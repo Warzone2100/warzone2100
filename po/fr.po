@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-03-22 19:55+0100\n"
-"PO-Revision-Date: 2017-03-18 22:52+0100\n"
+"PO-Revision-Date: 2017-04-08 10:31+0200\n"
 "Last-Translator: AmiralJCDG\n"
 "Language-Team: French <warzone2100-project@lists.sourceforge.net>\n"
 "Language: fr\n"
@@ -11,10 +11,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.1\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
@@ -1199,8 +1198,7 @@ msgstr "Cyborg à Canon"
 msgid "Demolish"
 msgstr "Démolition"
 
-#: data/base/messages/strings/names.txt:156
-#: po/custom/fromJson.txt:923
+#: data/base/messages/strings/names.txt:156 po/custom/fromJson.txt:923
 msgid "Naval"
 msgstr "Naval"
 
@@ -1227,20 +1225,17 @@ msgid "Dragon's Teeth"
 msgstr "Dents de dragon"
 
 #: data/base/messages/strings/names.txt:215
-#: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:668
+#: data/mp/messages/strings/names.txt:251 po/custom/fromJson.txt:668
 msgid "Howitzer Emplacement"
 msgstr "Emplacement à obusier"
 
 #: data/base/messages/strings/names.txt:216
-#: data/mp/messages/strings/names.txt:252
-#: po/custom/fromJson.txt:514
+#: data/mp/messages/strings/names.txt:252 po/custom/fromJson.txt:514
 msgid "Ground Shaker Emplacement"
 msgstr "Emplacement à Ground Shaker"
 
 #: data/base/messages/strings/names.txt:217
-#: data/mp/messages/strings/names.txt:253
-#: po/custom/fromJson.txt:613
+#: data/mp/messages/strings/names.txt:253 po/custom/fromJson.txt:613
 msgid "Hellstorm Emplacement"
 msgstr "Emplacement à Hellstorm"
 
@@ -1314,14 +1309,12 @@ msgid "Cyborg Jump Pack"
 msgstr "Jet-pack pour Cyborgs"
 
 #: data/base/messages/strings/names.txt:298
-#: data/mp/messages/strings/names.txt:381
-#: po/custom/fromJson.txt:380
+#: data/mp/messages/strings/names.txt:381 po/custom/fromJson.txt:380
 msgid "Cyborg Propulsion II"
 msgstr "Propulsion bipédique II"
 
 #: data/base/messages/strings/names.txt:299
-#: data/mp/messages/strings/names.txt:382
-#: po/custom/fromJson.txt:381
+#: data/mp/messages/strings/names.txt:382 po/custom/fromJson.txt:381
 msgid "Cyborg Propulsion III"
 msgstr "Propulsion bipédique III"
 
@@ -1331,24 +1324,20 @@ msgid "NP-Hardcrete"
 msgstr "Béton renforcé NP"
 
 #: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:395
-#: po/custom/fromJson.txt:585
+#: data/mp/messages/strings/names.txt:395 po/custom/fromJson.txt:585
 msgid "Heavy Machinegun Bunker"
 msgstr "Bunker à mitrailleuse lourde"
 
 #: data/base/messages/strings/names.txt:316
-#: data/mp/messages/strings/names.txt:397
-#: po/custom/fromJson.txt:486
+#: data/mp/messages/strings/names.txt:397 po/custom/fromJson.txt:486
 msgid "Flashlight Emplacement"
 msgstr "Emplacement à laser Flashlight"
 
-#: data/base/messages/strings/names.txt:322
-#: po/custom/fromJson.txt:590
+#: data/base/messages/strings/names.txt:322 po/custom/fromJson.txt:590
 msgid "Heavy Machinegun Guard Tower"
 msgstr "Tour de garde à mitrailleuse lourde"
 
-#: data/base/messages/strings/names.txt:323
-#: po/custom/fromJson.txt:478
+#: data/base/messages/strings/names.txt:323 po/custom/fromJson.txt:478
 msgid "Flamer Guard Tower"
 msgstr "Tour de garde à lance-flammes"
 
@@ -1357,13 +1346,11 @@ msgid "Lancer Guard Tower"
 msgstr "Tour de garde à lance-roquettes"
 
 #: data/base/messages/strings/names.txt:327
-#: data/mp/messages/strings/names.txt:409
-#: po/custom/fromJson.txt:479
+#: data/mp/messages/strings/names.txt:409 po/custom/fromJson.txt:479
 msgid "Flamer Hardpoint"
 msgstr "Pont défensif à lance-flammes"
 
-#: data/base/messages/strings/names.txt:330
-#: po/custom/fromJson.txt:42
+#: data/base/messages/strings/names.txt:330 po/custom/fromJson.txt:42
 msgid "Advanced Cyborg Production"
 msgstr "Production de Cyborgs avancée"
 
@@ -1375,8 +1362,7 @@ msgstr "Production de Cyborgs avancée Mk2"
 msgid "Advanced Cyborg Production Mk3"
 msgstr "Production de Cyborgs avancée Mk3"
 
-#: data/base/messages/strings/names.txt:334
-#: po/custom/fromJson.txt:45
+#: data/base/messages/strings/names.txt:334 po/custom/fromJson.txt:45
 msgid "Advanced Factory Production"
 msgstr "Production de véhicules avancée"
 
@@ -1657,64 +1643,55 @@ msgid "Bunker Blaster"
 msgstr "Anti-bunker"
 
 #: data/base/messages/strings/resstrings.txt:31
-#: data/mp/messages/strings/resstrings.txt:1
-#: po/custom/fromJson.txt:376
+#: data/mp/messages/strings/resstrings.txt:1 po/custom/fromJson.txt:376
 msgid "Cyborg Materials Improved"
 msgstr "Matériaux de fabrication pour Cyborgs améliorés"
 
 #: data/base/messages/strings/resstrings.txt:32
 #: data/base/messages/strings/resstrings.txt:572
 #: data/mp/messages/strings/resstrings.txt:2
-#: data/mp/messages/strings/resstrings.txt:262
-#: po/custom/fromJson.txt:817
+#: data/mp/messages/strings/resstrings.txt:262 po/custom/fromJson.txt:817
 msgid "Layered dense composite alloys and energy-absorbing fibres"
 msgstr "Couches d'alliages composites denses avec fibres à absorption d'impact intercalées"
 
 #: data/base/messages/strings/resstrings.txt:33
-#: data/mp/messages/strings/resstrings.txt:3
-#: po/custom/fromJson.txt:742
+#: data/mp/messages/strings/resstrings.txt:3 po/custom/fromJson.txt:742
 msgid "Increases Kinetic Armor and Body Points"
 msgstr "Blindage cinétique et résistance augmentés"
 
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
 #: data/mp/messages/strings/resstrings.txt:4
-#: data/mp/messages/strings/resstrings.txt:9
-#: po/custom/fromJson.txt:73
+#: data/mp/messages/strings/resstrings.txt:9 po/custom/fromJson.txt:73
 msgid "All Cyborgs upgraded automatically"
 msgstr "Amélioration automatique de tous les Cyborgs"
 
 #: data/base/messages/strings/resstrings.txt:41
-#: data/mp/messages/strings/resstrings.txt:6
-#: po/custom/fromJson.txt:391
+#: data/mp/messages/strings/resstrings.txt:6 po/custom/fromJson.txt:391
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Armure thermique des Cyborgs améliorée"
 
 #: data/base/messages/strings/resstrings.txt:42
-#: data/mp/messages/strings/resstrings.txt:7
-#: po/custom/fromJson.txt:553
+#: data/mp/messages/strings/resstrings.txt:7 po/custom/fromJson.txt:553
 msgid "Heat resistant armored layers"
 msgstr "Plaques blindées résistantes à la chaleur"
 
 #: data/base/messages/strings/resstrings.txt:43
-#: data/mp/messages/strings/resstrings.txt:8
-#: po/custom/fromJson.txt:1299
+#: data/mp/messages/strings/resstrings.txt:8 po/custom/fromJson.txt:1299
 msgid "Thermal Armor increased"
 msgstr "Blindage thermique renforcé"
 
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
 #: data/mp/messages/strings/resstrings.txt:11
-#: data/mp/messages/strings/resstrings.txt:16
-#: po/custom/fromJson.txt:944
+#: data/mp/messages/strings/resstrings.txt:16 po/custom/fromJson.txt:944
 msgid "New Cyborg Available"
 msgstr "Nouveau cyborg disponible"
 
 #: data/base/messages/strings/resstrings.txt:50
 #: data/base/messages/strings/resstrings.txt:84
 #: data/mp/messages/strings/resstrings.txt:12
-#: data/mp/messages/strings/resstrings.txt:27
-#: po/custom/fromJson.txt:118
+#: data/mp/messages/strings/resstrings.txt:27 po/custom/fromJson.txt:118
 msgid "Armed with Bunker Buster rocket"
 msgstr "Armé d'un lance-roquettes anti-bunker"
 
@@ -1737,8 +1714,7 @@ msgstr "Armé d'un lance-roquettes anti-bunker"
 #: data/mp/messages/strings/resstrings.txt:304
 #: data/mp/messages/strings/resstrings.txt:309
 #: data/mp/messages/strings/resstrings.txt:329
-#: data/mp/messages/strings/resstrings.txt:334
-#: po/custom/fromJson.txt:268
+#: data/mp/messages/strings/resstrings.txt:334 po/custom/fromJson.txt:268
 msgid "Body Points: Medium"
 msgstr "Résistance : moyenne"
 
@@ -1749,54 +1725,46 @@ msgstr "Résistance : moyenne"
 #: data/mp/messages/strings/resstrings.txt:14
 #: data/mp/messages/strings/resstrings.txt:19
 #: data/mp/messages/strings/resstrings.txt:24
-#: data/mp/messages/strings/resstrings.txt:29
-#: po/custom/fromJson.txt:1116
+#: data/mp/messages/strings/resstrings.txt:29 po/custom/fromJson.txt:1116
 msgid "Requires Cyborg factory to produce"
 msgstr "Usine de production de Cyborgs nécessaire"
 
 #: data/base/messages/strings/resstrings.txt:66
-#: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:120
+#: data/mp/messages/strings/resstrings.txt:17 po/custom/fromJson.txt:120
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Armé d'un fusil d'assaut"
 
 #: data/base/messages/strings/resstrings.txt:77
 #: data/base/messages/strings/resstrings.txt:83
 #: data/mp/messages/strings/resstrings.txt:21
-#: data/mp/messages/strings/resstrings.txt:26
-#: po/custom/fromJson.txt:950
+#: data/mp/messages/strings/resstrings.txt:26 po/custom/fromJson.txt:950
 msgid "New Jump Cyborg Available"
 msgstr "Nouvel Aérocyborg disponible"
 
 #: data/base/messages/strings/resstrings.txt:78
-#: data/mp/messages/strings/resstrings.txt:22
-#: po/custom/fromJson.txt:137
+#: data/mp/messages/strings/resstrings.txt:22 po/custom/fromJson.txt:137
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr "Armé de missiles SAM Avenger"
 
 #: data/base/messages/strings/resstrings.txt:103
-#: data/mp/messages/strings/resstrings.txt:31
-#: po/custom/fromJson.txt:402
+#: data/mp/messages/strings/resstrings.txt:31 po/custom/fromJson.txt:402
 msgid "Defenses Improved"
 msgstr "Défenses renforcées"
 
 #: data/base/messages/strings/resstrings.txt:104
-#: data/mp/messages/strings/resstrings.txt:32
-#: po/custom/fromJson.txt:654
+#: data/mp/messages/strings/resstrings.txt:32 po/custom/fromJson.txt:654
 msgid "High-tensile concrete reinforced with boron"
 msgstr "Béton HLE renforcé au bore"
 
 #: data/base/messages/strings/resstrings.txt:105
 #: data/base/messages/strings/resstrings.txt:401
 #: data/mp/messages/strings/resstrings.txt:33
-#: data/mp/messages/strings/resstrings.txt:198
-#: po/custom/fromJson.txt:724
+#: data/mp/messages/strings/resstrings.txt:198 po/custom/fromJson.txt:724
 msgid "Increases Armor and Body Points"
 msgstr "Augmente le blindage et la résistance"
 
 #: data/base/messages/strings/resstrings.txt:106
-#: data/mp/messages/strings/resstrings.txt:34
-#: po/custom/fromJson.txt:74
+#: data/mp/messages/strings/resstrings.txt:34 po/custom/fromJson.txt:74
 msgid "All defenses and walls upgraded automatically"
 msgstr "Amélioration automatique de tous les murs et défenses"
 
@@ -1851,14 +1819,12 @@ msgstr "Amélioration automatique de tous les murs et défenses"
 #: data/mp/messages/strings/resstrings.txt:146
 #: data/mp/messages/strings/resstrings.txt:151
 #: data/mp/messages/strings/resstrings.txt:156
-#: data/mp/messages/strings/resstrings.txt:161
-#: po/custom/fromJson.txt:946
+#: data/mp/messages/strings/resstrings.txt:161 po/custom/fromJson.txt:946
 msgid "New Defensive Structure Available"
 msgstr "Nouvelle structure défensive disponible"
 
 #: data/base/messages/strings/resstrings.txt:114
-#: data/mp/messages/strings/resstrings.txt:37
-#: po/custom/fromJson.txt:32
+#: data/mp/messages/strings/resstrings.txt:37 po/custom/fromJson.txt:32
 msgid "AA Site with Tornado Flak Turret"
 msgstr "Site de DCA Tornade"
 
@@ -1867,8 +1833,7 @@ msgstr "Site de DCA Tornade"
 #: data/base/messages/strings/resstrings.txt:133
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:43
-#: data/mp/messages/strings/resstrings.txt:53
-#: po/custom/fromJson.txt:231
+#: data/mp/messages/strings/resstrings.txt:53 po/custom/fromJson.txt:231
 msgid "Automatically targets VTOLs"
 msgstr "Attaque automatiquement les VTOLs ennemis à portée"
 
@@ -1905,38 +1870,32 @@ msgstr "Attaque automatiquement les VTOLs ennemis à portée"
 #: data/mp/messages/strings/resstrings.txt:114
 #: data/mp/messages/strings/resstrings.txt:119
 #: data/mp/messages/strings/resstrings.txt:124
-#: data/mp/messages/strings/resstrings.txt:129
-#: po/custom/fromJson.txt:406
+#: data/mp/messages/strings/resstrings.txt:129 po/custom/fromJson.txt:406
 msgid "Defensive Strength: Medium"
 msgstr "Puissance défensive : moyenne"
 
 #: data/base/messages/strings/resstrings.txt:120
-#: data/mp/messages/strings/resstrings.txt:42
-#: po/custom/fromJson.txt:30
+#: data/mp/messages/strings/resstrings.txt:42 po/custom/fromJson.txt:30
 msgid "AA Site with Cyclone Flak Turret"
 msgstr "Site de DCA Cyclone"
 
 #: data/base/messages/strings/resstrings.txt:126
-#: data/mp/messages/strings/resstrings.txt:47
-#: po/custom/fromJson.txt:31
+#: data/mp/messages/strings/resstrings.txt:47 po/custom/fromJson.txt:31
 msgid "AA Site with Hurricane Gun Turret"
 msgstr "Site de DCA Ouragan"
 
 #: data/base/messages/strings/resstrings.txt:127
-#: data/mp/messages/strings/resstrings.txt:48
-#: po/custom/fromJson.txt:230
+#: data/mp/messages/strings/resstrings.txt:48 po/custom/fromJson.txt:230
 msgid "Automatically targets VTOL"
 msgstr "Attaque automatiquement les VTOLs ennemis à portée"
 
 #: data/base/messages/strings/resstrings.txt:132
-#: data/mp/messages/strings/resstrings.txt:52
-#: po/custom/fromJson.txt:33
+#: data/mp/messages/strings/resstrings.txt:52 po/custom/fromJson.txt:33
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr "Site de DCA Tourbillon"
 
 #: data/base/messages/strings/resstrings.txt:142
-#: data/mp/messages/strings/resstrings.txt:57
-#: po/custom/fromJson.txt:767
+#: data/mp/messages/strings/resstrings.txt:57 po/custom/fromJson.txt:767
 msgid "Indirect fire rocket battery"
 msgstr "Batterie de roquettes à tir indirect"
 
@@ -1953,46 +1912,39 @@ msgstr "Batterie de roquettes à tir indirect"
 #: data/mp/messages/strings/resstrings.txt:73
 #: data/mp/messages/strings/resstrings.txt:78
 #: data/mp/messages/strings/resstrings.txt:83
-#: data/mp/messages/strings/resstrings.txt:88
-#: po/custom/fromJson.txt:209
+#: data/mp/messages/strings/resstrings.txt:88 po/custom/fromJson.txt:209
 msgid "Assigned automatically to nearest sensor or CB tower"
 msgstr "Assigné automatiquement au radar ou radar de contre-batterie le plus proche"
 
 #: data/base/messages/strings/resstrings.txt:154
-#: data/mp/messages/strings/resstrings.txt:62
-#: po/custom/fromJson.txt:141
+#: data/mp/messages/strings/resstrings.txt:62 po/custom/fromJson.txt:141
 msgid "Armored Bombard battery pit"
 msgstr "Bombarde retranchée blindée"
 
 #: data/base/messages/strings/resstrings.txt:160
-#: data/mp/messages/strings/resstrings.txt:67
-#: po/custom/fromJson.txt:175
+#: data/mp/messages/strings/resstrings.txt:67 po/custom/fromJson.txt:175
 msgid "Armored Pepperpot mortar battery pit"
 msgstr "Poivrière retranchée blindée"
 
 #: data/base/messages/strings/resstrings.txt:168
-#: data/mp/messages/strings/resstrings.txt:72
-#: po/custom/fromJson.txt:172
+#: data/mp/messages/strings/resstrings.txt:72 po/custom/fromJson.txt:172
 msgid "Armored howitzer emplacement"
 msgstr "Emplacement blindé à obusier"
 
 #: data/base/messages/strings/resstrings.txt:174
-#: data/mp/messages/strings/resstrings.txt:77
-#: po/custom/fromJson.txt:147
+#: data/mp/messages/strings/resstrings.txt:77 po/custom/fromJson.txt:147
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr "Emplacement blindé à Ground Shaker"
 
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
 #: data/mp/messages/strings/resstrings.txt:82
-#: data/mp/messages/strings/resstrings.txt:87
-#: po/custom/fromJson.txt:171
+#: data/mp/messages/strings/resstrings.txt:87 po/custom/fromJson.txt:171
 msgid "Armored Hellstorm howitzer emplacement"
 msgstr "Emplacement blindé à Hellstorm"
 
 #: data/base/messages/strings/resstrings.txt:192
-#: data/mp/messages/strings/resstrings.txt:92
-#: po/custom/fromJson.txt:185
+#: data/mp/messages/strings/resstrings.txt:92 po/custom/fromJson.txt:185
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "Pont défensif blindé à roquettes anti-char"
 
@@ -2005,14 +1957,12 @@ msgstr "Pont défensif blindé à roquettes anti-char"
 #: data/mp/messages/strings/resstrings.txt:98
 #: data/mp/messages/strings/resstrings.txt:103
 #: data/mp/messages/strings/resstrings.txt:108
-#: data/mp/messages/strings/resstrings.txt:113
-#: po/custom/fromJson.txt:228
+#: data/mp/messages/strings/resstrings.txt:113 po/custom/fromJson.txt:228
 msgid "Automatically targets enemies in range"
 msgstr "Attaque automatiquement les ennemis à portée"
 
 #: data/base/messages/strings/resstrings.txt:198
-#: data/mp/messages/strings/resstrings.txt:97
-#: po/custom/fromJson.txt:180
+#: data/mp/messages/strings/resstrings.txt:97 po/custom/fromJson.txt:180
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "Pont défensif blindé à canon hypersonique"
 
@@ -2033,26 +1983,22 @@ msgstr "Pont défensif blindé à canon hypersonique"
 #: data/mp/messages/strings/resstrings.txt:149
 #: data/mp/messages/strings/resstrings.txt:154
 #: data/mp/messages/strings/resstrings.txt:159
-#: data/mp/messages/strings/resstrings.txt:164
-#: po/custom/fromJson.txt:404
+#: data/mp/messages/strings/resstrings.txt:164 po/custom/fromJson.txt:404
 msgid "Defensive Strength: High"
 msgstr "Puissance défensive : élevée"
 
 #: data/base/messages/strings/resstrings.txt:204
-#: data/mp/messages/strings/resstrings.txt:102
-#: po/custom/fromJson.txt:181
+#: data/mp/messages/strings/resstrings.txt:102 po/custom/fromJson.txt:181
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "Pont défensif blindé à lance-flammes Inferno"
 
 #: data/base/messages/strings/resstrings.txt:218
-#: data/mp/messages/strings/resstrings.txt:107
-#: po/custom/fromJson.txt:176
+#: data/mp/messages/strings/resstrings.txt:107 po/custom/fromJson.txt:176
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Pont défensif blindé à canon d'assaut"
 
 #: data/base/messages/strings/resstrings.txt:224
-#: data/mp/messages/strings/resstrings.txt:112
-#: po/custom/fromJson.txt:1099
+#: data/mp/messages/strings/resstrings.txt:112 po/custom/fromJson.txt:1099
 msgid "Reinforced tower with Assault Gun"
 msgstr "Tour renforcée à fusil d'assaut"
 
@@ -2078,8 +2024,7 @@ msgstr "Tour de garde renforcée à mitrailleuse lourde"
 #: data/mp/messages/strings/resstrings.txt:143
 #: data/mp/messages/strings/resstrings.txt:148
 #: data/mp/messages/strings/resstrings.txt:153
-#: data/mp/messages/strings/resstrings.txt:158
-#: po/custom/fromJson.txt:229
+#: data/mp/messages/strings/resstrings.txt:158 po/custom/fromJson.txt:229
 msgid "Automatically targets enemies within sensor range"
 msgstr "Attaque automatiquement les ennemis à portée"
 
@@ -2104,92 +2049,78 @@ msgid "Armored hardpoint with Flamer"
 msgstr "Pont défensif à lance-flammes"
 
 #: data/base/messages/strings/resstrings.txt:288
-#: data/mp/messages/strings/resstrings.txt:142
-#: po/custom/fromJson.txt:158
+#: data/mp/messages/strings/resstrings.txt:142 po/custom/fromJson.txt:158
 msgid "Armored hardpoint with Assault Gun"
 msgstr "Pont défensif à fusil d'assaut"
 
 #: data/base/messages/strings/resstrings.txt:294
-#: data/mp/messages/strings/resstrings.txt:147
-#: po/custom/fromJson.txt:157
+#: data/mp/messages/strings/resstrings.txt:147 po/custom/fromJson.txt:157
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "Pont défensif à canon d'assaut"
 
 #: data/base/messages/strings/resstrings.txt:302
-#: data/mp/messages/strings/resstrings.txt:152
-#: po/custom/fromJson.txt:164
+#: data/mp/messages/strings/resstrings.txt:152 po/custom/fromJson.txt:164
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "Pont défensif à lance-flammes Inferno"
 
 #: data/base/messages/strings/resstrings.txt:308
-#: data/mp/messages/strings/resstrings.txt:157
-#: po/custom/fromJson.txt:170
+#: data/mp/messages/strings/resstrings.txt:157 po/custom/fromJson.txt:170
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "Pont défensif à lance-missile anti-char"
 
 #: data/base/messages/strings/resstrings.txt:324
-#: data/mp/messages/strings/resstrings.txt:162
-#: po/custom/fromJson.txt:1098
+#: data/mp/messages/strings/resstrings.txt:162 po/custom/fromJson.txt:1098
 msgid "Reinforced concrete tank traps"
 msgstr "Blocs de béton renforcé ancrés au sol"
 
 #: data/base/messages/strings/resstrings.txt:325
-#: data/mp/messages/strings/resstrings.txt:163
-#: po/custom/fromJson.txt:1044
+#: data/mp/messages/strings/resstrings.txt:163 po/custom/fromJson.txt:1044
 msgid "Prevents enemy movement"
 msgstr "Empêchent l'ennemi de s'y déplacer"
 
 #: data/base/messages/strings/resstrings.txt:333
-#: data/mp/messages/strings/resstrings.txt:166
-#: po/custom/fromJson.txt:1103
+#: data/mp/messages/strings/resstrings.txt:166 po/custom/fromJson.txt:1103
 msgid "Repair Facility Improved"
 msgstr "Ateliers de réparation améliorés"
 
 #: data/base/messages/strings/resstrings.txt:334
-#: data/mp/messages/strings/resstrings.txt:167
-#: po/custom/fromJson.txt:966
+#: data/mp/messages/strings/resstrings.txt:167 po/custom/fromJson.txt:966
 msgid "New robotic repair techniques"
 msgstr "Nouvelle technique de réparation robotisée"
 
 #: data/base/messages/strings/resstrings.txt:335
-#: data/mp/messages/strings/resstrings.txt:168
-#: po/custom/fromJson.txt:760
+#: data/mp/messages/strings/resstrings.txt:168 po/custom/fromJson.txt:760
 msgid "Increases Repair Speed"
 msgstr "Accélère la vitesse de réparation"
 
 #: data/base/messages/strings/resstrings.txt:336
-#: data/mp/messages/strings/resstrings.txt:169
-#: po/custom/fromJson.txt:88
+#: data/mp/messages/strings/resstrings.txt:169 po/custom/fromJson.txt:88
 msgid "All repair facilities upgraded automatically"
 msgstr "Amélioration automatique de tous les ateliers de réparation"
 
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
 #: data/mp/messages/strings/resstrings.txt:171
-#: data/mp/messages/strings/resstrings.txt:176
-#: po/custom/fromJson.txt:378
+#: data/mp/messages/strings/resstrings.txt:176 po/custom/fromJson.txt:378
 msgid "Cyborg Production Improved"
 msgstr "Production de Cyborgs améliorée"
 
 #: data/base/messages/strings/resstrings.txt:348
-#: data/mp/messages/strings/resstrings.txt:172
-#: po/custom/fromJson.txt:1132
+#: data/mp/messages/strings/resstrings.txt:172 po/custom/fromJson.txt:1132
 msgid "Robotic Cyborg Production"
 msgstr "Production de Cyborgs robotisée"
 
 #: data/base/messages/strings/resstrings.txt:349
 #: data/base/messages/strings/resstrings.txt:357
 #: data/mp/messages/strings/resstrings.txt:173
-#: data/mp/messages/strings/resstrings.txt:178
-#: po/custom/fromJson.txt:732
+#: data/mp/messages/strings/resstrings.txt:178 po/custom/fromJson.txt:732
 msgid "Increases Cyborg factory output"
 msgstr "Augmente la vitesse de production des usines à Cyborgs"
 
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
 #: data/mp/messages/strings/resstrings.txt:174
-#: data/mp/messages/strings/resstrings.txt:179
-#: po/custom/fromJson.txt:72
+#: data/mp/messages/strings/resstrings.txt:179 po/custom/fromJson.txt:72
 msgid "All Cyborg factories upgraded automatically"
 msgstr "Amélioration automatique de toutes les usines à Cyborgs"
 
@@ -2201,28 +2132,24 @@ msgstr "Production de Cyborgs par auto-réplication"
 #: data/base/messages/strings/resstrings.txt:365
 #: data/base/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:181
-#: data/mp/messages/strings/resstrings.txt:186
-#: po/custom/fromJson.txt:1366
+#: data/mp/messages/strings/resstrings.txt:186 po/custom/fromJson.txt:1366
 msgid "Vehicle Production Improved"
 msgstr "Production de véhicules améliorée"
 
 #: data/base/messages/strings/resstrings.txt:366
-#: data/mp/messages/strings/resstrings.txt:182
-#: po/custom/fromJson.txt:967
+#: data/mp/messages/strings/resstrings.txt:182 po/custom/fromJson.txt:967
 msgid "New Robotic Techniques improve factory production"
 msgstr "Nouvelle technique robotisée améliorant la production des usines"
 
 #: data/base/messages/strings/resstrings.txt:367
-#: data/mp/messages/strings/resstrings.txt:183
-#: po/custom/fromJson.txt:735
+#: data/mp/messages/strings/resstrings.txt:183 po/custom/fromJson.txt:735
 msgid "Increases factory production rate"
 msgstr "Augmente la vitesse de production des usines"
 
 #: data/base/messages/strings/resstrings.txt:368
 #: data/base/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:184
-#: data/mp/messages/strings/resstrings.txt:189
-#: po/custom/fromJson.txt:94
+#: data/mp/messages/strings/resstrings.txt:189 po/custom/fromJson.txt:94
 msgid "All vehicle factories upgraded automatically"
 msgstr "Toutes les usines de véhicules améliorées automatiquement"
 
@@ -2232,124 +2159,104 @@ msgid "Self-Replicating Factory Production"
 msgstr "Production de véhicules par auto-réplication"
 
 #: data/base/messages/strings/resstrings.txt:375
-#: data/mp/messages/strings/resstrings.txt:188
-#: po/custom/fromJson.txt:734
+#: data/mp/messages/strings/resstrings.txt:188 po/custom/fromJson.txt:734
 msgid "Increases factory output"
 msgstr "Les modules de production augmentent la vitesse de production des usines"
 
 #: data/base/messages/strings/resstrings.txt:389
-#: data/mp/messages/strings/resstrings.txt:191
-#: po/custom/fromJson.txt:1120
+#: data/mp/messages/strings/resstrings.txt:191 po/custom/fromJson.txt:1120
 msgid "Research Improved"
 msgstr "Recherches accélérées"
 
 #: data/base/messages/strings/resstrings.txt:390
-#: data/mp/messages/strings/resstrings.txt:192
-#: po/custom/fromJson.txt:399
+#: data/mp/messages/strings/resstrings.txt:192 po/custom/fromJson.txt:399
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "Analyse de données par Lien Synaptique Spécialisé"
 
 #: data/base/messages/strings/resstrings.txt:391
-#: data/mp/messages/strings/resstrings.txt:193
-#: po/custom/fromJson.txt:761
+#: data/mp/messages/strings/resstrings.txt:193 po/custom/fromJson.txt:761
 msgid "Increases research speed"
 msgstr "Augmente la vitesse de recherche"
 
 #: data/base/messages/strings/resstrings.txt:392
-#: data/mp/messages/strings/resstrings.txt:194
-#: po/custom/fromJson.txt:89
+#: data/mp/messages/strings/resstrings.txt:194 po/custom/fromJson.txt:89
 msgid "All research facilities upgraded automatically"
 msgstr "Amélioration automatique de tous les centres de recherche"
 
 #: data/base/messages/strings/resstrings.txt:399
-#: data/mp/messages/strings/resstrings.txt:196
-#: po/custom/fromJson.txt:733
+#: data/mp/messages/strings/resstrings.txt:196 po/custom/fromJson.txt:733
 msgid "Increases Damage Resistance"
 msgstr "Augmente la résistance aux dégâts"
 
 #: data/base/messages/strings/resstrings.txt:400
-#: data/mp/messages/strings/resstrings.txt:197
-#: po/custom/fromJson.txt:524
+#: data/mp/messages/strings/resstrings.txt:197 po/custom/fromJson.txt:524
 msgid "Hardened Base Structure Materials"
 msgstr "Matériaux de construction renforcés"
 
 #: data/base/messages/strings/resstrings.txt:402
-#: data/mp/messages/strings/resstrings.txt:199
-#: po/custom/fromJson.txt:68
+#: data/mp/messages/strings/resstrings.txt:199 po/custom/fromJson.txt:68
 msgid "All base structures upgraded automatically"
 msgstr "Amélioration automatique de tous les bâtiments (non-défensifs)"
 
 #: data/base/messages/strings/resstrings.txt:411
-#: data/mp/messages/strings/resstrings.txt:201
-#: po/custom/fromJson.txt:1046
+#: data/mp/messages/strings/resstrings.txt:201 po/custom/fromJson.txt:1046
 msgid "Production Improved"
 msgstr "Production améliorée"
 
 #: data/base/messages/strings/resstrings.txt:412
-#: data/mp/messages/strings/resstrings.txt:202
-#: po/custom/fromJson.txt:1144
+#: data/mp/messages/strings/resstrings.txt:202 po/custom/fromJson.txt:1144
 msgid "Robotic VTOL Production"
 msgstr "Production aéronautique robotisée"
 
 #: data/base/messages/strings/resstrings.txt:413
-#: data/mp/messages/strings/resstrings.txt:203
-#: po/custom/fromJson.txt:766
+#: data/mp/messages/strings/resstrings.txt:203 po/custom/fromJson.txt:766
 msgid "Increases VTOL factory output"
 msgstr "Augmente la vitesse de production des usines de VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:414
-#: data/mp/messages/strings/resstrings.txt:204
-#: po/custom/fromJson.txt:97
+#: data/mp/messages/strings/resstrings.txt:204 po/custom/fromJson.txt:97
 msgid "All VTOL factories upgraded automatically"
 msgstr "Amélioration automatique de toutes les usines de VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:421
-#: data/mp/messages/strings/resstrings.txt:206
-#: po/custom/fromJson.txt:1433
+#: data/mp/messages/strings/resstrings.txt:206 po/custom/fromJson.txt:1433
 msgid "VTOL Rearming Times Reduced"
 msgstr "Temps de réarmement des VTOLs réduit"
 
 #: data/base/messages/strings/resstrings.txt:422
-#: data/mp/messages/strings/resstrings.txt:207
-#: po/custom/fromJson.txt:224
+#: data/mp/messages/strings/resstrings.txt:207 po/custom/fromJson.txt:224
 msgid "Automated VTOL Rearming"
 msgstr "Réarmement des VTOLs automatisé"
 
 #: data/base/messages/strings/resstrings.txt:423
-#: data/mp/messages/strings/resstrings.txt:208
-#: po/custom/fromJson.txt:1093
+#: data/mp/messages/strings/resstrings.txt:208 po/custom/fromJson.txt:1093
 msgid "Reduces rearming time"
 msgstr "Réduit le temps de réarmement"
 
 #: data/base/messages/strings/resstrings.txt:424
-#: data/mp/messages/strings/resstrings.txt:209
-#: po/custom/fromJson.txt:87
+#: data/mp/messages/strings/resstrings.txt:209 po/custom/fromJson.txt:87
 msgid "All rearming pads upgraded automatically"
 msgstr "Amélioration automatique de toutes les plateformes de réarmement"
 
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
 #: data/mp/messages/strings/resstrings.txt:211
-#: data/mp/messages/strings/resstrings.txt:226
-#: po/custom/fromJson.txt:973
+#: data/mp/messages/strings/resstrings.txt:226 po/custom/fromJson.txt:973
 msgid "New Systems Turret Available"
 msgstr "Nouvelle tourelle système disponible"
 
 #: data/base/messages/strings/resstrings.txt:444
-#: data/mp/messages/strings/resstrings.txt:212
-#: po/custom/fromJson.txt:603
+#: data/mp/messages/strings/resstrings.txt:212 po/custom/fromJson.txt:603
 msgid "Heavy repair unit"
 msgstr "Unité de réparation lourde"
 
 #: data/base/messages/strings/resstrings.txt:445
-#: data/mp/messages/strings/resstrings.txt:213
-#: po/custom/fromJson.txt:227
+#: data/mp/messages/strings/resstrings.txt:213 po/custom/fromJson.txt:227
 msgid "Automatically Repairs Damaged Units"
 msgstr "Répare automatiquement les unités endommagées situées à proximité"
 
 #: data/base/messages/strings/resstrings.txt:446
-#: data/mp/messages/strings/resstrings.txt:214
-#: po/custom/fromJson.txt:1005
+#: data/mp/messages/strings/resstrings.txt:214 po/custom/fromJson.txt:1005
 msgid "Or damaged units may be selected as target"
 msgstr "Les unités endommagées peuvent aussi être désignées"
 
@@ -2369,92 +2276,77 @@ msgid "All mobile repair units upgraded automatically"
 msgstr "Amélioration automatique de toutes les unités de réparation"
 
 #: data/base/messages/strings/resstrings.txt:459
-#: data/mp/messages/strings/resstrings.txt:221
-#: po/custom/fromJson.txt:705
+#: data/mp/messages/strings/resstrings.txt:221 po/custom/fromJson.txt:705
 msgid "Improved Sensor Tower Available"
 msgstr "Tour radar améliorée disponible"
 
 #: data/base/messages/strings/resstrings.txt:460
-#: data/mp/messages/strings/resstrings.txt:222
-#: po/custom/fromJson.txt:943
+#: data/mp/messages/strings/resstrings.txt:222 po/custom/fromJson.txt:943
 msgid "New construction techniques improve tower"
 msgstr "Les nouvelles techniques de construction améliorent la tour"
 
 #: data/base/messages/strings/resstrings.txt:461
-#: data/mp/messages/strings/resstrings.txt:223
-#: po/custom/fromJson.txt:1113
+#: data/mp/messages/strings/resstrings.txt:223 po/custom/fromJson.txt:1113
 msgid "Replaces existing sensor tower"
 msgstr "Remplace la tour radar précédente"
 
 #: data/base/messages/strings/resstrings.txt:462
-#: data/mp/messages/strings/resstrings.txt:224
-#: po/custom/fromJson.txt:854
+#: data/mp/messages/strings/resstrings.txt:224 po/custom/fromJson.txt:854
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "Peut être désignée comme cibleur automatique pour l'artillerie mobile"
 
 #: data/base/messages/strings/resstrings.txt:480
-#: data/mp/messages/strings/resstrings.txt:227
-#: po/custom/fromJson.txt:1399
+#: data/mp/messages/strings/resstrings.txt:227 po/custom/fromJson.txt:1399
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "Tourelle radar de CB pour VTOLs calculant la position des batteries ennemies"
 
 #: data/base/messages/strings/resstrings.txt:481
-#: data/mp/messages/strings/resstrings.txt:228
-#: po/custom/fromJson.txt:1008
+#: data/mp/messages/strings/resstrings.txt:228 po/custom/fromJson.txt:1008
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "Ordonne aux VTOLs associés de viser les batteries ennemies"
 
 #: data/base/messages/strings/resstrings.txt:482
-#: data/mp/messages/strings/resstrings.txt:229
-#: po/custom/fromJson.txt:1434
+#: data/mp/messages/strings/resstrings.txt:229 po/custom/fromJson.txt:1434
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "Les VTOLs attaquent jusqu'à destruction de la batterie ennemie"
 
 #: data/base/messages/strings/resstrings.txt:485
-#: data/mp/messages/strings/resstrings.txt:231
-#: po/custom/fromJson.txt:1393
+#: data/mp/messages/strings/resstrings.txt:231 po/custom/fromJson.txt:1393
 msgid "VTOL CB Improved"
 msgstr "Radars de contre-batterie pour VTOLs améliorés"
 
 #: data/base/messages/strings/resstrings.txt:486
-#: data/mp/messages/strings/resstrings.txt:232
-#: po/custom/fromJson.txt:948
+#: data/mp/messages/strings/resstrings.txt:232 po/custom/fromJson.txt:948
 msgid "New fire detection systems"
 msgstr "Nouveau système de détection de tirs"
 
 #: data/base/messages/strings/resstrings.txt:487
-#: data/mp/messages/strings/resstrings.txt:233
-#: po/custom/fromJson.txt:448
+#: data/mp/messages/strings/resstrings.txt:233 po/custom/fromJson.txt:448
 msgid "Extends VTOL CB Range"
 msgstr "Augmente la portée des radars de contre-batterie pour VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:488
-#: data/mp/messages/strings/resstrings.txt:234
-#: po/custom/fromJson.txt:96
+#: data/mp/messages/strings/resstrings.txt:234 po/custom/fromJson.txt:96
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "Amélioration automatique de toutes les radars de contre-batterie pour VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:499
-#: data/mp/messages/strings/resstrings.txt:236
-#: po/custom/fromJson.txt:1436
+#: data/mp/messages/strings/resstrings.txt:236 po/custom/fromJson.txt:1436
 msgid "VTOL Strike Improved"
 msgstr "Radars pour VTOLs améliorés"
 
 #: data/base/messages/strings/resstrings.txt:500
-#: data/mp/messages/strings/resstrings.txt:237
-#: po/custom/fromJson.txt:976
+#: data/mp/messages/strings/resstrings.txt:237 po/custom/fromJson.txt:976
 msgid "New target recognition systems"
 msgstr "Nouveaux systèmes de reconnaissance de cible"
 
 #: data/base/messages/strings/resstrings.txt:501
-#: data/mp/messages/strings/resstrings.txt:238
-#: po/custom/fromJson.txt:449
+#: data/mp/messages/strings/resstrings.txt:238 po/custom/fromJson.txt:449
 msgid "Extends VTOL Strike Range"
 msgstr "Augmente la portée des radars pour VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:502
-#: data/mp/messages/strings/resstrings.txt:239
-#: po/custom/fromJson.txt:98
+#: data/mp/messages/strings/resstrings.txt:239 po/custom/fromJson.txt:98
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "Amélioration automatique de toutes les tours radar pour VTOLs"
 
@@ -2479,68 +2371,57 @@ msgid "All scramblers upgraded automatically"
 msgstr "Amélioration automatique de tous les brouilleurs"
 
 #: data/base/messages/strings/resstrings.txt:527
-#: data/mp/messages/strings/resstrings.txt:246
-#: po/custom/fromJson.txt:327
+#: data/mp/messages/strings/resstrings.txt:246 po/custom/fromJson.txt:327
 msgid "Collective Light Body"
 msgstr "Châssis léger du Collectif"
 
 #: data/base/messages/strings/resstrings.txt:528
-#: data/mp/messages/strings/resstrings.txt:247
-#: po/custom/fromJson.txt:1259
+#: data/mp/messages/strings/resstrings.txt:247 po/custom/fromJson.txt:1259
 msgid "Superior armor and body points to Viper"
 msgstr "Blindage et résistance supérieurs à la Vipère"
 
 #: data/base/messages/strings/resstrings.txt:529
-#: data/mp/messages/strings/resstrings.txt:248
-#: po/custom/fromJson.txt:1219
+#: data/mp/messages/strings/resstrings.txt:248 po/custom/fromJson.txt:1219
 msgid "Slower than Viper"
 msgstr "Plus lent que la Vipère"
 
 #: data/base/messages/strings/resstrings.txt:530
-#: data/mp/messages/strings/resstrings.txt:249
-#: po/custom/fromJson.txt:648
+#: data/mp/messages/strings/resstrings.txt:249 po/custom/fromJson.txt:648
 msgid "High power costs and slower to produce than Viper"
 msgstr "Plus cher et plus lent à produire que la Vipère"
 
 #: data/base/messages/strings/resstrings.txt:539
-#: data/mp/messages/strings/resstrings.txt:251
-#: po/custom/fromJson.txt:328
+#: data/mp/messages/strings/resstrings.txt:251 po/custom/fromJson.txt:328
 msgid "Collective Medium Body"
 msgstr "Châssis moyen du Collectif"
 
 #: data/base/messages/strings/resstrings.txt:540
-#: data/mp/messages/strings/resstrings.txt:252
-#: po/custom/fromJson.txt:1258
+#: data/mp/messages/strings/resstrings.txt:252 po/custom/fromJson.txt:1258
 msgid "Superior armor and body points to Cobra"
 msgstr "Blindage et résistance supérieurs au Cobra"
 
 #: data/base/messages/strings/resstrings.txt:541
-#: data/mp/messages/strings/resstrings.txt:253
-#: po/custom/fromJson.txt:1217
+#: data/mp/messages/strings/resstrings.txt:253 po/custom/fromJson.txt:1217
 msgid "Slower than Cobra"
 msgstr "Plus lent que le Cobra"
 
 #: data/base/messages/strings/resstrings.txt:542
-#: data/mp/messages/strings/resstrings.txt:254
-#: po/custom/fromJson.txt:647
+#: data/mp/messages/strings/resstrings.txt:254 po/custom/fromJson.txt:647
 msgid "High power costs and slower to produce than Cobra"
 msgstr "Plus cher et plus lent à produire que le Cobra"
 
 #: data/base/messages/strings/resstrings.txt:559
-#: data/mp/messages/strings/resstrings.txt:256
-#: po/custom/fromJson.txt:1365
+#: data/mp/messages/strings/resstrings.txt:256 po/custom/fromJson.txt:1365
 msgid "Vehicle Engine Upgrade"
 msgstr "Amélioration des moteurs"
 
 #: data/base/messages/strings/resstrings.txt:560
-#: data/mp/messages/strings/resstrings.txt:257
-#: po/custom/fromJson.txt:1331
+#: data/mp/messages/strings/resstrings.txt:257 po/custom/fromJson.txt:1331
 msgid "Turbo-Charged Engine"
 msgstr "Moteur Turbo"
 
 #: data/base/messages/strings/resstrings.txt:561
-#: data/mp/messages/strings/resstrings.txt:258
-#: po/custom/fromJson.txt:713
+#: data/mp/messages/strings/resstrings.txt:258 po/custom/fromJson.txt:713
 msgid "Improves vehicle speed"
 msgstr "Augmente la vitesse des véhicules"
 
@@ -2549,38 +2430,32 @@ msgstr "Augmente la vitesse des véhicules"
 #: data/base/messages/strings/resstrings.txt:584
 #: data/mp/messages/strings/resstrings.txt:259
 #: data/mp/messages/strings/resstrings.txt:264
-#: data/mp/messages/strings/resstrings.txt:269
-#: po/custom/fromJson.txt:95
+#: data/mp/messages/strings/resstrings.txt:269 po/custom/fromJson.txt:95
 msgid "All vehicles upgraded automatically"
 msgstr "Amélioration automatique de tous les véhicules"
 
 #: data/base/messages/strings/resstrings.txt:571
-#: data/mp/messages/strings/resstrings.txt:261
-#: po/custom/fromJson.txt:1364
+#: data/mp/messages/strings/resstrings.txt:261 po/custom/fromJson.txt:1364
 msgid "Vehicle Bodies Improved"
 msgstr "Châssis améliorés"
 
 #: data/base/messages/strings/resstrings.txt:573
-#: data/mp/messages/strings/resstrings.txt:263
-#: po/custom/fromJson.txt:741
+#: data/mp/messages/strings/resstrings.txt:263 po/custom/fromJson.txt:741
 msgid "Increases kinetic armor and body points"
 msgstr "Augmente le blindage cinétique et la résistance"
 
 #: data/base/messages/strings/resstrings.txt:581
-#: data/mp/messages/strings/resstrings.txt:266
-#: po/custom/fromJson.txt:1372
+#: data/mp/messages/strings/resstrings.txt:266 po/custom/fromJson.txt:1372
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Blindage thermique des véhicules renforcé"
 
 #: data/base/messages/strings/resstrings.txt:582
-#: data/mp/messages/strings/resstrings.txt:267
-#: po/custom/fromJson.txt:554
+#: data/mp/messages/strings/resstrings.txt:267 po/custom/fromJson.txt:554
 msgid "Heat-resistant armored layers"
 msgstr "Plaques blindées résistantes à la chaleur"
 
 #: data/base/messages/strings/resstrings.txt:583
-#: data/mp/messages/strings/resstrings.txt:268
-#: po/custom/fromJson.txt:765
+#: data/mp/messages/strings/resstrings.txt:268 po/custom/fromJson.txt:765
 msgid "Increases Thermal Armor"
 msgstr "Augmente le blindage thermique"
 
@@ -2591,8 +2466,7 @@ msgstr "Augmente le blindage thermique"
 #: data/mp/messages/strings/resstrings.txt:271
 #: data/mp/messages/strings/resstrings.txt:276
 #: data/mp/messages/strings/resstrings.txt:281
-#: data/mp/messages/strings/resstrings.txt:286
-#: po/custom/fromJson.txt:1367
+#: data/mp/messages/strings/resstrings.txt:286 po/custom/fromJson.txt:1367
 msgid "Vehicle Propulsion Improved"
 msgstr "Propulsion améliorée pour véhicules"
 
@@ -2603,8 +2477,7 @@ msgstr "Propulsion améliorée pour véhicules"
 #: data/mp/messages/strings/resstrings.txt:272
 #: data/mp/messages/strings/resstrings.txt:277
 #: data/mp/messages/strings/resstrings.txt:282
-#: data/mp/messages/strings/resstrings.txt:287
-#: po/custom/fromJson.txt:936
+#: data/mp/messages/strings/resstrings.txt:287 po/custom/fromJson.txt:936
 msgid "New armored construction"
 msgstr "Nouvelle construction blindée"
 
@@ -2615,32 +2488,27 @@ msgstr "Nouvelle construction blindée"
 #: data/mp/messages/strings/resstrings.txt:273
 #: data/mp/messages/strings/resstrings.txt:278
 #: data/mp/messages/strings/resstrings.txt:283
-#: data/mp/messages/strings/resstrings.txt:288
-#: po/custom/fromJson.txt:726
+#: data/mp/messages/strings/resstrings.txt:288 po/custom/fromJson.txt:726
 msgid "Increases Body Points"
 msgstr "Augmente la résistance"
 
 #: data/base/messages/strings/resstrings.txt:594
-#: data/mp/messages/strings/resstrings.txt:274
-#: po/custom/fromJson.txt:77
+#: data/mp/messages/strings/resstrings.txt:274 po/custom/fromJson.txt:77
 msgid "All half-tracks upgraded automatically"
 msgstr "Amélioration automatique de tous les véhicules à autochenilles"
 
 #: data/base/messages/strings/resstrings.txt:604
-#: data/mp/messages/strings/resstrings.txt:279
-#: po/custom/fromJson.txt:78
+#: data/mp/messages/strings/resstrings.txt:279 po/custom/fromJson.txt:78
 msgid "All hovers upgraded automatically"
 msgstr "Amélioration automatique de tous les aéroglisseurs"
 
 #: data/base/messages/strings/resstrings.txt:614
-#: data/mp/messages/strings/resstrings.txt:284
-#: po/custom/fromJson.txt:92
+#: data/mp/messages/strings/resstrings.txt:284 po/custom/fromJson.txt:92
 msgid "All tracks upgraded automatically"
 msgstr "Amélioration automatique de tous les véhicules à chenilles"
 
 #: data/base/messages/strings/resstrings.txt:624
-#: data/mp/messages/strings/resstrings.txt:289
-#: po/custom/fromJson.txt:100
+#: data/mp/messages/strings/resstrings.txt:289 po/custom/fromJson.txt:100
 msgid "All wheels upgraded automatically"
 msgstr "Amélioration automatique de tous les véhicules à roues"
 
@@ -2651,14 +2519,12 @@ msgstr "Amélioration automatique de tous les véhicules à roues"
 #: data/mp/messages/strings/resstrings.txt:291
 #: data/mp/messages/strings/resstrings.txt:296
 #: data/mp/messages/strings/resstrings.txt:301
-#: data/mp/messages/strings/resstrings.txt:306
-#: po/custom/fromJson.txt:934
+#: data/mp/messages/strings/resstrings.txt:306 po/custom/fromJson.txt:934
 msgid "New AA Turret Available"
 msgstr "Nouvelle tourelle de DCA disponible"
 
 #: data/base/messages/strings/resstrings.txt:636
-#: data/mp/messages/strings/resstrings.txt:292
-#: po/custom/fromJson.txt:1336
+#: data/mp/messages/strings/resstrings.txt:292 po/custom/fromJson.txt:1336
 msgid "Twin 80mm flak weapon"
 msgstr "Double canon de DCA de 80mm tirant des obus à fragmentation (flak)"
 
@@ -2669,138 +2535,117 @@ msgstr "Double canon de DCA de 80mm tirant des obus à fragmentation (flak)"
 #: data/mp/messages/strings/resstrings.txt:293
 #: data/mp/messages/strings/resstrings.txt:298
 #: data/mp/messages/strings/resstrings.txt:303
-#: data/mp/messages/strings/resstrings.txt:308
-#: po/custom/fromJson.txt:63
+#: data/mp/messages/strings/resstrings.txt:308 po/custom/fromJson.txt:63
 msgid "Aerial targets only"
 msgstr "Uniquement contre des cibles aériennes"
 
 #: data/base/messages/strings/resstrings.txt:642
-#: data/mp/messages/strings/resstrings.txt:297
-#: po/custom/fromJson.txt:1067
+#: data/mp/messages/strings/resstrings.txt:297 po/custom/fromJson.txt:1067
 msgid "Quad 80mm flak weapon"
 msgstr "Quadruple canon flak de 80mm"
 
 #: data/base/messages/strings/resstrings.txt:648
-#: data/mp/messages/strings/resstrings.txt:302
-#: po/custom/fromJson.txt:5
+#: data/mp/messages/strings/resstrings.txt:302 po/custom/fromJson.txt:5
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "Mitrailleuse anti-aérienne de 30mm"
 
 #: data/base/messages/strings/resstrings.txt:654
-#: data/mp/messages/strings/resstrings.txt:307
-#: po/custom/fromJson.txt:1065
+#: data/mp/messages/strings/resstrings.txt:307 po/custom/fromJson.txt:1065
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "Mitrailleuse anti-aérienne quadritube de 30mm"
 
 #: data/base/messages/strings/resstrings.txt:659
 #: data/base/messages/strings/resstrings.txt:677
 #: data/mp/messages/strings/resstrings.txt:311
-#: data/mp/messages/strings/resstrings.txt:321
-#: po/custom/fromJson.txt:37
+#: data/mp/messages/strings/resstrings.txt:321 po/custom/fromJson.txt:37
 msgid "AA Upgrade"
 msgstr "Amélioration des armes DCA"
 
 #: data/base/messages/strings/resstrings.txt:660
-#: data/mp/messages/strings/resstrings.txt:312
-#: po/custom/fromJson.txt:414
+#: data/mp/messages/strings/resstrings.txt:312 po/custom/fromJson.txt:414
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "Détecte et se verrouille sur les émissions thermiques des moteurs des VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:661
-#: data/mp/messages/strings/resstrings.txt:313
-#: po/custom/fromJson.txt:721
+#: data/mp/messages/strings/resstrings.txt:313 po/custom/fromJson.txt:721
 msgid "Increases AA accuracy"
 msgstr "Augmente la précision des armes DCA"
 
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
 #: data/mp/messages/strings/resstrings.txt:314
-#: data/mp/messages/strings/resstrings.txt:324
-#: po/custom/fromJson.txt:67
+#: data/mp/messages/strings/resstrings.txt:324 po/custom/fromJson.txt:67
 msgid "All AA weapons upgraded automatically"
 msgstr "Amélioration automatique de toutes les armes DCA"
 
 #: data/base/messages/strings/resstrings.txt:669
-#: data/mp/messages/strings/resstrings.txt:316
-#: po/custom/fromJson.txt:22
+#: data/mp/messages/strings/resstrings.txt:316 po/custom/fromJson.txt:22
 msgid "AA Flak Upgrade"
 msgstr "Amélioration des armes DCA à fragmentation (flak)"
 
 #: data/base/messages/strings/resstrings.txt:670
-#: data/mp/messages/strings/resstrings.txt:317
-#: po/custom/fromJson.txt:639
+#: data/mp/messages/strings/resstrings.txt:317 po/custom/fromJson.txt:639
 msgid "High Explosive Flak shards"
 msgstr "Obus à fragmentation hautement explosifs pour canons de DCA flak"
 
 #: data/base/messages/strings/resstrings.txt:671
-#: data/mp/messages/strings/resstrings.txt:318
-#: po/custom/fromJson.txt:722
+#: data/mp/messages/strings/resstrings.txt:318 po/custom/fromJson.txt:722
 msgid "Increases AA Flak damage"
 msgstr "Augmente les dégâts des armes de DCA flak"
 
 #: data/base/messages/strings/resstrings.txt:672
-#: data/mp/messages/strings/resstrings.txt:319
-#: po/custom/fromJson.txt:66
+#: data/mp/messages/strings/resstrings.txt:319 po/custom/fromJson.txt:66
 msgid "All AA flak weapons upgraded automatically"
 msgstr "Amélioration automatique de toutes les armes de DCA flak"
 
 #: data/base/messages/strings/resstrings.txt:678
-#: data/mp/messages/strings/resstrings.txt:322
-#: po/custom/fromJson.txt:1091
+#: data/mp/messages/strings/resstrings.txt:322 po/custom/fromJson.txt:1091
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "Mécanisme de rechargement au recul pour canons de DCA"
 
 #: data/base/messages/strings/resstrings.txt:679
-#: data/mp/messages/strings/resstrings.txt:323
-#: po/custom/fromJson.txt:723
+#: data/mp/messages/strings/resstrings.txt:323 po/custom/fromJson.txt:723
 msgid "Increases AA ROF"
 msgstr "Augmente la cadence de tir des armes de DCA"
 
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
 #: data/mp/messages/strings/resstrings.txt:326
-#: data/mp/messages/strings/resstrings.txt:331
-#: po/custom/fromJson.txt:961
+#: data/mp/messages/strings/resstrings.txt:331 po/custom/fromJson.txt:961
 msgid "New Proximity Bomb Turret Available"
 msgstr "Nouvelle tourelle lanceuse de mines de proximité disponible"
 
 #: data/base/messages/strings/resstrings.txt:686
-#: data/mp/messages/strings/resstrings.txt:327
-#: po/custom/fromJson.txt:277
+#: data/mp/messages/strings/resstrings.txt:327 po/custom/fromJson.txt:277
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr "Une mine a explosé à proximité d'un ennemi"
 
 #: data/base/messages/strings/resstrings.txt:687
 #: data/base/messages/strings/resstrings.txt:693
 #: data/mp/messages/strings/resstrings.txt:328
-#: data/mp/messages/strings/resstrings.txt:333
-#: po/custom/fromJson.txt:248
+#: data/mp/messages/strings/resstrings.txt:333 po/custom/fromJson.txt:248
 msgid "Best Targets: Base Structures and Defenses"
 msgstr "Efficace contre : bâtiments et défenses"
 
 #: data/base/messages/strings/resstrings.txt:692
-#: data/mp/messages/strings/resstrings.txt:332
-#: po/custom/fromJson.txt:1242
+#: data/mp/messages/strings/resstrings.txt:332 po/custom/fromJson.txt:1242
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "Une super-mine a explosée à proximité d'un ennemi"
 
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
 #: data/mp/messages/strings/resstrings.txt:336
-#: data/mp/messages/strings/resstrings.txt:341
-#: po/custom/fromJson.txt:941
+#: data/mp/messages/strings/resstrings.txt:341 po/custom/fromJson.txt:941
 msgid "New Bomb Bay Available"
 msgstr "Nouvelle soute à bombes disponible"
 
 #: data/base/messages/strings/resstrings.txt:698
-#: data/mp/messages/strings/resstrings.txt:337
-#: po/custom/fromJson.txt:421
+#: data/mp/messages/strings/resstrings.txt:337 po/custom/fromJson.txt:421
 msgid "Drops High Explosive Cluster bombs"
 msgstr "Largue des bombes à fragmentation"
 
 #: data/base/messages/strings/resstrings.txt:699
-#: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:246
+#: data/mp/messages/strings/resstrings.txt:338 po/custom/fromJson.txt:246
 msgid "Best Targets: Base Structures"
 msgstr "Efficace contre : bâtiments"
 
@@ -2815,44 +2660,37 @@ msgstr "Efficace contre : bâtiments"
 #: data/mp/messages/strings/resstrings.txt:364
 #: data/mp/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:379
-#: data/mp/messages/strings/resstrings.txt:384
-#: po/custom/fromJson.txt:267
+#: data/mp/messages/strings/resstrings.txt:384 po/custom/fromJson.txt:267
 msgid "Body Points: Low"
 msgstr "Résistance : faible"
 
 #: data/base/messages/strings/resstrings.txt:704
-#: data/mp/messages/strings/resstrings.txt:342
-#: po/custom/fromJson.txt:420
+#: data/mp/messages/strings/resstrings.txt:342 po/custom/fromJson.txt:420
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr "Largue des bombes anti-blindage hautement explosives (HEAP)"
 
 #: data/base/messages/strings/resstrings.txt:705
-#: data/mp/messages/strings/resstrings.txt:343
-#: po/custom/fromJson.txt:256
+#: data/mp/messages/strings/resstrings.txt:343 po/custom/fromJson.txt:256
 msgid "Best Targets: Defenses"
 msgstr "Efficace contre : défenses"
 
 #: data/base/messages/strings/resstrings.txt:713
-#: data/mp/messages/strings/resstrings.txt:346
-#: po/custom/fromJson.txt:275
+#: data/mp/messages/strings/resstrings.txt:346 po/custom/fromJson.txt:275
 msgid "Bombsight Upgrade"
 msgstr "Amélioration des bombardiers"
 
 #: data/base/messages/strings/resstrings.txt:714
-#: data/mp/messages/strings/resstrings.txt:347
-#: po/custom/fromJson.txt:834
+#: data/mp/messages/strings/resstrings.txt:347 po/custom/fromJson.txt:834
 msgid "Locks on to thermal emissions"
 msgstr "Se verrouille sur les émissions de chaleur"
 
 #: data/base/messages/strings/resstrings.txt:715
-#: data/mp/messages/strings/resstrings.txt:348
-#: po/custom/fromJson.txt:727
+#: data/mp/messages/strings/resstrings.txt:348 po/custom/fromJson.txt:727
 msgid "Increases Bombing accuracy"
 msgstr "Augmente la précision des bombes"
 
 #: data/base/messages/strings/resstrings.txt:716
-#: data/mp/messages/strings/resstrings.txt:349
-#: po/custom/fromJson.txt:69
+#: data/mp/messages/strings/resstrings.txt:349 po/custom/fromJson.txt:69
 msgid "All bomb bays upgraded automatically"
 msgstr "Amélioration automatique de tous les bombardiers"
 
@@ -2861,76 +2699,64 @@ msgstr "Amélioration automatique de tous les bombardiers"
 #: data/base/messages/strings/resstrings.txt:757
 #: data/mp/messages/strings/resstrings.txt:351
 #: data/mp/messages/strings/resstrings.txt:356
-#: data/mp/messages/strings/resstrings.txt:361
-#: po/custom/fromJson.txt:979
+#: data/mp/messages/strings/resstrings.txt:361 po/custom/fromJson.txt:979
 msgid "New Weapon Turret Available"
 msgstr "Nouvelle tourelle d'armement disponible"
 
 #: data/base/messages/strings/resstrings.txt:730
-#: data/mp/messages/strings/resstrings.txt:352
-#: po/custom/fromJson.txt:682
+#: data/mp/messages/strings/resstrings.txt:352 po/custom/fromJson.txt:682
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "Canon tirant des munitions de 88mm à vitesse d'impact élevée"
 
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
 #: data/mp/messages/strings/resstrings.txt:353
-#: data/mp/messages/strings/resstrings.txt:358
-#: po/custom/fromJson.txt:260
+#: data/mp/messages/strings/resstrings.txt:358 po/custom/fromJson.txt:260
 msgid "Best Targets: Vehicles"
 msgstr "Efficace contre : véhicules"
 
 #: data/base/messages/strings/resstrings.txt:732
-#: data/mp/messages/strings/resstrings.txt:354
-#: po/custom/fromJson.txt:1114
+#: data/mp/messages/strings/resstrings.txt:354 po/custom/fromJson.txt:1114
 msgid "Replaces Medium Cannon"
 msgstr "Remplace le canon moyen"
 
 #: data/base/messages/strings/resstrings.txt:736
-#: data/mp/messages/strings/resstrings.txt:357
-#: po/custom/fromJson.txt:8
+#: data/mp/messages/strings/resstrings.txt:357 po/custom/fromJson.txt:8
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "Canon automatique haute-vitesse quadritube tirant des munitions de 76mm"
 
 #: data/base/messages/strings/resstrings.txt:738
-#: data/mp/messages/strings/resstrings.txt:359
-#: po/custom/fromJson.txt:266
+#: data/mp/messages/strings/resstrings.txt:359 po/custom/fromJson.txt:266
 msgid "Body Points: High"
 msgstr "Résistance : élevée"
 
 #: data/base/messages/strings/resstrings.txt:758
-#: data/mp/messages/strings/resstrings.txt:362
-#: po/custom/fromJson.txt:576
+#: data/mp/messages/strings/resstrings.txt:362 po/custom/fromJson.txt:576
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "Lance-flammes lourd au gel d'oxyde de propylène"
 
 #: data/base/messages/strings/resstrings.txt:759
-#: data/mp/messages/strings/resstrings.txt:363
-#: po/custom/fromJson.txt:254
+#: data/mp/messages/strings/resstrings.txt:363 po/custom/fromJson.txt:254
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Efficace contre : bunkers, véhicules à roues et aéroglisseurs"
 
 #: data/base/messages/strings/resstrings.txt:765
-#: data/mp/messages/strings/resstrings.txt:366
-#: po/custom/fromJson.txt:481
+#: data/mp/messages/strings/resstrings.txt:366 po/custom/fromJson.txt:481
 msgid "Flamer Upgrade"
 msgstr "Amélioration des lance-flammes"
 
 #: data/base/messages/strings/resstrings.txt:766
-#: data/mp/messages/strings/resstrings.txt:367
-#: po/custom/fromJson.txt:1051
+#: data/mp/messages/strings/resstrings.txt:367 po/custom/fromJson.txt:1051
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "Gel d'oxyde de propylène traité pour brûler à très hautes températures"
 
 #: data/base/messages/strings/resstrings.txt:767
-#: data/mp/messages/strings/resstrings.txt:368
-#: po/custom/fromJson.txt:736
+#: data/mp/messages/strings/resstrings.txt:368 po/custom/fromJson.txt:736
 msgid "Increases Flamer damage"
 msgstr "Augmente les dégâts des lance-flammes"
 
 #: data/base/messages/strings/resstrings.txt:768
-#: data/mp/messages/strings/resstrings.txt:369
-#: po/custom/fromJson.txt:76
+#: data/mp/messages/strings/resstrings.txt:369 po/custom/fromJson.txt:76
 msgid "All flamers upgraded automatically"
 msgstr "Amélioration automatique de tous les lance-flammes"
 
@@ -2941,40 +2767,34 @@ msgstr "Amélioration automatique de tous les lance-flammes"
 #: data/mp/messages/strings/resstrings.txt:371
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:381
-#: data/mp/messages/strings/resstrings.txt:411
-#: po/custom/fromJson.txt:949
+#: data/mp/messages/strings/resstrings.txt:411 po/custom/fromJson.txt:949
 msgid "New Indirect Fire Weapon Available"
 msgstr "Nouvelle artillerie disponible"
 
 #: data/base/messages/strings/resstrings.txt:774
-#: data/mp/messages/strings/resstrings.txt:372
-#: po/custom/fromJson.txt:2
+#: data/mp/messages/strings/resstrings.txt:372 po/custom/fromJson.txt:2
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "Obusier de calibre 105mm pouvant être affecté à un radar"
 
 #: data/base/messages/strings/resstrings.txt:775
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
-#: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:251
+#: data/mp/messages/strings/resstrings.txt:378 po/custom/fromJson.txt:251
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Efficace contre : bâtiments, infanterie, véhicules à roues"
 
 #: data/base/messages/strings/resstrings.txt:780
-#: data/mp/messages/strings/resstrings.txt:377
-#: po/custom/fromJson.txt:4
+#: data/mp/messages/strings/resstrings.txt:377 po/custom/fromJson.txt:4
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "Obusier de calibre 155mm pouvant être affecté à un radar"
 
 #: data/base/messages/strings/resstrings.txt:788
-#: data/mp/messages/strings/resstrings.txt:382
-#: po/custom/fromJson.txt:1
+#: data/mp/messages/strings/resstrings.txt:382 po/custom/fromJson.txt:1
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr "Obusier de calibre 105mm à obus incendiaires pouvant être affecté à un radar"
 
 #: data/base/messages/strings/resstrings.txt:789
-#: data/mp/messages/strings/resstrings.txt:383
-#: po/custom/fromJson.txt:249
+#: data/mp/messages/strings/resstrings.txt:383 po/custom/fromJson.txt:249
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "Efficace contre : bâtiments, bunkers"
 
@@ -2983,20 +2803,17 @@ msgstr "Efficace contre : bâtiments, bunkers"
 #: data/base/messages/strings/resstrings.txt:809
 #: data/mp/messages/strings/resstrings.txt:386
 #: data/mp/messages/strings/resstrings.txt:391
-#: data/mp/messages/strings/resstrings.txt:396
-#: po/custom/fromJson.txt:671
+#: data/mp/messages/strings/resstrings.txt:396 po/custom/fromJson.txt:671
 msgid "Howitzer Upgrade"
 msgstr "Amélioration des obusiers"
 
 #: data/base/messages/strings/resstrings.txt:794
-#: data/mp/messages/strings/resstrings.txt:387
-#: po/custom/fromJson.txt:1197
+#: data/mp/messages/strings/resstrings.txt:387 po/custom/fromJson.txt:1197
 msgid "Self-guided rocket powered shells"
 msgstr "Munitions auto-guidées propulsées par fusées"
 
 #: data/base/messages/strings/resstrings.txt:795
-#: data/mp/messages/strings/resstrings.txt:388
-#: po/custom/fromJson.txt:738
+#: data/mp/messages/strings/resstrings.txt:388 po/custom/fromJson.txt:738
 msgid "Increases Howitzer accuracy"
 msgstr "Augmente la précision des obusiers"
 
@@ -3005,142 +2822,120 @@ msgstr "Augmente la précision des obusiers"
 #: data/base/messages/strings/resstrings.txt:812
 #: data/mp/messages/strings/resstrings.txt:389
 #: data/mp/messages/strings/resstrings.txt:394
-#: data/mp/messages/strings/resstrings.txt:399
-#: po/custom/fromJson.txt:79
+#: data/mp/messages/strings/resstrings.txt:399 po/custom/fromJson.txt:79
 msgid "All howitzers upgraded automatically"
 msgstr "Amélioration automatique de tous les obusiers"
 
 #: data/base/messages/strings/resstrings.txt:802
-#: data/mp/messages/strings/resstrings.txt:392
-#: po/custom/fromJson.txt:642
+#: data/mp/messages/strings/resstrings.txt:392 po/custom/fromJson.txt:642
 msgid "High Explosive shells"
 msgstr "Obus hautement explosifs"
 
 #: data/base/messages/strings/resstrings.txt:803
-#: data/mp/messages/strings/resstrings.txt:393
-#: po/custom/fromJson.txt:739
+#: data/mp/messages/strings/resstrings.txt:393 po/custom/fromJson.txt:739
 msgid "Increases Howitzer damage"
 msgstr "Augmente les dégâts des obusiers"
 
 #: data/base/messages/strings/resstrings.txt:810
-#: data/mp/messages/strings/resstrings.txt:397
-#: po/custom/fromJson.txt:233
+#: data/mp/messages/strings/resstrings.txt:397 po/custom/fromJson.txt:233
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "Le mécanisme de chargement automatique remplace le chargement manuel"
 
 #: data/base/messages/strings/resstrings.txt:811
-#: data/mp/messages/strings/resstrings.txt:398
-#: po/custom/fromJson.txt:740
+#: data/mp/messages/strings/resstrings.txt:398 po/custom/fromJson.txt:740
 msgid "Increases Howitzer ROF"
 msgstr "Augmente la cadence de tir des obusiers"
 
 #: data/base/messages/strings/resstrings.txt:845
 #: data/base/messages/strings/resstrings.txt:857
 #: data/mp/messages/strings/resstrings.txt:401
-#: data/mp/messages/strings/resstrings.txt:406
-#: po/custom/fromJson.txt:845
+#: data/mp/messages/strings/resstrings.txt:406 po/custom/fromJson.txt:845
 msgid "Machinegun Upgrade"
 msgstr "Amélioration des mitrailleuses"
 
 #: data/base/messages/strings/resstrings.txt:846
-#: data/mp/messages/strings/resstrings.txt:402
-#: po/custom/fromJson.txt:1327
+#: data/mp/messages/strings/resstrings.txt:402 po/custom/fromJson.txt:1327
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Balles perforantes à pointe de tungstène"
 
 #: data/base/messages/strings/resstrings.txt:847
-#: data/mp/messages/strings/resstrings.txt:403
-#: po/custom/fromJson.txt:746
+#: data/mp/messages/strings/resstrings.txt:403 po/custom/fromJson.txt:746
 msgid "Increases Machinegun damage"
 msgstr "Augmente les dégâts des mitrailleuses"
 
 #: data/base/messages/strings/resstrings.txt:848
 #: data/base/messages/strings/resstrings.txt:860
 #: data/mp/messages/strings/resstrings.txt:404
-#: data/mp/messages/strings/resstrings.txt:409
-#: po/custom/fromJson.txt:81
+#: data/mp/messages/strings/resstrings.txt:409 po/custom/fromJson.txt:81
 msgid "All machineguns upgraded automatically"
 msgstr "Amélioration automatique de toutes les mitrailleuses"
 
 #: data/base/messages/strings/resstrings.txt:858
-#: data/mp/messages/strings/resstrings.txt:407
-#: po/custom/fromJson.txt:691
+#: data/mp/messages/strings/resstrings.txt:407 po/custom/fromJson.txt:691
 msgid "Improved chaingun mechanism"
 msgstr "Mécanisme d'alimentation amélioré"
 
 #: data/base/messages/strings/resstrings.txt:859
-#: data/mp/messages/strings/resstrings.txt:408
-#: po/custom/fromJson.txt:747
+#: data/mp/messages/strings/resstrings.txt:408 po/custom/fromJson.txt:747
 msgid "Increases Machinegun ROF"
 msgstr "Cadence de tir des mitrailleuses augmentée"
 
 #: data/base/messages/strings/resstrings.txt:892
-#: data/mp/messages/strings/resstrings.txt:412
-#: po/custom/fromJson.txt:855
+#: data/mp/messages/strings/resstrings.txt:412 po/custom/fromJson.txt:855
 msgid "May be assigned to a sensor"
 msgstr "Peut être affecté à un radar"
 
 #: data/base/messages/strings/resstrings.txt:893
-#: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:250
+#: data/mp/messages/strings/resstrings.txt:413 po/custom/fromJson.txt:250
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Efficace contre : bâtiments, infanterie, véhicules à roues"
 
 #: data/base/messages/strings/resstrings.txt:894
-#: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:270
+#: data/mp/messages/strings/resstrings.txt:414 po/custom/fromJson.txt:270
 msgid "Body Points: Very Low"
 msgstr "Résistance : très faible"
 
 #: data/base/messages/strings/resstrings.txt:905
-#: data/mp/messages/strings/resstrings.txt:416
-#: po/custom/fromJson.txt:917
+#: data/mp/messages/strings/resstrings.txt:416 po/custom/fromJson.txt:917
 msgid "Mortar Upgrade"
 msgstr "Amélioration des mortiers"
 
 #: data/base/messages/strings/resstrings.txt:906
-#: data/mp/messages/strings/resstrings.txt:417
-#: po/custom/fromJson.txt:636
+#: data/mp/messages/strings/resstrings.txt:417 po/custom/fromJson.txt:636
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "Obus anti-blindage hautement explosifs (HEAP) pour obusiers"
 
 #: data/base/messages/strings/resstrings.txt:907
-#: data/mp/messages/strings/resstrings.txt:418
-#: po/custom/fromJson.txt:755
+#: data/mp/messages/strings/resstrings.txt:418 po/custom/fromJson.txt:755
 msgid "Increases Mortar damage"
 msgstr "Augmente les dégâts des mortiers"
 
 #: data/base/messages/strings/resstrings.txt:908
-#: data/mp/messages/strings/resstrings.txt:419
-#: po/custom/fromJson.txt:84
+#: data/mp/messages/strings/resstrings.txt:419 po/custom/fromJson.txt:84
 msgid "All mortars upgraded automatically"
 msgstr "Amélioration automatique de tous les mortiers"
 
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
 #: data/mp/messages/strings/resstrings.txt:421
-#: data/mp/messages/strings/resstrings.txt:426
-#: po/custom/fromJson.txt:891
+#: data/mp/messages/strings/resstrings.txt:426 po/custom/fromJson.txt:891
 msgid "Mini-Rocket Upgrade"
 msgstr "Amélioration des mini-roquettes"
 
 #: data/base/messages/strings/resstrings.txt:944
-#: data/mp/messages/strings/resstrings.txt:422
-#: po/custom/fromJson.txt:637
+#: data/mp/messages/strings/resstrings.txt:422 po/custom/fromJson.txt:637
 msgid "High Explosive Armor-Piercing warheads"
 msgstr "Ogives anti-blindage hautement explosives (HEAP) pour roquettes"
 
 #: data/base/messages/strings/resstrings.txt:945
-#: data/mp/messages/strings/resstrings.txt:423
-#: po/custom/fromJson.txt:749
+#: data/mp/messages/strings/resstrings.txt:423 po/custom/fromJson.txt:749
 msgid "Increases Mini-Rocket damage"
 msgstr "Augmente les dégâts des mini-roquettes"
 
 #: data/base/messages/strings/resstrings.txt:946
 #: data/base/messages/strings/resstrings.txt:954
 #: data/mp/messages/strings/resstrings.txt:424
-#: data/mp/messages/strings/resstrings.txt:429
-#: po/custom/fromJson.txt:82
+#: data/mp/messages/strings/resstrings.txt:429 po/custom/fromJson.txt:82
 msgid "All mini-rockets upgraded automatically"
 msgstr "Amélioration automatique de toutes les mini-roquettes"
 
@@ -3155,95 +2950,73 @@ msgid "Increases Mini-Rocket ROF"
 msgstr "Augmente la cadence de tir des mini-roquettes"
 
 #: data/base/messages/strings/resstrings.txt:965
-#: data/mp/messages/strings/resstrings.txt:431
-#: po/custom/fromJson.txt:1162
+#: data/mp/messages/strings/resstrings.txt:431 po/custom/fromJson.txt:1162
 msgid "Rocket Upgrade"
 msgstr "Amélioration des roquettes"
 
 #: data/base/messages/strings/resstrings.txt:966
-#: data/mp/messages/strings/resstrings.txt:432
-#: po/custom/fromJson.txt:643
+#: data/mp/messages/strings/resstrings.txt:432 po/custom/fromJson.txt:643
 msgid "High Explosive Squash Head warhead"
 msgstr "Ogive HESH pour roquettes"
 
 #: data/base/messages/strings/resstrings.txt:967
-#: data/mp/messages/strings/resstrings.txt:433
-#: po/custom/fromJson.txt:763
+#: data/mp/messages/strings/resstrings.txt:433 po/custom/fromJson.txt:763
 msgid "Increases Rocket damage"
 msgstr "Augmente les dégâts des roquettes"
 
 #: data/base/messages/strings/resstrings.txt:968
-#: data/mp/messages/strings/resstrings.txt:434
-#: po/custom/fromJson.txt:90
+#: data/mp/messages/strings/resstrings.txt:434 po/custom/fromJson.txt:90
 msgid "All rockets upgraded automatically"
 msgstr "Amélioration automatique de toutes les roquettes"
 
-#: data/base/script/rules.js:22
-#: data/base/script/tutorial.js:9
-#: data/mp/multiplay/skirmish/rules.js:33
-#: src/challenge.cpp:214
-#: src/hci.cpp:2866
-#: src/hci.cpp:3582
-#: src/intelmap.cpp:402
-#: src/intorder.cpp:568
-#: src/loadsave.cpp:240
-#: src/multimenu.cpp:392
-#: src/multimenu.cpp:1049
-#: src/transporter.cpp:197
-#: src/transporter.cpp:256
-#: src/transporter.cpp:534
+#: data/base/script/rules.js:22 data/base/script/tutorial.js:9
+#: data/mp/multiplay/skirmish/rules.js:33 src/challenge.cpp:214
+#: src/hci.cpp:2866 src/hci.cpp:3582 src/intelmap.cpp:402 src/intorder.cpp:568
+#: src/loadsave.cpp:240 src/multimenu.cpp:392 src/multimenu.cpp:1049
+#: src/transporter.cpp:197 src/transporter.cpp:256 src/transporter.cpp:534
 msgid "Close"
 msgstr "Fermer"
 
-#: data/base/script/rules.js:23
-#: data/base/script/tutorial.js:10
+#: data/base/script/rules.js:23 data/base/script/tutorial.js:10
 #: data/mp/multiplay/skirmish/rules.js:34
 msgid "Manufacture (F1)"
 msgstr "Assemblage (F1)"
 
-#: data/base/script/rules.js:24
-#: data/base/script/tutorial.js:11
+#: data/base/script/rules.js:24 data/base/script/tutorial.js:11
 #: data/mp/multiplay/skirmish/rules.js:35
 msgid "Research (F2)"
 msgstr "Recherche (F2)"
 
-#: data/base/script/rules.js:25
-#: data/base/script/tutorial.js:12
+#: data/base/script/rules.js:25 data/base/script/tutorial.js:12
 #: data/mp/multiplay/skirmish/rules.js:36
 msgid "Build (F3)"
 msgstr "Construction (F3)"
 
-#: data/base/script/rules.js:26
-#: data/base/script/tutorial.js:13
+#: data/base/script/rules.js:26 data/base/script/tutorial.js:13
 #: data/mp/multiplay/skirmish/rules.js:37
 msgid "Design (F4)"
 msgstr "Conception (F4)"
 
-#: data/base/script/rules.js:27
-#: data/base/script/tutorial.js:14
+#: data/base/script/rules.js:27 data/base/script/tutorial.js:14
 #: data/mp/multiplay/skirmish/rules.js:38
 msgid "Intelligence Display (F5)"
 msgstr "Panneau d'informations (F5)"
 
-#: data/base/script/rules.js:28
-#: data/base/script/tutorial.js:15
+#: data/base/script/rules.js:28 data/base/script/tutorial.js:15
 #: data/mp/multiplay/skirmish/rules.js:39
 msgid "Commanders (F6)"
 msgstr "Commandants (F6)"
 
-#: data/base/script/text/cam2cx.slo:270
-#: data/base/script/text/genexp.slo:758
+#: data/base/script/text/cam2cx.slo:270 data/base/script/text/genexp.slo:758
 msgid "Enemy Escaping"
 msgstr "Un ennemi s'échappe !"
 
-#: data/base/script/text/cam2dx.slo:40
-#: data/base/script/text/cam3a-d1x.slo:98
+#: data/base/script/text/cam2dx.slo:40 data/base/script/text/cam3a-d1x.slo:98
 #: data/base/script/text/cam3a-d2x.slo:108
 msgid "Objective Destroyed"
 msgstr "Objectif détruit"
 
-#: data/base/script/text/cam2dx.slo:63
-#: data/base/script/text/cam3a-d1x.slo:128
+#: data/base/script/text/cam2dx.slo:63 data/base/script/text/cam3a-d1x.slo:128
 msgid "Objective Captured"
 msgstr "Objectif capturé"
 
@@ -4249,13 +4022,11 @@ msgstr "Il est maintenant grand temps de les utiliser pour reconstruire le monde
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Lentement, la civilisation va renaître de ses cendres..."
 
-#: data/mp/messages/strings/names.txt:15
-#: po/custom/fromJson.txt:848
+#: data/mp/messages/strings/names.txt:15 po/custom/fromJson.txt:848
 msgid "Machinegun Viper Wheels"
 msgstr "Mitrailleuse Vipère roues"
 
-#: data/mp/messages/strings/names.txt:213
-#: po/custom/fromJson.txt:1207
+#: data/mp/messages/strings/names.txt:213 po/custom/fromJson.txt:1207
 msgid "Sensor Tower"
 msgstr "Tour radar"
 
@@ -4263,8 +4034,7 @@ msgstr "Tour radar"
 msgid "Tornado AA Site"
 msgstr "Site de DCA Tornade"
 
-#: data/mp/messages/strings/names.txt:271
-#: po/custom/fromJson.txt:838
+#: data/mp/messages/strings/names.txt:271 po/custom/fromJson.txt:838
 msgid "Machinegun"
 msgstr "Mitrailleuse"
 
@@ -4272,8 +4042,7 @@ msgstr "Mitrailleuse"
 msgid "VTOL Flak Cannon"
 msgstr "Canon flak VTOL"
 
-#: data/mp/messages/strings/names.txt:293
-#: po/custom/fromJson.txt:329
+#: data/mp/messages/strings/names.txt:293 po/custom/fromJson.txt:329
 msgid "Collective Wall"
 msgstr "Mur du Collectif"
 
@@ -4293,8 +4062,7 @@ msgstr "Angle de mur NEXUS en béton renforcé"
 msgid "CAM1 RESEARCH"
 msgstr "CAM1 RECHERCHE"
 
-#: data/mp/messages/strings/names.txt:336
-#: po/custom/fromJson.txt:57
+#: data/mp/messages/strings/names.txt:336 po/custom/fromJson.txt:57
 msgid "ADVANCED RESEARCH"
 msgstr "RECHERCHE AVANCÉE"
 
@@ -4350,43 +4118,35 @@ msgstr "CAM2 STRUCTURES"
 msgid "CAM3 RESEARCH"
 msgstr "CAM3 RECHERCHE"
 
-#: data/mp/messages/strings/names.txt:361
-#: po/custom/fromJson.txt:901
+#: data/mp/messages/strings/names.txt:361 po/custom/fromJson.txt:901
 msgid "Missile Targeting Codes"
 msgstr "Codes de programmation des missiles"
 
-#: data/mp/messages/strings/names.txt:362
-#: po/custom/fromJson.txt:1195
+#: data/mp/messages/strings/names.txt:362 po/custom/fromJson.txt:1195
 msgid "Second Level Missile Targeting Codes"
 msgstr "Codes de programmation des missiles Niveau 2"
 
-#: data/mp/messages/strings/names.txt:363
-#: po/custom/fromJson.txt:1311
+#: data/mp/messages/strings/names.txt:363 po/custom/fromJson.txt:1311
 msgid "Third Level Missile Firing Codes"
 msgstr "Codes de programmation des missiles Niveau 3"
 
-#: data/mp/messages/strings/names.txt:371
-#: po/custom/fromJson.txt:578
+#: data/mp/messages/strings/names.txt:371 po/custom/fromJson.txt:578
 msgid "Heavy Gunner Cyborg"
 msgstr "Cyborg à canon"
 
-#: data/mp/messages/strings/names.txt:372
-#: po/custom/fromJson.txt:476
+#: data/mp/messages/strings/names.txt:372 po/custom/fromJson.txt:476
 msgid "Flamer Cyborg"
 msgstr "Cyborg lance-flammes"
 
-#: data/mp/messages/strings/names.txt:373
-#: po/custom/fromJson.txt:843
+#: data/mp/messages/strings/names.txt:373 po/custom/fromJson.txt:843
 msgid "Machinegunner Cyborg"
 msgstr "Cyborg mitrailleur"
 
-#: data/mp/messages/strings/names.txt:380
-#: po/custom/fromJson.txt:379
+#: data/mp/messages/strings/names.txt:380 po/custom/fromJson.txt:379
 msgid "Cyborg Propulsion"
 msgstr "Propulsion bipédique"
 
-#: data/mp/messages/strings/names.txt:404
-#: po/custom/fromJson.txt:594
+#: data/mp/messages/strings/names.txt:404 po/custom/fromJson.txt:594
 msgid "Heavy Machinegun Tower"
 msgstr "Tour à mitrailleuse lourde"
 
@@ -4394,8 +4154,7 @@ msgstr "Tour à mitrailleuse lourde"
 msgid "Flamer Tower"
 msgstr "Tour à lance-flammes"
 
-#: data/mp/messages/strings/names.txt:406
-#: po/custom/fromJson.txt:800
+#: data/mp/messages/strings/names.txt:406 po/custom/fromJson.txt:800
 msgid "Lancer Tower"
 msgstr "Tour à lance-roquettes"
 
@@ -4415,8 +4174,7 @@ msgstr "Centre de réparation avancé Mk2"
 msgid "Advanced Repair Facility Mk3"
 msgstr "Centre de réparation avancé Mk3"
 
-#: data/mp/messages/strings/names.txt:469
-#: po/custom/fromJson.txt:601
+#: data/mp/messages/strings/names.txt:469 po/custom/fromJson.txt:601
 msgid "Heavy Repair Turret"
 msgstr "Tourelle de réparation lourde"
 
@@ -4424,8 +4182,7 @@ msgstr "Tourelle de réparation lourde"
 msgid "Nexus Intruder Program"
 msgstr "Cyber virus de NEXUS"
 
-#: data/mp/messages/strings/names.txt:490
-#: po/custom/fromJson.txt:992
+#: data/mp/messages/strings/names.txt:490 po/custom/fromJson.txt:992
 msgid "Nexus Resistance Circuits"
 msgstr "Circuits résisitifs au NEXUS"
 
@@ -4437,94 +4194,76 @@ msgstr "Circuits résisitifs au NEXUS Mk2"
 msgid "Nexus Resistance Circuits Mk3"
 msgstr "Circuits résisitifs au NEXUS Mk3"
 
-#: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:661
+#: data/mp/messages/strings/names.txt:504 po/custom/fromJson.txt:661
 msgid "Hover Propulsion II"
 msgstr "Aéroglisseur II"
 
-#: data/mp/messages/strings/names.txt:506
-#: po/custom/fromJson.txt:516
+#: data/mp/messages/strings/names.txt:506 po/custom/fromJson.txt:516
 msgid "Half-tracked Propulsion II"
 msgstr "Autochenilles II"
 
-#: data/mp/messages/strings/names.txt:508
-#: po/custom/fromJson.txt:1315
+#: data/mp/messages/strings/names.txt:508 po/custom/fromJson.txt:1315
 msgid "Tracked Propulsion II"
 msgstr "Chenilles II"
 
-#: data/mp/messages/strings/names.txt:510
-#: po/custom/fromJson.txt:1427
+#: data/mp/messages/strings/names.txt:510 po/custom/fromJson.txt:1427
 msgid "VTOL Propulsion II"
 msgstr "Propulsion VTOL II"
 
-#: data/mp/messages/strings/names.txt:512
-#: po/custom/fromJson.txt:1450
+#: data/mp/messages/strings/names.txt:512 po/custom/fromJson.txt:1450
 msgid "Wheeled Propulsion II"
 msgstr "Roues II"
 
-#: data/mp/messages/strings/names.txt:537
-#: po/custom/fromJson.txt:413
+#: data/mp/messages/strings/names.txt:537 po/custom/fromJson.txt:413
 msgid "Depleted Uranium MG Bullets Mk2"
 msgstr "Balles à uranium appauvri pour mitrailleuses Mk2"
 
-#: data/mp/messages/strings/names.txt:566
-#: po/custom/fromJson.txt:839
+#: data/mp/messages/strings/names.txt:566 po/custom/fromJson.txt:839
 msgid "Machinegun Artifact"
 msgstr "Artefact pour mitrailleuses"
 
-#: data/mp/messages/strings/names.txt:569
-#: po/custom/fromJson.txt:953
+#: data/mp/messages/strings/names.txt:569 po/custom/fromJson.txt:953
 msgid "New Paradigm Command Center"
 msgstr "Centre de commandement du Nouveau Paradigme"
 
-#: data/mp/messages/strings/names.txt:570
-#: po/custom/fromJson.txt:324
+#: data/mp/messages/strings/names.txt:570 po/custom/fromJson.txt:324
 msgid "Collective Command Center"
 msgstr "Centre de commandement du Collectif"
 
 #: data/mp/messages/strings/names.txt:723
-#: data/mp/messages/strings/names.txt:724
-#: po/custom/fromJson.txt:900
+#: data/mp/messages/strings/names.txt:724 po/custom/fromJson.txt:900
 msgid "Missile Silo"
 msgstr "Silo de lancement de missiles nucléaires"
 
-#: data/mp/messages/strings/names.txt:775
-#: po/custom/fromJson.txt:1250
+#: data/mp/messages/strings/names.txt:775 po/custom/fromJson.txt:1250
 msgid "Super Heavy-Gunner"
 msgstr "Super Cyborg à canon lourd"
 
-#: data/mp/messages/strings/names.txt:777
-#: po/custom/fromJson.txt:1241
+#: data/mp/messages/strings/names.txt:777 po/custom/fromJson.txt:1241
 msgid "Super Auto-Cannon Cyborg"
 msgstr "Super Cyborg à canon d'assaut"
 
-#: data/mp/messages/strings/names.txt:779
-#: po/custom/fromJson.txt:1257
+#: data/mp/messages/strings/names.txt:779 po/custom/fromJson.txt:1257
 msgid "Super HPV Cyborg"
 msgstr "Super Cyborg à canon hypersonique"
 
-#: data/mp/messages/strings/names.txt:781
-#: po/custom/fromJson.txt:1263
+#: data/mp/messages/strings/names.txt:781 po/custom/fromJson.txt:1263
 msgid "Super Tank-Killer Cyborg"
 msgstr "Super Cyborg à roquettes anti-char"
 
-#: data/mp/messages/strings/names.txt:788
-#: po/custom/fromJson.txt:1170
+#: data/mp/messages/strings/names.txt:788 po/custom/fromJson.txt:1170
 msgid "Satellite Uplink Center"
 msgstr "Centre de communications satellite"
 
-#: data/mp/messages/strings/names.txt:799
-#: po/custom/fromJson.txt:1260
+#: data/mp/messages/strings/names.txt:799 po/custom/fromJson.txt:1260
 msgid "Super Pulse Laser Cyborg"
 msgstr "Super Cyborg à laser à impulsions"
 
-#: data/mp/messages/strings/names.txt:801
-#: po/custom/fromJson.txt:1261
+#: data/mp/messages/strings/names.txt:801 po/custom/fromJson.txt:1261
 msgid "Super Rail-Gunner"
 msgstr "Super Cyborg à canon électrique lourd"
 
-#: data/mp/messages/strings/names.txt:803
-#: po/custom/fromJson.txt:1262
+#: data/mp/messages/strings/names.txt:803 po/custom/fromJson.txt:1262
 msgid "Super Scourge Cyborg"
 msgstr "Super Cyborg à missiles Scourge"
 
@@ -4545,92 +4284,85 @@ msgstr "Tourelle de commandement IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "FACILE"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "MOYEN"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "DIFFICILE"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "DEMENT"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
-#, fuzzy
 msgid "Personality change successful."
-msgstr "Transfert de contrôle réussi."
+msgstr "Transfert de personnalité réussi."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "Cette personnalité n'existe pas ! Essayez l'une d'elles :"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "Recherche forcée terminée, je vais faire ce que qui m'intéresse maintenant !"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Recherche bloquée, je ne vais pas travailler pour le moment."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Recherche sur une technologie fondamentale en cours."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Menu recherche"
+msgstr "Recherche en cours"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "Cette stratégie de recherche n'existe pas ! Essayez l'une d'entre elles :"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Désolé, je n'ai pas de camions."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
-#, fuzzy
 msgid "You can use this one."
-msgstr "Sécurisez la zone."
+msgstr "Vous pouvez utiliser cette zone."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "Désolé, le tranfert d'unités a échoué."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "Générateur d'énergie"
+msgstr "Energie transférée"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
-#, fuzzy
 msgid "Please put a beacon!"
-msgstr "Larguer une balise"
+msgstr "Larguez une balise !"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "J'arrive !"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "Désolé je n'ai pas d'unités à envoyer pour le moment !"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "Quand vous voudrez chef !"
 
-#: lib/framework/i18n.cpp:100
-#: lib/framework/i18n.cpp:163
+#: lib/framework/i18n.cpp:100 lib/framework/i18n.cpp:163
 msgid "System locale"
 msgstr "Langage du système"
 
-#: lib/netplay/netplay.cpp:217
-#: lib/netplay/netplay.cpp:1121
+#: lib/netplay/netplay.cpp:217 lib/netplay/netplay.cpp:1121
 msgid "Enter password here"
 msgstr "Entrez le mot de passe ici"
 
@@ -4651,7 +4383,7 @@ msgstr ""
 "ouvrir le port 2100 avant d'héberger une partie."
 
 #: lib/netplay/netplay.cpp:1028
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr "Impossible d'ouvrir le port (%s) sur (%s)"
 
@@ -4835,9 +4567,8 @@ msgid "Advanced Manufacturing"
 msgstr "Techniques de production avancées"
 
 #: po/custom/fromJson.txt:48
-#, fuzzy
 msgid "Advancedmaterialslab"
-msgstr "Techniques de guerre avancées"
+msgstr "Laboratiore de matériaux avancés"
 
 #: po/custom/fromJson.txt:49
 msgid "Advanced Missile Allocation System"
@@ -4892,14 +4623,12 @@ msgid "Advanced VTOL Production Mk3"
 msgstr "Production aéronautique avancée Mk3"
 
 #: po/custom/fromJson.txt:64
-#, fuzzy
 msgid "Aerodynamic Jump Pack"
 msgstr "Jet-pack aérodynamique"
 
 #: po/custom/fromJson.txt:65
-#, fuzzy
 msgid "Aerodynamicslab"
-msgstr "Jet-pack aérodynamique"
+msgstr "Laboratiore d'aérodynamisme"
 
 #: po/custom/fromJson.txt:70
 msgid "All cannons upgraded automatically"
@@ -4943,12 +4672,11 @@ msgstr "Amélioration automatique de tous les VTOLs"
 
 #: po/custom/fromJson.txt:101
 msgid "Ally"
-msgstr ""
+msgstr "Allié"
 
 #: po/custom/fromJson.txt:102
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Campagne"
+msgstr "Campagne Alpha"
 
 #: po/custom/fromJson.txt:103
 msgid "Amphibious hover propulsion"
@@ -4975,18 +4703,15 @@ msgid "Anti-tank rocket"
 msgstr "Roquettes anti-char"
 
 #: po/custom/fromJson.txt:109
-#, fuzzy
-msgid "APDSB MG Bullets"
+msgid "APDS MG Bullets"
 msgstr "Balles perforantes à sabot détachable (APDS) pour mitrailleuses"
 
 #: po/custom/fromJson.txt:110
-#, fuzzy
-msgid "APDSB MG Bullets Mk2"
+msgid "APDS MG Bullets Mk2"
 msgstr "Balles APDS pour mitrailleuses Mk2"
 
 #: po/custom/fromJson.txt:111
-#, fuzzy
-msgid "APDSB MG Bullets Mk3"
+msgid "APDS MG Bullets Mk3"
 msgstr "Balles APDS pour mitrailleuses Mk3"
 
 #: po/custom/fromJson.txt:112
@@ -5382,7 +5107,6 @@ msgid "Automatic loader replaces manual feed"
 msgstr "Chargeur automatique remplaçant le chargement manuel"
 
 #: po/custom/fromJson.txt:234
-#, fuzzy
 msgid "Auto Repair"
 msgstr "Auto-réparation"
 
@@ -5408,16 +5132,15 @@ msgstr "Coûts et délais de production moyens"
 
 #: po/custom/fromJson.txt:240
 msgid "BaBaLegs"
-msgstr ""
+msgstr "Jambes pillard"
 
 #: po/custom/fromJson.txt:241
 msgid "BaBaProp"
-msgstr ""
+msgstr "Propulsion pillard"
 
 #: po/custom/fromJson.txt:242
-#, fuzzy
 msgid "Back to Basics"
-msgstr "De retour à la normalité !"
+msgstr "Retour aux bases"
 
 #: po/custom/fromJson.txt:243
 msgid "Battlefield repair unit"
@@ -5472,9 +5195,8 @@ msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Efficace contre : véhicules à roues et aéroglisseurs"
 
 #: po/custom/fromJson.txt:264
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Nouvelle campagne"
+msgstr "Campagne Beta"
 
 #: po/custom/fromJson.txt:265
 msgid "Body Points and Speed Increased"
@@ -5857,9 +5579,8 @@ msgid "Cyborg Flamer"
 msgstr "Cyborg incendieur"
 
 #: po/custom/fromJson.txt:370
-#, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Châssis lourd du Projet"
+msgstr "Cyborg lourd"
 
 #: po/custom/fromJson.txt:371
 msgid "Cyborg High Intensity Thermal Armor"
@@ -5874,14 +5595,12 @@ msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "Armure thermique hautes températures Cyborg Mk3"
 
 #: po/custom/fromJson.txt:374
-#, fuzzy
 msgid "Cyborg Lancer"
-msgstr "Cyborg incendieur"
+msgstr "Cyborg lance-roquettes"
 
 #: po/custom/fromJson.txt:375
-#, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Châssis léger du Projet"
+msgstr "Cyborg léger"
 
 #: po/custom/fromJson.txt:377
 msgid "Cyborg Mechanic"
@@ -6032,7 +5751,6 @@ msgid "Electronic Countermeasures"
 msgstr "Brouillage électronique"
 
 #: po/custom/fromJson.txt:427
-#, fuzzy
 msgid "Electronic Countermeasures Mk2"
 msgstr "Brouillage électronique Mk2"
 
@@ -6089,9 +5807,8 @@ msgid "Enables self-repair in all vehicles"
 msgstr "Permet l'auto-réparation de tous les véhicules"
 
 #: po/custom/fromJson.txt:441
-#, fuzzy
 msgid "Enemy"
-msgstr "Base ennemie"
+msgstr "Ennemi"
 
 #: po/custom/fromJson.txt:442
 msgid "Engineering"
@@ -6275,9 +5992,8 @@ msgid "Fuel Injection Engine Mk3"
 msgstr "Moteur à injection Mk3"
 
 #: po/custom/fromJson.txt:494
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Campagne"
+msgstr "Campagne gamma"
 
 #: po/custom/fromJson.txt:495
 msgid "Gas turbine boosts power output"
@@ -6677,7 +6393,7 @@ msgstr "Missile sol-air lourd"
 
 #: po/custom/fromJson.txt:606
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "Laboratoire d'armes lourdes"
 
 #: po/custom/fromJson.txt:607
 msgid "HE Bomb Shells"
@@ -6697,7 +6413,7 @@ msgstr "Obus HE pour obusiers Mk3"
 
 #: po/custom/fromJson.txt:611
 msgid "Helicopter"
-msgstr ""
+msgstr "Hélicoptère"
 
 #: po/custom/fromJson.txt:612
 msgid "Hellstorm"
@@ -6753,7 +6469,7 @@ msgstr "Ogive HESH pour roquettes Mk3"
 
 #: po/custom/fromJson.txt:626
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Cache toi derrière moi"
 
 #: po/custom/fromJson.txt:627
 msgid "Hi-Energy Laser Emitter"
@@ -6844,9 +6560,8 @@ msgid "Hover"
 msgstr "Aéroglisseur"
 
 #: po/custom/fromJson.txt:657
-#, fuzzy
 msgid "Hover AI"
-msgstr "Aéroglisseur II"
+msgstr "IA aéroglisseur"
 
 #: po/custom/fromJson.txt:658
 msgid "Hover II"
@@ -7157,9 +6872,8 @@ msgid "Increases Rocket ROF"
 msgstr "Cadence de tir des lance-roquettes augmentée"
 
 #: po/custom/fromJson.txt:768
-#, fuzzy
 msgid "Indirectweaponslab"
-msgstr "Nouvelle artillerie disponible"
+msgstr "Laboratiore d'artillerie"
 
 #: po/custom/fromJson.txt:769
 msgid "Inferior armor and body points to Cobra"
@@ -7326,7 +7040,6 @@ msgid "Laser Guided Bombsight"
 msgstr "Bombardement à visée laser"
 
 #: po/custom/fromJson.txt:811
-#, fuzzy
 msgid "Laseropticslab"
 msgstr "Laboratoire d'optique laser"
 
@@ -7716,7 +7429,7 @@ msgstr "Châssis super lourd - Dragon"
 
 #: po/custom/fromJson.txt:921
 msgid "Nanolab"
-msgstr ""
+msgstr "Laboratoire de nanotechnologies"
 
 #: po/custom/fromJson.txt:922
 msgid "Narrow area of effect"
@@ -7883,9 +7596,8 @@ msgid "New VTOL Missile Launcher"
 msgstr "Nouveau lance-missiles pour VTOLs"
 
 #: po/custom/fromJson.txt:980
-#, fuzzy
 msgid "Nexus"
-msgstr "Lien Nexus"
+msgstr "Nexus"
 
 #: po/custom/fromJson.txt:981
 msgid "NEXUS CWall"
@@ -7928,7 +7640,6 @@ msgid "NEXUS Medium Body"
 msgstr "Châssis moyen de NEXUS"
 
 #: po/custom/fromJson.txt:991
-#, fuzzy
 msgid "Nexus Missile Silo"
 msgstr "Silo de lancement de missiles nucléaires de NEXUS"
 
@@ -7950,11 +7661,11 @@ msgstr "Mur Nexus"
 
 #: po/custom/fromJson.txt:997
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Nulle part où se cacher"
 
 #: po/custom/fromJson.txt:998
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #: po/custom/fromJson.txt:999
 msgid "Oil Derrick"
@@ -7989,14 +7700,12 @@ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
 msgstr "Ordonne aux unités d'artillerie associées de tirer sur les radars ennemis"
 
 #: po/custom/fromJson.txt:1009
-#, fuzzy
 msgid "Original Campaign"
-msgstr "Campagne"
+msgstr "Campagne originale"
 
 #: po/custom/fromJson.txt:1010
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Escarmouche un joueur"
+msgstr "Escarmouche originale"
 
 #: po/custom/fromJson.txt:1011
 msgid "Or select the Repair Facility as a unit's target"
@@ -8107,9 +7816,8 @@ msgid "Power Generator"
 msgstr "Générateur d'énergie"
 
 #: po/custom/fromJson.txt:1038
-#, fuzzy
 msgid "Powerlab"
-msgstr "Énergie"
+msgstr "Laboratoire sur l'énergie"
 
 #: po/custom/fromJson.txt:1039
 msgid "Power Module"
@@ -8136,14 +7844,12 @@ msgid "Produces Cyborgs"
 msgstr "Produit des Cyborgs"
 
 #: po/custom/fromJson.txt:1047
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Châssis lourd du Collectif"
+msgstr "Châssis lourd du Projet"
 
 #: po/custom/fromJson.txt:1048
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Châssis léger du Collectif"
+msgstr "Châssis léger du Projet"
 
 #: po/custom/fromJson.txt:1049
 msgid "Project Medium Body"
@@ -8322,9 +8028,8 @@ msgid "Reinforced Base Structure Materials Mk3"
 msgstr "Matériaux de construction améliorés Mk3"
 
 #: po/custom/fromJson.txt:1100
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Centre de réparation"
+msgstr "Tourelle de centre de réparation"
 
 #: po/custom/fromJson.txt:1101
 msgid "Repair Cobra Tracks"
@@ -8556,7 +8261,7 @@ msgstr "Mortier rotatif - Poivrière"
 
 #: po/custom/fromJson.txt:1166
 msgid "Rotaryweaponslab"
-msgstr ""
+msgstr "Laboratoire d'armes rotatives"
 
 #: po/custom/fromJson.txt:1167
 msgid "Ruined Factory"
@@ -8680,11 +8385,11 @@ msgstr "Production de véhicules par auto-réplication"
 
 #: po/custom/fromJson.txt:1200
 msgid "Semperfi"
-msgstr ""
+msgstr "Semperfi"
 
 #: po/custom/fromJson.txt:1201
 msgid "Semperfi JS"
-msgstr ""
+msgstr "Semperfi JS"
 
 #: po/custom/fromJson.txt:1202
 msgid "Sensor Cobra Half-tracks"
@@ -8752,11 +8457,11 @@ msgstr "Châssis lent"
 
 #: po/custom/fromJson.txt:1221
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "Coin de mur détruit"
 
 #: po/custom/fromJson.txt:1222
 msgid "Smashedwall"
-msgstr ""
+msgstr "Mur détruit"
 
 #: po/custom/fromJson.txt:1223
 msgid "Speed: Fast"
@@ -8882,8 +8587,7 @@ msgstr "Gel plasma très haute température Mk2"
 msgid "Superhot Plasmite gel Mk3"
 msgstr "Gel plasma très haute température Mk3"
 
-#: po/custom/fromJson.txt:1264
-#: src/design.cpp:1054
+#: po/custom/fromJson.txt:1264 src/design.cpp:1054
 msgid "Super Transport"
 msgstr "Super Transporteur"
 
@@ -9095,8 +8799,7 @@ msgstr "Chenilles II"
 msgid "Tracks III"
 msgstr "Chenilles III"
 
-#: po/custom/fromJson.txt:1320
-#: src/design.cpp:1049
+#: po/custom/fromJson.txt:1320 src/design.cpp:1049
 msgid "Transport"
 msgstr "Transporteur"
 
@@ -9146,7 +8849,7 @@ msgstr "Moteur turbo Mk3"
 
 #: po/custom/fromJson.txt:1334
 msgid "Turtle AI"
-msgstr ""
+msgstr "IA Tortue"
 
 #: po/custom/fromJson.txt:1335
 msgid "Twin 7.62mm machineguns"
@@ -9198,7 +8901,7 @@ msgstr "Double laser moyen anti-aérien"
 
 #: po/custom/fromJson.txt:1348
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Mitrailleuses rotatives jumelées"
+msgstr "Mitrailleuses rotatives rapides jumelées"
 
 #: po/custom/fromJson.txt:1349
 msgid "Unit Research Completed"
@@ -9542,11 +9245,11 @@ msgstr "Mitrailleuses jumelées VTOL"
 
 #: po/custom/fromJson.txt:1445
 msgid "Wall"
-msgstr ""
+msgstr "Mur"
 
 #: po/custom/fromJson.txt:1446
 msgid "Wallcorner"
-msgstr ""
+msgstr "Coin de mur"
 
 #: po/custom/fromJson.txt:1447
 msgid "Warehouse"
@@ -9619,31 +9322,30 @@ msgstr "Varan"
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2013 The Warzone 2100 Project"
+"Copyright © 2005-2017 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2015 The Warzone 2100 Project"
+"Copyright © 2005-2017 The Warzone 2100 Project"
 
-#: po/custom/mac-infoplist.txt:2
-#: po/custom/warzone2100.desktop.txt:2
+#: po/custom/mac-infoplist.txt:2 po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
 msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr "Fichier Warzone 2100 (carte/mod)"
+msgstr "Fichier mode carte pour Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr "Fichier Warzone 2100 (mod campagne)"
+msgstr "Fichier mode campagne pour Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Fichier Warzone 2100 (mod multijoueurs)"
+msgstr "Fichier mode multijoueurs pour Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr "Fichier Warzone 2100 (mod global)"
+msgstr "Fichier mode global pour Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
@@ -9651,7 +9353,7 @@ msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr "Fichier Warzone 2100 (mod pour la musique)"
+msgstr "Fichier mode pour la musique pour Warzone 2100"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
@@ -9688,9 +9390,8 @@ msgid "configuration directory"
 msgstr "Dossier de configuration"
 
 #: src/clparse.cpp:260
-#, fuzzy
 msgid "Add data directory"
-msgstr "Dossier de données"
+msgstr "Ajouter un dossier de données"
 
 #: src/clparse.cpp:260
 msgid "data directory"
@@ -9721,41 +9422,36 @@ msgid "Play in fullscreen mode"
 msgstr "Jouer en mode plein écran"
 
 #: src/clparse.cpp:265
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Charger un jeu spécifique"
+msgstr "Charger un mode de jeu spécifique"
 
 #: src/clparse.cpp:265
 msgid "level name"
-msgstr ""
+msgstr "Nom du niveau"
 
 #: src/clparse.cpp:266
-#, fuzzy
 msgid "Show options and exit"
-msgstr "Affiche les informations sur la version et quitte"
+msgstr "Affiche les options et quitte"
 
 #: src/clparse.cpp:267
-#, fuzzy
 msgid "Show all options and exit"
-msgstr "Affiche les informations sur la version et quitte"
+msgstr "Affiche toutes les options et quitte"
 
 #: src/clparse.cpp:268
 msgid "Enable a global mod"
-msgstr "Active un mod global"
+msgstr "Active un mode global"
 
-#: src/clparse.cpp:268
-#: src/clparse.cpp:269
-#: src/clparse.cpp:270
+#: src/clparse.cpp:268 src/clparse.cpp:269 src/clparse.cpp:270
 msgid "mod"
 msgstr "Mod"
 
 #: src/clparse.cpp:269
 msgid "Enable a campaign only mod"
-msgstr "Active un mod pour campagnes seulement"
+msgstr "Active un mode pour campagnes seulement"
 
 #: src/clparse.cpp:270
 msgid "Enable a multiplay only mod"
-msgstr "Active un mod pour multijoueurs seulement"
+msgstr "Active un mode pour multijoueurs seulement"
 
 #: src/clparse.cpp:271
 msgid "Disable asserts"
@@ -9766,19 +9462,16 @@ msgid "Causes a crash to test the crash handler"
 msgstr "Génère un crash afin de tester le gestionnaire de crash"
 
 #: src/clparse.cpp:273
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Charger une sauvegarde"
+msgstr "Charger une sauvegarde d'escarmouche"
 
-#: src/clparse.cpp:273
-#: src/clparse.cpp:274
+#: src/clparse.cpp:273 src/clparse.cpp:274
 msgid "savegame"
 msgstr "Sauvegarder"
 
 #: src/clparse.cpp:274
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Charger une sauvegarde"
+msgstr "Charger une sauvegarde de campagne"
 
 #: src/clparse.cpp:275
 msgid "Play in windowed mode"
@@ -9786,15 +9479,15 @@ msgstr "Jouer en mode fenêtré"
 
 #: src/clparse.cpp:276
 msgid "Show version information and exit"
-msgstr "Affiche les informations sur la version et quitte"
+msgstr "Afficher les informations sur la version et quitter"
 
 #: src/clparse.cpp:277
 msgid "Set the resolution to use"
-msgstr "Fixe la résolution à utiliser"
+msgstr "Définir la résolution à utiliser"
 
 #: src/clparse.cpp:277
 msgid "WIDTHxHEIGHT"
-msgstr "HAUTEUR*LARGEUR"
+msgstr "HAUTEUR x LARGEUR"
 
 #: src/clparse.cpp:278
 msgid "Enable shadows"
@@ -9813,7 +9506,6 @@ msgid "Disable sound"
 msgstr "Désactiver le son"
 
 #: src/clparse.cpp:282
-#, fuzzy
 msgid "Connect directly to IP/hostname"
 msgstr "Se connecter directement à un IP/nom d'hôte"
 
@@ -9822,9 +9514,8 @@ msgid "host"
 msgstr "Hôte"
 
 #: src/clparse.cpp:283
-#, fuzzy
 msgid "Go directly to host screen"
-msgstr "Aller directement à l'écran de l'hôte"
+msgstr "Aller directement à l'écran hôte"
 
 #: src/clparse.cpp:284
 msgid "Enable texture compression"
@@ -9836,24 +9527,23 @@ msgstr "Désactiver la compression des textures"
 
 #: src/clparse.cpp:286
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "Lancer automatiquement les parties (test)"
 
 #: src/clparse.cpp:287
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "Sauvegarder immédiatement et quitter"
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "save name"
-msgstr "Sauvegarder"
+msgstr "Sauvegarder le nom"
 
 #: src/clparse.cpp:288
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "Démarrer l'escarmouche avec le fichier de paramètres sélectionné"
 
 #: src/clparse.cpp:288
 msgid "test"
-msgstr ""
+msgstr "test"
 
 #: src/cmddroid.cpp:108
 msgid "Commander needs a higher level to command more units"
@@ -9863,13 +9553,11 @@ msgstr "Le commandant doit avoir un niveau plus élevé pour prendre en charge p
 msgid "My Game"
 msgstr "Ma partie"
 
-#: src/configuration.cpp:117
-#: src/multistat.cpp:167
+#: src/configuration.cpp:117 src/multistat.cpp:167
 msgid "Player"
 msgstr "Joueur"
 
-#: src/design.cpp:392
-#: src/design.cpp:405
+#: src/design.cpp:392 src/design.cpp:405
 msgid "New Vehicle"
 msgstr "Nouveau véhicule"
 
@@ -9881,9 +9569,7 @@ msgstr "Châssis"
 msgid "Vehicle Propulsion"
 msgstr "Mode de propulsion"
 
-#: src/design.cpp:483
-#: src/design.cpp:502
-#: src/design.cpp:522
+#: src/design.cpp:483 src/design.cpp:502 src/design.cpp:522
 msgid "Vehicle Turret"
 msgstr "Tourelle du véhicule"
 
@@ -9893,115 +9579,87 @@ msgstr "Effacer ce modèle"
 
 #: src/design.cpp:553
 msgid "Store Template"
-msgstr "Enregistrer la configuration"
+msgstr "Enregistrer le modèle"
 
-#: src/design.cpp:597
-#: src/design.cpp:637
+#: src/design.cpp:597 src/design.cpp:637
 msgid "Kinetic Armour"
 msgstr "Blindage cinétique"
 
-#: src/design.cpp:606
-#: src/design.cpp:647
+#: src/design.cpp:606 src/design.cpp:647
 msgid "Thermal Armour"
 msgstr "Blindage thermique"
 
-#: src/design.cpp:615
-#: src/design.cpp:656
+#: src/design.cpp:615 src/design.cpp:656
 msgid "Engine Output"
 msgstr "Puissance du moteur"
 
-#: src/design.cpp:623
-#: src/design.cpp:665
-#: src/design.cpp:1261
-#: src/design.cpp:1285
-#: src/design.cpp:1305
-#: src/design.cpp:1321
-#: src/design.cpp:1340
-#: src/design.cpp:1357
-#: src/design.cpp:1376
-#: src/design.cpp:1393
-#: src/design.cpp:1433
-#: src/design.cpp:1465
-#: src/design.cpp:1597
-#: src/design.cpp:1613
-#: src/design.cpp:1651
+#: src/design.cpp:623 src/design.cpp:665 src/design.cpp:1261
+#: src/design.cpp:1285 src/design.cpp:1305 src/design.cpp:1321
+#: src/design.cpp:1340 src/design.cpp:1357 src/design.cpp:1376
+#: src/design.cpp:1393 src/design.cpp:1433 src/design.cpp:1465
+#: src/design.cpp:1597 src/design.cpp:1613 src/design.cpp:1651
 #: src/design.cpp:1684
 msgid "Weight"
 msgstr "Poids"
 
-#: src/design.cpp:693
-#: src/design.cpp:708
+#: src/design.cpp:693 src/design.cpp:708
 msgid "Total Power Required"
 msgstr "Énergie requise pour l'assemblage"
 
-#: src/design.cpp:721
-#: src/design.cpp:737
+#: src/design.cpp:721 src/design.cpp:737
 msgid "Total Body Points"
 msgstr "Résistance totale"
 
-#: src/design.cpp:830
-#: src/design.cpp:850
+#: src/design.cpp:830 src/design.cpp:850
 msgid "Power Usage"
 msgstr "Consommation d'énergie"
 
 #: src/design.cpp:1076
 msgid "Hydra "
-msgstr ""
+msgstr "Hydra"
 
-#: src/design.cpp:1241
-#: src/design.cpp:1269
+#: src/design.cpp:1241 src/design.cpp:1269
 msgid "Sensor Range"
 msgstr "Portée des détecteurs"
 
-#: src/design.cpp:1253
-#: src/design.cpp:1277
+#: src/design.cpp:1253 src/design.cpp:1277
 msgid "Sensor Power"
 msgstr "Puissance des détecteurs"
 
-#: src/design.cpp:1297
-#: src/design.cpp:1313
+#: src/design.cpp:1297 src/design.cpp:1313
 msgid "ECM Power"
 msgstr "Puissance ECM"
 
-#: src/design.cpp:1332
-#: src/design.cpp:1349
-#: src/design.cpp:1368
+#: src/design.cpp:1332 src/design.cpp:1349 src/design.cpp:1368
 #: src/design.cpp:1385
 msgid "Build Points"
 msgstr "Vitesse de construction/réparation"
 
-#: src/design.cpp:1405
-#: src/design.cpp:1441
+#: src/design.cpp:1405 src/design.cpp:1441
 msgid "Range"
 msgstr "Portée"
 
-#: src/design.cpp:1417
-#: src/design.cpp:1449
+#: src/design.cpp:1417 src/design.cpp:1449
 msgid "Damage"
 msgstr "Dégâts"
 
-#: src/design.cpp:1425
-#: src/design.cpp:1457
+#: src/design.cpp:1425 src/design.cpp:1457
 msgid "Rate-of-Fire"
 msgstr "Cadence de tir"
 
-#: src/design.cpp:1585
-#: src/design.cpp:1605
+#: src/design.cpp:1585 src/design.cpp:1605
 msgid "Air Speed"
 msgstr "Vitesse en vol"
 
-#: src/design.cpp:1623
-#: src/design.cpp:1660
+#: src/design.cpp:1623 src/design.cpp:1660
 msgid "Road Speed"
 msgstr "Vitesse sur route"
 
-#: src/design.cpp:1633
-#: src/design.cpp:1668
+#: src/design.cpp:1633 src/design.cpp:1668
 msgid "Off-Road Speed"
 msgstr "Vitesse en hors-route"
 
-#: src/design.cpp:1641
-#: src/design.cpp:1676
+#: src/design.cpp:1641 src/design.cpp:1676
 msgid "Water Speed"
 msgstr "Vitesse sur l'eau"
 
@@ -10014,14 +9672,12 @@ msgid "Systems"
 msgstr "Systèmes"
 
 #: src/design.cpp:4183
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "Effacer ce modèle"
+msgstr "Effacer le modèle"
 
 #: src/design.cpp:4188
-#, fuzzy
 msgid "Store Design"
-msgstr "Nouveau modèle"
+msgstr "Sauvegarder le modèle"
 
 #: src/display3d.cpp:668
 msgid "Player left"
@@ -10031,8 +9687,7 @@ msgstr "Le joueur à quitté"
 msgid "Player dropped"
 msgstr "Le joueur a perdu"
 
-#: src/display3d.cpp:676
-#: src/multiint.cpp:2371
+#: src/display3d.cpp:676 src/multiint.cpp:2371
 msgid "Waiting for other players"
 msgstr "Attente des autres joueurs"
 
@@ -10045,14 +9700,14 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction impossible pour le moment. Le gisement de pétrole est en feu."
 
 #: src/display.cpp:1534
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Endommagé(e) à %d%% - Expérience %.1f, %s"
+msgstr "%s - Points de vie : %d/%d - Expérience %.1f, %s"
 
 #: src/display.cpp:1696
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Allié - Endommagé(e) à %d%% - Expérience %d, %s"
+msgstr "%s - Allié - Points de vie : %d/%d - Expérience %d, %s"
 
 #: src/droid.cpp:266
 msgid "Unit Lost!"
@@ -10129,7 +9784,7 @@ msgstr "Héros"
 
 #: src/droid.cpp:3072
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "Transfert d'unités impossible -- limite dépassée"
 
 #: src/frontend.cpp:141
 msgid "Single Player"
@@ -10139,8 +9794,7 @@ msgstr "Un joueur"
 msgid "Multi Player"
 msgstr "Multijoueurs"
 
-#: src/frontend.cpp:143
-#: src/frontend.cpp:276
+#: src/frontend.cpp:143 src/frontend.cpp:276
 msgid "Tutorial"
 msgstr "Tutoriel"
 
@@ -10148,8 +9802,7 @@ msgstr "Tutoriel"
 msgid "Options"
 msgstr "Options"
 
-#: src/frontend.cpp:147
-#: src/frontend.cpp:151
+#: src/frontend.cpp:147 src/frontend.cpp:151
 msgid "View Intro"
 msgstr "Voir l'intro"
 
@@ -10194,20 +9847,13 @@ msgid "TUTORIALS"
 msgstr "TUTORIELS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:280
-#: src/frontend.cpp:343
-#: src/frontend.cpp:389
-#: src/frontend.cpp:577
-#: src/frontend.cpp:651
-#: src/frontend.cpp:772
-#: src/frontend.cpp:855
-#: src/frontend.cpp:985
-#: src/frontend.cpp:1157
-#: src/frontend.cpp:1288
-#: src/frontend.cpp:1308
+#: src/frontend.cpp:280 src/frontend.cpp:343 src/frontend.cpp:389
+#: src/frontend.cpp:577 src/frontend.cpp:651 src/frontend.cpp:772
+#: src/frontend.cpp:855 src/frontend.cpp:985 src/frontend.cpp:1157
+#: src/frontend.cpp:1288 src/frontend.cpp:1308
 msgctxt "menu"
 msgid "Return"
-msgstr "Menu précédent"
+msgstr "Retour"
 
 #: src/frontend.cpp:336
 msgid "New Campaign"
@@ -10233,23 +9879,19 @@ msgstr "Charger une sauvegarde d'escarmouche"
 msgid "SINGLE PLAYER"
 msgstr "UN JOUEUR"
 
-#: src/frontend.cpp:347
-#: src/frontend.cpp:393
+#: src/frontend.cpp:347 src/frontend.cpp:393
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Les vidéos pour la campagne sont manquantes ! Téléchargez-les sur http://wz2100.net"
 
 #: src/frontend.cpp:388
-#, fuzzy
 msgid "CAMPAIGNS"
-msgstr "PREMIÈRE CAMPAGNE"
+msgstr "CAMPAGNES"
 
-#: src/frontend.cpp:512
-#: src/ingameop.cpp:432
+#: src/frontend.cpp:512 src/ingameop.cpp:432
 msgid "Load Campaign Saved Game"
 msgstr "Charger une sauvegarde de campagne"
 
-#: src/frontend.cpp:518
-#: src/ingameop.cpp:436
+#: src/frontend.cpp:518 src/ingameop.cpp:436
 msgid "Load Skirmish Saved Game"
 msgstr "Charger une sauvegarde d'escarmouche"
 
@@ -10269,8 +9911,7 @@ msgstr "Joindre une partie"
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "Le port TCP 2100 doit être ouvert dans votre pare-feu/routeur pour pouvoir héberger des parties !"
 
-#: src/frontend.cpp:644
-#: src/multiint.cpp:1577
+#: src/frontend.cpp:644 src/multiint.cpp:1577
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
@@ -10286,8 +9927,7 @@ msgstr "Options graphiques"
 msgid "Video Options"
 msgstr "Options vidéo"
 
-#: src/frontend.cpp:648
-#: src/ingameop.cpp:209
+#: src/frontend.cpp:648 src/ingameop.cpp:209
 msgid "Audio Options"
 msgstr "Options audio"
 
@@ -10301,32 +9941,23 @@ msgstr "Raccourcis clavier"
 
 #: src/frontend.cpp:703
 msgid "1×"
-msgstr ""
+msgstr "1x"
 
 #: src/frontend.cpp:704
 msgid "2×"
-msgstr ""
+msgstr "2x"
 
-#: src/frontend.cpp:705
-#: src/frontend.cpp:910
+#: src/frontend.cpp:705 src/frontend.cpp:910
 msgid "Fullscreen"
 msgstr "Plein écran"
 
-#: src/frontend.cpp:706
-#: src/frontend.cpp:717
-#: src/frontend.cpp:1228
+#: src/frontend.cpp:706 src/frontend.cpp:717 src/frontend.cpp:1228
 msgid "Unsupported"
 msgstr "Non supporté"
 
-#: src/frontend.cpp:714
-#: src/frontend.cpp:723
-#: src/frontend.cpp:728
-#: src/frontend.cpp:917
-#: src/frontend.cpp:941
-#: src/frontend.cpp:1099
-#: src/frontend.cpp:1104
-#: src/frontend.cpp:1109
-#: src/frontend.cpp:1119
+#: src/frontend.cpp:714 src/frontend.cpp:723 src/frontend.cpp:728
+#: src/frontend.cpp:917 src/frontend.cpp:941 src/frontend.cpp:1099
+#: src/frontend.cpp:1104 src/frontend.cpp:1109 src/frontend.cpp:1119
 msgid "Off"
 msgstr "Désactivé"
 
@@ -10334,17 +9965,12 @@ msgstr "Désactivé"
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:716
-#: src/multiplay.cpp:2027
+#: src/frontend.cpp:716 src/multiplay.cpp:2027
 msgid "Black"
 msgstr "Noir"
 
-#: src/frontend.cpp:723
-#: src/frontend.cpp:728
-#: src/frontend.cpp:941
-#: src/frontend.cpp:1099
-#: src/frontend.cpp:1104
-#: src/frontend.cpp:1109
+#: src/frontend.cpp:723 src/frontend.cpp:728 src/frontend.cpp:941
+#: src/frontend.cpp:1099 src/frontend.cpp:1104 src/frontend.cpp:1109
 #: src/frontend.cpp:1119
 msgid "On"
 msgstr "Activé"
@@ -10381,18 +10007,15 @@ msgstr "Mini-map"
 msgid "GRAPHICS OPTIONS"
 msgstr "OPTIONS GRAPHIQUES"
 
-#: src/frontend.cpp:843
-#: src/ingameop.cpp:131
+#: src/frontend.cpp:843 src/ingameop.cpp:131
 msgid "Voice Volume"
 msgstr "Volume de la voix"
 
-#: src/frontend.cpp:847
-#: src/ingameop.cpp:136
+#: src/frontend.cpp:847 src/ingameop.cpp:136
 msgid "FX Volume"
 msgstr "Volume des bruits (FX)"
 
-#: src/frontend.cpp:851
-#: src/ingameop.cpp:141
+#: src/frontend.cpp:851 src/ingameop.cpp:141
 msgid "Music Volume"
 msgstr "Volume de la musique"
 
@@ -10418,11 +10041,11 @@ msgstr "Résolution*"
 
 #: src/frontend.cpp:970
 msgid "Texture size"
-msgstr "Résolution des textures"
+msgstr "Taille des textures"
 
 #: src/frontend.cpp:974
 msgid "Vertical sync"
-msgstr "V-sync"
+msgstr "Synchronisation verticale"
 
 #: src/frontend.cpp:982
 msgid "VIDEO OPTIONS"
@@ -10446,23 +10069,21 @@ msgstr "Piéger le curseur"
 
 #: src/frontend.cpp:1141
 msgid "Switch Mouse Buttons"
-msgstr "Inverser boutons de souris"
+msgstr "Inverser les boutons de la souris"
 
 #: src/frontend.cpp:1146
 msgid "Rotate Screen"
 msgstr "Rotation du point de vue"
 
 #: src/frontend.cpp:1150
-#, fuzzy
 msgid "Colored Cursors"
-msgstr "Curseur coloré*"
+msgstr "Curseurs colorés"
 
 #: src/frontend.cpp:1154
 msgid "MOUSE OPTIONS"
 msgstr "OPTIONS SOURIS"
 
-#: src/frontend.cpp:1221
-#: src/multiint.cpp:211
+#: src/frontend.cpp:1221 src/multiint.cpp:211
 msgid "Easy"
 msgstr "Facile"
 
@@ -10470,69 +10091,55 @@ msgstr "Facile"
 msgid "Normal"
 msgstr "Normale"
 
-#: src/frontend.cpp:1223
-#: src/multiint.cpp:211
+#: src/frontend.cpp:1223 src/multiint.cpp:211
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.cpp:1224
-#: src/multiint.cpp:211
+#: src/frontend.cpp:1224 src/multiint.cpp:211
 msgid "Insane"
 msgstr "Démént"
 
 #: src/frontend.cpp:1225
 msgid "Tough"
-msgstr ""
+msgstr "Combatif"
 
 #: src/frontend.cpp:1226
-#, fuzzy
 msgid "Killer"
-msgstr "Tués"
+msgstr "Tueur"
 
-#: src/frontend.cpp:1243
-#: src/frontend.cpp:1309
+#: src/frontend.cpp:1243 src/frontend.cpp:1309
 msgid "Language"
 msgstr "Langage"
 
-#: src/frontend.cpp:1247
-#: src/frontend.cpp:1313
-#, fuzzy
+#: src/frontend.cpp:1247 src/frontend.cpp:1313
 msgid "Campaign Difficulty"
-msgstr "Difficulté"
+msgstr "Difficulté de la campagne"
 
-#: src/frontend.cpp:1251
-#: src/frontend.cpp:1314
+#: src/frontend.cpp:1251 src/frontend.cpp:1314
 msgid "Scroll Speed"
 msgstr "Vitesse de défilement"
 
-#: src/frontend.cpp:1255
-#: src/frontend.cpp:1310
+#: src/frontend.cpp:1255 src/frontend.cpp:1310
 msgid "Unit Colour:"
 msgstr "Couleur des unités :"
 
-#: src/frontend.cpp:1275
-#: src/frontend.cpp:1311
+#: src/frontend.cpp:1275 src/frontend.cpp:1311
 msgid "Campaign"
 msgstr "Campagne"
 
-#: src/frontend.cpp:1285
-#: src/frontend.cpp:1312
+#: src/frontend.cpp:1285 src/frontend.cpp:1312
 msgid "Skirmish/Multiplayer"
-msgstr "Escarmouche/MP"
+msgstr "Escarmouche/Multijoueurs"
 
-#: src/frontend.cpp:1291
-#: src/frontend.cpp:1307
+#: src/frontend.cpp:1291 src/frontend.cpp:1307
 msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.cpp:1421
-#: src/multiint.cpp:2647
+#: src/frontend.cpp:1421 src/multiint.cpp:2647
 msgid "Mod: "
-msgstr "Mod(s) : "
+msgstr "Mode(s) : "
 
-#: src/hci.cpp:1106
-#: src/loop.cpp:253
-#: src/loop.cpp:269
+#: src/hci.cpp:1106 src/loop.cpp:253 src/loop.cpp:269
 msgid "GAME SAVED: "
 msgstr "PARTIE SAUVEGARDÉE !"
 
@@ -10556,9 +10163,7 @@ msgstr "Le joueur %u Triche (Il se sert du menu debug pour se faire une nouvelle
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle unité)"
 
-#: src/hci.cpp:2721
-#: src/multiint.cpp:1650
-#: src/multimenu.cpp:636
+#: src/hci.cpp:2721 src/multiint.cpp:1650 src/multimenu.cpp:636
 msgid "Power"
 msgstr "Énergie"
 
@@ -10568,11 +10173,11 @@ msgstr "Barre de progression"
 
 #: src/hci.cpp:3447
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "Cacher les technologies obsolètes"
 
 #: src/hci.cpp:3449
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Montrer les technologies obsolètes"
 
 #: src/hci.cpp:3516
 msgid "Factory Delivery Point"
@@ -10580,7 +10185,7 @@ msgstr "Point de livraison"
 
 #: src/hci.cpp:3525
 msgid "Loop Production"
-msgstr "Nombre de livraisons"
+msgstr "Production en boucle"
 
 #: src/hci.cpp:3729
 msgid "Ally progress"
@@ -10591,24 +10196,22 @@ msgid ""
 "\n"
 "Cost: %1"
 msgstr ""
+"\n"
+"Coût : %1"
 
 #: src/hci.cpp:4902
 msgid "Chat: All"
-msgstr ""
+msgstr "Chat : Tous"
 
 #: src/hci.cpp:4907
-#, fuzzy
 msgid "Chat: Team"
-msgstr "Choisir l'équipe"
+msgstr "Chat : équipe"
 
-#: src/ingameop.cpp:99
-#: src/ingameop.cpp:159
-#: src/ingameop.cpp:206
+#: src/ingameop.cpp:99 src/ingameop.cpp:159 src/ingameop.cpp:206
 msgid "Resume Game"
 msgstr "Reprendre le jeu"
 
-#: src/ingameop.cpp:100
-#: src/ingameop.cpp:203
+#: src/ingameop.cpp:100 src/ingameop.cpp:203
 msgid "Quit"
 msgstr "Quitter"
 
@@ -10616,24 +10219,19 @@ msgstr "Quitter"
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "Avertissement : Vous êtes l'hôte. Si vous quittez, la partie finit pour tous !"
 
-#: src/ingameop.cpp:150
-#: src/ingameop.cpp:466
+#: src/ingameop.cpp:150 src/ingameop.cpp:466
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.cpp:155
-#: src/ingameop.cpp:470
+#: src/ingameop.cpp:155 src/ingameop.cpp:470
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.cpp:216
-#: src/ingameop.cpp:223
+#: src/ingameop.cpp:216 src/ingameop.cpp:223
 msgid "Load Game"
 msgstr "Charger une partie"
 
-#: src/ingameop.cpp:218
-#: src/ingameop.cpp:225
-#: src/mission.cpp:2449
+#: src/ingameop.cpp:218 src/ingameop.cpp:225 src/mission.cpp:2449
 msgid "Save Game"
 msgstr "Sauvegarder"
 
@@ -10688,8 +10286,7 @@ msgstr "Progression de la recherche"
 msgid "Need more resources!"
 msgstr "PAS ASSEZ D'ENERGIE !"
 
-#: src/intelmap.cpp:245
-#: src/keybind.cpp:1362
+#: src/intelmap.cpp:245 src/keybind.cpp:1362
 msgid "PAUSED"
 msgstr "PAUSE"
 
@@ -10709,18 +10306,15 @@ msgstr "Objectif actuel"
 msgid "New Intelligence Report"
 msgstr "Nouveau rapport du Bureau Central"
 
-#: src/intorder.cpp:158
-#: src/keymap.cpp:418
+#: src/intorder.cpp:158 src/keymap.cpp:418
 msgid "Retreat at Medium Damage"
 msgstr "Fuir à dégâts moyens"
 
-#: src/intorder.cpp:159
-#: src/keymap.cpp:419
+#: src/intorder.cpp:159 src/keymap.cpp:419
 msgid "Retreat at Heavy Damage"
 msgstr "Fuir à dégâts élevés"
 
-#: src/intorder.cpp:160
-#: src/keymap.cpp:420
+#: src/intorder.cpp:160 src/keymap.cpp:420
 msgid "Do or Die!"
 msgstr "Jusqu'à la mort !"
 
@@ -10728,23 +10322,19 @@ msgstr "Jusqu'à la mort !"
 msgid "Fire-At-Will"
 msgstr "Feu à volonté"
 
-#: src/intorder.cpp:162
-#: src/keymap.cpp:400
+#: src/intorder.cpp:162 src/keymap.cpp:400
 msgid "Return Fire"
 msgstr "Riposter"
 
-#: src/intorder.cpp:163
-#: src/keymap.cpp:398
+#: src/intorder.cpp:163 src/keymap.cpp:398
 msgid "Hold Fire"
 msgstr "Ne pas tirer"
 
-#: src/intorder.cpp:164
-#: src/keymap.cpp:404
+#: src/intorder.cpp:164 src/keymap.cpp:404
 msgid "Patrol"
 msgstr "Patrouiller"
 
-#: src/intorder.cpp:165
-#: src/keymap.cpp:405
+#: src/intorder.cpp:165 src/keymap.cpp:405
 msgid "Return For Repair"
 msgstr "Retour pour réparation"
 
@@ -10752,13 +10342,11 @@ msgstr "Retour pour réparation"
 msgid "Return To HQ"
 msgstr "Retour au QG"
 
-#: src/intorder.cpp:167
-#: src/keymap.cpp:407
+#: src/intorder.cpp:167 src/keymap.cpp:407
 msgid "Go to Transport"
 msgstr "Embarquer dans le transporteur"
 
-#: src/intorder.cpp:168
-#: src/keymap.cpp:429
+#: src/intorder.cpp:168 src/keymap.cpp:429
 msgid "Return for Recycling"
 msgstr "Retour pour recyclage"
 
@@ -10768,15 +10356,15 @@ msgstr "Lancer le recyclage"
 
 #: src/intorder.cpp:170
 msgid "Assign Factory Production"
-msgstr "Lui Assigner la production d'une usine"
+msgstr "Lui assigner la production d'une usine"
 
 #: src/intorder.cpp:171
 msgid "Assign Cyborg Factory Production"
-msgstr "Lui Assigner la production d'une usine de Cyborgs"
+msgstr "Lui assigner la production d'une usine de Cyborgs"
 
 #: src/intorder.cpp:172
 msgid "Assign Fire Support"
-msgstr "Lui Assigner le support de feu d'artillerie"
+msgstr "Lui assigner le support de feu d'artillerie"
 
 #: src/intorder.cpp:173
 msgid "Assign VTOL Factory Production"
@@ -10811,22 +10399,14 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "C'est bon, je désactive l'affichage des détecteurs et de la portée de tir !"
 
 #: src/keybind.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle armée de %s )"
+msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle armée de %d %s )"
 
-#: src/keybind.cpp:478
-#: src/keybind.cpp:508
-#: src/keybind.cpp:525
-#: src/keybind.cpp:569
-#: src/keybind.cpp:673
-#: src/keybind.cpp:712
-#: src/keybind.cpp:768
-#: src/keybind.cpp:1309
-#: src/keybind.cpp:1416
-#: src/keybind.cpp:1521
-#: src/keybind.cpp:1829
-#: src/keybind.cpp:1870
+#: src/keybind.cpp:478 src/keybind.cpp:508 src/keybind.cpp:525
+#: src/keybind.cpp:569 src/keybind.cpp:673 src/keybind.cpp:712
+#: src/keybind.cpp:768 src/keybind.cpp:1309 src/keybind.cpp:1416
+#: src/keybind.cpp:1521 src/keybind.cpp:1829 src/keybind.cpp:1870
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "Le joueur %u utilise un code de triche : %s"
@@ -10837,7 +10417,7 @@ msgstr "Prends-toi ça dans les dents !!!"
 
 #: src/keybind.cpp:493
 msgid "Takings thing easy!"
-msgstr "Prend-le cool !"
+msgstr "On leur survivra !"
 
 #: src/keybind.cpp:509
 msgid "1000 big ones!!!"
@@ -10853,11 +10433,11 @@ msgstr "De retour à la normalité !"
 
 #: src/keybind.cpp:554
 msgid "Getting tricky!"
-msgstr "Sois plus audacieux !"
+msgstr "Ca devient chaud !"
 
 #: src/keybind.cpp:570
 msgid "Twice as nice!"
-msgstr "À Deux, c'est quand-même mieux !"
+msgstr "Deux fois mieux !"
 
 #: src/keybind.cpp:581
 msgid "FPS display is enabled."
@@ -10870,7 +10450,7 @@ msgstr "L'affichage du nombre de frames par seconde est désactivé"
 #: src/keybind.cpp:638
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "Le joueur %u utilise une tricherie : Num Droids : %d  Num Structures : %d  Num Features : %d"
+msgstr "Le joueur %u utilise une tricherie : Unités : %d  Structures : %d  Features : %d"
 
 #: src/keybind.cpp:674
 msgid "Infinite power disabled"
@@ -10899,7 +10479,7 @@ msgstr "Avertissement ! Cette tricherie peut causer des problèmes désastreux p
 
 #: src/keybind.cpp:1195
 msgid "Ending Mission."
-msgstr "Termine la mission"
+msgstr "Fin de la mission"
 
 #: src/keybind.cpp:1310
 msgid "God Mode ON"
@@ -10924,7 +10504,7 @@ msgstr "Nous avons fait toutes les recherches pour vous !"
 
 #: src/keybind.cpp:1441
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "Bâtiments sélectionnés rechargés !"
 
 #: src/keybind.cpp:1482
 #, c-format
@@ -10937,15 +10517,15 @@ msgstr "Recherché"
 
 #: src/keybind.cpp:1503
 msgid "Only displaying energy bars when selected"
-msgstr "Afficher seulement la santé des unités sélectionnées"
+msgstr "Afficher seulement les barres de vie des unités sélectionnées"
 
 #: src/keybind.cpp:1506
 msgid "Always displaying energy bars for units"
-msgstr "Toujours afficher la santé des unités"
+msgstr "Toujours afficher les barres de vie des unités"
 
 #: src/keybind.cpp:1509
 msgid "Always displaying energy bars for units and structures"
-msgstr "Toujours afficher la santé des unités et des bâtiments"
+msgstr "Toujours afficher les barres de vie des unités et des bâtiments"
 
 #: src/keybind.cpp:1522
 msgid "Debug menu is Open"
@@ -10969,7 +10549,7 @@ msgstr "Prévisions météo : ciel dégagé dans toute la région... Aucune inte
 
 #: src/keybind.cpp:1828
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr "Attention ! Ceci peut avoir des conséquences désastreuses s'il est mal utilisé dans les missions."
+msgstr "Attention ! Ceci peut avoir des conséquences désastreuses si mal utilisé dans les missions."
 
 #: src/keybind.cpp:1830
 msgid "All enemies destroyed by cheating!"
@@ -10977,7 +10557,7 @@ msgstr "Tous les ennemis ont été détruits par un TRICHEUR !"
 
 #: src/keybind.cpp:1871
 msgid "Destroying selected droids and structures!"
-msgstr "Détruit les unités et les structures sélectionnées !"
+msgstr "Destruction des unités et les structures sélectionnées !"
 
 #: src/keybind.cpp:2269
 msgid "Reveal OFF"
@@ -11009,10 +10589,9 @@ msgstr "Sens de rotation vertical : inversé"
 
 #: src/keybind.cpp:2480
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Désolé, mais la vitesse de jeu ne peut pas être modifiée pendant les parties multijoueurs."
+msgstr "La vitesse de jeu ne peut pas être modifiée pendant les parties multijoueurs."
 
-#: src/keybind.cpp:2515
-#: src/keybind.cpp:2569
+#: src/keybind.cpp:2515 src/keybind.cpp:2569
 msgid "Game Speed Reset"
 msgstr "Réinitialisation de la vitesse de jeu"
 
@@ -11054,9 +10633,7 @@ msgstr "Mini-map montrant le relief"
 msgid "KEY MAPPING"
 msgstr "RACOURCIS CLAVIER"
 
-#: src/keyedit.cpp:317
-#: src/multiint.cpp:792
-#: src/multiint.cpp:1277
+#: src/keyedit.cpp:317 src/multiint.cpp:792 src/multiint.cpp:1277
 #: src/multiint.cpp:1695
 msgid "Return To Previous Screen"
 msgstr "Revenir à l'écran précédent"
@@ -11099,7 +10676,7 @@ msgstr "Active/désactive l'affichage de la console"
 
 #: src/keymap.cpp:317
 msgid "Toggle Damage Bars On/Off"
-msgstr "Active/désactive l'affichage des barres de santé"
+msgstr "Active/désactive l'affichage des barres de vie"
 
 #: src/keymap.cpp:318
 msgid "Take Screen Shot"
@@ -11346,13 +10923,12 @@ msgid "Toggle Overlays"
 msgstr "Active/désactive l'affichage des panneaux de commande"
 
 #: src/keymap.cpp:393
-#, fuzzy
 msgid "Toggle Console History "
-msgstr "Active/désactive l'affichage de la console"
+msgstr "Active/désactive l'historique de la console"
 
 #: src/keymap.cpp:394
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Active/désactive l'historique du chat d'équipe"
 
 #: src/keymap.cpp:397
 msgid "Center View on HQ"
@@ -11376,17 +10952,15 @@ msgstr "Rester en position"
 
 #: src/keymap.cpp:406
 msgid "Stop Droid"
-msgstr ""
+msgstr "Stopper l'unité"
 
 #: src/keymap.cpp:408
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "Envoyer un message textuel"
+msgstr "Envoyer un message global"
 
 #: src/keymap.cpp:409
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "Envoyer un message textuel"
+msgstr "Envoyer un message à l'équipe"
 
 #: src/keymap.cpp:410
 msgid "Drop a beacon"
@@ -11445,9 +11019,8 @@ msgid "Select all VTOLs"
 msgstr "Sélectionner tous les VTOLs"
 
 #: src/keymap.cpp:434
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "Sélectionner tous les VTOLs"
+msgstr "Sélectionner tous les VTOLs rechargés"
 
 #: src/keymap.cpp:435
 msgid "Select all Wheels"
@@ -11459,7 +11032,7 @@ msgstr "Afficher la fréquence de rafraîchissement de l'écran"
 
 #: src/keymap.cpp:437
 msgid "Select all Similar Units"
-msgstr "Sélectionner toutes les unités similaires"
+msgstr "Sélectionner toutes les unités identiques"
 
 #: src/keymap.cpp:441
 msgid "Select all Combat Cyborgs"
@@ -11551,11 +11124,11 @@ msgstr "Déclencher une météo"
 
 #: src/keymap.cpp:468
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "Changer l'orientation des triangles du terrain"
 
 #: src/keymap.cpp:469
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "Faire un test de performances"
 
 #: src/keymap.cpp:472
 msgid "Make all items available"
@@ -11571,7 +11144,7 @@ msgstr "Active/désactive le mode dieu-tout-puissant"
 
 #: src/keymap.cpp:475
 msgid "Display Options Screen"
-msgstr "Afficher les options de jeu"
+msgstr "Afficher les options"
 
 #: src/keymap.cpp:476
 msgid "Complete current research"
@@ -11579,14 +11152,13 @@ msgstr "Termine la recherche courante"
 
 #: src/keymap.cpp:477
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "Révéler la carte autour de la souris"
 
 #: src/keymap.cpp:478
 msgid "Trace a game object"
 msgstr "Tracer un objet de jeu"
 
-#: src/loop.cpp:260
-#: src/loop.cpp:276
+#: src/loop.cpp:260 src/loop.cpp:276
 msgid "Could not save game!"
 msgstr "Impossible de sauvegarder la partie !"
 
@@ -11604,15 +11176,13 @@ msgstr "MISSION ACCOMPLIE"
 
 #: src/mission.cpp:2287
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "ÉCHEC DE LA MISSION -- et vous avez triché !"
+msgstr "ÉCHEC DE LA MISSION -- et en plus vous avez triché !"
 
 #: src/mission.cpp:2287
 msgid "OBJECTIVE FAILED"
 msgstr "ÉCHEC DE LA MISSION"
 
-#: src/mission.cpp:2311
-#: src/mission.cpp:2355
-#: src/mission.cpp:2462
+#: src/mission.cpp:2311 src/mission.cpp:2355 src/mission.cpp:2462
 msgid "Quit To Main Menu"
 msgstr "Retour au menu principal"
 
@@ -11620,8 +11190,7 @@ msgstr "Retour au menu principal"
 msgid "Continue Game"
 msgstr "Continuer le jeu"
 
-#: src/mission.cpp:2349
-#: src/mission.cpp:2446
+#: src/mission.cpp:2349 src/mission.cpp:2446
 msgid "Load Saved Game"
 msgstr "Charger une partie enregistrée"
 
@@ -11652,17 +11221,17 @@ msgstr "Vous avez tenté de donner un %s non vide - Mais cette action n'est pas 
 #: src/multigifts.cpp:330
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr "%s vous a donné de la documentation sur une technologie"
+msgstr "%s vous a transféré une technologie"
 
 #: src/multigifts.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s vous donne %u d'énergie"
+msgstr "%s vous donne %d d'énergie"
 
 #: src/multigifts.cpp:417
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "%s cherche à s'allier avec vous"
+msgstr "%s veut s'allier avec vous"
 
 #: src/multigifts.cpp:426
 #, c-format
@@ -11688,13 +11257,11 @@ msgstr "Vous avez trouvé des plans pour %s"
 msgid "Medium"
 msgstr "Moyen"
 
-#: src/multiint.cpp:732
-#: src/multilimit.cpp:150
+#: src/multiint.cpp:732 src/multilimit.cpp:150
 msgid "Accept Settings"
-msgstr "Accepter les réglages"
+msgstr "Valider les réglages"
 
-#: src/multiint.cpp:734
-#: src/multiint.cpp:1331
+#: src/multiint.cpp:734 src/multiint.cpp:1331
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -11716,7 +11283,7 @@ msgstr "IP"
 
 #: src/multiint.cpp:957
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Votre version de Warzone est incompatible avec cette partie"
 
 #: src/multiint.cpp:1018
 msgid "[Password required]"
@@ -11746,7 +11313,7 @@ msgstr "Hébergé par %s - %s"
 
 #: src/multiint.cpp:1060
 msgid "Can't find any games for your version."
-msgstr "Aucune partie dispo. pour votre version."
+msgstr "Aucune partie disponible pour votre version du jeu"
 
 #: src/multiint.cpp:1077
 msgid "There appears to be a game update available!"
@@ -11754,7 +11321,7 @@ msgstr "Une nouvelle version du jeu est disponible !"
 
 #: src/multiint.cpp:1081
 msgid "No games are available for your version"
-msgstr "Aucune partie disponible pour votre version"
+msgstr "Aucune partie disponible pour votre version du jeu"
 
 #: src/multiint.cpp:1085
 msgid "Game is full"
@@ -11770,11 +11337,11 @@ msgstr "Mauvaise version du jeu !"
 
 #: src/multiint.cpp:1095
 msgid "You have an incompatible mod."
-msgstr "Vous avez un mod incompatible."
+msgstr "Vous avez un mode incompatible."
 
 #: src/multiint.cpp:1099
 msgid "Host couldn't send file?"
-msgstr "L'hôte ne peut-il pas envoyer le fichier ?"
+msgstr "L'hôte n'a-t-il pas pu envoyer le fichier ?"
 
 #: src/multiint.cpp:1103
 msgid "Incorrect Password!"
@@ -11790,7 +11357,7 @@ msgstr "Erreur de connexion"
 
 #: src/multiint.cpp:1200
 msgid "Refreshing..."
-msgstr ""
+msgstr "Mise à jour..."
 
 #: src/multiint.cpp:1241
 msgid "Searching"
@@ -11818,7 +11385,7 @@ msgstr "OK"
 
 #: src/multiint.cpp:1535
 msgid "Tanks disabled!!"
-msgstr "Tanks désactivés!!"
+msgstr "Tanks désactivés."
 
 #: src/multiint.cpp:1536
 msgid "Cyborgs disabled."
@@ -11836,11 +11403,9 @@ msgstr "Site de télécommunications satellite désactivé."
 msgid "Laser Satellite disabled."
 msgstr "Poste de commande pour satellite laser désactivé."
 
-#: src/multiint.cpp:1582
-#: src/multiint.cpp:4091
-#, fuzzy
+#: src/multiint.cpp:1582 src/multiint.cpp:4091
 msgid "Game Name"
-msgstr "Définissez le nom de la partie"
+msgstr "Nom de la partie"
 
 #: src/multiint.cpp:1583
 msgid "One-Player Skirmish"
@@ -11856,7 +11421,7 @@ msgstr "Sélectionnez la carte"
 
 #: src/multiint.cpp:1598
 msgid "Map-Mod!"
-msgstr "Carte mod !"
+msgstr "Carte-mode !"
 
 #: src/multiint.cpp:1611
 msgid "Click to set Password"
@@ -11866,8 +11431,7 @@ msgstr "Cliquez pour définir un mot de passe"
 msgid "Select Player Name"
 msgstr "Choisir le nom du joueur"
 
-#: src/multiint.cpp:1629
-#: src/multiint.cpp:1632
+#: src/multiint.cpp:1629 src/multiint.cpp:1632
 msgid "Scavengers"
 msgstr "Pillards"
 
@@ -11875,8 +11439,7 @@ msgstr "Pillards"
 msgid "No Scavengers"
 msgstr "Aucun pillard"
 
-#: src/multiint.cpp:1640
-#: src/multimenu.cpp:629
+#: src/multiint.cpp:1640 src/multimenu.cpp:629
 msgid "Alliances"
 msgstr "Alliances"
 
@@ -11889,9 +11452,8 @@ msgid "Allow Alliances"
 msgstr "Autoriser les alliances"
 
 #: src/multiint.cpp:1643
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "Le mode 'Equipes verrouillées' est activé"
+msgstr "Equipes vérouillées, recherches non partagées"
 
 #: src/multiint.cpp:1644
 msgid "Locked Teams"
@@ -11933,18 +11495,15 @@ msgstr "Prévisualiser la carte"
 msgid "Click to see Map"
 msgstr "Cliquez pour voir la carte"
 
-#: src/multiint.cpp:1676
-#: src/multiint.cpp:1677
+#: src/multiint.cpp:1676 src/multiint.cpp:1677
 msgid "Show Structure Limits"
 msgstr "Afficher des limites de construction"
 
-#: src/multiint.cpp:1676
-#: src/multiint.cpp:1677
+#: src/multiint.cpp:1676 src/multiint.cpp:1677
 msgid "Set Structure Limits"
 msgstr "Limites de construction"
 
-#: src/multiint.cpp:1685
-#: src/multiint.cpp:1686
+#: src/multiint.cpp:1685 src/multiint.cpp:1686
 msgid "Start Hosting Game"
 msgstr "Démarrer le serveur"
 
@@ -11953,9 +11512,8 @@ msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
 
 #: src/multiint.cpp:1777
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Commence avec des avantages"
+msgstr "Commence avec un handicap"
 
 #: src/multiint.cpp:1778
 msgid "Plays nice"
@@ -11971,7 +11529,7 @@ msgstr "Commence avec des avantages"
 
 #: src/multiint.cpp:1803
 msgid "CHOOSE AI"
-msgstr "CHOISIR L' IA"
+msgstr "CHOISIR L'IA"
 
 #: src/multiint.cpp:1841
 msgid "Allow human players to join in this slot"
@@ -11986,9 +11544,8 @@ msgid "Team"
 msgstr "Équipe"
 
 #: src/multiint.cpp:2356
-#, fuzzy
 msgid "Difficulty locked"
-msgstr "Difficulté"
+msgstr "Difficulté vérouillée"
 
 #: src/multiint.cpp:2356
 msgid "Click to change difficulty"
@@ -12003,18 +11560,16 @@ msgid "Player is ready"
 msgstr "Le joueur est prêt"
 
 #: src/multiint.cpp:2371
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Le joueur est prêt"
+msgstr "Le joueur est en train de télécharger"
 
 #: src/multiint.cpp:2371
 msgid "Click when ready"
 msgstr "Cliquez une fois prêt"
 
 #: src/multiint.cpp:2371
-#, fuzzy
 msgid "Waiting for download"
-msgstr "Attente d'énergie"
+msgstr "Attente de la fin du téléchargement"
 
 #: src/multiint.cpp:2383
 msgid "READY?"
@@ -12033,9 +11588,8 @@ msgid "Choose Team"
 msgstr "Choisir l'équipe"
 
 #: src/multiint.cpp:2490
-#, fuzzy
 msgid "Teams locked"
-msgstr "Division Alpha sauvée"
+msgstr "Equipes vérouillées"
 
 #: src/multiint.cpp:2516
 msgid "Click to change player colour"
@@ -12050,13 +11604,12 @@ msgid "Click to change AI"
 msgstr "Cliquez pour modifier l'intelligence artificielle"
 
 #: src/multiint.cpp:2552
-#, fuzzy
 msgid "Player ID: "
-msgstr "Joueur"
+msgstr "ID du joueur :"
 
 #: src/multiint.cpp:2559
 msgid "(none)"
-msgstr ""
+msgstr "(aucun)"
 
 #: src/multiint.cpp:2619
 msgid "CHAT"
@@ -12077,15 +11630,13 @@ msgstr "*** Mot de passe NON requis ***"
 
 #: src/multiint.cpp:3034
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Ceci est une carte mod, l'expérience de jeu peut être altérée"
+msgstr "Ceci est une carte-mode, l'expérience de jeu peut être altérée"
 
 #: src/multiint.cpp:3080
 msgid "Sorry! Failed to host the game."
 msgstr "Désolé ! Impossible d'héberger la partie."
 
-#: src/multiint.cpp:3224
-#: src/multiint.cpp:3293
-#: src/multimenu.cpp:1165
+#: src/multiint.cpp:3224 src/multiint.cpp:3293 src/multimenu.cpp:1165
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a exclu %s de la partie !"
@@ -12100,7 +11651,7 @@ msgstr "UPnP activé"
 
 #: src/multiint.cpp:3875
 msgid "UPnP detection faled. You must manually configure router yourself."
-msgstr "La détection UPnP a échouée, veuillez configurer votre routeur manuellement."
+msgstr "La détection UPnP a échoué, veuillez configurer votre routeur manuellement."
 
 #: src/multiint.cpp:3879
 msgid "UPnP detection is in progress..."
@@ -12125,11 +11676,11 @@ msgstr "La connexion à l'antichambre a échoué !"
 #: src/multiint.cpp:4060
 #, c-format
 msgid "Mods: %s"
-msgstr "Mods : %s"
+msgstr "Modes : %s"
 
 #: src/multiint.cpp:4067
 msgid "Mods: None!"
-msgstr "Mods : aucun"
+msgstr "Modes : aucun"
 
 #: src/multiint.cpp:4077
 #, c-format
@@ -12138,7 +11689,7 @@ msgstr "Version : %s"
 
 #: src/multiint.cpp:4092
 msgid "Map Name"
-msgstr ""
+msgstr "Nom de la carte"
 
 #: src/multiint.cpp:4093
 msgid "Players"
@@ -12146,20 +11697,18 @@ msgstr "Joueurs"
 
 #: src/multiint.cpp:4094
 msgid "Status"
-msgstr ""
+msgstr "Statut"
 
 #: src/multiint.cpp:4124
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Cliquez pour prendre la position %d"
 
-#: src/multiint.cpp:4133
-#: src/multiint.cpp:4354
+#: src/multiint.cpp:4133 src/multiint.cpp:4354
 msgid "Open"
 msgstr "Ouvert"
 
-#: src/multiint.cpp:4133
-#: src/multiint.cpp:4355
+#: src/multiint.cpp:4133 src/multiint.cpp:4355
 msgid "Closed"
 msgstr "Fermé"
 
@@ -12177,15 +11726,13 @@ msgstr "Carte %d%% téléchargée"
 msgid "HOST"
 msgstr "HOTE"
 
-#: src/multiint.cpp:4243
-#: src/multimenu.cpp:643
+#: src/multiint.cpp:4243 src/multimenu.cpp:643
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multijoin.cpp:96
-#: src/multijoin.cpp:97
+#: src/multijoin.cpp:96 src/multijoin.cpp:97
 msgid "Players Still Joining"
-msgstr "Les joueurs sont en cours de connexion"
+msgstr "Joueurs sont en cours de connexion"
 
 #: src/multijoin.cpp:245
 #, c-format
@@ -12246,7 +11793,7 @@ msgid_plural "%d players"
 msgstr[0] "1 joueur"
 msgstr[1] "%d joueurs"
 
-#: src/multimenu.cpp:630
+#: src/multimenu.cpp:639
 msgid "Score"
 msgstr "Score"
 
@@ -12314,13 +11861,11 @@ msgstr "Donner de l'énergie au joueur"
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "%s : %s a été exclu du jeu et inscrit sur la liste des indésirables !"
 
-#: src/multiopt.cpp:303
-#: src/multiplay.cpp:1706
+#: src/multiopt.cpp:303 src/multiplay.cpp:1706
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr "Attention, ceci est une carte mod, l'expérience de jeu pourra etre altérée."
+msgstr "Attention, ceci est une carte mod, l'expérience de jeu pourra être altérée."
 
-#: src/multiopt.cpp:304
-#: src/multiplay.cpp:1710
+#: src/multiopt.cpp:304 src/multiplay.cpp:1710
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "Attention, l'hôte a modifié le code du jeu, et ne peut être digne de confiance !"
 
@@ -12343,15 +11888,15 @@ msgstr "[invalide]"
 
 #: src/multiplay.cpp:1617
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "Carte requise : envoi en cours"
 
 #: src/multiplay.cpp:1632
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "Mode requis : envoi en cours"
 
 #: src/multiplay.cpp:1672
 msgid "FILE SENT!"
-msgstr ""
+msgstr "Fichier envoyé"
 
 #: src/multiplay.cpp:2024
 msgid "Green"
@@ -12417,13 +11962,11 @@ msgstr "Marron"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Vous ne croyez pas qu'on est un peu lourd pour entrer là dedans Commandant ?"
 
-#: src/qtscriptfuncs.cpp:2772
-#: src/scriptfuncs.cpp:3065
+#: src/qtscriptfuncs.cpp:2772 src/scriptfuncs.cpp:3065
 msgid "YOU ARE VICTORIOUS!"
 msgstr "VOUS AVEZ GAGNÉ !"
 
-#: src/qtscriptfuncs.cpp:2777
-#: src/scriptfuncs.cpp:3069
+#: src/qtscriptfuncs.cpp:2777 src/scriptfuncs.cpp:3069
 msgid "YOU WERE DEFEATED!"
 msgstr "VOUS AVEZ PERDU !"
 
@@ -12438,7 +11981,7 @@ msgstr "Recherche terminée"
 
 #: src/research.cpp:1174
 msgid "Research Award"
-msgstr "Bourse de recherche"
+msgstr "Récompense de recherche"
 
 #: src/scores.cpp:97
 #, c-format
@@ -12568,8 +12111,7 @@ msgstr "Balise reçue de %s !"
 msgid "Beacon %d"
 msgstr "Balise %d"
 
-#: src/selection.cpp:281
-#: src/selection.cpp:361
+#: src/selection.cpp:281 src/selection.cpp:361
 msgid "Unable to locate any repair units!"
 msgstr "Impossible de localiser la moindre unité de réparation !"
 
@@ -12593,51 +12135,45 @@ msgstr[0] "%u unité sélectionnée"
 msgstr[1] "%u unités sélectionnées"
 
 #: src/structure.cpp:2519
-#, fuzzy
 msgid "Can't build anymore units, Unit Limit Reached — Production Halted"
-msgstr "Impossible de produire plus d'unités, la limite de capacité de contrôle est atteinte - Arrêt de la production"
+msgstr "Impossible de produire plus d'unités, la limite est atteinte - Arrêt de la production"
 
 #: src/structure.cpp:2527
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
-msgstr "Impossible de produire plus d'unités, la limite de capacité de contrôle est atteinte - Arrêt de la production"
+msgstr "Impossible de produire plus de %s, la limite de capacité de contrôle est atteinte - Arrêt de la production"
 
 #: src/structure.cpp:2535
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Impossible de produire plus d'unités, la limite de capacité de contrôle est atteinte - Arrêt de la production"
+msgstr "Impossible de produire plus de %s, la limite de construction est atteinte - Arrêt de la production"
 
 #: src/structure.cpp:5476
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u unité assignée - Endommagée à %3.0f%%"
-msgstr[1] "%s - %u unités assignées - Endommagées à %3.0f%%"
+msgstr[0] "%s - %u Unité assignée - Points de vie %d/%d"
+msgstr[1] "%s - %u Unités assignées - Points de vie %d/%d"
 
 #: src/structure.cpp:5495
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u unité assignée - Endommagée à %3.0f%%"
-msgstr[1] "%s - %u unités assignées - Endommagées à %3.0f%%"
+msgstr[0] "%s - %u Unité assignée - Endommagé à %d/%d"
+msgstr[1] "%s - %u Unités assignées - Points de vie %d/%d"
 
-#: src/structure.cpp:5500
-#: src/structure.cpp:5510
-#: src/structure.cpp:5517
-#: src/structure.cpp:5543
-#: src/structure.cpp:5552
-#: src/structure.cpp:5559
+#: src/structure.cpp:5500 src/structure.cpp:5510 src/structure.cpp:5517
+#: src/structure.cpp:5543 src/structure.cpp:5552 src/structure.cpp:5559
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Points de vie : %d/%d"
 
 #: src/structure.cpp:5533
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - %u connexions établies sur %u - Endommagé à %3.0f%%"
+msgstr "%s - %u connexions établies sur %u - Points de vie : %d/%d"
 
-#: src/structure.cpp:5683
-#: src/structure.cpp:5730
+#: src/structure.cpp:5683 src/structure.cpp:5730
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé(e)"
@@ -12670,8 +12206,7 @@ msgstr "Butin de centre de réparation - Réparation"
 msgid "Repair Facility Award - Nothing"
 msgstr "Butin de centre de réparation - Rien"
 
-#: src/transporter.cpp:293
-#: src/transporter.cpp:341
+#: src/transporter.cpp:293 src/transporter.cpp:341
 msgid "Launch Transport"
 msgstr "Envoyer le transporteur"
 
@@ -12694,9 +12229,9 @@ msgstr " - DEBUG"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built:%s%s"
-msgstr "Version %s - %s%s%s%s"
+msgstr "Version: %s,%s Built:%s%s"
 
 #~ msgid "Set default data directory"
 #~ msgstr "Choisir le répertoire à défaut pour les données"
