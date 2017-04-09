@@ -368,13 +368,13 @@ bool pie_LoadShaders()
 
 	debug(LOG_3D, "Loading shader: SHADER_TERRAIN");
 	result = pie_LoadShader("terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
-		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix2",
+		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
 		"fogEnabled", "fogEnd", "fogStart", "fogColor" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TERRAIN, "Failed to load terrain shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_TERRAIN_DEPTH");
 	result = pie_LoadShader("terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
-	{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex" });
+	{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "textureMatrix1", "textureMatrix2" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TERRAIN_DEPTH, "Failed to load terrain_depth shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_DECALS");
@@ -385,7 +385,7 @@ bool pie_LoadShaders()
 
 	debug(LOG_3D, "Loading shader: SHADER_WATER");
 	result = pie_LoadShader("water program", "shaders/terrain_water.vert", "shaders/water.frag",
-		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1",
+		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1", "textureMatrix2",
 		"fogEnabled", "fogEnd", "fogStart" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_WATER, "Failed to load water shader");
 
@@ -408,7 +408,7 @@ bool pie_LoadShaders()
 
 	debug(LOG_3D, "Loading shader: SHADER_GFX_TEXT");
 	result = pie_LoadShader("gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
-		{ "posMatrix", "texture" });
+		{ "posMatrix", "color", "texture" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_GFX_TEXT, "Failed to load textured gfx shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_GENERIC_COLOR");

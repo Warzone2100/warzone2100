@@ -7,8 +7,8 @@ uniform vec4 paramy1;
 uniform vec4 paramx2;
 uniform vec4 paramy2;
 
-uniform mat4 textureMatrix1 = mat4(1.);
-uniform mat4 textureMatrix2 = mat4(1.);
+uniform mat4 textureMatrix1;
+uniform mat4 textureMatrix2;
 
 attribute vec4 vertex;
 attribute vec4 vertexColor;

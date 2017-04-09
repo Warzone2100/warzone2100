@@ -1073,7 +1073,7 @@ static void cullTerrain()
 
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight)
 {
-	const auto &program = pie_ActivateShader(SHADER_TERRAIN_DEPTH, ModelViewProjection, paramsXLight, paramsYLight, 1);
+	const auto &program = pie_ActivateShader(SHADER_TERRAIN_DEPTH, ModelViewProjection, paramsXLight, paramsYLight, 1, glm::mat4(), glm::mat4());
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_OPAQUE);
 
@@ -1134,8 +1134,8 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 		renderState.fogColour.vector[2] / 255.f,
 		renderState.fogColour.vector[3] / 255.f
 	);
-	const auto &program = pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, glm::vec4(), glm::vec4(), paramsXLight, paramsYLight, 0, 1, textureMatrix,
-		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
+	const auto &program = pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, glm::vec4(), glm::vec4(), paramsXLight, paramsYLight, 0, 1,
+		glm::mat4(), textureMatrix, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
 
 	// additive blending
 	pie_SetRendMode(REND_ADDITIVE);
@@ -1160,7 +1160,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	{
 		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0 );
 		const glm::vec4 paramsY(1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0 );
-		pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, 0, 1, textureMatrix,
+		pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, 0, 1, glm::mat4(), textureMatrix,
 			renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
 
 		// load the texture
@@ -1326,7 +1326,7 @@ void drawWater(const glm::mat4 &viewMatrix)
 	const auto &renderState = getCurrentRenderState();
 
 	const auto &program = pie_ActivateShader(SHADER_WATER, viewMatrix, paramsX, paramsY, paramsX2, paramsY2, 0, 1,
-		glm::translate(waterOffset, 0.f, 0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
+		glm::translate(waterOffset, 0.f, 0.f), glm::mat4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
 
 	glDepthMask(GL_FALSE);
 

@@ -157,7 +157,7 @@ void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
 		glBindTexture(GL_TEXTURE_2D, mTexture);
-		pie_ActivateShader(SHADER_GFX_TEXT, modelViewProjectionMatrix, 0);
+		pie_ActivateShader(SHADER_GFX_TEXT, modelViewProjectionMatrix, glm::vec4(1), 0);
 		glEnableVertexAttribArray(VERTEX_COORDS_ATTRIB_INDEX);
 		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
 		glVertexAttribPointer(VERTEX_COORDS_ATTRIB_INDEX, 2, GL_FLOAT, false, 0, nullptr);

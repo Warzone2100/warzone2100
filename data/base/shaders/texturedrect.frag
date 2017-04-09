@@ -1,6 +1,6 @@
 #version 120
 
-uniform vec4 color = vec4(1.);
+uniform vec4 color;
 uniform sampler2D texture;
 
 varying vec2 uv;
