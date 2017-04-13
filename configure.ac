@@ -221,8 +221,8 @@ AC_ARG_WITH(applicationdir,
 AC_SUBST([applicationdir], [${with_applicationdir}])
 
 AC_ARG_WITH(appdatadir,
-	AS_HELP_STRING([--with-appdatadir=DIR],[application files [DATADIR/appdata]]),
-	[ with_appdatadir=${withval} ], [ with_appdatadir=${datadir}/appdata ])
+	AS_HELP_STRING([--with-appdatadir=DIR],[application files [DATADIR/metainfo]]),
+	[ with_appdatadir=${withval} ], [ with_appdatadir=${datadir}/metainfo ])
 AC_SUBST([appdatadir], [${with_appdatadir}])
 
 # Commandline options - enable:

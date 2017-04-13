@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
-	<id type="desktop">warzone2100.desktop</id>
+<component type="desktop-application">
+	<id>warzone2100</id>
 	<metadata_license>CC0-1.0</metadata_license>
-	<license>GPL-2.0+</license>
+	<project_license>GPL-2.0+</project_license>
 	<summary>Real-Time-Strategy War Game</summary>
 	<name>Warzone 2100</name>
 	<description>
@@ -17,7 +17,12 @@
 		</p>
 	</description>
 	<url type="homepage">https://wz2100.net/</url>
+	<url type="bugtracker">http://developer.wz2100.net/newticket</url>
+	<url type="faq">http://developer.wz2100.net/wiki/NewFAQ</url>
+	<url type="translate">http://developer.wz2100.net/wiki/Translation</url>
+	<url type="help">http://betaguide.wz2100.net/</url>
 	<screenshots>
-		<screenshot type="default">https://wz2100.net/static/img/wz2100-CAM_3A50.png</screenshot>
+		<screenshot type="default" width="320" height="240">https://wz2100.net/static/img/wz2100-CAM_3A50.png</screenshot>
 	</screenshots>
-</application>
+	<developer_name>Warzone 2100 Team</developer_name>
+</component>
