@@ -24,11 +24,20 @@
 #ifndef __INCLUDED_SRC_MULTIPLAY_H__
 #define __INCLUDED_SRC_MULTIPLAY_H__
 
-#include "featuredef.h"
-#include "group.h"
-#include "featuredef.h"
-#include "droid.h"  // For INITIAL_DROID_ORDERS.
-#include "levels.h"  // For LevelHashSize.
+#include "lib/framework/frame.h"
+#include "lib/framework/types.h"
+#include "lib/framework/vector.h"
+#include "lib/framework/crc.h"
+#include "orderdef.h"
+#include "stringdef.h"
+
+class DROID_GROUP;
+struct BASE_OBJECT;
+struct DROID;
+struct DROID_TEMPLATE;
+struct FEATURE;
+struct INITIAL_DROID_ORDERS;
+struct STRUCTURE;
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in a multiplayer game.
@@ -90,10 +99,10 @@ enum STRUCTURE_INFO
 extern MULTIPLAYERGAME		game;						// the game description.
 extern MULTIPLAYERINGAME	ingame;						// the game description.
 
-extern bool					bMultiPlayer;				// true when more than 1 player.
-extern bool					bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
-extern bool					openchannels[MAX_PLAYERS];
-extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
+extern bool bMultiPlayer;				// true when more than 1 player.
+extern bool bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
+extern bool openchannels[MAX_PLAYERS];
+extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines

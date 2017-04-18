@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_MULTIINT_H__
 #define __INCLUDED_SRC_MULTIINT_H__
 
+#include "lib/ivis_opengl/ivisdef.h"
 #include "lib/netplay/netplay.h"
 #include "lib/widget/widgbase.h"
 #include "lib/widget/form.h"

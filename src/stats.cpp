@@ -30,6 +30,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/gamelib/gtime.h"
 #include "objects.h"

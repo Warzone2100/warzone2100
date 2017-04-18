@@ -45,6 +45,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
+#include "levels.h"
 #include "map.h"
 #include "difficulty.h"
 #include "console.h"

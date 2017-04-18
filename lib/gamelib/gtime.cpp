@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/rational.h"
+#include "lib/framework/math_ext.h"
 #include "gtime.h"
 #include "src/multiplay.h"
 #include "lib/netplay/netplay.h"

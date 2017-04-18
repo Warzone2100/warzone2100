@@ -24,6 +24,13 @@
 #include "lib/ivis_opengl/piedef.h"
 #include <glm/gtx/transform.hpp>
 
+// FIXME: Zero vector normalization should be handled on caller side.
+template<typename T>
+WZ_DECL_PURE T normalise(const T&a)
+{
+	return glm::dot(a, a) > 0.f ? glm::normalize(a) : a;
+}
+
 /*!
  * Calculate surface normal
  * Eg. if a polygon (with n points in clockwise order) normal is required,

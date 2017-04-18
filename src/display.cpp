@@ -34,7 +34,9 @@
 
 #include "action.h"
 #include "display.h"
+#include "droid.h"
 #include "fpath.h"
+#include "group.h"
 #include "map.h"
 #include "loop.h"
 #include "component.h"

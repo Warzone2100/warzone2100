@@ -21,8 +21,11 @@
 #ifndef _INCLUDED_TEXTDRAW_
 #define _INCLUDED_TEXTDRAW_
 
-#include "ivisdef.h"
-#include "piepalette.h"
+#include <string>
+
+#include "lib/framework/vector.h"
+#include "lib/framework/opengl.h"
+#include "pietypes.h"
 
 enum iV_fonts
 {

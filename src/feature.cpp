@@ -30,6 +30,7 @@
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/imd.h"
+#include "lib/ivis_opengl/ivisdef.h"
 
 #include "feature.h"
 #include "map.h"

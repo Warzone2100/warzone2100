@@ -38,6 +38,7 @@
 #include "hci.h"
 #include <string>
 #include <istream>
+#include <sstream>
 #include <deque>
 
 // FIXME: When we switch over to full JS, use class version of this file

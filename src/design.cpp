@@ -40,6 +40,7 @@
 #include "lib/ivis_opengl/piematrix.h"//matrix code
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/ivisdef.h"
 
 #include "objmem.h"
 #include "display3d.h"

@@ -51,6 +51,8 @@
 #include "loop.h"
 #include "atmos.h"
 #include "map.h"
+#include "droid.h"
+#include "group.h"
 #include "visibility.h"
 #include "geometry.h"
 #include "messagedef.h"

@@ -29,8 +29,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
 #include "lib/exceptionhandler/dumpinfo.h"
-#include <physfs.h>
-#include <png.h>
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/textdraw.h"
@@ -44,16 +42,15 @@
 #include "screen.h"
 #include "src/console.h"
 #include "src/levels.h"
+
 #include <vector>
 #include <algorithm>
-
+#include <physfs.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cstring>
 #include <glm/gtx/transform.hpp>
-
-//using namespace std;
 
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;

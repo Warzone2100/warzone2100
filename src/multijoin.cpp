@@ -47,6 +47,7 @@
 #include "projectile.h"
 #include "droid.h"
 #include "map.h"
+#include "levels.h"
 #include "power.h"
 #include "game.h"					// for loading maps
 #include "message.h"				// for clearing game messages

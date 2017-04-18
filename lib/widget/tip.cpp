@@ -23,6 +23,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/screen.h"
 #include "widget.h"
 #include "widgint.h"

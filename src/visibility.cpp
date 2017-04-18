@@ -23,10 +23,12 @@
  * Pumpkin Studios, Eidos Interactive 1996.
  */
 #include "lib/framework/frame.h"
+#include "lib/framework/fixedpoint.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "lib/ivis_opengl/ivisdef.h"
 
 #include "visibility.h"
 

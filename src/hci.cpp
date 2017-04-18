@@ -37,7 +37,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piestate.h"
-// FIXME Direct iVis implementation include!
+#include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"
 #include "lib/netplay/netplay.h"

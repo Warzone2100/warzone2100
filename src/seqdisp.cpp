@@ -33,6 +33,7 @@
 #include "lib/framework/stdio_ext.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "lib/sequence/sequence.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"

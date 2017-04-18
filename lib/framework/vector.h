@@ -24,16 +24,14 @@
 #pragma warning( disable : 4201)
 #endif
 #define GLM_SWIZZLE
-#include <glm/glm.hpp>
+
+#include <stdint.h>
 
 #include "wzglobal.h"
-
-#include <assert.h>
-
-
-#include "fixedpoint.h"
 #include "frame.h"
-#include "math_ext.h"
+#include "lib/framework/types.h"
+#include "glm/core/setup.hpp"
+#include "glm/core/type.hpp"
 
 using Vector3i = glm::ivec3;
 using Vector2i = glm::ivec2;
@@ -67,13 +65,6 @@ static inline WZ_DECL_PURE int operator *(Vector2i const &a, Vector2i const &b)
 static inline WZ_DECL_PURE int operator *(Vector3i const &a, Vector3i const &b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
-}
-
-// FIXME: Zero vector normalization should be handled on caller side.
-template<typename T>
-WZ_DECL_PURE T normalise(const T&a)
-{
-	return glm::dot(a, a) > 0.f ? glm::normalize(a) : a;
 }
 
 // iSinCosR(angle, scalar) -> 2d_vector

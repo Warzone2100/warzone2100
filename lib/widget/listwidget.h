@@ -25,6 +25,8 @@
 #ifndef THISISALISTWIDGET_H
 #define THISISALISTWIDGET_H
 
+#include "lib/ivis_opengl/ivisdef.h"
+
 #include "widget.h"
 
 

@@ -24,7 +24,13 @@
 #ifndef __INCLUDED_BASEOBJECT_H__
 #define __INCLUDED_BASEOBJECT_H__
 
-#include "basedef.h"
+#include "lib/framework/types.h"
+#include "lib/framework/vector.h"
+
+struct BASE_OBJECT;
+struct BASE_STATS;
+struct SIMPLE_OBJECT;
+struct Spacetime;
 
 struct StructureBounds
 {

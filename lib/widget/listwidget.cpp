@@ -27,7 +27,7 @@
 #endif
 #include "button.h"
 #include <QtCore/QSignalMapper>
-
+#include "lib/framework/math_ext.h"
 
 TabSelectionStyle::TabSelectionStyle(Image tab, Image tabDown, Image tabHighlight, Image prev, Image prevDown, Image prevHighlight, Image next, Image nextDown, Image nextHighlight, int gap)
 	: tabSize(tab.width(), tab.height())

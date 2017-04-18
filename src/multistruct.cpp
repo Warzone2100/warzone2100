@@ -28,6 +28,8 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
+
 #include "design.h"
 #include "template.h"
 #include "droid.h"

@@ -27,6 +27,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
+#include "lib/framework/fixedpoint.h"
+#include "lib/framework/math_ext.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"

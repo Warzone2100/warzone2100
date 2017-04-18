@@ -24,6 +24,8 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
+#include "lib/framework/fixedpoint.h"
 #include "lib/sound/aud.h"
 
 #include "display3d.h"

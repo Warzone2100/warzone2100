@@ -22,6 +22,7 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
 
 #include "audio.h"
 #include "track.h"

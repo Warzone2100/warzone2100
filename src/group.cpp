@@ -28,6 +28,8 @@
 #include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
+#include "group.h"
+#include "droid.h"
 #include "order.h"
 #include <QtCore/QMap>
 

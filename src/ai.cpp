@@ -29,6 +29,8 @@
 #include "action.h"
 #include "cmddroid.h"
 #include "combat.h"
+#include "droid.h"
+#include "group.h"
 #include "mapgrid.h"
 #include "map.h"
 #include "projectile.h"

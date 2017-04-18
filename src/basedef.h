@@ -28,6 +28,7 @@
 #include "displaydef.h"
 #include "statsdef.h"
 #include "weapondef.h"
+#include "baseobject.h"
 
 //the died flag for a droid is set to this when it gets added to the non-current list
 #define NOT_CURRENT_LIST 1
@@ -185,8 +186,5 @@ static inline BASE_OBJECT const *castBaseObject(SIMPLE_OBJECT const *psObject)
 {
 	return isBaseObject(psObject) ? (BASE_OBJECT const *)psObject : (BASE_OBJECT const *)NULL;
 }
-
-// Must be #included __AFTER__ the definition of BASE_OBJECT
-#include "baseobject.h"
 
 #endif // __INCLUDED_BASEDEF_H__

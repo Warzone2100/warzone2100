@@ -24,6 +24,7 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/rational.h"
 #include "objects.h"
+#include "levels.h"
 #include "basedef.h"
 #include "map.h"
 #include "warcam.h"

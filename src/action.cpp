@@ -25,6 +25,8 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
+#include "lib/framework/fixedpoint.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"

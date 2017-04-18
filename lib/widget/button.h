@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_LIB_WIDGET_BUTTON_H__
 #define __INCLUDED_LIB_WIDGET_BUTTON_H__
 
+#include "lib/ivis_opengl/ivisdef.h"
+
 #include "widget.h"
 #include "widgbase.h"
 #include <map>

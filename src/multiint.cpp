@@ -55,6 +55,7 @@
 
 #include "challenge.h"
 #include "main.h"
+#include "levels.h"
 #include "objects.h"
 #include "display.h"// pal stuff
 #include "display3d.h"

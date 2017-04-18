@@ -26,11 +26,18 @@
 
 #include <list>
 
+#include "lib/framework/types.h"
 #include "lib/ivis_opengl/pieclip.h"
-#include "lib/widget/widget.h"
 
 #include "message.h"
 
+class StateButton;
+class WIDGET;
+struct DROID;
+struct PROXIMITY_DISPLAY;
+struct STRUCTURE;
+struct W_SCREEN;
+struct iIMDShape;
 
 #define BASE_COORDS_X	(640)
 #define BASE_COORDS_Y	(460)
@@ -38,7 +45,6 @@
 #define E_H (pie_GetVideoBufferHeight() - BASE_COORDS_Y)
 #define D_W	((pie_GetVideoBufferWidth() - BASE_COORDS_X)/2)
 #define D_H ((pie_GetVideoBufferHeight() - BASE_COORDS_Y)/2)
-
 
 #define IDRET_FORM				1		// The reticule form
 #define IDRET_OPTIONS			2		// option button

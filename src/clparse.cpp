@@ -30,6 +30,7 @@
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieclip.h"
 
+#include "levels.h"
 #include "clparse.h"
 #include "display3d.h"
 #include "frontend.h"
