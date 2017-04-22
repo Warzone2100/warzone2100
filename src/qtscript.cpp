@@ -935,7 +935,7 @@ void jsShowDebug()
 
 /// For generic, parameter-less triggers
 //__ \subsection{eventGameInit()}
-//__ An event that is run once as the game is initialized. Not all game may have been
+//__ An event that is run once as the game is initialized. Not all game state may have been
 //__ properly initialized by this time, so use this only to initialize script state.
 //__ \subsection{eventStartLevel()}
 //__ An event that is run once the game has started and all game data has been loaded.

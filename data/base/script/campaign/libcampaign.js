@@ -70,7 +70,6 @@
 	HTML by HeVeA, which fails to support most of the complicated stuff.
 */
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Misc useful stuff.
 ////////////////////////////////////////////////////////////////////////////////
@@ -2322,6 +2321,13 @@ function camAreaEvent(label, code)
 //////////// privates
 
 var __camOriginalEvents = {};
+
+// A hack to make sure we do not put this variable into the savegame. It is
+// called from top level, because we need to call it again every time we load
+// scripts. But other than this one, you should in general never call game
+// functions from toplevel, since all game state may not be fully initialized
+// yet at the time scripts are loaded. (Yes, function name needs to be quoted.)
+hackDoNotSave("__camOriginalEvents");
 
 function __camPreHookEvent(eventname, hookcode)
 {
