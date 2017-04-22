@@ -1,3 +1,25 @@
+2017-04-23: Version 3.2.3
+ * General:
+   * Fix: Rescale body points if players have different armour levels when transferring units (commit:d0934ff3adb980f4c3c67d3c6c4a3572af0a6890, ticket:4554)
+   * Fix: Occasional crash when entering host game menu (commit:03d494d36663e7d483eb2d5f8a498358d0cd64ed, ticket:4567, ticket:4564, ticket:4546, ticket:4361 and others)
+   * Fix: Game freeze on clicking on start game in menu (commit:382077800bd98b718fb2bc8221d9d6be66602765, ticket:4566)
+   * Fix: Never put scavengers on human teams by accident (commit:a691778a5fcabe33b8b8fabc60e836fd50953e6e, ticket:4563)
+ * Graphics:
+   * Add: We now support higher than 8x MSAA, if supported by driver - do not show 8x if not supported (commit:33057c24ed87423e8a5e2d9d9aa5a53dee5dda08)
+   * Change: Optimizing graphics rendering (commit:92b50b766582f1712756aca1321fa06c0380c4ad, commit:c1f697f28aa8d4817a6ed8c6bb1e150a56050c4f, commit:a70920985ef860c1a1adf01bdda49a28411df09d, commit:486dd8e9c0283a92f7fa109271c2edd623800441)
+   * Change: Increase default resolution to 1024x720 rather than 640x480 (commit:9b0fa9e79a0e941c2f6d2e86795674872ef44217)
+   * Fix: Avoiding some techniques to hopefully run with more drivers (commit:8a2ff4499d0e732832dac0db264d4a735c10b8c8, commit:4134f82d22fe557791ab7a988629a8539ee3700a, commit:871fa31c809a9808b0d12787c523ecf4821f9a25)
+   * Fix: Fix clipped letters (commit:9c04d4ad6b378c6d246203b57e5038259f13348a)
+   * Fix: Fix text rendering blend mode, makes progress bar more readable (commit:0bfd2179408383de94dc120782b5bc23cdf884a5, ticket:4569)
+   * Fix: Still/moving helicopter/VTOL animations were reversed (commit:fb9bea5e0adc24a1a0de14ebdc883168380e5576, ticket:4489)
+   * Fix: Prevent structure turret stretching again (commit:f79286dc13562e8b1277be0ab120a79f7d2d2fa7, ticket:4537)
+ * Campaign:
+   * Change: Lots of initial campaign ported to Javascript. Discuss these changes in our new porting forum here: http://forums.wz2100.net/viewforum.php?f=51
+ * Scripting:
+   * Add: donateObject() works on structures. findResearch() works on other players (commit:839e0b0f5c0ec3a2b5b6018d1c82697db0804d22)
+   * Add: New function hackDoNotSave(global name) to prevent variable from being put in savegames (commit:ff57dc5733b69123b76a8f5dc469c4555f7b49f1)
+   * Add: Add setHealth(object, health %) to set a game object's health (commit:62a7c961683266d7ce53fdd23b3fe913d9b9b01a)
+
 2016-12-04: Version 3.2.2
  * General:
    * Change: Improved debug menu (commit:e89e1625401dfd9eefef8851f4a7af3245ce283e, commit:550f6eb01e2fabd27e491f71223b3c323c20cad6)
