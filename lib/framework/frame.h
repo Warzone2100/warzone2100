@@ -76,11 +76,11 @@ typedef uint16_t PlayerMask;
 #endif
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 3.2"
+# define WZ_WRITEDIR "Warzone 2100 master"
 #elif defined(WZ_OS_MAC)
-# define WZ_WRITEDIR "Warzone 2100 3.2"
+# define WZ_WRITEDIR "Warzone 2100 master"
 #else
-# define WZ_WRITEDIR ".warzone2100-3.2"
+# define WZ_WRITEDIR ".warzone2100-master"
 #endif
 
 enum QUEUE_MODE
