@@ -43,6 +43,7 @@
 #include "src/console.h"
 #include "src/levels.h"
 
+#include <time.h>
 #include <vector>
 #include <algorithm>
 #include <physfs.h>
