@@ -37,7 +37,7 @@ static const char vcs_tag[] = VCS_TAG;
 */
 const char *version_getVersionString()
 {
-	static const char *version_string = nullptr;
+	static const char *version_string = "3.2.3";
 
 	if (version_string == NULL)
 	{
