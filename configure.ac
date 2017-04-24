@@ -204,7 +204,7 @@ AS_IF([test -z "$docdir"],[
 	AC_SUBST([docdir], [${datarootdir}/doc/${AC_PACKAGE_TARNAME}])
 ])
 AS_IF([test -z "$localedir"],[
-	AC_SUBST([localedir], [${datadir}/locale])
+	AC_SUBST([localedir], [${datarootdir}/locale])
 ])
 
 
@@ -212,17 +212,17 @@ AS_IF([test -z "$localedir"],[
 
 AC_ARG_WITH(icondir,
 	AS_HELP_STRING([--with-icondir=DIR],[icon files [DATADIR/icons]]),
-	[ with_icondir=${withval} ], [ with_icondir=${datadir}/icons ])
+	[ with_icondir=${withval} ], [ with_icondir=${datarootdir}/icons ])
 AC_SUBST([icondir], [${with_icondir}])
 
 AC_ARG_WITH(applicationdir,
 	AS_HELP_STRING([--with-applicationdir=DIR],[application files [DATADIR/applications]]),
-	[ with_applicationdir=${withval} ], [ with_applicationdir=${datadir}/applications ])
+	[ with_applicationdir=${withval} ], [ with_applicationdir=${datarootdir}/applications ])
 AC_SUBST([applicationdir], [${with_applicationdir}])
 
 AC_ARG_WITH(appdatadir,
 	AS_HELP_STRING([--with-appdatadir=DIR],[application files [DATADIR/metainfo]]),
-	[ with_appdatadir=${withval} ], [ with_appdatadir=${datadir}/metainfo ])
+	[ with_appdatadir=${withval} ], [ with_appdatadir=${datarootdir}/metainfo ])
 AC_SUBST([appdatadir], [${with_appdatadir}])
 
 # Commandline options - enable:
