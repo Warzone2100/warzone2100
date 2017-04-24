@@ -8,14 +8,14 @@ directory	"messages"
 file		SMSG		"brief2-7.txt"
 
 /* Directory for uncompiled script files */
-directory       "script/text"
-file		SCRIPT		"genbet.slo"
+directory	"script/text"
 file		SCRIPT		"cam2daynight.slo"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam2-7s.vlo"
 file            SCRIPTVAL       "cam2day.vlo"
 
 directory       "script"
 file            JAVASCRIPT      "rules.js"
+directory       "script/campaign"
+file            JAVASCRIPT      "cam2-7s.js"

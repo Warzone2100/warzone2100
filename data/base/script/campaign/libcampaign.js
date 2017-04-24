@@ -799,7 +799,7 @@ function camSendReinforcement(player, position, list, kind, data)
 			{
 				droids[droids.length] = addDroid(player, pos.x, pos.y,
 				                        "Reinforcement", list[i].body,
-				                        list[i].prop, null, null, list[i].weap);
+				                        list[i].prop, "", "", list[i].weap);
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
@@ -1984,15 +1984,6 @@ const CAM_VICTORY_OFFWORLD = 2;
 //;; 	and construction droids are lost, or on mission timeout.
 //;; 	Victory when all enemies are destroyed and all artifacts
 //;; 	are recovered.
-//;; 	The following data parameter fields are available:
-//;; 	\begin{description}
-//;; 		\item[calllback] A function callback to check for extra win/loss
-//;; 		conditions. Return values are interpreted as follows:
-//;; 		\textbf{false} means instant defeat ("objective failed"),
-//;; 		\textbf{true} means victory as long as other standard victory
-//;; 		conditions are met, \textbf{undefined} means suppress
-//;; 		other victory checks ("clearly not won yet").
-//;; 	\end{description}
 //;; 	\item[CAM_VICTORY_PRE_OFFWORLD] Defeat on timeout. Victory on
 //;; 	transporter launch, then load the sub-level.
 //;; 	\item[CAM_VICTORY_OFFWORLD] Defeat on timeout or all units lost.
@@ -2005,6 +1996,15 @@ const CAM_VICTORY_OFFWORLD = 2;
 //;; 		\item[area] The landing zone to return to.
 //;; 		\item[message] The "Return to LZ" message ID. Optional.
 //;; 		\item[reinforcements] Reinforcements interval, in seconds.
+//;; 	\end{description}
+//;; For standard and offworld victory, an extra data parameter can be defined:
+//;; 	\begin{description}
+//;; 		\item[callback] A function callback to check for extra win/loss
+//;; 		conditions. Return values are interpreted as follows:
+//;; 		\textbf{false} means instant defeat ("objective failed"),
+//;; 		\textbf{true} means victory as long as other standard victory
+//;; 		conditions are met, \textbf{undefined} means suppress
+//;; 		other victory checks ("clearly not won yet").
 //;; 	\end{description}
 //;; \end{description}
 function camSetStandardWinLossConditions(kind, nextLevel, data)
@@ -2035,6 +2035,30 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			break;
 	}
 	__camNextLevel = nextLevel;
+}
+
+//Checks for extra win conditions defined in level scripts, if any.
+function camCheckExtraObjective()
+{
+	var extraObjMet = true;
+	if (camDef(__camVictoryData) && camDef(__camVictoryData.callback))
+	{
+		var result = __camGlobalContext()[__camVictoryData.callback]();
+		if (camDef(result))
+		{
+			if (!result)
+			{
+				__camGameLost();
+				return;
+			}
+		}
+		else
+		{
+			extraObjMet = false;
+		}
+	}
+
+	return extraObjMet;
 }
 
 //////////// privates
@@ -2097,34 +2121,9 @@ function __camTriggerLastAttack()
 	}
 }
 
-//Checks for extra win conditions defined in level scripts, if any.
-//Not recommended to be defined within eventStartLevel() in offworld missions.
-function __camCheckExtraObjective()
-{
-	var extraObjMet = true;
-	if (camDef(__camVictoryData) && camDef(__camVictoryData.callback))
-	{
-		var result = __camGlobalContext()[__camVictoryData.callback]();
-		if (camDef(result))
-		{
-			if (!result)
-			{
-				__camGameLost();
-				return;
-			}
-		}
-		else
-		{
-			extraObjMet = false;
-		}
-	}
-
-	return extraObjMet;
-}
-
 function __camVictoryStandard()
 {
-	var extraObj = __camCheckExtraObjective();
+	var extraObj = camCheckExtraObjective();
 	// check if game is lost
 	if (__camPlayerDead())
 	{
@@ -2156,7 +2155,6 @@ function __camVictoryPreOffworld()
 
 function __camVictoryOffworld()
 {
-	var extraObj = __camCheckExtraObjective();
 	var lz = __camVictoryData.area;
 	if (!camDef(lz))
 	{
@@ -2166,30 +2164,28 @@ function __camVictoryOffworld()
 	var total = countDroid(DROID_ANY, CAM_HUMAN_PLAYER); // for future use
 	if (total === 0)
 		__camGameLost();
-	if (camAllArtifactsPickedUp())
+
+	if (camAllArtifactsPickedUp() && camCheckExtraObjective())
 	{
 		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
 		{
-			//if there are no more enemies, win instantly. Unless the extra
-			//victory condition has not been met.
-			if(extraObj === true)
-				__camGameWon();
+			//if there are no more enemies, win instantly.
+			__camGameWon();
 			return;
 		}
 
 		//Missions that are not won based on artifact count (see campaign 2-1).
-		if(getArtifacts().length === 0)
+		var arti = getArtifacts();
+		if(arti.length === 0)
 		{
-			if(extraObj === true)
-				__camGameWon();
+			__camGameWon();
 			return;
 		}
 
 		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).length;
 		if (atlz === total)
 		{
-			if(extraObj === true)
-				__camGameWon();
+			__camGameWon();
 			return;
 		}
 		else
@@ -2204,7 +2200,7 @@ function __camVictoryOffworld()
 			camMarkTiles(lz);
 			if (camDef(__camVictoryData.message))
 				hackAddMessage(__camVictoryData.message, PROX_MSG,
-				               CAM_HUMAN_PLAYER, false);
+				               	CAM_HUMAN_PLAYER, false);
 		}
 		if (__camRTLZTicker % 30 === 0) // every 30 seconds
 		{
@@ -2366,6 +2362,7 @@ var __camOriginalEvents = {};
 // functions from toplevel, since all game state may not be fully initialized
 // yet at the time scripts are loaded. (Yes, function name needs to be quoted.)
 hackDoNotSave("__camOriginalEvents");
+
 
 function __camPreHookEvent(eventname, hookcode)
 {
