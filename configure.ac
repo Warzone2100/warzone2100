@@ -334,6 +334,11 @@ elif test "x$enable_debug" = "xsanitize-address" ; then
 	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -Os -fno-omit-frame-pointer ${WZ_WARNINGS_GCC_CXX} -Werror -fsanitize=address"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	LDFLAGS="${LDFLAGS} -fsanitize=address -lpthread"
+elif test "x$enable_debug" = "xsanitize-thread" ; then
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -Os -fno-omit-frame-pointer ${WZ_WARNINGS_GCC_C} -Werror -fsanitize=thread"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -Os -fno-omit-frame-pointer ${WZ_WARNINGS_GCC_CXX} -Werror -fsanitize=thread"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+	LDFLAGS="${LDFLAGS} -fsanitize=thread -lpthread"
 # normal, non-debug build
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -g ${WZ_WARNINGS_GCC_C}"
