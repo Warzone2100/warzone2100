@@ -117,6 +117,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 # include <stdint.h>
 # include <signal.h>
 # include <string.h>
+# include <errno.h>
 
 // POSIX headers:
 # include <unistd.h>
