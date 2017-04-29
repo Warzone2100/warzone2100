@@ -11,18 +11,14 @@ file		SMSG		"prox2b.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-
-file		SCRIPT		"genexp.slo"
-file            SCRIPT		"vtols.slo"
 file		SCRIPT		"cam2daynight.slo"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam2b.vlo"
-file            SCRIPTVAL       "vtols2b.vlo"
 file            SCRIPTVAL       "cam2day.vlo"
 
 directory       "script"
 file            JAVASCRIPT      "rules.js"
 directory       "script/campaign"
 file            JAVASCRIPT      "cam2bx.js"
+file            JAVASCRIPT      "cam2-b.js"
