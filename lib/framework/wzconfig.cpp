@@ -172,11 +172,7 @@ QJsonValue WzConfig::json(const QString &key, const QJsonValue &defaultValue) co
 
 void WzConfig::setVector3f(const QString &name, const Vector3f &v)
 {
-	QStringList l;
-	l.push_back(QString::number(v.x));
-	l.push_back(QString::number(v.y));
-	l.push_back(QString::number(v.z));
-	setValue(name, l);
+	mObj.insert(name, QJsonArray({ v.x, v.y, v.z }));
 }
 
 Vector3f WzConfig::vector3f(const QString &name)
@@ -196,11 +192,7 @@ Vector3f WzConfig::vector3f(const QString &name)
 
 void WzConfig::setVector3i(const QString &name, const Vector3i &v)
 {
-	QStringList l;
-	l.push_back(QString::number(v.x));
-	l.push_back(QString::number(v.y));
-	l.push_back(QString::number(v.z));
-	setValue(name, l);
+	mObj.insert(name, QJsonArray({ v.x, v.y, v.z }));
 }
 
 Vector3i WzConfig::vector3i(const QString &name)
@@ -220,10 +212,7 @@ Vector3i WzConfig::vector3i(const QString &name)
 
 void WzConfig::setVector2i(const QString &name, const Vector2i &v)
 {
-	QStringList l;
-	l.push_back(QString::number(v.x));
-	l.push_back(QString::number(v.y));
-	setValue(name, l);
+	mObj.insert(name, QJsonArray({ v.x, v.y }));
 }
 
 Vector2i WzConfig::vector2i(const QString &name)

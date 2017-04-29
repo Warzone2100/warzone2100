@@ -1831,7 +1831,6 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 //-- Load a droid, which is currently located on the campaign off-world mission list,
 //-- into a transporter, which is also currently on the campaign off-world mission list.
 //-- (3.2+ only)
-
 static QScriptValue js_addDroidToTransporter(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue transporterVal = context->argument(0);
