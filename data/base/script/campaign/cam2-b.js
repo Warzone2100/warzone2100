@@ -102,7 +102,7 @@ function checkCollectiveHQ()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
-	camSetVtolData(CO, "vtolAppearPos", "vtolAppearPos", list, 540000); //9 min
+	camSetVtolData(CO, "vtolAppearPos", "vtolRemove", list, 600000); //10 min
 	checkCollectiveHQ();
 }
 
