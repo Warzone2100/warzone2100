@@ -3763,7 +3763,7 @@ static bool loadSettings(const QString &filename)
 	game.power = ini.value("powerLevel", game.power).toInt();
 	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 	sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
-	locked.position = ini.value("allowPositionChange", locked.position).toBool();
+	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
 	ini.endGroup();
 	return true;
 }
