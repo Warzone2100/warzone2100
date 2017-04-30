@@ -1,0 +1,38 @@
+{
+    "challenge": {
+        "bases": 3,
+        "description": "Surprise your enemy by exploiting geography and his bad habits.",
+        "difficulty": "Medium",
+        "map": "Sk-LittleEgypt-T1",
+        "maxPlayers": 4,
+        "name": "Two-faced",
+        "powerLevel": 2,
+        "scavengers": "false",
+        "version": 0,
+	"allowPositionChange": "true"
+    },
+    "locked": {
+        "position": "false"
+    },
+    "player_0": {
+        "team": 0
+    },
+    "player_1": {
+	"name": "Alpha",
+	"ai": "multiplay/skirmish/nb_generic.js",
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_2": {
+	"name": "Beta",
+	"ai": "multiplay/skirmish/nb_generic.js",
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_3": {
+	"name": "Gamma",
+	"ai": "multiplay/skirmish/nb_generic.js",
+        "difficulty": "Hard",
+        "team": 1
+    }
+}
