@@ -1,5 +1,15 @@
 include("script/campaign/libcampaign.js");
 
+var cheat;
+
+function eventChat(from, to, message)
+{
+	if(isCheating() && message === "let me win")
+	{
+		cheat = true;
+	}
+}
+
 //Video if player does not yet have power module built
 function resPowModVideo()
 {
@@ -26,10 +36,10 @@ function powerModuleBuilt()
 	return false;
 }
 
-//Only way to pass this mission is to build a power module
+//Only way to pass this mission is to build a power module or be in cheat mode.
 function checkForPowerModule()
 {
-	if(powerModuleBuilt())
+	if(cheat || powerModuleBuilt())
 	{
 		camSetupTransporter(11, 52, 1, 32);
 		setMissionTime(900); // 15 min
@@ -37,7 +47,7 @@ function checkForPowerModule()
 	}
 	else
 	{
-		queue("checkForPowerModule", 5000);
+		queue("checkForPowerModule", 3000);
 	}
 }
 
@@ -47,6 +57,7 @@ function eventStartLevel()
 	setNoGoArea(10, 51, 12, 53, CAM_HUMAN_PLAYER);
 	setMissionTime(-1);
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
+	cheat = false;
 
 	if(!powerModuleBuilt())
 	{
@@ -54,5 +65,5 @@ function eventStartLevel()
 	}
 
 	checkForPowerModule();
-
 }
+
