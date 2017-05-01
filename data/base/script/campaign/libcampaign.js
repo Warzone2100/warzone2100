@@ -381,6 +381,12 @@ function camTraceOnce()
 	                  arguments);
 }
 
+//;; \subsection{isCheating}
+//;; Check if the player is in cheat mode.
+function isCheating()
+{
+	return __camCheatMode;
+}
 
 //////////// privates
 
@@ -2398,7 +2404,7 @@ __camPreHookEvent("eventChat", function(from, to, message)
 	if (!__camCheatMode)
 		return;
 	camTrace(from, to, message);
-	if (message === "let me win")
+	if (message === "let me win" && __camNextLevel !== "SUB_1_1")
 		__camLetMeWin();
 	if (message === "win info")
 		__camWinInfo();
