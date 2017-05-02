@@ -85,7 +85,7 @@ changequote([,])dnl
   dnl Installation directories.
   dnl Autoconf >= 2.60 defines localedir. For older versions of autoconf, we
   dnl have to define it here, so that it can be used in po/Makefile.
-  test -n "$localedir" || localedir='${datadir}/locale'
+  test -n "$localedir" || localedir='${datarootdir}/locale'
   AC_SUBST([localedir])
 
   dnl Support for AM_XGETTEXT_OPTION.
