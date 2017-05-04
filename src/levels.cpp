@@ -116,11 +116,11 @@ void levShutDown()
 {
 	for (auto toDelete : psLevels)
 	{
-		for (int i = 0; i < ARRAY_SIZE(toDelete->apDataFiles); ++i)
+		for (auto &apDataFile : toDelete->apDataFiles)
 		{
-			if (toDelete->apDataFiles[i] != nullptr)
+			if (apDataFile != nullptr)
 			{
-				free(toDelete->apDataFiles[i]);
+				free(apDataFile);
 			}
 		}
 

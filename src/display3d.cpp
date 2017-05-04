@@ -1547,9 +1547,9 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 	blueprints.erase(std::unique(blueprints.begin(), blueprints.end()), blueprints.end());
 
 	// Actually render everything.
-	for (std::vector<Blueprint>::iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
+	for (auto &blueprint : blueprints)
 	{
-		blueprint->renderBlueprint(viewMatrix);
+		blueprint.renderBlueprint(viewMatrix);
 	}
 
 	renderDeliveryRepos(viewMatrix);

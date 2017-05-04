@@ -114,9 +114,9 @@ bool loadResearch(QString filename)
 	for (int inc = 0; inc < list.size(); ++inc)
 	{
 		// HACK FIXME: the code assumes we have empty PLAYER_RESEARCH entries to throw around
-		for (int j = 0; j < MAX_PLAYERS; j++)
+		for (auto &j : asPlayerResList)
 		{
-			asPlayerResList[j].push_back(dummy);
+			j.push_back(dummy);
 		}
 
 		ini.beginGroup(list[inc]);
@@ -496,38 +496,38 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	MakeResearchCompleted(&asPlayerResList[player][researchIndex]);
 
 	//check for structures to be made available
-	for (int inc = 0; inc < pResearch->pStructureResults.size(); inc++)
+	for (unsigned short pStructureResult : pResearch->pStructureResults)
 	{
-		if (apStructTypeLists[player][pResearch->pStructureResults[inc]] != REDUNDANT)
+		if (apStructTypeLists[player][pStructureResult] != REDUNDANT)
 		{
-			apStructTypeLists[player][pResearch->pStructureResults[inc]] = AVAILABLE;
+			apStructTypeLists[player][pStructureResult] = AVAILABLE;
 		}
 	}
 
 	//check for structures to be made redundant
-	for (int inc = 0; inc < pResearch->pRedStructs.size(); inc++)
+	for (unsigned short pRedStruct : pResearch->pRedStructs)
 	{
-		apStructTypeLists[player][pResearch->pRedStructs[inc]] = REDUNDANT;
+		apStructTypeLists[player][pRedStruct] = REDUNDANT;
 	}
 
 	//check for component replacement
 	if (pResearch->componentReplacement.size() != 0)
 	{
-		for (int ri = 0; ri < pResearch->componentReplacement.size(); ri++)
+		for (auto &ri : pResearch->componentReplacement)
 		{
-			COMPONENT_STATS *pOldComp = pResearch->componentReplacement[ri].pOldComponent;
-			replaceComponent(pResearch->componentReplacement[ri].pNewComponent, pOldComp, player);
+			COMPONENT_STATS *pOldComp = ri.pOldComponent;
+			replaceComponent(ri.pNewComponent, pOldComp, player);
 			apCompLists[player][pOldComp->compType][pOldComp->index] = REDUNDANT;
 		}
 	}
 
 	//check for artefacts to be made available
-	for (int inc = 0; inc < pResearch->componentResults.size(); inc++)
+	for (auto &componentResult : pResearch->componentResults)
 	{
 		//determine the type of artefact
-		COMPONENT_TYPE type = pResearch->componentResults[inc]->compType;
+		COMPONENT_TYPE type = componentResult->compType;
 		//set the component state to AVAILABLE
-		int compInc = pResearch->componentResults[inc]->index;
+		int compInc = componentResult->index;
 		if (apCompLists[player][type][compInc] != REDUNDANT)
 		{
 			apCompLists[player][type][compInc] = AVAILABLE;
@@ -551,10 +551,10 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	}
 
 	//check for artefacts to be made redundant
-	for (int inc = 0; inc < pResearch->pRedArtefacts.size(); inc++)
+	for (auto &pRedArtefact : pResearch->pRedArtefacts)
 	{
-		COMPONENT_TYPE type = pResearch->pRedArtefacts[inc]->compType;
-		apCompLists[player][type][pResearch->pRedArtefacts[inc]->index] = REDUNDANT;
+		COMPONENT_TYPE type = pRedArtefact->compType;
+		apCompLists[player][type][pRedArtefact->index] = REDUNDANT;
 	}
 
 	//Add message to player's list if Major Topic
@@ -623,9 +623,9 @@ bool ResearchShutDown()
 void ResearchRelease()
 {
 	asResearch.clear();
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	for (auto &i : asPlayerResList)
 	{
-		asPlayerResList[i].clear();
+		i.clear();
 	}
 }
 
@@ -756,11 +756,11 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /* For a given view data get the research this is related to */
 RESEARCH *getResearchForMsg(VIEWDATA *pViewData)
 {
-	for (int inc = 0; inc < asResearch.size(); inc++)
+	for (auto &inc : asResearch)
 	{
-		if (asResearch[inc].pViewData == pViewData)	// compare the pointer
+		if (inc.pViewData == pViewData)	// compare the pointer
 		{
-			return &asResearch[inc];
+			return &inc;
 		}
 	}
 	return nullptr;
@@ -1017,11 +1017,11 @@ SDWORD	mapIconToRID(UDWORD iconID)
 //return a pointer to a research topic based on the name
 RESEARCH *getResearch(const char *pName)
 {
-	for (int inc = 0; inc < asResearch.size(); inc++)
+	for (auto &inc : asResearch)
 	{
-		if (asResearch[inc].id.compare(pName) == 0)
+		if (inc.id.compare(pName) == 0)
 		{
-			return &asResearch[inc];
+			return &inc;
 		}
 	}
 	debug(LOG_WARNING, "Unknown research - %s", pName);
@@ -1383,9 +1383,9 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 				researches[cRef].push_back(r);
 			}
 		}
-		for (std::map<unsigned, std::vector<AllyResearch> >::iterator i = researches.begin(); i != researches.end(); ++i)
+		for (auto &research : researches)
 		{
-			std::sort(i->second.begin(), i->second.end(), allyResearchSortFunction);
+			std::sort(research.second.begin(), research.second.end(), allyResearchSortFunction);
 		}
 	}
 

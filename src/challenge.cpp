@@ -333,9 +333,9 @@ bool closeChallenges()
 bool runChallenges()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
-	for (WidgetTriggers::const_iterator trigger = triggers.begin(); trigger != triggers.end(); ++trigger)
+	for (const auto trigger : triggers)
 	{
-		unsigned id = trigger->widget->id;
+		unsigned id = trigger.widget->id;
 
 		sstrcpy(sRequestResult, "");  // set returned filename to null;
 

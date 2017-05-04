@@ -750,22 +750,21 @@ void desSetupDesignTemplates()
 	/* init template list */
 	apsTemplateList.clear();
 	apsTemplateList.push_back(&sDefaultDesignTemplate);
-	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	for (DROID_TEMPLATE &templ : localTemplates)
 	{
-		DROID_TEMPLATE *psTempl = &*i;  // &* changes iterators into pointers.
 		/* add template to list if not a transporter,
 		 * cyborg, person or command droid,
 		 */
-		if (psTempl->droidType != DROID_TRANSPORTER        &&
-		    psTempl->droidType != DROID_SUPERTRANSPORTER   &&
-		    psTempl->droidType != DROID_CYBORG             &&
-		    psTempl->droidType != DROID_CYBORG_SUPER       &&
-		    psTempl->droidType != DROID_CYBORG_CONSTRUCT   &&
-		    psTempl->droidType != DROID_CYBORG_REPAIR      &&
-		    psTempl->droidType != DROID_PERSON             &&
-		    researchedTemplate(psTempl, selectedPlayer, includeRedundantDesigns))
+		if (templ.droidType != DROID_TRANSPORTER        &&
+		    templ.droidType != DROID_SUPERTRANSPORTER   &&
+		    templ.droidType != DROID_CYBORG             &&
+		    templ.droidType != DROID_CYBORG_SUPER       &&
+		    templ.droidType != DROID_CYBORG_CONSTRUCT   &&
+		    templ.droidType != DROID_CYBORG_REPAIR      &&
+		    templ.droidType != DROID_PERSON             &&
+		    researchedTemplate(&templ, selectedPlayer, includeRedundantDesigns))
 		{
-			apsTemplateList.push_back(psTempl);
+			apsTemplateList.push_back(&templ);
 		}
 	}
 }
@@ -797,7 +796,6 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 /* Add the droid template buttons to a form */
 static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSelected)
 {
-	DROID_TEMPLATE	*psTempl = nullptr;
 	char TempString[256];
 
 	/* Set up the button struct */
@@ -816,10 +814,8 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
 	sBarInit.pTip = _("Power Usage");
 
 	droidTemplID = 0;
-	for (unsigned i = 0; i < apsTemplateList.size(); ++i)
+	for (DROID_TEMPLATE *psTempl : apsTemplateList)
 	{
-		psTempl = apsTemplateList[i];
-
 		/* Set the tip and add the button */
 		IntStatsButton *button = new IntStatsButton(templList);
 		button->id = nextButtonId;

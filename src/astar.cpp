@@ -340,9 +340,9 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 /// Recalculates estimates to new tileF tile.
 static void fpathAStarReestimate(PathfindContext &context, PathCoord tileF)
 {
-	for (std::vector<PathNode>::iterator node = context.nodes.begin(); node != context.nodes.end(); ++node)
+	for (auto &node : context.nodes)
 	{
-		node->est = node->dist + fpathGoodEstimate(node->p, tileF);
+		node.est = node.dist + fpathGoodEstimate(node.p, tileF);
 	}
 
 	// Changing the estimates breaks the heap ordering. Fix the heap ordering.

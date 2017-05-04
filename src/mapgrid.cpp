@@ -63,9 +63,9 @@ void gridReset()
 				if (!psObj->died)
 				{
 					gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
-					for (unsigned viewer = 0; viewer < MAX_PLAYERS; ++viewer)
+					for (unsigned char &viewer : psObj->seenThisTick)
 					{
-						psObj->seenThisTick[viewer] = 0;
+						viewer = 0;
 					}
 				}
 			}

@@ -255,19 +255,19 @@ void initMission()
 	mission.psGateways.clear(); // just in case
 	mission.mapHeight = 0;
 	mission.mapWidth = 0;
-	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
+	for (auto &i : mission.psBlockMap)
 	{
-		mission.psBlockMap[i] = nullptr;
+		i = nullptr;
 	}
-	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
+	for (auto &i : mission.psAuxMap)
 	{
-		mission.psAuxMap[i] = nullptr;
+		i = nullptr;
 	}
 
 	//init all the landing zones
-	for (int inc = 0; inc < MAX_NOGO_AREAS; inc++)
+	for (auto &inc : sLandingZone)
 	{
-		sLandingZone[inc].x1 = sLandingZone[inc].y1 = sLandingZone[inc].x2 = sLandingZone[inc].y2 = 0;
+		inc.x1 = inc.y1 = inc.x2 = inc.y2 = 0;
 	}
 
 	// init the vtol return pos
@@ -1123,7 +1123,6 @@ void saveCampaignData()
 	for (int inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		psDroid = apsDroidLists[inc];
-
 		while (psDroid != nullptr)
 		{
 			psNext = psDroid->psNext;

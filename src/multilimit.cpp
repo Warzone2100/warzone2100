@@ -313,9 +313,9 @@ void applyLimitSet()
 		// So long as the ID is valid
 		if (id < numStructureStats)
 		{
-			for (int j = 0; j < MAX_PLAYERS; ++j)
+			for (auto &asStructLimit : asStructLimits)
 			{
-				asStructLimits[j][id].limit = pEntry[i].limit;
+				asStructLimit[id].limit = pEntry[i].limit;
 			}
 		}
 	}

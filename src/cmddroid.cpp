@@ -66,11 +66,11 @@ void cmdDroidShutDown()
  */
 void cmdDroidUpdate()
 {
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	for (auto &i : apsCmdDesignator)
 	{
-		if (apsCmdDesignator[i] && apsCmdDesignator[i]->died)
+		if (i && i->died)
 		{
-			apsCmdDesignator[i] = nullptr;
+			i = nullptr;
 		}
 	}
 }

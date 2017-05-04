@@ -493,9 +493,9 @@ void setReticuleBut(int ButId)
 /* Initialise the in game interface */
 bool intInitialise()
 {
-	for (int i = 0; i < NUMRETBUTS; i++)
+	for (auto &i : ReticuleEnabled)
 	{
-		ReticuleEnabled[i].Hidden = false;
+		i.Hidden = false;
 	}
 
 	widgSetTipColour(WZCOL_TOOLTIP_TEXT);
@@ -561,9 +561,9 @@ bool intInitialise()
 		{
 			if (asStructureStats[comp].type == REF_DEMOLISH)
 			{
-				for (int inc = 0; inc < MAX_PLAYERS; inc++)
+				for (auto &apStructTypeList : apStructTypeLists)
 				{
-					apStructTypeLists[inc][comp] = AVAILABLE;
+					apStructTypeList[comp] = AVAILABLE;
 				}
 			}
 		}
@@ -938,9 +938,9 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 	{
 	case OBJ_DROID:
 		apsTemplateList.clear();
-		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+		for (auto &localTemplate : localTemplates)
 		{
-			apsTemplateList.push_back(&*i);
+			apsTemplateList.push_back(&localTemplate);
 		}
 		ppsStatsList = (BASE_STATS **)&apsTemplateList[0]; // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 		objMode = IOBJ_MANUFACTURE;
@@ -1026,11 +1026,11 @@ void hciUpdate()
 	}
 
 	// Update the previous object array, prune dead objects.
-	for (int i = 0; i < IOBJ_MAX; ++i)
+	for (auto &i : apsPreviousObj)
 	{
-		if (apsPreviousObj[i] && apsPreviousObj[i]->died)
+		if (i && i->died)
 		{
-			apsPreviousObj[i] = nullptr;
+			i = nullptr;
 		}
 	}
 
@@ -1129,9 +1129,9 @@ INT_RETVAL intRunWidgets()
 	if (!bLoadSaveUp)
 	{
 		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-		for (WidgetTriggers::const_iterator trigger = triggers.begin(); trigger != triggers.end(); ++trigger)
+		for (const auto trigger : triggers)
 		{
-			retIDs.push_back(trigger->widget->id);
+			retIDs.push_back(trigger.widget->id);
 		}
 	}
 
@@ -2956,9 +2956,8 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sAllyResearch.y = 10;
 	sAllyResearch.pDisplay = intDisplayAllyIcon;
 
-	for (unsigned i = 0; i < apsObjectList.size(); ++i)
+	for (auto psObj : apsObjectList)
 	{
-		BASE_OBJECT *psObj = apsObjectList[i];
 		if (psObj->died != 0)
 		{
 			continue; // Don't add the button if the objects dead.
@@ -4573,30 +4572,30 @@ void intCheckReticuleButtons()
 		}
 	}
 
-	for (int i = 0; i < NUMRETBUTS; i++)
+	for (auto &i : ReticuleEnabled)
 	{
-		WIDGET *psWidget = widgGetFromID(psWScreen, ReticuleEnabled[i].id);
+		WIDGET *psWidget = widgGetFromID(psWScreen, i.id);
 
 		if (psWidget != nullptr)
 		{
 			if (psWidget->type != WIDG_LABEL)
 			{
-				if (ReticuleEnabled[i].Enabled)
+				if (i.Enabled)
 				{
-					widgSetButtonState(psWScreen, ReticuleEnabled[i].id, 0);
+					widgSetButtonState(psWScreen, i.id, 0);
 				}
 				else
 				{
-					widgSetButtonState(psWScreen, ReticuleEnabled[i].id, WBUT_DISABLE);
+					widgSetButtonState(psWScreen, i.id, WBUT_DISABLE);
 				}
 
-				if (ReticuleEnabled[i].Hidden)
+				if (i.Hidden)
 				{
-					widgHide(psWScreen, ReticuleEnabled[i].id);
+					widgHide(psWScreen, i.id);
 				}
 				else
 				{
-					widgReveal(psWScreen, ReticuleEnabled[i].id);
+					widgReveal(psWScreen, i.id);
 				}
 			}
 		}
@@ -4661,11 +4660,11 @@ void intNotifyResearchButton(int prevState)
 // see if a reticule button is enabled
 bool intCheckReticuleButEnabled(UDWORD id)
 {
-	for (int i = 0; i < NUMRETBUTS; i++)
+	for (auto &i : ReticuleEnabled)
 	{
-		if (ReticuleEnabled[i].id == id)
+		if (i.id == id)
 		{
-			return ReticuleEnabled[i].Enabled;
+			return i.Enabled;
 		}
 	}
 	return false;

@@ -119,10 +119,10 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 	// Subtitute the angle values angBegin and angEnd with ones that can be compared to each other, so that
 	// the angles can be compared without using the unsortedAngles lookup table. (And without using the
 	// sortedAngles lookup table either.)
-	for (std::vector<WavecastTile>::iterator i = tiles.begin(); i != tiles.end(); ++i)
+	for (auto &i : tiles)
 	{
-		i->angBegin = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angBegin]) - sortedAngles.begin();
-		i->angEnd   = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angEnd  ]) - sortedAngles.begin();
+		i.angBegin = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i.angBegin]) - sortedAngles.begin();
+		i.angEnd   = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i.angEnd  ]) - sortedAngles.begin();
 	}
 
 #if 0  // Prints wavecast table.

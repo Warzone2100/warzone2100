@@ -365,12 +365,12 @@ static std::vector<AVORDER> buildDroidOrderList()
 {
 	std::set<AVORDER> orders;
 
-	for (unsigned j = 0; j < SelectedDroids.size(); j++)
+	for (auto &SelectedDroid : SelectedDroids)
 	{
 		for (unsigned OrdIndex = 0; OrdIndex < NUM_ORDERS; ++OrdIndex)
 		{
 			// Is the order available?
-			if (secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order))
+			if (secondarySupported(SelectedDroid, OrderButtons[OrdIndex].Order))
 			{
 				AVORDER avOrder;
 				avOrder.OrderIndex = OrdIndex;
@@ -416,9 +416,9 @@ static SECONDARY_STATE GetSecondaryStates(SECONDARY_ORDER sec)
 	}
 	else //droids
 	{
-		for (unsigned i = 0; i < SelectedDroids.size(); ++i)
+		for (auto &SelectedDroid : SelectedDroids)
 		{
-			currState = secondaryGetState(SelectedDroids[i], sec, ModeQueue);
+			currState = secondaryGetState(SelectedDroid, sec, ModeQueue);
 			if (bFirst)
 			{
 				state = currState;
@@ -785,11 +785,11 @@ bool intAddOrder(BASE_OBJECT *psObj)
 void intRunOrder()
 {
 	// Check to see if there all dead or unselected.
-	for (unsigned i = 0; i < SelectedDroids.size(); i++)
+	for (auto &SelectedDroid : SelectedDroids)
 	{
-		if (SelectedDroids[i]->died)
+		if (SelectedDroid->died)
 		{
-			SelectedDroids[i] = nullptr;
+			SelectedDroid = nullptr;
 		}
 	}
 	// Remove any NULL pointers from SelectedDroids.
@@ -820,14 +820,14 @@ void intRunOrder()
 static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 {
 	// This code is similar to kfsf_SetSelectedDroidsState() in keybind.cpp. Unfortunately, it seems hard to un-duplicate the code.
-	for (unsigned i = 0; i < SelectedDroids.size(); ++i)
+	for (auto &SelectedDroid : SelectedDroids)
 	{
-		if (SelectedDroids[i])
+		if (SelectedDroid)
 		{
 			//Only set the state if it's not a transporter.
-			if (!isTransporter(SelectedDroids[i]))
+			if (!isTransporter(SelectedDroid))
 			{
-				if (!secondarySetState(SelectedDroids[i], sec, (SECONDARY_STATE)State))
+				if (!secondarySetState(SelectedDroid, sec, (SECONDARY_STATE)State))
 				{
 					return false;
 				}

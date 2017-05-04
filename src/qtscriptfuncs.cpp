@@ -350,9 +350,8 @@ std::pair<bool, int> seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BA
 	GROUPMAP *psMap = groups.value(engine);
 	int groupId = psMap->value(seen);
 	bool foundObj = false, foundGroup = false;
-	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+	for (auto &l : labels)
 	{
-		labeltype &l = (*i);
 		if (l.id == seen->id && l.triggered == 0
 		    && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
 		{
@@ -1015,9 +1014,9 @@ bool writeLabels(const char *filename)
 			ini.setValue("player", l.player);
 			ini.setValue("triggered", l.triggered);
 			QStringList list;
-			for (int i = 0; i < l.idlist.size(); i++)
+			for (int i : l.idlist)
 			{
-				list += QString::number(l.idlist[i]);
+				list += QString::number(i);
 			}
 			ini.setValue("members", list);
 			ini.setValue("label", key);
@@ -1894,9 +1893,8 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		              "Invalid template %s for factory %s",
 		              getName(psTemplate), getName(psStruct->pStructureType));
 		// Delete similar template from existing list before adding this one
-		for (int j = 0; j < apsTemplateList.size(); j++)
+		for (auto t : apsTemplateList)
 		{
-			DROID_TEMPLATE *t = apsTemplateList[j];
 			if (t->name.compare(psTemplate->name) == 0)
 			{
 				debug(LOG_SCRIPT, "deleting %s for player %d", getName(t), player);
@@ -2986,9 +2984,9 @@ static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
 		bool researched = researchedTemplate(keyvaluepair.second, selectedPlayer);
 		keyvaluepair.second->enabled = (researched || allowDesign);
 	}
-	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	for (auto &localTemplate : localTemplates)
 	{
-		psCurr = &*i;
+		psCurr = &localTemplate;
 		bool researched = researchedTemplate(psCurr, selectedPlayer);
 		psCurr->enabled = (researched || allowDesign);
 	}
@@ -3016,9 +3014,9 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 		debug(LOG_ERROR, "Template %s was not found!", templateName.toUtf8().constData());
 		return QScriptValue(false);
 	}
-	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	for (auto &localTemplate : localTemplates)
 	{
-		psCurr = &*i;
+		psCurr = &localTemplate;
 		if (templateName.compare(psCurr->id) == 0)
 		{
 			psCurr->enabled = true;

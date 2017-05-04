@@ -404,10 +404,10 @@ void	displayConsoleMessages()
 		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH, mainConsole.topY - mainConsole.textDepth - CON_BORDER_HEIGHT,
 						mainConsole.topX + mainConsole.width, mainConsole.topY + (getNumberConsoleMessages() * linePitch) + CON_BORDER_HEIGHT - linePitch);
 	}
-	for (auto i = ActiveMessages.begin(); i != ActiveMessages.end(); ++i)
+	for (auto & ActiveMessage : ActiveMessages)
 	{
-		console_drawtext(i->display, getConsoleTextColor(i->player), mainConsole.topX, TextYpos, i->JustifyType, mainConsole.width);
-		TextYpos += i->display.lineSize();
+		console_drawtext(ActiveMessage.display, getConsoleTextColor(ActiveMessage.player), mainConsole.topX, TextYpos, ActiveMessage.JustifyType, mainConsole.width);
+		TextYpos += ActiveMessage.display.lineSize();
 	}
 }
 

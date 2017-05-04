@@ -469,9 +469,9 @@ bool droidTemplateShutDown()
  */
 DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 {
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	for (auto &droidTemplate : droidTemplates)
 	{
-		for (auto &keyvaluepair : droidTemplates[i])
+		for (auto &keyvaluepair : droidTemplate)
 		{
 			if (keyvaluepair.second->id.compare(pName) == 0)
 			{
@@ -485,11 +485,11 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 /*getTemplatefFromMultiPlayerID gets template for unique ID  searching all lists */
 DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 {
-	for (int player = 0; player < MAX_PLAYERS; player++)
+	for (auto &droidTemplate : droidTemplates)
 	{
-		if (droidTemplates[player].count(multiPlayerID) > 0)
+		if (droidTemplate.count(multiPlayerID) > 0)
 		{
-			return droidTemplates[player][multiPlayerID];
+			return droidTemplate[multiPlayerID];
 		}
 	}
 	return nullptr;

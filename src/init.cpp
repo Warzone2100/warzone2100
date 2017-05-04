@@ -495,9 +495,9 @@ static MapFileList listMapFiles()
 	}
 	PHYSFS_freeList(searchPath);
 
-	for (MapFileList::iterator realFileName = ret.begin(); realFileName != ret.end(); ++realFileName)
+	for (const auto &realFileName : ret)
 	{
-		std::string realFilePathAndName = PHYSFS_getWriteDir() + *realFileName;
+		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName;
 		if (PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND))
 		{
 			int unsafe = 0;
@@ -524,7 +524,7 @@ static MapFileList listMapFiles()
 			PHYSFS_freeList(filelist);
 			if (unsafe < 2)
 			{
-				filtered.push_back(realFileName->c_str());
+				filtered.push_back(realFileName.c_str());
 			}
 			PHYSFS_removeFromSearchPath(realFilePathAndName.c_str());
 		}
@@ -535,9 +535,9 @@ static MapFileList listMapFiles()
 	}
 
 	// restore our search path(s) again
-	for (MapFileList::iterator restorePaths = oldSearchPath.begin(); restorePaths != oldSearchPath.end(); ++restorePaths)
+	for (const auto &restorePaths : oldSearchPath)
 	{
-		PHYSFS_addToSearchPath(restorePaths->c_str(), PHYSFS_APPEND);
+		PHYSFS_addToSearchPath(restorePaths.c_str(), PHYSFS_APPEND);
 	}
 	debug(LOG_WZ, "Search paths restored");
 	printSearchPath();
@@ -632,11 +632,11 @@ bool buildMapList()
 	loadLevFile("addon.lev", mod_multiplay, false, nullptr);
 	WZ_Maps.clear();
 	MapFileList realFileNames = listMapFiles();
-	for (MapFileList::iterator realFileName = realFileNames.begin(); realFileName != realFileNames.end(); ++realFileName)
+	for (auto &realFileName : realFileNames)
 	{
 		bool mapmod = false;
 		struct WZmaps CurrentMap;
-		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName->c_str()) + *realFileName;
+		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName.c_str()) + realFileName;
 
 		PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND);
 
@@ -647,12 +647,12 @@ bool buildMapList()
 			size_t len = strlen(*file);
 			if (len > 10 && !strcasecmp(*file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
 			{
-				loadLevFile(*file, mod_multiplay, true, realFileName->c_str());
+				loadLevFile(*file, mod_multiplay, true, realFileName.c_str());
 			}
 			// add support for X player maps using a new name to prevent conflicts.
 			if (len > 13 && !strcasecmp(*file + (len - 13), ".xplayers.lev"))
 			{
-				loadLevFile(*file, mod_multiplay, true, realFileName->c_str());
+				loadLevFile(*file, mod_multiplay, true, realFileName.c_str());
 			}
 		}
 		PHYSFS_freeList(filelist);
@@ -668,7 +668,7 @@ bool buildMapList()
 			mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
 		}
 
-		CurrentMap.MapName = realFileName->c_str();
+		CurrentMap.MapName = realFileName.c_str();
 		CurrentMap.isMapMod = mapmod;
 		WZ_Maps.push_back(CurrentMap);
 	}

@@ -2368,24 +2368,24 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int bestPowerNeeded = researchNotStarted;
 	int bestTimeToResearch = researchNotStarted;
 	int researchPowerCost = researchNotStarted;
-	for (std::vector<AllyResearch>::const_iterator i = researches.begin(); i != researches.end(); ++i)
+	for (const auto &res : researches)
 	{
-		if (bestCompletion < i->completion)
+		if (bestCompletion < res.completion)
 		{
-			bestCompletion = i->completion;
-			psBar->majorCol = pal_GetTeamColour(getPlayerColour(i->player));
+			bestCompletion = res.completion;
+			psBar->majorCol = pal_GetTeamColour(getPlayerColour(res.player));
 		}
-		if (!i->active)
+		if (!res.active)
 		{
 			continue;  // Don't show remaining time/power, if the facility is currently being upgraded.
 		}
-		if (i->powerNeeded == -1)
+		if (res.powerNeeded == -1)
 		{
-			bestTimeToResearch = std::min<unsigned>(bestTimeToResearch, i->timeToResearch);
+			bestTimeToResearch = std::min<unsigned>(bestTimeToResearch, res.timeToResearch);
 		}
 		else
 		{
-			bestPowerNeeded = std::min<unsigned>(bestPowerNeeded, i->powerNeeded);
+			bestPowerNeeded = std::min<unsigned>(bestPowerNeeded, res.powerNeeded);
 			researchPowerCost = research.researchPower;
 		}
 	}
