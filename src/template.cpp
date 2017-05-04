@@ -320,7 +320,7 @@ void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
 	{
 		weapons += (asWeaponStats + psCurr->asWeaps[j])->id;
 	}
-	if (weapons.size())
+	if (!weapons.empty())
 	{
 		ini.setValue("weapons", weapons);
 	}

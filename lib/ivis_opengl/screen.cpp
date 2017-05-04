@@ -304,7 +304,7 @@ void wzPerfStart()
 
 void wzPerfShutdown()
 {
-	if (perfList.size() == 0)
+	if (perfList.empty())
 	{
 		return;
 	}

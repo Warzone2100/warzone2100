@@ -976,7 +976,7 @@ bool writeLabels(const char *filename)
 	WzConfig ini(filename, WzConfig::ReadAndWrite);
 	for (LABELMAP::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
 	{
-		QString key = i.key();
+		const QString& key = i.key();
 		labeltype l = i.value();
 		if (l.type == SCRIPT_POSITION)
 		{
@@ -1441,7 +1441,7 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 		}
 		RESEARCH *prev = cur;
 		cur = nullptr;
-		if (prev->pPRList.size())
+		if (!prev->pPRList.empty())
 		{
 			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
 		}
@@ -1450,7 +1450,7 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 			// push any other pre-reqs on the stack
 			reslist += &asResearch[prev->pPRList[i]];
 		}
-		if (!cur && reslist.size())
+		if (!cur && !reslist.empty())
 		{
 			cur = reslist.takeFirst(); // retrieve options from the stack
 		}

@@ -762,7 +762,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 					droids.push_back(QString::number(psCDroid->id));
 				}
 				ini.setValue("members", QVariant(members));
-				if (droids.size() > 0)
+				if (!droids.empty())
 				{
 					ini.setValue("data", droids);
 				}

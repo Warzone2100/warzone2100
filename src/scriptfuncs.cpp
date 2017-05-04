@@ -6996,7 +6996,7 @@ bool scrNumResearchLeft()
 				    !skTopicAvail(index, player) &&					//has no unresearched PRs left if available
 				    !beingResearchedByAlly(index, player))			//will become available soon anyway
 				{
-					if (asResearch[tempIndex].pPRList.size() > 0)	//node has any nodes itself
+					if (!asResearch[tempIndex].pPRList.empty())	//node has any nodes itself
 					{
 						Stack[top + 1] = cur;								//so can go back to it further
 						Stack[top + 2] = index;

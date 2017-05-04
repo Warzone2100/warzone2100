@@ -196,7 +196,7 @@ int	getNumberConsoleMessages()
 void	updateConsoleMessages()
 {
 	// If there are no messages or we're on permanent (usually for scripts) then exit
-	if ((!getNumberConsoleMessages() && !InfoMessages.size()) || mainConsole.permanent)
+	if ((!getNumberConsoleMessages() && InfoMessages.empty()) || mainConsole.permanent)
 	{
 		return;
 	}
@@ -370,13 +370,13 @@ void displayOldMessages(bool mode)
 void	displayConsoleMessages()
 {
 	// Check if we have any messages we want to show
-	if (!getNumberConsoleMessages() && !bConsoleDropped && !InfoMessages.size())
+	if (!getNumberConsoleMessages() && !bConsoleDropped && InfoMessages.empty())
 	{
 		return;
 	}
 
 	// scripts can disable the console
-	if (!bConsoleDisplayEnabled && !InfoMessages.size())
+	if (!bConsoleDisplayEnabled && InfoMessages.empty())
 	{
 		return;
 	}
@@ -389,7 +389,7 @@ void	displayConsoleMessages()
 		displayOldMessages(HistoryMode);
 	}
 
-	if (InfoMessages.size())
+	if (!InfoMessages.empty())
 	{
 		auto i = InfoMessages.end() - 1;		// we can only show the last one...
 		int tmp = pie_GetVideoBufferWidth();

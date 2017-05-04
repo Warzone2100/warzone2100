@@ -2526,14 +2526,14 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		QStringList keys = droidMap.keys();
 		for (int i = 0; i < keys.size(); i++)
 		{
-			QString key = keys.at(i);
+			const QString& key = keys.at(i);
 			DROID **pList = droidMap.value(key);
 			loadSaveDroidPointers(key, pList);
 		}
 		keys = structMap.keys();
 		for (int i = 0; i < keys.size(); i++)
 		{
-			QString key = keys.at(i);
+			const QString& key = keys.at(i);
 			STRUCTURE **pList = structMap.value(key);
 			loadSaveStructurePointers(key, pList);
 		}

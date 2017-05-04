@@ -660,7 +660,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 		QStringList keys = ini.childKeys();
 		for (int j = 0; j < keys.size(); j++)
 		{
-			QString strength = keys.at(j);
+			const QString& strength = keys.at(j);
 			int modifier = ini.value(strength).toInt();
 			// FIXME - add support for dynamic categories
 			if (strength.compare("SOFT") == 0)
@@ -2205,7 +2205,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 		}
 	}
 
-	if (tiles.size() == 0)
+	if (tiles.empty())
 	{
 		return false;
 	}

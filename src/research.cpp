@@ -511,7 +511,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	}
 
 	//check for component replacement
-	if (pResearch->componentReplacement.size() != 0)
+	if (!pResearch->componentReplacement.empty())
 	{
 		for (auto &ri : pResearch->componentReplacement)
 		{

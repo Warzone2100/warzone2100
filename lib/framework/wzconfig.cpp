@@ -35,7 +35,7 @@ WzConfig::~WzConfig()
 {
 	if (mWarning == ReadAndWrite)
 	{
-		ASSERT(mObjStack.size() == 0, "Some json groups have not been closed, stack size %d.", mObjStack.size());
+		ASSERT(mObjStack.empty(), "Some json groups have not been closed, stack size %d.", mObjStack.size());
 		QJsonDocument doc(mObj);
 		QByteArray json = doc.toJson();
 		saveFile(mFilename.toUtf8().constData(), json.constData(), json.size());
@@ -254,7 +254,7 @@ bool WzConfig::beginGroup(const QString &prefix)
 
 void WzConfig::endGroup()
 {
-	ASSERT(mObjStack.size() > 0, "An endGroup() too much!");
+	ASSERT(!mObjStack.empty(), "An endGroup() too much!");
 	if (mWarning == ReadAndWrite)
 	{
 		QJsonObject latestObj = mObj;
@@ -303,7 +303,7 @@ void WzConfig::nextArrayItem()
 	else
 	{
 		mArray.removeFirst();
-		if (mArray.size() > 0)
+		if (!mArray.empty())
 		{
 			mObj = mArray.first().toObject();
 		}

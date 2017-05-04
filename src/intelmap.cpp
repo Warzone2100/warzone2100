@@ -1137,7 +1137,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 {
 	UDWORD	i, x, y;
 
-	if (psSeqDisplay->textMsg.size() > 0)
+	if (!psSeqDisplay->textMsg.empty())
 	{
 		//add each message, first at the top
 		// FIXME We should perhaps get font size, and use that to calculate offset(s) ?

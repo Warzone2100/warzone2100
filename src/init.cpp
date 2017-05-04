@@ -475,7 +475,7 @@ static MapFileList listMapFiles()
 	for (char **i = subdirlist; *i != nullptr; ++i)
 	{
 		std::string wzfile = *i;
-		if (*i[0] == '.' || wzfile.substr(wzfile.find_last_of(".") + 1) != "wz")
+		if (*i[0] == '.' || wzfile.substr(wzfile.find_last_of('.') + 1) != "wz")
 		{
 			continue;
 		}
@@ -512,7 +512,7 @@ static MapFileList listMapFiles()
 				}
 				std::string checkfile = *file;
 				debug(LOG_WZ, "checking ... %s", *file);
-				if (checkfile.substr(checkfile.find_last_of(".") + 1) == "gam")
+				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
 				{
 					if (unsafe++ > 1)
 					{
