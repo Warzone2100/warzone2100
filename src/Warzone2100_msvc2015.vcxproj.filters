@@ -36,9 +36,6 @@
     <ClCompile Include="baseobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bridge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bucket3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

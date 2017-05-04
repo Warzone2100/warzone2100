@@ -638,7 +638,6 @@ void actionSanity(DROID *psDroid)
 // Update the action state for a droid
 void actionUpdateDroid(DROID *psDroid)
 {
-	BASE_OBJECT			*psTarget;
 	PROPULSION_STATS	*psPropStats;
 	bool	(*actionUpdateFunc)(DROID * psDroid) = NULL;
 	//this is a bit field
@@ -690,7 +689,6 @@ void actionUpdateDroid(DROID *psDroid)
 	}
 
 	DROID_ORDER_DATA *order = &psDroid->order;
-	psTarget = order->psObj;
 
 	switch (psDroid->action)
 	{
@@ -1039,6 +1037,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 		if (!bHasTarget)
 		{
+			BASE_OBJECT *psTarget;
 			if ((!isVtolDroid(psDroid)
 			     && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
 			     && psTarget->type == OBJ_STRUCTURE)
