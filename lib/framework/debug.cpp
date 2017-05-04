@@ -43,7 +43,7 @@
 char last_called_script_event[MAX_EVENT_NAME_LEN];
 UDWORD traceID = -1;
 
-static debug_callback *callbackRegistry = NULL;
+static debug_callback *callbackRegistry = nullptr;
 bool enabled_debug[LOG_LAST]; // global
 #ifdef DEBUG
 bool assertEnabled = true;
@@ -208,7 +208,7 @@ bool debug_callback_file_init(void **data)
 		return false;
 	}
 	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename);
-	setbuf(logfile, NULL);
+	setbuf(logfile, nullptr);
 	fprintf(logfile, "\n--- Starting log [%s]---\n", WZDebugfilename);
 	*data = logfile;
 
@@ -227,7 +227,7 @@ void debug_callback_file_exit(void **data)
 {
 	FILE *logfile = (FILE *)*data;
 	fclose(logfile);
-	*data = NULL;
+	*data = nullptr;
 }
 
 void debugFlushStderr()
@@ -291,7 +291,7 @@ void debug_init()
 
 void debug_exit()
 {
-	debug_callback *curCallback = callbackRegistry, * tmpCallback = NULL;
+	debug_callback *curCallback = callbackRegistry, * tmpCallback = nullptr;
 
 	while (curCallback)
 	{
@@ -304,17 +304,17 @@ void debug_exit()
 		curCallback = tmpCallback;
 	}
 	warning_list.clear();
-	callbackRegistry = NULL;
+	callbackRegistry = nullptr;
 }
 
 
 void debug_register_callback(debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void *data)
 {
-	debug_callback *curCallback = callbackRegistry, * tmpCallback = NULL;
+	debug_callback *curCallback = callbackRegistry, * tmpCallback = nullptr;
 
 	tmpCallback = (debug_callback *)malloc(sizeof(*tmpCallback));
 
-	tmpCallback->next = NULL;
+	tmpCallback->next = nullptr;
 	tmpCallback->callback = callback;
 	tmpCallback->init = init;
 	tmpCallback->exit = exit;
@@ -367,7 +367,7 @@ static void printToDebugCallbacks(const char *const str)
 	debug_callback *curCallback;
 
 	// Loop over all callbacks, invoking them with the given data string
-	for (curCallback = callbackRegistry; curCallback != NULL; curCallback = curCallback->next)
+	for (curCallback = callbackRegistry; curCallback != nullptr; curCallback = curCallback->next)
 	{
 		curCallback->callback(&curCallback->data, str);
 	}
@@ -401,7 +401,7 @@ const char *debugLastError()
 	}
 	else
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 

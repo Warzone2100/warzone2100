@@ -82,7 +82,7 @@ struct timerNode
 	int player;
 	int calls;
 	timerType type;
-	timerNode() : engine(NULL), baseobjtype(OBJ_NUM_TYPES) {}
+	timerNode() : engine(nullptr), baseobjtype(OBJ_NUM_TYPES) {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame)
 		: function(val), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
 	bool operator== (const timerNode &t)
@@ -368,7 +368,7 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 		path = "scripts/" + basename.filePath(); // use this path instead (in user write dir)
 	}
 	UDWORD size;
-	char *bytes = NULL;
+	char *bytes = nullptr;
 	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
 	{
 		debug(LOG_ERROR, "Failed to read include file \"%s\" (path=%s, name=%s)",
@@ -427,7 +427,7 @@ bool shutdownScripts()
 	jsDebugShutdown();
 	globalDialog = false;
 	models.clear();
-	triggerModel = NULL;
+	triggerModel = nullptr;
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -469,7 +469,7 @@ bool updateScripts()
 		{
 			QScriptEngine *engine = scripts.at(i);
 			QScriptValueList args;
-			args += js_enumSelected(NULL, engine);
+			args += js_enumSelected(nullptr, engine);
 			callFunction(engine, "eventSelectionChanged", args);
 		}
 		selectionChanged = false;
@@ -537,19 +537,19 @@ bool updateScripts()
 
 QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 {
-	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "Player index %d out of bounds", player);
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
 	UDWORD size;
-	char *bytes = NULL;
+	char *bytes = nullptr;
 	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
 	{
 		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().constData());
-		return NULL;
+		return nullptr;
 	}
 	QString source = QString::fromUtf8(bytes, size);
 	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	ASSERT_OR_RETURN(NULL, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s",
+	ASSERT_OR_RETURN(nullptr, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s",
 	                 path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
@@ -638,7 +638,7 @@ QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("scriptPath", basename.path(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	QScriptValue result = engine->evaluate(source, path);
-	ASSERT_OR_RETURN(NULL, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s",
+	ASSERT_OR_RETURN(nullptr, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s",
 	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().constData(), result.toString().toUtf8().constData());
 
 	// Register script
@@ -716,7 +716,7 @@ static QScriptEngine *findEngineForPlayer(int match, QString scriptName)
 	}
 	ASSERT(false, "Script context for player %d and script name %s not found",
 	       match, scriptName.toUtf8().constData());
-	return NULL;
+	return nullptr;
 }
 
 bool loadScriptStates(const char *filename)
@@ -778,7 +778,7 @@ static QStandardItemList addModelItem(QScriptValueIterator &it)
 {
 	QStandardItemList l;
 	QStandardItem *key = new QStandardItem(it.name());
-	QStandardItem *value = NULL;
+	QStandardItem *value = nullptr;
 
 	if (it.value().isObject() || it.value().isArray())
 	{
@@ -894,7 +894,7 @@ void jsAutogame()
 	QString srcPath(PHYSFS_getWriteDir());
 	srcPath += PHYSFS_getDirSeparator();
 	srcPath += "scripts";
-	QString path = QFileDialog::getOpenFileName(NULL, "Choose AI script to load", srcPath, "Javascript files (*.js)");
+	QString path = QFileDialog::getOpenFileName(nullptr, "Choose AI script to load", srcPath, "Javascript files (*.js)");
 	QFileInfo basename(path);
 	if (path.isEmpty())
 	{

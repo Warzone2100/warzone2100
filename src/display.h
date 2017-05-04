@@ -185,7 +185,7 @@ extern void startDeliveryPosition(FLAG_POSITION *psFlag);
 extern bool deliveryReposValid(void);
 extern void processDeliveryRepos(void);
 extern void renderDeliveryRepos(const glm::mat4 &viewMatrix);
-extern bool deliveryReposFinished(FLAG_POSITION *psFlag = NULL);
+extern bool deliveryReposFinished(FLAG_POSITION *psFlag = nullptr);
 
 extern void StartTacticalScrollObj(bool driveActive, BASE_OBJECT *psObj);
 extern void CancelTacticalScroll(void);

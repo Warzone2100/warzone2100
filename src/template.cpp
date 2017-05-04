@@ -234,7 +234,7 @@ bool initTemplates()
 			ini.nextArrayItem();
 			continue;
 		}
-		DROID_TEMPLATE *psDestTemplate = NULL;
+		DROID_TEMPLATE *psDestTemplate = nullptr;
 		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 		{
 			psDestTemplate = keyvaluepair.second;
@@ -255,7 +255,7 @@ bool initTemplates()
 			{
 				break;
 			}
-			psDestTemplate = NULL;
+			psDestTemplate = nullptr;
 		}
 		if (psDestTemplate)
 		{
@@ -386,7 +386,7 @@ bool loadDroidTemplates(const char *filename)
 		design.enabled = true;
 		bool available = ini.value("available", false).toBool();
 		char const *droidResourceName = getDroidResourceName(list[i].toUtf8().constData());
-		design.name = droidResourceName != NULL ? droidResourceName : GetDefaultTemplateName(&design);
+		design.name = droidResourceName != nullptr ? droidResourceName : GetDefaultTemplateName(&design);
 		ini.endGroup();
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
@@ -479,7 +479,7 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 /*getTemplatefFromMultiPlayerID gets template for unique ID  searching all lists */
@@ -492,7 +492,7 @@ DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 			return droidTemplates[player][multiPlayerID];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 /*called when a Template is deleted in the Design screen*/
@@ -504,7 +504,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 	//see if any factory is currently using the template
 	for (unsigned i = 0; i < 2; ++i)
 	{
-		psList = NULL;
+		psList = nullptr;
 		switch (i)
 		{
 		case 0:
@@ -514,7 +514,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 			psList = mission.apsStructLists[player];
 			break;
 		}
-		for (psStruct = psList; psStruct != NULL; psStruct = psStruct->psNext)
+		for (psStruct = psList; psStruct != nullptr; psStruct = psStruct->psNext)
 		{
 			if (StructIsFactory(psStruct))
 			{
@@ -534,7 +534,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 					}
 				}
 
-				if (psFactory->psSubject == NULL)
+				if (psFactory->psSubject == nullptr)
 				{
 					continue;
 				}
@@ -548,7 +548,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 					// Clear the factory's subject, and returns power.
 					cancelProduction(psStruct, ModeImmediate, false);
 					// Check to see if anything left to produce. (Also calls cancelProduction again, if nothing left to produce, which is a no-op. But if other things are left to produce, doesn't call cancelProduction, so wouldn't return power without the explicit cancelProduction call above.)
-					doNextProduction(psStruct, NULL, ModeImmediate);
+					doNextProduction(psStruct, nullptr, ModeImmediate);
 
 					//tell the interface
 					intManufactureFinished(psStruct);

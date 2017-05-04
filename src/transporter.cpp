@@ -107,8 +107,8 @@
 extern W_SCREEN		*psWScreen;
 
 /* Static variables */
-static DROID *psCurrTransporter = NULL;
-static	DROID			*g_psCurScriptTransporter = NULL;
+static DROID *psCurrTransporter = nullptr;
+static	DROID			*g_psCurScriptTransporter = nullptr;
 static	bool			onMission;
 static	UDWORD			g_iLaunchTime = 0;
 //used for audio message for reinforcements
@@ -133,7 +133,7 @@ static void intRemoveTransDroidsAvailNoAnim(void);
 void initTransporters(void)
 {
 	onMission = false;
-	psCurrTransporter = NULL;
+	psCurrTransporter = nullptr;
 }
 
 // Call to refresh the transporter screen, ie when a droids boards it.
@@ -141,7 +141,7 @@ void initTransporters(void)
 bool intRefreshTransporter(void)
 {
 	// Is the transporter screen up?
-	if (intMode == INT_TRANSPORTER && widgGetFromID(psWScreen, IDTRANS_FORM) != NULL)
+	if (intMode == INT_TRANSPORTER && widgGetFromID(psWScreen, IDTRANS_FORM) != nullptr)
 	{
 		bool Ret;
 		// Refresh it by re-adding it.
@@ -170,7 +170,7 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 
 	// Add the main Transporter form
 	// Is the form already up?
-	if (widgGetFromID(psWScreen, IDTRANS_FORM) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_FORM) != nullptr)
 	{
 		intRemoveTransNoAnim();
 		Animate = false;
@@ -229,7 +229,7 @@ bool intAddTransporterContents(void)
 	bool			Animate = true;
 
 	// Is the form already up?
-	if (widgGetFromID(psWScreen, IDTRANS_CONTENTFORM) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_CONTENTFORM) != nullptr)
 	{
 		intRemoveTransContentNoAnim();
 		Animate = false;
@@ -326,7 +326,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	psCurrTransporter = psDroid;
 
 	//check the button is not already up
-	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != nullptr)
 	{
 		return true;
 	}
@@ -366,7 +366,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	if (psCurrTransporter && psCurrTransporter->psGroup)
 	{
 		capacity = TRANSPORTER_CAPACITY;
-		for (psCurr = psCurrTransporter->psGroup->psList; psCurr != NULL; psCurr = psNext)
+		for (psCurr = psCurrTransporter->psGroup->psList; psCurr != nullptr; psCurr = psNext)
 		{
 			psNext = psCurr->psGrpNext;
 			if (psCurr != psCurrTransporter)
@@ -386,7 +386,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 /* Remove the Transporter Launch widget from the screen*/
 void intRemoveTransporterLaunch(void)
 {
-	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != nullptr)
 	{
 		widgDelete(psWScreen, IDTRANS_LAUNCH);
 	}
@@ -506,7 +506,7 @@ bool intAddDroidsAvailForm(void)
 {
 	// Is the form already up?
 	bool Animate = true;
-	if (widgGetFromID(psWScreen, IDTRANS_DROIDS) != NULL)
+	if (widgGetFromID(psWScreen, IDTRANS_DROIDS) != nullptr)
 	{
 		intRemoveTransDroidsAvailNoAnim();
 		Animate = false;
@@ -622,7 +622,7 @@ int calcRemainingCapacity(const DROID *psTransporter)
 		return 0;
 	}
 
-	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
+	for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr && psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
 		const int space = transporterSpaceRequired(psDroid);
@@ -645,7 +645,7 @@ bool transporterIsEmpty(const DROID *psTransporter)
 	// Assume dead droids and non-transporter droids to be empty
 	return (isDead((const BASE_OBJECT *)psTransporter)
 	        || !isTransporter(psTransporter)
-	        || psTransporter->psGroup->psList == NULL
+	        || psTransporter->psGroup->psList == nullptr
 	        || psTransporter->psGroup->psList == psTransporter);
 }
 
@@ -685,11 +685,11 @@ void intProcessTransporter(UDWORD id)
 	else if (id >= IDTRANS_CONTSTART && id <= IDTRANS_CONTEND)
 	{
 		//got to have a current transporter for this to work - and can't be flying
-		if (psCurrTransporter != NULL && !transporterFlying(psCurrTransporter))
+		if (psCurrTransporter != nullptr && !transporterFlying(psCurrTransporter))
 		{
 			unsigned currID = IDTRANS_CONTSTART;
 			DROID *psDroid;
-			for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid != psCurrTransporter; psDroid = psDroid->psGrpNext)
+			for (psDroid = psCurrTransporter->psGroup->psList; psDroid != nullptr && psDroid != psCurrTransporter; psDroid = psDroid->psGrpNext)
 			{
 				if (psDroid->selected)
 				{
@@ -701,7 +701,7 @@ void intProcessTransporter(UDWORD id)
 				}
 				currID++;
 			}
-			if (psDroid != NULL)
+			if (psDroid != nullptr)
 			{
 				transporterRemoveDroid(psCurrTransporter, psDroid, ModeQueue);
 			}
@@ -718,7 +718,7 @@ void intProcessTransporter(UDWORD id)
 	{
 		intRemoveTransContent();
 		intRemoveTrans();
-		psCurrTransporter = NULL;
+		psCurrTransporter = nullptr;
 	}
 	else if (id == IDTRANS_CONTCLOSE)
 	{
@@ -731,7 +731,7 @@ void intProcessTransporter(UDWORD id)
 	else if (id >= IDTRANS_DROIDSTART && id <= IDTRANS_DROIDEND)
 	{
 		//got to have a current transporter for this to work - and can't be flying
-		if (psCurrTransporter != NULL && !transporterFlying(psCurrTransporter))
+		if (psCurrTransporter != nullptr && !transporterFlying(psCurrTransporter))
 		{
 			intTransporterAddDroid(id);
 			/*don't need to explicitly refresh here since intRefreshScreen()
@@ -818,11 +818,11 @@ void setCurrentTransporter(UDWORD id)
 	DROID	*psDroid;
 	UDWORD	currID;
 
-	psCurrTransporter = NULL;
+	psCurrTransporter = nullptr;
 	currID = IDTRANS_START;
 
 	//loop thru all the droids to find the selected one
-	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid = psDroid->psNext)
+	for (psDroid = transInterfaceDroidList(); psDroid != nullptr; psDroid = psDroid->psNext)
 	{
 		if (isTransporter(psDroid) &&
 		    (psDroid->action != DACTION_TRANSPORTOUT &&
@@ -846,7 +846,7 @@ void setCurrentTransporter(UDWORD id)
 /*removes a droid from the group associated with the transporter*/
 void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 {
-	ASSERT_OR_RETURN(, psTransport != NULL && psDroid != NULL && psTransport != psDroid, "Something NULL or unloading transporter from itself");
+	ASSERT_OR_RETURN(, psTransport != nullptr && psDroid != nullptr && psTransport != psDroid, "Something NULL or unloading transporter from itself");
 
 	if (bMultiMessages && mode == ModeQueue)
 	{
@@ -929,10 +929,10 @@ static void intTransporterAddDroid(UDWORD id)
 	DROID		*psDroid, *psNext;
 	UDWORD		currID;
 
-	ASSERT(psCurrTransporter != NULL, "intTransporterAddUnit:can't remove units");
+	ASSERT(psCurrTransporter != nullptr, "intTransporterAddUnit:can't remove units");
 
 	currID = IDTRANS_DROIDSTART;
-	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid = psNext)
+	for (psDroid = transInterfaceDroidList(); psDroid != nullptr; psDroid = psNext)
 	{
 		psNext = psDroid->psNext;
 		if (!isTransporter(psDroid))
@@ -955,8 +955,8 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 {
 	bool    bDroidRemoved;
 
-	ASSERT(psTransporter != NULL, "Was passed a NULL transporter");
-	ASSERT(psDroidToAdd != NULL, "Was passed a NULL droid, can't add to transporter");
+	ASSERT(psTransporter != nullptr, "Was passed a NULL transporter");
+	ASSERT(psDroidToAdd != nullptr, "Was passed a NULL droid, can't add to transporter");
 
 	if (!psTransporter || !psDroidToAdd)
 	{
@@ -1014,14 +1014,14 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 	DROID		*psDroid, *psNext;
 	UDWORD		capacity;
 
-	ASSERT_OR_RETURN(false, psTransporter != NULL, "Invalid droid pointer");
-	ASSERT_OR_RETURN(false, psAssigned != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(false, psTransporter != nullptr, "Invalid droid pointer");
+	ASSERT_OR_RETURN(false, psAssigned != nullptr, "Invalid droid pointer");
 	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");
-	ASSERT_OR_RETURN(false, psTransporter->psGroup != NULL, "tranporter doesn't have a group");
+	ASSERT_OR_RETURN(false, psTransporter->psGroup != nullptr, "tranporter doesn't have a group");
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
-	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
+	for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr && psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
 		capacity -= transporterSpaceRequired(psDroid);
@@ -1114,7 +1114,7 @@ bool launchTransporter(DROID *psTransporter)
 have arrived - returns true when there*/
 bool updateTransporter(DROID *psTransporter)
 {
-	ASSERT_OR_RETURN(true, psTransporter != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(true, psTransporter != nullptr, "Invalid droid pointer");
 	ASSERT_OR_RETURN(true, isTransporter(psTransporter), "Invalid droid type");
 
 	//if not moving to mission site, exit
@@ -1159,7 +1159,7 @@ bool updateTransporter(DROID *psTransporter)
 		if (psTransporter->action == DACTION_TRANSPORTIN)
 		{
 			/* !!!! GJ Hack - should be landing audio !!!! */
-			audio_PlayObjDynamicTrack(psTransporter, ID_SOUND_BLIMP_TAKE_OFF, NULL);
+			audio_PlayObjDynamicTrack(psTransporter, ID_SOUND_BLIMP_TAKE_OFF, nullptr);
 		}
 
 		if (!bFirstTransporter && missionForReInforcements() &&
@@ -1171,7 +1171,7 @@ bool updateTransporter(DROID *psTransporter)
 			                    psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z);
 			addConsoleMessage(_("Reinforcements landing"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 			//reset the data for the transporter timer
-			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)NULL);
+			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)nullptr);
 			return true;
 		}
 
@@ -1313,7 +1313,7 @@ void resetTransporter()
 /*checks the order of the droid to see if its currently flying*/
 bool transporterFlying(DROID *psTransporter)
 {
-	ASSERT_OR_RETURN(false, psTransporter != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(false, psTransporter != nullptr, "Invalid droid pointer");
 	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");
 
 	return psTransporter->order.type == DORDER_TRANSPORTOUT ||

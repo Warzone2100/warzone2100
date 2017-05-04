@@ -123,14 +123,14 @@ static void updateMaxConstStats(UWORD maxValue);
 static void deallocPropulsionTypes(void)
 {
 	free(asPropulsionTypes);
-	asPropulsionTypes = NULL;
+	asPropulsionTypes = nullptr;
 }
 
 //dealloc the storage assigned for the terrain table
 static void deallocTerrainTable(void)
 {
 	free(asTerrainTable);
-	asTerrainTable = NULL;
+	asTerrainTable = nullptr;
 }
 
 /*******************************************************************************
@@ -258,7 +258,7 @@ bool statsAllocConstruct(UDWORD	numStats)
 
 static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, QString key, QString key2 = QString())
 {
-	iIMDShape *retval = NULL;
+	iIMDShape *retval = nullptr;
 	if (json.contains(key))
 	{
 		QJsonValue value = json.json(key);
@@ -268,12 +268,12 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, QString key, 
 			QJsonObject obj = value.toObject();
 			if (!obj.contains(key2))
 			{
-				return NULL;
+				return nullptr;
 			}
 			value = obj[key2];
 		}
 		retval = modelGet(value.toString());
-		ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
+		ASSERT(retval != nullptr, "Cannot find the PIE model %s for stat %s in %s",
 		       value.toString().toUtf8().constData(), getName(psStats), json.fileName().toUtf8().constData());
 	}
 	return retval;
@@ -587,14 +587,14 @@ bool loadBodyStats(const char *pFileName)
 	for (int numStats = 0; numStats < numBodyStats; ++numStats)
 	{
 		BODY_STATS *psBodyStat = &asBodyStats[numStats];
-		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
-		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
-		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
+		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
+		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
+		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
 	}
 	for (int i = 0; i < list.size(); ++i)
 	{
 		QString propulsionName, leftIMD, rightIMD;
-		BODY_STATS *psBodyStat = NULL;
+		BODY_STATS *psBodyStat = nullptr;
 		int numStats;
 
 		ini.beginGroup(list[i]);
@@ -671,7 +671,7 @@ bool loadBrainStats(const char *pFileName)
 		psStats->ref = REF_BRAIN_START + i;
 
 		// check weapon attached
-		psStats->psWeaponStat = NULL;
+		psStats->psWeaponStat = nullptr;
 		if (ini.contains("turret"))
 		{
 			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toString());
@@ -751,7 +751,7 @@ bool loadPropulsionStats(const char *pFileName)
 		psStats->acceleration = ini.value("acceleration", 250).toInt();
 		psStats->deceleration = ini.value("deceleration", 800).toInt();
 		psStats->skidDeceleration = ini.value("skidDeceleration", 600).toInt();
-		psStats->pIMD = NULL;
+		psStats->pIMD = nullptr;
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
 		if (!getPropulsionType(ini.value("type").toString().toUtf8().constData(), &psStats->propulsionType))
 		{
@@ -1204,7 +1204,7 @@ bool loadPropulsionSounds(const char *pFileName)
 	PROPULSION_TYPE type;
 	PROPULSION_TYPES *pPropType;
 
-	ASSERT(asPropulsionTypes != NULL, "loadPropulsionSounds: Propulsion type stats not loaded");
+	ASSERT(asPropulsionTypes != nullptr, "loadPropulsionSounds: Propulsion type stats not loaded");
 
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
@@ -1372,7 +1372,7 @@ int getCompFromName(COMPONENT_TYPE compType, const QString &name)
 
 int getCompFromID(COMPONENT_TYPE compType, const QString &name)
 {
-	COMPONENT_STATS *psComp = (COMPONENT_STATS *)lookupStatPtr.value(name, NULL);
+	COMPONENT_STATS *psComp = (COMPONENT_STATS *)lookupStatPtr.value(name, nullptr);
 	ASSERT_OR_RETURN(-1, psComp, "No such component ID [%s] found", name.toUtf8().constData());
 	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for ID %s", name.toUtf8().constData());
 	return psComp->index;
@@ -1382,7 +1382,7 @@ int getCompFromID(COMPONENT_TYPE compType, const QString &name)
 /// Returns NULL if record not found
 COMPONENT_STATS *getCompStatsFromName(const QString &name)
 {
-	COMPONENT_STATS *psComp = (COMPONENT_STATS *)lookupStatPtr.value(name, NULL);
+	COMPONENT_STATS *psComp = (COMPONENT_STATS *)lookupStatPtr.value(name, nullptr);
 	/*if (!psComp)
 	{
 		debug(LOG_ERROR, "Not found: %s", name.toUtf8().constData());
@@ -2028,7 +2028,7 @@ bool objHasWeapon(const BASE_OBJECT *psObj)
 
 SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj)
 {
-	SENSOR_STATS	*psStats = NULL;
+	SENSOR_STATS	*psStats = nullptr;
 	int				compIndex;
 
 	switch (psObj->type)
@@ -2036,17 +2036,17 @@ SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj)
 	case OBJ_DROID:
 		if (((DROID *)psObj)->droidType != DROID_SENSOR && ((DROID *)psObj)->droidType != DROID_COMMAND)
 		{
-			return NULL;
+			return nullptr;
 		}
 		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR];
-		ASSERT_OR_RETURN(NULL, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+		ASSERT_OR_RETURN(nullptr, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = asSensorStats + compIndex;
 		break;
 	case OBJ_STRUCTURE:
 		psStats = ((STRUCTURE *)psObj)->pStructureType->pSensor;
-		if (psStats == NULL || psStats->location != LOC_TURRET || ((STRUCTURE *)psObj)->status != SS_BUILT)
+		if (psStats == nullptr || psStats->location != LOC_TURRET || ((STRUCTURE *)psObj)->status != SS_BUILT)
 		{
-			return NULL;
+			return nullptr;
 		}
 		break;
 	default:

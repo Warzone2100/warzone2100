@@ -40,7 +40,7 @@ static bool eventSaveContext(WzConfig &ini)
 	UDWORD hashedName;
 
 	// go through the context list
-	for (SCRIPT_CONTEXT *psCCont = psContList; psCCont != NULL; psCCont = psCCont->psNext)
+	for (SCRIPT_CONTEXT *psCCont = psContList; psCCont != nullptr; psCCont = psCCont->psNext)
 	{
 		// save the context info
 		if (!resGetHashfromData("SCRIPT", psCCont->psCode, &hashedName))
@@ -58,7 +58,7 @@ static bool eventSaveContext(WzConfig &ini)
 
 		// save the context variables
 		int countVar = 0;
-		for (VAL_CHUNK *psCVals = psCCont->psGlobals; psCVals != NULL; psCVals = psCVals->psNext)
+		for (VAL_CHUNK *psCVals = psCCont->psGlobals; psCVals != nullptr; psCVals = psCVals->psNext)
 		{
 			for (int i = 0; i < CONTEXT_VALS; i++)
 			{
@@ -96,7 +96,7 @@ static bool eventSaveContext(WzConfig &ini)
 					// user defined type
 					SCR_VAL_SAVE saveFunc = asScrTypeTab[psVal->type - VAL_USERTYPESTART].saveFunc;
 
-					ASSERT(saveFunc != NULL, "No save function for type %d", psVal->type);
+					ASSERT(saveFunc != nullptr, "No save function for type %d", psVal->type);
 
 					if (!saveFunc(psVal, ini))
 					{
@@ -111,7 +111,7 @@ static bool eventSaveContext(WzConfig &ini)
 				if (numVars <= 0)
 				{
 					// done all the variables
-					ASSERT(psCVals->psNext == NULL, "Number of context variables does not match the script code");
+					ASSERT(psCVals->psNext == nullptr, "Number of context variables does not match the script code");
 					break;
 				}
 			}
@@ -255,7 +255,7 @@ static bool eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 {
 	int index = 0;
 
-	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr != NULL; psCurr = psCurr->psNext)
+	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr == psContext)
 		{
@@ -270,7 +270,7 @@ static bool eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 // find a context from it's id number
 static bool eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 {
-	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr != NULL; psCurr = psCurr->psNext)
+	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->id == id)
 		{
@@ -286,7 +286,7 @@ static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, QString tname, WzConfig
 {
 	int numTriggers = 0, context = 0;
 
-	for (ACTIVE_TRIGGER *psCurr = psList; psCurr != NULL; psCurr = psCurr->psNext)
+	for (ACTIVE_TRIGGER *psCurr = psList; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (!eventGetContextIndex(psCurr->psContext, &context))
 		{

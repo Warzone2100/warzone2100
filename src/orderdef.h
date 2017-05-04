@@ -159,17 +159,17 @@ struct STRUCTURE_STATS;
 struct DroidOrder
 {
 	explicit DroidOrder(DroidOrderType type = DORDER_NONE)
-		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     psObj(NULL),  psStats(NULL)    {}
+		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     psObj(nullptr),  psStats(nullptr)    {}
 	DroidOrder(DroidOrderType type, Vector2i pos)
-		: type(type), pos(pos),  pos2(0, 0), direction(0),         index(0),     psObj(NULL),  psStats(NULL)    {}
+		: type(type), pos(pos),  pos2(0, 0), direction(0),         index(0),     psObj(nullptr),  psStats(nullptr)    {}
 	DroidOrder(DroidOrderType type, STRUCTURE_STATS *psStats, Vector2i pos, uint16_t direction)
-		: type(type), pos(pos),  pos2(0, 0), direction(direction), index(0),     psObj(NULL),  psStats(psStats) {}
+		: type(type), pos(pos),  pos2(0, 0), direction(direction), index(0),     psObj(nullptr),  psStats(psStats) {}
 	DroidOrder(DroidOrderType type, STRUCTURE_STATS *psStats, Vector2i pos, Vector2i pos2, uint16_t direction)
-		: type(type), pos(pos),  pos2(pos2), direction(direction), index(0),     psObj(NULL),  psStats(psStats) {}
+		: type(type), pos(pos),  pos2(pos2), direction(direction), index(0),     psObj(nullptr),  psStats(psStats) {}
 	DroidOrder(DroidOrderType type, BASE_OBJECT *psObj)
-		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     psObj(psObj), psStats(NULL)    {}
+		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     psObj(psObj), psStats(nullptr)    {}
 	DroidOrder(DroidOrderType type, BASE_OBJECT *psObj, uint32_t index)
-		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(index), psObj(psObj), psStats(NULL)    {}
+		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(index), psObj(psObj), psStats(nullptr)    {}
 
 	DroidOrderType   type;       /**< the actual order. */
 	Vector2i         pos;        /**< the order's position. */

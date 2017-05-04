@@ -33,14 +33,14 @@ struct WZ_TRACK
 	WZ_TRACK       *next;
 };
 
-static WZ_TRACK *currentSong = NULL;
+static WZ_TRACK *currentSong = nullptr;
 static int numSongs = 0;
-static WZ_TRACK *songList = NULL;
+static WZ_TRACK *songList = nullptr;
 
 void PlayList_Init()
 {
-	songList = NULL;
-	currentSong = NULL;
+	songList = nullptr;
+	currentSong = nullptr;
 	numSongs = 0;
 }
 
@@ -71,7 +71,7 @@ bool PlayList_Read(const char *path)
 	// Attempt to open the playlist file
 	fileHandle = PHYSFS_openRead(listName);
 	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(listName), listName);
-	if (fileHandle == NULL)
+	if (fileHandle == nullptr)
 	{
 		debug(LOG_INFO, "PHYSFS_openRead(\"%s\") failed with error: %s\n", listName, PHYSFS_getLastError());
 		return false;
@@ -105,7 +105,7 @@ bool PlayList_Read(const char *path)
 		}
 
 		song = (WZ_TRACK *)malloc(sizeof(*songList));
-		if (song == NULL)
+		if (song == nullptr)
 		{
 			debug(LOG_FATAL, "Out of memory!");
 			PHYSFS_close(fileHandle);
@@ -116,7 +116,7 @@ bool PlayList_Read(const char *path)
 		sstrcpy(song->path, path);
 		sstrcat(song->path, "/");
 		sstrcat(song->path, filename);
-		song->next = NULL;
+		song->next = nullptr;
 
 		// Append this song to the list
 		*last = song;
@@ -139,7 +139,7 @@ const char *PlayList_CurrentSong()
 	}
 	else
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 

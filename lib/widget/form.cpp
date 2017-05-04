@@ -120,7 +120,7 @@ void W_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 			state |= WBUT_DOWN;
 			dirty = true;
 
-			if (AudioCallback != NULL)
+			if (AudioCallback != nullptr)
 			{
 				AudioCallback(ClickedAudioID);
 			}
@@ -155,7 +155,7 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 
-	if (AudioCallback != NULL)
+	if (AudioCallback != nullptr)
 	{
 		AudioCallback(HilightAudioID);
 	}

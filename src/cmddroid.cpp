@@ -70,7 +70,7 @@ void cmdDroidUpdate(void)
 	{
 		if (apsCmdDesignator[i] && apsCmdDesignator[i]->died)
 		{
-			apsCmdDesignator[i] = NULL;
+			apsCmdDesignator[i] = nullptr;
 		}
 	}
 }
@@ -83,7 +83,7 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 {
 	DROID_GROUP	*psGroup;
 
-	if (psCommander->psGroup == NULL)
+	if (psCommander->psGroup == nullptr)
 	{
 		psGroup = grpCreate();
 		psGroup->add(psCommander);
@@ -115,7 +115,7 @@ DROID *cmdDroidGetDesignator(UDWORD player)
 
 void cmdDroidSetDesignator(DROID *psDroid)
 {
-	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid droid!");
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Invalid droid!");
 	if (psDroid->droidType != DROID_COMMAND)
 	{
 		return;
@@ -126,7 +126,7 @@ void cmdDroidSetDesignator(DROID *psDroid)
 
 void cmdDroidClearDesignator(UDWORD player)
 {
-	apsCmdDesignator[player] = NULL;
+	apsCmdDesignator[player] = nullptr;
 }
 
 /** This function returns the index of the command droid.
@@ -175,7 +175,7 @@ unsigned int cmdDroidMaxGroup(const DROID *psCommander)
 /** This function adds experience to the command droid of the psKiller's command group.*/
 void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
 {
-	ASSERT_OR_RETURN(, psKiller != NULL, "invalid Unit pointer");
+	ASSERT_OR_RETURN(, psKiller != nullptr, "invalid Unit pointer");
 
 	if (hasCommander(psKiller))
 	{
@@ -187,10 +187,10 @@ void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
 /** This function returns true if the droid is assigned to a commander group and it is not the commander.*/
 bool hasCommander(const DROID *psDroid)
 {
-	ASSERT_OR_RETURN(false, psDroid != NULL, "invalid droid pointer");
+	ASSERT_OR_RETURN(false, psDroid != nullptr, "invalid droid pointer");
 
 	if (psDroid->droidType != DROID_COMMAND &&
-	    psDroid->psGroup != NULL &&
+	    psDroid->psGroup != nullptr &&
 	    psDroid->psGroup->type == GT_COMMAND)
 	{
 		return true;
@@ -204,7 +204,7 @@ unsigned int cmdGetCommanderLevel(const DROID *psDroid)
 {
 	const DROID *psCommander;
 
-	ASSERT(psDroid != NULL, "invalid droid pointer");
+	ASSERT(psDroid != nullptr, "invalid droid pointer");
 
 	// If this droid is not the member of a Commander's group
 	// Return an experience level of 0

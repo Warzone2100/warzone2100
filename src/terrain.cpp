@@ -913,7 +913,7 @@ bool initTerrain()
 
 	// Prepare the lightmap pixmap and texture
 	lightmapPixmap = (GLubyte *)calloc(lightmapWidth * lightmapHeight, 3 * sizeof(GLubyte));
-	if (lightmapPixmap == NULL)
+	if (lightmapPixmap == nullptr)
 	{
 		debug(LOG_FATAL, "Out of memory!");
 		abort();
@@ -966,11 +966,11 @@ void shutdownTerrain()
 		}
 	}
 	free(sectors);
-	sectors = NULL;
+	sectors = nullptr;
 
 	glDeleteTextures(1, &lightmap_tex_num);
 	free(lightmapPixmap);
-	lightmapPixmap = NULL;
+	lightmapPixmap = nullptr;
 
 	terrainInitalised = false;
 }

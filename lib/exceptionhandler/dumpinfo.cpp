@@ -51,7 +51,7 @@ using std::string;
 
 static const std::size_t max_debug_messages = 20;
 
-static char *dbgHeader = NULL;
+static char *dbgHeader = nullptr;
 static WZ_MUTEX *dbgMessagesMutex = wzMutexCreate();  // Protects dbgMessages.
 static std::deque<std::vector<char> > dbgMessages;
 
@@ -62,7 +62,7 @@ static void dumpstr(const DumpFileHandle file, const char *const str, std::size_
 {
 #if defined(WZ_OS_WIN)
 	DWORD lNumberOfBytesWritten;
-	WriteFile(file, str, size, &lNumberOfBytesWritten, NULL);
+	WriteFile(file, str, size, &lNumberOfBytesWritten, nullptr);
 #else
 	std::size_t written = 0;
 	while (written < size)
@@ -104,10 +104,10 @@ static void debug_exceptionhandler_data(void **, const char *const str)
 	/* Can't use ASSERT here as that will cause us to be invoked again.
 	 * Possibly resulting in infinite recursion.
 	 */
-	assert(str != NULL && "Empty string sent to debug callback");
+	assert(str != nullptr && "Empty string sent to debug callback");
 
 	// For non-debug builds
-	if (str == NULL)
+	if (str == nullptr)
 	{
 		return;
 	}
@@ -174,7 +174,7 @@ static std::string getProgramPath(const char *programCommand)
 	std::vector<char> buf(PATH_MAX);
 
 #if defined(WZ_OS_WIN)
-	while (GetModuleFileNameA(NULL, &buf[0], buf.size()) == buf.size())
+	while (GetModuleFileNameA(nullptr, &buf[0], buf.size()) == buf.size())
 	{
 		buf.resize(buf.size() * 2);
 	}
@@ -185,7 +185,7 @@ static std::string getProgramPath(const char *programCommand)
 
 		sasprintf(&whichProgramCommand, "which %s", programCommand);
 		whichProgramStream = popen(whichProgramCommand, "r");
-		if (whichProgramStream == NULL)
+		if (whichProgramStream == nullptr)
 		{
 			debug(LOG_WARNING, "Failed to run \"%s\", will not create extended backtrace", whichProgramCommand);
 			return std::string();
@@ -258,7 +258,7 @@ static std::string getCurTime()
 	using std::string;
 
 	// Get the current time
-	const time_t currentTime = time(NULL);
+	const time_t currentTime = time(nullptr);
 
 	// Convert it to a string
 	string time(ctime(&currentTime));
@@ -343,7 +343,7 @@ static void createHeader(int const argc, const char **argv, const char *packageV
 	   << endl;
 
 	dbgHeader = strdup(os.str().c_str());
-	if (dbgHeader == NULL)
+	if (dbgHeader == nullptr)
 	{
 		debug(LOG_FATAL, "createHeader: Out of memory!");
 		abort();
@@ -355,7 +355,7 @@ void addDumpInfo(const char *inbuffer)
 {
 	char ourtime[sizeof("HH:MM:SS")];
 
-	const time_t curtime = time(NULL);
+	const time_t curtime = time(nullptr);
 	struct tm *const timeinfo = localtime(&curtime);
 
 	strftime(ourtime, sizeof(ourtime), "%H:%M:%S", timeinfo);
@@ -371,6 +371,6 @@ void addDumpInfo(const char *inbuffer)
 
 void dbgDumpInit(int argc, const char **argv, const char *packageVersion)
 {
-	debug_register_callback(&debug_exceptionhandler_data, NULL, NULL, NULL);
+	debug_register_callback(&debug_exceptionhandler_data, nullptr, nullptr, nullptr);
 	createHeader(argc, argv, packageVersion);
 }

@@ -154,7 +154,7 @@ struct PathNonblockingArea
 // Data structures used for pathfinding, can contain cached results.
 struct PathfindContext
 {
-	PathfindContext() : myGameTime(0), iteration(0), blockingMap(NULL) {}
+	PathfindContext() : myGameTime(0), iteration(0), blockingMap(nullptr) {}
 	bool isBlocked(int x, int y) const
 	{
 		if (dstIgnore.isNonblocking(x, y))

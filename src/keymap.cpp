@@ -48,7 +48,7 @@ KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
 {
 	KEY_MAPPING	*psMapping, *psReturn;
 
-	for (psMapping = keyMappings, psReturn = NULL;
+	for (psMapping = keyMappings, psReturn = nullptr;
 	     psMapping && !psReturn;
 	     psMapping = psMapping->psNext)
 	{
@@ -263,7 +263,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_SelectAllTrucks,
 	kf_SetDroidOrderStop,
 	kf_SelectAllArmedVTOLs,
-	NULL		// last function!
+	nullptr		// last function!
 };
 
 
@@ -276,7 +276,7 @@ _keymapsave keyMapSaveTable[] =
 void	keyInitMappings(bool bForceDefaults)
 {
 	UDWORD	i;
-	keyMappings = NULL;
+	keyMappings = nullptr;
 	numActiveMappings = 0;
 	bKeyProcessing = true;
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
@@ -287,7 +287,7 @@ void	keyInitMappings(bool bForceDefaults)
 
 	for (i = 0; i < NUM_QWERTY_KEYS; i++)
 	{
-		qwertyKeyMappings[i].psMapping = NULL;
+		qwertyKeyMappings[i].psMapping = nullptr;
 	}
 
 	// load the mappings.
@@ -487,20 +487,20 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCod
 
 	/* Get some memory for our binding */
 	newMapping = (KEY_MAPPING *)malloc(sizeof(KEY_MAPPING));
-	if (newMapping == NULL)
+	if (newMapping == nullptr)
 	{
 		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
 		abort();
-		return NULL;
+		return nullptr;
 	}
 
 	/* Copy over the name */
 	newMapping->pName = strdup(name);
-	if (newMapping->pName == NULL)
+	if (newMapping->pName == nullptr)
 	{
 		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
 		abort();
-		return NULL;
+		return nullptr;
 	}
 
 	/* Fill up our entries, first the ones that activate it */
@@ -564,14 +564,14 @@ KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode)
 	KEY_MAPPING	*psCurr;
 
 	/* See if we can find it */
-	for (psCurr = keyMappings; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = keyMappings; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->metaKeyCode == metaCode && psCurr->subKeyCode == subCode)
 		{
 			return (psCurr);
 		}
 	}
-	return (NULL);
+	return (nullptr);
 }
 
 // ----------------------------------------------------------------------------------
@@ -591,26 +591,26 @@ bool	keyRemoveMappingPt(KEY_MAPPING *psToRemove)
 {
 	KEY_MAPPING	*psPrev, *psCurr;
 
-	if (psToRemove == NULL)
+	if (psToRemove == nullptr)
 	{
 		return (false);
 	}
 
-	if (psToRemove == keyMappings && keyMappings->psNext == NULL)
+	if (psToRemove == keyMappings && keyMappings->psNext == nullptr)
 	{
 		if (keyMappings->pName)
 		{
 			free(keyMappings->pName);    // ffs
 		}
 		free(keyMappings);
-		keyMappings = NULL;
+		keyMappings = nullptr;
 		numActiveMappings = 0;
 		return (true);
 	}
 
 	/* See if we can find it */
-	for (psPrev = NULL, psCurr = keyMappings;
-	     psCurr != NULL && psCurr != psToRemove;
+	for (psPrev = nullptr, psCurr = keyMappings;
+	     psCurr != nullptr && psCurr != psToRemove;
 	     psPrev = psCurr, psCurr = psCurr->psNext)
 	{
 		/*NOP*/
@@ -718,7 +718,7 @@ void	keyProcessMappings(bool bExclude)
 	}
 
 	/* Run through all our mappings */
-	for (keyToProcess = keyMappings; keyToProcess != NULL; keyToProcess = keyToProcess->psNext)
+	for (keyToProcess = keyMappings; keyToProcess != nullptr; keyToProcess = keyToProcess->psNext)
 	{
 		/* We haven't acted upon it */
 		if (!keyToProcess->active)
@@ -737,7 +737,7 @@ void	keyProcessMappings(bool bExclude)
 			continue;
 		}
 
-		if (keyToProcess->function == NULL)
+		if (keyToProcess->function == nullptr)
 		{
 			continue;
 		}
@@ -1108,7 +1108,7 @@ KEY_MAPPING	*getKeyMapFromName(char *pName)
 			return (psMapping);
 		}
 	}
-	return (NULL);
+	return (nullptr);
 }
 
 // ----------------------------------------------------------------------------------

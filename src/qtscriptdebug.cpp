@@ -65,7 +65,7 @@
 
 typedef QList<QStandardItem *> QStandardItemList;
 
-static ScriptDebugger *globalDialog = NULL;
+static ScriptDebugger *globalDialog = nullptr;
 bool doUpdateModels = false;
 
 // ----------------------------------------------------------
@@ -114,7 +114,7 @@ void ScriptDebugger::fogButtonClicked()
 	kf_ToggleFog();
 }
 
-ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(NULL, Qt::Window)
+ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(nullptr, Qt::Window)
 {
 	modelMap = models;
 	QSignalMapper *signalMapper = new QSignalMapper(this);
@@ -529,7 +529,7 @@ void jsDebugSelected(const BASE_OBJECT *psObj)
 bool jsDebugShutdown()
 {
 	delete globalDialog;
-	globalDialog = NULL;
+	globalDialog = nullptr;
 	return true;
 }
 

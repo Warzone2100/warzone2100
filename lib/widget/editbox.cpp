@@ -55,9 +55,9 @@
 #define EB_MAX_STRINGSIZE 72
 
 W_EDBINIT::W_EDBINIT()
-	: pText(NULL)
+	: pText(nullptr)
 	, FontID(font_regular)
-	, pBoxDisplay(NULL)
+	, pBoxDisplay(nullptr)
 {}
 
 W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
@@ -585,7 +585,7 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	int x1 = x0 + width();
 	int y1 = y0 + height();
 
-	if (pBoxDisplay != NULL)
+	if (pBoxDisplay != nullptr)
 	{
 		pBoxDisplay(this, xOffset, yOffset);
 	}
@@ -641,7 +641,7 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, WZCOL_FORM_CURSOR);
 	}
 
-	if (pBoxDisplay == NULL)
+	if (pBoxDisplay == nullptr)
 	{
 		if ((state & WEDBS_HILITE) != 0)
 		{

@@ -54,11 +54,11 @@ iIMDShape::iIMDShape()
 	nconnectors = 0; // Default number of connectors must be 0
 	npoints = 0;
 	npolys = 0;
-	points = NULL;
-	polys = NULL;
-	connectors = NULL;
-	next = NULL;
-	shadowEdgeList = NULL;
+	points = nullptr;
+	polys = nullptr;
+	connectors = nullptr;
+	next = nullptr;
+	shadowEdgeList = nullptr;
 	nShadowEdges = 0;
 	texpage = iV_TEX_INVALID;
 	tcmaskpage = iV_TEX_INVALID;
@@ -99,7 +99,7 @@ static void iV_IMDRelease(iIMDShape *s)
 		if (s->shadowEdgeList)
 		{
 			free(s->shadowEdgeList);
-			s->shadowEdgeList = NULL;
+			s->shadowEdgeList = nullptr;
 		}
 		glDeleteBuffers(VBO_COUNT, s->buffers);
 		// shader deleted later, if any
@@ -122,7 +122,7 @@ static bool tryLoad(const QString &path, const QString &filename)
 {
 	if (PHYSFS_exists(path + filename))
 	{
-		char *pFileData = NULL, *fileEnd;
+		char *pFileData = nullptr, *fileEnd;
 		UDWORD size = 0;
 		if (!loadFile(QString(path + filename).toUtf8().constData(), &pFileData, &size))
 		{
@@ -169,7 +169,7 @@ iIMDShape *modelGet(const QString &filename)
 		return models[name];
 	}
 	debug(LOG_ERROR, "Could not find: %s", name.toUtf8().constData());
-	return NULL;
+	return nullptr;
 }
 
 static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
@@ -212,7 +212,7 @@ static bool _imd_load_polys(const QString &filename, const char **ppFileData, iI
 	s->animInterval = 0;
 
 	s->polys = (iIMDPoly *)malloc(sizeof(iIMDPoly) * s->npolys);
-	if (s->polys == NULL)
+	if (s->polys == nullptr)
 	{
 		debug(LOG_ERROR, "(_load_polys) Out of memory (polys)");
 		return false;
@@ -348,7 +348,7 @@ static bool _imd_load_polys(const QString &filename, const char **ppFileData, iI
 		else
 		{
 			ASSERT_OR_RETURN(false, !(poly->flags & iV_IMD_TEXANIM), "Polygons with texture animation must have textures!");
-			poly->texCoord = NULL;
+			poly->texCoord = nullptr;
 		}
 	}
 
@@ -562,7 +562,7 @@ static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
 {
 	//load the points then pass through a second time to setup bounding datavalues
 	s->points = (Vector3f *)malloc(sizeof(Vector3f) * s->npoints);
-	if (s->points == NULL)
+	if (s->points == nullptr)
 	{
 		return false;
 	}
@@ -571,7 +571,7 @@ static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
 	if (ReadPoints(ppFileData, s) == false)
 	{
 		free(s->points);
-		s->points = NULL;
+		s->points = nullptr;
 		return false;
 	}
 
@@ -595,7 +595,7 @@ bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
-	Vector3i *p = NULL, newVector(0, 0, 0);
+	Vector3i *p = nullptr, newVector(0, 0, 0);
 
 	s->connectors = (Vector3i *)malloc(sizeof(Vector3i) * s->nconnectors);
 	for (p = s->connectors; p < s->connectors + s->nconnectors; p++)
@@ -671,16 +671,16 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
 	int cnt = 0, n = 0, i;
-	iIMDShape *s = NULL;
+	iIMDShape *s = nullptr;
 	float dummy;
 
 	if (nlevels == 0)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
-	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
+	ASSERT_OR_RETURN(nullptr, i == 1, "Bad directive following LEVEL");
 
 	s = new iIMDShape;
 
@@ -689,7 +689,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 	{
 		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer, &dummy, &dummy, &dummy, &dummy,
 		           &dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &cnt);
-		ASSERT_OR_RETURN(NULL, i == 11, "Bad MATERIALS directive");
+		ASSERT_OR_RETURN(nullptr, i == 11, "Bad MATERIALS directive");
 		debug(LOG_WARNING, "MATERIALS directive no longer supported!");
 		pFileData += cnt;
 	}
@@ -700,7 +700,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 		if (sscanf(pFileData, "%255s %255s %255s%n", buffer, vertex, fragment, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "%s shader corrupt: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		std::vector<std::string> uniform_names { "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap",
 		                                         "specularmap", "ecmEffect", "alphaTest", "graphicsCycle", "ModelViewProjectionMatrix" };
@@ -711,24 +711,24 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npoints, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(2): file corrupt");
-		return NULL;
+		return nullptr;
 	}
 	pFileData += cnt;
 
 	// load points
 
-	ASSERT_OR_RETURN(NULL, strcmp(buffer, "POINTS") == 0, "Expecting 'POINTS' directive, got: %s", buffer);
+	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POINTS") == 0, "Expecting 'POINTS' directive, got: %s", buffer);
 
 	_imd_load_points(&pFileData, s);
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npolys, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(3): file corrupt");
-		return NULL;
+		return nullptr;
 	}
 	pFileData += cnt;
 
-	ASSERT_OR_RETURN(NULL, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
+	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 
 	_imd_load_polys(filename, &pFileData, s, pieVersion);
 
@@ -760,7 +760,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 			if (sscanf(pFileData, "%d %d%n", &s->objanimcycles, &s->objanimframes, &cnt) != 2)
 			{
 				debug(LOG_ERROR, "%s bad ANIMOBJ: %s", filename.toUtf8().constData(), pFileData);
-				return NULL;
+				return nullptr;
 			}
 			pFileData += cnt;
 			s->objanimdata.resize(s->objanimframes);
@@ -854,28 +854,28 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 	{
 		debug(LOG_ERROR, "%s: bad PIE version: (%s)", filename.toUtf8().constData(), buffer);
 		assert(false);
-		return NULL;
+		return nullptr;
 	}
 	pFileData += cnt;
 
 	if (strcmp(PIE_NAME, buffer) != 0)
 	{
 		debug(LOG_ERROR, "%s: Not an IMD file (%s %d)", filename.toUtf8().constData(), buffer, imd_version);
-		return NULL;
+		return nullptr;
 	}
 
 	//Now supporting version PIE_VER and PIE_FLOAT_VER files
 	if (imd_version != PIE_VER && imd_version != PIE_FLOAT_VER)
 	{
 		debug(LOG_ERROR, "%s: Version %d not supported", filename.toUtf8().constData(), imd_version);
-		return NULL;
+		return nullptr;
 	}
 
 	// Read flag
 	if (sscanf(pFileData, "%255s %x%n", buffer, &imd_flags, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "%s: bad flags: %s", filename.toUtf8().constData(), buffer);
-		return NULL;
+		return nullptr;
 	}
 	pFileData += cnt;
 
@@ -883,7 +883,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 	if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "%s: Expecting TEXTURE or LEVELS: %s", filename.toUtf8().constData(), buffer);
-		return NULL;
+		return nullptr;
 	}
 	pFileData += cnt;
 
@@ -907,21 +907,21 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s: Texture info corrupt: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 
 		if (strcmp(texType, "png") != 0)
 		{
 			debug(LOG_ERROR, "%s: Only png textures supported", filename.toUtf8().constData());
-			return NULL;
+			return nullptr;
 		}
 		sstrcat(texfile, ".png");
 
 		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad texture size: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 
@@ -929,7 +929,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 
@@ -955,14 +955,14 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s: Normal map info corrupt: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 
 		if (strcmp(texType, "png") != 0)
 		{
 			debug(LOG_ERROR, "%s: Only png normal maps supported", filename.toUtf8().constData());
-			return NULL;
+			return nullptr;
 		}
 		sstrcat(normalfile, ".png");
 
@@ -970,7 +970,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 	}
@@ -993,14 +993,14 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s specular map info corrupt: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 
 		if (strcmp(texType, "png") != 0)
 		{
 			debug(LOG_ERROR, "%s: only png specular maps supported", filename.toUtf8().constData());
-			return NULL;
+			return nullptr;
 		}
 		sstrcat(specfile, ".png");
 
@@ -1008,14 +1008,14 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 	}
 
 	for (int i = 0; i < ANIM_EVENT_COUNT; i++)
 	{
-		objanimpie[i] = NULL;
+		objanimpie[i] = nullptr;
 	}
 	while (strncmp(buffer, "EVENT", 5) == 0)
 	{
@@ -1026,7 +1026,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s%n", animpie, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s animation model corrupt: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 
@@ -1036,7 +1036,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().constData(), buffer);
-			return NULL;
+			return nullptr;
 		}
 		pFileData += cnt;
 	}
@@ -1044,28 +1044,28 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 	if (strncmp(buffer, "LEVELS", 6) != 0)
 	{
 		debug(LOG_ERROR, "%s: Expecting 'LEVELS' directive (%s)", filename.toUtf8().constData(), buffer);
-		return NULL;
+		return nullptr;
 	}
 
 	/* Read first LEVEL directive */
 	if (sscanf(pFileData, "%255s %d%n", buffer, &level, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "(_load_level) file corrupt -J");
-		return NULL;
+		return nullptr;
 	}
 	pFileData += cnt;
 
 	if (strncmp(buffer, "LEVEL", 5) != 0)
 	{
 		debug(LOG_ERROR, "%s: Expecting 'LEVEL' directive (%s)", filename.toUtf8().constData(), buffer);
-		return NULL;
+		return nullptr;
 	}
 
 	shape = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels, imd_version, level);
-	if (shape == NULL)
+	if (shape == nullptr)
 	{
 		debug(LOG_ERROR, "%s: Unsuccessful", filename.toUtf8().constData());
-		return NULL;
+		return nullptr;
 	}
 
 	// load texture page if specified
@@ -1075,24 +1075,24 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		int normalpage = iV_TEX_INVALID;
 		int specpage = iV_TEX_INVALID;
 
-		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", filename.toUtf8().constData(), texfile);
+		ASSERT_OR_RETURN(nullptr, texpage >= 0, "%s could not load tex page %s", filename.toUtf8().constData(), texfile);
 
 		if (normalfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, filename.toUtf8().constData());
 			normalpage = iV_GetTexture(normalfile, false);
-			ASSERT_OR_RETURN(NULL, normalpage >= 0, "%s could not load tex page %s", filename.toUtf8().constData(), normalfile);
+			ASSERT_OR_RETURN(nullptr, normalpage >= 0, "%s could not load tex page %s", filename.toUtf8().constData(), normalfile);
 		}
 
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, filename.toUtf8().constData());
 			specpage = iV_GetTexture(specfile, false);
-			ASSERT_OR_RETURN(NULL, specpage >= 0, "%s could not load tex page %s", filename.toUtf8().constData(), specfile);
+			ASSERT_OR_RETURN(nullptr, specpage >= 0, "%s could not load tex page %s", filename.toUtf8().constData(), specfile);
 		}
 
 		// assign tex pages and flags to all levels
-		for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
+		for (iIMDShape *psShape = shape; psShape != nullptr; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
 			psShape->normalpage = normalpage;
@@ -1112,7 +1112,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 			ASSERT_OR_RETURN(shape, texpage_mask >= 0, "%s could not load tcmask %s", filename.toUtf8().constData(), texfile);
 
 			// Propagate settings through levels
-			for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
+			for (iIMDShape *psShape = shape; psShape != nullptr; psShape = psShape->next)
 			{
 				psShape->tcmaskpage = texpage_mask;
 			}

@@ -120,7 +120,7 @@ struct labeltype
 };
 typedef QMap<QString, labeltype> LABELMAP;
 static LABELMAP labels;
-static QStandardItemModel *labelModel = NULL;
+static QStandardItemModel *labelModel = nullptr;
 
 #define SCRIPT_ASSERT_PLAYER(_context, _player) \
 	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
@@ -839,7 +839,7 @@ BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
 	case OBJ_DROID: return IdToDroid(id, player);
 	case OBJ_FEATURE: return IdToFeature(id, player);
 	case OBJ_STRUCTURE: return IdToStruct(id, player);
-	default: return NULL;
+	default: return nullptr;
 	}
 }
 
@@ -1441,7 +1441,7 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 			list.append(cur);
 		}
 		RESEARCH *prev = cur;
-		cur = NULL;
+		cur = nullptr;
 		if (prev->pPRList.size())
 		{
 			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
@@ -1478,7 +1478,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	STRUCTURE *psStruct = IdToStruct(id, player);
 	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
 	QScriptValue list = context->argument(1);
-	RESEARCH *psResearch = NULL;  // Dummy initialisation.
+	RESEARCH *psResearch = nullptr;  // Dummy initialisation.
 	if (list.isArray())
 	{
 		int length = list.property("length").toInt32();
@@ -1514,7 +1514,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	}
 	SCRIPT_ASSERT(context, psStruct->pStructureType->type == REF_RESEARCH, "Not a research lab: %s", objInfo(psStruct));
 	RESEARCH_FACILITY *psResLab = (RESEARCH_FACILITY *)psStruct->pFunctionality;
-	SCRIPT_ASSERT(context, psResLab->psSubject == NULL, "Research lab not ready");
+	SCRIPT_ASSERT(context, psResLab->psSubject == nullptr, "Research lab not ready");
 	// Go down the requirements list for the desired tech
 	QList<RESEARCH *> reslist;
 	RESEARCH *cur = psResearch;
@@ -1547,7 +1547,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 			}
 		}
 		RESEARCH *prev = cur;
-		cur = NULL;
+		cur = nullptr;
 		if (!prev->pPRList.empty())
 		{
 			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
@@ -1695,7 +1695,7 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 		debug(LOG_SCRIPT, "Wanted to build %s but body types all unavailable",
 		      templName.toUtf8().constData());
 		delete psTemplate;
-		return NULL; // no component available
+		return nullptr; // no component available
 	}
 	int prop = get_first_available_component(player, capacity, context->argument(paramstart + 1), COMP_PROPULSION, strict);
 	if (prop < 0)
@@ -1703,7 +1703,7 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 		debug(LOG_SCRIPT, "Wanted to build %s but propulsion types all unavailable",
 		      templName.toUtf8().constData());
 		delete psTemplate;
-		return NULL; // no component available
+		return nullptr; // no component available
 	}
 	psTemplate->asParts[COMP_BODY] = body;
 	psTemplate->asParts[COMP_PROPULSION] = prop;
@@ -1725,11 +1725,11 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 		compName = context->argument(firstTurret).toString();
 	}
 	COMPONENT_STATS *psComp = getCompStatsFromName(compName);
-	if (psComp == NULL)
+	if (psComp == nullptr)
 	{
 		debug(LOG_ERROR, "Wanted to build %s but %s does not exist", templName.toUtf8().constData(), compName.toUtf8().constData());
 		delete psTemplate;
-		return NULL;
+		return nullptr;
 	}
 	if (psComp->compType == COMP_WEAPON)
 	{
@@ -1740,7 +1740,7 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 			{
 				debug(LOG_SCRIPT, "Wanted to build %s but no weapon available", templName.toUtf8().constData());
 				delete psTemplate;
-				return NULL;
+				return nullptr;
 			}
 			psTemplate->asWeaps[i] = result;
 			psTemplate->numWeaps++;
@@ -1757,7 +1757,7 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 		{
 			debug(LOG_SCRIPT, "Wanted to build %s but turret unavailable", templName.toUtf8().constData());
 			delete psTemplate;
-			return NULL;
+			return nullptr;
 		}
 		psTemplate->asParts[psComp->compType] = result;
 	}
@@ -1770,7 +1770,7 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 	{
 		delete psTemplate;
 		debug(LOG_ERROR, "Invalid template %s", templName.toUtf8().constData());
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -1792,7 +1792,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	DROID_TEMPLATE *psTemplate = makeTemplate(player, templName, context, 4, SIZE_NUM, false);
 	if (psTemplate)
 	{
-		DROID *psDroid = NULL;
+		DROID *psDroid = nullptr;
 		bool oldMulti = bMultiMessages;
 		bMultiMessages = false; // ugh, fixme
 		if (onMission)
@@ -1809,7 +1809,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 		}
 		else
 		{
-			psDroid = buildDroid(psTemplate, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, NULL);
+			psDroid = buildDroid(psTemplate, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, nullptr);
 			if (psDroid)
 			{
 				addDroid(psDroid, apsDroidLists);
@@ -1914,7 +1914,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 			return QScriptValue(false);
 		}
 	}
-	return QScriptValue(psTemplate != NULL);
+	return QScriptValue(psTemplate != nullptr);
 }
 
 //-- \subsection{enumStruct([player[, structure type[, looking player]]])}
@@ -2678,7 +2678,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 		intRemoveTransporterTimer();
 		/* Only remove the launch if haven't got a transporter droid since the scripts set the
 		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
 			if (isTransporter(psDroid))
 			{
@@ -2686,7 +2686,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 			}
 		}
 		// if not found a transporter, can remove the launch button
-		if (psDroid ==  NULL)
+		if (psDroid ==  nullptr)
 		{
 			intRemoveTransporterLaunch();
 		}
@@ -2832,7 +2832,7 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 	}
 	else
 	{
-		researchResult(psResearch->index, player, false, NULL, false);
+		researchResult(psResearch->index, player, false, nullptr, false);
 	}
 	return QScriptValue();
 }
@@ -4161,7 +4161,7 @@ static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *)
 		int player = droidVal.property("player").toInt32();
 		DROID *targetDroid = IdToDroid(id, player);
 		SCRIPT_ASSERT(context, targetDroid, "No such droid id %d belonging to player %d", id, player);
-		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
 			psDroid->selected = (psDroid == targetDroid); // select only the target droid
 		}
@@ -4248,7 +4248,7 @@ static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 	int32_t req_id = context->argument(0).toInt32();
 	int32_t x = world_coord(context->argument(1).toInt32());
 	int32_t y = world_coord(context->argument(2).toInt32());
-	BASE_OBJECT *psObj = NULL, *psObj2 = NULL;
+	BASE_OBJECT *psObj = nullptr, *psObj2 = nullptr;
 	if (context->argumentCount() > 3)
 	{
 		QScriptValue objVal = context->argument(3);
@@ -4303,7 +4303,7 @@ bool unregisterFunctions(QScriptEngine *engine)
 	delete psMap;
 	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
 	labels.clear();
-	labelModel = NULL;
+	labelModel = nullptr;
 	return true;
 }
 
@@ -4341,15 +4341,15 @@ void prepareLabels()
 // flag all droids as requiring update on next frame
 static void dirtyAllDroids(int player)
 {
-	for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
 		psDroid->flags |= BASEFLAG_DIRTY;
 	}
-	for (DROID *psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+	for (DROID *psDroid = mission.apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
 		psDroid->flags |= BASEFLAG_DIRTY;
 	}
-	for (DROID *psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsLimboDroids[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
 		psDroid->flags |= BASEFLAG_DIRTY;
 	}

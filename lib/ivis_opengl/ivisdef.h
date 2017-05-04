@@ -190,7 +190,7 @@ struct IMAGEFILE
 
 struct Image
 {
-	Image(IMAGEFILE const *images = NULL, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
+	Image(IMAGEFILE const *images = nullptr, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
 
 	bool isNull() const
 	{

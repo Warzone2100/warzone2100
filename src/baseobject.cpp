@@ -105,12 +105,12 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, periodicalDamage(0)
 	, flags(0)
 	, jammedTiles(false)
-	, watchedTiles(NULL)
+	, watchedTiles(nullptr)
 	, timeAnimationStarted(0)
 	, animationEvent(ANIM_EVENT_NONE)
 {
 	memset(visible, 0, sizeof(visible));
-	sDisplay.imd = NULL;
+	sDisplay.imd = nullptr;
 	sDisplay.frameNumber = 0;
 	sDisplay.screenX = 0;
 	sDisplay.screenY = 0;
@@ -135,7 +135,7 @@ void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_descr
 		return;
 	}
 
-	ASSERT(psObject != NULL, "NULL pointer");
+	ASSERT(psObject != nullptr, "NULL pointer");
 
 	switch (psObject->type)
 	{
@@ -193,11 +193,11 @@ StructureBounds getStructureBounds(BASE_OBJECT const *object)
 	STRUCTURE const *psStructure = castStructure(object);
 	FEATURE const *psFeature = castFeature(object);
 
-	if (psStructure != NULL)
+	if (psStructure != nullptr)
 	{
 		return getStructureBounds(psStructure);
 	}
-	else if (psFeature != NULL)
+	else if (psFeature != nullptr)
 	{
 		return getStructureBounds(psFeature);
 	}

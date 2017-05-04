@@ -208,7 +208,7 @@ bool process3DBuilding(void)
 		buildSite.yBR = buildSite.yTL + sBuildDetails.width - 1;
 	}
 
-	if ((buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != NULL))
+	if ((buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != nullptr))
 	{
 		sBuildDetails.CallBack(sBuildDetails.x, sBuildDetails.y, sBuildDetails.UserData);
 		buildState = BUILD3D_NONE;
@@ -227,7 +227,7 @@ bool process3DBuilding(void)
 /* See if a structure location has been found */
 bool found3DBuilding(UDWORD *x, UDWORD *y)
 {
-	if (buildState != BUILD3D_FINISHED || x == NULL || y == NULL)
+	if (buildState != BUILD3D_FINISHED || x == nullptr || y == nullptr)
 	{
 		return false;
 	}

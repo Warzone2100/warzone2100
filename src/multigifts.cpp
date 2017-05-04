@@ -283,7 +283,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	uint8_t      giftType = DROID_GIFT;
 	uint8_t      totalToSend;
 
-	if (apsDroidLists[from] == NULL)
+	if (apsDroidLists[from] == nullptr)
 	{
 		return;
 	}
@@ -365,7 +365,7 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 			    && !IsResearchCompleted(&asPlayerResList[to][i]))
 			{
 				MakeResearchCompleted(&asPlayerResList[to][i]);
-				researchResult(i, to, false, NULL, true);
+				researchResult(i, to, false, nullptr, true);
 			}
 		}
 	}

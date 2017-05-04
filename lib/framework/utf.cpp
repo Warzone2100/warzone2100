@@ -183,7 +183,7 @@ char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
 
 	if (*utf8_string == '\0')
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	return (char *)utf8_string;
@@ -348,10 +348,10 @@ char *UTF16toUTF8(const utf_16_char *unicode_string, size_t *nbytes)
 	char *utf8_string = (char *)malloc(utf8_length + 1);
 	char *curOutPos = utf8_string;
 
-	if (utf8_string == NULL)
+	if (utf8_string == nullptr)
 	{
 		debug(LOG_ERROR, "Out of memory");
-		return NULL;
+		return nullptr;
 	}
 
 	curChar = unicode_string;
@@ -411,10 +411,10 @@ utf_16_char *UTF8toUTF16(const char *utf8_string, size_t *nbytes)
 	utf_16_char *unicode_string = (utf_16_char *)malloc(sizeof(utf_16_char) * (unicode_length + 1));
 	utf_16_char *curOutPos = unicode_string;
 
-	if (unicode_string == NULL)
+	if (unicode_string == nullptr)
 	{
 		debug(LOG_ERROR, "Out of memory");
-		return NULL;
+		return nullptr;
 	}
 
 	while (*curChar != '\0')
@@ -447,7 +447,7 @@ utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t inde
 
 	if (*utf16_string == '\0')
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	return (utf_16_char *)utf16_string;
@@ -478,10 +478,10 @@ char *UTF32toUTF8(const utf_32_char *unicode_string, size_t *nbytes)
 	char *utf8_string = (char *)malloc(utf8_length + 1);
 	char *curOutPos = utf8_string;
 
-	if (utf8_string == NULL)
+	if (utf8_string == nullptr)
 	{
 		debug(LOG_ERROR, "Out of memory");
-		return NULL;
+		return nullptr;
 	}
 
 	for (curChar = unicode_string; *curChar != 0; ++curChar)
@@ -510,10 +510,10 @@ utf_32_char *UTF8toUTF32(const char *utf8_string, size_t *nbytes)
 	utf_32_char *unicode_string = (utf_32_char *)malloc(sizeof(utf_32_char) * (unicode_length + 1));
 	utf_32_char *curOutPos = unicode_string;
 
-	if (unicode_string == NULL)
+	if (unicode_string == nullptr)
 	{
 		debug(LOG_ERROR, "Out of memory");
-		return NULL;
+		return nullptr;
 	}
 
 	while (*curChar != '\0')

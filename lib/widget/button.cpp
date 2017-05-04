@@ -35,7 +35,7 @@
 
 
 W_BUTINIT::W_BUTINIT()
-	: pText(NULL)
+	: pText(nullptr)
 	, FontID(font_regular)
 {}
 

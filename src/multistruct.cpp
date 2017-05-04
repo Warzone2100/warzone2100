@@ -150,7 +150,7 @@ bool recvBuildFinished(NETQUEUE queue)
 #if defined (DEBUG)
 		NETlogEntry("had to plonk down a building", SYNC_FLAG, player);
 #endif
-		triggerEventStructBuilt(psStruct, NULL);
+		triggerEventStructBuilt(psStruct, nullptr);
 	}
 	else
 	{
@@ -261,7 +261,7 @@ bool recvLasSat(NETQUEUE queue)
 		}
 
 		// Give enemy no quarter, unleash the lasat
-		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
+		proj_SendProjectile(&psStruct->asWeaps[0], nullptr, player, psObj->pos, psObj, true, 0);
 		psStruct->asWeaps[0].lastFired = gameTime;
 		psStruct->asWeaps[0].ammo = 1; // abducting this field for keeping track of triggers
 
@@ -342,9 +342,9 @@ void recvStructureInfo(NETQUEUE queue)
 
 	psStruct = IdToStruct(structId, player);
 
-	syncDebug("player%d,structId%u%c,structureInfo%u", player, structId, psStruct == NULL? '^' : '*', structureInfo);
+	syncDebug("player%d,structId%u%c,structureInfo%u", player, structId, psStruct == nullptr? '^' : '*', structureInfo);
 
-	if (psStruct == NULL)
+	if (psStruct == nullptr)
 	{
 		debug(LOG_ERROR, "Could not find structure %u to change production for", structId);
 		return;
@@ -362,7 +362,7 @@ void recvStructureInfo(NETQUEUE queue)
 		debug(LOG_ERROR, "Invalid droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
 		return;
 	}
-	if (structureInfo == STRUCTUREINFO_MANUFACTURE && !intValidTemplate(pT, NULL, true, player))
+	if (structureInfo == STRUCTUREINFO_MANUFACTURE && !intValidTemplate(pT, nullptr, true, player))
 	{
 		debug(LOG_ERROR, "Illegal droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
 		return;

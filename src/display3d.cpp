@@ -210,7 +210,7 @@ bool showORDERS = false;
 
 /** When we have a connection issue, we will flash a message on screen
 */
-static const char *errorWaiting = NULL;
+static const char *errorWaiting = nullptr;
 static uint32_t lastErrorTime = 0;
 
 #define NETWORK_FORM_ID 0xFAAA
@@ -238,7 +238,7 @@ static UDWORD	lastTargetAssignation = 0;
 static UDWORD	lastDestAssignation = 0;
 static bool	bSensorTargetting = false;
 static bool	bDestTargetting = false;
-static BASE_OBJECT *psSensorObj = NULL;
+static BASE_OBJECT *psSensorObj = nullptr;
 static UDWORD	destTargetX, destTargetY;
 static UDWORD	destTileX = 0, destTileY = 0;
 
@@ -389,12 +389,12 @@ static Blueprint getTileBlueprint(int mapX, int mapY)
 		}
 	}
 
-	return Blueprint(NULL, Vector2i(), 0, 0, SS_BEING_BUILT);
+	return Blueprint(nullptr, Vector2i(), 0, 0, SS_BEING_BUILT);
 }
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
 {
-	static STRUCTURE *psStruct = NULL;
+	static STRUCTURE *psStruct = nullptr;
 
 	Blueprint blueprint = getTileBlueprint(mapX, mapY);
 	if (blueprint.state == SS_BLUEPRINT_PLANNED)
@@ -404,7 +404,7 @@ STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
 		return psStruct;  // This blueprint was clicked on.
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY)
@@ -503,7 +503,7 @@ static void showDroidPaths(void)
 				pos.y = map_Height(pos.x, pos.z) + 16;
 
 				effectGiveAuxVar(80);
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 			}
 		}
 	}
@@ -771,7 +771,7 @@ void draw3DScene(void)
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorWaiting);
 			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-			errorWaiting = NULL;
+			errorWaiting = nullptr;
 			lastErrorTime = realTime;
 		}
 	}
@@ -850,7 +850,7 @@ void draw3DScene(void)
 	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
 	if (CauseCrash)
 	{
-		char *crash = 0;
+		char *crash = nullptr;
 #ifdef DEBUG
 		ASSERT(false, "Yes, this is a assert.  This should not happen on release builds! Use --noassert to bypass in debug builds.");
 		debug(LOG_WARNING, " *** Warning!  You have compiled in debug mode! ***");
@@ -1189,7 +1189,7 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix)
 
 	psObj = proj_GetFirst();
 
-	while (psObj != NULL)
+	while (psObj != nullptr)
 	{
 		// If source or destination is visible, and projectile has been spawned and has not impacted.
 		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
@@ -1250,7 +1250,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix)
 	{
 		return;
 	}
-	for (; pIMD != NULL; pIMD = pIMD->next)
+	for (; pIMD != nullptr; pIMD = pIMD->next)
 	{
 		bool rollToCamera = false;
 		bool pitchToCamera = false;
@@ -1360,7 +1360,7 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix)
 		BASE_OBJECT *list = player < MAX_PLAYERS ? apsStructLists[player] : psDestroyedObj;
 
 		/* Now go all buildings for that player */
-		for (; list != NULL; list = list->psNext)
+		for (; list != nullptr; list = list->psNext)
 		{
 			/* Worth rendering the structure? */
 			if (list->type != OBJ_STRUCTURE || (list->died != 0 && list->died < graphicsTime)
@@ -1378,7 +1378,7 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix)
 static bool tileHasIncompatibleStructure(MAPTILE const *tile, STRUCTURE_STATS const *stats, int moduleIndex)
 {
 	STRUCTURE *psStruct = castStructure(tile->psObject);
-	if (psStruct == NULL)
+	if (psStruct == nullptr)
 	{
 		return false;
 	}
@@ -1427,7 +1427,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 	if (order.type == DORDER_BUILDMODULE)
 	{
 		STRUCTURE const *structure = castStructure(order.psObj);
-		if (structure == NULL)
+		if (structure == nullptr)
 		{
 			return;
 		}
@@ -1439,7 +1439,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 		stats = order.psStats;
 	}
 
-	if (stats == NULL)
+	if (stats == nullptr)
 	{
 		return;
 	}
@@ -1558,7 +1558,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 /// Draw Factory Delivery Points
 static void displayDelivPoints(const glm::mat4& viewMatrix)
 {
-	for (FLAG_POSITION *psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint != NULL; psDelivPoint = psDelivPoint->psNext)
+	for (FLAG_POSITION *psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint != nullptr; psDelivPoint = psDelivPoint->psNext)
 	{
 		if (clipXY(psDelivPoint->coords.x, psDelivPoint->coords.y))
 		{
@@ -1576,7 +1576,7 @@ static void displayFeatures(const glm::mat4 &viewMatrix)
 		BASE_OBJECT *list = player < 1 ? apsFeatureLists[player] : psDestroyedObj;
 
 		/* Go through all the features */
-		for (; list != NULL; list = list->psNext)
+		for (; list != nullptr; list = list->psNext)
 		{
 			if (list->type == OBJ_FEATURE
 			    && (list->died == 0 || list->died > graphicsTime)
@@ -1597,7 +1597,7 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix)
 	UDWORD				x, y;
 
 	/* Go through all the proximity Displays*/
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
+	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
 	{
 		if (!(psProxDisp->psMessage->read))
 		{
@@ -1634,7 +1634,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 	{
 		BASE_OBJECT *list = player < MAX_PLAYERS ? apsDroidLists[player] : psDestroyedObj;
 
-		for (; list != NULL; list = list->psNext)
+		for (; list != nullptr; list = list->psNext)
 		{
 			if (list->type != OBJ_DROID || (list->died != 0 && list->died < graphicsTime)
 			    || !clipXY(list->pos.x, list->pos.y))
@@ -1763,9 +1763,9 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 {
 	UDWORD			msgX = 0, msgY = 0;
 	Vector3i                dv(0, 0, 0);
-	VIEW_PROXIMITY	*pViewProximity = NULL;
+	VIEW_PROXIMITY	*pViewProximity = nullptr;
 	SDWORD			x, y, r;
-	iIMDShape		*proxImd = NULL;
+	iIMDShape		*proxImd = nullptr;
 
 	//store the frame number for when deciding what has been clicked on
 	psProxDisp->frameNumber = currentGameFrame;
@@ -1883,9 +1883,9 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag,
 	const glm::mat4 &modelViewMatrix)
 {
-	iIMDShape *mountImd[MAX_WEAPONS] = { NULL };
-	iIMDShape *weaponImd[MAX_WEAPONS] = { NULL };
-	iIMDShape *flashImd[MAX_WEAPONS] = { NULL };
+	iIMDShape *mountImd[MAX_WEAPONS] = { nullptr };
+	iIMDShape *weaponImd[MAX_WEAPONS] = { nullptr };
+	iIMDShape *flashImd[MAX_WEAPONS] = { nullptr };
 
 	int colour = getPlayerColour(psStructure->player);
 
@@ -1904,21 +1904,21 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 	}
 
 	// check for ECM
-	if (weaponImd[0] == NULL && psStructure->pStructureType->pECM != NULL)
+	if (weaponImd[0] == nullptr && psStructure->pStructureType->pECM != nullptr)
 	{
 		weaponImd[0] = psStructure->pStructureType->pECM->pIMD;
 		mountImd[0] = psStructure->pStructureType->pECM->pMountGraphic;
-		flashImd[0] = NULL;
+		flashImd[0] = nullptr;
 	}
 	// check for sensor (or repair center)
 	bool noRecoil = false;
-	if (weaponImd[0] == NULL && psStructure->pStructureType->pSensor != NULL)
+	if (weaponImd[0] == nullptr && psStructure->pStructureType->pSensor != nullptr)
 	{
 		weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
 		/* No recoil for sensors */
 		noRecoil = true;
 		mountImd[0]  =  psStructure->pStructureType->pSensor->pMountGraphic;
-		flashImd[0] = NULL;
+		flashImd[0] = nullptr;
 	}
 
 	// flags for drawing weapons
@@ -1938,11 +1938,11 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 	{
 		Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
 
-		if (weaponImd[i] != NULL)
+		if (weaponImd[i] != nullptr)
 		{
 			glm::mat4 matrix = glm::translate(strImd->connectors[i].xzy) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 			int recoilValue = noRecoil ? 0 : getRecoil(psStructure->asWeaps[i]);
-			if (mountImd[i] != NULL)
+			if (mountImd[i] != nullptr)
 			{
 				matrix *= glm::translate(0.f, 0.f, recoilValue / 3.f);
 				int animFrame = 0;
@@ -1966,7 +1966,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				{
 					REPAIR_FACILITY *psRepairFac = &psStructure->pFunctionality->repairFacility;
 					// draw repair flash if the Repair Facility has a target which it has started work on
-					if (weaponImd[i]->nconnectors && psRepairFac->psObj != NULL
+					if (weaponImd[i]->nconnectors && psRepairFac->psObj != nullptr
 					    && psRepairFac->psObj->type == OBJ_DROID)
 					{
 						DROID *psDroid = (DROID *)psRepairFac->psObj;
@@ -2004,7 +2004,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				// check for weapon
 				flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
 				// draw Weapon/ECM/Sensor for structure
-				if (flashImd[i] != NULL)
+				if (flashImd[i] != nullptr)
 				{
 					glm::mat4 matrix;
 					// horrendous hack
@@ -2115,7 +2115,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	if (!defensive)
 	{
 		/* Draw the building's base first */
-		if (psStructure->pStructureType->pBaseIMD != NULL)
+		if (psStructure->pStructureType->pBaseIMD != nullptr)
 		{
 			if (structureIsBlueprint(psStructure))
 			{
@@ -2146,7 +2146,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT)
 	{
-		if (psStructure->prebuiltImd != NULL)
+		if (psStructure->prebuiltImd != nullptr)
 		{
 			// strImd is a module, so render the already-built part at full height.
 			pie_Draw3DShape(psStructure->prebuiltImd, 0, colour, buildingBrightness, pie_SHADOW, 0,
@@ -2550,7 +2550,7 @@ static void	drawStructureSelections(void)
 	bool		bMouseOverOwnStructure = false;
 
 	psClickedOn = mouseTarget();
-	if (psClickedOn != NULL && psClickedOn->type == OBJ_STRUCTURE)
+	if (psClickedOn != nullptr && psClickedOn->type == OBJ_STRUCTURE)
 	{
 		bMouseOverStructure = true;
 		if (psClickedOn->player == selectedPlayer)
@@ -2699,7 +2699,7 @@ static void	drawDroidSelections(void)
 	float			mulH;
 
 	psClickedOn = mouseTarget();
-	if (psClickedOn != NULL && psClickedOn->type == OBJ_DROID)
+	if (psClickedOn != nullptr && psClickedOn->type == OBJ_DROID)
 	{
 		bMouseOverDroid = true;
 		if (psClickedOn->player == selectedPlayer && !psClickedOn->selected)
@@ -3313,7 +3313,7 @@ static void structureEffectsPlayer(UDWORD player)
 	DROID	*psDroid;
 	UDWORD	gameDiv;
 	UDWORD	i;
-	BASE_OBJECT			*psChosenObj = NULL;
+	BASE_OBJECT			*psChosenObj = nullptr;
 	UWORD	bFXSize;
 
 	const int effectsPerSecond = 12;  // Effects per second. Will add effects up to once time per frame, so won't add as many effects if the framerate is low, but will be consistent, otherwise.
@@ -3371,13 +3371,13 @@ static void structureEffectsPlayer(UDWORD player)
 				pos.z = psStructure->pos.y + yDif;
 				pos.y = map_Height(pos.x, pos.z) + 64 + (i * 20);	// 64 up to get to base of spire
 				effectGiveAuxVar(50);	// half normal plasma size...
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 
 				pos.x = psStructure->pos.x - xDif;
 				pos.z = psStructure->pos.y - yDif;
 				effectGiveAuxVar(50);	// half normal plasma size...
 
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 			}
 		}
 		/* Might be a re-arm pad! */
@@ -3386,7 +3386,7 @@ static void structureEffectsPlayer(UDWORD player)
 		{
 			REARM_PAD *psReArmPad = &psStructure->pFunctionality->rearmPad;
 			psChosenObj = psReArmPad->psObj;
-			if (psChosenObj != NULL && (((DROID *)psChosenObj)->visible[selectedPlayer]))
+			if (psChosenObj != nullptr && (((DROID *)psChosenObj)->visible[selectedPlayer]))
 			{
 				bFXSize = 0;
 				psDroid = (DROID *) psChosenObj;
@@ -3403,11 +3403,11 @@ static void structureEffectsPlayer(UDWORD player)
 				pos.z = psStructure->pos.y + yDif;
 				pos.y = map_Height(pos.x, pos.z) + psStructure->sDisplay.imd->max.y;
 				effectGiveAuxVar(30 + bFXSize);	// half normal plasma size...
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 				pos.x = psStructure->pos.x - xDif;
 				pos.z = psStructure->pos.y - yDif;	// buildings are level!
 				effectGiveAuxVar(30 + bFXSize);	// half normal plasma size...
-				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 			}
 		}
 	}
@@ -3468,7 +3468,7 @@ static void showEffectCircle(Position centre, int32_t radius, uint32_t auxVar, E
 		{
 			pos.y = map_Height(pos.x, pos.z) + 16;
 			effectGiveAuxVar(auxVar);
-			addEffect(&pos, group, type, false, NULL, 0);
+			addEffect(&pos, group, type, false, nullptr, 0);
 		}
 	}
 }

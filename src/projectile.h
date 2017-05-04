@@ -84,8 +84,8 @@ extern glm::mat4	objectShimmy(BASE_OBJECT *psObj);
 static inline void setProjectileSource(PROJECTILE *psProj, SIMPLE_OBJECT *psObj)
 {
 	// use the source of the source of psProj if psAttacker is a projectile
-	psProj->psSource = NULL;
-	if (psObj == NULL)
+	psProj->psSource = nullptr;
+	if (psObj == nullptr)
 	{
 	}
 	else if (isProjectile(psObj))

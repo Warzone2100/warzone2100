@@ -320,59 +320,59 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 	new_handler.sa_handler = signalHandler;
 #endif
 
-	sigaction(SIGABRT, NULL, &oldAction[SIGABRT]);
+	sigaction(SIGABRT, nullptr, &oldAction[SIGABRT]);
 	if (oldAction[SIGABRT].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGABRT, &new_handler, NULL);
+		sigaction(SIGABRT, &new_handler, nullptr);
 	}
 
-	sigaction(SIGBUS, NULL, &oldAction[SIGBUS]);
+	sigaction(SIGBUS, nullptr, &oldAction[SIGBUS]);
 	if (oldAction[SIGBUS].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGBUS, &new_handler, NULL);
+		sigaction(SIGBUS, &new_handler, nullptr);
 	}
 
-	sigaction(SIGFPE, NULL, &oldAction[SIGFPE]);
+	sigaction(SIGFPE, nullptr, &oldAction[SIGFPE]);
 	if (oldAction[SIGFPE].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGFPE, &new_handler, NULL);
+		sigaction(SIGFPE, &new_handler, nullptr);
 	}
 
-	sigaction(SIGILL, NULL, &oldAction[SIGILL]);
+	sigaction(SIGILL, nullptr, &oldAction[SIGILL]);
 	if (oldAction[SIGILL].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGILL, &new_handler, NULL);
+		sigaction(SIGILL, &new_handler, nullptr);
 	}
 
-	sigaction(SIGQUIT, NULL, &oldAction[SIGQUIT]);
+	sigaction(SIGQUIT, nullptr, &oldAction[SIGQUIT]);
 	if (oldAction[SIGQUIT].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGQUIT, &new_handler, NULL);
+		sigaction(SIGQUIT, &new_handler, nullptr);
 	}
 
-	sigaction(SIGSEGV, NULL, &oldAction[SIGSEGV]);
+	sigaction(SIGSEGV, nullptr, &oldAction[SIGSEGV]);
 	if (oldAction[SIGSEGV].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGSEGV, &new_handler, NULL);
+		sigaction(SIGSEGV, &new_handler, nullptr);
 	}
 
 #if _XOPEN_UNIX
-	sigaction(SIGSYS, NULL, &oldAction[SIGSYS]);
+	sigaction(SIGSYS, nullptr, &oldAction[SIGSYS]);
 	if (oldAction[SIGSYS].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGSYS, &new_handler, NULL);
+		sigaction(SIGSYS, &new_handler, nullptr);
 	}
 
-	sigaction(SIGXCPU, NULL, &oldAction[SIGXCPU]);
+	sigaction(SIGXCPU, nullptr, &oldAction[SIGXCPU]);
 	if (oldAction[SIGXCPU].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGXCPU, &new_handler, NULL);
+		sigaction(SIGXCPU, &new_handler, nullptr);
 	}
 
-	sigaction(SIGXFSZ, NULL, &oldAction[SIGXFSZ]);
+	sigaction(SIGXFSZ, nullptr, &oldAction[SIGXFSZ]);
 	if (oldAction[SIGXFSZ].sa_handler != SIG_IGN)
 	{
-		sigaction(SIGXFSZ, &new_handler, NULL);
+		sigaction(SIGXFSZ, &new_handler, nullptr);
 	}
 
 	// ignore SIGTRAP
@@ -433,8 +433,8 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 {
 	int gdbPipe[2];
 	pid_t pid;
-	char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
-	char *gdbEnv[] = { NULL };
+	char *gdbArgv[] = { gdbPath, programPath, programPID, nullptr };
+	char *gdbEnv[] = { nullptr };
 	/* Check if the "bare minimum" is available: GDB and an absolute path
 	 * to our program's binary.
 	 */
@@ -539,7 +539,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 */
 	void const *const frame =
 #if   defined(SA_SIGINFO) && defined(REG_RBP)
-	    sigcontext ? (void *)(sigcontext->uc_mcontext.gregs[REG_RBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
+	    sigcontext ? (void *)(sigcontext->uc_mcontext.gregs[REG_RBP] + sizeof(greg_t) + sizeof(void (*)(void))) : nullptr;
 #elif defined(SA_SIGINFO) && defined(REG_EBP)
 	    sigcontext ? (void *)(sigcontext->uc_mcontext.gregs[REG_EBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
 #else
@@ -551,7 +551,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 */
 	void (*instruction)(void) =
 #if   defined(SA_SIGINFO) && defined(REG_RIP)
-	    sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_RIP] : NULL;
+	    sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_RIP] : nullptr;
 #elif defined(SA_SIGINFO) && defined(REG_EIP)
 	    sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_EIP] : NULL;
 #else
@@ -662,7 +662,7 @@ static void posixExceptionHandler(int signum)
 	int dumpFile;
 	const char *signal;
 # if defined(__GLIBC__)
-	void *btBuffer[MAX_BACKTRACE] = {NULL};
+	void *btBuffer[MAX_BACKTRACE] = {nullptr};
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
 # endif
 
@@ -722,7 +722,7 @@ static void posixExceptionHandler(int signum)
 	close(dumpFile);
 
 
-	sigaction(signum, &oldAction[signum], NULL);
+	sigaction(signum, &oldAction[signum], nullptr);
 	raise(signum);
 }
 
@@ -810,7 +810,7 @@ void setupExceptionHandler(int argc, const char **argv, const char *packageVersi
 
 	sysInfoValid = (uname(&sysInfo) == 0);
 
-	currentTime = time(NULL);
+	currentTime = time(nullptr);
 	sstrcpy(executionDate, ctime(&currentTime));
 
 	snprintf(programPID, sizeof(programPID), "%i", getpid());

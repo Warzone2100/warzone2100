@@ -199,7 +199,7 @@ bool multiplayerWinSequence(bool firstCall)
 			pos2.z = world_coord(mapHeight);
 		}
 
-		addEffect(&pos2, EFFECT_FIREWORK, FIREWORK_TYPE_LAUNCHER, false, NULL, 0);	// throw up some fire works.
+		addEffect(&pos2, EFFECT_FIREWORK, FIREWORK_TYPE_LAUNCHER, false, nullptr, 0);	// throw up some fire works.
 	}
 
 	// show the score..
@@ -327,7 +327,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 // find off-world droids
@@ -356,7 +356,7 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -383,7 +383,7 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ FEATURE *IdToFeature(UDWORD id, UDWORD player)
 			return d;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -413,7 +413,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 		{
 			return droidTemplates[player][tempId];
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	// It could be a AI template...or that of another player
@@ -426,7 +426,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 	}
 
 	// no error, since it is possible that we don't have this template defined yet.
-	return NULL;
+	return nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -458,7 +458,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 		return (BASE_OBJECT *)pF;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 
@@ -466,7 +466,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 // return a players name.
 const char *getPlayerName(int player)
 {
-	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS , "Wrong player index: %u", player);
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS , "Wrong player index: %u", player);
 
 	if (game.type != CAMPAIGN)
 	{
@@ -609,7 +609,7 @@ Vector3i cameraToHome(UDWORD player, bool scroll)
 static void recvSyncRequest(NETQUEUE queue)
 {
 	int32_t req_id, x, y, obj_id, obj_id2, player_id, player_id2;
-	BASE_OBJECT *psObj = NULL, *psObj2 = NULL;
+	BASE_OBJECT *psObj = nullptr, *psObj2 = nullptr;
 
 	NETbeginDecode(queue, GAME_SYNC_REQUEST);
 	NETint32_t(&req_id);
@@ -953,7 +953,7 @@ static bool recvResearch(NETQUEUE queue)
 	if (!IsResearchCompleted(pPlayerRes))
 	{
 		MakeResearchCompleted(pPlayerRes);
-		researchResult(index, player, false, NULL, true);
+		researchResult(index, player, false, nullptr, true);
 	}
 
 	// Update allies research accordingly
@@ -969,7 +969,7 @@ static bool recvResearch(NETQUEUE queue)
 				{
 					// Do the research for that player
 					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL, true);
+					researchResult(index, i, false, nullptr, true);
 				}
 			}
 		}
@@ -1026,7 +1026,7 @@ STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned inde
 			return psBuilding;
 		}
 	}
-	return NULL;  // Not found.
+	return nullptr;  // Not found.
 }
 
 bool recvResearchStatus(NETQUEUE queue)
@@ -1090,8 +1090,8 @@ bool recvResearchStatus(NETQUEUE queue)
 			if (IsResearchStarted(pPlayerRes))
 			{
 				STRUCTURE *psOtherBuilding = findResearchingFacilityByResearchIndex(player, index);
-				ASSERT(psOtherBuilding != NULL, "Something researched but no facility.");
-				if (psOtherBuilding != NULL)
+				ASSERT(psOtherBuilding != nullptr, "Something researched but no facility.");
+				if (psOtherBuilding != nullptr)
 				{
 					cancelResearch(psOtherBuilding, ModeImmediate);
 				}
@@ -1191,7 +1191,7 @@ void sendTeamMessage(const char *pStr, uint32_t from)
 			}
 			else if (myResponsibility(i))
 			{
-				msgStackPush(CALL_AI_MSG, from, i, display, -1, -1, NULL);
+				msgStackPush(CALL_AI_MSG, from, i, display, -1, -1, nullptr);
 				triggerEventChat(from, i, display);
 			}
 			else	//also send to AIs now (non-humans), needed for AI
@@ -1301,7 +1301,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 			}
 			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
 			{
-				msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, NULL);
+				msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, nullptr);
 				triggerEventChat(from, i, msg);
 			}
 			else if (i != from && !isHumanPlayer(i) && !myResponsibility(i))
@@ -1330,7 +1330,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 				}
 				else if (myResponsibility(i))
 				{
-					msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, NULL);
+					msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, nullptr);
 					triggerEventChat(from, i, msg);
 				}
 				else	// send to AIs on different host
@@ -1360,7 +1360,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 				}
 				else if (myResponsibility(i))
 				{
-					msgStackPush(CALL_AI_MSG, from, i, curStr, -1, -1, NULL);
+					msgStackPush(CALL_AI_MSG, from, i, curStr, -1, -1, nullptr);
 					triggerEventChat(from, i, curStr);
 				}
 				else	//also send to AIs now (non-humans), needed for AI
@@ -1536,7 +1536,7 @@ bool recvTextMessageAI(NETQUEUE queue)
 	//Received a console message from a player callback
 	//store and call later
 	//-------------------------------------------------
-	if (!msgStackPush(CALL_AI_MSG, sender, receiver, msg, -1, -1, NULL))
+	if (!msgStackPush(CALL_AI_MSG, sender, receiver, msg, -1, -1, nullptr))
 	{
 		debug(LOG_ERROR, "recvTextMessageAI() - msgStackPush - stack failed");
 		return false;
@@ -1574,7 +1574,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 	}
 
 	pF = IdToFeature(id, ANYPLAYER);
-	if (pF == NULL)
+	if (pF == nullptr)
 	{
 		debug(LOG_FEATURE, "feature id %d not found (probably already destroyed)", id);
 		return false;

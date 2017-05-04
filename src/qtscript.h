@@ -96,7 +96,7 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text);
 // Event functions
 
 /// For generic, parameter-less triggers, using an enum to avoid declaring a ton of parameter-less functions
-bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj = NULL);
+bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj = nullptr);
 
 // For each trigger with function parameters, a function to trigger it here
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);

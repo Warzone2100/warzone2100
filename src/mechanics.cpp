@@ -39,12 +39,12 @@ bool mechanicsShutdown(void)
 {
 	BASE_OBJECT *psObj, *psNext;
 
-	for (psObj = psDestroyedObj; psObj != NULL; psObj = psNext)
+	for (psObj = psDestroyedObj; psObj != nullptr; psObj = psNext)
 	{
 		psNext = psObj->psNext;
 		delete psObj;
 	}
-	psDestroyedObj = NULL;
+	psDestroyedObj = nullptr;
 
 	return true;
 }
@@ -86,42 +86,42 @@ void freeComponentLists(void)
 		if (apCompLists[inc][COMP_BODY])
 		{
 			free(apCompLists[inc][COMP_BODY]);
-			apCompLists[inc][COMP_BODY] = NULL;
+			apCompLists[inc][COMP_BODY] = nullptr;
 		}
 		if (apCompLists[inc][COMP_BRAIN])
 		{
 			free(apCompLists[inc][COMP_BRAIN]);
-			apCompLists[inc][COMP_BRAIN] = NULL;
+			apCompLists[inc][COMP_BRAIN] = nullptr;
 		}
 		if (apCompLists[inc][COMP_PROPULSION])
 		{
 			free(apCompLists[inc][COMP_PROPULSION]);
-			apCompLists[inc][COMP_PROPULSION] = NULL;
+			apCompLists[inc][COMP_PROPULSION] = nullptr;
 		}
 		if (apCompLists[inc][COMP_SENSOR])
 		{
 			free(apCompLists[inc][COMP_SENSOR]);
-			apCompLists[inc][COMP_SENSOR] = NULL;
+			apCompLists[inc][COMP_SENSOR] = nullptr;
 		}
 		if (apCompLists[inc][COMP_ECM])
 		{
 			free(apCompLists[inc][COMP_ECM]);
-			apCompLists[inc][COMP_ECM] = NULL;
+			apCompLists[inc][COMP_ECM] = nullptr;
 		}
 		if (apCompLists[inc][COMP_REPAIRUNIT])
 		{
 			free(apCompLists[inc][COMP_REPAIRUNIT]);
-			apCompLists[inc][COMP_REPAIRUNIT] = NULL;
+			apCompLists[inc][COMP_REPAIRUNIT] = nullptr;
 		}
 		if (apCompLists[inc][COMP_CONSTRUCT])
 		{
 			free(apCompLists[inc][COMP_CONSTRUCT]);
-			apCompLists[inc][COMP_CONSTRUCT] = NULL;
+			apCompLists[inc][COMP_CONSTRUCT] = nullptr;
 		}
 		if (apCompLists[inc][COMP_WEAPON])
 		{
 			free(apCompLists[inc][COMP_WEAPON]);
-			apCompLists[inc][COMP_WEAPON] = NULL;
+			apCompLists[inc][COMP_WEAPON] = nullptr;
 		}
 	}
 }
@@ -143,7 +143,7 @@ bool allocStructLists(void)
 		}
 		else
 		{
-			apStructTypeLists[inc] = NULL;
+			apStructTypeLists[inc] = nullptr;
 		}
 	}
 
@@ -162,7 +162,7 @@ void freeStructureLists(void)
 		if (apStructTypeLists[inc])
 		{
 			free(apStructTypeLists[inc]);
-			apStructTypeLists[inc] = NULL;
+			apStructTypeLists[inc] = nullptr;
 		}
 	}
 }

@@ -259,7 +259,7 @@ struct BASE_STATS
 /* Stats common to all droid components */
 struct COMPONENT_STATS : public BASE_STATS
 {
-	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), body(0), designable(false), pIMD(NULL),
+	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), body(0), designable(false), pIMD(nullptr),
 		compType(COMP_NUMCOMPONENTS) {}
 
 	UDWORD		buildPower;			/**< Power required to build the component */
@@ -288,7 +288,7 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 
 struct SENSOR_STATS : public COMPONENT_STATS
 {
-	SENSOR_STATS() : location(0), type(STANDARD_SENSOR), pMountGraphic(NULL)
+	SENSOR_STATS() : location(0), type(STANDARD_SENSOR), pMountGraphic(nullptr)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
 		memset(&base, 0, sizeof(base));
@@ -306,7 +306,7 @@ struct SENSOR_STATS : public COMPONENT_STATS
 
 struct ECM_STATS : public COMPONENT_STATS
 {
-	ECM_STATS() : location(0), pMountGraphic(NULL)
+	ECM_STATS() : location(0), pMountGraphic(nullptr)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
 		memset(&base, 0, sizeof(base));
@@ -323,7 +323,7 @@ struct ECM_STATS : public COMPONENT_STATS
 
 struct REPAIR_STATS : public COMPONENT_STATS
 {
-	REPAIR_STATS() : location(0), time(0), pMountGraphic(NULL)
+	REPAIR_STATS() : location(0), time(0), pMountGraphic(nullptr)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
 		memset(&base, 0, sizeof(base));
@@ -341,8 +341,8 @@ struct REPAIR_STATS : public COMPONENT_STATS
 
 struct WEAPON_STATS : public COMPONENT_STATS
 {
-	WEAPON_STATS() : pMountGraphic(NULL), pMuzzleGraphic(NULL), pInFlightGraphic(NULL), pTargetHitGraphic(NULL),
-		pTargetMissGraphic(NULL), pWaterHitGraphic(NULL), pTrailGraphic(NULL), iAudioFireID(0),
+	WEAPON_STATS() : pMountGraphic(nullptr), pMuzzleGraphic(nullptr), pInFlightGraphic(nullptr), pTargetHitGraphic(nullptr),
+		pTargetMissGraphic(nullptr), pWaterHitGraphic(nullptr), pTrailGraphic(nullptr), iAudioFireID(0),
 		iAudioImpactID(0)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
@@ -410,7 +410,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 struct CONSTRUCT_STATS : public COMPONENT_STATS
 {
-	CONSTRUCT_STATS() : pMountGraphic(NULL)
+	CONSTRUCT_STATS() : pMountGraphic(nullptr)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
 		memset(&base, 0, sizeof(base));
@@ -426,7 +426,7 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 
 struct BRAIN_STATS : public COMPONENT_STATS
 {
-	BRAIN_STATS() : psWeaponStat(NULL), maxDroids(0), maxDroidsMult(0) {}
+	BRAIN_STATS() : psWeaponStat(nullptr), maxDroids(0), maxDroidsMult(0) {}
 
 	WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
 	UDWORD          maxDroids;       ///< base maximum number of droids that the commander can control

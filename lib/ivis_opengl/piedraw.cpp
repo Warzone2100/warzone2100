@@ -52,7 +52,7 @@ static void ss_GL2_1pass();
 static void ss_EXT_1pass();
 static void ss_ATI_1pass();
 static void ss_2pass();
-static void (*ShadowStencilFunc)() = 0;
+static void (*ShadowStencilFunc)() = nullptr;
 static GLenum ss_op_depth_pass_front = GL_INCR;
 static GLenum ss_op_depth_pass_back = GL_DECR;
 
@@ -166,7 +166,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
-	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, NULL);
+	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, nullptr);
 	disableArrays();
 	polyCount += shape->npolys;
 	pie_DeactivateShader();
@@ -306,7 +306,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 	static std::vector<EDGE> edgelist;  // Static, to save allocations.
 	static std::vector<EDGE> edgelistFlipped;  // Static, to save allocations.
 	static std::vector<EDGE> edgelistFiltered;  // Static, to save allocations.
-	EDGE *drawlist = NULL;
+	EDGE *drawlist = nullptr;
 
 	unsigned edge_count;
 	Vector3f *pVertices = shape->points;

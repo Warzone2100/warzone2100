@@ -207,7 +207,7 @@ bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE m
  */
 void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 {
-	ASSERT_OR_RETURN(, psDroid != NULL && isVtolDroid(psDroid), "Only valid for a VTOL unit");
+	ASSERT_OR_RETURN(, psDroid != nullptr && isVtolDroid(psDroid), "Only valid for a VTOL unit");
 
 	fpathSetDirectRoute(psDroid, x, y);
 	psDroid->sMove.Status = MOVENAVIGATE;
@@ -237,7 +237,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	SDWORD	lvx, lvy, rvx, rvy, svx, svy;
 	SDWORD	shuffleMove;
 
-	ASSERT_OR_RETURN(, psDroid != NULL, "Bad droid pointer");
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Bad droid pointer");
 	CHECK_DROID(psDroid);
 
 	uint16_t shuffleDir = iAtan2(s);
@@ -283,7 +283,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
 		DROID *psCurr = castDroid(*gi);
-		if (psCurr == NULL || psCurr->died || psCurr == psDroid)
+		if (psCurr == nullptr || psCurr->died || psCurr == psDroid)
 		{
 			continue;
 		}
@@ -351,7 +351,7 @@ void moveStopDroid(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT_OR_RETURN(, psPropStats != NULL, "invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
@@ -1024,7 +1024,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 {
 	int32_t		droidR, rad, radSq, objR, xdiff, ydiff, distSq, spmx, spmy;
 	bool            bLegs;
-	ASSERT_OR_RETURN(, psDroid != NULL, "Bad droid");
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Bad droid");
 	CHECK_DROID(psDroid);
 
 	bLegs = false;
@@ -1036,7 +1036,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	spmy = gameTimeAdjustedAverage(*pmy, EXTRA_PRECISION);
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
-	BASE_OBJECT *psObst = NULL;
+	BASE_OBJECT *psObst = nullptr;
 	static GridList gridList;  // static to avoid allocations.
 	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
 	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
@@ -1086,12 +1086,12 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 
 		if (radSq > distSq)
 		{
-			if (psObst != NULL)
+			if (psObst != nullptr)
 			{
 				// hit more than one droid - stop
 				*pmx = 0;
 				*pmy = 0;
-				psObst = NULL;
+				psObst = nullptr;
 				break;
 			}
 			else
@@ -1128,7 +1128,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		}
 	}
 
-	if (psObst != NULL)
+	if (psObst != nullptr)
 	{
 		// Try to slide round it
 		moveCalcSlideVector(psDroid, psObst->pos.x, psObst->pos.y, pmx, pmy);
@@ -1162,7 +1162,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 		}
 
 		DROID *psObstacle = castDroid(*gi);
-		if (psObstacle == NULL)
+		if (psObstacle == nullptr)
 		{
 			// Object wrong type to worry about.
 			continue;
@@ -1823,7 +1823,7 @@ bool moveCheckDroidMovingAndVisible(void *psObj)
 {
 	DROID	*psDroid = (DROID *)psObj;
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		return false;
 	}
@@ -1847,13 +1847,13 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	PROPULSION_TYPES	*psPropType;
 	UBYTE				iPropType = 0;
 
-	ASSERT_OR_RETURN(, psDroid != NULL, "Unit pointer invalid");
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Unit pointer invalid");
 
-	if ((psDroid != NULL) &&
+	if ((psDroid != nullptr) &&
 	    (psDroid->visible[selectedPlayer]))
 	{
 		PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-		ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
+		ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 		iPropType = asPropulsionStats[(psDroid)->asBits[COMP_PROPULSION]].propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
 
@@ -1891,7 +1891,7 @@ static bool moveDroidStartCallback(void *psObj)
 {
 	DROID *psDroid = (DROID *)psObj;
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		return false;
 	}
@@ -1909,11 +1909,11 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 	PROPULSION_TYPES	*psPropType;
 	bool				bStoppedNow;
 	SDWORD				iAudioID = NO_SOUND;
-	AUDIO_CALLBACK		pAudioCallback = NULL;
+	AUDIO_CALLBACK		pAudioCallback = nullptr;
 
 	/* get prop stats */
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 	propType = psPropStats->propulsionType;
 	psPropType = &asPropulsionTypes[propType];
 
@@ -2047,7 +2047,7 @@ void moveUpdateDroid(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 
 	// If the droid has been attacked by an EMP weapon, it is temporarily disabled
 	if (psDroid->lastHitWeapon == WSC_EMP)
@@ -2142,7 +2142,7 @@ void moveUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			ASSERT_OR_RETURN(, psDroid->sMove.asPath != NULL, "NULL path of non-zero length!");
+			ASSERT_OR_RETURN(, psDroid->sMove.asPath != nullptr, "NULL path of non-zero length!");
 		}
 
 		// Get the best control point.
@@ -2312,7 +2312,7 @@ void moveUpdateDroid(DROID *psDroid)
 		pos.x = psDroid->pos.x + (18 - rand() % 36);
 		pos.z = psDroid->pos.y + (18 - rand() % 36);
 		pos.y = psDroid->pos.z + (psDroid->sDisplay.imd->max.y / 3);
-		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0, gameTime - deltaGameTime + 1);
+		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, nullptr, 0, gameTime - deltaGameTime + 1);
 	}
 
 	movePlayAudio(psDroid, bStarted, bStopped, moveSpeed);

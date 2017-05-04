@@ -179,7 +179,7 @@ extern bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
 /* is this a lassat structure? */
 static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
 {
-	ASSERT_OR_RETURN(false, pStructureType != NULL, "LasSat is invalid?");
+	ASSERT_OR_RETURN(false, pStructureType != nullptr, "LasSat is invalid?");
 
 	return (pStructureType->psWeapStat[0]
 	        && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT);
@@ -434,7 +434,7 @@ static inline void setStatusPendingStart(Functionality &functionality, Subject *
 template<typename Functionality>
 static inline void setStatusPendingCancel(Functionality &functionality)
 {
-	functionality.psSubjectPending = NULL;
+	functionality.psSubjectPending = nullptr;
 	functionality.statusPending = FACTORY_CANCEL_PENDING;
 	++functionality.pendingCount;
 }
@@ -442,7 +442,7 @@ static inline void setStatusPendingCancel(Functionality &functionality)
 template<typename Functionality>
 static inline void setStatusPendingHold(Functionality &functionality)
 {
-	if (functionality.psSubjectPending == NULL)
+	if (functionality.psSubjectPending == nullptr)
 	{
 		functionality.psSubjectPending = functionality.psSubject;
 	}
@@ -453,11 +453,11 @@ static inline void setStatusPendingHold(Functionality &functionality)
 template<typename Functionality>
 static inline void setStatusPendingRelease(Functionality &functionality)
 {
-	if (functionality.psSubjectPending == NULL && functionality.statusPending != FACTORY_CANCEL_PENDING)
+	if (functionality.psSubjectPending == nullptr && functionality.statusPending != FACTORY_CANCEL_PENDING)
 	{
 		functionality.psSubjectPending = functionality.psSubject;
 	}
-	if (functionality.psSubjectPending != NULL)
+	if (functionality.psSubjectPending != nullptr)
 	{
 		functionality.statusPending = FACTORY_START_PENDING;
 	}
@@ -474,7 +474,7 @@ static inline void popStatusPending(Functionality &functionality)
 	if (--functionality.pendingCount == 0)
 	{
 		// Subject is now synchronised, remove pending.
-		functionality.psSubjectPending = NULL;
+		functionality.psSubjectPending = nullptr;
 		functionality.statusPending = FACTORY_NOTHING_PENDING;
 	}
 }
@@ -492,17 +492,17 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 // True iff object is a structure.
 static inline bool isStructure(SIMPLE_OBJECT const *psObject)
 {
-	return psObject != NULL && psObject->type == OBJ_STRUCTURE;
+	return psObject != nullptr && psObject->type == OBJ_STRUCTURE;
 }
 // Returns STRUCTURE * if structure or NULL if not.
 static inline STRUCTURE *castStructure(SIMPLE_OBJECT *psObject)
 {
-	return isStructure(psObject) ? (STRUCTURE *)psObject : (STRUCTURE *)NULL;
+	return isStructure(psObject) ? (STRUCTURE *)psObject : (STRUCTURE *)nullptr;
 }
 // Returns STRUCTURE const * if structure or NULL if not.
 static inline STRUCTURE const *castStructure(SIMPLE_OBJECT const *psObject)
 {
-	return isStructure(psObject) ? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL;
+	return isStructure(psObject) ? (STRUCTURE const *)psObject : (STRUCTURE const *)nullptr;
 }
 
 static inline int getBuildingResearchPoints(STRUCTURE *psStruct)

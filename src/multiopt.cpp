@@ -189,7 +189,7 @@ void recvOptions(NETQUEUE queue)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
-		ingame.pStructureLimits = NULL;
+		ingame.pStructureLimits = nullptr;
 	}
 
 	// Get the number of structure limits to expect
@@ -396,7 +396,7 @@ bool multiShutdown(void)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
-		ingame.pStructureLimits = NULL;
+		ingame.pStructureLimits = nullptr;
 	}
 
 	return true;
@@ -510,7 +510,7 @@ bool multiGameShutdown(void)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
-		ingame.pStructureLimits = NULL;
+		ingame.pStructureLimits = nullptr;
 	}
 	ingame.flags = 0;
 

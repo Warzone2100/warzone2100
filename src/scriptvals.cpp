@@ -47,7 +47,7 @@ struct SCRV_STORE
 };
 
 // The list of script contexts
-static SCRV_STORE	*psContextStore = NULL;
+static SCRV_STORE	*psContextStore = nullptr;
 
 // Copy of all references to game objects, so that we can NULL them on death...
 static std::list<INTERP_VAL *>basePointers;
@@ -55,7 +55,7 @@ static std::list<INTERP_VAL *>basePointers;
 // Initialise the script value module
 bool scrvInitialise(void)
 {
-	psContextStore = NULL;
+	psContextStore = nullptr;
 	return true;
 }
 
@@ -86,7 +86,7 @@ void scrvReset(void)
 		free(psCurr);
 	}
 
-	psContextStore = NULL;
+	psContextStore = nullptr;
 	basePointers.clear();
 }
 
@@ -138,7 +138,7 @@ static bool baseObjDead(INTERP_VAL *psVal)
 	if (psObj && isDead(psObj))
 	{
 		debug(LOG_DEATH, "Removing %p (%s) from the wzscript system", psObj, objInfo(psObj));
-		psVal->v.oval = NULL;
+		psVal->v.oval = nullptr;
 		return true;
 	}
 	return false;
@@ -158,7 +158,7 @@ bool scrvNewGroup(INTERP_VAL *psVal)
 	psGroup = grpCreate();
 
 	// increment the refcount so the group doesn't get automatically freed when empty
-	psGroup->add(NULL);
+	psGroup->add(nullptr);
 
 	psVal->v.oval = psGroup;
 
@@ -177,7 +177,7 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 	       "scrvReleaseGroup: ref count is wrong");
 
 	// do a final Remove to free the group
-	psGroup->remove(NULL);
+	psGroup->remove(nullptr);
 }
 
 // Get a context from the list

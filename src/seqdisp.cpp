@@ -262,7 +262,7 @@ static bool seq_StartFullScreenVideo(QString videoName, QString audioName, VIDEO
 		// NOT controlled by sliders for now?
 		static const float maxVolume = 1.f;
 
-		bAudioPlaying = audio_PlayStream(aAudioName.toUtf8().constData(), maxVolume, NULL, NULL) ? true : false;
+		bAudioPlaying = audio_PlayStream(aAudioName.toUtf8().constData(), maxVolume, nullptr, nullptr) ? true : false;
 		ASSERT(bAudioPlaying == true, "unable to initialise sound %s", aAudioName.toUtf8().constData());
 	}
 
@@ -303,7 +303,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 
 			if (realTime >= seqtext.endTime && realTime < seqtext.endTime)
 			{
-				if (pbClear != NULL)
+				if (pbClear != nullptr)
 				{
 					*pbClear = CLEAR_BLACK;
 				}
@@ -518,7 +518,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 
 	pTextBuffer = fileLoadBuffer;
 	pCurrentLine = strtok(pTextBuffer, seps);
-	while (pCurrentLine != NULL)
+	while (pCurrentLine != nullptr)
 	{
 		if (*pCurrentLine != '/')
 		{
@@ -531,21 +531,21 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				yOffset = (double)pie_GetVideoBufferHeight() / 480. * (double)yOffset;
 				//get the text
 				pText = strrchr(pCurrentLine, '"');
-				ASSERT(pText != NULL, "error parsing text file");
-				if (pText != NULL)
+				ASSERT(pText != nullptr, "error parsing text file");
+				if (pText != nullptr)
 				{
 					*pText = (UBYTE)0;
 				}
 				pText = strchr(pCurrentLine, '"');
-				ASSERT(pText != NULL, "error parsing text file");
-				if (pText != NULL)
+				ASSERT(pText != nullptr, "error parsing text file");
+				if (pText != nullptr)
 				{
 					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startTime, endTime, textJustification);
 				}
 			}
 		}
 		//get next line
-		pCurrentLine = strtok(NULL, seps);
+		pCurrentLine = strtok(nullptr, seps);
 	}
 	return true;
 }
@@ -572,7 +572,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 	aSeqList[currentSeq].pSeq = pSeqName;
 	aSeqList[currentSeq].pAudio = pAudioName;
 	aSeqList[currentSeq].bSeqLoop = bLoop;
-	if (pTextName != NULL)
+	if (pTextName != nullptr)
 	{
 		// Ordinary text shouldn't be justified
 		seq_AddTextFromFile(pTextName, SEQ_TEXT_POSITION);

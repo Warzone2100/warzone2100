@@ -63,7 +63,7 @@ int hostlaunch = 0;				// used to detect if we are hosting a game via command li
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
-static STAR *stars = NULL;
+static STAR *stars = nullptr;
 
 static STAR newStar(void)
 {
@@ -383,9 +383,9 @@ void closeLoadingScreen(void)
 	if (stars)
 	{
 		free(stars);
-		stars = NULL;
+		stars = nullptr;
 	}
-	resSetLoadCallback(NULL);
+	resSetLoadCallback(nullptr);
 	pie_ScreenFlip(CLEAR_BLACK);
 }
 

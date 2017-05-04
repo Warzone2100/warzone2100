@@ -104,7 +104,7 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 
 IMAGEFILE *FrontImages;
 
-static wzSearchPath *searchPathRegistry = NULL;
+static wzSearchPath *searchPathRegistry = nullptr;
 
 // Each module in the game should have a call from here to initialise
 // any globals and statics to there default values each time the game
@@ -136,7 +136,7 @@ bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, c
 	char *pBuffer;
 	UDWORD size;
 
-	if (realFileName == NULL)
+	if (realFileName == nullptr)
 	{
 		debug(LOG_WZ, "Loading lev file: \"%s\", builtin\n", filename);
 	}
@@ -163,7 +163,7 @@ bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, c
 
 static void cleanSearchPath()
 {
-	wzSearchPath *curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
+	wzSearchPath *curSearchPath = searchPathRegistry, * tmpSearchPath = nullptr;
 
 	// Start at the lowest priority
 	while (curSearchPath->lowerPriority)
@@ -177,7 +177,7 @@ static void cleanSearchPath()
 		free(curSearchPath);
 		curSearchPath = tmpSearchPath;
 	}
-	searchPathRegistry = NULL;
+	searchPathRegistry = nullptr;
 }
 
 
@@ -187,7 +187,7 @@ static void cleanSearchPath()
  */
 void registerSearchPath(const char path[], unsigned int priority)
 {
-	wzSearchPath *curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
+	wzSearchPath *curSearchPath = searchPathRegistry, * tmpSearchPath = nullptr;
 
 	tmpSearchPath = (wzSearchPath *)malloc(sizeof(*tmpSearchPath));
 	sstrcpy(tmpSearchPath->path, path);
@@ -201,8 +201,8 @@ void registerSearchPath(const char path[], unsigned int priority)
 	if (!curSearchPath)
 	{
 		searchPathRegistry = tmpSearchPath;
-		searchPathRegistry->lowerPriority = NULL;
-		searchPathRegistry->higherPriority = NULL;
+		searchPathRegistry->lowerPriority = nullptr;
+		searchPathRegistry->higherPriority = nullptr;
 		return;
 	}
 
@@ -250,7 +250,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 	wzSearchPath *curSearchPath = searchPathRegistry;
 	char tmpstr[PATH_MAX] = "\0";
 
-	if (mode != current_mode || (current_map != NULL ? current_map : "") != current_current_map || force ||
+	if (mode != current_mode || (current_map != nullptr ? current_map : "") != current_current_map || force ||
 	    (use_override_mods && override_mod_list != getModList()))
 	{
 		if (mode != mod_clean)
@@ -259,7 +259,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 		}
 
 		current_mode = mode;
-		current_current_map = current_map != NULL ? current_map : "";
+		current_current_map = current_map != nullptr ? current_map : "";
 
 		// Start at the lowest priority
 		while (curSearchPath->lowerPriority)
@@ -376,7 +376,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				curSearchPath = curSearchPath->higherPriority;
 			}
 			// Add the selected map first, for mapmod support
-			if (current_map != NULL)
+			if (current_map != nullptr)
 			{
 				QString realPathAndDir = QString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
 				realPathAndDir.replace('/', PHYSFS_getDirSeparator()); // Windows fix
@@ -472,7 +472,7 @@ static MapFileList listMapFiles()
 
 	char **subdirlist = PHYSFS_enumerateFiles("maps");
 
-	for (char **i = subdirlist; *i != NULL; ++i)
+	for (char **i = subdirlist; *i != nullptr; ++i)
 	{
 		std::string wzfile = *i;
 		if (*i[0] == '.' || wzfile.substr(wzfile.find_last_of(".") + 1) != "wz")
@@ -487,7 +487,7 @@ static MapFileList listMapFiles()
 	// save our current search path(s)
 	debug(LOG_WZ, "Map search paths:");
 	char **searchPath = PHYSFS_getSearchPath();
-	for (char **i = searchPath; *i != NULL; i++)
+	for (char **i = searchPath; *i != nullptr; i++)
 	{
 		debug(LOG_WZ, "    [%s]", *i);
 		oldSearchPath.push_back(*i);
@@ -503,7 +503,7 @@ static MapFileList listMapFiles()
 			int unsafe = 0;
 			char **filelist = PHYSFS_enumerateFiles("multiplay/maps");
 
-			for (char **file = filelist; *file != NULL; ++file)
+			for (char **file = filelist; *file != nullptr; ++file)
 			{
 				std::string isDir = std::string("multiplay/maps/") + *file;
 				if (PHYSFS_isDirectory(isDir.c_str()))
@@ -567,7 +567,7 @@ struct FindMap
 bool CheckForMod(char *theMap)
 {
 	std::vector<struct WZmaps>::iterator it;
-	if (theMap == NULL)
+	if (theMap == nullptr)
 	{
 		return false;
 	}
@@ -596,7 +596,7 @@ static bool CheckInMap(const char *archive, const char *mountpoint, const char *
 	std::string checkpath = lookin;
 	checkpath.append("/");
 	char **filelist = PHYSFS_enumerateFiles(lookin);
-	for (char **file = filelist; *file != NULL; ++file)
+	for (char **file = filelist; *file != nullptr; ++file)
 	{
 		std::string checkfile = *file;
 		if (PHYSFS_isDirectory((checkpath + checkfile).c_str()))
@@ -625,11 +625,11 @@ static bool CheckInMap(const char *archive, const char *mountpoint, const char *
 
 bool buildMapList()
 {
-	if (!loadLevFile("gamedesc.lev", mod_campaign, false, NULL))
+	if (!loadLevFile("gamedesc.lev", mod_campaign, false, nullptr))
 	{
 		return false;
 	}
-	loadLevFile("addon.lev", mod_multiplay, false, NULL);
+	loadLevFile("addon.lev", mod_multiplay, false, nullptr);
 	WZ_Maps.clear();
 	MapFileList realFileNames = listMapFiles();
 	for (MapFileList::iterator realFileName = realFileNames.begin(); realFileName != realFileNames.end(); ++realFileName)
@@ -641,7 +641,7 @@ bool buildMapList()
 		PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND);
 
 		char **filelist = PHYSFS_enumerateFiles("");
-		for (char **file = filelist; *file != NULL; ++file)
+		for (char **file = filelist; *file != nullptr; ++file)
 		{
 			std::string checkfile = *file;
 			size_t len = strlen(*file);

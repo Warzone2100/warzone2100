@@ -72,7 +72,7 @@ void QtGameWidget::freeMouse()
 #ifdef WZ_WS_X11
 	XUngrabPointer(QX11Info::display(), CurrentTime);
 #elif defined(WZ_WS_WIN32)
-	ClipCursor(NULL);
+	ClipCursor(nullptr);
 #endif
 	mCursorTrapped = false;
 }
@@ -201,7 +201,7 @@ void QtGameWidget::updateResolutionList()
 	lpDevMode.dmDriverExtra = 0;	// increase to receive private driver data
 	if (mOriginalResolution == QSize(0, 0))
 	{
-		if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &lpDevMode))
+		if (!EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &lpDevMode))
 		{
 			qWarning("Failed to enumerate display settings!");
 			return;
@@ -210,7 +210,7 @@ void QtGameWidget::updateResolutionList()
 		mOriginalRefreshRate = mCurrentRefreshRate = lpDevMode.dmDisplayFrequency;
 		mOriginalDepth = mCurrentDepth = lpDevMode.dmBitsPerPel;
 	}
-	for (int i = 0; EnumDisplaySettings(NULL, i, &lpDevMode); i++)
+	for (int i = 0; EnumDisplaySettings(nullptr, i, &lpDevMode); i++)
 	{
 		QSize res(lpDevMode.dmPelsWidth, lpDevMode.dmPelsHeight);
 		// not changing depth or refresh rate

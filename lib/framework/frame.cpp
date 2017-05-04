@@ -196,7 +196,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 			assert(false);
 			return false;
 		}
-		assert(*ppFileData != NULL);
+		assert(*ppFileData != nullptr);
 	}
 
 	/* Load the file data */
@@ -206,7 +206,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 		if (AllocateMem)
 		{
 			free(*ppFileData);
-			*ppFileData = NULL;
+			*ppFileData = nullptr;
 		}
 
 		debug(LOG_ERROR, "Reading %s short: %s", pFileName, PHYSFS_getLastError());
@@ -219,7 +219,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 		if (AllocateMem)
 		{
 			free(*ppFileData);
-			*ppFileData = NULL;
+			*ppFileData = nullptr;
 		}
 
 		debug(LOG_ERROR, "Error closing %s: %s", pFileName, PHYSFS_getLastError());
@@ -250,7 +250,7 @@ PHYSFS_file *openSaveFile(const char *fileName)
 		}
 
 		assert(!"openSaveFile: couldn't open file for writing");
-		return NULL;
+		return nullptr;
 	}
 
 	return fileHandle;
@@ -285,7 +285,7 @@ bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 		return false;
 	}
 
-	if (PHYSFS_getRealDir(pFileName) == NULL)
+	if (PHYSFS_getRealDir(pFileName) == nullptr)
 	{
 		// weird
 		debug(LOG_ERROR, "PHYSFS_getRealDir(%s) returns NULL (%s)?!", pFileName, PHYSFS_getLastError());

@@ -81,7 +81,7 @@ static bool pushedKeyMap(UDWORD key)
 	selectedKeyMap = (KEY_MAPPING *)widgGetFromID(psWScreen, key)->pUserData;
 	if (selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
 	{
-		selectedKeyMap = NULL;
+		selectedKeyMap = nullptr;
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 
 	}
@@ -128,7 +128,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	pExist = keyFindMapping(metakey,  subkey);
 	if (pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
 	{
-		selectedKeyMap = NULL;	// unhighlght selected.
+		selectedKeyMap = nullptr;	// unhighlght selected.
 		return false;
 	}
 
@@ -139,7 +139,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	psMapping = keyGetMappingFromFunction((void *)selectedKeyMap->function);
 
 	/* Cough if it's not there */
-	ASSERT_OR_RETURN(false, psMapping != NULL, "Trying to patch a non-existant function mapping - whoop whoop!!!");
+	ASSERT_OR_RETURN(false, psMapping != nullptr, "Trying to patch a non-existant function mapping - whoop whoop!!!");
 
 	/* Now alter it to the new values */
 	psMapping->metaKeyCode = metakey;
@@ -150,7 +150,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	{
 		psMapping->altMetaKeyCode = alt;
 	}
-	selectedKeyMap = NULL;	// unhighlght selected .
+	selectedKeyMap = nullptr;	// unhighlght selected .
 	return true;
 }
 
@@ -405,8 +405,8 @@ bool saveKeyMap(void)
 		WRITE(&psMapping->action, sizeof(KEY_ACTION)); // action
 
 		// function to map to!
-		for (count = 0;  keyMapSaveTable[count] != NULL && keyMapSaveTable[count] != psMapping->function; count++) {}
-		if (keyMapSaveTable[count] == NULL)
+		for (count = 0;  keyMapSaveTable[count] != nullptr && keyMapSaveTable[count] != psMapping->function; count++) {}
+		if (keyMapSaveTable[count] == nullptr)
 		{
 			debug(LOG_FATAL, "can't find keymapped function %s in the keymap save table at %d!", name, count);
 			abort();

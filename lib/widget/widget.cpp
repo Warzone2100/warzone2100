@@ -47,9 +47,9 @@
 static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
-static WIDGET	*psMouseOverWidget = NULL;
+static WIDGET	*psMouseOverWidget = nullptr;
 
-static WIDGET_AUDIOCALLBACK AudioCallback = NULL;
+static WIDGET_AUDIOCALLBACK AudioCallback = nullptr;
 static SWORD HilightAudioID = -1;
 static SWORD ClickedAudioID = -1;
 static SWORD ErrorAudioID = -1;
@@ -103,9 +103,9 @@ W_INIT::W_INIT()
 	, style(0)
 	, x(0), y(0)
 	, width(0), height(0)
-	, pDisplay(NULL)
-	, pCallback(NULL)
-	, pUserData(NULL)
+	, pDisplay(nullptr)
+	, pCallback(nullptr)
+	, pUserData(nullptr)
 	, UserData(0)
 {}
 
@@ -118,7 +118,7 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, pUserData(init->pUserData)
 	, UserData(init->UserData)
 	, screenPointer(nullptr)
-	, parentWidget(NULL)
+	, parentWidget(nullptr)
 	, dim(init->x, init->y, init->width, init->height)
 	, dirty(true)
 {}
@@ -127,12 +127,12 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	: id(0xFFFFEEEEu)
 	, type(type)
 	, style(0)
-	, displayFunction(NULL)
-	, callback(NULL)
-	, pUserData(NULL)
+	, displayFunction(nullptr)
+	, callback(nullptr)
+	, pUserData(nullptr)
 	, UserData(0)
 	, screenPointer(nullptr)
-	, parentWidget(NULL)
+	, parentWidget(nullptr)
 	, dim(0, 0, 1, 1)
 	, dirty(true)
 {
@@ -144,13 +144,13 @@ WIDGET::~WIDGET()
 	setScreenPointer(nullptr);  // Clear any pointers to us directly from screenPointer.
 	tipStop(this);  // Stop showing tooltip, if we are.
 
-	if (parentWidget != NULL)
+	if (parentWidget != nullptr)
 	{
 		parentWidget->detach(this);
 	}
 	for (unsigned n = 0; n < childWidgets.size(); ++n)
 	{
-		childWidgets[n]->parentWidget = NULL;  // Detach in advance, slightly faster than detach(), and doesn't change our list.
+		childWidgets[n]->parentWidget = nullptr;  // Detach in advance, slightly faster than detach(), and doesn't change our list.
 		delete childWidgets[n];
 	}
 }
@@ -173,7 +173,7 @@ void WIDGET::setGeometry(QRect const &r)
 
 void WIDGET::attach(WIDGET *widget)
 {
-	ASSERT_OR_RETURN(, widget != NULL && widget->parentWidget == NULL, "Bad attach.");
+	ASSERT_OR_RETURN(, widget != nullptr && widget->parentWidget == nullptr, "Bad attach.");
 	widget->parentWidget = this;
 	widget->setScreenPointer(screenPointer);
 	childWidgets.push_back(widget);
@@ -181,10 +181,10 @@ void WIDGET::attach(WIDGET *widget)
 
 void WIDGET::detach(WIDGET *widget)
 {
-	ASSERT_OR_RETURN(, widget != NULL && widget->parentWidget != NULL, "Bad detach.");
+	ASSERT_OR_RETURN(, widget != nullptr && widget->parentWidget != nullptr, "Bad detach.");
 
-	widget->parentWidget = NULL;
-	widget->setScreenPointer(NULL);
+	widget->parentWidget = nullptr;
+	widget->setScreenPointer(nullptr);
 	childWidgets.erase(std::find(childWidgets.begin(), childWidgets.end(), widget));
 
 	widgetLost(widget);
@@ -219,14 +219,14 @@ void WIDGET::setScreenPointer(W_SCREEN *screen)
 
 void WIDGET::widgetLost(WIDGET *widget)
 {
-	if (parentWidget != NULL)
+	if (parentWidget != nullptr)
 	{
 		parentWidget->widgetLost(widget);  // We don't care about the lost widget, maybe the parent does. (Special code for W_TABFORM.)
 	}
 }
 
 W_SCREEN::W_SCREEN()
-	: psFocus(NULL)
+	: psFocus(nullptr)
 	, lastHighlight(nullptr)
 	, TipFontID(font_regular)
 {
@@ -266,8 +266,8 @@ static bool widgCheckIDForm(WIDGET *psForm, UDWORD id)
 
 static bool widgAddWidget(W_SCREEN *psScreen, W_INIT const *psInit, WIDGET *widget)
 {
-	ASSERT_OR_RETURN(false, widget != NULL, "Invalid widget");
-	ASSERT_OR_RETURN(false, psScreen != NULL, "Invalid screen pointer");
+	ASSERT_OR_RETURN(false, widget != nullptr, "Invalid widget");
+	ASSERT_OR_RETURN(false, psScreen != nullptr, "Invalid screen pointer");
 	ASSERT_OR_RETURN(false, !widgCheckIDForm(psScreen->psForm, psInit->id), "ID number has already been used (%d)", psInit->id);
 	// Find the form to add the widget to.
 	W_FORM *psParent;
@@ -280,7 +280,7 @@ static bool widgAddWidget(W_SCREEN *psScreen, W_INIT const *psInit, WIDGET *widg
 	{
 		psParent = (W_FORM *)widgGetFromID(psScreen, psInit->formID);
 	}
-	ASSERT_OR_RETURN(false, psParent != NULL && psParent->type == WIDG_FORM, "Could not find parent form from formID");
+	ASSERT_OR_RETURN(false, psParent != nullptr && psParent->type == WIDG_FORM, "Could not find parent form from formID");
 
 	psParent->attach(widget);
 	return true;
@@ -354,12 +354,12 @@ static WIDGET *widgFormGetFromID(WIDGET *widget, UDWORD id)
 	for (WIDGET::Children::const_iterator i = c.begin(); i != c.end(); ++i)
 	{
 		WIDGET *w = widgFormGetFromID(*i, id);
-		if (w != NULL)
+		if (w != nullptr)
 		{
 			return w;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 /* Find a widget in a screen from its ID number */
@@ -371,7 +371,7 @@ WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id)
 void widgHide(W_SCREEN *psScreen, UDWORD id)
 {
 	WIDGET *psWidget = widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psWidget != NULL, "Couldn't find widget from id.");
+	ASSERT_OR_RETURN(, psWidget != nullptr, "Couldn't find widget from id.");
 
 	psWidget->hide();
 }
@@ -379,7 +379,7 @@ void widgHide(W_SCREEN *psScreen, UDWORD id)
 void widgReveal(W_SCREEN *psScreen, UDWORD id)
 {
 	WIDGET *psWidget = widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psWidget != NULL, "Couldn't find widget from id.");
+	ASSERT_OR_RETURN(, psWidget != nullptr, "Couldn't find widget from id.");
 
 	psWidget->show();
 }
@@ -392,7 +392,7 @@ void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY)
 
 	/* Find the widget */
 	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget != NULL)
+	if (psWidget != nullptr)
 	{
 		*pX = psWidget->x();
 		*pY = psWidget->y();
@@ -413,7 +413,7 @@ UDWORD widgGetMouseOver(W_SCREEN *psScreen)
 	   the screen structure */
 	(void)psScreen;
 
-	if (psMouseOverWidget == NULL)
+	if (psMouseOverWidget == nullptr)
 	{
 		return 0;
 	}
@@ -433,7 +433,7 @@ void *widgGetUserData(W_SCREEN *psScreen, UDWORD id)
 		return psWidget->pUserData;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 
@@ -716,7 +716,7 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 	W_CONTEXT sContext;
 	sContext.xOffset = 0;
 	sContext.yOffset = 0;
-	psMouseOverWidget = NULL;
+	psMouseOverWidget = nullptr;
 
 	// Note which keys have been pressed
 	lastReleasedKey_DEPRECATED = WKEY_NONE;

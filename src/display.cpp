@@ -725,14 +725,14 @@ CURSOR processMouseClickInput()
 		{
 			// exceptions to the lookup table.
 			if (ctrlShiftDown() &&
-			    (ObjUnderMouse != NULL) &&
+			    (ObjUnderMouse != nullptr) &&
 			    (ObjUnderMouse->player == selectedPlayer) &&
 			    (ObjUnderMouse->type == OBJ_DROID))
 			{
 				item = MT_OWNDROID;
 			}
 			else if (specialOrderKeyDown() &&
-			         (ObjUnderMouse != NULL) &&
+			         (ObjUnderMouse != nullptr) &&
 			         ObjUnderMouse->player == selectedPlayer)
 			{
 				if (selection == SC_DROID_REPAIR)
@@ -748,11 +748,11 @@ CURSOR processMouseClickInput()
 			else if (selection == SC_DROID_REPAIR)
 			{
 				// We can't repair ourselves, so change it to a blocking cursor
-				for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+				for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
 				{
 					if (psCurr->selected)
 					{
-						if ((ObjUnderMouse != NULL) && ObjUnderMouse->player == selectedPlayer && psCurr->id == ObjUnderMouse->id)
+						if ((ObjUnderMouse != nullptr) && ObjUnderMouse->player == selectedPlayer && psCurr->id == ObjUnderMouse->id)
 						{
 							item = MT_BLOCKING;
 						}
@@ -1238,12 +1238,12 @@ bool DrawnInLastFrame(int32_t frame)
 */
 BASE_OBJECT *mouseTarget()
 {
-	BASE_OBJECT *psReturn = NULL;
+	BASE_OBJECT *psReturn = nullptr;
 	int dispX, dispY, dispR;
 
 	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > mapWidth - 1 || mouseTileY > mapHeight - 1)
 	{
-		return (NULL);
+		return (nullptr);
 	}
 
 	/* First have a look through the droid lists */
@@ -1274,7 +1274,7 @@ BASE_OBJECT *mouseTarget()
 		If still NULL after this then nothing */
 	psReturn = getTileOccupier(mouseTileX, mouseTileY);
 
-	if (psReturn == NULL)
+	if (psReturn == nullptr)
 	{
 		psReturn = getTileBlueprintStructure(mouseTileX, mouseTileY);
 	}
@@ -1342,7 +1342,7 @@ void finishDeliveryPosition()
 			setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
 			                 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 		}
-		else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->pFunctionality != NULL)
+		else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->pFunctionality != nullptr)
 		{
 			setAssemblyPoint(psStruct->pFunctionality->repairFacility.psDeliveryPoint,
 			                 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
@@ -1454,7 +1454,7 @@ static bool droidHasLeader(DROID *psDroid)
 		psLeader = orderStateObj(psDroid, DORDER_FIRESUPPORT);
 	}
 
-	if (psLeader != NULL)
+	if (psLeader != nullptr)
 	{
 		if (psLeader->type == OBJ_DROID)
 		{
@@ -1493,7 +1493,7 @@ void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 		}
 		psCBSelectedDroid = psDroid;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
-		psCBSelectedDroid = NULL;
+		psCBSelectedDroid = nullptr;
 	}
 }
 
@@ -1933,7 +1933,7 @@ void	dealWithLMB(void)
 
 	/*Check for a Delivery Point or a Proximity Message*/
 	psLocation = checkMouseLoc();
-	if (psLocation == NULL || selNumSelected(selectedPlayer))
+	if (psLocation == nullptr || selNumSelected(selectedPlayer))
 	{
 		// now changed to use the multiple order stuff
 		// clicked on a destination.
@@ -2013,7 +2013,7 @@ static void dealWithLMBDClick(void)
 	/* What have we clicked on? */
 	psClickedOn = mouseTarget();
 	/* If not NULL, then it's a droid or a structure */
-	if (psClickedOn != NULL)
+	if (psClickedOn != nullptr)
 	{
 		/* We've got a droid or a structure */
 		if (psClickedOn->type == OBJ_DROID)
@@ -2085,7 +2085,7 @@ static OBJECT_POSITION 	*checkMouseLoc(void)
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 static void dealWithRMB(void)
@@ -2102,7 +2102,7 @@ static void dealWithRMB(void)
 	/* What have we clicked on? */
 	psClickedOn = mouseTarget();
 	/* If not NULL, then it's a droid or a structure */
-	if (psClickedOn != NULL)
+	if (psClickedOn != nullptr)
 	{
 		/* We've got a droid or a structure */
 		if (psClickedOn->type == OBJ_DROID)
@@ -2185,7 +2185,7 @@ static void dealWithRMB(void)
 				else if (psStructure->selected == true)
 				{
 					psStructure->selected = false;
-					intObjectSelected(NULL);
+					intObjectSelected(nullptr);
 					triggerEventSelected();
 					jsDebugSelected(psStructure);
 				}
@@ -2266,7 +2266,7 @@ static void dealWithRMB(void)
 		else
 		{
 			clearSelection();
-			intObjectSelected(NULL);
+			intObjectSelected(nullptr);
 			memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
 		}
 	}
@@ -2285,7 +2285,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 	UDWORD		dispX, dispY, dispR;
 	STRUCTURE	*psStructure;
 
-	*ppObjectUnderMouse = NULL;
+	*ppObjectUnderMouse = nullptr;
 
 	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > (int)(mapWidth - 1) || mouseTileY > (int)(mapHeight - 1))
 	{
@@ -2383,12 +2383,12 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
 	psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
-	if (psNotDroid == NULL)
+	if (psNotDroid == nullptr)
 	{
 		psNotDroid = getTileBlueprintStructure(mouseTileX, mouseTileY);
 	}
 
-	if (psNotDroid != NULL)
+	if (psNotDroid != nullptr)
 	{
 		*ppObjectUnderMouse = (BASE_OBJECT *)psNotDroid;
 
@@ -2511,7 +2511,7 @@ static UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] =
 	of multiple selections */
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 {
-	DROID *psDominant = NULL;
+	DROID *psDominant = nullptr;
 	UBYTE CurrWeight = UBYTE_MAX;
 	SELECTION_TYPE selectionClass = SC_INVALID;
 
@@ -2605,7 +2605,7 @@ bool	repairDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 
-	for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected && (
 		        psCurr->droidType == DROID_REPAIR ||
@@ -2624,7 +2624,7 @@ bool	vtolDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 
-	for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected && isVtolDroid(psCurr))
 		{
@@ -2643,7 +2643,7 @@ bool	anyDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 
-	for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected)
 		{
@@ -2660,7 +2660,7 @@ bool cyborgDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 
-	for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected && cyborgDroid(psCurr))
 		{

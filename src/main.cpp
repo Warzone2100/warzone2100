@@ -135,7 +135,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
 static bool getCurrentDir(char *const dest, size_t const size)
 {
 #if defined(WZ_OS_UNIX)
-	if (getcwd(dest, size) == NULL)
+	if (getcwd(dest, size) == nullptr)
 	{
 		if (errno == ERANGE)
 		{
@@ -355,7 +355,7 @@ static void check_Physfs(void)
 		debug(LOG_ERROR, "Please upgrade/downgrade PhysicsFS to a different version, such as 2.0.3 or 2.0.1.");
 	}
 
-	for (i = PHYSFS_supportedArchiveTypes(); *i != NULL; i++)
+	for (i = PHYSFS_supportedArchiveTypes(); *i != nullptr; i++)
 	{
 		debug(LOG_WZ, "[**] Supported archive(s): [%s], which is [%s].", (*i)->extension, (*i)->description);
 		if (!strncasecmp("zip", (*i)->extension, 3) && !zipfound)
@@ -498,7 +498,7 @@ static void scanDataDirs(void)
 static void make_dir(char *dest, const char *dirname, const char *subdir)
 {
 	strcpy(dest, dirname);
-	if (subdir != NULL)
+	if (subdir != nullptr)
 	{
 		strcat(dest, "/");
 		strcat(dest, subdir);
@@ -563,7 +563,7 @@ static void startGameLoop(void)
 	SetGameMode(GS_NORMAL);
 
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
-	if (!levLoadData(aLevelName, &game.hash, NULL, GTYPE_SCENARIO_START))
+	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
 	{
 		debug(LOG_FATAL, "Shutting down after failure");
 		exit(EXIT_FAILURE);
@@ -743,8 +743,8 @@ static void runTitleLoop(void)
 	case TITLECODE_SHOWINTRO:
 		debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
 		seq_ClearSeqList();
-		seq_AddSeqToList("titles.ogg", NULL, NULL, false);
-		seq_AddSeqToList("devastation.ogg", NULL, "devastation.txa", false);
+		seq_AddSeqToList("titles.ogg", nullptr, nullptr, false);
+		seq_AddSeqToList("devastation.ogg", nullptr, "devastation.txa", false);
 		seq_StartNextFullScreenVideo();
 		break;
 	default:
@@ -870,7 +870,7 @@ int realmain(int argc, char *argv[])
 #endif
 
 	debug_init();
-	debug_register_callback(debug_callback_stderr, NULL, NULL, NULL);
+	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
 #if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
 	debug_register_callback(debug_callback_win32debug, NULL, NULL, NULL);
 #endif // WZ_OS_WIN && DEBUG_INSANE
@@ -905,16 +905,16 @@ int realmain(int argc, char *argv[])
 	initialize_ConfigDir();
 
 	/*** Initialize directory structure ***/
-	make_dir(ScreenDumpPath, "screenshots", NULL);
-	make_dir(SaveGamePath, "savegames", NULL);
+	make_dir(ScreenDumpPath, "screenshots", nullptr);
+	make_dir(SaveGamePath, "savegames", nullptr);
 	PHYSFS_mkdir("savegames/campaign");
 	PHYSFS_mkdir("savegames/skirmish");
-	make_dir(MultiCustomMapsPath, "maps", NULL); // MUST have this to prevent crashes when getting map
+	make_dir(MultiCustomMapsPath, "maps", nullptr); // MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
 	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
 	PHYSFS_mkdir("userdata");	// a place to store per-mod data user generated data
 	memset(rulesettag, 0, sizeof(rulesettag)); // tag to add to userdata to find user generated stuff
-	make_dir(MultiPlayersPath, "multiplay", NULL);
+	make_dir(MultiPlayersPath, "multiplay", nullptr);
 	make_dir(MultiPlayersPath, "multiplay", "players");
 	PHYSFS_mkdir("mods/downloads");
 

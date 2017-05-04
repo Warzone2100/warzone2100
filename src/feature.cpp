@@ -56,13 +56,13 @@ FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-FEATURE_STATS *oilResFeature = NULL;
+FEATURE_STATS *oilResFeature = nullptr;
 
 void featureInitVars(void)
 {
-	asFeatureStats = NULL;
+	asFeatureStats = nullptr;
 	numFeatureStats = 0;
-	oilResFeature = NULL;
+	oilResFeature = nullptr;
 }
 
 /* Load the feature stats */
@@ -145,7 +145,7 @@ bool loadFeatureStats(const char *pFileName)
 void featureStatsShutDown(void)
 {
 	delete[] asFeatureStats;
-	asFeatureStats = NULL;
+	asFeatureStats = nullptr;
 	numFeatureStats = 0;
 }
 
@@ -159,7 +159,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 {
 	int32_t relativeDamage;
 
-	ASSERT_OR_RETURN(0, psFeature != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(0, psFeature != nullptr, "Invalid feature pointer");
 
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->psStats->armourValue, damage);
@@ -186,10 +186,10 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 	//try and create the Feature
 	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
 
-	if (psFeature == NULL)
+	if (psFeature == nullptr)
 	{
 		debug(LOG_WARNING, "Feature couldn't be built.");
-		return NULL;
+		return nullptr;
 	}
 	// features are not in the cluster system
 	// this will cause an assert when they still end up there
@@ -253,7 +253,7 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 	// set up the imd for the feature
 	psFeature->sDisplay.imd = psStats->psImd;
 
-	ASSERT_OR_RETURN(NULL, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
+	ASSERT_OR_RETURN(nullptr, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
 
 	for (int breadth = 0; breadth < b.size.y; ++breadth)
 	{
@@ -262,8 +262,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 			MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(NULL, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats), psFeature->id);
-			ASSERT_OR_RETURN(NULL, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -357,7 +357,7 @@ bool removeFeature(FEATURE *psDel)
 	MESSAGE		*psMessage;
 	Vector3i	pos;
 
-	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(false, psDel != nullptr, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
 
 	//remove from the map data
@@ -372,7 +372,7 @@ bool removeFeature(FEATURE *psDel)
 
 				if (psTile->psObject == psDel)
 				{
-					psTile->psObject = NULL;
+					psTile->psObject = nullptr;
 					auxClearBlocking(b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
 				}
 			}
@@ -384,7 +384,7 @@ bool removeFeature(FEATURE *psDel)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x, pos.z) + 30;
-		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, 0, gameTime - deltaGameTime + 1);
+		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, 0, gameTime - deltaGameTime + 1);
 		if (psDel->psStats->subType == FEAT_GEN_ARTE)
 		{
 			scoreUpdateVar(WD_ARTEFACTS_FOUND);
@@ -418,7 +418,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 	EFFECT_TYPE		explosionSize;
 	Vector3i pos;
 
-	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(false, psDel != nullptr, "Invalid feature pointer");
 	ASSERT(gameTime - deltaGameTime < impactTime, "Expected %u < %u, gameTime = %u, bad impactTime", gameTime - deltaGameTime, impactTime, gameTime);
 
 	/* Only add if visible and damageable*/
@@ -447,7 +447,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			pos.x = psDel->pos.x + widthScatter - rand() % (2 * widthScatter);
 			pos.z = psDel->pos.y + breadthScatter - rand() % (2 * breadthScatter);
 			pos.y = psDel->pos.z + 32 + rand() % heightScatter;
-			addEffect(&pos, EFFECT_EXPLOSION, explosionSize, false, NULL, 0, impactTime);
+			addEffect(&pos, EFFECT_EXPLOSION, explosionSize, false, nullptr, 0, impactTime);
 		}
 
 		if (psDel->psStats->subType == FEAT_SKYSCRAPER)
@@ -463,7 +463,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x, pos.z);
-		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, NULL, 0, impactTime);
+		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, nullptr, 0, impactTime);
 
 		//play sound
 		// ffs gj
@@ -499,7 +499,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 					else
 					{
 						/* This remains a blocking tile */
-						psTile->psObject = NULL;
+						psTile->psObject = nullptr;
 						auxClearBlocking(b.map.x + width, b.map.y + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
 					}

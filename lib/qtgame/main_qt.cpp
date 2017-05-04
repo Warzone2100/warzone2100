@@ -70,7 +70,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	mainwindow.setMinimumResolution(QSize(800, 600));
 	if (!mainwindow.context()->isValid())
 	{
-		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
+		QMessageBox::critical(nullptr, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
 		return false;
 	}
 
@@ -115,9 +115,9 @@ void wzMainEventLoop()
 void wzShutdown()
 {
 	delete mainWindowPtr;
-	mainWindowPtr = NULL;
+	mainWindowPtr = nullptr;
 	delete appPtr;
-	appPtr = NULL;
+	appPtr = nullptr;
 }
 
 bool wzIsFullscreen()

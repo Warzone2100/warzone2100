@@ -51,7 +51,7 @@ DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 	UDWORD	bestSoFar;
 
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
-	for (psDroid = apsDroidLists[selectedPlayer], psBestUnit = NULL, bestSoFar = UDWORD_MAX;
+	for (psDroid = apsDroidLists[selectedPlayer], psBestUnit = nullptr, bestSoFar = UDWORD_MAX;
 	     psDroid; psDroid = psDroid->psNext)
 	{
 		if (!isVtolDroid(psDroid))

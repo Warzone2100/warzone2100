@@ -75,7 +75,7 @@ static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
 
-static GFX *backdropGfx = NULL;
+static GFX *backdropGfx = nullptr;
 
 static bool perfStarted = false;
 static GLuint perfpos[PERF_COUNT];
@@ -276,10 +276,10 @@ bool screenInitialise()
 
 	if (khr_debug)
 	{
-		glDebugMessageCallback((GLDEBUGPROC)khr_callback, NULL);
+		glDebugMessageCallback((GLDEBUGPROC)khr_callback, nullptr);
 		glEnable(GL_DEBUG_OUTPUT);
 		// Do not want to output notifications. Some drivers spam them too much.
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
 		debug(LOG_3D, "Enabling KHR_debug message callback");
 	}
 
@@ -360,10 +360,10 @@ void wzPerfFrame()
 	GL_DEBUG("Performance sample complete");
 }
 
-static const char *sceneActive = NULL;
+static const char *sceneActive = nullptr;
 void wzSceneBegin(const char *descr)
 {
-	ASSERT(sceneActive == NULL, "Out of order scenes: Wanted to start %s, was in %s", descr, sceneActive);
+	ASSERT(sceneActive == nullptr, "Out of order scenes: Wanted to start %s, was in %s", descr, sceneActive);
 	if (khr_debug)
 	{
 		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
@@ -378,7 +378,7 @@ void wzSceneEnd(const char *descr)
 	{
 		glPopDebugGroup();
 	}
-	sceneActive = NULL;
+	sceneActive = nullptr;
 }
 
 void wzPerfBegin(PERF_POINT pp, const char *descr)
@@ -433,7 +433,7 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 
 	// Walk thru the files in our dir, adding the ones that start with basename to our vector of strings
 	size_t len = strlen(basename);
-	for (char **i = rc; *i != NULL; i++)
+	for (char **i = rc; *i != nullptr; i++)
 	{
 		// does our filename start with basename?
 		if (!strncmp(*i, basename, len))
@@ -453,7 +453,7 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 void screen_SetBackDropFromFile(const char *filename)
 {
 	backdropGfx->loadTexture(filename);
-	screen_Upload(NULL);
+	screen_Upload(nullptr);
 }
 
 void screen_StopBackDrop(void)
@@ -594,7 +594,7 @@ static const unsigned int channelsPerPixel = 3;
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char *fileName = screendump_filename;
-	iV_Image image = { 0, 0, 8, NULL };
+	iV_Image image = { 0, 0, 8, nullptr };
 
 	if (!screendump_required)
 	{

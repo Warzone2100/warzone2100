@@ -58,7 +58,7 @@ bool rotateRadar; ///< Rotate the radar?
 
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
-static UDWORD		*radarBuffer = NULL;
+static UDWORD		*radarBuffer = nullptr;
 static Vector3i		playerpos;
 
 PIELIGHT clanColours[] =
@@ -188,7 +188,7 @@ bool resizeRadar()
 bool ShutdownRadar()
 {
 	free(radarBuffer);
-	radarBuffer = NULL;
+	radarBuffer = nullptr;
 	return true;
 }
 
@@ -451,7 +451,7 @@ static void DrawRadarObjects()
 		flashCol = flashColours[getPlayerColour(clan)];
 
 		/* Go through all droids */
-		for (psDroid = apsDroidLists[clan]; psDroid != NULL; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[clan]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
 			if (psDroid->pos.x < world_coord(scrollMinX) || psDroid->pos.y < world_coord(scrollMinY)
 			    || psDroid->pos.x >= world_coord(scrollMaxX) || psDroid->pos.y >= world_coord(scrollMaxY))

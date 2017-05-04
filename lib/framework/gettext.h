@@ -226,7 +226,7 @@ dcpgettext_expr(const char *domain,
 	    (msgctxt_len + msgid_len <= sizeof(buf)
 	     ? buf
 	     : (char *) malloc(msgctxt_len + msgid_len));
-	if (msg_ctxt_id != NULL)
+	if (msg_ctxt_id != nullptr)
 #endif
 	{
 		memcpy(msg_ctxt_id, msgctxt, msgctxt_len - 1);
@@ -237,7 +237,7 @@ dcpgettext_expr(const char *domain,
 		if (msg_ctxt_id != buf)
 		{
 			free(msg_ctxt_id);
-			msg_ctxt_id = NULL;
+			msg_ctxt_id = nullptr;
 		}
 #endif
 		if (translation != msg_ctxt_id)
@@ -277,7 +277,7 @@ dcnpgettext_expr(const char *domain,
 	    (msgctxt_len + msgid_len <= sizeof(buf)
 	     ? buf
 	     : (char *) malloc(msgctxt_len + msgid_len));
-	if (msg_ctxt_id != NULL)
+	if (msg_ctxt_id != nullptr)
 #endif
 	{
 		memcpy(msg_ctxt_id, msgctxt, msgctxt_len - 1);

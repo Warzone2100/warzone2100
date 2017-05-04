@@ -275,7 +275,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	// add savegame filenames minus extensions to buttons
 	files = PHYSFS_enumerateFiles(NewSaveGamePath);
-	for (i = files; *i != NULL; ++i)
+	for (i = files; *i != nullptr; ++i)
 	{
 		W_BUTTON *button;
 		char savefile[256];
@@ -342,7 +342,7 @@ bool closeLoadSave(void)
 
 	}
 	delete psRequestScreen;
-	psRequestScreen = NULL;
+	psRequestScreen = nullptr;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
 	return true;
@@ -368,7 +368,7 @@ void deleteSaveGame(char *saveGameName)
 
 	// check for a directory and remove that too.
 	files = PHYSFS_enumerateFiles(saveGameName);
-	for (i = files; *i != NULL; ++i)
+	for (i = files; *i != nullptr; ++i)
 	{
 		char del_file[PATH_MAX];
 
@@ -536,7 +536,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 cleanup:
 	closeLoadSave();
 	bRequestLoad = false;
-	if (bResetMissionWidgets && widgGetFromID(psWScreen, IDMISSIONRES_FORM) == NULL)
+	if (bResetMissionWidgets && widgGetFromID(psWScreen, IDMISSIONRES_FORM) == nullptr)
 	{
 		resetMissionWidgets();			//reset the mission widgets here if necessary
 	}

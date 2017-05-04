@@ -261,7 +261,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		{
 			//particle use the image radius
 			pImd = ((EFFECT *)pObject)->imd;
-			if (pImd != NULL)
+			if (pImd != nullptr)
 			{
 				radius = pImd->radius;
 				radius *= SCALE_DEPTH;

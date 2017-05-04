@@ -80,7 +80,7 @@ struct SocketSet
 
 static WZ_MUTEX *socketThreadMutex;
 static WZ_SEMAPHORE *socketThreadSemaphore;
-static WZ_THREAD *socketThread = NULL;
+static WZ_THREAD *socketThread = nullptr;
 static bool socketThreadQuit;
 typedef std::map<Socket *, std::vector<uint8_t> > SocketThreadWriteMap;
 static SocketThreadWriteMap socketThreadWrites;
@@ -118,11 +118,11 @@ typedef int (WINAPI *GETADDRINFO_DLL_FUNC)(const char *node, const char *service
         struct addrinfo **res);
 typedef int (WINAPI *FREEADDRINFO_DLL_FUNC)(struct addrinfo *res);
 
-static HMODULE winsock2_dll = NULL;
+static HMODULE winsock2_dll = nullptr;
 static unsigned int major_windows_version = 0;
 
-static GETADDRINFO_DLL_FUNC getaddrinfo_dll_func = NULL;
-static FREEADDRINFO_DLL_FUNC freeaddrinfo_dll_func = NULL;
+static GETADDRINFO_DLL_FUNC getaddrinfo_dll_func = nullptr;
+static FREEADDRINFO_DLL_FUNC freeaddrinfo_dll_func = nullptr;
 
 # define getaddrinfo  getaddrinfo_dll_dispatcher
 # define freeaddrinfo freeaddrinfo_dll_dispatcher
@@ -397,7 +397,7 @@ static int socketThreadFunction(void *)
 
 		// Check if we can write to any sockets.
 		wzMutexUnlock(socketThreadMutex);
-		int ret = select(maxfd + 1, NULL, &fds, NULL, &tv);
+		int ret = select(maxfd + 1, nullptr, &fds, nullptr, &tv);
 		wzMutexLock(socketThreadMutex);
 
 		// We can write to some sockets. (Ignore errors from select, we may have deleted the socket after unlocking the mutex, and before calling select.)
@@ -490,7 +490,7 @@ static int socketThreadFunction(void *)
 ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount)
 {
 	size_t ignored;
-	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
+	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
 	rawBytes = 0;
 
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
@@ -538,14 +538,14 @@ ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount
 		sock->zInflate.avail_out = max_size;
 		int ret = inflate(&sock->zInflate, Z_NO_FLUSH);
 		ASSERT(ret != Z_STREAM_ERROR, "zlib inflate not working!");
-		char const *err = NULL;
+		char const *err = nullptr;
 		switch (ret)
 		{
 		case Z_NEED_DICT:  err = "Z_NEED_DICT";  break;
 		case Z_DATA_ERROR: err = "Z_DATA_ERROR"; break;
 		case Z_MEM_ERROR:  err = "Z_MEM_ERROR";  break;
 		}
-		if (err != NULL)
+		if (err != nullptr)
 		{
 			debug(LOG_ERROR, "Couldn't decompress data from socket. zlib error %s", err);
 			return -1;  // Bad data!
@@ -591,7 +591,7 @@ bool socketReadDisconnected(Socket *sock)
 ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCount)
 {
 	size_t ignored;
-	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
+	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
 	rawBytes = 0;
 
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
@@ -650,7 +650,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 void socketFlush(Socket *sock, size_t *rawByteCount)
 {
 	size_t ignored;
-	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
+	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
 	rawBytes = 0;
 
 	if (!sock->isCompressed)
@@ -661,7 +661,7 @@ void socketFlush(Socket *sock, size_t *rawByteCount)
 	// Flush data out of zlib compression state.
 	do
 	{
-		sock->zDeflate.next_in = (Bytef *)NULL;
+		sock->zDeflate.next_in = (Bytef *)nullptr;
 		sock->zDeflate.avail_in = 0;
 		size_t alreadyHave = sock->zDeflateOutBuf.size();
 		sock->zDeflateOutBuf.resize(alreadyHave + 1000);  // 100 bytes would probably be enough to flush the rest in one go.
@@ -890,7 +890,7 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
 			FD_SET(fd, &fds);
 		}
 
-		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
+		ret = select(maxfd + 1, &fds, nullptr, nullptr, &tv);
 	}
 	while (ret == SOCKET_ERROR && getSockErr() == EINTR);
 
@@ -1063,11 +1063,11 @@ Socket *socketAccept(Socket *sock)
 			}
 
 			conn = new Socket;
-			if (conn == NULL)
+			if (conn == nullptr)
 			{
 				debug(LOG_ERROR, "Out of memory!");
 				abort();
-				return NULL;
+				return nullptr;
 			}
 
 			debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
@@ -1075,7 +1075,7 @@ Socket *socketAccept(Socket *sock)
 			{
 				debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
 				socketClose(conn);
-				return NULL;
+				return nullptr;
 			}
 
 			socketBlockSIGPIPE(newConn, true);
@@ -1097,7 +1097,7 @@ Socket *socketAccept(Socket *sock)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
@@ -1106,14 +1106,14 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	int ret;
 
 	Socket *const conn = new Socket;
-	if (conn == NULL)
+	if (conn == nullptr)
 	{
 		debug(LOG_ERROR, "Out of memory!");
 		abort();
-		return NULL;
+		return nullptr;
 	}
 
-	ASSERT(addr != NULL, "NULL Socket provided");
+	ASSERT(addr != nullptr, "NULL Socket provided");
 
 	addressToText(addr->ai_addr, conn->textAddress, sizeof(conn->textAddress));
 	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs(((const struct sockaddr_in *)addr->ai_addr)->sin_port));
@@ -1130,7 +1130,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	{
 		debug(LOG_ERROR, "Failed to create a socket (%p): %s", conn, strSockError(getSockErr()));
 		socketClose(conn);
-		return NULL;
+		return nullptr;
 	}
 
 	debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
@@ -1138,7 +1138,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	{
 		debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
 		socketClose(conn);
-		return NULL;
+		return nullptr;
 	}
 
 	socketBlockSIGPIPE(conn->fd[SOCK_CONNECTION], true);
@@ -1161,7 +1161,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		{
 			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), conn);
 			socketClose(conn);
-			return NULL;
+			return nullptr;
 		}
 
 		do
@@ -1178,7 +1178,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 #if   defined(WZ_OS_WIN)
 			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, &conFailed, &tv);
 #else
-			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, NULL, &tv);
+			ret = select(conn->fd[SOCK_CONNECTION] + 1, nullptr, &conReady, nullptr, &tv);
 #endif
 		}
 		while (ret == SOCKET_ERROR && getSockErr() == EINTR);
@@ -1187,7 +1187,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		{
 			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(getSockErr()), conn);
 			socketClose(conn);
-			return NULL;
+			return nullptr;
 		}
 
 		if (ret == 0)
@@ -1195,7 +1195,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 			setSockErr(ETIMEDOUT);
 			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(getSockErr()), conn);
 			socketClose(conn);
-			return NULL;
+			return nullptr;
 		}
 
 #if   defined(WZ_OS_WIN)
@@ -1213,7 +1213,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		{
 			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), conn);
 			socketClose(conn);
-			return NULL;
+			return nullptr;
 		}
 	}
 
@@ -1235,11 +1235,11 @@ Socket *socketListen(unsigned int port)
 	unsigned int i;
 
 	Socket *const conn = new Socket;
-	if (conn == NULL)
+	if (conn == nullptr)
 	{
 		debug(LOG_ERROR, "Out of memory!");
 		abort();
-		return NULL;
+		return nullptr;
 	}
 
 	// Mark all unused socket handles as invalid
@@ -1269,7 +1269,7 @@ Socket *socketListen(unsigned int port)
 	{
 		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", conn, strSockError(getSockErr()));
 		socketClose(conn);
-		return NULL;
+		return nullptr;
 	}
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
@@ -1352,7 +1352,7 @@ Socket *socketListen(unsigned int port)
 	{
 		debug(LOG_NET, "No IPv4 or IPv6 sockets created.");
 		socketClose(conn);
-		return NULL;
+		return nullptr;
 	}
 
 	return conn;
@@ -1360,8 +1360,8 @@ Socket *socketListen(unsigned int port)
 
 Socket *socketOpenAny(const SocketAddress *addr, unsigned timeout)
 {
-	Socket *ret = NULL;
-	while (addr != NULL && ret == NULL)
+	Socket *ret = nullptr;
+	while (addr != nullptr && ret == nullptr)
 	{
 		ret = socketOpen(addr, timeout);
 
@@ -1374,24 +1374,24 @@ Socket *socketOpenAny(const SocketAddress *addr, unsigned timeout)
 size_t socketArrayOpen(Socket **sockets, size_t maxSockets, const SocketAddress *addr, unsigned timeout)
 {
 	size_t i = 0;
-	while (i < maxSockets && addr != NULL)
+	while (i < maxSockets && addr != nullptr)
 	{
 		if (addr->ai_family == AF_INET || addr->ai_family == AF_INET6)
 		{
 			sockets[i] = socketOpen(addr, timeout);
-			i += sockets[i] != NULL;
+			i += sockets[i] != nullptr;
 		}
 
 		addr = addr->ai_next;
 	}
-	std::fill(sockets + i, sockets + maxSockets, (Socket *)NULL);
+	std::fill(sockets + i, sockets + maxSockets, (Socket *)nullptr);
 	return i;
 }
 
 void socketArrayClose(Socket **sockets, size_t maxSockets)
 {
 	std::for_each(sockets, sockets + maxSockets, socketClose);     // Close any open sockets.
-	std::fill(sockets, sockets + maxSockets, (Socket *)NULL);      // Set the pointers to NULL.
+	std::fill(sockets, sockets + maxSockets, (Socket *)nullptr);      // Set the pointers to NULL.
 }
 
 char const *getSocketTextAddress(Socket const *sock)
@@ -1417,9 +1417,9 @@ SocketAddress *resolveHost(const char *host, unsigned int port)
 #endif
 	hint.ai_flags     = flags;
 	hint.ai_addrlen   = 0;
-	hint.ai_addr      = NULL;
-	hint.ai_canonname = NULL;
-	hint.ai_next      = NULL;
+	hint.ai_addr      = nullptr;
+	hint.ai_canonname = nullptr;
+	hint.ai_next      = nullptr;
 
 	sasprintf(&service, "%u", port);
 
@@ -1427,7 +1427,7 @@ SocketAddress *resolveHost(const char *host, unsigned int port)
 	if (error != 0)
 	{
 		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service, gai_strerror(error));
-		return NULL;
+		return nullptr;
 	}
 
 	return results;
@@ -1468,19 +1468,19 @@ void SOCKETinit()
 	}
 #endif
 
-	if (socketThread == NULL)
+	if (socketThread == nullptr)
 	{
 		socketThreadQuit = false;
 		socketThreadMutex = wzMutexCreate();
 		socketThreadSemaphore = wzSemaphoreCreate(0);
-		socketThread = wzThreadCreate(socketThreadFunction, NULL);
+		socketThread = wzThreadCreate(socketThreadFunction, nullptr);
 		wzThreadStart(socketThread);
 	}
 }
 
 void SOCKETshutdown()
 {
-	if (socketThread != NULL)
+	if (socketThread != nullptr)
 	{
 		wzMutexLock(socketThreadMutex);
 		socketThreadQuit = true;
@@ -1490,7 +1490,7 @@ void SOCKETshutdown()
 		wzThreadJoin(socketThread);
 		wzMutexDestroy(socketThreadMutex);
 		wzSemaphoreDestroy(socketThreadSemaphore);
-		socketThread = NULL;
+		socketThread = nullptr;
 	}
 
 #if defined(WZ_OS_WIN)

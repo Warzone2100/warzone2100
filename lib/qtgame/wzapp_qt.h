@@ -64,7 +64,7 @@ private:
 	static WzMainWindow *myself;
 
 public:
-	WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent = 0);
+	WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent = nullptr);
 	~WzMainWindow();
 	void initializeGL();
 	void resizeGL(int w, int h);

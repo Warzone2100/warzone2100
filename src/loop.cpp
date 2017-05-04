@@ -433,7 +433,7 @@ static void countUpdate(bool synch)
 		numMissionDroids[i] = 0;
 		numTransporterDroids[i] = 0;
 
-		for (DROID *psCurr = apsDroidLists[i]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			numDroids[i]++;
 			switch (psCurr->droidType)
@@ -447,13 +447,13 @@ static void countUpdate(bool synch)
 				break;
 			case DROID_TRANSPORTER:
 			case DROID_SUPERTRANSPORTER:
-				if ((psCurr->psGroup != NULL))
+				if ((psCurr->psGroup != nullptr))
 				{
-					DROID *psDroid = NULL;
+					DROID *psDroid = nullptr;
 
 					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
 					// and count the units inside it...
-					for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
+					for (psDroid = psCurr->psGroup->psList; psDroid != nullptr && psDroid != psCurr; psDroid = psDroid->psGrpNext)
 					{
 						if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
 						{
@@ -470,7 +470,7 @@ static void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			numMissionDroids[i]++;
 			switch (psCurr->droidType)
@@ -484,7 +484,7 @@ static void countUpdate(bool synch)
 				break;
 			case DROID_TRANSPORTER:
 			case DROID_SUPERTRANSPORTER:
-				if ((psCurr->psGroup != NULL))
+				if ((psCurr->psGroup != nullptr))
 				{
 					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
 				}
@@ -493,7 +493,7 @@ static void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr = apsLimboDroids[i]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (DROID *psCurr = apsLimboDroids[i]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			// count the type of units
 			switch (psCurr->droidType)
@@ -511,7 +511,7 @@ static void countUpdate(bool synch)
 		}
 		// FIXME: These for-loops are code duplicationo
 		setLasSatExists(false, i);
-		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != NULL; psCBuilding = psCBuilding->psNext)
+		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psCBuilding->psNext)
 		{
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
@@ -523,7 +523,7 @@ static void countUpdate(bool synch)
 				setLasSatExists(true, i);
 			}
 		}
-		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != NULL; psCBuilding = psCBuilding->psNext)
+		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psCBuilding->psNext)
 		{
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
@@ -610,14 +610,14 @@ static void gameStateUpdate()
 		updatePlayerPower(i);
 
 		DROID *psNext;
-		for (DROID *psCurr = apsDroidLists[i]; psCurr != NULL; psCurr = psNext)
+		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psNext)
 		{
 			// Copy the next pointer - not 100% sure if the droid could get destroyed but this covers us anyway
 			psNext = psCurr->psNext;
 			droidUpdate(psCurr);
 		}
 
-		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != NULL; psCurr = psNext)
+		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != nullptr; psCurr = psNext)
 		{
 			/* Copy the next pointer - not 100% sure if the droid could
 			get destroyed but this covers us anyway */
@@ -627,13 +627,13 @@ static void gameStateUpdate()
 
 		// FIXME: These for-loops are code duplicationo
 		STRUCTURE *psNBuilding;
-		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != NULL; psCBuilding = psNBuilding)
+		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psNBuilding)
 		{
 			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
 			psNBuilding = psCBuilding->psNext;
 			structureUpdate(psCBuilding, false);
 		}
-		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != NULL; psCBuilding = psNBuilding)
+		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psNBuilding)
 		{
 			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
 			psNBuilding = psCBuilding->psNext;
@@ -730,7 +730,7 @@ void videoLoop(void)
 	ASSERT(videoMode == 1, "videoMode out of sync");
 
 	// display a frame of the FMV
-	videoFinished = !seq_UpdateFullScreenVideo(NULL);
+	videoFinished = !seq_UpdateFullScreenVideo(nullptr);
 	pie_ScreenFlip(CLEAR_BLACK);
 
 	// should we stop playing?

@@ -79,7 +79,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 {
 	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psBGraph != NULL, "Could not find widget from ID");
+	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
 	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
 
 	psBGraph->iOriginal = iValue;
@@ -101,7 +101,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 {
 	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psBGraph != NULL, "Could not find widget from ID");
+	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
 	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
 	psBGraph->minorSize = MIN(WBAR_SCALE * iValue / MAX(psBGraph->iRange, 1), WBAR_SCALE);
 	psBGraph->dirty = true;

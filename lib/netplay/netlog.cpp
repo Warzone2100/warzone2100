@@ -33,7 +33,7 @@
 
 #define NUM_GAME_PACKETS 256
 
-static PHYSFS_file	*pFileHandle = NULL;
+static PHYSFS_file	*pFileHandle = nullptr;
 static uint32_t		packetcount[2][NUM_GAME_PACKETS];
 static uint32_t		packetsize[2][NUM_GAME_PACKETS];
 
@@ -132,7 +132,7 @@ bool NETstopLogging(void)
 		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
 		return false;
 	}
-	pFileHandle = NULL;
+	pFileHandle = nullptr;
 
 	return true;
 }

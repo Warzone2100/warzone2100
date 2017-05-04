@@ -193,8 +193,8 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 // ---------------------------------------------------------------------
 void selNextSpecifiedUnit(DROID_TYPE unitType)
 {
-	static DROID *psOldRD = NULL; // pointer to last selected repair unit
-	DROID *psResult = NULL, *psFirst = NULL;
+	static DROID *psOldRD = nullptr; // pointer to last selected repair unit
+	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
@@ -297,8 +297,8 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 // ---------------------------------------------------------------------
 void selNextUnassignedUnit()
 {
-	static DROID *psOldNS = NULL;
-	DROID *psResult = NULL, *psFirst = NULL;
+	static DROID *psOldNS = nullptr;
+	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
 	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
@@ -365,7 +365,7 @@ void selNextUnassignedUnit()
 // ---------------------------------------------------------------------
 void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 {
-	STRUCTURE *psResult = NULL, *psOldStruct = NULL, *psFirst = NULL;
+	STRUCTURE *psResult = nullptr, *psOldStruct = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
 	/* Firstly, start coughing if the type is invalid */

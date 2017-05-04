@@ -136,7 +136,7 @@ static char *readShaderBuf(const char *name)
 
 	fp = PHYSFS_openRead(name);
 	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name), name);
-	ASSERT_OR_RETURN(0, fp != NULL, "Could not open %s", name);
+	ASSERT_OR_RETURN(nullptr, fp != nullptr, "Could not open %s", name);
 	filesize = PHYSFS_fileLength(fp);
 	buffer = (char *)malloc(filesize + 1);
 	if (buffer)
@@ -238,7 +238,7 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 
-			glShaderSource(shader, 2, (const char **)buffer, NULL);
+			glShaderSource(shader, 2, (const char **)buffer, nullptr);
 			glCompileShader(shader);
 
 			// Check for compilation errors
@@ -270,7 +270,7 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-			glShaderSource(shader, 2, (const char **)buffer, NULL);
+			glShaderSource(shader, 2, (const char **)buffer, nullptr);
 			glCompileShader(shader);
 
 			// Check for compilation errors

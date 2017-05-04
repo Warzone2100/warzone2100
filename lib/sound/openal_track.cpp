@@ -73,15 +73,15 @@ struct SAMPLE_LIST
 	SAMPLE_LIST    *next;
 };
 
-static SAMPLE_LIST *active_samples = NULL;
+static SAMPLE_LIST *active_samples = nullptr;
 
-static AUDIO_STREAM *active_streams = NULL;
+static AUDIO_STREAM *active_streams = nullptr;
 
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
 
-static ALCdevice *device = NULL;
-static ALCcontext *context = NULL;
+static ALCdevice *device = nullptr;
+static ALCcontext *context = nullptr;
 
 
 /** Removes the given sample from the "active_samples" linked list
@@ -92,7 +92,7 @@ static ALCcontext *context = NULL;
  */
 static void sound_RemoveSample(SAMPLE_LIST *previous, SAMPLE_LIST *to_remove)
 {
-	if (previous != NULL && previous != to_remove)
+	if (previous != nullptr && previous != to_remove)
 	{
 		// Verify that the given two samples actually follow eachother in the list
 		ASSERT(previous->next == to_remove, "Sound samples don't follow eachother in the list, we're probably removing the wrong item.");
@@ -149,7 +149,7 @@ bool sound_InitLibrary(void)
 #endif
 	{
 		// Open default device
-		device = alcOpenDevice(NULL);
+		device = alcOpenDevice(nullptr);
 	}
 
 	if (!device)
@@ -164,7 +164,7 @@ bool sound_InitLibrary(void)
 	ssprintf(buf, "OpenAL Device Name: %s", deviceName);
 	addDumpInfo(buf);
 
-	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
+	context = alcCreateContext(device, nullptr);		//NULL was contextAttributes
 	if (!context)
 	{
 		debug(LOG_ERROR, "Couldn't open audio context.");
@@ -218,7 +218,7 @@ static void sound_UpdateStreams(void);
 void sound_ShutdownLibrary(void)
 {
 	AUDIO_STREAM *stream;
-	SAMPLE_LIST *aSample = active_samples, * tmpSample = NULL;
+	SAMPLE_LIST *aSample = active_samples, * tmpSample = nullptr;
 
 	if (!openal_initialized)
 	{
@@ -227,7 +227,7 @@ void sound_ShutdownLibrary(void)
 	debug(LOG_SOUND, "starting shutdown");
 
 	// Stop all streams, sound_UpdateStreams() will deallocate all stopped streams
-	for (stream = active_streams; stream != NULL; stream = stream->next)
+	for (stream = active_streams; stream != nullptr; stream = stream->next)
 	{
 		sound_StopStream(stream);
 	}
@@ -237,7 +237,7 @@ void sound_ShutdownLibrary(void)
 
 	/* On Linux since this caused some versions of OpenAL to hang on exit. - Per */
 	debug(LOG_SOUND, "make default context NULL");
-	alcMakeContextCurrent(NULL);
+	alcMakeContextCurrent(nullptr);
 	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "destroy previous context");
@@ -256,7 +256,7 @@ void sound_ShutdownLibrary(void)
 		free(aSample);
 		aSample = tmpSample;
 	}
-	active_samples = NULL;
+	active_samples = nullptr;
 }
 
 /** Deletes the given sample and updates the \c previous and \c current iterators
@@ -281,7 +281,7 @@ static void sound_DestroyIteratedSample(SAMPLE_LIST **previous, SAMPLE_LIST **sa
 	free(*sample);
 
 	// Get a pointer to the next node, the previous pointer doesn't change
-	*sample = (*previous != NULL) ? (*previous)->next : active_samples;
+	*sample = (*previous != nullptr) ? (*previous)->next : active_samples;
 }
 
 /** Counts the number of samples in active_samples
@@ -303,7 +303,7 @@ unsigned int sound_GetActiveSamplesCount()
 void sound_Update()
 {
 	SAMPLE_LIST *node = active_samples;
-	SAMPLE_LIST *previous = NULL;
+	SAMPLE_LIST *previous = nullptr;
 	ALCenum err;
 	ALfloat gain;
 
@@ -315,7 +315,7 @@ void sound_Update()
 	// Update all streaming audio
 	sound_UpdateStreams();
 
-	while (node != NULL)
+	while (node != nullptr)
 	{
 		ALenum state, err;
 
@@ -417,10 +417,10 @@ bool sound_QueueSamplePlaying(void)
 	if (current_queue_sample != (ALuint)AL_INVALID)
 	{
 		SAMPLE_LIST *node = active_samples;
-		SAMPLE_LIST *previous = NULL;
+		SAMPLE_LIST *previous = nullptr;
 
 		// We need to remove it from the queue of actively played samples
-		while (node != NULL)
+		while (node != nullptr)
 		{
 			if (node->curr->iSample == current_queue_sample)
 			{
@@ -454,24 +454,24 @@ static inline TRACK *sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file *PHY
 
 	if (!openal_initialized)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, true);
-	if (decoder == NULL)
+	if (decoder == nullptr)
 	{
 		debug(LOG_WARNING, "Failed to open audio file for decoding");
 		free(psTrack);
-		return NULL;
+		return nullptr;
 	}
 
 	soundBuffer = sound_DecodeOggVorbis(decoder, 0);
 	sound_DestroyOggVorbisDecoder(decoder);
 
-	if (soundBuffer == NULL)
+	if (soundBuffer == nullptr)
 	{
 		free(psTrack);
-		return NULL;
+		return nullptr;
 	}
 
 	if (soundBuffer->size == 0)
@@ -518,13 +518,13 @@ TRACK *sound_LoadTrackFromFile(const char *fileName)
 	// Use PhysicsFS to open the file
 	fileHandle = PHYSFS_openRead(fileName);
 	debug(LOG_NEVER, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-	if (fileHandle == NULL)
+	if (fileHandle == nullptr)
 	{
 		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
-		return NULL;
+		return nullptr;
 	}
 
-	if (GetLastResourceFilename() == NULL)
+	if (GetLastResourceFilename() == nullptr)
 	{
 		// This is a non fatal error.  We just can't find filename for some reason.
 		debug(LOG_WARNING, "sound_LoadTrackFromFile: missing resource filename?");
@@ -538,11 +538,11 @@ TRACK *sound_LoadTrackFromFile(const char *fileName)
 	// allocate track, plus the memory required to contain the filename
 	// one malloc call ensures only one free call is required
 	pTrack = (TRACK *)malloc(sizeof(TRACK) + filename_size);
-	if (pTrack == NULL)
+	if (pTrack == nullptr)
 	{
 		debug(LOG_FATAL, "sound_ConstructTrack: couldn't allocate memory\n");
 		abort();
-		return NULL;
+		return nullptr;
 	}
 
 	// Initialize everyting (except for the filename) to zero
@@ -551,7 +551,7 @@ TRACK *sound_LoadTrackFromFile(const char *fileName)
 	// Set filename pointer; if the filename (as returned by
 	// GetLastResourceFilename()) is a NULL pointer, then this will be a
 	// NULL pointer as well.
-	track_name = filename_size ? (char *)(pTrack + 1) : NULL;
+	track_name = filename_size ? (char *)(pTrack + 1) : nullptr;
 
 	// Copy the filename into the struct, if we don't have a NULL pointer
 	if (filename_size != 0)
@@ -588,9 +588,9 @@ static void sound_AddActiveSample(AUDIO_SAMPLE *psSample)
 void sound_RemoveActiveSample(AUDIO_SAMPLE *psSample)
 {
 	SAMPLE_LIST *node = active_samples;
-	SAMPLE_LIST *previous = NULL;
+	SAMPLE_LIST *previous = nullptr;
 
-	while (node != NULL)
+	while (node != nullptr)
 	{
 		if (node->curr->psObj == psSample->psObj)
 		{
@@ -797,15 +797,15 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 	if (!openal_initialized)
 	{
 		debug(LOG_WARNING, "OpenAL isn't initialized, not creating an audio stream");
-		return NULL;
+		return nullptr;
 	}
 
 	stream = (AUDIO_STREAM *)malloc(sizeof(AUDIO_STREAM));
-	if (stream == NULL)
+	if (stream == nullptr)
 	{
 		debug(LOG_FATAL, "sound_PlayStream: Out of memory");
 		abort();
-		return NULL;
+		return nullptr;
 	}
 
 	// Clear error codes
@@ -820,17 +820,17 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 		// Failed to create OpenAL sound source, so bail out...
 		debug(LOG_SOUND, "alGenSources failed, most likely out of sound sources");
 		free(stream);
-		return NULL;
+		return nullptr;
 	}
 
 	stream->fileHandle = fileHandle;
 
 	stream->decoder = sound_CreateOggVorbisDecoder(stream->fileHandle, false);
-	if (stream->decoder == NULL)
+	if (stream->decoder == nullptr)
 	{
 		debug(LOG_ERROR, "sound_PlayStream: Failed to open audio file for decoding");
 		free(stream);
-		return NULL;
+		return nullptr;
 	}
 
 	stream->volume = volume;
@@ -895,7 +895,7 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 		// Free allocated memory
 		free(stream);
 
-		return NULL;
+		return nullptr;
 	}
 
 	// Attach the OpenAL buffers to our OpenAL source
@@ -949,7 +949,7 @@ bool sound_isStreamPlaying(AUDIO_STREAM *stream)
  */
 void sound_StopStream(AUDIO_STREAM *stream)
 {
-	assert(stream != NULL);
+	assert(stream != nullptr);
 
 	alGetError();	// clear error codes
 	// Tell OpenAL to stop playing on the given source
@@ -1162,9 +1162,9 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
  */
 static void sound_UpdateStreams()
 {
-	AUDIO_STREAM *stream = active_streams, *previous = NULL, *next = NULL;
+	AUDIO_STREAM *stream = active_streams, *previous = nullptr, *next = nullptr;
 
-	while (stream != NULL)
+	while (stream != nullptr)
 	{
 		next = stream->next;
 

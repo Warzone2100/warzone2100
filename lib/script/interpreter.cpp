@@ -148,7 +148,7 @@ SDWORD aOpSize[] =
 };
 
 /* The type equivalence table */
-static TYPE_EQUIV *asInterpTypeEquiv = NULL;
+static TYPE_EQUIV *asInterpTypeEquiv = nullptr;
 
 // whether the interpreter is running
 static bool		bInterpRunning = false;
@@ -156,7 +156,7 @@ static bool		bInterpRunning = false;
 /* Whether to output trace information */
 static bool	interpTrace = false;
 
-static SCRIPT_CODE *psCurProg = NULL;
+static SCRIPT_CODE *psCurProg = nullptr;
 static bool bCurCallerIsEvent = false;
 
 /* Print out trace info if tracing is turned on */
@@ -273,7 +273,7 @@ static bool interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 // Initialise the interpreter
 bool interpInitialise(void)
 {
-	asInterpTypeEquiv = NULL;
+	asInterpTypeEquiv = nullptr;
 
 	return true;
 }
@@ -287,8 +287,8 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	VAL_CHUNK		*psGlobals;
 	UDWORD			numGlobals = 0;
 	INTERP_VAL		*pCodeStart, *pCodeEnd, *pCodeBase;
-	SCRIPT_FUNC		scriptFunc = 0;
-	SCRIPT_VARFUNC	scriptVarFunc = 0;
+	SCRIPT_FUNC		scriptFunc = nullptr;
+	SCRIPT_VARFUNC	scriptVarFunc = nullptr;
 	SCRIPT_CODE		*psProg;
 	SDWORD			instructionCount = 0;
 
@@ -297,12 +297,12 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	UDWORD			callDepth = 0;
 	bool			bTraceOn = false;		//enable to debug function/event calls
 
-	ASSERT(psContext != NULL, "Invalid context pointer");
+	ASSERT(psContext != nullptr, "Invalid context pointer");
 
 	psProg = psContext->psCode;
 	psCurProg = psProg;		//remember for future use
 
-	ASSERT(psProg != NULL, "Invalid script code pointer");
+	ASSERT(psProg != nullptr, "Invalid script code pointer");
 
 	if (bInterpRunning)
 	{
@@ -898,7 +898,7 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 
 	}
 
-	psCurProg = NULL;
+	psCurProg = nullptr;
 	TRCPRINTF("%-6d  EXIT\n", (int)(InstrPointer - psProg->pCode));
 
 	bInterpRunning = false;
@@ -926,7 +926,7 @@ exit_with_error:
 
 	/* Output script call trace */
 	scrOutputCallTrace(LOG_ERROR);
-	psCurProg = NULL;
+	psCurProg = nullptr;
 
 	TRCPRINTF("*** ERROR EXIT ***\n");
 
@@ -1119,14 +1119,14 @@ void scrOutputCallTrace(code_part part)
 		return;
 	}
 
-	if (psCurProg == NULL)
+	if (psCurProg == nullptr)
 	{
 		return;
 	}
 
 	debug(part, "%d: %s (current event)", retStackPos + 1, &(last_called_script_event[0]));
 
-	if (psCurProg->psDebug != NULL)
+	if (psCurProg->psDebug != nullptr)
 	{
 		for (i = retStackPos; i >= 0; i--)
 		{
@@ -1174,7 +1174,7 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 	}
 	else
 	{
-		varEnvironment[callDepth] = NULL;
+		varEnvironment[callDepth] = nullptr;
 	}
 }
 
@@ -1183,12 +1183,12 @@ static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIn
 	UDWORD i;
 	UDWORD numEventVars = 0;
 
-	if (psContext != NULL)
+	if (psContext != nullptr)
 	{
 		numEventVars = psContext->psCode->numLocalVars[eventIndex];
 	}
 
-	if (varEnvironment[envIndex] != NULL)
+	if (varEnvironment[envIndex] != nullptr)
 	{
 		// deallocate string space
 		for (i = 0; i < numEventVars; i++)
@@ -1196,12 +1196,12 @@ static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIn
 			if (varEnvironment[envIndex][i].type == VAL_STRING)
 			{
 				free(varEnvironment[envIndex][i].v.sval);
-				varEnvironment[envIndex][i].v.sval = NULL;
+				varEnvironment[envIndex][i].v.sval = nullptr;
 			}
 		}
 
 		free(varEnvironment[envIndex]);
-		varEnvironment[envIndex] = NULL;
+		varEnvironment[envIndex] = nullptr;
 	}
 }
 
@@ -1212,6 +1212,6 @@ static void cleanupVarEnvironments(void)
 
 	for (i = 0; i < retStackCallDepth(); i++)
 	{
-		destroyVarEnvironment(NULL, i, 0);
+		destroyVarEnvironment(nullptr, i, 0);
 	}
 }

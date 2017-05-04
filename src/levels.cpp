@@ -70,11 +70,11 @@ static	char	currentLevelName[32] = { "main" };
 LEVEL_LIST psLevels;
 
 // the currently loaded data set
-static LEVEL_DATASET	*psBaseData = NULL;
-static LEVEL_DATASET	*psCurrLevel = NULL;
+static LEVEL_DATASET	*psBaseData = nullptr;
+static LEVEL_DATASET	*psCurrLevel = nullptr;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = {LDS_COMPLETE, 0, 0, 0, mod_clean, {0}, 0, 0, 0, {{0}}};
+static LEVEL_DATASET	sSingleWRF = {LDS_COMPLETE, 0, 0, nullptr, mod_clean, {nullptr}, nullptr, nullptr, nullptr, {{0}}};
 
 // return values from the lexer
 char *pLevToken;
@@ -100,8 +100,8 @@ enum LEVELPARSER_STATE
 bool levInitialise(void)
 {
 	psLevels.clear();
-	psBaseData = NULL;
-	psCurrLevel = NULL;
+	psBaseData = nullptr;
+	psCurrLevel = nullptr;
 
 	return true;
 }
@@ -118,7 +118,7 @@ void levShutDown(void)
 	{
 		for (int i = 0; i < ARRAY_SIZE(toDelete->apDataFiles); ++i)
 		{
-			if (toDelete->apDataFiles[i] != NULL)
+			if (toDelete->apDataFiles[i] != nullptr)
 			{
 				free(toDelete->apDataFiles[i]);
 			}
@@ -144,28 +144,28 @@ void lev_error(const char *msg)
  */
 LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 {
-	if (hash != NULL && hash->isZero())
+	if (hash != nullptr && hash->isZero())
 	{
-		hash = NULL;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
+		hash = nullptr;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
 	}
 
 	for (auto psNewLevel : psLevels)
 	{
 		if (psNewLevel->pName && strcmp(psNewLevel->pName, name) == 0)
 		{
-			if (hash == NULL || levGetFileHash(psNewLevel) == *hash)
+			if (hash == nullptr || levGetFileHash(psNewLevel) == *hash)
 			{
 				return psNewLevel;
 			}
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 Sha256 levGetFileHash(LEVEL_DATASET *level)
 {
-	if (level->realFileName != NULL && level->realFileHash.isZero())
+	if (level->realFileName != nullptr && level->realFileHash.isZero())
 	{
 		level->realFileHash = findHashOfFile(level->realFileName);
 		debug(LOG_WZ, "Hash of file \"%s\" is %s.", level->realFileName, level->realFileHash.toString().c_str());
@@ -175,8 +175,8 @@ Sha256 levGetFileHash(LEVEL_DATASET *level)
 
 Sha256 levGetMapNameHash(char const *mapName)
 {
-	LEVEL_DATASET *level = levFindDataSet(mapName, NULL);
-	if (level == NULL)
+	LEVEL_DATASET *level = levFindDataSet(mapName, nullptr);
+	if (level == nullptr)
 	{
 		debug(LOG_WARNING, "Couldn't find map \"%s\" to hash.", mapName);
 		Sha256 zero;
@@ -194,7 +194,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 	lexerinput_t input;
 	LEVELPARSER_STATE state;
 	int token, currData = -1;
-	LEVEL_DATASET	*psDataSet = NULL;
+	LEVEL_DATASET	*psDataSet = nullptr;
 
 	input.type = LEXINPUT_BUFFER;
 	input.input.buffer.begin = buffer;
@@ -231,7 +231,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				psDataSet->players = 1;
 				psDataSet->game = -1;
 				psDataSet->dataDir = datadir;
-				psDataSet->realFileName = realFileName != NULL ? strdup(realFileName) : NULL;
+				psDataSet->realFileName = realFileName != nullptr ? strdup(realFileName) : nullptr;
 				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
 				psLevels.push_back(psDataSet);
 				currData = 0;
@@ -384,7 +384,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 					// This is a campaign change dataset, we need to find the full data set.
 					LEVEL_DATASET *const psFoundData = levFindDataSet(pLevToken);
 
-					if (psFoundData == NULL)
+					if (psFoundData == nullptr)
 					{
 						lev_error("Cannot find full data set for camchange");
 						return false;
@@ -399,7 +399,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				}
 				// store the level name
 				psDataSet->pName = strdup(pLevToken);
-				if (psDataSet->pName == NULL)
+				if (psDataSet->pName == nullptr)
 				{
 					debug(LOG_FATAL, "Out of memory!");
 					abort();
@@ -413,7 +413,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				// find the dataset
 				psDataSet->psBaseData = levFindDataSet(pLevToken);
 
-				if (psDataSet->psBaseData == NULL)
+				if (psDataSet->psBaseData == nullptr)
 				{
 					lev_error("Unknown dataset");
 					return false;
@@ -485,7 +485,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 bool levReleaseMissionData(void)
 {
 	// release old data if any was loaded
-	if (psCurrLevel != NULL)
+	if (psCurrLevel != nullptr)
 	{
 		if (!stageThreeShutDown())
 		{
@@ -497,7 +497,7 @@ bool levReleaseMissionData(void)
 		{
 			if (i == psCurrLevel->game)
 			{
-				if (psCurrLevel->psBaseData == NULL)
+				if (psCurrLevel->psBaseData == nullptr)
 				{
 					if (!stageTwoShutDown())
 					{
@@ -522,7 +522,7 @@ bool levReleaseAll(void)
 	initEffectsSystem();
 
 	// release old data if any was loaded
-	if (psCurrLevel != NULL)
+	if (psCurrLevel != nullptr)
 	{
 		if (!levReleaseMissionData())
 		{
@@ -531,7 +531,7 @@ bool levReleaseAll(void)
 		}
 
 		// release the game data
-		if (psCurrLevel->psBaseData != NULL)
+		if (psCurrLevel->psBaseData != nullptr)
 		{
 			if (!stageTwoShutDown())
 			{
@@ -559,7 +559,7 @@ bool levReleaseAll(void)
 		}
 	}
 
-	psCurrLevel = NULL;
+	psCurrLevel = nullptr;
 
 	return true;
 }
@@ -618,7 +618,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	bool            bCamChangeSaveGame;
 
-	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == NULL ? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
+	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == nullptr ? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
 	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		if (!levReleaseAll())
@@ -632,7 +632,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 	// find the level dataset
 	psNewLevel = levFindDataSet(name, hash);
-	if (psNewLevel == NULL)
+	if (psNewLevel == nullptr)
 	{
 		debug(LOG_INFO, "Dataset %s not found - trying to load as WRF", name);
 		return levLoadSingleWRF(name);
@@ -645,7 +645,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	bCamChangeSaveGame = false;
 	if (pSaveName && saveType == GTYPE_SAVE_START)
 	{
-		if (psNewLevel->psChange != NULL)
+		if (psNewLevel->psChange != nullptr)
 		{
 			bCamChangeSaveGame = true;
 			debug(LOG_WZ, "** CAMCHANGE FOUND");
@@ -653,8 +653,8 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// select the change dataset if there is one
-	psChangeLevel = NULL;
-	if (((psNewLevel->psChange != NULL) && (psCurrLevel != NULL)) || bCamChangeSaveGame)
+	psChangeLevel = nullptr;
+	if (((psNewLevel->psChange != nullptr) && (psCurrLevel != nullptr)) || bCamChangeSaveGame)
 	{
 		//store the level name
 		debug(LOG_WZ, "Found CAMCHANGE dataset");
@@ -670,7 +670,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 	else
 	{
-		if (psCurrLevel != NULL)
+		if (psCurrLevel != nullptr)
 		{
 			if ((psCurrLevel->psBaseData != psNewLevel->psBaseData) ||
 			    (psCurrLevel->type < LDS_NONE && psNewLevel->type  >= LDS_NONE) ||
@@ -692,9 +692,9 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 
 		// setup the correct dataset to load if necessary
-		if (psCurrLevel == NULL)
+		if (psCurrLevel == nullptr)
 		{
-			if (psNewLevel->psBaseData != NULL)
+			if (psNewLevel->psBaseData != nullptr)
 			{
 				debug(LOG_WZ, "Setting base dataset to load: %s", psNewLevel->psBaseData->pName);
 			}
@@ -703,7 +703,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		else
 		{
 			debug(LOG_WZ, "No base dataset to load");
-			psBaseData = NULL;
+			psBaseData = nullptr;
 		}
 	}
 
@@ -714,7 +714,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// reset the old mission data if necessary
-	if (psCurrLevel != NULL)
+	if (psCurrLevel != nullptr)
 	{
 		debug(LOG_WZ, "Reseting old mission data");
 		if (!levReleaseMissionData())
@@ -725,7 +725,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// need to free the current map and droids etc for a save game
-	if (psBaseData == NULL && pSaveName != NULL)
+	if (psBaseData == nullptr && pSaveName != nullptr)
 	{
 		if (!saveGameReset())
 		{
@@ -735,7 +735,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// initialise if necessary
-	if (psNewLevel->type == LDS_COMPLETE || psBaseData != NULL)
+	if (psNewLevel->type == LDS_COMPLETE || psBaseData != nullptr)
 	{
 		debug(LOG_WZ, "Calling stageOneInitialise!");
 		if (!stageOneInitialise())
@@ -746,7 +746,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// load up a base dataset if necessary
-	if (psBaseData != NULL)
+	if (psBaseData != nullptr)
 	{
 		debug(LOG_WZ, "Loading base dataset %s", psBaseData->pName);
 		for (int i = 0; i < LEVEL_MAXFILES; i++)
@@ -775,9 +775,9 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	{
 		ASSERT(psNewLevel->type == LDS_BETWEEN, "Only BETWEEN missions do not need a .gam file");
 		debug(LOG_WZ, "No .gam file for level: BETWEEN mission");
-		if (pSaveName != NULL)
+		if (pSaveName != nullptr)
 		{
-			if (psBaseData != NULL)
+			if (psBaseData != nullptr)
 			{
 				if (!stageTwoInitialise())
 				{
@@ -808,10 +808,10 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 		}
 
-		if (pSaveName == NULL || saveType == GTYPE_SAVE_START)
+		if (pSaveName == nullptr || saveType == GTYPE_SAVE_START)
 		{
 			debug(LOG_NEVER, "Start mission - no .gam");
-			if (!startMission((LEVEL_TYPE)psNewLevel->type, NULL))
+			if (!startMission((LEVEL_TYPE)psNewLevel->type, nullptr))
 			{
 				debug(LOG_ERROR, "Failed startMission(%d)!", psNewLevel->type);
 				return false;
@@ -822,9 +822,9 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	//we need to load up the save game data here for a camchange
 	if (bCamChangeSaveGame)
 	{
-		if (pSaveName != NULL)
+		if (pSaveName != nullptr)
 		{
-			if (psBaseData != NULL)
+			if (psBaseData != nullptr)
 			{
 				if (!stageTwoInitialise())
 				{
@@ -852,7 +852,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		if (psNewLevel->game == i)
 		{
 			// do some more initialising if necessary
-			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= LDS_MULTI_TYPE_START || (psBaseData != NULL && !bCamChangeSaveGame))
+			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= LDS_MULTI_TYPE_START || (psBaseData != nullptr && !bCamChangeSaveGame))
 			{
 				if (!stageTwoInitialise())
 				{
@@ -862,7 +862,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			// load a savegame if there is one - but not if already done so
-			if (pSaveName != NULL && !bCamChangeSaveGame)
+			if (pSaveName != nullptr && !bCamChangeSaveGame)
 			{
 				//set the mission type before the saveGame data is loaded
 				if (saveType == GTYPE_SAVE_MIDMISSION)
@@ -886,7 +886,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				}
 			}
 
-			if (pSaveName == NULL || saveType == GTYPE_SAVE_START)
+			if (pSaveName == nullptr || saveType == GTYPE_SAVE_START)
 			{
 				// load the game
 				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i]);
@@ -984,7 +984,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	if (pSaveName != NULL)
+	if (pSaveName != nullptr)
 	{
 		//load MidMission Extras
 		if (!loadMissionExtras(pSaveName, psNewLevel->type))
@@ -998,7 +998,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	{
 		loadMultiScripts();
 	}
-	if (pSaveName != NULL && saveType == GTYPE_SAVE_MIDMISSION)
+	if (pSaveName != nullptr && saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load script stuff
 		// load the event system state here for a save game
@@ -1026,7 +1026,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	//restore the level name for comparisons on next mission load up
-	if (psChangeLevel == NULL)
+	if (psChangeLevel == nullptr)
 	{
 		psCurrLevel = psNewLevel;
 	}

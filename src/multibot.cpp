@@ -244,8 +244,8 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
  */
 bool recvDroidDisEmbark(NETQUEUE queue)
 {
-	DROID *psFoundDroid = NULL, *psTransporterDroid = NULL;
-	DROID *psCheckDroid = NULL;
+	DROID *psFoundDroid = nullptr, *psTransporterDroid = nullptr;
+	DROID *psCheckDroid = nullptr;
 
 	NETbeginDecode(queue, GAME_DROIDDISEMBARK);
 	{
@@ -331,7 +331,7 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_DROID);
 	{
 		Position pos(x, y, 0);
-		bool haveInitialOrders = initialOrdersP != NULL;
+		bool haveInitialOrders = initialOrdersP != nullptr;
 		int32_t droidType = pTemplate->droidType;
 
 		NETuint8_t(&player);
@@ -370,7 +370,7 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 bool recvDroid(NETQUEUE queue)
 {
 	DROID_TEMPLATE t, *pT = &t;
-	DROID *psDroid = NULL;
+	DROID *psDroid = nullptr;
 	uint8_t player = 0;
 	uint32_t id = 0;
 	Position pos(0, 0, 0);
@@ -567,7 +567,7 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 
 	info.player = psDroid->player;
 	info.droidId = psDroid->id;
-	info.subType = order.psObj != NULL ? ObjOrder : LocOrder;
+	info.subType = order.psObj != nullptr ? ObjOrder : LocOrder;
 	info.order = order.type;
 	if (info.subType == ObjOrder)
 	{
@@ -620,7 +620,7 @@ bool recvDroidInfo(NETQUEUE queue)
 		memset(&info, 0x00, sizeof(info));
 		NETQueuedDroidInfo(&info);
 
-		STRUCTURE_STATS *psStats = NULL;
+		STRUCTURE_STATS *psStats = nullptr;
 		if (info.subType == LocOrder && (info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD))
 		{
 			// Find structure target
@@ -723,12 +723,12 @@ static BASE_OBJECT *processDroidTarget(OBJECT_TYPE desttype, uint32_t destid)
 	// Target is a location
 	if (destid == 0 && desttype == 0)
 	{
-		return NULL;
+		return nullptr;
 	}
 	// Target is an object
 	else
 	{
-		BASE_OBJECT *psObj = NULL;
+		BASE_OBJECT *psObj = nullptr;
 
 		switch (desttype)
 		{

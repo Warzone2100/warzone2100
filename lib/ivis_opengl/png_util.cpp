@@ -52,15 +52,15 @@ static void wzpng_flush_data(png_structp png_ptr)
 
 static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file *fileHandle)
 {
-	if (*info_ptr != NULL)
+	if (*info_ptr != nullptr)
 	{
 		png_destroy_info_struct(*png_ptr, info_ptr);
 	}
-	if (*png_ptr != NULL)
+	if (*png_ptr != nullptr)
 	{
-		png_destroy_read_struct(png_ptr, NULL, NULL);
+		png_destroy_read_struct(png_ptr, nullptr, nullptr);
 	}
-	if (fileHandle != NULL)
+	if (fileHandle != nullptr)
 	{
 		PHYSFS_close(fileHandle);
 	}
@@ -68,15 +68,15 @@ static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHY
 
 static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file *fileHandle)
 {
-	if (*info_ptr != NULL)
+	if (*info_ptr != nullptr)
 	{
 		png_destroy_info_struct(*png_ptr, info_ptr);
 	}
-	if (*png_ptr != NULL)
+	if (*png_ptr != nullptr)
 	{
-		png_destroy_write_struct(png_ptr, NULL);
+		png_destroy_write_struct(png_ptr, nullptr);
 	}
-	if (fileHandle != NULL)
+	if (fileHandle != nullptr)
 	{
 		PHYSFS_close(fileHandle);
 	}
@@ -87,12 +87,12 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
 	PHYSFS_sint64 readSize;
 
-	png_structp png_ptr = NULL;
-	png_infop info_ptr = NULL;
+	png_structp png_ptr = nullptr;
+	png_infop info_ptr = nullptr;
 
 	// Open file
 	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	ASSERT_OR_RETURN(false, fileHandle != NULL, "Could not open %s: %s", fileName, PHYSFS_getLastError());
+	ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open %s: %s", fileName, PHYSFS_getLastError());
 
 	// Read PNG header from file
 	readSize = PHYSFS_read(fileHandle, PNGheader, 1, PNG_BYTES_TO_CHECK);
@@ -111,8 +111,8 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 		return false;
 	}
 
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (png_ptr == NULL)
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	if (png_ptr == nullptr)
 	{
 		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
@@ -120,7 +120,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL)
+	if (info_ptr == nullptr)
 	{
 		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png info struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
@@ -160,7 +160,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
 //	png_set_gray_1_2_4_to_8(png_ptr);
 
-	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
 
 	image->width = png_get_image_width(png_ptr, info_ptr);
 	image->height = png_get_image_height(png_ptr, info_ptr);
@@ -185,23 +185,23 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
 {
-	unsigned char **volatile scanlines = NULL;  // Must be volatile to reliably preserve value if modified between setjmp/longjmp.
-	png_infop info_ptr = NULL;
-	png_structp png_ptr = NULL;
+	unsigned char **volatile scanlines = nullptr;  // Must be volatile to reliably preserve value if modified between setjmp/longjmp.
+	png_infop info_ptr = nullptr;
+	png_structp png_ptr = nullptr;
 	PHYSFS_file *fileHandle;
 
-	scanlines = NULL;
+	scanlines = nullptr;
 	ASSERT(image->depth != 0, "Bad depth");
 
 	fileHandle = PHYSFS_openWrite(fileName);
-	if (fileHandle == NULL)
+	if (fileHandle == nullptr)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
 		return;
 	}
 
-	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (png_ptr == NULL)
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	if (png_ptr == nullptr)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png struct\n");
 		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
@@ -209,7 +209,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL)
+	if (info_ptr == nullptr)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png info struct\n");
 		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
@@ -233,7 +233,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 		row_stride = image->width * channelsPerPixel * image->depth / 8;
 
 		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * image->height);
-		if (scanlines == NULL)
+		if (scanlines == nullptr)
 		{
 			debug(LOG_ERROR, "pie_PNGSaveFile: Couldn't allocate memory\n");
 			PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
@@ -281,7 +281,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 
 		png_set_rows(png_ptr, info_ptr, (png_bytepp)scanlines);
 
-		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
 	}
 
 	free(scanlines);
@@ -300,8 +300,8 @@ void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image)
 
 void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 {
-	unsigned char *buffer = NULL;
-	unsigned char *jpeg = NULL;
+	unsigned char *buffer = nullptr;
+	unsigned char *jpeg = nullptr;
 	char newfilename[PATH_MAX];
 	unsigned int currentRow;
 	const unsigned int row_stride = image->width * 3; // 3 bytes per pixel
@@ -311,14 +311,14 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	sstrcpy(newfilename, fileName);
 	memcpy(newfilename + strlen(newfilename) - 4, ".jpg", 4);
 	fileHandle = PHYSFS_openWrite(newfilename);
-	if (fileHandle == NULL)
+	if (fileHandle == nullptr)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
 		return;
 	}
 
 	buffer = (unsigned char *)malloc(sizeof(const char *) * image->height * image->width); // Suspect it should be sizeof(unsigned char)*3 == 3 here, not sizeof(const char *) == 8.
-	if (buffer == NULL)
+	if (buffer == nullptr)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
 		return;
@@ -333,7 +333,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	}
 
 	jpeg = (unsigned char *)malloc(sizeof(const char *) * image->height * image->width); // Suspect it should be something else here, but sizeof(const char *) == 8 is hopefully big enough...
-	if (jpeg == NULL)
+	if (jpeg == nullptr)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
 		free(buffer);

@@ -49,7 +49,7 @@
  */
 /***************************************************************************/
 
-static GFX *radarGfx = NULL;
+static GFX *radarGfx = nullptr;
 
 struct PIERECT  ///< Screen rectangle.
 {
@@ -63,7 +63,7 @@ struct PIERECT  ///< Screen rectangle.
 /***************************************************************************/
 
 static bool assertValidImage(IMAGEFILE *imageFile, unsigned id);
-static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0);
+static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = nullptr, int x = 0, int y = 0);
 
 /***************************************************************************/
 /*
@@ -403,7 +403,7 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, i
 	Vector2i pieImage;
 	pieImage.x = image.Width;
 	pieImage.y = image.Height;
-	if (dest != NULL)
+	if (dest != nullptr)
 	{
 		dest->x = x + image.XOffset;
 		dest->y = y + image.YOffset;
@@ -529,7 +529,7 @@ bool pie_InitRadar(void)
 bool pie_ShutdownRadar(void)
 {
 	delete radarGfx;
-	radarGfx = NULL;
+	radarGfx = nullptr;
 	return true;
 }
 

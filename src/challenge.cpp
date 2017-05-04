@@ -248,7 +248,7 @@ bool addChallenges()
 
 	// add challenges to buttons
 	files = PHYSFS_enumerateFiles(sSearchPath);
-	for (i = files; *i != NULL; ++i)
+	for (i = files; *i != nullptr; ++i)
 	{
 		W_BUTTON *button;
 		QString name, map, difficulty, highscore, description;
@@ -319,7 +319,7 @@ bool addChallenges()
 bool closeChallenges()
 {
 	delete psRequestScreen;
-	psRequestScreen = NULL;
+	psRequestScreen = nullptr;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
 	challengesUp = false;

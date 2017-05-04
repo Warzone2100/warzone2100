@@ -37,13 +37,13 @@ static const size_t bufferSize = 16 * 1024;
 static const unsigned int buffer_count = 32;
 static bool		music_initialized = false;
 static bool		stopping = true;
-static AUDIO_STREAM *cdStream = NULL;
+static AUDIO_STREAM *cdStream = nullptr;
 
 bool cdAudio_Open(const char *user_musicdir)
 {
 	PlayList_Init();
 
-	if (user_musicdir == NULL
+	if (user_musicdir == nullptr
 	    || !PlayList_Read(user_musicdir))
 	{
 		return false;
@@ -84,14 +84,14 @@ static bool cdAudio_OpenTrack(const char *filename)
 		PHYSFS_file *music_file = PHYSFS_openRead(filename);
 
 		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename), filename);
-		if (music_file == NULL)
+		if (music_file == nullptr)
 		{
 			debug(LOG_ERROR, "Failed opening file [directory: %s] %s, with error %s", PHYSFS_getRealDir(filename), filename, PHYSFS_getLastError());
 			return false;
 		}
 
 		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, (char *)filename, bufferSize, buffer_count);
-		if (cdStream == NULL)
+		if (cdStream == nullptr)
 		{
 			PHYSFS_close(music_file);
 			debug(LOG_ERROR, "Failed creating audio stream for %s", filename);
@@ -111,9 +111,9 @@ static void cdAudio_TrackFinished(void *user_data)
 	const char *filename = PlayList_NextSong();
 
 	// This pointer is now officially invalidated; so set it to NULL
-	cdStream = NULL;
+	cdStream = nullptr;
 
-	if (filename == NULL)
+	if (filename == nullptr)
 	{
 		debug(LOG_ERROR, "Out of playlist?! was playing %s", (char *)user_data);
 		return;
@@ -138,7 +138,7 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 		{
 			const char *filename = PlayList_CurrentSong();
 
-			if (filename == NULL)
+			if (filename == nullptr)
 			{
 				return false;
 			}
@@ -160,7 +160,7 @@ void cdAudio_Stop()
 	if (cdStream)
 	{
 		sound_StopStream(cdStream);
-		cdStream = NULL;
+		cdStream = nullptr;
 		sound_Update();
 	}
 }

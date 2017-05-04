@@ -40,7 +40,7 @@ static SDWORD			g_iCurTracks = 0;
 
 // flag set when system is active (for callbacks etc)
 static bool				g_bSystemActive = false;
-static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
+static AUDIO_CALLBACK	g_pStopTrackCallback = nullptr;
 
 //*
 // =======================================================================================================================
@@ -96,14 +96,14 @@ unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 	unsigned int trackID;
 	TRACK *psTrack;
 
-	if (fileName == NULL || strlen(fileName) == 0) // check for empty filename.  This is a non fatal error.
+	if (fileName == nullptr || strlen(fileName) == 0) // check for empty filename.  This is a non fatal error.
 	{
-		debug(LOG_WARNING, "fileName is %s", (fileName == NULL) ? "a NULL pointer" : "empty");
+		debug(LOG_WARNING, "fileName is %s", (fileName == nullptr) ? "a NULL pointer" : "empty");
 		return 0;
 	}
 
 	psTrack = (TRACK *)resGetData("WAV", fileName);
-	if (psTrack == NULL)
+	if (psTrack == nullptr)
 	{
 		debug(LOG_WARNING, "track %s resource not found", fileName);
 		return 0;
@@ -117,7 +117,7 @@ unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 		trackID = sound_GetAvailableID();
 	}
 
-	if (g_apTrack[trackID] != NULL)
+	if (g_apTrack[trackID] != nullptr)
 	{
 		debug(LOG_ERROR, "sound_SetTrackVals: track %i already set (filename: \"%s\"\n", trackID, g_apTrack[trackID]->fileName);
 		return 0;
@@ -163,7 +163,7 @@ void sound_ReleaseTrack(TRACK *psTrack)
 	{
 		if (*currTrack == psTrack)
 		{
-			*currTrack = NULL;
+			*currTrack = nullptr;
 		}
 	}
 
@@ -181,7 +181,7 @@ void sound_CheckAllUnloaded(void)
 
 	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
 	{
-		ASSERT(*currTrack == NULL, "A track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->fileName);
+		ASSERT(*currTrack == nullptr, "A track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->fileName);
 	}
 }
 
@@ -217,7 +217,7 @@ bool sound_CheckTrack(SDWORD iTrack)
 		return false;
 	}
 
-	if (g_apTrack[iTrack] == NULL)
+	if (g_apTrack[iTrack] == nullptr)
 	{
 		debug(LOG_SOUND, "Track %i NULL\n", iTrack);
 		return false;
@@ -267,9 +267,9 @@ const char *sound_GetTrackName(SDWORD iTrack)
 	if (iTrack <= 0
 	    || iTrack >= MAX_TRACKS
 	    || iTrack == SAMPLE_NOT_FOUND
-	    || g_apTrack[iTrack] == NULL)
+	    || g_apTrack[iTrack] == nullptr)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	return g_apTrack[iTrack]->fileName;
@@ -317,12 +317,12 @@ bool sound_Play3DTrack(AUDIO_SAMPLE *psSample)
 //
 void sound_StopTrack(AUDIO_SAMPLE *psSample)
 {
-	ASSERT_OR_RETURN(, psSample != NULL, "Sample pointer invalid");
+	ASSERT_OR_RETURN(, psSample != nullptr, "Sample pointer invalid");
 
 	sound_StopSample(psSample);
 
 	// do stopped callback
-	if (g_pStopTrackCallback != NULL && psSample->psObj != NULL)
+	if (g_pStopTrackCallback != nullptr && psSample->psObj != nullptr)
 	{
 		g_pStopTrackCallback(psSample->psObj);
 	}
@@ -343,15 +343,15 @@ void sound_PauseTrack(AUDIO_SAMPLE *psSample)
 //
 void sound_FinishedCallback(AUDIO_SAMPLE *psSample)
 {
-	ASSERT(psSample != NULL, "sound_FinishedCallback: sample pointer invalid\n");
+	ASSERT(psSample != nullptr, "sound_FinishedCallback: sample pointer invalid\n");
 
-	if (g_apTrack[psSample->iTrack] != NULL)
+	if (g_apTrack[psSample->iTrack] != nullptr)
 	{
 		g_apTrack[psSample->iTrack]->iTimeLastFinished = sound_GetGameTime();
 	}
 
 	// call user callback if specified
-	if (psSample->pCallback != NULL)
+	if (psSample->pCallback != nullptr)
 	{
 		psSample->pCallback(psSample->psObj);
 		// NOTE: we must invalidate the iAudioID (iTrack) so the game knows to add the
@@ -375,7 +375,7 @@ SDWORD sound_GetTrackID(TRACK *psTrack)
 {
 	unsigned int i;
 
-	if (psTrack == NULL)
+	if (psTrack == nullptr)
 	{
 		return SAMPLE_NOT_FOUND;
 	}
@@ -409,7 +409,7 @@ SDWORD sound_GetAvailableID()
 	// Iterate through the list of tracks until we find an unused ID slot
 	for (i = ID_SOUND_NEXT; i < MAX_TRACKS; ++i)
 	{
-		if (g_apTrack[i] == NULL)
+		if (g_apTrack[i] == nullptr)
 		{
 			break;
 		}

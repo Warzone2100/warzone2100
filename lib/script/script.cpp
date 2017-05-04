@@ -374,7 +374,7 @@ const char *scriptFunctionToString(SCRIPT_FUNC function)
 	if (asScrInstinctTab)
 	{
 		unsigned int i;
-		for (i = 0; asScrInstinctTab[i].pFunc != NULL; i++)
+		for (i = 0; asScrInstinctTab[i].pFunc != nullptr; i++)
 		{
 			if (asScrInstinctTab[i].pFunc == function)
 			{

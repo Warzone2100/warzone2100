@@ -153,7 +153,7 @@ static void processLeaderSelection(void)
 {
 	DROID *psDroid;
 	DROID *psPresent;
-	DROID *psNew = NULL;
+	DROID *psNew = nullptr;
 	UDWORD leaderClass;
 	bool bSuccess;
 	UDWORD dif;
@@ -394,7 +394,7 @@ bool	processWarCam(void)
 		break;
 	case CAM_RESET:
 		/* Reset camera to pre-droid tracking status */
-		if ((trackingCamera.target == NULL)
+		if ((trackingCamera.target == nullptr)
 		    || (trackingCamera.target->type != OBJ_TARGET))
 		{
 			camSwitchOff();
@@ -476,7 +476,7 @@ BASE_OBJECT	*camFindDroidTarget(void)
 	}
 
 	/* We didn't find one */
-	return (NULL);
+	return (nullptr);
 }
 
 
@@ -998,15 +998,15 @@ DROID *getTrackingDroid(void)
 {
 	if (!getWarCamStatus())
 	{
-		return (NULL);
+		return (nullptr);
 	}
 	if (trackingCamera.status != CAM_TRACKING)
 	{
-		return (NULL);
+		return (nullptr);
 	}
 	if (trackingCamera.target->type != OBJ_DROID)
 	{
-		return (NULL);
+		return (nullptr);
 	}
 	return ((DROID *)trackingCamera.target);
 }

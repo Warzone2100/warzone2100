@@ -50,7 +50,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	CHECK_OBJECT(psAttacker);
 	CHECK_OBJECT(psTarget);
-	ASSERT(psWeap != NULL, "Invalid weapon pointer");
+	ASSERT(psWeap != nullptr, "Invalid weapon pointer");
 
 	/* Don't shoot if the weapon_slot of a vtol is empty */
 	if (psAttacker->type == OBJ_DROID && isVtolDroid(((DROID *)psAttacker))
@@ -280,7 +280,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(360)), missDist), 0);
 		predict += miss;
 
-		psTarget = NULL;  // Missed the target, so don't expect to hit it.
+		psTarget = nullptr;  // Missed the target, so don't expect to hit it.
 
 		objTrace(psAttacker->id, "combFire: Missed shot by (%4d,%4d)", miss.x, miss.y);
 		syncDebug("miss=(%d,%d,%d)", predict.x, predict.y, predict.z);
@@ -302,9 +302,9 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	projectile is sent - we may have to cater for these at some point*/
 	// also ignore cases where you attack your own player
 	// Also ignore cases where there are already 1000 missiles heading towards the attacker.
-	if (psTarget == NULL
-	    || (psAttacker != NULL && psAttacker->player == psTarget->player)
-	    || (psAttacker != NULL && aiObjectIsProbablyDoomed(psAttacker, false)))
+	if (psTarget == nullptr
+	    || (psAttacker != nullptr && psAttacker->player == psTarget->player)
+	    || (psAttacker != nullptr && aiObjectIsProbablyDoomed(psAttacker, false)))
 	{
 		return;
 	}
@@ -471,7 +471,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	unsigned int damage;
 	int actualDamage, armour, level = 1;
 
-	if (psTarget == NULL)
+	if (psTarget == nullptr)
 	{
 		return 0;    // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
 	}

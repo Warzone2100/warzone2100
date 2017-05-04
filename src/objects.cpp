@@ -54,10 +54,10 @@ bool objShutdown(void)
 the last and the last entry becomes the first!*/
 void reverseObjectList(BASE_OBJECT **ppsList)
 {
-	BASE_OBJECT *psPrev = NULL;
+	BASE_OBJECT *psPrev = nullptr;
 	BASE_OBJECT *psCurrent = *ppsList;
 
-	while (psCurrent != NULL)
+	while (psCurrent != nullptr)
 	{
 		BASE_OBJECT *psNext = psCurrent->psNext;
 		psCurrent->psNext = psPrev;

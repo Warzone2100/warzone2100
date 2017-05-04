@@ -39,7 +39,7 @@ const char *version_getVersionString()
 {
 	static const char *version_string = nullptr;
 
-	if (version_string == NULL)
+	if (version_string == nullptr)
 	{
 		if (strlen(vcs_tag))
 		{

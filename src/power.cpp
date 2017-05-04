@@ -252,7 +252,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 //returns the relevant list based on OffWorld or OnWorld
 STRUCTURE *powerStructList(int player)
 {
-	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "Invalid player %d", player);
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (offWorldKeepLists)
 	{
 		return (mission.apsStructLists[player]);
@@ -273,7 +273,7 @@ void updatePlayerPower(int player, int ticks)
 
 	syncDebugEconomy(player, '<');
 
-	for (psStruct = powerStructList(player); psStruct != NULL; psStruct = psStruct->psNext)
+	for (psStruct = powerStructList(player); psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
 		{
@@ -303,7 +303,7 @@ static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 			//check not died
 			if (psPowerGen->apResExtractors[i]->died)
 			{
-				psPowerGen->apResExtractors[i] = NULL;
+				psPowerGen->apResExtractors[i] = nullptr;
 			}
 			else
 			{

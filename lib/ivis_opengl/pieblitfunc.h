@@ -81,7 +81,7 @@ public:
 
 	/// Allocate space on the GPU for texture of given parameters. If image is non-NULL,
 	/// then that memory buffer is uploaded to the GPU.
-	void makeTexture(int width, int height, GLenum filter = GL_LINEAR, GLenum format = GL_RGBA, const GLvoid *image = NULL);
+	void makeTexture(int width, int height, GLenum filter = GL_LINEAR, GLenum format = GL_RGBA, const GLvoid *image = nullptr);
 
 	/// Upload given memory buffer to already allocated texture space on the GPU
 	void updateTexture(const GLvoid *image, int width = -1, int height = -1);

@@ -100,7 +100,7 @@ enum STRUCT_ANIM_STATES
 //this structure is used to hold the permenant stats for each type of building
 struct STRUCTURE_STATS : public BASE_STATS
 {
-	STRUCTURE_STATS() : pBaseIMD(NULL), pECM(NULL), pSensor(NULL) {};
+	STRUCTURE_STATS() : pBaseIMD(nullptr), pECM(nullptr), pSensor(nullptr) {};
 
 	STRUCTURE_TYPE type;            /* the type of structure */
 	STRUCT_STRENGTH strength;       /* strength against the weapon effects */
@@ -285,7 +285,7 @@ static const int NUM_FACMOD_TYPES = 2;
 
 struct ProductionRunEntry
 {
-	ProductionRunEntry() : quantity(0), built(0), psTemplate(NULL) {}
+	ProductionRunEntry() : quantity(0), built(0), psTemplate(nullptr) {}
 	void restart()
 	{
 		built = 0;
@@ -305,7 +305,7 @@ struct ProductionRunEntry
 	}
 	bool isValid() const
 	{
-		return psTemplate != NULL && quantity > 0 && built <= quantity;
+		return psTemplate != nullptr && quantity > 0 && built <= quantity;
 	}
 	bool operator ==(DROID_TEMPLATE *t) const;
 

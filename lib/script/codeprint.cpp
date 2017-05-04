@@ -77,7 +77,7 @@ void cpPrintVal(INTERP_VAL value)
 /* Display a value from a program that has been packed with an opcode */
 void cpPrintPackedVal(INTERP_VAL *ip)
 {
-	INTERP_VAL data = {(INTERP_TYPE)(ip->v.ival & OPCODE_DATAMASK), {0}};
+	INTERP_VAL data = {(INTERP_TYPE)(ip->v.ival & OPCODE_DATAMASK), {nullptr}};
 	data.v = (ip + 1)->v;
 
 	cpPrintVal(data);
@@ -91,7 +91,7 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 	if (asScrExternalTab)
 	{
 		unsigned int i;
-		for (i = 0; asScrExternalTab[i].pIdent != NULL; i++)
+		for (i = 0; asScrExternalTab[i].pIdent != nullptr; i++)
 		{
 			if (asScrExternalTab[i].index == index)
 			{
@@ -113,7 +113,7 @@ void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index)
 	if (asScrObjectVarTab)
 	{
 		unsigned int i;
-		for (i = 0; asScrObjectVarTab[i].pIdent != NULL; i++)
+		for (i = 0; asScrObjectVarTab[i].pIdent != nullptr; i++)
 		{
 			if (asScrObjectVarTab[i].index == index)
 			{
@@ -154,17 +154,17 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 	INTERP_VAL		*ip, *end;
 	OPCODE			opcode;
 	UDWORD			data, i, dim;
-	SCRIPT_DEBUG	*psCurrDebug = NULL;
+	SCRIPT_DEBUG	*psCurrDebug = nullptr;
 	int32_t			debugInfo, triggerCode;
 	UDWORD			jumpOffset;
 	VAR_DEBUG		*psCurrVar;
 	ARRAY_DATA		*psCurrArray;
 	ARRAY_DEBUG		*psCurrArrayDebug;
 
-	ASSERT(psProg != NULL,
+	ASSERT(psProg != nullptr,
 	       "cpPrintProgram: Invalid program pointer");
 
-	debugInfo = (psProg->psDebug != NULL);
+	debugInfo = (psProg->psDebug != nullptr);
 
 	if (debugInfo)
 	{
@@ -226,7 +226,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		{
 			// display a label if there is one
 			if ((UDWORD)(ip - psProg->pCode) == psCurrDebug->offset &&
-			    psCurrDebug->pLabel != NULL)
+			    psCurrDebug->pLabel != nullptr)
 			{
 				debug(LOG_NEVER, "label: %s\n", psCurrDebug->pLabel);
 			}
@@ -330,7 +330,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 		debug(LOG_NEVER, "\n");
 
 		ip += aOpSize[opcode];
-		ASSERT((ip <= end) || ip != NULL,
+		ASSERT((ip <= end) || ip != nullptr,
 		       "cpPrintProgram: instruction pointer no longer valid");
 
 		opcode = (OPCODE)(ip->v.ival >> OPCODE_SHIFT);

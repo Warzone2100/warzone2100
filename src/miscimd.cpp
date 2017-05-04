@@ -32,59 +32,59 @@
 static MISC_IMD	miscImds[] =
 {
 	// Previous imd pointer names
-	{NULL, "fxsexp"},	// explosionSmallImd	MI_EXPLOSION_SMALL
-	{NULL, "fxlexp"},	// explosionMediumImd	MI_EXPLOSION_MEDIUM
-	{NULL, "fxdust"},	// constructionImd		MI_CONSTRUCTION
-	{NULL, "fxsmoke"},	// smallSmokeImd		MI_SMALL_SMOKE
-	{NULL, "parthead"},	// babaHeadImd			MI_BABA_HEAD
-	{NULL, "partlegs"},	// babaLegsImd			MI_BABA_LEGS
-	{NULL, "partarm"},	// babaArmImd			MI_BABA_ARM
-	{NULL, "partbody"},	// babaBodyImd			MI_BABA_BODY
-	{NULL, "cybitrkt"},	// cyborgHeadImd		MI_CYBORG_HEAD
-	{NULL, "cybitlg1"},	// cyborgLegsImd		MI_CYBORG_LEGS
-	{NULL, "cybitgun"},	// cyborgArmImd			MI_CYBORG_ARM
-	{NULL, "cybitbod"},	// cyborgBodyImd		MI_CYBORG_BODY
-	{NULL, "fxatexp"},	// waterImd				MI_WATER
-	{NULL, "fxssteam"},	// droidDamageImd		MI_DROID_DAMAGE
-	{NULL, "fxssteam"},	// smallSteamImd		MI_SMALL_STEAM
-	{NULL, "fxplasma"},	// plasmaImd			MI_PLASMA
-	{NULL, "fxblip"},	// blipImd				MI_BLIP
-	{NULL, "cyshadow"},	// shadowImd			MI_SHADOW
-	{NULL, "Mitrnshd"},	// transporterShadowImd	MI_TRANSPORTER_SHADOW
-	{NULL, "fxblood"},	// bloodImd				MI_BLOOD
-	{NULL, "fxssmoke"},	// trailImd				MI_TRAIL
-	{NULL, "fxft"},		// flameImd				MI_FLAME
-	{NULL, "fxpower"},	// teslaImd				MI_TESLA
-	{NULL, "fxmflare"},	// mFlareImd			MI_MFLARE
-	{NULL, "mirain"},	// rainImd				MI_RAIN
-	{NULL, "misnow"},	// snowImd				MI_SNOW
-	{NULL, "fxssplsh"},	// splashImd			MI_SPLASH
+	{nullptr, "fxsexp"},	// explosionSmallImd	MI_EXPLOSION_SMALL
+	{nullptr, "fxlexp"},	// explosionMediumImd	MI_EXPLOSION_MEDIUM
+	{nullptr, "fxdust"},	// constructionImd		MI_CONSTRUCTION
+	{nullptr, "fxsmoke"},	// smallSmokeImd		MI_SMALL_SMOKE
+	{nullptr, "parthead"},	// babaHeadImd			MI_BABA_HEAD
+	{nullptr, "partlegs"},	// babaLegsImd			MI_BABA_LEGS
+	{nullptr, "partarm"},	// babaArmImd			MI_BABA_ARM
+	{nullptr, "partbody"},	// babaBodyImd			MI_BABA_BODY
+	{nullptr, "cybitrkt"},	// cyborgHeadImd		MI_CYBORG_HEAD
+	{nullptr, "cybitlg1"},	// cyborgLegsImd		MI_CYBORG_LEGS
+	{nullptr, "cybitgun"},	// cyborgArmImd			MI_CYBORG_ARM
+	{nullptr, "cybitbod"},	// cyborgBodyImd		MI_CYBORG_BODY
+	{nullptr, "fxatexp"},	// waterImd				MI_WATER
+	{nullptr, "fxssteam"},	// droidDamageImd		MI_DROID_DAMAGE
+	{nullptr, "fxssteam"},	// smallSteamImd		MI_SMALL_STEAM
+	{nullptr, "fxplasma"},	// plasmaImd			MI_PLASMA
+	{nullptr, "fxblip"},	// blipImd				MI_BLIP
+	{nullptr, "cyshadow"},	// shadowImd			MI_SHADOW
+	{nullptr, "Mitrnshd"},	// transporterShadowImd	MI_TRANSPORTER_SHADOW
+	{nullptr, "fxblood"},	// bloodImd				MI_BLOOD
+	{nullptr, "fxssmoke"},	// trailImd				MI_TRAIL
+	{nullptr, "fxft"},		// flameImd				MI_FLAME
+	{nullptr, "fxpower"},	// teslaImd				MI_TESLA
+	{nullptr, "fxmflare"},	// mFlareImd			MI_MFLARE
+	{nullptr, "mirain"},	// rainImd				MI_RAIN
+	{nullptr, "misnow"},	// snowImd				MI_SNOW
+	{nullptr, "fxssplsh"},	// splashImd			MI_SPLASH
 
-	{NULL, "fxexpdrt"},	// kickImd				MI_KICK
-	{NULL, "fxlightr"},	// landingImd			MI_LANDING
-	{NULL, "fxl3dshk"},	// shockImd				MI_SHOCK
+	{nullptr, "fxexpdrt"},	// kickImd				MI_KICK
+	{nullptr, "fxlightr"},	// landingImd			MI_LANDING
+	{nullptr, "fxl3dshk"},	// shockImd				MI_SHOCK
 
-	{NULL, "blipenm"},	// proximityImds[0]	   	MI_BLIP_ENEMY
-	{NULL, "blipres"},	// proximityImds[1]	   	MI_BLIP_RESOURCE
-	{NULL, "blipart"},	// proximityImds[2]	   	MI_BLIP_ARTEFACT
+	{nullptr, "blipenm"},	// proximityImds[0]	   	MI_BLIP_ENEMY
+	{nullptr, "blipres"},	// proximityImds[1]	   	MI_BLIP_RESOURCE
+	{nullptr, "blipart"},	// proximityImds[2]	   	MI_BLIP_ARTEFACT
 
-	{NULL, "miwrek1"},	// wreckageImds[0]		MI_WRECK0
-	{NULL, "miwrek2"},	// wreckageImds[1]		MI_WRECK1
-	{NULL, "miwrek3"},	// wreckageImds[2]		MI_WRECK2
-	{NULL, "miwrek4"},	// wreckageImds[3]		MI_WRECK3
-	{NULL, "miwrek5"},	// wreckageImds[4]		MI_WRECK4
+	{nullptr, "miwrek1"},	// wreckageImds[0]		MI_WRECK0
+	{nullptr, "miwrek2"},	// wreckageImds[1]		MI_WRECK1
+	{nullptr, "miwrek3"},	// wreckageImds[2]		MI_WRECK2
+	{nullptr, "miwrek4"},	// wreckageImds[3]		MI_WRECK3
+	{nullptr, "miwrek5"},	// wreckageImds[4]		MI_WRECK4
 
-	{NULL, "midebr1"},	// debrisImds[0]		MI_DEBRIS0
-	{NULL, "midebr2"},	// debrisImds[1]		MI_DEBRIS1
-	{NULL, "midebr3"},	// debrisImds[2]		MI_DEBRIS2
-	{NULL, "midebr4"},	// debrisImds[3]		MI_DEBRIS3
-	{NULL, "midebr5"},	// debrisImds[4]		MI_DEBRIS4
+	{nullptr, "midebr1"},	// debrisImds[0]		MI_DEBRIS0
+	{nullptr, "midebr2"},	// debrisImds[1]		MI_DEBRIS1
+	{nullptr, "midebr3"},	// debrisImds[2]		MI_DEBRIS2
+	{nullptr, "midebr4"},	// debrisImds[3]		MI_DEBRIS3
+	{nullptr, "midebr5"},	// debrisImds[4]		MI_DEBRIS4
 
-	{NULL, "fxflecht"},	// met hit - for repair centre MI_FIREWORK
+	{nullptr, "fxflecht"},	// met hit - for repair centre MI_FIREWORK
 
 
 
-	{NULL, "END_OF_IMD_LIST"}
+	{nullptr, "END_OF_IMD_LIST"}
 };
 
 // -------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ iIMDShape	*getRandomDebrisImd(void)
 
 	DebrisIMD = getImdFromIndex(MI_DEBRIS0 + rand() % ((MI_DEBRIS4 - MI_DEBRIS0) + 1));
 
-	ASSERT(DebrisIMD != NULL, "getRandomDebrisImd : NULL PIE");
+	ASSERT(DebrisIMD != nullptr, "getRandomDebrisImd : NULL PIE");
 
 	return DebrisIMD;
 }

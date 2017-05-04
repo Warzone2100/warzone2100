@@ -85,7 +85,7 @@ static inline void freeLimitSet(void)
 	{
 		free(ingame.pStructureLimits);
 		ingame.numStructureLimits = 0;
-		ingame.pStructureLimits = NULL;
+		ingame.pStructureLimits = nullptr;
 	}
 }
 

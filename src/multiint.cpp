@@ -466,15 +466,15 @@ void loadMapPreview(bool hideInterface)
 {
 	static char		aFileName[256];
 	UDWORD			fileSize;
-	char			*pFileData = NULL;
-	LEVEL_DATASET	*psLevel = NULL;
+	char			*pFileData = nullptr;
+	LEVEL_DATASET	*psLevel = nullptr;
 	PIELIGHT		plCliffL, plCliffH, plWater, plRoadL, plRoadH, plGroundL, plGroundH;
 	UDWORD			x, y, height;
 	UBYTE			col;
 	MAPTILE			*psTile, *WTile;
 	UDWORD oursize;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
-	char  *ptr = NULL, *imageData = NULL;
+	char  *ptr = nullptr, *imageData = nullptr;
 
 	// absurd hack, since there is a problem with updating this crap piece of info, we're setting it to
 	// true by default for now, like it used to be
@@ -487,13 +487,13 @@ void loadMapPreview(bool hideInterface)
 
 	// load the terrain types
 	psLevel = levFindDataSet(game.map, &game.hash);
-	if (psLevel == NULL)
+	if (psLevel == nullptr)
 	{
 		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), !NetPlay.wzFiles.empty() ? "are" : "aren't");
 		loadEmptyMapPreview();
 		return;
 	}
-	if (psLevel->realFileName == NULL)
+	if (psLevel->realFileName == nullptr)
 	{
 		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
 	}
@@ -661,7 +661,7 @@ void readAIs()
 
 	sstrcpy(basepath, sSearchPath);
 	files = PHYSFS_enumerateFiles(basepath);
-	for (i = files; *i != NULL; ++i)
+	for (i = files; *i != nullptr; ++i)
 	{
 		char path[PATH_MAX];
 		// See if this filename contains the extension we're looking for
@@ -833,7 +833,7 @@ void runConnectionScreen(void)
 		if (SettingsUp == true)
 		{
 			delete psConScreen;
-			psConScreen = NULL;
+			psConScreen = nullptr;
 			SettingsUp = false;
 		}
 
@@ -843,7 +843,7 @@ void runConnectionScreen(void)
 		if (SettingsUp == true)
 		{
 			delete psConScreen;
-			psConScreen = NULL;
+			psConScreen = nullptr;
 			SettingsUp = false;
 		}
 		break;
@@ -1551,7 +1551,7 @@ void updateLimitFlags()
 	for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
 	{
 		int stat = getStructStatFromName(limitIcons[i].stat);
-		bool disabled = asStructLimits[0] != NULL && stat >= 0 && asStructLimits[0][stat].limit == 0;
+		bool disabled = asStructLimits[0] != nullptr && stat >= 0 && asStructLimits[0][stat].limit == 0;
 		flags |= disabled << i;
 	}
 
@@ -2350,7 +2350,7 @@ static void drawReadyButton(UDWORD player)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            locked.difficulty ? _("Difficulty locked") : (NetPlay.isHost ? _("Click to change difficulty") : NULL), icon, icon, icon);
+		            locked.difficulty ? _("Difficulty locked") : (NetPlay.isHost ? _("Click to change difficulty") : nullptr), icon, icon, icon);
 		return;
 	}
 	else if (!NetPlay.players[player].allocated)
@@ -2391,7 +2391,7 @@ static bool canChooseTeamFor(int i)
 void addPlayerBox(bool players)
 {
 	// if background isn't there, then return since were not ready to draw the box yet!
-	if (widgGetFromID(psWScreen, FRONTEND_BACKDROP) == NULL)
+	if (widgGetFromID(psWScreen, FRONTEND_BACKDROP) == nullptr)
 	{
 		return;
 	}
@@ -2634,7 +2634,7 @@ static void addChatBox(bool preserveOldChat)
 	sEdInit.width = MULTIOP_CHATEDITW;
 	sEdInit.height = MULTIOP_CHATEDITH;
 
-	sEdInit.pUserData = NULL;
+	sEdInit.pUserData = nullptr;
 	sEdInit.pBoxDisplay = displayChatEdit;
 
 	widgAddEditBox(psWScreen, &sEdInit);
@@ -3791,7 +3791,7 @@ bool startMultiOptions(bool bReenter)
 		{
 			ingame.numStructureLimits = 0;
 			free(ingame.pStructureLimits);
-			ingame.pStructureLimits = NULL;
+			ingame.pStructureLimits = nullptr;
 		}
 	}
 
@@ -4413,7 +4413,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 {
 	int x0 = xOffset + x();
 	int y0 = yOffset + y();
-	Image hiToUse(NULL, 0);
+	Image hiToUse(nullptr, 0);
 
 	// FIXME: This seems to be a way to conserve space, so you can use a
 	// transparent icon with these edit boxes.
@@ -4447,7 +4447,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 	{
 		toDraw[numToDraw++] = imDown;
 	}
-	if (highlight && !grey && hiToUse.images != NULL)
+	if (highlight && !grey && hiToUse.images != nullptr)
 	{
 		toDraw[numToDraw++] = hiToUse;
 	}

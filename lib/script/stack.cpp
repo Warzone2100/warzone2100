@@ -51,10 +51,10 @@ struct STACK_CHUNK
 };
 
 /* The first chunk of the stack */
-static STACK_CHUNK		*psStackBase = NULL;
+static STACK_CHUNK		*psStackBase = nullptr;
 
 /* The current stack chunk */
-static STACK_CHUNK		*psCurrChunk = NULL;
+static STACK_CHUNK		*psCurrChunk = nullptr;
 
 /* The current free entry on the current stack chunk */
 static UDWORD			currEntry = 0;
@@ -66,7 +66,7 @@ static inline bool stackRemoveTop(void);
 /* Check if the stack is empty */
 bool stackEmpty(void)
 {
-	return (psCurrChunk->psPrev == NULL && currEntry == 0);
+	return (psCurrChunk->psPrev == nullptr && currEntry == 0);
 }
 
 
@@ -74,7 +74,7 @@ bool stackEmpty(void)
 static bool stackNewChunk(UDWORD size)
 {
 	/* see if a chunk has already been allocated */
-	if (psCurrChunk->psNext != NULL)
+	if (psCurrChunk->psNext != nullptr)
 	{
 		psCurrChunk = psCurrChunk->psNext;
 		currEntry = 0;
@@ -91,13 +91,13 @@ static bool stackNewChunk(UDWORD size)
 		if (!psCurrChunk->psNext->aVals)
 		{
 			free(psCurrChunk->psNext);
-			psCurrChunk->psNext = NULL;
+			psCurrChunk->psNext = nullptr;
 			return false;
 		}
 
 		psCurrChunk->psNext->size = size;
 		psCurrChunk->psNext->psPrev = psCurrChunk;
-		psCurrChunk->psNext->psNext = NULL;
+		psCurrChunk->psNext->psNext = nullptr;
 		psCurrChunk = psCurrChunk->psNext;
 		currEntry = 0;
 	}
@@ -132,7 +132,7 @@ bool stackPush(INTERP_VAL  *psVal)
 		if (psCurrChunk->aVals[currEntry].type == VAL_STRING)
 		{
 			free(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
-			psCurrChunk->aVals[currEntry].v.sval = NULL;
+			psCurrChunk->aVals[currEntry].v.sval = nullptr;
 		}
 
 		/* copy type/data as union */
@@ -188,7 +188,7 @@ bool stackPop(INTERP_VAL  *psVal)
 /* Return pointer to the top value without poping it */
 bool stackPeekTop(INTERP_VAL  **ppsVal)
 {
-	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	if ((psCurrChunk->psPrev == nullptr) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackPeekTop: stack empty");
 		ASSERT(false, "stackPeekTop: stack empty");
@@ -220,7 +220,7 @@ bool stackPopType(INTERP_VAL  *psVal)
 {
 	INTERP_VAL	*psTop;
 
-	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	if ((psCurrChunk->psPrev == nullptr) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackPopType: stack empty");
 		ASSERT(false, "stackPopType: stack empty");
@@ -308,7 +308,7 @@ bool stackPopParams(unsigned int numParams, ...)
 		// Have to work down the previous chunks to find the first param
 		unsigned int params = numParams - currEntry;
 
-		for (psCurr = psCurrChunk->psPrev; psCurr != NULL; psCurr = psCurr->psPrev)
+		for (psCurr = psCurrChunk->psPrev; psCurr != nullptr; psCurr = psCurr->psPrev)
 		{
 			if (params <= psCurr->size)
 			{
@@ -441,7 +441,7 @@ bool stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
 		if (psCurrChunk->aVals[currEntry].type == VAL_STRING)
 		{
 			free(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
-			psCurrChunk->aVals[currEntry].v.sval = NULL;
+			psCurrChunk->aVals[currEntry].v.sval = nullptr;
 		}
 
 		/* copy type/data as union */
@@ -483,7 +483,7 @@ bool stackPeek(INTERP_VAL *psVal, UDWORD index)
 		/* Have to work down the previous chunks to find the entry */
 		index -= currEntry;
 
-		for (psCurr = psCurrChunk->psPrev; psCurr != NULL; psCurr = psCurr->psPrev)
+		for (psCurr = psCurrChunk->psPrev; psCurr != nullptr; psCurr = psCurr->psPrev)
 		{
 			if (index < psCurr->size)
 			{
@@ -528,7 +528,7 @@ bool stackBinaryOp(OPCODE opcode)
 	INTERP_VAL		*psV1, *psV2;
 
 	// Get the parameters
-	if (psCurrChunk->psPrev == NULL && currEntry < 2)
+	if (psCurrChunk->psPrev == nullptr && currEntry < 2)
 	{
 		debug(LOG_ERROR, "stackBinaryOp: not enough entries on stack");
 		ASSERT(false, "stackBinaryOp: not enough entries on stack");
@@ -813,7 +813,7 @@ bool stackUnaryOp(OPCODE opcode)
 	INTERP_VAL		*psVal;
 
 	// Get the value
-	if (psCurrChunk->psPrev == NULL && currEntry == 0)
+	if (psCurrChunk->psPrev == nullptr && currEntry == 0)
 	{
 		ASSERT(false, "stackUnaryOp: not enough entries on stack");
 		return false;
@@ -926,7 +926,7 @@ bool stackCastTop(INTERP_TYPE neededType)
 	ASSERT(neededType == VAL_INT || neededType == VAL_FLOAT,
 	       "stackCast: can't cast to %d", neededType);
 
-	if (!stackPeekTop(&pTop) || pTop == NULL)
+	if (!stackPeekTop(&pTop) || pTop == nullptr)
 	{
 		ASSERT(false, "castTop: failed to peek stack");
 		return false;
@@ -984,7 +984,7 @@ bool stackCastTop(INTERP_TYPE neededType)
 bool stackInitialise(void)
 {
 	psStackBase = (STACK_CHUNK *)calloc(1, sizeof(*psStackBase));
-	if (psStackBase == NULL)
+	if (psStackBase == nullptr)
 	{
 		debug(LOG_FATAL, "Out of memory");
 		abort();
@@ -999,8 +999,8 @@ bool stackInitialise(void)
 	}
 
 	psStackBase->size = INIT_SIZE;
-	psStackBase->psPrev = NULL;
-	psStackBase->psNext = NULL;
+	psStackBase->psPrev = nullptr;
+	psStackBase->psNext = nullptr;
 	psCurrChunk = psStackBase;
 
 	//string support
@@ -1022,7 +1022,7 @@ void stackShutDown(void)
 		debug(LOG_NEVER, "stackShutDown: stack is not empty on shutdown");
 	}
 
-	for (psCurr = psStackBase; psCurr != NULL; psCurr = psNext)
+	for (psCurr = psStackBase; psCurr != nullptr; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
 
@@ -1031,11 +1031,11 @@ void stackShutDown(void)
 		{
 			if (psCurr->aVals[i].type == VAL_STRING)
 			{
-				if (psCurr->aVals[i].v.sval != NULL)					//FIXME: seems to be causing problems sometimes
+				if (psCurr->aVals[i].v.sval != nullptr)					//FIXME: seems to be causing problems sometimes
 				{
 					debug(LOG_WZ, "freeing '%s' ", psCurr->aVals[i].v.sval);
 					free(psCurr->aVals[i].v.sval);
-					psCurr->aVals[i].v.sval = NULL;
+					psCurr->aVals[i].v.sval = nullptr;
 				}
 				else
 				{
@@ -1047,13 +1047,13 @@ void stackShutDown(void)
 		free(psCurr->aVals);
 		free(psCurr);
 	}
-	psStackBase = NULL;
+	psStackBase = nullptr;
 }
 
 /* Get rid of the top value without returning it */
 static inline bool stackRemoveTop(void)
 {
-	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
+	if ((psCurrChunk->psPrev == nullptr) && (currEntry == 0))
 	{
 		debug(LOG_ERROR, "stackRemoveTop: stack empty");
 		ASSERT(false, "stackRemoveTop: stack empty");

@@ -125,10 +125,10 @@ static bool videobuf_ready = false;		// single frame video buffer ready for proc
 static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for processing
 
 // file handle
-static PHYSFS_file *fpInfile = NULL;
+static PHYSFS_file *fpInfile = nullptr;
 
-static uint32_t *RGBAframe = NULL;					// texture buffer
-static ogg_int16_t *audiobuf = NULL;			// audio buffer
+static uint32_t *RGBAframe = nullptr;					// texture buffer
+static ogg_int16_t *audiobuf = nullptr;			// audio buffer
 
 // For timing
 static double audioTime = 0;
@@ -149,7 +149,7 @@ static int dropped = 0;
 
 // Screen dimensions
 #define NUM_VERTICES 4
-static GFX *videoGfx = NULL;
+static GFX *videoGfx = nullptr;
 static GLfloat vertices[NUM_VERTICES][2];
 static GLfloat Scrnvidpos[3];
 
@@ -234,7 +234,7 @@ static void audio_close(void)
 	if (audiobuf)
 	{
 		free(audiobuf);
-		audiobuf = NULL;
+		audiobuf = nullptr;
 	}
 }
 
@@ -504,12 +504,12 @@ bool seq_Play(const char *filename)
 	seq_InitOgg();
 
 	fpInfile = PHYSFS_openRead(filename);
-	if (fpInfile == NULL)
+	if (fpInfile == nullptr)
 	{
 		info("unable to open '%s' for playback", filename);
 
 		fpInfile = PHYSFS_openRead("novideo.ogg");
-		if (fpInfile == NULL)
+		if (fpInfile == nullptr)
 		{
 			return false;
 		}
@@ -681,14 +681,14 @@ bool seq_Play(const char *filename)
 			debug(LOG_ERROR, "Video size too large, must be below %.gx%.g!",
 			      texture_width, texture_height);
 			delete videoGfx;
-			videoGfx = NULL;
+			videoGfx = nullptr;
 			return false;
 		}
 		if (videodata.ti.pixelformat != OC_PF_420)
 		{
 			debug(LOG_ERROR, "Video not in YUV420 format!");
 			delete videoGfx;
-			videoGfx = NULL;
+			videoGfx = nullptr;
 			return false;
 		}
 		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
@@ -917,7 +917,7 @@ void seq_Shutdown()
 		return;
 	}
 	delete videoGfx;
-	videoGfx = NULL;
+	videoGfx = nullptr;
 
 	if (vorbis_p)
 	{

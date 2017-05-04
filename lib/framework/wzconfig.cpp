@@ -100,7 +100,7 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 	mObj = mJson.object();
 	free(data);
 	char **diffList = PHYSFS_enumerateFiles("diffs");
-	for (char **i = diffList; *i != NULL; i++)
+	for (char **i = diffList; *i != nullptr; i++)
 	{
 		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().constData());
 		if (!PHYSFS_exists(str.c_str()))

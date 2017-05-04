@@ -41,7 +41,7 @@ static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 	{
 		return (STRUCTURE *)psObj;
 	}
-	return NULL;
+	return nullptr;
 }
 
 static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
@@ -51,7 +51,7 @@ static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 	{
 		return (FEATURE *)psObj;
 	}
-	return NULL;
+	return nullptr;
 }
 
 /// WARNING: Returns NULL if tile not visible to selectedPlayer.
@@ -65,7 +65,7 @@ static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
 	}
 	else
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 

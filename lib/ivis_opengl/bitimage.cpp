@@ -69,7 +69,7 @@ ImageDef *iV_GetImage(const QString &filename)
 	if (!images.contains(filename))
 	{
 		debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().constData());
-		return NULL;
+		return nullptr;
 	}
 	return images.value(filename);
 }
@@ -154,7 +154,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	if (!loadFile(fileName, &pFileData, &pFileSize))
 	{
 		debug(LOG_ERROR, "iV_LoadImageFile: failed to open %s", fileName);
-		return NULL;
+		return nullptr;
 	}
 
 	char *ptr = pFileData;
@@ -183,7 +183,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		{
 			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
 			delete imageFile;
-			return NULL;
+			return nullptr;
 		}
 		imageFile->imageNames[numImages].first = tmpName;
 		imageFile->imageNames[numImages].second = numImages;
@@ -196,7 +196,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		{
 			debug(LOG_ERROR, "Failed to find image \"%s\" listed in \"%s\".", spriteName.c_str(), fileName);
 			delete imageFile;
-			return NULL;
+			return nullptr;
 		}
 		imageRect->siz = Vector2i(imageRect->data->width, imageRect->data->height);
 		numImages++;

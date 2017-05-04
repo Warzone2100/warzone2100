@@ -655,11 +655,11 @@ static inline char _WZ_ASSERT_STATIC_STRING_FUNCTION(char const(&)[N])
 }
 static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char const *&)
 {
-	return NULL;    // Eeek, it's a pointer!
+	return nullptr;    // Eeek, it's a pointer!
 }
 static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char *&)
 {
-	return NULL;    // Eeek, it's a pointer!
+	return nullptr;    // Eeek, it's a pointer!
 }
 #  define WZ_ASSERT_STATIC_STRING(_var) STATIC_ASSERT(sizeof(_WZ_ASSERT_STATIC_STRING_FUNCTION(_var)) == sizeof(char))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
@@ -684,7 +684,7 @@ static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(void const *)
 template <typename T>
 static inline char *_WZ_ASSERT_ARRAY_EXPR_FUNCTION(T *&)
 {
-	return NULL;    // Eeek, it's a pointer!
+	return nullptr;    // Eeek, it's a pointer!
 }
 #  define WZ_ASSERT_ARRAY_EXPR(_var) STATIC_ASSERT_EXPR(sizeof(_WZ_ASSERT_ARRAY_EXPR_FUNCTION(_var)) == sizeof(char))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)

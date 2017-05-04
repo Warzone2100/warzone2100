@@ -60,11 +60,11 @@ bool scrGroupAddDroid(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
+	ASSERT(psGroup != nullptr,
 	       "scrGroupAdd: Invalid group pointer");
-	ASSERT(psDroid != NULL,
+	ASSERT(psDroid != nullptr,
 	       "scrGroupAdd: Invalid droid pointer");
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		return false;
 	}
@@ -100,7 +100,7 @@ bool scrGroupAddArea(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
+	ASSERT(psGroup != nullptr,
 	       "scrGroupAdd: Invalid group pointer");
 
 	if (player < 0 || player >= MAX_PLAYERS)
@@ -138,7 +138,7 @@ bool scrGroupAddAreaNoGroup(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
+	ASSERT(psGroup != nullptr,
 	       "scrGroupAddNoGroup: Invalid group pointer");
 
 	if (player < 0 || player >= MAX_PLAYERS)
@@ -153,7 +153,7 @@ bool scrGroupAddAreaNoGroup(void)
 		    ((SDWORD)psDroid->pos.y >= y1) && ((SDWORD)psDroid->pos.y <= y2) &&
 		    psDroid->droidType != DROID_COMMAND &&
 		    !isTransporter(psDroid) &&
-		    psDroid->psGroup   == NULL)
+		    psDroid->psGroup   == nullptr)
 		{
 			psGroup->add(psDroid);
 		}
@@ -174,8 +174,8 @@ bool scrGroupAddGroup(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psTo != NULL, "Invalid group pointer");
-	ASSERT_OR_RETURN(false, psFrom != NULL, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psTo != nullptr, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psFrom != nullptr, "Invalid group pointer");
 
 	for (psDroid = psFrom->psList; psDroid; psDroid = psNext)
 	{
@@ -199,11 +199,11 @@ bool scrGroupMember(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
+	ASSERT(psGroup != nullptr,
 	       "scrGroupMember: Invalid group pointer");
-	ASSERT(psDroid != NULL,
+	ASSERT(psDroid != nullptr,
 	       "scrGroupMember: Invalid droid pointer");
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		return false;
 	}
@@ -238,11 +238,11 @@ bool scrIdleGroup(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psGroup != nullptr, "Invalid group pointer");
 
 	for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
 	{
-		if (psDroid->order.type == DORDER_NONE || (psDroid->order.type == DORDER_GUARD && psDroid->order.psObj == NULL))
+		if (psDroid->order.type == DORDER_NONE || (psDroid->order.type == DORDER_GUARD && psDroid->order.psObj == nullptr))
 		{
 			count++;
 		}
@@ -270,7 +270,7 @@ bool scrInitIterateGroup(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psGroup != nullptr, "Invalid group pointer");
 
 	psScrIterateGroup = psGroup;
 	psScrIterateGroupDroid = psGroup->psList;
@@ -296,14 +296,14 @@ bool scrIterateGroup(void)
 		return false;
 	}
 
-	if (psScrIterateGroupDroid != NULL)
+	if (psScrIterateGroupDroid != nullptr)
 	{
 		psDroid = psScrIterateGroupDroid;
 		psScrIterateGroupDroid = psScrIterateGroupDroid->psGrpNext;
 	}
 	else
 	{
-		psDroid = NULL;
+		psDroid = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psDroid;
@@ -326,7 +326,7 @@ bool scrDroidLeaveGroup(void)
 		return false;
 	}
 
-	if (psDroid->psGroup != NULL)
+	if (psDroid->psGroup != nullptr)
 	{
 		psDroid->psGroup->remove(psDroid);
 	}
@@ -346,7 +346,7 @@ bool scrOrderGroup(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
+	ASSERT(psGroup != nullptr,
 	       "scrOrderGroup: Invalid group pointer");
 
 	if (order != DORDER_STOP &&
@@ -379,7 +379,7 @@ bool scrOrderGroupLoc(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
+	ASSERT(psGroup != nullptr,
 	       "scrOrderGroupLoc: Invalid group pointer");
 
 	if (order != DORDER_MOVE &&
@@ -418,8 +418,8 @@ bool scrOrderGroupObj(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
-	ASSERT_OR_RETURN(false, psObj != NULL, "Invalid object pointer");
+	ASSERT_OR_RETURN(false, psGroup != nullptr, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psObj != nullptr, "Invalid object pointer");
 
 	if (order != DORDER_ATTACK &&
 	    order != DORDER_HELPBUILD &&
@@ -453,9 +453,9 @@ bool scrOrderDroid(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL,
+	ASSERT(psDroid != nullptr,
 	       "scrOrderUnit: Invalid unit pointer");
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		return false;
 	}
@@ -490,9 +490,9 @@ bool scrOrderDroidLoc(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL,
+	ASSERT(psDroid != nullptr,
 	       "scrOrderUnitLoc: Invalid unit pointer");
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		return false;
 	}
@@ -532,11 +532,11 @@ bool scrOrderDroidObj(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL,
+	ASSERT(psDroid != nullptr,
 	       "scrOrderUnitObj: Invalid unit pointer");
-	ASSERT(psObj != NULL,
+	ASSERT(psObj != nullptr,
 	       "scrOrderUnitObj: Invalid object pointer");
-	if (psDroid == NULL || psObj == NULL)
+	if (psDroid == nullptr || psObj == nullptr)
 	{
 		return false;
 	}
@@ -582,8 +582,8 @@ bool scrOrderDroidStatsLoc(void)
 	ASSERT_OR_RETURN(false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 	STRUCTURE_STATS *psStats = asStructureStats + statIndex;
 
-	ASSERT_OR_RETURN(false, psDroid != NULL, "Invalid Unit pointer");
-	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid object pointer");
+	ASSERT_OR_RETURN(false, psDroid != nullptr, "Invalid Unit pointer");
+	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid object pointer");
 
 	if ((x < 0) || (x > (SDWORD)mapWidth * TILE_UNITS) ||
 	    (y < 0) || (y > (SDWORD)mapHeight * TILE_UNITS))
@@ -624,9 +624,9 @@ bool scrSetDroidSecondary(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL,
+	ASSERT(psDroid != nullptr,
 	       "scrSetUnitSecondary: invalid unit pointer");
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		return false;
 	}
@@ -648,7 +648,7 @@ bool scrSetGroupSecondary(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
+	ASSERT(psGroup != nullptr,
 	       "scrSetGroupSecondary: invalid group pointer");
 
 	psGroup->setSecondary(sec, state);
@@ -682,7 +682,7 @@ bool scrCmdDroidMaxGroup(void)
 		return false;
 	}
 
-	ASSERT(psCommander != NULL,
+	ASSERT(psCommander != nullptr,
 	       "scrCmdDroidMaxGroup: NULL pointer passed");
 
 	scrFunctionResult.v.ival = cmdDroidMaxGroup(psCommander);
@@ -887,12 +887,12 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 		break;
 	case REF_DEFENSE:
 		//if (psStats->numWeaps == 0 && psStats->pSensor != NULL)
-		if (psStats->psWeapStat[0] == NULL && psStats->pSensor != NULL)
+		if (psStats->psWeapStat[0] == nullptr && psStats->pSensor != nullptr)
 		{
 			mask = SCR_ST_SENSOR;
 		}
 		//else if (psStats->numWeaps > 0)
-		else if (psStats->psWeapStat[0] != NULL)
+		else if (psStats->psWeapStat[0] != nullptr)
 		{
 			psWStats = psStats->psWeapStat[0];
 			if (!proj_Direct(psWStats))
@@ -1088,7 +1088,7 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 static void scrDroidTargetPriority(DROID **ppsTarget, DROID *psCurr)
 {
 	// priority to things with weapons
-	if (((*ppsTarget) == NULL) ||
+	if (((*ppsTarget) == nullptr) ||
 	    ((*ppsTarget)->asWeaps[0].nStat == 0))
 	{
 		*ppsTarget = psCurr;
@@ -1124,7 +1124,7 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 	{
 		ASSERT(false,
 		       "scrTargetInArea: invalid target player number");
-		return NULL;
+		return nullptr;
 	}
 
 	if (x1 > x2)
@@ -1159,10 +1159,10 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 		break;
 	default:
 		ASSERT(false, "scrTargetInArea: invalid target type");
-		return NULL;
+		return nullptr;
 	}
 
-	psTarget = NULL;
+	psTarget = nullptr;
 	for (; psCurr; psCurr = psCurr->psNext)
 	{
 		if ((cluster == 0 || psCurr->cluster == cluster) &&
@@ -1420,7 +1420,7 @@ bool scrSkLocateEnemy(void)
 	}
 	else
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))		// part success
 		{
 			return false;
@@ -1516,7 +1516,7 @@ bool scrSkDoResearch(void)
 
 	psResFacilty =	(RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
-	if (psResFacilty->psSubject != NULL)
+	if (psResFacilty->psSubject != nullptr)
 	{
 		// not finshed yet..
 		return true;
@@ -1708,7 +1708,7 @@ static bool defenseLocation(bool variantB)
 
 	// go down the gateways, find the nearest gateway with >1 empty tiles
 	nearestSoFar = UDWORD_MAX;
-	psChosenGate = NULL;
+	psChosenGate = nullptr;
 	for (auto psGate : gwGetGateways())
 	{
 		if (auxTile(psGate->x1, psGate->y1, player) & AUXBITS_THREAT)
@@ -1948,12 +1948,12 @@ bool scrActionDroidObj(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL,
+	ASSERT(psDroid != nullptr,
 	       "scrOrderUnitObj: Invalid unit pointer");
-	ASSERT(psObj != NULL,
+	ASSERT(psObj != nullptr,
 	       "scrOrderUnitObj: Invalid object pointer");
 
-	if (psDroid == NULL || psObj == NULL)
+	if (psDroid == nullptr || psObj == nullptr)
 	{
 		return false;
 	}
@@ -1987,7 +1987,7 @@ bool scrInitIterateGroupB(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psGroup != nullptr, "Invalid group pointer");
 	ASSERT_OR_RETURN(false, bucket < MAX_PLAYERS, "Invalid bucket");
 
 	psScrIterateGroupB[bucket] = psGroup;
@@ -2018,14 +2018,14 @@ bool scrIterateGroupB(void)
 		return false;
 	}
 
-	if (psScrIterateGroupDroidB[bucket] != NULL)
+	if (psScrIterateGroupDroidB[bucket] != nullptr)
 	{
 		psDroid = psScrIterateGroupDroidB[bucket];
 		psScrIterateGroupDroidB[bucket] = psScrIterateGroupDroidB[bucket]->psGrpNext;
 	}
 	else
 	{
-		psDroid = NULL;
+		psDroid = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psDroid;

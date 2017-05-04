@@ -57,7 +57,7 @@ enum AP_STATUS
 	APS_ACTIVE
 };
 
-static ATPART	*asAtmosParts = NULL;
+static ATPART	*asAtmosParts = nullptr;
 static UDWORD	freeParticle;
 static WT_CLASS	weather = WT_NONE;
 
@@ -342,7 +342,7 @@ void atmosSetWeatherType(WT_CLASS type)
 	if (type == WT_NONE && asAtmosParts)
 	{
 		free(asAtmosParts);
-		asAtmosParts = NULL;
+		asAtmosParts = nullptr;
 	}
 }
 

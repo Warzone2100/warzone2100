@@ -143,7 +143,7 @@ int vasprintfNull(char **strp, const char *format, va_list ap)
 
 	if (count == -1)  // If count == -1, strp is currently undefined.
 	{
-		strp = NULL;
+		strp = nullptr;
 	}
 
 	return count;

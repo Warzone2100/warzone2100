@@ -179,7 +179,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 	psObj = (BASE_OBJECT *)BarGraph->pUserData;	// Get the object associated with this widget.
 
-	if (psObj == NULL)
+	if (psObj == nullptr)
 	{
 		BarGraph->hide();
 		return;
@@ -226,7 +226,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 		{
 			Manufacture = StructureGetFactory(Structure);
 
-			if (Manufacture->psSubject != NULL && Manufacture->buildPointsRemaining < calcTemplateBuild(Manufacture->psSubject))
+			if (Manufacture->psSubject != nullptr && Manufacture->buildPointsRemaining < calcTemplateBuild(Manufacture->psSubject))
 			{
 				// Started production. Set the colour of the bar to yellow.
 				int buildPointsTotal = calcTemplateBuild(FactoryGetTemplate(Manufacture));
@@ -245,7 +245,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 		{
 			Research = StructureGetResearch(Structure);
 			unsigned currentPoints = 0;
-			if (Research->psSubject != NULL)
+			if (Research->psSubject != nullptr)
 			{
 				currentPoints = asPlayerResList[selectedPlayer][Research->psSubject->index].currentPoints;
 			}
@@ -258,7 +258,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 			{
 				// Not yet started production.
 				int neededPower = checkPowerRequest(Structure);
-				int powerToBuild = Research->psSubject != NULL ? Research->psSubject->researchPower : 0;
+				int powerToBuild = Research->psSubject != nullptr ? Research->psSubject->researchPower : 0;
 				formatPower(BarGraph, neededPower, powerToBuild);
 			}
 		}
@@ -356,7 +356,7 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 	BASE_OBJECT	*psObj = (BASE_OBJECT *)Label->pUserData;
 
 	// Get the object associated with this widget.
-	if (psObj != NULL && !isDead(psObj))
+	if (psObj != nullptr && !isDead(psObj))
 	{
 		STRUCTURE	*Structure = (STRUCTURE *)psObj;
 		if (StructIsFactory(Structure))
@@ -380,18 +380,18 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	DROID_TEMPLATE                 *psTemplate = (DROID_TEMPLATE *)Label->pUserData;
 
 	// Get the object associated with this widget.
-	if (psTemplate != NULL)
+	if (psTemplate != nullptr)
 	{
-		STRUCTURE	*psStructure = NULL;
+		STRUCTURE	*psStructure = nullptr;
 		BASE_OBJECT	*psObj = getCurrentSelected();
 
-		if (psObj != NULL && psObj->type == OBJ_STRUCTURE && !isDead(psObj))
+		if (psObj != nullptr && psObj->type == OBJ_STRUCTURE && !isDead(psObj))
 		{
 			psStructure = (STRUCTURE *)psObj;
 		}
 
 		ProductionRunEntry entry;
-		if (psStructure != NULL && StructIsFactory(psStructure))
+		if (psStructure != nullptr && StructIsFactory(psStructure))
 		{
 			entry = getProduction(psStructure, psTemplate);
 		}
@@ -461,7 +461,7 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
 
 	// Get the object associated with this widget.
-	if (psObj != NULL && !isDead(psObj))
+	if (psObj != nullptr && !isDead(psObj))
 	{
 		DROID	*psDroid = (DROID *)psObj;
 
@@ -487,7 +487,7 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
 
 	// Get the object associated with this widget.
-	if (psObj != NULL && !isDead(psObj))
+	if (psObj != nullptr && !isDead(psObj))
 	{
 		DROID	*psDroid = (DROID *)psObj;
 
@@ -513,7 +513,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 	SDWORD                          i, start;
 
 	// Get the object associated with this widget.
-	if (psObj != NULL && !isDead(psObj))
+	if (psObj != nullptr && !isDead(psObj))
 	{
 		DROID		*psDroid = (DROID *)psObj;
 
@@ -726,7 +726,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	{
 		// this may catch this horrible crash bug we've been having,
 		// who knows?.... Shipping tomorrow, la de da :-)
-		psObj = NULL;
+		psObj = nullptr;
 		intRefreshScreen();
 	}
 
@@ -748,13 +748,13 @@ void IntStatusButton::display(int xOffset, int yOffset)
 			else if (DroidGoingToBuild(Droid))
 			{
 				Stats = DroidGetBuildStats(Droid);
-				ASSERT(Stats != NULL, "NULL Stats pointer.");
+				ASSERT(Stats != nullptr, "NULL Stats pointer.");
 				object = ImdObject::StructureStat(Stats);
 			}
 			else if (orderState(Droid, DORDER_DEMOLISH))
 			{
 				Stats = structGetDemolishStat();
-				ASSERT(Stats != NULL, "NULL Stats pointer.");
+				ASSERT(Stats != nullptr, "NULL Stats pointer.");
 				object = ImdObject::StructureStat(Stats);
 			}
 			else if (Droid->droidType == DROID_COMMAND)
@@ -870,7 +870,7 @@ void IntObjectButton::display(int xOffset, int yOffset)
 	{
 		// this may catch this horrible crash bug we've been having,
 		// who knows?.... Shipping tomorrow, la de da :-)
-		psObj = NULL;
+		psObj = nullptr;
 		intRefreshScreen();
 	}
 
@@ -1655,7 +1655,7 @@ bool DroidGoingToBuild(DROID *Droid)
 //
 STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 {
-	BASE_OBJECT *Structure = NULL;
+	BASE_OBJECT *Structure = nullptr;
 
 	if (orderStateObj(Droid, DORDER_BUILD))
 	{
@@ -1714,7 +1714,7 @@ static STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // Get the stats for a structure which a droid is going to ( but not yet ) building.
@@ -1729,7 +1729,7 @@ BASE_STATS *DroidGetBuildStats(DROID *Droid)
 		return Stats;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 iIMDShape *DroidGetIMD(DROID *Droid)
@@ -1744,7 +1744,7 @@ static inline bool _structureIsManufacturingPending(Functionality const &functio
 	{
 		return functionality.statusPending == FACTORY_START_PENDING || functionality.statusPending == FACTORY_HOLD_PENDING;
 	}
-	return functionality.psSubject != NULL;
+	return functionality.psSubject != nullptr;
 }
 
 bool StructureIsManufacturingPending(STRUCTURE *structure)
@@ -1804,7 +1804,7 @@ RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure)
 
 DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 {
-	if (Factory->psSubjectPending != NULL)
+	if (Factory->psSubjectPending != nullptr)
 	{
 		return (DROID_TEMPLATE *)Factory->psSubjectPending;
 	}
@@ -1893,8 +1893,8 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 {
 	WEAPON_STATS		*psWStat;
 
-	*CompIMD = NULL;
-	*MountIMD = NULL;
+	*CompIMD = nullptr;
+	*MountIMD = nullptr;
 
 	switch (compID)
 	{
@@ -1962,14 +1962,14 @@ static void StatGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **S
 	{
 		*ppGraphicData = ((RESEARCH *)psStat)->psStat;
 		//make sure the IMDShape is initialised
-		*Shape = NULL;
+		*Shape = nullptr;
 	}
 	else
 	{
 		//no stat so just just the IMD associated with the research
 		*Shape = ((RESEARCH *)psStat)->pIMD;
 		//make sure the stat is initialised
-		*ppGraphicData = NULL;
+		*ppGraphicData = nullptr;
 	}
 }
 
@@ -2070,7 +2070,7 @@ IntTransportButton::IntTransportButton(WIDGET *parent)
 void IntTransportButton::display(int xOffset, int yOffset)
 {
 	// There should always be a droid associated with the button
-	ASSERT(psDroid != NULL, "Invalid droid pointer");
+	ASSERT(psDroid != nullptr, "Invalid droid pointer");
 
 	initDisplay();
 	displayIMD(Image(), ImdObject::Droid(psDroid), xOffset, yOffset);
@@ -2112,19 +2112,19 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go through all the proximity Displays*/
-		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
+		for (psProxDisp = apsProxDisp[i]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
 		{
 			if (psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
 			{
 				MESSAGE		*psCurrMsg = psProxDisp->psMessage;
 				VIEWDATA	*pViewData = (VIEWDATA *)psCurrMsg->pViewData;
 
-				ASSERT_OR_RETURN(, pViewData != NULL, "Message without data!");
+				ASSERT_OR_RETURN(, pViewData != nullptr, "Message without data!");
 
 				if (pViewData->type == VIEW_BEACON)
 				{
-					ASSERT_OR_RETURN(, pViewData->pData != NULL, "Help message without data!");
-					if (pViewData->pData != NULL && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
+					ASSERT_OR_RETURN(, pViewData->pData != nullptr, "Help message without data!");
+					if (pViewData->pData != nullptr && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
 					{
 						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
 						removeMessage(psCurrMsg, i);	//remove beacon
@@ -2136,7 +2136,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	}
 
 	/* Go through all the proximity Displays */
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
+	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
 	{
 		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
 		const uint16_t *images;
@@ -2248,7 +2248,7 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, W
 	ASSERT(psMsg->type == MSG_PROXIMITY, "Invalid message type");
 
 	//if no data - ignore message
-	if (psMsg->pViewData == NULL || psMsg->player != selectedPlayer)
+	if (psMsg->pViewData == nullptr || psMsg->player != selectedPlayer)
 	{
 		return;
 	}

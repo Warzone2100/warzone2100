@@ -100,7 +100,7 @@ void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath
 {
 	char **subdirlist = PHYSFS_enumerateFiles(subdir);
 	char **i = subdirlist;
-	while (*i != NULL)
+	while (*i != nullptr)
 	{
 #ifdef DEBUG
 		debug(LOG_NEVER, "Examining subdir: [%s]", *i);
@@ -132,7 +132,7 @@ void removeSubdirs(const char *basedir, const char *subdir)
 	char tmpstr[PATH_MAX];
 	char **subdirlist = PHYSFS_enumerateFiles(subdir);
 	char **i = subdirlist;
-	while (*i != NULL)
+	while (*i != nullptr)
 	{
 #ifdef DEBUG
 		debug(LOG_NEVER, "Examining subdir: [%s]", *i);
@@ -156,7 +156,7 @@ void printSearchPath(void)
 {
 	debug(LOG_WZ, "Search paths:");
 	char **searchPath = PHYSFS_getSearchPath();
-	for (char **i = searchPath; *i != NULL; i++)
+	for (char **i = searchPath; *i != nullptr; i++)
 	{
 		debug(LOG_WZ, "    [%s]", *i);
 	}

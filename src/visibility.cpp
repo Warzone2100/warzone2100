@@ -60,7 +60,7 @@ class SPOTTER
 {
 public:
 	SPOTTER(int x, int y, int plr, int radius, int type, uint32_t expiry = 0)
-		: pos(x, y, 0), player(plr), sensorRadius(radius), sensorType(type), expiryTime(expiry), numWatchedTiles(0), watchedTiles(NULL)
+		: pos(x, y, 0), player(plr), sensorRadius(radius), sensorType(type), expiryTime(expiry), numWatchedTiles(0), watchedTiles(nullptr)
 	{
 		id = generateSynchronisedObjectId();
 	}
@@ -82,8 +82,8 @@ static std::vector<SPOTTER *> apsInvisibleViewers;
 
 #define MIN_VIS_HEIGHT 80
 
-static int *gNumWalls = NULL;
-static Vector2i *gWall = NULL;
+static int *gNumWalls = nullptr;
+static Vector2i *gWall = nullptr;
 
 // forward declarations
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val);
@@ -357,7 +357,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 		}
 	}
 	free(psObj->watchedTiles);
-	psObj->watchedTiles = NULL;
+	psObj->watchedTiles = nullptr;
 	psObj->numWatchedTiles = 0;
 	psObj->jammedTiles = false;
 }
@@ -365,7 +365,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj)
 {
 	free(psObj->watchedTiles);
-	psObj->watchedTiles = NULL;
+	psObj->watchedTiles = nullptr;
 	psObj->numWatchedTiles = 0;
 }
 
@@ -431,8 +431,8 @@ void revealAll(UBYTE player)
  */
 int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool /*wallsBlock*/)
 {
-	ASSERT_OR_RETURN(0, psViewer != NULL, "Invalid viewer pointer!");
-	ASSERT_OR_RETURN(0, psTarget != NULL, "Invalid viewed pointer!");
+	ASSERT_OR_RETURN(0, psViewer != nullptr, "Invalid viewer pointer!");
+	ASSERT_OR_RETURN(0, psTarget != nullptr, "Invalid viewed pointer!");
 
 	int range = objSensorRange(psViewer);
 
@@ -535,8 +535,8 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 
 	visibleObject(psViewer, psTarget, true);
 
-	gNumWalls = NULL;
-	gWall = NULL;
+	gNumWalls = nullptr;
+	gWall = nullptr;
 
 	// see if there was a wall in the way
 	if (numWalls > 0)
@@ -558,7 +558,7 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool hasSharedVision(unsigned viewer, unsigned ally)
@@ -621,12 +621,12 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 	// you can always see anything that a CB sensor is targetting
 	// Anyone commenting this out again will get a knee capping from John.
 	// You have been warned!!
-	if (psStruct != NULL && (structCBSensor(psStruct) || structVTOLCBSensor(psStruct)) && psStruct->psTarget[0] != NULL)
+	if (psStruct != nullptr && (structCBSensor(psStruct) || structVTOLCBSensor(psStruct)) && psStruct->psTarget[0] != nullptr)
 	{
 		setSeenByInstantly(psStruct->psTarget[0], psObj->player, UBYTE_MAX);
 	}
 	DROID *psDroid = castDroid(psObj);
-	if (psDroid != NULL && psDroid->action == DACTION_OBSERVE && cbSensorDroid(psDroid))
+	if (psDroid != nullptr && psDroid->action == DACTION_OBSERVE && cbSensorDroid(psDroid))
 	{
 		// Anyone commenting this out will get a knee capping from John.
 		// You have been warned!!
@@ -758,7 +758,7 @@ void processVisibility()
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != NULL; psObj = psObj->psNext)
+			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
 			{
 				processVisibilitySelf(psObj);
 			}
@@ -770,17 +770,17 @@ void processVisibility()
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != NULL; psObj = psObj->psNext)
+			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
 			{
 				processVisibilityVision(psObj);
 			}
 		}
 	}
-	for (BASE_OBJECT *psObj = apsSensorList[0]; psObj != NULL; psObj = psObj->psNextFunc)
+	for (BASE_OBJECT *psObj = apsSensorList[0]; psObj != nullptr; psObj = psObj->psNextFunc)
 	{
 		if (objRadarDetector(psObj))
 		{
-			for (BASE_OBJECT *psTarget = apsSensorList[0]; psTarget != NULL; psTarget = psTarget->psNextFunc)
+			for (BASE_OBJECT *psTarget = apsSensorList[0]; psTarget != nullptr; psTarget = psTarget->psNextFunc)
 			{
 				if (psObj != psTarget && psTarget->visible[psObj->player] < UBYTE_MAX / 2
 				    && objActiveRadar(psTarget)
@@ -797,7 +797,7 @@ void processVisibility()
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != NULL; psObj = psObj->psNext)
+			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
 			{
 				processVisibilityLevel(psObj);
 			}
@@ -855,10 +855,10 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
  */
 bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock)
 {
-	WEAPON_STATS *psStats = NULL;
+	WEAPON_STATS *psStats = nullptr;
 
-	ASSERT_OR_RETURN(false, psViewer != NULL, "Invalid shooter pointer!");
-	ASSERT_OR_RETURN(false, psTarget != NULL, "Invalid target pointer!");
+	ASSERT_OR_RETURN(false, psViewer != nullptr, "Invalid shooter pointer!");
+	ASSERT_OR_RETURN(false, psTarget != nullptr, "Invalid target pointer!");
 	ASSERT_OR_RETURN(false, psViewer->type == OBJ_DROID || psViewer->type == OBJ_STRUCTURE, "Bad viewer type");
 
 	if (psViewer->type == OBJ_DROID)
@@ -899,7 +899,7 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 /* Check how much of psTarget is hitable from psViewer's gun position */
 int areaOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock)
 {
-	if (psViewer == NULL)
+	if (psViewer == nullptr)
 	{
 		return 0;  // Lassat special case, avoid assertion.
 	}
@@ -957,8 +957,8 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 	int distSq, partSq, oldPartSq;
 	int64_t angletan;
 
-	ASSERT(psViewer != NULL, "Invalid shooter pointer!");
-	ASSERT(psTarget != NULL, "Invalid target pointer!");
+	ASSERT(psViewer != nullptr, "Invalid shooter pointer!");
+	ASSERT(psTarget != nullptr, "Invalid target pointer!");
 	if (!psViewer || !psTarget)
 	{
 		return -1;

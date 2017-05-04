@@ -376,8 +376,8 @@ static inline Rotation getInterpolatedWeaponRotation(DROID *psDroid, int weaponS
 static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int line, const char *func)
 {
 	psDroid->order.psObj = psNewTarget;
-	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setDroidTarget: Set dead target");
-	ASSERT(psNewTarget == NULL || !psNewTarget->died || (psNewTarget->died == NOT_CURRENT_LIST && psDroid->died == NOT_CURRENT_LIST),
+	ASSERT(psNewTarget == nullptr || !psNewTarget->died, "setDroidTarget: Set dead target");
+	ASSERT(psNewTarget == nullptr || !psNewTarget->died || (psNewTarget->died == NOT_CURRENT_LIST && psDroid->died == NOT_CURRENT_LIST),
 	       "setDroidTarget: Set dead target");
 #ifdef DEBUG
 	psDroid->targetLine = line;
@@ -393,7 +393,7 @@ static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int
 static inline void _setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
 {
 	psDroid->psActionTarget[idx] = psNewTarget;
-	ASSERT(psNewTarget == NULL || !psNewTarget->died || (psNewTarget->died == NOT_CURRENT_LIST && psDroid->died == NOT_CURRENT_LIST),
+	ASSERT(psNewTarget == nullptr || !psNewTarget->died || (psNewTarget->died == NOT_CURRENT_LIST && psDroid->died == NOT_CURRENT_LIST),
 	       "setDroidActionTarget: Set dead target");
 #ifdef DEBUG
 	psDroid->actionTargetLine[idx] = line;
@@ -409,7 +409,7 @@ static inline void _setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarge
 static inline void _setDroidBase(DROID *psDroid, STRUCTURE *psNewBase, int line, const char *func)
 {
 	psDroid->psBaseStruct = psNewBase;
-	ASSERT(psNewBase == NULL || !psNewBase->died, "setDroidBase: Set dead target");
+	ASSERT(psNewBase == nullptr || !psNewBase->died, "setDroidBase: Set dead target");
 #ifdef DEBUG
 	psDroid->baseLine = line;
 	sstrcpy(psDroid->baseFunc, func);
@@ -469,17 +469,17 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch);
 // True iff object is a droid.
 static inline bool isDroid(SIMPLE_OBJECT const *psObject)
 {
-	return psObject != NULL && psObject->type == OBJ_DROID;
+	return psObject != nullptr && psObject->type == OBJ_DROID;
 }
 // Returns DROID * if droid or NULL if not.
 static inline DROID *castDroid(SIMPLE_OBJECT *psObject)
 {
-	return isDroid(psObject) ? (DROID *)psObject : (DROID *)NULL;
+	return isDroid(psObject) ? (DROID *)psObject : (DROID *)nullptr;
 }
 // Returns DROID const * if droid or NULL if not.
 static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
 {
-	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)NULL;
+	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)nullptr;
 }
 
 

@@ -67,7 +67,7 @@ struct RESEARCH : public BASE_STATS
 	iIMDShape		*pIMD2;		/* the 2nd IMD for base plates/turrets*/
 	int index;		///< Unique index for this research, set incrementally
 
-	RESEARCH() : pViewData(NULL), iconID(0), psStat(NULL), pIMD(NULL), pIMD2(NULL) {}
+	RESEARCH() : pViewData(nullptr), iconID(0), psStat(nullptr), pIMD(nullptr), pIMD2(nullptr) {}
 };
 
 struct PLAYER_RESEARCH

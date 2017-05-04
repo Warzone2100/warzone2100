@@ -53,15 +53,15 @@
 
 #define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
 
-static WZ_THREAD *dangerThread = NULL;
-static WZ_SEMAPHORE *dangerSemaphore = NULL;
-static WZ_SEMAPHORE *dangerDoneSemaphore = NULL;
+static WZ_THREAD *dangerThread = nullptr;
+static WZ_SEMAPHORE *dangerSemaphore = nullptr;
+static WZ_SEMAPHORE *dangerDoneSemaphore = nullptr;
 struct floodtile
 {
 	uint8_t x;
 	uint8_t y;
 };
-static struct floodtile *floodbucket = NULL;
+static struct floodtile *floodbucket = nullptr;
 static int bucketcounter;
 static UDWORD lastDangerUpdate = 0;
 static int lastDangerPlayer = -1;
@@ -104,7 +104,7 @@ struct GATEWAY_SAVE
 
 /* The size and contents of the map */
 SDWORD	mapWidth = 0, mapHeight = 0;
-MAPTILE	*psMapTiles = NULL;
+MAPTILE	*psMapTiles = nullptr;
 uint8_t *psBlockMap[AUX_MAX];
 uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
 
@@ -120,9 +120,9 @@ static void init_tileNames(int type);
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
 int numGroundTypes;
-char *tilesetDir = NULL;
+char *tilesetDir = nullptr;
 static int numTile_names;
-static char *Tile_names = NULL;
+static char *Tile_names = nullptr;
 #define ARIZONA 1
 #define URBAN 2
 #define ROCKIE 3
@@ -136,7 +136,7 @@ UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
 static void init_tileNames(int type)
 {
-	char	*pFileData = NULL;
+	char	*pFileData = nullptr;
 	char	name[MAX_STR_LENGTH] = {'\0'};
 	int		numlines = 0, i = 0, cnt = 0;
 	uint32_t	fileSize = 0;
@@ -232,7 +232,7 @@ static void init_tileNames(int type)
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
 static bool mapLoadGroundTypes(void)
 {
-	char	*pFileData = NULL;
+	char	*pFileData = nullptr;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
 	char	textureName[MAX_STR_LENGTH] = {'\0'};
 	char	textureType[MAX_STR_LENGTH] = {'\0'};
@@ -376,7 +376,7 @@ fallback:
 // Parse the file to set up the ground type
 static void SetGroundForTile(const char *filename, const char *nametype)
 {
-	char	*pFileData = NULL;
+	char	*pFileData = nullptr;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
 	char	val1[MAX_STR_LENGTH], val2[MAX_STR_LENGTH], val3[MAX_STR_LENGTH], val4[MAX_STR_LENGTH];
 	int		numlines = 0;
@@ -497,7 +497,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 		{
 			if (x + i - 1 < 0 || y + j - 1 < 0 || x + i - 1 >= mapWidth || y + j - 1 >= mapHeight)
 			{
-				psTile = NULL;
+				psTile = nullptr;
 				tile = 0;
 			}
 			else
@@ -781,11 +781,11 @@ bool mapLoad(char *filename, bool preview)
 	}
 
 	/* See if this is the first time a map has been loaded */
-	ASSERT(psMapTiles == NULL, "Map has not been cleared before calling mapLoad()!");
+	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
 	psMapTiles = (MAPTILE *)calloc(width * height, sizeof(MAPTILE));
-	ASSERT(psMapTiles != NULL, "Out of memory");
+	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
 	mapHeight = height;
@@ -928,11 +928,11 @@ failure:
 /* Save the map data */
 bool mapSave(char **ppFileData, UDWORD *pFileSize)
 {
-	MAP_SAVEHEADER	*psHeader = NULL;
-	MAP_SAVETILE	*psTileData = NULL;
-	MAPTILE	*psTile = NULL;
-	GATEWAY_SAVEHEADER *psGateHeader = NULL;
-	GATEWAY_SAVE *psGate = NULL;
+	MAP_SAVEHEADER	*psHeader = nullptr;
+	MAP_SAVETILE	*psTileData = nullptr;
+	MAPTILE	*psTile = nullptr;
+	GATEWAY_SAVEHEADER *psGateHeader = nullptr;
+	GATEWAY_SAVE *psGate = nullptr;
 	SDWORD	numGateways = gwNumGateways();
 
 	/* Allocate the data buffer */
@@ -941,7 +941,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE) * numGateways;
 
 	*ppFileData = (char *)malloc(*pFileSize);
-	if (*ppFileData == NULL)
+	if (*ppFileData == nullptr)
 	{
 		debug(LOG_FATAL, "Out of memory");
 		abort();
@@ -1026,9 +1026,9 @@ bool mapShutdown(void)
 		wzThreadJoin(dangerThread);
 		wzSemaphoreDestroy(dangerSemaphore);
 		wzSemaphoreDestroy(dangerDoneSemaphore);
-		dangerThread = NULL;
-		dangerSemaphore = NULL;
-		dangerDoneSemaphore = NULL;
+		dangerThread = nullptr;
+		dangerSemaphore = nullptr;
+		dangerDoneSemaphore = nullptr;
 	}
 
 	free(psMapTiles);
@@ -1037,26 +1037,26 @@ bool mapShutdown(void)
 	free(map);
 	free(Tile_names);
 	free(psBlockMap[AUX_MAP]);
-	psBlockMap[AUX_MAP] = NULL;
+	psBlockMap[AUX_MAP] = nullptr;
 	free(psBlockMap[AUX_ASTARMAP]);
-	psBlockMap[AUX_ASTARMAP] = NULL;
+	psBlockMap[AUX_ASTARMAP] = nullptr;
 	free(psBlockMap[AUX_DANGERMAP]);
 	free(floodbucket);
-	psBlockMap[AUX_DANGERMAP] = NULL;
+	psBlockMap[AUX_DANGERMAP] = nullptr;
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
 		free(psAuxMap[x]);
-		psAuxMap[x] = NULL;
+		psAuxMap[x] = nullptr;
 	}
 
-	map = NULL;
-	floodbucket = NULL;
-	psGroundTypes = NULL;
-	mapDecals = NULL;
-	psMapTiles = NULL;
+	map = nullptr;
+	floodbucket = nullptr;
+	psGroundTypes = nullptr;
+	mapDecals = nullptr;
+	psMapTiles = nullptr;
 	mapWidth = mapHeight = 0;
 	numTile_names = 0;
-	Tile_names = NULL;
+	Tile_names = nullptr;
 	return true;
 }
 
@@ -1773,7 +1773,7 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 	const MAPTILE *psTile = mapTile(posX, posY);
 
 	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
-	return psTile != NULL && TileIsBurning(psTile);
+	return psTile != nullptr && TileIsBurning(psTile);
 }
 
 // This function runs in a separate thread!
@@ -1971,13 +1971,13 @@ void mapInit()
 	}
 
 	// Start thread
-	ASSERT(dangerSemaphore == NULL && dangerThread == NULL, "Map data not cleaned up before starting!");
+	ASSERT(dangerSemaphore == nullptr && dangerThread == nullptr, "Map data not cleaned up before starting!");
 	if (game.type == SKIRMISH)
 	{
 		lastDangerPlayer = 0;
 		dangerSemaphore = wzSemaphoreCreate(0);
 		dangerDoneSemaphore = wzSemaphoreCreate(0);
-		dangerThread = wzThreadCreate(dangerThreadFunc, NULL);
+		dangerThread = wzThreadCreate(dangerThreadFunc, nullptr);
 		wzThreadStart(dangerThread);
 	}
 }

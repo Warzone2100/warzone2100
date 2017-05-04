@@ -208,7 +208,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	iV_DrawText(butString, x + 6, y + 12, font_regular);	//draw text
 
-	if (mapData != NULL)
+	if (mapData != nullptr)
 	{
 		// Display map hash, so we can see the difference between identically named maps.
 		Sha256 hash = mapData->realFileHash;  // levGetFileHash can be slightly expensive.
@@ -389,7 +389,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 	// Put the buttons on it.
 	int nextButtonId = M_REQUEST_BUT;
-	for (char **currFile = fileList; *currFile != NULL; ++currFile)
+	for (char **currFile = fileList; *currFile != nullptr; ++currFile)
 	{
 		const unsigned int fileNameLength = strlen(*currFile);
 
@@ -502,7 +502,7 @@ static void closeMultiRequester(void)
 	multiRequestUp = false;
 	resetReadyStatus(false);
 	delete psRScreen;  // move this to the frontend shutdown...
-	psRScreen = NULL;
+	psRScreen = nullptr;
 	return;
 }
 
@@ -794,7 +794,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
 			int num = 0;
-			for (STRUCTURE *temp = apsStructLists[player]; temp != NULL; temp = temp->psNext)
+			for (STRUCTURE *temp = apsStructLists[player]; temp != nullptr; temp = temp->psNext)
 			{
 				++num;
 			}
@@ -805,7 +805,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	// a droid of theirs.
 	DROID *displayDroid = apsDroidLists[player];
-	while (displayDroid != NULL && !displayDroid->visible[selectedPlayer])
+	while (displayDroid != nullptr && !displayDroid->visible[selectedPlayer])
 	{
 		displayDroid = displayDroid->psNext;
 	}
@@ -834,12 +834,12 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	// clean up widgets if player leaves while menu is up.
 	if (!isHuman && !(game.type == SKIRMISH && player < game.maxPlayers))
 	{
-		if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + player) != NULL)
+		if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + player) != nullptr)
 		{
 			widgDelete(psWScreen, MULTIMENU_CHANNEL + player);
 		}
 
-		if (widgGetFromID(psWScreen, MULTIMENU_ALLIANCE_BASE + player) != NULL)
+		if (widgGetFromID(psWScreen, MULTIMENU_ALLIANCE_BASE + player) != nullptr)
 		{
 			widgDelete(psWScreen, MULTIMENU_ALLIANCE_BASE + player);
 			widgDelete(psWScreen, MULTIMENU_GIFT_RAD + player);

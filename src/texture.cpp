@@ -90,7 +90,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 
 	// debug(LOG_TEXTURE, "newPage: glTexImage2D(page=%d, level=%d) opengl id=%u", texPage, level, _TEX_PAGE[texPage].id);
 	glTexImage2D(GL_TEXTURE_2D, level, wz_texture_compression, width, height, 0,
-	             GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	             GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

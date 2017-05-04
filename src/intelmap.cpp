@@ -196,7 +196,7 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 
 /*********************** VARIABLES ****************************/
 // The current message being displayed
-MESSAGE			*psCurrentMsg = NULL;
+MESSAGE			*psCurrentMsg = nullptr;
 
 #define PAUSE_DISPLAY_CONDITION (!bMultiPlayer)
 #define PAUSEMESSAGE_YOFFSET (0)
@@ -208,7 +208,7 @@ bool intAddIntelMap(void)
 	bool			Animate = true;
 
 	//check playCurrent with psCurrentMsg
-	if (psCurrentMsg == NULL)
+	if (psCurrentMsg == nullptr)
 	{
 		playCurrent = false;
 	}
@@ -218,7 +218,7 @@ bool intAddIntelMap(void)
 	}
 
 	// Is the form already up?
-	if (widgGetFromID(psWScreen, IDINTMAP_FORM) != NULL)
+	if (widgGetFromID(psWScreen, IDINTMAP_FORM) != nullptr)
 	{
 		intRemoveIntelMapNoAnim();
 		Animate = false;
@@ -233,7 +233,7 @@ bool intAddIntelMap(void)
 	//add message to indicate game is paused - single player mode
 	if (PAUSE_DISPLAY_CONDITION)
 	{
-		if (widgGetFromID(psWScreen, IDINTMAP_PAUSELABEL) == NULL)
+		if (widgGetFromID(psWScreen, IDINTMAP_PAUSELABEL) == nullptr)
 		{
 			W_LABINIT sLabInit;
 			sLabInit.id = IDINTMAP_PAUSELABEL;
@@ -375,7 +375,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 	RESEARCH		*psResearch;
 
 	// Is the form already up?
-	if (widgGetFromID(psWScreen, IDINTMAP_MSGVIEW) != NULL)
+	if (widgGetFromID(psWScreen, IDINTMAP_MSGVIEW) != nullptr)
 	{
 		intRemoveMessageView(false);
 		Animate = false;
@@ -451,7 +451,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 
-	ASSERT_OR_RETURN(false, psResearch != NULL, "Research not found");
+	ASSERT_OR_RETURN(false, psResearch != nullptr, "Research not found");
 	//sLabInit.pText=psResearch->pName;
 	sLabInit.pText = psResearch->name;
 
@@ -525,7 +525,7 @@ void intProcessIntelMap(UDWORD id)
 	else if (id == IDINTMAP_CLOSE)
 	{
 		//if close button pressed on 3D View then close the view only
-		psCurrentMsg = NULL;
+		psCurrentMsg = nullptr;
 		intRemoveMessageView(true);
 		if (bMultiPlayer && !MultiMenuUp)
 		{
@@ -619,7 +619,7 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		return;
 	}
 
-	ASSERT_OR_RETURN(, psMessage->pViewData != NULL, "Invalid ViewData pointer");
+	ASSERT_OR_RETURN(, psMessage->pViewData != nullptr, "Invalid ViewData pointer");
 
 	if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
 	{
@@ -645,7 +645,7 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 			}
 
 
-			seq_AddSeqToList(psViewReplay->pSeqList[Sequence].sequenceName, psViewReplay->pSeqList[Sequence].pAudio, NULL, bLoop);
+			seq_AddSeqToList(psViewReplay->pSeqList[Sequence].sequenceName, psViewReplay->pSeqList[Sequence].pAudio, nullptr, bLoop);
 
 			debug(LOG_GUI, "StartMessageSequences: sequence=%d", Sequence);
 			addVideoText(&psViewReplay->pSeqList[Sequence], Sequence);
@@ -665,7 +665,7 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		psViewReplay = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 
 		seq_ClearSeqList();
-		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->pAudio, NULL, false);
+		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->pAudio, nullptr, false);
 		//play first full screen video
 		if (Start == true)
 		{
@@ -698,7 +698,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 	{
 		widgSetButtonState(psWScreen, messageID, 0);
 		intRemoveMessageView(false);
-		psCurrentMsg = NULL;
+		psCurrentMsg = nullptr;
 	}
 
 	/* Lock the new button */
@@ -755,7 +755,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 			else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
 			{
 				psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
-				if (psResearch != NULL)
+				if (psResearch != nullptr)
 				{
 					static const float maxVolume = 1.f;
 					static AUDIO_STREAM *playing = nullptr;
@@ -813,7 +813,7 @@ static void intCleanUpIntelMap(void)
 	MESSAGE		*psMessage, *psNext;
 
 	//remove any research messages that have been read
-	for (psMessage = apsMessages[selectedPlayer]; psMessage != NULL; psMessage =
+	for (psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage =
 	         psNext)
 	{
 		psNext = psMessage->psNext;
@@ -830,7 +830,7 @@ static void intCleanUpIntelMap(void)
 	if (interpProcessorActive())
 	{
 		debug(LOG_SCRIPT, "intCleanUpIntelMap: interpreter running, storing CALL_VIDEO_QUIT");
-		if (!msgStackPush(CALL_VIDEO_QUIT, -1, -1, "\0", -1, -1, NULL))
+		if (!msgStackPush(CALL_VIDEO_QUIT, -1, -1, "\0", -1, -1, nullptr))
 		{
 			debug(LOG_ERROR, "intCleanUpIntelMap() - msgStackPush - stack failed");
 			return;
@@ -929,7 +929,7 @@ IntMessageButton::IntMessageButton(WIDGET *parent)
 /*Displays the buttons used on the intelligence map */
 void IntMessageButton::display(int xOffset, int yOffset)
 {
-	RESEARCH		*pResearch = NULL;
+	RESEARCH		*pResearch = nullptr;
 	bool MovieButton = false;
 	ImdObject object;
 	Image image;
@@ -1166,8 +1166,8 @@ void setCurrentMsg(void)
 {
 	MESSAGE *psMsg, *psLastMsg;
 
-	psLastMsg = NULL;
-	for (psMsg = apsMessages[selectedPlayer]; psMsg != NULL; psMsg =
+	psLastMsg = nullptr;
+	for (psMsg = apsMessages[selectedPlayer]; psMsg != nullptr; psMsg =
 	         psMsg->psNext)
 	{
 		if (psMsg->type != MSG_PROXIMITY)

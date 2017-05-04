@@ -32,14 +32,14 @@
 #include "pointtree.h"
 
 
-static PointTree *gridPointTree = NULL;  // A quad-tree-like object.
+static PointTree *gridPointTree = nullptr;  // A quad-tree-like object.
 static PointTree::Filter *gridFiltersUnseen;
 static PointTree::Filter *gridFiltersDroidsByPlayer;
 
 // initialise the grid system
 bool gridInitialise(void)
 {
-	ASSERT(gridPointTree == NULL, "gridInitialise already called, without calling gridShutDown.");
+	ASSERT(gridPointTree == nullptr, "gridInitialise already called, without calling gridShutDown.");
 	gridPointTree = new PointTree;
 	gridFiltersUnseen = new PointTree::Filter[MAX_PLAYERS];
 	gridFiltersDroidsByPlayer = new PointTree::Filter[MAX_PLAYERS];
@@ -58,7 +58,7 @@ void gridReset(void)
 		BASE_OBJECT *start[3] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player], (BASE_OBJECT *)apsFeatureLists[player]};
 		for (unsigned type = 0; type != sizeof(start) / sizeof(*start); ++type)
 		{
-			for (BASE_OBJECT *psObj = start[type]; psObj != NULL; psObj = psObj->psNext)
+			for (BASE_OBJECT *psObj = start[type]; psObj != nullptr; psObj = psObj->psNext)
 			{
 				if (!psObj->died)
 				{
@@ -85,11 +85,11 @@ void gridReset(void)
 void gridShutDown(void)
 {
 	delete gridPointTree;
-	gridPointTree = NULL;
+	gridPointTree = nullptr;
 	delete[] gridFiltersUnseen;
-	gridFiltersUnseen = NULL;
+	gridFiltersUnseen = nullptr;
 	delete[] gridFiltersDroidsByPlayer;
-	gridFiltersDroidsByPlayer = NULL;
+	gridFiltersDroidsByPlayer = nullptr;
 }
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
@@ -102,7 +102,7 @@ static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 template<class Condition>
 static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
 {
-	if (filter == NULL)
+	if (filter == nullptr)
 	{
 		gridPointTree->query(x, y, radius);
 	}
@@ -162,7 +162,7 @@ struct ConditionTrue
 
 GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
-	return gridStartIterateFiltered(x, y, radius, NULL, ConditionTrue());
+	return gridStartIterateFiltered(x, y, radius, nullptr, ConditionTrue());
 }
 
 GridList const &gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)

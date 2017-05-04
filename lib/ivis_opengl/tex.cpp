@@ -100,7 +100,7 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 	}
 	// it is uploaded, we do not need it anymore
 	free(s->bmp);
-	s->bmp = NULL;
+	s->bmp = nullptr;
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -248,7 +248,7 @@ void iV_unloadImage(iV_Image *image)
 		if (image->bmp)
 		{
 			free(image->bmp);
-			image->bmp = NULL;
+			image->bmp = nullptr;
 		}
 	}
 	else

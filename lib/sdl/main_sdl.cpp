@@ -71,8 +71,8 @@ int main(int argc, char *argv[])
 }
 
 // At this time, we only have 1 window and 1 GL context.
-static SDL_Window *WZwindow = NULL;
-static SDL_GLContext WZglcontext = NULL;
+static SDL_Window *WZwindow = nullptr;
+static SDL_GLContext WZglcontext = nullptr;
 unsigned int screenWidth = 0;
 unsigned int screenHeight = 0;
 
@@ -222,8 +222,8 @@ unsigned int wzGetCurrentKey(void)
 /* Put a character into a text buffer overwriting any text under the cursor */
 QString wzGetSelection()
 {
-	QString retval = NULL;
-	static char *scrap = NULL;
+	QString retval = nullptr;
+	static char *scrap = nullptr;
 
 	if (get_scrap(&scrap))
 	{
@@ -433,10 +433,7 @@ int wzGetTicks()
 
 void wzFatalDialog(const char *msg)
 {
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-	                         "We have a problem!",
-	                         msg,
-	                         NULL);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "We have a problem!", msg, nullptr);
 }
 
 void wzScreenFlip()
@@ -1100,7 +1097,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 */
 void inputhandleText(SDL_TextInputEvent *Tevent)
 {
-	size_t *newtextsize = NULL;
+	size_t *newtextsize = nullptr;
 	int size = 	SDL_strlen(Tevent->text);
 	if (size)
 	{
@@ -1108,7 +1105,7 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
 		{
 			// clean up memory from last use.
 			free(utf8Buf);
-			utf8Buf = NULL;
+			utf8Buf = nullptr;
 		}
 		utf8Buf = UTF8toUTF32(Tevent->text, newtextsize);
 		debug(LOG_INPUT, "Keyboard: text input \"%s\"", Tevent->text);
@@ -1561,5 +1558,5 @@ void wzShutdown()
 	SDL_Quit();
 	appPtr->quit();
 	delete appPtr;
-	appPtr = NULL;
+	appPtr = nullptr;
 }

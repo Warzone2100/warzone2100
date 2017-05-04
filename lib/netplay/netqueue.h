@@ -57,7 +57,7 @@ class MessageWriter
 public:
 	enum { Read, Write, Direction = Write };
 
-	MessageWriter(NetMessage *m = NULL) : message(m) {}
+	MessageWriter(NetMessage *m = nullptr) : message(m) {}
 	MessageWriter(NetMessage &m) : message(&m) {}
 	void byte(uint8_t v) const
 	{
@@ -75,7 +75,7 @@ class MessageReader
 public:
 	enum { Read, Write, Direction = Read };
 
-	MessageReader(const NetMessage *m = NULL) : message(m), index(0) {}
+	MessageReader(const NetMessage *m = nullptr) : message(m), index(0) {}
 	MessageReader(const NetMessage &m) : message(&m), index(0) {}
 	void byte(uint8_t &v) const
 	{

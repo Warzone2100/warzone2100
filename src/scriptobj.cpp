@@ -107,7 +107,7 @@ bool scrBaseObjGet(UDWORD index)
 		}
 		type = VAL_INT;
 		scrFunctionResult.v.ival = ((DROID *)psObj)->order.type;
-		if (scrFunctionResult.v.ival == DORDER_GUARD && ((DROID *)psObj)->order.psObj == NULL)
+		if (scrFunctionResult.v.ival == DORDER_GUARD && ((DROID *)psObj)->order.psObj == nullptr)
 		{
 			scrFunctionResult.v.ival = DORDER_NONE;
 		}
@@ -375,7 +375,7 @@ bool scrObjToDroid(void)
 	// return NULL if not a droid
 	if (psObj->type != OBJ_DROID)
 	{
-		psObj = NULL;
+		psObj = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psObj;
@@ -401,7 +401,7 @@ bool scrObjToStructure(void)
 	// return NULL if not a droid
 	if (psObj->type != OBJ_STRUCTURE)
 	{
-		psObj = NULL;
+		psObj = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psObj;
@@ -427,7 +427,7 @@ bool scrObjToFeature(void)
 	// return NULL if not a droid
 	if (psObj->type != OBJ_FEATURE)
 	{
-		psObj = NULL;
+		psObj = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psObj;
@@ -687,7 +687,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_INTMESSAGE:
 		// save the name
 		psIntMessage = (VIEWDATA *)psVal->v.oval;
-		if (psIntMessage != NULL)
+		if (psIntMessage != nullptr)
 		{
 			ini.setValue("data", QString(psIntMessage->pName));
 		}
@@ -728,7 +728,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		break;
 	case ST_TEXTSTRING:
 		{
-			const char *const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : NULL;
+			const char *const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : nullptr;
 			if (idStr)
 			{
 				ini.setValue("data", QString(idStr));
@@ -806,7 +806,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 	SDWORD			index, members;
 	UDWORD			id;
 	LEVEL_DATASET	*psLevel;
-	DROID_GROUP		*psGroup = NULL;
+	DROID_GROUP		*psGroup = nullptr;
 
 	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
@@ -817,7 +817,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		}
 		else
 		{
-			psVal->v.oval = NULL;
+			psVal->v.oval = nullptr;
 		}
 		break;
 	case ST_BASEOBJECT:
@@ -830,7 +830,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		}
 		else
 		{
-			psVal->v.oval = NULL;
+			psVal->v.oval = nullptr;
 		}
 		break;
 	case ST_BASESTATS:
@@ -935,30 +935,30 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_TEMPLATE:
-		psVal->v.oval = NULL;
+		psVal->v.oval = nullptr;
 		if (ini.contains("data"))
 		{
 			// FIXME: Ugh. Find a better way to show full template info
 			psVal->v.oval = (void *)IdToTemplate(ini.value("data").toInt(), ANYPLAYER);
-			if ((DROID_TEMPLATE *)(psVal->v.oval) == NULL)
+			if ((DROID_TEMPLATE *)(psVal->v.oval) == nullptr)
 			{
 				debug(LOG_FATAL, "Could not find template %d", ini.value("data").toInt());
 			}
 		}
 		break;
 	case ST_TEXTSTRING:
-		psVal->v.sval = NULL;
+		psVal->v.sval = nullptr;
 		if (ini.contains("data"))
 		{
 			psVal->v.sval = strdup(ini.value("data").toString().toUtf8().constData());
 		}
 		break;
 	case ST_LEVEL:
-		psVal->v.sval = NULL;
+		psVal->v.sval = nullptr;
 		if (ini.contains("data"))
 		{
 			psLevel = levFindDataSet(ini.value("data").toString().toUtf8().constData());
-			if (psLevel == NULL)
+			if (psLevel == nullptr)
 			{
 				debug(LOG_FATAL, "Could not find level dataset");
 				return false;	// FIXME: Why are we saying fatal, if this isn't?
@@ -967,7 +967,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		}
 		break;
 	case ST_RESEARCH:
-		psVal->v.oval = NULL;
+		psVal->v.oval = nullptr;
 		if (ini.contains("data"))
 		{
 			QString research = ini.value("data").toString();
@@ -979,10 +979,10 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		}
 		break;
 	case ST_GROUP:
-		if (psVal->v.oval == NULL)
+		if (psVal->v.oval == nullptr)
 		{
 			DROID_GROUP *tmp = grpCreate();
-			tmp->add(NULL);
+			tmp->add(nullptr);
 			psVal->v.oval = tmp;
 		}
 		psGroup = (DROID_GROUP *)(psVal->v.oval);

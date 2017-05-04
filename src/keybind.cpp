@@ -100,7 +100,7 @@ bool		bAllowOtherKeyPresses = true;
 char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
-static STRUCTURE	*psOldRE = NULL;
+static STRUCTURE	*psOldRE = nullptr;
 static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
 
 /* Support functions to minimise code size */
@@ -367,7 +367,7 @@ void	kf_DebugDroidInfo(void)
 
 void kf_CloneSelected(int limit)
 {
-	DROID_TEMPLATE	*sTemplate = NULL;
+	DROID_TEMPLATE	*sTemplate = nullptr;
 	const char *msg;
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -406,10 +406,10 @@ void kf_CloneSelected(int limit)
 				{
 					addDroid(psNewDroid, apsDroidLists);
 					psScrCBNewDroid = psNewDroid;
-					psScrCBNewDroidFact = NULL;
+					psScrCBNewDroidFact = nullptr;
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
-					psScrCBNewDroid = NULL;
-					triggerEventDroidBuilt(psNewDroid, NULL);
+					psScrCBNewDroid = nullptr;
+					triggerEventDroidBuilt(psNewDroid, nullptr);
 				}
 				else if (!bMultiMessages)
 				{
@@ -1066,7 +1066,7 @@ void	kf_SelectGrouping(UDWORD	groupNumber)
 	bool	Selected;
 
 	bAlreadySelected = false;
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
 		/* Wipe out the ones in the wrong group */
 		if (psDroid->selected && psDroid->group != groupNumber)
@@ -1398,7 +1398,7 @@ void	kf_FinishAllResearch(void)
 			else
 			{
 				MakeResearchCompleted(&asPlayerResList[selectedPlayer][j]);
-				researchResult(j, selectedPlayer, false, NULL, false);
+				researchResult(j, selectedPlayer, false, nullptr, false);
 			}
 		}
 	}
@@ -1452,7 +1452,7 @@ void	kf_FinishResearch(void)
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
-			BASE_STATS	*pSubject = NULL;
+			BASE_STATS	*pSubject = nullptr;
 
 			// find out what we are researching here
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
@@ -2366,11 +2366,11 @@ void kf_ToggleFormationSpeedLimiting(void)
 // --------------------------------------------------------------------------
 void	kf_RightOrderMenu(void)
 {
-	DROID	*psDroid, *psGotOne = NULL;
+	DROID	*psDroid, *psGotOne = nullptr;
 	bool	bFound;
 
 	// if menu open, then close it!
-	if (widgGetFromID(psWScreen, IDORDER_FORM) != NULL)
+	if (widgGetFromID(psWScreen, IDORDER_FORM) != nullptr)
 	{
 		intRemoveOrder();	// close the screen.
 		return;
@@ -2401,7 +2401,7 @@ void kf_TriggerShockWave(void)
 	pos.z = mouseTileY * TILE_UNITS + TILE_UNITS / 2;
 	pos.y = map_Height(pos.x, pos.z) + SHOCK_WAVE_HEIGHT;
 
-	addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, NULL, 0);
+	addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, nullptr, 0);
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleMouseInvert(void)
@@ -2671,9 +2671,9 @@ void kf_NoAssert()
 // rotuine to decrement the tab-scroll 'buttons'
 void kf_BuildPrevPage()
 {
-	ASSERT_OR_RETURN(, psWScreen != NULL, " Invalid screen pointer!");
+	ASSERT_OR_RETURN(, psWScreen != nullptr, " Invalid screen pointer!");
 	ListTabWidget *psTForm = (ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
-	if (psTForm == NULL)
+	if (psTForm == nullptr)
 	{
 		return;
 	}
@@ -2690,9 +2690,9 @@ void kf_BuildPrevPage()
 // rotuine to advance the tab-scroll 'buttons'
 void kf_BuildNextPage()
 {
-	ASSERT_OR_RETURN(, psWScreen != NULL, " Invalid screen pointer!");
+	ASSERT_OR_RETURN(, psWScreen != nullptr, " Invalid screen pointer!");
 	ListTabWidget *psTForm = (ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
-	if (psTForm == NULL)
+	if (psTForm == nullptr)
 	{
 		return;
 	}

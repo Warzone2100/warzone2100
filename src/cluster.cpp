@@ -440,8 +440,8 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 				break;
 			}
 
-			psScrCBObjSeen = NULL;
-			psScrCBObjViewer = NULL;
+			psScrCBObjSeen = nullptr;
+			psScrCBObjViewer = nullptr;
 		}
 	}
 }
@@ -459,12 +459,12 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 		case OBJ_DROID:
 			psLastDroidHit = (DROID *)psObj;
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_ATTACKED);
-			psLastDroidHit = NULL;
+			psLastDroidHit = nullptr;
 			break;
 		case OBJ_STRUCTURE:
 			psLastStructHit = (STRUCTURE *)psObj;
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_ATTACKED);
-			psLastStructHit = NULL;
+			psLastStructHit = nullptr;
 			break;
 		default:
 			ASSERT(!"invalid object type", "clustObjectAttacked: invalid object type");

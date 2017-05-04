@@ -355,7 +355,7 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 {
 	QList<CAMPAIGN_FILE> result;
 	char **files = PHYSFS_enumerateFiles("campaigns");
-	for (char **i = files; *i != NULL; ++i)
+	for (char **i = files; *i != nullptr; ++i)
 	{
 		CAMPAIGN_FILE c;
 		QString filename("campaigns/");
@@ -404,7 +404,7 @@ static void frontEndNewGame(int which)
 	if (!list[which].video.isEmpty())
 	{
 		seq_ClearSeqList();
-		seq_AddSeqToList(list[which].video.toUtf8().constData(), NULL, list[which].captions.toUtf8().constData(), false);
+		seq_AddSeqToList(list[which].video.toUtf8().constData(), nullptr, list[which].captions.toUtf8().constData(), false);
 		seq_StartNextFullScreenVideo();
 	}
 	if (!list[which].package.isEmpty())
@@ -415,7 +415,7 @@ static void frontEndNewGame(int which)
 		path += "campaigns";
 		path += PHYSFS_getDirSeparator();
 		path += list[which].package;
-		if (!PHYSFS_mount(path.toUtf8().constData(), NULL, PHYSFS_APPEND))
+		if (!PHYSFS_mount(path.toUtf8().constData(), nullptr, PHYSFS_APPEND))
 		{
 			debug(LOG_ERROR, "Failed to load campaign mod \"%s\": %s",
 			      path.toUtf8().constData(), PHYSFS_getLastError());
@@ -424,7 +424,7 @@ static void frontEndNewGame(int which)
 	if (!list[which].loading.isEmpty())
 	{
 		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().constData());
-		if (!loadLevFile(list[which].loading.toUtf8().constData(), mod_campaign, false, NULL))
+		if (!loadLevFile(list[which].loading.toUtf8().constData(), mod_campaign, false, nullptr))
 		{
 			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().constData());
 			return;
@@ -1260,11 +1260,11 @@ static bool startGameOptionsMenu(void)
 	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
 	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
 
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS6M + (0 * (w + 6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 0);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS6M + (1 * (w + 6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 4);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS6M + (2 * (w + 6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 5);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS6M + (3 * (w + 6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 6);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS6M + (4 * (w + 6)), FRONTEND_POS6Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 7);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS6M + (0 * (w + 6)), FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 0);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS6M + (1 * (w + 6)), FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 4);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS6M + (2 * (w + 6)), FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 5);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS6M + (3 * (w + 6)), FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 6);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS6M + (4 * (w + 6)), FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 7);
 
 	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
 	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
@@ -1282,7 +1282,7 @@ static bool startGameOptionsMenu(void)
 	{
 		int cellX = (colour + 1) % 7;
 		int cellY = (colour + 1) / 7;
-		addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_MP_PR + colour + 1, FRONTEND_POS7M + cellX * (w + 2), FRONTEND_POS7Y + cellY * (h + 2) - 5, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colour >= 0 ? colour : MAX_PLAYERS + 1);
+		addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_MP_PR + colour + 1, FRONTEND_POS7M + cellX * (w + 2), FRONTEND_POS7Y + cellY * (h + 2) - 5, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colour >= 0 ? colour : MAX_PLAYERS + 1);
 	}
 	widgSetButtonState(psWScreen, FE_MP_PR + playercolor + 1, WBUT_LOCK);
 	addTextButton(FRONTEND_COLOUR_MP, FRONTEND_POS7X, FRONTEND_POS7Y, _("Skirmish/Multiplayer"), 0);

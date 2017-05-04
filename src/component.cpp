@@ -92,8 +92,8 @@ UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *)
 
 UDWORD getComponentRadius(BASE_STATS *psComponent)
 {
-	iIMDShape *ComponentIMD = NULL;
-	iIMDShape *MountIMD = NULL;
+	iIMDShape *ComponentIMD = nullptr;
+	iIMDShape *MountIMD = nullptr;
 	SDWORD compID;
 
 	compID = StatIsComponent(psComponent);
@@ -177,7 +177,7 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
 
-	if (baseImd != NULL)
+	if (baseImd != nullptr)
 	{
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
 	}
@@ -186,12 +186,12 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 	//and draw the turret
 	if (strImd->nconnectors)
 	{
-		weaponImd[0] = NULL;
-		mountImd[0] = NULL;
+		weaponImd[0] = nullptr;
+		mountImd[0] = nullptr;
 		for (int i = 0; i < Stats->numWeaps; i++)
 		{
-			weaponImd[i] = NULL;//weapon is gun ecm or sensor
-			mountImd[i] = NULL;
+			weaponImd[i] = nullptr;//weapon is gun ecm or sensor
+			mountImd[i] = nullptr;
 		}
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
@@ -199,26 +199,26 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 		for (int i = 0; i < MAX(1, Stats->numWeaps); i++)
 		{
 			//can only have the one
-			if (Stats->psWeapStat[i] != NULL)
+			if (Stats->psWeapStat[i] != nullptr)
 			{
 				weaponImd[i] = Stats->psWeapStat[i]->pIMD;
 				mountImd[i] = Stats->psWeapStat[i]->pMountGraphic;
 			}
 
-			if (weaponImd[i] == NULL)
+			if (weaponImd[i] == nullptr)
 			{
 				//check for ECM
-				if (Stats->pECM != NULL)
+				if (Stats->pECM != nullptr)
 				{
 					weaponImd[i] =  Stats->pECM->pIMD;
 					mountImd[i] =  Stats->pECM->pMountGraphic;
 				}
 			}
 
-			if (weaponImd[i] == NULL)
+			if (weaponImd[i] == nullptr)
 			{
 				//check for sensor
-				if (Stats->pSensor != NULL)
+				if (Stats->pSensor != nullptr)
 				{
 					weaponImd[i] =  Stats->pSensor->pIMD;
 					mountImd[i]  =  Stats->pSensor->pMountGraphic;
@@ -227,12 +227,12 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 		}
 
 		//draw Weapon/ECM/Sensor for structure
-		if (weaponImd[0] != NULL)
+		if (weaponImd[0] != nullptr)
 		{
 			for (int i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
 				glm::mat4 localMatrix = glm::translate(strImd->connectors[i].xzy);
-				if (mountImd[i] != NULL)
+				if (mountImd[i] != nullptr)
 				{
 					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix * localMatrix);
 					if (mountImd[i]->nconnectors)
@@ -261,8 +261,8 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, const Vector3i *rotation
 //
 void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
-	iIMDShape *ComponentIMD = NULL;
-	iIMDShape *MountIMD = NULL;
+	iIMDShape *ComponentIMD = nullptr;
+	iIMDShape *MountIMD = nullptr;
 	int compID = StatIsComponent(Stat);
 
 	if (compID >= 0)
@@ -400,7 +400,7 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 
 	/* get propulsion stats */
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT_OR_RETURN(, psPropStats != NULL, "invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 	//set pieflag for button object or ingame object
 	if (bButton)
@@ -828,7 +828,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 		position.y = st.pos.z + rand() % 8;
 		position.z = st.pos.y + DROID_EMP_SPREAD;
 		effectGiveAuxVar(90 + rand() % 20);
-		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_PLASMA, false, NULL, 0);
+		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_PLASMA, false, nullptr, 0);
 	}
 
 	if (psDroid->visible[selectedPlayer] == UBYTE_MAX)
@@ -849,7 +849,7 @@ void destroyFXDroid(DROID *psDroid, unsigned impactTime)
 {
 	for (int i = 0; i < 5; ++i)
 	{
-		iIMDShape *psImd = NULL;
+		iIMDShape *psImd = nullptr;
 
 		int maxHorizontalScatter = TILE_UNITS / 4;
 		int heightScatter = TILE_UNITS / 5;
@@ -901,7 +901,7 @@ void destroyFXDroid(DROID *psDroid, unsigned impactTime)
 			}
 			break;
 		}
-		if (psImd == NULL)
+		if (psImd == nullptr)
 		{
 			psImd = getRandomDebrisImd();
 		}

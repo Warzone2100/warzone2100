@@ -143,7 +143,7 @@ struct EFFECT
 
 	EFFECT() : player(MAX_PLAYERS), control(0), group(EFFECT_FREED), type(EXPLOSION_TYPE_SMALL), frameNumber(0), size(0),
 	           baseScale(0), specific(0), birthTime(0), lastFrame(0), frameDelay(0), lifeSpan(0), radius(0),
-	           imd(NULL), prev(NULL), next(NULL) {}
+	           imd(nullptr), prev(nullptr), next(nullptr) {}
 };
 
 /* Maximum number of effects in the world - need to investigate what this should be */

@@ -109,7 +109,7 @@ static bool scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *p
 {
 	SDWORD	i, size;
 
-	if (!psCurrScript || psCurrScript->psDebug == NULL)
+	if (!psCurrScript || psCurrScript->psDebug == nullptr)
 	{
 		return false;
 	}
@@ -544,7 +544,7 @@ static const char *const yytname[] =
   "TYPE", "VAR", "ARRAY", "SCRIPT", "STORE", "RUN", "'{'", "'}'", "'['",
   "']'", "$accept", "val_file", "script_entry", "$@1", "$@2",
   "script_name", "var_init_list", "var_init", "array_index",
-  "array_index_list", "var_entry", "var_value", 0
+  "array_index_list", "var_entry", "var_value", nullptr
 };
 #endif
 
@@ -1029,12 +1029,12 @@ static int
 yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                 yytype_int16 *yyssp, int yytoken)
 {
-  YYSIZE_T yysize0 = yytnamerr (0, yytname[yytoken]);
+  YYSIZE_T yysize0 = yytnamerr (nullptr, yytname[yytoken]);
   YYSIZE_T yysize = yysize0;
   YYSIZE_T yysize1;
   enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
   /* Internationalized format string. */
-  const char *yyformat = 0;
+  const char *yyformat = nullptr;
   /* Arguments of yyformat. */
   char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
   /* Number of reported tokens (one for the "unexpected", one per
@@ -1094,7 +1094,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                     break;
                   }
                 yyarg[yycount++] = yytname[yyx];
-                yysize1 = yysize + yytnamerr (0, yytname[yyx]);
+                yysize1 = yysize + yytnamerr (nullptr, yytname[yyx]);
                 if (! (yysize <= yysize1
                        && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
                   return 2;
@@ -1860,7 +1860,7 @@ yyreduce:
 							YYABORT;
 						}
 						data.v.oval = getTemplateFromTranslatedNameNoPlayer((yyvsp[(3) - (3)].sInit).pString);	/* store pointer to the template */
-						if (data.v.oval == NULL)
+						if (data.v.oval == nullptr)
 						{
 							yyerror("Template %s not found", (yyvsp[(3) - (3)].sInit).pString);
 							YYABORT;
@@ -1950,7 +1950,7 @@ yyreduce:
 							YYABORT;
 						}
 						data.v.oval = getViewData((yyvsp[(3) - (3)].sInit).pString);	/* store pointer to the intelligence message */
-						if (data.v.oval == NULL)
+						if (data.v.oval == nullptr)
 						{
 							yyerror("Message %s not found", (yyvsp[(3) - (3)].sInit).pString);
 							YYABORT;
@@ -2001,7 +2001,7 @@ yyreduce:
 							}
 							// just check the level exists
 							psLevel = levFindDataSet((yyvsp[(3) - (3)].sInit).pString);
-							if (psLevel == NULL)
+							if (psLevel == nullptr)
 							{
 								yyerror("Level %s not found", (yyvsp[(3) - (3)].sInit).pString);
 								YYABORT;
@@ -2414,14 +2414,14 @@ bool scrvLookUpVar(const char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 
-	if (!psCurrScript || psCurrScript->psDebug == NULL)
+	if (!psCurrScript || psCurrScript->psDebug == nullptr)
 	{
 		return false;
 	}
 
 	for(i=0; i<psCurrScript->numGlobals; i++)
 	{
-		if (psCurrScript->psVarDebug[i].pIdent != NULL &&
+		if (psCurrScript->psVarDebug[i].pIdent != nullptr &&
 			strcmp(psCurrScript->psVarDebug[i].pIdent, pIdent) == 0)
 		{
 			*pIndex = i;
@@ -2438,14 +2438,14 @@ bool scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 
-	if (!psCurrScript || psCurrScript->psDebug == NULL)
+	if (!psCurrScript || psCurrScript->psDebug == nullptr)
 	{
 		return false;
 	}
 
 	for(i=0; i<psCurrScript->numArrays; i++)
 	{
-		if (psCurrScript->psArrayDebug[i].pIdent != NULL &&
+		if (psCurrScript->psArrayDebug[i].pIdent != nullptr &&
 			strcmp(psCurrScript->psArrayDebug[i].pIdent, pIdent) == 0)
 		{
 			*pIndex = i;
@@ -2482,7 +2482,7 @@ void yyerror(const char* fmt, ...)
 	va_list	args;
 
 	va_start(args, fmt);
-	size = vsnprintf(NULL, 0, fmt, args);
+	size = vsnprintf(nullptr, 0, fmt, args);
 	va_end(args);
 
 	txtBuf = (char *)alloca(size + 1);

@@ -45,17 +45,17 @@
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
 /// messages at the same game time. The game queues should be used, even in single-player. Players should write to their own queue, not to other player's
 /// queues, and should read messages from all queues including their own.
-static NetQueue *gameQueues[MAX_PLAYERS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static NetQueue *gameQueues[MAX_PLAYERS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
 /// There is a bidirectional net queue for communicating with each client or host. Each queue corresponds either to a real socket, or a virtual socket
 /// which routes via the host.
-static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static NetQueuePair *netQueues[MAX_CONNECTED_PLAYERS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
 /// These queues are for clients which just connected, but haven't yet been assigned a player number.
-static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static NetQueuePair *tmpQueues[MAX_TMP_SOCKETS] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
 /// Sending a message to the broadcast queue is equivalent to sending the message to the net queues of all other players.
-static NetQueue *broadcastQueue = NULL;
+static NetQueue *broadcastQueue = nullptr;
 
 // Only used between NETbegin{Encode,Decode} and NETend calls.
 static MessageWriter writer;  ///< Used when serialising a message.
@@ -435,7 +435,7 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst)
 	ASSERT(src.isPair, "Huh?");
 	ASSERT(dst.isPair, "Huh?");
 	delete pairQueue(dst);
-	pairQueue(dst) = NULL;
+	pairQueue(dst) = nullptr;
 	std::swap(pairQueue(src), pairQueue(dst));
 }
 
@@ -544,7 +544,7 @@ void NETflushGameQueues()
 	{
 		NetQueue *queue = gameQueues[player];
 
-		if (queue == NULL)
+		if (queue == nullptr)
 		{
 			continue;  // Can't send for this player.
 		}

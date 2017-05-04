@@ -1689,7 +1689,7 @@ static void sanityUpdate()
 
 static void getIniBaseObject(WzConfig &ini, QString const &key, BASE_OBJECT *&object)
 {
-	object = NULL;
+	object = nullptr;
 	if (ini.contains(key + "/id"))
 	{
 		int tid = ini.value(key + "/id", -1).toInt();
@@ -1697,13 +1697,13 @@ static void getIniBaseObject(WzConfig &ini, QString const &key, BASE_OBJECT *&ob
 		OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value(key + "/type", 0).toInt();
 		ASSERT_OR_RETURN(, tid >= 0 && tplayer >= 0, "Bad ID");
 		object = getBaseObjFromData(tid, tplayer, ttype);
-		ASSERT(object != NULL, "Failed to find target");
+		ASSERT(object != nullptr, "Failed to find target");
 	}
 }
 
 static void getIniStructureStats(WzConfig &ini, QString const &key, STRUCTURE_STATS *&stats)
 {
-	stats = NULL;
+	stats = nullptr;
 	if (ini.contains(key))
 	{
 		QString statName = ini.value(key).toString();
@@ -1725,7 +1725,7 @@ static void getIniDroidOrder(WzConfig &ini, QString const &key, DroidOrder &orde
 
 static void setIniBaseObject(WzConfig &ini, QString const &key, BASE_OBJECT const *object)
 {
-	if (object != NULL && object->died <= 1)
+	if (object != nullptr && object->died <= 1)
 	{
 		ini.setValue(key + "/id", object->id);
 		ini.setValue(key + "/player", object->player);
@@ -1739,7 +1739,7 @@ static void setIniBaseObject(WzConfig &ini, QString const &key, BASE_OBJECT cons
 
 static void setIniStructureStats(WzConfig &ini, QString const &key, STRUCTURE_STATS const *stats)
 {
-	if (stats != NULL)
+	if (stats != nullptr)
 	{
 		ini.setValue(key, stats->id);
 	}
@@ -1763,7 +1763,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	QMap<QString, STRUCTURE **> structMap;
 	char			aFileName[256];
 	UDWORD			fileExten, fileSize;
-	char			*pFileData = NULL;
+	char			*pFileData = nullptr;
 	UDWORD			player, inc, i, j;
 	DROID           *psCurr;
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
@@ -1800,16 +1800,16 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//initialise the lists
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			apsDroidLists[player] = NULL;
-			apsStructLists[player] = NULL;
-			apsFeatureLists[player] = NULL;
-			apsFlagPosLists[player] = NULL;
+			apsDroidLists[player] = nullptr;
+			apsStructLists[player] = nullptr;
+			apsFeatureLists[player] = nullptr;
+			apsFlagPosLists[player] = nullptr;
 			//clear all the messages?
-			apsProxDisp[player] = NULL;
-			apsSensorList[0] = NULL;
-			apsExtractorLists[player] = NULL;
+			apsProxDisp[player] = nullptr;
+			apsSensorList[0] = nullptr;
+			apsExtractorLists[player] = nullptr;
 		}
-		apsOilList[0] = NULL;
+		apsOilList[0] = nullptr;
 		initFactoryNumFlag();
 	}
 
@@ -1818,15 +1818,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//initialise the lists
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			apsLimboDroids[player] = NULL;
-			mission.apsDroidLists[player] = NULL;
-			mission.apsStructLists[player] = NULL;
-			mission.apsFeatureLists[player] = NULL;
-			mission.apsFlagPosLists[player] = NULL;
-			mission.apsExtractorLists[player] = NULL;
+			apsLimboDroids[player] = nullptr;
+			mission.apsDroidLists[player] = nullptr;
+			mission.apsStructLists[player] = nullptr;
+			mission.apsFeatureLists[player] = nullptr;
+			mission.apsFlagPosLists[player] = nullptr;
+			mission.apsExtractorLists[player] = nullptr;
 		}
-		mission.apsOilList[0] = NULL;
-		mission.apsSensorList[0] = NULL;
+		mission.apsOilList[0] = nullptr;
+		mission.apsSensorList[0] = nullptr;
 	}
 
 	if (saveGameVersion >= VERSION_11)
@@ -2192,7 +2192,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		 */
 		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
-			for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 			{
 				if (psCurr->droidType != DROID_PERSON
 				    // && psCurr->droidType != DROID_CYBORG
@@ -2220,7 +2220,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
 	{
-		psMapTiles = NULL;
+		psMapTiles = nullptr;
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
@@ -2330,7 +2330,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		 */
 		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
-			for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 			{
 				if (psCurr->droidType != DROID_PERSON
 				    && !cyborgDroid(psCurr)
@@ -2581,7 +2581,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		 * been another flag to indicate this state has changed but its late in
 		 * the day excuses...excuses...excuses
 		 */
-		if (mission.apsDroidLists[selectedPlayer] == NULL)
+		if (mission.apsDroidLists[selectedPlayer] == nullptr)
 		{
 			//set the mission type
 			startMissionSave(LDS_EXPAND);
@@ -2612,7 +2612,7 @@ error:
 	freeAllStructs();
 	freeAllFeatures();
 	droidTemplateShutDown();
-	psMapTiles = NULL;
+	psMapTiles = nullptr;
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -2832,14 +2832,14 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 	//clear the list
 	if (saveGameVersion < VERSION_25)
 	{
-		for (psDroid = apsLimboDroids[selectedPlayer]; psDroid != NULL; psDroid = psNext)
+		for (psDroid = apsLimboDroids[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
 		{
 			psNext = psDroid->psNext;
 			//limbo list invalidate XY
 			psDroid->pos.x = INVALID_XY;
 			psDroid->pos.y = INVALID_XY;
 			//this is mainly for VTOLs
-			setSaveDroidBase(psDroid, NULL);
+			setSaveDroidBase(psDroid, nullptr);
 			psDroid->cluster = 0;
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
@@ -2922,7 +2922,7 @@ error:
 // -----------------------------------------------------------------------------------------
 static bool writeMapFile(const char *fileName)
 {
-	char *pFileData = NULL;
+	char *pFileData = nullptr;
 	UDWORD fileSize;
 
 	/* Get the save data */
@@ -2934,7 +2934,7 @@ static bool writeMapFile(const char *fileName)
 		status = saveFile(fileName, pFileData, fileSize);
 	}
 
-	if (pFileData != NULL)
+	if (pFileData != nullptr)
 	{
 		free(pFileData);
 	}
@@ -3349,13 +3349,13 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 		//copy the level name across
 		sstrcpy(aLevelName, saveGame.levelName);
 		//load up the level dataset
-		if (!levLoadData(aLevelName, NULL, saveGameName, (GAME_TYPE)gameType))
+		if (!levLoadData(aLevelName, nullptr, saveGameName, (GAME_TYPE)gameType))
 		{
 			return false;
 		}
 		// find the level dataset
 		psNewLevel = levFindDataSet(aLevelName);
-		if (psNewLevel == NULL)
+		if (psNewLevel == nullptr)
 		{
 			debug(LOG_ERROR, "gameLoadV7: couldn't find level data");
 
@@ -4102,7 +4102,7 @@ bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 		}
 
 		psTemplate = getTemplateFromTranslatedNameNoPlayer(pDroidInit->name);
-		if (psTemplate == NULL)
+		if (psTemplate == nullptr)
 		{
 			debug(LOG_ERROR, "Unable to find template for %s for player %d", pDroidInit->name, pDroidInit->player);
 		}
@@ -4238,9 +4238,9 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext)
 		{
-			if (isTransporter(psDroid) && psDroid->psGroup != NULL)  // Check for droids in the transporter.
+			if (isTransporter(psDroid) && psDroid->psGroup != nullptr)  // Check for droids in the transporter.
 			{
-				for (DROID *psTrDroid = psDroid->psGroup->psList; psTrDroid != NULL; psTrDroid = psTrDroid->psGrpNext)
+				for (DROID *psTrDroid = psDroid->psGroup->psList; psTrDroid != nullptr; psTrDroid = psTrDroid->psGrpNext)
 				{
 					if (psTrDroid->id == id)
 					{
@@ -4435,7 +4435,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			// Use real template (for maps)
 			QString templName(ini.value("template").toString());
 			psTemplate = getTemplateFromTranslatedNameNoPlayer(templName.toUtf8().constData());
-			if (psTemplate == NULL)
+			if (psTemplate == nullptr)
 			{
 				debug(LOG_ERROR, "Unable to find template for %s for player %d -- unit skipped", templName.toUtf8().constData(), player);
 				ini.endGroup();
@@ -4469,7 +4469,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		/* Create the Droid */
 		turnOffMultiMsg(true);
 		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
-		ASSERT_OR_RETURN(false, psDroid != NULL, "Failed to build unit %s", sortedList[i].second.toUtf8().constData());
+		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().constData());
 		turnOffMultiMsg(false);
 
 		// Copy the values across
@@ -4526,7 +4526,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			}
 			else
 			{
-				psDroid->psGroup = NULL;
+				psDroid->psGroup = nullptr;
 			}
 		}
 
@@ -4585,7 +4585,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
 		}
 
-		if (psDroid->psGroup == NULL || psDroid->psGroup->type != GT_TRANSPORTER || isTransporter(psDroid))  // do not add to list if on a transport, then the group list is used instead
+		if (psDroid->psGroup == nullptr || psDroid->psGroup->type != GT_TRANSPORTER || isTransporter(psDroid))  // do not add to list if on a transport, then the group list is used instead
 		{
 			addDroid(psDroid, ppsCurrentDroidLists);
 		}
@@ -4646,7 +4646,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	ini.setVector2i("action/pos", psCurr->actionPos);
 	ini.setValue("actionStarted", psCurr->actionStarted);
 	ini.setValue("actionPoints", psCurr->actionPoints);
-	if (psCurr->psBaseStruct != NULL)
+	if (psCurr->psBaseStruct != nullptr)
 	{
 		ini.setValue("baseStruct/id", psCurr->psBaseStruct->id);
 		ini.setValue("baseStruct/player", psCurr->psBaseStruct->player);	// always ours, but for completeness
@@ -4717,12 +4717,12 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			writeDroid(ini, psCurr, onMission, counter);
 			if (isTransporter(psCurr))	// if transporter save any droids in the grp
 			{
-				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
+				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
 				{
 					if (psTrans != psCurr)
 					{
@@ -4747,7 +4747,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 	STRUCT_SAVEHEADER		*psHeader;
 	SAVE_STRUCTURE_V2		*psSaveStructure, sSaveStructure;
 	STRUCTURE			*psStructure;
-	STRUCTURE_STATS			*psStats = NULL;
+	STRUCTURE_STATS			*psStats = nullptr;
 	UDWORD				count, statInc;
 	int32_t				found;
 	UDWORD				NumberOfSkippedStructures = 0;
@@ -4847,7 +4847,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		if (IsStatExpansionModule(psStats))
 		{
 			psStructure = getTileStructure(map_coord(psSaveStructure->x), map_coord(psSaveStructure->y));
-			if (psStructure == NULL)
+			if (psStructure == nullptr)
 			{
 				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->player);
 				//ignore this module
@@ -4940,7 +4940,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		RESEARCH_FACILITY *psResearch;
 		REPAIR_FACILITY *psRepair;
 		REARM_PAD *psReArmPad;
-		STRUCTURE_STATS *psStats = NULL, *psModule;
+		STRUCTURE_STATS *psStats = nullptr, *psModule;
 		int statInc, capacity, found, researchId;
 		STRUCTURE *psStructure;
 
@@ -4975,7 +4975,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		if (IsStatExpansionModule(psStats))
 		{
 			STRUCTURE *psStructure = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-			if (psStructure == NULL)
+			if (psStructure == nullptr)
 			{
 				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", name.toUtf8().constData(), player);
 				ini.endGroup();
@@ -5079,7 +5079,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
 			}
 			//clear subject
-			psResearch->psSubject = NULL;
+			psResearch->psSubject = nullptr;
 			psResearch->timeStartHold = 0;
 			//set the subject
 			if (ini.contains("Research/target"))
@@ -5180,7 +5180,7 @@ bool writeGameInfo(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 	char ourtime[100] = {'\0'};
-	const time_t currentTime = time(NULL);
+	const time_t currentTime = time(nullptr);
 	std::string time(ctime(&currentTime));
 
 	ini.beginGroup("GameProperties");
@@ -5219,7 +5219,7 @@ bool writeStructFile(const char *pFileName)
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			ini.beginGroup("structure_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
 			ini.setValue("name", psCurr->pStructureType->id);
@@ -5275,12 +5275,12 @@ bool writeStructFile(const char *pFileName)
 					// statusPending and pendingCount belong to the GUI, not the game state.
 					ini.setValue("Factory/secondaryOrder", psFactory->secondaryOrder);
 
-					if (psFactory->psSubject != NULL)
+					if (psFactory->psSubject != nullptr)
 					{
 						ini.setValue("Factory/template", psFactory->psSubject->multiPlayerID);
 					}
 					FLAG_POSITION *psFlag = ((FACTORY *)psCurr->pFunctionality)->psAssemblyPoint;
-					if (psFlag != NULL)
+					if (psFlag != nullptr)
 					{
 						ini.setVector3i("Factory/assemblyPoint/pos", psFlag->coords);
 						if (psFlag->selected)
@@ -5448,7 +5448,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 	SAVE_FEATURE_V14			*psSaveFeature;
 	FEATURE					*pFeature;
 	UDWORD					count, i, statInc;
-	FEATURE_STATS			*psStats = NULL;
+	FEATURE_STATS			*psStats = nullptr;
 	bool					found;
 	UDWORD					sizeOfSaveFeature;
 
@@ -5573,7 +5573,7 @@ bool loadSaveFeature2(const char *pFileName)
 		Position pos = ini.vector3i("position");
 		int statInc;
 		bool found = false;
-		FEATURE_STATS *psStats = NULL;
+		FEATURE_STATS *psStats = nullptr;
 
 		//get the stats for this feature
 		for (statInc = 0; statInc < numFeatureStats; statInc++)
@@ -5635,7 +5635,7 @@ bool writeFeatureFile(const char *pFileName)
 	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 	int counter = 0;
 
-	for (FEATURE *psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (FEATURE *psCurr = apsFeatureLists[0]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		ini.beginGroup("feature_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
 		ini.setValue("name", psCurr->psStats->id);
@@ -6070,7 +6070,7 @@ bool loadSaveResearch(const char *pFileName)
 			//for any research that has been completed - perform so that upgrade values are set up
 			if (researched == RESEARCHED)
 			{
-				researchResult(statInc, plr, false, NULL, false);
+				researchResult(statInc, plr, false, nullptr, false);
 			}
 		}
 		ini.endGroup();
@@ -6167,7 +6167,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 				}
 				else
 				{
-					VIEWDATA *psViewData = NULL;
+					VIEWDATA *psViewData = nullptr;
 
 					// Proximity position so get viewdata pointer from the name
 					MESSAGE *psMessage = addMessage(type, false, player);
@@ -6180,7 +6180,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 							int sender = ini.value("sender").toInt();
 							psViewData = CreateBeaconViewData(sender, pos.x, pos.y);
 							ASSERT(psViewData, "Could not create view data for message %d", id);
-							if (psViewData == NULL)
+							if (psViewData == nullptr)
 							{
 								// Skip this message
 								removeMessage(psMessage, player);
@@ -6191,7 +6191,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 						{
 							psViewData = (VIEWDATA *)getViewData(ini.value("name").toString().toUtf8().constData());
 							ASSERT(psViewData, "Failed to find view data for proximity position - skipping message %d", id);
-							if (psViewData == NULL)
+							if (psViewData == nullptr)
 							{
 								// Skip this message
 								removeMessage(psMessage, player);
@@ -6250,7 +6250,7 @@ static bool writeMessageFile(const char *pFileName)
 	// save each type of research
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		for (MESSAGE *psMessage = apsMessages[player]; psMessage != NULL; psMessage = psMessage->psNext)
+		for (MESSAGE *psMessage = apsMessages[player]; psMessage != nullptr; psMessage = psMessage->psNext)
 		{
 			ini.beginGroup("message_" + QString::number(numMessages++));
 			ini.setValue("id", numMessages - 1);	// for future use
@@ -6260,8 +6260,8 @@ static bool writeMessageFile(const char *pFileName)
 			if (psMessage->type == MSG_PROXIMITY)
 			{
 				//get the matching proximity message
-				PROXIMITY_DISPLAY *psProx = NULL;
-				for (psProx = apsProxDisp[player]; psProx != NULL; psProx = psProx->psNext)
+				PROXIMITY_DISPLAY *psProx = nullptr;
+				for (psProx = apsProxDisp[player]; psProx != nullptr; psProx = psProx->psNext)
 				{
 					//compare the pointers
 					if (psProx->psMessage == psMessage)
@@ -6269,7 +6269,7 @@ static bool writeMessageFile(const char *pFileName)
 						break;
 					}
 				}
-				ASSERT(psProx != NULL, "Save message; proximity display not found for message");
+				ASSERT(psProx != nullptr, "Save message; proximity display not found for message");
 				if (psProx && psProx->type == POS_PROXDATA)
 				{
 					//message has viewdata so store the name
@@ -6303,7 +6303,7 @@ static bool writeMessageFile(const char *pFileName)
 			else
 			{
 				VIEWDATA *pViewData = (VIEWDATA *)psMessage->pViewData;
-				ini.setValue("name", pViewData != NULL ? pViewData->pName : "NULL");
+				ini.setValue("name", pViewData != nullptr ? pViewData->pName : "NULL");
 			}
 			ini.setValue("read", psMessage->read);	// flag to indicate whether message has been read; not that this is/was _not_ read by loading code!?
 			ASSERT(player == psMessage->player, "Bad player number (%d == %d)", player, psMessage->player);
@@ -6420,7 +6420,7 @@ bool writeFiresupportDesignators(const char *pFileName)
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		DROID *psDroid = cmdDroidGetDesignator(player);
-		if (psDroid != NULL)
+		if (psDroid != nullptr)
 		{
 			ini.setValue("Player_" + QString::number(player) + "/id", psDroid->id);
 		}
@@ -6547,7 +6547,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 	char aFileName[256];
 	UDWORD xx, yy, count, fileSize, sizeOfSaveStructure = sizeof(SAVE_STRUCTURE);
 	UDWORD playerid = 0;
-	char *pFileData = NULL;
+	char *pFileData = nullptr;
 	LEVEL_DATASET *psLevel;
 	PIELIGHT color = WZCOL_BLACK ;
 	bool HQ = false;
@@ -6747,7 +6747,7 @@ static void plotFeature(char *backDropSprite)
 	LEVEL_DATASET *psLevel;
 	UDWORD xx, yy, count, fileSize;
 	UDWORD sizeOfSaveFeature = 0;
-	char *pFileData = NULL;
+	char *pFileData = nullptr;
 	char aFileName[256];
 	const PIELIGHT colourOil = WZCOL_MAP_PREVIEW_OIL;
 	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
@@ -6775,7 +6775,7 @@ static void plotFeature(char *backDropSprite)
 			Position pos = ini.vector3i("position");
 
 			// we only care about oil
-			PIELIGHT const *colour = NULL;
+			PIELIGHT const *colour = nullptr;
 			if (name.startsWith("OilResource"))
 			{
 				colour = &colourOil;
@@ -6784,7 +6784,7 @@ static void plotFeature(char *backDropSprite)
 			{
 				colour = &colourBarrel;
 			}
-			if (colour != NULL)
+			if (colour != nullptr)
 			{
 				// and now we blit the color to the texture
 				xx = map_coord(pos.x);
@@ -6833,7 +6833,7 @@ static void plotFeature(char *backDropSprite)
 		psSaveFeature = (SAVE_FEATURE_V2 *) pFileData;
 
 		// we only care about oil
-		PIELIGHT const *colour = NULL;
+		PIELIGHT const *colour = nullptr;
 		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
 		{
 			colour = &colourOil;

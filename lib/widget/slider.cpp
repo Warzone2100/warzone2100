@@ -69,7 +69,7 @@ UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
-	ASSERT(psWidget != NULL, "Could not find widget from id %u", id);
+	ASSERT(psWidget != nullptr, "Could not find widget from id %u", id);
 	if (psWidget)
 	{
 		return ((W_SLIDER *)psWidget)->pos;
@@ -83,7 +83,7 @@ void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos)
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
-	ASSERT(psWidget != NULL, "Could not find widget from id %u", id);
+	ASSERT(psWidget != nullptr, "Could not find widget from id %u", id);
 	if (psWidget && pos != ((W_SLIDER *)psWidget)->pos)
 	{
 		psWidget->dirty = true;

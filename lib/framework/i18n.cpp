@@ -382,7 +382,7 @@ void setNextLanguage(bool prev)
 
 void initI18n()
 {
-	const char *textdomainDirectory = NULL;
+	const char *textdomainDirectory = nullptr;
 
 	if (!setLanguage("")) // set to system default
 	{

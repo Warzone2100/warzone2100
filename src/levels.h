@@ -88,7 +88,7 @@ extern bool levInitialise(void);
 bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType);
 
 // find the level dataset
-LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = NULL);
+LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = nullptr);
 
 Sha256 levGetFileHash(LEVEL_DATASET *level);
 Sha256 levGetMapNameHash(char const *name);

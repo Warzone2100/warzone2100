@@ -225,7 +225,7 @@ WzMainWindow::~WzMainWindow()
 
 WzMainWindow *WzMainWindow::instance()
 {
-	assert(myself != NULL);
+	assert(myself != nullptr);
 	return myself;
 }
 
@@ -290,7 +290,7 @@ void WzMainWindow::setCursor(QCursor cursor)
 	QWidget::setCursor(cursor);
 }
 
-WzMainWindow *WzMainWindow::myself = NULL;
+WzMainWindow *WzMainWindow::myself = nullptr;
 
 void WzMainWindow::setFontType(enum iV_fonts fontID)
 {
@@ -933,7 +933,7 @@ UDWORD inputGetKey(utf_32_char *unicode)
 		retVal = ' ';  // Don't return 0 if we got a virtual key, since that's interpreted as no input.
 	}
 
-	if (unicode != NULL)
+	if (unicode != nullptr)
 	{
 		*unicode = inputBuffer.front().unicode;
 	}
@@ -1208,7 +1208,7 @@ QString wzGetSelection()
 void wzFatalDialog(const char *text)
 {
 	crashing = true;
-	QMessageBox::critical(NULL, "Fatal error", text);
+	QMessageBox::critical(nullptr, "Fatal error", text);
 }
 
 static int WZkeyToQtKey(int code)

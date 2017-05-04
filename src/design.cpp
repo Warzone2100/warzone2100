@@ -392,7 +392,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sCurrDesign.name = aCurrName;
 
 	/* Add the design templates form */
-	if (!intAddTemplateForm(NULL))  // Was psCurrTemplate instead of NULL, but psCurrTemplate was always NULL. Deleted psCurrTemplate, but leaving this here, in case intAddTemplateForm(NULL) does something useful.
+	if (!intAddTemplateForm(nullptr))  // Was psCurrTemplate instead of NULL, but psCurrTemplate was always NULL. Deleted psCurrTemplate, but leaving this here, in case intAddTemplateForm(NULL) does something useful.
 	{
 		return false;
 	}
@@ -797,7 +797,7 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 /* Add the droid template buttons to a form */
 static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSelected)
 {
-	DROID_TEMPLATE	*psTempl = NULL;
+	DROID_TEMPLATE	*psTempl = nullptr;
 	char TempString[256];
 
 	/* Set up the button struct */
@@ -970,7 +970,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 static COMPONENT_STATS *
 intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 {
-	COMPONENT_STATS		*psStats = NULL;
+	COMPONENT_STATS		*psStats = nullptr;
 	int compIndex;
 
 	// Choose correct system stats
@@ -978,29 +978,29 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 	{
 	case DROID_COMMAND:
 		compIndex = psTemplate->asParts[COMP_BRAIN];
-		ASSERT_OR_RETURN(NULL, compIndex < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
+		ASSERT_OR_RETURN(nullptr, compIndex < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
 		psStats = (COMPONENT_STATS *)(asBrainStats + compIndex);
 		break;
 	case DROID_SENSOR:
 		compIndex = psTemplate->asParts[COMP_SENSOR];
-		ASSERT_OR_RETURN(NULL, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+		ASSERT_OR_RETURN(nullptr, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = (COMPONENT_STATS *)(asSensorStats + compIndex);
 		break;
 	case DROID_ECM:
 		compIndex = psTemplate->asParts[COMP_ECM];
-		ASSERT_OR_RETURN(NULL, compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
+		ASSERT_OR_RETURN(nullptr, compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
 		psStats = (COMPONENT_STATS *)(asECMStats + compIndex);
 		break;
 	case DROID_CONSTRUCT:
 	case DROID_CYBORG_CONSTRUCT:
 		compIndex = psTemplate->asParts[COMP_CONSTRUCT];
-		ASSERT_OR_RETURN(NULL, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+		ASSERT_OR_RETURN(nullptr, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
 		psStats = (COMPONENT_STATS *)(asConstructStats + compIndex);
 		break;
 	case DROID_REPAIR:
 	case DROID_CYBORG_REPAIR:
 		compIndex = psTemplate->asParts[COMP_REPAIRUNIT];
-		ASSERT_OR_RETURN(NULL, compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
+		ASSERT_OR_RETURN(nullptr, compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
 		psStats = (COMPONENT_STATS *)(asRepairStats + compIndex);
 		break;
 	case DROID_WEAPON:
@@ -1009,12 +1009,12 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 	case DROID_CYBORG_SUPER:
 	case DROID_DEFAULT:
 		compIndex = psTemplate->asWeaps[0];
-		ASSERT_OR_RETURN(NULL, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+		ASSERT_OR_RETURN(nullptr, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 		psStats = (COMPONENT_STATS *)(asWeaponStats + compIndex);
 		break;
 	default:
 		debug(LOG_ERROR, "unrecognised droid type");
-		return NULL;
+		return nullptr;
 	}
 
 	return psStats;
@@ -1024,7 +1024,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	// NOTE:	At this time, savegames can support a max of 60. We are using MAX_STR_LENGTH (currently 256) for display
 	// We are also returning a truncated string, instead of NULL if the string is too long.
-	COMPONENT_STATS *psStats = NULL;
+	COMPONENT_STATS *psStats = nullptr;
 	int compIndex;
 
 	/*
@@ -1491,7 +1491,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 {
 	DES_PROPMODE	newPropMode = (DES_PROPMODE)0;
 
-	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid propulsion stats pointer");
 
 	/* figure out what the new mode should be */
 	switch (asPropulsionTypes[psStats->propulsionType].travel)
@@ -1812,7 +1812,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 		{
 			psPropStats = asPropulsionStats + sCurrDesign.
 			              asParts[COMP_PROPULSION];
-			ASSERT_OR_RETURN(false, psPropStats != NULL, "invalid propulsion stats pointer");
+			ASSERT_OR_RETURN(false, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 			if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 			{
@@ -1879,7 +1879,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 		// if this is a command droid that is in use or dead - make it unavailable
 		if (psCurrStats->compType == COMP_BRAIN)
 		{
-			if ((((COMMAND_DROID *)psCurrStats)->psDroid != NULL) ||
+			if ((((COMMAND_DROID *)psCurrStats)->psDroid != nullptr) ||
 			    ((COMMAND_DROID *)psCurrStats)->died)
 			{
 				button->setState(WBUT_DISABLE);
@@ -1901,8 +1901,8 @@ static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorInd
 {
 	UDWORD			i, buttonType, size = 0;
 	UDWORD			compIndex = 0, numStats = 0;
-	COMPONENT_STATS	*psCurrStats = 0;
-	UBYTE			*aAvailable = 0;
+	COMPONENT_STATS	*psCurrStats = nullptr;
+	UBYTE			*aAvailable = nullptr;
 
 	// Set up the button struct
 	int nextButtonId = IDDES_EXTRASYSSTART;
@@ -2017,14 +2017,14 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 {
 	W_FORM *psForm;
 
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 
 	/* set form tip to stats string */
 	widgSetTip(psWScreen, IDDES_SYSTEMFORM, getName(psStats));
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_SYSTEMFORM);
-	if (psForm != NULL)
+	if (psForm != nullptr)
 	{
 		psForm->pUserData = psStats;
 	}
@@ -2072,7 +2072,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 			}
 			else
 			{
-				psStats = NULL;
+				psStats = nullptr;
 			}
 			break;
 		case COMP_ECM:
@@ -2082,7 +2082,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 			}
 			else
 			{
-				psStats = NULL;
+				psStats = nullptr;
 			}
 			break;
 		case COMP_WEAPON:
@@ -2092,7 +2092,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 			}
 			else
 			{
-				psStats = NULL;
+				psStats = nullptr;
 			}
 			break;
 		case COMP_CONSTRUCT:
@@ -2102,11 +2102,11 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 			}
 			else
 			{
-				psStats = NULL;
+				psStats = nullptr;
 			}
 			break;
 		case COMP_BRAIN:
-			psStats = NULL;
+			psStats = nullptr;
 			break;
 		case COMP_REPAIRUNIT:
 			if (desSysMode == IDES_REPAIR)
@@ -2115,7 +2115,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 			}
 			else
 			{
-				psStats = NULL;
+				psStats = nullptr;
 			}
 			break;
 		default:
@@ -2127,19 +2127,19 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 		switch (desSysMode)
 		{
 		case IDES_SENSOR:
-			intSetSensorShadowStats(NULL);
+			intSetSensorShadowStats(nullptr);
 			break;
 		case IDES_ECM:
-			intSetECMShadowStats(NULL);
+			intSetECMShadowStats(nullptr);
 			break;
 		case IDES_WEAPON:
-			intSetWeaponShadowStats(NULL);
+			intSetWeaponShadowStats(nullptr);
 			break;
 		case IDES_CONSTRUCT:
-			intSetConstructShadowStats(NULL);
+			intSetConstructShadowStats(nullptr);
 			break;
 		case IDES_REPAIR:
-			intSetRepairShadowStats(NULL);
+			intSetRepairShadowStats(nullptr);
 			break;
 		default:
 			break;
@@ -2150,7 +2150,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 /* Set the bar graphs for the sensor stats */
 static void intSetSensorStats(SENSOR_STATS *psStats)
 {
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 	ASSERT_OR_RETURN(, (psStats->ref >= REF_SENSOR_START) &&
 	                 (psStats->ref < REF_SENSOR_START + REF_RANGE), "stats ref is out of range");
 
@@ -2165,7 +2165,7 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 /* Set the shadow bar graphs for the sensor stats */
 static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 {
-	ASSERT(psStats == NULL ||
+	ASSERT(psStats == nullptr ||
 	       ((psStats->ref >= REF_SENSOR_START) &&
 	        (psStats->ref < REF_SENSOR_START + REF_RANGE)),
 	       "stats ref is out of range");
@@ -2193,7 +2193,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 /* Set the bar graphs for the ECM stats */
 static void intSetECMStats(ECM_STATS *psStats)
 {
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 	ASSERT_OR_RETURN(, (psStats->ref >= REF_ECM_START) &&
 	                 (psStats->ref < REF_ECM_START + REF_RANGE), "stats ref is out of range");
 
@@ -2206,7 +2206,7 @@ static void intSetECMStats(ECM_STATS *psStats)
 /* Set the shadow bar graphs for the ECM stats */
 static void intSetECMShadowStats(ECM_STATS *psStats)
 {
-	ASSERT(psStats == NULL ||
+	ASSERT(psStats == nullptr ||
 	       ((psStats->ref >= REF_ECM_START) &&
 	        (psStats->ref < REF_ECM_START + REF_RANGE)),
 	       "stats ref is out of range");
@@ -2230,7 +2230,7 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 /* Set the bar graphs for the Constructor stats */
 static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 {
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 	ASSERT_OR_RETURN(, (psStats->ref >= REF_CONSTRUCT_START) &&
 	                 (psStats->ref < REF_CONSTRUCT_START + REF_RANGE), "stats ref is out of range");
 
@@ -2245,7 +2245,7 @@ static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 /* Set the shadow bar graphs for the Constructor stats */
 static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 {
-	ASSERT(psStats == NULL ||
+	ASSERT(psStats == nullptr ||
 	       ((psStats->ref >= REF_CONSTRUCT_START) &&
 	        (psStats->ref < REF_CONSTRUCT_START + REF_RANGE)),
 	       "stats ref is out of range");
@@ -2269,7 +2269,7 @@ static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 /* Set the bar graphs for the Repair stats */
 static void intSetRepairStats(REPAIR_STATS *psStats)
 {
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 	ASSERT_OR_RETURN(, (psStats->ref >= REF_REPAIR_START) &&
 	                 (psStats->ref < REF_REPAIR_START + REF_RANGE), "stats ref is out of range");
 
@@ -2284,7 +2284,7 @@ static void intSetRepairStats(REPAIR_STATS *psStats)
 /* Set the shadow bar graphs for the Repair stats */
 static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 {
-	ASSERT(psStats == NULL ||
+	ASSERT(psStats == nullptr ||
 	       ((psStats->ref >= REF_REPAIR_START) &&
 	        (psStats->ref < REF_REPAIR_START + REF_RANGE)),
 	       "stats ref is out of range");
@@ -2309,7 +2309,7 @@ static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 /* Set the bar graphs for the Weapon stats */
 static void intSetWeaponStats(WEAPON_STATS *psStats)
 {
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 	ASSERT_OR_RETURN(, (psStats->ref >= REF_WEAPON_START) &&
 	                 (psStats->ref < REF_WEAPON_START + REF_RANGE), "stats ref is out of range");
 
@@ -2327,7 +2327,7 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 /* Set the shadow bar graphs for the Weapon stats */
 static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 {
-	ASSERT(psStats == NULL ||
+	ASSERT(psStats == nullptr ||
 	       ((psStats->ref >= REF_WEAPON_START) &&
 	        (psStats->ref < REF_WEAPON_START + REF_RANGE)),
 	       "stats ref is out of range");
@@ -2359,7 +2359,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 {
 	W_FORM	*psForm;
 
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 	ASSERT_OR_RETURN(, (psStats->ref >= REF_BODY_START) &&
 	                 (psStats->ref < REF_BODY_START + REF_RANGE),
 	                 "stats ref is out of range");
@@ -2379,7 +2379,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_BODYFORM);
-	if (psForm != NULL)
+	if (psForm != nullptr)
 	{
 		psForm->pUserData = psStats;
 	}
@@ -2388,7 +2388,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 /* Set the shadow bar graphs for the Body stats */
 static void intSetBodyShadowStats(BODY_STATS *psStats)
 {
-	ASSERT(psStats == NULL ||
+	ASSERT(psStats == nullptr ||
 	       ((psStats->ref >= REF_BODY_START) &&
 	        (psStats->ref < REF_BODY_START + REF_RANGE)),
 	       "stats ref is out of range");
@@ -2665,7 +2665,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	W_FORM	    *psForm;
 	UDWORD      weight;
 
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 	ASSERT_OR_RETURN(, (psStats->ref >= REF_PROPULSION_START) &&
 	                 (psStats->ref < REF_PROPULSION_START + REF_RANGE), "stats ref is out of range");
 
@@ -2674,7 +2674,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_PROPFORM);
-	if (psForm != NULL)
+	if (psForm != nullptr)
 	{
 		psForm->pUserData = psStats;
 	}
@@ -2719,7 +2719,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 {
 	UDWORD      weight;
 
-	ASSERT(psStats == NULL ||
+	ASSERT(psStats == nullptr ||
 	       ((psStats->ref >= REF_PROPULSION_START) &&
 	        (psStats->ref < REF_PROPULSION_START + REF_RANGE)),
 	       "stats ref is out of range");
@@ -2994,7 +2994,7 @@ static DROID_TEMPLATE *templateFromButtonId(unsigned buttonId, bool allowBlankTe
 	{
 		return apsTemplateList[index];
 	}
-	return NULL;
+	return nullptr;
 }
 
 /* Process return codes from the design screen */
@@ -3035,9 +3035,9 @@ void intProcessDesign(UDWORD id)
 			/* Find the template for the new button */
 			DROID_TEMPLATE *psTempl = templateFromButtonId(id, true);
 
-			ASSERT_OR_RETURN(, psTempl != NULL, "template not found!");
+			ASSERT_OR_RETURN(, psTempl != nullptr, "template not found!");
 
-			if (psTempl != NULL)
+			if (psTempl != nullptr)
 			{
 				/* Set the new template */
 				sCurrDesign = *psTempl;
@@ -3529,7 +3529,7 @@ void intProcessDesign(UDWORD id)
 				DROID_TEMPLATE *psTempl = templateFromButtonId(droidTemplID);  // Does not return the first template, which is the empty template.
 
 				/* remove template if found */
-				if (psTempl != NULL)
+				if (psTempl != nullptr)
 				{
 					//update player template list.
 					for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
@@ -3822,7 +3822,7 @@ void intRunDesign(void)
 	if (statID == desCompID)
 	{
 		/* The mouse is over the selected component - no shadow stats */
-		psStats = NULL;
+		psStats = nullptr;
 	}
 	else if (statID >= IDDES_COMPSTART && statID <= IDDES_COMPEND)
 	{
@@ -3840,12 +3840,12 @@ void intRunDesign(void)
 	{
 		runTemplateShadowStats(statID);
 		templateButton = true;
-		psStats = NULL;
+		psStats = nullptr;
 	}
 	else
 	{
 		/* No component button so reset the stats to nothing */
-		psStats = NULL;
+		psStats = nullptr;
 	}
 
 	/* Now set the bar graphs for the stats - don't bother if over template
@@ -3857,17 +3857,17 @@ void intRunDesign(void)
 		case IDES_SYSTEM:
 		case IDES_TURRET:
 			intSetSystemShadowStats(psStats);
-			intSetBodyShadowStats(NULL);
-			intSetPropulsionShadowStats(NULL);
+			intSetBodyShadowStats(nullptr);
+			intSetPropulsionShadowStats(nullptr);
 			break;
 		case IDES_BODY:
-			intSetSystemShadowStats(NULL);
+			intSetSystemShadowStats(nullptr);
 			intSetBodyShadowStats((BODY_STATS *)psStats);
-			intSetPropulsionShadowStats(NULL);
+			intSetPropulsionShadowStats(nullptr);
 			break;
 		case IDES_PROPULSION:
-			intSetSystemShadowStats(NULL);
-			intSetBodyShadowStats(NULL);
+			intSetSystemShadowStats(nullptr);
+			intSetBodyShadowStats(nullptr);
 			intSetPropulsionShadowStats((PROPULSION_STATS *)psStats);
 			break;
 		default:
@@ -4007,7 +4007,7 @@ static bool saveTemplate()
 	{
 		/* Find the template for the current button */
 		psTempl = templateFromButtonId(droidTemplID);
-		if (psTempl == NULL)
+		if (psTempl == nullptr)
 		{
 			debug(LOG_ERROR, "Template not found for button");
 			return false;
@@ -4034,7 +4034,7 @@ static bool saveTemplate()
 /* Function to set the shadow bars for all the stats when the mouse is over the Template buttons */
 void runTemplateShadowStats(UDWORD id)
 {
-	DROID_TEMPLATE	*psTempl = NULL;
+	DROID_TEMPLATE	*psTempl = nullptr;
 	COMPONENT_STATS	*psStats;
 	DROID_TYPE		templType;
 	int				compIndex;
@@ -4050,7 +4050,7 @@ void runTemplateShadowStats(UDWORD id)
 		intSetBodyShadowStats(asBodyStats + psTempl->asParts[COMP_BODY]);
 		intSetPropulsionShadowStats(asPropulsionStats + psTempl->asParts[COMP_PROPULSION]);
 		//only set the system shadow bar if the same type of droid
-		psStats = NULL;
+		psStats = nullptr;
 		templType = droidTemplateType(psTempl);
 		if (templType == droidTemplateType(&sCurrDesign))
 		{

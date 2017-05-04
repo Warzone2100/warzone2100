@@ -69,17 +69,17 @@ void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch);
 // True iff object is a feature.
 static inline bool isFeature(SIMPLE_OBJECT const *psObject)
 {
-	return psObject != NULL && psObject->type == OBJ_FEATURE;
+	return psObject != nullptr && psObject->type == OBJ_FEATURE;
 }
 // Returns FEATURE * if feature or NULL if not.
 static inline FEATURE *castFeature(SIMPLE_OBJECT *psObject)
 {
-	return isFeature(psObject) ? (FEATURE *)psObject : (FEATURE *)NULL;
+	return isFeature(psObject) ? (FEATURE *)psObject : (FEATURE *)nullptr;
 }
 // Returns FEATURE const * if feature or NULL if not.
 static inline FEATURE const *castFeature(SIMPLE_OBJECT const *psObject)
 {
-	return isFeature(psObject) ? (FEATURE const *)psObject : (FEATURE const *)NULL;
+	return isFeature(psObject) ? (FEATURE const *)psObject : (FEATURE const *)nullptr;
 }
 
 #endif // __INCLUDED_SRC_FEATURE_H__

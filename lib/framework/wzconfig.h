@@ -49,7 +49,7 @@ private:
 	warning mWarning;
 
 public:
-	WzConfig(const QString &name, WzConfig::warning warning, QObject *parent = 0);
+	WzConfig(const QString &name, WzConfig::warning warning, QObject *parent = nullptr);
 	~WzConfig();
 
 	Vector3f vector3f(const QString &name);

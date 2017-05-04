@@ -88,7 +88,7 @@ void widgSetTipColour(PIELIGHT colour)
  */
 void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, int x, int y, int width, int height)
 {
-	ASSERT(psSource != NULL, "Invalid widget pointer");
+	ASSERT(psSource != nullptr, "Invalid widget pointer");
 
 	tipState = TIP_WAIT;
 	startTime = wzGetTicks();
@@ -107,7 +107,7 @@ void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, int x, int 
  */
 void tipStop(WIDGET *psSource)
 {
-	ASSERT(psSource != NULL,
+	ASSERT(psSource != nullptr,
 	       "tipStop: Invalid widget pointer");
 
 	if (tipState != TIP_NONE && psSource == psWidget)

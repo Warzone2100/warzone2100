@@ -255,7 +255,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxClearBlocking(int x, int y, int stat
  */
 static inline bool TileIsOccupied(const MAPTILE *tile)
 {
-	return tile->psObject != NULL;
+	return tile->psObject != nullptr;
 }
 
 static inline bool TileIsKnownOccupied(MAPTILE const *tile, unsigned player)

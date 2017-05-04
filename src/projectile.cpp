@@ -140,11 +140,11 @@ bool gfxVisible(PROJECTILE *psObj)
 	}
 
 	// Someone elses structure firing at something you can't see
-	if (psObj->psSource != NULL
+	if (psObj->psSource != nullptr
 	    && !psObj->psSource->died
 	    && psObj->psSource->type == OBJ_STRUCTURE
 	    && psObj->psSource->player != selectedPlayer
-	    && (psObj->psDest == NULL
+	    && (psObj->psDest == nullptr
 	        || psObj->psDest->died
 	        || !psObj->psDest->visible[selectedPlayer]))
 	{
@@ -152,18 +152,18 @@ bool gfxVisible(PROJECTILE *psObj)
 	}
 
 	// Something you cannot see firing at a structure that isn't yours
-	if (psObj->psDest != NULL
+	if (psObj->psDest != nullptr
 	    && !psObj->psDest->died
 	    && psObj->psDest->type == OBJ_STRUCTURE
 	    && psObj->psDest->player != selectedPlayer
-	    && (psObj->psSource == NULL
+	    && (psObj->psSource == nullptr
 	        || !psObj->psSource->visible[selectedPlayer]))
 	{
 		return false;
 	}
 
 	// You can see the source
-	if (psObj->psSource != NULL
+	if (psObj->psSource != nullptr
 	    && !psObj->psSource->died
 	    && psObj->psSource->visible[selectedPlayer])
 	{
@@ -171,7 +171,7 @@ bool gfxVisible(PROJECTILE *psObj)
 	}
 
 	// You can see the destination
-	if (psObj->psDest != NULL
+	if (psObj->psDest != nullptr
 	    && !psObj->psDest->died
 	    && psObj->psDest->visible[selectedPlayer])
 	{
@@ -223,7 +223,7 @@ PROJECTILE *
 proj_GetFirst(void)
 {
 	psProjectileNext = psProjectileList.begin();
-	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : NULL;
+	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : nullptr;
 }
 
 /***************************************************************************/
@@ -233,7 +233,7 @@ PROJECTILE *
 proj_GetNext(void)
 {
 	++psProjectileNext;
-	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : NULL;
+	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : nullptr;
 }
 
 /***************************************************************************/
@@ -271,7 +271,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 	CHECK_PROJECTILE(psObj);
 
-	if (psObj->psSource == NULL || (psObj->psDest && psObj->psDest->type == OBJ_FEATURE)
+	if (psObj->psSource == nullptr || (psObj->psDest && psObj->psDest->type == OBJ_FEATURE)
 	    || (psObj->psDest && psObj->psSource->player == psObj->psDest->player))	// no exp for friendly fire
 	{
 		return;
@@ -292,7 +292,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 		// If it is 'droid-on-droid' then modify the experience by the Quality factor
 		// Only do this in MP so to not un-balance the campaign
-		if (psObj->psDest != NULL
+		if (psObj->psDest != nullptr
 		    && psObj->psDest->type == OBJ_DROID
 		    && bMultiPlayer)
 		{
@@ -319,7 +319,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 		// See if there was a command droid designating this target
 		psDroid = cmdDroidGetDesignator(psObj->psSource->player);
 
-		if (psDroid != NULL
+		if (psDroid != nullptr
 		    && psDroid->action == DACTION_ATTACK
 		    && psDroid->psActionTarget[0] == psObj->psDest)
 		{
@@ -412,13 +412,13 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT_OR_RETURN(false, psWeap->nStat < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, numWeaponStats);
-	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid weapon stats");
-	ASSERT_OR_RETURN(false, psTarget == NULL || !psTarget->died, "Aiming at dead target!");
+	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid weapon stats");
+	ASSERT_OR_RETURN(false, psTarget == nullptr || !psTarget->died, "Aiming at dead target!");
 
 	PROJECTILE *psProj = new PROJECTILE(ProjectileTrackerID | (realTime >> 4), player);
 
 	/* get muzzle offset */
-	if (psAttacker == NULL)
+	if (psAttacker == nullptr)
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
@@ -448,7 +448,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	psProj->bVisible = false;
 
 	// Must set ->psDest and ->expectedDamageCaused before first call to setProjectileDestination().
-	psProj->psDest = NULL;
+	psProj->psDest = nullptr;
 	psProj->expectedDamageCaused = objGuessFutureDamage(psStats, player, psTarget);
 	setProjectileDestination(psProj, psTarget);  // Updates expected damage of psProj->psDest, using psProj->expectedDamageCaused.
 
@@ -521,7 +521,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	psProj->state = PROJ_INFLIGHT;
 
 	// If droid or structure, set muzzle pitch.
-	if (psAttacker != NULL && weapon_slot >= 0)
+	if (psAttacker != nullptr && weapon_slot >= 0)
 	{
 		if (psAttacker->type == OBJ_DROID)
 		{
@@ -550,11 +550,11 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 			if (psProj->psSource)
 			{
 				/* firing sound emitted from source */
-				audio_PlayObjDynamicTrack(psProj->psSource, psStats->iAudioFireID, NULL);
+				audio_PlayObjDynamicTrack(psProj->psSource, psStats->iAudioFireID, nullptr);
 				/* GJ HACK: move howitzer sound with shell */
 				if (psStats->weaponSubClass == WSC_HOWITZERS)
 				{
-					audio_PlayObjDynamicTrack(psProj, ID_SOUND_HOWITZ_FLIGHT, NULL);
+					audio_PlayObjDynamicTrack(psProj, ID_SOUND_HOWITZ_FLIGHT, nullptr);
 				}
 			}
 			//don't play the sound for a LasSat in multiPlayer
@@ -565,7 +565,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 		}
 	}
 
-	if (psAttacker != NULL && !proj_Direct(psStats))
+	if (psAttacker != nullptr && !proj_Direct(psStats))
 	{
 		//check for Counter Battery Sensor in range of target
 		counterBatteryFire(castBaseObject(psAttacker), psTarget);
@@ -679,7 +679,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 4;
-	BASE_OBJECT *closestCollisionObject = NULL;
+	BASE_OBJECT *closestCollisionObject = nullptr;
 	Spacetime closestCollisionSpacetime;
 	memset(&closestCollisionSpacetime, 0, sizeof(Spacetime));  // Squelch uninitialised warning.
 
@@ -691,7 +691,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	int deltaProjectileTime = psProj->time - psProj->prevSpacetime.time;
 
 	WEAPON_STATS *psStats = psProj->psWStats;
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid weapon stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid weapon stats pointer");
 
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
@@ -732,7 +732,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	case MM_HOMINGDIRECT:     // Fly towards target, even if target moves.
 	case MM_HOMINGINDIRECT:   // Fly towards target, even if target moves. Avoid terrain.
 		{
-			if (psProj->psDest != NULL)
+			if (psProj->psDest != nullptr)
 			{
 				if (psStats->movementModel == MM_HOMINGDIRECT)
 				{
@@ -745,7 +745,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 					psProj->dst = psProj->psDest->pos + Vector3i(0, 0, establishTargetHeight(psProj->psDest) / 2);
 				}
 				DROID *targetDroid = castDroid(psProj->psDest);
-				if (targetDroid != NULL)
+				if (targetDroid != nullptr)
 				{
 					// Do target prediction.
 					Vector3i delta = psProj->dst - psProj->pos;
@@ -757,7 +757,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			}
 			if (psStats->movementModel == MM_HOMINGINDIRECT)
 			{
-				if (psProj->psDest == NULL)
+				if (psProj->psDest == nullptr)
 				{
 					psProj->dst.z = map_Height(psProj->pos.xy) - 1;  // Target missing, so just home in on the ground under where the target was.
 				}
@@ -770,13 +770,13 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			}
 			Vector3i delta = psProj->dst - psProj->pos;
 			int targetDistance = std::max(iHypot(delta), 1);
-			if (psProj->psDest == NULL && targetDistance < 10000 && psStats->movementModel == MM_HOMINGDIRECT)
+			if (psProj->psDest == nullptr && targetDistance < 10000 && psStats->movementModel == MM_HOMINGDIRECT)
 			{
 				psProj->dst = psProj->pos + delta * 10; // Target missing, so just keep going in a straight line.
 			}
 			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
 			Vector3i step = quantiseFraction(delta * int32_t(psStats->flightSpeed), GAME_TICKS_PER_SEC * targetDistance, psProj->time, psProj->prevSpacetime.time);
-			if (psStats->movementModel == MM_HOMINGINDIRECT && psProj->psDest != NULL)
+			if (psStats->movementModel == MM_HOMINGINDIRECT && psProj->psDest != nullptr)
 			{
 				for (int tries = 0; tries < 10 && map_LineIntersect(psProj->prevSpacetime.pos, psProj->pos + step, iHypot(step)) < targetDistance - 1u; ++tries)
 				{
@@ -861,7 +861,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		{
 			// We hit the terrain!
 			closestCollisionSpacetime = interpolateObjectSpacetime(psProj, collisionTime);
-			closestCollisionObject = NULL;
+			closestCollisionObject = nullptr;
 		}
 	}
 
@@ -877,7 +877,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		setProjectileDestination(psProj, closestCollisionObject);  // We hit something.
 
 		// Buildings and terrain cannot be penetrated and we need a penetrating weapon.
-		if (closestCollisionObject != NULL && closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
+		if (closestCollisionObject != nullptr && closestCollisionObject->type == OBJ_DROID && psStats->penetrate)
 		{
 			WEAPON asWeap;
 			asWeap.nStat = psStats - asWeaponStats;
@@ -885,7 +885,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);
 
-			proj_SendProjectile(&asWeap, psProj, psProj->player, psProj->dst, NULL, true, -1);
+			proj_SendProjectile(&asWeap, psProj, psProj->player, psProj->dst, nullptr, true, -1);
 		}
 
 		psProj->state = PROJ_IMPACT;
@@ -897,7 +897,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	{
 		// We've travelled our maximum range.
 		psProj->state = PROJ_IMPACT;
-		setProjectileDestination(psProj, NULL); /* miss registered if NULL target */
+		setProjectileDestination(psProj, nullptr); /* miss registered if NULL target */
 		return;
 	}
 
@@ -914,28 +914,28 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			case WSC_FLAME:
 				posFlip.z -= 8;  // Why?
 				effectGiveAuxVar(PERCENT(currentDistance, psStats->upgrade[psProj->player].maxRange));
-				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0, effectTime);
+				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, nullptr, 0, effectTime);
 				break;
 			case WSC_COMMAND:
 			case WSC_ELECTRONIC:
 			case WSC_EMP:
 				posFlip.z -= 8;  // Why?
 				effectGiveAuxVar(PERCENT(currentDistance, psStats->upgrade[psProj->player].maxRange) / 2);
-				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0, effectTime);
+				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0, effectTime);
 				break;
 			case WSC_ROCKET:
 			case WSC_MISSILE:
 			case WSC_SLOWROCKET:
 			case WSC_SLOWMISSILE:
 				posFlip.z += 8;  // Why?
-				addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0, effectTime);
+				addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, nullptr, 0, effectTime);
 				break;
 			default:
 				// Add smoke trail to indirect weapons, even if firing directly.
 				if (!proj_Direct(psStats))
 				{
 					posFlip.z += 4;  // Why?
-					addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0, effectTime);
+					addEffect(&posFlip, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, nullptr, 0, effectTime);
 				}
 				// Otherwise no effect.
 				break;
@@ -955,11 +955,11 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	iIMDShape       *imd;
 	BASE_OBJECT     *temp;
 
-	ASSERT_OR_RETURN(, psObj != NULL, "Invalid pointer");
+	ASSERT_OR_RETURN(, psObj != nullptr, "Invalid pointer");
 	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid weapon stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid weapon stats pointer");
 
 	// note the attacker if any
 	g_pProjLastAttacker = psObj->psSource;
@@ -970,7 +970,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		if (psStats->iAudioImpactID == NO_SOUND)
 		{
 			/* play richochet if MG */
-			if (psObj->psDest != NULL && psStats->weaponSubClass == WSC_MGUN
+			if (psObj->psDest != nullptr && psStats->weaponSubClass == WSC_MGUN
 			    && ONEINTHREE)
 			{
 				iAudioImpactID = ID_SOUND_RICOCHET_1 + (rand() % 3);
@@ -990,7 +990,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			position.y = map_Height(position.x, position.z);
 			effectGiveAuxVar(psStats->upgrade[psObj->player].periodicalDamageRadius);
 			effectGiveAuxVarSec(psStats->upgrade[psObj->player].periodicalDamageTime);
-			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, psObj->time);
+			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, nullptr, 0, psObj->time);
 		}
 
 		// may want to add both a fire effect and the las sat effect
@@ -999,7 +999,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			position.x = psObj->pos.x;
 			position.z = psObj->pos.y;  // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
-			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, NULL, 0, psObj->time);
+			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, nullptr, 0, psObj->time);
 		}
 	}
 
@@ -1017,7 +1017,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	scatter.z = psStats->upgrade[psObj->player].radius;
 
 	// If the projectile missed its target (or the target died)
-	if (psObj->psDest == NULL)
+	if (psObj->psDest == nullptr)
 	{
 		if (gfxVisible(psObj))
 		{
@@ -1041,7 +1041,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			if ((psStats->surfaceToAir & SHOOT_IN_AIR)
 			    && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
 			{
-				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0, psObj->time);
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, nullptr, 3, 0, 0, psObj->time);
 			}
 		}
 	}
@@ -1069,7 +1069,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			    && psStats->weaponSubClass == WSC_AAGUN)
 			{
 				imd = psStats->pTargetMissGraphic;
-				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 3, 0, 0, psObj->time);
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, nullptr, 3, 0, 0, psObj->time);
 			}
 			// Otherwise we just hit it plain and simple
 			else
@@ -1098,7 +1098,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 					break;
 
 				case OBJ_STRUCTURE:
-					((STRUCTURE *) psObj->psSource)->psTarget[0] = NULL;
+					((STRUCTURE *) psObj->psSource)->psTarget[0] = nullptr;
 					break;
 
 				// This is only here to prevent the compiler from producing
@@ -1137,7 +1137,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	}
 
 	temp = psObj->psDest;
-	setProjectileDestination(psObj, NULL);
+	setProjectileDestination(psObj, nullptr);
 	// The damage has been done, no more damage expected from this projectile. (Ignore periodical damaging.)
 	psObj->expectedDamageCaused = 0;
 	setProjectileDestination(psObj, temp);
@@ -1205,7 +1205,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			// The psCurr will get damaged, at this point.
 			unsigned damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, psCurr);
 			debug(LOG_ATTACK, "Damage to object %d, player %d : %u", psCurr->id, psCurr->player, damage);
-			if (bMultiPlayer && psObj->psSource != NULL && psCurr->type != OBJ_FEATURE)
+			if (bMultiPlayer && psObj->psSource != nullptr && psCurr->type != OBJ_FEATURE)
 			{
 				updateMultiStatsDamage(psObj->psSource->player, psCurr->player, damage);
 			}
@@ -1230,11 +1230,11 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 
 static void proj_PostImpactFunc(PROJECTILE *psObj)
 {
-	ASSERT_OR_RETURN(, psObj != NULL, "Invalid pointer");
+	ASSERT_OR_RETURN(, psObj != nullptr, "Invalid pointer");
 	CHECK_PROJECTILE(psObj);
 
 	WEAPON_STATS *psStats = psObj->psWStats;
-	ASSERT_OR_RETURN(, psStats != NULL, "Invalid weapon stats pointer");
+	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid weapon stats pointer");
 
 	int age = gameTime - psObj->born;
 
@@ -1270,11 +1270,11 @@ void PROJECTILE::update()
 	 */
 	if (psObj->psSource && psObj->psSource->died)
 	{
-		setProjectileSource(psObj, NULL);
+		setProjectileSource(psObj, nullptr);
 	}
 	if (psObj->psDest && psObj->psDest->died)
 	{
-		setProjectileDestination(psObj, NULL);
+		setProjectileDestination(psObj, nullptr);
 	}
 	// Remove dead objects from psDamaged.
 	psDamaged.erase(std::remove_if(psDamaged.begin(), psDamaged.end(), std::ptr_fun(&::isDead)), psDamaged.end());
@@ -1596,7 +1596,7 @@ glm::mat4 objectShimmy(BASE_OBJECT *psObj)
 
 int establishTargetHeight(BASE_OBJECT const *psTarget)
 {
-	if (psTarget == NULL)
+	if (psTarget == nullptr)
 	{
 		return 0;
 	}
@@ -1623,7 +1623,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 				if (psDroid->numWeaps > 0)
 				{
 					// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-					if ((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD == NULL)
+					if ((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD == nullptr)
 					{
 						return height;
 					}
@@ -1697,8 +1697,8 @@ void checkProjectile(const PROJECTILE *psProjectile, const char *const location_
 		return;
 	}
 
-	ASSERT_HELPER(psProjectile != NULL, location_description, function, "CHECK_PROJECTILE: NULL pointer");
-	ASSERT_HELPER(psProjectile->psWStats != NULL, location_description, function, "CHECK_PROJECTILE");
+	ASSERT_HELPER(psProjectile != nullptr, location_description, function, "CHECK_PROJECTILE: NULL pointer");
+	ASSERT_HELPER(psProjectile->psWStats != nullptr, location_description, function, "CHECK_PROJECTILE");
 	ASSERT_HELPER(psProjectile->type == OBJ_PROJECTILE, location_description, function, "CHECK_PROJECTILE");
 	ASSERT_HELPER(psProjectile->player < MAX_PLAYERS, location_description, function, "CHECK_PROJECTILE: Out of bound owning player number (%u)", (unsigned int)psProjectile->player);
 	ASSERT_HELPER(psProjectile->state == PROJ_INFLIGHT

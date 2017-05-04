@@ -50,7 +50,7 @@ protected:
 	virtual void initializeGL();
 
 public:
-	QtGameWidget(QSize curResolution, const QGLFormat &format, QWidget *parent = 0, Qt::WindowFlags f = 0, const QGLWidget *shareWidget = 0);
+	QtGameWidget(QSize curResolution, const QGLFormat &format, QWidget *parent = 0, Qt::WindowFlags f = 0, const QGLWidget *shareWidget = nullptr);
 	~QtGameWidget()
 	{
 		if (mResolutionChanged)

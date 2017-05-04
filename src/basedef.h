@@ -64,7 +64,7 @@ struct BASE_OBJECT;
 
 struct NEXTOBJ
 {
-	NEXTOBJ(BASE_OBJECT *ptr_ = NULL) : ptr(ptr_) {}
+	NEXTOBJ(BASE_OBJECT *ptr_ = nullptr) : ptr(ptr_) {}
 	NEXTOBJ &operator =(BASE_OBJECT *ptr_)
 	{
 		ptr = ptr_;
@@ -174,17 +174,17 @@ static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *p
 // True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
 static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)
 {
-	return psObject != NULL && psObject->type != OBJ_PROJECTILE;
+	return psObject != nullptr && psObject->type != OBJ_PROJECTILE;
 }
 // Returns BASE_OBJECT * if base_object or NULL if not.
 static inline BASE_OBJECT *castBaseObject(SIMPLE_OBJECT *psObject)
 {
-	return isBaseObject(psObject) ? (BASE_OBJECT *)psObject : (BASE_OBJECT *)NULL;
+	return isBaseObject(psObject) ? (BASE_OBJECT *)psObject : (BASE_OBJECT *)nullptr;
 }
 // Returns BASE_OBJECT const * if base_object or NULL if not.
 static inline BASE_OBJECT const *castBaseObject(SIMPLE_OBJECT const *psObject)
 {
-	return isBaseObject(psObject) ? (BASE_OBJECT const *)psObject : (BASE_OBJECT const *)NULL;
+	return isBaseObject(psObject) ? (BASE_OBJECT const *)psObject : (BASE_OBJECT const *)nullptr;
 }
 
 #endif // __INCLUDED_BASEDEF_H__

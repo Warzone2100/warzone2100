@@ -35,8 +35,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <array>
 
-static GFX *skyboxGfx = NULL;
-static GFX *radarViewGfx[2] = { NULL, NULL };
+static GFX *skyboxGfx = nullptr;
+static GFX *radarViewGfx[2] = { nullptr, nullptr };
 
 #define VW_VERTICES 5
 

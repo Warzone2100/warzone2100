@@ -122,7 +122,7 @@ static inline char *PHYSFS_fgets(char *s, int size, PHYSFS_file *stream)
 
 	if (size <= 0 || !stream || !s || PHYSFS_eof(stream))
 	{
-		return NULL;
+		return nullptr;
 	}
 	do
 	{
@@ -146,7 +146,7 @@ static inline char *PHYSFS_fgets(char *s, int size, PHYSFS_file *stream)
 	}
 
 	// Complete failure
-	return NULL;
+	return nullptr;
 }
 
 #endif // _physfs_ext_h

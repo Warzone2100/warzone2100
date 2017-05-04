@@ -204,7 +204,7 @@ bool scrGetDerrick()
 		debug(LOG_ERROR, "stack failed");
 		return false;
 	}
-	scrFunctionResult.v.oval = NULL;
+	scrFunctionResult.v.oval = nullptr;
 	if (i < (int)derricks.size())
 	{
 		x = derricks[i].x;
@@ -870,7 +870,7 @@ bool scrDroidHasSeen(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psObj != NULL, "NULL object");
+	ASSERT_OR_RETURN(false, psObj != nullptr, "NULL object");
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	// See if any droid has seen this object
@@ -1009,7 +1009,7 @@ bool scrAddDroidToMissionList(void)
 	}
 
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
-	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != nullptr, "Invalid template pointer");
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
@@ -1017,7 +1017,7 @@ bool scrAddDroidToMissionList(void)
 	{
 		debug(LOG_SCRIPT, "Max units reached for player %d adding %s to mission list (type %d)",
 		      player, getName(psTemplate), psTemplate->droidType);
-		psDroid = NULL;
+		psDroid = nullptr;
 	}
 	else
 #endif
@@ -1047,19 +1047,19 @@ bool scrAddDroid(void)
 		return false;
 	}
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
-	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != nullptr, "Invalid template pointer");
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
 	if (IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
 	{
 		debug(LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player);
-		psDroid = NULL;
+		psDroid = nullptr;
 	}
 	else
 #endif
 	{
-		psDroid = buildDroid(psTemplate, x, y, player, false, NULL);
+		psDroid = buildDroid(psTemplate, x, y, player, false, nullptr);
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
@@ -1097,14 +1097,14 @@ bool scrAddDroidToTransporter(void)
 		return false;
 	}
 
-	if (psTransporter == NULL || psDroid == NULL)
+	if (psTransporter == nullptr || psDroid == nullptr)
 	{
 		ASSERT(false, "Null unit passed");
 		return true; // allow to continue
 	}
 
-	ASSERT_OR_RETURN(false, psTransporter != NULL, "Invalid transporter pointer");
-	ASSERT_OR_RETURN(false, psDroid != NULL, "Invalid unit pointer");
+	ASSERT_OR_RETURN(false, psTransporter != nullptr, "Invalid transporter pointer");
+	ASSERT_OR_RETURN(false, psDroid != nullptr, "Invalid unit pointer");
 	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Invalid transporter type");
 
 	/* check for space */
@@ -1136,7 +1136,7 @@ bool scrBuildingDestroyed(void)
 
 	destroyed = true;
 	//look thru the players list to see if the structure still exists
-	for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->id == structureID)
 		{
@@ -1478,8 +1478,8 @@ bool scrBuildDroid(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psFactory != NULL, "NULL factory object");
-	ASSERT_OR_RETURN(false, psTemplate != NULL, "NULL template object sent to %s", objInfo((BASE_OBJECT *)psFactory));
+	ASSERT_OR_RETURN(false, psFactory != nullptr, "NULL factory object");
+	ASSERT_OR_RETURN(false, psTemplate != nullptr, "NULL template object sent to %s", objInfo((BASE_OBJECT *)psFactory));
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player number");
 	ASSERT_OR_RETURN(false, productionRun <= UBYTE_MAX, "Production run too high");
 	ASSERT_OR_RETURN(false, (psFactory->pStructureType->type == REF_FACTORY ||
@@ -1515,7 +1515,7 @@ bool	scrSetAssemblyPoint(void)
 		return false;
 	}
 
-	if (psBuilding == NULL)
+	if (psBuilding == nullptr)
 	{
 		ASSERT(false, "NULL structure");
 		return false;
@@ -1546,7 +1546,7 @@ bool	scrStructureIdle(void)
 	{
 		return false;
 	}
-	if (psBuilding == NULL)
+	if (psBuilding == nullptr)
 	{
 		ASSERT(false, "NULL structure");
 		return false;
@@ -1590,9 +1590,9 @@ bool scrDestroyFeature(void)
 	{
 		return false;
 	}
-	if (psFeature == NULL)
+	if (psFeature == nullptr)
 	{
-		ASSERT_OR_RETURN(false, psFeature != NULL, "Invalid feature pointer");
+		ASSERT_OR_RETURN(false, psFeature != nullptr, "Invalid feature pointer");
 	}
 
 	removeFeature(psFeature);
@@ -1654,9 +1654,9 @@ bool scrGetFeature(void)
 		psFeat = psFeat->psNext;
 	}
 
-	if (psFeat == NULL)		// no more to find.
+	if (psFeat == nullptr)		// no more to find.
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
 			ASSERT(false, "Failed to push result");
@@ -1666,10 +1666,10 @@ bool scrGetFeature(void)
 	}
 
 	// check to see if badly called
-	if (psFeatureStatToFind[bucket] == NULL)
+	if (psFeatureStatToFind[bucket] == nullptr)
 	{
 		debug(LOG_NEVER, "invalid feature to find. possibly due to save game\n");
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
 			ASSERT(false, "Failed to push result");
@@ -1702,7 +1702,7 @@ bool scrGetFeature(void)
 	}
 
 	// none found
-	scrFunctionResult.v.oval = NULL;
+	scrFunctionResult.v.oval = nullptr;
 	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
 	{
 		ASSERT(false, "Failed to push result");
@@ -1725,10 +1725,10 @@ bool scrGetFeatureB(void)
 	ASSERT_OR_RETURN(false, bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
 
 	// check to see if badly called
-	if (psFeatureStatToFind[bucket] == NULL)
+	if (psFeatureStatToFind[bucket] == nullptr)
 	{
 		debug(LOG_NEVER, "invalid feature to find. possibly due to save game\n");
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
 			ASSERT(false, "Failed to push result");
@@ -1760,7 +1760,7 @@ bool scrGetFeatureB(void)
 	}
 
 	// none found
-	scrFunctionResult.v.oval = NULL;
+	scrFunctionResult.v.oval = nullptr;
 	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
 	{
 		ASSERT(false, "Failed to push result");
@@ -1774,7 +1774,7 @@ bool scrGetFeatureB(void)
 bool scrAddFeature(void)
 {
 	FEATURE_STATS	*psStat;
-	FEATURE			*psFeat = NULL;
+	FEATURE			*psFeat = nullptr;
 	SDWORD			iX, iY, iMapX, iMapY, iTestX, iTestY, iFeat;
 
 	if (!stackPopParams(3, ST_FEATURESTAT, &iFeat,
@@ -1785,9 +1785,9 @@ bool scrAddFeature(void)
 
 	psStat = (FEATURE_STATS *)(asFeatureStats + iFeat);
 
-	ASSERT_OR_RETURN(false, psStat != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(false, psStat != nullptr, "Invalid feature pointer");
 
-	if (psStat != NULL)
+	if (psStat != nullptr)
 	{
 		iMapX = map_coord(iX);
 		iMapY = map_coord(iY);
@@ -1818,7 +1818,7 @@ bool scrAddFeature(void)
 bool scrAddStructure(void)
 {
 	STRUCTURE_STATS		*psStat;
-	STRUCTURE			*psStruct = NULL;
+	STRUCTURE			*psStruct = nullptr;
 	SDWORD				iX, iY, iMapX, iMapY;//, iWidth, iBreadth;
 	SDWORD				iStruct, iPlayer;//, iW, iB;
 
@@ -1830,9 +1830,9 @@ bool scrAddStructure(void)
 
 	psStat = (STRUCTURE_STATS *)(asStructureStats + iStruct);
 
-	ASSERT_OR_RETURN(false, psStat != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(false, psStat != nullptr, "Invalid feature pointer");
 
-	if (psStat != NULL)
+	if (psStat != nullptr)
 	{
 		/* offset coords so building centre at (iX, iY) */
 		/*		no longer necessary - buildStruct no longer uses top left
@@ -1849,7 +1849,7 @@ bool scrAddStructure(void)
 		}
 
 		psStruct = buildStructure(psStat, iX, iY, iPlayer, false);
-		if (psStruct != NULL)
+		if (psStruct != nullptr)
 		{
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
@@ -1893,9 +1893,9 @@ bool scrDestroyStructure(void)
 		return false;
 	}
 
-	if (psStruct == NULL)
+	if (psStruct == nullptr)
 	{
-		ASSERT_OR_RETURN(false, psStruct != NULL, "Invalid structure pointer");
+		ASSERT_OR_RETURN(false, psStruct != nullptr, "Invalid structure pointer");
 	}
 
 	removeStruct(psStruct, true);
@@ -1957,9 +1957,9 @@ bool scrEnumStruct(void)
 		psStruct = psStruct->psNext;
 	}
 
-	if (psStruct == NULL)		// no more to find.
+	if (psStruct == nullptr)		// no more to find.
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 		{
 			return false;
@@ -1987,7 +1987,7 @@ bool scrEnumStruct(void)
 		psStruct = psStruct->psNext;
 	}
 	// push NULL, none found;
-	scrFunctionResult.v.oval = NULL;
+	scrFunctionResult.v.oval = nullptr;
 	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return false;
@@ -2047,9 +2047,9 @@ bool scrEnumStructB(void)
 		psStruct = psStruct->psNext;
 	}
 
-	if (psStruct == NULL)		// no more to find.
+	if (psStruct == nullptr)		// no more to find.
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 		{
 			return false;
@@ -2077,7 +2077,7 @@ bool scrEnumStructB(void)
 		psStruct = psStruct->psNext;
 	}
 	// push NULL, none found;
-	scrFunctionResult.v.oval = NULL;
+	scrFunctionResult.v.oval = nullptr;
 	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return false;
@@ -2193,7 +2193,7 @@ bool scrCentreView(void)
 		return false;
 	}
 
-	if (psObj == NULL)
+	if (psObj == nullptr)
 	{
 		ASSERT(false, "NULL object");
 		return false;
@@ -2229,7 +2229,7 @@ bool scrCentreViewPos(void)
 	return true;
 }
 
-static STRUCTURE *unbuiltIter = NULL;
+static STRUCTURE *unbuiltIter = nullptr;
 static int unbuiltPlayer = -1;
 
 bool scrEnumUnbuilt(void)
@@ -2281,7 +2281,7 @@ bool scrGetStructure(void)
 
 	//search the players' list of built structures to see if one exists
 	found = false;
-	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
+	for (psStruct = apsStructLists[player]; psStruct != nullptr; psStruct =
 	         psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
@@ -2294,7 +2294,7 @@ bool scrGetStructure(void)
 	//make sure pass NULL back if not got one
 	if (!found)
 	{
-		psStruct = NULL;
+		psStruct = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psStruct;
@@ -2395,7 +2395,7 @@ bool scrGetTemplate(void)
 	//make sure pass NULL back if not got one
 	if (!found)
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 	}
 
 	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
@@ -2430,7 +2430,7 @@ bool scrGetDroid(void)
 
 	//search the players' list of droid to see if one exists
 	found = false;
-	for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid =
+	for (psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid =
 	         psDroid->psNext)
 	{
 		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
@@ -2495,7 +2495,7 @@ bool scrGetDroid(void)
 	//make sure pass NULL back if not got one
 	if (!found)
 	{
-		psDroid = NULL;
+		psDroid = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psDroid;
@@ -3006,7 +3006,7 @@ bool scrPlayVideo(void)
 	}
 
 	seq_ClearSeqList();
-	seq_AddSeqToList(pVideo, NULL, pText, false);		// Arpzzzzzzzzzzzzzzzlksht!
+	seq_AddSeqToList(pVideo, nullptr, pText, false);		// Arpzzzzzzzzzzzzzzzlksht!
 	seq_StartNextFullScreenVideo();
 
 	return true;
@@ -3028,7 +3028,7 @@ bool scrAnyDroidsLeft(void)
 
 	//check the players list for any droid
 	droidsLeft = true;
-	if (apsDroidLists[player] == NULL)
+	if (apsDroidLists[player] == nullptr)
 	{
 		droidsLeft = false;
 	}
@@ -3125,7 +3125,7 @@ bool scrGameOver(void)
 
 			seq_ClearSeqList();
 
-			seq_AddSeqToList("outro.ogg", NULL, "outro.txa", false);
+			seq_AddSeqToList("outro.ogg", nullptr, "outro.txa", false);
 			seq_StartNextFullScreenVideo();
 
 		}
@@ -3152,7 +3152,7 @@ bool scrAnyFactoriesLeft(void)
 	bResult = false;
 	if (apsStructLists[player])
 	{
-		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			if (StructIsFactory(psCurr))
 			{
@@ -3189,7 +3189,7 @@ bool scrAnyStructButWallsLeft(void)
 
 	//check the players list for any structures
 	structuresLeft = false;
-	for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type != REF_WALL && psCurr->pStructureType->
 		    type != REF_WALLCORNER)
@@ -3221,7 +3221,7 @@ bool scrPlayBackgroundAudio(void)
 	}
 
 
-	audio_PlayStream(pText, (float)iVol / 100.f, NULL, NULL);
+	audio_PlayStream(pText, (float)iVol / 100.f, nullptr, nullptr);
 
 
 	return true;
@@ -3486,7 +3486,7 @@ bool scrStartMission(void)
 
 	// find the level dataset
 	psNewLevel = levFindDataSet(pGame);
-	if (psNewLevel == NULL)
+	if (psNewLevel == nullptr)
 	{
 		debug(LOG_FATAL, "scrStartMission: couldn't find level data");
 		abort();
@@ -3890,7 +3890,7 @@ bool scrMyResponsibility(void)
 bool scrStructureBuiltInRange(void)
 {
 	SDWORD		player, index, x, y, range;
-	STRUCTURE	*psStruct = NULL;
+	STRUCTURE	*psStruct = nullptr;
 	STRUCTURE_STATS *psTarget;
 
 	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range, VAL_INT, &player))
@@ -3922,7 +3922,7 @@ bool scrStructureBuiltInRange(void)
 				break;
 			}
 		}
-		psStruct = NULL;
+		psStruct = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psStruct;
@@ -4013,7 +4013,7 @@ bool scrCompleteResearch(void)
 
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	if (psResearch == NULL)
+	if (psResearch == nullptr)
 	{
 		// hack to make T2 and T3 work even though the research lists
 		// are polluted with tons of non-existent techs :(
@@ -4034,7 +4034,7 @@ bool scrCompleteResearch(void)
 	}
 	else
 	{
-		researchResult(researchIndex, player, false, NULL, false);
+		researchResult(researchIndex, player, false, nullptr, false);
 	}
 
 
@@ -4061,7 +4061,7 @@ bool scrFlashOn(void)
 	}
 
 
-	if (widgGetFromID(psWScreen, button) != NULL)
+	if (widgGetFromID(psWScreen, button) != nullptr)
 	{
 		widgSetButtonFlash(psWScreen, button);
 	}
@@ -4087,7 +4087,7 @@ bool scrFlashOff(void)
 	}
 
 
-	if (widgGetFromID(psWScreen, button) != NULL)
+	if (widgGetFromID(psWScreen, button) != nullptr)
 	{
 		widgClearButtonFlash(psWScreen, button);
 	}
@@ -4419,7 +4419,7 @@ bool scrSetReinforcementTime(void)
 		/*only remove the launch if haven't got a transporter droid since the
 		scripts set the time to -1 at the between stage if there are not going
 		to be reinforcements on the submap  */
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
 			if (isTransporter(psDroid))
 			{
@@ -4427,7 +4427,7 @@ bool scrSetReinforcementTime(void)
 			}
 		}
 		//if not found a transporter, can remove the launch button
-		if (psDroid ==  NULL)
+		if (psDroid ==  nullptr)
 		{
 			intRemoveTransporterLaunch();
 		}
@@ -4982,7 +4982,7 @@ static bool	structHasModule(STRUCTURE *psStruct)
 	STRUCTURE_STATS	*psStats;
 	bool bFound = false;
 
-	ASSERT_OR_RETURN(false, psStruct != NULL, "Testing for a module from a NULL struct");
+	ASSERT_OR_RETURN(false, psStruct != nullptr, "Testing for a module from a NULL struct");
 
 	/* Fail if the structure isn't built yet */
 	if (psStruct->status != SS_BUILT)
@@ -5049,7 +5049,7 @@ bool scrAddTemplate(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != nullptr, "Invalid template pointer");
 
 	addTemplate(player, psTemplate);
 	scrFunctionResult.v.bval = true;
@@ -5246,7 +5246,7 @@ bool scrPickStructLocation(void)
 	{
 		return false;
 	}
-	return pickStructLocation(NULL, index, pX, pY, player, MAX_BLOCKING_TILES);
+	return pickStructLocation(nullptr, index, pX, pY, player, MAX_BLOCKING_TILES);
 }
 
 // pick a structure location and check that we can build there (duh!)
@@ -5276,7 +5276,7 @@ bool scrPickStructLocationB(void)
 	{
 		return false;
 	}
-	return pickStructLocation(NULL, index, pX, pY, player, maxBlockingTiles);
+	return pickStructLocation(nullptr, index, pX, pY, player, maxBlockingTiles);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -5346,7 +5346,7 @@ bool scrGetGameStatus(void)
 	{
 
 	case STATUS_ReticuleIsOpen:
-		if (widgGetFromID(psWScreen, IDRET_FORM) != NULL)
+		if (widgGetFromID(psWScreen, IDRET_FORM) != nullptr)
 		{
 			bResult = true;
 		}
@@ -5479,7 +5479,7 @@ bool scrTakeOverDroidsInArea(void)
 	ASSERT_OR_RETURN(false, x1 < world_coord(MAP_MAXWIDTH) && x2 < world_coord(MAP_MAXWIDTH) && y1 < world_coord(MAP_MAXHEIGHT)
 	                 && y2 < world_coord(MAP_MAXHEIGHT), "coordinate outside map");
 	numChanged = 0;
-	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
+	for (psDroid = apsDroidLists[fromPlayer]; psDroid != nullptr; psDroid = psNext)
 	{
 		psNext = psDroid->psNext;
 		// check if within area specified
@@ -5517,13 +5517,13 @@ bool scrTakeOverSingleDroid(void)
 		return false;
 	}
 
-	if (psDroidToTake == NULL)
+	if (psDroidToTake == nullptr)
 	{
 		ASSERT(false, "scrTakeOverSingleUnit: Null unit");
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psDroidToTake != NULL, "Invalid unit pointer");
+	ASSERT_OR_RETURN(false, psDroidToTake != nullptr, "Invalid unit pointer");
 
 	psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
 
@@ -5579,7 +5579,7 @@ bool scrTakeOverDroidsInAreaExp(void)
 	}
 
 	numChanged = 0;
-	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
+	for (psDroid = apsDroidLists[fromPlayer]; psDroid != nullptr; psDroid = psNext)
 	{
 		psNext = psDroid->psNext;
 		//check if within area specified
@@ -5631,20 +5631,20 @@ bool scrTakeOverSingleStructure(void)
 		return false;
 	}
 
-	if (psStructToTake == NULL)
+	if (psStructToTake == nullptr)
 	{
 		ASSERT(false, "scrTakeOverSingleStructure: Null structure");
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psStructToTake != NULL, "Invalid structure pointer");
+	ASSERT_OR_RETURN(false, psStructToTake != nullptr, "Invalid structure pointer");
 
 	structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
 	if (playerToGain == (SDWORD)selectedPlayer && StructIsFactory(psStructToTake) &&
 	    asStructLimits[playerToGain][structureInc].currentQuantity >= MAX_FACTORY)
 	{
 		debug(LOG_NEVER, "scrTakeOverSingleStructure - factory ignored for selectedPlayer\n");
-		psNewStruct = NULL;
+		psNewStruct = nullptr;
 	}
 	else
 	{
@@ -5719,7 +5719,7 @@ bool scrTakeOverStructsInArea(void)
 	}
 
 	numChanged = 0;
-	for (psStruct = apsStructLists[fromPlayer]; psStruct != NULL; psStruct = psNext)
+	for (psStruct = apsStructLists[fromPlayer]; psStruct != nullptr; psStruct = psNext)
 	{
 		psNext = psStruct->psNext;
 		//check if within area specified
@@ -5839,7 +5839,7 @@ bool scrFireWeaponAtObj(void)
 		return false;
 	}
 
-	if (psTarget == NULL)
+	if (psTarget == nullptr)
 	{
 		ASSERT(false, "scrFireWeaponAtObj: Null target pointer");
 		return false;
@@ -5848,7 +5848,7 @@ bool scrFireWeaponAtObj(void)
 	target = psTarget->pos;
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, 0);
+	proj_SendProjectile(&sWeapon, nullptr, selectedPlayer, target, psTarget, true, 0);
 
 	return true;
 }
@@ -5868,7 +5868,7 @@ bool scrFireWeaponAtLoc(void)
 	target.z = map_Height(target.x, target.y);
 
 	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, NULL, true, 0);
+	proj_SendProjectile(&sWeapon, nullptr, selectedPlayer, target, nullptr, true, 0);
 
 	return true;
 }
@@ -5884,7 +5884,7 @@ bool scrSetDroidKills(void)
 		return true;
 	}
 
-	if ((psDroid == NULL) ||
+	if ((psDroid == nullptr) ||
 	    (psDroid->type != OBJ_DROID))
 	{
 		ASSERT(false, "scrSetUnitKills: NULL/invalid unit pointer");
@@ -5906,7 +5906,7 @@ bool scrGetDroidKills(void)
 		return true;
 	}
 
-	if ((psDroid == NULL) ||
+	if ((psDroid == nullptr) ||
 	    (psDroid->type != OBJ_DROID))
 	{
 		ASSERT(false, "scrGetDroidKills: NULL/invalid unit pointer");
@@ -6018,7 +6018,7 @@ bool scrIsVtol(void)
 		return true;
 	}
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		ASSERT_OR_RETURN(false, false, "null droid passed in.");
 	}
@@ -6217,7 +6217,7 @@ bool scrEnumDroid(void)
 	}
 
 	// push NULLDROID, since didn't find any
-	scrFunctionResult.v.oval = NULL;
+	scrFunctionResult.v.oval = nullptr;
 	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrEnumDroid() - push failed");
@@ -6230,8 +6230,8 @@ bool scrEnumDroid(void)
 //Return the template factory is currently building
 bool scrFactoryGetTemplate(void)
 {
-	STRUCTURE		*psStructure = NULL;
-	DROID_TEMPLATE	*psTemplate = NULL;
+	STRUCTURE		*psStructure = nullptr;
+	DROID_TEMPLATE	*psTemplate = nullptr;
 
 	if (!stackPopParams(1, ST_STRUCTURE, &psStructure))
 	{
@@ -6239,14 +6239,14 @@ bool scrFactoryGetTemplate(void)
 		return false;
 	}
 
-	if (psStructure == NULL)
+	if (psStructure == nullptr)
 	{
 		debug(LOG_ERROR, "scrFactoryGetTemplate() - NULL factory object");
 		ASSERT(false, "scrFactoryGetTemplate: NULL factory object");
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psStructure != NULL, "Invalid structure pointer");
+	ASSERT_OR_RETURN(false, psStructure != nullptr, "Invalid structure pointer");
 	ASSERT_OR_RETURN(false, (psStructure->pStructureType->type == REF_FACTORY ||
 	        psStructure->pStructureType->type == REF_CYBORG_FACTORY ||
 	        psStructure->pStructureType->type == REF_VTOL_FACTORY),
@@ -6260,7 +6260,7 @@ bool scrFactoryGetTemplate(void)
 
 	psTemplate = (DROID_TEMPLATE *)((FACTORY *)psStructure->pFunctionality)->psSubject;
 
-	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != nullptr, "Invalid template pointer");
 
 	scrFunctionResult.v.oval = psTemplate;
 	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
@@ -6293,13 +6293,13 @@ bool scrNumTemplatesInProduction(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != nullptr, "Invalid template pointer");
 
 	psBaseStats = (BASE_STATS *)psTemplate; //Convert
 
 	psList = apsStructLists[player];
 
-	for (psStruct = psList; psStruct != NULL; psStruct = psStruct->psNext)
+	for (psStruct = psList; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (StructIsFactory(psStruct))
 		{
@@ -6933,7 +6933,7 @@ bool scrNumResearchLeft(void)
 		return false;
 	}
 
-	if (psResearch == NULL)
+	if (psResearch == nullptr)
 	{
 		ASSERT(false, "scrNumResearchLeft(): no such research topic");
 		return false;
@@ -7059,7 +7059,7 @@ bool scrResearchCompleted(void)
 		return false;
 	}
 
-	if (psResearch == NULL)
+	if (psResearch == nullptr)
 	{
 		debug(LOG_ERROR, "scrResearchCompleted: no such research topic");
 		return false;
@@ -7105,7 +7105,7 @@ bool scrResearchStarted(void)
 		return false;
 	}
 
-	if (psResearch == NULL)
+	if (psResearch == nullptr)
 	{
 		ASSERT(false, ": no such research topic");
 		return false;
@@ -7809,11 +7809,11 @@ bool scrNumStructsByStatInArea(void)
 	ASSERT_OR_RETURN(false, index < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", index, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + index);
 
-	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid structure pointer");
+	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid structure pointer");
 
 	NumStruct = 0;
 
-	for (psCurr = apsStructLists[player]; psCurr != NULL;
+	for (psCurr = apsStructLists[player]; psCurr != nullptr;
 	     psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType == psStats)
@@ -8083,7 +8083,7 @@ bool scrGetStructureVis(void)
 
 	//search the players' list of built structures to see if one exists
 	found = false;
-	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
+	for (psStruct = apsStructLists[player]; psStruct != nullptr; psStruct =
 	         psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
@@ -8099,7 +8099,7 @@ bool scrGetStructureVis(void)
 	//make sure pass NULL back if not got one
 	if (!found)
 	{
-		psStruct = NULL;
+		psStruct = nullptr;
 	}
 
 	scrFunctionResult.v.oval = psStruct;
@@ -8166,9 +8166,9 @@ bool scrGetClosestEnemy(void)
 	UDWORD				dist, bestDist;
 	int32_t				weaponOnly, bVTOLs;		// was BOOL (int) ** see warning about conversion
 	bool				bFound = false;			//only military objects?
-	BASE_OBJECT			*psObj = NULL;
-	STRUCTURE			*psStruct = NULL;
-	DROID				*psDroid = NULL;
+	BASE_OBJECT			*psObj = nullptr;
+	STRUCTURE			*psStruct = nullptr;
+	DROID				*psDroid = nullptr;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
 	                    VAL_INT, &range,  VAL_BOOL, &weaponOnly, VAL_BOOL, &bVTOLs, VAL_INT, &player))
@@ -8267,7 +8267,7 @@ bool scrGetClosestEnemy(void)
 	}
 	else
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
 		{
 			return false;
@@ -8288,7 +8288,7 @@ bool scrTransporterCapacity(void)
 		return false;
 	}
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		debug(LOG_ERROR, "scrTransporterCapacity(): NULLOBJECT passed");
 		return false;
@@ -8321,7 +8321,7 @@ bool scrTransporterFlying(void)
 		return false;
 	}
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		debug(LOG_ERROR, "scrTransporterFlying(): NULLOBJECT passed");
 		return false;
@@ -8354,7 +8354,7 @@ bool scrUnloadTransporter(void)
 		return false;
 	}
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		debug(LOG_ERROR, "scrUnloadTransporter(): NULLOBJECT passed");
 		return false;
@@ -8383,13 +8383,13 @@ bool scrHasGroup(void)
 		return false;
 	}
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		debug(LOG_ERROR, "scrHasGroup: droid is NULLOBJECT");
 		return false;
 	}
 
-	if (psDroid->psGroup != NULL)
+	if (psDroid->psGroup != nullptr)
 	{
 		retval = true;
 	}
@@ -8509,7 +8509,7 @@ bool scrObjectHasIndirectWeapon(void)
 		return false;
 	}
 
-	if (psObj == NULL)
+	if (psObj == nullptr)
 	{
 		debug(LOG_ERROR, "scrHasIndirectWeapon(): NULLOBJECT passed");
 		return false;
@@ -8550,7 +8550,7 @@ bool scrGetClosestEnemyDroidByType(void)
 	UDWORD				dist, bestDist;
 	bool				bFound = false;	//only military objects?
 	int32_t				bVTOLs;			// was BOOL (int) ** see warning about conversion
-	DROID				*psDroid = NULL, *foundDroid = NULL;
+	DROID				*psDroid = nullptr, *foundDroid = nullptr;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
 	                    VAL_INT, &range,  VAL_INT, &type, VAL_BOOL, &bVTOLs, VAL_INT, &player))
@@ -8622,7 +8622,7 @@ bool scrGetClosestEnemyDroidByType(void)
 	}
 	else
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 		{
 			return false;
@@ -8638,7 +8638,7 @@ bool scrGetClosestEnemyStructByType(void)
 	SDWORD				x, y, tx, ty, player, range, i, type, dist;
 	UDWORD				bestDist;
 	bool				bFound = false;	//only military objects?
-	STRUCTURE			*psStruct = NULL, *foundStruct = NULL;
+	STRUCTURE			*psStruct = nullptr, *foundStruct = nullptr;
 
 	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
 	                    VAL_INT, &range,  VAL_INT, &type, VAL_INT, &player))
@@ -8706,7 +8706,7 @@ bool scrGetClosestEnemyStructByType(void)
 	}
 	else
 	{
-		scrFunctionResult.v.oval = NULL;
+		scrFunctionResult.v.oval = nullptr;
 		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 		{
 			return false;
@@ -8875,7 +8875,7 @@ bool scrSelectDroid(void)
 		return false;
 	}
 
-	if (psDroid == NULL)
+	if (psDroid == nullptr)
 	{
 		debug(LOG_ERROR, "droid is NULLOBJECT");
 		return false;
@@ -8943,7 +8943,7 @@ bool scrPlayerLoaded(void)
 	/* see if there are any player factories left */
 	if (apsStructLists[player])
 	{
-		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			if (StructIsFactory(psCurr))
 			{
@@ -8954,7 +8954,7 @@ bool scrPlayerLoaded(void)
 	}
 
 	/* player is active if he has at least a unit or some factory */
-	scrFunctionResult.v.bval = (apsDroidLists[player] != NULL || bPlayerHasFactories);
+	scrFunctionResult.v.bval = (apsDroidLists[player] != nullptr || bPlayerHasFactories);
 
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
@@ -8991,7 +8991,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 	{
 		pTempData = CreateBeaconViewData(sender, locX, locY);
 
-		ASSERT_OR_RETURN(false, pTempData != NULL, "Empty help data for radar beacon");
+		ASSERT_OR_RETURN(false, pTempData != nullptr, "Empty help data for radar beacon");
 
 		psMessage->pViewData = (MSG_VIEWDATA *)pTempData;
 
@@ -9010,7 +9010,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 	{
 		triggerEventBeacon(sender, forPlayer, textMsg, locX, locY);
 
-		if (!msgStackPush(CALL_BEACON, sender, forPlayer, textMsg, locX, locY, NULL))
+		if (!msgStackPush(CALL_BEACON, sender, forPlayer, textMsg, locX, locY, nullptr))
 		{
 			debug(LOG_ERROR, "msgStackPush - stack failed");
 			return false;
@@ -9067,11 +9067,11 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 
 	//allocate memory for blip location etc
 	psViewData->pData = (VIEW_PROXIMITY *) malloc(sizeof(VIEW_PROXIMITY));
-	if (psViewData->pData == NULL)
+	if (psViewData->pData == nullptr)
 	{
 		ASSERT(false, "prepairHelpViewData() - Unable to allocate memory");
 		delete psViewData;
-		return NULL;
+		return nullptr;
 	}
 
 	//store audio
@@ -9105,7 +9105,7 @@ MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 {
 	MESSAGE					*psCurr;
 
-	for (psCurr = apsMessages[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsMessages[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		//look for VIEW_BEACON, should only be 1 per player
 		if (psCurr->dataType == MSG_DATA_BEACON)
@@ -9123,7 +9123,7 @@ MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 	}
 
 	//not found the message so return NULL
-	return NULL;
+	return nullptr;
 }
 
 /* Add beacon (radar blip) */
@@ -9186,7 +9186,7 @@ bool scrClosestDamagedGroupDroid(void)
 	}
 
 	wBestDist = 999999;
-	psClosestDroid = NULL;
+	psClosestDroid = nullptr;
 	for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
 	{
 		if ((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
@@ -9224,7 +9224,7 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 			continue;
 		}
 
-		if (psDroid->order.psObj != NULL && psDroid->order.psObj->type == OBJ_DROID)
+		if (psDroid->order.psObj != nullptr && psDroid->order.psObj->type == OBJ_DROID)
 		{
 			if ((DROID *)psDroid->order.psObj == psDroidToCheck)
 			{
@@ -9367,7 +9367,7 @@ bool scrPursueResearch(void)
 		return false;
 	}
 
-	if (psResearch == NULL)
+	if (psResearch == nullptr)
 	{
 		ASSERT(false, ": no such research topic");
 		return false;
@@ -9375,7 +9375,7 @@ bool scrPursueResearch(void)
 
 	psResFacilty =	(RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
-	if (psResFacilty->psSubject != NULL)		// not finished yet
+	if (psResFacilty->psSubject != nullptr)		// not finished yet
 	{
 		scrFunctionResult.v.bval = false;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9882,7 +9882,7 @@ bool scrGetNumArgsInCmd(void)
 bool scrGetChatCmdDescription(void)
 {
 	SDWORD			cmdIndex;
-	char			*pChatCommand = NULL;
+	char			*pChatCommand = nullptr;
 
 	if (!stackPopParams(1, VAL_INT, &cmdIndex))
 	{
@@ -9900,7 +9900,7 @@ bool scrGetChatCmdDescription(void)
 
 	/* Allocate memory for the comamnd string */
 	pChatCommand = (char *)malloc(MAXSTRLEN);
-	if (pChatCommand == NULL)
+	if (pChatCommand == nullptr)
 	{
 		debug(LOG_FATAL, "scrGetCmdDescription: Out of memory!");
 		abort();
@@ -9931,7 +9931,7 @@ bool scrGetChatCmdDescription(void)
 bool scrGetChatCmdParam(void)
 {
 	SDWORD			cmdIndex, argIndex;
-	void			*pArgument = NULL;
+	void			*pArgument = nullptr;
 	INTERP_TYPE		argType = VAL_VOID;
 	bool			bSuccess = true;		//failure on type mismatch
 
@@ -9963,7 +9963,7 @@ bool scrGetChatCmdParam(void)
 		//return false;
 	}
 
-	if (pArgument == NULL)
+	if (pArgument == nullptr)
 	{
 		ASSERT(false, "scrGetChatCmdParam: nullpointer check failed");
 		bSuccess = false;
@@ -10100,7 +10100,7 @@ bool scrCalcDroidPower(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psDroid != NULL, "can't calculate cost of a null-droid");
+	ASSERT_OR_RETURN(false, psDroid != nullptr, "can't calculate cost of a null-droid");
 
 	scrFunctionResult.v.ival = (SDWORD)calcDroidPower(psDroid);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -10124,7 +10124,7 @@ bool scrGetDroidLevel(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, psDroid != NULL, "null-pointer passed");
+	ASSERT_OR_RETURN(false, psDroid != nullptr, "null-pointer passed");
 
 	scrFunctionResult.v.ival = (SDWORD)getDroidLevel(psDroid);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -10140,7 +10140,7 @@ bool scrGetDroidLevel(void)
 bool scrAssembleWeaponTemplate(void)
 {
 	SDWORD					player, bodyIndex, weapIndex, propIndex;
-	DROID_TEMPLATE			*pNewTemplate = NULL;
+	DROID_TEMPLATE			*pNewTemplate = nullptr;
 
 	if (!stackPopParams(4, VAL_INT, &player, ST_BODY, &bodyIndex,
 	                    ST_PROPULSION, &propIndex, ST_WEAPON, &weapIndex))
@@ -10149,7 +10149,7 @@ bool scrAssembleWeaponTemplate(void)
 	}
 
 	pNewTemplate = new DROID_TEMPLATE;
-	if (pNewTemplate == NULL)
+	if (pNewTemplate == nullptr)
 	{
 		debug(LOG_ERROR, "pNewTemplate: Out of memory");
 		return false;
@@ -10185,15 +10185,15 @@ bool scrAssembleWeaponTemplate(void)
 	// make sure we have a valid weapon
 	if (!checkValidWeaponForProp(pNewTemplate))
 	{
-		scrFunctionResult.v.oval = NULL;		// failure
+		scrFunctionResult.v.oval = nullptr;		// failure
 	}
 	else
 	{
-		DROID_TEMPLATE *tempTemplate = NULL;
+		DROID_TEMPLATE *tempTemplate = nullptr;
 
 		// check if an identical template already exists for this player
 		tempTemplate = scrCheckTemplateExists(player, pNewTemplate);
-		if (tempTemplate == NULL)
+		if (tempTemplate == nullptr)
 		{
 			// set template id
 			pNewTemplate->multiPlayerID = generateNewObjectId();
@@ -10261,7 +10261,7 @@ static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // deprecated
