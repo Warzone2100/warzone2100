@@ -32,7 +32,7 @@ enum DIFFICULTY_LEVEL
 };
 
 void setDifficultyLevel(DIFFICULTY_LEVEL lev);
-DIFFICULTY_LEVEL getDifficultyLevel(void);
+DIFFICULTY_LEVEL getDifficultyLevel();
 int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
 
 #endif // __INCLUDED_SRC_DIFFICULTY_H__

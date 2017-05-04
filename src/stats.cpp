@@ -120,14 +120,14 @@ static void updateMaxConstStats(UWORD maxValue);
 *	Dealloc the extra storage tables
 ***********************************************************************************/
 //Deallocate the storage assigned for the Propulsion Types table
-static void deallocPropulsionTypes(void)
+static void deallocPropulsionTypes()
 {
 	free(asPropulsionTypes);
 	asPropulsionTypes = nullptr;
 }
 
 //dealloc the storage assigned for the terrain table
-static void deallocTerrainTable(void)
+static void deallocTerrainTable()
 {
 	free(asTerrainTable);
 	asTerrainTable = nullptr;
@@ -151,7 +151,7 @@ static void deallocTerrainTable(void)
 	listSize = 0; \
 	(list) = NULL
 
-void statsInitVars(void)
+void statsInitVars()
 {
 	/* The number of different stats stored */
 	numBodyStats = 0;
@@ -171,7 +171,7 @@ void statsInitVars(void)
 }
 
 /*Deallocate all the stats assigned from input data*/
-bool statsShutDown(void)
+bool statsShutDown()
 {
 	lookupStatPtr.clear();
 
@@ -1730,7 +1730,7 @@ void setMaxComponentWeight(UDWORD weight)
 		maxComponentWeight = weight;
 	}
 }
-UDWORD getMaxComponentWeight(void)
+UDWORD getMaxComponentWeight()
 {
 	return maxComponentWeight;
 }
@@ -1742,7 +1742,7 @@ void setMaxBodyArmour(UDWORD armour)
 		maxBodyArmour = armour;
 	}
 }
-UDWORD getMaxBodyArmour(void)
+UDWORD getMaxBodyArmour()
 {
 	return maxBodyArmour;
 }
@@ -1754,7 +1754,7 @@ void setMaxBodyPower(UDWORD power)
 		maxBodyPower = power;
 	}
 }
-UDWORD getMaxBodyPower(void)
+UDWORD getMaxBodyPower()
 {
 	return maxBodyPower;
 }
@@ -1766,7 +1766,7 @@ void setMaxBodyPoints(UDWORD points)
 		maxBodyPoints = points;
 	}
 }
-UDWORD getMaxBodyPoints(void)
+UDWORD getMaxBodyPoints()
 {
 	return maxBodyPoints;
 }
@@ -1779,7 +1779,7 @@ void setMaxSensorRange(UDWORD range)
 	}
 }
 
-UDWORD getMaxSensorRange(void)
+UDWORD getMaxSensorRange()
 {
 	return maxSensorRange;
 }
@@ -1792,7 +1792,7 @@ void setMaxECMRange(UDWORD range)
 	}
 }
 
-UDWORD getMaxECMRange(void)
+UDWORD getMaxECMRange()
 {
 	return maxECMRange;
 }
@@ -1804,7 +1804,7 @@ void setMaxConstPoints(UDWORD points)
 		maxConstPoints = points;
 	}
 }
-UDWORD getMaxConstPoints(void)
+UDWORD getMaxConstPoints()
 {
 	return maxConstPoints;
 }
@@ -1816,7 +1816,7 @@ void setMaxRepairPoints(UDWORD repair)
 		maxRepairPoints = repair;
 	}
 }
-UDWORD getMaxRepairPoints(void)
+UDWORD getMaxRepairPoints()
 {
 	return maxRepairPoints;
 }
@@ -1828,7 +1828,7 @@ void setMaxWeaponRange(UDWORD range)
 		maxWeaponRange = range;
 	}
 }
-UDWORD getMaxWeaponRange(void)
+UDWORD getMaxWeaponRange()
 {
 	return maxWeaponRange;
 }
@@ -1840,7 +1840,7 @@ void setMaxWeaponDamage(UDWORD damage)
 		maxWeaponDamage = damage;
 	}
 }
-UDWORD getMaxWeaponDamage(void)
+UDWORD getMaxWeaponDamage()
 {
 	return maxWeaponDamage;
 }
@@ -1852,7 +1852,7 @@ void setMaxWeaponROF(UDWORD rof)
 		maxWeaponROF = rof;
 	}
 }
-UDWORD getMaxWeaponROF(void)
+UDWORD getMaxWeaponROF()
 {
 	return maxWeaponROF;
 }
@@ -1864,7 +1864,7 @@ void setMaxPropulsionSpeed(UDWORD speed)
 		maxPropulsionSpeed = speed;
 	}
 }
-UDWORD getMaxPropulsionSpeed(void)
+UDWORD getMaxPropulsionSpeed()
 {
 	return maxPropulsionSpeed;
 }
@@ -1952,7 +1952,7 @@ void updateMaxConstStats(UWORD maxValue)
 	}
 }
 
-void adjustMaxDesignStats(void)
+void adjustMaxDesignStats()
 {
 	UWORD       weaponDamage, sensorRange, repairPoints,
 	            ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour;

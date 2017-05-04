@@ -58,46 +58,46 @@ extern SDWORD		cbPressedMetaKey;
 extern SDWORD		cbPressedKey;
 
 // deal with unit takover(2)
-extern bool scrCBDroidTaken(void);
+bool scrCBDroidTaken();
 
 // Deal with a CALL_NEWDROID
-extern bool scrCBNewDroid(void);
+bool scrCBNewDroid();
 
 // the attacker and target for a CALL_ATTACKED
 extern BASE_OBJECT	*psScrCBAttacker, *psScrCBTarget;
 
 // Deal with a CALL_STRUCT_ATTACKED
-extern bool scrCBStructAttacked(void);
+bool scrCBStructAttacked();
 
 // Deal with a CALL_DROID_ATTACKED
-extern bool scrCBDroidAttacked(void);
+bool scrCBDroidAttacked();
 
 // Deal with a CALL_ATTACKED
-extern bool scrCBAttacked(void);
+bool scrCBAttacked();
 
 // deal with CALL_BUTTON_PRESSED
-extern bool scrCBButtonPressed(void);
+bool scrCBButtonPressed();
 
 // the Droid that was selected for a CALL_DROID_SELECTED
 extern DROID	*psCBSelectedDroid;
 
 // deal with CALL_DROID_SELECTED
-extern bool scrCBDroidSelected(void);
+bool scrCBDroidSelected();
 
 // the object that was last killed for a CALL_OBJ_DESTROYED
 extern BASE_OBJECT *psCBObjDestroyed;
 
 // deal with a CALL_OBJ_DESTROYED
-extern bool scrCBObjDestroyed(void);
+bool scrCBObjDestroyed();
 
 // deal with a CALL_STRUCT_DESTROYED
-extern bool scrCBStructDestroyed(void);
+bool scrCBStructDestroyed();
 
 // deal with a CALL_DROID_DESTROYED
-extern bool scrCBDroidDestroyed(void);
+bool scrCBDroidDestroyed();
 
 // deal with a CALL_FEATURE_DESTROYED
-extern bool scrCBFeatureDestroyed(void);
+bool scrCBFeatureDestroyed();
 
 // the last object to be seen for a CALL_OBJ_SEEN
 extern BASE_OBJECT		*psScrCBObjSeen;
@@ -106,57 +106,57 @@ extern BASE_OBJECT		*psScrCBObjSeen;
 extern BASE_OBJECT		*psScrCBObjViewer;
 
 // deal with a CALL_OBJ_SEEN
-extern bool scrCBObjSeen(void);
+bool scrCBObjSeen();
 
 // deal with a CALL_DROID_SEEN
-extern bool scrCBDroidSeen(void);
+bool scrCBDroidSeen();
 
 // deal with a CALL_STRUCT_SEEN
-extern bool scrCBStructSeen(void);
+bool scrCBStructSeen();
 
 // deal with a CALL_FEATURE_SEEN
-extern bool scrCBFeatureSeen(void);
+bool scrCBFeatureSeen();
 
 // deal with a CALL_TRANSPORTER_OFFMAP
-extern bool scrCBTransporterOffMap(void);
+bool scrCBTransporterOffMap();
 
 // deal with a CALL_TRANSPORTER_LANDED
-extern bool scrCBTransporterLanded(void);
+bool scrCBTransporterLanded();
 
 // tell the scripts when a cluster is no longer valid
 extern SDWORD	scrCBEmptyClusterID;
-extern bool scrCBClusterEmpty(void);
+bool scrCBClusterEmpty();
 
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
 extern DROID *psScrCBVtolOffMap;
-extern bool scrCBVtolOffMap(void);
+bool scrCBVtolOffMap();
 
 /*called when selectedPlayer completes some research*/
-extern bool scrCBResCompleted(void);
+bool scrCBResCompleted();
 
 /* when a player leaves the game*/
-extern bool scrCBPlayerLeft(void);
+bool scrCBPlayerLeft();
 
 /* when a VTOL runs out of things to do while mid-air */
-extern bool scrCBVTOLRetarget(void);
+bool scrCBVTOLRetarget();
 
 // alliance offered.
-extern bool scrCBAllianceOffer(void);
+bool scrCBAllianceOffer();
 extern UDWORD	CBallFrom, CBallTo;
 
 // player number that left the game
 extern UDWORD	CBPlayerLeft;
 
 //Console callback
-extern bool scrCallConsole(void);
-extern bool scrCBStructBuilt(void);
-extern bool scrCallMultiMsg(void);
-extern bool scrCallBeacon(void);
-extern bool scrCBTransporterLandedB(void);
+bool scrCallConsole();
+bool scrCBStructBuilt();
+bool scrCallMultiMsg();
+bool scrCallBeacon();
+bool scrCBTransporterLandedB();
 
-extern bool scrCBDorderStop(void);
-extern bool scrCBDorderReachedLocation(void);
-extern bool scrCBProcessKeyPress(void);
+bool scrCBDorderStop();
+bool scrCBDorderReachedLocation();
+bool scrCBProcessKeyPress();
 
 #endif // __INCLUDED_SRC_SCRIPTCB_H__

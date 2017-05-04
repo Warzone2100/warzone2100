@@ -35,7 +35,7 @@
 #include "structure.h"
 
 /* Shutdown the mechanics system */
-bool mechanicsShutdown(void)
+bool mechanicsShutdown()
 {
 	BASE_OBJECT *psObj, *psNext;
 
@@ -76,7 +76,7 @@ bool allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 }
 
 // release all the component lists
-void freeComponentLists(void)
+void freeComponentLists()
 {
 	UDWORD	inc;
 
@@ -127,7 +127,7 @@ void freeComponentLists(void)
 }
 
 //allocate the space for the Players' structure lists
-bool allocStructLists(void)
+bool allocStructLists()
 {
 	SDWORD	inc, stat;
 
@@ -152,7 +152,7 @@ bool allocStructLists(void)
 
 
 // release the structure lists
-void freeStructureLists(void)
+void freeStructureLists()
 {
 	UDWORD	inc;
 
@@ -169,7 +169,7 @@ void freeStructureLists(void)
 
 
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
-void makeAllAvailable(void)
+void makeAllAvailable()
 {
 	UDWORD	comp, i;
 

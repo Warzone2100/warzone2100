@@ -28,7 +28,7 @@
 #include "lib/widget/widgbase.h"
 
 /* Initialise the tool tip module */
-extern void tipInitialise(void);
+void tipInitialise();
 
 /*
  * Setup a tool tip.
@@ -46,9 +46,9 @@ void tipStart(WIDGET *psSource, QString pTip, iV_fonts NewFontID, int x, int y, 
 /* Stop a tool tip (e.g. if the hilite is lost on a button).
  * psSource should be the same as the widget that started the tip.
  */
-extern void tipStop(WIDGET *psSource);
+void tipStop(WIDGET *psSource);
 
 /* Update and possibly display the tip */
-extern void tipDisplay(void);
+void tipDisplay();
 
 #endif // __INCLUDED_LIB_WIDGET_TIP_H__

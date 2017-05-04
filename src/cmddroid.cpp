@@ -50,21 +50,21 @@ static bool bMultiExpBoost = false;
 
 
 /** This function allocs the global instance apsCmdDesignator.*/
-bool cmdDroidInit(void)
+bool cmdDroidInit()
 {
 	memset(apsCmdDesignator, 0, sizeof(DROID *)*MAX_PLAYERS);
 	return true;
 }
 
 // ShutDown the command droids
-void cmdDroidShutDown(void)
+void cmdDroidShutDown()
 {
 }
 
 /** This function runs on all players to check if the player's current target designator as died.
  * If it does, sets the target designator to NULL.
  */
-void cmdDroidUpdate(void)
+void cmdDroidUpdate()
 {
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{

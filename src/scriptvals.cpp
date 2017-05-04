@@ -53,14 +53,14 @@ static SCRV_STORE	*psContextStore = nullptr;
 static std::list<INTERP_VAL *>basePointers;
 
 // Initialise the script value module
-bool scrvInitialise(void)
+bool scrvInitialise()
 {
 	psContextStore = nullptr;
 	return true;
 }
 
 // Shut down the script value module
-void scrvShutDown(void)
+void scrvShutDown()
 {
 	SCRV_STORE	*psCurr;
 	while (psContextStore)
@@ -74,7 +74,7 @@ void scrvShutDown(void)
 }
 
 // reset the script value module
-void scrvReset(void)
+void scrvReset()
 {
 	SCRV_STORE	*psCurr;
 	while (psContextStore)
@@ -145,7 +145,7 @@ static bool baseObjDead(INTERP_VAL *psVal)
 }
 
 // Check all the base pointers to see if they have died
-void scrvUpdateBasePointers(void)
+void scrvUpdateBasePointers()
 {
 	std::for_each(basePointers.begin(), basePointers.end(), baseObjDead);
 }

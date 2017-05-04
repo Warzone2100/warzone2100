@@ -238,7 +238,7 @@ bool isBlueprint(BASE_OBJECT *psObject)
 	return psObject->type == OBJ_STRUCTURE && structureIsBlueprint((STRUCTURE *)psObject);
 }
 
-void structureInitVars(void)
+void structureInitVars()
 {
 	int i, j;
 
@@ -288,7 +288,7 @@ void changeProductionPlayer(UBYTE player)
 
 
 /*initialises the flag before a new data set is loaded up*/
-void initFactoryNumFlag(void)
+void initFactoryNumFlag()
 {
 	UDWORD i, j;
 
@@ -303,7 +303,7 @@ void initFactoryNumFlag(void)
 }
 
 //called at start of missions
-void resetFactoryNumFlag(void)
+void resetFactoryNumFlag()
 {
 	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -579,7 +579,7 @@ bool loadStructureStats(QString filename)
 }
 
 //initialise the structure limits structure
-void initStructLimits(void)
+void initStructLimits()
 {
 	UDWORD				i, player;
 
@@ -690,7 +690,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 }
 
 
-bool structureStatsShutDown(void)
+bool structureStatsShutDown()
 {
 	UDWORD	inc;
 
@@ -4977,7 +4977,7 @@ static void structureCompletedCallback(STRUCTURE_STATS *psStructType)
 }
 
 
-STRUCTURE_STATS *structGetDemolishStat(void)
+STRUCTURE_STATS *structGetDemolishStat()
 {
 	ASSERT_OR_RETURN(nullptr, g_psStatDestroyStruct != nullptr , "Demolish stat not initialised");
 	return g_psStatDestroyStruct;

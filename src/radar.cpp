@@ -558,14 +558,14 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 	}
 }
 
-static SDWORD getDistanceAdjust(void)
+static SDWORD getDistanceAdjust()
 {
 	int dif = std::max<int>(MAXDISTANCE - getViewDistance(), 0);
 
 	return dif / 100;
 }
 
-static SDWORD getLengthAdjust(void)
+static SDWORD getLengthAdjust()
 {
 	const int pitch = 360 - (player.r.x / DEG_1);
 

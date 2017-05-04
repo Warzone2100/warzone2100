@@ -50,7 +50,7 @@ public:
 
 extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.
 
-bool imageInitBitmaps(void);
+bool imageInitBitmaps();
 
 /** Draws a transparent window. */
 void RenderWindowFrame(FRAMETYPE frame, uint32_t x, uint32_t y, uint32_t Width, uint32_t Heig, const glm::mat4 &modelViewProjection = glm::mat4());

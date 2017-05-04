@@ -43,7 +43,7 @@ void gameSRand(uint32_t seed);
 
 /// Generates a random number in the interval [0...UINT32_MAX].
 /// Must not be called from graphics routines, only for making game decisions.
-uint32_t gameRandU32(void);
+uint32_t gameRandU32();
 
 /// Generates a random number in the interval [0...limit - 1]. Not equidistributed for large non-powers of 2.
 /// Must not be called from graphics routines, only for making game decisions.

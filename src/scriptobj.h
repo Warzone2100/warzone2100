@@ -75,30 +75,30 @@ enum _groupids
 };
 
 // Get values from a base object
-extern bool scrBaseObjGet(UDWORD index);
+bool scrBaseObjGet(UDWORD index);
 
 // Set values from a base object
-extern bool scrBaseObjSet(UDWORD index);
+bool scrBaseObjSet(UDWORD index);
 
 // convert a base object to a droid if it is the right type
-extern bool scrObjToDroid(void);
+bool scrObjToDroid();
 
 // convert a base object to a structure if it is the right type
-extern bool scrObjToStructure(void);
+bool scrObjToStructure();
 
 // convert a base object to a feature if it is the right type
-extern bool scrObjToFeature(void);
+bool scrObjToFeature();
 
 // Get values from a group
-extern bool scrGroupObjGet(UDWORD index);
+bool scrGroupObjGet(UDWORD index);
 
 // Get values from a weapon
-extern bool scrWeaponObjGet(UDWORD index);
+bool scrWeaponObjGet(UDWORD index);
 
 // default value save routine
-extern bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini);
+bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini);
 
 // default value load routine
-extern bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini);
+bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini);
 
 #endif // __INCLUDED_SRC_SCRIPTOBJ_H__

@@ -57,22 +57,21 @@ extern bool		bRequestLoad;
  */
 /***************************************************************************/
 
-extern void		drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
+void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 
-extern bool		addLoadSave(LOADSAVE_MODE mode, const char *title);
-extern bool		closeLoadSave(void);
-extern bool		runLoadSave(bool bResetMissionWidgets);
-extern bool		displayLoadSave(void);
+bool addLoadSave(LOADSAVE_MODE mode, const char *title);
+bool closeLoadSave();
+bool runLoadSave(bool bResetMissionWidgets);
+bool displayLoadSave();
 
-extern void		removeWildcards(char *pStr);
+void removeWildcards(char *pStr);
 
 // return whether the save screen was displayed in the mission results screen
-bool saveInMissionRes(void);
+bool saveInMissionRes();
 
 // return whether the save screen was displayed in the middle of a mission
-bool saveMidMission(void);
+bool saveMidMission();
 
-
-extern void deleteSaveGame(char *saveGameName);
+void deleteSaveGame(char *saveGameName);
 
 #endif // __INCLUDED_SRC_LOADSAVE_H__

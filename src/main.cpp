@@ -246,7 +246,7 @@ static void getPlatformUserDir(char *const tmpstr, size_t const size)
 }
 
 
-static void initialize_ConfigDir(void)
+static void initialize_ConfigDir()
 {
 	char tmpstr[PATH_MAX] = { '\0' };
 
@@ -330,7 +330,7 @@ static void initialize_PhysicsFS(const char *argv_0)
 	}
 }
 
-static void check_Physfs(void)
+static void check_Physfs()
 {
 	const PHYSFS_ArchiveInfo **i;
 	bool zipfound = false;
@@ -384,7 +384,7 @@ static void check_Physfs(void)
  *
  * \sa rebuildSearchPath
  */
-static void scanDataDirs(void)
+static void scanDataDirs()
 {
 	char tmpstr[PATH_MAX], prefix[PATH_MAX];
 	char *separator;
@@ -526,7 +526,7 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
  * Preparations before entering the title (mainmenu) loop
  * Would start the timer in an event based mainloop
  */
-static void startTitleLoop(void)
+static void startTitleLoop()
 {
 	SetGameMode(GS_TITLE_SCREEN);
 
@@ -544,7 +544,7 @@ static void startTitleLoop(void)
  * Shutdown/cleanup after the title (mainmenu) loop
  * Would stop the timer
  */
-static void stopTitleLoop(void)
+static void stopTitleLoop()
 {
 	if (!frontendShutdown())
 	{
@@ -558,7 +558,7 @@ static void stopTitleLoop(void)
  * Preparations before entering the game loop
  * Would start the timer in an event based mainloop
  */
-static void startGameLoop(void)
+static void startGameLoop()
 {
 	SetGameMode(GS_NORMAL);
 
@@ -597,7 +597,7 @@ static void startGameLoop(void)
  * Shutdown/cleanup after the game loop
  * Would stop the timer
  */
-static void stopGameLoop(void)
+static void stopGameLoop()
 {
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
@@ -629,7 +629,7 @@ static void stopGameLoop(void)
  * Load a savegame and start into the game loop
  * Game data should be initialised afterwards, so that startGameLoop is not necessary anymore.
  */
-static bool initSaveGameLoad(void)
+static bool initSaveGameLoad()
 {
 	// NOTE: always setGameMode correctly before *any* loading routines!
 	SetGameMode(GS_NORMAL);
@@ -669,7 +669,7 @@ static bool initSaveGameLoad(void)
 /*!
  * Run the code inside the gameloop
  */
-static void runGameLoop(void)
+static void runGameLoop()
 {
 	gameLoopStatus = gameLoop();
 	switch (gameLoopStatus)
@@ -706,7 +706,7 @@ static void runGameLoop(void)
 /*!
  * Run the code inside the titleloop
  */
-static void runTitleLoop(void)
+static void runTitleLoop()
 {
 	switch (titleLoop())
 	{
@@ -757,7 +757,7 @@ static void runTitleLoop(void)
  * The mainloop.
  * Fetches events, executes appropriate code
  */
-void mainLoop(void)
+void mainLoop()
 {
 	frameUpdate(); // General housekeeping
 
@@ -1119,7 +1119,7 @@ int realmain(int argc, char *argv[])
 /*!
  * Get the mode the game is currently in
  */
-GS_GAMEMODE GetGameMode(void)
+GS_GAMEMODE GetGameMode()
 {
 	return gameStatus;
 }

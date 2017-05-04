@@ -31,14 +31,14 @@
 #include "objmem.h"
 
 /* Initialise the object system */
-extern bool objInitialise(void);
+bool objInitialise();
 
 /* Shutdown the object system */
-extern bool objShutdown(void);
+bool objShutdown();
 
-/*goes thru' the list passed in reversing the order so the first entry becomes
-the last and the last entry becomes the first!*/
+/// Goes through the list passed in reversing the order so the first entry becomes the last and the last entry becomes the first!
 void reverseObjectList(BASE_OBJECT **ppsList);
+
 template <typename OBJECT>
 void reverseObjectList(OBJECT **ppsList)
 {
@@ -46,7 +46,6 @@ void reverseObjectList(OBJECT **ppsList)
 	reverseObjectList(&baseList);
 	*ppsList = static_cast<OBJECT *>(baseList);
 }
-
 
 /** Output an informative string about this object. For debugging. */
 const char *objInfo(const BASE_OBJECT *psObj);

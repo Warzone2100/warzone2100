@@ -28,10 +28,10 @@
 #define OILDRUM_POWER		100
 
 /** Allocate the space for the playerPower. */
-extern bool allocPlayerPower(void);
+bool allocPlayerPower();
 
 /** Clear the playerPower. */
-extern void clearPlayerPower(void);
+void clearPlayerPower();
 
 /// Removes any pending power request from this structure.
 void delPowerRequest(STRUCTURE *psStruct);
@@ -41,7 +41,7 @@ void delPowerRequest(STRUCTURE *psStruct);
 int32_t checkPowerRequest(STRUCTURE *psStruct);
 
 /** Reset the power levels when a power_gen or resource_extractor is destroyed. */
-extern bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
+bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 
 /** Check the available power. */
 bool checkPower(int player, uint32_t quantity);
@@ -49,13 +49,13 @@ bool checkPower(int player, uint32_t quantity);
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount);
 bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount);
 
-extern void addPower(int player, int32_t quantity);
+void addPower(int player, int32_t quantity);
 
 void usePower(int player, uint32_t quantity);
 
 /** Update current power based on what was extracted during the last cycle and what Power Generators exist.
   * If ticks is set, this is the number of game ticks to process for at once. */
-extern void updatePlayerPower(int player, int ticks = 1);
+void updatePlayerPower(int player, int ticks = 1);
 
 /** Used in multiplayer to force power levels. */
 void setPower(unsigned player, int32_t power);
@@ -74,6 +74,6 @@ int getQueuedPower(int player);
 void powerCalc(bool on);
 
 /** Flag used to check for power calculations to be done or not. */
-extern	bool			powerCalculated;
+extern bool powerCalculated;
 
 #endif // __INCLUDED_SRC_POWER_H__

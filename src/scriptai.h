@@ -25,73 +25,73 @@
 #define __INCLUDED_SRC_SCRIPTAI_H__
 
 // Add a droid to a group
-extern bool scrGroupAddDroid(void);
+bool scrGroupAddDroid();
 
 // Add droids in an area to a group
-extern bool scrGroupAddArea(void);
+bool scrGroupAddArea();
 
 // Add groupless droids in an area to a group
-extern bool scrGroupAddAreaNoGroup(void);
+bool scrGroupAddAreaNoGroup();
 
 // Move the droids from one group to another
-extern bool scrGroupAddGroup(void);
+bool scrGroupAddGroup();
 
 // check if a droid is a member of a group
-extern bool scrGroupMember(void);
+bool scrGroupMember();
 
 // return number of idle droids in group.
-extern bool scrIdleGroup(void);
+bool scrIdleGroup();
 
 // initialise iterating a groups members
-extern bool scrInitIterateGroup(void);
+bool scrInitIterateGroup();
 
 // iterate through a groups members
-extern bool scrIterateGroup(void);
+bool scrIterateGroup();
 
 // remove a droid from a group
-extern bool scrDroidLeaveGroup(void);
+bool scrDroidLeaveGroup();
 
 // Give a group an order
-extern bool scrOrderGroup(void);
+bool scrOrderGroup();
 
 // Give a group an order to a location
-extern bool scrOrderGroupLoc(void);
+bool scrOrderGroupLoc();
 
 // Give a group an order to an object
-extern bool scrOrderGroupObj(void);
+bool scrOrderGroupObj();
 
 // Give a Droid an order
-extern bool scrOrderDroid(void);
+bool scrOrderDroid();
 
 // Give a Droid an order to a location
-extern bool scrOrderDroidLoc(void);
+bool scrOrderDroidLoc();
 
 // Give a Droid an order to an object
-extern bool scrOrderDroidObj(void);
+bool scrOrderDroidObj();
 
 // Give a Droid an order with a stat
-extern bool scrOrderDroidStatsLoc(void);
+bool scrOrderDroidStatsLoc();
 
 // set the secondary state for a droid
-extern bool scrSetDroidSecondary(void);
+bool scrSetDroidSecondary();
 
 // set the secondary state for a droid
-extern bool scrSetGroupSecondary(void);
+bool scrSetGroupSecondary();
 
 // initialise iterating a cluster
-extern bool scrInitIterateCluster(void);
+bool scrInitIterateCluster();
 
 // iterate a cluster
-extern bool scrIterateCluster(void);
+bool scrIterateCluster();
 
 // add a droid to a commander
-extern bool scrCmdDroidAddDroid(void);
+bool scrCmdDroidAddDroid();
 
 // returns max number of droids in a commander group
-extern bool scrCmdDroidMaxGroup(void);
+bool scrCmdDroidMaxGroup();
 
 // return whether a droid can reach given destination
-extern bool scrDroidCanReach(void);
+bool scrDroidCanReach();
 
 // types for structure targets
 enum SCR_STRUCT_TAR
@@ -149,52 +149,49 @@ enum SCR_DROID_TAR
 
 
 // reset the structure preferences
-bool scrResetStructTargets(void);
+bool scrResetStructTargets();
 // reset the droid preferences
-bool scrResetDroidTargets(void);
+bool scrResetDroidTargets();
 // set prefered structure target types
-bool scrSetStructTarPref(void);
+bool scrSetStructTarPref();
 // set structure target ignore types
-bool scrSetStructTarIgnore(void);
+bool scrSetStructTarIgnore();
 // set prefered droid target types
-bool scrSetDroidTarPref(void);
+bool scrSetDroidTarPref();
 // set droid target ignore types
-bool scrSetDroidTarIgnore(void);
+bool scrSetDroidTarIgnore();
 // get a structure target in an area using the preferences
-bool scrStructTargetInArea(void);
+bool scrStructTargetInArea();
 // get a structure target on the map using the preferences
-bool scrStructTargetOnMap(void);
+bool scrStructTargetOnMap();
 // get a droid target in an area using the preferences
-bool scrDroidTargetInArea(void);
+bool scrDroidTargetInArea();
 // get a droid target on the map using the preferences
-bool scrDroidTargetOnMap(void);
+bool scrDroidTargetOnMap();
 // get a target from a cluster using the preferences
-bool scrTargetInCluster(void);
+bool scrTargetInCluster();
 
 // Skirmish funcs may99
 
 // choose and do research
-bool scrSkDoResearch(void);
+bool scrSkDoResearch();
 
 // find the human players
-bool scrSkLocateEnemy(void);
+bool scrSkLocateEnemy();
 
 // check a template
-bool scrSkCanBuildTemplate(void);
+bool scrSkCanBuildTemplate();
 
 // check for vtol availability
-bool scrSkVtolEnableCheck(void);
+bool scrSkVtolEnableCheck();
 
 // check capacity
-bool scrSkGetFactoryCapacity(void);
+bool scrSkGetFactoryCapacity();
 
 // help/hinder player.
-bool scrSkDifficultyModifier(void);
+bool scrSkDifficultyModifier();
 
 // pick good spots.
-bool scrSkDefenseLocation(void);
-
-// line build.
-//bool scrSkOrderDroidLineBuild(void);
+bool scrSkDefenseLocation();
 
 #endif // __INCLUDED_SRC_SCRIPTAI_H__

@@ -89,7 +89,7 @@ static Vector2i *gWall = nullptr;
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val);
 
 // initialise the visibility stuff
-bool visInitialise(void)
+bool visInitialise()
 {
 	visLevelInc = 1;
 	visLevelDec = 0;
@@ -98,7 +98,7 @@ bool visInitialise(void)
 }
 
 // update the visibility change levels
-void visUpdateLevel(void)
+void visUpdateLevel()
 {
 	visLevelInc = gameTimeAdjustedAverage(VIS_LEVEL_INC);
 	visLevelDec = gameTimeAdjustedAverage(VIS_LEVEL_DEC);

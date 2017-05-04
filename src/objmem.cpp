@@ -71,12 +71,12 @@ BASE_OBJECT		*psDestroyedObj = nullptr;
 
 /* Forward function declarations */
 #ifdef DEBUG
-static void objListIntegCheck(void);
+static void objListIntegCheck();
 #endif
 
 
 /* Initialise the object heaps */
-bool objmemInitialise(void)
+bool objmemInitialise()
 {
 	// reset the object ID number
 	unsynchObjID = OBJ_ID_INIT / 2; // /2 so that object IDs start around OBJ_ID_INIT*8, in case that's important when loading maps.
@@ -86,7 +86,7 @@ bool objmemInitialise(void)
 }
 
 /* Release the object heaps */
-void objmemShutdown(void)
+void objmemShutdown()
 {
 }
 
@@ -166,7 +166,7 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 }
 
 /* General housekeeping for the object system */
-void objmemUpdate(void)
+void objmemUpdate()
 {
 	BASE_OBJECT		*psCurr, *psNext, *psPrev;
 
@@ -231,13 +231,13 @@ void objmemUpdate(void)
 	}
 }
 
-uint32_t generateNewObjectId(void)
+uint32_t generateNewObjectId()
 {
 	// Generate even ID for unsynchronized objects. This is needed for debug objects, templates and other border lines cases that should preferably be removed one day.
 	return unsynchObjID++*MAX_PLAYERS * 2 + selectedPlayer * 2; // Was taken from createObject, where 'player' was used instead of 'selectedPlayer'. Hope there are no stupid hacks that try to recover 'player' from the last 3 bits.
 }
 
-uint32_t generateSynchronisedObjectId(void)
+uint32_t generateSynchronisedObjectId()
 {
 	// Generate odd ID for synchronized objects
 	uint32_t ret = synchObjID++ * 2 + 1;
@@ -470,7 +470,7 @@ void killDroid(DROID *psDel)
 }
 
 /* Remove all droids */
-void freeAllDroids(void)
+void freeAllDroids()
 {
 	releaseAllObjectsInList(apsDroidLists);
 }
@@ -503,13 +503,13 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 }
 
 /*Removes all droids that may be stored in the mission lists*/
-void freeAllMissionDroids(void)
+void freeAllMissionDroids()
 {
 	releaseAllObjectsInList(mission.apsDroidLists);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
-void freeAllLimboDroids(void)
+void freeAllLimboDroids()
 {
 	releaseAllObjectsInList(apsLimboDroids);
 }
@@ -592,7 +592,7 @@ void killStruct(STRUCTURE *psBuilding)
 }
 
 /* Remove heapall structures */
-void freeAllStructs(void)
+void freeAllStructs()
 {
 	releaseAllObjectsInList(apsStructLists);
 }
@@ -645,7 +645,7 @@ void killFeature(FEATURE *psDel)
 }
 
 /* Remove all features */
-void freeAllFeatures(void)
+void freeAllFeatures()
 {
 	releaseAllObjectsInList(apsFeatureLists);
 }
@@ -712,7 +712,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 
 
 // free all flag positions
-void freeAllFlagPositions(void)
+void freeAllFlagPositions()
 {
 	FLAG_POSITION	*psNext;
 	SDWORD			player;
@@ -731,7 +731,7 @@ void freeAllFlagPositions(void)
 
 #ifdef DEBUG
 // check all flag positions for duplicate delivery points
-void checkFactoryFlags(void)
+void checkFactoryFlags()
 {
 	static std::vector<unsigned> factoryDeliveryPointCheck[NUM_FLAG_TYPES];  // Static to save allocations.
 
@@ -975,7 +975,7 @@ bool checkValidId(UDWORD id)
 
 // integrity check the lists
 #ifdef DEBUG
-static void objListIntegCheck(void)
+static void objListIntegCheck()
 {
 	SDWORD			player;
 	BASE_OBJECT		*psCurr;

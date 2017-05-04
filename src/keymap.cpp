@@ -88,13 +88,12 @@ UDWORD	numActiveMappings;
 static KEY_CODE	lastMetaKey, lastSubKey;
 static bool	bKeyProcessing = true;
 
-static void kf_NOOP(void) {}
+static void kf_NOOP() {}
 
 // ----------------------------------------------------------------------------------
 // Adding a mapped function ? add a save pointer! Thank AlexL.
 // don't bugger around with the order either. new ones go at the end! DEBUG in debug section..
 
-//typedef void (*_keymapsave)(void);
 _keymapsave keyMapSaveTable[] =
 {
 	kf_ChooseManufacture,
@@ -480,8 +479,7 @@ void	keyInitMappings(bool bForceDefaults)
 // ----------------------------------------------------------------------------------
 /* Adds a new mapping to the list */
 //bool	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, char *name)
-KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,
-                           void (*pKeyMapFunc)(void), const char *name)
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name)
 {
 	KEY_MAPPING	*newMapping;
 
@@ -576,7 +574,7 @@ KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode)
 
 // ----------------------------------------------------------------------------------
 /* clears the mappings list and frees the memory */
-void	keyClearMappings(void)
+void	keyClearMappings()
 {
 	while (keyMappings)
 	{
@@ -645,7 +643,7 @@ bool	keyRemoveMappingPt(KEY_MAPPING *psToRemove)
 
 // ----------------------------------------------------------------------------------
 /* Just returns how many are active */
-UDWORD	getNumMappings(void)
+UDWORD	getNumMappings()
 {
 	return (numActiveMappings);
 }
@@ -653,7 +651,7 @@ UDWORD	getNumMappings(void)
 
 // ----------------------------------------------------------------------------------
 /* Allows _new_ mappings to be made at runtime */
-static bool checkQwertyKeys(void)
+static bool checkQwertyKeys()
 {
 	KEY_CODE qKey;
 	UDWORD tableEntry;
@@ -896,7 +894,7 @@ static void keyShowMapping(KEY_MAPPING *psMapping)
 
 // ----------------------------------------------------------------------------------
 // this function isn't really module static - should be removed - debug only
-void keyShowMappings(void)
+void keyShowMappings()
 {
 	KEY_MAPPING *psMapping;
 
@@ -908,14 +906,14 @@ void keyShowMappings(void)
 
 // ----------------------------------------------------------------------------------
 /* Returns the key code of the last sub key pressed - allows called functions to have a simple stack */
-KEY_CODE	getLastSubKey(void)
+KEY_CODE getLastSubKey()
 {
 	return (lastSubKey);
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns the key code of the last meta key pressed - allows called functions to have a simple stack */
-KEY_CODE	getLastMetaKey(void)
+KEY_CODE getLastMetaKey()
 {
 	return (lastMetaKey);
 }
@@ -929,7 +927,7 @@ void	keyEnableProcessing(bool val)
 
 // ----------------------------------------------------------------------------------
 /* Sets all mappings to be inactive */
-void	keyAllMappingsInactive(void)
+void keyAllMappingsInactive()
 {
 	KEY_MAPPING	*psMapping;
 
@@ -940,7 +938,7 @@ void	keyAllMappingsInactive(void)
 }
 
 // ----------------------------------------------------------------------------------
-void	keyAllMappingsActive(void)
+void keyAllMappingsActive()
 {
 	KEY_MAPPING	*psMapping;
 
@@ -972,7 +970,7 @@ static const KEY_CODE qwertyCodes[26] =
 };
 
 /* Returns the key code of the first ascii key that its finds has been PRESSED */
-KEY_CODE getQwertyKey(void)
+KEY_CODE getQwertyKey()
 {
 	unsigned i;
 

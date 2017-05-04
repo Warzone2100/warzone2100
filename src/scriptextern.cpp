@@ -59,7 +59,7 @@ bool		bTrackTransporter = false;
 
 
 // reset the script externals for a new level
-void scrExternReset(void)
+void scrExternReset()
 {
 	scrGameLevel = 0;
 	bInTutorial = false;

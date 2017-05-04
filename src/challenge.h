@@ -23,10 +23,10 @@
 
 #define CHALLENGE_SCORES "scores.json"
 
-bool addChallenges(void);
-bool closeChallenges(void);
-bool runChallenges(void);
-bool displayChallenges(void);
+bool addChallenges();
+bool closeChallenges();
+bool runChallenges();
+bool displayChallenges();
 void updateChallenge(bool gameWon);
 
 extern bool challengesUp;

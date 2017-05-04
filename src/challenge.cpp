@@ -330,7 +330,7 @@ bool closeChallenges()
 // Returns true if cancel pressed or a valid game slot was selected.
 // if when returning true strlen(sRequestResult) != 0 then a valid game
 // slot was selected otherwise cancel was selected..
-bool runChallenges(void)
+bool runChallenges()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
 	for (WidgetTriggers::const_iterator trigger = triggers.begin(); trigger != triggers.end(); ++trigger)

@@ -411,7 +411,7 @@ void wzPerfEnd(PERF_POINT pp)
 	glEndQuery(GL_TIME_ELAPSED);
 }
 
-void screenShutDown(void)
+void screenShutDown()
 {
 	pie_ShutDown();
 	pie_TexShutDown();
@@ -456,17 +456,17 @@ void screen_SetBackDropFromFile(const char *filename)
 	screen_Upload(nullptr);
 }
 
-void screen_StopBackDrop(void)
+void screen_StopBackDrop()
 {
 	bBackDrop = false;	//checking [movie]
 }
 
-void screen_RestartBackDrop(void)
+void screen_RestartBackDrop()
 {
 	bBackDrop = true;
 }
 
-bool screen_GetBackDrop(void)
+bool screen_GetBackDrop()
 {
 	return bBackDrop;
 }
@@ -573,7 +573,7 @@ void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)
 	}
 }
 
-void screen_disableMapPreview(void)
+void screen_disableMapPreview()
 {
 	mappreview = false;
 }
@@ -591,7 +591,7 @@ static const unsigned int channelsPerPixel = 3;
  *
  *  \sa screenDumpToDisk()
  */
-void screenDoDumpToDiskIfRequired(void)
+void screenDoDumpToDiskIfRequired()
 {
 	const char *fileName = screendump_filename;
 	iV_Image image = { 0, 0, 8, nullptr };

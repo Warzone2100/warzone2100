@@ -101,14 +101,14 @@ static const char *sExt = ".gam";
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
-bool saveInMissionRes(void)
+bool saveInMissionRes()
 {
 	return bLoadSaveMode == SAVE_MISSIONEND;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the middle of a mission
-bool saveMidMission(void)
+bool saveMidMission()
 {
 	return bLoadSaveMode == SAVE_INGAME_MISSION;
 }
@@ -319,7 +319,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool closeLoadSave(void)
+bool closeLoadSave()
 {
 	bLoadSaveUp = false;
 
@@ -554,7 +554,7 @@ success:
 
 // ////////////////////////////////////////////////////////////////////////////
 // should be done when drawing the other widgets.
-bool displayLoadSave(void)
+bool displayLoadSave()
 {
 	widgDisplayScreen(psRequestScreen);	// display widgets.
 	return true;

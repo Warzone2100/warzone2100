@@ -61,28 +61,28 @@ extern bool	bLimiterLoaded;
 
 
 void changeTitleMode(tMode mode);
-bool runTitleMenu(void);
-bool runSinglePlayerMenu(void);
+bool runTitleMenu();
+bool runSinglePlayerMenu();
 bool runCampaignSelector();
-bool runMultiPlayerMenu(void);
-bool runGameOptionsMenu(void);
-bool runOptionsMenu(void);
-bool runGraphicsOptionsMenu(void);
-bool runAudioOptionsMenu(void);
-bool runVideoOptionsMenu(void);
-bool runMouseOptionsMenu(void);
-bool runTutorialMenu(void);
+bool runMultiPlayerMenu();
+bool runGameOptionsMenu();
+bool runOptionsMenu();
+bool runGraphicsOptionsMenu();
+bool runAudioOptionsMenu();
+bool runVideoOptionsMenu();
+bool runMouseOptionsMenu();
+bool runTutorialMenu();
 
-void addTopForm(void);
-void addBottomForm(void);
-void addBackdrop(void);
+void addTopForm();
+void addBottomForm();
+void addBackdrop();
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
 void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
 void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-bool CancelPressed(void);
+bool CancelPressed();
 
 
 // ////////////////////////////////////////////////////////////////////////////

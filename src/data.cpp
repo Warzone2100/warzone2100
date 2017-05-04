@@ -114,7 +114,7 @@ static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 	return;
 }
 
-void resetDataHash(void)
+void resetDataHash()
 {
 	UDWORD i;
 	for (i = 0; i < DATA_MAXDATA; i++)
@@ -127,11 +127,11 @@ void resetDataHash(void)
 /**********************************************************/
 
 
-void dataSetSaveFlag(void)
+void dataSetSaveFlag()
 {
 	saveFlag = true;
 }
-void dataClearSaveFlag(void)
+void dataClearSaveFlag()
 {
 	saveFlag = false;
 }
@@ -766,7 +766,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 };
 
 /* Pass all the data loading functions to the framework library */
-bool dataInitLoadFuncs(void)
+bool dataInitLoadFuncs()
 {
 	// init the data integrity hash;
 	resetDataHash();

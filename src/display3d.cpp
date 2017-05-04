@@ -87,24 +87,24 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix);
 static void displayDynamicObjects(const glm::mat4 &viewMatrix);
 static void displayStaticObjects(const glm::mat4 &viewMatrix);
 static void displayFeatures(const glm::mat4 &viewMatrix);
-static UDWORD	getTargettingGfx(void);
+static UDWORD	getTargettingGfx();
 static void	drawDroidGroupNumber(DROID *psDroid);
 static void	trackHeight(float desiredHeight);
 static void	renderSurroundings(const glm::mat4 &viewMatrix);
-static void	locateMouse(void);
+static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
-static void	drawDragBox(void);
+static void	drawDragBox();
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const glm::mat4 &modelViewMatrix);
 static void	drawTiles(iView *player);
 static void	display3DProjectiles(const glm::mat4 &viewMatrix);
-static void	drawDroidSelections(void);
-static void	drawStructureSelections(void);
+static void	drawDroidSelections();
+static void	drawStructureSelections();
 static void displayBlueprints(const glm::mat4 &viewMatrix);
-static void	processSensorTarget(void);
-static void	processDestinationTarget(void);
+static void	processSensorTarget();
+static void	processDestinationTarget();
 static bool	eitherSelected(DROID *psDroid);
-static void	structureEffects(void);
-static void	showDroidSensorRanges(void);
+static void	structureEffects();
+static void	showDroidSensorRanges();
 static void	showSensorRange2(BASE_OBJECT *psObj);
 static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
@@ -113,7 +113,7 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static void	calcAverageTerrainHeight(iView *player);
-bool	doWeDrawProximitys(void);
+bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -477,7 +477,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 
 
 /// Show all droid movement parts by displaying an explosion at every step
-static void showDroidPaths(void)
+static void showDroidPaths()
 {
 	DROID *psDroid;
 
@@ -577,7 +577,7 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_DrawImage(IntImages, ImageID, x, y);
 }
 
-static void setupConnectionStatusForm(void)
+static void setupConnectionStatusForm()
 {
 	static unsigned          prevStatusMask = 0;
 
@@ -688,7 +688,7 @@ static void setupConnectionStatusForm(void)
 }
 
 /// Render the 3D world
-void draw3DScene(void)
+void draw3DScene()
 {
 	wzPerfBegin(PERF_START_FRAME, "Start 3D scene");
 
@@ -877,7 +877,7 @@ void draw3DScene(void)
 
 
 /***************************************************************************/
-bool	doWeDrawProximitys(void)
+bool	doWeDrawProximitys()
 {
 	return (bDrawProximitys);
 }
@@ -1080,7 +1080,7 @@ static void drawTiles(iView *player)
 }
 
 /// Initialise the fog, skybox and some other stuff
-bool init3DView(void)
+bool init3DView()
 {
 	/* Arbitrary choice - from direct read! */
 	Vector3f theSun(225.0f, -600.0f, 450.0f);
@@ -1684,7 +1684,7 @@ void setPlayerPos(SDWORD x, SDWORD y)
 }
 
 /// Get the distance at which the player views the world
-float getViewDistance(void)
+float getViewDistance()
 {
 	return distance;
 }
@@ -2304,7 +2304,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 }
 
 /// Draws the strobing 3D drag box that is used for multiple selection
-static void	drawDragBox(void)
+static void	drawDragBox()
 {
 	int minX, maxX;		// SHURCOOL: These 4 ints will hold the corners of the selection box
 	int minY, maxY;
@@ -2540,7 +2540,7 @@ static void drawStructureBuildProgress(STRUCTURE *psStruct)
 }
 
 /// Draw the health of structures and show enemy structures being targetted
-static void	drawStructureSelections(void)
+static void	drawStructureSelections()
 {
 	STRUCTURE	*psStruct;
 	SDWORD		scrX, scrY;
@@ -2624,7 +2624,7 @@ static void	drawStructureSelections(void)
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
-static UDWORD	getTargettingGfx(void)
+static UDWORD	getTargettingGfx()
 {
 	UDWORD	index;
 
@@ -2684,7 +2684,7 @@ bool	eitherSelected(DROID *psDroid)
 }
 
 /// Draw the selection graphics for selected droids
-static void	drawDroidSelections(void)
+static void	drawDroidSelections()
 {
 	UDWORD			scrX, scrY, scrR;
 	DROID			*psDroid;
@@ -3084,7 +3084,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
  * Find the tile the mouse is currently over
  * \todo This is slow - speed it up
  */
-static void locateMouse(void)
+static void locateMouse()
 {
 	const Vector2i pt(mouseX(), mouseY());
 	int i, j;
@@ -3177,7 +3177,7 @@ static void trackHeight(float desiredHeight)
 }
 
 /// Select the next energy bar display mode
-ENERGY_BAR toggleEnergyBars(void)
+ENERGY_BAR toggleEnergyBars()
 {
 	if (++barMode == BAR_LAST)
 	{
@@ -3195,7 +3195,7 @@ void assignSensorTarget(BASE_OBJECT *psObj)
 }
 
 /// Set everything up for when the player selects the destination
-void	assignDestTarget(void)
+void	assignDestTarget()
 {
 	bDestTargetting = true;
 	lastDestAssignation = realTime;
@@ -3248,7 +3248,7 @@ static void processSensorTarget()
 }
 
 /// Draw a graphical effect after selecting a destination
-static void	processDestinationTarget(void)
+static void processDestinationTarget()
 {
 	SWORD x, y;
 	SWORD offset;
@@ -3292,12 +3292,12 @@ void	setRubbleTile(UDWORD num)
 	rubbleTile = num;
 }
 /// Get the tile that is currently being used to draw underwater ground
-UDWORD	getWaterTileNum(void)
+UDWORD	getWaterTileNum()
 {
 	return (underwaterTile);
 }
 /// Get the tile that is being used to show rubble
-UDWORD	getRubbleTileNum(void)
+UDWORD	getRubbleTileNum()
 {
 	return (rubbleTile);
 }
@@ -3428,7 +3428,7 @@ static void structureEffects()
 }
 
 /// Show the sensor ranges of selected droids and buildings
-static void	showDroidSensorRanges(void)
+static void	showDroidSensorRanges()
 {
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;

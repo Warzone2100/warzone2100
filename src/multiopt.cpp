@@ -367,7 +367,7 @@ bool hostCampaign(char *sGame, char *sPlayer)
 // ////////////////////////////////////////////////////////////////////////////
 // Tell the host we are leaving the game 'nicely', (we wanted to) and not
 // because we have some kind of error. (dropped or disconnected)
-bool sendLeavingMsg(void)
+bool sendLeavingMsg()
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
@@ -385,7 +385,7 @@ bool sendLeavingMsg(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // called in Init.c to shutdown the whole netgame gubbins.
-bool multiShutdown(void)
+bool multiShutdown()
 {
 	// shut down netplay lib.
 	debug(LOG_MAIN, "shutting down networking");
@@ -403,7 +403,7 @@ bool multiShutdown(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static bool gameInit(void)
+static bool gameInit()
 {
 	UDWORD			player;
 
@@ -448,7 +448,7 @@ static bool gameInit(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // say hi to everyone else....
-void playerResponding(void)
+void playerResponding()
 {
 	ingame.startTime = gameTime;
 	ingame.localJoiningInProgress = false; // No longer joining.
@@ -465,7 +465,7 @@ void playerResponding(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 //called when the game finally gets fired up.
-bool multiGameInit(void)
+bool multiGameInit()
 {
 	UDWORD player;
 
@@ -482,7 +482,7 @@ bool multiGameInit(void)
 
 ////////////////////////////////
 // at the end of every game.
-bool multiGameShutdown(void)
+bool multiGameShutdown()
 {
 	PLAYERSTATS	st;
 	uint32_t        time;

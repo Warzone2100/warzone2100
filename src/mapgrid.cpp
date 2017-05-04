@@ -37,7 +37,7 @@ static PointTree::Filter *gridFiltersUnseen;
 static PointTree::Filter *gridFiltersDroidsByPlayer;
 
 // initialise the grid system
-bool gridInitialise(void)
+bool gridInitialise()
 {
 	ASSERT(gridPointTree == nullptr, "gridInitialise already called, without calling gridShutDown.");
 	gridPointTree = new PointTree;
@@ -48,7 +48,7 @@ bool gridInitialise(void)
 }
 
 // reset the grid system
-void gridReset(void)
+void gridReset()
 {
 	gridPointTree->clear();
 
@@ -82,7 +82,7 @@ void gridReset(void)
 }
 
 // shutdown the grid system
-void gridShutDown(void)
+void gridShutDown()
 {
 	delete gridPointTree;
 	gridPointTree = nullptr;
@@ -200,7 +200,7 @@ GridList const &gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, in
 	return gridStartIterateFiltered(x, y, radius, &gridFiltersUnseen[player], ConditionUnseen(player));
 }
 
-BASE_OBJECT **gridIterateDup(void)
+BASE_OBJECT **gridIterateDup()
 {
 	size_t bytes = gridPointTree->lastQueryResults.size() * sizeof(void *);
 	BASE_OBJECT **ret = (BASE_OBJECT **)malloc(bytes);

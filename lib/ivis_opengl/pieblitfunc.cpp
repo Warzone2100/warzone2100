@@ -520,13 +520,13 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 	}
 }
 
-bool pie_InitRadar(void)
+bool pie_InitRadar()
 {
 	radarGfx = new GFX(GFX_TEXTURE, GL_TRIANGLE_STRIP, 2);
 	return true;
 }
 
-bool pie_ShutdownRadar(void)
+bool pie_ShutdownRadar()
 {
 	delete radarGfx;
 	radarGfx = nullptr;

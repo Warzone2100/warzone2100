@@ -21,9 +21,9 @@
 #ifndef __INCLUDED_SRC_KEYEDIT_H__
 #define __INCLUDED_SRC_KEYEDIT_H__
 
-bool runKeyMapEditor(void);
+bool runKeyMapEditor();
 bool startKeyMapEditor(bool first);
-bool saveKeyMap(void);
-bool loadKeyMap(void);
+bool saveKeyMap();
+bool loadKeyMap();
 
 #endif // __INCLUDED_SRC_KEYEDIT_H__

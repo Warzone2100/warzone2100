@@ -21,9 +21,8 @@
 #ifndef __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__
 
-extern void ExchndlSetup(const char *packageVersion);
-extern void ExchndlShutdown(void);
-
+void ExchndlSetup(const char *packageVersion);
+void ExchndlShutdown();
 void ResetRPTDirectory(wchar_t *newPath);
 
 #endif // __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__

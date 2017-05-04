@@ -25,7 +25,7 @@
 
 PIELIGHT psPalette[WZCOL_MAX];
 
-void pal_Init(void)
+void pal_Init()
 {
 	char *pFileData, *ptr;
 	UDWORD fileSize;
@@ -53,7 +53,7 @@ void pal_Init(void)
 	free(pFileData);
 }
 
-void pal_ShutDown(void)
+void pal_ShutDown()
 {
 	// placeholder
 }

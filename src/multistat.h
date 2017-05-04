@@ -49,9 +49,9 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form di
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net
 bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // send to net.
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
-void updateMultiStatsGames(void);
-void updateMultiStatsWins(void);
-void updateMultiStatsLoses(void);
+void updateMultiStatsGames();
+void updateMultiStatsWins();
+void updateMultiStatsLoses();
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
 

@@ -57,38 +57,38 @@ extern unsigned int loopPieCount;
 extern unsigned int loopPolyCount;
 extern unsigned int loopStateChanges;
 
-extern GAMECODE gameLoop(void);
-extern void videoLoop(void);
-extern void loop_SetVideoPlaybackMode(void);
-extern void loop_ClearVideoPlaybackMode(void);
-extern bool loop_GetVideoStatus(void);
-extern SDWORD loop_GetVideoMode(void);
-extern bool	gamePaused(void);
-extern void	setGamePauseStatus(bool val);
-extern void loopFastExit(void);
+GAMECODE gameLoop();
+void videoLoop();
+void loop_SetVideoPlaybackMode();
+void loop_ClearVideoPlaybackMode();
+bool loop_GetVideoStatus();
+SDWORD loop_GetVideoMode();
+bool	gamePaused();
+void	setGamePauseStatus(bool val);
+void loopFastExit();
 
-extern bool gameUpdatePaused(void);
-extern bool audioPaused(void);
-extern bool scriptPaused(void);
-extern bool scrollPaused(void);
-extern bool consolePaused(void);
+bool gameUpdatePaused();
+bool audioPaused();
+bool scriptPaused();
+bool scrollPaused();
+bool consolePaused();
 
-extern void setGameUpdatePause(bool state);
-extern void setAudioPause(bool state);
-extern void setScriptPause(bool state);
-extern void setScrollPause(bool state);
-extern void setConsolePause(bool state);
+void setGameUpdatePause(bool state);
+void setAudioPause(bool state);
+void setScriptPause(bool state);
+void setScrollPause(bool state);
+void setConsolePause(bool state);
 //set all the pause states to the state value
-extern void setAllPauseStates(bool state);
+void setAllPauseStates(bool state);
 
 // Number of units in the current list.
-extern UDWORD	getNumDroids(UDWORD	player);
+UDWORD getNumDroids(UDWORD player);
 // Number of units on transporters.
-extern UDWORD	getNumTransporterDroids(UDWORD player);
+UDWORD getNumTransporterDroids(UDWORD player);
 // Number of units in the mission list.
-extern UDWORD	getNumMissionDroids(UDWORD player);
-UDWORD	getNumCommandDroids(UDWORD player);
-UDWORD	getNumConstructorDroids(UDWORD player);
+UDWORD getNumMissionDroids(UDWORD player);
+UDWORD getNumCommandDroids(UDWORD player);
+UDWORD getNumConstructorDroids(UDWORD player);
 // increase the droid counts - used by update factory to keep the counts in sync
 void incNumDroids(UDWORD player);
 void incNumCommandDroids(UDWORD player);

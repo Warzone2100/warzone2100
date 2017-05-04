@@ -254,7 +254,7 @@ typedef enum
 	CLI_SKIRMISH,
 } CLI_OPTIONS;
 
-static const struct poptOption *getOptionsTable(void)
+static const struct poptOption *getOptionsTable()
 {
 	static const struct poptOption optionsTable[] =
 	{

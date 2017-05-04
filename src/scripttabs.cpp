@@ -3050,7 +3050,7 @@ TYPE_EQUIV asEquivTable[] =
 
 
 // Initialise the script system
-bool scrTabInitialise(void)
+bool scrTabInitialise()
 {
 	if (!scriptInitialise())
 	{
@@ -3144,7 +3144,7 @@ bool scrTabInitialise(void)
 }
 
 // Shut down the script system
-void scrShutDown(void)
+void scrShutDown()
 {
 	scrvShutDown();
 	scriptShutDown();

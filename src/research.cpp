@@ -84,7 +84,7 @@ static void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                         UDWORD oldCompInc, UDWORD newCompInc);
 
 
-bool researchInitVars(void)
+bool researchInitVars()
 {
 	psCBLastResearch = nullptr;
 	psCBLastResStructure = nullptr;
@@ -613,14 +613,14 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 }
 
 /*This function is called when the research files are reloaded*/
-bool ResearchShutDown(void)
+bool ResearchShutDown()
 {
 	ResearchRelease();
 	return true;
 }
 
 /*This function is called when a game finishes*/
-void ResearchRelease(void)
+void ResearchRelease()
 {
 	asResearch.clear();
 	for (int i = 0; i < MAX_PLAYERS; i++)

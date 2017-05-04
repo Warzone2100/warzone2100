@@ -83,7 +83,7 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 	return true;
 }
 
-static bool addQuitOptions(void)
+static bool addQuitOptions()
 {
 	// get rid of the old stuff.
 	delete widgGetFromID(psWScreen, INTINGAMEOP);
@@ -116,7 +116,7 @@ static bool addQuitOptions(void)
 }
 
 
-static bool addSlideOptions(void)
+static bool addSlideOptions()
 {
 	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
@@ -164,7 +164,7 @@ static bool addSlideOptions(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static bool _intAddInGameOptions(void)
+static bool _intAddInGameOptions()
 {
 	audio_StopAll();
 
@@ -235,7 +235,7 @@ static bool _intAddInGameOptions(void)
 }
 
 
-bool intAddInGameOptions(void)
+bool intAddInGameOptions()
 {
 	sliderEnableDrag(true);
 	return _intAddInGameOptions();
@@ -244,7 +244,7 @@ bool intAddInGameOptions(void)
 //
 // Quick hack to throw up a ingame 'popup' for when the host drops connection.
 //
-void intAddInGamePopup(void)
+void intAddInGamePopup()
 {
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
@@ -304,7 +304,7 @@ void intAddInGamePopup(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void ProcessOptionFinished(void)
+static void ProcessOptionFinished()
 {
 	intMode		= INT_NORMAL;
 

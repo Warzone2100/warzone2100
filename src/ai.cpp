@@ -137,7 +137,7 @@ static bool aiObjHasRange(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, int weapon_
 }
 
 /* Initialise the AI system */
-bool aiInitialise(void)
+bool aiInitialise()
 {
 	SDWORD		i, j;
 
@@ -158,7 +158,7 @@ bool aiInitialise(void)
 }
 
 /* Shutdown the AI system */
-bool aiShutdown(void)
+bool aiShutdown()
 {
 	return true;
 }

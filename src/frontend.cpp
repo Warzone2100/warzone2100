@@ -102,7 +102,7 @@ static void addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *
 
 // Returns true if escape key pressed.
 //
-bool CancelPressed(void)
+bool CancelPressed()
 {
 	const bool cancel = keyPressed(KEY_ESC);
 	if (cancel)
@@ -133,7 +133,7 @@ static T pow2Cycle(T value, T min, T max)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-static bool startTitleMenu(void)
+static bool startTitleMenu()
 {
 	intRemoveReticule();
 
@@ -166,7 +166,7 @@ static bool startTitleMenu(void)
 	return true;
 }
 
-static void runUpgrdHyperlink(void)
+static void runUpgrdHyperlink()
 {
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
 	std::string link = "http://gamecheck.wz2100.net/";
@@ -194,7 +194,7 @@ static void runUpgrdHyperlink(void)
 #endif
 }
 
-static void runHyperlink(void)
+static void runHyperlink()
 {
 #if defined(WZ_OS_WIN)
 	ShellExecuteW(NULL, L"open", L"http://wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
@@ -208,7 +208,7 @@ static void runHyperlink(void)
 #endif
 }
 
-static void rundonatelink(void)
+static void rundonatelink()
 {
 #if defined(WZ_OS_WIN)
 	ShellExecuteW(NULL, L"open", L"http://donations.wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
@@ -222,7 +222,7 @@ static void rundonatelink(void)
 #endif
 }
 
-bool runTitleMenu(void)
+bool runTitleMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -269,7 +269,7 @@ bool runTitleMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Tutorial Menu
-static bool startTutorialMenu(void)
+static bool startTutorialMenu()
 {
 	addBackdrop();
 	addTopForm();
@@ -285,7 +285,7 @@ static bool startTutorialMenu(void)
 	return true;
 }
 
-bool runTutorialMenu(void)
+bool runTutorialMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -329,7 +329,7 @@ bool runTutorialMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Single Player Menu
-static void startSinglePlayerMenu(void)
+static void startSinglePlayerMenu()
 {
 	challengeActive = false;
 	addBackdrop();
@@ -434,7 +434,7 @@ static void frontEndNewGame(int which)
 	changeTitleMode(STARTGAME);
 }
 
-static void loadOK(void)
+static void loadOK()
 {
 	if (strlen(sRequestResult))
 	{
@@ -486,7 +486,7 @@ bool runCampaignSelector()
 	return true;
 }
 
-bool runSinglePlayerMenu(void)
+bool runSinglePlayerMenu()
 {
 	if (bLoadSaveUp)
 	{
@@ -566,7 +566,7 @@ bool runSinglePlayerMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Multi Player Menu
-static bool startMultiPlayerMenu(void)
+static bool startMultiPlayerMenu()
 {
 	addBackdrop();
 	addTopForm();
@@ -585,7 +585,7 @@ static bool startMultiPlayerMenu(void)
 	return true;
 }
 
-bool runMultiPlayerMenu(void)
+bool runMultiPlayerMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -636,7 +636,7 @@ bool runMultiPlayerMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Options Menu
-static bool startOptionsMenu(void)
+static bool startOptionsMenu()
 {
 	sliderEnableDrag(true);
 
@@ -656,7 +656,7 @@ static bool startOptionsMenu(void)
 	return true;
 }
 
-bool runOptionsMenu(void)
+bool runOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -738,7 +738,7 @@ static char const *graphicsOptionsRadarString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
-static bool startGraphicsOptionsMenu(void)
+static bool startGraphicsOptionsMenu()
 {
 	addBackdrop();
 	addTopForm();
@@ -777,7 +777,7 @@ static bool startGraphicsOptionsMenu(void)
 	return true;
 }
 
-bool runGraphicsOptionsMenu(void)
+bool runGraphicsOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -836,7 +836,7 @@ bool runGraphicsOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Audio Options Menu
-static bool startAudioOptionsMenu(void)
+static bool startAudioOptionsMenu()
 {
 	addBackdrop();
 	addTopForm();
@@ -864,7 +864,7 @@ static bool startAudioOptionsMenu(void)
 	return true;
 }
 
-bool runAudioOptionsMenu(void)
+bool runAudioOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -946,7 +946,7 @@ static char const *videoOptionsVsyncString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
-static bool startVideoOptionsMenu(void)
+static bool startVideoOptionsMenu()
 {
 	addBackdrop();
 	addTopForm();
@@ -990,7 +990,7 @@ static bool startVideoOptionsMenu(void)
 	return true;
 }
 
-bool runVideoOptionsMenu(void)
+bool runVideoOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -1124,7 +1124,7 @@ static char const *mouseOptionsCursorModeString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
-static bool startMouseOptionsMenu(void)
+static bool startMouseOptionsMenu()
 {
 	addBackdrop();
 	addTopForm();
@@ -1162,7 +1162,7 @@ static bool startMouseOptionsMenu(void)
 	return true;
 }
 
-bool runMouseOptionsMenu(void)
+bool runMouseOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -1233,7 +1233,7 @@ static char const *gameOptionsDifficultyString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
-static bool startGameOptionsMenu(void)
+static bool startGameOptionsMenu()
 {
 	UDWORD	w, h;
 	int playercolor;
@@ -1296,7 +1296,7 @@ static bool startGameOptionsMenu(void)
 	return true;
 }
 
-bool runGameOptionsMenu(void)
+bool runGameOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -1531,7 +1531,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 // common widgets.
 
-void addBackdrop(void)
+void addBackdrop()
 {
 	W_FORMINIT sFormInit;                              // Backdrop
 	sFormInit.formID = 0;
@@ -1546,7 +1546,7 @@ void addBackdrop(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTopForm(void)
+void addTopForm()
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
@@ -1585,7 +1585,7 @@ void addTopForm(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addBottomForm(void)
+void addBottomForm()
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 

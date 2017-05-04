@@ -117,20 +117,20 @@ static  bool            bFirstTransporter;
 static  UWORD           objMajor = 0;
 
 /*functions */
-static bool intAddTransporterContents(void);
+static bool intAddTransporterContents();
 static void setCurrentTransporter(UDWORD id);
-static void intRemoveTransContentNoAnim(void);
-static bool intAddTransButtonForm(void);
-static bool intAddTransContentsForm(void);
-static bool intAddDroidsAvailForm(void);
-static void intRemoveTransContent(void);
-static DROID *transInterfaceDroidList(void);
+static void intRemoveTransContentNoAnim();
+static bool intAddTransButtonForm();
+static bool intAddTransContentsForm();
+static bool intAddDroidsAvailForm();
+static void intRemoveTransContent();
+static DROID *transInterfaceDroidList();
 static void intTransporterAddDroid(UDWORD id);
-static void intRemoveTransDroidsAvail(void);
-static void intRemoveTransDroidsAvailNoAnim(void);
+static void intRemoveTransDroidsAvail();
+static void intRemoveTransDroidsAvailNoAnim();
 
 //initialises Transporter variables
-void initTransporters(void)
+void initTransporters()
 {
 	onMission = false;
 	psCurrTransporter = nullptr;
@@ -138,7 +138,7 @@ void initTransporters(void)
 
 // Call to refresh the transporter screen, ie when a droids boards it.
 //
-bool intRefreshTransporter(void)
+bool intRefreshTransporter()
 {
 	// Is the transporter screen up?
 	if (intMode == INT_TRANSPORTER && widgGetFromID(psWScreen, IDTRANS_FORM) != nullptr)
@@ -224,7 +224,7 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 }
 
 // Add the main Transporter Contents Interface
-bool intAddTransporterContents(void)
+bool intAddTransporterContents()
 {
 	bool			Animate = true;
 
@@ -384,7 +384,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 }
 
 /* Remove the Transporter Launch widget from the screen*/
-void intRemoveTransporterLaunch(void)
+void intRemoveTransporterLaunch()
 {
 	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != nullptr)
 	{
@@ -393,7 +393,7 @@ void intRemoveTransporterLaunch(void)
 }
 
 /* Add the Transporter Button form */
-bool intAddTransButtonForm(void)
+bool intAddTransButtonForm()
 {
 	WIDGET *transForm = widgGetFromID(psWScreen, IDTRANS_FORM);
 
@@ -460,7 +460,7 @@ bool intAddTransButtonForm(void)
 }
 
 /* Add the Transporter Contents form */
-bool intAddTransContentsForm(void)
+bool intAddTransContentsForm()
 {
 	WIDGET *contForm = widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
 
@@ -502,7 +502,7 @@ bool intAddTransContentsForm(void)
 }
 
 /* Add the Droids back at home form */
-bool intAddDroidsAvailForm(void)
+bool intAddDroidsAvailForm()
 {
 	// Is the form already up?
 	bool Animate = true;
@@ -741,7 +741,7 @@ void intProcessTransporter(UDWORD id)
 }
 
 /* Remove the Transporter widgets from the screen */
-void intRemoveTrans(void)
+void intRemoveTrans()
 {
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_FORM);
@@ -756,7 +756,7 @@ void intRemoveTrans(void)
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
-void intRemoveTransNoAnim(void)
+void intRemoveTransNoAnim()
 {
 	//remove main screen
 	widgDelete(psWScreen, IDTRANS_FORM);
@@ -766,7 +766,7 @@ void intRemoveTransNoAnim(void)
 }
 
 /* Remove the Transporter Content widgets from the screen */
-void intRemoveTransContent(void)
+void intRemoveTransContent()
 {
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
@@ -777,14 +777,14 @@ void intRemoveTransContent(void)
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
-void intRemoveTransContentNoAnim(void)
+void intRemoveTransContentNoAnim()
 {
 	//remove main screen
 	widgDelete(psWScreen, IDTRANS_CONTENTFORM);
 }
 
 /* Remove the Transporter Droids Avail widgets from the screen */
-void intRemoveTransDroidsAvail(void)
+void intRemoveTransDroidsAvail()
 {
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_DROIDS);
@@ -798,7 +798,7 @@ void intRemoveTransDroidsAvail(void)
 }
 
 /* Remove the Transporter Droids Avail widgets from the screen w/o animation!*/
-void intRemoveTransDroidsAvailNoAnim(void)
+void intRemoveTransDroidsAvailNoAnim()
 {
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_DROIDS);
 	if (form != nullptr)
@@ -1050,7 +1050,7 @@ int transporterSpaceRequired(const DROID *psDroid)
 }
 
 /*sets which list of droids to use for the transporter interface*/
-DROID *transInterfaceDroidList(void)
+DROID *transInterfaceDroidList()
 {
 	if (onMission)
 	{
@@ -1062,7 +1062,7 @@ DROID *transInterfaceDroidList(void)
 	}
 }
 
-UDWORD transporterGetLaunchTime(void)
+UDWORD transporterGetLaunchTime()
 {
 	return g_iLaunchTime;
 }
@@ -1189,7 +1189,7 @@ bool updateTransporter(DROID *psTransporter)
 }
 
 //process the launch transporter button click
-void processLaunchTransporter(void)
+void processLaunchTransporter()
 {
 	UDWORD		capacity = TRANSPORTER_CAPACITY;
 	W_CLICKFORM *psForm;
@@ -1227,7 +1227,7 @@ void processLaunchTransporter(void)
 	}
 }
 
-SDWORD	bobTransporterHeight(void)
+SDWORD	bobTransporterHeight()
 {
 	// Because 4320/12 = 360 degrees
 	// this gives us a bob frequency of 4.32 seconds.
@@ -1292,7 +1292,7 @@ void transporterSetScriptCurrent(DROID *psTransporter)
 }
 
 /* get current transporter (for script callbacks) */
-DROID *transporterGetScriptCurrent(void)
+DROID *transporterGetScriptCurrent()
 {
 	return g_psCurScriptTransporter;
 }
@@ -1329,7 +1329,7 @@ bool transporterFlying(DROID *psTransporter)
 }
 
 //initialise the flag to indicate the first transporter has arrived - set in startMission()
-void initFirstTransporterFlag(void)
+void initFirstTransporterFlag()
 {
 	bFirstTransporter = true;
 }

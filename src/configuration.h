@@ -24,10 +24,10 @@
 #ifndef __INCLUDED_SRC_CONFIGURATION_H__
 #define __INCLUDED_SRC_CONFIGURATION_H__
 
-bool loadConfig(void);
-bool saveConfig(void);
-bool reloadMPConfig(void);
-void closeConfig(void);
+bool loadConfig();
+bool saveConfig();
+bool reloadMPConfig();
+void closeConfig();
 
 /// Default map for Skirmish
 static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";

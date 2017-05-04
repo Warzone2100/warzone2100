@@ -23,7 +23,6 @@
 
 #include "lib/framework/input.h"
 
-
 enum KEY_ACTION
 {
 	KEYMAP_DOWN,
@@ -42,7 +41,7 @@ enum KEY_STATUS
 
 struct KEY_MAPPING
 {
-	void (*function)(void);
+	void (*function)();
 	bool		active;
 	KEY_STATUS	status;
 	UDWORD		lastCalled;
@@ -54,47 +53,43 @@ struct KEY_MAPPING
 	KEY_MAPPING    *psNext;
 };
 
-extern KEY_MAPPING	*keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode,
-                                   KEY_ACTION action, void (*pKeyMapFunc)(void), const char *name);
-extern bool	keyRemoveMapping(KEY_CODE metaCode, KEY_CODE subCode);
-extern	KEY_MAPPING	*keyGetMappingFromFunction(void	*function);
-extern bool	keyRemoveMappingPt(KEY_MAPPING *psToRemove);
-extern KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode);
-extern void	keyClearMappings(void);
-extern void	keyProcessMappings(bool bExclude);
-extern void	keyInitMappings(bool bForceDefaults);
-extern UDWORD	getNumMappings(void);
-extern KEY_CODE	getLastSubKey(void);
-extern KEY_CODE	getLastMetaKey(void);
-extern KEY_MAPPING	*getLastMapping(void);
-extern void	keyEnableProcessing(bool val);
-extern void keyStatusAllInactive(void);
-extern void keyAllMappingsInactive(void);
-extern void	keyAllMappingsActive(void);
-extern void	keySetMappingStatus(KEY_MAPPING *psMapping, bool state);
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name);
+bool keyRemoveMapping(KEY_CODE metaCode, KEY_CODE subCode);
+KEY_MAPPING *keyGetMappingFromFunction(void	*function);
+bool keyRemoveMappingPt(KEY_MAPPING *psToRemove);
+KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode);
+void keyClearMappings();
+void keyProcessMappings(bool bExclude);
+void keyInitMappings(bool bForceDefaults);
+UDWORD getNumMappings();
+KEY_CODE getLastSubKey();
+KEY_CODE getLastMetaKey();
+KEY_MAPPING *getLastMapping();
+void keyEnableProcessing(bool val);
+void keyStatusAllInactive();
+void keyAllMappingsInactive();
+void keyAllMappingsActive();
+void keySetMappingStatus(KEY_MAPPING *psMapping, bool state);
 void processDebugMappings(unsigned player, bool val);
 bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
-extern	bool	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
+bool keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
 
-extern	bool	keyReAssignMapping(KEY_CODE origMetaCode, KEY_CODE origSubCode,
-                                   KEY_CODE newMetaCode, KEY_CODE newSubCode);
-extern	KEY_MAPPING	*getKeyMapFromName(char *pName);
+bool keyReAssignMapping(KEY_CODE origMetaCode, KEY_CODE origSubCode, KEY_CODE newMetaCode, KEY_CODE newSubCode);
+KEY_MAPPING *getKeyMapFromName(char *pName);
 
+KEY_CODE	getQwertyKey();
 
-extern KEY_CODE	getQwertyKey(void);
-
-extern UDWORD	getMarkerX(KEY_CODE code);
-extern UDWORD	getMarkerY(KEY_CODE code);
-extern SDWORD	getMarkerSpin(KEY_CODE code);
+UDWORD	getMarkerX(KEY_CODE code);
+UDWORD	getMarkerY(KEY_CODE code);
+SDWORD	getMarkerSpin(KEY_CODE code);
 
 // for keymap editor.
-typedef void (*_keymapsave)(void);
-extern _keymapsave	keyMapSaveTable[];
-extern KEY_MAPPING	*keyMappings;
+typedef void (*_keymapsave)();
+extern _keymapsave keyMapSaveTable[];
+extern KEY_MAPPING *keyMappings;
 
-//remove this one below
-extern void	keyShowMappings(void);
+void	keyShowMappings();
 
 #endif // __INCLUDED_SRC_KEYMAP_H__

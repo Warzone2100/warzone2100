@@ -36,19 +36,19 @@ int pie_ReserveTexture(const char *name);
 
 //*************************************************************************
 
-extern int iV_GetTexture(const char *filename, bool compression = true);
-extern void iV_unloadImage(iV_Image *image);
-extern unsigned int iV_getPixelFormat(const iV_Image *image);
+int iV_GetTexture(const char *filename, bool compression = true);
+void iV_unloadImage(iV_Image *image);
+unsigned int iV_getPixelFormat(const iV_Image *image);
 
 bool replaceTexture(const QString &oldfile, const QString &newfile);
-extern int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page = -1);
-extern void pie_TexInit(void);
+int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page = -1);
+void pie_TexInit();
 
-extern void pie_MakeTexPageName(char *filename);
-extern void pie_MakeTexPageTCMaskName(char *filename);
+void pie_MakeTexPageName(char *filename);
+void pie_MakeTexPageTCMaskName(char *filename);
 
 //*************************************************************************
 
-extern void pie_TexShutDown(void);
+void pie_TexShutDown();
 
 #endif

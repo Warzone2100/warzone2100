@@ -131,96 +131,95 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
 // functions
 
-extern WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
-extern WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id, UDWORD player);
-extern WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(UDWORD id, UDWORD player);
-extern WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
-extern WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
-extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
-extern const char *getPlayerName(int player);
-extern bool setPlayerName(int player, const char *sName);
-extern const char *getPlayerColourName(int player);
-extern bool isHumanPlayer(int player);				//to tell if the player is a computer or not.
-extern bool myResponsibility(int player);
-extern bool responsibleFor(int player, int playerinquestion);
-extern int whosResponsible(int player);
+const char *getPlayerName(int player);
+bool setPlayerName(int player, const char *sName);
+const char *getPlayerColourName(int player);
+bool isHumanPlayer(int player);				//to tell if the player is a computer or not.
+bool myResponsibility(int player);
+bool responsibleFor(int player, int playerinquestion);
+int whosResponsible(int player);
 bool canGiveOrdersFor(int player, int playerInQuestion);
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
-extern Vector3i cameraToHome(UDWORD player, bool scroll);
+Vector3i cameraToHome(UDWORD player, bool scroll);
 
-extern bool	multiPlayerLoop(void);							// for loop.c
+bool multiPlayerLoop();							// for loop.c
 
-extern bool recvMessage(void);
-extern bool SendResearch(uint8_t player, uint32_t index, bool trigger);
-extern bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
-extern bool sendTextMessage(const char *pStr, bool cast, uint32_t from = selectedPlayer);	// send a text message
-extern void sendTeamMessage(const char *pStr, uint32_t from = selectedPlayer);	// send a team chat message
+bool recvMessage();
+bool SendResearch(uint8_t player, uint32_t index, bool trigger);
+bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
+bool sendTextMessage(const char *pStr, bool cast, uint32_t from = selectedPlayer);	// send a text message
+void sendTeamMessage(const char *pStr, uint32_t from = selectedPlayer);	// send a team chat message
 void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
-extern void turnOffMultiMsg(bool bDoit);
+void turnOffMultiMsg(bool bDoit);
 
-extern void sendMap(void);
-extern bool multiplayerWinSequence(bool firstCall);
+void sendMap();
+bool multiplayerWinSequence(bool firstCall);
 
 /////////////////////////////////////////////////////////
 // definitions of functions in multiplay's other c files.
 
 // Buildings . multistruct
-extern bool SendDestroyStructure(STRUCTURE *s);
-extern bool	SendBuildFinished(STRUCTURE *psStruct);
-extern bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
+bool SendDestroyStructure(STRUCTURE *s);
+bool SendBuildFinished(STRUCTURE *psStruct);
+bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
 void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, DROID_TEMPLATE *psTempl);
 
 // droids . multibot
-extern bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
-extern bool SendDestroyDroid(const DROID *psDroid);
-void sendQueuedDroidInfo(void);  ///< Actually sends the droid orders which were queued by SendDroidInfo.
+bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
+bool SendDestroyDroid(const DROID *psDroid);
+void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
-extern bool SendCmdGroup(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
+bool SendCmdGroup(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 
-
-extern bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
+bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
 bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 
 // Startup. mulitopt
-extern bool multiShutdown(void);
-extern bool sendLeavingMsg(void);
+bool multiShutdown();
+bool sendLeavingMsg();
 
-extern bool hostCampaign(char *sGame, char *sPlayer);
-extern bool joinGame(const char *host, uint32_t port);
-extern void	playerResponding(void);
-extern bool multiGameInit(void);
-extern bool multiGameShutdown(void);
+bool hostCampaign(char *sGame, char *sPlayer);
+bool joinGame(const char *host, uint32_t port);
+void playerResponding();
+bool multiGameInit();
+bool multiGameShutdown();
 
 // syncing.
-extern bool sendScoreCheck(void);							//score check only(frontend)
-extern bool sendPing(void);							// allow game to request pings.
-extern void HandleBadParam(const char *msg, const int from, const int actual);
+bool sendScoreCheck();							//score check only(frontend)
+bool sendPing();							// allow game to request pings.
+void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
-extern bool sendResearchStatus(STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
+bool sendResearchStatus(STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
 
-extern void displayAIMessage(char *pStr, SDWORD from, SDWORD to);  //make AI process a message
+void displayAIMessage(char *pStr, SDWORD from, SDWORD to);  //make AI process a message
 
 
 /* for multiplayer message stack */
-extern  UDWORD	msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y, DROID *psDroid);
-extern	bool	isMsgStackEmpty(void);
-extern	bool	msgStackGetFrom(SDWORD  *psVal);
-extern	bool	msgStackGetTo(SDWORD  *psVal);
-extern	bool	msgStackGetMsg(char  *psVal);
-extern	bool	msgStackPop(void);
-extern	SDWORD	msgStackGetCount(void);
-extern	void	msgStackReset(void);
-extern bool msgStackGetDroid(DROID **ppsDroid);
+UDWORD	msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y, DROID *psDroid);
+bool	isMsgStackEmpty();
+bool	msgStackGetFrom(SDWORD  *psVal);
+bool	msgStackGetTo(SDWORD  *psVal);
+bool	msgStackGetMsg(char  *psVal);
+bool	msgStackPop();
+SDWORD	msgStackGetCount();
+void	msgStackReset();
+bool msgStackGetDroid(DROID **ppsDroid);
 
-extern bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
-extern bool msgStackFireTop(void);
+bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
+bool msgStackFireTop();
 
-extern	bool multiplayPlayersReady(bool bNotifyStatus);
-extern	void startMultiplayerGame(void);
-extern	void resetReadyStatus(bool bSendOptions);
+bool multiplayPlayersReady(bool bNotifyStatus);
+void startMultiplayerGame();
+void resetReadyStatus(bool bSendOptions);
 
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
 

@@ -152,7 +152,7 @@ void removeSubdirs(const char *basedir, const char *subdir)
 	PHYSFS_freeList(subdirlist);
 }
 
-void printSearchPath(void)
+void printSearchPath()
 {
 	debug(LOG_WZ, "Search paths:");
 	char **searchPath = PHYSFS_getSearchPath();
@@ -170,7 +170,7 @@ void setOverrideMods(char *modlist)
 	use_override_mods = true;
 }
 
-void clearOverrideMods(void)
+void clearOverrideMods()
 {
 	override_mods.clear();
 	override_mod_list.clear();

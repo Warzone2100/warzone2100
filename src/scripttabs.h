@@ -45,9 +45,9 @@ extern VAR_SYMBOL asObjTable[];
 extern CONST_SYMBOL asConstantTable[];
 
 // Initialise the script system
-extern bool scrTabInitialise(void);
+bool scrTabInitialise();
 
 // Shut down the script system
-extern void scrShutDown(void);
+void scrShutDown();
 
 #endif // __INCLUDED_SRC_SCRIPTTABS_H__

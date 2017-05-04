@@ -58,7 +58,7 @@ UDWORD			numFeatureStats;
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 FEATURE_STATS *oilResFeature = nullptr;
 
-void featureInitVars(void)
+void featureInitVars()
 {
 	asFeatureStats = nullptr;
 	numFeatureStats = 0;
@@ -142,7 +142,7 @@ bool loadFeatureStats(const char *pFileName)
 }
 
 /* Release the feature stats memory */
-void featureStatsShutDown(void)
+void featureStatsShutDown()
 {
 	delete[] asFeatureStats;
 	asFeatureStats = nullptr;

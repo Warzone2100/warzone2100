@@ -29,7 +29,7 @@
 #include "frame.h"
 
 /* Initialise the Trig tables */
-extern bool trigInitialise(void);
+bool trigInitialise();
 
 // Deterministic trig functions.
 WZ_DECL_PURE int32_t iSin(uint16_t a);               ///< Returns sin(a*2π >> 16) << 16, rounded to nearest integer. Used as the x component in this game.

@@ -110,7 +110,7 @@ static wzSearchPath *searchPathRegistry = nullptr;
 // any globals and statics to there default values each time the game
 // or frontend restarts.
 //
-static bool InitialiseGlobals(void)
+static bool InitialiseGlobals()
 {
 	frontendInitVars();	// Initialise frontend globals and statics.
 	statsInitVars();
@@ -680,7 +680,7 @@ bool buildMapList()
 // ////////////////////////////////////////////////////////////////////////////
 // Called once on program startup.
 //
-bool systemInitialise(void)
+bool systemInitialise()
 {
 	if (!widgInitialise())
 	{
@@ -734,7 +734,7 @@ bool systemInitialise(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Called once at program shutdown.
 //
-void systemShutdown(void)
+void systemShutdown()
 {
 	pie_ShutdownRadar();
 	clearLoadedMods();
@@ -856,7 +856,7 @@ bool frontendInitialise(const char *ResourceFile)
 }
 
 
-bool frontendShutdown(void)
+bool frontendShutdown()
 {
 	debug(LOG_WZ, "== Shuting down frontend ==");
 
@@ -896,7 +896,7 @@ bool frontendShutdown(void)
 
 
 
-bool stageOneInitialise(void)
+bool stageOneInitialise()
 {
 	debug(LOG_WZ, "== stageOneInitalise ==");
 	wzSceneEnd("Main menu loop");
@@ -981,7 +981,7 @@ bool stageOneInitialise(void)
 /******************************************************************************/
 /*                       Shutdown after data is released                      */
 
-bool stageOneShutDown(void)
+bool stageOneShutDown()
 {
 	debug(LOG_WZ, "== stageOneShutDown ==");
 
@@ -1045,7 +1045,7 @@ bool stageOneShutDown(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Initialise after the base data is loaded but before final level data is loaded
 
-bool stageTwoInitialise(void)
+bool stageTwoInitialise()
 {
 	int i;
 
@@ -1131,7 +1131,7 @@ bool stageTwoInitialise(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Free up after level specific data has been released but before base data is released
 //
-bool stageTwoShutDown(void)
+bool stageTwoShutDown()
 {
 	debug(LOG_WZ, "== stageTwoShutDown ==");
 
@@ -1173,7 +1173,7 @@ bool stageTwoShutDown(void)
 	return true;
 }
 
-bool stageThreeInitialise(void)
+bool stageThreeInitialise()
 {
 	STRUCTURE *psStr;
 	UDWORD i;
@@ -1283,7 +1283,7 @@ bool stageThreeInitialise(void)
 /*****************************************************************************/
 /*      Shutdown before any data is released                                 */
 
-bool stageThreeShutDown(void)
+bool stageThreeShutDown()
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
@@ -1340,7 +1340,7 @@ bool stageThreeShutDown(void)
 }
 
 // Reset the game between campaigns
-bool campaignReset(void)
+bool campaignReset()
 {
 	debug(LOG_MAIN, "campaignReset");
 	gwShutDown();
@@ -1354,7 +1354,7 @@ bool campaignReset(void)
 }
 
 // Reset the game when loading a save game
-bool saveGameReset(void)
+bool saveGameReset()
 {
 	debug(LOG_MAIN, "saveGameReset");
 

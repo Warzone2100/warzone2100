@@ -300,8 +300,8 @@ static std::vector<Vector2i> asJumpPos;
 /*              Function Prototypes                                                    */
 static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, bool bForceStats);
 /* Remove the object widgets from the widget screen */
-void intRemoveObject(void);
-static void intRemoveObjectNoAnim(void);
+void intRemoveObject();
+static void intRemoveObjectNoAnim();
 /* Process the object widgets */
 static void intProcessObject(UDWORD id);
 /* Get the object refered to by a button ID on the object screen.
@@ -336,7 +336,7 @@ static bool intAddCommand(DROID *psSelected);
 /* Start looking for a structure location */
 static void intStartStructPosition(BASE_STATS *psStats);
 /* Stop looking for a structure location */
-static void intStopStructPosition(void);
+static void intStopStructPosition();
 
 static STRUCTURE *CurrentStruct = nullptr;
 static SWORD CurrentStructType = 0;
@@ -346,9 +346,9 @@ static DROID_TYPE CurrentDroidType = DROID_ANY;
 /******************Power Bar Stuff!**************/
 
 /* Set the shadow for the PowerBar */
-static void intRunPower(void);
+static void intRunPower();
 
-static void intRunStats(void);
+static void intRunStats();
 
 /*Deals with the RMB click for the stats screen */
 static void intStatsRMBPressed(UDWORD id);
@@ -365,7 +365,7 @@ static void processProximityButtons(UDWORD id);
 static DROID *intCheckForDroid(UDWORD droidType);
 static STRUCTURE *intCheckForStructure(UDWORD structType);
 
-static void intCheckReticuleButtons(void);
+static void intCheckReticuleButtons();
 
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
@@ -491,7 +491,7 @@ void setReticuleBut(int ButId)
 }
 
 /* Initialise the in game interface */
-bool intInitialise(void)
+bool intInitialise()
 {
 	for (int i = 0; i < NUMRETBUTS; i++)
 	{
@@ -574,7 +574,7 @@ bool intInitialise(void)
 
 
 //initialise all the previous obj - particularly useful for when go Off world!
-void intResetPreviousObj(void)
+void intResetPreviousObj()
 {
 	//make sure stats screen doesn't think it should be up
 	StatsUp = false;
@@ -584,7 +584,7 @@ void intResetPreviousObj(void)
 
 
 /* Shut down the in game interface */
-void interfaceShutDown(void)
+void interfaceShutDown()
 {
 	delete psWScreen;
 	psWScreen = nullptr;
@@ -617,19 +617,19 @@ static bool IntRefreshPending = false;
 
 // Set widget refresh pending flag.
 //
-void intRefreshScreen(void)
+void intRefreshScreen()
 {
 	IntRefreshPending = true;
 }
 
-bool intIsRefreshing(void)
+bool intIsRefreshing()
 {
 	return Refreshing;
 }
 
 
 // see if a delivery point is selected
-static FLAG_POSITION *intFindSelectedDelivPoint(void)
+static FLAG_POSITION *intFindSelectedDelivPoint()
 {
 	FLAG_POSITION *psFlagPos;
 
@@ -647,7 +647,7 @@ static FLAG_POSITION *intFindSelectedDelivPoint(void)
 
 // Refresh widgets once per game cycle if pending flag is set.
 //
-static void intDoScreenRefresh(void)
+static void intDoScreenRefresh()
 {
 	UWORD           objMajor = 0, statMajor = 0;
 	FLAG_POSITION	*psFlag;
@@ -1042,7 +1042,7 @@ void hciUpdate()
 }
 
 /* Run the widgets for the in game interface */
-INT_RETVAL intRunWidgets(void)
+INT_RETVAL intRunWidgets()
 {
 	bool			quitting = false;
 	UDWORD			structX, structY, structX2, structY2;
@@ -1579,7 +1579,7 @@ INT_RETVAL intRunWidgets(void)
 }
 
 /* Set the shadow for the PowerBar */
-static void intRunPower(void)
+static void intRunPower()
 {
 	UDWORD				statID;
 	BASE_STATS			*psStat;
@@ -1629,7 +1629,7 @@ static void intRunPower(void)
 
 
 // Process stats screen.
-static void intRunStats(void)
+static void intRunStats()
 {
 	BASE_OBJECT			*psOwner;
 	STRUCTURE			*psStruct;
@@ -2338,7 +2338,7 @@ static void intStartStructPosition(BASE_STATS *psStats)
 
 
 /* Stop looking for a structure location */
-static void intStopStructPosition(void)
+static void intStopStructPosition()
 {
 	/* Check there is still a struct position running */
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
@@ -2351,7 +2351,7 @@ static void intStopStructPosition(void)
 
 
 /* Display the widgets for the in game interface */
-void intDisplayWidgets(void)
+void intDisplayWidgets()
 {
 	if (ReticuleUp && !bInTutorial)
 	{
@@ -2485,25 +2485,25 @@ void intBuildStarted(DROID *psDroid)
 }
 
 /* Are we in build select mode*/
-bool intBuildSelectMode(void)
+bool intBuildSelectMode()
 {
 	return (objMode == IOBJ_BUILDSEL);
 }
 
 /* Are we in demolish select mode*/
-bool intDemolishSelectMode(void)
+bool intDemolishSelectMode()
 {
 	return (objMode == IOBJ_DEMOLISHSEL);
 }
 
 //is the build interface up?
-bool intBuildMode(void)
+bool intBuildMode()
 {
 	return (objMode == IOBJ_BUILD);
 }
 
 //Written to allow demolish order to be added to the queuing system
-void intDemolishCancel(void)
+void intDemolishCancel()
 {
 	if (objMode == IOBJ_DEMOLISHSEL)
 	{
@@ -2513,7 +2513,7 @@ void intDemolishCancel(void)
 
 
 //reorder the research facilities so that first built is first in the list
-static void orderResearch(void)
+static void orderResearch()
 {
 	std::reverse(apsObjectList.begin(), apsObjectList.end());  // Why reverse this list, instead of sorting it?
 }
@@ -2525,7 +2525,7 @@ static inline bool sortObjectByIdFunction(BASE_OBJECT *a, BASE_OBJECT *b)
 }
 
 // reorder the commanders
-static void orderDroids(void)
+static void orderDroids()
 {
 	// bubble sort on the ID - first built will always be first in the list
 	std::sort(apsObjectList.begin(), apsObjectList.end(), sortObjectByIdFunction);  // Why sort this list, instead of reversing it?
@@ -2549,14 +2549,14 @@ static inline bool sortFactoryByTypeFunction(BASE_OBJECT *a, BASE_OBJECT *b)
 
 /*puts the selected players factories in order - Standard factories 1-5, then
 cyborg factories 1-5 and then Vtol factories 1-5*/
-static void orderFactories(void)
+static void orderFactories()
 {
 	std::sort(apsObjectList.begin(), apsObjectList.end(), sortFactoryByTypeFunction);
 }
 
 
 /** Order the objects in the bottom bar according to their type. */
-static void orderObjectInterface(void)
+static void orderObjectInterface()
 {
 	if (apsObjectList.empty())
 	{
@@ -2674,7 +2674,7 @@ bool intAddReticule()
 	return true;
 }
 
-void intRemoveReticule(void)
+void intRemoveReticule()
 {
 	if (ReticuleUp == true)
 	{
@@ -2684,7 +2684,7 @@ void intRemoveReticule(void)
 }
 
 //toggles the Power Bar display on and off
-void togglePowerBar(void)
+void togglePowerBar()
 {
 	//toggle the flag
 	powerBarUp = !powerBarUp;
@@ -3278,7 +3278,7 @@ static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, boo
 }
 
 /* Remove the build widgets from the widget screen */
-void intRemoveObject(void)
+void intRemoveObject()
 {
 	widgDelete(psWScreen, IDOBJ_TABFORM);
 	widgDelete(psWScreen, IDOBJ_CLOSE);
@@ -3301,7 +3301,7 @@ void intRemoveObject(void)
 
 
 /* Remove the build widgets from the widget screen */
-static void intRemoveObjectNoAnim(void)
+static void intRemoveObjectNoAnim()
 {
 	widgDelete(psWScreen, IDOBJ_TABFORM);
 	widgDelete(psWScreen, IDOBJ_CLOSE);
@@ -3312,7 +3312,7 @@ static void intRemoveObjectNoAnim(void)
 
 
 /* Remove the stats widgets from the widget screen */
-void intRemoveStats(void)
+void intRemoveStats()
 {
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
@@ -3330,7 +3330,7 @@ void intRemoveStats(void)
 
 
 /* Remove the stats widgets from the widget screen */
-void intRemoveStatsNoAnim(void)
+void intRemoveStatsNoAnim()
 {
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
@@ -4251,7 +4251,7 @@ static void intObjStatRMBPressed(UDWORD id)
 
 
 //sets up the Intelligence Screen as far as the interface is concerned
-void addIntelScreen(void)
+void addIntelScreen()
 {
 	bool	radOnScreen;
 
@@ -4296,7 +4296,7 @@ void addTransporterInterface(DROID *psSelected, bool onMission)
 }
 
 /*sets which list of structures to use for the interface*/
-STRUCTURE *interfaceStructList(void)
+STRUCTURE *interfaceStructList()
 {
 	if (offWorldKeepLists)
 	{
@@ -4332,7 +4332,7 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 }
 
 //displays the Power Bar
-void intShowPowerBar(void)
+void intShowPowerBar()
 {
 	//if its not already on display
 	if (widgGetFromID(psWScreen, IDPOW_POWERBAR_T))
@@ -4342,7 +4342,7 @@ void intShowPowerBar(void)
 }
 
 //hides the power bar from the display - regardless of what player requested!
-void forceHidePowerBar(void)
+void forceHidePowerBar()
 {
 	if (widgGetFromID(psWScreen, IDPOW_POWERBAR_T))
 	{
@@ -4518,7 +4518,7 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 // Check that each reticule button has the structure or droid required for it and
 // enable/disable accordingly.
 //
-void intCheckReticuleButtons(void)
+void intCheckReticuleButtons()
 {
 	STRUCTURE	*psStruct;
 	DROID	*psDroid;
@@ -4734,7 +4734,7 @@ static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 
 // Find any structure. Returns NULL if none found.
 //
-STRUCTURE *intFindAStructure(void)
+STRUCTURE *intFindAStructure()
 {
 	STRUCTURE *Struct;
 
@@ -4837,7 +4837,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 }
 
 //access function for selected object in the interface
-BASE_OBJECT *getCurrentSelected(void)
+BASE_OBJECT *getCurrentSelected()
 {
 	return psObjSelected;
 }
@@ -4917,13 +4917,13 @@ void chatDialog(int mode)
 }
 
 // If chat dialog is up
-bool isChatUp(void)
+bool isChatUp()
 {
 	return ChatDialogUp;
 }
 
 // Helper call to see if we have builder/research/... window up or not.
-bool isSecondaryWindowUp(void)
+bool isSecondaryWindowUp()
 {
 	return SecondaryWindowUp;
 }

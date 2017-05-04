@@ -71,11 +71,11 @@ NetMessage const *NETgetMessage(NETQUEUE queue);///< Returns the current message
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
 void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game queue should not be sent over the network (for example, if it is being sent to us, instead).
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue to a netQueue, once a newly-connected client is assigned a player number.
-void NETdeleteQueue(void);					///< Delete queues for cleanup
+void NETdeleteQueue();					///< Delete queues for cleanup
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
-bool NETend(void);
-void NETflushGameQueues(void);
+bool NETend();
+void NETflushGameQueues();
 void NETpop(NETQUEUE queue);
 
 void NETint8_t(int8_t *ip);
@@ -94,7 +94,7 @@ void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of N
 void NETbin(uint8_t *str, uint32_t len);
 void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen = 10000);
 
-PACKETDIR NETgetPacketDir(void);
+PACKETDIR NETgetPacketDir();
 
 template <typename EnumT>
 static void NETenum(EnumT *enumPtr)

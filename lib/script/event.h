@@ -124,10 +124,10 @@ extern ACTIVE_TRIGGER	*psCallbackList;
 extern SCRIPT_CONTEXT	*psContList;
 
 /* Initialise the event system */
-extern bool eventInitialise(void);
+extern bool eventInitialise();
 
 // Shutdown the event system
-extern void eventShutDown(void);
+extern void eventShutDown();
 
 // add a TR_PAUSE trigger to the event system.
 extern bool eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,

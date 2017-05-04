@@ -256,13 +256,13 @@ extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsynchronised list,
 extern iIMDShape	*pNewDesignIMD;
 
 /* Initialise the in game interface */
-extern bool intInitialise(void);
+bool intInitialise();
 
 // Check of coordinate is in the build menu
-extern bool CoordInBuild(int x, int y);
+bool CoordInBuild(int x, int y);
 
 /* Shut down the in game interface */
-extern void interfaceShutDown(void);
+void interfaceShutDown();
 
 /* Return codes for the widget interface */
 enum INT_RETVAL
@@ -275,10 +275,10 @@ enum INT_RETVAL
 void hciUpdate();
 
 /* Run the widgets for the in game interface */
-extern INT_RETVAL intRunWidgets(void);
+INT_RETVAL intRunWidgets();
 
 /* Display the widgets for the in game interface */
-extern void intDisplayWidgets(void);
+void intDisplayWidgets();
 
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule();
@@ -287,65 +287,65 @@ void intRemoveReticule();
 void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown);
 
 /* Set the map view point to the world coordinates x,y */
-extern void intSetMapPos(UDWORD x, UDWORD y);
+void intSetMapPos(UDWORD x, UDWORD y);
 
 /* Set the map view point to the world coordinates x,y */
-extern void intSetMapPos(UDWORD x, UDWORD y);
+void intSetMapPos(UDWORD x, UDWORD y);
 
 /* Tell the interface when an object is created
  * - it may have to be added to a screen
  */
-extern void intNewObj(BASE_OBJECT *psObj);
+void intNewObj(BASE_OBJECT *psObj);
 
 /* Tell the interface a construction droid has finished building */
-extern void intBuildFinished(DROID *psDroid);
+void intBuildFinished(DROID *psDroid);
 /* Tell the interface a construction droid has started building*/
-extern void intBuildStarted(DROID *psDroid);
+void intBuildStarted(DROID *psDroid);
 /* Tell the interface a research facility has completed a topic */
-extern void intResearchFinished(STRUCTURE *psBuilding);
+void intResearchFinished(STRUCTURE *psBuilding);
 void intAlliedResearchChanged();
 /* Tell the interface a factory has completed building ALL droids */
-extern void intManufactureFinished(STRUCTURE *psBuilding);
-extern void intUpdateManufacture(STRUCTURE *psBuilding);
+void intManufactureFinished(STRUCTURE *psBuilding);
+void intUpdateManufacture(STRUCTURE *psBuilding);
 
 /* Sync the interface to an object */
-extern void intObjectSelected(BASE_OBJECT *psObj);
+void intObjectSelected(BASE_OBJECT *psObj);
 
 // add the construction interface if a constructor droid is selected
-extern void intConstructorSelected(DROID *psDroid);
-extern bool intBuildSelectMode(void);
-extern bool intDemolishSelectMode(void);
-extern bool intBuildMode(void);
+void intConstructorSelected(DROID *psDroid);
+bool intBuildSelectMode();
+bool intDemolishSelectMode();
+bool intBuildMode();
 
-// add the construction interface if a constructor droid is selected
+/* add the construction interface if a constructor droid is selected */
 void intCommanderSelected(DROID *psDroid);
 
 //sets up the Intelligence Screen as far as the interface is concerned
-extern void addIntelScreen(void);
+void addIntelScreen();
 
 /* Reset the widget screen to just the reticule */
-extern void intResetScreen(bool NoAnim);
+void intResetScreen(bool NoAnim);
 
 /* Refresh icons on the interface, without disturbing the layout. i.e. smartreset*/
-extern void intRefreshScreen(void);
+void intRefreshScreen();
 
 /* Remove the stats widgets from the widget screen */
-extern void intRemoveStats(void);
+void intRemoveStats();
 
 /* Remove the stats widgets from the widget screen */
-extern void intRemoveStatsNoAnim(void);
+void intRemoveStatsNoAnim();
 
 /*sets which list of structures to use for the interface*/
-extern STRUCTURE *interfaceStructList(void);
+STRUCTURE *interfaceStructList();
 
 //sets up the Transporter Screen as far as the interface is concerned
-extern void addTransporterInterface(DROID *psSelected, bool onMission);
+void addTransporterInterface(DROID *psSelected, bool onMission);
 
 /*causes a reticule button to start flashing*/
-extern void flashReticuleButton(UDWORD buttonID);
+void flashReticuleButton(UDWORD buttonID);
 
 // stop a reticule button flashing
-extern void stopReticuleButtonFlash(UDWORD buttonID);
+void stopReticuleButtonFlash(UDWORD buttonID);
 
 //toggles the Power Bar display on and off
 void togglePowerBar();
@@ -353,18 +353,18 @@ void intShowPowerBar();
 void intHidePowerBar();
 
 //hides the power bar from the display - regardless of what player requested!
-extern void forceHidePowerBar(void);
+void forceHidePowerBar();
 
 /* Add the Proximity message buttons */
-extern bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc);
+bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc);
 
 /*Remove a Proximity Button - when the message is deleted*/
-extern void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
+void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 
 /* Allows us to fool the widgets with a keypress */
 void	setKeyButtonMapping(UDWORD	val);
 
-STRUCTURE *intFindAStructure(void);
+STRUCTURE *intFindAStructure();
 DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup);
 
 /// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
@@ -375,23 +375,23 @@ int intGetResearchState();
 void intNotifyResearchButton(int prevState);
 
 // see if a reticule button is enabled
-extern bool intCheckReticuleButEnabled(UDWORD id);
+bool intCheckReticuleButEnabled(UDWORD id);
 
 //access function for selected object in the interface
-extern BASE_OBJECT *getCurrentSelected(void);
+BASE_OBJECT *getCurrentSelected();
 
 //initialise all the previous obj - particularly useful for when go Off world!
-extern void intResetPreviousObj(void);
+void intResetPreviousObj();
 
-extern bool intIsRefreshing(void);
+bool intIsRefreshing();
 
-extern void intDemolishCancel(void);
+void intDemolishCancel();
 
 StateButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
 
-extern void chatDialog(int mode);
-extern bool isChatUp(void);
-extern bool isSecondaryWindowUp(void);
+void chatDialog(int mode);
+bool isChatUp();
+bool isSecondaryWindowUp();
 
 void intOpenDebugMenu(OBJECT_TYPE id);
 

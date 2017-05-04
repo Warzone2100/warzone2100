@@ -108,8 +108,8 @@ static bool recvBeacon(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
 static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to);
 
-bool		multiplayPlayersReady(bool bNotifyStatus);
-void		startMultiplayerGame(void);
+bool multiplayPlayersReady(bool bNotifyStatus);
+void startMultiplayerGame();
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
@@ -211,7 +211,7 @@ bool multiplayerWinSequence(bool firstCall)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // MultiPlayer main game loop code.
-bool multiPlayerLoop(void)
+bool multiPlayerLoop()
 {
 	UDWORD		i;
 	UBYTE		joinCount;
@@ -664,7 +664,7 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, BASE_OBJECT *psObj, B
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Recv Messages. Get a message and dispatch to relevant function.
-bool recvMessage(void)
+bool recvMessage()
 {
 	NETQUEUE queue;
 	uint8_t type;
@@ -1725,7 +1725,7 @@ bool recvMapFileData(NETQUEUE queue)
 //------------------------------------------------------------------------------------------------//
 
 /* multiplayer message stack */
-void msgStackReset(void)
+void msgStackReset()
 {
 	msgStackPos = -1;		//Beginning of the stack
 }
@@ -1758,7 +1758,7 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 	return true;
 }
 
-bool isMsgStackEmpty(void)
+bool isMsgStackEmpty()
 {
 	if (msgStackPos <= (-1))
 	{
@@ -1835,7 +1835,7 @@ bool msgStackGetMsg(char  *psVal)
 	return true;
 }
 
-static bool msgStackSort(void)
+static bool msgStackSort()
 {
 	SDWORD i;
 
@@ -1867,7 +1867,7 @@ static bool msgStackSort(void)
 	return true;
 }
 
-bool msgStackPop(void)
+bool msgStackPop()
 {
 	debug(LOG_WZ, "msgStackPop: stack size %d", msgStackPos);
 
@@ -1893,12 +1893,12 @@ bool msgStackGetDroid(DROID **ppsDroid)
 	return true;
 }
 
-SDWORD msgStackGetCount(void)
+SDWORD msgStackGetCount()
 {
 	return msgStackPos + 1;
 }
 
-bool msgStackFireTop(void)
+bool msgStackFireTop()
 {
 	SDWORD		_callbackType;
 	char		msg[255];

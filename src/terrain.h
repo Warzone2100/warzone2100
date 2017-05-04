@@ -24,8 +24,8 @@
 #include "glm/core/type.hpp"
 #include "lib/ivis_opengl/pietypes.h"
 
-bool initTerrain(void);
-void shutdownTerrain(void);
+bool initTerrain();
+void shutdownTerrain();
 
 void drawTerrain(const glm::mat4 &ModelViewProjection);
 void drawWater(const glm::mat4 &viewMatrix);

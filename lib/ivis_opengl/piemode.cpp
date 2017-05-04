@@ -47,7 +47,7 @@
 
 iSurface rendSurface;
 
-bool pie_Initialise(void)
+bool pie_Initialise()
 {
 	pie_SetUp();
 	pie_TexInit();
@@ -80,7 +80,7 @@ bool pie_Initialise(void)
 }
 
 
-void pie_ShutDown(void)
+void pie_ShutDown()
 {
 	pie_CleanUp();
 }
@@ -114,7 +114,7 @@ void pie_ScreenFlip(int clearMode)
 }
 
 /***************************************************************************/
-UDWORD	pie_GetResScalingFactor(void)
+UDWORD	pie_GetResScalingFactor()
 {
 	if (pie_GetVideoBufferWidth() * 4 > pie_GetVideoBufferHeight() * 5)
 	{

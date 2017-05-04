@@ -68,17 +68,17 @@ enum FPATH_RETVAL
 
 /** Initialise the path-finding module.
  */
-extern bool fpathInitialise(void);
+bool fpathInitialise();
 
 /** Shutdown the path-finding module.
  */
-extern void fpathShutdown(void);
+void fpathShutdown();
 
-extern void fpathUpdate(void);
+void fpathUpdate();
 
 /** Find a route for a droid to a location.
  */
-extern FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
+FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
 
 /// Returns true iff the parameters have equivalent behaviour in fpathBaseBlockingTile.
 bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
@@ -112,10 +112,10 @@ static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion)
  *
  *  Used for instance by VTOLs. Function is thread-safe.
  */
-extern void fpathSetDirectRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY);
+void fpathSetDirectRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY);
 
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
-extern void fpathRemoveDroidData(int id);
+void fpathRemoveDroidData(int id);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */

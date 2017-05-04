@@ -203,7 +203,7 @@ MESSAGE			*psCurrentMsg = nullptr;
 
 
 /* Add the Intelligence Map widgets to the widget screen */
-bool intAddIntelMap(void)
+bool intAddIntelMap()
 {
 	bool			Animate = true;
 
@@ -808,7 +808,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 }
 
 
-static void intCleanUpIntelMap(void)
+static void intCleanUpIntelMap()
 {
 	MESSAGE		*psMessage, *psNext;
 
@@ -845,7 +845,7 @@ static void intCleanUpIntelMap(void)
 
 
 /* Remove the Intelligence Map widgets from the screen */
-void intRemoveIntelMap(void)
+void intRemoveIntelMap()
 {
 	//remove 3dView if still there
 	WIDGET *Widg = widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
@@ -872,7 +872,7 @@ void intRemoveIntelMap(void)
 }
 
 /* Remove the Intelligence Map widgets from the screen */
-void intRemoveIntelMapNoAnim(void)
+void intRemoveIntelMapNoAnim()
 {
 	WIDGET *Widg;
 
@@ -1162,7 +1162,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 }
 
 /*sets psCurrentMsg for the Intelligence screen*/
-void setCurrentMsg(void)
+void setCurrentMsg()
 {
 	MESSAGE *psMsg, *psLastMsg;
 
@@ -1179,7 +1179,7 @@ void setCurrentMsg(void)
 }
 
 /*sets which states need to be paused when the intelligence screen is up*/
-void setIntelligencePauseState(void)
+void setIntelligencePauseState()
 {
 	if (!bMultiPlayer)
 	{
@@ -1199,7 +1199,7 @@ void setIntelligencePauseState(void)
 }
 
 /*resets the pause states */
-void resetIntelligencePauseState(void)
+void resetIntelligencePauseState()
 {
 	if (!bMultiPlayer)
 	{
@@ -1237,7 +1237,7 @@ void displayImmediateMessage(MESSAGE *psMessage)
 
 
 // return whether a message is immediate
-bool messageIsImmediate(void)
+bool messageIsImmediate()
 {
 	return immediateMessage;
 }

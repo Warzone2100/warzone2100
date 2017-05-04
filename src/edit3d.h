@@ -30,17 +30,17 @@
 
 typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos, void *UserData);
 
-extern void Edit3DInitVars(void);
-extern	bool	found3DBuilding(UDWORD *x, UDWORD *y);
-extern  bool    found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
-extern void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData);
-extern	void	kill3DBuilding(void);
-extern bool process3DBuilding(void);
+void Edit3DInitVars();
+bool found3DBuilding(UDWORD *x, UDWORD *y);
+bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
+void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData);
+void kill3DBuilding();
+bool process3DBuilding();
 
-extern void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
-extern void	raiseTile(int tile3dX, int tile3dY);
-extern void	lowerTile(int tile3dX, int tile3dY);
-bool	inHighlight(UDWORD realX, UDWORD realY);
+void adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
+void raiseTile(int tile3dX, int tile3dY);
+void lowerTile(int tile3dX, int tile3dY);
+bool inHighlight(UDWORD realX, UDWORD realY);
 
 struct HIGHLIGHT
 {
@@ -74,6 +74,6 @@ extern int brushSize;
 extern bool quickQueueMode;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
-extern bool   tryingToGetLocation(void);
+bool   tryingToGetLocation();
 
 #endif // __INCLUDED_SRC_EDIT3D_H__

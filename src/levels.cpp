@@ -55,11 +55,11 @@
 #include "qtscript.h"
 #include "wrappers.h"
 
-extern int lev_get_lineno(void);
-extern char *lev_get_text(void);
-extern int lev_lex(void);
+extern int lev_get_lineno();
+extern char *lev_get_text();
+extern int lev_lex();
 extern void lev_set_extra(YY_EXTRA_TYPE user_defined);
-extern int lev_lex_destroy(void);
+extern int lev_lex_destroy();
 
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
@@ -97,7 +97,7 @@ enum LEVELPARSER_STATE
 
 
 // initialise the level system
-bool levInitialise(void)
+bool levInitialise()
 {
 	psLevels.clear();
 	psBaseData = nullptr;
@@ -106,13 +106,13 @@ bool levInitialise(void)
 	return true;
 }
 
-SDWORD getLevelLoadType(void)
+SDWORD getLevelLoadType()
 {
 	return levelLoadType;
 }
 
 // shutdown the level system
-void levShutDown(void)
+void levShutDown()
 {
 	for (auto toDelete : psLevels)
 	{
@@ -482,7 +482,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 
 
 // free the data for the current mission
-bool levReleaseMissionData(void)
+bool levReleaseMissionData()
 {
 	// release old data if any was loaded
 	if (psCurrLevel != nullptr)
@@ -516,7 +516,7 @@ bool levReleaseMissionData(void)
 
 
 // free the currently loaded dataset
-bool levReleaseAll(void)
+bool levReleaseAll()
 {
 	// clear out old effect data first
 	initEffectsSystem();
@@ -606,7 +606,7 @@ static bool levLoadSingleWRF(const char *name)
 }
 
 
-char *getLevelName(void)
+char *getLevelName()
 {
 	return (currentLevelName);
 }

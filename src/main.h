@@ -31,9 +31,10 @@ enum GS_GAMEMODE
 //flag to indicate when initialisation is complete
 extern bool gameInitialised;
 extern bool customDebugfile;
-extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
-extern void SetGameMode(GS_GAMEMODE status);
-extern void mainLoop(void);
+
+GS_GAMEMODE GetGameMode() WZ_DECL_PURE;
+void SetGameMode(GS_GAMEMODE status);
+void mainLoop();
 
 extern char SaveGamePath[PATH_MAX];
 extern char datadir[PATH_MAX];

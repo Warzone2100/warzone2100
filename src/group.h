@@ -61,10 +61,10 @@ public: // TODO: c++ design to members become private.
 };
 
 // initialise the group system
-bool grpInitialise(void);
+bool grpInitialise();
 
 // shutdown the group system
-void grpShutDown(void);
+void grpShutDown();
 
 /// create a new group, use -1 to generate a new ID. never use id != -1 unless loading from a savegame.
 DROID_GROUP *grpCreate(int id = -1);

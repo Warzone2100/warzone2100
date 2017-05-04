@@ -178,33 +178,33 @@ static void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 static Image getFrontHighlightImage(Image image);
 
 // find games
-static void addGames(void);
-static void removeGames(void);
+static void addGames();
+static void removeGames();
 
 // password form functions
-static void hidePasswordForm(void);
-static void showPasswordForm(void);
+static void hidePasswordForm();
+static void showPasswordForm();
 
 // Game option functions
 static	void	addGameOptions();
 static void addChatBox(bool preserveOldChat = false);
-static void		addConsoleBox(void);
-static	void	disableMultiButs(void);
+static void		addConsoleBox();
+static	void	disableMultiButs();
 static	void	processMultiopWidgets(UDWORD);
-static	void	SendFireUp(void);
+static	void	SendFireUp();
 
-static	void	decideWRF(void);
+static	void	decideWRF();
 
-static void		closeColourChooser(void);
-static void		closeTeamChooser(void);
-static void		closePositionChooser(void);
-static void		closeAiChooser(void);
-static void		closeDifficultyChooser(void);
+static void		closeColourChooser();
+static void		closeTeamChooser();
+static void		closePositionChooser();
+static void		closeAiChooser();
+static void		closeDifficultyChooser();
 static bool		SendColourRequest(UBYTE player, UBYTE col);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 static bool		safeToUseColour(UDWORD player, UDWORD col);
 static bool		changeReadyStatus(UBYTE player, bool bReady);
-static	void stopJoining(void);
+static	void stopJoining();
 static int difficultyIcon(int difficulty);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -695,7 +695,7 @@ void readAIs()
 }
 
 //sets sWRFILE form game.map
-static void decideWRF(void)
+static void decideWRF()
 {
 	// try and load it from the maps directory first,
 	sstrcpy(aLevelName, MultiCustomMapsPath);
@@ -714,7 +714,7 @@ static void decideWRF(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Connection Options Screen.
 
-static bool OptionsInet(void)			//internet options
+static bool OptionsInet()			//internet options
 {
 	psConScreen = new W_SCREEN;
 
@@ -774,7 +774,7 @@ static bool OptionsInet(void)			//internet options
 
 // ////////////////////////////////////////////////////////////////////////////
 // Draw the connections screen.
-bool startConnectionScreen(void)
+bool startConnectionScreen()
 {
 	addBackdrop();										//background
 	addTopForm();										// logo
@@ -798,7 +798,7 @@ bool startConnectionScreen(void)
 	return true;
 }
 
-void runConnectionScreen(void)
+void runConnectionScreen()
 {
 	static char addr[128];
 
@@ -863,7 +863,7 @@ void runConnectionScreen(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Lobby error reading
-LOBBY_ERROR_TYPES getLobbyError(void)
+LOBBY_ERROR_TYPES getLobbyError()
 {
 	return LobbyError;
 }
@@ -952,7 +952,7 @@ bool joinGame(const char *host, uint32_t port)
 // ////////////////////////////////////////////////////////////////////////////
 // Game Chooser Screen.
 
-static void addGames(void)
+static void addGames()
 {
 	int i, gcount = 0, added = 0;
 	static const char *wrongVersionTip = _("Your version of Warzone is incompatible with this game.");
@@ -1140,7 +1140,7 @@ static void addGames(void)
 	displayConsoleMessages();
 }
 
-static void removeGames(void)
+static void removeGames()
 {
 	int i;
 	for (i = 0; i < MaxGames; i++)
@@ -1150,7 +1150,7 @@ static void removeGames(void)
 	widgDelete(psWScreen, FRONTEND_NOGAMESAVAILABLE);
 }
 
-void runGameFind(void)
+void runGameFind()
 {
 	static UDWORD lastupdate = 0;
 	static char game_password[StringSize];
@@ -1259,7 +1259,7 @@ void runGameFind(void)
 }
 
 // This is what starts the lobby screen
-void startGameFind(void)
+void startGameFind()
 {
 	addBackdrop();										//background image
 
@@ -1334,7 +1334,7 @@ void startGameFind(void)
 	EnablePasswordPrompt = false;
 }
 
-static void hidePasswordForm(void)
+static void hidePasswordForm()
 {
 	EnablePasswordPrompt = false;
 
@@ -1361,7 +1361,7 @@ static void hidePasswordForm(void)
 	addGames();
 }
 
-static void showPasswordForm(void)
+static void showPasswordForm()
 {
 	W_CONTEXT sContext;
 	EnablePasswordPrompt = true;
@@ -1937,7 +1937,7 @@ static void addColourChooser(UDWORD player)
 	colourChooserUp = player;
 }
 
-static void closeColourChooser(void)
+static void closeColourChooser()
 {
 	colourChooserUp = -1;
 	widgDelete(psWScreen, MULTIOP_COLCHOOSER_FORM);
@@ -2324,7 +2324,7 @@ static void addTeamChooser(UDWORD player)
 /*
  * Closes Team Chooser dialog box, if there was any open
  */
-static void closeTeamChooser(void)
+static void closeTeamChooser()
 {
 	teamChooserUp = -1;
 	widgDelete(psWScreen, MULTIOP_TEAMCHOOSER_FORM);	//only once!
@@ -2567,7 +2567,7 @@ void addPlayerBox(bool players)
 /*
  * Notify all players of host launching the game
  */
-static void SendFireUp(void)
+static void SendFireUp()
 {
 	uint32_t randomSeed = rand();  // Pick a random random seed for the synchronised random number generator.
 
@@ -2649,7 +2649,7 @@ static void addChatBox(bool preserveOldChat)
 	return;
 }
 
-static void addConsoleBox(void)
+static void addConsoleBox()
 {
 	if (widgGetFromID(psWScreen, FRONTEND_TOPFORM))
 	{
@@ -2681,7 +2681,7 @@ static void addConsoleBox(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void disableMultiButs(void)
+static void disableMultiButs()
 {
 
 	// edit box icons.
@@ -2701,7 +2701,7 @@ static void disableMultiButs(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-static void stopJoining(void)
+static void stopJoining()
 {
 	dwSelectedGame	 = 0;
 	reloadMPConfig(); // reload own settings
@@ -3296,7 +3296,7 @@ static void processMultiopWidgets(UDWORD id)
 }
 
 /* Start a multiplayer or skirmish game */
-void startMultiplayerGame(void)
+void startMultiplayerGame()
 {
 	if (!bHosted)
 	{
@@ -3351,7 +3351,7 @@ void startMultiplayerGame(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Net message handling
 
-void frontendMultiMessages(void)
+void frontendMultiMessages()
 {
 	NETQUEUE queue;
 	uint8_t type;
@@ -3584,7 +3584,7 @@ void frontendMultiMessages(void)
 	}
 }
 
-void runMultiOptions(void)
+void runMultiOptions()
 {
 	static UDWORD	lastrefresh = 0;
 	char                    oldGameMap[128];

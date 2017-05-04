@@ -497,7 +497,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	}
 }
 
-static void closeMultiRequester(void)
+static void closeMultiRequester()
 {
 	multiRequestUp = false;
 	resetReadyStatus(false);
@@ -996,7 +996,7 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 	}
 }
 
-bool intAddMultiMenu(void)
+bool intAddMultiMenu()
 {
 	UDWORD			i;
 
@@ -1055,7 +1055,7 @@ bool intAddMultiMenu(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void intCloseMultiMenuNoAnim(void)
+void intCloseMultiMenuNoAnim()
 {
 	widgDelete(psWScreen, MULTIMENU_FORM);
 	if (!MultiMenuUp)
@@ -1071,7 +1071,7 @@ void intCloseMultiMenuNoAnim(void)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-bool intCloseMultiMenu(void)
+bool intCloseMultiMenu()
 {
 	if (!MultiMenuUp)
 	{
@@ -1095,7 +1095,7 @@ bool intCloseMultiMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // In Game Options house keeping stuff.
-bool intRunMultiMenu(void)
+bool intRunMultiMenu()
 {
 	return true;
 }

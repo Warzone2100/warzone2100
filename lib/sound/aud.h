@@ -32,7 +32,7 @@ void     audio_GetObjectPos(SIMPLE_OBJECT *psObj, SDWORD *piX, SDWORD *piY, SDWO
 void	audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY,
                            SDWORD *piX, SDWORD *piY, SDWORD *piZ);
 bool     audio_ObjectDead(SIMPLE_OBJECT *psObj);
-Vector3f audio_GetPlayerPos(void);
+Vector3f audio_GetPlayerPos();
 void audio_Get3DPlayerRotAboutVerticalAxis(float *angle);
 
 #endif // __INCLUDED_LIB_SOUND_AUD_H__

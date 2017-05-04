@@ -254,7 +254,7 @@ bool saveConfig()
 
 // Saves and loads the relevant part of the config files for MP games
 // Ensures that others' games don't change our own configuration settings
-bool reloadMPConfig(void)
+bool reloadMPConfig()
 {
 	QSettings ini(PHYSFS_getWriteDir() + QString("/") + fileName, QSettings::IniFormat);
 	if (ini.status() != QSettings::NoError)

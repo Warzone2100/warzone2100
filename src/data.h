@@ -60,13 +60,13 @@ enum
 	DATA_MAXDATA		// must be last
 };
 
-void resetDataHash(void);
+void resetDataHash();
 extern uint32_t DataHash[DATA_MAXDATA];
 
 /* Pass all the data loading functions to the framework library */
-bool dataInitLoadFuncs(void);
+bool dataInitLoadFuncs();
 
-void dataSetSaveFlag(void);
-void dataClearSaveFlag(void);
+void dataSetSaveFlag();
+void dataClearSaveFlag();
 
 #endif // __INCLUDED_SRC_DATA_H__

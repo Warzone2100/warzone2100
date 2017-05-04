@@ -112,13 +112,13 @@ static bool bRightClickOrders = false;
 static bool bMiddleClickRotate = false;
 static bool bDrawShadows = true;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
-static void	dealWithLMB(void);
-static void	dealWithLMBDClick(void);
-static void	dealWithRMB(void);
+static void	dealWithLMB();
+static void	dealWithLMBDClick();
+static void	dealWithRMB();
 static bool	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
-static OBJECT_POSITION *checkMouseLoc(void);
+static OBJECT_POSITION *checkMouseLoc();
 
-void finishDeliveryPosition(void);
+void finishDeliveryPosition();
 
 static bool	bInstantRadarJump = false;
 static SDWORD	desiredPitch = 340;
@@ -203,12 +203,12 @@ void	setRadarJump(bool	val)
 	bInstantRadarJump = val;
 }
 
-bool	getRadarJumpStatus(void)
+bool	getRadarJumpStatus()
 {
 	return (bInstantRadarJump);
 }
 
-bool	getInvertMouseStatus(void)
+bool	getInvertMouseStatus()
 {
 	return (bInvertMouse);
 }
@@ -223,7 +223,7 @@ void	setInvertMouseStatus(bool val)
 #define MOUSE_SELECT (bRightClickOrders?MOUSE_LMB:MOUSE_RMB)
 #define MOUSE_ROTATE (bMiddleClickRotate?MOUSE_MMB:MOUSE_RMB)
 
-bool	getRightClickOrders(void)
+bool	getRightClickOrders()
 {
 	return bRightClickOrders;
 }
@@ -233,7 +233,7 @@ void	setRightClickOrders(bool val)
 	bRightClickOrders = val;
 }
 
-bool	getMiddleClickRotate(void)
+bool	getMiddleClickRotate()
 {
 	return bMiddleClickRotate;
 }
@@ -243,7 +243,7 @@ void	setMiddleClickRotate(bool val)
 	bMiddleClickRotate = val;
 }
 
-bool	getDrawShadows(void)
+bool	getDrawShadows()
 {
 	return (bDrawShadows);
 }
@@ -342,7 +342,7 @@ void ProcessRadarInput()
 }
 
 // reset the input state
-void resetInput(void)
+void resetInput()
 {
 	rotActive = false;
 	dragBox3D.status = DRAG_INACTIVE;
@@ -350,7 +350,7 @@ void resetInput(void)
 }
 
 /* Process the user input. This just processes the key input and jumping around the radar*/
-void processInput(void)
+void processInput()
 {
 	bool mOverConstruction = false;
 
@@ -422,12 +422,12 @@ void processInput(void)
 	}
 }
 
-static bool OverRadarAndNotDragging(void)
+static bool OverRadarAndNotDragging()
 {
 	return mouseOverRadar && dragBox3D.status != DRAG_DRAGGING && radarPermitted && wallDrag.status != DRAG_DRAGGING;
 }
 
-static void CheckFinishedDrag(void)
+static void CheckFinishedDrag()
 {
 	if (mouseReleased(MOUSE_LMB) || mouseDown(MOUSE_RMB))
 	{
@@ -471,7 +471,7 @@ static void CheckFinishedDrag(void)
 	}
 }
 
-static void CheckStartWallDrag(void)
+static void CheckStartWallDrag()
 {
 	if (mousePressed(MOUSE_LMB))
 	{
@@ -503,7 +503,7 @@ static void CheckStartWallDrag(void)
 }
 
 //this function is called when a location has been chosen to place a structure or a DP
-static bool CheckFinishedFindPosition(void)
+static bool CheckFinishedFindPosition()
 {
 	bool OverRadar = OverRadarAndNotDragging();
 
@@ -554,7 +554,7 @@ static bool CheckFinishedFindPosition(void)
 	return false;
 }
 
-static void HandleDrag(void)
+static void HandleDrag()
 {
 	UDWORD dragX = 0, dragY = 0;
 
@@ -597,7 +597,7 @@ static void HandleDrag(void)
 	}
 }
 
-UDWORD getTargetType(void)
+UDWORD getTargetType()
 {
 	return CurrentItemUnderMouse;
 }
@@ -1090,7 +1090,7 @@ CURSOR scroll()
 /*
  * Reset scrolling, so we don't jump around after unpausing.
  */
-void resetScroll(void)
+void resetScroll()
 {
 	scrollRefTime = wzGetTicks();
 	scrollSpeedUpDown = 0.0f;
@@ -1139,7 +1139,7 @@ bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos)
 // Check the view is within the scroll limits,
 // Returns true if edge hit.
 //
-bool CheckScrollLimits(void)
+bool CheckScrollLimits()
 {
 	SDWORD xp = player.p.x;
 	SDWORD zp = player.p.z;
@@ -1152,7 +1152,7 @@ bool CheckScrollLimits(void)
 }
 
 /* Do the 3D display */
-void displayWorld(void)
+void displayWorld()
 {
 	Vector3i pos;
 
@@ -1357,7 +1357,7 @@ void finishDeliveryPosition()
 }
 
 // Is there a valid delivery point repositioning going on.
-bool deliveryReposValid(void)
+bool deliveryReposValid()
 {
 	if (!flagReposVarsValid)
 	{
@@ -1405,7 +1405,7 @@ bool deliveryReposFinished(FLAG_POSITION *psFlag)
 	return flagReposFinished;
 }
 
-void processDeliveryRepos(void)
+void processDeliveryRepos()
 {
 	if (!flagReposVarsValid)
 	{
@@ -1420,7 +1420,7 @@ void processDeliveryRepos(void)
 
 // Cancel repositioning of the delivery point without moving it.
 //
-void cancelDeliveryRepos(void)
+void cancelDeliveryRepos()
 {
 	flagReposVarsValid = false;
 }
@@ -1497,7 +1497,7 @@ void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 	}
 }
 
-static void FeedbackOrderGiven(void)
+static void FeedbackOrderGiven()
 {
 	static UDWORD LastFrame = 0;
 	UDWORD ThisFrame = frameGetFrameNumber();
@@ -1511,12 +1511,12 @@ static void FeedbackOrderGiven(void)
 }
 
 // check whether the queue order keys are pressed
-bool ctrlShiftDown(void)
+bool ctrlShiftDown()
 {
 	return keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT);
 }
 
-void AddDerrickBurningMessage(void)
+void AddDerrickBurningMessage()
 {
 	addConsoleMessage(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	audio_PlayTrack(ID_SOUND_BUILD_FAIL);
@@ -1910,7 +1910,7 @@ static void dealWithLMBObject(BASE_OBJECT *psClickedOn)
 	}
 }
 
-void	dealWithLMB(void)
+void	dealWithLMB()
 {
 	BASE_OBJECT         *psClickedOn;
 	OBJECT_POSITION     *psLocation;
@@ -1988,12 +1988,12 @@ void	dealWithLMB(void)
 	}
 }
 
-bool	getRotActive(void)
+bool	getRotActive()
 {
 	return (rotActive);
 }
 
-SDWORD	getDesiredPitch(void)
+SDWORD	getDesiredPitch()
 {
 	return (desiredPitch);
 }
@@ -2004,7 +2004,7 @@ void	setDesiredPitch(SDWORD pitch)
 }
 
 // process LMB double clicks
-static void dealWithLMBDClick(void)
+static void dealWithLMBDClick()
 {
 	BASE_OBJECT		*psClickedOn;
 	DROID			*psDroid;
@@ -2060,7 +2060,7 @@ static void dealWithLMBDClick(void)
 
 /*This checks to see if the mouse was over a delivery point or a proximity message
 when the mouse button was pressed */
-static OBJECT_POSITION 	*checkMouseLoc(void)
+static OBJECT_POSITION 	*checkMouseLoc()
 {
 	FLAG_POSITION		*psPoint;
 	UDWORD				i;
@@ -2088,7 +2088,7 @@ static OBJECT_POSITION 	*checkMouseLoc(void)
 	return nullptr;
 }
 
-static void dealWithRMB(void)
+static void dealWithRMB()
 {
 	BASE_OBJECT			*psClickedOn;
 	DROID				*psDroid;
@@ -2705,13 +2705,13 @@ void clearSelection()
 }
 
 //access function for bSensorAssigned variable
-void setSensorAssigned(void)
+void setSensorAssigned()
 {
 	bSensorAssigned = true;
 }
 
 /* Initialise the display system */
-bool dispInitialise(void)
+bool dispInitialise()
 {
 	flagReposVarsValid = false;
 	return true;

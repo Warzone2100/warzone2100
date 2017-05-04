@@ -35,14 +35,14 @@ void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set r
 #define DEFAULT_RADARZOOM	(16)        // 1.00x
 #define RADARZOOM_STEP		(16 * 1/4)  // 0.25x
 
-extern bool InitRadar(void);				///< Initialize minimap subsystem.
-extern bool ShutdownRadar(void);			///< Shutdown minimap subsystem.
-extern bool resizeRadar(void);				///< Recalculate minimap size. For initialization code only.
-extern void drawRadar(void);				///< Draw the minimap on the screen.
-extern void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY);	///< Given a position within the radar, returns a world coordinate.
-extern void SetRadarZoom(uint8_t ZoomLevel);		///< Set current zoom level. 1.0 is 1:1 resolution.
-extern uint8_t GetRadarZoom(void);			///< Get current zoom level.
-extern bool CoordInRadar(int x, int y);			///< Is screen coordinate inside minimap?
+bool InitRadar();				///< Initialize minimap subsystem.
+bool ShutdownRadar();			///< Shutdown minimap subsystem.
+bool resizeRadar();				///< Recalculate minimap size. For initialization code only.
+void drawRadar();				///< Draw the minimap on the screen.
+void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY);	///< Given a position within the radar, returns a world coordinate.
+void SetRadarZoom(uint8_t ZoomLevel);		///< Set current zoom level. 1.0 is 1:1 resolution.
+uint8_t GetRadarZoom();			///< Get current zoom level.
+bool CoordInRadar(int x, int y);			///< Is screen coordinate inside minimap?
 
 /** Different mini-map draw modes. */
 enum RADAR_DRAW_MODE
@@ -55,11 +55,12 @@ enum RADAR_DRAW_MODE
 	NUM_RADAR_MODES
 };
 
-extern bool		bEnemyAllyRadarColor;		///< Enemy/ally minimap color
+extern bool bEnemyAllyRadarColor;		///< Enemy/ally minimap color
 extern RADAR_DRAW_MODE	radarDrawMode;			///< Current minimap mode
 extern bool rotateRadar;
 
-extern void radarInitVars(void);			///< Recalculate minimap variables. For initialization code only.
+void radarInitVars();			///< Recalculate minimap variables. For initialization code only.
+
 extern PIELIGHT clanColours[];
 
 /** @} */

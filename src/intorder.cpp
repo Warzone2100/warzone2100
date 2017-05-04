@@ -344,7 +344,7 @@ bool OrderUp = false;
 // Build a list of currently selected droids.
 // Returns true if droids were selected.
 //
-static bool BuildSelectedDroidList(void)
+static bool BuildSelectedDroidList()
 {
 	DROID *psDroid;
 
@@ -361,7 +361,7 @@ static bool BuildSelectedDroidList(void)
 
 // Build a list of orders available for the selected group of droids.
 //
-static std::vector<AVORDER> buildDroidOrderList(void)
+static std::vector<AVORDER> buildDroidOrderList()
 {
 	std::set<AVORDER> orders;
 
@@ -782,7 +782,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 // Any droids that die now get set to NULL - John.
 // No droids being selected no longer removes the screen,
 // this lets the screen work with command droids - John.
-void intRunOrder(void)
+void intRunOrder()
 {
 	// Check to see if there all dead or unselected.
 	for (unsigned i = 0; i < SelectedDroids.size(); i++)
@@ -989,7 +989,7 @@ void intProcessOrder(UDWORD id)
 
 
 // check whether the order list has changed
-static bool CheckObjectOrderList(void)
+static bool CheckObjectOrderList()
 {
 	std::vector<AVORDER> NewAvailableOrders;
 
@@ -1006,7 +1006,7 @@ static bool CheckObjectOrderList(void)
 	return NewAvailableOrders == AvailableOrders;
 }
 
-static bool intRefreshOrderButtons(void)
+static bool intRefreshOrderButtons()
 {
 	SECONDARY_STATE State;
 	UWORD OrdIndex;
@@ -1060,7 +1060,7 @@ static bool intRefreshOrderButtons(void)
 
 // Call to refresh the Order screen, ie when a droids boards it.
 //
-bool intRefreshOrder(void)
+bool intRefreshOrder()
 {
 	// Is the Order screen up?
 	if ((intMode == INT_ORDER) &&
@@ -1104,7 +1104,7 @@ bool intRefreshOrder(void)
 
 // Remove the droids order screen with animation.
 //
-void intRemoveOrder(void)
+void intRemoveOrder()
 {
 	widgDelete(psWScreen, IDORDER_CLOSE);
 
@@ -1122,7 +1122,7 @@ void intRemoveOrder(void)
 
 // Remove the droids order screen without animation.
 //
-void intRemoveOrderNoAnim(void)
+void intRemoveOrderNoAnim()
 {
 	widgDelete(psWScreen, IDORDER_CLOSE);
 	widgDelete(psWScreen, IDORDER_FORM);

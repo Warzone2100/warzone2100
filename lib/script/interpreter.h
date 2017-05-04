@@ -26,7 +26,7 @@
 #define _interp_h
 
 /* The type of function called by an OP_CALL */
-typedef bool (*SCRIPT_FUNC)(void);
+typedef bool (*SCRIPT_FUNC)();
 
 /* The type of function called to access an object or in-game variable */
 typedef bool (*SCRIPT_VARFUNC)(UDWORD index);
@@ -337,10 +337,10 @@ extern SDWORD aOpSize[];
 extern bool interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from);
 
 // Initialise the interpreter
-extern bool interpInitialise(void);
+extern bool interpInitialise();
 
 // true if the interpreter is currently running
-extern bool interpProcessorActive(void);
+extern bool interpProcessorActive();
 
 /* Output script call stack trace */
 extern void scrOutputCallTrace(code_part part);

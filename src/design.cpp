@@ -294,14 +294,14 @@ static void intSetButtonFlash(UDWORD id, bool bFlash);
 the Template buttons*/
 static void runTemplateShadowStats(UDWORD id);
 
-static bool intCheckValidWeaponForProp(void);
+static bool intCheckValidWeaponForProp();
 
 static bool checkTemplateIsVtol(DROID_TEMPLATE *psTemplate);
 
 /* save the current Template if valid. Return true if stored */
 static bool saveTemplate();
 
-static void desCreateDefaultTemplate(void);
+static void desCreateDefaultTemplate();
 
 /**
  * Updates the status of the stored template toggle button.
@@ -745,7 +745,7 @@ bool intAddDesign(bool bShowCentreScreen)
 }
 
 /* set up droid templates before going into design screen */
-void desSetupDesignTemplates(void)
+void desSetupDesignTemplates()
 {
 	/* init template list */
 	apsTemplateList.clear();
@@ -2921,7 +2921,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	return true;
 }
 
-static void desCreateDefaultTemplate(void)
+static void desCreateDefaultTemplate()
 {
 	/* set current design to default */
 	sCurrDesign = sDefaultDesignTemplate;
@@ -2935,7 +2935,7 @@ static void desCreateDefaultTemplate(void)
 }
 
 /* Remove the design widgets from the widget screen */
-void intRemoveDesign(void)
+void intRemoveDesign()
 {
 	//save the current design on exit if it is valid
 	saveTemplate();
@@ -3806,7 +3806,7 @@ void intProcessDesign(UDWORD id)
 
 
 /* Set the shadow bar graphs for the design screen */
-void intRunDesign(void)
+void intRunDesign()
 {
 	UDWORD				statID;
 	COMPONENT_STATS		*psStats;
@@ -4097,7 +4097,7 @@ void runTemplateShadowStats(UDWORD id)
 }
 
 /*sets which states need to be paused when the design screen is up*/
-static void setDesignPauseState(void)
+static void setDesignPauseState()
 {
 	if (!bMultiPlayer)
 	{
@@ -4111,7 +4111,7 @@ static void setDesignPauseState(void)
 }
 
 /*resets the pause states */
-static void resetDesignPauseState(void)
+static void resetDesignPauseState()
 {
 	if (!bMultiPlayer)
 	{
@@ -4128,7 +4128,7 @@ static void resetDesignPauseState(void)
 /*this is called when a new propulsion type is added to the current design
 to check the weapon is 'allowed'. Check if VTOL, the weapon is direct fire.
 Also check numVTOLattackRuns for the weapon is not zero - return true if valid weapon*/
-static bool intCheckValidWeaponForProp(void)
+static bool intCheckValidWeaponForProp()
 {
 	if (asPropulsionTypes[((PROPULSION_STATS *)(asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION]))->propulsionType].travel != AIR)
 	{

@@ -27,21 +27,21 @@
 #include "statsdef.h"
 
 /* Shutdown the mechanics system */
-bool mechanicsShutdown(void);
+bool mechanicsShutdown();
 
 // Allocate the list for a component
 bool allocComponentList(COMPONENT_TYPE	type, SDWORD number);
 
 // release all the component lists
-void freeComponentLists(void);
+void freeComponentLists();
 
 //allocate the space for the Players' structure lists
-bool allocStructLists(void);
+bool allocStructLists();
 
 // release the structure lists
-void freeStructureLists(void);
+void freeStructureLists();
 
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
-void makeAllAvailable(void);
+void makeAllAvailable();
 
 #endif // __INCLUDED_SRC_MECHANICS_H__

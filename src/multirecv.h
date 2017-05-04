@@ -27,32 +27,31 @@
 #ifndef __INCLUDED_SRC_MULTIRECV_H__
 #define __INCLUDED_SRC_MULTIRECV_H__
 
-extern bool recvDroid(NETQUEUE queue);
-extern bool recvDroidInfo(NETQUEUE queue);
-extern bool recvDestroyDroid(NETQUEUE queue);
-extern bool recvDroidMove(NETQUEUE queue);
-extern bool recvDestroyStructure(NETQUEUE queue);
-extern bool recvBuildFinished(NETQUEUE queue);
-extern bool recvTemplate(NETQUEUE queue);
-extern bool recvDestroyFeature(NETQUEUE queue);
-extern bool recvPing(NETQUEUE queue);
-extern bool recvRequestDroid(NETQUEUE queue);
-extern bool recvTextMessage(NETQUEUE queue);
-extern bool recvDroidDisEmbark(NETQUEUE queue);
-extern bool recvColourRequest(NETQUEUE queue);
-extern bool recvPositionRequest(NETQUEUE queue);
-extern void recvOptions(NETQUEUE queue);
-extern void sendOptions(void);
+bool recvDroid(NETQUEUE queue);
+bool recvDroidInfo(NETQUEUE queue);
+bool recvDestroyDroid(NETQUEUE queue);
+bool recvDroidMove(NETQUEUE queue);
+bool recvDestroyStructure(NETQUEUE queue);
+bool recvBuildFinished(NETQUEUE queue);
+bool recvTemplate(NETQUEUE queue);
+bool recvDestroyFeature(NETQUEUE queue);
+bool recvPing(NETQUEUE queue);
+bool recvRequestDroid(NETQUEUE queue);
+bool recvTextMessage(NETQUEUE queue);
+bool recvDroidDisEmbark(NETQUEUE queue);
+bool recvColourRequest(NETQUEUE queue);
+bool recvPositionRequest(NETQUEUE queue);
+void recvOptions(NETQUEUE queue);
+void sendOptions();
 
-extern bool recvResearchStatus(NETQUEUE queue);
-extern bool recvLasSat(NETQUEUE queue);
-extern void recvStructureInfo(NETQUEUE queue);
-extern bool recvMapFileData(NETQUEUE queue);
-extern bool recvMapFileRequested(NETQUEUE queue);
+bool recvResearchStatus(NETQUEUE queue);
+bool recvLasSat(NETQUEUE queue);
+void recvStructureInfo(NETQUEUE queue);
+bool recvMapFileData(NETQUEUE queue);
+bool recvMapFileRequested(NETQUEUE queue);
 
-
-extern bool recvTextMessageAI(NETQUEUE queue);         //AI multiplayer message
-extern bool recvTeamRequest(NETQUEUE queue);
-extern bool recvReadyRequest(NETQUEUE queue);
+bool recvTextMessageAI(NETQUEUE queue);         //AI multiplayer message
+bool recvTeamRequest(NETQUEUE queue);
+bool recvReadyRequest(NETQUEUE queue);
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

@@ -119,7 +119,7 @@ IMAGEFRAME FrameRadar =
 
 // Read bitmaps used by the interface.
 //
-bool imageInitBitmaps(void)
+bool imageInitBitmaps()
 {
 	IntImages = (IMAGEFILE *)resGetData("IMG", "intfac.img");
 

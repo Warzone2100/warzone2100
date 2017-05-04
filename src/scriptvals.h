@@ -56,16 +56,16 @@ struct ARRAY_INDEXES
 
 /* A simple error reporting routine */
 
-extern void scrv_error(const char *fmt, ...);
+void scrv_error(const char *fmt, ...);
 
 // Lookup a type
-extern bool scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);
+bool scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);
 
 // Lookup a variable identifier
-extern bool scrvLookUpVar(const char *pIdent, UDWORD *pIndex);
+bool scrvLookUpVar(const char *pIdent, UDWORD *pIndex);
 
 // Lookup an array identifier
-extern bool scrvLookUpArray(const char *pIdent, UDWORD *pIndex);
+bool scrvLookUpArray(const char *pIdent, UDWORD *pIndex);
 
 // Whether the script is run immediately or stored for later use
 enum SCRV_TYPE
@@ -75,39 +75,36 @@ enum SCRV_TYPE
 };
 
 // Add a new context to the list
-extern bool scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type);
+bool scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type);
 
 // Get a context from the list
-extern bool scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext);
+bool scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext);
 
 // Add a new base pointer variable
-extern bool scrvAddBasePointer(INTERP_VAL *psVal);
+bool scrvAddBasePointer(INTERP_VAL *psVal);
 
 // Check all the base pointers to see if they have died
-extern void scrvUpdateBasePointers(void);
+void scrvUpdateBasePointers();
 
 // remove a base pointer from the list
-extern void scrvReleaseBasePointer(INTERP_VAL *psVal);
+void scrvReleaseBasePointer(INTERP_VAL *psVal);
 
 // create a group structure for a ST_GROUP variable
-extern bool scrvNewGroup(INTERP_VAL *psVal);
+bool scrvNewGroup(INTERP_VAL *psVal);
 
 // release a ST_GROUP variable
-extern void scrvReleaseGroup(INTERP_VAL *psVal);
+void scrvReleaseGroup(INTERP_VAL *psVal);
 
 // Initialise the script value module
-extern bool scrvInitialise(void);
+bool scrvInitialise();
 
 // Shut down the script value module
-extern void scrvShutDown(void);
+void scrvShutDown();
 
 // reset the script value module
-extern void scrvReset(void);
+void scrvReset();
 
 // Load a script value file
-extern bool scrvLoad(PHYSFS_file *fileHandle);
-
-// Link any object types to the actual pointer values
-//extern bool scrvLinkValues(void);
+bool scrvLoad(PHYSFS_file *fileHandle);
 
 #endif // __INCLUDED_SRC_SCRIPTVALS_H__

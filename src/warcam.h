@@ -51,20 +51,20 @@ enum WARSTATUS
 };
 
 /* Externally referenced functions */
-extern void	initWarCam(void);
-extern void	setWarCamActive(bool status);
-extern bool	getWarCamStatus(void);
-extern void camToggleStatus(void);
-extern bool processWarCam(void);
-extern void	camToggleInfo(void);
-extern void	requestRadarTrack(SDWORD x, SDWORD y);
-extern bool	getRadarTrackingStatus(void);
-extern void	toggleRadarAllignment(void);
-extern void	camInformOfRotation(Vector3i *rotation);
-extern BASE_OBJECT *camFindDroidTarget(void);
-extern DROID *getTrackingDroid(void);
-extern SDWORD	getPresAngle(void);
-extern UDWORD	getNumDroidsSelected(void);
-extern void	camAllignWithTarget(BASE_OBJECT *psTarget);
+void initWarCam();
+void setWarCamActive(bool status);
+bool getWarCamStatus();
+void camToggleStatus();
+bool processWarCam();
+void camToggleInfo();
+void requestRadarTrack(SDWORD x, SDWORD y);
+bool getRadarTrackingStatus();
+void toggleRadarAllignment();
+void camInformOfRotation(Vector3i *rotation);
+BASE_OBJECT *camFindDroidTarget();
+DROID *getTrackingDroid();
+SDWORD getPresAngle();
+UDWORD getNumDroidsSelected();
+void camAllignWithTarget(BASE_OBJECT *psTarget);
 
 #endif // __INCLUDED_SRC_WARCAM_H__

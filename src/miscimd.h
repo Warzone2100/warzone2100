@@ -25,9 +25,9 @@
 #include "structuredef.h"
 #include "messagedef.h"
 
-extern bool initMiscImds(void);
-extern iIMDShape	*getImdFromIndex(UDWORD	index);
-extern iIMDShape	*getRandomDebrisImd(void);
+bool initMiscImds();
+iIMDShape *getImdFromIndex(UDWORD index);
+iIMDShape *getRandomDebrisImd();
 
 #define	MAX_DEBRIS		5
 #define	MAX_WRECKAGE	5
@@ -75,7 +75,6 @@ struct MISC_IMD
 	iIMDShape	*pImd;
 	const char	*pName;
 };
-
 
 enum
 {

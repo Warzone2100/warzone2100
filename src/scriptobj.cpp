@@ -363,7 +363,7 @@ bool scrBaseObjGet(UDWORD index)
 
 
 // convert a base object to a droid if it is the right type
-bool scrObjToDroid(void)
+bool scrObjToDroid()
 {
 	BASE_OBJECT		*psObj;
 
@@ -389,7 +389,7 @@ bool scrObjToDroid(void)
 
 
 // convert a base object to a structure if it is the right type
-bool scrObjToStructure(void)
+bool scrObjToStructure()
 {
 	BASE_OBJECT		*psObj;
 
@@ -415,7 +415,7 @@ bool scrObjToStructure(void)
 
 
 // convert a base object to a feature if it is the right type
-bool scrObjToFeature(void)
+bool scrObjToFeature()
 {
 	BASE_OBJECT		*psObj;
 

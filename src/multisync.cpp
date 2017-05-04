@@ -42,7 +42,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
 
-static UDWORD averagePing(void);
+static UDWORD averagePing();
 
 #define AV_PING_FREQUENCY       20000                           // how often to update average pingtimes. in approx millisecs.
 #define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
@@ -55,7 +55,7 @@ static uint8_t pingChallenge[8];                                // Random data s
 // ////////////////////////////////////////////////////////////////////////
 // Score
 // We use setMultiStats() to broadcast the score when needed.
-bool sendScoreCheck(void)
+bool sendScoreCheck()
 {
 	// Broadcast any changes in other players, but not in FRONTEND!!!
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
@@ -80,7 +80,7 @@ bool sendScoreCheck(void)
 // ////////////////////////////////////////////////////////////////////////
 // Pings
 
-static UDWORD averagePing(void)
+static UDWORD averagePing()
 {
 	UDWORD i, count = 0, total = 0;
 
@@ -95,7 +95,7 @@ static UDWORD averagePing(void)
 	return total / MAX(count, 1);
 }
 
-bool sendPing(void)
+bool sendPing()
 {
 	bool			isNew = true;
 	uint8_t			player = selectedPlayer;

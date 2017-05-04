@@ -31,21 +31,21 @@ struct IMAGEFILE;
 #define FILE_LOAD_BUFFER_SIZE (1024*1024*4)
 extern char fileLoadBuffer[];
 
-extern bool systemInitialise(void);
-extern void systemShutdown(void);
-extern bool frontendInitialise(const char *ResourceFile);
-extern bool frontendShutdown(void);
-extern bool stageOneInitialise(void);
-extern bool stageOneShutDown(void);
-extern bool stageTwoInitialise(void);
-extern bool stageTwoShutDown(void);
-extern bool stageThreeInitialise(void);
-extern bool stageThreeShutDown(void);
+bool systemInitialise();
+void systemShutdown();
+bool frontendInitialise(const char *ResourceFile);
+bool frontendShutdown();
+bool stageOneInitialise();
+bool stageOneShutDown();
+bool stageTwoInitialise();
+bool stageTwoShutDown();
+bool stageThreeInitialise();
+bool stageThreeShutDown();
 
 // Reset the game between campaigns
-extern bool campaignReset(void);
+bool campaignReset();
 // Reset the game when loading a save game
-extern bool saveGameReset(void);
+bool saveGameReset();
 
 struct wzSearchPath
 {
@@ -59,7 +59,7 @@ enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 void registerSearchPath(const char path[], unsigned int priority);
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL);
 
-bool buildMapList(void);
+bool buildMapList();
 bool CheckForMod(char *theMap);
 
 bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);

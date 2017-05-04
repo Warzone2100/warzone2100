@@ -75,7 +75,7 @@ SDWORD MultiMsgPlayerFrom = -2;
 char ConsoleMsg[MAXSTRLEN] = "ERROR!!!\0";	//Last console message
 char MultiplayMsg[MAXSTRLEN];	//Last multiplayer message
 
-bool scrCBDroidTaken(void)
+bool scrCBDroidTaken()
 {
 	DROID		**ppsDroid;
 	bool	triggered = false;
@@ -106,7 +106,7 @@ bool scrCBDroidTaken(void)
 }
 
 // Deal with a CALL_NEWDROID
-bool scrCBNewDroid(void)
+bool scrCBNewDroid()
 {
 	SDWORD		player;
 	DROID		**ppsDroid;
@@ -143,7 +143,7 @@ bool scrCBNewDroid(void)
 }
 
 // Deal with a CALL_STRUCT_ATTACKED
-bool scrCBStructAttacked(void)
+bool scrCBStructAttacked()
 {
 	SDWORD			player;
 	STRUCTURE		**ppsTarget;
@@ -186,7 +186,7 @@ bool scrCBStructAttacked(void)
 	return true;
 }
 
-bool scrCBVTOLRetarget(void)
+bool scrCBVTOLRetarget()
 {
 	SDWORD			player;
 	DROID			**ppsDroid;
@@ -216,7 +216,7 @@ bool scrCBVTOLRetarget(void)
 }
 
 // Deal with a CALL_DROID_ATTACKED
-bool scrCBDroidAttacked(void)
+bool scrCBDroidAttacked()
 {
 	SDWORD			player;
 	DROID			**ppsTarget;
@@ -260,7 +260,7 @@ bool scrCBDroidAttacked(void)
 }
 
 // Deal with a CALL_ATTACKED
-bool scrCBAttacked(void)
+bool scrCBAttacked()
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsTarget;
@@ -306,7 +306,7 @@ bool scrCBAttacked(void)
 // The button id
 
 // deal with CALL_BUTTON_PRESSED
-bool scrCBButtonPressed(void)
+bool scrCBButtonPressed()
 {
 	UDWORD	button;
 	bool	triggered = false;
@@ -334,7 +334,7 @@ bool scrCBButtonPressed(void)
 DROID	*psCBSelectedDroid;
 
 // deal with CALL_DROID_SELECTED
-bool scrCBDroidSelected(void)
+bool scrCBDroidSelected()
 {
 	DROID	**ppsDroid;
 
@@ -362,7 +362,7 @@ bool scrCBDroidSelected(void)
 BASE_OBJECT *psCBObjDestroyed;
 
 // deal with a CALL_OBJ_DESTROYED
-bool scrCBObjDestroyed(void)
+bool scrCBObjDestroyed()
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
@@ -397,7 +397,7 @@ bool scrCBObjDestroyed(void)
 
 
 // deal with a CALL_STRUCT_DESTROYED
-bool scrCBStructDestroyed(void)
+bool scrCBStructDestroyed()
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
@@ -432,7 +432,7 @@ bool scrCBStructDestroyed(void)
 
 
 // deal with a CALL_DROID_DESTROYED
-bool scrCBDroidDestroyed(void)
+bool scrCBDroidDestroyed()
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
@@ -467,7 +467,7 @@ bool scrCBDroidDestroyed(void)
 
 
 // deal with a CALL_FEATURE_DESTROYED
-bool scrCBFeatureDestroyed(void)
+bool scrCBFeatureDestroyed()
 {
 	BASE_OBJECT		**ppsObj;
 	bool			retval;
@@ -559,30 +559,30 @@ static bool scrCBObjectSeen(SDWORD callback)
 }
 
 // deal with a CALL_OBJ_SEEN
-bool scrCBObjSeen(void)
+bool scrCBObjSeen()
 {
 	return scrCBObjectSeen(CALL_OBJ_SEEN);
 }
 
 // deal with a CALL_DROID_SEEN
-bool scrCBDroidSeen(void)
+bool scrCBDroidSeen()
 {
 	return scrCBObjectSeen(CALL_DROID_SEEN);
 }
 
 // deal with a CALL_STRUCT_SEEN
-bool scrCBStructSeen(void)
+bool scrCBStructSeen()
 {
 	return scrCBObjectSeen(CALL_STRUCT_SEEN);
 }
 
 // deal with a CALL_FEATURE_SEEN
-bool scrCBFeatureSeen(void)
+bool scrCBFeatureSeen()
 {
 	return scrCBObjectSeen(CALL_FEATURE_SEEN);
 }
 
-bool scrCBTransporterOffMap(void)
+bool scrCBTransporterOffMap()
 {
 	SDWORD	player;
 	bool	retval;
@@ -614,7 +614,7 @@ bool scrCBTransporterOffMap(void)
 	return true;
 }
 
-bool scrCBTransporterLanded(void)
+bool scrCBTransporterLanded()
 {
 	SDWORD			player;
 	DROID_GROUP		*psGroup;
@@ -661,7 +661,7 @@ bool scrCBTransporterLanded(void)
 	return true;
 }
 
-bool scrCBTransporterLandedB(void)
+bool scrCBTransporterLandedB()
 {
 	SDWORD			player;
 	DROID_GROUP		*psGroup;
@@ -712,7 +712,7 @@ bool scrCBTransporterLandedB(void)
 
 // tell the scripts when a cluster is no longer valid
 SDWORD	scrCBEmptyClusterID;
-bool scrCBClusterEmpty(void)
+bool scrCBClusterEmpty()
 {
 	SDWORD		*pClusterID;
 
@@ -735,7 +735,7 @@ bool scrCBClusterEmpty(void)
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
 DROID *psScrCBVtolOffMap;
-bool scrCBVtolOffMap(void)
+bool scrCBVtolOffMap()
 {
 	SDWORD	player;
 	DROID	**ppsVtol;
@@ -770,7 +770,7 @@ bool scrCBVtolOffMap(void)
 }
 
 /*called when selectedPlayer completes some research*/
-bool scrCBResCompleted(void)
+bool scrCBResCompleted()
 {
 	RESEARCH	**ppsResearch;
 	STRUCTURE	**ppsResFac;
@@ -812,7 +812,7 @@ bool scrCBResCompleted(void)
 
 
 /* when a humna player leaves a game*/
-bool scrCBPlayerLeft(void)
+bool scrCBPlayerLeft()
 {
 	SDWORD	*player;
 	if (!stackPopParams(1, VAL_REF | VAL_INT, &player))
@@ -833,7 +833,7 @@ bool scrCBPlayerLeft(void)
 
 
 // alliance has been offered.
-bool scrCBAllianceOffer(void)
+bool scrCBAllianceOffer()
 {
 	SDWORD	*from, *to;
 
@@ -860,7 +860,7 @@ bool scrCBAllianceOffer(void)
 
 //console callback
 //---------------------------
-bool scrCallConsole(void)
+bool scrCallConsole()
 {
 	SDWORD	*player;
 	char	**ConsoleText = nullptr;
@@ -893,7 +893,7 @@ bool scrCallConsole(void)
 
 //multiplayer beacon
 //---------------------------
-bool scrCallBeacon(void)
+bool scrCallBeacon()
 {
 	SDWORD	*playerFrom, playerTo;
 	char	**BeaconText = nullptr;
@@ -961,7 +961,7 @@ bool scrCallBeacon(void)
 
 //multiplayer message callback
 //----------------------------
-bool scrCallMultiMsg(void)
+bool scrCallMultiMsg()
 {
 	SDWORD	*player, playerTo;
 	char	**ConsoleText = nullptr;
@@ -1023,7 +1023,7 @@ STRUCTURE	*psScrCBNewStruct = nullptr;	//for scrCBStructBuilt callback
 DROID		*psScrCBNewStructTruck = nullptr;
 //structure built callback
 //------------------------------
-bool scrCBStructBuilt(void)
+bool scrCBStructBuilt()
 {
 	SDWORD		player;
 	STRUCTURE	**ppsStructure;
@@ -1070,7 +1070,7 @@ bool scrCBStructBuilt(void)
 }
 
 /* Droid received stop order */
-bool scrCBDorderStop(void)
+bool scrCBDorderStop()
 {
 	SDWORD		player;
 	DROID		**ppsDroid;
@@ -1104,7 +1104,7 @@ bool scrCBDorderStop(void)
 }
 
 /* Droid reached destination point and stopped on its own */
-bool scrCBDorderReachedLocation(void)
+bool scrCBDorderReachedLocation()
 {
 	SDWORD		player;
 	SDWORD		*Order = nullptr;
@@ -1140,7 +1140,7 @@ bool scrCBDorderReachedLocation(void)
 }
 
 /* Process key-combo */
-bool scrCBProcessKeyPress(void)
+bool scrCBProcessKeyPress()
 {
 	SDWORD		*key = nullptr, *metaKey = nullptr;
 

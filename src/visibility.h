@@ -28,19 +28,19 @@
 #define LINE_OF_FIRE_MINIMUM 5
 
 // initialise the visibility stuff
-extern bool visInitialise(void);
+bool visInitialise();
 
 /* Check which tiles can be seen by an object */
-extern void visTilesUpdate(BASE_OBJECT *psObj);
+void visTilesUpdate(BASE_OBJECT *psObj);
 
-extern void revealAll(UBYTE player);
+void revealAll(UBYTE player);
 
 /* Check whether psViewer can see psTarget
  * psViewer should be an object that has some form of sensor,
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  */
-extern int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock);
+int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock);
 
 /** Can shooter hit target with direct fire weapon? */
 bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock);
@@ -52,16 +52,16 @@ int areaOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int w
 int arcOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock);
 
 // Find the wall that is blocking LOS to a target (if any)
-extern STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget);
+STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget);
 
 bool hasSharedVision(unsigned viewer, unsigned ally);
 
-extern void processVisibility(void);  ///< Calls processVisibilitySelf and processVisibilityVision on all objects.
+void processVisibility();  ///< Calls processVisibilitySelf and processVisibilityVision on all objects.
 
 // update the visibility reduction
-extern void visUpdateLevel(void);
+void visUpdateLevel();
 
-extern void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
+void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
 
 void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
 void visRemoveVisibility(BASE_OBJECT *psObj);

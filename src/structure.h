@@ -67,9 +67,9 @@ extern UDWORD				numStructureStats;
 extern STRUCTURE_LIMITS		*asStructLimits[MAX_PLAYERS];
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
-extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][
-    NUM_STRUCT_STRENGTH];
-extern void handleAbandonedStructures(void);
+extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
+
+void handleAbandonedStructures();
 
 int getMaxDroids(int player);
 int getMaxCommanders(int player);
@@ -81,24 +81,24 @@ void setMaxConstructors(int player, int value);
 bool IsPlayerDroidLimitReached(int player);
 bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 
-extern bool loadStructureStats(QString filename);
+bool loadStructureStats(QString filename);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-extern bool loadStructureStrengthModifiers(const char *pFileName);
+bool loadStructureStrengthModifiers(const char *pFileName);
 
-extern bool	structureStatsShutDown(void);
+bool structureStatsShutDown();
 
 int requestOpenGate(STRUCTURE *psStructure);
 int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minimumStub);  ///< Returns how far open the gate is, or 0 if the structure is not a gate.
 
 int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
-extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
-extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
+void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
+void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate);
 /* Set the type of droid for a factory to build */
-extern bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode);
+bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode);
 
 //temp test function for creating structures at the start of the game
-extern void createTestStructures(void);
+void createTestStructures();
 
 //builds a specified structure at a given location
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
@@ -117,8 +117,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
 bool removeStruct(STRUCTURE *psDel, bool bDestroy);
 
 //fills the list with Structures that can be built
-extern UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer,
-                                UDWORD limit);
+UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD limit);
 
 /// Checks if the two structures would be too close to build together.
 bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t dir1, STRUCTURE_STATS const *stats2, Vector2i pos2, uint16_t dir2);
@@ -132,49 +131,43 @@ bool isBuildableOnWalls(STRUCTURE_TYPE type);                        ///< Struct
 
 /* for a new structure, find a location along an edge which the droid can get
 to and return this as the destination for the droid */
-//extern bool getDroidDestination(STRUCTURE_STATS *psPositionStats, UDWORD structX,
-//	UDWORD structY, UDWORD * pDroidX, UDWORD *pDroidY);
-/*for a structure or feature, find a location along an edge which the droid can get
+
+/* for a structure or feature, find a location along an edge which the droid can get
 to and return this as the destination for the droid*/
-extern bool getDroidDestination(BASE_STATS *psPositionStats, UDWORD structX,
-                                UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY);
+bool getDroidDestination(BASE_STATS *psPositionStats, UDWORD structX, UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY);
+
 /* check along the width of a structure for an empty space */
-extern bool checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
+bool checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
 /* check along the length of a structure for an empty space */
-extern bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
+bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
-extern void alignStructure(STRUCTURE *psBuilding);
+void alignStructure(STRUCTURE *psBuilding);
 
 //initialise the structure limits structure
-extern void initStructLimits(void);
+void initStructLimits();
 /* set the current number of structures of each type built */
-extern void setCurrentStructQuantity(bool displayError);
+void setCurrentStructQuantity(bool displayError);
 /* get a stat inc based on the name */
-extern int32_t getStructStatFromName(char const *pName);
+int32_t getStructStatFromName(char const *pName);
 /*check to see if the structure is 'doing' anything  - return true if idle*/
-extern bool  structureIdle(STRUCTURE *psBuilding);
+bool  structureIdle(STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */
-extern bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
+bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
 /*sets the point new droids go to - x/y in world coords for a Factory*/
-extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
-                             UDWORD player, bool bCheck);
+void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y, UDWORD player, bool bCheck);
 
 /*initialises the flag before a new data set is loaded up*/
-extern void initFactoryNumFlag(void);
+void initFactoryNumFlag();
+
 //called at start of missions
-extern void resetFactoryNumFlag(void);
+void resetFactoryNumFlag();
 
 /* get demolish stat */
-extern STRUCTURE_STATS *structGetDemolishStat(void);
+STRUCTURE_STATS *structGetDemolishStat();
 
 /*find a location near to the factory to start the droid of*/
-extern bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
-
-/*sets the flag to indicate a Power Generator Exists - so do Oil Derrick anim*/
-//extern void setPowerGenExists(bool state, UDWORD player);
-/*returns teh status of the flag*/
-//extern bool getPowerGenExists(UDWORD player);
+bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
 
 /* is this a lassat structure? */
 static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
@@ -186,144 +179,145 @@ static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
 }
 
 /*sets the flag to indicate a SatUplink Exists - so draw everything!*/
-extern void setSatUplinkExists(bool state, UDWORD player);
+void setSatUplinkExists(bool state, UDWORD player);
+
 /*returns the status of the flag*/
-extern bool getSatUplinkExists(UDWORD player);
+bool getSatUplinkExists(UDWORD player);
+
 /*sets the flag to indicate a Las Sat Exists - ONLY EVER WANT ONE*/
-extern void setLasSatExists(bool state, UDWORD player);
+void setLasSatExists(bool state, UDWORD player);
+
 /*returns the status of the flag*/
-extern bool getLasSatExists(UDWORD player);
+bool getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
 bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
-extern void buildingComplete(STRUCTURE *psBuilding);
-// these functions are used in game.c inplace of  building complete
-extern void checkForResExtractors(STRUCTURE *psPowerGen);
-extern void checkForPowerGen(STRUCTURE *psPowerGen);
+void buildingComplete(STRUCTURE *psBuilding);
 
-// Set the command droid that factory production should go to
-//struct _command_droid;
-extern void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
+// these functions are used in game.c inplace of  building complete
+void checkForResExtractors(STRUCTURE *psPowerGen);
+void checkForPowerGen(STRUCTURE *psPowerGen);
+
+// Set the command droid that factory production should go to struct _command_droid;
+void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
 
 // remove all factories from a command droid
 void clearCommandDroidFactory(DROID *psDroid);
 
 /*for a given structure, return a pointer to its module stat */
-extern STRUCTURE_STATS *getModuleStat(const STRUCTURE *psStruct);
+STRUCTURE_STATS *getModuleStat(const STRUCTURE *psStruct);
 
 /*called when a Res extractor is destroyed or runs out of power or is disconnected
 adjusts the owning Power Gen so that it can link to a different Res Extractor if one
 is available*/
-extern void releaseResExtractor(STRUCTURE *psRelease);
+void releaseResExtractor(STRUCTURE *psRelease);
 
 /*called when a Power Gen is destroyed or is disconnected
 adjusts the associated Res Extractors so that they can link to different Power
 Gens if any are available*/
-extern void releasePowerGen(STRUCTURE *psRelease);
+void releasePowerGen(STRUCTURE *psRelease);
 
 //print some info at the top of the screen dependant on the structure
-extern void printStructureInfo(STRUCTURE *psStructure);
+void printStructureInfo(STRUCTURE *psStructure);
 
 /*Checks the template type against the factory type - returns false
 if not a good combination!*/
-extern bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain);
+bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain);
 
 /*calculates the damage caused to the resistance levels of structures*/
-//extern bool electronicDamage(STRUCTURE *psStructure, UDWORD damage, UBYTE attackPlayer);
-//electronic damage can be targetted at droids as well as structures now - AB 5/11/98
-extern bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer);
+bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer);
 
 /* EW works differently in multiplayer mode compared with single player.*/
-extern bool validStructResistance(STRUCTURE *psStruct);
+bool validStructResistance(STRUCTURE *psStruct);
 
 /*checks to see if a specific structure type exists -as opposed to a structure
 stat type*/
-extern bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
+bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
-extern int32_t getStructureDamage(const STRUCTURE *psStructure);
+int32_t getStructureDamage(const STRUCTURE *psStructure);
 
 unsigned structureBodyBuilt(STRUCTURE const *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
-extern UDWORD	structureBody(const STRUCTURE *psStruct);
-extern UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
-extern UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player);
+UDWORD structureBody(const STRUCTURE *psStruct);
+UDWORD structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
+UDWORD structureResistance(STRUCTURE_STATS *psStats, UBYTE player);
 
-extern void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
+void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 
 // Is a structure a factory of somekind?
-extern bool StructIsFactory(STRUCTURE *Struct);
+bool StructIsFactory(STRUCTURE *Struct);
 
 // Is a flag a factory delivery point?
-extern bool FlagIsFactory(FLAG_POSITION *psCurrFlag);
+bool FlagIsFactory(FLAG_POSITION *psCurrFlag);
 
 // Find a factories corresonding delivery point.
-extern FLAG_POSITION *FindFactoryDelivery(STRUCTURE *Struct);
+FLAG_POSITION *FindFactoryDelivery(STRUCTURE *Struct);
 
 //Find the factory associated with the delivery point - returns NULL if none exist
-extern STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint);
+STRUCTURE *findDeliveryFactory(FLAG_POSITION *psDelPoint);
 
 /*this is called when a factory produces a droid. The Template returned is the next
 one to build - if any*/
-extern DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
+DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
 
 //increment the production run for this type
-extern void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool add);
+void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool add);
 
 //returns the quantity of a specific template in the production list
 ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
 
 //looks through a players production list to see if a command droid is being built
-extern UBYTE checkProductionForCommand(UBYTE player);
+UBYTE checkProductionForCommand(UBYTE player);
 
 //check that delivery points haven't been put down in invalid location
-extern void checkDeliveryPoints(UDWORD version);
+void checkDeliveryPoints(UDWORD version);
 
 //adjust the loop quantity for this factory
-extern void factoryLoopAdjust(STRUCTURE *psStruct, bool add);
+void factoryLoopAdjust(STRUCTURE *psStruct, bool add);
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
 void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun = true);
 
 /*set a factory's production run to hold*/
-extern void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
+void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /*release a factory's production run from hold*/
-extern void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
+void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /// Does the next item in the production list.
 void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode);
 
 /*This function is called after a game is loaded so that any resource extractors
 that are active are initialised for when to start*/
-extern void checkResExtractorsActive(void);
+void checkResExtractorsActive();
 
 // Count number of factories assignable to a command droid.
-extern UWORD countAssignableFactories(UBYTE player, UWORD FactoryType);
+UWORD countAssignableFactories(UBYTE player, UWORD FactoryType);
 
 /*Used for determining how much of the structure to draw as being built or demolished*/
-extern float structHeightScale(STRUCTURE *psStruct);
+float structHeightScale(STRUCTURE *psStruct);
 
 /*compares the structure sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/
-extern bool structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid);
+bool structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid);
 
 /*checks if the structure has a Counter Battery sensor attached - returns
 true if it has*/
-extern bool structCBSensor(const STRUCTURE *psStruct);
+bool structCBSensor(const STRUCTURE *psStruct);
 /*checks if the structure has a Standard Turret sensor attached - returns
 true if it has*/
-extern bool structStandardSensor(const STRUCTURE *psStruct);
+bool structStandardSensor(const STRUCTURE *psStruct);
 
 /*checks if the structure has a VTOL Intercept sensor attached - returns
 true if it has*/
-extern bool structVTOLSensor(const STRUCTURE *psStruct);
+bool structVTOLSensor(const STRUCTURE *psStruct);
 
 /*checks if the structure has a VTOL Counter Battery sensor attached - returns
 true if it has*/
-extern bool structVTOLCBSensor(const STRUCTURE *psStruct);
+bool structVTOLCBSensor(const STRUCTURE *psStruct);
 
 // return the nearest rearm pad
 // if bClear is true it tries to find the nearest clear rearm pad in
@@ -341,13 +335,13 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid);
 bool vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid);
 
 /* Just returns true if the structure's present body points aren't as high as the original*/
-extern bool	structIsDamaged(STRUCTURE *psStruct);
+bool	structIsDamaged(STRUCTURE *psStruct);
 
 // give a structure from one player to another - used in Electronic Warfare
 STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true);
 
 /*Initialise the production list and set up the production player*/
-extern void changeProductionPlayer(UBYTE player);
+void changeProductionPlayer(UBYTE player);
 
 // La!
 bool IsStatExpansionModule(STRUCTURE_STATS const *psStats);
@@ -357,14 +351,14 @@ bool structureIsBlueprint(STRUCTURE *psStructure);
 bool isBlueprint(BASE_OBJECT *psObject);
 
 /*returns the power cost to build this structure*/
-extern UDWORD structPowerToBuild(const STRUCTURE *psStruct);
+UDWORD structPowerToBuild(const STRUCTURE *psStruct);
 
 // check whether a factory of a certain number and type exists
-extern bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
+bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 
 /*checks the structure passed in is a Las Sat structure which is currently
 selected - returns true if valid*/
-extern bool lasSatStructSelected(STRUCTURE *psStruct);
+bool lasSatStructSelected(STRUCTURE *psStruct);
 
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
@@ -483,7 +477,7 @@ void checkStructure(const STRUCTURE *psStructure, const char *const location_des
 
 #define CHECK_STRUCTURE(object) checkStructure((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
-extern void     structureInitVars(void);
+void structureInitVars();
 
 #define syncDebugStructure(psStruct, ch) _syncDebugStructure(__FUNCTION__, psStruct, ch)
 void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch);

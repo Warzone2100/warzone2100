@@ -51,7 +51,7 @@ struct lexerinput_t
 
 #define YY_EXTRA_TYPE lexerinput_t *
 
-extern int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue);
+int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue);
 
 #define YY_INPUT(buf, result, max_size) \
 	do \

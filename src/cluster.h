@@ -42,10 +42,10 @@ extern UBYTE	aClusterMap[CLUSTER_MAX];
 extern UBYTE	aClusterInfo[CLUSTER_MAX];
 
 // initialise the cluster system
-void clustInitialise(void);
+void clustInitialise();
 
 // update routine for the cluster system
-void clusterUpdate(void);
+void clusterUpdate();
 
 // tell the cluster system about a new droid
 void clustNewDroid(DROID *psDroid);

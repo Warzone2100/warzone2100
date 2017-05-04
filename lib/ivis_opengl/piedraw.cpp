@@ -390,7 +390,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 	pie_DeactivateShader();
 }
 
-void pie_SetUp(void)
+void pie_SetUp()
 {
 	// initialise pie engine
 
@@ -418,7 +418,7 @@ void pie_SetUp(void)
 	}
 }
 
-void pie_CleanUp(void)
+void pie_CleanUp()
 {
 	tshapes.clear();
 	shapes.clear();
@@ -495,7 +495,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	}
 }
 
-static void pie_ShadowDrawLoop(void)
+static void pie_ShadowDrawLoop()
 {
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
@@ -503,7 +503,7 @@ static void pie_ShadowDrawLoop(void)
 	}
 }
 
-static void pie_DrawShadows(void)
+static void pie_DrawShadows()
 {
 	const float width = pie_GetVideoBufferWidth();
 	const float height = pie_GetVideoBufferHeight();
@@ -536,7 +536,7 @@ static void pie_DrawShadows(void)
 	scshapes.resize(0);
 }
 
-void pie_RemainingPasses(void)
+void pie_RemainingPasses()
 {
 	GL_DEBUG("Remaining passes - shadows");
 	// Draw shadows

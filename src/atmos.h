@@ -41,11 +41,11 @@ enum WT_CLASS
 	WT_NONE
 };
 
-void atmosInitSystem(void);
-void atmosUpdateSystem(void);
+void atmosInitSystem();
+void atmosUpdateSystem();
 void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix);
 void atmosDrawParticles(const glm::mat4 &viewMatrix);
 void atmosSetWeatherType(WT_CLASS type);
-WT_CLASS atmosGetWeatherType(void);
+WT_CLASS atmosGetWeatherType();
 
 #endif // __INCLUDED_SRC_ATMOS_H__

@@ -231,7 +231,7 @@ static inline void releaseAllMessages(MESSAGE *list[])
 	}
 }
 
-bool messageInitVars(void)
+bool messageInitVars()
 {
 	int i;
 
@@ -250,7 +250,7 @@ bool messageInitVars(void)
 }
 
 //allocates the viewdata heap
-bool initViewData(void)
+bool initViewData()
 {
 	return true;
 }
@@ -395,14 +395,14 @@ void removeMessage(MESSAGE *psDel, UDWORD player)
 }
 
 /* Remove all Messages*/
-void freeMessages(void)
+void freeMessages()
 {
 	releaseAllProxDisp();
 	releaseAllMessages(apsMessages);
 }
 
 /* removes all the proximity displays */
-void releaseAllProxDisp(void)
+void releaseAllProxDisp()
 {
 	UDWORD				player;
 	PROXIMITY_DISPLAY	*psCurr, *psNext;
@@ -422,7 +422,7 @@ void releaseAllProxDisp(void)
 }
 
 /* Initialise the message heaps */
-bool initMessage(void)
+bool initMessage()
 {
 	//set up the imd used for proximity messages
 	pProximityMsgIMD = modelGet("arrow.pie");
@@ -759,7 +759,7 @@ VIEWDATA *getViewData(const char *pName)
 }
 
 /* Release the message heaps */
-bool messageShutdown(void)
+bool messageShutdown()
 {
 	freeMessages();
 	return true;

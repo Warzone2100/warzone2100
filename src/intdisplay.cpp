@@ -1250,7 +1250,7 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 // Initialise all the surfaces,graphics etc. used by the interface.
 //
-void intInitialiseGraphics(void)
+void intInitialiseGraphics()
 {
 	// Initialise any bitmaps used by the interface.
 	imageInitBitmaps();

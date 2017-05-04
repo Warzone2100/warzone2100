@@ -50,6 +50,6 @@ void fpathSetBlockingMap(PATHJOB *psJob);
  *
  *  @ingroup pathfinding
  */
-extern void fpathHardTableReset(void);
+void fpathHardTableReset();
 
 #endif // __INCLUDED_SRC_ASTART_H__

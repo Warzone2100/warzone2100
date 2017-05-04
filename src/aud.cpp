@@ -53,7 +53,7 @@ bool audio_ObjectDead(SIMPLE_OBJECT *psSimpleObj)
 }
 // @FIXME we don't need to do this, since we are not using qsound.
 
-Vector3f audio_GetPlayerPos(void)
+Vector3f audio_GetPlayerPos()
 {
 	Vector3f pos;
 

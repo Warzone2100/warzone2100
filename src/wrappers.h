@@ -37,21 +37,21 @@ enum TITLECODE
 
 extern int hostlaunch;
 
-bool frontendInitVars(void);
-TITLECODE titleLoop(void);
+bool frontendInitVars();
+TITLECODE titleLoop();
 
 void initLoadingScreen(bool drawbdrop);
-void closeLoadingScreen(void);
-void loadingScreenCallback(void);
+void closeLoadingScreen();
+void loadingScreenCallback();
 
-void startCreditsScreen(void);
+void startCreditsScreen();
 
 bool displayGameOver(bool success);
 void setPlayerHasLost(bool val);
-bool testPlayerHasLost(void);
-bool testPlayerHasWon(void);
+bool testPlayerHasLost();
+bool testPlayerHasWon();
 void setPlayerHasWon(bool val);
 void setScriptWinLoseVideo(UBYTE val);
-UBYTE getScriptWinLoseVideo(void);
+UBYTE getScriptWinLoseVideo();
 
 #endif // __INCLUDED_SRC_WRAPPERS_H__

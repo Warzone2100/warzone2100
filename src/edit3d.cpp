@@ -47,7 +47,7 @@ bool quickQueueMode = false;
 
 // Initialisation function for statis & globals in this module.
 //
-void Edit3DInitVars(void)
+void Edit3DInitVars()
 {
 	buildState = BUILD3D_NONE;
 	brushSize = 1;
@@ -151,7 +151,7 @@ void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData)
 	}
 }
 
-void	kill3DBuilding(void)
+void	kill3DBuilding()
 {
 	//cancel the drag boxes
 	dragBox3D.status = DRAG_INACTIVE;
@@ -162,7 +162,7 @@ void	kill3DBuilding(void)
 
 // Call once per frame to handle structure positioning and callbacks.
 //
-bool process3DBuilding(void)
+bool process3DBuilding()
 {
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
@@ -282,7 +282,7 @@ bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 }
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
-bool tryingToGetLocation(void)
+bool tryingToGetLocation()
 {
 	if (buildState == BUILD3D_NONE)
 	{

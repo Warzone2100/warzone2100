@@ -41,25 +41,25 @@ enum CONSOLE_TEXT_JUSTIFICATION
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false);
-void updateConsoleMessages(void);
-void initConsoleMessages(void);
-void removeTopConsoleMessage(void);
-void displayConsoleMessages(void);
-void displayOldMessages(void);
-void flushConsoleMessages(void);
+void updateConsoleMessages();
+void initConsoleMessages();
+void removeTopConsoleMessage();
+void displayConsoleMessages();
+void displayOldMessages();
+void flushConsoleMessages();
 void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
-bool getConsoleDisplayStatus(void);
+bool getConsoleDisplayStatus();
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
-void clearActiveConsole(void);
-bool mouseOverConsoleBox(void);
-bool mouseOverHistoryConsoleBox(void);
-int getNumberConsoleMessages(void);
+void clearActiveConsole();
+bool mouseOverConsoleBox();
+bool mouseOverHistoryConsoleBox();
+int getNumberConsoleMessages();
 void setConsoleLineInfo(UDWORD vis);
-UDWORD getConsoleLineInfo(void);
+UDWORD getConsoleLineInfo();
 void permitNewConsoleMessages(bool allow);
-void toggleConsoleDrop(void);
+void toggleConsoleDrop();
 void setHistoryMode(bool mode);
 
 #if defined(DEBUG)
@@ -69,7 +69,7 @@ void setHistoryMode(bool mode);
 # define debug_console(...) (void)0
 #endif // !defined(DEBUG)
 
-extern void console(const char *pFormat, ...); /// Print always to the ingame console
+void console(const char *pFormat, ...); /// Print always to the ingame console
 
 /**
  Usage:

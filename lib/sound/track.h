@@ -81,8 +81,8 @@ struct TRACK
 /* functions
  */
 
-bool	sound_Init(void);
-bool	sound_Shutdown(void);
+bool	sound_Init();
+bool	sound_Shutdown();
 
 TRACK 	*sound_LoadTrackFromFile(const char *fileName);
 unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
@@ -91,7 +91,7 @@ void	sound_ReleaseTrack(TRACK *psTrack);
 void	sound_StopTrack(AUDIO_SAMPLE *psSample);
 void	sound_PauseTrack(AUDIO_SAMPLE *psSample);
 void	sound_UpdateSample(AUDIO_SAMPLE *psSample);
-void	sound_CheckAllUnloaded(void);
+void	sound_CheckAllUnloaded();
 void sound_RemoveActiveSample(AUDIO_SAMPLE *psSample);
 bool	sound_CheckTrack(SDWORD iTrack);
 
@@ -108,12 +108,12 @@ bool	sound_Play3DTrack(AUDIO_SAMPLE *psSample);
 void	sound_PlayWithCallback(AUDIO_SAMPLE *psSample, SDWORD iCurTime, AUDIO_CALLBACK pDoneFunc);
 void	sound_FinishedCallback(AUDIO_SAMPLE *psSample);
 
-bool	sound_GetSystemActive(void);
+bool	sound_GetSystemActive();
 SDWORD	sound_GetTrackID(TRACK *psTrack);
-SDWORD	sound_GetAvailableID(void);
+SDWORD	sound_GetAvailableID();
 SDWORD	sound_GetNumPlaying(SDWORD iTrack);
 
-SDWORD	sound_GetGlobalVolume(void);
+SDWORD	sound_GetGlobalVolume();
 void	sound_SetGlobalVolume(SDWORD iVol);
 
 void	sound_SetStoppedCallback(AUDIO_CALLBACK pStopTrackCallback);

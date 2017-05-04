@@ -43,10 +43,10 @@ enum SCR_DEBUGTYPE
 #define SCRIPTTYPE SCR_DEBUGINFO
 
 // Initialise the script library
-extern bool scriptInitialise(void);
+extern bool scriptInitialise();
 
 // Shutdown the script library
-extern void scriptShutDown(void);
+extern void scriptShutDown();
 
 /***********************************************************************************
  *
@@ -85,7 +85,7 @@ extern void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab);
  *
  * \return Number of calls on the return address stack
  */
-extern UDWORD retStackCallDepth(void);
+extern UDWORD retStackCallDepth();
 
 
 /***********************************************************************************
@@ -128,7 +128,7 @@ extern bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
  */
 
 // reset the event system
-extern void eventReset(void);
+extern void eventReset();
 
 // Initialise the create/release function array - specify the maximum value type
 extern bool eventInitValueFuncs(SDWORD maxType);
@@ -201,20 +201,20 @@ extern bool stackPushResult(INTERP_TYPE type, INTERP_VAL *result);
  */
 
 /* Instinct function to turn on tracing */
-extern bool interpTraceOn(void);
+extern bool interpTraceOn();
 
 /* Instinct function to turn off tracing */
-extern bool interpTraceOff(void);
+extern bool interpTraceOff();
 
 // Change the trigger assigned to an event
 // This is an instinct function that takes a VAL_EVENT and VAL_TRIGGER as parameters
-extern bool eventSetTrigger(void);
+extern bool eventSetTrigger();
 
 // set the event tracing level
 //   0 - no tracing
 //   1 - only fired triggers
 //   2 - added and fired triggers
 //   3 - as 2 but show tested but not fired triggers as well
-extern bool eventSetTraceLevel(void);
+extern bool eventSetTraceLevel();
 
 #endif

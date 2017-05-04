@@ -98,7 +98,7 @@ static void	setConsoleMessageDuration(UDWORD time)
 }
 
 /** Sets the system up */
-void	initConsoleMessages(void)
+void	initConsoleMessages()
 {
 	linePitch = iV_GetTextLineSize(font_regular);
 	bConsoleDropped = false;
@@ -123,7 +123,7 @@ void setHistoryMode(bool mode)
 }
 
 /** Open the console when it's closed and close it when it's open. */
-void	toggleConsoleDrop(void)
+void	toggleConsoleDrop()
 {
 	if (!bConsoleDropped)
 	{	// it was closed, so play open sound
@@ -185,7 +185,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 }
 
 /// \return The number of active console messages
-int	getNumberConsoleMessages(void)
+int	getNumberConsoleMessages()
 {
 	return (ActiveMessages.size());
 }
@@ -193,7 +193,7 @@ int	getNumberConsoleMessages(void)
 /** Update the console messages.
 	This function will remove messages that are overdue.
 */
-void	updateConsoleMessages(void)
+void	updateConsoleMessages()
 {
 	// If there are no messages or we're on permanent (usually for scripts) then exit
 	if ((!getNumberConsoleMessages() && !InfoMessages.size()) || mainConsole.permanent)
@@ -231,7 +231,7 @@ void	updateConsoleMessages(void)
 	us to put up messages that stay there until we remove them
 	ourselves - be sure and reset message duration afterwards
 */
-void	removeTopConsoleMessage(void)
+void	removeTopConsoleMessage()
 {
 	if (getNumberConsoleMessages())
 	{
@@ -240,13 +240,13 @@ void	removeTopConsoleMessage(void)
 }
 
 /** Clears just Active console messages */
-void clearActiveConsole(void)
+void clearActiveConsole()
 {
 	ActiveMessages.clear();
 }
 
 /** Clears all console messages */
-void	flushConsoleMessages(void)
+void	flushConsoleMessages()
 {
 	ActiveMessages.clear();
 	TeamMessages.clear();
@@ -367,7 +367,7 @@ void displayOldMessages(bool mode)
 }
 
 /** Displays all the console messages */
-void	displayConsoleMessages(void)
+void	displayConsoleMessages()
 {
 	// Check if we have any messages we want to show
 	if (!getNumberConsoleMessages() && !bConsoleDropped && !InfoMessages.size())
@@ -462,7 +462,7 @@ void	setConsolePermanence(bool state, bool bClearOld)
 }
 
 /** Check if mouse is over the Active console 'window' area */
-bool mouseOverConsoleBox(void)
+bool mouseOverConsoleBox()
 {
 	int gotMessages = getNumberConsoleMessages();
 	if (gotMessages &&
@@ -477,7 +477,7 @@ bool mouseOverConsoleBox(void)
 }
 
 /** Check if mouse is over the History console 'window' area */
-bool	mouseOverHistoryConsoleBox(void)
+bool	mouseOverHistoryConsoleBox()
 {
 	int nudgeright = 0;
 	if (isSecondaryWindowUp())
@@ -535,7 +535,7 @@ void	setConsoleLineInfo(UDWORD vis)
 }
 
 /** get how many lines are allowed and how many are visible */
-UDWORD getConsoleLineInfo(void)
+UDWORD getConsoleLineInfo()
 {
 	return consoleVisibleLines;
 }
@@ -547,7 +547,7 @@ void	permitNewConsoleMessages(bool allow)
 }
 
 /// \return the visibility of the console
-bool	getConsoleDisplayStatus(void)
+bool	getConsoleDisplayStatus()
 {
 	return (bConsoleDisplayEnabled);
 }

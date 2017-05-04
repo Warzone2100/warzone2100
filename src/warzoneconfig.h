@@ -45,37 +45,37 @@ enum FMV_MODE
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void	war_SetDefaultStates(void);
-extern void war_SetFMVmode(FMV_MODE mode);
-extern FMV_MODE war_GetFMVmode(void);
-extern void war_SetAllowSubtitles(bool);
-extern bool war_GetAllowSubtitles(void);
-extern void war_setFullscreen(bool);
-extern bool war_getFullscreen(void);
+void war_SetDefaultStates();
+void war_SetFMVmode(FMV_MODE mode);
+FMV_MODE war_GetFMVmode();
+void war_SetAllowSubtitles(bool);
+bool war_GetAllowSubtitles();
+void war_setFullscreen(bool);
+bool war_getFullscreen();
 void war_setAntialiasing(int);
 int war_getAntialiasing();
-extern void war_SetTrapCursor(bool b);
-extern bool war_GetTrapCursor(void);
-extern bool war_GetColouredCursor(void);
-extern void war_SetColouredCursor(bool enabled);
-extern void war_SetVsync(bool b);
-extern bool war_GetVsync(void);
-extern void war_SetWidth(UDWORD width);
-extern UDWORD war_GetWidth(void);
+void war_SetTrapCursor(bool b);
+bool war_GetTrapCursor();
+bool war_GetColouredCursor();
+void war_SetColouredCursor(bool enabled);
+void war_SetVsync(bool b);
+bool war_GetVsync();
+void war_SetWidth(UDWORD width);
+UDWORD war_GetWidth();
 void war_SetScreen(int screen);
 int war_GetScreen();
-extern void war_SetHeight(UDWORD height);
-extern UDWORD war_GetHeight(void);
-extern void war_SetPauseOnFocusLoss(bool enabled);
-extern bool war_GetPauseOnFocusLoss(void);
-extern bool war_GetMusicEnabled(void);
-extern void war_SetMusicEnabled(bool enabled);
-extern int8_t war_GetSPcolor(void);
-extern void war_SetSPcolor(int color);
+void war_SetHeight(UDWORD height);
+UDWORD war_GetHeight();
+void war_SetPauseOnFocusLoss(bool enabled);
+bool war_GetPauseOnFocusLoss();
+bool war_GetMusicEnabled();
+void war_SetMusicEnabled(bool enabled);
+int8_t war_GetSPcolor();
+void war_SetSPcolor(int color);
 void war_setMPcolour(int colour);
 int war_getMPcolour();
 void war_setScanlineMode(SCANLINE_MODE mode);
-SCANLINE_MODE war_getScanlineMode(void);
+SCANLINE_MODE war_getScanlineMode();
 
 /**
  * Enable or disable sound initialization
@@ -90,6 +90,6 @@ void war_setSoundEnabled(bool soundEnabled);
  *
  * \return	Enable sound (or not)
  */
-bool war_getSoundEnabled(void);
+bool war_getSoundEnabled();
 
 #endif // __INCLUDED_SRC_WARZONECONFIG_H__

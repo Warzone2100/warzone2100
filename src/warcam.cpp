@@ -113,11 +113,11 @@ static	bool bRadarTrackingRequested = false;
 static  float	 radarX, radarY;
 
 // Prototypes
-static bool camTrackCamera(void);
+static bool camTrackCamera();
 
 //-----------------------------------------------------------------------------------
 /* Sets the camera to inactive to begin with */
-void	initWarCam(void)
+void	initWarCam()
 {
 	/* We're not intitially following anything */
 	trackingCamera.status = CAM_INACTIVE;
@@ -128,7 +128,7 @@ void	initWarCam(void)
 
 
 /* Static function that switches off tracking - and might not be desirable? - Jim?*/
-static void camSwitchOff(void)
+static void camSwitchOff()
 {
 	/* Restore the angles */
 //	player.r.x = trackingCamera.oldView.r.x;
@@ -149,7 +149,7 @@ static void camSwitchOff(void)
 #define	LEADER_DOWN			4
 #define LEADER_STATIC		5
 
-static void processLeaderSelection(void)
+static void processLeaderSelection()
 {
 	DROID *psDroid;
 	DROID *psPresent;
@@ -311,7 +311,7 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 
 
 /* Attempts to find the target for the camera to track */
-static BASE_OBJECT *camFindTarget(void)
+static BASE_OBJECT *camFindTarget()
 {
 	/*	See if we can find a selected droid. If there's more than one
 		droid selected for the present player, then we track the oldest
@@ -329,7 +329,7 @@ static BASE_OBJECT *camFindTarget(void)
 
 
 /* Updates the camera position/angle along with the object movement */
-bool	processWarCam(void)
+bool	processWarCam()
 {
 	BASE_OBJECT *foundTarget;
 	bool Status = true;
@@ -460,7 +460,7 @@ void	setWarCamActive(bool status)
 
 //-----------------------------------------------------------------------------------
 
-BASE_OBJECT	*camFindDroidTarget(void)
+BASE_OBJECT	*camFindDroidTarget()
 {
 	DROID	*psDroid;
 
@@ -994,7 +994,7 @@ static bool camTrackCamera()
 	return (true);
 }
 //-----------------------------------------------------------------------------------
-DROID *getTrackingDroid(void)
+DROID *getTrackingDroid()
 {
 	if (!getWarCamStatus())
 	{
@@ -1012,7 +1012,7 @@ DROID *getTrackingDroid(void)
 }
 
 //-----------------------------------------------------------------------------------
-SDWORD	getPresAngle(void)
+SDWORD	getPresAngle()
 {
 	return (presAvAngle);
 }
@@ -1020,7 +1020,7 @@ SDWORD	getPresAngle(void)
 
 
 //-----------------------------------------------------------------------------------
-UDWORD	getNumDroidsSelected(void)
+UDWORD	getNumDroidsSelected()
 {
 	return (selNumSelected(selectedPlayer));
 }
@@ -1028,7 +1028,7 @@ UDWORD	getNumDroidsSelected(void)
 //-----------------------------------------------------------------------------------
 
 /* Returns whether or not the tracking camera is active */
-bool	getWarCamStatus(void)
+bool	getWarCamStatus()
 {
 	/* Is it switched off? */
 	if (trackingCamera.status == CAM_INACTIVE)
@@ -1045,7 +1045,7 @@ bool	getWarCamStatus(void)
 //-----------------------------------------------------------------------------------
 
 /* Flips the status of tracking to the opposite of what it presently is */
-void	camToggleStatus(void)
+void	camToggleStatus()
 {
 	/* If it's off */
 	if (trackingCamera.status == CAM_INACTIVE)
@@ -1063,7 +1063,7 @@ void	camToggleStatus(void)
 
 /*	Flips on/off whether we print out full info about the droid being tracked.
 	If ON then this info is permanent on screen and realtime updating */
-void	camToggleInfo(void)
+void	camToggleInfo()
 {
 	bFullInfo = !bFullInfo;
 }
@@ -1079,7 +1079,7 @@ void	requestRadarTrack(SDWORD x, SDWORD y)
 }
 
 /* Returns whether we're presently tracking to a new _location_ */
-bool	getRadarTrackingStatus(void)
+bool	getRadarTrackingStatus()
 {
 	bool retVal;
 
@@ -1101,7 +1101,7 @@ bool	getRadarTrackingStatus(void)
 	return (retVal);
 }
 
-void	toggleRadarAllignment(void)
+void	toggleRadarAllignment()
 {
 	bRadarAllign = !bRadarAllign;
 }

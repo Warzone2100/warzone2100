@@ -55,7 +55,7 @@ static UDWORD aClusterAttacked[CLUSTER_MAX];
 UBYTE	aClusterInfo[CLUSTER_MAX];
 
 // initialise the cluster system
-void clustInitialise(void)
+void clustInitialise()
 {
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
@@ -94,7 +94,7 @@ void clustInitialise(void)
 }
 
 // update routine for the cluster system
-void clusterUpdate(void)
+void clusterUpdate()
 {
 	SDWORD	i;
 
@@ -295,7 +295,7 @@ void clustNewStruct(STRUCTURE *psStruct)
 
 
 // find an unused cluster number for a droid
-static SDWORD clustFindUnused(void)
+static SDWORD clustFindUnused()
 {
 	SDWORD	cluster;
 

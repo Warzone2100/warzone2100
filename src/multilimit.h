@@ -24,9 +24,9 @@
 #ifndef __INCLUDED_MULTILIMIT_H__
 #define __INCLUDED_MULTILIMIT_H__
 
-extern bool startLimitScreen(void);
-extern void runLimitScreen(void);
-extern void applyLimitSet(void);
-extern void createLimitSet(void);
+bool startLimitScreen();
+void runLimitScreen();
+void applyLimitSet();
+void createLimitSet();
 
 #endif //__cplusplus //__INCLUDED_MULTILIMIT_H__

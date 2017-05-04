@@ -46,14 +46,14 @@ extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - us
 /** How long to display a single electronic warfare shimmmer. */
 #define ELEC_DAMAGE_DURATION    (GAME_TICKS_PER_SEC/5)
 
-bool	proj_InitSystem(void);	///< Initialize projectiles subsystem.
-void	proj_UpdateAll(void);	///< Frame update for projectiles.
-bool	proj_Shutdown(void);	///< Shut down projectile subsystem.
+bool	proj_InitSystem();	///< Initialize projectiles subsystem.
+void	proj_UpdateAll();	///< Frame update for projectiles.
+bool	proj_Shutdown();	///< Shut down projectile subsystem.
 
-PROJECTILE *proj_GetFirst(void);	///< Get first projectile in the list.
-PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
+PROJECTILE *proj_GetFirst();	///< Get first projectile in the list.
+PROJECTILE *proj_GetNext();		///< Get next projectile in the list.
 
-void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
+void	proj_FreeAllProjectiles();	///< Free all projectiles in the list.
 
 void setExpGain(int player, int gain);
 int getExpGain(int player);
@@ -74,12 +74,12 @@ bool proj_Direct(const WEAPON_STATS *psStats);
 /** Return the maximum range for a weapon. */
 int proj_GetLongRange(const WEAPON_STATS *psStats, int player);
 
-extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
-extern bool gfxVisible(PROJECTILE *psObj);
+UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
+bool gfxVisible(PROJECTILE *psObj);
 
 /***************************************************************************/
 
-extern glm::mat4	objectShimmy(BASE_OBJECT *psObj);
+glm::mat4 objectShimmy(BASE_OBJECT *psObj);
 
 static inline void setProjectileSource(PROJECTILE *psProj, SIMPLE_OBJECT *psObj)
 {

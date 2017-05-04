@@ -184,7 +184,7 @@ bool gfxVisible(PROJECTILE *psObj)
 /***************************************************************************/
 
 bool
-proj_InitSystem(void)
+proj_InitSystem()
 {
 	psProjectileList.clear();
 	psProjectileNext = psProjectileList.end();
@@ -200,7 +200,7 @@ proj_InitSystem(void)
 // Clean out all projectiles from the system, and properly decrement
 // all reference counts.
 void
-proj_FreeAllProjectiles(void)
+proj_FreeAllProjectiles()
 {
 	psProjectileList.clear();
 	psProjectileNext = psProjectileList.end();
@@ -209,7 +209,7 @@ proj_FreeAllProjectiles(void)
 /***************************************************************************/
 
 bool
-proj_Shutdown(void)
+proj_Shutdown()
 {
 	proj_FreeAllProjectiles();
 
@@ -220,7 +220,7 @@ proj_Shutdown(void)
 
 // Reset the first/next methods, and give out the first projectile in the list.
 PROJECTILE *
-proj_GetFirst(void)
+proj_GetFirst()
 {
 	psProjectileNext = psProjectileList.begin();
 	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : nullptr;
@@ -230,7 +230,7 @@ proj_GetFirst(void)
 
 // Get the next projectile
 PROJECTILE *
-proj_GetNext(void)
+proj_GetNext()
 {
 	++psProjectileNext;
 	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : nullptr;

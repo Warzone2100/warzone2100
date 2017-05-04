@@ -39,19 +39,19 @@
 int transporterSpaceRequired(const DROID *psDroid);
 
 //initialises Transporter variables
-extern void initTransporters(void);
+void initTransporters();
 // Refresh the transporter screen.
-extern bool intRefreshTransporter(void);
+bool intRefreshTransporter();
 /*Add the Transporter Interface*/
-extern bool intAddTransporter(DROID *psSelected, bool offWorld);
+bool intAddTransporter(DROID *psSelected, bool offWorld);
 /* Remove the Transporter widgets from the screen */
-extern void intRemoveTrans(void);
-extern void intRemoveTransNoAnim(void);
+void intRemoveTrans();
+void intRemoveTransNoAnim();
 /* Process return codes from the Transporter Screen*/
-extern void intProcessTransporter(UDWORD id);
+void intProcessTransporter(UDWORD id);
 
 /*Adds a droid to the transporter, removing it from the world*/
-extern void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd);
+void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd);
 void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode);
 /*check to see if the droid can fit on the Transporter - return true if fits*/
 bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, bool mayFlash = true);
@@ -59,48 +59,48 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 up different amount depending on their body size - currently all are set to one!*/
 int calcRemainingCapacity(const DROID *psTransporter);
 
-extern bool transporterIsEmpty(const DROID *psTransporter);
+bool transporterIsEmpty(const DROID *psTransporter);
 
 /*launches the defined transporter to the offworld map*/
-extern bool launchTransporter(DROID *psTransporter);
+bool launchTransporter(DROID *psTransporter);
 
 /*checks how long the transporter has been travelling to see if it should
 have arrived - returns true when there*/
-extern bool updateTransporter(DROID *psTransporter);
+bool updateTransporter(DROID *psTransporter);
 
-extern void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 /* Remove the Transporter Launch widget from the screen*/
-extern void intRemoveTransporterLaunch(void);
+void intRemoveTransporterLaunch();
 
 //process the launch transporter button click
-extern void processLaunchTransporter(void);
+void processLaunchTransporter();
 
-extern SDWORD	bobTransporterHeight(void);
+SDWORD	bobTransporterHeight();
 
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
-extern bool intAddTransporterLaunch(DROID *psDroid);
+bool intAddTransporterLaunch(DROID *psDroid);
 
 /* set current transporter (for script callbacks) */
-extern void transporterSetScriptCurrent(DROID *psTransporter);
+void transporterSetScriptCurrent(DROID *psTransporter);
 
 /* get current transporter (for script callbacks) */
-extern DROID *transporterGetScriptCurrent(void);
+DROID *transporterGetScriptCurrent();
 
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/
-extern void resetTransporter(void);
+void resetTransporter();
 
 /* get time transporter launch button was pressed */
-extern UDWORD transporterGetLaunchTime(void);
+UDWORD transporterGetLaunchTime();
 
 /*set the time for the Launch*/
-extern void transporterSetLaunchTime(UDWORD time);
+void transporterSetLaunchTime(UDWORD time);
 
-extern void flashMissionButton(UDWORD buttonID);
-extern void stopMissionButtonFlash(UDWORD buttonID);
+void flashMissionButton(UDWORD buttonID);
+void stopMissionButtonFlash(UDWORD buttonID);
 /*checks the order of the droid to see if its currenly flying*/
-extern bool transporterFlying(DROID *psTransporter);
+bool transporterFlying(DROID *psTransporter);
 //initialise the flag to indicate the first transporter has arrived - set in startMission()
-extern void initFirstTransporterFlag(void);
+void initFirstTransporterFlag();
 
 #endif // __INCLUDED_SRC_TRANSPORTER_H__

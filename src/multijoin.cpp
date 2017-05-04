@@ -369,7 +369,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 	return true;
 }
 
-bool sendDataCheck(void)
+bool sendDataCheck()
 {
 	int i = 0;
 
@@ -475,7 +475,7 @@ void setupNewPlayer(UDWORD player)
 
 // While not the perfect place for this, it has to do when a HOST joins (hosts) game
 // unfortunatly, we don't get the message until after the setup is done.
-void ShowMOTD(void)
+void ShowMOTD()
 {
 	char buf[250] = { '\0' };
 	// when HOST joins the game, show server MOTD message first

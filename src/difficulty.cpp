@@ -74,7 +74,7 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 
 // ------------------------------------------------------------------------------------
 /* Returns the difficulty level */
-DIFFICULTY_LEVEL	getDifficultyLevel(void)
+DIFFICULTY_LEVEL	getDifficultyLevel()
 {
 	return (presDifLevel);
 }

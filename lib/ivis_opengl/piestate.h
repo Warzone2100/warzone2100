@@ -74,21 +74,21 @@ extern unsigned int pieStateCount;
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_SetDefaultStates(void);//Sets all states
-extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
-extern void pie_SetDepthOffset(float offset);
+void pie_SetDefaultStates();//Sets all states
+void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
+void pie_SetDepthOffset(float offset);
 //fog available
-extern void pie_EnableFog(bool val);
-extern bool pie_GetFogEnabled(void);
+void pie_EnableFog(bool val);
+bool pie_GetFogEnabled();
 //fog currently on
-extern void pie_SetFogStatus(bool val);
-extern bool pie_GetFogStatus(void);
-extern void pie_SetFogColour(PIELIGHT colour);
-extern PIELIGHT pie_GetFogColour(void) WZ_DECL_PURE;
-extern void pie_UpdateFogDistance(float begin, float end);
+void pie_SetFogStatus(bool val);
+bool pie_GetFogStatus();
+void pie_SetFogColour(PIELIGHT colour);
+PIELIGHT pie_GetFogColour() WZ_DECL_PURE;
+void pie_UpdateFogDistance(float begin, float end);
 //render states
-extern void pie_SetTexturePage(SDWORD num);
-extern void pie_SetRendMode(REND_MODE rendMode);
+void pie_SetTexturePage(SDWORD num);
+void pie_SetRendMode(REND_MODE rendMode);
 RENDER_STATE getCurrentRenderState();
 
 int pie_GetMaxAntialiasing();
@@ -243,6 +243,6 @@ void pie_SetShaderEcmEffect(bool value);
 #define glErrors()
 #endif
 
-extern bool _glerrors(const char *, const char *, int);
+bool _glerrors(const char *, const char *, int);
 
 #endif // _pieState_h

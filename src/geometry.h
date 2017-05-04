@@ -28,11 +28,11 @@ struct QUAD
 	Vector2i coords[4];
 };
 
-extern uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
+uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 bool inQuad(const Vector2i *pt, const QUAD *quad);
 Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad);
-extern DROID *getNearestDroid(UDWORD x, UDWORD y, bool bSelected);
-extern bool droidOnScreen(DROID *psDroid, SDWORD tolerance);
+DROID *getNearestDroid(UDWORD x, UDWORD y, bool bSelected);
+bool droidOnScreen(DROID *psDroid, SDWORD tolerance);
 
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {

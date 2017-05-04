@@ -26,17 +26,15 @@
 
 #include "droiddef.h"
 
-extern bool intDisplayMultiJoiningStatus(UBYTE joinCount);
+bool intDisplayMultiJoiningStatus(UBYTE joinCount);
 void recvPlayerLeft(NETQUEUE queue);
-extern bool MultiPlayerLeave(UDWORD playerIndex);						// A player has left the game.
-extern bool MultiPlayerJoin(UDWORD playerIndex);						// A Player has joined the game.
-extern void setupNewPlayer(UDWORD player);		// stuff to do when player joins.
-extern void clearPlayer(UDWORD player, bool quietly);     // wipe a player off the face of the earth.
-//extern bool ProcessDroidOrders			(void);
-//extern UDWORD							arenaPlayersReceived;
+bool MultiPlayerLeave(UDWORD playerIndex);						// A player has left the game.
+bool MultiPlayerJoin(UDWORD playerIndex);						// A Player has joined the game.
+void setupNewPlayer(UDWORD player);		// stuff to do when player joins.
+void clearPlayer(UDWORD player, bool quietly);     // wipe a player off the face of the earth.
 
-extern void ShowMOTD(void);
-extern bool recvDataCheck(NETQUEUE queue);
-extern bool sendDataCheck(void);
+void ShowMOTD();
+bool recvDataCheck(NETQUEUE queue);
+bool sendDataCheck();
 
 #endif // __INCLUDED_SRC_MULTIJOIN_H__

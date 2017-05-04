@@ -224,7 +224,7 @@ bool replaceTexture(const QString &oldfile, const QString &newfile)
 	return false;
 }
 
-void pie_TexShutDown(void)
+void pie_TexShutDown()
 {
 	// TODO, lazy deletions for faster loading of next level
 	debug(LOG_TEXTURE, "Cleaning out %u textures", _TEX_PAGE.size());
@@ -236,7 +236,7 @@ void pie_TexShutDown(void)
 	_TEX_PAGE.clear();
 }
 
-void pie_TexInit(void)
+void pie_TexInit()
 {
 	debug(LOG_TEXTURE, "pie_TexInit successful");
 }

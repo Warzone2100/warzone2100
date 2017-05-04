@@ -173,7 +173,7 @@ STAT_BAR	infoBars[] =
 };
 
 // --------------------------------------------------------------------
-static void fillUpStats(void);
+static void fillUpStats();
 // --------------------------------------------------------------------
 
 /* The present mission data */
@@ -186,7 +186,7 @@ extern bool Cheated;
 
 // --------------------------------------------------------------------
 /* Initialise the mission data info - done before each mission */
-bool	scoreInitSystem(void)
+bool	scoreInitSystem()
 {
 	missionData.unitsBuilt		= 0;
 	missionData.unitsKilled		= 0;
@@ -384,7 +384,7 @@ void scoreDataToScreen(WIDGET *psWidget)
 }
 
 // -----------------------------------------------------------------------------------
-void	fillUpStats(void)
+void	fillUpStats()
 {
 	UDWORD	i;
 	UDWORD	maxi, num;

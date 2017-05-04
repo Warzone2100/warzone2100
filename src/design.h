@@ -120,12 +120,12 @@
 #define IDDES_WPABUTTON			5903		// WeaponA button
 #define IDDES_WPBBUTTON			5904		// WeaponB button
 
-extern bool intAddDesign(bool bShowCentreScreen);
-extern void intRemoveDesign(void);
-extern void intProcessDesign(UDWORD id);
-extern void intRunDesign(void);
+bool intAddDesign(bool bShowCentreScreen);
+void intRemoveDesign();
+void intProcessDesign(UDWORD id);
+void intRunDesign();
 
-extern const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
+const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
 
 bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complain, int player);
 

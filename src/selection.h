@@ -50,7 +50,6 @@ enum SELECTIONTYPE
 	DST_ALL_SAME
 };
 
-// EXTERNALLY REFERENCED FUNCTIONS
 unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen);
 unsigned int selDroidDeselect(unsigned int player);
 unsigned int selNumSelected(unsigned int player);

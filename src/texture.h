@@ -43,6 +43,6 @@ extern TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 extern int terrainPage;
 
 void setTextureSize(int texSize);
-int getTextureSize(void);
+int getTextureSize();
 
 #endif // __INCLUDED_SRC_TEXTURE_H__

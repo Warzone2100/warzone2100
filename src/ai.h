@@ -55,13 +55,10 @@ extern PlayerMask satuplinkbits;
 #define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)
 
 /* Initialise the AI system */
-bool aiInitialise(void);
+bool aiInitialise();
 
 /* Shutdown the AI system */
-bool aiShutdown(void);
-
-/* Initialise a droid structure for AI */
-//extern bool aiInitDroid(DROID *psDroid);
+bool aiShutdown();
 
 /* Do the AI for a droid */
 void aiUpdateDroid(DROID *psDroid);

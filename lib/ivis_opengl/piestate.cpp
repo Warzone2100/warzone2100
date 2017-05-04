@@ -64,7 +64,7 @@ void rendStatesRendModeHack()
  *	Source
  */
 
-void pie_SetDefaultStates(void)//Sets all states
+void pie_SetDefaultStates()//Sets all states
 {
 	PIELIGHT black;
 
@@ -107,12 +107,12 @@ void pie_EnableFog(bool val)
 	}
 }
 
-bool pie_GetFogEnabled(void)
+bool pie_GetFogEnabled()
 {
 	return rendStates.fogEnabled;
 }
 
-bool pie_GetFogStatus(void)
+bool pie_GetFogStatus()
 {
 	return rendStates.fog;
 }
@@ -122,7 +122,7 @@ void pie_SetFogColour(PIELIGHT colour)
 	rendStates.fogColour = colour;
 }
 
-PIELIGHT pie_GetFogColour(void)
+PIELIGHT pie_GetFogColour()
 {
 	return rendStates.fogColour;
 }

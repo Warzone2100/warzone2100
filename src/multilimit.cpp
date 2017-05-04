@@ -78,7 +78,7 @@
 static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 // ////////////////////////////////////////////////////////////////////////////
-static inline void freeLimitSet(void)
+static inline void freeLimitSet()
 {
 	// Free the old set if required
 	if (ingame.numStructureLimits)
@@ -90,7 +90,7 @@ static inline void freeLimitSet(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool startLimitScreen(void)
+bool startLimitScreen()
 {
 	addBackdrop();//background
 
@@ -181,7 +181,7 @@ bool startLimitScreen(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-void runLimitScreen(void)
+void runLimitScreen()
 {
 	frontendMultiMessages();							// network stuff.
 
@@ -244,7 +244,7 @@ void runLimitScreen(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void createLimitSet(void)
+void createLimitSet()
 {
 	UDWORD			i, numchanges = 0, bufSize, idx = 0;
 	MULTISTRUCTLIMITS	*pEntry;
@@ -296,7 +296,7 @@ void createLimitSet(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void applyLimitSet(void)
+void applyLimitSet()
 {
 	MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
 

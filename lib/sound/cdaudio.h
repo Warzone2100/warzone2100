@@ -28,10 +28,10 @@ enum SONG_CONTEXT
 };
 
 bool cdAudio_Open(const char *user_musicdir);
-void cdAudio_Close(void);
+void cdAudio_Close();
 bool cdAudio_PlayTrack(SONG_CONTEXT context);
-void cdAudio_Stop(void);
-void cdAudio_Pause(void);
-void cdAudio_Resume(void);
+void cdAudio_Stop();
+void cdAudio_Pause();
+void cdAudio_Resume();
 
 #endif // __INCLUDED_LIB_SOUND_CDAUDIO_H__

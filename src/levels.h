@@ -80,9 +80,9 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
 // shutdown the level system
-extern void levShutDown(void);
+void levShutDown();
 
-extern bool levInitialise(void);
+bool levInitialise();
 
 // load up the data for a level
 bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType);
@@ -94,16 +94,16 @@ Sha256 levGetFileHash(LEVEL_DATASET *level);
 Sha256 levGetMapNameHash(char const *name);
 
 // free the currently loaded dataset
-extern bool levReleaseAll(void);
+bool levReleaseAll();
 
 // free the data for the current mission
-extern bool levReleaseMissionData(void);
+bool levReleaseMissionData();
 
 //get the type of level currently being loaded of GTYPE type
-extern SDWORD getLevelLoadType(void);
+SDWORD getLevelLoadType();
 
-extern char *getLevelName(void);
+char *getLevelName();
 
-extern void levTest(void);
+void levTest();
 
 #endif // __INCLUDED_SRC_LEVELS_H__

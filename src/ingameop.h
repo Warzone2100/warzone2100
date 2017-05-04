@@ -25,12 +25,12 @@
 #define __INCLUDED_SRC_INGAMEOP_H__
 
 // functions
-extern bool intAddInGameOptions(void);
-extern bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets);
-extern void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets);
-extern bool intRunInGameOptions(void);
-extern void intProcessInGameOptions(UDWORD);
-extern void intAddInGamePopup(void);
+bool intAddInGameOptions();
+bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets);
+void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets);
+bool intRunInGameOptions();
+void intProcessInGameOptions(UDWORD);
+void intAddInGamePopup();
 
 // status bools.
 extern bool	InGameOpUp;

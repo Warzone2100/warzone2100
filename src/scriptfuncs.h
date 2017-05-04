@@ -35,443 +35,435 @@
 struct BASE_OBJECT;
 struct DROID;
 
-extern bool scriptInit(void);
-extern void scriptSetStartPos(int position, int x, int	y);
-extern void scriptSetDerrickPos(int x, int y);
+bool scriptInit();
+void scriptSetStartPos(int position, int x, int	y);
+void scriptSetDerrickPos(int x, int y);
 
-extern bool scrGetPlayer(void);
-extern bool scrGetDerrick();
-extern bool scrGetDifficulty(void);
-extern bool scrScavengersActive(void);
-extern bool scrGetPlayerStartPosition(void);
-extern bool scrSafeDest(void);
-extern bool scrThreatAt(void);
-extern Vector2i getPlayerStartPosition(int player);
-extern bool scrSetSunPosition(void);
-extern bool scrSetSunIntensity(void);
+bool scrGetPlayer();
+bool scrGetDerrick();
+bool scrGetDifficulty();
+bool scrScavengersActive();
+bool scrGetPlayerStartPosition();
+bool scrSafeDest();
+bool scrThreatAt();
+Vector2i getPlayerStartPosition(int player);
+bool scrSetSunPosition();
+bool scrSetSunIntensity();
 
 // not used in scripts, but used in code.
-extern  bool objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
+bool objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
 
 // Check for any player object being within a certain range of a position
-extern bool scrObjectInRange(void);
+bool scrObjectInRange();
 
 // Check for a droid being within a certain range of a position
-extern bool scrDroidInRange(void);
+bool scrDroidInRange();
 
 // Check for a struct being within a certain range of a position
-extern bool scrStructInRange(void);
+bool scrStructInRange();
 
 // return power of a player.
-extern bool scrPlayerPower(void);
+bool scrPlayerPower();
 
 // Check for any player object being within a certain area
-extern bool scrObjectInArea(void);
+bool scrObjectInArea();
 
 // Check for a droid being within a certain area
-extern bool scrDroidInArea(void);
+bool scrDroidInArea();
 
 // Check for a struct being within a certain Area of a position
-extern bool scrStructInArea(void);
+bool scrStructInArea();
 
 // as above, but only visible structures.
-extern bool scrSeenStructInArea(void);
+bool scrSeenStructInArea();
 
 // Check for a players structures but no walls being within a certain area
-extern bool scrStructButNoWallsInArea(void);
+bool scrStructButNoWallsInArea();
 
 // Count the number of player objects within a certain area
-extern bool scrNumObjectsInArea(void);
+bool scrNumObjectsInArea();
 
 // Count the number of player droids within a certain area
-extern bool scrNumDroidsInArea(void);
+bool scrNumDroidsInArea();
 
 // Count the number of player structures within a certain area
-extern bool scrNumStructsInArea(void);
+bool scrNumStructsInArea();
 
 // Count the number of player structures but not walls within a certain area
-extern bool scrNumStructsButNotWallsInArea(void);
+bool scrNumStructsButNotWallsInArea();
 
 // Count the number of structures in an area of a certain type
-extern bool scrNumStructsByTypeInArea(void);
+bool scrNumStructsByTypeInArea();
 
 // Check for a droid having seen a certain object
-extern bool scrDroidHasSeen(void);
+bool scrDroidHasSeen();
 
 // Enable a component to be researched
-extern bool scrEnableComponent(void);
+bool scrEnableComponent();
 
 // Make a component available
-extern bool scrMakeComponentAvailable(void);
+bool scrMakeComponentAvailable();
 
 //Enable a structure type to be built
-extern bool	scrEnableStructure(void);
+bool	scrEnableStructure();
 
 // true if structure is available.
-extern bool scrIsStructureAvailable(void);
+bool scrIsStructureAvailable();
 
 // Build a droid
-extern bool scrAddDroid(void);
+bool scrAddDroid();
 
 // Build a droid
-extern bool scrAddDroidToMissionList(void);
+bool scrAddDroidToMissionList();
 
 //builds a droid in the specified factory//
-extern bool scrBuildDroid(void);
+bool scrBuildDroid();
 
 //check for a building to have been destroyed
-extern bool scrBuildingDestroyed(void);
+bool scrBuildingDestroyed();
 
 // Add a reticule button to the interface
-extern bool scrAddReticuleButton(void);
+bool scrAddReticuleButton();
 
 //Remove a reticule button from the interface
-extern bool scrRemoveReticuleButton(void);
+bool scrRemoveReticuleButton();
 
 // add a message to the Intelligence Display
-extern bool scrAddMessage(void);
+bool scrAddMessage();
 
 // add a tutorial message to the Intelligence Display
-//extern bool scrAddTutorialMessage(void);
+//bool scrAddTutorialMessage();
 
 //make the droid with the matching id the currently selected droid
-extern bool scrSelectDroidByID(void);
+bool scrSelectDroidByID();
 
 // for a specified player, set the assembly point droids go to when built
-extern bool	scrSetAssemblyPoint(void);
+bool scrSetAssemblyPoint();
 
 // test for structure is idle or not
-extern bool	scrStructureIdle(void);
+bool scrStructureIdle();
 
 // sends a players droids to a location to attack
-extern bool	scrAttackLocation(void);
+bool scrAttackLocation();
 
 // enumerate features;
-extern bool scrInitGetFeature(void);
-extern bool scrGetFeature(void);
-extern bool scrGetFeatureB(void);
+bool scrInitGetFeature();
+bool scrGetFeature();
+bool scrGetFeatureB();
 
 //Add a feature
-extern bool scrAddFeature(void);
+bool scrAddFeature();
 
 //Destroy a feature
-extern bool scrDestroyFeature(void);
+bool scrDestroyFeature();
 
 //Add a structure
-extern bool scrAddStructure(void);
+bool scrAddStructure();
 
 //Destroy a structure
-extern bool scrDestroyStructure(void);
+bool scrDestroyStructure();
 
 // enumerate structures
-extern bool scrInitEnumStruct(void);
-extern bool scrEnumStruct(void);
-extern bool scrInitEnumStructB(void);
-extern bool scrEnumStructB(void);
+bool scrInitEnumStruct();
+bool scrEnumStruct();
+bool scrInitEnumStructB();
+bool scrEnumStructB();
 
 /*looks to see if a structure (specified by type) exists */
-extern bool scrStructureBeingBuilt(void);
+bool scrStructureBeingBuilt();
 
 /* almost the same as above, but only for a specific struct*/
 // pc multiplayer only for now.
-extern bool scrStructureComplete(void);
+bool scrStructureComplete();
 
 /*looks to see if a structure (specified by type) exists and built*/
-extern bool scrStructureBuilt(void);
+bool scrStructureBuilt();
 
 /*centre theview on an object - can be droid/structure or feature */
-extern bool scrCentreView(void);
+bool scrCentreView();
 
 /*centre the view on a position */
-extern bool scrCentreViewPos(void);
+bool scrCentreViewPos();
 
 // Get a pointer to a structure based on a stat - returns NULL if cannot find one
-extern bool scrGetStructure(void);
+bool scrGetStructure();
 
 // Get a pointer to a template based on a component stat - returns NULL if cannot find one
-extern bool scrGetTemplate(void);
+bool scrGetTemplate();
 
 // Get a pointer to a droid based on a component stat - returns NULL if cannot find one
-extern bool scrGetDroid(void);
+bool scrGetDroid();
 
 // Sets all the scroll params for the map
-extern bool scrSetScrollParams(void);
+bool scrSetScrollParams();
 
 // Sets the scroll minX separately for the map
-extern bool scrSetScrollMinX(void);
+bool scrSetScrollMinX();
 
 // Sets the scroll minY separately for the map
-extern bool scrSetScrollMinY(void);
+bool scrSetScrollMinY();
 
 // Sets the scroll maxX separately for the map
-extern bool scrSetScrollMaxX(void);
+bool scrSetScrollMaxX();
 
 // Sets the scroll maxY separately for the map
-extern bool scrSetScrollMaxY(void);
+bool scrSetScrollMaxY();
 
 // Sets which sensor will be used as the default for a player
-extern bool scrSetDefaultSensor(void);
+bool scrSetDefaultSensor();
 
 // Sets which ECM will be used as the default for a player
-extern bool scrSetDefaultECM(void);
+bool scrSetDefaultECM();
 
 // Sets which RepairUnit will be used as the default for a player
-extern bool scrSetDefaultRepair(void);
+bool scrSetDefaultRepair();
 
 // Sets the structure limits for a player
-extern bool scrSetStructureLimits(void);
+bool scrSetStructureLimits();
 
 // Sets all structure limits for a player to a specified value
-extern bool scrSetAllStructureLimits(void);
-
+bool scrSetAllStructureLimits();
 
 //multiplayer limit handler
-extern bool scrApplyLimitSet(void);
-
+bool scrApplyLimitSet();
 
 // plays a sound for the specified player - only plays the sound if the
 //specified player = selectedPlayer
-extern bool scrPlaySound(void);
+bool scrPlaySound();
 
 // plays a sound for the specified player - only plays the sound if the
 // specified player = selectedPlayer - saves position
-extern bool scrPlaySoundPos(void);
+bool scrPlaySoundPos();
 
 /* add a text message tothe top of the screen for the selected player*/
-extern bool scrAddConsoleText(void);
+bool scrAddConsoleText();
 
 // same as above - but it doesn't clear what's there and isn't permanent
-extern	bool scrShowConsoleText(void);
-
+bool scrShowConsoleText();
 
 /* Adds console text without clearing old */
-extern bool scrTagConsoleText(void);
-
+bool scrTagConsoleText();
 
 //demo functions for turning the power on
-extern bool scrTurnPowerOff(void);
+bool scrTurnPowerOff();
 
 //demo functions for turning the power off
-extern bool scrTurnPowerOn(void);
+bool scrTurnPowerOn();
 
 //flags when the tutorial is over so that console messages can be turned on again
-extern bool scrTutorialEnd(void);
+bool scrTutorialEnd();
 
 //function to play a full-screen video in the middle of the game for the selected player
-extern bool scrPlayVideo(void);
+bool scrPlayVideo();
 
 //checks to see if there are any droids for the specified player
-extern bool scrAnyDroidsLeft(void);
+bool scrAnyDroidsLeft();
 
 //checks to see if there are any structures (except walls) for the specified player
-extern bool scrAnyStructButWallsLeft(void);
+bool scrAnyStructButWallsLeft();
 
-extern bool scrAnyFactoriesLeft(void);
+bool scrAnyFactoriesLeft();
 
 //function to call when the game is over, plays a message.
-extern bool scrGameOverMessage(void);
+bool scrGameOverMessage();
 
 //function to call when the game is over
-extern bool scrGameOver(void);
+bool scrGameOver();
 
 //defines the background audio to play
-extern bool scrPlayBackgroundAudio(void);
+bool scrPlayBackgroundAudio();
 
 // cd audio funcs
-extern bool scrPlayIngameCDAudio(void);
-extern bool scrStopCDAudio(void);
-extern bool scrPauseCDAudio(void);
-extern bool scrResumeCDAudio(void);
+bool scrPlayIngameCDAudio();
+bool scrStopCDAudio();
+bool scrPauseCDAudio();
+bool scrResumeCDAudio();
 
 // set the retreat point for a player
-extern bool scrSetRetreatPoint(void);
+bool scrSetRetreatPoint();
 
 // set the retreat force level
-extern bool scrSetRetreatForce(void);
+bool scrSetRetreatForce();
 
 // set the retreat leadership
-extern bool scrSetRetreatLeadership(void);
+bool scrSetRetreatLeadership();
 
 // set the retreat point for a group
-extern bool scrSetGroupRetreatPoint(void);
+bool scrSetGroupRetreatPoint();
 
-extern bool scrSetGroupRetreatForce(void);
+bool scrSetGroupRetreatForce();
 
 // set the retreat leadership
-extern bool scrSetGroupRetreatLeadership(void);
+bool scrSetGroupRetreatLeadership();
 
 // set the retreat health level
-bool scrSetRetreatHealth(void);
-bool scrSetGroupRetreatHealth(void);
+bool scrSetRetreatHealth();
+bool scrSetGroupRetreatHealth();
 
 //start a Mission
-extern bool scrStartMission(void);
-
-//end a mission NO LONGER CALLED FROM SCRIPT
-//extern bool scrEndMission(void);
+bool scrStartMission();
 
 //set Snow (enable disable snow)
-extern bool scrSetSnow(void);
+bool scrSetSnow();
 
 //set Rain (enable disable Rain)
-extern bool scrSetRain(void);
+bool scrSetRain();
 
 //set Background Fog (replace fade out with fog)
-extern bool scrSetBackgroundFog(void);
+bool scrSetBackgroundFog();
 
 //set Depth Fog (gradual fog from mid range to edge of world)
-extern bool scrSetDepthFog(void);
+bool scrSetDepthFog();
 
 //set Mission Fog colour, may be modified by weather effects
-extern bool scrSetFogColour(void);
+bool scrSetFogColour();
 
 // remove a message from the Intelligence Display
-extern bool scrRemoveMessage(void);
+bool scrRemoveMessage();
 
 // Pop up a message box with a number value in it
-extern bool scrNumMB(void);
+bool scrNumMB();
 
 // Do an approximation to a square root
-extern bool scrApproxRoot(void);
+bool scrApproxRoot();
 
-extern bool scrRefTest(void);
+bool scrRefTest();
 
 // is <player> human or a computer? (multiplayer)
-extern bool	scrIsHumanPlayer(void);
+bool	scrIsHumanPlayer();
 
 // Set an alliance between two players
-extern bool scrCreateAlliance(void);
+bool scrCreateAlliance();
 
-extern bool scrOfferAlliance(void);
+bool scrOfferAlliance();
 
 // Break an alliance between two players
-extern bool scrBreakAlliance(void);
+bool scrBreakAlliance();
 
 // push true if an alliance still exists.
-extern bool scrAllianceExists(void);
-extern bool scrAllianceExistsBetween(void);
+bool scrAllianceExists();
+bool scrAllianceExistsBetween();
 
 // true if player is allied.
-extern bool scrPlayerInAlliance(void);
+bool scrPlayerInAlliance();
 
 // push true if group wins are allowed.
-//extern bool scrAllianceState(void);
+//bool scrAllianceState();
 
 // push true if a single alliance is dominant.
-extern bool scrDominatingAlliance(void);
+bool scrDominatingAlliance();
 
 // push true if human player is responsible for 'player'
-extern bool	scrMyResponsibility(void);
+bool scrMyResponsibility();
 
 /*checks to see if a structure of the type specified exists within the
 specified range of an XY location */
-extern bool scrStructureBuiltInRange(void);
+bool scrStructureBuiltInRange();
 
 // generate a random number
-extern bool scrRandom(void);
+bool scrRandom();
 
 // randomise the random number seed
-extern bool scrRandomiseSeed(void);
+bool scrRandomiseSeed();
 
 //explicitly enables a research topic
-extern bool scrEnableResearch(void);
+bool scrEnableResearch();
 
 //acts as if the research topic was completed - used to jump into the tree
-extern bool scrCompleteResearch(void);
+bool scrCompleteResearch();
 
 // start a reticule button flashing
-extern bool scrFlashOn(void);
+bool scrFlashOn();
 
 // stop a reticule button flashing
-extern bool scrFlashOff(void);
+bool scrFlashOff();
 
 //set the initial power level settings for a player
-extern bool scrSetPowerLevel(void);
+bool scrSetPowerLevel();
 
 //add some power for a player
-extern bool scrAddPower(void);
+bool scrAddPower();
 
 //set the landing Zone position for the map
-extern bool scrSetLandingZone(void);
+bool scrSetLandingZone();
 
 /*set the landing Zone position for the Limbo droids*/
-extern bool scrSetLimboLanding(void);
+bool scrSetLimboLanding();
 
 //initialises all the no go areas
-extern bool scrInitAllNoGoAreas(void);
+bool scrInitAllNoGoAreas();
 
 //set a no go area for the map - landing zones for the enemy, or player 0
-extern bool scrSetNoGoArea(void);
+bool scrSetNoGoArea();
 
 // set the zoom level for the radar
-extern bool scrSetRadarZoom(void);
+bool scrSetRadarZoom();
 
 //set the time delay for reinforcements for an offworld mission
-extern bool scrSetReinforcementTime(void);
+bool scrSetReinforcementTime();
 
 //set how long an offworld mission can last -1 = no limit
-extern bool scrSetMissionTime(void);
+bool scrSetMissionTime();
 
 // this returns how long is left for the current mission time is 1/100th sec - same units as passed in
-extern bool scrMissionTimeRemaining(void);
+bool scrMissionTimeRemaining();
 
 // clear all the console messages
-extern bool scrFlushConsoleMessages(void);
+bool scrFlushConsoleMessages();
 
 // find and manipulate a position to build a structure.
-extern bool scrPickStructLocation(void);
-extern bool scrPickStructLocationB(void);
-extern bool scrPickStructLocationC(void);
+bool scrPickStructLocation();
+bool scrPickStructLocationB();
+bool scrPickStructLocationC();
 
 // establish the distance between two points in world coordinates - approximate bounded to 11% out
-extern bool scrDistanceTwoPts(void);
+bool scrDistanceTwoPts();
 
 // decides if a base object can see another - you can select whether walls matter to line of sight
-extern bool	scrLOSTwoBaseObjects(void);
+bool scrLOSTwoBaseObjects();
 
 // destroys all structures of a certain type within a certain area and gives a gfx effect if you want it
-extern bool	scrDestroyStructuresInArea(void);
+bool scrDestroyStructuresInArea();
 
 // Estimates a threat from droids within a certain area
-extern bool	scrThreatInArea(void);
+bool scrThreatInArea();
 
 // gets the nearest gateway to a list of points
-extern bool scrGetNearestGateway(void);
+bool scrGetNearestGateway();
 
 // Lets the user specify which tile goes under water.
-extern bool	scrSetWaterTile(void);
+bool scrSetWaterTile();
 
 // lets the user specify which tile	is used for rubble on skyscraper destruction
-extern bool	scrSetRubbleTile(void);
+bool scrSetRubbleTile();
 
 // Tells the game what campaign it's in
-extern bool	scrSetCampaignNumber(void);
+bool scrSetCampaignNumber();
 
 // tests whether a structure has a module. If structure is null, then any structure
-extern bool	scrTestStructureModule(void);
+bool scrTestStructureModule();
 
 // give a player a template from another player
-extern bool scrAddTemplate(void);
+bool scrAddTemplate();
 
 // Sets the transporter entry and exit points for the map
-extern bool scrSetTransporterExit(void);
+bool scrSetTransporterExit();
 
 // Fly transporters in at start of map
-extern bool scrFlyTransporterIn(void);
+bool scrFlyTransporterIn();
 
 // Add droid to transporter
-extern bool scrAddDroidToTransporter(void);
+bool scrAddDroidToTransporter();
 
-
-extern	bool	scrDestroyUnitsInArea(void);
+bool scrDestroyUnitsInArea();
 
 // Removes a droid from thr world without all the graphical hoo ha.
-extern bool	scrRemoveDroid(void);
+bool scrRemoveDroid();
 
 // Sets an object to be a certain percent damaged
-extern bool	scrForceDamage(void);
+bool scrForceDamage();
 
-extern bool scrGetGameStatus(void);
+bool scrGetGameStatus();
 
 enum GAMESTATUS
 {
@@ -481,210 +473,209 @@ enum GAMESTATUS
 };
 
 //get the colour number used by a player
-extern bool scrGetPlayerColour(void);
-extern bool scrGetPlayerColourName(void);
+bool scrGetPlayerColour();
+bool scrGetPlayerColourName();
 
 //set the colour number to use for a player
-extern bool scrSetPlayerColour(void);
+bool scrSetPlayerColour();
 
 //set all droids in an area to belong to a different player
-extern bool scrTakeOverDroidsInArea(void);
+bool scrTakeOverDroidsInArea();
 
 /*this takes over a single droid and passes a pointer back to the new one*/
-extern bool scrTakeOverSingleDroid(void);
+bool scrTakeOverSingleDroid();
 
 // set all droids in an area of a certain experience level or less to belong to
 // a different player - returns the number of droids changed
-extern bool scrTakeOverDroidsInAreaExp(void);
+bool scrTakeOverDroidsInAreaExp();
 
 /*this takes over a single structure and passes a pointer back to the new one*/
-extern bool scrTakeOverSingleStructure(void);
+bool scrTakeOverSingleStructure();
 
 //set all structures in an area to belong to a different player - returns the number of droids changed
 //will not work on factories for the selectedPlayer
-extern bool scrTakeOverStructsInArea(void);
+bool scrTakeOverStructsInArea();
 
 //set Flag for defining what happens to the droids in a Transporter
-extern bool scrSetDroidsToSafetyFlag(void);
+bool scrSetDroidsToSafetyFlag();
 
 //set Flag for defining whether the coded countDown is called
-extern bool scrSetPlayCountDown(void);
+bool scrSetPlayCountDown();
 
 //get the number of droids currently onthe map for a player
-extern bool scrGetDroidCount(void);
+bool scrGetDroidCount();
 
 // fire a weapon stat at an object
-extern bool scrFireWeaponAtObj(void);
+bool scrFireWeaponAtObj();
 
 // fire a weapon stat at a location
-extern bool scrFireWeaponAtLoc(void);
+bool scrFireWeaponAtLoc();
 
-extern bool	scrClearConsole(void);
+bool scrClearConsole();
 
 // set the number of kills for a droid
-extern bool scrSetDroidKills(void);
+bool scrSetDroidKills();
 
 // get the number of kills for a droid
-extern bool scrGetDroidKills(void);
+bool scrGetDroidKills();
 
 // reset the visibility for a player
-extern bool scrResetPlayerVisibility(void);
+bool scrResetPlayerVisibility();
 
 // set the vtol return pos for a player
-extern bool scrSetVTOLReturnPos(void);
+bool scrSetVTOLReturnPos();
 
 // skirmish function **NOT PSX**
-extern bool scrIsVtol(void);
+bool scrIsVtol();
 
 // init templates for tutorial.
-extern bool scrTutorialTemplates(void);
+bool scrTutorialTemplates();
 
 //called via the script in a Limbo Expand level to set the level to plain ol' expand
-extern bool scrResetLimboMission(void);
+bool scrResetLimboMission();
 
 // skirmish lassat fire.
-extern bool scrSkFireLassat(void);
+bool scrSkFireLassat();
 
 //-----------------------------------------
 //New functions
 //-----------------------------------------
 
-extern bool scrStrcmp(void);
-extern bool scrConsole(void);
-extern bool scrDbgMsgOn(void);
-extern bool scrDbg(void);
-extern bool scrMsg(void);
-extern bool scrDebugFile(void);
+bool scrStrcmp();
+bool scrConsole();
+bool scrDbgMsgOn();
+bool scrDbg();
+bool scrMsg();
+bool scrDebugFile();
 
-extern bool scrActionDroidObj(void);
-extern bool scrInitEnumDroids(void);
-extern bool scrEnumDroid(void);
-extern bool scrInitIterateGroupB(void);
-extern bool scrIterateGroupB(void);
-extern bool	scrFactoryGetTemplate(void);
-extern bool scrNumTemplatesInProduction(void);
-extern bool scrNumDroidsByComponent(void);
-extern bool scrGetStructureLimit(void);
-extern bool scrStructureLimitReached(void);
-extern bool scrGetNumStructures(void);
-extern bool scrGetUnitLimit(void);
-extern bool scrMin(void);
-extern bool scrMax(void);
-extern bool scrFMin(void);
-extern bool scrFMax(void);
-extern bool scrFogTileInRange(void);
-extern bool scrMapRevealedInRange(void);
-extern bool scrMapTileVisible(void);
-extern bool scrPursueResearch(void);
-extern bool scrNumResearchLeft(void);
-extern bool scrResearchCompleted(void);
-extern bool scrResearchStarted(void);
-extern bool scrThreatInRange(void);
-extern bool scrNumEnemyWeapObjInRange(void);
-extern bool scrNumEnemyWeapDroidsInRange(void);
-extern bool scrNumEnemyWeapStructsInRange(void);
-extern bool scrNumFriendlyWeapObjInRange(void);
-extern bool scrNumFriendlyWeapDroidsInRange(void);
-extern bool scrNumFriendlyWeapStructsInRange(void);
-extern bool scrNumPlayerWeapDroidsInRange(void);
-extern bool scrNumPlayerWeapStructsInRange(void);
-extern bool scrNumPlayerWeapObjInRange(void);
-extern bool scrNumEnemyObjInRange(void);
-extern bool scrEnemyWeapObjCostInRange(void);
-extern bool scrFriendlyWeapObjCostInRange(void);
-extern bool scrNumStructsByStatInRange(void);
-extern bool scrNumStructsByStatInArea(void);
-extern bool scrNumStructsByTypeInRange(void);
-extern bool scrNumFeatByTypeInRange(void);
-extern bool scrNumStructsButNotWallsInRangeVis(void);
-extern bool scrGetStructureVis(void);
-extern bool scrChooseValidLoc(void);
-extern bool scrGetClosestEnemy(void);
-extern bool scrTransporterCapacity(void);
-extern bool scrTransporterFlying(void);
-extern bool scrUnloadTransporter(void);
-extern bool scrHasGroup(void);
-extern bool scrObjWeaponMaxRange(void);
-extern bool scrObjHasWeapon(void);
-extern bool scrObjectHasIndirectWeapon(void);
-extern bool scrGetClosestEnemyDroidByType(void);
-extern bool scrGetClosestEnemyStructByType(void);
-extern bool scrSkDefenseLocationB(void);
-extern bool scrCirclePerimPoint(void);
+bool scrActionDroidObj();
+bool scrInitEnumDroids();
+bool scrEnumDroid();
+bool scrInitIterateGroupB();
+bool scrIterateGroupB();
+bool scrFactoryGetTemplate();
+bool scrNumTemplatesInProduction();
+bool scrNumDroidsByComponent();
+bool scrGetStructureLimit();
+bool scrStructureLimitReached();
+bool scrGetNumStructures();
+bool scrGetUnitLimit();
+bool scrMin();
+bool scrMax();
+bool scrFMin();
+bool scrFMax();
+bool scrFogTileInRange();
+bool scrMapRevealedInRange();
+bool scrMapTileVisible();
+bool scrPursueResearch();
+bool scrNumResearchLeft();
+bool scrResearchCompleted();
+bool scrResearchStarted();
+bool scrThreatInRange();
+bool scrNumEnemyWeapObjInRange();
+bool scrNumEnemyWeapDroidsInRange();
+bool scrNumEnemyWeapStructsInRange();
+bool scrNumFriendlyWeapObjInRange();
+bool scrNumFriendlyWeapDroidsInRange();
+bool scrNumFriendlyWeapStructsInRange();
+bool scrNumPlayerWeapDroidsInRange();
+bool scrNumPlayerWeapStructsInRange();
+bool scrNumPlayerWeapObjInRange();
+bool scrNumEnemyObjInRange();
+bool scrEnemyWeapObjCostInRange();
+bool scrFriendlyWeapObjCostInRange();
+bool scrNumStructsByStatInRange();
+bool scrNumStructsByStatInArea();
+bool scrNumStructsByTypeInRange();
+bool scrNumFeatByTypeInRange();
+bool scrNumStructsButNotWallsInRangeVis();
+bool scrGetStructureVis();
+bool scrChooseValidLoc();
+bool scrGetClosestEnemy();
+bool scrTransporterCapacity();
+bool scrTransporterFlying();
+bool scrUnloadTransporter();
+bool scrHasGroup();
+bool scrObjWeaponMaxRange();
+bool scrObjHasWeapon();
+bool scrObjectHasIndirectWeapon();
+bool scrGetClosestEnemyDroidByType();
+bool scrGetClosestEnemyStructByType();
+bool scrSkDefenseLocationB();
+bool scrCirclePerimPoint();
 
-extern bool scrGiftRadar(void);
-extern bool scrNumAllies(void);
-extern bool scrNumAAinRange(void);
-extern bool scrSelectDroid(void);
-extern bool scrSelectGroup(void);
-extern bool scrModulo(void);
-extern bool scrPlayerLoaded(void);
-extern bool scrRemoveBeacon(void);
-extern bool scrDropBeacon(void);
-extern bool scrClosestDamagedGroupDroid(void);
-extern bool scrMsgBox(void);
-extern bool scrGetStructureType(void);
-extern bool scrGetPlayerName(void);
-extern bool scrSetPlayerName(void);
-extern bool scrStructInRangeVis(void);
-extern bool scrDroidInRangeVis(void);
+bool scrGiftRadar();
+bool scrNumAllies();
+bool scrNumAAinRange();
+bool scrSelectDroid();
+bool scrSelectGroup();
+bool scrModulo();
+bool scrPlayerLoaded();
+bool scrRemoveBeacon();
+bool scrDropBeacon();
+bool scrClosestDamagedGroupDroid();
+bool scrMsgBox();
+bool scrGetStructureType();
+bool scrGetPlayerName();
+bool scrSetPlayerName();
+bool scrStructInRangeVis();
+bool scrDroidInRangeVis();
 
-extern bool scrGetBit(void);
-extern bool scrSetBit(void);
-extern bool scrAlliancesLocked(void);
-extern bool scrASSERT(void);
-extern bool scrShowRangeAtPos(void);
-extern bool scrToPow(void);
-extern bool scrDebugMenu(void);
-extern bool scrSetDebugMenuEntry(void);
-extern bool scrProcessChatMsg(void);
-extern bool scrGetChatCmdDescription(void);
-extern bool	scrGetNumArgsInCmd(void);
-extern bool	scrGetChatCmdParam(void);
-extern bool scrChatCmdIsPlayerAddressed(void);
-extern bool scrSetTileHeight(void);
-extern bool scrGetTileStructure(void);
-extern bool scrPrintCallStack(void);
-extern bool scrDebugModeEnabled(void);
-extern bool scrCalcDroidPower(void);
-extern bool scrGetDroidLevel(void);
-extern bool scrMoveDroidStopped(void);
-extern bool scrUpdateVisibleTiles(void);
-extern bool scrCheckVisibleTile(void);
-extern bool scrAssembleWeaponTemplate(void);
-extern bool scrWeaponLongHitUpgrade(void);
-extern bool scrWeaponDamageUpgrade(void);
-extern bool scrWeaponFirePauseUpgrade(void);
-extern bool scrIsComponentAvailable(void);
-extern bool scrGetBodySize(void);
-extern bool scrGettext(void);
-extern bool scrGettext_noop(void);
-extern bool scrPgettext(void);
-extern bool scrPgettext_expr(void);
-extern bool scrPgettext_noop(void);
+bool scrGetBit();
+bool scrSetBit();
+bool scrAlliancesLocked();
+bool scrASSERT();
+bool scrShowRangeAtPos();
+bool scrToPow();
+bool scrDebugMenu();
+bool scrSetDebugMenuEntry();
+bool scrProcessChatMsg();
+bool scrGetChatCmdDescription();
+bool scrGetNumArgsInCmd();
+bool scrGetChatCmdParam();
+bool scrChatCmdIsPlayerAddressed();
+bool scrSetTileHeight();
+bool scrGetTileStructure();
+bool scrPrintCallStack();
+bool scrDebugModeEnabled();
+bool scrCalcDroidPower();
+bool scrGetDroidLevel();
+bool scrMoveDroidStopped();
+bool scrUpdateVisibleTiles();
+bool scrCheckVisibleTile();
+bool scrAssembleWeaponTemplate();
+bool scrWeaponLongHitUpgrade();
+bool scrWeaponDamageUpgrade();
+bool scrWeaponFirePauseUpgrade();
+bool scrIsComponentAvailable();
+bool scrGetBodySize();
+bool scrGettext();
+bool scrGettext_noop();
+bool scrPgettext();
+bool scrPgettext_expr();
+bool scrPgettext_noop();
 
+bool beingResearchedByAlly(SDWORD resIndex, SDWORD player);
+bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
+bool skTopicAvail(UWORD inc, UDWORD player);
+UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
+UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bFinished);
+UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
+UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bFinished);
+UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool bFinished);
+bool addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, const char *textMsg);
+bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);
+MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
+SDWORD getNumRepairedBy(struct DROID *psDroidToCheck, SDWORD player);
+bool objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
+SDWORD getPlayerFromString(char *playerName);
+bool scrExp();
+bool scrSqrt();
+bool scrLog();
 
-extern bool beingResearchedByAlly(SDWORD resIndex, SDWORD player);
-extern bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
-extern bool skTopicAvail(UWORD inc, UDWORD player);
-extern UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
-extern UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bFinished);
-extern UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
-extern UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bFinished);
-extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool bFinished);
-extern bool addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, const char *textMsg);
-extern bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);
-extern MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
-extern SDWORD getNumRepairedBy(struct DROID *psDroidToCheck, SDWORD player);
-extern bool objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
-extern SDWORD getPlayerFromString(char *playerName);
-extern bool scrExp(void);
-extern bool scrSqrt(void);
-extern bool scrLog(void);
+VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
-extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
-
-extern bool scrEnumUnbuilt(void);
-extern bool scrIterateUnbuilt(void);
+bool scrEnumUnbuilt();
+bool scrIterateUnbuilt();
 
 #endif // __INCLUDED_SRC_SCRIPTFUNCS_H__

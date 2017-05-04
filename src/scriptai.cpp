@@ -50,7 +50,7 @@
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // Add a droid to a group
-bool scrGroupAddDroid(void)
+bool scrGroupAddDroid()
 {
 	DROID_GROUP		*psGroup;
 	DROID			*psDroid;
@@ -88,7 +88,7 @@ bool scrGroupAddDroid(void)
 
 
 // Add droids in an area to a group
-bool scrGroupAddArea(void)
+bool scrGroupAddArea()
 {
 	DROID_GROUP		*psGroup;
 	DROID			*psDroid;
@@ -126,7 +126,7 @@ bool scrGroupAddArea(void)
 
 
 // Add groupless droids in an area to a group
-bool scrGroupAddAreaNoGroup(void)
+bool scrGroupAddAreaNoGroup()
 {
 	DROID_GROUP		*psGroup;
 	DROID			*psDroid;
@@ -164,7 +164,7 @@ bool scrGroupAddAreaNoGroup(void)
 
 
 // Move the droids from one group to another
-bool scrGroupAddGroup(void)
+bool scrGroupAddGroup()
 {
 	DROID_GROUP		*psTo, *psFrom;
 	DROID			*psDroid, *psNext;
@@ -188,7 +188,7 @@ bool scrGroupAddGroup(void)
 
 
 // check if a droid is a member of a group
-bool scrGroupMember(void)
+bool scrGroupMember()
 {
 	DROID_GROUP		*psGroup;
 	DROID			*psDroid;
@@ -228,7 +228,7 @@ bool scrGroupMember(void)
 
 
 // returns number of idle droids in a group.
-bool scrIdleGroup(void)
+bool scrIdleGroup()
 {
 	DROID_GROUP *psGroup;
 	DROID		*psDroid;
@@ -261,7 +261,7 @@ static DROID_GROUP		*psScrIterateGroup;
 static DROID			*psScrIterateGroupDroid;
 
 // initialise iterating a groups members
-bool scrInitIterateGroup(void)
+bool scrInitIterateGroup()
 {
 	DROID_GROUP	*psGroup;
 
@@ -280,7 +280,7 @@ bool scrInitIterateGroup(void)
 
 
 // iterate through a groups members
-bool scrIterateGroup(void)
+bool scrIterateGroup()
 {
 	DROID_GROUP	*psGroup;
 	DROID		*psDroid;
@@ -317,7 +317,7 @@ bool scrIterateGroup(void)
 
 
 // remove a droid from a group
-bool scrDroidLeaveGroup(void)
+bool scrDroidLeaveGroup()
 {
 	DROID			*psDroid;
 
@@ -336,7 +336,7 @@ bool scrDroidLeaveGroup(void)
 
 
 // Give a group an order
-bool scrOrderGroup(void)
+bool scrOrderGroup()
 {
 	DROID_GROUP		*psGroup;
 	DROID_ORDER		order;
@@ -368,7 +368,7 @@ bool scrOrderGroup(void)
 
 
 // Give a group an order to a location
-bool scrOrderGroupLoc(void)
+bool scrOrderGroupLoc()
 {
 	DROID_GROUP		*psGroup;
 	DROID_ORDER		order;
@@ -407,7 +407,7 @@ bool scrOrderGroupLoc(void)
 
 
 // Give a group an order to an object
-bool scrOrderGroupObj(void)
+bool scrOrderGroupObj()
 {
 	DROID_GROUP		*psGroup;
 	DROID_ORDER		order;
@@ -443,7 +443,7 @@ bool scrOrderGroupObj(void)
 }
 
 // Give a droid an order
-bool scrOrderDroid(void)
+bool scrOrderDroid()
 {
 	DROID			*psDroid;
 	DROID_ORDER		order;
@@ -479,7 +479,7 @@ bool scrOrderDroid(void)
 
 
 // Give a Droid an order to a location
-bool scrOrderDroidLoc(void)
+bool scrOrderDroidLoc()
 {
 	DROID			*psDroid;
 	DROID_ORDER		order;
@@ -521,7 +521,7 @@ bool scrOrderDroidLoc(void)
 
 
 // Give a Droid an order to an object
-bool scrOrderDroidObj(void)
+bool scrOrderDroidObj()
 {
 	DROID			*psDroid;
 	DROID_ORDER		order;
@@ -561,7 +561,7 @@ bool scrOrderDroidObj(void)
 }
 
 // Give a Droid an order with a stat
-bool scrOrderDroidStatsLoc(void)
+bool scrOrderDroidStatsLoc()
 {
 	DROID			*psDroid;
 	DROID_ORDER		order;
@@ -613,7 +613,7 @@ bool scrOrderDroidStatsLoc(void)
 
 
 // set the secondary state for a droid
-bool scrSetDroidSecondary(void)
+bool scrSetDroidSecondary()
 {
 	DROID		*psDroid;
 	SECONDARY_ORDER	sec;
@@ -637,7 +637,7 @@ bool scrSetDroidSecondary(void)
 }
 
 // set the secondary state for a droid
-bool scrSetGroupSecondary(void)
+bool scrSetGroupSecondary()
 {
 	DROID_GROUP		*psGroup;
 	SECONDARY_ORDER		sec;
@@ -658,7 +658,7 @@ bool scrSetGroupSecondary(void)
 
 
 // add a droid to a commander
-bool scrCmdDroidAddDroid(void)
+bool scrCmdDroidAddDroid()
 {
 	DROID		*psDroid, *psCommander;
 
@@ -673,7 +673,7 @@ bool scrCmdDroidAddDroid(void)
 }
 
 // returns max number of droids in a commander group
-bool scrCmdDroidMaxGroup(void)
+bool scrCmdDroidMaxGroup()
 {
 	DROID		*psCommander;
 
@@ -700,7 +700,7 @@ UDWORD	scrDroidPref, scrDroidIgnore;
 
 
 // reset the structure preferences
-bool scrResetStructTargets(void)
+bool scrResetStructTargets()
 {
 	scrStructPref = 0;
 	scrStructIgnore = 0;
@@ -710,7 +710,7 @@ bool scrResetStructTargets(void)
 
 
 // reset the droid preferences
-bool scrResetDroidTargets(void)
+bool scrResetDroidTargets()
 {
 	scrDroidPref = 0;
 	scrDroidIgnore = 0;
@@ -720,7 +720,7 @@ bool scrResetDroidTargets(void)
 
 
 // set prefered structure target types
-bool scrSetStructTarPref(void)
+bool scrSetStructTarPref()
 {
 	UDWORD	pref;
 
@@ -754,7 +754,7 @@ bool scrSetStructTarPref(void)
 
 
 // set structure target ignore types
-bool scrSetStructTarIgnore(void)
+bool scrSetStructTarIgnore()
 {
 	UDWORD	pref;
 
@@ -788,7 +788,7 @@ bool scrSetStructTarIgnore(void)
 
 
 // set prefered droid target types
-bool scrSetDroidTarPref(void)
+bool scrSetDroidTarPref()
 {
 	UDWORD	pref;
 
@@ -825,7 +825,7 @@ bool scrSetDroidTarPref(void)
 }
 
 // set droid target ignore types
-bool scrSetDroidTarIgnore(void)
+bool scrSetDroidTarIgnore()
 {
 	UDWORD	pref;
 
@@ -1196,7 +1196,7 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 }
 
 // get a structure target in an area using the preferences
-bool scrStructTargetInArea(void)
+bool scrStructTargetInArea()
 {
 	SDWORD		x1, y1, x2, y2;
 	SDWORD		tarPlayer, visPlayer;
@@ -1218,7 +1218,7 @@ bool scrStructTargetInArea(void)
 }
 
 // get a structure target on the map using the preferences
-bool scrStructTargetOnMap(void)
+bool scrStructTargetOnMap()
 {
 	SDWORD		tarPlayer, visPlayer;
 	STRUCTURE	*psTarget;
@@ -1242,7 +1242,7 @@ bool scrStructTargetOnMap(void)
 }
 
 // get a droid target in an area using the preferences
-bool scrDroidTargetInArea(void)
+bool scrDroidTargetInArea()
 {
 	SDWORD		x1, y1, x2, y2;
 	SDWORD		tarPlayer, visPlayer;
@@ -1266,7 +1266,7 @@ bool scrDroidTargetInArea(void)
 }
 
 // get a droid target on the map using the preferences
-bool scrDroidTargetOnMap(void)
+bool scrDroidTargetOnMap()
 {
 	SDWORD		tarPlayer, visPlayer;
 	DROID		*psTarget;
@@ -1290,7 +1290,7 @@ bool scrDroidTargetOnMap(void)
 }
 
 // get a target from a cluster using the preferences
-bool scrTargetInCluster(void)
+bool scrTargetInCluster()
 {
 	SDWORD		tarPlayer, tarType, visPlayer, clusterID, cluster;
 	BASE_OBJECT	*psTarget;
@@ -1329,7 +1329,7 @@ bool scrTargetInCluster(void)
 // ********************************************************************************************
 // ********************************************************************************************
 
-bool scrSkCanBuildTemplate(void)
+bool scrSkCanBuildTemplate()
 {
 	STRUCTURE *psStructure;
 	DROID_TEMPLATE *psTempl;
@@ -1389,7 +1389,7 @@ failTempl:
 // ********************************************************************************************
 // locate the enemy
 // gives a target location given a player to attack.
-bool scrSkLocateEnemy(void)
+bool scrSkLocateEnemy()
 {
 	SDWORD		player;//,*x,*y;
 	STRUCTURE	*psStruct;
@@ -1502,7 +1502,7 @@ bool skTopicAvail(UWORD inc, UDWORD player)
 }
 
 // ********************************************************************************************
-bool scrSkDoResearch(void)
+bool scrSkDoResearch()
 {
 	SDWORD				player, bias;
 	UWORD				i;
@@ -1547,7 +1547,7 @@ bool scrSkDoResearch(void)
 }
 
 // ********************************************************************************************
-bool scrSkVtolEnableCheck(void)
+bool scrSkVtolEnableCheck()
 {
 	SDWORD player;
 	UDWORD i;
@@ -1587,7 +1587,7 @@ bool scrSkVtolEnableCheck(void)
 }
 
 // ********************************************************************************************
-bool scrSkGetFactoryCapacity(void)
+bool scrSkGetFactoryCapacity()
 {
 	SDWORD count = 0;
 	STRUCTURE *psStructure;
@@ -1610,7 +1610,7 @@ bool scrSkGetFactoryCapacity(void)
 	return true;
 }
 // ********************************************************************************************
-bool scrSkDifficultyModifier(void)
+bool scrSkDifficultyModifier()
 {
 	int 			player;
 	RESEARCH_FACILITY	*psResFacility;
@@ -1903,19 +1903,19 @@ failed:
 
 
 // return a good place to build a defence, given a starting point
-bool scrSkDefenseLocation(void)
+bool scrSkDefenseLocation()
 {
 	return defenseLocation(false);
 }
 
 // return a good place to build a defence with a min number of clear tiles
-bool scrSkDefenseLocationB(void)
+bool scrSkDefenseLocationB()
 {
 	return defenseLocation(true);
 }
 
 
-bool scrSkFireLassat(void)
+bool scrSkFireLassat()
 {
 	SDWORD	player;
 	BASE_OBJECT *psObj;
@@ -1936,7 +1936,7 @@ bool scrSkFireLassat(void)
 //-----------------------
 // New functions
 //-----------------------
-bool scrActionDroidObj(void)
+bool scrActionDroidObj()
 {
 	DROID			*psDroid;
 	DROID_ACTION		action;
@@ -1976,7 +1976,7 @@ static DROID_GROUP *psScrIterateGroupB[MAX_PLAYERS];
 static DROID *psScrIterateGroupDroidB[MAX_PLAYERS];
 
 // initialise iterating a groups members
-bool scrInitIterateGroupB(void)
+bool scrInitIterateGroupB()
 {
 	DROID_GROUP	*psGroup;
 	SDWORD		bucket;
@@ -1998,7 +1998,7 @@ bool scrInitIterateGroupB(void)
 
 //script function - improved version
 // iterate through a groups members
-bool scrIterateGroupB(void)
+bool scrIterateGroupB()
 {
 	DROID_GROUP	*psGroup;
 	DROID		*psDroid;
@@ -2038,7 +2038,7 @@ bool scrIterateGroupB(void)
 	return true;
 }
 
-bool scrDroidCanReach(void)
+bool scrDroidCanReach()
 {
 	DROID			*psDroid;
 	int			x, y;

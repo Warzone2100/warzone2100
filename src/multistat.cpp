@@ -269,7 +269,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 }
 
 // update games played.
-void updateMultiStatsGames(void)
+void updateMultiStatsGames()
 {
 	if (Cheated || selectedPlayer >= MAX_PLAYERS)
 	{
@@ -279,7 +279,7 @@ void updateMultiStatsGames(void)
 }
 
 // games won
-void updateMultiStatsWins(void)
+void updateMultiStatsWins()
 {
 	if (Cheated || selectedPlayer >= MAX_PLAYERS)
 	{
@@ -289,7 +289,7 @@ void updateMultiStatsWins(void)
 }
 
 //games lost.
-void updateMultiStatsLoses(void)
+void updateMultiStatsLoses()
 {
 	if (Cheated || selectedPlayer >= MAX_PLAYERS)
 	{

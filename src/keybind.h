@@ -25,113 +25,113 @@
 #include "lib/framework/fixedpoint.h"
 
 // --------------- All those keyboard mappable functions */
-extern void	kf_HalveHeights(void);
-extern void	kf_DebugDroidInfo(void);
-extern void	kf_BuildInfo(void);
-extern void	kf_ToggleFPS(void);			//FPS counter NOT same as kf_Framerate! -Q
-extern void	kf_ToggleSamples(void);		// Displays # of sound samples in Queue/list.
-extern void kf_ToggleOrders(void);		//displays unit's Order/action state.
-extern void	kf_FrameRate(void);
-extern void	kf_ShowNumObjects(void);
-extern void	kf_ToggleRadar(void);
-extern void	kf_TogglePower(void);
-extern void	kf_RecalcLighting(void);
-extern void	kf_ScreenDump(void);
-extern void	kf_AllAvailable(void);
-extern void	kf_TriFlip(void);
-extern void	kf_ToggleBackgroundFog(void);
-extern void	kf_ToggleDistanceFog(void);
-extern void	kf_ToggleMistFog(void);
-extern void	kf_ToggleFog(void);
-extern void	kf_ToggleShadows(void);
-extern void	kf_ToggleCamera(void);
-extern void	kf_RaiseTile(void);
-extern void	kf_LowerTile(void);
-extern void	kf_MapCheck(void);
-extern void	kf_SystemClose(void);
-extern void	kf_ZoomOut(void);
-void            kf_ZoomOutStep();
-extern void	kf_ZoomIn(void);
-void            kf_ZoomInStep();
-extern void	kf_ShrinkScreen(void);
-extern void	kf_ExpandScreen(void);
-extern void	kf_RotateLeft(void);
-extern void	kf_RotateRight(void);
-extern void	kf_PitchBack(void);
-extern void	kf_PitchForward(void);
-extern void	kf_ResetPitch(void);
-extern void	kf_ToggleDimension(void);
-extern void	kf_ShowMappings(void);
-extern void	kf_SelectGrouping(UDWORD groupNumber);
-extern void	kf_SelectGrouping_0(void);
-extern void	kf_SelectGrouping_1(void);
-extern void	kf_SelectGrouping_2(void);
-extern void	kf_SelectGrouping_3(void);
-extern void	kf_SelectGrouping_4(void);
-extern void	kf_SelectGrouping_5(void);
-extern void	kf_SelectGrouping_6(void);
-extern void	kf_SelectGrouping_7(void);
-extern void	kf_SelectGrouping_8(void);
-extern void	kf_SelectGrouping_9(void);
-extern void	kf_AssignGrouping_0(void);
-extern void	kf_AssignGrouping_1(void);
-extern void	kf_AssignGrouping_2(void);
-extern void	kf_AssignGrouping_3(void);
-extern void	kf_AssignGrouping_4(void);
-extern void	kf_AssignGrouping_5(void);
-extern void	kf_AssignGrouping_6(void);
-extern void	kf_AssignGrouping_7(void);
-extern void	kf_AssignGrouping_8(void);
-extern void	kf_AssignGrouping_9(void);
-extern void	kf_SelectMoveGrouping(void);
-extern void	kf_ToggleDroidInfo(void);
-extern void	kf_addInGameOptions(void);
-extern void	kf_AddMissionOffWorld(void);
-extern void	kf_EndMissionOffWorld(void);
-extern void	kf_NewPlayerPower(void);
-extern void	kf_addMultiMenu(void);
-extern void	kf_multiAudioStart(void);
-extern void	kf_multiAudioStop(void);
-extern void	kf_JumpToMapMarker(void);
-extern void	kf_TogglePowerBar(void);
-extern void	kf_ToggleDebugMappings(void);
-extern void	kf_ToggleGodMode(void);
-extern void	kf_SeekNorth(void);
-extern void	kf_MaxScrollLimits(void);
-extern void	kf_LevelSea(void);
-extern void	kf_TestWater(void);
-extern void	kf_toggleTrapCursor(void);
-extern void	kf_TogglePauseMode(void);
-extern void	kf_ToggleRadarAllign(void);
+void kf_HalveHeights();
+void kf_DebugDroidInfo();
+void kf_BuildInfo();
+void kf_ToggleFPS();			//FPS counter NOT same as kf_Framerate! -Q
+void kf_ToggleSamples();		// Displays # of sound samples in Queue/list.
+void kf_ToggleOrders();		//displays unit's Order/action state.
+void kf_FrameRate();
+void kf_ShowNumObjects();
+void kf_ToggleRadar();
+void kf_TogglePower();
+void kf_RecalcLighting();
+void kf_ScreenDump();
+void kf_AllAvailable();
+void kf_TriFlip();
+void kf_ToggleBackgroundFog();
+void kf_ToggleDistanceFog();
+void kf_ToggleMistFog();
+void kf_ToggleFog();
+void kf_ToggleShadows();
+void kf_ToggleCamera();
+void kf_RaiseTile();
+void kf_LowerTile();
+void kf_MapCheck();
+void kf_SystemClose();
+void kf_ZoomOut();
+void kf_ZoomOutStep();
+void kf_ZoomIn();
+void kf_ZoomInStep();
+void kf_ShrinkScreen();
+void kf_ExpandScreen();
+void kf_RotateLeft();
+void kf_RotateRight();
+void kf_PitchBack();
+void kf_PitchForward();
+void kf_ResetPitch();
+void kf_ToggleDimension();
+void kf_ShowMappings();
+void kf_SelectGrouping(UDWORD groupNumber);
+void kf_SelectGrouping_0();
+void kf_SelectGrouping_1();
+void kf_SelectGrouping_2();
+void kf_SelectGrouping_3();
+void kf_SelectGrouping_4();
+void kf_SelectGrouping_5();
+void kf_SelectGrouping_6();
+void kf_SelectGrouping_7();
+void kf_SelectGrouping_8();
+void kf_SelectGrouping_9();
+void kf_AssignGrouping_0();
+void kf_AssignGrouping_1();
+void kf_AssignGrouping_2();
+void kf_AssignGrouping_3();
+void kf_AssignGrouping_4();
+void kf_AssignGrouping_5();
+void kf_AssignGrouping_6();
+void kf_AssignGrouping_7();
+void kf_AssignGrouping_8();
+void kf_AssignGrouping_9();
+void kf_SelectMoveGrouping();
+void kf_ToggleDroidInfo();
+void kf_addInGameOptions();
+void kf_AddMissionOffWorld();
+void kf_EndMissionOffWorld();
+void kf_NewPlayerPower();
+void kf_addMultiMenu();
+void kf_multiAudioStart();
+void kf_multiAudioStop();
+void kf_JumpToMapMarker();
+void kf_TogglePowerBar();
+void kf_ToggleDebugMappings();
+void kf_ToggleGodMode();
+void kf_SeekNorth();
+void kf_MaxScrollLimits();
+void kf_LevelSea();
+void kf_TestWater();
+void kf_toggleTrapCursor();
+void kf_TogglePauseMode();
+void kf_ToggleRadarAllign();
 
-extern void	kf_ToggleEnergyBars(void);
-extern void	kf_FinishAllResearch(void);
-extern void	kf_FinishResearch(void);
-extern void	kf_ToggleOverlays(void);
-extern void	kf_ChooseOptions(void);
-extern void	kf_ChooseCommand(void);
-extern void	kf_ChooseManufacture(void);
-extern void	kf_ChooseResearch(void);
-extern void	kf_ChooseBuild(void);
-extern void	kf_ChooseDesign(void);
-extern void	kf_ChooseIntelligence(void);
-extern void	kf_ChooseCancel(void);
-extern void	kf_ToggleWeather(void);
-extern void	kf_KillSelected(void);
-extern void	kf_ShowGridInfo(void);
-extern void	kf_SendGlobalMessage(void);
-extern void	kf_SendTeamMessage(void);
-extern void	kf_SelectPlayer(void);
-extern void	kf_ToggleConsole(void);
-extern void	kf_ToggleTeamChat(void);
-extern void	kf_SelectAllOnScreenUnits(void);
-extern void	kf_SelectAllUnits(void);
-extern void	kf_SelectAllVTOLs(void);
+void kf_ToggleEnergyBars();
+void kf_FinishAllResearch();
+void kf_FinishResearch();
+void kf_ToggleOverlays();
+void kf_ChooseOptions();
+void kf_ChooseCommand();
+void kf_ChooseManufacture();
+void kf_ChooseResearch();
+void kf_ChooseBuild();
+void kf_ChooseDesign();
+void kf_ChooseIntelligence();
+void kf_ChooseCancel();
+void kf_ToggleWeather();
+void kf_KillSelected();
+void kf_ShowGridInfo();
+void kf_SendGlobalMessage();
+void kf_SendTeamMessage();
+void kf_SelectPlayer();
+void kf_ToggleConsole();
+void kf_ToggleTeamChat();
+void kf_SelectAllOnScreenUnits();
+void kf_SelectAllUnits();
+void kf_SelectAllVTOLs();
 void kf_SelectAllArmedVTOLs();
-extern void	kf_SelectAllHovers(void);
-extern void	kf_SelectAllWheeled(void);
-extern void	kf_SelectAllTracked(void);
-extern void	kf_SelectAllHalfTracked(void);
+void kf_SelectAllHovers();
+void kf_SelectAllWheeled();
+void kf_SelectAllTracked();
+void kf_SelectAllHalfTracked();
 void kf_SelectAllCyborgs();
 void kf_SelectAllEngineers();
 void kf_SelectAllMechanics();
@@ -139,124 +139,125 @@ void kf_SelectAllTransporters();
 void kf_SelectAllRepairTanks();
 void kf_SelectAllSensorUnits();
 void kf_SelectAllTrucks();
-extern void	kf_SelectAllCombatUnits(void);
+void kf_SelectAllCombatUnits();
 void kf_SelectAllLandCombatUnits();
 void kf_SelectAllCombatCyborgs();
-extern void	kf_SelectAllSameType(void);
+void kf_SelectAllSameType();
 
-extern void	kf_SetDroidRetreatMedium(void);
-extern void	kf_SetDroidRetreatHeavy(void);
-extern void	kf_SetDroidRetreatNever(void);
+void kf_SetDroidRetreatMedium();
+void kf_SetDroidRetreatHeavy();
+void kf_SetDroidRetreatNever();
 
-extern void	kf_SetDroidAttackAtWill(void);
-extern void	kf_SetDroidAttackReturn(void);
-extern void	kf_SetDroidAttackCease(void);
+void kf_SetDroidAttackAtWill();
+void kf_SetDroidAttackReturn();
+void kf_SetDroidAttackCease();
 
 void kf_SetDroidOrderHold();
 void kf_SetDroidOrderStop();
 
-extern void	kf_SetDroidMoveGuard(void);
-extern void	kf_SetDroidMovePursue(void);   //not there?
-extern void	kf_SetDroidMovePatrol(void);   // not there?
+void kf_SetDroidMoveGuard();
+void kf_SetDroidMovePursue();   //not there?
+void kf_SetDroidMovePatrol();   // not there?
 
-extern void	kf_SetDroidReturnToBase(void);
-extern void	kf_SetDroidGoToTransport(void);
-extern void	kf_SetDroidGoForRepair(void);
-extern void	kf_SetDroidRecycle(void);
-extern void	kf_ScatterDroids(void);
-extern void	kf_CentreOnBase(void);
-extern void	kf_ToggleFog(void);
-extern void	kf_MoveToLastMessagePos(void);
-extern void	kf_SelectAllDamaged(void);
-extern void	kf_RightOrderMenu(void);
+void kf_SetDroidReturnToBase();
+void kf_SetDroidGoToTransport();
+void kf_SetDroidGoForRepair();
+void kf_SetDroidRecycle();
+void kf_ScatterDroids();
+void kf_CentreOnBase();
+void kf_ToggleFog();
+void kf_MoveToLastMessagePos();
+void kf_SelectAllDamaged();
+void kf_RightOrderMenu();
 
-extern bool	bAllowOtherKeyPresses;
+extern bool bAllowOtherKeyPresses;
 
-extern void	kf_TriggerRayCast(void);
-extern void	kf_ToggleFormationSpeedLimiting(void);
-extern void	kf_ToggleSensorDisplay(void);		//Was commented out.  Re-enabled --Q 5/10/05
-extern void	kf_JumpToResourceExtractor(void);
-extern void	kf_JumpToRepairUnits(void);
-extern void	kf_JumpToConstructorUnits(void);
-extern void	kf_JumpToCommandUnits(void);
-extern void	kf_JumpToSensorUnits(void);
-extern void	kf_AddHelpBlip(void);				//Add a beacon
-extern void	kf_ToggleProximitys(void);
+void kf_TriggerRayCast();
+void kf_ToggleFormationSpeedLimiting();
+void kf_ToggleSensorDisplay();		//Was commented out.  Re-enabled --Q 5/10/05
+void kf_JumpToResourceExtractor();
+void kf_JumpToRepairUnits();
+void kf_JumpToConstructorUnits();
+void kf_JumpToCommandUnits();
+void kf_JumpToSensorUnits();
+void kf_AddHelpBlip();				//Add a beacon
+void kf_ToggleProximitys();
 
-extern void	kf_JumpToUnassignedUnits(void);
-extern void	kf_TriggerShockWave(void);
-extern void	kf_ToggleVisibility(void);
-extern void	kf_RadarZoomIn(void);
-extern void	kf_RadarZoomOut(void);
-extern void	kf_SelectNextFactory(void);
-extern void	kf_SelectNextCyborgFactory(void);
-extern void	kf_SelectNextPowerStation(void);
-extern void	kf_SelectNextResearch(void);
-extern void	kf_ToggleConsoleDrop(void);
-extern void	kf_ToggleMouseInvert(void);
-extern void	kf_SetKillerLevel(void);
-extern void	kf_SetEasyLevel(void);
-extern void	kf_SetNormalLevel(void);
-extern void	kf_SetToughUnitsLevel(void);
-extern void	kf_UpThePower(void);
-extern void	kf_MaxPower(void);
-extern void	kf_KillEnemy(void);
-extern void	kf_ToggleMissionTimer(void);
-extern void	kf_TraceObject(void);
+void kf_JumpToUnassignedUnits();
+void kf_TriggerShockWave();
+void kf_ToggleVisibility();
+void kf_RadarZoomIn();
+void kf_RadarZoomOut();
+void kf_SelectNextFactory();
+void kf_SelectNextCyborgFactory();
+void kf_SelectNextPowerStation();
+void kf_SelectNextResearch();
+void kf_ToggleConsoleDrop();
+void kf_ToggleMouseInvert();
+void kf_SetKillerLevel();
+void kf_SetEasyLevel();
+void kf_SetNormalLevel();
+void kf_SetToughUnitsLevel();
+void kf_UpThePower();
+void kf_MaxPower();
+void kf_KillEnemy();
+void kf_ToggleMissionTimer();
+void kf_TraceObject();
 
-extern void	kf_SetHardLevel(void);
-extern void	kf_SelectCommander_0(void);
-extern void	kf_SelectCommander_1(void);
-extern void	kf_SelectCommander_2(void);
-extern void	kf_SelectCommander_3(void);
-extern void	kf_SelectCommander_4(void);
-extern void	kf_SelectCommander_5(void);
-extern void	kf_SelectCommander_6(void);
-extern void	kf_SelectCommander_7(void);
-extern void	kf_SelectCommander_8(void);
-extern void	kf_SelectCommander_9(void);
-void kf_ToggleReopenBuildMenu(void);
+void kf_SetHardLevel();
+void kf_SelectCommander_0();
+void kf_SelectCommander_1();
+void kf_SelectCommander_2();
+void kf_SelectCommander_3();
+void kf_SelectCommander_4();
+void kf_SelectCommander_5();
+void kf_SelectCommander_6();
+void kf_SelectCommander_7();
+void kf_SelectCommander_8();
+void kf_SelectCommander_9();
+void kf_ToggleReopenBuildMenu();
 
-extern void	kf_ToggleShowGateways(void);
-extern void	kf_ToggleShowPath(void);
+void kf_ToggleShowGateways();
+void kf_ToggleShowPath();
 
 // dirty but necessary
-extern	char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
-extern	void	kf_FaceNorth(void);
-extern	void	kf_FaceSouth(void);
-extern	void	kf_FaceEast(void);
-extern	void	kf_FaceWest(void);
-extern	void	kf_ToggleRadarJump(void);
-extern	void	kf_MovePause(void);
+extern char sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 
-extern void kf_SpeedUp(void);
-extern void kf_SlowDown(void);
-extern void kf_NormalSpeed(void);
+void kf_FaceNorth();
+void kf_FaceSouth();
+void kf_FaceEast();
+void kf_FaceWest();
+void kf_ToggleRadarJump();
+void kf_MovePause();
+
+void kf_SpeedUp();
+void kf_SlowDown();
+void kf_NormalSpeed();
 
 void kf_CloneSelected(int);
-extern void kf_Reload(void);
+void kf_Reload();
 
 #define SPIN_SCALING	(360*DEG_1)
 #define	SECS_PER_SPIN	2
 #define MAP_SPIN_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
-void kf_ToggleRadarTerrain(void);            //radar terrain
-void kf_ToggleRadarAllyEnemy(void);          //enemy/ally color toggle
+void kf_ToggleRadarTerrain();            //radar terrain
+void kf_ToggleRadarAllyEnemy();          //enemy/ally color toggle
 
-void kf_TileInfo(void);
+void kf_TileInfo();
 
-void kf_NoAssert(void);
+void kf_NoAssert();
 
 void kf_RevealMapAtPos();
 
-bool runningMultiplayer(void);
+bool runningMultiplayer();
 
-void    kf_ForceDesync(void);
-void	kf_PowerInfo(void);
-void	kf_BuildNextPage(void);
-void	kf_BuildPrevPage(void);
-extern void kf_DamageMe(void);
-extern void kf_AutoGame(void);
+void kf_ForceDesync();
+void kf_PowerInfo();
+void kf_BuildNextPage();
+void kf_BuildPrevPage();
+void kf_DamageMe();
+void kf_AutoGame();
 
 void kf_PerformanceSample();
 

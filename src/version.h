@@ -23,7 +23,7 @@
 
 #include "lib/framework/types.h"
 
-extern const char *version_getVersionString(void);
-extern const char *version_getFormattedVersionString(void);
+const char *version_getVersionString();
+const char *version_getFormattedVersionString();
 
 #endif // __INCLUDED_VERSION_H__

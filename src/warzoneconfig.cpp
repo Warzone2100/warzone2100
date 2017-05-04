@@ -69,7 +69,7 @@ void war_SetSPcolor(int color)
 	setPlayerColour(0, color);
 }
 
-int8_t war_GetSPcolor(void)
+int8_t war_GetSPcolor()
 {
 	return warGlobs.SPcolor;
 }
@@ -89,7 +89,7 @@ void war_setFullscreen(bool b)
 	warGlobs.Fullscreen = b;
 }
 
-bool war_getFullscreen(void)
+bool war_getFullscreen()
 {
 	return warGlobs.Fullscreen;
 }
@@ -109,7 +109,7 @@ void war_SetTrapCursor(bool b)
 	warGlobs.trapCursor = b;
 }
 
-bool war_GetTrapCursor(void)
+bool war_GetTrapCursor()
 {
 	return warGlobs.trapCursor;
 }
@@ -119,7 +119,7 @@ void war_SetVsync(bool b)
 	warGlobs.vsync = b;
 }
 
-bool war_GetVsync(void)
+bool war_GetVsync()
 {
 	return warGlobs.vsync;
 }
@@ -129,7 +129,7 @@ void war_SetWidth(UDWORD width)
 	warGlobs.width = width;
 }
 
-UDWORD war_GetWidth(void)
+UDWORD war_GetWidth()
 {
 	return warGlobs.width;
 }
@@ -139,7 +139,7 @@ void war_SetHeight(UDWORD height)
 	warGlobs.height = height;
 }
 
-UDWORD war_GetHeight(void)
+UDWORD war_GetHeight()
 {
 	return warGlobs.height;
 }
@@ -159,7 +159,7 @@ void war_SetFMVmode(FMV_MODE mode)
 	warGlobs.FMVmode = (FMV_MODE)(mode % FMV_MAX);
 }
 
-FMV_MODE war_GetFMVmode(void)
+FMV_MODE war_GetFMVmode()
 {
 	return  warGlobs.FMVmode;
 }
@@ -170,7 +170,7 @@ void war_setScanlineMode(SCANLINE_MODE mode)
 	seq_setScanlineMode(mode);
 }
 
-SCANLINE_MODE war_getScanlineMode(void)
+SCANLINE_MODE war_getScanlineMode()
 {
 	debug(LOG_VIDEO, "%d", seq_getScanlineMode());
 	return seq_getScanlineMode();
@@ -191,7 +191,7 @@ void war_SetColouredCursor(bool enabled)
 	warGlobs.ColouredCursor = enabled;
 }
 
-bool war_GetColouredCursor(void)
+bool war_GetColouredCursor()
 {
 	return warGlobs.ColouredCursor;
 }
@@ -201,12 +201,12 @@ void war_setSoundEnabled(bool soundEnabled)
 	warGlobs.soundEnabled = soundEnabled;
 }
 
-bool war_getSoundEnabled(void)
+bool war_getSoundEnabled()
 {
 	return warGlobs.soundEnabled;
 }
 
-bool war_GetMusicEnabled(void)
+bool war_GetMusicEnabled()
 {
 	return warGlobs.MusicEnabled;
 }

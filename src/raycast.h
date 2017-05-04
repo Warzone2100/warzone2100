@@ -49,6 +49,6 @@ void rayCast(Vector2i src, Vector2i dst, RAY_CALLBACK callback, void *data);
 
 // Calculates the maximum height and distance found along a line from any
 // point to the edge of the grid
-extern void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch);
+void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch);
 
 #endif // __INCLUDED_SRC_RAYCAST_H__

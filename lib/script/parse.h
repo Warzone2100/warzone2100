@@ -299,10 +299,10 @@ extern CALLBACK_SYMBOL	*asScrCallbackTab;
 extern void scriptSetInputFile(PHYSFS_file *fileHandle);
 
 /* Initialise the parser ready for a new script */
-extern bool scriptInitParser(void);
+extern bool scriptInitParser();
 
 /* Set off the scenario file parser */
-extern int scr_parse(void);
+extern int scr_parse();
 
 /* Give an error message */
 void scr_error(const char *pMessage, ...);

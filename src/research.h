@@ -82,31 +82,26 @@ extern UDWORD	aDefaultSensor[MAX_PLAYERS];
 extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
-//extern bool loadResearch(void);
-extern bool loadResearch(QString filename);
+bool loadResearch(QString filename);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
-//extern UBYTE fillResearchList(UBYTE *plist, UDWORD playerID, UWORD topic,
-//							   UWORD limit);
-//needs to be UWORD sized for Patches
-extern UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic,
-                              UWORD limit);
+UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit);
 
 /* process the results of a completed research topic */
-extern void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger);
+void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger);
 
 //this just inits all the research arrays
-extern bool ResearchShutDown(void);
+bool ResearchShutDown();
 //this free the memory used for the research
-extern void ResearchRelease(void);
+void ResearchRelease();
 
 /* For a given view data get the research this is related to */
-extern RESEARCH *getResearch(const char *pName);
+RESEARCH *getResearch(const char *pName);
 
 /* sets the status of the topic to cancelled and stores the current research
    points accquired */
-extern void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
+void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /* For a given view data get the research this is related to */
 struct VIEWDATA;
@@ -114,31 +109,31 @@ RESEARCH *getResearchForMsg(VIEWDATA *pViewData);
 
 /* Sets the 'possible' flag for a player's research so the topic will appear in
 the research list next time the Research Facilty is selected */
-extern bool enableResearch(RESEARCH *psResearch, UDWORD player);
+bool enableResearch(RESEARCH *psResearch, UDWORD player);
 
 /*find the last research topic of importance that the losing player did and
 'give' the results to the reward player*/
-extern void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer);
+void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 
 /*check to see if any research has been completed that enables self repair*/
-extern bool selfRepairEnabled(UBYTE player);
+bool selfRepairEnabled(UBYTE player);
 
-extern SDWORD	mapRIDToIcon(UDWORD rid);
-extern SDWORD	mapIconToRID(UDWORD iconID);
+SDWORD	mapRIDToIcon(UDWORD rid);
+SDWORD	mapIconToRID(UDWORD iconID);
 
 /*puts research facility on hold*/
-extern void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
+void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 /*release a research facility from hold*/
-extern void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
+void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /*checks the stat to see if its of type wall or defence*/
-extern bool wallDefenceStruct(STRUCTURE_STATS *psStats);
+bool wallDefenceStruct(STRUCTURE_STATS *psStats);
 
-extern void enableSelfRepair(UBYTE player);
+void enableSelfRepair(UBYTE player);
 
 void CancelAllResearch(UDWORD pl);
 
-extern bool researchInitVars(void);
+bool researchInitVars();
 
 bool researchAvailable(int inc, int playerID, QUEUE_MODE mode);
 

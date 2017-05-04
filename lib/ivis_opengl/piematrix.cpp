@@ -83,12 +83,12 @@ glm::mat4 pie_PerspectiveGet()
 }
 
 
-void pie_Begin3DScene(void)
+void pie_Begin3DScene()
 {
 	glDepthRange(0.1, 1);
 }
 
-void pie_BeginInterface(void)
+void pie_BeginInterface()
 {
 	glDepthRange(0, 0.1);
 }

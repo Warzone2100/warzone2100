@@ -56,7 +56,7 @@ static bool		bPlayerHasLost = false;
 static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-void	runCreditsScreen(void);
+void	runCreditsScreen();
 
 static	UDWORD	lastChange = 0;
 int hostlaunch = 0;				// used to detect if we are hosting a game via command line option.
@@ -65,7 +65,7 @@ static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
 static STAR *stars = nullptr;
 
-static STAR newStar(void)
+static STAR newStar()
 {
 	STAR s;
 	s.xPos = rand() % barRightX;
@@ -74,7 +74,7 @@ static STAR newStar(void)
 	return s;
 }
 
-static void setupLoadingScreen(void)
+static void setupLoadingScreen()
 {
 	unsigned int i;
 	int w = pie_GetVideoBufferWidth();
@@ -109,7 +109,7 @@ static void setupLoadingScreen(void)
 // //////////////////////////////////////////////////////////////////
 // Initialise frontend globals and statics.
 //
-bool frontendInitVars(void)
+bool frontendInitVars()
 {
 	firstcall = true;
 
@@ -118,7 +118,7 @@ bool frontendInitVars(void)
 
 // ///////////////// /////////////////////////////////////////////////
 // Main Front end game loop.
-TITLECODE titleLoop(void)
+TITLECODE titleLoop()
 {
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
@@ -285,7 +285,7 @@ TITLECODE titleLoop(void)
 // Loading Screen.
 
 //loadbar update
-void loadingScreenCallback(void)
+void loadingScreenCallback()
 {
 	const PIELIGHT loadingbar_background = WZCOL_LOADING_BAR_BACKGROUND;
 	const uint32_t currTick = wzGetTicks();
@@ -352,7 +352,7 @@ void initLoadingScreen(bool drawbdrop)
 
 
 // fill buffers with the static screen
-void startCreditsScreen(void)
+void startCreditsScreen()
 {
 	lastChange = gameTime;
 
@@ -363,7 +363,7 @@ void startCreditsScreen(void)
 }
 
 /* This function does nothing - since it's already been drawn */
-void runCreditsScreen(void)
+void runCreditsScreen()
 {
 	// Check for key presses now.
 	if (keyReleased(KEY_ESC)
@@ -378,7 +378,7 @@ void runCreditsScreen(void)
 }
 
 // shut down the loading screen
-void closeLoadingScreen(void)
+void closeLoadingScreen()
 {
 	if (stars)
 	{
@@ -428,7 +428,7 @@ bool displayGameOver(bool bDidit)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-bool testPlayerHasLost(void)
+bool testPlayerHasLost()
 {
 	return (bPlayerHasLost);
 }
@@ -440,7 +440,7 @@ void setPlayerHasLost(bool val)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-bool testPlayerHasWon(void)
+bool testPlayerHasWon()
 {
 	return (bPlayerHasWon);
 }
@@ -456,7 +456,7 @@ void setScriptWinLoseVideo(UBYTE val)
 	scriptWinLoseVideo = val;
 }
 
-UBYTE getScriptWinLoseVideo(void)
+UBYTE getScriptWinLoseVideo()
 {
 	return scriptWinLoseVideo;
 }

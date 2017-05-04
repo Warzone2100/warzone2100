@@ -28,37 +28,37 @@
 #include "fpath.h"
 
 /* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
-extern bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
+bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
 
 /* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
 // the droid will not join a formation when it gets to the location
-extern bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
+bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
 
 // move a droid directly to a location (used by vtols only)
-extern void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y);
+void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y);
 
 // Get a droid to turn towards a locaton
-extern void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y);
+void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y);
 
 /* Stop a droid */
-extern void moveStopDroid(DROID *psDroid);
+void moveStopDroid(DROID *psDroid);
 
 /*Stops a droid dead in its tracks - doesn't allow for any little skidding bits*/
-extern void moveReallyStopDroid(DROID *psDroid);
+void moveReallyStopDroid(DROID *psDroid);
 
 /* Get a droid to do a frame's worth of moving */
-extern void moveUpdateDroid(DROID *psDroid);
+void moveUpdateDroid(DROID *psDroid);
 
 SDWORD moveCalcDroidSpeed(DROID *psDroid);
 
 /* Frame update for the movement of a tracked droid */
-extern void moveUpdateTracked(DROID *psDroid);
+void moveUpdateTracked(DROID *psDroid);
 
 /* update body and turret to local slope */
-extern void updateDroidOrientation(DROID *psDroid);
+void updateDroidOrientation(DROID *psDroid);
 
 /* audio callback used to kill movement sounds */
-extern bool moveCheckDroidMovingAndVisible(void *psObj);
+bool moveCheckDroidMovingAndVisible(void *psObj);
 
 // set a vtol to be hovering in the air
 void moveMakeVtolHover(DROID *psDroid);

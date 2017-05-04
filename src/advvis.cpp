@@ -38,7 +38,7 @@
 static bool bRevealActive = true;
 
 // ------------------------------------------------------------------------------------
-void	avUpdateTiles(void)
+void	avUpdateTiles()
 {
 	const int len = mapHeight * mapWidth;
 	const int playermask = 1 << selectedPlayer;
@@ -87,7 +87,7 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel)
 }
 
 // ------------------------------------------------------------------------------------
-bool	getRevealStatus(void)
+bool	getRevealStatus()
 {
 	return bRevealActive;
 }
@@ -100,7 +100,7 @@ void	setRevealStatus(bool val)
 }
 
 // ------------------------------------------------------------------------------------
-void	preProcessVisibility(void)
+void	preProcessVisibility()
 {
 	for (int i = 0; i < mapWidth; i++)
 	{

@@ -731,7 +731,7 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 }
 
 /* Ally team members with each other */
-void createTeamAlliances(void)
+void createTeamAlliances()
 {
 	int i, j;
 

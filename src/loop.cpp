@@ -96,7 +96,7 @@
 #include <numeric>
 
 
-static void fireWaitingCallbacks(void);
+static void fireWaitingCallbacks();
 
 /*
  * Global variables
@@ -665,7 +665,7 @@ static void gameStateUpdate()
 }
 
 /* The main game loop */
-GAMECODE gameLoop(void)
+GAMECODE gameLoop()
 {
 	static uint32_t lastFlushTime = 0;
 
@@ -723,7 +723,7 @@ GAMECODE gameLoop(void)
 }
 
 /* The video playback loop */
-void videoLoop(void)
+void videoLoop()
 {
 	bool videoFinished;
 
@@ -766,7 +766,7 @@ void videoLoop(void)
 }
 
 
-void loop_SetVideoPlaybackMode(void)
+void loop_SetVideoPlaybackMode()
 {
 	videoMode += 1;
 	paused = true;
@@ -780,7 +780,7 @@ void loop_SetVideoPlaybackMode(void)
 }
 
 
-void loop_ClearVideoPlaybackMode(void)
+void loop_ClearVideoPlaybackMode()
 {
 	videoMode -= 1;
 	paused = false;
@@ -793,17 +793,17 @@ void loop_ClearVideoPlaybackMode(void)
 }
 
 
-SDWORD loop_GetVideoMode(void)
+SDWORD loop_GetVideoMode()
 {
 	return videoMode;
 }
 
-bool loop_GetVideoStatus(void)
+bool loop_GetVideoStatus()
 {
 	return video;
 }
 
-bool gamePaused(void)
+bool gamePaused()
 {
 	return paused;
 }
@@ -813,23 +813,23 @@ void setGamePauseStatus(bool val)
 	paused = val;
 }
 
-bool gameUpdatePaused(void)
+bool gameUpdatePaused()
 {
 	return pauseState.gameUpdatePause;
 }
-bool audioPaused(void)
+bool audioPaused()
 {
 	return pauseState.audioPause;
 }
-bool scriptPaused(void)
+bool scriptPaused()
 {
 	return pauseState.scriptPause;
 }
-bool scrollPaused(void)
+bool scrollPaused()
 {
 	return pauseState.scrollPause;
 }
-bool consolePaused(void)
+bool consolePaused()
 {
 	return pauseState.consolePause;
 }
@@ -906,7 +906,7 @@ void incNumConstructorDroids(UDWORD player)
 }
 
 /* Fire waiting beacon messages which we couldn't run before */
-static void fireWaitingCallbacks(void)
+static void fireWaitingCallbacks()
 {
 	bool bOK = true;
 

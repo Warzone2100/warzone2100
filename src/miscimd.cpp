@@ -89,7 +89,7 @@ static MISC_IMD	miscImds[] =
 
 // -------------------------------------------------------------------------------
 // Load up all the imds into an array
-static bool multiLoadMiscImds(void)
+static bool multiLoadMiscImds()
 {
 	UDWORD	i = 0;
 	bool	bMoreToProcess = true;
@@ -128,7 +128,7 @@ iIMDShape	*getImdFromIndex(UDWORD	index)
 // -------------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------------
-iIMDShape	*getRandomDebrisImd(void)
+iIMDShape	*getRandomDebrisImd()
 {
 	iIMDShape *DebrisIMD;
 
@@ -155,7 +155,7 @@ static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned
 	return true;
 }
 
-bool	initMiscImds(void)
+bool	initMiscImds()
 {
 	/* Do the new loading system */
 	multiLoadMiscImds();

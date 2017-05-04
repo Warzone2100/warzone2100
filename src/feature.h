@@ -37,26 +37,26 @@ extern FEATURE_STATS *oilResFeature;
 bool loadFeatureStats(const char *pFileName);
 
 /* Release the feature stats memory */
-extern void featureStatsShutDown(void);
+void featureStatsShutDown();
 
 /* Create a feature on the map */
-extern FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
+FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
 
 /* Update routine for features */
-extern void featureUpdate(FEATURE *psFeat);
+void featureUpdate(FEATURE *psFeat);
 
 // free up a feature with no visual effects
-extern bool removeFeature(FEATURE *psDel);
+bool removeFeature(FEATURE *psDel);
 
 /* Remove a Feature and free it's memory */
 bool destroyFeature(FEATURE *psDel, unsigned impactTime);
 
 /* get a feature stat id from its name */
-extern SDWORD getFeatureStatFromName(const char *pName);
+SDWORD getFeatureStatFromName(const char *pName);
 
 int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
 
-extern void     featureInitVars(void);
+void featureInitVars();
 
 Vector2i getFeatureStatsSize(FEATURE_STATS const *pStructureType);
 StructureBounds getStructureBounds(FEATURE const *object);

@@ -118,10 +118,10 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 {
 	iV_Box2(x0, y0, x1, y1, first, first);
 }
-extern void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour, REND_MODE rendermode = REND_OPAQUE);
-extern void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
-extern void iV_DrawImageText(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
-extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
+void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour, REND_MODE rendermode = REND_OPAQUE);
+void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
+void iV_DrawImageText(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImage2(const QString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
@@ -136,8 +136,8 @@ static inline void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned id
 	iV_DrawImageTc(Image(imageFile, id), Image(imageFile, idTc), x, y, colour);
 }
 
-extern void iV_TransBoxFill(float x0, float y0, float x1, float y1);
-extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
+void iV_TransBoxFill(float x0, float y0, float x1, float y1);
+void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
 bool pie_InitRadar();
 bool pie_ShutdownRadar();
@@ -152,6 +152,6 @@ enum SCREENTYPE
 	SCREEN_MISSIONEND,
 };
 
-extern void pie_LoadBackDrop(SCREENTYPE screenType);
+void pie_LoadBackDrop(SCREENTYPE screenType);
 
 #endif //

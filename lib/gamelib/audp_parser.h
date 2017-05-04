@@ -78,6 +78,6 @@ typedef union YYSTYPE YYSTYPE;
 
 extern YYSTYPE audp_lval;
 
-int audp_parse (void);
+int audp_parse ();
 
 #endif /* !YY_AUDP_AUDP_PARSER_TAB_HPP_INCLUDED  */

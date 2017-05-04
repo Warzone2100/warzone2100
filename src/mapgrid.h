@@ -24,20 +24,18 @@
 #ifndef __INCLUDED_SRC_MAPGRID_H__
 #define __INCLUDED_SRC_MAPGRID_H__
 
-
 typedef std::vector<BASE_OBJECT *> GridList;
 typedef GridList::const_iterator GridIterator;
 
-
 // initialise the grid system
-extern bool gridInitialise(void);
+bool gridInitialise();
 
 // shutdown the grid system
-extern void gridShutDown(void);
+void gridShutDown();
 
 // Reset the grid system. Called once per update.
 // Resets seenThisTick[] to false.
-extern void gridReset(void);
+void gridReset();
 
 /// Find all objects within radius.
 GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius);

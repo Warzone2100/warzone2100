@@ -155,7 +155,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static KEY_CODE scanKeyBoardForBinding(void)
+static KEY_CODE scanKeyBoardForBinding()
 {
 	UDWORD i;
 	for (i = 0; i < KEY_MAXSCAN; i++)
@@ -180,7 +180,7 @@ static KEY_CODE scanKeyBoardForBinding(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool runKeyMapEditor(void)
+bool runKeyMapEditor()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -357,7 +357,7 @@ bool startKeyMapEditor(bool first)
 // ////////////////////////////////////////////////////////////////////////////
 // save current keymaps to registry
 // FIXME: Use the endian-safe physfs functions.
-bool saveKeyMap(void)
+bool saveKeyMap()
 {
 	KEY_MAPPING	*psMapping;
 	SDWORD		count;
@@ -426,7 +426,7 @@ bool saveKeyMap(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // load keymaps from registry.
-bool loadKeyMap(void)
+bool loadKeyMap()
 {
 	KEY_STATUS	status;
 	KEY_CODE	metaCode;

@@ -38,7 +38,7 @@ static QMap<int, DROID_GROUP *> grpGlobalManager;
 static bool grpInitialized = false;
 
 // initialise the group system
-bool grpInitialise(void)
+bool grpInitialise()
 {
 	grpGlobalManager.clear();
 	grpInitialized = true;
@@ -46,7 +46,7 @@ bool grpInitialise(void)
 }
 
 // shutdown the group system
-void grpShutDown(void)
+void grpShutDown()
 {
 	/* Since we are not very diligent removing groups after we have
 	 * created them; we need this hack to remove them on level end. */

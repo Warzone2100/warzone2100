@@ -150,7 +150,7 @@ static void droidBodyUpgrade(DROID *psDroid)
 }
 
 // initialise droid module
-bool droidInit(void)
+bool droidInit()
 {
 	memset(aDroidExperience, 0, sizeof(UWORD) * MAX_PLAYERS * MAX_RECYCLED_DROIDS);
 	psLastDroidHit = nullptr;

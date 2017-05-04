@@ -90,11 +90,11 @@ static unsigned int masterserver_port = 0, gameserver_port = 0;
 static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETregisterServer(int state);
-static void NETallowJoining(void);
+static void NETallowJoining();
 static void recvDebugSync(NETQUEUE queue);
 static bool onBanList(const char *ip);
 static void addToBanList(const char *ip, const char *name);
-static void NETfixPlayerCount(void);
+static void NETfixPlayerCount();
 /*
  * Network globals, these are part of the new network API
  */
@@ -221,7 +221,7 @@ void NETsetGamePassword(const char *password)
 }
 
 //	Resets the game password
-void NETresetGamePassword(void)
+void NETresetGamePassword()
 {
 	sstrcpy(NetPlay.gamePassword, _("Enter password here"));
 	debug(LOG_NET, "password reset to 'Enter password here'");
@@ -607,7 +607,7 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 	return true;
 }
 
-void NETfixDuplicatePlayerNames(void)
+void NETfixDuplicatePlayerNames()
 {
 	char name[StringSize];
 	unsigned i, j, pass;
@@ -659,7 +659,7 @@ SDWORD NETgetGameFlags(UDWORD flag)
 	}
 }
 
-static void NETsendGameFlags(void)
+static void NETsendGameFlags()
 {
 	debug(LOG_NET, "sending game flags");
 	NETbeginEncode(NETbroadcastQueue(), NET_GAME_FLAGS);
@@ -1040,7 +1040,7 @@ static int upnp_rem_redirect(int port)
 	return UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, port_str, "TCP", nullptr);
 }
 
-void NETaddRedirects(void)
+void NETaddRedirects()
 {
 	if (upnp_add_redirect(gameserver_port))
 	{
@@ -1056,7 +1056,7 @@ void NETaddRedirects(void)
 	}
 }
 
-void NETremRedirects(void)
+void NETremRedirects()
 {
 	debug(LOG_NET, "upnp is %d", NetPlay.isUPNP_CONFIGURED);
 	if (NetPlay.isUPNP_CONFIGURED)
@@ -1073,7 +1073,7 @@ void NETremRedirects(void)
 	}
 }
 
-void NETdiscoverUPnPDevices(void)
+void NETdiscoverUPnPDevices()
 {
 	if (!NetPlay.isUPNP_CONFIGURED && NetPlay.isUPNP)
 	{
@@ -1123,7 +1123,7 @@ int NETinit(bool bFirstCall)
 
 // ////////////////////////////////////////////////////////////////////////
 // SHUTDOWN THE CONNECTION.
-int NETshutdown(void)
+int NETshutdown()
 {
 	debug(LOG_NET, "NETshutdown");
 	NETlogEntry("NETshutdown", SYNC_FLAG, selectedPlayer);
@@ -1157,7 +1157,7 @@ int NETshutdown(void)
 
 // ////////////////////////////////////////////////////////////////////////
 //close the open game..
-int NETclose(void)
+int NETclose()
 {
 	unsigned int i;
 
@@ -1740,7 +1740,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 *	the socket, then we have no way to connect with them again. Future
 *	item to enhance.
 */
-static void NETcheckPlayers(void)
+static void NETcheckPlayers()
 {
 	if (!NetPlay.isHost)
 	{
@@ -2241,7 +2241,7 @@ static void NETregisterServer(int state)
 
 // ////////////////////////////////////////////////////////////////////////
 //  Check player "slots" & update player count if needed.
-void NETfixPlayerCount(void)
+void NETfixPlayerCount()
 {
 	int maxPlayers = game.maxPlayers;
 	unsigned playercount = 0;
@@ -2268,7 +2268,7 @@ void NETfixPlayerCount(void)
 }
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
-static void NETallowJoining(void)
+static void NETallowJoining()
 {
 	unsigned int i;
 	char buffer[10] = {'\0'};
@@ -2719,7 +2719,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 
 // ////////////////////////////////////////////////////////////////////////
 // Stop the dplay interface from accepting more players.
-bool NEThaltJoining(void)
+bool NEThaltJoining()
 {
 	debug(LOG_NET, "temporarily locking game to prevent more players");
 
@@ -2731,7 +2731,7 @@ bool NEThaltJoining(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-bool NETfindGame(void)
+bool NETfindGame()
 {
 	SocketAddress *hosts;
 	unsigned int gamecount = 0;

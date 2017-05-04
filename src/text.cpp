@@ -31,7 +31,7 @@
 struct STR_RES *psStringRes = nullptr;
 
 /* Initialise the string system */
-bool stringsInitialise(void)
+bool stringsInitialise()
 {
 	psStringRes = strresCreate();
 
@@ -40,7 +40,7 @@ bool stringsInitialise(void)
 
 
 /* Shut down the string system */
-void stringsShutDown(void)
+void stringsShutDown()
 {
 	strresDestroy(psStringRes);
 }

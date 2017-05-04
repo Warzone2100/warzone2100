@@ -28,47 +28,47 @@
 #include "structure.h"
 
 /* Initialise the display system */
-extern bool dispInitialise(void);
+bool dispInitialise();
 
 void ProcessRadarInput();
 
-extern void processInput(void);
+void processInput();
 /*don't want to do any of these whilst in the Intelligence Screen*/
 CURSOR processMouseClickInput();
 
 CURSOR scroll();
-extern void resetScroll(void);
-extern void setMouseScroll(bool);
+void resetScroll();
+void setMouseScroll(bool);
 
-extern bool DrawnInLastFrame(SDWORD Frame);
+bool DrawnInLastFrame(SDWORD Frame);
 
 // Clear all selections.
-extern void clearSel();
+void clearSel();
 // Clear all selections and stop driver mode.
-extern void clearSelection();
+void clearSelection();
 // deal with selecting a droid
-extern void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
+void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
 
 bool isMouseOverRadar();
 
-extern	void	setInvertMouseStatus(bool val);
-extern bool	getInvertMouseStatus(void);
+void	setInvertMouseStatus(bool val);
+bool	getInvertMouseStatus();
 
-extern	void	setRightClickOrders(bool val);
-extern bool	getRightClickOrders(void);
+void	setRightClickOrders(bool val);
+bool	getRightClickOrders();
 
-extern	void	setMiddleClickRotate(bool val);
-extern bool	getMiddleClickRotate(void);
+void	setMiddleClickRotate(bool val);
+bool	getMiddleClickRotate();
 
-extern	void	setDrawShadows(bool val);
-extern bool	getDrawShadows(void);
+void	setDrawShadows(bool val);
+bool	getDrawShadows();
 
-extern	bool	getRadarJumpStatus(void);
-extern	void	setRadarJump(bool	val);
+bool	getRadarJumpStatus();
+void	setRadarJump(bool val);
 
 
 /* Do the 3D display */
-extern void displayWorld(void);
+void displayWorld();
 
 // Illumination value for standard light level "as the artist drew it" ... not darker, not lighter
 
@@ -169,30 +169,30 @@ extern bool		gameStats;
 extern bool		godMode;
 
 // reset the input state
-void resetInput(void);
+void resetInput();
 
 bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos);
-extern bool CheckScrollLimits(void);
+bool CheckScrollLimits();
 extern bool	rotActive;
 
-BASE_OBJECT	*mouseTarget(void);
+BASE_OBJECT	*mouseTarget();
 
 bool StartObjectOrbit(BASE_OBJECT *psObj);
-void CancelObjectOrbit(void);
+void CancelObjectOrbit();
 
-extern void cancelDeliveryRepos(void);
-extern void startDeliveryPosition(FLAG_POSITION *psFlag);
-extern bool deliveryReposValid(void);
-extern void processDeliveryRepos(void);
-extern void renderDeliveryRepos(const glm::mat4 &viewMatrix);
-extern bool deliveryReposFinished(FLAG_POSITION *psFlag = nullptr);
+void cancelDeliveryRepos();
+void startDeliveryPosition(FLAG_POSITION *psFlag);
+bool deliveryReposValid();
+void processDeliveryRepos();
+void renderDeliveryRepos(const glm::mat4 &viewMatrix);
+bool deliveryReposFinished(FLAG_POSITION *psFlag = nullptr);
 
-extern void StartTacticalScrollObj(bool driveActive, BASE_OBJECT *psObj);
-extern void CancelTacticalScroll(void);
-extern void MoveTacticalScroll(SDWORD xVel, SDWORD yVel);
-extern bool	getRotActive(void);
-extern SDWORD	getDesiredPitch(void);
-extern void	setDesiredPitch(SDWORD pitch);
+void StartTacticalScrollObj(bool driveActive, BASE_OBJECT *psObj);
+void CancelTacticalScroll();
+void MoveTacticalScroll(SDWORD xVel, SDWORD yVel);
+bool	getRotActive();
+SDWORD	getDesiredPitch();
+void	setDesiredPitch(SDWORD pitch);
 
 #define MAX_PLAYER_X_ANGLE	(-1)
 #define MIN_PLAYER_X_ANGLE	(-60)
@@ -211,14 +211,14 @@ extern void	setDesiredPitch(SDWORD pitch);
 #define	HIDDEN_FRONTEND_HEIGHT	(480)
 
 //access function for bSensorAssigned variable
-extern void setSensorAssigned(void);
+void setSensorAssigned();
 
-void AddDerrickBurningMessage(void);
+void AddDerrickBurningMessage();
 
 // check whether the queue order keys are pressed
-extern bool ctrlShiftDown(void);
+bool ctrlShiftDown();
 
-extern UDWORD getTargetType(void);
+UDWORD getTargetType();
 
 void setZoom(float zoomSpeed, float zoomTarget);
 float getZoom();

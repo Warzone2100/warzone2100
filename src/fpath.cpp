@@ -104,7 +104,7 @@ static int fpathThreadFunc(void *)
 
 
 // initialise the findpath module
-bool fpathInitialise(void)
+bool fpathInitialise()
 {
 	// The path system is up
 	fpathQuit = false;
@@ -147,7 +147,7 @@ void fpathShutdown()
  *	Updates the pathfinding system.
  *	@ingroup pathfinding
  */
-void fpathUpdate(void)
+void fpathUpdate()
 {
 	// Nothing now
 }
@@ -506,7 +506,7 @@ PATHRESULT fpathExecute(PATHJOB job)
 }
 
 /** Find the length of the job queue. Function is thread-safe. */
-static int fpathJobQueueLength(void)
+static int fpathJobQueueLength()
 {
 	int count = 0;
 
@@ -518,7 +518,7 @@ static int fpathJobQueueLength(void)
 
 
 /** Find the length of the result queue, excepting future results. Function is thread-safe. */
-static int fpathResultQueueLength(void)
+static int fpathResultQueueLength()
 {
 	int count = 0;
 

@@ -98,31 +98,28 @@ enum ItemAvailability
 *		Allocate stats functions
 *******************************************************************************/
 /* Allocate Weapon stats */
-extern bool statsAllocWeapons(UDWORD numEntries);
-
-/*Allocate Armour stats*/
-//extern bool statsAllocArmour(UDWORD numEntries);
+bool statsAllocWeapons(UDWORD numEntries);
 
 /*Allocate Body stats*/
-extern bool statsAllocBody(UDWORD numEntries);
+bool statsAllocBody(UDWORD numEntries);
 
 /*Allocate Brain stats*/
-extern bool statsAllocBrain(UDWORD numEntries);
+bool statsAllocBrain(UDWORD numEntries);
 
 /*Allocate Propulsion stats*/
-extern bool statsAllocPropulsion(UDWORD numEntries);
+bool statsAllocPropulsion(UDWORD numEntries);
 
 /*Allocate Sensor stats*/
-extern bool statsAllocSensor(UDWORD numEntries);
+bool statsAllocSensor(UDWORD numEntries);
 
 /*Allocate Ecm Stats*/
-extern bool statsAllocECM(UDWORD numEntries);
+bool statsAllocECM(UDWORD numEntries);
 
 /*Allocate Repair Stats*/
-extern bool statsAllocRepair(UDWORD numEntries);
+bool statsAllocRepair(UDWORD numEntries);
 
 /*Allocate Construct Stats*/
-extern bool statsAllocConstruct(UDWORD numEntries);
+bool statsAllocConstruct(UDWORD numEntries);
 
 /*******************************************************************************
 *		Load stats functions
@@ -130,52 +127,52 @@ extern bool statsAllocConstruct(UDWORD numEntries);
 void loadStats(WzConfig &json, BASE_STATS *psStats, int index);
 
 /* Return the number of newlines in a file buffer */
-extern UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
+UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
 
 /*Load the weapon stats from the file exported from Access*/
-extern bool loadWeaponStats(const char *pFileName);
+bool loadWeaponStats(const char *pFileName);
 
 /*Load the body stats from the file exported from Access*/
-extern bool loadBodyStats(const char *pFileName);
+bool loadBodyStats(const char *pFileName);
 
 /*Load the brain stats from the file exported from Access*/
-extern bool loadBrainStats(const char *pFileName);
+bool loadBrainStats(const char *pFileName);
 
 /*Load the propulsion stats from the file exported from Access*/
-extern bool loadPropulsionStats(const char *pFileName);
+bool loadPropulsionStats(const char *pFileName);
 
 /*Load the sensor stats from the file exported from Access*/
-extern bool loadSensorStats(const char *pFileName);
+bool loadSensorStats(const char *pFileName);
 
 /*Load the ecm stats from the file exported from Access*/
-extern bool loadECMStats(const char *fileName);
+bool loadECMStats(const char *fileName);
 
 /*Load the repair stats from the file exported from Access*/
-extern bool loadRepairStats(const char *pFileName);
+bool loadRepairStats(const char *pFileName);
 
 /*Load the construct stats from the file exported from Access*/
-extern bool loadConstructStats(const char *pFileName);
+bool loadConstructStats(const char *pFileName);
 
 /*Load the Propulsion Types from the file exported from Access*/
-extern bool loadPropulsionTypes(const char *pFileName);
+bool loadPropulsionTypes(const char *pFileName);
 
 /*Load the propulsion sounds from the file exported from Access*/
-extern bool loadPropulsionSounds(const char *pFileName);
+bool loadPropulsionSounds(const char *pFileName);
 
 /*Load the Terrain Table from the file exported from Access*/
-extern bool loadTerrainTable(const char *pFileName);
+bool loadTerrainTable(const char *pFileName);
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
-extern bool loadWeaponModifiers(const char *pFileName);
+bool loadWeaponModifiers(const char *pFileName);
 
 /*******************************************************************************
 *		Generic stats functions
 *******************************************************************************/
 
 /*calls the STATS_DEALLOC macro for each set of stats*/
-extern bool statsShutDown(void);
+bool statsShutDown();
 
-extern UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
+UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 
 /// Get the component index for a component based on the name, verifying with type.
 /// It is currently identical to getCompFromID, but may not be in the future.
@@ -188,11 +185,11 @@ int getCompFromID(COMPONENT_TYPE compType, const QString &name);
 COMPONENT_STATS *getCompStatsFromName(const QString &name);
 
 /*returns the weapon sub class based on the string name passed in */
-extern bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
+bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
-extern bool getBodySize(const char *pSize, BODY_SIZE *pStore);
+bool getBodySize(const char *pSize, BODY_SIZE *pStore);
 
 /**
  * Determines the propulsion type indicated by the @c typeName string passed
@@ -208,7 +205,7 @@ extern bool getBodySize(const char *pSize, BODY_SIZE *pStore);
  *         contain a valid propulsion type enumerator, otherwise its value will
  *         be left unchanged.
  */
-extern bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type);
+bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type);
 
 /**
  * Determines the weapon effect indicated by the @c weaponEffect string passed
@@ -241,25 +238,25 @@ WZ_DECL_PURE int constructorPoints(const CONSTRUCT_STATS *psStats, int player);
 WZ_DECL_PURE int bodyPower(const BODY_STATS *psStats, int player);
 WZ_DECL_PURE int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass);
 
-extern void adjustMaxDesignStats(void);
+void adjustMaxDesignStats();
 
 //Access functions for the max values to be used in the Design Screen
-extern UDWORD getMaxComponentWeight(void);
-extern UDWORD getMaxBodyArmour(void);
-extern UDWORD getMaxBodyPower(void);
-extern UDWORD getMaxBodyPoints(void);
-extern UDWORD getMaxSensorRange(void);
-extern UDWORD getMaxECMRange(void);
-extern UDWORD getMaxConstPoints(void);
-extern UDWORD getMaxRepairPoints(void);
-extern UDWORD getMaxWeaponRange(void);
-extern UDWORD getMaxWeaponDamage(void);
-extern UDWORD getMaxWeaponROF(void);
-extern UDWORD getMaxPropulsionSpeed(void);
+UDWORD getMaxComponentWeight();
+UDWORD getMaxBodyArmour();
+UDWORD getMaxBodyPower();
+UDWORD getMaxBodyPoints();
+UDWORD getMaxSensorRange();
+UDWORD getMaxECMRange();
+UDWORD getMaxConstPoints();
+UDWORD getMaxRepairPoints();
+UDWORD getMaxWeaponRange();
+UDWORD getMaxWeaponDamage();
+UDWORD getMaxWeaponROF();
+UDWORD getMaxPropulsionSpeed();
 
 WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 
-extern void statsInitVars(void);
+void statsInitVars();
 
 bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect);
 bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass);

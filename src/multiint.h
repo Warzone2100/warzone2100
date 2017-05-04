@@ -95,30 +95,30 @@ const char *getAIName(int player);	///< only run this -after- readAIs() is calle
 int matchAIbyName(const char *name);	///< only run this -after- readAIs() is called
 int getNextAIAssignment(const char *name);
 
-extern LOBBY_ERROR_TYPES getLobbyError(void);
-extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
+LOBBY_ERROR_TYPES getLobbyError();
+void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
-extern	void	runConnectionScreen(void);
-extern	bool	startConnectionScreen(void);
-extern	void	intProcessConnection(UDWORD id);
+void runConnectionScreen();
+bool startConnectionScreen();
+void intProcessConnection(UDWORD id);
 
-extern	void	runGameFind(void);
-extern	void	startGameFind(void);
+void runGameFind();
+void startGameFind();
 
-void updateLimitFlags(void);
+void updateLimitFlags();
 
-extern	void	runMultiOptions(void);
-extern	bool	startMultiOptions(bool bReenter);
-extern	void	frontendMultiMessages(void);
+void runMultiOptions();
+bool startMultiOptions(bool bReenter);
+void frontendMultiMessages();
 
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
 bool changeColour(unsigned player, int col, bool isHost);
-extern	char	sPlayer[128];
 
+extern char sPlayer[128];
 extern bool bHosted;
 
-void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
-void	addPlayerBox(bool);			// players (mid) box
+void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
+void addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
 

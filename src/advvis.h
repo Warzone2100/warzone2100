@@ -23,10 +23,10 @@
 
 #include "basedef.h"
 
-void avUpdateTiles(void);
+void avUpdateTiles();
 UDWORD avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel);
 void setRevealStatus(bool val);
-bool getRevealStatus(void);
-void preProcessVisibility(void);
+bool getRevealStatus();
+void preProcessVisibility();
 
 #endif // __INCLUDED_SRC_ADVVIS_H__

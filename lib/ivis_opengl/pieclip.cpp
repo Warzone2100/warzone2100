@@ -40,17 +40,17 @@ bool pie_SetVideoBufferHeight(UDWORD height)
 	return (true);
 }
 
-int pie_GetVideoBufferDepth(void)
+int pie_GetVideoBufferDepth()
 {
 	return (videoBufferDepth);
 }
 
-int pie_GetVideoBufferWidth(void)
+int pie_GetVideoBufferWidth()
 {
 	return (videoBufferWidth);
 }
 
-int pie_GetVideoBufferHeight(void)
+int pie_GetVideoBufferHeight()
 {
 	return (videoBufferHeight);
 }

@@ -1610,7 +1610,7 @@ static bool writeScriptState(const char *pFileName);
 static bool gameLoad(const char *fileName);
 
 /* set the global scroll values to use for the save game */
-static void setMapScroll(void);
+static void setMapScroll();
 
 static bool gameLoad(const char *fileName);
 
@@ -6477,7 +6477,7 @@ bool loadScriptState(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 /* set the global scroll values to use for the save game */
-static void setMapScroll(void)
+static void setMapScroll()
 {
 	//if loading in a pre version5 then scroll values will not have been set up so set to max poss
 	if (width == 0 && height == 0)
@@ -6508,7 +6508,7 @@ static void setMapScroll(void)
 
 // -----------------------------------------------------------------------------------------
 /*returns the current type of save game being loaded*/
-UDWORD getSaveGameType(void)
+UDWORD getSaveGameType()
 {
 	return gameType;
 }

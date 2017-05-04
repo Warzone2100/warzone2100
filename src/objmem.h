@@ -39,80 +39,79 @@ extern FEATURE			*apsOilList[1];
 extern BASE_OBJECT	*psDestroyedObj;
 
 /* Initialise the object heaps */
-extern bool objmemInitialise(void);
+bool objmemInitialise();
 
 /* Release the object heaps */
-extern void objmemShutdown(void);
+void objmemShutdown();
 
 /* General housekeeping for the object system */
-extern void objmemUpdate(void);
+void objmemUpdate();
 
 /// Generates a new, (hopefully) unique object id.
-uint32_t generateNewObjectId(void);
+uint32_t generateNewObjectId();
 /// Generates a new, (hopefully) unique object id, which all clients agree on.
-uint32_t generateSynchronisedObjectId(void);
+uint32_t generateSynchronisedObjectId();
 
 /* add the droid to the Droid Lists */
-extern void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS]);
+void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS]);
 
 /*destroy a droid */
 void killDroid(DROID *psDel);
 
 /* Remove all droids */
-extern void freeAllDroids(void);
+void freeAllDroids();
 
 /*Remove a single Droid from its list*/
-extern void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS]);
+void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS]);
 
 /*Removes all droids that may be stored in the mission lists*/
-extern void freeAllMissionDroids(void);
+void freeAllMissionDroids();
 
 /*Removes all droids that may be stored in the limbo lists*/
-extern void freeAllLimboDroids(void);
+void freeAllLimboDroids();
 
 /* add the structure to the Structure Lists */
-extern void addStructure(STRUCTURE *psStructToAdd);
+void addStructure(STRUCTURE *psStructToAdd);
 
 /* Destroy a structure */
 void killStruct(STRUCTURE *psDel);
 
 /* Remove all structures */
-extern void freeAllStructs(void);
+void freeAllStructs();
 
 /*Remove a single Structure from a list*/
-extern void removeStructureFromList(STRUCTURE *psStructToRemove,
-                                    STRUCTURE *pList[MAX_PLAYERS]);
+void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_PLAYERS]);
 
 /* add the feature to the Feature Lists */
-extern void addFeature(FEATURE *psFeatureToAdd);
+void addFeature(FEATURE *psFeatureToAdd);
 
 /* Destroy a feature */
 void killFeature(FEATURE *psDel);
 
 /* Remove all features */
-extern void freeAllFeatures(void);
+void freeAllFeatures();
 
 /* Create a new Flag Position */
-extern bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
+bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
 /* add the Flag Position to the Flag Position Lists */
-extern void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
 /* Remove a Flag Position from the Lists */
-extern void removeFlagPosition(FLAG_POSITION *psDel);
+void removeFlagPosition(FLAG_POSITION *psDel);
 // free all flag positions
-extern void freeAllFlagPositions(void);
-extern void freeAllAssemblyPoints(void);
+void freeAllFlagPositions();
+void freeAllAssemblyPoints();
 
 // Find a base object from it's id
-extern BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);
-extern BASE_OBJECT *getBaseObjFromId(UDWORD id);
-extern bool checkValidId(UDWORD id);
+BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);
+BASE_OBJECT *getBaseObjFromId(UDWORD id);
+bool checkValidId(UDWORD id);
 
-extern UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag);
+UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag);
 
 void objCount(int *droids, int *structures, int *features);
 
 #ifdef DEBUG
-extern void checkFactoryFlags(void);
+void checkFactoryFlags();
 #endif
 
 #endif // __INCLUDED_SRC_OBJMEM_H__

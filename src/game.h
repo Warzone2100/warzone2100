@@ -106,30 +106,30 @@ struct VIS_SAVEHEADER
  */
 /***************************************************************************/
 
-extern bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame);	// UserSaveGame is true when the save game is not a new level (User Save Game)
+bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame);	// UserSaveGame is true when the save game is not a new level (User Save Game)
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-extern bool loadGameInit(const char *fileName);
+bool loadGameInit(const char *fileName);
 
-extern bool loadMissionExtras(const char *pGameToLoad, SWORD levelType);
+bool loadMissionExtras(const char *pGameToLoad, SWORD levelType);
 
 // load the script state given a .gam name
-extern bool loadScriptState(char *pFileName);
+bool loadScriptState(char *pFileName);
 
 /// Load the terrain types
-extern bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
+bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 
 bool saveGame(const char *aFileName, GAME_TYPE saveType);
 
 // Get the campaign number for loadGameInit game
-extern UDWORD getCampaign(const char *fileName);
+UDWORD getCampaign(const char *fileName);
 
 /*calls windows find file tree*/
-extern bool getSaveGameName(char *pName);
+bool getSaveGameName(char *pName);
 
 /*returns the current type of save game being loaded*/
-extern UDWORD getSaveGameType(void);
+UDWORD getSaveGameType();
 
 bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
 

@@ -128,9 +128,9 @@ extern PIELIGHT		psPalette[];
 
 //*************************************************************************
 
-extern void		pal_Init(void);
-extern void		pal_ShutDown(void);
-extern PIELIGHT		pal_GetTeamColour(int team);
+void pal_Init();
+void pal_ShutDown();
+PIELIGHT pal_GetTeamColour(int team);
 
 static inline PIELIGHT WZ_DECL_PURE pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 {

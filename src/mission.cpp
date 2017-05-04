@@ -154,31 +154,31 @@ static bool startMissionCampaignStart(char *pGame);
 static bool startMissionCampaignChange(char *pGame);
 static bool startMissionCampaignExpand(char *pGame);
 static bool startMissionCampaignExpandLimbo(char *pGame);
-static bool startMissionBetween(void);
-static void endMissionCamChange(void);
-static void endMissionOffClear(void);
-static void endMissionOffKeep(void);
-static void endMissionOffKeepLimbo(void);
-static void endMissionExpandLimbo(void);
+static bool startMissionBetween();
+static void endMissionCamChange();
+static void endMissionOffClear();
+static void endMissionOffKeep();
+static void endMissionOffKeepLimbo();
+static void endMissionExpandLimbo();
 
-static void saveMissionData(void);
-static void restoreMissionData(void);
-static void saveCampaignData(void);
-static void missionResetDroids(void);
-static void saveMissionLimboData(void);
-static void restoreMissionLimboData(void);
-static void processMissionLimbo(void);
+static void saveMissionData();
+static void restoreMissionData();
+static void saveCampaignData();
+static void missionResetDroids();
+static void saveMissionLimboData();
+static void restoreMissionLimboData();
+static void processMissionLimbo();
 
 static void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext);
-static bool intAddMissionTimer(void);
+static bool intAddMissionTimer();
 static void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext);
-static void adjustMissionPower(void);
-static void saveMissionPower(void);
-static UDWORD getHomeLandingX(void);
-static UDWORD getHomeLandingY(void);
-static void processPreviousCampDroids(void);
-static bool intAddTransporterTimer(void);
-static void clearCampaignUnits(void);
+static void adjustMissionPower();
+static void saveMissionPower();
+static UDWORD getHomeLandingX();
+static UDWORD getHomeLandingY();
+static void processPreviousCampDroids();
+static bool intAddTransporterTimer();
+static void clearCampaignUnits();
 static void emptyTransporters(bool bOffWorld);
 
 bool MissionResUp	= false;
@@ -190,7 +190,7 @@ static	UDWORD	camNumber = 1;
 
 
 //returns true if on an off world mission
-bool missionIsOffworld(void)
+bool missionIsOffworld()
 {
 	return ((mission.type == LDS_MKEEP)
 	        || (mission.type == LDS_MCLEAR)
@@ -199,7 +199,7 @@ bool missionIsOffworld(void)
 }
 
 //returns true if the correct type of mission for reinforcements
-bool missionForReInforcements(void)
+bool missionForReInforcements()
 {
 	if (mission.type == LDS_CAMSTART || missionIsOffworld() || mission.type == LDS_CAMCHANGE)
 	{
@@ -212,7 +212,7 @@ bool missionForReInforcements(void)
 }
 
 //returns true if the correct type of mission and a reinforcement time has been set
-bool missionCanReEnforce(void)
+bool missionCanReEnforce()
 {
 	if (mission.ETA >= 0)
 	{
@@ -225,13 +225,13 @@ bool missionCanReEnforce(void)
 }
 
 //returns true if the mission is a Limbo Expand mission
-bool missionLimboExpand(void)
+bool missionLimboExpand()
 {
 	return (mission.type == LDS_EXPAND_LIMBO);
 }
 
 // mission initialisation game code
-void initMission(void)
+void initMission()
 {
 	debug(LOG_SAVE, "*** Init Mission ***");
 	mission.type = LDS_NONE;
@@ -281,13 +281,13 @@ void initMission(void)
 }
 
 // reset the vtol landing pos
-void resetVTOLLandingPos(void)
+void resetVTOLLandingPos()
 {
 	memset(asVTOLReturnPos, 0, sizeof(Vector2i)*MAX_PLAYERS);
 }
 
 //this is called everytime the game is quit
-void releaseMission(void)
+void releaseMission()
 {
 	/* mission.apsDroidLists may contain some droids that have been transferred from one campaign to the next */
 	freeAllMissionDroids();
@@ -297,7 +297,7 @@ void releaseMission(void)
 }
 
 //called to shut down when mid-mission on an offWorld map
-bool missionShutDown(void)
+bool missionShutDown()
 {
 	debug(LOG_SAVE, "called, mission is %s", missionIsOffworld() ? "off-world" : "main map");
 	if (missionIsOffworld())
@@ -355,7 +355,7 @@ bool missionShutDown(void)
 
 
 /*on the PC - sets the countdown played flag*/
-void setMissionCountDown(void)
+void setMissionCountDown()
 {
 	SDWORD		timeRemaining;
 
@@ -521,7 +521,7 @@ bool startMissionSave(SDWORD missionType)
 
 /*checks the time has been set and then adds the timer if not already on
 the display*/
-void addMissionTimerInterface(void)
+void addMissionTimerInterface()
 {
 	//don't add if the timer hasn't been set
 	if (mission.time < 0 && !challengeActive)
@@ -538,7 +538,7 @@ void addMissionTimerInterface(void)
 
 /*checks that the timer has been set and that a Transporter exists before
 adding the timer button*/
-void addTransporterTimerInterface(void)
+void addTransporterTimerInterface()
 {
 	DROID           *psTransporter = nullptr;
 	bool            bAddInterface = false;
@@ -697,7 +697,7 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 }
 
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
-static void saveMissionData(void)
+static void saveMissionData()
 {
 	UDWORD			inc;
 	DROID			*psDroid;
@@ -817,7 +817,7 @@ static void saveMissionData(void)
 	i.e. We shoudn't have called SwapMissionPointers()
 
 */
-void restoreMissionData(void)
+void restoreMissionData()
 {
 	UDWORD		inc;
 	BASE_OBJECT	*psObj;
@@ -906,7 +906,7 @@ void restoreMissionData(void)
 }
 
 /*Saves the necessary data when moving from one mission to a limbo expand Mission*/
-void saveMissionLimboData(void)
+void saveMissionLimboData()
 {
 	DROID           *psDroid, *psNext;
 	STRUCTURE           *psStruct;
@@ -946,7 +946,7 @@ void saveMissionLimboData(void)
 }
 
 //this is called via a script function to place the Limbo droids once the mission has started
-void placeLimboDroids(void)
+void placeLimboDroids()
 {
 	DROID           *psDroid, *psNext;
 	UDWORD			droidX, droidY;
@@ -997,7 +997,7 @@ void placeLimboDroids(void)
 }
 
 /*restores the necessary data on completion of a Limbo Expand mission*/
-void restoreMissionLimboData(void)
+void restoreMissionLimboData()
 {
 	DROID           *psDroid, *psNext;
 
@@ -1023,7 +1023,7 @@ void restoreMissionLimboData(void)
 
 /*Saves the necessary data when moving from one campaign to the start of the
 next - saves out the list of droids for the selected player*/
-void saveCampaignData(void)
+void saveCampaignData()
 {
 	DROID		*psDroid, *psNext, *psSafeDroid, *psNextSafe, *psCurr, *psCurrNext;
 
@@ -1257,7 +1257,7 @@ bool startMissionCampaignExpandLimbo(char *pGame)
 	return true;
 }
 
-static bool startMissionBetween(void)
+static bool startMissionBetween()
 {
 	offWorldKeepLists = false;
 
@@ -1265,7 +1265,7 @@ static bool startMissionBetween(void)
 }
 
 //check no units left with any settings that are invalid
-static void clearCampaignUnits(void)
+static void clearCampaignUnits()
 {
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -1277,7 +1277,7 @@ static void clearCampaignUnits(void)
 }
 
 /*This deals with droids at the end of an offworld mission*/
-static void processMission(void)
+static void processMission()
 {
 	DROID			*psNext;
 	DROID			*psDroid;
@@ -1324,7 +1324,7 @@ static void processMission(void)
 #define MAXLIMBODROIDS (999)
 
 /*This deals with droids at the end of an offworld Limbo mission*/
-void processMissionLimbo(void)
+void processMissionLimbo()
 {
 	DROID			*psNext, *psDroid;
 	UDWORD	numDroidsAddedToLimboList = 0;
@@ -1368,7 +1368,7 @@ void processMissionLimbo(void)
  and orientation can occur on the map they will appear on*/
 // NOTE: This is one huge hack for campaign games!
 // Pay special attention on what is getting swapped!
-void swapMissionPointers(void)
+void swapMissionPointers()
 {
 	debug(LOG_SAVE, "called");
 
@@ -1401,7 +1401,7 @@ void swapMissionPointers(void)
 	std::swap(apsOilList[0],    mission.apsOilList[0]);
 }
 
-void endMission(void)
+void endMission()
 {
 	if (mission.type == LDS_NONE)
 	{
@@ -1484,13 +1484,13 @@ void endMission(void)
 	initTransporters();
 }
 
-void endMissionCamChange(void)
+void endMissionCamChange()
 {
 	//get any droids remaining from the previous campaign
 	processPreviousCampDroids();
 }
 
-void endMissionOffClear(void)
+void endMissionOffClear()
 {
 	processMission();
 	restoreMissionData();
@@ -1499,7 +1499,7 @@ void endMissionOffClear(void)
 	missionResetDroids();
 }
 
-void endMissionOffKeep(void)
+void endMissionOffKeep()
 {
 	processMission();
 	restoreMissionData();
@@ -1510,7 +1510,7 @@ void endMissionOffKeep(void)
 
 /*In this case any droids remaining (for selectedPlayer) go into a limbo list
 for use in a future mission (expand type) */
-void endMissionOffKeepLimbo(void)
+void endMissionOffKeepLimbo()
 {
 	// Save any droids left 'alive'
 	processMissionLimbo();
@@ -1525,14 +1525,14 @@ void endMissionOffKeepLimbo(void)
 //This happens MID_MISSION now! but is left here in case the scripts fail but somehow get here...?
 /*The selectedPlayer's droids which were separated at the start of the
 mission need to merged back into the list*/
-void endMissionExpandLimbo(void)
+void endMissionExpandLimbo()
 {
 	restoreMissionLimboData();
 }
 
 
 //this is called mid Limbo mission via the script
-void resetLimboMission(void)
+void resetLimboMission()
 {
 	//add the units that were moved into the mission list at the start of the mission
 	restoreMissionLimboData();
@@ -1576,7 +1576,7 @@ void missionDroidUpdate(DROID *psDroid)
 }
 
 // Reset variables in Droids such as order and position
-static void missionResetDroids(void)
+static void missionResetDroids()
 {
 	debug(LOG_SAVE, "called");
 
@@ -1876,7 +1876,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 
 
 //add the Mission timer into the top  right hand corner of the screen
-bool intAddMissionTimer(void)
+bool intAddMissionTimer()
 {
 	//check to see if it exists already
 	if (widgGetFromID(psWScreen, IDTIMER_FORM) != nullptr)
@@ -1924,7 +1924,7 @@ bool intAddMissionTimer(void)
 }
 
 //add the Transporter timer into the top left hand corner of the screen
-bool intAddTransporterTimer(void)
+bool intAddTransporterTimer()
 {
 	// Make sure that Transporter Launch button isn't up as well
 	intRemoveTransporterLaunch();
@@ -1991,7 +1991,7 @@ void missionSetReinforcementTime(UDWORD iTime)
 	g_iReinforceTime = iTime;
 }
 
-UDWORD  missionGetReinforcementTime(void)
+UDWORD  missionGetReinforcementTime()
 {
 	return g_iReinforceTime;
 }
@@ -2186,7 +2186,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 }
 
 /* Remove the Mission Timer widgets from the screen*/
-void intRemoveMissionTimer(void)
+void intRemoveMissionTimer()
 {
 	// Check it's up.
 	if (widgGetFromID(psWScreen, IDTIMER_FORM) != nullptr)
@@ -2197,7 +2197,7 @@ void intRemoveMissionTimer(void)
 }
 
 /* Remove the Transporter Timer widgets from the screen*/
-void intRemoveTransporterTimer(void)
+void intRemoveTransporterTimer()
 {
 
 	//remove main screen
@@ -2220,7 +2220,7 @@ static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD y
 	scoreDataToScreen(psWidget);
 }
 
-static void missionResetInGameState(void)
+static void missionResetInGameState()
 {
 	//stop the game if in single player mode
 	setMissionPauseState();
@@ -2375,7 +2375,7 @@ bool intAddMissionResult(bool result, bool bPlaySuccess)
 	return _intAddMissionResult(result, bPlaySuccess);
 }
 
-void intRemoveMissionResultNoAnim(void)
+void intRemoveMissionResultNoAnim()
 {
 	widgDelete(psWScreen, IDMISSIONRES_TITLE);
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
@@ -2395,7 +2395,7 @@ void intRemoveMissionResultNoAnim(void)
 	intShowPowerBar();
 }
 
-void intRunMissionResult(void)
+void intRunMissionResult()
 {
 	wzSetCursor(CURSOR_DEFAULT);
 
@@ -2421,7 +2421,7 @@ void intRunMissionResult(void)
 	}
 }
 
-static void missionContineButtonPressed(void)
+static void missionContineButtonPressed()
 {
 	if (nextMissionType == LDS_CAMSTART
 	    || nextMissionType == LDS_BETWEEN
@@ -2511,7 +2511,7 @@ DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 }
 
 //this causes the new mission data to be loaded up - only if startMission has been called
-void launchMission(void)
+void launchMission()
 {
 	//if (mission.type == MISSION_NONE)
 	if (mission.type == LDS_NONE)
@@ -2584,7 +2584,7 @@ bool setUpMission(UDWORD type)
 }
 
 //save the power settings before loading in the new map data
-void saveMissionPower(void)
+void saveMissionPower()
 {
 	UDWORD	inc;
 
@@ -2595,7 +2595,7 @@ void saveMissionPower(void)
 }
 
 //add the power from the home base to the current power levels for the mission map
-void adjustMissionPower(void)
+void adjustMissionPower()
 {
 	UDWORD	inc;
 
@@ -2607,7 +2607,7 @@ void adjustMissionPower(void)
 
 /*sets the appropriate pause states for when the interface is up but the
 game needs to be paused*/
-void setMissionPauseState(void)
+void setMissionPauseState()
 {
 	if (!bMultiPlayer)
 	{
@@ -2620,7 +2620,7 @@ void setMissionPauseState(void)
 }
 
 /*resets the pause states */
-void resetMissionPauseState(void)
+void resetMissionPauseState()
 {
 	if (!bMultiPlayer)
 	{
@@ -2641,7 +2641,7 @@ LANDING_ZONE *getLandingZone(SDWORD i)
 
 /*Initialises all the nogo areas to 0 - DOESN'T INIT THE LIMBO AREA because we
 have to set this up in the mission BEFORE*/
-void initNoGoAreas(void)
+void initNoGoAreas()
 {
 	UBYTE	i;
 
@@ -2752,13 +2752,13 @@ UWORD getLandingY(SDWORD iPlayer)
 }
 
 //returns the x coord for where the Transporter can land back at home base
-UDWORD getHomeLandingX(void)
+UDWORD getHomeLandingX()
 {
 	return map_coord(mission.homeLZ_X);
 }
 
 //returns the y coord for where the Transporter can land back at home base
-UDWORD getHomeLandingY(void)
+UDWORD getHomeLandingY()
 {
 	return map_coord(mission.homeLZ_Y);
 }
@@ -2830,7 +2830,7 @@ void missionGetTransporterExit(SDWORD iPlayer, UDWORD *iX, UDWORD *iY)
 }
 
 /*update routine for mission details */
-void missionTimerUpdate(void)
+void missionTimerUpdate()
 {
 	//don't bother with the time check if have 'cheated'
 	if (!mission.cheatTime)
@@ -2855,7 +2855,7 @@ void missionTimerUpdate(void)
 
 // Remove any objects left ie walls,structures and droids that are not the selected player.
 //
-void missionDestroyObjects(void)
+void missionDestroyObjects()
 {
 	DROID *psDroid;
 	STRUCTURE *psStruct;
@@ -2956,7 +2956,7 @@ void missionDestroyObjects(void)
 	objmemUpdate();	// Actually free objects removed above
 }
 
-void processPreviousCampDroids(void)
+void processPreviousCampDroids()
 {
 	DROID           *psDroid, *psNext;
 
@@ -2983,7 +2983,7 @@ void setDroidsToSafetyFlag(bool set)
 	bDroidsToSafety = set;
 }
 
-bool getDroidsToSafetyFlag(void)
+bool getDroidsToSafetyFlag()
 {
 	return bDroidsToSafety;
 }
@@ -2995,7 +2995,7 @@ void setPlayCountDown(UBYTE set)
 	bPlayCountDown = set;
 }
 
-bool getPlayCountDown(void)
+bool getPlayCountDown()
 {
 	return bPlayCountDown;
 }
@@ -3040,7 +3040,7 @@ void moveDroidsToSafety(DROID *psTransporter)
 	}
 }
 
-void clearMissionWidgets(void)
+void clearMissionWidgets()
 {
 	//remove any widgets that are up due to the missions
 	if (mission.time > 0)
@@ -3056,7 +3056,7 @@ void clearMissionWidgets(void)
 	intRemoveTransporterLaunch();
 }
 
-void resetMissionWidgets(void)
+void resetMissionWidgets()
 {
 	DROID       *psDroid;
 
@@ -3107,7 +3107,7 @@ void	setCampaignNumber(UDWORD number)
 	camNumber = number;
 }
 
-UDWORD	getCampaignNumber(void)
+UDWORD	getCampaignNumber()
 {
 	return (camNumber);
 }

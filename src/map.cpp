@@ -230,7 +230,7 @@ static void init_tileNames(int type)
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
-static bool mapLoadGroundTypes(void)
+static bool mapLoadGroundTypes()
 {
 	char	*pFileData = nullptr;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
@@ -628,7 +628,7 @@ static bool hasDecals(int i, int j)
 }
 // mapSetGroundTypes()
 // Sets the ground type to be a decal or not
-static bool mapSetGroundTypes(void)
+static bool mapSetGroundTypes()
 {
 	int i, j;
 
@@ -663,7 +663,7 @@ static bool isWaterVertex(int x, int y)
 	       && terrainType(mapTile(x, y - 1)) == TER_WATER && terrainType(mapTile(x - 1, y - 1)) == TER_WATER;
 }
 
-static void generateRiverbed(void)
+static void generateRiverbed()
 {
 	MersenneTwister mt(12345);  // 12345 = random seed.
 	int maxIdx = 1, idx[MAP_MAXWIDTH][MAP_MAXHEIGHT];
@@ -1014,7 +1014,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 }
 
 /* Shutdown the map module */
-bool mapShutdown(void)
+bool mapShutdown()
 {
 	int x;
 

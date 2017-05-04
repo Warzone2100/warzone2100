@@ -188,7 +188,7 @@ bool seq_RenderVideoToBuffer(const char *sequenceName, int seqCommand)
 }
 
 
-static void seq_SetUserResolution(void)
+static void seq_SetUserResolution()
 {
 	switch (war_GetFMVmode())
 	{
@@ -383,7 +383,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	return true;
 }
 
-bool seq_StopFullScreenVideo(void)
+bool seq_StopFullScreenVideo()
 {
 	if (!seq_AnySeqLeft())
 	{
@@ -551,7 +551,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 }
 
 //clear the sequence list
-void seq_ClearSeqList(void)
+void seq_ClearSeqList()
 {
 	currentSeq = -1;
 	currentPlaySeq = -1;
@@ -597,7 +597,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 }
 
 /*checks to see if there are any sequences left in the list to play*/
-bool seq_AnySeqLeft(void)
+bool seq_AnySeqLeft()
 {
 	int nextSeq = currentPlaySeq + 1;
 
@@ -609,7 +609,7 @@ bool seq_AnySeqLeft(void)
 	return !aSeqList[nextSeq].pSeq.isEmpty();
 }
 
-void seq_StartNextFullScreenVideo(void)
+void seq_StartNextFullScreenVideo()
 {
 	bool	bPlayedOK;
 
@@ -649,7 +649,7 @@ void seq_SetSubtitles(bool bNewState)
 	bSeqSubtitles = bNewState;
 }
 
-bool seq_GetSubtitles(void)
+bool seq_GetSubtitles()
 {
 	return bSeqSubtitles;
 }
