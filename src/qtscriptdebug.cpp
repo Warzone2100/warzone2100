@@ -535,9 +535,6 @@ bool jsDebugShutdown()
 
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel)
 {
-	if (globalDialog)
-	{
-		delete globalDialog;
-	}
+	delete globalDialog;
 	globalDialog = new ScriptDebugger(models, triggerModel);
 }

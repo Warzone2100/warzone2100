@@ -245,7 +245,7 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected);
 /* Add the system buttons (weapons, command droid, etc) to the design screen */
 static bool intAddSystemButtons(DES_COMPMODE mode);
 /* Add the component buttons to the main tab of the system or component form */
-static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psStats, unsigned size, UBYTE *aAvailable, unsigned numEntries, unsigned compID);
+static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psStats, unsigned size, const UBYTE *aAvailable, unsigned numEntries, unsigned compID);
 /* Add the component buttons to the main tab of the component form */
 static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorIndex, unsigned ecmIndex, unsigned constIndex, unsigned repairIndex, unsigned brainIndex);
 /* Set the bar graphs for the system clickable */
@@ -1768,7 +1768,7 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 
 
 /* Add the component buttons to the main tab of the component form */
-static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psStats, unsigned size, UBYTE *aAvailable, unsigned numEntries, unsigned compID)
+static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psStats, unsigned size, const UBYTE *aAvailable, unsigned numEntries, unsigned compID)
 {
 	UDWORD				i, maxComponents;
 	COMPONENT_STATS		*psCurrStats;

@@ -67,7 +67,7 @@ void pie_setShadows(bool drawShadows);
 
 /** Set light parameters */
 void pie_InitLighting();
-void pie_Lighting0(LIGHTING_TYPE entry, float value[4]);
+void pie_Lighting0(LIGHTING_TYPE entry, const float value[4]);
 
 void pie_RemainingPasses();
 

@@ -524,7 +524,7 @@ static MapFileList listMapFiles()
 			PHYSFS_freeList(filelist);
 			if (unsafe < 2)
 			{
-				filtered.push_back(realFileName.c_str());
+				filtered.push_back(realFileName);
 			}
 			PHYSFS_removeFromSearchPath(realFilePathAndName.c_str());
 		}
@@ -668,7 +668,7 @@ bool buildMapList()
 			mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
 		}
 
-		CurrentMap.MapName = realFileName.c_str();
+		CurrentMap.MapName = realFileName;
 		CurrentMap.isMapMod = mapmod;
 		WZ_Maps.push_back(CurrentMap);
 	}

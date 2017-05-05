@@ -49,7 +49,7 @@ unsigned long ERR_get_error()
 	return 1;
 }
 
-const char *ERR_error_string(unsigned long e, char *buf)
+static const char *ERR_error_string(unsigned long e, const char *buf)
 {
 	(void)buf;
 	return "";
