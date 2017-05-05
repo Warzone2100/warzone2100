@@ -282,7 +282,7 @@ static bool eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 }
 
 // save a list of triggers
-static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, QString tname, WzConfig &ini)
+static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, const QString& tname, WzConfig &ini)
 {
 	int numTriggers = 0, context = 0;
 
@@ -308,7 +308,7 @@ static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, QString tname, WzConfig
 }
 
 // load a list of triggers
-static bool eventLoadTriggerList(WzConfig &ini, QString tname)
+static bool eventLoadTriggerList(WzConfig &ini, const QString& tname)
 {
 	UDWORD			event, offset, time;
 	int			numTriggers, context, type, trigger;

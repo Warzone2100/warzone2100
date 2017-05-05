@@ -29,6 +29,7 @@
 
 #include <string.h>
 #include <algorithm>
+#include <utility>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/stdio_ext.h"
@@ -386,9 +387,9 @@ static RETBUTSTATS retbutstats[NUMRETBUTS];
 
 void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown)
 {
-	retbutstats[ButId].tip = tip;
-	retbutstats[ButId].filename = filename;
-	retbutstats[ButId].filenameDown = filenameDown;
+	retbutstats[ButId].tip = std::move(tip);
+	retbutstats[ButId].filename = std::move(filename);
+	retbutstats[ButId].filenameDown = std::move(filenameDown);
 	retbutstats[ButId].downTime = 0;
 	retbutstats[ButId].flashing = 0;
 	retbutstats[ButId].flashTime = 0;

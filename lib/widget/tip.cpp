@@ -86,7 +86,7 @@ void widgSetTipColour(PIELIGHT colour)
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, int x, int y, int width, int height)
+void tipStart(WIDGET *psSource, const QString& pNewTip, iV_fonts NewFontID, int x, int y, int width, int height)
 {
 	ASSERT(psSource != nullptr, "Invalid widget pointer");
 

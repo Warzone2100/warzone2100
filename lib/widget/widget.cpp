@@ -31,6 +31,8 @@
 #include "lib/gamelib/gtime.h"
 
 #include "widget.h"
+
+#include <utility>
 #if defined(WZ_CC_MSVC)
 #include "widgbase_moc.h"		// this is generated on the pre-build event.
 #endif
@@ -491,7 +493,7 @@ void widgSetTip(W_SCREEN *psScreen, UDWORD id, QString pTip)
 		return;
 	}
 
-	psWidget->setTip(pTip);
+	psWidget->setTip(std::move(pTip));
 }
 
 /* Return which key was used to press the last returned widget */

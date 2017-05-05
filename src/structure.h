@@ -81,7 +81,7 @@ void setMaxConstructors(int player, int value);
 bool IsPlayerDroidLimitReached(int player);
 bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 
-bool loadStructureStats(QString filename);
+bool loadStructureStats(const QString& filename);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
 bool loadStructureStrengthModifiers(const char *pFileName);
 

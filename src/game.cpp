@@ -1575,7 +1575,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList);
-static bool loadSaveStructurePointers(QString filename, STRUCTURE **ppList);
+static bool loadSaveStructurePointers(const QString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
 
 static bool loadSaveTemplate(const char *pFileName);
@@ -5364,7 +5364,7 @@ bool writeStructFile(const char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveStructurePointers(QString filename, STRUCTURE **ppList)
+bool loadSaveStructurePointers(const QString& filename, STRUCTURE **ppList)
 {
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();

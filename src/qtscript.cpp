@@ -52,6 +52,7 @@
 #include "clparse.h"
 
 #include <set>
+#include <utility>
 
 #include "qtscriptdebug.h"
 #include "qtscriptfuncs.h"
@@ -84,7 +85,7 @@ struct timerNode
 	timerType type;
 	timerNode() : engine(nullptr), baseobjtype(OBJ_NUM_TYPES) {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame)
-		: function(val), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
+		: function(std::move(val)), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
 	bool operator== (const timerNode &t)
 	{
 		return function == t.function && player == t.player;
@@ -531,7 +532,7 @@ bool updateScripts()
 	return true;
 }
 
-QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
+QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
@@ -649,7 +650,7 @@ QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 
 bool loadGlobalScript(QString path)
 {
-	return loadPlayerScript(path, selectedPlayer, 0);
+	return loadPlayerScript(std::move(path), selectedPlayer, 0);
 }
 
 bool saveScriptStates(const char *filename)
@@ -698,7 +699,7 @@ bool saveScriptStates(const char *filename)
 	return true;
 }
 
-static QScriptEngine *findEngineForPlayer(int match, QString scriptName)
+static QScriptEngine *findEngineForPlayer(int match, const QString& scriptName)
 {
 	for (auto *engine : scripts)
 	{
@@ -1415,7 +1416,7 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 //__ An event that is run whenever a droid enters an area label. The area is then
 //__ deactived. Call resetArea() to reactivate it. The name of the event is
 //__ eventArea + the name of the label.
-bool triggerEventArea(QString label, DROID *psDroid)
+bool triggerEventArea(const QString& label, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (auto *engine : scripts)

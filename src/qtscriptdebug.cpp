@@ -315,7 +315,7 @@ static void setPair(int &row, QStandardItemModel &model, const QString &key, con
 	row++;
 }
 
-static void setPair(int &row, QStandardItemModel &model, QStandardItemList list)
+static void setPair(int &row, QStandardItemModel &model, const QStandardItemList& list)
 {
 	model.appendRow(list);
 	row++;

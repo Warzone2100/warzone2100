@@ -256,7 +256,7 @@ bool statsAllocConstruct(UDWORD	numStats)
 *		Load stats functions
 *******************************************************************************/
 
-static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, QString key, QString key2 = QString())
+static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const QString& key, const QString& key2 = QString())
 {
 	iIMDShape *retval = nullptr;
 	if (json.contains(key))
@@ -1607,7 +1607,7 @@ bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect)
 	return true;
 }
 
-bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass)
+bool getWeaponClass(const QString& weaponClassStr, WEAPON_CLASS *weaponClass)
 {
 	if (weaponClassStr.compare("KINETIC") == 0)
 	{

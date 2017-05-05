@@ -43,7 +43,7 @@ WzConfig::~WzConfig()
 	debug(LOG_SAVE, "%s %s", mWarning == ReadAndWrite? "Saving" : "Closing", mFilename.toUtf8().constData());
 }
 
-static QJsonObject jsonMerge(QJsonObject original, const QJsonObject override)
+static QJsonObject jsonMerge(QJsonObject original, const QJsonObject& override)
 {
 	for (const QString &key : override.keys())
 	{

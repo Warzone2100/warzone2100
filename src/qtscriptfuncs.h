@@ -47,7 +47,7 @@ void doNotSaveGlobal(const QString &global);
 void groupRemoveObject(BASE_OBJECT *psObj);
 
 /// Register functions to engine context
-bool registerFunctions(QScriptEngine *engine, QString scriptName);
+bool registerFunctions(QScriptEngine *engine, const QString& scriptName);
 bool unregisterFunctions(QScriptEngine *engine);
 
 bool saveGroups(WzConfig &ini, QScriptEngine *engine);

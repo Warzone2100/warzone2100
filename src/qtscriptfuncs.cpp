@@ -3106,7 +3106,7 @@ static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue();
 }
 
-static void setComponent(QString name, int player, int value)
+static void setComponent(const QString& name, int player, int value)
 {
 	COMPONENT_STATS *psComp = getCompStatsFromName(name);
 	ASSERT_OR_RETURN(, psComp, "Bad component %s", name.toUtf8().constData());
@@ -4691,7 +4691,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue::NullValue;
 }
 
-static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, QString name, int player, int type, int index)
+static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, const QString& name, int player, int type, int index)
 {
 	QScriptValue v = engine->newFunction(js_stats);
 	base.setProperty(name, v, QScriptValue::PropertyGetter | QScriptValue::PropertySetter);
@@ -4701,7 +4701,7 @@ static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, QString name
 	v.setProperty("name", name, QScriptValue::SkipInEnumeration | QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-bool registerFunctions(QScriptEngine *engine, QString scriptName)
+bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 {
 	debug(LOG_WZ, "Loading functions for engine %p, script %s", engine, scriptName.toUtf8().constData());
 

@@ -259,7 +259,7 @@ WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 void statsInitVars();
 
 bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect);
-bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass);
+bool getWeaponClass(const QString& weaponClassStr, WEAPON_CLASS *weaponClass);
 
 /* Wrappers */
 

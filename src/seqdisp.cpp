@@ -124,7 +124,7 @@ enum VIDEO_RESOLUTION
 	VIDEO_USER_CHOSEN_RESOLUTION,
 };
 
-static bool seq_StartFullScreenVideo(QString videoName, QString audioName, VIDEO_RESOLUTION resolution);
+static bool seq_StartFullScreenVideo(const QString& videoName, const QString& audioName, VIDEO_RESOLUTION resolution);
 
 /***************************************************************************/
 /*
@@ -219,7 +219,7 @@ static void seq_SetUserResolution()
 }
 
 //full screenvideo functions
-static bool seq_StartFullScreenVideo(QString videoName, QString audioName, VIDEO_RESOLUTION resolution)
+static bool seq_StartFullScreenVideo(const QString& videoName, const QString& audioName, VIDEO_RESOLUTION resolution)
 {
 	QString aAudioName("sequenceaudio/" + audioName);
 

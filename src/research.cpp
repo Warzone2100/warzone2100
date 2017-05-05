@@ -103,7 +103,7 @@ bool researchInitVars()
 }
 
 /** Load the research stats */
-bool loadResearch(QString filename)
+bool loadResearch(const QString& filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();

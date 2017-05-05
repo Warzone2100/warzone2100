@@ -281,7 +281,7 @@ void StateButton::setState(unsigned state)
 	}
 }
 
-void StateButton::setTip(int state, QString string)
+void StateButton::setTip(int state, const QString& string)
 {
 	tips[state] = string;
 	if (currentState == state)

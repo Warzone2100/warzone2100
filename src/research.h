@@ -82,7 +82,7 @@ extern UDWORD	aDefaultSensor[MAX_PLAYERS];
 extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
-bool loadResearch(QString filename);
+bool loadResearch(const QString& filename);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
