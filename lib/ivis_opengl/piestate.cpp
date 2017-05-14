@@ -668,7 +668,7 @@ void pie_SetRendMode(REND_MODE rendMode)
 
 		case REND_TEXT:
 			glEnable(GL_BLEND);
-			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA /*should be GL_ONE_MINUS_SRC1_COLOR, if supported*/);
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA /* Should be GL_ONE_MINUS_SRC1_COLOR, if supported. Also, gl_FragData[1] then needs to be set in text.frag. */);
 			break;
 
 		default:
