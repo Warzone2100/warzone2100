@@ -161,6 +161,8 @@ static bool startTitleMenu()
 	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
 	addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS8X + 360, FRONTEND_POS8Y, _("Donate: http://donations.wz2100.net/"), 0);
 	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
+	addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS8X + 360, 0, _("Chat with players on #warzone2100"), 0);
+	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 
 	return true;
@@ -222,6 +224,20 @@ static void rundonatelink()
 #endif
 }
 
+static void runchatlink()
+{
+#if defined(WZ_OS_WIN)
+	ShellExecuteW(NULL, L"open", L"http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4", NULL, NULL, SW_SHOWNORMAL);
+#elif defined (WZ_OS_MAC)
+	// For the macs
+	system("open http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4");
+#else
+	// for linux
+	int stupidWarning = system("xdg-open http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4 &");
+	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
+#endif
+}
+
 bool runTitleMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
@@ -255,6 +271,9 @@ bool runTitleMenu()
 		break;
 	case FRONTEND_DONATELINK:
 		rundonatelink();
+		break;
+	case FRONTEND_CHATLINK:
+		runchatlink();
 		break;
 
 	default:
@@ -1510,7 +1529,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
-		else if (psWidget->id == FRONTEND_HYPERLINK || psWidget->id == FRONTEND_DONATELINK)				// special case for our hyperlink
+		else if (psWidget->id == FRONTEND_HYPERLINK || psWidget->id == FRONTEND_DONATELINK || psWidget->id == FRONTEND_CHATLINK) // special case for our hyperlink
 		{
 			iV_SetTextColour(WZCOL_YELLOW);
 		}
