@@ -3014,7 +3014,7 @@ static void processMultiopWidgets(UDWORD id)
 				else
 				{
 					NETresetGamePassword();
-					ssprintf(buf, _("*** password is NOT required! ***"));
+					ssprintf(buf, "%s", _("*** password is NOT required! ***"));
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 				}
 				NETGameLocked(willSet);
@@ -3028,7 +3028,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 	case MULTIOP_MAP_MOD:
 		char buf[256];
-		ssprintf(buf, _("This is a map-mod, it can change your playing experience!"));
+		ssprintf(buf, "%s", _("This is a map-mod, it can change your playing experience!"));
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		break;
 
@@ -3862,34 +3862,34 @@ bool startMultiOptions(bool bReenter)
 				{
 					if (NetPlay.isUPNP_CONFIGURED)
 					{
-						ssprintf(buf, _("UPnP has been enabled."));
+						ssprintf(buf, "%s", _("UPnP has been enabled."));
 					}
 					else
 					{
 						if (NetPlay.isUPNP_ERROR)
 						{
-							ssprintf(buf, _("UPnP detection faled. You must manually configure router yourself."));
+							ssprintf(buf, "%s", _("UPnP detection faled. You must manually configure router yourself."));
 						}
 						else
 						{
-							ssprintf(buf, _("UPnP detection is in progress..."));
+							ssprintf(buf, "%s", _("UPnP detection is in progress..."));
 						}
 					}
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 				}
 				else
 				{
-					ssprintf(buf, _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
+					ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 				}
 			}
 			if (challengeActive)
 			{
-				ssprintf(buf, _("Hit the ready box to begin your challenge!"));
+				ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
 			}
 			else if (!bHosted)
 			{
-				ssprintf(buf, _("Press the start hosting button to begin hosting a game."));
+				ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
 			}
 			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		}

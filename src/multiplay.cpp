@@ -1703,11 +1703,11 @@ bool recvMapFileData(NETQUEUE queue)
 			char buf[256];
 			if (game.isMapMod)
 			{
-				ssprintf(buf, _("Warning, this is a map-mod, it could alter normal gameplay."));
+				ssprintf(buf, "%s", _("Warning, this is a map-mod, it could alter normal gameplay."));
 			}
 			else
 			{
-				ssprintf(buf, _("Warning, HOST has altered the game code, and can't be trusted!"));
+				ssprintf(buf, "%s", _("Warning, HOST has altered the game code, and can't be trusted!"));
 			}
 			addConsoleMessage(buf,  DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			game.isMapMod = true;
