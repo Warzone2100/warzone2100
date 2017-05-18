@@ -190,13 +190,19 @@ bool initTemplates()
 	{
 		return true; // too old version
 	}
-	ini.beginArray("templates");
-	while (ini.remainingArrayItems())
+	for (ini.beginArray("templates"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
 		DROID_TEMPLATE design = loadTemplateCommon(ini);
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = false;		// not AI template
 		design.stored = true;
+
+		if (std::find(std::begin(design.asParts), std::end(design.asParts), -1) != std::end(design.asParts)
+			|| std::find(std::begin(design.asWeaps), std::end(design.asWeaps), -1) != std::end(design.asWeaps))
+		{
+			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", design.name.toUtf8().constData());
+			continue;
+		}
 
 		char const *failPart = nullptr;
 		QString failPartName;
@@ -224,14 +230,12 @@ bool initTemplates()
 		if (!designable)
 		{
 			debug(LOG_ERROR, "%s \"%s\" for \"%s\" from stored templates cannot be designed", failPart, failPartName.toUtf8().constData(), design.name.toUtf8().constData());
-			ini.nextArrayItem();
 			continue;
 		}
 		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
 		if (!valid)
 		{
 			debug(LOG_ERROR, "Invalid template \"%s\" from stored templates", design.name.toUtf8().constData());
-			ini.nextArrayItem();
 			continue;
 		}
 		DROID_TEMPLATE *psDestTemplate = nullptr;
@@ -260,13 +264,11 @@ bool initTemplates()
 		if (psDestTemplate)
 		{
 			psDestTemplate->stored = true; // assimilate it
-			ini.nextArrayItem();
 			continue; // next!
 		}
 		design.enabled = allowDesign;
 		copyTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
-		ini.nextArrayItem();
 	}
 	ini.endArray();
 	return true;
