@@ -104,6 +104,7 @@ function eventStartLevel()
 			eliminateSnd: "pcv392.ogg",
 		},
 		"base3group": {
+			cleanup: "enemybase3",
 			detectMsg: "C1B_OBJ1",
 			detectSnd: "pcv375.ogg",
 			eliminateSnd: "pcv391.ogg",
