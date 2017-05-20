@@ -42,23 +42,15 @@
 #include "keyedit.h"
 
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
+static KEY_CODE getQwertyKey();
 
 // ----------------------------------------------------------------------------------
-KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
+KEY_MAPPING *keyGetMappingFromFunction(void (*function)())
 {
-	KEY_MAPPING	*psMapping, *psReturn;
-
-	for (psMapping = keyMappings, psReturn = nullptr;
-	     psMapping && !psReturn;
-	     psMapping = psMapping->psNext)
-	{
-		if ((void *)psMapping->function == function)
-		{
-			psReturn = psMapping;
-		}
-	}
-
-	return (psReturn);
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [function](KEY_MAPPING const &mapping) {
+		return mapping.function == function;
+	});
+	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
 // ----------------------------------------------------------------------------------
 /* Some stuff allowing the user to add key mappings themselves */
@@ -79,14 +71,10 @@ static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 
 // ----------------------------------------------------------------------------------
 /* The linked list of present key mappings */
-KEY_MAPPING	*keyMappings;
-
-/* Holds number of active mappings */
-UDWORD	numActiveMappings;
+std::list<KEY_MAPPING> keyMappings;
 
 /* Last meta and sub key that were recorded */
 static KEY_CODE	lastMetaKey, lastSubKey;
-static bool	bKeyProcessing = true;
 
 static void kf_NOOP() {}
 
@@ -272,19 +260,16 @@ _keymapsave keyMapSaveTable[] =
 	these will be read in from a .cfg file customisable by the player from
 	an in-game menu
 */
-void	keyInitMappings(bool bForceDefaults)
+void keyInitMappings(bool bForceDefaults)
 {
-	UDWORD	i;
-	keyMappings = nullptr;
-	numActiveMappings = 0;
-	bKeyProcessing = true;
+	keyMappings.clear();
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
 		processDebugMappings(n, false);
 	}
 
 
-	for (i = 0; i < NUM_QWERTY_KEYS; i++)
+	for (unsigned i = 0; i < NUM_QWERTY_KEYS; i++)
 	{
 		qwertyKeyMappings[i].psMapping = nullptr;
 	}
@@ -481,25 +466,12 @@ void	keyInitMappings(bool bForceDefaults)
 //bool	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, char *name)
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name)
 {
-	KEY_MAPPING	*newMapping;
-
 	/* Get some memory for our binding */
-	newMapping = (KEY_MAPPING *)malloc(sizeof(KEY_MAPPING));
-	if (newMapping == nullptr)
-	{
-		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
-		abort();
-		return nullptr;
-	}
+	keyMappings.emplace_front();
+	KEY_MAPPING *newMapping = &keyMappings.front();
 
 	/* Copy over the name */
-	newMapping->pName = strdup(name);
-	if (newMapping->pName == nullptr)
-	{
-		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
-		abort();
-		return nullptr;
-	}
+	newMapping->name = name;
 
 	/* Fill up our entries, first the ones that activate it */
 	newMapping->metaKeyCode	= metaCode;
@@ -535,117 +507,40 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCod
 		newMapping->altMetaKeyCode = KEY_RMETA;
 	}
 
-	/* Set it to be active */
-	newMapping->active = true;
-	/* Add it to the start of the list */
-	newMapping->psNext = keyMappings;
-	keyMappings = newMapping;
-	numActiveMappings++;
-
-	return (newMapping);
-}
-
-// ----------------------------------------------------------------------------------
-/* Removes a mapping from the list specified by the key codes */
-bool	keyRemoveMapping(KEY_CODE metaCode, KEY_CODE subCode)
-{
-	KEY_MAPPING	*mapping;
-
-	mapping = keyFindMapping(metaCode, subCode);
-	return (keyRemoveMappingPt(mapping));
+	return newMapping;
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns a pointer to a mapping if it exists - NULL otherwise */
 KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode)
 {
-	KEY_MAPPING	*psCurr;
-
-	/* See if we can find it */
-	for (psCurr = keyMappings; psCurr != nullptr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->metaKeyCode == metaCode && psCurr->subKeyCode == subCode)
-		{
-			return (psCurr);
-		}
-	}
-	return (nullptr);
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [metaCode, subCode](KEY_MAPPING const &mapping) {
+		return mapping.metaKeyCode == metaCode && mapping.subKeyCode == subCode;
+	});
+	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
 
 // ----------------------------------------------------------------------------------
 /* clears the mappings list and frees the memory */
-void	keyClearMappings()
+void keyClearMappings()
 {
-	while (keyMappings)
-	{
-		keyRemoveMappingPt(keyMappings);
-	}
+	keyMappings.clear();
 }
 
 
 // ----------------------------------------------------------------------------------
 /* Removes a mapping specified by a pointer */
-bool	keyRemoveMappingPt(KEY_MAPPING *psToRemove)
+static bool keyRemoveMappingPt(KEY_MAPPING *psToRemove)
 {
-	KEY_MAPPING	*psPrev, *psCurr;
-
-	if (psToRemove == nullptr)
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [psToRemove](KEY_MAPPING const &mapping) {
+		return &mapping == psToRemove;
+	});
+	if (mapping != keyMappings.end())
 	{
-		return (false);
+		keyMappings.erase(mapping);
+		return true;
 	}
-
-	if (psToRemove == keyMappings && keyMappings->psNext == nullptr)
-	{
-		if (keyMappings->pName)
-		{
-			free(keyMappings->pName);    // ffs
-		}
-		free(keyMappings);
-		keyMappings = nullptr;
-		numActiveMappings = 0;
-		return (true);
-	}
-
-	/* See if we can find it */
-	for (psPrev = nullptr, psCurr = keyMappings;
-	     psCurr != nullptr && psCurr != psToRemove;
-	     psPrev = psCurr, psCurr = psCurr->psNext)
-	{
-		/*NOP*/
-	}
-
-	/* If it was found... */
-	if (psCurr == psToRemove)
-	{
-		/* See if it was the first element */
-		if (psPrev)
-		{
-			/* It wasn't */
-			psPrev->psNext = psCurr->psNext;
-		}
-		else
-		{
-			/* It was */
-			keyMappings = psCurr->psNext;
-		}
-		/* Free up the memory, first for the string  */
-		if (psCurr->pName)
-		{
-			free(psCurr->pName);    // only free it if it was allocated in the first place (ffs)
-		}
-		/* and then for the mapping itself */
-		free(psCurr);
-		numActiveMappings--;
-		return (true);
-	}
-	return (false);
-}
-
-// ----------------------------------------------------------------------------------
-/* Just returns how many are active */
-UDWORD	getNumMappings()
-{
-	return (numActiveMappings);
+	return false;
 }
 
 
@@ -691,11 +586,8 @@ static bool checkQwertyKeys()
 /* Manages update of all the active function mappings */
 void	keyProcessMappings(bool bExclude)
 {
-	KEY_MAPPING	*keyToProcess;
-	bool		bMetaKeyDown;
-
 	/* Bomb out if there are none */
-	if (!keyMappings || !numActiveMappings || !bKeyProcessing)
+	if (keyMappings.empty())
 	{
 		return;
 	}
@@ -704,27 +596,14 @@ void	keyProcessMappings(bool bExclude)
 	(void) checkQwertyKeys();
 
 	/* Check for the meta keys */
-	if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
+	bool bMetaKeyDown = keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
 	    || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)
-	    || keyDown(KEY_LMETA) || keyDown(KEY_RMETA))
-	{
-		bMetaKeyDown = true;
-	}
-	else
-	{
-		bMetaKeyDown = false;
-	}
+	    || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
 
 	/* Run through all our mappings */
-	for (keyToProcess = keyMappings; keyToProcess != nullptr; keyToProcess = keyToProcess->psNext)
+	for (auto keyToProcess = keyMappings.begin(); keyToProcess != keyMappings.end(); ++keyToProcess)
 	{
-		/* We haven't acted upon it */
-		if (!keyToProcess->active)
-		{
-			/* Get out if it's inactive */
-			break;
-		}
-		/* Skip innappropriate ones when necessary */
+		/* Skip inappropriate ones when necessary */
 		if (bExclude && keyToProcess->status != KEYMAP_ALWAYS_PROCESS)
 		{
 			break;
@@ -883,11 +762,11 @@ static void keyShowMapping(KEY_MAPPING *psMapping)
 	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
 	if (onlySub)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s - %s", asciiSub, _(psMapping->pName)));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s - %s", asciiSub, _(psMapping->name.c_str())));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s and %s - %s", asciiMeta, asciiSub, _(psMapping->pName)));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s and %s - %s", asciiMeta, asciiSub, _(psMapping->name.c_str())));
 	}
 	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
 }
@@ -896,11 +775,9 @@ static void keyShowMapping(KEY_MAPPING *psMapping)
 // this function isn't really module static - should be removed - debug only
 void keyShowMappings()
 {
-	KEY_MAPPING *psMapping;
-
-	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	for (auto &mapping : keyMappings)
 	{
-		keyShowMapping(psMapping);
+		keyShowMapping(&mapping);
 	}
 }
 
@@ -908,77 +785,38 @@ void keyShowMappings()
 /* Returns the key code of the last sub key pressed - allows called functions to have a simple stack */
 KEY_CODE getLastSubKey()
 {
-	return (lastSubKey);
+	return lastSubKey;
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns the key code of the last meta key pressed - allows called functions to have a simple stack */
 KEY_CODE getLastMetaKey()
 {
-	return (lastMetaKey);
-}
-
-// ----------------------------------------------------------------------------------
-/* Allows us to enable/disable the whole mapping system */
-void	keyEnableProcessing(bool val)
-{
-	bKeyProcessing = val;
-}
-
-// ----------------------------------------------------------------------------------
-/* Sets all mappings to be inactive */
-void keyAllMappingsInactive()
-{
-	KEY_MAPPING	*psMapping;
-
-	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
-	{
-		psMapping->active = false;
-	}
-}
-
-// ----------------------------------------------------------------------------------
-void keyAllMappingsActive()
-{
-	KEY_MAPPING	*psMapping;
-
-	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
-	{
-		psMapping->active = true;
-	}
-}
-
-// ----------------------------------------------------------------------------------
-/* Allows us to make active/inactive specific mappings */
-void	keySetMappingStatus(KEY_MAPPING *psMapping, bool state)
-{
-	psMapping->active = state;
+	return lastMetaKey;
 }
 
 
 static const KEY_CODE qwertyCodes[26] =
 {
 	//  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
-	KEY_Q,  KEY_W,  KEY_E,  KEY_R,  KEY_T,  KEY_Y,  KEY_U,  KEY_I,  KEY_O,  KEY_P,
+	    KEY_Q,  KEY_W,  KEY_E,  KEY_R,  KEY_T,  KEY_Y,  KEY_U,  KEY_I,  KEY_O,  KEY_P,
 	//  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
 	//    +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
-	KEY_A,  KEY_S,  KEY_D,  KEY_F,  KEY_G,  KEY_H,  KEY_J,  KEY_K,  KEY_L,
+	      KEY_A,  KEY_S,  KEY_D,  KEY_F,  KEY_G,  KEY_H,  KEY_J,  KEY_K,  KEY_L,
 	//    +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
 	//        +---+   +---+   +---+   +---+   +---+   +---+   +---+
-	KEY_Z,  KEY_X,  KEY_C,  KEY_V,  KEY_B,  KEY_N,  KEY_M
+	          KEY_Z,  KEY_X,  KEY_C,  KEY_V,  KEY_B,  KEY_N,  KEY_M
 	//        +---+   +---+   +---+   +---+   +---+   +---+   +---+
 };
 
 /* Returns the key code of the first ascii key that its finds has been PRESSED */
-KEY_CODE getQwertyKey()
+static KEY_CODE getQwertyKey()
 {
-	unsigned i;
-
-	for (i = 0; i < ARRAY_SIZE(qwertyCodes); ++i)
+	for (KEY_CODE code : qwertyCodes)
 	{
-		if (keyPressed(qwertyCodes[i]))
+		if (keyPressed(code))
 		{
-			return qwertyCodes[i];  // Top-, middle- or bottom-row key pressed.
+			return code;  // Top-, middle- or bottom-row key pressed.
 		}
 	}
 
@@ -1070,62 +908,19 @@ std::string getWantedDebugMappingStatuses(bool val)
 	return ret;
 }
 // ----------------------------------------------------------------------------------
-bool	keyReAssignMapping(KEY_CODE origMetaCode, KEY_CODE origSubCode,
-                           KEY_CODE newMetaCode, KEY_CODE newSubCode)
+bool keyReAssignMapping(KEY_CODE origMetaCode, KEY_CODE origSubCode, KEY_CODE newMetaCode, KEY_CODE newSubCode)
 {
-	KEY_MAPPING	*psMapping;
-	bool		bFound;
-
-	for (psMapping = keyMappings, bFound = false; psMapping && !bFound;
-	     psMapping = psMapping->psNext)
+	/* Find the original */
+	if (KEY_MAPPING *psMapping = keyFindMapping(origMetaCode, origSubCode))
 	{
-		/* Find the original */
-		if (psMapping->metaKeyCode == origMetaCode && psMapping->subKeyCode == origSubCode)
+		/* Not all can be remapped */
+		if (psMapping->status != KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 		{
-			/* Not all can be remapped */
-			if (psMapping->status != KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
-			{
-				psMapping->metaKeyCode = newMetaCode;
-				psMapping->subKeyCode = newSubCode;
-				bFound = true;
-			}
+			psMapping->metaKeyCode = newMetaCode;
+			psMapping->subKeyCode = newSubCode;
+			return true;
 		}
 	}
 
-	return (bFound);
+	return false;
 }
-
-// ----------------------------------------------------------------------------------
-KEY_MAPPING	*getKeyMapFromName(char *pName)
-{
-	KEY_MAPPING	*psMapping;
-	for (psMapping = keyMappings; psMapping;	psMapping = psMapping->psNext)
-	{
-		if (strcmp(pName, psMapping->pName) == false)
-		{
-			return (psMapping);
-		}
-	}
-	return (nullptr);
-}
-
-// ----------------------------------------------------------------------------------
-bool	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode)
-{
-	KEY_MAPPING	*psMapping;
-
-
-	psMapping = getKeyMapFromName(pName);
-	if (psMapping)
-	{
-		if (psMapping->status == KEYMAP_ASSIGNABLE)
-		{
-			(void)keyAddMapping(psMapping->status, newMetaCode,
-			                    newSubCode, psMapping->action, psMapping->function, psMapping->pName);
-			keyRemoveMappingPt(psMapping);
-			return (true);
-		}
-	}
-	return (false);
-}
-// ----------------------------------------------------------------------------------

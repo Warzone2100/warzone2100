@@ -23,6 +23,7 @@
 
 #include "lib/framework/input.h"
 
+
 enum KEY_ACTION
 {
 	KEYMAP_DOWN,
@@ -42,44 +43,29 @@ enum KEY_STATUS
 struct KEY_MAPPING
 {
 	void (*function)();
-	bool		active;
 	KEY_STATUS	status;
 	UDWORD		lastCalled;
 	KEY_CODE	metaKeyCode;
 	KEY_CODE	altMetaKeyCode;
 	KEY_CODE	subKeyCode;
 	KEY_ACTION	action;
-	char		*pName;
-	KEY_MAPPING    *psNext;
+	std::string name;
 };
 
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name);
-bool keyRemoveMapping(KEY_CODE metaCode, KEY_CODE subCode);
-KEY_MAPPING *keyGetMappingFromFunction(void	*function);
-bool keyRemoveMappingPt(KEY_MAPPING *psToRemove);
+KEY_MAPPING *keyGetMappingFromFunction(void (*function)());
 KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode);
 void keyClearMappings();
 void keyProcessMappings(bool bExclude);
 void keyInitMappings(bool bForceDefaults);
-UDWORD getNumMappings();
 KEY_CODE getLastSubKey();
 KEY_CODE getLastMetaKey();
-KEY_MAPPING *getLastMapping();
-void keyEnableProcessing(bool val);
-void keyStatusAllInactive();
-void keyAllMappingsInactive();
-void keyAllMappingsActive();
-void keySetMappingStatus(KEY_MAPPING *psMapping, bool state);
 void processDebugMappings(unsigned player, bool val);
 bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
-bool keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
 
 bool keyReAssignMapping(KEY_CODE origMetaCode, KEY_CODE origSubCode, KEY_CODE newMetaCode, KEY_CODE newSubCode);
-KEY_MAPPING *getKeyMapFromName(char *pName);
-
-KEY_CODE	getQwertyKey();
 
 UDWORD	getMarkerX(KEY_CODE code);
 UDWORD	getMarkerY(KEY_CODE code);
@@ -88,7 +74,7 @@ SDWORD	getMarkerSpin(KEY_CODE code);
 // for keymap editor.
 typedef void (*_keymapsave)();
 extern _keymapsave keyMapSaveTable[];
-extern KEY_MAPPING *keyMappings;
+extern std::list<KEY_MAPPING> keyMappings;
 
 void	keyShowMappings();
 

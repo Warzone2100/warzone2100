@@ -136,7 +136,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	keyReAssignMapping(metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN);
 
 	/* Try and see if its there already - damn well should be! */
-	psMapping = keyGetMappingFromFunction((void *)selectedKeyMap->function);
+	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);
 
 	/* Cough if it's not there */
 	ASSERT_OR_RETURN(false, psMapping != nullptr, "Trying to patch a non-existant function mapping - whoop whoop!!!");
@@ -273,7 +273,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	// draw name
 	iV_SetTextColour(WZCOL_FORM_TEXT);
-	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height() / 2) + 3, font_regular);
+	iV_DrawText(_(psMapping->name.c_str()), x + 2, y + (psWidget->height() / 2) + 3, font_regular);
 
 	// draw binding
 	keyMapToString(sKey, psMapping);
@@ -284,11 +284,6 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		sstrcat(sKey, " (numpad)");
 	}
 	iV_DrawText(sKey, x + 364, y + (psWidget->height() / 2) + 3, font_regular);
-}
-
-static bool keyMappingSort(KEY_MAPPING const *a, KEY_MAPPING const *b)
-{
-	return strcmp(a->pName, b->pName) < 0;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -328,14 +323,16 @@ bool startKeyMapEditor(bool first)
 
 	//Put the buttons on it
 	std::vector<KEY_MAPPING *> mappings;
-	for (KEY_MAPPING *m = keyMappings; m != nullptr; m = m->psNext)
+	for (KEY_MAPPING &m : keyMappings)
 	{
-		if (m->status != KEYMAP__DEBUG && m->status != KEYMAP___HIDE)  // if it's not a debug mapping..
+		if (m.status != KEYMAP__DEBUG && m.status != KEYMAP___HIDE)  // if it's not a debug mapping..
 		{
-			mappings.push_back(m);
+			mappings.push_back(&m);
 		}
 	}
-	std::sort(mappings.begin(), mappings.end(), keyMappingSort);
+	std::sort(mappings.begin(), mappings.end(), [](KEY_MAPPING *a, KEY_MAPPING *b) {
+		return a->name < b->name;
+	});
 	/* Add our first mapping to the form */
 	/* Now add the others... */
 	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
@@ -359,7 +356,6 @@ bool startKeyMapEditor(bool first)
 // FIXME: Use the endian-safe physfs functions.
 bool saveKeyMap()
 {
-	KEY_MAPPING	*psMapping;
 	SDWORD		count;
 	char		name[128];
 	PHYSFS_file *pfile;
@@ -384,19 +380,15 @@ bool saveKeyMap()
 	}
 
 	// write out number of entries.
-	count = 0;
-	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
-	{
-		count++;
-	}
+	count = keyMappings.size();
 	WRITE(&count, sizeof(count));
 	WRITE(&keymapVersion, 8);
 
-	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	for (auto psMapping = keyMappings.begin(); psMapping != keyMappings.end(); ++psMapping)
 	{
 		// save this map.
 		// name
-		sstrcpy(name, psMapping->pName);
+		sstrcpy(name, psMapping->name.c_str());
 		WRITE(&name, 128);
 
 		WRITE(&psMapping->status, sizeof(KEY_STATUS));	// status
