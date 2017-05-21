@@ -71,6 +71,16 @@
 */
 
 ////////////////////////////////////////////////////////////////////////////////
+// Library initialization.
+////////////////////////////////////////////////////////////////////////////////
+
+// Registers a private event namespace for this library, to avoid collisions with
+// any event handling in code using this library. Make sure no other library uses
+// the same namespace, or strange things will happen. After this, we can name our
+// event handlers with the registered prefix, and they will still get called.
+namespace("cam_");
+
+////////////////////////////////////////////////////////////////////////////////
 // Misc useful stuff.
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -2398,23 +2408,23 @@ var __camLastHitTime = 0;
 
 const __CAM_EVENT_ATTACKED_INTENSITY = 5000;
 
-__camPreHookEvent("eventPickup", function(feature, droid)
+function cam_eventPickup(feature, droid)
 {
 	if (feature.stattype === ARTIFACT)
 	{
 		__camPickupArtifact(feature);
 	}
-});
+}
 
-__camPreHookEvent("eventGroupLoss", function(obj, group, newsize)
+function cam_eventGroupLoss(obj, group, newsize)
 {
 	if (newsize === 0)
 		__camCheckBaseEliminated(group);
 	if (camDef(__camGroupInfo[group]))
 		profile("__camCheckGroupMorale", group);
-});
+}
 
-__camPreHookEvent("eventCheatMode", function(entered)
+function cam_eventCheatMode(entered)
 {
 	if (entered)
 	{
@@ -2427,9 +2437,9 @@ __camPreHookEvent("eventCheatMode", function(entered)
 		__camCheatMode = false;
 	}
 	__camUpdateMarkedTiles();
-});
+}
 
-__camPreHookEvent("eventChat", function(from, to, message)
+function cam_eventChat(from, to, message)
 {
 	if (!__camCheatMode)
 		return;
@@ -2448,9 +2458,9 @@ __camPreHookEvent("eventChat", function(from, to, message)
 		__camNextLevel = message.substring(7).toUpperCase().replace(/-/g, "_");
 		__camLetMeWin();
 	}
-});
+}
 
-__camPreHookEvent("eventStartLevel", function()
+function cam_eventStartLevel()
 {
 	isReceivingAllEvents = true;
 	// Variables initialized here are the ones that should not be
@@ -2482,9 +2492,9 @@ __camPreHookEvent("eventStartLevel", function()
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 150100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
-});
+}
 
-__camPreHookEvent("eventDroidBuilt", function(droid, structure)
+function cam_eventDroidBuilt(droid, structure)
 {
 	if (!camDef(structure)) // "clone wars" cheat
 		return;
@@ -2496,26 +2506,26 @@ __camPreHookEvent("eventDroidBuilt", function(droid, structure)
 		return;
 	__camContinueProduction(structure);
 	__camAddDroidToFactoryGroup(droid, structure);
-});
+}
 
-__camPreHookEvent("eventDestroyed", function(obj)
+function cam_eventDestroyed(obj)
 {
 	__camCheckPlaceArtifact(obj);
 	if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
 		__camCheckDeadTruck(obj);
-});
+}
 
-__camPreHookEvent("eventObjectSeen", function(viewer, seen)
+function cam_eventObjectSeen(viewer, seen)
 {
 	__camCheckBaseSeen(seen);
-});
+}
 
-__camPreHookEvent("eventGroupSeen", function(viewer, group)
+function cam_eventGroupSeen(viewer, group)
 {
 	__camCheckBaseSeen(group);
-});
+}
 
-__camPreHookEvent("eventTransporterExit", function(transport)
+function cam_eventTransporterExit(transport)
 {
 	if (transport.player !== CAM_HUMAN_PLAYER || 
 		(__camWinLossCallback === "__camVictoryStandard" && 
@@ -2531,28 +2541,28 @@ __camPreHookEvent("eventTransporterExit", function(transport)
 		__camGameWon();
 		return;
 	}
-});
+}
 
-__camPreHookEvent("eventTransporterLanded", function(transport)
+function cam_eventTransporterLanded(transport)
 {
 	if (transport.player !== CAM_HUMAN_PLAYER)
 		__camLandTransporter(transport.player, camMakePos(transport));
-});
+}
 
-__camPreHookEvent("eventMissionTimeout", function()
+function cam_eventMissionTimeout()
 {
 	if (__camDefeatOnTimeout)
 	{
 		camTrace("0 minutes remaining.");
 		__camGameLost();
 	}
-});
+}
 
-__camPreHookEvent("eventAttacked", function(victim, attacker)
+function cam_eventAttacked(victim, attacker)
 {
 	if (camDef(victim) && victim &&
 	    victim.type === DROID && camDef(__camGroupInfo[victim.group]))
 	{
 		__camGroupInfo[victim.group].lastHit = gameTime;
 	}
-});
+}

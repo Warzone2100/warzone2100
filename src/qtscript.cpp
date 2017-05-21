@@ -134,6 +134,7 @@ typedef struct monitor_bin
 } MONITOR_BIN;
 typedef QHash<QString, MONITOR_BIN> MONITOR;
 static QHash<QScriptEngine *, MONITOR *> monitors;
+static QHash<QScriptEngine *, QStringList> eventNamespaces; // separate event namespaces for libraries
 
 static MODELMAP models;
 static QStandardItemModel *triggerModel;
@@ -149,9 +150,21 @@ void doNotSaveGlobal(const QString &global)
 }
 
 // Call a function by name
-static QScriptValue callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool required = false)
+static QScriptValue callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool event = true)
 {
-	code_part level = required ? LOG_ERROR : LOG_SCRIPT;
+	if (event)
+	{
+		// recurse into variants, if any
+		for (const QString &s : eventNamespaces[engine])
+		{
+			const QScriptValue &value = engine->globalObject().property(s + function);
+			if (value.isValid() && value.isFunction())
+			{
+				callFunction(engine, s + function, args, event);
+			}
+		}
+	}
+	code_part level = event ? LOG_SCRIPT : LOG_ERROR;
 	QScriptValue value = engine->globalObject().property(function);
 	if (!value.isValid() || !value.isFunction())
 	{
@@ -349,6 +362,18 @@ void scriptRemoveObject(BASE_OBJECT *psObj)
 		}
 	}
 	groupRemoveObject(psObj);
+}
+
+//-- \subsection{namespace(prefix)}
+//-- Registers a new event namespace. All events can now have this prefix. This is useful for
+//-- code libraries, to implement event that do not conflict with events in main code. This
+//-- function should be called from global; do not (for hopefully obvious reasons) put it
+//-- inside an event.
+static QScriptValue js_namespace(QScriptContext *context, QScriptEngine *engine)
+{
+	QString prefix(context->argument(0).toString());
+	eventNamespaces[engine].append(prefix);
+	return QScriptValue(true);
 }
 
 //-- \subsection{include(file)}
@@ -554,6 +579,7 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
 	engine->globalObject().setProperty("profile", engine->newFunction(js_profile));
 	engine->globalObject().setProperty("include", engine->newFunction(js_include));
+	engine->globalObject().setProperty("namespace", engine->newFunction(js_namespace));
 
 	// Special global variables
 	//== \item[version] Current version of the game, set in \emph{major.minor} format.

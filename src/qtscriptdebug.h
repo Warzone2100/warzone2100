@@ -66,6 +66,9 @@ private:
 protected slots:
 	void labelClickedIdx(const QModelIndex &idx);
 	void labelClicked();
+	void labelClickedAll();
+	void labelClickedActive();
+	void labelClear();
 	void runClicked(QObject *obj);
 	void updateModels();
 	void powerEditing(const QString &value);
@@ -77,6 +80,7 @@ protected slots:
 	void researchButtonClicked();
 	void sensorsButtonClicked();
 	void deityButtonClicked();
+	void gatewayButtonClicked();
 	void weatherButtonClicked();
 	void revealButtonClicked();
 	void shadowButtonClicked();

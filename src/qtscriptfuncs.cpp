@@ -103,7 +103,7 @@ typedef QMap<BASE_OBJECT *, int> GROUPMAP;
 typedef QMap<QScriptEngine *, GROUPMAP *> ENGINEMAP;
 static ENGINEMAP groups;
 
-struct labeltype
+struct LABEL
 {
 	Vector2i p1, p2;
 	int id;
@@ -113,12 +113,12 @@ struct labeltype
 	QList<int> idlist;
 	int triggered;
 
-	bool operator==(const labeltype &o) const
+	bool operator==(const LABEL &o) const
 	{
 		return id == o.id && type == o.type && player == o.player;
 	}
 };
-typedef QMap<QString, labeltype> LABELMAP;
+typedef QMap<QString, LABEL> LABELMAP;
 static LABELMAP labels;
 static QStandardItemModel *labelModel = nullptr;
 
@@ -179,7 +179,7 @@ static void updateLabelModel()
 	int nextRow = 0;
 	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 	{
-		const labeltype &l = i.value();
+		const LABEL &l = i.value();
 		labelModel->setItem(nextRow, 0, new QStandardItem(i.key()));
 		const char *c = "?";
 		switch (l.type)
@@ -236,7 +236,7 @@ QStandardItemModel *createLabelModel()
 	return labelModel;
 }
 
-static void clearMarks()
+void clearMarks()
 {
 	for (int x = 0; x < mapWidth; x++) // clear old marks
 	{
@@ -248,18 +248,36 @@ static void clearMarks()
 	}
 }
 
-void showLabel(const QString &key)
+void markAllLabels(bool only_active)
+{
+	for (const auto &key : labels.keys())
+	{
+		const LABEL &l = labels[key];
+		if (!only_active || l.triggered <= 0)
+		{
+			showLabel(key, false, false);
+		}
+	}
+}
+
+void showLabel(const QString &key, bool clear_old, bool jump_to)
 {
 	if (!labels.contains(key))
 	{
 		debug(LOG_ERROR, "label %s not found", key.toUtf8().constData());
 		return;
 	}
-	labeltype &l = labels[key];
+	LABEL &l = labels[key];
+	if (clear_old)
+	{
+		clearMarks();
+	}
 	if (l.type == SCRIPT_AREA || l.type == SCRIPT_POSITION)
 	{
-		setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
-		clearMarks();
+		if (jump_to)
+		{
+			setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		}
 		int maxx = map_coord(l.p2.x);
 		int maxy = map_coord(l.p2.y);
 		if (l.type == SCRIPT_POSITION)
@@ -278,8 +296,10 @@ void showLabel(const QString &key)
 	}
 	else if (l.type == SCRIPT_RADIUS)
 	{
-		setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
-		clearMarks();
+		if (jump_to)
+		{
+			setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		}
 		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), mapWidth); x++)
 		{
 			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), mapHeight); y++) // l.p2.x is radius, not a bug
@@ -294,8 +314,10 @@ void showLabel(const QString &key)
 	}
 	else if (l.type == SCRIPT_RADIUS)
 	{
-		setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
-		clearMarks();
+		if (jump_to)
+		{
+			setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		}
 		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), mapWidth); x++)
 		{
 			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), mapHeight); y++) // l.p2.x is radius, not a bug
@@ -310,11 +332,13 @@ void showLabel(const QString &key)
 	}
 	else if (l.type == OBJ_DROID || l.type == OBJ_FEATURE || l.type == OBJ_STRUCTURE)
 	{
-		clearMarks();
 		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)l.type, l.id, l.player);
 		if (psObj)
 		{
-			setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
+			if (jump_to)
+			{
+				setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
+			}
 			MAPTILE *psTile = mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y));
 			psTile->tileInfoBits |= BITS_MARKED;
 		}
@@ -322,7 +346,6 @@ void showLabel(const QString &key)
 	else if (l.type == SCRIPT_GROUP)
 	{
 		bool cameraMoved = false;
-		clearMarks();
 		for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
 		{
 			for (GROUPMAP::const_iterator iter = i.value()->constBegin(); iter != i.value()->constEnd(); ++iter)
@@ -330,7 +353,7 @@ void showLabel(const QString &key)
 				if (iter.value() == l.id)
 				{
 					BASE_OBJECT *psObj = iter.key();
-					if (!cameraMoved)
+					if (!cameraMoved && jump_to)
 					{
 						setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
 						cameraMoved = true;
@@ -379,7 +402,7 @@ bool areaLabelCheck(DROID *psDroid)
 	bool activated = false;
 	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 	{
-		labeltype &l = i.value();
+		LABEL &l = i.value();
 		if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
 		    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
 		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - psDroid->pos.xy) < l.p2.x)))
@@ -893,7 +916,7 @@ bool loadLabels(const char *filename)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		labeltype p;
+		LABEL p;
 		QString label(ini.value("label").toString());
 		if (labels.contains(label))
 		{
@@ -977,7 +1000,7 @@ bool writeLabels(const char *filename)
 	for (LABELMAP::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
 	{
 		const QString& key = i.key();
-		labeltype l = i.value();
+		LABEL l = i.value();
 		if (l.type == SCRIPT_POSITION)
 		{
 			ini.beginGroup("position_" + QString::number(c[0]++));
@@ -1075,7 +1098,7 @@ static QScriptValue js_resetLabel(QScriptContext *context, QScriptEngine *)
 {
 	QString labelName = context->argument(0).toString();
 	SCRIPT_ASSERT(context, labels.contains(labelName), "Label %s not found", labelName.toUtf8().constData());
-	labeltype &l = labels[labelName];
+	LABEL &l = labels[labelName];
 	l.triggered = 0; // make active again
 	if (context->argumentCount() > 1)
 	{
@@ -1095,7 +1118,7 @@ static QScriptValue js_enumLabels(QScriptContext *context, QScriptEngine *engine
 		SCRIPT_TYPE type = (SCRIPT_TYPE)context->argument(0).toInt32();
 		for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 		{
-			labeltype &l = (*i);
+			LABEL &l = (*i);
 			if (l.type == type)
 			{
 				matches += i.key();
@@ -1119,7 +1142,7 @@ static QScriptValue js_enumLabels(QScriptContext *context, QScriptEngine *engine
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 {
-	struct labeltype value;
+	LABEL value;
 	QScriptValue qval = context->argument(0);
 	value.type = qval.property("type").toInt32();
 	value.id = qval.property("id").toInt32();
@@ -1170,7 +1193,7 @@ static QScriptValue js_removeLabel(QScriptContext *context, QScriptEngine *engin
 //-- This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
 static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 {
-	struct labeltype value;
+	LABEL value;
 	QScriptValue objparam = context->argument(0);
 	value.id = objparam.property("id").toInt32();
 	value.player = objparam.property("player").toInt32();
@@ -1225,7 +1248,7 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 	if (labels.contains(label))
 	{
 		ret = engine->newObject();
-		labeltype p = labels.value(label);
+		LABEL p = labels.value(label);
 		ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 		switch (p.type)
 		{
@@ -3641,7 +3664,7 @@ static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
 		QString label = context->argument(0).toString();
 		nextparam = 1;
 		SCRIPT_ASSERT(context, labels.contains(label), "Label %s not found", label.toUtf8().constData());
-		labeltype p = labels.value(label);
+		LABEL p = labels.value(label);
 		SCRIPT_ASSERT(context, p.type == SCRIPT_AREA, "Wrong label type for %s", label.toUtf8().constData());
 		x1 = p.p1.x;
 		y1 = p.p1.y;
@@ -4090,7 +4113,7 @@ static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *)
 	{
 		QString label = context->argument(0).toString();
 		SCRIPT_ASSERT(context, labels.contains(label), "Label %s not found", label.toUtf8().constData());
-		labeltype &l = labels[label];
+		const LABEL &l = labels[label];
 		if (l.type == SCRIPT_AREA)
 		{
 			for (int x = map_coord(l.p1.x); x < map_coord(l.p2.x); x++)
@@ -4315,7 +4338,7 @@ void prepareLabels()
 		QScriptEngine *engine = iter.key();
 		for (LABELMAP::iterator i = labels.begin(); i != labels.end(); ++i)
 		{
-			struct labeltype l = i.value();
+			LABEL l = i.value();
 			if (l.type == SCRIPT_GROUP)
 			{
 				QScriptValue groupMembers = iter.key()->globalObject().property("groupSizes");

@@ -94,6 +94,11 @@ void ScriptDebugger::deityButtonClicked()
 	kf_ToggleGodMode();
 }
 
+void ScriptDebugger::gatewayButtonClicked()
+{
+	kf_ToggleShowGateways();
+}
+
 void ScriptDebugger::weatherButtonClicked()
 {
 	kf_ToggleWeather();
@@ -134,7 +139,8 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	miscLayout->addWidget(createButton("Fog", SLOT(fogButtonClicked()), this));
 	mainLayout->addLayout(miscLayout);
 	QHBoxLayout *worldLayout = new QHBoxLayout();
-	worldLayout->addWidget(createButton("Show all", SLOT(deityButtonClicked()), this));
+	worldLayout->addWidget(createButton("Show gateways", SLOT(gatewayButtonClicked()), this));
+	worldLayout->addWidget(createButton("Reveal all", SLOT(deityButtonClicked()), this));
 	worldLayout->addWidget(createButton("Weather", SLOT(weatherButtonClicked()), this));
 	worldLayout->addWidget(createButton("Reveal mode", SLOT(revealButtonClicked()), this));
 	mainLayout->addLayout(worldLayout);
@@ -214,11 +220,20 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	labelView.setSelectionMode(QAbstractItemView::SingleSelection);
 	labelView.setSelectionBehavior(QAbstractItemView::SelectRows);
 	connect(&labelView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(labelClickedIdx(const QModelIndex &)));
-	QPushButton *button = new QPushButton("Show", this);
-	connect(button, SIGNAL(pressed()), this, SLOT(labelClicked()));
+	QPushButton *buttonShow = new QPushButton("Show selected", this);
+	QPushButton *buttonShowAll = new QPushButton("Show all", this);
+	QPushButton *buttonShowActive = new QPushButton("Show active", this);
+	QPushButton *buttonClear = new QPushButton("Clear", this);
+	connect(buttonShow, SIGNAL(pressed()), this, SLOT(labelClicked()));
+	connect(buttonShowAll, SIGNAL(pressed()), this, SLOT(labelClickedAll()));
+	connect(buttonShowActive, SIGNAL(pressed()), this, SLOT(labelClickedActive()));
+	connect(buttonClear, SIGNAL(pressed()), this, SLOT(labelClear()));
 	QVBoxLayout *labelLayout = new QVBoxLayout(this);
 	labelLayout->addWidget(&labelView);
-	labelLayout->addWidget(button);
+	labelLayout->addWidget(buttonShow);
+	labelLayout->addWidget(buttonShowAll);
+	labelLayout->addWidget(buttonShowActive);
+	labelLayout->addWidget(buttonClear);
 	QWidget *dummyWidget = new QWidget(this);
 	dummyWidget->setLayout(labelLayout);
 	tab.addTab(dummyWidget, "Labels");
@@ -249,6 +264,23 @@ void ScriptDebugger::runClicked(QObject *obj)
 void ScriptDebugger::updateModels()
 {
 	doUpdateModels = true;
+}
+
+void ScriptDebugger::labelClear()
+{
+	clearMarks();
+}
+
+void ScriptDebugger::labelClickedAll()
+{
+	clearMarks();
+	markAllLabels(false);
+}
+
+void ScriptDebugger::labelClickedActive()
+{
+	clearMarks();
+	markAllLabels(true);
 }
 
 void ScriptDebugger::labelClicked()
