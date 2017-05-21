@@ -71,7 +71,6 @@
 // variables
 
 static KEY_MAPPING	*selectedKeyMap;
-static char keymapVersion[8] = "KM_0002";
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -353,149 +352,71 @@ bool startKeyMapEditor(bool first)
 
 // ////////////////////////////////////////////////////////////////////////////
 // save current keymaps to registry
-// FIXME: Use the endian-safe physfs functions.
 bool saveKeyMap()
 {
-	SDWORD		count;
-	char		name[128];
-	PHYSFS_file *pfile;
-
-	// KeyMapPath
-	debug(LOG_WZ, "We are to write %s for keymap info", KeyMapPath);
-	pfile = PHYSFS_openWrite(KeyMapPath);
-	if (!pfile)
+	WzConfig ini(KeyMapPath, WzConfig::ReadAndWrite);
+	if (!ini.status() || !ini.isWritable())
 	{
 		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
-		debug(LOG_FATAL, "saveKeyMap: %s could not be created: %s", KeyMapPath, PHYSFS_getLastError());
-		assert(false);
+		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
 
-#define WRITE(var, size)                                               \
-	if (PHYSFS_write(pfile, var, 1, size) != size) {                     \
-		debug(LOG_FATAL, "saveKeyMap: could not write to %s %d bytes: %s", \
-		      KeyMapPath, (int)size, PHYSFS_getLastError());                    \
-		assert(false);                                                     \
-		return false;                                                      \
-	}
+	ini.setValue("version", 1);
 
-	// write out number of entries.
-	count = keyMappings.size();
-	WRITE(&count, sizeof(count));
-	WRITE(&keymapVersion, 8);
-
-	for (auto psMapping = keyMappings.begin(); psMapping != keyMappings.end(); ++psMapping)
+	ini.beginArray("mappings");
+	for (auto const &mapping : keyMappings)
 	{
-		// save this map.
-		// name
-		sstrcpy(name, psMapping->name.c_str());
-		WRITE(&name, 128);
-
-		WRITE(&psMapping->status, sizeof(KEY_STATUS));	// status
-		WRITE(&psMapping->metaKeyCode, sizeof(KEY_CODE));	// metakey
-		WRITE(&psMapping->subKeyCode, sizeof(KEY_CODE)); // subkey
-		WRITE(&psMapping->action, sizeof(KEY_ACTION)); // action
-
-		// function to map to!
-		for (count = 0;  keyMapSaveTable[count] != nullptr && keyMapSaveTable[count] != psMapping->function; count++) {}
-		if (keyMapSaveTable[count] == nullptr)
+		ini.setValue("name", mapping.name.c_str());
+		ini.setValue("status", mapping.status);
+		ini.setValue("meta", mapping.metaKeyCode);
+		ini.setValue("sub", mapping.subKeyCode);
+		ini.setValue("action", mapping.action);
+		if (auto function = keymapEntryByFunction(mapping.function))
 		{
-			debug(LOG_FATAL, "can't find keymapped function %s in the keymap save table at %d!", name, count);
-			abort();
+			ini.setValue("function", function->name);
 		}
-		WRITE(&count, sizeof(count));
+
+		ini.nextArrayItem();
 	}
-	if (!PHYSFS_close(pfile))
-	{
-		debug(LOG_FATAL, "Error closing %s: %s", KeyMapPath, PHYSFS_getLastError());
-		assert(false);
-		return false;
-	}
+	ini.endArray();
+
 	debug(LOG_WZ, "Keymap written ok to %s.", KeyMapPath);
 	return true;	// saved ok.
-#undef WRITE
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // load keymaps from registry.
 bool loadKeyMap()
 {
-	KEY_STATUS	status;
-	KEY_CODE	metaCode;
-	KEY_CODE	subCode;
-	KEY_ACTION	action;
-	char		name[128];
-	SDWORD		count;
-	UDWORD		funcmap;
-	char		ver[8];
-	PHYSFS_file *pfile;
-	PHYSFS_sint64 filesize;
-	PHYSFS_sint64 countsize = 0;
-	PHYSFS_sint64 length_read;
-
 	// throw away any keymaps!!
-	keyClearMappings();
+	keyMappings.clear();
 
-	if (!PHYSFS_exists(KeyMapPath))
+	WzConfig ini(KeyMapPath, WzConfig::ReadOnly);
+	if (!ini.status())
 	{
 		debug(LOG_WZ, "%s not found", KeyMapPath);
 		return false;
 	}
-	pfile = PHYSFS_openRead(KeyMapPath);
-	if (!pfile)
+
+	for (ini.beginArray("mappings"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
-		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
-		debug(LOG_FATAL, "loadKeyMap: [directory: %s] %s could not be opened: %s", PHYSFS_getRealDir(KeyMapPath),
-		      KeyMapPath, PHYSFS_getLastError());
-		assert(false);
-		return false;
-	}
-	filesize = PHYSFS_fileLength(pfile);
-
-#define READ(var, size)                                       \
-	length_read = PHYSFS_read(pfile, var, 1, size);             \
-	countsize += length_read;                                   \
-	if (length_read != size) {                                  \
-		debug(LOG_FATAL, "loadKeyMap: Reading %s short: %s",      \
-		      KeyMapPath, PHYSFS_getLastError());                 \
-		assert(false);                                            \
-		(void) PHYSFS_close(pfile);                               \
-		return false;                                             \
-	}
-
-	READ(&count, sizeof(count));
-	READ(&ver, 8);	// get version number.
-
-	if (strncmp(ver, keymapVersion, 8) != 0)
-	{
-		/* If wrong version, create a new one instead. */
-		PHYSFS_close(pfile);
-		return false;
-	}
-
-	for (; count > 0; count--)
-	{
-		READ(&name, 128);	// name
-		READ(&status, sizeof(KEY_STATUS));	// status
-		READ(&metaCode, sizeof(KEY_CODE));	// metakey
-		READ(&subCode, sizeof(KEY_CODE));	// subkey
-		READ(&action, sizeof(KEY_ACTION));	// action
-		READ(&funcmap, sizeof(funcmap));	// function
+		auto name = ini.value("name", "").toString();
+		auto status = (KEY_STATUS)ini.value("status", 0).toInt();
+		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
+		auto sub = (KEY_CODE)ini.value("sub", 0).toInt();
+		auto action = (KEY_ACTION)ini.value("action", 0).toInt();
+		auto functionName = ini.value("function", "").toString().toUtf8();
+		auto function = keymapEntryByName(functionName.constData());
+		if (function == nullptr)
+		{
+			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.constData());
+			continue;
+		}
 
 		// add mapping
-		keyAddMapping(status, metaCode, subCode, action, keyMapSaveTable[funcmap], (char *)&name);
+		keyAddMapping(status, meta, sub, action, function->function, name.toUtf8().constData());
 	}
-
-	if (!PHYSFS_close(pfile))
-	{
-		debug(LOG_ERROR, "Error closing %s: %s", KeyMapPath, PHYSFS_getLastError());
-		assert(false);
-		return false;
-	}
-	if (countsize != filesize)
-	{
-		debug(LOG_FATAL, "File size different from bytes read!");
-		assert(false);
-	}
+	ini.endArray();
 	return true;
 }

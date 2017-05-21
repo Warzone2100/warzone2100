@@ -72,8 +72,13 @@ UDWORD	getMarkerY(KEY_CODE code);
 SDWORD	getMarkerSpin(KEY_CODE code);
 
 // for keymap editor.
-typedef void (*_keymapsave)();
-extern _keymapsave keyMapSaveTable[];
+struct KeyMapSaveEntry
+{
+	void (*function)();
+	char const *name;
+};
+KeyMapSaveEntry const *keymapEntryByFunction(void (*function)());
+KeyMapSaveEntry const *keymapEntryByName(std::string const &name);
 extern std::list<KEY_MAPPING> keyMappings;
 
 void	keyShowMappings();

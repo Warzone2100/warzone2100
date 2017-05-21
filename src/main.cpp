@@ -948,7 +948,7 @@ int realmain(int argc, char *argv[])
 
 
 	/* Put in the writedir root */
-	sstrcpy(KeyMapPath, "keymap.map");
+	sstrcpy(KeyMapPath, "keymap.json");
 
 	// initialise all the command line states
 	war_SetDefaultStates();
