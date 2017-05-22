@@ -168,74 +168,51 @@ static bool startTitleMenu()
 	return true;
 }
 
-static void runUpgrdHyperlink()
+static void runLink(char const *link)
 {
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
+#if defined(WZ_OS_WIN)
+	wchar_t  wszDest[250] = {'/0'};
+	MultiByteToWideChar(CP_UTF8, 0, link, -1, wszDest, 250);
+
+	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
+#elif defined (WZ_OS_MAC)
+	char lbuf[250] = {'\0'};
+	ssprintf(lbuf, "open %s &", link);
+	system(lbuf);
+#else
+	// for linux
+	char lbuf[250] = {'\0'};
+	ssprintf(lbuf, "xdg-open %s &", link);
+	int stupidWarning = system(lbuf);
+	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
+#endif
+}
+
+static void runUpgrdHyperlink()
+{
 	std::string link = "http://gamecheck.wz2100.net/";
 	std::string version = version_getVersionString();
 	for (char ch : version)
 	{
 		link += ch == ' '? '_' : ch;
 	}
-
-#if defined(WZ_OS_WIN)
-	wchar_t  wszDest[250] = {'/0'};
-	MultiByteToWideChar(CP_UTF8, 0, link.c_str(), -1, wszDest, 250);
-
-	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
-#elif defined (WZ_OS_MAC)
-	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "open %s &", link.c_str());
-	system(lbuf);
-#else
-	// for linux
-	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "xdg-open %s &", link.c_str());
-	int stupidWarning = system(lbuf);
-	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
-#endif
+	runLink(link.c_str());
 }
 
 static void runHyperlink()
 {
-#if defined(WZ_OS_WIN)
-	ShellExecuteW(NULL, L"open", L"http://wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
-#elif defined (WZ_OS_MAC)
-	// For the macs
-	system("open http://wz2100.net");
-#else
-	// for linux
-	int stupidWarning = system("xdg-open http://wz2100.net &");
-	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
-#endif
+	runLink("http://wz2100.net/");
 }
 
 static void rundonatelink()
 {
-#if defined(WZ_OS_WIN)
-	ShellExecuteW(NULL, L"open", L"http://donations.wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
-#elif defined (WZ_OS_MAC)
-	// For the macs
-	system("open http://donations.wz2100.net");
-#else
-	// for linux
-	int stupidWarning = system("xdg-open http://donations.wz2100.net &");
-	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
-#endif
+	runLink("http://donations.wz2100.net/");
 }
 
 static void runchatlink()
 {
-#if defined(WZ_OS_WIN)
-	ShellExecuteW(NULL, L"open", L"http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4", NULL, NULL, SW_SHOWNORMAL);
-#elif defined (WZ_OS_MAC)
-	// For the macs
-	system("open http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4");
-#else
-	// for linux
-	int stupidWarning = system("xdg-open http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4 &");
-	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
-#endif
+	runLink("http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4");
 }
 
 bool runTitleMenu()
