@@ -328,7 +328,6 @@ static UDWORD			droidTemplID;
 
 /* The current design being edited on the design screen */
 static DROID_TEMPLATE sCurrDesign;
-static bool haveCurrentDesign = false;
 
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -381,8 +380,6 @@ bool intAddDesign(bool bShowCentreScreen)
 	{
 		return false;
 	}
-
-	haveCurrentDesign = false;
 
 	/* Initialise the current design */
 	sDefaultDesignTemplate.droidType = DROID_ANY;
@@ -2927,7 +2924,6 @@ static void desCreateDefaultTemplate()
 	intSetDesignStats(&sCurrDesign);
 	widgDelete(psWScreen, IDDES_SYSTEMFORM);
 	desSysMode = IDES_NOSYSTEM;
-	haveCurrentDesign = true;
 }
 
 /* Remove the design widgets from the widget screen */
@@ -3930,31 +3926,28 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
-	if (haveCurrentDesign)
-	{
-		pie_SetGeometricOffset((DES_CENTERFORMX + DES_3DVIEWX) + (DES_3DVIEWWIDTH / 2),
-		                       (DES_CENTERFORMY + DES_3DVIEWY) + (DES_3DVIEWHEIGHT / 4) + 32);
+	pie_SetGeometricOffset((DES_CENTERFORMX + DES_3DVIEWX) + (DES_3DVIEWWIDTH / 2),
+	                       (DES_CENTERFORMY + DES_3DVIEWY) + (DES_3DVIEWHEIGHT / 4) + 32);
 
-		Rotation.x = -30;
-		Rotation.y = iRY;
-		Rotation.z = 0;
+	Rotation.x = -30;
+	Rotation.y = iRY;
+	Rotation.z = 0;
 
-		/* inc rotation */
-		iRY += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-		iRY %= 360;
+	/* inc rotation */
+	iRY += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+	iRY %= 360;
 
-		//fixed depth scale the pie
-		Position.x = 0;
-		Position.y = -100;
-		Position.z = BUTTON_DEPTH;
+	//fixed depth scale the pie
+	Position.x = 0;
+	Position.y = -100;
+	Position.z = BUTTON_DEPTH;
 
-		templateRadius = getComponentDroidTemplateRadius(&sCurrDesign);
-		//scale the object around the OBJECT_RADIUS so that half size objects are draw are draw 75% the size of normal objects
-		falseScale = (DESIGN_DROID_SCALE * OBJECT_RADIUS) / templateRadius;
+	templateRadius = getComponentDroidTemplateRadius(&sCurrDesign);
+	//scale the object around the OBJECT_RADIUS so that half size objects are draw are draw 75% the size of normal objects
+	falseScale = (DESIGN_DROID_SCALE * OBJECT_RADIUS) / templateRadius;
 
-		//display large droid view in the design screen
-		displayComponentButtonTemplate(&sCurrDesign, &Rotation, &Position, falseScale);
-	}
+	//display large droid view in the design screen
+	displayComponentButtonTemplate(&sCurrDesign, &Rotation, &Position, falseScale);
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/
