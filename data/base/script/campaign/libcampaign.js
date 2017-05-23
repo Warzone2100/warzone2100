@@ -2075,9 +2075,10 @@ var __camLevelEnded;
 
 function __camSetOffworldLimits()
 {
-	// That's the only structure that doesn't get
+	// These are the only structures that do not get
 	// auto-disabled by the engine in off-world missions.
 	setStructureLimits("A0CommandCentre", 0, 0);
+	setStructureLimits("A0ComDroidControl", 0, 0);
 }
 
 function __camGameLostCB()
