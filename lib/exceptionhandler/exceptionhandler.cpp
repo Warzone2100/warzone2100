@@ -511,6 +511,8 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 
 	// Terminate the child, indicating failure
 	_exit(1);
+	// with some compiler versions, _exit is not handled properly
+	return -1;
 }
 
 /**
