@@ -139,7 +139,6 @@ function eventStartLevel()
 	camSetArtifacts({
 		"COCyborgFactory-Arti": { tech: "R-Wpn-Rocket07-Tank-Killer" },
 		"COCommandCenter": { tech: "R-Wpn-Mortar3" },
-		"aaGunEmplacement": { tech: "R-Wpn-AAGun02" },
 		"uplink": { tech: "R-Sys-VTOLCBS-Tower01" },
 	});
 
