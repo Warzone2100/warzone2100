@@ -234,6 +234,7 @@ void kf_SpeedUp();
 void kf_SlowDown();
 void kf_NormalSpeed();
 
+void kf_TeachSelected();
 void kf_CloneSelected(int);
 void kf_Reload();
 

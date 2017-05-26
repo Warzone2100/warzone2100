@@ -346,3 +346,8 @@ void WzConfig::setValue(const QString &key, const QVariant &value)
 {
 	mObj.insert(key, QJsonValue::fromVariant(value));
 }
+
+void WzConfig::set(const QString &key, const QJsonValue &value)
+{
+	mObj.insert(key, value);
+}

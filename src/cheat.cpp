@@ -46,6 +46,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"templates", listTemplates}, // print templates
 	{"jsload", jsAutogame}, // load an AI script for selectedPlayer
 	{"jsdebug", jsShowDebug}, // show scripting states
+	{"teach us", kf_TeachSelected}, // give experience to selected units
 	{"clone wars", []{ kf_CloneSelected(10); }}, // clone selected units
 	{"clone wars!", []{ kf_CloneSelected(40); }}, // clone selected units
 	{"clone wars!!", []{ kf_CloneSelected(135); }}, // clone selected units

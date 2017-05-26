@@ -789,7 +789,7 @@ static bool serializeSaveGameV15Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 	{
 		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
 		{
-			if (!PHYSFS_writeUBE8(fileHandle, serializeGame->aDroidExperience[i][j]))
+			if (!PHYSFS_writeUBE8(fileHandle, 0)) // no longer saved in binary form
 			{
 				return false;
 			}
@@ -819,9 +819,14 @@ static bool deserializeSaveGameV15Data(PHYSFS_file *fileHandle, SAVE_GAME_V15 *s
 	{
 		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
 		{
-			if (!PHYSFS_readUBE8(fileHandle, &serializeGame->aDroidExperience[i][j]))
+			uint8_t tmp;
+			if (!PHYSFS_readUBE8(fileHandle, &tmp))
 			{
 				return false;
+			}
+			if (tmp > 0)
+			{
+				add_to_experience_queue(i, tmp * 65536);
 			}
 		}
 	}
@@ -1126,7 +1131,7 @@ static bool serializeSaveGameV27Data(PHYSFS_file *fileHandle, const SAVE_GAME_V2
 	{
 		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
 		{
-			if (!PHYSFS_writeUBE16(fileHandle, serializeGame->awDroidExperience[i][j]))
+			if (!PHYSFS_writeUBE16(fileHandle, 0))
 			{
 				return false;
 			}
@@ -1149,9 +1154,14 @@ static bool deserializeSaveGameV27Data(PHYSFS_file *fileHandle, SAVE_GAME_V27 *s
 	{
 		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
 		{
-			if (!PHYSFS_readUBE16(fileHandle, &serializeGame->awDroidExperience[i][j]))
+			uint16_t tmp;
+			if (!PHYSFS_readUBE16(fileHandle, &tmp))
 			{
 				return false;
+			}
+			if (tmp > 0)
+			{
+				add_to_experience_queue(i, tmp * 65536);
 			}
 		}
 	}
@@ -1564,6 +1574,8 @@ static bool IsScenario;
 /***************************************************************************/
 static bool gameLoadV7(PHYSFS_file *fileHandle);
 static bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version);
+static bool loadMainFile(const std::string &fileName);
+static bool writeMainFile(const std::string &fileName, SDWORD saveType);
 static bool writeGameFile(const char *fileName, SDWORD saveType);
 static bool writeMapFile(const char *fileName);
 
@@ -1611,8 +1623,6 @@ static bool gameLoad(const char *fileName);
 
 /* set the global scroll values to use for the save game */
 static void setMapScroll();
-
-static bool gameLoad(const char *fileName);
 
 static char *getSaveStructNameV19(SAVE_STRUCTURE_V17 *psSaveStructure)
 {
@@ -1947,26 +1957,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			}
 		}
 
-		if (saveGameVersion >= VERSION_27)//V27
-		{
-			for (player = 0; player < MAX_PLAYERS; player++)
-			{
-				for (inc = 0; inc < MAX_RECYCLED_DROIDS; inc++)
-				{
-					aDroidExperience[player][inc]	= saveGameData.awDroidExperience[player][inc];
-				}
-			}
-		}
-		else
-		{
-			for (player = 0; player < MAX_PLAYERS; player++)
-			{
-				for (inc = 0; inc < MAX_RECYCLED_DROIDS; inc++)
-				{
-					aDroidExperience[player][inc]	= saveGameData.aDroidExperience[player][inc];
-				}
-			}
-		}
 		if (saveGameVersion >= VERSION_30)
 		{
 			scrGameLevel = saveGameData.scrGameLevel;
@@ -2640,7 +2630,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 	/* Write the data to the file */
 	if (!writeGameFile(CurrentFileName, saveType))
 	{
-		debug(LOG_ERROR, "saveGame: writeGameFile(\"%s\") failed", CurrentFileName);
+		debug(LOG_ERROR, "writeGameFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
@@ -2649,6 +2639,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 
 	//create dir will fail if directory already exists but don't care!
 	(void) PHYSFS_mkdir(CurrentFileName);
+
+	writeMainFile(std::string(CurrentFileName) + "/main.json", saveType);
 
 	//save the map file
 	strcat(CurrentFileName, "/game.map");
@@ -2945,6 +2937,8 @@ static bool writeMapFile(const char *fileName)
 // -----------------------------------------------------------------------------------------
 static bool gameLoad(const char *fileName)
 {
+	char CurrentFileName[PATH_MAX];
+	strcpy(CurrentFileName, fileName);
 	GAME_SAVEHEADER fileHeader;
 
 	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
@@ -3034,6 +3028,9 @@ static bool gameLoad(const char *fileName)
 	{
 		bool retVal = gameLoadV(fileHandle, fileHeader.version);
 		PHYSFS_close(fileHandle);
+		//remove the file extension
+		CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
+		loadMainFile(std::string(CurrentFileName) + "/main.json");
 		return retVal;
 	}
 	else
@@ -3048,7 +3045,7 @@ static bool gameLoad(const char *fileName)
 // Fix endianness of a savegame
 static void endian_SaveGameV(SAVE_GAME *psSaveGame, UDWORD version)
 {
-	unsigned int i, j;
+	unsigned int i;
 	/* SAVE_GAME is GAME_SAVE_V33 */
 	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
 	if (version >= VERSION_33)
@@ -3078,15 +3075,6 @@ static void endian_SaveGameV(SAVE_GAME *psSaveGame, UDWORD version)
 		endian_uword(&psSaveGame->missionScrollMinY);
 		endian_uword(&psSaveGame->missionScrollMaxX);
 		endian_uword(&psSaveGame->missionScrollMaxY);
-	}
-	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
-	if (version >= VERSION_27)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-			for (j = 0; j < MAX_RECYCLED_DROIDS; j++)
-			{
-				endian_uword(&psSaveGame->awDroidExperience[i][j]);
-			}
 	}
 	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
 	if (version >= VERSION_24)
@@ -3739,13 +3727,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		mission.cheatTime = saveGameData.missionCheatTime;
 	}
 
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		for (i = 0; i < MAX_RECYCLED_DROIDS; ++i)
-		{
-			aDroidExperience[player][i]	= 0;//clear experience before
-		}
-	}
+	droidInit();
 
 	//set IsScenario to true if not a user saved game
 	if ((gameType == GTYPE_SAVE_START) ||
@@ -3759,10 +3741,6 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (i = 0; i < MAX_RECYCLED_DROIDS; ++i)
-			{
-				aDroidExperience[player][i] = 0;//clear experience before building saved units
-			}
 			NetPlay.players[player].ai = saveGameData.sNetPlay.players[player].ai;
 			NetPlay.players[player].difficulty = saveGameData.sNetPlay.players[player].difficulty;
 			sstrcpy(NetPlay.players[player].name, saveGameData.sNetPlay.players[player].name);
@@ -3840,11 +3818,164 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	return true;
 }
 
+// -----------------------------------------------------------------------------------------
+// Load main game data from JSON. Only implement stuff here that we actually use instead of 
+// the binary blobbery.
+static bool loadMainFile(const std::string &fileName)
+{
+	WzConfig save(QString::fromStdString(fileName), WzConfig::ReadOnly);
+
+	save.beginArray("players");
+	while (save.remainingArrayItems() > 0)
+	{
+		int index = save.value("index").toInt();
+		QVariant value = save.value("recycled_droids");
+		for (const QVariant &v : value.toList())
+		{
+			add_to_experience_queue(index, v.toInt());
+		}
+		save.nextArrayItem();
+	}
+	save.endArray();
+	return true;
+}
 
 // -----------------------------------------------------------------------------------------
-/*
-Writes the game specifics to a file
-*/
+// Save main game data to JSON. We save more here than we need to, and duplicate some of the
+// binary blobbery, for future usage.
+static bool writeMainFile(const std::string &fileName, SDWORD saveType)
+{
+	ASSERT(saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type");
+
+	WzConfig save(QString::fromStdString(fileName), WzConfig::ReadAndWrite);
+
+	uint32_t saveKey = getCampaignNumber();
+	if (missionIsOffworld())
+	{
+		saveKey |= SAVEKEY_ONMISSION;
+		saveGameOnMission = true;
+	}
+	else
+	{
+		saveGameOnMission = false;
+	}
+
+	/* Put the save game data into the buffer */
+	save.setValue("version", 1); // version of this file
+	save.setValue("saveKey", saveKey);
+	save.setValue("gameTime", gameTime);
+	save.setValue("missionTime", mission.startTime);
+	save.setVector2i("scrollMin", Vector2i(scrollMinX, scrollMinY));
+	save.setVector2i("scrollMax", Vector2i(scrollMaxX, scrollMaxY));
+	save.setValue("saveType", saveType);
+	save.setValue("levelName", aLevelName);
+	save.setValue("radarPermitted", radarPermitted);
+	save.setValue("allowDesign", allowDesign);
+	save.setValue("missionOffTime", mission.time);
+	save.setValue("missionETA", mission.ETA);
+	save.setValue("missionCheatTime", mission.cheatTime);
+	save.setVector2i("missionHomeLZ", Vector2i(mission.homeLZ_X, mission.homeLZ_Y));
+	save.setVector2i("missionPlayerPos", Vector2i(mission.playerX, mission.playerY));
+	save.setVector2i("missionScrollMin", Vector2i(mission.scrollMinX, mission.scrollMinY));
+	save.setVector2i("missionScrollMax", Vector2i(mission.scrollMaxX, mission.scrollMaxY));
+	save.setValue("offWorldKeepLists", offWorldKeepLists);
+	save.setValue("rubbleTile", getRubbleTileNum());
+	save.setValue("waterTile", getWaterTileNum());
+	save.setValue("objId", MAX(unsynchObjID * 2, (synchObjID + 3) / 4));
+	save.setValue("radarZoom", GetRadarZoom());
+	save.setValue("droidsToSafetyFlag", getDroidsToSafetyFlag());
+	save.setValue("reinforceTime", missionGetReinforcementTime());
+	save.setValue("playCountDown", getPlayCountDown());
+
+	save.beginArray("players");
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		save.setValue("index", i);
+		save.setValue("power", getPower(i));
+		save.setVector2i("iTranspEntryTile", Vector2i(mission.iTranspEntryTileX[i], mission.iTranspEntryTileY[i]));
+		save.setVector2i("iTranspExitTile", Vector2i(mission.iTranspExitTileX[i], mission.iTranspExitTileY[i]));
+		save.setValue("aDefaultSensor", aDefaultSensor[i]);
+		save.setValue("aDefaultECM", aDefaultECM[i]);
+		save.setValue("aDefaultRepair", aDefaultRepair[i]);
+		save.setValue("colour", getPlayerColour(i));
+		save.setVector2i("VTOL_return_position", asVTOLReturnPos[i]);
+
+		std::priority_queue<int> experience = copy_experience_queue(i);
+		QJsonArray recycled_droids;
+		while (!experience.empty())
+		{
+			recycled_droids.append(experience.top());
+			experience.pop();
+		}
+		save.set("recycled_droids", recycled_droids);
+
+		QJsonArray allies;
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			allies.append(alliances[i][j]);
+		}
+		save.set("alliances", allies);
+		save.setValue("difficulty", game.skDiff[i]);
+
+		// RUN_DATA not saved -- is it still used?
+
+		save.setValue("position", NetPlay.players[i].position);
+		save.setValue("colour", NetPlay.players[i].colour);
+		save.setValue("allocated", NetPlay.players[i].allocated);
+		save.setValue("team", NetPlay.players[i].team);
+		save.setValue("ai", NetPlay.players[i].ai);
+		save.setValue("difficultyLevel", NetPlay.players[i].difficulty);
+		save.setValue("autoGame", NetPlay.players[i].autoGame);
+		save.setValue("ip", NetPlay.players[i].IPtextAddress);
+
+		// wtf why do we keep player names stored in so many places?
+		save.setValue("netName", NetPlay.players[i].name);
+		save.setValue("name", getPlayerName(selectedPlayer));
+
+		save.nextArrayItem();
+	}
+	save.endArray();
+
+	iView playerPos;
+	disp3d_getView(&playerPos);
+	save.setVector3i("camera_position", playerPos.p);
+	save.setVector3i("camera_rotation", playerPos.r);
+
+	save.beginArray("landing_zones");
+	for (int i = 0; i < MAX_NOGO_AREAS; ++i)
+	{
+		LANDING_ZONE *psLandingZone = getLandingZone(i);
+		save.setVector2i("start", Vector2i(psLandingZone->x1, psLandingZone->x2));
+		save.setVector2i("end", Vector2i(psLandingZone->y1, psLandingZone->y2));
+		save.nextArrayItem();
+	}
+	save.endArray();
+
+	save.setValue("playerHasWon", testPlayerHasWon());
+	save.setValue("playerHasLost", testPlayerHasLost());
+	save.setValue("gameLevel", scrGameLevel);
+	save.setValue("failFlag", bExtraFailFlag);
+	save.setValue("trackTransporter", bTrackTransporter);
+	save.setValue("gameType", game.type);
+	save.setValue("scavengers", game.scavengers);
+	save.setValue("mapName", game.map);
+	save.setValue("maxPlayers", game.maxPlayers);
+	save.setValue("gameName", game.name);
+	save.setValue("powerSetting", game.power);
+	save.setValue("baseSetting", game.base);
+	save.setValue("allianceSetting", game.alliance);
+	save.setValue("mapHasScavengers", game.mapHasScavengers);
+	save.setValue("mapMod", game.isMapMod);
+	save.setValue("selectedPlayer", selectedPlayer);
+	save.setValue("multiplayer", bMultiPlayer);
+	save.setValue("playerCount", NetPlay.playercount);
+	save.setValue("hostPlayer", NetPlay.hostPlayer);
+	save.setValue("bComms", NetPlay.bComms);
+	save.setValue("modList", getModList().c_str());
+
+	return true;
+}
+
 static bool writeGameFile(const char *fileName, SDWORD saveType)
 {
 	GAME_SAVEHEADER fileHeader;
@@ -3876,7 +4007,6 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	}
 
 	ASSERT(saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type");
-	// saveKeymissionIsOffworld
 	saveGame.saveKey = getCampaignNumber();
 	if (missionIsOffworld())
 	{
@@ -3943,11 +4073,6 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 		saveGame.aDefaultSensor[i]    = aDefaultSensor[i];
 		saveGame.aDefaultECM[i]       = aDefaultECM[i];
 		saveGame.aDefaultRepair[i]    = aDefaultRepair[i];
-
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
-		{
-			saveGame.awDroidExperience[i][j]	= aDroidExperience[i][j];
-		}
 	}
 
 	for (i = 0; i < MAX_NOGO_AREAS; ++i)

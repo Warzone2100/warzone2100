@@ -31,6 +31,8 @@
 #include "stats.h"
 #include "visibility.h"
 
+#include <queue>
+
 #define OFF_SCREEN 9999		// world->screen check - alex
 
 #define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
@@ -58,8 +60,8 @@ enum PICKTILE
 // the structure that was last hit
 extern DROID	*psLastDroidHit;
 
-extern UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
-
+std::priority_queue<int> copy_experience_queue(int player);
+void add_to_experience_queue(int player, int value);
 
 // initialise droid module
 bool droidInit();

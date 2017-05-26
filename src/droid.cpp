@@ -81,7 +81,7 @@
 #define	DROID_REPAIR_SPREAD	(20 - rand()%40)
 
 // store the experience of recently recycled droids
-UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
+static std::priority_queue<int> recycled_experience[MAX_PLAYERS];
 
 /** Height the transporter hovers at above the terrain. */
 #define TRANSPORTER_HOVER_HEIGHT	10
@@ -152,7 +152,10 @@ static void droidBodyUpgrade(DROID *psDroid)
 // initialise droid module
 bool droidInit()
 {
-	memset(aDroidExperience, 0, sizeof(UWORD) * MAX_PLAYERS * MAX_RECYCLED_DROIDS);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		recycled_experience[i] = std::priority_queue <int>(); // clear it
+	}
 	psLastDroidHit = nullptr;
 
 	return true;
@@ -386,32 +389,29 @@ DROID::~DROID()
 	free(sMove.asPath);
 }
 
+std::priority_queue<int> copy_experience_queue(int player)
+{
+	return recycled_experience[player];
+}
+
+void add_to_experience_queue(int player, int value)
+{
+	recycled_experience[player].push(value);
+}
 
 // recycle a droid (retain it's experience and some of it's cost)
 void recycleDroid(DROID *psDroid)
 {
-	UDWORD		numKills, minKills;
-	SDWORD		i, cost, storeIndex;
-	Vector3i position;
-
 	CHECK_DROID(psDroid);
 
 	// store the droids kills
-	numKills = psDroid->experience / 65536;
-	minKills = UWORD_MAX;
-	storeIndex = 0;
-	for (i = 0; i < MAX_RECYCLED_DROIDS; i++)
+	if (psDroid->experience > 0)
 	{
-		if (aDroidExperience[psDroid->player][i] < (UWORD)minKills)
-		{
-			storeIndex = i;
-			minKills = aDroidExperience[psDroid->player][i];
-		}
+		recycled_experience[psDroid->player].push(psDroid->experience);
 	}
-	aDroidExperience[psDroid->player][storeIndex] = (UWORD)numKills;
 
 	// return part of the cost of the droid
-	cost = calcDroidPower(psDroid);
+	int cost = calcDroidPower(psDroid);
 	cost = (cost / 2) * psDroid->body / psDroid->originalBody;
 	addPower(psDroid->player, (UDWORD)cost);
 
@@ -423,13 +423,10 @@ void recycleDroid(DROID *psDroid)
 		psDroid->psGroup->remove(psDroid);
 	}
 
-	position.x = psDroid->pos.x;				// Add an effect
-	position.z = psDroid->pos.y;
-	position.y = psDroid->pos.z;
-
 	triggerEvent(TRIGGER_OBJECT_RECYCLED, psDroid);
 	vanishDroid(psDroid);
 
+	Vector3i position = psDroid->pos.xzy;
 	addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
 
 	CHECK_DROID(psDroid);
@@ -1624,7 +1621,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 {
 	DROID			*psDroid;
 	DROID_GROUP		*psGrp;
-	SDWORD			i, experienceLoc;
 
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
@@ -1660,20 +1656,11 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	    (psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
 	    (psDroid->droidType != DROID_REPAIR) &&
 	    (psDroid->droidType != DROID_CYBORG_REPAIR) &&
-	    !isTransporter(psDroid))
+	    !isTransporter(psDroid) &&
+	    !recycled_experience[psDroid->player].empty())
 	{
-		uint32_t numKills = 0;
-		experienceLoc = 0;
-		for (i = 0; i < MAX_RECYCLED_DROIDS; i++)
-		{
-			if (aDroidExperience[player][i] * 65536 > numKills)
-			{
-				numKills = aDroidExperience[player][i] * 65536;
-				experienceLoc = i;
-			}
-		}
-		aDroidExperience[player][experienceLoc] = 0;
-		psDroid->experience = numKills;
+		psDroid->experience = recycled_experience[psDroid->player].top();
+		recycled_experience[psDroid->player].pop();
 	}
 	else
 	{

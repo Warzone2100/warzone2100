@@ -84,6 +84,7 @@ public:
 	}
 
 	void setValue(const QString &key, const QVariant &value);
+	void set(const QString &key, const QJsonValue &value);
 
 	QString group()
 	{
