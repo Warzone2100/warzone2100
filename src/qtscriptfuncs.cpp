@@ -4761,6 +4761,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			bodybase.setProperty(psStats->name, body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Sensor] Sensor turrets
 		QScriptValue sensorbase = engine->newObject();
 		for (int j = 0; j < numSensorStats; j++)
@@ -4776,6 +4777,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			sensorbase.setProperty(psStats->name, sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[ECM] ECM (Electronic Counter-Measure) turrets
 		QScriptValue ecmbase = engine->newObject();
 		for (int j = 0; j < numECMStats; j++)
@@ -4791,6 +4793,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			ecmbase.setProperty(psStats->name, ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Repair] Repair turrets (not used, incidentially, for repair centers)
 		QScriptValue repairbase = engine->newObject();
 		for (int j = 0; j < numRepairStats; j++)
@@ -4806,6 +4809,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			repairbase.setProperty(psStats->name, repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Construct] Constructor turrets (eg for trucks)
 		QScriptValue conbase = engine->newObject();
 		for (int j = 0; j < numConstructStats; j++)
@@ -4856,6 +4860,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			wbase.setProperty(psStats->name, weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[WeaponClass] Defined weapon classes
 		QScriptValue weaptypes = engine->newArray(WSC_NUM_WEAPON_SUBCLASSES);
 		for (int j = 0; j < WSC_NUM_WEAPON_SUBCLASSES; j++)
@@ -4863,6 +4868,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			weaptypes.setProperty(j, getWeaponSubClass((WEAPON_SUBCLASS)j), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("WeaponClass", weaptypes, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Building] Buildings
 		QScriptValue structbase = engine->newObject();
 		for (int j = 0; j < numStructureStats; j++)
@@ -4908,6 +4914,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		QScriptValue node = engine->newObject();
+
 		//== \item[Body] Droid bodies
 		QScriptValue bodybase = engine->newObject();
 		for (int j = 0; j < numBodyStats; j++)
@@ -4922,6 +4929,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			bodybase.setProperty(psStats->name, body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Sensor] Sensor turrets
 		QScriptValue sensorbase = engine->newObject();
 		for (int j = 0; j < numSensorStats; j++)
@@ -4932,6 +4940,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			sensorbase.setProperty(psStats->name, sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[ECM] ECM (Electronic Counter-Measure) turrets
 		QScriptValue ecmbase = engine->newObject();
 		for (int j = 0; j < numECMStats; j++)
@@ -4942,6 +4951,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			ecmbase.setProperty(psStats->name, ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Repair] Repair turrets (not used, incidentially, for repair centers)
 		QScriptValue repairbase = engine->newObject();
 		for (int j = 0; j < numRepairStats; j++)
@@ -4952,6 +4962,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			repairbase.setProperty(psStats->name, repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Construct] Constructor turrets (eg for trucks)
 		QScriptValue conbase = engine->newObject();
 		for (int j = 0; j < numConstructStats; j++)
@@ -4984,6 +4995,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			wbase.setProperty(psStats->name, weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Building] Buildings
 		QScriptValue structbase = engine->newObject();
 		for (int j = 0; j < numStructureStats; j++)
@@ -5005,6 +5017,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			structbase.setProperty(psStats->name, strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Building", structbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		// Finally
 		upgrades.setProperty(i, node, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}

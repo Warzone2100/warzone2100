@@ -40,13 +40,8 @@
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
 
-
 /** This global instance is responsible for dealing with the each player's target designator.*/
 DROID	*apsCmdDesignator[MAX_PLAYERS];
-
-
-/** This global instance says whether experience should be boosted due to a multi game.*/
-static bool bMultiExpBoost = false;
 
 
 /** This function allocs the global instance apsCmdDesignator.*/
@@ -153,16 +148,6 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 	}
 
 	return index;
-}
-
-void cmdDroidMultiExpBoost(bool bDoit)
-{
-	bMultiExpBoost = bDoit;
-}
-
-bool cmdGetDroidMultiExpBoost()
-{
-	return bMultiExpBoost;
 }
 
 /** This function returns the maximum group size of the command droid.*/

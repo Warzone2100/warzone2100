@@ -67,10 +67,4 @@ unsigned int cmdGetCommanderLevel(const DROID *psDroid);
 /** \brief Returns if the droid has commander.*/
 bool hasCommander(const DROID *psDroid);
 
-/** \brief Sets whether commander experience should be increased in multiplayer games.*/
-void cmdDroidMultiExpBoost(bool bDoit);
-
-/** \brief Checks whether commander experience should be increased in multiplayer games.*/
-bool cmdGetDroidMultiExpBoost();
-
 #endif // __INCLUDED_SRC_CMDDROID_H__

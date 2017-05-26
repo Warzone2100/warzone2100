@@ -378,7 +378,7 @@ static QString arrayToString(const T *array, int length)
 }
 
 // Using ^ to denote stats that are in templates, and as such do not change.
-QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *psStats)
+QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *psStats, int player)
 {
 	QStandardItem *key = new QStandardItem(name);
 	QStandardItem *value = new QStandardItem(getName(psStats));
@@ -467,7 +467,7 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		if (psObj->asWeaps[i].nStat > 0)
 		{
 			WEAPON_STATS *psWeap = asWeaponStats + psObj->asWeaps[i].nStat;
-			QStandardItemList list = componentToString(QString::number(i), psWeap);
+			QStandardItemList list = componentToString(QString::number(i), psWeap, psObj->player);
 			QStandardItem *weapSubKey = list[0];
 			weapSubKey->appendRow(QStandardItemList{ new QStandardItem("Ammo"), new QStandardItem(QString::number(psObj->asWeaps[i].ammo)) });
 			weapSubKey->appendRow(QStandardItemList{ new QStandardItem("Last fired time"), new QStandardItem(QString::number(psObj->asWeaps[i].lastFired)) });
@@ -510,13 +510,13 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		setPair(row, selectedModel, "Move pause time", QString::number(psDroid->sMove.pauseTime));
 		setPair(row, selectedModel, "Move shuffle start", QString::number(psDroid->sMove.shuffleStart));
 		setPair(row, selectedModel, "Move vert speed", QString::number(psDroid->sMove.iVertSpeed));
-		setPair(row, selectedModel, componentToString("Body", asBodyStats + psDroid->asBits[COMP_BODY]));
-		setPair(row, selectedModel, componentToString("Brain", asBrainStats + psDroid->asBits[COMP_BRAIN]));
-		setPair(row, selectedModel, componentToString("Propulsion", asPropulsionStats + psDroid->asBits[COMP_PROPULSION]));
-		setPair(row, selectedModel, componentToString("ECM", asECMStats + psDroid->asBits[COMP_ECM]));
-		setPair(row, selectedModel, componentToString("Sensor", asSensorStats + psDroid->asBits[COMP_SENSOR]));
-		setPair(row, selectedModel, componentToString("Construct", asConstructStats + psDroid->asBits[COMP_CONSTRUCT]));
-		setPair(row, selectedModel, componentToString("Repair", asRepairStats + psDroid->asBits[COMP_REPAIRUNIT]));
+		setPair(row, selectedModel, componentToString("Body", asBodyStats + psDroid->asBits[COMP_BODY], psObj->player));
+		setPair(row, selectedModel, componentToString("Brain", asBrainStats + psDroid->asBits[COMP_BRAIN], psObj->player));
+		setPair(row, selectedModel, componentToString("Propulsion", asPropulsionStats + psDroid->asBits[COMP_PROPULSION], psObj->player));
+		setPair(row, selectedModel, componentToString("ECM", asECMStats + psDroid->asBits[COMP_ECM], psObj->player));
+		setPair(row, selectedModel, componentToString("Sensor", asSensorStats + psDroid->asBits[COMP_SENSOR], psObj->player));
+		setPair(row, selectedModel, componentToString("Construct", asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psObj->player));
+		setPair(row, selectedModel, componentToString("Repair", asRepairStats + psDroid->asBits[COMP_REPAIRUNIT], psObj->player));
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
@@ -530,8 +530,8 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		setPair(row, selectedModel, "^Build points", QString::number(psStruct->pStructureType->buildPoints));
 		setPair(row, selectedModel, "^Power points", QString::number(psStruct->pStructureType->powerToBuild));
 		setPair(row, selectedModel, "^Height", QString::number(psStruct->pStructureType->height));
-		setPair(row, selectedModel, componentToString("ECM", psStruct->pStructureType->pECM));
-		setPair(row, selectedModel, componentToString("Sensor", psStruct->pStructureType->pSensor));
+		setPair(row, selectedModel, componentToString("ECM", psStruct->pStructureType->pECM, psObj->player));
+		setPair(row, selectedModel, componentToString("Sensor", psStruct->pStructureType->pSensor, psObj->player));
 	}
 	else if (psObj->type == OBJ_FEATURE)
 	{

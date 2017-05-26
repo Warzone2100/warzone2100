@@ -1869,16 +1869,6 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 			compList->setCurrentPage(compList->pages() - 1);
 		}
 
-		// if this is a command droid that is in use or dead - make it unavailable
-		if (psCurrStats->compType == COMP_BRAIN)
-		{
-			if ((((COMMAND_DROID *)psCurrStats)->psDroid != nullptr) ||
-			    ((COMMAND_DROID *)psCurrStats)->died)
-			{
-				button->setState(WBUT_DISABLE);
-			}
-		}
-
 		/* Update the init struct for the next button */
 		++nextButtonId;
 

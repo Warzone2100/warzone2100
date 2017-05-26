@@ -1983,7 +1983,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			productionPlayer = selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			bMultiMessages	= bMultiPlayer;
-			cmdDroidMultiExpBoost(true);
 
 			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
 			for (i = 0; i < MAX_PLAYERS; i++)
@@ -3774,7 +3773,6 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;  // why do this again????
 			game.scavengers = scav;
-			cmdDroidMultiExpBoost(true);
 			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
 			if (bMultiPlayer)
 			{

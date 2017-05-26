@@ -1203,7 +1203,6 @@ bool stageThreeInitialise()
 	if (bMultiPlayer)
 	{
 		multiGameInit();
-		cmdDroidMultiExpBoost(true);
 		initTemplates();
 	}
 
@@ -1309,8 +1308,6 @@ bool stageThreeShutDown()
 	{
 		multiGameShutdown();
 	}
-
-	cmdDroidMultiExpBoost(false);
 
 	eventReset();
 
