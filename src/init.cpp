@@ -1202,16 +1202,12 @@ bool stageThreeInitialise()
 
 	if (bMultiPlayer)
 	{
-		// FIXME Is this really needed?
-		debug(LOG_WZ, "multiGameInit()\n");
 		multiGameInit();
 		cmdDroidMultiExpBoost(true);
+		initTemplates();
 	}
 
 	preProcessVisibility();
-
-	// Load any stored templates; these need to be available ASAP
-	initTemplates();
 
 	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
 

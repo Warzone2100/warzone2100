@@ -538,7 +538,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_SAVEH, IMAGE_DES_SAVE);
 
-	if (!widgAddButton(psWScreen, &sButInit))
+	if (bMultiPlayer && !widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
 	}
@@ -3020,7 +3020,10 @@ void intProcessDesign(UDWORD id)
 			intSetButtonFlash(IDDES_WPABUTTON,   true);
 			intSetButtonFlash(IDDES_WPBBUTTON,   true);
 
-			widgHide(psWScreen, IDDES_STOREBUTTON);
+			if (bMultiPlayer)
+			{
+				widgHide(psWScreen, IDDES_STOREBUTTON);
+			}
 		}
 		else
 		{
@@ -3068,8 +3071,11 @@ void intProcessDesign(UDWORD id)
 					intSetButtonFlash(IDDES_WPBBUTTON,   true);
 				}
 
-				widgReveal(psWScreen, IDDES_STOREBUTTON);
-				updateStoreButton(sCurrDesign.stored);
+				if (bMultiPlayer)
+				{
+					widgReveal(psWScreen, IDDES_STOREBUTTON);
+					updateStoreButton(sCurrDesign.stored);
+				}
 			}
 		}
 
@@ -3967,11 +3973,17 @@ static bool saveTemplate()
 {
 	if (!intValidTemplate(&sCurrDesign, aCurrName, false, selectedPlayer))
 	{
-		widgHide(psWScreen, IDDES_STOREBUTTON);
+		if (bMultiPlayer)
+		{
+			widgHide(psWScreen, IDDES_STOREBUTTON);
+		}
 		return false;
 	}
-	widgReveal(psWScreen, IDDES_STOREBUTTON);
-	updateStoreButton(sCurrDesign.stored);	// Change the buttons icon
+	if (bMultiPlayer)
+	{
+		widgReveal(psWScreen, IDDES_STOREBUTTON);
+		updateStoreButton(sCurrDesign.stored);	// Change the buttons icon
+	}
 
 	/* if first (New Design) button selected find empty template
 	 * else find current button template
