@@ -2130,41 +2130,26 @@ struct rankMap
 	const char  *name;           // name of this rank
 };
 
-static const struct rankMap arrRank[] =
-{
-	{0,   0,    N_("Rookie")},
-	{4,   8,    NP_("rank", "Green")},
-	{8,   16,   N_("Trained")},
-	{16,  32,   N_("Regular")},
-	{32,  64,   N_("Professional")},
-	{64,  128,  N_("Veteran")},
-	{128, 256,  N_("Elite")},
-	{256, 512,  N_("Special")},
-	{512, 1024, N_("Hero")}
-};
-
 unsigned int getDroidLevel(const DROID *psDroid)
 {
-	bool isCommander = (psDroid->droidType == DROID_COMMAND ||
-	                    psDroid->droidType == DROID_SENSOR) ? true : false;
 	unsigned int numKills = psDroid->experience / 65536;
 	unsigned int i;
 
 	// Search through the array of ranks until one is found
 	// which requires more kills than the droid has.
 	// Then fall back to the previous rank.
-	for (i = 1; i < ARRAY_SIZE(arrRank); ++i)
+	const BRAIN_STATS *psStats = getBrainStats(psDroid);
+	auto &vec = psStats->upgrade[psDroid->player].rankThresholds;
+	for (i = 1; i < vec.size(); ++i)
 	{
-		const unsigned int requiredKills = isCommander ? arrRank[i].commanderKills : arrRank[i].kills;
-
-		if (numKills < requiredKills)
+		if (numKills < vec.at(i))
 		{
 			return i - 1;
 		}
 	}
 
 	// If the criteria of the last rank are met, then select the last one
-	return ARRAY_SIZE(arrRank) - 1;
+	return vec.size() - 1;
 }
 
 UDWORD getDroidEffectiveLevel(DROID *psDroid)
@@ -2184,18 +2169,10 @@ UDWORD getDroidEffectiveLevel(DROID *psDroid)
 	return MAX(level, cmdLevel);
 }
 
-
-const char *getDroidNameForRank(UDWORD rank)
-{
-	ASSERT_OR_RETURN(PE_("rank", "invalid"), rank < (sizeof(arrRank) / sizeof(struct rankMap)),
-	                 "given rank number (%d) out of bounds, we only have %lu ranks", rank, (unsigned long)(sizeof(arrRank) / sizeof(struct rankMap)));
-
-	return PE_("rank", arrRank[rank].name);
-}
-
 const char *getDroidLevelName(DROID *psDroid)
 {
-	return (getDroidNameForRank(getDroidLevel(psDroid)));
+	const BRAIN_STATS *psStats = getBrainStats(psDroid);
+	return PE_("rank", psStats->rankNames[getDroidLevel(psDroid)].c_str());
 }
 
 UDWORD	getNumDroidsForLevel(UDWORD	level)

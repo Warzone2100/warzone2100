@@ -426,11 +426,16 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 
 struct BRAIN_STATS : public COMPONENT_STATS
 {
-	BRAIN_STATS() : psWeaponStat(nullptr), maxDroids(0), maxDroidsMult(0) {}
+	BRAIN_STATS() : psWeaponStat(nullptr) {}
 
 	WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
-	UDWORD          maxDroids;       ///< base maximum number of droids that the commander can control
-	UDWORD          maxDroidsMult;   ///< maximum number of controlled droids multiplied by level
+	struct
+	{
+		int maxDroids = 0;       ///< base maximum number of droids that the commander can control
+		int maxDroidsMult = 0;   ///< maximum number of controlled droids multiplied by level
+		std::vector<int> rankThresholds;
+	} upgrade[MAX_PLAYERS], base;
+	std::vector<std::string> rankNames;
 };
 
 /*

@@ -15,6 +15,38 @@
         ],
         "statID": "CommandBrain01"
     },
+    "R-Comp-CommandTurret02": {
+        "iconID": "IMAGE_RES_COMPUTERTECH",
+        "id": "R-Comp-CommandTurret02",
+        "msgName": "RES_C_CT2",
+        "name": "Command Turret Upgrade",
+        "requiredResearch": [
+            "R-Comp-CommandTurret01",
+            "R-Struc-Research-Upgrade07"
+        ],
+        "researchPoints": 5000,
+        "researchPower": 450,
+        "results": [
+            {
+                "class": "Brain",
+                "parameter": "BaseCommandLimit",
+                "value": 20
+            },
+            {
+                "class": "Brain",
+                "parameter": "CommandLimitByLevel",
+                "value": 50
+            },
+            {
+                "class": "Brain",
+                "filterParameter": "Id",
+                "filterValue": "CommandBrain01",
+                "parameter": "RankThresholds",
+                "value": -10
+            }
+        ],
+        "statID": "CommandBrain01"
+    },
     "R-Comp-SynapticLink": {
         "iconID": "IMAGE_RES_COMPUTERTECH",
         "id": "R-Comp-SynapticLink",

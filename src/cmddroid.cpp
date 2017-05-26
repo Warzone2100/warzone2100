@@ -153,8 +153,8 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 /** This function returns the maximum group size of the command droid.*/
 unsigned int cmdDroidMaxGroup(const DROID *psCommander)
 {
-	return getDroidLevel(psCommander) * getBrainStats(const_cast<DROID *>(psCommander))->maxDroidsMult
-	       + getBrainStats(const_cast<DROID *>(psCommander))->maxDroids;
+	const BRAIN_STATS *psStats = getBrainStats(psCommander);
+	return getDroidLevel(psCommander) * psStats->upgrade[psCommander->player].maxDroidsMult + psStats->upgrade[psCommander->player].maxDroids;
 }
 
 /** This function adds experience to the command droid of the psKiller's command group.*/

@@ -410,30 +410,42 @@ QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *
 	else if (psStats->compType == COMP_BRAIN)
 	{
 		const BRAIN_STATS *psBrain = (const BRAIN_STATS *)psStats;
-		key->appendRow(QStandardItemList{ new QStandardItem("^Max droids"), new QStandardItem(QString::number(psBrain->maxDroids)) });
-		key->appendRow(QStandardItemList{ new QStandardItem("^Extra droids/level"), new QStandardItem(QString::number(psBrain->maxDroidsMult)) });
+		QStringList ranks;
+		for (const std::string &s : psBrain->rankNames)
+		{
+			ranks.append(QString::fromStdString(s));
+		}
+		QStringList thresholds;
+		for (int t : psBrain->upgrade[player].rankThresholds)
+		{
+			thresholds.append(QString::number(t));
+		}
+		key->appendRow(QStandardItemList{ new QStandardItem("^Base command limit"), new QStandardItem(QString::number(psBrain->upgrade[player].maxDroids)) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Extra command limit by level"), new QStandardItem(QString::number(psBrain->upgrade[player].maxDroidsMult)) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Rank names"), new QStandardItem(ranks.join(", ")) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Rank thresholds"), new QStandardItem(thresholds.join(", ")) });
 	}
 	else if (psStats->compType == COMP_REPAIRUNIT)
 	{
 		const REPAIR_STATS *psRepair = (const REPAIR_STATS *)psStats;
 		key->appendRow(QStandardItemList{ new QStandardItem("^Repair time"), new QStandardItem(QString::number(psRepair->time)) });
-		key->appendRow(QStandardItemList{ new QStandardItem("^Base repair points"), new QStandardItem(QString::number(psRepair->base.repairPoints)) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Base repair points"), new QStandardItem(QString::number(psRepair->upgrade[player].repairPoints)) });
 	}
 	else if (psStats->compType == COMP_ECM)
 	{
 		const ECM_STATS *psECM = (const ECM_STATS *)psStats;
-		key->appendRow(QStandardItemList{ new QStandardItem("^Base range"), new QStandardItem(QString::number(psECM->base.range)) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Base range"), new QStandardItem(QString::number(psECM->upgrade[player].range)) });
 	}
 	else if (psStats->compType == COMP_SENSOR)
 	{
 		const SENSOR_STATS *psSensor = (const SENSOR_STATS *)psStats;
 		key->appendRow(QStandardItemList{ new QStandardItem("^Sensor type"), new QStandardItem(QString::number(psSensor->type)) });
-		key->appendRow(QStandardItemList{ new QStandardItem("^Base range"), new QStandardItem(QString::number(psSensor->base.range)) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Base range"), new QStandardItem(QString::number(psSensor->upgrade[player].range)) });
 	}
 	else if (psStats->compType == COMP_CONSTRUCT)
 	{
 		const CONSTRUCT_STATS *psCon = (const CONSTRUCT_STATS *)psStats;
-		key->appendRow(QStandardItemList{ new QStandardItem("^Base construct points"), new QStandardItem(QString::number(psCon->base.constructPoints)) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Base construct points"), new QStandardItem(QString::number(psCon->upgrade[player].constructPoints)) });
 	}
 	return QStandardItemList { key, value };
 }

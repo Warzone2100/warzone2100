@@ -666,9 +666,24 @@ bool loadBrainStats(const char *pFileName)
 		psStats->compType = COMP_BRAIN;
 
 		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->maxDroids = ini.value("maxDroids").toInt();
-		psStats->maxDroidsMult = ini.value("maxDroidsMult").toInt();
+		psStats->base.maxDroids = ini.value("maxDroids").toInt();
+		psStats->base.maxDroidsMult = ini.value("maxDroidsMult").toInt();
+		QVariant rankNames = ini.value("ranks");
+		for (const QVariant &v : rankNames.toList())
+		{
+			psStats->rankNames.push_back(v.toString().toStdString());
+		}
+		QVariant rankThresholds = ini.value("thresholds");
+		for (const QVariant &v : rankThresholds.toList())
+		{
+			psStats->base.rankThresholds.push_back(v.toInt());
+		}
 		psStats->ref = REF_BRAIN_START + i;
+
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j] = psStats->base;
+		}
 
 		// check weapon attached
 		psStats->psWeaponStat = nullptr;

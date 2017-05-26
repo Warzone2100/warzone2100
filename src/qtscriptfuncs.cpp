@@ -4430,6 +4430,32 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
 			}
 		}
+		else if (type == COMP_BRAIN)
+		{
+			SCRIPT_ASSERT(context, index < numBrainStats, "Bad index");
+			BRAIN_STATS *psStats = asBrainStats + index;
+			if (name == "BaseCommandLimit")
+			{
+				psStats->upgrade[player].maxDroids = value;
+			}
+			else if (name == "CommandLimitByLevel")
+			{
+				psStats->upgrade[player].maxDroidsMult = value;
+			}
+			else if (name == "RankThresholds")
+			{
+				SCRIPT_ASSERT(context, context->argument(0).isArray(), "Level thresholds not an array!");
+				int length = context->argument(0).property("length").toInt32();
+				for (int i = 0; i < length; i++)
+				{
+					psStats->upgrade[player].rankThresholds[i] = context->argument(0).property(i).toInt32();
+				}
+			}
+			else
+			{
+				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+			}
+		}
 		else if (type == COMP_SENSOR)
 		{
 			SCRIPT_ASSERT(context, index < numSensorStats, "Bad index");
@@ -4602,6 +4628,33 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		else if (name == "Resistance")
 		{
 			return psStats->upgrade[player].resistance;
+		}
+		else
+		{
+			SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+		}
+	}
+	else if (type == COMP_BRAIN)
+	{
+		SCRIPT_ASSERT(context, index < numBrainStats, "Bad index");
+		BRAIN_STATS *psStats = asBrainStats + index;
+		if (name == "BaseCommandLimit")
+		{
+			return psStats->upgrade[player].maxDroids;
+		}
+		else if (name == "CommandLimitByLevel")
+		{
+			return psStats->upgrade[player].maxDroidsMult;
+		}
+		else if (name == "RankThresholds")
+		{
+			int length = psStats->upgrade[player].rankThresholds.size();
+			QScriptValue value = engine->newArray(length);
+			for (int i = 0; i < length; i++)
+			{
+				value.setProperty(i, psStats->upgrade[player].rankThresholds[i], QScriptValue::Undeletable | QScriptValue::ReadOnly);
+			}
+			return value;
 		}
 		else
 		{
@@ -4825,6 +4878,36 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			conbase.setProperty(psStats->name, con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+		//== \item[Brain] Brains
+		QScriptValue brainbase = engine->newObject();
+		for (int j = 0; j < numBrainStats; j++)
+		{
+			BRAIN_STATS *psStats = asBrainStats + j;
+			QScriptValue br = engine->newObject();
+			br.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			br.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			br.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			br.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			br.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			br.setProperty("BaseCommandLimit", psStats->base.maxDroids, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			br.setProperty("CommandLimitByLevel", psStats->base.maxDroidsMult, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue thresholds = engine->newArray(psStats->base.rankThresholds.size());
+			for (int x = 0; x < psStats->base.rankThresholds.size(); x++)
+			{
+				thresholds.setProperty(x, psStats->base.rankThresholds.at(x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			}
+			br.setProperty("RankThresholds", thresholds, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue ranks = engine->newArray(psStats->rankNames.size());
+			for (int x = 0; x < psStats->rankNames.size(); x++)
+			{
+				ranks.setProperty(x, QString::fromStdString(psStats->rankNames.at(x)), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			}
+			br.setProperty("RankNames", ranks, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			brainbase.setProperty(psStats->name, br, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		}
+		stats.setProperty("Brain", brainbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Weapon] Weapon turrets
 		QScriptValue wbase = engine->newObject();
 		for (int j = 0; j < numWeaponStats; j++)
@@ -4973,6 +5056,24 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			conbase.setProperty(psStats->name, con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+		//== \item[Brain] Brains
+		//== BaseCommandLimit: How many droids a commander can command. CommandLimitByLevel: How many extra droids
+		//== a commander can command for each of its rank levels. RankThresholds: An array describing how many
+		//== kills are required for this brain to level up to the next rank. To alter this from scripts, you must
+		//== set the entire array at once. Setting each item in the array will not work at the moment.
+		QScriptValue brainbase = engine->newObject();
+		for (int j = 0; j < numBrainStats; j++)
+		{
+			BRAIN_STATS *psStats = asBrainStats + j;
+			QScriptValue br = engine->newObject();
+			setStatsFunc(br, engine, "BaseCommandLimit", i, COMP_BRAIN, j);
+			setStatsFunc(br, engine, "CommandLimitByLevel", i, COMP_BRAIN, j);
+			setStatsFunc(br, engine, "RankThresholds", i, COMP_BRAIN, j);
+			brainbase.setProperty(psStats->name, br, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		}
+		node.setProperty("Brain", brainbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
 		//== \item[Weapon] Weapon turrets
 		QScriptValue wbase = engine->newObject();
 		for (int j = 0; j < numWeaponStats; j++)
