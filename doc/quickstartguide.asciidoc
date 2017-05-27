@@ -30,6 +30,47 @@ Enjoy Warzone 2100!
 
 image::images/logo.png[align="center"]
 
+Introduction to Warzone 2100 universe
+-------------------------------------
+
+'"THE PROJECT is dedicated to to recovering pre-collapse technologies and rebuilding the world."
+~ Project mission statement'
+
+'"From the ashes of the collapse we seek to build a better world for all."
+~ John Hammond - Project Director.'
+
+Timeline
+^^^^^^^^
+
+- *2050*: Nato alliance collapses in face of growing nationalism and unrest in Europe.
+
+- *2075*: Nationalist unrest in Eastern Europe and Asia leads to nuclear attacks by terrorists.
+
+- *2075*: Synaptic Link research begins.
+
+- *2077*: Mongolia attacks China.
+
+- *2079*: Korea allies with Mongolia
+
+- *2080*: Synaptic link patented. First cyborg soldiers developed.
+
+- *2080*: N.A.S.D.A (North American Strategic Defense Agency) formed to protect North America From Nuclear Attacks.
+
+- *2081*: N.A.S.D.A begins building satellite defense array.
+
+- *2082*: N.A.S.D.A satellite system comes on line.
+
+- *2085*: During routine testing the N.A.S.D.A system malfunctions and launches nuclear strikes against all major cities in the world. The target countries respond with nuclear counter strikes. N.A.S.D.A fails to defend against incoming missiles.
+
+- *2086*: Nuclear Winter begins. Widespread plagues and famines kill billions of people. Civilization ends. N.A.S.D.A systems lie dormant following electromagnetic pulses. A group of survivors discover an abandoned subterranean military base. They set up home there and begin THE PROJECT.
+
+- *2099*: THE PROJECT emerges from it's military base.
+
+- *2100*: THE PROJECT begins its search for pre-collapse technologies.
+
+Your objective in WarZone 2100 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+As the best command general in the ranks of THE PROJECT your mission is to venture into the wasteland of the western United States, recover the technology to rebuild civilization, and then defeat the other (more sinister) groups that also seek to this technology. If you have the talent and vision, you may even discover the "TRUE" reason N.A.S.D.A failed.
 
 Interface
 ---------
