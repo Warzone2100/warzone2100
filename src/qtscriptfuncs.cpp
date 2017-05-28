@@ -2681,6 +2681,17 @@ static QScriptValue js_startTransporterEntry(QScriptContext *context, QScriptEng
 	return QScriptValue();
 }
 
+//-- \subsection{useSafetyTransport(flag)}
+//-- Change if the mission transporter will fetch droids in non offworld missions
+//-- setReinforcementTime() is be used to hide it before coming back after the set time
+//-- which is handled by the campaign library in the victory data section (3.2.4+ only).
+static QScriptValue js_useSafetyTransport(QScriptContext *context, QScriptEngine *)
+{
+	bool flag = context->argument(0).toBool();
+	setDroidsToSafetyFlag(flag);
+	return QScriptValue();
+}
+
 //-- \subsection{setReinforcementTime(time)} Set time for reinforcements to arrive. If time is
 //-- negative, the reinforcement GUI is removed and the timer stopped. Time is in seconds.
 //-- If time equals to the magic LZ_COMPROMISED_TIME constant, reinforcement GUI ticker
@@ -5365,6 +5376,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("replaceTexture", engine->newFunction(js_replaceTexture));
 	engine->globalObject().setProperty("changePlayerColour", engine->newFunction(js_changePlayerColour));
 	engine->globalObject().setProperty("setHealth", engine->newFunction(js_setHealth));
+	engine->globalObject().setProperty("useSafetyTransport", engine->newFunction(js_useSafetyTransport));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
