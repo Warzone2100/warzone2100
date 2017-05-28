@@ -286,13 +286,65 @@ function __camGlobalContext()
 // Research and structure related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
+//This list of research is meant for initializing a player with all the research
+//from the Alpha campaign.
+const ALPHA_RESEARCH = [
+		"R-Wpn-MG1Mk1", "R-Vehicle-Body01",
+		"R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels", "R-Wpn-Flamer-Damage03",
+		"R-Sys-Engineering01", "R-Sys-MobileRepairTurret01",
+		"R-Struc-PowerModuleMk1", "R-Wpn-MG2Mk1",
+		"R-Wpn-MG3Mk1", "R-Wpn-Cannon1Mk1", "R-Defense-WallUpgrade03",
+		"R-Struc-Factory-Upgrade03",
+		"R-Vehicle-Metals03", "R-Cyborg-Wpn-MG",
+		"R-Cyborg-Metals03", "R-Struc-Factory-Cyborg-Upgrade03",
+		"R-Struc-Materials03", "R-Struc-Research-Upgrade03",
+		"R-Struc-RprFac-Upgrade03", "R-Wpn-MG-ROF01",
+		"R-Wpn-Cannon-Damage03", "R-Wpn-Rocket05-MiniPod", "R-Wpn-Rocket-Damage03",
+		"R-Wpn-Flamer-ROF01", "R-Wpn-MG-Damage04",
+		"R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy02",
+		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Damage03",
+		"R-Wpn-RocketSlow-Accuracy01", "R-Vehicle-Engine03",
+		"R-Defense-MRL", "R-Comp-CommandTurret01",
+		"R-Cyborg-Wpn-Cannon", "R-Cyborg-Wpn-Flamer",
+		"R-Cyborg-Wpn-Rocket", "R-Defense-MortarPit", "R-Defense-Pillbox01",
+		"R-Defense-Pillbox04", "R-Defense-Pillbox05", "R-Defense-Pillbox06",
+		"R-Defense-TankTrap01", "R-Defense-Tower01", "R-Defense-Tower06",
+		"R-Defense-WallTower01", "R-Defense-WallTower02", "R-Defense-WallTower03",
+		"R-Defense-WallTower04", "R-Defense-WallTower06",
+		"R-Vehicle-Body11", "R-Vehicle-Body12", "R-Vehicle-Engine03",
+		"R-Vehicle-Prop-Tracks", "R-Vehicle-Prop-Hover", "R-Vehicle-Prop-Wheels",
+		"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon3Mk1", "R-Wpn-Mortar-Acc01",
+		"R-Wpn-Mortar-ROF01", "R-Defense-HvyMor", "R-Wpn-Rocket03-HvAT"
+];
+
 //;; \subsection{camEnableRes(list, player)}
 //;; Grants research from the given list to player
 function camEnableRes(list, player)
 {
 	for(var i = 0; i < list.length; ++i)
 	{
+		enableResearch(list[i], player);
 		completeResearch(list[i], player);
+	}
+}
+
+//;; \subsection{camCompleteRequiredResearch(items, player)}
+//;; Grants research from the given list to player and also researches
+//;; the required research for that item.
+function camCompleteRequiredResearch(items, player)
+{
+	dump("Player " + player + " requesting accelerated research.");
+	for(var i = 0; i < items.length; ++i)
+	{
+		dump("Searching for required research of item: " + items[i]);
+		var reqRes = findResearch(items[i], player).reverse();
+
+		for(var s = 0; s < reqRes.length; ++s)
+		{
+			dump("	Found: " + reqRes[s].name);
+			enableResearch(reqRes[s].name, player);
+			completeResearch(reqRes[s].name, player);
+		}
 	}
 }
 
@@ -409,8 +461,12 @@ function __camUpdateMarkedTiles()
 {
 	hackMarkTiles();
 	if (__camCheatMode && camDef(__camMarkedTiles))
+	{
 		for (var label in __camMarkedTiles)
+		{
 			hackMarkTiles(label);
+		}
+	}
 }
 
 function __camLetMeWin()
@@ -884,7 +940,7 @@ function __camDispatchTransporterUnsafe()
 		__camPlayerTransports[player] = addDroid(player, -1, -1,
 		                                         "Transporter",
 		                                         "TransporterBody",
-		                                         "V-Tol", null, null,
+		                                         "V-Tol", "", "",
 		                                         "MG3-VTOL");
 	}
 	var trans = __camPlayerTransports[player];
@@ -893,7 +949,7 @@ function __camDispatchTransporterUnsafe()
 	{
 		var droid = addDroid(player, -1, -1,
 		                     "Reinforcement", list[i].body,
-		                     list[i].prop, null, null, list[i].weap);
+		                     list[i].prop, "", "", list[i].weap);
 		droids[droids.length] = droid;
 		addDroidToTransporter(trans, droid);
 	}
@@ -902,13 +958,14 @@ function __camDispatchTransporterUnsafe()
 		message: args.data.message,
 		order: args.order,
 		data: args.order_data,
-	}
+	};
 	camTrace("Incoming transport with", droids.length,
-	         "droids for player", player + 
+	         "droids for player", player +
 	         ", queued transports", __camTransporterQueue.length);
+
 	setNoGoArea(pos.x - 2, pos.y - 2, pos.x + 2, pos.y + 2, player);
-	setTransporterExit(data.exit.x,
-	                   data.exit.y, player);
+
+	setTransporterExit(data.exit.x, data.exit.y, player);
 	// will guess which transporter to start, automagically
 	startTransporterEntry(data.entry.x, data.entry.y, player);
 	if (camDef(__camTransporterMessage))
@@ -1143,7 +1200,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
 //;; 	\end{description}
-//;; \end{description} 
+//;; \end{description}
 function camManageGroup(group, order, data)
 {
 	var saneData = data;
@@ -1281,7 +1338,7 @@ function __camFindClusters(list, size)
 			if (1 > ret.maxCount)
 			{
 				ret.maxIdx = n;
-				ret.maxCount = 1
+				ret.maxCount = 1;
 			}
 		}
 	}
@@ -1319,7 +1376,7 @@ function __camPickTarget(group)
 			if (gi.order === CAM_ORDER_COMPROMISE && !targets.length)
 			{
 				if (!camDef(gi.data.pos))
-					camDebug("`pos' is required for COMPROMISE order")
+					camDebug("`pos' is required for COMPROMISE order");
 				else
 					targets = [ gi.data.pos[gi.data.pos.length - 1] ];
 			}
@@ -1330,7 +1387,7 @@ function __camPickTarget(group)
 			break;
 		case CAM_ORDER_DEFEND:
 			if (!camDef(gi.data.pos))
-				camDebug("`pos' is required for DEFEND order")
+				camDebug("`pos' is required for DEFEND order");
 			var radius = gi.data.radius;
 			if (!camDef(radius))
 				radius = __CAM_DEFENSE_RADIUS;
@@ -1629,7 +1686,7 @@ function __camTruckTick()
 {
 	// Issue truck orders for each player.
 	// See comments inside the loop to understand priority.
-	for (player in __camTruckInfo)
+	for (var player in __camTruckInfo)
 	{
 		var ti = __camTruckInfo[player];
 
@@ -1801,7 +1858,7 @@ function camEnableFactory(flabel)
 	if (fi.enabled)
 	{
 		// safe, no error
-		camTrace("Factory", flabel, "enabled twice");
+		camTrace("Factory", flabel, "enabled again");
 		return;
 	}
 	camTrace("Enabling", flabel);
@@ -1908,13 +1965,15 @@ function __camContinueProduction(structure)
 		flabel = getLabel(structure);
 		struct = structure;
 	}
+	if (!camDef(flabel) || !flabel)
+	{
+		return;
+	}
 	if (!structureIdle(struct))
 	{
 		camDebug("Already enabled?");
 		return;
 	}
-	if (!camDef(flabel) || !flabel)
-		return;
 	var fi = __camFactoryInfo[flabel];
 	if (camDef(fi.maxSize) && groupSize(fi.group) >= fi.maxSize)
 	{
@@ -1983,6 +2042,7 @@ function camNextLevel(nextLevel)
 const CAM_VICTORY_STANDARD = 0;
 const CAM_VICTORY_PRE_OFFWORLD = 1;
 const CAM_VICTORY_OFFWORLD = 2;
+const CAM_VICTORY_TIMEOUT = 3;
 
 //;; \subsection{camSetStandardWinLossConditions(kind, nextLevel, data)}
 //;; Set victory and defeat conditions to one of the common
@@ -2026,11 +2086,13 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
+			bringBackMissionTransport(false);
 			break;
 		case CAM_VICTORY_PRE_OFFWORLD:
 			__camWinLossCallback = "__camVictoryPreOffworld";
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = true;
+			bringBackMissionTransport(false);
 			break;
 		case CAM_VICTORY_OFFWORLD:
 			__camWinLossCallback = "__camVictoryOffworld";
@@ -2039,6 +2101,14 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camVictoryData = data;
 			setReinforcementTime(__camVictoryData.reinforcements);
 			queue("__camSetOffworldLimits", 100);
+			bringBackMissionTransport(false);
+			break;
+		case CAM_VICTORY_TIMEOUT:
+			__camWinLossCallback = "__camVictoryTimeout";
+			__camNeedBonusTime = false;
+			__camDefeatOnTimeout = false;
+			setReinforcementTime(__camVictoryData.reinforcements);
+			bringBackMissionTransport(true);
 			break;
 		default:
 			camDebug("Unknown standard victory condition", kind);
@@ -2122,9 +2192,9 @@ function __camTriggerLastAttack()
 	if (!__camLastAttackTriggered)
 	{
 		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(
-		function(obj) { 
+		function(obj) {
 			return (obj.type === DROID) && ((obj.droidType !== DROID_TRANSPORTER) &&
-				(obj.droidType !== DROID_SUPERTRANSPORTER))
+				(obj.droidType !== DROID_SUPERTRANSPORTER));
 		});
 		camTrace(enemies.length, "enemy droids remaining");
 		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
@@ -2138,7 +2208,7 @@ function __camVictoryStandard()
 	// check if game is lost
 	if (__camPlayerDead())
 	{
-		__camGameLost()
+		__camGameLost();
 		return;
 	}
 	// check if game is won
@@ -2164,12 +2234,22 @@ function __camVictoryPreOffworld()
 	// victory hooked from eventTransporterExit
 }
 
+function __camVictoryTimeout()
+{
+	if (__camPlayerDead())
+	{
+		__camGameLost();
+		return;
+	}
+	// victory hooked from eventMissionTimeout
+}
+
 function __camVictoryOffworld()
 {
 	var lz = __camVictoryData.area;
 	if (!camDef(lz))
 	{
-		camDebug("Landing zone area is required for OFFWORLD")
+		camDebug("Landing zone area is required for OFFWORLD");
 		return;
 	}
 	var total = countDroid(DROID_ANY, CAM_HUMAN_PLAYER); // for future use
@@ -2259,10 +2339,9 @@ function __camVictoryOffworld()
 function camSetupTransporter(x, y, x1, y1)
 {
 	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport",
-	         "TransporterBody", "V-Tol", null, null, "MG3-VTOL");
+	         "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
 	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // VTOL management.
@@ -2279,7 +2358,7 @@ var __disableVtolSpawn;
 function camSetVtolData(player, startPos, exitPos, templates, timer)
 {
 	__vtolPlayer = player;
-	__vtolStartPosition = camMakePos(startPos);
+	__vtolStartPosition = startPos;
 	__vtolExitPosition = camMakePos(exitPos);
 	__vtolTemplates = templates;
 	__vtolTimer = timer;
@@ -2297,12 +2376,26 @@ function __camSpawnVtols()
 {
 	var amount = 5 + camRand(2);
 	var droids = [];
+	var pos;
+
+	//Make sure to catch multiple start positions also.
+	if(__vtolStartPosition instanceof Array)
+	{
+		pos = __vtolStartPosition[camRand(__vtolStartPosition.length)];
+	}
+	else
+	{
+		pos = __vtolStartPosition;
+	}
+
+	//Pick some droids randomly.
 	for (var i = 0; i < amount; ++i)
 	{
 		droids.push(__vtolTemplates[camRand(__vtolTemplates.length)]);
 	}
 
-	camSendReinforcement(__vtolPlayer, camMakePos(__vtolStartPosition), droids,
+	//...And send them.
+	camSendReinforcement(__vtolPlayer, camMakePos(pos), droids,
 		CAM_REINFORCE_GROUND,
 		{
 			order: CAM_ORDER_ATTACK,
@@ -2315,8 +2408,8 @@ function __camSpawnVtols()
 
 function __camRetreatVtols()
 {
-	var vtols = enumDroid(__vtolPlayer).filter(function(obj) { 
-		return isVTOL(obj)
+	var vtols = enumDroid(__vtolPlayer).filter(function(obj) {
+		return isVTOL(obj);
 	});
 
 	for (var i = 0; i < vtols.length; ++i)
@@ -2335,7 +2428,7 @@ function __camRetreatVtols()
 	}
 
 	if(__disableVtolSpawn === false)
-		queue("__camRetreatVtols", 3000);
+		queue("__camRetreatVtols", 1500);
 }
 
 
@@ -2405,7 +2498,6 @@ function __camTick()
 }
 
 var __camLastHitTime = 0;
-
 const __CAM_EVENT_ATTACKED_INTENSITY = 5000;
 
 function cam_eventPickup(feature, droid)
@@ -2527,10 +2619,11 @@ function cam_eventGroupSeen(viewer, group)
 
 function cam_eventTransporterExit(transport)
 {
-	if (transport.player !== CAM_HUMAN_PLAYER || 
-		(__camWinLossCallback === "__camVictoryStandard" && 
+	if (transport.player !== CAM_HUMAN_PLAYER ||
+		(__camWinLossCallback === "__camVictoryStandard" &&
 		transport.player === CAM_HUMAN_PLAYER) )
 	{
+
 		// allow the next transport to enter
 		if (camDef(__camIncomingTransports[transport.player]))
 			delete __camIncomingTransports[transport.player];
@@ -2546,7 +2639,9 @@ function cam_eventTransporterExit(transport)
 function cam_eventTransporterLanded(transport)
 {
 	if (transport.player !== CAM_HUMAN_PLAYER)
+	{
 		__camLandTransporter(transport.player, camMakePos(transport));
+	}
 }
 
 function cam_eventMissionTimeout()
@@ -2555,6 +2650,10 @@ function cam_eventMissionTimeout()
 	{
 		camTrace("0 minutes remaining.");
 		__camGameLost();
+	}
+	else
+	{
+		queue("__camGameWon", 200);
 	}
 }
 
