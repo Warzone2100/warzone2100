@@ -2086,13 +2086,13 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
-			bringBackMissionTransport(false);
+			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_PRE_OFFWORLD:
 			__camWinLossCallback = "__camVictoryPreOffworld";
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = true;
-			bringBackMissionTransport(false);
+			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_OFFWORLD:
 			__camWinLossCallback = "__camVictoryOffworld";
@@ -2101,14 +2101,14 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camVictoryData = data;
 			setReinforcementTime(__camVictoryData.reinforcements);
 			queue("__camSetOffworldLimits", 100);
-			bringBackMissionTransport(false);
+			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_TIMEOUT:
 			__camWinLossCallback = "__camVictoryTimeout";
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = false;
 			setReinforcementTime(__camVictoryData.reinforcements);
-			bringBackMissionTransport(true);
+			useSafetyTransport(true);
 			break;
 		default:
 			camDebug("Unknown standard victory condition", kind);
