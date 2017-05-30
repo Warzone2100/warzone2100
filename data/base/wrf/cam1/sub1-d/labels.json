@@ -15,7 +15,7 @@
 	"position_13": { "label": "hoverDefense3",   "pos": [ 6080, 704 ] },
 	"position_14": { "label": "hoverDefense4",   "pos": [ 2752, 2368 ] },
 
-	"area_0": { "label": "RTLZ",           "pos1": [ 192, 14016 ],  "pos2": [ 2496, 15936 ] },
+	"area_0": { "label": "RTLZ",           "pos1": [ 0, 14000 ],  "pos2": [ 2600, 16256 ] },
 	"area_1": { "label": "landingZone",    "pos1": [ 512, 15360 ],  "pos2": [ 768, 15616 ] },
 	"area_2": { "label": "IDF1",           "pos1": [ 4032, 15168 ], "pos2": [ 4416, 15552 ] },
 	"area_3": { "label": "IDF2",           "pos1": [ 4672, 12864 ], "pos2": [ 5440, 13376 ] },
