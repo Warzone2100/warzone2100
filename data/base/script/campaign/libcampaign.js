@@ -211,6 +211,22 @@ function camPlayerMatchesFilter(player, filter)
 	}
 }
 
+//;; \subsection{camRemoveDuplicates(array)}
+//;; Remove duplicate items from an array.
+function camRemoveDuplicates(array)
+{
+	var prims = {"boolean":{}, "number":{}, "string":{}};
+	var objs = [];
+
+	return array.filter(function(item) {
+		var type = typeof item;
+		if(type in prims)
+			return prims[type].hasOwnProperty(item) ? false : (prims[type][item] = true);
+		else
+			return objs.indexOf(item) >= 0 ? false : objs.push(item);
+	});
+}
+
 //;; \subsection{camMakeGroup(what, filter)}
 //;; Make a new group out of array of droids, single game object,
 //;; or label string, with fuzzy auto-detection of argument type.
@@ -286,37 +302,6 @@ function __camGlobalContext()
 // Research and structure related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
-//This list of research is meant for initializing a player with all the research
-//from the Alpha campaign.
-const ALPHA_RESEARCH = [
-		"R-Wpn-MG1Mk1", "R-Vehicle-Body01",
-		"R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels", "R-Wpn-Flamer-Damage03",
-		"R-Sys-Engineering01", "R-Sys-MobileRepairTurret01",
-		"R-Struc-PowerModuleMk1", "R-Wpn-MG2Mk1",
-		"R-Wpn-MG3Mk1", "R-Wpn-Cannon1Mk1", "R-Defense-WallUpgrade03",
-		"R-Struc-Factory-Upgrade03",
-		"R-Vehicle-Metals03", "R-Cyborg-Wpn-MG",
-		"R-Cyborg-Metals03", "R-Struc-Factory-Cyborg-Upgrade03",
-		"R-Struc-Materials03", "R-Struc-Research-Upgrade03",
-		"R-Struc-RprFac-Upgrade03", "R-Wpn-MG-ROF01",
-		"R-Wpn-Cannon-Damage03", "R-Wpn-Rocket05-MiniPod", "R-Wpn-Rocket-Damage03",
-		"R-Wpn-Flamer-ROF01", "R-Wpn-MG-Damage04",
-		"R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy02",
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Damage03",
-		"R-Wpn-RocketSlow-Accuracy01", "R-Vehicle-Engine03",
-		"R-Defense-MRL", "R-Comp-CommandTurret01",
-		"R-Cyborg-Wpn-Cannon", "R-Cyborg-Wpn-Flamer",
-		"R-Cyborg-Wpn-Rocket", "R-Defense-MortarPit", "R-Defense-Pillbox01",
-		"R-Defense-Pillbox04", "R-Defense-Pillbox05", "R-Defense-Pillbox06",
-		"R-Defense-TankTrap01", "R-Defense-Tower01", "R-Defense-Tower06",
-		"R-Defense-WallTower01", "R-Defense-WallTower02", "R-Defense-WallTower03",
-		"R-Defense-WallTower04", "R-Defense-WallTower06",
-		"R-Vehicle-Body11", "R-Vehicle-Body12", "R-Vehicle-Engine03",
-		"R-Vehicle-Prop-Tracks", "R-Vehicle-Prop-Hover", "R-Vehicle-Prop-Wheels",
-		"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon3Mk1", "R-Wpn-Mortar-Acc01",
-		"R-Wpn-Mortar-ROF01", "R-Defense-HvyMor", "R-Wpn-Rocket03-HvAT"
-];
-
 //;; \subsection{camEnableRes(list, player)}
 //;; Grants research from the given list to player
 function camEnableRes(list, player)
@@ -333,12 +318,18 @@ function camEnableRes(list, player)
 //;; the required research for that item.
 function camCompleteRequiredResearch(items, player)
 {
-	dump("Player " + player + " requesting accelerated research.");
+	dump("\n*Player " + player + " requesting accelerated research.");
 	for(var i = 0; i < items.length; ++i)
 	{
 		dump("Searching for required research of item: " + items[i]);
 		var reqRes = findResearch(items[i], player).reverse();
 
+		if(reqRes.length === 0)
+		{
+			continue;
+		}
+
+		resRes = camRemoveDuplicates(reqRes);
 		for(var s = 0; s < reqRes.length; ++s)
 		{
 			dump("	Found: " + reqRes[s].name);
@@ -826,8 +817,7 @@ function camAllEnemyBasesEliminated()
 //;; a position label. Kind can be one of:
 //;; \begin{description}
 //;; 	\item[CAM_REINFORCE_GROUND] Reinforcements magically appear
-//;; 	on the ground,
-//;; 	No data fields are currently supported.
+//;; 	on the ground.
 //;; 	\item[CAM_REINFORCE_TRANSPORT] Reinforcements are unloaded from
 //;; 	a transporter.
 //;; 	\textbf{NOTE:} the game engine doesn't seem to support two simultaneous
@@ -848,7 +838,7 @@ function camSendReinforcement(player, position, list, kind, data)
 {
 	var pos = camMakePos(position);
 	var order = CAM_ORDER_ATTACK;
-	var order_data = { regroup: true, count: -1 };
+	var order_data = { regroup: false, count: -1 };
 	if (camDef(data) && camDef(data.order))
 	{
 		order = data.order;
@@ -2107,6 +2097,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camWinLossCallback = "__camVictoryTimeout";
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = false;
+			__camVictoryData = data;
 			setReinforcementTime(__camVictoryData.reinforcements);
 			useSafetyTransport(true);
 			break;
@@ -2163,12 +2154,17 @@ function __camSetOffworldLimits()
 
 function __camGameLostCB()
 {
-	camTrace();
 	gameOverMessage(false);
 }
 
 function __camGameLost()
 {
+	//HACK: Allow player to survive Gamma 3A for six minutes. If they did not
+	//bring in a construction droid then they lose.
+	if(__camNextLevel === "SUB_3_1S" && getMissionTime() > 6940)
+	{
+		return; // Campaign 3A needs to get units setup first.
+	}
 	camCallOnce("__camGameLostCB");
 }
 
@@ -2367,9 +2363,9 @@ function camSetVtolData(player, startPos, exitPos, templates, timer)
 	__camRetreatVtols();
 }
 
-function camEnableVtolSpawn(arg)
+function camToggleVtolSpawn()
 {
-	__disableVtolSpawn = arg;
+	__disableVtolSpawn = !__disableVtolSpawn;
 }
 
 function __camSpawnVtols()
