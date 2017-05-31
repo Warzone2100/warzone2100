@@ -27,7 +27,7 @@ data		"wrf/tut.wrf"
 data 		"wrf/audio.wrf"
 data		"wrf/tutorial/tutaudio.wrf"
 data		"wrf/stats.wrf"
-data 		"wrf/cam1res.wrf"
+data 		"wrf/camres.wrf"
 
 /* Tutorial Level 3 - Base Building. */
 camstart	TUTORIAL3
@@ -45,7 +45,7 @@ data		"wrf/basic.wrf"
 data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/stats.wrf"
-data		"wrf/cam1res.wrf"
+data		"wrf/camres.wrf"
 
 /* Campaign 1 now starts with 1A */
 camstart	CAM_1A
@@ -162,7 +162,7 @@ data		"wrf/basic.wrf"
 data		"wrf/cam2.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/stats.wrf"
-data		"wrf/cam2res.wrf"
+data		"wrf/camres.wrf"
 
 camstart	CAM_2A
 dataset		CAM_2
@@ -269,7 +269,7 @@ data		"wrf/basic.wrf"
 data		"wrf/cam3.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/stats.wrf"
-data		"wrf/cam3res.wrf"
+data		"wrf/camres.wrf"
 
 camstart	CAM_3A
 dataset		CAM_3

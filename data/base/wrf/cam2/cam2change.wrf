@@ -27,5 +27,3 @@ file		TEXPAGE	"page-96-burned-ground-urban.png"
 file		TEXPAGE	"page-97-burned-tiles-urban.png"
 file		TEXPAGE	"page-98-bottom-urban.png"
 
-directory 	"stats"
-file		RESCH	"research_cam2.json"

@@ -27,5 +27,3 @@ file		TEXPAGE	"page-106-snowrock-rockies.png"
 file		TEXPAGE	"page-107-brown-earth-rockies.png"
 file		TEXPAGE	"page-108-snowcliff-rockies.png"
 
-directory 	"stats"
-file		RESCH	"research_cam3.json"

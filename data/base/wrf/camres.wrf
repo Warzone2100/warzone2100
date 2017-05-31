@@ -1,6 +1,6 @@
 /***********************************************************/
 /*  You may have to modify this file for it to be correct! */ 
-/*******************       wrf/cam1res.wrf      *******************/
+/*******************       wrf/camres.wrf      *******************/
 
 directory 	"stats"
-file		RESCH	"research_cam1.json"
+file		RESCH	"research.json"

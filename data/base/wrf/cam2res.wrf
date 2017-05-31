@@ -1,7 +1,0 @@
-/***********************************************************/
-/*  You may have to modify this file for it to be correct! */ 
-/*******************       wrf/cam2Res.wrf      *******************/
-
-
-directory 	"stats"
-file		RESCH	"research_cam2.json"
