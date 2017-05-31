@@ -259,48 +259,68 @@ struct BASE_STATS
 /* Stats common to all droid components */
 struct COMPONENT_STATS : public BASE_STATS
 {
-	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), body(0), designable(false), pIMD(nullptr),
+	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), designable(false), pIMD(nullptr),
 		compType(COMP_NUMCOMPONENTS) {}
 
 	UDWORD		buildPower;			/**< Power required to build the component */
 	UDWORD		buildPoints;		/**< Time required to build the component */
 	UDWORD		weight;				/**< Component's weight */
-	UDWORD		body;				/**< Component's body points */
 	bool		designable;			/**< flag to indicate whether this component can be used in the design screen */
 	iIMDShape	*pIMD;				/**< The IMD to draw for this component */
 	COMPONENT_TYPE	compType;
+
+	struct UPGRADE
+	{
+		/// Number of upgradeable hitpoints
+		unsigned hitpoints = 0;
+		/// Adjust final droid hitpoints by this percentage amount
+		int hitpointPct = 100;
+	};
+
+	UPGRADE		*pBase = nullptr;
+	UPGRADE		*pUpgrade[MAX_PLAYERS] = { nullptr };
 };
 
 struct PROPULSION_STATS : public COMPONENT_STATS
 {
 	PROPULSION_STATS() : maxSpeed(0), propulsionType(PROPULSION_TYPE_NUM), turnSpeed(0), spinSpeed(0),
-		spinAngle(0), skidDeceleration(0), deceleration(0), acceleration(0) {}
+		spinAngle(0), skidDeceleration(0), deceleration(0), acceleration(0)
+	{
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
+	}
 
-	UDWORD			maxSpeed;		///< Max speed for the droid
+	UDWORD maxSpeed;		///< Max speed for the droid
 	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
-	UDWORD		turnSpeed;
-	UDWORD		spinSpeed;
-	UDWORD		spinAngle;
-	UDWORD		skidDeceleration;
-	UDWORD		deceleration;
-	UDWORD		acceleration;
+	UDWORD turnSpeed;
+	UDWORD spinSpeed;
+	UDWORD spinAngle;
+	UDWORD skidDeceleration;
+	UDWORD deceleration;
+	UDWORD acceleration;
+
+	struct : UPGRADE
+	{
+		/// Increase hitpoints by this percentage of the body's hitpoints
+		int hitpointPctOfBody = 0;
+	} upgrade[MAX_PLAYERS], base;
 };
 
 struct SENSOR_STATS : public COMPONENT_STATS
 {
 	SENSOR_STATS() : location(0), type(STANDARD_SENSOR), pMountGraphic(nullptr)
 	{
-		memset(&upgrade, 0, sizeof(upgrade));
-		memset(&base, 0, sizeof(base));
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
 	}
 
 	UDWORD		location;		///< specifies whether the Sensor is default or for the Turret
 	SENSOR_TYPE type;			///< used for combat
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
 
-	struct
+	struct : UPGRADE
 	{
-		unsigned range;
+		unsigned range = 0;
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -308,16 +328,16 @@ struct ECM_STATS : public COMPONENT_STATS
 {
 	ECM_STATS() : location(0), pMountGraphic(nullptr)
 	{
-		memset(&upgrade, 0, sizeof(upgrade));
-		memset(&base, 0, sizeof(base));
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
 	}
 
 	UDWORD location;          ///< specifies whether the ECM is default or for the Turret
 	iIMDShape *pMountGraphic; ///< The turret mount to use
 
-	struct
+	struct : UPGRADE
 	{
-		unsigned range;
+		unsigned range = 0;
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -325,17 +345,17 @@ struct REPAIR_STATS : public COMPONENT_STATS
 {
 	REPAIR_STATS() : location(0), time(0), pMountGraphic(nullptr)
 	{
-		memset(&upgrade, 0, sizeof(upgrade));
-		memset(&base, 0, sizeof(base));
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
 	}
 
 	UDWORD		location;		///< specifies whether the Repair is default or for the Turret
 	UDWORD		time;			///< time delay for repair cycle
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
 
-	struct
+	struct : UPGRADE
 	{
-		unsigned repairPoints;		///< The number of points contributed each cycle
+		unsigned repairPoints = 0;	///< The number of points contributed each cycle
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -345,25 +365,25 @@ struct WEAPON_STATS : public COMPONENT_STATS
 		pTargetMissGraphic(nullptr), pWaterHitGraphic(nullptr), pTrailGraphic(nullptr), iAudioFireID(0),
 		iAudioImpactID(0)
 	{
-		memset(&upgrade, 0, sizeof(upgrade));
-		memset(&base, 0, sizeof(base));
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
 	}
 
-	struct
+	struct : UPGRADE
 	{
-		unsigned maxRange;               ///< Max distance to target for long range shot
-		unsigned minRange;               ///< Min distance to target for shot
-		unsigned hitChance;              ///< Chance to hit at
-		unsigned firePause;              ///< Pause between each shot
-		uint8_t numRounds;               ///< The number of rounds per salvo
-		unsigned reloadTime;             ///< Time to reload the round of ammo
-		unsigned damage;
-		unsigned radius;                 ///< Basic blast radius of weapon
-		unsigned radiusDamage;           ///< "Splash damage"
-		unsigned periodicalDamage;       ///< Repeat damage each second after hit
-		unsigned periodicalDamageRadius; ///< Repeat damage radius
-		unsigned periodicalDamageTime;   ///< How long the round keeps damaging
-		unsigned minimumDamage;          ///< Minimum amount of damage done, in percentage of damage
+		unsigned maxRange = 0;               ///< Max distance to target for long range shot
+		unsigned minRange = 0;               ///< Min distance to target for shot
+		unsigned hitChance = 0;              ///< Chance to hit at
+		unsigned firePause = 0;              ///< Pause between each shot
+		uint8_t numRounds = 0;               ///< The number of rounds per salvo
+		unsigned reloadTime = 0;             ///< Time to reload the round of ammo
+		unsigned damage = 0;
+		unsigned radius = 0;                 ///< Basic blast radius of weapon
+		unsigned radiusDamage = 0;           ///< "Splash damage"
+		unsigned periodicalDamage = 0;       ///< Repeat damage each second after hit
+		unsigned periodicalDamageRadius = 0; ///< Repeat damage radius
+		unsigned periodicalDamageTime = 0;   ///< How long the round keeps damaging
+		unsigned minimumDamage = 0;          ///< Minimum amount of damage done, in percentage of damage
 	} base, upgrade[MAX_PLAYERS];
 
 	WEAPON_CLASS	periodicalDamageWeaponClass;	///< Periodical damage weapon class by damage type (KINETIC, HEAT)
@@ -412,13 +432,13 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 {
 	CONSTRUCT_STATS() : pMountGraphic(nullptr)
 	{
-		memset(&upgrade, 0, sizeof(upgrade));
-		memset(&base, 0, sizeof(base));
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
 	}
 
 	iIMDShape	*pMountGraphic;              ///< The turret mount to use
 
-	struct
+	struct : UPGRADE
 	{
 		unsigned constructPoints;        ///< The number of points contributed each cycle
 	} upgrade[MAX_PLAYERS], base;
@@ -426,10 +446,15 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 
 struct BRAIN_STATS : public COMPONENT_STATS
 {
-	BRAIN_STATS() : psWeaponStat(nullptr) {}
+	BRAIN_STATS() : psWeaponStat(nullptr)
+	{
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
+	}
 
 	WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
-	struct
+
+	struct : UPGRADE
 	{
 		int maxDroids = 0;       ///< base maximum number of droids that the commander can control
 		int maxDroidsMult = 0;   ///< maximum number of controlled droids multiplied by level
@@ -448,8 +473,8 @@ struct BODY_STATS : public COMPONENT_STATS
 {
 	BODY_STATS() : size(SIZE_NUM), weaponSlots(0), droidTypeOverride(DROID_ANY)
 	{
-		memset(&upgrade, 0, sizeof(upgrade));
-		memset(&base, 0, sizeof(base));
+		pBase = &base;
+		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
 	}
 
 	BODY_SIZE	size;			///< How big the body is - affects how hit
@@ -461,10 +486,9 @@ struct BODY_STATS : public COMPONENT_STATS
 	std::vector<iIMDShape *> ppStillIMDList;///< list of IMDs to use when droid is still - up to numPropulsionStats
 	QString         bodyClass;		///< rules hint to script about its classification
 
-	struct
+	struct : UPGRADE
 	{
 		unsigned power;           ///< this is the engine output of the body
-		unsigned body;
 		unsigned armour;          ///< A measure of how much protection the armour provides
 		int thermal;
 		int resistance;

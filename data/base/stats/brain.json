@@ -1,6 +1,7 @@
 {
     "CommandBrain01": {
         "designable": 1,
+        "hitpoints": 500,
         "id": "CommandBrain01",
         "maxDroids": 6,
         "maxDroidsMult": 2,

@@ -1066,7 +1066,7 @@
         "flightGfx": "FXBeam.PIE",
         "flightSpeed": 2500,
         "hitGfx": "FXSFlms.PIE",
-        "hitpoints": 1000,
+        "hitpoints": 500,
         "id": "CommandTurret1",
         "lightWorld": 1,
         "longRange": 1536,

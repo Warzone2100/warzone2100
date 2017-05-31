@@ -43,6 +43,13 @@
                 "filterValue": "CommandBrain01",
                 "parameter": "RankThresholds",
                 "value": -10
+            },
+            {
+                "class": "Brain",
+                "filterParameter": "Id",
+                "filterValue": "CommandBrain01",
+                "parameter": "HitPoints",
+                "value": 20
             }
         ],
         "statID": "CommandBrain01"
@@ -396,7 +403,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -424,7 +431,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -453,7 +460,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -487,7 +494,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -515,7 +522,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -544,7 +551,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -574,7 +581,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -602,7 +609,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 25
             }
         ],
@@ -631,7 +638,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 35
             }
         ],
@@ -4289,7 +4296,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4317,7 +4324,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4347,7 +4354,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4378,7 +4385,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4406,7 +4413,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4435,7 +4442,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4466,7 +4473,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4494,7 +4501,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -4523,7 +4530,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],

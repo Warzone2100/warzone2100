@@ -293,9 +293,10 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
 	loadStats(json, psStats, index);
 	psStats->buildPower = json.value("buildPower", 0).toUInt();
 	psStats->buildPoints = json.value("buildPoints", 0).toUInt();
-	psStats->body = json.value("hitpoints", 0).toUInt();
 	psStats->designable = json.value("designable", false).toBool();
 	psStats->weight = json.value("weight", 0).toUInt();
+	psStats->pBase->hitpoints = json.value("hitpoints", 0).toUInt();
+	psStats->pBase->hitpointPct = json.value("hitpointPct", 100).toUInt();
 }
 
 /*Load the weapon stats from the file exported from Access*/
@@ -527,7 +528,6 @@ bool loadBodyStats(const char *pFileName)
 		psStats->base.thermal = ini.value("armourHeat").toInt();
 		psStats->base.armour = ini.value("armourKinetic").toInt();
 		psStats->base.power = ini.value("powerOutput").toInt();
-		psStats->base.body = psStats->body; // special exception hack
 		psStats->base.resistance = ini.value("resistance", 30).toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
@@ -575,7 +575,7 @@ bool loadBodyStats(const char *pFileName)
 			setMaxBodyArmour(psStats->base.armour);
 			setMaxBodyArmour(psStats->base.thermal);
 			setMaxBodyPower(psStats->base.power);
-			setMaxBodyPoints(psStats->body);
+			setMaxBodyPoints(psStats->base.hitpoints);
 			setMaxComponentWeight(psStats->weight);
 		}
 	}
@@ -758,6 +758,7 @@ bool loadPropulsionStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_PROPULSION;
 
+		psStats->base.hitpointPctOfBody = ini.value("hitpointPctOfBody", 0).toInt();
 		psStats->maxSpeed = ini.value("speed").toInt();
 		psStats->ref = REF_PROPULSION_START + i;
 		psStats->turnSpeed = ini.value("turnSpeed", DEG(1) / 3).toInt();
@@ -768,6 +769,10 @@ bool loadPropulsionStats(const char *pFileName)
 		psStats->skidDeceleration = ini.value("skidDeceleration", 600).toInt();
 		psStats->pIMD = nullptr;
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j] = psStats->base;
+		}
 		if (!getPropulsionType(ini.value("type").toString().toUtf8().constData(), &psStats->propulsionType))
 		{
 			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getName(psStats));
@@ -828,7 +833,7 @@ bool loadSensorStats(const char *pFileName)
 		psStats->base.range = ini.value("range").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
-			psStats->upgrade[j].range = psStats->base.range;
+			psStats->upgrade[j] = psStats->base;
 		}
 
 		psStats->ref = REF_SENSOR_START + i;
@@ -914,7 +919,7 @@ bool loadECMStats(const char *pFileName)
 		psStats->base.range = ini.value("range").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
-			psStats->upgrade[j].range = psStats->base.range;
+			psStats->upgrade[j] = psStats->base;
 		}
 
 		psStats->ref = REF_ECM_START + i;
@@ -970,7 +975,7 @@ bool loadRepairStats(const char *pFileName)
 		psStats->base.repairPoints = ini.value("repairPoints").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
-			psStats->upgrade[j].repairPoints = psStats->base.repairPoints;
+			psStats->upgrade[j] = psStats->base;
 		}
 		psStats->time = ini.value("time", 0).toInt() * WEAPON_TIME;
 
@@ -1030,7 +1035,7 @@ bool loadConstructStats(const char *pFileName)
 		psStats->base.constructPoints = ini.value("constructPoints").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
-			psStats->upgrade[j].constructPoints = psStats->base.constructPoints;
+			psStats->upgrade[j] = psStats->base;
 		}
 		psStats->ref = REF_CONSTRUCT_START + i;
 
@@ -1980,7 +1985,7 @@ void adjustMaxDesignStats()
 	for (int j = 0; j < numBodyStats; j++)
 	{
 		BODY_STATS *psStats = asBodyStats + j;
-		bodyPoints = MAX(bodyPoints, psStats->upgrade[selectedPlayer].body);
+		bodyPoints = MAX(bodyPoints, psStats->upgrade[selectedPlayer].hitpoints);
 		bodyArmour = MAX(bodyArmour, psStats->upgrade[selectedPlayer].armour);
 		bodyPower = MAX(bodyPower, psStats->upgrade[selectedPlayer].power);
 	}

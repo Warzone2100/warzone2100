@@ -2533,6 +2533,7 @@ static void intSetBodyPoints(DROID_TEMPLATE *psTemplate)
 /* Set the shadow bar graphs for the template Body points - psStats is new hilited stats*/
 static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 {
+	const int plr = selectedPlayer;
 	if (!psStats)
 	{
 		/* Reset the shadow bar */
@@ -2542,24 +2543,24 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 
 	COMPONENT_TYPE type = psStats->compType;
 	UDWORD body;
-	UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
-	uint32_t bodyUpgradeBody = asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[selectedPlayer].body;
-	UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].body;
-	UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].body;
-	UDWORD ECMBody         = asECMStats[sCurrDesign.asParts[COMP_ECM]].body;
-	UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].body;
-	UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].body;
-	UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].body;
-	UDWORD weaponBody1     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].body;
-	UDWORD weaponBody2     = asWeaponStats[sCurrDesign.numWeaps >= 2 ? sCurrDesign.asWeaps[1] : 0].body;
-	UDWORD weaponBody3     = asWeaponStats[sCurrDesign.numWeaps >= 3 ? sCurrDesign.asWeaps[2] : 0].body;
-	UDWORD newComponentBody = psStats->body;
+	UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[plr].hitpoints;
+	UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].upgrade[plr].hitpoints;
+	UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].upgrade[plr].hitpoints;
+	UDWORD ECMBody         = asECMStats[sCurrDesign.asParts[COMP_ECM]].upgrade[plr].hitpoints;
+	UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].upgrade[plr].hitpoints;
+	UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].upgrade[plr].hitpoints;
+	UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].upgrade[plr].hitpoints;
+	UDWORD weaponBody1     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].upgrade[plr].hitpoints;
+	UDWORD weaponBody2     = asWeaponStats[sCurrDesign.numWeaps >= 2 ? sCurrDesign.asWeaps[1] : 0].upgrade[plr].hitpoints;
+	UDWORD weaponBody3     = asWeaponStats[sCurrDesign.numWeaps >= 3 ? sCurrDesign.asWeaps[2] : 0].upgrade[plr].hitpoints;
+	UDWORD newComponentBody = psStats->pUpgrade[plr]->hitpoints;
 
 	// Commanders receive the stats of their associated weapon.
 	if (type == COMP_BRAIN)
 	{
-		newComponentBody += ((BRAIN_STATS *)psStats)->psWeaponStat->body;
+		newComponentBody += ((BRAIN_STATS *)psStats)->psWeaponStat->upgrade[plr].hitpoints;
 	}
+
 	/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
 	a 'system' stat then need to find out which 'system' is currently in place so the
 	comparison is meaningful*/
@@ -2572,7 +2573,6 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	{
 	case COMP_BODY:
 		bodyBody = newComponentBody;
-		bodyUpgradeBody = ((BODY_STATS *)psStats)->upgrade[selectedPlayer].body;
 		break;
 	case COMP_PROPULSION:
 		propulsionBody = newComponentBody;
@@ -2617,7 +2617,6 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 
 	//add weapon HP
 	body += weaponBody1 + weaponBody2 + weaponBody3;
-	body = body * bodyUpgradeBody / std::max(bodyBody, 1u);
 	widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, body);
 }
 

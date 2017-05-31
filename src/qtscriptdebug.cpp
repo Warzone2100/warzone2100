@@ -386,7 +386,8 @@ QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *
 	key->appendRow(QStandardItemList{ new QStandardItem("^Power"), new QStandardItem(QString::number(psStats->buildPower)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Build Points"), new QStandardItem(QString::number(psStats->buildPoints)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Weight"), new QStandardItem(QString::number(psStats->weight)) });
-	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points"), new QStandardItem(QString::number(psStats->body)) });
+	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points"), new QStandardItem(QString::number(psStats->pUpgrade[player]->hitpoints)) });
+	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points +% of total"), new QStandardItem(QString::number(psStats->pUpgrade[player]->hitpointPct)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Designable"), new QStandardItem(QString::number(psStats->designable)) });
 	if (psStats->compType == COMP_BODY)
 	{
@@ -398,6 +399,7 @@ QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *
 	else if (psStats->compType == COMP_PROPULSION)
 	{
 		const PROPULSION_STATS *psProp = (const PROPULSION_STATS *)psStats;
+		key->appendRow(QStandardItemList{ new QStandardItem("^Hit points +% of body"), new QStandardItem(QString::number(psProp->upgrade[player].hitpointPctOfBody)) });
 		key->appendRow(QStandardItemList{ new QStandardItem("^Max speed"), new QStandardItem(QString::number(psProp->maxSpeed)) });
 		key->appendRow(QStandardItemList{ new QStandardItem("^Propulsion type"), new QStandardItem(QString::number(psProp->propulsionType)) });
 		key->appendRow(QStandardItemList{ new QStandardItem("^Turn speed"), new QStandardItem(QString::number(psProp->turnSpeed)) });

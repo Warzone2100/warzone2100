@@ -1388,33 +1388,42 @@ UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 
 static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsigned numWeaps, uint8_t (&asWeaps)[MAX_WEAPONS], unsigned player)
 {
-	auto &bodyStats = asBodyStats[asParts[COMP_BODY]];
+	const auto &bodyStats = asBodyStats[asParts[COMP_BODY]];
 
 	// Get the basic component body points
-	uint32_t body =
-	    bodyStats.body +
-	    asBrainStats[asParts[COMP_BRAIN]].body +
-	    asSensorStats[asParts[COMP_SENSOR]].body +
-	    asECMStats[asParts[COMP_ECM]].body +
-	    asRepairStats[asParts[COMP_REPAIRUNIT]].body +
-	    asConstructStats[asParts[COMP_CONSTRUCT]].body;
+	int hitpoints =
+	    bodyStats.upgrade[player].hitpoints +
+	    asBrainStats[asParts[COMP_BRAIN]].upgrade[player].hitpoints +
+	    asSensorStats[asParts[COMP_SENSOR]].upgrade[player].hitpoints +
+	    asECMStats[asParts[COMP_ECM]].upgrade[player].hitpoints +
+	    asRepairStats[asParts[COMP_REPAIRUNIT]].upgrade[player].hitpoints +
+	    asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player].hitpoints +
+	    asConstructStats[asParts[COMP_CONSTRUCT]].upgrade[player].hitpoints;
 
-	// propulsion body points are a percentage of the body's body points
-	body += bodyStats.body * asPropulsionStats[asParts[COMP_PROPULSION]].body / 100;
+	int hitpointpct =
+	    bodyStats.upgrade[player].hitpointPct - 100 +
+	    asBrainStats[asParts[COMP_BRAIN]].upgrade[player].hitpointPct - 100 +
+	    asSensorStats[asParts[COMP_SENSOR]].upgrade[player].hitpointPct - 100 +
+	    asECMStats[asParts[COMP_ECM]].upgrade[player].hitpointPct - 100 +
+	    asRepairStats[asParts[COMP_REPAIRUNIT]].upgrade[player].hitpointPct - 100 +
+	    asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player].hitpointPct - 100 +
+	    asConstructStats[asParts[COMP_CONSTRUCT]].upgrade[player].hitpointPct - 100;
+
+	// propulsion hitpoints can be a percentage of the body's hitpoints
+	hitpoints += bodyStats.upgrade[player].hitpoints * asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player].hitpointPctOfBody / 100;
 
 	// Add the weapon body points
 	for (unsigned i = 0; i < numWeaps; ++i)
 	{
 		if (asWeaps[i] > 0)
 		{
-			body += asWeaponStats[asWeaps[i]].body;
+			hitpoints += asWeaponStats[asWeaps[i]].upgrade[player].hitpoints;
+			hitpointpct += asWeaponStats[asWeaps[i]].upgrade[player].hitpointPct - 100;
 		}
 	}
 
-	//add on any upgrade value that may need to be applied
-	body = body * bodyStats.upgrade[player].body / std::max(bodyStats.body, 1u);
-
-	return body;
+	// Final adjustment based on the hitpoint modifier
+	return (hitpoints * (100 + hitpointpct)) / 100;
 }
 
 // Calculate the body points of a droid from its template

@@ -4405,7 +4405,12 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			BODY_STATS *psStats = asBodyStats + index;
 			if (name == "HitPoints")
 			{
-				psStats->upgrade[player].body = value;
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
 				dirtyAllDroids(player);
 			}
 			else if (name == "Armour")
@@ -4451,6 +4456,16 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 					psStats->upgrade[player].rankThresholds[i] = context->argument(0).property(i).toInt32();
 				}
 			}
+			else if (name == "HitPoints")
+			{
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
+				dirtyAllDroids(player);
+			}
 			else
 			{
 				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
@@ -4460,26 +4475,98 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		{
 			SCRIPT_ASSERT(context, index < numSensorStats, "Bad index");
 			SENSOR_STATS *psStats = asSensorStats + index;
-			SCRIPT_ASSERT(context, name == "Range", "Invalid sensor parameter");
-			psStats->upgrade[player].range = value;
-			dirtyAllDroids(player);
-			dirtyAllStructures(player);
+			if (name == "Range")
+			{
+				psStats->upgrade[player].range = value;
+				dirtyAllDroids(player);
+				dirtyAllStructures(player);
+			}
+			else if (name == "HitPoints")
+			{
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
+				dirtyAllDroids(player);
+			}
+			else
+			{
+				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+			}
 		}
 		else if (type == COMP_ECM)
 		{
 			SCRIPT_ASSERT(context, index < numECMStats, "Bad index");
 			ECM_STATS *psStats = asECMStats + index;
-			SCRIPT_ASSERT(context, name == "Range", "Invalid ECM parameter");
-			psStats->upgrade[player].range = value;
-			dirtyAllDroids(player);
-			dirtyAllStructures(player);
+			if (name == "Range")
+			{
+				psStats->upgrade[player].range = value;
+				dirtyAllDroids(player);
+				dirtyAllStructures(player);
+			}
+			else if (name == "HitPoints")
+			{
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
+				dirtyAllDroids(player);
+			}
+			else
+			{
+				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+			}
+		}
+		else if (type == COMP_PROPULSION)
+		{
+			SCRIPT_ASSERT(context, index < numPropulsionStats, "Bad index");
+			PROPULSION_STATS *psStats = asPropulsionStats + index;
+			if (name == "HitPoints")
+			{
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPctOfBody")
+			{
+				psStats->upgrade[player].hitpointPctOfBody = value;
+				dirtyAllDroids(player);
+			}
+			else
+			{
+				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+			}
 		}
 		else if (type == COMP_CONSTRUCT)
 		{
 			SCRIPT_ASSERT(context, index < numConstructStats, "Bad index");
 			CONSTRUCT_STATS *psStats = asConstructStats + index;
-			SCRIPT_ASSERT(context, name == "ConstructorPoints", "Invalid constructor parameter");
-			psStats->upgrade[player].constructPoints = value;
+			if (name == "ConstructorPoints")
+			{
+				psStats->upgrade[player].constructPoints = value;
+			}
+			else if (name == "HitPoints")
+			{
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
+				dirtyAllDroids(player);
+			}
+			else
+			{
+				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+			}
 		}
 		else if (type == COMP_WEAPON)
 		{
@@ -4536,6 +4623,16 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			else if (name == "RepeatRadius")
 			{
 				psStats->upgrade[player].periodicalDamageRadius = value;
+			}
+			else if (name == "HitPoints")
+			{
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
+				dirtyAllDroids(player);
 			}
 			else
 			{
@@ -4608,10 +4705,14 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	if (type == COMP_BODY)
 	{
 		SCRIPT_ASSERT(context, index < numBodyStats, "Bad index");
-		BODY_STATS *psStats = asBodyStats + index;
+		const BODY_STATS *psStats = asBodyStats + index;
 		if (name == "HitPoints")
 		{
-			return psStats->upgrade[player].body;
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
 		}
 		else if (name == "Armour")
 		{
@@ -4637,7 +4738,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	else if (type == COMP_BRAIN)
 	{
 		SCRIPT_ASSERT(context, index < numBrainStats, "Bad index");
-		BRAIN_STATS *psStats = asBrainStats + index;
+		const BRAIN_STATS *psStats = asBrainStats + index;
 		if (name == "BaseCommandLimit")
 		{
 			return psStats->upgrade[player].maxDroids;
@@ -4656,6 +4757,14 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			}
 			return value;
 		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
 		else
 		{
 			SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
@@ -4664,28 +4773,91 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	else if (type == COMP_SENSOR)
 	{
 		SCRIPT_ASSERT(context, index < numSensorStats, "Bad index");
-		SENSOR_STATS *psStats = asSensorStats + index;
-		SCRIPT_ASSERT(context, name == "Range", "Invalid sensor parameter");
-		return psStats->upgrade[player].range;
+		const SENSOR_STATS *psStats = asSensorStats + index;
+		if (name == "Range")
+		{
+			return psStats->upgrade[player].range;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+		}
 	}
 	else if (type == COMP_ECM)
 	{
 		SCRIPT_ASSERT(context, index < numECMStats, "Bad index");
-		ECM_STATS *psStats = asECMStats + index;
-		SCRIPT_ASSERT(context, name == "Range", "Invalid ECM parameter");
-		return psStats->upgrade[player].range;
+		const ECM_STATS *psStats = asECMStats + index;
+		if (name == "Range")
+		{
+			return psStats->upgrade[player].range;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+		}
+	}
+	else if (type == COMP_PROPULSION)
+	{
+		SCRIPT_ASSERT(context, index < numPropulsionStats, "Bad index");
+		const PROPULSION_STATS *psStats = asPropulsionStats + index;
+		if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else if (name == "HitPointPctOfBody")
+		{
+			return psStats->upgrade[player].hitpointPctOfBody;
+		}
+		else
+		{
+			SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+		}
 	}
 	else if (type == COMP_CONSTRUCT)
 	{
 		SCRIPT_ASSERT(context, index < numConstructStats, "Bad index");
-		CONSTRUCT_STATS *psStats = asConstructStats + index;
-		SCRIPT_ASSERT(context, name == "ConstructorPoints", "Invalid constructor parameter");
-		return psStats->upgrade[player].constructPoints;
+		const CONSTRUCT_STATS *psStats = asConstructStats + index;
+		if (name == "ConstructorPoints")
+		{
+			return psStats->upgrade[player].constructPoints;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+		}
 	}
 	else if (type == COMP_WEAPON)
 	{
 		SCRIPT_ASSERT(context, index < numWeaponStats, "Bad index");
-		WEAPON_STATS *psStats = asWeaponStats + index;
+		const WEAPON_STATS *psStats = asWeaponStats + index;
 		if (name == "MaxRange")
 		{
 			return psStats->upgrade[player].maxRange;
@@ -4738,6 +4910,14 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		{
 			return psStats->upgrade[player].periodicalDamageRadius;
 		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
 		else
 		{
 			SCRIPT_ASSERT(context, false, "Invalid weapon method");
@@ -4746,7 +4926,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	else if (type >= SCRCB_FIRST && type <= SCRCB_LAST)
 	{
 		SCRIPT_ASSERT(context, index < numStructureStats, "Bad index");
-		STRUCTURE_STATS *psStats = asStructureStats + index;
+		const STRUCTURE_STATS *psStats = asStructureStats + index;
 		switch (type)
 		{
 		case SCRCB_RES: return psStats->upgrade[player].research; break;
@@ -4777,6 +4957,18 @@ static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, const QStrin
 	v.setProperty("name", name, QScriptValue::SkipInEnumeration | QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
+QScriptValue register_common(QScriptEngine *engine, COMPONENT_STATS *psStats)
+{
+	QScriptValue v = engine->newObject();
+	v.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("HitPoints", psStats->pBase->hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("HitPointPct", psStats->pBase->hitpointPct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	return v;
+}
+
 bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 {
 	debug(LOG_WZ, "Loading functions for engine %p, script %s", engine, scriptName.toUtf8().constData());
@@ -4798,12 +4990,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		for (int j = 0; j < numBodyStats; j++)
 		{
 			BODY_STATS *psStats = asBodyStats + j;
-			QScriptValue body = engine->newObject();
-			body.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue body = register_common(engine, psStats);
 			body.setProperty("Power", psStats->base.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("Armour", psStats->base.armour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("Thermal", psStats->base.thermal, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4820,12 +5007,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		for (int j = 0; j < numSensorStats; j++)
 		{
 			SENSOR_STATS *psStats = asSensorStats + j;
-			QScriptValue sensor = engine->newObject();
-			sensor.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			sensor.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			sensor.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			sensor.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			sensor.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue sensor = register_common(engine, psStats);
 			sensor.setProperty("Range", psStats->base.range, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			sensorbase.setProperty(psStats->name, sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
@@ -4836,28 +5018,36 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		for (int j = 0; j < numECMStats; j++)
 		{
 			ECM_STATS *psStats = asECMStats + j;
-			QScriptValue ecm = engine->newObject();
-			ecm.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			ecm.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			ecm.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			ecm.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			ecm.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue ecm = register_common(engine, psStats);
 			ecm.setProperty("Range", psStats->base.range, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			ecmbase.setProperty(psStats->name, ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+		//== \item[Propulsion] Propulsions
+		QScriptValue propbase = engine->newObject();
+		for (int j = 0; j < numPropulsionStats; j++)
+		{
+			PROPULSION_STATS *psStats = asPropulsionStats + j;
+			QScriptValue v = register_common(engine, psStats);
+			v.setProperty("HitpointPctOfBody", psStats->maxSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("MaxSpeed", psStats->maxSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("TurnSpeed", psStats->turnSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("SpinSpeed", psStats->spinSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("SpinAngle", psStats->spinAngle, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("SkidDeceleration", psStats->skidDeceleration, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("Acceleration", psStats->acceleration, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("Deceleration", psStats->deceleration, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			propbase.setProperty(psStats->name, v, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		}
+		stats.setProperty("Propulsion", propbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 		//== \item[Repair] Repair turrets (not used, incidentially, for repair centers)
 		QScriptValue repairbase = engine->newObject();
 		for (int j = 0; j < numRepairStats; j++)
 		{
 			REPAIR_STATS *psStats = asRepairStats + j;
-			QScriptValue repair = engine->newObject();
-			repair.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			repair.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			repair.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			repair.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			repair.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue repair = register_common(engine, psStats);
 			repair.setProperty("RepairPoints", psStats->base.repairPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			repairbase.setProperty(psStats->name, repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
@@ -4868,12 +5058,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		for (int j = 0; j < numConstructStats; j++)
 		{
 			CONSTRUCT_STATS *psStats = asConstructStats + j;
-			QScriptValue con = engine->newObject();
-			con.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			con.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			con.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			con.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			con.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue con = register_common(engine, psStats);
 			con.setProperty("ConstructorPoints", psStats->base.constructPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			conbase.setProperty(psStats->name, con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
@@ -4884,12 +5069,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		for (int j = 0; j < numBrainStats; j++)
 		{
 			BRAIN_STATS *psStats = asBrainStats + j;
-			QScriptValue br = engine->newObject();
-			br.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			br.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			br.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			br.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			br.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue br = register_common(engine, psStats);
 			br.setProperty("BaseCommandLimit", psStats->base.maxDroids, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			br.setProperty("CommandLimitByLevel", psStats->base.maxDroidsMult, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			QScriptValue thresholds = engine->newArray(psStats->base.rankThresholds.size());
@@ -4913,11 +5093,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		for (int j = 0; j < numWeaponStats; j++)
 		{
 			WEAPON_STATS *psStats = asWeaponStats + j;
-			QScriptValue weap = engine->newObject();
-			weap.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			QScriptValue weap = register_common(engine, psStats);
 			weap.setProperty("MaxRange", psStats->base.maxRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("MinRange", psStats->base.minRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("HitChance", psStats->base.hitChance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5005,6 +5181,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			BODY_STATS *psStats = asBodyStats + j;
 			QScriptValue body = engine->newObject();
 			setStatsFunc(body, engine, "HitPoints", i, COMP_BODY, j);
+			setStatsFunc(body, engine, "HitPointPct", i, COMP_BODY, j);
 			setStatsFunc(body, engine, "Power", i, COMP_BODY, j);
 			setStatsFunc(body, engine, "Armour", i, COMP_BODY, j);
 			setStatsFunc(body, engine, "Thermal", i, COMP_BODY, j);
@@ -5019,10 +5196,25 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		{
 			SENSOR_STATS *psStats = asSensorStats + j;
 			QScriptValue sensor = engine->newObject();
+			setStatsFunc(sensor, engine, "HitPoints", i, COMP_SENSOR, j);
+			setStatsFunc(sensor, engine, "HitPointPct", i, COMP_SENSOR, j);
 			setStatsFunc(sensor, engine, "Range", i, COMP_SENSOR, j);
 			sensorbase.setProperty(psStats->name, sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+		//== \item[Propulsion] Propulsions
+		QScriptValue propbase = engine->newObject();
+		for (int j = 0; j < numPropulsionStats; j++)
+		{
+			PROPULSION_STATS *psStats = asPropulsionStats + j;
+			QScriptValue v = engine->newObject();
+			setStatsFunc(v, engine, "HitPoints", i, COMP_PROPULSION, j);
+			setStatsFunc(v, engine, "HitPointPct", i, COMP_PROPULSION, j);
+			setStatsFunc(v, engine, "HitPointPctOfBody", i, COMP_PROPULSION, j);
+			propbase.setProperty(psStats->name, v, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		}
+		node.setProperty("Propulsion", propbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 		//== \item[ECM] ECM (Electronic Counter-Measure) turrets
 		QScriptValue ecmbase = engine->newObject();
@@ -5031,6 +5223,8 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			ECM_STATS *psStats = asECMStats + j;
 			QScriptValue ecm = engine->newObject();
 			setStatsFunc(ecm, engine, "Range", i, COMP_ECM, j);
+			setStatsFunc(ecm, engine, "HitPoints", i, COMP_ECM, j);
+			setStatsFunc(ecm, engine, "HitPointPct", i, COMP_ECM, j);
 			ecmbase.setProperty(psStats->name, ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5042,6 +5236,8 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			REPAIR_STATS *psStats = asRepairStats + j;
 			QScriptValue repair = engine->newObject();
 			setStatsFunc(repair, engine, "RepairPoints", i, COMP_REPAIRUNIT, j);
+			setStatsFunc(repair, engine, "HitPoints", i, COMP_REPAIRUNIT, j);
+			setStatsFunc(repair, engine, "HitPointPct", i, COMP_REPAIRUNIT, j);
 			repairbase.setProperty(psStats->name, repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5053,6 +5249,8 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			CONSTRUCT_STATS *psStats = asConstructStats + j;
 			QScriptValue con = engine->newObject();
 			setStatsFunc(con, engine, "ConstructorPoints", i, COMP_CONSTRUCT, j);
+			setStatsFunc(con, engine, "HitPoints", i, COMP_CONSTRUCT, j);
+			setStatsFunc(con, engine, "HitPointPct", i, COMP_CONSTRUCT, j);
 			conbase.setProperty(psStats->name, con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5070,6 +5268,8 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			setStatsFunc(br, engine, "BaseCommandLimit", i, COMP_BRAIN, j);
 			setStatsFunc(br, engine, "CommandLimitByLevel", i, COMP_BRAIN, j);
 			setStatsFunc(br, engine, "RankThresholds", i, COMP_BRAIN, j);
+			setStatsFunc(br, engine, "HitPoints", i, COMP_BRAIN, j);
+			setStatsFunc(br, engine, "HitPointPct", i, COMP_BRAIN, j);
 			brainbase.setProperty(psStats->name, br, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Brain", brainbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5093,6 +5293,8 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			setStatsFunc(weap, engine, "RepeatDamage", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "RepeatTime", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "RepeatRadius", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "HitPoints", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "HitPointPct", i, COMP_WEAPON, j);
 			wbase.setProperty(psStats->name, weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);

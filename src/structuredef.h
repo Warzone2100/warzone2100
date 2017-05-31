@@ -315,13 +315,13 @@ struct ProductionRunEntry
 };
 typedef std::vector<ProductionRunEntry> ProductionRun;
 
-struct UPGRADE
+struct UPGRADE_MOD
 {
 	UWORD modifier;      //% to increase the stat by
 };
 
-typedef UPGRADE REPAIR_FACILITY_UPGRADE;
-typedef UPGRADE POWER_UPGRADE;
-typedef UPGRADE REARM_UPGRADE;
+typedef UPGRADE_MOD REPAIR_FACILITY_UPGRADE;
+typedef UPGRADE_MOD POWER_UPGRADE;
+typedef UPGRADE_MOD REARM_UPGRADE;
 
 #endif // __INCLUDED_STRUCTUREDEF_H__
