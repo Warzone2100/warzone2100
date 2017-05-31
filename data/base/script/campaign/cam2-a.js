@@ -1,9 +1,9 @@
-
+include("script/campaign/transitionTech.js");
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const CO = 2; //The Collective player number
-var transportLimit, index; //Player transports limits for this level
+var index; //Number of transport loads sent into the level
 
 
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -50,12 +50,18 @@ function getDroidsForCOLZ()
 	for (var i = 0; i < count; ++i)
 	{
 		if(camRand(3) === 0)
+		{
 			t = scouts[camRand(scouts.length)];
+		}
 		else
+		{
 			t = artillery[camRand(artillery.length)];
-		droids[droids.length] = t;
-		droids[droids.length] = t;
+		}
+
+		droids.push(t);
+		droids.push(t);
 	}
+
 	return droids;
 }
 
@@ -63,7 +69,7 @@ function getDroidsForCOLZ()
 function sendCOTransporter()
 {
 	var list = getDroidsForCOLZ();
-	camSendReinforcement(CO, camMakePos("COTransportPos"), list, 
+	camSendReinforcement(CO, camMakePos("COTransportPos"), list,
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 100 },
 			exit: { x: 126, y: 70 }
@@ -77,48 +83,73 @@ function sendCOTransporter()
 //from the main menu. Otherwise a player can just bring in there Alpha units
 function sendPlayerTransporter()
 {
-	if(!camDef(transportLimit) || index === transportLimit)
-		return;
+	const TRANSPORT_LIMIT = 4;
 
-	var list
-	with (camTemplates) list = [prhct, prltat, npcybr, prrept];
+	if(!camDef(index))
+	{
+		index = 0;
+	}
+
+	if(index === TRANSPORT_LIMIT)
+	{
+		return;
+	}
+
 	var droids = [];
+	var list;
+	with (camTemplates) list = [prhct, prltat, npcybr, prrept];
 
 	for(var i = 0; i < 10; ++i)
-		droids[droids.length] = list[camRand(list.length)];
-	
-	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids, 
+	{
+		droids.push(list[camRand(list.length)]);
+	}
+
+	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 87, y: 126 },
 			exit: { x: 87, y: 126 }
 		}
 	);
 
-	index += 1;
+	index = index + 1;
 	queue("sendPlayerTransporter", 300000); //5 min
 }
 
 //Continuously spawns heavy units on the north part of the map every 7 minutes
 function mapEdgeDroids()
 {
-	const TankNum = 8 + camRand(6);
-	var list
+	var TankNum = 8 + camRand(6);
+	var list;
 	with (camTemplates) list = [npcybm, npcybr, comct, cohct];
 
 	var droids = [];
-	for (var i = 0; i <= TankNum; ++i)
+	for (var i = 0; i < TankNum; ++i)
 	{
-		droids[droids.length] = list[camRand(list.length)];
+		droids.push(list[camRand(list.length)]);
 	}
 
 	camSendReinforcement(CO, camMakePos("groundUnitPos"), droids, CAM_REINFORCE_GROUND);
-	queue("mapEdgeDroids", 420000) //7 min
+	queue("mapEdgeDroids", 420000); //7 min
+}
+
+//Stop VTOLs from coming if HQ is destroyed.
+function checkCollectiveHQ()
+{
+	if(getObject("COCommandCenter") === null)
+	{
+		camToggleVtolSpawn();
+	}
+	else
+	{
+		queue("checkCollectiveHQ", 8000);
+	}
 }
 
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
 	camSetVtolData(CO, "vtolAppearPos", "vtolRemoveZone", list, 300000); //5 min
+	checkCollectiveHQ();
 }
 
 function groupPatrol()
@@ -128,14 +159,14 @@ function groupPatrol()
 		count: -1,
 	});
 
-	camManageGroup(camMakeGroup("IDFGroup"), CAM_ORDER_DEFEND, { 
+	camManageGroup(camMakeGroup("IDFGroup"), CAM_ORDER_DEFEND, {
 		pos: [
 			camMakePos("waypoint1"),
 			camMakePos("waypoint2")
 		]
 	});
 
-	camManageGroup(camMakeGroup("sensorGroup"), CAM_ORDER_PATROL, { 
+	camManageGroup(camMakeGroup("sensorGroup"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("waypoint1"),
 			camMakePos("waypoint2")
@@ -150,86 +181,64 @@ function truckDefense()
 	if(enumDroid(CO, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
-	const list = ["WallTower06", "PillBox1", "WallTower03"];
-	camQueueBuilding(CO, list[camRand(list.length)]);
+	const DEFENSES = ["WallTower06", "PillBox1", "WallTower03"];
+	camQueueBuilding(CO, DEFENSES[camRand(DEFENSES.length)]);
 }
 
 //Gives starting tech and research.
 function cam2Setup()
 {
-	const alphaTech = [
-		"MG1Mk1", "Cannon1Mk1", "Cannon2A-TMk1", "Cannon375mmMk1", "Flame1Mk1",
-		"MG2Mk1", "MG3Mk1", "Mortar1Mk1", "Mortar2Mk1", "Rocket-BB", "Rocket-LtA-T",
-		"Rocket-MRL", "Rocket-Pod", "Cannon1-VTOL", "MG1-VTOL", "MG2-VTOL",
-		"MG3-VTOL", "Rocket-VTOL-LtA-T", "Rocket-VTOL-Pod", "Rocket-VTOL-BB",
-		"CyborgFlamer01", "CyborgCannon", "CyborgChaingun", "Cyb-Wpn-Atmiss",
-		"Cyb-Wpn-Laser", "Cyb-Wpn-Rail1", "CyborgRocket", "CyborgRotMG",
-		"CommandTurret1", "Body1REC", "Body5REC", "Body11ABT", "Body4ABT",
-		"Body8MBT", "Body12SUP", "CyborgCannonGrd", "CyborgFlamerGrd", 
-		"CyborgChain1Ground", "CyborgRkt1Ground", "HalfTrack", "hover01",
-		"tracked01", "wheeled01", "Spade1Mk1", "SensorTurret1Mk1", 
-		"CommandBrain01" ];
-	const structs = [
-		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
-		"A0ResearchFacility", "A0LightFactory", "A0ComDroidControl",
-		"A0CyborgFactory", "A0FacMod1", "A0HardcreteMk1CWall",
-		"A0HardcreteMk1Wall", "A0PowMod1", "A0RepairCentre3", 
-		"A0ResearchModule1", "A0TankTrap", "PillBox1", "PillBox4",
-		"PillBox5", "PillBox6", "TankTrapC", "WallTower01",
-		"WallTower03", "WallTower04", "WallTower06", "AASite-QuadMg1",
-		"Emplacement-MortarPit01", "Emplacement-MRL-pit" ];
-	const playerRes = [ 
-		"R-Cyborg-Legs01", "R-Cyborg-Metals03", "R-Defense-WallUpgrade03",
-		"R-Struc-Factory-Upgrade03", "R-Struc-Factory-Cyborg-Upgrade03",
-		"R-Struc-Materials03", "R-Struc-Research-Upgrade03",
-		"R-Struc-RprFac-Upgrade03", "R-Sys-Engineering01", "R-Wpn-MG-ROF01",
-		"R-Sys-MobileRepairTurret01", "R-Wpn-Cannon-Damage03",
-		"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01", "R-Wpn-MG-Damage04",
-		"R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy02",
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy02", 
-		"R-Wpn-RocketSlow-Damage03", "R-Vehicle-Engine03", 
-		"R-Vehicle-Metals03", "R-Wpn-AAGun03", "R-Defense-AASite-QuadMg1",
-		"R-Sys-Sensor-Tower02", "R-Defense-MRL" ];
-	const collectiveRes = [
+	const COLLECTIVE_RES = [
+		"R-Wpn-MG1Mk1", "R-Sys-Engineering02",
 		"R-Defense-WallUpgrade03", "R-Struc-Materials03",
 		"R-Struc-Factory-Upgrade03", "R-Struc-Factory-Cyborg-Upgrade03",
-		"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03", 
-		"R-Vehicle-Armor-Heat01", "R-Cyborg-Armor-Heat01", 
-		"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon-Damage03", 
+		"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
+		"R-Vehicle-Armor-Heat01", "R-Cyborg-Armor-Heat01",
+		"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon-Damage03",
 		"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
 		"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
-		"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01", 
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage03", 
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", 
-		"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01" ];
+		"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
+		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage03",
+		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+		"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01"
+	];
 
-	for( var x = 0; x < alphaTech.length; ++x)
-		makeComponentAvailable(alphaTech[x], me);
+	for( var x = 0; x < ALPHA_TECH.length; ++x)
+	{
+		makeComponentAvailable(ALPHA_TECH[x], CAM_HUMAN_PLAYER);
+	}
 
-	for( var x = 0; x < structs.length; ++x)
-		enableStructure(structs[x], me);
+	for( var x = 0; x < STRUCTS_ALPHA.length; ++x)
+	{
+		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
+	}
 
-	camEnableRes(playerRes, CAM_HUMAN_PLAYER);
-	camEnableRes(collectiveRes, CO);
-	enableResearch("R-Wpn-Cannon-Accuracy02", me);
+	camCompleteRequiredResearch(PLAYER_RES_BETA, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	camCompleteRequiredResearch(ALPHA_RESEARCH, CAM_HUMAN_PLAYER);
+	enableResearch("R-Wpn-Cannon-Accuracy02", CAM_HUMAN_PLAYER);
 	preDamageStuff();
 }
 
 
 function eventStartLevel()
 {
+	const MISSION_TIME = 3600; //60 minutes.
+	const PLAYER_POWER = 5000;
+	const COLLECTIVE_POWER = 10000;
+	var startpos = getObject("startPosition");
+	var lz = getObject("landingZone"); //player lz
+	var enemyLz = getObject("COLandingZone");
+	var tent = getObject("transporterEntry");
+	var text = getObject("transporterExit");
+
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_1S");
 	setReinforcementTime(LZ_COMPROMISED_TIME);
 
-	var startpos = getObject("startPosition");
 	centreView(startpos.x, startpos.y);
-	var lz = getObject("landingZone"); //player lz
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	lz = getObject("COLandingZone");
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CO);
-	var tent = getObject("transporterEntry");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CO);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	var text = getObject("transporterExit");
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
@@ -238,9 +247,9 @@ function eventStartLevel()
 		"COArtiCBTower": { tech: "R-Sys-Sensor-Upgrade01" },
 	});
 
-	setMissionTime(3600); //60 min
-	setPower(10000, CO);
-	setPower(5000, CAM_HUMAN_PLAYER);
+	setMissionTime(MISSION_TIME);
+	setPower(COLLECTIVE_POWER, CO);
+	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	cam2Setup();
 
 	//C2A_BASE2 is not really a base
@@ -256,14 +265,12 @@ function eventStartLevel()
 			detectMsg: "C2A_BASE2",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv393.ogg",
-		}
+		},
 	});
-	
+
 	camManageTrucks(CO);
 	truckDefense();
 	hackAddMessage("MB2A_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
-	transportLimit = 4;
-	index = 0;
 
 	//Only if starting Beta directly rather than going through Alpha
 	if(enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0) {
@@ -278,5 +285,5 @@ function eventStartLevel()
 	queue("groupPatrol", 15000); // 15 sec
 	queue("sendCOTransporter", 30000); //30 sec
 	queue("vtolAttack", 300000); //5 min
-	queue("mapEdgeDroids", 420000) //7 min
+	queue("mapEdgeDroids", 420000); //7 min
 }

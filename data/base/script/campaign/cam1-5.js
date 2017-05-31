@@ -6,20 +6,46 @@ var NPDefenseGroup;
 const NP = 1; //New Paradigm player number
 const scavs = 7; // Scav player number
 
+const NEW_PARADIGM_RES = [
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
+	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
+	"R-Struc-Factory-Cyborg-Upgrade02", "R-Vehicle-Engine02",
+	"R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Damage03",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01", "R-Wpn-Mortar-Damage03",
+	"R-Wpn-Mortar-Acc01", "R-Wpn-Rocket-Accuracy01", "R-Wpn-Rocket-Damage03",
+	"R-Wpn-Rocket-ROF02", "R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
+];
+
+const SCAVENGER_RES = [
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage02",
+];
+
+
 //Get some droids for the NP transport
 function getDroidsForNPLZ(args)
 {
+	var scouts;
+	var heavies;
+
 	with (camTemplates) {
-		var scouts = [ npsens, nppod, nphmg ];
-		var heavies = [ npsbb, npmmct, npmrl ];
+		scouts = [ npsens, nppod, nphmg ];
+		heavies = [ npsbb, npmmct, npmrl ];
 	}
+
 	var numScouts = camRand(5) + 1;
-	var list = [];
-	for (var i = 0; i < numScouts; ++i)
-		list[list.length] = scouts[camRand(scouts.length)];
 	var heavy = heavies[camRand(heavies.length)];
+	var list = [];
+
+	for (var i = 0; i < numScouts; ++i)
+	{
+		list[list.length] = scouts[camRand(scouts.length)];
+	}
+
 	for (var i = numScouts; i < 8; ++i)
+	{
 		list[list.length] = heavy;
+	}
+
 	return list;
 }
 
@@ -105,7 +131,7 @@ function eventStartLevel()
 		reinforcements: -1
 	});
 
-	
+
 	var lz = getObject("LandingZone1"); //player lz
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var lz2 = getObject("LandingZone2"); //new paradigm lz
@@ -125,34 +151,10 @@ function eventStartLevel()
 	setPower(2000, NP);
 	setPower(500, scavs);
 
-	//Just the ever growing amount of research for enemies
-	//New Paradigm
-	completeResearch("R-Defense-WallUpgrade02", NP);
-	completeResearch("R-Struc-Materials02", NP);
-	completeResearch("R-Struc-Factory-Upgrade02", NP);
-	completeResearch("R-Struc-Factory-Cyborg-Upgrade02", NP);
-	completeResearch("R-Vehicle-Engine02", NP);
-	completeResearch("R-Vehicle-Metals02", NP);
-	completeResearch("R-Cyborg-Metals02", NP);
-	completeResearch("R-Wpn-Cannon-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-ROF01", NP);
-	completeResearch("R-Wpn-MG-Damage04", NP);
-	completeResearch("R-Wpn-MG-ROF01", NP);
-	completeResearch("R-Wpn-Mortar-Damage03", NP);
-	completeResearch("R-Wpn-Mortar-Acc01", NP);
-	completeResearch("R-Wpn-Rocket-Accuracy01", NP);
-	completeResearch("R-Wpn-Rocket-Damage03", NP);
-	completeResearch("R-Wpn-Rocket-ROF02", NP);
-	completeResearch("R-Wpn-RocketSlow-Damage02", NP);
-	completeResearch("R-Struc-RprFac-Upgrade03", NP);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NP);
+	camCompleteRequiredResearch(SCAVENGER_RES, scavs);
 
-	//Scavs
-	completeResearch("R-Wpn-MG-Damage03", scavs);
-	completeResearch("R-Wpn-Rocket-Damage02", scavs);
-	completeResearch("R-Wpn-Cannon-Damage02", scavs);
 
-	
 	camSetEnemyBases({
 		"ScavNorthGroup": {
 			cleanup: "ScavNorth",
@@ -181,9 +183,6 @@ function eventStartLevel()
 		},
 	});
 
-	//Will fly over New Paradigm base at the start
-	camDetectEnemyBase("NPBaseGroup");
-
 	camSetArtifacts({
 		"NPCyborgFactory": { tech: "R-Struc-Factory-Upgrade03" },
 		"NPRightFactory": { tech: "R-Vehicle-Engine02" },
@@ -191,7 +190,7 @@ function eventStartLevel()
 		"NPResearchFacility": { tech: "R-Comp-SynapticLink" },
 	});
 
-	//The NP factories had unused assembly points (off map also) 
+	//The NP factories had unused assembly points (off map also)
 	with (camTemplates) camSetFactories({
 		"NPLeftFactory": {
 			//assembly: "NPLeftAssembly",
@@ -243,7 +242,7 @@ function eventStartLevel()
 		},
 	});
 
-	
+
 	NPDefenseGroup = newGroup();
 
 	queue("camCallOnce", 30000, "enableReinforcements");

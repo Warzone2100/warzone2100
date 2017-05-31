@@ -4,12 +4,11 @@ include("script/campaign/templates.js");
 
 const scavs = 7; //Scav player number
 
-
 //Ambush player from scav base - triggered from middle path
 camAreaEvent("scavBaseTrigger", function()
 {
 	var ambushGroup = camMakeGroup(enumArea("eastScavs", scavs, false));
-	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, 
+	camManageGroup(ambushGroup, CAM_ORDER_DEFEND,
 		{ pos: camMakePos("artifactLocation") }
 	);
 });
@@ -18,7 +17,7 @@ camAreaEvent("scavBaseTrigger", function()
 camAreaEvent("ambush1Trigger", function()
 {
 	var ambushGroup = camMakeGroup(enumArea("westScavs", scavs, false));
-	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, 
+	camManageGroup(ambushGroup, CAM_ORDER_DEFEND,
 		{ pos: camMakePos("ambush1") }
 	);
 });
@@ -27,7 +26,7 @@ camAreaEvent("ambush1Trigger", function()
 camAreaEvent("ambush2Trigger", function()
 {
 	var ambushGroup = camMakeGroup(enumArea("northWestScavs", scavs, false));
-	camManageGroup(ambushGroup, CAM_ORDER_ATTACK, 
+	camManageGroup(ambushGroup, CAM_ORDER_ATTACK,
 		{ pos: camMakePos("ambush2") }
 	);
 });

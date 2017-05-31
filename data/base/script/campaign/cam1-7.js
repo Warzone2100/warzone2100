@@ -4,9 +4,22 @@ include("script/campaign/templates.js");
 
 const NP = 1; //New Paradigm player number
 const scavs = 7; //Scav player number
+const NEW_PARADIGM_RESEARCH = [
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade03",
+	"R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
+	"R-Struc-Factory-Cyborg-Upgrade03", "R-Vehicle-Engine03",
+	"R-Vehicle-Metals03", "R-Cyborg-Metals03", "R-Wpn-Cannon-Accuracy01",
+	"R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-Acc01", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy02",
+	"R-Wpn-RocketSlow-Damage03", "R-Struc-RprFac-Upgrade03",
+];
+const SCAVENGER_RES = [
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage02",
+];
+
 var artiGroup;
 var lastPosX, lastPosY;
-
 //Determine if NP has artifact values:
 //0 - Does not have artifact
 //1 - Has artifact; Can be dropped
@@ -34,7 +47,7 @@ camAreaEvent("middleScavFactoryTrigger", function()
 //New Paradigm landing zone
 camAreaEvent("NPWayPointTrigger", function()
 {
-	camManageGroup(artiGroup, CAM_ORDER_DEFEND, 
+	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
 		{ pos: camMakePos("NPTransportPos") }
 	);
 });
@@ -50,7 +63,7 @@ camAreaEvent("artifactCheckNP", function()
 	hackRemoveMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //canyon
 	hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
 
-	camManageGroup(artiGroup, CAM_ORDER_DEFEND, 
+	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
 		{ pos: camMakePos("NPWayPoint") }
 	);
 
@@ -93,7 +106,7 @@ function checkArtifactGroup()
 		{
 			var acrate = addFeature("Crate", lastPosX, lastPosY);
 			addLabel(acrate, "newArtiPos");
-		
+
 			camSetArtifacts({
 				"newArtiPos": { tech: "R-Wpn-Cannon3Mk1" },
 			});
@@ -142,8 +155,10 @@ function enableReinforcements()
 function eventPickup(droid, feature)
 {
 	if(droid.player === CAM_HUMAN_PLAYER && enemyHasArtifact === 0)
+	{
 		hackRemoveMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
-};
+	}
+}
 
 //Mission setup stuff
 function eventStartLevel()
@@ -175,35 +190,9 @@ function eventStartLevel()
 	setPower(2000, NP);
 	setPower(200, scavs);
 
-	//New Paradigm research
-	completeResearch("R-Defense-WallUpgrade03", NP);
-	completeResearch("R-Struc-Materials03", NP);
-	completeResearch("R-Struc-Factory-Upgrade03", NP);
-	completeResearch("R-Struc-Factory-Cyborg-Upgrade03", NP);
-	completeResearch("R-Vehicle-Engine03", NP);
-	completeResearch("R-Vehicle-Metals03", NP);
-	completeResearch("R-Cyborg-Metals03", NP);
-	completeResearch("R-Wpn-Cannon-Accuracy01", NP);
-	completeResearch("R-Wpn-Cannon-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-ROF01", NP);
-	completeResearch("R-Wpn-MG-Damage04", NP);
-	completeResearch("R-Wpn-MG-ROF01", NP);
-	completeResearch("R-Wpn-Mortar-Damage03", NP);
-	completeResearch("R-Wpn-Mortar-Acc01", NP);
-	completeResearch("R-Wpn-Rocket-Accuracy01", NP);
-	completeResearch("R-Wpn-Rocket-Damage03", NP);
-	completeResearch("R-Wpn-Rocket-ROF03", NP);
-	completeResearch("R-Wpn-RocketSlow-Accuracy02", NP);
-	completeResearch("R-Wpn-RocketSlow-Damage03", NP);
-	completeResearch("R-Struc-RprFac-Upgrade03", NP);
+	camCompleteRequiredResearch(NEW_PARADIGM_RESEARCH, NP);
+	camCompleteRequiredResearch(SCAVENGER_RES, scavs);
 
-	//Scav research
-	completeResearch("R-Wpn-MG-Damage03", scavs);
-	completeResearch("R-Wpn-Rocket-Damage02", scavs);
-	completeResearch("R-Wpn-Cannon-Damage02", scavs);
-
-	
 	camSetEnemyBases({
 		"ScavMiddleGroup": {
 			assembly: "middleAssembly",
@@ -254,7 +243,7 @@ function eventStartLevel()
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 	});
-	
+
 	artiGroup = camMakeGroup(enumArea("NPArtiGroup", NP, false));
 	enemyHasArtifact = 0;
 	camManageTrucks(NP);

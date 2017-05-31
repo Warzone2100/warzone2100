@@ -2,6 +2,13 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const NEW_PARADIGM_RES = [
+	"R-Wpn-MG-Damage02", "R-Wpn-Flamer-Damage03", "R-Struc-RprFac-Upgrade03",
+];
+const SCAVENGER_RES = [
+	"R-Wpn-MG-Damage02",
+];
+
 var NPDefenseGroup, NPScoutGroup, NPFactory;
 
 camAreaEvent("RemoveBeacon", function(droid)
@@ -164,11 +171,9 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, 0);
 
 	setPower(50000, 1);
-	completeResearch("R-Wpn-Flamer-Damage03", 1);
-	completeResearch("R-Wpn-MG-Damage02", 1);
-	completeResearch("R-Struc-RprFac-Upgrade03", 1);
 	setPower(200, 7);
-	completeResearch("R-Wpn-MG-Damage02", 7);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, 1);
+	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 	setAlliance(1, 7, true);
 
 	camSetEnemyBases({

@@ -2,21 +2,21 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const CO = 2; //The Collective player number.
-const collectiveRes = [
+const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade05", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-Factory-Cyborg-Upgrade06",
-	"R-Struc-VTOLFactory-Upgrade03", "R-Struc-VTOLPad-Upgrade03", 
-	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals06", 
+	"R-Struc-VTOLFactory-Upgrade03", "R-Struc-VTOLPad-Upgrade03",
+	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals06",
 	"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
-	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", 
+	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
 	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
 	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-	"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03", 
-	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06", 
-	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", 
+	"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 	"R-Wpn-RocketSlow-Damage06", "R-Sys-Sensor-Upgrade01",
 	"R-Wpn-Howitzer-Accuracy02", "R-Wpn-RocketSlow-ROF03",
-	"R-Wpn-Howitzer-Damage03"
+	"R-Wpn-Howitzer-Damage03",
 ];
 
 function vtolPatrol()
@@ -113,8 +113,8 @@ function eventStartLevel()
 		"COHeavyFacL-b2": { tech: "R-Wpn-HvyHowitzer" },
 	});
 
-	setPower(10000, CO);
-	camEnableRes(collectiveRes, CO);
+	setPower(20000, CO); //10000.
+	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
 
 	camSetEnemyBases({
 		"COBase1": {
@@ -179,4 +179,3 @@ function eventStartLevel()
 	queue("cyborgPatrol", 50000);
 	queue("vtolPatrol", 60000);
 }
-

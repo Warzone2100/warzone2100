@@ -1,6 +1,9 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
+
+const PLAYER_RES = [
+	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
+];
 
 // player zero's droid enteres this area
 camAreaEvent("LaunchScavAttack", function(droid)
@@ -8,8 +11,8 @@ camAreaEvent("LaunchScavAttack", function(droid)
 	var spos = getObject("scav1soundpos");
 	playSound("pcv375.ogg", spos.x, spos.y, 0);
 	playSound("pcv456.ogg");
-	hackAddMessage("MB1A_MSG", MISS_MSG, 0, true);
-	hackAddMessage("C1A_OBJ1", PROX_MSG, 0, false);
+	hackAddMessage("MB1A_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	// send scavengers on war path if triggered above
 	camManageGroup(
 		camMakeGroup("ScavAttack1", ENEMIES), CAM_ORDER_ATTACK,
@@ -46,7 +49,7 @@ function doAmbush()
 // player zero's droid enteres this area
 camAreaEvent("ScavAttack1", function(droid)
 {
-	hackRemoveMessage("C1A_OBJ1", PROX_MSG, 0);
+	hackRemoveMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	queue("runAway", 1000);
 	queue("doAmbush", 5000);
 });
@@ -88,37 +91,41 @@ function camEnemyBaseEliminated_scavgroup2()
 	queue("camDetectEnemyBase", 2000, "scavgroup3");
 }
 
+function enableStartingBuildings()
+{
+	const STRUCTS = [
+		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
+		"A0ResearchFacility", "A0LightFactory",
+	];
+
+	for (var i = 0; i < STRUCTS.length; ++i)
+	{
+		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
+	}
+}
+
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1B");
-
+	const PLAYER_POWER = 1300;
+	const SCAVENGER_POWER = 200;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
-	centreView(startpos.x, startpos.y);
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
 
-	setPower(1300);
-	setPower(200, 6);
-	setPower(200, 7);
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1B");
+
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+
+	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
+	setPower(SCAVENGER_POWER, 6);
+	setPower(SCAVENGER_POWER, 7);
 	setAlliance(6, 7, true);
 
-	// allow to build stuff
-	enableStructure("A0CommandCentre", 0);
-	enableStructure("A0PowerGenerator", 0);
-	enableStructure("A0ResourceExtractor", 0);
-	enableStructure("A0ResearchFacility", 0);
-	enableStructure("A0LightFactory", 0);
-
-	// needs to be done this way so doesn't enable rest of tree!
-	makeComponentAvailable("MG1Mk1", me);
-
-	completeResearch("R-Vehicle-Body01", me);
-	completeResearch("R-Sys-Spade1Mk1", me);
-	completeResearch("R-Vehicle-Prop-Wheels", me);
+	enableStartingBuildings();
+	camCompleteRequiredResearch(PLAYER_RES, CAM_HUMAN_PLAYER);
 
 	// give player briefing
-	hackAddMessage("CMB1_MSG", CAMP_MSG, 0, false);
-
+	hackAddMessage("CMB1_MSG", CAMP_MSG, CAM_HUMAN_PLAYER, false);
 	setMissionTime(-1);
 
 	// feed libcampaign.js with data to do the rest

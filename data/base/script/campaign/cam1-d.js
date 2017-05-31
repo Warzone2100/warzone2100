@@ -3,6 +3,17 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NP = 1; //New Paradigm player number
+const NEW_PARADIGM_RES = [
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade03",
+	"R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
+	"R-Struc-Factory-Cyborg-Upgrade03", "R-Vehicle-Engine03",
+	"R-Vehicle-Metals03", "R-Cyborg-Metals03", "R-Wpn-Cannon-Accuracy01",
+	"R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-Acc01", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage03", "R-Struc-RprFac-Upgrade03",
+];
+
 
 camAreaEvent("tankTrapTrig", function()
 {
@@ -20,6 +31,14 @@ camAreaEvent("causeWayTrig", function()
 	cyborgGroupPatrol();
 	sendNPTransporter();
 });
+
+function eventPickup(feature, droid)
+{
+	if(feature.stattype === ARTIFACT)
+	{
+		hackRemoveMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
+	}
+}
 
 function getDroidsForNPLZ()
 {
@@ -41,7 +60,7 @@ function getDroidsForNPLZ()
 function sendNPTransporter()
 {
 	var list = getDroidsForNPLZ();
-	camSendReinforcement(NP, camMakePos("NPTransportPos"), list, 
+	camSendReinforcement(NP, camMakePos("NPTransportPos"), list,
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 0, y: 0 },
 			exit: { x: 0, y: 0 },
@@ -57,13 +76,13 @@ function sendNPTransporter()
 
 function HoverGroupPatrol()
 {
-	camManageGroup(camMakeGroup("hoversAttack"), CAM_ORDER_ATTACK, { 
+	camManageGroup(camMakeGroup("hoversAttack"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("attackPoint2"),
 		fallback: camMakePos("cybRetreatPoint"),
 		morale: 50,
 		regroup: true
 	});
-	camManageGroup(camMakeGroup("hoversDefense"), CAM_ORDER_PATROL, { 
+	camManageGroup(camMakeGroup("hoversDefense"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("hoverDefense1"),
 			camMakePos("hoverDefense2"),
@@ -76,14 +95,14 @@ function HoverGroupPatrol()
 
 function cyborgGroupPatrol()
 {
-	camManageGroup(camMakeGroup("cyborgs1"), CAM_ORDER_PATROL, { 
+	camManageGroup(camMakeGroup("cyborgs1"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("genRetreatPoint"),
 			camMakePos("cybRetreatPoint"),
 			camMakePos("NPTransportPos")
 		]
 	});
-	camManageGroup(camMakeGroup("cyborgs2"), CAM_ORDER_PATROL, { 
+	camManageGroup(camMakeGroup("cyborgs2"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("genRetreatPoint"),
 			camMakePos("cybRetreatPoint"),
@@ -94,7 +113,7 @@ function cyborgGroupPatrol()
 
 function mrlGroupAttack()
 {
-	camManageGroup(camMakeGroup("MRL1"), CAM_ORDER_ATTACK, { 
+	camManageGroup(camMakeGroup("MRL1"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("attackPoint3"),
 		fallback: camMakePos("genRetreatPoint"),
 		morale: 60,
@@ -104,13 +123,13 @@ function mrlGroupAttack()
 
 function sensorGroupAttack()
 {
-	camManageGroup(camMakeGroup("sensor1"), CAM_ORDER_ATTACK, { 
+	camManageGroup(camMakeGroup("sensor1"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("attackPoint3"),
 		fallback: camMakePos("genRetreatPoint"),
 		morale: 50,
 		regroup: true
 	});
-	camManageGroup(camMakeGroup("sensor2"), CAM_ORDER_ATTACK, { 
+	camManageGroup(camMakeGroup("sensor2"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("attackPoint3"),
 		fallback: camMakePos("genRetreatPoint"),
 		morale: 50,
@@ -122,7 +141,7 @@ function IDFGroupAmbush()
 {
 	camManageGroup(camMakeGroup("IDF1"), CAM_ORDER_ATTACK,
 		{ pos: camMakePos("attackPoint3") });
-	camManageGroup(camMakeGroup("IDF2"), CAM_ORDER_ATTACK, 
+	camManageGroup(camMakeGroup("IDF2"), CAM_ORDER_ATTACK,
 		{ pos: camMakePos("attackPoint3") });
 }
 
@@ -169,31 +188,8 @@ function eventStartLevel()
 	});
 
 	setPower(5000, NP);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NP);
 
-	//New Paradigm research
-	completeResearch("R-Defense-WallUpgrade03", NP);
-	completeResearch("R-Struc-Materials03", NP);
-	completeResearch("R-Struc-Factory-Upgrade03", NP);
-	completeResearch("R-Struc-Factory-Cyborg-Upgrade03", NP);
-	completeResearch("R-Vehicle-Engine03", NP);
-	completeResearch("R-Vehicle-Metals03", NP);
-	completeResearch("R-Cyborg-Metals03", NP);
-	completeResearch("R-Wpn-Cannon-Accuracy01", NP);
-	completeResearch("R-Wpn-Cannon-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-ROF01", NP);
-	completeResearch("R-Wpn-MG-Damage04", NP);
-	completeResearch("R-Wpn-MG-ROF01", NP);
-	completeResearch("R-Wpn-Mortar-Damage03", NP);
-	completeResearch("R-Wpn-Mortar-Acc01", NP);
-	completeResearch("R-Wpn-Rocket-Accuracy01", NP);
-	completeResearch("R-Wpn-Rocket-Damage03", NP);
-	completeResearch("R-Wpn-Rocket-ROF03", NP);
-	completeResearch("R-Wpn-RocketSlow-Accuracy03", NP);
-	completeResearch("R-Wpn-RocketSlow-Damage03", NP);
-	completeResearch("R-Struc-RprFac-Upgrade03", NP);
-
-	
 	camSetEnemyBases({
 		"NPSouthEastGroup": {
 			cleanup: "NPSouthEast",
@@ -214,7 +210,7 @@ function eventStartLevel()
 			eliminateSnd: "pcv394.ogg",
 		},
 	});
-	
+
 	with (camTemplates) camSetFactories({
 		"NPFactoryW": {
 			assembly: camMakePos("genRetreatPoint"),

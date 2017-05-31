@@ -101,17 +101,28 @@ function camEnemyBaseEliminated_NPCentralFactory()
 
 function getDroidsForNPLZ(args)
 {
+	var scouts;
+	var heavies;
+
 	with (camTemplates) {
-		var scouts = [ npsens, nppod, nphmg ];
-		var heavies = [ npslc, npsmct, npmor ];
+		scouts = [ npsens, nppod, nphmg ];
+		heavies = [ npslc, npsmct, npmor ];
 	}
+
 	var numScouts = camRand(5) + 1;
-	var list = [];
-	for (var i = 0; i < numScouts; ++i)
-		list[list.length] = scouts[camRand(scouts.length)];
 	var heavy = heavies[camRand(heavies.length)];
+	var list = [];
+
+	for (var i = 0; i < numScouts; ++i)
+	{
+		list[list.length] = scouts[camRand(scouts.length)];
+	}
+
 	for (var i = numScouts; i < 8; ++i)
+	{
 		list[list.length] = heavy;
+	}
+
 	return list;
 }
 
@@ -316,9 +327,7 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(1);
-	
-	replaceTexture("page-7-barbarians-arizona.png",
-		       "page-7-barbarians-kevlar.png");
+	replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-kevlar.png");
 
 	NPDefenseGroup = newGroup();
 	camEnableFactory("ScavSouthFactory");

@@ -4,7 +4,7 @@ include("script/campaign/templates.js");
 var videoIndex;
 const VIDEOS = ["MB2_B_MSG", "MB2_B_MSG2"];
 const CO = 2; //The Collective player number.
-const collectiveRes = [
+const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials04", "R-Struc-Factory-Upgrade04",
 	"R-Struc-Factory-Cyborg-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
 	"R-Struc-VTOLPad-Upgrade01", "R-Vehicle-Engine04", "R-Vehicle-Metals03",
@@ -14,7 +14,7 @@ const collectiveRes = [
 	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage04",
 	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage05",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-	"R-Wpn-RocketSlow-Damage04", "R-Wpn-RocketSlow-ROF03", "R-Sys-Sensor-Upgrade01"
+	"R-Wpn-RocketSlow-Damage04", "R-Wpn-RocketSlow-ROF03", "R-Sys-Sensor-Upgrade01",
 ];
 
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -89,9 +89,9 @@ function ambushPlayer()
 //VTOL units stop coming when the Collective HQ is destroyed.
 function checkCollectiveHQ()
 {
-	if(getObject("COCommandCenter") == null)
+	if(getObject("COCommandCenter") === null)
 	{
-		camEnableVtolSpawn(false);
+		camToggleVtolSpawn();
 	}
 	else
 	{
@@ -126,7 +126,6 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setPower(20000, CO);
-	camEnableRes(collectiveRes, CO);
 	setMissionTime(7200); // 2 hr.
 	videoIndex = 0;
 	eventVideoDone(); //Play video sequences.
@@ -139,7 +138,7 @@ function eventStartLevel()
 	});
 
 	setPower(20000, CO);
-	camEnableRes(collectiveRes, CO);
+	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
 
 	camSetEnemyBases({
 		"CONorthBase": {
@@ -212,7 +211,7 @@ function eventStartLevel()
 			templates: [npcybc, npcybr, npcybf]
 		},
 	});
-	
+
 	camManageTrucks(CO);
 	truckDefense();
 	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
@@ -225,4 +224,3 @@ function eventStartLevel()
 	queue("activateBase1Defenders2", 1200000); //20 min.
 	queue("activateBase1Defenders", 1800000); //30 min.
 }
-

@@ -2,16 +2,31 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const NP = 1; //New Paradigm player number
 const landingZoneList = [ "npPos1", "npPos2", "npPos3", "npPos4", "npPos5" ];
 const landingZoneMessages = [ "C1A-C_LZ1", "C1A-C_LZ2", "C1A-C_LZ3", "C1A-C_LZ4", "C1A-C_LZ5" ];
-const cyborgPatrolList = ["seCybPos1", "seCybPos2", "seCybPos3", "northCybPos1",
-						  "northCybPos2", "northCybPos3", "canyonCybPos1",
-						  "canyonCybPos2", "canyonCybPos3", "hillCybPos1",
-						  "hillCybPos2", "hillCybPos3", "1aCybPos1",
-						  "1aCybPos2", "1aCybPos3" ];
-const NP = 1; //New Paradigm player number
+const cyborgPatrolList = [
+	"seCybPos1", "seCybPos2", "seCybPos3", "northCybPos1",
+	"northCybPos2", "northCybPos3", "canyonCybPos1",
+	"canyonCybPos2", "canyonCybPos3", "hillCybPos1",
+	"hillCybPos2", "hillCybPos3", "1aCybPos1",
+	"1aCybPos2", "1aCybPos3",
+];
+const NEW_PARADIGM_RES = [
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
+	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
+	"R-Struc-Factory-Cyborg-Upgrade02", "R-Vehicle-Engine02",
+	"R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Accuracy01",
+	"R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-Acc01", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF02", "R-Wpn-RocketSlow-Accuracy01",
+	"R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
+];
+
 var index; //Current LZ (SE, N, canyon, south hill, road north of base)
 var switchLZ; //Counter for incrementing index every third landing
+
+
 
 function secondVideo()
 {
@@ -54,20 +69,13 @@ function checkForGroundForces()
 			else
 				droidGroup2[i - 1 - firstAmount] = templates[2];
 		}
-		
+
 		//What part of map to appear at
-		if(index === 0)
-		{
-			var pos = camMakePos("reinforceSouthEast");
-			camSendReinforcement(NP, pos, droidGroup1, CAM_REINFORCE_GROUND);
-			camSendReinforcement(NP, pos, droidGroup2, CAM_REINFORCE_GROUND);
-		}
-		else if(index === 1)
-		{
-			var pos = camMakePos("reinforceNorth");
-			camSendReinforcement(NP, pos, droidGroup1, CAM_REINFORCE_GROUND);
-			camSendReinforcement(NP, pos, droidGroup2, CAM_REINFORCE_GROUND);
-		}
+		var pos = (index === 0) ? camMakePos("reinforceSouthEast") : camMakePos("reinforceNorth");
+		camSendReinforcement(NP, pos, droidGroup1, CAM_REINFORCE_GROUND, {
+			data: {regroup: false, count: -1,},
+		});
+		camSendReinforcement(NP, pos, droidGroup2, CAM_REINFORCE_GROUND);
 	}
 }
 
@@ -100,23 +108,23 @@ function sendTransport()
 		exit: { x: 126, y: 76 },
 		message: landingZoneMessages[index],
 		order: CAM_ORDER_PATROL,
-		data: { 
+		data: {
 			pos:[
-				camMakePos( cyborgPatrolList[(3 * index)] ), 
-				camMakePos( cyborgPatrolList[(3 * index) + 1] ), 
+				camMakePos( cyborgPatrolList[(3 * index)] ),
+				camMakePos( cyborgPatrolList[(3 * index) + 1] ),
 				camMakePos( cyborgPatrolList[(3 * index) + 2] ),
 			],
 			radius: 8,
 			interval: 60000, //60 sec
-			regroup: true, 
-			count: -1, 
+			regroup: true,
+			count: -1,
 		}
 	});
 
 	checkForGroundForces();
 
 	//Switch to a different LZ every third landing
-	if (switchLZ === 3) 
+	if (switchLZ === 3)
 	{
 		index += 1;
 		switchLZ = 0;
@@ -149,28 +157,7 @@ function eventStartLevel()
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, NP);
 	}
 
-	//New Paradigm research
-	completeResearch("R-Defense-WallUpgrade02", NP);
-	completeResearch("R-Struc-Materials02", NP);
-	completeResearch("R-Struc-Factory-Upgrade02", NP);
-	completeResearch("R-Struc-Factory-Cyborg-Upgrade02", NP);
-	completeResearch("R-Vehicle-Engine02", NP);
-	completeResearch("R-Vehicle-Metals02", NP);
-	completeResearch("R-Cyborg-Metals02", NP);
-	completeResearch("R-Wpn-Cannon-Accuracy01", NP);
-	completeResearch("R-Wpn-Cannon-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-Damage03", NP);
-	completeResearch("R-Wpn-Flamer-ROF01", NP);
-	completeResearch("R-Wpn-MG-Damage04", NP);
-	completeResearch("R-Wpn-MG-ROF01", NP);
-	completeResearch("R-Wpn-Mortar-Damage03", NP);
-	completeResearch("R-Wpn-Mortar-Acc01", NP);
-	completeResearch("R-Wpn-Rocket-Accuracy01", NP);
-	completeResearch("R-Wpn-Rocket-Damage03", NP);
-	completeResearch("R-Wpn-Rocket-ROF02", NP);
-	completeResearch("R-Wpn-RocketSlow-Accuracy01", NP);
-	completeResearch("R-Wpn-RocketSlow-Damage02", NP);
-	completeResearch("R-Struc-RprFac-Upgrade03", NP);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NP);
 
 	index = 0;
 	switchLZ = 0;

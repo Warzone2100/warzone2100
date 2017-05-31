@@ -2,6 +2,21 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const NEW_PARADIGM_RES = [
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
+	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
+	"R-Struc-Factory-Cyborg-Upgrade02", "R-Vehicle-Engine02",
+	"R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Damage03",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF01",
+	"R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
+];
+
+const SCAVENGER_RES = [
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02"
+];
+
 function camEnemyBaseDetected_NPBaseGroup()
 {
 	// First wave of trucks
@@ -94,27 +109,9 @@ function eventStartLevel()
 	// Hmm, these tech lists are getting pretty long.
 	// But there isn't much we can do to reduce duplication.
 	setPower(5000, 1);
-	completeResearch("R-Defense-WallUpgrade02", 1);
-	completeResearch("R-Struc-Materials02", 1);
-	completeResearch("R-Struc-Factory-Upgrade02", 1);
-	completeResearch("R-Struc-Factory-Cyborg-Upgrade02", 1);
-	completeResearch("R-Vehicle-Engine02", 1);
-	completeResearch("R-Vehicle-Metals02", 1);
-	completeResearch("R-Cyborg-Metals02", 1);
-	completeResearch("R-Wpn-Cannon-Damage03", 1);
-	completeResearch("R-Wpn-Flamer-Damage03", 1);
-	completeResearch("R-Wpn-Flamer-ROF01", 1);
-	completeResearch("R-Wpn-MG-Damage04", 1);
-	completeResearch("R-Wpn-MG-ROF01", 1);
-	completeResearch("R-Wpn-Mortar-Damage02", 1);
-	completeResearch("R-Wpn-Rocket-Accuracy01", 1);
-	completeResearch("R-Wpn-Rocket-Damage02", 1);
-	completeResearch("R-Wpn-Rocket-ROF01", 1);
-	completeResearch("R-Wpn-RocketSlow-Damage02", 1);
-	completeResearch("R-Struc-RprFac-Upgrade03", 1);
 	setPower(200, 7);
-	completeResearch("R-Wpn-MG-Damage03", 7);
-	completeResearch("R-Wpn-Rocket-Damage02", 7);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, 1);
+	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 	setAlliance(1, 7, true);
 
 	camSetEnemyBases({

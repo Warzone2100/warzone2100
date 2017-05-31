@@ -2,21 +2,21 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const CO = 2; //The Collective player number
-const collectiveRes = [
+const COLLECTIVE_RES = [
 		"R-Defense-WallUpgrade03", "R-Struc-Materials05",
 		"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
-		"R-Struc-VTOLFactory-Upgrade02", "R-Struc-VTOLPad-Upgrade01", 
-		"R-Vehicle-Engine04", "R-Vehicle-Metals04", "R-Cyborg-Metals05", 
+		"R-Struc-VTOLFactory-Upgrade02", "R-Struc-VTOLPad-Upgrade01",
+		"R-Vehicle-Engine04", "R-Vehicle-Metals04", "R-Cyborg-Metals05",
 		"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
-		"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04", 
+		"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 		"R-Wpn-Cannon-ROF02", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
 		"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03", 
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06", 
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", 
+		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
+		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 		"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
 		"R-Wpn-Howitzer-Accuracy01", "R-Wpn-RocketSlow-ROF03",
-		"R-Wpn-Howitzer-Damage01"
+		"R-Wpn-Howitzer-Damage01",
 ];
 
 camAreaEvent("factoryTrigger", function(droid)
@@ -108,7 +108,7 @@ function eventStartLevel()
 	});
 
 	setPower(10000, CO);
-	camEnableRes(collectiveRes, CO);
+	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
 
 	camSetEnemyBases({
 		"COEastBase": {
@@ -116,7 +116,7 @@ function eventStartLevel()
 			detectMsg: "C25_BASE1",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv393.ogg",
-		}
+		},
 	});
 
 	with (camTemplates) camSetFactories({
@@ -146,11 +146,10 @@ function eventStartLevel()
 			templates: [npcybr, npcybc]
 		},
 	});
-	
+
 	hackAddMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("enableReinforcements", 15000);
 	queue("setupCyborgsEast", 180000);//3 min
 	queue("setupCyborgsNorth", 600000);//10 min
 }
-

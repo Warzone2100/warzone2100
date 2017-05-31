@@ -3,21 +3,21 @@ include("script/campaign/templates.js");
 
 const UPLINK = 1; //The satellite uplink player number.
 const CO = 2; //The Collective player number.
-const collectiveRes = [
+const COLLECTIVE_RES = [
 		"R-Defense-WallUpgrade04", "R-Struc-Materials05",
 		"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
-		"R-Struc-VTOLFactory-Upgrade03", "R-Struc-VTOLPad-Upgrade03", 
-		"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05", 
+		"R-Struc-VTOLFactory-Upgrade03", "R-Struc-VTOLPad-Upgrade03",
+		"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 		"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
-		"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", 
+		"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
 		"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
 		"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03", 
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06", 
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", 
+		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
+		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 		"R-Wpn-RocketSlow-Damage06", "R-Sys-Sensor-Upgrade01",
 		"R-Wpn-Howitzer-Accuracy01", "R-Wpn-RocketSlow-ROF03",
-		"R-Wpn-Howitzer-Damage01"
+		"R-Wpn-Howitzer-Damage01",
 ];
 
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -44,9 +44,9 @@ function truckDefense()
 //VTOL units stop coming when the Collective HQ is destroyed.
 function checkCollectiveHQ()
 {
-	if(getObject("COCommandCenter") == null)
+	if(getObject("COCommandCenter") === null)
 	{
-		camEnableVtolSpawn(false);
+		camToggleVtolSpawn();
 	}
 	else
 	{
@@ -64,7 +64,7 @@ function vtolAttack()
 //The project captured the uplink.
 function captureUplink()
 {
-	const GOODSND = "pcv621.ogg"	//"Objective captured"
+	const GOODSND = "pcv621.ogg";	//"Objective captured"
 	playSound(GOODSND);
 	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	//setAlliance(UPLINK, CO, false);
@@ -130,7 +130,7 @@ function eventStartLevel()
 	setAlliance(CO, UPLINK, true);
 
 	setPower(20000, CO);
-	camEnableRes(collectiveRes, CO);
+	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
 
 	camSetEnemyBases({
 		"COSouthEastBase": {
@@ -138,7 +138,7 @@ function eventStartLevel()
 			detectMsg: "C2D_BASE1",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv393.ogg",
-		}
+		},
 	});
 
 	with (camTemplates) camSetFactories({
@@ -157,9 +157,9 @@ function eventStartLevel()
 			regroup: true,
 			repair: 40,
 			templates: [npcybc, npcybf, npcybr, cocybag]
-		}
+		},
 	});
-	
+
 	camManageTrucks(CO);
 	truckDefense();
 	hackAddMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
@@ -171,4 +171,3 @@ function eventStartLevel()
 	queue("enableReinforcements", 20000);
 	queue("vtolAttack", 60000);
 }
-

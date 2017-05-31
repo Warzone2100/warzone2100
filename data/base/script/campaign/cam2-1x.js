@@ -7,7 +7,7 @@ include ("script/campaign/templates.js");
 
 const TRANSPORT_TEAM = 1;
 const CO = 2;
-const collectiveRes = [
+const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Vehicle-Engine04",
 	"R-Vehicle-Metals03", "R-Cyborg-Metals03", "R-Vehicle-Armor-Heat01",
 	"R-Cyborg-Armor-Heat01", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
@@ -16,7 +16,7 @@ const collectiveRes = [
 	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01", "R-Wpn-RocketSlow-Accuracy03",
 	"R-Wpn-RocketSlow-Damage03", "R-Wpn-RocketSlow-ROF03"
 ];
-                       
+
 //trigger event when droid reaches the downed transport.
 camAreaEvent("crashSite", function(droid)
 {
@@ -33,7 +33,7 @@ camAreaEvent("crashSite", function(droid)
 	//set downed transport team colour to be Project Green.
 	changePlayerColour(TRANSPORT_TEAM, 0);
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
-         
+
 	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
 	for(var i = 0; i < downedTransportUnits.length; i++)
 	{
@@ -122,7 +122,7 @@ function updateTransportUnits()
 //likely will never happen as with the WZ Script version.
 function checkCrashedTeam()
 {
-	if(getObject("transporter") == null)
+	if(getObject("transporter") === null)
 	{
 		const BADSND = "pcv622.ogg";
 		playSound(BADSND);
@@ -157,7 +157,7 @@ function eventStartLevel()
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
 
-	camEnableRes(CO, collectiveRes);
+	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
 
 	camSetEnemyBases({
 		"COHardpointBase": {
@@ -177,11 +177,10 @@ function eventStartLevel()
 			detectMsg: "C21_BASE3",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv393.ogg",
-		}
+		},
 	});
 
 	victoryFlag = false;
 	setupCyborgGroups();
 	queue("updateTransportUnits", 20000);
 };
-

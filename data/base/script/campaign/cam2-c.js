@@ -7,22 +7,22 @@ const civilians = 7; //Civilian player number.
 var capturedCivCount; //How many civilians have been captured. 59 for defeat.
 var civilianPosIndex; //Current location of civilian groups.
 var shepardGroup; //Enemy group that protects civilians.
-const collectiveRes = [
+const COLLECTIVE_RES = [
 		"R-Defense-WallUpgrade03", "R-Struc-Materials04",
 		"R-Struc-Factory-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
 		"R-Struc-VTOLPad-Upgrade01", "R-Struc-Factory-Cyborg-Upgrade04",
-		"R-Vehicle-Engine04", "R-Vehicle-Metals03", "R-Cyborg-Metals04", 
-		"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02", 
-		"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04", 
+		"R-Vehicle-Engine04", "R-Vehicle-Metals03", "R-Cyborg-Metals04",
+		"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+		"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 		"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
 		"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03", 
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06", 
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", 
+		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
+		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 		"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
 		"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
-		"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy02", 
-		"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF03"
+		"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy02",
+		"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF03",
 ];
 
 //Play video about civilians being captured by the Collective. Triggered
@@ -57,7 +57,7 @@ function camEnemyBaseEliminated_COAirBase()
 }
 
 
-function enableFactories() 
+function enableFactories()
 {
 	camEnableFactory("COHeavyFac-Leopard");
 	camEnableFactory("COHeavyFac-Upgrade");
@@ -212,7 +212,7 @@ function removeCivsFromEnemyBase()
 	var escaping = "pcv632.ogg"; //"Enemy escaping".
 	var position = getObject("COTransportPos");
 	var civs = enumRange(position.x, position.y, 15, civilians, false);
-	
+
 	if(civs.length > 0)
 	{
 		playSound(escaping);
@@ -235,7 +235,7 @@ function sendCOTransporter()
 	if(!pDroid.length)
 	{
 		playSound(warning);
-		camSendReinforcement(CO, camMakePos("COTransportPos"), list, 
+		camSendReinforcement(CO, camMakePos("COTransportPos"), list,
 			CAM_REINFORCE_TRANSPORT, {
 				entry: { x: 1, y: 80 },
 				exit: { x: 1, y: 80 }
@@ -297,7 +297,7 @@ function eventStartLevel()
 
 	setAlliance(CO, civilians, true);
 	setAlliance(CAM_HUMAN_PLAYER, civilians, true);
-	camEnableRes(collectiveRes, CO);
+	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
 
 	camSetEnemyBases({
 		"COAirBase": {
@@ -370,7 +370,7 @@ function eventStartLevel()
 			templates: [colatv, colagv, commorv]
 		},
 	});
-	
+
 	camManageTrucks(CO);
 	truckDefense();
 	capturedCivCount = 0;
@@ -383,5 +383,3 @@ function eventStartLevel()
 
 	queue("activateGroups", 480000); //8 min
 }
-
-
