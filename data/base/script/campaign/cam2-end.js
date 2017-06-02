@@ -4,7 +4,6 @@ include("script/campaign/templates.js");
 var videoIndex;
 var allowWin;
 const VIDEOS = ["MB2_DII_MSG", "MB2_DII_MSG2", "CAM2_OUT"];
-const CO = 2; //The Collective player number.
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-Factory-Cyborg-Upgrade06",
@@ -27,8 +26,8 @@ const COLLECTIVE_RES = [
 function checkEnemyVtolArea()
 {
 	var pos = {"x": 127, "y": 64};
-	var vtols = enumRange(pos.x, pos.y, 10, CO, false);
-	vtols.filter(function(obj) { return (obj.player === CO) && isVTOL(obj); });
+	var vtols = enumRange(pos.x, pos.y, 10, THE_COLLECTIVE, false);
+	vtols.filter(function(obj) { return (obj.player === THE_COLLECTIVE) && isVTOL(obj); });
 
 	for(var i = 0; i < vtols.length; ++i)
 	{
@@ -114,7 +113,7 @@ function vtolAttack()
 	startPos.push(vtolPosNorthWestLeft);
 
 	var list; with (camTemplates) list = [commorv, colcbv, colagv, comhvat];
-	camSetVtolData(CO, startPos, vtolRemovePos, list, 30000);
+	camSetVtolData(THE_COLLECTIVE, startPos, vtolRemovePos, list, camChangeOnDiff(30000));
 }
 
 //Every 10 minutes.
@@ -124,14 +123,14 @@ function collectiveTransportScouts()
 	var COTransportPos = {"x": 117, "y": 116};
 
 	var list; with (camTemplates) list = [commgt, npcybc, comhltat, npcybr, cocybag];
-	camSendReinforcement(CO, camMakePos(COTransportPos), randomTemplates(list, true),
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(COTransportPos), randomTemplates(list, true),
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 100 },
 			exit: { x: 126, y: 70 }
 		}
 	);
 
-	queue("collectiveTransportScouts", 600000);
+	queue("collectiveTransportScouts", camChangeOnDiff(600000));
 }
 */
 
@@ -141,11 +140,11 @@ function cyborgAttack()
 	var southCyborgAssembly = {"x": 123, "y": 125};
 	var list; with (camTemplates) list = [npcybr, cocybag, npcybc, comhltat, cohhpv];
 
-	camSendReinforcement(CO, camMakePos(southCyborgAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(southCyborgAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
 	});
 
-	queue("cyborgAttack", 300000);
+	queue("cyborgAttack", camChangeOnDiff(300000));
 }
 
 //Every 4 min
@@ -158,10 +157,10 @@ function tankAttack()
 	var pos = [];
 	pos.push(northTankAssembly);
 
-	camSendReinforcement(CO, camMakePos(northTankAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
+	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
 	});
-	queue("tankAttack", 240000);
+	queue("tankAttack", camChangeOnDiff(240000));
 }
 
 function checkIfLaunched()
@@ -203,7 +202,7 @@ function eventStartLevel()
 	camSetupTransporter(tCoords.xStart, tCoords.yStart, tCoords.xOut, tCoords.yOut);
 
 	setMissionTime(1800); // 30 min.
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	videoIndex = 0;
 	allowWin = false;

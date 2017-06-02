@@ -100,47 +100,47 @@ comrotmh: { body: "Body6SUPP", prop: "tracked01", weap: "Mortar3ROTARYMk1" },
 comhvat: { body: "Body6SUPP", prop: "V-Tol", weap: "Rocket-VTOL-HvyA-T" },
 
 // CAM_3_A
-nxtruckh: { body: "Body7ABT", prop: "hover01", weap: "Spade1Mk1" },
-nxmserh: { body: "Body7ABT", prop: "hover01", weap: "Missile-MdArt" },
-nxmreph: { body: "Body7ABT", prop: "hover01", weap: "LightRepair1" },
-nxlsensh: { body: "Body3MBT", prop: "hover01", weap: "SensorTurret1Mk1" },
-nxmrailh: { body: "Body7ABT", prop: "hover01", weap: "RailGun2Mk1" },
-nxmscouh: { body: "Body7ABT", prop: "hover01", weap: "Missile-A-T" },
-nxcyrail: { body: "Cyb-Bod-Rail1", prop: "CyborgLegs", weap: "Cyb-Wpn-Rail1" },
-nxcyscou: { body: "Cyb-Bod-Atmiss", prop: "CyborgLegs", weap: "Cyb-Wpn-Atmiss" },
-nxlneedv: { body: "Body3MBT", prop: "V-Tol", weap: "RailGun1-VTOL" },
-nxlscouv: { body: "Body3MBT", prop: "V-Tol", weap: "Missile-VTOL-AT" },
-nxmtherv: { body: "Body7ABT", prop: "V-Tol", weap: "Bomb4-VTOL-HvyINC" },
+nxtruckh: { body: "Body7ABT", prop: "hover02", weap: "Spade1Mk1" },
+nxmserh: { body: "Body7ABT", prop: "hover02", weap: "Missile-MdArt" },
+nxmreph: { body: "Body7ABT", prop: "hover02", weap: "LightRepair1" },
+nxlsensh: { body: "Body3MBT", prop: "hover02", weap: "SensorTurret1Mk1" },
+nxmrailh: { body: "Body7ABT", prop: "hover02", weap: "RailGun2Mk1" },
+nxmscouh: { body: "Body7ABT", prop: "hover02", weap: "Missile-A-T" },
+nxcyrail: { body: "Cyb-Bod-Rail1", prop: "CyborgLegs02", weap: "Cyb-Wpn-Rail1" },
+nxcyscou: { body: "Cyb-Bod-Atmiss", prop: "CyborgLegs02", weap: "Cyb-Wpn-Atmiss" },
+nxlneedv: { body: "Body3MBT", prop: "V-Tol02", weap: "RailGun1-VTOL" },
+nxlscouv: { body: "Body3MBT", prop: "V-Tol02", weap: "Missile-VTOL-AT" },
+nxmtherv: { body: "Body7ABT", prop: "V-Tol02", weap: "Bomb4-VTOL-HvyINC" },
 prhasgnt: { body: "Body11ABT", prop: "tracked01", weap: "MG4ROTARYMk1" },
 prhhpvt: { body: "Body11ABT", prop: "tracked01", weap: "Cannon4AUTOMk1" },
 prhaacnt: { body: "Body11ABT", prop: "tracked01", weap: "AAGun2Mk1" },
 
 // CAM_3_1
-nxmcommh: { body: "Body7ABT", prop: "hover01", weap: "CommandTurret1" },
-nxcylas: { body: "Cyb-Bod-Las1", prop: "CyborgLegs", weap: "Cyb-Wpn-Laser" },
+nxmcommh: { body: "Body7ABT", prop: "hover02", weap: "CommandTurret1" },
+nxcylas: { body: "Cyb-Bod-Las1", prop: "CyborgLegs02", weap: "Cyb-Wpn-Laser" },
 
 // CAM_3_B
-nxmlinkh: { body: "Body7ABT", prop: "hover01", weap: "SpyTurret01" },
-nxmsamh: { body: "Body7ABT", prop: "hover01", weap: "Missile-HvySAM" },
-nxmheapv: { body: "Body7ABT", prop: "V-Tol", weap: "Bomb2-VTOL-HvHE" },
+nxmlinkh: { body: "Body7ABT", prop: "hover02", weap: "SpyTurret01" },
+nxmsamh: { body: "Body7ABT", prop: "hover02", weap: "Missile-HvySAM" },
+nxmheapv: { body: "Body7ABT", prop: "V-Tol02", weap: "Bomb2-VTOL-HvHE" },
 
 // CAM_3_2
-nxlflash: { body: "Body3MBT", prop: "hover01", weap: "Laser3BEAMMk1" },
+nxlflash: { body: "Body3MBT", prop: "hover02", weap: "Laser3BEAMMk1" },
 
 // CAM_3_A_B
-nxmstrike: { body: "Body7ABT", prop: "hover01", weap: "Sys-VstrikeTurret01" },
+nxmstrike: { body: "Body7ABT", prop: "hover02", weap: "Sys-VstrikeTurret01" },
 
 // CAM_3_A_D_1
-nxmpulseh: { body: "Body7ABT", prop: "hover01", weap: "Laser2PULSEMk1" },
-nxlpulsev: { body: "Body3MBT", prop: "V-Tol", weap: "Laser2PULSE-VTOL" },
+nxmpulseh: { body: "Body7ABT", prop: "hover02", weap: "Laser2PULSEMk1" },
+nxlpulsev: { body: "Body3MBT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
 
 // CAM_3_A_D_2
-nxhgauss: { body: "Body10MBT", prop: "hover01", weap: "RailGun3Mk1" },
-nxhrailv: { body: "Body10MBT", prop: "V-Tol", weap: "RailGun2-VTOL" },
+nxhgauss: { body: "Body10MBT", prop: "hover02", weap: "RailGun3Mk1" },
+nxhrailv: { body: "Body10MBT", prop: "V-Tol02", weap: "RailGun2-VTOL" },
 
 // CAM_3_4
-nxllinkh: { body: "Body3MBT", prop: "hover01", weap: "SpyTurret01" },
-nxmpulsev: { body: "Body7ABT", prop: "V-Tol", weap: "Laser2PULSE-VTOL" },
+nxllinkh: { body: "Body3MBT", prop: "hover02", weap: "SpyTurret01" },
+nxmpulsev: { body: "Body7ABT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
 
 
 ////////////////////////////////////////////////////////////////////////////////

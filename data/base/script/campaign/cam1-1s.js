@@ -42,7 +42,7 @@ function checkForPowerModule()
 	if(cheat || powerModuleBuilt())
 	{
 		camSetupTransporter(11, 52, 1, 32);
-		setMissionTime(900); // 15 min
+		setMissionTime(camChangeOnDiff(900)); // 15 min
 		secondVideo();
 	}
 	else

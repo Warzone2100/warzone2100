@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const CO = 2; //The Collective player number.
 const civilians = 7; //Civilian player number.
 var capturedCivCount; //How many civilians have been captured. 59 for defeat.
 var civilianPosIndex; //Current location of civilian groups.
@@ -29,7 +28,7 @@ const COLLECTIVE_RES = [
 //by destroying the air base or crossing the base3Trigger area.
 function videoTrigger()
 {
-	setMissionTime(getMissionTime() + 1800); //+30 minutes
+	setMissionTime(getMissionTime() + camChangeOnDiff(1800)); //+30 minutes
 	civilianOrders();
 	captureCivilians();
 
@@ -121,14 +120,14 @@ function activateGroups()
 
 function truckDefense()
 {
-	var truck = enumDroid(CO, DROID_CONSTRUCT);
-	if(enumDroid(CO, DROID_CONSTRUCT).length > 0)
+	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
+	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
 		queue("truckDefense", 160000);
 	}
 
 	const LIST = ["WallTower06", "PillBox1", "WallTower03"];
-	camQueueBuilding(CO, LIST[camRand(LIST.length)]);
+	camQueueBuilding(THE_COLLECTIVE, LIST[camRand(LIST.length)]);
 }
 
 //This controls the collective cyborg shepard groups and moving civilians
@@ -174,7 +173,7 @@ function captureCivilians()
 			queue("sendCOTransporter", 6000);
 		}
 		civilianPosIndex = (civilianPosIndex > 6) ? 0 : (civilianPosIndex + 1);
-		queue("captureCivilians", 10000); //10 sec.
+		queue("captureCivilians", camChangeOnDiff(10000)); //10 sec.
 	}
 }
 
@@ -206,8 +205,8 @@ function civilianOrders()
 	queue("civilianOrders", 2000);
 }
 
-//Catured civilans.
-function removeCivsFromEnemyBase()
+//Capture civilans.
+function eventTransporterLanded(transport)
 {
 	var escaping = "pcv632.ogg"; //"Enemy escaping".
 	var position = getObject("COTransportPos");
@@ -216,7 +215,7 @@ function removeCivsFromEnemyBase()
 	if(civs.length > 0)
 	{
 		playSound(escaping);
-		capturedCivCount += civs.length;
+		capturedCivCount += civs.length - 1;
 		for(var i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
@@ -235,13 +234,12 @@ function sendCOTransporter()
 	if(!pDroid.length)
 	{
 		playSound(warning);
-		camSendReinforcement(CO, camMakePos("COTransportPos"), list,
+		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
 			CAM_REINFORCE_TRANSPORT, {
 				entry: { x: 1, y: 80 },
 				exit: { x: 1, y: 80 }
 			}
 		);
-		queue("removeCivsFromEnemyBase", 17000);
 	}
 }
 
@@ -292,12 +290,12 @@ function eventStartLevel()
 		"COVtolFacLeft-Prop":	{ tech: "R-Vehicle-Prop-VTOL" },
 	});
 
-	setPower(100000, CO);
-	setMissionTime(7200); //120 min
+	setPower(camChangeOnDiff(100000, true), THE_COLLECTIVE);
+	setMissionTime(camChangeOnDiff(7200)); //120 min
 
-	setAlliance(CO, civilians, true);
+	setAlliance(THE_COLLECTIVE, civilians, true);
 	setAlliance(CAM_HUMAN_PLAYER, civilians, true);
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COAirBase": {
@@ -324,7 +322,7 @@ function eventStartLevel()
 		"COHeavyFac-Upgrade": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			regroup: false,
 			repair: 40,
 			templates: [comit, cohct, comhpv, cohbbt]
@@ -332,7 +330,7 @@ function eventStartLevel()
 		"COHeavyFac-Leopard": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			regroup: false,
 			repair: 40,
 			templates: [comit, cohct, comhpv, cohbbt]
@@ -340,7 +338,7 @@ function eventStartLevel()
 		"COCyborgFactoryL": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 20000,
+			throttle: camChangeOnDiff(20000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybf, npcybc, npcybr]
@@ -348,7 +346,7 @@ function eventStartLevel()
 		"COCyborgFactoryR": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 20000,
+			throttle: camChangeOnDiff(20000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybf, npcybc, npcybr]
@@ -356,7 +354,7 @@ function eventStartLevel()
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 30000,
+			throttle: camChangeOnDiff(30000),
 			regroup: false,
 			repair: 40,
 			templates: [commorv, colagv, colatv]
@@ -364,14 +362,14 @@ function eventStartLevel()
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 30000,
+			throttle: camChangeOnDiff(30000),
 			regroup: false,
 			repair: 40,
 			templates: [colatv, colagv, commorv]
 		},
 	});
 
-	camManageTrucks(CO);
+	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	capturedCivCount = 0;
 	civilianPosIndex = 0;
@@ -381,5 +379,5 @@ function eventStartLevel()
 	hackAddMessage("MB2_C_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("activateGroups", 480000); //8 min
+	queue("activateGroups", camChangeOnDiff(480000)); //8 min
 }

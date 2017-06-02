@@ -1,7 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const CO = 2; //The Collective player number
 const COLLECTIVE_RES = [
 		"R-Defense-WallUpgrade03", "R-Struc-Materials05",
 		"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
@@ -80,7 +79,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2DS", {
 		area: "RTLZ",
 		message: "C25_LZ",
-		reinforcements: 180 //3 min
+		reinforcements: camChangeOnDiff(180, true) //3 min
 	});
 }
 
@@ -107,15 +106,15 @@ function eventStartLevel()
 		"COCyborgFactoryL": { tech: "R-Wpn-MG4" },
 	});
 
-	setPower(10000, CO);
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	setPower(camChangeOnDiff(10000, true), THE_COLLECTIVE);
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COEastBase": {
 			cleanup: "baseCleanup",
 			detectMsg: "C25_BASE1",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 	});
 
@@ -124,7 +123,7 @@ function eventStartLevel()
 			assembly: camMakePos("mediumFactoryAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			regroup: true,
 			repair: 40,
 			templates: [comct, comatt, comhpv]
@@ -132,7 +131,7 @@ function eventStartLevel()
 		"COCyborgFactoryL": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 25000,
+			throttle: camChangeOnDiff(25000),
 			regroup: true,
 			repair: 40,
 			templates: [cocybag, npcybf, npcybr]
@@ -140,7 +139,7 @@ function eventStartLevel()
 		"COCyborgFactoryR": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 25000,
+			throttle: camChangeOnDiff(25000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybr, npcybc]

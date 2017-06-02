@@ -2860,6 +2860,11 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 		player = engine->globalObject().property("me").toInt32();
 	}
 	RESEARCH *psResearch = getResearch(researchName.toUtf8().constData());
+	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
+	if (IsResearchCompleted(plrRes))
+	{
+		return QScriptValue(false);
+	}
 	SCRIPT_ASSERT(context, psResearch, "No such research %s for player %d", researchName.toUtf8().constData(), player);
 	SCRIPT_ASSERT(context, psResearch->index < asResearch.size(), "Research index out of bounds");
 	if (bMultiMessages && (gameTime > 2))

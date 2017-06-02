@@ -5,7 +5,7 @@ include("script/campaign/templates.js");
 function exposeNorthBase()
 {
 	camDetectEnemyBase("NorthGroup"); // no problem if already detected
-	hackAddMessage("SB1_2_MSG2", MISS_MSG, 0, true); // that's what it was for
+	hackAddMessage("SB1_2_MSG2", MISS_MSG, CAM_HUMAN_PLAYER, true); // that's what it was for
 }
 
 function camArtifactPickup_ScavLab()
@@ -24,7 +24,7 @@ function camArtifactPickup_ScavLab()
 		},
 		groupSize: 5,
 		maxSize: 9,
-		throttle: 10000,
+		throttle: camChangeOnDiff(10000),
 		templates: [ trike, bloke, buggy, bjeep ]
 	});
 	camEnableFactory("WestFactory");
@@ -56,17 +56,17 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
 		area: "RTLZ",
 		message: "C1-2_LZ",
-		reinforcements: 60
+		reinforcements: camChangeOnDiff(60, true)
 	});
 	var startpos = getObject("StartPosition");
 	centreView(startpos.x, startpos.y);
 	var lz = getObject("LandingZone");
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("TransporterEntry");
-	startTransporterEntry(tent.x, tent.y, 0);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("TransporterExit");
-	setTransporterExit(text.x, text.y, 0);
-	setPower(400, 7);
+	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	setPower(camChangeOnDiff(400, true), 7);
 
 	camSetEnemyBases({
 		"NorthGroup": {
@@ -86,7 +86,7 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("SB1_2_MSG", MISS_MSG, 0, false);
+	hackAddMessage("SB1_2_MSG", MISS_MSG, CAM_HUMAN_PLAYER, false);
 	camDetectEnemyBase("ScavLabGroup");
 
 	camSetArtifacts({
@@ -108,7 +108,7 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: 15000,
+			throttle: camChangeOnDiff(15000),
 			group: camMakeGroup("NorthTankGroup"),
 			templates: [ trike, bloke, buggy, bjeep ]
 		},
@@ -125,7 +125,7 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: 10000,
+			throttle: camChangeOnDiff(10000),
 			templates: [ trike, bloke, buggy, bjeep ]
 		},
 	});

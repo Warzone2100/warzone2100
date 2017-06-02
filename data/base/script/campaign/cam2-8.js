@@ -1,7 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const CO = 2; //The Collective player number.
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade05", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-Factory-Cyborg-Upgrade06",
@@ -75,19 +74,18 @@ function enableFactories()
 //Everything must be destroyed.
 function extraVictoryCondition()
 {
-	if(enumStruct(CO).length === 0)
+	if(enumStruct(THE_COLLECTIVE).length === 0)
 	{
 		return true;
 	}
 }
-
 
 function enableReinforcements()
 {
 	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2END", {
 		area: "RTLZ",
-		reinforcements: 180, //3 min
+		reinforcements: camChangeOnDiff(180, true), //3 min
 		callback: "extraVictoryCondition",
 	});
 }
@@ -113,8 +111,8 @@ function eventStartLevel()
 		"COHeavyFacL-b2": { tech: "R-Wpn-HvyHowitzer" },
 	});
 
-	setPower(20000, CO); //10000.
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE); //10000.
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COBase1": {
@@ -142,7 +140,7 @@ function eventStartLevel()
 			assembly: camMakePos("cyborgAssembly-b1"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 90000,
+			throttle: camChangeOnDiff(90000),
 			regroup: true,
 			repair: 40,
 			templates: [cocybag, npcybr, npcybf, npcybc]
@@ -150,7 +148,7 @@ function eventStartLevel()
 		"COHeavyFacL-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 60000,
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [comhpv, cohact]
@@ -159,7 +157,7 @@ function eventStartLevel()
 			assembly: camMakePos("heavyAssembly-b2"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 60000,
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [comrotmh, cohct]
@@ -167,7 +165,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 30000,
+			throttle: camChangeOnDiff(30000),
 			regroup: true,
 			repair: 40,
 			templates: [comhvat]

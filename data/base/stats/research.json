@@ -106,7 +106,7 @@
         "msgName": "RES_V_P_W2",
         "name": "Wheeled Propulsion II",
         "replacedComponents": [
-            "wheeled02:wheeled02"
+            "wheeled01:wheeled02"
         ],
         "requiredResearch": [
             "R-Struc-Factory-Upgrade04"
@@ -117,6 +117,24 @@
             "wheeled02"
         ],
         "statID": "wheeled02"
+    },
+	"R-Cyborg-Legs02": {
+        "iconID": "IMAGE_RES_CYBORGTECH",
+        "id": "R-Cyborg-Legs02",
+		"keyTopic": 1,
+        "name": "Cyborg Propulsion II",
+		"replacedComponents": [
+            "CyborgLegs:CyborgLegs02"
+        ],
+		"requiredResearch": [
+            "R-Struc-Factory-Upgrade04"
+        ],
+        "researchPoints": 7800,
+        "researchPower": 300,
+        "resultComponents": [
+            "CyborgLegs02"
+        ],
+        "statID": "CyborgLegs02"
     },
     "R-Comp-CommandTurret01": {
         "iconID": "IMAGE_RES_COMPUTERTECH",
@@ -187,7 +205,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -218,7 +236,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -251,7 +269,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -282,7 +300,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -311,7 +329,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -341,7 +359,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -372,7 +390,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -401,7 +419,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -431,7 +449,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -602,7 +620,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -633,7 +651,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -666,7 +684,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -697,7 +715,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -726,7 +744,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -756,7 +774,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -787,7 +805,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -816,7 +834,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -846,7 +864,7 @@
                 "class": "Body",
                 "filterParameter": "BodyClass",
                 "filterValue": "Droids",
-                "parameter": "HitPoints",
+                "parameter": "HitPointPct",
                 "value": 30
             }
         ],
@@ -6989,6 +7007,7 @@
     "R-Vehicle-Body07": {
         "iconID": "IMAGE_RES_DROIDTECH",
         "id": "R-Vehicle-Body07",
+		"keyTopic": 1,
         "msgName": "RES_V_B07",
         "name": "Medium Body - Retribution",
         "requiredResearch": [
@@ -7004,6 +7023,7 @@
     "R-Vehicle-Body10": {
         "iconID": "IMAGE_RES_DROIDTECH",
         "id": "R-Vehicle-Body10",
+		"keyTopic": 1,
         "msgName": "RES_V_B10",
         "name": "Heavy Body - Vengeance",
         "requiredResearch": [
@@ -8240,9 +8260,7 @@
         "id": "R-Wpn-Missile2A-T",
         "name": "Scourge Missile",
         "requiredResearch": [
-            "R-Wpn-Missile-Accuracy01",
-            "R-Wpn-Missile-Damage01",
-			"R-Wpn-Rocket07-Tank-Killer"
+            "R-Wpn-Missile-Accuracy01"
         ],
         "researchPoints": 14400,
         "researchPower": 450,

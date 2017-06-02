@@ -21,7 +21,7 @@ camAreaEvent("AttackArea1", function(droid)
 		data: { pos: "playerBase" }, // changes
 		groupSize: 10, // changes
 		maxSize: 10,
-		throttle: 40000,
+		throttle: camChangeOnDiff(40000),
 		templates: [ trike, bloke, buggy, bloke, ] // changes
 	});
 	camEnableFactory("base2factory"); // re-enable
@@ -73,15 +73,15 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(3600);
-	setAlliance(1, 6, true);
-	setAlliance(1, 7, true);
+	setMissionTime(camChangeOnDiff(3600));
+	setAlliance(NEW_PARADIGM, 6, true);
+	setAlliance(NEW_PARADIGM, 7, true);
 	setAlliance(6, 7, true);
 
-	setPower(200, 6);
-	setPower(200, 7);
+	setPower(camChangeOnDiff(200, true), 6);
+	setPower(camChangeOnDiff(200, true), 7);
 
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
@@ -117,7 +117,7 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("MB1B_MSG", MISS_MSG, 0, true);
+	hackAddMessage("MB1B_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	camDetectEnemyBase("base4group"); // power surge detected
 
 	with (camTemplates) camSetFactories({
@@ -127,7 +127,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 6,
 			maxSize: 6,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			templates: [ trike, bloke, buggy, bloke ]
 		},
 		"base2factory": { // the hill harass factory
@@ -140,7 +140,7 @@ function eventStartLevel()
 			group: camMakeGroup("hillForce"), // will override later
 			groupSize: 4, // will override later
 			maxSize: 10,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			templates: [ bloke ] // will override later
 		},
 		"base4factory": {
@@ -149,18 +149,18 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
  			groupSize: 8,
 			maxSize: 8,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			templates: [ trike, bloke, buggy, bjeep ]
 		},
 	});
 	camEnableFactory("base2factory");
 
 	//Timed attacks if player dawdles
-	queue("eventAreaAttackArea2", 360000);
+	queue("eventAreaAttackArea2", camChangeOnDiff(360000));
 
 	// New Paradigm sensor scout
 	var pos = getObject("NPSensorAppear");
-	NPScout = addDroid(1, pos.x, pos.y, "Scout",
+	NPScout = addDroid(NEW_PARADIGM, pos.x, pos.y, "Scout",
 	                   "Body4ABT", "wheeled01", 0, 0, "SensorTurret1Mk1");
 	pos = getObject("NPSensorWatch");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);

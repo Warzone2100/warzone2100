@@ -14,24 +14,24 @@ const NEW_PARADIGM_RES = [
 ];
 
 const SCAVENGER_RES = [
-	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02"
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02",
 ];
 
 function camEnemyBaseDetected_NPBaseGroup()
 {
 	// First wave of trucks
-	camQueueBuilding(1, "GuardTower6", "BuildTower0");
-	camQueueBuilding(1, "PillBox3",    "BuildTower3");
-	camQueueBuilding(1, "PillBox3",    "BuildTower6");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower0");
+	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower3");
+	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower6");
 
 	// Second wave of trucks
-	camQueueBuilding(1, "GuardTower3", "BuildTower1");
-	camQueueBuilding(1, "GuardTower6", "BuildTower2");
-	camQueueBuilding(1, "GuardTower6", "BuildTower4");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower3", "BuildTower1");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower2");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower4");
 
 	// Third wave of trucks
-	camQueueBuilding(1, "GuardTower3", "BuildTower5");
-	camQueueBuilding(1, "GuardTower6", "BuildTower7");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower3", "BuildTower5");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower7");
 
 	// Send tanks
 	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_COMPROMISE, {
@@ -67,7 +67,7 @@ camAreaEvent("MediumNPFactoryTrigger", function()
 camAreaEvent("LandingZoneTrigger", function()
 {
 	var lz = getObject("LandingZone2"); // will override later
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	playSound("pcv456.ogg");
 	// continue after 4 seconds
 	queue("moreLandingZoneTrigger", 4000);
@@ -75,13 +75,13 @@ camAreaEvent("LandingZoneTrigger", function()
 
 function moreLandingZoneTrigger()
 {
-	hackAddMessage("SB1_4_B", MISS_MSG, 0, true);
+	hackAddMessage("SB1_4_B", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	// Give extra 30 minutes.
-	setMissionTime(1800 + getMissionTime());
+	setMissionTime(camChangeOnDiff(1800) + getMissionTime());
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
 		area: "RTLZ",
 		message: "C1-4_LZ",
-		reinforcements: 90 // changes!
+		reinforcements: camChangeOnDiff(90, true) // changes!
 	});
 	// enables all factories
 	camEnableFactory("SouthScavFactory");
@@ -97,22 +97,25 @@ function eventStartLevel()
 		message: "C1-4_LZ",
 		reinforcements: -1 // will override later
 	});
-	var startpos = getObject("StartPosition");
-	centreView(startpos.x, startpos.y);
-	var lz = getObject("LandingZone1"); // will override later
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
-	var tent = getObject("TransporterEntry");
-	startTransporterEntry(tent.x, tent.y, 0);
-	var text = getObject("TransporterExit");
-	setTransporterExit(text.x, text.y, 0);
 
-	// Hmm, these tech lists are getting pretty long.
-	// But there isn't much we can do to reduce duplication.
-	setPower(5000, 1);
-	setPower(200, 7);
-	camCompleteRequiredResearch(NEW_PARADIGM_RES, 1);
-	camCompleteRequiredResearch(SCAVENGER_RES, 7);
-	setAlliance(1, 7, true);
+	const NP_POWER = camChangeOnDiff(5000, true);
+	const SCAV_POWER = camChangeOnDiff(200, true);
+	const SCAVS = 7;
+	var startpos = getObject("StartPosition");
+	var lz = getObject("LandingZone1"); // will override later
+	var tent = getObject("TransporterEntry");
+	var text = getObject("TransporterExit");
+
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+
+	setPower(NP_POWER, NEW_PARADIGM);
+	setPower(SCAV_POWER, SCAVS);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
+	setAlliance(NEW_PARADIGM, SCAVS, true);
 
 	camSetEnemyBases({
 		"SouthScavBaseGroup": {
@@ -137,8 +140,8 @@ function eventStartLevel()
 
 	// These seem to be in a different order this time,
 	// first PROX then MISS, not sure if matters.
-	hackAddMessage("C1-4_OBJ1", PROX_MSG, 0, false);
-	hackAddMessage("SB1_4_MSG", MISS_MSG, 0, false);
+	hackAddMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
+	hackAddMessage("SB1_4_MSG", MISS_MSG, CAM_HUMAN_PLAYER, false);
 
 	camSetArtifacts({
 		"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
@@ -152,7 +155,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,
-			throttle: 35000,
+			throttle: camChangeOnDiff(35000),
 			templates: [ rbuggy, bjeep, buscan, trike ]
 		},
 		"NorthScavFactory": {
@@ -164,7 +167,7 @@ function eventStartLevel()
 			},
 			groupSize: 4,
 			maxSize: 6,
-			throttle: 35000,
+			throttle: camChangeOnDiff(35000),
 			templates: [ firecan, rbjeep, bloke, buggy ]
 		},
 		"HeavyNPFactory": {
@@ -172,7 +175,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,         // this one was exclusively producing trucks
-			throttle: 40000,    // but we simplify this out
+			throttle: camChangeOnDiff(40000),    // but we simplify this out
 			templates: [ npmmct, npsmct, npsmc ]
 		},
 		"MediumNPFactory": {
@@ -180,14 +183,14 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			templates: [ npmrl, nphmg, npsbb, npmor ]
 		},
 	});
 
 	// To be able to use camEnqueueBuilding() later,
 	// and also to rebuild dead trucks.
-	camManageTrucks(1);
+	camManageTrucks(NEW_PARADIGM);
 
 	queue("enableSouthScavFactory", 10000);
 }

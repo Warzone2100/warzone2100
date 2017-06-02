@@ -1,24 +1,28 @@
 include("script/campaign/libcampaign.js");
-
-//"Commander, the only reactor located in this sector"...
-function secondVideo()
-{
-	hackAddMessage("MB2_DI_MSG2", MISS_MSG, CAM_HUMAN_PLAYER, true);
-}
+var index;
 
 function eventVideoDone()
 {
-	camCallOnce("secondVideo");
+	const VIDEOS = ["MB2_DI_MSG", "MB2_DI_MSG2"];
+	if(!camDef(index))
+	{
+		index = 0;
+	}
+
+	if(index < VIDEOS.length)
+	{
+		hackAddMessage(VIDEOS[index], MISS_MSG, CAM_HUMAN_PLAYER, true);
+		index = index + 1;
+	}
 }
+
 
 function eventStartLevel()
 {
-	index = 0;
     camSetupTransporter(87, 100, 1, 100);
     centreView(88, 101);
     setNoGoArea(86, 99, 88, 101, CAM_HUMAN_PLAYER);
-    setMissionTime(4500); // 1 hour, 15 minutes.
-	//"Commander, we are now able to research and build VTOLs"...
-	hackAddMessage("MB2_DI_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+    setMissionTime(camChangeOnDiff(4500)); // 1 hour, 15 minutes.
+	eventVideoDone();
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_2D");
 }

@@ -12,7 +12,7 @@ var lastLZ, lastHeavy;
 // not sure if worth including in libcampaign.
 function countStructuresInBuildArea()
 {
-	var list = enumArea("buildArea", 0, false);
+	var list = enumArea("buildArea", CAM_HUMAN_PLAYER, false);
 	var ret = 0;
 	for (var i = 0; i < list.length; ++i)
 		if (list[i].type === STRUCTURE && list[i].stattype !== WALL
@@ -35,7 +35,7 @@ function extraVictoryCondition()
 		if (countStructuresInBuildArea() >= initialStructures + 4)
 		{
 			baseEstablished = true;
-			hackRemoveMessage("C1CA_OBJ1", PROX_MSG, 0);
+			hackRemoveMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 			return true;
 		}
 	}
@@ -60,7 +60,7 @@ function sendTransport()
 	for (var i = 0; i < landingZoneList.length; ++i)
 	{
 		var lz = landingZoneList[i];
-		if (enumArea(lz, 0, false).length === 0)
+		if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
 			list[list.length] = { idx: i, label: lz };
 	}
 	if (list.length === 0)
@@ -80,13 +80,13 @@ function sendTransport()
 	if (lastHeavy)
 	{
 		lastHeavy = false;
-		queue('sendTransport', 90000);
+		queue('sendTransport', camChangeOnDiff(90000));
 		with (camTemplates) templates = [ nppod, nphmg, npmrl, npsmc ];
 	}
 	else
 	{
 		lastHeavy = true;
-		queue('sendTransport', 180000);
+		queue('sendTransport', camChangeOnDiff(180000));
 		with (camTemplates) templates = [ npsmct, npmor, npsmc, npmmct,
 		                                  npmrl, nphmg, npsbb ];
 	}
@@ -100,7 +100,7 @@ function sendTransport()
 		droids[droids.length] = t;
 	}
 
-	camSendReinforcement(1, pos, droids, CAM_REINFORCE_TRANSPORT, {
+	camSendReinforcement(NEW_PARADIGM, pos, droids, CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 126, y: 36 },
 		exit: { x: 126, y: 76 },
 		message: landingZoneMessages[lastLZ],
@@ -120,7 +120,7 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// make sure player doesn't build on enemy LZs
 	for (var i = 1; i <= 5; ++i)
@@ -131,9 +131,9 @@ function eventStartLevel()
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
 	}
 
-	setMissionTime(1800);
-	hackAddMessage("MB1CA_MSG", MISS_MSG, 0, true);
-	hackAddMessage("C1CA_OBJ1", PROX_MSG, 0, false);
+	setMissionTime(camChangeOnDiff(1800));
+	hackAddMessage("MB1CA_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	// first transport after 10 seconds; will re-queue itself
 	queue('sendTransport', 10000);

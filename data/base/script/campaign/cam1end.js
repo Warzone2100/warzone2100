@@ -1,24 +1,28 @@
 include("script/campaign/libcampaign.js");
 
-const extraVideos = ["CAM1_OUT2", "CAM2_BRIEF"];
 var index;
 
 function eventVideoDone()
 {
-	if(index < extraVideos.length)
+	const VIDEOS = ["CAM1_OUT", "CAM1_OUT2", "CAM2_BRIEF"];
+	if(!camDef(index))
 	{
-		hackAddMessage(extraVideos[index], MISS_MSG, CAM_HUMAN_PLAYER, true);
+		index = 0;
+	}
+
+	if(index < VIDEOS.length)
+	{
+		hackAddMessage(VIDEOS[index], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		index = index + 1;
 	}
 }
 
 function eventStartLevel()
 {
-	index = 0;
 	camSetupTransporter(11, 52, 40, 1);
 	centreView(13, 52);
 	setNoGoArea(10, 51, 12, 53, CAM_HUMAN_PLAYER);
-	setMissionTime(600); //10 min
-	hackAddMessage("CAM1_OUT", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	setMissionTime(camChangeOnDiff(600)); //10 min
+	eventVideoDone();
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "CAM_2A");
 }

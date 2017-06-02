@@ -1,7 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const CO = 2; //The Collective player number.
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade05", "R-Struc-Materials05",
 	"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
@@ -85,7 +84,7 @@ function enableReinforcements()
 		callback: "checkEnemyBases",
 		area: "RTLZ",
 		message: "C27_LZ",
-		reinforcements: 180 //3 min
+		reinforcements: camChangeOnDiff(180, true) //3 min
 	});
 }
 
@@ -111,33 +110,33 @@ function eventStartLevel()
 		"COHeavyFac-Arti-b2": { tech: "R-Wpn-Cannon5" },
 	});
 
-	setPower(20000, CO); //10000.
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE); //10000.
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COBase1": {
 			cleanup: "COBase1Cleanup",
 			detectMsg: "C27_BASE1",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COBase2": {
 			cleanup: "COBase2Cleanup",
 			detectMsg: "C27_BASE2",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COBase3": {
 			cleanup: "COBase3Cleanup",
 			detectMsg: "C27_BASE3",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COBase4": {
 			cleanup: "COBase4Cleanup",
 			detectMsg: "C27_BASE4",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 	});
 
@@ -146,7 +145,7 @@ function eventStartLevel()
 			assembly: camMakePos("base2HeavyAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 60000,
+			throttle: camChangeOnDiff(60000),
 			regroup: true,
 			repair: 40,
 			templates: [comagt, cohact, cohhpv, comtath]
@@ -155,7 +154,7 @@ function eventStartLevel()
 			assembly: camMakePos("base2CybAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 120000,
+			throttle: camChangeOnDiff(120000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybc, cocybag]
@@ -163,7 +162,7 @@ function eventStartLevel()
 		"COCyborgFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 120000,
+			throttle: camChangeOnDiff(120000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybf, npcybr]
@@ -171,7 +170,7 @@ function eventStartLevel()
 		"COHeavyFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 30000,
+			throttle: camChangeOnDiff(30000),
 			regroup: true,
 			repair: 40,
 			templates: [comrotmh, comhltat, cohct]
@@ -179,7 +178,7 @@ function eventStartLevel()
 		"COCyborgFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 120000,
+			throttle: camChangeOnDiff(120000),
 			regroup: true,
 			repair: 40,
 			templates: [cocybag, npcybc, npcybr]
@@ -188,7 +187,7 @@ function eventStartLevel()
 			assembly: camMakePos("base4VTOLAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 120000,
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [colagv, commorv]
@@ -207,5 +206,5 @@ function eventStartLevel()
 
 
 	queue("enableReinforcements", 15000);
-	queue("baseFourGroupAttack", 80000);
+	queue("baseFourGroupAttack", 100000);
 }

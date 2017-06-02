@@ -2,7 +2,6 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const UPLINK = 1; //The satellite uplink player number.
-const CO = 2; //The Collective player number.
 const COLLECTIVE_RES = [
 		"R-Defense-WallUpgrade04", "R-Struc-Materials05",
 		"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
@@ -22,7 +21,7 @@ const COLLECTIVE_RES = [
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if((droid.player === CO) && (isVTOL(droid)))
+	if((droid.player === THE_COLLECTIVE) && (isVTOL(droid)))
 	{
 		camSafeRemoveObject(droid, false);
 	}
@@ -33,12 +32,12 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	var truck = enumDroid(CO, DROID_CONSTRUCT);
-	if(enumDroid(CO, DROID_CONSTRUCT).length > 0)
+	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
+	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	var list = ["AASite-QuadBof", "WallTower04", "GuardTower-RotMg", "WallTower-Projector"];
-	camQueueBuilding(CO, list[camRand(list.length)], camMakePos("uplinkPos"));
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("uplinkPos"));
 }
 
 //VTOL units stop coming when the Collective HQ is destroyed.
@@ -58,7 +57,7 @@ function checkCollectiveHQ()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colatv];
-	camSetVtolData(CO, "vtolAppearPos", "vtolRemovePos", list, 120000);
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, 120000);
 }
 
 //The project captured the uplink.
@@ -67,7 +66,7 @@ function captureUplink()
 	const GOODSND = "pcv621.ogg";	//"Objective captured"
 	playSound(GOODSND);
 	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	//setAlliance(UPLINK, CO, false);
+	//setAlliance(UPLINK, THE_COLLECTIVE, false);
 }
 
 //Extra win condition callback. Failure code works, however the uplink is far too
@@ -83,7 +82,7 @@ function checkNASDACentral()
 	}
 	*/
 
-	var enemyStuff = enumArea("uplinkClearArea", CO, false);
+	var enemyStuff = enumArea("uplinkClearArea", THE_COLLECTIVE, false);
 	if(enemyStuff.length === 0)
 	{
 		camCallOnce("captureUplink");
@@ -97,7 +96,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
 		area: "RTLZ",
 		message: "C2D_LZ",
-		reinforcements: 300, //5 min
+		reinforcements: camChangeOnDiff(300, true), //5 min
 		callback: "checkNASDACentral"
 	});
 }
@@ -127,17 +126,17 @@ function eventStartLevel()
 	});
 
 	setAlliance(CAM_HUMAN_PLAYER, UPLINK, true);
-	setAlliance(CO, UPLINK, true);
+	setAlliance(THE_COLLECTIVE, UPLINK, true);
 
-	setPower(20000, CO);
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE);
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COSouthEastBase": {
 			cleanup: "baseCleanup",
 			detectMsg: "C2D_BASE1",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 	});
 
@@ -145,7 +144,7 @@ function eventStartLevel()
 		"COHeavyFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 50000,
+			throttle: camChangeOnDiff(50000),
 			regroup: false,
 			repair: 40,
 			templates: [cohhpv, comhltat, cohct]
@@ -153,14 +152,14 @@ function eventStartLevel()
 		"COSouthCyborgFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 20000,
+			throttle: camChangeOnDiff(20000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybc, npcybf, npcybr, cocybag]
 		},
 	});
 
-	camManageTrucks(CO);
+	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	hackAddMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 

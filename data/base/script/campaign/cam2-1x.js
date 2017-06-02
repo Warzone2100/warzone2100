@@ -1,4 +1,4 @@
-/* 
+/*
 SUB_2_1 Script
 Authors: Cristian Odorico (Alpha93) / KJeff01
  */
@@ -6,7 +6,6 @@ include ("script/campaign/libcampaign.js");
 include ("script/campaign/templates.js");
 
 const TRANSPORT_TEAM = 1;
-const CO = 2;
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Vehicle-Engine04",
 	"R-Vehicle-Metals03", "R-Cyborg-Metals03", "R-Vehicle-Armor-Heat01",
@@ -157,26 +156,26 @@ function eventStartLevel()
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
 
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COHardpointBase": {
 			cleanup: "hardpointBaseCleanup",
 			detectMsg: "C21_BASE1",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COBombardBase": {
 			cleanup: "bombardBaseCleanup",
 			detectMsg: "C21_BASE2",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COBunkerBase": {
 			cleanup: "bunkerBaseCleanup",
 			detectMsg: "C21_BASE3",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 	});
 

@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const NP = 1; //New Paradigm player number
 const landingZoneList = [ "npPos1", "npPos2", "npPos3", "npPos4", "npPos5" ];
 const landingZoneMessages = [ "C1A-C_LZ1", "C1A-C_LZ2", "C1A-C_LZ3", "C1A-C_LZ4", "C1A-C_LZ5" ];
 const cyborgPatrolList = [
@@ -22,20 +21,23 @@ const NEW_PARADIGM_RES = [
 	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF02", "R-Wpn-RocketSlow-Accuracy01",
 	"R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
 ];
-
 var index; //Current LZ (SE, N, canyon, south hill, road north of base)
 var switchLZ; //Counter for incrementing index every third landing
-
-
-
-function secondVideo()
-{
-	hackAddMessage("MB1A-C_MSG2", MISS_MSG, CAM_HUMAN_PLAYER, true);
-}
+var videoIndex;
 
 function eventVideoDone()
 {
-	camCallOnce("secondVideo");
+	const VIDEOS = ["MB1A-C_MSG", "MB1A-C_MSG2"];
+	if(!camDef(videoIndex))
+	{
+		videoIndex = 0;
+	}
+
+	if(videoIndex < VIDEOS.length)
+	{
+		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
+		videoIndex = videoIndex + 1;
+	}
 }
 
 //Check if all enemies are gone and win after 15 transports
@@ -72,10 +74,10 @@ function checkForGroundForces()
 
 		//What part of map to appear at
 		var pos = (index === 0) ? camMakePos("reinforceSouthEast") : camMakePos("reinforceNorth");
-		camSendReinforcement(NP, pos, droidGroup1, CAM_REINFORCE_GROUND, {
+		camSendReinforcement(NEW_PARADIGM, pos, droidGroup1, CAM_REINFORCE_GROUND, {
 			data: {regroup: false, count: -1,},
 		});
-		camSendReinforcement(NP, pos, droidGroup2, CAM_REINFORCE_GROUND);
+		camSendReinforcement(NEW_PARADIGM, pos, droidGroup2, CAM_REINFORCE_GROUND);
 	}
 }
 
@@ -103,7 +105,7 @@ function sendTransport()
 	}
 
 
-	camSendReinforcement(NP, position, droids, CAM_REINFORCE_TRANSPORT, {
+	camSendReinforcement(NEW_PARADIGM, position, droids, CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 126, y: 36 },
 		exit: { x: 126, y: 76 },
 		message: landingZoneMessages[index],
@@ -133,7 +135,7 @@ function sendTransport()
 	if(index === 5)
 		return;
 	else
-		queue("sendTransport", 60000); //1 min
+		queue("sendTransport", camChangeOnDiff(60000)); //1 min
 }
 
 function eventStartLevel()
@@ -147,21 +149,21 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(3600); //1 hour
-	//setPower(500, NP);
+	setMissionTime(camChangeOnDiff(3600)); //1 hour
+	//setPower(500, NEW_PARADIGM);
 
 	// make sure player doesn't build on enemy LZs
 	for (var i = 6; i <= 10; ++i)
 	{
 		var ph = getObject("NPLZ" + i);
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, NP);
+		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, NEW_PARADIGM);
 	}
 
-	camCompleteRequiredResearch(NEW_PARADIGM_RES, NP);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
+	eventVideoDone();
 
 	index = 0;
 	switchLZ = 0;
 
-	hackAddMessage("MB1A-C_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	queue("sendTransport", 10000);
 }

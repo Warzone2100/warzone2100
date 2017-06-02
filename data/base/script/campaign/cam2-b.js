@@ -2,8 +2,6 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var videoIndex;
-const VIDEOS = ["MB2_B_MSG", "MB2_B_MSG2"];
-const CO = 2; //The Collective player number.
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials04", "R-Struc-Factory-Upgrade04",
 	"R-Struc-Factory-Cyborg-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
@@ -19,7 +17,7 @@ const COLLECTIVE_RES = [
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if((droid.player === CO) && (isVTOL(droid)))
+	if((droid.player === THE_COLLECTIVE) && (isVTOL(droid)))
 	{
 		camSafeRemoveObject(droid, false);
 	}
@@ -42,6 +40,12 @@ function camEnemyBaseDetected_COMiddleBase()
 
 function eventVideoDone()
 {
+	const VIDEOS = ["MB2_B_MSG", "MB2_B_MSG2"];
+	if(!camDef(videoIndex))
+	{
+		videoIndex = 0;
+	}
+
 	if(videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
@@ -102,18 +106,18 @@ function checkCollectiveHQ()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
-	camSetVtolData(CO, "vtolAppearPos", "vtolRemove", list, 600000); //10 min
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(600000)); //10 min
 	checkCollectiveHQ();
 }
 
 function truckDefense()
 {
-	var truck = enumDroid(CO, DROID_CONSTRUCT);
-	if(enumDroid(CO, DROID_CONSTRUCT).length > 0)
+	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
+	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-Tower-MdCan", "CO-Tower-LtATRkt"];
-	camQueueBuilding(CO, list[camRand(list.length)]);
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
 function eventStartLevel()
@@ -125,9 +129,8 @@ function eventStartLevel()
 	var lz = getObject("landingZone"); //player lz
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setPower(20000, CO);
-	setMissionTime(7200); // 2 hr.
-	videoIndex = 0;
+	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE);
+	setMissionTime(camChangeOnDiff(7200)); // 2 hr.
 	eventVideoDone(); //Play video sequences.
 
 	camSetArtifacts({
@@ -137,27 +140,27 @@ function eventStartLevel()
 		"COCommandCenter": { tech: "R-Vehicle-Body06" }, //Panther
 	});
 
-	setPower(20000, CO);
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE);
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"CONorthBase": {
 			cleanup: "base1Cleanup",
 			detectMsg: "C2B_BASE1",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COCentralBase": {
 			cleanup: "base2Cleanup",
 			detectMsg: "C2B_BASE2",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COMiddleBase": {
 			cleanup: "base4Cleanup",
 			detectMsg: "C2B_BASE4",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 	});
 
@@ -165,7 +168,7 @@ function eventStartLevel()
 		"COHeavyFacL-b1": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 80000,
+			throttle: camChangeOnDiff(80000),
 			regroup: false,
 			repair: 40,
 			templates: [comatt, cohct, comct]
@@ -173,7 +176,7 @@ function eventStartLevel()
 		"COHeavyFacR-b1": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 80000,
+			throttle: camChangeOnDiff(80000),
 			regroup: false,
 			repair: 40,
 			templates: [comatt, cohct, comct]
@@ -181,7 +184,7 @@ function eventStartLevel()
 		"COCybFacL-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 30000,
+			throttle: camChangeOnDiff(30000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybr]
@@ -189,7 +192,7 @@ function eventStartLevel()
 		"COCybFacR-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 30000,
+			throttle: camChangeOnDiff(30000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybr, npcybf, npcybm]
@@ -197,7 +200,7 @@ function eventStartLevel()
 		"COHeavyFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 50000,
+			throttle: camChangeOnDiff(50000),
 			regroup: false,
 			repair: 40,
 			templates: [comatt, comit]
@@ -205,14 +208,14 @@ function eventStartLevel()
 		"COCybFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 50000,
+			throttle: camChangeOnDiff(50000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybr, npcybf]
 		},
 	});
 
-	camManageTrucks(CO);
+	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	camEnableFactory("COHeavyFac-b4");
@@ -221,6 +224,6 @@ function eventStartLevel()
 	ambushPlayer();
 
 	queue("vtolAttack", 60000); //1 min
-	queue("activateBase1Defenders2", 1200000); //20 min.
-	queue("activateBase1Defenders", 1800000); //30 min.
+	queue("activateBase1Defenders2", camChangeOnDiff(1200000)); //20 min.
+	queue("activateBase1Defenders", camChangeOnDiff(1800000)); //30 min.
 }

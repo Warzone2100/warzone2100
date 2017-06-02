@@ -3,8 +3,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var NPDefenseGroup;
-const NP = 1; //New Paradigm player number
-const scavs = 7; // Scav player number
+const SCAVS = 7; // Scav player number
 
 const NEW_PARADIGM_RES = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
@@ -21,7 +20,7 @@ const SCAVENGER_RES = [
 ];
 
 
-//Get some droids for the NP transport
+//Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
 	var scouts;
@@ -65,13 +64,13 @@ camAreaEvent("SouthEastScavFactoryTrigger", function()
 	camEnableFactory("ScavSouthEastFactory");
 });
 
-//Land NP transport in the LZ area (protected by four hardpoints in the NP base)
+//Land New Paradigm transport in the LZ area (protected by four hardpoints in the NEW_PARADIGM base)
 camAreaEvent("NPLZTrigger", function()
 {
 	playSound("pcv395.ogg"); //enemy transport detected warning sound
 
 	var list = getDroidsForNPLZ();
-	camSendReinforcement(NP, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
+	camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 5, y: 55 },
 		exit: { x: 7, y: 57 },
 		order: CAM_ORDER_ATTACK,
@@ -82,7 +81,7 @@ camAreaEvent("NPLZTrigger", function()
 //What to do if the New Paradigm builds some droid
 function eventDroidBuilt(droid, structure)
 {
-	if (!camDef(structure) || !structure || structure.player !== NP
+	if (!camDef(structure) || !structure || structure.player !== NEW_PARADIGM
                            || droid.droidType === DROID_CONSTRUCT)
 		return;
 	if (groupSize(NPDefenseGroup) < 4)
@@ -96,7 +95,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
 		area: "RTLZ",
 		message: "C1-5_LZ",
-		reinforcements: 180 //3 min
+		reinforcements: camChangeOnDiff(180, true) //3 min
 	});
 }
 
@@ -107,8 +106,8 @@ function enableNPFactories()
 	camEnableFactory("NPRightFactory");
 }
 
-//Destroying the NP base will activate all scav factories
-//And make any unfound scavs attack the player
+//Destroying the NEW_PARADIGM base will activate all scav factories
+//And make any unfound SCAVS attack the player
 function camEnemyBaseEliminated_NPBaseGroup()
 {
 	//Enable all scav factories
@@ -116,9 +115,9 @@ function camEnemyBaseEliminated_NPBaseGroup()
 	camEnableFactory("ScavSouthWestFactory");
 	camEnableFactory("ScavSouthEastFactory");
 
-	//All scavs on map attack
+	//All SCAVS on map attack
 	camManageGroup(
-		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, scavs, false)),
+		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, SCAVS, false)),
 		CAM_ORDER_ATTACK
 	);
 }
@@ -135,7 +134,7 @@ function eventStartLevel()
 	var lz = getObject("LandingZone1"); //player lz
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var lz2 = getObject("LandingZone2"); //new paradigm lz
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NP);
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEW_PARADIGM);
 	var tent = getObject("TransporterEntry");
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("TransporterExit");
@@ -146,13 +145,13 @@ function eventStartLevel()
 	cameraTrack(transporter[0]);
 
 	//Make sure the New Paradigm and Scavs are allies
-	setAlliance(NP, scavs, true);
+	setAlliance(NEW_PARADIGM, SCAVS, true);
 
-	setPower(2000, NP);
-	setPower(500, scavs);
+	setPower(camChangeOnDiff(2000, true), NEW_PARADIGM);
+	setPower(camChangeOnDiff(500, true), SCAVS);
 
-	camCompleteRequiredResearch(NEW_PARADIGM_RES, NP);
-	camCompleteRequiredResearch(SCAVENGER_RES, scavs);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
 
 
 	camSetEnemyBases({
@@ -179,7 +178,7 @@ function eventStartLevel()
 			detectMsg: "C1-5_OBJ1",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
-			player: NP
+			player: NEW_PARADIGM
 		},
 	});
 
@@ -190,34 +189,33 @@ function eventStartLevel()
 		"NPResearchFacility": { tech: "R-Comp-SynapticLink" },
 	});
 
-	//The NP factories had unused assembly points (off map also)
 	with (camTemplates) camSetFactories({
 		"NPLeftFactory": {
 			//assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 20000,
+			throttle: camChangeOnDiff(20000),
 			templates: [ npmrl, npmmct, npsbb, nphmg ]
 		},
 		"NPRightFactory": {
 			//assembly: "NPRightAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 20000,
+			throttle: camChangeOnDiff(20000),
 			templates: [ npmor, npsens, npsbb, nphmg ]
 		},
 		"NPCyborgFactory": {
 			//assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 10000,
+			throttle: camChangeOnDiff(10000),
 			templates: [ npcybc, npcybf, npcybm ]
 		},
 		"ScavSouthWestFactory": {
 			assembly: "ScavSouthWestAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 4000,
+			throttle: camChangeOnDiff(4000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -226,7 +224,7 @@ function eventStartLevel()
 			assembly: "ScavSouthEastAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 4000,
+			throttle: camChangeOnDiff(4000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -235,7 +233,7 @@ function eventStartLevel()
 			assembly: "ScavNorthAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 4000,
+			throttle: camChangeOnDiff(4000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]

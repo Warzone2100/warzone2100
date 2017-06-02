@@ -23,7 +23,7 @@ camAreaEvent("LaunchScavAttack", function(droid)
 		}
 	);
 	// activate mission timer, unlike the original campaign.
-	setMissionTime(3600);
+	setMissionTime(camChangeOnDiff(3600));
 });
 
 function runAway()
@@ -106,8 +106,8 @@ function enableStartingBuildings()
 
 function eventStartLevel()
 {
-	const PLAYER_POWER = 1300;
-	const SCAVENGER_POWER = 200;
+	const PLAYER_POWER = camChangeOnDiff(1300, true);
+	const SCAVENGER_POWER = camChangeOnDiff(200, true);
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
@@ -170,7 +170,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 3,
 			maxSize: 3,
-			throttle: 20000,
+			throttle: camChangeOnDiff(20000),
 			templates: [ trike, bloke ]
 		},
 		"base2factory1": {
@@ -179,7 +179,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: 16000,
+			throttle: camChangeOnDiff(16000),
 			templates: [ bloke, buggy, bloke ]
 		},
 		"base2factory2": {
@@ -188,7 +188,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: 13000,
+			throttle: camChangeOnDiff(13000),
 			templates: [ bjeep, bloke, trike, bloke ]
 		},
 	});

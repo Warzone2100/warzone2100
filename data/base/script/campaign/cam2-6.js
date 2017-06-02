@@ -1,7 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const CO = 2; //The Collective player number.
 const COLLECTIVE_RES = [
 		"R-Defense-WallUpgrade05", "R-Struc-Materials05",
 		"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
@@ -92,12 +91,12 @@ function mainBaseAttackGroup()
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	var truck = enumDroid(CO, DROID_CONSTRUCT);
-	if(enumDroid(CO, DROID_CONSTRUCT).length > 0)
+	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
+	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	var list = ["Emplacement-MortarPit02", "WallTower04", "CO-Tower-LtATRkt", "Sys-CB-Tower01"];
-	camQueueBuilding(CO, list[camRand(list.length)], camMakePos("heavyFacAssembly"));
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("heavyFacAssembly"));
 }
 
 //After 3 minutes.
@@ -115,7 +114,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_7S", {
 		area: "RTLZ",
 		message: "C26_LZ",
-		reinforcements: 180 //3 min
+		reinforcements: camChangeOnDiff(180, true) //3 min
 	});
 }
 
@@ -142,27 +141,27 @@ function eventStartLevel()
 		"uplink": { tech: "R-Sys-VTOLCBS-Tower01" },
 	});
 
-	setPower(10000, CO);
-	camCompleteRequiredResearch(COLLECTIVE_RES, CO);
+	setPower(camChangeOnDiff(10000, true), THE_COLLECTIVE);
+	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COUplinkBase": {
 			cleanup: "uplinkBaseCleanup",
 			detectMsg: "C26_BASE1",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COMainBase": {
 			cleanup: "mainBaseCleanup",
 			detectMsg: "C26_BASE2",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 		"COMediumBase": {
 			cleanup: "mediumBaseCleanup",
 			detectMsg: "C26_BASE3",
 			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv393.ogg",
+			eliminateSnd: "pcv394.ogg",
 		},
 	});
 
@@ -170,7 +169,7 @@ function eventStartLevel()
 		"COCyborgFactory-Arti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 60000,
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybf, cocybag, npcybr]
@@ -179,7 +178,7 @@ function eventStartLevel()
 			assembly: camMakePos("base1CybAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: 50000,
+			throttle: camChangeOnDiff(50000),
 			regroup: false,
 			repair: 40,
 			templates: [cocybag, npcybr]
@@ -187,7 +186,7 @@ function eventStartLevel()
 		"COCyborgFactory-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 70000,
+			throttle: camChangeOnDiff(70000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybf]
@@ -195,7 +194,7 @@ function eventStartLevel()
 		"COHeavyFactory-b2L": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 90000,
+			throttle: camChangeOnDiff(90000),
 			regroup: false,
 			repair: 40,
 			templates: [cohact, comhpv, comrotm]
@@ -203,7 +202,7 @@ function eventStartLevel()
 		"COHeavyFactory-b2R": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: 80000,
+			throttle: camChangeOnDiff(80000),
 			regroup: false,
 			repair: 40,
 			templates: [comrotm, comhltat, cohact, comsensh]
@@ -211,19 +210,19 @@ function eventStartLevel()
 		"COMediumFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			regroup: false,
 			repair: 40,
 			templates: [comhpv, comagt, comrotm]
 		},
 	});
 
-	camManageTrucks(CO);
+	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("enableReinforcements", 20000);
-	queue("northWestAttack", 60000);
-	queue("mainBaseAttackGroup", 120000);
+	queue("northWestAttack", 120000);
+	queue("mainBaseAttackGroup", 180000);
 	queue("enableTimeBasedFactories", 180000);
 }

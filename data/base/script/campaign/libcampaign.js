@@ -85,6 +85,9 @@ namespace("cam_");
 ////////////////////////////////////////////////////////////////////////////////
 
 const CAM_HUMAN_PLAYER = 0;
+const NEW_PARADIGM = 1;
+const THE_COLLECTIVE = 2;
+const NEXUS = 3;
 const CAM_MAX_PLAYERS = 8;
 const CAM_TICKS_PER_FRAME = 100;
 
@@ -227,6 +230,39 @@ function camRemoveDuplicates(array)
 	});
 }
 
+//;; \subsection{camChangeOnDiff(numeric value, invert)}
+//;; Change a numeric value based on campaign difficulty. If invert is defined
+//;; then the opposite effect will occur on that value.
+function camChangeOnDiff(num, invert)
+{
+	var modifier = 0;
+	if(!camDef(invert))
+	{
+		invert = false;
+	}
+
+	switch(difficulty)
+	{
+		case EASY:
+			modifier = (invert === false) ? 1.25 : 0.70;
+			break;
+		case MEDIUM:
+			modifier = 1.00;
+			break;
+		case HARD:
+			modifier = (invert === false) ? 0.75 : 1.75;
+			break;
+		case INSANE:
+			modifier = (invert === false) ? 0.50 : 2.50;
+			break
+		default:
+			modifier = 1.00;
+			break;
+	}
+
+	return Math.floor(num * modifier);
+}
+
 //;; \subsection{camMakeGroup(what, filter)}
 //;; Make a new group out of array of droids, single game object,
 //;; or label string, with fuzzy auto-detection of argument type.
@@ -329,7 +365,7 @@ function camCompleteRequiredResearch(items, player)
 			continue;
 		}
 
-		resRes = camRemoveDuplicates(reqRes);
+		reqRes = camRemoveDuplicates(reqRes);
 		for(var s = 0; s < reqRes.length; ++s)
 		{
 			dump("	Found: " + reqRes[s].name);
@@ -2011,8 +2047,7 @@ function __camContinueProduction(structure)
 
 //;; \subsection{camNextLevel(next level)}
 //;; A wrapper around \texttt{loadLevel()}. Remembers to give bonus power
-//;; for completing the mission faster - 25 percent more than what you could have
-//;; received by milking this time limit down.
+//;; for completing the mission faster.
 function camNextLevel(nextLevel)
 {
 	if (__camNeedBonusTime)
@@ -2020,8 +2055,14 @@ function camNextLevel(nextLevel)
 		var bonusTime = getMissionTime();
 		if (bonusTime > 0)
 		{
+			var bonus = 125;
+			if (difficulty === HARD)
+				bonus = 115;
+			else if (difficulty === INSANE)
+				bonus = 105;
+
 			camTrace("Bonus time", bonusTime);
-			setPowerModifier(125); // 25% bonus to completing fast
+			setPowerModifier(bonus); // Bonus percentage for completing fast
 			extraPowerTime(bonusTime);
 			setPowerModifier(100);
 		}
@@ -2414,7 +2455,7 @@ function __camRetreatVtols()
 		for (var c = 0; c < vt.weapons.length; ++c)
 		{
 			if ((vt.order == DORDER_RTB)
-				|| (vt.weapons[c].armed < 20) || (vt.health < 60))
+				|| (vt.weapons[c].armed < 1) || (vt.health < 60))
 			{
 				orderDroidLoc(vt, DORDER_MOVE, __vtolExitPosition.x,
 					__vtolExitPosition.y);
@@ -2423,8 +2464,7 @@ function __camRetreatVtols()
 		}
 	}
 
-	if(__disableVtolSpawn === false)
-		queue("__camRetreatVtols", 1500);
+	queue("__camRetreatVtols", 1500);
 }
 
 

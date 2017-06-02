@@ -2,8 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const NP = 1; //New Paradigm player number
-const scavs = 7; //Scav player number
+const SCAVS = 7; //Scav player number
 const NEW_PARADIGM_RESEARCH = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade03",
 	"R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
@@ -20,7 +19,7 @@ const SCAVENGER_RES = [
 
 var artiGroup;
 var lastPosX, lastPosY;
-//Determine if NP has artifact values:
+//Determine if the New Paradigm has artifact values:
 //0 - Does not have artifact
 //1 - Has artifact; Can be dropped
 //2 - Has artifact; Can not be dropped
@@ -79,7 +78,7 @@ camAreaEvent("NPTransportTrigger", function()
 		enemyHasArtifact = 2;
 		var list = [];
 		with(camTemplates) list = [npmrl, npmrl];
-		camSendReinforcement(NP, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
+		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 39, y: 0 },
 			exit: { x: 32, y: 62 }
 		});
@@ -131,12 +130,12 @@ function getArtifact()
 	);
 }
 
-//New Paradigm truck builds six lancer hardpoints around NP LZ
+//New Paradigm truck builds six lancer hardpoints around LZ
 function buildLancers()
 {
 	for(var i = 1; i <= 6; ++i)
 	{
-		camQueueBuilding(NP, "WallTower06", "hardPoint" + i);
+		camQueueBuilding(NEW_PARADIGM, "WallTower06", "hardPoint" + i);
 	}
 }
 
@@ -147,7 +146,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
-		reinforcements: 60 //1 min
+		reinforcements: camChangeOnDiff(60, true) //1 min
 	});
 }
 
@@ -179,7 +178,7 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	//Make sure the New Paradigm and Scavs are allies
-	setAlliance(NP, scavs, true);
+	setAlliance(NEW_PARADIGM, SCAVS, true);
 
 	//Get rid of the already existing crate and replace with another
 	camSafeRemoveObject("artifact1", false);
@@ -187,11 +186,11 @@ function eventStartLevel()
 		"artifactLocation": { tech: "R-Wpn-Cannon3Mk1" },
 	});
 
-	setPower(2000, NP);
-	setPower(200, scavs);
+	setPower(camChangeOnDiff(2000, true), NEW_PARADIGM);
+	setPower(camChangeOnDiff(200, true), SCAVS);
 
-	camCompleteRequiredResearch(NEW_PARADIGM_RESEARCH, NP);
-	camCompleteRequiredResearch(SCAVENGER_RES, scavs);
+	camCompleteRequiredResearch(NEW_PARADIGM_RESEARCH, NEW_PARADIGM);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
 
 	camSetEnemyBases({
 		"ScavMiddleGroup": {
@@ -221,7 +220,7 @@ function eventStartLevel()
 		"scavMiddleFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 4000,
+			throttle: camChangeOnDiff(4000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -229,7 +228,7 @@ function eventStartLevel()
 		"scavSouthEastFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 4000,
+			throttle: camChangeOnDiff(4000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -237,16 +236,16 @@ function eventStartLevel()
 		"scavNorthEastFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 4000,
+			throttle: camChangeOnDiff(4000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 	});
 
-	artiGroup = camMakeGroup(enumArea("NPArtiGroup", NP, false));
+	artiGroup = camMakeGroup(enumArea("NPArtiGroup", NEW_PARADIGM, false));
 	enemyHasArtifact = 0;
-	camManageTrucks(NP);
+	camManageTrucks(NEW_PARADIGM);
 	buildLancers();
 
 

@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const NP = 1; //New Paradigm player number
 const NEW_PARADIGM_RES = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade03",
 	"R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
@@ -60,7 +59,7 @@ function getDroidsForNPLZ()
 function sendNPTransporter()
 {
 	var list = getDroidsForNPLZ();
-	camSendReinforcement(NP, camMakePos("NPTransportPos"), list,
+	camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list,
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 0, y: 0 },
 			exit: { x: 0, y: 0 },
@@ -70,7 +69,7 @@ function sendNPTransporter()
 
 	if(enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length > 0)
 	{
-		queue("sendNPTransporter", 600000); //10 min
+		queue("sendNPTransporter", camChangeOnDiff(600000)); //10 min
 	}
 }
 
@@ -158,7 +157,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
 		area: "RTLZ",
 		message: "C1D_LZ",
-		reinforcements: 60 //1 min
+		reinforcements: camChangeOnDiff(60, true) //1 min
 	});
 }
 
@@ -187,8 +186,8 @@ function eventStartLevel()
 		"NPFactoryNE": { tech: "R-Vehicle-Body12" }, //Main base factory
 	});
 
-	setPower(5000, NP);
-	camCompleteRequiredResearch(NEW_PARADIGM_RES, NP);
+	setPower(camChangeOnDiff(5000, true), NEW_PARADIGM);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 
 	camSetEnemyBases({
 		"NPSouthEastGroup": {
@@ -216,7 +215,7 @@ function eventStartLevel()
 			assembly: camMakePos("genRetreatPoint"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 50000,
+			throttle: camChangeOnDiff(50000),
 			regroup: true,
 			repair: 40,
 			templates: [ nphmgh, npltath, nphch ] //Hover factory
@@ -224,7 +223,7 @@ function eventStartLevel()
 		"NPFactoryE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 50000,
+			throttle: camChangeOnDiff(50000),
 			regroup: true,
 			repair: 40,
 			templates: [ npltat, npmsens, npmorb, npsmct, nphct ] //variety
@@ -232,7 +231,7 @@ function eventStartLevel()
 		"NPFactoryNE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 50000,
+			throttle: camChangeOnDiff(50000),
 			regroup: true,
 			repair: 40,
 			templates: [ nphct, npsbb, npmorb ] //tough units
@@ -240,7 +239,7 @@ function eventStartLevel()
 		"NPCybFactoryW": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			regroup: true,
 			repair: 40,
 			templates: [ npcybc, npcybf, npcybr ]
@@ -248,7 +247,7 @@ function eventStartLevel()
 		"NPCybFactoryE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			regroup: true,
 			repair: 40,
 			templates: [ npcybc, npcybf, npcybr ]
@@ -257,7 +256,7 @@ function eventStartLevel()
 			assembly: camMakePos("cybRetreatPoint"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: 40000,
+			throttle: camChangeOnDiff(40000),
 			regroup: true,
 			repair: 40,
 			templates: [ npcybc, npcybf, npcybr ]

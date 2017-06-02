@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const CO = 2; //The Collective player number
 const warning = "pcv632.ogg"; // Collective commander escaping
 const COLLEVTIVE_RES = [
 		"R-Defense-WallUpgrade03", "R-Struc-Materials04",
@@ -29,7 +28,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 		camSafeRemoveObject(droid, false);
 	}
 
-	resetLabel("vtolRemoveZone", CO);
+	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
 });
 
 
@@ -48,7 +47,7 @@ camAreaEvent("wayPoint1Rad", function(droid)
 {
 	if(isVTOL(droid))
 	{
-		resetLabel("wayPoint1Rad", CO);
+		resetLabel("wayPoint1Rad", THE_COLLECTIVE);
 		return;
 	}
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
@@ -63,12 +62,12 @@ camAreaEvent("wayPoint2Rad", function(droid)
 {
 	if(droid.droidType != DROID_COMMAND)
 	{
-		resetLabel("wayPoint2Rad", CO);
+		resetLabel("wayPoint2Rad", THE_COLLECTIVE);
 		return;
 	}
 
 	var point = getObject("wayPoint3");
-	var defGroup = enumRange(point.x, point.y, 10, CO, false).filter(function(obj) {
+	var defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter(function(obj) {
 		return (obj.droidType == DROID_WEAPON);
 	});
 
@@ -113,19 +112,19 @@ function checkCollectiveHQ()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colatv, colatv];
-	camSetVtolData(CO, "vtolAppearPoint", "vtolRemovePoint", list, 120000);
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, 120000);
 	checkCollectiveHQ();
 }
 
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	var truck = enumDroid(CO, DROID_CONSTRUCT);
-	if(enumDroid(CO, DROID_CONSTRUCT).length > 0)
+	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
+	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	const list = ["WallTower06", "PillBox1", "WallTower03"];
-	camQueueBuilding(CO, list[camRand(list.length)]);
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
 function showGameOver()
@@ -147,7 +146,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C", {
 		area: "RTLZ",
 		message: "C22_LZ",
-		reinforcements: 180 //3 min
+		reinforcements: "MB2_1_MSG2"(180, true) //3 min
 	});
 }
 
@@ -172,8 +171,8 @@ function eventStartLevel()
 		"COCommander": { tech: "R-Wpn-RocketSlow-Accuracy03" },
 	});
 
-	setPower(8000, CO); //used to be 10000
-	camCompleteRequiredResearch(COLLEVTIVE_RES, CO);
+	setPower(camChangeOnDiff(8000, true), THE_COLLECTIVE);
+	camCompleteRequiredResearch(COLLEVTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COEastBase": {
@@ -195,20 +194,20 @@ function eventStartLevel()
 			assembly: camMakePos("eastAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: 70000,
+			throttle: camChangeOnDiff(70000),
 			regroup: true,
 			repair: 40,
 			templates: [cohct, comtathh, comorb] //Heavy factory
 		},
 		"COFactoryWest": {
 			assembly: camMakePos("westAssembly"),
-			throttle: 20000,
+			throttle: camChangeOnDiff(20000),
 			templates: [comtath, comih] //Hover lancers/infernos
 		},
 	});
 
 	commandGroup = camMakeGroup("group1NBase");
-	camManageTrucks(CO);
+	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	camEnableFactory("COFactoryWest");
 

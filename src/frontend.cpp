@@ -1319,7 +1319,7 @@ bool runGameOptionsMenu()
 
 	case FRONTEND_DIFFICULTY:
 	case FRONTEND_DIFFICULTY_R:
-		setDifficultyLevel(stepCycle(getDifficultyLevel(), DL_EASY, DL_HARD));
+		setDifficultyLevel(stepCycle(getDifficultyLevel(), DL_EASY, DL_INSANE));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		break;
 
