@@ -7,7 +7,7 @@ attribute vec2 vertexTexCoord;
 attribute vec4 vertexColor;
 
 varying vec2 uv;
-varying vec4 color;
+varying vec4 vColour;
 
 void main()
 {
@@ -15,5 +15,5 @@ void main()
 	uv = vertexTexCoord;
 
 	gl_Position = posMatrix * vertex;
-	color = vertexColor;
+	vColour = vertexColor;
 }
