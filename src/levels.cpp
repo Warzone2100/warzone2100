@@ -984,6 +984,12 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
+	if (bMultiPlayer)
+	{
+		// This calls resLoadFile("SMSG", "multiplay.txt"). Must be before loadMissionExtras, which calls loadSaveMessage, which calls getViewData.
+		loadMultiScripts();
+	}
+
 	if (pSaveName != nullptr)
 	{
 		//load MidMission Extras
@@ -994,10 +1000,6 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	if (bMultiPlayer)
-	{
-		loadMultiScripts();
-	}
 	if (pSaveName != nullptr && saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load script stuff

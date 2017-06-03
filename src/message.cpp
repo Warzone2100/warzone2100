@@ -737,7 +737,7 @@ const char *loadResearchViewData(const char *fileName)
 		ini.endGroup();
 		apsViewData.insert(v->pName, v);
 	}
-	return filedup; // so that cleanup function will be called on rigth data
+	return filedup; // so that cleanup function will be called on right data
 }
 
 /* Get the view data identified by the name */
