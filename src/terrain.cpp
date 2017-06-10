@@ -897,7 +897,7 @@ bool initTerrain()
 	debug(LOG_TERRAIN, "%i decals found", decalSize / 12);
 	glGenBuffers(1, &decalVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, decaldata, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, decaldata, GL_DYNAMIC_DRAW);
 	free(decaldata);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
