@@ -272,7 +272,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		if (psDroid->sDisplay.imd->objanimpie[ANIM_EVENT_DYING] && psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
 			debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, psDroid);
-			psDroid->timeAnimationStarted = graphicsTime;
+			psDroid->timeAnimationStarted = gameTime;
 			psDroid->animationEvent = ANIM_EVENT_DYING;
 			if (psDroid->droidType == DROID_PERSON)
 			{
@@ -720,7 +720,7 @@ void droidUpdate(DROID *psDroid)
 	if (psDroid->animationEvent != ANIM_EVENT_NONE)
 	{
 		iIMDShape *imd = psDroid->sDisplay.imd->objanimpie[psDroid->animationEvent];
-		if (imd && imd->objanimcycles > 0 && graphicsTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
+		if (imd && imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
 		{
 			// Done animating (animation is defined by body - other components should follow suit)
 			if (psDroid->animationEvent == ANIM_EVENT_DYING)

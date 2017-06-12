@@ -1615,7 +1615,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		     psDroid->action == DACTION_ROTATETOATTACK)
 		    && psDroid->animationEvent == ANIM_EVENT_NONE)
 		{
-			psDroid->timeAnimationStarted = graphicsTime;
+			psDroid->timeAnimationStarted = gameTime;
 			psDroid->animationEvent = ANIM_EVENT_FIRING;
 		}
 		else if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
@@ -1650,7 +1650,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	/* update anim if moving and not shooting */
 	if (psDroid->droidType == DROID_PERSON && speed != 0 && psDroid->animationEvent == ANIM_EVENT_NONE)
 	{
-		psDroid->timeAnimationStarted = graphicsTime;
+		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
 
@@ -1782,7 +1782,7 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 
 	if (psDroid->animationEvent == ANIM_EVENT_NONE)
 	{
-		psDroid->timeAnimationStarted = graphicsTime;
+		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
 
