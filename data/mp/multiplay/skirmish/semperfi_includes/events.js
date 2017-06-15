@@ -1,7 +1,7 @@
 
 function eventDroidBuilt(droid, struct)
 {
-	if (defined(droid) && droid.player == me)
+	if (defined(droid) && (droid.player == me))
 	{
 		if (isVTOL(droid))
 		{
@@ -30,7 +30,7 @@ function eventAttacked(victim, attacker)
 	const MIN_VTOL_UNITS = 4;
 
 	// TBD, for now -- SEND EVERYONE!!!
-	if (attacker && victim && attacker.player != me && !allianceExistsBetween(attacker.player, me))
+	if (attacker && victim && (attacker.player != me) && !allianceExistsBetween(attacker.player, me))
 	{
 		var loc = {x: attacker.x, y: attacker.y };
 		//Set this player as the current enemy (as long as they are not scavengers).
@@ -41,9 +41,10 @@ function eventAttacked(victim, attacker)
 
 		//log("Defend!");
 		var defenders = enumGroup(attackGroup);
-		if (defenders.length > MIN_GROUND_UNITS)
+		var defLen = defenders.length;
+		if (defLen > MIN_GROUND_UNITS)
 		{
-			for (var i = 0; i < defenders.length; i++)
+			for (var i = 0; i < defLen; i++)
 			{
 				if(defenders[i].order != DORDER_RECYCLE)
 				{
@@ -53,9 +54,10 @@ function eventAttacked(victim, attacker)
 		}
 
 		var vtols = enumGroup(vtolGroup);
-		if (vtols.length > MIN_VTOL_UNITS)
+		var vtolLen = vtols.length;
+		if (vtolLen > MIN_VTOL_UNITS)
 		{
-			for (var j = 0; j < vtols.length; j++)
+			for (var j = 0; j < vtolLen; j++)
 			{
 				if (vtolReady(vtols[j]))
 				{
@@ -69,7 +71,7 @@ function eventAttacked(victim, attacker)
 function eventStartLevel()
 {
 	//log("== level started ==");
-
+	recycleDroidsForHover();
 	buildFundamentals();
 	isSeaMap = isHoverMap();
 
@@ -130,10 +132,12 @@ function eventBeacon(x, y, from, to, message)
 		const MIN_VTOLS = 4;
 		var attackers = enumGroup(attackGroup);
 		var vtols = enumGroup(vtolGroup);
+		var attackLen = attackers.length;
+		var vtolLen = vtols.length;
 
-		if (attackers.length > MIN_ATTACKERS)
+		if (attackLen > MIN_ATTACKERS)
 		{
-			for (var i = 0; i < attackers.length; i++)
+			for (var i = 0; i < attackLen; i++)
 			{
 				if(droidCanReach(attackers[i], x, y))
 				{
@@ -142,9 +146,9 @@ function eventBeacon(x, y, from, to, message)
 			}
 		}
 
-		if (vtols.length > MIN_VTOLS)
+		if (vtolLen > MIN_VTOLS)
 		{
-			for (var j = 0; j < vtols.length; j++)
+			for (var j = 0; j < vtolLen; j++)
 			{
 				if (vtols[j].armed == 100)
 				{

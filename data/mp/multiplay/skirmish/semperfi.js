@@ -1,20 +1,22 @@
 
-//TODO: The WZ script SmepferFi has a scout group that patrols around the map
-//and defense structures are build near derricks. Repair cyborgs/units were made as well.
+//TODO: The WZ script SemperFi has a scout group that patrols around the map,
+//and repair cyborgs were made as well.
 //It should be able to outpace Nexus in grabbing oil.
 
 // -- definitions
-const oilRes = "OilResource";
-const resLab = "A0ResearchFacility";
-const powGen = "A0PowerGenerator";
-const factory = "A0LightFactory";
-const derrick = "A0ResourceExtractor";
-const cybFactory = "A0CyborgFactory";
-const playerHQ = "A0CommandCentre";
-const vtolPad = "A0VtolPad";
-const vtolFactory = "A0VTolFactory1";
-const cbTower = "Sys-CB-Tower01";
-const wideSpecTower = "Sys-SensoTowerWS";
+const OIL_RES = "OilResource";
+const RES_LAB = "A0ResearchFacility";
+const POW_GEN = "A0PowerGenerator";
+const FACTORY = "A0LightFactory";
+const DERRICK = "A0ResourceExtractor";
+const CYBORG_FACTORY = "A0CyborgFactory";
+const PLAYER_HQ = "A0CommandCentre";
+const VTOL_PAD = "A0VtolPad";
+const VTOL_FACTORY = "A0VTolFactory1";
+const CB_TOWER = "Sys-CB-Tower01";
+const WIDE_SPECTRUM_TOWER = "Sys-SensoTowerWS";
+const UPLINK = "A0Sat-linkCentre";
+const ELECTRONIC_DEFENSES = ["Sys-SpyTower", "WallTower-EMP", "Emplacement-MortarEMP"];
 
 // -- globals
 var attackGroup;

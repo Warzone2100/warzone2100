@@ -9,10 +9,9 @@ function eventChat(from, to, message)
 	{
 		// donate first truck
 		var droids = enumDroid(me, DROID_CONSTRUCT);
-		for (var i = 0; i < droids.length; i++)
+		if (droids.length)
 		{
-			donateObject(droids[i], from);
-			return;
+			donateObject(droids[0], from);
 		}
 	}
 	else if (message == "donatepower" && allianceExistsBetween(from, to))

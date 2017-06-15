@@ -66,13 +66,20 @@ function buildAttacker(struct)
 {
 	const HOVER_CHANCE = 58;
 	const WEAPON_CHANCE = 68;
+	const EMP_CHANCE = 40;
 	//Choose either artillery or anti-tank.
 	var weaponChoice = (random(101) < WEAPON_CHANCE) ? tankWeaponList : tankArtillery;
+	var SECONDARY;
 
 	//Give a chance to produce hover propulsion units if not a sea map.
-	if(!isSeaMap && (random(101) < HOVER_CHANCE))
+	if (!isSeaMap && (random(101) < HOVER_CHANCE))
 	{
-		buildDroid(struct, "Ranged Attacker", tankBodyList, tankPropList, "", "", weaponChoice, weaponChoice);
+		SECONDARY = weaponChoice;
+		if (componentAvailable("Body14SUP") && componentAvailable("EMP-Cannon") && random(101) < EMP_CHANCE)
+		{
+			SECONDARY = "EMP-Cannon";
+		}
+		buildDroid(struct, "Ranged Attacker", tankBodyList, tankPropList, "", "", weaponChoice, SECONDARY);
 	}
 	else
 	{
@@ -94,7 +101,14 @@ function buildCyborg(struct)
 function buildVTOL(struct)
 {
 	const WEAPON_CHANCE = 50;
+	const EMP_CHANCE = 20;
+
 	var weaponChoice = (random(101) < WEAPON_CHANCE) ? bombList : vtolRockets;
+	if (random(101) < EMP_CHANCE && componentAvailable("Bomb6-VTOL-EMP"))
+	{
+		weaponChoice = "Bomb6-VTOL-EMP";
+	}
+
 	buildDroid(struct, "Bomber", vtolBodyList, "V-Tol", "", "", weaponChoice);
 }
 
@@ -104,11 +118,12 @@ function produce()
 	const MIN_POWER = -300;
 	const MIN_TRUCKS = 5;
 
-	var fac = enumStruct(me, factory);
+	var fac = enumStruct(me, FACTORY);
+	var facNum = fac.length;
 
 	//Count the trucks being built so as not to build too many of them.
 	var virtualTrucks = 0;
-	for(var i = 0; i < fac.length; ++i)
+	for(var i = 0; i < facNum; ++i)
 	{
 		var virDroid = getDroidProduction(fac[i]);
 		if(virDroid !== null)
@@ -118,7 +133,7 @@ function produce()
 		}
 	}
 
-	for(var i = 0; i < fac.length; ++i)
+	for(var i = 0; i < facNum; ++i)
 	{
 		if(structureIdle(fac[i]) && (getRealPower() > MIN_POWER))
 		{
@@ -136,8 +151,8 @@ function produce()
 	//No point building cyborgs if it is a sea map.
 	if(!isSeaMap)
 	{
-		var cyborgFac = enumStruct(me, cybFactory);
-		for(var i = 0; i < cyborgFac.length; ++i)
+		var cyborgFac = enumStruct(me, CYBORG_FACTORY);
+		for(var i = 0, l = cyborgFac.length; i < l; ++i)
 		{
 			if(structureIdle(cyborgFac[i]) && (getRealPower() > MIN_POWER))
 			{
@@ -146,8 +161,8 @@ function produce()
 		}
 	}
 
-	var vtolFac = enumStruct(me, vtolFactory);
-	for(var i = 0; i < vtolFac.length; ++i)
+	var vtolFac = enumStruct(me, VTOL_FACTORY);
+	for(var i = 0, l = vtolFac.length; i < l; ++i)
 	{
 		if(structureIdle(vtolFac[i]) && (getRealPower() > MIN_POWER))
 		{

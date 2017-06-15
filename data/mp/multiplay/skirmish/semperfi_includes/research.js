@@ -12,6 +12,7 @@ var fundamentals = [
 var lateGameTech = [
 	"R-Vehicle-Body14", // dragon body (implies vengeance)
 	"R-Sys-Resistance-Circuits", // NEXUS Resistance Circuits
+	"R-Wpn-Flamer-Damage09", // even more thermal damage
 ];
 var rocketTech = [
 	"R-Defense-Tower06", //mini-rocket pod tower
@@ -36,9 +37,8 @@ var kineticAlloys = [
 	"R-Cyborg-Metals09",
 ];
 var vtolWeaponry = [
-	"R-Struc-VTOLPad-Upgrade02", // get vtol pads
-	"R-Wpn-Bomb05", // plasmite bomb
 	"R-Wpn-Bomb-Accuracy03", // better bomb accuracy
+	"R-Wpn-Bomb05", // plasmite bomb
 	"R-Struc-VTOLPad-Upgrade06", // faster vtol rearming pads
 ];
 var startComponents = [
@@ -55,6 +55,8 @@ var fundamentals2 = [
 	"R-Vehicle-Body09", // tiger body
 	"R-Vehicle-Armor-Heat04", // some tank thermal armor
 	"R-Cyborg-Armor-Heat02", // some cyborg thermal armor
+	"R-Struc-VTOLPad-Upgrade02", // get vtol pads
+	"R-Wpn-Bomb04", // thermite bomb
 	"R-Struc-Factory-Upgrade09", // self-replicating manufacturing
 ];
 var thermalAlloys = [
@@ -66,9 +68,18 @@ var antiAirMissiles = [
 	"R-Defense-SamSite2", // vindicator "P0-AASite-SAM2"
 ];
 var structureDefenseUpgrades = [
-	"R-Struc-Materials09", // better base structure defense.
 	"R-Defense-HvyArtMissile", // Arch-angel Missile emplacement
+	"R-Struc-Materials09", // better base structure defense.
 	"R-Defense-WallUpgrade12", // stronger walls
+];
+var empTech = [
+	"R-Wpn-Bomb06", // implies EMP-Cannon, uplink, Nexus tower.
+	"R-Defense-EMPCannon",
+	"R-Defense-EMPMortar",
+	"R-Wpn-Mortar-ROF04",
+	"R-Wpn-Cannon-ROF06",
+	"R-Wpn-Mortar-Acc03",
+	"R-Wpn-Cannon-Accuracy02",
 ];
 
 //This function aims to more cleanly discover available research topics
@@ -79,7 +90,7 @@ function evalResearch(lab, list)
 	//Try going a bit deeper.
 	if(!found)
 	{
-		for (var i = 0; i < list.length; ++i)
+		for (var i = 0, l = list.length; i < l; ++i)
 		{
 			found = pursueResearch(lab, list[i]);
 			if (found)
@@ -103,10 +114,10 @@ function eventResearched(tech, labParam)
 	}
 	else
 	{
-		labList = enumStruct(me, resLab);
+		labList = enumStruct(me, RES_LAB);
 	}
 
-	for (var i = 0; i < labList.length; i++)
+	for (var i = 0, r = labList.length; i < r; i++)
 	{
 		var lab = labList[i];
 		if (lab.status == BUILT && structureIdle(lab) && (getRealPower() > MIN_POWER))
@@ -135,10 +146,10 @@ function eventResearched(tech, labParam)
 				found = pursueResearch(lab, fundamentals2);
 
 			if (!found)
-				found = evalResearch(lab, antiAirMissiles);
+				found = evalResearch(lab, missileTech);
 
 			if (!found)
-				found = evalResearch(lab, missileTech);
+				found = evalResearch(lab, antiAirMissiles);
 
 			if (!found)
 				found = evalResearch(lab, lateGameTech);
@@ -161,14 +172,18 @@ function eventResearched(tech, labParam)
 			if (!found)
 				found = evalResearch(lab, structureDefenseUpgrades);
 
+			if (!found)
+				found = evalResearch(lab, empTech);
+
 			//Only research random stuff once we get retribution.
 			if (componentAvailable("Body7ABT") && !found)
 			{
 				// Find a random research item
 				var reslist = enumResearch();
-				if (reslist.length > 0)
+				var len = reslist.length;
+				if (len > 0)
 				{
-					var idx = Math.floor(Math.random() * reslist.length);
+					var idx = Math.floor(Math.random() * len);
 					pursueResearch(lab, reslist[idx].name);
 				}
 			}
