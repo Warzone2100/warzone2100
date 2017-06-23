@@ -98,8 +98,8 @@ function eventStartLevel()
 		reinforcements: -1 // will override later
 	});
 
-	const NP_POWER = camChangeOnDiff(5000, true);
-	const SCAV_POWER = camChangeOnDiff(200, true);
+	const NP_POWER = camChangeOnDiff(10000, true);
+	const SCAV_POWER = camChangeOnDiff(400, true);
 	const SCAVS = 7;
 	var startpos = getObject("StartPosition");
 	var lz = getObject("LandingZone1"); // will override later

@@ -106,7 +106,7 @@ function eventStartLevel()
 		"COCyborgFactoryL": { tech: "R-Wpn-MG4" },
 	});
 
-	setPower(camChangeOnDiff(10000, true), THE_COLLECTIVE);
+	setPower(camChangeOnDiff(40000, true), THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

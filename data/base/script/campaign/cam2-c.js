@@ -290,7 +290,7 @@ function eventStartLevel()
 		"COVtolFacLeft-Prop":	{ tech: "R-Vehicle-Prop-VTOL" },
 	});
 
-	setPower(camChangeOnDiff(100000, true), THE_COLLECTIVE);
+	setPower(camChangeOnDiff(200000, true), THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); //120 min
 
 	setAlliance(THE_COLLECTIVE, civilians, true);

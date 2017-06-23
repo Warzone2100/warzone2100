@@ -128,7 +128,7 @@ function eventStartLevel()
 	setAlliance(CAM_HUMAN_PLAYER, UPLINK, true);
 	setAlliance(THE_COLLECTIVE, UPLINK, true);
 
-	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE);
+	setPower(camChangeOnDiff(40000, true), THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

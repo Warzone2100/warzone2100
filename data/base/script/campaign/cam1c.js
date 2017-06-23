@@ -194,8 +194,8 @@ function eventStartLevel()
 	setMissionTime(camChangeOnDiff(7200));
 	setAlliance(NEW_PARADIGM, 7, true);
 
-	setPower(camChangeOnDiff(5000, true), NEW_PARADIGM);
-	setPower(camChangeOnDiff(100, true), 7);
+	setPower(camChangeOnDiff(10000, true), NEW_PARADIGM);
+	setPower(camChangeOnDiff(2500, true), 7);
 
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {

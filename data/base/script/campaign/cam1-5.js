@@ -147,8 +147,8 @@ function eventStartLevel()
 	//Make sure the New Paradigm and Scavs are allies
 	setAlliance(NEW_PARADIGM, SCAVS, true);
 
-	setPower(camChangeOnDiff(2000, true), NEW_PARADIGM);
-	setPower(camChangeOnDiff(500, true), SCAVS);
+	setPower(camChangeOnDiff(15000, true), NEW_PARADIGM);
+	setPower(camChangeOnDiff(800, true), SCAVS);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);

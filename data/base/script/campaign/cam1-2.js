@@ -66,7 +66,8 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("TransporterExit");
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
-	setPower(camChangeOnDiff(400, true), 7);
+
+	setPower(camChangeOnDiff(800, true), 7);
 
 	camSetEnemyBases({
 		"NorthGroup": {

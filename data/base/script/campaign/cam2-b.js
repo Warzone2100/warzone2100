@@ -129,7 +129,7 @@ function eventStartLevel()
 	var lz = getObject("landingZone"); //player lz
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE);
+	setPower(camChangeOnDiff(60000, true), THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); // 2 hr.
 	eventVideoDone(); //Play video sequences.
 

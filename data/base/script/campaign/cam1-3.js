@@ -171,7 +171,7 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	setPower(camChangeOnDiff(50000, true), NEW_PARADIGM);
-	setPower(camChangeOnDiff(200, true), 7);
+	setPower(camChangeOnDiff(400, true), 7);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 	setAlliance(1, 7, true);

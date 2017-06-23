@@ -263,7 +263,7 @@ function cam3Setup()
 function eventStartLevel()
 {
 	const MISSION_TIME = camChangeOnDiff(7200); //120 minutes.
-	const NEXUS_POWER = camChangeOnDiff(20000, true);
+	const NEXUS_POWER = camChangeOnDiff(50000, true);
 	const PLAYER_POWER = 16000;
 	const REINFORCEMENT_TIME = camChangeOnDiff(300, true); //5 minutes.
 	var startpos = getObject("startPosition");

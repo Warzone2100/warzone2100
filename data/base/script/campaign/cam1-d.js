@@ -186,7 +186,7 @@ function eventStartLevel()
 		"NPFactoryNE": { tech: "R-Vehicle-Body12" }, //Main base factory
 	});
 
-	setPower(camChangeOnDiff(5000, true), NEW_PARADIGM);
+	setPower(camChangeOnDiff(100000, true), NEW_PARADIGM);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 
 	camSetEnemyBases({
