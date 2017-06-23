@@ -341,7 +341,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	bEmpWeap = (attackerWeapon->weaponSubClass == WSC_EMP);
 
 	int dist = iHypot((psAttacker->pos - psTarget->pos).xy);
-	bool tooClose = dist <= attackerWeapon->upgrade[psAttacker->player].minRange;
+	bool tooClose = (unsigned)dist <= attackerWeapon->upgrade[psAttacker->player].minRange;
 	if (tooClose)
 	{
 		dist = objSensorRange(psAttacker);  // If object is too close to fire at, consider it to be at maximum range.
@@ -813,7 +813,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
 
-	ASSERT_OR_RETURN(false, psObj->numWeaps > weapon_slot, "Invalid weapon selected");
+	ASSERT_OR_RETURN(false, (unsigned)weapon_slot < psObj->numWeaps, "Invalid weapon selected");
 
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
@@ -984,7 +984,7 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	else	// structure
 	{
 		BASE_OBJECT    *psTemp = nullptr;
-		int		tarDist = SDWORD_MAX;
+		unsigned tarDist = UINT32_MAX;
 
 		static GridList gridList;  // static to avoid allocations.
 		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, objSensorRange(psObj));
@@ -1061,7 +1061,6 @@ static bool updateAttackTarget(BASE_OBJECT *psAttacker, SDWORD weapon_slot)
 /* Do the AI for a droid */
 void aiUpdateDroid(DROID *psDroid)
 {
-	BASE_OBJECT	*psTarget;
 	bool		lookForTarget, updateTarget;
 
 	ASSERT(psDroid != nullptr, "Invalid droid pointer");
@@ -1155,7 +1154,7 @@ void aiUpdateDroid(DROID *psDroid)
 	if (!lookForTarget && updateTarget && psDroid->numWeaps > 0 && !hasCommander(psDroid)
 	    && (psDroid->id + gameTime) / TARGET_UPD_SKIP_FRAMES != (psDroid->id + gameTime - deltaGameTime) / TARGET_UPD_SKIP_FRAMES)
 	{
-		for (int i = 0; i < psDroid->numWeaps; ++i)
+		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 		{
 			updateAttackTarget((BASE_OBJECT *)psDroid, i);
 		}
@@ -1165,9 +1164,10 @@ void aiUpdateDroid(DROID *psDroid)
 
 	if (lookForTarget && !updateTarget)
 	{
+		BASE_OBJECT *psTarget;
 		if (psDroid->droidType == DROID_SENSOR)
 		{
-			if (aiChooseSensorTarget((BASE_OBJECT *)psDroid, &psTarget))
+			if (aiChooseSensorTarget(psDroid, &psTarget))
 			{
 				actionDroid(psDroid, DACTION_OBSERVE, psTarget);
 			}
