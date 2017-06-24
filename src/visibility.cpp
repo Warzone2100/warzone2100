@@ -230,7 +230,7 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 		TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(inRange)};
 
 		visionType[rayPlayer]++;                        // we observe this tile
-		if (psObj->jammedTiles)                         // we are a jammer object
+		if (psObj->flags.test(OBJECT_FLAG_JAMMED_TILES))   // we are a jammer object
 		{
 			psTile->jammers[rayPlayer]++;
 			psTile->jammerBits |= (1 << rayPlayer); // mark it as being jammed
@@ -343,7 +343,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			}
 			ASSERT(visionType[psObj->player] > 0, "No %s on watched tile (%d, %d)", pos.type ? "radar" : "vision", (int)pos.x, (int)pos.y);
 			visionType[psObj->player]--;
-			if (psObj->jammedTiles)  // we are a jammer object — we cannot check objJammerPower(psObj) > 0 directly here, we may be in the BASE_OBJECT destructor).
+			if (psObj->flags.test(OBJECT_FLAG_JAMMED_TILES))  // we are a jammer object — we cannot check objJammerPower(psObj) > 0 directly here, we may be in the BASE_OBJECT destructor).
 			{
 				// No jammers in campaign, no need for special hack
 				ASSERT(psTile->jammers[psObj->player] > 0, "Not jamming watched tile (%d, %d)", (int)pos.x, (int)pos.y);
@@ -359,7 +359,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 	free(psObj->watchedTiles);
 	psObj->watchedTiles = nullptr;
 	psObj->numWatchedTiles = 0;
-	psObj->jammedTiles = false;
+	psObj->flags.set(OBJECT_FLAG_JAMMED_TILES, false);
 }
 
 void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj)
@@ -392,7 +392,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	}
 
 	// Do the whole circle in ∞ steps. No more pretty moiré patterns.
-	psObj->jammedTiles = objJammerPower(psObj) > 0;
+	psObj->flags.set(OBJECT_FLAG_JAMMED_TILES, objJammerPower(psObj) > 0);
 	doWaveTerrain(psObj, recordTilePos, &lastRecordTilePos);
 
 	// Record new map visibility provided by object
@@ -614,7 +614,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 		}
 	}
 
-	psObj->flags &= ~BASEFLAG_TARGETED;	// Remove any targetting locks from last update.
+	psObj->flags.set(OBJECT_FLAG_TARGETED, false); // Remove any targetting locks from last update.
 
 	// If we're a CB sensor, make our target visible instantly. Although this is actually checking visibility of our target, we do it here anyway.
 	STRUCTURE *psStruct = castStructure(psObj);

@@ -3545,10 +3545,10 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 	syncDebugStructure(psBuilding, '<');
 
-	if (psBuilding->flags & BASEFLAG_DIRTY)
+	if (psBuilding->flags.test(OBJECT_FLAG_DIRTY))
 	{
 		visTilesUpdate(psBuilding);
-		psBuilding->flags &= ~BASEFLAG_DIRTY;
+		psBuilding->flags.set(OBJECT_FLAG_DIRTY, false);
 	}
 
 	if (psBuilding->pStructureType->type == REF_GATE)

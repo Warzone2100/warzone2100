@@ -699,11 +699,11 @@ void droidUpdate(DROID *psDroid)
 
 	syncDebugDroid(psDroid, '<');
 
-	if (psDroid->flags & BASEFLAG_DIRTY)
+	if (psDroid->flags.test(OBJECT_FLAG_DIRTY))
 	{
 		visTilesUpdate(psDroid);
 		droidBodyUpgrade(psDroid);
-		psDroid->flags &= ~BASEFLAG_DIRTY;
+		psDroid->flags.set(OBJECT_FLAG_DIRTY, false);
 	}
 
 	// Save old droid position, update time.
@@ -792,7 +792,7 @@ void droidUpdate(DROID *psDroid)
 		if ((psBeingTargetted = orderStateObj(psDroid, DORDER_ATTACK))
 		    || (psBeingTargetted = orderStateObj(psDroid, DORDER_OBSERVE)))
 		{
-			psBeingTargetted->flags |= BASEFLAG_TARGETED;
+			psBeingTargetted->flags.set(OBJECT_FLAG_TARGETED, true);
 		}
 	}
 	// -----------------

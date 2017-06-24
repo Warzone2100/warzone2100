@@ -4364,15 +4364,15 @@ static void dirtyAllDroids(int player)
 {
 	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
-		psDroid->flags |= BASEFLAG_DIRTY;
+		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}
 	for (DROID *psDroid = mission.apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
-		psDroid->flags |= BASEFLAG_DIRTY;
+		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}
 	for (DROID *psDroid = apsLimboDroids[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
-		psDroid->flags |= BASEFLAG_DIRTY;
+		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}
 }
 
@@ -4380,11 +4380,11 @@ static void dirtyAllStructures(int player)
 {
 	for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
-		psCurr->flags |= BASEFLAG_DIRTY;
+		psCurr->flags.set(OBJECT_FLAG_DIRTY);
 	}
 	for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
-		psCurr->flags |= BASEFLAG_DIRTY;
+		psCurr->flags.set(OBJECT_FLAG_DIRTY);
 	}
 }
 

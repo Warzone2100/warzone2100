@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_BASEDEF_H__
 #define __INCLUDED_BASEDEF_H__
 
+#include <bitset>
+
 #include "lib/framework/vector.h"
 #include "displaydef.h"
 #include "statsdef.h"
@@ -94,10 +96,15 @@ struct SIMPLE_OBJECT
 	uint32_t        time;                           ///< Game time of given space-time position.
 };
 
-#define BASEFLAG_TARGETED  0x01 ///< Whether object is targeted by a selectedPlayer droid sensor (quite the hack)
-#define BASEFLAG_DIRTY     0x02 ///< Whether certain recalculations are needed for object on frame update
-
 #define MAX_WEAPONS 3
+
+enum OBJECT_FLAG
+{
+	OBJECT_FLAG_JAMMED_TILES,
+	OBJECT_FLAG_TARGETED,
+	OBJECT_FLAG_DIRTY,
+	OBJECT_FLAG_COUNT
+};
 
 struct BASE_OBJECT : public SIMPLE_OBJECT
 {
@@ -117,8 +124,6 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UDWORD              body;                       ///< Hit points with lame name
 	UDWORD              periodicalDamageStart;                  ///< When the object entered the fire
 	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
-	uint16_t            flags;                      ///< Various flags
-	bool                jammedTiles;                ///< True if any tiles are being jammed.
 	TILEPOS             *watchedTiles;              ///< Variable size array of watched tiles, NULL for features
 
 	UDWORD              timeAnimationStarted;       ///< Animation start time, zero for do not animate
@@ -126,6 +131,8 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 
 	unsigned            numWeaps;
 	WEAPON              asWeaps[MAX_WEAPONS];
+
+	std::bitset<OBJECT_FLAG_COUNT> flags;
 
 	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
 	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list
