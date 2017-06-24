@@ -425,6 +425,9 @@ PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto >= 1.0.0])
 # check for nearbyint()
 AC_CHECK_LIB(m, nearbyint, [MATH_LIB=""], AC_MSG_ERROR([nearbyint not found.]))
 
+# check for miniupnpc
+AC_CHECK_LIB(miniupnpc, upnpDiscover, AC_SUBST([MINIUPNPC_LIBS], [-lminiupnpc]), AC_MSG_ERROR([miniupnpc not found.]))
+
 # When (cross-)compiling for Windows (MinGW) we need to link in iberty for the Dr. MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
     AC_CHECK_LIB(iberty, main, AC_SUBST([IBERTY_LIBS], [-liberty]), AC_MSG_ERROR([libiberty not found.]))
@@ -502,7 +505,6 @@ AC_CONFIG_FILES([Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		tests/Makefile
-		3rdparty/miniupnpc/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
