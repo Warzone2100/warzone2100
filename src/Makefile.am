@@ -21,7 +21,7 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 .PHONY: autorevision.h
 
 autorevision.h autorevision.cache:
-	cd $(top_srcdir) && ./build_tools/autorevision -t h -o $(abs_builddir)/autorevision.cache > $(abs_builddir)/autorevision.h.new
+	cd $(top_srcdir) && ./build_tools/autorevision -t h -o "$(abs_builddir)/autorevision.cache" > "$(abs_builddir)/autorevision.h.new"
 	cmp -s autorevision.h.new autorevision.h && rm autorevision.h.new || mv -f autorevision.h.new autorevision.h
 
 CLEANFILES = \
@@ -347,4 +347,3 @@ else
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o  $(WIN32_LIBS)
 endif
 endif
-
