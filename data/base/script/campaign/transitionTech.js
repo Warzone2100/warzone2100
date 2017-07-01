@@ -88,7 +88,7 @@ const BETA_TECH = [
 	"tracked01", "wheeled01", "Spade1Mk1", "SensorTurret1Mk1",
 	"CommandBrain01", "V-Tol", "Sys-CBTurret01", "Sys-VstrikeTurret01",
 	"Sys-VTOLCBTurret01", "Body2SUP", "Body6SUPP", "Body9REC", "AAGun2Mk1",
-	"Bomb1-VTOL-LtHE", "Bomb2-VTOL-HvHE", "Bomb3-VTOL-LtINC", "Bomb4-VTOL-HvyINC",
+	"Bomb1-VTOL-LtHE", "Bomb2-VTOL-HvHE", "Bomb3-VTOL-LtINC",
 	"Cannon4AUTO-VTOL", "Cannon4AUTOMk1", "Cannon5Vulcan-VTOL", "Cannon5VulcanMk1",
 	"Flame2", "Howitzer105Mk1", "Howitzer150Mk1", "MG4ROTARY-VTOL", "MG4ROTARYMk1",
 	"Mortar3ROTARYMk1", "Rocket-HvyA-T", "Rocket-IDF", "Rocket-VTOL-HvyA-T",

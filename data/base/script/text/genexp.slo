@@ -273,12 +273,14 @@ event	start(CALL_GAMEINIT)
 	while (count < numEnemies)
 	{
 		// also set technology for each enemy
+		/*
 		count2 = 0;
 		while (count2 < numTechs[count])
 		{
 			completeResearch(startTech[count][count2], enemy[count]);
 			count2 = count2 + 1;
 		}
+		*/
 		setPowerLevel(power[count], enemy[count]);
 		count = count + 1;
 	}

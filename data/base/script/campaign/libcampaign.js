@@ -2200,9 +2200,9 @@ function __camGameLostCB()
 
 function __camGameLost()
 {
-	//HACK: Allow player to survive Gamma 3A for six minutes. If they did not
+	//HACK: Allows the player to survive in Gamma 3-A. If they did not
 	//bring in a construction droid then they lose.
-	if(__camNextLevel === "SUB_3_1S" && getMissionTime() > 6940)
+	if(__camNextLevel === "SUB_3_1S" && getMissionTime() > (camChangeOnDiff(7200) - 60))
 	{
 		return; // Campaign 3A needs to get units setup first.
 	}
