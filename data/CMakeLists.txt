@@ -1,8 +1,8 @@
 project(data)
 
 
-add_custom_target(data_base COMMAND
-    ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_CURRENT_BINARY_DIR}/base.wz" --format=zip
+add_custom_target(data_base ALL COMMAND
+    zip -r0 ${CMAKE_CURRENT_BINARY_DIR}/base.wz
 	"palette.txt"
 	"audio"
 	"campaigns"
@@ -25,8 +25,8 @@ add_custom_target(data_base COMMAND
 	"wrf"
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base")
 
-add_custom_target(data_mp COMMAND
-    ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_CURRENT_BINARY_DIR}/mp.wz" --format=zip
+add_custom_target(data_mp ALL COMMAND
+    zip -r0 ${CMAKE_CURRENT_BINARY_DIR}/mp.wz
 	"addon.lev"
 	"ruleset.json"
 	"anims"
@@ -41,3 +41,15 @@ add_custom_target(data_mp COMMAND
 	"wrf"
 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/mp"
 )
+
+install(FILES
+	"${CMAKE_CURRENT_BINARY_DIR}/base.wz"
+	"${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
+	DESTINATION ".")
+install(FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/music/menu.ogg"
+	"${CMAKE_CURRENT_SOURCE_DIR}/music/track1.ogg"
+	"${CMAKE_CURRENT_SOURCE_DIR}/music/track2.ogg"
+	"${CMAKE_CURRENT_SOURCE_DIR}/music/track3.ogg"
+	"${CMAKE_CURRENT_SOURCE_DIR}/music/music.wpl"
+	DESTINATION "music")

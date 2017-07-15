@@ -1,9 +1,8 @@
 cmake_minimum_required (VERSION 3.5)
-project (miniupnpc C)
 
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.c")
 
-add_library(miniupnpc ${HEADERS} ${SRC})
-
-#install(TARGETS hello-world DESTINATION bin)
+add_library(miniupnpc STATIC ${HEADERS} ${SRC})
+target_include_directories(miniupnpc PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")
+target_compile_definitions(miniupnpc PUBLIC "MINIUPNP_STATICLIB")
