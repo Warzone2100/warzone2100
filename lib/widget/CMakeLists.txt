@@ -7,4 +7,4 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 add_library(widget ${HEADERS} ${SRC} ${MOCFILES})
-target_link_libraries(widget Qt5::Core)
+target_link_libraries(widget PRIVATE framework ivis-opengl)

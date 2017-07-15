@@ -26,11 +26,6 @@
 #include <QtCore/QString>
 #include "lib/framework/wzapp.h"
 
-// Needed for cross compiler static builds
-#if defined(WZ_CC_MINGW) && !defined(QT_STATICPLUGIN)
-#error "We only support static builds at this time!"
-#endif
-
 #include <QtWidgets/QApplication>
 // This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
 #if defined(QT_STATICPLUGIN)

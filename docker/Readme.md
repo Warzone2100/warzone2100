@@ -16,10 +16,6 @@ docker run --rm -v ${pwd}:/code <build_image_name> make
 
 
 * cross compile
-docker run --rm -v ${pwd}:/code <build_image_name> -it bash
+docker run --rm -v ${pwd}:/code <build_image_name> cmake '-H.' -DCMAKE_BUILD_TYPE=Debug -Bbuild -DCMAKE_TOOLCHAIN_FILE="/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake" -DINSTALLER_VERSION="2.46.0.0" -DINSTALLER_EXTDIR="/mingw-cross-env/usr/i686-w64-mingw32.static" -G"Ninja"
 
-mkdir build && cd build
-
-cmake -DCMAKE_TOOLCHAIN_FILE=/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake -DINSTALLER_VERSION=2.46.0.0 -DINSTALLER_EXTDIR="/mingw-cross-env/usr/i686-w64-mingw32.static" ..
-
-make -j8
+docker run --rm -v ${pwd}:/code <build_image_name> cmake --build build --target package

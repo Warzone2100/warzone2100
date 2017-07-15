@@ -1,0 +1,8 @@
+
+!define PACKAGE_NAME "warzone2100"
+!define TOP_SRCDIR "@SOURCE_DIR@"
+!define TOP_BUILDDIR "@BUILD_DIR@"
+!define PACKAGE "warzone2100"
+!define PACKAGE_VERSION "3.2"
+!define OUTFILE "warzone2100_portable.exe"
+!define VERSIONNUM "@INSTALLER_VERSION@"
