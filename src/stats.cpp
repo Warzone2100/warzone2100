@@ -297,6 +297,57 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
 	psStats->weight = json.value("weight", 0).toUInt();
 	psStats->pBase->hitpoints = json.value("hitpoints", 0).toUInt();
 	psStats->pBase->hitpointPct = json.value("hitpointPct", 100).toUInt();
+
+	QString dtype = json.value("droidType", "DROID").toString();
+	psStats->droidTypeOverride = DROID_DEFAULT;
+	if (dtype.compare("PERSON") == 0)
+	{
+		psStats->droidTypeOverride = DROID_PERSON;
+	}
+	else if (dtype.compare("TRANSPORTER") == 0)
+	{
+		psStats->droidTypeOverride = DROID_TRANSPORTER;
+	}
+	else if (dtype.compare("CYBORG") == 0)
+	{
+		psStats->droidTypeOverride = DROID_CYBORG;
+	}
+	else if (dtype.compare("CYBORG_SUPER") == 0)
+	{
+		psStats->droidTypeOverride = DROID_CYBORG_SUPER;
+	}
+	else if (dtype.compare("CYBORG_CONSTRUCT") == 0)
+	{
+		psStats->droidTypeOverride = DROID_CYBORG_CONSTRUCT;
+	}
+	else if (dtype.compare("CYBORG_REPAIR") == 0)
+	{
+		psStats->droidTypeOverride = DROID_CYBORG_REPAIR;
+	}
+	else if (dtype.compare("DROID_CONSTRUCT") == 0)
+	{
+		psStats->droidTypeOverride = DROID_CONSTRUCT;
+	}
+	else if (dtype.compare("DROID_ECM") == 0)
+	{
+		psStats->droidTypeOverride = DROID_ECM;
+	}
+	else if (dtype.compare("DROID_COMMAND") == 0)
+	{
+		psStats->droidTypeOverride = DROID_COMMAND;
+	}
+	else if (dtype.compare("DROID_SENSOR") == 0)
+	{
+		psStats->droidTypeOverride = DROID_SENSOR;
+	}
+	else if (dtype.compare("DROID_REPAIR") == 0)
+	{
+		psStats->droidTypeOverride = DROID_REPAIR;
+	}
+	else if (dtype.compare("DROID") != 0)
+	{
+		debug(LOG_ERROR, "Unrecognized droidType %s", dtype.toUtf8().constData());
+	}
 }
 
 /*Load the weapon stats from the file exported from Access*/
@@ -532,32 +583,6 @@ bool loadBodyStats(const char *pFileName)
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
 			psStats->upgrade[j] = psStats->base;
-		}
-		QString dtype = ini.value("droidType", "DROID").toString();
-		psStats->droidTypeOverride = DROID_DEFAULT;
-		if (dtype.compare("PERSON") == 0)
-		{
-			psStats->droidTypeOverride = DROID_PERSON;
-		}
-		else if (dtype.compare("TRANSPORTER") == 0)
-		{
-			psStats->droidTypeOverride = DROID_TRANSPORTER;
-		}
-		else if (dtype.compare("CYBORG") == 0)
-		{
-			psStats->droidTypeOverride = DROID_CYBORG;
-		}
-		else if (dtype.compare("CYBORG_SUPER") == 0)
-		{
-			psStats->droidTypeOverride = DROID_CYBORG_SUPER;
-		}
-		else if (dtype.compare("CYBORG_CONSTRUCT") == 0)
-		{
-			psStats->droidTypeOverride = DROID_CYBORG_CONSTRUCT;
-		}
-		else if (dtype.compare("CYBORG_REPAIR") == 0)
-		{
-			psStats->droidTypeOverride = DROID_CYBORG_REPAIR;
 		}
 		psStats->ref = REF_BODY_START + i;
 		if (!getBodySize(ini.value("size").toString().toUtf8().constData(), &psStats->size))

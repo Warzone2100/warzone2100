@@ -1753,6 +1753,10 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 		delete psTemplate;
 		return nullptr;
 	}
+	if (psComp->droidTypeOverride != DROID_ANY)
+	{
+		psTemplate->droidType = psComp->droidTypeOverride; // set droidType based on component
+	}
 	if (psComp->compType == COMP_WEAPON)
 	{
 		for (int i = 0; i < numTurrets; i++) // may be multi-weapon

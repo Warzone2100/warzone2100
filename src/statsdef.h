@@ -260,7 +260,7 @@ struct BASE_STATS
 struct COMPONENT_STATS : public BASE_STATS
 {
 	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), designable(false), pIMD(nullptr),
-		compType(COMP_NUMCOMPONENTS) {}
+		compType(COMP_NUMCOMPONENTS), droidTypeOverride(DROID_ANY) {}
 
 	UDWORD		buildPower;			/**< Power required to build the component */
 	UDWORD		buildPoints;		/**< Time required to build the component */
@@ -268,6 +268,7 @@ struct COMPONENT_STATS : public BASE_STATS
 	bool		designable;			/**< flag to indicate whether this component can be used in the design screen */
 	iIMDShape	*pIMD;				/**< The IMD to draw for this component */
 	COMPONENT_TYPE	compType;
+	DROID_TYPE	droidTypeOverride;		///< If not DROID_ANY, sets droid type.
 
 	struct UPGRADE
 	{
@@ -471,7 +472,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 
 struct BODY_STATS : public COMPONENT_STATS
 {
-	BODY_STATS() : size(SIZE_NUM), weaponSlots(0), droidTypeOverride(DROID_ANY)
+	BODY_STATS() : size(SIZE_NUM), weaponSlots(0)
 	{
 		pBase = &base;
 		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
@@ -479,7 +480,6 @@ struct BODY_STATS : public COMPONENT_STATS
 
 	BODY_SIZE	size;			///< How big the body is - affects how hit
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
-	DROID_TYPE	droidTypeOverride; // if not DROID_ANY, sets droid type
 
 	std::vector<iIMDShape *> ppIMDList;	///< list of IMDs to use for propulsion unit - up to numPropulsionStats
 	std::vector<iIMDShape *> ppMoveIMDList;	///< list of IMDs to use when droid is moving - up to numPropulsionStats
