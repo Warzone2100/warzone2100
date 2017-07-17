@@ -3,6 +3,7 @@
         "buildPoints": 250,
         "buildPower": 50,
         "designable": 1,
+        "droidType": "DROID_REPAIR",
         "id": "LightRepair1",
         "location": "TURRET",
         "model": "GNMREPAR.PIE",

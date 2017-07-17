@@ -4,6 +4,7 @@
         "buildPower": 17,
         "constructPoints": 10,
         "designable": 1,
+        "droidType": "DROID_CONSTRUCT",
         "hitpoints": 50,
         "id": "Spade1Mk1",
         "name": "Truck",

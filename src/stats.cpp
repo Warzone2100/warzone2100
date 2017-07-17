@@ -299,7 +299,7 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
 	psStats->pBase->hitpointPct = json.value("hitpointPct", 100).toUInt();
 
 	QString dtype = json.value("droidType", "DROID").toString();
-	psStats->droidTypeOverride = DROID_DEFAULT;
+	psStats->droidTypeOverride = DROID_ANY;
 	if (dtype.compare("PERSON") == 0)
 	{
 		psStats->droidTypeOverride = DROID_PERSON;
