@@ -84,10 +84,12 @@ namespace("cam_");
 // Misc useful stuff.
 ////////////////////////////////////////////////////////////////////////////////
 
+//These are campaign player numbers.
 const CAM_HUMAN_PLAYER = 0;
 const NEW_PARADIGM = 1;
 const THE_COLLECTIVE = 2;
 const NEXUS = 3;
+
 const CAM_MAX_PLAYERS = 8;
 const CAM_TICKS_PER_FRAME = 100;
 
@@ -230,8 +232,8 @@ function camRemoveDuplicates(array)
 	});
 }
 
-//;; \subsection{camChangeOnDiff(numeric value, invert)}
-//;; Change a numeric value based on campaign difficulty. If invert is defined
+//;; \subsection{camChangeOnDiff(numeric value, [bool])}
+//;; Change a numeric value based on campaign difficulty. If the second option is defined
 //;; then the opposite effect will occur on that value.
 function camChangeOnDiff(num, invert)
 {
@@ -261,6 +263,22 @@ function camChangeOnDiff(num, invert)
 	}
 
 	return Math.floor(num * modifier);
+}
+
+//;; \subsection{camIsSystemDroid(game object)}
+//;; Determine if the passed in object is a non-weapon based droid.
+function camIsSystemDroid(obj)
+{
+	if (obj.type !== DROID)
+	{
+		camTrace("Attempted to compare if a non-droid is a system unit");
+		return false;
+	}
+
+	return (obj.droidType === DROID_SENSOR
+		|| obj.droidType === DROID_CONSTRUCT
+		|| obj.droidType === DROID_REPAIR
+	);
 }
 
 //;; \subsection{camMakeGroup(what, filter)}
@@ -309,7 +327,7 @@ function camMakeGroup(what, filter)
 	if (camDef(array))
 	{
 		var group = newGroup();
-		for (var i = 0; i < array.length; ++i)
+		for (var i = 0, l = array.length; i < l; ++i)
 		{
 			var o = array[i];
 			if (!camDef(o) || !o)
@@ -342,7 +360,7 @@ function __camGlobalContext()
 //;; Grants research from the given list to player
 function camEnableRes(list, player)
 {
-	for(var i = 0; i < list.length; ++i)
+	for(var i = 0, l = list.length; i < l; ++i)
 	{
 		enableResearch(list[i], player);
 		completeResearch(list[i], player);
@@ -355,18 +373,19 @@ function camEnableRes(list, player)
 function camCompleteRequiredResearch(items, player)
 {
 	dump("\n*Player " + player + " requesting accelerated research.");
-	for(var i = 0; i < items.length; ++i)
+
+	for (var i = 0, l = items.length; i < l; ++i)
 	{
 		dump("Searching for required research of item: " + items[i]);
 		var reqRes = findResearch(items[i], player).reverse();
 
-		if(reqRes.length === 0)
+		if (reqRes.length === 0)
 		{
 			continue;
 		}
 
 		reqRes = camRemoveDuplicates(reqRes);
-		for(var s = 0; s < reqRes.length; ++s)
+		for (var s = 0, r = reqRes.length; s < r; ++s)
 		{
 			dump("	Found: " + reqRes[s].name);
 			enableResearch(reqRes[s].name, player);
@@ -385,10 +404,16 @@ function camCompleteRequiredResearch(items, player)
 function camMarkTiles(label)
 {
 	if (camIsString(label))
+	{
 		__camMarkedTiles[label] = true;
+	}
 	else
-		for (var i = 0; i < label.length; ++i)
+	{
+		for (var i = 0, l = label.length; i < l; ++i)
+		{
 			__camMarkedTiles[label[i]] = true;
+		}
+	}
 	// apply instantly
 	__camUpdateMarkedTiles();
 }
@@ -398,10 +423,16 @@ function camMarkTiles(label)
 function camUnmarkTiles(label)
 {
 	if (camIsString(label))
+	{
 		delete __camMarkedTiles[label];
+	}
 	else
-		for (var i = 0; i < label.length; ++i)
+	{
+		for (var i = 0, l = label.length; i < l; ++i)
+		{
 			delete __camMarkedTiles[label[i]];
+		}
+	}
 	// apply instantly
 	__camUpdateMarkedTiles();
 }
@@ -514,8 +545,12 @@ function __camWinInfo()
 function __camGenericDebug(flag, func, args, err, bt)
 {
 	if (camDef(bt) && bt)
+	{
 		for (var i = bt.length - 1; i >= 0; --i)
+		{
 			debug("STACK: from", [bt[i]]);
+		}
+	}
 	if (!func)
 		func = "<anonymous>";
 	var str = flag + ": " + func + ": " +
@@ -532,9 +567,9 @@ function __camBacktrace()
 	while (camDef(func) && func)
 	{
 		if (func.name)
-			list[list.length] = func.name;
+			list.push(func.name);
 		else
-			list[list.length] = "<anonymous>";
+			list.push("<anonymous>");
 		func = func.caller;
 	}
 	return list;
@@ -604,7 +639,7 @@ function getArtifacts()
 	{
 		if(camDef(__camArtifacts[alabel]))
 		{
-			camArti[camArti.length] = __camGetArtifactLabel(alabel);
+			camArti.push(__camGetArtifactLabel(alabel));
 		}
 	}
 	return camArti;
@@ -752,14 +787,15 @@ function camSetEnemyBases(bases)
 			if (!camDef(bi.cleanup)) // auto-detect cleanup area
 			{
 				var objs = enumGroup(bi.group);
-				if (objs.length > 0) {
+				if (objs.length > 0)
+				{
 					var a = {
 						type: AREA,
 						x: mapWidth, y: mapHeight,
 						x2: 0, y2: 0
 					};
 					// smallest rectangle to contain all objects
-					for (var i = 0; i < objs.length; ++i)
+					for (var i = 0, l = objs.length; i < l; ++i)
 					{
 						var o = objs[i];
 						if (o.x < a.x) a.x = o.x;
@@ -787,7 +823,7 @@ function camSetEnemyBases(bases)
 			bi.group = newGroup();
 			addLabel({ type: GROUP, id: bi.group }, blabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
-			for (var i = 0; i < structs.length; ++i)
+			for (var i = 0, l = structs.length; i < l; ++i)
 			{
 				var s = structs[i];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
@@ -878,7 +914,7 @@ function camSendReinforcement(player, position, list, kind, data)
 	if (camDef(data) && camDef(data.order))
 	{
 		order = data.order;
-		if (camDef(data) && camDef(data.data))
+		if (camDef(data.data))
 		{
 			order_data = data.data;
 		}
@@ -887,7 +923,7 @@ function camSendReinforcement(player, position, list, kind, data)
 	{
 		case CAM_REINFORCE_GROUND:
 			var droids = [];
-			for (var i = 0; i < list.length; ++i)
+			for (var i = 0, l = list.length; i < l; ++i)
 			{
 				droids[droids.length] = addDroid(player, pos.x, pos.y,
 				                        "Reinforcement", list[i].body,
@@ -907,6 +943,7 @@ function camSendReinforcement(player, position, list, kind, data)
 			__camDispatchTransporterSafe();
 			break;
 		default:
+			camTrace("Unknown reinforcement type");
 			break;
 	}
 }
@@ -948,15 +985,14 @@ function __camDispatchTransporterUnsafe()
 		camDebug("Transporter queue empty!");
 		return false;
 	}
-	args = __camTransporterQueue[0];
+	var args = __camTransporterQueue[0];
 	var player = args.player;
 	var pos = args.position;
 	var list = args.list;
 	var data = args.data;
 	if (camDef(__camIncomingTransports[player]))
 	{
-		camTrace("Transporter already on map for player",
-		         player + ", delaying.");
+		camTrace("Transporter already on map for player", player + ", delaying.");
 		return false;
 	}
 	__camTransporterQueue.shift(); // what could possibly go wrong?
@@ -971,12 +1007,12 @@ function __camDispatchTransporterUnsafe()
 	}
 	var trans = __camPlayerTransports[player];
 	var droids = [];
-	for (var i = 0; i < list.length; ++i)
+	for (var i = 0, l = list.length; i < l; ++i)
 	{
 		var droid = addDroid(player, -1, -1,
 		                     "Reinforcement", list[i].body,
 		                     list[i].prop, "", "", list[i].weap);
-		droids[droids.length] = droid;
+		droids.push(droid);
 		addDroidToTransporter(trans, droid);
 	}
 	__camIncomingTransports[player] = {
@@ -1008,6 +1044,28 @@ function __camDispatchTransporterSafe(player, position, list, data)
 		queue("__camDispatchTransporterSafe", 1000);
 }
 
+function __camLandTransporter(player, pos)
+{
+	var ti = __camIncomingTransports[player];
+	if (!camDef(ti))
+	{
+		camDebug("Unhandled transporter for player", player);
+		return;
+	}
+	if (camDef(ti.message))
+	{
+		__camTransporterMessage = ti.message;
+		hackAddMessage(ti.message, PROX_MSG, 0, false);
+	}
+	else
+	{
+		__camTransporterMessage = undefined;
+	}
+	camTrace("Landing transport for player", player);
+	playSound("pcv395.ogg", pos.x, pos.y, 0);
+	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
+}
+
 function __camCheckBaseSeen(seen)
 {
 	var group = seen; // group?
@@ -1028,11 +1086,15 @@ function __camCheckBaseSeen(seen)
 function __camIsValidLeftover(obj)
 {
 	if (camPlayerMatchesFilter(obj.player, ENEMIES))
+	{
 		if (obj.type === STRUCTURE && obj.stattype === WALL)
 			return true;
+	}
 	if (obj.type === FEATURE)
+	{
 		if (obj.stattype === BUILDING)
 			return true;
+	}
 	return false;
 }
 
@@ -1049,7 +1111,7 @@ function __camCheckBaseEliminated(group)
 		if (camDef(bi.cleanup))
 		{
 			var leftovers = enumArea(bi.cleanup);
-			for (var i = 0; i < leftovers.length; i++)
+			for (var i = 0, l = leftovers.length; i < l; i++)
 			{
 				var obj = leftovers[i];
 				if (__camIsValidLeftover(obj))
@@ -1103,29 +1165,6 @@ function __camBasesTick()
 		                     bi.reinforce_kind, bi.reinforce_data);
 	}
 }
-
-function __camLandTransporter(player, pos)
-{
-	var ti = __camIncomingTransports[player];
-	if (!camDef(ti))
-	{
-		camDebug("Unhandled transporter for player", player);
-		return;
-	}
-	if (camDef(ti.message))
-	{
-		__camTransporterMessage = ti.message;
-		hackAddMessage(ti.message, PROX_MSG, 0, false);
-	}
-	else
-	{
-		__camTransporterMessage = undefined;
-	}
-	camTrace("Landing transport for player", player);
-	playSound("pcv395.ogg", pos.x, pos.y, 0);
-	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // AI droid movement automation.
@@ -1238,11 +1277,12 @@ function camManageGroup(group, order, data)
 			saneData.pos = [ saneData.pos ];
 		else if (!camDef(saneData.pos.length)) // single position object?
 			saneData.pos = [ saneData.pos ];
-		for (var i = 0; i < saneData.pos.length; ++i) // array of labels?
+		for (var i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
+		{
 			saneData.pos[i] = camMakePos(saneData.pos[i]);
+		}
 	}
-	if (camDef(__camGroupInfo[group])
-	    && order !== __camGroupInfo[group].order)
+	if (camDef(__camGroupInfo[group]) && order !== __camGroupInfo[group].order)
 	{
 		camTrace("Group", group, "receives a new order:",
 		         camOrderToString(order));
@@ -1339,7 +1379,8 @@ function __camFindClusters(list, size)
 	{
 		var x = list[i].x, y = list[i].y;
 		var found = false;
-		for (var j = 0; j < ret.clusters.length; ++j) {
+		for (var j = 0, l = ret.clusters.length; j < l; ++j)
+		{
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
 			{
 				var n = ret.clusters[j].length;
@@ -1467,9 +1508,9 @@ function __camTacticsTickForGroup(group)
 
 	// Handle the case when we need to repair
 	if (rawDroids.length > 0 && camDef(gi.data.repair)
-	            && countStruct("A0RepairCentre3", rawDroids[0].player))
+		&& countStruct("A0RepairCentre3", rawDroids[0].player))
 	{
-		for (var i = 0; i < rawDroids.length; ++i)
+		for (var i = 0, l = rawDroids.length; i < l; ++i)
 		{
 			var droid = rawDroids[i];
 			if (droid.order === DORDER_RTR)
@@ -1479,7 +1520,7 @@ function __camTacticsTickForGroup(group)
 				orderDroid(droid, DORDER_RTR);
 				continue;
 			}
-			healthyDroids[healthyDroids.length] = droid;
+			healthyDroids.push(droid);
 		}
 	}
 	else
@@ -1487,29 +1528,37 @@ function __camTacticsTickForGroup(group)
 		healthyDroids = rawDroids;
 	}
 
-	// Handle regrouping
-	var droids = healthyDroids;
-	if (camDef(gi.data.regroup) && gi.data.regroup
-	              && healthyDroids.length > 0)
+	// Handle regrouping. Do not include system droids.
+	var droids = healthyDroids.filter(function(dr) {
+		return !camIsSystemDroid(dr);
+	});
+	if (camDef(gi.data.regroup) && gi.data.regroup && healthyDroids.length > 0)
 	{
 		var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
 		var groupX = ret.xav[ret.maxIdx];
 		var groupY = ret.yav[ret.maxIdx];
 		droids = ret.clusters[ret.maxIdx];
-		for (var i = 0; i < ret.clusters.length; ++i)
+		for (var i = 0, l = ret.clusters.length; i < l; ++i)
+		{
 			if (i != ret.maxIdx) // move other droids towards main cluster
-				for (var j = 0; j < ret.clusters[i].length; ++j)
+			{
+				for (var j = 0, c = ret.clusters[i].length; j < c; ++j)
 				{
 					var droid = ret.clusters[i][j];
-					orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
+					if (camDef(droid))
+					{
+						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
+					}
 				}
+			}
+		}
 		var back = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
 		// not enough droids grouped?
 		if (gi.count < 0
 		    ? (ret.maxCount < groupSize(group) * 0.66)
 		    : (ret.maxCount < gi.count))
 		{
-			for (var i = 0; i < droids.length; ++i)
+			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
 				if (back)
@@ -1532,7 +1581,7 @@ function __camTacticsTickForGroup(group)
 			var target = profile("__camPickTarget", group);
 			if (!camDef(target))
 				return;
-			for (var i = 0; i < droids.length; ++i)
+			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
 				if (droid.player === CAM_HUMAN_PLAYER)
@@ -1550,20 +1599,23 @@ function __camTacticsTickForGroup(group)
 					if (dist > radius)
 					{
 						orderDroidLoc(droid, DORDER_MOVE,
-						              gi.data.pos.x, gi.data.pos.y);
+									gi.data.pos.x, gi.data.pos.y);
 						done = true;
 					}
 				}
-				if (!done && ((droid.order !== DORDER_SCOUT) || isVTOL(droid))
-					&& camDist(droid, target) >= __CAM_CLOSE_RADIUS)
+				var vt = (droid.type === DROID) && isVTOL(droid);
+				var sc = droid.order !== DORDER_SCOUT;
+				if (!done
+					&& ((sc || vt)
+					&& camDist(droid, target) >= __CAM_CLOSE_RADIUS))
 				{
 					//Rearm vtols.
-					if (isVTOL(droid) && ((droid.weapons[0].armed < 60) ||
-						((droid.order === DORDER_REARM) &&
-						(droid.weapons[0].armed < 99))))
+					if (vt && ((droid.weapons[0].armed < 1)
+						|| ((droid.order === DORDER_REARM)
+						&& (droid.weapons[0].armed < 100))))
 					{
 						var pads = countStruct("A0VtolPad", droid.player);
-						if((pads > 0) && (droid.order !== DORDER_REARM))
+						if (pads && (droid.order !== DORDER_REARM))
 							orderDroid(droid, DORDER_REARM);
 					}
 					else
@@ -1588,17 +1640,19 @@ function __camTacticsTickForGroup(group)
 					return;
 				// find random new position to visit
 				var list = [];
-				for (var i = 0; i < gi.data.pos.length; ++i)
+				for (var i = 0, l = gi.data.pos.length; i < l; ++i)
+				{
 					if (i !== gi.lastspot)
 						list[list.length] = i;
+				}
 				gi.lastspot = list[camRand(list.length)];
 			}
 			gi.lastmove = gameTime;
 			var pos = gi.data.pos[gi.lastspot];
-			for (var i = 0; i < droids.length; ++i)
+			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				if(!isVTOL(droid))
+				if((droid.type === DROID) && !isVTOL(droid))
 					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
 				else
 					orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
@@ -1613,12 +1667,11 @@ function __camTacticsTickForGroup(group)
 				camManageGroup(group, gi.data.order, gi.data.data);
 				break;
 			}
-			for (var i = 0; i < droids.length; ++i)
+			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
 				if (droid.order !== DORDER_COMMANDERSUPPORT)
-					orderDroidObj(droid, DORDER_COMMANDERSUPPORT,
-					              commander);
+					orderDroidObj(droid, DORDER_COMMANDERSUPPORT, commander);
 			}
 			break;
 		default:
@@ -1662,8 +1715,7 @@ function __camCheckGroupMorale(group)
 			queue("__camTacticsTickForGroup", CAM_TICKS_PER_FRAME, group);
 			break;
 		default:
-			camDebug("Group order doesn't support morale",
-			         camOrderToString(gi.order));
+			camDebug("Group order doesn't support morale", camOrderToString(gi.order));
 			break;
 	}
 }
@@ -1672,13 +1724,13 @@ function __camEnumFreeTrucks(player)
 {
 	var rawDroids = enumDroid(player, DROID_CONSTRUCT);
 	var droids = [];
-	for (var i = 0; i < rawDroids.length; ++i)
+	for (var i = 0, l = rawDroids.length; i < l; ++i)
 	{
 		var droid = rawDroids[i];
 		if (droid.order !== DORDER_BUILD && droid.order !== DORDER_HELPBUILD
 		                                 && droid.order !== DORDER_LINEBUILD)
 		{
-			droids[droids.length] = droid;
+			droids.push(droid);
 		}
 	}
 	return droids;
@@ -1693,7 +1745,7 @@ function __camGetClosestTruck(player, pos)
 	// Find out which one is the closest.
 	var minDroid = droids[0];
 	var minDist = camDist(minDroid, pos);
-	for (var i = 1; i < droids.length; ++i)
+	for (var i = 1, l = droids.length; i < l; ++i)
 	{
 		var droid = droids[i];
 		if (!droidCanReach(droid, pos.x, pos.y))
@@ -1775,7 +1827,7 @@ function __camCheckDeadTruck(obj)
 	{
 		// multi-turret templates are not supported yet
 		// cyborg engineers are not supported yet
-		// cannot use obj.weapons[] because spade aint a weapon
+		// cannot use obj.weapons[] because spade is not a weapon
 		camQueueDroidProduction(obj.player, {
 			body: obj.body,
 			prop: obj.propulsion,
@@ -1833,7 +1885,9 @@ function __camCheckDeadTruck(obj)
 function camSetFactories(factories)
 {
 	for (var flabel in factories)
+	{
 		camSetFactoryData(flabel, factories[flabel]);
+	}
 }
 
 //;; \subsection{camSetFactoryData(factory label, factory description)}
@@ -1864,8 +1918,10 @@ function camSetFactoryData(flabel, fdata)
 	fi.state = 0;
 	if (!camDef(fi.group))
 		fi.group = newGroup();
-	for (var i = 0; i < droids.length; ++i)
+	for (var i = 0, l = droids.length; i < l; ++i)
+	{
 		groupAdd(fi.group, droids[i]);
+	}
 	if (!camDef(fi.data.count))
 		fi.data.count = fi.groupSize;
 }
@@ -2228,10 +2284,10 @@ function __camTriggerLastAttack()
 {
 	if (!__camLastAttackTriggered)
 	{
-		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(
-		function(obj) {
-			return (obj.type === DROID) && ((obj.droidType !== DROID_TRANSPORTER) &&
-				(obj.droidType !== DROID_SUPERTRANSPORTER));
+		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+		// Do not order systems (sensor/trucks/repairs) to attack stuff.
+		enemies.filter(function(obj) {
+			return ((obj.type === DROID) && !camIsTransporter(obj))
 		});
 		camTrace(enemies.length, "enemy droids remaining");
 		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
@@ -2369,6 +2425,21 @@ function __camVictoryOffworld()
 // Transporter management.
 ////////////////////////////////////////////////////////////////////////////////
 
+//;; \subsection{camIsTransporter(game object)}
+//;; Determine if the object is a transporter.
+function camIsTransporter(object)
+{
+	if (object.type !== DROID)
+	{
+		camTrace("Attempted to check if a non-droid object is a transporter.");
+		return false;
+	}
+
+	return ((object.droidType === DROID_TRANSPORTER)
+		|| (object.droidType === DROID_SUPERTRANSPORTER)
+	);
+}
+
 //;; \subsection{camSetupTransport(place x, place y, exit x, exit y)}
 //;; A convenient function for placing the standard campaign transport
 //;; for loading in pre-away missions. The exit point for the transport
@@ -2449,13 +2520,13 @@ function __camRetreatVtols()
 		return isVTOL(obj);
 	});
 
-	for (var i = 0; i < vtols.length; ++i)
+	for (var i = 0, l = vtols.length; i < l; ++i)
 	{
 		var vt = vtols[i];
-		for (var c = 0; c < vt.weapons.length; ++c)
+		for (var c = 0, d = vt.weapons.length; c < d; ++c)
 		{
 			if ((vt.order == DORDER_RTB)
-				|| (vt.weapons[c].armed < 1) || (vt.health < 60))
+				|| (vt.weapons[c].armed < 1) || (vt.health < 40))
 			{
 				orderDroidLoc(vt, DORDER_MOVE, __vtolExitPosition.x,
 					__vtolExitPosition.y);
@@ -2474,6 +2545,10 @@ function __camRetreatVtols()
 // It assumes that script authors do not implement another similar mechanism,
 // or something BAD would happen.
 ////////////////////////////////////////////////////////////////////////////////
+
+// To capture events for non human players upon game load or just by starting a
+// mission.
+isReceivingAllEvents = true;
 
 //;; \subsection{camAreaEvent(label, function(droid))}
 //;; Implement eventArea<label> in a debugging-friendly way. The function
@@ -2590,7 +2665,6 @@ function cam_eventChat(from, to, message)
 
 function cam_eventStartLevel()
 {
-	isReceivingAllEvents = true;
 	// Variables initialized here are the ones that should not be
 	// re-initialized on save-load. Otherwise, they are initialized
 	// on the global scope (or wherever necessary).
@@ -2618,7 +2692,7 @@ function cam_eventStartLevel()
 	__vtolTimer = 0;
 	__disableVtolSpawn = false;
 	setTimer("__camTick", 1000); // campaign pollers
-	setTimer("__camTruckTick", 150100); // some slower campaign pollers
+	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
 }
 
@@ -2655,9 +2729,11 @@ function cam_eventGroupSeen(viewer, group)
 
 function cam_eventTransporterExit(transport)
 {
-	if (transport.player !== CAM_HUMAN_PLAYER ||
-		(__camWinLossCallback === "__camVictoryStandard" &&
-		transport.player === CAM_HUMAN_PLAYER) )
+	camTrace("Transporter for player", transport.player + " has exited");
+
+	if (transport.player !== CAM_HUMAN_PLAYER
+		|| (__camWinLossCallback === "__camVictoryStandard"
+		&& transport.player === CAM_HUMAN_PLAYER))
 	{
 
 		// allow the next transport to enter

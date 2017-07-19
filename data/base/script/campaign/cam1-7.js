@@ -70,7 +70,7 @@ camAreaEvent("artifactCheckNP", function()
 });
 
 //Land New Paradigm transport if the New Paradigm have the artifact
-//Also prevent it from being dropped anymore
+//and prevent it from being dropped.
 camAreaEvent("NPTransportTrigger", function()
 {
 	if(enemyHasArtifact === 1)
@@ -83,7 +83,6 @@ camAreaEvent("NPTransportTrigger", function()
 			exit: { x: 32, y: 62 }
 		});
 		playSound("pcv632.ogg"); //enemy transport escaping warning sound
-		queue("timedGameLoss", 18000);
 	}
 });
 
@@ -115,11 +114,16 @@ function checkArtifactGroup()
 	}
 }
 
-//Give New Paradigm transporter time to lift off before showing game over
-function timedGameLoss()
+function eventTransporterExit(transport)
 {
-	camTrace("Enemy stole artifact");
-	gameOverMessage(false);
+	if(transport.player !== CAM_HUMAN_PLAYER)
+	{
+		if(enemyHasArtifact === 2)
+		{
+			camTrace("Enemy stole artifact");
+			gameOverMessage(false);
+		}
+	}
 }
 
 //Moves some New Paradigm forces to the artifact
@@ -247,10 +251,8 @@ function eventStartLevel()
 	enemyHasArtifact = 0;
 	camManageTrucks(NEW_PARADIGM);
 	buildLancers();
-
-
+	
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
-
 	queue("camCallOnce", 15000, "enableReinforcements");
 	queue("getArtifact", 120000);
 }

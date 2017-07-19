@@ -7,6 +7,7 @@ const landingZoneList = [ "NPLZ1", "NPLZ2", "NPLZ3", "NPLZ4", "NPLZ5" ];
 const landingZoneMessages = [ "C1CA_LZ1", "C1CA_LZ2", "C1CA_LZ3", "C1CA_LZ4", "C1CA_LZ5" ];
 var baseEstablished;
 var lastLZ, lastHeavy;
+var totalTransportLoads;
 
 // mimics wzscript's numStructsButNotWallsInArea(),
 // not sure if worth including in libcampaign.
@@ -26,9 +27,10 @@ function countStructuresInBuildArea()
 // a simple extra victory condition callback
 function extraVictoryCondition()
 {
+	const MIN_TRANSPORT_RUNS = 10;
 	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
-	// at least one enemy transporter should have landed and no enemies on map
-	if (camDef(lastLZ) && enemies.length === 0)
+	// No enemies on map and at least eleven New Paradigm transport runs.
+	if ((totalTransportLoads > MIN_TRANSPORT_RUNS) && !enemies.length)
 	{
 		if (baseEstablished) // if base is destroyed later, we don't care
 			return true;
@@ -107,10 +109,13 @@ function sendTransport()
 		order: CAM_ORDER_ATTACK,
 		data: { regroup: true, count: -1, pos: "buildArea" }
 	});
+
+	totalTransportLoads = totalTransportLoads + 1;
 }
 
 function eventStartLevel()
 {
+	totalTransportLoads = 0;
 	initialStructures = countStructuresInBuildArea();
 	baseEstablished = false;
 
