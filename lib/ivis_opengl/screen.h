@@ -55,7 +55,7 @@ void screen_Display();
 /* screendump */
 void screenDumpToDisk(const char *path, const char *level);
 
-extern int wz_texture_compression;
+extern bool wz_texture_compression;
 
 void screenDoDumpToDiskIfRequired();
 

@@ -79,7 +79,10 @@ static int newPage(const char *name, int level, int width, int height, int count
 	if (texPage == pie_NumberOfPages())
 	{
 		// We need to create a new texture page; create it and increase texture table to store it
-		pie_ReserveTexture(name);
+		pie_ReserveTexture(name, width, height);
+		pie_AssignTexture(texPage,
+			gfx_api::context::get().create_texture(width, height,
+				wz_texture_compression ? gfx_api::pixel_format::compressed_rgba : gfx_api::pixel_format::rgba));
 	}
 	terrainPage = texPage;
 	pie_SetTexturePage(texPage);
@@ -89,8 +92,6 @@ static int newPage(const char *name, int level, int width, int height, int count
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipmap_levels - 1);
 
 	// debug(LOG_TEXTURE, "newPage: glTexImage2D(page=%d, level=%d) opengl id=%u", texPage, level, _TEX_PAGE[texPage].id);
-	glTexImage2D(GL_TEXTURE_2D, level, wz_texture_compression, width, height, 0,
-	             GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -216,8 +217,7 @@ bool texLoad(const char *fileName)
 				break;
 			}
 			// Insert into texture page
-			glTexSubImage2D(GL_TEXTURE_2D, j, xOffset, yOffset, tile.width, tile.height,
-			                GL_RGBA, GL_UNSIGNED_BYTE, tile.bmp);
+			pie_Texture(texPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::rgba, tile.bmp);
 			free(tile.bmp);
 			if (i == mipmap_max) // dealing with main texture page; so register coordinates
 			{
@@ -239,14 +239,13 @@ bool texLoad(const char *fileName)
 				xOffset = 0;
 				yOffset = 0;
 				debug(LOG_TEXTURE, "texLoad: Extra page added at %d for %s, was page %d, opengl id %u",
-				      k, partialPath, texPage, (unsigned)pie_Texture(texPage));
+				      k, partialPath, texPage, (unsigned)pie_Texture(texPage).id());
 				texPage = newPage(fileName, j, xSize, ySize, k);
 			}
 		}
 		debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u",
-		      k, partialPath, i, texPage, (unsigned)pie_Texture(texPage));
+		      k, partialPath, i, texPage, (unsigned)pie_Texture(texPage).id());
 		i /= 2;	// halve the dimensions for the next series; OpenGL mipmaps start with largest at level zero
 	}
-
 	return true;
 }

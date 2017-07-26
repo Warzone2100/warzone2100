@@ -617,11 +617,11 @@ bool ParseCommandLine(int argc, const char **argv)
 			break;
 
 		case CLI_TEXTURECOMPRESSION:
-			wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
+			wz_texture_compression = true;
 			break;
 
 		case CLI_NOTEXTURECOMPRESSION:
-			wz_texture_compression = GL_RGBA;
+			wz_texture_compression = false;
 			break;
 
 		case CLI_AUTOGAME:

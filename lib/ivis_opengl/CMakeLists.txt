@@ -1,7 +1,44 @@
 cmake_minimum_required (VERSION 3.5)
 
-file(GLOB HEADERS "*.h")
-file(GLOB SRC "*.cpp")
+file(GLOB HEADERS
+	"bitimage.h"
+	"gfx_api.h"
+	"imd.h"
+	"ivisdef.h"
+	"jpeg_encoder.h"
+	"pieblitfunc.h"
+	"pieclip.h"
+	"piedef.h"
+	"piefunc.h"
+	"piematrix.h"
+	"piemode.h"
+	"piepalette.h"
+	"piestate.h"
+	"pietypes.h"
+	"png_util.h"
+	"screen.h"
+	"tex.h"
+	"textdraw.h"
+)
+
+file(GLOB SRC
+	"bitimage.cpp"
+	"gfx_api_gl.cpp"
+	"imdload.cpp"
+	"jpeg_encoder.cpp"
+	"pieblitfunc.cpp"
+	"pieclip.cpp"
+	"piedraw.cpp"
+	"piefunc.cpp"
+	"piematrix.cpp"
+	"piemode.cpp"
+	"piepalette.cpp"
+	"piestate.cpp"
+	"png_util.cpp"
+	"screen.cpp"
+	"tex.cpp"
+	"textdraw.cpp"
+)
 
 find_package(PNG REQUIRED)
 find_package(OpenGL REQUIRED)

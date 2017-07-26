@@ -18,9 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
 
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -36,16 +34,31 @@
 struct iTexPage
 {
 	char name[iV_TEXNAME_MAX];
-	GLuint id;
+	gfx_api::texture* id = nullptr;
+
+	iTexPage() = default;
+
+	iTexPage(iTexPage&& input)
+	{
+		memcpy(name, input.name, iV_TEXNAME_MAX);
+		id = input.id;
+		input.id = nullptr;
+	}
+
+	~iTexPage()
+	{
+		if (id)
+			delete id;
+	}
 };
 
-QList<iTexPage> _TEX_PAGE;
+std::vector<iTexPage> _TEX_PAGE;
 
 //*************************************************************************
 
-GLuint pie_Texture(int page)
+gfx_api::texture& pie_Texture(int page)
 {
-	return _TEX_PAGE[page].id;
+	return *(_TEX_PAGE[page].id);
 }
 
 int pie_NumberOfPages()
@@ -54,13 +67,19 @@ int pie_NumberOfPages()
 }
 
 // Add a new texture page to the list
-int pie_ReserveTexture(const char *name)
+int pie_ReserveTexture(const char *name, const size_t& width, const size_t& height)
 {
 	iTexPage tex;
-	glGenTextures(1, &tex.id);
 	sstrcpy(tex.name, name);
-	_TEX_PAGE.append(tex);
+	_TEX_PAGE.push_back(std::move(tex));
 	return _TEX_PAGE.size() - 1;
+}
+
+void pie_AssignTexture(int page, gfx_api::texture* texture)
+{
+	if (_TEX_PAGE[page].id)
+		delete _TEX_PAGE[page].id;
+	_TEX_PAGE[page].id = texture;
 }
 
 int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page)
@@ -71,9 +90,8 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 	{
 		iTexPage tex;
 		page = _TEX_PAGE.size();
-		glGenTextures(1, &tex.id);
 		sstrcpy(tex.name, filename);
-		_TEX_PAGE.append(tex);
+		_TEX_PAGE.push_back(std::move(tex));
 	}
 	else // replace
 	{
@@ -82,22 +100,36 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 	}
 	debug(LOG_TEXTURE, "%s page=%d", filename, page);
 
-	pie_SetTexturePage(page);
-	if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
-	{
-		glObjectLabel(GL_TEXTURE, pie_Texture(page), -1, filename);
-	}
-
 	if (gameTexture) // this is a game texture, use texture compression
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
+		gfx_api::pixel_format format{};
+		switch (iV_getPixelFormat(s))
+		{
+		case gfx_api::pixel_format::rgba:
+			format = wz_texture_compression ? gfx_api::pixel_format::compressed_rgba : gfx_api::pixel_format::rgba;
+			break;
+		case gfx_api::pixel_format::rgb:
+			format = wz_texture_compression ? gfx_api::pixel_format::compressed_rgb : gfx_api::pixel_format::rgb;
+			break;
+		default:
+			debug(LOG_FATAL, "getPixelFormat only returns rgb or rgba at the moment");
+		}
+		if (_TEX_PAGE[page].id)
+			delete _TEX_PAGE[page].id;
+		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(s->width, s->height, format, filename);
+		pie_Texture(page).upload(0u, 0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
+		pie_Texture(page).generate_mip_levels();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
 	else	// this is an interface texture, do not use compression
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, s->width, s->height, 0, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
+		if (_TEX_PAGE[page].id)
+			delete _TEX_PAGE[page].id;
+		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(s->width, s->height, gfx_api::pixel_format::rgba, filename);
+		pie_Texture(page).upload(0u, 0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
+	pie_SetTexturePage(page);
 	// it is uploaded, we do not need it anymore
 	free(s->bmp);
 	s->bmp = nullptr;
@@ -211,7 +243,7 @@ bool replaceTexture(const QString &oldfile, const QString &newfile)
 		if (strcmp(tmpname, _TEX_PAGE[i].name) == 0)
 		{
 			GL_DEBUG("Replacing texture");
-			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %d (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().constData(), i, _TEX_PAGE[i].id);
+			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %d (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().constData(), i, _TEX_PAGE[i].id->id());
 			sstrcpy(tmpname, newfile.toUtf8().constData());
 			pie_MakeTexPageName(tmpname);
 			pie_AddTexPage(&image, tmpname, true, i);
@@ -227,12 +259,7 @@ bool replaceTexture(const QString &oldfile, const QString &newfile)
 void pie_TexShutDown()
 {
 	// TODO, lazy deletions for faster loading of next level
-	debug(LOG_TEXTURE, "Cleaning out %u textures", _TEX_PAGE.size());
-	int _TEX_INDEX = _TEX_PAGE.size() - 1;
-	while (_TEX_INDEX > 0)
-	{
-		glDeleteTextures(1, &_TEX_PAGE[_TEX_INDEX--].id);
-	}
+	debug(LOG_TEXTURE, "Cleaning out %u textures", static_cast<unsigned>(_TEX_PAGE.size()));
 	_TEX_PAGE.clear();
 }
 
@@ -257,16 +284,16 @@ void iV_unloadImage(iV_Image *image)
 	}
 }
 
-unsigned int iV_getPixelFormat(const iV_Image *image)
+gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image)
 {
 	switch (image->depth)
 	{
 	case 3:
-		return GL_RGB;
+		return gfx_api::pixel_format::rgb;
 	case 4:
-		return GL_RGBA;
+		return gfx_api::pixel_format::rgba;
 	default:
-		debug(LOG_ERROR, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
-		return GL_INVALID_ENUM;
+		debug(LOG_FATAL, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
+		return gfx_api::pixel_format::invalid;
 	}
 }

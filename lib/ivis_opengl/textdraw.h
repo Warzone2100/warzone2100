@@ -24,7 +24,7 @@
 #include <string>
 
 #include "lib/framework/vector.h"
-#include "lib/framework/opengl.h"
+#include "gfx_api.h"
 #include "pietypes.h"
 
 enum iV_fonts
@@ -42,6 +42,7 @@ class WzText
 {
 public:
 	WzText() {}
+	WzText& operator =(WzText&& in) = default;
 	WzText(const std::string &text, iV_fonts fontID);
 	void setText(const std::string &text, iV_fonts fontID);
 	~WzText();
@@ -56,7 +57,7 @@ public:
 private:
 	iV_fonts mFontID = font_count;
 	std::string mText;
-	GLuint texture = 0;
+	gfx_api::texture* texture = nullptr;
 	int mAboveBase = 0;
 	int mBelowBase = 0;
 	int mLineSize = 0;

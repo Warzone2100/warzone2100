@@ -74,10 +74,6 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = 
 GFX::GFX(GFXTYPE type, GLenum drawType, int coordsPerVertex) : mType(type), mdrawType(drawType), mCoordsPerVertex(coordsPerVertex), mSize(0)
 {
 	glGenBuffers(VBO_MINIMAL, mBuffers);
-	if (type == GFX_TEXTURE)
-	{
-		glGenTextures(1, &mTexture);
-	}
 }
 
 void GFX::loadTexture(const char *filename, GLenum filter)
@@ -97,12 +93,15 @@ void GFX::loadTexture(const char *filename, GLenum filter)
 	}
 }
 
-void GFX::makeTexture(int width, int height, GLenum filter, GLenum format, const GLvoid *image)
+void GFX::makeTexture(int width, int height, GLenum filter, const gfx_api::pixel_format& format, const GLvoid *image)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	pie_SetTexturePage(TEXPAGE_EXTERN);
-	glBindTexture(GL_TEXTURE_2D, mTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+	if (mTexture)
+		delete mTexture;
+	mTexture = gfx_api::context::get().create_texture(width, height, format);
+	if (image != nullptr)
+		mTexture->upload(0u, 0u, 0u, width, height, format, image);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -124,8 +123,7 @@ void GFX::updateTexture(const void *image, int width, int height)
 		height = mHeight;
 	}
 	pie_SetTexturePage(TEXPAGE_EXTERN);
-	glBindTexture(GL_TEXTURE_2D, mTexture);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, mFormat, GL_UNSIGNED_BYTE, image);
+	mTexture->upload(0u, 0u, 0u, width, height, mFormat, image);
 }
 
 void GFX::buffers(int vertices, const GLvoid *vertBuf, const GLvoid *auxBuf)
@@ -156,7 +154,7 @@ void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 	if (mType == GFX_TEXTURE)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
-		glBindTexture(GL_TEXTURE_2D, mTexture);
+		mTexture->bind();
 		pie_ActivateShader(SHADER_GFX_TEXT, modelViewProjectionMatrix, glm::vec4(1), 0);
 		glEnableVertexAttribArray(VERTEX_COORDS_ATTRIB_INDEX);
 		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
@@ -190,10 +188,8 @@ void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 GFX::~GFX()
 {
 	glDeleteBuffers(VBO_MINIMAL, mBuffers);
-	if (mType == GFX_TEXTURE)
-	{
-		glDeleteTextures(1, &mTexture);
-	}
+	if (mTexture)
+		delete mTexture;
 }
 
 static void enableRect()
@@ -370,11 +366,11 @@ void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i
 	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
 }
 
-void iV_DrawImageText(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour)
+void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour)
 {
 	pie_SetRendMode(mode);
 	pie_SetTexturePage(TEXPAGE_EXTERN);
-	glBindTexture(GL_TEXTURE_2D, TextureID);
+	TextureID.bind();
 
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(Position.x, Position.y, 0) * glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
 

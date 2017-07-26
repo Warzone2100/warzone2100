@@ -537,17 +537,17 @@ pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMod
 	if (maskpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, pie_Texture(maskpage));
+		pie_Texture(maskpage).bind();
 	}
 	if (normalpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, pie_Texture(normalpage));
+		pie_Texture(normalpage).bind();
 	}
 	if (specularpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, pie_Texture(specularpage));
+		pie_Texture(specularpage).bind();
 	}
 	glActiveTexture(GL_TEXTURE0);
 
@@ -628,7 +628,7 @@ void pie_SetTexturePage(SDWORD num)
 		case TEXPAGE_EXTERN:
 			break;
 		default:
-			glBindTexture(GL_TEXTURE_2D, pie_Texture(num));
+			pie_Texture(num).bind();
 		}
 		rendStates.texPage = num;
 	}
