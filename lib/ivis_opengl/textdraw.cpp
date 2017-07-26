@@ -430,20 +430,10 @@ static FTFace &getFTFace(iV_fonts FontID)
 	}
 }
 
-static GLuint textureID = 0;
-static GLuint pbo = 0;
+static gfx_api::texture* textureID = nullptr;
 
 void iV_TextInit()
 {
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glGenBuffers(1, &pbo);
 	regular = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, DPI, DPI);
 	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, DPI, DPI);
 	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, DPI, DPI);
@@ -464,8 +454,8 @@ void iV_TextShutdown()
 	bold = nullptr;
 	small = nullptr;
 	smallBold = nullptr;
-	glDeleteBuffers(1, &pbo);
-	glDeleteTextures(1, &textureID);
+	delete textureID;
+	textureID = nullptr;
 }
 
 unsigned int iV_GetTextWidth(const char *string, iV_fonts fontID)
@@ -690,13 +680,16 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 	if (width > 0 && height > 0)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
-		glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * width * height, texture.get(), GL_STREAM_DRAW);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+		if (textureID)
+			delete textureID;
+		textureID = gfx_api::context::get().create_texture(width, height, gfx_api::pixel_format::rgba);
+		textureID->upload(0u, 0u, 0u, width, height, gfx_api::pixel_format::rgba, texture.get());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glDisable(GL_CULL_FACE);
-		iV_DrawImageText(textureID, Vector2i(XPos, YPos), Vector2i(xoffset, yoffset), Vector2i(width, height), rotation, REND_TEXT, color);
+		iV_DrawImageText(*textureID, Vector2i(XPos, YPos), Vector2i(xoffset, yoffset), Vector2i(width, height), rotation, REND_TEXT, color);
 		glEnable(GL_CULL_FACE);
 	}
 }
@@ -744,16 +737,6 @@ void WzText::setText(const std::string &string, iV_fonts fontID)
 	}
 	mFontID = fontID;
 	mText = string;
-	if (texture == 0)
-	{
-		pie_SetTexturePage(TEXPAGE_EXTERN);
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	}
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	std::unique_ptr<unsigned char[]> data;
 	FTFace &face = getFTFace(fontID);
@@ -762,11 +745,14 @@ void WzText::setText(const std::string &string, iV_fonts fontID)
 	if (dimensions.x > 0 && dimensions.y > 0)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
-		glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * dimensions.x * dimensions.y, data.get(), GL_STREAM_DRAW);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimensions.x, dimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+		if (texture)
+			delete texture;
+		texture = gfx_api::context::get().create_texture(dimensions.x, dimensions.y, gfx_api::pixel_format::rgba);
+		texture->upload(0u, 0u, 0u, dimensions.x , dimensions.y, gfx_api::pixel_format::rgba, data.get());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		mAboveBase = -(type->size->metrics.ascender >> 6);
 		mLineSize = (type->size->metrics.ascender - type->size->metrics.descender) >> 6;
@@ -782,17 +768,18 @@ WzText::WzText(const std::string &string, iV_fonts fontID)
 
 WzText::~WzText()
 {
-	glDeleteTextures(1, &texture); // ok to call with texture ID zero
+	if (texture)
+		delete texture;
 }
 
 void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
 {
-	ASSERT(texture != 0, "Text not initialized before rendering");
+	ASSERT(texture != 0 || dimensions.x == 0 || dimensions.y == 0, "Text not initialized before rendering");
 	if (rotation != 0.f)
 	{
 		rotation = 180. - rotation;
 	}
 	glDisable(GL_CULL_FACE);
-	iV_DrawImageText(texture, position, offsets, dimensions, rotation, REND_TEXT, colour);
+	iV_DrawImageText(*texture, position, offsets, dimensions, rotation, REND_TEXT, colour);
 	glEnable(GL_CULL_FACE);
 }

@@ -54,7 +54,7 @@
 #include <glm/gtx/transform.hpp>
 
 /* global used to indicate preferred internal OpenGL format */
-int wz_texture_compression = 0;
+bool wz_texture_compression = 0;
 
 // for compatibility with older versions of GLEW
 #ifndef GLEW_ARB_timer_query
@@ -537,7 +537,7 @@ void screen_Upload(const char *newBackDropBmp)
 
 	if (newBackDropBmp) // preview
 	{
-		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, GL_NEAREST, GL_RGB, newBackDropBmp);
+		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, GL_NEAREST, gfx_api::pixel_format::rgb, newBackDropBmp);
 
 		int s1 = screenWidth / preview_width;
 		int s2 = screenHeight / preview_height;

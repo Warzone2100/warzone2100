@@ -86,7 +86,7 @@ struct DecalVertex
 };
 
 /// The lightmap texture
-static GLuint lightmap_tex_num;
+static gfx_api::texture* lightmap_tex_num = nullptr;
 /// When are we going to update the lightmap next?
 static unsigned int lightmapLastUpdate;
 /// How big is the lightmap?
@@ -919,11 +919,12 @@ bool initTerrain()
 		abort();
 		return false;
 	}
-
-	glGenTextures(1, &lightmap_tex_num);
-	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+	if (lightmap_tex_num)
+		delete lightmap_tex_num;
+	lightmap_tex_num = gfx_api::context::get().create_texture(lightmapWidth, lightmapHeight, gfx_api::pixel_format::rgb);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::rgb, lightmapPixmap);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -967,8 +968,8 @@ void shutdownTerrain()
 	}
 	free(sectors);
 	sectors = nullptr;
-
-	glDeleteTextures(1, &lightmap_tex_num);
+	delete lightmap_tex_num;
+	lightmap_tex_num = nullptr;
 	free(lightmapPixmap);
 	lightmapPixmap = nullptr;
 
@@ -1270,7 +1271,7 @@ void drawTerrain(const glm::mat4 &mvp)
 	// set up the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
 	// bind the texture
-	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+	lightmap_tex_num->bind();
 
 	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
 	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
@@ -1279,7 +1280,7 @@ void drawTerrain(const glm::mat4 &mvp)
 		updateLightMap();
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lightmapWidth, lightmapHeight, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+		lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::rgb, lightmapPixmap);
 	}
 
 	///////////////////////////////////
@@ -1340,7 +1341,7 @@ void drawWater(const glm::mat4 &viewMatrix)
 
 	// second texture unit
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81-water-2.png")));
+	pie_Texture(iV_GetTexture("page-81-water-2.png")).bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
