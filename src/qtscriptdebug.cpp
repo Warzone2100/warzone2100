@@ -55,6 +55,7 @@
 #include "hci.h"
 #include "display.h"
 #include "keybind.h"
+#include "message.h"
 
 #include "qtscript.h"
 #include "qtscriptfuncs.h"
@@ -113,6 +114,42 @@ void ScriptDebugger::shadowButtonClicked()
 void ScriptDebugger::fogButtonClicked()
 {
 	kf_ToggleFog();
+}
+
+static void fillMessageModel(QStandardItemModel &m)
+{
+	const QStringList msg_type = { "RESEARCH", "CAMPAIGN", "MISSION", "PROXIMITY" };
+	const QStringList view_type = { "RES", "PPL", "PROX", "RPLX", "BEACON" };
+	const QStringList msg_data_type = { "OBJ", "VIEW" };
+	const QStringList obj_type = { "DROID", "STRUCTURE", "FEATURE", "PROJECTILE", "TARGET" };
+	int row = 0;
+	m.setRowCount(0);
+	m.setHorizontalHeaderLabels({"ID", "Type", "Data Type", "Player", "Name", "ViewData Type"});
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		for (const MESSAGE *psCurr = apsMessages[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			ASSERT(psCurr->type < msg_type.size(), "Bad message type");
+			ASSERT(psCurr->dataType < msg_data_type.size(), "Bad viewdata type");
+			m.setItem(row, 0, new QStandardItem(QString::number(psCurr->id)));
+			m.setItem(row, 1, new QStandardItem(msg_type.at(psCurr->type)));
+			m.setItem(row, 2, new QStandardItem(msg_data_type.at(psCurr->dataType)));
+			m.setItem(row, 3, new QStandardItem(QString::number(psCurr->player)));
+			ASSERT(!psCurr->pViewData || !psCurr->psObj, "Both viewdata and object in message should be impossible!");
+			if (psCurr->pViewData)
+			{
+				ASSERT(psCurr->pViewData->type < view_type.size(), "Bad viewdata type");
+				m.setItem(row, 4, new QStandardItem(psCurr->pViewData->name));
+				m.setItem(row, 5, new QStandardItem(view_type.at(psCurr->pViewData->type)));
+			}
+			else if (psCurr->psObj)
+			{
+				m.setItem(row, 4, new QStandardItem(objInfo(psCurr->psObj)));
+				m.setItem(row, 5, new QStandardItem(obj_type.at(psCurr->psObj->type)));
+			}
+			row++;
+		}
+	}
 }
 
 ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(nullptr, Qt::Window)
@@ -208,6 +245,14 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	triggerView.setSelectionBehavior(QAbstractItemView::SelectRows);
 	tab.addTab(&triggerView, "Triggers");
 
+	// Add messages
+	messageView.setModel(&messageModel);
+	messageView.setSelectionMode(QAbstractItemView::NoSelection);
+	messageView.setSelectionBehavior(QAbstractItemView::SelectRows);
+	tab.addTab(&messageView, "Messages");
+	fillMessageModel(messageModel);
+	messageView.resizeColumnToContents(0);
+
 	// Add labels
 	labelModel = createLabelModel();
 	labelModel->setParent(this); // take ownership to avoid memory leaks
@@ -245,6 +290,12 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	powerLineEdit->setFocusPolicy(Qt::StrongFocus);
 	powerLineEdit->setFocus();
 	activateWindow();
+}
+
+void ScriptDebugger::updateMessages()
+{
+	fillMessageModel(messageModel);
+	messageView.resizeColumnToContents(0);
 }
 
 void ScriptDebugger::runClicked(QObject *obj)
@@ -558,6 +609,14 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 
 ScriptDebugger::~ScriptDebugger()
 {
+}
+
+void jsDebugMessageUpdate()
+{
+	if (globalDialog)
+	{
+		globalDialog->updateMessages();
+	}
 }
 
 void jsDebugSelected(const BASE_OBJECT *psObj)

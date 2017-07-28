@@ -735,7 +735,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj)
 					psMessage = addMessage(MSG_PROXIMITY, true, player);
 					if (psMessage)
 					{
-						psMessage->pViewData = (MSG_VIEWDATA *)psObj;
+						psMessage->psObj = psObj;
 						debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", psMessage->pViewData);
 					}
 					if (!bInTutorial && player == selectedPlayer)

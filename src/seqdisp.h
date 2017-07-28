@@ -65,7 +65,7 @@ enum SEQ_TEXT_POSITIONING
  */
 /***************************************************************************/
 //buffer render
-bool seq_RenderVideoToBuffer(const char *sequenceName, int seqCommand);
+bool seq_RenderVideoToBuffer(const QString &sequenceName, int seqCommand);
 
 bool seq_UpdateFullScreenVideo(int *bClear);
 
@@ -77,7 +77,7 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 //clear the sequence list
 void seq_ClearSeqList();
 //add a sequence to the list to be played
-void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, bool bLoop);
+void seq_AddSeqToList(const QString &pSeqName, const QString &audioName, const char *pTextName, bool bLoop);
 /*checks to see if there are any sequences left in the list to play*/
 bool seq_AnySeqLeft();
 

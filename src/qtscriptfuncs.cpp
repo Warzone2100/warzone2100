@@ -2813,13 +2813,14 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	if (psMessage)
 	{
 		//set the data
-		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+		psMessage->pViewData = psViewData;
 		displayImmediateMessage(psMessage);
 		stopReticuleButtonFlash(IDRET_INTEL_MAP);
 
 		//we need to set this here so the VIDEO_QUIT callback is not called
 		setScriptWinLoseVideo(gameWon ? PLAY_WIN : PLAY_LOSE);
 	}
+	jsDebugMessageUpdate();
 	displayGameOver(gameWon);
 	if (challengeActive)
 	{
@@ -3757,6 +3758,7 @@ static QScriptValue js_removeBeacon(QScriptContext *context, QScriptEngine *engi
 			}
 		}
 	}
+	jsDebugMessageUpdate();
 	return QScriptValue(true);
 }
 
@@ -3976,8 +3978,8 @@ static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
 	{
 		VIEWDATA *psViewData = getViewData(mess.toUtf8().constData());
 		SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
-		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
-		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->pName, psMessage->pViewData);
+		psMessage->pViewData = psViewData;
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().constData(), psMessage->pViewData);
 		if (msgType == MSG_PROXIMITY)
 		{
 			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;
@@ -3993,6 +3995,7 @@ static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
 			displayImmediateMessage(psMessage);
 		}
 	}
+	jsDebugMessageUpdate();
 	return QScriptValue();
 }
 
@@ -4005,16 +4008,17 @@ static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine 
 	int player = context->argument(2).toInt32();
 	VIEWDATA *psViewData = getViewData(mess.toUtf8().constData());
 	SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
-	MESSAGE *psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
+	MESSAGE *psMessage = findMessage(psViewData, msgType, player);
 	if (psMessage)
 	{
-		debug(LOG_MSG, "Removing %s", psViewData->pName);
+		debug(LOG_MSG, "Removing %s", psViewData->name.toUtf8().constData());
 		removeMessage(psMessage, player);
 	}
 	else
 	{
-		debug(LOG_ERROR, "cannot find message - %s", psViewData->pName);
+		debug(LOG_ERROR, "cannot find message - %s", psViewData->name.toUtf8().constData());
 	}
+	jsDebugMessageUpdate();
 	return QScriptValue();
 }
 

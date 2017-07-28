@@ -24,14 +24,13 @@
 #ifndef __INCLUDED_MESSAGEDEF_H__
 #define __INCLUDED_MESSAGEDEF_H__
 
+#include <vector>
 #include <QtCore/QStringList>
 #include "positiondef.h"
 #include "stringdef.h"
 
 struct iIMDShape;
-
-/// max number of text strings or sequences for VIEWDATA
-static const unsigned int MAX_DATA = 4;
+struct BASE_OBJECT;
 
 enum MESSAGE_TYPE
 {
@@ -63,33 +62,36 @@ enum PROX_TYPE
 	PROX_TYPES,
 };
 
-// info required to view an object in Intelligence screen
-struct VIEW_RESEARCH
+struct VIEW_BASE
 {
-	iIMDShape	*pIMD;
-	iIMDShape	*pIMD2;				//allows base plates and turrets to be drawn as well
-	char	sequenceName[MAX_STR_LENGTH];	//which windowed flic to display
-	char	*pAudio;						/*name of audio track to play (for this seq)*/
+	virtual ~VIEW_BASE() = default; // will cause destructors to be called for subclasses
+};
+
+// info required to view an object in Intelligence screen
+struct VIEW_RESEARCH : VIEW_BASE
+{
+	iIMDShape	*pIMD = nullptr;
+	iIMDShape	*pIMD2 = nullptr;	// allows base plates and turrets to be drawn as well
+	QString		sequenceName;		// which windowed flic to display
+	QString		audio;			// name of audio track to play (for this seq)
 };
 
 struct SEQ_DISPLAY
 {
-	char		sequenceName[MAX_STR_LENGTH];
-
+	QString 	sequenceName;
 	UBYTE		flag;			//flag data to control video playback 1 = loop till audio finish
 	QStringList     textMsg;	//Text messages - if any
-	char		*pAudio;		/*name of audio track to play (for this seq)*/
+	QString         audio;		// name of audio track to play (for this seq)
 };
 
 //info required to view a flic in Intelligence Screen
-struct VIEW_REPLAY
+struct VIEW_REPLAY : VIEW_BASE
 {
-	UBYTE		numSeq;
-	SEQ_DISPLAY *pSeqList;
+	std::vector<SEQ_DISPLAY> seqList;
 };
 
 // info required to view a proximity message
-struct VIEW_PROXIMITY
+struct VIEW_PROXIMITY : VIEW_BASE
 {
 	UDWORD		x;			//world coords for position of Proximity message
 	UDWORD		y;
@@ -102,44 +104,41 @@ struct VIEW_PROXIMITY
 
 struct VIEWDATA
 {
-	char		*pName;		//name ID of the message - used for loading in and identifying
+	QString		name;		//name ID of the message - used for loading in and identifying
 	VIEW_TYPE	type;		//the type of view
 	QStringList     textMsg;        //Text messages, if any
-	void		*pData;		/*the data required to view - either a
-							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
-	const char      *fileName;      //file it came from, for piecemeal destruction (pretty lame reason)
+	VIEW_BASE       *pData = nullptr; // the data required to view - either VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY
+	QString         fileName;       // file it came from, for piecemeal destruction (pretty lame reason)
 };
-
-typedef void *MSG_VIEWDATA;
 
 enum MSG_DATA_TYPE
 {
-	MSG_DATA_DEFAULT,		// Message's pViewData has a BASE_OBJECT stored
-	MSG_DATA_BEACON,		// Message's pViewData has beacon data stored
+	MSG_DATA_DEFAULT,
+	MSG_DATA_BEACON,
 };
 
 //base structure for each message
 struct MESSAGE
 {
-	MESSAGE_TYPE	type;					//The type of message
-	UDWORD			id;						//ID number of the message
-	MSG_VIEWDATA	*pViewData;				//Pointer to view data - if any - should be some!
-	bool			read;					//flag to indicate whether message has been read
-	UDWORD			player;					//which player this message belongs to
-	MSG_DATA_TYPE	dataType;				//stores actual type of data pViewData points to
-	//only relevant for messages of type MSG_PROXIMITY
+	MESSAGE_TYPE    type;                                   // The type of message
+	UDWORD          id;                                     // ID number of the message
+	VIEWDATA        *pViewData = nullptr;                   // Pointer to view data - if any - should be some!
+	BASE_OBJECT     *psObj = nullptr;
+	bool            read = false;                           // flag to indicate whether message has been read
+	UDWORD		player;                                 // which player this message belongs to
+	MSG_DATA_TYPE	dataType;
 
-	MESSAGE        *psNext;                                 //pointer to the next in the list
+	MESSAGE         *psNext = nullptr;                       // pointer to the next in the list
 };
 
 //used to display the proximity messages
 struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 {
-	MESSAGE			*psMessage;				//message associated with this 'button'
-	UDWORD			timeLastDrawn;			//stores the time the 'button' was last drawn for animation
-	UDWORD			strobe;					//id of image last used
-	UDWORD			buttonID;				//id of the button for the interface
-	PROXIMITY_DISPLAY      *psNext;                         //pointer to the next in the list
+	MESSAGE            *psMessage = nullptr;   // message associated with this 'button'
+	UDWORD             timeLastDrawn = 0;     // stores the time the 'button' was last drawn for animation
+	UDWORD             strobe = 0;            // id of image last used
+	UDWORD             buttonID = 0;          // id of the button for the interface
+	PROXIMITY_DISPLAY  *psNext = nullptr;      // pointer to the next in the list
 };
 
 #endif // __INCLUDED_MESSAGEDEF_H__

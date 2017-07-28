@@ -6279,8 +6279,8 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 					MESSAGE *psMessage = addMessage(type, true, player);
 					if (psMessage)
 					{
-						psMessage->pViewData = (MSG_VIEWDATA *)getBaseObjFromData(objId, objPlayer, objType);
-						ASSERT(psMessage->pViewData, "Viewdata object id %d not found for message %d", objId, id);
+						psMessage->psObj = getBaseObjFromData(objId, objPlayer, objType);
+						ASSERT(psMessage->psObj, "Viewdata object id %d not found for message %d", objId, id);
 					}
 					else
 					{
@@ -6312,7 +6312,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 						}
 						else if (ini.contains("name"))
 						{
-							psViewData = (VIEWDATA *)getViewData(ini.value("name").toString().toUtf8().constData());
+							psViewData = getViewData(ini.value("name").toString().toUtf8().constData());
 							ASSERT(psViewData, "Failed to find view data for proximity position - skipping message %d", id);
 							if (psViewData == nullptr)
 							{
@@ -6328,7 +6328,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 							continue;
 						}
 
-						psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+						psMessage->pViewData = psViewData;
 						// Check the z value is at least the height of the terrain
 						const int height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x, ((VIEW_PROXIMITY *)psViewData->pData)->y);
 						if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
@@ -6338,8 +6338,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 					}
 					else
 					{
-						debug(LOG_ERROR, "Proximity position could not be created (type=%d, player=%d, message=%d)",
-						      type, player, id);
+						debug(LOG_ERROR, "Proximity position could not be created (type=%d, player=%d, message=%d)", type, player, id);
 					}
 				}
 			}
@@ -6353,13 +6352,14 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 				ASSERT(psMessage, "Could not create message %d", id);
 				if (psMessage)
 				{
-					psMessage->pViewData = (MSG_VIEWDATA *)getViewData(ini.value("name").toString().toUtf8().constData());
+					psMessage->pViewData = getViewData(ini.value("name").toString().toUtf8().constData());
 					ASSERT(psMessage->pViewData, "Failed to find view data for message %d", id);
 				}
 			}
 		}
 		ini.endGroup();
 	}
+	jsDebugMessageUpdate();
 	return true;
 }
 
@@ -6396,13 +6396,13 @@ static bool writeMessageFile(const char *pFileName)
 				if (psProx && psProx->type == POS_PROXDATA)
 				{
 					//message has viewdata so store the name
-					VIEWDATA *pViewData = (VIEWDATA *)psMessage->pViewData;
-					ini.setValue("name", pViewData->pName);
+					VIEWDATA *pViewData = psMessage->pViewData;
+					ini.setValue("name", pViewData->name);
 
 					// save beacon data
 					if (psMessage->dataType == MSG_DATA_BEACON)
 					{
-						VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)((VIEWDATA *)psMessage->pViewData)->pData;
+						VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
 						ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
 						ini.setValue("sender", viewData->sender);
 					}
@@ -6410,7 +6410,7 @@ static bool writeMessageFile(const char *pFileName)
 				else
 				{
 					// message has object so store Object Id
-					BASE_OBJECT *psObj = (BASE_OBJECT *)psMessage->pViewData;
+					const BASE_OBJECT *psObj = psMessage->psObj;
 					if (psObj)
 					{
 						ini.setValue("obj/id", psObj->id);
@@ -6425,8 +6425,8 @@ static bool writeMessageFile(const char *pFileName)
 			}
 			else
 			{
-				VIEWDATA *pViewData = (VIEWDATA *)psMessage->pViewData;
-				ini.setValue("name", pViewData != nullptr ? pViewData->pName : "NULL");
+				const VIEWDATA *pViewData = psMessage->pViewData;
+				ini.setValue("name", pViewData != nullptr ? pViewData->name : "NULL");
 			}
 			ini.setValue("read", psMessage->read);	// flag to indicate whether message has been read; not that this is/was _not_ read by loading code!?
 			ASSERT(player == psMessage->player, "Bad player number (%d == %d)", player, psMessage->player);

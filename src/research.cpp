@@ -572,7 +572,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 			pMessage = addMessage(MSG_RESEARCH, false, player);
 			if (pMessage != nullptr)
 			{
-				pMessage->pViewData = (MSG_VIEWDATA *)pResearch->pViewData;
+				pMessage->pViewData = pResearch->pViewData;
+				jsDebugMessageUpdate();
 			}
 		}
 	}
@@ -754,7 +755,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 }
 
 /* For a given view data get the research this is related to */
-RESEARCH *getResearchForMsg(VIEWDATA *pViewData)
+RESEARCH *getResearchForMsg(const VIEWDATA *pViewData)
 {
 	for (auto &inc : asResearch)
 	{

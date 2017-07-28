@@ -26,10 +26,11 @@
 
 #include "objectdef.h"
 
+struct VIEWDATA;
+
 #define NO_RESEARCH_ICON 0
 //max 'research complete' console message length
 #define MAX_RESEARCH_MSG_SIZE 200
-
 
 //used for loading in the research stats into the appropriate list
 enum
@@ -38,7 +39,6 @@ enum
 	RED_LIST,
 	RES_LIST
 };
-
 
 enum
 {
@@ -64,7 +64,6 @@ enum
 	RID_GRPDAM,
 	RID_MAXRID
 };
-
 
 /* The store for the research stats */
 extern std::vector<RESEARCH> asResearch;
@@ -104,8 +103,7 @@ RESEARCH *getResearch(const char *pName);
 void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /* For a given view data get the research this is related to */
-struct VIEWDATA;
-RESEARCH *getResearchForMsg(VIEWDATA *pViewData);
+RESEARCH *getResearchForMsg(const VIEWDATA *pViewData);
 
 /* Sets the 'possible' flag for a player's research so the topic will appear in
 the research list next time the Research Facilty is selected */

@@ -1606,19 +1606,18 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix)
 		{
 			if (psProxDisp->type == POS_PROXDATA)
 			{
-				pViewProximity = (VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->
-				                                    pViewData)->pData;
+				pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 				x = pViewProximity->x;
 				y = pViewProximity->y;
 			}
 			else
 			{
-				if (!psProxDisp->psMessage->pViewData)
+				if (!psProxDisp->psMessage->psObj)
 				{
 					continue;    // sanity check
 				}
-				x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
-				y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
+				x = psProxDisp->psMessage->psObj->pos.x;
+				y = psProxDisp->psMessage->psObj->pos.y;
 			}
 			/* Is the Message worth rendering? */
 			if (clipXY(x, y))
@@ -1776,8 +1775,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
 	if (psProxDisp->type == POS_PROXDATA)
 	{
-		pViewProximity = (VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->
-		                                    pViewData)->pData;
+		pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 		if (pViewProximity)
 		{
 			msgX = pViewProximity->x;
@@ -1786,7 +1784,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 			dv.y = pViewProximity->z + 64;
 
 			/* in case of a beacon message put above objects */
-			if (((VIEWDATA *)psProxDisp->psMessage->pViewData)->type == VIEW_BEACON)
+			if (psProxDisp->psMessage->pViewData->type == VIEW_BEACON)
 			{
 				if (TileIsOccupied(mapTile(msgX / TILE_UNITS, msgY / TILE_UNITS)))
 				{
@@ -1798,10 +1796,10 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
 	{
-		msgX = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
-		msgY = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
+		msgX = psProxDisp->psMessage->psObj->pos.x;
+		msgY = psProxDisp->psMessage->psObj->pos.y;
 		/* message sits at the height specified at input*/
-		dv.y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.z + 64;
+		dv.y = psProxDisp->psMessage->psObj->pos.z + 64;
 	}
 	else
 	{
@@ -1837,9 +1835,9 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	else
 	{
 		//object Proximity displays are for oil resources and artefacts
-		ASSERT_OR_RETURN(, ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type == OBJ_FEATURE, "Invalid object type for proximity display");
+		ASSERT_OR_RETURN(, psProxDisp->psMessage->psObj->type == OBJ_FEATURE, "Invalid object type for proximity display");
 
-		if (((FEATURE *)psProxDisp->psMessage->pViewData)->psStats->subType == FEAT_OIL_RESOURCE)
+		if (castFeature(psProxDisp->psMessage->psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			//resource
 			proxImd = getImdFromIndex(MI_BLIP_RESOURCE);

@@ -133,7 +133,7 @@ static bool seq_StartFullScreenVideo(const QString& videoName, const QString& au
 /***************************************************************************/
 
 /* Renders a video sequence specified by filename to a buffer*/
-bool seq_RenderVideoToBuffer(const char *sequenceName, int seqCommand)
+bool seq_RenderVideoToBuffer(const QString &sequenceName, int seqCommand)
 {
 	static enum
 	{
@@ -562,7 +562,7 @@ void seq_ClearSeqList()
 }
 
 //add a sequence to the list to be played
-void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, bool bLoop)
+void seq_AddSeqToList(const QString &pSeqName, const QString &audioName, const char *pTextName, bool bLoop)
 {
 	currentSeq++;
 
@@ -570,7 +570,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 
 	//OK so add it to the list
 	aSeqList[currentSeq].pSeq = pSeqName;
-	aSeqList[currentSeq].pAudio = pAudioName;
+	aSeqList[currentSeq].pAudio = audioName;
 	aSeqList[currentSeq].bSeqLoop = bLoop;
 	if (pTextName != nullptr)
 	{
@@ -581,7 +581,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 	if (bSeqSubtitles)
 	{
 		char aSubtitleName[MAX_STR_LENGTH];
-		sstrcpy(aSubtitleName, pSeqName);
+		sstrcpy(aSubtitleName, pSeqName.toUtf8().constData());
 
 		// check for a subtitle file
 		char *extension = strrchr(aSubtitleName, '.');

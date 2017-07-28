@@ -396,11 +396,11 @@ bool removeFeature(FEATURE *psDel)
 	{
 		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 		{
-			psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
+			psMessage = findMessage(psDel, MSG_PROXIMITY, player);
 			while (psMessage)
 			{
 				removeMessage(psMessage, player);
-				psMessage = findMessage((MSG_VIEWDATA *)psDel, MSG_PROXIMITY, player);
+				psMessage = findMessage(psDel, MSG_PROXIMITY, player);
 			}
 		}
 	}

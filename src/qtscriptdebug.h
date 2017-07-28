@@ -49,14 +49,17 @@ public:
 	ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel);
 	~ScriptDebugger();
 	void selected(const BASE_OBJECT *psObj);
+	void updateMessages();
 
 private:
 	QTabWidget tab;
 	QStandardItemModel *labelModel;
 	QStandardItemModel selectedModel;
+	QStandardItemModel messageModel;
 	QTreeView selectedView;
 	QTreeView labelView;
 	QTreeView triggerView;
+	QTreeView messageView;
 	MODELMAP modelMap;
 	EDITMAP editMap;
 	int powerValue = 0;
@@ -90,6 +93,6 @@ protected slots:
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);
 bool jsDebugShutdown();
 
-// jsDebugSelected() defined in qtscript.h since it is used widely
+// jsDebugSelected() and jsDebugMessageUpdate() defined in qtscript.h since it is used widely
 
 #endif

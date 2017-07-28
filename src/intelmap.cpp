@@ -315,7 +315,7 @@ static bool intAddMessageForm(bool playCurrent)
 		switch (psMessage->type)
 		{
 		case MSG_RESEARCH:
-			psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
+			psResearch = getResearchForMsg(psMessage->pViewData);
 			if (psResearch)
 			{
 				button->setTip(psResearch->name);
@@ -407,12 +407,11 @@ bool intAddMessageView(MESSAGE *psMessage)
 		return false;
 	}
 
-	if (psMessage->type != MSG_RESEARCH &&
-	    ((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
+	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
 	{
 		VIEW_REPLAY	*psViewReplay;
 
-		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
+		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
 
 		/* Add a big tabbed text box for the subtitle text */
 		IntListTabWidget *seqList = new IntListTabWidget(intMapMsgView);
@@ -449,7 +448,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	ASSERT_OR_RETURN(false, psMessage->type != MSG_PROXIMITY, "Invalid message type for research");
 
-	psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
+	psResearch = getResearchForMsg(psMessage->pViewData);
 
 	ASSERT_OR_RETURN(false, psResearch != nullptr, "Research not found");
 	//sLabInit.pText=psResearch->pName;
@@ -558,9 +557,9 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 	/* add each message */
 	unsigned i;
 	unsigned sequence;
-	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->numSeq; sequence++)
+	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->seqList.size(); sequence++)
 	{
-		SEQ_DISPLAY *psSeqDisplay = &psViewReplay->pSeqList[sequence];
+		const SEQ_DISPLAY *psSeqDisplay = &psViewReplay->seqList.at(sequence);
 		for (; i < psSeqDisplay->textMsg.size(); i++)
 		{
 			if (render)
@@ -621,21 +620,20 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 
 	ASSERT_OR_RETURN(, psMessage->pViewData != nullptr, "Invalid ViewData pointer");
 
-	if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
+	if (psMessage->pViewData->type == VIEW_RPL)
 	{
 		VIEW_REPLAY		*psViewReplay;
 		UDWORD Sequence;
 
 		// Surely we don't need to set up psCurrentMsg when we pass the message into this routine ... tim
-		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
+		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
 
 		seq_ClearSeqList();
 
 		//add any sequences to the list to be played when the first one is finished
-		for (Sequence = 0; Sequence < psViewReplay->numSeq; Sequence++)
-
+		for (Sequence = 0; Sequence < psViewReplay->seqList.size(); Sequence++)
 		{
-			if (psViewReplay->pSeqList[Sequence].flag == 1)
+			if (psViewReplay->seqList.at(Sequence).flag == 1)
 			{
 				bLoop = true;
 			}
@@ -644,11 +642,10 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 				bLoop = false;
 			}
 
-
-			seq_AddSeqToList(psViewReplay->pSeqList[Sequence].sequenceName, psViewReplay->pSeqList[Sequence].pAudio, nullptr, bLoop);
+			seq_AddSeqToList(psViewReplay->seqList.at(Sequence).sequenceName, psViewReplay->seqList.at(Sequence).audio, nullptr, bLoop);
 
 			debug(LOG_GUI, "StartMessageSequences: sequence=%d", Sequence);
-			addVideoText(&psViewReplay->pSeqList[Sequence], Sequence);
+			addVideoText(&psViewReplay->seqList.at(Sequence), Sequence);
 		}
 		//play first full screen video
 		if (Start == true)
@@ -657,15 +654,15 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		}
 	}
 
-	else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
+	else if (psMessage->pViewData->type == VIEW_RES)
 	{
 		VIEW_RESEARCH		*psViewReplay;
 		//UDWORD Sequence;
 
-		psViewReplay = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
+		psViewReplay = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
 
 		seq_ClearSeqList();
-		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->pAudio, nullptr, false);
+		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->audio, nullptr, false);
 		//play first full screen video
 		if (Start == true)
 		{
@@ -739,22 +736,21 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 			return;
 		}
 
-		if ((VIEWDATA *)psMessage->pViewData)
-		{		// If its a video sequence then play it anyway
-			if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
+		if (psMessage->pViewData)
+		{
+			// If its a video sequence then play it anyway
+			if (psMessage->pViewData->type == VIEW_RPL)
 			{
-
 				if (psMessage->pViewData)
 				{
 					intAddMessageView(psMessage);
 				}
 
 				StartMessageSequences(psMessage, true);
-
 			}
-			else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
+			else if (psMessage->pViewData->type == VIEW_RES)
 			{
-				psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
+				psResearch = getResearchForMsg(psMessage->pViewData);
 				if (psResearch != nullptr)
 				{
 					static const float maxVolume = 1.f;
@@ -945,7 +941,7 @@ void IntMessageButton::display(int xOffset, int yOffset)
 	switch (psMsg->type)
 	{
 	case MSG_RESEARCH:
-		pResearch = getResearchForMsg((VIEWDATA *)psMsg->pViewData);
+		pResearch = getResearchForMsg(psMsg->pViewData);
 		//IMDType = IMDTYPE_RESEARCH;
 		//set the IMDType depending on what stat is associated with the research
 		if (pResearch && pResearch->psStat)
@@ -1035,18 +1031,18 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		//moved from after close render
 		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
 
-		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
+		if (psMessage->pViewData->type != VIEW_RES)
 		{
 			ASSERT(false, "intDisplayPIEView: Invalid message type");
 			return;
 		}
 
 		//render an object
-		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
+		psResearch = getResearchForMsg(psCurrentMsg->pViewData);
 		renderResearchToBuffer(psResearch, x0 + (x1 - x0) / 2, y0 + (y1 - y0) / 2);
 
 		//draw image icon in top left of window
-		image = (SWORD)getResearchForMsg((VIEWDATA *)psMessage->pViewData)->iconID;
+		image = (SWORD)getResearchForMsg(psMessage->pViewData)->iconID;
 		if (image > 0)
 		{
 			iV_DrawImage(IntImages, image, x0, y0);
@@ -1073,14 +1069,14 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		int x1 = x0 + psWidget->width();
 		int y1 = y0 + psWidget->height();
 
-		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
+		if (psMessage->pViewData->type != VIEW_RES)
 		{
 			ASSERT(false, "intDisplayFLICView: Invalid message type");
 			return;
 		}
 
 		RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
+		psViewResearch = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
 		// set the dimensions to window size & position
 		seq_SetDisplaySize(192, 168, x0, y0);
 		//render a frame of the current movie *must* force above resolution!
@@ -1116,7 +1112,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		//add each message
-		for (unsigned i = 0; i < ((VIEWDATA *)psMessage->pViewData)->textMsg.size(); i++)
+		for (unsigned i = 0; i < psMessage->pViewData->textMsg.size(); i++)
 		{
 			//check haven't run out of room first!
 			if (i * linePitch > psWidget->height())
@@ -1125,7 +1121,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				return;
 			}
 			//need to check the string will fit!
-			iV_DrawText(_(((VIEWDATA *)psMessage->pViewData)->textMsg[i].toUtf8().constData()), x0 + TEXT_XINDENT,
+			iV_DrawText(_(psMessage->pViewData->textMsg[i].toUtf8().constData()), x0 + TEXT_XINDENT,
 			            (ty + TEXT_YINDENT * 3) + (i * linePitch), font_regular);
 		}
 	}

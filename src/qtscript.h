@@ -126,5 +126,6 @@ bool triggerEventKeyPressed(int meta, int key);
 // Debug functions
 
 void jsDebugSelected(const BASE_OBJECT *psObj);
+void jsDebugMessageUpdate();
 
 #endif

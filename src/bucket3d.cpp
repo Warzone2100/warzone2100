@@ -215,23 +215,17 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 	case RENDER_PROXMSG:
 		if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXDATA)
 		{
-			position.x = ((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)
-			                                 pObject)->psMessage->pViewData)->pData)->x - player.p.x;
-			position.z = -(((VIEW_PROXIMITY *)((VIEWDATA *)
-			                                   ((PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->pData)->y -
-			               player.p.z);
-			position.y = ((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)pObject)->
-			                                 psMessage->pViewData)->pData)->z;
+			const PROXIMITY_DISPLAY *ptr = (PROXIMITY_DISPLAY *)pObject;
+			position.x = ((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->x - player.p.x;
+			position.z = -(((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->y - player.p.z);
+			position.y = ((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->z;
 		}
 		else if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXOBJ)
 		{
-			position.x = ((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
-			              psMessage->pViewData)->pos.x - player.p.x;
-			position.z = -(((BASE_OBJECT *)((
-			                                    PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->pos.y -
-			               player.p.z);
-			position.y = ((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
-			              psMessage->pViewData)->pos.z;
+			const PROXIMITY_DISPLAY *ptr = (PROXIMITY_DISPLAY *)pObject;
+			position.x = ptr->psMessage->psObj->pos.x - player.p.x;
+			position.z = -(ptr->psMessage->psObj->pos.y - player.p.z);
+			position.y = ptr->psMessage->psObj->pos.z;
 		}
 		z = pie_RotateProject(&position, viewMatrix, &pixel);
 

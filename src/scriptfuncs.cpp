@@ -1391,7 +1391,7 @@ bool scrAddMessage()
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
 	int32_t			playImmediate; // was BOOL (int) ** see warning about conversion
-	VIEWDATA		*psViewData;
+	VIEWDATA		*psViewData = nullptr;
 	UDWORD			height;
 
 
@@ -1408,8 +1408,8 @@ bool scrAddMessage()
 	if (psMessage)
 	{
 		//set the data
-		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
-		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->pName, psMessage->pViewData);
+		psMessage->pViewData = psViewData;
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().constData(), psMessage->pViewData);
 		if (msgType == MSG_PROXIMITY)
 		{
 			//check the z value is at least the height of the terrain
@@ -1429,6 +1429,7 @@ bool scrAddMessage()
 			//stopReticuleButtonFlash(IDRET_INTEL_MAP);
 		}
 	}
+	jsDebugMessageUpdate();
 
 	return true;
 }
@@ -1440,7 +1441,7 @@ bool scrRemoveMessage()
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
-	VIEWDATA		*psViewData;
+	VIEWDATA		*psViewData = nullptr;
 
 	if (!stackPopParams(3, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType, VAL_INT, &player))
 	{
@@ -1450,17 +1451,18 @@ bool scrRemoveMessage()
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//find the message
-	psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
+	psMessage = findMessage(psViewData, msgType, player);
 	if (psMessage)
 	{
 		//delete it
-		debug(LOG_MSG, "Removing %s", psViewData->pName);
+		debug(LOG_MSG, "Removing %s", psViewData->name.toUtf8().constData());
 		removeMessage(psMessage, player);
 	}
 	else
 	{
-		debug(LOG_ERROR, "cannot find message - %s", psViewData->pName);
+		debug(LOG_ERROR, "cannot find message - %s", psViewData->name.toUtf8().constData());
 	}
+	jsDebugMessageUpdate();
 
 	return true;
 }
@@ -3051,7 +3053,7 @@ bool scrGameOverMessage()
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
-	VIEWDATA		*psViewData;
+	VIEWDATA		*psViewData = nullptr;
 
 	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
 	                    VAL_INT, &player, VAL_BOOL, &gameWon))
@@ -3078,7 +3080,7 @@ bool scrGameOverMessage()
 	if (psMessage)
 	{
 		//set the data
-		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+		psMessage->pViewData = psViewData;
 		displayImmediateMessage(psMessage);
 		stopReticuleButtonFlash(IDRET_INTEL_MAP);
 
@@ -3095,6 +3097,8 @@ bool scrGameOverMessage()
 	{
 		updateChallenge(gameWon);
 	}
+
+	jsDebugMessageUpdate();
 
 	return true;
 }
@@ -8969,7 +8973,6 @@ bool scrPlayerLoaded()
 bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *textMsg)
 {
 	MESSAGE			*psMessage;
-	VIEWDATA		*pTempData;
 
 	if (forPlayer >= MAX_PLAYERS)
 	{
@@ -8989,12 +8992,9 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 	psMessage = addBeaconMessage(MSG_PROXIMITY, false, forPlayer);
 	if (psMessage)
 	{
-		pTempData = CreateBeaconViewData(sender, locX, locY);
-
+		VIEWDATA *pTempData = CreateBeaconViewData(sender, locX, locY);
 		ASSERT_OR_RETURN(false, pTempData != nullptr, "Empty help data for radar beacon");
-
-		psMessage->pViewData = (MSG_VIEWDATA *)pTempData;
-
+		psMessage->pViewData = pTempData;
 		debug(LOG_MSG, "blip added, pViewData=%p", psMessage->pViewData);
 	}
 	else
@@ -9032,23 +9032,26 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 
 bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg)
 {
+	bool retval;
 	if (sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
 	{
 		debug(LOG_WZ, "sending beacon to player %d (local player) from %d", forPlayer, sender);
-		return addBeaconBlip(locX, locY, forPlayer, sender, beaconMsg);
+		retval = addBeaconBlip(locX, locY, forPlayer, sender, beaconMsg);
 	}
 	else
 	{
 		debug(LOG_WZ, "sending beacon to player %d (remote player) from %d", forPlayer, sender);
-		return sendBeacon(locX, locY, forPlayer, sender, beaconMsg);
+		retval = sendBeacon(locX, locY, forPlayer, sender, beaconMsg);
 	}
+	jsDebugMessageUpdate();
+	return retval;
 }
 
 //prepare viewdata for help blip
 VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 {
 	UDWORD				height;
-	VIEWDATA			*psViewData;
+	VIEWDATA			*psViewData = nullptr;
 	SDWORD				audioID;
 	char				name[MAXSTRLEN];
 
@@ -9057,7 +9060,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 
 	//store name
 	sprintf(name, _("Beacon %d"), sender);
-	psViewData->pName = name;
+	psViewData->name = name;
 
 	//store text message, hardcoded for now
 	psViewData->textMsg.push_back(QString::fromUtf8(getPlayerName(sender)));
@@ -9066,13 +9069,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	psViewData->type = VIEW_BEACON;
 
 	//allocate memory for blip location etc
-	psViewData->pData = (VIEW_PROXIMITY *) malloc(sizeof(VIEW_PROXIMITY));
-	if (psViewData->pData == nullptr)
-	{
-		ASSERT(false, "prepairHelpViewData() - Unable to allocate memory");
-		delete psViewData;
-		return nullptr;
-	}
+	psViewData->pData = new VIEW_PROXIMITY;
 
 	//store audio
 	audioID = NO_SOUND;
@@ -9103,17 +9100,15 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 /* Looks through the players list of messages to find VIEW_BEACON (one per player!) pointer */
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 {
-	MESSAGE					*psCurr;
-
-	for (psCurr = apsMessages[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (MESSAGE *psCurr = apsMessages[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		//look for VIEW_BEACON, should only be 1 per player
 		if (psCurr->dataType == MSG_DATA_BEACON)
 		{
-			if (((VIEWDATA *)psCurr->pViewData)->type == VIEW_BEACON)
+			if (psCurr->pViewData->type == VIEW_BEACON)
 			{
 				debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED", player);
-				if (((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender == sender)
+				if (((VIEW_PROXIMITY *)psCurr->pViewData->pData)->sender == sender)
 				{
 					debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED from %d", player, sender);
 					return psCurr;
@@ -9168,6 +9163,8 @@ bool scrRemoveBeacon()
 		removeMessage(psMessage, player);
 		triggerEventBeaconRemoved(sender, player);
 	}
+
+	jsDebugMessageUpdate();
 
 	return true;
 }

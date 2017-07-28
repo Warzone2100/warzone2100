@@ -689,7 +689,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		psIntMessage = (VIEWDATA *)psVal->v.oval;
 		if (psIntMessage != nullptr)
 		{
-			ini.setValue("data", QString(psIntMessage->pName));
+			ini.setValue("data", psIntMessage->name);
 		}
 		break;
 	case ST_BASEOBJECT:

@@ -2117,7 +2117,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 			if (psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
 			{
 				MESSAGE		*psCurrMsg = psProxDisp->psMessage;
-				VIEWDATA	*pViewData = (VIEWDATA *)psCurrMsg->pViewData;
+				VIEWDATA	*pViewData = psCurrMsg->pViewData;
 
 				ASSERT_OR_RETURN(, pViewData != nullptr, "Message without data!");
 
@@ -2148,12 +2148,12 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 
 		if (psProxDisp->type == POS_PROXDATA)
 		{
-			PROX_TYPE proxType = ((VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
+			PROX_TYPE proxType = ((VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData)->proxType;
 			images = imagesProxTypes[proxType];
 		}
 		else
 		{
-			FEATURE *psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
+			const FEATURE *psFeature = castFeature(psProxDisp->psMessage->psObj);
 
 			ASSERT_OR_RETURN(, psFeature && psFeature->psStats, "Bad feature message");
 			if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
@@ -2190,15 +2190,15 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 
 		if (psProxDisp->type == POS_PROXDATA)
 		{
-			VIEW_PROXIMITY *psViewProx = (VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData;
+			const VIEW_PROXIMITY *psViewProx = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 
 			x = (psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH;
 			y = (psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV;
 		}
 		else if (psProxDisp->type == POS_PROXOBJ)
 		{
-			x = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x / TILE_UNITS - scrollMinX) * pixSizeH;
-			y = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y / TILE_UNITS - scrollMinY) * pixSizeV;
+			x = (psProxDisp->psMessage->psObj->pos.x / TILE_UNITS - scrollMinX) * pixSizeH;
+			y = (psProxDisp->psMessage->psObj->pos.y / TILE_UNITS - scrollMinY) * pixSizeV;
 		}
 		else
 		{
@@ -2254,13 +2254,13 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, W
 	}
 	if (psProxDisp->type == POS_PROXDATA)
 	{
-		x = ((VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->x;
-		y = ((VIEW_PROXIMITY *)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->y;
+		x = ((VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData)->x;
+		y = ((VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData)->y;
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
 	{
-		x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
-		y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
+		x = psProxDisp->psMessage->psObj->pos.x;
+		y = psProxDisp->psMessage->psObj->pos.y;
 	}
 
 	//if not within view ignore message
