@@ -75,6 +75,14 @@ function eventMissionTimeout()
 	camCallOnce("playLastVideo");
 }
 
+// Allow win if at least one tranport launched.
+function eventTransporterLaunch(transport)
+{
+	if (transport.player === CAM_HUMAN_PLAYER)
+	{
+		allowWin = true;
+	}
+}
 
 //Return 8 - 15 droids.
 function randomTemplates(list, isTransport)
@@ -165,24 +173,14 @@ function tankAttack()
 
 function checkIfLaunched()
 {
-	var launched = enumRange(88, 101, 10,CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return (obj.type === DROID &&
-		(obj.droidType === DROID_TRANSPORTER || obj.droidType === DROID_SUPERTRANSPORTER));
-	});
-
-	if (!launched.length)
-	{
-		allowWin = true;
-	}
-
-	if ((getMissionTime() === 0) && !allowWin)
-	{
-		return false;
-	}
-
 	if (allowWin)
 	{
 		return true;
+	}
+
+	if ((getMissionTime() <= 1) && !allowWin)
+	{
+		return false;
 	}
 }
 
@@ -195,7 +193,7 @@ function eventStartLevel()
 
 	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, "CAM_3A", {
 		reinforcements: 420, //Duration the transport "leaves" map.
-		callback: "chechIfLaunched"
+		callback: "checkIfLaunched"
 	});
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);

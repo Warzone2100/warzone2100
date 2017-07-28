@@ -269,9 +269,14 @@ function camChangeOnDiff(num, invert)
 //;; Determine if the passed in object is a non-weapon based droid.
 function camIsSystemDroid(obj)
 {
-	if (obj.type !== DROID)
+	if(!camDef(obj) || !obj)
 	{
-		camTrace("Attempted to compare if a non-droid is a system unit");
+		return false;
+	}
+
+	if (!camDef(obj.propulsion))
+	{
+		camTrace("Non-droid: " + obj.type + " pl: " + obj.name);
 		return false;
 	}
 
@@ -1530,14 +1535,16 @@ function __camTacticsTickForGroup(group)
 
 	// Handle regrouping. Do not include system droids.
 	var droids = healthyDroids.filter(function(dr) {
-		return !camIsSystemDroid(dr);
+		return (dr.type === DROID && !camIsSystemDroid(dr));
 	});
+
 	if (camDef(gi.data.regroup) && gi.data.regroup && healthyDroids.length > 0)
 	{
 		var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
 		var groupX = ret.xav[ret.maxIdx];
 		var groupY = ret.yav[ret.maxIdx];
 		droids = ret.clusters[ret.maxIdx];
+		droids = droids.filter(function(obj) { return (obj.type === DROID); });
 		for (var i = 0, l = ret.clusters.length; i < l; ++i)
 		{
 			if (i != ret.maxIdx) // move other droids towards main cluster
@@ -1545,7 +1552,7 @@ function __camTacticsTickForGroup(group)
 				for (var j = 0, c = ret.clusters[i].length; j < c; ++j)
 				{
 					var droid = ret.clusters[i][j];
-					if (camDef(droid))
+					if (camDef(droid) && droid)
 					{
 						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
 					}
@@ -1569,6 +1576,10 @@ function __camTacticsTickForGroup(group)
 			return;
 		}
 	}
+
+	var droids = droids.filter(function(dr) {
+		return (dr.type === DROID && !camIsSystemDroid(dr));
+	});
 
 	if (droids.length === 0)
 		return;
@@ -1652,7 +1663,7 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				if((droid.type === DROID) && !isVTOL(droid))
+				if ((droid.type === DROID) && !isVTOL(droid))
 					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
 				else
 					orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
@@ -2287,7 +2298,10 @@ function __camTriggerLastAttack()
 		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 		// Do not order systems (sensor/trucks/repairs) to attack stuff.
 		enemies.filter(function(obj) {
-			return ((obj.type === DROID) && !camIsTransporter(obj))
+			return ((obj.type === DROID)
+				&& !camIsTransporter(obj)
+				&& !camIsSystemDroid(obj)
+			);
 		});
 		camTrace(enemies.length, "enemy droids remaining");
 		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
@@ -2429,6 +2443,11 @@ function __camVictoryOffworld()
 //;; Determine if the object is a transporter.
 function camIsTransporter(object)
 {
+	if(!camDef(object) || !object)
+	{
+		return false;
+	}
+
 	if (object.type !== DROID)
 	{
 		camTrace("Attempted to check if a non-droid object is a transporter.");
@@ -2765,6 +2784,12 @@ function cam_eventMissionTimeout()
 	}
 	else
 	{
+		var won = camCheckExtraObjective();
+		if (!won)
+		{
+			__camGameLost();
+			return;
+		}
 		queue("__camGameWon", 200);
 	}
 }
