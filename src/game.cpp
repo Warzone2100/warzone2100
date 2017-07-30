@@ -2837,7 +2837,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 	}
 
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "limbo.bjo");
+	strcat(CurrentFileName, "limbo.json");
 	/*Write the swapped droid lists to the file*/
 	if (!writeDroidFile(CurrentFileName, apsLimboDroids))
 	{
