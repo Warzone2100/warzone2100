@@ -69,6 +69,9 @@ const char *loadResearchViewData(const char *fileName);
 /** Get the view data that contains the text message pointer passed in. */
 VIEWDATA *getViewData(const char *pTextMsg);
 
+/// Get a list of viewdata entries
+QStringList getViewDataKeys();
+
 /** Release the viewdata memory. */
 void viewDataShutDown(const char *fileName);
 

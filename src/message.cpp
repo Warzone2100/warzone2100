@@ -734,6 +734,11 @@ VIEWDATA *getViewData(const char *pName)
 	return ptr;
 }
 
+QStringList getViewDataKeys()
+{
+	return apsViewData.keys();
+}
+
 /* Release the message heaps */
 bool messageShutdown()
 {

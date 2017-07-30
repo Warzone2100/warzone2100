@@ -56,10 +56,12 @@ private:
 	QStandardItemModel *labelModel;
 	QStandardItemModel selectedModel;
 	QStandardItemModel messageModel;
+	QStandardItemModel viewdataModel;
 	QTreeView selectedView;
 	QTreeView labelView;
 	QTreeView triggerView;
 	QTreeView messageView;
+	QTreeView viewdataView;
 	MODELMAP modelMap;
 	EDITMAP editMap;
 	int powerValue = 0;

@@ -116,6 +116,23 @@ void ScriptDebugger::fogButtonClicked()
 	kf_ToggleFog();
 }
 
+static void fillViewdataModel(QStandardItemModel &m)
+{
+	const QStringList view_type = { "RES", "PPL", "PROX", "RPLX", "BEACON" };
+	int row = 0;
+	m.setRowCount(0);
+	m.setHorizontalHeaderLabels({"Name", "Type", "Source"});
+	QStringList keys = getViewDataKeys();
+	for (QString& key : keys)
+	{
+		VIEWDATA *ptr = getViewData(key.toUtf8().constData());
+		m.setItem(row, 0, new QStandardItem(key));
+		m.setItem(row, 1, new QStandardItem(view_type.at(ptr->type)));
+		m.setItem(row, 2, new QStandardItem(ptr->fileName));
+		row++;
+	}
+}
+
 static void fillMessageModel(QStandardItemModel &m)
 {
 	const QStringList msg_type = { "RESEARCH", "CAMPAIGN", "MISSION", "PROXIMITY" };
@@ -253,6 +270,14 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	fillMessageModel(messageModel);
 	messageView.resizeColumnToContents(0);
 
+	// Add viewdata
+	viewdataView.setModel(&viewdataModel);
+	viewdataView.setSelectionMode(QAbstractItemView::NoSelection);
+	viewdataView.setSelectionBehavior(QAbstractItemView::SelectRows);
+	tab.addTab(&viewdataView, "Viewdata");
+	fillViewdataModel(viewdataModel);
+	viewdataView.resizeColumnToContents(0);
+
 	// Add labels
 	labelModel = createLabelModel();
 	labelModel->setParent(this); // take ownership to avoid memory leaks
@@ -283,7 +308,7 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	QHBoxLayout *layout = new QHBoxLayout(this);
 	layout->addWidget(&tab);
 	setLayout(layout);
-	resize(600, 700);
+	resize(640, 700);
 	setSizeGripEnabled(true);
 	show();
 	raise();
