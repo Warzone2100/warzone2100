@@ -104,7 +104,9 @@ function eventVideoDone()
 function setHeroUnits()
 {
 	const DROID_EXP = 512;
-	var droids = enumDroid(CAM_HUMAN_PLAYER);
+	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
+		return !camIsSystemDroid(dr);
+	});
 
 	for (var j = 0, i = droids.length; j < i; ++j)
 	{

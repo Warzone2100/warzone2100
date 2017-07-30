@@ -96,12 +96,14 @@ function sendPlayerTransporter()
 
 	var droids = [];
 	var list;
-	with (camTemplates) list = [prhct, prltat, npcybr, prrept];
+	with (camTemplates) list = [prhct, prhct, prhct, prltat, prltat, npcybr, prrept];
 
 	for(var i = 0; i < 10; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
+
+
 
 	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
 		CAM_REINFORCE_TRANSPORT, {
@@ -219,6 +221,33 @@ function cam2Setup()
 	preDamageStuff();
 }
 
+//Get some higher rank droids at start and first Transport drop.
+function setUnitRank()
+{
+	const DROID_EXP = 32;
+	const MIN_TO_AWARD = 16;
+	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
+		return !camIsSystemDroid(dr);
+	});
+
+	for (var j = 0, i = droids.length; j < i; ++j)
+	{
+		var droid = droids[j];
+		if (Math.floor(droid.experience) < MIN_TO_AWARD)
+		{
+			setDroidExperience(droids[j], DROID_EXP);
+		}
+	}
+}
+
+//Bump the rank of the first batch of transport droids as a reward.
+function eventTransporterLanded(transport)
+{
+	if (transport.player === CAM_HUMAN_PLAYER)
+	{
+		camCallOnce("setUnitRank");
+	}
+}
 
 function eventStartLevel()
 {
@@ -269,6 +298,7 @@ function eventStartLevel()
 
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
+	setUnitRank(); //All pre-placed player droids are ranked.
 	hackAddMessage("MB2A_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
 
 	//Only if starting Beta directly rather than going through Alpha
@@ -282,7 +312,7 @@ function eventStartLevel()
 	queue("secondVideo", 12000); // 12 sec
 	queue("truckDefense", 15000);// 15 sec.
 	queue("sendCOTransporter", 30000); //30 sec
-	queue("groupPatrol", 160000); // ~3 min
+	queue("groupPatrol", 60000); // 60 sec
 	queue("vtolAttack", 300000); //5 min
 	queue("mapEdgeDroids", 420000); //7 min
 }

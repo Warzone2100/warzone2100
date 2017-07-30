@@ -274,7 +274,7 @@ function camIsSystemDroid(obj)
 		return false;
 	}
 
-	if (!camDef(obj.propulsion))
+	if (obj.type !== DROID)
 	{
 		camTrace("Non-droid: " + obj.type + " pl: " + obj.name);
 		return false;
@@ -1364,6 +1364,13 @@ function camOrderToString(order)
 	}
 }
 
+//;; \subsection{camSortByHealth(orbject 1, object 2)}
+//;; Use this to sort an array of objects by health value.
+function camSortByHealth(a, b)
+{
+	return (a.health - b.health);
+}
+
 //////////// privates
 
 var __camGroupInfo;
@@ -1483,10 +1490,10 @@ function __camPickTarget(group)
 	}
 	if (!targets.length)
 		return undefined;
-	var target = targets[camRand(targets.length)];
-	// sanitize data to make sure no bad things happen when object dies
-	target = { x : target.x, y : target.y };
-	__camGroupInfo[group].target = target;
+	//Prefer the farthest object from the radius.
+	targets.reverse();
+	var target = targets[0];
+	__camGroupInfo[group].target = { x: target.x, y: target.y };
 	return target;
 }
 
@@ -1533,9 +1540,9 @@ function __camTacticsTickForGroup(group)
 		healthyDroids = rawDroids;
 	}
 
-	// Handle regrouping. Do not include system droids.
+	// Handle regrouping. Do not include trucks.
 	var droids = healthyDroids.filter(function(dr) {
-		return (dr.type === DROID && !camIsSystemDroid(dr));
+		return ((dr.type === DROID) && (dr.droidType !== DROID_CONSTRUCT));
 	});
 
 	if (camDef(gi.data.regroup) && gi.data.regroup && healthyDroids.length > 0)
@@ -1578,7 +1585,7 @@ function __camTacticsTickForGroup(group)
 	}
 
 	var droids = droids.filter(function(dr) {
-		return (dr.type === DROID && !camIsSystemDroid(dr));
+		return ((dr.type === DROID) && (dr.droidType !== DROID_CONSTRUCT));
 	});
 
 	if (droids.length === 0)
@@ -1590,8 +1597,9 @@ function __camTacticsTickForGroup(group)
 		case CAM_ORDER_DEFEND:
 		case CAM_ORDER_COMPROMISE:
 			var target = profile("__camPickTarget", group);
-			if (!camDef(target))
+			if (!camDef(target) || !target || !target.id)
 				return;
+			var targetC = { x: target.x, y: target.y };
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
@@ -1618,20 +1626,49 @@ function __camTacticsTickForGroup(group)
 				var sc = droid.order !== DORDER_SCOUT;
 				if (!done
 					&& ((sc || vt)
-					&& camDist(droid, target) >= __CAM_CLOSE_RADIUS))
+					&& (camDist(droid, targetC) >= __CAM_CLOSE_RADIUS)))
 				{
 					//Rearm vtols.
-					if (vt && ((droid.weapons[0].armed < 1)
+					if (vt && ((Math.floor(droid.weapons[0].armed) < 1)
 						|| ((droid.order === DORDER_REARM)
-						&& (droid.weapons[0].armed < 100))))
+						&& (Math.ceil(droid.weapons[0].armed) < 100))))
 					{
 						var pads = countStruct("A0VtolPad", droid.player);
 						if (pads && (droid.order !== DORDER_REARM))
 							orderDroid(droid, DORDER_REARM);
+						else
+							continue;
 					}
 					else
 					{
-						orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+						if (!camDef(target) || !target || !target.id)
+							return;
+						if (camDef(droid) && droid && droid.id)
+						{
+							var closeBy = enumRange(droid.x, droid.y, 8,
+											CAM_HUMAN_PLAYER, false);
+							closeBy.sort(function(obj1, obj2) {
+								var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
+								var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
+								return (temp1 - temp2);
+							});
+							if (droid.droidType === DROID_SENSOR)
+							{
+								if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+									orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
+								else
+									orderDroidObj(droid, DORDER_OBSERVE, target);
+							}
+							else if ((target.type !== DROID) || !vt)
+							{
+								if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+									orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
+								else
+									orderDroidObj(droid, DORDER_ATTACK, target);
+							}
+							else
+								orderDroidLoc(droid, DORDER_SCOUT, targetC.x, targetC.y);
+						}
 					}
 				}
 			}
@@ -2800,5 +2837,23 @@ function cam_eventAttacked(victim, attacker)
 	    victim.type === DROID && camDef(__camGroupInfo[victim.group]))
 	{
 		__camGroupInfo[victim.group].lastHit = gameTime;
+	}
+}
+
+//Need to set the scavenger kevlar vests when loading a save from later Alpha
+//missions or else it reverts to the original texture.
+function cam_eventGameLoaded()
+{
+	const SCAV_KEVLAR_MISSIONS = [
+		"CAM_1CA", "SUB_1_5S", "CAM_1A-C", "SUB_1_DS",
+	];
+
+	for (var i = 0, l = SCAV_KEVLAR_MISSIONS.length; i < l; ++i)
+	{
+		if (__camNextLevel === SCAV_KEVLAR_MISSIONS[i])
+		{
+			replaceTexture("page-7-barbarians-arizona.png",
+						"page-7-barbarians-kevlar.png");
+		}
 	}
 }

@@ -187,7 +187,7 @@ function eventStartLevel()
 		var ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,
 		// note: player 1 is NP, player 7 is scavs
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, CAM_HUMAN_PLAYER);
+		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
 	}
 
 	setReinforcementTime(-1);
