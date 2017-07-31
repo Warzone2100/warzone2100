@@ -247,6 +247,19 @@ struct WzMultiButton : public W_BUTTON
 	unsigned tc;
 };
 
+const QStringList getAINames()
+{
+	QStringList l;
+	for (const auto &i : aidata)
+	{
+		if (i.js[0] != '\0')
+		{
+			l.append(i.js);
+		}
+	}
+	return l;
+}
+
 const char *getAIName(int player)
 {
 	if (NetPlay.players[player].ai >= 0)

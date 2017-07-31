@@ -37,7 +37,6 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QStandardItemModel>
@@ -61,6 +60,7 @@
 #include "message.h"
 #include "transporter.h"
 #include "template.h"
+#include "multiint.h"
 
 #include "qtscript.h"
 #include "qtscriptfuncs.h"
@@ -214,6 +214,25 @@ static void fillMainModel(QStandardItemModel &m)
 	KEYVAL("No. droids", QString::number(droids));
 	KEYVAL("No. structures", QString::number(structures));
 	KEYVAL("No. features", QString::number(features));
+}
+
+static void fillPlayerModel(QStandardItemModel &m, int i)
+{
+	int row = 0;
+	m.setRowCount(0);
+	m.setHorizontalHeaderLabels({"Key", "Value"});
+	KEYVAL("game.skDiff", QString::number(game.skDiff[i]));
+	KEYVAL("ingame.skScores score", QString::number(ingame.skScores[i][0]));
+	KEYVAL("ingame.skScores kills", QString::number(ingame.skScores[i][1]));
+	KEYVAL("NetPlay.players.name", NetPlay.players[i].name);
+	KEYVAL("NetPlay.players.position", QString::number(NetPlay.players[i].position));
+	KEYVAL("NetPlay.players.colour", QString::number(NetPlay.players[i].colour));
+	KEYVAL("NetPlay.players.allocated", QString::number(NetPlay.players[i].allocated));
+	KEYVAL("NetPlay.players.team", QString::number(NetPlay.players[i].team));
+	KEYVAL("NetPlay.players.ai", QString::number(NetPlay.players[i].ai));
+	KEYVAL("NetPlay.players.difficulty", QString::number(NetPlay.players[i].difficulty));
+	KEYVAL("NetPlay.players.autoGame", QString::number(NetPlay.players[i].autoGame));
+	KEYVAL("NetPlay.players.IPtextAddress", NetPlay.players[i].IPtextAddress);
 
 #undef B2Q
 #undef KEYVAL
@@ -226,27 +245,28 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 
 	// Add main page
 	QWidget *mainWidget = new QWidget(this);
-	QVBoxLayout *mainLayout = new QVBoxLayout();
-	QHBoxLayout *placementLayout = new QHBoxLayout();
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	QHBoxLayout *placementLayout = new QHBoxLayout;
 	placementLayout->addWidget(createButton("Add droids", SLOT(droidButtonClicked()), this));
 	placementLayout->addWidget(createButton("Add structures", SLOT(structButtonClicked()), this));
 	placementLayout->addWidget(createButton("Add features", SLOT(featButtonClicked()), this));
 	mainLayout->addLayout(placementLayout);
-	QHBoxLayout *miscLayout = new QHBoxLayout();
+	QHBoxLayout *miscLayout = new QHBoxLayout;
 	miscLayout->addWidget(createButton("Research all", SLOT(researchButtonClicked()), this));
 	miscLayout->addWidget(createButton("Show sensors", SLOT(sensorsButtonClicked()), this));
 	miscLayout->addWidget(createButton("Shadows", SLOT(shadowButtonClicked()), this));
 	miscLayout->addWidget(createButton("Fog", SLOT(fogButtonClicked()), this));
 	mainLayout->addLayout(miscLayout);
-	QHBoxLayout *worldLayout = new QHBoxLayout();
+	QHBoxLayout *worldLayout = new QHBoxLayout;
 	worldLayout->addWidget(createButton("Show gateways", SLOT(gatewayButtonClicked()), this));
 	worldLayout->addWidget(createButton("Reveal all", SLOT(deityButtonClicked()), this));
 	worldLayout->addWidget(createButton("Weather", SLOT(weatherButtonClicked()), this));
 	worldLayout->addWidget(createButton("Reveal mode", SLOT(revealButtonClicked()), this));
 	mainLayout->addLayout(worldLayout);
-	QHBoxLayout *selectedPlayerLayout = new QHBoxLayout();
-	QLabel *selectPlayerLabel = new QLabel("Selected Player:");
-	QComboBox *playerComboBox = new QComboBox;
+	// selected player
+	QHBoxLayout *selectedPlayerLayout = new QHBoxLayout;
+	QLabel *selectPlayerLabel = new QLabel("Selected Player:", this);
+	QComboBox *playerComboBox = new QComboBox(this);
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		playerComboBox->addItem(QString::number(i));
@@ -255,15 +275,34 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	selectedPlayerLayout->addWidget(selectPlayerLabel);
 	selectedPlayerLayout->addWidget(playerComboBox);
 	mainLayout->addLayout(selectedPlayerLayout);
-	QHBoxLayout *powerLayout = new QHBoxLayout();
-	QLabel *powerLabel = new QLabel("Power:");
-	QLineEdit *powerLineEdit = new QLineEdit;
+	// attach script
+	QHBoxLayout *addAILayout = new QHBoxLayout;
+	QLabel *addAILabel = new QLabel("Attach AI to player:", this);
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		aiPlayerComboBox.addItem(QString::number(i));
+	}
+	const QStringList AIs = getAINames();
+	for (const QString &name : AIs)
+	{
+		aiScriptComboBox.addItem(name);
+	}
+	addAILayout->addWidget(addAILabel);
+	addAILayout->addWidget(&aiScriptComboBox);
+	addAILayout->addWidget(&aiPlayerComboBox);
+	addAILayout->addWidget(createButton("Attach", SLOT(attachScriptClicked()), this));
+	mainLayout->addLayout(addAILayout);
+	// power
+	QHBoxLayout *powerLayout = new QHBoxLayout;
+	QLabel *powerLabel = new QLabel("Power:", this);
+	QLineEdit *powerLineEdit = new QLineEdit(this);
 	powerLineEdit->setText(QString::number(getPower(selectedPlayer)));
 	connect(powerLineEdit, SIGNAL(textEdited(const QString&)), this, SLOT(powerEditing(const QString&)));
 	connect(powerLineEdit, SIGNAL(returnPressed()), this, SLOT(powerEditingFinished()));
 	powerLayout->addWidget(powerLabel);
 	powerLayout->addWidget(powerLineEdit);
 	mainLayout->addLayout(powerLayout);
+	// globals view
 	mainView.setModel(&mainModel);
 	mainView.setSelectionMode(QAbstractItemView::NoSelection);
 	mainView.setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -279,6 +318,7 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	tab.addTab(&selectedView, "Selected");
 
 	// Add globals
+	QTabWidget *contextsTab = new QTabWidget(this);
 	for (MODELMAP::const_iterator i = models.constBegin(); i != models.constEnd(); ++i)
 	{
 		QWidget *dummyWidget = new QWidget(this);
@@ -291,8 +331,8 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		QString scriptName = engine->globalObject().property("scriptName").toString();
 		int player = engine->globalObject().property("me").toInt32();
 		QLineEdit *lineEdit = new QLineEdit(this);
-		QVBoxLayout *layout = new QVBoxLayout();
-		QHBoxLayout *layout2 = new QHBoxLayout();
+		QVBoxLayout *layout = new QVBoxLayout;
+		QHBoxLayout *layout2 = new QHBoxLayout;
 		QPushButton *updateButton = new QPushButton("Update", this);
 		QPushButton *button = new QPushButton("Run", this);
 		connect(button, SIGNAL(pressed()), signalMapper, SLOT(map()));
@@ -304,11 +344,24 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		layout2->addWidget(lineEdit);
 		layout2->addWidget(button);
 		layout->addLayout(layout2);
-
 		dummyWidget->setLayout(layout);
-		tab.addTab(dummyWidget, scriptName + ":" + QString::number(player));
+		contextsTab->addTab(dummyWidget, scriptName + ":" + QString::number(player));
 	}
 	connect(signalMapper, SIGNAL(mapped(QObject *)), this, SLOT(runClicked(QObject *)));
+	tab.addTab(contextsTab, "Contexts");
+
+	QTabWidget *playersTab = new QTabWidget(this);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		QTreeView *view = new QTreeView(this);
+		view->setSelectionMode(QAbstractItemView::NoSelection);
+		view->setSelectionBehavior(QAbstractItemView::SelectRows);
+		view->setModel(&playerModel[i]);
+		fillPlayerModel(playerModel[i], i);
+		view->resizeColumnToContents(0);
+		playersTab->addTab(view, QString::number(i));
+	}
+	tab.addTab(playersTab, "Players");
 
 	// Add triggers
 	triggerModel->setParent(this); // take ownership to avoid memory leaks
@@ -319,20 +372,21 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	tab.addTab(&triggerView, "Triggers");
 
 	// Add messages
+	QTabWidget *messTab = new QTabWidget(this);
 	messageView.setModel(&messageModel);
 	messageView.setSelectionMode(QAbstractItemView::NoSelection);
 	messageView.setSelectionBehavior(QAbstractItemView::SelectRows);
-	tab.addTab(&messageView, "Messages");
+	messTab->addTab(&messageView, "Created");
 	fillMessageModel(messageModel);
 	messageView.resizeColumnToContents(0);
-
 	// Add viewdata
 	viewdataView.setModel(&viewdataModel);
 	viewdataView.setSelectionMode(QAbstractItemView::NoSelection);
 	viewdataView.setSelectionBehavior(QAbstractItemView::SelectRows);
-	tab.addTab(&viewdataView, "Viewdata");
+	messTab->addTab(&viewdataView, "Viewdata");
 	fillViewdataModel(viewdataModel);
 	viewdataView.resizeColumnToContents(0);
+	tab.addTab(messTab, "Messages");
 
 	// Add labels
 	labelModel = createLabelModel();
@@ -350,7 +404,7 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	connect(buttonShowAll, SIGNAL(pressed()), this, SLOT(labelClickedAll()));
 	connect(buttonShowActive, SIGNAL(pressed()), this, SLOT(labelClickedActive()));
 	connect(buttonClear, SIGNAL(pressed()), this, SLOT(labelClear()));
-	QVBoxLayout *labelLayout = new QVBoxLayout(this);
+	QVBoxLayout *labelLayout = new QVBoxLayout;
 	labelLayout->addWidget(&labelView);
 	labelLayout->addWidget(buttonShow);
 	labelLayout->addWidget(buttonShowAll);
@@ -361,7 +415,7 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	tab.addTab(dummyWidget, "Labels");
 
 	// Set up dialog
-	QHBoxLayout *layout = new QHBoxLayout(this);
+	QHBoxLayout *layout = new QHBoxLayout;
 	layout->addWidget(&tab);
 	setLayout(layout);
 	resize(640, 700);
@@ -371,6 +425,14 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	powerLineEdit->setFocusPolicy(Qt::StrongFocus);
 	powerLineEdit->setFocus();
 	activateWindow();
+}
+
+void ScriptDebugger::attachScriptClicked()
+{
+	const QString &script = aiScriptComboBox.currentText();
+	const int player = aiPlayerComboBox.currentIndex();
+	jsAutogameSpecific("multiplay/skirmish/" + script, player);
+	debug(LOG_INFO, "Script attached - close and reopen debug window to see its context");
 }
 
 void ScriptDebugger::updateMessages()
@@ -383,6 +445,10 @@ void ScriptDebugger::update()
 {
 	fillMainModel(mainModel);
 	mainView.resizeColumnToContents(0);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		fillPlayerModel(playerModel[i], i);
+	}
 }
 
 void ScriptDebugger::runClicked(QObject *obj)

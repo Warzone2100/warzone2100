@@ -37,6 +37,7 @@ class QLineEdit;
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTreeView>
+#include <QtWidgets/QComboBox>
 
 typedef QHash<QScriptEngine *, QStandardItemModel *> MODELMAP;
 typedef QHash<QScriptEngine *, QLineEdit *> EDITMAP;
@@ -59,12 +60,15 @@ private:
 	QStandardItemModel messageModel;
 	QStandardItemModel viewdataModel;
 	QStandardItemModel mainModel;
+	QStandardItemModel playerModel[MAX_PLAYERS];
 	QTreeView selectedView;
 	QTreeView labelView;
 	QTreeView triggerView;
 	QTreeView messageView;
 	QTreeView viewdataView;
 	QTreeView mainView;
+	QComboBox aiScriptComboBox;
+	QComboBox aiPlayerComboBox;
 	MODELMAP modelMap;
 	EDITMAP editMap;
 	int powerValue = 0;
@@ -93,6 +97,7 @@ protected slots:
 	void revealButtonClicked();
 	void shadowButtonClicked();
 	void fogButtonClicked();
+	void attachScriptClicked();
 };
 
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);
