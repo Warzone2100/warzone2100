@@ -50,6 +50,7 @@ public:
 	~ScriptDebugger();
 	void selected(const BASE_OBJECT *psObj);
 	void updateMessages();
+	void update();
 
 private:
 	QTabWidget tab;
@@ -57,11 +58,13 @@ private:
 	QStandardItemModel selectedModel;
 	QStandardItemModel messageModel;
 	QStandardItemModel viewdataModel;
+	QStandardItemModel mainModel;
 	QTreeView selectedView;
 	QTreeView labelView;
 	QTreeView triggerView;
 	QTreeView messageView;
 	QTreeView viewdataView;
+	QTreeView mainView;
 	MODELMAP modelMap;
 	EDITMAP editMap;
 	int powerValue = 0;

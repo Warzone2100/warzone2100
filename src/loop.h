@@ -55,7 +55,6 @@ extern LEVEL_TYPE nextMissionType;
 
 extern unsigned int loopPieCount;
 extern unsigned int loopPolyCount;
-extern unsigned int loopStateChanges;
 
 GAMECODE gameLoop();
 void videoLoop();

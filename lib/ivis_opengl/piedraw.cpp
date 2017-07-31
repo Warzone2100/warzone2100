@@ -567,16 +567,13 @@ void pie_RemainingPasses()
 	GL_DEBUG("Remaining passes - done");
 }
 
-void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount, unsigned int *pStateCount)
+void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount)
 {
 	*pPieCount  = pieCount;
 	*pPolyCount = polyCount;
-	*pStateCount = pieStateCount;
 
 	pieCount = 0;
 	polyCount = 0;
-	pieStateCount = 0;
-	return;
 }
 
 // GL 2.0 1-pass version

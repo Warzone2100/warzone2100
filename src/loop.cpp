@@ -103,7 +103,6 @@ static void fireWaitingCallbacks();
  */
 unsigned int loopPieCount;
 unsigned int loopPolyCount;
-unsigned int loopStateChanges;
 
 /*
  * local variables
@@ -341,7 +340,7 @@ static GAMECODE renderLoop()
 
 	wzSetCursor(cursor);
 
-	pie_GetResetCounts(&loopPieCount, &loopPolyCount, &loopStateChanges);
+	pie_GetResetCounts(&loopPieCount, &loopPolyCount);
 
 	if (!quitting)
 	{
@@ -663,6 +662,12 @@ static void gameStateUpdate()
 
 	// Must be at the beginning or end of each tick, since countUpdate is also called randomly (unsynchronised) between ticks.
 	countUpdate(true);
+
+	static int i = 0;
+	if (i++ % 10 == 0) // trigger every second
+	{
+		jsDebugUpdate();
+	}
 }
 
 /* The main game loop */

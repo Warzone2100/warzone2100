@@ -49,13 +49,18 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/netplay/netplay.h"
 
+#include "difficulty.h"
 #include "multiplay.h"
 #include "objects.h"
 #include "power.h"
 #include "hci.h"
 #include "display.h"
 #include "keybind.h"
+#include "loop.h"
+#include "mission.h"
 #include "message.h"
+#include "transporter.h"
+#include "template.h"
 
 #include "qtscript.h"
 #include "qtscriptfuncs.h"
@@ -169,6 +174,51 @@ static void fillMessageModel(QStandardItemModel &m)
 	}
 }
 
+static void fillMainModel(QStandardItemModel &m)
+{
+	const QStringList lev_type = { "LDS_COMPLETE", "LDS_CAMPAIGN", "LDS_CAMSTART", "LDS_CAMCHANGE",
+	                               "LDS_EXPAND", "LDS_BETWEEN", "LDS_MKEEP", "LDS_MCLEAR",
+	                               "LDS_EXPAND_LIMBO", "LDS_MKEEP_LIMBO", "LDS_NONE", "CAMPAIGN",
+	                               "SKIRMISH", "MULTI_SKIRMISH2", "MULTI_SKIRMISH3" };
+	const QStringList difficulty_type = { "EASY", "NORMAL", "HARD", "INSANE", "TOUGH", "KILLER" };
+	int row = 0;
+	m.setRowCount(0);
+	m.setHorizontalHeaderLabels({"Key", "Value"});
+
+#define B2Q(_b) (_b ? QString("true") : QString("false"))
+#define KEYVAL(_key, _val) m.setItem(row, 0, new QStandardItem(_key)); m.setItem(row, 1, new QStandardItem(_val)); row++;
+
+	KEYVAL("game.type", lev_type.at(game.type));
+	KEYVAL("game.scavengers", B2Q(game.scavengers));
+	KEYVAL("game.map", QString(game.map));
+	KEYVAL("game.maxPlayers", QString::number(game.maxPlayers));
+	KEYVAL("transporterGetLaunchTime", QString::number(transporterGetLaunchTime()));
+	KEYVAL("missionIsOffworld", B2Q(missionIsOffworld()));
+	KEYVAL("missionCanReEnforce", B2Q(missionCanReEnforce()));
+	KEYVAL("missionForReInforcements", B2Q(missionForReInforcements()));
+	KEYVAL("mission.type", lev_type.at(mission.type));
+	KEYVAL("getDroidsToSafetyFlag", B2Q(getDroidsToSafetyFlag()));
+	KEYVAL("scavengerSlot", QString::number(scavengerSlot()));
+	KEYVAL("scavengerPlayer", QString::number(scavengerPlayer()));
+	KEYVAL("bMultiPlayer", B2Q(bMultiPlayer));
+	KEYVAL("difficultyLevel", difficulty_type.at(getDifficultyLevel()));
+	KEYVAL("loopPieCount", QString::number(loopPieCount));
+	KEYVAL("loopPolyCount", QString::number(loopPolyCount));
+	KEYVAL("allowDesign", B2Q(allowDesign));
+	KEYVAL("includeRedundantDesigns", B2Q(includeRedundantDesigns));
+
+	int features;
+	int droids;
+	int structures;
+	objCount(&droids, &structures, &features);
+	KEYVAL("No. droids", QString::number(droids));
+	KEYVAL("No. structures", QString::number(structures));
+	KEYVAL("No. features", QString::number(features));
+
+#undef B2Q
+#undef KEYVAL
+}
+
 ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(nullptr, Qt::Window)
 {
 	modelMap = models;
@@ -214,7 +264,13 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	powerLayout->addWidget(powerLabel);
 	powerLayout->addWidget(powerLineEdit);
 	mainLayout->addLayout(powerLayout);
+	mainView.setModel(&mainModel);
+	mainView.setSelectionMode(QAbstractItemView::NoSelection);
+	mainView.setSelectionBehavior(QAbstractItemView::SelectRows);
+	mainLayout->addWidget(&mainView);
 	mainWidget->setLayout(mainLayout);
+	fillMainModel(mainModel);
+	mainView.resizeColumnToContents(0);
 	tab.addTab(mainWidget, "Main");
 
 	selectedView.setModel(&selectedModel);
@@ -321,6 +377,12 @@ void ScriptDebugger::updateMessages()
 {
 	fillMessageModel(messageModel);
 	messageView.resizeColumnToContents(0);
+}
+
+void ScriptDebugger::update()
+{
+	fillMainModel(mainModel);
+	mainView.resizeColumnToContents(0);
 }
 
 void ScriptDebugger::runClicked(QObject *obj)
@@ -641,6 +703,14 @@ void jsDebugMessageUpdate()
 	if (globalDialog)
 	{
 		globalDialog->updateMessages();
+	}
+}
+
+void jsDebugUpdate()
+{
+	if (globalDialog)
+	{
+		globalDialog->update(); // quick update every second
 	}
 }
 
