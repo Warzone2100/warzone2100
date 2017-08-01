@@ -78,11 +78,11 @@ static inline std::string join(std::vector<std::string> const &strs, std::string
 	bool first = true;
 	for (auto const &s : strs)
 	{
-		str += s;
 		if (!first)
 		{
 			str += sep;
 		}
+		str += s;
 		first = false;
 	}
 	return str;
