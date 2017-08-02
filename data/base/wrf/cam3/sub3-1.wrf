@@ -4,7 +4,7 @@
  */
 
 
-/* Aditional audio for the level */
+/* Additional audio for the level */
 directory	"audio/countdown"
 file		WAV		"60min.ogg"
 file		WAV		"50min.ogg"
@@ -44,21 +44,13 @@ file		SMSG		"prox3-1.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-file		SCRIPT		"setdisk.slo"
-file		SCRIPT		"genexp.slo"
-file		SCRIPT		"cam3-1x.slo"
-file		SCRIPT		"vtols.slo"
 file		SCRIPT		"cam3daynight.slo"
-file		SCRIPT		"countdown.slo"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam3-1.vlo"
-file            SCRIPTVAL       "cam3-1x.vlo"
-file            SCRIPTVAL       "vtols3-1.vlo"
-file            SCRIPTVAL       "count3-1.vlo"
-file            SCRIPTVAL       "disk2.vlo"
 file            SCRIPTVAL       "cam3mkday.vlo"
 
-directory       "script"
-file            JAVASCRIPT      "rules.js"
+directory		"script"
+file			JAVASCRIPT        "rules.js"
+directory		"script/campaign"
+file			JAVASCRIPT        "cam3-1.js"
