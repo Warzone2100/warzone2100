@@ -2602,10 +2602,6 @@ function __camRetreatVtols()
 // or something BAD would happen.
 ////////////////////////////////////////////////////////////////////////////////
 
-// To capture events for non human players upon game load or just by starting a
-// mission.
-isReceivingAllEvents = true;
-
 //;; \subsection{camAreaEvent(label, function(droid))}
 //;; Implement eventArea<label> in a debugging-friendly way. The function
 //;; marks the area until the event is triggered, and traces entering the area
@@ -2721,6 +2717,7 @@ function cam_eventChat(from, to, message)
 
 function cam_eventStartLevel()
 {
+	isReceivingAllEvents = true;
 	// Variables initialized here are the ones that should not be
 	// re-initialized on save-load. Otherwise, they are initialized
 	// on the global scope (or wherever necessary).
@@ -2844,6 +2841,7 @@ function cam_eventAttacked(victim, attacker)
 //missions or else it reverts to the original texture.
 function cam_eventGameLoaded()
 {
+	isReceivingAllEvents = true;
 	const SCAV_KEVLAR_MISSIONS = [
 		"CAM_1CA", "SUB_1_5S", "CAM_1A-C", "SUB_1_DS",
 	];
