@@ -496,7 +496,7 @@ void _imd_calc_bounds(iIMDShape *s, Vector3f *p, int size)
 	dz = vzmax.z - vzmin.z;
 	zspan = dx * dx + dy * dy + dz * dz;
 
-	// set points dia1 & dia2 to maximally seperated pair
+	// set points dia1 & dia2 to maximally separated pair
 	// assume xspan biggest
 	dia1 = vxmin;
 	dia2 = vxmax;

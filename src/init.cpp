@@ -898,7 +898,7 @@ bool frontendShutdown()
 
 bool stageOneInitialise()
 {
-	debug(LOG_WZ, "== stageOneInitalise ==");
+	debug(LOG_WZ, "== stageOneInitialise ==");
 	wzSceneEnd("Main menu loop");
 	wzSceneBegin("Main game loop");
 
@@ -1026,7 +1026,7 @@ bool stageOneShutDown()
 	scrShutDown();
 	gridShutDown();
 
-	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
+	debug(LOG_TEXTURE, "== stageOneShutDown ==");
 	modelShutdown();
 	pie_TexShutDown();
 
@@ -1049,7 +1049,7 @@ bool stageTwoInitialise()
 {
 	int i;
 
-	debug(LOG_WZ, "== stageTwoInitalise ==");
+	debug(LOG_WZ, "== stageTwoInitialise ==");
 
 	// make sure we clear on loading; this a bad hack to fix a bug when
 	// loading a savegame where we are building a lassat
@@ -1179,7 +1179,7 @@ bool stageThreeInitialise()
 	UDWORD i;
 	DROID		*psDroid;
 
-	debug(LOG_WZ, "== stageThreeInitalise ==");
+	debug(LOG_WZ, "== stageThreeInitialise ==");
 
 	loopMissionState = LMS_NORMAL;
 

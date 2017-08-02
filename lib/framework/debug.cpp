@@ -209,7 +209,7 @@ bool debug_callback_file_init(void **data)
 	}
 	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename);
 	setbuf(logfile, nullptr);
-	fprintf(logfile, "\n--- Starting log [%s]---\n", WZDebugfilename);
+	fprintf(logfile, "--- Starting log [%s]---\n", WZDebugfilename);
 	*data = logfile;
 
 	return true;

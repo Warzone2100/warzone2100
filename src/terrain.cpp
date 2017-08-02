@@ -117,7 +117,7 @@ static int terrainDistance;
 static int xSectors, ySectors;
 
 /// Did we initialise the terrain renderer yet?
-static bool terrainInitalised = false;
+static bool terrainInitialised = false;
 
 /// Helper to specify the offset in a VBO
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -538,7 +538,7 @@ void markTileDirty(int i, int j)
 {
 	int x, y;
 
-	if (!terrainInitalised)
+	if (!terrainInitialised)
 	{
 		return; // will be updated anyway
 	}
@@ -931,7 +931,7 @@ bool initTerrain()
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, lightmapWidth, lightmapHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
 
-	terrainInitalised = true;
+	terrainInitialised = true;
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (in this function, at least), otherwise text rendering may mysteriously crash.
 
@@ -972,7 +972,7 @@ void shutdownTerrain()
 	free(lightmapPixmap);
 	lightmapPixmap = nullptr;
 
-	terrainInitalised = false;
+	terrainInitialised = false;
 }
 
 static void updateLightMap()

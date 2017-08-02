@@ -89,7 +89,7 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	x = RET_X;
 	y = RET_Y;
 
-	RenderWindowFrame(FRAME_NORMAL, x, y , w, h);		// draw a wee blu box.
+	RenderWindowFrame(FRAME_NORMAL, x, y , w, h);		// draw a wee blue box.
 
 	// display how far done..
 	iV_DrawText(_("Players Still Joining"),

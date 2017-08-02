@@ -826,7 +826,7 @@ void WIDGET::displayRecursive(int xOffset, int yOffset)
 
 /* Display the screen's widgets in their current state
  * (Call after calling widgRunScreen, this allows the input
- *  processing to be seperated from the display of the widgets).
+ *  processing to be separated from the display of the widgets).
  */
 void widgDisplayScreen(W_SCREEN *psScreen)
 {

@@ -340,7 +340,7 @@ WZ_DECL_NONNULL(1) WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen);
 
 /** Display the screen's widgets in their current state
  * (Call after calling widgRunScreen, this allows the input
- *  processing to be seperated from the display of the widgets).
+ *  processing to be separated from the display of the widgets).
  */
 WZ_DECL_NONNULL(1) void widgDisplayScreen(W_SCREEN *psScreen);
 

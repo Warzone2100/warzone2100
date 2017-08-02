@@ -4183,7 +4183,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	int downloadProgress = NETgetDownloadProgress(j);
 
-	//bluboxes.
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if (downloadProgress != 100)
 	{

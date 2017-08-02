@@ -25,7 +25,7 @@
 
 
 /*
-	Changed to allow seperate modifiers for enemy and player damage.
+	Changed to allow separate modifiers for enemy and player damage.
 */
 
 #include "lib/framework/frame.h"

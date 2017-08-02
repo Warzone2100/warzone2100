@@ -38,7 +38,7 @@
 
 /*!
  * The number of components in the asParts / asBits arrays.
- * Weapons are stored seperately, thus the maximum index into the array
+ * Weapons are stored separately, thus the maximum index into the array
  * is 1 smaller than the number of components.
  */
 #define DROID_MAXCOMP (COMP_NUMCOMPONENTS - 1)
