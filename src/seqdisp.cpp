@@ -452,21 +452,11 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 	}
 	lastX = aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x;
 
-	if (textJustification && currentLength == sourceLength)
+	const int MIN_JUSTIFICATION = 40;
+	const int justification = buffer_width - iV_GetTextWidth(currentText, font_scaled);
+	if (textJustification == SEQ_TEXT_JUSTIFY && currentLength == sourceLength && justification > MIN_JUSTIFICATION)
 	{
-		static const int MIN_JUSTIFICATION = 40;
-		static const int FOLLOW_ON_JUSTIFICATION = 160;
-		//justify this text
-		const int justification = buffer_width - iV_GetTextWidth(currentText, font_scaled);
-
-		if (textJustification == SEQ_TEXT_JUSTIFY && justification > MIN_JUSTIFICATION)
-		{
-			aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x += (justification / 2);
-		}
-		else if (textJustification == SEQ_TEXT_FOLLOW_ON && justification > FOLLOW_ON_JUSTIFICATION)
-		{
-
-		}
+		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x += (justification / 2);
 	}
 
 	//set start and finish times for the objects

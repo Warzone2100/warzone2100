@@ -43,11 +43,6 @@ enum SEQ_TEXT_POSITIONING
 	SEQ_TEXT_POSITION,
 
 	/**
-	 * Justify if less than 3/4 length.
-	 */
-	SEQ_TEXT_FOLLOW_ON,
-
-	/**
 	 * Justify if less than 520/600 length.
 	 */
 	SEQ_TEXT_JUSTIFY,
