@@ -46,6 +46,8 @@ data/base/script/campaign/cam2-d.js
 data/base/script/campaign/cam2-ds.js
 data/base/script/campaign/cam2-end.js
 data/base/script/campaign/cam3-a.js
+data/base/script/campaign/cam3-1.js
+data/base/script/campaign/cam3-1s.js
 data/base/script/campaign/libcampaign.js
 data/base/script/campaign/templates.js
 data/base/script/campaign/transitionTech.js
@@ -56,7 +58,6 @@ data/base/script/text/basic.slo
 data/base/script/text/brief.slo
 data/base/script/text/cam1daynight.slo
 data/base/script/text/cam2daynight.slo
-data/base/script/text/cam3-1x.slo
 data/base/script/text/cam3-2x.slo
 data/base/script/text/cam3-4sx.slo
 data/base/script/text/cam3-4x.slo
