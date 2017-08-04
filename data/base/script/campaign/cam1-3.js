@@ -3,10 +3,17 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NEW_PARADIGM_RES = [
-	"R-Wpn-MG-Damage02", "R-Wpn-Flamer-Damage03", "R-Struc-RprFac-Upgrade03",
+	"R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade01",
+	"R-Struc-Materials01", "R-Struc-Factory-Upgrade01",
+	"R-Struc-Factory-Cyborg-Upgrade01", "R-Vehicle-Engine01",
+	"R-Vehicle-Metals01", "R-Cyborg-Metals01", "R-Wpn-Cannon-Damage01",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-Mortar-Damage01", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF01",
+	"R-Wpn-RocketSlow-Damage01", "R-Struc-RprFac-Upgrade03",
 ];
 const SCAVENGER_RES = [
-	"R-Wpn-MG-Damage02",
+	"R-Wpn-MG-Damage02", "R-Wpn-Rocket-Damage01", "R-Wpn-Cannon-Damage01",
 ];
 
 var NPDefenseGroup, NPScoutGroup, NPFactory;
@@ -109,7 +116,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
 		area: "RTLZ",
 		message: "C1-3_LZ",
-		reinforcements: camChangeOnDiff(120, true) // changes!
+		reinforcements: 120 // changes!
 	});
 }
 

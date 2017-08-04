@@ -2,6 +2,19 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const NEW_PARADIGM_RES = [
+	"R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
+	"R-Struc-Materials02", "R-Struc-Factory-Upgrade01",
+	"R-Struc-Factory-Cyborg-Upgrade01", "R-Vehicle-Engine02",
+	"R-Vehicle-Metals01", "R-Cyborg-Metals01", "R-Wpn-Cannon-Damage02",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-Mortar-Damage01", "R-Wpn-Rocket-Accuracy02",
+	"R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF01",
+	"R-Wpn-RocketSlow-Damage01", "R-Struc-RprFac-Upgrade03",
+];
+const SCAVENGER_RES = [
+	"R-Wpn-MG-Damage02", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage01",
+];
 var NPDefenseGroup; // no particular orders, just stay near factories
 
 function sendRocketForce()
@@ -193,6 +206,8 @@ function eventStartLevel()
 	setReinforcementTime(-1);
 	setMissionTime(camChangeOnDiff(7200));
 	setAlliance(NEW_PARADIGM, 7, true);
+	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
+	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 
 	setPower(camChangeOnDiff(10000, true), NEW_PARADIGM);
 	setPower(camChangeOnDiff(2500, true), 7);

@@ -150,7 +150,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
-		reinforcements: camChangeOnDiff(60, true) //1 min
+		reinforcements: 60 //1 min
 	});
 }
 
@@ -251,7 +251,7 @@ function eventStartLevel()
 	enemyHasArtifact = 0;
 	camManageTrucks(NEW_PARADIGM);
 	buildLancers();
-	
+
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
 	queue("camCallOnce", 15000, "enableReinforcements");
 	queue("getArtifact", 120000);

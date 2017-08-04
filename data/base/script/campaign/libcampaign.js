@@ -246,16 +246,16 @@ function camChangeOnDiff(num, invert)
 	switch(difficulty)
 	{
 		case EASY:
-			modifier = (invert === false) ? 1.25 : 0.70;
+			modifier = (invert === false) ? 1.25 : 0.68;
 			break;
 		case MEDIUM:
 			modifier = 1.00;
 			break;
 		case HARD:
-			modifier = (invert === false) ? 0.75 : 1.75;
+			modifier = (invert === false) ? 0.85 : 1.75;
 			break;
 		case INSANE:
-			modifier = (invert === false) ? 0.50 : 2.50;
+			modifier = (invert === false) ? 0.75 : 2.50;
 			break
 		default:
 			modifier = 1.00;
@@ -1607,7 +1607,6 @@ function __camTacticsTickForGroup(group)
 				{
 					camDebug("Controlling a human player's droid");
 				}
-				var done = false;
 				if (gi.order === CAM_ORDER_DEFEND)
 				{
 					// fall back to defense position
@@ -1619,56 +1618,49 @@ function __camTacticsTickForGroup(group)
 					{
 						orderDroidLoc(droid, DORDER_MOVE,
 									gi.data.pos.x, gi.data.pos.y);
-						done = true;
+						continue;
 					}
 				}
 				var vt = (droid.type === DROID) && isVTOL(droid);
-				var sc = droid.order !== DORDER_SCOUT;
-				if (!done
-					&& ((sc || vt)
-					&& (camDist(droid, targetC) >= __CAM_CLOSE_RADIUS)))
+				//Rearm vtols.
+				if (vt && ((Math.floor(droid.weapons[0].armed) < 1)
+					|| ((droid.order === DORDER_REARM)
+					&& (Math.ceil(droid.weapons[0].armed) < 100))))
 				{
-					//Rearm vtols.
-					if (vt && ((Math.floor(droid.weapons[0].armed) < 1)
-						|| ((droid.order === DORDER_REARM)
-						&& (Math.ceil(droid.weapons[0].armed) < 100))))
-					{
-						var pads = countStruct("A0VtolPad", droid.player);
-						if (pads && (droid.order !== DORDER_REARM))
-							orderDroid(droid, DORDER_REARM);
-						else
-							continue;
-					}
+					var pads = countStruct("A0VtolPad", droid.player);
+					if (pads && (droid.order !== DORDER_REARM))
+						orderDroid(droid, DORDER_REARM);
 					else
+						continue;
+				}
+				if (camDist(droid, targetC) >= __CAM_CLOSE_RADIUS)
+				{
+					if (!camDef(target) || !target || !target.id)
+						return;
+					if (camDef(droid) && droid && droid.id)
 					{
-						if (!camDef(target) || !target || !target.id)
-							return;
-						if (camDef(droid) && droid && droid.id)
+						var closeBy = enumRange(droid.x, droid.y, 8, CAM_HUMAN_PLAYER, false);
+						closeBy.sort(function(obj1, obj2) {
+							var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
+							var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
+							return (temp1 - temp2);
+						});
+						if (droid.droidType === DROID_SENSOR)
 						{
-							var closeBy = enumRange(droid.x, droid.y, 8,
-											CAM_HUMAN_PLAYER, false);
-							closeBy.sort(function(obj1, obj2) {
-								var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
-								var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
-								return (temp1 - temp2);
-							});
-							if (droid.droidType === DROID_SENSOR)
-							{
-								if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
-									orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
-								else
-									orderDroidObj(droid, DORDER_OBSERVE, target);
-							}
-							else if ((target.type !== DROID) || !vt)
-							{
-								if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
-									orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
-								else
-									orderDroidObj(droid, DORDER_ATTACK, target);
-							}
+							if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+								orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
 							else
-								orderDroidLoc(droid, DORDER_SCOUT, targetC.x, targetC.y);
+								orderDroidObj(droid, DORDER_OBSERVE, target);
 						}
+						else if ((target.type !== DROID) || !vt)
+						{
+							if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+								orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
+							else
+								orderDroidObj(droid, DORDER_ATTACK, target);
+						}
+						else
+							orderDroidLoc(droid, DORDER_SCOUT, targetC.x, targetC.y);
 					}
 				}
 			}
@@ -1700,10 +1692,7 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				if ((droid.type === DROID) && !isVTOL(droid))
-					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
-				else
-					orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
+				orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
 			}
 			break;
 		case CAM_ORDER_FOLLOW:

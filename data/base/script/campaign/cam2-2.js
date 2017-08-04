@@ -146,7 +146,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C", {
 		area: "RTLZ",
 		message: "C22_LZ",
-		reinforcements: "MB2_1_MSG2"(180, true) //3 min
+		reinforcements: 180 //3 min
 	});
 }
 

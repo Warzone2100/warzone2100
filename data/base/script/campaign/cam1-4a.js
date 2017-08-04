@@ -81,7 +81,7 @@ function moreLandingZoneTrigger()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
 		area: "RTLZ",
 		message: "C1-4_LZ",
-		reinforcements: camChangeOnDiff(90, true) // changes!
+		reinforcements: 90 // changes!
 	});
 	// enables all factories
 	camEnableFactory("SouthScavFactory");

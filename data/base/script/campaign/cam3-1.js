@@ -274,11 +274,11 @@ function unitsInValley()
 
 function enableReinforcements()
 {
-	const REINFORCEMENT_TIME = camChangeOnDiff(180); //3 minutes.
+	const REINFORCEMENT_TIME = 180; //3 minutes.
 	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
 		area: "RTLZ",
-		reinforcements: camChangeOnDiff(REINFORCEMENT_TIME, true),
+		reinforcements: REINFORCEMENT_TIME,
 		callback: "unitsInValley"
 	});
 }

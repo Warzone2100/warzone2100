@@ -79,7 +79,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2DS", {
 		area: "RTLZ",
 		message: "C25_LZ",
-		reinforcements: camChangeOnDiff(180, true) //3 min
+		reinforcements: 180 //3 min
 	});
 }
 

@@ -56,7 +56,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
 		area: "RTLZ",
 		message: "C1-2_LZ",
-		reinforcements: camChangeOnDiff(60, true)
+		reinforcements: 60
 	});
 	var startpos = getObject("StartPosition");
 	centreView(startpos.x, startpos.y);

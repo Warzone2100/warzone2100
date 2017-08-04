@@ -96,7 +96,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
 		area: "RTLZ",
 		message: "C2D_LZ",
-		reinforcements: camChangeOnDiff(300, true), //5 min
+		reinforcements: 300, //5 min
 		callback: "checkNASDACentral"
 	});
 }

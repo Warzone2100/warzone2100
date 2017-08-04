@@ -84,7 +84,7 @@ function enableReinforcements()
 		callback: "checkEnemyBases",
 		area: "RTLZ",
 		message: "C27_LZ",
-		reinforcements: camChangeOnDiff(180, true) //3 min
+		reinforcements: 180 //3 min
 	});
 }
 

@@ -85,7 +85,7 @@ function enableReinforcements()
 	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2END", {
 		area: "RTLZ",
-		reinforcements: camChangeOnDiff(180, true), //3 min
+		reinforcements: 180, //3 min
 		callback: "extraVictoryCondition",
 	});
 }
