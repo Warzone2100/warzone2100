@@ -8,7 +8,7 @@
 	"area_3": { "label": "NPLZ2", "pos1": [ 6720, 5824 ], "pos2": [ 7744, 6848 ]},
 	"area_4": { "label": "NPLZ3", "pos1": [ 5696, 6336 ], "pos2": [ 6976, 7360 ]},
 	"area_5": { "label": "NPLZ4", "pos1": [ 7360, 4160 ], "pos2": [ 8384, 5184 ]},
-	"area_6": { "label": "NPLZ5", "pos1": [ 6464, 3008 ], "pos2": [ 7448, 4032 ]},
+	"area_6": { "label": "NPLZ5", "pos1": [ 6656, 3456 ], "pos2": [ 6912, 3712 ]},
 
 	"area_7":  { "label": "PhantomLZ1", "pos1": [ 7104, 6208 ], "pos2": [ 7360, 6464 ]},
 	"area_8":  { "label": "PhantomLZ2", "pos1": [ 6080, 6720 ], "pos2": [ 6336, 6976 ]},
@@ -39,7 +39,7 @@
 	"position_20": { "label": "1aCybPos1", "pos": [ 4928, 2112 ]},
 	"position_21": { "label": "1aCybPos2", "pos": [ 3776, 4928 ]},
 	"position_22": { "label": "1aCybPos3", "pos": [ 1472, 6720 ]},
-	
+
 	"area_12": { "label": "NPLZ6", "pos1": [ 15104, 14976 ], "pos2": [ 15744, 15616 ]},
 	"area_13": { "label": "NPLZ7", "pos1": [ 12416, 1152 ], "pos2": [ 12928, 1536 ]},
 	"area_14": { "label": "NPLZ8", "pos1": [ 8320, 14976 ], "pos2": [ 8960, 15616 ]},

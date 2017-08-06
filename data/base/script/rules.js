@@ -33,11 +33,34 @@ function setupGame()
 function eventGameLoaded()
 {
 	setupGame();
+	queue("resetPower", 1000);
 }
 
 function eventGameInit()
 {
 	setupGame();
+	queue("resetPower", 1000)
+}
+
+function resetPower() {
+	const HARD_POWER_LIMIT = 50000;
+	const INSANE_POWER_LIMIT = 20000;
+
+	// set income modifier/power storage for player 0 (human)
+	if (difficulty == EASY)
+	{
+		setPowerModifier(110);
+	}
+	else if (difficulty == HARD)
+	{
+		setPowerModifier(90);
+		setPowerStorageMaximum(HARD_POWER_LIMIT);
+	}
+	else if (difficulty == INSANE)
+	{
+		setPowerModifier(70);
+		setPowerStorageMaximum(INSANE_POWER_LIMIT);
+	}
 }
 
 function eventStartLevel()
@@ -70,21 +93,7 @@ function eventStartLevel()
 		eventStructureBuilt(structlist[i]);
 	}
 
-	// set income modifier/power storage for player 0 (human)
-	if (difficulty == EASY)
-	{
-		setPowerModifier(110);
-	}
-	else if (difficulty == HARD)
-	{
-		setPowerModifier(90);
-		setPowerStorageMaximum(50000);
-	}
-	else if (difficulty == INSANE)
-	{
-		setPowerModifier(70);
-		setPowerStorageMaximum(20000);
-	}
+	resetPower();
 }
 
 function eventStructureBuilt(struct)
