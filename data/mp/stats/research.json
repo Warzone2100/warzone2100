@@ -6128,9 +6128,6 @@
             "Flame1Mk1",
             "CyborgFlamer01"
         ],
-        "replacedComponents": [
-            "CyborgFlamer01:Cyb-Wpn-Thermite"
-        ],
         "requiredResearch": [
             "R-Wpn-Flamer-Damage04",
             "R-Wpn-Flamer01Mk1"
