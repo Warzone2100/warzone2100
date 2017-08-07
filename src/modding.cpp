@@ -75,16 +75,19 @@ static inline std::vector<std::string> split(std::string const &str, std::string
 static inline std::string join(std::vector<std::string> const &strs, std::string const &sep)
 {
 	std::string str;
-	bool first = true;
-	for (auto const &s : strs)
+	if (strs.empty())
 	{
-		if (!first)
-		{
-			str += sep;
-		}
-		str += s;
-		first = false;
+		return str;
 	}
+
+	str += strs[strs.size() -1];
+
+	for (int i = strs.size() - 2; i >= 0; --i)
+	{
+		str += sep;
+		str += strs[i];
+	}
+
 	return str;
 }
 
