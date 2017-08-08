@@ -1525,6 +1525,8 @@ function __camTacticsTickForGroup(group)
 		for (var i = 0, l = rawDroids.length; i < l; ++i)
 		{
 			var droid = rawDroids[i];
+			if (!camDef(droid) || (droid.id === 0))
+				continue;
 			if (droid.order === DORDER_RTR)
 				continue;
 			if (droid.health < gi.data.repair)
@@ -1559,7 +1561,7 @@ function __camTacticsTickForGroup(group)
 				for (var j = 0, c = ret.clusters[i].length; j < c; ++j)
 				{
 					var droid = ret.clusters[i][j];
-					if (camDef(droid) && droid)
+					if (camDef(droid) && (droid.type === DROID) && (droid.id !== 0))
 					{
 						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
 					}
@@ -1575,6 +1577,8 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
+				if (!camDef(droid) || (droid.id === 0))
+					continue;
 				if (back)
 					orderDroid(droid, DORDER_RTB);
 				else if (droid.order !== DORDER_MOVE) // to assembly point?
@@ -1603,6 +1607,8 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
+				if (!camDef(droid) || (droid.id === 0))
+					continue;
 				if (droid.player === CAM_HUMAN_PLAYER)
 				{
 					camDebug("Controlling a human player's droid");
@@ -1692,7 +1698,8 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
+				if (camDef(droid) && (droid.id !== 0))
+					orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
 			}
 			break;
 		case CAM_ORDER_FOLLOW:
@@ -1707,6 +1714,8 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
+				if (!camDef(droid) || (droid.id === 0))
+					continue;
 				if (droid.order !== DORDER_COMMANDERSUPPORT)
 					orderDroidObj(droid, DORDER_COMMANDERSUPPORT, commander);
 			}
@@ -1830,7 +1839,7 @@ function __camTruckTick()
 
 			enableStructure(qi.stat, player);
 			var loc = pickStructLocation(truck, qi.stat, pos.x, pos.y);
-			if (camDef(loc))
+			if (camDef(loc) && camDef(truck) && (truck.id !== 0))
 			{
 				if (orderDroidBuild(truck, DORDER_BUILD,
 				                    qi.stat, loc.x, loc.y))
@@ -1847,7 +1856,7 @@ function __camTruckTick()
 			continue;
 		var oil = oils[0];
 		var truck = __camGetClosestTruck(player, oil);
-		if (camDef(truck))
+		if (camDef(truck) && (truck.id !== 0))
 		{
 			enableStructure("A0ResourceExtractor", player);
 			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor",
@@ -2065,6 +2074,19 @@ function __camBuildDroid(template, structure)
 	                          "", "", template.weap);
 }
 
+function __camResetFactories()
+{
+	for (var fl in __camFactoryInfo)
+	{
+		if ((getObject(fl) !== null) && (__camFactoryInfo[fl].enabled === true))
+		{
+			__camFactoryInfo[fl].enabled = false;
+			__camFactoryInfo[fl].state = -1;
+			camEnableFactory(fl);
+		}
+	}
+}
+
 function __camContinueProduction(structure)
 {
 	var flabel, struct;
@@ -2106,8 +2128,7 @@ function __camContinueProduction(structure)
 		if (throttle < fi.throttle)
 		{
 			// do throttle
-			queue("__camContinueProduction",
-			      fi.throttle - throttle, flabel);
+			queue("__camContinueProduction", fi.throttle - throttle, flabel);
 			return;
 		}
 	}
@@ -2568,6 +2589,8 @@ function __camRetreatVtols()
 	for (var i = 0, l = vtols.length; i < l; ++i)
 	{
 		var vt = vtols[i];
+		if (!camDef(vt) || (vt.id === 0))
+			continue;
 		for (var c = 0, d = vt.weapons.length; c < d; ++c)
 		{
 			if ((vt.order == DORDER_RTB)
@@ -2580,7 +2603,7 @@ function __camRetreatVtols()
 		}
 	}
 
-	queue("__camRetreatVtols", 1500);
+	queue("__camRetreatVtols", 800);
 }
 
 
@@ -2843,4 +2866,6 @@ function cam_eventGameLoaded()
 						"page-7-barbarians-kevlar.png");
 		}
 	}
+
+	__camResetFactories();
 }
