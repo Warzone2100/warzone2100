@@ -180,6 +180,6 @@ function eventStartLevel()
 	});
 
 	victoryFlag = false;
-	setupCyborgGroups();
+	queue("setupCyborgGroups", 5000);
 	queue("updateTransportUnits", 20000);
 };

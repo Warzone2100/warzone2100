@@ -120,6 +120,13 @@ function truckDefense()
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
+function transferPower()
+{
+	//increase player power level and play sound
+     setPower(playerPower(me) + 4000);
+     playSound("power-transferred.ogg");
+}
+
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_2S");
@@ -218,11 +225,12 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+
 	camEnableFactory("COHeavyFac-b4");
 	camEnableFactory("COCybFac-b4");
-
 	ambushPlayer();
 
+	queue("transferPower", 2000);
 	queue("vtolAttack", 60000); //1 min
 	queue("activateBase1Defenders2", camChangeOnDiff(1200000)); //20 min.
 	queue("activateBase1Defenders", camChangeOnDiff(1800000)); //30 min.
