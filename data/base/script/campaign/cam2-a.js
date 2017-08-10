@@ -67,15 +67,21 @@ function getDroidsForCOLZ()
 //Send Collective tranport units
 function sendCOTransporter()
 {
-	var list = getDroidsForCOLZ();
-	camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
-		CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 126, y: 100 },
-			exit: { x: 126, y: 70 }
-		}
-	);
+	var tPos = getObject("COTransportPos");
+	var nearbyDefense = enumRange(tPos.x, tPos.y, 15, THE_COLLECTIVE, false);
 
-	queue("sendCOTransporter", camChangeOnDiff(300000)); //5 min
+	if(nearbyDefense.length)
+	{
+		var list = getDroidsForCOLZ();
+		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
+			CAM_REINFORCE_TRANSPORT, {
+				entry: { x: 126, y: 100 },
+				exit: { x: 126, y: 70 }
+			}
+		);
+
+		queue("sendCOTransporter", camChangeOnDiff(300000)); //5 min
+	}
 }
 
 //Extra transport units are only awarded to those who start Beta campaign
@@ -102,8 +108,6 @@ function sendPlayerTransporter()
 	{
 		droids.push(list[camRand(list.length)]);
 	}
-
-
 
 	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
 		CAM_REINFORCE_TRANSPORT, {

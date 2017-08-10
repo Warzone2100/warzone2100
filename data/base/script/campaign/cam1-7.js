@@ -143,6 +143,15 @@ function buildLancers()
 	}
 }
 
+//Destroy all of the New Paradigm.
+function allNPDestroyed()
+{
+	if(!enumArea(0, 0, mapWidth, mapHeight, NEW_PARADIGM, false).length)
+	{
+		return true;
+	}
+}
+
 //Enable transport reinforcements
 function enableReinforcements()
 {
@@ -150,7 +159,8 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
-		reinforcements: 60 //1 min
+		reinforcements: 60, //1 min
+		callback: "allNPDestroyed"
 	});
 }
 
@@ -169,7 +179,8 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
-		reinforcements: -1
+		reinforcements: -1,
+		callback: "allNPDestroyed"
 	});
 
 	var startpos = getObject("startPosition");

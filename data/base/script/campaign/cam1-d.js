@@ -21,6 +21,7 @@ camAreaEvent("tankTrapTrig", function()
 	camEnableFactory("NPFactoryE");
 	camEnableFactory("NPCybFactoryE");
 	mrlGroupAttack();
+	hackRemoveMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 });
 
 camAreaEvent("causeWayTrig", function()
@@ -30,14 +31,6 @@ camAreaEvent("causeWayTrig", function()
 	cyborgGroupPatrol();
 	sendNPTransporter();
 });
-
-function eventPickup(feature, droid)
-{
-	if(feature.stattype === ARTIFACT)
-	{
-		hackRemoveMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	}
-}
 
 function getDroidsForNPLZ()
 {
@@ -58,17 +51,21 @@ function getDroidsForNPLZ()
 
 function sendNPTransporter()
 {
-	var list = getDroidsForNPLZ();
-	camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list,
-		CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 0, y: 0 },
-			exit: { x: 0, y: 0 },
-			message: "C1D_LZ2"
-		}
-	);
+	//Check if the NP LZ is secure. If so, send a transport.
+	var tPos = getObject("NPTransportPos");
+	var nearbyDefense = enumRange(tPos.x, tPos.y, 8, NEW_PARADIGM, false);
 
-	if(enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length > 0)
+	if(nearbyDefense.length)
 	{
+		var list = getDroidsForNPLZ();
+		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list,
+			CAM_REINFORCE_TRANSPORT, {
+				entry: { x: 0, y: 0 },
+				exit: { x: 0, y: 0 },
+				message: "C1D_LZ2"
+			}
+		);
+
 		queue("sendNPTransporter", camChangeOnDiff(600000)); //10 min
 	}
 }

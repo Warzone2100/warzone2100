@@ -64,19 +64,30 @@ camAreaEvent("SouthEastScavFactoryTrigger", function()
 	camEnableFactory("ScavSouthEastFactory");
 });
 
-//Land New Paradigm transport in the LZ area (protected by four hardpoints in the NEW_PARADIGM base)
+//Land New Paradigm transport in the LZ area (protected by four hardpoints in the New Paradigm base)
 camAreaEvent("NPLZTrigger", function()
 {
-	playSound("pcv395.ogg"); //enemy transport detected warning sound
-
-	var list = getDroidsForNPLZ();
-	camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
-		entry: { x: 5, y: 55 },
-		exit: { x: 7, y: 57 },
-		order: CAM_ORDER_ATTACK,
-		data: { regroup: true, count: -1, pos: camMakePos("NPBase") }
-	});
+	sendNPTransport();
 });
+
+function sendNPTransport()
+{
+	var tPos = getObject("NPTransportPos");
+	var nearbyDefense = enumRange(tPos.x, tPos.y, 6, NEW_PARADIGM, false);
+
+	if(nearbyDefense.length)
+	{
+		var list = getDroidsForNPLZ();
+		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
+			entry: { x: 1, y: 42 },
+			exit: { x: 1, y: 42 },
+			order: CAM_ORDER_ATTACK,
+			data: { regroup: true, count: -1, pos: camMakePos("NPBase") }
+		});
+
+		queue("sendNPTransport", camChangeOnDiff(180000)); //3 min
+	}
+}
 
 //What to do if the New Paradigm builds some droid
 function eventDroidBuilt(droid, structure)
@@ -129,7 +140,6 @@ function eventStartLevel()
 		message: "C1-5_LZ",
 		reinforcements: -1
 	});
-
 
 	var lz = getObject("LandingZone1"); //player lz
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
@@ -239,7 +249,6 @@ function eventStartLevel()
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 	});
-
 
 	NPDefenseGroup = newGroup();
 

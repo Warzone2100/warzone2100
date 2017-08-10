@@ -134,7 +134,7 @@ function camSafeRemoveObject(obj, flashy)
 		return;
 	if (camIsString(obj))
 		obj = getObject(obj);
-	if (camDef(obj) && obj)
+	if (camDef(obj) && obj && (obj.id !== 0))
 		removeObject(obj, flashy);
 }
 
@@ -252,10 +252,10 @@ function camChangeOnDiff(num, invert)
 			modifier = 1.00;
 			break;
 		case HARD:
-			modifier = (invert === false) ? 0.85 : 1.75;
+			modifier = (invert === false) ? 0.75 : 1.75;
 			break;
 		case INSANE:
-			modifier = (invert === false) ? 0.75 : 2.50;
+			modifier = (invert === false) ? 0.67 : 2.50;
 			break
 		default:
 			modifier = 1.00;
@@ -1490,11 +1490,9 @@ function __camPickTarget(group)
 	}
 	if (!targets.length)
 		return undefined;
-	//Prefer the farthest object from the radius.
-	targets.reverse();
 	var target = targets[0];
 	__camGroupInfo[group].target = { x: target.x, y: target.y };
-	return target;
+	return __camGroupInfo[group].target;
 }
 
 function __camTacticsTick()
@@ -1601,9 +1599,8 @@ function __camTacticsTickForGroup(group)
 		case CAM_ORDER_DEFEND:
 		case CAM_ORDER_COMPROMISE:
 			var target = profile("__camPickTarget", group);
-			if (!camDef(target) || !target || !target.id)
+			if (!camDef(target))
 				return;
-			var targetC = { x: target.x, y: target.y };
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
@@ -1639,34 +1636,25 @@ function __camTacticsTickForGroup(group)
 					else
 						continue;
 				}
-				if (camDist(droid, targetC) >= __CAM_CLOSE_RADIUS)
+				if (camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 				{
-					if (!camDef(target) || !target || !target.id)
-						return;
-					if (camDef(droid) && droid && droid.id)
+					if (droid.droidType === DROID_SENSOR)
 					{
-						var closeBy = enumRange(droid.x, droid.y, 8, CAM_HUMAN_PLAYER, false);
+						var closeBy = enumRange(droid.x, droid.y, 15, CAM_HUMAN_PLAYER, false);
 						closeBy.sort(function(obj1, obj2) {
 							var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
 							var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
 							return (temp1 - temp2);
 						});
-						if (droid.droidType === DROID_SENSOR)
-						{
-							if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
-								orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
-							else
-								orderDroidObj(droid, DORDER_OBSERVE, target);
-						}
-						else if ((target.type !== DROID) || !vt)
-						{
-							if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
-								orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
-							else
-								orderDroidObj(droid, DORDER_ATTACK, target);
-						}
+
+						if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+							orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
 						else
-							orderDroidLoc(droid, DORDER_SCOUT, targetC.x, targetC.y);
+							orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+					}
+					else
+					{
+						orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
 					}
 				}
 			}
