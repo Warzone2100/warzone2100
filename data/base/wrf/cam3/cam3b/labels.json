@@ -1,0 +1,38 @@
+{
+	"position_0": { "label": "startPosition",		"pos": [ 7360, 15296 ] },
+	"position_1": { "label": "vtolAppearPos",		"pos": [ 832, 6464 ] },
+	"position_2": { "label": "vtolRemovePos",		"pos": [ 128, 10240 ] },
+	"position_3": { "label": "healthRetreatPos",		"pos": [ 704, 6592 ] },
+	"position_4": { "label": "healthRetreatPosGamma",	"pos": [ 1728, 1472 ] },
+	"position_5": { "label": "playerLZ",			"pos": [ 7232, 14656 ] },
+	"position_6": { "label": "nexusEastTransportPos",	"pos": [ 6144, 6528 ] },
+	"position_7": { "label": "nexusWestTransportPos",	"pos": [ 1024, 6784 ] },
+	"position_8": { "label": "eastRetreat",			"pos": [ 6464, 7104 ] },
+	"position_9": { "label": "westRetreat",			"pos": [ 704, 6592 ] },
+	"position_10": { "label": "westPhantomFactory",	"pos": [ 64, 10816 ] },
+	"position_11": { "label": "northEastOfLake",		"pos": [ 5952, 1856 ] },
+	"position_12": { "label": "gammaBase",			"pos": [ 1728, 1472 ] },
+	"position_13": { "label": "northEndOfPass",		"pos": [ 2496, 6080 ] },
+	"position_14": { "label": "southOfRidge",		"pos": [ 4416, 9152 ] },
+	"position_15": { "label": "westRidge",			"pos": [ 3520, 6336 ] },
+	"position_16": { "label": "eastRidge",			"pos": [ 5696, 7488 ] },
+	"position_17": { "label": "westDoorOfBase",		"pos": [ 6080, 14144 ] },
+	"position_18": { "label": "eastDoorOfBase",		"pos": [ 6592, 11456 ] },
+
+	"area_0": { "label": "landingZone",		"pos1": [ 7040, 15232 ], "pos2": [ 7296, 15488 ] },
+	"area_1": { "label": "gammaBaseCleanup",	"pos1": [ 448, 448 ], "pos2": [ 2880, 3800 ] },
+	"area_2": { "label": "NXEastBaseCleanup",	"pos1": [ 5696, 4800 ], "pos2": [ 7360, 7872 ] },
+	"area_3": { "label": "NXWestBaseCleanup",	"pos1": [ 448, 5440 ], "pos2": [ 1600, 7104 ] },
+	"area_4": { "label": "eastNXGroup",		"pos1": [ 6080, 5568 ], "pos2": [ 6848, 6080 ] },
+	"area_5": { "label": "westNXGroup",		"pos1": [ 192, 4288 ], "pos2": [ 1472, 6336 ] },
+	"area_6": { "label": "trapTrigger",	"subscriber": 0, "pos1": [ 448, 4000 ], "pos2": [ 7600, 4500 ] },
+
+	"object_0": { "label": "NXCommandCenter",	"id": 1180,  "player": 3, "type": 1 },
+	"object_1": { "label": "NXBeamTowerArti",	"id": 1181,  "player": 3, "type": 1 },
+	"object_2": { "label": "gammaFactory",		"id": 432,  "player": 1, "type": 1 },
+	"object_3": { "label": "gammaCyborgFactory",	"id": 134,  "player": 1, "type": 1 },
+	"object_4": { "label": "gammaResLabArti",	"id": 143,  "player": 1, "type": 1 },
+	"object_5": { "label": "gammaCommandArti",	"id": 133,  "player": 1, "type": 1 },
+
+	"radius_0": { "label": "vtolRemoveZone", "subscriber": 3, "pos" : [ 128, 10240 ], "radius": 300 }
+}

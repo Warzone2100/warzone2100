@@ -2332,7 +2332,7 @@ function __camTriggerLastAttack()
 	{
 		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 		// Do not order systems (sensor/trucks/repairs) to attack stuff.
-		enemies.filter(function(obj) {
+		enemies = enemies.filter(function(obj) {
 			return ((obj.type === DROID)
 				&& !camIsTransporter(obj)
 				&& !camIsSystemDroid(obj)
@@ -2594,6 +2594,78 @@ function __camRetreatVtols()
 	queue("__camRetreatVtols", 800);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Nexus related functionality.
+////////////////////////////////////////////////////////////////////////////////
+
+const DEFENSE_ABSORBED = "defabsrd.ogg";
+const DEFENSE_NEUTRALIZE = "defnut.ogg";
+const LAUGH1 = "laugh1.ogg";
+const LAUGH2 = "laugh2.ogg";
+const LAUGH3 = "laugh3.ogg";
+const PRODUCTION_COMPLETE = "pordcomp.ogg";
+const RES_ABSORBED = "resabsrd.ogg"
+const STRUCTURE_ABSORBED = "strutabs.ogg";
+const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
+const SYNAPTICS_ACTIVATED = "synplnk.ogg";
+const UNIT_ABSORBED = "untabsrd.ogg";
+const UNIT_NEUTRALIZE = "untnut.ogg";
+var lastNexusHit;
+
+function camAbsorbPlayer(playerNumber, to)
+{
+     if (!camDef(playerNumber))
+     {
+          playerNumber = CAM_HUMAN_PLAYER;
+     }
+     if (!camDef(to))
+     {
+          to = NEXUS;
+     }
+
+     var units = enumDroid(playerNumber);
+	for (var i = 0, l = units.length; i < l; i++)
+	{
+		donateObject(units[i], to);
+	}
+
+    var structs = enumStruct(playerNumber);
+    for (var i = 0, l = structs.length; i < l; i++)
+    {
+         donateObject(structs[i], to);
+    }
+
+    camTrace("Player " + playerNumber + " has been absorbed by player" + to);
+    changePlayerColour(playerNumber, to); // Black painting.
+}
+
+//Steal a droid or structure from a player.
+function camHackIntoPlayer(what, player, to)
+{
+     if (!camDef(what))
+     {
+          what = "DROID";
+     }
+     if (!camDef(player))
+     {
+          player = CAM_HUMAN_PLAYER;
+     }
+     if (!camDef(to))
+     {
+          to = NEXUS;
+     }
+     if (!camDef(lastNexusHit))
+     {
+          lastNexusHit = 0;
+     }
+
+     var str = (what = "DROID") ? enumDroid(playerNumber) : enumStruct(playerNumber);
+	if (((lastNexusHit + 15000) > gameTime) && (camRand(101) < 10))
+     {
+          donateObject(str[camRand(str.length)], to);
+          lastNexusHit = gameTime;
+     }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events

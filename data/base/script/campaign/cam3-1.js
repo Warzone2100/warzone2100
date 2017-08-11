@@ -285,7 +285,6 @@ function enableReinforcements()
 
 function eventStartLevel()
 {
-	const MISSION_TIME = camChangeOnDiff(7200); //120 minutes.
 	const NEXUS_POWER = camChangeOnDiff(20000);
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
@@ -317,7 +316,6 @@ function eventStartLevel()
 		reinforcements: -1,
 		callback: "unitsInValley"
 	});
-	setMissionTime(MISSION_TIME);
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);

@@ -655,7 +655,8 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 					// structure with weapons - go for this
 					psTarget = targetInQuestion;
 				}
-				else if (!isHumanPlayer(psDroid->player))
+				else if ((isHumanPlayer(psDroid->player) && (psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER))
+					|| !isHumanPlayer(psDroid->player))
 				{
 					psTarget = targetInQuestion;
 				}

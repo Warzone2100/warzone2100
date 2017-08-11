@@ -20,10 +20,10 @@ function eventVideoDone()
 
 function eventStartLevel()
 {
-    camSetupTransporter(56, 120, 25, 87);
-    centreView(57, 119);
-    setNoGoArea(55, 119, 57, 121, CAM_HUMAN_PLAYER);
-    setMissionTime(camChangeOnDiff(4200)); // 70 minutes
-    eventVideoDone();
-    camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_3_1");
+	camSetupTransporter(56, 120, 25, 87);
+	centreView(57, 119);
+	setNoGoArea(55, 119, 57, 121, CAM_HUMAN_PLAYER);
+	setMissionTime(camChangeOnDiff(7200)); // 120 minutes
+	eventVideoDone();
+	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_3_1");
 }
