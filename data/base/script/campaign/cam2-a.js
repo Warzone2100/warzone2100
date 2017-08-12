@@ -117,7 +117,7 @@ function sendPlayerTransporter()
 	);
 
 	index = index + 1;
-	queue("sendPlayerTransporter", camChangeOnDiff(300000, true)); //5 min
+	queue("sendPlayerTransporter", 300000); //5 min
 }
 
 //Continuously spawns heavy units on the north part of the map every 7 minutes
@@ -310,7 +310,7 @@ function eventStartLevel()
 		sendPlayerTransporter();
 	}
 	else {
-		setReinforcementTime(camChangeOnDiff(300, true)); // 5 min.
+		setReinforcementTime(300); // 5 min.
 	}
 
 	queue("secondVideo", 12000); // 12 sec

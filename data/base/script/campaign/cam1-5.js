@@ -2,9 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var NPDefenseGroup;
 const SCAVS = 7; // Scav player number
-
 const NEW_PARADIGM_RES = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
 	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
@@ -87,16 +85,6 @@ function sendNPTransport()
 
 		queue("sendNPTransport", camChangeOnDiff(180000)); //3 min
 	}
-}
-
-//What to do if the New Paradigm builds some droid
-function eventDroidBuilt(droid, structure)
-{
-	if (!camDef(structure) || !structure || structure.player !== NEW_PARADIGM
-                           || droid.droidType === DROID_CONSTRUCT)
-		return;
-	if (groupSize(NPDefenseGroup) < 4)
-		groupAdd(NPDefenseGroup, droid);
 }
 
 //Enable transport reinforcements
@@ -249,8 +237,6 @@ function eventStartLevel()
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 	});
-
-	NPDefenseGroup = newGroup();
 
 	queue("camCallOnce", 30000, "enableReinforcements");
 	queue("enableNPFactories", 50000);

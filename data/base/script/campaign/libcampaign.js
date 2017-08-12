@@ -1638,15 +1638,16 @@ function __camTacticsTickForGroup(group)
 				}
 				if (camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 				{
+					var rng = droid.droidType === DROID_SENSOR ? 10 : 5;
+					var closeBy = enumRange(droid.x, droid.y, rng, CAM_HUMAN_PLAYER, false);
+					closeBy = closeBy.sort(function(obj1, obj2) {
+						var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
+						var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
+						return (temp1 - temp2);
+					});
+
 					if (droid.droidType === DROID_SENSOR)
 					{
-						var closeBy = enumRange(droid.x, droid.y, 15, CAM_HUMAN_PLAYER, false);
-						closeBy.sort(function(obj1, obj2) {
-							var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
-							var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
-							return (temp1 - temp2);
-						});
-
 						if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
 							orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
 						else
@@ -1654,7 +1655,10 @@ function __camTacticsTickForGroup(group)
 					}
 					else
 					{
-						orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+						if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+							orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
+						else
+							orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
 					}
 				}
 			}
@@ -1686,8 +1690,28 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				if (camDef(droid) && (droid.id !== 0))
-					orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
+				var rng = droid.droidType === DROID_SENSOR ? 10 : 5;
+				var closeBy = enumRange(droid.x, droid.y, rng, CAM_HUMAN_PLAYER, false);
+				closeBy = closeBy.sort(function(obj1, obj2) {
+					var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
+					var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
+					return (temp1 - temp2);
+				});
+
+				if (droid.droidType === DROID_SENSOR)
+				{
+					if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+						orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
+					else
+						orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
+				}
+				else
+				{
+					if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+						orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
+					else
+						orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
+				}
 			}
 			break;
 		case CAM_ORDER_FOLLOW:

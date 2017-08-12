@@ -165,7 +165,7 @@ function sendPlayerTransporter()
 	);
 
 	index = index + 1;
-	queue("sendPlayerTransporter", camChangeOnDiff(300000, true)); //5 min
+	queue("sendPlayerTransporter", 300000); //5 min
 }
 
 //VTOL units stop coming when the Nexus HQ is destroyed.
@@ -267,7 +267,7 @@ function eventStartLevel()
 	const MISSION_TIME = camChangeOnDiff(7200); //120 minutes.
 	const NEXUS_POWER = camChangeOnDiff(50000, true);
 	const PLAYER_POWER = 16000;
-	const REINFORCEMENT_TIME = camChangeOnDiff(300, true); //5 minutes.
+	const REINFORCEMENT_TIME = 300; //5 minutes.
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	var tent = getObject("transporterEntry");

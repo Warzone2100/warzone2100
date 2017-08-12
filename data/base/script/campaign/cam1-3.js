@@ -15,7 +15,6 @@ const NEW_PARADIGM_RES = [
 const SCAVENGER_RES = [
 	"R-Wpn-MG-Damage02", "R-Wpn-Rocket-Damage01", "R-Wpn-Cannon-Damage01",
 ];
-
 var NPDefenseGroup, NPScoutGroup, NPFactory;
 
 camAreaEvent("RemoveBeacon", function(droid)
