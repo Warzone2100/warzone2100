@@ -58,7 +58,6 @@
 #define IDDES_PROPAIR		5108		// The propulsion air speed
 #define IDDES_PROPWEIGHT	5109		// The propulsion weight
 #define IDDES_SENSORRANGE	5110		// The sensor range
-#define IDDES_SENSORPOWER	5111		// The sensor power
 #define IDDES_SENSORWEIGHT	5112		// The sensor weight
 #define IDDES_ECMPOWER		5115		// The ecm power
 #define IDDES_ECMWEIGHT		5116		// The ecm weight
@@ -84,7 +83,6 @@
 #define IDDES_PROPAIRLAB		5208		// The propulsion air speed label
 #define IDDES_PROPWEIGHTLAB		5209		// The propulsion weight label
 #define IDDES_SENSORRANGELAB	5210		// The sensor range label
-#define IDDES_SENSORPOWERLAB	5211		// The sensor power label
 #define IDDES_SENSORWEIGHTLAB	5212		// The sensor weight label
 #define IDDES_ECMPOWERLAB		5215		// The ecm power label
 #define IDDES_ECMWEIGHTLAB		5216		// The ecm weight label

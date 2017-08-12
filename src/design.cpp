@@ -1226,16 +1226,8 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		}
 		sBarInit.denominator = 0;
 		sBarInit.precision = 0;
-		sBarInit.id = IDDES_SENSORPOWER;
-		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
-		sBarInit.iRange = (UDWORD)getMaxSensorRange();	// FIXME: Remove
-		sBarInit.pTip = _("Sensor Power");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
 		sBarInit.id = IDDES_SENSORWEIGHT;
-		sBarInit.y = DES_STATBAR_Y3;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
+		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -1247,14 +1239,6 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_SENSORRANGELAB;
 		sLabInit.pTip = _("Sensor Range");
 		sLabInit.UserData = IMAGE_DES_RANGE;
-		if (!widgAddLabel(psWScreen, &sLabInit))
-		{
-			return false;
-		}
-		sLabInit.id = IDDES_SENSORPOWERLAB;
-		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
-		sLabInit.pTip = _("Sensor Power");
-		sLabInit.UserData = IMAGE_DES_POWER;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
 			return false;
@@ -2139,8 +2123,6 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_SENSORRANGE, sensorRange(psStats, selectedPlayer));
-	/* power */
-	widgSetBarSize(psWScreen, IDDES_SENSORPOWER, 0);	// FIXME: Remove
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SENSORWEIGHT, psStats->weight);
 }
@@ -2158,8 +2140,6 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 		/* range */
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORRANGE,
 		                    sensorRange(psStats, (UBYTE)selectedPlayer));
-		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_SENSORPOWER, 0);	// FIXME: Remove
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORWEIGHT, psStats->weight);
 	}
@@ -2167,7 +2147,6 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 	{
 		/* Remove the shadow bars */
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORRANGE, 0);
-		widgSetMinorBarSize(psWScreen, IDDES_SENSORPOWER, 0);
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORWEIGHT, 0);
 	}
 }
