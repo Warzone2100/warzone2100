@@ -73,7 +73,6 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = 
 
 GFX::GFX(GFXTYPE type, GLenum drawType, int coordsPerVertex) : mType(type), mdrawType(drawType), mCoordsPerVertex(coordsPerVertex), mSize(0)
 {
-	glGenBuffers(VBO_MINIMAL, mBuffers);
 }
 
 void GFX::loadTexture(const char *filename, GLenum filter)
@@ -128,18 +127,24 @@ void GFX::updateTexture(const void *image, int width, int height)
 
 void GFX::buffers(int vertices, const GLvoid *vertBuf, const GLvoid *auxBuf)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_VERTEX]);
-	glBufferData(GL_ARRAY_BUFFER, vertices * mCoordsPerVertex * sizeof(GLfloat), vertBuf, GL_STATIC_DRAW);
+	if (mBuffers[VBO_VERTEX])
+		delete mBuffers[VBO_VERTEX];
+	mBuffers[VBO_VERTEX] = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, vertices * mCoordsPerVertex * sizeof(gfx_api::gfxFloat));
+	mBuffers[VBO_VERTEX]->upload(0, vertices * mCoordsPerVertex * sizeof(GLfloat), vertBuf);
 	if (mType == GFX_TEXTURE)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
-		glBufferData(GL_ARRAY_BUFFER, vertices * 2 * sizeof(GLfloat), auxBuf, GL_STATIC_DRAW);
+		if (mBuffers[VBO_TEXCOORD])
+			delete mBuffers[VBO_TEXCOORD];
+		mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, vertices * 2 * sizeof(gfx_api::gfxFloat));
+		mBuffers[VBO_TEXCOORD]->upload(0, vertices * 2 * sizeof(GLfloat), auxBuf);
 	}
 	else if (mType == GFX_COLOUR)
 	{
+		if (mBuffers[VBO_TEXCOORD])
+			delete mBuffers[VBO_TEXCOORD];
+		mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, vertices * 4 * sizeof(GLbyte));
 		// reusing texture buffer for colours for now
-		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
-		glBufferData(GL_ARRAY_BUFFER, vertices * 4 * sizeof(GLbyte), auxBuf, GL_STATIC_DRAW);
+		mBuffers[VBO_TEXCOORD]->upload(0, vertices * 4 * sizeof(GLbyte), auxBuf);
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	mSize = vertices;
@@ -157,7 +162,7 @@ void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 		mTexture->bind();
 		pie_ActivateShader(SHADER_GFX_TEXT, modelViewProjectionMatrix, glm::vec4(1), 0);
 		glEnableVertexAttribArray(VERTEX_COORDS_ATTRIB_INDEX);
-		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
+		mBuffers[VBO_TEXCOORD]->bind();
 		glVertexAttribPointer(VERTEX_COORDS_ATTRIB_INDEX, 2, GL_FLOAT, false, 0, nullptr);
 	}
 	else if (mType == GFX_COLOUR)
@@ -165,11 +170,11 @@ void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 		pie_SetTexturePage(TEXPAGE_NONE);
 		pie_ActivateShader(SHADER_GFX_COLOUR, modelViewProjectionMatrix);
 		glEnableVertexAttribArray(VERTEX_COLOR_ATTRIB_INDEX);
-		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
+		mBuffers[VBO_TEXCOORD]->bind();
 		glVertexAttribPointer(VERTEX_COLOR_ATTRIB_INDEX, 4, GL_UNSIGNED_BYTE, true, 0, nullptr);
 	}
 	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
-	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_VERTEX]);
+	mBuffers[VBO_VERTEX]->bind();
 	glVertexAttribPointer(VERTEX_POS_ATTRIB_INDEX, mCoordsPerVertex, GL_FLOAT, false, 0, nullptr);
 	glDrawArrays(mdrawType, 0, mSize);
 	glDisableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
@@ -187,7 +192,8 @@ void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 
 GFX::~GFX()
 {
-	glDeleteBuffers(VBO_MINIMAL, mBuffers);
+	for (auto* buffer : mBuffers)
+		delete buffer;
 	if (mTexture)
 		delete mTexture;
 }
@@ -195,7 +201,7 @@ GFX::~GFX()
 static void enableRect()
 {
 	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
-	glBindBuffer(GL_ARRAY_BUFFER, pie_internal::rectBuffer);
+	pie_internal::rectBuffer->bind();
 	glVertexAttribPointer(VERTEX_POS_ATTRIB_INDEX, 4, GL_BYTE, false, 0, nullptr);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

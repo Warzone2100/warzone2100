@@ -68,14 +68,13 @@ static GLfloat lighting0[LIGHT_MAX][4];
 static std::vector<GLint> enabledAttribArrays;
 
 
-void enableArray(GLint buffer, GLint loc, GLint size, GLenum type, GLboolean normalised, GLsizei stride, std::size_t offset)
+void enableArray(gfx_api::buffer& buffer, GLint loc, GLint size, GLenum type, GLboolean normalised, GLsizei stride, std::size_t offset)
 {
 	if (loc == -1)
 	{
 		return;
 	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	buffer.bind();
 	glVertexAttribPointer(loc, size, type, normalised, stride, BUFFER_OFFSET(offset));
 	glEnableVertexAttribArray(loc);
 	enabledAttribArrays.push_back(loc);
@@ -162,10 +161,10 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 		glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4());
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(shape->texpage);
-	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
+	enableArray(*shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
+	enableArray(*shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
+	enableArray(*shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
+	shape->buffers[VBO_INDEX]->bind();
 	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, nullptr);
 	disableArrays();
 	polyCount += shape->npolys;
@@ -233,10 +232,10 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 
 	frame %= std::max<int>(1, shape->numFrames);
 
-	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
+	enableArray(*shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
+	enableArray(*shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
+	enableArray(*shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
+	shape->buffers[VBO_INDEX]->bind();
 	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->npolys * 3 * sizeof(uint16_t)));
 	disableArrays();
 
@@ -280,24 +279,6 @@ static inline float scale_y(float y, int flag, int flag_data)
 		}
 	}
 	return tempY;
-}
-
-namespace
-{
-	struct glBufferWrapper
-	{
-		GLuint id;
-
-		glBufferWrapper()
-		{
-			glGenBuffers(1, &id);
-		}
-
-		~glBufferWrapper()
-		{
-			glDeleteBuffers(1, &id);
-		}
-	};
 }
 
 /// Draw the shadow for a shape
@@ -379,9 +360,11 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 
 	// draw the shadow volume
 	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() * modelViewMatrix, glm::vec4());
-	static glBufferWrapper buffer;
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * vertexes.size(), vertexes.data(), GL_STREAM_DRAW);
+	static gfx_api::buffer* buffer;
+	if (buffer)
+		delete buffer;
+	buffer = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, sizeof(Vector3f) * vertexes.size(), gfx_api::context::buffer_storage_hint::stream_draw);
+	buffer->upload(0, sizeof(Vector3f) * vertexes.size(), vertexes.data());
 	glEnableVertexAttribArray(program.locVertex);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 

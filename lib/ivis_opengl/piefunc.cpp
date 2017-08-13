@@ -85,23 +85,6 @@ void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix)
 	radarViewGfx[1]->draw(modelViewProjectionMatrix);
 }
 
-namespace
-{
-	struct glBufferWrapper
-	{
-		GLuint id;
-		glBufferWrapper()
-		{
-			glGenBuffers(1, &id);
-		}
-
-		~glBufferWrapper()
-		{
-			glDeleteBuffers(1, &id);
-		}
-	};
-}
-
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
@@ -109,9 +92,11 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	glm::vec4 color(c.byte.r / 255.f, c.byte.g / 255.f, c.byte.b / 255.f, 128.f / 255.f);
 	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() * modelViewMatrix, color);
 
-	static glBufferWrapper buffer;
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.id);
-	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vector3f), vrt.data(), GL_STREAM_DRAW);
+	static gfx_api::buffer* buffer;
+	if (buffer)
+		delete buffer;
+	buffer = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, 3 * sizeof(Vector3f), gfx_api::context::buffer_storage_hint::stream_draw);
+	buffer->upload(0, 3 * sizeof(Vector3f), vrt.data());
 	glEnableVertexAttribArray(program.locVertex);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
