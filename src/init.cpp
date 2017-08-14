@@ -771,7 +771,6 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
-	closeConfig();		// "registry" close
 	cleanSearchPath();	// clean PHYSFS search paths
 	debug_exit();		// cleanup debug routines
 	PHYSFS_deinit();	// cleanup PHYSFS (If failure, state of PhysFS is undefined, and probably badly screwed up.)

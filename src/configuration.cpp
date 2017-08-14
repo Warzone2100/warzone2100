@@ -330,7 +330,3 @@ bool reloadMPConfig()
 
 	return true;
 }
-
-void closeConfig()
-{
-}
