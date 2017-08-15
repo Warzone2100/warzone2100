@@ -106,7 +106,7 @@ function enableStartingBuildings()
 
 function eventStartLevel()
 {
-	const PLAYER_POWER = camChangeOnDiff(1300, true);
+	const PLAYER_POWER = 1300;
 	const SCAVENGER_POWER = camChangeOnDiff(800, true);
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
