@@ -153,3 +153,13 @@ int wzGetSwapInterval()
 {
 	return WzMainWindow::instance()->swapInterval();
 }
+
+void StartTextInput()
+{
+	// Something started?
+}
+
+void StopTextInput()
+{
+	// Whatever it was, it stopped…
+}
