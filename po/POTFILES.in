@@ -48,8 +48,8 @@ data/base/script/campaign/cam3-a.js
 data/base/script/campaign/cam3-1.js
 data/base/script/campaign/cam3-1s.js
 data/base/script/campaign/cam3-b.js
-ata/base/script/campaign/cam3-2.js
-ata/base/script/campaign/cam3-2s.js
+data/base/script/campaign/cam3-2.js
+data/base/script/campaign/cam3-2s.js
 data/base/script/campaign/libcampaign.js
 data/base/script/campaign/templates.js
 data/base/script/campaign/transitionTech.js
