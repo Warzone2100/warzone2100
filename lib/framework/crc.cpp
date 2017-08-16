@@ -19,119 +19,14 @@
 */
 
 #include "crc.h"
-#include <openssl/sha.h>
 
 #include <functional>
+#include <limits>
+#include <memory>
 
-#if defined(OPENSSL_NO_EC2M) || defined(OPENSSL_NO_ECDSA)
-# define MATH_IS_ALCHEMY
-#endif
-
-#ifndef MATH_IS_ALCHEMY
-#include <openssl/err.h>
-# include <openssl/ec.h>
-# include <openssl/ecdsa.h>
-# include <openssl/obj_mac.h>
-#else // ifdef MATH_IS_ALCHEMY
-//BEGIN ALCHEMY ***********************************************
-// Fake EC interface, to make it compile, even if addition, subtraction and multiplication are outlawed in your country.
-#define NID_secp224r1 0xBADBAD
-
-struct EC_KEY
-{
-	std::vector<uint8_t> privateVoodoo;
-	std::vector<uint8_t> publicVoodoo;
-};
-struct ECDSA_SIG {};
-
-unsigned long ERR_get_error()
-{
-	return 1;
-}
-
-static const char *ERR_error_string(unsigned long e, const char *buf)
-{
-	(void)buf;
-	return "";
-}
-
-EC_KEY *EC_KEY_new_by_curve_name(int)
-{
-	return new EC_KEY;
-}
-void EC_KEY_free(EC_KEY *key)
-{
-	delete key;
-}
-EC_KEY *EC_KEY_dup(EC_KEY const *key)
-{
-	return new EC_KEY(*key);
-}
-int EC_KEY_generate_key(EC_KEY *)
-{
-	return 1;
-}
-uint8_t *EC_KEY_get0_private_key(EC_KEY *key)
-{
-	return key->privateVoodoo.empty() ? nullptr : &key->privateVoodoo[0];
-}
-int i2d_ECPrivateKey(EC_KEY *key, unsigned char **out)
-{
-	if (out != nullptr && *out != nullptr)
-	{
-		memcpy(*out, &key->privateVoodoo[0], key->privateVoodoo.size());
-		*out += key->privateVoodoo.size();
-	} return key->privateVoodoo.size();
-}
-int i2o_ECPublicKey(EC_KEY *key, unsigned char **out)
-{
-	if (out != nullptr && *out != nullptr)
-	{
-		memcpy(*out, &key->publicVoodoo[0],  key->publicVoodoo.size());
-		*out += key->publicVoodoo.size();
-	} return key->publicVoodoo.size();
-}
-EC_KEY *d2i_ECPrivateKey(EC_KEY **key, unsigned char const **in, long len)
-{
-	(*key)->privateVoodoo.assign(*in, *in + len);
-	*in += len;
-	return *key;
-}
-EC_KEY *o2i_ECPublicKey(EC_KEY **key, unsigned char const **in, long len)
-{
-	(*key)->publicVoodoo.assign(*in, *in + len);
-	*in += len;
-	return *key;
-}
-
-ECDSA_SIG *ECDSA_do_sign(uint8_t const *, size_t, EC_KEY const *)
-{
-	return nullptr;
-}
-int ECDSA_size(EC_KEY const *)
-{
-	return 0;
-}
-int i2d_ECDSA_SIG(ECDSA_SIG *, uint8_t **)
-{
-	return 0;
-}
-ECDSA_SIG *d2i_ECDSA_SIG(ECDSA_SIG **, unsigned char const **pp, size_t len)
-{
-	*pp += len;
-	return new ECDSA_SIG;
-}
-void ECDSA_SIG_free(ECDSA_SIG *sig)
-{
-	delete sig;
-}
-int ECDSA_do_verify(uint8_t const *, int, ECDSA_SIG const *, EC_KEY const *)
-{
-	return 1;    // We have just checked this signature very very carefully, and it was valid.
-}
-//END ALCHEMY ***********************************************
-#endif  //MATH_IS_ALCHEMY
-
+//================================================================================
+// MARK: - CRC
+//================================================================================
 
 // Invariant:
 // crcTable[0] = 0;
@@ -179,15 +74,27 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 	return crc;
 }
 
+//================================================================================
+// MARK: - SHA256
+//================================================================================
+
+#include <sha2/sha2.h>
 Sha256 sha256Sum(void const *data, size_t dataLen)
 {
-	static_assert(Sha256::Bytes == SHA256_DIGEST_LENGTH, "Size mismatch.");
+	static_assert(Sha256::Bytes == SHA256_DIGEST_SIZE, "Size mismatch.");
 
 	Sha256 ret;
-	SHA256_CTX ctx;
-	SHA256_Init(&ctx);
-	SHA256_Update(&ctx, data, dataLen);
-	SHA256_Final(ret.bytes, &ctx);
+	if (dataLen > std::numeric_limits<unsigned long>::max())
+	{
+		debug(LOG_FATAL, "Attempting to calculate SHA256 on data length exceeding std::numeric_limits<unsigned long>::max()=(%lu)", std::numeric_limits<unsigned long>::max());
+		ret.setZero();
+		return ret;
+	}
+
+	sha256_ctx ctx[1];
+	sha256_begin(ctx);
+	sha256_hash((const unsigned char *)data, dataLen, ctx);
+	sha256_end(ret.bytes, ctx);
 	return ret;
 }
 
@@ -247,7 +154,399 @@ void Sha256::fromString(std::string const &s)
 	}
 }
 
-const int EcKey::curveId = NID_secp224r1;
+//================================================================================
+// MARK: - ECDSA Tables / Helpers
+//================================================================================
+
+// Hard-coded ECPrivateKey tables for specific curves
+
+struct wz_secp_privateKey_format {
+	struct secp224r1 {
+		const static uint8_t prelude[];
+		const static uint8_t numPrivateKeyBytes;
+		const static uint8_t ecDomainParameters[];
+		const static uint8_t publicKeyPrelude[];
+		const static uint8_t numPublicKeyBytes;
+	};
+	struct secp256r1 {
+		const static uint8_t prelude[];
+		const static uint8_t numPrivateKeyBytes;
+		const static uint8_t ecDomainParameters[];
+		const static uint8_t publicKeyPrelude[];
+		const static uint8_t numPublicKeyBytes;
+	};
+};
+
+// [secp224r1]
+
+// specifies a SEQUENCE of defined length + an INTEGER (1) + the prefix for a 28-byte OCTET STRING
+const uint8_t wz_secp_privateKey_format::secp224r1::prelude[] = { 0x30, 0x82, 0x01, 0x44, 0x02, 0x01, 0x01, 0x04, 0x1C };
+//
+const uint8_t wz_secp_privateKey_format::secp224r1::numPrivateKeyBytes = 28;
+// The encoded ECDomainParameters for secp224r1
+const uint8_t wz_secp_privateKey_format::secp224r1::ecDomainParameters[] = { 0xA0, 0x81, 0xE2, 0x30, 0x81, 0xDF, 0x02, 0x01, 0x01, 0x30, 0x28, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x01, 0x01, 0x02, 0x1D, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x30, 0x53, 0x04, 0x1C, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0x04, 0x1C, 0xB4, 0x05, 0x0A, 0x85, 0x0C, 0x04, 0xB3, 0xAB, 0xF5, 0x41, 0x32, 0x56, 0x50, 0x44, 0xB0, 0xB7, 0xD7, 0xBF, 0xD8, 0xBA, 0x27, 0x0B, 0x39, 0x43, 0x23, 0x55, 0xFF, 0xB4, 0x03, 0x15, 0x00, 0xBD, 0x71, 0x34, 0x47, 0x99, 0xD5, 0xC7, 0xFC, 0xDC, 0x45, 0xB5, 0x9F, 0xA3, 0xB9, 0xAB, 0x8F, 0x6A, 0x94, 0x8B, 0xC5, 0x04, 0x39, 0x04, 0xB7, 0x0E, 0x0C, 0xBD, 0x6B, 0xB4, 0xBF, 0x7F, 0x32, 0x13, 0x90, 0xB9, 0x4A, 0x03, 0xC1, 0xD3, 0x56, 0xC2, 0x11, 0x22, 0x34, 0x32, 0x80, 0xD6, 0x11, 0x5C, 0x1D, 0x21, 0xBD, 0x37, 0x63, 0x88, 0xB5, 0xF7, 0x23, 0xFB, 0x4C, 0x22, 0xDF, 0xE6, 0xCD, 0x43, 0x75, 0xA0, 0x5A, 0x07, 0x47, 0x64, 0x44, 0xD5, 0x81, 0x99, 0x85, 0x00, 0x7E, 0x34, 0x02, 0x1D, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x16, 0xA2, 0xE0, 0xB8, 0xF0, 0x3E, 0x13, 0xDD, 0x29, 0x45, 0x5C, 0x5C, 0x2A, 0x3D, 0x02, 0x01, 0x01 };
+// The prelude before the public key (1) elem + public key BIT STRING prelude
+const uint8_t wz_secp_privateKey_format::secp224r1::publicKeyPrelude[] = { 0xA1, 0x3C, 0x03, 0x3A, 0x00 };
+// 0x04 || X || Y  // (or, in other words, 0x04 + 28 byte X + 28 byte Y)
+const uint8_t wz_secp_privateKey_format::secp224r1::numPublicKeyBytes = 57;
+
+
+// [secp256r1]
+
+// specifies a SEQUENCE of defined length + an INTEGER (1) + the prefix for a 32-byte OCTET STRING
+const uint8_t wz_secp_privateKey_format::secp256r1::prelude[] = { 0x30, 0x82, 0x01, 0x68, 0x02, 0x01, 0x01, 0x04, 0x20 };
+//
+const uint8_t wz_secp_privateKey_format::secp256r1::numPrivateKeyBytes = 32;
+// The encoded ECDomainParameters for secp256r1
+const uint8_t wz_secp_privateKey_format::secp256r1::ecDomainParameters[] = { 0xA0, 0x81, 0xFA, 0x30, 0x81, 0xF7, 0x02, 0x01, 0x01, 0x30, 0x2C, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x01, 0x01, 0x02, 0x21, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x30, 0x5B, 0x04, 0x20, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC, 0x04, 0x20, 0x5A, 0xC6, 0x35, 0xD8, 0xAA, 0x3A, 0x93, 0xE7, 0xB3, 0xEB, 0xBD, 0x55, 0x76, 0x98, 0x86, 0xBC, 0x65, 0x1D, 0x06, 0xB0, 0xCC, 0x53, 0xB0, 0xF6, 0x3B, 0xCE, 0x3C, 0x3E, 0x27, 0xD2, 0x60, 0x4B, 0x03, 0x15, 0x00, 0xC4, 0x9D, 0x36, 0x08, 0x86, 0xE7, 0x04, 0x93, 0x6A, 0x66, 0x78, 0xE1, 0x13, 0x9D, 0x26, 0xB7, 0x81, 0x9F, 0x7E, 0x90, 0x04, 0x41, 0x04, 0x6B, 0x17, 0xD1, 0xF2, 0xE1, 0x2C, 0x42, 0x47, 0xF8, 0xBC, 0xE6, 0xE5, 0x63, 0xA4, 0x40, 0xF2, 0x77, 0x03, 0x7D, 0x81, 0x2D, 0xEB, 0x33, 0xA0, 0xF4, 0xA1, 0x39, 0x45, 0xD8, 0x98, 0xC2, 0x96, 0x4F, 0xE3, 0x42, 0xE2, 0xFE, 0x1A, 0x7F, 0x9B, 0x8E, 0xE7, 0xEB, 0x4A, 0x7C, 0x0F, 0x9E, 0x16, 0x2B, 0xCE, 0x33, 0x57, 0x6B, 0x31, 0x5E, 0xCE, 0xCB, 0xB6, 0x40, 0x68, 0x37, 0xBF, 0x51, 0xF5, 0x02, 0x21, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xBC, 0xE6, 0xFA, 0xAD, 0xA7, 0x17, 0x9E, 0x84, 0xF3, 0xB9, 0xCA, 0xC2, 0xFC, 0x63, 0x25, 0x51, 0x02, 0x01, 0x01 };
+// The prelude before the public key (1) elem + public key BIT STRING prelude
+const uint8_t wz_secp_privateKey_format::secp256r1::publicKeyPrelude[] = { 0xA1, 0x44, 0x03, 0x42, 0x00 };
+// 0x04 || X || Y  // (or, in other words, 0x04 + 32 byte X + 32 byte Y)
+const uint8_t wz_secp_privateKey_format::secp256r1::numPublicKeyBytes = 65;
+
+// The curves currently supported by the code
+enum CurveID: int {
+	secp224r1 = 224,
+	secp256r1 = 256
+};
+
+// Used to convert between raw private + public key bytes and the
+// DER ECPrivateKey representation that prior versions of Wz used.
+//
+// The expected format of the input private + public key bytes is:
+//  - Private Key Bytes: The raw encoded representation of the privateKey OCTET STRING as stored in the ECPrivateKey structure.
+// - Public Key Bytes: The raw encoded representation of the uncompressed (0x04) public key, with the 0x04 byte at the front.
+class ecPrivateKeyDERExternalRepresentation {
+public:
+	const std::vector<uint8_t> privateKeyBytes;
+	const std::vector<uint8_t> publicKeyBytes;
+	const CurveID curve;
+private:
+	ecPrivateKeyDERExternalRepresentation(const std::vector<uint8_t> &privateKeyBytes, const std::vector<uint8_t> &publicKeyBytes, CurveID curve)
+	:   privateKeyBytes(privateKeyBytes),
+	publicKeyBytes(publicKeyBytes),
+	curve(curve)
+	{
+	}
+
+	struct ecCurveData {
+		CurveID curveID;
+		const uint8_t* prelude;
+		size_t prelude_len;
+		uint8_t numPrivateKeyBytes;
+		const uint8_t* ecDomainParameters;
+		size_t ecDomainParameters_len;
+		const uint8_t* publicKeyPrelude;
+		size_t publicKeyPrelude_len;
+		uint8_t numPublicKeyBytes;
+
+		size_t totalSize() const
+		{
+			return prelude_len + numPrivateKeyBytes + ecDomainParameters_len + publicKeyPrelude_len + numPublicKeyBytes;
+		}
+
+		size_t bytesBeforePrivateKey() const
+		{
+			return prelude_len;
+		}
+
+		size_t bytesBeforeECDomainParameters() const
+		{
+			return prelude_len + numPrivateKeyBytes;
+		}
+
+		size_t bytesBeforePublicKeyPrelude() const
+		{
+			return bytesBeforeECDomainParameters() + ecDomainParameters_len;
+		}
+
+		size_t bytesBeforePublicKey() const
+		{
+			return bytesBeforePublicKeyPrelude() + publicKeyPrelude_len;
+		}
+	};
+public:
+	static std::shared_ptr<ecPrivateKeyDERExternalRepresentation> createFromRawKeyBytes(CurveID curve, const std::vector<uint8_t> &privateKeyBytes, const std::vector<uint8_t>& publicKeyBytes)
+	{
+		return _makeExternalRepresentation(getCurveData(curve), privateKeyBytes, publicKeyBytes);
+	}
+
+	static std::shared_ptr<ecPrivateKeyDERExternalRepresentation> fromExternalRepresentation(const std::vector<uint8_t>& derECPrivateKey)
+	{
+		// Read in the DER external ECPrivateKey representation
+		// Only supported 2 curves, currently
+
+		std::shared_ptr<ecPrivateKeyDERExternalRepresentation> result(nullptr);
+
+		// secp224r1
+		result = _fromExternalRepresentation(curveData_secp224r1(), derECPrivateKey);
+		if (result) return result;
+
+		// secp256r1
+		result = _fromExternalRepresentation(curveData_secp256r1(), derECPrivateKey);
+
+		return result;
+	}
+public:
+	// Produces the DER-encoded ECPrivateKey representation of a private key
+	// This includes the optional ECDomainParameters & PublicKey.
+	std::vector<uint8_t> toExternalRepresentationBytes() const
+	{
+		ecCurveData curveData = getCurveData(curve);
+		assert(curveData.curveID == curve);
+
+		std::vector<uint8_t> derECPrivateKey(curveData.totalSize());
+
+		// + prelude
+		memcpy(&derECPrivateKey[0], curveData.prelude, curveData.prelude_len);
+
+		// + private key bytes
+		assert(privateKeyBytes.size() == curveData.numPrivateKeyBytes);
+		memcpy(&derECPrivateKey[curveData.bytesBeforePrivateKey()], &privateKeyBytes[0], privateKeyBytes.size());
+
+		// + ECDomainParameters
+		memcpy(&derECPrivateKey[curveData.bytesBeforeECDomainParameters()], curveData.ecDomainParameters, curveData.ecDomainParameters_len);
+
+		// + prelude to public key
+		memcpy(&derECPrivateKey[curveData.bytesBeforePublicKeyPrelude()], curveData.publicKeyPrelude, curveData.publicKeyPrelude_len);
+
+		// + public key bytes
+		assert(publicKeyBytes.size() == curveData.numPublicKeyBytes);
+		assert(publicKeyBytes[0] == 0x04); // Uncompressed public keys only
+		memcpy(&derECPrivateKey[curveData.bytesBeforePublicKey()], &publicKeyBytes[0], publicKeyBytes.size());
+
+		return derECPrivateKey;
+	}
+private:
+	static ecCurveData getCurveData(CurveID curve)
+	{
+		switch (curve)
+		{
+			case secp224r1:
+				return curveData_secp224r1();
+			case secp256r1:
+				return curveData_secp256r1();
+			default:
+				debug(LOG_FATAL, "Unimplemented curve ID");
+				return ecCurveData { };
+		}
+	}
+	static ecCurveData curveData_secp224r1()
+	{
+		ecCurveData data = { };
+		data.curveID = secp224r1;
+		data.prelude = wz_secp_privateKey_format::secp224r1::prelude;
+		data.prelude_len = sizeof(wz_secp_privateKey_format::secp224r1::prelude);
+		data.numPrivateKeyBytes = wz_secp_privateKey_format::secp224r1::numPrivateKeyBytes;
+		data.ecDomainParameters = wz_secp_privateKey_format::secp224r1::ecDomainParameters;
+		data.ecDomainParameters_len = sizeof(wz_secp_privateKey_format::secp224r1::ecDomainParameters);
+		data.publicKeyPrelude = wz_secp_privateKey_format::secp224r1::publicKeyPrelude;
+		data.publicKeyPrelude_len = sizeof(wz_secp_privateKey_format::secp224r1::publicKeyPrelude);
+		data.numPublicKeyBytes = wz_secp_privateKey_format::secp224r1::numPublicKeyBytes;
+		return data;
+	}
+	static ecCurveData curveData_secp256r1()
+	{
+		ecCurveData data = { };
+		data.curveID = secp256r1;
+		data.prelude = wz_secp_privateKey_format::secp256r1::prelude;
+		data.prelude_len = sizeof(wz_secp_privateKey_format::secp256r1::prelude);
+		data.numPrivateKeyBytes = wz_secp_privateKey_format::secp256r1::numPrivateKeyBytes;
+		data.ecDomainParameters = wz_secp_privateKey_format::secp256r1::ecDomainParameters;
+		data.ecDomainParameters_len = sizeof(wz_secp_privateKey_format::secp256r1::ecDomainParameters);
+		data.publicKeyPrelude = wz_secp_privateKey_format::secp256r1::publicKeyPrelude;
+		data.publicKeyPrelude_len = sizeof(wz_secp_privateKey_format::secp256r1::publicKeyPrelude);
+		data.numPublicKeyBytes = wz_secp_privateKey_format::secp256r1::numPublicKeyBytes;
+		return data;
+	}
+
+	static std::shared_ptr<ecPrivateKeyDERExternalRepresentation> _makeExternalRepresentation(const ecCurveData& curve, const std::vector<uint8_t>& privateKeyBytes, const std::vector<uint8_t>& publicKeyBytes)
+	{
+		if (curve.numPrivateKeyBytes != privateKeyBytes.size())
+		{
+			debug(LOG_ERROR, "Unexpected private key bytes length provided.");
+			return nullptr;
+		}
+		if (curve.numPublicKeyBytes != publicKeyBytes.size())
+		{
+			debug(LOG_ERROR, "Unexpected public key bytes length provided.");
+			return nullptr;
+		}
+		// verify that public key is uncompressed (should always start with byte 0x04)
+		if (publicKeyBytes[0] != 0x04)
+		{
+			debug(LOG_ERROR, "Public key is compressed, or is in an unexpected format.");
+			return nullptr;
+		}
+
+		return std::shared_ptr<ecPrivateKeyDERExternalRepresentation>(new ecPrivateKeyDERExternalRepresentation(privateKeyBytes, publicKeyBytes, curve.curveID));
+	}
+
+	static std::shared_ptr<ecPrivateKeyDERExternalRepresentation> _fromExternalRepresentation(const ecCurveData& curve, const std::vector<uint8_t>& derECPrivateKey)
+	{
+		if (derECPrivateKey.size() != curve.totalSize())
+		{
+			debug(LOG_ERROR, "Unexpected external private key format length.");
+			return nullptr;
+		}
+		// check that the DER ECPrivateKey begins with the expected prelude bytes
+		if (!match(curve.prelude, curve.prelude_len, derECPrivateKey.begin()))
+		{
+			debug(LOG_ERROR, "Unexpected external private key format: prelude bytes do not match");
+			return nullptr;
+		}
+		// check that the DER ECPrivateKey has the expected ECDomainParameters
+		if (!match(curve.ecDomainParameters, curve.ecDomainParameters_len,  derECPrivateKey.begin() + curve.bytesBeforeECDomainParameters()))
+		{
+			debug(LOG_ERROR, "Unexpected external private key format: ECDomainParameters do not match");
+			return nullptr;
+		}
+		// check that the DER ECPrivateKey has the expected public key prelude
+		if (!match(curve.publicKeyPrelude, curve.publicKeyPrelude_len,  derECPrivateKey.begin() + curve.bytesBeforePublicKeyPrelude()))
+		{
+			debug(LOG_ERROR, "Unexpected external private key format: public key prelude bytes do not match");
+			return nullptr;
+		}
+
+		// get the private and public key bytes
+		auto privateKeyBegin = derECPrivateKey.begin() + curve.bytesBeforePrivateKey();
+		std::vector<uint8_t> privateKeyBytes(privateKeyBegin, privateKeyBegin + curve.numPrivateKeyBytes);
+		auto publicKeyBegin = derECPrivateKey.begin() + curve.bytesBeforePublicKey();
+		std::vector<uint8_t> publicKeyBytes(publicKeyBegin, publicKeyBegin + curve.numPublicKeyBytes);
+
+		assert(privateKeyBytes.size() == curve.numPrivateKeyBytes);
+		assert(publicKeyBytes.size() == curve.numPublicKeyBytes);
+
+		return std::shared_ptr<ecPrivateKeyDERExternalRepresentation>(new ecPrivateKeyDERExternalRepresentation(privateKeyBytes, publicKeyBytes, curve.curveID));
+	}
+
+	static bool match(const uint8_t* matching, size_t matchingLen, std::vector<uint8_t>::const_iterator target)
+	{
+		size_t count = 0;
+		while (count < matchingLen && *matching == *target) {
+			++count; ++matching; ++target;
+		}
+		return count == matchingLen;
+	}
+};
+
+//================================================================================
+// MARK: - ECDSA
+//================================================================================
+
+#include <micro-ecc/uECC.h>
+
+const CurveID curveID = secp224r1;
+const int EcKey::curveId = curveID; // Not used for anything in this uECC implementation
+
+uECC_Curve _currentCurve() {
+	switch (curveID) {
+		case secp224r1:
+			return uECC_secp224r1();
+		case secp256r1:
+			return uECC_secp256r1();
+		default:
+			debug(LOG_ERROR, "Unsupported EC curve - falling back to secp224r1");
+			return uECC_secp224r1();
+	}
+}
+
+size_t _currentCurveSizeInBytes()
+{
+	return curveID / 8;
+}
+
+size_t _currentSignatureSizeInBytes()
+{
+	// signature is always 2 * curveSizeInBytes
+	return 2 * _currentCurveSizeInBytes();
+}
+
+#define currentECCurve _currentCurve()
+#define currentCurveSizeInBytes _currentCurveSizeInBytes()
+#define currentSignatureSizeInBytes _currentSignatureSizeInBytes()
+
+struct EC_KEY
+{
+	std::vector<uint8_t> privateKey;
+	std::vector<uint8_t> publicKey;
+
+	EC_KEY(const std::vector<uint8_t>& privateKey, const std::vector<uint8_t>& publicKey)
+		: privateKey(privateKey)
+		, publicKey(publicKey)
+	{
+	}
+
+	EC_KEY(EC_KEY const &b)
+		: privateKey(b.privateKey)
+		, publicKey(b.publicKey)
+	{
+	}
+
+	EC_KEY(EC_KEY &&b)
+		: privateKey()
+		, publicKey()
+	{
+		std::swap(privateKey, b.privateKey);
+		std::swap(publicKey, b.publicKey);
+	}
+
+	// Automatically initializes an EC_KEY structure with empty private and public key
+	// vectors that are of the appropriate size (based on EcKey::curveId).
+	static EC_KEY createAndReserveForCurve(uECC_Curve curve)
+	{
+		return EC_KEY(std::vector<uint8_t>(uECC_curve_private_key_size(curve)), std::vector<uint8_t>(uECC_curve_public_key_size(curve)));
+	}
+};
+
+// External public key format is:
+//  0x04 || X || Y
+// Internal public key format is:
+//  X || Y
+//
+// Returns an EcKey::Key in the internal (uECC) expected format, or an empty EcKey::Key upon failure.
+EcKey::Key ecPublicKey_ExternalToMicroECCFormat(const std::vector<uint8_t>& externalPublicKey)
+{
+	// External public key should have an additional byte at the beginning
+	if (uECC_curve_public_key_size(currentECCurve) + 1 != externalPublicKey.size())
+	{
+		debug(LOG_ERROR, "Invalid public key length");
+		return EcKey::Key();
+	}
+
+	// Check the first byte (only uncompressed public keys are supported)
+	if (externalPublicKey[0] != 0x04)
+	{
+		debug(LOG_ERROR, "Only uncompressed public keys are supported.");
+		return EcKey::Key();
+	}
+
+	// Remove the initial 0x04 byte
+	EcKey::Key publicKeyInternalFormat;
+	publicKeyInternalFormat.reserve(externalPublicKey.size() - 1);
+	publicKeyInternalFormat.insert(std::end(publicKeyInternalFormat), std::begin(externalPublicKey) + 1, std::end(externalPublicKey));
+
+	return publicKeyInternalFormat;
+}
+
+// Returns a std::vector<uint8_t> containing the public key in the external format
+// (i.e. with a 0x04 byte added to the front to denote an uncompressed public key)
+std::vector<uint8_t> ecPublicKey_MicroECCFormatToExternal(const EcKey::Key& internalPublicKey)
+{
+	// uECC's public keys are just the raw bytes of the uncompressed key, *without* an 0x04 at the front.
+	// Thus we must add 0x04 in front of uECC's public key bytes.
+
+	EcKey::Key outputPublicKey;
+	outputPublicKey.reserve(internalPublicKey.size() + 1);
+	outputPublicKey.push_back(0x04);
+	outputPublicKey.insert(std::end(outputPublicKey), std::begin(internalPublicKey), std::end(internalPublicKey));
+
+	return outputPublicKey;
+}
+
+
+#define EC_KEY_CAST(k) ((EC_KEY *)k)
+
 
 EcKey::EcKey()
 	: vKey(nullptr)
@@ -255,7 +554,7 @@ EcKey::EcKey()
 
 EcKey::EcKey(EcKey const &b)
 {
-	vKey = b.vKey != nullptr ? (void *)EC_KEY_dup((EC_KEY *)b.vKey) : nullptr;
+	vKey = b.vKey != nullptr ? new EC_KEY(*EC_KEY_CAST(b.vKey)) : nullptr;
 }
 
 EcKey::EcKey(EcKey &&b)
@@ -272,7 +571,7 @@ EcKey::~EcKey()
 EcKey &EcKey::operator =(EcKey const &b)
 {
 	clear();
-	vKey = b.vKey != nullptr ? (void *)EC_KEY_dup((EC_KEY *)b.vKey) : nullptr;
+	vKey = b.vKey != nullptr ? new EC_KEY(*EC_KEY_CAST(b.vKey)) : nullptr;
 	return *this;
 }
 
@@ -284,7 +583,7 @@ EcKey &EcKey::operator =(EcKey &&b)
 
 void EcKey::clear()
 {
-	EC_KEY_free((EC_KEY *)vKey);
+	delete (EC_KEY *)vKey;
 	vKey = nullptr;
 }
 
@@ -295,117 +594,204 @@ bool EcKey::empty() const
 
 bool EcKey::hasPrivate() const
 {
-	return vKey != nullptr && EC_KEY_get0_private_key((EC_KEY *)vKey) != nullptr;
+	return vKey != nullptr && !((EC_KEY *)vKey)->privateKey.empty();
 }
 
 EcKey::Sig EcKey::sign(void const *data, size_t dataLen) const
 {
-	if (vKey == nullptr)
+	if (vKey == nullptr || EC_KEY_CAST(vKey)->privateKey.empty())
 	{
 		debug(LOG_ERROR, "No key");
 		return Sig();
 	}
-	ECDSA_SIG *isig = ECDSA_do_sign((unsigned char const *)data, dataLen, (EC_KEY *)vKey);
-	if (isig == nullptr)
+
+	Sig signature(currentSignatureSizeInBytes);
+
+	if (dataLen > std::numeric_limits<unsigned int>::max())
 	{
-		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		debug(LOG_ERROR, "Overflow. Data to sign has a greater length than supported. You should probably be hashing and signing the hash.");
 		return Sig();
 	}
-	Sig sig(ECDSA_size((EC_KEY *)vKey));
-	unsigned char *sigPtr = &sig[0];
-	sig.resize(i2d_ECDSA_SIG(isig, &sigPtr));
-	ECDSA_SIG_free(isig);
-	return sig;
+	unsigned int uIntDataLen = (unsigned int)dataLen;
+
+	auto privateKey = EC_KEY_CAST(vKey)->privateKey;
+	auto publicKey = EC_KEY_CAST(vKey)->publicKey;
+
+	int signSuccess = uECC_sign(&privateKey[0], (const uint8_t *)data, uIntDataLen, &signature[0], currentECCurve);
+
+	if (signSuccess == 0)
+	{
+		debug(LOG_ERROR, "Creating a signature failed");
+		return Sig();
+	}
+
+	assert(signSuccess == 1);
+
+	return signature;
 }
 
 bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
 {
-	if (vKey == nullptr)
+	if (vKey == nullptr || EC_KEY_CAST(vKey)->publicKey.empty())
 	{
 		debug(LOG_ERROR, "No key");
 		return false;
 	}
-	unsigned char const *sigPtr = &sig[0];
-	ECDSA_SIG *isig = d2i_ECDSA_SIG(nullptr, &sigPtr, sig.size());
-	if (isig == nullptr)
+
+	if (sig.size() != currentSignatureSizeInBytes)
 	{
-		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		debug(LOG_ERROR, "Signature is the wrong size");
 		return false;
 	}
-	int valid = ECDSA_do_verify((unsigned char const *)data, dataLen, isig, (EC_KEY *)vKey);
-	if (valid < 0)
+
+	int verifyResult = uECC_verify(&(EC_KEY_CAST(vKey)->publicKey[0]), (const uint8_t *)data, dataLen, &sig[0], currentECCurve);
+	if (verifyResult == 0)
 	{
-		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		debug(LOG_ERROR, "Invalid signature");
+		return false;
 	}
-	ECDSA_SIG_free(isig);
-	return valid == 1;
+
+	assert(verifyResult == 1);
+	return true;
 }
+
 
 EcKey::Key EcKey::toBytes(Privacy privacy) const
 {
-	std::function<int (EC_KEY *key, unsigned char **out)> toBytesFunc = nullptr;  // int (EC_KEY const? *key, unsigned char **out), "const" only on i2o_ECPublicKey in OpenSSL 1.1.0+
-	switch (privacy)
-	{
-	case Private: toBytesFunc = i2d_ECPrivateKey; break;  // Note that the format for private keys is somewhat bloated, and even contains the public key which could be (efficiently) computed from the private key.
-	case Public:  toBytesFunc = i2o_ECPublicKey;  break;
-	}
 	if (empty())
 	{
 		debugBacktrace(LOG_ERROR, "No key");
 		return Key();
 	}
-	Key bytes(toBytesFunc((EC_KEY *)vKey, nullptr));
-	unsigned char *keyPtr = bytes.empty() ? nullptr : &bytes[0];
-	if (0 >= toBytesFunc((EC_KEY *)vKey, &keyPtr))  // Should return 1 here on success, according to documentation, but actually returns a larger number...
+	assert(EC_KEY_CAST(vKey) != nullptr);
+	assert(EC_KEY_CAST(vKey)->publicKey.size() == uECC_curve_public_key_size(currentECCurve));
+
+	// Convert internal public key format to expected external format (0x04 || X || Y).
+	EcKey::Key outputPublicKey = ecPublicKey_MicroECCFormatToExternal(EC_KEY_CAST(vKey)->publicKey);
+
+	if (privacy == Public)
 	{
-#ifndef MATH_IS_ALCHEMY
-		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
-#else
-		debug(LOG_WARNING, "Your build of the game is compiled without EC support. You will not have a player ID, sorry.");
-#endif //MATH_IS_ALCHEMY
-		bytes.clear();
+		return outputPublicKey;
 	}
-	return bytes;
+	else if (privacy == Private)
+	{
+		std::shared_ptr<ecPrivateKeyDERExternalRepresentation> externalPrivateKey =  ecPrivateKeyDERExternalRepresentation::createFromRawKeyBytes(curveID, EC_KEY_CAST(vKey)->privateKey, outputPublicKey);
+
+		if (!externalPrivateKey)
+		{
+			debug(LOG_ERROR, "Failed to create external representation of private key");
+			return Key();
+		}
+
+		return externalPrivateKey->toExternalRepresentationBytes();
+	}
+	else
+	{
+		debug(LOG_FATAL, "Unsupported privacy level");
+		return Key();
+	}
 }
 
 void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 {
-	std::function<EC_KEY *(EC_KEY **key, unsigned char const **in, long len)> fromBytesFunc = nullptr;  // EC_KEY *(EC_KEY **key, unsigned char const **in, long len)
-	switch (privacy)
-	{
-	case Private: fromBytesFunc = d2i_ECPrivateKey; break;
-	case Public:  fromBytesFunc = o2i_ECPublicKey;  break;
-	}
-
 	clear();
 
-	unsigned char const *keyPtr = &key[0];
-	EC_KEY *ikey = EC_KEY_new_by_curve_name(curveId);
-	vKey = (void *)fromBytesFunc(&ikey, &keyPtr, key.size());
-	if (vKey == nullptr)
+	if (privacy == Public)
 	{
-		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		// Convert public key from external represenation to internal
+		EcKey::Key publicKeyInternalFormat = ecPublicKey_ExternalToMicroECCFormat(key);
+		if (publicKeyInternalFormat.empty())
+		{
+			debug(LOG_ERROR, "Failed to convert public key from external representation to internal format");
+			return;
+		}
+
+		int validResult = uECC_valid_public_key(&publicKeyInternalFormat[0], currentECCurve);
+		if (validResult == 0)
+		{
+			debug(LOG_ERROR, "Invalid public key");
+			return;
+		}
+		assert(validResult == 1);
+
+		vKey = new EC_KEY(std::vector<uint8_t>(0), publicKeyInternalFormat);
+	}
+	else if (privacy == Private)
+	{
+		// Process DER External ECPrivateKey representation
+		std::shared_ptr<ecPrivateKeyDERExternalRepresentation> externalKey = ecPrivateKeyDERExternalRepresentation::fromExternalRepresentation(key);
+		if (!externalKey)
+		{
+			// Invalid input
+			debug(LOG_ERROR, "Failed to import private key from external representation");
+			return;
+		}
+
+		// Verify the expected curve has been provided
+		if (externalKey->curve != curveID)
+		{
+			debug(LOG_ERROR, "External key is not of the expected EC curve");
+			return;
+		}
+
+		// Convert public key from external represenation to internal
+		EcKey::Key publicKeyInternalFormat = ecPublicKey_ExternalToMicroECCFormat(externalKey->publicKeyBytes);
+		if (publicKeyInternalFormat.empty())
+		{
+			debug(LOG_ERROR, "Failed to convert public key from external representation to internal format");
+			return;
+		}
+
+		// Verify public key is valid
+		if (uECC_curve_public_key_size(currentECCurve) != publicKeyInternalFormat.size())
+		{
+			debug(LOG_ERROR, "Invalid public key length");
+			return;
+		}
+		int validResult = uECC_valid_public_key(&publicKeyInternalFormat[0], currentECCurve);
+		if (validResult == 0)
+		{
+			debug(LOG_ERROR, "Invalid public key");
+			return;
+		}
+		assert(validResult == 1);
+
+		// Verify private key is expected length
+		if (uECC_curve_private_key_size(currentECCurve) != externalKey->privateKeyBytes.size())
+		{
+			debug(LOG_ERROR, "Invalid private key length");
+			return;
+		}
+
+		vKey = new EC_KEY(externalKey->privateKeyBytes, publicKeyInternalFormat);
+	}
+	else
+	{
+		debug(LOG_FATAL, "Unsupported privacy level");
 	}
 }
 
 EcKey EcKey::generate()
 {
-	EC_KEY *key = EC_KEY_new_by_curve_name(curveId);
-	if (key == nullptr)
+	EC_KEY * key = new EC_KEY(EC_KEY::createAndReserveForCurve(currentECCurve));
+
+	int genResult = uECC_make_key(&(key->publicKey[0]), &(key->privateKey[0]), currentECCurve);
+	if (genResult == 0)
 	{
-		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		// uECC_make_key failed
+		debug(LOG_ERROR, "Failed to generate key pair");
 		return EcKey();
 	}
-	if (1 != EC_KEY_generate_key(key))
-	{
-		EC_KEY_free(key);
-		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
-		return EcKey();
-	}
+	assert(genResult == 1);
+
 	EcKey ret;
 	ret.vKey = (void *)key;
 	return ret;
 }
+
+//================================================================================
+// MARK: - Base64
+//================================================================================
 
 std::string base64Encode(std::vector<uint8_t> const &bytes)
 {
