@@ -51,12 +51,22 @@ function enableWestFactory()
 	});
 }
 
+function enableReinforcements()
+{
+	playSound("pcv440.ogg"); // Reinforcements are available.
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
+		area: "RTLZ",
+		message: "C1-2_LZ",
+		reinforcements: 60
+	});
+}
+
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
 		area: "RTLZ",
 		message: "C1-2_LZ",
-		reinforcements: 60
+		reinforcements: -1
 	});
 	var startpos = getObject("StartPosition");
 	centreView(startpos.x, startpos.y);
@@ -130,6 +140,7 @@ function eventStartLevel()
 			templates: [ trike, bloke, buggy, bjeep ]
 		},
 	});
-
+	
+	queue("enableReinforcements", 10000);
 	queue("enableWestFactory", 30000);
 }
