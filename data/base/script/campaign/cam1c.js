@@ -145,7 +145,7 @@ camAreaEvent("NPLZ1Trigger", function()
 	hackAddMessage("MB1C4_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	camDetectEnemyBase("NPLZ1Group");
 
-	camSetBaseReinforcements("NPLZ1Group", 300000, "getDroidsForNPLZ",
+	camSetBaseReinforcements("NPLZ1Group", camChangeOnDiff(300000), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
 			exit: { x: 126, y: 36 }
@@ -158,7 +158,7 @@ camAreaEvent("NPLZ2Trigger", function()
 	hackAddMessage("MB1C3_MSG", MISS_MSG, 0, true);
 	camDetectEnemyBase("NPLZ2Group");
 
-	camSetBaseReinforcements("NPLZ2Group", 300000, "getDroidsForNPLZ",
+	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(300000), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
 			exit: { x: 126, y: 36 }

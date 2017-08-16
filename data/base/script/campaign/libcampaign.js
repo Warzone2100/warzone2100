@@ -2933,23 +2933,26 @@ function cam_eventAttacked(victim, attacker)
 	}
 }
 
-//Need to set the scavenger kevlar vests when loading a save from later Alpha
-//missions or else it reverts to the original texture.
 function cam_eventGameLoaded()
 {
 	isReceivingAllEvents = true;
 	const SCAV_KEVLAR_MISSIONS = [
-		"CAM_1CA", "SUB_1_5S", "CAM_1A-C", "SUB_1_DS",
+		"CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
+		"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "CAM_1END"
 	];
 
+	//Need to set the scavenger kevlar vests when loading a save from later Alpha
+	//missions or else it reverts to the original texture.
 	for (var i = 0, l = SCAV_KEVLAR_MISSIONS.length; i < l; ++i)
 	{
 		if (__camNextLevel === SCAV_KEVLAR_MISSIONS[i])
 		{
 			replaceTexture("page-7-barbarians-arizona.png",
 						"page-7-barbarians-kevlar.png");
+			break;
 		}
 	}
 
+	//reset active factory management.
 	__camResetFactories();
 }
