@@ -123,7 +123,7 @@ case ${host_os} in
 	*mingw32*)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS='-ldbghelp -lshfolder -lshlwapi -lpsapi -lshell32 -lwinmm -lws2_32 -liphlpapi'
+		WIN32_LIBS='-ldbghelp -lshfolder -lshlwapi -lpsapi -lshell32 -lwinmm -lws2_32 -liphlpapi -ladvapi32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		LDFLAGS="-Wl,-subsystem,windows ${LDFLAGS}"
 		;;
@@ -418,7 +418,6 @@ PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
 PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
-PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto >= 1.0.0])
 
 # Checks for libraries:
 
@@ -503,6 +502,8 @@ AC_CONFIG_FILES([Makefile
 		win32/Makefile
 		tests/Makefile
 		3rdparty/miniupnpc/Makefile
+		3rdparty/micro-ecc/Makefile
+		3rdparty/sha2/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile

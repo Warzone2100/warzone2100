@@ -65,6 +65,8 @@ CHECK_FUNCTION_EXISTS(strlcpy HAVE_VALID_STRLCPY)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 add_subdirectory(3rdparty/miniupnpc)
+add_subdirectory(3rdparty/micro-ecc)
+add_subdirectory(3rdparty/sha2)
 add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(po)

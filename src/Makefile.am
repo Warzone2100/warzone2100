@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(VORBISFILE_CFLAGS) $(VORBIS_CFLAGS) $(OPENAL_CFLAGS) $(FONT_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS) $(LIBCRYPTO_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(VORBISFILE_CFLAGS) $(VORBIS_CFLAGS) $(OPENAL_CFLAGS) $(FONT_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 
@@ -303,22 +303,31 @@ endif
 
 if BACKEND_QT
 if PORTABLE
-warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a \
-							 $(top_builddir)/lib/framework/libframework.a
+warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
 else
-warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a \
-					$(top_builddir)/lib/framework/libframework.a
+warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
 endif
 endif
 
 if BACKEND_SDL
 if PORTABLE
-warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a \
-							 $(top_builddir)/lib/framework/libframework.a
+warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a
 else
-warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a \
-					$(top_builddir)/lib/framework/libframework.a
+warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
 endif
+endif
+
+# lib/framework (and dependencies)
+if PORTABLE
+warzone2100_portable_LIBS += \
+	$(top_builddir)/lib/framework/libframework.a \
+	$(top_builddir)/3rdparty/micro-ecc/libmicroecc.a \
+	$(top_builddir)/3rdparty/sha2/libsha2.a
+else
+warzone2100_LIBS += \
+	$(top_builddir)/lib/framework/libframework.a \
+	$(top_builddir)/3rdparty/micro-ecc/libmicroecc.a \
+	$(top_builddir)/3rdparty/sha2/libsha2.a
 endif
 
 # Here, we need to bring in the "plugins" for Qt5 and they MUST come before the other QT libs.
@@ -332,11 +341,11 @@ endif
 if PORTABLE
 warzone2100_portable_LDADD = $(warzone2100_portable_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
 	$(THEORA_LIBS) $(OPENAL_LIBS) $(FONT_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
-	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS)
 else
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
 	$(THEORA_LIBS) $(OPENAL_LIBS) $(FONT_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
-	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS)
 endif
 
 

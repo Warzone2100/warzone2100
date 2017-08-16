@@ -183,6 +183,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\3rdparty\micro-ecc\uECC.c" />
+    <ClCompile Include="..\..\3rdparty\sha2\sha2.c" />
     <ClCompile Include="crc.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="frame.cpp" />
@@ -208,6 +210,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\3rdparty\micro-ecc\types.h" />
+    <ClInclude Include="..\..\3rdparty\micro-ecc\uECC_vli.h" />
+    <ClInclude Include="..\..\3rdparty\micro-ecc\uECC.h" />
+    <ClInclude Include="..\..\3rdparty\sha2\brg_endian.h" />
+    <ClInclude Include="..\..\3rdparty\sha2\brg_types.h" />
+    <ClInclude Include="..\..\3rdparty\sha2\sha2.h" />
     <ClInclude Include="crc.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="endian_hack.h" />
