@@ -1032,6 +1032,11 @@ function __camDispatchTransporterUnsafe()
 
 	setNoGoArea(pos.x - 2, pos.y - 2, pos.x + 2, pos.y + 2, player);
 
+	if(player !== CAM_HUMAN_PLAYER)
+	{
+		playSound("pcv381.ogg"); //Enemy transport detected.
+	}
+
 	setTransporterExit(data.exit.x, data.exit.y, player);
 	// will guess which transporter to start, automagically
 	startTransporterEntry(data.entry.x, data.entry.y, player);
@@ -1067,7 +1072,7 @@ function __camLandTransporter(player, pos)
 		__camTransporterMessage = undefined;
 	}
 	camTrace("Landing transport for player", player);
-	playSound("pcv395.ogg", pos.x, pos.y, 0);
+	playSound("pcv395.ogg", pos.x, pos.y, 0); //Incoming enemy transport.
 	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
 }
 

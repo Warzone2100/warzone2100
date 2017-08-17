@@ -227,13 +227,11 @@ function eventTransporterLanded(transport)
 function sendCOTransporter()
 {
 	var list; with (camTemplates) list = [npcybr, npcybr];
-	var warning = "pcv395.ogg";	//Transport incoming
 	var tPos = getObject("COTransportPos");
 	var pDroid = enumRange(tPos.x, tPos.y, 6, CAM_HUMAN_PLAYER, false);
 
 	if(!pDroid.length)
 	{
-		playSound(warning);
 		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
 			CAM_REINFORCE_TRANSPORT, {
 				entry: { x: 1, y: 80 },
