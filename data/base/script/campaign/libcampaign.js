@@ -1109,7 +1109,7 @@ function __camCheckBaseEliminated(group)
 	for (var blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
-		if (bi.group !== group)
+		if ((bi.eliminated === true) || (bi.group !== group))
 			continue;
 		camTrace("Enemy base", blabel, "eliminated");
 		bi.eliminated = true;
@@ -1491,6 +1491,8 @@ function __camPickTarget(group)
 	if (!targets.length)
 		return undefined;
 	var target = targets[0];
+	if (target.type === DROID && camIsTransporter(target))
+		return undefined;
 	__camGroupInfo[group].target = { x: target.x, y: target.y };
 	return __camGroupInfo[group].target;
 }
@@ -1523,8 +1525,6 @@ function __camTacticsTickForGroup(group)
 		for (var i = 0, l = rawDroids.length; i < l; ++i)
 		{
 			var droid = rawDroids[i];
-			if (!camDef(droid) || (droid.id === 0))
-				continue;
 			if (droid.order === DORDER_RTR)
 				continue;
 			if (droid.health < gi.data.repair)
@@ -1559,7 +1559,7 @@ function __camTacticsTickForGroup(group)
 				for (var j = 0, c = ret.clusters[i].length; j < c; ++j)
 				{
 					var droid = ret.clusters[i][j];
-					if (camDef(droid) && (droid.type === DROID) && (droid.id !== 0))
+					if (camDef(droid) && (droid.type === DROID))
 					{
 						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
 					}
@@ -1575,8 +1575,6 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				if (!camDef(droid) || (droid.id === 0))
-					continue;
 				if (back)
 					orderDroid(droid, DORDER_RTB);
 				else if (droid.order !== DORDER_MOVE) // to assembly point?
@@ -1604,8 +1602,6 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				if (!camDef(droid) || (droid.id === 0))
-					continue;
 				if (droid.player === CAM_HUMAN_PLAYER)
 				{
 					camDebug("Controlling a human player's droid");
@@ -1648,14 +1644,14 @@ function __camTacticsTickForGroup(group)
 
 					if (droid.droidType === DROID_SENSOR)
 					{
-						if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+						if (camDef(closeBy[0]))
 							orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
 						else
 							orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
 					}
 					else
 					{
-						if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+						if (camDef(closeBy[0]))
 							orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
 						else
 							orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
@@ -1700,14 +1696,14 @@ function __camTacticsTickForGroup(group)
 
 				if (droid.droidType === DROID_SENSOR)
 				{
-					if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+					if (camDef(closeBy[0]))
 						orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
 					else
 						orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
 				}
 				else
 				{
-					if (camDef(closeBy[0]) && (closeBy[0].id !== 0))
+					if (camDef(closeBy[0]))
 						orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
 					else
 						orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
@@ -1726,9 +1722,9 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
-				if (!camDef(droid) || (droid.id === 0))
+				if (!camDef(droid))
 					continue;
-				if (droid.order !== DORDER_COMMANDERSUPPORT)
+				if ((droid.droidType !== DROID_COMMAND) && (droid.order !== DORDER_COMMANDERSUPPORT))
 					orderDroidObj(droid, DORDER_COMMANDERSUPPORT, commander);
 			}
 			break;
@@ -2076,6 +2072,8 @@ function __camAddDroidToFactoryGroup(droid, structure)
 
 function __camBuildDroid(template, structure)
 {
+	if (!camDef(structure))
+		return false;
 	makeComponentAvailable(template.body, structure.player);
 	makeComponentAvailable(template.prop, structure.player);
 	makeComponentAvailable(template.weap, structure.player);
@@ -2594,6 +2592,11 @@ function __camSpawnVtols()
 
 function __camRetreatVtols()
 {
+	if(countStruct("A0VtolPad", __vtolPlayer))
+	{
+		return; //Got to destroy those rearming pads now.
+	}
+
 	var vtols = enumDroid(__vtolPlayer).filter(function(obj) {
 		return isVTOL(obj);
 	});
@@ -2634,7 +2637,8 @@ const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
 const SYNAPTICS_ACTIVATED = "synplnk.ogg";
 const UNIT_ABSORBED = "untabsrd.ogg";
 const UNIT_NEUTRALIZE = "untnut.ogg";
-var lastNexusHit;
+var __lastNexusHit;
+var __nexusActivated;
 
 function camAbsorbPlayer(playerNumber, to)
 {
@@ -2664,12 +2668,13 @@ function camAbsorbPlayer(playerNumber, to)
 }
 
 //Steal a droid or structure from a player.
-function camHackIntoPlayer(what, player, to)
+function camHackIntoPlayer(player, to)
 {
-     if (!camDef(what))
-     {
-          what = "DROID";
-     }
+	if (camGetNexusState() === false)
+	{
+		return;
+	}
+
      if (!camDef(player))
      {
           player = CAM_HUMAN_PLAYER;
@@ -2678,17 +2683,42 @@ function camHackIntoPlayer(what, player, to)
      {
           to = NEXUS;
      }
-     if (!camDef(lastNexusHit))
+     if (!camDef(__lastNexusHit))
      {
           lastNexusHit = 0;
      }
 
-     var str = (what = "DROID") ? enumDroid(playerNumber) : enumStruct(playerNumber);
-	if (((lastNexusHit + 15000) > gameTime) && (camRand(101) < 10))
+	//Try stealing the HQ right away.
+	if (__lastNexusHit === 0)
+	{
+		var hq = enumStruct(player, HQ);
+		if (hq.length)
+		{
+			camTrace("stealing HQ");
+			__lastNexusHit += 1;
+			donateObject(hq[0], to);
+			return;
+		}
+	}
+
+     var tmp = camRand(2) ? enumDroid(player) : enumStruct(player);
+	if ((gameTime > (__lastNexusHit + 5000)) && (camRand(101) <= 25))
      {
-          donateObject(str[camRand(str.length)], to);
-          lastNexusHit = gameTime;
+		var obj = tmp[camRand(tmp.length)];
+		camTrace("stealing object: " + obj.name);
+		donateObject(obj, to);
+		__lastNexusHit = gameTime;
      }
+}
+
+function camSetNexusState(flag)
+{
+	__nexusActivated = flag;
+}
+
+function camGetNexusState()
+{
+	return __nexusActivated;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2840,6 +2870,8 @@ function cam_eventStartLevel()
 	__vtolExitPosition = {};
 	__vtolTimer = 0;
 	__disableVtolSpawn = false;
+	__lastNexusHit = 0;
+	__nexusActivated = false;
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
@@ -2955,4 +2987,46 @@ function cam_eventGameLoaded()
 
 	//reset active factory management.
 	__camResetFactories();
+}
+
+//Plays Nexus sounds if nexusActivated is true.
+function cam_eventObjectTranfer(obj, from)
+{
+	if ((from === CAM_HUMAN_PLAYER) && __nexusActivated)
+	{
+		var snd;
+		if (obj.type === STRUCTURE)
+		{
+			if (obj.stattype === DEFENSE)
+			{
+				snd = DEFENSE_ABSORBED;
+			}
+			else if (obj.stattype === RESEARCH_LAB)
+			{
+				snd = RES_ABSORBED;
+			}
+			else
+			{
+				snd = STRUCTURE_ABSORBED;
+			}
+		}
+		else if (obj.type === DROID)
+		{
+			snd = UNIT_ABSORBED;
+		}
+
+		if (obj.stattype === FACTORY
+			|| obj.stattype === CYBORG_FACTORY
+			|| obj.stattype === VTOL_FACTORY)
+		{
+			//TODO: add to the factory list.
+		}
+
+		if (!camDef(snd))
+		{
+			return;
+		}
+
+		playSound(snd);
+	}
 }

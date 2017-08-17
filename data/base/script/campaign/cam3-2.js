@@ -119,7 +119,7 @@ function sendEdgeMapDroids()
 		droids.push(list[camRand(list.length)]);
 	}
 
-	camSendReinforcement(NEXUS, camMakePos(EDGE[edgeMapIndex]), list,
+	camSendReinforcement(NEXUS, camMakePos(EDGE[edgeMapIndex]), droids,
 		CAM_REINFORCE_GROUND, {
 			data: {regroup: true, count: -1}
 		}
@@ -304,6 +304,6 @@ function eventStartLevel()
 	setAlliance(ALPHA, CAM_HUMAN_PLAYER, true);
 
 	hackAddMessage("C3-2_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	queue("setupPatrolGroups", 5000);
+	queue("setupPatrolGroups", 15000);
 	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
 }
