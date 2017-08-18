@@ -779,8 +779,12 @@ const CAM_REINFORCE_TRANSPORT = 2;
 //;; \end{description}
 function camSetEnemyBases(bases)
 {
-	__camEnemyBases = bases;
-	__camNumEnemyBases = 0;
+	var reload = !camDef(bases);
+	if (!reload)
+	{
+		__camEnemyBases = bases;
+		__camNumEnemyBases = 0;
+	}
 	// convert label strings to groups and store
 	for (var blabel in __camEnemyBases)
 	{
@@ -788,7 +792,19 @@ function camSetEnemyBases(bases)
 		var obj = getObject(blabel);
 		if (camDef(obj) && obj) // group already defined
 		{
-			bi.group = obj.id;
+			if (!camDef(bi.group))
+			{
+				bi.group = obj.id;
+			}
+			else
+			{
+				var structures = enumGroup(bi.group);
+				addLabel({ type: GROUP, id: bi.group }, blabel);
+				for (var i = 0, l = structures.length; i < l; ++i)
+				{
+					groupAdd(bi.group, structures[i]);
+				}
+			}
 			if (!camDef(bi.cleanup)) // auto-detect cleanup area
 			{
 				var objs = enumGroup(bi.group);
@@ -843,8 +859,11 @@ function camSetEnemyBases(bases)
 		}
 		if (groupSize(bi.group) === 0)
 			camDebug("Base", blabel, "defined as empty group");
-		bi.detected = false;
-		bi.eliminated = false;
+		if(!reload)
+		{
+			bi.detected = false;
+			bi.eliminated = false;
+		}
 		camTrace("Resetting label", blabel);
 		resetLabel(blabel, CAM_HUMAN_PLAYER); // subscribe for eventGroupSeen
 	}
@@ -2992,6 +3011,9 @@ function cam_eventGameLoaded()
 
 	//reset active factory management.
 	__camResetFactories();
+
+	//Subscribe to eventGroupSeen again.
+	camSetEnemyBases();
 }
 
 //Plays Nexus sounds if nexusActivated is true.
