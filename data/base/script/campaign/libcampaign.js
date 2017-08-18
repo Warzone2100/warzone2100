@@ -2664,6 +2664,31 @@ const UNIT_NEUTRALIZE = "untnut.ogg";
 var __lastNexusHit;
 var __nexusActivated;
 
+//Play a random laugh.
+function camNexusLaugh()
+{
+	if (camRand(101) < 25)
+	{
+		var rnd = camRand(3) + 1;
+		var snd;
+
+		if (!rnd)
+		{
+			snd = LAUGH1;
+		}
+		else if (rnd === 1)
+		{
+			snd = LAUGH2;
+		}
+		else
+		{
+			snd = LAUGH3;
+		}
+
+		playSound(snd);
+	}
+}
+
 function camAbsorbPlayer(playerNumber, to)
 {
      if (!camDef(playerNumber))
@@ -2712,26 +2737,28 @@ function camHackIntoPlayer(player, to)
           lastNexusHit = 0;
      }
 
-	//Try stealing the HQ right away.
-	if (__lastNexusHit === 0)
-	{
-		var hq = enumStruct(player, HQ);
-		if (hq.length)
-		{
-			camTrace("stealing HQ");
-			__lastNexusHit += 1;
-			donateObject(hq[0], to);
-			return;
-		}
-	}
-
-     var tmp = camRand(2) ? enumDroid(player) : enumStruct(player);
-	if ((gameTime > (__lastNexusHit + 5000)) && (camRand(101) <= 25))
+	//HACK: Seems HQ can not be donated yet so destroy it for now.
+     var tmp = camRand(2) ? enumDroid(player) : enumStruct(player).filter(function(s) { return (s.status === BUILT); });
+	if (!__lastNexusHit || (gameTime > (__lastNexusHit + 5000)) && (camRand(101) <= 25))
      {
-		var obj = tmp[camRand(tmp.length)];
-		camTrace("stealing object: " + obj.name);
-		donateObject(obj, to);
+		var obj = !__lastNexusHit ? enumStruct(player, HQ)[0] : tmp[camRand(tmp.length)];
 		__lastNexusHit = gameTime;
+		if (!camDef(obj))
+			return;
+		camTrace("stealing object: " + obj.name);
+		if (obj.type === STRUCTURE && obj.stattype === HQ)
+		{
+			camSafeRemoveObject(obj, false);
+			if (player === CAM_HUMAN_PLAYER)
+			{
+				setMiniMap(false);
+				setDesign(false);
+			}
+		}
+		else
+		{
+			donateObject(obj, to);
+		}
      }
 }
 
@@ -2920,6 +2947,33 @@ function cam_eventDestroyed(obj)
 	__camCheckPlaceArtifact(obj);
 	if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
 		__camCheckDeadTruck(obj);
+
+	//Nexus neutralize sounds.
+	if (__nexusActivated && (camRand(101) < 35) && (obj.player === CAM_HUMAN_PLAYER))
+	{
+		var snd;
+		if (obj.type === STRUCTURE)
+		{
+			if (obj.stattype === DEFENSE)
+			{
+				snd = DEFENSE_NEUTRALIZE;
+			}
+			else
+			{
+				snd = STRUCTURE_NEUTRALIZE;
+			}
+		}
+		else if (obj.tpye === DROID)
+		{
+			snd = UNIT_NEUTRALIZE;
+		}
+
+		if (camDef(snd))
+		{
+			playSound(snd);
+			queue("camNexusLaugh", 3000 + camRand(3000));
+		}
+	}
 }
 
 function cam_eventObjectSeen(viewer, seen)
@@ -3055,5 +3109,6 @@ function cam_eventObjectTranfer(obj, from)
 		}
 
 		playSound(snd);
+		queue("camNexusLaugh", 3000 + camRand(3000));
 	}
 }
