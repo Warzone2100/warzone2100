@@ -20,7 +20,7 @@
 #ifndef _tex_
 #define _tex_
 
-#include "lib/framework/opengl.h"
+#include "gfx_api.h"
 #include "png_util.h"
 
 #define iV_TEX_INVALID 0
@@ -30,15 +30,16 @@
 
 //*************************************************************************
 
-GLuint pie_Texture(int page);
+gfx_api::texture& pie_Texture(int page);
 int pie_NumberOfPages();
-int pie_ReserveTexture(const char *name);
+int pie_ReserveTexture(const char *name, const size_t& width, const size_t& height);
+void pie_AssignTexture(int page, gfx_api::texture* texture);
 
 //*************************************************************************
 
 int iV_GetTexture(const char *filename, bool compression = true);
 void iV_unloadImage(iV_Image *image);
-unsigned int iV_getPixelFormat(const iV_Image *image);
+gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
 bool replaceTexture(const QString &oldfile, const QString &newfile);
 int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page = -1);

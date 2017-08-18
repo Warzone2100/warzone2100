@@ -31,6 +31,7 @@
 
 /***************************************************************************/
 
+#include "gfx_api.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/vector.h"
@@ -81,7 +82,7 @@ public:
 
 	/// Allocate space on the GPU for texture of given parameters. If image is non-NULL,
 	/// then that memory buffer is uploaded to the GPU.
-	void makeTexture(int width, int height, GLenum filter = GL_LINEAR, GLenum format = GL_RGBA, const GLvoid *image = nullptr);
+	void makeTexture(int width, int height, GLenum filter = GL_LINEAR, const gfx_api::pixel_format& format = gfx_api::pixel_format::rgba, const GLvoid *image = nullptr);
 
 	/// Upload given memory buffer to already allocated texture space on the GPU
 	void updateTexture(const GLvoid *image, int width = -1, int height = -1);
@@ -94,13 +95,13 @@ public:
 
 private:
 	GFXTYPE mType;
-	GLenum mFormat;
+	gfx_api::pixel_format mFormat;
 	int mWidth;
 	int mHeight;
 	GLenum mdrawType;
 	int mCoordsPerVertex;
 	GLuint mBuffers[VBO_COUNT];
-	GLuint mTexture;
+	gfx_api::texture* mTexture = nullptr;
 	int mSize;
 };
 
@@ -120,7 +121,7 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 }
 void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour, REND_MODE rendermode = REND_OPAQUE);
 void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
-void iV_DrawImageText(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
+void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImage2(const QString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());

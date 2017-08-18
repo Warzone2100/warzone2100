@@ -5,6 +5,7 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 noinst_LIBRARIES = libivis_opengl.a
 noinst_HEADERS = \
 	piematrix.h \
+	gfx_api.h \
 	screen.h \
 	bitimage.h \
 	imd.h \
@@ -24,6 +25,7 @@ noinst_HEADERS = \
 
 libivis_opengl_a_SOURCES = \
 	pieblitfunc.cpp \
+	gfx_api_gl.cpp \
 	piedraw.cpp \
 	piefunc.cpp \
 	piematrix.cpp \

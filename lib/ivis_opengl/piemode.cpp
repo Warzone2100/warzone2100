@@ -53,15 +53,13 @@ bool pie_Initialise()
 	pie_TexInit();
 
 	/* Find texture compression extension */
-	if (GLEW_ARB_texture_compression && wz_texture_compression != GL_RGBA)
+	if (GLEW_ARB_texture_compression && wz_texture_compression)
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
-		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
 	}
 	else
 	{
 		debug(LOG_TEXTURE, "Texture compression: No");
-		wz_texture_compression = GL_RGBA;
 	}
 
 	rendSurface.width	= pie_GetVideoBufferWidth();

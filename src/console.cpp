@@ -68,6 +68,16 @@ struct CONSOLE_MESSAGE
 	int		player;			// Player who sent this message or SYSTEM_MESSAGE
 	CONSOLE_MESSAGE(const std::string &text, iV_fonts fontID, UDWORD time, CONSOLE_TEXT_JUSTIFICATION justify, int plr)
 	                : display(text, fontID), timeAdded(time), JustifyType(justify), player(plr) {}
+
+	CONSOLE_MESSAGE& operator =(CONSOLE_MESSAGE&& input)
+	{
+		display = std::move(input.display);
+		timeAdded = input.timeAdded;
+		JustifyType = input.JustifyType;
+		player = input.player;
+		return *this;
+	}
+
 };
 
 static std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
