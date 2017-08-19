@@ -268,11 +268,7 @@ void drawRadar()
 
 	ASSERT_OR_RETURN(, radarBuffer, "No radar buffer allocated");
 
-	// Do not recalculate frustum window coordinates if position or zoom does not change
-	if (playerpos.x != player.p.x || playerpos.y != player.p.y || playerpos.z != player.p.z)
-	{
-		setViewingWindow();
-	}
+	setViewingWindow();
 	playerpos = player.p; // cache position
 
 	if (frameSkip <= 0)
