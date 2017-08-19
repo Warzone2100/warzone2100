@@ -316,11 +316,7 @@ void	kf_HalveHeights()
 // --------------------------------------------------------------------------
 void	kf_FaceNorth()
 {
-	player.r.y = 0;
-	if (getWarCamStatus())
-	{
-		camToggleStatus();
-	}
+	kf_SeekNorth();
 }
 // --------------------------------------------------------------------------
 void	kf_FaceSouth()
@@ -330,6 +326,7 @@ void	kf_FaceSouth()
 	{
 		camToggleStatus();
 	}
+	CONPRINTF(ConsoleString, (ConsoleString, _("View Aligned to South")));
 }
 // --------------------------------------------------------------------------
 void	kf_FaceEast()
@@ -339,6 +336,7 @@ void	kf_FaceEast()
 	{
 		camToggleStatus();
 	}
+	CONPRINTF(ConsoleString, (ConsoleString, _("View Aligned to East")));
 }
 // --------------------------------------------------------------------------
 void	kf_FaceWest()
@@ -348,6 +346,7 @@ void	kf_FaceWest()
 	{
 		camToggleStatus();
 	}
+	CONPRINTF(ConsoleString, (ConsoleString, _("View Aligned to West")));
 }
 // --------------------------------------------------------------------------
 
