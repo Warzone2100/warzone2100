@@ -16,14 +16,9 @@ const NEW_PARADIGM_RESEARCH = [
 const SCAVENGER_RES = [
 	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage02",
 ];
-
 var artiGroup;
-var lastPosX, lastPosY;
-//Determine if the New Paradigm has artifact values:
-//0 - Does not have artifact
-//1 - Has artifact; Can be dropped
-//2 - Has artifact; Can not be dropped
 var enemyHasArtifact;
+var enemyStoleArtifact;
 
 
 //These enable scav factories when close enough
@@ -43,7 +38,7 @@ camAreaEvent("middleScavFactoryTrigger", function()
 });
 
 //If a group member of artiGroup gets to the waypoint, then go to the
-//New Paradigm landing zone
+//New Paradigm landing zone.
 camAreaEvent("NPWayPointTrigger", function()
 {
 	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
@@ -51,31 +46,11 @@ camAreaEvent("NPWayPointTrigger", function()
 	);
 });
 
-//The artifact group move to waypoint 1
-camAreaEvent("artifactCheckNP", function()
-{
-	var artifact = getArtifacts();
-	camSafeRemoveObject(artifact[0], false);
-	enemyHasArtifact = 1;
-
-	hackAddMessage("SB1_7_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
-	hackRemoveMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //canyon
-	hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
-
-	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("NPWayPoint") }
-	);
-
-	checkArtifactGroup();
-});
-
-//Land New Paradigm transport if the New Paradigm have the artifact
-//and prevent it from being dropped.
+//Land New Paradigm transport if the New Paradigm have the artifact.
 camAreaEvent("NPTransportTrigger", function()
 {
-	if(enemyHasArtifact === 1)
+	if(enemyHasArtifact)
 	{
-		enemyHasArtifact = 2;
 		var list = [];
 		with(camTemplates) list = [npmrl, npmrl];
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
@@ -86,43 +61,63 @@ camAreaEvent("NPTransportTrigger", function()
 	}
 });
 
-//Check if the artifact group member are still alive
-//If not, then drop the artifact unless enemyHasArtifact = 2
-function checkArtifactGroup()
+camAreaEvent("artifactCheckNP", function()
 {
-	var droids = enumGroup(artiGroup);
+	enemyHasArtifact = true;
+	var artifact = getArtifacts();
+	camSafeRemoveObject(artifact[0], false);
 
-	if(droids.length !== 0)
+	hackAddMessage("SB1_7_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
+	camCallOnce("removeCanyonBlip");
+
+	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
+		{ pos: camMakePos("NPWayPoint") }
+	);
+});
+
+//Remove nearby droids. Make sure the player loses if the NP still has the artifact
+//by the time it lands.
+function eventTransporterLanded(transport)
+{
+	if((transport.player === NEW_PARADIGM) && enemyHasArtifact)
 	{
-		lastPosX = droids[0].x;
-		lastPosY = droids[0].y;
-		queue("checkArtifactGroup", 1000);
-	}
-	else
-	{
-		if(enemyHasArtifact !== 2)
+		for(var s = 0; s < 5; ++s)
 		{
-			var acrate = addFeature("Crate", lastPosX, lastPosY);
-			addLabel(acrate, "newArtiPos");
-
-			camSetArtifacts({
-				"newArtiPos": { tech: "R-Wpn-Cannon3Mk1" },
+			var crew = enumRange(transport.x, transport.y, 5, ALL_PLAYERS, false);
+			crew = crew.filter(function(obj) {
+				return ((obj.type === DROID
+					&& obj.player === NEW_PARADIGM
+					&& !camIsTransporter(obj)
+					&& !camIsSystemDroid(obj))
+					|| (obj.type === FEATURE && obj.stattype === ARTIFACT)
+				);
 			});
-			enemyHasArtifact = 0;
-			hackRemoveMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true);
+
+			for(var i = 0, l = crew.length; i < l; ++i)
+			{
+				camSafeRemoveObject(crew[i], false);
+			}
 		}
+
+		enemyStoleArtifact = true; //Instant lose.
 	}
 }
 
-function eventTransporterExit(transport)
+//Check if the artifact group member are still alive and drop the artifact if needed.
+function eventGroupLoss(obj, group, newsize)
 {
-	if(transport.player !== CAM_HUMAN_PLAYER)
+	if((group === artiGroup) && !newsize && enemyHasArtifact && !enemyStoleArtifact)
 	{
-		if(enemyHasArtifact === 2)
-		{
-			camTrace("Enemy stole artifact");
-			gameOverMessage(false);
-		}
+		var acrate = addFeature("Crate", obj.x, obj.y);
+		addLabel(acrate, "newArtiPos");
+
+		camSetArtifacts({
+			"newArtiPos": { tech: "R-Wpn-Cannon3Mk1" },
+		});
+
+		enemyHasArtifact = false;
+		hackRemoveMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	}
 }
 
@@ -143,10 +138,15 @@ function buildLancers()
 	}
 }
 
-//Destroy all of the New Paradigm.
-function allNPDestroyed()
+//Must destroy all of the New Paradigm droids and make sure the artifact is safe.
+function extraVictory()
 {
-	if(!enumArea(0, 0, mapWidth, mapHeight, NEW_PARADIGM, false).length)
+	if(camDef(enemyStoleArtifact) && enemyStoleArtifact)
+	{
+		return false;
+	}
+
+	if(!enumDroid(NEW_PARADIGM).length)
 	{
 		return true;
 	}
@@ -160,37 +160,51 @@ function enableReinforcements()
 		area: "RTLZ",
 		message: "C1-7_LZ",
 		reinforcements: 60, //1 min
-		callback: "allNPDestroyed"
+		callback: "extraVictory"
 	});
 }
 
-///Remove canyon blip should the player reach it before the New Paradigm does
-function eventPickup(droid, feature)
+function removeCanyonBlip()
 {
-	if(droid.player === CAM_HUMAN_PLAYER && enemyHasArtifact === 0)
+	hackRemoveMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
+}
+
+function eventPickup(feature, droid)
+{
+	if(feature.stattype === ARTIFACT)
 	{
-		hackRemoveMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+		if(droid.player === CAM_HUMAN_PLAYER)
+		{
+			if(enemyHasArtifact)
+			{
+				hackRemoveMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER);
+			}
+			enemyHasArtifact = false;
+			camCallOnce("removeCanyonBlip");
+		}
 	}
 }
 
 //Mission setup stuff
 function eventStartLevel()
 {
+	enemyHasArtifact = false;
+	enemyStoleArtifact = false;
+	var startpos = getObject("startPosition");
+	var lz = getObject("landingZone"); //player lz
+	var tent = getObject("transporterEntry");
+	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
 		reinforcements: -1,
-		callback: "allNPDestroyed"
+		callback: "extraVictory"
 	});
-
-	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
-	var lz = getObject("landingZone"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	var text = getObject("transporterExit");
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	//Make sure the New Paradigm and Scavs are allies
 	setAlliance(NEW_PARADIGM, SCAVS, true);
@@ -235,7 +249,7 @@ function eventStartLevel()
 		"scavMiddleFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(4000),
+			throttle: camChangeOnDiff(10000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -243,7 +257,7 @@ function eventStartLevel()
 		"scavSouthEastFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(4000),
+			throttle: camChangeOnDiff(10000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -251,7 +265,7 @@ function eventStartLevel()
 		"scavNorthEastFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(4000),
+			throttle: camChangeOnDiff(10000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -259,11 +273,10 @@ function eventStartLevel()
 	});
 
 	artiGroup = camMakeGroup(enumArea("NPArtiGroup", NEW_PARADIGM, false));
-	enemyHasArtifact = 0;
 	camManageTrucks(NEW_PARADIGM);
 	buildLancers();
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
-	queue("camCallOnce", 15000, "enableReinforcements");
+	queue("enableReinforcements", 15000);
 	queue("getArtifact", 120000);
 }

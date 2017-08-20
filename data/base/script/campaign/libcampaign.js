@@ -2444,7 +2444,7 @@ function __camVictoryOffworld()
 	if (total === 0)
 		__camGameLost();
 
-	if (camAllArtifactsPickedUp() && camCheckExtraObjective())
+	if (camCheckExtraObjective() && camAllArtifactsPickedUp())
 	{
 		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
 		{
