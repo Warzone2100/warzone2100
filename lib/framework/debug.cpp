@@ -187,7 +187,7 @@ void debug_callback_file(void **data, const char *outputBuffer)
 	}
 }
 
-char WZ_DBGFile[PATH_MAX];		//Used to save path of the created log file
+char WZ_DBGFile[PATH_MAX] = {0};	//Used to save path of the created log file
 /**
  * Setup the file callback
  *
@@ -516,8 +516,13 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			                                  2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
 			if (clickedIndex == 0)
 			{
-				cocoaOpenURL("http://developer.wz2100.net/newticket");
-				if (WZDebugfilename == NULL)
+				if (!cocoaOpenURL("http://developer.wz2100.net/newticket"))
+                {
+                    cocoaShowAlert("Failed to open URL",
+                                   "Could not open URL: http://developer.wz2100.net/newticket\nPlease open this URL manually in your web browser.",
+                                   2, "Continue", NULL);
+                }
+                if (strnlen(WZ_DBGFile, sizeof(WZ_DBGFile)/sizeof(WZ_DBGFile[0])) <= 0)
 				{
 					cocoaShowAlert("Unable to open debug log.",
 					               "The debug log subsystem has not yet been initialised.",
@@ -525,7 +530,12 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 				}
 				else
 				{
-					cocoaSelectFileInFinder(WZDebugfilename);
+                    if (!cocoaSelectFileInFinder(WZ_DBGFile))
+                    {
+                        cocoaShowAlert("Cannot Display Log File",
+                                       "The attempt to open a Finder window highlighting the log file from this run failed.",
+                                       2, "Continue", NULL);
+                    }
 				}
 				cocoaOpenUserCrashReportFolder();
 			}

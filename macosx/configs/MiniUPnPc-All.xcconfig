@@ -9,3 +9,6 @@ USER_HEADER_SEARCH_PATHS = $(inherited) "$(SRCROOT)/../3rdparty/miniupnpc"
 GCC_STRICT_ALIASING = NO
 
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) _DARWIN_C_SOURCE
+
+// Silence warnings that are not ours
+GCC_WARN_64_TO_32_BIT_CONVERSION = NO // Silence "Implicit conversion loses integer precision" warnings

@@ -8,5 +8,8 @@ PRODUCT_NAME = Theora
 HEADER_SEARCH_PATHS =  $(inherited)
 USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external/libtheora/lib" "$(SRCROOT)/external/libtheora/include/**"
 
-WARNING_CFLAGS = -Wno-parentheses -Wno-tautological-compare // Silence warnings that are not ours
-WARNING_CFLAGS[arch=i386] = $(inherited) -Wno-tautological-compare
+// Silence warnings that are not ours
+GCC_WARN_MISSING_PARENTHESES = NO
+GCC_WARN_64_TO_32_BIT_CONVERSION = NO // Silence "Implicit conversion loses integer precision" warnings
+GCC_WARN_UNUSED_FUNCTION = NO
+WARNING_CFLAGS = -Wno-tautological-compare -Wno-shift-negative-value

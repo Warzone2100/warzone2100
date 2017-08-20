@@ -1,7 +1,7 @@
 /*
  This file is part of Warzone 2100.
  Copyright (C) 1999-2004  Eidos Interactive
- Copyright (C) 2005-2010  Warzone 2100 Project
+ Copyright (C) 2005-2017  Warzone 2100 Project
 
  Warzone 2100 is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -23,68 +23,108 @@
 #ifdef WZ_OS_MAC
 #import <AppKit/AppKit.h>
 #import <stdarg.h>
+#import "WZSDLAppDelegate.h"
 
 void cocoaInit()
 {
 	NSApplicationLoad();
 }
 
-static inline NSString *nsstringify(const char *str)
+void cocoaRunApplication(void (*mainEventLoop)()) {
+	assert([NSThread isMainThread]); // Must be called from the main thread.
+	
+    @autoreleasepool {
+        NSApplication * application = [NSApplication sharedApplication];
+        
+        // Configure the WZ SDL Application Delegate
+        WZSDLAppDelegate * delegate = [[WZSDLAppDelegate alloc] init];
+        [delegate setMainEventLoop: mainEventLoop];
+        
+        [application setDelegate:delegate];
+
+        // Run the NSApplication
+        [application run];
+        
+        // NSApp.run has returned, app is exiting
+        [application setDelegate:nil];
+    }
+}
+
+static inline NSString * _Nonnull nsstringify(const char *str)
 {
-	return [NSString stringWithUTF8String:str];
+    NSString * nsString = [NSString stringWithUTF8String:str];
+    if (nsString == nil)
+    {
+        return @"stringWithUTF8String failed";
+    }
+	return nsString;
 }
 
 int cocoaShowAlert(const char *message, const char *information, unsigned style,
                    const char *buttonTitle, ...)
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSAlert *alert = [[NSAlert alloc] init];
-	[alert setMessageText:nsstringify(message)];
-	[alert setInformativeText:nsstringify(information)];
-	[alert setAlertStyle:style];
+    NSInteger buttonID = -1;
+    @autoreleasepool {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:nsstringify(message)];
+        [alert setInformativeText:nsstringify(information)];
+        [alert setAlertStyle:(NSAlertStyle)style];
 
-	va_list args;
-	va_start(args, buttonTitle);
-	const char *currentButtonTitle = buttonTitle;
-	do {
-		[alert addButtonWithTitle:nsstringify(currentButtonTitle)];
-	} while ((currentButtonTitle = va_arg(args, const char *)));
-	va_end(args);
+        va_list args;
+        va_start(args, buttonTitle);
+        const char *currentButtonTitle = buttonTitle;
+        do {
+            [alert addButtonWithTitle:nsstringify(currentButtonTitle)];
+        } while ((currentButtonTitle = va_arg(args, const char *)));
+        va_end(args);
 
-	NSInteger buttonID = [alert runModal];
-	[pool release];
-	return buttonID - NSAlertFirstButtonReturn;
+        buttonID = [alert runModal];
+    }
+    return buttonID - NSAlertFirstButtonReturn;
 }
 
-void cocoaSelectFileInFinder(const char *filename)
+bool cocoaSelectFileInFinder(const char *filename)
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[[NSWorkspace sharedWorkspace] selectFile:nsstringify(filename) inFileViewerRootedAtPath:nil];
-	[pool release];
+    if (filename == nullptr) return false;
+    BOOL success = NO;
+	@autoreleasepool {
+        success = [[NSWorkspace sharedWorkspace] selectFile:nsstringify(filename) inFileViewerRootedAtPath:@""];
+    }
+    return success;
 }
 
-void cocoaOpenURL(const char *url)
+bool cocoaOpenURL(const char *url)
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:nsstringify(url)]];
-	[pool release];
+    assert(url != nullptr);
+    BOOL success = NO;
+	@autoreleasepool {
+        success = [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:nsstringify(url)]];
+    }
+    return success;
 }
 
-void cocoaOpenUserCrashReportFolder()
+bool cocoaOpenUserCrashReportFolder()
 {
-	SInt32 maj, min;
-	if (Gestalt(gestaltSystemVersionMajor, &maj) == noErr
-		&& Gestalt(gestaltSystemVersionMinor, &min) == noErr)
-	{
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-		NSString *libraryPath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-		if (libraryPath == nil) return;
-		NSURL *libraryURL = [NSURL fileURLWithPath:libraryPath isDirectory:YES];
-		NSString *subdir = (maj == 10 && min <= 5) ? @"Logs/CrashReporter" : @"Logs/DiagnosticReports";
-		NSURL *crashReportsURL = [NSURL URLWithString:subdir relativeToURL:libraryURL];
-		[[NSWorkspace sharedWorkspace] openURL:crashReportsURL];
-		[pool release];
+    BOOL success = NO;
+    @autoreleasepool {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+        NSString *libraryPath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        if (libraryPath == nil) return false;
+        NSURL *libraryURL = [NSURL fileURLWithPath:libraryPath isDirectory:YES];
+        NSURL *crashReportsURL = [NSURL URLWithString:@"Logs/DiagnosticReports" relativeToURL:libraryURL];
+        success = [[NSWorkspace sharedWorkspace] openURL:crashReportsURL];
+    }
+    return success;
+}
+
+bool cocoaGetApplicationSupportDir(char *const tmpstr, size_t const size)
+{
+	@autoreleasepool {
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, TRUE);
+		NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+		if (path == nil) return false;
+		BOOL success = [path getCString:tmpstr maxLength:size encoding:NSUTF8StringEncoding];
+		return success;
 	}
 }
 

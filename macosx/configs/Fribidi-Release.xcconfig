@@ -1,6 +1,0 @@
-// Fribidi settings for Release configuration
-
-#include "Fribidi-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO

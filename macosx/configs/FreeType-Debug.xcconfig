@@ -1,6 +1,6 @@
-// Fribidi settings for Debug configuration
+// FreeType settings for Debug configuration
 
-#include "Fribidi-All.xcconfig"
+#include "FreeType-All.xcconfig"
 
 
 GCC_ENABLE_FIX_AND_CONTINUE = YES

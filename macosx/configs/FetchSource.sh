@@ -5,9 +5,13 @@ DirectorY="$1"
 OutDir="$2"
 FileName="$3"
 SourceDLP="$4"
-MD5Sum="$5"
+SHA256Sum="$5"
 BackupDLP="http://wz2100.net/~dak180/BuildTools/external/"
 
+if ! type -aP shasum > /dev/null; then
+	echo "error: Missing command `shasum`. Are you sure Xcode is properly installed?" >&2
+	exit 1
+fi
 
 # Make sure we are in the right place
 cd "${SRCROOT}"
@@ -20,8 +24,8 @@ cd external
 if [ "${ACTION}" = "clean" ]; then
 	# Force cleaning when directed
 	rm -fRv "${DirectorY}" "${OutDir}"
-	MD5SumLoc="$(md5 -q "${FileName}")"
-	if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
+	SHA256SumLoc="$(shasum -a 256 "${FileName}" | awk '{ print $1 }')"
+	if [ "${SHA256SumLoc}" != "${SHA256Sum}" ]; then
 		rm -fRv "${FileName}"
 	fi
 	exit 0
@@ -36,12 +40,12 @@ elif [[ -d "${OutDir}" ]] && [[ ! -f "${FileName}" ]]; then
 	rm -fR "${DirectorY}" "${OutDir}"
 elif [[ -d "${OutDir}" ]] && [[ -f "${FileName}" ]]; then
 	# Check to make sure we have the right file
-	MD5SumLoc="$(cat "${OutDir}/.MD5SumLoc" 2>/dev/null || echo "")"
-	if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
+	SHA256SumLoc="$(cat "${OutDir}/.SHA256SumLoc" 2>/dev/null || echo "")"
+	if [ "${SHA256SumLoc}" != "${SHA256Sum}" ]; then
 		echo "warning: Cached file is outdated or incorrect, removing" >&2
 		rm -fR "${DirectorY}" "${OutDir}"
-		MD5SumFle="$(md5 -q "${FileName}")"
-		if [ "${MD5SumFle}" != "${MD5Sum}" ]; then
+		SHA256SumFle="$(shasum -a 256 "${FileName}" | awk '{ print $1 }')"
+		if [ "${SHA256SumFle}" != "${SHA256Sum}" ]; then
 			rm -fR "${FileName}"
 		fi
 	else
@@ -65,12 +69,12 @@ else
 fi
 
 # Check our sums
-MD5SumLoc="$(md5 -q "${FileName}")"
-if [ -z "${MD5SumLoc}" ]; then
-	echo "error: Unable to compute md5 for ${FileName}" >&2
+SHA256SumLoc="$(shasum -a 256 "${FileName}" | awk '{ print $1 }')"
+if [ -z "${SHA256SumLoc}" ]; then
+	echo "error: Unable to compute SHA256 for ${FileName}" >&2
 	exit 1
-elif [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
-	echo "error: MD5 does not match for ${FileName}" >&2
+elif [ "${SHA256SumLoc}" != "${SHA256Sum}" ]; then
+	echo "error: SHA256 does not match for ${FileName}" >&2
 	exit 1
 fi
 
@@ -92,7 +96,7 @@ else
 fi
 
 # Save the sum
-echo "${MD5SumLoc}" > "${DirectorY}/.MD5SumLoc"
+echo "${SHA256SumLoc}" > "${DirectorY}/.SHA256SumLoc"
 
 # Move
 if [ ! -d "${DirectorY}" ]; then

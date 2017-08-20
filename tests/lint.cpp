@@ -197,7 +197,7 @@ static bool callFunction(QScriptEngine *engine, QString function, QScriptValueLi
 	QScriptValue value = engine->globalObject().property(function);
 	if (!value.isValid() || !value.isFunction())
 	{
-		ASSERT(!required, "Function %s not found", function.toAscii().constData());
+		ASSERT(!required, "Function %s not found", function.toUtf8().constData());
 		return false;	// not necessarily an error, may just be a trigger that is not defined (ie not needed)
 	}
 	QScriptValue result = value.call(QScriptValue(), args);
@@ -207,10 +207,10 @@ static bool callFunction(QScriptEngine *engine, QString function, QScriptValueLi
 		QStringList bt = engine->uncaughtExceptionBacktrace();
 		for (int i = 0; i < bt.size(); i++)
 		{
-			fprintf(stderr, "%d : %s\n", i, bt.at(i).toAscii().constData());
+			fprintf(stderr, "%d : %s\n", i, bt.at(i).toUtf8().constData());
 		}
 		fprintf(stderr, "Uncaught exception calling function \"%s\" at line %d: %s\n",
-		       function.toAscii().constData(), line, result.toString().toAscii().constData());
+		       function.toUtf8().constData(), line, result.toString().toUtf8().constData());
 		return false;
 	}
 	return true;
@@ -768,7 +768,7 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *)
 		}
 	}
 	QString warnName = function.left(15) + "...";
-	SCRIPT_ASSERT(context, false, "Did not find timer %s to remove", warnName.toAscii().constData());
+	SCRIPT_ASSERT(context, false, "Did not find timer %s to remove", warnName.toUtf8().constData());
 	return QScriptValue();
 }
 
@@ -1123,14 +1123,14 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
 	{
-		qFatal("Syntax error in %s line %d: %s", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+        qFatal("Syntax error in %s line %d: %s", path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
 		return false;
 	}
 	QScriptValue result = engine->evaluate(source, path);
 	if (engine->hasUncaughtException())
 	{
 		int line = engine->uncaughtExceptionLineNumber();
-		qFatal("Uncaught exception at line %d, file %s: %s", line, path.toAscii().constData(), result.toString().toAscii().constData());
+		qFatal("Uncaught exception at line %d, file %s: %s", line, path.toUtf8().constData(), result.toString().toUtf8().constData());
 		return false;
 	}
 

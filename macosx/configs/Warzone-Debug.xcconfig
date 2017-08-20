@@ -9,7 +9,8 @@ GCC_OPTIMIZATION_LEVEL = 0
 BUILD_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG
 
 // Additional build flags for both c and c++ files
-BuildDependentFlagsForCandCpp = -Werror -fstack-protector-all
+//BuildDependentFlagsForCandCpp = -Werror -fstack-protector-all
+BuildDependentFlagsForCandCpp = -fstack-protector-all
 
 // Build setting dependent warnings
 WarnForCandCppDep = -Wno-error=unused-parameter -Wno-error=format-security -Wno-sign-compare // -Wno-error=sign-compare // FIXME: For some reason these will be errors anyway, so off for now
