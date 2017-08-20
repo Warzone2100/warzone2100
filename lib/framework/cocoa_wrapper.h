@@ -27,6 +27,8 @@
 
 void cocoaInit(void);
 
+void cocoaRunApplication( void (*mainEventLoop)() );
+
 /*!
  * Display an alert dialog.
  * This blocks until the dialog is dismissed.
@@ -39,9 +41,11 @@ void cocoaInit(void);
 int cocoaShowAlert(const char *message, const char *information, unsigned style,
                    const char *buttonTitles, ...) __attribute__((sentinel));
 
-void cocoaSelectFileInFinder(const char *filename);
-void cocoaOpenURL(const char *url);
-void cocoaOpenUserCrashReportFolder();
+bool cocoaSelectFileInFinder(const char *filename);
+bool cocoaOpenURL(const char *url);
+bool cocoaOpenUserCrashReportFolder();
+
+bool cocoaGetApplicationSupportDir(char *const tmpstr, size_t const size);
 
 #endif // WZ_OS_MAC
 

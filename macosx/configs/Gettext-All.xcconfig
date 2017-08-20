@@ -1,9 +1,9 @@
-// Gettext settings for all configurations
+// Gettext-libintl settings for all configurations
 
 #include "Base-Framework.xcconfig"
 
 
-PRODUCT_NAME = Gettext
+PRODUCT_NAME = Libintl
 
 FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_1)
 LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1)

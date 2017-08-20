@@ -8,4 +8,5 @@ PRODUCT_NAME = Vorbis
 HEADER_SEARCH_PATHS = $(inherited)
 USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/external/libvorbis/lib/"
 
-WARNING_CFLAGS = -Wno-comment
+// Silence warnings that are not ours
+GCC_WARN_64_TO_32_BIT_CONVERSION = NO // Silence "Implicit conversion loses integer precision" warnings

@@ -32,9 +32,11 @@ GCC_WARN_UNUSED_FUNCTION = YES // -Wunused-function
 GCC_WARN_UNUSED_LABEL = YES // -Wunused-label
 GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
+GCC_WARN_UNUSED_PARAMETER = NO // FIXME: Hides some "Unused parameter" warnings; these should be fixed at some point
+CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES
 
 // Build setting dependent warnings
-WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep)
+WarnForCandCpp = -Wall -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep)
 WarnForC = -Wstrict-prototypes -Wdeclaration-after-statement $(WarnForCDep)
 WarnForCpp = $(WarnForCppDep)
 

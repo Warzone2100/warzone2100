@@ -1,0 +1,6 @@
+// FreeType settings for Release configuration
+
+#include "FreeType-All.xcconfig"
+
+
+GCC_ENABLE_FIX_AND_CONTINUE = NO

@@ -1,10 +1,11 @@
 #!/bin/sh
 
-DirectorY="gettext-0.18.1"
+VerLib="0.19.8.1"
 OutDir="gettext"
-FileName="gettext-0.18.1.tar.gz"
-SourceDLP="http://ftp.gnu.org/pub/gnu/gettext/gettext-0.18.1.tar.gz"
-MD5Sum="2ae04f960d5fa03774636ddef19ebdbf"
+DirectorY="${OutDir}-${VerLib}"
+FileName="${DirectorY}.tar.gz"
+SourceDLP="http://ftp.gnu.org/pub/gnu/gettext/${FileName}"
+SHA256Sum="ff942af0e438ced4a8b0ea4b0b6e0d6d657157c5e2364de57baa279c1c125c43"
 
-configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${MD5Sum}"
+configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${SHA256Sum}"
 exit ${?}
