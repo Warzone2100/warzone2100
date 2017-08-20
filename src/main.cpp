@@ -599,6 +599,7 @@ static void startGameLoop()
  */
 static void stopGameLoop()
 {
+	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
 		clearBlueprints();

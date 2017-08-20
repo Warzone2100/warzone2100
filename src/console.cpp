@@ -421,6 +421,13 @@ void	displayConsoleMessages()
 	}
 }
 
+/** destroy CONPRINTF messages **/
+void clearInfoMessages()
+{
+	InfoMessages.clear();
+}
+
+
 /** Allows toggling of the box under the console text */
 void	setConsoleBackdropStatus(bool state)
 {

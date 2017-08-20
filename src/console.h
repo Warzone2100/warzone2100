@@ -61,6 +61,7 @@ UDWORD getConsoleLineInfo();
 void permitNewConsoleMessages(bool allow);
 void toggleConsoleDrop();
 void setHistoryMode(bool mode);
+void clearInfoMessages();
 
 #if defined(DEBUG)
 # define debug_console(...) \
