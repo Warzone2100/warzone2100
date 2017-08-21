@@ -2692,6 +2692,15 @@ static QScriptValue js_useSafetyTransport(QScriptContext *context, QScriptEngine
 	return QScriptValue();
 }
 
+//-- \subsection{restoreLimboMissionData()}
+//-- Swap mission type and bring back units previously stored at the start
+//-- of the mission (see cam3-c mission). (3.2.4+ only).
+static QScriptValue js_restoreLimboMissionData(QScriptContext *context, QScriptEngine *)
+{
+	resetLimboMission();
+	return QScriptValue();
+}
+
 //-- \subsection{setReinforcementTime(time)} Set time for reinforcements to arrive. If time is
 //-- negative, the reinforcement GUI is removed and the timer stopped. Time is in seconds.
 //-- If time equals to the magic LZ_COMPROMISED_TIME constant, reinforcement GUI ticker
@@ -5382,6 +5391,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("changePlayerColour", engine->newFunction(js_changePlayerColour));
 	engine->globalObject().setProperty("setHealth", engine->newFunction(js_setHealth));
 	engine->globalObject().setProperty("useSafetyTransport", engine->newFunction(js_useSafetyTransport));
+	engine->globalObject().setProperty("restoreLimboMissionData", engine->newFunction(js_restoreLimboMissionData));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

@@ -1,0 +1,30 @@
+{
+	"position_0": { "label": "startPosition",		"pos": [ 704, 17856 ] },
+	"position_1": { "label": "vtolAppearPos",		"pos": [ 832, 6464 ] },
+	"position_2": { "label": "vtolRemovePos",		"pos": [ 128, 10240 ] },
+	"position_3": { "label": "healthRetreatPos",		"pos": [ 6848, 23232 ] },
+	"position_4": { "label": "southBaseRetreat",		"pos": [ 6848, 23232 ] },
+	"position_5": { "label": "southOfVtolBase",		"pos": [ 4416, 23232 ] },
+	"position_6": { "label": "SWrampToGammaBase",		"pos": [ 1600, 18752 ] },
+	"position_7": { "label": "eastRidgeGammaBase",		"pos": [ 2112, 22208 ] },
+
+	"area_0": { "label": "landingZone",		"pos1": [ 7040, 15232 ],	"pos2": [ 7296, 15488 ] },
+	"area_1": { "label": "vtolGroup1",		"pos1": [ 2112, 1344 ],		"pos2": [ 2368, 2112 ] },
+	"area_2": { "label": "vtolGroup2",		"pos1": [ 2112, 2112 ],		"pos2": [ 2368, 2624 ] },
+	"area_3": { "label": "gammaBase",		"pos1": [ 192, 22080 ],		"pos2": [ 2880, 24128 ] },
+	"area_4": { "label": "limboDroidLZ",		"pos1": [ 1024, 17536 ],	"pos2": [ 1280, 17792 ] },
+	"area_5": { "label": "NEgroup",			"pos1": [ 6848, 18112 ],	"pos2": [ 7232, 18752 ] },
+	"area_6": { "label": "Egroup",			"pos1": [ 6720, 20928 ],	"pos2": [ 7232, 21440 ] },
+	"area_7": { "label": "gammaBaseTrigger",	"pos1": [ 192, 22208 ],		"pos2": [ 2368, 24256 ] },
+	"area_8": { "label": "northBaseCleanup",	"pos1": [ 3008, 16320 ],	"pos2": [ 4672, 18880 ] },
+	"area_9": { "label": "vtolBaseCleanup",		"pos1": [ 3008, 19776 ],	"pos2": [ 5568, 22976 ] },
+	"area_10": { "label": "southBaseCleanup",	"pos1": [ 5568, 21952 ],	"pos2": [ 8000, 24896 ] },
+
+	"object_0": { "id": 1309,	"label": "NXbase1HeavyFacArti",	"player": 3, "type": 1 },
+	"object_1": { "id": 690,	"label": "NXcybFacArti",	"player": 3, "type": 1 },
+	"object_2": { "id": 544,	"label": "NXvtolFacArti",	"player": 3, "type": 1 },
+	"object_3": { "id": 529,	"label": "NXsouthCybFac",	"player": 3, "type": 1 },
+	"object_4": { "id": 1256,	"label": "NXcommandCenter",	"player": 3, "type": 1 },
+
+	"radius_0": { "label": "vtolRemoveZone", "subscriber": 3, "pos" : [ 128, 10240 ], "radius": 250 }
+}

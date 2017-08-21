@@ -1,5 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
+include("script/campaign/transitionTech.js");
 
 const ALPHA = 1; //Team alpha units belong to player 1.
 const NEXUS_RES = [
@@ -12,21 +13,6 @@ const NEXUS_RES = [
 	"R-Wpn-Energy-ROF02", "R-Wpn-Missile-Accuracy01", "R-Wpn-Missile-Damage01",
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
-];
-const ALPHA_RES = [
-	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06", "R-Wpn-Cannon-ROF03",
-	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-Howitzer-Accuracy02",
-	"R-Wpn-Howitzer-Damage03", "R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03",
-	"R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
-	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06", "R-Wpn-Rocket-ROF03",
-	"R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06", "R-Wpn-RocketSlow-ROF03",
-	"R-Vehicle-Armor-Heat02", "R-Vehicle-Engine06", "R-Vehicle-Metals06", "R-Cyborg-Metals06",
-	"R-Cyborg-Armor-Heat02", "R-Defense-WallUpgrade06", "R-Struc-Factory-Upgrade06",
-	"R-Struc-Factory-Cyborg-Upgrade06", "R-Struc-VTOLFactory-Upgrade03",
-	"R-Struc-VTOLPad-Upgrade03", "R-Struc-Materials06", "R-Struc-Power-Upgrade01",
-	"R-Struc-Research-Upgrade06", "R-Struc-RprFac-Upgrade06", "R-Sys-Engineering02",
-	"R-Sys-MobileRepairTurret01", "R-Sys-Sensor-Upgrade01", "R-Wpn-AAGun-Accuracy02",
-	"R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03", "R-Wpn-Bomb-Accuracy02",
 ];
 var videoIndex;
 var edgeMapIndex;
@@ -299,7 +285,7 @@ function eventStartLevel()
 	setPower(NEXUS_POWER, NEXUS);
 	setPower(ALPHA_POWER, ALPHA);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
-	camCompleteRequiredResearch(ALPHA_RES, ALPHA);
+	camCompleteRequiredResearch(GAMMA_ALLY_RES, ALPHA);
 	setAlliance(ALPHA, NEXUS, true);
 	setAlliance(ALPHA, CAM_HUMAN_PLAYER, true);
 

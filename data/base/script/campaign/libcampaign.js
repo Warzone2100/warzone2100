@@ -2667,7 +2667,7 @@ var __nexusActivated;
 //Play a random laugh.
 function camNexusLaugh()
 {
-	if (camRand(101) < 25)
+	if (camRand(101) < 35)
 	{
 		var rnd = camRand(3) + 1;
 		var snd;
@@ -2703,13 +2703,19 @@ function camAbsorbPlayer(playerNumber, to)
      var units = enumDroid(playerNumber);
 	for (var i = 0, l = units.length; i < l; i++)
 	{
-		donateObject(units[i], to);
+		if (!donateObject(units[i], to))
+		{
+			camSafeRemoveObject(units[i], false);
+		}
 	}
 
     var structs = enumStruct(playerNumber);
     for (var i = 0, l = structs.length; i < l; i++)
     {
-         donateObject(structs[i], to);
+         if (!donateObject(structs[i], to))
+	    {
+		    camSafeRemoveObject(structs[i], false);
+	    }
     }
 
     camTrace("Player " + playerNumber + " has been absorbed by player" + to);
@@ -3103,12 +3109,10 @@ function cam_eventObjectTranfer(obj, from)
 			//TODO: add to the factory list.
 		}
 
-		if (!camDef(snd))
+		if (camDef(snd))
 		{
-			return;
+			playSound(snd);
+			queue("camNexusLaugh", 3000 + camRand(3000));
 		}
-
-		playSound(snd);
-		queue("camNexusLaugh", 3000 + camRand(3000));
 	}
 }

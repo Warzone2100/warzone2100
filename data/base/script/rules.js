@@ -49,11 +49,11 @@ function resetPower() {
 	// set income modifier/power storage for player 0 (human)
 	if (difficulty == EASY)
 	{
-		setPowerModifier(110);
+		setPowerModifier(120);
 	}
 	else if (difficulty == HARD)
 	{
-		setPowerModifier(90);
+		setPowerModifier(85);
 		setPowerStorageMaximum(HARD_POWER_LIMIT);
 	}
 	else if (difficulty == INSANE)
