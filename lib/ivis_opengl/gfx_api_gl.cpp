@@ -72,7 +72,7 @@ struct gl_context : public gfx_api::context
 		{
 			glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 		}
-		for (unsigned i = 0; i < floor(log(std::max(width, height))); ++i)
+		for (unsigned i = 0; i < floor(log(std::max(width, height))) + 1; ++i)
 		{
 			glTexImage2D(GL_TEXTURE_2D, i, to_gl(internal_format), width >> i, height >> i, 0, to_gl(internal_format), GL_UNSIGNED_BYTE, nullptr);
 		}
