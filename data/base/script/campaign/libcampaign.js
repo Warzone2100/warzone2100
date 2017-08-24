@@ -1135,11 +1135,16 @@ function __camCheckBaseEliminated(group)
 		var bi = __camEnemyBases[blabel];
 		if ((bi.eliminated === true) || (bi.group !== group))
 			continue;
-		camTrace("Enemy base", blabel, "eliminated");
-		bi.eliminated = true;
 		if (camDef(bi.cleanup))
 		{
 			var leftovers = enumArea(bi.cleanup);
+			var nonValidLeftovers = leftovers.filter(function(obj) {
+				return (obj.player !== CAM_HUMAN_PLAYER
+					&& obj.type === STRUCTURE
+					&& !__camIsValidLeftover(obj));
+			});
+			if (nonValidLeftovers.length)
+				continue;
 			for (var i = 0, l = leftovers.length; i < l; i++)
 			{
 				var obj = leftovers[i];
@@ -1158,6 +1163,8 @@ function __camCheckBaseEliminated(group)
 		}
 		if (camDef(bi.detectMsg) && bi.detected) // remove the beacon
 			hackRemoveMessage(bi.detectMsg, PROX_MSG, 0);
+		camTrace("Enemy base", blabel, "eliminated");
+		bi.eliminated = true;
 		// bump counter before the callback, so that it was
 		// actual during the callback
 		++__camNumEnemyBases;
