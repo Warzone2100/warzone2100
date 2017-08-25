@@ -168,3 +168,20 @@ Warzone AI, maps and campaign can be scripted using javascript.
 Links to further information
 * [Model format](doc/PIE.md)
 * [Animation](doc/Animation.md)
+
+How to build
+-------------------
+
+### Linux
+See http://developer.wz2100.net/wiki/CompileGuideLinux
+
+### Windows Cross compile
+See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
+
+### Windows using MSVC
+
+* You need Visual Studio 2015 or 2017 (recommended) CMake (https://cmake.org/) and QT 5.9.1 (https://www.qt.io/)
+* Build dependencies are provided with vcpkg project from Microsoft. Run "get-dependencies.ps1" script from powershell in order to download source and build them.
+* From now you can use cmake the canonical way or directly from Visual Studio 2017 ; the only requirement is to pass the CMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystem/vcpkg.cmake variable.
+* The canonical way is the command 'cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystem\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015" '
+* With VS2017 open the warzone 2100 folder, then  "CMake menu > Change Cmake settings" will create a json file. There add "-DCMAKE_TOOLCHAIN_FILE=vcpkg\\scripts\\buildsystems\\vcpkg.cmake" to cmakeCommandArgs.
