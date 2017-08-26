@@ -90,29 +90,15 @@ function ambushPlayer()
 	});
 }
 
-//VTOL units stop coming when the Collective HQ is destroyed.
-function checkCollectiveHQ()
-{
-	if(getObject("COCommandCenter") === null)
-	{
-		camToggleVtolSpawn();
-	}
-	else
-	{
-		queue("checkCollectiveHQ", 8000);
-	}
-}
-
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(600000)); //10 min
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(600000), "COCommandCenter"); //10 min
 	checkCollectiveHQ();
 }
 
 function truckDefense()
 {
-	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
 	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 

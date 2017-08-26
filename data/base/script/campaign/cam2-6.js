@@ -2,20 +2,20 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const COLLECTIVE_RES = [
-		"R-Defense-WallUpgrade05", "R-Struc-Materials05",
-		"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
-		"R-Struc-VTOLFactory-Upgrade03", "R-Struc-VTOLPad-Upgrade03",
-		"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
-		"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
-		"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
-		"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
-		"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-		"R-Wpn-RocketSlow-Damage06", "R-Sys-Sensor-Upgrade01",
-		"R-Wpn-Howitzer-Accuracy02", "R-Wpn-RocketSlow-ROF03",
-		"R-Wpn-Howitzer-Damage02",
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05",
+	"R-Struc-Factory-Upgrade05", "R-Struc-Factory-Cyborg-Upgrade05",
+	"R-Struc-VTOLFactory-Upgrade03", "R-Struc-VTOLPad-Upgrade03",
+	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
+	"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
+	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
+	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
+	"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage06", "R-Sys-Sensor-Upgrade01",
+	"R-Wpn-Howitzer-Accuracy02", "R-Wpn-RocketSlow-ROF03",
+	"R-Wpn-Howitzer-Damage02",
 ];
 
 camAreaEvent("groupTrigger", function(droid)
@@ -91,7 +91,6 @@ function mainBaseAttackGroup()
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
 	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 

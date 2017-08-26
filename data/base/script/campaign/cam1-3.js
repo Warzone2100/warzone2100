@@ -140,7 +140,6 @@ function playNPWarningMessage()
 
 function playNPWarningSound()
 {
-	var startpos = getObject("StartPosition");
 	playSound("pcv455.ogg");
 	queue("playNPWarningMessage", 2000);
 }

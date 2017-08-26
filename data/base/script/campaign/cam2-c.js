@@ -7,21 +7,21 @@ var capturedCivCount; //How many civilians have been captured. 59 for defeat.
 var civilianPosIndex; //Current location of civilian groups.
 var shepardGroup; //Enemy group that protects civilians.
 const COLLECTIVE_RES = [
-		"R-Defense-WallUpgrade03", "R-Struc-Materials04",
-		"R-Struc-Factory-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
-		"R-Struc-VTOLPad-Upgrade01", "R-Struc-Factory-Cyborg-Upgrade04",
-		"R-Vehicle-Engine04", "R-Vehicle-Metals03", "R-Cyborg-Metals04",
-		"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
-		"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
-		"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
-		"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-		"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
-		"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
-		"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy02",
-		"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF03",
+	"R-Defense-WallUpgrade03", "R-Struc-Materials04",
+	"R-Struc-Factory-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
+	"R-Struc-VTOLPad-Upgrade01", "R-Struc-Factory-Cyborg-Upgrade04",
+	"R-Vehicle-Engine04", "R-Vehicle-Metals03", "R-Cyborg-Metals04",
+	"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
+	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
+	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
+	"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
+	"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
+	"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy02",
+	"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF03",
 ];
 
 //Play video about civilians being captured by the Collective. Triggered
@@ -120,7 +120,6 @@ function activateGroups()
 
 function truckDefense()
 {
-	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
 	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
 		queue("truckDefense", 160000);

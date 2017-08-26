@@ -182,4 +182,4 @@ function eventStartLevel()
 	victoryFlag = false;
 	queue("setupCyborgGroups", 5000);
 	queue("updateTransportUnits", 20000);
-};
+}

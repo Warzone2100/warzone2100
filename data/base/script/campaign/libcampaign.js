@@ -802,7 +802,15 @@ function camSetEnemyBases(bases)
 				addLabel({ type: GROUP, id: bi.group }, blabel);
 				for (var i = 0, l = structures.length; i < l; ++i)
 				{
-					groupAdd(bi.group, structures[i]);
+					var s = structures[i];
+					if (s.type !== STRUCTURE || __camIsValidLeftover(s))
+						continue;
+					if (!camDef(bi.player) ||
+					    camPlayerMatchesFilter(s.player, bi.player))
+					{
+						camTrace("Auto-adding", s.id, "to base", blabel);
+						groupAdd(bi.group, s);
+					}
 				}
 			}
 			if (!camDef(bi.cleanup)) // auto-detect cleanup area
@@ -2563,72 +2571,95 @@ function camSetupTransporter(x, y, x1, y1)
 // These functions create the hit and run vtols for the given player.
 // Vtol rearming is handled in group management.
 ////////////////////////////////////////////////////////////////////////////////
-var __vtolPlayer;
-var __vtolStartPosition;
-var __vtolTemplates;
-var __vtolExitPosition;
-var __vtolTimer;
-var __disableVtolSpawn;
+var __camVtolPlayer;
+var __camVtolStartPosition;
+var __camVtolTemplates;
+var __camVtolExitPosition;
+var __camVtolTimer;
+var __camVtolSpawnActive;
+var __camVtolSpawnStopObject;
 
-function camSetVtolData(player, startPos, exitPos, templates, timer)
+//Setup hit and runner VTOLs. Passing in obj is optional and will automatically
+//disable the vtol spawner once that object is dead.
+function camSetVtolData(player, startPos, exitPos, templates, timer, obj)
 {
-	__vtolPlayer = player;
-	__vtolStartPosition = startPos;
-	__vtolExitPosition = camMakePos(exitPos);
-	__vtolTemplates = templates;
-	__vtolTimer = timer;
+	__camVtolPlayer = player;
+	__camVtolStartPosition = startPos;
+	__camVtolExitPosition = camMakePos(exitPos);
+	__camVtolTemplates = templates;
+	__camVtolTimer = timer;
+	__camVtolSpawnStopObject = obj;
 
+	camSetVtolSpawn(true);
+	__checkVtolSpawnObject();
 	__camSpawnVtols();
 	__camRetreatVtols();
 }
 
-function camToggleVtolSpawn()
+function camSetVtolSpawn(value)
 {
-	__disableVtolSpawn = !__disableVtolSpawn;
+	__camVtolSpawnActive = value;
+}
+
+function __checkVtolSpawnObject()
+{
+	if (camDef(__camVtolSpawnStopObject))
+	{
+		if (getObject(__camVtolSpawnStopObject) === null)
+		{
+			camSetVtolSpawn(false); //Deactive hit and runner VTOLs.
+		}
+		else
+		{
+			queue("__checkVtolSpawnObject", 5000);
+		}
+	}
 }
 
 function __camSpawnVtols()
 {
+	if (__camVtolSpawnActive === false)
+		return;
+
 	var amount = 5 + camRand(2);
 	var droids = [];
 	var pos;
 
 	//Make sure to catch multiple start positions also.
-	if(__vtolStartPosition instanceof Array)
+	if(__camVtolStartPosition instanceof Array)
 	{
-		pos = __vtolStartPosition[camRand(__vtolStartPosition.length)];
+		pos = __camVtolStartPosition[camRand(__camVtolStartPosition.length)];
 	}
 	else
 	{
-		pos = __vtolStartPosition;
+		pos = __camVtolStartPosition;
 	}
 
 	//Pick some droids randomly.
 	for (var i = 0; i < amount; ++i)
 	{
-		droids.push(__vtolTemplates[camRand(__vtolTemplates.length)]);
+		droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
 	}
 
 	//...And send them.
-	camSendReinforcement(__vtolPlayer, camMakePos(pos), droids,
+	camSendReinforcement(__camVtolPlayer, camMakePos(pos), droids,
 		CAM_REINFORCE_GROUND,
 		{
 			order: CAM_ORDER_ATTACK,
 			data: { regroup: false, count: -1 }
 		});
 
-	if(__disableVtolSpawn === false)
-		queue("__camSpawnVtols", __vtolTimer);
+	queue("__camSpawnVtols", __camVtolTimer);
 }
 
 function __camRetreatVtols()
 {
-	if(countStruct("A0VtolPad", __vtolPlayer))
+	if(countStruct("A0VtolPad", __camVtolPlayer))
 	{
 		return; //Got to destroy those rearming pads now.
 	}
 
-	var vtols = enumDroid(__vtolPlayer).filter(function(obj) {
+	var vtols = enumDroid(__camVtolPlayer).filter(function(obj) {
 		return isVTOL(obj);
 	});
 
@@ -2642,8 +2673,8 @@ function __camRetreatVtols()
 			if ((vt.order == DORDER_RTB)
 				|| (vt.weapons[c].armed < 1) || (vt.health < 40))
 			{
-				orderDroidLoc(vt, DORDER_MOVE, __vtolExitPosition.x,
-					__vtolExitPosition.y);
+				orderDroidLoc(vt, DORDER_MOVE, __camVtolExitPosition.x,
+					__camVtolExitPosition.y);
 				break;
 			}
 		}
@@ -2668,8 +2699,8 @@ const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
 const SYNAPTICS_ACTIVATED = "synplnk.ogg";
 const UNIT_ABSORBED = "untabsrd.ogg";
 const UNIT_NEUTRALIZE = "untnut.ogg";
-var __lastNexusHit;
-var __nexusActivated;
+var __camLastNexusAttack;
+var __camNexusActivated;
 
 //Play a random laugh.
 function camNexusLaugh()
@@ -2745,17 +2776,17 @@ function camHackIntoPlayer(player, to)
      {
           to = NEXUS;
      }
-     if (!camDef(__lastNexusHit))
+     if (!camDef(__camLastNexusAttack))
      {
           lastNexusHit = 0;
      }
 
 	//HACK: Seems HQ can not be donated yet so destroy it for now.
      var tmp = camRand(2) ? enumDroid(player) : enumStruct(player).filter(function(s) { return (s.status === BUILT); });
-	if (!__lastNexusHit || (gameTime > (__lastNexusHit + 5000)) && (camRand(101) <= 25))
+	if (!__camLastNexusAttack || (gameTime > (__camLastNexusAttack + 5000)) && (camRand(101) <= 25))
      {
-		var obj = !__lastNexusHit ? enumStruct(player, HQ)[0] : tmp[camRand(tmp.length)];
-		__lastNexusHit = gameTime;
+		var obj = !__camLastNexusAttack ? enumStruct(player, HQ)[0] : tmp[camRand(tmp.length)];
+		__camLastNexusAttack = gameTime;
 		if (!camDef(obj))
 			return;
 		camTrace("stealing object: " + obj.name);
@@ -2777,12 +2808,12 @@ function camHackIntoPlayer(player, to)
 
 function camSetNexusState(flag)
 {
-	__nexusActivated = flag;
+	__camNexusActivated = flag;
 }
 
 function camGetNexusState()
 {
-	return __nexusActivated;
+	return __camNexusActivated;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2928,14 +2959,14 @@ function cam_eventStartLevel()
 	__camArtifacts = {};
 	__camNumEnemyBases = 0;
 	__camEnemyBases = {};
-	__vtolPlayer = 0;
-	__vtolStartPosition = {};
-	__vtolTemplates = {};
-	__vtolExitPosition = {};
-	__vtolTimer = 0;
-	__disableVtolSpawn = false;
-	__lastNexusHit = 0;
-	__nexusActivated = false;
+	__camVtolPlayer = 0;
+	__camVtolStartPosition = {};
+	__camVtolTemplates = {};
+	__camVtolExitPosition = {};
+	__camVtolTimer = 0;
+	__camVtolSpawnActive = false;
+	__camLastNexusAttack = 0;
+	__camNexusActivated = false;
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
@@ -2962,7 +2993,7 @@ function cam_eventDestroyed(obj)
 		__camCheckDeadTruck(obj);
 
 	//Nexus neutralize sounds.
-	if (__nexusActivated && (camRand(101) < 35) && (obj.player === CAM_HUMAN_PLAYER))
+	if (__camNexusActivated && (camRand(101) < 35) && (obj.player === CAM_HUMAN_PLAYER))
 	{
 		var snd;
 		if (obj.type === STRUCTURE)
@@ -3086,7 +3117,7 @@ function cam_eventGameLoaded()
 //Plays Nexus sounds if nexusActivated is true.
 function cam_eventObjectTranfer(obj, from)
 {
-	if ((from === CAM_HUMAN_PLAYER) && __nexusActivated)
+	if ((from === CAM_HUMAN_PLAYER) && __camNexusActivated)
 	{
 		var snd;
 		if (obj.type === STRUCTURE)

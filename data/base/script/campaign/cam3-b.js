@@ -64,25 +64,11 @@ function eventVideoDone(flag)
 	}
 }
 
-//VTOL units stop coming when the Nexus HQ is destroyed.
-function checkNexusHQ()
-{
-	if(getObject("NXCommandCenter") === null)
-	{
-		camToggleVtolSpawn();
-	}
-	else
-	{
-		queue("checkNexusHQ", 8000);
-	}
-}
-
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxmheapv, nxmtherv, nxlscouv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000)); //2 min
-	checkNexusHQ();
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), "NXCommandCenter"); //2 min
 }
 
 function enableAllFactories()
@@ -226,8 +212,6 @@ function eventStartLevel()
 	const GAMMA_POWER = camChangeOnDiff(60000); //20000
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
 
      camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
 	setMissionTime(MISSION_TIME);
@@ -236,7 +220,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setPower(NEXUS_POWER, NEXUS);
-	setPower(NEXUS_POWER, GAMMA);
+	setPower(GAMMA_POWER, GAMMA);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);

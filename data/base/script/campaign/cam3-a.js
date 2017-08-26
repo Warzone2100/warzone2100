@@ -105,7 +105,7 @@ function setHeroUnits()
 {
 	const DROID_EXP = 512;
 	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
-		return !camIsSystemDroid(dr);
+		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
 	});
 
 	for (var j = 0, i = droids.length; j < i; ++j)
@@ -168,17 +168,11 @@ function sendPlayerTransporter()
 	queue("sendPlayerTransporter", 300000); //5 min
 }
 
-//VTOL units stop coming when the Nexus HQ is destroyed.
-function checkNexusHQ()
-{
-	(getObject("NXCommandCenter") === null) ? camToggleVtolSpawn() : queue("checkNexusHQ", 8000);
-}
-
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxlneedv, nxlscouv, nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(420000)); //7 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(420000), "NXCommandCenter"); //7 min
 	checkNexusHQ();
 }
 
@@ -218,7 +212,6 @@ function groupPatrolNoTrigger()
 //Build defenses.
 function truckDefense()
 {
-	var truck = enumDroid(NEXUS, DROID_CONSTRUCT);
 	if(enumDroid(NEXUS, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 

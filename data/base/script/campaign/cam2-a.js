@@ -2,6 +2,7 @@ include("script/campaign/transitionTech.js");
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const TRANSPORT_LIMIT = 4;
 var index; //Number of transport loads sent into the level
 
 
@@ -88,8 +89,6 @@ function sendCOTransporter()
 //from the main menu. Otherwise a player can just bring in there Alpha units
 function sendPlayerTransporter()
 {
-	const TRANSPORT_LIMIT = 4;
-
 	if(!camDef(index))
 	{
 		index = 0;
@@ -116,7 +115,6 @@ function sendPlayerTransporter()
 		}
 	);
 
-	index = index + 1;
 	queue("sendPlayerTransporter", 300000); //5 min
 }
 
@@ -137,24 +135,10 @@ function mapEdgeDroids()
 	queue("mapEdgeDroids", camChangeOnDiff(420000)); //7 min
 }
 
-//Stop VTOLs from coming if HQ is destroyed.
-function checkCollectiveHQ()
-{
-	if(getObject("COCommandCenter") === null)
-	{
-		camToggleVtolSpawn();
-	}
-	else
-	{
-		queue("checkCollectiveHQ", 8000);
-	}
-}
-
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(300000)); //5 min
-	checkCollectiveHQ();
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(300000), "COCommandCenter"); //5 min
 }
 
 function groupPatrol()
@@ -182,7 +166,6 @@ function groupPatrol()
 //Build defenses around oil resource
 function truckDefense()
 {
-	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
 	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
@@ -231,7 +214,7 @@ function setUnitRank()
 	const DROID_EXP = 32;
 	const MIN_TO_AWARD = 16;
 	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
-		return !camIsSystemDroid(dr);
+		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
 	});
 
 	for (var j = 0, i = droids.length; j < i; ++j)
@@ -250,6 +233,17 @@ function eventTransporterLanded(transport)
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
 		camCallOnce("setUnitRank");
+
+		if (!camDef(index))
+		{
+			index = 0;
+		}
+
+		index = index + 1;
+		if (index === TRANSPORT_LIMIT)
+		{
+			setReinforcementTime(LZ_COMPROMISED_TIME); // Stop any more transports
+		}
 	}
 }
 
@@ -316,7 +310,7 @@ function eventStartLevel()
 	queue("secondVideo", 12000); // 12 sec
 	queue("truckDefense", 15000);// 15 sec.
 	queue("sendCOTransporter", 30000); //30 sec
-	queue("groupPatrol", 60000); // 60 sec
-	queue("vtolAttack", 300000); //5 min
-	queue("mapEdgeDroids", 420000); //7 min
+	queue("groupPatrol", camChangeOnDiff(60000)); // 60 sec
+	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
+	queue("mapEdgeDroids", camChangeOnDiff(420000)); //7 min
 }

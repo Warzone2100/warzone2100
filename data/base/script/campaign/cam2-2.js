@@ -4,20 +4,20 @@ include("script/campaign/templates.js");
 
 const warning = "pcv632.ogg"; // Collective commander escaping
 const COLLEVTIVE_RES = [
-		"R-Defense-WallUpgrade03", "R-Struc-Materials04",
-		"R-Struc-Factory-Upgrade04", "R-Struc-Factory-Cyborg-Upgrade04",
-		"R-Vehicle-Engine04", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
-		"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
-		"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
-		"R-Wpn-Cannon-ROF02", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
-		"R-Wpn-MG-Damage06", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-		"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
-		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-		"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
-		"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
-		"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy01",
-		"R-Wpn-Howitzer-Damage01", "R-Wpn-RocketSlow-ROF03",
+	"R-Defense-WallUpgrade03", "R-Struc-Materials04",
+	"R-Struc-Factory-Upgrade04", "R-Struc-Factory-Cyborg-Upgrade04",
+	"R-Vehicle-Engine04", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
+	"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
+	"R-Wpn-Cannon-ROF02", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
+	"R-Wpn-MG-Damage06", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
+	"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
+	"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
+	"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy01",
+	"R-Wpn-Howitzer-Damage01", "R-Wpn-RocketSlow-ROF03",
 ];
 var commandGroup;
 
@@ -96,30 +96,15 @@ camAreaEvent("failZone", function(droid)
 		resetLabel("failZone");
 });
 
-//Stop VTOLs from coming if HQ is destroyed.
-function checkCollectiveHQ()
-{
-	if(getObject("COCommandCenter") === null)
-	{
-		camToggleVtolSpawn();
-	}
-	else
-	{
-		queue("checkCollectiveHQ", 8000);
-	}
-}
-
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colatv, colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, 120000);
-	checkCollectiveHQ();
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(120000), "COCommandCenter");
 }
 
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	var truck = enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT);
 	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
@@ -171,7 +156,7 @@ function eventStartLevel()
 		"COCommander": { tech: "R-Wpn-RocketSlow-Accuracy03" },
 	});
 
-	setPower(camChangeOnDiff(12000, true), THE_COLLECTIVE);
+	setPower(camChangeOnDiff(40000, true), THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLEVTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

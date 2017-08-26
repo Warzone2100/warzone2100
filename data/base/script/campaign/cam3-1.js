@@ -2,15 +2,15 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NEXUS_RES = [
-		"R-Sys-Engineering03", "R-Defense-WallUpgrade07",
-		"R-Struc-Materials07", "R-Struc-Factory-Upgrade06",
-		"R-Struc-Factory-Cyborg-Upgrade06", "R-Struc-VTOLFactory-Upgrade06",
-		"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals06",
-		"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
-		"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
-		"R-Wpn-Bomb-Accuracy03", "R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01",
-		"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
-		"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade07",
+	"R-Struc-Materials07", "R-Struc-Factory-Upgrade06",
+	"R-Struc-Factory-Cyborg-Upgrade06", "R-Struc-VTOLFactory-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals06",
+	"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
+	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
+	"R-Wpn-Bomb-Accuracy03", "R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01",
+	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
+	"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
 ];
 var launchTimes;
 var detTimes;
@@ -77,24 +77,11 @@ function eventVideoDone()
 	}
 }
 
-//VTOL units stop coming when the Nexus HQ is destroyed.
-function checkNexusHQ()
-{
-	if(getObject("NXCommandCenter") === null)
-	{
-		camToggleVtolSpawn();
-	}
-	else
-	{
-		queue("checkNexusHQ", 8000);
-	}
-}
-
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxlscouv, nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000)); //5 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
 	checkNexusHQ();
 }
 
