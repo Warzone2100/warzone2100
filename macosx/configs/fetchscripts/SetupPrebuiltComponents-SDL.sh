@@ -1,12 +1,12 @@
 #!/bin/sh
 
-DirectorY="SDL-1.2.15"
-OutDir="SDL"
-FileName="SDL-1.2.15.tgz"
-BuiltDLP="http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/SDL-1.2.15.tgz"
-MD5Sum="11191d1d17befc3a2ddc9065effacfac"
+DirectorY="SDL-2.0.5"
+OutDir="SDL2"
+FileName="SDL2-2.0.5.dmg"
+BuiltDLP="https://www.libsdl.org/release/SDL2-2.0.5.dmg"
+SHA256Sum="09309e5af6739ce91e8e5db443604a0d0d85e0b728652423ba1a00e26363c30c"
 
-configs/FetchPrebuilt.sh "${DirectorY}" "${OutDir}" "${FileName}" "${BuiltDLP}" "${MD5Sum}"
+configs/FetchPrebuilt.sh "${DirectorY}" "${OutDir}" "${FileName}" "${BuiltDLP}" "${SHA256Sum}" "-dmg"
 exit ${?}
 
-# tar -czf SDL-1.2.15.tgz --exclude '.DS_Store' SDL-1.2.15
+# tar -czf SDL-2.0.5.tgz --exclude '.DS_Store' SDL-2.0.5

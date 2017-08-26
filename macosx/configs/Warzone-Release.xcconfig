@@ -6,6 +6,7 @@
 GCC_OPTIMIZATION_LEVEL = 2
 BUILD_PREPROCESSOR_DEFINITIONS = $(inherited)
 
+// Release builds should have stack-protector enabled
 BuildDependentFlagsForCandCpp = -fstack-protector
 
 // Build setting dependent warnings

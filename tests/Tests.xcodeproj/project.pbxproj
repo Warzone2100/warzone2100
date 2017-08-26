@@ -39,7 +39,6 @@
 		43E700B514F9852E00D419C5 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008B14F9823C00D419C5 /* PhysFS.framework */; };
 		43E700B614F9852F00D419C5 /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008914F9823C00D419C5 /* Png.framework */; };
 		43E700EA14F986B500D419C5 /* modeltest.c in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009714F9826C00D419C5 /* modeltest.c */; };
-		43E7010C14F988C400D419C5 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7FE8714F9823A00D419C5 /* QtCore.framework */; };
 		43E7010D14F988C500D419C5 /* QtScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7FE8814F9823A00D419C5 /* QtScript.framework */; };
 		43E7010E14F988CE00D419C5 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008B14F9823C00D419C5 /* PhysFS.framework */; };
 		43E7010F14F9891100D419C5 /* lint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009414F9826C00D419C5 /* lint.cpp */; };
@@ -49,6 +48,7 @@
 		43E7012814F98ADC00D419C5 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7008B14F9823C00D419C5 /* PhysFS.framework */; };
 		43E7012914F98AF800D419C5 /* qtscripttest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009914F9826C00D419C5 /* qtscripttest.cpp */; };
 		43E7012A14F98AFE00D419C5 /* lint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43E7009414F9826C00D419C5 /* lint.cpp */; };
+		BC32B0741F3D212C0046142A /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E7FE8714F9823A00D419C5 /* QtCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,13 +129,6 @@
 			remoteGlobalIDString = 02356D830BD3BB4100E9A019;
 			remoteInfo = Zlib;
 		};
-		43E7008414F9823C00D419C5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 43CCDD1B14BA474E00B21363;
-			remoteInfo = Fribidi;
-		};
 		43E7008614F9823C00D419C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
@@ -177,13 +170,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 97AEAB330E8C1B5200A10721;
 			remoteInfo = Theora;
-		};
-		43E7009214F9823C00D419C5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4366718213D1FD5600FE85BA;
-			remoteInfo = QuesoGLC;
 		};
 		43E700B114F9851500D419C5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -233,6 +219,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02DDA8B00BD3C2F20049AB60;
 			remoteInfo = PhysFS;
+		};
+		BC32B0701F3D20DE0046142A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCC95D101F3CE4D200A243A4;
+			remoteInfo = FreeType;
+		};
+		BC32B0721F3D20DE0046142A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43E7FE8A14F9823A00D419C5 /* Warzone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BC80238F1F3D032C001E75F8;
+			remoteInfo = Harfbuzz;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -295,7 +295,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43E7010C14F988C400D419C5 /* QtCore.framework in Frameworks */,
+				BC32B0741F3D212C0046142A /* QtCore.framework in Frameworks */,
 				43E7010D14F988C500D419C5 /* QtScript.framework in Frameworks */,
 				43E7010E14F988CE00D419C5 /* PhysFS.framework in Frameworks */,
 			);
@@ -410,14 +410,14 @@
 				43E7007F14F9823C00D419C5 /* MiniUPnPc.framework */,
 				43E7008114F9823C00D419C5 /* GLExtensionWrangler.framework */,
 				43E7008314F9823C00D419C5 /* Zlib.framework */,
-				43E7008514F9823C00D419C5 /* fribidi.framework */,
 				43E7008714F9823C00D419C5 /* Ogg.framework */,
 				43E7008914F9823C00D419C5 /* Png.framework */,
 				43E7008B14F9823C00D419C5 /* PhysFS.framework */,
 				43E7008D14F9823C00D419C5 /* Vorbis.framework */,
-				43E7008F14F9823C00D419C5 /* Gettext.framework */,
+				43E7008F14F9823C00D419C5 /* Libintl.framework */,
 				43E7009114F9823C00D419C5 /* Theora.framework */,
-				43E7009314F9823C00D419C5 /* QuesoGLC.framework */,
+				BC32B0711F3D20DE0046142A /* FreeType.framework */,
+				BC32B0731F3D20DE0046142A /* Harfbuzz.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -572,13 +572,6 @@
 			remoteRef = 43E7008214F9823C00D419C5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		43E7008514F9823C00D419C5 /* fribidi.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = fribidi.framework;
-			remoteRef = 43E7008414F9823C00D419C5 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		43E7008714F9823C00D419C5 /* Ogg.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -607,10 +600,10 @@
 			remoteRef = 43E7008C14F9823C00D419C5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		43E7008F14F9823C00D419C5 /* Gettext.framework */ = {
+		43E7008F14F9823C00D419C5 /* Libintl.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = Gettext.framework;
+			path = Libintl.framework;
 			remoteRef = 43E7008E14F9823C00D419C5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -621,11 +614,18 @@
 			remoteRef = 43E7009014F9823C00D419C5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		43E7009314F9823C00D419C5 /* QuesoGLC.framework */ = {
+		BC32B0711F3D20DE0046142A /* FreeType.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = QuesoGLC.framework;
-			remoteRef = 43E7009214F9823C00D419C5 /* PBXContainerItemProxy */;
+			path = FreeType.framework;
+			remoteRef = BC32B0701F3D20DE0046142A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BC32B0731F3D20DE0046142A /* Harfbuzz.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Harfbuzz.framework;
+			remoteRef = BC32B0721F3D20DE0046142A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -839,8 +839,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE2F14F97D2A00D419C5 /* maptest-Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -848,8 +846,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3014F97D2A00D419C5 /* maptest-Release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -857,20 +853,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(BUILT_PRODUCTS_DIR)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "";
 			};
 			name = StaticAnalyzer;
 		};
@@ -885,8 +869,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3114F97D2A00D419C5 /* maptest-StaticAnalyzer.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -894,7 +876,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3314F97D2A00D419C5 /* modeltest-Debug.xcconfig */;
 			buildSettings = {
-				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -902,7 +883,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3514F97D2A00D419C5 /* modeltest-StaticAnalyzer.xcconfig */;
 			buildSettings = {
-				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -910,7 +890,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3414F97D2A00D419C5 /* modeltest-Release.xcconfig */;
 			buildSettings = {
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -918,8 +897,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3814F97D2A00D419C5 /* qslint-Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(BUILT_PRODUCTS_DIR)\"";
 			};
 			name = Debug;
 		};
@@ -927,8 +905,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3A14F97D2A00D419C5 /* qslint-StaticAnalyzer.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(BUILT_PRODUCTS_DIR)\"";
 			};
 			name = StaticAnalyzer;
 		};
@@ -936,8 +913,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3914F97D2A00D419C5 /* qslint-Release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(BUILT_PRODUCTS_DIR)\"";
 			};
 			name = Release;
 		};
@@ -945,8 +921,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3C14F97D2A00D419C5 /* qtscripttest-Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -954,8 +928,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3E14F97D2A00D419C5 /* qtscripttest-StaticAnalyzer.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -963,8 +935,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3D14F97D2A00D419C5 /* qtscripttest-Release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -972,20 +942,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(BUILT_PRODUCTS_DIR)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "";
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -994,20 +953,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43E7FE3614F97D2A00D419C5 /* Project-All.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(BUILT_PRODUCTS_DIR)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "";
 			};
 			name = Release;
 		};

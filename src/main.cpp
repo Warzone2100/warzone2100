@@ -212,13 +212,7 @@ static void getPlatformUserDir(char *const tmpstr, size_t const size)
 	}
 	else
 #elif defined(WZ_OS_MAC)
-	FSRef fsref;
-	OSErr error = FSFindFolder(kUserDomain, kApplicationSupportFolderType, false, &fsref);
-	if (!error)
-	{
-		error = FSRefMakePath(&fsref, (UInt8 *) tmpstr, size);
-	}
-	if (!error)
+	if (cocoaGetApplicationSupportDir(tmpstr, size))
 	{
 		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
 	}
@@ -1074,7 +1068,12 @@ int realmain(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
+#ifndef WZ_OS_MAC
 	wzMainEventLoop();
+#else // WZ_OS_MAC
+	// On Mac, use special method of launching NSApplication properly
+	cocoaRunApplication(&wzMainEventLoop);
+#endif
 	saveConfig();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion

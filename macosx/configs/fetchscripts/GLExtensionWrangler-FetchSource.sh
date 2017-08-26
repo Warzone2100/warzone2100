@@ -1,11 +1,11 @@
 #!/bin/sh
 
-VerLib="1.10.0"
+VerLib="1.13.0"
 OutDir="glew"
 DirectorY="${OutDir}-${VerLib}"
 FileName="${DirectorY}.tgz"
 SourceDLP="http://downloads.sourceforge.net/project/glew/glew/${VerLib}/${FileName}"
-MD5Sum="2f09e5e6cb1b9f3611bcac79bc9c2d5d"
+SHA256Sum="aa25dc48ed84b0b64b8d41cdd42c8f40f149c37fa2ffa39cd97f42c78d128bc7"
 
-configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${MD5Sum}"
+configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${SHA256Sum}"
 exit ${?}
