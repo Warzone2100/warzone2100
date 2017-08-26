@@ -94,11 +94,6 @@
 #  define WZ_DATADIR "data"
 #endif
 
-#include <openssl/conf.h>
-#include <openssl/evp.h>
-#include <openssl/err.h>
-#include <openssl/rand.h>
-
 
 enum FOCUS_STATE
 {
@@ -788,10 +783,6 @@ void mainLoop()
 			}
 		realTimeUpdate(); // Update realTime.
 	}
-
-	// Feed a bit of randomness into libcrypto.
-	unsigned buf[] = {mouseX(), mouseY(), realTime, graphicsTime, gameTime, (unsigned) rand(), 4};  // http://xkcd.com/221/
-	RAND_add(buf, sizeof(buf), 1);
 }
 
 bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, const char *** const utfargv WZ_DECL_UNUSED) // explicitely pass by reference
@@ -848,23 +839,6 @@ int realmain(int argc, char *argv[])
 	int utfargc = argc;
 	const char **utfargv = (const char **)argv;
 	wzMain(argc, argv);		// init Qt integration first
-
-#if !defined(OPENSSL_API_COMPAT) || OPENSSL_API_COMPAT < 0x10100000L
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
-	ERR_load_crypto_strings();  // This is needed for descriptive error messages.
-	OpenSSL_add_all_algorithms();  // Don't actually use the EVP functions, so probably not needed.
-	OPENSSL_config(nullptr);  // What does this actually do?
-#pragma GCC diagnostic pop
-#else
-	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
-	OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS | OPENSSL_INIT_LOAD_CONFIG, nullptr);
-#endif
-
-#ifdef WZ_OS_WIN
-	RAND_screen();  // Uses a screenshot as a random seed, on systems lacking /dev/random.
-#endif
 
 #ifdef WZ_OS_MAC
 	cocoaInit();

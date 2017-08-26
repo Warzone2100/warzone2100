@@ -4,7 +4,7 @@ RUN apt-get -u update && apt-get -y install \
     autoconf automake autopoint bash bison bzip2 flex gettext\
     git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
     libtool libtool-bin libltdl-dev libssl-dev libxml-parser-perl make \
-    openssl p7zip-full patch perl pkg-config python ruby scons \
+    p7zip-full patch perl pkg-config python ruby scons \
     sed unzip wget xz-utils cmake asciidoc nsis ninja-build
 
 RUN git clone https://github.com/mxe/mxe.git

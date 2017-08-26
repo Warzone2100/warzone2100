@@ -66,7 +66,21 @@ public:
 	Sig sign(void const *data, size_t dataLen) const;
 	bool verify(Sig const &sig, void const *data, size_t dataLen) const;
 
+	// Exports the specified key (public / private) bytes as a Key (vector of uint8_t).
+	//
+	// For the public key, the format follows the ANSI X9.63 standard using a byte string of 0x04 || X || Y.
+	// (This is the format expected by OpenSSL's o2i_ECPublicKey function, and Apple's SecKeyCreateWithData
+	// function for EC public keys.)
+	//
+	// For the private key, the format is the DER-encoded ECPrivateKey SEQUENCE.
 	Key toBytes(Privacy privacy) const;
+
+	// Imports the specified (public / private) Key previously exported via toBytes().
+	//
+	// See the documentation for toBytes() for the expected format.
+	//
+	// If supplied the exported public key, the EcKey object supports verify.
+	// If supplied the exported private key, the EcKey object supports sign & verify.
 	void fromBytes(Key const &key, Privacy privacy);
 
 	static EcKey generate();

@@ -9,6 +9,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Source Files\micro-ecc">
+      <UniqueIdentifier>{24dc2be6-a296-40f5-ad4d-4bf88530006f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sha2">
+      <UniqueIdentifier>{85c5fd1a-5056-4e4f-bed9-ff02463e1004}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="crc.cpp">
@@ -61,6 +67,12 @@
     </ClCompile>
     <ClCompile Include="strres_parser.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\sha2\sha2.c">
+      <Filter>Source Files\sha2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\micro-ecc\uECC.c">
+      <Filter>Source Files\micro-ecc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +165,24 @@
     </ClInclude>
     <ClInclude Include="resource_parser.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\micro-ecc\uECC.h">
+      <Filter>Source Files\micro-ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\micro-ecc\uECC_vli.h">
+      <Filter>Source Files\micro-ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\micro-ecc\types.h">
+      <Filter>Source Files\micro-ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\sha2\sha2.h">
+      <Filter>Source Files\sha2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\sha2\brg_types.h">
+      <Filter>Source Files\micro-ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\sha2\brg_endian.h">
+      <Filter>Source Files\micro-ecc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

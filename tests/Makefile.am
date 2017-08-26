@@ -1,5 +1,5 @@
 AM_CPPFLAGS = $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) -I$(top_srcdir)/tools \
-	-I. -I$(top_srcdir)/lib/framework $(QT5_CFLAGS) $(LIBCRYPTO_CFLAGS) $(OPENGLC_CFLAGS) $(GLEW_CFLAGS)
+	-I. -I$(top_srcdir)/lib/framework $(QT5_CFLAGS) $(OPENGLC_CFLAGS) $(GLEW_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
@@ -18,7 +18,7 @@ check_PROGRAMS = maptest modeltest framework_linktest ivis_linktest
 #qtscripttest_LDADD = $(PHYSFS_LIBS) $(QT5_LIBS)
 
 framework_linktest_SOURCES = framework_linktest.cpp
-framework_linktest_LDADD = $(top_builddir)/lib/framework/libframework.a $(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
+framework_linktest_LDADD = $(top_builddir)/lib/framework/libframework.a $(PHYSFS_LIBS) $(LDFLAGS)
 
 ivis_linktest_SOURCES = ivis_linktest.cpp
 ivis_linktest_LDADD =
