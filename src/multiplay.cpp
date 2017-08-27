@@ -1152,10 +1152,18 @@ static void printchatmsg(const char *text, int from, bool team = false)
 {
 	char msg[MAX_CONSOLE_STRING_LENGTH];
 
-	sstrcpy(msg, NetPlay.players[from].name);		// name
-	sstrcat(msg, ": ");					// seperator
+	if (strlen(NetPlay.players[from].name) == 0)
+	{
+		// triggered in campaign and tutorials for prettier output
+		sstrcpy(msg, _("Commander"));
+	}
+	else
+	{
+		sstrcpy(msg, NetPlay.players[from].name);
+	}
+	sstrcat(msg, ": ");					// separator
 	sstrcat(msg, text);					// add message
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);		// display
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);	// display
 }
 
 // ////////////////////////////////////////////////////////////////////////////
