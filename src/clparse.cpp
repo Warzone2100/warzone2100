@@ -492,11 +492,14 @@ bool ParseCommandLine(int argc, const char **argv)
 			NetPlay.bComms = false;
 			bMultiPlayer = false;
 			bMultiMessages = false;
-			NetPlay.players[0].allocated = true;
 			for (int i = 0; i < MAX_PLAYERS; i++)
 			{
 				NET_InitPlayer(i, true, false);
 			}
+
+			//NET_InitPlayer deallocates Player 0, who must be allocated so that a later invocation of processDebugMappings does not trigger DEBUG mode
+			NetPlay.players[0].allocated = true;
+
 			if (!strcmp(token, "CAM_1A") || !strcmp(token, "CAM_2A") || !strcmp(token, "CAM_3A"))
 			{
 				game.type = CAMPAIGN;

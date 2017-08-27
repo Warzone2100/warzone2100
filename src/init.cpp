@@ -741,7 +741,7 @@ void systemShutdown()
 
 	shutdownEffectsSystem();
 	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".
-	keyClearMappings();
+	keyMappings.clear();
 
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();
@@ -834,9 +834,7 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	// keymappings
-	// clear out any existing mappings
-	keyClearMappings();
+	// reinitialise key mappings
 	keyInitMappings(false);
 
 	// Set the default uncoloured cursor here, since it looks slightly
@@ -1098,8 +1096,7 @@ bool stageTwoInitialise()
 		return false;
 	}
 
-	// keymappings
-	keyClearMappings();
+	// reinitialise key mappings
 	keyInitMappings(false);
 
 	// Set the default uncoloured cursor here, since it looks slightly

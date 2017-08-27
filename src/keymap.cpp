@@ -268,7 +268,6 @@ void keyInitMappings(bool bForceDefaults)
 		processDebugMappings(n, false);
 	}
 
-
 	for (unsigned i = 0; i < NUM_QWERTY_KEYS; i++)
 	{
 		qwertyKeyMappings[i].psMapping = nullptr;
@@ -519,14 +518,6 @@ KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode)
 	});
 	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
-
-// ----------------------------------------------------------------------------------
-/* clears the mappings list and frees the memory */
-void keyClearMappings()
-{
-	keyMappings.clear();
-}
-
 
 // ----------------------------------------------------------------------------------
 /* Removes a mapping specified by a pointer */

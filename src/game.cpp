@@ -1765,6 +1765,26 @@ static void setIniDroidOrder(WzConfig &ini, QString const &key, DroidOrder const
 	setIniStructureStats(ini, key + "/stats", order.psStats);
 }
 
+static void allocatePlayers()
+{
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
+		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
+		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
+		if (saveGameData.sGame.skDiff[i] == UBYTE_MAX || (game.type == CAMPAIGN && i == 0))
+		{
+			NetPlay.players[i].allocated = true;
+			//processDebugMappings ensures game does not start in DEBUG mode
+			processDebugMappings(i, false);
+		}
+		else
+		{
+			NetPlay.players[i].allocated = false;
+		}
+	}
+}
+
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
@@ -1985,20 +2005,8 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			bMultiMessages	= bMultiPlayer;
 
 			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
-			for (i = 0; i < MAX_PLAYERS; i++)
-			{
-				NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
-				NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
-				sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
-				if (saveGameData.sGame.skDiff[i] == UBYTE_MAX || (game.type == CAMPAIGN && i == 0))
-				{
-					NetPlay.players[i].allocated = true;
-				}
-				else
-				{
-					NetPlay.players[i].allocated = false;
-				}
-			}
+
+			allocatePlayers();
 
 			if (bMultiPlayer)
 			{
@@ -3738,20 +3746,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 			powerSaved[i].extractedPower = saveGameData.power[i].extractedPower;
 		}
 
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			NetPlay.players[player].ai = saveGameData.sNetPlay.players[player].ai;
-			NetPlay.players[player].difficulty = saveGameData.sNetPlay.players[player].difficulty;
-			sstrcpy(NetPlay.players[player].name, saveGameData.sNetPlay.players[player].name);
-			if ((saveGameData.sGame.skDiff[player] == UBYTE_MAX || game.type == CAMPAIGN) && player == 0)
-			{
-				NetPlay.players[player].allocated = true;
-			}
-			else
-			{
-				NetPlay.players[player].allocated = false;
-			}
-		}
+		allocatePlayers();
 
 		IsScenario = false;
 		//copy the level name across

@@ -55,7 +55,6 @@ struct KEY_MAPPING
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name);
 KEY_MAPPING *keyGetMappingFromFunction(void (*function)());
 KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode);
-void keyClearMappings();
 void keyProcessMappings(bool bExclude);
 void keyInitMappings(bool bForceDefaults);
 KEY_CODE getLastSubKey();

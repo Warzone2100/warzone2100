@@ -191,7 +191,7 @@ bool runKeyMapEditor()
 	}
 	if (id == KM_DEFAULT)
 	{
-		keyClearMappings();
+		// reinitialise key mappings
 		keyInitMappings(true);
 		widgDelete(psWScreen, FRONTEND_BACKDROP); // readd the widgets
 		startKeyMapEditor(false);
