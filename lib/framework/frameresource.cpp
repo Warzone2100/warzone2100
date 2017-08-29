@@ -428,7 +428,7 @@ static inline RES_DATA *resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 
 
 /*!
- * check if given file exists in a locale dependend subdir
+ * check if given file exists in a locale dependent subdir
  * if so, modify given fileName to hold the locale dep. file,
  * else do not change given fileName
  * \param[in,out] fileName must be at least PATH_MAX bytes large

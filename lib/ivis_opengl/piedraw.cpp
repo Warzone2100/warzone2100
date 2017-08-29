@@ -187,7 +187,7 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 		pie_SetFogStatus(true);
 	}
 
-	/* Set tranlucency */
+	/* Set translucency */
 	if (pieFlag & pie_ADDITIVE)
 	{
 		pie_SetRendMode(REND_ADDITIVE);

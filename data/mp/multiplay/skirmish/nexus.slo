@@ -98,7 +98,7 @@ public	STRUCTURESTAT	vtolTarget[10],rebuildStat[TECHS][2];
 private int				baseX,baseY,minx,miny,maxx,maxy;
 public	int				numStructs,numIncendrys,numDefStructs,numExtraStructs[TECHS],numWallWeaps,numBaseStruct,numLightCyborgs,numFundamental;
 private	STRUCTURESTAT	structChoice[5];
-public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],extraStructs[TECHS][6],wallWeaps[11];
+public	STRUCTURESTAT	incendiaries[8],structs[13],defStructs[26],extraStructs[TECHS][6],wallWeaps[11];
 public	STRUCTURESTAT	sensorTower,wall,cornerWall,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
 						vtolDefStruct[5],vtolPad,vtolFactory,uplink,baseStruct[8];
 public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
@@ -183,7 +183,7 @@ trigger repairDroidsTr				(every, 2600);
 trigger basedetailsTr				(every, 600	);
 trigger buildDerrickTr				(every, 80	);
 trigger buildOilDefenseOrRetreatTr	(every, 120	);
-trigger incendryTr					(every, 250 );
+trigger incendiaryTr					(every, 250 );
 trigger buildPowerGeneratorsTr		(every, 80	);
 trigger buildBaseTr					(every, 150	);
 trigger finishStructsTr				(every, 210);
@@ -611,7 +611,7 @@ function bool aiResponsibleForPlayer(int _player)
 }
 
 /////////////////////////////////////////////////////////////////////
-// keep details about the size and postion of the ai players base
+// keep details about the size and position of the ai players base
 event basedetails(basedetailsTr)
 {
 	// clear old extremities.
@@ -738,7 +738,7 @@ event buildDerrick(buildDerrickTr)
 		}
 		if (_closestOil != NULLOBJECT)
 		{
-			orderDroidStatsLoc(droid, DORDER_BUILD, derrick, _closestOil.x, _closestOil.y); // build a derick
+			orderDroidStatsLoc(droid, DORDER_BUILD, derrick, _closestOil.x, _closestOil.y); // build a derrick
 			if (idleGroup(buildGroup) > 0)
 			{
 				setEventTrigger(buildDerrick, slowloadTr);	// do it again for next droid
@@ -843,7 +843,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 
 /////////////////////////////////////////////////////////////////////
 //mortar etc.. rules. build sensor towers and emplacements.
-event incendry(incendryTr)
+event incendiary(incendiaryTr)
 {
 	if (not isStructureAvailable(sensorTower, me))
 	{
@@ -926,7 +926,7 @@ event incendry(incendryTr)
 	}
 	else
 	{
-		// find a sensor tower with least incencdry structs around it..
+		// find a sensor tower with least incendiary structs around it..
 		buildX = 0;
 		buildY = 0;
 
@@ -935,12 +935,12 @@ event incendry(incendryTr)
 		count = 999;
 		while(structure != NULLOBJECT)
 		{
-			// count incendrys near this tower.
+			// count incendiaries near this tower.
 			result = 0;
 			count2 = 0;
 			while(count2 < numIncendrys)
 			{
-				structure2 = structureBuiltInRange(incendrys[count2], structure.x, structure.y,(4*128), me);
+				structure2 = structureBuiltInRange(incendiaries[count2], structure.x, structure.y,(4*128), me);
 				if(structure2 != NULLOBJECT)
 				{
 					result = result + 1;
@@ -965,7 +965,7 @@ event incendry(incendryTr)
 			result = 99;
 			while(count >= 0 )
 			{
-				if(isStructureAvailable(incendrys[count],me))
+				if(isStructureAvailable(incendiaries[count],me))
 				{
 					result = count;
 					count = -1;
@@ -977,22 +977,22 @@ event incendry(incendryTr)
 			}
 
 
-			// find a unit and build an incendry device.
+			// find a unit and build an incendiary device.
 			if(result != 99)
 			{
-				boolResult = pickStructLocation(incendrys[result], ref buildX, ref buildY,me);	// pick spot.
+				boolResult = pickStructLocation(incendiaries[result], ref buildX, ref buildY,me);	// pick spot.
 				if(boolResult == TRUE)
 				{
 					initIterateGroup(buildGroup);
 					droid = iterateGroup(buildGroup);
 
-					boolResult = (numBuildSameBuilding(incendrys[result], buildX, buildY) > 0);	//anyone building there already?
+					boolResult = (numBuildSameBuilding(incendiaries[result], buildX, buildY) > 0);	//anyone building there already?
 
 					while(droid != NULLOBJECT and (not boolResult))
 					{
 						if ((droid.order == DORDER_NONE or droid.order == DORDER_RTB) and droidCanReach(droid, buildX, buildY))
 						{
-							orderDroidStatsLoc(droid, DORDER_BUILD,incendrys[result], buildX,buildY);
+							orderDroidStatsLoc(droid, DORDER_BUILD,incendiaries[result], buildX,buildY);
 							boolResult = TRUE;	//only 1 truck
 						}
 						droid = iterateGroup(buildGroup);
@@ -1310,7 +1310,7 @@ event newfortify(fortifyTr)
 	{
 		if (droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droid.order != DORDER_HELPBUILD)
 		{
-			boolResult = TRUE;					// dont do this again!
+			boolResult = TRUE;					// don't do this again!
 
 			tempx = baseX;
 			tempy = baseY;
@@ -2491,7 +2491,7 @@ event difficultyModifier(difficultyModifierTr)
 /////////////////////////////////////////////////////////////////////
 // vtols.
 /////////////////////////////////////////////////////////////////////
-// build vtol strucutures.
+// build vtol structures.
 event vtolStructs(inactive)
 {
 	local	int		_numVtolFacs,_numRearmPads;
@@ -3015,7 +3015,7 @@ function void shutDownAI()
 	setEventTrigger(basedetails,	inactive);
 	setEventTrigger(buildDerrick,	inactive);
 	setEventTrigger(buildOilDefenseOrRetreat,	inactive);
-	setEventTrigger(incendry,	inactive);
+	setEventTrigger(incendiary,	inactive);
 	setEventTrigger(buildPowerGenerators,	inactive);
 	setEventTrigger(buildBase,	inactive);
 	setEventTrigger(buildExpand,inactive);
@@ -3071,7 +3071,7 @@ function void reassignAI()
 	setEventTrigger(basedetails,basedetailsTr);
 	setEventTrigger(buildDerrick,buildDerrickTr);
 	setEventTrigger(buildOilDefenseOrRetreat,buildOilDefenseOrRetreatTr);
-	setEventTrigger(incendry,incendryTr);
+	setEventTrigger(incendiary,incendiaryTr);
 	setEventTrigger(buildPowerGenerators,buildPowerGeneratorsTr);
 	setEventTrigger(buildBase,buildBaseTr );
 	setEventTrigger(buildExpand,buildExpandTr );
@@ -3350,7 +3350,7 @@ function void helpPlayer(int _playerToHelp, int _helpX, int _helpY)
 	defendLocation(_helpX, _helpY, tHelpTimeout, (_playerToHelp == me));
 }
 
-/* Returns a random affirmative responce */
+/* Returns a random affirmative response */
 function string m_affirmative()
 {
 	local int _rnd;

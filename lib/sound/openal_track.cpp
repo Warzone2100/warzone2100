@@ -545,7 +545,7 @@ TRACK *sound_LoadTrackFromFile(const char *fileName)
 		return nullptr;
 	}
 
-	// Initialize everyting (except for the filename) to zero
+	// Initialize everything (except for the filename) to zero
 	memset(pTrack, 0, sizeof(TRACK));
 
 	// Set filename pointer; if the filename (as returned by
@@ -965,7 +965,7 @@ void sound_PauseStream(AUDIO_STREAM *stream)
 {
 	ALint state;
 
-	// To be sure we won't go mutilating this OpenAL source, check wether
+	// To be sure we won't go mutilating this OpenAL source, check whether
 	// it's playing first.
 	alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
 	sound_GetError();
@@ -987,7 +987,7 @@ void sound_ResumeStream(AUDIO_STREAM *stream)
 {
 	ALint state;
 
-	// To be sure we won't go mutilating this OpenAL source, check wether
+	// To be sure we won't go mutilating this OpenAL source, check whether
 	// it's paused first.
 	alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
 	sound_GetError();

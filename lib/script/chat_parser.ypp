@@ -312,7 +312,10 @@ R_ADDRESSED_COMMAND:					R_PLAYER_LIST _T_COLON R_COMMAND			/* "Red, Black: atta
 											//{console("RULE: player list; command");}
 									|	R_PLAYER_LIST _T_COMMA R_COMMAND			/* "Red, Black, attack yellow" */
 											//{console("RULE: player list, command");}
-									|	R_PLAYER_LIST R_COMMAND						/* No delimeter: "Red, Black attack yellow" */
+									|
+									R_PLAYER_LIST
+									R_COMMAND
+									/* No delimiter: "Red, Black attack yellow" */
 											//{console("RULE: player list command");}
 									;
 
@@ -412,7 +415,10 @@ R_PLAYER_LIST:					R_PLAYER
 									{
 										chat_store_player(chat_msg.numCommands, $1);		/* Remember this player was addressed in current command */
 									}
-								|	R_PLAYER_LIST R_PLAYER			/* without any delimeters: "yellow black red" */
+								|
+								R_PLAYER_LIST
+								R_PLAYER
+								/* without any delimiters: "yellow black red" */
 									{
 										chat_store_player(chat_msg.numCommands, $2);
 									}

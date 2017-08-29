@@ -586,7 +586,7 @@ bool socketReadDisconnected(Socket *sock)
  * Similar to write(2) with the exception that this function will block until
  * <em>all</em> data has been written or an error occurs.
  *
- * @return @c size when succesful or @c SOCKET_ERROR if an error occurred.
+ * @return @c size when successful or @c SOCKET_ERROR if an error occurred.
  */
 ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCount)
 {
@@ -753,7 +753,7 @@ void deleteSocketSet(SocketSet *set)
 /**
  * Add the given socket to the given socket set.
  *
- * @return true if @c socket is succesfully added to @set.
+ * @return true if @c socket is successfully added to @set.
  */
 void SocketSet_AddSocket(SocketSet *set, Socket *socket)
 {
@@ -918,7 +918,7 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
  *                milliseconds. When zero this function blocks until success or
  *                an error occurs.
  *
- * @c return @c size when succesful, less than @c size but at least zero (0)
+ * @c return @c size when successful, less than @c size but at least zero (0)
  * when the other end disconnected or a timeout occurred. Or @c SOCKET_ERROR if
  * an error occurred.
  */

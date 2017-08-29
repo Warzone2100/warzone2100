@@ -623,7 +623,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 */
 	assert(pid == wpid);
 
-	/* Check wether our child (which presumably was GDB, but doesn't
+	/* Check whether our child (which presumably was GDB, but doesn't
 	 * necessarily have to be) didn't terminate normally or had a non-zero
 	 * return code.
 	 */

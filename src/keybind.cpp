@@ -106,7 +106,7 @@ static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what us
 /* Support functions to minimise code size */
 static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE State);
 
-/** A function to determine wether we're running a multiplayer game, not just a
+/** A function to determine whether we're running a multiplayer game, not just a
  *  single player campaign or a skirmish game.
  *  \return false if this is a skirmish or single player game, true if it is a
  *          multiplayer game.
@@ -580,7 +580,7 @@ void	kf_SetToughUnitsLevel()
 	sendTextMessage(cmsg, true);
 }
 // --------------------------------------------------------------------------
-void kf_ToggleFPS() //This shows *just FPS* and is always visable (when active) -Q.
+void kf_ToggleFPS() //This shows *just FPS* and is always visible (when active) -Q.
 {
 	// Toggle the boolean value of showFPS
 	showFPS = !showFPS;
@@ -1012,7 +1012,7 @@ void	kf_PitchBack()
 }
 
 // --------------------------------------------------------------------------
-/* Pitches camera foward */
+/* Pitches camera forward */
 void	kf_PitchForward()
 {
 	float pitchAmount = realTimeAdjustedIncrement(MAP_PITCH_RATE);
@@ -1111,7 +1111,7 @@ void	kf_SelectGrouping(UDWORD	groupNumber)
 		Selected = activateGroup(selectedPlayer, groupNumber);
 	}
 
-	/* play group audio but only if they wern't already selected - AM */
+	/* play group audio but only if they weren't already selected - AM */
 	if (Selected && !bAlreadySelected)
 	{
 		audio_QueueTrack(ID_SOUND_GROUP_0 + groupNumber);

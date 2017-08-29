@@ -102,7 +102,7 @@ WZ_DECL_PURE static inline size_t strnlen1(const char *string, size_t maxlen)
  * \param dest a pointer to the destination buffer
  * \param src the source string to copy into the \c dest buffer
  * \param size the buffer size (in bytes) of buffer \c dest
- * \return Length to string src, if >= size truncation occured
+ * \return Length to string src, if >= size truncation occurred
  */
 static inline size_t strlcpy(char *WZ_DECL_RESTRICT dest, const char *WZ_DECL_RESTRICT src, size_t size)
 {
@@ -139,7 +139,7 @@ static inline size_t strlcpy(char *WZ_DECL_RESTRICT dest, const char *WZ_DECL_RE
  * \param dest a pointer to the destination buffer
  * \param src the source string to copy into the \c dest buffer
  * \param size the buffer size (in bytes) of buffer \c dest
- * \return Length to string src + dest, if >= size truncation occured.
+ * \return Length to string src + dest, if >= size truncation occurred.
  */
 static inline size_t strlcat(char *WZ_DECL_RESTRICT dest, const char *WZ_DECL_RESTRICT src, size_t size)
 {

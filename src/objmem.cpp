@@ -927,7 +927,7 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 
 	player = psFlag->player;
 
-	//probably dont need to check mission list
+	//probably don't need to check mission list
 	for (i = 0; i < 2; ++i)
 	{
 		switch (i)

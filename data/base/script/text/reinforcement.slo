@@ -77,7 +77,7 @@ event loadTrans(inactive)
 //counts how many transport loads the player has brought in
 event countReinforcements(CALL_TRANSPORTER_LANDED, playerGroup, transPlayer)
 {
-	// count how many times the player's tranpsorter has landed
+	// count how many times the player's transporter has landed
 	if (transPlayer == player)
 	{
 		transCount = transCount + 1;

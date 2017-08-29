@@ -1412,7 +1412,7 @@ bool runGameOptionsMenu()
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
 
-// show a background piccy (currently used for version and mods labels)
+// show a background picture (currently used for version and mods labels)
 static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
 {
 	char modListText[MAX_STR_LENGTH] = "";
@@ -1516,7 +1516,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			iV_SetTextColour(WZCOL_YELLOW);
 		}
-		else														// dont highlight
+		else														// don't highlight
 		{
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 		}

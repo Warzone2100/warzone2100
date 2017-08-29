@@ -998,7 +998,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		SYSTEMTIME SystemTime;
 
 		GetLocalTime(&SystemTime);
-		rprintf(_T("Error occured on %s, %s %i, %i at %02i:%02i:%02i.\r\n\r\n"),
+		rprintf(_T("Error occurred on %s, %s %i, %i at %02i:%02i:%02i.\r\n\r\n"),
 		        lpDayOfWeek[SystemTime.wDayOfWeek],
 		        lpMonth[SystemTime.wMonth],
 		        SystemTime.wDay,
@@ -1144,7 +1144,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 		break;
 	}
 
-	// Now print information about where the fault occured
+	// Now print information about where the fault occurred
 	rprintf(_T(" at location %08x"), (DWORD) pExceptionRecord->ExceptionAddress);
 	if ((hModule = (HMODULE) GetModuleBase((DWORD) pExceptionRecord->ExceptionAddress)) && GetModuleFileName(hModule, szModule, sizeof(szModule)))
 	{

@@ -127,7 +127,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	pExist = keyFindMapping(metakey,  subkey);
 	if (pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
 	{
-		selectedKeyMap = nullptr;	// unhighlght selected.
+		selectedKeyMap = nullptr;	// unhighlight selected.
 		return false;
 	}
 
@@ -138,7 +138,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);
 
 	/* Cough if it's not there */
-	ASSERT_OR_RETURN(false, psMapping != nullptr, "Trying to patch a non-existant function mapping - whoop whoop!!!");
+	ASSERT_OR_RETURN(false, psMapping != nullptr, "Trying to patch a non-existent function mapping - whoop whoop!!!");
 
 	/* Now alter it to the new values */
 	psMapping->metaKeyCode = metakey;
@@ -149,7 +149,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	{
 		psMapping->altMetaKeyCode = alt;
 	}
-	selectedKeyMap = nullptr;	// unhighlght selected .
+	selectedKeyMap = nullptr;	// unhighlight selected .
 	return true;
 }
 
@@ -343,7 +343,7 @@ bool startKeyMapEditor(bool first)
 		kmList->addWidgetToLayout(button);
 	}
 
-	/* Stop when the right number or when aphabetically last - not sure...! */
+	/* Stop when the right number or when alphabetically last - not sure...! */
 	/* Go home... */
 	return true;
 }

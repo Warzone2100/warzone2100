@@ -55,7 +55,7 @@ LZX[1]		int		56	//coords of LZ in tile units
 LZY[1]		int		120	
 
 ReinforceTime	INT		-1	//-1 for no reinforcements
-timeLimit		INT		3000	//5mins for no time limit (needs to be done if previous misison had a time limit!)
+timeLimit		INT		3000	//5mins for no time limit (needs to be done if previous mission had a time limit!)
 //noTimeLimit	BOOL		TRUE	//don't use time limit as a fail in GenExp
 
 /* Transport exit and entry */

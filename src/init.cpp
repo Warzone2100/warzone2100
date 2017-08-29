@@ -856,7 +856,7 @@ bool frontendInitialise(const char *ResourceFile)
 
 bool frontendShutdown()
 {
-	debug(LOG_WZ, "== Shuting down frontend ==");
+	debug(LOG_WZ, "== Shutting down frontend ==");
 
 	saveConfig();// save settings to registry.
 
@@ -900,7 +900,7 @@ bool stageOneInitialise()
 	wzSceneEnd("Main menu loop");
 	wzSceneBegin("Main game loop");
 
-	// Initialise all globals and statics everwhere.
+	// Initialise all globals and statics everywhere.
 	if (!InitialiseGlobals())
 	{
 		return false;
@@ -1283,7 +1283,7 @@ bool stageThreeShutDown()
 
 	removeSpotters();
 
-	// There is an assymetry in scripts initialization and destruction, due
+	// There is an asymmetry in scripts initialization and destruction, due
 	// the many different ways scripts get loaded.
 	if (!shutdownScripts())
 	{

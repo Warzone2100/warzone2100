@@ -36,7 +36,7 @@ those bugs we require that you follow these rules:
       clicking "Details" in the crash error message)
       A self created backtrace is just as useful.
    2. Give as much information about what you were doing before the crash/bug
-      occured.
+      occurred.
    3. Try to reproduce the bug and add a description of the process to your bug-
       report.
    4. You may even upload save-games. These consist of one or two file(s) and

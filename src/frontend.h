@@ -150,11 +150,11 @@ enum
 	FRONTEND_TOPFORM,
 	FRONTEND_BOTFORM,
 	FRONTEND_LOGO,
-	FRONTEND_SIDETEXT,					// side-ee-ways text
-	FRONTEND_SIDETEXT1,					// side-ee-ways text
-	FRONTEND_SIDETEXT2,					// side-ee-ways text
-	FRONTEND_SIDETEXT3,					// side-ee-ways text
-	FRONTEND_SIDETEXT4,					// side-ee-ways text
+	FRONTEND_SIDETEXT,					// sideways text
+	FRONTEND_SIDETEXT1,					// sideways text
+	FRONTEND_SIDETEXT2,					// sideways text
+	FRONTEND_SIDETEXT3,					// sideways text
+	FRONTEND_SIDETEXT4,					// sideways text
 	FRONTEND_PASSWORDFORM,
 	FRONTEND_HYPERLINK,
 	FRONTEND_UPGRDLINK,

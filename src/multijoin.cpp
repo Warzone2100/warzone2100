@@ -195,7 +195,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	return;
 }
 
-// Reset visibilty, so a new player can't see the old stuff!!
+// Reset visibility, so a new player can't see the old stuff!!
 static void resetMultiVisibility(UDWORD player)
 {
 	UDWORD		owned;
@@ -474,7 +474,7 @@ void setupNewPlayer(UDWORD player)
 
 
 // While not the perfect place for this, it has to do when a HOST joins (hosts) game
-// unfortunatly, we don't get the message until after the setup is done.
+// unfortunately, we don't get the message until after the setup is done.
 void ShowMOTD()
 {
 	char buf[250] = { '\0' };

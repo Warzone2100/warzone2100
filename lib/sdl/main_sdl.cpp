@@ -795,7 +795,7 @@ void inputClearBuffer(void)
 }
 
 /* Return the next key press or 0 if no key in the buffer.
- * The key returned will have been remaped to the correct ascii code for the
+ * The key returned will have been remapped to the correct ascii code for the
  * windows key map.
  * All key presses are buffered up (including windows auto repeat).
  */

@@ -3019,7 +3019,7 @@ CALLBACK_SYMBOL asCallbackTable[] =
 /* The table of type equivalence (only user types allowed)
  * The format is :
  *
- *       <base type>  <num equivalents>  <eqivalent types>
+ *       <base type>  <num equivalents>  <equivalent types>
  *
  */
 TYPE_EQUIV asEquivTable[] =

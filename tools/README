@@ -3,7 +3,7 @@
 This directory (will) contain all sorts of Warzone 2100 related tools.
 
  * Each of these tools will have to be Warzone specific.
- * Every independend tool should have one directory of its own
+ * Every independent tool should have one directory of its own
  * No tool should depend on others for compilation or linking.
  * Each of these tools *must* have a "COPYING" file with it in its directory.
   - This file should contain the full licensing conditions applied to the entire tool.

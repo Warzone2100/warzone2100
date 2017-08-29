@@ -543,7 +543,7 @@ R-Wpn-MissileSlow-Damage03		_("HEAP Missile Warhead Mk3")
 R-Wpn-MissileSlow-ROF01			_("Improved Missile Loading System")
 
 //R-Wpn-Missile-ASM-AT			"*Missile-ASM-AT*"
-//R-Wpn-Misisile-ASM-BB			_("Devastator Missile")
+//R-Wpn-Missile-ASM-BB			_("Devastator Missile")
 //R-Wpn-Missile-SAM			"*R-Wpn-Missile-SAM*"
 
 

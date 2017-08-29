@@ -457,7 +457,7 @@ static bool groupAddObject(BASE_OBJECT *psObj, int groupId, QScriptEngine *engin
 //;; Describes a research item. The following properties are defined:
 //;; \begin{description}
 //;; \item[power] Number of power points needed for starting the research.
-//;; \item[points] Number of resarch points needed to complete the research.
+//;; \item[points] Number of research points needed to complete the research.
 //;; \item[started] A boolean saying whether or not this research has been started by current player or any of its allies.
 //;; \item[done] A boolean saying whether or not this research has been completed.
 //;; \item[name] A string containing the full name of the research.
@@ -2582,7 +2582,7 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{orderDroidBuild(droid, order, structure type, x, y[, direction])}
-//-- Give a droid an order to build someting at the given position. Returns true if allowed.
+//-- Give a droid an order to build something at the given position. Returns true if allowed.
 static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -5075,7 +5075,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		}
 		stats.setProperty("Propulsion", propbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
-		//== \item[Repair] Repair turrets (not used, incidentially, for repair centers)
+		//== \item[Repair] Repair turrets (not used, incidentally, for repair centers)
 		QScriptValue repairbase = engine->newObject();
 		for (int j = 0; j < numRepairStats; j++)
 		{
@@ -5262,7 +5262,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		}
 		node.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
-		//== \item[Repair] Repair turrets (not used, incidentially, for repair centers)
+		//== \item[Repair] Repair turrets (not used, incidentally, for repair centers)
 		QScriptValue repairbase = engine->newObject();
 		for (int j = 0; j < numRepairStats; j++)
 		{

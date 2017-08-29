@@ -263,7 +263,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet *socket_set, uint8_t *b
 			debug(LOG_NET, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), socket);
 		}
 
-		// an error occured, or the remote host has closed the connection.
+		// an error occurred, or the remote host has closed the connection.
 		if (socket_set != nullptr)
 		{
 			SocketSet_DelSocket(socket_set, socket);
@@ -1756,7 +1756,7 @@ static void NETcheckPlayers()
 		}
 		if (NetPlay.players[i].heartbeat == 0 && NetPlay.players[i].heartattacktime == 0)	// looks like they are dead
 		{
-			NetPlay.players[i].heartattacktime = realTime;		// mark when this occured
+			NetPlay.players[i].heartattacktime = realTime;		// mark when this occurred
 		}
 		else
 		{
@@ -2336,7 +2336,7 @@ static void NETallowJoining()
 		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 8))
 		    && recv_result != SOCKET_ERROR)
 		{
-			std::string rIP = "Incomming connection from:";
+			std::string rIP = "Incoming connection from:";
 			rIP.append(getSocketTextAddress(tmp_socket[i]));
 			NETlogEntry(rIP.c_str(), SYNC_FLAG, i);
 			// A 2.3.7 client sends a "list" command first, just drop the connection.
@@ -2809,7 +2809,7 @@ bool NETfindGame()
 	{
 		if (result == SOCKET_ERROR)
 		{
-			debug(LOG_NET, "Server socket ecountered error: %s", strSockError(getSockErr()));
+			debug(LOG_NET, "Server socket encountered error: %s", strSockError(getSockErr()));
 		}
 		else
 		{
@@ -2945,7 +2945,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 	result = ntohl(result);
 	if (result != ERROR_NOERROR)
 	{
-		debug(LOG_ERROR, "Receveid error %d", result);
+		debug(LOG_ERROR, "Received error %d", result);
 
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);

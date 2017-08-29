@@ -53,7 +53,7 @@
 static const int VIS_LEVEL_INC = 255 * 2;
 static const int VIS_LEVEL_DEC = 50;
 
-// integer amount to change visiblility this turn
+// integer amount to change visibility this turn
 static SDWORD			visLevelInc, visLevelDec;
 
 class SPOTTER
@@ -932,7 +932,7 @@ static inline void angle_check(int64_t *angletan, int positionSq, int height, in
 			// ( targetHeight ) = a * distance^2 + factor * distance
 			// ( height ) = a * position^2 + factor * position
 			//  "a" depends on angle, gravity and shooting speed.
-			//  luckily we dont need it for this at all, since
+			//  luckily we don't need it for this at all, since
 			// factor = tan(firing_angle)
 			current = ((int64_t)65536 * ((int64_t)distanceSq * (int64_t)height - (int64_t)positionSq * (int64_t)targetHeight))
 			          / ((int64_t)distanceSq * (int64_t)pos - (int64_t)dist * (int64_t)positionSq);

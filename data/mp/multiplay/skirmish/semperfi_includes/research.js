@@ -17,7 +17,7 @@ var lateGameTech = [
 var rocketTech = [
 	"R-Defense-Tower06", //mini-rocket pod tower
 	"R-Defense-WallTower06", // lancer hardpoint
-	"R-Defense-HvyA-Trocket", //Tank-killer rocket and emplacment (implies lancer)
+	"R-Defense-HvyA-Trocket", //Tank-killer rocket and emplacement (implies lancer)
 	"R-Wpn-Rocket-ROF03", // Rocket ROF
 	"R-Defense-MRL", // mrl emplacement
 	"R-Defense-IDFRocket",

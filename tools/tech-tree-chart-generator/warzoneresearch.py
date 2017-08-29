@@ -32,7 +32,7 @@ class Tech(object):
         self.name = name
         self.rawcosttime = rawcosttime
         self.prereqs = set()
-        self.dependants = set()
+        self.dependents = set()
         self._cumcost = None
 
     @property
@@ -137,7 +137,7 @@ def main():
             if prereq.startswith('CAM1'):  # Automatic stuff
                 continue
             techs[name].prereqs.add(techs[prereq])
-            techs[prereq].dependants.add(techs[name])
+            techs[prereq].dependents.add(techs[name])
 
     with open(PATH + NAMES) as names:
         for line in names:
@@ -229,8 +229,8 @@ def main():
                 edge.set_color(prereq.color)
             edge.set_style(style)
 
-            #edge.set_weight(str(20.0 / (len(tech.prereqs) + len(prereq.dependants))))
-            weight = 8.0 / 1.2**(len(prereq.dependants) + len(tech.prereqs) / 4)
+            #edge.set_weight(str(20.0 / (len(tech.prereqs) + len(prereq.dependents))))
+            weight = 8.0 / 1.2**(len(prereq.dependents) + len(tech.prereqs) / 4)
             if tech.color != prereq.color:
                 weight /= 2
             if tech.cumcost:

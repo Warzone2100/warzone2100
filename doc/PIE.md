@@ -90,7 +90,7 @@ This starts a list of vertex coordinates (points) that is ''n'' lines long. ''n'
 
 > -4.0 4.0 8.0
 
-Each point MUST be on a seperate line and MUST be indented with a tab. It MUST contain exactly 3 floating-point values in the order ''x y z''. Y denotes "up".
+Each point MUST be on a separate line and MUST be indented with a tab. It MUST contain exactly 3 floating-point values in the order ''x y z''. Y denotes "up".
 
 ### POLYGONS
 

@@ -102,7 +102,7 @@ void kf_LevelSea();
 void kf_TestWater();
 void kf_toggleTrapCursor();
 void kf_TogglePauseMode();
-void kf_ToggleRadarAllign();
+void kf_ToggleRadarAlign();
 
 void kf_ToggleEnergyBars();
 void kf_FinishAllResearch();

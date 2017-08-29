@@ -490,7 +490,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		else if (psDroid->action == DACTION_NONE)
 		{
-			// stoped moving, but still havn't got the artifact
+			// stopped moving, but still haven't got the artifact
 			actionDroid(psDroid, DACTION_MOVE, psDroid->order.psObj->pos.x, psDroid->order.psObj->pos.y);
 		}
 		break;
@@ -3741,7 +3741,7 @@ void orderMoralCheck(UDWORD player)
 
 
 /** This function runs through all group's droids and check if their moral is below the minimum moral to flee. If it is, then the order DORDER_RUN is set to that droid.
- * @todo this fuction is near a duplicate of orderMoralCheck(). A better approach to erase this one should be tried.
+ * @todo this function is near a duplicate of orderMoralCheck(). A better approach to erase this one should be tried.
  */
 void orderGroupMoralCheck(DROID_GROUP *psGroup)
 {

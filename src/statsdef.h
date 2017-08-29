@@ -248,7 +248,7 @@ struct BASE_STATS
 	BASE_STATS(unsigned ref = 0) : ref(ref), index(0) {}
 
 	UDWORD	ref;    /**< Unique ID of the item */
-	QString id;     /**< Text id (i.e. short language-independant name) */
+	QString id;     /**< Text id (i.e. short language-independent name) */
 	QString name;   /**< Full / real name of the item */
 	int	index;	///< Index into containing array
 };

@@ -88,7 +88,7 @@ enum CODE_ERROR
 {
 	CE_OK,				// No error
 	CE_MEMORY,			// Out of memory
-	CE_PARSE			// A parse error occured
+	CE_PARSE			// A parse error occurred
 };
 
 /* Turn off a couple of warnings that the yacc generated code gives */
@@ -108,7 +108,7 @@ static OBJVAR_BLOCK	*psObjVarBlock=NULL;
 /* Pointer to current block of compiled parameter code */
 static PARAM_BLOCK	*psCurrPBlock=NULL;
 
-/* Any errors occured? */
+/* Any errors occurred? */
 static bool bError=false;
 
 //String support
@@ -9484,7 +9484,7 @@ bool scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym)
 		}
 	}
 
-	/* Failed to find the indentifier */
+	/* Failed to find the identifier */
 	*ppsSym = NULL;
 
 	//debug(LOG_SCRIPT, "END scriptLookUpFunction");
@@ -9512,7 +9512,7 @@ bool scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym)
 		}
 	}
 
-	/* Failed to find the indentifier */
+	/* Failed to find the identifier */
 	*ppsSym = NULL;
 
 	//debug(LOG_SCRIPT, "END scriptLookUpCustomFunction");

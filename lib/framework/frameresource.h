@@ -44,7 +44,7 @@ typedef void (*RESLOAD_CALLBACK)();
 
 struct RES_DATA
 {
-	void		*pData;				// pointer to the acutal data
+	void		*pData;				// pointer to the actual data
 	SDWORD		blockID;			// which of the blocks is it in (so we can clear some of them...)
 
 	UDWORD	HashedID;				// hashed version of the name of the id
@@ -61,7 +61,7 @@ struct RES_DATA
 struct RES_TYPE
 {
 	// type is still needed on psx ... strings are defined in source - data.c (yak!)
-	char			aType[RESTYPE_MAXCHAR];		// type string (e.g. "PIE"	 - just for debug use only, only aplicable when loading from wrf (not wdg)
+	char			aType[RESTYPE_MAXCHAR];		// type string (e.g. "PIE"	 - just for debug use only, only applicable when loading from wrf (not wdg)
 
 	RES_BUFFERLOAD buffLoad;	// routine to process the data for this type
 	RES_FREE release;			// routine to release the data (NULL indicates none)

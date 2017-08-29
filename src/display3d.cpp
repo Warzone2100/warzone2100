@@ -228,7 +228,7 @@ static const int geoOffset = 192;
 /// The average terrain height for the center of the area the camera is looking at
 static int averageCentreTerrainHeight;
 
-/** The time at which a sensor target was last asssigned
+/** The time at which a sensor target was last assigned
  * Used to draw a visual effect.
  */
 static UDWORD	lastTargetAssignation = 0;
@@ -980,7 +980,7 @@ static void drawTiles(iView *player)
 	// Not sure if should do this here or whenever using, since this transform seems to be done all over the place.
 	//actualCameraPosition -= Vector3i(-player->p.x, 0, player->p.z);
 
-	// this also detemines the length of the shadows
+	// this also determines the length of the shadows
 	theSun = getTheSun();
 	auto suntmp = (viewMatrix * glm::vec4(theSun, 0.f));
 	theSun = suntmp.xyz;
@@ -3075,7 +3075,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 		}
 	}
 
-	/* Store away the screen coordinates so we can select the droids without doing a trasform */
+	/* Store away the screen coordinates so we can select the droids without doing a transform */
 	psDroid->sDisplay.screenX = center.x;
 	psDroid->sDisplay.screenY = center.y;
 	psDroid->sDisplay.screenR = radius;

@@ -3,7 +3,7 @@
 # This script drives autorevision so that you end up with two
 # `autorevision.h` files; one for including in the program and one for
 # populating values in the `info.plist` file (some of which are user
-# visable).
+# visible).
 # The cache file is generated in a repo and is read from
 # unconditionally when building from a tarball.
 

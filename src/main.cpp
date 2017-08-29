@@ -593,7 +593,7 @@ static void stopGameLoop()
 	{
 		clearBlueprints();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
-		pie_EnableFog(false); // dont let the normal loop code set status on
+		pie_EnableFog(false); // don't let the normal loop code set status on
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
 			if (!levReleaseAll())
@@ -762,7 +762,7 @@ void mainLoop()
 	{
 		if (loop_GetVideoStatus())
 		{
-			videoLoop(); // Display the video if neccessary
+			videoLoop(); // Display the video if necessary
 		}
 		else switch (GetGameMode())
 			{

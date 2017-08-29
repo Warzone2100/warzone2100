@@ -44,7 +44,7 @@ uint32_t MersenneTwister::u32()
 
 	// Give better than 624 dimensional equidistribution for lower bits.
 	// Don't change the constants unless you know what you're doing.
-	// Can skip this step if it noticably affects performance (which it probably doesn't), since we aren't doing Monte-Carlo simulations.
+	// Can skip this step if it noticeably affects performance (which it probably doesn't), since we aren't doing Monte-Carlo simulations.
 	ret ^= ret >> 11;
 	ret ^= ret << 7 & 0x9D2C5680;
 	ret ^= ret << 15 & 0xEFC60000;

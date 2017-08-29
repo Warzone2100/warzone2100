@@ -1518,7 +1518,7 @@ bool scrSkDoResearch()
 
 	if (psResFacilty->psSubject != nullptr)
 	{
-		// not finshed yet..
+		// not finished yet..
 		return true;
 	}
 

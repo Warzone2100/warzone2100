@@ -1706,7 +1706,7 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 	}
 
 	// if currently got a VTOL proplusion attached then don't add the system buttons
-	// dont add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
+	// don't add the system button if mode is IDES_TURRET_A or IDES_TURRET_B
 	if (!checkTemplateIsVtol(&sCurrDesign) && mode != IDES_TURRET_A && mode != IDES_TURRET_B)
 	{
 		// add the system button
@@ -3118,7 +3118,7 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
-			//Watemelon:weaponslots >= 2
+			//Watermelon:weaponslots >= 2
 			if ((asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots >= 2)
 			{
 				/* reveal turret_a button if hidden */
@@ -3151,7 +3151,7 @@ void intProcessDesign(UDWORD id)
 			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
 			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
 			sCurrDesign.asParts[COMP_BRAIN] = 0;
-			//Watemelon:weaponSlots > 2
+			//Watermelon:weaponSlots > 2
 			if ((asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2)
 			{
 				/* reveal turret_b button if hidden */

@@ -121,7 +121,7 @@ bool recvGift(NETQUEUE queue)
 		break;
 	}
 
-	// If we are on the recieving end play an audio alert
+	// If we are on the receiving end play an audio alert
 	if (to == selectedPlayer)
 	{
 		audio_QueueTrack(audioTrack);
@@ -185,7 +185,7 @@ static void giftAutoGame(uint8_t from, uint8_t to, bool send)
 		NETend();
 		debug(LOG_SYNC, "We (%d) are telling %d we want to enable/disable a autogame", from, to);
 	}
-	// If we are recieving the "gift"
+	// If we are receiving the "gift"
 	else
 	{
 		if (to == selectedPlayer)
@@ -215,7 +215,7 @@ void giftRadar(uint8_t from, uint8_t to, bool send)
 		NETuint32_t(&dummy);
 		NETend();
 	}
-	// If we are recieving the gift
+	// If we are receiving the gift
 	else
 	{
 		hqReward(from, to);

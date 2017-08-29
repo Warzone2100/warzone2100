@@ -256,7 +256,7 @@ FunctionEnd
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
   LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update"
-  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for Warzone 2100."
+  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permitted for Warzone 2100."
 
 
 

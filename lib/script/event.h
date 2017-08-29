@@ -60,7 +60,7 @@ struct SCRIPT_CONTEXT
 
 /*
  * A currently active trigger.
- * If the type of the triggger == TR_PAUSE, the trigger number stored is the
+ * If the type of the trigger == TR_PAUSE, the trigger number stored is the
  * index of the trigger to replace this one when the event restarts
  */
 struct ACTIVE_TRIGGER

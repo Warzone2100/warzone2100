@@ -87,7 +87,7 @@ texpage2mipmap.conf
 #export-path=
 
 ## a file in the current directory with one of these endings will be processed
-## defualts to '.png .pcx .tga' if not specified. order is not important.
+## defaults to '.png .pcx .tga' if not specified. order is not important.
 
 #extensions=.tga
 

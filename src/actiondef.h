@@ -39,7 +39,7 @@ enum DROID_ACTION
 	DACTION_ATTACK,					///< 6 attacking something
 	DACTION_OBSERVE,				///< 7 observing something
 	DACTION_FIRESUPPORT,				///< 8 attacking something visible by a sensor droid
-	DACTION_SULK,					///< 9 refuse to do anything aggresive for a fixed time
+	DACTION_SULK,					///< 9 refuse to do anything aggressive for a fixed time
 	DACTION_UNUSED_2,
 	DACTION_TRANSPORTOUT,				///< 11 move transporter offworld
 	DACTION_TRANSPORTWAITTOFLYIN,			///< 12 wait for timer to move reinforcements in

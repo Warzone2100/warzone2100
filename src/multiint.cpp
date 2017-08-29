@@ -100,7 +100,7 @@
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
 // ////////////////////////////////////////////////////////////////////////////
-// tertile dependant colors for map preview
+// tertile dependent colors for map preview
 
 // C1 - Arizona type
 #define WZCOL_TERC1_CLIFF_LOW   pal_Colour(0x68, 0x3C, 0x24)
@@ -2738,7 +2738,7 @@ static void stopJoining()
 		sendLeavingMsg();								// say goodbye
 		NETclose();										// quit running game.
 
-		// if we were in a midle of transfering a file, then close the file handle
+		// if we were in a midle of transferring a file, then close the file handle
 		for (auto const &file : NetPlay.wzFiles)
 		{
 			debug(LOG_NET, "closing aborted file");		// no need to delete it, we do size check on (map) file
@@ -2747,7 +2747,7 @@ static void stopJoining()
 		NetPlay.wzFiles.clear();
 		ingame.localJoiningInProgress = false;			// reset local flags
 		ingame.localOptionsReceived = false;
-		if (!ingame.bHostSetup && NetPlay.isHost)			// joining and host was transfered.
+		if (!ingame.bHostSetup && NetPlay.isHost)			// joining and host was transferred.
 		{
 			NetPlay.isHost = false;
 		}
@@ -3878,7 +3878,7 @@ bool startMultiOptions(bool bReenter)
 					{
 						if (NetPlay.isUPNP_ERROR)
 						{
-							ssprintf(buf, "%s", _("UPnP detection faled. You must manually configure router yourself."));
+							ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
 						}
 						else
 						{
@@ -3972,7 +3972,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	bool disableButton = true;
 	iV_SetTextColour(WZCOL_TEXT_DARK);
 
-	// As long as they got room, and mods are the same then we proccess the button(s)
+	// As long as they got room, and mods are the same then we process the button(s)
 	if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
 	{
 		if (NetPlay.games[gameID].desc.dwCurrentPlayers >= NetPlay.games[gameID].desc.dwMaxPlayers)

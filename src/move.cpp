@@ -1258,7 +1258,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
  */
 static uint16_t moveGetDirection(DROID *psDroid)
 {
-	Vector2i src = psDroid->pos.xy;  // Do not want precice precision here, would overflow.
+	Vector2i src = psDroid->pos.xy;  // Do not want precise precision here, would overflow.
 	Vector2i target = psDroid->sMove.target;
 	Vector2i dest = target - src;
 

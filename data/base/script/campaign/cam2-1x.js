@@ -117,7 +117,7 @@ function updateTransportUnits()
 	preDamageUnits();
 }
 
-//Checks if the downed tranport has been destroyed and issues a game lose. This
+//Checks if the downed transport has been destroyed and issues a game lose. This
 //likely will never happen as with the WZ Script version.
 function checkCrashedTeam()
 {

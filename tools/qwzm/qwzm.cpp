@@ -11,7 +11,7 @@
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
-	You should have received a copy of the GNU Lessser General Public
+	You should have received a copy of the GNU Lesser General Public
 	License along with this program. If not, see
 	<http://www.gnu.org/licenses/>.
 */
@@ -143,7 +143,7 @@ void QWzmViewer::closeEvent(QCloseEvent *event)
 
 void QWzmViewer::actionOpen()
 {
-	static QString lastDir; // Convenience HACK to remember last succesful directory a model was loaded from.
+	static QString lastDir; // Convenience HACK to remember last successful directory a model was loaded from.
 	filename = QFileDialog::getOpenFileName(this, tr("Choose a PIE or WZM file"), lastDir, tr("All Compatible (*.wzm *.pie);;WZM models (*.wzm);;PIE models (*.pie)"));
 	if (!filename.isEmpty())
 	{

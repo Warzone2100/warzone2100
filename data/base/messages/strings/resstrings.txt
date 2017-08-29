@@ -863,7 +863,7 @@ RES_W_MG_ROF2_MSG4		_("All machineguns upgraded automatically")
 
 //R-Wpn-Missile-ASM-AT		Scourge Missile
 
-//R-Wpn-Misisile-ASM-BB		Devastator Missile
+//R-Wpn-Missile-ASM-BB		Devastator Missile
 
 //R-Wpn-Missile-LtSAM			Avenger SAM
 

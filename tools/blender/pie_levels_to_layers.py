@@ -12,8 +12,8 @@ __url__ = ["blender"]
 __version__ = "0.2"
 
 __bpydoc__ = """\
-All "clean" LEVEL_* objects that either are the selected objects or descendents
-thereof will be given a seperate layer, from levels 1-18, while "broken" level 
+All "clean" LEVEL_* objects that either are the selected objects or descendants
+thereof will be given a separate layer, from levels 1-18, while "broken" level
 objects will appear in layer 20. "broken" objects are ones that were built from
 untrustable data, for more complete recovery from malformed PIEs, and should
 have a "clean" counterpart that can be trusted.
@@ -23,7 +23,7 @@ Usage:
 Select any number of objects and run Object -> Scripts -> "PIE levels -> layers"
 
 For each selected object, if it has a PIE_* object as either its descendent or
-ancestor, that PIE_* object and all LEVEL_* and CONNECTOR_* descendents will be
+ancestor, that PIE_* object and all LEVEL_* and CONNECTOR_* descendants will be
 assigned to their respective layers, though if the 'strict_matching' option is
 selected, then only those objects explicitly selected and matching the above
 criteria will be assigned layers.

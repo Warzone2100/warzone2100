@@ -191,7 +191,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 		return false;
 	}
 
-	// Struct to destory
+	// Struct to destroy
 	psStruct = IdToStruct(structID, ANYPLAYER);
 
 	if (psStruct)

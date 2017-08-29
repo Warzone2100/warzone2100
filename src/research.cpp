@@ -223,7 +223,7 @@ bool loadResearch(const QString& filename)
 		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getName(&research));
 		research.researchPower = resPower;
 
-		//rememeber research pre-requisites for futher checking
+		//remember research pre-requisites for futher checking
 		preResearch[inc] = ini.value("requiredResearch").toStringList();
 
 		//set components results
@@ -646,7 +646,7 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 	if (psResFac->psSubject)
 	{
-		//set the time the research facilty was put on hold
+		//set the time the research facility was put on hold
 		psResFac->timeStartHold = gameTime;
 		//play audio to indicate on hold
 		if (psBuilding->player == selectedPlayer)
@@ -1101,7 +1101,7 @@ static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 }
 
 /* Sets the 'possible' flag for a player's research so the topic will appear in
-the research list next time the Research Facilty is selected */
+the research list next time the Research Facility is selected */
 bool enableResearch(RESEARCH *psResearch, UDWORD player)
 {
 	UDWORD				inc;

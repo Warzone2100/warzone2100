@@ -573,7 +573,7 @@ int QWzmViewer::savePIE(const char *filename, const MODEL *psModel, int pieVersi
 	// variable polyFlag: Use to compose the flag for a PIE polygon
 	unsigned int ptOffset, ptSetIndex, polyFlag;
 
-	/* Temporary stringstream used to accomodate
+	/* Temporary stringstream used to accommodate
 	 * the order PIE polygon data is written
 	 */
 	std::stringstream animTmpSs;

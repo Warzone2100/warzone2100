@@ -87,7 +87,7 @@
 #include "random.h"
 #include <functional>
 
-//Maximium slope of the terrin for building a structure
+//Maximium slope of the terrain for building a structure
 #define MAX_INCLINE		50//80//40
 
 /* droid construction smoke cloud constants */
@@ -1401,7 +1401,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					return nullptr;
 				}
 				// remove it from the map
-				turnOffMultiMsg(true); // dont send this one!
+				turnOffMultiMsg(true); // don't send this one!
 				removeFeature(psFeature);
 				turnOffMultiMsg(false);
 			}
@@ -1546,7 +1546,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			scrollMaxY = mapHeight;
 			// NOTE: resizeRadar() may be required here, since we change scroll limits?
 		}
-		//set the functionality dependant on the type of structure
+		//set the functionality dependent on the type of structure
 		if (!setFunctionality(psBuilding, pStructureType->type))
 		{
 			removeStructFromMap(psBuilding);
@@ -2887,7 +2887,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						}
 					}
 					// Lowest priority:
-					// Just repair whatever's nearby and needs repairing.
+					// Just repair whatever is nearby and needs repairing.
 					else if (mindist > (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2 && psDroid->body < psDroid->originalBody)
 					{
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
@@ -4676,7 +4676,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 			addEffect(&pos, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, nullptr, 0, impactTime);
 		}
 
-		/* Power stations have their own desctruction sequence */
+		/* Power stations have their own destruction sequence */
 		if (bPowerGen)
 		{
 			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_POWER_STATION, false, nullptr, 0, impactTime);
@@ -4916,7 +4916,7 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 	psAssemblyPoint->coords.x = x;
 	psAssemblyPoint->coords.y = y;
 
-	// Deliv Point sits at the height of the tile it's centre is on + arbitary amount!
+	// Deliv Point sits at the height of the tile it's centre is on + arbitrary amount!
 	psAssemblyPoint->coords.z = map_Height(x, y) + ASSEMBLY_POINT_Z_PADDING;
 }
 
@@ -5450,7 +5450,7 @@ static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 	return num;
 }
 
-//print some info at the top of the screen dependant on the structure
+//print some info at the top of the screen dependent on the structure
 void printStructureInfo(STRUCTURE *psStructure)
 {
 	unsigned int numConnected;
@@ -6356,7 +6356,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	//if nothing is allocated then the current factory may have been cancelled
 	if (productionRun.empty())
 	{
-		//must have cancelled eveything - so tell the struct
+		//must have cancelled everything - so tell the struct
 		if (psFactory->productionLoops != INFINITE_PRODUCTION)
 		{
 			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
@@ -6503,7 +6503,7 @@ void checkDeliveryPoints(UDWORD version)
 							// add an assembly point
 							if (!createFlagPosition(&psRepair->psDeliveryPoint, psStruct->player))
 							{
-								ASSERT(!"can't create new deilivery point for repair facility", "unable to create new delivery point for repair facility");
+								ASSERT(!"can't create new delivery point for repair facility", "unable to create new delivery point for repair facility");
 								return;
 							}
 							addFlagPosition(psRepair->psDeliveryPoint);

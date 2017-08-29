@@ -108,7 +108,7 @@ def parse(pie):
 
   Uses Python's universal EOL support. Makes the assumption that tokens
   may not span multiple lines, which differs from Warzone 2100's internal
-  parser. Directives such as "PIE" or "CONNECTORS" have the proceding
+  parser. Directives such as "PIE" or "CONNECTORS" have the proceeding
   tokens converted into python integers, with the except of "TEXTURE" and
   "NOTEXTURE", which contain extra data within the declaration.
   

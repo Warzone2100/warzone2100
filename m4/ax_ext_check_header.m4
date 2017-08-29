@@ -13,7 +13,7 @@
 # DESCRIPTION
 #
 #   Check for <header> with -I<path> for each path in <paths> if need be.
-#   The first sucecssful path is chosen (eg if you say
+#   The first successful path is chosen (eg if you say
 #   AX_EXT_CHECK_HEADER(foo.h, bar baz qux) and -Ibaz works then -Iqux will
 #   not be tested.
 #

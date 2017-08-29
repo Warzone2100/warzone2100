@@ -37,7 +37,7 @@ static struct timeval endCount;
  * The difference between the FAT32 and Unix epoch.
  *
  * The FAT32 epoch starts at 1 January 1601 while the Unix epoch starts at 1
- * January 1970. And apparantly we gained 3.25 days in that time period.
+ * January 1970. And apparently we gained 3.25 days in that time period.
  *
  * Thus the amount of micro seconds passed between these dates can be computed
  * as follows:

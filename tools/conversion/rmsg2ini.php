@@ -133,7 +133,7 @@ else
 
 	echo convert_rmsg(file_get_contents($argv[1]), $errors);
 
-	$log.= ($errors?count($errors):'No').' skiped lines
+	$log.= ($errors?count($errors):'No').' skipped lines
 '.($errors?implode(', ', $errors)."\n":'');
 }
 

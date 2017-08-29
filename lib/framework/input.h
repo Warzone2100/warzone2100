@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*! \file input.h
- * \brief Prototypes for the keyboard and mouse input funcitons.
+ * \brief Prototypes for the keyboard and mouse input functions.
  */
 #ifndef _input_h
 #define _input_h

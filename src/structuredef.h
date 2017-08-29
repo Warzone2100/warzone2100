@@ -97,7 +97,7 @@ enum STRUCT_ANIM_STATES
 
 #define STRUCTURE_CONNECTED 0x0001 ///< This structure must be built side by side with another of the same player
 
-//this structure is used to hold the permenant stats for each type of building
+//this structure is used to hold the permanent stats for each type of building
 struct STRUCTURE_STATS : public BASE_STATS
 {
 	STRUCTURE_STATS() : pBaseIMD(nullptr), pECM(nullptr), pSensor(nullptr) {};
@@ -268,14 +268,14 @@ struct STRUCTURE_LIMITS
 
 
 //the three different types of factory (currently) - FACTORY, CYBORG_FACTORY, VTOL_FACTORY
-// added repair facilities as they need an assebly point as well
+// added repair facilities as they need an assembly point as well
 enum FLAG_TYPE
 {
 	FACTORY_FLAG,
 	CYBORG_FLAG,
 	VTOL_FLAG,
 	REPAIR_FLAG,
-//seperate the numfactory from numflag
+//separate the numfactory from numflag
 	NUM_FLAG_TYPES,
 	NUM_FACTORY_TYPES = REPAIR_FLAG,
 };

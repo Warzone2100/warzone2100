@@ -106,18 +106,18 @@ run
 	maxVTOLs[0]		int					5
 	maxVTOLs[1]		int					70
 
-	// incendry emplacements.
+	// incendiary emplacements.
 	numIncendrys	int					10
-	incendrys[0]	STRUCTURESTAT		"Emplacement-MortarPit01"
-	incendrys[1]	STRUCTURESTAT		"Emplacement-MortarPit02"
-	incendrys[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incenediary"
-	incendrys[3]	STRUCTURESTAT		"Emplacement-RotMor"
-	incendrys[4]	STRUCTURESTAT		"Emplacement-Howitzer105"
-	incendrys[5]	STRUCTURESTAT		"Emplacement-Howitzer150"
-	incendrys[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incenediary"
-	incendrys[7]	STRUCTURESTAT		"Emplacement-RotHow"
-	incendrys[8]	STRUCTURESTAT		"Emplacement-Rocket06-IDF"
-	incendrys[9]	STRUCTURESTAT		"Emplacement-HvART-pit"
+	incendiaries[0]	STRUCTURESTAT		"Emplacement-MortarPit01"
+	incendiaries[1]	STRUCTURESTAT		"Emplacement-MortarPit02"
+	incendiaries[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incendiary"
+	incendiaries[3]	STRUCTURESTAT		"Emplacement-RotMor"
+	incendiaries[4]	STRUCTURESTAT		"Emplacement-Howitzer105"
+	incendiaries[5]	STRUCTURESTAT		"Emplacement-Howitzer150"
+	incendiaries[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incendiary"
+	incendiaries[7]	STRUCTURESTAT		"Emplacement-RotHow"
+	incendiaries[8]	STRUCTURESTAT		"Emplacement-Rocket06-IDF"
+	incendiaries[9]	STRUCTURESTAT		"Emplacement-HvART-pit"
 
 	//anti a.
 	vtolDefStruct[0] STRUCTURESTAT		"AASite-QuadMg1"	//1

@@ -928,7 +928,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 		}
 		else
 		{
-			compID = StatIsComponent(Stat); // This failes for viper body.
+			compID = StatIsComponent(Stat); // This fails for viper body.
 			if (compID != COMP_NUMCOMPONENTS)
 			{
 				object = ImdObject::Component(Stat);
@@ -1629,7 +1629,7 @@ bool DroidIsBuilding(DROID *Droid)
 }
 
 
-// Returns true if the droid has been ordered build something ( but has'nt started yet )
+// Returns true if the droid has been ordered build something ( but hasn't started yet )
 //
 bool DroidGoingToBuild(DROID *Droid)
 {
@@ -1980,7 +1980,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	char const *szCheckWidth = "00000";
 	int x0 = xOffset + BarGraph->x();
 	int y0 = yOffset + BarGraph->y();
-	int arbitaryOffset = 3;
+	int arbitraryOffset = 3;
 	int iX, iY;
 	int barWidth = 100, width;
 	int i, precisionFactor = 1, value;
@@ -1993,8 +1993,8 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	}
 
 	// Arbitrary increment for the position of the bars
-	x0 += arbitaryOffset;
-	y0 += arbitaryOffset;
+	x0 += arbitraryOffset;
+	y0 += arbitraryOffset;
 
 	/* indent to allow text value */
 	iX = x0 + iV_GetTextWidth(szCheckWidth, font_regular);
@@ -2003,7 +2003,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	if (isPowerBar)
 	{
 		// Adjust the width based on the text drawn
-		barWidth = BarGraph->width() - (iX - x0 + arbitaryOffset);
+		barWidth = BarGraph->width() - (iX - x0 + arbitraryOffset);
 	}
 
 	//draw current value section

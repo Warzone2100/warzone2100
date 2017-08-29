@@ -97,7 +97,7 @@ struct DROID : public BASE_OBJECT
 	 * but stored here for easy access
 	 */
 	UDWORD          weight;
-	UDWORD          baseSpeed;                      ///< the base speed dependant on propulsion type
+	UDWORD          baseSpeed;                      ///< the base speed dependent on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
 	UDWORD          lastFrustratedTime;             ///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way

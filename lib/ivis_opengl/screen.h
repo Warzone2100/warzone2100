@@ -62,7 +62,7 @@ void screenDoDumpToDiskIfRequired();
 void screen_enableMapPreview(int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview();
 
-/// gaphics performance measurement points
+/// graphics performance measurement points
 enum PERF_POINT
 {
 	PERF_START_FRAME,

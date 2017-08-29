@@ -98,7 +98,7 @@ void transporterSetLaunchTime(UDWORD time);
 
 void flashMissionButton(UDWORD buttonID);
 void stopMissionButtonFlash(UDWORD buttonID);
-/*checks the order of the droid to see if its currenly flying*/
+/*checks the order of the droid to see if its currently flying*/
 bool transporterFlying(DROID *psTransporter);
 //initialise the flag to indicate the first transporter has arrived - set in startMission()
 void initFirstTransporterFlag();

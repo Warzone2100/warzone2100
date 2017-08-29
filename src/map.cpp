@@ -1184,7 +1184,7 @@ bool map_Intersect(int *Cx, int *Cy, int *Vx, int *Vy, int *Sx, int *Sy)
 	//calculate midway line intersection points
 	if (((map_coord(itx) == tileX) == (map_coord(ily) == tileY)) && ((map_coord(ibx) == tileX) == (map_coord(iry) == tileY)))
 	{
-		// line crosses diagnonal only
+		// line crosses diagonal only
 		if (Dx - Dy == 0)
 		{
 			return false;

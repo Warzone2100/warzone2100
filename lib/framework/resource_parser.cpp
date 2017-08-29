@@ -1437,14 +1437,14 @@ yyreduce:
 /* Line 1806 of yacc.c  */
 #line 115 "resource_parser.ypp"
     {
-					bool succes;
+					bool success;
 					/* load a data file */
 					debug(LOG_NEVER, "file: %s %s", (yyvsp[(2) - (3)].sval), (yyvsp[(3) - (3)].sval));
-					succes = resLoadFile((yyvsp[(2) - (3)].sval), (yyvsp[(3) - (3)].sval));
+					success = resLoadFile((yyvsp[(2) - (3)].sval), (yyvsp[(3) - (3)].sval));
 					free((yyvsp[(2) - (3)].sval));
 					free((yyvsp[(3) - (3)].sval));
 
-					if (!succes)
+					if (!success)
 					{
 						YYABORT;
 					}

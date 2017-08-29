@@ -61,7 +61,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"sensors", kf_ToggleSensorDisplay},	//show sensor ranges
 	{"let me win", kf_AddMissionOffWorld},	//let me win
 	{"timedemo", kf_FrameRate},	 //timedemo
-	{"kill", kf_KillSelected},	//kill slected
+	{"kill", kf_KillSelected},	//kill selected
 	{"john kettley", kf_ToggleWeather},	//john kettley
 	{"mouseflip", kf_ToggleMouseInvert},	//mouseflip
 	{"biffer baker", kf_SetKillerLevel},	//indestructive units

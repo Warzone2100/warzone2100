@@ -29,7 +29,7 @@ void main()
 	lightDir = lightPosition.xyz - vVertex;
 	eyeVec = -vVertex;
 
-	// Implement building stretching to accomodate terrain
+	// Implement building stretching to accommodate terrain
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
 		position.y -= stretch;

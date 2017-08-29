@@ -332,7 +332,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	}
 
 	/*
-		See what kind of effect it is - the add fucnction is different for each,
+		See what kind of effect it is - the add function is different for each,
 		although some things are shared
 	*/
 	psEffect->imd = nullptr;
@@ -1603,7 +1603,7 @@ static void renderSmokeEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 		// Since psEffect->birthTime will be set to graphicsTime on
 		// creation, and graphicsTime only increments, birthTime should be
 		// smaller than or equal to graphicsTime. As a great man once said
-		// though (hehe, I just love exaggarating ;-) -- Giel):
+		// though (hehe, I just love exaggerating ;-) -- Giel):
 		// "Always assert your assumptions!". So here it goes:
 		assert(psEffect->birthTime <= graphicsTime);
 

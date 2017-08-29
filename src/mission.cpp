@@ -127,7 +127,7 @@ MISSION		mission;
 
 bool		offWorldKeepLists;
 
-/*lists of droids that are held seperate over several missions. There should
+/*lists of droids that are held separate over several missions. There should
 only be selectedPlayer's droids but have possibility for MAX_PLAYERS -
 also saves writing out list functions to cater for just one player*/
 DROID       *apsLimboDroids[MAX_PLAYERS];
@@ -401,7 +401,7 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 	setPlayerHasLost(false);
 	setPlayerHasWon(false);
 
-	/* and win/lose video is obvioulsy not playing */
+	/* and win/lose video is obviously not playing */
 	setScriptWinLoseVideo(PLAY_NONE);
 
 	// this inits the flag so that 'reinforcements have arrived' message isn't played for the first transporter load
@@ -2174,7 +2174,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 	Label->aText[0] = (UBYTE)('0'+ calcTime / 10);
 	Label->aText[1] = (UBYTE)('0'+ calcTime % 10);
 	timeElapsed -= calcTime * (60*GAME_TICKS_PER_SEC);
-	//seperator
+	//separator
 	Label->aText[3] = (UBYTE)(':');
 	//seconds
 	calcTime = timeRemaining / GAME_TICKS_PER_SEC;
@@ -2877,7 +2877,7 @@ void missionDestroyObjects()
 				psDroid = psNext;
 			}
 
-			//clear out the mission lists as well to make sure no Tranporters exist
+			//clear out the mission lists as well to make sure no Transporters exist
 			apsDroidLists[Player] = mission.apsDroidLists[Player];
 			psDroid = apsDroidLists[Player];
 
@@ -3112,7 +3112,7 @@ UDWORD	getCampaignNumber()
 }
 
 /*deals with any selectedPlayer's transporters that are flying in when the
-mission ends. bOffWorld is true if the Mission is currenly offWorld*/
+mission ends. bOffWorld is true if the Mission is currently offWorld*/
 void emptyTransporters(bool bOffWorld)
 {
 	DROID       *psTransporter, *psDroid, *psNext, *psNextTrans;
@@ -3176,7 +3176,7 @@ void emptyTransporters(bool bOffWorld)
 				addDroid(psDroid, mission.apsDroidLists);
 			}
 		}
-		//don't need to destory the transporter here - it is dealt with by the endMission process
+		//don't need to destroy the transporter here - it is dealt with by the endMission process
 	}
 }
 

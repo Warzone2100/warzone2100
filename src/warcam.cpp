@@ -90,7 +90,7 @@ static	SDWORD	warCamLogoRotation;
 static BASE_OBJECT radarTarget(OBJ_TARGET, 0, 0);
 
 /* Do we trun to face when doing a radar jump? */
-static	bool	bRadarAllign;
+static	bool	bRadarAlign;
 
 static SDWORD	presAvAngle = 0;
 
@@ -119,7 +119,7 @@ static bool camTrackCamera();
 /* Sets the camera to inactive to begin with */
 void	initWarCam()
 {
-	/* We're not intitially following anything */
+	/* We're not initially following anything */
 	trackingCamera.status = CAM_INACTIVE;
 
 	/* Logo setup */
@@ -284,7 +284,7 @@ static void processLeaderSelection()
 	}
 	if (bSuccess)
 	{
-		camAllignWithTarget((BASE_OBJECT *)psNew);
+		camAlignWithTarget((BASE_OBJECT *)psNew);
 	}
 }
 
@@ -351,7 +351,7 @@ bool	processWarCam()
 		if (foundTarget && !foundTarget->died)
 		{
 			/* We've got one, so store away info */
-			camAllignWithTarget(foundTarget);
+			camAlignWithTarget(foundTarget);
 			/* We're now into tracking status */
 			trackingCamera.status = CAM_TRACKING;
 			/* Inform via console */
@@ -483,7 +483,7 @@ BASE_OBJECT	*camFindDroidTarget()
 //-----------------------------------------------------------------------------------
 
 /* Stores away old viewangle info and sets up new distance and angles */
-void	camAllignWithTarget(BASE_OBJECT *psTarget)
+void	camAlignWithTarget(BASE_OBJECT *psTarget)
 {
 	/* Store away the target */
 	trackingCamera.target = psTarget;
@@ -927,7 +927,7 @@ static bool camTrackCamera()
 		}
 	}
 
-	if (bRadarAllign || trackingCamera.target->type == OBJ_DROID)
+	if (bRadarAlign || trackingCamera.target->type == OBJ_DROID)
 	{
 		if (bFlying)
 		{
@@ -1101,9 +1101,9 @@ bool	getRadarTrackingStatus()
 	return (retVal);
 }
 
-void	toggleRadarAllignment()
+void	toggleRadarAlignment()
 {
-	bRadarAllign = !bRadarAllign;
+	bRadarAlign = !bRadarAlign;
 }
 
 void	camInformOfRotation(Vector3i *rotation)

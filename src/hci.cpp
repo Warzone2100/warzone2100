@@ -305,7 +305,7 @@ void intRemoveObject();
 static void intRemoveObjectNoAnim();
 /* Process the object widgets */
 static void intProcessObject(UDWORD id);
-/* Get the object refered to by a button ID on the object screen.
+/* Get the object referred to by a button ID on the object screen.
  * This works for droid or structure buttons
  */
 static BASE_OBJECT *intGetObject(UDWORD id);
@@ -1260,7 +1260,7 @@ INT_RETVAL intRunWidgets()
 		/* Catch the quit button here */
 		case INTINGAMEOP_POPUP_QUIT:
 		case IDMISSIONRES_QUIT:			// mission quit
-		case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confrim
+		case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confirm
 		case IDOPT_QUIT:						// options screen quit
 			intResetScreen(false);
 			quitting = true;
@@ -1982,7 +1982,7 @@ static void intProcessObject(UDWORD id)
 				}
 				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
 				{
-					//might need to cancel the hold on research facilty
+					//might need to cancel the hold on research facility
 					releaseResearch((STRUCTURE *)psObj, ModeQueue);
 				}
 
@@ -2269,13 +2269,13 @@ void intObjectSelected(BASE_OBJECT *psObj)
 			if (!OrderUp)
 			{
 				intResetScreen(false);
-				// changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
+				// changed to a BASE_OBJECT to accommodate the factories - AB 21/04/99
 				intAddOrder(psObj);
 				intMode = INT_ORDER;
 			}
 			else
 			{
-				// changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
+				// changed to a BASE_OBJECT to accommodate the factories - AB 21/04/99
 				intAddOrder(psObj);
 			}
 			break;
@@ -3341,7 +3341,7 @@ void intRemoveStatsNoAnim()
 }
 
 /**
- * Get the object refered to by a button ID on the object screen. This works for object or stats buttons.
+ * Get the object referred to by a button ID on the object screen. This works for object or stats buttons.
  */
 static BASE_OBJECT *intGetObject(UDWORD id)
 {
@@ -3945,7 +3945,7 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	{
 		if (pResearch != nullptr)
 		{
-			// Say that we want to do reseach [sic].
+			// Say that we want to do research [sic].
 			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, selectedPlayer, true);
 			setStatusPendingStart(*psResFacilty, pResearch);  // Tell UI that we are going to research.
 		}
@@ -4708,7 +4708,7 @@ static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 		}
 	}
 
-	// Start back at the begining?
+	// Start back at the beginning?
 	if ((!Found) && (CurrentStruct != nullptr))
 	{
 		for (psStruct = interfaceStructList(); psStruct != CurrentStruct && psStruct != nullptr; psStruct = psStruct->psNext)
@@ -4799,7 +4799,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 		}
 	}
 
-	// Start back at the begining?
+	// Start back at the beginning?
 	if ((!Found) && (CurrentDroid != nullptr))
 	{
 		for (psDroid = apsDroidLists[selectedPlayer]; (psDroid != CurrentDroid) && (psDroid != nullptr); psDroid = psDroid->psNext)

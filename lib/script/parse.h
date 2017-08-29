@@ -92,7 +92,7 @@ struct COND_BLOCK
 	UDWORD		numOffsets;
 	UDWORD		*aOffsets;	// Positions in the code that have to be
 	// replaced with the offset to the end of the
-	// conditional statement (for the jumps). - //TODO: change to INTERP_VAL - probbaly not necessary
+	// conditional statement (for the jumps). - //TODO: change to INTERP_VAL - probably not necessary
 	UDWORD		size;
 	INTERP_VAL		*pCode;
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.

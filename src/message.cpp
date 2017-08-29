@@ -460,7 +460,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		psViewData->fileName = filename;
 		name[0] = '\0';
 
-		//read the data into the storage - the data is delimeted using comma's
+		//read the data into the storage - the data is delimited using comma's
 		sscanf(pViewMsgData, "%255[^,'\r\n],%d%n", name, &numText, &cnt);
 		pViewMsgData += cnt;
 

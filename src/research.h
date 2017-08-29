@@ -106,7 +106,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 RESEARCH *getResearchForMsg(const VIEWDATA *pViewData);
 
 /* Sets the 'possible' flag for a player's research so the topic will appear in
-the research list next time the Research Facilty is selected */
+the research list next time the Research Facility is selected */
 bool enableResearch(RESEARCH *psResearch, UDWORD player);
 
 /*find the last research topic of importance that the losing player did and

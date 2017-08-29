@@ -79,7 +79,7 @@ struct PathNode
 {
 	bool operator <(PathNode const &z) const
 	{
-		// Sort decending est, fallback to ascending dist, fallback to sorting by position.
+		// Sort descending est, fallback to ascending dist, fallback to sorting by position.
 		if (est  != z.est)
 		{
 			return est  > z.est;

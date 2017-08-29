@@ -193,7 +193,7 @@ static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
 
 /*!
  * Load shape level polygons
- * \param ppFileData Pointer to the data (usualy read from a file)
+ * \param ppFileData Pointer to the data (usually read from a file)
  * \param s Pointer to shape level
  * \return false on error (memory allocation failure/bad file format), true otherwise
  * \pre ppFileData loaded
@@ -583,7 +583,7 @@ static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
 
 /*!
  * Load shape level connectors
- * \param ppFileData Pointer to the data (usualy read from a file)
+ * \param ppFileData Pointer to the data (usually read from a file)
  * \param s Pointer to shape level
  * \return false on error (memory allocation failure/bad file format), true otherwise
  * \pre ppFileData loaded
@@ -659,7 +659,7 @@ static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx
 
 /*!
  * Load shape levels recursively
- * \param ppFileData Pointer to the data (usualy read from a file)
+ * \param ppFileData Pointer to the data (usually read from a file)
  * \param FileDataEnd ???
  * \param nlevels Number of levels to load
  * \return pointer to iFSDShape structure (or NULL on error)

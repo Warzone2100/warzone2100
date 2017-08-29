@@ -697,7 +697,7 @@ void WzMainWindow::keyPressEvent(QKeyEvent *event)
 
 void WzMainWindow::inputMethodEvent(QInputMethodEvent *event)
 {
-	// Foward all "committed" characters. Should be more advanced than that, but better than nothing.
+	// Forward all "committed" characters. Should be more advanced than that, but better than nothing.
 	for (int i = 0; i < event->commitString().size(); ++i)
 	{
 		inputAddBuffer(' ', event->commitString()[i].unicode());
@@ -916,7 +916,7 @@ void inputClearBuffer(void)
 }
 
 /* Return the next key press or 0 if no key in the buffer.
- * The key returned will have been remaped to the correct ascii code for the
+ * The key returned will have been remapped to the correct ascii code for the
  * windows key map.
  * All key presses are buffered up (including windows auto repeat).
  */

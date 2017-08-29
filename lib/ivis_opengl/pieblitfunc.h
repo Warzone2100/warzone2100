@@ -21,7 +21,7 @@
 /*
  * pieBlitFunc.h
  *
- * patch for exisitng ivis rectangle draw functions.
+ * patch for existing ivis rectangle draw functions.
  *
  */
 /***************************************************************************/

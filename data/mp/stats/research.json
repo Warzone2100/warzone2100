@@ -891,21 +891,21 @@
         ],
         "statID": "Emplacement-Howitzer105"
     },
-    "R-Defense-Howitzer-Incenediary": {
+    "R-Defense-Howitzer-Incendiary": {
         "iconID": "IMAGE_RES_DEFENCE",
-        "id": "R-Defense-Howitzer-Incenediary",
+        "id": "R-Defense-Howitzer-Incendiary",
         "msgName": "RES_EMP_INH",
         "name": "Incendiary Howitzer Emplacement",
         "requiredResearch": [
             "R-Defense-Howitzer",
-            "R-Wpn-Howitzer-Incenediary"
+            "R-Wpn-Howitzer-Incendiary"
         ],
         "researchPoints": 4800,
         "researchPower": 150,
         "resultStructures": [
-            "Emplacement-Howitzer-Incenediary"
+            "Emplacement-Howitzer-Incendiary"
         ],
-        "statID": "Emplacement-Howitzer-Incenediary"
+        "statID": "Emplacement-Howitzer-Incendiary"
     },
     "R-Defense-HvyA-Trocket": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -1078,21 +1078,21 @@
         ],
         "statID": "Emplacement-MortarPit01"
     },
-    "R-Defense-MortarPit-Incenediary": {
+    "R-Defense-MortarPit-Incendiary": {
         "iconID": "IMAGE_RES_DEFENCE",
-        "id": "R-Defense-MortarPit-Incenediary",
+        "id": "R-Defense-MortarPit-Incendiary",
         "msgName": "RES_EMP_IMP",
         "name": "Incendiary Mortar Pit",
         "requiredResearch": [
-            "R-Wpn-Mortar-Incenediary",
+            "R-Wpn-Mortar-Incendiary",
             "R-Defense-HvyMor"
         ],
         "researchPoints": 2400,
         "researchPower": 75,
         "resultStructures": [
-            "Emplacement-MortarPit-Incenediary"
+            "Emplacement-MortarPit-Incendiary"
         ],
-        "statID": "Emplacement-MortarPit-Incenediary"
+        "statID": "Emplacement-MortarPit-Incendiary"
     },
     "R-Defense-Pillbox01": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -6794,9 +6794,9 @@
         "subgroupIconID": "IMAGE_RES_GRPDAM",
         "techCode": 1
     },
-    "R-Wpn-Howitzer-Incenediary": {
+    "R-Wpn-Howitzer-Incendiary": {
         "iconID": "IMAGE_RES_WEAPONTECH",
-        "id": "R-Wpn-Howitzer-Incenediary",
+        "id": "R-Wpn-Howitzer-Incendiary",
         "keyTopic": 1,
         "msgName": "RES_W_INH",
         "name": "Incendiary Howitzer",
@@ -6808,9 +6808,9 @@
         "researchPoints": 12000,
         "researchPower": 375,
         "resultComponents": [
-            "Howitzer-Incenediary"
+            "Howitzer-Incendiary"
         ],
-        "statID": "Howitzer-Incenediary"
+        "statID": "Howitzer-Incendiary"
     },
     "R-Wpn-Howitzer-ROF01": {
         "iconID": "IMAGE_RES_WEAPONTECH",
@@ -8025,9 +8025,9 @@
         "subgroupIconID": "IMAGE_RES_GRPDAM",
         "techCode": 1
     },
-    "R-Wpn-Mortar-Incenediary": {
+    "R-Wpn-Mortar-Incendiary": {
         "iconID": "IMAGE_RES_WEAPONTECH",
-        "id": "R-Wpn-Mortar-Incenediary",
+        "id": "R-Wpn-Mortar-Incendiary",
         "keyTopic": 1,
         "msgName": "RES_IMORT",
         "name": "Incendiary Mortar",
@@ -8038,9 +8038,9 @@
         "researchPoints": 3600,
         "researchPower": 112,
         "resultComponents": [
-            "Mortar-Incenediary"
+            "Mortar-Incendiary"
         ],
-        "statID": "Mortar-Incenediary"
+        "statID": "Mortar-Incendiary"
     },
     "R-Wpn-Mortar-ROF01": {
         "iconID": "IMAGE_RES_WEAPONTECH",

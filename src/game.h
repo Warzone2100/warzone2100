@@ -22,7 +22,7 @@
  *  load and save game routines.
  *  Very likely to ALL change! All the headers are separately defined at the
  *  moment - they probably don't need to be - if no difference make into one.
- *  Also the struct defintions throughout the game could be re-ordered to contain
+ *  Also the struct definitions throughout the game could be re-ordered to contain
  *  the variables required for saving so that don't need to create a load more here!
  */
 

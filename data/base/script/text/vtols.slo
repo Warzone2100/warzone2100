@@ -181,7 +181,7 @@ event targetFound(CALL_OBJ_SEEN, padPlayer, ref targetObj, ref viewerObj)
 				{
 					attackCluster[group] = targetObj.clusterID;
 					// clusterID can be 0 for droids - especially near start
-					// when they havn't moved yet
+					// when they haven't moved yet
 					if (attackCluster[group] != 0)
 					{
 						targetObj2 = targetInCluster(targetObj.clusterID, padPlayer);

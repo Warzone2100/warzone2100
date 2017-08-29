@@ -2984,7 +2984,7 @@ static bool gameLoad(const char *fileName)
 
 	debug(LOG_NEVER, "gl .gam file is version %u\n", fileHeader.version);
 
-	// Prior to getting here, the directory structure has been set to whereever the
+	// Prior to getting here, the directory structure has been set to wherever the
 	// map or savegame is loaded from, so we will get the right ruleset file.
 	if (!PHYSFS_exists("ruleset.json"))
 	{
@@ -3290,7 +3290,7 @@ UDWORD getCampaign(const char *fileName)
 	// you save it out in a skirmish save and
 	// then don't bother putting it back in again
 	// when loading so it screws loads of stuff?!?
-	// dont check skirmish saves.
+	// don't check skirmish saves.
 	if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
 		UDWORD retVal = getCampaignV(fileHandle, fileHeader.version);

@@ -449,7 +449,7 @@ static UDWORD GetImageHeight(IMAGEFILE *ImageFile, UDWORD ImageID)
 // Add the droid order screen.
 // Returns true if the form was displayed ok.
 //
-//changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
+//changed to a BASE_OBJECT to accommodate the factories - AB 21/04/99
 bool intAddOrder(BASE_OBJECT *psObj)
 {
 	bool Animate = true;
@@ -924,13 +924,13 @@ void intProcessOrder(UDWORD id)
 				if (widgGetButtonState(psWScreen, id) & WBUT_CLICKLOCK)
 				{
 					widgSetButtonState(psWScreen, id, 0);
-					// Disable the dependant button.
+					// Disable the dependent button.
 					widgSetButtonState(psWScreen, id + 1, WBUT_DISABLE);
 				}
 				else
 				{
 					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-					// Enable the dependant button.
+					// Enable the dependent button.
 					widgSetButtonState(psWScreen, id + 1, 0);
 				}
 			} if ((id > BaseID) && (id < BaseID + OrderButtons[OrdIndex].AcNumButs))
@@ -1081,7 +1081,7 @@ bool intRefreshOrder()
 			}
 		}
 
-		// if the orders havn't changed, just reset the state
+		// if the orders haven't changed, just reset the state
 		if (CheckObjectOrderList())
 		{
 			Ret = intRefreshOrderButtons();

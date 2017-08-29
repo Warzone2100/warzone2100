@@ -220,7 +220,7 @@ adjusts the associated Res Extractors so that they can link to different Power
 Gens if any are available*/
 void releasePowerGen(STRUCTURE *psRelease);
 
-//print some info at the top of the screen dependant on the structure
+//print some info at the top of the screen dependent on the structure
 void printStructureInfo(STRUCTURE *psStructure);
 
 /*Checks the template type against the factory type - returns false

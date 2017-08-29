@@ -1832,7 +1832,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 		for (i = 0; (i < numStructureStats) && (asStructureStats[i].type != REF_RESOURCE_EXTRACTOR); ++i) {}
 
 		if ((i < numStructureStats) &&
-		    (apStructTypeLists[selectedPlayer][i] == AVAILABLE))	// dont go any further if no derrick stat found.
+		    (apStructTypeLists[selectedPlayer][i] == AVAILABLE))	// don't go any further if no derrick stat found.
 		{
 			DROID *psCurr;
 
@@ -2507,7 +2507,7 @@ static UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] =
 };
 
 /* Only deals with one type of droid being selected!!!! */
-/*	We'll have to make it assesss which selection is to be dominant in the case
+/*	We'll have to make it assess which selection is to be dominant in the case
 	of multiple selections */
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 {

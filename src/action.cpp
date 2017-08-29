@@ -248,7 +248,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 		tPitch = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].rot.pitch;
 
 		// now find the nearest 90 degree angle
-		nearest = (uint16_t)((tRot + DEG(45)) / DEG(90) * DEG(90));  // Cast wrapping indended.
+		nearest = (uint16_t)((tRot + DEG(45)) / DEG(90) * DEG(90));  // Cast wrapping intended.
 		break;
 	default:
 		ASSERT(!"invalid object type", "invalid object type");
@@ -1940,7 +1940,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				break;
 			}
 
-			//in multiPlayer cannot electronically attack a tranporter
+			//in multiPlayer cannot electronically attack a transporter
 			if (bMultiPlayer
 			    && psAction->psObj->type == OBJ_DROID
 			    && isTransporter((DROID *)psAction->psObj))
@@ -2119,7 +2119,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 		moveDroidToDirect(psDroid, psAction->x, psAction->y);
 
-		// make sure there arn't any other VTOLs on the rearm pad
+		// make sure there aren't any other VTOLs on the rearm pad
 		ensureRearmPadClear((STRUCTURE *)psAction->psObj, psDroid);
 		break;
 	case DACTION_DROIDREPAIR:

@@ -43,7 +43,7 @@
 #define	WEIGHT_DIST_TILE			13						//In points used in weaponmodifier.txt and structuremodifier.txt
 #define	WEIGHT_DIST_TILE_DROID		WEIGHT_DIST_TILE		//How much weight a distance of 1 tile (128 world units) has when looking for the best nearest target
 #define	WEIGHT_DIST_TILE_STRUCT		WEIGHT_DIST_TILE
-#define	WEIGHT_HEALTH_DROID			(WEIGHT_DIST_TILE * 10)	//How much weight unit damage has (100% of damage is equaly weighted as 10 tiles distance)
+#define	WEIGHT_HEALTH_DROID			(WEIGHT_DIST_TILE * 10)	//How much weight unit damage has (100% of damage is equally weighted as 10 tiles distance)
 //~100% damage should be ~8 tiles (max sensor range)
 #define	WEIGHT_HEALTH_STRUCT		(WEIGHT_DIST_TILE * 7)
 

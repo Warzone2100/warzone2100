@@ -75,7 +75,7 @@ function eventMissionTimeout()
 	camCallOnce("playLastVideo");
 }
 
-// Allow win if at least one tranport launched.
+// Allow win if at least one transport launched.
 function eventTransporterLaunch(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)

@@ -1017,7 +1017,7 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 	ASSERT_OR_RETURN(false, psTransporter != nullptr, "Invalid droid pointer");
 	ASSERT_OR_RETURN(false, psAssigned != nullptr, "Invalid droid pointer");
 	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");
-	ASSERT_OR_RETURN(false, psTransporter->psGroup != nullptr, "tranporter doesn't have a group");
+	ASSERT_OR_RETURN(false, psTransporter->psGroup != nullptr, "transporter doesn't have a group");
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
@@ -1124,7 +1124,7 @@ bool updateTransporter(DROID *psTransporter)
 	}
 
 	/*if the transporter (selectedPlayer only) is moving droids to safety and
-	all remaining droids are destoyed then we need to flag the end of mission
+	all remaining droids are destroyed then we need to flag the end of mission
 	as long as we're not flying out*/
 	if (psTransporter->player == selectedPlayer && getDroidsToSafetyFlag()
 	    && psTransporter->action != DACTION_TRANSPORTOUT)

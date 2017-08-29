@@ -66,7 +66,7 @@ function getDroidsForCOLZ()
 	return droids;
 }
 
-//Send Collective tranport units
+//Send Collective transport units
 function sendCOTransporter()
 {
 	var tPos = getObject("COTransportPos");

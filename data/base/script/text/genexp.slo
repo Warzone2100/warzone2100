@@ -1038,7 +1038,7 @@ event sectorGroups(sectorGroupsTrig)
 				resetStructTargets();
 				if (random(100) < 10)
 				{
-					setStructTarPref(ST_WALL);		//pick walls occassionally
+					setStructTarPref(ST_WALL);		//pick walls occasionally
 				}
 				hitStruc = structTargetInArea(player, grpPlayer[count], grpGroup[count].x - targetRange, grpGroup[count].y - targetRange,
 				                              grpGroup[count].x + targetRange, grpGroup[count].y + targetRange);
@@ -1155,7 +1155,7 @@ event targetGroups(targetGroupsTrig)
 			resetStructTargets();
 			if (random(100) < 10)
 			{
-				setStructTarPref(ST_WALL);		//pick walls occassionally
+				setStructTarPref(ST_WALL);		//pick walls occasionally
 			}
 			hitStruc = structTargetInArea(player, grpPlayer[count2], grpGroup[count2].x - targetRange, grpGroup[count2].y - targetRange,
 			                              grpGroup[count2].x + targetRange, grpGroup[count2].y + targetRange);
@@ -1703,7 +1703,7 @@ event buildDerrick(inactive)	//only used if trucks found!
 				{
 					tempX = feature.x;
 					tempY = feature.y;
-					orderDroidStatsLoc(testDroid, DORDER_BUILD, strucStat[1], tempX, tempY);	//build a derick
+					orderDroidStatsLoc(testDroid, DORDER_BUILD, strucStat[1], tempX, tempY);	//build a derrick
 					testDroid = NULLOBJECT;
 				}
 				else
@@ -1829,7 +1829,7 @@ event sensorTarget(every, 67)
 				resetStructTargets();
 				if (random(100) < 10)
 				{
-					setStructTarPref(ST_WALL);		//pick walls occassionally
+					setStructTarPref(ST_WALL);		//pick walls occasionally
 				}
 				hitStruc = structTargetInArea(player, droids[count].player, droids[count].x - 768, droids[count].y - 768, droids[count].x + 768, droids[count].y + 768);
 				if (hitStruc != NULLOBJECT)

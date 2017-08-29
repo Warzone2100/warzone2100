@@ -3972,7 +3972,7 @@ bool scrRandom()
 // randomise the random number seed
 bool scrRandomiseSeed()
 {
-	// Why? What's the point? What on earth were they thinking, exactly? If the numbers don't have enough randominess, just set the random seed again and again until the numbers are double-plus super-duper full of randonomium?
+	// Why? What's the point? What on earth were they thinking, exactly? If the numbers don't have enough randomness, just set the random seed again and again until the numbers are double-plus super-duper full of randonomium?
 	debug(LOG_ERROR, "A script is trying to set the random seed with srand(). That just doesn't make sense.");
 	//srand((UDWORD)clock());
 
@@ -4047,7 +4047,7 @@ bool scrCompleteResearch()
 
 // -----------------------------------------------------------------------------------------
 // This routine used to start just a reticule button flashing
-//   .. now it starts any button flashing (awaiting implmentation from widget library)
+//   .. now it starts any button flashing (awaiting implementation from widget library)
 bool scrFlashOn()
 {
 	SDWORD		button;
@@ -5329,7 +5329,7 @@ bool scrFlyTransporterIn()
  *
  *  DESCRIPTION: Returns various bool options in the game	e.g. If the reticule is open
  *      - You should use the externed variable intMode for other game mode options
- *        e.g. in the intelligence screen or desgin screen)
+ *        e.g. in the intelligence screen or design screen)
  *
  *  RETURNS:
  *
@@ -10205,7 +10205,7 @@ bool scrAssembleWeaponTemplate()
 			pNewTemplate = tempTemplate;
 		}
 
-		scrFunctionResult.v.oval = pNewTemplate;	// succes
+		scrFunctionResult.v.oval = pNewTemplate;	// success
 	}
 
 	// return template to scripts

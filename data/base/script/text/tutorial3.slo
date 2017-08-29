@@ -644,7 +644,7 @@ event	researchCentreBuilt(CALL_RESEARCH_BUILT)
 	// Wait
 	pause(30);
 
-	// PlaySound "to resarch the artefact.."
+	// PlaySound "to research the artefact.."
 	playSound(SND_TUT22,0);
 
 	// Set the event that catches this
@@ -722,7 +722,7 @@ event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone, ref structure,
 	// Flash Icon
 	flashOn(IDRET_DESIGN);
 
-	// PlaySound "Left click the deisgn icon"
+	// PlaySound "Left click the design icon"
 	playSound(SND_TUT29,0);
 
 	pause(30);

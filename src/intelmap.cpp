@@ -1220,7 +1220,7 @@ void resetIntelligencePauseState()
 void displayImmediateMessage(MESSAGE *psMessage)
 {
 	/*
-		This has to be changed to support a script calling a message in the intellegence screen
+		This has to be changed to support a script calling a message in the intelligence screen
 	*/
 
 	psCurrentMsg = psMessage;

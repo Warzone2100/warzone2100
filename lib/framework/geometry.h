@@ -55,7 +55,7 @@ public:
 	Affine3F &RotInvYXZ(Rotation);
 	Affine3F &Trans(int32_t, int32_t, int32_t);
 	Affine3F &Trans(Vector3i);
-	Affine3F &Scale(int32_t); // Note: parameter assummed to be a scaled integer (scaled by FP_MULTIPLIER)
+	Affine3F &Scale(int32_t); // Note: parameter assumed to be a scaled integer (scaled by FP_MULTIPLIER)
 	Affine3F &InvRot();
 	Vector3i translation() const;
 	Vector3i operator*(const Vector3i) const;

@@ -20,7 +20,7 @@
 /**
  *
  * @file
- * Order releated structures.
+ * Order related structures.
  *
  */
 
