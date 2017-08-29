@@ -1135,13 +1135,17 @@ function __camIsValidLeftover(obj)
 	return false;
 }
 
+// Calling this without a defined group will check non-eliminated bases for
+// having the conditions to be destoyed. Helps fix earlier save files that
+// had problems with bases not being eliminated properly.
 function __camCheckBaseEliminated(group)
 {
 	// FIXME: O(n) lookup here
 	for (var blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
-		if ((bi.eliminated === true) || (bi.group !== group))
+		var foundLeftover = false;
+		if (bi.eliminated || (camDef(group) && (bi.group !== group)))
 			continue;
 		if (camDef(bi.cleanup))
 		{
@@ -1152,23 +1156,33 @@ function __camCheckBaseEliminated(group)
 					&& !__camIsValidLeftover(obj));
 			});
 			if (nonValidLeftovers.length)
+			{
 				continue;
+			}
 			for (var i = 0, l = leftovers.length; i < l; i++)
 			{
 				var obj = leftovers[i];
+				foundLeftover = true;
 				if (__camIsValidLeftover(obj))
 				{
 					// remove with special effect
-					camSafeRemoveObject(obj, true);
+					camSafeRemoveObject(obj, camDef(group));
 				}
 			}
-			if (camDef(bi.eliminateSnd))
+			if (camDef(group) && !bi.eliminated && camDef(bi.eliminateSnd))
 			{
 				// play sound
 				var pos = camMakePos(bi.cleanup);
 				playSound(bi.eliminateSnd, pos.x, pos.y, 0);
 			}
 		}
+		else
+		{
+			camDebug("All bases must have a cleanup area : " + blabel);
+			continue;
+		}
+		if (!camDef(group) && !foundLeftover)
+			continue;
 		if (camDef(bi.detectMsg) && bi.detected) // remove the beacon
 			hackRemoveMessage(bi.detectMsg, PROX_MSG, 0);
 		camTrace("Enemy base", blabel, "eliminated");
@@ -1179,7 +1193,6 @@ function __camCheckBaseEliminated(group)
 		var callback = __camGlobalContext()["camEnemyBaseEliminated_" + blabel];
 		if (camDef(callback))
 			callback();
-		break;
 	}
 }
 
@@ -2693,7 +2706,7 @@ const LAUGH1 = "laugh1.ogg";
 const LAUGH2 = "laugh2.ogg";
 const LAUGH3 = "laugh3.ogg";
 const PRODUCTION_COMPLETE = "pordcomp.ogg";
-const RES_ABSORBED = "resabsrd.ogg"
+const RES_ABSORBED = "resabsrd.ogg";
 const STRUCTURE_ABSORBED = "strutabs.ogg";
 const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
 const SYNAPTICS_ACTIVATED = "synplnk.ogg";
@@ -3087,6 +3100,7 @@ function cam_eventAttacked(victim, attacker)
 	}
 }
 
+//Work around some things that break on save-load.
 function cam_eventGameLoaded()
 {
 	isReceivingAllEvents = true;
@@ -3112,6 +3126,9 @@ function cam_eventGameLoaded()
 
 	//Subscribe to eventGroupSeen again.
 	camSetEnemyBases();
+
+	//Mark any dead bases if for some reason some did not eliminate properly.
+	__camCheckBaseEliminated();
 }
 
 //Plays Nexus sounds if nexusActivated is true.
