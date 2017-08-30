@@ -192,28 +192,28 @@ function eventStartLevel()
 			//assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(50000),
 			templates: [ npmrl, npmmct, npsbb, nphmg ]
 		},
 		"NPRightFactory": {
 			//assembly: "NPRightAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(60000),
 			templates: [ npmor, npsens, npsbb, nphmg ]
 		},
 		"NPCyborgFactory": {
 			//assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(40000),
 			templates: [ npcybc, npcybf, npcybm ]
 		},
 		"ScavSouthWestFactory": {
 			assembly: "ScavSouthWestAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(4000),
+			throttle: camChangeOnDiff(15000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -222,7 +222,7 @@ function eventStartLevel()
 			assembly: "ScavSouthEastAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(4000),
+			throttle: camChangeOnDiff(15000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
@@ -231,13 +231,13 @@ function eventStartLevel()
 			assembly: "ScavNorthAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(4000),
+			throttle: camChangeOnDiff(15000),
 			regroup: true,
 			repair: 40,
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 	});
 
-	queue("camCallOnce", 30000, "enableReinforcements");
-	queue("enableNPFactories", 50000);
+	queue("enableReinforcements", 30000);
+	queue("enableNPFactories", camChangeOnDiff(600000)); // 10 minutes
 }

@@ -246,13 +246,13 @@ function camChangeOnDiff(num, invert)
 	switch(difficulty)
 	{
 		case EASY:
-			modifier = (invert === false) ? 1.25 : 0.68;
+			modifier = (invert === false) ? 1.25 : 0.67;
 			break;
 		case MEDIUM:
 			modifier = 1.00;
 			break;
 		case HARD:
-			modifier = (invert === false) ? 0.75 : 1.75;
+			modifier = (invert === false) ? 0.80 : 1.50;
 			break;
 		case INSANE:
 			modifier = (invert === false) ? 0.67 : 2.50;
@@ -1136,7 +1136,7 @@ function __camIsValidLeftover(obj)
 }
 
 // Calling this without a defined group will check non-eliminated bases for
-// having the conditions to be destoyed. Helps fix earlier save files that
+// having the conditions to be destroyed. Helps fix earlier save files that
 // had problems with bases not being eliminated properly.
 function __camCheckBaseEliminated(group)
 {

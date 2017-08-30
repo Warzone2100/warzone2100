@@ -220,7 +220,7 @@ function eventStartLevel()
 		"NPFactoryE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(80000),
 			regroup: true,
 			repair: 40,
 			templates: [ npltat, npmsens, npmorb, npsmct, nphct ] //variety
@@ -228,7 +228,7 @@ function eventStartLevel()
 		"NPFactoryNE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(100000),
 			regroup: true,
 			repair: 40,
 			templates: [ nphct, npsbb, npmorb ] //tough units
@@ -253,7 +253,7 @@ function eventStartLevel()
 			assembly: camMakePos("cybRetreatPoint"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(50000),
 			regroup: true,
 			repair: 40,
 			templates: [ npcybc, npcybf, npcybr ]
@@ -262,6 +262,6 @@ function eventStartLevel()
 
 	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //hover arti
 
-	queue("camCallOnce", 10000, "enableReinforcements");
-	queue("setupPatrols", 40000);
+	queue("enableReinforcements", 10000);
+	queue("setupPatrols", 120000); // 2 min.
 }
