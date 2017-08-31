@@ -4,7 +4,6 @@ include("script/campaign/templates.js");
 
 const TRANSPORT_LIMIT = 4;
 var index; //Number of transport loads sent into the level
-var lastLandedTime; //The gameTime the last players transporter landed at.
 
 
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -243,7 +242,6 @@ function eventTransporterLanded(transport)
 		}
 
 		index = index + 1;
-		lastLandedTime = gameTime;
 	}
 }
 
@@ -256,9 +254,17 @@ function downTransporter()
 
 function eventTransporterLaunch(transport)
 {
-	if (index === TRANSPORT_LIMIT && (gameTime > (lastLandedTime + 60000)))
+	if (index >= TRANSPORT_LIMIT)
 	{
 		queue("downTransporter", 60000);
+	}
+}
+
+function eventGameLoaded()
+{
+	if (index >= TRANSPORT_LIMIT)
+	{
+		setReinforcementTime(LZ_COMPROMISED_TIME);
 	}
 }
 
