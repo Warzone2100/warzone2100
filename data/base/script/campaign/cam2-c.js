@@ -279,12 +279,12 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
-		"rippleRocket":		{ tech: "R-Wpn-Rocket06-IDF" },
-		"quadbof":			{ tech: "R-Wpn-AAGun02" },
-		"howitzer":			{ tech: "R-Wpn-HowitzerMk1" },
-		"COHeavyFac-Leopard":	{ tech: "R-Vehicle-Body02" }, //leopard
-		"COHeavyFac-Upgrade":	{ tech: "R-Struc-Factory-Upgrade04" },
-		"COVtolFacLeft-Prop":	{ tech: "R-Vehicle-Prop-VTOL" },
+		"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },
+		"quadbof": { tech: "R-Wpn-AAGun02" },
+		"howitzer": { tech: "R-Wpn-HowitzerMk1" },
+		"COHeavyFac-Leopard": { tech: "R-Vehicle-Body02" }, //leopard
+		"COHeavyFac-Upgrade": { tech: "R-Struc-Factory-Upgrade04" },
+		"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
 	});
 
 	setPower(camChangeOnDiff(200000, true), THE_COLLECTIVE);
@@ -319,7 +319,7 @@ function eventStartLevel()
 		"COHeavyFac-Upgrade": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(700000),
+			throttle: camChangeOnDiff(70000),
 			regroup: false,
 			repair: 40,
 			templates: [comit, cohct, comhpv, cohbbt]

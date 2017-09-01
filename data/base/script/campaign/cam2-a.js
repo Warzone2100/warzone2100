@@ -27,7 +27,10 @@ function preDamageStuff()
 	for (var x = 0; x < droids.length; ++x)
 	{
 		var droid = droids[x];
-		setHealth(droid, 45 + camRand(20));
+		if (!camIsTransporter(droid))
+		{
+			setHealth(droid, 45 + camRand(20));
+		}
 	}
 
 	for (var x = 0; x < structures.length; ++x)

@@ -212,7 +212,7 @@ function eventStartLevel()
 			assembly: camMakePos("genRetreatPoint"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(60000),
 			regroup: true,
 			repair: 40,
 			templates: [ nphmgh, npltath, nphch ] //Hover factory
@@ -220,7 +220,7 @@ function eventStartLevel()
 		"NPFactoryE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(90000),
 			regroup: true,
 			repair: 40,
 			templates: [ npltat, npmsens, npmorb, npsmct, nphct ] //variety
@@ -228,7 +228,7 @@ function eventStartLevel()
 		"NPFactoryNE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(100000),
+			throttle: camChangeOnDiff(120000),
 			regroup: true,
 			repair: 40,
 			templates: [ nphct, npsbb, npmorb ] //tough units
@@ -236,7 +236,7 @@ function eventStartLevel()
 		"NPCybFactoryW": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(50000),
 			regroup: true,
 			repair: 40,
 			templates: [ npcybc, npcybf, npcybr ]
@@ -244,7 +244,7 @@ function eventStartLevel()
 		"NPCybFactoryE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(50000),
 			regroup: true,
 			repair: 40,
 			templates: [ npcybc, npcybf, npcybr ]
@@ -253,7 +253,7 @@ function eventStartLevel()
 			assembly: camMakePos("cybRetreatPoint"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(70000),
 			regroup: true,
 			repair: 40,
 			templates: [ npcybc, npcybf, npcybr ]
