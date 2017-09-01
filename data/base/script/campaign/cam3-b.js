@@ -47,17 +47,17 @@ camAreaEvent("trapTrigger", function(droid)
 function eventVideoDone(flag)
 {
 	const VIDEOS = ["MB3_B_MSG", "MB3_B_MSG2", "MB3_B_MSG3"];
-	if(!camDef(videoIndex))
+	if (!camDef(videoIndex))
 	{
 		videoIndex = 0;
 	}
 
-	if(!camDef(flag) && (videoIndex === 2))
+	if (!camDef(flag) && (videoIndex === 2))
 	{
 		return; //Last message is triggered by an area event.
 	}
 
-	if(videoIndex < VIDEOS.length)
+	if (videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex += 1;
@@ -80,7 +80,7 @@ function enableAllFactories()
 //return 10 units if for a transport and up to 15 for land.
 function getDroidsForNXLZ(isTransport)
 {
-	if(!camDef(isTransport))
+	if (!camDef(isTransport))
 	{
 		isTransport = false;
 	}
@@ -101,7 +101,7 @@ function getDroidsForNXLZ(isTransport)
 //Send Nexus transport units
 function sendNXTransporter()
 {
-	if(!enumArea("NXEastBaseCleanup", NEXUS, false).length && !enumArea("NXWestBaseCleanup", NEXUS, false).length)
+	if (!enumArea("NXEastBaseCleanup", NEXUS, false).length && !enumArea("NXWestBaseCleanup", NEXUS, false).length)
 	{
 		return; //Call off transport when both west and east Nexus bases are destroyed.
 	}
@@ -125,7 +125,7 @@ function sendNXTransporter()
 //Send Nexus transport units
 function sendNXlandReinforcements()
 {
-	if(!enumArea("NXWestBaseCleanup", NEXUS, false).length)
+	if (!enumArea("NXWestBaseCleanup", NEXUS, false).length)
 	{
 		return;
 	}

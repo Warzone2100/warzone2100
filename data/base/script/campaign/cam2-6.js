@@ -91,7 +91,7 @@ function mainBaseAttackGroup()
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	var list = ["Emplacement-MortarPit02", "WallTower04", "CO-Tower-LtATRkt", "Sys-CB-Tower01"];
@@ -126,12 +126,12 @@ function eventStartLevel()
 	});
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
@@ -223,5 +223,5 @@ function eventStartLevel()
 	queue("enableReinforcements", 20000);
 	queue("northWestAttack", 120000);
 	queue("mainBaseAttackGroup", 180000);
-	queue("enableTimeBasedFactories", 180000);
+	queue("enableTimeBasedFactories", camChangeOnDiff(600000)); // 10 min
 }

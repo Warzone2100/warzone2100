@@ -29,9 +29,9 @@ function checkEnemyVtolArea()
 	var vtols = enumRange(pos.x, pos.y, 10, THE_COLLECTIVE, false);
 	vtols.filter(function(obj) { return (obj.player === THE_COLLECTIVE) && isVTOL(obj); });
 
-	for(var i = 0; i < vtols.length; ++i)
+	for (var i = 0; i < vtols.length; ++i)
 	{
-		if((vtols[i].weapons[0].armed < 20) || (vtols[i].health < 60))
+		if ((vtols[i].weapons[0].armed < 20) || (vtols[i].health < 60))
 		{
 			camSafeRemoveObject(vtols[i], false);
 		}
@@ -43,12 +43,12 @@ function checkEnemyVtolArea()
 //Play first two immediately...
 function eventVideoDone(playLastVideo)
 {
-	if(camDef(playLastVideo))
+	if (camDef(playLastVideo))
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 	}
 
-	if(videoIndex < VIDEOS.length - 1)
+	if (videoIndex < VIDEOS.length - 1)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex = videoIndex + 1;
@@ -62,7 +62,7 @@ function playLastVideo()
 		return obj.type === DROID;
 	});
 
-	for(var i = 0; i < droids.length; ++i)
+	for (var i = 0; i < droids.length; ++i)
 	{
 		camSafeRemoveObject(droids[i], false);
 	}
@@ -90,12 +90,12 @@ function randomTemplates(list, isTransport)
 	var droids = [];
 	var size = 8 + camRand(8);
 
-	if(camDef(isTransport))
+	if (camDef(isTransport))
 	{
 		size = 8 + camRand(3);
 	}
 
-	for(var i = 0; i < size; ++i)
+	for (var i = 0; i < size; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -134,7 +134,7 @@ function collectiveTransportScouts()
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(COTransportPos), randomTemplates(list, true),
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 100 },
-			exit: { x: 126, y: 70 }
+			exit: { x: 126, y: 100 }
 		}
 	);
 

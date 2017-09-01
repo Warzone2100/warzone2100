@@ -54,7 +54,7 @@ camAreaEvent("phantomFacTrigger", function(droid)
 	queue("eventVideoDone", 2000);
 	//Donate All of alpha to the player.
 	var alphaStuff = enumArea(0, 0, mapWidth, mapHeight, ALPHA, false);
-	for(var i = 0, l = alphaStuff.length; i < l; ++i)
+	for (var i = 0, l = alphaStuff.length; i < l; ++i)
 	{
 		donateObject(alphaStuff[i], CAM_HUMAN_PLAYER);
 	}
@@ -69,7 +69,7 @@ camAreaEvent("phantomFacTrigger", function(droid)
 function getAlphaUnitIDs()
 {
 	const DROID_EXP = 512; //Hero rank.
-	if(!camDef(alphaUnitIDs))
+	if (!camDef(alphaUnitIDs))
 	{
 		alphaUnitIDs = [];
 	}
@@ -78,10 +78,10 @@ function getAlphaUnitIDs()
 		return (obj.type === DROID);
 	});
 
-	for(var i = 0, l = alphaDroids.length; i < l; ++i)
+	for (var i = 0, l = alphaDroids.length; i < l; ++i)
 	{
 		var dr = alphaDroids[i];
-		if(!camIsSystemDroid(dr))
+		if (!camIsSystemDroid(dr))
 		{
 			setDroidExperience(dr, DROID_EXP);
 		}
@@ -94,7 +94,7 @@ function sendEdgeMapDroids()
 	const COUNT = 9 + camRand(8); // 9 - 16.
 	const EDGE = ["NE-PhantomFactory", "SW-PhantomFactory", "SE-PhantomFactory"];
 	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh];
-	if(!camDef(edgeMapIndex))
+	if (!camDef(edgeMapIndex))
 	{
 		edgeMapIndex = 0;
 	}
@@ -112,7 +112,7 @@ function sendEdgeMapDroids()
 	);
 
 	edgeMapIndex += 1;
-	if(edgeMapIndex === EDGE.length)
+	if (edgeMapIndex === EDGE.length)
 	{
 		edgeMapIndex = 0;
 	}
@@ -124,12 +124,12 @@ function sendEdgeMapDroids()
 function eventVideoDone()
 {
 	const VIDEOS = ["MB3_2_MSG3", "MB3_2_MSG4"];
-	if(!camDef(videoIndex))
+	if (!camDef(videoIndex))
 	{
 		videoIndex = 0;
 	}
 
-	if(videoIndex < VIDEOS.length)
+	if (videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex += 1;
@@ -226,7 +226,7 @@ function enableReinforcements()
 
 function alphaTeamAlive()
 {
-	if(camDef(alphaUnitIDs))
+	if (camDef(alphaUnitIDs))
 	{
 		var alphaAlive = false;
 		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
@@ -236,11 +236,11 @@ function alphaTeamAlive()
 			return (obj.type === DROID);
 		});
 
-		for(var i = 0, l = alive.length; i < l; ++i)
+		for (var i = 0, l = alive.length; i < l; ++i)
 		{
-			for(var x = 0, c = alphaUnitIDs.length; x < c; ++x)
+			for (var x = 0, c = alphaUnitIDs.length; x < c; ++x)
 			{
-				if(alive[i].id === alphaUnitIDs[x])
+				if (alive[i].id === alphaUnitIDs[x])
 				{
 					alphaAlive = true;
 					break;
@@ -248,13 +248,13 @@ function alphaTeamAlive()
 			}
 		}
 
-		if(!alphaAlive)
+		if (!alphaAlive)
 		{
 			playSound("pcv622.ogg"); //objective destroyed.
 			return false;
 		}
 
-		if(alphaAlive && (alive.length === allDroidsAtLZ.length))
+		if (alphaAlive && (alive.length === allDroidsAtLZ.length))
 		{
 			enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);
 			return true;

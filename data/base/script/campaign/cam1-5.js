@@ -73,7 +73,7 @@ function sendNPTransport()
 	var tPos = getObject("NPTransportPos");
 	var nearbyDefense = enumRange(tPos.x, tPos.y, 6, NEW_PARADIGM, false);
 
-	if(nearbyDefense.length)
+	if (nearbyDefense.length)
 	{
 		var list = getDroidsForNPLZ();
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
@@ -130,12 +130,12 @@ function eventStartLevel()
 	});
 
 	var lz = getObject("LandingZone1"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var lz2 = getObject("LandingZone2"); //new paradigm lz
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEW_PARADIGM);
 	var tent = getObject("TransporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("TransporterExit");
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEW_PARADIGM);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	//Transporter is the only droid of the player's on the map

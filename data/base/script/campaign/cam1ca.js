@@ -16,11 +16,13 @@ function countStructuresInBuildArea()
 	var list = enumArea("buildArea", CAM_HUMAN_PLAYER, false);
 	var ret = 0;
 	for (var i = 0; i < list.length; ++i)
+	{
 		if (list[i].type === STRUCTURE && list[i].stattype !== WALL
 		                               && list[i].status === BUILT)
 		{
 			++ret;
 		}
+	}
 	return ret;
 }
 

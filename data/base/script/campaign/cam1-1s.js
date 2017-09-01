@@ -4,7 +4,7 @@ var cheat;
 
 function eventChat(from, to, message)
 {
-	if(isCheating() && message === "let me win")
+	if (isCheating() && message === "let me win")
 	{
 		cheat = true;
 	}
@@ -26,9 +26,9 @@ function secondVideo()
 function powerModuleBuilt()
 {
 	var gens = enumStruct(CAM_HUMAN_PLAYER, "A0PowerGenerator", false);
-	for(var x = 0; x < gens.length; ++x)
+	for (var x = 0; x < gens.length; ++x)
 	{
-		if((gens[x].modules > 0) && (gens[x].status === BUILT))
+		if ((gens[x].modules > 0) && (gens[x].status === BUILT))
 		{
 			return true;
 		}
@@ -39,7 +39,7 @@ function powerModuleBuilt()
 //Only way to pass this mission is to build a power module or be in cheat mode.
 function checkForPowerModule()
 {
-	if(cheat || powerModuleBuilt())
+	if (cheat || powerModuleBuilt())
 	{
 		camSetupTransporter(11, 52, 1, 32);
 		secondVideo();
@@ -58,7 +58,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
 	cheat = false;
 
-	if(!powerModuleBuilt())
+	if (!powerModuleBuilt())
 	{
 		resPowModVideo();
 	}

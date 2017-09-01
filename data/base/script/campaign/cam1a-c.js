@@ -28,12 +28,12 @@ var videoIndex;
 function eventVideoDone()
 {
 	const VIDEOS = ["MB1A-C_MSG", "MB1A-C_MSG2"];
-	if(!camDef(videoIndex))
+	if (!camDef(videoIndex))
 	{
 		videoIndex = 0;
 	}
 
-	if(videoIndex < VIDEOS.length)
+	if (videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex = videoIndex + 1;
@@ -51,7 +51,7 @@ function extraVictoryCondition()
 //Makes a large group of ground units appear on map
 function checkForGroundForces()
 {
-	if(index < 2 && switchLZ === 3)
+	if (index < 2 && switchLZ === 3)
 	{
 		//Amounts for the ground force
 		const maxTanks = 16;
@@ -132,7 +132,7 @@ function sendTransport()
 		switchLZ = 0;
 	}
 
-	if(index === 5)
+	if (index === 5)
 		return;
 	else
 		queue("sendTransport", camChangeOnDiff(60000)); //1 min

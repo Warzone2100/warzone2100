@@ -21,7 +21,7 @@ const COLLECTIVE_RES = [
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if((droid.player === THE_COLLECTIVE) && (isVTOL(droid)))
+	if ((droid.player === THE_COLLECTIVE) && isVTOL(droid))
 	{
 		camSafeRemoveObject(droid, false);
 	}
@@ -32,7 +32,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	var list = ["AASite-QuadBof", "WallTower04", "GuardTower-RotMg", "WallTower-Projector"];
@@ -100,12 +100,12 @@ function eventStartLevel()
 	});
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
@@ -142,7 +142,7 @@ function eventStartLevel()
 		"COSouthCyborgFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(30000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybc, npcybf, npcybr, cocybag]

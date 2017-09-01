@@ -49,10 +49,10 @@ camAreaEvent("NPWayPointTrigger", function()
 //Land New Paradigm transport if the New Paradigm have the artifact.
 camAreaEvent("NPTransportTrigger", function()
 {
-	if(enemyHasArtifact)
+	if (enemyHasArtifact)
 	{
 		var list = [];
-		with(camTemplates) list = [npmrl, npmrl];
+		with (camTemplates) list = [npmrl, npmrl];
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 39, y: 0 },
 			exit: { x: 32, y: 62 }
@@ -80,9 +80,9 @@ camAreaEvent("artifactCheckNP", function()
 //by the time it lands.
 function eventTransporterLanded(transport)
 {
-	if((transport.player === NEW_PARADIGM) && enemyHasArtifact)
+	if ((transport.player === NEW_PARADIGM) && enemyHasArtifact)
 	{
-		for(var s = 0; s < 5; ++s)
+		for (var s = 0; s < 5; ++s)
 		{
 			var crew = enumRange(transport.x, transport.y, 5, ALL_PLAYERS, false);
 			crew = crew.filter(function(obj) {
@@ -94,7 +94,7 @@ function eventTransporterLanded(transport)
 				);
 			});
 
-			for(var i = 0, l = crew.length; i < l; ++i)
+			for (var i = 0, l = crew.length; i < l; ++i)
 			{
 				camSafeRemoveObject(crew[i], false);
 			}
@@ -107,7 +107,7 @@ function eventTransporterLanded(transport)
 //Check if the artifact group member are still alive and drop the artifact if needed.
 function eventGroupLoss(obj, group, newsize)
 {
-	if((group === artiGroup) && !newsize && enemyHasArtifact && !enemyStoleArtifact)
+	if ((group === artiGroup) && !newsize && enemyHasArtifact && !enemyStoleArtifact)
 	{
 		var acrate = addFeature("Crate", obj.x, obj.y);
 		addLabel(acrate, "newArtiPos");
@@ -132,7 +132,7 @@ function getArtifact()
 //New Paradigm truck builds six lancer hardpoints around LZ
 function buildLancers()
 {
-	for(var i = 1; i <= 6; ++i)
+	for (var i = 1; i <= 6; ++i)
 	{
 		camQueueBuilding(NEW_PARADIGM, "WallTower06", "hardPoint" + i);
 	}
@@ -141,12 +141,12 @@ function buildLancers()
 //Must destroy all of the New Paradigm droids and make sure the artifact is safe.
 function extraVictory()
 {
-	if(camDef(enemyStoleArtifact) && enemyStoleArtifact)
+	if (camDef(enemyStoleArtifact) && enemyStoleArtifact)
 	{
 		return false;
 	}
 
-	if(!enumDroid(NEW_PARADIGM).length)
+	if (!enumDroid(NEW_PARADIGM).length)
 	{
 		return true;
 	}
@@ -171,11 +171,11 @@ function removeCanyonBlip()
 
 function eventPickup(feature, droid)
 {
-	if(feature.stattype === ARTIFACT)
+	if (feature.stattype === ARTIFACT)
 	{
-		if(droid.player === CAM_HUMAN_PLAYER)
+		if (droid.player === CAM_HUMAN_PLAYER)
 		{
-			if(enemyHasArtifact)
+			if (enemyHasArtifact)
 			{
 				hackRemoveMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER);
 			}

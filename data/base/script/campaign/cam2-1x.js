@@ -20,7 +20,7 @@ const COLLECTIVE_RES = [
 camAreaEvent("crashSite", function(droid)
 {
 	//Unlikely to happen.
-	if(enumDroid(TRANSPORT_TEAM).length === 0)
+	if (!enumDroid(TRANSPORT_TEAM).length)
 	{
 		gameOverMessage(false);
 		return;
@@ -34,7 +34,7 @@ camAreaEvent("crashSite", function(droid)
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
-	for(var i = 0; i < downedTransportUnits.length; i++)
+	for (var i = 0; i < downedTransportUnits.length; i++)
 	{
 		donateObject(downedTransportUnits[i], CAM_HUMAN_PLAYER);
 	}
@@ -87,12 +87,12 @@ function setupCyborgGroups()
 function updateTransportUnits()
 {
 	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
-	for(var i = 0; i < downedTransportUnits.length; i++)
+	for (var i = 0; i < downedTransportUnits.length; i++)
 	{
-		if(camDef(downedTransportUnits[i]))
+		if (camDef(downedTransportUnits[i]))
 		{
 			var temp = downedTransportUnits[i];
-			if(camDef(temp.weapons[0]))
+			if (camDef(temp.weapons[0]))
 			{
 				addDroid(TRANSPORT_TEAM, temp.x, temp.y, "Team Alpha unit",
 					temp.body, temp.propulsion, "", "", temp.weapons[0].name);
@@ -108,7 +108,7 @@ function updateTransportUnits()
 	//Remove the old droids.
 	for(var i = 0; i < downedTransportUnits.length; i++)
 	{
-		if(camDef(downedTransportUnits[i]))
+		if (camDef(downedTransportUnits[i]))
 		{
 			camSafeRemoveObject(downedTransportUnits[i], false);
 		}
@@ -121,14 +121,14 @@ function updateTransportUnits()
 //likely will never happen as with the WZ Script version.
 function checkCrashedTeam()
 {
-	if(getObject("transporter") === null)
+	if (getObject("transporter") === null)
 	{
 		const BADSND = "pcv622.ogg";
 		playSound(BADSND);
 		return false;
 	}
 
-	if(camDef(victoryFlag) && (victoryFlag === true))
+	if (camDef(victoryFlag) && victoryFlag)
 	{
 		return true;
 	}

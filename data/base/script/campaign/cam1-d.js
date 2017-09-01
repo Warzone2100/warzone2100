@@ -55,7 +55,7 @@ function sendNPTransporter()
 	var tPos = getObject("NPTransportPos");
 	var nearbyDefense = enumRange(tPos.x, tPos.y, 8, NEW_PARADIGM, false);
 
-	if(nearbyDefense.length)
+	if (nearbyDefense.length)
 	{
 		var list = getDroidsForNPLZ();
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list,
@@ -167,12 +167,12 @@ function eventStartLevel()
 	});
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	//Get rid of the already existing crate and replace with another

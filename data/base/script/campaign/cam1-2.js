@@ -68,13 +68,14 @@ function eventStartLevel()
 		message: "C1-2_LZ",
 		reinforcements: -1
 	});
+	
 	var startpos = getObject("StartPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("LandingZone");
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("TransporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("TransporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	setPower(camChangeOnDiff(800, true), 7);
@@ -140,7 +141,7 @@ function eventStartLevel()
 			templates: [ trike, bloke, buggy, bjeep ]
 		},
 	});
-	
+
 	queue("enableReinforcements", 10000);
 	queue("enableWestFactory", 30000);
 }

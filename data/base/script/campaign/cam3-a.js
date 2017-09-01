@@ -34,7 +34,7 @@ camAreaEvent("cybAttackers", function(droid)
 
 camAreaEvent("northEastBaseCleanup", function(droid)
 {
-	if(droid.player === CAM_HUMAN_PLAYER)
+	if (droid.player === CAM_HUMAN_PLAYER)
 	{
 		camEnableFactory("NXcybFac-b3-1");
 	}
@@ -47,7 +47,7 @@ camAreaEvent("northEastBaseCleanup", function(droid)
 //This one sets up some groups also.
 camAreaEvent("southWestBaseCleanup", function(droid)
 {
-	if(droid.player === CAM_HUMAN_PLAYER)
+	if (droid.player === CAM_HUMAN_PLAYER)
 	{
 		camEnableFactory("NXcybFac-b3-2");
 		camEnableFactory("NXHvyFac-b3");
@@ -74,7 +74,7 @@ camAreaEvent("southWestBaseCleanup", function(droid)
 
 camAreaEvent("northWestBaseCleanup", function(droid)
 {
-	if(droid.player === CAM_HUMAN_PLAYER)
+	if (droid.player === CAM_HUMAN_PLAYER)
 	{
 		camEnableFactory("NXcybFac-b4");
 	}
@@ -88,12 +88,12 @@ camAreaEvent("northWestBaseCleanup", function(droid)
 function eventVideoDone()
 {
 	const VIDEOS = ["MB3A_MSG", "MB3A_MSG2"];
-	if(!camDef(videoIndex))
+	if (!camDef(videoIndex))
 	{
 		videoIndex = 0;
 	}
 
-	if(videoIndex < VIDEOS.length)
+	if (videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex += 1;
@@ -138,12 +138,12 @@ function enableAllFactories()
 function sendPlayerTransporter()
 {
 	const transportLimit = 4; //Max of four transport loads if starting from menu.
-	if(!camDef(index))
+	if (!camDef(index))
 	{
 		index = 0;
 	}
 
-	if(index === transportLimit)
+	if (index === transportLimit)
 	{
 		return;
 	}
@@ -152,7 +152,7 @@ function sendPlayerTransporter()
 	var list;
 	with (camTemplates) list = [prhasgnt, prhhpvt, prhaacnt, prtruck];
 
-	for(var i = 0, d = list.length; i < 10; ++i)
+	for (var i = 0, d = list.length; i < 10; ++i)
 	{
 		droids.push((i < d) ? list[i] : list[camRand(d)]);
 	}
@@ -173,7 +173,6 @@ function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxlneedv, nxlscouv, nxmtherv];
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(420000), "NXCommandCenter"); //7 min
-	checkNexusHQ();
 }
 
 //These groups are active immediately.
@@ -212,7 +211,7 @@ function groupPatrolNoTrigger()
 //Build defenses.
 function truckDefense()
 {
-	if(enumDroid(NEXUS, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(NEXUS, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	const DEFENSE = ["NX-Tower-Rail1", "NX-Tower-ATMiss"];
@@ -234,12 +233,12 @@ function cam3Setup()
 		"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
 	];
 
-	for( var x = 0, l = BETA_TECH.length; x < l; ++x)
+	for (var x = 0, l = BETA_TECH.length; x < l; ++x)
 	{
 		makeComponentAvailable(BETA_TECH[x], CAM_HUMAN_PLAYER);
 	}
 
-	for( var x = 0, l = STRUCTS_GAMMA.length; x < l; ++x)
+	for (var x = 0, l = STRUCTS_GAMMA.length; x < l; ++x)
 	{
 		enableStructure(STRUCTS_GAMMA[x], CAM_HUMAN_PLAYER);
 	}
@@ -389,11 +388,13 @@ function eventStartLevel()
 	eventVideoDone(); //Play videos.
 
 	//Only if starting Gamma directly rather than going through Beta
-	if(enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0) {
+	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)
+	{
 		setReinforcementTime(LZ_COMPROMISED_TIME);
 		sendPlayerTransporter();
 	}
-	else {
+	else
+	{
 		setReinforcementTime(REINFORCEMENT_TIME);
 	}
 

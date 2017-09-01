@@ -166,13 +166,14 @@ function eventStartLevel()
 		message: "C1-3_LZ",
 		reinforcements: -1 // will override later
 	});
+
 	var startpos = getObject("StartPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("LandingZone");
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("TransporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("TransporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	setPower(camChangeOnDiff(50000, true), NEW_PARADIGM);

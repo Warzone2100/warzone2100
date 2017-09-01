@@ -168,7 +168,7 @@ function eventStartLevel()
 	sendEdgeMapDroids();
 	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS, true);
 
-	queue("synapticsSound", 800);
-	queue("powerTransfer", 3000);
+	queue("powerTransfer", 800);
+	queue("synapticsSound", 5000);
 	queue("hackPlayer", 8000);
 }

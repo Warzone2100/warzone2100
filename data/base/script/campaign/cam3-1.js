@@ -65,12 +65,12 @@ camAreaEvent("hillTriggerZone", function(droid)
 function eventVideoDone()
 {
 	const VIDEOS = ["MB3_1B_MSG", "MB3_1B_MSG2"];
-	if(!camDef(videoIndex))
+	if (!camDef(videoIndex))
 	{
 		videoIndex = 0;
 	}
 
-	if(videoIndex < VIDEOS.length)
+	if (videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex += 1;
@@ -82,7 +82,6 @@ function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxlscouv, nxmtherv];
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
-	checkNexusHQ();
 }
 
 //These groups are active immediately.
@@ -125,7 +124,7 @@ function missileSilosDestroyed()
 	const SILO_ALIAS = "NXMissileSilo";
 	var destroyed = 0;
 
-	for(var i = 0; i < SILO_COUNT; ++i)
+	for (var i = 0; i < SILO_COUNT; ++i)
 	{
 		destroyed += (getObject(SILO_ALIAS + (i + 1)) === null) ? 1 : 0;
 	}
@@ -141,19 +140,19 @@ function nukeAndCountSurvivors()
 	var safeLen = safeZone.length;
 
 	//Make em' explode!
-	for(var i = 0, t = nuked.length; i < t; ++i)
+	for (var i = 0, t = nuked.length; i < t; ++i)
 	{
 		var nukeIt = true;
-		for(var s = 0; s < safeLen; ++s)
+		for (var s = 0; s < safeLen; ++s)
 		{
-			if(nuked[i].id === safeZone[s].id)
+			if (nuked[i].id === safeZone[s].id)
 			{
 				nukeIt = false;
 				break;
 			}
 		}
 
-		if(nukeIt && camDef(nuked[i]) && (nuked[i].id !== 0))
+		if (nukeIt && camDef(nuked[i]) && (nuked[i].id !== 0))
 		{
 			camSafeRemoveObject(nuked[i], true);
 		}
@@ -165,7 +164,7 @@ function nukeAndCountSurvivors()
 //Expand the map and play video and prevent transporter reentry.
 function setupNextMission()
 {
-	if(missileSilosDestroyed())
+	if (missileSilosDestroyed())
 	{
 		const MISSLE_ABORT = "labort.ogg";
 		eventVideoDone();
@@ -173,7 +172,7 @@ function setupNextMission()
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
 
-		if(getMissionTime() > 3600)
+		if (getMissionTime() > 3600)
 		{
 			setMissionTime(camChangeOnDiff(3600));
 		}
@@ -198,22 +197,22 @@ function getCountdown()
 	var sounds = missilesDead ? detSounds : launchSounds;
 	var skip = false;
 
-	for(var i = 0, t = times.length; i < t; ++i)
+	for (var i = 0, t = times.length; i < t; ++i)
 	{
 		var currentTime = getMissionTime();
-		if(currentTime <= times[0])
+		if (currentTime <= times[0])
 		{
-			if(camDef(times[1]) && (currentTime <= times[1]))
+			if (camDef(times[1]) && (currentTime <= times[1]))
 			{
 				skip = true; //Huge time jump?
 			}
 
-			if(!skip)
+			if (!skip)
 			{
 				playSound(sounds[0], CAM_HUMAN_PLAYER);
 			}
 
-			if(missilesDead)
+			if (missilesDead)
 			{
 				detTimes.shift();
 				detSounds.shift();
@@ -246,9 +245,9 @@ function unitsInValley()
 		return (obj.type === DROID);
 	});
 
-	if(safeZone.length === allDroids.length)
+	if (safeZone.length === allDroids.length)
 	{
-		if(nukeAndCountSurvivors())
+		if (nukeAndCountSurvivors())
 		{
 			return true;
 		}

@@ -8,12 +8,12 @@ var index;
 function eventVideoDone()
 {
 	const VIDEOS = ["MB2_1_MSG", "MB2_1_MSG2"];
-	if(!camDef(index))
+	if (!camDef(index))
 	{
 		index = 0;
 	}
 
-	if(index < VIDEOS.length)
+	if (index < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[index], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		index = index + 1;

@@ -25,12 +25,12 @@ camAreaEvent("gammaBaseTrigger", function() {
 function eventVideoDone()
 {
 	const VIDEOS = ["MB3_C_MSG", "MB3_C_MSG2"];
-	if(!camDef(videoIndex))
+	if (!camDef(videoIndex))
 	{
 		videoIndex = 0;
 	}
 
-	if(videoIndex < VIDEOS.length)
+	if (videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex += 1;

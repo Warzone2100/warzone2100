@@ -24,13 +24,13 @@ function preDamageStuff()
 	var droids = enumDroid(CAM_HUMAN_PLAYER);
 	var structures = enumStruct(CAM_HUMAN_PLAYER);
 
-	for(var x = 0; x < droids.length; ++x)
+	for (var x = 0; x < droids.length; ++x)
 	{
 		var droid = droids[x];
 		setHealth(droid, 45 + camRand(20));
 	}
 
-	for(var x = 0; x < structures.length; ++x)
+	for (var x = 0; x < structures.length; ++x)
 	{
 		var struc = structures[x];
 		setHealth(struc, 45 + camRand(45));
@@ -49,7 +49,7 @@ function getDroidsForCOLZ()
 	var droids = [];
 	for (var i = 0; i < count; ++i)
 	{
-		if(camRand(3) === 0)
+		if (camRand(3) === 0)
 		{
 			t = scouts[camRand(scouts.length)];
 		}
@@ -71,7 +71,7 @@ function sendCOTransporter()
 	var tPos = getObject("COTransportPos");
 	var nearbyDefense = enumRange(tPos.x, tPos.y, 15, THE_COLLECTIVE, false);
 
-	if(nearbyDefense.length)
+	if (nearbyDefense.length)
 	{
 		var list = getDroidsForCOLZ();
 		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
@@ -89,12 +89,12 @@ function sendCOTransporter()
 //from the main menu. Otherwise a player can just bring in there Alpha units
 function sendPlayerTransporter()
 {
-	if(!camDef(index))
+	if (!camDef(index))
 	{
 		index = 0;
 	}
 
-	if(index === TRANSPORT_LIMIT)
+	if (index === TRANSPORT_LIMIT)
 	{
 		downTransporter();
 		return;
@@ -105,7 +105,7 @@ function sendPlayerTransporter()
 	var list;
 	with (camTemplates) list = [prhct, prhct, prhct, prltat, prltat, npcybr, prrept];
 
-	for(var i = 0; i < 10; ++i)
+	for (var i = 0; i < 10; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -168,7 +168,7 @@ function groupPatrol()
 //Build defenses around oil resource
 function truckDefense()
 {
-	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	const DEFENSES = ["WallTower06", "PillBox1", "WallTower03"];
@@ -193,12 +193,12 @@ function cam2Setup()
 		"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01"
 	];
 
-	for( var x = 0; x < ALPHA_TECH.length; ++x)
+	for (var x = 0; x < ALPHA_TECH.length; ++x)
 	{
 		makeComponentAvailable(ALPHA_TECH[x], CAM_HUMAN_PLAYER);
 	}
 
-	for( var x = 0; x < STRUCTS_ALPHA.length; ++x)
+	for (var x = 0; x < STRUCTS_ALPHA.length; ++x)
 	{
 		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}
@@ -321,10 +321,12 @@ function eventStartLevel()
 	hackAddMessage("MB2A_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
 
 	//Only if starting Beta directly rather than going through Alpha
-	if(enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0) {
+	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)
+	{
 		sendPlayerTransporter();
 	}
-	else {
+	else
+	{
 		setReinforcementTime(300); // 5 min.
 	}
 

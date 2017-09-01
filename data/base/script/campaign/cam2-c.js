@@ -120,7 +120,7 @@ function activateGroups()
 
 function truckDefense()
 {
-	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
 		queue("truckDefense", 160000);
 	}
@@ -141,11 +141,11 @@ function captureCivilians()
 	var currPos = getObject(wayPoints[civilianPosIndex]);
 	var shepardDroids = enumGroup(shepardGroup);
 
-	if(shepardDroids.length > 0)
+	if (shepardDroids.length)
 	{
 		//add some civs
 		var num = 1 + camRand(3);
-		for(var i = 0; i < num; ++i)
+		for (var i = 0; i < num; ++i)
 		{
 			addDroid(civilians, currPos.x, currPos.y, "Civilian",
 					"B1BaBaPerson01", "BaBaLegs", "", "", "BaBaMG");
@@ -154,20 +154,20 @@ function captureCivilians()
 		//Only count civilians that are not in the the transporter base.
 		var civs = enumArea(0, 0, 35, mapHeight, civilians, false);
 		//Move them
-		for(var i = 0; i < civs.length; ++i)
+		for (var i = 0; i < civs.length; ++i)
 		{
 			orderDroidLoc(civs[i], DORDER_MOVE, currPos.x, currPos.y);
 		}
 
-		if(civilianPosIndex <= 5)
+		if (civilianPosIndex <= 5)
 		{
-			for(var i = 0; i < shepardDroids.length; ++i)
+			for (var i = 0; i < shepardDroids.length; ++i)
 			{
 				orderDroidLoc(shepardDroids[i], DORDER_MOVE, currPos.x, currPos.y);
 			}
 		}
 
-		if(civilianPosIndex === 7)
+		if (civilianPosIndex === 7)
 		{
 			queue("sendCOTransporter", 6000);
 		}
@@ -186,17 +186,17 @@ function civilianOrders()
 	var rescued = false;
 
 	//Check if a civilian is close to a player droid.
-	for(var i = 0; i < civs.length; ++i)
+	for (var i = 0; i < civs.length; ++i)
 	{
 		var pDroids = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
-		if(pDroids.length > 0)
+		if (pDroids.length)
 		{
 			rescued = true;
 			orderDroidLoc(civs[i], DORDER_MOVE, lz.x, lz.y);
 		}
 	}
 
-	if(rescued === true)
+	if (rescued === true)
 	{
 		playSound(rescueSound);
 	}
@@ -211,11 +211,11 @@ function eventTransporterLanded(transport)
 	var position = getObject("COTransportPos");
 	var civs = enumRange(position.x, position.y, 15, civilians, false);
 
-	if(civs.length > 0)
+	if (civs.length)
 	{
 		playSound(escaping);
 		capturedCivCount += civs.length - 1;
-		for(var i = 0; i < civs.length; ++i)
+		for (var i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
 		}
@@ -229,7 +229,7 @@ function sendCOTransporter()
 	var tPos = getObject("COTransportPos");
 	var pDroid = enumRange(tPos.x, tPos.y, 6, CAM_HUMAN_PLAYER, false);
 
-	if(!pDroid.length)
+	if (!pDroid.length)
 	{
 		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
 			CAM_REINFORCE_TRANSPORT, {
@@ -246,7 +246,7 @@ function extraVictoryCondition()
 {
 	const LIMIT = 59;
 
-	if(capturedCivCount >= LIMIT)
+	if (capturedCivCount >= LIMIT)
 	{
 		return false; //instant defeat
 	}
@@ -255,12 +255,12 @@ function extraVictoryCondition()
 		var lz = getObject("startPosition");
 		var civs = enumRange(lz.x, lz.y, 30, civilians, false);
 
-		for(var i = 0; i < civs.length; ++i)
+		for (var i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
 		}
 
-		if(enumArea(0, 0, mapWidth, mapHeight, civilians, false).length === 0)
+		if (!enumArea(0, 0, mapWidth, mapHeight, civilians, false).length)
 		{
 			return true;
 		}
@@ -274,14 +274,14 @@ function eventStartLevel()
 	});
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
+	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
-		"rippleRocket":			{ tech: "R-Wpn-Rocket06-IDF" },
-		"quadbof":				{ tech: "R-Wpn-AAGun02" },
-		"howitzer":				{ tech: "R-Wpn-HowitzerMk1" },
+		"rippleRocket":		{ tech: "R-Wpn-Rocket06-IDF" },
+		"quadbof":			{ tech: "R-Wpn-AAGun02" },
+		"howitzer":			{ tech: "R-Wpn-HowitzerMk1" },
 		"COHeavyFac-Leopard":	{ tech: "R-Vehicle-Body02" }, //leopard
 		"COHeavyFac-Upgrade":	{ tech: "R-Struc-Factory-Upgrade04" },
 		"COVtolFacLeft-Prop":	{ tech: "R-Vehicle-Prop-VTOL" },
@@ -319,7 +319,7 @@ function eventStartLevel()
 		"COHeavyFac-Upgrade": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(700000),
 			regroup: false,
 			repair: 40,
 			templates: [comit, cohct, comhpv, cohbbt]
@@ -327,7 +327,7 @@ function eventStartLevel()
 		"COHeavyFac-Leopard": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [comit, cohct, comhpv, cohbbt]
@@ -335,7 +335,7 @@ function eventStartLevel()
 		"COCyborgFactoryL": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(30000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybf, npcybc, npcybr]
@@ -343,7 +343,7 @@ function eventStartLevel()
 		"COCyborgFactoryR": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(30000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybf, npcybc, npcybr]
@@ -351,7 +351,7 @@ function eventStartLevel()
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(40000),
 			regroup: false,
 			repair: 40,
 			templates: [commorv, colagv, colatv]
@@ -359,7 +359,7 @@ function eventStartLevel()
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(40000),
 			regroup: false,
 			repair: 40,
 			templates: [colatv, colagv, commorv]

@@ -70,7 +70,7 @@ function enableFactories()
 //Player must destroy all bases.
 function checkEnemyBases()
 {
-	if(camAllEnemyBasesEliminated())
+	if (camAllEnemyBasesEliminated())
 	{
 		return true;
 	}
@@ -98,12 +98,12 @@ function eventStartLevel()
 	});
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
@@ -194,8 +194,6 @@ function eventStartLevel()
 		},
 	});
 
-	enableFactories();
-
 	//This mission shows you the approximate base locations at the start.
 	//These are removed once the base it is close to is seen and is replaced
 	//with a more precise proximity blip.
@@ -204,7 +202,7 @@ function eventStartLevel()
 	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-
 	queue("enableReinforcements", 15000);
 	queue("baseFourGroupAttack", 100000);
+	queue("enableFactories", camChangeOnDiff(480000)); // 8 min
 }

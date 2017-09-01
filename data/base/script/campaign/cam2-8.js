@@ -74,7 +74,7 @@ function enableFactories()
 //Everything must be destroyed.
 function extraVictoryCondition()
 {
-	if(enumStruct(THE_COLLECTIVE).length === 0)
+	if (!enumStruct(THE_COLLECTIVE).length)
 	{
 		return true;
 	}
@@ -98,12 +98,12 @@ function eventStartLevel()
 	});
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
@@ -173,7 +173,7 @@ function eventStartLevel()
 	});
 
 	queue("enableReinforcements", 15000);
-	queue("enableFactories", 20000);
 	queue("cyborgPatrol", 50000);
 	queue("vtolPatrol", 60000);
+	queue("enableFactories", camChangeOnDiff(480000)); // 8 min
 }

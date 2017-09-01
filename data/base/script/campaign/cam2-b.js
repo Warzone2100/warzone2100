@@ -17,7 +17,7 @@ const COLLECTIVE_RES = [
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if((droid.player === THE_COLLECTIVE) && (isVTOL(droid)))
+	if ((droid.player === THE_COLLECTIVE) && isVTOL(droid))
 	{
 		camSafeRemoveObject(droid, false);
 	}
@@ -41,12 +41,12 @@ function camEnemyBaseDetected_COMiddleBase()
 function eventVideoDone()
 {
 	const VIDEOS = ["MB2_B_MSG", "MB2_B_MSG2"];
-	if(!camDef(videoIndex))
+	if (!camDef(videoIndex))
 	{
 		videoIndex = 0;
 	}
 
-	if(videoIndex < VIDEOS.length)
+	if (videoIndex < VIDEOS.length)
 	{
 		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
 		videoIndex = videoIndex + 1;
@@ -94,12 +94,11 @@ function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
 	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(600000), "COCommandCenter"); //10 min
-	checkCollectiveHQ();
 }
 
 function truckDefense()
 {
-	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-Tower-MdCan", "CO-Tower-LtATRkt"];
@@ -118,8 +117,8 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_2S");
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
+	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setPower(camChangeOnDiff(60000, true), THE_COLLECTIVE);

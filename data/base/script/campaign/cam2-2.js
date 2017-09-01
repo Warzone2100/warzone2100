@@ -23,7 +23,7 @@ var commandGroup;
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if(isVTOL(droid))
+	if (isVTOL(droid))
 	{
 		camSafeRemoveObject(droid, false);
 	}
@@ -45,7 +45,7 @@ camAreaEvent("group1Trigger", function()
 
 camAreaEvent("wayPoint1Rad", function(droid)
 {
-	if(isVTOL(droid))
+	if (isVTOL(droid))
 	{
 		resetLabel("wayPoint1Rad", THE_COLLECTIVE);
 		return;
@@ -60,7 +60,7 @@ camAreaEvent("wayPoint1Rad", function(droid)
 //that can attack together to defend the enemy commander.
 camAreaEvent("wayPoint2Rad", function(droid)
 {
-	if(droid.droidType != DROID_COMMAND)
+	if (droid.droidType != DROID_COMMAND)
 	{
 		resetLabel("wayPoint2Rad", THE_COLLECTIVE);
 		return;
@@ -87,7 +87,7 @@ camAreaEvent("wayPoint2Rad", function(droid)
 
 camAreaEvent("failZone", function(droid)
 {
-	if(droid.droidType == DROID_COMMAND)
+	if (droid.droidType == DROID_COMMAND)
 	{
 		camSafeRemoveObject(droid, false);
 		failSequence();
@@ -105,7 +105,7 @@ function vtolAttack()
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	if(enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 		queue("truckDefense", 160000);
 
 	const list = ["WallTower06", "PillBox1", "WallTower03"];
@@ -144,12 +144,12 @@ function eventStartLevel()
 	});
 
 	var startpos = getObject("startPosition");
-	centreView(startpos.x, startpos.y);
 	var lz = getObject("landingZone"); //player lz
-	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
