@@ -13,17 +13,16 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-04-23 01:45+0200\n"
-"PO-Revision-Date: 2014-12-31 18:42+0100\n"
+"PO-Revision-Date: 2017-06-25 18:57+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
-"Language: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
-"X-Poedit-Language: German\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
 
@@ -4560,84 +4559,79 @@ msgstr "Commanderturm IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "LEICHT"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "MITTEL"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "SCHWIERIG"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "WAHNSINNIG"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
-#, fuzzy
 msgid "Personality change successful."
-msgstr "Kontrolle erfolgreich übertragen."
+msgstr "Persönlichkeit erfolgreich gewechselt."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "Keine solche Persönlichkeit! Versuchen Sie eine der folgenden:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "Erzwungene Forschungsthemen geleert, werde von nun an forschen, was ich möchte."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Forschung blockiert, werde jetzt nichts erforschen."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Erforsche Grundlagentechnologie."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Forschung"
+msgstr "Forsche"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "Kein solcher Forschungspfad! Versuche einen der folgenden:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Entschuldigung, ich habe keine LKW."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
-#, fuzzy
 msgid "You can use this one."
-msgstr "Sichern Sie diese Zone."
+msgstr "Sie können diesen benutzen."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "Entschuldigung, Einheitenübertragung fehlgeschlagen."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "Kraftwerk"
+msgstr "Energie übertragen."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
-#, fuzzy
 msgid "Please put a beacon!"
-msgstr "Setze ein Signal"
+msgstr "Bitte setzen Sie ein Signal!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "Komme!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "Entschuldigung, ich habe keine freien Truppen, um dir Hilfe zu schicken!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "Jederzeit, Chef!"
 
 #: lib/framework/i18n.cpp:98
 #: lib/framework/i18n.cpp:161
@@ -4650,7 +4644,7 @@ msgid "Enter password here"
 msgstr "Passwort hier eingeben"
 
 #: lib/netplay/netplay.cpp:1015
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr "Konnte benötigten Port (%s) auf (%s) nicht öffnen"
 
@@ -4672,11 +4666,8 @@ msgstr ""
 "Ihre externe IP-Adresse lautet %s"
 
 #: lib/netplay/netplay.cpp:1799
-#, fuzzy
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
-"Kein UPnP-Gerät gefunden. Sie müssen Ihren Router und Ihre Firewall händisch\n"
-"einstellen, um Port 2100 zu öffnen, bevor Sie ein Spiel leiten können."
+msgstr "Kein UPnP-Gerät gefunden. Konfigurieren Sie Ihren Router/Ihre Firewall, um Port 2100 zu öffnen!"
 
 #: lib/netplay/netplay.cpp:2144
 #, c-format
@@ -4849,9 +4840,8 @@ msgid "Advanced Manufacturing"
 msgstr "Fortschrittliche Fertigung"
 
 #: po/custom/fromJson.txt:48
-#, fuzzy
 msgid "Advancedmaterialslab"
-msgstr "Fortschrittliche Kriegsführung"
+msgstr "Labor für fortschrittliche Materialien"
 
 #: po/custom/fromJson.txt:49
 msgid "Advanced Missile Allocation System"
@@ -4907,15 +4897,13 @@ msgstr "Fortschrittliche VTOL-Produktion Mk3"
 
 # Pack wie Equipment übersetzt -Kreuvf
 #: po/custom/fromJson.txt:64
-#, fuzzy
 msgid "Aerodynamic Jump Pack"
 msgstr "Aerodynamische Sprungausrüstung"
 
 # Pack wie Equipment übersetzt -Kreuvf
 #: po/custom/fromJson.txt:65
-#, fuzzy
 msgid "Aerodynamicslab"
-msgstr "Aerodynamische Sprungausrüstung"
+msgstr "Aerodynamiklabor"
 
 #: po/custom/fromJson.txt:70
 msgid "All cannons upgraded automatically"
@@ -4959,12 +4947,11 @@ msgstr "Alle VTOLs werden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:101
 msgid "Ally"
-msgstr ""
+msgstr "Verbündeter"
 
 #: po/custom/fromJson.txt:102
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Kampagne"
+msgstr "Alphakampagne"
 
 #: po/custom/fromJson.txt:103
 msgid "Amphibious hover propulsion"
@@ -5395,7 +5382,6 @@ msgid "Automatic loader replaces manual feed"
 msgstr "Automatisches Ladesystem ersetzt manuelles Nachladen"
 
 #: po/custom/fromJson.txt:234
-#, fuzzy
 msgid "Auto Repair"
 msgstr "Selbstreparatur"
 
@@ -5428,9 +5414,8 @@ msgid "BaBaProp"
 msgstr "BaBaAntrieb"
 
 #: po/custom/fromJson.txt:242
-#, fuzzy
 msgid "Back to Basics"
-msgstr "Zurück zur Normalität!"
+msgstr "Zurück zu den Grundlagen!"
 
 #: po/custom/fromJson.txt:243
 msgid "Battlefield repair unit"
@@ -5485,9 +5470,8 @@ msgid "Best Targets: Wheeled and hover vehicles"
 msgstr "Beste Ziele: Rad- und Hoverfahrzeuge"
 
 #: po/custom/fromJson.txt:264
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Neue Kampagne"
+msgstr "Betakampagne"
 
 #: po/custom/fromJson.txt:265
 msgid "Body Points and Speed Increased"
@@ -5873,9 +5857,8 @@ msgid "Cyborg Flamer"
 msgstr "Flammenwerfercyborg"
 
 #: po/custom/fromJson.txt:370
-#, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Schwerer Rumpf des Projekts"
+msgstr "Schwerer Cyborgrumpf"
 
 #: po/custom/fromJson.txt:371
 msgid "Cyborg High Intensity Thermal Armor"
@@ -5890,14 +5873,12 @@ msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "Hochtemperaturthermalpanzerung für Cyborgs Mk3"
 
 #: po/custom/fromJson.txt:374
-#, fuzzy
 msgid "Cyborg Lancer"
-msgstr "Flammenwerfercyborg"
+msgstr "Lancer-Cyborg"
 
 #: po/custom/fromJson.txt:375
-#, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Leichter Rumpf des Projekts"
+msgstr "Leichter Cyborgrumpf"
 
 #: po/custom/fromJson.txt:377
 msgid "Cyborg Mechanic"
@@ -6048,9 +6029,8 @@ msgid "Electronic Countermeasures"
 msgstr "Elektronische Gegenmaßnahmen"
 
 #: po/custom/fromJson.txt:427
-#, fuzzy
 msgid "Electronic Countermeasures Mk2"
-msgstr "Elektronische Gegenmaßnahmen"
+msgstr "Elektronische Gegenmaßnahmen Mk2"
 
 #: po/custom/fromJson.txt:428
 msgid "EMP Cannon"
@@ -6105,9 +6085,8 @@ msgid "Enables self-repair in all vehicles"
 msgstr "Ermöglicht Selbstreparatur von Fahrzeugen"
 
 #: po/custom/fromJson.txt:441
-#, fuzzy
 msgid "Enemy"
-msgstr "Feindliche Basis"
+msgstr "Feind"
 
 #: po/custom/fromJson.txt:442
 msgid "Engineering"
@@ -6291,9 +6270,8 @@ msgid "Fuel Injection Engine Mk3"
 msgstr "Motoren mit Kraftstoffeinspritzung Mk3"
 
 #: po/custom/fromJson.txt:494
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Kampagne"
+msgstr "Gammakampagne"
 
 #: po/custom/fromJson.txt:495
 msgid "Gas turbine boosts power output"
@@ -6694,7 +6672,7 @@ msgstr "Schwere Boden-Luft-Lenkrakete"
 
 #: po/custom/fromJson.txt:606
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "Schwere-Waffen-Labor"
 
 #: po/custom/fromJson.txt:607
 msgid "HE Bomb Shells"
@@ -6714,7 +6692,7 @@ msgstr "Hochexplosive Haubitzengeschosse Mk3"
 
 #: po/custom/fromJson.txt:611
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 #: po/custom/fromJson.txt:612
 msgid "Hellstorm"
@@ -6771,7 +6749,7 @@ msgstr "Hochexplosiver Quetschsprengkopf Mk3"
 
 #: po/custom/fromJson.txt:626
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Verstecke dich hinter mir"
 
 #: po/custom/fromJson.txt:627
 msgid "Hi-Energy Laser Emitter"
@@ -6862,9 +6840,8 @@ msgid "Hover"
 msgstr "Hover"
 
 #: po/custom/fromJson.txt:657
-#, fuzzy
 msgid "Hover AI"
-msgstr "Hover II"
+msgstr "Hover-KI"
 
 #: po/custom/fromJson.txt:658
 msgid "Hover II"
@@ -7175,9 +7152,8 @@ msgid "Increases Rocket ROF"
 msgstr "Erhöht Feuerrate von Raketen"
 
 #: po/custom/fromJson.txt:768
-#, fuzzy
 msgid "Indirectweaponslab"
-msgstr "Neue indirektfeuernde Waffe verfügbar"
+msgstr "Labor für indirekt feuernde Waffen"
 
 #: po/custom/fromJson.txt:769
 msgid "Inferior armor and body points to Cobra"
@@ -7344,7 +7320,6 @@ msgid "Laser Guided Bombsight"
 msgstr "Lasergestütztes Visier für Bomben"
 
 #: po/custom/fromJson.txt:811
-#, fuzzy
 msgid "Laseropticslab"
 msgstr "Laseroptiklabor"
 
@@ -7734,7 +7709,7 @@ msgstr "Mehrturmrumpf - Dragon"
 
 #: po/custom/fromJson.txt:921
 msgid "Nanolab"
-msgstr ""
+msgstr "Nanolabor"
 
 #: po/custom/fromJson.txt:922
 msgid "Narrow area of effect"
@@ -7903,9 +7878,8 @@ msgid "New VTOL Missile Launcher"
 msgstr "Neuer VTOL-Raketenwerfer"
 
 #: po/custom/fromJson.txt:980
-#, fuzzy
 msgid "Nexus"
-msgstr "NEXUS-Link"
+msgstr "Nexus"
 
 #: po/custom/fromJson.txt:981
 msgid "NEXUS CWall"
@@ -7948,9 +7922,8 @@ msgid "NEXUS Medium Body"
 msgstr "Mittlerer Rumpf des NEXUS"
 
 #: po/custom/fromJson.txt:991
-#, fuzzy
 msgid "Nexus Missile Silo"
-msgstr "Raketensilo"
+msgstr "Nexus-Raketensilo"
 
 #: po/custom/fromJson.txt:993
 msgid "NEXUS Resistance Circuits"
@@ -7970,11 +7943,11 @@ msgstr "NEXUS-Mauer"
 
 #: po/custom/fromJson.txt:997
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Kein Platz zum Verstecken"
 
 #: po/custom/fromJson.txt:998
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #: po/custom/fromJson.txt:999
 msgid "Oil Derrick"
@@ -8009,14 +7982,12 @@ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
 msgstr "Weist zugewiesene indirektfeuernde Einheiten an feindliche Sensoren zu beschießen"
 
 #: po/custom/fromJson.txt:1009
-#, fuzzy
 msgid "Original Campaign"
-msgstr "Kampagne"
+msgstr "Originalkampagne"
 
 #: po/custom/fromJson.txt:1010
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Einzelspielergeplänkel"
+msgstr "Originalgeplänkel"
 
 #: po/custom/fromJson.txt:1011
 msgid "Or select the Repair Facility as a unit's target"
@@ -8128,9 +8099,8 @@ msgid "Power Generator"
 msgstr "Kraftwerk"
 
 #: po/custom/fromJson.txt:1038
-#, fuzzy
 msgid "Powerlab"
-msgstr "Energie"
+msgstr "Energielabor"
 
 #: po/custom/fromJson.txt:1039
 msgid "Power Module"
@@ -8157,14 +8127,12 @@ msgid "Produces Cyborgs"
 msgstr "Produziert Cyborgs"
 
 #: po/custom/fromJson.txt:1047
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Schwerer Rumpf des Kollektivs"
+msgstr "Schwerer Rumpf des Projekts"
 
 #: po/custom/fromJson.txt:1048
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Leichter Rumpf des Kollektivs"
+msgstr "Leichter Rumpf des Projekts"
 
 #: po/custom/fromJson.txt:1049
 msgid "Project Medium Body"
@@ -8343,9 +8311,8 @@ msgid "Reinforced Base Structure Materials Mk3"
 msgstr "Verstärkte Gebäudematerialien Mk3"
 
 #: po/custom/fromJson.txt:1100
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Reparaturzentrum"
+msgstr "Reparaturzentrumsaufbau"
 
 #: po/custom/fromJson.txt:1101
 msgid "Repair Cobra Tracks"
@@ -8577,7 +8544,7 @@ msgstr "Drehmörser - Pepperpot"
 
 #: po/custom/fromJson.txt:1166
 msgid "Rotaryweaponslab"
-msgstr ""
+msgstr "Rotationswaffenlabor"
 
 #: po/custom/fromJson.txt:1167
 msgid "Ruined Factory"
@@ -8703,11 +8670,11 @@ msgstr "Selbstreplizierende Fertigung"
 
 #: po/custom/fromJson.txt:1200
 msgid "Semperfi"
-msgstr ""
+msgstr "Semperfi"
 
 #: po/custom/fromJson.txt:1201
 msgid "Semperfi JS"
-msgstr ""
+msgstr "Semperfi JS"
 
 #: po/custom/fromJson.txt:1202
 msgid "Sensor Cobra Half-tracks"
@@ -8777,11 +8744,11 @@ msgstr "Langsamer Rumpf"
 
 #: po/custom/fromJson.txt:1221
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "Zertrümmerte Eckmauer"
 
 #: po/custom/fromJson.txt:1222
 msgid "Smashedwall"
-msgstr ""
+msgstr "Zertrümmerte Mauer"
 
 #: po/custom/fromJson.txt:1223
 msgid "Speed: Fast"
@@ -8950,7 +8917,6 @@ msgstr "Analyse der synaptischen Verbindung Mk3"
 
 # Ist die Frage: Störtechnologie, die syn. Verb. nutzt oder die dagegen eingesetzt wird -Kreuvf
 #: po/custom/fromJson.txt:1274
-#, fuzzy
 msgid "Synaptic Link Scrambler technology"
 msgstr "Störtechnologie gegen synaptische Verbindungen"
 
@@ -9173,7 +9139,7 @@ msgstr "Turbomotor Mk3"
 
 #: po/custom/fromJson.txt:1334
 msgid "Turtle AI"
-msgstr ""
+msgstr "Turtle AI"
 
 #: po/custom/fromJson.txt:1335
 msgid "Twin 7.62mm machineguns"
@@ -9571,11 +9537,11 @@ msgstr "VTOL-Zwillingsmaschinengewehr"
 
 #: po/custom/fromJson.txt:1445
 msgid "Wall"
-msgstr ""
+msgstr "Mauer"
 
 #: po/custom/fromJson.txt:1446
 msgid "Wallcorner"
-msgstr ""
+msgstr "Mauerecke"
 
 #: po/custom/fromJson.txt:1447
 msgid "Warehouse"
@@ -9718,9 +9684,8 @@ msgid "configuration directory"
 msgstr "Konfigurationsverzeichnis"
 
 #: src/clparse.cpp:262
-#, fuzzy
 msgid "Add data directory"
-msgstr "Datenverzeichnis"
+msgstr "Datenverzeichnis hinzufügen"
 
 #: src/clparse.cpp:262
 msgid "data directory"
@@ -9752,23 +9717,20 @@ msgid "Play in fullscreen mode"
 msgstr "Spiele im Vollbildmodus"
 
 #: src/clparse.cpp:267
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Spielstand laden"
+msgstr "Spezifischen Spielmodus laden"
 
 #: src/clparse.cpp:267
 msgid "level name"
-msgstr ""
+msgstr "Levelname"
 
 #: src/clparse.cpp:268
-#, fuzzy
 msgid "Show options and exit"
-msgstr "Versionsinformationen anzeigen und Programm beenden"
+msgstr "Optionen anzeigen und beenden"
 
 #: src/clparse.cpp:269
-#, fuzzy
 msgid "Show all options and exit"
-msgstr "Versionsinformationen anzeigen und Programm beenden"
+msgstr "Alle Optionen anzeigen und beenden"
 
 #: src/clparse.cpp:270
 msgid "Enable a global mod"
@@ -9797,9 +9759,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr "Verursacht einen Absturz, um den Crash Handler zu testen"
 
 #: src/clparse.cpp:275
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Spielstand laden"
+msgstr "Gespeichertes Geplänkel laden"
 
 #: src/clparse.cpp:275
 #: src/clparse.cpp:276
@@ -9807,9 +9768,8 @@ msgid "savegame"
 msgstr "Spielstand"
 
 #: src/clparse.cpp:276
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Spielstand laden"
+msgstr "Gespeicherte Kampagne laden"
 
 #: src/clparse.cpp:277
 msgid "Play in windowed mode"
@@ -9844,7 +9804,6 @@ msgid "Disable sound"
 msgstr "Sound deaktivieren"
 
 #: src/clparse.cpp:284
-#, fuzzy
 msgid "Connect directly to IP/hostname"
 msgstr "Direkt mit IP/Hostnamen verbinden"
 
@@ -9853,7 +9812,6 @@ msgid "host"
 msgstr "Spielleiter"
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "Go directly to host screen"
 msgstr "Direkt zum Spielleiterschirm"
 
@@ -9867,24 +9825,23 @@ msgstr "Deaktiviere Texturkompression"
 
 #: src/clparse.cpp:288
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "Spiele zum Testen automatisch laufen lassen"
 
 #: src/clparse.cpp:289
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "Spiel umgehend abspeichern und beenden"
 
 #: src/clparse.cpp:289
-#, fuzzy
 msgid "save name"
 msgstr "Spielstand"
 
 #: src/clparse.cpp:290
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "Geplänkel mit gegebener Einstellungsdatei starten"
 
 #: src/clparse.cpp:290
 msgid "test"
-msgstr ""
+msgstr "Test"
 
 #: src/cmddroid.cpp:107
 msgid "Commander needs a higher level to command more units"
@@ -10045,14 +10002,12 @@ msgid "Systems"
 msgstr "Systeme"
 
 #: src/design.cpp:4169
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "Entwurf löschen"
+msgstr "Entwurf nicht speichern"
 
 #: src/design.cpp:4174
-#, fuzzy
 msgid "Store Design"
-msgstr "Neuer Entwurf"
+msgstr "Entwurf speichern"
 
 #: src/display3d.cpp:660
 msgid "Player left"
@@ -10076,14 +10031,14 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
 #: src/display.cpp:1537
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Schaden %d%% - Erfahrung %.1f, %s"
+msgstr "%s - Schaden %d/%d - Erfahrung %.1f, %s"
 
 #: src/display.cpp:1699
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Verbündet - Schaden %d%% - Erfahrung %d, %s"
+msgstr "%s - Verbündet - Schaden %d/%d - Erfahrung %d, %s"
 
 #: src/droid.cpp:261
 msgid "Unit Lost!"
@@ -10104,8 +10059,8 @@ msgstr[1] "Gruppe %u ausgewählt - %u Einheiten"
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%u Einheit zur Gruppe %u hinzugefügt"
-msgstr[1] "%u Einheiten zur Gruppe %u hinzugefügt"
+msgstr[0] "%u Einheit der Gruppe %u zugewiesen"
+msgstr[1] "%u Einheiten der Gruppe %u zugewiesen"
 
 #: src/droid.cpp:1988
 #, c-format
@@ -10160,7 +10115,7 @@ msgstr "Held"
 
 #: src/droid.cpp:3067
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "Einheitenübertragung fehlgeschlagen -- Einheitenlimit ausgereizt"
 
 #: src/frontend.cpp:144
 msgid "Single Player"
@@ -10270,9 +10225,8 @@ msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Feldzugvideos fehlen! Hole Sie dir von http://wz2100.net/."
 
 #: src/frontend.cpp:391
-#, fuzzy
 msgid "CAMPAIGNS"
-msgstr "FELDZUG EINS"
+msgstr "KAMPAGNEN"
 
 #: src/frontend.cpp:515
 #: src/ingameop.cpp:432
@@ -10332,11 +10286,11 @@ msgstr "Tastenzuordnung"
 
 #: src/frontend.cpp:706
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:707
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:708
 #: src/frontend.cpp:913
@@ -10484,9 +10438,8 @@ msgid "Rotate Screen"
 msgstr "Bildschirm drehen"
 
 #: src/frontend.cpp:1153
-#, fuzzy
 msgid "Colored Cursors"
-msgstr "Bunte Mauszeiger*"
+msgstr "Bunte Mauszeiger"
 
 #: src/frontend.cpp:1157
 msgid "MOUSE OPTIONS"
@@ -10513,12 +10466,11 @@ msgstr "Verrückt"
 
 #: src/frontend.cpp:1228
 msgid "Tough"
-msgstr ""
+msgstr "Schwierig"
 
 #: src/frontend.cpp:1229
-#, fuzzy
 msgid "Killer"
-msgstr "Abschüsse"
+msgstr "Totschläger"
 
 #: src/frontend.cpp:1246
 #: src/frontend.cpp:1312
@@ -10527,9 +10479,8 @@ msgstr "Sprache"
 
 #: src/frontend.cpp:1250
 #: src/frontend.cpp:1316
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Schwierigkeitsgrad"
+msgstr "Kampagnenschwierigkeitsgrad"
 
 #: src/frontend.cpp:1254
 #: src/frontend.cpp:1317
@@ -10599,11 +10550,11 @@ msgstr "Fortschrittsbalken"
 
 #: src/hci.cpp:3446
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "Veraltete Technologien ausblenden"
 
 #: src/hci.cpp:3448
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Veraltete Technologien anzeigen"
 
 #: src/hci.cpp:3515
 msgid "Factory Delivery Point"
@@ -10622,15 +10573,16 @@ msgid ""
 "\n"
 "Cost: %1"
 msgstr ""
+"\n"
+"Kosten: %1"
 
 #: src/hci.cpp:4901
 msgid "Chat: All"
-msgstr ""
+msgstr "Chat: alle"
 
 #: src/hci.cpp:4906
-#, fuzzy
 msgid "Chat: Team"
-msgstr "Wähle ein Team"
+msgstr "Chat: Team"
 
 #: src/ingameop.cpp:99
 #: src/ingameop.cpp:159
@@ -10842,9 +10794,9 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Gut, Waffen- und Sensoranzeige sind aus!"
 
 #: src/keybind.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Spieler %u erschummelt sich eine neue Einheitenarmee aus %s."
+msgstr "Spieler %u erschummelt sich eine neue Einheitenarmee aus %d × %s."
 
 #: src/keybind.cpp:467
 #: src/keybind.cpp:497
@@ -10956,7 +10908,7 @@ msgstr "ALLES für Sie erforscht!"
 
 #: src/keybind.cpp:1430
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "Ausgewählte Gebäude auf der Stelle aufgeladen!"
 
 #: src/keybind.cpp:1471
 #, c-format
@@ -11016,11 +10968,11 @@ msgstr "Zerstöre ausgewählte Einheiten und Gebäude!"
 
 #: src/keybind.cpp:2258
 msgid "Reveal OFF"
-msgstr ""
+msgstr "Aufdecken AUS"
 
 #: src/keybind.cpp:2263
 msgid "Reveal ON"
-msgstr ""
+msgstr "Aufdecken AN"
 
 #: src/keybind.cpp:2344
 msgid "Centered on player HQ, direction NORTH"
@@ -11381,13 +11333,12 @@ msgid "Toggle Overlays"
 msgstr "Menü und Energiebalken umschalten"
 
 #: src/keymap.cpp:391
-#, fuzzy
 msgid "Toggle Console History "
-msgstr "Konsolenanzeige umschalten"
+msgstr "Konsolenhistorie umschalten"
 
 #: src/keymap.cpp:392
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Teamchathistorie umschalten"
 
 #: src/keymap.cpp:395
 msgid "Center View on HQ"
@@ -11411,17 +11362,15 @@ msgstr "Position halten"
 
 #: src/keymap.cpp:404
 msgid "Stop Droid"
-msgstr ""
+msgstr "Einheit anhalten"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "Sende Textnachricht"
+msgstr "Sende globale Textnachricht"
 
 #: src/keymap.cpp:407
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "Sende Textnachricht"
+msgstr "Sende Teamtextnachricht"
 
 #: src/keymap.cpp:408
 msgid "Drop a beacon"
@@ -11480,9 +11429,8 @@ msgid "Select all VTOLs"
 msgstr "Alle VTOLs auswählen"
 
 #: src/keymap.cpp:432
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "Alle VTOLs auswählen"
+msgstr "Alle vollständig bewaffnete VTOLs auswählen"
 
 #: src/keymap.cpp:433
 msgid "Select all Wheels"
@@ -11590,7 +11538,7 @@ msgstr "Drehe Geländedreieck um"
 
 #: src/keymap.cpp:467
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "Nehme eine Probe zur Performancemessung"
 
 #: src/keymap.cpp:470
 msgid "Make all items available"
@@ -11614,7 +11562,7 @@ msgstr "Erledige aktuelle Forschung"
 
 #: src/keymap.cpp:475
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "Karte an Mausposition aufdecken"
 
 #: src/keymap.cpp:476
 msgid "Trace a game object"
@@ -11691,9 +11639,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s gibt Ihnen Technologiedokumente"
 
 #: src/multigifts.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s gibt Ihnen %u Energie"
+msgstr "%s gibt Ihnen %d Energie"
 
 #: src/multigifts.cpp:445
 #, c-format
@@ -11752,7 +11700,7 @@ msgstr "IP"
 
 #: src/multiint.cpp:958
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Deine Version von Warzone ist inkompatibel mit diesem Spiel."
 
 #: src/multiint.cpp:1019
 msgid "[Password required]"
@@ -11826,7 +11774,7 @@ msgstr "Verbindungsfehler"
 
 #: src/multiint.cpp:1201
 msgid "Refreshing..."
-msgstr ""
+msgstr "Aktualisiere..."
 
 #: src/multiint.cpp:1241
 msgid "Searching"
@@ -11874,9 +11822,8 @@ msgstr "Lasersatelliten abgeschaltet."
 
 #: src/multiint.cpp:1579
 #: src/multiint.cpp:4082
-#, fuzzy
 msgid "Game Name"
-msgstr "Spielname auswählen"
+msgstr "Spielname"
 
 #: src/multiint.cpp:1580
 msgid "One-Player Skirmish"
@@ -11926,9 +11873,8 @@ msgstr "Bündnisse erlauben"
 
 # festgelegt ungleich fest -Kreuvf
 #: src/multiint.cpp:1640
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "Feste-Teams-Modus aktiviert"
+msgstr "Feste Teams, keine gemeinsame Forschung"
 
 #: src/multiint.cpp:1641
 msgid "Locked Teams"
@@ -11990,9 +11936,8 @@ msgid "DIFFICULTY"
 msgstr "SCHWIERIGKEITSGRAD"
 
 #: src/multiint.cpp:1774
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Mit Vorteilen starten"
+msgstr "Startet benachteiligt"
 
 #: src/multiint.cpp:1775
 msgid "Plays nice"
@@ -12023,9 +11968,8 @@ msgid "Team"
 msgstr "Gruppe"
 
 #: src/multiint.cpp:2353
-#, fuzzy
 msgid "Difficulty locked"
-msgstr "Schwierigkeitsgrad"
+msgstr "Fester Schwierigkeitsgrad"
 
 #: src/multiint.cpp:2353
 msgid "Click to change difficulty"
@@ -12040,18 +11984,16 @@ msgid "Player is ready"
 msgstr "Spieler ist bereit"
 
 #: src/multiint.cpp:2368
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Spieler ist bereit"
+msgstr "Spieler lädt herunter"
 
 #: src/multiint.cpp:2368
 msgid "Click when ready"
 msgstr "Klicken, wenn bereit"
 
 #: src/multiint.cpp:2368
-#, fuzzy
 msgid "Waiting for download"
-msgstr "Warte auf Energie"
+msgstr "Warte auf Download"
 
 #: src/multiint.cpp:2380
 msgid "READY?"
@@ -12070,9 +12012,8 @@ msgid "Choose Team"
 msgstr "Wähle ein Team"
 
 #: src/multiint.cpp:2487
-#, fuzzy
 msgid "Teams locked"
-msgstr "Team Alpha gerettet"
+msgstr "Feste Teams"
 
 #: src/multiint.cpp:2513
 msgid "Click to change player colour"
@@ -12087,13 +12028,12 @@ msgid "Click to change AI"
 msgstr "Klicken, um KI zu ändern"
 
 #: src/multiint.cpp:2549
-#, fuzzy
 msgid "Player ID: "
-msgstr "Spieler"
+msgstr "Spieler-ID:"
 
 #: src/multiint.cpp:2556
 msgid "(none)"
-msgstr ""
+msgstr "(keine)"
 
 #: src/multiint.cpp:2616
 msgid "CHAT"
@@ -12175,7 +12115,7 @@ msgstr "Version: %s"
 
 #: src/multiint.cpp:4083
 msgid "Map Name"
-msgstr ""
+msgstr "Kartenname"
 
 #: src/multiint.cpp:4084
 msgid "Players"
@@ -12183,7 +12123,7 @@ msgstr "Spieler"
 
 #: src/multiint.cpp:4085
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/multiint.cpp:4114
 #, c-format
@@ -12380,15 +12320,15 @@ msgstr "[ungültig]"
 
 #: src/multiplay.cpp:1617
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "Karte wurde angefragt: SENDE KARTE!"
 
 #: src/multiplay.cpp:1632
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "Mod wurde angefragt: SENDE MOD!"
 
 #: src/multiplay.cpp:1672
 msgid "FILE SENT!"
-msgstr ""
+msgstr "DATEI VERSANDT!"
 
 #: src/multiplay.cpp:2024
 msgid "Green"
@@ -12630,33 +12570,32 @@ msgstr[0] "%u Einheit ausgewählt"
 msgstr[1] "%u Einheiten ausgewählt"
 
 #: src/structure.cpp:2514
-#, fuzzy
 msgid "Can't build anymore units, Unit Limit Reached — Production Halted"
-msgstr "Kann keine weiteren Einheiten mehr bauen, Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
+msgstr "Kann keine weiteren Einheiten mehr bauen, Einheitenlimit erreicht — Produktion angehalten"
 
 #: src/structure.cpp:2522
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
-msgstr "Kann keine weiteren Einheiten mehr bauen, Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
+msgstr "Kann keine weiteren \"%s\" mehr bauen, Commandereinheit hat Kontrollgrenze erreicht — Produktion angehalten"
 
 #: src/structure.cpp:2530
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Kann keine weiteren Einheiten mehr bauen, Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
+msgstr "Kann keine weiteren \"%s\" mehr bauen, Baueinheitenlimit erreicht — Produktion angehalten"
 
 #: src/structure.cpp:5471
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Einheit hinzugefügt - Schaden %3.0f%%"
-msgstr[1] "%s - %u Einheiten hinzugefügt - Schaden %3.0f%%"
+msgstr[0] "%s - %u Einheit zugewiesen - Trefferpunkte %d/%d"
+msgstr[1] "%s - %u Einheiten zugewiesen - Trefferpunkte %d/%d"
 
 #: src/structure.cpp:5490
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Einheit hinzugefügt - Schaden %3.0f%%"
-msgstr[1] "%s - %u Einheiten hinzugefügt - Schaden %3.0f%%"
+msgstr[0] "%s - %u Einheit zugewiesen - Schaden %d/%d"
+msgstr[1] "%s - %u Einheiten zugewiesen - Trefferpunkte %d/%d"
 
 #: src/structure.cpp:5495
 #: src/structure.cpp:5505
@@ -12666,12 +12605,12 @@ msgstr[1] "%s - %u Einheiten hinzugefügt - Schaden %3.0f%%"
 #: src/structure.cpp:5554
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Trefferpunkte %d/%d"
 
 #: src/structure.cpp:5528
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - %u von %u verbunden - Schaden %3.0f%%"
+msgstr "%s - %u von %u verbunden - Schaden %d/%d"
 
 #: src/structure.cpp:5678
 #: src/structure.cpp:5725
