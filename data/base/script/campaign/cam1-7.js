@@ -42,7 +42,7 @@ camAreaEvent("middleScavFactoryTrigger", function()
 camAreaEvent("NPWayPointTrigger", function()
 {
 	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("NPTransportPos") }
+		{ pos: camMakePos("NPTransportPos"), regroup: true }
 	);
 });
 
@@ -72,7 +72,7 @@ camAreaEvent("artifactCheckNP", function()
 	camCallOnce("removeCanyonBlip");
 
 	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("NPWayPoint") }
+		{ pos: camMakePos("NPWayPoint"), regroup: true }
 	);
 });
 
@@ -125,7 +125,7 @@ function eventGroupLoss(obj, group, newsize)
 function getArtifact()
 {
 	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("artifactLocation") }
+		{ pos: camMakePos("artifactLocation"), regroup: true }
 	);
 }
 
@@ -278,5 +278,5 @@ function eventStartLevel()
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
 	queue("enableReinforcements", 15000);
-	queue("getArtifact", 120000);
+	queue("getArtifact", 15000);
 }

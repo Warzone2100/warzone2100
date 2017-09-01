@@ -1443,7 +1443,7 @@ function __camFindClusters(list, size)
 	{
 		var x = list[i].x, y = list[i].y;
 		var found = false;
-		for (var j = 0, l = ret.clusters.length; j < l; ++j)
+		for (var j = 0; j < ret.clusters.length; ++j)
 		{
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
 			{
@@ -1603,18 +1603,14 @@ function __camTacticsTickForGroup(group)
 		var groupX = ret.xav[ret.maxIdx];
 		var groupY = ret.yav[ret.maxIdx];
 		droids = ret.clusters[ret.maxIdx];
-		droids = droids.filter(function(obj) { return (obj.type === DROID); });
-		for (var i = 0, l = ret.clusters.length; i < l; ++i)
+		for (var i = 0; i < ret.clusters.length; ++i)
 		{
 			if (i != ret.maxIdx) // move other droids towards main cluster
 			{
-				for (var j = 0, c = ret.clusters[i].length; j < c; ++j)
+				for (var j = 0; j < ret.clusters[i].length; ++j)
 				{
 					var droid = ret.clusters[i][j];
-					if (camDef(droid) && (droid.type === DROID))
-					{
-						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
-					}
+					orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
 				}
 			}
 		}
