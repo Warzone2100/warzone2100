@@ -44,13 +44,13 @@ data/base/script/campaign/cam2-c.js
 data/base/script/campaign/cam2-d.js
 data/base/script/campaign/cam2-ds.js
 data/base/script/campaign/cam2-end.js
-data/base/script/campaign/cam3-a.js
 data/base/script/campaign/cam3-1.js
 data/base/script/campaign/cam3-1s.js
-data/base/script/campaign/cam3-b.js
 data/base/script/campaign/cam3-2.js
 data/base/script/campaign/cam3-2s.js
 data/base/script/campaign/cam3-ab.js
+data/base/script/campaign/cam3-a.js
+data/base/script/campaign/cam3-b.js
 data/base/script/campaign/cam3-c.js
 data/base/script/campaign/libcampaign.js
 data/base/script/campaign/templates.js
@@ -158,6 +158,13 @@ data/mp/multiplay/skirmish/nb_rulesets/standard.js
 data/mp/multiplay/skirmish/nb_turtle.js
 data/mp/multiplay/skirmish/nexus.slo
 data/mp/multiplay/skirmish/rules.js
+data/mp/multiplay/skirmish/semperfi_includes/build.js
+data/mp/multiplay/skirmish/semperfi_includes/chat.js
+data/mp/multiplay/skirmish/semperfi_includes/events.js
+data/mp/multiplay/skirmish/semperfi_includes/miscFunctions.js
+data/mp/multiplay/skirmish/semperfi_includes/production.js
+data/mp/multiplay/skirmish/semperfi_includes/research.js
+data/mp/multiplay/skirmish/semperfi_includes/tactics.js
 data/mp/multiplay/skirmish/semperfi.js
 data/mp/multiplay/skirmish/semperfi.slo
 lib/exceptionhandler/dumpinfo.cpp
@@ -178,6 +185,7 @@ lib/framework/utf.cpp
 lib/framework/wzconfig.cpp
 lib/gamelib/gtime.cpp
 lib/ivis_opengl/bitimage.cpp
+lib/ivis_opengl/gfx_api_gl.cpp
 lib/ivis_opengl/imdload.cpp
 lib/ivis_opengl/jpeg_encoder.cpp
 lib/ivis_opengl/pieblitfunc.cpp
