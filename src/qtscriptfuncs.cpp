@@ -4257,6 +4257,26 @@ static QScriptValue js_setHealth(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{setObjectFlag(object, flag, value)}
+//-- Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
+//-- needs wrapping in a syncRequest. (3.2.4+ only.)
+//-- Recognized object flags: OBJECT_FLAG_UNSELECTABLE - makes object unavailable for selection from player UI.
+static QScriptValue js_setObjectFlag(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue obj = context->argument(0);
+	OBJECT_FLAG flag = (OBJECT_FLAG)context->argument(1).toInt32();
+	SCRIPT_ASSERT(context, flag < OBJECT_FLAG_COUNT, "Bad flag value %d", context->argument(1).toInt32());
+	int id = obj.property("id").toInt32();
+	int player = obj.property("player").toInt32();
+	OBJECT_TYPE type = (OBJECT_TYPE)obj.property("type").toInt32();
+	SCRIPT_ASSERT(context, type == OBJ_DROID || type == OBJ_STRUCTURE || type == OBJ_FEATURE, "Bad object type");
+	BASE_OBJECT *psObj = IdToObject(type, id, player);
+	SCRIPT_ASSERT(context, psObj, "Object not found!");
+	bool value = context->argument(2).toBool();
+	psObj->flags.set(flag, value);
+	return QScriptValue();
+}
+
 //-- \subsection{addSpotter(x, y, player, range, type, expiry)}
 //-- Add an invisible viewer at a given position for given player that shows map in given range. \emph{type}
 //-- is zero for vision reveal, or one for radar reveal. The difference is that a radar reveal can be obstructed
@@ -5508,6 +5528,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea));
 	engine->globalObject().setProperty("startTransporterEntry", engine->newFunction(js_startTransporterEntry));
 	engine->globalObject().setProperty("setTransporterExit", engine->newFunction(js_setTransporterExit));
+	engine->globalObject().setProperty("setObjectFlag", engine->newFunction(js_setObjectFlag));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("TER_WATER", TER_WATER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5600,6 +5621,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("PLAYER_DATA", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH_DATA", SCRIPT_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("LZ_COMPROMISED_TIME", JS_LZ_COMPROMISED_TIME, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("OBJECT_FLAG_UNSELECTABLE", OBJECT_FLAG_UNSELECTABLE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	// the constants below are subject to change without notice...
 	engine->globalObject().setProperty("PROX_MSG", MSG_PROXIMITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("CAMP_MSG", MSG_CAMPAIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);

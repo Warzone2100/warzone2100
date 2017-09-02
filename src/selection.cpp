@@ -58,7 +58,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 		bool shouldSelect = (!onlyOnScreen || droidOnScreen(psDroid, 0)) &&
 		                    condition(psDroid);
 		count += shouldSelect;
-		if (shouldSelect && !psDroid->selected)
+		if (shouldSelect && !psDroid->selected && !psDroid->flags.test(OBJECT_FLAG_UNSELECTABLE))
 		{
 			SelectDroid(psDroid);
 		}
@@ -373,8 +373,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 
 	for (STRUCTURE *psCurr = apsStructLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
 	{
-		if ((psCurr->pStructureType->type == structType) &&
-		    (psCurr->status == SS_BUILT))
+		if (psCurr->pStructureType->type == structType && psCurr->status == SS_BUILT)
 		{
 			if (!psFirst)
 			{
@@ -447,12 +446,12 @@ void selCommander(int n)
 	{
 		if (droidIsCommanderNum(psCurr, n))
 		{
-			if (!psCurr->selected)
+			if (!psCurr->selected && !psCurr->flags.test(OBJECT_FLAG_UNSELECTABLE))
 			{
 				clearSelection();
 				psCurr->selected = true;
 			}
-			else
+			else if (!psCurr->flags.test(OBJECT_FLAG_UNSELECTABLE))
 			{
 				clearSelection();
 				psCurr->selected = true;

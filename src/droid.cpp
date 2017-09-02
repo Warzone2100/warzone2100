@@ -3136,6 +3136,10 @@ bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 //
 void SelectDroid(DROID *psDroid)
 {
+	if (psDroid->flags.test(OBJECT_FLAG_UNSELECTABLE))
+	{
+		return;
+	}
 	// we shouldn't ever control the transporter in SP games
 	if (!isTransporter(psDroid) || bMultiPlayer)
 	{

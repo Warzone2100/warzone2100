@@ -445,6 +445,35 @@ void kf_TeachSelected()
 	}
 }
 
+void kf_Unselectable()
+{
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			psDroid->flags.set(OBJECT_FLAG_UNSELECTABLE, true);
+			psDroid->selected = false;
+		}
+	}
+	for (STRUCTURE *psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (psStruct->selected)
+		{
+			psStruct->flags.set(OBJECT_FLAG_UNSELECTABLE, true);
+			psStruct->selected = false;
+		}
+	}
+}
+
 // --------------------------------------------------------------------------
 //
 ///* Prints out the date and time of the build of the game */
