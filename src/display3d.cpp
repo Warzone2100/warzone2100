@@ -1657,6 +1657,7 @@ float getViewDistance()
 void setViewDistance(float dist)
 {
 	distance = dist;
+	CONPRINTF(ConsoleString, (ConsoleString, _("Setting zoom to %.0f"), distance));
 }
 
 /// Draw a feature (tree/rock/etc.)

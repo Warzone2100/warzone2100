@@ -913,6 +913,7 @@ void	kf_RadarZoomIn()
 	if (RadarZoomLevel < MAX_RADARZOOM)
 	{
 		RadarZoomLevel += RADARZOOM_STEP;
+		CONPRINTF(ConsoleString, (ConsoleString, _("Setting radar zoom to %u"), RadarZoomLevel));
 		SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 	}
@@ -925,6 +926,7 @@ void	kf_RadarZoomOut()
 	if (RadarZoomLevel > MIN_RADARZOOM)
 	{
 		RadarZoomLevel -= RADARZOOM_STEP;
+		CONPRINTF(ConsoleString, (ConsoleString, _("Setting radar zoom to %u"), RadarZoomLevel));
 		SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 	}
