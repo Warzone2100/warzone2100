@@ -112,9 +112,9 @@ bool CancelPressed()
 	return cancel;
 }
 
-// Cycle through options, one at a time.
-template <typename T>
-static T stepCycle(T value, T min, T max)
+// Cycle through options as in program seq(1) from coreutils
+// The T cast is to cycle through enums.
+template <typename T> static T seqCycle(T value, T min, int inc, T max)
 {
 	return widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY ?
 		value < max ? T(value + inc) : min :  // Cycle forwards.
@@ -122,14 +122,12 @@ static T stepCycle(T value, T min, T max)
 }
 
 // Cycle through options, which are powers of two, such as [128, 256, 512, 1024, 2048].
-template <typename T>
-static T pow2Cycle(T value, T min, T max)
+template <typename T> static T pow2Cycle(T value, T min, T max)
 {
 	return widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY ?
 		value < max ? std::max<T>(1, value) * 2 : min :  // Cycle forwards.
 		min < value ? (value / 2 > 1 ? value / 2 : 0) : max;  // Cycle backwards.
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
@@ -810,13 +808,13 @@ bool runGraphicsOptionsMenu()
 
 	case FRONTEND_FMVMODE:
 	case FRONTEND_FMVMODE_R:
-		war_SetFMVmode(stepCycle(war_GetFMVmode(), FMV_FULLSCREEN, FMV_MODE(FMV_MAX - 1)));
+		war_SetFMVmode(seqCycle(war_GetFMVmode(), FMV_FULLSCREEN, 1, FMV_MODE(FMV_MAX - 1)));
 		widgSetString(psWScreen, FRONTEND_FMVMODE_R, graphicsOptionsFmvmodeString());
 		break;
 
 	case FRONTEND_SCANLINES:
 	case FRONTEND_SCANLINES_R:
-		war_setScanlineMode(stepCycle(war_getScanlineMode(), SCANLINES_OFF, SCANLINES_BLACK));
+		war_setScanlineMode(seqCycle(war_getScanlineMode(), SCANLINES_OFF, 1, SCANLINES_BLACK));
 		widgSetString(psWScreen, FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString());
 		break;
 
@@ -1053,7 +1051,7 @@ bool runVideoOptionsMenu()
 			}
 
 			// Increment/decrement and loop if required.
-			current = stepCycle(current, modes.begin(), modes.end() - 1);
+			current = seqCycle(current, modes.begin(), 1, modes.end() - 1);
 
 			// Set the new width and height (takes effect on restart)
 			war_SetScreen(current->screen);
@@ -1333,7 +1331,7 @@ bool runGameOptionsMenu()
 
 	case FRONTEND_DIFFICULTY:
 	case FRONTEND_DIFFICULTY_R:
-		setDifficultyLevel(stepCycle(getDifficultyLevel(), DL_EASY, DL_INSANE));
+		setDifficultyLevel(seqCycle(getDifficultyLevel(), DL_EASY, 1, DL_INSANE));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		break;
 
