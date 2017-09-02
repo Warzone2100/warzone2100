@@ -3661,7 +3661,6 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		{
 			setPlayerColour(i, saveGameData.playerColour[i]);
 		}
-		SetRadarZoom(saveGameData.radarZoom);
 	}
 
 	if (version >= VERSION_20)//version 20
