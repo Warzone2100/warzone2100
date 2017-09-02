@@ -269,18 +269,10 @@ void ProcessRadarInput()
 		{
 			mouseOverRadar = true;
 
-			if (mousePressed(MOUSE_ORDER) || (mousePressed(MOUSE_MMB) && keyDown(KEY_LALT)))
+			if (mousePressed(MOUSE_ORDER))
 			{
-				if (mousePressed(MOUSE_ORDER))
-				{
-					x = mousePressPos_DEPRECATED(MOUSE_ORDER).x;
-					y = mousePressPos_DEPRECATED(MOUSE_ORDER).y;
-				}
-				else
-				{
-					x = mousePressPos_DEPRECATED(MOUSE_MMB).x;
-					y = mousePressPos_DEPRECATED(MOUSE_MMB).y;
-				}
+				x = mousePressPos_DEPRECATED(MOUSE_ORDER).x;
+				y = mousePressPos_DEPRECATED(MOUSE_ORDER).y;
 
 				/* If we're tracking a droid, then cancel that */
 				CalcRadarPosition(x, y, &PosX, &PosY);
@@ -620,8 +612,7 @@ CURSOR processMouseClickInput()
 
 	CheckFinishedDrag();
 
-	if ((mouseReleased(MOUSE_LMB) || (mouseReleased(MOUSE_MMB) && (keyDown(KEY_LALT) || keyDown(KEY_RALT)))) && !OverRadar &&
-	    dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
+	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
 	{
 		if (bRightClickOrders)
 		{
