@@ -317,17 +317,13 @@ void ProcessRadarInput()
 					requestRadarTrack(PosX * TILE_UNITS, PosY * TILE_UNITS);
 				}
 			}
-			// ctrl-alt-scroll changes game speed
-			if (!keyDown(KEY_LCTRL) || !keyDown(KEY_LALT))
+			if (mousePressed(MOUSE_WUP))
 			{
-				if (mousePressed(MOUSE_WUP))
-				{
-					kf_RadarZoomIn();
-				}
-				else if (mousePressed(MOUSE_WDN))
-				{
-					kf_RadarZoomOut();
-				}
+				kf_RadarZoomIn();
+			}
+			else if (mousePressed(MOUSE_WDN))
+			{
+				kf_RadarZoomOut();
 			}
 		}
 	}
@@ -365,12 +361,7 @@ void processInput()
 	mouseOverConsole = mouseOverHistoryConsoleBox();
 	if (mousePressed(MOUSE_WUP) && !isMouseOverRadar())
 	{
-		/* Ctrl+Alt+WheelUp makes game speed up */
-		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
-		{
-			kf_SpeedUp();
-		}
-		else if (mOverConstruction)
+		if (mOverConstruction)
 		{
 			kf_BuildPrevPage();
 		}
@@ -382,12 +373,7 @@ void processInput()
 
 	if (mousePressed(MOUSE_WDN) && !isMouseOverRadar())
 	{
-		/* Ctrl+Alt+WheelDown makes game slow down */
-		if (keyDown(KEY_LCTRL) && keyDown(KEY_LALT))
-		{
-			kf_SlowDown();
-		}
-		else if (mOverConstruction)
+		if (mOverConstruction)
 		{
 			kf_BuildNextPage();
 		}
