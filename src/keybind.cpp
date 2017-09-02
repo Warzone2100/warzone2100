@@ -177,7 +177,7 @@ void kf_PerformanceSample()
 // --------------------------------------------------------------------------
 void	kf_ToggleRadarJump()
 {
-	setRadarJump(!getRadarJumpStatus());
+	war_SetRadarJump(!war_GetRadarJump());
 }
 
 // --------------------------------------------------------------------------

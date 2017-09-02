@@ -54,6 +54,9 @@ struct WARZONE_GLOBALS
 	int mapZoom = STARTDISTANCE;
 	int mapZoomRate = MAP_ZOOM_RATE_DEFAULT;
 	int radarZoom = DEFAULT_RADARZOOM;
+	int cameraSpeed = CAMERASPEED_DEFAULT;
+	int scrollEvent = 0; // map/radar zoom
+	bool radarJump = false;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -259,4 +262,37 @@ void war_SetRadarZoom(int radarZoom)
 	{
 	    warGlobs.radarZoom = radarZoom;
 	}
+}
+
+int war_GetCameraSpeed()
+{
+	return warGlobs.cameraSpeed;
+}
+
+void war_SetCameraSpeed(int cameraSpeed)
+{
+        if (cameraSpeed % CAMERASPEED_STEP == 0 && ! (cameraSpeed < CAMERASPEED_MIN || cameraSpeed > CAMERASPEED_MAX))
+	{
+	    warGlobs.cameraSpeed = cameraSpeed;
+	}
+}
+
+int war_GetScrollEvent()
+{
+	return warGlobs.scrollEvent;
+}
+
+void war_SetScrollEvent(int scrollEvent)
+{
+	warGlobs.scrollEvent = scrollEvent;
+}
+
+bool war_GetRadarJump()
+{
+	return warGlobs.radarJump;
+}
+
+void war_SetRadarJump(bool radarJump)
+{
+	warGlobs.radarJump = radarJump;
 }

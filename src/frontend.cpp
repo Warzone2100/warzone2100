@@ -743,6 +743,11 @@ static char const *graphicsOptionsRadarString()
 	return rotateRadar ? _("Rotating") : _("Fixed");
 }
 
+static char const *graphicsOptionsRadarJumpString()
+{
+	return war_GetRadarJump() ? _("Instant") : _("Tracked");
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
 static bool startGraphicsOptionsMenu()
@@ -773,6 +778,10 @@ static bool startGraphicsOptionsMenu()
 	// Radar
 	addTextButton(FRONTEND_RADAR,   FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Radar"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, graphicsOptionsRadarString(), WBUT_SECONDARY);
+
+	// RadarJump
+	addTextButton(FRONTEND_RADAR_JUMP,   FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar Jump"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR_JUMP_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, graphicsOptionsRadarJumpString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GRAPHICS OPTIONS"));
@@ -819,9 +828,16 @@ bool runGraphicsOptionsMenu()
 		widgSetString(psWScreen, FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString());
 		break;
 
+	case FRONTEND_RADAR:
 	case FRONTEND_RADAR_R:
 		rotateRadar = !rotateRadar;
 		widgSetString(psWScreen, FRONTEND_RADAR_R, graphicsOptionsRadarString());
+		break;
+
+	case FRONTEND_RADAR_JUMP:
+	case FRONTEND_RADAR_JUMP_R:
+		war_SetRadarJump(!war_GetRadarJump());
+		widgSetString(psWScreen, FRONTEND_RADAR_JUMP_R, graphicsOptionsRadarJumpString());
 		break;
 
 	default:
@@ -1184,6 +1200,17 @@ static char const *mouseOptionsCursorModeString()
 	return war_GetColouredCursor() ? _("On") : _("Off");
 }
 
+static char const *mouseOptionsScrollEventString()
+{
+	switch(war_GetScrollEvent())
+	{
+	    case 0: return _("Map/Radar Zoom");
+	    case 1: return _("Game Speed");
+	    case 2: return _("Camera Pitch");
+	    default: return "";
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
 static bool startMouseOptionsMenu()
@@ -1213,7 +1240,11 @@ static bool startMouseOptionsMenu()
 
 	// Hardware / software cursor toggle
 	addTextButton(FRONTEND_CURSORMODE,   FRONTEND_POS4X - 35, FRONTEND_POS6Y, _("Colored Cursors"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 25, FRONTEND_POS6Y, mouseOptionsCursorModeString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 55, FRONTEND_POS6Y, mouseOptionsCursorModeString(), WBUT_SECONDARY);
+
+	// Function of the scroll wheel
+	addTextButton(FRONTEND_SCROLLEVENT,   FRONTEND_POS5X - 35, FRONTEND_POS7Y, _("Scroll Event"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SCROLLEVENT_R, FRONTEND_POS5M - 55, FRONTEND_POS7Y, mouseOptionsScrollEventString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
@@ -1261,6 +1292,14 @@ bool runMouseOptionsMenu()
 		wzSetCursor(CURSOR_DEFAULT);
 		break;
 
+	case FRONTEND_SCROLLEVENT:
+	case FRONTEND_SCROLLEVENT_R:
+		{
+		    war_SetScrollEvent(seqCycle(war_GetScrollEvent(), 0, 1, 2));
+		    widgSetString(psWScreen, FRONTEND_SCROLLEVENT_R, mouseOptionsScrollEventString());
+		    break;
+		}
+
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);
 		break;
@@ -1293,6 +1332,13 @@ static char const *gameOptionsDifficultyString()
 	return _("Unsupported");
 }
 
+static std::string gameOptionsCameraSpeedString()
+{
+	char cameraSpeed[20];
+	ssprintf(cameraSpeed, "%d", war_GetCameraSpeed());
+	return cameraSpeed;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
 static bool startGameOptionsMenu()
@@ -1312,9 +1358,9 @@ static bool startGameOptionsMenu()
 	addTextButton(FRONTEND_DIFFICULTY,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Campaign Difficulty"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, gameOptionsDifficultyString(), WBUT_SECONDARY);
 
-	// Scroll speed
-	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS4X - 25, FRONTEND_POS4Y, _("Scroll Speed"), 0);
-	addFESlider(FRONTEND_SCROLLSPEED_SL, FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y + 5, 16, scroll_speed_accel / 100);
+	// Camera speed
+	addTextButton(FRONTEND_CAMERASPEED, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Camera Speed"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_CAMERASPEED_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, gameOptionsCameraSpeedString(), WBUT_SECONDARY);
 
 	// Colour stuff
 	addTextButton(FRONTEND_COLOUR, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Unit Colour:"), 0);
@@ -1378,11 +1424,8 @@ bool runGameOptionsMenu()
 		widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
 		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
-		widgSetString(psWScreen, FRONTEND_SCROLLSPEED, _("Scroll Speed"));
+		widgSetString(psWScreen, FRONTEND_CAMERASPEED, _("Camera Speed"));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
-		break;
-
-	case FRONTEND_SCROLLSPEED:
 		break;
 
 	case FRONTEND_DIFFICULTY:
@@ -1391,12 +1434,10 @@ bool runGameOptionsMenu()
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		break;
 
-	case FRONTEND_SCROLLSPEED_SL:
-		scroll_speed_accel = widgGetSliderPos(psWScreen, FRONTEND_SCROLLSPEED_SL) * 100; //0-1600
-		if (scroll_speed_accel == 0)		// make sure you CAN scroll.
-		{
-			scroll_speed_accel = 100;
-		}
+	case FRONTEND_CAMERASPEED:
+	case FRONTEND_CAMERASPEED_R:
+		war_SetCameraSpeed(seqCycle(war_GetCameraSpeed(), CAMERASPEED_MIN, CAMERASPEED_STEP, CAMERASPEED_MAX));
+		widgSetString(psWScreen, FRONTEND_CAMERASPEED_R, gameOptionsCameraSpeedString().c_str());
 		break;
 
 	case FRONTEND_QUIT:

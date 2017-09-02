@@ -95,10 +95,7 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 #include "cursorselection"
 };
 
-/// acceleration on scrolling. Game Option.
-UDWORD	scroll_speed_accel;
-
-/// Control zoom. Add an amount to zoom this much each second.
+// Control zoom. Add an amount to zoom this much each second.
 static float zoom_speed = 0.0f;
 static float zoom_target = 0.0f;
 
@@ -120,7 +117,6 @@ static OBJECT_POSITION *checkMouseLoc();
 
 void finishDeliveryPosition();
 
-static bool	bInstantRadarJump = false;
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
@@ -196,16 +192,6 @@ bool isMouseOverRadar()
 void setMouseScroll(bool scroll)
 {
 	mouseScroll = scroll;
-}
-
-void	setRadarJump(bool	val)
-{
-	bInstantRadarJump = val;
-}
-
-bool	getRadarJumpStatus()
-{
-	return (bInstantRadarJump);
 }
 
 bool	getInvertMouseStatus()
@@ -306,7 +292,7 @@ void ProcessRadarInput()
 
 				CalcRadarPosition(x, y, &PosX, &PosY);
 
-				if (bInstantRadarJump)
+				if (war_GetRadarJump())
 				{
 					/* Go instantly */
 					setViewPos(PosX, PosY, true);
@@ -317,13 +303,23 @@ void ProcessRadarInput()
 					requestRadarTrack(PosX * TILE_UNITS, PosY * TILE_UNITS);
 				}
 			}
-			if (mousePressed(MOUSE_WUP))
+			else if (mousePressed(MOUSE_WUP))
 			{
-				kf_RadarZoomIn();
+				switch(war_GetScrollEvent())
+				{
+				    case 0: kf_RadarZoomIn(); break;
+				    case 1: kf_SpeedUp(); break;
+				    case 2: kf_PitchForward(); break;
+				}
 			}
 			else if (mousePressed(MOUSE_WDN))
 			{
-				kf_RadarZoomOut();
+				switch(war_GetScrollEvent())
+				{
+				    case 0: kf_RadarZoomOut(); break;
+				    case 1: kf_SlowDown(); break;
+				    case 2: kf_PitchBack(); break;
+				}
 			}
 		}
 	}
@@ -367,7 +363,12 @@ void processInput()
 		}
 		else if (!mouseOverConsole)
 		{
-			kf_ZoomInStep();
+		    switch(war_GetScrollEvent())
+		    {
+			case 0: kf_ZoomInStep(); break;
+			case 1: kf_SpeedUp(); break;
+			case 2: kf_PitchForward(); break;
+		    }
 		}
 	}
 
@@ -379,7 +380,12 @@ void processInput()
 		}
 		else if (!mouseOverConsole)
 		{
-			kf_ZoomOutStep();
+			switch(war_GetScrollEvent())
+			{
+			    case 0: kf_ZoomOutStep(); break;
+			    case 1: kf_SlowDown(); break;
+			    case 2: kf_PitchBack(); break;
+			}
 		}
 	}
 
@@ -978,8 +984,9 @@ CURSOR scroll()
 	uint32_t timeDiff;
 	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
-	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
-	float scaled_accel;
+
+	float scaled_max_scroll_speed = scroll_zoom_factor * war_GetCameraSpeed();
+	float scaled_accel = scaled_max_scroll_speed / 2;
 
 	static float xDiffFrac = 0, yDiffFrac = 0;
 
@@ -1031,8 +1038,6 @@ CURSOR scroll()
 	{
 		setWarCamActive(false);  // Don't let this thing override the user trying to scroll.
 	}
-
-	scaled_accel = scroll_zoom_factor * scroll_speed_accel;
 
 	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
 	timeDiff = wzGetTicks() - scrollRefTime;

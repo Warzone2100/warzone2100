@@ -47,7 +47,6 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 
-#define DEFAULTSCROLL	1000
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
@@ -104,12 +103,23 @@ bool loadConfig()
 		wz_texture_compression = GL_RGBA;
 	}
 	showFPS = ini.value("showFPS", false).toBool();
-	scroll_speed_accel = ini.value("scroll", DEFAULTSCROLL).toInt();
+	if (ini.contains("cameraSpeed"))
+	{
+		war_SetCameraSpeed(ini.value("cameraSpeed").toInt());
+	}
 	setDrawShadows(ini.value("shadows", true).toBool());
 	war_setSoundEnabled(ini.value("sound", true).toBool());
 	setInvertMouseStatus(ini.value("mouseflip", true).toBool());
 	setRightClickOrders(ini.value("RightClickOrders", false).toBool());
 	setMiddleClickRotate(ini.value("MiddleClickRotate", false).toBool());
+	if (ini.contains("radarJump"))
+	{
+		war_SetRadarJump(ini.value("radarJump").toBool());
+	}
+	if (ini.contains("scrollEvent"))
+	{
+		war_SetScrollEvent(ini.value("scrollEvent").toInt());
+	}
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	radarRotationArrow = ini.value("radarRotationArrow", true).toBool();
 	quitConfirmation = ini.value("quitConfirmation", true).toBool();
@@ -218,9 +228,11 @@ bool saveConfig()
 	{
 		ini.setValue("difficulty", getDifficultyLevel());		// level
 	}
-	ini.setValue("scroll", (SDWORD)scroll_speed_accel);		// scroll
+	ini.setValue("cameraSpeed", war_GetCameraSpeed());	// camera speed
+	ini.setValue("radarJump", war_GetRadarJump());		// radar jump
+	ini.setValue("scrollEvent", war_GetScrollEvent());	// scroll event
 	ini.setValue("mouseflip", (SDWORD)(getInvertMouseStatus()));	// flipmouse
-	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
+	ini.setValue("nomousewarp", (SDWORD)getMouseWarp());		// mouse warp
 	ini.setValue("coloredCursor", (SDWORD)war_GetColouredCursor());
 	ini.setValue("RightClickOrders", (SDWORD)(getRightClickOrders()));
 	ini.setValue("MiddleClickRotate", (SDWORD)(getMiddleClickRotate()));

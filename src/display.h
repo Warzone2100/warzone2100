@@ -63,19 +63,10 @@ bool	getMiddleClickRotate();
 void	setDrawShadows(bool val);
 bool	getDrawShadows();
 
-bool	getRadarJumpStatus();
-void	setRadarJump(bool val);
-
-
 /* Do the 3D display */
 void displayWorld();
 
 // Illumination value for standard light level "as the artist drew it" ... not darker, not lighter
-
-#define MAX_SCROLL_SPEED (800+scroll_speed_accel)	// make max speed dependant on accel chosen.
-
-extern UDWORD scroll_speed_accel;			// now user modifyable.
-
 
 #define DRAG_INACTIVE 0
 #define DRAG_DRAGGING 1
