@@ -195,10 +195,6 @@ bool ShutdownRadar()
 
 void SetRadarZoom(uint8_t ZoomLevel)
 {
-	if (ZoomLevel < 4) // old savegame format didn't save zoom levels very well
-	{
-		ZoomLevel = DEFAULT_RADARZOOM;
-	}
 	if (ZoomLevel > MAX_RADARZOOM)
 	{
 		ZoomLevel = MAX_RADARZOOM;
