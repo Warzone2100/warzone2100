@@ -51,7 +51,7 @@
 #define LANG_NAME_DANISH "Dansk"
 #define LANG_NAME_DUTCH "Nederlands"
 #define LANG_NAME_ENGLISH "English"
-#define LANG_NAME_ENGLISH_UK "English (United Kingdom)"
+#define LANG_NAME_ENGLISH_UK "British English"
 #define LANG_NAME_ESTONIAN "Eesti Keel"
 #define LANG_NAME_FINNISH "suomi"
 #define LANG_NAME_FRENCH "Français"
