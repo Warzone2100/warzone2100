@@ -226,8 +226,8 @@ TITLECODE titleLoop()
 		runGraphicsOptionsMenu();
 		break;
 
-	case AUDIO_OPTIONS:
-		runAudioOptionsMenu();
+	case AUDIO_AND_ZOOM_OPTIONS:
+		runAudioAndZoomOptionsMenu();
 		break;
 
 	case VIDEO_OPTIONS:

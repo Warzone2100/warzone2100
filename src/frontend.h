@@ -44,7 +44,7 @@ enum tMode
 	LOADSAVEGAME,	// 15 loading a save game
 	KEYMAP,			// 16 keymap editor
 	GRAPHICS_OPTIONS,       // 17 graphics options menu
-	AUDIO_OPTIONS,          // 18 audio options menu
+	AUDIO_AND_ZOOM_OPTIONS, // 18 audio and zoom options menu
 	VIDEO_OPTIONS,          // 19 video options menu
 	MOUSE_OPTIONS,          // 20 mouse options menu
 	CAMPAIGNS,              // 21 campaign selector
@@ -68,7 +68,7 @@ bool runMultiPlayerMenu();
 bool runGameOptionsMenu();
 bool runOptionsMenu();
 bool runGraphicsOptionsMenu();
-bool runAudioOptionsMenu();
+bool runAudioAndZoomOptionsMenu();
 bool runVideoOptionsMenu();
 bool runMouseOptionsMenu();
 bool runTutorialMenu();
@@ -216,13 +216,19 @@ enum
 	FRONTEND_SHADOWS,
 	FRONTEND_SHADOWS_R,
 
-	FRONTEND_AUDIOOPTIONS = 23000,          // Audio Options Menu
+	FRONTEND_AUDIO_AND_ZOOMOPTIONS = 23000,                 // Audio and Zoom Options Menu
 	FRONTEND_3D_FX,						// 3d sound volume
 	FRONTEND_FX,						// 2d (voice) sound volume
 	FRONTEND_MUSIC,						// music volume
+	FRONTEND_MAP_ZOOM,					// map zoom
+	FRONTEND_MAP_ZOOM_RATE,					// map zoom rate
+	FRONTEND_RADAR_ZOOM,					// radar zoom rate
 	FRONTEND_3D_FX_SL,
 	FRONTEND_FX_SL,
 	FRONTEND_MUSIC_SL,
+	FRONTEND_MAP_ZOOM_R,
+	FRONTEND_MAP_ZOOM_RATE_R,
+	FRONTEND_RADAR_ZOOM_R,
 
 	FRONTEND_VIDEOOPTIONS = 24000,          // video Options Menu
 	FRONTEND_WINDOWMODE,

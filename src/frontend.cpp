@@ -55,6 +55,7 @@
 #include "init.h"
 #include "levels.h"
 #include "intdisplay.h"
+#include "keybind.h"
 #include "keyedit.h"
 #include "loadsave.h"
 #include "main.h"
@@ -654,7 +655,7 @@ static bool startOptionsMenu()
 	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X, FRONTEND_POS2Y, _("Game Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_GRAPHICSOPTIONS, FRONTEND_POS3X, FRONTEND_POS3Y, _("Graphics Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_VIDEOOPTIONS, FRONTEND_POS4X, FRONTEND_POS4Y, _("Video Options"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_AUDIOOPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Audio Options"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_AUDIO_AND_ZOOMOPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Audio / Zoom Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -675,8 +676,8 @@ bool runOptionsMenu()
 	case FRONTEND_GRAPHICSOPTIONS:
 		changeTitleMode(GRAPHICS_OPTIONS);
 		break;
-	case FRONTEND_AUDIOOPTIONS:
-		changeTitleMode(AUDIO_OPTIONS);
+	case FRONTEND_AUDIO_AND_ZOOMOPTIONS:
+		changeTitleMode(AUDIO_AND_ZOOM_OPTIONS);
 		break;
 	case FRONTEND_VIDEOOPTIONS:
 		changeTitleMode(VIDEO_OPTIONS);
@@ -839,10 +840,30 @@ bool runGraphicsOptionsMenu()
 	return true;
 }
 
+static std::string audioAndZoomOptionsMapZoomString()
+{
+	char mapZoom[20];
+	ssprintf(mapZoom, "%d", war_GetMapZoom());
+	return mapZoom;
+}
+
+static std::string audioAndZoomOptionsMapZoomRateString()
+{
+	char mapZoomRate[20];
+	ssprintf(mapZoomRate, "%d", war_GetMapZoomRate());
+	return mapZoomRate;
+}
+
+static std::string audioAndZoomOptionsRadarZoomString()
+{
+	char radarZoom[20];
+	ssprintf(radarZoom, "%d", war_GetRadarZoom());
+	return radarZoom;
+}
 
 // ////////////////////////////////////////////////////////////////////////////
-// Audio Options Menu
-static bool startAudioOptionsMenu()
+// Audio and Zoom Options Menu
+static bool startAudioAndZoomOptionsMenu()
 {
 	addBackdrop();
 	addTopForm();
@@ -860,17 +881,29 @@ static bool startAudioOptionsMenu()
 	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X - 25, FRONTEND_POS4Y, _("Music Volume"), 0);
 	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y + 5, AUDIO_VOL_MAX, sound_GetMusicVolume() * 100.0);
 
+	// map zoom
+	addTextButton(FRONTEND_MAP_ZOOM, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Map Zoom"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MAP_ZOOM_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, audioAndZoomOptionsMapZoomString(), WBUT_SECONDARY);
+
+	// map zoom rate
+	addTextButton(FRONTEND_MAP_ZOOM_RATE, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Map Zoom Rate"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MAP_ZOOM_RATE_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, audioAndZoomOptionsMapZoomRateString(), WBUT_SECONDARY);
+
+	// radar zoom
+	addTextButton(FRONTEND_RADAR_ZOOM, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar Zoom"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR_ZOOM_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, audioAndZoomOptionsRadarZoomString(), WBUT_SECONDARY);
+
 	// quit.
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	//add some text down the side of the form
-	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("AUDIO OPTIONS"));
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("AUDIO / ZOOM OPTIONS"));
 
 
 	return true;
 }
 
-bool runAudioOptionsMenu()
+bool runAudioAndZoomOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -894,6 +927,29 @@ bool runAudioOptionsMenu()
 		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, FRONTEND_MUSIC_SL) / 100.0);
 		break;
 
+	case FRONTEND_MAP_ZOOM:
+	case FRONTEND_MAP_ZOOM_R:
+		{
+		    war_SetMapZoom(seqCycle(war_GetMapZoom(), MINDISTANCE, war_GetMapZoomRate(), MAXDISTANCE));
+		    widgSetString(psWScreen, FRONTEND_MAP_ZOOM_R, audioAndZoomOptionsMapZoomString().c_str());
+		    break;
+		}
+
+	case FRONTEND_MAP_ZOOM_RATE:
+	case FRONTEND_MAP_ZOOM_RATE_R:
+		{
+		    war_SetMapZoomRate(seqCycle(war_GetMapZoomRate(), MAP_ZOOM_RATE_MIN, MAP_ZOOM_RATE_STEP, MAP_ZOOM_RATE_MAX));
+		    widgSetString(psWScreen, FRONTEND_MAP_ZOOM_RATE_R, audioAndZoomOptionsMapZoomRateString().c_str());
+		    break;
+		}
+
+	case FRONTEND_RADAR_ZOOM:
+	case FRONTEND_RADAR_ZOOM_R:
+		{
+		    war_SetRadarZoom(seqCycle(war_GetRadarZoom(), MIN_RADARZOOM, RADARZOOM_STEP, MAX_RADARZOOM));
+		    widgSetString(psWScreen, FRONTEND_RADAR_ZOOM_R, audioAndZoomOptionsRadarZoomString().c_str());
+		    break;
+		}
 
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);
@@ -1762,8 +1818,8 @@ void changeTitleMode(tMode mode)
 	case GRAPHICS_OPTIONS:
 		startGraphicsOptionsMenu();
 		break;
-	case AUDIO_OPTIONS:
-		startAudioOptionsMenu();
+	case AUDIO_AND_ZOOM_OPTIONS:
+		startAudioAndZoomOptionsMenu();
 		break;
 	case VIDEO_OPTIONS:
 		startVideoOptionsMenu();
