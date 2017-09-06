@@ -226,7 +226,6 @@ static bool seq_StartFullScreenVideo(const QString& videoName, const QString& au
 	bHoldSeqForAudio = false;
 	aVideoName = QString("sequences/" + videoName);
 
-	cdAudio_Pause();
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	/* We do not want to enter loop_SetVideoPlaybackMode() when we are
