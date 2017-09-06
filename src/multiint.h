@@ -90,6 +90,7 @@ public:
 
 
 void readAIs();	///< step 1, load AI definition files
+void setupChallengeAIs();	///< dirty hack to allow correct display of names from challenges
 void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
 const QStringList getAINames();

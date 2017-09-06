@@ -324,13 +324,6 @@ bool hostCampaign(char *sGame, char *sPlayer)
 
 	freeMessages();
 
-	// If we had a single player (i.e. campaign) game before this value will
-	// have been set to 0. So revert back to the default value.
-	if (game.maxPlayers == 0)
-	{
-		game.maxPlayers = 4;
-	}
-
 	if (!NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers))
 	{
 		return false;
@@ -342,7 +335,6 @@ bool hostCampaign(char *sGame, char *sPlayer)
 		{
 			game.skDiff[i] = 0;     	// disable AI
 		}
-		setPlayerName(i, ""); //Clear custom names (use default ones instead)
 	}
 
 	NetPlay.players[selectedPlayer].ready = false;
@@ -356,9 +348,17 @@ bool hostCampaign(char *sGame, char *sPlayer)
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
+	// load AI values of challenge files for getAIName()
+	setupChallengeAIs();
+
+	// ensure all players have a name in One Player Skirmish games
 	if (!NetPlay.bComms)
 	{
 		sstrcpy(NetPlay.players[0].name, sPlayer);
+		for (unsigned i = 1; i < MAX_PLAYERS; ++i)
+		{
+		    sstrcpy(NetPlay.players[i].name, getAIName(i));
+		}
 	}
 
 	return true;

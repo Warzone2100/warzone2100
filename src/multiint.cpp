@@ -97,6 +97,8 @@
 #include "levels.h"
 #include "wrappers.h"
 
+#include <QFileInfo> // used to strip path of challenge AI values
+
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -232,9 +234,6 @@ struct AIDATA
 };
 static std::vector<AIDATA> aidata;
 
-/// Player name overrides
-static char nameOverrides[MAX_PLAYERS][MAX_LEN_AI_NAME];
-
 struct WzMultiButton : public W_BUTTON
 {
 	WzMultiButton(WIDGET *parent) : W_BUTTON(parent) {}
@@ -262,13 +261,13 @@ const QStringList getAINames()
 
 const char *getAIName(int player)
 {
-	if (NetPlay.players[player].ai >= 0)
+	if (NetPlay.players[player].ai >= 0 && NetPlay.players[player].ai != AI_CUSTOM)
 	{
 		return aidata[NetPlay.players[player].ai].name;
 	}
 	else
 	{
-		return "";
+		return _("Commander");
 	}
 }
 
@@ -291,6 +290,47 @@ int getNextAIAssignment(const char *name)
 		}
 	}
 	return AI_NOT_FOUND;
+}
+
+void setupChallengeAIs()
+{
+	if(challengeActive)
+	{
+		WzConfig ini(sRequestResult, WzConfig::ReadOnly);
+		for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+		{
+			// set ai property for all players, so that getAIName() can name them accordingly
+			ini.beginGroup("player_" + QString::number(i));
+			if (ini.contains("ai"))
+			{
+				QString val = ini.value("ai").toString();
+				ini.endGroup();
+				if (val.compare("null") == 0)
+				{
+					continue; // no AI
+				}
+
+				// strip given path down to filename
+				QString filename(QFileInfo(val).fileName());
+
+				// look up AI value in vector of known skirmish AIs
+				for (int ai = 0; ai < aidata.size(); ++ai)
+				{
+					if (filename == aidata[ai].js || filename == aidata[ai].slo || filename == aidata[ai].vlo)
+					{
+						NetPlay.players[i].ai = ai;
+						break;
+					}
+					else
+					{
+						NetPlay.players[i].ai = AI_CUSTOM; // for custom AIs
+					}
+				}
+				continue;
+			}
+			ini.endGroup();
+		}
+	}
 }
 
 void loadMultiScripts()
@@ -378,8 +418,8 @@ void loadMultiScripts()
 						continue; // no AI
 					}
 					loadPlayerScript(val, i, NetPlay.players[i].difficulty);
-					NetPlay.players[i].ai = AI_CUSTOM;
-					debug(LOG_WZ, "Custom AI %s loaded for player %u", val.toUtf8().constData(), i);
+
+					debug(LOG_WZ, "AI %s loaded for player %u", val.toUtf8().constData(), i);
 					continue;
 				}
 				ini.endGroup();
@@ -2846,7 +2886,7 @@ static void loadMapSettings2()
 		}
 		if (ini.contains("name"))
 		{
-			sstrcpy(nameOverrides[i], ini.value("name").toString().toUtf8().constData());
+			sstrcpy(NetPlay.players[i].name, ini.value("name").toString().toUtf8().constData());
 		}
 		NetPlay.players[i].position = MAX_PLAYERS;  // Invalid value, fix later.
 		if (ini.contains("position"))
@@ -3807,7 +3847,6 @@ bool startMultiOptions(bool bReenter)
 
 	if (!bReenter)
 	{
-		memset(nameOverrides, 0, sizeof(nameOverrides));
 		memset(&locked, 0, sizeof(locked)); // nothing is locked by default
 
 		teamChooserUp = -1;
@@ -4340,12 +4379,18 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			iV_DrawImage(FrontImages, IMAGE_PLAYER_PC, x, y + 11);
 		}
 		iV_SetTextColour(WZCOL_FORM_TEXT);
-		ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
+
+		// challenges may use custom AIs that are not in aidata and set to 127
+		if (!challengeActive)
+		{
+		    ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
+		}
+
 		switch (NetPlay.players[j].ai)
 		{
 		case AI_OPEN: sstrcpy(aitext, _("Open")); break;
 		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
-		default: sstrcpy(aitext, nameOverrides[j][0] == '\0' ? NetPlay.isHost ? aidata[NetPlay.players[j].ai].name : NetPlay.players[j].name : nameOverrides[j]); break;
+		default: sstrcpy(aitext, NetPlay.players[j].name ); break;
 		}
 		iV_DrawText(aitext, x + nameX, y + 22, font_regular);
 	}

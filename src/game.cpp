@@ -1785,6 +1785,18 @@ static void allocatePlayers()
 	}
 }
 
+static void getPlayerNames()
+{
+	/* Get human and AI players names */
+	if (saveGameVersion >= VERSION_34)
+	{
+		for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+		{
+			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
+		}
+	}
+}
+
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
@@ -2017,14 +2029,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 	}
 
-	/* Get human and AI players names */
-	if (saveGameVersion >= VERSION_34)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
-		}
-	}
+	getPlayerNames();
 
 	//clear the player Power structs
 	if ((gameType != GTYPE_SAVE_START) && (gameType != GTYPE_SAVE_MIDMISSION) &&
@@ -3782,14 +3787,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		IsScenario = true;
 	}
 
-	/* Get human and AI players names */
-	if (saveGameVersion >= VERSION_34)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
-		}
-	}
+	getPlayerNames();
 
 	clearPlayerPower();
 	//don't adjust any power if a camStart (gameType is set to GTYPE_SCENARIO_START when a camChange saveGame is loaded)
@@ -3920,9 +3918,6 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("difficultyLevel", NetPlay.players[i].difficulty);
 		save.setValue("autoGame", NetPlay.players[i].autoGame);
 		save.setValue("ip", NetPlay.players[i].IPtextAddress);
-
-		// wtf why do we keep player names stored in so many places?
-		save.setValue("netName", NetPlay.players[i].name);
 		save.setValue("name", getPlayerName(selectedPlayer));
 
 		save.nextArrayItem();

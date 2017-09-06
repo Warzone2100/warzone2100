@@ -468,18 +468,16 @@ const char *getPlayerName(int player)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS , "Wrong player index: %u", player);
 
-	if (game.type != CAMPAIGN)
+	// playerName is created through setPlayerName()
+	if (strcmp(playerName[player], "") != 0)
 	{
-		if (strcmp(playerName[player], "") != 0)
-		{
-			return (char *)&playerName[player];
-		}
+		return (char *)&playerName[player];
 	}
 
 	if (strlen(NetPlay.players[player].name) == 0)
 	{
-		// make up a name for this player.
-		return getPlayerColourName(player);
+		// for campaign and tutorials
+		return _("Commander");
 	}
 	else if (NetPlay.players[player].ai >= 0 && !NetPlay.players[player].allocated)
 	{
@@ -1152,15 +1150,7 @@ static void printchatmsg(const char *text, int from, bool team = false)
 {
 	char msg[MAX_CONSOLE_STRING_LENGTH];
 
-	if (strlen(NetPlay.players[from].name) == 0)
-	{
-		// triggered in campaign and tutorials for prettier output
-		sstrcpy(msg, _("Commander"));
-	}
-	else
-	{
-		sstrcpy(msg, NetPlay.players[from].name);
-	}
+	sstrcpy(msg, getPlayerName(from));
 	sstrcat(msg, ": ");					// separator
 	sstrcat(msg, text);					// add message
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);	// display
