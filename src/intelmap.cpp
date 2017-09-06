@@ -368,7 +368,7 @@ static bool intAddMessageForm(bool playCurrent)
 	return true;
 }
 
-/*Add the 3D world view for the particular message (only research nmessages now) */
+/*Add the 3D world view for the particular message */
 bool intAddMessageView(MESSAGE *psMessage)
 {
 	bool			Animate = true;
@@ -476,20 +476,23 @@ bool intAddMessageView(MESSAGE *psMessage)
 		return false;
 	}
 
-	/*Add the Flic box */
-	sFormInit = W_FORMINIT();
-	sFormInit.formID = IDINTMAP_MSGVIEW;
-	sFormInit.id = IDINTMAP_FLICVIEW;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = INTMAP_FLICX;
-	sFormInit.y = INTMAP_FLICY;
-	sFormInit.width = INTMAP_FLICWIDTH;
-	sFormInit.height = INTMAP_FLICHEIGHT;
-	sFormInit.pDisplay = intDisplayFLICView;
-	sFormInit.pUserData = psMessage;
-	if (!widgAddForm(psWScreen, &sFormInit))
+	/*Add the Flic box if videos are installed */
+	if (PHYSFS_exists("sequences/devastation.ogg"))
 	{
-		return false;
+		sFormInit = W_FORMINIT();
+		sFormInit.formID = IDINTMAP_MSGVIEW;
+		sFormInit.id = IDINTMAP_FLICVIEW;
+		sFormInit.style = WFORM_PLAIN;
+		sFormInit.x = INTMAP_FLICX;
+		sFormInit.y = INTMAP_FLICY;
+		sFormInit.width = INTMAP_FLICWIDTH;
+		sFormInit.height = INTMAP_FLICHEIGHT;
+		sFormInit.pDisplay = intDisplayFLICView;
+		sFormInit.pUserData = psMessage;
+		if (!widgAddForm(psWScreen, &sFormInit))
+		{
+			return false;
+		}
 	}
 
 	/*Add the text box*/
@@ -738,15 +741,18 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 
 		if (psMessage->pViewData)
 		{
-			// If its a video sequence then play it anyway
+			// If it's a video sequence then play it anyway
 			if (psMessage->pViewData->type == VIEW_RPL)
 			{
 				if (psMessage->pViewData)
 				{
 					intAddMessageView(psMessage);
 				}
-
-				StartMessageSequences(psMessage, true);
+				// only attempt to show videos if they are installed
+				if (PHYSFS_exists("sequences/devastation.ogg"))
+				{
+					StartMessageSequences(psMessage, true);
+				}
 			}
 			else if (psMessage->pViewData->type == VIEW_RES)
 			{
@@ -1223,8 +1229,12 @@ void displayImmediateMessage(MESSAGE *psMessage)
 		This has to be changed to support a script calling a message in the intelligence screen
 	*/
 
-	psCurrentMsg = psMessage;
-	StartMessageSequences(psMessage, true);
+	// only attempt to show videos if they are installed
+	if (PHYSFS_exists("sequences/devastation.ogg"))
+	{
+	    psCurrentMsg = psMessage;
+	    StartMessageSequences(psMessage, true);
+	}
 	// remind the player that the message can be seen again from
 	// the intelligence screen
 	addConsoleMessage(_("New Intelligence Report"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);

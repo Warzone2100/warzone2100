@@ -145,6 +145,7 @@ static bool startTitleMenu()
 	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
+	// check whether video sequences are installed
 	if (PHYSFS_exists("sequences/devastation.ogg"))
 	{
 		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE);
@@ -397,11 +398,15 @@ static void frontEndNewGame(int which)
 {
 	QList<CAMPAIGN_FILE> list = readCampaignFiles();
 	sstrcpy(aLevelName, list[which].level.toUtf8().constData());
-	if (!list[which].video.isEmpty())
+	// show this only when the video sequences are installed
+	if (PHYSFS_exists("sequences/devastation.ogg"))
 	{
-		seq_ClearSeqList();
-		seq_AddSeqToList(list[which].video.toUtf8().constData(), nullptr, list[which].captions.toUtf8().constData(), false);
-		seq_StartNextFullScreenVideo();
+		if (!list[which].video.isEmpty())
+		{
+			seq_ClearSeqList();
+			seq_AddSeqToList(list[which].video.toUtf8().constData(), nullptr, list[which].captions.toUtf8().constData(), false);
+			seq_StartNextFullScreenVideo();
+		}
 	}
 	if (!list[which].package.isEmpty())
 	{
