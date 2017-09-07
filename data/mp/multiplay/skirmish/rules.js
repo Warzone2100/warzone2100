@@ -218,7 +218,6 @@ function eventGameInit()
 	// Disabled by default
 	setMiniMap(false);
 	setDesign(false);
-	revealMap(false);
 	// This is the only template that should be enabled before design is allowed
 	enableTemplate("ConstructionDroid");
 
@@ -226,13 +225,6 @@ function eventGameInit()
 	for (var i = 0; i < structlist.length; i++)
 	{
 		// Simulate build events to enable minimap/unit design when an HQ exists
-		eventStructureBuilt(structlist[i]);
-	}
-	
-	var structlist = enumStruct(selectedPlayer, SAT_UPLINK);
-	for (var i = 0; i < structlist.length; i++)
-	{
-		// Simulate build events to reveal entire map when a satellite uplink center exists
 		eventStructureBuilt(structlist[i]);
 	}
 
@@ -324,33 +316,19 @@ function eventAttacked(victimObj, attackerObj)
 
 function eventStructureBuilt(struct)
 {
-	if (struct.player == selectedPlayer && struct.type == STRUCTURE)
+	if (struct.player == selectedPlayer && struct.type == STRUCTURE && struct.stattype == HQ)
 	{
-		if (struct.stattype == HQ)
-		{
-			setMiniMap(true); // show minimap
-			setDesign(true); // permit designs
-		}
-		if (struct.stattype == SAT_UPLINK)
-		{		
-			revealMap(true); // Reveal the entire map.
-		}
+		setMiniMap(true); // show minimap
+		setDesign(true); // permit designs
 	}
 }
 
 function eventDestroyed(victim)
 {
-	if (victim.player == selectedPlayer && victim.type == STRUCTURE)
+	if (victim.player == selectedPlayer && victim.type == STRUCTURE && victim.stattype == HQ && !enumStruct(selectedPlayer, HQ).length)
 	{
-		if (victim.stattype == HQ && !enumStruct(selectedPlayer, HQ).length)
-		{
-			setMiniMap(false); // hide minimap if HQ is destroyed, and no other HQs are present
-			setDesign(false); // and disallow design
-		}
-		if (victim.stattype == SAT_UPLINK && !enumStruct(selectedPlayer, SAT_UPLINK).length)
-		{
-			revealMap(false); // Do not reveal the entire map when the player has no satellite uplinks.
-		}
+		setMiniMap(false); // hide minimap if HQ is destroyed and no other HQs are present
+		setDesign(false); // and disallow design
 	}
 }
 

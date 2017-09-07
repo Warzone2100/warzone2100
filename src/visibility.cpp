@@ -84,7 +84,6 @@ static std::vector<SPOTTER *> apsInvisibleViewers;
 
 static int *gNumWalls = nullptr;
 static Vector2i *gWall = nullptr;
-bool seeEverything = false;
 
 // forward declarations
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val);
@@ -605,11 +604,11 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 		setSeenBy(psObj, psObj->player, UBYTE_MAX);
 	}
 
-	// if a player has seeEverything enabled (which would normally happen if the player has a satellite uplink),
-	// or has godMode enabled (via cheating), they can see everything!
+	// if a player has a SAT_UPLINK structure, or has godMode enabled,
+	// they can see everything!
 	for (unsigned viewer = 0; viewer < MAX_PLAYERS; viewer++)
 	{
-		if (viewer == selectedPlayer && (seeEverything || godMode))
+		if (getSatUplinkExists(viewer) || (viewer == selectedPlayer && godMode))
 		{
 			setSeenBy(psObj, viewer, UBYTE_MAX);
 		}

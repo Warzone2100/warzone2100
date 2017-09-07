@@ -75,10 +75,9 @@ function setupCyborgGroups()
 			camMakePos ("cybEastPatrol1"),
 			camMakePos ("cybEastPatrol2"),
 			camMakePos ("cybEastPatrol3"),
-			camMakePos ("cybEastPatrol4"),
 		],
-		interval: 15000,
-		regroup: true
+		interval: 20000,
+		regroup: false
 	});
 }
 

@@ -2,10 +2,9 @@
 	"position_0": { "label": "startingPosition", "pos" : [ 960, 7488 ]},
 	"position_1": { "label": "transporterEntry", "pos" : [ 128, 7040 ]},
 	"position_2": { "label": "transporterExit",	"pos" : [ 1280, 7936 ]},
-	"position_3": { "label": "cybEastPatrol1", "pos" : [ 7168, 6528 ]},
-	"position_4": { "label": "cybEastPatrol2", "pos" : [ 6016, 6400 ]},
-	"position_5": { "label": "cybEastPatrol3", "pos" : [ 6016, 7168 ]},
-	"position_6": { "label": "cybEastPatrol4", "pos" : [ 7168, 7168 ]},
+	"position_3": { "label": "cybEastPatrol1", "pos" : [ 5696, 7104 ]},
+	"position_4": { "label": "cybEastPatrol2", "pos" : [ 7104, 7104 ]},
+	"position_5": { "label": "cybEastPatrol3", "pos" : [ 7232, 3904 ]},
 
 	"area_0" : { "label" : "crashSite", "subscriber": 0, "pos1" : [ 6080, 1088 ], "pos2" : [ 6976, 1856]},
 	"area_1" : { "label" : "landingZone", "pos1" : [ 768, 7296 ], "pos2" : [ 1024, 7552 ]},
