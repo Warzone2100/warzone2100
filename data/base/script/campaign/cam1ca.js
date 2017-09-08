@@ -9,23 +9,6 @@ var baseEstablished;
 var lastLZ, lastHeavy;
 var totalTransportLoads;
 
-// mimics wzscript's numStructsButNotWallsInArea(),
-// not sure if worth including in libcampaign.
-function countStructuresInBuildArea()
-{
-	var list = enumArea("buildArea", CAM_HUMAN_PLAYER, false);
-	var ret = 0;
-	for (var i = 0; i < list.length; ++i)
-	{
-		if (list[i].type === STRUCTURE && list[i].stattype !== WALL
-		                               && list[i].status === BUILT)
-		{
-			++ret;
-		}
-	}
-	return ret;
-}
-
 // a simple extra victory condition callback
 function extraVictoryCondition()
 {
@@ -36,7 +19,7 @@ function extraVictoryCondition()
 	{
 		if (baseEstablished) // if base is destroyed later, we don't care
 			return true;
-		if (countStructuresInBuildArea() >= initialStructures + 4)
+		if (camCountStructuresInArea("buildArea") >= initialStructures + 4)
 		{
 			baseEstablished = true;
 			hackRemoveMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -118,7 +101,7 @@ function sendTransport()
 function eventStartLevel()
 {
 	totalTransportLoads = 0;
-	initialStructures = countStructuresInBuildArea();
+	initialStructures = camCountStructuresInArea("buildArea");
 	baseEstablished = false;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_4AS", {

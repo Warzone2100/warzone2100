@@ -232,6 +232,23 @@ function camRemoveDuplicates(array)
 	});
 }
 
+//;; \subsection{camCountStructuresInArea(label)}
+//;; Mimics wzscript's numStructsButNotWallsInArea().
+function camCountStructuresInArea(lab)
+{
+	var list = enumArea(lab, CAM_HUMAN_PLAYER, false);
+	var ret = 0;
+	for (var i = 0, l = list.length; i < l; ++i)
+	{
+		if (list[i].type === STRUCTURE && list[i].stattype !== WALL
+		                               && list[i].status === BUILT)
+		{
+			++ret;
+		}
+	}
+	return ret;
+}
+
 //;; \subsection{camChangeOnDiff(numeric value, [bool])}
 //;; Change a numeric value based on campaign difficulty. If the second option is defined
 //;; then the opposite effect will occur on that value.
@@ -1602,7 +1619,9 @@ function __camTacticsTickForGroup(group)
 		var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
 		var groupX = ret.xav[ret.maxIdx];
 		var groupY = ret.yav[ret.maxIdx];
-		droids = ret.clusters[ret.maxIdx];
+		droids = ret.clusters[ret.maxIdx].filter(function(obj) {
+			return obj.type === DROID;
+		});
 		for (var i = 0; i < ret.clusters.length; ++i)
 		{
 			if (i != ret.maxIdx) // move other droids towards main cluster
@@ -1610,7 +1629,10 @@ function __camTacticsTickForGroup(group)
 				for (var j = 0; j < ret.clusters[i].length; ++j)
 				{
 					var droid = ret.clusters[i][j];
-					orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
+					if (droid.type === DROID)
+					{
+						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
+					}
 				}
 			}
 		}
@@ -2772,7 +2794,7 @@ function camAbsorbPlayer(playerNumber, to)
 //Steal a droid or structure from a player.
 function camHackIntoPlayer(player, to)
 {
-	if (camGetNexusState() === false)
+	if (__camNexusActivated === false)
 	{
 		return;
 	}
