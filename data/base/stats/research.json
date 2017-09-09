@@ -1022,8 +1022,7 @@
         "researchPoints": 1500,
         "researchPower": 46,
         "resultComponents": [
-            "CyborgCannon",
-            "CyborgCannonGrd"
+            "CyborgCannon"
         ],
         "statID": "Cannon1Mk1"
     },
@@ -1042,8 +1041,7 @@
         "researchPoints": 900,
         "researchPower": 28,
         "resultComponents": [
-            "CyborgFlamer01",
-            "CyborgFlamerGrd"
+            "CyborgFlamer01"
         ],
         "statID": "Flame1Mk1"
     },
@@ -1063,7 +1061,7 @@
         "resultComponents": [
             "CyborgLegs",
             "CyborgChaingun",
-            "CyborgChain1Ground"
+            "CyborgLightBody"
         ],
         "statID": "MG1Mk1"
     },
@@ -1082,18 +1080,17 @@
         "researchPoints": 900,
         "researchPower": 28,
         "resultComponents": [
-            "CyborgRocket",
-            "CyborgRkt1Ground"
+            "CyborgRocket"
         ],
         "statID": "Rocket-LtA-T"
     },
-	"R-Cyborg-Wpn-RotMG-Grd": {
+	"R-Cyborg-Wpn-RotMG": {
         "iconID": "IMAGE_RES_CYBORGTECH",
-        "id": "R-Cyborg-Wpn-RotMG-Grd",
+        "id": "R-Cyborg-Wpn-RotMG",
         "msgName": "RES_CYW_MG4",
         "name": "Assault Gunner Cyborg",
         "replacedComponents": [
-            "CyborgChain1Ground:CybRotMgGrd"
+            "CyborgChaingun:CyborgRotMG"
         ],
         "requiredResearch": [
             "R-Wpn-MG4"
@@ -1101,17 +1098,17 @@
         "researchPoints": 7200,
         "researchPower": 225,
         "resultComponents": [
-            "CybRotMgGrd"
+            "CyborgRotMG"
         ],
         "statID": "MG4ROTARYMk1"
     },
-	"R-Cyborg-Wpn-ATMiss-Grd": {
+	"R-Cyborg-Wpn-ATMiss": {
         "iconID": "IMAGE_RES_CYBORGTECH",
-        "id": "R-Cyborg-Wpn-ATMiss-Grd",
+        "id": "R-Cyborg-Wpn-ATMiss",
         "msgName": "RES_CYW_ATM",
         "name": "Scourge Cyborg",
         "replacedComponents": [
-            "CyborgRkt1Ground:Cyb-Bod-Atmiss"
+            "CyborgRocket:Cyb-Wpn-Atmiss"
         ],
         "requiredResearch": [
             "R-Wpn-Missile2A-T"
@@ -1119,13 +1116,13 @@
         "researchPoints": 14400,
         "researchPower": 450,
         "resultComponents": [
-            "Cyb-Bod-Atmiss"
+            "Cyb-Wpn-Atmiss"
         ],
         "statID": "Missile-A-T"
     },
-    "R-Cyborg-Wpn-Laser1-Grd": {
+    "R-Cyborg-Wpn-Laser1": {
         "iconID": "IMAGE_RES_CYBORGTECH",
-        "id": "R-Cyborg-Wpn-Laser1-Grd",
+        "id": "R-Cyborg-Wpn-Laser1",
         "msgName": "RES_CYW_LS1",
         "name": "Flashlight Gunner Cyborg",
         "requiredResearch": [
@@ -1134,13 +1131,13 @@
         "researchPoints": 14400,
         "researchPower": 450,
         "resultComponents": [
-            "Cyb-Bod-Las1"
+            "Cyb-Wpn-Laser"
         ],
         "statID": "Laser2PULSEMk1"
     },
-    "R-Cyborg-Wpn-Rail1-Grd": {
+    "R-Cyborg-Wpn-Rail1": {
         "iconID": "IMAGE_RES_CYBORGTECH",
-        "id": "R-Cyborg-Wpn-Rail1-Grd",
+        "id": "R-Cyborg-Wpn-Rail1",
         "msgName": "RES_CYW_RL1",
         "name": "Needle Gunner Cyborg",
         "requiredResearch": [
@@ -1149,7 +1146,7 @@
         "researchPoints": 14400,
         "researchPower": 450,
         "resultComponents": [
-            "Cyb-Bod-Rail1"
+            "Cyb-Wpn-Rail1"
         ],
         "statID": "RailGun1Mk1"
     },

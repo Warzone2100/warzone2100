@@ -609,7 +609,7 @@
     },
     "Cyb-Atmiss-GROUND": {
         "available": true,
-        "body": "Cyb-Bod-Atmiss",
+        "body": "CyborgLightBody",
         "id": "Cyb-Atmiss-GROUND",
         "name": "Scourge",
         "propulsion": "CyborgLegs",
@@ -619,8 +619,8 @@
         ]
     },
     "Cyb-Cannon-GROUND": {
-        "available": true,
-        "body": "CyborgCannonGrd",
+        "available": false,
+        "body": "CyborgLightBody",
         "id": "Cyb-Cannon-GROUND",
         "name": "Heavy Gunner",
         "propulsion": "CyborgLegs",
@@ -630,8 +630,8 @@
         ]
     },
     "Cyb-Chain-GROUND": {
-        "available": true,
-        "body": "CyborgChain1Ground",
+        "available": false,
+        "body": "CyborgLightBody",
         "id": "Cyb-Chain-GROUND",
         "name": "Machinegunner",
         "propulsion": "CyborgLegs",
@@ -641,8 +641,41 @@
         ]
     },
     "Cyb-Flamer-GROUND": {
+        "available": false,
+        "body": "CyborgLightBody",
+        "id": "Cyb-Flamer-GROUND",
+        "name": "Cyborg Flamer",
+        "propulsion": "CyborgLegs",
+        "type": "CYBORG",
+        "weapons": [
+            "CyborgFlamer01"
+        ]
+   },
+    "CyborgCannon01Grd": {
         "available": true,
-        "body": "CyborgFlamerGrd",
+        "body": "CyborgLightBody",
+        "id": "Cyb-Cannon-GROUND",
+        "name": "Heavy Gunner",
+        "propulsion": "CyborgLegs",
+        "type": "CYBORG",
+        "weapons": [
+            "CyborgCannon"
+        ]
+    },
+    "CyborgChain01Ground": {
+        "available": true,
+        "body": "CyborgLightBody",
+        "id": "Cyb-Chain-GROUND",
+        "name": "Machinegunner",
+        "propulsion": "CyborgLegs",
+        "type": "CYBORG",
+        "weapons": [
+            "CyborgChaingun"
+        ]
+    },
+    "CyborgFlamer01Grd": {
+        "available": true,
+        "body": "CyborgLightBody",
         "id": "Cyb-Flamer-GROUND",
         "name": "Cyborg Flamer",
         "propulsion": "CyborgLegs",
@@ -653,7 +686,7 @@
     },
     "Cyb-Laser1-GROUND": {
         "available": true,
-        "body": "Cyb-Bod-Las1",
+        "body": "CyborgLightBody",
         "id": "Cyb-Laser1-GROUND",
         "name": "Flashlight Gunner",
         "propulsion": "CyborgLegs",
@@ -664,7 +697,7 @@
     },
     "Cyb-Rail1-GROUND": {
         "available": true,
-        "body": "Cyb-Bod-Rail1",
+        "body": "CyborgLightBody",
         "id": "Cyb-Rail1-GROUND",
         "name": "Needle Gunner",
         "propulsion": "CyborgLegs",
@@ -673,9 +706,9 @@
             "Cyb-Wpn-Rail1"
         ]
     },
-    "Cyb-Rocket-GROUND": {
+    "CyborgRkt01Ground": {
         "available": true,
-        "body": "CyborgRkt1Ground",
+        "body": "CyborgLightBody",
         "id": "Cyb-Rocket-GROUND",
         "name": "Lancer",
         "propulsion": "CyborgLegs",
@@ -684,59 +717,26 @@
             "CyborgRocket"
         ]
     },
+    "Cyb-Rocket-GROUND": {
+        "available": false,
+        "body": "CyborgLightBody",
+        "id": "Cyb-Rocket-GROUND",
+        "name": "Lancer",
+        "propulsion": "CyborgLegs",
+        "type": "CYBORG",
+        "weapons": [
+            "CyborgRocket"
+        ]
+   },
     "Cyb-RotMG-GROUND": {
         "available": true,
-        "body": "CybRotMgGrd",
+        "body": "CyborgLightBody",
         "id": "Cyb-RotMG-GROUND",
         "name": "Assault Gunner",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
             "CyborgRotMG"
-        ]
-    },
-    "CyborgCannon01Grd": {
-        "available": true,
-        "body": "CyborgCannonGrd",
-        "id": "CyborgCannon01Grd",
-        "name": "Heavy Gunner",
-        "propulsion": "CyborgLegs",
-        "type": "CYBORG",
-        "weapons": [
-            "CyborgCannon"
-        ]
-    },
-    "CyborgChain01Ground": {
-        "available": true,
-        "body": "CyborgChain1Ground",
-        "id": "CyborgChain01Ground",
-        "name": "Machinegunner",
-        "propulsion": "CyborgLegs",
-        "type": "CYBORG",
-        "weapons": [
-            "CyborgChaingun"
-        ]
-    },
-    "CyborgFlamer01Grd": {
-        "available": true,
-        "body": "CyborgFlamerGrd",
-        "id": "CyborgFlamer01Grd",
-        "name": "Flamer",
-        "propulsion": "CyborgLegs",
-        "type": "CYBORG",
-        "weapons": [
-            "CyborgFlamer01"
-        ]
-    },
-    "CyborgRkt01Ground": {
-        "available": true,
-        "body": "CyborgRkt1Ground",
-        "id": "CyborgRkt01Ground",
-        "name": "Lancer",
-        "propulsion": "CyborgLegs",
-        "type": "CYBORG",
-        "weapons": [
-            "CyborgRocket"
         ]
     },
     "NP-H-HvyCannon-Hover": {
@@ -970,7 +970,7 @@
         "type": "DROID"
     },
     "NX-Cyb-Miss-JUMP": {
-        "body": "CybNXMissJmp",
+        "body": "CyborgLightBody",
         "id": "NX-Cyb-Miss-JUMP",
         "name": "*NX-Cyb-Miss-JUMP*",
         "propulsion": "CyborgLegs",
@@ -981,7 +981,7 @@
         ]
     },
     "NX-Cyb-PulseLas-JUMP": {
-        "body": "CybNXPulseLasJmp",
+        "body": "CyborgLightBody",
         "id": "NX-Cyb-PulseLas-JUMP",
         "name": "*NX-Cyb-PulseLas-JUMP*",
         "propulsion": "CyborgLegs",
@@ -992,7 +992,7 @@
         ]
     },
     "NX-Cyb-Rail1-JUMP": {
-        "body": "CybNXRail1Jmp",
+        "body": "CyborgLightBody",
         "id": "NX-Cyb-Rail1-JUMP",
         "name": "*NX-Cyb-JUMP*",
         "propulsion": "CyborgLegs",

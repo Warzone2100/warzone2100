@@ -1,4 +1,4 @@
-//Contains the camapign transition technology definitions.
+//Contains the campaign transition technology definitions.
 
 //This array should give a player all the research from Alpha.
 const ALPHA_RESEARCH = [
@@ -35,11 +35,9 @@ const ALPHA_TECH = [
 	"MG2Mk1", "MG3Mk1", "Mortar1Mk1", "Mortar2Mk1", "Rocket-BB", "Rocket-LtA-T",
 	"Rocket-MRL", "Rocket-Pod", "Cannon1-VTOL", "MG1-VTOL", "MG2-VTOL",
 	"MG3-VTOL", "Rocket-VTOL-LtA-T", "Rocket-VTOL-Pod", "Rocket-VTOL-BB",
-	"CyborgFlamer01", "CyborgCannon", "CyborgChaingun", "Cyb-Wpn-Atmiss",
-	"Cyb-Wpn-Laser", "Cyb-Wpn-Rail1", "CyborgRocket", "CyborgRotMG",
+	"CyborgFlamer01", "CyborgCannon", "CyborgChaingun", "CyborgRocket",
 	"CommandTurret1", "Body1REC", "Body5REC", "Body11ABT", "Body4ABT",
-	"Body8MBT", "Body12SUP", "CyborgCannonGrd", "CyborgFlamerGrd",
-	"CyborgChain1Ground", "CyborgRkt1Ground", "HalfTrack", "hover01",
+	"Body8MBT", "Body12SUP", "CyborgLightBody", "HalfTrack", "hover01",
 	"tracked01", "wheeled01", "Spade1Mk1", "SensorTurret1Mk1",
 	"CommandBrain01",
 ];
@@ -76,11 +74,9 @@ const BETA_TECH = [
 	"MG2Mk1", "MG3Mk1", "Mortar1Mk1", "Mortar2Mk1", "Rocket-BB", "Rocket-LtA-T",
 	"Rocket-MRL", "Rocket-Pod", "Cannon1-VTOL", "MG1-VTOL", "MG2-VTOL",
 	"MG3-VTOL", "Rocket-VTOL-LtA-T", "Rocket-VTOL-Pod", "Rocket-VTOL-BB",
-	"CyborgFlamer01", "CyborgCannon", "CyborgChaingun", "Cyb-Wpn-Atmiss",
-	"Cyb-Wpn-Laser", "Cyb-Wpn-Rail1", "CyborgRocket", "CyborgRotMG",
+	"CyborgFlamer01", "CyborgCannon", "CyborgChaingun", "CyborgRocket", "CyborgRotMG",
 	"CommandTurret1", "Body1REC", "Body5REC", "Body11ABT", "Body4ABT",
-	"Body8MBT", "Body12SUP", "CyborgCannonGrd", "CyborgFlamerGrd",
-	"CyborgChain1Ground", "CyborgRkt1Ground", "HalfTrack", "hover01",
+	"Body8MBT", "Body12SUP", "CyborgLightBody", "HalfTrack", "hover01",
 	"tracked01", "wheeled01", "Spade1Mk1", "SensorTurret1Mk1",
 	"CommandBrain01", "V-Tol", "Sys-CBTurret01", "Sys-VstrikeTurret01",
 	"Sys-VTOLCBTurret01", "Body2SUP", "Body6SUPP", "Body9REC", "AAGun2Mk1",
@@ -128,7 +124,7 @@ const PLAYER_RES_GAMMA = [
 	"R-Struc-Power-Upgrade01", "R-Sys-Sensor-Upgrade01", "R-Wpn-AAGun-Accuracy02",
 	"R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03", "R-Wpn-Bomb-Accuracy02", "R-Wpn-Bomb03",
 	"R-Wpn-Howitzer-ROF03", "R-Sys-CBSensor-Turret01", "R-Sys-VTOLStrike-Turret01",
-	"R-Cyborg-Wpn-RotMG-Grd", "R-Defense-AASite-QuadRotMg", "R-Defense-Emplacement-HPVcannon",
+	"R-Cyborg-Wpn-RotMG", "R-Defense-AASite-QuadRotMg", "R-Defense-Emplacement-HPVcannon",
 	"R-Defense-Howitzer", "R-Defense-HvyFlamer", "R-Defense-RotMG", "R-Defense-Wall-VulcanCan",
 	"R-Defense-WallTower-HPVcannon", "R-Defense-HvyHowitzer", "R-Defense-Wall-RotMg",
 ];

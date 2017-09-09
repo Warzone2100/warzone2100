@@ -348,7 +348,7 @@ function camMakeGroup(what, filter)
 	}
 	if (camDef(array))
 	{
-		var group = newGroup();
+		var group = camNewGroup();
 		for (var i = 0, l = array.length; i < l; ++i)
 		{
 			var o = array[i];
@@ -866,7 +866,7 @@ function camSetEnemyBases(bases)
 				camDebug("Neither group nor cleanup area found for", blabel);
 				continue;
 			}
-			bi.group = newGroup();
+			bi.group = camNewGroup();
 			addLabel({ type: GROUP, id: bi.group }, blabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
 			for (var i = 0, l = structs.length; i < l; ++i)
@@ -1433,7 +1433,7 @@ function camOrderToString(order)
 	}
 }
 
-//;; \subsection{camSortByHealth(orbject 1, object 2)}
+//;; \subsection{camSortByHealth(object 1, object 2)}
 //;; Use this to sort an array of objects by health value.
 function camSortByHealth(a, b)
 {
@@ -2041,7 +2041,7 @@ function camSetFactoryData(flabel, fdata)
 	fi.enabled = false;
 	fi.state = 0;
 	if (!camDef(fi.group))
-		fi.group = newGroup();
+		fi.group = camNewGroup();
 	for (var i = 0, l = droids.length; i < l; ++i)
 	{
 		groupAdd(fi.group, droids[i]);
@@ -2107,7 +2107,7 @@ function __camFactoryUpdateTactics(flabel)
 	if (droids.length >= fi.groupSize)
 	{
 		camManageGroup(fi.group, fi.order, fi.data);
-		fi.group = newGroup();
+		fi.group = camNewGroup();
 	}
 	else
 	{
@@ -2730,8 +2730,6 @@ const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
 const SYNAPTICS_ACTIVATED = "synplnk.ogg";
 const UNIT_ABSORBED = "untabsrd.ogg";
 const UNIT_NEUTRALIZE = "untnut.ogg";
-var __camLastNexusAttack;
-var __camNexusActivated;
 
 //Play a random laugh.
 function camNexusLaugh()
@@ -2846,6 +2844,29 @@ function camGetNexusState()
 {
 	return __camNexusActivated;
 }
+
+// privates
+var __camLastNexusAttack;
+var __camNexusActivated;
+
+////////////////////////////////////////////////////////////////////////////////
+// Group numerical ID functionality
+////////////////////////////////////////////////////////////////////////////////
+
+//;; \subsection{camNewGroup()}
+//;; A saveload safe version of newGroup() so as not to create group ID clashes.
+function camNewGroup()
+{
+	if(!camDef(__camNewGroupCounter))
+	{
+		__camNewGroupCounter = 0;
+	}
+	++__camNewGroupCounter;
+	return __camNewGroupCounter;
+}
+
+// privates
+var __camNewGroupCounter;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
@@ -2998,6 +3019,7 @@ function cam_eventStartLevel()
 	__camVtolSpawnActive = false;
 	__camLastNexusAttack = 0;
 	__camNexusActivated = false;
+	__camNewGroupCounter = 0;
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
