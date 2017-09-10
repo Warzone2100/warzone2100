@@ -179,14 +179,14 @@ function eventStartLevel()
 			assembly: camMakePos("eastAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(120000),
 			regroup: true,
 			repair: 40,
 			templates: [cohct, comtathh, comorb] //Heavy factory
 		},
 		"COFactoryWest": {
 			assembly: camMakePos("westAssembly"),
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(90000),
 			templates: [comtath, comih] //Hover lancers/infernos
 		},
 	});
