@@ -148,7 +148,7 @@ function eventStartLevel()
 		"COHeavyFacL-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [comhpv, cohact]
@@ -157,7 +157,7 @@ function eventStartLevel()
 			assembly: camMakePos("heavyAssembly-b2"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [comrotmh, cohct]
@@ -165,7 +165,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(180000),
 			regroup: true,
 			repair: 40,
 			templates: [comhvat]

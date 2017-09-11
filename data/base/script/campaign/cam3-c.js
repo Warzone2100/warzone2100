@@ -193,7 +193,7 @@ function eventStartLevel()
 		"NXbase1HeavyFacArti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(180000),
 			regroup: true,
 			repair: 40,
 			templates: [nxmrailh, nxlflash, nxmlinkh] //nxmsamh
@@ -201,7 +201,7 @@ function eventStartLevel()
 		"NXcybFacArti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(80000),
 			regroup: true,
 			repair: 40,
 			templates: [nxcyrail, nxcyscou, nxcylas]
@@ -209,7 +209,7 @@ function eventStartLevel()
 		"NXvtolFacArti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(100000),
 			regroup: true,
 			repair: 40,
 			templates: [nxmheapv, nxmtherv]

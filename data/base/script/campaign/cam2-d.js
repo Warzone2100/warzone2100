@@ -134,7 +134,7 @@ function eventStartLevel()
 		"COHeavyFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [cohhpv, comhltat, cohct]
@@ -142,7 +142,7 @@ function eventStartLevel()
 		"COSouthCyborgFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(80000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybc, npcybf, npcybr, cocybag]

@@ -160,7 +160,7 @@ function eventStartLevel()
 		"COHeavyFacL-b1": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [comatt, cohct, comct]
@@ -168,7 +168,7 @@ function eventStartLevel()
 		"COHeavyFacR-b1": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [comatt, cohct, comct]
@@ -176,7 +176,7 @@ function eventStartLevel()
 		"COCybFacL-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybr]
@@ -184,7 +184,7 @@ function eventStartLevel()
 		"COCybFacR-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybr, npcybf, npcybm]

@@ -99,7 +99,7 @@ camAreaEvent("failZone", function(droid)
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colatv, colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(120000), "COCommandCenter");
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(300000), "COCommandCenter"); // 5 min
 }
 
 //Order the truck to build some defenses.
@@ -199,5 +199,5 @@ function eventStartLevel()
 	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("enableReinforcements", 20000);
-	queue("vtolAttack", 60000);
+	queue("vtolAttack", 120000);
 }

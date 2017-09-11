@@ -319,7 +319,7 @@ function eventStartLevel()
 		"COHeavyFac-Upgrade": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [comit, cohct, comhpv, cohbbt]
@@ -327,7 +327,7 @@ function eventStartLevel()
 		"COHeavyFac-Leopard": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(100000),
 			regroup: false,
 			repair: 40,
 			templates: [comit, cohct, comhpv, cohbbt]
@@ -335,7 +335,7 @@ function eventStartLevel()
 		"COCyborgFactoryL": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(80000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybf, npcybc, npcybr]
@@ -343,7 +343,7 @@ function eventStartLevel()
 		"COCyborgFactoryR": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(80000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybf, npcybc, npcybr]
@@ -351,7 +351,7 @@ function eventStartLevel()
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(100000),
 			regroup: false,
 			repair: 40,
 			templates: [commorv, colagv, colatv]
@@ -359,7 +359,7 @@ function eventStartLevel()
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(100000),
 			regroup: false,
 			repair: 40,
 			templates: [colatv, colagv, commorv]

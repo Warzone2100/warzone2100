@@ -168,7 +168,7 @@ function eventStartLevel()
 		"COCyborgFactory-Arti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(80000),
 			regroup: false,
 			repair: 40,
 			templates: [npcybc, npcybf, cocybag, npcybr]
@@ -177,7 +177,7 @@ function eventStartLevel()
 			assembly: camMakePos("base1CybAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [cocybag, npcybr]
@@ -193,7 +193,7 @@ function eventStartLevel()
 		"COHeavyFactory-b2L": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(90000),
+			throttle: camChangeOnDiff(120000),
 			regroup: false,
 			repair: 40,
 			templates: [cohact, comhpv, comrotm]
@@ -201,7 +201,7 @@ function eventStartLevel()
 		"COHeavyFactory-b2R": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(100000),
 			regroup: false,
 			repair: 40,
 			templates: [comrotm, comhltat, cohact, comsensh]
@@ -209,7 +209,7 @@ function eventStartLevel()
 		"COMediumFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(60000),
 			regroup: false,
 			repair: 40,
 			templates: [comhpv, comagt, comrotm]

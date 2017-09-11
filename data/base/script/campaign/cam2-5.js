@@ -123,7 +123,7 @@ function eventStartLevel()
 			assembly: camMakePos("mediumFactoryAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(120000),
 			regroup: true,
 			repair: 40,
 			templates: [comct, comatt, comhpv]
@@ -131,7 +131,7 @@ function eventStartLevel()
 		"COCyborgFactoryL": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(25000),
+			throttle: camChangeOnDiff(100000),
 			regroup: true,
 			repair: 40,
 			templates: [cocybag, npcybf, npcybr]
@@ -139,7 +139,7 @@ function eventStartLevel()
 		"COCyborgFactoryR": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(25000),
+			throttle: camChangeOnDiff(80000),
 			regroup: true,
 			repair: 40,
 			templates: [npcybr, npcybc]

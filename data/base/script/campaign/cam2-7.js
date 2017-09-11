@@ -170,7 +170,7 @@ function eventStartLevel()
 		"COHeavyFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(90000),
 			regroup: true,
 			repair: 40,
 			templates: [comrotmh, comhltat, cohct]
