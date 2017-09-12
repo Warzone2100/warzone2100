@@ -188,9 +188,6 @@
             "R-Struc-Factory-Module",
             "R-Cyborg-Wpn-MG"
         ],
-        "requiredStructures": [
-            "A0CyborgFactory"
-        ],
         "researchPoints": 1200,
         "researchPower": 37,
         "results": [
@@ -218,9 +215,6 @@
         "name": "Cyborg Composite Alloys Mk2",
         "requiredResearch": [
             "R-Cyborg-Metals01"
-        ],
-        "requiredStructures": [
-            "A0CyborgFactory"
         ],
         "researchPoints": 2400,
         "researchPower": 75,
@@ -251,9 +245,6 @@
         "requiredResearch": [
             "R-Cyborg-Wpn-MG",
             "R-Cyborg-Metals02"
-        ],
-        "requiredStructures": [
-            "A0CyborgFactory"
         ],
         "researchPoints": 3600,
         "researchPower": 112,
@@ -603,9 +594,6 @@
             "R-Struc-Research-Module",
             "R-Struc-Factory-Module"
         ],
-        "requiredStructures": [
-            "A0LightFactory"
-        ],
         "researchPoints": 1800,
         "researchPower": 56,
         "results": [
@@ -633,9 +621,6 @@
         "name": "Composite Alloys Mk2",
         "requiredResearch": [
             "R-Vehicle-Metals01"
-        ],
-        "requiredStructures": [
-            "A0LightFactory"
         ],
         "researchPoints": 3600,
         "researchPower": 112,
@@ -666,9 +651,6 @@
         "name": "Composite Alloys Mk3",
         "requiredResearch": [
             "R-Vehicle-Metals02"
-        ],
-        "requiredStructures": [
-            "A0LightFactory"
         ],
         "researchPoints": 5400,
         "researchPower": 168,
@@ -1016,9 +998,6 @@
             "R-Wpn-Cannon1Mk1",
             "R-Cyborg-Wpn-MG"
         ],
-        "requiredStructures": [
-            "A0CyborgFactory"
-        ],
         "researchPoints": 1500,
         "researchPower": 46,
         "resultComponents": [
@@ -1035,9 +1014,6 @@
             "R-Wpn-Flamer01Mk1",
             "R-Cyborg-Wpn-MG"
         ],
-        "requiredStructures": [
-            "A0CyborgFactory"
-        ],
         "researchPoints": 900,
         "researchPower": 28,
         "resultComponents": [
@@ -1052,9 +1028,6 @@
         "name": "Machinegunner Cyborg",
         "requiredResearch": [
             "R-Struc-Factory-Cyborg"
-        ],
-        "requiredStructures": [
-            "A0CyborgFactory"
         ],
         "researchPoints": 600,
         "researchPower": 18,
@@ -1073,9 +1046,6 @@
         "requiredResearch": [
             "R-Wpn-Rocket01-LtAT",
             "R-Cyborg-Wpn-MG"
-        ],
-        "requiredStructures": [
-            "A0CyborgFactory"
         ],
         "researchPoints": 900,
         "researchPower": 28,

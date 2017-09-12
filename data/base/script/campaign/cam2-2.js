@@ -187,7 +187,7 @@ function eventStartLevel()
 		"COFactoryWest": {
 			assembly: camMakePos("westAssembly"),
 			throttle: camChangeOnDiff(90000),
-			templates: [comtath, comih] //Hover lancers/infernos
+			templates: [comtath] //Hover lancers
 		},
 	});
 

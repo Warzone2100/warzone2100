@@ -508,7 +508,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	syncDebug("Form alliance %d %d", p1, p2);
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
-	if (alliancesSharedVision(game.alliance))	// this is for shared vision only
+	if (bMultiPlayer && alliancesSharedVision(game.alliance))	// this is for shared vision only
 	{
 		alliancebits[p1] |= 1 << p2;
 		alliancebits[p2] |= 1 << p1;
@@ -520,7 +520,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Not campaign and alliances are transitive
-	if (alliancesSharedVision(game.alliance))
+	if (bMultiPlayer && alliancesSharedVision(game.alliance))
 	{
 		giftRadar(p1, p2, false);
 		giftRadar(p2, p1, false);
