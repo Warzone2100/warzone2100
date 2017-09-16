@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var initialStructures;
 const landingZoneList = [ "NPLZ1", "NPLZ2", "NPLZ3", "NPLZ4", "NPLZ5" ];
 const landingZoneMessages = [ "C1CA_LZ1", "C1CA_LZ2", "C1CA_LZ3", "C1CA_LZ4", "C1CA_LZ5" ];
 var baseEstablished;
@@ -19,7 +18,8 @@ function extraVictoryCondition()
 	{
 		if (baseEstablished) // if base is destroyed later, we don't care
 			return true;
-		if (camCountStructuresInArea("buildArea") >= initialStructures + 4)
+		//Now we check if there is stuff built here already from cam1-C.
+		if (camCountStructuresInArea("buildArea") >= 4)
 		{
 			baseEstablished = true;
 			hackRemoveMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -41,14 +41,18 @@ function sendTransport()
 {
 	// start with light forces
 	if (!camDef(lastHeavy))
+	{
 		lastHeavy = true;
+	}
 	// find an LZ that is not compromised
 	var list = [];
 	for (var i = 0; i < landingZoneList.length; ++i)
 	{
 		var lz = landingZoneList[i];
 		if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
+		{
 			list[list.length] = { idx: i, label: lz };
+		}
 	}
 	if (list.length === 0)
 	{
@@ -67,13 +71,13 @@ function sendTransport()
 	if (lastHeavy)
 	{
 		lastHeavy = false;
-		queue('sendTransport', camChangeOnDiff(90000));
+		queue("sendTransport", camChangeOnDiff(90000));
 		with (camTemplates) templates = [ nppod, nphmg, npmrl, npsmc ];
 	}
 	else
 	{
 		lastHeavy = true;
-		queue('sendTransport', camChangeOnDiff(180000));
+		queue("sendTransport", camChangeOnDiff(180000));
 		with (camTemplates) templates = [ npsmct, npmor, npsmc, npmmct,
 		                                  npmrl, nphmg, npsbb ];
 	}
@@ -101,7 +105,6 @@ function sendTransport()
 function eventStartLevel()
 {
 	totalTransportLoads = 0;
-	initialStructures = camCountStructuresInArea("buildArea");
 	baseEstablished = false;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_4AS", {

@@ -38,7 +38,7 @@
 	"area_12": { "label": "AmbushForce", "pos1": [ 10944, 10816 ], "pos2": [ 11712, 11712 ]},
 	"object_8": { "label": "AmbushForceCommander", "id": 3276, "player": 1, "type": 0 },
 
-	"area_13": {"label": "ScavSouthDerrick", "pos1": [ 9920, 14272 ], "pos2": [ 11072, 16192 ]},
+	"area_13": {"label": "ScavSouthDerrick", "pos1": [ 9920, 14848 ], "pos2": [ 11072, 16192 ]},
 	"area_14": {"label": "ScavSouthEastHighground", "pos1": [ 11200, 11968 ], "pos2": [ 14912, 14784 ]},
 	"area_15": {"label": "ScavNorthBase", "pos1": [ 8000, 192 ], "pos2": [ 9664, 1600 ]},
 	"area_16": {"label": "ScavSouthPodPits", "pos1": [ 8384, 2624 ], "pos2": [ 10048, 4672 ]},

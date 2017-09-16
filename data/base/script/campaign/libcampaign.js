@@ -523,7 +523,7 @@ function camTraceOnce()
 	                  arguments);
 }
 
-//;; \subsection{isCheating}
+//;; \subsection{isCheating()}
 //;; Check if the player is in cheat mode.
 function isCheating()
 {
@@ -1170,7 +1170,10 @@ function __camCheckBaseEliminated(group)
 			var nonValidLeftovers = leftovers.filter(function(obj) {
 				return (obj.player !== CAM_HUMAN_PLAYER
 					&& obj.type === STRUCTURE
-					&& !__camIsValidLeftover(obj));
+					&& !__camIsValidLeftover(obj)
+					&& (!camDef(bi.player) ||
+					    camPlayerMatchesFilter(obj.player, bi.player))
+				);
 			});
 			if (nonValidLeftovers.length)
 			{

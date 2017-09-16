@@ -53,7 +53,9 @@ function sendNPTransporter()
 {
 	//Check if the NP LZ is secure. If so, send a transport.
 	var tPos = getObject("NPTransportPos");
-	var nearbyDefense = enumRange(tPos.x, tPos.y, 8, NEW_PARADIGM, false);
+	var nearbyDefense = enumRange(tPos.x, tPos.y, 8, NEW_PARADIGM, false).filter(function(obj) {
+		return (obj.type === STRUCTURE && obj.stattype !== WALL);
+	});
 
 	if (nearbyDefense.length)
 	{
