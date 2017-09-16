@@ -982,7 +982,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 	dest = psTarget->pos;
 	diff = (dest - pos).xy;
 
-	distSq = diff * diff;
+	distSq = dot(diff, diff);
 	if (distSq == 0)
 	{
 		// Should never be on top of each other, but ...
@@ -1013,7 +1013,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 		{
 			// check whether target was reached before tile split line:
 			part = halfway - start;
-			partSq = part * part;
+			partSq = dot(part, part);
 
 			if (partSq >= distSq)
 			{
@@ -1037,7 +1037,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 			{
 				// check whether target was reached before tile's "half way" line
 				part = halfway - start;
-				partSq = part * part;
+				partSq = dot(part, part);
 
 				if (partSq >= distSq)
 				{
@@ -1057,7 +1057,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 		// next
 		current = next;
 		part = current - start;
-		partSq = part * part;
+		partSq = dot(part, part);
 		ASSERT(partSq > oldPartSq, "areaOfFire(): no progress in tile-walk! From: %i,%i to %i,%i stuck in %i,%i", map_coord(pos.x), map_coord(pos.y), map_coord(dest.x), map_coord(dest.y), map_coord(current.x), map_coord(current.y));
 
 	}

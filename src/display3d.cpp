@@ -342,7 +342,7 @@ void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		{
 			return;
 		}
-		modelMatrix *= glm::translate(state.pos) *
+		modelMatrix *= glm::translate(glm::vec3{ state.pos }) *
 			glm::rotate(UNDEG(state.rot.pitch), glm::vec3(1.f, 0.f, 0.f)) *
 			glm::rotate(UNDEG(state.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 			glm::rotate(UNDEG(state.rot.roll), glm::vec3(0.f, 0.f, 1.f)) *
@@ -954,12 +954,12 @@ static void drawTiles(iView *player)
 
 	/* ---------------------------------------------------------------- */
 	const glm::mat4 &viewMatrix =
-		glm::translate(0.f, 0.f, distance) *
-		glm::scale(pie_GetResScalingFactor() / 100.f, pie_GetResScalingFactor() / 100.f, pie_GetResScalingFactor() / 100.f) *
+		glm::translate(glm::vec3{ 0.f, 0.f, distance }) *
+		glm::scale(glm::vec3{ pie_GetResScalingFactor() / 100.f }) *
 		glm::rotate(UNDEG(player->r.z), glm::vec3(0.f, 0.f, 1.f)) *
 		glm::rotate(UNDEG(player->r.x), glm::vec3(1.f, 0.f, 0.f)) *
 		glm::rotate(UNDEG(player->r.y), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::translate(0, -player->p.y, 0);
+		glm::translate(glm::vec3{ 0, -player->p.y, 0 });
 
 	actualCameraPosition = Vector3i(0, 0, 0);
 
@@ -1026,7 +1026,7 @@ static void drawTiles(iView *player)
 
 	// draw it
 	// and draw it
-	drawTerrain(pie_PerspectiveGet() * viewMatrix * glm::translate(-player->p.x, 0, player->p.z));
+	drawTerrain(pie_PerspectiveGet() * viewMatrix * glm::translate(glm::vec3{ -player->p.x, 0, player->p.z }));
 
 	wzPerfEnd(PERF_TERRAIN);
 
@@ -1062,7 +1062,7 @@ static void drawTiles(iView *player)
 	pie_SetFogStatus(true);
 
 	// also, make sure we can use world coordinates directly
-	drawWater(pie_PerspectiveGet() * viewMatrix * glm::translate(-player->p.x, 0, player->p.z));
+	drawWater(pie_PerspectiveGet() * viewMatrix * glm::translate(glm::vec3{ -player->p.x, 0, player->p.z }));
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
@@ -1304,7 +1304,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix)
 		rotateSomething(camera.y, camera.z, -st.rot.pitch);
 
 		glm::mat4 modelMatrix =
-			glm::translate(dv) *
+			glm::translate(glm::vec3{ dv }) *
 			glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 			glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 
@@ -1312,7 +1312,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix)
 		{
 			// Centre on projectile (relevant for twin projectiles).
 			camera -= Vector3i(pIMD->connectors[0].x, pIMD->connectors[0].y, pIMD->connectors[0].z);
-			modelMatrix *= glm::translate(pIMD->connectors[0]);
+			modelMatrix *= glm::translate(glm::vec3{ pIMD->connectors[0] });
 		}
 
 		if (pitchToCamera)
@@ -1333,7 +1333,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix)
 		{
 			camera -= Vector3i(-pIMD->connectors[0].x, -pIMD->connectors[0].y, -pIMD->connectors[0].z);
 			// Undo centre on projectile (relevant for twin projectiles).
-			modelMatrix *= glm::translate(-pIMD->connectors[0].x, -pIMD->connectors[0].y, -pIMD->connectors[0].z);
+			modelMatrix *= glm::translate(glm::vec3{ -pIMD->connectors[0].x, -pIMD->connectors[0].y, -pIMD->connectors[0].z });
 		}
 
 		if (premultiplied)
@@ -1724,7 +1724,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 	         -(psFeature->pos.y - player.p.z)
 	     );
 
-	glm::mat4 modelMatrix = glm::translate(dv) * glm::rotate(UNDEG(-psFeature->rot.direction), glm::vec3(0.f, 1.f, 0.f));
+	glm::mat4 modelMatrix = glm::translate(glm::vec3{ dv }) * glm::rotate(UNDEG(-psFeature->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
 	if (psFeature->psStats->subType == FEAT_SKYSCRAPER)
 	{
@@ -1941,11 +1941,11 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 
 		if (weaponImd[i] != nullptr)
 		{
-			glm::mat4 matrix = glm::translate(strImd->connectors[i].xzy) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
+			glm::mat4 matrix = glm::translate(glm::vec3{ strImd->connectors[i].xzy() }) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 			int recoilValue = noRecoil ? 0 : getRecoil(psStructure->asWeaps[i]);
 			if (mountImd[i] != nullptr)
 			{
-				matrix *= glm::translate(0.f, 0.f, recoilValue / 3.f);
+				matrix *= glm::translate(glm::vec3{ 0.f, 0.f, recoilValue / 3.f });
 				int animFrame = 0;
 				if (mountImd[i]->numFrames > 0)	// Calculate an animation frame
 				{
@@ -1954,11 +1954,11 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modelViewMatrix * matrix);
 				if (mountImd[i]->nconnectors)
 				{
-					matrix *= glm::translate(mountImd[i]->connectors->xzy);
+					matrix *= glm::translate(glm::vec3{ mountImd[i]->connectors->xzy() });
 				}
 			}
 			matrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
-			matrix *= glm::translate(0, 0, recoilValue);
+			matrix *= glm::translate(glm::vec3{ 0, 0, recoilValue });
 
 			pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, pieFlag, pieFlagData, modelViewMatrix * matrix);
 			if (psStructure->status == SS_BUILT && psStructure->visible[selectedPlayer] > (UBYTE_MAX / 2))
@@ -1980,7 +1980,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 							pRepImd = getImdFromIndex(MI_FLAME);
 
 
-							matrix *= glm::translate(weaponImd[i]->connectors->x, weaponImd[i]->connectors->z - 12, weaponImd[i]->connectors->y) *
+							matrix *= glm::translate(glm::vec3{ weaponImd[i]->connectors->x, weaponImd[i]->connectors->z - 12, weaponImd[i]->connectors->y }) *
 								glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
@@ -2011,11 +2011,11 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 					// horrendous hack
 					if (strImd->max.y > 80) // babatower
 					{
-						matrix *= glm::translate(0.f, 80.f, 0.f) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f)) * glm::translate(0.f, 0.f, -20.f);
+						matrix *= glm::translate(glm::vec3{ 0.f, 80.f, 0.f }) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f)) * glm::translate(glm::vec3{ 0.f, 0.f, -20.f });
 					}
 					else//baba bunker
 					{
-						matrix *= glm::translate(0.f, 10.f, 0.f) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f)) * glm::translate(0.f, 0.f, -40.f);
+						matrix *= glm::translate(glm::vec3{ 0.f, 10.f, 0.f }) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f)) * glm::translate(glm::vec3{ 0.f, 0.f, -40.f });
 					}
 					matrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 					// draw the muzzle flash?
@@ -2051,7 +2051,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				iIMDShape *lImd;
 				lImd = getImdFromIndex(MI_LANDING);
 				pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0, 
-				                modelViewMatrix * glm::translate(psStructure->sDisplay.imd->connectors->xzy));
+				                modelViewMatrix * glm::translate(glm::vec3{psStructure->sDisplay.imd->connectors->xzy()}));
 			}
 		}
 	}
@@ -2079,7 +2079,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
 		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2,
-			viewMatrix * glm::translate(dv));
+			viewMatrix * glm::translate(glm::vec3{ dv }));
 		return;
 	}
 	else if (!psStructure->visible[selectedPlayer])
@@ -2102,7 +2102,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 
 	/* Mark it as having been drawn */
 	psStructure->sDisplay.frameNumber = currentGameFrame;
-	glm::mat4 modelMatrix = glm::translate(dv) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
+	glm::mat4 modelMatrix = glm::translate(glm::vec3{ dv }) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
 	if (!defensive
 	    && graphicsTime - psStructure->timeLastHit < ELEC_DAMAGE_DURATION
@@ -2211,7 +2211,7 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 	//quick check for invalid data
 	ASSERT_OR_RETURN(, psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
 
-	const glm::mat4 modelMatrix = glm::translate(dv) * glm::scale(.5f, .5f, .5f);
+	const glm::mat4 modelMatrix = glm::translate(glm::vec3{ dv }) * glm::scale(glm::vec3{ .5f });
 
 	pieFlag = pie_TRANSLUCENT;
 	pieFlagData = BLUEPRINT_OPACITY;
@@ -2264,7 +2264,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 
 	dv.y -= gateCurrentOpenHeight(psStructure, graphicsTime, 1);  // Make gate stick out by 1 unit, so that the tops of ┼ gates can safely have heights differing by 1 unit.
 
-	const glm::mat4 modelMatrix = glm::translate(dv) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
+	const glm::mat4 modelMatrix = glm::translate(glm::vec3{ dv }) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
 	/* Actually render it */
 	if (psStructure->status == SS_BEING_BUILT)
@@ -3161,7 +3161,7 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	{
 		wind = std::remainder(wind + graphicsTimeAdjustedIncrement(windSpeed), 360.0f);
 	}
-	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(0.f, player.p.y - skybox_scale / 8.f, 0.f) * glm::rotate(UNDEG(wind), glm::vec3(0.f, 1.f, 0.f)));
+	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3{ 0.f, player.p.y - skybox_scale / 8.f, 0.f }) * glm::rotate(UNDEG(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
 /// Smoothly adjust player height to match the desired height

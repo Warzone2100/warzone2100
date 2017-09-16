@@ -33,7 +33,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
-#include "glm/core/type.hpp"
+#include <glm/glm.hpp>
 #include "pietypes.h"
 
 struct iIMDShape;

@@ -1215,7 +1215,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 			diff += deltaDiff;
 		}
 
-		if (diff * dest < 0)
+		if (dot(diff, dest) < 0)
 		{
 			// object behind
 			continue;
@@ -1239,7 +1239,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 
 	// Create the avoid vector
 	Vector2i o(dir.y, -dir.x);
-	Vector2i avoid = dest * o < 0 ? -o : o;
+	Vector2i avoid = dot(dest, o) < 0 ? -o : o;
 
 	// Normalise dest and avoid.
 	dest = dest * 32767 / (iHypot(dest) + 1);
@@ -1286,7 +1286,7 @@ static bool moveReachedWayPoint(DROID *psDroid)
 	}
 
 	// Else check current waypoint
-	return droid * droid < sqprecision;
+	return dot(droid, droid) < sqprecision;
 }
 
 #define MAX_SPEED_PITCH  60
@@ -1494,7 +1494,7 @@ static void moveCheckFinalWaypoint(DROID *psDroid, SDWORD *pSpeed)
 	    psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
 	{
 		Vector2i diff = psDroid->pos.xy - psDroid->sMove.target;
-		int distSq = diff * diff;
+		int distSq = dot(diff, diff);
 		if (distSq < END_SPEED_RANGE * END_SPEED_RANGE)
 		{
 			*pSpeed = (*pSpeed - minEndSpeed) * distSq / (END_SPEED_RANGE * END_SPEED_RANGE) + minEndSpeed;

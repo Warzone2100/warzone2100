@@ -1585,7 +1585,7 @@ glm::mat4 objectShimmy(BASE_OBJECT *psObj)
 			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(0.f, 0.f, 1.f));
 		if (psObj->type != OBJ_DROID)
 			return rotations;
-		return rotations * glm::translate(1 - rand() % 3, 0, 1 - rand() % 3);
+		return rotations * glm::translate(glm::vec3{ 1 - rand() % 3, 0, 1 - rand() % 3 });
 	}
 	return glm::mat4();
 }

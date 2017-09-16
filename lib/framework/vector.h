@@ -30,8 +30,7 @@
 #include "wzglobal.h"
 #include "frame.h"
 #include "lib/framework/types.h"
-#include "glm/core/setup.hpp"
-#include "glm/core/type.hpp"
+#include <glm/glm.hpp>
 
 using Vector3i = glm::ivec3;
 using Vector2i = glm::ivec2;
@@ -58,11 +57,11 @@ static inline Vector3i toVector(Rotation const &r)
 
 // vector * vector -> scalar
 // Note: glm doesn't provide dot operator for integral vector.
-static inline WZ_DECL_PURE int operator *(Vector2i const &a, Vector2i const &b)
+static inline WZ_DECL_PURE int dot(Vector2i const &a, Vector2i const &b)
 {
 	return a.x * b.x + a.y * b.y;
 }
-static inline WZ_DECL_PURE int operator *(Vector3i const &a, Vector3i const &b)
+static inline WZ_DECL_PURE int dot(Vector3i const &a, Vector3i const &b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -120,7 +119,7 @@ static inline bool WZ_DECL_PURE Vector3i_InCircle(Vector3i v, Vector3i c, unsign
 	// negative, due to the fact that these numbers are squared. Still GCC
 	// warns about a comparison of a comparison between an unsigned and a
 	// signed integer.
-	return (unsigned int)(delta * delta) < r * r;
+	return (unsigned int)dot(delta, delta) < r * r;
 }
 
 
@@ -142,7 +141,7 @@ static inline bool WZ_DECL_PURE Vector3i_InSphere(Vector3i v, Vector3i c, unsign
 	// negative, due to the fact that these numbers are squared. Still GCC
 	// warns about a comparison of a comparison between an unsigned and a
 	// signed integer.
-	return (unsigned int)(delta * delta) < r * r;
+	return (unsigned int)dot(delta, delta) < r * r;
 }
 
 #endif // VECTOR_H

@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_SRC_TERRAIN_H__
 #define __INCLUDED_SRC_TERRAIN_H__
 
-#include "glm/core/type.hpp"
+#include <glm/glm.hpp>
 #include "lib/ivis_opengl/pietypes.h"
 
 bool initTerrain();

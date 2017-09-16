@@ -42,7 +42,7 @@ static const float DEG_1 = (float)65536 / 360.f;
 
 static inline WZ_DECL_CONST float UNDEG(uint16_t angle)
 {
-	return angle * (360 / 65536.0f);
+	return angle * (360.f / 65536.0f) * (3.141592f / 180.f);
 }
 
 // Should be a macro (or two separate functions), since we can't do function overloading for float and int, and we don't want to use the float version for anything game-state related.
