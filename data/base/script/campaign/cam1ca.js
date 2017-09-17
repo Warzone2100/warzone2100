@@ -4,9 +4,34 @@ include("script/campaign/templates.js");
 
 const landingZoneList = [ "NPLZ1", "NPLZ2", "NPLZ3", "NPLZ4", "NPLZ5" ];
 const landingZoneMessages = [ "C1CA_LZ1", "C1CA_LZ2", "C1CA_LZ3", "C1CA_LZ4", "C1CA_LZ5" ];
-var baseEstablished;
+var blipActive;
 var lastLZ, lastHeavy;
 var totalTransportLoads;
+
+//See if we have enough structures on the plateau area and toggle
+//the green objective blip on or off accordingly.
+function baseEstablished()
+{
+	//Now we check if there is stuff built here already from cam1-C.
+	if (camCountStructuresInArea("buildArea") >= 4)
+	{
+		if (blipActive)
+		{
+			blipActive = false;
+			hackRemoveMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
+		}
+		return true;
+	}
+	else
+	{
+		if (!blipActive)
+		{
+			blipActive = true;
+			hackAddMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
+		}
+		return false;
+	}
+}
 
 // a simple extra victory condition callback
 function extraVictoryCondition()
@@ -14,27 +39,12 @@ function extraVictoryCondition()
 	const MIN_TRANSPORT_RUNS = 10;
 	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 	// No enemies on map and at least eleven New Paradigm transport runs.
-	if ((totalTransportLoads > MIN_TRANSPORT_RUNS) && !enemies.length)
+	if (baseEstablished() && (totalTransportLoads > MIN_TRANSPORT_RUNS) && !enemies.length)
 	{
-		if (baseEstablished) // if base is destroyed later, we don't care
-			return true;
-		//Now we check if there is stuff built here already from cam1-C.
-		if (camCountStructuresInArea("buildArea") >= 4)
-		{
-			baseEstablished = true;
-			hackRemoveMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-			return true;
-		}
+		return true;
 	}
 	// otherwise returns 'undefined', which suppresses victory;
 	// returning 'false' would have triggered an instant defeat
-}
-
-function eventStructureBuild()
-{
-	// update `baseEstablished' variable instantly
-	// rather than by timer
-	extraVictoryCondition();
 }
 
 function sendTransport()
@@ -105,7 +115,7 @@ function sendTransport()
 function eventStartLevel()
 {
 	totalTransportLoads = 0;
-	baseEstablished = false;
+	blipActive = false;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_4AS", {
 		callback: "extraVictoryCondition"
@@ -126,7 +136,6 @@ function eventStartLevel()
 
 	setMissionTime(camChangeOnDiff(1800));
 	hackAddMessage("MB1CA_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
-	hackAddMessage("C1CA_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	// first transport after 10 seconds; will re-queue itself
 	queue('sendTransport', 10000);

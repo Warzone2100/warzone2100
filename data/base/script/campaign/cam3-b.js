@@ -296,6 +296,8 @@ function eventStartLevel()
 	hackAddMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	eventVideoDone();
 
+	changePlayerColour(GAMMA, 0);
+
 	queue("transferPower", 3000);
 	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
 	queue("enableAllFactories", camChangeOnDiff(300000)); //5 min

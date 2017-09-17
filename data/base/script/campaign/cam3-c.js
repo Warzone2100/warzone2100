@@ -218,6 +218,7 @@ function eventStartLevel()
 
 	eventVideoDone();
 	setScrollLimits(0, 137, 64, 192); //Show the middle section of the map.
+	changePlayerColour(GAMMA, 0);
 
 	queue("enableAllFactories", camChangeOnDiff(180000)); // 3 min.
 	queue("setupPatrolGroups", 10000); // 10 sec.

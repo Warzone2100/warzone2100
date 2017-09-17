@@ -1084,11 +1084,6 @@ function __camDispatchTransporterUnsafe()
 	setTransporterExit(data.exit.x, data.exit.y, player);
 	// will guess which transporter to start, automagically
 	startTransporterEntry(data.entry.x, data.entry.y, player);
-	if (camDef(__camTransporterMessage))
-	{
-		hackRemoveMessage(__camTransporterMessage, PROX_MSG, 0);
-		__camTransporterMessage = undefined;
-	}
 	return true;
 }
 
@@ -3094,6 +3089,12 @@ function cam_eventTransporterExit(transport)
 		|| (__camWinLossCallback === "__camVictoryStandard"
 		&& transport.player === CAM_HUMAN_PLAYER))
 	{
+		//Delete any enemy reinforcement transport blips once it exits map.
+		if (transport.player !== CAM_HUMAN_PLAYER && camDef(__camTransporterMessage))
+		{
+			hackRemoveMessage(__camTransporterMessage, PROX_MSG, 0);
+			__camTransporterMessage = undefined;
+		}
 
 		// allow the next transport to enter
 		if (camDef(__camIncomingTransports[transport.player]))

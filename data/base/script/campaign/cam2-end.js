@@ -106,22 +106,17 @@ function randomTemplates(list, isTransport)
 //Attack every 30 seconds.
 function vtolAttack()
 {
-	var vtolPosNorthRoad = {"x": 99, "y": 1};
-	var vtolPosNorthEast = {"x": 127, "y": 65};
-	var vtolPosNorthEast2 = {"x": 127, "y": 28};
-	var vtolPosNorthWest = {"x": 36, "y": 1};
-	var vtolPosNorthWestLeft = {"x": 1, "y": 28};
+	const VTOL_POSITIONS = [
+		{"x": 99, "y": 1},
+		{"x": 127, "y": 65},
+		{"x": 127, "y": 28},
+		{"x": 36, "y": 1},
+		{"x": 1, "y": 28},
+	];
 	var vtolRemovePos = {"x": 127, "y": 64};
 
-	var startPos = [];
-	startPos.push(vtolPosNorthRoad);
-	startPos.push(vtolPosNorthEast);
-	startPos.push(vtolPosNorthEast2);
-	startPos.push(vtolPosNorthWest);
-	startPos.push(vtolPosNorthWestLeft);
-
 	var list; with (camTemplates) list = [commorv, colcbv, colagv, comhvat];
-	camSetVtolData(THE_COLLECTIVE, startPos, vtolRemovePos, list, camChangeOnDiff(30000));
+	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(30000));
 }
 
 //Every 10 minutes.
@@ -161,7 +156,7 @@ function tankAttack()
 	var northTankAssembly = {"x": 95, "y": 3};
 	//var westTankAssembly = {"x": 3, "y": 112}; //This was unused.
 
-	var list; with (camTemplates) list = [comhltat, cohact, cohhpv, comagt];
+	var list; with (camTemplates) list = [comhltat, cohact, cohhpv, comagt, cohbbt];
 	var pos = [];
 	pos.push(northTankAssembly);
 
