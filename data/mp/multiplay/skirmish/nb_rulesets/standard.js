@@ -1,31 +1,31 @@
 
 /*
- * This file describes standard stats and strategies of 
+ * This file describes standard stats and strategies of
  * the base (unmodded) game.
- * 
+ *
  * If you want to make an AI specially designed for your mod, start by
  * making a copy of this file and modifying it according to your mod's rules.
- * 
- * Then provide a personality to use the ruleset, similar to 
+ *
+ * Then provide a personality to use the ruleset, similar to
  * how nb_generic.[js|ai] is provided for this ruleset.
- * 
+ *
  * You may find some useful functions for working with these stats
  * in stats.js .
- * 
+ *
  */
 
 // a factor for figuring out how large things are in this ruleset,
 // or simply a typical radius of a player's base
-const baseScale = 20; 
+const baseScale = 20;
 
-// diameter of laser satellite splash/incendiary damage 
+// diameter of laser satellite splash/incendiary damage
 // for use in lassat.js
-const lassatSplash = 4; 
+const lassatSplash = 4;
 
 // set this to 1 to choose templates randomly, instead of later=>better.
 const randomTemplates = 0;
 
-// this function is used for avoiding AI cheats that appear due to 
+// this function is used for avoiding AI cheats that appear due to
 // being able to build droids before designing them
 function iCanDesign() {
 	if (difficulty === INSANE) // won't make INSANE much worse ...
@@ -160,7 +160,7 @@ const classResearch = {
 // NOTE: Hover propulsion should be placed AFTER ground propulsion!
 // Adaptation code relies on that for discovering map topology.
 // Ground propulsions need to be ground only, hover propulsions shouldn't
-// be able to cross cliffs, but should be able to cross seas, etc. 
+// be able to cross cliffs, but should be able to cross seas, etc.
 const propulsionStats = [
 	{ res: "R-Vehicle-Prop-Wheels", stat: "wheeled01", usage: PROPULSIONUSAGE.GROUND },
 	{ res: "R-Vehicle-Prop-Halftracks", stat: "HalfTrack", usage: PROPULSIONUSAGE.GROUND },
@@ -186,7 +186,7 @@ const weaponStats = {
 	machineguns: {
 		// How good weapons of this path are against tanks, borgs, defenses, vtols?
 		// The sum of the four should be equal to 1.
-		roles: [ 0.1, 0.7, 0.1, 0.1 ], 
+		roles: [ 0.1, 0.7, 0.1, 0.1 ],
 		// This explains how are human players supposed to call this weapon path in the chat.
 		chatalias: "mg",
 		// This controls micromanagement of units based on the weapons of this path.
@@ -356,12 +356,12 @@ const weaponStats = {
 	},
 	fireMortars: {
 		roles: [ 0.3, 0.3, 0.4, 0.0 ],
-		chatalias: "fm", 
+		chatalias: "fm",
 		micro: MICRO.DUMB,
 		weapons: [
 			{ res: "R-Wpn-Mortar01Lt", stat: "Mortar1Mk1", weight: WEIGHT.HEAVY }, // duplicate stat!
-			{ res: "R-Wpn-Mortar-Incendiary", stat: "Mortar-Incendiary", weight: WEIGHT.HEAVY },
-			{ res: "R-Wpn-Howitzer-Incendiary", stat: "Howitzer-Incendiary", weight: WEIGHT.ULTRAHEAVY },
+			{ res: "R-Wpn-Mortar-Incenediary", stat: "Mortar-Incenediary", weight: WEIGHT.HEAVY },
+			{ res: "R-Wpn-Howitzer-Incenediary", stat: "Howitzer-Incenediary", weight: WEIGHT.ULTRAHEAVY },
 		],
 		vtols: [
 			{ res: "R-Wpn-Bomb03", stat: "Bomb3-VTOL-LtINC", weight: WEIGHT.LIGHT },
@@ -369,8 +369,8 @@ const weaponStats = {
 			{ res: "R-Wpn-Bomb05", stat: "Bomb5-VTOL-Plasmite", weight: WEIGHT.HEAVY },
 		],
 		defenses: [
-			{ res: "R-Defense-MortarPit-Incendiary", stat: "Emplacement-MortarPit-Incendiary", defrole: DEFROLE.STANDALONE },
-			{ res: "R-Defense-Howitzer-Incendiary", stat: "Emplacement-Howitzer-Incendiary", defrole: DEFROLE.ARTY },
+			{ res: "R-Defense-MortarPit-Incenediary", stat: "Emplacement-MortarPit-Incenediary", defrole: DEFROLE.STANDALONE },
+			{ res: "R-Defense-Howitzer-Incenediary", stat: "Emplacement-Howitzer-Incenediary", defrole: DEFROLE.ARTY },
 		],
 		templates: [],
 		extras: [
@@ -503,7 +503,7 @@ const weaponStats = {
 		],
 		templates: [
 			{ res: "R-Wpn-Laser01", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "Cyb-Wpn-Laser", ] }, // flash borg
-			{ res: "Cyb-Hvy-PulseLsr", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-PulseLsr", ] }, // pulse super
+			{ res: "R-Cyborg-Hvywpn-PulseLsr", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-PulseLsr", ] }, // pulse super
 		],
 		extras: [],
 	},

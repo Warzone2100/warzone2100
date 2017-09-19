@@ -21,7 +21,7 @@ run
 	numAttackers[1]	int					0
 	numCyborgs[1]	int					25			// build cyborgs until scouts contains x droids
 
-	
+
 	//default branch
 	maxScouts[0]	int					3			// min number of droids in group to aim for.
 	maxDefenders[0]	int					5
@@ -33,7 +33,7 @@ run
 	maxDefenders[1]	int					20
 	maxAttackers[1]	int					0
 	maxCyborgs[1]	int					50			// build cyborgs until scouts contains x droids
-	
+
 	tileExpand		int					12			// approx minutes to expand over the map.
 
 	/////////////////////////////////////////////////////////////////////
@@ -57,10 +57,10 @@ run
 
 	//number of research topics for each research branch
 	techCount[0]	int					6
-	
+
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[0]	int					-1
-	
+
 	tech[0][0]		RESEARCHSTAT		"R-Wpn-MG3Mk1"			//HMG
 	tech[0][1]		RESEARCHSTAT		"R-Vehicle-Prop-Halftracks"	//half-tracks
 	tech[0][2]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
@@ -70,26 +70,26 @@ run
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
 	techCount[1]	int					19
-	
+
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[1]	int					3
-	
+
 	tech[1][0]		RESEARCHSTAT		"R-Struc-VTOLFactory"
 	tech[1][1]		RESEARCHSTAT		"R-Struc-VTOLPad"
 	tech[1][2]		RESEARCHSTAT		"R-Wpn-MG3Mk1"				//HMG
-	
+
 	tech[1][3]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
 	tech[1][4]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
-	
+
 	tech[1][5]		RESEARCHSTAT		"R-Wpn-Flamer-Damage03"		//flamer damage 03
 	tech[1][6]		RESEARCHSTAT		"R-Wpn-Flamer-ROF03"		//flamer ROF 03
-	
+
 	tech[1][7]		RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//Lancer
 	tech[1][8]		RESEARCHSTAT		"R-Vehicle-Body08"			//Scorpion body
 	tech[1][9]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
 	tech[1][10]		RESEARCHSTAT		"R-Wpn-Missile-Accuracy02"	//lancer accuracy
 	tech[1][11]		RESEARCHSTAT		"R-Wpn-Missile-Damage03"	//lancer damage
-	
+
 	tech[1][12]		RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB
 	tech[1][13]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"
 	tech[1][14]		RESEARCHSTAT		"R-Struc-Factory-Upgrade04"
@@ -108,11 +108,11 @@ run
 	numIncendrys	int					8
 	incendiaries[0]	STRUCTURESTAT		"Emplacement-MortarPit01"
 	incendiaries[1]	STRUCTURESTAT		"Emplacement-MortarPit02"
-	incendiaries[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incendiary"
+	incendiaries[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incenediary"
 	incendiaries[3]	STRUCTURESTAT		"Emplacement-RotMor"
 	incendiaries[4]	STRUCTURESTAT		"Emplacement-Howitzer105"
 	incendiaries[5]	STRUCTURESTAT		"Emplacement-Howitzer150"
-	incendiaries[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incendiary"
+	incendiaries[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incenediary"
 	incendiaries[7]	STRUCTURESTAT		"Emplacement-RotHow"
 
 	//anti a.
@@ -206,7 +206,7 @@ run
 	extraStructs[0][1]	STRUCTURESTAT		"A0LightFactory"
 	extraStructs[0][2]	STRUCTURESTAT		"A0ResearchFacility"
 	extraStructs[0][3]	STRUCTURESTAT		"A0CyborgFactory"
-	
+
 	numExtraStructs[1]	int					5
 	extraStructs[1][0]	STRUCTURESTAT		"A0VTolFactory1"
 	extraStructs[1][1]	STRUCTURESTAT		"A0VTolFactory1"
@@ -285,8 +285,8 @@ run
 
 	tmpl[0][46]	TEMPLATE	"SK-Veng-Hover-Seraph"
 	tmpl[0][47]	TEMPLATE	"Dragon-Hover-SeraphGauss"
-	
-	
+
+
 	//branchVTOL
 	numTemplates[1]	int			18
 
@@ -304,13 +304,13 @@ run
 
 	tmpl[1][11]		TEMPLATE	"SK-Cobra-Hover-HMG"
 	tmpl[1][12]		TEMPLATE	"SK-Cobra-Hover-Lancer"
-	
+
 	tmpl[1][13]		TEMPLATE	"H-Scorp-Trk-Lancer"
 	tmpl[1][14]		TEMPLATE	"H-Scorp-Trk-HC"
 	tmpl[1][15]		TEMPLATE	"H-Scorp-Trk-Lancer"
 	tmpl[1][16]		TEMPLATE	"H-Scorp-Trk-HC"
 	tmpl[1][17]		TEMPLATE	"H-Scorp-Trk-Lancer"
-	
+
 	/////////////////////////////////////////////////////////////////////
 	// SENSORS / REPAIR TEMPLATES
 
@@ -343,7 +343,7 @@ run
 	cybTempl[3]		TEMPLATE	"CyborgRkt01Ground"
 	cybTempl[4]		TEMPLATE	"MP-Cyb-Needle-GRD"
 	cybTempl[5]		TEMPLATE	"MP-Cyb-Needle-GRD"
-	
+
 	cybMechanic		TEMPLATE	"Cyb-Mechanic"
 	cybEngineer		TEMPLATE	"Cyb-ComEng"
 
@@ -404,10 +404,10 @@ run
 	vtolTargetWeight[8]	int				20
 	vtolTarget[9]		STRUCTURESTAT	"A0RepairCentre3"
 	vtolTargetWeight[9]	int				10
-	
-	
+
+
 	// Structure types AI will rebuild when they get destroyed (per tech branch basis)
-	
+
 	// branchDefault
 	numRebuildStat[0]	int				2
 	rebuildStat[0][0]	STRUCTURESTAT	"A0HardcreteMk1Wall"

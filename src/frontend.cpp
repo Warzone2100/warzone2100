@@ -1024,12 +1024,6 @@ bool runVideoOptionsMenu()
 			std::sort(modes.begin(), modes.end(), compareLess);
 			modes.erase(std::unique(modes.begin(), modes.end(), compareEq), modes.end());
 
-			// Minimum resolution is 640x480, thus remove smaller values.
-			screeninfo minimum;
-			minimum.width = 640;
-			minimum.height = 480;
-			modes.erase(modes.begin(), std::lower_bound(modes.begin(), modes.end(), minimum, compareLess));
-
 			// We can't pick resolutions if there aren't any.
 			if (modes.empty())
 			{

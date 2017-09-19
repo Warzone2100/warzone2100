@@ -22,7 +22,7 @@ run
 	//vtol branch
 	numDefenders[1]	int					12
 	numAttackers[1]	int					0
-	
+
 	//default branch
 	maxDefenders[0]	int					5
 	maxAttackers[0]	int					-1
@@ -30,7 +30,7 @@ run
 	//vtol branch
 	maxDefenders[1]	int					20
 	maxAttackers[1]	int					0
-	
+
 	tileExpand		int					12			// approx minutes to expand over the map.
 
 	/////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ run
 
 	//number of research topics for each research branch
 	techCount[0]	int					19
-	
+
 	tech[0][0]		RESEARCHSTAT		"R-Defense-Tower01"		//mg guard tower
 	tech[0][1]		RESEARCHSTAT		"R-Wpn-MG3Mk1"			//HMG
 	tech[0][2]		RESEARCHSTAT		"R-Vehicle-Prop-Halftracks"	//Half-tracks
@@ -80,7 +80,7 @@ run
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
 	techCount[1]	int					18
-	
+
 	tech[1][0]		RESEARCHSTAT		"R-Defense-Tower01"		//mg tower for early fun
 	tech[1][1]		RESEARCHSTAT		"R-Struc-Research-Module"	//reslab module
 	tech[1][2]		RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//power module
@@ -110,11 +110,11 @@ run
 	numIncendrys	int					10
 	incendiaries[0]	STRUCTURESTAT		"Emplacement-MortarPit01"
 	incendiaries[1]	STRUCTURESTAT		"Emplacement-MortarPit02"
-	incendiaries[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incendiary"
+	incendiaries[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incenediary"
 	incendiaries[3]	STRUCTURESTAT		"Emplacement-RotMor"
 	incendiaries[4]	STRUCTURESTAT		"Emplacement-Howitzer105"
 	incendiaries[5]	STRUCTURESTAT		"Emplacement-Howitzer150"
-	incendiaries[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incendiary"
+	incendiaries[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incenediary"
 	incendiaries[7]	STRUCTURESTAT		"Emplacement-RotHow"
 	incendiaries[8]	STRUCTURESTAT		"Emplacement-Rocket06-IDF"
 	incendiaries[9]	STRUCTURESTAT		"Emplacement-HvART-pit"
@@ -212,7 +212,7 @@ run
 
 	//branchDefault
 	numTemplates	int			48
-	
+
 	tmpl[0]	TEMPLATE	"ViperMG01Wheels"		//MG
 	tmpl[1]	TEMPLATE	"ViperMG02Wheels"		//TMG
 	tmpl[2]	TEMPLATE	"ViperHMGWheels"		//HMG
@@ -271,7 +271,7 @@ run
 	tmpl[46]	TEMPLATE	"SK-Veng-Hover-Seraph"
 	tmpl[47]	TEMPLATE	"Dragon-Hover-SeraphGauss"
 
-	
+
 	/////////////////////////////////////////////////////////////////////
 	// SENSORS / REPAIR TEMPLATES
 
@@ -304,7 +304,7 @@ run
 	cybTempl[3]		TEMPLATE	"CyborgRkt01Ground"
 	cybTempl[4]		TEMPLATE	"MP-Cyb-Needle-GRD"
 	cybTempl[5]		TEMPLATE	"MP-Cyb-Needle-GRD"
-	
+
 	cybMechanic		TEMPLATE	"Cyb-Mechanic"
 	cybEngineer		TEMPLATE	"Cyb-ComEng"
 
@@ -334,8 +334,8 @@ run
 	vtolTargetWeight[8]	int				20
 	vtolTarget[9]		STRUCTURESTAT	"A0RepairCentre3"
 	vtolTargetWeight[9]	int				10
-	
-	
+
+
 	// Structure types AI will rebuild when they get destroyed
 	numRebuildStat		int				2
 	rebuildStat[0]		STRUCTURESTAT	"A0HardcreteMk1Wall"
