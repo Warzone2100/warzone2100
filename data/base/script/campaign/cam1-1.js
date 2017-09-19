@@ -31,6 +31,14 @@ camAreaEvent("ambush2Trigger", function()
 	);
 });
 
+function eventPickup(feature, droid)
+{
+	if (droid.player === CAM_HUMAN_PLAYER && feature.stattype === ARTIFACT)
+	{
+		hackRemoveMessage("C1-1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
+	}
+}
+
 //Mission setup stuff
 function eventStartLevel()
 {

@@ -68,6 +68,7 @@ camAreaEvent("LandingZoneTrigger", function()
 {
 	var lz = getObject("LandingZone2"); // will override later
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	hackRemoveMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER); //Remove mission objective.
 	playSound("pcv456.ogg");
 	// continue after 4 seconds
 	queue("moreLandingZoneTrigger", 4000);

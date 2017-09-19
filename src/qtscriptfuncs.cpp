@@ -4356,6 +4356,29 @@ static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{fireWeaponAtLoc(x, y, weapon_name)}
+//-- Fires a weapon at the given coordinates (3.2.4+ only).
+static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
+{
+	int xLocation = context->argument(0).toInt32();
+	int yLocation = context->argument(1).toInt32();
+
+	QScriptValue weaponValue = context->argument(2);
+	int weapon = getCompFromName(COMP_WEAPON, weaponValue.toString());
+	SCRIPT_ASSERT(context, weapon > 0, "No such weapon: %s", weaponValue.toString().toUtf8().constData());
+
+	Vector3i target;
+	target.x = xLocation;
+	target.y = yLocation;
+	target.z = map_Height(xLocation, yLocation);
+
+	WEAPON sWeapon;
+	sWeapon.nStat = weapon;
+	// send the projectile using the selectedPlayer so that it can always be seen
+	proj_SendProjectile(&sWeapon, nullptr, selectedPlayer, target, nullptr, true, 0);
+	return QScriptValue();
+}
+
 //-- \subsection{changePlayerColour(player, colour)}
 //-- Change a player's colour slot. The current player colour can be read from the playerData array. There are as many
 //-- colour slots as the maximum number of players. (3.2.3+ only)
@@ -5529,6 +5552,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("startTransporterEntry", engine->newFunction(js_startTransporterEntry));
 	engine->globalObject().setProperty("setTransporterExit", engine->newFunction(js_setTransporterExit));
 	engine->globalObject().setProperty("setObjectFlag", engine->newFunction(js_setObjectFlag));
+	engine->globalObject().setProperty("fireWeaponAtLoc", engine->newFunction(js_fireWeaponAtLoc));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("TER_WATER", TER_WATER, QScriptValue::ReadOnly | QScriptValue::Undeletable);

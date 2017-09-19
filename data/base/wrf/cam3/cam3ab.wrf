@@ -6,7 +6,6 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 file		SMSG		"brief3a-b.txt"
-file		SMSG		"prox3ab.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"

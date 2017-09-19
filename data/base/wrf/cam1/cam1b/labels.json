@@ -2,7 +2,7 @@
     "area_0": { "label": "landingZone", "pos1": [ 1280, 6528 ], "pos2": [ 1536, 6784 ]},
     "area_1": { "label": "enemybase1", "pos1": [ 3840, 8960 ], "pos2": [ 5504, 10112 ]},
     "area_2": { "label": "enemybase2", "pos1": [ 704, 8896 ], "pos2": [ 2496, 9728 ]},
-    "area_3": { "label": "enemybase3", "pos1": [ 2432, 10496 ], "pos2": [ 4352, 12672 ]},
+    "area_3": { "label": "enemybase3", "pos1": [ 2432, 10496 ], "pos2": [ 4224, 12288 ]},
     "area_4": { "label": "enemybase4", "pos1": [ 2240, 12864 ], "pos2": [ 5312, 14400 ]},
     "area_5": { "label": "AttackArea1", "subscriber": 0, "pos1": [ 4032, 8000 ], "pos2": [ 5440, 9024 ]},
     "area_6": { "label": "AttackArea2", "subscriber": 0, "pos1": [ 320, 9792 ], "pos2": [ 6720, 13120 ]},

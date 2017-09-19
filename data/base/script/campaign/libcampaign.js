@@ -1147,44 +1147,42 @@ function __camIsValidLeftover(obj)
 	return false;
 }
 
-// Calling this without a defined group will check non-eliminated bases for
-// having the conditions to be destroyed. Helps fix earlier save files that
-// had problems with bases not being eliminated properly.
 function __camCheckBaseEliminated(group)
 {
 	// FIXME: O(n) lookup here
 	for (var blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
-		var foundLeftover = false;
-		if (bi.eliminated || (camDef(group) && (bi.group !== group)))
+		if (bi.eliminated || (bi.group !== group))
 			continue;
 		if (camDef(bi.cleanup))
 		{
-			var leftovers = enumArea(bi.cleanup);
-			var nonValidLeftovers = leftovers.filter(function(obj) {
+			var nonLeftovers = enumArea(bi.cleanup).filter(function(obj) {
 				return (obj.player !== CAM_HUMAN_PLAYER
 					&& obj.type === STRUCTURE
 					&& !__camIsValidLeftover(obj)
-					&& (!camDef(bi.player) ||
-					    camPlayerMatchesFilter(obj.player, bi.player))
+					&& (!camDef(bi.player)
+					|| (camDef(bi.player) && camPlayerMatchesFilter(obj.player, bi.player)))
 				);
 			});
-			if (nonValidLeftovers.length)
+			var leftovers = enumArea(bi.cleanup).filter(function(obj) {
+				return (obj.player !== CAM_HUMAN_PLAYER
+					&& obj.type === STRUCTURE
+					&& __camIsValidLeftover(obj)
+					&& (!camDef(bi.player)
+					|| (camDef(bi.player) && camPlayerMatchesFilter(obj.player, bi.player)))
+				);
+			});
+			if (nonLeftovers.length > 0)
 			{
 				continue;
 			}
 			for (var i = 0, l = leftovers.length; i < l; i++)
 			{
-				var obj = leftovers[i];
-				foundLeftover = true;
-				if (__camIsValidLeftover(obj))
-				{
-					// remove with special effect
-					camSafeRemoveObject(obj, camDef(group));
-				}
+				// remove with special effect
+				camSafeRemoveObject(leftovers[i], true);
 			}
-			if (camDef(group) && !bi.eliminated && camDef(bi.eliminateSnd))
+			if (camDef(bi.eliminateSnd))
 			{
 				// play sound
 				var pos = camMakePos(bi.cleanup);
@@ -1196,8 +1194,6 @@ function __camCheckBaseEliminated(group)
 			camDebug("All bases must have a cleanup area : " + blabel);
 			continue;
 		}
-		if (!camDef(group) && !foundLeftover)
-			continue;
 		if (camDef(bi.detectMsg) && bi.detected) // remove the beacon
 			hackRemoveMessage(bi.detectMsg, PROX_MSG, 0);
 		camTrace("Enemy base", blabel, "eliminated");
@@ -3170,9 +3166,6 @@ function cam_eventGameLoaded()
 
 	//Subscribe to eventGroupSeen again.
 	camSetEnemyBases();
-
-	//Mark any dead bases if for some reason some did not eliminate properly.
-	__camCheckBaseEliminated();
 }
 
 //Plays Nexus sounds if nexusActivated is true.

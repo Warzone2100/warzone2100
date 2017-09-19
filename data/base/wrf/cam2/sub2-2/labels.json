@@ -9,13 +9,13 @@
 	"position_7": { "label": "wayPoint1",        "pos": [ 4672, 1984 ] },
 	"position_8": { "label": "wayPoint2",        "pos": [ 1856, 1600 ] },
 	"position_9": { "label": "wayPoint3",        "pos": [ 960, 1472 ] },
-	"position_10": { "label": "wayPoint4",       "pos": [ 50, 7900 ] },
+	"position_10": { "label": "wayPoint4",       "pos": [ 896, 8064 ] },
 	"position_11": { "label": "fac2WayPoint1",   "pos": [ 1472, 4800 ] },
 	"position_12": { "label": "fac2WayPoint2",   "pos": [ 5696, 7232 ] },
 	"position_13": { "label": "eastAssembly2",   "pos": [ 4160, 4544 ] },
 	"position_14": { "label": "westAssembly2",   "pos": [ 5696, 6976 ] },
 	"position_15": { "label": "vtolRemovePoint", "pos": [ 3604, 320 ] },
-	"position_16": { "label": "defensePos",      "pos": [ 1536, 6784 ] },
+	"position_16": { "label": "defensePos",      "pos": [ 1664, 7040 ] },
 	
 	"area_0": { "label": "landingZone",     "pos1": [ 5504, 7168 ], "pos2": [ 5760, 7424 ] },
 	"area_1": { "label": "RTLZ",            "pos1": [ 5184, 6592 ], "pos2": [ 7104, 8128 ] },
@@ -28,7 +28,7 @@
 	"object_1": { "label": "COFactoryEast", "id": 518, "player": 2, "type": 1 },
 	"object_2": { "label": "COFactoryWest", "id": 517, "player": 2, "type": 1 },
 
-	"radius_0": { "label": "failZone", "subscriber": 2, "pos" : [ 600, 7800 ], "radius": 700 },
+	"radius_0": { "label": "failZone", "subscriber": 2, "pos" : [ 896, 8064 ], "radius": 400 },
 	"radius_1": { "label": "wayPoint1Rad", "subscriber": 2, "pos" : [ 4672, 1984 ], "radius": 300 },
 	"radius_2": { "label": "wayPoint2Rad", "subscriber": 2, "pos" : [ 1856, 1400 ], "radius": 300 },
 	"radius_3": { "label": "vtolRemoveZone", "subscriber": 2, "pos" : [ 3604, 320 ], "radius": 200 }

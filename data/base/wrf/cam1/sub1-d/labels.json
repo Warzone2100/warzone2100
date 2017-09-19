@@ -27,7 +27,7 @@
 	"area_9": { "label": "hoversAttack",   "pos1": [ 832, 1216 ],   "pos2": [ 1344, 1728 ] },
 	"area_10": { "label": "hoversDefense", "pos1": [ 3776, 2112 ],  "pos2": [ 4160, 2624 ] },
 	"area_11": { "label": "NPSouthEast",   "pos1": [ 3072, 12800 ], "pos2": [ 6272, 16000 ] },
-	"area_12": { "label": "NPMiddle",      "pos1": [ 1408, 256 ],   "pos2": [ 6016, 6144 ] },
+	"area_12": { "label": "NPMiddle",      "pos1": [ 3392, 1984 ],   "pos2": [ 6080, 5184 ] },
 	"area_13": { "label": "NPNorthEast",   "pos1": [ 6016, 128 ],   "pos2": [ 9984, 3968 ] },
 
 	"object_0": { "label": "artifact1",      "id": 555, "player": 0, "type": 2 },
