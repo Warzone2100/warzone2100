@@ -217,6 +217,10 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 // Save Player Stats
 bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYERSTATS *st)
 {
+	if (Cheated)
+	{
+	    return false;
+	}
 	char buffer[1000];
 	char fileName[255] = "";
 
@@ -236,10 +240,6 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 // update players damage stats.
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
-	if (Cheated)
-	{
-		return;
-	}
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
 	if (attacker < MAX_PLAYERS)
 	{
@@ -272,7 +272,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 // update games played.
 void updateMultiStatsGames()
 {
-	if (Cheated || selectedPlayer >= MAX_PLAYERS)
+	if (selectedPlayer >= MAX_PLAYERS)
 	{
 		return;
 	}
@@ -282,7 +282,7 @@ void updateMultiStatsGames()
 // games won
 void updateMultiStatsWins()
 {
-	if (Cheated || selectedPlayer >= MAX_PLAYERS)
+	if (selectedPlayer >= MAX_PLAYERS)
 	{
 		return;
 	}
@@ -292,7 +292,7 @@ void updateMultiStatsWins()
 //games lost.
 void updateMultiStatsLoses()
 {
-	if (Cheated || selectedPlayer >= MAX_PLAYERS)
+	if (selectedPlayer >= MAX_PLAYERS)
 	{
 		return;
 	}
@@ -302,7 +302,7 @@ void updateMultiStatsLoses()
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 {
-	if (Cheated || player >= MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
 		return;
 	}
