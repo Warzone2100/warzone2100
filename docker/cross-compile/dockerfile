@@ -5,11 +5,11 @@ RUN apt-get -u update && apt-get -y install \
     git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
     libtool libtool-bin libltdl-dev libssl-dev libxml-parser-perl make \
     p7zip-full patch perl pkg-config python ruby scons \
-    sed unzip wget xz-utils cmake asciidoc nsis ninja-build
+    sed unzip wget xz-utils cmake asciidoc nsis ninja-build libnvtt-bin
 
 RUN git clone https://github.com/mxe/mxe.git
 
-RUN cd mxe && make -j 2 JOBS=4 gcc zlib bfd gettext jpeg libpng ogg vorbis openal theora qt5 sdl2 physfs glew freetype fontconfig fribidi libiberty harfbuzz
+RUN cd mxe && make -j 2 JOBS=4 gcc zlib bfd gettext jpeg libpng ogg vorbis openal theora qt5 sdl2 physfs glew freetype fribidi libiberty harfbuzz
 RUN cp /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf /mxe/usr/i686-w64-mingw32.static/etc/fonts/
 RUN cp /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf /mxe/usr/i686-w64-mingw32.static/etc/fonts/
 

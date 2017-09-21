@@ -54,4 +54,6 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     )
 endif()
 
+add_dependencies(warzone2100 data_base)
+
 install(TARGETS warzone2100 DESTINATION ".")

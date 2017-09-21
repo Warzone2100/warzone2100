@@ -70,6 +70,7 @@ add_subdirectory(3rdparty/sha2)
 add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(po)
-add_subdirectory(data)
 add_subdirectory(doc)
 add_subdirectory(pkg/nsis)
+
+add_subdirectory(data)
