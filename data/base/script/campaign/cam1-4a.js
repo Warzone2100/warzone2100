@@ -64,11 +64,21 @@ camAreaEvent("MediumNPFactoryTrigger", function()
 	camEnableFactory("MediumNPFactory");
 });
 
+camAreaEvent("removeRedObjectiveBlip", function()
+{
+	hackRemoveMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER); //Remove mission objective.
+});
+
+camAreaEvent("triggerLZ2Blip", function()
+{
+	hackAddMessage("C1-4_LZ", PROX_MSG, CAM_HUMAN_PLAYER, false);
+});
+
 camAreaEvent("LandingZoneTrigger", function()
 {
 	var lz = getObject("LandingZone2"); // will override later
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	hackRemoveMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER); //Remove mission objective.
+	hackRemoveMessage("C1-4_LZ", PROX_MSG, CAM_HUMAN_PLAYER); //Remove LZ 2 blip.
 	playSound("pcv456.ogg");
 	// continue after 4 seconds
 	queue("moreLandingZoneTrigger", 4000);

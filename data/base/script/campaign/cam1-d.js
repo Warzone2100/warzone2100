@@ -29,7 +29,14 @@ camAreaEvent("causeWayTrig", function()
 	camEnableFactory("NPFactoryNE");
 	camEnableFactory("NPCybFactoryNE");
 	cyborgGroupPatrol();
-	sendNPTransporter();
+	
+	camDetectEnemyBase("NPLZGroup");
+	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ",
+		CAM_REINFORCE_TRANSPORT, {
+			entry: { x: 0, y: 0 },
+			exit: { x: 0, y: 0 }
+		}
+	);
 });
 
 function getDroidsForNPLZ()
@@ -47,29 +54,6 @@ function getDroidsForNPLZ()
 		droids[droids.length] = t;
 	}
 	return droids;
-}
-
-function sendNPTransporter()
-{
-	//Check if the NP LZ is secure. If so, send a transport.
-	var tPos = getObject("NPTransportPos");
-	var nearbyDefense = enumRange(tPos.x, tPos.y, 8, NEW_PARADIGM, false).filter(function(obj) {
-		return (obj.type === STRUCTURE && obj.stattype !== WALL);
-	});
-
-	if (nearbyDefense.length)
-	{
-		var list = getDroidsForNPLZ();
-		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list,
-			CAM_REINFORCE_TRANSPORT, {
-				entry: { x: 0, y: 0 },
-				exit: { x: 0, y: 0 },
-				message: "C1D_LZ2"
-			}
-		);
-
-		queue("sendNPTransporter", camChangeOnDiff(600000)); //10 min
-	}
 }
 
 function HoverGroupPatrol()
@@ -206,6 +190,12 @@ function eventStartLevel()
 			detectMsg: "C1D_BASE3",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
+		},
+		"NPLZGroup": {
+			cleanup: "NPLZ1",
+			detectMsg: "C1D_LZ2",
+			eliminateSnd: "pcv394.ogg",
+			player: NEW_PARADIGM // required for LZ-type bases
 		},
 	});
 

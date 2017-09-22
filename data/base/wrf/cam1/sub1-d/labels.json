@@ -29,6 +29,7 @@
 	"area_11": { "label": "NPSouthEast",   "pos1": [ 3072, 12800 ], "pos2": [ 6272, 16000 ] },
 	"area_12": { "label": "NPMiddle",      "pos1": [ 3392, 1984 ],   "pos2": [ 6080, 5184 ] },
 	"area_13": { "label": "NPNorthEast",   "pos1": [ 6016, 128 ],   "pos2": [ 9984, 3968 ] },
+	"area_14": { "label": "NPLZ1",		"pos1": [ 6912, 5376 ],   "pos2": [ 7808, 6400 ] },
 
 	"object_0": { "label": "artifact1",      "id": 555, "player": 0, "type": 2 },
 	"object_1": { "label": "NPFactoryW",     "id": 670, "player": 1, "type": 1 },

@@ -1076,6 +1076,13 @@ function __camDispatchTransporterUnsafe()
 
 	setNoGoArea(pos.x - 2, pos.y - 2, pos.x + 2, pos.y + 2, player);
 
+	//Delete previous enemy reinforcement transport blip
+	if (player !== CAM_HUMAN_PLAYER && camDef(__camTransporterMessage))
+	{
+		hackRemoveMessage(__camTransporterMessage, PROX_MSG, 0);
+		__camTransporterMessage = undefined;
+	}
+
 	if(player !== CAM_HUMAN_PLAYER)
 	{
 		playSound("pcv381.ogg"); //Enemy transport detected.
@@ -3085,13 +3092,6 @@ function cam_eventTransporterExit(transport)
 		|| (__camWinLossCallback === "__camVictoryStandard"
 		&& transport.player === CAM_HUMAN_PLAYER))
 	{
-		//Delete any enemy reinforcement transport blips once it exits map.
-		if (transport.player !== CAM_HUMAN_PLAYER && camDef(__camTransporterMessage))
-		{
-			hackRemoveMessage(__camTransporterMessage, PROX_MSG, 0);
-			__camTransporterMessage = undefined;
-		}
-
 		// allow the next transport to enter
 		if (camDef(__camIncomingTransports[transport.player]))
 			delete __camIncomingTransports[transport.player];

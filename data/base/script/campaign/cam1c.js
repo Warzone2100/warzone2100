@@ -211,7 +211,7 @@ function eventStartLevel()
 		},
 		"ScavSouthEastHighgroundGroup": {
 			cleanup: "ScavSouthEastHighground",
-			detectMsg: "C1C_BASE2",
+			detectMsg: "C1C_BASE6",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv391.ogg"
 		},
@@ -233,12 +233,6 @@ function eventStartLevel()
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv391.ogg",
 			player: 7 // hence discriminate by player filter
-		},
-		"ScavSouthEastBaseGroup": {
-			cleanup: "ScavSouthEastBase",
-			detectMsg: "C1C_BASE6",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv391.ogg",
 		},
 		"NPEastBaseGroup": {
 			cleanup: "NPEastBase",

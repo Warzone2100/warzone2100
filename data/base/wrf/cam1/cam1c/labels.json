@@ -39,21 +39,20 @@
 	"object_8": { "label": "AmbushForceCommander", "id": 3276, "player": 1, "type": 0 },
 
 	"area_13": {"label": "ScavSouthDerrick", "pos1": [ 9920, 14848 ], "pos2": [ 11072, 16192 ]},
-	"area_14": {"label": "ScavSouthEastHighground", "pos1": [ 11200, 11968 ], "pos2": [ 14912, 14784 ]},
+	"area_14": {"label": "ScavSouthEastHighground", "pos1": [ 10624, 11968 ], "pos2": [ 14912, 14784 ]},
 	"area_15": {"label": "ScavNorthBase", "pos1": [ 8000, 192 ], "pos2": [ 9664, 1600 ]},
 	"area_16": {"label": "ScavSouthPodPits", "pos1": [ 8384, 2624 ], "pos2": [ 10048, 4672 ]},
 	"area_17": {"label": "MixedCentralBase", "pos1": [ 8256, 4928 ], "pos2": [ 10048, 8640 ]},
-	"area_18": {"label": "ScavSouthEastBase", "pos1": [ 10176, 12992 ], "pos2": [ 14528, 14784 ]},
-	"area_19": {"label": "NPEastBase", "pos1": [ 9408, 8640 ], "pos2": [ 13760, 11328 ]},
-	"area_20": {"label": "NPNorthEastGenerator", "pos1": [ 12992, 1088 ], "pos2": [ 15040, 3776 ]},
-	"area_21": {"label": "NPNorthEastBase", "pos1": [ 10176, 1216 ], "pos2": [ 12352, 4544 ]},
+	"area_18": {"label": "NPEastBase", "pos1": [ 9408, 8640 ], "pos2": [ 13760, 11328 ]},
+	"area_19": {"label": "NPNorthEastGenerator", "pos1": [ 12992, 1088 ], "pos2": [ 15040, 3776 ]},
+	"area_20": {"label": "NPNorthEastBase", "pos1": [ 10176, 1216 ], "pos2": [ 12352, 4544 ]},
 
-	"radius_3": { "label": "RemoveBeacon", "subscriber": 0, "pos" : [ 6848, 13888 ], "radius": 640 },
-	"area_22": { "label": "AmbushTrigger", "subscriber": 0, "pos1": [ 8896, 13760 ], "pos2": [ 10048, 14656 ]},
+	"radius_3": { "label": "RemoveBeacon", "subscriber": 0, "pos" : [ 7168, 13888 ], "radius": 540 },
+	"area_21": { "label": "AmbushTrigger", "subscriber": 0, "pos1": [ 8896, 13760 ], "pos2": [ 10048, 14656 ]},
 	"position_5": { "label": "AmbushTarget", "pos": [ 8352, 13880 ]},
 
-	"area_23": { "label": "NPLZ1", "pos1": [ 12992, 3904 ], "pos2": [ 14272, 5568 ]},
-	"area_24": { "label": "NPLZ1Trigger", "subscriber": 0, "pos1": [ 10560, 6400 ], "pos2": [ 16448, 8256 ]},
-	"area_25": { "label": "NPLZ2", "pos1": [ 8512, 9792 ], "pos2": [ 9664, 10944 ]},
-	"area_26": { "label": "NPLZ2Trigger", "subscriber": 0, "pos1": [ 7616, 4800 ], "pos2": [ 9408, 5696 ]}
+	"area_22": { "label": "NPLZ1", "pos1": [ 12892, 3704 ], "pos2": [ 14472, 5668 ]},
+	"area_23": { "label": "NPLZ1Trigger", "subscriber": 0, "pos1": [ 10560, 6400 ], "pos2": [ 16448, 8256 ]},
+	"area_24": { "label": "NPLZ2", "pos1": [ 8512, 9792 ], "pos2": [ 9664, 10944 ]},
+	"area_25": { "label": "NPLZ2Trigger", "subscriber": 0, "pos1": [ 7616, 4800 ], "pos2": [ 9408, 5696 ]}
 }

@@ -37,5 +37,8 @@
 
 	"area_6": { "label": "LandingZoneTrigger", "subscriber": 0, "pos1": [ 7232, 4416 ], "pos2": [ 7744, 4928 ] },
 	"area_7": { "label": "AttackGroupMedium", "pos1": [ 3264, 3008 ], "pos2": [ 3648, 3264 ] },
-	"area_8": { "label": "AttackGroupLight", "pos1": [ 3392, 2112 ], "pos2": [ 3776, 2624 ] }
+	"area_8": { "label": "AttackGroupLight", "pos1": [ 3392, 2112 ], "pos2": [ 3776, 2624 ] },
+
+	"radius_3": { "label": "removeRedObjectiveBlip", "subscriber": 0, "pos" : [ 4096, 3640 ], "radius": 700 },
+	"radius_4": { "label": "triggerLZ2Blip", "subscriber": 0, "pos" : [ 6160, 3840 ], "radius": 800 }
 }
