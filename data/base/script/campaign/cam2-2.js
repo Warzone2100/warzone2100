@@ -23,7 +23,7 @@ var commandGroup;
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if (isVTOL(droid))
+	if (isVTOL(droid) && (droid.weapons[0].armed < 20) || (droid.health < 60))
 	{
 		camSafeRemoveObject(droid, false);
 	}
@@ -60,7 +60,7 @@ camAreaEvent("wayPoint1Rad", function(droid)
 //that can attack together to defend the enemy commander.
 camAreaEvent("wayPoint2Rad", function(droid)
 {
-	if (droid.droidType != DROID_COMMAND)
+	if (droid.droidType !== DROID_COMMAND)
 	{
 		resetLabel("wayPoint2Rad", THE_COLLECTIVE);
 		return;
@@ -68,7 +68,7 @@ camAreaEvent("wayPoint2Rad", function(droid)
 
 	var point = getObject("wayPoint3");
 	var defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter(function(obj) {
-		return (obj.droidType == DROID_WEAPON);
+		return (obj.droidType === DROID_WEAPON);
 	});
 
 
@@ -87,7 +87,7 @@ camAreaEvent("wayPoint2Rad", function(droid)
 
 camAreaEvent("failZone", function(droid)
 {
-	if (droid.droidType == DROID_COMMAND)
+	if (droid.droidType === DROID_COMMAND)
 	{
 		camSafeRemoveObject(droid, false);
 		failSequence();
@@ -123,6 +123,27 @@ function failSequence()
 {
 	camTrace("Collective Commander escaped with artifact");
 	queue("showGameOver", 300);
+}
+
+function retreatCommander()
+{
+	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
+		pos: camMakePos("wayPoint3"),
+		repair: 30,
+		regroup: false
+	});
+}
+
+//Make the enemy commander flee back to the NW base if attacked.
+function eventAttacked(victim, attacker)
+{
+	if (camDef(victim)
+		&& victim.player === THE_COLLECTIVE
+		&& victim.y > Math.floor(mapHeight / 3) //only if the commander is escaping to the south
+		&& victim.group === commandGroup)
+	{
+		camCallOnce("retreatCommander");
+	}
 }
 
 function enableReinforcements()

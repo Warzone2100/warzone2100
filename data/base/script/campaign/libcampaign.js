@@ -2508,7 +2508,10 @@ function __camVictoryOffworld()
 			return;
 		}
 
-		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).length;
+		//Make sure to only count droids here.
+		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+			return (obj.type === DROID && !camIsTransporter(obj));
+		}).length;
 		if (atlz === total)
 		{
 			__camGameWon();
