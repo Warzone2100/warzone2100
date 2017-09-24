@@ -56,7 +56,7 @@ endif()
 
 add_dependencies(warzone2100 data_base)
 
-install(TARGETS warzone2100 DESTINATION ".")
+install(TARGETS warzone2100 COMPONENT Core DESTINATION ".")
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     install(FILES
@@ -79,6 +79,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/glib-2.dll"
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/glew32.dll"
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/freetype.dll"
+        COMPONENT Core
         DESTINATION "."
     )
 endif()

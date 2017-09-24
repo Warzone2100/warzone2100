@@ -100,6 +100,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 		"base/texpages"
 		"base/tileset"
 		"base/wrf"
+		COMPONENT Data
 		DESTINATION "data/base/")
 	install(DIRECTORY
 		"mp/anims"
@@ -112,15 +113,18 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 		"mp/stats"
 		"mp/structs"
 		"mp/wrf"
+		COMPONENT Data
 		DESTINATION "data/mp/")
 	install(FILES
 		"base/palette.txt"
 		"base/ruleset.json"
 		"base/gamedesc.lev"
+		COMPONENT Data
 		DESTINATION "data/base")
 	install(FILES
 		"mp/addon.lev"
 		"mp/ruleset.json"
+		COMPONENT Data
 		DESTINATION "data/mp")
 	add_custom_target(data_base ALL
 		DEPENDS ${DDS_FILES})
@@ -169,6 +173,7 @@ else()
 	install(FILES
 		"${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 		"${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
+		COMPONENT Data
 		DESTINATION ".")
 	add_custom_target(data_base ALL
 		DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/base.wz")
@@ -180,4 +185,5 @@ install(FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/music/track2.ogg"
 	"${CMAKE_CURRENT_SOURCE_DIR}/music/track3.ogg"
 	"${CMAKE_CURRENT_SOURCE_DIR}/music/music.wpl"
+	COMPONENT Data
 	DESTINATION "music")

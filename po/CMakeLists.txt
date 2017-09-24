@@ -17,8 +17,9 @@ else()
 			DEPENDS ${f}
 		)
 		list(APPEND PO_FILES_LIST "${CMAKE_BINARY_DIR}/locale/${stripped_f}/LC_MESSAGES/warzone2100.gmo")
-		install(FILES "${CMAKE_BINARY_DIR}/locale/${stripped_f}/LC_MESSAGES/warzone2100.gmo" DESTINATION
-		"locale/${stripped_f}/LC_MESSAGES/")
+		install(FILES "${CMAKE_BINARY_DIR}/locale/${stripped_f}/LC_MESSAGES/warzone2100.gmo"
+		COMPONENT Lang
+		DESTINATION "locale/${stripped_f}/LC_MESSAGES/")
 	endforeach()
 endif()
 
