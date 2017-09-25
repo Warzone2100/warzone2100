@@ -105,12 +105,12 @@ void TabSelectionWidget::setNumberOfTabs(int tabs)
 
 void TabSelectionWidget::prevTabPage()
 {
-	setTab(currentTab - tabsAtOnce);
+	setTab(currentTab - currentTab % tabsAtOnce - 1);
 }
 
 void TabSelectionWidget::nextTabPage()
 {
-	setTab(currentTab + tabsAtOnce);
+	setTab(currentTab + (tabsAtOnce - currentTab % tabsAtOnce));
 }
 
 void TabSelectionWidget::doLayoutAll()
