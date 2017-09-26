@@ -2,10 +2,11 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const civilians = 7; //Civilian player number.
+const CIVILIAN = 7; //Civilian player number.
 var capturedCivCount; //How many civilians have been captured. 59 for defeat.
 var civilianPosIndex; //Current location of civilian groups.
 var shepardGroup; //Enemy group that protects civilians.
+var lastSoundTime; //Only play the "civilian rescued" sound every so often.
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials04",
 	"R-Struc-Factory-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
@@ -147,12 +148,12 @@ function captureCivilians()
 		var num = 1 + camRand(3);
 		for (var i = 0; i < num; ++i)
 		{
-			addDroid(civilians, currPos.x, currPos.y, "Civilian",
+			addDroid(CIVILIAN, currPos.x, currPos.y, "Civilian",
 					"B1BaBaPerson01", "BaBaLegs", "", "", "BaBaMG");
 		}
 
 		//Only count civilians that are not in the the transporter base.
-		var civs = enumArea(0, 0, 35, mapHeight, civilians, false);
+		var civs = enumArea(0, 0, 35, mapHeight, CIVILIAN, false);
 		//Move them
 		for (var i = 0; i < civs.length; ++i)
 		{
@@ -182,13 +183,15 @@ function civilianOrders()
 {
 	var lz = getObject("startPosition");
 	var rescueSound = "pcv612.ogg";	//"Civilian Rescued".
-	var civs = enumDroid(civilians);
+	var civs = enumDroid(CIVILIAN);
 	var rescued = false;
 
 	//Check if a civilian is close to a player droid.
 	for (var i = 0; i < civs.length; ++i)
 	{
-		var pDroids = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
+		var pDroids = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+			return obj.type === DROID;
+		});
 		if (pDroids.length)
 		{
 			rescued = true;
@@ -196,8 +199,10 @@ function civilianOrders()
 		}
 	}
 
-	if (rescued === true)
+	//Play the "Civilian rescued" sound and throttle it for ten seconds.
+	if (rescued && ((lastSoundTime + 10000) < gameTime))
 	{
+		lastSoundTime = gameTime;
 		playSound(rescueSound);
 	}
 
@@ -209,7 +214,7 @@ function eventTransporterLanded(transport)
 {
 	var escaping = "pcv632.ogg"; //"Enemy escaping".
 	var position = getObject("COTransportPos");
-	var civs = enumRange(position.x, position.y, 15, civilians, false);
+	var civs = enumRange(position.x, position.y, 15, CIVILIAN, false);
 
 	if (civs.length)
 	{
@@ -253,17 +258,15 @@ function extraVictoryCondition()
 	else
 	{
 		var lz = getObject("startPosition");
-		var civs = enumRange(lz.x, lz.y, 30, civilians, false);
+		var civs = enumRange(lz.x, lz.y, 30, CIVILIAN, false);
 
 		for (var i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
 		}
 
-		if (!enumArea(0, 0, mapWidth, mapHeight, civilians, false).length)
-		{
-			return true;
-		}
+		//Win regardless if all civilians do not make it to the LZ.
+		return true;
 	}
 }
 
@@ -290,27 +293,27 @@ function eventStartLevel()
 	setPower(camChangeOnDiff(200000, true), THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); //120 min
 
-	setAlliance(THE_COLLECTIVE, civilians, true);
-	setAlliance(CAM_HUMAN_PLAYER, civilians, true);
+	setAlliance(THE_COLLECTIVE, CIVILIAN, true);
+	setAlliance(CAM_HUMAN_PLAYER, CIVILIAN, true);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COAirBase": {
 			cleanup: "airBaseCleanup",
 			detectMsg: "C2C_BASE1",
-			detectSnd: "pcv393.ogg",
+			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
 		"COCyborgBase": {
 			cleanup: "cyborgBaseCleanup",
 			detectMsg: "C2C_BASE2",
-			detectSnd: "pcv393.ogg",
+			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
 		"COtransportBase": {
 			cleanup: "transportBaseCleanup",
 			detectMsg: "C2C_BASE3",
-			detectSnd: "pcv393.ogg",
+			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
 	});
@@ -354,7 +357,7 @@ function eventStartLevel()
 			throttle: camChangeOnDiff(100000),
 			regroup: false,
 			repair: 40,
-			templates: [commorv, colagv, colatv]
+			templates: [commorv, colagv]
 		},
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
@@ -362,7 +365,7 @@ function eventStartLevel()
 			throttle: camChangeOnDiff(100000),
 			regroup: false,
 			repair: 40,
-			templates: [colatv, colagv, commorv]
+			templates: [colagv, commorv]
 		},
 	});
 
@@ -370,6 +373,7 @@ function eventStartLevel()
 	truckDefense();
 	capturedCivCount = 0;
 	civilianPosIndex = 0;
+	lastSoundTime = 0;
 	shepardGroup = camMakeGroup("heavyGroup2");
 	enableFactories();
 

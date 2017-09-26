@@ -21,7 +21,6 @@ camAreaEvent("tankTrapTrig", function()
 	camEnableFactory("NPFactoryE");
 	camEnableFactory("NPCybFactoryE");
 	mrlGroupAttack();
-	hackRemoveMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 });
 
 camAreaEvent("causeWayTrig", function()
@@ -29,7 +28,7 @@ camAreaEvent("causeWayTrig", function()
 	camEnableFactory("NPFactoryNE");
 	camEnableFactory("NPCybFactoryNE");
 	cyborgGroupPatrol();
-	
+
 	camDetectEnemyBase("NPLZGroup");
 	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
@@ -140,7 +139,7 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
 		area: "RTLZ",
 		message: "C1D_LZ",
-		reinforcements: 60 //1 min
+		reinforcements: 120 //2 min
 	});
 }
 
@@ -252,8 +251,8 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //hover arti
+	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("enableReinforcements", 10000);
-	queue("setupPatrols", 120000); // 2 min.
+	queue("setupPatrols", 160000); // 2.5 min.
 }

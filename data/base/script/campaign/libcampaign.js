@@ -1167,6 +1167,7 @@ function __camCheckBaseEliminated(group)
 			var nonLeftovers = enumArea(bi.cleanup).filter(function(obj) {
 				return (obj.player !== CAM_HUMAN_PLAYER
 					&& obj.type === STRUCTURE
+					&& obj.status === BUILT
 					&& !__camIsValidLeftover(obj)
 					&& (!camDef(bi.player)
 					|| (camDef(bi.player) && camPlayerMatchesFilter(obj.player, bi.player)))
@@ -1175,6 +1176,7 @@ function __camCheckBaseEliminated(group)
 			var leftovers = enumArea(bi.cleanup).filter(function(obj) {
 				return (obj.player !== CAM_HUMAN_PLAYER
 					&& obj.type === STRUCTURE
+					&& obj.status === BUILT
 					&& __camIsValidLeftover(obj)
 					&& (!camDef(bi.player)
 					|| (camDef(bi.player) && camPlayerMatchesFilter(obj.player, bi.player)))
@@ -1498,6 +1500,7 @@ function __camPickTarget(group)
 {
 	var targets = [];
 	var gi = __camGroupInfo[group];
+	var droids = enumGroup(group);
 	switch(gi.order)
 	{
 		case CAM_ORDER_ATTACK:
@@ -1529,10 +1532,13 @@ function __camPickTarget(group)
 				else
 					targets = [ gi.data.pos[gi.data.pos.length - 1] ];
 			}
-			if (!targets.length)
-				targets = enumStruct(CAM_HUMAN_PLAYER);
+			targets = targets.filter(function(obj) {
+				return propulsionCanReach(droids[0].propulsion, droids[0].x, droids[0].y, obj.x, obj.y);
+			});
 			if (!targets.length)
 				targets = enumDroid(CAM_HUMAN_PLAYER);
+			if (!targets.length)
+				targets = enumStruct(CAM_HUMAN_PLAYER);
 			break;
 		case CAM_ORDER_DEFEND:
 			if (!camDef(gi.data.pos))
@@ -1648,7 +1654,7 @@ function __camTacticsTickForGroup(group)
 				var droid = droids[i];
 				if (back)
 					orderDroid(droid, DORDER_RTB);
-				else if (droid.order !== DORDER_MOVE) // to assembly point?
+				else
 					orderDroid(droid, DORDER_STOP);
 			}
 			return;
@@ -1705,6 +1711,7 @@ function __camTacticsTickForGroup(group)
 				}
 				if (camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 				{
+					var defending = gi.order === CAM_ORDER_DEFEND;
 					var rng = droid.droidType === DROID_SENSOR ? 10 : 5;
 					var closeBy = enumRange(droid.x, droid.y, rng, CAM_HUMAN_PLAYER, false);
 					closeBy = closeBy.sort(function(obj1, obj2) {
@@ -1715,17 +1722,27 @@ function __camTacticsTickForGroup(group)
 
 					if (droid.droidType === DROID_SENSOR)
 					{
-						if (camDef(closeBy[0]))
+						if (!defending && camDef(closeBy[0]))
 							orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
 						else
-							orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+						{
+							if (!defending)
+								orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+							else
+								orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
+						}
 					}
 					else
 					{
-						if (camDef(closeBy[0]))
+						if (!defending && camDef(closeBy[0]))
 							orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
 						else
-							orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+						{
+							if (!defending)
+								orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+							else
+								orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
+						}
 					}
 				}
 			}
