@@ -55,6 +55,7 @@
 bool bEnemyAllyRadarColor = false;     			/**< Enemy/ally radar color. */
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;	/**< Current mini-map mode. */
 bool rotateRadar; ///< Rotate the radar?
+bool radarRotationArrow; ///< display arrow when radar rotation enabled?
 
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
@@ -286,7 +287,10 @@ void drawRadar()
 	{
 		// rotate the map
 		radarMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 0.f, 1.f));
-		DrawNorth(orthoMatrix * radarMatrix);
+		if (radarRotationArrow)
+		{
+			DrawNorth(orthoMatrix * radarMatrix);
+		}
 	}
 
 	pie_RenderRadar(orthoMatrix * radarMatrix);

@@ -58,6 +58,7 @@ enum RADAR_DRAW_MODE
 extern bool bEnemyAllyRadarColor;		///< Enemy/ally minimap color
 extern RADAR_DRAW_MODE	radarDrawMode;			///< Current minimap mode
 extern bool rotateRadar;
+extern bool radarRotationArrow;
 
 void radarInitVars();			///< Recalculate minimap variables. For initialization code only.
 
