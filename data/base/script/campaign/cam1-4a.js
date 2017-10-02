@@ -17,30 +17,20 @@ const SCAVENGER_RES = [
 	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02",
 ];
 
+//Pursue player when nearby but do not go too far away from defense zone.
 function camEnemyBaseDetected_NPBaseGroup()
 {
-	// First wave of trucks
-	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower0");
-	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower3");
-	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower6");
-
-	// Second wave of trucks
-	camQueueBuilding(NEW_PARADIGM, "GuardTower3", "BuildTower1");
-	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower2");
-	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower4");
-
-	// Third wave of trucks
-	camQueueBuilding(NEW_PARADIGM, "GuardTower3", "BuildTower5");
-	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower7");
-
 	// Send tanks
-	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_COMPROMISE, {
-		pos: camMakePos("RTLZ"),
-		regroup: true,
+	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_DEFEND, {
+		pos: camMakePos("nearSensor"),
+		radius: 10,
+		regroup: true
 	});
-	camManageGroup(camMakeGroup("AttackGroupMedium"), CAM_ORDER_COMPROMISE, {
-		pos: camMakePos("RTLZ"),
-		regroup: true,
+
+	camManageGroup(camMakeGroup("AttackGroupMedium"), CAM_ORDER_DEFEND, {
+		pos: camMakePos("nearSensor"),
+		radius: 10,
+		regroup: true
 	});
 }
 
@@ -54,13 +44,10 @@ camAreaEvent("NorthScavFactoryTrigger", function()
 	camEnableFactory("NorthScavFactory");
 });
 
-camAreaEvent("HeavyNPFactoryTrigger", function()
+camAreaEvent("NPBaseDetectTrigger", function()
 {
+	camDetectEnemyBase("NPBaseGroup");
 	camEnableFactory("HeavyNPFactory");
-});
-
-camAreaEvent("MediumNPFactoryTrigger", function()
-{
 	camEnableFactory("MediumNPFactory");
 });
 
@@ -92,7 +79,8 @@ function moreLandingZoneTrigger()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
 		area: "RTLZ",
 		message: "C1-4_LZ",
-		reinforcements: 90 // changes!
+		reinforcements: 90, // changes!
+		retlz: true
 	});
 	// enables all factories
 	camEnableFactory("SouthScavFactory");
@@ -101,12 +89,30 @@ function moreLandingZoneTrigger()
 	camEnableFactory("MediumNPFactory");
 }
 
+function buildDefenses()
+{
+	// First wave of trucks
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower0");
+	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower3");
+	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower6");
+
+	// Second wave of trucks
+	camQueueBuilding(NEW_PARADIGM, "GuardTower3", "BuildTower1");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower2");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower4");
+
+	// Third wave of trucks
+	camQueueBuilding(NEW_PARADIGM, "GuardTower3", "BuildTower5");
+	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower7");
+}
+
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
 		area: "RTLZ",
 		message: "C1-4_LZ",
-		reinforcements: -1 // will override later
+		reinforcements: -1, // will override later
+		retlz: true
 	});
 
 	const NP_POWER = camChangeOnDiff(10000, true);
@@ -203,5 +209,6 @@ function eventStartLevel()
 	// and also to rebuild dead trucks.
 	camManageTrucks(NEW_PARADIGM);
 
+	queue("buildDefenses", 2000);
 	queue("enableSouthScavFactory", 10000);
 }

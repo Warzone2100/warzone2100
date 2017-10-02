@@ -94,7 +94,8 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
 		area: "RTLZ",
 		message: "C1-5_LZ",
-		reinforcements: 180 //3 min
+		reinforcements: 180, //3 min
+		annihilate: true
 	});
 }
 
@@ -126,7 +127,8 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
 		area: "RTLZ",
 		message: "C1-5_LZ",
-		reinforcements: -1
+		reinforcements: -1,
+		annihilate: true
 	});
 
 	var lz = getObject("LandingZone1"); //player lz

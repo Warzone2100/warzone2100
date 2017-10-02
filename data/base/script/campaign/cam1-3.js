@@ -59,10 +59,9 @@ function playYouAreInContraventionOfTheNewParadigm()
 	});
 	camManageGroup(NPDefenseGroup, CAM_ORDER_FOLLOW, {
 		droid: "NPCommander",
-		order: CAM_ORDER_DEFEND,
+		order: CAM_ORDER_ATTACK,
 		data: {
-			pos: camMakePos("NPCommander"),
-			radius: 15,
+			pos: camMakePos("LandingZone"),
 			repair: 30,
 		},
 		repair: 30
@@ -115,7 +114,8 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
 		area: "RTLZ",
 		message: "C1-3_LZ",
-		reinforcements: 120 // changes!
+		reinforcements: 120, // changes!
+		annihilate: true
 	});
 }
 
@@ -149,7 +149,7 @@ function eventDroidBuilt(droid, structure)
 	// An example of manually managing factory groups.
 	if (!camDef(structure) || !structure || structure.id !== NPFactory.id)
 		return;
-	if (groupSize(NPDefenseGroup) < 6) // watch out! commander control limit
+	if (getObject("NPCommander") !== null && groupSize(NPDefenseGroup) < 6) // watch out! commander control limit
 		groupAdd(NPDefenseGroup, droid);
 	else if (groupSize(NPScoutGroup) < 4 && droid.body !== camTemplates.npsmc.body)
 		groupAdd(NPScoutGroup, droid);// heavy tanks don't go scouting
@@ -164,7 +164,8 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
 		area: "RTLZ",
 		message: "C1-3_LZ",
-		reinforcements: -1 // will override later
+		reinforcements: -1, // will override later
+		annihilate: true
 	});
 
 	var startpos = getObject("StartPosition");

@@ -23,8 +23,7 @@
 	"object_5": { "label": "NPResearchFacility", "id": 458, "player": 1, "type": 1 },
 	"position_5": { "label": "HeavyNPFactoryAssembly", "pos": [ 3648, 2368 ] },
 	"position_6": { "label": "MediumNPFactoryAssembly", "pos": [ 4032, 1984 ] },
-	"radius_1": { "label": "HeavyNPFactoryTrigger", "subscriber": 0, "pos" : [ 3328, 1536 ], "radius": 1280 },
-	"radius_2": { "label": "MediumNPFactoryTrigger", "subscriber": 0, "pos" : [ 3840, 2688 ], "radius": 1280 },
+	"radius_1": { "label": "NPBaseDetectTrigger", "subscriber": 0, "pos" : [ 3840, 5504 ], "radius": 800 },
 
 	"position_7" : { "label": "BuildTower0", "pos": [ 2880, 3264 ] },
 	"position_8" : { "label": "BuildTower1", "pos": [ 3136, 3520 ] },
@@ -34,11 +33,12 @@
 	"position_12": { "label": "BuildTower5", "pos": [ 6336, 3264 ] },
 	"position_13": { "label": "BuildTower6", "pos": [ 4416, 4288 ] },
 	"position_14": { "label": "BuildTower7", "pos": [ 4672, 4288 ] },
+	"position_15": { "label": "nearSensor", "pos": [ 3456, 3328 ] },
 
 	"area_6": { "label": "LandingZoneTrigger", "subscriber": 0, "pos1": [ 7232, 4416 ], "pos2": [ 7744, 4928 ] },
 	"area_7": { "label": "AttackGroupMedium", "pos1": [ 3264, 3008 ], "pos2": [ 3648, 3264 ] },
 	"area_8": { "label": "AttackGroupLight", "pos1": [ 3392, 2112 ], "pos2": [ 3776, 2624 ] },
 
-	"radius_3": { "label": "removeRedObjectiveBlip", "subscriber": 0, "pos" : [ 4096, 3640 ], "radius": 700 },
-	"radius_4": { "label": "triggerLZ2Blip", "subscriber": 0, "pos" : [ 6160, 3840 ], "radius": 800 }
+	"radius_2": { "label": "removeRedObjectiveBlip", "subscriber": 0, "pos" : [ 4096, 3640 ], "radius": 700 },
+	"radius_3": { "label": "triggerLZ2Blip", "subscriber": 0, "pos" : [ 6160, 3840 ], "radius": 800 }
 }

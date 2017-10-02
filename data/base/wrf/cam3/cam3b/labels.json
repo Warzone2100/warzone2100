@@ -9,7 +9,7 @@
 	"position_7": { "label": "nexusWestTransportPos",	"pos": [ 1024, 6784 ] },
 	"position_8": { "label": "eastRetreat",			"pos": [ 6464, 7104 ] },
 	"position_9": { "label": "westRetreat",			"pos": [ 704, 6592 ] },
-	"position_10": { "label": "westPhantomFactory",	"pos": [ 64, 10816 ] },
+	"position_10": { "label": "westPhantomFactory",		"pos": [ 64, 2624  ] },
 	"position_11": { "label": "northEastOfLake",		"pos": [ 5952, 1856 ] },
 	"position_12": { "label": "gammaBase",			"pos": [ 1728, 1472 ] },
 	"position_13": { "label": "northEndOfPass",		"pos": [ 2496, 6080 ] },

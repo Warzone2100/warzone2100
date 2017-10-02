@@ -123,6 +123,9 @@ function eventStartLevel()
 
 	enableStartingBuildings();
 	camCompleteRequiredResearch(PLAYER_RES, CAM_HUMAN_PLAYER);
+	//These are available without needing to build a HQ.
+	enableTemplate("ConstructionDroid");
+	enableTemplate("ViperLtMGWheels");
 
 	// give player briefing
 	hackAddMessage("CMB1_MSG", CAMP_MSG, CAM_HUMAN_PLAYER, false);

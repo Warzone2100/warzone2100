@@ -71,22 +71,13 @@ function enableFactories()
 	camEnableFactory("COVtolFac-b3");
 }
 
-//Everything must be destroyed.
-function extraVictoryCondition()
-{
-	if (!enumStruct(THE_COLLECTIVE).length)
-	{
-		return true;
-	}
-}
-
 function enableReinforcements()
 {
 	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2END", {
 		area: "RTLZ",
 		reinforcements: 180, //3 min
-		callback: "extraVictoryCondition",
+		annihilate: true
 	});
 }
 
@@ -95,6 +86,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2END", {
 		area: "RTLZ",
 		reinforcements: -1,
+		annihilate: true
 	});
 
 	var startpos = getObject("startPosition");

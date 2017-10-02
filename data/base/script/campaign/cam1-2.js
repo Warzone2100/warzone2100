@@ -57,7 +57,8 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
 		area: "RTLZ",
 		message: "C1-2_LZ",
-		reinforcements: 60
+		reinforcements: 60,
+		retlz: true
 	});
 }
 
@@ -66,9 +67,10 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
 		area: "RTLZ",
 		message: "C1-2_LZ",
-		reinforcements: -1
+		reinforcements: -1,
+		retlz: true
 	});
-	
+
 	var startpos = getObject("StartPosition");
 	var lz = getObject("LandingZone");
 	var tent = getObject("TransporterEntry");

@@ -176,15 +176,14 @@ function activateNexusGroups()
 		//fallback: camMakePos("westRetreat")
 	});
 
-	camManageGroup(camMakeGroup("gammaBaseCleanup"), CAM_ORDER_DEFEND, {
+	camManageGroup(camMakeGroup("gammaBaseCleanup"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("gammaBase"),
 			camMakePos("northEndOfPass"),
 		],
-		regroup: true,
-		count: -1,
-		morale: 10,
-		fallback: camMakePos("gammaBase")
+		interval: 30000,
+		regroup: false,
+		count: -1
 	});
 }
 
@@ -242,13 +241,13 @@ function eventStartLevel()
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
-		"NX-EastBase": {
+		"NXEastBase": {
 			cleanup: "NXEastBaseCleanup",
 			detectMsg: "CM3B_BASE4",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
-		"NX-WestBase": {
+		"NXWestBase": {
 			cleanup: "NXWestBaseCleanup",
 			detectMsg: "CM3B_BASE6",
 			detectSnd: "pcv379.ogg",
@@ -258,34 +257,17 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"gammaFactory": {
-			order: CAM_ORDER_PATROL,
-			data: {
-				pos: [
-					camMakePos("northEndOfPass"),
-					camMakePos("southOfRidge"),
-					camMakePos("westRidge"),
-					camMakePos("eastRidge"),
-				],
-				interval: 45000,
-				count: -1
-			},
-			group: camMakeGroup("eastNXGroup"),
+			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(45000),
-			regroup: false,
+			regroup: true,
 			repair: 40,
 			templates: [nxmrailh, nxmscouh]
 		},
 		"gammaCyborgFactory": {
-			order: CAM_ORDER_DEFEND,
-			data: {
-				pos: [
-					camMakePos("gammaBase"),
-					camMakePos("northEndOfPass"),
-				]
-			},
+			order: CAM_ORDER_ATTACK,
 			group: camMakeGroup("gammaBaseCleanup"),
-			groupSize: 5,
+			groupSize: 6,
 			throttle: camChangeOnDiff(40000),
 			regroup: true,
 			repair: 40,
@@ -300,5 +282,5 @@ function eventStartLevel()
 
 	queue("transferPower", 3000);
 	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
-	queue("enableAllFactories", camChangeOnDiff(300000)); //5 min
+	queue("enableAllFactories", camChangeOnDiff(301000)); //5 min
 }

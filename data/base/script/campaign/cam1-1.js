@@ -8,27 +8,27 @@ const scavs = 7; //Scav player number
 camAreaEvent("scavBaseTrigger", function()
 {
 	var ambushGroup = camMakeGroup(enumArea("eastScavs", scavs, false));
-	camManageGroup(ambushGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("artifactLocation") }
-	);
+	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
+		pos: camMakePos("artifactLocation")
+	});
 });
 
 //Moves west scavs units closer to the base - triggered from right path
 camAreaEvent("ambush1Trigger", function()
 {
 	var ambushGroup = camMakeGroup(enumArea("westScavs", scavs, false));
-	camManageGroup(ambushGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("ambush1") }
-	);
+	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
+		pos: camMakePos("ambush1")
+	});
 });
 
 //Sends some units towards player LZ - triggered from left path
 camAreaEvent("ambush2Trigger", function()
 {
 	var ambushGroup = camMakeGroup(enumArea("northWestScavs", scavs, false));
-	camManageGroup(ambushGroup, CAM_ORDER_ATTACK,
-		{ pos: camMakePos("ambush2") }
-	);
+	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
+		pos: camMakePos("ambush2")
+	});
 });
 
 function eventPickup(feature, droid)
@@ -45,7 +45,8 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_2S", {
 		area: "RTLZ",
 		message: "C1-1_LZ",
-		reinforcements: -1 //No reinforcements
+		reinforcements: -1, //No reinforcements
+		retlz: true
 	});
 
 	var startpos = getObject("startPosition");

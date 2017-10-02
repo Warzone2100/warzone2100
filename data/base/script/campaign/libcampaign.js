@@ -2319,6 +2319,17 @@ const CAM_VICTORY_TIMEOUT = 3;
 //;; 		conditions are met, \textbf{undefined} means suppress
 //;; 		other victory checks ("clearly not won yet").
 //;; 	\end{description}
+//;; For offworld victory, some more extra data parameters can be defined:
+//;; 	\begin{description}
+//;;		\item[retlz] Force the player to return to the LZ area:
+//;; 		\textbf{false} mission does not require a LZ return,
+//;; 		\textbf{true} mission requires all units to be at LZ to win.
+//;; 	\end{description}
+//;; 	\begin{description}
+//;;		\item[annihilate] Player must destroy every thing on map to win:
+//;; 		\textbf{false} mission does not require everything destroyed,
+//;; 		\textbf{true} mission requires total map annihilation.
+//;; 	\end{description}
 //;; \end{description}
 function camSetStandardWinLossConditions(kind, nextLevel, data)
 {
@@ -2506,13 +2517,20 @@ function __camVictoryOffworld()
 	}
 	var total = countDroid(DROID_ANY, CAM_HUMAN_PLAYER); // for future use
 	if (total === 0)
+	{
 		__camGameLost();
+		return;
+	}
+	var forceLZ = camDef(__camVictoryData.retlz) ? __camVictoryData.retlz : false;
+	var destroyAll = camDef(__camVictoryData.annihilate) ? __camVictoryData.annihilate : false;
 
 	if (camCheckExtraObjective() && camAllArtifactsPickedUp())
 	{
-		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
+		var enemyLen = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length;
+		if (!forceLZ && !enemyLen)
 		{
-			//if there are no more enemies, win instantly.
+			//if there are no more enemies, win instantly unless forced to go
+			//back to the LZ.
 			__camGameWon();
 			return;
 		}
@@ -2529,7 +2547,7 @@ function __camVictoryOffworld()
 		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
 			return (obj.type === DROID && !camIsTransporter(obj));
 		}).length;
-		if (atlz === total)
+		if (((forceLZ && destroyAll && !enemyLen) || (forceLZ && !destroyAll)) && (atlz === total))
 		{
 			__camGameWon();
 			return;
@@ -2539,22 +2557,24 @@ function __camVictoryOffworld()
 			__camTriggerLastAttack();
 		}
 
-
-		if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
+		if (!destroyAll || forceLZ)
 		{
-			camTrace("Return to LZ message displayed");
-			camMarkTiles(lz);
-			if (camDef(__camVictoryData.message))
-				hackAddMessage(__camVictoryData.message, PROX_MSG,
-				               	CAM_HUMAN_PLAYER, false);
+			if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
+			{
+				camTrace("Return to LZ message displayed");
+				camMarkTiles(lz);
+				if (camDef(__camVictoryData.message))
+					hackAddMessage(__camVictoryData.message, PROX_MSG,
+					               	CAM_HUMAN_PLAYER, false);
+			}
+			if (__camRTLZTicker % 30 === 0) // every 30 seconds
+			{
+				var pos = camMakePos(lz);
+				playSound("pcv427.ogg", pos.x, pos.y, 0);
+				console("Return to LZ");
+			}
+			++__camRTLZTicker;
 		}
-		if (__camRTLZTicker % 30 === 0) // every 30 seconds
-		{
-			var pos = camMakePos(lz);
-			playSound("pcv427.ogg", pos.x, pos.y, 0);
-			console("Return to LZ");
-		}
-		++__camRTLZTicker;
 	}
 	if (enumArea(lz, ENEMIES, false).length > 0)
 	{
