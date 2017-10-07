@@ -59,6 +59,17 @@ add_dependencies(warzone2100 data_base)
 install(TARGETS warzone2100 COMPONENT Core DESTINATION ".")
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+    get_target_property(QtCoreLib Qt5::Core LOCATION)
+    install(FILES ${QtCoreLib} COMPONENT Core DESTINATION ".")
+    get_target_property(QtGuiLib Qt5::Gui LOCATION)
+    install(FILES ${QtGuiLib} COMPONENT Core DESTINATION ".")
+    get_target_property(QtGuiPlugin Qt5::QWindowsIntegrationPlugin LOCATION)
+    install(FILES ${QtGuiPlugin} COMPONENT Core DESTINATION "platforms")
+    get_target_property(QtScriptLib Qt5::Script LOCATION)
+    install(FILES ${QtScriptLib} COMPONENT Core DESTINATION ".")
+    get_target_property(QtWidgetstLib Qt5::Widgets LOCATION)
+    install(FILES ${QtWidgetstLib} COMPONENT Core DESTINATION ".")
+
     install(FILES
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/SDL2.dll"
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/ogg.dll"
