@@ -257,7 +257,6 @@ function cam3Setup()
 function eventStartLevel()
 {
 	const MISSION_TIME = camChangeOnDiff(7200); //120 minutes.
-	const NEXUS_POWER = camChangeOnDiff(50000, true);
 	const PLAYER_POWER = 16000;
 	const REINFORCEMENT_TIME = 300; //5 minutes.
 	var startpos = getObject("startPosition");
@@ -278,7 +277,7 @@ function eventStartLevel()
 		"NXResearchLabArti": { tech: "R-Sys-Engineering03" },
 	});
 
-	setPower(NEXUS_POWER, NEXUS);
+	setPower(AI_POWER, NEXUS);
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	cam3Setup();
 
@@ -317,12 +316,13 @@ function eventStartLevel()
 					camMakePos("southWestBasePatrol"),
 					camMakePos("westEntrancePatrol"),
 					camMakePos("playerLZPatrol"),
-				]
+				],
+				regroup: false,
+				repair: 40,
+				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
 			group: camMakeGroup("cybValleyPatrol"),
 			templates: [nxcyrail, nxcyscou]
 		},
@@ -332,21 +332,25 @@ function eventStartLevel()
 				pos: [
 					camMakePos("northFacAssembly"),
 					camMakePos("ambushPlayerPos"),
-				]
+				],
+				regroup: false,
+				repair: 40,
+				count: -1,
 			},
 			groupSize: 8,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
 			group: camMakeGroup("cybAttackers"),
 			templates: [nxcyrail, nxcyscou]
 		},
 		"NXcybFac-b3-2": {
 			order: CAM_ORDER_ATTACK,
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(50000),
 			group: camMakeGroup("NEAttackerGroup"),
 			templates: [nxcyrail, nxcyscou]
 		},
@@ -357,12 +361,13 @@ function eventStartLevel()
 					camMakePos("hoverGrpPos1"),
 					camMakePos("hoverGrpPos2"),
 					camMakePos("hoverGrpPos3"),
-				]
+				],
+				regroup: false,
+				repair: 45,
+				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(180000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(70000),
 			group: camMakeGroup("hoverPatrolGrp"),
 			templates: [nxmscouh]
 		},
@@ -373,11 +378,13 @@ function eventStartLevel()
 					camMakePos("genericasAssembly"),
 					camMakePos("northFacAssembly"),
 				],
+				regroup: false,
+				repair: 40,
+				radius: 15,
+				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(50000),
 			group: camMakeGroup("NEDefenderGroup"),
 			templates: [nxcyrail, nxcyscou]
 		},

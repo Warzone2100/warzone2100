@@ -103,7 +103,7 @@ function eventStartLevel()
 		"COHeavyFacL-b2": { tech: "R-Wpn-HvyHowitzer" },
 	});
 
-	setPower(camChangeOnDiff(80000, true), THE_COLLECTIVE); //10000.
+	setPower(AI_POWER, THE_COLLECTIVE); //10000.
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
@@ -132,34 +132,45 @@ function eventStartLevel()
 			assembly: camMakePos("cyborgAssembly-b1"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(90000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [cocybag, npcybr, npcybf, npcybc]
 		},
 		"COHeavyFacL-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(80000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comhpv, cohact]
 		},
 		"COHeavyFacR-b2": {
 			assembly: camMakePos("heavyAssembly-b2"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(80000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comrotmh, cohct]
 		},
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(180000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(90000),
+			data: {
+				regroup: false,
+				count: -1,
+			},
 			templates: [comhvat]
 		},
 	});

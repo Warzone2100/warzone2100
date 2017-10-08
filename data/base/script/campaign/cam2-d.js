@@ -51,7 +51,7 @@ function captureUplink()
 {
 	const GOODSND = "pcv621.ogg";	//"Objective captured"
 	playSound(GOODSND);
-	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	//setAlliance(UPLINK, THE_COLLECTIVE, false);
 }
 
@@ -118,7 +118,7 @@ function eventStartLevel()
 	setAlliance(CAM_HUMAN_PLAYER, UPLINK, true);
 	setAlliance(THE_COLLECTIVE, UPLINK, true);
 
-	setPower(camChangeOnDiff(40000, true), THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
@@ -134,17 +134,23 @@ function eventStartLevel()
 		"COHeavyFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(80000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [cohhpv, comhltat, cohct]
 		},
 		"COSouthCyborgFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybc, npcybf, npcybr, cocybag]
 		},
 	});

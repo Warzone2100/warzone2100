@@ -40,16 +40,16 @@ camAreaEvent("damTrigger", function(droid)
 			camMakePos("damWaypoint2"),
 			camMakePos("damWaypoint3"),
 		],
-		morale: 10,
-		fallback: camMakePos("damWaypoint1"),
+		//morale: 10,
+		//fallback: camMakePos("damWaypoint1"),
 		repair: 40,
-		regroup: false,
+		regroup: true,
 	});
 });
 
 function camEnemyBaseEliminated_COEastBase()
 {
-	hackRemoveMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
 function setupCyborgsNorth()
@@ -106,7 +106,7 @@ function eventStartLevel()
 		"COCyborgFactoryL": { tech: "R-Wpn-MG4" },
 	});
 
-	setPower(camChangeOnDiff(40000, true), THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
@@ -123,25 +123,34 @@ function eventStartLevel()
 			assembly: camMakePos("mediumFactoryAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(60000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comct, comatt, comhpv]
 		},
 		"COCyborgFactoryL": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(100000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 30,
+				count: -1,
+			},
 			templates: [cocybag, npcybf, npcybr]
 		},
 		"COCyborgFactoryR": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 30,
+				count: -1,
+			},
 			templates: [npcybr, npcybc]
 		},
 	});

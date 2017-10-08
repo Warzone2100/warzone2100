@@ -271,7 +271,6 @@ function enableReinforcements()
 
 function eventStartLevel()
 {
-	const NEXUS_POWER = camChangeOnDiff(20000);
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	var tent = getObject("transporterEntry");
@@ -309,7 +308,7 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 	setScrollLimits(0, 32, 64, 64);
 
-	setPower(NEXUS_POWER, NEXUS);
+	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	camSetEnemyBases({
@@ -325,17 +324,23 @@ function eventStartLevel()
 		"NXCybFac1": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(30000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NXCybFac2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(180000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NXMediumFac": {
@@ -345,13 +350,15 @@ function eventStartLevel()
 					camMakePos("defenderPos1"),
 					camMakePos("defenderPos2"),
 					camMakePos("defenderPos3"),
-				]
+				],
+				regroup: false,
+				repair: 45,
+				count: -1,
+				radius: 15,
 			},
 			group: camMakeGroup("baseDefenderGroup"),
 			groupSize: 5,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(60000),
 			templates: [nxmscouh, nxmrailh]
 		},
 	});

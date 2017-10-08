@@ -87,7 +87,7 @@ function discoverGammaBase()
 	reunited = true;
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
-	setMissionTime(camChangeOnDiff(5400)) // 1.5 hr.
+	setMissionTime(camChangeOnDiff(5400)); // 1.5 hr.
 	setPower(playerPower(me) + camChangeOnDiff(10000));
 
 	playSound("power-transferred.ogg");
@@ -140,7 +140,6 @@ function betaAlive()
 //Vtol factory this time.
 function eventStartLevel()
 {
-	const NEXUS_POWER = camChangeOnDiff(50000);
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	var limboLZ = getObject("limboDroidLZ");
@@ -152,10 +151,10 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
-	setNoGoArea(lz.x1, lz.y1, lz.x2, lz.y2, CAM_HUMAN_PLAYER)
+	setNoGoArea(lz.x1, lz.y1, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(600)); //10 minutes for first part.
 
-	setPower(NEXUS_POWER, NEXUS);
+	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);
 	hackAddMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);
@@ -193,25 +192,34 @@ function eventStartLevel()
 		"NXbase1HeavyFacArti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(180000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(50000),
+			data: {
+				regroup: false,
+				repair: 45,
+				count: -1,
+			},
 			templates: [nxmrailh, nxlflash, nxmlinkh] //nxmsamh
 		},
 		"NXcybFacArti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(30000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NXvtolFacArti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(100000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [nxmheapv, nxmtherv]
 		},
 	});

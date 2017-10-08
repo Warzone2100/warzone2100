@@ -20,22 +20,22 @@ const COLLECTIVE_RES = [
 
 function camEnemyBaseDetected_COBase1()
 {
-	hackRemoveMessage("C27_OBJECTIVE1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C27_OBJECTIVE1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
 function camEnemyBaseDetected_COBase2()
 {
-	hackRemoveMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
 function camEnemyBaseDetected_COBase3()
 {
-	hackRemoveMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
 function camEnemyBaseDetected_COBase4()
 {
-	hackRemoveMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
 function baseFourGroupAttack()
@@ -110,7 +110,7 @@ function eventStartLevel()
 		"COHeavyFac-Arti-b2": { tech: "R-Wpn-Cannon5" },
 	});
 
-	setPower(camChangeOnDiff(80000, true), THE_COLLECTIVE); //10000.
+	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
@@ -146,50 +146,67 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(60000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comagt, cohact, cohhpv, comtath]
 		},
 		"COCyborgFac-b2": {
 			assembly: camMakePos("base2CybAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybc, cocybag]
 		},
 		"COCyborgFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybf, npcybr]
 		},
 		"COHeavyFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(90000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(80000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comrotmh, comhltat, cohct]
 		},
 		"COCyborgFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(50000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [cocybag, npcybc, npcybr]
 		},
 		"COVtolFactory-b4": {
 			assembly: camMakePos("base4VTOLAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(70000),
+			data: {
+				regroup: false,
+				count: -1,
+			},
 			templates: [colagv, commorv]
 		},
 	});

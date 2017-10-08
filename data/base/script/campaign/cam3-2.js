@@ -264,7 +264,6 @@ function alphaTeamAlive()
 
 function eventStartLevel()
 {
-	const NEXUS_POWER = camChangeOnDiff(40000);
 	const ALPHA_POWER = 5000;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
@@ -282,7 +281,7 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	setPower(NEXUS_POWER, NEXUS);
+	setPower(AI_POWER, NEXUS);
 	setPower(ALPHA_POWER, ALPHA);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, ALPHA);

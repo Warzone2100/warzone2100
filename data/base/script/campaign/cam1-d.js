@@ -33,7 +33,12 @@ camAreaEvent("causeWayTrig", function()
 	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 0, y: 0 },
-			exit: { x: 0, y: 0 }
+			exit: { x: 0, y: 0 },
+			data: {
+				regroup: false,
+				count: -1,
+				repair: 40,
+			},
 		}
 	);
 });
@@ -139,7 +144,8 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
 		area: "RTLZ",
 		message: "C1D_LZ",
-		reinforcements: 120 //2 min
+		reinforcements: 120, //2 min
+		eliminateBases: true
 	});
 }
 
@@ -148,7 +154,8 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
 		area: "RTLZ",
 		message: "C1D_LZ",
-		reinforcements: -1
+		reinforcements: -1,
+		eliminateBases: true
 	});
 
 	var startpos = getObject("startPosition");
@@ -168,7 +175,7 @@ function eventStartLevel()
 		"NPFactoryNE": { tech: "R-Vehicle-Body12" }, //Main base factory
 	});
 
-	setPower(camChangeOnDiff(100000, true), NEW_PARADIGM);
+	setPower(AI_POWER, NEW_PARADIGM);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 
 	camSetEnemyBases({
@@ -204,40 +211,55 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 45,
+				count: -1,
+			},
 			templates: [ nphmgh, npltath, nphch ] //Hover factory
 		},
 		"NPFactoryE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(90000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 30,
+				count: -1,
+			},
 			templates: [ npltat, npmsens, npmorb, npsmct, nphct ] //variety
 		},
 		"NPFactoryNE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 25,
+				count: -1,
+			},
 			templates: [ nphct, npsbb, npmorb ] //tough units
 		},
 		"NPCybFactoryW": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 25,
+				count: -1,
+			},
 			templates: [ npcybc, npcybf, npcybr ]
 		},
 		"NPCybFactoryE": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 25,
+				count: -1,
+			},
 			templates: [ npcybc, npcybf, npcybr ]
 		},
 		"NPCybFactoryNE": {
@@ -245,8 +267,11 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(70000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 25,
+				count: -1,
+			},
 			templates: [ npcybc, npcybf, npcybr ]
 		},
 	});

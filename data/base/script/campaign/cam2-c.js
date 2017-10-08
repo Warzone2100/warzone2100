@@ -33,7 +33,7 @@ function videoTrigger()
 	civilianOrders();
 	captureCivilians();
 
-	hackRemoveMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	hackAddMessage("MB2_C_MSG2", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C2C_OBJ2", PROX_MSG, CAM_HUMAN_PLAYER, true);
 }
@@ -290,7 +290,7 @@ function eventStartLevel()
 		"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
 	});
 
-	setPower(camChangeOnDiff(200000, true), THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); //120 min
 
 	setAlliance(THE_COLLECTIVE, CIVILIAN, true);
@@ -322,49 +322,65 @@ function eventStartLevel()
 		"COHeavyFac-Upgrade": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(60000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comit, cohct, comhpv, cohbbt]
 		},
 		"COHeavyFac-Leopard": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(100000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(60000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comit, cohct, comhpv, cohbbt]
 		},
 		"COCyborgFactoryL": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(80000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybf, npcybc, npcybr]
 		},
 		"COCyborgFactoryR": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(80000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybf, npcybc, npcybr]
 		},
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(100000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(70000),
+			data: {
+				regroup: false,
+				count: -1,
+			},
 			templates: [commorv, colagv]
 		},
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(100000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(70000),
+			data: {
+				regroup: false,
+				count: -1,
+			},
 			templates: [colagv, commorv]
 		},
 	});

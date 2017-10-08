@@ -31,11 +31,14 @@ camAreaEvent("NorthConvoyTrigger", function(droid)
 
 camAreaEvent("SouthConvoyTrigger", function(droid)
 {
+	camEnableFactory("ScavFactory");
 	camManageGroup(camMakeGroup("SouthConvoyForce"), CAM_ORDER_DEFEND, {
-		pos: camMakePos("SouthConvoyLoc")
+		pos: camMakePos("SouthConvoyLoc"),
+		radius: 6,
 	});
 	var scout = getObject("ScoutDroid");
-	if (camDef(scout) && scout) {
+	if (camDef(scout) && scout)
+	{
 		camTrace("New Paradigm sensor scout retreating");
 		var pos = camMakePos("ScoutDroidTarget");
 		orderDroidLoc(scout, DORDER_MOVE, pos.x, pos.y);
@@ -45,7 +48,8 @@ camAreaEvent("SouthConvoyTrigger", function(droid)
 camAreaEvent("WestConvoyTrigger", function(droid)
 {
 	camManageGroup(camMakeGroup("WestConvoyForce"), CAM_ORDER_DEFEND, {
-		pos: camMakePos("WestConvoyLoc")
+		pos: camMakePos("WestConvoyLoc"),
+		radius: 6,
 	});
 });
 
@@ -54,17 +58,18 @@ function playYouAreInContraventionOfTheNewParadigm()
 	hackAddMessage("SB1_3_MSG4", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	camManageGroup(NPScoutGroup, CAM_ORDER_COMPROMISE, {
 		pos: camMakePos("RTLZ"),
-		repair: 30,
+		repair: 66,
 		regroup: true,
 	});
 	camManageGroup(NPDefenseGroup, CAM_ORDER_FOLLOW, {
 		droid: "NPCommander",
-		order: CAM_ORDER_ATTACK,
+		order: CAM_ORDER_DEFEND,
 		data: {
-			pos: camMakePos("LandingZone"),
-			repair: 30,
+			pos: camMakePos("NPCommander"),
+			radius: 22,
+			repair: 66,
 		},
-		repair: 30
+		repair: 66,
 	});
 }
 
@@ -90,7 +95,6 @@ camAreaEvent("ScavTrigger", function(droid)
 camAreaEvent("NPTrigger", function(droid)
 {
 	camCallOnce("enableReinforcements");
-	camCallOnce("enableNP");
 });
 
 function eventAttacked(victim, attacker) {
@@ -177,8 +181,8 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	setPower(camChangeOnDiff(50000, true), NEW_PARADIGM);
-	setPower(camChangeOnDiff(400, true), 7);
+	setPower(AI_POWER, NEW_PARADIGM);
+	setPower(AI_POWER, 7);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 	setAlliance(1, 7, true);
@@ -218,18 +222,19 @@ function eventStartLevel()
 			},
 			groupSize: 4,
 			maxSize: 10,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(25000),
 			templates: [ rbuggy, bloke, rbjeep, buggy ]
 		},
 		"NPFactory": {
 			assembly: "NPAssembly",
 			order: CAM_ORDER_ATTACK,
 			data: {
-				regroup: true,
+				regroup: false,
+				repair: 30,
 			},
 			groupSize: 4, // sic! scouts, at most
 			maxSize: 20,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(40000),
 			templates: [ nppod, nphmg, npsmc, npsmc ]
 		},
 	});

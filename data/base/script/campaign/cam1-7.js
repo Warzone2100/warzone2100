@@ -64,7 +64,7 @@ camAreaEvent("NPTransportTrigger", function()
 camAreaEvent("artifactCheckNP", function()
 {
 	enemyHasArtifact = true;
-	var artifact = getArtifacts();
+	var artifact = camGetArtifacts();
 	camSafeRemoveObject(artifact[0], false);
 
 	hackAddMessage("SB1_7_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
@@ -96,11 +96,22 @@ function eventTransporterLanded(transport)
 
 			for (var i = 0, l = crew.length; i < l; ++i)
 			{
-				camSafeRemoveObject(crew[i], false);
+				var obj = crew[i];
+				if (obj.type === FEATURE && obj.stattype === ARTIFACT)
+				{
+					enemyStoleArtifact = true;
+				}
+				camSafeRemoveObject(obj, false);
 			}
 		}
+	}
+}
 
-		enemyStoleArtifact = true; //Instant lose.
+function eventTransporterExit(transport)
+{
+	if (transport.player === NEW_PARADIGM && camDef(enemyStoleArtifact) && enemyStoleArtifact)
+	{
+		gameOverMessage(false);
 	}
 }
 
@@ -117,7 +128,7 @@ function eventGroupLoss(obj, group, newsize)
 		});
 
 		enemyHasArtifact = false;
-		hackRemoveMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true);
+		hackRemoveMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER);
 	}
 }
 
@@ -141,11 +152,6 @@ function buildLancers()
 //Must destroy all of the New Paradigm droids and make sure the artifact is safe.
 function extraVictory()
 {
-	if (camDef(enemyStoleArtifact) && enemyStoleArtifact)
-	{
-		return false;
-	}
-
 	if (!enumDroid(NEW_PARADIGM).length)
 	{
 		return true;
@@ -160,7 +166,8 @@ function enableReinforcements()
 		area: "RTLZ",
 		message: "C1-7_LZ",
 		reinforcements: 60, //1 min
-		callback: "extraVictory"
+		callback: "extraVictory",
+		retlz: true,
 	});
 }
 
@@ -203,7 +210,8 @@ function eventStartLevel()
 		area: "RTLZ",
 		message: "C1-7_LZ",
 		reinforcements: -1,
-		callback: "extraVictory"
+		callback: "extraVictory",
+		retlz: true,
 	});
 
 	//Make sure the New Paradigm and Scavs are allies
@@ -215,8 +223,8 @@ function eventStartLevel()
 		"artifactLocation": { tech: "R-Wpn-Cannon3Mk1" },
 	});
 
-	setPower(camChangeOnDiff(15000, true), NEW_PARADIGM);
-	setPower(camChangeOnDiff(1000, true), SCAVS);
+	setPower(AI_POWER, NEW_PARADIGM);
+	setPower(AI_POWER, SCAVS);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RESEARCH, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
@@ -250,24 +258,30 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(10000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: true,
+				count: -1,
+			},
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 		"scavSouthEastFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(10000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: true,
+				count: -1,
+			},
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 		"scavNorthEastFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(10000),
-			regroup: true,
-			repair: 40,
+			rdata: {
+				regroup: true,
+				count: -1,
+			},
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 	});

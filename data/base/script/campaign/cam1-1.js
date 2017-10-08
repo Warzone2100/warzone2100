@@ -2,12 +2,12 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const scavs = 7; //Scav player number
+const SCAVS = 7; //Scav player number
 
 //Ambush player from scav base - triggered from middle path
 camAreaEvent("scavBaseTrigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("eastScavs", scavs, false));
+	var ambushGroup = camMakeGroup(enumArea("eastScavs", SCAVS, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("artifactLocation")
 	});
@@ -16,7 +16,7 @@ camAreaEvent("scavBaseTrigger", function()
 //Moves west scavs units closer to the base - triggered from right path
 camAreaEvent("ambush1Trigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("westScavs", scavs, false));
+	var ambushGroup = camMakeGroup(enumArea("westScavs", SCAVS, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush1")
 	});
@@ -25,7 +25,7 @@ camAreaEvent("ambush1Trigger", function()
 //Sends some units towards player LZ - triggered from left path
 camAreaEvent("ambush2Trigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("northWestScavs", scavs, false));
+	var ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAVS, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush2")
 	});
@@ -57,6 +57,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	setPower(AI_POWER, SCAVS);
 
 	//Get rid of the already existing crate and replace with another
 	camSafeRemoveObject("artifact1", false);

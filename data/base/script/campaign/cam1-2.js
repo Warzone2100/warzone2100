@@ -80,7 +80,7 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	setPower(camChangeOnDiff(800, true), 7);
+	setPower(AI_POWER, 7);
 
 	camSetEnemyBases({
 		"NorthGroup": {

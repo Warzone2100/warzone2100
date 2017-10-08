@@ -35,7 +35,7 @@ camAreaEvent("factoryTrigger", function(droid)
 
 function camEnemyBaseDetected_COMiddleBase()
 {
-	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
 function eventVideoDone()
@@ -121,7 +121,7 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setPower(camChangeOnDiff(60000, true), THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); // 2 hr.
 	eventVideoDone(); //Play video sequences.
 
@@ -160,49 +160,67 @@ function eventStartLevel()
 		"COHeavyFacL-b1": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(70000),
+			data: {
+				regroup: false,
+				repair: 30,
+				count: -1,
+			},
 			templates: [comatt, cohct, comct]
 		},
 		"COHeavyFacR-b1": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(60000),
+			data: {
+				regroup: false,
+				repair: 30,
+				count: -1,
+			},
 			templates: [comatt, cohct, comct]
 		},
 		"COCybFacL-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(30000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybc, npcybr]
 		},
 		"COCybFacR-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybc, npcybr, npcybf, npcybm]
 		},
 		"COHeavyFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
-			regroup: false,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 30,
+				count: -1,
+			},
 			templates: [comatt, comit]
 		},
 		"COCybFac-b4": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybc, npcybr, npcybf]
 		},
 	});

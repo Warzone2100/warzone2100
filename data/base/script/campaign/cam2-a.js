@@ -275,7 +275,6 @@ function eventStartLevel()
 {
 	const MISSION_TIME = camChangeOnDiff(3600); //60 minutes.
 	const PLAYER_POWER = 5000;
-	const COLLECTIVE_POWER = camChangeOnDiff(10000, true);
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone"); //player lz
 	var enemyLz = getObject("COLandingZone");
@@ -298,7 +297,7 @@ function eventStartLevel()
 	});
 
 	setMissionTime(MISSION_TIME);
-	setPower(COLLECTIVE_POWER, THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	cam2Setup();
 

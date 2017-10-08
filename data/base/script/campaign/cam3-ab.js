@@ -143,7 +143,7 @@ function resistanceResearched()
 
 function eventStartLevel()
 {
-	const NEXUS_POWER = 999999;
+
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
@@ -158,7 +158,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(3600)); //1 hour.
 
-	setPower(NEXUS_POWER, NEXUS);
+	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);

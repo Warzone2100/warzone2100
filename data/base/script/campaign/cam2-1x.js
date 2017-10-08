@@ -31,7 +31,7 @@ camAreaEvent("crashSite", function(droid)
 
 	//set downed transport team colour to be Project Green.
 	changePlayerColour(TRANSPORT_TEAM, 0);
-	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
 	for (var i = 0; i < downedTransportUnits.length; i++)
@@ -154,6 +154,7 @@ function eventStartLevel()
 	//Add crash site blip and from an alliance with the crashed team.
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
+	setPower(AI_POWER, THE_COLLECTIVE);
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 

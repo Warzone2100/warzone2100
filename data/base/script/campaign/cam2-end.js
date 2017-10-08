@@ -26,10 +26,11 @@ const COLLECTIVE_RES = [
 function checkEnemyVtolArea()
 {
 	var pos = {"x": 127, "y": 64};
-	var vtols = enumRange(pos.x, pos.y, 10, THE_COLLECTIVE, false);
-	vtols.filter(function(obj) { return (obj.player === THE_COLLECTIVE) && isVTOL(obj); });
+	var vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter(function(obj) {
+		return isVTOL(obj);
+	});
 
-	for (var i = 0; i < vtols.length; ++i)
+	for (var i = 0, l = vtols.length; i < l; ++i)
 	{
 		if ((vtols[i].weapons[0].armed < 20) || (vtols[i].health < 60))
 		{
@@ -62,7 +63,7 @@ function playLastVideo()
 		return obj.type === DROID;
 	});
 
-	for (var i = 0; i < droids.length; ++i)
+	for (var i = 0, l = droids.length; i < l; ++i)
 	{
 		camSafeRemoveObject(droids[i], false);
 	}
@@ -84,16 +85,11 @@ function eventTransporterLaunch(transport)
 	}
 }
 
-//Return 8 - 15 droids.
+//Return randomly selected droid templates.
 function randomTemplates(list, isTransport)
 {
 	var droids = [];
-	var size = 8 + camRand(8);
-
-	if (camDef(isTransport))
-	{
-		size = 8 + camRand(3);
-	}
+	var size = camDef(isTransport) ? 8 + camRand(3) : 18 + camRand(8);
 
 	for (var i = 0; i < size; ++i)
 	{
@@ -137,7 +133,7 @@ function collectiveTransportScouts()
 }
 */
 
-//every 5 min
+//SouthEast attackers which are mostly cyborgs.
 function cyborgAttack()
 {
 	var southCyborgAssembly = {"x": 123, "y": 125};
@@ -147,10 +143,10 @@ function cyborgAttack()
 		data: { regroup: false, count: -1 }
 	});
 
-	queue("cyborgAttack", camChangeOnDiff(300000));
+	queue("cyborgAttack", camChangeOnDiff(240000));
 }
 
-//Every 4 min
+//North road attacker consisting of powerful weaponry.
 function tankAttack()
 {
 	var northTankAssembly = {"x": 95, "y": 3};
@@ -163,7 +159,7 @@ function tankAttack()
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
 	});
-	queue("tankAttack", camChangeOnDiff(240000));
+	queue("tankAttack", camChangeOnDiff(180000));
 }
 
 function checkIfLaunched()
@@ -196,6 +192,7 @@ function eventStartLevel()
 
 	setMissionTime(1800); // 30 min.
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 
 	videoIndex = 0;
 	allowWin = false;

@@ -115,8 +115,6 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	const NP_POWER = camChangeOnDiff(10000, true);
-	const SCAV_POWER = camChangeOnDiff(400, true);
 	const SCAVS = 7;
 	var startpos = getObject("StartPosition");
 	var lz = getObject("LandingZone1"); // will override later
@@ -128,8 +126,8 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	setPower(NP_POWER, NEW_PARADIGM);
-	setPower(SCAV_POWER, SCAVS);
+	setPower(AI_POWER, NEW_PARADIGM);
+	setPower(AI_POWER, SCAVS);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
 	setAlliance(NEW_PARADIGM, SCAVS, true);

@@ -207,8 +207,6 @@ function trapSprung()
 function eventStartLevel()
 {
 	const MISSION_TIME = camChangeOnDiff(1800); //30 minutes. Rescue part.
-	const NEXUS_POWER = camChangeOnDiff(60000); //20000
-	const GAMMA_POWER = camChangeOnDiff(60000); //20000
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
@@ -218,8 +216,8 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setPower(NEXUS_POWER, NEXUS);
-	setPower(GAMMA_POWER, GAMMA);
+	setPower(AI_POWER, NEXUS);
+	setPower(AI_POWER, GAMMA);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);
@@ -260,8 +258,11 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(45000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 45,
+				count: -1,
+			},
 			templates: [nxmrailh, nxmscouh]
 		},
 		"gammaCyborgFactory": {
@@ -269,8 +270,11 @@ function eventStartLevel()
 			group: camMakeGroup("gammaBaseCleanup"),
 			groupSize: 6,
 			throttle: camChangeOnDiff(40000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		}
 	});

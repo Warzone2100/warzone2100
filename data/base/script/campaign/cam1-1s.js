@@ -26,7 +26,7 @@ function secondVideo()
 function powerModuleBuilt()
 {
 	var gens = enumStruct(CAM_HUMAN_PLAYER, "A0PowerGenerator", false);
-	for (var x = 0; x < gens.length; ++x)
+	for (var x = 0, l = gens.length; x < l; ++x)
 	{
 		if ((gens[x].modules > 0) && (gens[x].status === BUILT))
 		{
@@ -42,6 +42,7 @@ function checkForPowerModule()
 	if (cheat || powerModuleBuilt())
 	{
 		camSetupTransporter(11, 52, 1, 32);
+		setMissionTime(camChangeOnDiff(900)); // 15 min for offworld
 		secondVideo();
 	}
 	else
@@ -54,7 +55,7 @@ function eventStartLevel()
 {
 	centreView(13, 52);
 	setNoGoArea(10, 51, 12, 53, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(900)); // 15 min
+	setMissionTime(camChangeOnDiff(600)); // 10 min for building module.
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
 	cheat = false;
 

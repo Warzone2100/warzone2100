@@ -22,6 +22,7 @@ camAreaEvent("groupTrigger", function(droid)
 {
 	camManageGroup(camMakeGroup("mediumBaseGroup"), CAM_ORDER_DEFEND, {
 		pos: camMakePos("uplinkBaseCorner"),
+		radius: 20,
 		regroup: false,
 	});
 
@@ -31,49 +32,32 @@ camAreaEvent("groupTrigger", function(droid)
 			camMakePos("grp2Pos2"),
 			camMakePos("uplinkBaseCorner"),
 		],
-		interval: 20000,
+		interval: 40000,
 		//fallback: camMakePos("heavyFacAssembly"),
+		repair: 40,
 		regroup: false,
 	});
 
 	camEnableFactory("COCyborgFactory-b1");
 	camEnableFactory("COCyborgFactory-b2");
 	camEnableFactory("COHeavyFactory-b2R");
+	enableTimeBasedFactories(); //Might as well since the player is attacking.
 });
 
 function camEnemyBaseEliminated_COUplinkBase()
 {
-	hackRemoveMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
-//Attacks after 1 minute.
 function northWestAttack()
 {
 	camManageGroup(camMakeGroup("uplinkBaseGroup"), CAM_ORDER_ATTACK, {
-		pos: [
-			camMakePos("hillPos1"),
-			camMakePos("playerLZ"),
-			camMakePos("hillPos1"),
-		],
-		morale: 50,
-		fallback: camMakePos("base1CybAssembly"),
+		//morale: 10,
+		//fallback: camMakePos("base1CybAssembly"),
 		regroup: false,
 	});
-
-	//May not be used?
-	/*
-	camManageGroup(camMakeGroup("regionGroup4"), CAM_ORDER_ATTACK, {
-		pos: [
-			camMakePos("playerLZ"),
-		],
-		morale: 70,
-		fallback: camMakePos("heavyFacAssembly"),
-		regroup: false,
-	});
-	*/
 }
 
-//Attack after 2 minutes.
 function mainBaseAttackGroup()
 {
 	camManageGroup(camMakeGroup("mainBaseGroup"), CAM_ORDER_ATTACK, {
@@ -98,7 +82,6 @@ function truckDefense()
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("heavyFacAssembly"));
 }
 
-//After 3 minutes.
 function enableTimeBasedFactories()
 {
 	camEnableFactory("COMediumFactory");
@@ -140,7 +123,7 @@ function eventStartLevel()
 		"uplink": { tech: "R-Sys-VTOLCBS-Tower01" },
 	});
 
-	setPower(camChangeOnDiff(50000, true), THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
@@ -168,50 +151,68 @@ function eventStartLevel()
 		"COCyborgFactory-Arti": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(80000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(40000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybc, npcybf, cocybag, npcybr]
 		},
 		"COCyborgFactory-b1": {
 			assembly: camMakePos("base1CybAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(60000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(50000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [cocybag, npcybr]
 		},
 		"COCyborgFactory-b2": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(70000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(50000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [npcybc, npcybf]
 		},
 		"COHeavyFactory-b2L": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(80000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [cohact, comhpv, comrotm]
 		},
 		"COHeavyFactory-b2R": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(100000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(60000),
+			data: {
+				regroup: false,
+				repair: 20,
+				count: -1,
+			},
 			templates: [comrotm, comhltat, cohact, comsensh]
 		},
 		"COMediumFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
-			regroup: false,
-			repair: 40,
+			throttle: camChangeOnDiff(45000),
+			data: {
+				regroup: false,
+				repair: 30,
+				count: -1,
+			},
 			templates: [comhpv, comagt, comrotm]
 		},
 	});

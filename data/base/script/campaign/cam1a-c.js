@@ -150,7 +150,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(3600)); //1 hour
-	//setPower(500, NEW_PARADIGM);
+	setPower(AI_POWER, NEW_PARADIGM);
 
 	// make sure player doesn't build on enemy LZs
 	for (var i = 6; i <= 10; ++i)

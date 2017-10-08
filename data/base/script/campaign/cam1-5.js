@@ -80,7 +80,12 @@ function sendNPTransport()
 			entry: { x: 1, y: 42 },
 			exit: { x: 1, y: 42 },
 			order: CAM_ORDER_ATTACK,
-			data: { regroup: true, count: -1, pos: camMakePos("NPBase") }
+			data: {
+				regroup: true,
+				count: -1,
+				pos: camMakePos("NPBase"),
+				repair: 66,
+			},
 		});
 
 		queue("sendNPTransport", camChangeOnDiff(180000)); //3 min
@@ -106,8 +111,8 @@ function enableNPFactories()
 	camEnableFactory("NPRightFactory");
 }
 
-//Destroying the NEW_PARADIGM base will activate all scav factories
-//And make any unfound SCAVS attack the player
+//Destroying the New Paradigm base will activate all scav factories
+//And make any unfound scavs attack the player
 function camEnemyBaseEliminated_NPBaseGroup()
 {
 	//Enable all scav factories
@@ -147,8 +152,8 @@ function eventStartLevel()
 	//Make sure the New Paradigm and Scavs are allies
 	setAlliance(NEW_PARADIGM, SCAVS, true);
 
-	setPower(camChangeOnDiff(15000, true), NEW_PARADIGM);
-	setPower(camChangeOnDiff(800, true), SCAVS);
+	setPower(AI_POWER, NEW_PARADIGM);
+	setPower(AI_POWER, SCAVS);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
@@ -195,48 +200,69 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
-			templates: [ npmrl, npmmct, npsbb, nphmg ]
+			templates: [ npmrl, npmmct, npsbb, nphmg ],
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 		},
 		"NPRightFactory": {
 			//assembly: "NPRightAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
-			templates: [ npmor, npsens, npsbb, nphmg ]
+			templates: [ npmor, npsens, npsbb, nphmg ],
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 		},
 		"NPCyborgFactory": {
 			//assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
-			templates: [ npcybc, npcybf, npcybm ]
+			templates: [ npcybc, npcybf, npcybm ],
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 		},
 		"ScavSouthWestFactory": {
 			assembly: "ScavSouthWestAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(15000),
-			regroup: true,
-			repair: 40,
-			templates: [ firecan, rbjeep, rbuggy, bloke ]
+			templates: [ firecan, rbjeep, rbuggy, bloke ],
+			data: {
+				regroup: false,
+				count: -1,
+			},
 		},
 		"ScavSouthEastFactory": {
 			assembly: "ScavSouthEastAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(15000),
-			regroup: true,
-			repair: 40,
-			templates: [ firecan, rbjeep, rbuggy, bloke ]
+			templates: [ firecan, rbjeep, rbuggy, bloke ],
+			data: {
+				regroup: false,
+				count: -1,
+			},
 		},
 		"ScavNorthFactory": {
 			assembly: "ScavNorthAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(15000),
-			regroup: true,
-			repair: 40,
-			templates: [ firecan, rbjeep, rbuggy, bloke ]
+			templates: [ firecan, rbjeep, rbuggy, bloke ],
+			data: {
+				regroup: false,
+				count: -1,
+			},
 		},
 	});
 

@@ -155,7 +155,7 @@ camAreaEvent("NPLZ1Trigger", function()
 
 camAreaEvent("NPLZ2Trigger", function()
 {
-	hackAddMessage("MB1C3_MSG", MISS_MSG, 0, true);
+	hackAddMessage("MB1C3_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	camDetectEnemyBase("NPLZ2Group");
 
 	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(300000), "getDroidsForNPLZ",
@@ -199,8 +199,8 @@ function eventStartLevel()
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 
-	setPower(camChangeOnDiff(10000, true), NEW_PARADIGM);
-	setPower(camChangeOnDiff(2500, true), 7);
+	setPower(AI_POWER, NEW_PARADIGM);
+	setPower(AI_POWER, 7);
 
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {
@@ -310,8 +310,11 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [ npmor, npsens, npslc ]
 		},
 		"NPNorthFactory": {
@@ -319,8 +322,11 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(30000),
-			regroup: true,
-			repair: 40,
+			data: {
+				regroup: false,
+				repair: 66,
+				count: -1,
+			},
 			templates: [ nppod, npsmct, npmor ]
 		},
 	});

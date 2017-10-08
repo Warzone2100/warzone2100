@@ -34,7 +34,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 
 camAreaEvent("group1Trigger", function()
 {
-	hackRemoveMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	hackRemoveMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	camEnableFactory("COFactoryEast");
 
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
@@ -79,7 +79,9 @@ camAreaEvent("wayPoint2Rad", function(droid)
 
 	camManageGroup(camMakeGroup(defGroup), CAM_ORDER_DEFEND, {
 		pos: camMakePos("defensePos"),
-		regroup: false
+		regroup: false,
+		radius: 10,
+		repair: 45,
 	});
 
 	playSound(warning);
@@ -114,7 +116,7 @@ function truckDefense()
 
 function showGameOver()
 {
-	var arti = getArtifacts();
+	var arti = camGetArtifacts();
 	camSafeRemoveObject(arti[0], false);
 	gameOverMessage(false);
 }
@@ -177,7 +179,7 @@ function eventStartLevel()
 		"COCommander": { tech: "R-Wpn-RocketSlow-Accuracy03" },
 	});
 
-	setPower(camChangeOnDiff(40000, true), THE_COLLECTIVE);
+	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLEVTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
@@ -200,14 +202,24 @@ function eventStartLevel()
 			assembly: camMakePos("eastAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(120000),
-			regroup: true,
-			repair: 40,
+			throttle: camChangeOnDiff(70000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
 			templates: [cohct, comtathh, comorb] //Heavy factory
 		},
 		"COFactoryWest": {
 			assembly: camMakePos("westAssembly"),
-			throttle: camChangeOnDiff(90000),
+			order: CAM_ORDER_DEFEND,
+			throttle: camChangeOnDiff(50000),
+			data: {
+				regroup: false,
+				repair: 45,
+				radius: 15,
+				count: -1,
+			},
 			templates: [comtath] //Hover lancers
 		},
 	});

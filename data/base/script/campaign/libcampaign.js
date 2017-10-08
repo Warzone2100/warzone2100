@@ -92,6 +92,7 @@ const NEXUS = 3;
 
 const CAM_MAX_PLAYERS = 8;
 const CAM_TICKS_PER_FRAME = 100;
+const AI_POWER = 999999;
 
 //;; \subsection{camDef(something)}
 //;; Returns false if something is JavaScript-undefined, true otherwise.
@@ -134,7 +135,7 @@ function camSafeRemoveObject(obj, flashy)
 		return;
 	if (camIsString(obj))
 		obj = getObject(obj);
-	if (camDef(obj) && obj && (obj.id !== 0))
+	if (camDef(obj) && obj)
 		removeObject(obj, flashy);
 }
 
@@ -654,7 +655,7 @@ function camAllArtifactsPickedUp()
 }
 
 //Returns the label of all existing artifacts
-function getArtifacts()
+function camGetArtifacts()
 {
 	var camArti = [];
 	for(var alabel in __camArtifacts)
@@ -1079,7 +1080,7 @@ function __camDispatchTransporterUnsafe()
 	//Delete previous enemy reinforcement transport blip
 	if (player !== CAM_HUMAN_PLAYER && camDef(__camTransporterMessage))
 	{
-		hackRemoveMessage(__camTransporterMessage, PROX_MSG, 0);
+		hackRemoveMessage(__camTransporterMessage, PROX_MSG, CAM_HUMAN_PLAYER);
 		__camTransporterMessage = undefined;
 	}
 
@@ -1164,18 +1165,16 @@ function __camCheckBaseEliminated(group)
 			continue;
 		if (camDef(bi.cleanup))
 		{
-			var nonLeftovers = enumArea(bi.cleanup).filter(function(obj) {
-				return (obj.player !== CAM_HUMAN_PLAYER
-					&& obj.type === STRUCTURE
+			var nonLeftovers = enumArea(bi.cleanup, ENEMIES, false).filter(function(obj) {
+				return (obj.type === STRUCTURE
 					&& obj.status === BUILT
 					&& !__camIsValidLeftover(obj)
 					&& (!camDef(bi.player)
 					|| (camDef(bi.player) && camPlayerMatchesFilter(obj.player, bi.player)))
 				);
 			});
-			var leftovers = enumArea(bi.cleanup).filter(function(obj) {
-				return (obj.player !== CAM_HUMAN_PLAYER
-					&& obj.type === STRUCTURE
+			var leftovers = enumArea(bi.cleanup, ENEMIES, false).filter(function(obj) {
+				return (obj.type === STRUCTURE
 					&& obj.status === BUILT
 					&& __camIsValidLeftover(obj)
 					&& (!camDef(bi.player)
@@ -1204,7 +1203,7 @@ function __camCheckBaseEliminated(group)
 			continue;
 		}
 		if (camDef(bi.detectMsg) && bi.detected) // remove the beacon
-			hackRemoveMessage(bi.detectMsg, PROX_MSG, 0);
+			hackRemoveMessage(bi.detectMsg, PROX_MSG, CAM_HUMAN_PLAYER);
 		camTrace("Enemy base", blabel, "eliminated");
 		bi.eliminated = true;
 		// bump counter before the callback, so that it was
@@ -1528,21 +1527,36 @@ function __camPickTarget(group)
 			if (gi.order === CAM_ORDER_COMPROMISE && !targets.length)
 			{
 				if (!camDef(gi.data.pos))
-					camDebug("`pos' is required for COMPROMISE order");
+				{
+					camDebug("'pos' is required for COMPROMISE order");
+					return undefined;
+				}
 				else
 					targets = [ gi.data.pos[gi.data.pos.length - 1] ];
 			}
+			var dr = droids[0];
 			targets = targets.filter(function(obj) {
-				return propulsionCanReach(droids[0].propulsion, droids[0].x, droids[0].y, obj.x, obj.y);
+				return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 			});
 			if (!targets.length)
-				targets = enumDroid(CAM_HUMAN_PLAYER);
-			if (!targets.length)
-				targets = enumStruct(CAM_HUMAN_PLAYER);
+			{
+				targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
+					return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
+				});
+				if (!targets.length)
+				{
+					targets = enumStruct(CAM_HUMAN_PLAYER).filter(function(obj) {
+						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
+					});
+				}
+			}
 			break;
 		case CAM_ORDER_DEFEND:
 			if (!camDef(gi.data.pos))
-				camDebug("`pos' is required for DEFEND order");
+			{
+				camDebug("'pos' is required for DEFEND order");
+				return undefined;
+			}
 			var radius = gi.data.radius;
 			if (!camDef(radius))
 				radius = __CAM_DEFENSE_RADIUS;
@@ -1616,18 +1630,13 @@ function __camTacticsTickForGroup(group)
 		healthyDroids = rawDroids;
 	}
 
-	// Handle regrouping. Do not include trucks.
-	var droids = healthyDroids.filter(function(dr) {
-		return ((dr.type === DROID) && (dr.droidType !== DROID_CONSTRUCT));
-	});
-
 	if (camDef(gi.data.regroup) && gi.data.regroup && healthyDroids.length > 0)
 	{
 		var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
 		var groupX = ret.xav[ret.maxIdx];
 		var groupY = ret.yav[ret.maxIdx];
-		droids = ret.clusters[ret.maxIdx].filter(function(obj) {
-			return obj.type === DROID;
+		var droids = ret.clusters[ret.maxIdx].filter(function(obj) {
+			return ((obj.type === DROID) && (obj.droidType !== DROID_CONSTRUCT));
 		});
 		for (var i = 0; i < ret.clusters.length; ++i)
 		{
@@ -1636,7 +1645,7 @@ function __camTacticsTickForGroup(group)
 				for (var j = 0; j < ret.clusters[i].length; ++j)
 				{
 					var droid = ret.clusters[i][j];
-					if (droid.type === DROID)
+					if (droid.type === DROID && droid.order !== DORDER_RTR)
 					{
 						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
 					}
@@ -1652,6 +1661,8 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
+				if (droid.order === DORDER_RTR)
+					continue;
 				if (back)
 					orderDroid(droid, DORDER_RTB);
 				else
@@ -1661,8 +1672,11 @@ function __camTacticsTickForGroup(group)
 		}
 	}
 
-	var droids = droids.filter(function(dr) {
-		return ((dr.type === DROID) && (dr.droidType !== DROID_CONSTRUCT));
+	var droids = healthyDroids.filter(function(dr) {
+		return (dr.type === DROID
+			&& dr.droidType !== DROID_CONSTRUCT
+			&& dr.order !== DORDER_RTR
+		);
 	});
 
 	if (droids.length === 0)
@@ -2267,11 +2281,11 @@ function camNextLevel(nextLevel)
 		var bonusTime = getMissionTime();
 		if (bonusTime > 0)
 		{
-			var bonus = 125;
+			var bonus = 110;
 			if (difficulty === HARD)
-				bonus = 115;
-			else if (difficulty === INSANE)
 				bonus = 105;
+			else if (difficulty === INSANE)
+				bonus = 100;
 
 			camTrace("Bonus time", bonusTime);
 			setPowerModifier(bonus); // Bonus percentage for completing fast
@@ -2329,6 +2343,11 @@ const CAM_VICTORY_TIMEOUT = 3;
 //;;		\item[annihilate] Player must destroy every thing on map to win:
 //;; 		\textbf{false} mission does not require everything destroyed,
 //;; 		\textbf{true} mission requires total map annihilation.
+//;; 	\end{description}
+//;; 	\begin{description}
+//;;		\item[eliminateBases] Instant win when all enemy units and bases are destroyed:
+//;; 		\textbf{false} does not require all bases to be destroyed,
+//;; 		\textbf{true} requires all bases destroyed.
 //;; 	\end{description}
 //;; \end{description}
 function camSetStandardWinLossConditions(kind, nextLevel, data)
@@ -2523,57 +2542,71 @@ function __camVictoryOffworld()
 	}
 	var forceLZ = camDef(__camVictoryData.retlz) ? __camVictoryData.retlz : false;
 	var destroyAll = camDef(__camVictoryData.annihilate) ? __camVictoryData.annihilate : false;
+	var elimBases = camDef(__camVictoryData.eliminateBases) ? __camVictoryData.eliminateBases : false;
 
 	if (camCheckExtraObjective() && camAllArtifactsPickedUp())
 	{
 		var enemyLen = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length;
-		if (!forceLZ && !enemyLen)
+		if (elimBases)
 		{
-			//if there are no more enemies, win instantly unless forced to go
-			//back to the LZ.
-			__camGameWon();
-			return;
-		}
-
-		//Missions that are not won based on artifact count (see campaign 2-1).
-		var arti = getArtifacts();
-		if(arti.length === 0)
-		{
-			__camGameWon();
-			return;
-		}
-
-		//Make sure to only count droids here.
-		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-			return (obj.type === DROID && !camIsTransporter(obj));
-		}).length;
-		if (((forceLZ && destroyAll && !enemyLen) || (forceLZ && !destroyAll)) && (atlz === total))
-		{
-			__camGameWon();
-			return;
+			if (!enemyLen && camAllEnemyBasesEliminated())
+			{
+				__camGameWon();
+			}
 		}
 		else
 		{
-			__camTriggerLastAttack();
-		}
+			if (!forceLZ && !enemyLen)
+			{
+				//if there are no more enemies, win instantly unless forced to go
+				//back to the LZ.
+				__camGameWon();
+				return;
+			}
 
-		if (!destroyAll || forceLZ)
-		{
-			if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
+			//Missions that are not won based on artifact count (see missions 2-1 and 3-2).
+			var arti = camGetArtifacts();
+			if(arti.length === 0)
 			{
-				camTrace("Return to LZ message displayed");
-				camMarkTiles(lz);
-				if (camDef(__camVictoryData.message))
-					hackAddMessage(__camVictoryData.message, PROX_MSG,
-					               	CAM_HUMAN_PLAYER, false);
+				__camGameWon();
+				return;
 			}
-			if (__camRTLZTicker % 30 === 0) // every 30 seconds
+
+			//Make sure to only count droids here.
+			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+				return (obj.type === DROID && !camIsTransporter(obj));
+			}).length;
+			if (((!forceLZ && !destroyAll)
+				|| (forceLZ && destroyAll && !enemyLen)
+				|| (forceLZ && !destroyAll))
+				&& (atlz === total))
 			{
-				var pos = camMakePos(lz);
-				playSound("pcv427.ogg", pos.x, pos.y, 0);
-				console("Return to LZ");
+				__camGameWon();
+				return;
 			}
-			++__camRTLZTicker;
+			else
+			{
+				__camTriggerLastAttack();
+			}
+
+			if (!destroyAll || forceLZ)
+			{
+				if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
+				{
+					camTrace("Return to LZ message displayed");
+					camMarkTiles(lz);
+					if (camDef(__camVictoryData.message))
+						hackAddMessage(__camVictoryData.message, PROX_MSG,
+						               	CAM_HUMAN_PLAYER, false);
+				}
+				if (__camRTLZTicker % 30 === 0) // every 30 seconds
+				{
+					var pos = camMakePos(lz);
+					playSound("pcv427.ogg", pos.x, pos.y, 0);
+					console("Return to LZ");
+				}
+				++__camRTLZTicker;
+			}
 		}
 	}
 	if (enumArea(lz, ENEMIES, false).length > 0)
