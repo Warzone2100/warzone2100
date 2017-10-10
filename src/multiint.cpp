@@ -97,7 +97,7 @@
 #include "levels.h"
 #include "wrappers.h"
 
-#include <QFileInfo> // used to strip path of challenge AI values
+#include <QtCore/QFile> // used to strip path of challenge AI values
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
@@ -311,7 +311,7 @@ void setupChallengeAIs()
 				}
 
 				// strip given path down to filename
-				QString filename(QFileInfo(val).fileName());
+				QString filename(QFile(val).fileName());
 
 				// look up AI value in vector of known skirmish AIs
 				for (int ai = 0; ai < aidata.size(); ++ai)
