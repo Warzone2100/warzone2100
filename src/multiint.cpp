@@ -97,7 +97,11 @@
 #include "levels.h"
 #include "wrappers.h"
 
-#include <QFileInfo> // used to strip path of challenge AI values
+#ifndef WZ_OS_MAC
+	#include <QFileInfo> // used to strip path of challenge AI values
+#else // WZ_OS_MAC
+	#include <QtCore/QFileInfo> // used to strip path of challenge AI values
+#endif
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
