@@ -1869,21 +1869,10 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 		mission.apsOilList[0] = nullptr;
 		mission.apsSensorList[0] = nullptr;
-	}
 
-	if (saveGameVersion >= VERSION_11)
-	{
-		//camera position
-		disp3d_setView(&(saveGameData.currentPlayerPos));
-	}
-	else
-	{
-		disp3d_resetView();
-	}
+		// Stuff added after level load to avoid being reset or initialised during load
+		// always !keepObjects
 
-	//Stuff added after level load to avoid being reset or initialised during load
-	if (UserSaveGame)//always !keepObjects
-	{
 		if (saveGameVersion >= VERSION_12)
 		{
 			mission.startTime = saveGameData.missionTime;
@@ -3625,7 +3614,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else
 	{
-		disp3d_resetView();
+		disp3d_oldView();
 	}
 
 	//load mission data from save game these values reloaded after load game

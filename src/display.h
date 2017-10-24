@@ -205,7 +205,7 @@ void	setDesiredPitch(SDWORD pitch);
 #define CAMERA_PIVOT_HEIGHT (500)
 
 #define INITIAL_STARTING_PITCH (-40)
-#define INITIAL_DESIRED_ROTATION (-45)
+#define OLD_INITIAL_ROTATION (-45) // only used in savegames <= 10
 
 #define	HIDDEN_FRONTEND_WIDTH	(640)
 #define	HIDDEN_FRONTEND_HEIGHT	(480)

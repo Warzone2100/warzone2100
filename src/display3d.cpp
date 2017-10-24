@@ -1112,7 +1112,9 @@ bool init3DView()
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
 
-	disp3d_resetView();	// clear player view variables
+	player.r.z = 0; // roll
+	player.r.y = 0; // rotation
+	player.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
 
 	if (!initTerrain())
 	{
@@ -1133,13 +1135,9 @@ void disp3d_setView(iView *newView)
 }
 
 /// reset the camera rotation (used for save games <= 10)
-void disp3d_resetView()
+void disp3d_oldView()
 {
-	player.r.z = 0; // roll
-	player.r.y = INITIAL_DESIRED_ROTATION; // rotation
-	player.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
-
-	// and set the camera position
+	player.r.y = OLD_INITIAL_ROTATION; // rotation
 	player.p.y = START_HEIGHT; // height
 }
 
