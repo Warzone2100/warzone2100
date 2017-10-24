@@ -200,7 +200,6 @@ bool saveConfig()
 	{
 		ini.setValue("difficulty", getDifficultyLevel());		// level
 	}
-	ini.setValue("showFPS", (SDWORD)showFPS);
 	ini.setValue("scroll", (SDWORD)scroll_speed_accel);		// scroll
 	ini.setValue("mouseflip", (SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
