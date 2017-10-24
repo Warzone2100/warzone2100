@@ -483,7 +483,14 @@ bool runCampaignSelector()
 		SPinit();
 		frontEndNewGame(id - FRONTEND_CAMPAIGN_1);
 	}
+
 	widgDisplayScreen(psWScreen); // show the widgets currently running
+
+	if (CancelPressed())
+	{
+		changeTitleMode(SINGLE);
+	}
+
 	return true;
 }
 
