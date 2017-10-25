@@ -267,11 +267,12 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
 	QString function = context->argument(0).toString();
+	int player = engine->globalObject().property("me").toInt32();
 	int i, size = timers.size();
 	for (i = 0; i < size; ++i)
 	{
 		timerNode node = timers.at(i);
-		if (node.function == function)
+		if (node.function == function && node.player == player)
 		{
 			timers.removeAt(i);
 			break;
