@@ -1311,6 +1311,7 @@ bool runGameOptionsMenu()
 
 	switch (id)
 	{
+	case FRONTEND_LANGUAGE:
 	case FRONTEND_LANGUAGE_R:
 		setNextLanguage(mouseReleased(MOUSE_RMB));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
