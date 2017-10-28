@@ -234,7 +234,6 @@ static void getPlatformUserDir(char *const tmpstr, size_t const size)
 		}
 }
 
-
 static void initialize_ConfigDir()
 {
 	char tmpstr[PATH_MAX] = { '\0' };
@@ -501,7 +500,6 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
 			dest[l + 1] = '\0';
 		}
 	}
-	PHYSFS_mkdir(dest);
 	if (!PHYSFS_mkdir(dest))
 	{
 		debug(LOG_FATAL, "Unable to create directory \"%s\" in write dir \"%s\"!",
@@ -874,18 +872,36 @@ int realmain(int argc, char *argv[])
 	initialize_ConfigDir();
 
 	/*** Initialize directory structure ***/
-	make_dir(ScreenDumpPath, "screenshots", nullptr);
-	make_dir(SaveGamePath, "savegames", nullptr);
-	PHYSFS_mkdir("savegames/campaign");
-	PHYSFS_mkdir("savegames/skirmish");
-	make_dir(MultiCustomMapsPath, "maps", nullptr); // MUST have this to prevent crashes when getting map
-	PHYSFS_mkdir("music");
-	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
-	PHYSFS_mkdir("userdata");	// a place to store per-mod data user generated data
-	memset(rulesettag, 0, sizeof(rulesettag)); // tag to add to userdata to find user generated stuff
-	make_dir(MultiPlayersPath, "multiplay", nullptr);
-	make_dir(MultiPlayersPath, "multiplay", "players");
-	PHYSFS_mkdir("mods/downloads");
+
+	PHYSFS_mkdir("challenges");	// custom challenges
+
+	PHYSFS_mkdir("logs");		// netplay, mingw crash reports & WZ logs
+
+	make_dir(MultiCustomMapsPath, "maps", nullptr); // needed to prevent crashes when getting map
+
+	PHYSFS_mkdir("mods/autoload");	// mods that are automatically loaded
+	PHYSFS_mkdir("mods/campaign");	// campaign only mods activated with --mod_ca=example.wz
+	PHYSFS_mkdir("mods/downloads");	// mod download directory
+	PHYSFS_mkdir("mods/global");	// global mods activated with --mod=example.wz
+	PHYSFS_mkdir("mods/multiplay");	// multiplay only mods activated with --mod_mp=example.wz
+	PHYSFS_mkdir("mods/music");	// music mods that are automatically loaded
+
+	make_dir(MultiPlayersPath, "multiplay", "players"); // player profiles
+
+	PHYSFS_mkdir("music");	// custom music overriding default music and music mods
+
+	make_dir(SaveGamePath, "savegames", nullptr); 	// save games
+	PHYSFS_mkdir("savegames/campaign");		// campaign save games
+	PHYSFS_mkdir("savegames/skirmish");		// skirmish save games
+
+	make_dir(ScreenDumpPath, "screenshots", nullptr);	// for screenshots
+
+	PHYSFS_mkdir("tests");			// test games launched with --skirmish=game
+
+	PHYSFS_mkdir("userdata");		// per-mod data user generated data
+	PHYSFS_mkdir("userdata/campaign");	// contains campaign templates
+	PHYSFS_mkdir("userdata/mp");		// contains multiplayer templates
+	memset(rulesettag, 0, sizeof(rulesettag)); // stores tag property of ruleset.json files
 
 	if (!customDebugfile)
 	{

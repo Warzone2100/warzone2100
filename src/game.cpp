@@ -3000,12 +3000,6 @@ static bool gameLoad(const char *fileName)
 			debug(LOG_ERROR, "User generated data will not work.");
 			memset(rulesettag, 0, sizeof(rulesettag));
 		}
-		else
-		{
-			char tmppath[PATH_MAX];
-			ssprintf(tmppath, "userdata/%s", rulesettag);
-			PHYSFS_mkdir(tmppath);
-		}
 	}
 
 	//set main version Id from game file

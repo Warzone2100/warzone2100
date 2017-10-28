@@ -156,8 +156,6 @@ bool addChallenges()
 	static char		sSlotFile[totalslots][totalslotspace];
 	char **i, **files;
 
-	(void) PHYSFS_mkdir(sSearchPath); // just in case
-
 	psRequestScreen = new W_SCREEN; // init the screen
 
 	WIDGET *parent = psRequestScreen->psForm;

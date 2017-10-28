@@ -221,12 +221,6 @@ Section $(TEXT_SecBase) SecBase
   Push "README.md.txt"
   Call unix2dos
 
-; Create mod directories
-  CreateDirectory "$INSTDIR\mods\campaign"
-  CreateDirectory "$INSTDIR\mods\music"
-  CreateDirectory "$INSTDIR\mods\global"
-  CreateDirectory "$INSTDIR\mods\multiplay"
-
   SetOutPath "$INSTDIR\fonts"
   ;File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
   ;File "${EXTDIR}\etc\fonts\DejaVuSans.ttf"
