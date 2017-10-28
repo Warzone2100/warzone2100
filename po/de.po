@@ -6,8 +6,9 @@
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
-# Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2014.
+# Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2017.
 # raymond, 2011.
+# Frank Ehlers <ehlersfrank@gmail.com>, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
@@ -92,7 +93,7 @@ msgstr "Erkunden Sie nach der Landung die Ruinen und bergen Sie jegliche Artefak
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "TRANSPORTERMISSION: Forschungszentrums untersuchen"
+msgstr "TRANSPORTERMISSION: Forschungszentrum untersuchen"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -450,7 +451,7 @@ msgstr "Unser Transporter mit Einheiten aus der Alphabasis ist abgeschossen word
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr "Er wird an dieser Position von Streitkräften des Kollektiv angegriffen."
+msgstr "Er wird an dieser Position von Streitkräften des Kollektivs angegriffen."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
@@ -466,7 +467,7 @@ msgstr "Team Beta sucht nach der Technologie für Senkrechtstarter (Vertical Tak
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "Wir vermuten es in einer Luftbasis aus der Zeit vor dem Kollaps in diesem Gebiet."
+msgstr "Wir vermuten es in einem Luftstützpunkt aus der Zeit vor dem Kollaps in diesem Gebiet."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
@@ -498,7 +499,7 @@ msgstr "TRANSPORTERMISSION: Konvoi aufhalten"
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "Daten aus der Basis des Kollektiv deuten auf die Anwesenheit des NEXUS-Eindringlingsprogramm hin."
+msgstr "Daten aus der Basis des Kollektivs deuten auf die Anwesenheit des NEXUS-Eindringlingsprogramm hin."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
@@ -618,7 +619,7 @@ msgstr "Rücken Sie von der Landezone zum Reaktor vor und zerstören Sie ihn."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "Erlauben Sie es dem Kollektiv nicht den Reaktor in Betrieb zu nehmen."
+msgstr "Erlauben Sie es dem Kollektiv nicht, den Reaktor in Betrieb zu nehmen."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
@@ -632,7 +633,7 @@ msgstr "Nehmen Sie die NASDA-Zentrale ein, bevor NEXUS oder das Kollektiv sie ve
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "TRANSPORTERMISSION: Satelitenkontrollzerntrum"
+msgstr "TRANSPORTERMISSION: Satellitenkontrollzentrum"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -1245,7 +1246,7 @@ msgstr "Stellung mit Haubitze"
 #: data/mp/messages/strings/names.txt:252
 #: po/custom/fromJson.txt:518
 msgid "Ground Shaker Emplacement"
-msgstr "Stellung für Ground-Shaker-Haubitze"
+msgstr "Stellung mit Ground-Shaker-Haubitze"
 
 #: data/base/messages/strings/names.txt:217
 #: data/mp/messages/strings/names.txt:253
@@ -1402,15 +1403,15 @@ msgstr "Fortschrittliche Fabrikproduktion Mk3"
 
 #: data/base/messages/strings/names.txt:342
 msgid "Advanced Repair Facility Upgrade"
-msgstr "Fortschrittliche Reparatureinrichtung"
+msgstr "Fortschrittliche Reparatureinrichtungsverbesserung"
 
 #: data/base/messages/strings/names.txt:343
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr "Fortschrittliche Reparatureinrichtung Mk2"
+msgstr "Fortschrittliche Reparatureinrichtungsverbesserung Mk2"
 
 #: data/base/messages/strings/names.txt:344
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr "Fortschrittliche Reparatureinrichtung Mk3"
+msgstr "Fortschrittliche Reparatureinrichtungsverbesserung Mk3"
 
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:441
@@ -1694,7 +1695,7 @@ msgstr "Erhöht kinetische Panzerung und Rumpfpunkte"
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:73
 msgid "All Cyborgs upgraded automatically"
-msgstr "Alle Cyborgs werden automatisch aufgerüstet"
+msgstr "Alle Cyborgs wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:41
 #: data/mp/messages/strings/resstrings.txt:6
@@ -1810,7 +1811,7 @@ msgstr "Erhöht Panzerung und Rumpfpunkte"
 #: data/mp/messages/strings/resstrings.txt:34
 #: po/custom/fromJson.txt:74
 msgid "All defenses and walls upgraded automatically"
-msgstr "Verteidigungsanlagen und Mauern werden automatisch aufgerüstet"
+msgstr "Verteidigungsanlagen und Mauern wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:113
 #: data/base/messages/strings/resstrings.txt:119
@@ -1992,7 +1993,7 @@ msgstr "Gepanzerte Stellung mit Haubitze"
 #: data/mp/messages/strings/resstrings.txt:77
 #: po/custom/fromJson.txt:148
 msgid "Armored Ground Shaker howitzer emplacement"
-msgstr "Gepanzerte Stellung mit Ground Shaker"
+msgstr "Gepanzerte Stellung mit Ground-Shaker-Haubitze"
 
 #: data/base/messages/strings/resstrings.txt:180
 #: data/base/messages/strings/resstrings.txt:186
@@ -2173,7 +2174,7 @@ msgstr "Erhöht Reparaturgeschwindigkeit"
 #: data/mp/messages/strings/resstrings.txt:169
 #: po/custom/fromJson.txt:88
 msgid "All repair facilities upgraded automatically"
-msgstr "Alle Reparatureinrichtungen werden aufgerüstet"
+msgstr "Alle Reparatureinrichtungen wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
@@ -2203,7 +2204,7 @@ msgstr "Erhöht Produktionsrate von Cyborgfabriken"
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:72
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Alle Cyborgfabriken werden automatisch aufgerüstet"
+msgstr "Alle Cyborgfabriken wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2236,7 +2237,7 @@ msgstr "Erhöht Produktionsrate von Fabriken"
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:94
 msgid "All vehicle factories upgraded automatically"
-msgstr "Alle Fahrzeugfabriken werden automatisch aufgerüstet"
+msgstr "Alle Fahrzeugfabriken wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -2271,7 +2272,7 @@ msgstr "Erhöht die Forschungsgeschwindigkeit"
 #: data/mp/messages/strings/resstrings.txt:194
 #: po/custom/fromJson.txt:89
 msgid "All research facilities upgraded automatically"
-msgstr "Alle Forschungseinrichtungen werden automatisch aufgerüstet"
+msgstr "Alle Forschungseinrichtungen wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:399
 #: data/mp/messages/strings/resstrings.txt:196
@@ -2289,7 +2290,7 @@ msgstr "Gehärtete Gebäudematerialien"
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:68
 msgid "All base structures upgraded automatically"
-msgstr "Alle Basisgebäude werden automatisch aufgerüstet"
+msgstr "Alle Basisgebäude wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/strings/resstrings.txt:201
@@ -2313,7 +2314,7 @@ msgstr "Erhöht Produktionsrate von VTOL-Fabriken"
 #: data/mp/messages/strings/resstrings.txt:204
 #: po/custom/fromJson.txt:97
 msgid "All VTOL factories upgraded automatically"
-msgstr "Alle VTOL-Fabriken werden automatisch aufgerüstet"
+msgstr "Alle VTOL-Fabriken wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:421
 #: data/mp/messages/strings/resstrings.txt:206
@@ -2337,7 +2338,7 @@ msgstr "Verringert Zeit für Bewaffnung"
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:87
 msgid "All rearming pads upgraded automatically"
-msgstr "Alle Servicestationen werden automatisch aufgerüstet"
+msgstr "Alle Servicestationen wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
@@ -2378,7 +2379,7 @@ msgstr "Erhöht Reparaturgeschwindigkeit"
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
 msgid "All mobile repair units upgraded automatically"
-msgstr "Alle mobilen Reparatureinheiten werden automatisch aufgerüstet"
+msgstr "Alle mobilen Reparatureinheiten wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:459
 #: data/mp/messages/strings/resstrings.txt:221
@@ -2444,7 +2445,7 @@ msgstr "Erweitert Reichweite von VTOL-CB-Sensoren"
 #: data/mp/messages/strings/resstrings.txt:234
 #: po/custom/fromJson.txt:96
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Alle VTOL-CB-Sensoren werden automatisch aufgerüstet"
+msgstr "Alle VTOL-CB-Sensoren wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:499
 #: data/mp/messages/strings/resstrings.txt:236
@@ -2468,7 +2469,7 @@ msgstr "Erweitert VTOL-Schlagsensorreichweite"
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:98
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Alle VTOL-Schlagsensoren werden automatisch aufgerüstet"
+msgstr "Alle VTOL-Schlagsensoren wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
@@ -2564,7 +2565,7 @@ msgstr "Erhöht Fahrzeuggeschwindigkeit"
 #: data/mp/messages/strings/resstrings.txt:269
 #: po/custom/fromJson.txt:95
 msgid "All vehicles upgraded automatically"
-msgstr "Alle Fahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Fahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:571
 #: data/mp/messages/strings/resstrings.txt:261
@@ -2636,25 +2637,25 @@ msgstr "Erhöht Rumpfpunkte"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:77
 msgid "All half-tracks upgraded automatically"
-msgstr "Alle Halbkettenfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Halbkettenfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:604
 #: data/mp/messages/strings/resstrings.txt:279
 #: po/custom/fromJson.txt:78
 msgid "All hovers upgraded automatically"
-msgstr "Alle Hoverfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Hoverfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:614
 #: data/mp/messages/strings/resstrings.txt:284
 #: po/custom/fromJson.txt:92
 msgid "All tracks upgraded automatically"
-msgstr "Alle Kettenfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Kettenfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:624
 #: data/mp/messages/strings/resstrings.txt:289
 #: po/custom/fromJson.txt:100
 msgid "All wheels upgraded automatically"
-msgstr "Alle Radfahrzeuge werden automatisch aufgerüstet"
+msgstr "Alle Radfahrzeuge wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:635
 #: data/base/messages/strings/resstrings.txt:641
@@ -2730,7 +2731,7 @@ msgstr "Erhöht Genauigkeit der Flugabwehr"
 #: data/mp/messages/strings/resstrings.txt:324
 #: po/custom/fromJson.txt:67
 msgid "All AA weapons upgraded automatically"
-msgstr "Alle Flugabwehrwaffen werden automatisch aufgerüstet"
+msgstr "Alle Flugabwehrwaffen wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:669
 #: data/mp/messages/strings/resstrings.txt:316
@@ -2754,7 +2755,7 @@ msgstr "Erhöht Schaden von Flugabwehrgeschützen"
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:66
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Alle Flugabwehrgeschütze werden automatisch aufgerüstet"
+msgstr "Alle Flugabwehrgeschütze wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:322
@@ -2867,7 +2868,7 @@ msgstr "Erhöht Genauigkeit von Bomben"
 #: data/mp/messages/strings/resstrings.txt:349
 #: po/custom/fromJson.txt:69
 msgid "All bomb bays upgraded automatically"
-msgstr "Alle Bombenabwurfschächte werden automatisch aufgerüstet"
+msgstr "Alle Bombenabwurfschächte wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
@@ -2945,7 +2946,7 @@ msgstr "Erhöht Schaden von Flammenwerfern"
 #: data/mp/messages/strings/resstrings.txt:369
 #: po/custom/fromJson.txt:76
 msgid "All flamers upgraded automatically"
-msgstr "Alle Flammenwerfer werden automatisch aufgerüstet"
+msgstr "Alle Flammenwerfer wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:773
 #: data/base/messages/strings/resstrings.txt:779
@@ -3021,7 +3022,7 @@ msgstr "Erhöht die Genauigkeit von Haubitzen"
 #: data/mp/messages/strings/resstrings.txt:399
 #: po/custom/fromJson.txt:79
 msgid "All howitzers upgraded automatically"
-msgstr "Alle Haubitzen werden automatisch aufgerüstet"
+msgstr "Alle Haubitzen wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:802
 #: data/mp/messages/strings/resstrings.txt:392
@@ -3073,7 +3074,7 @@ msgstr "Erhöht Schaden von Maschinengewehren"
 #: data/mp/messages/strings/resstrings.txt:409
 #: po/custom/fromJson.txt:81
 msgid "All machineguns upgraded automatically"
-msgstr "Alle Maschinengewehre werden automatisch aufgerüstet"
+msgstr "Alle Maschinengewehre wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:858
 #: data/mp/messages/strings/resstrings.txt:407
@@ -3127,7 +3128,7 @@ msgstr "Erhöht Schaden von Mörsern"
 #: data/mp/messages/strings/resstrings.txt:419
 #: po/custom/fromJson.txt:84
 msgid "All mortars upgraded automatically"
-msgstr "Alle Mörser werden automatisch aufgerüstet"
+msgstr "Alle Mörser wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
@@ -3155,7 +3156,7 @@ msgstr "Erhöht Schaden von Miniraketen"
 #: data/mp/messages/strings/resstrings.txt:429
 #: po/custom/fromJson.txt:82
 msgid "All mini-rockets upgraded automatically"
-msgstr "Alle Miniraketen werden automatisch aufgerüstet"
+msgstr "Alle Miniraketen wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
@@ -3189,7 +3190,7 @@ msgstr "Erhöht Schaden von Raketen"
 #: data/mp/messages/strings/resstrings.txt:434
 #: po/custom/fromJson.txt:90
 msgid "All rockets upgraded automatically"
-msgstr "Alle Raketen werden automatisch aufgerüstet"
+msgstr "Alle Raketen wurden automatisch aufgerüstet"
 
 #: data/base/script/rules.js:23
 #: data/base/script/tutorial.js:9
@@ -3263,7 +3264,7 @@ msgstr "Rückkehr zur Landezone"
 
 #: data/base/script/text/tutorial3.slo:274
 msgid "In this training session you'll learn how to build an effective base"
-msgstr "In dieser Übungssitzung werden Sie lernen wie man eine effektive Basis baut"
+msgstr "In dieser Übungssitzung werden Sie lernen, wie man eine effektive Basis baut"
 
 #: data/base/script/text/tutorial3.slo:289
 msgid "Oil resources are key to your success"
@@ -3437,7 +3438,7 @@ msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr "Bitten um Unterstützunge!..."
+msgstr "Bitten um Unterstützung!..."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
@@ -3501,7 +3502,7 @@ msgstr "Ihr Zielgebiet liegt in der westlichen Zone."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "Commander, wir haben ein Commanderturm des New Paradigm erbeutet."
+msgstr "Commander, wir haben einen Commanderturm des New Paradigm erbeutet."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
@@ -3596,7 +3597,7 @@ msgstr "Nexus entfernte sich dann selbst aus dem System, zerstörte die Speicher
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr "Wir wissen nicht, was Nexus ist und wer oder was es steuert. Anfängliche Untersuchungen weisen auf eine Verbindung des Nexus-Eindringlingsprogramm zur Reed Corporation hin, dem Entwickler der synaptischen Verbindung."
+msgstr "Wir wissen nicht, was Nexus ist und wer oder was es steuert. Anfängliche Untersuchungen weisen auf eine Verbindung des Nexus-Eindringlingsprogramms zur Reed Corporation hin, dem Entwickler der synaptischen Verbindung."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
@@ -3620,7 +3621,7 @@ msgstr "Die Verbindung verfügt über eine Hochgeschwindigkeitsdatenschnittstell
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr "Noch wichtiger ist, dass die synaptische Verbindung die Erschaffung von Cyborgs möglich machte. Erste Versuche mit Kraftanzügen für einzelne Soldaten erwiesen sich wegen ihrer Langsamheit und Trägheit als Fehlschläge."
+msgstr "Noch wichtiger ist, dass die synaptische Verbindung die Erschaffung von Cyborgs möglich machte. Erste Versuche mit Kraftanzügen für einzelne Soldaten erwiesen sich wegen ihrer Langsamki3eit und Trägheit als Fehlschläge."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
@@ -3680,7 +3681,7 @@ msgstr "Wir konnten seine genaue Funktion oder sein Ziel nicht feststellen. In s
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr "Weitere Untersuchungen wurden durch das manuelle Abschalten des Systems durch unsere Techniker verhindert, um eine weitere Verseuchung durch das Nexuseindringlingsprogramm zu verhindern."
+msgstr "Weitere Untersuchungen wurden durch das manuelle Abschalten des Systems durch unsere Techniker verhindert, um eine weitere Verseuchung durch das Nexus-Eindringlingsprogramm zu verhindern."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
@@ -3984,7 +3985,7 @@ msgstr "Feindliche VTOLs nageln uns am Boden fest. Wir konnten die Cyborgs und P
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr "Können Sie uns versuchen mit Flugabwehreinheiten zu unterstützen?"
+msgstr "Können Sie versuchen uns mit Flugabwehreinheiten zu unterstützen?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
@@ -4124,7 +4125,7 @@ msgstr "Ihre Streitkräfte gehören nun mir! Willkommen im Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr "Commander, Sie erweisen sich hartnäckiger als ich angenommen habe."
+msgstr "Commander, Sie erweisen sich als hartnäckiger als ich angenommen habe."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
@@ -4136,7 +4137,7 @@ msgstr "Das macht aber nichts, denn Sie werden nicht mehr lange unter uns weilen
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr "Nach intensiver Suche und Neuprogrammierung, sind alle meine Systeme endlich wieder online."
+msgstr "Nach intensiver Suche und Neuprogrammierung sind alle meine Systeme endlich wieder online."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
@@ -4900,11 +4901,11 @@ msgstr "Aerodynamiklabor"
 
 #: po/custom/fromJson.txt:70
 msgid "All cannons upgraded automatically"
-msgstr "Alle Geschütze werden automatisch aufgerüstet"
+msgstr "Alle Geschütze wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:71
 msgid "All CB sensors upgraded automatically"
-msgstr "Alle CB-Sensoren werden automatisch aufgerüstet"
+msgstr "Alle CB-Sensoren wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:75
 msgid "All factories upgraded automatically"
@@ -4912,31 +4913,31 @@ msgstr "Alle Fabriken wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:80
 msgid "All lasers upgraded automatically"
-msgstr "Alle Laser werden automatisch aufgerüstet"
+msgstr "Alle Laser wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:83
 msgid "All missiles upgraded automatically"
-msgstr "Alle Lenkraketen werden automatisch aufgerüstet"
+msgstr "Alle Lenkraketen wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:85
 msgid "All power generators upgraded automatically"
-msgstr "Alle Kraftwerke werden automatisch aufgerüstet"
+msgstr "Alle Kraftwerke wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:86
 msgid "All rail guns upgraded automatically"
-msgstr "Alle Magnetwaffen werden automatisch aufgerüstet"
+msgstr "Alle Magnetwaffen wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:91
 msgid "All sensors upgraded automatically"
-msgstr "Alle Sensoren werden automatisch aufgerüstet"
+msgstr "Alle Sensoren wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:93
 msgid "All trucks upgraded automatically"
-msgstr "Alle LKW werden automatisch aufgerüstet"
+msgstr "Alle LKW wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:99
 msgid "All VTOLs upgraded automatically"
-msgstr "Alle VTOLs werden automatisch aufgerüstet"
+msgstr "Alle VTOLs wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:101
 msgid "Ally"
@@ -4944,7 +4945,7 @@ msgstr "Verbündeter"
 
 #: po/custom/fromJson.txt:102
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 #: po/custom/fromJson.txt:103
 msgid "Alpha Campaign"
@@ -5056,7 +5057,7 @@ msgstr "Bewaffnet mit Mörsergranaten"
 
 #: po/custom/fromJson.txt:132
 msgid "Armed with hyper velocity cannon"
-msgstr "Bewaffnet mit Hochgeschwindigkeitgeschütz"
+msgstr "Bewaffnet mit Hochgeschwindigkeitsgeschütz"
 
 #: po/custom/fromJson.txt:133
 msgid "Armed with Lance Anti-Tank rocket"
@@ -5360,11 +5361,11 @@ msgstr "Automatisierte Reparatureinrichtung"
 
 #: po/custom/fromJson.txt:223
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Automatisierte Reparatureinrichtung Mk2"
+msgstr "Automatisierte Reparatureinrichtungsverbesserung Mk2"
 
 #: po/custom/fromJson.txt:224
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Automatisierte Reparatureinrichtung Mk3"
+msgstr "Automatisierte Reparatureinrichtungsverbesserung Mk3"
 
 #: po/custom/fromJson.txt:226
 msgid "Automated VTOL Rearming Mk2"
@@ -5468,7 +5469,7 @@ msgstr "Beste Ziele: Rad- und Hoverfahrzeuge"
 
 #: po/custom/fromJson.txt:265
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #: po/custom/fromJson.txt:266
 msgid "Beta Campaign"
@@ -5750,9 +5751,8 @@ msgid "Command Turret Scorpion Tracks"
 msgstr "Commander Scorpion Ketten"
 
 #: po/custom/fromJson.txt:345
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Commanderturm"
+msgstr "Commanderturmverbesserung"
 
 #: po/custom/fromJson.txt:346
 msgid "Command Turret Viper Tracks"
@@ -6277,7 +6277,7 @@ msgstr "Motoren mit Kraftstoffeinspritzung Mk3"
 
 #: po/custom/fromJson.txt:497
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: po/custom/fromJson.txt:498
 msgid "Gamma Campaign"
@@ -6317,7 +6317,7 @@ msgstr "Gaußkanone"
 
 #: po/custom/fromJson.txt:507
 msgid "Gauss Cannon Emplacement"
-msgstr "Stellung für Gaußkanone"
+msgstr "Stellung mit Gaußkanone"
 
 #: po/custom/fromJson.txt:508
 msgid "Gauss Cannon Hardpoint"
@@ -6386,7 +6386,7 @@ msgstr "Hartbetonmauer (Eckstück)"
 
 #: po/custom/fromJson.txt:526
 msgid "Hardcrete Gate"
-msgstr "Hartbetonmauer"
+msgstr "Hartbetontor"
 
 #: po/custom/fromJson.txt:527
 msgid "Hardcrete Wall"
@@ -6602,7 +6602,7 @@ msgstr "Schwerer Laser"
 
 #: po/custom/fromJson.txt:585
 msgid "Heavy Laser Emplacement"
-msgstr "Stellung für schweren Laser"
+msgstr "Stellung mit schweren Laser"
 
 #: po/custom/fromJson.txt:586
 msgid "Heavy Laser Tiger Tracks"
@@ -7603,7 +7603,7 @@ msgstr "Miniraketen Cobra Ketten"
 
 #: po/custom/fromJson.txt:892
 msgid "Mini-Rocket Guard Tower"
-msgstr "Turm mit Miniraketen"
+msgstr "Wachturm mit Miniraketen"
 
 #: po/custom/fromJson.txt:893
 msgid "Mini-Rocket Pod"
@@ -7956,7 +7956,6 @@ msgid "No Place To Hide"
 msgstr "Kein Platz zum Verstecken"
 
 #: po/custom/fromJson.txt:1002
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
 msgstr "Elite"
@@ -7967,43 +7966,36 @@ msgid "Green"
 msgstr "Neuling"
 
 #: po/custom/fromJson.txt:1004
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
 msgstr "Held"
 
 #: po/custom/fromJson.txt:1005
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
 msgstr "Profi"
 
 #: po/custom/fromJson.txt:1006
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
 msgstr "Durchschnitt"
 
 #: po/custom/fromJson.txt:1007
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
 msgstr "Anfänger"
 
 #: po/custom/fromJson.txt:1008
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
 msgstr "Spezialist"
 
 #: po/custom/fromJson.txt:1009
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
 msgstr "Geübter"
 
 #: po/custom/fromJson.txt:1010
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
 msgstr "Veteran"
@@ -8315,15 +8307,15 @@ msgstr "Magnetwaffennachladezeit -15%"
 
 #: po/custom/fromJson.txt:1094
 msgid "Rail Gun ROF"
-msgstr "Verbessertes Ladesystem von Magnetgeschützen"
+msgstr "Verbesserte Feuerrate von Magnetgeschützen"
 
 #: po/custom/fromJson.txt:1095
 msgid "Rail Gun ROF Mk2"
-msgstr "Verbessertes Ladesystem von Magnetgeschützen Mk2"
+msgstr "Verbesserte Feuerrate von Magnetgeschützen Mk2"
 
 #: po/custom/fromJson.txt:1096
 msgid "Rail Gun ROF Mk3"
-msgstr "Verbessertes Ladesystem von Magnetgeschützen Mk3"
+msgstr "Verbesserte Feuerrate von Magnetgeschützen Mk3"
 
 #: po/custom/fromJson.txt:1097
 msgid "Rail Gun Tiger Hover"
@@ -8515,15 +8507,15 @@ msgstr "Robotergestützte Reparatureinrichtung"
 
 #: po/custom/fromJson.txt:1154
 msgid "Robotic Repair Facility Upgrade"
-msgstr "Robotergestützte Reparatureinrichtung"
+msgstr "Robotergestützte Reparatureinrichtungsverbesserung"
 
 #: po/custom/fromJson.txt:1155
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Robotergestützte Reparatureinrichtung Mk2"
+msgstr "Robotergestützte Reparatureinrichtungsverbesserung Mk2"
 
 #: po/custom/fromJson.txt:1156
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr "Robotergestützte Reparatureinrichtung Mk3"
+msgstr "Robotergestützte Reparatureinrichtungsverbesserung Mk3"
 
 #: po/custom/fromJson.txt:1158
 msgid "Robotic VTOL Production Mk2"
@@ -8635,7 +8627,7 @@ msgstr "Scavenger-Bunker"
 
 #: po/custom/fromJson.txt:1187
 msgid "Scavenger CornerWall"
-msgstr "Scavenger-Mauer"
+msgstr "Scavenger-Eckmauer"
 
 #: po/custom/fromJson.txt:1188
 msgid "Scavenger Factory"
@@ -8704,7 +8696,7 @@ msgstr "Scourge-Lenkrakete Wyvern Ketten"
 
 #: po/custom/fromJson.txt:1204
 msgid "Scourge Python Tracks"
-msgstr "Scourge Python Ketten"
+msgstr "Scourge-Lenkrakete Python Ketten"
 
 #: po/custom/fromJson.txt:1205
 msgid "Scourge Retaliation VTOL"
@@ -8736,9 +8728,8 @@ msgid "Semperfi"
 msgstr "Semperfi"
 
 #: po/custom/fromJson.txt:1214
-#, fuzzy
 msgid "SemperFi JS"
-msgstr "Semperfi JS"
+msgstr "SemperFi JS"
 
 #: po/custom/fromJson.txt:1215
 msgid "Sensor Cobra Half-tracks"
@@ -8864,7 +8855,7 @@ msgstr "Stellung mit Stormbringer"
 
 #: po/custom/fromJson.txt:1248
 msgid "Strike mission continues until enemy destroyed or they retreat"
-msgstr "Angriffsbefehl wird aufrecht erhalten bis der Feind zerstört ist oder sich zurückzieht"
+msgstr "Angriffsbefehl wird aufrechterhalten, bis der Feind zerstört ist oder sich zurückzieht"
 
 #: po/custom/fromJson.txt:1249
 msgid "Stronger Commander Turret Available for Design"
@@ -8928,15 +8919,15 @@ msgstr "Flammenwerfergel für sehr hohe Temperaturen Mk3"
 
 #: po/custom/fromJson.txt:1267
 msgid "Superhot Plasmite gel"
-msgstr "Superheißes, plasmites Flammenwerfergel"
+msgstr "Superheißes Plasmitlammenwerfergel"
 
 #: po/custom/fromJson.txt:1268
 msgid "Superhot Plasmite gel Mk2"
-msgstr "Superheißes, plasmites Flammenwerfergel Mk2"
+msgstr "Superheißes Plasmitlammenwerfergel Mk2"
 
 #: po/custom/fromJson.txt:1269
 msgid "Superhot Plasmite gel Mk3"
-msgstr "Superheißes, plasmites Flammenwerfergel Mk3"
+msgstr "Superheißes Plasmitlammenwerfergel Mk3"
 
 #: po/custom/fromJson.txt:1277
 #: src/design.cpp:1033
@@ -9062,7 +9053,7 @@ msgstr "Zielvorhersagelenkraketen"
 
 #: po/custom/fromJson.txt:1307
 msgid "Thermal Armor"
-msgstr "Thermalpanzerung für Fahrzeuge"
+msgstr "Thermalpanzerung"
 
 #: po/custom/fromJson.txt:1308
 msgid "Thermal Armor +35%"
@@ -9082,11 +9073,11 @@ msgstr "Thermalpanzerung +45%"
 
 #: po/custom/fromJson.txt:1313
 msgid "Thermal Armor Mk2"
-msgstr "Thermalpanzerung für Fahrzeuge Mk2"
+msgstr "Thermalpanzerung Mk2"
 
 #: po/custom/fromJson.txt:1314
 msgid "Thermal Armor Mk3"
-msgstr "Thermalpanzerung für Fahrzeuge Mk3"
+msgstr "Thermalpanzerung Mk3"
 
 #: po/custom/fromJson.txt:1315
 msgid "Thermal Imaging Bombsight"
@@ -9259,7 +9250,7 @@ msgstr "Mehrläufiges Zwillingsschnellfeuermaschinengewehr"
 
 #: po/custom/fromJson.txt:1362
 msgid "Two-faced"
-msgstr ""
+msgstr "Doppelseitig"
 
 #: po/custom/fromJson.txt:1363
 msgid "Unit Research Completed"
@@ -9267,7 +9258,7 @@ msgstr "Einheitenforschung abgeschlossen"
 
 #: po/custom/fromJson.txt:1364
 msgid "Upgraded battlefield computer system"
-msgstr "Gefechtsfeldcomputersystem verbessert"
+msgstr "Verbessertes Gefechtsfeldcomputersystem"
 
 #: po/custom/fromJson.txt:1365
 msgid "Uplink Sensor"
@@ -9347,7 +9338,7 @@ msgstr "Vengeance Ketten Gauß-Kanone"
 
 #: po/custom/fromJson.txt:1389
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr "Vengeance Ketten Scourge"
+msgstr "Vengeance Ketten Gauß Scourge-Lenkrakete"
 
 #: po/custom/fromJson.txt:1390
 msgid "Vengeance Tracks Rail Gun"
@@ -9569,7 +9560,7 @@ msgstr "VTOL-Servicestationen werden benötigt, um VTOLs einsatzbereit zu halten
 
 #: po/custom/fromJson.txt:1449
 msgid "VTOL Scourge Missile"
-msgstr "VTOL-Scourge-Rakete"
+msgstr "VTOL-Scourge-Lenkrakete"
 
 #: po/custom/fromJson.txt:1451
 msgid "VTOL Strike Tower"
@@ -9762,7 +9753,7 @@ msgstr "Datenverzeichnis"
 # Aus dem Source ist ersichtlich, was mit "level" gemeint ist, kA, ob das gut übersetzt ist -Kreuvf
 #: src/clparse.cpp:263
 msgid "Show debug for given level"
-msgstr "Zeige die Debugdaten für die angeforderten Bereich"
+msgstr "Zeige die Debugdaten für die angeforderten Bereiche"
 
 #: src/clparse.cpp:263
 msgid "debug level"
@@ -9913,7 +9904,7 @@ msgstr "Test"
 
 #: src/cmddroid.cpp:102
 msgid "Commander needs a higher level to command more units"
-msgstr "Commander braucht höhere Stufe, um mehr Einheiten befehligen zu können."
+msgstr "Commander braucht höheren Rang, um mehr Einheiten befehligen zu können."
 
 #: src/configuration.cpp:114
 msgid "My Game"
@@ -10195,11 +10186,11 @@ msgstr "Helfen Sie dem Projekt bei der Deckung unserer Serverkosten, klicken Sie
 
 #: src/frontend.cpp:164
 msgid "Chat with players on #warzone2100"
-msgstr ""
+msgstr "Chatte mit Spielern in #warzone2100"
 
 #: src/frontend.cpp:165
 msgid "Connect to Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Verbinde dich mit Freenode über den Webchat durch Klicken dieses Links."
 
 #: src/frontend.cpp:166
 msgid "Check for a newer version"
@@ -10695,7 +10686,7 @@ msgstr "Baufortschritt"
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
-msgstr "Baufortschritt"
+msgstr "Konstruktionsfortschritt"
 
 #: src/intdisplay.cpp:255
 msgid "Research Progress"
@@ -10828,19 +10819,16 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Gut, Waffen- und Sensoranzeige sind aus!"
 
 #: src/keybind.cpp:329
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "Sicht nach Norden ausgerichtet"
+msgstr "Sicht nach Süden ausgerichtet"
 
 #: src/keybind.cpp:339
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "Sicht nach Norden ausgerichtet"
+msgstr "Sicht nach Osten ausgerichtet"
 
 #: src/keybind.cpp:349
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "Sicht nach Norden ausgerichtet"
+msgstr "Sicht nach West ausgerichtet"
 
 #: src/keybind.cpp:418
 #, c-format
@@ -11033,7 +11021,7 @@ msgstr "Kann Kommandozentrale nicht finden!"
 
 #: src/keybind.cpp:2383
 msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr "Geschwindigkeitbegrenzung für Formationen wurde aufgrund von Fehlern aus dem Spiel entfernt."
+msgstr "Geschwindigkeitsbegrenzung für Formationen wurde aufgrund von Fehlern aus dem Spiel entfernt."
 
 #: src/keybind.cpp:2432
 msgid "Vertical rotation direction: Normal"
@@ -12125,7 +12113,6 @@ msgid "UPnP has been enabled."
 msgstr "UPnP wurde aktiviert."
 
 #: src/multiint.cpp:3881
-#, fuzzy
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "UPnP-Erkennung fehlgeschlagen. Sie müssen Ihren Router händisch konfigurieren."
 
