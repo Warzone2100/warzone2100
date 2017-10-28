@@ -2279,6 +2279,10 @@ function camNextLevel(nextLevel)
 	if (__camNeedBonusTime)
 	{
 		var bonusTime = getMissionTime();
+		if (difficulty === EASY || difficulty === MEDIUM)
+		{
+			bonusTime = Math.floor(bonusTime * 0.75);
+		}
 		if (bonusTime > 0)
 		{
 			var bonus = 110;

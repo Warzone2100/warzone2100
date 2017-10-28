@@ -43,31 +43,30 @@ function eventGameInit()
 }
 
 function resetPower() {
-	const HARD_POWER_LIMIT = 20000;
-	const INSANE_POWER_LIMIT = 12000;
+	var powerLimit = 999999;
+	var powerProductionRate = 100;
 
 	// set income modifier/power storage for player 0 (human)
 	if (difficulty == EASY)
 	{
-		setPowerModifier(150);
+		powerProductionRate = 115;
 	}
 	else if (difficulty == HARD)
 	{
-		setPowerModifier(65);
-		setPowerStorageMaximum(HARD_POWER_LIMIT);
-		if (playerPower(selectedPlayer) >= HARD_POWER_LIMIT)
-		{
-			setPower(HARD_POWER_LIMIT - 1, selectedPlayer);
-		}
+		powerProductionRate = 85;
+		powerLimit = 20000;
 	}
 	else if (difficulty == INSANE)
 	{
-		setPowerModifier(50);
-		setPowerStorageMaximum(INSANE_POWER_LIMIT);
-		if (playerPower(selectedPlayer) >= INSANE_POWER_LIMIT)
-		{
-			setPower(INSANE_POWER_LIMIT - 1, selectedPlayer);
-		}
+		powerProductionRate = 70;
+		powerLimit = 12000;
+	}
+
+	setPowerModifier(powerProductionRate);
+	setPowerStorageMaximum(powerLimit);
+	if (playerPower(selectedPlayer) >= powerLimit)
+	{
+		setPower(powerLimit - 1, selectedPlayer);
 	}
 }
 
