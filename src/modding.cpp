@@ -120,7 +120,7 @@ void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath
 				snprintf(buf, sizeof(buf), "mod: %s", *i);
 				addDumpInfo(buf);
 			}
-			PHYSFS_addToSearchPath(tmpstr, appendToPath);
+			PHYSFS_mount(tmpstr, NULL, appendToPath);
 		}
 		i++;
 	}

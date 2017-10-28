@@ -415,7 +415,7 @@ static void frontEndNewGame(int which)
 		path += "campaigns";
 		path += PHYSFS_getDirSeparator();
 		path += list[which].package;
-		if (!PHYSFS_mount(path.toUtf8().constData(), nullptr, PHYSFS_APPEND))
+		if (!PHYSFS_mount(path.toUtf8().constData(), NULL, PHYSFS_APPEND))
 		{
 			debug(LOG_ERROR, "Failed to load campaign mod \"%s\": %s",
 			      path.toUtf8().constData(), PHYSFS_getLastError());
