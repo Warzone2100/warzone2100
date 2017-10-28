@@ -295,7 +295,7 @@ static void initialize_ConfigDir()
 
 
 	// User's home dir first so we always see what we write
-	PHYSFS_addToSearchPath(PHYSFS_getWriteDir(), PHYSFS_PREPEND);
+	PHYSFS_mount(PHYSFS_getWriteDir(), NULL, PHYSFS_PREPEND);
 
 	PHYSFS_permitSymbolicLinks(1);
 

@@ -323,7 +323,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// make sure videos override included files
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "sequences.wz");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 				curSearchPath = curSearchPath->higherPriority;
 			}
 			curSearchPath = searchPathRegistry;
@@ -337,7 +337,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path);
 #endif // DEBUG
 				// Add global and campaign mods
-				PHYSFS_addToSearchPath(curSearchPath->path, PHYSFS_APPEND);
+				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 
 				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
 				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
@@ -350,15 +350,15 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				}
 
 				// Add plain dir
-				PHYSFS_addToSearchPath(curSearchPath->path, PHYSFS_APPEND);
+				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 
 				// Add base files
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "base");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "base.wz");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 
 				curSearchPath = curSearchPath->higherPriority;
 			}
@@ -372,7 +372,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// make sure videos override included files
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "sequences.wz");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 				curSearchPath = curSearchPath->higherPriority;
 			}
 			// Add the selected map first, for mapmod support
@@ -380,7 +380,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 			{
 				QString realPathAndDir = QString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
 				realPathAndDir.replace('/', PHYSFS_getDirSeparator()); // Windows fix
-				PHYSFS_addToSearchPath(realPathAndDir.toUtf8().constData(), PHYSFS_APPEND);
+				PHYSFS_mount(realPathAndDir.toUtf8().constData(), NULL, PHYSFS_APPEND);
 			}
 			curSearchPath = searchPathRegistry;
 			while (curSearchPath->lowerPriority)
@@ -393,7 +393,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				debug(LOG_WZ, "Adding [%s] to search path", curSearchPath->path);
 #endif // DEBUG
 				// Add global and multiplay mods
-				PHYSFS_addToSearchPath(curSearchPath->path, PHYSFS_APPEND);
+				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
 				if (NetPlay.isHost || !NetPlay.bComms)
 				{
@@ -416,21 +416,21 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add multiplay patches
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "mp");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "mp.wz");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 
 				// Add plain dir
-				PHYSFS_addToSearchPath(curSearchPath->path, PHYSFS_APPEND);
+				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 
 				// Add base files
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "base");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 				sstrcpy(tmpstr, curSearchPath->path);
 				sstrcat(tmpstr, "base.wz");
-				PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+				PHYSFS_mount(tmpstr, NULL, PHYSFS_APPEND);
 
 				curSearchPath = curSearchPath->higherPriority;
 			}
@@ -451,7 +451,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 
 		// User's home dir must be first so we always see what we write
 		PHYSFS_removeFromSearchPath(PHYSFS_getWriteDir());
-		PHYSFS_addToSearchPath(PHYSFS_getWriteDir(), PHYSFS_PREPEND);
+		PHYSFS_mount(PHYSFS_getWriteDir(), NULL, PHYSFS_PREPEND);
 
 #ifdef DEBUG
 		printSearchPath();
@@ -498,7 +498,7 @@ static MapFileList listMapFiles()
 	for (const auto &realFileName : ret)
 	{
 		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName;
-		if (PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND))
+		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND))
 		{
 			int unsafe = 0;
 			char **filelist = PHYSFS_enumerateFiles("multiplay/maps");
@@ -537,7 +537,7 @@ static MapFileList listMapFiles()
 	// restore our search path(s) again
 	for (const auto &restorePaths : oldSearchPath)
 	{
-		PHYSFS_addToSearchPath(restorePaths.c_str(), PHYSFS_APPEND);
+		PHYSFS_mount(restorePaths.c_str(), NULL, PHYSFS_APPEND);
 	}
 	debug(LOG_WZ, "Search paths restored");
 	printSearchPath();
@@ -638,7 +638,7 @@ bool buildMapList()
 		struct WZmaps CurrentMap;
 		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName.c_str()) + realFileName;
 
-		PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND);
+		PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND);
 
 		char **filelist = PHYSFS_enumerateFiles("");
 		for (char **file = filelist; *file != nullptr; ++file)

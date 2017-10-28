@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 		strcpy(filename, argv[1]);
 	}
 	PHYSFS_init(argv[0]);
-	PHYSFS_addToSearchPath(path, 1);
+	PHYSFS_mount(path, NULL, 1);
 
 	map = mapLoad(filename);
 	if (!map)
