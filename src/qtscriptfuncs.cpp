@@ -4368,8 +4368,8 @@ static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
 	SCRIPT_ASSERT(context, weapon > 0, "No such weapon: %s", weaponValue.toString().toUtf8().constData());
 
 	Vector3i target;
-	target.x = xLocation;
-	target.y = yLocation;
+	target.x = world_coord(xLocation);
+	target.y = world_coord(yLocation);
 	target.z = map_Height(xLocation, yLocation);
 
 	WEAPON sWeapon;
