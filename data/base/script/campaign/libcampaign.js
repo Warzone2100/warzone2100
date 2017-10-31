@@ -2550,16 +2550,19 @@ function __camVictoryOffworld()
 
 	if (camCheckExtraObjective() && camAllArtifactsPickedUp())
 	{
-		var enemyLen = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length;
 		if (elimBases)
 		{
-			if (!enemyLen && camAllEnemyBasesEliminated())
+			var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
+				return obj.type === DROID;
+			}).length;
+			if (!enemyDroids && camAllEnemyBasesEliminated())
 			{
 				__camGameWon();
 			}
 		}
 		else
 		{
+			var enemyLen = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length;
 			if (!forceLZ && !enemyLen)
 			{
 				//if there are no more enemies, win instantly unless forced to go

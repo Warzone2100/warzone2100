@@ -207,7 +207,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"NPFactoryW": {
-			assembly: camMakePos("genRetreatPoint"),
+			assembly: "NPFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
@@ -219,6 +219,7 @@ function eventStartLevel()
 			templates: [ nphmgh, npltath, nphch ] //Hover factory
 		},
 		"NPFactoryE": {
+			assembly: "NPFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(90000),
@@ -230,6 +231,7 @@ function eventStartLevel()
 			templates: [ npltat, npmsens, npmorb, npsmct, nphct ] //variety
 		},
 		"NPFactoryNE": {
+			assembly: "NPFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(120000),
@@ -241,6 +243,7 @@ function eventStartLevel()
 			templates: [ nphct, npsbb, npmorb ] //tough units
 		},
 		"NPCybFactoryW": {
+			assembly: "NPCybFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
@@ -252,6 +255,7 @@ function eventStartLevel()
 			templates: [ npcybc, npcybf, npcybr ]
 		},
 		"NPCybFactoryE": {
+			assembly: "NPCybFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
@@ -263,7 +267,7 @@ function eventStartLevel()
 			templates: [ npcybc, npcybf, npcybr ]
 		},
 		"NPCybFactoryNE": {
-			assembly: camMakePos("cybRetreatPoint"),
+			assembly: "NPCybFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(70000),
@@ -278,6 +282,6 @@ function eventStartLevel()
 
 	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 10000);
+	queue("enableReinforcements", 15000);
 	queue("setupPatrols", 160000); // 2.5 min.
 }

@@ -149,6 +149,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"COCyborgFactory-Arti": {
+			assembly: "COCyborgFactory-ArtiAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
@@ -160,7 +161,7 @@ function eventStartLevel()
 			templates: [npcybc, npcybf, cocybag, npcybr]
 		},
 		"COCyborgFactory-b1": {
-			assembly: camMakePos("base1CybAssembly"),
+			assembly: "COCyborgFactory-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
 			throttle: camChangeOnDiff(50000),
@@ -172,6 +173,7 @@ function eventStartLevel()
 			templates: [cocybag, npcybr]
 		},
 		"COCyborgFactory-b2": {
+			assembly: "COCyborgFactory-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
@@ -183,6 +185,7 @@ function eventStartLevel()
 			templates: [npcybc, npcybf]
 		},
 		"COHeavyFactory-b2L": {
+			assembly: "COHeavyFactory-b2LAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(80000),
@@ -194,6 +197,7 @@ function eventStartLevel()
 			templates: [cohact, comhpv, comrotm]
 		},
 		"COHeavyFactory-b2R": {
+			assembly: "COHeavyFactory-b2RAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(60000),
@@ -205,6 +209,7 @@ function eventStartLevel()
 			templates: [comrotm, comhltat, cohact, comsensh]
 		},
 		"COMediumFactory": {
+			assembly: "COMediumFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(45000),
@@ -221,7 +226,7 @@ function eventStartLevel()
 	truckDefense();
 	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 20000);
+	queue("enableReinforcements", 27000);
 	queue("northWestAttack", 120000);
 	queue("mainBaseAttackGroup", 180000);
 	queue("enableTimeBasedFactories", camChangeOnDiff(600000)); // 10 min

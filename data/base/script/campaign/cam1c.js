@@ -288,14 +288,14 @@ function eventStartLevel()
 			assembly: "ScavSouthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(90000),
+			throttle: camChangeOnDiff(30000),
 			templates: [ buscan, rbjeep, trike, buggy ]
 		},
 		"ScavCentralFactory": {
-			// no assembly was defined in wzcam for this factory
+			assembly: "ScavCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(30000),
 			templates: [ firecan, rbuggy, bjeep, bloke ]
 		},
 		"ScavNorthFactory": {

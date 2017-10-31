@@ -132,6 +132,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"COHeavyFactory": {
+			assembly: "COHeavyFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(80000),
@@ -143,6 +144,7 @@ function eventStartLevel()
 			templates: [cohhpv, comhltat, cohct]
 		},
 		"COSouthCyborgFactory": {
+			assembly: "COSouthCyborgFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(40000),
@@ -162,6 +164,6 @@ function eventStartLevel()
 	camEnableFactory("COHeavyFactory");
 	camEnableFactory("COSouthCyborgFactory");
 
-	queue("enableReinforcements", 20000);
+	queue("enableReinforcements", 22000);
 	queue("vtolAttack", 60000);
 }

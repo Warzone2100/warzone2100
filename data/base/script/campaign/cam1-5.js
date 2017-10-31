@@ -196,7 +196,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"NPLeftFactory": {
-			//assembly: "NPLeftAssembly",
+			assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
@@ -208,7 +208,7 @@ function eventStartLevel()
 			},
 		},
 		"NPRightFactory": {
-			//assembly: "NPRightAssembly",
+			assembly: "NPRightAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
@@ -220,7 +220,7 @@ function eventStartLevel()
 			},
 		},
 		"NPCyborgFactory": {
-			//assembly: "NPCyborgAssembly",
+			assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),

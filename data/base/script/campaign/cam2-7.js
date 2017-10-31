@@ -142,7 +142,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"COHeavyFac-Arti-b2": {
-			assembly: camMakePos("base2HeavyAssembly"),
+			assembly: "base2HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(60000),
@@ -154,7 +154,7 @@ function eventStartLevel()
 			templates: [comagt, cohact, cohhpv, comtath]
 		},
 		"COCyborgFac-b2": {
-			assembly: camMakePos("base2CybAssembly"),
+			assembly: "base2CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
@@ -166,6 +166,7 @@ function eventStartLevel()
 			templates: [npcybc, cocybag]
 		},
 		"COCyborgFac-b3": {
+			assembly: "base3CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
@@ -177,6 +178,7 @@ function eventStartLevel()
 			templates: [npcybf, npcybr]
 		},
 		"COHeavyFac-b4": {
+			assembly: "base4HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(80000),
@@ -188,6 +190,7 @@ function eventStartLevel()
 			templates: [comrotmh, comhltat, cohct]
 		},
 		"COCyborgFac-b4": {
+			assembly: "base4CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
@@ -199,7 +202,7 @@ function eventStartLevel()
 			templates: [cocybag, npcybc, npcybr]
 		},
 		"COVtolFactory-b4": {
-			assembly: camMakePos("base4VTOLAssembly"),
+			assembly: "base4VTOLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(70000),

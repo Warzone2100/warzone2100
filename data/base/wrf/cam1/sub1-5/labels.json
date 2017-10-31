@@ -1,10 +1,13 @@
 {
-	"position_0": { "label": "TransporterEntry",      "pos": [ 7232, 4416 ] },
-	"position_1": { "label": "TransporterExit",       "pos": [ 100, 8000 ] },
-	"position_2": { "label": "ScavSouthWestAssembly", "pos": [ 4928, 7488 ] },
-	"position_3": { "label": "ScavSouthEastAssembly", "pos": [ 6336, 7616 ] },
-	"position_4": { "label": "ScavNorthAssembly",     "pos": [ 3136, 1600 ] },
-	"position_5": { "label": "NPTransportPos",        "pos": [ 6144, 2560 ] },
+	"position_0": { "label": "TransporterEntry",          "pos": [ 7232, 4416 ] },
+	"position_1": { "label": "TransporterExit",           "pos": [ 100, 8000 ] },
+	"position_2": { "label": "NPLeftAssembly",            "pos": [ 4800, 3008 ] },
+	"position_3": { "label": "NPRightAssembly",           "pos": [ 5184, 3008 ] },
+	"position_4": { "label": "NPCyborgAssembly",          "pos": [ 4160, 3648 ] },
+	"position_5": { "label": "ScavSouthWestAssembly",     "pos": [ 4928, 7488 ] },
+	"position_6": { "label": "ScavSouthEastAssembly",     "pos": [ 6336, 7616 ] },
+	"position_7": { "label": "ScavNorthAssembly",         "pos": [ 3136, 1600 ] },
+	"position_8": { "label": "NPTransportPos",            "pos": [ 6144, 2560 ] },
 
 	"area_0": { "label": "RTLZ",                  "pos1": [ 0, 6400 ],    "pos2": [ 1664, 8000 ] },
 	"area_1": { "label": "LandingZone1",          "pos1": [ 640, 7040 ],  "pos2": [ 896, 7296 ] },
@@ -13,7 +16,7 @@
 	"area_4": { "label": "ScavSouthWest",         "pos1": [ 3392, 6848 ], "pos2": [ 4928, 8000 ] },
 	"area_5": { "label": "ScavSouthEast",         "pos1": [ 5056, 6592 ], "pos2": [ 6464, 8000 ] },
 	"area_6": { "label": "NPBase",                "pos1": [ 3520, 1728 ], "pos2": [ 6976, 5056 ] },
-	
+
 	"object_0": { "label": "NPLeftFactory",        "id": 481, "player": 1, "type": 1 },
 	"object_1": { "label": "NPRightFactory",       "id": 483, "player": 1, "type": 1 },
 	"object_2": { "label": "NPCyborgFactory",      "id": 407, "player": 1, "type": 1 },

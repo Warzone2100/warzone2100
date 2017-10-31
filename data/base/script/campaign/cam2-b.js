@@ -158,6 +158,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"COHeavyFacL-b1": {
+			assembly: "COHeavyFacL-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(70000),
@@ -169,6 +170,7 @@ function eventStartLevel()
 			templates: [comatt, cohct, comct]
 		},
 		"COHeavyFacR-b1": {
+			assembly: "COHeavyFacR-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(60000),
@@ -180,6 +182,7 @@ function eventStartLevel()
 			templates: [comatt, cohct, comct]
 		},
 		"COCybFacL-b2": {
+			assembly: "COCybFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(30000),
@@ -191,6 +194,7 @@ function eventStartLevel()
 			templates: [npcybc, npcybr]
 		},
 		"COCybFacR-b2": {
+			assembly: "COCybFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
@@ -202,6 +206,7 @@ function eventStartLevel()
 			templates: [npcybc, npcybr, npcybf, npcybm]
 		},
 		"COHeavyFac-b4": {
+			assembly: "COHeavyFac-b4Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
@@ -213,6 +218,7 @@ function eventStartLevel()
 			templates: [comatt, comit]
 		},
 		"COCybFac-b4": {
+			assembly: "COCybFac-b4Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),

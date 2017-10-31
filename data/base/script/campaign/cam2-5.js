@@ -120,7 +120,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"COMediumFactory": {
-			assembly: camMakePos("mediumFactoryAssembly"),
+			assembly: "COMediumFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
@@ -132,6 +132,7 @@ function eventStartLevel()
 			templates: [comct, comatt, comhpv]
 		},
 		"COCyborgFactoryL": {
+			assembly: "COCyborgFactoryLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(40000),
@@ -143,6 +144,7 @@ function eventStartLevel()
 			templates: [cocybag, npcybf, npcybr]
 		},
 		"COCyborgFactoryR": {
+			assembly: "COCyborgFactoryRAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(40000),

@@ -320,6 +320,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"COHeavyFac-Upgrade": {
+			assembly: "COHeavyFac-UpgradeAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
@@ -331,6 +332,7 @@ function eventStartLevel()
 			templates: [comit, cohct, comhpv, cohbbt]
 		},
 		"COHeavyFac-Leopard": {
+			assembly: "COHeavyFac-LeopardAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
@@ -342,6 +344,7 @@ function eventStartLevel()
 			templates: [comit, cohct, comhpv, cohbbt]
 		},
 		"COCyborgFactoryL": {
+			assembly: "COCyborgFactoryLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
@@ -353,6 +356,7 @@ function eventStartLevel()
 			templates: [npcybf, npcybc, npcybr]
 		},
 		"COCyborgFactoryR": {
+			assembly: "COCyborgFactoryRAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),

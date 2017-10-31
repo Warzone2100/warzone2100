@@ -44,7 +44,7 @@ function cyborgPatrol()
 			camMakePos("NWTankPos2"),
 			camMakePos("NWTankPos3"),
 		],
-		//fallback: camMakePos("cyborgAssembly-b1"),
+		//fallback: camMakePos("COCyborgFac-b1Assembly"),
 		//morale: 50,
 		interval: 45000,
 		regroup: false,
@@ -56,7 +56,7 @@ function cyborgPatrol()
 			camMakePos("WCybPos2"),
 			camMakePos("WCybPos3"),
 		],
-		//fallback: camMakePos("heavyAssembly-b2"),
+		//fallback: camMakePos("COHeavyFacR-b2Assembly"),
 		//morale: 90,
 		interval: 30000,
 		regroup: false,
@@ -129,7 +129,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"COCyborgFac-b1": {
-			assembly: camMakePos("cyborgAssembly-b1"),
+			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(40000),
@@ -141,6 +141,7 @@ function eventStartLevel()
 			templates: [cocybag, npcybr, npcybf, npcybc]
 		},
 		"COHeavyFacL-b2": {
+			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(80000),
@@ -152,7 +153,7 @@ function eventStartLevel()
 			templates: [comhpv, cohact]
 		},
 		"COHeavyFacR-b2": {
-			assembly: camMakePos("heavyAssembly-b2"),
+			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(80000),
