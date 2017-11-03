@@ -4035,3 +4035,50 @@ const char *getDroidOrderName(DROID_ORDER order)
 
 	return "DORDER_#INVALID#";
 }
+
+const char *getDroidOrderKey(DROID_ORDER order)
+{
+	switch (order)
+	{
+	case DORDER_NONE:                     return "N";
+	case DORDER_STOP:                     return "Stop";
+	case DORDER_MOVE:                     return "M";
+	case DORDER_ATTACK:                   return "A";
+	case DORDER_BUILD:                    return "B";
+	case DORDER_HELPBUILD:                return "hB";
+	case DORDER_LINEBUILD:                return "lB";
+	case DORDER_DEMOLISH:                 return "D";
+	case DORDER_REPAIR:                   return "R";
+	case DORDER_OBSERVE:                  return "O";
+	case DORDER_FIRESUPPORT:              return "F";
+	case DORDER_RETREAT:                  return "RET";
+	case DORDER_UNUSED_2:                 return "Err";
+	case DORDER_RTB:                      return "RTB";
+	case DORDER_RTR:                      return "RTR";
+	case DORDER_RUN:                      return "RUN";
+	case DORDER_EMBARK:                   return "E";
+	case DORDER_DISEMBARK:                return "!E";
+	case DORDER_ATTACKTARGET:             return "AT";
+	case DORDER_COMMANDERSUPPORT:         return "CS";
+	case DORDER_BUILDMODULE:              return "BM";
+	case DORDER_RECYCLE:                  return "RCY";
+	case DORDER_TRANSPORTOUT:             return "To";
+	case DORDER_TRANSPORTIN:              return "Ti";
+	case DORDER_TRANSPORTRETURN:          return "Tr";
+	case DORDER_GUARD:                    return "G";
+	case DORDER_DROIDREPAIR:              return "DR";
+	case DORDER_RESTORE:                  return "RES";
+	case DORDER_SCOUT:                    return "S";
+	case DORDER_UNUSED_3:                 return "Err";
+	case DORDER_UNUSED:                   return "Err";
+	case DORDER_PATROL:                   return "P";
+	case DORDER_REARM:                    return "RE";
+	case DORDER_RECOVER:                  return "RCV";
+	case DORDER_LEAVEMAP:                 return "L";
+	case DORDER_RTR_SPECIFIED:            return "RTR";
+	case DORDER_CIRCLE:                   return "C";
+	case DORDER_HOLD:                     return "H";
+	};
+	ASSERT(false, "DROID_ORDER out of range: %u", order);
+	return "Err";
+}

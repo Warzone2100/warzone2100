@@ -110,6 +110,7 @@ static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
 static void	doConstructionLines(const glm::mat4 &viewMatrix);
 static void	drawDroidCmndNo(DROID *psDroid);
+static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static void	calcAverageTerrainHeight(iView *player);
@@ -2873,6 +2874,10 @@ static void	drawDroidSelections()
 		/* Go thru' all the droidss */
 		for (const DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
+			if (showORDERS)
+			{
+				drawDroidOrder(psDroid);
+			}
 			if (i != selectedPlayer && !psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
 				/* If it's selected */
@@ -2958,6 +2963,16 @@ static void	drawDroidGroupNumber(DROID *psDroid)
 /// X offset to display the group number at
 #define CMND_STAR_X_OFFSET	(6)
 #define CMND_GN_Y_OFFSET	(8)
+
+static void drawDroidOrder(const DROID *psDroid)
+{
+	const int xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
+	const int yShift = psDroid->sDisplay.screenR - CMND_GN_Y_OFFSET;
+	const char *letter = getDroidOrderKey(psDroid->order.type);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText(letter, psDroid->sDisplay.screenX - xShift - CMND_STAR_X_OFFSET,  psDroid->sDisplay.screenY + yShift, font_regular);
+}
+
 /// Draw the number of the commander the droid is assigned to
 static void	drawDroidCmndNo(DROID *psDroid)
 {

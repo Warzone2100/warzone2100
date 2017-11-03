@@ -128,6 +128,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup);
 
 /** \brief Gets the name of an order. */
 const char *getDroidOrderName(DROID_ORDER order);
+const char *getDroidOrderKey(DROID_ORDER order);
 
 /** \brief Gets a player's transporter. */
 DROID *FindATransporter(DROID const *embarkee);
