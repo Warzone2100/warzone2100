@@ -323,7 +323,6 @@ static bool tryDoRepairlikeAction(DROID *psDroid)
 }
 
 /** This function updates all the orders status, according with psdroid's current order and state.
- * @todo This is as quite complex function. Suggestion to try to refactor it.
  */
 void orderUpdateDroid(DROID *psDroid)
 {

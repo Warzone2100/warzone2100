@@ -1919,16 +1919,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 
 	case DACTION_ATTACK:
-		// can't attack without a weapon
-		// or yourself
-		if ((psDroid->asWeaps[0].nStat == 0) ||
-		    isTransporter(psDroid) ||
-		    (psAction->psObj == psDroid))
+		if (psDroid->asWeaps[0].nStat == 0 || isTransporter(psDroid) || psAction->psObj == psDroid)
 		{
 			break;
 		}
 
-		//check electronic droids only attack structures - not so anymore!
 		if (electronicDroid(psDroid))
 		{
 			//check for low or zero resistance - just zero resistance!

@@ -373,7 +373,7 @@ int objArmour(BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
  */
 int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage)
 {
-	int	actualDamage, level = 1, lastHit = psObj->timeLastHit;
+	int level = 1;
 	int armour = objArmour(psObj, weaponClass);
 
 	// If the previous hit was by an EMP cannon and this one is not:
@@ -401,7 +401,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		bMultiMessages = bMultiPlayer;
 
 		clustObjectAttacked((BASE_OBJECT *)psObj);
-		triggerEventAttacked(psObj, g_pProjLastAttacker, lastHit);
+		triggerEventAttacked(psObj, g_pProjLastAttacker, psObj->timeLastHit);
 
 		bMultiMessages = bMultiMessagesBackup;
 	}
@@ -416,7 +416,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	}
 
 	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
-	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
+	int actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
 
 	// Apply at least the minimum damage amount
 	actualDamage = MAX(actualDamage - armour, actualDamage * minDamage / 100);

@@ -2686,7 +2686,6 @@ bool	eitherSelected(DROID *psDroid)
 static void	drawDroidSelections()
 {
 	UDWORD			scrX, scrY, scrR;
-	DROID			*psDroid;
 	UDWORD			damage;
 	PIELIGHT		powerCol = WZCOL_BLACK, powerColShadow = WZCOL_BLACK;
 	PIELIGHT		boxCol;
@@ -2694,7 +2693,6 @@ static void	drawDroidSelections()
 	bool			bMouseOverDroid = false;
 	bool			bMouseOverOwnDroid = false;
 	UDWORD			i, index;
-	FEATURE			*psFeature;
 	float			mulH;
 
 	psClickedOn = mouseTarget();
@@ -2709,7 +2707,7 @@ static void	drawDroidSelections()
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->sDisplay.frameNumber != currentGameFrame || !clipXY(psDroid->pos.x, psDroid->pos.y))
 		{
@@ -2793,7 +2791,7 @@ static void	drawDroidSelections()
 		{
 			if (psClickedOn->player != selectedPlayer && psClickedOn->sDisplay.frameNumber == currentGameFrame)
 			{
-				psDroid = (DROID *)psClickedOn;
+				DROID *psDroid = (DROID *)psClickedOn;
 				//show resistance values if CTRL/SHIFT depressed
 				if (ctrlShiftDown())
 				{
@@ -2873,7 +2871,7 @@ static void	drawDroidSelections()
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go thru' all the droidss */
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (const DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			if (i != selectedPlayer && !psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -2889,7 +2887,7 @@ static void	drawDroidSelections()
 		}
 	}
 
-	for (psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
+	for (const FEATURE *psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
 	{
 		if (!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
 		{
