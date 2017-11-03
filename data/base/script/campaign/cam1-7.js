@@ -82,36 +82,26 @@ function eventTransporterLanded(transport)
 {
 	if ((transport.player === NEW_PARADIGM) && enemyHasArtifact)
 	{
-		for (var s = 0; s < 5; ++s)
+		enemyStoleArtifact = true;
+		var crew = enumRange(transport.x, transport.y, 6, NEW_PARADIGM, false).filter(function(obj) {
+			return obj.type === DROID && obj.group === artiGroup;
+		});
+		for (var i = 0, l = crew.length; i < l; ++i)
 		{
-			var crew = enumRange(transport.x, transport.y, 5, ALL_PLAYERS, false);
-			crew = crew.filter(function(obj) {
-				return ((obj.type === DROID
-					&& obj.player === NEW_PARADIGM
-					&& !camIsTransporter(obj)
-					&& !camIsSystemDroid(obj))
-					|| (obj.type === FEATURE && obj.stattype === ARTIFACT)
-				);
-			});
-
-			for (var i = 0, l = crew.length; i < l; ++i)
-			{
-				var obj = crew[i];
-				if (obj.type === FEATURE && obj.stattype === ARTIFACT)
-				{
-					enemyStoleArtifact = true;
-				}
-				camSafeRemoveObject(obj, false);
-			}
+			var obj = crew[i];
+			camSafeRemoveObject(obj, false);
 		}
 	}
 }
 
 function eventTransporterExit(transport)
 {
-	if (transport.player === NEW_PARADIGM && camDef(enemyStoleArtifact) && enemyStoleArtifact)
+	if (transport.player === NEW_PARADIGM)
 	{
-		gameOverMessage(false);
+		if (enemyStoleArtifact)
+		{
+			gameOverMessage(false);
+		}
 	}
 }
 
@@ -197,6 +187,7 @@ function eventStartLevel()
 {
 	enemyHasArtifact = false;
 	enemyStoleArtifact = false;
+	var time = (difficulty === INSANE) ? 25000 : 50000;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone"); //player lz
 	var tent = getObject("transporterEntry");
@@ -292,5 +283,5 @@ function eventStartLevel()
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
 	queue("enableReinforcements", 15000);
-	queue("getArtifact", 120000);
+	queue("getArtifact", time);
 }

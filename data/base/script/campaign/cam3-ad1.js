@@ -149,11 +149,8 @@ function laserSatFuzzyStrike(obj)
 	//Introduce some randomness
 	var xRand = camRand(2);
 	var yRand = camRand(2);
-
 	var xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
 	var yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
-
-	camTrace("targeting at: " + xCoord + " " + yCoord);
 
 	if (xCoord < 0)
 	{
@@ -161,7 +158,7 @@ function laserSatFuzzyStrike(obj)
 	}
 	else if (xCoord > mapWidth)
 	{
-		xCoord = MAP_WIDTH;
+		xCoord = mapWidth;
 	}
 
 	if (yCoord < 0)
@@ -173,8 +170,10 @@ function laserSatFuzzyStrike(obj)
 		yCoord = mapLimit;
 	}
 
-	camTrace("firing at: " + xCoord + " " + yCoord);
-	playSound(LASSAT_FIRING, xCoord, yCoord);
+	if (camRand(101) < 40)
+	{
+		playSound(LASSAT_FIRING, xCoord, yCoord);
+	}
 	fireWeaponAtLoc(xCoord, yCoord, "LasSat");
 }
 
@@ -182,7 +181,7 @@ function laserSatFuzzyStrike(obj)
 function allySiloWithPlayer()
 {
 	playSound("pcv621.ogg"); //Objective captured
-	hackRemoveMessage("CM3D1_OBJ1", CAM_HUMAN_PLAYER);
+	hackRemoveMessage("CM3D1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	camAbsorbPlayer(SILO_PLAYER, CAM_HUMAN_PLAYER);
 	capturedSilos = true;
 }
@@ -190,7 +189,8 @@ function allySiloWithPlayer()
 //Check if the silos still exist and only allow winning if the player captured them.
 function checkMissileSilos()
 {
-	if (!enumArea("missileSilos", ALL_PLAYERS, false).length)
+	if (!countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER)
+		&& !countStruct("NX-ANTI-SATSite", SILO_PLAYER))
 	{
 		playSound("pcv622.ogg"); //Objective failed.
 		return false;
