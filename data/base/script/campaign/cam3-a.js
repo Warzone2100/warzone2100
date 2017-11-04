@@ -3,7 +3,6 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var index; //Number of bonus transports that have flown in.
-var videoIndex; //What video sequence should be played.
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -83,22 +82,6 @@ camAreaEvent("northWestBaseCleanup", function(droid)
 		resetLabel("northWestBaseCleanup", CAM_HUMAN_PLAYER);
 	}
 });
-
-//Play videos.
-function eventVideoDone()
-{
-	const VIDEOS = ["MB3A_MSG", "MB3A_MSG2"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex += 1;
-	}
-}
 
 //make the first batch or extra transport droids hero rank.
 function setHeroUnits()
@@ -392,7 +375,7 @@ function eventStartLevel()
 
 	camManageTrucks(NEXUS);
 	truckDefense();
-	eventVideoDone(); //Play videos.
+	camPlayVideos(["MB3A_MSG", "MB3A_MSG2"]);
 
 	//Only if starting Gamma directly rather than going through Beta
 	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)

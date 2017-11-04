@@ -274,7 +274,7 @@ function camChangeOnDiff(num, invert)
 			break;
 		case INSANE:
 			modifier = (invert === false) ? 0.67 : 2.50;
-			break
+			break;
 		default:
 			modifier = 1.00;
 			break;
@@ -1540,12 +1540,12 @@ function __camPickTarget(group)
 			});
 			if (!targets.length)
 			{
-				targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
+				targets = enumStruct(CAM_HUMAN_PLAYER).filter(function(obj) {
 					return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 				});
 				if (!targets.length)
 				{
-					targets = enumStruct(CAM_HUMAN_PLAYER).filter(function(obj) {
+					targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
 						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 					});
 				}
@@ -2683,13 +2683,6 @@ function camSetupTransporter(x, y, x1, y1)
 // These functions create the hit and run vtols for the given player.
 // Vtol rearming is handled in group management.
 ////////////////////////////////////////////////////////////////////////////////
-var __camVtolPlayer;
-var __camVtolStartPosition;
-var __camVtolTemplates;
-var __camVtolExitPosition;
-var __camVtolTimer;
-var __camVtolSpawnActive;
-var __camVtolSpawnStopObject;
 
 //Setup hit and runner VTOLs. Passing in obj is optional and will automatically
 //disable the vtol spawner once that object is dead.
@@ -2712,6 +2705,15 @@ function camSetVtolSpawn(value)
 {
 	__camVtolSpawnActive = value;
 }
+
+// privates
+var __camVtolPlayer;
+var __camVtolStartPosition;
+var __camVtolTemplates;
+var __camVtolExitPosition;
+var __camVtolTimer;
+var __camVtolSpawnActive;
+var __camVtolSpawnStopObject;
 
 function __checkVtolSpawnObject()
 {
@@ -2950,6 +2952,57 @@ function camNewGroup()
 var __camNewGroupCounter;
 
 ////////////////////////////////////////////////////////////////////////////////
+// Video playback related logic
+////////////////////////////////////////////////////////////////////////////////
+
+// Be aware that eventVideoDone will be triggered for each video
+// and will be received by the mission script's eventVideoDone, should it exist.
+
+//;; \subsection{camPlayVideos(videos)}
+//;; If videos is an array, queue up all of them for immediate playing. This
+//;; function will play one video sequence should one be provided.
+function camPlayVideos(videos)
+{
+	if (videos instanceof Array)
+	{
+		__camVideoSequences = videos;
+		__camEnqueueVideos();
+	}
+	else
+	{
+		if (!camIsString(videos))
+		{
+			camDebug("Non string passed in to play a video. Skipping.");
+			return;
+		}
+		hackAddMessage(videos, MISS_MSG, CAM_HUMAN_PLAYER, true);
+	}
+}
+
+// privates
+var __camVideoSequences;
+
+// Play all stored videos one after the other.
+// cam_eventVideoDone will call this function repeatedly.
+function __camEnqueueVideos()
+{
+	if (!__camVideoSequences.length)
+	{
+		return; //Nothing to play
+	}
+
+	var what = __camVideoSequences[0];
+	if(!camIsString(what))
+	{
+		camDebug("Non string found in __camVideoSequences. Stopping playback.");
+		return;
+	}
+
+	hackAddMessage(what, MISS_MSG, CAM_HUMAN_PLAYER, true);
+	__camVideoSequences.shift();
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
 // without distracting the script authors from handling them on their own.
 // It assumes that script authors do not implement another similar mechanism,
@@ -3101,6 +3154,7 @@ function cam_eventStartLevel()
 	__camLastNexusAttack = 0;
 	__camNexusActivated = false;
 	__camNewGroupCounter = 0;
+	__camVideoSequences = [];
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
@@ -3287,4 +3341,9 @@ function cam_eventObjectTranfer(obj, from)
 			queue("camNexusLaugh", 3000 + camRand(3000));
 		}
 	}
+}
+
+function cam_eventVideoDone()
+{
+	__camEnqueueVideos(); //Play any remaining videos automatically.
 }

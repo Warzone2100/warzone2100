@@ -12,7 +12,6 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var videoIndex;
 var edgeMapIndex;
 var edgeMapCounter;
 var winFlag;
@@ -81,22 +80,6 @@ function sendEdgeMapDroids()
 	}
 }
 
-//Play videos.
-function eventVideoDone()
-{
-	const VIDEOS = ["MB3_AB_MSG", "MB3_AB_MSG2", "MB3_AB_MSG3"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex += 1;
-	}
-}
-
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
@@ -152,7 +135,7 @@ function eventStartLevel()
 	});
 
 	camSetNexusState(true);
-	eventVideoDone();
+	camPlayVideos(["MB3_AB_MSG", "MB3_AB_MSG2", "MB3_AB_MSG3"]);
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);

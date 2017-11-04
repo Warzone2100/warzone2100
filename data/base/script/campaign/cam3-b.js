@@ -14,7 +14,6 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var videoIndex;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -42,27 +41,6 @@ camAreaEvent("trapTrigger", function(droid)
 		resetLabel("trapTrigger", CAM_HUMAN_PLAYER);
 	}
 });
-
-//Play videos.
-function eventVideoDone(flag)
-{
-	const VIDEOS = ["MB3_B_MSG", "MB3_B_MSG2", "MB3_B_MSG3"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (!camDef(flag) && (videoIndex === 2))
-	{
-		return; //Last message is triggered by an area event.
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex += 1;
-	}
-}
 
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
@@ -190,7 +168,7 @@ function activateNexusGroups()
 //Take everything Gamma has and donate to Nexus.
 function trapSprung()
 {
-	eventVideoDone(true);
+	camPlayVideos("MB3_B_MSG3");
 	hackRemoveMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(5400));
@@ -280,7 +258,7 @@ function eventStartLevel()
 	});
 
 	hackAddMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	eventVideoDone();
+	camPlayVideos(["MB3_B_MSG", "MB3_B_MSG2"]);
 
 	changePlayerColour(GAMMA, 0);
 

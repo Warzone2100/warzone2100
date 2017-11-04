@@ -65,7 +65,7 @@ function eventStartLevel()
 		"artifactLocation": { tech: "R-Wpn-MG3Mk1" }, //Heavy machine gun
 	});
 
-	hackAddMessage("FLIGHT", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("FLIGHT");
 	hackAddMessage("C1-1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 }

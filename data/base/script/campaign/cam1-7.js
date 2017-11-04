@@ -67,7 +67,7 @@ camAreaEvent("artifactCheckNP", function()
 	var artifact = camGetArtifacts();
 	camSafeRemoveObject(artifact[0], false);
 
-	hackAddMessage("SB1_7_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("SB1_7_MSG3");
 	hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
 	camCallOnce("removeCanyonBlip");
 
@@ -187,7 +187,6 @@ function eventStartLevel()
 {
 	enemyHasArtifact = false;
 	enemyStoleArtifact = false;
-	var time = (difficulty === INSANE) ? 25000 : 50000;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone"); //player lz
 	var tent = getObject("transporterEntry");
@@ -283,5 +282,5 @@ function eventStartLevel()
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
 	queue("enableReinforcements", 15000);
-	queue("getArtifact", time);
+	queue("getArtifact", camChangeOnDiff(90000));
 }

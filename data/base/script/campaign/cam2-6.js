@@ -18,7 +18,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Howitzer-Damage02",
 ];
 
-camAreaEvent("groupTrigger", function(droid)
+function camEnemyBaseDetected_COMainBase()
 {
 	camManageGroup(camMakeGroup("mediumBaseGroup"), CAM_ORDER_DEFEND, {
 		pos: camMakePos("uplinkBaseCorner"),
@@ -42,11 +42,23 @@ camAreaEvent("groupTrigger", function(droid)
 	camEnableFactory("COCyborgFactory-b2");
 	camEnableFactory("COHeavyFactory-b2R");
 	enableTimeBasedFactories(); //Might as well since the player is attacking.
-});
+};
 
 function camEnemyBaseEliminated_COUplinkBase()
 {
 	hackRemoveMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
+}
+
+//Group together attack droids in this base that are not already in a group
+function camEnemyBaseDetected_COMediumBase()
+{
+	var droids = enumArea("mediumBaseCleanup", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && !camDef(obj.group) && obj.canHitGround;
+	});
+
+	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+		regroup: false,
+	});
 }
 
 function northWestAttack()
@@ -70,16 +82,6 @@ function mainBaseAttackGroup()
 		fallback: camMakePos("grp2Pos2"),
 		regroup: false,
 	});
-}
-
-//Order the truck to build some defenses.
-function truckDefense()
-{
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
-		queue("truckDefense", 160000);
-
-	var list = ["Emplacement-MortarPit02", "WallTower04", "CO-Tower-LtATRkt", "Sys-CB-Tower01"];
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("heavyFacAssembly"));
 }
 
 function enableTimeBasedFactories()
@@ -222,8 +224,6 @@ function eventStartLevel()
 		},
 	});
 
-	camManageTrucks(THE_COLLECTIVE);
-	truckDefense();
 	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("enableReinforcements", 27000);

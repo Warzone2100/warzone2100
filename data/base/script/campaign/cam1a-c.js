@@ -23,22 +23,6 @@ const NEW_PARADIGM_RES = [
 ];
 var index; //Current LZ (SE, N, canyon, south hill, road north of base)
 var switchLZ; //Counter for incrementing index every third landing
-var videoIndex;
-
-function eventVideoDone()
-{
-	const VIDEOS = ["MB1A-C_MSG", "MB1A-C_MSG2"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex = videoIndex + 1;
-	}
-}
 
 //Check if all enemies are gone and win after 15 transports
 function extraVictoryCondition()
@@ -160,7 +144,7 @@ function eventStartLevel()
 	}
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	eventVideoDone();
+	camPlayVideos(["MB1A-C_MSG", "MB1A-C_MSG2"]);
 
 	index = 0;
 	switchLZ = 0;

@@ -34,7 +34,7 @@ function videoTrigger()
 	captureCivilians();
 
 	hackRemoveMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	hackAddMessage("MB2_C_MSG2", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB2_C_MSG2");
 	hackAddMessage("C2C_OBJ2", PROX_MSG, CAM_HUMAN_PLAYER, true);
 }
 
@@ -397,7 +397,7 @@ function eventStartLevel()
 	shepardGroup = camMakeGroup("heavyGroup2");
 	enableFactories();
 
-	hackAddMessage("MB2_C_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB2_C_MSG");
 	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("activateGroups", camChangeOnDiff(480000)); //8 min

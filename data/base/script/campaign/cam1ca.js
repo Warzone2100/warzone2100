@@ -136,7 +136,7 @@ function eventStartLevel()
 	}
 
 	setMissionTime(camChangeOnDiff(1800));
-	hackAddMessage("MB1CA_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB1CA_MSG");
 
 	// first transport after 10 seconds; will re-queue itself
 	queue('sendTransport', 10000);

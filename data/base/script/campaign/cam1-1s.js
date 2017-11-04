@@ -13,13 +13,13 @@ function eventChat(from, to, message)
 //Video if player does not yet have power module built
 function resPowModVideo()
 {
-	hackAddMessage("MB1_B2_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB1_B2_MSG");
 }
 
 //Sector clear commander!
 function secondVideo()
 {
-	hackAddMessage("SB1_1_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("SB1_1_MSG");
 }
 
 //Has player built the power module?

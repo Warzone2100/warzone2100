@@ -14,28 +14,11 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var videoIndex;
 var reunited;
 
 camAreaEvent("gammaBaseTrigger", function() {
 	discoverGammaBase();
 });
-
-//Play videos.
-function eventVideoDone()
-{
-	const VIDEOS = ["MB3_C_MSG", "MB3_C_MSG2"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex += 1;
-	}
-}
 
 function setupPatrolGroups()
 {
@@ -224,7 +207,7 @@ function eventStartLevel()
 		},
 	});
 
-	eventVideoDone();
+	camPlayVideos(["MB3_C_MSG", "MB3_C_MSG2"]);
 	setScrollLimits(0, 137, 64, 192); //Show the middle section of the map.
 	changePlayerColour(GAMMA, 0);
 

@@ -1,7 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var videoIndex;
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials04", "R-Struc-Factory-Upgrade04",
 	"R-Struc-Factory-Cyborg-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
@@ -36,21 +35,6 @@ camAreaEvent("factoryTrigger", function(droid)
 function camEnemyBaseDetected_COMiddleBase()
 {
 	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-}
-
-function eventVideoDone()
-{
-	const VIDEOS = ["MB2_B_MSG", "MB2_B_MSG2"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex = videoIndex + 1;
-	}
 }
 
 function activateBase1Defenders()
@@ -123,7 +107,7 @@ function eventStartLevel()
 
 	setPower(AI_POWER, THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); // 2 hr.
-	eventVideoDone(); //Play video sequences.
+	camPlayVideos(["MB2_B_MSG", "MB2_B_MSG2"]);
 
 	camSetArtifacts({
 		"COResearchLab": { tech: "R-Wpn-Flame2" },

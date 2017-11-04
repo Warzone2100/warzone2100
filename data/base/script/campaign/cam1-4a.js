@@ -73,7 +73,7 @@ camAreaEvent("LandingZoneTrigger", function()
 
 function moreLandingZoneTrigger()
 {
-	hackAddMessage("SB1_4_B", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("SB1_4_B");
 	// Give extra 30 minutes.
 	setMissionTime(camChangeOnDiff(1800) + getMissionTime());
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
@@ -153,11 +153,8 @@ function eventStartLevel()
 		},
 	});
 
-	// These seem to be in a different order this time,
-	// first PROX then MISS, not sure if matters.
 	hackAddMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
-	hackAddMessage("SB1_4_MSG", MISS_MSG, CAM_HUMAN_PLAYER, false);
-
+	
 	camSetArtifacts({
 		"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
 		"NPResearchFacility": { tech: "R-Vehicle-Body04" },

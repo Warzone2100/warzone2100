@@ -14,7 +14,6 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var videoIndex;
 var edgeMapIndex;
 var alphaUnitIDs;
 
@@ -44,6 +43,11 @@ camAreaEvent("rescueTrigger", function(droid)
 	});
 });
 
+function playVideos()
+{
+	camPlayVideos(["MB3_2_MSG3", "MB3_2_MSG4"]);
+}
+
 //Activate edge map queues and play videos, donate alpha to the player, setup reinforcements.
 camAreaEvent("phantomFacTrigger", function(droid)
 {
@@ -51,7 +55,7 @@ camAreaEvent("phantomFacTrigger", function(droid)
 
 	setAlliance(ALPHA, NEXUS, false);
 	playSound("pcv456.ogg"); //Incoming transmission...
-	queue("eventVideoDone", 2000);
+	queue("playVideos", 2000);
 	//Donate All of alpha to the player.
 	var alphaStuff = enumArea(0, 0, mapWidth, mapHeight, ALPHA, false);
 	for (var i = 0, l = alphaStuff.length; i < l; ++i)
@@ -118,22 +122,6 @@ function sendEdgeMapDroids()
 	}
 
 	queue("sendEdgeMapDroids", camChangeOnDiff(150000)); // ~2.5 min.
-}
-
-//Play videos.
-function eventVideoDone()
-{
-	const VIDEOS = ["MB3_2_MSG3", "MB3_2_MSG4"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex += 1;
-	}
 }
 
 function setupPatrolGroups()

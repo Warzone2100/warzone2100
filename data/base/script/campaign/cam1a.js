@@ -11,7 +11,7 @@ camAreaEvent("LaunchScavAttack", function(droid)
 	var spos = getObject("scav1soundpos");
 	playSound("pcv375.ogg", spos.x, spos.y, 0);
 	playSound("pcv456.ogg");
-	hackAddMessage("MB1A_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB1A_MSG");
 	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	// send scavengers on war path if triggered above
 	camManageGroup(

@@ -1,9 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var videoIndex;
 var allowWin;
-const VIDEOS = ["MB2_DII_MSG", "MB2_DII_MSG2", "CAM2_OUT"];
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-Factory-Cyborg-Upgrade06",
@@ -41,21 +39,6 @@ function checkEnemyVtolArea()
 	queue("checkEnemyVtolArea", 1000);
 }
 
-//Play first two immediately...
-function eventVideoDone(playLastVideo)
-{
-	if (camDef(playLastVideo))
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-	}
-
-	if (videoIndex < VIDEOS.length - 1)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex = videoIndex + 1;
-	}
-}
-
 //Play last video sequence and destroy all droids on map.
 function playLastVideo()
 {
@@ -68,7 +51,7 @@ function playLastVideo()
 		camSafeRemoveObject(droids[i], false);
 	}
 
-	eventVideoDone(true);
+	camPlayVideos("CAM2_OUT");
 }
 
 function eventMissionTimeout()
@@ -196,7 +179,7 @@ function eventStartLevel()
 
 	videoIndex = 0;
 	allowWin = false;
-	eventVideoDone();
+	camPlayVideos(["MB2_DII_MSG", "MB2_DII_MSG2"]);
 
 	//These requeue themselves every so often.
 	vtolAttack();

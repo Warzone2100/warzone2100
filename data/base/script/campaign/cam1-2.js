@@ -5,7 +5,7 @@ include("script/campaign/templates.js");
 function exposeNorthBase()
 {
 	camDetectEnemyBase("NorthGroup"); // no problem if already detected
-	hackAddMessage("SB1_2_MSG2", MISS_MSG, CAM_HUMAN_PLAYER, true); // that's what it was for
+	camPlayVideos("SB1_2_MSG2");
 }
 
 function camArtifactPickup_ScavLab()
@@ -100,7 +100,6 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("SB1_2_MSG", MISS_MSG, CAM_HUMAN_PLAYER, false);
 	camDetectEnemyBase("ScavLabGroup");
 
 	camSetArtifacts({

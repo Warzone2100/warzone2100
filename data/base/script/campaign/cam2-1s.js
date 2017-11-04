@@ -3,22 +3,6 @@ SUB_2_1S campaign script
 Authors: Cristian Odorico (Alpha93) / KJeff01
  */
 include("script/campaign/libcampaign.js");
-var index;
-
-function eventVideoDone()
-{
-	const VIDEOS = ["MB2_1_MSG", "MB2_1_MSG2"];
-	if (!camDef(index))
-	{
-		index = 0;
-	}
-
-	if (index < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[index], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		index = index + 1;
-	}
-}
 
 function eventStartLevel()
 {
@@ -33,5 +17,5 @@ function eventStartLevel()
 	//Set Mission Time
 	setMissionTime(camChangeOnDiff(1800));
 	//Give player briefings
-	eventVideoDone();
+	camPlayVideos(["MB2_1_MSG", "MB2_1_MSG2"]);
 }

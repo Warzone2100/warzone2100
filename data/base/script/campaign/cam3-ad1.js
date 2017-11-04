@@ -14,7 +14,6 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Accuracy01", "R-Wpn-Rail-Damage03", "R-Wpn-Rail-ROF03",
 	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var videoIndex;
 var capturedSilos; // victory flag letting us know if we captured any silos.
 var mapLimit; //LasSat slowly creeps toward missile silos.
 var retryTime; //Delay before next Lassat strike.
@@ -48,22 +47,6 @@ camAreaEvent("NWDefenseZone", function(droid) {
 		regroup: true
 	});
 });
-
-//Play videos.
-function eventVideoDone()
-{
-	const VIDEOS = ["MB3_AD1_MSG", "MB3_AD1_MSG2", "MB3_AD1_MSG3"];
-	if(!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if(videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex += 1;
-	}
-}
 
 function setupPatrolGroups()
 {
@@ -228,7 +211,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x1, lz.y1, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setNoGoArea(lz2.x1, lz2.y1, lz2.x2, lz2.y2, NEXUS); //LZ for cam3-4s.
 	setNoGoArea(siloZone.x1, siloZone.y1, siloZone.x2, siloZone.y2, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(7200)); //2 hr
+	setMissionTime(7200); //2 hr
 
 	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
@@ -304,7 +287,7 @@ function eventStartLevel()
 		},
 	});
 
-	eventVideoDone();
+	camPlayVideos(["MB3_AD1_MSG", "MB3_AD1_MSG2", "MB3_AD1_MSG3"]);
 	hackAddMessage("CM3D1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	camEnableFactory("NXbase1VtolFacArti");
 	camEnableFactory("NXcyborgFac1");

@@ -142,7 +142,7 @@ camAreaEvent("NPLZ1Trigger", function()
 {
 	// Message4 here, Message3 for the second LZ, and
 	// please don't ask me why they did it this way
-	hackAddMessage("MB1C4_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB1C4_MSG");
 	camDetectEnemyBase("NPLZ1Group");
 
 	camSetBaseReinforcements("NPLZ1Group", camChangeOnDiff(300000), "getDroidsForNPLZ",
@@ -155,7 +155,7 @@ camAreaEvent("NPLZ1Trigger", function()
 
 camAreaEvent("NPLZ2Trigger", function()
 {
-	hackAddMessage("MB1C3_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB1C3_MSG");
 	camDetectEnemyBase("NPLZ2Group");
 
 	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(300000), "getDroidsForNPLZ",
@@ -165,16 +165,6 @@ camAreaEvent("NPLZ2Trigger", function()
 		}
 	);
 });
-
-function playSecondVideo()
-{
-	hackAddMessage("MB1C2_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
-}
-
-function eventVideoDone()
-{
-	camCallOnce("playSecondVideo");
-}
 
 function eventStartLevel()
 {
@@ -274,7 +264,7 @@ function eventStartLevel()
 	});
 
 	hackAddMessage("C1C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); // initial beacon
-	hackAddMessage("MB1C_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos(["MB1C_MSG", "MB1C2_MSG"]);
 
 	camSetArtifacts({
 		"ScavSouthFactory": { tech: "R-Wpn-Rocket05-MiniPod" },

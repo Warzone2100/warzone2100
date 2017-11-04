@@ -16,7 +16,6 @@ var launchTimes;
 var detTimes;
 var launchSounds;
 var detSounds;
-var videoIndex; //What video sequence should be played.
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -60,22 +59,6 @@ camAreaEvent("hillTriggerZone", function(droid)
 		//fallback: camMakePos("hillRetreat")
 	});
 });
-
-//Play videos.
-function eventVideoDone()
-{
-	const VIDEOS = ["MB3_1B_MSG", "MB3_1B_MSG2"];
-	if (!camDef(videoIndex))
-	{
-		videoIndex = 0;
-	}
-
-	if (videoIndex < VIDEOS.length)
-	{
-		hackAddMessage(VIDEOS[videoIndex], MISS_MSG, CAM_HUMAN_PLAYER, true);
-		videoIndex += 1;
-	}
-}
 
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
@@ -167,7 +150,7 @@ function setupNextMission()
 	if (missileSilosDestroyed())
 	{
 		const MISSLE_ABORT = "labort.ogg";
-		eventVideoDone();
+		camPlayVideos(["MB3_1B_MSG", "MB3_1B_MSG2"]);
 		playSound(MISSLE_ABORT, CAM_HUMAN_PLAYER);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.

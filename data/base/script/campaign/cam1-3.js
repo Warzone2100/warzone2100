@@ -55,7 +55,7 @@ camAreaEvent("WestConvoyTrigger", function(droid)
 
 function playYouAreInContraventionOfTheNewParadigm()
 {
-	hackAddMessage("SB1_3_MSG4", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("SB1_3_MSG4");
 	camManageGroup(NPScoutGroup, CAM_ORDER_COMPROMISE, {
 		pos: camMakePos("RTLZ"),
 		repair: 66,
@@ -139,7 +139,7 @@ function camEnemyBaseEliminated_ScavBaseGroup()
 
 function playNPWarningMessage()
 {
-	hackAddMessage("SB1_3_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("SB1_3_MSG3");
 }
 
 function playNPWarningSound()
@@ -202,7 +202,7 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("SB1_3_MSG", MISS_MSG, CAM_HUMAN_PLAYER, false);
+	camPlayVideos("SB1_3_MSG");
 	hackAddMessage("C1-3_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); // south-west beacon
 
 	camSetArtifacts({

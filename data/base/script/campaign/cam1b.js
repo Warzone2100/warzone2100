@@ -117,7 +117,7 @@ function eventStartLevel()
 		},
 	});
 
-	hackAddMessage("MB1B_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
+	camPlayVideos("MB1B_MSG");
 	camDetectEnemyBase("base4group"); // power surge detected
 
 	with (camTemplates) camSetFactories({
