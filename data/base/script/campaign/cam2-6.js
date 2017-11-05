@@ -53,7 +53,7 @@ function camEnemyBaseEliminated_COUplinkBase()
 function camEnemyBaseDetected_COMediumBase()
 {
 	var droids = enumArea("mediumBaseCleanup", THE_COLLECTIVE, false).filter(function(obj) {
-		return obj.type === DROID && !camDef(obj.group) && obj.canHitGround;
+		return obj.type === DROID && obj.group === null && obj.canHitGround;
 	});
 
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {

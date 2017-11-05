@@ -26,6 +26,13 @@ function camEnemyBaseDetected_COBase1()
 function camEnemyBaseDetected_COBase2()
 {
 	hackRemoveMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER);
+
+	var vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && isVTOL(obj);
+	});
+	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
+		regroup: false,
+	});
 }
 
 function camEnemyBaseDetected_COBase3()
@@ -38,8 +45,35 @@ function camEnemyBaseDetected_COBase4()
 	hackRemoveMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
-function baseFourGroupAttack()
+function baseThreeVtolAttack()
 {
+	var vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && isVTOL(obj);
+	});
+	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
+		regroup: false,
+	});
+}
+
+function baseFourVtolAttack()
+{
+	var vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && isVTOL(obj);
+	});
+	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
+		regroup: false,
+	});
+}
+
+function enableFactoriesAndHovers()
+{
+	camEnableFactory("COHeavyFac-Arti-b2");
+	camEnableFactory("COCyborgFac-b2");
+	camEnableFactory("COCyborgFac-b3");
+	camEnableFactory("COVtolFactory-b4");
+	camEnableFactory("COHeavyFac-b4");
+	camEnableFactory("COCyborgFac-b4");
+
 	camManageGroup(camMakeGroup("grp2Hovers"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("hoverPos1"),
@@ -51,37 +85,13 @@ function baseFourGroupAttack()
 		interval: 22000,
 		regroup: false,
 	});
-
-	camManageGroup(camMakeGroup("vtolGroupBase4"), CAM_ORDER_ATTACK, {
-		regroup: false,
-	});
 }
-
-function enableFactories()
-{
-	camEnableFactory("COVtolFactory-b4");
-	camEnableFactory("COHeavyFac-Arti-b2");
-	camEnableFactory("COCyborgFac-b2");
-	camEnableFactory("COCyborgFac-b3");
-	camEnableFactory("COHeavyFac-b4");
-	camEnableFactory("COCyborgFac-b4");
-}
-
-//Player must destroy all bases.
-function checkEnemyBases()
-{
-	if (camAllEnemyBasesEliminated())
-	{
-		return true;
-	}
-}
-
 
 function enableReinforcements()
 {
 	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_8S", {
-		callback: "checkEnemyBases",
+		eliminateBases: true,
 		area: "RTLZ",
 		message: "C27_LZ",
 		reinforcements: 180 //3 min
@@ -91,7 +101,7 @@ function enableReinforcements()
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_8S", {
-		callback: "checkEnemyBases",
+		eliminateBases: true,
 		area: "RTLZ",
 		message: "C27_LZ",
 		reinforcements: -1,
@@ -144,7 +154,7 @@ function eventStartLevel()
 		"COHeavyFac-Arti-b2": {
 			assembly: "base2HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
+			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
 			data: {
 				regroup: false,
@@ -156,7 +166,7 @@ function eventStartLevel()
 		"COCyborgFac-b2": {
 			assembly: "base2CybAssembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 4,
+			groupSize: 5,
 			throttle: camChangeOnDiff(40000),
 			data: {
 				regroup: false,
@@ -168,7 +178,7 @@ function eventStartLevel()
 		"COCyborgFac-b3": {
 			assembly: "base3CybAssembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 4,
+			groupSize: 5,
 			throttle: camChangeOnDiff(40000),
 			data: {
 				regroup: false,
@@ -181,7 +191,7 @@ function eventStartLevel()
 			assembly: "base4HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(70000),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -192,8 +202,8 @@ function eventStartLevel()
 		"COCyborgFac-b4": {
 			assembly: "base4CybAssembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			groupSize: 5,
+			throttle: camChangeOnDiff(40000),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -205,7 +215,7 @@ function eventStartLevel()
 			assembly: "base4VTOLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(60000),
 			data: {
 				regroup: false,
 				count: -1,
@@ -222,7 +232,8 @@ function eventStartLevel()
 	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 15000);
-	queue("baseFourGroupAttack", 100000);
-	queue("enableFactories", camChangeOnDiff(480000)); // 8 min
+	queue("enableReinforcements", 20000);
+	queue("baseThreeVtolAttack", 30000);
+	queue("baseFourVtolAttack", 60000);
+	queue("enableFactoriesAndHovers", camChangeOnDiff(90000));
 }
