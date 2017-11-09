@@ -366,8 +366,8 @@ void orderUpdateDroid(DROID *psDroid)
 			break;
 		}
 		// if you are in a command group, default to guarding the commander
-		else if (hasCommander(psDroid) &&
-		         psDroid->order.psStats !=  structGetDemolishStat())  // stop the constructor auto repairing when it is about to demolish
+		else if (hasCommander(psDroid) && psDroid->order.type != DORDER_HOLD
+		         && psDroid->order.psStats != structGetDemolishStat())  // stop the constructor auto repairing when it is about to demolish
 		{
 			orderDroidObj(psDroid, DORDER_GUARD, psDroid->psGroup->psCommander, ModeImmediate);
 		}
@@ -386,11 +386,11 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 			}
 		}
-		else if (tryDoRepairlikeAction(psDroid))
-		{
-		}
 		// default to guarding
-		else if (psDroid->order.psStats != structGetDemolishStat() && !isVtolDroid(psDroid))
+		else if (!tryDoRepairlikeAction(psDroid)
+		         && psDroid->order.type != DORDER_HOLD
+		         && psDroid->order.psStats != structGetDemolishStat()
+		         && !isVtolDroid(psDroid))
 		{
 			orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
 		}

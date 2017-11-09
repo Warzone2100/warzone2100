@@ -1243,7 +1243,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 				if (actionInsideMinRange(psDroid, psDroid->psActionTarget[0], psWeapStats))
 				{
-					if (proj_Direct(psWeapStats))
+					if (proj_Direct(psWeapStats) && order->type != DORDER_HOLD)
 					{
 						SDWORD pbx, pby;
 
@@ -1265,7 +1265,7 @@ void actionUpdateDroid(DROID *psDroid)
 						}
 					}
 				}
-				else // too far away
+				else if (order->type != DORDER_HOLD) // approach closer?
 				{
 					// try to close the range
 					moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
@@ -1955,7 +1955,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			psDroid->action = DACTION_ATTACK;		// holding, try attack straightaway
 		}
-		else if (actionInsideMinRange(psDroid, psAction->psObj, psWeapStats))
+		else if (actionInsideMinRange(psDroid, psAction->psObj, psWeapStats)) // too close?
 		{
 			if (!proj_Direct(psWeapStats))
 			{
@@ -1969,7 +1969,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 					moveTurnDroid(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
 				}
 			}
-			else
+			else if (order->type != DORDER_HOLD)
 			{
 				/* direct fire - try and extend the range */
 				psDroid->action = DACTION_MOVETOATTACK;
@@ -1980,7 +1980,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				turnOffMultiMsg(false);
 			}
 		}
-		else
+		else if (order->type != DORDER_HOLD) // approach closer?
 		{
 			psDroid->action = DACTION_MOVETOATTACK;
 			turnOffMultiMsg(true);
