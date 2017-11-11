@@ -166,7 +166,7 @@ function eventStartLevel()
 		"COCyborgFac-b2": {
 			assembly: "base2CybAssembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
+			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
 			data: {
 				regroup: false,
@@ -178,7 +178,7 @@ function eventStartLevel()
 		"COCyborgFac-b3": {
 			assembly: "base3CybAssembly",
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
+			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
 			data: {
 				regroup: false,

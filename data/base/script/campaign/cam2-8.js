@@ -18,35 +18,37 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Howitzer-Damage03",
 ];
 
-function vtolPatrol()
+function vtolAttack()
 {
-	camManageGroup(camMakeGroup("COVtolGroup"), CAM_ORDER_PATROL, {
-		pos: [
-			camMakePos("vtolPos1"),
-			camMakePos("vtolPos2"),
-			camMakePos("vtolPos3"),
-			camMakePos("vtolPos4"),
-			camMakePos("vtolPos5"),
-		],
-		//fallback: camMakePos("cyborgAssembly-b1"),
-		//morale: 10,
-		interval: 20000,
+	camManageGroup(camMakeGroup("COVtolGroup"), CAM_ORDER_ATTACK, {
 		regroup: false,
 	});
-
 }
 
-function cyborgPatrol()
+function setupLandGroups()
 {
-	camManageGroup(camMakeGroup("NWTankGroup"), CAM_ORDER_PATROL, {
+	var hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && obj.propulsion === "hover01";
+	});
+	var tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && obj.propulsion !== "hover01";
+	});
+
+	camManageGroup(camMakeGroup(hovers), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("NWTankPos1"),
 			camMakePos("NWTankPos2"),
 			camMakePos("NWTankPos3"),
 		],
-		//fallback: camMakePos("COCyborgFac-b1Assembly"),
-		//morale: 50,
-		interval: 45000,
+		interval: 25000,
+		regroup: false,
+	});
+
+	camManageGroup(camMakeGroup(tanks), CAM_ORDER_DEFEND, {
+		pos: [
+			camMakePos("NWTankPos3"),
+		],
+		radius: 15,
 		regroup: false,
 	});
 
@@ -69,6 +71,17 @@ function enableFactories()
 	camEnableFactory("COHeavyFacL-b2");
 	camEnableFactory("COHeavyFacR-b2");
 	camEnableFactory("COVtolFac-b3");
+}
+
+function truckDefense()
+{
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	{
+		queue("truckDefense", 120000);
+	}
+
+	var list = ["AASite-QuadBof", "WallTower04", "GuardTower-RotMg"];
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
 function enableReinforcements()
@@ -132,7 +145,7 @@ function eventStartLevel()
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(30000),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -144,7 +157,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(60000),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -156,7 +169,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(60000),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -166,8 +179,8 @@ function eventStartLevel()
 		},
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
-			throttle: camChangeOnDiff(90000),
+			groupSize: 4,
+			throttle: camChangeOnDiff(70000),
 			data: {
 				regroup: false,
 				count: -1,
@@ -176,8 +189,11 @@ function eventStartLevel()
 		},
 	});
 
+	camManageTrucks(THE_COLLECTIVE);
+	truckDefense();
+
 	queue("enableReinforcements", 15000);
-	queue("cyborgPatrol", 50000);
-	queue("vtolPatrol", 60000);
-	queue("enableFactories", camChangeOnDiff(480000)); // 8 min
+	queue("setupLandGroups", 50000);
+	queue("vtolAttack", 60000);
+	queue("enableFactories", camChangeOnDiff(90000)); // 90 sec
 }
