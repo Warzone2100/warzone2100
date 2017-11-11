@@ -202,7 +202,6 @@ function eventStartLevel()
 		},
 	});
 
-	camPlayVideos("SB1_3_MSG");
 	hackAddMessage("C1-3_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); // south-west beacon
 
 	camSetArtifacts({
