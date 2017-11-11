@@ -2039,7 +2039,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
 	case DACTION_REPAIR:
-		psDroid->action = DACTION_MOVETOREPAIR;
+		psDroid->action = psAction->action;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
 		//this needs setting so that automatic repair works
@@ -2054,6 +2054,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		}
 		break;
 	case DACTION_OBSERVE:
+		psDroid->action = psAction->action;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 		psDroid->actionPos.x = psDroid->pos.x;
 		psDroid->actionPos.y = psDroid->pos.y;
@@ -2104,7 +2105,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ensureRearmPadClear((STRUCTURE *)psAction->psObj, psDroid);
 		break;
 	case DACTION_DROIDREPAIR:
-		psDroid->action = DACTION_MOVETODROIDREPAIR;
+		psDroid->action = psAction->action;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
@@ -2119,13 +2120,17 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 	case DACTION_RESTORE:
 		ASSERT_OR_RETURN(, order->type == DORDER_RESTORE, "cannot start restore action without a restore order");
-		psDroid->action = DACTION_MOVETORESTORE;
+		psDroid->action = psAction->action;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
 		ASSERT_OR_RETURN(, (order->psObj != nullptr) && (order->psObj->type == OBJ_STRUCTURE), "invalid target for restore order");
 		order->psStats = ((STRUCTURE *)order->psObj)->pStructureType;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		moveDroidTo(psDroid, psAction->x, psAction->y);
+		if (order->type != DORDER_HOLD)
+		{
+			psDroid->action = DACTION_MOVETORESTORE;
+			moveDroidTo(psDroid, psAction->x, psAction->y);
+		}
 		break;
 	default:
 		ASSERT(!"unknown action", "actionUnitBase: unknown action");
