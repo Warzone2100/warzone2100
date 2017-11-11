@@ -192,8 +192,6 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 // check if a target is inside minimum weapon range
 static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
 {
-	SDWORD	dx, dy, radSq, rangeSq, minRange;
-
 	CHECK_DROID(psDroid);
 	CHECK_OBJECT(psObj);
 
@@ -208,13 +206,11 @@ static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STAT
 		return false;
 	}
 
-	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
-	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
-
-	radSq = dx * dx + dy * dy;
-
-	minRange = psStats->upgrade[psDroid->player].minRange;
-	rangeSq = minRange * minRange;
+	const int dx = psDroid->pos.x - psObj->pos.x;
+	const int dy = psDroid->pos.y - psObj->pos.y;
+	const int radSq = dx * dx + dy * dy;
+	const int minRange = psStats->upgrade[psDroid->player].minRange;
+	const int rangeSq = minRange * minRange;
 
 	// check min range
 	if (radSq <= rangeSq)
@@ -229,13 +225,12 @@ static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STAT
 // Realign turret
 void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 {
-	int32_t         rotation;
 	uint16_t        nearest = 0;
 	uint16_t        tRot;
 	uint16_t        tPitch;
 
 	//get the maximum rotation this frame
-	rotation = gameTimeAdjustedIncrement(DEG(ACTION_TURRET_ROTATION_RATE));
+	const int rotation = gameTimeAdjustedIncrement(DEG(ACTION_TURRET_ROTATION_RATE));
 
 	switch (psObj->type)
 	{
@@ -281,24 +276,20 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 {
 	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
 	uint16_t tRotation, tPitch;
-	int32_t  rotRate, pitchRate;
 	uint16_t targetRotation;
-	int32_t  rotationError;
 	int32_t  rotationTolerance = 0;
-	bool     onTarget;
 	int32_t  pitchLowerLimit, pitchUpperLimit;
-	bool     bRepair;
 
 	if (!psTarget)
 	{
 		return false;
 	}
 
-	bRepair = psAttacker->type == OBJ_DROID && ((DROID *)psAttacker)->droidType == DROID_REPAIR;
+	bool bRepair = psAttacker->type == OBJ_DROID && ((DROID *)psAttacker)->droidType == DROID_REPAIR;
 
 	// these are constants now and can be set up at the start of the function
-	rotRate = DEG(ACTION_TURRET_ROTATION_RATE) * 4;
-	pitchRate = DEG(ACTION_TURRET_ROTATION_RATE) * 2;
+	int rotRate = DEG(ACTION_TURRET_ROTATION_RATE) * 4;
+	int pitchRate = DEG(ACTION_TURRET_ROTATION_RATE) * 2;
 
 	// extra heavy weapons on some structures need to rotate and pitch more slowly
 	if (psWeapStats->weight > HEAVY_WEAPON_WEIGHT && !bRepair)
@@ -353,7 +344,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	targetRotation = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
 
 	//restrict rotationerror to =/- 180 degrees
-	rotationError = angleDelta(targetRotation - (tRotation + psAttacker->rot.direction));
+	int rotationError = angleDelta(targetRotation - (tRotation + psAttacker->rot.direction));
 
 	tRotation += clip(rotationError, -rotRate, rotRate);  // Addition wrapping intentional.
 	if (psAttacker->type == OBJ_DROID && isVtolDroid((DROID *)psAttacker))
@@ -367,7 +358,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		}
 		tRotation = (uint16_t)clip(angleDelta(tRotation), -limit, limit);  // Cast wrapping intentional.
 	}
-	onTarget = abs(angleDelta(targetRotation - (tRotation + psAttacker->rot.direction))) <= rotationTolerance;
+	bool onTarget = abs(angleDelta(targetRotation - (tRotation + psAttacker->rot.direction))) <= rotationTolerance;
 
 	/* Set muzzle pitch if not repairing or outside minimum range */
 	if (!bRepair && (unsigned)objPosDiffSq(psAttacker, psTarget) > psWeapStats->upgrade[psAttacker->player].minRange * psWeapStats->upgrade[psAttacker->player].minRange)
@@ -479,21 +470,18 @@ static void actionUpdateTransporter(DROID *psDroid)
 	{
 		// Got to destination
 		psDroid->action = DACTION_NONE;
-		return;
 	}
 }
 
 
 // calculate a position for units to pull back to if they
 // need to increase the range between them and a target
-static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, SDWORD *px, SDWORD *py)
+static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, int *px, int *py)
 {
-	SDWORD xdiff, ydiff, len;
-
 	// get the vector from the target to the object
-	xdiff = (SDWORD)psObj->pos.x - (SDWORD)psTarget->pos.x;
-	ydiff = (SDWORD)psObj->pos.y - (SDWORD)psTarget->pos.y;
-	len = iHypot(xdiff, ydiff);
+	int xdiff = psObj->pos.x - psTarget->pos.x;
+	int ydiff = psObj->pos.y - psTarget->pos.y;
+	const int len = iHypot(xdiff, ydiff);
 
 	if (len == 0)
 	{
@@ -507,8 +495,8 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 	}
 
 	// create the position
-	*px = (SDWORD)psObj->pos.x + xdiff * PULL_BACK_DIST;
-	*py = (SDWORD)psObj->pos.y + ydiff * PULL_BACK_DIST;
+	*px = psObj->pos.x + xdiff * PULL_BACK_DIST;
+	*py = psObj->pos.y + ydiff * PULL_BACK_DIST;
 
 	// make sure coordinates stay inside of the map
 	clip_world_offmap(px, py);
@@ -636,19 +624,17 @@ void actionSanity(DROID *psDroid)
 // Update the action state for a droid
 void actionUpdateDroid(DROID *psDroid)
 {
-	PROPULSION_STATS	*psPropStats;
-	bool	(*actionUpdateFunc)(DROID * psDroid) = nullptr;
-	//this is a bit field
+	bool (*actionUpdateFunc)(DROID * psDroid) = nullptr;
 	bool nonNullWeapon[MAX_WEAPONS] = { false };
-	BASE_OBJECT			*psTargets[MAX_WEAPONS];
+	BASE_OBJECT *psTargets[MAX_WEAPONS] = { nullptr };
 	bool hasVisibleTarget = false;
 	bool targetVisibile[MAX_WEAPONS] = { false };
-	bool bHasTarget;
+	bool bHasTarget = false;
 	bool bDirect = false;
 
 	CHECK_DROID(psDroid);
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 
 	actionSanity(psDroid);
@@ -1875,11 +1861,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 {
 	ASSERT_OR_RETURN(, psAction->psObj == nullptr || !psAction->psObj->died, "Droid dead");
 
-	SDWORD			pbx, pby;
-	WEAPON_STATS		*psWeapStats = getWeaponStats(psDroid, 0);
-	Vector2i                pos;
-	//added MinRangeResult;
-	UBYTE	i;
+	WEAPON_STATS *psWeapStats = getWeaponStats(psDroid, 0);
+	Vector2i pos;
 
 	CHECK_DROID(psDroid);
 
@@ -1903,7 +1886,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionPoints = 0;
 		if (psDroid->numWeaps > 0)
 		{
-			for (i = 0; i < psDroid->numWeaps; i++)
+			for (int i = 0; i < psDroid->numWeaps; i++)
 			{
 				setDroidActionTarget(psDroid, nullptr, i);
 			}
@@ -1971,6 +1954,9 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			}
 			else if (order->type != DORDER_HOLD)
 			{
+				int pbx = 0;
+				int pby = 0;
+
 				/* direct fire - try and extend the range */
 				psDroid->action = DACTION_MOVETOATTACK;
 				actionCalcPullBackPoint(psDroid, psAction->psObj, &pbx, &pby);
@@ -2205,8 +2191,6 @@ return to base*/
 // IF YOU CHANGE THE ORDER/ACTION RESULTS TELL ALEXL!!!! && recvvtolrearm
 void moveToRearm(DROID *psDroid)
 {
-	STRUCTURE	*psStruct;
-
 	CHECK_DROID(psDroid);
 
 	if (!isVtolDroid(psDroid))
@@ -2222,7 +2206,7 @@ void moveToRearm(DROID *psDroid)
 
 	//get the droid to fly back to a ReArming Pad
 	// don't worry about finding a clear one for the minute
-	psStruct = findNearestReArmPad(psDroid, psDroid->psBaseStruct, false);
+	STRUCTURE *psStruct = findNearestReArmPad(psDroid, psDroid->psBaseStruct, false);
 	if (psStruct)
 	{
 		// note a base rearm pad if the vtol doesn't have one
@@ -2254,15 +2238,13 @@ void moveToRearm(DROID *psDroid)
 // whether a tile is suitable for a vtol to land on
 static bool vtolLandingTile(SDWORD x, SDWORD y)
 {
-	MAPTILE		*psTile;
-
 	if (x < 0 || x >= (SDWORD)mapWidth ||
 	    y < 0 || y >= (SDWORD)mapHeight)
 	{
 		return false;
 	}
 
-	psTile = mapTile(x, y);
+	MAPTILE *psTile = mapTile(x, y);
 
 	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
 	    (TileIsOccupied(psTile)) ||
@@ -2290,8 +2272,6 @@ static bool vtolLandingTile(SDWORD x, SDWORD y)
  */
 static bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction match, void *matchState)
 {
-	int radius;          // radius counter
-
 	// test center tile
 	if (match(startX, startY, matchState))
 	{
@@ -2299,7 +2279,7 @@ static bool spiralSearch(int startX, int startY, int max_radius, tileMatchFuncti
 	}
 
 	// test for each radius, from 1 to max_radius (inclusive)
-	for (radius = 1; radius <= max_radius; ++radius)
+	for (int radius = 1; radius <= max_radius; ++radius)
 	{
 		// choose tiles that are between radius and radius+1 away from center
 		// distances are squared
@@ -2366,19 +2346,14 @@ static bool vtolLandingTileSearchFunction(int x, int y, void *matchState)
 // choose a landing position for a VTOL when it goes to rearm
 bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 {
-	int startX, startY;
-	DROID *psCurr;
-	bool   foundTile;
-	Vector2i xyCoords;
-
 	CHECK_DROID(psDroid);
 
 	/* Initial box dimensions and set iteration count to zero */
-	startX = map_coord(p->x);
-	startY = map_coord(p->y);
+	int startX = map_coord(p->x);
+	int startY = map_coord(p->y);
 
 	// set blocking flags for all the other droids
-	for (psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		Vector2i t;
 		if (DROID_STOPPED(psCurr))
@@ -2399,18 +2374,18 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	}
 
 	// search for landing tile; will stop when found or radius exceeded
-	foundTile = spiralSearch(startX, startY, vtolLandingRadius,
-	                         vtolLandingTileSearchFunction, &xyCoords);
+	Vector2i xyCoords;
+	const bool foundTile = spiralSearch(startX, startY, vtolLandingRadius,
+	                                    vtolLandingTileSearchFunction, &xyCoords);
 	if (foundTile)
 	{
-		debug(LOG_NEVER, "Unit %d landing pos (%d,%d)",
-		      psDroid->id, xyCoords.x, xyCoords.y);
+		debug(LOG_NEVER, "Unit %d landing pos (%d,%d)", psDroid->id, xyCoords.x, xyCoords.y);
 		p->x = world_coord(xyCoords.x) + TILE_UNITS / 2;
 		p->y = world_coord(xyCoords.y) + TILE_UNITS / 2;
 	}
 
 	// clear blocking flags for all the other droids
-	for (psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		Vector2i t;
 		if (DROID_STOPPED(psCurr))

@@ -2538,8 +2538,6 @@ char const *getDroidResourceName(char const *pName)
 /*checks to see if an electronic warfare weapon is attached to the droid*/
 bool electronicDroid(DROID *psDroid)
 {
-	DROID	*psCurr;
-
 	CHECK_DROID(psDroid);
 
 	//use slot 0 for now
@@ -2551,7 +2549,7 @@ bool electronicDroid(DROID *psDroid)
 	if (psDroid->droidType == DROID_COMMAND && psDroid->psGroup && psDroid->psGroup->psCommander == psDroid)
 	{
 		// if a commander has EW units attached it is electronic
-		for (psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			if (psDroid != psCurr && electronicDroid(psCurr))
 			{
@@ -2566,15 +2564,13 @@ bool electronicDroid(DROID *psDroid)
 /*checks to see if the droid is currently being repaired by another*/
 bool droidUnderRepair(DROID *psDroid)
 {
-	DROID		*psCurr;
-
 	CHECK_DROID(psDroid);
 
 	//droid must be damaged
 	if (droidIsDamaged(psDroid))
 	{
 		//look thru the list of players droids to see if any are repairing this droid
-		for (psCurr = apsDroidLists[psDroid->player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
 			     DROID_CYBORG_REPAIR) && psCurr->action ==
@@ -2590,10 +2586,9 @@ bool droidUnderRepair(DROID *psDroid)
 //count how many Command Droids exist in the world at any one moment
 UBYTE checkCommandExist(UBYTE player)
 {
-	DROID	*psDroid;
 	UBYTE	quantity = 0;
 
-	for (psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
 		if (psDroid->droidType == DROID_COMMAND)
 		{
@@ -2635,8 +2630,6 @@ bool isFlying(const DROID *psDroid)
 /* returns true if it's a VTOL weapon droid which has completed all runs */
 bool vtolEmpty(DROID *psDroid)
 {
-	UBYTE	i;
-
 	CHECK_DROID(psDroid);
 
 	if (!isVtolDroid(psDroid))
@@ -2648,7 +2641,7 @@ bool vtolEmpty(DROID *psDroid)
 		return false;
 	}
 
-	for (i = 0; i < psDroid->numWeaps; i++)
+	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
 		    psDroid->asWeaps[i].usedAmmo < getNumAttackRuns(psDroid, i))
@@ -2663,8 +2656,6 @@ bool vtolEmpty(DROID *psDroid)
 /* returns true if it's a VTOL weapon droid which still has full ammo */
 bool vtolFull(DROID *psDroid)
 {
-	UBYTE	i;
-
 	CHECK_DROID(psDroid);
 
 	if (!isVtolDroid(psDroid))
@@ -2676,7 +2667,7 @@ bool vtolFull(DROID *psDroid)
 		return false;
 	}
 
-	for (i = 0; i < psDroid->numWeaps; i++)
+	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
 		    psDroid->asWeaps[i].usedAmmo > 0)
@@ -2691,8 +2682,6 @@ bool vtolFull(DROID *psDroid)
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 {
-	BASE_OBJECT *psRearmPad;
-
 	CHECK_DROID(psDroid);
 
 	if (!isVtolDroid(psDroid)
@@ -2702,7 +2691,7 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 	}
 
 	// If a unit has been ordered to rearm make sure it goes to the correct base
-	psRearmPad = orderStateObj(psDroid, DORDER_REARM);
+	BASE_OBJECT *psRearmPad = orderStateObj(psDroid, DORDER_REARM);
 	if (psRearmPad
 	    && (STRUCTURE *)psRearmPad != psStruct
 	    && !vtolOnRearmPad((STRUCTURE *)psRearmPad, psDroid))
@@ -2782,9 +2771,6 @@ bool droidAttacking(DROID *psDroid)
 // but still rearming
 bool allVtolsRearmed(DROID *psDroid)
 {
-	DROID	*psCurr;
-	bool	stillRearming;
-
 	CHECK_DROID(psDroid);
 
 	// ignore all non vtols
@@ -2793,8 +2779,8 @@ bool allVtolsRearmed(DROID *psDroid)
 		return true;
 	}
 
-	stillRearming = false;
-	for (psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	bool stillRearming = false;
+	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (vtolRearming(psCurr) &&
 		    psCurr->order.type == psDroid->order.type &&
@@ -2826,8 +2812,6 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 leave reArm pad */
 bool vtolHappy(const DROID *psDroid)
 {
-	unsigned int i;
-
 	CHECK_DROID(psDroid);
 
 	ASSERT_OR_RETURN(false, isVtolDroid(psDroid), "not a VTOL droid");
@@ -2852,7 +2836,7 @@ bool vtolHappy(const DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid->numWeaps > 0, "VTOL weapon droid without weapons found!");
 
 	//check full complement of ammo
-	for (i = 0; i < psDroid->numWeaps; ++i)
+	for (int i = 0; i < psDroid->numWeaps; ++i)
 	{
 		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0
 		    && psDroid->asWeaps[i].usedAmmo != 0)
@@ -2865,7 +2849,7 @@ bool vtolHappy(const DROID *psDroid)
 }
 
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
-void updateVtolAttackRun(DROID *psDroid , int weapon_slot)
+void updateVtolAttackRun(DROID *psDroid, int weapon_slot)
 {
 	if (isVtolDroid(psDroid))
 	{

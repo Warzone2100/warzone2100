@@ -129,11 +129,10 @@ void initRunData()
  */
 static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 {
-	SDWORD		xdiff, ydiff;
-	UDWORD		x, y;
-
 	if (psDroid->order.psObj != nullptr)
 	{
+		UDWORD x, y;
+
 		// repair droids always follow behind - don't want them jumping into the line of fire
 		if ((!(psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR))
 		    && psDroid->order.psObj->type == OBJ_DROID && orderStateLoc((DROID *)psDroid->order.psObj, DORDER_MOVE, &x, &y))
@@ -147,8 +146,8 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 		}
 	}
 
-	xdiff = psDroid->pos.x - psDroid->order.pos.x;
-	ydiff = psDroid->pos.y - psDroid->order.pos.y;
+	int xdiff = psDroid->pos.x - psDroid->order.pos.x;
+	int ydiff = psDroid->pos.y - psDroid->order.pos.y;
 	if (xdiff * xdiff + ydiff * ydiff > range * range)
 	{
 		if ((psDroid->sMove.Status != MOVEINACTIVE) &&
@@ -326,7 +325,7 @@ static bool tryDoRepairlikeAction(DROID *psDroid)
  */
 void orderUpdateDroid(DROID *psDroid)
 {
-	BASE_OBJECT		*psObj;
+	BASE_OBJECT		*psObj = nullptr;
 	STRUCTURE		*psStruct, *psWall;
 	SDWORD			xdiff, ydiff;
 	bool			bAttack;
@@ -358,7 +357,6 @@ void orderUpdateDroid(DROID *psDroid)
 	{
 	case DORDER_NONE:
 	case DORDER_HOLD:
-		psObj = nullptr;
 		// see if there are any orders queued up
 		if (orderDroidList(psDroid))
 		{
@@ -679,7 +677,6 @@ void orderUpdateDroid(DROID *psDroid)
 			// attacking something - see if the droid has gone too far
 			xdiff = psDroid->pos.x - psDroid->actionPos.x;
 			ydiff = psDroid->pos.y - psDroid->actionPos.y;
-			//if (xdiff*xdiff + ydiff*ydiff > psDroid->sMove.iGuardRadius * psDroid->sMove.iGuardRadius)
 			if (xdiff * xdiff + ydiff * ydiff > 2000 * 2000)
 			{
 				// head back to the target location
@@ -693,8 +690,7 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_REPAIR:
 	case DORDER_DROIDREPAIR:
 	case DORDER_RESTORE:
-		if (psDroid->action == DACTION_NONE ||
-		    psDroid->order.psObj == nullptr)
+		if (psDroid->action == DACTION_NONE || psDroid->order.psObj == nullptr)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
 			actionDroid(psDroid, DACTION_NONE);
@@ -705,8 +701,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DORDER_REARM:
-		if ((psDroid->order.psObj == nullptr) ||
-		    (psDroid->psActionTarget[0] == nullptr))
+		if (psDroid->order.psObj == nullptr || psDroid->psActionTarget[0] == nullptr)
 		{
 			// arm pad destroyed find another
 			psDroid->order = DroidOrder(DORDER_NONE);
@@ -1207,9 +1202,6 @@ void orderUpdateDroid(DROID *psDroid)
  */
 static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 {
-	DROID	*psCurr, *psChosen;
-	SDWORD	currdist, mindist;
-
 	ASSERT_OR_RETURN(, psGroup != nullptr, "Invalid unit group");
 
 	syncDebug("Commander group order");
@@ -1217,11 +1209,11 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	if (psData->type == DORDER_RECOVER)
 	{
 		// picking up an artifact - only need to send one unit
-		psChosen = nullptr;
-		mindist = SDWORD_MAX;
-		for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		DROID *psChosen = nullptr;
+		int mindist = SDWORD_MAX;
+		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			currdist = objPosDiffSq(psCurr->pos, psData->psObj->pos);
+			int currdist = objPosDiffSq(psCurr->pos, psData->psObj->pos);
 			if (currdist < mindist)
 			{
 				psChosen = psCurr;
@@ -1236,7 +1228,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	}
 	else
 	{
-		for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			syncDebug("command %d", psCurr->id);
 			if (!orderState(psCurr, DORDER_RTR))		// if you change this, youll need to change sendcmdgroup()
@@ -2517,7 +2509,6 @@ static int highestQueuedModule(DROID const *droid, STRUCTURE const *structure)
 DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 {
 	DroidOrder order(DORDER_NONE);
-	STRUCTURE		*psStruct;
 
 	if (isTransporter(psDroid))
 	{
@@ -2527,7 +2518,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 			if (aiCheckAlliances(psObj->player, psDroid->player) &&
 			    psObj->type == OBJ_STRUCTURE)
 			{
-				psStruct = (STRUCTURE *) psObj;
+				STRUCTURE *psStruct = (STRUCTURE *) psObj;
 				ASSERT_OR_RETURN(DroidOrder(DORDER_NONE), psObj != nullptr, "Invalid structure pointer");
 				if (psStruct->pStructureType->type == REF_REPAIR_FACILITY &&
 				    psStruct->status == SS_BUILT)
@@ -2640,7 +2631,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	else if (aiCheckAlliances(psObj->player, psDroid->player) &&
 	         psObj->type == OBJ_STRUCTURE)
 	{
-		psStruct = (STRUCTURE *) psObj;
+		STRUCTURE *psStruct = (STRUCTURE *) psObj;
 		ASSERT_OR_RETURN(DroidOrder(DORDER_NONE), psObj != nullptr, "Invalid structure pointer");
 
 		/* check whether construction droid */
@@ -2745,10 +2736,8 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
  */
 static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 {
-	DROID	*psDroid;
-
 	/* loop over selected droids */
-	for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
 		{
@@ -2778,11 +2767,10 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
  */
 void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 {
-	DROID		*psCurr;
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected)
 		{
@@ -2828,9 +2816,7 @@ void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
  */
 void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
-	DROID		*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected && isConstructionDroid(psCurr))
 		{
@@ -2852,9 +2838,7 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
  */
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add)
 {
-	DROID		*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->selected)
 		{
@@ -2903,11 +2887,9 @@ DROID *FindATransporter(DROID const *embarkee)
 /** Given a factory type, this function runs though all player's structures to check if any is of factory type. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
-	STRUCTURE *psStruct;
-
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player number");
 
-	for (psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == factoryType)
 		{
@@ -2922,9 +2904,7 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 /** This function runs though all player's structures to check if any of then is a repair facility. Returns the structure if any was found, and NULL else.*/
 static STRUCTURE *FindARepairFacility(unsigned player)
 {
-	STRUCTURE *psStruct;
-
-	for (psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 		{
@@ -3013,9 +2993,8 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 /** This function returns the droid order's secondary state of the secondary order.*/
 SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode)
 {
-	uint32_t state;
+	uint32_t state = psDroid->secondaryOrder;
 
-	state = psDroid->secondaryOrder;
 	if (mode == ModeQueue)
 	{
 		state = psDroid->secondaryOrderPending;  // The UI wants to know the state, so return what the state will be after orders are synchronised.
@@ -3063,11 +3042,10 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MOD
 #ifdef DEBUG
 static char *secondaryPrintFactories(UDWORD state)
 {
-	SDWORD		i;
 	static		char aBuff[255];
 
 	memset(aBuff, 0, sizeof(aBuff));
-	for (i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		if (state & (1 << (i + DSS_ASSPROD_SHIFT)))
 		{
@@ -3585,9 +3563,7 @@ bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
  */
 static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->group == group &&
 		    secondaryGetState(psCurr, sec) != state)
@@ -3680,13 +3656,12 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 /** This function runs through all player's droids and check if their moral is below the minimum moral to flee. If it is, then it uses the orderDroid() to send the order DORDER_RUN to the droid.*/
 void orderMoralCheck(UDWORD player)
 {
-	DROID	*psCurr;
 	SDWORD	units, numVehicles, leadership, personLShip, check;
 
 	// count the number of vehicles and units on the side
 	units = 0;
 	numVehicles = 0;
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		units += 1;
 		if (psCurr->droidType != DROID_PERSON)
@@ -3706,7 +3681,7 @@ void orderMoralCheck(UDWORD player)
 	personLShip = asRunData[player].leadership + numVehicles * 3;
 
 	// do the moral check for each droid
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (orderState(psCurr, DORDER_RUN) ||
 		    orderState(psCurr, DORDER_RETREAT) ||
@@ -3744,14 +3719,13 @@ void orderMoralCheck(UDWORD player)
  */
 void orderGroupMoralCheck(DROID_GROUP *psGroup)
 {
-	DROID		*psCurr;
 	SDWORD		units, numVehicles, leadership, personLShip, check;
 	RUN_DATA	*psRunData;
 
 	// count the number of vehicles and units on the side
 	units = 0;
 	numVehicles = 0;
-	for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+	for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
 		units += 1;
 		if (psCurr->droidType != DROID_PERSON)
@@ -3772,7 +3746,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 	personLShip = psRunData->leadership + numVehicles * 3;
 
 	// do the moral check for each droid
-	for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+	for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
 		if (orderState(psCurr, DORDER_RUN) ||
 		    orderState(psCurr, DORDER_RETREAT) ||
@@ -3810,7 +3784,6 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
  */
 void orderHealthCheck(DROID *psDroid)
 {
-	DROID		*psCurr;
 	SBYTE       healthLevel = 0;
 	UDWORD      retreatX = 0, retreatY = 0;
 
@@ -3861,7 +3834,7 @@ void orderHealthCheck(DROID *psDroid)
 		// order each unit in the same group to run
 		if (psDroid->psGroup)
 		{
-			for (psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+			for (DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 			{
 				if (orderState(psCurr, DORDER_RUN) || orderState(psCurr, DORDER_RETREAT)
 				    || orderState(psCurr, DORDER_RTB) || orderState(psCurr, DORDER_RTR))
@@ -3883,22 +3856,17 @@ void orderHealthCheck(DROID *psDroid)
  */
 bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State)
 {
-	UDWORD		CurrState;
-	bool		retVal;
-	FACTORY     *psFactory;
-
-
 	if (!StructIsFactory(psStruct))
 	{
 		ASSERT(false, "setFactoryState: structure is not a factory");
 		return false;
 	}
 
-	psFactory = (FACTORY *)psStruct->pFunctionality;
+	FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
 
-	CurrState = psFactory->secondaryOrder;
+	UDWORD CurrState = psFactory->secondaryOrder;
 
-	retVal = true;
+	bool retVal = true;
 	switch (sec)
 	{
 	case DSO_REPAIR_LEVEL:
@@ -3935,12 +3903,10 @@ bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
  */
 bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
 {
-	UDWORD	state;
-
 	ASSERT_OR_RETURN(false, StructIsFactory(psStruct), "Structure is not a factory");
 	if ((FACTORY *)psStruct->pFunctionality)
 	{
-		state = ((FACTORY *)psStruct->pFunctionality)->secondaryOrder;
+		UDWORD state = ((FACTORY *)psStruct->pFunctionality)->secondaryOrder;
 
 		switch (sec)
 		{
