@@ -233,6 +233,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"gammaFactory": {
+			assembly: "gammaFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(45000),
@@ -244,6 +245,7 @@ function eventStartLevel()
 			templates: [nxmrailh, nxmscouh]
 		},
 		"gammaCyborgFactory": {
+			assembly: "gammaCyborgFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			group: camMakeGroup("gammaBaseCleanup"),
 			groupSize: 6,

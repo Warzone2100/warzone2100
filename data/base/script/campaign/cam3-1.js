@@ -112,7 +112,7 @@ function missileSilosDestroyed()
 		destroyed += (getObject(SILO_ALIAS + (i + 1)) === null) ? 1 : 0;
 	}
 
-	return ((destroyed === SILO_COUNT) ? true : false);
+	return destroyed === SILO_COUNT ? true : false;
 }
 
 //Nuclear missile destroys everything not in safe zone.
@@ -305,6 +305,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"NXCybFac1": {
+			assembly: "NXCybFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(30000),
@@ -316,6 +317,7 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NXCybFac2": {
+			assembly: "NXCybFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
@@ -327,6 +329,7 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NXMediumFac": {
+			assembly: "NXMediumFacAssembly",
 			order: CAM_ORDER_DEFEND,
 			data: {
 				pos: [

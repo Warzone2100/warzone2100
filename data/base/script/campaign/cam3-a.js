@@ -271,14 +271,14 @@ function eventStartLevel()
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
-		"NEXUS-SWBase": {
-			cleanup: "southWestBaseCleanup",
+		"NEXUS-NEBase": {
+			cleanup: "northEastBaseCleanup",
 			detectMsg: "CM3A_BASE2",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
-		"NEXUS-NEBase": {
-			cleanup: "northEastBaseCleanup",
+		"NEXUS-SWBase": {
+			cleanup: "southWestBaseCleanup",
 			detectMsg: "CM3A_BASE3",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
@@ -293,23 +293,20 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"NXcybFac-b2": {
-			order: CAM_ORDER_PATROL,
+			assembly: "NXcybFac-b2Assembly",
+			order: CAM_ORDER_ATTACK,
 			data: {
-				pos: [
-					camMakePos("southWestBasePatrol"),
-					camMakePos("westEntrancePatrol"),
-					camMakePos("playerLZPatrol"),
-				],
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
-			group: camMakeGroup("cybValleyPatrol"),
-			templates: [nxcyrail, nxcyscou]
+			throttle: camChangeOnDiff(50000),
+			group: camMakeGroup("NEAttackerGroup"),
+			templates: [nxcyrail, nxcyscou]		
 		},
 		"NXcybFac-b3-1": {
+			assembly: "NXcybFac-b3-1Assembly",
 			order: CAM_ORDER_ATTACK,
 			data: {
 				pos: [
@@ -326,18 +323,25 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou]
 		},
 		"NXcybFac-b3-2": {
-			order: CAM_ORDER_ATTACK,
+			assembly: "NXcybFac-b3-2Assembly",
+			order: CAM_ORDER_PATROL,
 			data: {
+				pos: [
+					camMakePos("southWestBasePatrol"),
+					camMakePos("westEntrancePatrol"),
+					camMakePos("playerLZPatrol"),
+				],
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
-			group: camMakeGroup("NEAttackerGroup"),
+			throttle: camChangeOnDiff(40000),
+			group: camMakeGroup("cybValleyPatrol"),
 			templates: [nxcyrail, nxcyscou]
 		},
 		"NXHvyFac-b3": {
+			assembly: "NXHvyFac-b3Assembly",
 			order: CAM_ORDER_PATROL,
 			data: {
 				pos: [
@@ -355,6 +359,7 @@ function eventStartLevel()
 			templates: [nxmscouh]
 		},
 		"NXcybFac-b4": {
+			assembly: "NXcybFac-b4Assembly",
 			order: CAM_ORDER_DEFEND,
 			data: {
 				pos: [
