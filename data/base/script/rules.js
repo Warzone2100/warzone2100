@@ -15,7 +15,7 @@ function setupGame()
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-rockies.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-rockies.png");
 	}
-	
+
 	if (tilesetType != "ARIZONA")
 	{
 		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
@@ -55,12 +55,30 @@ function resetPower() {
 	else if (difficulty == HARD)
 	{
 		powerProductionRate = 85;
-		powerLimit = 20000;
+		powerLimit = 20000; //base value for Alpha
+
+		if (tilesetType == "URBAN")
+		{
+			powerLimit = powerLimit + 5000;
+		}
+		else if (tilesetType == "ROCKIES")
+		{
+			powerLimit = powerLimit + 10000;
+		}
 	}
 	else if (difficulty == INSANE)
 	{
 		powerProductionRate = 70;
-		powerLimit = 12000;
+		powerLimit = 12000; //base value for Alpha
+
+		if (tilesetType == "URBAN")
+		{
+			powerLimit = powerLimit + 2000;
+		}
+		else if (tilesetType == "ROCKIES")
+		{
+			powerLimit = powerLimit + 4000;
+		}
 	}
 
 	setPowerModifier(powerProductionRate);

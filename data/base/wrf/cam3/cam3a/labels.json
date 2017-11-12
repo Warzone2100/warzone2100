@@ -73,11 +73,11 @@
 	},
 	"position_18": {
 		"label": "NXcybFac-b3Assembly",
-		"pos": [5568, 8640]
+		"pos": [5568, 8896]
 	},
 	"position_19": {
 		"label": "NXcybFac-b2-1Assembly",
-		"pos": [2496, 14528]
+		"pos": [2624, 14656]
 	},
 	"position_20": {
 		"label": "NXcybFac-b2-2Assembly",
@@ -89,7 +89,7 @@
 	},
 	"position_22": {
 		"label": "NXcybFac-b4Assembly",
-		"pos": [1984, 8768]
+		"pos": [2112, 8896]
 	},
 
 	"area_0": {
@@ -99,6 +99,7 @@
 	},
 	"area_1": {
 		"label": "cybAttackers",
+		"subscriber": 0,
 		"pos1": [6976, 12480],
 		"pos2": [7360, 12864]
 	},
@@ -147,6 +148,12 @@
 		"pos1": [192, 8256],
 		"pos2": [3264, 10176]
 	},
+	"area_11": {
+		"label": "westFactoryTrigger",
+		"subscriber": 0,
+		"pos1": [5312, 13632],
+		"pos2": [6080, 14656]
+	},
 
 	"object_0": {
 		"label": "NXPowerGenArti",
@@ -162,13 +169,13 @@
 	},
 	"object_2": {
 		"label": "NXcybFac-b3",
-		"id": 187,
+		"id": 88,
 		"player": 3,
 		"type": 1
 	},
 	"object_3": {
 		"label": "NXcybFac-b2-1",
-		"id": 88,
+		"id": 187,
 		"player": 3,
 		"type": 1
 	},

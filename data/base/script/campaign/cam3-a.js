@@ -18,69 +18,29 @@ camAreaEvent("vtolRemoveZone", function(droid)
 	resetLabel("vtolRemoveZone", NEXUS);
 });
 
-//These area events are for enabling factories.
+//Order base three groups to do stuff.
 camAreaEvent("cybAttackers", function(droid)
 {
-	if(droid.player === CAM_HUMAN_PLAYER)
-	{
-		camEnableFactory("NXcybFac-b2-1");
-	}
-	else
-	{
-		resetLabel("cybAttackers", CAM_HUMAN_PLAYER);
-	}
+	enableAllFactories();
+
+	camManageGroup(camMakeGroup("NEAttackerGroup"), CAM_ORDER_ATTACK, {
+		regroup: true,
+		morale: 90,
+		fallback: camMakePos("SWBaseRetreat")
+	});
+
+	camManageGroup(camMakeGroup("NEDefenderGroup"), CAM_ORDER_DEFEND, {
+		pos: [
+			camMakePos("genericasAssembly"),
+			camMakePos("northFacAssembly"),
+		],
+		regroup: true,
+	});
 });
 
-camAreaEvent("northEastBaseCleanup", function(droid)
+camAreaEvent("westFactoryTrigger", function(droid)
 {
-	if (droid.player === CAM_HUMAN_PLAYER)
-	{
-		camEnableFactory("NXcybFac-b3");
-	}
-	else
-	{
-		resetLabel("northEastBaseCleanup", CAM_HUMAN_PLAYER);
-	}
-});
-
-//This one sets up some groups also.
-camAreaEvent("southWestBaseCleanup", function(droid)
-{
-	if (droid.player === CAM_HUMAN_PLAYER)
-	{
-		camEnableFactory("NXcybFac-b2-2");
-		camEnableFactory("NXHvyFac-b2");
-
-		camManageGroup(camMakeGroup("NEAttackerGroup"), CAM_ORDER_ATTACK, {
-			regroup: true,
-			morale: 90,
-			fallback: camMakePos("SWBaseRetreat")
-		});
-
-		camManageGroup(camMakeGroup("NEDefenderGroup"), CAM_ORDER_DEFEND, {
-			pos: [
-				camMakePos("genericasAssembly"),
-				camMakePos("northFacAssembly"),
-			],
-			regroup: true,
-		});
-	}
-	else
-	{
-		resetLabel("southWestBaseCleanup", CAM_HUMAN_PLAYER);
-	}
-});
-
-camAreaEvent("northWestBaseCleanup", function(droid)
-{
-	if (droid.player === CAM_HUMAN_PLAYER)
-	{
-		camEnableFactory("NXcybFac-b4");
-	}
-	else
-	{
-		resetLabel("northWestBaseCleanup", CAM_HUMAN_PLAYER);
-	}
+	enableAllFactories();
 });
 
 //make the first batch or extra transport droids hero rank.
@@ -155,7 +115,7 @@ function sendPlayerTransporter()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxlneedv, nxlscouv, nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(420000), "NXCommandCenter"); //7 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
 }
 
 //These groups are active immediately.
@@ -309,10 +269,6 @@ function eventStartLevel()
 			assembly: "NXcybFac-b2-1Assembly",
 			order: CAM_ORDER_ATTACK,
 			data: {
-				pos: [
-					camMakePos("northFacAssembly"),
-					camMakePos("ambushPlayerPos"),
-				],
 				regroup: false,
 				repair: 40,
 				count: -1,
@@ -360,7 +316,7 @@ function eventStartLevel()
 		},
 		"NXcybFac-b4": {
 			assembly: "NXcybFac-b4Assembly",
-			order: CAM_ORDER_DEFEND,
+			order: CAM_ORDER_PATROL,
 			data: {
 				pos: [
 					camMakePos("genericasAssembly"),
@@ -368,7 +324,6 @@ function eventStartLevel()
 				],
 				regroup: false,
 				repair: 40,
-				radius: 15,
 				count: -1,
 			},
 			groupSize: 4,
