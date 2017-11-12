@@ -375,6 +375,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 {
 	int level = 1;
 	int armour = objArmour(psObj, weaponClass);
+	const int lastHit = psObj->timeLastHit;
 
 	// If the previous hit was by an EMP cannon and this one is not:
 	// don't reset the weapon class and hit time
@@ -401,7 +402,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		bMultiMessages = bMultiPlayer;
 
 		clustObjectAttacked((BASE_OBJECT *)psObj);
-		triggerEventAttacked(psObj, g_pProjLastAttacker, psObj->timeLastHit);
+		triggerEventAttacked(psObj, g_pProjLastAttacker, lastHit);
 
 		bMultiMessages = bMultiMessagesBackup;
 	}
