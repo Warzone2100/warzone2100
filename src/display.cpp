@@ -1529,7 +1529,7 @@ static void printDroidClickInfo(DROID *psDroid)
 		console("%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u",
 		        droidGetName(psDroid), psDroid->body, psDroid->originalBody, psDroid->id,
 		        psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-		        droidSensorRange(psDroid), droidJammerPower(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime);
+		        droidSensorRange(psDroid), objJammerPower(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime);
 		FeedbackOrderGiven();
 	}
 	else if (!psDroid->selected)
@@ -1555,7 +1555,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 			console("(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f",
 			        droidGetName(psDroid),  psDroid->body, psDroid->originalBody, psDroid->id,
 			        psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type),
-			        getDroidActionName(psDroid->action), droidSensorRange(psDroid), droidJammerPower(psDroid), UNDEG(psDroid->rot.pitch));
+			        getDroidActionName(psDroid->action), droidSensorRange(psDroid), objJammerPower(psDroid), UNDEG(psDroid->rot.pitch));
 			FeedbackOrderGiven();
 		}
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());

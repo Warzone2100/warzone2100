@@ -74,14 +74,26 @@ static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 	return abs(xdiff) <= range && abs(ydiff) <= range && xdiff * xdiff + ydiff * ydiff <= range;
 }
 
+// If we have ECM, use this for range instead. Otherwise, the sensor's range will be used for
+// jamming range, which we do not want. Rather limit ECM unit sensor range to jammer range.
 static inline int objSensorRange(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
+		const int ecmrange = asECMStats[((DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+		if (ecmrange > 0)
+		{
+			return ecmrange;
+		}
 		return asSensorStats[((DROID *)psObj)->asBits[COMP_SENSOR]].upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
+		const int ecmrange = ((STRUCTURE *)psObj)->pStructureType->pECM->upgrade[psObj->player].range;
+		if (ecmrange)
+		{
+			return ecmrange;
+		}
 		return ((STRUCTURE *)psObj)->pStructureType->pSensor->upgrade[psObj->player].range;
 	}
 	return 0;
