@@ -72,19 +72,19 @@
 		"pos": [2496, 15168]
 	},
 	"position_18": {
-		"label": "NXcybFac-b2Assembly",
+		"label": "NXcybFac-b3Assembly",
 		"pos": [5568, 8640]
 	},
 	"position_19": {
-		"label": "NXcybFac-b3-1Assembly",
+		"label": "NXcybFac-b2-1Assembly",
 		"pos": [2496, 14528]
 	},
 	"position_20": {
-		"label": "NXcybFac-b3-2Assembly",
+		"label": "NXcybFac-b2-2Assembly",
 		"pos": [1600, 15296]
 	},
 	"position_21": {
-		"label": "NXHvyFac-b3Assembly",
+		"label": "NXHvyFac-b2Assembly",
 		"pos": [1600, 14912]
 	},
 	"position_22": {
@@ -161,25 +161,25 @@
 		"type": 1
 	},
 	"object_2": {
-		"label": "NXcybFac-b2",
-		"id": 88,
-		"player": 3,
-		"type": 1
-	},
-	"object_3": {
-		"label": "NXcybFac-b3-1",
+		"label": "NXcybFac-b3",
 		"id": 187,
 		"player": 3,
 		"type": 1
 	},
+	"object_3": {
+		"label": "NXcybFac-b2-1",
+		"id": 88,
+		"player": 3,
+		"type": 1
+	},
 	"object_4": {
-		"label": "NXcybFac-b3-2",
+		"label": "NXcybFac-b2-2",
 		"id": 1059,
 		"player": 3,
 		"type": 1
 	},
 	"object_5": {
-		"label": "NXHvyFac-b3",
+		"label": "NXHvyFac-b2",
 		"id": 1065,
 		"player": 3,
 		"type": 1

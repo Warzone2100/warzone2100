@@ -23,7 +23,7 @@ camAreaEvent("cybAttackers", function(droid)
 {
 	if(droid.player === CAM_HUMAN_PLAYER)
 	{
-		camEnableFactory("NXcybFac-b2");
+		camEnableFactory("NXcybFac-b2-1");
 	}
 	else
 	{
@@ -35,7 +35,7 @@ camAreaEvent("northEastBaseCleanup", function(droid)
 {
 	if (droid.player === CAM_HUMAN_PLAYER)
 	{
-		camEnableFactory("NXcybFac-b3-1");
+		camEnableFactory("NXcybFac-b3");
 	}
 	else
 	{
@@ -48,8 +48,8 @@ camAreaEvent("southWestBaseCleanup", function(droid)
 {
 	if (droid.player === CAM_HUMAN_PLAYER)
 	{
-		camEnableFactory("NXcybFac-b3-2");
-		camEnableFactory("NXHvyFac-b3");
+		camEnableFactory("NXcybFac-b2-2");
+		camEnableFactory("NXHvyFac-b2");
 
 		camManageGroup(camMakeGroup("NEAttackerGroup"), CAM_ORDER_ATTACK, {
 			regroup: true,
@@ -102,11 +102,11 @@ function eventTransporterLanded(transport)
 	camCallOnce("setHeroUnits");
 }
 
-//Enable all factories after twenty five minutes.
+//Enable all factories.
 function enableAllFactories()
 {
 	const FACTORY_NAMES = [
-		"NXcybFac-b4", "NXcybFac-b3-1", "NXcybFac-b3-2", "NXHvyFac-b3", "NXcybFac-b2",
+		"NXcybFac-b3", "NXcybFac-b2-1", "NXcybFac-b2-2", "NXHvyFac-b2", "NXcybFac-b4",
 	];
 
 	for (var j = 0, i = FACTORY_NAMES.length; j < i; ++j)
@@ -271,14 +271,14 @@ function eventStartLevel()
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
-		"NEXUS-NEBase": {
-			cleanup: "northEastBaseCleanup",
+		"NEXUS-SWBase": {
+			cleanup: "southWestBaseCleanup",
 			detectMsg: "CM3A_BASE2",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
-		"NEXUS-SWBase": {
-			cleanup: "southWestBaseCleanup",
+		"NEXUS-NEBase": {
+			cleanup: "northEastBaseCleanup",
 			detectMsg: "CM3A_BASE3",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
@@ -292,8 +292,8 @@ function eventStartLevel()
 	});
 
 	with (camTemplates) camSetFactories({
-		"NXcybFac-b2": {
-			assembly: "NXcybFac-b2Assembly",
+		"NXcybFac-b3": {
+			assembly: "NXcybFac-b3Assembly",
 			order: CAM_ORDER_ATTACK,
 			data: {
 				regroup: false,
@@ -301,12 +301,12 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(40000),
 			group: camMakeGroup("NEAttackerGroup"),
-			templates: [nxcyrail, nxcyscou]		
+			templates: [nxcyrail, nxcyscou]
 		},
-		"NXcybFac-b3-1": {
-			assembly: "NXcybFac-b3-1Assembly",
+		"NXcybFac-b2-1": {
+			assembly: "NXcybFac-b2-1Assembly",
 			order: CAM_ORDER_ATTACK,
 			data: {
 				pos: [
@@ -317,13 +317,13 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			groupSize: 8,
-			throttle: camChangeOnDiff(40000),
+			groupSize: 4,
+			throttle: camChangeOnDiff(30000),
 			group: camMakeGroup("cybAttackers"),
 			templates: [nxcyrail, nxcyscou]
 		},
-		"NXcybFac-b3-2": {
-			assembly: "NXcybFac-b3-2Assembly",
+		"NXcybFac-b2-2": {
+			assembly: "NXcybFac-b2-2Assembly",
 			order: CAM_ORDER_PATROL,
 			data: {
 				pos: [
@@ -336,12 +336,12 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(30000),
 			group: camMakeGroup("cybValleyPatrol"),
 			templates: [nxcyrail, nxcyscou]
 		},
-		"NXHvyFac-b3": {
-			assembly: "NXHvyFac-b3Assembly",
+		"NXHvyFac-b2": {
+			assembly: "NXHvyFac-b2Assembly",
 			order: CAM_ORDER_PATROL,
 			data: {
 				pos: [
@@ -354,7 +354,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(60000),
 			group: camMakeGroup("hoverPatrolGrp"),
 			templates: [nxmscouh]
 		},
@@ -372,7 +372,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(30000),
 			group: camMakeGroup("NEDefenderGroup"),
 			templates: [nxcyrail, nxcyscou]
 		},
@@ -395,5 +395,5 @@ function eventStartLevel()
 
 	groupPatrolNoTrigger();
 	queue("vtolAttack", camChangeOnDiff(480000)); //8 min
-	queue("enableAllFactories", camChangeOnDiff(1800000)); //25 minutes.
+	queue("enableAllFactories", camChangeOnDiff(1200000)); //20 minutes.
 }
