@@ -712,8 +712,8 @@
     "ECM1PylonMk1": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 300,
-        "buildPower": 60,
+        "buildPoints": 750,
+        "buildPower": 500,
         "ecmID": "ECM1TurretMk1",
         "height": 3,
         "hitpoints": 300,
