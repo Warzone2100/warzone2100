@@ -1,31 +1,133 @@
 {
-	"position_0" : { "label": "startPosition",		"pos": [ 1344, 6848 ] },
-	"position_1" : { "label": "transporterEntry",		"pos": [ 1536, 7936 ] },
-	"position_2" : { "label": "transporterExit",		"pos": [ 128, 6400 ] },
-	"position_3" : { "label": "COMediumFactoryAssembly",	"pos": [ 6080, 1216 ] },
-	"position_4" : { "label": "COCyborgFactoryLAssembly",	"pos": [ 6592, 1216 ] },	
-	"position_5" : { "label": "COCyborgFactoryRAssembly",	"pos": [ 6848, 1216 ] },	
-	"position_6" : { "label": "playerLZ",			"pos": [ 1344, 7104 ] },
-	"position_7" : { "label": "canalWaypoint",		"pos": [ 1600, 3520 ] },
-	"position_8" : { "label": "crossroadWaypoint",		"pos": [ 1600, 1728 ] },
-	"position_9" : { "label": "damWaypoint1",		"pos": [ 6592, 2624 ] },
-	"position_10": { "label": "damWaypoint2",		"pos": [ 7360, 5824 ] },
-	"position_11": { "label": "damWaypoint3",		"pos": [ 5952, 6336 ] },
-	"position_12": { "label": "hillGroupPos",		"pos": [ 1728, 7744 ] },
-	
-	"area_0": { "label": "landingZone",	"pos1": [ 1152, 6656 ],	"pos2": [ 1408, 6912 ] },
-	"area_1": { "label": "RTLZ",		"pos1": [ 64, 5952 ],	"pos2": [ 2112, 8128 ] },
-	"area_2": { "label": "canalGuards",	"pos1": [ 960, 1856 ],	"pos2": [ 2112, 4160 ] },
-	"area_3": { "label": "eastCyborgs",	"pos1": [ 3008, 6208 ],	"pos2": [ 4032, 7872 ] },
-	"area_4": { "label": "northCyborgs",	"pos1": [ 2368, 3520 ],	"pos2": [ 5312, 3904 ] },
-	"area_5": { "label": "damGroup",	"pos1": [ 6336, 2496 ],	"pos2": [ 7232, 3008 ] },
-	"area_6": { "label": "baseCleanup",	"pos1": [ 5120, 0 ],	"pos2": [ 7936, 3840 ] },
-	"area_7": { "label": "factoryTrigger",	"subscriber": 0, "pos1": [ 0, 3500 ], "pos2": [ 5312, 5200 ] },
-	"area_8": { "label": "damTrigger",	"subscriber": 0, "pos1": [ 5440, 6080 ], "pos2": [ 5952, 7872 ] },
+	"position_0": {
+		"label": "startPosition",
+		"pos": [1344, 6848]
+	},
+	"position_1": {
+		"label": "transporterEntry",
+		"pos": [1536, 7936]
+	},
+	"position_2": {
+		"label": "transporterExit",
+		"pos": [128, 6400]
+	},
+	"position_3": {
+		"label": "COMediumFactoryAssembly",
+		"pos": [6080, 1216]
+	},
+	"position_4": {
+		"label": "COCyborgFactoryLAssembly",
+		"pos": [6592, 1216]
+	},
+	"position_5": {
+		"label": "COCyborgFactoryRAssembly",
+		"pos": [6848, 1216]
+	},
+	"position_6": {
+		"label": "playerLZ",
+		"pos": [1344, 7104]
+	},
+	"position_7": {
+		"label": "canalWaypoint",
+		"pos": [1600, 3520]
+	},
+	"position_8": {
+		"label": "crossroadWaypoint",
+		"pos": [1600, 1728]
+	},
+	"position_9": {
+		"label": "damWaypoint1",
+		"pos": [6592, 2624]
+	},
+	"position_10": {
+		"label": "damWaypoint2",
+		"pos": [7360, 5824]
+	},
+	"position_11": {
+		"label": "damWaypoint3",
+		"pos": [5952, 6336]
+	},
+	"position_12": {
+		"label": "hillGroupPos",
+		"pos": [1728, 7744]
+	},
 
-	"object_0": { "label": "COMediumFactory",	"id": 654, "player": 2, "type": 1 },
-	"object_1": { "label": "COCyborgFactoryL",	"id": 408, "player": 2, "type": 1 },
-	"object_2": { "label": "COCyborgFactoryR",	"id": 409, "player": 2, "type": 1 },
-	"object_3": { "label": "NuclearReactor",	"id": 511, "player": 2, "type": 1 },
-	"object_4": { "label": "CORepairFacility",	"id": 421, "player": 2, "type": 1 }
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [1152, 6656],
+		"pos2": [1408, 6912]
+	},
+	"area_1": {
+		"label": "RTLZ",
+		"pos1": [64, 5952],
+		"pos2": [2112, 8128]
+	},
+	"area_2": {
+		"label": "canalGuards",
+		"pos1": [960, 1856],
+		"pos2": [2112, 4160]
+	},
+	"area_3": {
+		"label": "eastCyborgs",
+		"pos1": [3008, 6208],
+		"pos2": [4032, 7872]
+	},
+	"area_4": {
+		"label": "northCyborgs",
+		"pos1": [2368, 3520],
+		"pos2": [5312, 3904]
+	},
+	"area_5": {
+		"label": "damGroup",
+		"pos1": [6336, 2496],
+		"pos2": [7232, 3008]
+	},
+	"area_6": {
+		"label": "baseCleanup",
+		"pos1": [5120, 0],
+		"pos2": [7936, 3840]
+	},
+	"area_7": {
+		"label": "factoryTrigger",
+		"subscriber": 0,
+		"pos1": [0, 3500],
+		"pos2": [5312, 5200]
+	},
+	"area_8": {
+		"label": "damTrigger",
+		"subscriber": 0,
+		"pos1": [5440, 6080],
+		"pos2": [5952, 7872]
+	},
+
+	"object_0": {
+		"label": "COMediumFactory",
+		"id": 654,
+		"player": 2,
+		"type": 1
+	},
+	"object_1": {
+		"label": "COCyborgFactoryL",
+		"id": 408,
+		"player": 2,
+		"type": 1
+	},
+	"object_2": {
+		"label": "COCyborgFactoryR",
+		"id": 409,
+		"player": 2,
+		"type": 1
+	},
+	"object_3": {
+		"label": "NuclearReactor",
+		"id": 511,
+		"player": 2,
+		"type": 1
+	},
+	"object_4": {
+		"label": "CORepairFacility",
+		"id": 421,
+		"player": 2,
+		"type": 1
+	}
 }

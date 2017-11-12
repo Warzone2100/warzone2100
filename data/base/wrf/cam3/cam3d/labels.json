@@ -1,26 +1,112 @@
 {
-	"position_0": { "label": "startPosition", "pos": [ 1472, 23232 ] },
-	"position_1": { "label": "missileSiloRetreat", "pos": [ 5568, 31296 ] },
-	"position_2": { "label": "westMainEntrance", "pos": [ 3904, 30784 ] },
-	"position_3": { "label": "vtolBaseEntrance", "pos": [ 1472, 30912 ] },
-	"position_4": { "label": "northMainEntrance", "pos": [ 6848, 27584 ] },
-	"position_5": { "label": "samSiteHillMiddle", "pos": [ 4032, 25408 ] },
-	"position_6": { "label": "southOfGammaBase", "pos": [ 1600, 24768 ] },
-	"position_7": { "label": "oldNexusBaseOil", "pos": [ 6976, 23104 ] },
-	"position_8": { "label": "gammaBasePos", "pos": [ 1600, 23488 ] },
+	"position_0": {
+		"label": "startPosition",
+		"pos": [1472, 23232]
+	},
+	"position_1": {
+		"label": "missileSiloRetreat",
+		"pos": [5568, 31296]
+	},
+	"position_2": {
+		"label": "westMainEntrance",
+		"pos": [3904, 30784]
+	},
+	"position_3": {
+		"label": "vtolBaseEntrance",
+		"pos": [1472, 30912]
+	},
+	"position_4": {
+		"label": "northMainEntrance",
+		"pos": [6848, 27584]
+	},
+	"position_5": {
+		"label": "samSiteHillMiddle",
+		"pos": [4032, 25408]
+	},
+	"position_6": {
+		"label": "southOfGammaBase",
+		"pos": [1600, 24768]
+	},
+	"position_7": {
+		"label": "oldNexusBaseOil",
+		"pos": [6976, 23104]
+	},
+	"position_8": {
+		"label": "gammaBasePos",
+		"pos": [1600, 23488]
+	},
 
-	"area_0": { "label": "landingZone", "pos1": [ 7040, 15232 ], "pos2": [ 7296, 15488 ] },
-	"area_1": { "label": "landingZone2", "pos1": [ 6200, 31160 ], "pos2": [ 6600, 31560 ] },
-	"area_2": { "label": "mainBaseCleanup", "pos1": [ 4672, 29760 ],	"pos2": [ 8000, 32448 ] },
-	"area_3": { "label": "NXVtolBaseCleanup", "pos1": [ 192, 28224 ], "pos2": [ 2368, 32448 ] },
-	"area_4": { "label": "NXsuicideSquad", "pos1": [ 2624, 25664 ], "pos2": [ 3264, 26304 ] },
-	"area_5": { "label": "NEDefenseZone", "subscriber": 0, "pos1": [ 4032, 23744 ], "pos2": [ 8000, 27712 ] },
-	"area_6": { "label": "NWDefenseZone", "subscriber": 0, "pos1": [ 192, 24512 ], "pos2": [ 4032, 28096 ] },
-	"area_7": { "label": "missileSilos", "pos1": [ 5248, 31232 ], "pos2": [ 6016, 31488 ] },
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [7040, 15232],
+		"pos2": [7296, 15488]
+	},
+	"area_1": {
+		"label": "landingZone2",
+		"pos1": [6200, 31160],
+		"pos2": [6600, 31560]
+	},
+	"area_2": {
+		"label": "mainBaseCleanup",
+		"pos1": [4672, 29760],
+		"pos2": [8000, 32448]
+	},
+	"area_3": {
+		"label": "NXVtolBaseCleanup",
+		"pos1": [192, 28224],
+		"pos2": [2368, 32448]
+	},
+	"area_4": {
+		"label": "NXsuicideSquad",
+		"pos1": [2624, 25664],
+		"pos2": [3264, 26304]
+	},
+	"area_5": {
+		"label": "NEDefenseZone",
+		"subscriber": 0,
+		"pos1": [4032, 23744],
+		"pos2": [8000, 27712]
+	},
+	"area_6": {
+		"label": "NWDefenseZone",
+		"subscriber": 0,
+		"pos1": [192, 24512],
+		"pos2": [4032, 28096]
+	},
+	"area_7": {
+		"label": "missileSilos",
+		"pos1": [5248, 31232],
+		"pos2": [6016, 31488]
+	},
 
-	"object_0": { "id": 1371, "label": "NXbase1VtolFacArti", "player": 3, "type": 1 },
-	"object_1": { "id": 1386, "label": "NXbase2HeavyFac", "player": 3, "type": 1 },
-	"object_2": { "id": 810, "label": "NXcommandCenter", "player": 3, "type": 1 },
-	"object_3": { "id": 1493, "label": "NXcyborgFac1", "player": 3, "type": 1 },
-	"object_4": { "id": 1494, "label": "NXcyborgFac2Arti", "player": 3, "type": 1 }
+	"object_0": {
+		"id": 1371,
+		"label": "NXbase1VtolFacArti",
+		"player": 3,
+		"type": 1
+	},
+	"object_1": {
+		"id": 1386,
+		"label": "NXbase2HeavyFac",
+		"player": 3,
+		"type": 1
+	},
+	"object_2": {
+		"id": 810,
+		"label": "NXcommandCenter",
+		"player": 3,
+		"type": 1
+	},
+	"object_3": {
+		"id": 1493,
+		"label": "NXcyborgFac1",
+		"player": 3,
+		"type": 1
+	},
+	"object_4": {
+		"id": 1494,
+		"label": "NXcyborgFac2Arti",
+		"player": 3,
+		"type": 1
+	}
 }

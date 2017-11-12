@@ -1,43 +1,180 @@
 {
-	"position_0" : { "label": "startPosition",         "pos": [ 1920, 6656 ] },
-	"position_1" : { "label": "reinforceSouthEast",    "pos": [ 15424, 16064 ] },
-	"position_2" : { "label": "reinforceNorth",        "pos": [ 12736, 128 ] },
-	"position_3" : { "label": "npPos1",                "pos": [ 15424, 15424 ] },
-	"position_4" : { "label": "npPos2",                "pos": [ 12736, 1312 ] },
-	"position_5" : { "label": "npPos3",                "pos": [ 8768, 15424 ] },
-	"position_6" : { "label": "npPos4",                "pos": [ 1344, 8896 ] },
-	"position_7" : { "label": "npPos5",                "pos": [ 5056, 3264 ] },
-	"position_8" : { "label": "seCybPos1",             "pos": [ 14272, 12608 ] },
-	"position_9" : { "label": "seCybPos2",             "pos": [ 12736, 13504 ] },
-	"position_10": { "label": "seCybPos3",             "pos": [ 10560, 15168 ] },
-	"position_11": { "label": "northCybPos1",          "pos": [ 8896, 7488 ] },
-	"position_12": { "label": "northCybPos2",          "pos": [ 11840, 3392 ] },
-	"position_13": { "label": "northCybPos3",          "pos": [ 14656, 832 ] },
-	"position_14": { "label": "canyonCybPos1",         "pos": [ 10304, 14912 ] },
-	"position_15": { "label": "canyonCybPos2",         "pos": [ 3648, 13760 ] },
-	"position_16": { "label": "canyonCybPos3",         "pos": [ 4928, 10304 ] },
-	"position_17": { "label": "hillCybPos1",           "pos": [ 1600, 7744 ] },
-	"position_18": { "label": "hillCybPos2",           "pos": [ 1472, 6720 ] },
-	"position_19": { "label": "hillCybPos3",           "pos": [ 3648, 13888 ] },
-	"position_20": { "label": "1aCybPos1", 	           "pos": [ 4928, 2112 ] },
-	"position_21": { "label": "1aCybPos2",             "pos": [ 3776, 4928 ] },
-	"position_22": { "label": "1aCybPos3", 	           "pos": [ 1472, 6720 ] },
-	
-	"area_0" : { "label": "landingZone",   "pos1": [ 1280, 6528 ],   "pos2": [ 1536, 6784 ] },
-	"area_1" : { "label": "buildArea",     "pos1": [ 7360, 5696 ],   "pos2": [ 10688, 8640 ] },
-	"area_2" : { "label": "NPLZ1",         "pos1": [ 10048, 7872 ],  "pos2": [ 11072, 8896 ] },
-	"area_3" : { "label": "NPLZ2",         "pos1": [ 6720, 5824 ],   "pos2": [ 7744, 6848 ] },
-	"area_4" : { "label": "NPLZ3",         "pos1": [ 5696, 6336 ],   "pos2": [ 6976, 7360 ] },
-	"area_5" : { "label": "NPLZ4",         "pos1": [ 7360, 4160 ],   "pos2": [ 8384, 5184 ] },
-	"area_6" : { "label": "NPLZ5",         "pos1": [ 7000, 3456 ],   "pos2": [ 7300, 3712 ] },
-	"area_7" : { "label": "PhantomLZ1",    "pos1": [ 7104, 6208 ],   "pos2": [ 7360, 6464 ] },
-	"area_8" : { "label": "PhantomLZ2",    "pos1": [ 6080, 6720 ],   "pos2": [ 6336, 6976 ] },
-	"area_9" : { "label": "PhantomLZ3",    "pos1": [ 7744, 4544 ],   "pos2": [ 8000, 4800 ] },
-	"area_10": { "label": "PhantomLZ4",    "pos1": [ 6720, 3392 ],   "pos2": [ 6976, 3648 ] },
-	"area_11": { "label": "PhantomLZ5",    "pos1": [ 10432, 8256 ],  "pos2": [ 10678, 8512 ] },
-	"area_12": { "label": "NPLZ6", 	       "pos1": [ 15104, 14976 ], "pos2": [ 15744, 15616 ] },
-	"area_13": { "label": "NPLZ7",         "pos1": [ 12416, 1152 ],  "pos2": [ 12928, 1536 ] },
-	"area_14": { "label": "NPLZ8",         "pos1": [ 8320, 14976 ],  "pos2": [ 8960, 15616 ] },
-	"area_15": { "label": "NPLZ9", 	       "pos1": [ 896, 8576 ],    "pos2": [ 1408, 8960 ] },
-	"area_16": { "label": "NPLZ10",        "pos1": [ 4608, 2816 ],   "pos2": [ 5120, 3200 ] }
+	"position_0": {
+		"label": "startPosition",
+		"pos": [1920, 6656]
+	},
+	"position_1": {
+		"label": "reinforceSouthEast",
+		"pos": [15424, 16064]
+	},
+	"position_2": {
+		"label": "reinforceNorth",
+		"pos": [12736, 128]
+	},
+	"position_3": {
+		"label": "npPos1",
+		"pos": [15424, 15424]
+	},
+	"position_4": {
+		"label": "npPos2",
+		"pos": [12736, 1312]
+	},
+	"position_5": {
+		"label": "npPos3",
+		"pos": [8768, 15424]
+	},
+	"position_6": {
+		"label": "npPos4",
+		"pos": [1344, 8896]
+	},
+	"position_7": {
+		"label": "npPos5",
+		"pos": [5056, 3264]
+	},
+	"position_8": {
+		"label": "seCybPos1",
+		"pos": [14272, 12608]
+	},
+	"position_9": {
+		"label": "seCybPos2",
+		"pos": [12736, 13504]
+	},
+	"position_10": {
+		"label": "seCybPos3",
+		"pos": [10560, 15168]
+	},
+	"position_11": {
+		"label": "northCybPos1",
+		"pos": [8896, 7488]
+	},
+	"position_12": {
+		"label": "northCybPos2",
+		"pos": [11840, 3392]
+	},
+	"position_13": {
+		"label": "northCybPos3",
+		"pos": [14656, 832]
+	},
+	"position_14": {
+		"label": "canyonCybPos1",
+		"pos": [10304, 14912]
+	},
+	"position_15": {
+		"label": "canyonCybPos2",
+		"pos": [3648, 13760]
+	},
+	"position_16": {
+		"label": "canyonCybPos3",
+		"pos": [4928, 10304]
+	},
+	"position_17": {
+		"label": "hillCybPos1",
+		"pos": [1600, 7744]
+	},
+	"position_18": {
+		"label": "hillCybPos2",
+		"pos": [1472, 6720]
+	},
+	"position_19": {
+		"label": "hillCybPos3",
+		"pos": [3648, 13888]
+	},
+	"position_20": {
+		"label": "1aCybPos1",
+		"pos": [4928, 2112]
+	},
+	"position_21": {
+		"label": "1aCybPos2",
+		"pos": [3776, 4928]
+	},
+	"position_22": {
+		"label": "1aCybPos3",
+		"pos": [1472, 6720]
+	},
+
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [1280, 6528],
+		"pos2": [1536, 6784]
+	},
+	"area_1": {
+		"label": "buildArea",
+		"pos1": [7360, 5696],
+		"pos2": [10688, 8640]
+	},
+	"area_2": {
+		"label": "NPLZ1",
+		"pos1": [10048, 7872],
+		"pos2": [11072, 8896]
+	},
+	"area_3": {
+		"label": "NPLZ2",
+		"pos1": [6720, 5824],
+		"pos2": [7744, 6848]
+	},
+	"area_4": {
+		"label": "NPLZ3",
+		"pos1": [5696, 6336],
+		"pos2": [6976, 7360]
+	},
+	"area_5": {
+		"label": "NPLZ4",
+		"pos1": [7360, 4160],
+		"pos2": [8384, 5184]
+	},
+	"area_6": {
+		"label": "NPLZ5",
+		"pos1": [7000, 3456],
+		"pos2": [7300, 3712]
+	},
+	"area_7": {
+		"label": "PhantomLZ1",
+		"pos1": [7104, 6208],
+		"pos2": [7360, 6464]
+	},
+	"area_8": {
+		"label": "PhantomLZ2",
+		"pos1": [6080, 6720],
+		"pos2": [6336, 6976]
+	},
+	"area_9": {
+		"label": "PhantomLZ3",
+		"pos1": [7744, 4544],
+		"pos2": [8000, 4800]
+	},
+	"area_10": {
+		"label": "PhantomLZ4",
+		"pos1": [6720, 3392],
+		"pos2": [6976, 3648]
+	},
+	"area_11": {
+		"label": "PhantomLZ5",
+		"pos1": [10432, 8256],
+		"pos2": [10678, 8512]
+	},
+	"area_12": {
+		"label": "NPLZ6",
+		"pos1": [15104, 14976],
+		"pos2": [15744, 15616]
+	},
+	"area_13": {
+		"label": "NPLZ7",
+		"pos1": [12416, 1152],
+		"pos2": [12928, 1536]
+	},
+	"area_14": {
+		"label": "NPLZ8",
+		"pos1": [8320, 14976],
+		"pos2": [8960, 15616]
+	},
+	"area_15": {
+		"label": "NPLZ9",
+		"pos1": [896, 8576],
+		"pos2": [1408, 8960]
+	},
+	"area_16": {
+		"label": "NPLZ10",
+		"pos1": [4608, 2816],
+		"pos2": [5120, 3200]
+	}
 }

@@ -1,31 +1,127 @@
 {
-    "position_0" : { "label": "retreat1",        "pos": [ 3904, 4416 ] },
-    "position_1" : { "label": "retreat2",        "pos": [ 5440, 2368 ] },
-    "position_2" : { "label": "retreat4",        "pos": [ 2112, 4544 ] },
-    "position_3" : { "label": "startPosition",   "pos": [ 1728, 6720 ] },
-    "position_4" : { "label": "scav1soundpos",   "pos": [ 3904, 4672 ] },
-    "position_5" : { "label": "scav2soundpos",   "pos": [ 5002, 2154 ] },
-    "position_6" : { "label": "scav3soundpos",   "pos": [ 1600, 1728 ] },
-    "position_7" : { "label": "artifact4pos",    "pos": [ 3776, 4544 ] },
-    "position_8" : { "label": "oilPatch",        "pos": [ 4928, 5568 ] },
-    "position_9" : { "label": "playerBase",      "pos": [ 2100, 6700 ] },
-    "position_10": { "label": "assembly1",       "pos": [ 5056, 2496 ] },
-    "position_11": { "label": "assembly2",       "pos": [ 1600, 2240 ] },
-    "position_12": { "label": "assembly3",       "pos": [ 2112, 3648 ] },
-    
-    "area_0": { "label": "raidGroup",          "pos1": [ 3392, 576 ],  "pos2": [ 3904, 1088 ] },
-    "area_1": { "label": "RoadblockArea",      "pos1": [ 4500, 3600 ], "pos2": [ 5500, 4700 ] },
-    "area_2": { "label": "landingZone",        "pos1": [ 1280, 6528 ], "pos2": [ 1536, 6784 ] },
-    "area_3": { "label": "LaunchScavAttack",   "pos1": [ 2496, 6080 ], "pos2": [ 4928, 7232 ] },
-    "area_4": { "label": "scavbase1area",      "pos1": [ 3520, 4416 ], "pos2": [ 4416, 5056 ] },
-    "area_5": { "label": "scavbase2area",      "pos1": [ 4544, 1856 ], "pos2": [ 5440, 2496 ] },
-    "area_6": { "label": "scavbase3area",      "pos1": [ 1088, 1216 ], "pos2": [ 2240, 2240 ] },
-    "area_7": { "label": "scavbase4area",      "pos1": [ 1472, 3776 ], "pos2": [ 2752, 5440 ] },
-    "area_8": { "label": "raidTrigger",        "subscriber": 0, "pos1": [ 2900, 500 ], "pos2": [ 3800, 3000 ] },
-    
-    "object_0": { "label": "base1factory",    "id": 8,     "player": 7, "type": 1 },
-    "object_1": { "label": "base2factory2",   "id": 1256,  "player": 6, "type": 1 },
-    "object_2": { "label": "base2factory1",   "id": 20,    "player": 6, "type": 1 },
-    
-    "radius_0": { "label": "ScavAttack1",     "subscriber": 0, "pos": [ 4928, 6592 ], "radius": 640 }
+	"position_0": {
+		"label": "retreat1",
+		"pos": [3904, 4416]
+	},
+	"position_1": {
+		"label": "retreat2",
+		"pos": [5440, 2368]
+	},
+	"position_2": {
+		"label": "retreat4",
+		"pos": [2112, 4544]
+	},
+	"position_3": {
+		"label": "startPosition",
+		"pos": [1728, 6720]
+	},
+	"position_4": {
+		"label": "scav1soundpos",
+		"pos": [3904, 4672]
+	},
+	"position_5": {
+		"label": "scav2soundpos",
+		"pos": [5002, 2154]
+	},
+	"position_6": {
+		"label": "scav3soundpos",
+		"pos": [1600, 1728]
+	},
+	"position_7": {
+		"label": "artifact4pos",
+		"pos": [3776, 4544]
+	},
+	"position_8": {
+		"label": "oilPatch",
+		"pos": [4928, 5568]
+	},
+	"position_9": {
+		"label": "playerBase",
+		"pos": [2100, 6700]
+	},
+	"position_10": {
+		"label": "assembly1",
+		"pos": [5056, 2496]
+	},
+	"position_11": {
+		"label": "assembly2",
+		"pos": [1600, 2240]
+	},
+	"position_12": {
+		"label": "assembly3",
+		"pos": [2112, 3648]
+	},
+
+	"area_0": {
+		"label": "raidGroup",
+		"pos1": [3392, 576],
+		"pos2": [3904, 1088]
+	},
+	"area_1": {
+		"label": "RoadblockArea",
+		"pos1": [4500, 3600],
+		"pos2": [5500, 4700]
+	},
+	"area_2": {
+		"label": "landingZone",
+		"pos1": [1280, 6528],
+		"pos2": [1536, 6784]
+	},
+	"area_3": {
+		"label": "LaunchScavAttack",
+		"pos1": [2496, 6080],
+		"pos2": [4928, 7232]
+	},
+	"area_4": {
+		"label": "scavbase1area",
+		"pos1": [3520, 4416],
+		"pos2": [4416, 5056]
+	},
+	"area_5": {
+		"label": "scavbase2area",
+		"pos1": [4544, 1856],
+		"pos2": [5440, 2496]
+	},
+	"area_6": {
+		"label": "scavbase3area",
+		"pos1": [1088, 1216],
+		"pos2": [2240, 2240]
+	},
+	"area_7": {
+		"label": "scavbase4area",
+		"pos1": [1472, 3776],
+		"pos2": [2752, 5440]
+	},
+	"area_8": {
+		"label": "raidTrigger",
+		"subscriber": 0,
+		"pos1": [2900, 500],
+		"pos2": [3800, 3000]
+	},
+
+	"object_0": {
+		"label": "base1factory",
+		"id": 8,
+		"player": 7,
+		"type": 1
+	},
+	"object_1": {
+		"label": "base2factory2",
+		"id": 1256,
+		"player": 6,
+		"type": 1
+	},
+	"object_2": {
+		"label": "base2factory1",
+		"id": 20,
+		"player": 6,
+		"type": 1
+	},
+
+	"radius_0": {
+		"label": "ScavAttack1",
+		"subscriber": 0,
+		"pos": [4928, 6592],
+		"radius": 640
+	}
 }

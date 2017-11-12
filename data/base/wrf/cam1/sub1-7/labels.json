@@ -1,37 +1,159 @@
 {
-	"position_0" : { "label": "startPosition",     "pos": [ 896, 7168 ] },
-	"position_1" : { "label": "transporterEntry",  "pos": [ 128, 6912 ] },
-	"position_2" : { "label": "transporterExit",   "pos": [ 640, 7936 ] },
-	"position_3" : { "label": "NPTransportPos",    "pos": [ 1664, 1408 ] },
-	"position_5" : { "label": "hardPoint1",        "pos": [ 1472, 1728 ] },
-	"position_6" : { "label": "hardPoint2",        "pos": [ 1472, 1216 ] },
-	"position_7" : { "label": "hardPoint3",        "pos": [ 1632, 1152 ] },
-	"position_8" : { "label": "hardPoint4",        "pos": [ 1920, 1152 ] },
-	"position_9" : { "label": "hardPoint5",        "pos": [ 1792, 1664 ] },
-	"position_10": { "label": "hardPoint6",        "pos": [ 1792, 1920 ] },
-	"position_11": { "label": "middleAssembly",    "pos": [ 4288, 5770 ] },
-	"position_12": { "label": "southAssembly",     "pos": [ 5824, 6080 ] },
-	"position_13": { "label": "northAssembly",     "pos": [ 4800, 576 ] },
-	"position_14": { "label": "artifactLocation",  "pos": [ 1344, 3904 ] },
-	"position_15": { "label": "NPWayPoint",        "pos": [ 5760, 968 ] },
+	"position_0": {
+		"label": "startPosition",
+		"pos": [896, 7168]
+	},
+	"position_1": {
+		"label": "transporterEntry",
+		"pos": [128, 6912]
+	},
+	"position_2": {
+		"label": "transporterExit",
+		"pos": [640, 7936]
+	},
+	"position_3": {
+		"label": "NPTransportPos",
+		"pos": [1664, 1408]
+	},
+	"position_5": {
+		"label": "hardPoint1",
+		"pos": [1472, 1728]
+	},
+	"position_6": {
+		"label": "hardPoint2",
+		"pos": [1472, 1216]
+	},
+	"position_7": {
+		"label": "hardPoint3",
+		"pos": [1632, 1152]
+	},
+	"position_8": {
+		"label": "hardPoint4",
+		"pos": [1920, 1152]
+	},
+	"position_9": {
+		"label": "hardPoint5",
+		"pos": [1792, 1664]
+	},
+	"position_10": {
+		"label": "hardPoint6",
+		"pos": [1792, 1920]
+	},
+	"position_11": {
+		"label": "middleAssembly",
+		"pos": [4288, 5770]
+	},
+	"position_12": {
+		"label": "southAssembly",
+		"pos": [5824, 6080]
+	},
+	"position_13": {
+		"label": "northAssembly",
+		"pos": [4800, 576]
+	},
+	"position_14": {
+		"label": "artifactLocation",
+		"pos": [1344, 3904]
+	},
+	"position_15": {
+		"label": "NPWayPoint",
+		"pos": [5760, 968]
+	},
 
-	"area_0": { "label": "RTLZ",           "pos1": [ 0, 6528 ],    "pos2": [ 1536, 7936 ] },
-	"area_1": { "label": "scavMiddle",     "pos1": [ 3136, 4288 ], "pos2": [ 5056, 7616 ] },
-	"area_2": { "label": "scavSouthEast",  "pos1": [ 5696, 5312 ], "pos2": [ 8000, 8000 ] },
-	"area_3": { "label": "scavNorth",      "pos1": [ 3392, 448 ],  "pos2": [ 8000, 1984 ] },
-	"area_4": { "label": "NPArtiGroup",    "pos1": [ 4352, 3328 ], "pos2": [ 4864, 3840 ] },
-	"area_5": { "label": "landingZone",    "pos1": [ 640, 6912 ],  "pos2": [ 1152, 7424 ] },
-	"area_6": { "label": "NPLZ",           "pos1": [ 1472, 1216 ], "pos2": [ 1792, 1664 ] },
+	"area_0": {
+		"label": "RTLZ",
+		"pos1": [0, 6528],
+		"pos2": [1536, 7936]
+	},
+	"area_1": {
+		"label": "scavMiddle",
+		"pos1": [3136, 4288],
+		"pos2": [5056, 7616]
+	},
+	"area_2": {
+		"label": "scavSouthEast",
+		"pos1": [5696, 5312],
+		"pos2": [8000, 8000]
+	},
+	"area_3": {
+		"label": "scavNorth",
+		"pos1": [3392, 448],
+		"pos2": [8000, 1984]
+	},
+	"area_4": {
+		"label": "NPArtiGroup",
+		"pos1": [4352, 3328],
+		"pos2": [4864, 3840]
+	},
+	"area_5": {
+		"label": "landingZone",
+		"pos1": [640, 6912],
+		"pos2": [1152, 7424]
+	},
+	"area_6": {
+		"label": "NPLZ",
+		"pos1": [1472, 1216],
+		"pos2": [1792, 1664]
+	},
 
-	"object_0": { "label": "scavMiddleFactory",    "id": 284, "player": 7, "type": 1 },
-	"object_1": { "label": "scavSouthEastFactory", "id": 198, "player": 7, "type": 1 },
-	"object_2": { "label": "scavNorthEastFactory", "id": 311, "player": 7, "type": 1 },
-	"object_3": { "label": "artifact1",            "id": 325, "type": 2 },
+	"object_0": {
+		"label": "scavMiddleFactory",
+		"id": 284,
+		"player": 7,
+		"type": 1
+	},
+	"object_1": {
+		"label": "scavSouthEastFactory",
+		"id": 198,
+		"player": 7,
+		"type": 1
+	},
+	"object_2": {
+		"label": "scavNorthEastFactory",
+		"id": 311,
+		"player": 7,
+		"type": 1
+	},
+	"object_3": {
+		"label": "artifact1",
+		"id": 325,
+		"type": 2
+	},
 
-	"radius_0": { "label": "northScavFactoryTrigger",     "subscriber": 0, "pos" : [ 7424, 640 ],  "radius": 1280 },
-	"radius_1": { "label": "southScavFactoryTrigger",     "subscriber": 0, "pos" : [ 6784, 6144 ], "radius": 1450 },
-	"radius_2": { "label": "middleScavFactoryTrigger",    "subscriber": 0, "pos" : [ 4224, 4864 ], "radius": 1280 },
-	"radius_3": { "label": "artifactCheckNP",             "subscriber": 1, "pos" : [ 1344, 3904 ], "radius": 220 },
-	"radius_4": { "label": "NPWayPointTrigger",           "subscriber": 1, "pos" : [ 5760, 768 ],  "radius": 500 },
-	"radius_5": { "label": "NPTransportTrigger",          "subscriber": 1, "pos" : [ 1190, 1352 ], "radius": 200 }
+	"radius_0": {
+		"label": "northScavFactoryTrigger",
+		"subscriber": 0,
+		"pos": [7424, 640],
+		"radius": 1280
+	},
+	"radius_1": {
+		"label": "southScavFactoryTrigger",
+		"subscriber": 0,
+		"pos": [6784, 6144],
+		"radius": 1450
+	},
+	"radius_2": {
+		"label": "middleScavFactoryTrigger",
+		"subscriber": 0,
+		"pos": [4224, 4864],
+		"radius": 1280
+	},
+	"radius_3": {
+		"label": "artifactCheckNP",
+		"subscriber": 1,
+		"pos": [1344, 3904],
+		"radius": 220
+	},
+	"radius_4": {
+		"label": "NPWayPointTrigger",
+		"subscriber": 1,
+		"pos": [5760, 768],
+		"radius": 500
+	},
+	"radius_5": {
+		"label": "NPTransportTrigger",
+		"subscriber": 1,
+		"pos": [1190, 1352],
+		"radius": 200
+	}
 }

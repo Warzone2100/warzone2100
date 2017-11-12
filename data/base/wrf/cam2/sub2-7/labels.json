@@ -1,32 +1,139 @@
 {
-	"position_0" : { "label": "startPosition",	"pos": [ 896, 6528 ] },
-	"position_1" : { "label": "transporterEntry",	"pos": [ 128, 7936 ] },
-	"position_2" : { "label": "transporterExit",	"pos": [ 1280, 7680 ] },
-	"position_3" : { "label": "playerLZ",		"pos": [ 896, 6528 ] },
-	"position_4" : { "label": "base2HeavyAssembly",	"pos": [ 6720, 3264 ] },
-	"position_5" : { "label": "base2CybAssembly",	"pos": [ 6464, 6336 ] },
-	"position_6" : { "label": "base4VTOLAssembly",	"pos": [ 1728, 2240 ] },
-	"position_7" : { "label": "base3CybAssembly",	"pos": [ 5312, 1088 ] },
-	"position_8" : { "label": "base4HeavyAssembly",	"pos": [ 1728, 1472 ] },
-	"position_9" : { "label": "base4CybAssembly",	"pos": [ 1856, 1728 ] },	
-	"position_10": { "label": "hoverPos1",		"pos": [ 832, 2880 ] },
-	"position_11": { "label": "hoverPos2",		"pos": [ 3392, 4288 ] },
+	"position_0": {
+		"label": "startPosition",
+		"pos": [896, 6528]
+	},
+	"position_1": {
+		"label": "transporterEntry",
+		"pos": [128, 7936]
+	},
+	"position_2": {
+		"label": "transporterExit",
+		"pos": [1280, 7680]
+	},
+	"position_3": {
+		"label": "playerLZ",
+		"pos": [896, 6528]
+	},
+	"position_4": {
+		"label": "base2HeavyAssembly",
+		"pos": [6720, 3264]
+	},
+	"position_5": {
+		"label": "base2CybAssembly",
+		"pos": [6464, 6336]
+	},
+	"position_6": {
+		"label": "base4VTOLAssembly",
+		"pos": [1728, 2240]
+	},
+	"position_7": {
+		"label": "base3CybAssembly",
+		"pos": [5312, 1088]
+	},
+	"position_8": {
+		"label": "base4HeavyAssembly",
+		"pos": [1728, 1472]
+	},
+	"position_9": {
+		"label": "base4CybAssembly",
+		"pos": [1856, 1728]
+	},
+	"position_10": {
+		"label": "hoverPos1",
+		"pos": [832, 2880]
+	},
+	"position_11": {
+		"label": "hoverPos2",
+		"pos": [3392, 4288]
+	},
 
-	"area_0": { "label": "landingZone",	"pos1": [ 768, 6400 ],  "pos2": [ 1024, 6656 ] },
-	"area_1": { "label": "RTLZ",		"pos1": [ 64, 5312 ],   "pos2": [ 2240, 8128 ] },
-	"area_2": { "label": "vtolGroupBase4",	"pos1": [ 1088, 2240 ], "pos2": [ 1984, 2496 ] },
-	"area_3": { "label": "vtolGroupBase3",	"pos1": [ 4928, 704 ],  "pos2": [ 5440, 1472 ] },
-	"area_4": { "label": "COBase1Cleanup",	"pos1": [ 2432, 5248 ], "pos2": [ 3456, 7168 ] },
-	"area_5": { "label": "COBase2Cleanup",	"pos1": [ 5376, 3072 ], "pos2": [ 7680, 7552 ] },
-	"area_6": { "label": "COBase3Cleanup",	"pos1": [ 3584, 256 ],  "pos2": [ 6400, 1792 ] },
-	"area_7": { "label": "COBase4Cleanup",	"pos1": [ 128, 128 ],   "pos2": [ 3072, 2944 ] },
-	"area_8": { "label": "grp2Hovers",	"pos1": [ 1920, 2560 ], "pos2": [ 2432, 3072 ] },
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [768, 6400],
+		"pos2": [1024, 6656]
+	},
+	"area_1": {
+		"label": "RTLZ",
+		"pos1": [64, 5312],
+		"pos2": [2240, 8128]
+	},
+	"area_2": {
+		"label": "vtolGroupBase4",
+		"pos1": [1088, 2240],
+		"pos2": [1984, 2496]
+	},
+	"area_3": {
+		"label": "vtolGroupBase3",
+		"pos1": [4928, 704],
+		"pos2": [5440, 1472]
+	},
+	"area_4": {
+		"label": "COBase1Cleanup",
+		"pos1": [2432, 5248],
+		"pos2": [3456, 7168]
+	},
+	"area_5": {
+		"label": "COBase2Cleanup",
+		"pos1": [5376, 3072],
+		"pos2": [7680, 7552]
+	},
+	"area_6": {
+		"label": "COBase3Cleanup",
+		"pos1": [3584, 256],
+		"pos2": [6400, 1792]
+	},
+	"area_7": {
+		"label": "COBase4Cleanup",
+		"pos1": [128, 128],
+		"pos2": [3072, 2944]
+	},
+	"area_8": {
+		"label": "grp2Hovers",
+		"pos1": [1920, 2560],
+		"pos2": [2432, 3072]
+	},
 
-	"object_0": { "label": "COCommandCenter",	"id": 32,  "player": 2, "type": 1 },
-	"object_1": { "label": "COVtolFactory-b4",	"id": 437, "player": 2, "type": 1 },
-	"object_2": { "label": "COHeavyFac-Arti-b2",	"id": 563, "player": 2, "type": 1 },
-	"object_3": { "label": "COCyborgFac-b2",	"id": 210, "player": 2, "type": 1 },
-	"object_4": { "label": "COCyborgFac-b3",	"id": 112, "player": 2, "type": 1 },
-	"object_5": { "label": "COHeavyFac-b4",		"id": 420, "player": 2, "type": 1 },
-	"object_6": { "label": "COCyborgFac-b4",	"id": 415, "player": 2, "type": 1 }
+	"object_0": {
+		"label": "COCommandCenter",
+		"id": 32,
+		"player": 2,
+		"type": 1
+	},
+	"object_1": {
+		"label": "COVtolFactory-b4",
+		"id": 437,
+		"player": 2,
+		"type": 1
+	},
+	"object_2": {
+		"label": "COHeavyFac-Arti-b2",
+		"id": 563,
+		"player": 2,
+		"type": 1
+	},
+	"object_3": {
+		"label": "COCyborgFac-b2",
+		"id": 210,
+		"player": 2,
+		"type": 1
+	},
+	"object_4": {
+		"label": "COCyborgFac-b3",
+		"id": 112,
+		"player": 2,
+		"type": 1
+	},
+	"object_5": {
+		"label": "COHeavyFac-b4",
+		"id": 420,
+		"player": 2,
+		"type": 1
+	},
+	"object_6": {
+		"label": "COCyborgFac-b4",
+		"id": 415,
+		"player": 2,
+		"type": 1
+	}
 }

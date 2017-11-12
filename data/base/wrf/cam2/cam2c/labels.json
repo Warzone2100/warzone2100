@@ -1,51 +1,227 @@
 {
-	"position_0" : { "label": "startPosition",			"pos": [ 11200, 12864 ] },
-	"position_1" : { "label": "groundWayPoint1",			"pos": [ 1856, 5312 ] },
-	"position_2" : { "label": "groundWayPoint2",			"pos": [ 12224, 4672 ] },
-	"position_3" : { "label": "groundWayPoint3",			"pos": [ 12224, 12352 ] },
-	"position_4" : { "label": "vtolWayPoint1",			"pos": [ 2368, 2880 ] },
-	"position_5" : { "label": "vtolWayPoint2",			"pos": [ 10176, 1984 ] },
-	"position_6" : { "label": "vtolWayPoint3",			"pos": [ 11968, 12736 ] },
-	"position_7" : { "label": "centerOfPlayerBase",			"pos": [ 12096, 12096 ] },
-	"position_8" : { "label": "oilDerrick",				"pos": [ 12224, 6592 ] },
-	"position_9" : { "label": "defensePoint1",			"pos": [ 3392, 1088 ] },
-	"position_10": { "label": "defensePoint2",			"pos": [ 2112, 3136 ] },
-	"position_11": { "label": "civPoint1",				"pos": [ 1600, 11968 ] },
-	"position_12": { "label": "civPoint2",				"pos": [ 2752, 11328 ] },
-	"position_13": { "label": "civPoint3",				"pos": [ 3264, 12096 ] },
-	"position_14": { "label": "civPoint4",				"pos": [ 3648, 11456 ] },
-	"position_15": { "label": "civPoint5",				"pos": [ 4160, 11968 ] },
-	"position_16": { "label": "civPoint6",				"pos": [ 4228, 10688 ] },
-	"position_17": { "label": "civPoint7",				"pos": [ 4096, 11248 ] },
-	"position_18": { "label": "COTransportPos",			"pos": [ 6464, 10816 ] },
-	"position_19": { "label": "civCapturePos",			"pos": [ 6592, 10816 ] },
-	"position_20": { "label": "COHeavyFac-UpgradeAssembly",		"pos": [ 3008, 1088 ] },
-	"position_21": { "label": "COHeavyFac-LeopardAssembly",		"pos": [ 3008, 1600 ] },
-	"position_22": { "label": "COCyborgFactoryLAssembly",		"pos": [ 7616, 7872 ] },
-	"position_23": { "label": "COCyborgFactoryRAssembly",		"pos": [ 7616, 7744 ] },	
-	
-	"area_0" : { "label": "landingZone",		"pos1": [ 11008, 12672 ],	"pos2": [ 11264, 12928 ] },
-	"area_1" : { "label": "heavyGroup1",		"pos1": [ 4672, 5568 ],		"pos2": [ 5696, 6080 ] },
-	"area_2" : { "label": "vtolGroup1",		"pos1": [ 2112, 1344 ],		"pos2": [ 2368, 2624 ] },
-	"area_3" : { "label": "heavyGroup2",		"pos1": [ 832, 12096 ],		"pos2": [ 1344, 12736 ] },
-	"area_4" : { "label": "cyborgGroup1",		"pos1": [ 6720, 4032 ],		"pos2": [ 8256, 8896 ] },
-	"area_5" : { "label": "defensegroup1",		"pos1": [ 576, 448 ],		"pos2": [ 6720, 7872 ] },
-	"area_6" : { "label": "airBaseCleanup",		"pos1": [ 64, 64 ],		"pos2": [ 6848, 5568 ] },
-	"area_7" : { "label": "cyborgBaseCleanup", 	"pos1": [ 6720, 6720 ],		"pos2": [ 8512, 9024 ] },
-	"area_8" : { "label": "transportBaseCleanup",	"pos1": [ 3392, 9792 ],		"pos2": [ 7872, 12608 ] },
-	"area_9" : { "label": "civGroup",		"pos1": [ 704, 10560 ],		"pos2": [ 1728, 11456 ] },
-	"area_10": { "label": "civPickupZone",		"pos1": [ 5568, 9792 ],		"pos2": [ 7616, 11968 ] },
-	"area_11": { "label": "groupTrigger",		"subscriber": 0, "pos1": [ 8960, 128 ],  "pos2": [ 9344, 16128 ] },
-	"area_12": { "label": "base3Trigger",		"subscriber": 0, "pos1": [ 2432, 7808 ], "pos2": [ 6016, 8832 ] },
-	
-	"object_0": { "label": "rippleRocket",		"id": 4641, "player": 2, "type": 1 },
-	"object_1": { "label": "quadbof",		"id": 4630, "player": 2, "type": 1 },
-	"object_2": { "label": "howitzer",		"id": 2552, "player": 2, "type": 1 },
-	"object_3": { "label": "COHeavyFac-Upgrade",	"id": 3672, "player": 2, "type": 1 },
-	"object_4": { "label": "COHeavyFac-Leopard",	"id": 3675, "player": 2, "type": 1 },
-	"object_5": { "label": "COVtolFacLeft-Prop",	"id": 4679, "player": 2, "type": 1 },
-	"object_6": { "label": "COVtolFacRight",	"id": 4680, "player": 2, "type": 1 },
-	"object_7": { "label": "COCyborgFactoryL",	"id": 3376, "player": 2, "type": 1 },
-	"object_8": { "label": "COCyborgFactoryR",	"id": 3377, "player": 2, "type": 1 },
-	"object_9": { "label": "COResearchLab",		"id": 2293, "player": 2, "type": 1 }
+	"position_0": {
+		"label": "startPosition",
+		"pos": [11200, 12864]
+	},
+	"position_1": {
+		"label": "groundWayPoint1",
+		"pos": [1856, 5312]
+	},
+	"position_2": {
+		"label": "groundWayPoint2",
+		"pos": [12224, 4672]
+	},
+	"position_3": {
+		"label": "groundWayPoint3",
+		"pos": [12224, 12352]
+	},
+	"position_4": {
+		"label": "vtolWayPoint1",
+		"pos": [2368, 2880]
+	},
+	"position_5": {
+		"label": "vtolWayPoint2",
+		"pos": [10176, 1984]
+	},
+	"position_6": {
+		"label": "vtolWayPoint3",
+		"pos": [11968, 12736]
+	},
+	"position_7": {
+		"label": "centerOfPlayerBase",
+		"pos": [12096, 12096]
+	},
+	"position_8": {
+		"label": "oilDerrick",
+		"pos": [12224, 6592]
+	},
+	"position_9": {
+		"label": "defensePoint1",
+		"pos": [3392, 1088]
+	},
+	"position_10": {
+		"label": "defensePoint2",
+		"pos": [2112, 3136]
+	},
+	"position_11": {
+		"label": "civPoint1",
+		"pos": [1600, 11968]
+	},
+	"position_12": {
+		"label": "civPoint2",
+		"pos": [2752, 11328]
+	},
+	"position_13": {
+		"label": "civPoint3",
+		"pos": [3264, 12096]
+	},
+	"position_14": {
+		"label": "civPoint4",
+		"pos": [3648, 11456]
+	},
+	"position_15": {
+		"label": "civPoint5",
+		"pos": [4160, 11968]
+	},
+	"position_16": {
+		"label": "civPoint6",
+		"pos": [4228, 10688]
+	},
+	"position_17": {
+		"label": "civPoint7",
+		"pos": [4096, 11248]
+	},
+	"position_18": {
+		"label": "COTransportPos",
+		"pos": [6464, 10816]
+	},
+	"position_19": {
+		"label": "civCapturePos",
+		"pos": [6592, 10816]
+	},
+	"position_20": {
+		"label": "COHeavyFac-UpgradeAssembly",
+		"pos": [3008, 1088]
+	},
+	"position_21": {
+		"label": "COHeavyFac-LeopardAssembly",
+		"pos": [3008, 1600]
+	},
+	"position_22": {
+		"label": "COCyborgFactoryLAssembly",
+		"pos": [7616, 7872]
+	},
+	"position_23": {
+		"label": "COCyborgFactoryRAssembly",
+		"pos": [7616, 7744]
+	},
+
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [11008, 12672],
+		"pos2": [11264, 12928]
+	},
+	"area_1": {
+		"label": "heavyGroup1",
+		"pos1": [4672, 5568],
+		"pos2": [5696, 6080]
+	},
+	"area_2": {
+		"label": "vtolGroup1",
+		"pos1": [2112, 1344],
+		"pos2": [2368, 2624]
+	},
+	"area_3": {
+		"label": "heavyGroup2",
+		"pos1": [832, 12096],
+		"pos2": [1344, 12736]
+	},
+	"area_4": {
+		"label": "cyborgGroup1",
+		"pos1": [6720, 4032],
+		"pos2": [8256, 8896]
+	},
+	"area_5": {
+		"label": "defensegroup1",
+		"pos1": [576, 448],
+		"pos2": [6720, 7872]
+	},
+	"area_6": {
+		"label": "airBaseCleanup",
+		"pos1": [64, 64],
+		"pos2": [6848, 5568]
+	},
+	"area_7": {
+		"label": "cyborgBaseCleanup",
+		"pos1": [6720, 6720],
+		"pos2": [8512, 9024]
+	},
+	"area_8": {
+		"label": "transportBaseCleanup",
+		"pos1": [3392, 9792],
+		"pos2": [7872, 12608]
+	},
+	"area_9": {
+		"label": "civGroup",
+		"pos1": [704, 10560],
+		"pos2": [1728, 11456]
+	},
+	"area_10": {
+		"label": "civPickupZone",
+		"pos1": [5568, 9792],
+		"pos2": [7616, 11968]
+	},
+	"area_11": {
+		"label": "groupTrigger",
+		"subscriber": 0,
+		"pos1": [8960, 128],
+		"pos2": [9344, 16128]
+	},
+	"area_12": {
+		"label": "base3Trigger",
+		"subscriber": 0,
+		"pos1": [2432, 7808],
+		"pos2": [6016, 8832]
+	},
+
+	"object_0": {
+		"label": "rippleRocket",
+		"id": 4641,
+		"player": 2,
+		"type": 1
+	},
+	"object_1": {
+		"label": "quadbof",
+		"id": 4630,
+		"player": 2,
+		"type": 1
+	},
+	"object_2": {
+		"label": "howitzer",
+		"id": 2552,
+		"player": 2,
+		"type": 1
+	},
+	"object_3": {
+		"label": "COHeavyFac-Upgrade",
+		"id": 3672,
+		"player": 2,
+		"type": 1
+	},
+	"object_4": {
+		"label": "COHeavyFac-Leopard",
+		"id": 3675,
+		"player": 2,
+		"type": 1
+	},
+	"object_5": {
+		"label": "COVtolFacLeft-Prop",
+		"id": 4679,
+		"player": 2,
+		"type": 1
+	},
+	"object_6": {
+		"label": "COVtolFacRight",
+		"id": 4680,
+		"player": 2,
+		"type": 1
+	},
+	"object_7": {
+		"label": "COCyborgFactoryL",
+		"id": 3376,
+		"player": 2,
+		"type": 1
+	},
+	"object_8": {
+		"label": "COCyborgFactoryR",
+		"id": 3377,
+		"player": 2,
+		"type": 1
+	},
+	"object_9": {
+		"label": "COResearchLab",
+		"id": 2293,
+		"player": 2,
+		"type": 1
+	}
 }

@@ -1,46 +1,198 @@
 {
-	"position_0" : { "label": "startPosition",         "pos": [ 7616, 7360 ] },
-	"position_1" : { "label": "transporterEntry",      "pos": [ 7040, 8064 ] },
-	"position_2" : { "label": "transporterExit",       "pos": [ 8064, 7680 ] },
-	"position_3" : { "label": "vtolAppearPos",         "pos": [ 192, 192 ] },
-	"position_4" : { "label": "vtolRemovePos",         "pos": [ 1920, 128 ] },
-	"position_5" : { "label": "healthRetreatPos",      "pos": [ 832, 6720 ] },
-	"position_6" : { "label": "playerLZ",              "pos": [ 7296, 7296 ] },
-	"position_7" : { "label": "swRetreat",             "pos": [ 832, 7488 ] },
-	"position_8" : { "label": "hillPos1",              "pos": [ 4160, 2880 ] },
-	"position_9" : { "label": "hillPos2",              "pos": [ 3648, 2368 ] },
-	"position_10": { "label": "hillPos3",              "pos": [ 4928, 960 ] },
-	"position_11": { "label": "hillCybPos1",           "pos": [ 4032, 6720 ] },
-	"position_12": { "label": "hillLzPos",             "pos": [ 7616, 6976 ] },
-	"position_13": { "label": "hillLzHover",           "pos": [ 4032, 2880 ] },
-	"position_14": { "label": "hillLzHover2",          "pos": [ 7000, 2880 ] },
-	"position_15": { "label": "hillRetreat",           "pos": [ 1344, 832 ] },
-	"position_16": { "label": "defenderPos1",          "pos": [ 2112, 7104 ] },
-	"position_17": { "label": "defenderPos2",          "pos": [ 1088, 6208 ] },
-	"position_18": { "label": "defenderPos3",          "pos": [ 960, 7232 ] },
-	"position_19": { "label": "NXCybFac1Assembly",     "pos": [ 1856, 6720 ] },
-	"position_20": { "label": "NXCybFac2Assembly",     "pos": [ 1600, 6720 ] },
-	"position_21": { "label": "NXMediumFacAssembly",   "pos": [ 1984, 7488 ] },
+	"position_0": {
+		"label": "startPosition",
+		"pos": [7616, 7360]
+	},
+	"position_1": {
+		"label": "transporterEntry",
+		"pos": [7040, 8064]
+	},
+	"position_2": {
+		"label": "transporterExit",
+		"pos": [8064, 7680]
+	},
+	"position_3": {
+		"label": "vtolAppearPos",
+		"pos": [192, 192]
+	},
+	"position_4": {
+		"label": "vtolRemovePos",
+		"pos": [1920, 128]
+	},
+	"position_5": {
+		"label": "healthRetreatPos",
+		"pos": [832, 6720]
+	},
+	"position_6": {
+		"label": "playerLZ",
+		"pos": [7296, 7296]
+	},
+	"position_7": {
+		"label": "swRetreat",
+		"pos": [832, 7488]
+	},
+	"position_8": {
+		"label": "hillPos1",
+		"pos": [4160, 2880]
+	},
+	"position_9": {
+		"label": "hillPos2",
+		"pos": [3648, 2368]
+	},
+	"position_10": {
+		"label": "hillPos3",
+		"pos": [4928, 960]
+	},
+	"position_11": {
+		"label": "hillCybPos1",
+		"pos": [4032, 6720]
+	},
+	"position_12": {
+		"label": "hillLzPos",
+		"pos": [7616, 6976]
+	},
+	"position_13": {
+		"label": "hillLzHover",
+		"pos": [4032, 2880]
+	},
+	"position_14": {
+		"label": "hillLzHover2",
+		"pos": [7000, 2880]
+	},
+	"position_15": {
+		"label": "hillRetreat",
+		"pos": [1344, 832]
+	},
+	"position_16": {
+		"label": "defenderPos1",
+		"pos": [2112, 7104]
+	},
+	"position_17": {
+		"label": "defenderPos2",
+		"pos": [1088, 6208]
+	},
+	"position_18": {
+		"label": "defenderPos3",
+		"pos": [960, 7232]
+	},
+	"position_19": {
+		"label": "NXCybFac1Assembly",
+		"pos": [1856, 6720]
+	},
+	"position_20": {
+		"label": "NXCybFac2Assembly",
+		"pos": [1600, 6720]
+	},
+	"position_21": {
+		"label": "NXMediumFacAssembly",
+		"pos": [1984, 7488]
+	},
 
-	"area_0": { "label": "landingZone",         "pos1": [ 7296, 7040 ], "pos2": [ 7552, 7424 ] },
-	"area_1": { "label": "RTLZ",                "pos1": [ 6800, 6800 ], "pos2": [ 7900, 7900 ] },
-	"area_2": { "label": "valleySafeZone",      "pos1": [ 4480, 128 ],  "pos2": [ 7936, 2560 ] },
-	"area_3": { "label": "baseCleanupArea",     "pos1": [ 192, 5568 ],  "pos2": [ 3136, 7872 ] },
-	"area_4": { "label": "lzAttackCyborgs",     "pos1": [ 2880, 6592 ], "pos2": [ 3264, 6976 ] },
-	"area_5": { "label": "lzAttackHovers",      "pos1": [ 3008, 4928 ], "pos2": [ 3520, 5696 ] },
-	"area_6": { "label": "hillGroupHovers",     "pos1": [ 1088, 2368 ], "pos2": [ 2368, 3264 ] },
-	"area_7": { "label": "hillGroupCyborgs",    "pos1": [ 5696, 1088 ], "pos2": [ 7360, 2240 ] },
-	"area_8": { "label": "baseDefenderGroup",   "pos1": [ 960, 6208 ],  "pos2": [ 2112, 7616 ] },
-	"area_9": { "label": "hillTriggerZone",     "subscriber": 0, "pos1": [ 320, 3136 ], "pos2": [ 7616, 4160 ] },
-	
-	"object_0": { "label": "NXCommandCenter",   "id": 680,  "player": 3, "type": 1 },
-	"object_1": { "label": "NXMissileSilo1",    "id": 735,  "player": 3, "type": 1 },
-	"object_2": { "label": "NXMissileSilo2",    "id": 686,  "player": 3, "type": 1 },
-	"object_3": { "label": "NXMissileSilo3",    "id": 733,  "player": 3, "type": 1 },
-	"object_4": { "label": "NXMissileSilo4",    "id": 278,  "player": 3, "type": 1 },
-	"object_5": { "label": "NXCybFac1",         "id": 251,  "player": 3, "type": 1 },
-	"object_6": { "label": "NXCybFac2",         "id": 229,  "player": 3, "type": 1 },
-	"object_7": { "label": "NXMediumFac",       "id": 731,  "player": 3, "type": 1 },
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [7296, 7040],
+		"pos2": [7552, 7424]
+	},
+	"area_1": {
+		"label": "RTLZ",
+		"pos1": [6800, 6800],
+		"pos2": [7900, 7900]
+	},
+	"area_2": {
+		"label": "valleySafeZone",
+		"pos1": [4480, 128],
+		"pos2": [7936, 2560]
+	},
+	"area_3": {
+		"label": "baseCleanupArea",
+		"pos1": [192, 5568],
+		"pos2": [3136, 7872]
+	},
+	"area_4": {
+		"label": "lzAttackCyborgs",
+		"pos1": [2880, 6592],
+		"pos2": [3264, 6976]
+	},
+	"area_5": {
+		"label": "lzAttackHovers",
+		"pos1": [3008, 4928],
+		"pos2": [3520, 5696]
+	},
+	"area_6": {
+		"label": "hillGroupHovers",
+		"pos1": [1088, 2368],
+		"pos2": [2368, 3264]
+	},
+	"area_7": {
+		"label": "hillGroupCyborgs",
+		"pos1": [5696, 1088],
+		"pos2": [7360, 2240]
+	},
+	"area_8": {
+		"label": "baseDefenderGroup",
+		"pos1": [960, 6208],
+		"pos2": [2112, 7616]
+	},
+	"area_9": {
+		"label": "hillTriggerZone",
+		"subscriber": 0,
+		"pos1": [320, 3136],
+		"pos2": [7616, 4160]
+	},
 
-	"radius_0": { "label": "vtolRemoveZone",    "subscriber": 3, "pos" : [ 1920, 128 ], "radius": 250 }
+	"object_0": {
+		"label": "NXCommandCenter",
+		"id": 680,
+		"player": 3,
+		"type": 1
+	},
+	"object_1": {
+		"label": "NXMissileSilo1",
+		"id": 735,
+		"player": 3,
+		"type": 1
+	},
+	"object_2": {
+		"label": "NXMissileSilo2",
+		"id": 686,
+		"player": 3,
+		"type": 1
+	},
+	"object_3": {
+		"label": "NXMissileSilo3",
+		"id": 733,
+		"player": 3,
+		"type": 1
+	},
+	"object_4": {
+		"label": "NXMissileSilo4",
+		"id": 278,
+		"player": 3,
+		"type": 1
+	},
+	"object_5": {
+		"label": "NXCybFac1",
+		"id": 251,
+		"player": 3,
+		"type": 1
+	},
+	"object_6": {
+		"label": "NXCybFac2",
+		"id": 229,
+		"player": 3,
+		"type": 1
+	},
+	"object_7": {
+		"label": "NXMediumFac",
+		"id": 731,
+		"player": 3,
+		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 3,
+		"pos": [1920, 128],
+		"radius": 250
+	}
 }
