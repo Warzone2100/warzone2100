@@ -68,7 +68,7 @@ function activateBase1Defenders2()
 function ambushPlayer()
 {
 	camManageGroup(camMakeGroup("centralBaseGroup"), CAM_ORDER_ATTACK, {
-		fallback: camMakePos("base2Assembly"),
+		fallback: camMakePos("COCybFacR-b2Assembly"),
 		morale: 20,
 		regroup: false,
 	});
