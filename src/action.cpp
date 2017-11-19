@@ -1625,8 +1625,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 		//don't move VTOL's
 		// also don't move closer to sensor towers
-		if (!isVtolDroid(psDroid) &&
-		    (order->psObj->type != OBJ_STRUCTURE))
+		if (!isVtolDroid(psDroid) && order->psObj->type != OBJ_STRUCTURE)
 		{
 			Vector2i diff = (psDroid->pos - order->psObj->pos).xy;
 			int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].maxRange / 2; // move close to sensor

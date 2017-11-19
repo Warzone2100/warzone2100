@@ -233,6 +233,9 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 	KEYVAL("NetPlay.players.difficulty", QString::number(NetPlay.players[i].difficulty));
 	KEYVAL("NetPlay.players.autoGame", QString::number(NetPlay.players[i].autoGame));
 	KEYVAL("NetPlay.players.IPtextAddress", NetPlay.players[i].IPtextAddress);
+	KEYVAL("Current power", QString::number(getPower(i)));
+	KEYVAL("Extracted power", QString::number(getExtractedPower(i)));
+	KEYVAL("Wasted power", QString::number(getWastedPower(i)));
 
 #undef B2Q
 #undef KEYVAL

@@ -66,6 +66,8 @@ struct PlayerPower
 	std::vector<PowerRequest> powerQueue;  ///< Requested power.
 	int powerModifier;                     ///< Percentage modifier on power from each derrick.
 	int64_t maxStorage;                    ///< Maximum storage of power, in total.
+	int64_t extractedPower;                ///< Total amount of extracted power in this game.
+	int64_t wastedPower;                   ///< Total amount of wasted power in this game.
 };
 
 static PlayerPower asPower[MAX_PLAYERS];
@@ -95,6 +97,8 @@ void clearPlayerPower()
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
 		asPower[player].currentPower = 0;
+		asPower[player].extractedPower = 0;
+		asPower[player].wastedPower = 0;
 		asPower[player].powerModifier = 100;
 		asPower[player].powerQueue.clear();
 		asPower[player].maxStorage = MAX_POWER * FP_ONE;
@@ -219,7 +223,11 @@ void addPower(int player, int32_t quantity)
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 	syncDebug("addPower%d %" PRId64"+=%d", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower += quantity * FP_ONE;
-	CLIP(asPower[player].currentPower, 0, asPower[player].maxStorage);
+	if (asPower[player].currentPower > asPower[player].maxStorage)
+	{
+		asPower[player].wastedPower += asPower[player].currentPower - asPower[player].maxStorage;
+		asPower[player].currentPower = asPower[player].maxStorage;
+	}
 }
 
 /*resets the power calc flag for all players*/
@@ -316,9 +324,11 @@ static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 	syncDebug("updateCurrentPower%d = %" PRId64",%u", player, extractedPower, multiplier);
 
 	asPower[player].currentPower += (extractedPower * multiplier) / 100 * ticks;
+	asPower[player].extractedPower += (extractedPower * multiplier) / 100 * ticks;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 	if (asPower[player].currentPower > asPower[player].maxStorage)
 	{
+		asPower[player].wastedPower += asPower[player].currentPower - asPower[player].maxStorage;
 		asPower[player].currentPower = asPower[player].maxStorage;
 	}
 }
@@ -353,6 +363,16 @@ int64_t getPrecisePower(unsigned player)
 	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player (%u)", player);
 
 	return asPower[player].currentPower;
+}
+
+int64_t getExtractedPower(unsigned player)
+{
+	return asPower[player].extractedPower / FP_ONE;
+}
+
+int64_t getWastedPower(unsigned player)
+{
+	return asPower[player].wastedPower / FP_ONE;
 }
 
 int32_t getPowerMinusQueued(unsigned player)

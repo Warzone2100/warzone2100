@@ -70,6 +70,12 @@ int64_t getPrecisePower(unsigned player);
 int32_t getPowerMinusQueued(unsigned player);
 int getQueuedPower(int player);
 
+/// Get amount of power extracted during the whole game
+int64_t getExtractedPower(unsigned player);
+
+/// Get amount of power wasted during the whole game
+int64_t getWastedPower(unsigned player);
+
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(bool on);
 

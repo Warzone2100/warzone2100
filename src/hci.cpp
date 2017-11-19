@@ -468,7 +468,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 
 // Set the x,y members of a button widget initialiser given a reticule button index.
 //
-void setReticuleBut(int ButId)
+static void setReticuleBut(int ButId)
 {
 	/* Default button data */
 	W_BUTINIT sButInit;
