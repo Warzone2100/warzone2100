@@ -68,8 +68,10 @@ function enableAllFactories()
 function discoverGammaBase()
 {
 	reunited = true;
+	var lz = getObject("landingZone");
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(5400)); // 1.5 hr.
 	setPower(playerPower(me) + camChangeOnDiff(10000));
 
@@ -124,7 +126,6 @@ function betaAlive()
 function eventStartLevel()
 {
 	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
 	var limboLZ = getObject("limboDroidLZ");
 	var reunited = false;
 
@@ -134,7 +135,6 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
-	setNoGoArea(lz.x1, lz.y1, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(600)); //10 minutes for first part.
 
 	setPower(AI_POWER, NEXUS);

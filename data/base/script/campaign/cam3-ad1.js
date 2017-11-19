@@ -208,9 +208,9 @@ function eventStartLevel()
 	});
 
 	centreView(startpos.x, startpos.y);
-	setNoGoArea(lz.x1, lz.y1, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(lz2.x1, lz2.y1, lz2.x2, lz2.y2, NEXUS); //LZ for cam3-4s.
-	setNoGoArea(siloZone.x1, siloZone.y1, siloZone.x2, siloZone.y2, CAM_HUMAN_PLAYER);
+	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS); //LZ for cam3-4s.
+	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
 	setMissionTime(7200); //2 hr
 
 	setPower(AI_POWER, NEXUS);

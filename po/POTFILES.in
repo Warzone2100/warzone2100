@@ -50,6 +50,7 @@ data/base/script/campaign/cam3-2.js
 data/base/script/campaign/cam3-2s.js
 data/base/script/campaign/cam3-ab.js
 data/base/script/campaign/cam3-ad1.js
+data/base/script/campaign/cam3-ad2.js
 data/base/script/campaign/cam3-a.js
 data/base/script/campaign/cam3-b.js
 data/base/script/campaign/cam3-c.js
@@ -65,7 +66,6 @@ data/base/script/text/cam1daynight.slo
 data/base/script/text/cam2daynight.slo
 data/base/script/text/cam3-4sx.slo
 data/base/script/text/cam3-4x.slo
-data/base/script/text/cam3a-d2x.slo
 data/base/script/text/cam3daynight.slo
 data/base/script/text/countdown.slo
 data/base/script/text/genbet.slo

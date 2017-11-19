@@ -11,17 +11,13 @@ file		SMSG		"prox3a-d1.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-file		SCRIPT		"genexp.slo"
-file		SCRIPT		"cam3a-d2x.slo"
-file		SCRIPT		"vtols.slo"
 file		SCRIPT		"cam3daynight.slo"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam3a-d2.vlo"
-file            SCRIPTVAL       "cam3a-d2x.vlo"
-file            SCRIPTVAL       "vtols3ad2.vlo"
 file            SCRIPTVAL       "cam3mknight.vlo"
 
 directory       "script"
 file            JAVASCRIPT      "rules.js"
+directory       "script/campaign"
+file            JAVASCRIPT      "cam3-ad2.js"

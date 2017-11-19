@@ -1,0 +1,51 @@
+{
+	"position_0": {
+		"label": "startPosition",
+		"pos": [5696, 31424]
+	},
+	"position_1": {
+		"label": "healthRetreat",
+		"pos": [4928, 16704]
+	},
+	"position_2": {
+		"label": "vtolRemovePos",
+		"pos": [2816, 32384]
+	},
+	"position_3": {
+		"label": "vtolAppearPosW",
+		"pos": [576, 32320]
+	},
+	"position_4": {
+		"label": "vtolAppearPosE",
+		"pos": [8000, 28864]
+	},
+	"position_5": {
+		"label": "phantomFacNorth",
+		"pos": [320, 3136]
+	},
+	"position_6": {
+		"label": "phantomFacWest",
+		"pos": [64, 17728]
+	},
+	"position_7": {
+		"label": "phantomFacEast",
+		"pos": [8000, 21440]
+	},
+	"position_8": {
+		"label": "phantomFacMiddle",
+		"pos": [8000, 18880]
+	},
+
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [6200, 31160],
+		"pos2": [6600, 31560]
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 3,
+		"pos": [2816, 32384],
+		"radius": 250
+	}
+}
