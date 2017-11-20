@@ -3124,7 +3124,12 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	QString tip = context->argument(1).toString();
 	QString file = context->argument(2).toString();
 	QString fileDown = context->argument(3).toString();
-	setReticuleStats(button, tip, file, fileDown);
+	QString func;
+	if (context->argumentCount() > 4)
+	{
+		func = context->argument(4).toString();
+	}
+	setReticuleStats(button, tip, file, fileDown, func, engine);
 	return QScriptValue();
 }
 

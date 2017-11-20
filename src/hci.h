@@ -38,6 +38,7 @@ struct PROXIMITY_DISPLAY;
 struct STRUCTURE;
 struct W_SCREEN;
 struct iIMDShape;
+struct QScriptEngine;
 
 #define BASE_COORDS_X	(640)
 #define BASE_COORDS_Y	(460)
@@ -284,7 +285,7 @@ void intDisplayWidgets();
 bool intAddReticule();
 bool intAddPower();
 void intRemoveReticule();
-void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown);
+void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown, QString func, QScriptEngine *engine);
 
 /* Set the map view point to the world coordinates x,y */
 void intSetMapPos(UDWORD x, UDWORD y);

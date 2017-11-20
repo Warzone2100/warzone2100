@@ -376,16 +376,19 @@ static SDWORD intNumSelectedDroids(UDWORD droidType);
 
 struct RETBUTSTATS
 {
-	int downTime;
+	int downTime = 0;
 	QString filename;
 	QString filenameDown;
 	QString tip;
-	int flashing;
-	int flashTime;
+	QString func;
+	int flashing = 0;
+	int flashTime = 0;
+	W_BUTTON *button = nullptr;
+	QScriptEngine *engine = nullptr;
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
 
-void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown)
+void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown, QString func, QScriptEngine *engine)
 {
 	retbutstats[ButId].tip = std::move(tip);
 	retbutstats[ButId].filename = std::move(filename);
@@ -393,6 +396,22 @@ void setReticuleStats(int ButId, QString tip, QString filename, QString filename
 	retbutstats[ButId].downTime = 0;
 	retbutstats[ButId].flashing = 0;
 	retbutstats[ButId].flashTime = 0;
+	retbutstats[ButId].func = std::move(func);
+	retbutstats[ButId].engine = engine;
+
+	if (!retbutstats[ButId].button) // not quite set up yet
+	{
+		return;
+	}
+	retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
+	if (retbutstats[ButId].filename.isEmpty())
+	{
+		retbutstats[ButId].button->setState(WBUT_DISABLE);
+	}
+	else
+	{
+		retbutstats[ButId].button->setState(0);
+	}
 }
 
 static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -407,7 +426,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
 	W_BUTTON *psButton = (W_BUTTON *)psWidget;
 
-	if (psButton->state & WBUT_DISABLE)
+	if ((psButton->state & WBUT_DISABLE) || retbutstats[psWidget->UserData].filename.isEmpty())
 	{
 		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
 		return;
@@ -485,7 +504,8 @@ static void setReticuleBut(int ButId)
 	retbutstats[ButId].downTime = 0;
 	retbutstats[ButId].flashing = 0;
 	retbutstats[ButId].flashTime = 0;
-	if (!widgAddButton(psWScreen, &sButInit))
+	retbutstats[ButId].button = widgAddButton(psWScreen, &sButInit);
+	if (!retbutstats[ButId].button)
 	{
 		debug(LOG_ERROR, "Failed to add reticule button");
 	}
@@ -1042,6 +1062,14 @@ void hciUpdate()
 	}
 }
 
+static void reticuleCallback(int retbut)
+{
+	if (!retbutstats[retbut].func.isEmpty())
+	{
+		namedScriptCallback(retbutstats[retbut].engine, retbutstats[retbut].func, selectedPlayer);
+	}
+}
+
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets()
 {
@@ -1199,24 +1227,28 @@ INT_RETVAL intRunWidgets()
 			intResetScreen(false);
 			widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
 			intAddCommand(nullptr);
+			reticuleCallback(RETBUT_COMMAND);
 			break;
 
 		case IDRET_BUILD:
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
 			intAddBuild(nullptr);
+			reticuleCallback(RETBUT_BUILD);
 			break;
 
 		case IDRET_MANUFACTURE:
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
 			intAddManufacture(nullptr);
+			reticuleCallback(RETBUT_FACTORY);
 			break;
 
 		case IDRET_RESEARCH:
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
 			(void)intAddResearch(nullptr);
+			reticuleCallback(RETBUT_RESEARCH);
 			break;
 
 		case IDRET_INTEL_MAP:
@@ -1232,6 +1264,7 @@ INT_RETVAL intRunWidgets()
 				psCurrentMsg = nullptr;
 			}
 			addIntelScreen();
+			reticuleCallback(RETBUT_INTELMAP);
 			break;
 
 		case IDRET_DESIGN:
@@ -1241,11 +1274,13 @@ INT_RETVAL intRunWidgets()
 			intShowPowerBar();
 			intAddDesign(false);
 			intMode = INT_DESIGN;
+			reticuleCallback(RETBUT_DESIGN);
 			break;
 
 		case IDRET_CANCEL:
 			intResetScreen(false);
 			psCurrentMsg = nullptr;
+			reticuleCallback(RETBUT_CANCEL);
 			break;
 
 		/*Transporter button pressed - OFFWORLD Mission Maps ONLY *********/
