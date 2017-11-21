@@ -1,59 +1,61 @@
 
 // Tank definitions
-var tankBodyList = [
+const TANK_BODY_LIST = [
 	"Body14SUP", // dragon
 	"Body10MBT", //vengeance
 	"Body7ABT", // retribution
-	"Body9REC", // tiger
 	"Body6SUPP", // panther
 	"Body11ABT", // python
 	"Body5REC", // cobra
 	"Body1REC", // viper
 ];
-var tankPropList = [
+const TANK_PROP_LIST = [
 	"HalfTrack", // half-track
 	"wheeled01", // wheels
 ];
-var tankWeaponList = [
+const TANK_WEAPON_LIST = [
 	"Missile-A-T", // Scourge
 	"Rocket-HvyA-T", // Tank-killer
 	"Rocket-LtA-T", // Lancer
-	"Rocket-Pod", // mini-pod
+	"Rocket-MRL", // MRL
 	"MG2Mk1", // twin mg
 	"MG1Mk1", // mg, initial weapon
 ];
-var tankArtillery = [
-	//"Missile-HvyArt", // Arch-angel
+const TANK_ARTILLERY = [
 	"Missile-MdArt", // Seraph
-	//"Rocket-IDF", // Ripple rockets
 	"Rocket-MRL", // MRL
+];
+const CYBORG_FLAMERS = [
+	"Cyb-Wpn-Thermite",
+	"CyborgFlamer01",
+];
+const CYBORG_ROCKETS = [
+	"Cyb-Hvywpn-TK",
+	"Cyb-Hvywpn-A-T",
 ];
 
 // System definitions
-var systemBodyList = [
-	"Body7ABT", // retribution
-	"Body6SUPP", // panther
-	"Body8MBT", // scorpion
-	"Body5REC", // cobra
-	"Body1REC", // viper
+const SYSTEM_BODY_LIST = [
+	"Body3MBT",  // Retaliation
+	"Body4ABT",  // Bug
+	"Body1REC",  // Viper
 ];
-var systemPropList = [
+const SYSTEM_PROP_LIST = [
 	"hover01", // hover
 	"wheeled01", // wheels
 ];
 
 // VTOL definitions
-var bombList = [
+const BOMB_LIST = [
 	"Bomb5-VTOL-Plasmite",	// plasmite bomb
 	"Bomb4-VTOL-HvyINC",	// thermite bomb
-	"Bomb3-VTOL-LtINC",	// phosphor bomb
 ];
-var vtolRockets = [
+const VTOL_ROCKETS = [
 	"Missile-VTOL-AT", // scourge
 	"Rocket-VTOL-HvyA-T", //tank killer
 	"Rocket-VTOL-LtA-T", // lancer
 ];
-var vtolBodyList = [
+var VTOL_BODY_LIST = [
 	"Body7ABT", // retribution
 	"Body6SUPP", // panther
 	"Body8MBT", // scorpion
@@ -64,38 +66,51 @@ var vtolBodyList = [
 
 function buildAttacker(struct)
 {
-	const HOVER_CHANCE = 58;
+	const HOVER_CHANCE = 65;
 	const WEAPON_CHANCE = 68;
 	const EMP_CHANCE = 40;
-	//Choose either artillery or anti-tank.
-	var weaponChoice = (random(101) < WEAPON_CHANCE) ? tankWeaponList : tankArtillery;
-	var SECONDARY;
 
-	//Give a chance to produce hover propulsion units if not a sea map.
-	if (!isSeaMap && (random(101) < HOVER_CHANCE))
+	//Choose either artillery or anti-tank.
+	var weaponChoice = (random(101) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
+	var secondary = (random(101) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
+	var prop = TANK_PROP_LIST;
+
+	//When dragon is available, try a chance at useing EMP-Cannon as secondary.
+	if (componentAvailable("Body14SUP") && componentAvailable("EMP-Cannon") && random(101) < EMP_CHANCE)
 	{
-		SECONDARY = weaponChoice;
-		if (componentAvailable("Body14SUP") && componentAvailable("EMP-Cannon") && random(101) < EMP_CHANCE)
-		{
-			SECONDARY = "EMP-Cannon";
-		}
-		buildDroid(struct, "Ranged Attacker", tankBodyList, tankPropList, "", "", weaponChoice, SECONDARY);
+		secondary = "EMP-Cannon";
 	}
-	else
+
+	if ((isSeaMap || (random(101) < HOVER_CHANCE)) && componentAvailable("hover01"))
 	{
-		buildDroid(struct, "Ranged Attacker", tankBodyList, "hover01", "", "", weaponChoice, weaponChoice);
+		prop = "hover01";
+	}
+
+	if (getRealPower() > MIN_POWER)
+	{
+		buildDroid(struct, "Ranged Attacker", TANK_BODY_LIST, prop, "", "", weaponChoice, secondary);
 	}
 }
 
 function buildTruck(struct)
 {
-	buildDroid(struct, "Constructor", systemBodyList, systemPropList, "", "", "Spade1Mk1");
+	buildDroid(struct, "Constructor", SYSTEM_BODY_LIST, SYSTEM_PROP_LIST, "", "", "Spade1Mk1");
 }
 
 function buildCyborg(struct)
 {
 	// Cyborg templates are special -- their bodies, legs and weapons are linked. We should fix this one day...
-	buildDroid(struct, "Cyborg Thermite", "CyborgLightBody", "CyborgLegs", "", "", "Cyb-Wpn-Thermite");
+	if (getRealPower() > MIN_POWER)
+	{
+		if (!random(2))
+		{
+			buildDroid(struct, "Cyborg Flamer", "CyborgLightBody", "CyborgLegs", "", "", CYBORG_FLAMERS);
+		}
+		else
+		{
+			buildDroid(struct, "Cyborg Rocket", "CyborgHeavyBody", "CyborgLegs", "", "", CYBORG_ROCKETS);
+		}
+	}
 }
 
 function buildVTOL(struct)
@@ -103,71 +118,82 @@ function buildVTOL(struct)
 	const WEAPON_CHANCE = 50;
 	const EMP_CHANCE = 20;
 
-	var weaponChoice = (random(101) < WEAPON_CHANCE) ? bombList : vtolRockets;
+	var weaponChoice = (random(101) < WEAPON_CHANCE) ? BOMB_LIST : VTOL_ROCKETS;
 	if (random(101) < EMP_CHANCE && componentAvailable("Bomb6-VTOL-EMP"))
 	{
 		weaponChoice = "Bomb6-VTOL-EMP";
 	}
 
-	buildDroid(struct, "Bomber", vtolBodyList, "V-Tol", "", "", weaponChoice);
+	if (getRealPower() > MIN_POWER)
+	{
+		buildDroid(struct, "VTOL unit", VTOL_BODY_LIST, "V-Tol", "", "", weaponChoice);
+	}
 }
 
 //Produce droids.
 function produce()
 {
-	const MIN_POWER = -300;
-	const MIN_TRUCKS = 5;
+	const FAC_LIST = [FACTORY, VTOL_FACTORY, CYBORG_FACTORY];
 
-	var fac = enumStruct(me, FACTORY);
-	var facNum = fac.length;
+	var facs = enumStruct(me, FACTORY);
+	var virtualTrucks = 0;
 
 	//Count the trucks being built so as not to build too many of them.
-	var virtualTrucks = 0;
-	for(var i = 0; i < facNum; ++i)
+	for (var i = 0, l = facs.length; i < l; ++i)
 	{
-		var virDroid = getDroidProduction(fac[i]);
-		if(virDroid !== null)
+		var virDroid = getDroidProduction(facs[i]);
+		if (virDroid !== null)
 		{
-			if(virDroid.droidType === DROID_CONSTRUCT)
+			if (virDroid.droidType === DROID_CONSTRUCT)
+			{
 				virtualTrucks += 1;
-		}
-	}
-
-	for(var i = 0; i < facNum; ++i)
-	{
-		if(structureIdle(fac[i]) && (getRealPower() > MIN_POWER))
-		{
-			if ((countDroid(DROID_CONSTRUCT) + virtualTrucks) < MIN_TRUCKS)
-			{
-				buildTruck(fac[i]);
-			}
-			else
-			{
-				buildAttacker(fac[i]);
 			}
 		}
 	}
 
-	//No point building cyborgs if it is a sea map.
-	if(!isSeaMap)
+	for (var i = 0; i < 3; ++i)
 	{
-		var cyborgFac = enumStruct(me, CYBORG_FACTORY);
-		for(var i = 0, l = cyborgFac.length; i < l; ++i)
+		var facType = FAC_LIST[i];
+		var fac = enumStruct(me, facType);
+		if (!(isSeaMap && (facType === CYBORG_FACTORY)))
 		{
-			if(structureIdle(cyborgFac[i]) && (getRealPower() > MIN_POWER))
+			for (var x = 0, l = fac.length; x < l; ++x)
 			{
-				buildCyborg(cyborgFac[i]);
+				const FC = fac[x];
+				if (defined(FC) && structureIdle(FC))
+				{
+					if (facType === FACTORY)
+					{
+						if (countDroid(DROID_CONSTRUCT) + virtualTrucks < MIN_TRUCKS)
+						{
+							buildTruck(FC);
+						}
+						else
+						{
+							if (countStruct(POW_GEN))
+							{
+								buildAttacker(FC);
+							}
+						}
+					}
+					else
+					{
+						if (!countStruct(POW_GEN))
+						{
+							continue;
+						}
+
+						if (facType === CYBORG_FACTORY)
+						{
+							buildCyborg(FC);
+						}
+						else
+						{
+							buildVTOL(FC);
+						}
+					}
+				}
 			}
 		}
 	}
-
-	var vtolFac = enumStruct(me, VTOL_FACTORY);
-	for(var i = 0, l = vtolFac.length; i < l; ++i)
-	{
-		if(structureIdle(vtolFac[i]) && (getRealPower() > MIN_POWER))
-		{
-			buildVTOL(vtolFac[i]);
-		}
-	}
-
 }

@@ -12,7 +12,8 @@ function logObj(obj, message)
 }
 
 // Returns true if something is defined
-function defined(data) {
+function defined(data)
+{
 	return typeof(data) !== "undefined";
 }
 
@@ -30,7 +31,17 @@ function getRealPower()
 
 function sortByDistToBase(obj1, obj2)
 {
-	var dist1 = distBetweenTwoPoints(startPositions[me].x, startPositions[me].y, obj1.x, obj1.y);
-	var dist2 = distBetweenTwoPoints(startPositions[me].x, startPositions[me].y, obj2.x, obj2.y);
+	var dist1 = distBetweenTwoPoints(BASE.x, BASE.y, obj1.x, obj1.y);
+	var dist2 = distBetweenTwoPoints(BASE.x, BASE.y, obj2.x, obj2.y);
 	return (dist1 - dist2);
+}
+
+//Used for deciding if a truck will capture oil.
+function isUnsafeEnemyObject(obj)
+{
+	return ((obj.type === DROID)
+		|| (obj.type === STRUCTURE
+		&& obj.stattype === DEFENSE
+		&& obj.status === BUILT)
+	);
 }

@@ -1,111 +1,103 @@
 
 // Research definitions
-var fundamentals = [
-	"R-Defense-Tower01",	// mg tower
-	"R-Wpn-MG2Mk1", // twin mg
+const FUNDAMENTALS = [
+	"R-Wpn-MG2Mk1",
+	"R-Wpn-MG-Damage03",
 	"R-Vehicle-Prop-Halftracks",	// halftracks
-	"R-Struc-Power-Upgrade03a", // final power upgrade
 	"R-Struc-Research-Upgrade09", // Faster research
-	"R-Wpn-Rocket02-MRL", //MRL
-	"R-Sys-Sensor-Upgrade03", // increase vision field
-];
-var lateGameTech = [
-	"R-Vehicle-Body14", // dragon body (implies vengeance)
-	"R-Sys-Resistance-Circuits", // NEXUS Resistance Circuits
-	"R-Wpn-Flamer-Damage09", // even more thermal damage
-];
-var rocketTech = [
-	"R-Defense-Tower06", //mini-rocket pod tower
-	"R-Defense-WallTower06", // lancer hardpoint
-	"R-Defense-HvyA-Trocket", //Tank-killer rocket and emplacement (implies lancer)
-	"R-Wpn-Rocket-ROF03", // Rocket ROF
+	"R-Struc-Power-Upgrade03a", // final power upgrade
 	"R-Defense-MRL", // mrl emplacement
-	"R-Defense-IDFRocket",
-	"R-Defense-Sunburst", // sunburst
+	"R-Defense-Tower06",
+];
+const LATE_GAME_TECH = [
+	"R-Sys-Resistance-Circuits",
+	"R-Vehicle-Body14", // dragon body
+	"R-Struc-Materials09",
+];
+const ROCKET_TECH = [
 	"R-Defense-IDFRocket", // ripple rocket battery
-	"R-Wpn-Rocket-Damage09", // Rocket Damage
+	"R-Cyborg-Hvywpn-TK", //tank killer cyborg
+	"R-Wpn-Rocket-ROF03",
+	"R-Defense-HvyA-Trocket", //Tank-killer rocket and emplacement
 ];
-var missileTech = [
+const MISSILE_TECH = [
 	"R-Defense-WallTower-A-Tmiss", // Scourge hardpoint
-	"R-Defense-MdArtMissile", // Seraph missiles and defense emplacement.
-	"R-Wpn-Missile-Accuracy02", // Missile Accuracy
-	"R-Wpn-Missile-Damage03", // Missile Damage
-	"R-Wpn-Missile-ROF03", // Missile ROF
+	"R-Cyborg-Hvywpn-A-T", // super scourge cyborg
+	"R-Defense-MdArtMissile",
+	"R-Defense-SamSite1",
+	"R-Wpn-Missile-Accuracy02",
+	"R-Wpn-Missile-Damage03",
+	"R-Wpn-Missile-ROF03",
+	"R-Defense-SamSite2",
 ];
-var kineticAlloys = [
+const KINETIC_ALLOYS = [
 	"R-Vehicle-Metals09",
 	"R-Cyborg-Metals09",
 ];
-var vtolWeaponry = [
-	"R-Wpn-Bomb-Accuracy03", // better bomb accuracy
+const VTOL_WEAPONRY = [
+	"R-Struc-VTOLPad-Upgrade06",
+	"R-Wpn-Bomb-Accuracy03",
 	"R-Wpn-Bomb05", // plasmite bomb
-	"R-Struc-VTOLPad-Upgrade06", // faster vtol rearming pads
 ];
-var startComponents = [
-	"R-Vehicle-Body05", // Cobra
+const START_COMPONENTS = [
+	"R-Defense-WallTower06", // lancer hardpoint
+	"R-Sys-Sensor-Upgrade02", // increase vision field
+	"R-Vehicle-Body05", // cobra
+	"R-Cyborg-Metals02",
 	"R-Vehicle-Body11", // Python
-	"R-Vehicle-Prop-Hover", //hover
 ];
-var fundamentals2 = [
-	"R-Sys-Autorepair-General", // autorepair
-	"R-Sys-CBSensor-Tower01", // CB tower
-	"R-Struc-Materials04", // better base structure defense.
-	"R-Wpn-Flamer-ROF03", // better flamer ROF (implies inferno)
-	"R-Wpn-Flamer-Damage06", // better flamer damage.
-	"R-Vehicle-Body09", // tiger body
-	"R-Vehicle-Armor-Heat04", // some tank thermal armor
-	"R-Cyborg-Armor-Heat02", // some cyborg thermal armor
-	"R-Struc-VTOLPad-Upgrade02", // get vtol pads
-	"R-Wpn-Bomb04", // thermite bomb
-	"R-Struc-Factory-Upgrade09", // self-replicating manufacturing
+const FUNDAMENTALS2 = [
+	"R-Vehicle-Prop-Hover",
+	"R-Wpn-Flamer-ROF03", // better flamer ROF
+	"R-Wpn-Flamer-Damage09",
+	"R-Defense-WallUpgrade05",
+	"R-Vehicle-Body06", //panther
+	"R-Sys-Sensor-Upgrade03", // increase vision field
+	"R-Vehicle-Armor-Heat04",
+	"R-Cyborg-Armor-Heat04",
 ];
-var thermalAlloys = [
+const THERMAL_ALLOYS = [
 	"R-Vehicle-Armor-Heat09",
 	"R-Cyborg-Armor-Heat09",
 ];
-var antiAirMissiles = [
-	"R-Defense-SamSite1", // avenger "P0-AASite-SAM1"
-	"R-Defense-SamSite2", // vindicator "P0-AASite-SAM2"
+const STRUCTURE_DEFENSE_UPGRADES = [
+	"R-Defense-WallUpgrade12",
+	"R-Defense-HvyArtMissile",
 ];
-var structureDefenseUpgrades = [
-	"R-Defense-HvyArtMissile", // Arch-angel Missile emplacement
-	"R-Struc-Materials09", // better base structure defense.
-	"R-Defense-WallUpgrade12", // stronger walls
-];
-var empTech = [
+const EMP_TECH = [
 	"R-Wpn-Bomb06", // implies EMP-Cannon, uplink, Nexus tower.
 	"R-Defense-EMPCannon",
 	"R-Defense-EMPMortar",
-	"R-Wpn-Mortar-ROF04",
-	"R-Wpn-Cannon-ROF06",
-	"R-Wpn-Mortar-Acc03",
-	"R-Wpn-Cannon-Accuracy02",
+];
+const LATE_EARLY_GAME_TECH = [
+	"R-Wpn-Rocket-Damage09",
+	"R-Defense-Sunburst",
+	"R-Sys-Autorepair-General",
+	"R-Struc-Factory-Upgrade09",
 ];
 
 //This function aims to more cleanly discover available research topics
 //with the given list provided.
 function evalResearch(lab, list)
 {
-	var found = pursueResearch(lab, list);
-	//Try going a bit deeper.
-	if(!found)
+	for (var i = 0, l = list.length; i < l; ++i)
 	{
-		for (var i = 0, l = list.length; i < l; ++i)
+		if (pursueResearch(lab, list[i]))
 		{
-			found = pursueResearch(lab, list[i]);
-			if (found)
-			{
-				break;
-			}
+			return true;
 		}
 	}
 
-	return found;
+	return false;
 }
 
-function eventResearched(tech, labParam)
+function findResearch(tech, labParam)
 {
-	const MIN_POWER = -400;
+	if (!countDroid(DROID_CONSTRUCT))
+	{
+		return; //need construction droids.
+	}
+
 	var labList;
 	if (labParam) // check if called with parameter or not
 	{
@@ -114,66 +106,59 @@ function eventResearched(tech, labParam)
 	}
 	else
 	{
-		labList = enumStruct(me, RES_LAB);
+		labList = enumStruct(me, RES_LAB).filter(function(lab) {
+			return (lab.status === BUILT && structureIdle(lab));
+		});
 	}
 
 	for (var i = 0, r = labList.length; i < r; i++)
 	{
 		var lab = labList[i];
-		if (lab.status == BUILT && structureIdle(lab) && (getRealPower() > MIN_POWER))
+		var found = evalResearch(lab, FUNDAMENTALS);
+		if (getRealPower() > MIN_POWER)
 		{
-			var found = evalResearch(lab, fundamentals);
+			if (!found)
+				found = evalResearch(lab, START_COMPONENTS);
 
 			if (!found)
-				found = evalResearch(lab, startComponents);
+				found = evalResearch(lab, ROCKET_TECH);
 
-			if (!found)
-				found = evalResearch(lab, rocketTech);
-
-			if (!found && !random(3))
+			if (!found && !random(4))
 			{
-				if (!isSeaMap && componentAvailable("Cyb-Wpn-Thermite"))
+				if (!isSeaMap)
 				{
-					found = evalResearch(lab, kineticAlloys);
+					found = evalResearch(lab, KINETIC_ALLOYS);
+					if (!found)
+						found = evalResearch(lab, THERMAL_ALLOYS);
 				}
 				else
 				{
 					found = pursueResearch(lab, "R-Vehicle-Metals09");
+					if (!found)
+						found = pursueResearch(lab, "R-Vehicle-Armor-Heat09");
 				}
 			}
 
 			if (!found)
-				found = pursueResearch(lab, fundamentals2);
+				found = evalResearch(lab, LATE_EARLY_GAME_TECH);
 
 			if (!found)
-				found = evalResearch(lab, missileTech);
+				found = pursueResearch(lab, FUNDAMENTALS2);
 
 			if (!found)
-				found = evalResearch(lab, antiAirMissiles);
+				found = evalResearch(lab, MISSILE_TECH);
 
 			if (!found)
-				found = evalResearch(lab, lateGameTech);
+				found = evalResearch(lab, STRUCTURE_DEFENSE_UPGRADES);
 
 			if (!found)
-			{
-				if (!isSeaMap && componentAvailable("Cyb-Wpn-Thermite"))
-				{
-					found = evalResearch(lab, thermalAlloys);
-				}
-				else
-				{
-					found = pursueResearch(lab, "R-Vehicle-Armor-Heat09");
-				}
-			}
+				found = evalResearch(lab, LATE_GAME_TECH);
 
 			if (!found)
-				found = evalResearch(lab, vtolWeaponry);
+				found = evalResearch(lab, EMP_TECH);
 
 			if (!found)
-				found = evalResearch(lab, structureDefenseUpgrades);
-
-			if (!found)
-				found = evalResearch(lab, empTech);
+				found = evalResearch(lab, VTOL_WEAPONRY);
 
 			//Only research random stuff once we get retribution.
 			if (componentAvailable("Body7ABT") && !found)
