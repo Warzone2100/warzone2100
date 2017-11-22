@@ -1,6 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const Y_SCROLL_LIMIT = 137;
 const LASSAT_FIRING = "pcv650.ogg"; // LASER SATELLITE FIRING!!!
 const NEXUS_RES = [
 	"R-Defense-WallUpgrade09", "R-Struc-Materials09", "R-Struc-Factory-Upgrade06",
@@ -67,27 +68,23 @@ function phantomFactorySpawn()
 	var list;
 	var chosenFactory;
 
-	switch (camRand(4))
+	switch (camRand(3))
 	{
 		case 0:
-			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
-			chosenFactory = "phantomFacNorth";
-			break;
-		case 1:
 			with (camTemplates) list = [nxcylas, nxcyrail, nxcyscou];
 			chosenFactory = "phantomFacWest";
 			break;
-		case 2:
+		case 1:
 			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
 			chosenFactory = "phantomFacEast";
 			break;
-		case 3:
+		case 2:
 			with (camTemplates) list = [nxcylas, nxcyrail, nxcyscou, nxhgauss, nxmpulseh, nxmlinkh];
 			chosenFactory = "phantomFacMiddle";
 			break;
 		default:
-			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
-			chosenFactory = "phantomFacNorth";
+			with (camTemplates) list = [nxcylas, nxcyrail, nxcyscou];
+			chosenFactory = "phantomFacWest";
 	}
 
 	if (countDroid(DROID_ANY, NEXUS) < 80)
@@ -104,16 +101,17 @@ function phantomFactorySpawn()
 //when no target is found in the area.
 function vaporizeTarget()
 {
-	const MAP_THIRD = Math.floor(mapHeight / 3);
-	var targets = enumArea(0, 2 * MAP_THIRD, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false);
 	var target;
+	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
+		return obj.type === DROID || (obj.type === STRUCTURE && obj.status === BUILT);
+	});
 
 	if (!targets.length)
 	{
 		//Choose random coordinate within the limits.
 		target = {
 			"x": camRand(mapWidth),
-			"y": Math.floor((2 * MAP_THIRD) + camRand(MAP_THIRD)),
+			"y": Y_SCROLL_LIMIT + camRand(mapHeight - Math.floor(mapLimit)),
 		};
 
 		if (target.y > Math.floor(mapLimit))
@@ -123,19 +121,30 @@ function vaporizeTarget()
 
 		if (Math.floor(mapLimit) < mapHeight)
 		{
-			mapLimit = mapLimit + 0.275; // sector clear; move closer.
+			mapLimit = mapLimit + 0.165; //sector clear; move closer
 		}
 	}
 	else
 	{
-		target = camMakePos(targets[0]);
+		// prefer droids over structures
+		var dr = targets.filter(function(obj) { return obj.type === DROID; });
+		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
+
+		if (dr.length)
+		{
+			target = camMakePos(dr[0]);
+		}
+		else if (st.length)
+		{
+			target = camMakePos(st[0]);
+		}
 	}
 
 	//Stop firing LasSat if the third missile unlock code was researched.
 	if (winFlag === false)
 	{
 		laserSatFuzzyStrike(target);
-		queue("vaporizeTarget", 12000);
+		queue("vaporizeTarget", 5000);
 	}
 }
 
@@ -243,19 +252,17 @@ function eventStartLevel()
 {
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
-	mapLimit = 2 * Math.floor(mapHeight * 0.33);
+	mapLimit = 137.0;
 	winFlag = false;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_3_4S", {
 		callback: "checkMissileSilos"
 	});
 
-	//Destroy all non-defense structures above the last third of the map and
-	//prevent the player from building anything there as well
-	setNoGoArea(0, 0, 64, Math.floor(mapLimit), NEXUS);
-	var destroyZone = enumArea(0, 0, 64, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === STRUCTURE && (obj.stattype !== WALL && obj.stattype !== DEFENSE);
-	});
+	setScrollLimits(0, Y_SCROLL_LIMIT, 64, 256);
+
+	//Destroy everything above limits
+	var destroyZone = enumArea(0, 0, 64, Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
 	for (var i = 0, l = destroyZone.length; i < l; ++i)
 	{
 		camSafeRemoveObject(destroyZone[i], false);

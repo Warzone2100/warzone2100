@@ -16,7 +16,6 @@ const NEXUS_RES = [
 ];
 var capturedSilos; // victory flag letting us know if we captured any silos.
 var mapLimit; //LasSat slowly creeps toward missile silos.
-var retryTime; //Delay before next Lassat strike.
 
 camAreaEvent("NEDefenseZone", function(droid) {
 	camEnableFactory("NXcyborgFac2Arti");
@@ -89,39 +88,42 @@ function enableAllFactories()
 //when no target is found in the area.
 function vaporizeTarget()
 {
-	var targets = enumArea(0, 0, mapWidth, mapLimit, CAM_HUMAN_PLAYER, false);
 	var target;
+	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
+		return obj.type === DROID || (obj.type === STRUCTURE && obj.status === BUILT);
+	});
 
 	if (!targets.length)
 	{
-		const ONE_THIRD = Math.floor(mapHeight / 3);
 		//Choose random coordinate within the limits.
 		target = {
 			"x": camRand(mapWidth),
-			"y": camRand(mapLimit),
+			"y": camRand(Math.floor(mapLimit)),
 		};
 
-		if (mapLimit < mapHeight)
+		if (Math.floor(mapLimit) < mapHeight)
 		{
-			mapLimit = mapLimit + 2; //sector clear; move closer.
-		}
-
-		if ((mapLimit >= ONE_THIRD) && (mapLimit < (2 * ONE_THIRD)))
-		{
-			retryTime = 10000; //Slow down cover cam1-a area.
-		}
-		else if (mapLimit >= (2 * ONE_THIRD))
-		{
-			retryTime = 20000; //Slow down even more on cam3-c area.
+			mapLimit = mapLimit + 0.178; //sector clear; move closer
 		}
 	}
 	else
 	{
-		target = camMakePos(targets[0]);
+		// prefer droids over structures
+		var dr = targets.filter(function(obj) { return obj.type === DROID; });
+		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
+
+		if (dr.length)
+		{
+			target = camMakePos(dr[0]);
+		}
+		else if (st.length)
+		{
+			target = camMakePos(st[0]);
+		}
 	}
 
 	laserSatFuzzyStrike(target);
-	queue("vaporizeTarget", retryTime);
+	queue("vaporizeTarget", 5000);
 }
 
 //A simple way to fire the LasSat with a chance of missing.
@@ -148,9 +150,9 @@ function laserSatFuzzyStrike(obj)
 	{
 		yCoord = 0;
 	}
-	else if (yCoord > mapLimit)
+	else if (yCoord > Math.floor(mapLimit))
 	{
-		yCoord = mapLimit;
+		yCoord = Math.floor(mapLimit);
 	}
 
 	if (camRand(101) < 40)
@@ -200,8 +202,7 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	var lz2 = getObject("landingZone2");
-	mapLimit = 1;
-	retryTime = 5000;
+	mapLimit = 1.0;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D2", {
 		callback: "checkMissileSilos"
