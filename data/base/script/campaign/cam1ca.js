@@ -61,13 +61,17 @@ function sendTransport()
 		var lz = landingZoneList[i];
 		if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
 		{
-			list[list.length] = { idx: i, label: lz };
+			list.push({ idx: i, label: lz });
 		}
 	}
+	//If all are compromised then choose the LZ randomly
 	if (list.length === 0)
 	{
-		queue('sendTransport', 10000);
-		return;
+		for (var i = 0; i < 2; ++i)
+		{
+			var rnd = camRand(landingZoneList.length);
+			list.push({ idx: rnd, label: landingZoneList[rnd] });
+		}
 	}
 	var picked = list[camRand(list.length)];
 	lastLZ = picked.idx;
