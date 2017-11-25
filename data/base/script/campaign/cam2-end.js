@@ -2,6 +2,8 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var allowWin;
+var launchedBeforeExit;
+var launchCount;
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-Factory-Cyborg-Upgrade06",
@@ -59,13 +61,38 @@ function eventMissionTimeout()
 	camCallOnce("playLastVideo");
 }
 
-// Allow win if at least one transport launched.
+// Allow win if the transporter was launched at least three times.
 function eventTransporterLaunch(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
-		allowWin = true;
+		launchedBeforeExit = true;
+		launchCount = launchCount + 1;
+		if (launchCount > 2)
+		{
+			allowWin = true;
+		}
 	}
+}
+
+//This is triggered all over the source to end these type of missions if no
+//droids remain on map.
+function eventTransporterExit(transport)
+{
+	var len = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
+		return !camIsTransporter(dr);
+	}).length;
+	if ((!launchedBeforeExit || (!len && launchedBeforeExit)) && transport.player === CAM_HUMAN_PLAYER)
+	{
+		camCallOnce("fastMissionEnd");
+	}
+
+	launchedBeforeExit = false;
+}
+
+function fastMissionEnd()
+{
+	setMissionTime(1);
 }
 
 //Return randomly selected droid templates.
@@ -97,24 +124,6 @@ function vtolAttack()
 	var list; with (camTemplates) list = [commorv, colcbv, colagv, comhvat];
 	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(30000));
 }
-
-//Every 10 minutes.
-/*
-function collectiveTransportScouts()
-{
-	var COTransportPos = {"x": 117, "y": 116};
-
-	var list; with (camTemplates) list = [commgt, npcybc, comhltat, npcybr, cocybag];
-	camSendReinforcement(THE_COLLECTIVE, camMakePos(COTransportPos), randomTemplates(list, true),
-		CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 126, y: 100 },
-			exit: { x: 126, y: 100 }
-		}
-	);
-
-	queue("collectiveTransportScouts", camChangeOnDiff(600000));
-}
-*/
 
 //SouthEast attackers which are mostly cyborgs.
 function cyborgAttack()
@@ -179,6 +188,8 @@ function eventStartLevel()
 
 	videoIndex = 0;
 	allowWin = false;
+	launchedBeforeExit = false;
+	launchCount = 0;
 	camPlayVideos(["MB2_DII_MSG", "MB2_DII_MSG2"]);
 
 	//These requeue themselves every so often.
