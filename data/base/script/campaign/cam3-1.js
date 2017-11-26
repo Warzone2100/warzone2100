@@ -112,7 +112,7 @@ function missileSilosDestroyed()
 		destroyed += (getObject(SILO_ALIAS + (i + 1)) === null) ? 1 : 0;
 	}
 
-	return destroyed === SILO_COUNT ? true : false;
+	return destroyed === SILO_COUNT;
 }
 
 //Nuclear missile destroys everything not in safe zone.
@@ -175,7 +175,7 @@ function setupNextMission()
 //Play countdown sounds. Elements are shifted out of the sound arrays as they play.
 function getCountdown()
 {
-	var missilesDead = missileSilosDestroyed() ? true : false;
+	var missilesDead = missileSilosDestroyed();
 	var times = missilesDead ? detTimes : launchTimes;
 	var sounds = missilesDead ? detSounds : launchSounds;
 	var skip = false;

@@ -1925,7 +1925,7 @@ function __camTruckTick()
 		var ti = __camTruckInfo[player];
 
 		// First, build things that were explicitly ordered.
-		if (ti.queue.length > 0)
+		while (ti.queue.length > 0)
 		{
 			var qi = ti.queue[0];
 			var pos = qi.pos;
@@ -1935,27 +1935,30 @@ function __camTruckTick()
 				// Find the truck most suitable for the job.
 				truck = __camGetClosestTruck(player, pos);
 				if (!camDef(truck))
-					continue;
+				{
+					break;
+				}
 			}
 			else
 			{
 				// Build near any truck if pos was not specified.
 				var droids = __camEnumFreeTrucks(player);
 				if (droids.length <= 0)
-					continue;
+				{
+					break;
+				}
 				truck = droids[0];
 				pos = truck;
 			}
 
 			enableStructure(qi.stat, player);
 			var loc = pickStructLocation(truck, qi.stat, pos.x, pos.y);
-			if (camDef(loc) && camDef(truck) && (truck.id !== 0))
+			if (camDef(loc) && camDef(truck))
 			{
 				if (orderDroidBuild(truck, DORDER_BUILD,
 				                    qi.stat, loc.x, loc.y))
 				{
 					ti.queue.shift(); // consider it handled
-					continue;
 				}
 			}
 		}
@@ -1963,10 +1966,12 @@ function __camTruckTick()
 		// Then, capture free oils.
 		var oils = enumFeature(-1, "OilResource");
 		if (oils.length === 0)
+		{
 			continue;
+		}
 		var oil = oils[0];
 		var truck = __camGetClosestTruck(player, oil);
-		if (camDef(truck) && (truck.id !== 0))
+		if (camDef(truck))
 		{
 			enableStructure("A0ResourceExtractor", player);
 			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor",
@@ -2839,18 +2844,18 @@ function camNexusLaugh()
 	}
 }
 
-function camAbsorbPlayer(playerNumber, to)
+function camAbsorbPlayer(who, to)
 {
-     if (!camDef(playerNumber))
+     if (!camDef(who))
      {
-          playerNumber = CAM_HUMAN_PLAYER;
+          who = CAM_HUMAN_PLAYER;
      }
      if (!camDef(to))
      {
           to = NEXUS;
      }
 
-     var units = enumDroid(playerNumber);
+     var units = enumDroid(who);
 	for (var i = 0, l = units.length; i < l; i++)
 	{
 		if (!donateObject(units[i], to))
@@ -2859,7 +2864,7 @@ function camAbsorbPlayer(playerNumber, to)
 		}
 	}
 
-    var structs = enumStruct(playerNumber);
+    var structs = enumStruct(who);
     for (var i = 0, l = structs.length; i < l; i++)
     {
          if (!donateObject(structs[i], to))
@@ -2868,8 +2873,8 @@ function camAbsorbPlayer(playerNumber, to)
 	    }
     }
 
-    camTrace("Player " + playerNumber + " has been absorbed by player" + to);
-    changePlayerColour(playerNumber, to); // Black painting.
+    camTrace("Player " + who + " has been absorbed by player" + to);
+    changePlayerColour(who, to);
 }
 
 //Steal a droid or structure from a player.
@@ -3280,7 +3285,7 @@ function cam_eventGameLoaded()
 	isReceivingAllEvents = true;
 	const SCAV_KEVLAR_MISSIONS = [
 		"CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
-		"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "CAM_1END"
+		"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "CAM_1END", "SUB_2_5S"
 	];
 
 	//Need to set the scavenger kevlar vests when loading a save from later Alpha
@@ -3289,8 +3294,16 @@ function cam_eventGameLoaded()
 	{
 		if (__camNextLevel === SCAV_KEVLAR_MISSIONS[i])
 		{
-			replaceTexture("page-7-barbarians-arizona.png",
-						"page-7-barbarians-kevlar.png");
+			if (tilesetType === "ARIZONA")
+			{
+				replaceTexture("page-7-barbarians-arizona.png",
+							"page-7-barbarians-kevlar.png");
+			}
+			else if (tilesetType === "URBAN")
+			{
+				replaceTexture("page-7-barbarians-arizona.png",
+							"page-7-barbarians-urban.png");
+			}
 			break;
 		}
 	}

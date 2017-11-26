@@ -57,11 +57,7 @@ camAreaEvent("phantomFacTrigger", function(droid)
 	playSound("pcv456.ogg"); //Incoming transmission...
 	queue("playVideos", 2000);
 	//Donate All of alpha to the player.
-	var alphaStuff = enumArea(0, 0, mapWidth, mapHeight, ALPHA, false);
-	for (var i = 0, l = alphaStuff.length; i < l; ++i)
-	{
-		donateObject(alphaStuff[i], CAM_HUMAN_PLAYER);
-	}
+	camAbsorbPlayer(ALPHA, CAM_HUMAN_PLAYER);
 
 	hackRemoveMessage("C3-2_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	queue("getAlphaUnitIDs", 3000);

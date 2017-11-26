@@ -20,18 +20,7 @@ const SCAVENGER_RES = [
 //Pursue player when nearby but do not go too far away from defense zone.
 function camEnemyBaseDetected_NPBaseGroup()
 {
-	// Send tanks
-	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_DEFEND, {
-		pos: camMakePos("nearSensor"),
-		radius: 10,
-		regroup: true
-	});
-
-	camManageGroup(camMakeGroup("AttackGroupMedium"), CAM_ORDER_DEFEND, {
-		pos: camMakePos("nearSensor"),
-		radius: 10,
-		regroup: true
-	});
+	camCallOnce("NPBaseDetect");
 }
 
 function enableSouthScavFactory()
@@ -47,8 +36,6 @@ camAreaEvent("NorthScavFactoryTrigger", function()
 camAreaEvent("NPBaseDetectTrigger", function()
 {
 	camDetectEnemyBase("NPBaseGroup");
-	camEnableFactory("HeavyNPFactory");
-	camEnableFactory("MediumNPFactory");
 });
 
 camAreaEvent("removeRedObjectiveBlip", function()
@@ -70,6 +57,25 @@ camAreaEvent("LandingZoneTrigger", function()
 	// continue after 4 seconds
 	queue("moreLandingZoneTrigger", 4000);
 });
+
+function NPBaseDetect()
+{
+	// Send tanks
+	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_DEFEND, {
+		pos: camMakePos("nearSensor"),
+		radius: 10,
+		regroup: true
+	});
+
+	camManageGroup(camMakeGroup("AttackGroupMedium"), CAM_ORDER_DEFEND, {
+		pos: camMakePos("nearSensor"),
+		radius: 10,
+		regroup: true
+	});
+
+	camEnableFactory("HeavyNPFactory");
+	camEnableFactory("MediumNPFactory");
+}
 
 function moreLandingZoneTrigger()
 {
@@ -154,7 +160,7 @@ function eventStartLevel()
 	});
 
 	hackAddMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
-	
+
 	camSetArtifacts({
 		"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
 		"NPResearchFacility": { tech: "R-Vehicle-Body04" },

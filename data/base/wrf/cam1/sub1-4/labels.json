@@ -111,6 +111,12 @@
 		"pos1": [7232, 4416],
 		"pos2": [7744, 4928]
 	},
+	"area_9": {
+		"label": "NPBaseDetectTrigger",
+		"subscriber": 0,
+		"pos1": [3500, 4480],
+		"pos2": [5120, 5376]
+	},
 
 	"object_0": {
 		"label": "SouthScavFactory",
@@ -156,18 +162,12 @@
 		"radius": 1280
 	},
 	"radius_1": {
-		"label": "NPBaseDetectTrigger",
-		"subscriber": 0,
-		"pos": [3840, 5504],
-		"radius": 800
-	},
-	"radius_2": {
 		"label": "removeRedObjectiveBlip",
 		"subscriber": 0,
 		"pos": [4096, 3640],
 		"radius": 700
 	},
-	"radius_3": {
+	"radius_2": {
 		"label": "triggerLZ2Blip",
 		"subscriber": 0,
 		"pos": [6160, 3840],

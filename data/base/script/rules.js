@@ -7,6 +7,7 @@ function setupGame()
 {
 	if (tilesetType == "URBAN")
 	{
+		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-urban.png");
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-urban.png");
 	}

@@ -29,8 +29,6 @@ camAreaEvent("crashSite", function(droid)
 	const GOODSND = "pcv615.ogg";
 	playSound(GOODSND);
 
-	//set downed transport team colour to be Project Green.
-	changePlayerColour(TRANSPORT_TEAM, 0);
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
@@ -155,6 +153,9 @@ function eventStartLevel()
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
 	setPower(AI_POWER, THE_COLLECTIVE);
+
+	//set downed transport team colour to be Project Green.
+	changePlayerColour(TRANSPORT_TEAM, 0);
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
