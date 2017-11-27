@@ -42,7 +42,7 @@
         "weaponWav": "medcan.ogg",
         "weight": 10000
     },
-    "BJeepMG": {
+    "BabaJeepMG": {
         "buildPoints": 16,
         "buildPower": 4,
         "damage": 14,
@@ -53,7 +53,7 @@
         "flightSpeed": 1000,
         "hitGfx": "FXMETHIT.PIE",
         "hitpoints": 1,
-        "id": "BJeepMG",
+        "id": "BabaJeepMG",
         "longHit": 50,
         "longRange": 960,
         "maxElevation": 90,
@@ -73,18 +73,18 @@
         "weaponWav": "mgbar2.ogg",
         "weight": 1
     },
-    "BTowerMG": {
+    "BabaTowerMG": {
         "buildPoints": 16,
         "buildPower": 12,
         "damage": 16,
         "effectSize": 100,
         "facePlayer": 1,
         "firePause": 5,
-        "flightGfx": "FXTracRD.PIE",
+        "flightGfx": "FXTracer.PIE",
         "flightSpeed": 1000,
         "hitGfx": "FXMETHIT.PIE",
         "hitpoints": 1,
-        "id": "BTowerMG",
+        "id": "BabaTowerMG",
         "longHit": 50,
         "longRange": 960,
         "maxElevation": 90,
@@ -101,10 +101,10 @@
         "weaponClass": "KINETIC",
         "weaponEffect": "ANTI PERSONNEL",
         "weaponSubClass": "MACHINE GUN",
-        "weaponWav": "mgtower.ogg",
+        "weaponWav": "mgbar2.ogg",
         "weight": 1
     },
-    "BaBaCannon": {
+    "BabaCannon": {
         "buildPoints": 10,
         "buildPower": 10,
         "damage": 28,
@@ -116,7 +116,7 @@
         "flightSpeed": 1000,
         "hitGfx": "FXGRDexl.PIE",
         "hitpoints": 10,
-        "id": "BaBaCannon",
+        "id": "BabaCannon",
         "lightWorld": 1,
         "longHit": 40,
         "longRange": 960,
@@ -137,7 +137,7 @@
         "weaponWav": "smlcan.ogg",
         "weight": 10
     },
-    "BaBaMG": {
+    "BabaMG": {
         "buildPoints": 1,
         "buildPower": 1,
         "damage": 10,
@@ -148,7 +148,7 @@
         "flightSpeed": 1000,
         "hitGfx": "FXMETHIT.PIE",
         "hitpoints": 1,
-        "id": "BaBaMG",
+        "id": "BabaMG",
         "longHit": 40,
         "longRange": 960,
         "maxElevation": 90,
@@ -478,7 +478,7 @@
         "weaponWav": "hwtzflgt.ogg",
         "weight": 9000
     },
-    "BuggyMG": {
+    "BabaBuggyMG": {
         "buildPoints": 11,
         "buildPower": 3,
         "damage": 16,
@@ -489,7 +489,7 @@
         "flightSpeed": 1000,
         "hitGfx": "FXMETHIT.PIE",
         "hitpoints": 1,
-        "id": "BuggyMG",
+        "id": "BabaBuggyMG",
         "longHit": 50,
         "longRange": 960,
         "maxElevation": 90,
@@ -509,7 +509,7 @@
         "weaponWav": "mgbar2.ogg",
         "weight": 1
     },
-    "BusCannon": {
+    "BabaBusCannon": {
         "buildPoints": 10,
         "buildPower": 10,
         "damage": 28,
@@ -521,7 +521,7 @@
         "flightSpeed": 1000,
         "hitGfx": "FXGRDexl.PIE",
         "hitpoints": 10,
-        "id": "BusCannon",
+        "id": "BabaBusCannon",
         "lightWorld": 1,
         "longHit": 50,
         "longRange": 960,
@@ -3325,7 +3325,7 @@
         "weaponEffect": "ANTI PERSONNEL",
         "weaponSubClass": "MACHINE GUN"
     },
-    "bTrikeMG": {
+    "BabaTrikeMG": {
         "buildPoints": 11,
         "buildPower": 2,
         "damage": 13,
@@ -3336,7 +3336,7 @@
         "flightSpeed": 1000,
         "hitGfx": "FXMETHIT.PIE",
         "hitpoints": 1,
-        "id": "bTrikeMG",
+        "id": "BabaTrikeMG",
         "longHit": 50,
         "longRange": 960,
         "maxElevation": 90,

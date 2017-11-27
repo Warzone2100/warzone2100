@@ -149,7 +149,7 @@ function captureCivilians()
 		for (var i = 0; i < num; ++i)
 		{
 			addDroid(CIVILIAN, currPos.x, currPos.y, "Civilian",
-					"B1BaBaPerson01", "BaBaLegs", "", "", "BaBaMG");
+					"B1BaBaPerson01", "BaBaLegs", "", "", "BabaMG");
 		}
 
 		//Only count civilians that are not in the the transporter base.

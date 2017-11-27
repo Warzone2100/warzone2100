@@ -43,7 +43,7 @@
         "propulsion": "BaBaLegs",
         "type": "PERSON",
         "weapons": [
-            "BaBaMG"
+            "BabaMG"
         ]
     },
     "BabaBusCan": {
@@ -53,7 +53,7 @@
         "propulsion": "BaBaProp",
         "type": "DROID",
         "weapons": [
-            "BusCannon"
+            "BabaBusCannon"
         ]
     },
     "BabaFireCan": {
@@ -63,7 +63,7 @@
         "propulsion": "BaBaProp",
         "type": "DROID",
         "weapons": [
-            "BusCannon"
+            "BabaBusCannon"
         ]
     },
     "BabaFireTruck": {
@@ -83,7 +83,7 @@
         "propulsion": "BaBaProp",
         "type": "DROID",
         "weapons": [
-            "BJeepMG"
+            "BabaJeepMG"
         ]
     },
     "BabaPickUp": {
@@ -110,7 +110,7 @@
         "propulsion": "BaBaProp",
         "type": "DROID",
         "weapons": [
-            "BuggyMG"
+            "BabaBuggyMG"
         ]
     },
     "BarbarianRKBuggy": {
@@ -130,7 +130,7 @@
         "propulsion": "BaBaProp",
         "type": "DROID",
         "weapons": [
-            "bTrikeMG"
+            "BabaTrikeMG"
         ]
     },
     "CO-H-COM-H": {
