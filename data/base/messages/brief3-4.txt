@@ -3,3 +3,4 @@ MB3_4_MSG2,0,1,1,cam3/cam3_4b.ogg,2,CAM3_4_MSG5,CAM3_4_MSG6,0,0000
 MB3_4_MSG3,0,1,1,cam3/cam34fmv.ogg,0,0,0000
 MB3_4_MSG4,0,1,1,cam3/cam34mu1.ogg,0,0,0000
 MB3_4_MSG5,0,1,1,cam3/cam34mu2.ogg,0,0,0000
+MB3_4_OUTRO,0,1,1,outro.ogg,0,0,0000

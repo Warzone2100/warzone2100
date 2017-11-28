@@ -10,19 +10,13 @@ file		SMSG		"prox3-4.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-file		SCRIPT		"setdisk.slo"
-file		SCRIPT		"genexp.slo"
-file		SCRIPT		"vtols2.slo"
-file		SCRIPT		"cam3-4x.slo"
 file		SCRIPT		"cam3daynight.slo"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam3-4.vlo"
-file            SCRIPTVAL       "disk1.vlo"
-file            SCRIPTVAL       "vtols3-4.vlo"
-file            SCRIPTVAL       "cam3-4x.vlo"
 file            SCRIPTVAL       "cam3mkday.vlo"
 
 directory       "script"
 file            JAVASCRIPT      "rules.js"
+directory       "script/campaign"
+file            JAVASCRIPT      "cam3-4.js"

@@ -2333,7 +2333,7 @@ const CAM_VICTORY_TIMEOUT = 3;
 //;; 		\item[message] The "Return to LZ" message ID. Optional.
 //;; 		\item[reinforcements] Reinforcements interval, in seconds.
 //;; 	\end{description}
-//;; For standard and offworld victory, an extra data parameter can be defined:
+//;; For standard and offworld victory, some extra data parameters can be defined:
 //;; 	\begin{description}
 //;; 		\item[callback] A function callback to check for extra win/loss
 //;; 		conditions. Return values are interpreted as follows:
@@ -2341,6 +2341,10 @@ const CAM_VICTORY_TIMEOUT = 3;
 //;; 		\textbf{true} means victory as long as other standard victory
 //;; 		conditions are met, \textbf{undefined} means suppress
 //;; 		other victory checks ("clearly not won yet").
+//;; 	\end{description}
+//;; 	\begin{description}
+//;; 		\item[victoryVideo] Pass in the name of a video string here
+//;;			and it will be played before attempting to load the next level.
 //;; 	\end{description}
 //;; For offworld victory, some more extra data parameters can be defined:
 //;; 	\begin{description}
@@ -2463,9 +2467,21 @@ function __camGameLost()
 function __camGameWon()
 {
 	__camLevelEnded = true;
-	camTrace(__camNextLevel);
+	if (camDef(__camVictoryData) && camDef(__camVictoryData.victoryVideo))
+	{
+		camPlayVideos(__camVictoryData.victoryVideo);
+	}
+
 	if (camDef(__camNextLevel))
+	{
+		camTrace(__camNextLevel);
 		camNextLevel(__camNextLevel);
+	}
+	else
+	{
+		//If nothing to load, go to main menu.
+		gameOverMessage(true);
+	}
 }
 
 function __camPlayerDead()

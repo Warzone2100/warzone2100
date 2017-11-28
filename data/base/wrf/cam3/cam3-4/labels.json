@@ -1,0 +1,190 @@
+{
+	"position_0": {
+		"label": "startPosition",
+		"pos": [11200, 1472]
+	},
+	"position_1": {
+		"label": "healthRetreatPos",
+		"pos": [1728, 11456]
+	},
+	"position_2": {
+		"label": "transportEntryExit",
+		"pos": [11776, 1536]
+	},
+	"position_3": {
+		"label": "SWRetreat",
+		"pos": [1728, 11456]
+	},
+	"position_4": {
+		"label": "SWPatrolPos1",
+		"pos": [1600, 8000]
+	},
+	"position_5": {
+		"label": "SWPatrolPos2",
+		"pos": [4160, 8128]
+	},
+	"position_6": {
+		"label": "SWPatrolPos3",
+		"pos": [5056, 10560]
+	},
+	"position_7": {
+		"label": "SERetreat",
+		"pos": [10432, 11456]
+	},
+	"position_8": {
+		"label": "SEPatrolPos1",
+		"pos": [11328, 6976]
+	},
+	"position_9": {
+		"label": "SEPatrolPos2",
+		"pos": [10432, 9664]
+	},
+	"position_10": {
+		"label": "NERetreat",
+		"pos": [8896, 4032]
+	},
+	"position_11": {
+		"label": "NEPatrolPos1",
+		"pos": [9408, 5184]
+	},
+	"position_12": {
+		"label": "NEPatrolPos2",
+		"pos": [4800, 5696]
+	},
+	"position_13": {
+		"label": "NWRetreat",
+		"pos": [1344, 1600]
+	},
+	"position_14": {
+		"label": "NWPatrolPos1",
+		"pos": [5824, 832]
+	},
+	"position_15": {
+		"label": "NWPatrolPos2",
+		"pos": [2496, 2624]
+	},
+	"position_16": {
+		"label": "NWPatrolPos3",
+		"pos": [704, 4160]
+	},
+
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [11008, 1280],
+		"pos2": [11264, 1536]
+	},
+	"area_1": {
+		"label": "NWBaseCleanup",
+		"pos1": [128, 128],
+		"pos2": [3712, 3584]
+	},
+	"area_2": {
+		"label": "NEBaseCleanup",
+		"pos1": [6016, 2304],
+		"pos2": [9728, 6144]
+	},
+	"area_3": {
+		"label": "SWBaseCleanup",
+		"pos1": [0, 7168],
+		"pos2": [4864, 12160]
+	},
+	"area_4": {
+		"label": "SEBaseCleanup",
+		"pos1": [9728, 6800],
+		"pos2": [12032, 12032]
+	},
+	"area_5": {
+		"label": "vtolBaseCleanup",
+		"pos1": [5376, 9472],
+		"pos2": [8576, 12032]
+	},
+	"area_6": {
+		"label": "factoryTriggerW",
+		"subscriber": 0,
+		"pos1": [8567, 0],
+		"pos2": [9216, 2560]
+	},
+	"area_7": {
+		"label": "factoryTriggerS",
+		"subscriber": 0,
+		"pos1": [8704, 2432],
+		"pos2": [12160, 2816]
+	},
+	"area_8": {
+		"label": "RTLZ",
+		"pos1": [10112, 512],
+		"pos2": [11776, 2304]
+	},
+	"area_9": {
+		"label": "WBaseCleanup",
+		"pos1": [6912, 128],
+		"pos2": [8960, 1920]
+	},
+
+	"object_0": {
+		"label": "NX-NWFactory1",
+		"id": 724,
+		"player": 3,
+		"type": 1
+	},
+	"object_1": {
+		"label": "NX-NWFactory2",
+		"id": 751,
+		"player": 3,
+		"type": 1
+	},
+	"object_2": {
+		"label": "NX-NEFactory",
+		"id": 729,
+		"player": 3,
+		"type": 1
+	},
+	"object_3": {
+		"label": "NX-SWFactory",
+		"id": 812,
+		"player": 3,
+		"type": 1
+	},
+	"object_4": {
+		"label": "NX-SEFactory",
+		"id": 733,
+		"player": 3,
+		"type": 1
+	},
+	"object_5": {
+		"label": "NX-VtolFactory1",
+		"id": 748,
+		"player": 3,
+		"type": 1
+	},
+	"object_6": {
+		"label": "NX-NWCyborgFactory",
+		"id": 1288,
+		"player": 3,
+		"type": 1
+	},
+	"object_7": {
+		"label": "NX-VtolFactory2",
+		"id": 746,
+		"player": 3,
+		"type": 1
+	},
+	"object_8": {
+		"label": "NX-SWCyborgFactory1",
+		"id": 238,
+		"player": 3,
+		"type": 1
+	},
+	"object_9": {
+		"label": "NX-SWCyborgFactory2",
+		"id": 246,
+		"player": 3,
+		"type": 1
+	},
+	"object_10": {
+		"label": "NX-MissileEmplacement",
+		"id": 1235,
+		"player": 3,
+		"type": 1
+	}
+}

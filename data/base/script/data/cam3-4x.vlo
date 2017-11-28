@@ -1,8 +1,0 @@
-// cam3-4X.vlo
-//give player starting power
-
-script "cam3-4X.slo"
-run
-{
-timeLimit	int		-1	//108000	//3hrs set -1 for no time limit, otherwise time in 1/10s
-}
