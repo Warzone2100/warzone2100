@@ -9,18 +9,8 @@ directory	"messages"
 file		SMSG		"briefdemo.txt"
 file		SMSG		"proxdemo.txt"
 
-/* Directory for uncompiled script files */
-directory       "script/fastplay"
-file		SCRIPT		"fastdemo.slo"
-file		SCRIPT		"start.slo"
-
 directory       "script/text"
 file		SCRIPT		"cam1daynight.slo"
-
-/* Directory for script value files*/
-directory       "script/fastplay"
-file            SCRIPTVAL       "fastdemo.vlo"
-file		SCRIPTVAL	"start.vlo"
 
 directory       "script/data"
 file            SCRIPTVAL       "cam1day.vlo"
@@ -28,3 +18,5 @@ file            SCRIPTVAL       "cam1day.vlo"
 /* Directory for javascript files*/
 directory "script"
 file JAVASCRIPT "rules.js"
+directory "script/fastplay"
+file JAVASCRIPT "fastdemo.js"
