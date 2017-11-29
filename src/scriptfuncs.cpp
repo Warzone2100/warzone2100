@@ -1296,30 +1296,27 @@ bool scrAddReticuleButton()
 	//set the appropriate flag to 'draw' the button
 	switch (val)
 	{
-	case IDRET_OPTIONS:
-		// bit of a hack here to keep compatibility with old scripts
-		widgReveal(psWScreen, IDRET_COMMAND);
-		break;
+	case IDRET_OPTIONS:	// bit of a hack here to keep compatibility with old scripts
 	case IDRET_COMMAND:
-		widgReveal(psWScreen, IDRET_COMMAND);
+		setReticuleStats(RETBUT_COMMAND, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 		break;
 	case IDRET_BUILD:
-		widgReveal(psWScreen, IDRET_BUILD);
+		setReticuleStats(RETBUT_BUILD, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 		break;
 	case IDRET_MANUFACTURE:
-		widgReveal(psWScreen, IDRET_MANUFACTURE);
+		setReticuleStats(RETBUT_FACTORY, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 		break;
 	case IDRET_RESEARCH:
-		widgReveal(psWScreen, IDRET_RESEARCH);
+		setReticuleStats(RETBUT_RESEARCH, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 		break;
 	case IDRET_INTEL_MAP:
-		widgReveal(psWScreen, IDRET_INTEL_MAP);
+		setReticuleStats(RETBUT_INTELMAP, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
 		break;
 	case IDRET_DESIGN:
-		widgReveal(psWScreen, IDRET_DESIGN);
+		setReticuleStats(RETBUT_DESIGN, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
 		break;
 	case IDRET_CANCEL:
-		widgReveal(psWScreen, IDRET_CANCEL);
+		setReticuleStats(RETBUT_CANCEL, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
 		break;
 	default:
 		ASSERT(false, "Invalid reticule Button ID");
@@ -1350,30 +1347,27 @@ bool scrRemoveReticuleButton()
 	}
 	switch (val)
 	{
-	case IDRET_OPTIONS:
-		// bit of a hack here to keep compatibility with old scripts
-		widgHide(psWScreen, IDRET_COMMAND);
-		break;
+	case IDRET_OPTIONS:	// bit of a hack here to keep compatibility with old scripts
 	case IDRET_COMMAND:
-		widgHide(psWScreen, IDRET_COMMAND);
+		setReticuleStats(RETBUT_COMMAND);
 		break;
 	case IDRET_BUILD:
-		widgHide(psWScreen, IDRET_BUILD);
+		setReticuleStats(RETBUT_BUILD);
 		break;
 	case IDRET_MANUFACTURE:
-		widgHide(psWScreen, IDRET_MANUFACTURE);
+		setReticuleStats(RETBUT_FACTORY);
 		break;
 	case IDRET_RESEARCH:
-		widgHide(psWScreen, IDRET_RESEARCH);
+		setReticuleStats(RETBUT_RESEARCH);
 		break;
 	case IDRET_INTEL_MAP:
-		widgHide(psWScreen, IDRET_INTEL_MAP);
+		setReticuleStats(RETBUT_INTELMAP);
 		break;
 	case IDRET_DESIGN:
-		widgHide(psWScreen, IDRET_DESIGN);
+		setReticuleStats(RETBUT_DESIGN);
 		break;
 	case IDRET_CANCEL:
-		widgHide(psWScreen, IDRET_CANCEL);
+		setReticuleStats(RETBUT_CANCEL);
 		break;
 	default:
 		ASSERT(false, "Invalid reticule Button ID");

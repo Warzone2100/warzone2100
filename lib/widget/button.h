@@ -63,6 +63,7 @@ public:
 	QString getString() const;
 	void setString(QString string);
 	void setTip(QString string);
+	void unlock();
 
 	void setImages(Images const &images);
 	void setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled = Image());

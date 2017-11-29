@@ -605,12 +605,10 @@ static bool levLoadSingleWRF(const char *name)
 	return true;
 }
 
-
-char *getLevelName()
+const char *getLevelName()
 {
-	return (currentLevelName);
+	return currentLevelName;
 }
-
 
 // load up the data for a level
 bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)

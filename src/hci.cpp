@@ -98,17 +98,6 @@ static bool ChatDialogUp = false;
 #define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
 
-enum  				  // Reticule button indecies.
-{
-	RETBUT_CANCEL,
-	RETBUT_FACTORY,
-	RETBUT_RESEARCH,
-	RETBUT_BUILD,
-	RETBUT_DESIGN,
-	RETBUT_INTELMAP,
-	RETBUT_COMMAND,
-};
-
 struct BUTSTATE
 {
 	UDWORD id;
@@ -366,8 +355,6 @@ static void processProximityButtons(UDWORD id);
 static DROID *intCheckForDroid(UDWORD droidType);
 static STRUCTURE *intCheckForStructure(UDWORD structType);
 
-static void intCheckReticuleButtons();
-
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
 
@@ -381,29 +368,43 @@ struct RETBUTSTATS
 	QString filenameDown;
 	QString tip;
 	QString func;
-	int flashing = 0;
+	bool flashing = false;
 	int flashTime = 0;
 	W_BUTTON *button = nullptr;
 	QScriptEngine *engine = nullptr;
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
 
+void setReticuleFlash(int ButId, bool flash)
+{
+	if (flash != retbutstats[ButId].flashing)
+	{
+		retbutstats[ButId].flashing = flash;
+		retbutstats[ButId].flashTime = 0;
+	}
+}
+
 void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown, QString func, QScriptEngine *engine)
 {
-	retbutstats[ButId].tip = std::move(tip);
-	retbutstats[ButId].filename = std::move(filename);
-	retbutstats[ButId].filenameDown = std::move(filenameDown);
+	retbutstats[ButId].tip = tip;
+	retbutstats[ButId].filename = filename;
+	retbutstats[ButId].filenameDown = filenameDown;
 	retbutstats[ButId].downTime = 0;
-	retbutstats[ButId].flashing = 0;
+	retbutstats[ButId].flashing = false;
 	retbutstats[ButId].flashTime = 0;
-	retbutstats[ButId].func = std::move(func);
+	retbutstats[ButId].func = func;
 	retbutstats[ButId].engine = engine;
 
 	if (!retbutstats[ButId].button) // not quite set up yet
 	{
 		return;
 	}
-	retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
+
+	if (!retbutstats[ButId].tip.isEmpty())
+	{
+		retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
+	}
+
 	if (retbutstats[ButId].filename.isEmpty())
 	{
 		retbutstats[ButId].button->setState(WBUT_DISABLE);
@@ -416,13 +417,11 @@ void setReticuleStats(int ButId, QString tip, QString filename, QString filename
 
 static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	int     x = xOffset + psWidget->x();
-	int     y = yOffset + psWidget->y();
-	bool	Hilight = false;
-	bool	Down = false;
-	UBYTE	DownTime = retbutstats[psWidget->UserData].downTime;
-	UBYTE	flashing = retbutstats[psWidget->UserData].flashing;
-	UBYTE	flashTime = retbutstats[psWidget->UserData].flashTime;
+	const int x = xOffset + psWidget->x();
+	const int y = yOffset + psWidget->y();
+	int DownTime = retbutstats[psWidget->UserData].downTime;
+	bool flashing = retbutstats[psWidget->UserData].flashing;
+	int flashTime = retbutstats[psWidget->UserData].flashTime;
 	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
 	W_BUTTON *psButton = (W_BUTTON *)psWidget;
 
@@ -432,8 +431,8 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 		return;
 	}
 
-	Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
-	Hilight = buttonIsHilite(psButton);
+	bool Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
+	bool Hilight = buttonIsHilite(psButton);
 
 	if (Down)
 	{
@@ -502,7 +501,7 @@ static void setReticuleBut(int ButId)
 	sButInit.style = WBUT_SECONDARY;
 	sButInit.UserData = ButId;
 	retbutstats[ButId].downTime = 0;
-	retbutstats[ButId].flashing = 0;
+	retbutstats[ButId].flashing = false;
 	retbutstats[ButId].flashTime = 0;
 	retbutstats[ButId].button = widgAddButton(psWScreen, &sButInit);
 	if (!retbutstats[ButId].button)
@@ -810,15 +809,12 @@ void intResetScreen(bool NoAnim)
 		NoAnim = true;
 	}
 
-	if (ReticuleUp)
+	for (auto& i : retbutstats)
 	{
-		/* Reset the reticule buttons */
-		widgSetButtonState(psWScreen, IDRET_COMMAND, 0);
-		widgSetButtonState(psWScreen, IDRET_BUILD, 0);
-		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, 0);
-		widgSetButtonState(psWScreen, IDRET_INTEL_MAP, 0);
-		widgSetButtonState(psWScreen, IDRET_RESEARCH, 0);
-		widgSetButtonState(psWScreen, IDRET_DESIGN, 0);
+		if (i.button && ReticuleUp)
+		{
+			i.button->unlock();
+		}
 	}
 
 	/* Remove whatever extra screen was displayed */
@@ -2394,11 +2390,6 @@ static void intStopStructPosition()
 /* Display the widgets for the in game interface */
 void intDisplayWidgets()
 {
-	if (ReticuleUp && !bInTutorial)
-	{
-		intCheckReticuleButtons();
-	}
-
 	/*draw the background for the design screen and the Intelligence screen*/
 	if (intMode == INT_DESIGN || intMode == INT_INTELMAP)
 	{
@@ -4356,7 +4347,7 @@ void flashReticuleButton(UDWORD buttonID)
 	WIDGET *psButton = widgGetFromID(psWScreen, buttonID);
 	if (psButton)
 	{
-		retbutstats[psButton->UserData].flashing = 1;
+		retbutstats[psButton->UserData].flashing = true;
 	}
 }
 
@@ -4367,7 +4358,7 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 	if (psButton)
 	{
 		retbutstats[psButton->UserData].flashTime = 0;
-		retbutstats[psButton->UserData].flashing = 0;
+		retbutstats[psButton->UserData].flashing = false;
 	}
 }
 
@@ -4553,94 +4544,6 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 	}
 
 	return num;
-}
-
-// Check that each reticule button has the structure or droid required for it and
-// enable/disable accordingly.
-//
-void intCheckReticuleButtons()
-{
-	STRUCTURE	*psStruct;
-	DROID	*psDroid;
-
-	ReticuleEnabled[RETBUT_CANCEL].Enabled = true;
-	ReticuleEnabled[RETBUT_FACTORY].Enabled = false;
-	ReticuleEnabled[RETBUT_RESEARCH].Enabled = false;
-	ReticuleEnabled[RETBUT_BUILD].Enabled = false;
-	ReticuleEnabled[RETBUT_DESIGN].Enabled = allowDesign;
-	ReticuleEnabled[RETBUT_INTELMAP].Enabled = true;
-	ReticuleEnabled[RETBUT_COMMAND].Enabled = false;
-
-	for (psStruct = interfaceStructList(); psStruct != nullptr; psStruct = psStruct->psNext)
-	{
-		if (psStruct->status == SS_BUILT)
-		{
-			switch (psStruct->pStructureType->type)
-			{
-			case REF_RESEARCH:
-				if (!missionLimboExpand())
-				{
-					ReticuleEnabled[RETBUT_RESEARCH].Enabled = true;
-				}
-				break;
-			case REF_FACTORY:
-			case REF_CYBORG_FACTORY:
-			case REF_VTOL_FACTORY:
-				if (!missionLimboExpand())
-				{
-					ReticuleEnabled[RETBUT_FACTORY].Enabled = true;
-				}
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
-	{
-		switch (psDroid->droidType)
-		{
-		case DROID_CONSTRUCT:
-		case DROID_CYBORG_CONSTRUCT:
-			ReticuleEnabled[RETBUT_BUILD].Enabled = true;
-			break;
-		case DROID_COMMAND:
-			ReticuleEnabled[RETBUT_COMMAND].Enabled = true;
-			break;
-		default:
-			break;
-		}
-	}
-
-	for (auto &i : ReticuleEnabled)
-	{
-		WIDGET *psWidget = widgGetFromID(psWScreen, i.id);
-
-		if (psWidget != nullptr)
-		{
-			if (psWidget->type != WIDG_LABEL)
-			{
-				if (i.Enabled)
-				{
-					widgSetButtonState(psWScreen, i.id, 0);
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, i.id, WBUT_DISABLE);
-				}
-
-				if (i.Hidden)
-				{
-					widgHide(psWScreen, i.id);
-				}
-				else
-				{
-					widgReveal(psWScreen, i.id);
-				}
-			}
-		}
-	}
 }
 
 /*Checks to see if there are any research topics to do and flashes the button -

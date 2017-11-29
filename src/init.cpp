@@ -1259,6 +1259,7 @@ bool stageThreeInitialise()
 		}
 	}
 
+	countUpdate();
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 	{
 		if (getDebugMappingStatus())

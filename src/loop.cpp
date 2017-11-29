@@ -419,7 +419,7 @@ static GAMECODE renderLoop()
 }
 
 // Carry out the various counting operations we perform each loop
-static void countUpdate(bool synch)
+void countUpdate(bool synch)
 {
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{

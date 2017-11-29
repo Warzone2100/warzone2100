@@ -40,6 +40,17 @@ struct W_SCREEN;
 struct iIMDShape;
 struct QScriptEngine;
 
+enum  				  // Reticule button indecies.
+{
+	RETBUT_CANCEL,
+	RETBUT_FACTORY,
+	RETBUT_RESEARCH,
+	RETBUT_BUILD,
+	RETBUT_DESIGN,
+	RETBUT_INTELMAP,
+	RETBUT_COMMAND,
+};
+
 #define BASE_COORDS_X	(640)
 #define BASE_COORDS_Y	(460)
 #define E_W (pie_GetVideoBufferWidth() - BASE_COORDS_X)
@@ -285,7 +296,8 @@ void intDisplayWidgets();
 bool intAddReticule();
 bool intAddPower();
 void intRemoveReticule();
-void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown, QString func, QScriptEngine *engine);
+void setReticuleStats(int ButId, QString tip = QString(), QString filename = QString(), QString filenameDown = QString(), QString func = QString(), QScriptEngine *engine = nullptr);
+void setReticuleFlash(int ButId, bool flash);
 
 /* Set the map view point to the world coordinates x,y */
 void intSetMapPos(UDWORD x, UDWORD y);

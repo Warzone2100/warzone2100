@@ -93,4 +93,6 @@ void incNumDroids(UDWORD player);
 void incNumCommandDroids(UDWORD player);
 void incNumConstructorDroids(UDWORD player);
 
+void countUpdate(bool synch = false);
+
 #endif // __INCLUDED_SRC_LOOP_H__

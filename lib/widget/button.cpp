@@ -76,6 +76,12 @@ void W_BUTTON::setFlash(bool enable)
 	}
 }
 
+void W_BUTTON::unlock()
+{
+	dirty = true;
+	state &= ~(WBUT_LOCK | WBUT_CLICKLOCK);
+}
+
 void W_BUTTON::setState(unsigned newState)
 {
 	ASSERT(!((newState & WBUT_LOCK) && (newState & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");

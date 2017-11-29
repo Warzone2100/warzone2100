@@ -102,7 +102,7 @@ bool levReleaseMissionData();
 //get the type of level currently being loaded of GTYPE type
 SDWORD getLevelLoadType();
 
-char *getLevelName();
+const char *getLevelName();
 
 void levTest();
 

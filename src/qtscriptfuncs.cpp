@@ -3173,6 +3173,16 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	return QScriptValue();
 }
 
+//-- \subsection{setReticuleFlash(id, flash)} Set reticule flash on or off. (3.2.3+ only)
+static QScriptValue js_setReticuleFlash(QScriptContext *context, QScriptEngine *engine)
+{
+	int button = context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, button >= 0 && button <= 6, "Invalid button %d", button);
+	bool flash = context->argument(1).toBoolean();
+	setReticuleFlash(button, flash);
+	return QScriptValue();
+}
+
 //-- \subsection{showInterface()} Show user interface. (3.2+ only)
 static QScriptValue js_showInterface(QScriptContext *context, QScriptEngine *engine)
 {
@@ -5575,6 +5585,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("removeTemplate", engine->newFunction(js_removeTemplate));
 	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("setReticuleButton", engine->newFunction(js_setReticuleButton));
+	engine->globalObject().setProperty("setReticuleFlash", engine->newFunction(js_setReticuleFlash));
 	engine->globalObject().setProperty("showInterface", engine->newFunction(js_showInterface));
 	engine->globalObject().setProperty("hideInterface", engine->newFunction(js_hideInterface));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_removeReticuleButton)); // deprecated!!
@@ -5699,6 +5710,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("CAMP_MSG", MSG_CAMPAIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MISS_MSG", MSG_MISSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RES_MSG", MSG_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("LDS_EXPAND_LIMBO", LDS_EXPAND_LIMBO, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	/// Place to store group sizes
 	//== \item[groupSizes] A sparse array of group sizes. If a group has never been used, the entry in this array will
