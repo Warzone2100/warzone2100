@@ -69,6 +69,7 @@
 #include "warcam.h"
 #include "projectile.h"
 #include "component.h"
+#include "seqdisp.h"
 
 #define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
@@ -2810,17 +2811,23 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-//-- \subsection{gameOverMessage(won)}
+//-- \subsection{gameOverMessage(won, showOutro)}
 //-- End game in victory or defeat.
 static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
 	const MESSAGE_TYPE msgType = MSG_MISSION;	// always
 	bool gameWon = context->argument(0).toBool();
+	bool showOutro = false;
+	if (context->argumentCount() > 1)
+	{
+		showOutro = context->argument(1).toBool();
+	}
 	VIEWDATA *psViewData;
 	if (gameWon)
 	{
-		psViewData = getViewData("WIN");
+		//Quick hack to stop assert when trying to play outro in campaign.
+		psViewData = !bMultiPlayer && showOutro ? getViewData("END") : getViewData("WIN");
 		addConsoleMessage(_("YOU ARE VICTORIOUS!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
@@ -2830,15 +2837,23 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	}
 	ASSERT(psViewData, "Viewdata not found");
 	MESSAGE *psMessage = addMessage(msgType, false, player);
-	if (psMessage)
+	if (!bMultiPlayer && psMessage)
 	{
-		//set the data
-		psMessage->pViewData = psViewData;
-		displayImmediateMessage(psMessage);
-		stopReticuleButtonFlash(IDRET_INTEL_MAP);
-
 		//we need to set this here so the VIDEO_QUIT callback is not called
 		setScriptWinLoseVideo(gameWon ? PLAY_WIN : PLAY_LOSE);
+		seq_ClearSeqList();
+		if (gameWon && showOutro)
+		{
+			seq_AddSeqToList("outro.ogg", nullptr, "outro.txa", false);
+			seq_StartNextFullScreenVideo();
+		}
+		else
+		{
+			//set the data
+			psMessage->pViewData = psViewData;
+			displayImmediateMessage(psMessage);
+			stopReticuleButtonFlash(IDRET_INTEL_MAP);
+		}
 	}
 	jsDebugMessageUpdate();
 	displayGameOver(gameWon);

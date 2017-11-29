@@ -91,11 +91,10 @@ function enableAllFactories()
 
 function enableReinforcements()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, undefined, {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
 		area: "RTLZ",
 		reinforcements: 60, // 1 min
-		annihilate: true,
-		victoryVideo: "MB3_4_OUTRO"
+		annihilate: true
 	});
 }
 
@@ -124,11 +123,10 @@ function eventStartLevel()
 	var tpos = getObject("transportEntryExit");
 	var lz = getObject("landingZone");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, undefined, {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
 		area: "RTLZ",
 		reinforcements: -1,
-		annihilate: true,
-		victoryVideo: "MB3_4_OUTRO"
+		annihilate: true
 	});
 
 	centreView(startpos.x, startpos.y);

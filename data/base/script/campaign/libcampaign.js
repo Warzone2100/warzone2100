@@ -2475,6 +2475,11 @@ function __camGameWon()
 	if (camDef(__camNextLevel))
 	{
 		camTrace(__camNextLevel);
+		if (__camNextLevel === "GAMMA_OUT")
+		{
+			gameOverMessage(true, true);
+			return;
+		}
 		camNextLevel(__camNextLevel);
 	}
 	else
