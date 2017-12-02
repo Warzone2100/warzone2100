@@ -2796,7 +2796,7 @@ static QScriptValue js_hackPlayIngameAudio(QScriptContext *context, QScriptEngin
 //-- \subsection{hackStopIngameAudio()} (3.2.4+ only)
 static QScriptValue js_hackStopIngameAudio(QScriptContext *context, QScriptEngine *)
 {
-	debug(LOG_SOUND, "Script wanted music to start");
+	debug(LOG_SOUND, "Script wanted music to stop");
 	cdAudio_Stop();
 	return QScriptValue();
 }
