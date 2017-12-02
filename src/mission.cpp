@@ -31,6 +31,7 @@
 #include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/screen.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
@@ -2244,7 +2245,11 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 	// add some funky beats
 	cdAudio_PlayTrack(SONG_FRONTEND);
 
-	pie_LoadBackDrop(SCREEN_MISSIONEND);
+	if (!screen_GetBackDrop())
+	{
+		pie_LoadBackDrop(SCREEN_MISSIONEND);
+	}
+	screen_RestartBackDrop();
 
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
