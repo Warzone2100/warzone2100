@@ -3555,6 +3555,8 @@ void intProcessDesign(UDWORD id)
 		case IDDES_STOREBUTTON:
 			sCurrDesign.stored = !sCurrDesign.stored;	// Invert the current status
 			saveTemplate();
+			storeTemplates();
+			updateStoreButton(sCurrDesign.stored);
 			break;
 		case IDDES_SYSTEMBUTTON:
 			// Add the correct component form
