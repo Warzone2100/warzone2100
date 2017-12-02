@@ -969,6 +969,10 @@ void jsShowDebug()
 //__ An event that is run before game is saved. There is usually no need to use this event.
 //__ \subsection{eventGameSaved()}
 //__ An event that is run after game is saved. There is usually no need to use this event.
+//__ \subsection{eventDeliveryPointMoving()}
+//__ An event that is run when the current player starts to move a delivery point.
+//__ \subsection{eventDeliveryPointMoved()}
+//__ An event that is run after the current player has moved a delivery point.
 //__ \subsection{eventTransporterLaunch(transport)}
 //__ An event that is run when the mission transporter has been ordered to fly off.
 //__ \subsection{eventTransporterArrived(transport)}
@@ -1014,6 +1018,12 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 		case TRIGGER_TRANSPORTER_ARRIVED:
 			callFunction(engine, "eventReinforcementsArrived", QScriptValueList()); // deprecated!
 			callFunction(engine, "eventTransporterArrived", args);
+			break;
+		case TRIGGER_DELIVERY_POINT_MOVING:
+			callFunction(engine, "eventDeliveryPointMoving", args);
+			break;
+		case TRIGGER_DELIVERY_POINT_MOVED:
+			callFunction(engine, "eventDeliveryPointMoved", args);
 			break;
 		case TRIGGER_OBJECT_RECYCLED:
 			callFunction(engine, "eventObjectRecycled", args);

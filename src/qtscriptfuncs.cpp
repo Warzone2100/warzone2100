@@ -26,6 +26,7 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/sound/audio.h"
+#include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
 #include "qtscriptfuncs.h"
 #include "lib/ivis_opengl/tex.h"
@@ -2385,6 +2386,14 @@ static QScriptValue js_removeObject(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(retval);
 }
 
+//-- \subsection{clearConsole()}
+//-- Clear the console. (3.2.4+ only)
+static QScriptValue js_clearConsole(QScriptContext *context, QScriptEngine *engine)
+{
+	flushConsoleMessages();
+	return QScriptValue();
+}
+
 //-- \subsection{console(strings...)}
 //-- Print text to the player console.
 // TODO, should cover scrShowConsoleText, scrAddConsoleText, scrTagConsoleText and scrConsole
@@ -2773,6 +2782,22 @@ static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *)
 	int x = context->argument(0).toInt32();
 	int y = context->argument(1).toInt32();
 	setViewPos(x, y, false);
+	return QScriptValue();
+}
+
+//-- \subsection{hackPlayIngameAudio()} (3.2.4+ only)
+static QScriptValue js_hackPlayIngameAudio(QScriptContext *context, QScriptEngine *)
+{
+	debug(LOG_SOUND, "Script wanted music to start");
+	cdAudio_PlayTrack(SONG_INGAME);
+	return QScriptValue();
+}
+
+//-- \subsection{hackStopIngameAudio()} (3.2.4+ only)
+static QScriptValue js_hackStopIngameAudio(QScriptContext *context, QScriptEngine *)
+{
+	debug(LOG_SOUND, "Script wanted music to start");
+	cdAudio_Stop();
 	return QScriptValue();
 }
 
@@ -5468,10 +5493,13 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("hackMarkTiles", engine->newFunction(js_hackMarkTiles));
 	engine->globalObject().setProperty("receiveAllEvents", engine->newFunction(js_receiveAllEvents));
 	engine->globalObject().setProperty("hackDoNotSave", engine->newFunction(js_hackDoNotSave));
+	engine->globalObject().setProperty("hackPlayIngameAudio", engine->newFunction(js_hackPlayIngameAudio));
+	engine->globalObject().setProperty("hackStopIngameAudio", engine->newFunction(js_hackStopIngameAudio));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
+	engine->globalObject().setProperty("clearConsole", engine->newFunction(js_clearConsole));
 	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
 	engine->globalObject().setProperty("enumStructOffWorld", engine->newFunction(js_enumStructOffWorld));

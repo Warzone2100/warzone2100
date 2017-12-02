@@ -1325,17 +1325,19 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DELIVPOINTMOVED);
 	}
+	triggerEvent(TRIGGER_DELIVERY_POINT_MOVING, psStruct);
 }
 
 // Finished repositioning a delivery point.
 //
 void finishDeliveryPosition()
 {
+	STRUCTURE *psStruct = nullptr;
 	FLAG_POSITION *psFlagPos;
 	if (flagStructId)
 	{
 		flagReposVarsValid = false;
-		STRUCTURE *psStruct = IdToStruct(flagStructId, selectedPlayer);
+		psStruct = IdToStruct(flagStructId, selectedPlayer);
 		if (StructIsFactory(psStruct) && psStruct->pFunctionality
 		    && psStruct->pFunctionality->factory.psAssemblyPoint)
 		{
@@ -1353,6 +1355,7 @@ void finishDeliveryPosition()
 			psFlagPos->selected = false;
 		}
 	}
+	triggerEvent(TRIGGER_DELIVERY_POINT_MOVED, psStruct);
 	flagReposFinished = true;
 }
 
