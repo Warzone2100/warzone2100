@@ -907,6 +907,7 @@ void intResetScreen(bool NoAnim)
 		{
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_QUIT);
 		}
+		triggerEvent(TRIGGER_DESIGN_QUIT);
 		break;
 	case INT_INTELMAP:
 		if (NoAnim)
@@ -2160,8 +2161,11 @@ static void intProcessStats(UDWORD id)
 					// call the tutorial callback if necessary
 					if (bInTutorial && objMode == IOBJ_BUILD)
 					{
-
 						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUILDGRID);
+					}
+					if (objMode == IOBJ_BUILD)
+					{
+						triggerEvent(TRIGGER_MENU_BUILD_SELECTED);
 					}
 
 					// Set the object stats
@@ -3807,6 +3811,21 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		default:
 			break;
 		}
+	}
+
+	switch (objMode)
+	{
+	case IOBJ_BUILD:
+		triggerEvent(TRIGGER_MENU_BUILD_UP);
+		break;
+	case IOBJ_RESEARCH:
+		triggerEvent(TRIGGER_MENU_RESEARCH_UP);
+		break;
+	case IOBJ_MANUFACTURE:
+		triggerEvent(TRIGGER_MENU_MANUFACTURE_UP);
+		break;
+	default:
+		break;
 	}
 
 	return true;

@@ -986,6 +986,26 @@ void jsShowDebug()
 //__ An event that is run when the mission transporter has no more reinforcements to deliver.
 //__ \subsection{eventTransporterLanded(transport)}
 //__ An event that is run when the mission transporter has landed with reinforcements.
+//__ \subsection{eventDesignBody()}
+//__An event that is run when current user picks a body in the design menu.
+//__ \subsection{eventDesignPropulsion()}
+//__An event that is run when current user picks a propulsion in the design menu.
+//__ \subsection{eventDesignWeapon()}
+//__An event that is run when current user picks a weapon in the design menu.
+//__ \subsection{eventDesignCommand()}
+//__An event that is run when current user picks a command turret in the design menu.
+//__ \subsection{eventDesignSystem()}
+//__An event that is run when current user picks a system other than command turret in the design menu.
+//__ \subsection{eventDesignQuit()}
+//__An event that is run when current user leaves the design menu.
+//__ \subsection{eventMenuBuildSelected()}
+//__An event that is run when current user picks something new in the build menu.
+//__ \subsection{eventMenuBuild()}
+//__An event that is run when current user opens the build menu.
+//__ \subsection{eventMenuResearch()}
+//__An event that is run when current user opens the research menu.
+//__ \subsection{eventMenuManufacture()}
+//__An event that is run when current user opens the manufacture menu.
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 {
 	// HACK: TRIGGER_VIDEO_QUIT is called before scripts for initial campaign video
@@ -1054,6 +1074,39 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 			break;
 		case TRIGGER_GAME_SAVED:
 			callFunction(engine, "eventGameSaved", QScriptValueList());
+			break;
+		case TRIGGER_DESIGN_BODY:
+			callFunction(engine, "eventDesignBody", QScriptValueList());
+			break;
+		case TRIGGER_DESIGN_PROPULSION:
+			callFunction(engine, "eventDesignPropulsion", QScriptValueList());
+			break;
+		case TRIGGER_DESIGN_WEAPON:
+			callFunction(engine, "eventDesignWeapon", QScriptValueList());
+			break;
+		case TRIGGER_DESIGN_COMMAND:
+			callFunction(engine, "eventDesignCommand", QScriptValueList());
+			break;
+		case TRIGGER_DESIGN_SYSTEM:
+			callFunction(engine, "eventDesignSystem", QScriptValueList());
+			break;
+		case TRIGGER_DESIGN_QUIT:
+			callFunction(engine, "eventDesignQuit", QScriptValueList());
+			break;
+		case TRIGGER_MENU_BUILD_SELECTED:
+			callFunction(engine, "eventMenuBuildSelected", args);
+			break;
+		case TRIGGER_MENU_BUILD_UP:
+			args += QScriptValue(true);
+			callFunction(engine, "eventMenuBuild", args);
+			break;
+		case TRIGGER_MENU_RESEARCH_UP:
+			args += QScriptValue(true);
+			callFunction(engine, "eventMenuResearch", args);
+			break;
+		case TRIGGER_MENU_MANUFACTURE_UP:
+			args += QScriptValue(true);
+			callFunction(engine, "eventMenuManufacture", args);
 			break;
 		}
 	}

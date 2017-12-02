@@ -3133,6 +3133,7 @@ void intProcessDesign(UDWORD id)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
 			}
+			triggerEvent(TRIGGER_DESIGN_WEAPON);
 			break;
 		//Added cases for 2nd/3rd turret
 		case IDES_TURRET_A:
@@ -3166,6 +3167,7 @@ void intProcessDesign(UDWORD id)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
 			}
+			triggerEvent(TRIGGER_DESIGN_WEAPON);
 			break;
 		case IDES_TURRET_B:
 			/* Calculate the index of the component */
@@ -3189,6 +3191,7 @@ void intProcessDesign(UDWORD id)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
 			}
+			triggerEvent(TRIGGER_DESIGN_WEAPON);
 			break;
 		case IDES_BODY:
 			/* reveal propulsion button if hidden */
@@ -3251,6 +3254,7 @@ void intProcessDesign(UDWORD id)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_BODY);
 			}
+			triggerEvent(TRIGGER_DESIGN_BODY);
 			break;
 		case IDES_PROPULSION:
 			/* Calculate the index of the component */
@@ -3288,6 +3292,7 @@ void intProcessDesign(UDWORD id)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_PROPULSION);
 			}
+			triggerEvent(TRIGGER_DESIGN_PROPULSION);
 			break;
 		default:
 			break;
@@ -3457,6 +3462,14 @@ void intProcessDesign(UDWORD id)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_SYSTEM);
 			}
+		}
+		if (apsExtraSysList[id - IDDES_EXTRASYSSTART]->compType == COMP_BRAIN)
+		{
+			triggerEvent(TRIGGER_DESIGN_COMMAND);
+		}
+		else
+		{
+			triggerEvent(TRIGGER_DESIGN_SYSTEM);
 		}
 	}
 	else
