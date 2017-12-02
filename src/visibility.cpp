@@ -565,6 +565,11 @@ bool hasSharedVision(unsigned viewer, unsigned ally)
 {
 	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
 
+	//Do not share vision with the human player if not in multiplayer.
+	if (!bMultiPlayer && (viewer == 0 || ally == 0))
+	{
+		return false;
+	}
 	return viewer == ally || (bMultiPlayer && alliancesSharedVision(game.alliance) && aiCheckAlliances(viewer, ally));
 }
 
