@@ -2083,7 +2083,7 @@ void IntTransportButton::display(int xOffset, int yOffset)
 		if (gfxId != UDWORD_MAX)
 		{
 			/* Render the rank graphic at the correct location */
-			iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 30);
+			iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 10);
 		}
 	}
 	doneDisplay();

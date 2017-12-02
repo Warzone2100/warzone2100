@@ -94,7 +94,7 @@ void swapMissionPointers();
 
 // Timer position defines
 #define		TIMER_X					(568 + E_W)
-#define		TIMER_Y					22
+#define		TIMER_Y					4
 
 // status of the mission result screens.
 extern bool MissionResUp;

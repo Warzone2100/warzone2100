@@ -351,7 +351,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	W_LABINIT sLabInit;
 	sLabInit.formID = IDTRANS_LAUNCH;
 	sLabInit.id = IDTRANS_CAPACITY;
-	sLabInit.x = (SWORD)(sButInit.x + 20);
+	sLabInit.x = (SWORD)(sButInit.x + 40);
 	sLabInit.y = 0;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
