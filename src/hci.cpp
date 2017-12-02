@@ -632,6 +632,11 @@ void interfaceShutDown()
 
 	//obviously!
 	ReticuleUp = false;
+
+	for (auto& i : retbutstats)
+	{
+		i = RETBUTSTATS();
+	}
 }
 
 static bool IntRefreshPending = false;
