@@ -1277,6 +1277,7 @@ INT_RETVAL intRunWidgets()
 			intAddDesign(false);
 			intMode = INT_DESIGN;
 			reticuleCallback(RETBUT_DESIGN);
+			triggerEvent(TRIGGER_MENU_DESIGN_UP);
 			break;
 
 		case IDRET_CANCEL:
@@ -2166,6 +2167,10 @@ static void intProcessStats(UDWORD id)
 					if (objMode == IOBJ_BUILD)
 					{
 						triggerEvent(TRIGGER_MENU_BUILD_SELECTED);
+					}
+					else if (objMode == IOBJ_RESEARCH)
+					{
+						triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
 					}
 
 					// Set the object stats

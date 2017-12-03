@@ -1096,6 +1096,9 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 		case TRIGGER_MENU_BUILD_SELECTED:
 			callFunction(engine, "eventMenuBuildSelected", args);
 			break;
+		case TRIGGER_MENU_RESEARCH_SELECTED:
+			callFunction(engine, "eventMenuResearchSelected", args);
+			break;
 		case TRIGGER_MENU_BUILD_UP:
 			args += QScriptValue(true);
 			callFunction(engine, "eventMenuBuild", args);
@@ -1103,6 +1106,10 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 		case TRIGGER_MENU_RESEARCH_UP:
 			args += QScriptValue(true);
 			callFunction(engine, "eventMenuResearch", args);
+			break;
+		case TRIGGER_MENU_DESIGN_UP:
+			args += QScriptValue(true);
+			callFunction(engine, "eventMenuDesign", args);
 			break;
 		case TRIGGER_MENU_MANUFACTURE_UP:
 			args += QScriptValue(true);
