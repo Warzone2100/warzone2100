@@ -2076,7 +2076,7 @@ void IntTransportButton::display(int xOffset, int yOffset)
 	displayIMD(Image(), ImdObject::Droid(psDroid), xOffset, yOffset);
 	displayIfHighlight(xOffset, yOffset);
 
-	if (psDroid && missionForReInforcements())
+	if (psDroid)
 	{
 		// Add the experience level for each droid
 		unsigned gfxId = getDroidRankGraphic(psDroid);
