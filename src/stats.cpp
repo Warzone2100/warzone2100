@@ -526,6 +526,10 @@ bool loadWeaponStats(const char *pFileName)
 		{
 			psStats->surfaceToAir |= SHOOT_IN_AIR;
 		}
+		if (flags.contains("NoFriendlyFire", Qt::CaseInsensitive))
+		{
+			psStats->flags.set(WEAPON_FLAG_NO_FRIENDLY_FIRE, true);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;

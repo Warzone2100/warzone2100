@@ -1172,6 +1172,11 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 				continue;  // Don't hit main target twice.
 			}
 
+			if (psObj->psSource && psObj->psSource->player == psCurr->player && psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE))
+			{
+				continue; // this weapon does not do friendly damage
+			}
+
 			bool bTargetInAir = false;
 			bool useSphere = false;
 			bool damageable = true;

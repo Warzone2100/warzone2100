@@ -28,6 +28,7 @@ struct iIMDShape;
 
 #include <vector>
 #include <algorithm>
+#include <bitset>
 
 /* The different types of droid */
 // NOTE, if you add to, or change this list then you'll need
@@ -101,6 +102,12 @@ enum COMPONENT_TYPE
 	COMP_CONSTRUCT,
 	COMP_WEAPON,
 	COMP_NUMCOMPONENTS,			/** The number of enumerators in this enum.	 */
+};
+
+enum WEAPON_FLAGS
+{
+	WEAPON_FLAG_NO_FRIENDLY_FIRE,
+	WEAPON_FLAG_COUNT
 };
 
 /**
@@ -410,6 +417,8 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	short			vtolAttackRuns;			///< number of attack runs a VTOL droid can	do with this weapon
 	bool			penetrate;				///< flag to indicate whether pentrate droid or not
 	int			distanceExtensionFactor;	///< max extra distance a projectile can travel if misses target
+
+	std::bitset<WEAPON_FLAG_COUNT> flags;
 
 	/* Graphics control stats */
 	UDWORD			radiusLife;				///< How long a blast radius is visible
