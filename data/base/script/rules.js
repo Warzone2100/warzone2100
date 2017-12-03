@@ -8,9 +8,20 @@ var allowDesign = false;
 
 function setMainReticule()
 {
+	var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
+	var offRes = enumStructOffWorld(selectedPlayer, "A0ResearchFacility");
+	var fCount = 0;
+	var facs = ["A0LightFactory", "A0CyborgFactory", "A0VTolFactory1"];
+
+	for (var i = 0, l = facs.length; i < l; ++i)
+	{
+		var f = facs[i];
+		var offWorldCount = enumStructOffWorld(selectedPlayer, f);
+		fCount = fCount + countStruct(f) + (offWorldCount != null ? offWorldCount.length : 0);
+	}
+
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	if (countStruct("A0LightFactory") + countStruct("A0CyborgFactory") + countStruct("A0VTolFactory1") > 0
-	    && levelType != LDS_EXPAND_LIMBO)
+	if (fCount > 0 && levelType != LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 	}
@@ -18,7 +29,7 @@ function setMainReticule()
 	{
 		setReticuleButton(1, _("Manufacture - build factory first"), "", "");
 	}
-	if (countStruct("A0ResearchFacility") > 0 && levelType != LDS_EXPAND_LIMBO)
+	if (countStruct("A0ResearchFacility") + (offRes != null ? offRes.length : 0) > 0 && levelType != LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	}
@@ -34,7 +45,7 @@ function setMainReticule()
 	{
 		setReticuleButton(3, _("Build - manufacture constructor droids first"), "", "");
 	}
-	if (allowDesign == true)
+	if (allowDesign == true || (offHQ != null ? offHQ.length > 0 : false))
 	{
 		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
 	}
