@@ -2245,11 +2245,14 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 	// add some funky beats
 	cdAudio_PlayTrack(SONG_FRONTEND);
 
-	if (!screen_GetBackDrop())
+	if (!bMultiPlayer)
 	{
-		pie_LoadBackDrop(SCREEN_MISSIONEND);
+		if (!screen_GetBackDrop())
+		{
+			pie_LoadBackDrop(SCREEN_MISSIONEND);
+		}
+		screen_RestartBackDrop();
 	}
-	screen_RestartBackDrop();
 
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
