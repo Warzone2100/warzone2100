@@ -73,7 +73,6 @@ data/base/script/text/reinforcement.slo
 data/base/script/text/resetid.slo
 data/base/script/text/setdisk.slo
 data/base/script/text/tech.slo
-data/base/script/text/tutorial3.slo
 data/base/script/text/vtols2.slo
 data/base/script/text/vtols.slo
 data/base/script/tutorial.js

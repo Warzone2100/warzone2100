@@ -4083,7 +4083,7 @@ void runTemplateShadowStats(UDWORD id)
 /*sets which states need to be paused when the design screen is up*/
 static void setDesignPauseState()
 {
-	if (!bMultiPlayer)
+	if (!bMultiPlayer && !bInTutorial)
 	{
 		//need to clear mission widgets from being shown on design screen
 		clearMissionWidgets();
@@ -4097,7 +4097,7 @@ static void setDesignPauseState()
 /*resets the pause states */
 static void resetDesignPauseState()
 {
-	if (!bMultiPlayer)
+	if (!bMultiPlayer && !bInTutorial)
 	{
 		//put any widgets back on for the missions
 		resetMissionWidgets();

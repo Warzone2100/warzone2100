@@ -9,12 +9,10 @@ file		SMSG		"proxtut.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-file		SCRIPT		"tutorial3.slo"
 file		SCRIPT		"cam3daynight.slo"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "tutorial3.vlo"
 file            SCRIPTVAL       "cam3day.vlo"
 
 /* Directory for javascript files*/
