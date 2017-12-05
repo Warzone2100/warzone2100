@@ -40,28 +40,17 @@
 Intelligence Map */
 void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY)
 {
-	UDWORD   angle = 0;
-
 	BASE_STATS      *psResGraphic;
-	UDWORD          compID, IMDType;
-	Vector3i Rotation, Position;
-	UDWORD          basePlateSize, Radius;
+	UDWORD          IMDType;
 	SDWORD          scale = 0;
 
 	pie_SetGeometricOffset(OriginX + 10, OriginY + 10);
 
 	// Rotate round
 	// full rotation once every 2 seconds..
-	angle = (realTime % ROTATE_TIME) * 360 / ROTATE_TIME;
-
-	Position.x = 0;
-	Position.y = 0;
-	Position.z = BUTTON_DEPTH;
-
-	// Rotate round
-	Rotation.x = -30;
-	Rotation.y = angle;
-	Rotation.z = 0;
+	const int angle = (realTime % ROTATE_TIME) * 360 / ROTATE_TIME;
+	Vector3i Position = Vector3i( 0, 0, BUTTON_DEPTH );
+	Vector3i Rotation = Vector3i( -30, angle, 0 );
 
 	//draw the IMD for the research
 	if (psResearch->psStat)
@@ -73,7 +62,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 			IMDType = IMDTYPE_STRUCTURESTAT;
 			psResGraphic = psResearch->psStat;
 			//set up the scale
-			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS *)psResearch->psStat);
+			unsigned basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS *)psResearch->psStat);
 			if (basePlateSize == 1)
 			{
 				scale = RESEARCH_COMPONENT_SCALE / 2;
@@ -97,7 +86,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 		}
 		else
 		{
-			compID = StatIsComponent(psResearch->psStat);
+			unsigned compID = StatIsComponent(psResearch->psStat);
 			if (compID != COMP_NUMCOMPONENTS)
 			{
 				//this defines how the button is drawn
@@ -135,7 +124,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	//scale the research according to size of IMD
 	if (IMDType == IMDTYPE_RESEARCH)
 	{
-		Radius = getResearchRadius((BASE_STATS *)psResGraphic);
+		unsigned Radius = getResearchRadius((BASE_STATS *)psResGraphic);
 		if (Radius <= 100)
 		{
 			scale = RESEARCH_COMPONENT_SCALE / 2;

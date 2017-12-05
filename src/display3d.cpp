@@ -117,7 +117,6 @@ static void	calcAverageTerrainHeight(iView *player);
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
-static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors & crash handler testing.
 
@@ -483,21 +482,17 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 /// Show all droid movement parts by displaying an explosion at every step
 static void showDroidPaths()
 {
-	DROID *psDroid;
-
 	if ((graphicsTime / 250 % 2) != 0)
 	{
 		return;
 	}
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
-			int	len = psDroid->sMove.numPoints;
-
-			int i = std::max(psDroid->sMove.pathIndex - 1, 0);
-			for (; i < len; i++)
+			const int len = psDroid->sMove.numPoints;
+			for (int i = std::max(psDroid->sMove.pathIndex - 1, 0); i < len; i++)
 			{
 				Vector3i pos;
 
@@ -511,21 +506,6 @@ static void showDroidPaths()
 			}
 		}
 	}
-}
-/// Renders the Network Issue form
-static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	int x0 = xOffset + psWidget->x();
-	int y0 = yOffset + psWidget->y();
-	int x1 = x0 + psWidget->width();
-	int y1 = y0 + psWidget->height();
-
-	// Don't draw anything, a rectangle behind the icon just looks strange, if you notice it.
-	//RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-	(void)x0;
-	(void)y0;
-	(void)x1;
-	(void)y1;
 }
 
 /// Displays an image for the Network Issue button
@@ -550,18 +530,17 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	if (NETcheckPlayerConnectionStatus(status, NET_ALL_PLAYERS))
 	{
-		unsigned width, height;
-		unsigned n, c = 0;
+		unsigned c = 0;
 		char players[MAX_PLAYERS + 1];
 		PlayerMask playerMaskMapped = 0;
-		for (n = 0; n < MAX_PLAYERS; ++n)
+		for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 		{
 			if (NETcheckPlayerConnectionStatus(status, n))
 			{
 				playerMaskMapped |= 1 << NetPlay.players[n].position;
 			}
 		}
-		for (n = 0; n < MAX_PLAYERS; ++n)
+		for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 		{
 			if ((playerMaskMapped & 1 << n) != 0)
 			{
@@ -570,10 +549,8 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 			}
 		}
 		players[c] = '\0';
-
-		width = iV_GetTextWidth(players, font_regular) + 10;
-		height = iV_GetTextHeight(players, font_regular) + 10;
-
+		const unsigned width = iV_GetTextWidth(players, font_regular) + 10;
+		const unsigned height = iV_GetTextHeight(players, font_regular) + 10;
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		iV_DrawText(players, x - width, y + height, font_regular);
 	}
@@ -588,9 +565,8 @@ static void setupConnectionStatusForm()
 	const int separation = 3;
 	unsigned statusMask = 0;
 	unsigned total = 0;
-	unsigned i;
 
-	for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
+	for (unsigned i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
 	{
 		if (NETcheckPlayerConnectionStatus((CONNECTION_STATUS)i, NET_ALL_PLAYERS))
 		{
@@ -602,7 +578,7 @@ static void setupConnectionStatusForm()
 	if (prevStatusMask != 0 && statusMask != prevStatusMask)
 	{
 		// Remove the icons.
-		for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
+		for (unsigned i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
 		{
 			if ((statusMask & 1 << i) != 0)
 			{
@@ -626,14 +602,13 @@ static void setupConnectionStatusForm()
 		sFormInit.y = 80;
 		sFormInit.width = 36;
 		sFormInit.height = (24 + separation) * total - separation;
-		sFormInit.pDisplay = NetworkDisplayPlainForm;  // NetworkDisplayPlainForm used to do something, but it looks ugly.
 		if (!widgAddForm(psWScreen, &sFormInit))
 		{
 			//return false;
 		}
 
 		/* Now add the buttons */
-		for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
+		for (unsigned i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
 		{
 			if ((statusMask & 1 << i) == 0)
 			{
@@ -894,15 +869,15 @@ void	setProximityDraw(bool val)
 /// Calculate the average terrain height for the area directly below the player
 static void calcAverageTerrainHeight(iView *player)
 {
-	int numTilesAveraged = 0, i, j;
+	int numTilesAveraged = 0;
 
 	/*	We track the height here - so make sure we get the average heights
 		of the tiles directly underneath us
 	*/
 	averageCentreTerrainHeight = 0;
-	for (i = -4; i <= 4; i++)
+	for (int i = -4; i <= 4; i++)
 	{
-		for (j = -4; j <= 4; j++)
+		for (int j = -4; j <= 4; j++)
 		{
 			if (tileOnMap(playerXTile + j, playerZTile + i))
 			{
@@ -935,10 +910,6 @@ static void calcAverageTerrainHeight(iView *player)
 /// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player)
 {
-	int i, j;
-	int idx, jdx;
-	Vector3f theSun;
-
 	// draw terrain
 
 	/* ---------------------------------------------------------------- */
@@ -982,16 +953,14 @@ static void drawTiles(iView *player)
 	//actualCameraPosition -= Vector3i(-player->p.x, 0, player->p.z);
 
 	// this also determines the length of the shadows
-	theSun = getTheSun();
-	auto suntmp = (viewMatrix * glm::vec4(theSun, 0.f));
-	theSun = suntmp.xyz;
+	const Vector3f theSun = (viewMatrix * glm::vec4(getTheSun(), 0.f)).xyz;
 	pie_BeginLighting(theSun);
 
 	// update the fog of war... FIXME: Remove this
-	for (i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
+	for (int i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
 	{
 		/* Go through the x's */
-		for (j = -visibleTiles.x / 2, jdx = 0; j <= visibleTiles.x / 2; j++, ++jdx)
+		for (int j = -visibleTiles.x / 2, jdx = 0; j <= visibleTiles.x / 2; j++, ++jdx)
 		{
 			Vector2i screen(0, 0);
 			Position pos;
@@ -1087,7 +1056,7 @@ static void drawTiles(iView *player)
 bool init3DView()
 {
 	/* Arbitrary choice - from direct read! */
-	Vector3f theSun(225.0f, -600.0f, 450.0f);
+	const Vector3f theSun(225.0f, -600.0f, 450.0f);
 
 	setTheSun(theSun);
 
@@ -1187,10 +1156,7 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const gl
 /// Decide whether to render a projectile, and make sure it will be drawn
 static void display3DProjectiles(const glm::mat4 &viewMatrix)
 {
-	PROJECTILE		*psObj;
-
-	psObj = proj_GetFirst();
-
+	PROJECTILE *psObj = proj_GetFirst();
 	while (psObj != nullptr)
 	{
 		// If source or destination is visible, and projectile has been spawned and has not impacted.
@@ -1594,18 +1560,15 @@ static void displayFeatures(const glm::mat4 &viewMatrix)
 /// Draw the Proximity messages for the *SELECTED PLAYER ONLY*
 static void displayProximityMsgs(const glm::mat4& viewMatrix)
 {
-	PROXIMITY_DISPLAY	*psProxDisp;
-	VIEW_PROXIMITY		*pViewProximity;
-	UDWORD				x, y;
-
 	/* Go through all the proximity Displays*/
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
+	for (PROXIMITY_DISPLAY *psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
 	{
 		if (!(psProxDisp->psMessage->read))
 		{
+			unsigned x, y;
 			if (psProxDisp->type == POS_PROXDATA)
 			{
-				pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
+				VIEW_PROXIMITY *pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 				x = pViewProximity->x;
 				y = pViewProximity->y;
 			}
@@ -2626,10 +2589,7 @@ static void	drawStructureSelections()
 
 static UDWORD	getTargettingGfx()
 {
-	UDWORD	index;
-
-	index = getModularScaledRealTime(1000, 10);
-
+	const unsigned index = getModularScaledRealTime(1000, 10);
 	switch (index)
 	{
 	case	0:
@@ -2653,10 +2613,7 @@ static UDWORD	getTargettingGfx()
 /// Is the droid, its commander or its sensor tower selected?
 bool	eitherSelected(DROID *psDroid)
 {
-	bool			retVal;
-	BASE_OBJECT		*psObj;
-
-	retVal = false;
+	bool retVal = false;
 	if (psDroid->selected)
 	{
 		retVal = true;
@@ -2673,9 +2630,8 @@ bool	eitherSelected(DROID *psDroid)
 		}
 	}
 
-	psObj = orderStateObj(psDroid, DORDER_FIRESUPPORT);
-	if (psObj
-	    && psObj->selected)
+	BASE_OBJECT *psObj = orderStateObj(psDroid, DORDER_FIRESUPPORT);
+	if (psObj && psObj->selected)
 	{
 		retVal = true;
 	}
@@ -2693,7 +2649,7 @@ static void	drawDroidSelections()
 	BASE_OBJECT		*psClickedOn;
 	bool			bMouseOverDroid = false;
 	bool			bMouseOverOwnDroid = false;
-	UDWORD			i, index;
+	UDWORD			index;
 	float			mulH;
 
 	psClickedOn = mouseTarget();
@@ -2778,7 +2734,7 @@ static void	drawDroidSelections()
 				drawDroidGroupNumber(psDroid);
 			}
 
-			for (i = 0; i < psDroid->numWeaps; i++)
+			for (int i = 0; i < psDroid->numWeaps; i++)
 			{
 				drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
 			}
@@ -2869,7 +2825,7 @@ static void	drawDroidSelections()
 		}
 	}
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go thru' all the droidss */
 		for (const DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
@@ -3099,16 +3055,14 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 static void locateMouse()
 {
 	const Vector2i pt(mouseX(), mouseY());
-	int i, j;
-	unsigned idx, jdx;
 	int nearestZ = INT_MAX;
 
 	// Intentionally not the same range as in drawTiles()
-	for (i = -visibleTiles.y / 2, idx = 0; i < visibleTiles.y / 2; i++, ++idx)
+	for (int i = -visibleTiles.y / 2, idx = 0; i < visibleTiles.y / 2; i++, ++idx)
 	{
-		for (j = -visibleTiles.x / 2, jdx = 0; j < visibleTiles.x / 2; j++, ++jdx)
+		for (int j = -visibleTiles.x / 2, jdx = 0; j < visibleTiles.x / 2; j++, ++jdx)
 		{
-			int tileZ = tileScreenInfo[idx][jdx].z;
+			const int tileZ = tileScreenInfo[idx][jdx].z;
 
 			if (tileZ <= nearestZ)
 			{
@@ -3262,23 +3216,17 @@ static void processSensorTarget()
 /// Draw a graphical effect after selecting a destination
 static void processDestinationTarget()
 {
-	SWORD x, y;
-	SWORD offset;
-	SWORD x0, y0, x1, y1;
-
 	if (bDestTargetting)
 	{
 		if ((realTime - lastDestAssignation) < DEST_TARGET_TIME)
 		{
-			x = (SWORD)destTargetX;
-			y = (SWORD)destTargetY;
-
-			offset = (SWORD)(((DEST_TARGET_TIME) - (realTime - lastDestAssignation)) / 2);
-
-			x0 = (SWORD)(x - offset);
-			y0 = (SWORD)(y - offset);
-			x1 = (SWORD)(x + offset);
-			y1 = (SWORD)(y + offset);
+			const int x = destTargetX;
+			const int y = destTargetY;
+			const int offset = ((DEST_TARGET_TIME) - (realTime - lastDestAssignation)) / 2;
+			const int x0 = x - offset;
+			const int y0 = y - offset;
+			const int x1 = x + offset;
+			const int y1 = y + offset;
 
 			pie_BoxFill(x0, y0, x0 + 2, y0 + 2, WZCOL_WHITE);
 			pie_BoxFill(x1 - 2, y0 - 2, x1, y0, WZCOL_WHITE);
@@ -3318,15 +3266,9 @@ UDWORD	getRubbleTileNum()
 static void structureEffectsPlayer(UDWORD player)
 {
 	SDWORD	radius;
-	STRUCTURE	*psStructure;
 	SDWORD	xDif, yDif;
 	Vector3i	pos;
-	UDWORD	numConnected;
-	DROID	*psDroid;
 	UDWORD	gameDiv;
-	UDWORD	i;
-	BASE_OBJECT			*psChosenObj = nullptr;
-	UWORD	bFXSize;
 
 	const int effectsPerSecond = 12;  // Effects per second. Will add effects up to once time per frame, so won't add as many effects if the framerate is low, but will be consistent, otherwise.
 	unsigned effectTime = graphicsTime / (GAME_TICKS_PER_SEC / effectsPerSecond) * (GAME_TICKS_PER_SEC / effectsPerSecond);
@@ -3335,7 +3277,7 @@ static void structureEffectsPlayer(UDWORD player)
 		return;  // Don't add effects this frame.
 	}
 
-	for (psStructure = apsStructLists[player]; psStructure; psStructure = psStructure->psNext)
+	for (STRUCTURE *psStructure = apsStructLists[player]; psStructure; psStructure = psStructure->psNext)
 	{
 		if (psStructure->status != SS_BUILT)
 		{
@@ -3344,8 +3286,8 @@ static void structureEffectsPlayer(UDWORD player)
 		if (psStructure->pStructureType->type == REF_POWER_GEN && psStructure->visible[selectedPlayer])
 		{
 			POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
-			numConnected = 0;
-			for (i = 0; i < NUM_POWER_MODULES; i++)
+			unsigned numConnected = 0;
+			for (int i = 0; i < NUM_POWER_MODULES; i++)
 			{
 				if (psPowerGen->apResExtractors[i])
 				{
@@ -3358,7 +3300,6 @@ static void structureEffectsPlayer(UDWORD player)
 				//keep looking for another!
 				continue;
 			}
-
 			else switch (numConnected)
 				{
 				case 1:
@@ -3373,7 +3314,7 @@ static void structureEffectsPlayer(UDWORD player)
 				}
 
 			/* New addition - it shows how many are connected... */
-			for (i = 0 ; i < numConnected; i++)
+			for (int i = 0 ; i < numConnected; i++)
 			{
 				radius = 32 - (i * 2);	// around the spire
 				xDif = iSinSR(effectTime, gameDiv, radius);
@@ -3397,11 +3338,11 @@ static void structureEffectsPlayer(UDWORD player)
 		         && psStructure->visible[selectedPlayer])
 		{
 			REARM_PAD *psReArmPad = &psStructure->pFunctionality->rearmPad;
-			psChosenObj = psReArmPad->psObj;
+			BASE_OBJECT *psChosenObj = psReArmPad->psObj;
 			if (psChosenObj != nullptr && (((DROID *)psChosenObj)->visible[selectedPlayer]))
 			{
-				bFXSize = 0;
-				psDroid = (DROID *) psChosenObj;
+				unsigned bFXSize = 0;
+				DROID *psDroid = (DROID *) psChosenObj;
 				if (!psDroid->died && psDroid->action == DACTION_WAITDURINGREARM)
 				{
 					bFXSize = 30;
@@ -3428,9 +3369,7 @@ static void structureEffectsPlayer(UDWORD player)
 /// Draw the effects for all players and buildings
 static void structureEffects()
 {
-	UDWORD	i;
-
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (apsStructLists[i])
 		{
@@ -3467,9 +3406,8 @@ static void	showDroidSensorRanges()
 
 static void showEffectCircle(Position centre, int32_t radius, uint32_t auxVar, EFFECT_GROUP group, EFFECT_TYPE type)
 {
-	int32_t circumference = radius * 2 * 355 / 113 / TILE_UNITS; // 2πr in tiles.
-	int32_t i;
-	for (i = 0; i < circumference; ++i)
+	const int32_t circumference = radius * 2 * 355 / 113 / TILE_UNITS; // 2πr in tiles.
+	for (int i = 0; i < circumference; ++i)
 	{
 		Vector3i pos;
 		pos.x = centre.x - iSinSR(i, circumference, radius);
@@ -3489,8 +3427,6 @@ static void showEffectCircle(Position centre, int32_t radius, uint32_t auxVar, E
 // Note, it only does it for the first weapon slot!
 static void showWeaponRange(BASE_OBJECT *psObj)
 {
-	uint32_t weaponRange;
-	uint32_t minRange;
 	WEAPON_STATS *psStats;
 
 	if (psObj->type == OBJ_DROID)
@@ -3509,8 +3445,8 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 		}
 		psStats = psStruct->pStructureType->psWeapStat[0];
 	}
-	weaponRange = psStats->upgrade[psObj->player].maxRange;
-	minRange = psStats->upgrade[psObj->player].minRange;
+	const unsigned weaponRange = psStats->upgrade[psObj->player].maxRange;
+	const unsigned minRange = psStats->upgrade[psObj->player].minRange;
 	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 	if (minRange > 0)
 	{
@@ -3551,9 +3487,7 @@ void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 /// Get the graphic ID for a droid rank
 UDWORD  getDroidRankGraphic(DROID *psDroid)
 {
-	UDWORD gfxId;
-	/* Not found yet */
-	gfxId = UDWORD_MAX;
+	UDWORD gfxId = UDWORD_MAX;
 
 	/* Establish the numerical value of the droid's rank */
 	switch (getDroidLevel(psDroid))
@@ -3625,12 +3559,9 @@ static void	drawDroidSensorLock(DROID *psDroid)
 /// Draw the construction lines for all construction droids
 static	void	doConstructionLines(const glm::mat4 &viewMatrix)
 {
-	DROID	*psDroid;
-	UDWORD	i;
-
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			if (clipXY(psDroid->pos.x, psDroid->pos.y)
 			    && psDroid->visible[selectedPlayer] == UBYTE_MAX

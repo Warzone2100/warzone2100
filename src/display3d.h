@@ -55,7 +55,6 @@ struct iView
 extern bool showFPS;
 extern bool showSAMPLES;
 extern bool showORDERS;
-extern bool showLevelName;
 
 float getViewDistance();
 void setViewDistance(float dist);
