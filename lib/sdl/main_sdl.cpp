@@ -1283,16 +1283,24 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 				exit(EXIT_FAILURE);
 			}
 
-			debug(LOG_WZ, "Monitor[%d]%dx%d %d %s", i, displaymode.w, displaymode.h, displaymode.refresh_rate, SDL_GetPixelFormatName(displaymode.format));
-			if (displaymode.refresh_rate < 59)
+			debug(LOG_WZ, "Monitor [%d] %dx%d %d %s", i, displaymode.w, displaymode.h, displaymode.refresh_rate, SDL_GetPixelFormatName(displaymode.format));
+			if (displaymode.w < 640 || displaymode.h < 480)
 			{
-				//continue;    // only store 60Hz & higher modes, some display report 59 on linux
+				debug(LOG_WZ, "Monitor mode resolution < 640x480 -- discarding entry");
 			}
-			screenlist.height = displaymode.h;
-			screenlist.width = displaymode.w;
-			screenlist.refresh_rate = displaymode.refresh_rate;
-			screenlist.screen = i;		// which monitor this belongs to
-			displaylist.push_back(screenlist);
+			else if (displaymode.refresh_rate < 59)
+			{
+				debug(LOG_WZ, "Monitor mode refresh rate < 59 -- discarding entry");
+				// only store 60Hz & higher modes, some display report 59 on Linux
+			}
+			else
+			{
+				screenlist.width = displaymode.w;
+				screenlist.height = displaymode.h;
+				screenlist.refresh_rate = displaymode.refresh_rate;
+				screenlist.screen = i;		// which monitor this belongs to
+				displaylist.push_back(screenlist);
+			}
 		}
 	}
 
@@ -1306,7 +1314,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 			SDL_Quit();
 			exit(EXIT_FAILURE);
 		}
-		debug(LOG_WZ, "Monitor[%d]%dx%d %d", i, current.w, current.h, current.refresh_rate);
+		debug(LOG_WZ, "Monitor [%d] %dx%d %d", i, current.w, current.h, current.refresh_rate);
 	}
 
 	if (width == 0 || height == 0)
