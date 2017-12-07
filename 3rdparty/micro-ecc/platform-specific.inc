@@ -42,6 +42,9 @@ static int default_RNG(uint8_t *dest, unsigned size) {
 
 static int default_RNG(uint8_t *dest, unsigned size) {
     int fd = open("/dev/urandom", O_RDONLY | O_CLOEXEC);
+    char *ptr = (char *)dest;
+    size_t left = size;
+
     if (fd == -1) {
         fd = open("/dev/random", O_RDONLY | O_CLOEXEC);
         if (fd == -1) {
@@ -49,8 +52,6 @@ static int default_RNG(uint8_t *dest, unsigned size) {
         }
     }
     
-    char *ptr = (char *)dest;
-    size_t left = size;
     while (left > 0) {
         ssize_t bytes_read = read(fd, ptr, left);
         if (bytes_read <= 0) { // read failed
