@@ -3793,7 +3793,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 }
 
 // -----------------------------------------------------------------------------------------
-// Load main game data from JSON. Only implement stuff here that we actually use instead of 
+// Load main game data from JSON. Only implement stuff here that we actually use instead of
 // the binary blobbery.
 static bool loadMainFile(const std::string &fileName)
 {
@@ -4559,8 +4559,11 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 
 		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
-		pos.x = clip(pos.x, world_coord(1), world_coord(mapWidth - 1));
-		pos.y = clip(pos.y, world_coord(1), world_coord(mapHeight - 1));
+		if (!onMission)
+		{
+			pos.x = clip(pos.x, world_coord(1), world_coord(mapWidth - 1));
+			pos.y = clip(pos.y, world_coord(1), world_coord(mapHeight - 1));
+		}
 
 		/* Create the Droid */
 		turnOffMultiMsg(true);
