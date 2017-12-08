@@ -246,7 +246,7 @@ void runLimitScreen()
 // ////////////////////////////////////////////////////////////////////////////
 void createLimitSet()
 {
-	UDWORD			i, numchanges = 0, bufSize, idx = 0;
+	UDWORD			numchanges = 0, bufSize, idx = 0;
 	MULTISTRUCTLIMITS	*pEntry;
 
 	debug(LOG_NET, "LimitSet created");
@@ -260,7 +260,7 @@ void createLimitSet()
 	}
 
 	// Count the number of changes
-	for (i = 0; i < numStructureStats; i++)
+	for (unsigned i = 0; i < numStructureStats; i++)
 	{
 		// If the limit differs from the default
 		if (asStructLimits[0][i].limit != LOTS_OF)
@@ -275,7 +275,7 @@ void createLimitSet()
 	memset(pEntry, 255, bufSize);
 
 	// Prepare chunk
-	for (i = 0; i < numStructureStats; i++)
+	for (unsigned i = 0; i < numStructureStats; i++)
 	{
 		if (asStructLimits[0][i].limit != LOTS_OF)
 		{
@@ -298,14 +298,13 @@ void createLimitSet()
 // ////////////////////////////////////////////////////////////////////////////
 void applyLimitSet()
 {
-	MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
-
 	if (ingame.numStructureLimits == 0)
 	{
 		return;
 	}
 
 	// Get the limits and decode
+	const MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
 	for (int i = 0; i < ingame.numStructureLimits; ++i)
 	{
 		int id = pEntry[i].id;

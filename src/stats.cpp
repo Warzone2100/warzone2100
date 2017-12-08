@@ -189,22 +189,6 @@ bool statsShutDown()
 	return true;
 }
 
-/* Return the number of newlines in a file buffer */
-UDWORD numCR(const char *pFileBuffer, UDWORD fileSize)
-{
-	UDWORD  lines = 0;
-
-	while (fileSize-- > 0)
-	{
-		if (*pFileBuffer++ == '\n')
-		{
-			lines++;
-		}
-	}
-
-	return lines;
-}
-
 
 /*******************************************************************************
 *		Allocate stats functions

@@ -433,6 +433,22 @@ bool initMessage()
 	return true;
 }
 
+/* Return the number of newlines in a file buffer */
+static unsigned numCR(const char *pFileBuffer, unsigned fileSize)
+{
+	unsigned lines = 0;
+
+	while (fileSize-- > 0)
+	{
+		if (*pFileBuffer++ == '\n')
+		{
+			lines++;
+		}
+	}
+
+	return lines;
+}
+
 /*load the view data for the messages from the file */
 const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {

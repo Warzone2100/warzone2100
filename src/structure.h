@@ -88,7 +88,7 @@ bool loadStructureStrengthModifiers(const char *pFileName);
 bool structureStatsShutDown();
 
 int requestOpenGate(STRUCTURE *psStructure);
-int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minimumStub);  ///< Returns how far open the gate is, or 0 if the structure is not a gate.
+int gateCurrentOpenHeight(const STRUCTURE *psStructure, uint32_t time, int minimumStub);  ///< Returns how far open the gate is, or 0 if the structure is not a gate.
 
 int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
 void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
@@ -231,7 +231,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer);
 
 /* EW works differently in multiplayer mode compared with single player.*/
-bool validStructResistance(STRUCTURE *psStruct);
+bool validStructResistance(const STRUCTURE *psStruct);
 
 /*checks to see if a specific structure type exists -as opposed to a structure
 stat type*/
@@ -239,21 +239,21 @@ bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
 int32_t getStructureDamage(const STRUCTURE *psStructure);
 
-unsigned structureBodyBuilt(STRUCTURE const *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
+unsigned structureBodyBuilt(const STRUCTURE *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
 UDWORD structureBody(const STRUCTURE *psStruct);
-UDWORD structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
-UDWORD structureResistance(STRUCTURE_STATS *psStats, UBYTE player);
+UDWORD structureArmour(const STRUCTURE_STATS *psStats, UBYTE player);
+UDWORD structureResistance(const STRUCTURE_STATS *psStats, UBYTE player);
 
 void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 
 // Is a structure a factory of somekind?
-bool StructIsFactory(STRUCTURE *Struct);
+bool StructIsFactory(const STRUCTURE *Struct);
 
 // Is a flag a factory delivery point?
-bool FlagIsFactory(FLAG_POSITION *psCurrFlag);
+bool FlagIsFactory(const FLAG_POSITION *psCurrFlag);
 
 // Find a factories corresonding delivery point.
-FLAG_POSITION *FindFactoryDelivery(STRUCTURE *Struct);
+FLAG_POSITION *FindFactoryDelivery(const STRUCTURE *Struct);
 
 //Find the factory associated with the delivery point - returns NULL if none exist
 STRUCTURE *findDeliveryFactory(FLAG_POSITION *psDelPoint);
@@ -298,11 +298,11 @@ void checkResExtractorsActive();
 UWORD countAssignableFactories(UBYTE player, UWORD FactoryType);
 
 /*Used for determining how much of the structure to draw as being built or demolished*/
-float structHeightScale(STRUCTURE *psStruct);
+float structHeightScale(const STRUCTURE *psStruct);
 
 /*compares the structure sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/
-bool structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid);
+bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid);
 
 /*checks if the structure has a Counter Battery sensor attached - returns
 true if it has*/
@@ -326,7 +326,7 @@ bool structVTOLCBSensor(const STRUCTURE *psStruct);
 STRUCTURE 	*findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear);
 
 // check whether a rearm pad is clear
-bool clearRearmPad(STRUCTURE *psStruct);
+bool clearRearmPad(const STRUCTURE *psStruct);
 
 // clear a rearm pad for a vtol to land on it
 void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid);
@@ -344,11 +344,11 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 void changeProductionPlayer(UBYTE player);
 
 // La!
-bool IsStatExpansionModule(STRUCTURE_STATS const *psStats);
+bool IsStatExpansionModule(const STRUCTURE_STATS *psStats);
 
 /// is this a blueprint and not a real structure?
-bool structureIsBlueprint(STRUCTURE *psStructure);
-bool isBlueprint(BASE_OBJECT *psObject);
+bool structureIsBlueprint(const STRUCTURE *psStructure);
+bool isBlueprint(const BASE_OBJECT *psObject);
 
 /*returns the power cost to build this structure*/
 UDWORD structPowerToBuild(const STRUCTURE *psStruct);
@@ -364,8 +364,8 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
 WZ_DECL_PURE Vector2i getStructureSize(STRUCTURE const *psBuilding);
 WZ_DECL_PURE Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t direction);
-StructureBounds getStructureBounds(STRUCTURE const *object);
-StructureBounds getStructureBounds(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t direction);
+StructureBounds getStructureBounds(const STRUCTURE *object);
+StructureBounds getStructureBounds(const STRUCTURE_STATS *stats, Vector2i pos, uint16_t direction);
 
 static inline unsigned getStructureWidth(const STRUCTURE *psBuilding)
 {

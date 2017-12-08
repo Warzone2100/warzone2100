@@ -126,9 +126,6 @@ bool statsAllocConstruct(UDWORD numEntries);
 *******************************************************************************/
 void loadStats(WzConfig &json, BASE_STATS *psStats, int index);
 
-/* Return the number of newlines in a file buffer */
-UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
-
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(const char *pFileName);
 
