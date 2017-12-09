@@ -472,13 +472,13 @@ R-Sys-MobileRepairTurret-02		_("Mobile Repair Upgrade Mk2")
 
 
 R-Sys-CBSensor-Upgrade01		_("CB Sensor Upgrade")
-R-Sys-CBSensor-Upgrade02		_("CB Sensor Upgrade 2")
-R-Sys-CBSensor-Upgrade03		_("CB Sensor Upgrade 3")
+R-Sys-CBSensor-Upgrade02		_("CB Sensor Upgrade Mk2")
+R-Sys-CBSensor-Upgrade03		_("CB Sensor Upgrade Mk3")
 
 //R-Sys-VTOL-RadarTower01		_("VTOL Radar Tower")
 R-Sys-VTOLCBS-Upgrade01			_("VTOL CB Upgrade")
-R-Sys-VTOLCBS-Upgrade02			_("VTOL CB Upgrade 2")
-R-Sys-VTOLCBS-Upgrade03			_("VTOL CB Upgrade 3")
+R-Sys-VTOLCBS-Upgrade02			_("VTOL CB Upgrade Mk2")
+R-Sys-VTOLCBS-Upgrade03			_("VTOL CB Upgrade Mk3")
 R-Sys-VTOLStrike-Upgrade01		_("VTOL Strike Upgrade")
 R-Sys-VTOLStrike-Upgrade02		_("VTOL Strike Upgrade Mk2")
 R-Sys-VTOLStrike-Upgrade03		_("VTOL Strike Upgrade Mk3")
