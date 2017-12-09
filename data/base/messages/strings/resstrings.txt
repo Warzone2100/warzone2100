@@ -469,9 +469,9 @@ RES_SY_STW2_MSG4			_("May be assigned as spotter for indirect fire weapons")
 
 //R-Sys-CBSensor-Upgrade01		CB Sensor Upgrade
 
-//R-Sys-CBSensor-Upgrade02		CB Sensor Upgrade 2
+//R-Sys-CBSensor-Upgrade02		CB Sensor Upgrade Mk2
 
-//R-Sys-CBSensor-Upgrade03		CB Sensor Upgrade 3
+//R-Sys-CBSensor-Upgrade03		CB Sensor Upgrade Mk3
 
 //R-Sys-VTOLCBS-Tower01		VTOL CB Tower
 
