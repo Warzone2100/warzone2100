@@ -8,6 +8,8 @@
 
 receiveAllEvents(true);  // If doing this in eventGameInit, it seems to be too late in T2/T3, due to some eventResearched events triggering first.
 
+include("multiplay/script/camTechEnabler.js");
+
 var lastHitTime = 0;
 var cheatmode = false;
 var maxOilDrums = 0;
@@ -156,7 +158,7 @@ function eventGameInit()
 	}
 	applyLimitSet();	// set limit options
 
-	const numCleanTech = 4;	// do x for clean	
+	const numCleanTech = 4;	// do x for clean
 	const numBaseTech = 18; // do x for base
 	var techlist = new Array(
 		"R-Vehicle-Prop-Wheels",
@@ -258,6 +260,16 @@ function eventGameInit()
 		}
 	}
 
+	var techLevel = getMultiTechLevel();
+	if (techLevel == 2)
+	{
+		grantTech(TECH_TWO);
+	}
+	else if (techLevel == 3)
+	{
+		grantTech(TECH_THREE);
+	}
+
 	// Disabled by default
 	setMiniMap(false);
 	setDesign(false);
@@ -313,7 +325,7 @@ function checkEndConditions()
 			return;
 		}
 	}
-	
+
 	// Winning Conditions
 	var gamewon = true;
 

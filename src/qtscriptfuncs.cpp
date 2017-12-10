@@ -56,6 +56,7 @@
 #include "research.h"
 #include "multilimit.h"
 #include "multigifts.h"
+#include "multimenu.h"
 #include "template.h"
 #include "lighting.h"
 #include "radar.h"
@@ -2909,13 +2910,13 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 		player = engine->globalObject().property("me").toInt32();
 	}
 	RESEARCH *psResearch = getResearch(researchName.toUtf8().constData());
+	SCRIPT_ASSERT(context, psResearch, "No such research %s for player %d", researchName.toUtf8().constData(), player);
+	SCRIPT_ASSERT(context, psResearch->index < asResearch.size(), "Research index out of bounds");
 	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
 	if (IsResearchCompleted(plrRes))
 	{
-		return QScriptValue(false);
+		return QScriptValue();
 	}
-	SCRIPT_ASSERT(context, psResearch, "No such research %s for player %d", researchName.toUtf8().constData(), player);
-	SCRIPT_ASSERT(context, psResearch->index < asResearch.size(), "Research index out of bounds");
 	if (bMultiMessages && (gameTime > 2))
 	{
 		SendResearch(player, psResearch->index, false);
@@ -4445,6 +4446,13 @@ static QScriptValue js_changePlayerColour(QScriptContext *context, QScriptEngine
 	return QScriptValue();
 }
 
+//-- \subsection{getMultiTechLevel()}
+//-- Returns the current multiplayer tech level. (3.2.4+ only)
+static QScriptValue js_getMultiTechLevel(QScriptContext *context, QScriptEngine *)
+{
+	return current_tech;
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -5490,6 +5498,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("setHealth", engine->newFunction(js_setHealth));
 	engine->globalObject().setProperty("useSafetyTransport", engine->newFunction(js_useSafetyTransport));
 	engine->globalObject().setProperty("restoreLimboMissionData", engine->newFunction(js_restoreLimboMissionData));
+	engine->globalObject().setProperty("getMultiTechLevel", engine->newFunction(js_getMultiTechLevel));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
