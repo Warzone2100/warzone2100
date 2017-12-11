@@ -3325,7 +3325,7 @@ msgstr "Użyj innej ciężarówki do pomocy w budowie stacji badawczej"
 
 #: data/base/script/text/tutorial3.slo:653
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr "Aby zbadać artefakt kliknij na mrygający przycisk BADANIA"
+msgstr "Aby zbadać artefakt kliknij na mrugający przycisk BADANIA"
 
 #: data/base/script/text/tutorial3.slo:676
 msgid "Now left click the machinegun artifact"
@@ -3341,7 +3341,7 @@ msgstr "Wynaleziony karabin może teraz być użyty do zaprojektowania nowego po
 
 #: data/base/script/text/tutorial3.slo:729
 msgid "Left click the flashing DESIGN icon"
-msgstr "Kliknij na przycisk PROJEKT"
+msgstr "Kliknij na mrugający przycisk PROJEKT"
 
 #: data/base/script/text/tutorial3.slo:746
 msgid "To start your design, left click the NEW DESIGN icon"
