@@ -46,6 +46,7 @@
 #include "loop.h"
 #include "transporter.h"
 #include "mission.h" // for INVALID_XY
+#include "qtscript.h"
 
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
@@ -439,6 +440,7 @@ void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 	CBallFrom = from;
 	CBallTo = to;
 	eventFireCallbackTrigger((TRIGGER_TYPE) CALL_ALLIANCEOFFER);
+	triggerEventAllianceOffer(from, to);
 
 	if (to == selectedPlayer)
 	{
@@ -481,6 +483,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 	}
 
 	syncDebug("Break alliance %d %d", p1, p2);
+	triggerEventAllianceBroken(p1, p2);
 	alliances[p1][p2] = ALLIANCE_BROKEN;
 	alliances[p2][p1] = ALLIANCE_BROKEN;
 	alliancebits[p1] &= ~(1 << p2);
@@ -506,6 +509,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	syncDebug("Form alliance %d %d", p1, p2);
+	triggerEventAllianceAccepted(p1, p2);
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
 	if (bMultiPlayer && alliancesSharedVision(game.alliance))	// this is for shared vision only

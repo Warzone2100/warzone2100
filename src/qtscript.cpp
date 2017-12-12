@@ -1546,6 +1546,48 @@ bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 	return true;
 }
 
+//__ \subsection{eventAllianceOffer(from, to)}
+//__ An event that is called whenever an alliance offer is requested.
+bool triggerEventAllianceOffer(uint8_t from, uint8_t to)
+{
+	for (auto *engine : scripts)
+	{
+		QScriptValueList args;
+		args += QScriptValue(from);
+		args += QScriptValue(to);
+		callFunction(engine, "eventAllianceOffer", args);
+	}
+	return true;
+}
+
+//__ \subsection{eventAllianceAccepted(from, to)}
+//__ An event that is called whenever an alliance is accepted.
+bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
+{
+	for (auto *engine : scripts)
+	{
+		QScriptValueList args;
+		args += QScriptValue(from);
+		args += QScriptValue(to);
+		callFunction(engine, "eventAllianceAccepted", args);
+	}
+	return true;
+}
+
+//__ \subsection{eventAllianceBroken(from, to)}
+//__ An event that is called whenever an alliance is broken.
+bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
+{
+	for (auto *engine : scripts)
+	{
+		QScriptValueList args;
+		args += QScriptValue(from);
+		args += QScriptValue(to);
+		callFunction(engine, "eventAllianceBroken", args);
+	}
+	return true;
+}
+
 //__ \subsection{eventSyncRequest(req_id, x, y, obj_id, obj_id2)}
 //__ An event that is called from a script and synchronized with all other scripts and hosts
 //__ to prevent desync from happening. Sync requests must be carefully validated to prevent

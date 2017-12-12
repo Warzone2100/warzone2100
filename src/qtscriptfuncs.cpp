@@ -72,6 +72,7 @@
 #include "projectile.h"
 #include "component.h"
 #include "seqdisp.h"
+#include "ai.h"
 
 #define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
@@ -3884,6 +3885,19 @@ static QScriptValue js_setAlliance(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue(true);
 }
 
+//-- \subsection{sendAllianceRequest(player)}
+//-- Send an alliance request to a player. (3.2.4+ only)
+static QScriptValue js_sendAllianceRequest(QScriptContext *context, QScriptEngine *engine)
+{
+	if (!alliancesFixed(game.alliance))
+	{
+		int player1 = engine->globalObject().property("me").toInt32();
+		int player2 = context->argument(0).toInt32();
+		requestAlliance(player1, player2, true, true);
+	}
+	return QScriptValue();
+}
+
 //-- \subsection{setAssemblyPoint(structure, x, y)}
 //-- Set the assembly point droids go to when built for the specified structure. (3.2+ only)
 static QScriptValue js_setAssemblyPoint(QScriptContext *context, QScriptEngine *engine)
@@ -5483,6 +5497,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("enumTemplates", engine->newFunction(js_enumTemplates));
 	engine->globalObject().setProperty("makeTemplate", engine->newFunction(js_makeTemplate));
 	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance));
+	engine->globalObject().setProperty("sendAllianceRequest", engine->newFunction(js_sendAllianceRequest));
 	engine->globalObject().setProperty("setAssemblyPoint", engine->newFunction(js_setAssemblyPoint));
 	engine->globalObject().setProperty("setSunPosition", engine->newFunction(js_setSunPosition));
 	engine->globalObject().setProperty("setSunIntensity", engine->newFunction(js_setSunIntensity));
