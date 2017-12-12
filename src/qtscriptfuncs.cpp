@@ -92,7 +92,8 @@ enum Scrcb {
 	SCRCB_HEA,
 	SCRCB_ELW,
 	SCRCB_HIT,
-	SCRCB_LAST = SCRCB_HIT
+	SCRCB_LIMIT,
+	SCRCB_LAST = SCRCB_LIMIT
 };
 
 // TODO, move this stuff into a script common subsystem
@@ -2769,9 +2770,7 @@ static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine
 	SCRIPT_ASSERT(context, limit < LOTS_OF && limit >= 0, "Invalid limit");
 	SCRIPT_ASSERT(context, structInc < numStructureStats && structInc >= 0, "Invalid structure");
 
-	STRUCTURE_LIMITS *psStructLimits = asStructLimits[player];
-	psStructLimits[structInc].limit = limit;
-	psStructLimits[structInc].globalLimit = limit;
+	asStructureStats[structInc].upgrade[player].limit = limit;
 
 	return QScriptValue();
 }
@@ -3301,7 +3300,7 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 		player = engine->globalObject().property("me").toInt32();
 	}
 	return QScriptValue(apStructTypeLists[player][index] == AVAILABLE
-	                    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
+	                    && asStructureStats[index].curCount[player] < asStructureStats[index].upgrade[player].limit);
 }
 
 //-- \subsection{isVTOL(droid)}
@@ -3435,8 +3434,8 @@ static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engi
 	{
 		STRUCTURE *psStruct = IdToStruct(id, player);
 		SCRIPT_ASSERT(context, psStruct, "No such struct id %u belonging to player %u", id, player);
-		int max = psStruct->pStructureType - asStructureStats;
-		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
+		const int statidx = psStruct->pStructureType - asStructureStats;
+		if (asStructureStats[statidx].curCount[player] + 1 > asStructureStats[statidx].upgrade[player].limit)
 		{
 			return QScriptValue(false);
 		}
@@ -3516,7 +3515,7 @@ static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine 
 	{
 		player = engine->globalObject().property("me").toInt32();
 	}
-	return QScriptValue(asStructLimits[player][index].limit);
+	return QScriptValue(asStructureStats[index].upgrade[player].limit);
 }
 
 //-- \subsection{countStruct(structure type[, player])}
@@ -3540,7 +3539,7 @@ static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engin
 		    || (player == ALLIES && aiCheckAlliances(i, me))
 		    || (player == ENEMIES && !aiCheckAlliances(i, me)))
 		{
-			quantity += asStructLimits[i][index].currentQuantity;
+			quantity += asStructureStats[index].curCount[i];
 		}
 	}
 	return QScriptValue(quantity);
@@ -4833,6 +4832,8 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 				}
 				psStats->upgrade[player].hitpoints = value;
 				break;
+			case SCRCB_LIMIT:
+				psStats->upgrade[player].limit = value; break;
 			}
 		}
 		else
@@ -5080,6 +5081,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		case SCRCB_HEA: return psStats->upgrade[player].thermal; break;
 		case SCRCB_ARM: return psStats->upgrade[player].armour; break;
 		case SCRCB_HIT: return psStats->upgrade[player].hitpoints;
+		case SCRCB_LIMIT: return psStats->upgrade[player].limit;
 		default: SCRIPT_ASSERT(context, false, "Component type not found for upgrade"); break;
 		}
 	}
@@ -5456,6 +5458,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			setStatsFunc(strct, engine, "Resistance", i, SCRCB_ELW, j);
 			setStatsFunc(strct, engine, "Thermal", i, SCRCB_HEA, j);
 			setStatsFunc(strct, engine, "HitPoints", i, SCRCB_HIT, j);
+			setStatsFunc(strct, engine, "Limit", i, SCRCB_LIMIT, j);
 			structbase.setProperty(psStats->name, strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Building", structbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);

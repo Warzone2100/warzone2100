@@ -105,8 +105,6 @@ UDWORD			researchModuleStat;
 //holder for all StructureStats
 STRUCTURE_STATS		*asStructureStats;
 UDWORD				numStructureStats;
-//holder for the limits of each structure per map
-STRUCTURE_LIMITS	*asStructLimits[MAX_PLAYERS];
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
@@ -254,7 +252,6 @@ void structureInitVars()
 		droidLimit[i] = INT16_MAX;
 		commanderLimit[i] = INT16_MAX;
 		constructorLimit[i] = INT16_MAX;
-		asStructLimits[i] = nullptr;
 		for (j = 0; j < NUM_FLAG_TYPES; j++)
 		{
 			factoryNumFlag[i][j].clear();
@@ -449,6 +446,19 @@ bool loadStructureStats(const QString& filename)
 		// save indexes of special structures for futher use
 		initModuleStats(inc, psStats->type);  // This function looks like a hack. But slightly less hacky than before.
 
+		if (ini.contains("userLimits"))
+		{
+			Vector3i limits = ini.vector3i("userLimits");
+			psStats->minLimit = limits[0];
+			psStats->maxLimit = limits[2];
+			psStats->base.limit = limits[1];
+		}
+		else
+		{
+			psStats->minLimit = 0;
+			psStats->maxLimit = LOTS_OF;
+			psStats->base.limit = LOTS_OF;
+		}
 		psStats->base.research = ini.value("researchPoints", 0).toInt();
 		psStats->base.moduleResearch = ini.value("moduleResearchPoints", 0).toInt();
 		psStats->base.production = ini.value("productionPoints", 0).toInt();
@@ -463,6 +473,7 @@ bool loadStructureStats(const QString& filename)
 		psStats->base.thermal = ini.value("thermal", 0).toUInt();
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
+			psStats->upgrade[i].limit = psStats->base.limit;
 			psStats->upgrade[i].research = psStats->base.research;
 			psStats->upgrade[i].moduleResearch = psStats->base.moduleResearch;
 			psStats->upgrade[i].power = psStats->base.power;
@@ -566,37 +577,7 @@ bool loadStructureStats(const QString& filename)
 	}
 	ASSERT_OR_RETURN(false, g_psStatDestroyStruct, "Destroy structure stat not found");
 
-	// allocate the structureLimits structure
-	for (int player = 0; player < MAX_PLAYERS; ++player)
-	{
-		asStructLimits[player] = (STRUCTURE_LIMITS *)malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
-	}
-	initStructLimits();
-
 	return true;
-}
-
-//initialise the structure limits structure
-void initStructLimits()
-{
-	for (unsigned player = 0; player < MAX_PLAYERS; player++)
-	{
-		STRUCTURE_LIMITS	*psStructLimits = asStructLimits[player];
-		STRUCTURE_STATS		*psStat = asStructureStats;
-
-		for (unsigned i = 0; i < numStructureStats; i++)
-		{
-			psStructLimits[i].limit = LOTS_OF;
-			psStructLimits[i].currentQuantity = 0;
-			psStructLimits[i].globalLimit = LOTS_OF;
-			if (isLasSat(psStat) || psStat->type == REF_SAT_UPLINK)
-			{
-				psStructLimits[i].limit = 1;
-				psStructLimits[i].globalLimit = 1;
-			}
-			psStat++;
-		}
-	}
 }
 
 /* set the current number of structures of each type built */
@@ -604,22 +585,18 @@ void setCurrentStructQuantity(bool displayError)
 {
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
-		STRUCTURE_LIMITS	*psStructLimits = asStructLimits[player];
-
-		//initialise the current quantity for all structures
 		for (unsigned inc = 0; inc < numStructureStats; inc++)
 		{
-			psStructLimits[inc].currentQuantity = 0;
+			asStructureStats[inc].curCount[player] = 0;
 		}
-
-		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (const STRUCTURE *psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			unsigned inc = psCurr->pStructureType - asStructureStats;
-			psStructLimits[inc].currentQuantity++;
+			asStructureStats[inc].curCount[player]++;
 			if (displayError)
 			{
 				//check quantity never exceeds the limit
-				ASSERT(psStructLimits[inc].currentQuantity <= psStructLimits[inc].limit,
+				ASSERT(asStructureStats[inc].curCount[player] <= asStructureStats[inc].upgrade[player].limit,
 				       "There appears to be too many %s on this map!", getName(&asStructureStats[inc]));
 			}
 		}
@@ -681,23 +658,11 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 	return true;
 }
 
-
 bool structureStatsShutDown()
 {
 	delete[] asStructureStats;
 	asStructureStats = nullptr;
 	numStructureStats = 0;
-
-	//free up the structLimits structure
-	for (unsigned inc = 0; inc < MAX_PLAYERS ; inc++)
-	{
-		if (asStructLimits[inc])
-		{
-			free(asStructLimits[inc]);
-			asStructLimits[inc] = nullptr;
-		}
-	}
-
 	return true;
 }
 
@@ -1303,20 +1268,12 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		ASSERT_OR_RETURN(nullptr, max <= numStructureStats, "Invalid structure type");
 
-		if (pStructureType->id.compare("A0CyborgFactory") == 0 && player == 0 && !bMultiPlayer)
-		{
-			// HACK: correcting SP bug, needs fixing in script(!!) (only applies for player 0)
-			// should be OK for Skirmish/MP games, since that is set correctly.
-			// scrSetStructureLimits() is called by scripts to set this normally.
-			asStructLimits[player][max].limit = MAX_FACTORY;
-			asStructLimits[player][max].globalLimit = MAX_FACTORY;
-		}
 		// Don't allow more than interface limits
-		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
+		if (asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)
 		{
-			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %d, max %d)!",
-			      player, getName(pStructureType), asStructLimits[player][max].currentQuantity,
-			      asStructLimits[player][max].limit);
+			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %u, max %u)!",
+			      player, getName(pStructureType), asStructureStats[max].curCount[player],
+			      asStructureStats[max].upgrade[player].limit);
 			return nullptr;
 		}
 
@@ -1583,7 +1540,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		addStructure(psBuilding);
 
 		clustNewStruct(psBuilding);
-		asStructLimits[player][max].currentQuantity++;
+		asStructureStats[max].curCount[player]++;
 
 		if (isLasSat(psBuilding->pStructureType))
 		{
@@ -3792,16 +3749,13 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 	//if currently on a mission can't build factory/research/power/derricks
 	if (!missionIsOffworld())
 	{
-		for (psCurr = apsStructLists[selectedPlayer]; psCurr != nullptr; psCurr =
-		         psCurr->psNext)
+		for (psCurr = apsStructLists[selectedPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status ==
-			    SS_BUILT)
+			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status == SS_BUILT)
 			{
 				researchModule = true;
 			}
-			else if (psCurr->pStructureType->type == REF_FACTORY && psCurr->status ==
-			         SS_BUILT)
+			else if (psCurr->pStructureType->type == REF_FACTORY && psCurr->status == SS_BUILT)
 			{
 				factoryModule = true;
 			}
@@ -3820,7 +3774,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 		if (apStructTypeLists[selectedPlayer][inc] == AVAILABLE || (includeRedundantDesigns && apStructTypeLists[selectedPlayer][inc] == REDUNDANT))
 		{
 			//check not built the maximum allowed already
-			if (asStructLimits[selectedPlayer][inc].currentQuantity < asStructLimits[selectedPlayer][inc].limit)
+			if (asStructureStats[inc].curCount[selectedPlayer] < asStructureStats[inc].upgrade[selectedPlayer].limit)
 			{
 				psBuilding = asStructureStats + inc;
 
@@ -3874,30 +3828,6 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 				{
 					//don't add to list if Power Gen not presently built
 					if (!powerModule)
-					{
-						continue;
-					}
-				}
-				//paranoid check!!
-				if (psBuilding->type == REF_FACTORY ||
-				    psBuilding->type == REF_CYBORG_FACTORY ||
-				    psBuilding->type == REF_VTOL_FACTORY)
-				{
-					//NEVER EVER EVER WANT MORE THAN 5 FACTORIES
-					if (asStructLimits[selectedPlayer][inc].currentQuantity >= MAX_FACTORY)
-					{
-						continue;
-					}
-				}
-				//HARD_CODE don't ever want more than one Las Sat structure
-				if (isLasSat(psBuilding) && getLasSatExists(selectedPlayer))
-				{
-					continue;
-				}
-				//HARD_CODE don't ever want more than one Sat Uplink structure
-				if (psBuilding->type == REF_SAT_UPLINK)
-				{
-					if (asStructLimits[selectedPlayer][inc].currentQuantity >= 1)
 					{
 						continue;
 					}
@@ -4543,9 +4473,9 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 	}
 
 	//subtract one from the structLimits list so can build another - don't allow to go less than zero!
-	if (asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].currentQuantity)
+	if (asStructureStats[psDel->pStructureType - asStructureStats].curCount[psDel->player])
 	{
-		asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].currentQuantity--;
+		asStructureStats[psDel->pStructureType - asStructureStats].curCount[psDel->player]--;
 	}
 
 	//if it is a factory - need to reset the factoryNumFlag

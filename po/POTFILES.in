@@ -131,7 +131,6 @@ data/base/sequenceaudio/devastation.txt
 data/base/sequenceaudio/outro.txt
 data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
-data/mp/multiplay/script/multilim.slo
 data/mp/multiplay/script/scavfact.js
 data/mp/multiplay/skirmish/nb_common/standard_build_order.js
 data/mp/multiplay/skirmish/nb_generic.js

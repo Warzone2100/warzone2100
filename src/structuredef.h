@@ -100,7 +100,11 @@ enum STRUCT_ANIM_STATES
 //this structure is used to hold the permanent stats for each type of building
 struct STRUCTURE_STATS : public BASE_STATS
 {
-	STRUCTURE_STATS() : pBaseIMD(nullptr), pECM(nullptr), pSensor(nullptr) {};
+	STRUCTURE_STATS() : pBaseIMD(nullptr), pECM(nullptr), pSensor(nullptr)
+	{
+		memset(curCount, 0, sizeof(curCount));
+		memset(upgrade, 0, sizeof(upgrade));
+	}
 
 	STRUCTURE_TYPE type;            /* the type of structure */
 	STRUCT_STRENGTH strength;       /* strength against the weapon effects */
@@ -118,6 +122,10 @@ struct STRUCTURE_STATS : public BASE_STATS
 	struct WEAPON_STATS *psWeapStat[MAX_WEAPONS];
 	uint64_t flags;
 
+	unsigned minLimit;		///< lowest value user can set limit to (currently unused)
+	unsigned maxLimit;		///< highest value user can set limit to, LOTS_OF = no limit
+	unsigned curCount[MAX_PLAYERS];	///< current number of instances of this type
+
 	struct
 	{
 		unsigned research;
@@ -132,6 +140,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 		unsigned thermal;
 		unsigned hitpoints;
 		unsigned resistance;	// resist enemy takeover; 0 = immune
+		unsigned limit;		// current max limit for this type, LOTS_OF = no limit
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -259,13 +268,6 @@ struct STRUCTURE : public BASE_OBJECT
 };
 
 #define LOTS_OF 0xFFFFFFFF  // highest number the limit can be set to
-struct STRUCTURE_LIMITS
-{
-	uint32_t        limit;                  // the number allowed to be built
-	uint32_t        currentQuantity;        // the number of the type currently built per player
-	uint32_t        globalLimit;            // multiplayer only. sets the max value selectable (limits changed by player)
-};
-
 
 //the three different types of factory (currently) - FACTORY, CYBORG_FACTORY, VTOL_FACTORY
 // added repair facilities as they need an assembly point as well

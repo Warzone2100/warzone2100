@@ -1191,7 +1191,7 @@ bool scrIsStructureAvailable()
 		return false;
 	}
 	if (apStructTypeLists[player][index] == AVAILABLE
-	    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit)
+	    && asStructureStats[index].curCount[player] < asStructureStats[index].upgrade[player].limit)
 	{
 		bResult = true;
 	}
@@ -2781,7 +2781,6 @@ bool scrSetStructureLimits()
 {
 	SDWORD				player, limit;
 	UDWORD				structInc;
-	STRUCTURE_LIMITS	*psStructLimits;
 
 	if (!stackPopParams(3, ST_STRUCTURESTAT, &structInc, VAL_INT, &limit, VAL_INT, &player))
 	{
@@ -2809,10 +2808,7 @@ bool scrSetStructureLimits()
 		return false;
 	}
 
-	psStructLimits = asStructLimits[player];
-	psStructLimits[structInc].limit = limit;
-
-	psStructLimits[structInc].globalLimit = limit;
+	asStructureStats[structInc].upgrade[player].limit = limit;
 
 	return true;
 }
@@ -4439,7 +4435,6 @@ bool scrSetReinforcementTime()
 bool scrSetAllStructureLimits()
 {
 	SDWORD				player, limit;
-	STRUCTURE_LIMITS	*psStructLimits;
 	UDWORD				i;
 
 	if (!stackPopParams(2, VAL_INT, &limit, VAL_INT, &player))
@@ -4461,13 +4456,9 @@ bool scrSetAllStructureLimits()
 	}
 
 	//set all the limits to the value specified
-	psStructLimits = asStructLimits[player];
 	for (i = 0; i < numStructureStats; i++)
 	{
-		psStructLimits[i].limit = limit;
-
-		psStructLimits[i].globalLimit = limit;
-
+		asStructureStats[i].upgrade[player].limit = limit;
 	}
 
 	return true;
@@ -5639,7 +5630,7 @@ bool scrTakeOverSingleStructure()
 
 	structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
 	if (playerToGain == (SDWORD)selectedPlayer && StructIsFactory(psStructToTake) &&
-	    asStructLimits[playerToGain][structureInc].currentQuantity >= MAX_FACTORY)
+	    asStructureStats[structureInc].curCount[playerToGain] >= MAX_FACTORY)
 	{
 		debug(LOG_NEVER, "scrTakeOverSingleStructure - factory ignored for selectedPlayer\n");
 		psNewStruct = nullptr;
@@ -5650,11 +5641,10 @@ bool scrTakeOverSingleStructure()
 		if (psNewStruct)
 		{
 			//check the structure limits aren't compromised
-			if (asStructLimits[playerToGain][structureInc].currentQuantity >
-			    asStructLimits[playerToGain][structureInc].limit)
+			if (asStructureStats[structureInc].curCount[playerToGain] >
+			    asStructureStats[structureInc].upgrade[playerToGain].limit)
 			{
-				asStructLimits[playerToGain][structureInc].limit = asStructLimits[
-				            playerToGain][structureInc].currentQuantity;
+				asStructureStats[structureInc].upgrade[playerToGain].limit = asStructureStats[structureInc].curCount[playerToGain];
 			}
 			//for each structure taken - add graphical effect if the selectedPlayer
 			if (playerToGain == (SDWORD)selectedPlayer)
@@ -5728,7 +5718,7 @@ bool scrTakeOverStructsInArea()
 			//don't work on factories for the selectedPlayer
 			structureInc = psStruct->pStructureType->ref - REF_STRUCTURE_START;
 			if (toPlayer == (SDWORD)selectedPlayer && StructIsFactory(psStruct) &&
-			    asStructLimits[toPlayer][structureInc].currentQuantity >= MAX_FACTORY)
+			    asStructureStats[structureInc].curCount[toPlayer] >= MAX_FACTORY)
 			{
 				debug(LOG_NEVER, "scrTakeOverStructsInArea - factory ignored for selectedPlayer\n");
 			}
@@ -5741,11 +5731,9 @@ bool scrTakeOverStructsInArea()
 					numChanged++;
 					//check the structure limits aren't compromised
 					//structureInc = psNewStruct->pStructureType->ref - REF_STRUCTURE_START;
-					if (asStructLimits[toPlayer][structureInc].currentQuantity >
-					    asStructLimits[toPlayer][structureInc].limit)
+					if (asStructureStats[structureInc].curCount[toPlayer] > asStructureStats[structureInc].upgrade[toPlayer].limit)
 					{
-						asStructLimits[toPlayer][structureInc].limit = asStructLimits[
-						            toPlayer][structureInc].currentQuantity;
+						asStructureStats[structureInc].upgrade[toPlayer].limit = asStructureStats[structureInc].curCount[toPlayer];
 					}
 					//for each structure taken - add graphical effect if the selectedPlayer
 					if (toPlayer == (SDWORD)selectedPlayer)
@@ -6425,7 +6413,6 @@ bool scrGetStructureLimit()
 {
 	SDWORD				player, limit;
 	UDWORD				structInc;
-	STRUCTURE_LIMITS	*psStructLimits;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
 	{
@@ -6447,8 +6434,7 @@ bool scrGetStructureLimit()
 		return false;
 	}
 
-	psStructLimits = asStructLimits[player];
-	limit = (SDWORD)psStructLimits[structInc].limit;
+	limit = asStructureStats[structInc].upgrade[player].limit;
 
 	scrFunctionResult.v.ival = limit;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -6466,7 +6452,6 @@ bool scrStructureLimitReached()
 	SDWORD				player;
 	bool				bLimit = false;
 	UDWORD				structInc;
-	STRUCTURE_LIMITS	*psStructLimits;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
 	{
@@ -6488,9 +6473,7 @@ bool scrStructureLimitReached()
 		return false;
 	}
 
-	psStructLimits = asStructLimits[player];
-
-	if (psStructLimits[structInc].currentQuantity >= psStructLimits[structInc].limit)
+	if (asStructureStats[structInc].curCount[player] >= asStructureStats[structInc].upgrade[player].limit)
 	{
 		bLimit = true;
 	}
@@ -6510,7 +6493,6 @@ bool scrGetNumStructures()
 {
 	SDWORD				player, numStructures;
 	UDWORD				structInc;
-	STRUCTURE_LIMITS	*psStructLimits;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
 	{
@@ -6530,8 +6512,7 @@ bool scrGetNumStructures()
 		return false;
 	}
 
-	psStructLimits = asStructLimits[player];
-	numStructures = (SDWORD)psStructLimits[structInc].currentQuantity;
+	numStructures = asStructureStats[structInc].curCount[player];
 
 	scrFunctionResult.v.ival = numStructures;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))

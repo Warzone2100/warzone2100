@@ -64,7 +64,6 @@ extern SBYTE         productionPlayer;
 //holder for all StructureStats
 extern STRUCTURE_STATS		*asStructureStats;
 extern UDWORD				numStructureStats;
-extern STRUCTURE_LIMITS		*asStructLimits[MAX_PLAYERS];
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
@@ -144,8 +143,6 @@ bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *p
 
 void alignStructure(STRUCTURE *psBuilding);
 
-//initialise the structure limits structure
-void initStructLimits();
 /* set the current number of structures of each type built */
 void setCurrentStructQuantity(bool displayError);
 /* get a stat inc based on the name */

@@ -1605,7 +1605,7 @@ void updateLimitFlags()
 	for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
 	{
 		int stat = getStructStatFromName(limitIcons[i].stat);
-		bool disabled = asStructLimits[0] != nullptr && stat >= 0 && asStructLimits[0][stat].limit == 0;
+		bool disabled = stat >= 0 && asStructureStats[stat].upgrade[0].limit == 0;
 		flags |= disabled << i;
 	}
 

@@ -944,7 +944,6 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 	     psDroid->order.type == DORDER_LINEBUILD))
 	{
 		STRUCTURE_STATS *psStructStat = psDroid->order.psStats;
-		STRUCTURE_LIMITS *structLimit = &asStructLimits[psDroid->player][psStructStat - asStructureStats];
 
 		ItemAvailability ia = (ItemAvailability)apStructTypeLists[psDroid->player][psStructStat - asStructureStats];
 		if (ia != AVAILABLE && ia != REDUNDANT)
@@ -957,7 +956,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		}
 
 		//need to check structLimits have not been exceeded
-		if (structLimit->currentQuantity >= structLimit->limit)
+		if (psStructStat->curCount[psDroid->player] >= psStructStat->upgrade[psDroid->player].limit)
 		{
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);

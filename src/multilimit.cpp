@@ -111,11 +111,9 @@ bool startLimitScreen()
 
 	if (challengeActive)
 	{
-		// reset the sliders..
-		// it's a HACK since the actual limiter structure was cleared in the startMultiOptions function
 		for (unsigned i = 0; i < numStructureStats; ++i)
 		{
-			asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
+			asStructureStats[i].upgrade[0].limit = asStructureStats[i].base.limit;
 		}
 
 		// turn off the sliders
@@ -160,7 +158,7 @@ bool startLimitScreen()
 
 	for (unsigned i = 0; i < numStructureStats; ++i)
 	{
-		if (asStructLimits[0][i].globalLimit != LOTS_OF)
+		if (asStructureStats[i].base.limit != LOTS_OF)
 		{
 			W_FORM *button = new W_FORM(limitsList);
 			button->id = limitsButtonId;
@@ -170,8 +168,8 @@ bool startLimitScreen()
 			++limitsButtonId;
 
 			addFESlider(limitsButtonId, limitsButtonId - 1, 290, 11,
-			            asStructLimits[0][i].globalLimit,
-			            asStructLimits[0][i].limit);
+			            asStructureStats[i].maxLimit,
+			            asStructureStats[i].upgrade[0].limit);
 			++limitsButtonId;
 		}
 	}
@@ -194,7 +192,7 @@ void runLimitScreen()
 		unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
 		if (statid)
 		{
-			asStructLimits[0][statid].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
+			asStructureStats[statid].upgrade[0].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
 		}
 	}
 	else
@@ -206,7 +204,7 @@ void runLimitScreen()
 			// reset the sliders..
 			for (unsigned i = 0; i < numStructureStats; ++i)
 			{
-				asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
+				asStructureStats[i].upgrade[0].limit = asStructureStats[i].base.limit;
 			}
 			// free limiter structure
 			freeLimitSet();
@@ -263,7 +261,7 @@ void createLimitSet()
 	for (unsigned i = 0; i < numStructureStats; i++)
 	{
 		// If the limit differs from the default
-		if (asStructLimits[0][i].limit != LOTS_OF)
+		if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
 		{
 			numchanges++;
 		}
@@ -277,11 +275,11 @@ void createLimitSet()
 	// Prepare chunk
 	for (unsigned i = 0; i < numStructureStats; i++)
 	{
-		if (asStructLimits[0][i].limit != LOTS_OF)
+		if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
 		{
 			ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
 			pEntry[idx].id		= i;
-			pEntry[idx].limit	= asStructLimits[0][i].limit;
+			pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
 			idx++;
 		}
 	}
@@ -312,9 +310,9 @@ void applyLimitSet()
 		// So long as the ID is valid
 		if (id < numStructureStats)
 		{
-			for (auto &asStructLimit : asStructLimits)
+			for (int player = 0; player < MAX_PLAYERS; player++)
 			{
-				asStructLimit[id].limit = pEntry[i].limit;
+				asStructureStats[id].upgrade[player].limit = pEntry[i].limit;
 			}
 		}
 	}

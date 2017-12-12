@@ -2141,7 +2141,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			}
 		}
 
-		initStructLimits();
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mstruct.json");
 
@@ -2381,7 +2380,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	}
 
 	//load in the structures
-	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.json");
 	if (!loadSaveStructure2(aFileName, apsStructLists))
@@ -6446,7 +6444,7 @@ bool loadSaveStructLimits(const char *pFileName)
 					STRUCTURE_STATS *psStats = asStructureStats + statInc;
 					if (name.compare(psStats->id) == 0)
 					{
-						asStructLimits[player][statInc].limit = limit != 255 ? limit : LOTS_OF;
+						asStructureStats[statInc].upgrade[player].limit = limit != 255 ? limit : LOTS_OF;
 						break;
 					}
 				}
@@ -6478,7 +6476,7 @@ bool writeStructLimitsFile(const char *pFileName)
 		STRUCTURE_STATS *psStats = asStructureStats;
 		for (int i = 0; i < numStructureStats; i++, psStats++)
 		{
-			const int limit = MIN(asStructLimits[player][i].limit, 255);
+			const int limit = MIN(asStructureStats[i].upgrade[player].limit, 255);
 			if (limit != 255)
 			{
 				ini.setValue(psStats->id, limit);
