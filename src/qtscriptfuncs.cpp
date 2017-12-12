@@ -4466,6 +4466,15 @@ static QScriptValue js_getMultiTechLevel(QScriptContext *context, QScriptEngine 
 	return current_tech;
 }
 
+//-- \subsection{setCampaignNumber(num)}
+//-- Set the campaign number. (3.2.4+ only)
+static QScriptValue js_setCampaignNumber(QScriptContext *context, QScriptEngine *)
+{
+	int num = context->argument(0).toInt32();
+	setCampaignNumber(num);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -5517,6 +5526,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("useSafetyTransport", engine->newFunction(js_useSafetyTransport));
 	engine->globalObject().setProperty("restoreLimboMissionData", engine->newFunction(js_restoreLimboMissionData));
 	engine->globalObject().setProperty("getMultiTechLevel", engine->newFunction(js_getMultiTechLevel));
+	engine->globalObject().setProperty("setCampaignNumber", engine->newFunction(js_setCampaignNumber));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

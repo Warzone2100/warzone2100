@@ -9,14 +9,9 @@ directory	"messages"
 file		SMSG		"briefdemo.txt"
 file		SMSG		"proxdemo.txt"
 
-directory       "script/text"
-file		SCRIPT		"cam1daynight.slo"
-
-directory       "script/data"
-file            SCRIPTVAL       "cam1day.vlo"
-
-/* Directory for javascript files*/
 directory "script"
 file JAVASCRIPT "rules.js"
+file JAVASCRIPT "weather.js"
+
 directory "script/fastplay"
 file JAVASCRIPT "fastdemo.js"

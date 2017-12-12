@@ -9,16 +9,9 @@ directory	"messages"
 file		SMSG		"brief2-c.txt"
 file		SMSG		"prox2c.txt"
 
-/* Directory for uncompiled script files */
-directory       "script/text"
-file			SCRIPT		"cam2daynight.slo"
-
-/* Directory for script value files*/
-directory       "script/data"
-file            SCRIPTVAL       "cam2day.vlo"
-
-directory		"script"
-file			JAVASCRIPT      "rules.js"
+directory "script"
+file JAVASCRIPT "rules.js"
+file JAVASCRIPT "weather.js"
 
 directory		"script/campaign"
 file			JAVASCRIPT		"cam2-c.js"

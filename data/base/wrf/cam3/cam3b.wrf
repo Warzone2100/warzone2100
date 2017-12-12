@@ -8,15 +8,9 @@ directory	"messages"
 file		SMSG		"brief3-b.txt"
 file		SMSG		"prox3b.txt"
 
-/* Directory for uncompiled script files */
-directory       "script/text"
-file		SCRIPT		"cam3daynight.slo"
+directory "script"
+file JAVASCRIPT "rules.js"
+file JAVASCRIPT "weather.js"
 
-/* Directory for script value files*/
-directory       "script/data"
-file            SCRIPTVAL       "cam3mknight.vlo"
-
-directory		"script"
-file			JAVASCRIPT        "rules.js"
 directory		"script/campaign"
 file			JAVASCRIPT        "cam3-b.js"

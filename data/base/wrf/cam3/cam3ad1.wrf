@@ -9,15 +9,9 @@ file		SMSG		"brief3a-d1.txt"
 file		SMSG		"brief3a-d2.txt"
 file		SMSG		"prox3a-d1.txt"
 
-/* Directory for uncompiled script files */
-directory       "script/text"
-file		SCRIPT		"cam3daynight.slo"
+directory "script"
+file JAVASCRIPT "rules.js"
+file JAVASCRIPT "weather.js"
 
-/* Directory for script value files*/
-directory       "script/data"
-file            SCRIPTVAL       "cam3mkday.vlo"
-
-directory       "script"
-file            JAVASCRIPT      "rules.js"
 directory       "script/campaign"
 file            JAVASCRIPT      "cam3-ad1.js"

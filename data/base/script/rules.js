@@ -67,16 +67,23 @@ function setMainReticule()
 
 function setupGame()
 {
-	if (tilesetType == "URBAN")
+	if (tilesetType == "ARIZONA")
 	{
+		setCampaignNumber(1);
+	}
+	else if (tilesetType == "URBAN")
+	{
+		setCampaignNumber(2);
 		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-urban.png");
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-urban.png");
 	}
 	else if (tilesetType == "ROCKIES")
 	{
+		setCampaignNumber(3);
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-rockies.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-rockies.png");
+		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-kevlar.png");
 	}
 
 	if (tilesetType != "ARIZONA")
@@ -93,6 +100,7 @@ function setupGame()
 	setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	setMainReticule();
 	showInterface();
+	hackPlayIngameAudio();
 }
 
 function eventGameLoaded()

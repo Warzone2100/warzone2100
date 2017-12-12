@@ -1,0 +1,3 @@
+
+directory "multiplay/script"
+file JAVASCRIPT "weather.js"

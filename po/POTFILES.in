@@ -61,6 +61,7 @@ data/base/script/campaign/templates.js
 data/base/script/campaign/transitionTech.js
 data/base/script/fastplay/fastdemo.js
 data/base/script/rules.js
+data/base/script/weather.js
 data/base/script/text/basic.slo
 data/base/script/text/cam1daynight.slo
 data/base/script/text/cam2daynight.slo
@@ -127,6 +128,7 @@ data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
 data/mp/multiplay/script/camTechEnabler.js
 data/mp/multiplay/script/scavfact.js
+data/mp/multiplay/script/weather.js
 data/mp/multiplay/skirmish/nb_common/standard_build_order.js
 data/mp/multiplay/skirmish/nb_generic.js
 data/mp/multiplay/skirmish/nb_hover.js

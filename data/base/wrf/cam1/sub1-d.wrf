@@ -9,17 +9,9 @@ directory	"messages"
 file		SMSG		"brief1d.txt"
 file		SMSG		"prox1d.txt"
 
-/* Directory for uncompiled script files */
-directory       "script/text"
-
-file		SCRIPT		"cam1daynight.slo"
-
-/* Directory for script value files*/
-directory       "script/data"
-
-file            SCRIPTVAL       "cam1mknight.vlo"
-
 directory "script"
-file JAVASCRIPT      "rules.js"
+file JAVASCRIPT "rules.js"
+file JAVASCRIPT "weather.js"
+
 directory "script/campaign"
 file JAVASCRIPT "cam1-d.js"

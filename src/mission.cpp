@@ -3116,7 +3116,7 @@ void	setCampaignNumber(UDWORD number)
 
 UDWORD	getCampaignNumber()
 {
-	return (camNumber);
+	return camNumber;
 }
 
 /*deals with any selectedPlayer's transporters that are flying in when the

@@ -75,6 +75,7 @@ function setupGame()
 	{
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-rockies.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-rockies.png");
+		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-kevlar.png");
 		// for some reason rockies will use arizona babas
 	}
 	if (tilesetType != "ARIZONA")
@@ -83,6 +84,7 @@ function setupGame()
 	}
 	setMainReticule();
 	showInterface();
+	hackPlayIngameAudio();
 }
 
 function eventGameLoaded()
