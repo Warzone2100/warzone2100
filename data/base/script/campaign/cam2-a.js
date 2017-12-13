@@ -84,7 +84,7 @@ function sendCOTransporter()
 			}
 		);
 
-		queue("sendCOTransporter", camChangeOnDiff(300000)); //5 min
+		queue("sendCOTransporter", camChangeOnDiff(240000)); //4 min
 	}
 }
 
@@ -142,8 +142,8 @@ function mapEdgeDroids()
 
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [colcbv, colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(300000), "COCommandCenter"); //5 min
+	var list; with (camTemplates) list = [colcbv];
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(180000), "COCommandCenter"); //3 min
 }
 
 function groupPatrol()
@@ -172,10 +172,12 @@ function groupPatrol()
 function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
-		queue("truckDefense", 160000);
+	{
+		const DEFENSES = ["WallTower06", "PillBox1", "WallTower03"];
+		camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
 
-	const DEFENSES = ["WallTower06", "PillBox1", "WallTower03"];
-	camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
+		queue("truckDefense", 160000);
+	}
 }
 
 //Gives starting tech and research.
@@ -245,14 +247,23 @@ function eventTransporterLanded(transport)
 		}
 
 		index = index + 1;
+		if (index >= TRANSPORT_LIMIT)
+		{
+			queue("downTransporter", 60000);
+		}
 	}
 }
 
 //Warn that something bad happened to the fifth transport
-function downTransporter()
+function reallyDownTransporter()
 {
 	setReinforcementTime(LZ_COMPROMISED_TIME);
 	playSound("pcv443.ogg");
+}
+
+function downTransporter()
+{
+	camCallOnce("reallyDownTransporter");
 }
 
 function eventTransporterLaunch(transport)
@@ -334,8 +345,8 @@ function eventStartLevel()
 
 	queue("secondVideo", 12000); // 12 sec
 	queue("truckDefense", 15000);// 15 sec.
-	queue("sendCOTransporter", 30000); //30 sec
 	queue("groupPatrol", camChangeOnDiff(60000)); // 60 sec
-	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
+	queue("sendCOTransporter", camChangeOnDiff(240000)); //4 min
+	queue("vtolAttack", camChangeOnDiff(180000)); //3 min
 	queue("mapEdgeDroids", camChangeOnDiff(420000)); //7 min
 }

@@ -2245,7 +2245,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 	// add some funky beats
 	cdAudio_PlayTrack(SONG_FRONTEND);
 
-	if (!bMultiPlayer)
+	if (!bMultiPlayer && result)
 	{
 		if (!screen_GetBackDrop())
 		{

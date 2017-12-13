@@ -5949,7 +5949,7 @@
         "keyTopic": 1,
         "msgName": "RES_W_RK_HvAT",
         "name": "Tank Killer Rocket",
-		"requiredResearch": [
+        "requiredResearch": [
             "R-Wpn-Rocket03-HvAT"
         ],
         "researchPoints": 10000,
@@ -5968,7 +5968,7 @@
         "requiredResearch": [
             "R-Wpn-Rocket03-HvAT",
             "R-Wpn-Rocket-Damage04",
-			"R-Wpn-RocketSlow-Damage03"
+            "R-Wpn-RocketSlow-Damage03"
         ],
         "researchPoints": 6000,
         "researchPower": 187,
