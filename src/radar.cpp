@@ -158,8 +158,7 @@ bool resizeRadar()
 	memset(radarBuffer, 0, radarBufferSize);
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
-	pie_SetRadar(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, radarWidth, radarHeight,
-	             radarTexWidth, radarTexHeight, rotateRadar || (RadarZoom % 16 != 0));
+	pie_SetRadar(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, radarWidth, radarHeight, radarTexWidth, radarTexHeight);
 	setViewingWindow();
 
 	return true;

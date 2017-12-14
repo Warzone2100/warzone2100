@@ -529,9 +529,9 @@ bool pie_ShutdownRadar()
 	return true;
 }
 
-void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight, bool filter)
+void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight)
 {
-	radarGfx->makeTexture(twidth, theight, filter ? GL_LINEAR : GL_NEAREST);
+	radarGfx->makeTexture(twidth, theight, GL_LINEAR);
 	GLfloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
 	GLfloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
 	radarGfx->buffers(4, vertices, texcoords);

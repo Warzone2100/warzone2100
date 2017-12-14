@@ -144,7 +144,7 @@ bool pie_InitRadar();
 bool pie_ShutdownRadar();
 void pie_DownLoadRadar(UDWORD *buffer);
 void pie_RenderRadar(const glm::mat4 &modelViewProjectionMatrix);
-void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight, bool filter);
+void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight);
 
 enum SCREENTYPE
 {
