@@ -35,6 +35,7 @@
 #include "display3d.h"
 #include "map.h"
 #include "component.h"
+#include "console.h"
 #include "radar.h"
 #include "mapdisplay.h"
 #include "hci.h"
@@ -47,6 +48,7 @@
 #include "multiplay.h"
 #include "intdisplay.h"
 #include "texture.h"
+#include "warzoneconfig.h"
 #include <glm/gtx/transform.hpp>
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC * 2)
@@ -130,7 +132,7 @@ void radarInitVars()
 {
 	radarTexWidth = 0;
 	radarTexHeight = 0;
-	RadarZoom = DEFAULT_RADARZOOM;
+	RadarZoom = war_GetRadarZoom();
 	debug(LOG_WZ, "Resetting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 	playerpos = Vector3i(-1, -1, -1);

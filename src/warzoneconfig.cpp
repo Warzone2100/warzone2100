@@ -29,6 +29,9 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "advvis.h"
 #include "component.h"
+#include "display.h"
+#include "keybind.h"
+#include "radar.h"
 
 /***************************************************************************/
 
@@ -48,6 +51,9 @@ struct WARZONE_GLOBALS
 	bool pauseOnFocusLoss = true;
 	bool ColouredCursor = true;
 	bool MusicEnabled = true;
+	int mapZoom = STARTDISTANCE;
+	int mapZoomRate = MAP_ZOOM_RATE_DEFAULT;
+	int radarZoom = DEFAULT_RADARZOOM;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -214,4 +220,43 @@ bool war_GetMusicEnabled()
 void war_SetMusicEnabled(bool enabled)
 {
 	warGlobs.MusicEnabled = enabled;
+}
+
+int war_GetMapZoom()
+{
+	return warGlobs.mapZoom;
+}
+
+void war_SetMapZoom(int mapZoom)
+{
+        if (mapZoom % MAP_ZOOM_RATE_MIN == 0 && ! (mapZoom < MINDISTANCE || mapZoom > MAXDISTANCE))
+	{
+	    warGlobs.mapZoom = mapZoom;
+	}
+}
+
+int war_GetMapZoomRate()
+{
+	return warGlobs.mapZoomRate;
+}
+
+void war_SetMapZoomRate(int mapZoomRate)
+{
+        if (mapZoomRate % MAP_ZOOM_RATE_STEP == 0 && ! (mapZoomRate < MAP_ZOOM_RATE_MIN || mapZoomRate > MAP_ZOOM_RATE_MAX))
+	{
+	    warGlobs.mapZoomRate = mapZoomRate;
+	}
+}
+
+int war_GetRadarZoom()
+{
+	return warGlobs.radarZoom;
+}
+
+void war_SetRadarZoom(int radarZoom)
+{
+        if (radarZoom % RADARZOOM_STEP == 0 && ! (radarZoom < MIN_RADARZOOM || radarZoom > MAX_RADARZOOM))
+	{
+	    warGlobs.radarZoom = radarZoom;
+	}
 }

@@ -79,6 +79,18 @@ bool loadConfig()
 	{
 		war_SetMusicEnabled(ini.value("music_enabled").toBool());
 	}
+	if (ini.contains("mapZoom"))
+	{
+		war_SetMapZoom(ini.value("mapZoom").toInt());
+	}
+	if (ini.contains("mapZoomRate"))
+	{
+		war_SetMapZoomRate(ini.value("mapZoomRate").toInt());
+	}
+	if (ini.contains("radarZoom"))
+	{
+		war_SetRadarZoom(ini.value("radarZoom").toInt());
+	}
 	if (ini.contains("language"))
 	{
 		setLanguage(ini.value("language").toString().toUtf8().constData());
@@ -192,6 +204,9 @@ bool saveConfig()
 	ini.setValue("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
 	ini.setValue("cdvol", (int)(sound_GetMusicVolume() * 100.0));
 	ini.setValue("music_enabled", war_GetMusicEnabled());
+	ini.setValue("mapZoom", war_GetMapZoom());
+	ini.setValue("mapZoomRate", war_GetMapZoomRate());
+	ini.setValue("radarZoom", war_GetRadarZoom());
 	ini.setValue("width", war_GetWidth());
 	ini.setValue("height", war_GetHeight());
 	ini.setValue("screen", war_GetScreen());

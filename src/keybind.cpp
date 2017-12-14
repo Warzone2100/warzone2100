@@ -90,9 +90,6 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive.
 */
 
-#define	MAP_ZOOM_RATE	(1000)
-#define MAP_PITCH_RATE	(SPIN_SCALING/SECS_PER_SPIN)
-
 extern char	ScreenDumpPath[];
 
 bool	bMovePause = false;
@@ -883,11 +880,11 @@ void	kf_ZoomOut()
 {
 	if (getDebugMappingStatus())
 	{
-		setViewDistance(getViewDistance() + realTimeAdjustedIncrement(MAP_ZOOM_RATE));
+		setViewDistance(getViewDistance() + realTimeAdjustedIncrement(war_GetMapZoomRate()));
 	}
 	else
 	{
-		setViewDistance(std::min<int>(getViewDistance() + realTimeAdjustedIncrement(MAP_ZOOM_RATE), MAXDISTANCE));
+		setViewDistance(std::min<int>(getViewDistance() + realTimeAdjustedIncrement(war_GetMapZoomRate()), MAXDISTANCE));
 	}
 	UpdateFogDistance(getViewDistance());
 }
@@ -896,11 +893,11 @@ void kf_ZoomOutStep()
 {
 	if (getDebugMappingStatus())
 	{
-		setViewDistance(getViewDistance() + MAP_ZOOM_RATE / 3);
+		setViewDistance(getViewDistance() + war_GetMapZoomRate());
 	}
 	else
 	{
-		setViewDistance(std::min<int>(getViewDistance() + MAP_ZOOM_RATE / 3, MAXDISTANCE));
+		setViewDistance(std::min<int>(getViewDistance() + war_GetMapZoomRate(), MAXDISTANCE));
 	}
 	UpdateFogDistance(getViewDistance());
 }
@@ -938,11 +935,11 @@ void	kf_ZoomIn()
 {
 	if (getDebugMappingStatus())
 	{
-		setViewDistance(getViewDistance() - realTimeAdjustedIncrement(MAP_ZOOM_RATE));
+		setViewDistance(getViewDistance() - realTimeAdjustedIncrement(war_GetMapZoomRate()));
 	}
 	else
 	{
-		setViewDistance(std::max<int>(getViewDistance() - realTimeAdjustedIncrement(MAP_ZOOM_RATE), MINDISTANCE));
+		setViewDistance(std::max<int>(getViewDistance() - realTimeAdjustedIncrement(war_GetMapZoomRate()), MINDISTANCE));
 	}
 	UpdateFogDistance(getViewDistance());
 }
@@ -951,11 +948,11 @@ void kf_ZoomInStep()
 {
 	if (getDebugMappingStatus())
 	{
-		setViewDistance(getViewDistance() - MAP_ZOOM_RATE / 3);
+		setViewDistance(getViewDistance() - war_GetMapZoomRate());
 	}
 	else
 	{
-		setViewDistance(std::max<int>(getViewDistance() - MAP_ZOOM_RATE / 3, MINDISTANCE));
+		setViewDistance(std::max<int>(getViewDistance() - war_GetMapZoomRate(), MINDISTANCE));
 	}
 	UpdateFogDistance(getViewDistance());
 }
@@ -1061,7 +1058,7 @@ void	kf_PitchForward()
 void	kf_ResetPitch()
 {
 	player.r.x = DEG(360 - 20);
-	setViewDistance(START_DISTANCE);
+	setViewDistance(STARTDISTANCE);
 }
 
 // --------------------------------------------------------------------------

@@ -197,10 +197,10 @@ void	setDesiredPitch(SDWORD pitch);
 #define MAX_PLAYER_X_ANGLE	(-1)
 #define MIN_PLAYER_X_ANGLE	(-60)
 
-#define MAXDISTANCE	(5000)
-#define MINDISTANCE	(500)
-#define START_DISTANCE	(2000)
-#define START_HEIGHT (1500)
+#define MAXDISTANCE	(10000)
+#define MINDISTANCE	(0)
+#define STARTDISTANCE	(2500)
+#define OLD_START_HEIGHT (1500) // only used in savegames <= 10
 
 #define CAMERA_PIVOT_HEIGHT (500)
 

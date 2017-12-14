@@ -79,6 +79,7 @@
 #include "advvis.h"
 #include "cmddroid.h"
 #include "terrain.h"
+#include "warzoneconfig.h"
 
 /********************  Prototypes  ********************/
 
@@ -1080,7 +1081,7 @@ bool init3DView()
 	setSkyBox("texpages/page-25-sky-arizona.png", 0.0f, 10000.0f);
 
 	// distance is not saved, so initialise it now
-	distance = START_DISTANCE; // distance
+	distance = war_GetMapZoom(); // distance
 
 	player.r.z = 0; // roll
 	player.r.y = 0; // rotation
@@ -1108,7 +1109,7 @@ void disp3d_setView(iView *newView)
 void disp3d_oldView()
 {
 	player.r.y = OLD_INITIAL_ROTATION; // rotation
-	player.p.y = START_HEIGHT; // height
+	player.p.y = OLD_START_HEIGHT; // height
 }
 
 /// get the view position for save game
