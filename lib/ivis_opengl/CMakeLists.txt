@@ -45,7 +45,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
 
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
   find_package(PkgConfig)
   pkg_check_modules(HARFBUZZ harfbuzz)
 else()

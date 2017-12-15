@@ -10,7 +10,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     COMMAND "powershell.exe"
     ARGS "-File" "${CMAKE_SOURCE_DIR}/build_tools/autorevision.ps1" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
     COMMAND "${CMAKE_SOURCE_DIR}/build_tools/autorevision"
@@ -35,7 +35,7 @@ if(WIN32)
     target_link_libraries(warzone2100 ws2_32 iphlpapi ${SDL2MAIN_LIBRARY})
 endif()
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     target_link_libraries(warzone2100 ogg vorbis vorbisfile theora)
   if (${CMAKE_CROSSCOMPILING})
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group,-subsystem,windows")
