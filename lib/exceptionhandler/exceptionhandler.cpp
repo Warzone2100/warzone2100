@@ -758,6 +758,7 @@ static bool fetchProgramPath(char *const programPath, size_t const bufSize, cons
 		return false;
 	}
 
+	programPath[bytesRead] = 0;
 	// Cut of the linefeed (and everything following it) if it's present.
 	linefeed = strchr(programPath, '\n');
 	if (linefeed)

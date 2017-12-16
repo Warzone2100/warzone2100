@@ -296,6 +296,7 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	bool			bStop = false, bEvent = false;
 	UDWORD			callDepth = 0;
 	bool			bTraceOn = false;		//enable to debug function/event calls
+	size_t			last_called_script_eventsz = sizeof(last_called_script_event);
 
 	ASSERT(psContext != nullptr, "Invalid context pointer");
 
@@ -345,7 +346,8 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		bCurCallerIsEvent = false;
 
 		// find the debug info for the trigger
-		strcpy(last_called_script_event, eventGetTriggerID(psProg, index));
+		strncpy(last_called_script_event, eventGetTriggerID(psProg, index), last_called_script_eventsz - 1);
+		last_called_script_event[last_called_script_eventsz - 1] = 0;
 
 		if (bTraceOn)
 		{
@@ -367,7 +369,8 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 		bCurCallerIsEvent = true;
 
 		// remember last called event/function
-		strcpy(last_called_script_event, eventGetEventID(psProg, index));
+		strncpy(last_called_script_event, eventGetEventID(psProg, index), last_called_script_eventsz - 1);
+		last_called_script_event[last_called_script_eventsz - 1] = 0;
 
 		if (bTraceOn)
 		{
@@ -848,7 +851,8 @@ bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 				}
 
 				//remember last called event/index
-				strcpy(last_called_script_event, eventGetEventID(psProg, CurEvent));
+				strncpy(last_called_script_event, eventGetEventID(psProg, CurEvent), last_called_script_eventsz - 1);
+				last_called_script_event[last_called_script_eventsz - 1]= 0;
 
 				if (bTraceOn)
 				{

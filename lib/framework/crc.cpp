@@ -780,6 +780,7 @@ EcKey EcKey::generate()
 	{
 		// uECC_make_key failed
 		debug(LOG_ERROR, "Failed to generate key pair");
+		delete key;
 		return EcKey();
 	}
 	assert(genResult == 1);

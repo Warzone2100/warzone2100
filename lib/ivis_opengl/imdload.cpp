@@ -724,6 +724,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npolys, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(3): file corrupt");
+		delete s;
 		return nullptr;
 	}
 	pFileData += cnt;

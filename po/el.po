@@ -13232,7 +13232,7 @@ msgstr[1] "%s - Ανατέθηκαν %u μονάδες - Σημεία %d/%d"
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - Ανατέθηκε %u μονάδα - φθορά %3.0f%%"
+msgstr[0] "%s - Ανατέθηκε %u μονάδα - φθορά %d/%d%%"
 msgstr[1] "%s - Ανατέθηκαν %u μονάδες - Σημεία %d/%d"
 
 #: src/structure.cpp:5495
