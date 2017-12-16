@@ -63,6 +63,9 @@ bool	getMiddleClickRotate();
 void	setDrawShadows(bool val);
 bool	getDrawShadows();
 
+bool	getCameraAccel();
+void	setCameraAccel(bool val);
+
 /* Do the 3D display */
 void displayWorld();
 

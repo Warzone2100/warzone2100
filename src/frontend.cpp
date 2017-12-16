@@ -1335,7 +1335,14 @@ static char const *gameOptionsDifficultyString()
 static std::string gameOptionsCameraSpeedString()
 {
 	char cameraSpeed[20];
-	ssprintf(cameraSpeed, "%d", war_GetCameraSpeed());
+	if(getCameraAccel())
+	{
+		ssprintf(cameraSpeed, "%d", war_GetCameraSpeed());
+	}
+	else
+	{
+		ssprintf(cameraSpeed, "%d / 2", war_GetCameraSpeed());
+	}
 	return cameraSpeed;
 }
 

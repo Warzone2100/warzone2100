@@ -137,6 +137,7 @@ static bool	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static bool bRadarDragging = false;
+static bool cameraAccel;
 static bool mouseScroll = true;
 static UDWORD CurrentItemUnderMouse = 0;
 
@@ -192,6 +193,16 @@ bool isMouseOverRadar()
 void setMouseScroll(bool scroll)
 {
 	mouseScroll = scroll;
+}
+
+bool	getCameraAccel()
+{
+	return cameraAccel;
+}
+
+void	setCameraAccel(bool val)
+{
+	cameraAccel = val;
 }
 
 bool	getInvertMouseStatus()
@@ -964,14 +975,24 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	tMid = (0 - *dydt) / decel;
 	CLIP(tMid, 0, dt);
 	*y += *dydt * tMid + decel / 2 * tMid * tMid;
-	*dydt += decel * tMid;
+	if (cameraAccel)
+	{
+		*dydt += decel * tMid;
+	}
 	dt -= tMid;
 
 	// Accelerate if needed.
 	tMid = (targetVelocity - *dydt) / accel;
 	CLIP(tMid, 0, dt);
 	*y += *dydt * tMid + accel / 2 * tMid * tMid;
-	*dydt += accel * tMid;
+	if (cameraAccel)
+	{
+		*dydt += accel * tMid;
+	}
+	else
+	{
+		*dydt = targetVelocity;
+	}
 	dt -= tMid;
 
 	// Continue at target velocity.
@@ -985,7 +1006,7 @@ CURSOR scroll()
 	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 
-	float scaled_max_scroll_speed = scroll_zoom_factor * war_GetCameraSpeed();
+	float scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2);
 	float scaled_accel = scaled_max_scroll_speed / 2;
 
 	CURSOR cursor = CURSOR_DEFAULT;
