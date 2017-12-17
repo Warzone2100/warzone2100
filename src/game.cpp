@@ -2141,6 +2141,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			}
 		}
 
+		initStructLimits();
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mstruct.json");
 
@@ -2380,6 +2381,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	}
 
 	//load in the structures
+	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.json");
 	if (!loadSaveStructure2(aFileName, apsStructLists))

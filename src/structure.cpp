@@ -236,10 +236,16 @@ bool isBlueprint(const BASE_OBJECT *psObject)
 	return psObject->type == OBJ_STRUCTURE && structureIsBlueprint((STRUCTURE *)psObject);
 }
 
+void initStructLimits()
+{
+	for (int i = 0; i < numStructureStats; i++)
+	{
+		memset(asStructureStats[i].curCount, 0, sizeof(asStructureStats[i].curCount));
+	}
+}
+
 void structureInitVars()
 {
-	int i, j;
-
 	asStructureStats = nullptr;
 	numStructureStats = 0;
 	factoryModuleStat = 0;
@@ -247,17 +253,18 @@ void structureInitVars()
 	researchModuleStat = 0;
 	lastMaxUnitMessage = 0;
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	initStructLimits();
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		droidLimit[i] = INT16_MAX;
 		commanderLimit[i] = INT16_MAX;
 		constructorLimit[i] = INT16_MAX;
-		for (j = 0; j < NUM_FLAG_TYPES; j++)
+		for (int j = 0; j < NUM_FLAG_TYPES; j++)
 		{
 			factoryNumFlag[i][j].clear();
 		}
 	}
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		satUplinkExists[i] = false;
 		lasSatExists[i] = false;

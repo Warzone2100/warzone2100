@@ -475,6 +475,7 @@ void checkStructure(const STRUCTURE *psStructure, const char *const location_des
 #define CHECK_STRUCTURE(object) checkStructure((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 void structureInitVars();
+void initStructLimits();
 
 #define syncDebugStructure(psStruct, ch) _syncDebugStructure(__FUNCTION__, psStruct, ch)
 void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch);
