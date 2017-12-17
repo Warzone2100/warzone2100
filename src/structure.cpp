@@ -3499,7 +3499,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 	syncDebugStructure(psBuilding, '<');
 
-	if (psBuilding->flags.test(OBJECT_FLAG_DIRTY))
+	if (psBuilding->flags.test(OBJECT_FLAG_DIRTY) && !mission)
 	{
 		visTilesUpdate(psBuilding);
 		psBuilding->flags.set(OBJECT_FLAG_DIRTY, false);
