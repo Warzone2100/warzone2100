@@ -418,11 +418,13 @@ void NETdeleteQueue(void)
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		delete pairQueue(NETnetQueue(i));
+		pairQueue(NETnetQueue(i)) = nullptr;
 		delete gameQueues[i];
+		gameQueues[i] = nullptr;
 	}
 
 	delete broadcastQueue;
-
+	broadcastQueue = nullptr;
 }
 
 void NETsetNoSendOverNetwork(NETQUEUE queue)
@@ -466,6 +468,10 @@ bool NETend()
 	{
 		// Push the message onto the list.
 		NetQueue *queue = sendQueue(queueInfo);
+		if (queue == nullptr) {
+			debug(LOG_WARNING, "Sending %s to null queue, type %d.", messageTypeToString(message.type), queueInfo.queueType);
+			return true;
+		}
 		queue->pushMessage(message);
 		NETlogPacket(message.type, message.data.size(), false);
 
