@@ -4,6 +4,7 @@ include("script/campaign/templates.js");
 
 const TRANSPORT_LIMIT = 4;
 var index; //Number of transport loads sent into the level
+var startedFromMenu;
 
 
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -239,7 +240,10 @@ function eventTransporterLanded(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
-		camCallOnce("setUnitRank");
+		if (startedFromMenu)
+		{
+			camCallOnce("setUnitRank");
+		}
 
 		if (!camDef(index))
 		{
@@ -332,10 +336,12 @@ function eventStartLevel()
 	truckDefense();
 	setUnitRank(); //All pre-placed player droids are ranked.
 	camPlayVideos("MB2A_MSG");
+	startedFromMenu = false;
 
 	//Only if starting Beta directly rather than going through Alpha
 	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)
 	{
+		startedFromMenu = true;
 		sendPlayerTransporter();
 	}
 	else

@@ -3,6 +3,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var index; //Number of bonus transports that have flown in.
+var startedFromMenu;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -59,7 +60,10 @@ function setHeroUnits()
 
 function eventTransporterLanded(transport)
 {
-	camCallOnce("setHeroUnits");
+	if (startedFromMenu)
+	{
+		camCallOnce("setHeroUnits");
+	}
 }
 
 //Enable all factories.
@@ -336,10 +340,12 @@ function eventStartLevel()
 	camManageTrucks(NEXUS);
 	truckDefense();
 	camPlayVideos(["MB3A_MSG", "MB3A_MSG2"]);
+	startedFromMenu = false;
 
 	//Only if starting Gamma directly rather than going through Beta
 	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)
 	{
+		startedFromMenu = true;
 		setReinforcementTime(LZ_COMPROMISED_TIME);
 		sendPlayerTransporter();
 	}
