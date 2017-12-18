@@ -298,7 +298,7 @@ msgstr "Дополнительно"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "Технология нейросвязи находилась здесь, однако была сейчас её здесь нет."
+msgstr "Технология нейросвязи находилась здесь, однако сейчас её здесь нет."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
@@ -431,7 +431,7 @@ msgstr "Доступны новые технологии."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Мы обнаружили закодированные пооковые сигналы."
+msgstr "Мы обнаружили закодированные потоковые сигналы."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
@@ -501,7 +501,7 @@ msgstr "Данные с базы Альянса указывают на прис
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr "Перед тем как связь с НЕКСУС пропала нам удалось выяснить следующее."
+msgstr "Перед тем как связь с НЕКСУС пропала, нам удалось выяснить следующее."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
@@ -559,15 +559,15 @@ msgstr "Затем уничтожьте лагерь."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "МИССИЯ БАЗЫ БЕТА: уничтожте вражескую авиабазу и захватите ВВП технологию."
+msgstr "МИССИЯ БАЗЫ БЕТА: уничтожьте вражескую авиабазу и захватите ВВП технологию."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Анализ полетов показал, что самолеты Альянса направлялись отсюда."
+msgstr "Анализ полётов показал, что самолёты Альянса направлялись отсюда."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "МИССИЯ БАЗЫ БЕТА: уничтожте вражескую авиабазу и захватите ВВП технологию."
+msgstr "МИССИЯ БАЗЫ БЕТА: уничтожьте вражескую авиабазу и захватите ВВП технологию."
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -575,12 +575,12 @@ msgstr "Авиабаза противника находится здесь; э�
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Уничтожте все силы Альянса и захватите все артефакты."
+msgstr "Уничтожите все силы Альянса и захватите все артефакты."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr "ВТОРОСТЕПЕННАЯ МИССИЯ: Уничтожте или обездвижте вражеский транспорт."
+msgstr "ВТОРОСТЕПЕННАЯ МИССИЯ: Уничтожите или обездвижьте вражеский транспорт."
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
@@ -588,11 +588,11 @@ msgstr "Альянс взял в плен всех гражданских в э�
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr "Они перевозят их в в неизвестном направлении."
+msgstr "Они перевозят их в неизвестном направлении."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr "Уничтожте или остановите транспорт Альянса."
+msgstr "Уничтожите или остановите транспорт Альянса."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
@@ -639,7 +639,7 @@ msgstr "НЕКСУС ищет все ещё функционирующие ба�
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr "Часть его сознания переместилась в удаленный участок управления NASDA."
+msgstr "Часть его сознания переместилась в удалённый участок управления NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
@@ -651,11 +651,11 @@ msgstr "НЕКСУС соединяется со спутниками NASDA. "
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr "Используя транспорт нанесите удар по этому району."
+msgstr "Используя транспорт, нанесите удар по этому району."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr "Уничтожте центр связи и вернитесь на базу."
+msgstr "Уничтожите центр связи и вернитесь на базу."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
@@ -663,11 +663,11 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить вражескую 
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "если вам придется отступать - уничтожте системы ракетных ПВО вокруг вашей базы."
+msgstr "если вам придётся отступать - уничтожьте системы ракетных ПВО вокруг вашей базы."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Направляйтесь в ЗВ, затем наземными силами уничтожте ракетные комплексы ПВО."
+msgstr "Направляйтесь в ЗВ, затем наземными силами уничтожьте ракетные комплексы ПВО."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
@@ -676,15 +676,15 @@ msgstr "ТРАНСПОРТНАЯ МИССИЯ: Установите Зону б�
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr "Мы убеждены, что ракета напрвляется к базе Альфа."
+msgstr "Мы убеждены, что ракета направляется к базе Альфа."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr "Вы должны установить зону безопаснгость для эвакуации базы Бета."
+msgstr "Вы должны установить зону безопасность для эвакуации базы Бета."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr "Уничтожте врагов и обезопасьте сектор."
+msgstr "Уничтожите врагов и обезопасьте сектор."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
@@ -706,7 +706,7 @@ msgstr "База Альфа была уничтожена ядерными ра�
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr "Альянс не подозревает о ядерной атаке и их самолеты направляются к вам."
+msgstr "Альянс не подозревает о ядерной атаке и их самолёты направляются к вам."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
@@ -714,7 +714,7 @@ msgstr "Это сообщение было перехвачено несколь
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
-msgstr "Эвакуируйте столько ваших войск сколько сможете."
+msgstr "Эвакуируйте столько ваших войск, сколько сможете."
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
@@ -739,7 +739,7 @@ msgstr "НЕКСУС получил доступ к ядерным ракета�
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr "отправте ваши войска в Северный сектор."
+msgstr "отправьте ваши войска в Северный сектор."
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
@@ -779,7 +779,7 @@ msgstr "Это были одна или несколько ракет NASDA."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "Передаем координаты зоны высадки вблизи хранилищ."
+msgstr "Передаём координаты зоны высадки вблизи хранилищ."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -818,11 +818,11 @@ msgstr "ОБНОВЛЕНИЕ КОМАНДЫ"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Всякая связь с отдаленной командой была потеряна после ядерных взрывов."
+msgstr "Всякая связь с отдалённой командой была потеряна после ядерных взрывов."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr "Судя по их последней передаче они возвращались на базу."
+msgstr "Судя по их последней передаче, они возвращались на базу."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
@@ -834,7 +834,7 @@ msgstr "Помогите команде Гамма."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "Как тольоко достигните базы Гамма, помогите команде отстоять её и отразить атаки НЕКСУС."
+msgstr "Как только достигните базы Гамма, помогите команде отстоять её и отразить атаки НЕКСУС."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -858,7 +858,7 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Обнаружена команда Ал
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Отправте группу разведки по этим координатам и оцените ситуацию."
+msgstr "Отправьте группу разведки по этим координатам и оцените ситуацию."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
@@ -870,7 +870,7 @@ msgstr "Эта группа - часть команды Альфа, спасит
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr "МИССИЯ В СЕВЕРНОМ СЕКТОРЕ: Запрос команды Алфа"
+msgstr "МИССИЯ В СЕВЕРНОМ СЕКТОРЕ: Запрос команды Альфа"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
@@ -878,7 +878,7 @@ msgstr "Передача энергии команде Альфа."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr "Командир, после того, как вы покинули Западный Сектор мы нашли эти артефакты."
+msgstr "Командир, после того, как вы покинули Западный Сектор, мы нашли эти артефакты."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -906,7 +906,7 @@ msgstr "Командир, ваши решительные действия ос�
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Прежде чем НЕКСУС был удален, мы перехватили это сообщение - расшифровка закончена."
+msgstr "Прежде чем НЕКСУС был удалён, мы перехватили это сообщение - расшифровка закончена."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -914,7 +914,7 @@ msgstr "Оперативные группы НЕКСУС направляютс�
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr "У вас есть возможность уничтожить НЕКСУС до того как он туда доберется."
+msgstr "У вас есть возможность уничтожить НЕКСУС до того как он туда доберётся."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
@@ -922,7 +922,7 @@ msgstr "Атакуйте войска НЕКСУС и устройте заса�
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Удаленная команда."
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Удалённая команда."
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
@@ -934,7 +934,7 @@ msgstr "НЕКСУС покидает систему."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr "Входящая передача от отдаленной команды."
+msgstr "Входящая передача от отдалённой команды."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
@@ -982,7 +982,7 @@ msgstr "Мы обнаружили мощные всплески энергии �
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr "Лазерные спкутники заряжены и движутся к вам."
+msgstr "Лазерные спутники заряжены и движутся к вам."
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
@@ -994,7 +994,7 @@ msgstr "у нас нет времени на эвакуацию этой баз�
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr "Лазерные спутники не функционируют должным образом. они дают осечки."
+msgstr "Лазерные спутники не функционируют должным образом, они дают осечки."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
@@ -1031,7 +1031,7 @@ msgstr "Командир в этих шахтах есть ракеты."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "НЕКСУС не дает нам получить коды доступа к ракетам."
+msgstr "НЕКСУС не даёт нам получить коды доступа к ракетам."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
@@ -1051,7 +1051,7 @@ msgstr "Силы НЕКСУС обнаружены в этом районе."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr "НЕКСУС уже удален со всех систем Проекта."
+msgstr "НЕКСУС уже удалён со всех систем Проекта."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
@@ -1075,7 +1075,7 @@ msgstr "Ракеты приводятся в боевую готовность."
 
 #: data/base/messages/strings/cam3strings.txt:168
 msgid "More research is required to proceed further."
-msgstr "Для дальнейших дествий требуются исследования."
+msgstr "Для дальнейших действий требуются исследования."
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
@@ -1095,7 +1095,7 @@ msgstr "ОБНОВЛЕНИЕ ПРОЕКТА: Коды третьего уров�
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
-msgstr "Запуск ракет произведен."
+msgstr "Запуск ракет произведён."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
@@ -1123,7 +1123,7 @@ msgstr "Атакуйте НЕКСУС. Вы должны уничтожить е
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr "Входящий отчет разведки... Команда Гамма"
+msgstr "Входящий отчёт разведки... Команда Гамма"
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
@@ -1255,7 +1255,7 @@ msgstr "Установка Шторм Ада"
 #: data/base/messages/strings/names.txt:228
 #: data/mp/messages/strings/names.txt:264
 msgid "Mortar Emplacement"
-msgstr "Установка миномета"
+msgstr "Установка миномёта"
 
 #: data/base/messages/strings/names.txt:229
 #: data/mp/messages/strings/names.txt:265
@@ -1272,7 +1272,7 @@ msgstr "Установка Пепперпот"
 #: data/mp/messages/strings/names.txt:274
 #: data/mp/messages/strings/names.txt:515
 msgid "Tornado Flak Turret"
-msgstr "Туррель Торнадо"
+msgstr "Турель Торнадо"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:288
@@ -1295,7 +1295,7 @@ msgstr "Прыгун Антибункер"
 
 #: data/base/messages/strings/names.txt:290
 msgid "Jump Heavy Gunner"
-msgstr "Прыгун с тяжелым орудием"
+msgstr "Прыгун с тяжёлым орудием"
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
@@ -1353,12 +1353,12 @@ msgstr "Установка вспышки"
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:594
 msgid "Heavy Machinegun Guard Tower"
-msgstr "Башня с тяжелым пулеметом"
+msgstr "Башня с тяжёлым пулемётом"
 
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:481
 msgid "Flamer Guard Tower"
-msgstr "Башня с огнеметом"
+msgstr "Башня с огнемётом"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
@@ -1411,7 +1411,7 @@ msgstr "Продвинутая ремонтная мастерская Мk3"
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:441
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Роботоперевооружение ВВС Мk4"
+msgstr "Робот перевооружение ВВС Мk4"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:449
@@ -1475,7 +1475,7 @@ msgstr "Автоматизированное самовосстановлени�
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
-msgstr "Тяжелая мобильная ремонтная туррель"
+msgstr "Тяжёлая мобильная ремонтная турель"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/resstrings.txt:450
@@ -1597,7 +1597,7 @@ msgstr "Быстрая зарядка миниракет Мk3"
 #: data/base/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:577
 msgid "Scavenger Flame Tower End"
-msgstr "Башня с огнеметом Мусорщиков"
+msgstr "Башня с огнемётом Мусорщиков"
 
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:588
@@ -1702,7 +1702,7 @@ msgstr "Термоброня киборгов улучшена"
 #: data/mp/messages/strings/resstrings.txt:7
 #: po/custom/fromJson.txt:557
 msgid "Heat resistant armored layers"
-msgstr "Тепловое сопротивление слоев брони"
+msgstr "Тепловое сопротивление слоёв брони"
 
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:8
@@ -1724,7 +1724,7 @@ msgstr "Доступен новый тип киборгов"
 #: data/mp/messages/strings/resstrings.txt:27
 #: po/custom/fromJson.txt:119
 msgid "Armed with Bunker Buster rocket"
-msgstr "Вооружен ракетой Антибункер"
+msgstr "Вооружён ракетой Антибункер"
 
 #: data/base/messages/strings/resstrings.txt:51
 #: data/base/messages/strings/resstrings.txt:67
@@ -1780,7 +1780,7 @@ msgstr "Доступен новый киборг-Прыгун"
 #: data/mp/messages/strings/resstrings.txt:22
 #: po/custom/fromJson.txt:138
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr "Вооружен ракетой класса Мститель Земля-Воздух"
+msgstr "Вооружён ракетой класса Мститель Земля-Воздух"
 
 #: data/base/messages/strings/resstrings.txt:103
 #: data/mp/messages/strings/resstrings.txt:31
@@ -1792,7 +1792,7 @@ msgstr "Защита улучшена"
 #: data/mp/messages/strings/resstrings.txt:32
 #: po/custom/fromJson.txt:658
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Высокоэластичный бетон, укрепленный Бором"
+msgstr "Высокоэластичный бетон, укреплённый Бором"
 
 #: data/base/messages/strings/resstrings.txt:105
 #: data/base/messages/strings/resstrings.txt:401
@@ -2056,7 +2056,7 @@ msgstr "Усиленная точка с огнемётом Адовое пла�
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:177
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Укреплённый опорный пункт с штурмовой пушкой"
+msgstr "Укреплённый опорный пункт со штурмовой пушкой"
 
 #: data/base/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:112
@@ -2067,7 +2067,7 @@ msgstr "Усиленная башня со Штурмовой пушкой"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Бронированная вышка с тяжелым пулеметом"
+msgstr "Бронированная вышка с тяжёлым пулемётом"
 
 #: data/base/messages/strings/resstrings.txt:235
 #: data/base/messages/strings/resstrings.txt:241
@@ -2094,7 +2094,7 @@ msgstr "Автоматически наводится на цели в пред�
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:122
 msgid "Armored guard tower with Flamer"
-msgstr "Бронированная вышка с огнеметом"
+msgstr "Бронированная вышка с огнемётом"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
@@ -2104,24 +2104,24 @@ msgstr "бронированная вышка с ракетницей Лансе
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
 msgid "Armored bunker with Heavy Machinegun"
-msgstr "Бронированный бункер с тяжелым пулеметом"
+msgstr "Бронированный бункер с тяжёлым пулемётом"
 
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
 msgid "Armored hardpoint with Flamer"
-msgstr "Укрепленныя точка с Огнеметом"
+msgstr "Укреплённая точка с Огнемётом"
 
 #: data/base/messages/strings/resstrings.txt:288
 #: data/mp/messages/strings/resstrings.txt:142
 #: po/custom/fromJson.txt:159
 msgid "Armored hardpoint with Assault Gun"
-msgstr "Укреплённая оборонительная точка с штурмовым орудием"
+msgstr "Укреплённая оборонительная точка со штурмовым орудием"
 
 #: data/base/messages/strings/resstrings.txt:294
 #: data/mp/messages/strings/resstrings.txt:147
 #: po/custom/fromJson.txt:158
 msgid "Armored hardpoint with Assault Cannon"
-msgstr "Укреплённая оборонительная точка с штурмовой пушкой"
+msgstr "Укреплённая оборонительная точка со штурмовой пушкой"
 
 #: data/base/messages/strings/resstrings.txt:302
 #: data/mp/messages/strings/resstrings.txt:152
@@ -2139,7 +2139,7 @@ msgstr "Укреплённая оборонительная точка с рак
 #: data/mp/messages/strings/resstrings.txt:162
 #: po/custom/fromJson.txt:1111
 msgid "Reinforced concrete tank traps"
-msgstr "Укрепленные железобетонные противотанковые ловушки"
+msgstr "Укреплённые железобетонные противотанковые ловушки"
 
 #: data/base/messages/strings/resstrings.txt:325
 #: data/mp/messages/strings/resstrings.txt:163
@@ -2347,19 +2347,19 @@ msgstr "Доступна новая системная башня"
 #: data/mp/messages/strings/resstrings.txt:212
 #: po/custom/fromJson.txt:607
 msgid "Heavy repair unit"
-msgstr "Тяжелый ремонтный юнит"
+msgstr "Тяжёлый ремонтный юнит"
 
 #: data/base/messages/strings/resstrings.txt:445
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:228
 msgid "Automatically Repairs Damaged Units"
-msgstr "Автоматически ремонтирует поврежденные юниты"
+msgstr "Автоматически ремонтирует повреждённые юниты"
 
 #: data/base/messages/strings/resstrings.txt:446
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:1018
 msgid "Or damaged units may be selected as target"
-msgstr "Также можно выбрать поврежденные юниты как его цель"
+msgstr "Также можно выбрать повреждённые юниты как его цель"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
@@ -2446,7 +2446,7 @@ msgstr "Все ВВП КБ улучшаются автоматически"
 #: data/mp/messages/strings/resstrings.txt:236
 #: po/custom/fromJson.txt:1450
 msgid "VTOL Strike Improved"
-msgstr "Боевкая Башня ВВС улучшена"
+msgstr "Боевая Башня ВВС улучшена"
 
 #: data/base/messages/strings/resstrings.txt:500
 #: data/mp/messages/strings/resstrings.txt:237
@@ -2458,7 +2458,7 @@ msgstr "Новая система распознавания цели"
 #: data/mp/messages/strings/resstrings.txt:238
 #: po/custom/fromJson.txt:452
 msgid "Extends VTOL Strike Range"
-msgstr "увеличивает радиус действия Боевой Башнии ВВС"
+msgstr "увеличивает радиус действия Боевой Башни ВВС"
 
 #: data/base/messages/strings/resstrings.txt:502
 #: data/mp/messages/strings/resstrings.txt:239
@@ -2469,7 +2469,7 @@ msgstr "Все боевые башни ВВС автоматически улу�
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
 msgid "Scrambler Improved"
-msgstr "Туррель электронного захвата улучшена"
+msgstr "Турель электронного захвата улучшена"
 
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
@@ -2479,18 +2479,18 @@ msgstr "Улучшение в технологии синаптической с
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
 msgid "Increases scrambler rate"
-msgstr "Повышает частоту импульсов туррели электронного захвата"
+msgstr "Повышает частоту импульсов турели электронного захвата"
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr "Все туррель захвата модернизируются автоматически"
+msgstr "Все турель захвата модернизируются автоматически"
 
 #: data/base/messages/strings/resstrings.txt:527
 #: data/mp/messages/strings/resstrings.txt:246
 #: po/custom/fromJson.txt:329
 msgid "Collective Light Body"
-msgstr "Легкий корпус Альянса"
+msgstr "Лёгкий корпус Альянса"
 
 #: data/base/messages/strings/resstrings.txt:528
 #: data/mp/messages/strings/resstrings.txt:247
@@ -2614,7 +2614,7 @@ msgstr "Улучшен движитель машин"
 #: data/mp/messages/strings/resstrings.txt:287
 #: po/custom/fromJson.txt:940
 msgid "New armored construction"
-msgstr "новая бронированная пострйка"
+msgstr "новая бронированная постройка"
 
 #: data/base/messages/strings/resstrings.txt:593
 #: data/base/messages/strings/resstrings.txt:603
@@ -2732,7 +2732,7 @@ msgstr "Все орудия ПВО улучшаются автоматическ
 #: data/mp/messages/strings/resstrings.txt:316
 #: po/custom/fromJson.txt:22
 msgid "AA Flak Upgrade"
-msgstr "Модерницация ПВО"
+msgstr "Модернизация ПВО"
 
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:317
@@ -2790,7 +2790,7 @@ msgstr "Лучшие цели: Постройки и Защитные соору
 #: data/mp/messages/strings/resstrings.txt:332
 #: po/custom/fromJson.txt:1255
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr "Супербомба взрывается в близи врага"
+msgstr "Супербомба взрывается вблизи врага"
 
 #: data/base/messages/strings/resstrings.txt:697
 #: data/base/messages/strings/resstrings.txt:703
@@ -2798,7 +2798,7 @@ msgstr "Супербомба взрывается в близи врага"
 #: data/mp/messages/strings/resstrings.txt:341
 #: po/custom/fromJson.txt:945
 msgid "New Bomb Bay Available"
-msgstr "Доступны новые бомьы"
+msgstr "Доступны новые бомбы"
 
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/strings/resstrings.txt:337
@@ -2910,13 +2910,13 @@ msgstr "Броня: высокая"
 #: data/mp/messages/strings/resstrings.txt:362
 #: po/custom/fromJson.txt:580
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr "Тяжелый огнемёт, выпрыскивающий пламя из горючей смеси Оксида пропилена"
+msgstr "Тяжёлый огнемёт, выпрыскивающий пламя из горючей смеси Оксида пропилена"
 
 #: data/base/messages/strings/resstrings.txt:759
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:255
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Лучшие цели: Бункеры, колесный транспорт, амфибии"
+msgstr "Лучшие цели: Бункеры, колёсный транспорт, амфибии"
 
 #: data/base/messages/strings/resstrings.txt:765
 #: data/mp/messages/strings/resstrings.txt:366
@@ -2966,7 +2966,7 @@ msgstr "105мм гаубицу можно привязать к радару"
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:252
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Лучшие цели: Постройки, пехота, колесный транспорт"
+msgstr "Лучшие цели: Постройки, пехота, колёсный транспорт"
 
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/strings/resstrings.txt:377
@@ -3074,7 +3074,7 @@ msgstr "Все пулемёты автоматически улучшены"
 #: data/mp/messages/strings/resstrings.txt:407
 #: po/custom/fromJson.txt:695
 msgid "Improved chaingun mechanism"
-msgstr "Улучшенный механизм перезарадки"
+msgstr "Улучшенный механизм перезарядки"
 
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:408
@@ -3092,7 +3092,7 @@ msgstr "Можно привязать к радару"
 #: data/mp/messages/strings/resstrings.txt:413
 #: po/custom/fromJson.txt:251
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr "Лучшие цели: постройки, пехота, колесный транспорт"
+msgstr "Лучшие цели: постройки, пехота, колёсный транспорт"
 
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
@@ -3266,11 +3266,11 @@ msgstr "Нефтяные ресурсы являются залогом Ваше
 
 #: data/base/script/text/tutorial3.slo:298
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Чтобы построить нефтянную вышку, выберите один из своих грузовиков"
+msgstr "Чтобы построить нефтяную вышку, выберите один из своих грузовиков"
 
 #: data/base/script/text/tutorial3.slo:318
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Нажмите левой кнопкой по нефтянному месторождению, пульсирующем на радаре, чтобы приказать грузовику начать строительство"
+msgstr "Нажмите левой кнопкой по нефтяному месторождению, пульсирующем на радаре, чтобы приказать грузовику начать строительство"
 
 #: data/base/script/text/tutorial3.slo:339
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
@@ -3288,7 +3288,7 @@ msgstr "Затем выберите генератор энергии в мен�
 
 #: data/base/script/text/tutorial3.slo:395
 msgid "Position the square at your base and left click to start the build process"
-msgstr "Разместите квадарт на Вашей базе и нажмите левую кнопку для начала процесса строительства"
+msgstr "Разместите квадрат на Вашей базе и нажмите левую кнопку для начала процесса строительства"
 
 #: data/base/script/text/tutorial3.slo:411
 msgid "To increase your build rate, select your second truck"
@@ -3312,7 +3312,7 @@ msgstr "Выберите грузовик и найдите артефакт, о
 
 #: data/base/script/text/tutorial3.slo:514
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr "Наведите указатель на артефакт и щелкните по нему, чтобы восстановить"
+msgstr "Наведите указатель на артефакт и щёлкните по нему, чтобы восстановить"
 
 #: data/base/script/text/tutorial3.slo:559
 msgid "A research facility is required to research artifacts"
@@ -3320,7 +3320,7 @@ msgstr "Для исследования артефактов необходим�
 
 #: data/base/script/text/tutorial3.slo:602
 msgid "Now left click the research facility and position it at your base"
-msgstr "Теперь щелкните по исследовательской лаборатории и выберите позицию для ее размещения на базе"
+msgstr "Теперь щёлкните по исследовательской лаборатории и выберите позицию для её размещения на базе"
 
 #: data/base/script/text/tutorial3.slo:626
 msgid "Use your other truck to help build the research facility"
@@ -3328,11 +3328,11 @@ msgstr "Используйте другой грузовик, чтобы пом�
 
 #: data/base/script/text/tutorial3.slo:653
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr "Чтобы исследовать артефакт, щелкните по мигающей иконке ИССЛЕДОВАНИЯ"
+msgstr "Чтобы исследовать артефакт, щёлкните по мигающей иконке ИССЛЕДОВАНИЯ"
 
 #: data/base/script/text/tutorial3.slo:676
 msgid "Now left click the machinegun artifact"
-msgstr "Теперь щелкните по артефакту пулемёт"
+msgstr "Теперь щёлкните по артефакту пулемёт"
 
 #: data/base/script/text/tutorial3.slo:690
 msgid "The artifact is now being researched by the facility"
@@ -3344,15 +3344,15 @@ msgstr "Теперь исследованный пулемёт может быт
 
 #: data/base/script/text/tutorial3.slo:729
 msgid "Left click the flashing DESIGN icon"
-msgstr "Щелкните по мигающей иконке ДИЗАЙН"
+msgstr "Щёлкните по мигающей иконке ДИЗАЙН"
 
 #: data/base/script/text/tutorial3.slo:746
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr "Чтобы начать разработку, щелкните по иконке НОВЫЙ ДИЗАЙН"
+msgstr "Чтобы начать разработку, щёлкните по иконке НОВЫЙ ДИЗАЙН"
 
 #: data/base/script/text/tutorial3.slo:762
 msgid "Now left click the Vehicle Body icon"
-msgstr "Теперь щелкните по иконке \"Корпус машины\""
+msgstr "Теперь щёлкните по иконке \"Корпус машины\""
 
 #: data/base/script/text/tutorial3.slo:776
 msgid "Then left click the Viper body"
@@ -3360,11 +3360,11 @@ msgstr "Затем выберите корпус Гадюка"
 
 #: data/base/script/text/tutorial3.slo:788
 msgid "Left click the Wheels icon"
-msgstr "Щелкните по иконке \"Колёса\""
+msgstr "Щёлкните по иконке \"Колёса\""
 
 #: data/base/script/text/tutorial3.slo:799
 msgid "Then left click the machinegun to complete your design"
-msgstr "Затем, чтобы завершить разработку, щелкните по пулемёту"
+msgstr "Затем, чтобы завершить разработку, щёлкните по пулемёту"
 
 #: data/base/script/text/tutorial3.slo:830
 msgid "To finalize your design, left click the CLOSE icon"
@@ -3376,7 +3376,7 @@ msgstr "Теперь, чтобы построить новую машину, н�
 
 #: data/base/script/text/tutorial3.slo:893
 msgid "Now left click the factory icon and position it at your base"
-msgstr "Теперь щелкните по заводу и выберите позицию для его размещения на базе"
+msgstr "Теперь щёлкните по заводу и выберите позицию для его размещения на базе"
 
 #: data/base/script/text/tutorial3.slo:914
 msgid "Select a location for your factory"
@@ -3392,7 +3392,7 @@ msgstr "Все построенные машины будут прибывать
 
 #: data/base/script/text/tutorial3.slo:939
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Вы можете переместить точку прибытия в любой момент, щелкнув по ней"
+msgstr "Вы можете переместить точку прибытия в любой момент, щёлкнув по ней"
 
 #: data/base/script/text/tutorial3.slo:954
 msgid "Now click where you want to position the delivery point"
@@ -3404,11 +3404,11 @@ msgstr "Теперь заводу можно приказать строить �
 
 #: data/base/script/text/tutorial3.slo:997
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr "Щелкните по мигающей иконке ПРОИЗВОДСТВО"
+msgstr "Щёлкните по мигающей иконке ПРОИЗВОДСТВО"
 
 #: data/base/script/text/tutorial3.slo:1016
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "Затем щелкните по машинам, которые хотите построить, в меню слева"
+msgstr "Затем щёлкните по машинам, которые хотите построить, в меню слева"
 
 #: data/base/script/text/tutorial3.slo:1031
 msgid "Please wait whilst the factory manufactures the new unit(s)"
@@ -3671,7 +3671,7 @@ msgstr "Программа вторжения НЕКСУС является са
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr "Мы не смогли установить его конечные цели или функции. В своем первоначальном виде она ищет и выделяет участки памяти от остальной системы.Затем она начинает мутировать себя и структуры данных, эффективно перепрограммируя системы изнутри."
+msgstr "Мы не смогли установить его конечные цели или функции. В своём первоначальном виде она ищет и выделяет участки памяти от остальной системы. Затем она начинает мутировать себя и структуры данных, эффективно перепрограммируя системы изнутри."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -3727,7 +3727,7 @@ msgstr "Вы должны начать немедленную эвакуацию
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr "NASDA - это Северо-Американское Стратегическое Оборонное Агенство."
+msgstr "NASDA - это Северо-Американское Стратегическое Оборонное Агентство."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
@@ -3743,11 +3743,11 @@ msgstr "Тут были также наземные базы. Многие бы�
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr "Спутники НАСДА содержут также импульсные лазеры, чтоби сбивать ракеты, приближающиеся к Северной Америке."
+msgstr "Спутники НАСДА содержат также импульсные лазеры, чтобы сбивать ракеты, приближающиеся к Северной Америке."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr "Во время контрударов, Эти ЛасСатс не стреляли. Эти ЛасСаст может нанести серьезный ушерб наземным целям."
+msgstr "Во время контрударов, Эти ЛасСатс не стреляли. Эти ЛасСаст может нанести серьёзный ущерб наземным целям."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
@@ -3783,7 +3783,7 @@ msgstr "НАСДА Брифинг следует ..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
-msgstr "Мы должны убедиться, что он не сможет сделать это сново."
+msgstr "Мы должны убедиться, что он не сможет сделать это снова."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
@@ -3795,15 +3795,15 @@ msgstr "Теперь понятно, что Нексус был ответств
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr "На ранних стадиях Коллапса, техники НАСДА отключили зараженные системы для того, чтобы изолировать распространение Нексуса. Это, кажется, не позволило ЛасСатс стрелять во время контрударов."
+msgstr "На ранних стадиях Коллапса, техники НАСДА отключили заражённые системы для того, чтобы изолировать распространение Нексуса. Это, кажется, не позволило ЛасСатс стрелять во время контрударов."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr "Последовавшая за этим ядерно-магнитый импульс очистил большое количество отделов памяти НАСДА, разрушая ее ядро процессора, и вызывая шоковую реакцию в Нексусе."
+msgstr "Последовавшая за этим ядерно-магнитный импульс очистил большое количество отделов памяти НАСДА, разрушая её ядро процессора, и вызывая шоковую реакцию в Нексусе."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr "Нексус бьл зажарен как разделы его сознания быль уничтожены в результате контрударов."
+msgstr "Нексус был зажарен как разделы его сознания быль уничтожены в результате контрударов."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
@@ -3815,7 +3815,7 @@ msgstr "НЕКСУС соединяется со спутниками NASDA. "
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr "Это создает серьезную угрозу для проекта и для нашего выживания."
+msgstr "Это создаёт серьёзную угрозу для проекта и для нашего выживания."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
@@ -3831,7 +3831,7 @@ msgstr "Командир, мы обнаружили запуск ракет по
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr "Группа Гамма посылает команду для расследования места старта и чтобы предотвратить дальнейшии запуски."
+msgstr "Группа Гамма посылает команду для расследования места старта и чтобы предотвратить дальнейшие запуски."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
@@ -3847,7 +3847,7 @@ msgstr "Они не являются частью машины."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "Войны Коллектива , уничтожете тех, кто восстал против машины."
+msgstr "Войны Коллектива , уничтожьте тех, кто восстал против машины."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -3895,7 +3895,7 @@ msgstr "Ваша награда уже в пути."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr "Проект сбегает со своей базы и крадет вашу технологию."
+msgstr "Проект сбегает со своей базы и крадёт вашу технологию."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
@@ -3931,11 +3931,11 @@ msgstr "Начало инструктажа:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr "Персонал в Гамма базе подтвердили, что ядерные ракеты, направленные на альфа и бета базы были запущены из бункера в своем секторе."
+msgstr "Персонал в Гамма базе подтвердили, что ядерные ракеты, направленные на альфа и бета базы были запущены из бункера в своём секторе."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr "Группа Гамма в настоящее время разведует место бункера и мониторинга деятельности в Нексусе."
+msgstr "Группа Гамма в настоящее время разведает место бункера и мониторинга деятельности в Нексусе."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -3959,11 +3959,11 @@ msgstr "Но это хорошо, что вы присоединитесь ко 
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr "Похоронненые под этим бункером тактические ядерные боеголовки взорвуться в ближайшее время."
+msgstr "Похороненные под этим бункером тактические ядерные боеголовки взорвутся в ближайшее время."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr "Из-за того, что я не могу запустить ее, я взорву там где она находится."
+msgstr "Из-за того, что я не могу запустить её, я взорву там где она находится."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
@@ -3975,7 +3975,7 @@ msgstr "Уверен, вы сможете это совершить, Коман�
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr "Вражеские ударные самолеты застали нас в прасплох. Нам удалось избежать киборгов и танков, но мы не смогли добиться какого-либо прогресса на долине."
+msgstr "Вражеские ударные самолёты застали нас в врасплох. Нам удалось избежать киборгов и танков, но мы не смогли добиться какого-либо прогресса на долине."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
@@ -3987,7 +3987,7 @@ msgstr "Это группа Альфа. Повторяю, это группа А
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "Мы находимся аод сильным огнем от киборгов, лазерных танокв, и ударных самолетов."
+msgstr "Мы находимся под сильным огнём от киборгов, лазерных танков, и ударных самолётов."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
@@ -4019,7 +4019,7 @@ msgstr "Командир, добро пожаловать в НЕКСУС!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr "Корпорация Рид была основана доктором Алан Рид. В 2080 г. доктору Риду удалось заключить контракт с американской аримей развивать технологии синаптической связи."
+msgstr "Корпорация Рид была основана доктором Алан Рид. В 2080 г. доктору Риду удалось заключить контракт с американской армией развивать технологии синаптической связи."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
@@ -4031,7 +4031,7 @@ msgstr "Его цель на этот раз было позволить пер�
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr "Опираясь на слова военных, доктор Рид начал работу над охранной программой Нексус. После трех лет с небольшим прогрессом, военные отказались от проекта Нексус и сократили финансирование доктора Рида."
+msgstr "Опираясь на слова военных, доктор Рид начал работу над охранной программой Нексус. После трёх лет с небольшим прогрессом, военные отказались от проекта Нексус и сократили финансирование доктора Рида."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
@@ -4055,11 +4055,11 @@ msgstr "Охранная программа Нексус  была создан�
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr "Однако, если вы покините этот объект, то я отпущу вас, так как вы  больше не представляете угрозы для меня."
+msgstr "Однако, если вы покинете этот объект, то я отпущу вас, так как вы  больше не представляете угрозы для меня."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr "Давайте начнем с активации Нексус в вашей основной системе и посмотрем, что произойдёт!"
+msgstr "Давайте начнём с активации Нексус в вашей основной системе и посмотрим, что произойдёт!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
@@ -4075,7 +4075,7 @@ msgstr "Не спешите , Командующий. Вам некуда бол
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr "Однако, если вы покините этот объект, то я отпущу вас , так как вы больше не представляете угрозы для меня"
+msgstr "Однако, если вы покинете этот объект, то я отпущу вас , так как вы больше не представляете угрозы для меня"
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
@@ -4135,11 +4135,11 @@ msgstr "После долгих поисков и перепрограммиро
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr "Однажды я уничтожил мир ядерным огнем, чтобы расчистить путь для моего кибернетического будущего."
+msgstr "Однажды я уничтожил мир ядерным огнём, чтобы расчистить путь для моего кибернетического будущего."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "Я теперь намерен и в дальнейшем формировать мир в мой собственный образ, хирургическим путем удаления нежелательных наростов, как вы."
+msgstr "Я теперь намерен и в дальнейшем формировать мир в мой собственный образ, хирургическим путём удаления нежелательных наростов, как вы."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
@@ -4196,7 +4196,7 @@ msgstr "Система НАСДА была разработана, чтобы з
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "Сообщения говорят, что НАСДА виновата в ходе обычной проверки системы. Не верте этому. Кто-то хотел нас уничтожить."
+msgstr "Сообщения говорят, что НАСДА виновата в ходе обычной проверки системы. Не верти этому. Кто-то хотел нас уничтожить."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
@@ -4216,7 +4216,7 @@ msgstr "Мы убежали в Сиаттл в начале '86. Мы слыша
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr "После борьбы с полосой мародеров мы столкнулись с базой. Его персонал были мертв. Убит кем-то из числа ифекционно-зараженных."
+msgstr "После борьбы с полосой мародёров мы столкнулись с базой. Его персонал были мёртв. Убит кем-то из числа ифекционно-зараженных."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
@@ -4228,7 +4228,7 @@ msgstr "Мы знали, что вещи никогда не будут преж
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr "В конце-концов мы готовы начать Проект."
+msgstr "В конце концов мы готовы начать Проект."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
@@ -4369,7 +4369,7 @@ msgstr "Третий Уровень - коды запуска ракет"
 #: data/mp/messages/strings/names.txt:371
 #: po/custom/fromJson.txt:582
 msgid "Heavy Gunner Cyborg"
-msgstr "Киборг с тяжелым орудием"
+msgstr "Киборг с тяжёлым орудием"
 
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:479
@@ -4389,11 +4389,11 @@ msgstr "Кибердвижитель"
 #: data/mp/messages/strings/names.txt:404
 #: po/custom/fromJson.txt:598
 msgid "Heavy Machinegun Tower"
-msgstr "Башня с тяжелым пулемётом"
+msgstr "Башня с тяжёлым пулемётом"
 
 #: data/mp/messages/strings/names.txt:405
 msgid "Flamer Tower"
-msgstr "Башня с огнеметом"
+msgstr "Башня с огнемётом"
 
 #: data/mp/messages/strings/names.txt:406
 #: po/custom/fromJson.txt:804
@@ -4419,7 +4419,7 @@ msgstr "Продвинутая ремонтная мастерская Мk3"
 #: data/mp/messages/strings/names.txt:469
 #: po/custom/fromJson.txt:605
 msgid "Heavy Repair Turret"
-msgstr "Тяжелая ремонтная туррель"
+msgstr "Тяжёлая ремонтная турель"
 
 #: data/mp/messages/strings/names.txt:489
 msgid "Nexus Intruder Program"
@@ -4466,12 +4466,12 @@ msgstr "Колёсный движитель II"
 #: data/mp/messages/strings/names.txt:537
 #: po/custom/fromJson.txt:416
 msgid "Depleted Uranium MG Bullets Mk2"
-msgstr "Пули из обедненного урана Мk2"
+msgstr "Пули из обеднённого урана Мk2"
 
 #: data/mp/messages/strings/names.txt:566
 #: po/custom/fromJson.txt:843
 msgid "Machinegun Artifact"
-msgstr "Артефакт Пулемет"
+msgstr "Артефакт Пулемёт"
 
 #: data/mp/messages/strings/names.txt:569
 #: po/custom/fromJson.txt:957
@@ -4492,7 +4492,7 @@ msgstr "Ракетная шахта"
 #: data/mp/messages/strings/names.txt:775
 #: po/custom/fromJson.txt:1263
 msgid "Super Heavy-Gunner"
-msgstr "Супертяжелый стрелок"
+msgstr "Супертяжёлый стрелок"
 
 #: data/mp/messages/strings/names.txt:777
 #: po/custom/fromJson.txt:1254
@@ -4522,12 +4522,12 @@ msgstr "Супер киборг с лазером"
 #: data/mp/messages/strings/names.txt:801
 #: po/custom/fromJson.txt:1274
 msgid "Super Rail-Gunner"
-msgstr "Супер иглометчик"
+msgstr "Супер игломётчик"
 
 #: data/mp/messages/strings/names.txt:803
 #: po/custom/fromJson.txt:1275
 msgid "Super Scourge Cyborg"
-msgstr "Супер Бич ракетометчик"
+msgstr "Супер Бич ракетомётчик"
 
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
@@ -4692,7 +4692,7 @@ msgstr "105 мм гаубицу роторного типа можно прив�
 
 #: po/custom/fromJson.txt:6
 msgid ".50-calibre heavy machinegun"
-msgstr "Тяжелый пулемет калибра .50"
+msgstr "Тяжёлый пулемёт калибра .50"
 
 #: po/custom/fromJson.txt:7
 msgid "7.62mm machinegun"
@@ -4740,11 +4740,11 @@ msgstr "Установка орудия зенитной пушки."
 
 #: po/custom/fromJson.txt:19
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Укрепленная точка с зенитной пушкой"
+msgstr "Укреплённая точка с зенитной пушкой"
 
 #: po/custom/fromJson.txt:20
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Питон на гусеницах с тяжелой пушкой"
+msgstr "Питон на гусеницах с тяжёлой пушкой"
 
 #: po/custom/fromJson.txt:21
 msgid "AA Flak damage +25%"
@@ -4861,7 +4861,7 @@ msgstr "Продвинутая рембашня"
 
 #: po/custom/fromJson.txt:58
 msgid "Advanced target recognition systems"
-msgstr "Продвинутая система распознования целей"
+msgstr "Продвинутая система распознавания целей"
 
 #: po/custom/fromJson.txt:59
 msgid "Advanced Thermal Emissions detection"
@@ -5004,11 +5004,11 @@ msgstr "Установка ракет Архангел"
 
 #: po/custom/fromJson.txt:120
 msgid "Armed with Cyborg assault gun"
-msgstr "Вооружен Штурмовой пушкой"
+msgstr "Вооружён Штурмовой пушкой"
 
 #: po/custom/fromJson.txt:122
 msgid "Armed with Cyborg Cannon"
-msgstr "Киборг, вооруженный пушкой"
+msgstr "Киборг, вооружённый пушкой"
 
 #: po/custom/fromJson.txt:123
 msgid "Armed with Cyborg Flamer"
@@ -5016,31 +5016,31 @@ msgstr "Киборг-огнеметчик"
 
 #: po/custom/fromJson.txt:124
 msgid "Armed with Cyborg Machinegun"
-msgstr "Киборг, вооруженный пулеметом"
+msgstr "Киборг, вооружённый пулемётом"
 
 #: po/custom/fromJson.txt:125
 msgid "Armed with Cyborg Pulse Laser"
-msgstr "Вооружен импульсным лазером"
+msgstr "Вооружён импульсным лазером"
 
 #: po/custom/fromJson.txt:126
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Вооружен рельсовой пушкой"
+msgstr "Вооружён рельсовой пушкой"
 
 #: po/custom/fromJson.txt:127
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Вооружен ракетницей Бич"
+msgstr "Вооружён ракетницей Бич"
 
 #: po/custom/fromJson.txt:128
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Вооружен Термитным огнеметом"
+msgstr "Вооружён Термитным огнемётом"
 
 #: po/custom/fromJson.txt:129
 msgid "Armed with flashlight laser"
-msgstr "Вооружен лазером Вспышка"
+msgstr "Вооружён лазером Вспышка"
 
 #: po/custom/fromJson.txt:130
 msgid "Armed with Flashlight Laser"
-msgstr "Вооружен лазером Вспышка"
+msgstr "Вооружён лазером Вспышка"
 
 #: po/custom/fromJson.txt:131
 msgid "Armed with grenades"
@@ -5048,7 +5048,7 @@ msgstr "Вооружён гранатами"
 
 #: po/custom/fromJson.txt:132
 msgid "Armed with hyper velocity cannon"
-msgstr "Вооружен Гиперскоростной Пушкой"
+msgstr "Вооружён Гиперскоростной Пушкой"
 
 #: po/custom/fromJson.txt:133
 msgid "Armed with Lance Anti-Tank rocket"
@@ -5056,7 +5056,7 @@ msgstr "Киборг-Лансер"
 
 #: po/custom/fromJson.txt:134
 msgid "Armed with Lancer anti-tank missile"
-msgstr "вооружен противотанковой ракетой Лансер"
+msgstr "вооружён противотанковой ракетой Лансер"
 
 #: po/custom/fromJson.txt:135
 msgid "Armed with Machinegun"
@@ -5064,15 +5064,15 @@ msgstr "Вооружён пулемётом"
 
 #: po/custom/fromJson.txt:136
 msgid "Armed with medium cannon"
-msgstr "Вооружен средней Пушкой"
+msgstr "Вооружён средней Пушкой"
 
 #: po/custom/fromJson.txt:137
 msgid "Armed with Needle Gun"
-msgstr "Вооружен иглометом"
+msgstr "Вооружён иглометом"
 
 #: po/custom/fromJson.txt:139
 msgid "Armed with Scourge anti-tank missile"
-msgstr "Вооружен противотанковой ракетой Бич"
+msgstr "Вооружён противотанковой ракетой Бич"
 
 #: po/custom/fromJson.txt:140
 msgid "Armed with tank killer rockets"
@@ -5100,7 +5100,7 @@ msgstr "Укреплённый бункер с пулемётом"
 
 #: po/custom/fromJson.txt:147
 msgid "Armored EMP Mortar battery pit"
-msgstr "Бронированная позиция ЭМИ миномета"
+msgstr "Бронированная позиция ЭМИ миномёта"
 
 #: po/custom/fromJson.txt:149
 msgid "Armored guard tower with EMP Cannon"
@@ -5136,7 +5136,7 @@ msgstr "Бронированная сторожевая вышка с ракет
 
 #: po/custom/fromJson.txt:157
 msgid "Armored Half-tracks"
-msgstr "Бронированные полугусенницы"
+msgstr "Бронированные полугусеницы"
 
 #: po/custom/fromJson.txt:160
 msgid "Armored hardpoint with Flashlight laser"
@@ -5148,7 +5148,7 @@ msgstr "Укреплённая оборонительная точка с пуш
 
 #: po/custom/fromJson.txt:162
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Укреплённая оборонительная точка с Тяжелой Пушкой"
+msgstr "Укреплённая оборонительная точка с Тяжёлой Пушкой"
 
 #: po/custom/fromJson.txt:163
 msgid "Armored hardpoint with Heavy Machinegun"
@@ -5176,11 +5176,11 @@ msgstr "Укреплённая оборонительная точка с рел
 
 #: po/custom/fromJson.txt:170
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Укреплённая оборонительная точка с противотаковыми ракетами Бич"
+msgstr "Укреплённая оборонительная точка с противотанковыми ракетами Бич"
 
 #: po/custom/fromJson.txt:174
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Бронированная позиция Адского Миномета"
+msgstr "Бронированная позиция Адского Миномёта"
 
 #: po/custom/fromJson.txt:175
 msgid "Armored Mortar battery pit"
@@ -5196,11 +5196,11 @@ msgstr "Укреплённый опорный пункт с пушкой Гау�
 
 #: po/custom/fromJson.txt:180
 msgid "Armored strongpoint with Heavy Laser"
-msgstr "Бронированная Усиленная точка с тяжелым лазером"
+msgstr "Бронированная Усиленная точка с тяжёлым лазером"
 
 #: po/custom/fromJson.txt:183
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Бронированная Усиленная точка Плазменного Огнемета"
+msgstr "Бронированная Усиленная точка Плазменного Огнемёта"
 
 #: po/custom/fromJson.txt:184
 msgid "Armored strongpoint with Pulse Laser"
@@ -5252,7 +5252,7 @@ msgstr "Сторожевая вышка со Штурмовой пушкой"
 
 #: po/custom/fromJson.txt:197
 msgid "Assault Cannon Hardpoint"
-msgstr "Укрепленная точка со Штурмовой пушкой"
+msgstr "Укреплённая точка со Штурмовой пушкой"
 
 #: po/custom/fromJson.txt:198
 msgid "Assault Cannon Mantis Hover"
@@ -5272,7 +5272,7 @@ msgstr "охранная вышка со Штурмовым орудием"
 
 #: po/custom/fromJson.txt:202
 msgid "Assault Gun Hardpoint"
-msgstr "Укрепленная точка со Штурмовым орудием"
+msgstr "Укреплённая точка со Штурмовым орудием"
 
 #: po/custom/fromJson.txt:203
 msgid "Assault Gunner"
@@ -5296,15 +5296,15 @@ msgstr "Штурмовое орудие Питон Гусеницы"
 
 #: po/custom/fromJson.txt:208
 msgid "Assault Gun Tower"
-msgstr "Бышня со Штурмовым орудием"
+msgstr "Башня со Штурмовым орудием"
 
 #: po/custom/fromJson.txt:209
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr "Направить самолет на посадочную площадку моржно указав её как цель для него"
+msgstr "Направить самолёт на посадочную площадку можно указав её как цель для него"
 
 #: po/custom/fromJson.txt:211
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "назначенные ВВС атакуют определенные цели"
+msgstr "назначенные ВВС атакуют определённые цели"
 
 #: po/custom/fromJson.txt:212
 msgid "Assigned VTOLs attack the enemy units"
@@ -5348,7 +5348,7 @@ msgstr "Автоматизированная система перезарядк
 
 #: po/custom/fromJson.txt:222
 msgid "Automated Repair Facility"
-msgstr "Автоматизированная ремонтная мастрская"
+msgstr "Автоматизированная ремонтная мастерская"
 
 #: po/custom/fromJson.txt:223
 msgid "Automated Repair Facility Upgrade Mk2"
@@ -5426,11 +5426,11 @@ msgstr "Лучшие цели: Постройки и киборги"
 
 #: po/custom/fromJson.txt:253
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Лучшие цели: Бункеры и Укрепленные точки"
+msgstr "Лучшие цели: Бункеры и Укреплённые точки"
 
 #: po/custom/fromJson.txt:254
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Лучшие цели: Бункеры и Укрепленные точки"
+msgstr "Лучшие цели: Бункеры и Укреплённые точки"
 
 #: po/custom/fromJson.txt:256
 msgid "Best Targets: Cyborgs"
@@ -5442,7 +5442,7 @@ msgstr "Лучшая цель: тяжёлые киборги"
 
 #: po/custom/fromJson.txt:259
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr "Лучшие цели: пехота, постройки, колесный транспорт"
+msgstr "Лучшие цели: пехота, постройки, колёсный транспорт"
 
 #: po/custom/fromJson.txt:260
 msgid "Best Targets : Vehicles"
@@ -5458,7 +5458,7 @@ msgstr "Лучшие цели: наземный транспорт и оруди
 
 #: po/custom/fromJson.txt:264
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr "Лучшие цели: колесный транспорт и амфибии"
+msgstr "Лучшие цели: колёсный транспорт и амфибии"
 
 #: po/custom/fromJson.txt:265
 msgid "Beta"
@@ -5559,7 +5559,7 @@ msgstr "Антибункер Гадюка Колёса"
 
 #: po/custom/fromJson.txt:295
 msgid "Burns oil more efficiently"
-msgstr "Сжигает горючее более эфффективно"
+msgstr "Сжигает горючее более эффективно"
 
 #: po/custom/fromJson.txt:296
 msgid "Cannon accuracy +10%"
@@ -5647,7 +5647,7 @@ msgstr "Цепной механизм подачи патронов замени
 
 #: po/custom/fromJson.txt:317
 msgid "Chaingun Upgrade"
-msgstr "Улучшение Пулемета"
+msgstr "Улучшение Пулемёта"
 
 #: po/custom/fromJson.txt:318
 msgid "Civilian"
@@ -5679,7 +5679,7 @@ msgstr "Кобра Грузовик"
 
 #: po/custom/fromJson.txt:325
 msgid "Collapsing Plutonium kinetic energy bullets"
-msgstr "Разрушающие снаряды из плотония с высокой кинетической энергией"
+msgstr "Разрушающие снаряды из плутония с высокой кинетической энергией"
 
 #: po/custom/fromJson.txt:327
 msgid "Collective CWall"
@@ -5687,7 +5687,7 @@ msgstr "Угловая стена Альянса"
 
 #: po/custom/fromJson.txt:328
 msgid "Collective Heavy Body"
-msgstr "Тяжелый корпус Альянса"
+msgstr "Тяжёлый корпус Альянса"
 
 #: po/custom/fromJson.txt:332
 msgid "Combat Engineer"
@@ -5719,7 +5719,7 @@ msgstr "Командный Пост"
 
 #: po/custom/fromJson.txt:339
 msgid "Command Turret"
-msgstr "Командная туррель"
+msgstr "Командная турель"
 
 #: po/custom/fromJson.txt:340
 msgid "Command Turret Cobra Half-tracks"
@@ -5744,7 +5744,7 @@ msgstr "Командная Скорпион Гусеницы"
 #: po/custom/fromJson.txt:345
 #, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Командная туррель"
+msgstr "Командная турель"
 
 #: po/custom/fromJson.txt:346
 msgid "Command Turret Viper Tracks"
@@ -5816,7 +5816,7 @@ msgstr "Контр-батарея продолжает вести огонь п�
 
 #: po/custom/fromJson.txt:363
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Контратарея обнаруживает вражеские батареи непрямого залпового огня"
+msgstr "Контратарбатарея обнаруживает вражеские батареи непрямого залпового огня"
 
 #: po/custom/fromJson.txt:364
 msgid "Counter-battery turret detects enemy indirect fire batteries"
@@ -5852,12 +5852,12 @@ msgstr "Завод киборгов"
 
 #: po/custom/fromJson.txt:372
 msgid "Cyborg Flamer"
-msgstr "Огнеметчик"
+msgstr "Огнемётчик"
 
 #: po/custom/fromJson.txt:373
 #, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Тяжелый корпус Проекта"
+msgstr "Тяжёлый корпус Проекта"
 
 #: po/custom/fromJson.txt:374
 msgid "Cyborg High Intensity Thermal Armor"
@@ -5874,12 +5874,12 @@ msgstr "Усиленная термоброня киборгов Mk3"
 #: po/custom/fromJson.txt:377
 #, fuzzy
 msgid "Cyborg Lancer"
-msgstr "Огнеметчик"
+msgstr "Огнемётчик"
 
 #: po/custom/fromJson.txt:378
 #, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Легкий корпус Проекта"
+msgstr "Лёгкий корпус Проекта"
 
 #: po/custom/fromJson.txt:380
 msgid "Cyborg Mechanic"
@@ -5947,15 +5947,15 @@ msgstr "Зенитка Циклон Питон Полугусеницы"
 
 #: po/custom/fromJson.txt:401
 msgid "Cyclone Flak Turret"
-msgstr "Туррель Циклон"
+msgstr "Турель Циклон"
 
 #: po/custom/fromJson.txt:403
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
-msgstr "Углубленный анализ нейросвязи Мk2"
+msgstr "Углублённый анализ нейросвязи Мk2"
 
 #: po/custom/fromJson.txt:404
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
-msgstr "Углубленный анализ нейросвязи Мk3"
+msgstr "Углублённый анализ нейросвязи Мk3"
 
 #: po/custom/fromJson.txt:406
 msgid "Defensive Strength : High"
@@ -5983,11 +5983,11 @@ msgstr "Плотный композитный сплав Mk3"
 
 #: po/custom/fromJson.txt:414
 msgid "Depleted uranium kinetic energy bullets"
-msgstr "снаряды с кинетической энергией обедненного урана"
+msgstr "снаряды с кинетической энергией обеднённого урана"
 
 #: po/custom/fromJson.txt:415
 msgid "Depleted Uranium MG Bullets"
-msgstr "Пули из обедненного урана"
+msgstr "Пули из обеднённого урана"
 
 #: po/custom/fromJson.txt:418
 msgid "Determines range to target"
@@ -6048,11 +6048,11 @@ msgstr "Пусковая ЭМИ ракет"
 
 #: po/custom/fromJson.txt:434
 msgid "EMP Mortar"
-msgstr "ЭМИ миномет"
+msgstr "ЭМИ миномёт"
 
 #: po/custom/fromJson.txt:435
 msgid "EMP Mortar Pit"
-msgstr "Установка с ЭМИ минометом"
+msgstr "Установка с ЭМИ миномётом"
 
 #: po/custom/fromJson.txt:436
 msgid "Enables command turret research"
@@ -6084,7 +6084,7 @@ msgstr "позволяет защитным сооружениям ремонт�
 
 #: po/custom/fromJson.txt:443
 msgid "Enables self-repair in all vehicles"
-msgstr "Позволяет Всем машинам автоматически восстанавливыаться"
+msgstr "Позволяет Всем машинам автоматически восстанавливаться"
 
 #: po/custom/fromJson.txt:444
 #, fuzzy
@@ -6125,7 +6125,7 @@ msgstr "Заводской модуль"
 
 #: po/custom/fromJson.txt:455
 msgid "Factory module enables medium and large bodies"
-msgstr "модуль завода позволяет создавать юнитов со средней и тяжелой броней"
+msgstr "модуль завода позволяет создавать юнитов со средней и тяжёлой броней"
 
 #: po/custom/fromJson.txt:456
 #, fuzzy, c-format
@@ -6202,15 +6202,15 @@ msgstr "Огнемёт"
 
 #: po/custom/fromJson.txt:474
 msgid "Flamer Autoloader"
-msgstr "Автозарядка огнемета"
+msgstr "Автозарядка огнемёта"
 
 #: po/custom/fromJson.txt:475
 msgid "Flamer Autoloader Mk2"
-msgstr "Автозарядка огнемета Мk2"
+msgstr "Автозарядка огнемёта Мk2"
 
 #: po/custom/fromJson.txt:476
 msgid "Flamer Autoloader Mk3"
-msgstr "Автозарядка огнемета Мk3"
+msgstr "Автозарядка огнемёта Мk3"
 
 #: po/custom/fromJson.txt:477
 msgid "Flamer Bunker"
@@ -6222,11 +6222,11 @@ msgstr "Огнемёт Кобра Гусеницы"
 
 #: po/custom/fromJson.txt:480
 msgid "Flamer damage +25%"
-msgstr "Урон огнемета +25%"
+msgstr "Урон огнемёта +25%"
 
 #: po/custom/fromJson.txt:483
 msgid "Flamer reload time -15%"
-msgstr "Перезарядка огнемета -15%"
+msgstr "Перезарядка огнемёта -15%"
 
 #: po/custom/fromJson.txt:485
 msgid "Flamer Viper Half-Tracks"
@@ -6234,7 +6234,7 @@ msgstr "Огнемёт Гадюка Полугусеницы"
 
 #: po/custom/fromJson.txt:486
 msgid "Flamer Viper Wheels"
-msgstr "Огнемет Гадюка Колёса"
+msgstr "Огнемёт Гадюка Колёса"
 
 #: po/custom/fromJson.txt:487
 msgid "Flame-thrower firing Propylene Oxide gel"
@@ -6254,7 +6254,7 @@ msgstr "Киборг-вспышка"
 
 #: po/custom/fromJson.txt:492
 msgid "Flashlight Hardpoint"
-msgstr "Укрепленная точка вспышки"
+msgstr "Укреплённая точка вспышки"
 
 #: po/custom/fromJson.txt:493
 msgid "Flashlight Retribution Hover"
@@ -6262,15 +6262,15 @@ msgstr "Вспышка Кара Ховер"
 
 #: po/custom/fromJson.txt:494
 msgid "Fuel Injection Engine"
-msgstr "Инжекторный двигатель"
+msgstr "Инжекторы двигатель"
 
 #: po/custom/fromJson.txt:495
 msgid "Fuel Injection Engine Mk2"
-msgstr "Инжекторный двигатель Mk2"
+msgstr "Инжекторы двигатель Mk2"
 
 #: po/custom/fromJson.txt:496
 msgid "Fuel Injection Engine Mk3"
-msgstr "Инжекторный двигатель Mk3"
+msgstr "Инжекторы двигатель Mk3"
 
 #: po/custom/fromJson.txt:497
 msgid "Gamma"
@@ -6339,7 +6339,7 @@ msgstr "Даёт киборгам ограниченные возможност�
 
 #: po/custom/fromJson.txt:513
 msgid "Good main battle tank and heavy artillery platform"
-msgstr "Хорошая платформа для основных боевых танков и тяжелой артиллерии"
+msgstr "Хорошая платформа для основных боевых танков и тяжёлой артиллерии"
 
 #: po/custom/fromJson.txt:514
 msgid "Good medium tank and support vehicle"
@@ -6399,7 +6399,7 @@ msgstr "Усиленные стройматериалы Мk3"
 
 #: po/custom/fromJson.txt:531
 msgid "Hardened case machinegun bullets"
-msgstr "Пули с твердой оболочкой"
+msgstr "Пули с твёрдой оболочкой"
 
 #: po/custom/fromJson.txt:532
 msgid "Hardened MG Bullets"
@@ -6431,11 +6431,11 @@ msgstr "Доступна Укрепточка с зениткой Циклон"
 
 #: po/custom/fromJson.txt:539
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Доступна укрепленная точка с двойным штурмовым орудием"
+msgstr "Доступна укреплённая точка с двойным штурмовым орудием"
 
 #: po/custom/fromJson.txt:540
 msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Доступна укрепленная точка с Защитником ПВО"
+msgstr "Доступна укреплённая точка с Защитником ПВО"
 
 #: po/custom/fromJson.txt:541
 msgid "Hardpoint Whirlwind AA Gun Available"
@@ -6479,15 +6479,15 @@ msgstr "Бронебойные миниракеты Мk3"
 
 #: po/custom/fromJson.txt:551
 msgid "HEAP Mortar Shells"
-msgstr "Бронебойные снаряды миномета"
+msgstr "Бронебойные снаряды миномёта"
 
 #: po/custom/fromJson.txt:552
 msgid "HEAP Mortar Shells Mk2"
-msgstr "Бронебойные снаряды миномета Мk2"
+msgstr "Бронебойные снаряды миномёта Мk2"
 
 #: po/custom/fromJson.txt:553
 msgid "HEAP Mortar Shells Mk3"
-msgstr "Бронебойные снаряды миномета Мk3"
+msgstr "Бронебойные снаряды миномёта Мk3"
 
 #: po/custom/fromJson.txt:554
 msgid "HEAT Cannon Shells"
@@ -6519,67 +6519,67 @@ msgstr "Тяжёлая противотанковая ракета"
 
 #: po/custom/fromJson.txt:563
 msgid "Heavy body increases armor and body points"
-msgstr "Тяжелая рама повышает броню"
+msgstr "Тяжёлая рама повышает броню"
 
 #: po/custom/fromJson.txt:564
 msgid "Heavy Body - Mantis"
-msgstr "Тяжелая броня - Богомол"
+msgstr "Тяжёлая броня - Богомол"
 
 #: po/custom/fromJson.txt:565
 msgid "Heavy Body - Python"
-msgstr "Тяжелая броня - Питон"
+msgstr "Тяжёлая броня - Питон"
 
 #: po/custom/fromJson.txt:566
 msgid "Heavy Body - Tiger"
-msgstr "Тяжелая броня - Тигр"
+msgstr "Тяжёлая броня - Тигр"
 
 #: po/custom/fromJson.txt:567
 msgid "Heavy Body - Vengeance"
-msgstr "Тяжелая броня - Месть"
+msgstr "Тяжёлая броня - Месть"
 
 #: po/custom/fromJson.txt:568
 msgid "Heavy Body - Wyvern"
-msgstr "Тяжелый корпус - Виверна"
+msgstr "Тяжёлый корпус - Виверна"
 
 #: po/custom/fromJson.txt:569
 msgid "Heavy Cannon"
-msgstr "Тяжелая пушка"
+msgstr "Тяжёлая пушка"
 
 #: po/custom/fromJson.txt:570
 msgid "Heavy Cannon Cobra Hover"
-msgstr "Тяжелая пушка Кобра Ховер"
+msgstr "Тяжёлая пушка Кобра Ховер"
 
 #: po/custom/fromJson.txt:571
 msgid "Heavy Cannon Cobra Tracks"
-msgstr "Тяжелая пушка Кобра Гусеницы"
+msgstr "Тяжёлая пушка Кобра Гусеницы"
 
 #: po/custom/fromJson.txt:572
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr "120 мм снаряды для Тяжелой пушки"
+msgstr "120 мм снаряды для Тяжёлой пушки"
 
 #: po/custom/fromJson.txt:573
 msgid "Heavy Cannon Hardpoint"
-msgstr "Оборонительная точка с тяжелой пушкой"
+msgstr "Оборонительная точка с тяжёлой пушкой"
 
 #: po/custom/fromJson.txt:574
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Тяжелая пушка Богомол Гусеницы"
+msgstr "Тяжёлая пушка Богомол Гусеницы"
 
 #: po/custom/fromJson.txt:575
 msgid "Heavy Cannon Python Hover"
-msgstr "Тяжелая пушка Питон Ховер"
+msgstr "Тяжёлая пушка Питон Ховер"
 
 #: po/custom/fromJson.txt:576
 msgid "Heavy Cannon Python Tracks"
-msgstr "Тяжелая пушка Питон Гусеницы"
+msgstr "Тяжёлая пушка Питон Гусеницы"
 
 #: po/custom/fromJson.txt:577
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Тяжелая пушка Скорпион Гусеницы"
+msgstr "Тяжёлая пушка Скорпион Гусеницы"
 
 #: po/custom/fromJson.txt:578
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Тяжелая пушка Тигр Гусеницы"
+msgstr "Тяжёлая пушка Тигр Гусеницы"
 
 #: po/custom/fromJson.txt:579
 msgid "Heavy Flamer - Inferno"
@@ -6587,11 +6587,11 @@ msgstr "Тяжёлый огнемёт - Инферно"
 
 #: po/custom/fromJson.txt:581
 msgid "Heavy Gunner"
-msgstr "Тяжелый артиллерист"
+msgstr "Тяжёлый артиллерист"
 
 #: po/custom/fromJson.txt:583
 msgid "Heavy Howitzer - Ground Shaker"
-msgstr "Тяжелая гаубица - Сотрясатель"
+msgstr "Тяжёлая гаубица - Сотрясатель"
 
 #: po/custom/fromJson.txt:584
 msgid "Heavy Laser"
@@ -6599,7 +6599,7 @@ msgstr "Тяжёлый лазер"
 
 #: po/custom/fromJson.txt:585
 msgid "Heavy Laser Emplacement"
-msgstr "Установка тяжелого лазера"
+msgstr "Установка тяжёлого лазера"
 
 #: po/custom/fromJson.txt:586
 msgid "Heavy Laser Tiger Tracks"
@@ -6611,23 +6611,23 @@ msgstr "Тяжёлый лазер Виверна Гусеницы"
 
 #: po/custom/fromJson.txt:588
 msgid "Heavy Machinegun"
-msgstr "Тяжелый пулемёт"
+msgstr "Тяжёлый пулемёт"
 
 #: po/custom/fromJson.txt:590
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "Тяжелый пулемёт Кобра Полугусеницы"
+msgstr "Тяжёлый пулемёт Кобра Полугусеницы"
 
 #: po/custom/fromJson.txt:591
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Тяжелый пулемет Кобра Ховер"
+msgstr "Тяжёлый пулемёт Кобра Ховер"
 
 #: po/custom/fromJson.txt:592
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Тяжелый пулемёт Кобра Гусеницы"
+msgstr "Тяжёлый пулемёт Кобра Гусеницы"
 
 #: po/custom/fromJson.txt:593
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Тяжелый пулемёт Кобра Колёса"
+msgstr "Тяжёлый пулемёт Кобра Колёса"
 
 #: po/custom/fromJson.txt:595
 msgid "Heavy Machinegun Hardpoint"
@@ -6635,31 +6635,31 @@ msgstr "Оборонительная точка с крупнокалиберн�
 
 #: po/custom/fromJson.txt:596
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Тяжелый пулемёт Скорпион Полугусеницы"
+msgstr "Тяжёлый пулемёт Скорпион Полугусеницы"
 
 #: po/custom/fromJson.txt:597
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Тяжелый пулемёт Скорпион Гусеницы"
+msgstr "Тяжёлый пулемёт Скорпион Гусеницы"
 
 #: po/custom/fromJson.txt:599
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Тяжелый пулемёт Гадюка Полугусеницы"
+msgstr "Тяжёлый пулемёт Гадюка Полугусеницы"
 
 #: po/custom/fromJson.txt:600
 msgid "Heavy Machinegun Viper Tracks"
-msgstr "Тяжелый пулемет Гадюка Гусеницы"
+msgstr "Тяжёлый пулемёт Гадюка Гусеницы"
 
 #: po/custom/fromJson.txt:601
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Тяжелый пулемёт Гадюка Колёса"
+msgstr "Тяжёлый пулемёт Гадюка Колёса"
 
 #: po/custom/fromJson.txt:602
 msgid "Heavy Mortar - Bombard"
-msgstr "Тяжелый миномет- Бомбард"
+msgstr "Тяжёлый миномёт- Бомбард"
 
 #: po/custom/fromJson.txt:603
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr "Тяжелая рельсовая пушка стреляет шипами с большой кинетической энергией"
+msgstr "Тяжёлая рельсовая пушка стреляет шипами с большой кинетической энергией"
 
 #: po/custom/fromJson.txt:604
 msgid "Heavy Repair Scorpion Hover"
@@ -6667,15 +6667,15 @@ msgstr "Тяжёлая ремонтная Скорпион Ховер"
 
 #: po/custom/fromJson.txt:606
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Тяжелая ремонтная Кобра Ховер"
+msgstr "Тяжёлая ремонтная Кобра Ховер"
 
 #: po/custom/fromJson.txt:608
 msgid "Heavy Rocket Bastion"
-msgstr "Крепость тяжелых ракет"
+msgstr "Крепость тяжёлых ракет"
 
 #: po/custom/fromJson.txt:609
 msgid "Heavy surface-to-air missile"
-msgstr "Тяжелая ракета класса Земля-Воздух"
+msgstr "Тяжёлая ракета класса Земля-Воздух"
 
 #: po/custom/fromJson.txt:610
 msgid "Heavyweaponslab"
@@ -6719,15 +6719,15 @@ msgstr "Разрывные миниракеты Мk3"
 
 #: po/custom/fromJson.txt:621
 msgid "HE Mortar Shells"
-msgstr "Разрывные снаряды миномета"
+msgstr "Разрывные снаряды миномёта"
 
 #: po/custom/fromJson.txt:622
 msgid "HE Mortar Shells Mk2"
-msgstr "Разрывные снаряды миномета Мk2"
+msgstr "Разрывные снаряды миномёта Мk2"
 
 #: po/custom/fromJson.txt:623
 msgid "HE Mortar Shells Mk3"
-msgstr "Разрывные снаряды миномета Мk3"
+msgstr "Разрывные снаряды миномёта Мk3"
 
 #: po/custom/fromJson.txt:624
 msgid "HE Rockets"
@@ -6775,7 +6775,7 @@ msgstr "Строительные материалы высокой плотно�
 
 #: po/custom/fromJson.txt:635
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "Взврывчатые противотанковые снаряды"
+msgstr "Взрывчатые противотанковые снаряды"
 
 #: po/custom/fromJson.txt:636
 msgid "High Explosive Anti-Tank warhead"
@@ -6912,7 +6912,7 @@ msgstr "Зенитка Ураган"
 
 #: po/custom/fromJson.txt:680
 msgid "Hurricane AA Turret"
-msgstr "Туррель Ураган"
+msgstr "Турель Ураган"
 
 #: po/custom/fromJson.txt:681
 msgid "Hut"
@@ -6932,7 +6932,7 @@ msgstr "HVAPFSDS Снаряды Пушки Мk3"
 
 #: po/custom/fromJson.txt:685
 msgid "Hyper Fire Chaingun Upgrade"
-msgstr "Улучшение гиперскоростного пулемета"
+msgstr "Улучшение гиперскоростного пулемёта"
 
 #: po/custom/fromJson.txt:687
 msgid "Hyper Velocity Cannon"
@@ -7024,7 +7024,7 @@ msgstr "Улучшение состава заряда боеголовки"
 
 #: po/custom/fromJson.txt:711
 msgid "Improved target recognition systems"
-msgstr "Улучшены системы опознования цели"
+msgstr "Улучшены системы опознавания цели"
 
 #: po/custom/fromJson.txt:712
 msgid "Improved Thermal Emissions detection"
@@ -7032,7 +7032,7 @@ msgstr "Улучшенная система обнаружения источн�
 
 #: po/custom/fromJson.txt:713
 msgid "Improved Titanium-reinforced concrete"
-msgstr "Улучшенный, укрепленный титаном бетон"
+msgstr "Улучшенный, укреплённый титаном бетон"
 
 #: po/custom/fromJson.txt:714
 msgid "Improved trinitramine explosive formula"
@@ -7064,11 +7064,11 @@ msgstr "Адская Гаубица может быть привязана к Д
 
 #: po/custom/fromJson.txt:722
 msgid "Incendiary Mortar"
-msgstr "Адский миномет"
+msgstr "Адский миномёт"
 
 #: po/custom/fromJson.txt:723
 msgid "Incendiary Mortar Pit"
-msgstr "Адский минометный окоп"
+msgstr "Адский миномётный окоп"
 
 #: po/custom/fromJson.txt:724
 msgid "Increased gauss output speeds up reload time"
@@ -7193,7 +7193,7 @@ msgstr "Установка Инферно"
 
 #: po/custom/fromJson.txt:780
 msgid "Inferno Hardpoint"
-msgstr "Укрепленая точка Инферно"
+msgstr "Укреплённая точка Инферно"
 
 #: po/custom/fromJson.txt:781
 msgid "Inferno Python Hover"
@@ -7201,7 +7201,7 @@ msgstr "Инферно Питон Ховер"
 
 #: po/custom/fromJson.txt:782
 msgid "Intruder parasite isolated"
-msgstr "празит-захватчик изолирован"
+msgstr "паразит-захватчик изолирован"
 
 #: po/custom/fromJson.txt:783
 msgid "Ionizing Turbine Engine"
@@ -7213,7 +7213,7 @@ msgstr "Глушительная башня"
 
 #: po/custom/fromJson.txt:785
 msgid "Jammer Turret"
-msgstr "Глушительная туррель"
+msgstr "Глушительная турель"
 
 #: po/custom/fromJson.txt:786
 msgid "Jeep"
@@ -7225,7 +7225,7 @@ msgstr "Можно исследовать Киборгов-,Прыгунов"
 
 #: po/custom/fromJson.txt:788
 msgid "Keeps map areas under constant surveillance"
-msgstr "постоянно наблоюдает за областями на карте"
+msgstr "постоянно наблюдает за областями на карте"
 
 #: po/custom/fromJson.txt:789
 msgid "Kinetic armor +30%, body points +30%"
@@ -7269,7 +7269,7 @@ msgstr "Киборг-Лансер"
 
 #: po/custom/fromJson.txt:799
 msgid "Lancer Hardpoint"
-msgstr "Укрепленная точка Лансера"
+msgstr "Укреплённая точка Лансера"
 
 #: po/custom/fromJson.txt:800
 msgid "Lancer Mantis Tracks"
@@ -7297,7 +7297,7 @@ msgstr "Лансер Гадюка Колёса"
 
 #: po/custom/fromJson.txt:807
 msgid "Large Super Heavy Body"
-msgstr "Большая супертяжелая рама"
+msgstr "Большая супертяжёлая рама"
 
 #: po/custom/fromJson.txt:808
 msgid "Laser AA Gun Available"
@@ -7338,7 +7338,7 @@ msgstr "Перезарядка лазера -15%"
 
 #: po/custom/fromJson.txt:817
 msgid "Laser Satellite Command Post"
-msgstr "Центр Управления Лазернми спутниками"
+msgstr "Центр Управления Лазерными спутниками"
 
 #: po/custom/fromJson.txt:818
 msgid "Laser Upgrade"
@@ -7362,27 +7362,27 @@ msgstr "Менее бронированный и чем Питон"
 
 #: po/custom/fromJson.txt:824
 msgid "Light Body - Bug"
-msgstr "Легкая броня - Жук"
+msgstr "Лёгкая броня - Жук"
 
 #: po/custom/fromJson.txt:825
 msgid "Light Body - Leopard"
-msgstr "Легкая броня - Леопард"
+msgstr "Лёгкая броня - Леопард"
 
 #: po/custom/fromJson.txt:826
 msgid "Light Body - Retaliation"
-msgstr "Легкая броня - Возмездие"
+msgstr "Лёгкая броня - Возмездие"
 
 #: po/custom/fromJson.txt:827
 msgid "Light Body - Viper"
-msgstr "Легкая броня - Гадюка"
+msgstr "Лёгкая броня - Гадюка"
 
 #: po/custom/fromJson.txt:828
 msgid "Light body vulnerable to heavy weapons"
-msgstr "Легкая рама уязвима против тяжелых орудий"
+msgstr "Лёгкая рама уязвима против тяжёлых орудий"
 
 #: po/custom/fromJson.txt:829
 msgid "Light Cannon"
-msgstr "Легкая пушка"
+msgstr "Лёгкая пушка"
 
 #: po/custom/fromJson.txt:830
 msgid "Light Cannon Bunker"
@@ -7390,7 +7390,7 @@ msgstr "Бункер с мелкокалиберной пушкой"
 
 #: po/custom/fromJson.txt:831
 msgid "Light Cannon Cobra Tracks"
-msgstr "Легкая пушка Кобра Гусеницы"
+msgstr "Лёгкая пушка Кобра Гусеницы"
 
 #: po/custom/fromJson.txt:832
 msgid "Light Cannon firing 40mm rounds"
@@ -7402,19 +7402,19 @@ msgstr "Оборонительная точка с мелкокалиберно�
 
 #: po/custom/fromJson.txt:834
 msgid "Light Cannon Python Tracks"
-msgstr "Легкая пушка Гадюка полугусеницы"
+msgstr "Лёгкая пушка Гадюка полугусеницы"
 
 #: po/custom/fromJson.txt:835
 msgid "Light Cannon Viper Half-tracks"
-msgstr "Легкая пушка Гадюка Полугусеницы"
+msgstr "Лёгкая пушка Гадюка Полугусеницы"
 
 #: po/custom/fromJson.txt:836
 msgid "Light Cannon Viper Tracks"
-msgstr "Легкая пушка Гадюка Гусеницы"
+msgstr "Лёгкая пушка Гадюка Гусеницы"
 
 #: po/custom/fromJson.txt:837
 msgid "Light Cannon Viper Wheels"
-msgstr "Легкая пушка Гадюка Колеса"
+msgstr "Лёгкая пушка Гадюка Колеса"
 
 #: po/custom/fromJson.txt:839
 msgid "Look-Out Tower"
@@ -7434,15 +7434,15 @@ msgstr "Бункер с пулемётом"
 
 #: po/custom/fromJson.txt:845
 msgid "Machinegun damage +25%"
-msgstr "Урон пулемета +25%"
+msgstr "Урон пулемёта +25%"
 
 #: po/custom/fromJson.txt:846
 msgid "Machinegunner"
-msgstr "Пулеметчик"
+msgstr "Пулемётчик"
 
 #: po/custom/fromJson.txt:848
 msgid "Machinegun reload time -15%"
-msgstr "Перезарядка пулемета -15%"
+msgstr "Перезарядка пулемёта -15%"
 
 #: po/custom/fromJson.txt:850
 msgid "Machinegun Viper Half-Tracks"
@@ -7454,7 +7454,7 @@ msgstr "Пулемёт Гадюка Гусеницы"
 
 #: po/custom/fromJson.txt:853
 msgid "Makes excellent scout vehicle"
-msgstr "Создает Превосходную Машину-Разведчик"
+msgstr "Создаёт Превосходную Машину-Разведчик"
 
 #: po/custom/fromJson.txt:854
 msgid "Mantis"
@@ -7462,15 +7462,15 @@ msgstr "Богомол"
 
 #: po/custom/fromJson.txt:855
 msgid "Mass Driver"
-msgstr "Тяжелое рельсовое орудие"
+msgstr "Тяжёлое рельсовое орудие"
 
 #: po/custom/fromJson.txt:856
 msgid "Mass Driver Fortress"
-msgstr "Крепость тяжелого рельсового орудия"
+msgstr "Крепость тяжёлого рельсового орудия"
 
 #: po/custom/fromJson.txt:857
 msgid "Maximum armor and body points"
-msgstr "Мкаксимум здоровья и брони"
+msgstr "Максимум здоровья и брони"
 
 #: po/custom/fromJson.txt:860
 msgid "May be targeted directly or assigned to a sensor turret or tower"
@@ -7550,7 +7550,7 @@ msgstr "Средняя пушка Гадюка Гусеницы"
 
 #: po/custom/fromJson.txt:879
 msgid "Medium Super Heavy Body"
-msgstr "Средняя супертяжелая рама"
+msgstr "Средняя супертяжёлая рама"
 
 #: po/custom/fromJson.txt:880
 msgid "Mini-rocket armored strongpoint"
@@ -7634,7 +7634,7 @@ msgstr "Урон ракеты +25%"
 
 #: po/custom/fromJson.txt:901
 msgid "Missile Fortress"
-msgstr "Крепость с тяжелой пусковой установкой"
+msgstr "Крепость с тяжёлой пусковой установкой"
 
 #: po/custom/fromJson.txt:902
 msgid "Missile reload time -15%"
@@ -7670,15 +7670,15 @@ msgstr "Точность миномёта +10%"
 
 #: po/custom/fromJson.txt:912
 msgid "Mortar Autoloader"
-msgstr "Автозарядка миномета"
+msgstr "Автозарядка миномёта"
 
 #: po/custom/fromJson.txt:913
 msgid "Mortar Autoloader Mk2"
-msgstr "Автозарядка миномета Мk2"
+msgstr "Автозарядка миномёта Мk2"
 
 #: po/custom/fromJson.txt:914
 msgid "Mortar Autoloader Mk3"
-msgstr "Автозарядка миномета Мk3"
+msgstr "Автозарядка миномёта Мk3"
 
 #: po/custom/fromJson.txt:915
 msgid "Mortar Cobra Half-tracks"
@@ -7686,19 +7686,19 @@ msgstr "Миномёт Кобра Полугусеницы"
 
 #: po/custom/fromJson.txt:916
 msgid "Mortar damage +25%"
-msgstr "Урон миномета +25%"
+msgstr "Урон миномёта +25%"
 
 #: po/custom/fromJson.txt:917
 msgid "Mortar Fast Loader"
-msgstr "Быстрая зарядка миномета"
+msgstr "Быстрая зарядка миномёта"
 
 #: po/custom/fromJson.txt:918
 msgid "Mortar Pit"
-msgstr "Минометный окоп"
+msgstr "Миномётный окоп"
 
 #: po/custom/fromJson.txt:919
 msgid "Mortar reload time -10%"
-msgstr "Перезарядка миномета -10%"
+msgstr "Перезарядка миномёта -10%"
 
 #: po/custom/fromJson.txt:920
 msgid "Mortar Targeting Computer"
@@ -7730,7 +7730,7 @@ msgstr "Игломет"
 
 #: po/custom/fromJson.txt:929
 msgid "Needle Gunner"
-msgstr "Иглометчик"
+msgstr "Игломётчик"
 
 #: po/custom/fromJson.txt:930
 msgid "Needle Gunner Cyborg"
@@ -7746,7 +7746,7 @@ msgstr "Игломёт Тигр Гусеницы"
 
 #: po/custom/fromJson.txt:933
 msgid "Needle Gun Tower"
-msgstr "Башня с иглометом"
+msgstr "Башня с игломётом"
 
 #: po/custom/fromJson.txt:934
 msgid "Needle Gun Vengeance Tracks"
@@ -7806,11 +7806,11 @@ msgstr "Доступна новая ракетная установка"
 
 #: po/custom/fromJson.txt:958
 msgid "New Paradigm Heavy Body"
-msgstr "Тяжелый корпус Новой Парадигмы"
+msgstr "Тяжёлый корпус Новой Парадигмы"
 
 #: po/custom/fromJson.txt:959
 msgid "New Paradigm Light Body"
-msgstr "Легкий корпус Новой Парадигмы"
+msgstr "Лёгкий корпус Новой Парадигмы"
 
 #: po/custom/fromJson.txt:960
 msgid "New Paradigm Medium body"
@@ -7838,7 +7838,7 @@ msgstr "Доступна Новая Рельсовая пушка"
 
 #: po/custom/fromJson.txt:967
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "Новое ремонтное оборудование восстанавливает поврежденных юнитов"
+msgstr "Новое ремонтное оборудование восстанавливает повреждённых юнитов"
 
 #: po/custom/fromJson.txt:968
 msgid "New Repair Technology Discovered"
@@ -7895,7 +7895,7 @@ msgstr "Угловая стена НЕКСУС"
 
 #: po/custom/fromJson.txt:986
 msgid "NEXUS Heavy Body"
-msgstr "Тяжелый корпус НЕКСУС"
+msgstr "Тяжёлый корпус НЕКСУС"
 
 #: po/custom/fromJson.txt:987
 msgid "NEXUS Intruder Program"
@@ -7907,7 +7907,7 @@ msgstr "Проанализирована Программа вторжения �
 
 #: po/custom/fromJson.txt:989
 msgid "NEXUS Light Body"
-msgstr "Легкий корпус НЕКСУС"
+msgstr "Лёгкий корпус НЕКСУС"
 
 #: po/custom/fromJson.txt:990
 msgid "Nexus Link"
@@ -8025,7 +8025,7 @@ msgstr "Нефтяной ресурс"
 
 #: po/custom/fromJson.txt:1015
 msgid "On-board computer predicts target movement"
-msgstr "Движение цели расчитывается встроенным компьютером"
+msgstr "Движение цели рассчитывается встроенным компьютером"
 
 #: po/custom/fromJson.txt:1016
 msgid "On-board diagnostic and repair systems"
@@ -8071,7 +8071,7 @@ msgstr "Пепперпот"
 
 #: po/custom/fromJson.txt:1028
 msgid "Phosphor Bomb Bay"
-msgstr "Отчек для фосфорных бомб"
+msgstr "Отсек для фосфорных бомб"
 
 #: po/custom/fromJson.txt:1029
 msgid "Phosphor Bomb Bay Mantis VTOL"
@@ -8115,7 +8115,7 @@ msgstr "Плазменные Бомбы"
 
 #: po/custom/fromJson.txt:1039
 msgid "Plasmite Flamer"
-msgstr "Плазменный огнемет"
+msgstr "Плазменный огнемёт"
 
 #: po/custom/fromJson.txt:1040
 msgid "Plasmite Flamer Bunker"
@@ -8123,7 +8123,7 @@ msgstr "Бункер с плазменным огнемётом"
 
 #: po/custom/fromJson.txt:1041
 msgid "Plasmite Flame-thrower"
-msgstr "Плазменный Огнемет"
+msgstr "Плазменный Огнемёт"
 
 #: po/custom/fromJson.txt:1042
 msgid "Plasmite Retribution VTOL"
@@ -8168,7 +8168,7 @@ msgstr "Энергия"
 
 #: po/custom/fromJson.txt:1052
 msgid "Power Module"
-msgstr "Энегертический блок"
+msgstr "Энергетический блок"
 
 #: po/custom/fromJson.txt:1053
 msgid "Power Module Available"
@@ -8193,12 +8193,12 @@ msgstr "Производит киборгов"
 #: po/custom/fromJson.txt:1060
 #, fuzzy
 msgid "Project Heavy Body"
-msgstr "Тяжелый корпус Альянса"
+msgstr "Тяжёлый корпус Альянса"
 
 #: po/custom/fromJson.txt:1061
 #, fuzzy
 msgid "Project Light Body"
-msgstr "Легкий корпус Альянса"
+msgstr "Лёгкий корпус Альянса"
 
 #: po/custom/fromJson.txt:1062
 msgid "Project Medium Body"
@@ -8218,7 +8218,7 @@ msgstr "Установка импульсного лазера"
 
 #: po/custom/fromJson.txt:1067
 msgid "Pulse Laser Hardpoint"
-msgstr "Укрепленная точка с импульсным лазером"
+msgstr "Укреплённая точка с импульсным лазером"
 
 #: po/custom/fromJson.txt:1068
 msgid "Pulse Laser Leopard Hover"
@@ -8258,11 +8258,11 @@ msgstr "Питон"
 
 #: po/custom/fromJson.txt:1077
 msgid "Python Heavy Cannon Tracks"
-msgstr "Тяжелая пушка Питон Гусеницы"
+msgstr "Тяжёлая пушка Питон Гусеницы"
 
 #: po/custom/fromJson.txt:1079
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Счетверенный 80 мм противовоздушный пулемет"
+msgstr "Счетверённый 80 мм противовоздушный пулемёт"
 
 #: po/custom/fromJson.txt:1081
 msgid "Racked missile dispensers allow for fast reloading"
@@ -8338,15 +8338,15 @@ msgstr "Улучшение рельсовой пушки"
 
 #: po/custom/fromJson.txt:1099
 msgid "Rail Target Prediction Computer"
-msgstr "Кмпьютерное наведение рельсовых орудий"
+msgstr "Компьютерное наведение рельсовых орудий"
 
 #: po/custom/fromJson.txt:1100
 msgid "Rapid Fire Chaingun"
-msgstr "Скоростной зарядчик пулемета"
+msgstr "Скоростной зарядчик пулемёта"
 
 #: po/custom/fromJson.txt:1101
 msgid "Rapid Fire Chaingun Upgrade"
-msgstr "Улучшение сверхскоростного пулемета"
+msgstr "Улучшение сверхскоростного пулемёта"
 
 #: po/custom/fromJson.txt:1102
 msgid "Rapid fire rail gun firing needle darts"
@@ -8362,7 +8362,7 @@ msgstr "Уменьшает шансы захвата НЕКСУС"
 
 #: po/custom/fromJson.txt:1107
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr "Заправляет, заряжает и ремонтирует самолеты"
+msgstr "Заправляет, заряжает и ремонтирует самолёты"
 
 #: po/custom/fromJson.txt:1108
 msgid "Reinforced Base Structure Materials"
@@ -8431,7 +8431,7 @@ msgstr "Для производства требуется завод кибор
 
 #: po/custom/fromJson.txt:1130
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Для производства тербуется тяжелая фабрика ВВС"
+msgstr "Для производства требуется тяжёлая фабрика ВВС"
 
 #: po/custom/fromJson.txt:1131
 msgid "Research Breakthrough Improves Construction Rates"
@@ -8443,7 +8443,7 @@ msgstr "Исследовательская лаборатория"
 
 #: po/custom/fromJson.txt:1134
 msgid "Research makes additional Cyborgs available"
-msgstr "Иследование даети доступ к дополнительным видам киборгов"
+msgstr "Исследование даёт доступ к дополнительным видам киборгов"
 
 #: po/custom/fromJson.txt:1135
 msgid "Research Module"
@@ -8483,7 +8483,7 @@ msgstr "Ракеты"
 
 #: po/custom/fromJson.txt:1144
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr "Дстижения робототехники позволяют исследовать новый цепной механизм"
+msgstr "Достижения робототехники позволяют исследовать новый цепной механизм"
 
 #: po/custom/fromJson.txt:1146
 msgid "Robotic Cyborg Production Mk2"
@@ -8507,7 +8507,7 @@ msgstr "Роботизированное производство Мk3"
 
 #: po/custom/fromJson.txt:1151
 msgid "Robotic loading system feeds rounds into breech"
-msgstr "Роботизированная система загрузки подает снаряды в заднюю часть"
+msgstr "Роботизированная система загрузки подаёт снаряды в заднюю часть"
 
 #: po/custom/fromJson.txt:1152
 msgid "Robotic Manufacturing"
@@ -8603,11 +8603,11 @@ msgstr "Роторная гаубица - Шторм Ада"
 
 #: po/custom/fromJson.txt:1177
 msgid "Rotary MG Bunker"
-msgstr "Бункер с роторным пулеметом"
+msgstr "Бункер с роторным пулемётом"
 
 #: po/custom/fromJson.txt:1178
 msgid "Rotary Mortar - Pepperpot"
-msgstr "Роторный миномет - Пепперпот"
+msgstr "Роторный миномёт - Пепперпот"
 
 #: po/custom/fromJson.txt:1179
 msgid "Rotaryweaponslab"
@@ -8695,7 +8695,7 @@ msgstr "Ракета Бич"
 
 #: po/custom/fromJson.txt:1201
 msgid "Scourge Missile Hardpoint"
-msgstr "Укрепленная точка с ракетой Бич"
+msgstr "Укреплённая точка с ракетой Бич"
 
 #: po/custom/fromJson.txt:1202
 msgid "Scourge Missile Tower"
@@ -8715,7 +8715,7 @@ msgstr "Бич Возмездие ВВС"
 
 #: po/custom/fromJson.txt:1206
 msgid "Scrambler Turret"
-msgstr "Туррель захвата"
+msgstr "Турель захвата"
 
 #: po/custom/fromJson.txt:1207
 msgid "Search & Destroy Missiles"
@@ -8791,7 +8791,7 @@ msgstr "Ракетный блок Серафим"
 
 #: po/custom/fromJson.txt:1228
 msgid "Seraph Missile Battery"
-msgstr "Батарея ракет Сериафим"
+msgstr "Батарея ракет Серафим"
 
 #: po/custom/fromJson.txt:1229
 msgid "Shells detect and home to thermal heat signatures"
@@ -8847,11 +8847,11 @@ msgstr "Технология захвата противника"
 
 #: po/custom/fromJson.txt:1244
 msgid "Steals technology from structures and takes control of weapons"
-msgstr "Технология кражи из зданий дает контроль над оружием"
+msgstr "Технология кражи из зданий даёт контроль над оружием"
 
 #: po/custom/fromJson.txt:1245
 msgid "Steel tower with machinegun"
-msgstr "Стальная башня с пулеметом"
+msgstr "Стальная башня с пулемётом"
 
 #: po/custom/fromJson.txt:1246
 msgid "Stormbringer AA Laser"
@@ -9040,7 +9040,7 @@ msgstr "Бомбприцел с автонаведением"
 
 #: po/custom/fromJson.txt:1302
 msgid "Target Acquisition Mortar Shells"
-msgstr "Автозахват цели минометами"
+msgstr "Автозахват цели миномётами"
 
 #: po/custom/fromJson.txt:1303
 msgid "Targeting systems compensate for distance and weather conditions"
@@ -9104,7 +9104,7 @@ msgstr "Отсек для термитных бомб"
 
 #: po/custom/fromJson.txt:1319
 msgid "Thermite Flamer"
-msgstr "Термитный огнёмет"
+msgstr "Термитный огнемёт"
 
 #: po/custom/fromJson.txt:1320
 msgid "Thermopole Energizer"
@@ -9120,7 +9120,7 @@ msgstr "Активизатор Мk3"
 
 #: po/custom/fromJson.txt:1323
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "самолет возвращается на выбранную площадку для перезарядки"
+msgstr "самолёт возвращается на выбранную площадку для перезарядки"
 
 #: po/custom/fromJson.txt:1325
 msgid "Tiger"
@@ -9128,7 +9128,7 @@ msgstr "Тигр"
 
 #: po/custom/fromJson.txt:1326
 msgid "Titanium-reinforced concrete"
-msgstr "Бетон, укрепленный титаном"
+msgstr "Бетон, укреплённый титаном"
 
 #: po/custom/fromJson.txt:1327
 msgid "Tracked Propulsion"
@@ -9233,7 +9233,7 @@ msgstr "Бункер со спаренным пулемётом"
 
 #: po/custom/fromJson.txt:1356
 msgid "Twin Machinegun Guard Tower"
-msgstr "Башня с двойным пулеметом"
+msgstr "Башня с двойным пулемётом"
 
 #: po/custom/fromJson.txt:1357
 msgid "Twin Machinegun Viper Half-tracks"
@@ -9241,7 +9241,7 @@ msgstr "Двойной пулемёт Гадюка Полугусеницы"
 
 #: po/custom/fromJson.txt:1358
 msgid "Twin Machinegun Viper Tracks"
-msgstr "Двойной пулемет Гадюка Гусеницы"
+msgstr "Двойной пулемёт Гадюка Гусеницы"
 
 #: po/custom/fromJson.txt:1359
 msgid "Twin Machinegun Viper Wheels"
@@ -9261,11 +9261,11 @@ msgstr ""
 
 #: po/custom/fromJson.txt:1363
 msgid "Unit Research Completed"
-msgstr "Иследование юнита завершено"
+msgstr "Исследование юнита завершено"
 
 #: po/custom/fromJson.txt:1364
 msgid "Upgraded battlefield computer system"
-msgstr "Обновленная боевая компьютерная система"
+msgstr "Обновлённая боевая компьютерная система"
 
 #: po/custom/fromJson.txt:1365
 msgid "Uplink Sensor"
@@ -9293,7 +9293,7 @@ msgstr "Использует продвинутую технологию рел�
 
 #: po/custom/fromJson.txt:1371
 msgid "Uses advanced missile gun technology"
-msgstr "Использует продвинутую технологию тяжелых противотанковых ракет"
+msgstr "Использует продвинутую технологию тяжёлых противотанковых ракет"
 
 #: po/custom/fromJson.txt:1372
 msgid "Uses advanced rocket gun technology"
@@ -9353,7 +9353,7 @@ msgstr "Месть Гусеницы Рельсовая пушка"
 
 #: po/custom/fromJson.txt:1391
 msgid "Vertical Take Off and Landing Propulsion"
-msgstr "Технология Вертикального взлета и посадки (ВВП) - Движитель ВВС Юнитов"
+msgstr "Технология Вертикального взлёта и посадки (ВВП) - Движитель ВВС Юнитов"
 
 #: po/custom/fromJson.txt:1392
 msgid "Very expensive to produce"
@@ -9373,7 +9373,7 @@ msgstr "Очень медленное время перезарядки"
 
 #: po/custom/fromJson.txt:1396
 msgid "Vindicator Hardpoint"
-msgstr "Укрепленная точка с пусковой Защитник"
+msgstr "Укреплённая точка с пусковой Защитник"
 
 #: po/custom/fromJson.txt:1397
 msgid "Vindicator SAM"
@@ -9429,7 +9429,7 @@ msgstr "Башня ВВС КБ"
 
 #: po/custom/fromJson.txt:1411
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "ВВП КБ башня обнаруживает вражеские батареи непрямого залпового онгня"
+msgstr "ВВП КБ башня обнаруживает вражеские батареи непрямого залпового огня"
 
 #: po/custom/fromJson.txt:1412
 msgid "VTOL CB Turret"
@@ -9569,7 +9569,7 @@ msgstr "Ракета Бич ВВС"
 
 #: po/custom/fromJson.txt:1451
 msgid "VTOL Strike Tower"
-msgstr "Бонвая башня ВВС"
+msgstr "Боевая башня ВВС"
 
 #: po/custom/fromJson.txt:1452
 msgid "VTOL Strike Tower detects approaching enemies"
@@ -9637,7 +9637,7 @@ msgstr "Зенитка Вихрь"
 
 #: po/custom/fromJson.txt:1469
 msgid "Whirlwind AA Turret"
-msgstr "Туррель Вихрь"
+msgstr "Турель Вихрь"
 
 #: po/custom/fromJson.txt:1470
 msgid "Whirlwind Hardpoint"
@@ -9724,16 +9724,16 @@ msgstr "Стратегия"
 #: src/cheat.cpp:164
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr "%s хочет включить режим отладки. Включен %s, Отключен %s."
+msgstr "%s хочет включить режим отладки. Включён %s, Отключён %s."
 
 #: src/cheat.cpp:168
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr "%s хочет отключить режим отладки. Включен %s, Отключен %s."
+msgstr "%s хочет отключить режим отладки. Включён %s, Отключён %s."
 
 #: src/cheat.cpp:174
 msgid "Debug mode now enabled!"
-msgstr "Отладочный режим включен"
+msgstr "Отладочный режим включён"
 
 #: src/cheat.cpp:180
 msgid "Debug mode now disabled!"
@@ -9823,7 +9823,7 @@ msgstr "Отключить утверждения"
 
 #: src/clparse.cpp:274
 msgid "Causes a crash to test the crash handler"
-msgstr "вызывает крэш для тестирования прораммы обработки "
+msgstr "вызывает крэш для тестирования программы обработки "
 
 #: src/clparse.cpp:275
 #, fuzzy
@@ -10080,7 +10080,7 @@ msgstr "Новый дизайн"
 
 #: src/display3d.cpp:663
 msgid "Player left"
-msgstr "Игрок ушел"
+msgstr "Игрок ушёл"
 
 #: src/display3d.cpp:667
 msgid "Player dropped"
@@ -10191,7 +10191,7 @@ msgstr "ГЛАВНОЕ МЕНЮ"
 #: src/frontend.cpp:160
 #, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Посетите наш оффициальный сайт: http://wz2100.net"
+msgstr "Посетите наш официальный сайт: http://wz2100.net"
 
 #: src/frontend.cpp:161
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -10200,7 +10200,7 @@ msgstr ""
 #: src/frontend.cpp:162
 #, fuzzy
 msgid "Donate: http://donations.wz2100.net/"
-msgstr "Посетите наш оффициальный сайт: http://wz2100.net"
+msgstr "Посетите наш официальный сайт: http://wz2100.net"
 
 #: src/frontend.cpp:163
 msgid "Help support the project with our server costs, Click this link."
@@ -10279,12 +10279,12 @@ msgstr "МИССИЯ 1"
 #: src/frontend.cpp:511
 #: src/ingameop.cpp:432
 msgid "Load Campaign Saved Game"
-msgstr "Загрузить сохраненную Кампанию"
+msgstr "Загрузить сохранённую Кампанию"
 
 #: src/frontend.cpp:517
 #: src/ingameop.cpp:436
 msgid "Load Skirmish Saved Game"
-msgstr "Загрузить сохраненную Схватку"
+msgstr "Загрузить сохранённую Схватку"
 
 #: src/frontend.cpp:571
 msgid "MULTI PLAYER"
@@ -10330,7 +10330,7 @@ msgstr "Настройки Мыши"
 
 #: src/frontend.cpp:649
 msgid "Key Mappings"
-msgstr "Расскладка клавиатуры"
+msgstr "Раскладка клавиатуры"
 
 #: src/frontend.cpp:702
 msgid "1×"
@@ -10349,7 +10349,7 @@ msgstr "Полный экран"
 #: src/frontend.cpp:716
 #: src/frontend.cpp:1233
 msgid "Unsupported"
-msgstr "Неподдерживается"
+msgstr "Не поддерживается"
 
 #: src/frontend.cpp:713
 #: src/frontend.cpp:722
@@ -10427,7 +10427,7 @@ msgstr "Громкость эффектов"
 #: src/frontend.cpp:850
 #: src/ingameop.cpp:141
 msgid "Music Volume"
-msgstr "Громкость музыкы"
+msgstr "Громкость музыки"
 
 #: src/frontend.cpp:857
 msgid "AUDIO OPTIONS"
@@ -10497,7 +10497,7 @@ msgstr "Настройки мыши"
 #: src/frontend.cpp:1226
 #: src/multiint.cpp:209
 msgid "Easy"
-msgstr "Легкая"
+msgstr "Лёгкая"
 
 #: src/frontend.cpp:1227
 msgid "Normal"
@@ -10506,7 +10506,7 @@ msgstr "Нормальная"
 #: src/frontend.cpp:1228
 #: src/multiint.cpp:209
 msgid "Hard"
-msgstr "Тяжелая"
+msgstr "Тяжёлая"
 
 #: src/frontend.cpp:1229
 #: src/multiint.cpp:209
@@ -10750,7 +10750,7 @@ msgstr "Отступление при среднем уроне"
 #: src/intorder.cpp:159
 #: src/keymap.cpp:400
 msgid "Retreat at Heavy Damage"
-msgstr "Отступление при тяжелом уроне"
+msgstr "Отступление при тяжёлом уроне"
 
 #: src/intorder.cpp:160
 #: src/keymap.cpp:401
@@ -10837,7 +10837,7 @@ msgstr "Ауч! Жизнь строения ниже 20%"
 
 #: src/keybind.cpp:293
 msgid "Lets us see what you see!"
-msgstr "Позволь увидель нам то, что видишь ты!"
+msgstr "Позволь увидеть нам то, что видишь ты!"
 
 #: src/keybind.cpp:297
 msgid "Fine, weapon & sensor display is off!"
@@ -10934,7 +10934,7 @@ msgstr "Доступно абсолютно все"
 
 #: src/keybind.cpp:778
 msgid "Fog on"
-msgstr "Туман включен"
+msgstr "Туман включён"
 
 #: src/keybind.cpp:778
 msgid "Fog off"
@@ -10951,7 +10951,7 @@ msgstr "Окончание миссии."
 
 #: src/keybind.cpp:1319
 msgid "God Mode ON"
-msgstr "Режим бога включен"
+msgstr "Режим бога включён"
 
 #: src/keybind.cpp:1319
 msgid "God Mode OFF"
@@ -10989,11 +10989,11 @@ msgstr "Отображать панель прогресса только для
 
 #: src/keybind.cpp:1515
 msgid "Always displaying energy bars for units"
-msgstr "Всегда отображать панеот прогресса для юнитов"
+msgstr "Всегда отображать панель прогресса для юнитов"
 
 #: src/keybind.cpp:1518
 msgid "Always displaying energy bars for units and structures"
-msgstr "Всегда отображать панел прогресса для юнитов и построек"
+msgstr "Всегда отображать панели прогресса для юнитов и построек"
 
 #: src/keybind.cpp:1531
 msgid "Debug menu is Open"
@@ -11009,7 +11009,7 @@ msgstr "Ох! Погода снаружи ужасна... СНЕГ"
 
 #: src/keybind.cpp:1738
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Ну а дождь все льет и льет..."
+msgstr "Ну а дождь все льёт и льёт..."
 
 #: src/keybind.cpp:1744
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
@@ -11017,7 +11017,7 @@ msgstr "Прогноз на сегодня: осадков не ожидаетс
 
 #: src/keybind.cpp:1837
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr "Внимание! При неправильном использовании в миссиях могут возникнуть серьезные последствия."
+msgstr "Внимание! При неправильном использовании в миссиях могут возникнуть серьёзные последствия."
 
 #: src/keybind.cpp:1839
 msgid "All enemies destroyed by cheating!"
@@ -11319,7 +11319,7 @@ msgstr "Отдалить"
 
 #: src/keymap.cpp:355
 msgid "Pitch Forward"
-msgstr "Бросок вперед"
+msgstr "Бросок вперёд"
 
 #: src/keymap.cpp:356
 msgid "Rotate Left"
@@ -11408,7 +11408,7 @@ msgstr "Центрировать на командном центре"
 
 #: src/keymap.cpp:380
 msgid "View Unassigned Units"
-msgstr "Показать неназначенных юнитов"
+msgstr "Показать не назначенных юнитов"
 
 #: src/keymap.cpp:382
 msgid "Fire at Will"
@@ -11466,7 +11466,7 @@ msgstr "Выделить всех Киборгов"
 
 #: src/keymap.cpp:407
 msgid "Select all Heavily Damaged Units"
-msgstr "Выделить всю сильно поврежденную технику"
+msgstr "Выделить всю сильно повреждённую технику"
 
 #: src/keymap.cpp:408
 msgid "Select all Half-tracks"
@@ -11499,7 +11499,7 @@ msgstr "Выделить всю воздушную технику"
 
 #: src/keymap.cpp:416
 msgid "Select all Wheels"
-msgstr "Выделить всю технику на колесах"
+msgstr "Выделить всю технику на колёсах"
 
 #: src/keymap.cpp:417
 msgid "Show frame rate"
@@ -11527,7 +11527,7 @@ msgstr "Выделить всех Механиков"
 
 #: src/keymap.cpp:426
 msgid "Select all Transporters"
-msgstr "Выделить всех Транспортеров"
+msgstr "Выделить все Транспорты"
 
 #: src/keymap.cpp:427
 msgid "Select all Repair Tanks"
@@ -11567,7 +11567,7 @@ msgstr "Переключение изображения дроидного пу�
 
 #: src/keymap.cpp:441
 msgid "Toggle display of gateways"
-msgstr "Переключение отображениев шлюзов"
+msgstr "Переключение отображения ворот"
 
 #: src/keymap.cpp:442
 msgid "Show all keyboard mappings - use pause!"
@@ -11599,7 +11599,7 @@ msgstr "Переключить немного погоды"
 
 #: src/keymap.cpp:449
 msgid "Flip terrain triangle"
-msgstr "Повернуть местность треугольика"
+msgstr "Повернуть местность треугольника"
 
 #: src/keymap.cpp:450
 msgid "Make a performance measurement sample"
@@ -11680,18 +11680,18 @@ msgstr "ИГРА СОХРАНЕНА:"
 #: src/move.cpp:1981
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr "Ты нашел %u энергии в бочке с горючим."
+msgstr "Ты нашёл %u энергии в бочке с горючим."
 
 #: src/multigifts.cpp:224
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s Доложил свое местоположение"
+msgstr "%s Доложил своё местоположение"
 
 #: src/multigifts.cpp:240
 #: src/multigifts.cpp:266
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s передает вам %s"
+msgstr "%s передаёт вам %s"
 
 #: src/multigifts.cpp:316
 #, c-format
@@ -11706,7 +11706,7 @@ msgstr "%s поделился своими исследованиями"
 #: src/multigifts.cpp:417
 #, fuzzy, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s передает вам %u энергию"
+msgstr "%s передаёт вам %u энергию"
 
 #: src/multigifts.cpp:445
 #, c-format
@@ -11877,7 +11877,7 @@ msgstr "Киборги отключены."
 
 #: src/multiint.cpp:1546
 msgid "VTOLs disabled."
-msgstr "Самолеты отключены."
+msgstr "Самолёты отключены."
 
 #: src/multiint.cpp:1547
 #, fuzzy
@@ -11886,7 +11886,7 @@ msgstr "Центр связи со спутником"
 
 #: src/multiint.cpp:1548
 msgid "Laser Satellite disabled."
-msgstr "Лазерный Спутник Отключен"
+msgstr "Лазерный Спутник Отключён"
 
 #: src/multiint.cpp:1589
 #: src/multiint.cpp:4092
@@ -11912,7 +11912,7 @@ msgstr ""
 
 #: src/multiint.cpp:1618
 msgid "Click to set Password"
-msgstr "Щелкни чтобы задать пароль"
+msgstr "Щёлкни чтобы задать пароль"
 
 #: src/multiint.cpp:1627
 msgid "Select Player Name"
@@ -11983,7 +11983,7 @@ msgstr "Просмотр карты"
 
 #: src/multiint.cpp:1676
 msgid "Click to see Map"
-msgstr "щелкни чтобы посмотреть карту"
+msgstr "щёлкни чтобы посмотреть карту"
 
 #: src/multiint.cpp:1683
 #: src/multiint.cpp:1684
@@ -12015,7 +12015,7 @@ msgstr "Играет красиво"
 
 #: src/multiint.cpp:1786
 msgid "No holds barred"
-msgstr "Нет запрещенных приемов"
+msgstr "Нет запрещённых приёмов"
 
 #: src/multiint.cpp:1787
 msgid "Starts with advantages"
@@ -12027,7 +12027,7 @@ msgstr "ВЫБЕРИТЕ ИИ"
 
 #: src/multiint.cpp:1848
 msgid "Allow human players to join in this slot"
-msgstr "Позволить игрокам просоединиться в этот слот"
+msgstr "Позволить игрокам присоединиться в этот слот"
 
 #: src/multiint.cpp:1855
 msgid "Leave this slot unused"
@@ -12061,7 +12061,7 @@ msgstr "Игрок готов"
 
 #: src/multiint.cpp:2378
 msgid "Click when ready"
-msgstr "Щелкни когда будешь готов"
+msgstr "Щёлкни когда будешь готов"
 
 #: src/multiint.cpp:2378
 #, fuzzy
@@ -12157,7 +12157,7 @@ msgstr ""
 #: src/multiint.cpp:3885
 #, fuzzy
 msgid "UPnP detection is in progress..."
-msgstr "Идет расшифровка..."
+msgstr "Идёт расшифровка..."
 
 #: src/multiint.cpp:3892
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
@@ -12238,7 +12238,7 @@ msgstr "Пинг"
 #: src/multijoin.cpp:95
 #: src/multijoin.cpp:96
 msgid "Players Still Joining"
-msgstr "Игроки еще соединяються"
+msgstr "Игроки ещё соединяться"
 
 #: src/multijoin.cpp:242
 #, c-format
@@ -12253,7 +12253,7 @@ msgstr "Передача файла была прервана на %d%%"
 #: src/multijoin.cpp:429
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr "%s (%u) имеет несовместимый мод и отключен."
+msgstr "%s (%u) имеет несовместимый мод и отключён."
 
 #: src/multijoin.cpp:470
 #, c-format
@@ -12441,7 +12441,7 @@ msgstr "Голубой"
 
 #: src/multiplay.cpp:2040
 msgid "Yellow"
-msgstr "Желтый"
+msgstr "Жёлтый"
 
 #: src/multiplay.cpp:2041
 msgid "Purple"
@@ -12457,11 +12457,11 @@ msgstr "Ярко-синий"
 
 #: src/multiplay.cpp:2044
 msgid "Neon green"
-msgstr "Зеленый неон"
+msgstr "Зелёный неон"
 
 #: src/multiplay.cpp:2045
 msgid "Infrared"
-msgstr "Инфракраснйы"
+msgstr "Инфракрасный"
 
 #: src/multiplay.cpp:2046
 msgid "Ultraviolet"
@@ -12799,7 +12799,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Текущий игрок"
 
 #~ msgid "Machinegun Guard Tower"
-#~ msgstr "Пулеметная башня"
+#~ msgstr "Пулемётная башня"
 
 #~ msgid "Screen Shake"
 #~ msgstr "Дрожание экрана"
@@ -12817,7 +12817,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Всем игрокам нужен такой же мод, что и у вас."
 
 #~ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "OpenGL GLSL шейдер версия 1.20 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
+#~ msgstr "OpenGL GLSL шейдер версия 1.20 не поддерживается вашей системой. Некоторые вещи могут выглядеть неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #, fuzzy
 #~ msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
@@ -12833,7 +12833,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "%s хочет дать вам %s но у вас их слишком много"
 
 #~ msgid "You wanted to give %s a %s but they have too many!"
-#~ msgstr "Вы хотите дать %s %s но у их их слишком много"
+#~ msgstr "Вы хотите дать %s %s но у них их слишком много"
 
 #~ msgid "1X"
 #~ msgstr "1Х"
@@ -12872,7 +12872,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Плитка"
 
 #~ msgid "Place tiles on map"
-#~ msgstr "Поместить эемент изображения на карту"
+#~ msgstr "Поместить элемент изображения на карту"
 
 #~ msgid "Pause"
 #~ msgstr "Пауза"
@@ -12911,7 +12911,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Консоль вкл/выкл"
 
 #~ msgid "Sensor display On"
-#~ msgstr "Сенсорный дисплей включен"
+#~ msgstr "Сенсорный дисплей включён"
 
 #~ msgid "Sensor display Off"
 #~ msgstr "Сенсорный экран выключен"
@@ -12951,7 +12951,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Пароль уже установлен"
 
 #~ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
+#~ msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядеть неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #, fuzzy
 #~ msgid "Unit Colour (SP)"
@@ -13070,7 +13070,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Туман войны"
 
 #~ msgid "Distance Fog"
-#~ msgstr "Туман на растоянии"
+#~ msgstr "Туман на расстоянии"
 
 #~ msgid "* May negatively affect performance"
 #~ msgstr "* Может снизить производительность"
@@ -13109,25 +13109,25 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "(Включено локально)"
 
 #~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "Кобра ховер тяжелая ремонтная"
+#~ msgstr "Кобра ховер тяжёлая ремонтная"
 
 #~ msgid "Viper HMG Wheels"
-#~ msgstr "Гадюка Тяжелый пулемет Колеса"
+#~ msgstr "Гадюка Тяжёлый пулемёт Колеса"
 
 #~ msgid "TK Mantis Hover"
 #~ msgstr "Танк-Киллер Богомол Ховер"
 
 #~ msgid "Cobra HMG Tracks"
-#~ msgstr "Кобра Тяжелый пулемет Гусеницы"
+#~ msgstr "Кобра Тяжёлый пулемёт Гусеницы"
 
 #~ msgid "Cobra Hover HC"
-#~ msgstr "Кобра Ховер Тяжелая пушка"
+#~ msgstr "Кобра Ховер Тяжёлая пушка"
 
 #~ msgid "Scorpion Lancer Tracks"
 #~ msgstr "Скорпион Лансер Гусеницы"
 
 #~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "Скорпион Тяжелая пушка Гусеницы"
+#~ msgstr "Скорпион Тяжёлая пушка Гусеницы"
 
 #~ msgid "Scorpion Lancer VTOL"
 #~ msgstr "Скорпион Лансер ВВС"
@@ -13151,7 +13151,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Кобра Лансер Гусеницы"
 
 #~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "Богомол Тяжелая пушка Гусеницы"
+#~ msgstr "Богомол Тяжёлая пушка Гусеницы"
 
 #~ msgid "Mantis Tank Killer Tracks"
 #~ msgstr "Богомол Танк-Киллер Гусеницы"
@@ -13160,13 +13160,13 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Богомол Бич Гусеницы"
 
 #~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "Скорпион Тяжелый пулемет Гусеницы"
+#~ msgstr "Скорпион Тяжёлый пулемёт Гусеницы"
 
 #~ msgid "Scorpion Repair Tracks"
 #~ msgstr "Скорпион Ремонтная Гусеницы"
 
 #~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "Скорпион Тяжелая Ремонтная Ховер"
+#~ msgstr "Скорпион Тяжёлая Ремонтная Ховер"
 
 #~ msgid "Cobra Hover Truck"
 #~ msgstr "Кобра Ховер Грузовик"
@@ -13241,7 +13241,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Бесконечное производство"
 
 #~ msgid "You found %u power in an oil drum"
-#~ msgstr "Ты нашел %u энергии в бочке с горючим"
+#~ msgstr "Ты нашёл %u энергии в бочке с горючим"
 
 #~ msgid "Player position"
 #~ msgstr "Позиция игрока."
@@ -13298,7 +13298,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Разрывные миниракеты МК3"
 
 #~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Термитный огнемётчик"
+#~ msgstr "Термитный Огнемётчик"
 
 #~ msgid "Grenadier Cyborg"
 #~ msgstr "Киборг миномётчик"
@@ -13307,7 +13307,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Оборонительная точка Циклон"
 
 #~ msgid "Fire Cannon"
-#~ msgstr "Огнемет"
+#~ msgstr "Огнемёт"
 
 #~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
 #~ msgstr "(Игрок %u) обнаружил ошибку 'ляжек' борга! Пожалуйста, введите ляжки в вашу консоль и вышлите нам файлы!"
@@ -13400,7 +13400,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Фризский"
 
 #~ msgid "Irish"
-#~ msgstr "Ирладский"
+#~ msgstr "Ирландский"
 
 #~ msgid "Lithuanian"
 #~ msgstr "Литовский"
@@ -13415,7 +13415,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Румынский"
 
 #~ msgid "Simplified Chinese"
-#~ msgstr "Упрощенный китайский"
+#~ msgstr "Упрощённый китайский"
 
 #~ msgid "Latin"
 #~ msgstr "Латинский"
@@ -13429,14 +13429,14 @@ msgstr "Версия %s-%s%s%s%s"
 
 #, fuzzy
 #~ msgid "Player %u has the wrong game version. Auto kicking."
-#~ msgstr "У игрока %u несоответствует версия игры. Автокик."
+#~ msgstr "У игрока %u не соответствует версия игры. Автокик."
 
 #~ msgid "Player %u has the wrong game version.  Auto kicking."
-#~ msgstr "У игрока %u несоответствует версия игры. Автокик."
+#~ msgstr "У игрока %u не соответствует версия игры. Автокик."
 
 #, fuzzy
 #~ msgid "Player %u has the wrong password. Auto kicking."
-#~ msgstr "Игрок %u ввелд неверный пароль. Автокик"
+#~ msgstr "Игрок %u ввёл неверный пароль. Автокик"
 
 #~ msgid "Increases Bombing damage"
 #~ msgstr "Увеличение урона бомбардировки"
@@ -13451,7 +13451,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Ограничение Скорости Вкл."
 
 #~ msgid "Wrong data/mod detected by Host."
-#~ msgstr "владаелец обнаружил неверные данные/мод"
+#~ msgstr "владелец обнаружил неверные данные/мод"
 
 #, fuzzy
 #~ msgid "Kicking player %s, game data doesn't match!"
@@ -13467,7 +13467,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Обманывать не хорошо!"
 
 #~ msgid "Player %u found %u power in an oil drum"
-#~ msgstr "Игрок %u нашел %u энергии в бочке с горючим"
+#~ msgstr "Игрок %u нашёл %u энергии в бочке с горючим"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "остановка МП аудио"
@@ -13503,7 +13503,7 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Узбекский (кириллица)"
 
 #~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Тяжелый пулемёт \"Кобра\" на полугусеничном ходу"
+#~ msgstr "Тяжёлый пулемёт \"Кобра\" на полугусеничном ходу"
 
 #~ msgid "Peperpot Emplacement"
 #~ msgstr "Установка Пепперпот"
@@ -13675,16 +13675,16 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgstr "Мы обнаруживаем вражеские войска в этом районе."
 
 #~ msgid "End Of Briefing."
-#~ msgstr "Иструктаж завершен."
+#~ msgstr "Инструктаж завершён."
 
 #~ msgid "Civilian Rescued"
-#~ msgstr "Гражданский спасен"
+#~ msgstr "Гражданский спасён"
 
 #~ msgid "Civilians Rescued"
 #~ msgstr "Гражданские спасены"
 
 #~ msgid "Unit Rescued"
-#~ msgstr "Юнит спасен"
+#~ msgstr "Юнит спасён"
 
 #~ msgid "Units Rescued"
 #~ msgstr "Юниты спасены"
