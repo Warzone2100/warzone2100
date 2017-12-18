@@ -303,9 +303,6 @@
         "id": "R-Cyborg-Hvywpn-HPV",
         "msgName": "RES_CYW_H_HPV",
         "name": "Super HPV Cyborg",
-        "replacedComponents": [
-            "Cyb-Hvywpn-Mcannon:Cyb-Hvywpn-HPV"
-        ],
         "requiredResearch": [
             "R-Cyborg-Hvywpn-Mcannon",
             "R-Wpn-Cannon4AMk1"
@@ -7720,9 +7717,6 @@
         "redComponents": [
             "Rocket-LtA-T",
             "Rocket-VTOL-LtA-T"
-        ],
-        "replacedComponents": [
-            "CyborgRocket:Cyb-Wpn-Atmiss"
         ],
         "requiredResearch": [
             "R-Wpn-Rocket07-Tank-Killer",
