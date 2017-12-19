@@ -14,6 +14,7 @@
         "structureModel": [
             "icdozer.PIE"
         ],
+        "thermal": 6,
         "type": "DEMOLISH",
         "width": 1
     },
@@ -33,6 +34,7 @@
         "structureModel": [
             "blbrbbnk.PIE"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "MG3Mk1"
@@ -57,6 +59,7 @@
         "structureModel": [
             "BLBRBFAC.PIE"
         ],
+        "thermal": 5,
         "type": "FACTORY",
         "width": 2
     },
@@ -76,6 +79,7 @@
         "structureModel": [
             "Blbrtowf.pie"
         ],
+        "thermal": 7,
         "type": "DEFENSE",
         "weapons": [
             "Flame1Mk1"
@@ -98,6 +102,7 @@
         "structureModel": [
             "BLBRBTW1.PIE"
         ],
+        "thermal": 7,
         "type": "DEFENSE",
         "weapons": [
             "BabaTowerMG"
@@ -120,6 +125,7 @@
         "structureModel": [
             "Blbrbtw2.PIE"
         ],
+        "thermal": 7,
         "type": "DEFENSE",
         "weapons": [
             "BabaTowerMG"
@@ -141,6 +147,7 @@
         "structureModel": [
             "BLBRBWLH.PIE"
         ],
+        "thermal": 7,
         "type": "WALL",
         "width": 1
     },
@@ -160,6 +167,7 @@
         "structureModel": [
             "BLBRMRTP.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Mortar1Mk1"
@@ -184,6 +192,7 @@
         "structureModel": [
             "BLBRBGEN.PIE"
         ],
+        "thermal": 5,
         "type": "POWER GENERATOR",
         "width": 1
     },
@@ -203,6 +212,7 @@
         "structureModel": [
             "EXROCKET.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "BabaPitRocket"
@@ -225,6 +235,7 @@
         "structureModel": [
             "EXROCKET.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "BabaPitRocketAT"
@@ -246,6 +257,7 @@
         "structureModel": [
             "BLBRBCR1.PIE"
         ],
+        "thermal": 5,
         "type": "CORNER WALL",
         "width": 1
     },
@@ -265,6 +277,7 @@
         "structureModel": [
             "BLBRTOWR.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "BabaCannon"
@@ -288,6 +301,7 @@
         "structureModel": [
             "bldrdcm0.pie"
         ],
+        "thermal": 10,
         "type": "COMMAND RELAY",
         "width": 2
     },
@@ -308,6 +322,7 @@
         "structureModel": [
             "blhq.pie"
         ],
+        "thermal": 10,
         "type": "HQ",
         "width": 2
     },
@@ -328,6 +343,7 @@
         "structureModel": [
             "blhq3.pie"
         ],
+        "thermal": 10,
         "type": "HQ",
         "width": 2
     },
@@ -348,6 +364,7 @@
         "structureModel": [
             "blhq4.pie"
         ],
+        "thermal": 10,
         "type": "HQ",
         "width": 2
     },
@@ -368,6 +385,7 @@
         "structureModel": [
             "blhq2.pie"
         ],
+        "thermal": 10,
         "type": "HQ",
         "width": 2
     },
@@ -390,6 +408,7 @@
         "structureModel": [
             "blcfact1.pie"
         ],
+        "thermal": 10,
         "type": "CYBORG FACTORY",
         "width": 1
     },
@@ -410,6 +429,7 @@
         "structureModel": [
             "blfact1.pie"
         ],
+        "thermal": 10,
         "type": "FACTORY MODULE",
         "width": 3
     },
@@ -428,6 +448,7 @@
         "structureModel": [
             "BLWALLC1.pie"
         ],
+        "thermal": 15,
         "type": "CORNER WALL",
         "width": 1
     },
@@ -449,6 +470,7 @@
             "blwallh_t.pie",
             "blwallh_l.pie"
         ],
+        "thermal": 15,
         "type": "WALL",
         "width": 1
     },
@@ -475,6 +497,7 @@
             "factory_module2.pie",
             "blfact2.pie"
         ],
+        "thermal": 10,
         "type": "FACTORY",
         "width": 3
     },
@@ -493,6 +516,7 @@
         "structureModel": [
             "blpower4.pie"
         ],
+        "thermal": 10,
         "type": "POWER MODULE",
         "width": 2
     },
@@ -517,6 +541,7 @@
             "power_module4.pie",
             "blpower4.pie"
         ],
+        "thermal": 20,
         "type": "POWER GENERATOR",
         "width": 2
     },
@@ -538,6 +563,7 @@
         "structureModel": [
             "BLRPAIR3.PIE"
         ],
+        "thermal": 10,
         "type": "REPAIR FACILITY",
         "width": 1
     },
@@ -562,6 +588,7 @@
             "research_module4.pie",
             "blresch4.pie"
         ],
+        "thermal": 10,
         "type": "RESEARCH",
         "width": 2
     },
@@ -581,6 +608,7 @@
         "structureModel": [
             "blresch4.pie"
         ],
+        "thermal": 10,
         "type": "RESEARCH MODULE",
         "width": 2
     },
@@ -599,6 +627,7 @@
         "structureModel": [
             "BLDERIK.PIE"
         ],
+        "thermal": 5,
         "type": "RESOURCE EXTRACTOR",
         "width": 1
     },
@@ -617,6 +646,7 @@
         "structureModel": [
             "MITRAP2.PIE"
         ],
+        "thermal": 10,
         "type": "WALL",
         "width": 1
     },
@@ -643,6 +673,7 @@
             "vtolfactory_module2.pie",
             "blvfact2.pie"
         ],
+        "thermal": 10,
         "type": "VTOL FACTORY",
         "width": 3
     },
@@ -665,6 +696,7 @@
         "structureModel": [
             "blvtolpd.pie"
         ],
+        "thermal": 10,
         "type": "REARM PAD",
         "width": 1
     },
@@ -684,6 +716,7 @@
         "structureModel": [
             "Blaamnt1.PIE"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "AAGun2Mk1"
@@ -706,6 +739,7 @@
         "structureModel": [
             "Blaamnt1.PIE"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "QuadMg1AAGun"
@@ -728,6 +762,7 @@
         "structureModel": [
             "Blaamnt1.PIE"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "QuadRotAAGun"
@@ -750,6 +785,7 @@
         "structureModel": [
             "BLGUARD2.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "Cannon4AUTOMk1"
@@ -772,6 +808,7 @@
         "structureModel": [
             "BLGUARD2.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-HvyA-T"
@@ -794,6 +831,7 @@
         "structureModel": [
             "BLHARDPT.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "Flame2"
@@ -816,6 +854,7 @@
         "structureModel": [
             "blguardn.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-LtA-T"
@@ -838,6 +877,7 @@
         "structureModel": [
             "blguardn.PIE"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "MG3Mk1"
@@ -860,6 +900,7 @@
         "structureModel": [
             "BLGUARD2.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "Cannon2A-TMk1"
@@ -882,6 +923,7 @@
         "structureModel": [
             "blguardn.PIE"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "MG4ROTARYMk1"
@@ -904,6 +946,7 @@
         "structureModel": [
             "BLGUARD2.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "Cannon375mmMk1"
@@ -926,6 +969,7 @@
         "structureModel": [
             "BLGUARD2.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "weapons": [
             "Cannon5VulcanMk1"
@@ -947,6 +991,7 @@
         "structureModel": [
             "BLWALLC2.pie"
         ],
+        "thermal": 12,
         "type": "CORNER WALL",
         "width": 1
     },
@@ -965,6 +1010,7 @@
         "structureModel": [
             "BLWALL2.pie"
         ],
+        "thermal": 12,
         "type": "WALL",
         "width": 1
     },
@@ -983,6 +1029,7 @@
         "structureModel": [
             "micool.PIE"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "width": 1
     },
@@ -1002,6 +1049,7 @@
         "structureModel": [
             "Blhowmnt.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Cannon4AUTOMk1"
@@ -1024,6 +1072,7 @@
         "structureModel": [
             "Blhowmnt.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Howitzer105Mk1"
@@ -1046,6 +1095,7 @@
         "structureModel": [
             "Blhowmnt.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Howitzer150Mk1"
@@ -1068,6 +1118,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Missile-HvyArt"
@@ -1090,6 +1141,7 @@
         "structureModel": [
             "Blhowmnt.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-HvyA-T"
@@ -1112,6 +1164,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-MRL"
@@ -1134,6 +1187,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Missile-MdArt"
@@ -1156,6 +1210,7 @@
         "structureModel": [
             "BLMRTPIT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Mortar1Mk1"
@@ -1178,6 +1233,7 @@
         "structureModel": [
             "BLMRTPIT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Mortar2Mk1"
@@ -1200,6 +1256,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Laser3BEAMMk1"
@@ -1222,6 +1279,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Laser2PULSEMk1"
@@ -1244,6 +1302,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "RailGun2Mk1"
@@ -1266,6 +1325,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "RailGun3Mk1"
@@ -1288,6 +1348,7 @@
         "structureModel": [
             "Blhowmnt.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-IDF"
@@ -1310,6 +1371,7 @@
         "structureModel": [
             "BLHOWMNT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Howitzer03-Rot"
@@ -1332,6 +1394,7 @@
         "structureModel": [
             "BLMRTPIT.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Mortar3ROTARYMk1"
@@ -1354,6 +1417,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Missile-A-T"
@@ -1376,6 +1440,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Laser3BEAMMk1"
@@ -1398,6 +1463,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "RailGun1Mk1"
@@ -1420,6 +1486,7 @@
         "structureModel": [
             "blguardr.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "MG4ROTARYMk1"
@@ -1442,6 +1509,7 @@
         "structureModel": [
             "BLGUARDM.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "MG3Mk1"
@@ -1464,6 +1532,7 @@
         "structureModel": [
             "BLGUARDM.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "MG2Mk1"
@@ -1486,6 +1555,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "MG3Mk1"
@@ -1508,6 +1578,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Flame1Mk1"
@@ -1530,6 +1601,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-LtA-T"
@@ -1552,6 +1624,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-Pod"
@@ -1573,6 +1646,7 @@
         "structureModel": [
             "blbrlook.PIE"
         ],
+        "thermal": 5,
         "type": "CORNER WALL",
         "width": 1
     },
@@ -1591,6 +1665,7 @@
         "structureModel": [
             "BLWALLC3.pie"
         ],
+        "thermal": 15,
         "type": "CORNER WALL",
         "width": 1
     },
@@ -1609,6 +1684,7 @@
         "structureModel": [
             "BLWALL3.pie"
         ],
+        "thermal": 15,
         "type": "WALL",
         "width": 1
     },
@@ -1627,6 +1703,7 @@
         "structureModel": [
             "blmssilo.pie"
         ],
+        "thermal": 999,
         "type": "MISSILE SILO",
         "width": 1
     },
@@ -1645,6 +1722,7 @@
         "structureModel": [
             "blbunkms.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "width": 1
     },
@@ -1664,6 +1742,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Missile-MdArt"
@@ -1686,6 +1765,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Missile-HvyArt"
@@ -1708,6 +1788,7 @@
         "structureModel": [
             "Blaamnt2.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "PlasmaHeavy"
@@ -1730,6 +1811,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Missile-A-T"
@@ -1752,6 +1834,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Laser2PULSEMk1"
@@ -1774,6 +1857,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "RailGun1Mk1"
@@ -1796,6 +1880,7 @@
         "structureModel": [
             "BLGUARD3.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Laser3BEAMMk1"
@@ -1818,6 +1903,7 @@
         "structureModel": [
             "BLGUARD3.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "RailGun2Mk1"
@@ -1840,6 +1926,7 @@
         "structureModel": [
             "BLGUARD3.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "RailGun3Mk1"
@@ -1861,6 +1948,7 @@
         "structureModel": [
             "minuke.PIE"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "width": 2
     },
@@ -1880,6 +1968,7 @@
         "structureModel": [
             "Blaamnt1.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Missile-LtSAM"
@@ -1902,6 +1991,7 @@
         "structureModel": [
             "Blaamnt2.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
             "Missile-HvySAM"
@@ -1924,6 +2014,7 @@
         "structureModel": [
             "blpilbox.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "MG3-Pillbox"
@@ -1946,6 +2037,7 @@
         "structureModel": [
             "blpilbox.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "MG2-Pillbox"
@@ -1968,6 +2060,7 @@
         "structureModel": [
             "blpilbox.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "MG3-Pillbox"
@@ -1990,6 +2083,7 @@
         "structureModel": [
             "Blcanpil.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "Cannon1Mk1"
@@ -2012,6 +2106,7 @@
         "structureModel": [
             "Blcanpil.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "Flame1Mk1"
@@ -2034,6 +2129,7 @@
         "structureModel": [
             "Blcanpil.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-LtA-T"
@@ -2056,6 +2152,7 @@
         "structureModel": [
             "blpilbox.pie"
         ],
+        "thermal": 20,
         "type": "DEFENSE",
         "weapons": [
             "MG4ROTARY-Pillbox"
@@ -2078,6 +2175,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2096,6 +2194,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "NEXUSlink"
@@ -2118,6 +2217,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2137,6 +2237,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2156,6 +2257,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2175,6 +2277,7 @@
         "structureModel": [
             "Blgrdnex.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2194,6 +2297,7 @@
         "structureModel": [
             "BLGUARDM.PIE"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2213,6 +2317,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2232,6 +2337,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2251,6 +2357,7 @@
         "structureModel": [
             "BLGUARDR.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "width": 1
     },
@@ -2269,6 +2376,7 @@
         "structureModel": [
             "MITRAP2.PIE"
         ],
+        "thermal": 10,
         "type": "CORNER WALL",
         "width": 1
     },
@@ -2288,6 +2396,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Flame2"
@@ -2310,6 +2419,7 @@
         "structureModel": [
             "BLGUARDR.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "MG4ROTARYMk1"
@@ -2332,6 +2442,7 @@
         "structureModel": [
             "BLGUARDR.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Cannon4AUTOMk1"
@@ -2353,6 +2464,7 @@
         "structureModel": [
             "miupbase.pie"
         ],
+        "thermal": 10,
         "type": "DEFENSE",
         "width": 2
     },
@@ -2372,6 +2484,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "MG4ROTARYMk1"
@@ -2394,6 +2507,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Cannon5VulcanMk1"
@@ -2416,6 +2530,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Missile-A-T"
@@ -2438,6 +2553,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Cannon4AUTOMk1"
@@ -2460,6 +2576,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-HvyA-T"
@@ -2482,6 +2599,7 @@
         "structureModel": [
             "BLHARDPT.PIE"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Flame2"
@@ -2504,6 +2622,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Laser3BEAMMk1"
@@ -2526,6 +2645,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "RailGun2Mk1"
@@ -2548,6 +2668,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "RailGun3Mk1"
@@ -2570,6 +2691,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "MG3Mk1"
@@ -2592,6 +2714,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Cannon1Mk1"
@@ -2614,6 +2737,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Cannon2A-TMk1"
@@ -2636,6 +2760,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Cannon375mmMk1"
@@ -2658,6 +2783,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Flame1Mk1"
@@ -2680,6 +2806,7 @@
         "structureModel": [
             "BLGUARD1.pie"
         ],
+        "thermal": 15,
         "type": "DEFENSE",
         "weapons": [
             "Rocket-LtA-T"
@@ -2701,6 +2828,7 @@
         "structureModel": [
             "drtrans.pie"
         ],
+        "thermal": 12,
         "type": "DEFENSE",
         "width": 3
     }
