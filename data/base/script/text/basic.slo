@@ -38,15 +38,6 @@ public  RESEARCHSTAT			commander;
 //this event is called once the game has initialised itself
 event initialisedEvent(CALL_GAMEINIT)
 {
-	// set up the reticule buttons
-	addReticuleButton(OPTIONS);
-	addReticuleButton(CANCEL);
-	addReticuleButton(BUILD);
-	addReticuleButton(MANUFACTURE);
-	addReticuleButton(RESEARCH);
-	addReticuleButton(INTELMAP);
-	addReticuleButton(DESIGN);
-
 	// make structures available to build
 	enableStructure(babaBunker,6);
 	enableStructure(babaCorner,6);

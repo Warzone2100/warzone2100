@@ -1,9 +1,0 @@
-public	int		campaign;
-
-event start(CALL_GAMEINIT)
-{
-	if (campaign > 0)
-	{
-		setCampaignNumber(campaign);	// so can easily switch disks during Cam3
-	}
-}

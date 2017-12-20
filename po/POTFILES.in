@@ -63,13 +63,6 @@ data/base/script/fastplay/fastdemo.js
 data/base/script/rules.js
 data/base/script/weather.js
 data/base/script/text/basic.slo
-data/base/script/text/cam1daynight.slo
-data/base/script/text/cam2daynight.slo
-data/base/script/text/cam3daynight.slo
-data/base/script/text/genbet.slo
-data/base/script/text/genexp.slo
-data/base/script/text/setdisk.slo
-data/base/script/text/tech.slo
 data/base/script/tutorial.js
 data/base/sequenceaudio/cam1/c001end.txt
 data/base/sequenceaudio/cam1/c001.txa
