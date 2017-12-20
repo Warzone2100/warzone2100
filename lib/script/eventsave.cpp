@@ -142,12 +142,6 @@ static bool eventLoadContext(WzConfig &ini)
 	// get the number of contexts in the save file
 	numContext = ini.value("general/contexts", 0).toInt();
 
-	if (numContext == 0)
-	{
-		debug(LOG_FATAL, "No script contexts found -- failed to load script data");
-		return false;
-	}
-
 	// go through the contexts
 	for (int context = 0; context < numContext; context++)
 	{
@@ -355,6 +349,11 @@ bool eventSaveState(const char *pFilename)
 bool eventLoadState(const char *pFilename)
 {
 	WzConfig ini(pFilename, WzConfig::ReadOnly);
+	// see if we actually use wzscript anymore
+	if (ini.value("general/contexts", 0).toInt() == 0)
+	{
+		return true; // not a bug
+	}
 	// load the event contexts
 	if (!eventLoadContext(ini) || !eventLoadTriggerList(ini, "trig") || !eventLoadTriggerList(ini, "callback"))
 	{
