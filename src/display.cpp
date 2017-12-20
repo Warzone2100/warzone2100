@@ -988,8 +988,6 @@ CURSOR scroll()
 	float scaled_max_scroll_speed = scroll_zoom_factor * war_GetCameraSpeed();
 	float scaled_accel = scaled_max_scroll_speed / 2;
 
-	static float xDiffFrac = 0, yDiffFrac = 0;
-
 	CURSOR cursor = CURSOR_DEFAULT;
 
 	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
@@ -1050,15 +1048,9 @@ CURSOR scroll()
 	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
 	/* Get x component of movement */
-	xDiffFrac += cos(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-player.r.y * (M_PI / 32768)) * scrollStepUpDown;
+	xDif = (int) (cos(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-player.r.y * (M_PI / 32768)) * scrollStepUpDown);
 	/* Get y component of movement */
-	yDiffFrac += sin(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-player.r.y * (M_PI / 32768)) * scrollStepUpDown;
-
-	xDif = (int)xDiffFrac;
-	yDif = (int)yDiffFrac;
-
-	xDiffFrac -= xDif;
-	yDiffFrac -= yDif;
+	yDif = (int) (sin(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-player.r.y * (M_PI / 32768)) * scrollStepUpDown);
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;
