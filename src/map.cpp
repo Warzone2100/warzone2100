@@ -1961,19 +1961,17 @@ void mapInit()
 	lastDangerUpdate = 0;
 	lastDangerPlayer = -1;
 
-	// Initialize danger maps
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		auxMapStore(player, AUX_DANGERMAP);
-		threatUpdate(player);
-		dangerFloodFill(player);
-		auxMapRestore(player, AUX_DANGERMAP, AUXBITS_DANGER | AUXBITS_THREAT | AUXBITS_AATHREAT);
-	}
-
-	// Start thread
+	// Start danger thread (not used for campaign for now - mission map swaps too icky)
 	ASSERT(dangerSemaphore == nullptr && dangerThread == nullptr, "Map data not cleaned up before starting!");
 	if (game.type == SKIRMISH)
 	{
+		for (player = 0; player < MAX_PLAYERS; player++)
+		{
+			auxMapStore(player, AUX_DANGERMAP);
+			threatUpdate(player);
+			dangerFloodFill(player);
+			auxMapRestore(player, AUX_DANGERMAP, AUXBITS_DANGER | AUXBITS_THREAT | AUXBITS_AATHREAT);
+		}
 		lastDangerPlayer = 0;
 		dangerSemaphore = wzSemaphoreCreate(0);
 		dangerDoneSemaphore = wzSemaphoreCreate(0);

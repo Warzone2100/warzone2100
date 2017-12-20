@@ -3467,7 +3467,8 @@ static QScriptValue js_donatePower(QScriptContext *context, QScriptEngine *engin
 }
 
 //-- \subsection{safeDest(player, x, y)} Returns true if given player is safe from hostile fire at
-//-- the given location, to the best of that player's map knowledge.
+//-- the given location, to the best of that player's map knowledge. Does not work in campaign at
+//-- the moment.
 static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
