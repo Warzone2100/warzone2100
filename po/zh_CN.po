@@ -4229,7 +4229,7 @@ msgstr "我们终于可以开始这个项目了。"
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr "在几个月的努力后，我们被Nexus打败了。"
+msgstr "在几个月的努力后，Nexus 被我们打败了。"
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
