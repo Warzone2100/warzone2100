@@ -3140,8 +3140,8 @@
         "msgName": "RES_SY_CBSTW1",
         "name": "CB Tower",
         "requiredResearch": [
-            "R-Sys-Sensor-Upgrade01",
-            "R-Wpn-Mortar-Acc01"
+            "R-Sys-CBSensor-Turret01",
+            "R-Sys-Sensor-Tower02"
         ],
         "researchPoints": 3600,
         "researchPower": 112,
@@ -3156,7 +3156,8 @@
         "msgName": "RES_SY_CBSTU1",
         "name": "CB Turret",
         "requiredResearch": [
-            "R-Sys-CBSensor-Tower01"
+            "R-Sys-Sensor-Upgrade01",
+            "R-Wpn-Mortar-Acc01"
         ],
         "researchPoints": 4800,
         "researchPower": 150,
@@ -3332,7 +3333,7 @@
         "requiredResearch": [
             "R-Sys-Engineering03",
             "R-Struc-Research-Upgrade08",
-            "R-Sys-Sensor-WSTower"
+            "R-Sys-Sensor-WS"
         ],
         "researchPoints": 14400,
         "researchPower": 450,
@@ -3409,7 +3410,7 @@
         "name": "Satellite Uplink Center",
         "requiredResearch": [
             "R-Struc-Research-Upgrade08",
-            "R-Sys-Sensor-WSTower",
+            "R-Sys-Sensor-WS",
             "R-Sys-Engineering03"
         ],
         "researchPoints": 28800,
@@ -3493,10 +3494,10 @@
         "name": "Wide Spectrum Sensor",
         "requiredResearch": [
             "R-Struc-Research-Upgrade07",
-            "R-Sys-VTOLCBS-Tower01",
-            "R-Sys-Sensor-Tower02",
-            "R-Sys-VTOLStrike-Tower01",
-            "R-Sys-CBSensor-Tower01"
+            "R-Sys-VTOLCBS-Turret01",
+            "R-Sys-CBSensor-Turret01",
+            "R-Sys-VTOLStrike-Turret01",
+            "R-Sys-Sensor-Turret01"
         ],
         "researchPoints": 14400,
         "researchPower": 450,
@@ -3512,7 +3513,8 @@
         "msgName": "RES_SY_S_WS",
         "name": "Wide Spectrum Sensor Tower",
         "requiredResearch": [
-            "R-Sys-Sensor-WS"
+            "R-Sys-Sensor-WS",
+            "R-Sys-Sensor-Tower02"
         ],
         "researchPoints": 16400,
         "researchPower": 450,
@@ -3543,7 +3545,8 @@
         "keyTopic": 1,
         "name": "Nexus Link Tower",
         "requiredResearch": [
-            "R-Sys-SpyTurret"
+            "R-Sys-SpyTurret",
+            "R-Sys-Sensor-Tower02"
         ],
         "researchPoints": 7200,
         "researchPower": 225,
@@ -3562,7 +3565,7 @@
         "requiredResearch": [
             "R-Sys-Engineering03",
             "R-Struc-Research-Upgrade08",
-            "R-Sys-Sensor-WSTower"
+            "R-Sys-Sensor-WS"
         ],
         "researchPoints": 14400,
         "researchPower": 450,
@@ -3578,8 +3581,8 @@
         "msgName": "RES_SY_VCBSTW1",
         "name": "VTOL CB Tower",
         "requiredResearch": [
-            "R-Sys-VTOLStrike-Tower01",
-            "R-Sys-Sensor-Upgrade02"
+            "R-Sys-VTOLCBS-Turret01",
+            "R-Sys-Sensor-Tower02"
         ],
         "researchPoints": 7200,
         "researchPower": 225,
@@ -3594,8 +3597,9 @@
         "msgName": "RES_SY_VCBSTU1",
         "name": "VTOL CB Turret",
         "requiredResearch": [
-            "R-Sys-VTOLCBS-Tower01",
-            "R-Sys-CBSensor-Turret01"
+            "R-Sys-CBSensor-Turret01",
+            "R-Sys-VTOLStrike-Turret01",
+            "R-Sys-Sensor-Upgrade02"
         ],
         "researchPoints": 8400,
         "researchPower": 262,
@@ -3610,8 +3614,8 @@
         "msgName": "RES_SY_VSTW1",
         "name": "VTOL Strike Tower",
         "requiredResearch": [
-            "R-Struc-VTOLPad",
-            "R-Sys-Sensor-Upgrade01"
+            "R-Sys-VTOLStrike-Turret01",
+            "R-Sys-Sensor-Tower02"
         ],
         "researchPoints": 7200,
         "researchPower": 225,
@@ -3626,8 +3630,9 @@
         "msgName": "RES_SY_VSTU1",
         "name": "VTOL Strike Turret",
         "requiredResearch": [
-            "R-Sys-VTOLStrike-Tower01",
-            "R-Sys-Sensor-Turret01"
+            "R-Sys-Sensor-Turret01",
+            "R-Struc-VTOLPad",
+            "R-Sys-Sensor-Upgrade01"
         ],
         "researchPoints": 7200,
         "researchPower": 225,
@@ -5917,8 +5922,7 @@
         "msgName": "RES_EMP_CANT",
         "name": "EMP Cannon",
         "requiredResearch": [
-            "R-Sys-SpyTower",
-            "R-Sys-Sensor-UpLink"
+            "R-Sys-SpyTurret"
         ],
         "researchPoints": 28800,
         "researchPower": 450,
@@ -8996,7 +9000,7 @@
         "name": "Ripple Rockets",
         "requiredResearch": [
             "R-Wpn-Rocket02-MRL",
-            "R-Sys-CBSensor-Tower01"
+            "R-Sys-CBSensor-Turret01"
         ],
         "researchPoints": 7200,
         "researchPower": 225,
