@@ -77,7 +77,11 @@ function ambushPlayer()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(600000), "COCommandCenter"); //10 min
+	const POSITIONS = [
+		"vtolAppearPosW",
+		"vtolAppearPosN",
+	];
+	camSetVtolData(THE_COLLECTIVE, POSITIONS, "vtolRemove", list, camChangeOnDiff(300000), "COCommandCenter"); //5 min
 }
 
 function truckDefense()
@@ -221,10 +225,10 @@ function eventStartLevel()
 
 	camEnableFactory("COHeavyFac-b4");
 	camEnableFactory("COCybFac-b4");
-	ambushPlayer();
 
 	queue("transferPower", 2000);
-	queue("vtolAttack", 60000); //1 min
+	queue("ambushPlayer", 10000); // 10 sec
+	queue("vtolAttack", camChangeOnDiff(240000)); //4 min
 	queue("activateBase1Defenders2", camChangeOnDiff(1200000)); //20 min.
 	queue("activateBase1Defenders", camChangeOnDiff(1800000)); //30 min.
 }

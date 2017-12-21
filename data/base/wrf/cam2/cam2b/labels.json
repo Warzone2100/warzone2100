@@ -8,7 +8,7 @@
 		"pos": [11136, 12800]
 	},
 	"position_2": {
-		"label": "vtolAppearPos",
+		"label": "vtolAppearPosW",
 		"pos": [8896, 8512]
 	},
 	"position_3": {
@@ -94,6 +94,10 @@
 	"position_23": {
 		"label": "vtolRemove",
 		"pos": [8576, 9500]
+	},
+	"position_24": {
+		"label": "vtolAppearPosN",
+		"pos": [8576, 1152]
 	},
 
 	"area_0": {
