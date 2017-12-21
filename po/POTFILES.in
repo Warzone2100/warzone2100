@@ -62,7 +62,6 @@ data/base/script/campaign/transitionTech.js
 data/base/script/fastplay/fastdemo.js
 data/base/script/rules.js
 data/base/script/weather.js
-data/base/script/text/basic.slo
 data/base/script/tutorial.js
 data/base/sequenceaudio/cam1/c001end.txt
 data/base/sequenceaudio/cam1/c001.txa
