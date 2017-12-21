@@ -46,7 +46,7 @@ void loadingScreenCallback();
 
 void startCreditsScreen();
 
-bool displayGameOver(bool success);
+bool displayGameOver(bool success, bool showBackDrop);
 void setPlayerHasLost(bool val);
 bool testPlayerHasLost();
 bool testPlayerHasWon();

@@ -2450,7 +2450,7 @@ function __camSetOffworldLimits()
 
 function __camGameLostCB()
 {
-	gameOverMessage(false);
+	gameOverMessage(false, false);
 }
 
 function __camGameLost()
@@ -2477,7 +2477,7 @@ function __camGameWon()
 		camTrace(__camNextLevel);
 		if (__camNextLevel === "GAMMA_OUT")
 		{
-			gameOverMessage(true, true);
+			gameOverMessage(true, false, true);
 			return;
 		}
 		camNextLevel(__camNextLevel);
@@ -2485,7 +2485,7 @@ function __camGameWon()
 	else
 	{
 		//If nothing to load, go to main menu.
-		gameOverMessage(true);
+		gameOverMessage(true, false);
 	}
 }
 

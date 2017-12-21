@@ -191,7 +191,7 @@ void resetMissionWidgets();
 
 UDWORD	getCampaignNumber();
 void	setCampaignNumber(UDWORD number);
-bool intAddMissionResult(bool result, bool bPlaySuccess);
+bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop);
 
 /** Reset the vtol landing pos. */
 void resetVTOLLandingPos();

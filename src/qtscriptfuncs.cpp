@@ -2837,7 +2837,7 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-//-- \subsection{gameOverMessage(won, showOutro)}
+//-- \subsection{gameOverMessage(won, showBackDrop, showOutro)}
 //-- End game in victory or defeat.
 static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *engine)
 {
@@ -2845,9 +2845,14 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	const MESSAGE_TYPE msgType = MSG_MISSION;	// always
 	bool gameWon = context->argument(0).toBool();
 	bool showOutro = false;
+	bool showBackDrop = true;
 	if (context->argumentCount() > 1)
 	{
-		showOutro = context->argument(1).toBool();
+		showBackDrop = context->argument(1).toBool();
+	}
+	if (context->argumentCount() > 2)
+	{
+		showOutro = context->argument(2).toBool();
 	}
 	VIEWDATA *psViewData;
 	if (gameWon)
@@ -2870,6 +2875,7 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 		seq_ClearSeqList();
 		if (gameWon && showOutro)
 		{
+			showBackDrop = false;
 			seq_AddSeqToList("outro.ogg", nullptr, "outro.txa", false);
 			seq_StartNextFullScreenVideo();
 		}
@@ -2882,7 +2888,7 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 		}
 	}
 	jsDebugMessageUpdate();
-	displayGameOver(gameWon);
+	displayGameOver(gameWon, showBackDrop);
 	if (challengeActive)
 	{
 		updateChallenge(gameWon);

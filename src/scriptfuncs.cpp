@@ -3081,7 +3081,7 @@ bool scrGameOverMessage()
 
 	// this should be called when the video Quit is processed
 	// not always is tough, so better be sure
-	displayGameOver(gameWon);
+	displayGameOver(gameWon, false);
 
 	if (challengeActive)
 	{

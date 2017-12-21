@@ -764,7 +764,7 @@ void videoLoop()
 			}
 			else if (!bMultiPlayer)
 			{
-				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
+				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN, false);
 			}
 			triggerEvent(TRIGGER_VIDEO_QUIT);
 		}

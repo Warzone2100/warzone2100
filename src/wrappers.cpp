@@ -394,7 +394,7 @@ void closeLoadingScreen()
 ////////////////////////////////////////////////////////////////////////////////
 // Gameover screen.
 
-bool displayGameOver(bool bDidit)
+bool displayGameOver(bool bDidit, bool showBackDrop)
 {
 	if (bDidit)
 	{
@@ -421,7 +421,7 @@ bool displayGameOver(bool bDidit)
 
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
-	intAddMissionResult(bDidit, true);
+	intAddMissionResult(bDidit, true, showBackDrop);
 
 	return true;
 }

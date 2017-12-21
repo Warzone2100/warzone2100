@@ -627,7 +627,7 @@ void seq_StartNextFullScreenVideo()
 		}
 		else
 		{
-			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
+			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN, false);
 		}
 	}
 }

@@ -2236,7 +2236,7 @@ static void missionResetInGameState()
 	intRemoveMissionTimer();
 }
 
-static bool _intAddMissionResult(bool result, bool bPlaySuccess)
+static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
 	missionResetInGameState();
 
@@ -2245,7 +2245,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 	// add some funky beats
 	cdAudio_PlayTrack(SONG_FRONTEND);
 
-	if (!bMultiPlayer && result)
+	if (!bMultiPlayer && result && showBackDrop)
 	{
 		if (!screen_GetBackDrop())
 		{
@@ -2377,9 +2377,9 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 }
 
 
-bool intAddMissionResult(bool result, bool bPlaySuccess)
+bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
-	return _intAddMissionResult(result, bPlaySuccess);
+	return _intAddMissionResult(result, bPlaySuccess, showBackDrop);
 }
 
 void intRemoveMissionResultNoAnim()
@@ -2559,7 +2559,7 @@ bool setUpMission(UDWORD type)
 			bPlaySuccess = false;
 		}
 		// Give the option of save/continue
-		if (!intAddMissionResult(true, bPlaySuccess))
+		if (!intAddMissionResult(true, bPlaySuccess, true))
 		{
 			return false;
 		}
@@ -2580,7 +2580,7 @@ bool setUpMission(UDWORD type)
 		}
 
 		// Give the option of save / continue
-		if (!intAddMissionResult(true, true))
+		if (!intAddMissionResult(true, true, true))
 		{
 			return false;
 		}
