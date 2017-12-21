@@ -907,7 +907,6 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 	initDroidMovement(psDroid);
 	//reset droid orders
 	orderDroid(psDroid, DORDER_STOP, ModeImmediate);
-	psDroid->cluster = 0;
 	// check if it is a commander
 	if (psDroid->droidType == DROID_COMMAND)
 	{

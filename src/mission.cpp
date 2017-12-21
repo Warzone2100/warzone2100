@@ -72,7 +72,6 @@
 #include "loop.h"
 #include "visibility.h"
 #include "mapgrid.h"
-#include "cluster.h"
 #include "selection.h"
 #include "scores.h"
 #include "keymap.h"
@@ -416,8 +415,6 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 		return true;
 	}
 
-	// reset the cluster stuff
-	clustInitialise();
 	initEffectsSystem();
 
 	//load the game file for all types of mission except a Between Mission
@@ -984,7 +981,6 @@ void placeLimboDroids()
 			psDroid->selected = false;
 			//this is mainly for VTOLs
 			setDroidBase(psDroid, nullptr);
-			psDroid->cluster = 0;
 			//initialise the movement data
 			initDroidMovement(psDroid);
 			//make sure the died flag is not set
@@ -1013,7 +1009,6 @@ void restoreMissionLimboData()
 		if (droidRemove(psDroid, mission.apsDroidLists))
 		{
 			addDroid(psDroid, apsDroidLists);
-			psDroid->cluster = 0;
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			//the location of the droid should be valid!
@@ -1315,7 +1310,6 @@ static void processMission()
 			psDroid->selected = false;
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, nullptr);
-			psDroid->cluster = 0;
 		}
 	}
 }
@@ -1355,7 +1349,6 @@ void processMissionLimbo()
 					addDroid(psDroid, apsLimboDroids);
 					// This is mainly for VTOLs
 					setDroidBase(psDroid, nullptr);
-					psDroid->cluster = 0;
 					orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 					numDroidsAddedToLimboList++;
 				}
@@ -1732,8 +1725,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	//unload all the droids from within the current Transporter
 	if (isTransporter(psTransporter))
 	{
-		// reset the transporter cluster
-		psTransporter->cluster = 0;
 		for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr && psDroid != psTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
@@ -1771,7 +1762,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 				// So VTOLs don't try to rearm on another map
 				setDroidBase(psDroid, nullptr);
 			}
-			psDroid->cluster = 0;
 			if (goingHome)
 			{
 				//swap the droid and map pointers

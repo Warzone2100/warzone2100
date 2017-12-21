@@ -309,7 +309,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClCompile Include="challenge.cpp" />
     <ClCompile Include="cheat.cpp" />
     <ClCompile Include="clparse.cpp" />
-    <ClCompile Include="cluster.cpp" />
     <ClCompile Include="cmddroid.cpp" />
     <ClCompile Include="combat.cpp" />
     <ClCompile Include="component.cpp" />
@@ -420,7 +419,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClInclude Include="challenge.h" />
     <ClInclude Include="cheat.h" />
     <ClInclude Include="clparse.h" />
-    <ClInclude Include="cluster.h" />
     <ClInclude Include="cmddroid.h" />
     <ClInclude Include="cmddroiddef.h" />
     <ClInclude Include="combat.h" />

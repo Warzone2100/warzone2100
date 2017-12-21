@@ -62,7 +62,6 @@
 #include "cmddroid.h"
 #include "fpath.h"
 #include "projectile.h"
-#include "cluster.h"
 #include "mission.h"
 #include "levels.h"
 #include "transporter.h"
@@ -383,9 +382,6 @@ DROID::~DROID()
 		psDroid->psGroup->remove(psDroid);
 	}
 
-	// remove the droid from the cluster system
-	clustRemoveObject((BASE_OBJECT *)psDroid);
-
 	free(sMove.asPath);
 }
 
@@ -520,9 +516,6 @@ bool removeDroidBase(DROID *psDel)
 		}
 	}
 
-	// remove the droid from the cluster systerm
-	clustRemoveObject((BASE_OBJECT *)psDel);
-
 	if (psDel->player == selectedPlayer)
 	{
 		intRefreshScreen();
@@ -609,7 +602,7 @@ void	vanishDroid(DROID *psDel)
 }
 
 /* Remove a droid from the List so doesn't update or get drawn etc
-TAKE CARE with removeDroid() - usually want droidRemove since it deal with cluster and grid code*/
+TAKE CARE with removeDroid() - usually want droidRemove since it deal with grid code*/
 //returns false if the droid wasn't removed - because it died!
 bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
@@ -630,9 +623,6 @@ bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 	// reset the baseStruct
 	setDroidBase(psDroid, nullptr);
-
-	// remove the droid from the cluster systerm
-	clustRemoveObject((BASE_OBJECT *)psDroid);
 
 	removeDroid(psDroid, pList);
 
@@ -732,12 +722,6 @@ void droidUpdate(DROID *psDroid)
 	else if (psDroid->animationEvent == ANIM_EVENT_DYING)
 	{
 		return; // rest below is irrelevant if dead
-	}
-
-	// update the cluster of the droid
-	if ((psDroid->id + gameTime) / 2000 != (psDroid->id + gameTime - deltaGameTime) / 2000)
-	{
-		clustUpdateObject((BASE_OBJECT *)psDroid);
 	}
 
 	// ai update droid
@@ -1702,7 +1686,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 			updateDroidOrientation(psDroid);
 		}
 		visTilesUpdate((BASE_OBJECT *)psDroid);
-		clustNewDroid(psDroid);
 	}
 
 	/* transporter-specific stuff */
@@ -2707,8 +2690,7 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 		return false;
 	}
 
-	if ((psDroid->psActionTarget[0] != nullptr) &&
-	    (psDroid->psActionTarget[0]->cluster != psStruct->cluster))
+	if (psDroid->psActionTarget[0] != nullptr)
 	{
 		// vtol is rearming at a different base
 		return false;

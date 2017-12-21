@@ -317,10 +317,8 @@ true if it has*/
 bool structVTOLCBSensor(const STRUCTURE *psStruct);
 
 // return the nearest rearm pad
-// if bClear is true it tries to find the nearest clear rearm pad in
-// the same cluster as psTarget
 // psTarget can be NULL
-STRUCTURE 	*findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear);
+STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear);
 
 // check whether a rearm pad is clear
 bool clearRearmPad(const STRUCTURE *psStruct);

@@ -39,7 +39,6 @@
 #include "geometry.h"
 #include "hci.h"
 #include "mapgrid.h"
-#include "cluster.h"
 #include "research.h"
 #include "scriptextern.h"
 #include "structure.h"
@@ -665,13 +664,6 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 
 			// Check if scripting system wants to trigger an event for this
 			triggerEventSeen(psViewer, psObj);
-
-			// This looks like some kind of weird hack. Only used by wzscript.
-			if (psObj->type != OBJ_FEATURE && psObj->visible[psViewer->player] <= 0)
-			{
-				// features are not in the cluster system
-				clustObjectSeen(psObj, psViewer);
-			}
 		}
 	}
 }

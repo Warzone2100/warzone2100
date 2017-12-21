@@ -87,7 +87,6 @@
 #include "levels.h"
 #include "mission.h"
 #include "projectile.h"
-#include "cluster.h"
 #include "multigifts.h"			//because of giftRadar()
 #include "display3d.h"			//for showRangeAtPos()
 #include "multimenu.h"
@@ -5947,8 +5946,6 @@ bool scrResetPlayerVisibility()
 	{
 		psObj->visible[player] = 0;
 	}
-
-	clustResetVisibility(player);
 
 	return true;
 }

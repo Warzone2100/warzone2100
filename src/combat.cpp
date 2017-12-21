@@ -29,7 +29,6 @@
 #include "lib/netplay/netplay.h"
 
 #include "action.h"
-#include "cluster.h"
 #include "combat.h"
 #include "difficulty.h"
 #include "geometry.h"
@@ -401,7 +400,6 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		bool bMultiMessagesBackup = bMultiMessages;
 		bMultiMessages = bMultiPlayer;
 
-		clustObjectAttacked((BASE_OBJECT *)psObj);
 		triggerEventAttacked(psObj, g_pProjLastAttacker, lastHit);
 
 		bMultiMessages = bMultiMessagesBackup;

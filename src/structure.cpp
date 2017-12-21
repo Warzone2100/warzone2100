@@ -68,7 +68,6 @@
 #include "feature.h"
 #include "mapgrid.h"
 #include "projectile.h"
-#include "cluster.h"
 #include "intdisplay.h"
 #include "display.h"
 #include "difficulty.h"
@@ -1546,7 +1545,6 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		//add the structure to the list - this enables it to be drawn whilst being built
 		addStructure(psBuilding);
 
-		clustNewStruct(psBuilding);
 		asStructureStats[max].curCount[player]++;
 
 		if (isLasSat(psBuilding->pStructureType))
@@ -4514,9 +4512,6 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 		}
 	}
 
-	// remove the structure from the cluster
-	clustRemoveObject(psDel);
-
 	if (bDestroy)
 	{
 		debug(LOG_DEATH, "Killing off %s id %d (%p)", objInfo(psDel), psDel->id, psDel);
@@ -5590,8 +5585,6 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 
 			psStructure->lastHitWeapon = WSC_ELECTRONIC;
 
-			// tell the cluster system it has been attacked
-			clustObjectAttacked(psStructure);
 			triggerEventAttacked(psStructure, g_pProjLastAttacker, lastHit);
 
 			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
@@ -5637,8 +5630,6 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		}
 		else
 		{
-			// tell the cluster system it has been attacked
-			clustObjectAttacked(psDroid);
 			triggerEventAttacked(psDroid, g_pProjLastAttacker, lastHit);
 
 			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
@@ -6627,8 +6618,6 @@ bool clearRearmPad(const STRUCTURE *psStruct)
 
 
 // return the nearest rearm pad
-// if bClear is true it tries to find the nearest clear rearm pad in
-// the same cluster as psTarget
 // psTarget can be NULL
 STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 {
@@ -6658,9 +6647,9 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 	psTotallyClear = nullptr;
 	for (STRUCTURE *psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
 	{
-		if ((psStruct->pStructureType->type == REF_REARM_PAD) &&
-		    (psTarget == nullptr || psTarget->cluster == psStruct->cluster) &&
-		    (!bClear || clearRearmPad(psStruct)))
+		if (psStruct->pStructureType->type == REF_REARM_PAD
+		    && psTarget == nullptr
+		    && (!bClear || clearRearmPad(psStruct)))
 		{
 			xdiff = (SDWORD)psStruct->pos.x - cx;
 			ydiff = (SDWORD)psStruct->pos.y - cy;
@@ -6814,9 +6803,6 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 					setStructureTarget(psStruct, nullptr, 0, ORIGIN_UNKNOWN);
 				}
 			}
-
-			//add back into cluster system
-			clustNewStruct(psStructure);
 
 			if (psStructure->status == SS_BUILT)
 			{

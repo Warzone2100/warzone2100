@@ -48,9 +48,6 @@
     <ClCompile Include="clparse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cluster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cmddroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -372,9 +369,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="clparse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cluster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cmddroid.h">

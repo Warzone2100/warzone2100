@@ -2833,7 +2833,6 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 			psDroid->pos.y = INVALID_XY;
 			//this is mainly for VTOLs
 			setSaveDroidBase(psDroid, nullptr);
-			psDroid->cluster = 0;
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}

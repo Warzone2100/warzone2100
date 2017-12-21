@@ -55,7 +55,6 @@ noinst_HEADERS = \
 	cheat.h \
 	challenge.h \
 	clparse.h \
-	cluster.h \
 	cmddroiddef.h \
 	cmddroid.h \
 	combat.h \
@@ -183,7 +182,6 @@ COMMONSOURCES = \
 	challenge.cpp \
 	cheat.cpp \
 	clparse.cpp \
-	cluster.cpp \
 	cmddroid.cpp \
 	combat.cpp \
 	component.cpp \

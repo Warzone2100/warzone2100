@@ -79,7 +79,6 @@
 #include "edit3d.h"
 #include "fpath.h"
 #include "scriptextern.h"
-#include "cluster.h"
 #include "cmddroid.h"
 #include "keybind.h"
 #include "wrappers.h"
@@ -594,9 +593,6 @@ static void gameStateUpdate()
 
 	//update the findpath system
 	fpathUpdate();
-
-	// update the cluster system
-	clusterUpdate();
 
 	// update the command droids
 	cmdDroidUpdate();

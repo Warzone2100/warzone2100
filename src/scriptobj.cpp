@@ -36,7 +36,6 @@
 #include "scriptobj.h"
 #include "group.h"
 #include "lib/gamelib/gtime.h"
-#include "cluster.h"
 #include "messagedef.h"
 #include "message.h"
 #include "researchdef.h"
@@ -178,7 +177,8 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = VAL_INT;
-		scrFunctionResult.v.ival = clustGetClusterID(psObj);
+		scrFunctionResult.v.ival = 0;
+		ASSERT(false, "unsupported wzscript feature");
 		break;
 	case OBJID_HEALTH:
 		switch (psObj->type)

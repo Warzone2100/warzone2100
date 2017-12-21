@@ -667,7 +667,6 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 	setPair(row, selectedModel, "Born", QString::number(psObj->born));
 	setPair(row, selectedModel, "Died", QString::number(psObj->died));
 	setPair(row, selectedModel, "Group", QString::number(psObj->group));
-	setPair(row, selectedModel, "Cluster", QString::number(psObj->cluster));
 	setPair(row, selectedModel, "Watched tiles", QString::number(psObj->numWatchedTiles));
 	setPair(row, selectedModel, "Last hit", QString::number(psObj->timeLastHit));
 	setPair(row, selectedModel, "Hit points", QString::number(psObj->body));

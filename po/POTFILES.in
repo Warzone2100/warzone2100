@@ -238,7 +238,6 @@ src/bucket3d.cpp
 src/challenge.cpp
 src/cheat.cpp
 src/clparse.cpp
-src/cluster.cpp
 src/cmddroid.cpp
 src/combat.cpp
 src/component.cpp

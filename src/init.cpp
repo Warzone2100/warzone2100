@@ -48,7 +48,6 @@
 #include "advvis.h"
 #include "atmos.h"
 #include "challenge.h"
-#include "cluster.h"
 #include "cmddroid.h"
 #include "configuration.h"
 #include "console.h"
@@ -1213,7 +1212,6 @@ bool stageThreeInitialise()
 	}
 
 	mapInit();
-	clustInitialise();
 	gridReset();
 
 	//if mission screen is up, close it.
