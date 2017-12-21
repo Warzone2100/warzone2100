@@ -266,6 +266,15 @@ function eventDestroyed(victim)
 	}
 }
 
+//The mission may not start with any constructors until they come from a transporter.
+function eventTransporterLanded(transport)
+{
+	if (transport.player == 0)
+	{
+		queue("setMainReticule", 1000);
+	}
+}
+
 function eventResearched(research, structure, player)
 {
 	//debug("RESEARCH : " + research.fullname + "(" + research.name + ") for " + player);
