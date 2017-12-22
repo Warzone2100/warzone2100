@@ -357,27 +357,8 @@ bool lasSatStructSelected(STRUCTURE *psStruct);
 
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
-WZ_DECL_PURE Vector2i getStructureSize(STRUCTURE const *psBuilding);
-WZ_DECL_PURE Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t direction);
 StructureBounds getStructureBounds(const STRUCTURE *object);
 StructureBounds getStructureBounds(const STRUCTURE_STATS *stats, Vector2i pos, uint16_t direction);
-
-static inline unsigned getStructureWidth(const STRUCTURE *psBuilding)
-{
-	return getStructureSize(psBuilding).x;
-}
-static inline unsigned getStructureBreadth(const STRUCTURE *psBuilding)
-{
-	return getStructureSize(psBuilding).y;
-}
-static inline WZ_DECL_PURE unsigned getStructureStatsWidth(const STRUCTURE_STATS *pStructureType, uint16_t direction)
-{
-	return getStructureStatsSize(pStructureType, direction).x;
-}
-static inline WZ_DECL_PURE unsigned getStructureStatsBreadth(const STRUCTURE_STATS *pStructureType, uint16_t direction)
-{
-	return getStructureStatsSize(pStructureType, direction).y;
-}
 
 static inline int structSensorRange(const STRUCTURE *psObj)
 {

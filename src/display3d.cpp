@@ -385,7 +385,7 @@ static Blueprint getTileBlueprint(int mapX, int mapY)
 
 	for (std::vector<Blueprint>::const_iterator blueprint = blueprints.begin(); blueprint != blueprints.end(); ++blueprint)
 	{
-		Vector2i size = getStructureStatsSize(blueprint->stats, blueprint->dir) * TILE_UNITS;
+		const Vector2i size = blueprint->stats->size(blueprint->dir) * TILE_UNITS;
 		if (abs(mouse.x - blueprint->pos.x) < size.x / 2 && abs(mouse.y - blueprint->pos.y) < size.y / 2)
 		{
 			return *blueprint;

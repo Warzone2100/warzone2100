@@ -1446,7 +1446,7 @@ static ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
 		}
 		break;
 	case OBJ_STRUCTURE:  // Rectangular.
-		return getStructureSize(castStructure(psTarget)) * TILE_UNITS / 2;
+		return castStructure(psTarget)->size() * TILE_UNITS / 2;
 	case OBJ_FEATURE:  // Rectangular.
 		return Vector2i(castFeature(psTarget)->psStats->baseWidth, castFeature(psTarget)->psStats->baseBreadth) * TILE_UNITS / 2;
 	case OBJ_PROJECTILE:  // Circular, but can't happen since a PROJECTILE isn't a BASE_OBJECT.

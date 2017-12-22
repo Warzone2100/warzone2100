@@ -1015,19 +1015,14 @@ static void droidAddWeldSound(Vector3i iVecEffect)
 
 static void addConstructorEffect(STRUCTURE *psStruct)
 {
-	UDWORD		widthRange, breadthRange;
-	Vector3i temp;
-
-	//FIXME
 	if ((ONEINTEN) && (psStruct->visible[selectedPlayer]))
 	{
 		/* This needs fixing - it's an arse effect! */
-		widthRange   = getStructureWidth(psStruct) * TILE_UNITS / 4;
-		breadthRange = getStructureBreadth(psStruct) * TILE_UNITS / 4;
-		temp.x = psStruct->pos.x + ((rand() % (2 * widthRange)) - widthRange);
-		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)) +
-		         (psStruct->sDisplay.imd->max.y / 6);
-		temp.z = psStruct->pos.y + ((rand() % (2 * breadthRange)) - breadthRange);
+		const Vector2i size = psStruct->size() * TILE_UNITS / 4;
+		Vector3i temp;
+		temp.x = psStruct->pos.x + ((rand() % (2 * size.x)) - size.x);
+		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)) + (psStruct->sDisplay.imd->max.y / 6);
+		temp.z = psStruct->pos.y + ((rand() % (2 * size.y)) - size.y);
 		if (rand() % 2)
 		{
 			droidAddWeldSound(temp);

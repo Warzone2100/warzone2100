@@ -1262,7 +1262,7 @@ STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, U
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave)
 {
 	STRUCTURE *psBuilding = nullptr;
-	Vector2i size = getStructureStatsSize(pStructureType, direction);
+	const Vector2i size = pStructureType->size(direction);
 
 	ASSERT_OR_RETURN(nullptr, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
 
@@ -1833,8 +1833,9 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// initialise the assembly point position
-			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS / 2);
-			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS / 2);
+			const Vector2i size = psBuilding->size();
+			x = map_coord(psBuilding->pos.x + (size.x + 1) * TILE_UNITS / 2);
+			y = map_coord(psBuilding->pos.y + (size.y + 1) * TILE_UNITS / 2);
 
 			// Set the assembly point
 			setAssemblyPoint(psFactory->psAssemblyPoint, world_coord(x), world_coord(y), psBuilding->player, true);
@@ -1890,8 +1891,9 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// Initialise the assembly point
-			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS / 2);
-			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS / 2);
+			const Vector2i size = psBuilding->size();
+			x = map_coord(psBuilding->pos.x + (size.x + 1) * TILE_UNITS / 2);
+			y = map_coord(psBuilding->pos.y + (size.y + 1) * TILE_UNITS / 2);
 
 			// Set the assembly point
 			setAssemblyPoint(psRepairFac->psDeliveryPoint, world_coord(x),
@@ -3605,8 +3607,9 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 			unsigned effectTime = std::max(gameTime - deltaGameTime + 1, psBuilding->lastEmission + emissionInterval);
 			if (gameTime >= effectTime)
 			{
-				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS / 2 / 3;
-				breadthScatter = getStructureBreadth(psBuilding) * TILE_UNITS / 2 / 3;
+				const Vector2i size = psBuilding->size();
+				widthScatter   = size.x * TILE_UNITS / 2 / 3;
+				breadthScatter = size.y * TILE_UNITS / 2 / 3;
 				dv.x = psBuilding->pos.x + widthScatter - rand() % (2 * widthScatter);
 				dv.z = psBuilding->pos.y + breadthScatter - rand() % (2 * breadthScatter);
 				dv.y = psBuilding->pos.z;
@@ -6968,7 +6971,6 @@ bool lasSatStructSelected(STRUCTURE *psStruct)
 	return false;
 }
 
-
 /* Call CALL_NEWDROID script callback */
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 {
@@ -6983,37 +6985,17 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 	triggerEventDroidBuilt(psDroid, psFactory);
 }
 
-Vector2i getStructureSize(STRUCTURE const *psBuilding)
-{
-	return getStructureStatsSize(psBuilding->pStructureType, psBuilding->rot.direction);
-}
-
-Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t direction)
-{
-	Vector2i size(pStructureType->baseWidth, pStructureType->baseBreadth);
-	if (((direction + 0x2000) & 0x4000) != 0)
-	{
-		// Building is rotated left or right by 90°, swap width and height.
-		std::swap(size.x, size.y);
-	}
-
-	// Building has normal orientation (or upsidedown).
-	return size;
-}
-
 StructureBounds getStructureBounds(const STRUCTURE *object)
 {
-	Vector2i size = getStructureSize(object);
-	Vector2i map = map_coord(object->pos.xy) - size / 2;
-
+	const Vector2i size = object->size();
+	const Vector2i map = map_coord(object->pos.xy) - size / 2;
 	return StructureBounds(map, size);
 }
 
 StructureBounds getStructureBounds(const STRUCTURE_STATS *stats, Vector2i pos, uint16_t direction)
 {
-	Vector2i size = getStructureStatsSize(stats, direction);
-	Vector2i map = map_coord(pos) - size / 2;
-
+	const Vector2i size = stats->size(direction);
+	const Vector2i map = map_coord(pos) - size / 2;
 	return StructureBounds(map, size);
 }
 

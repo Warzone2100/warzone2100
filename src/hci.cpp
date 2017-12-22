@@ -943,16 +943,13 @@ void intResetScreen(bool NoAnim)
 	IntRefreshPending = false;
 }
 
-
 // calulate the center world coords for a structure stat given
 // top left tile coords
-static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, uint16_t direction, UDWORD *pcx, UDWORD *pcy)
+static void intCalcStructCenter(const STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, uint16_t direction, UDWORD *pcx, UDWORD *pcy)
 {
-	unsigned width  = getStructureStatsWidth(psStats, direction) * TILE_UNITS;
-	unsigned height = getStructureStatsBreadth(psStats, direction) * TILE_UNITS;
-
-	*pcx = tilex * TILE_UNITS + width / 2;
-	*pcy = tiley * TILE_UNITS + height / 2;
+	const Vector2i size = psStats->size(direction) * TILE_UNITS;
+	*pcx = tilex * TILE_UNITS + size.x / 2;
+	*pcy = tiley * TILE_UNITS + size.y / 2;
 }
 
 void intOpenDebugMenu(OBJECT_TYPE id)

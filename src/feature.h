@@ -58,7 +58,6 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 
 void featureInitVars();
 
-Vector2i getFeatureStatsSize(FEATURE_STATS const *pStructureType);
 StructureBounds getStructureBounds(FEATURE const *object);
 StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos);
 

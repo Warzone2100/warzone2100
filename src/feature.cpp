@@ -526,26 +526,14 @@ SDWORD getFeatureStatFromName(const char *pName)
 	return -1;
 }
 
-Vector2i getFeatureStatsSize(FEATURE_STATS const *pFeatureType)
-{
-	Vector2i size(pFeatureType->baseWidth, pFeatureType->baseBreadth);
-
-	// Feature has normal orientation (or upsidedown).
-	return size;
-}
-
 StructureBounds getStructureBounds(FEATURE const *object)
 {
-	Vector2i size = getFeatureStatsSize(object->psStats);
-	Vector2i map = map_coord(object->pos.xy) - size / 2;
-
-	return StructureBounds(map, size);
+	return getStructureBounds(object->psStats, object->pos.xy);
 }
 
 StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos)
 {
-	Vector2i size = getFeatureStatsSize(stats);
-	Vector2i map = map_coord(pos) - size / 2;
-
+	const Vector2i size = stats->size();
+	const Vector2i map = map_coord(pos) - size / 2;
 	return StructureBounds(map, size);
 }
