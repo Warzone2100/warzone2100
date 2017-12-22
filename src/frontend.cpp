@@ -224,7 +224,7 @@ bool runTitleMenu()
 	switch (id)
 	{
 	case FRONTEND_QUIT:
-		changeTitleMode(CREDITS);
+		changeTitleMode(QUIT);
 		break;
 	case FRONTEND_MULTIPLAYER:
 		changeTitleMode(MULTI);
