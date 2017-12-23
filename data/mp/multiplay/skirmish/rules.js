@@ -9,6 +9,7 @@
 receiveAllEvents(true);  // If doing this in eventGameInit, it seems to be too late in T2/T3, due to some eventResearched events triggering first.
 
 include("multiplay/script/camTechEnabler.js");
+include("multiplay/script/weather.js");
 
 var lastHitTime = 0;
 var cheatmode = false;
@@ -288,6 +289,10 @@ function eventGameInit()
 
 	hackNetOn();
 	setTimer("checkEndConditions", 3000);
+	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
+	{
+		setTimer("weatherCycle", 45000);
+	}
 }
 
 // /////////////////////////////////////////////////////////////////

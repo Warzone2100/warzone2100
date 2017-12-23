@@ -35,7 +35,6 @@ data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires.wrf"
-data		"wrf/weather.wrf"
 
 campaign	MULTI_CAM_2
 data		"wrf/vidmem2.wrf"
@@ -44,7 +43,6 @@ data		"wrf/cam2.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires.wrf"
-data		"wrf/weather.wrf"
 
 campaign	MULTI_CAM_3
 data		"wrf/vidmem3.wrf"
@@ -53,7 +51,6 @@ data		"wrf/cam3.wrf"
 data		"wrf/audio.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires.wrf"
-data		"wrf/weather.wrf"
 
 /*cam1*/
 level 		Sk-Rush
