@@ -2296,8 +2296,8 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sButInit.width		= MISSION_TEXT_W;
 	sButInit.height		= MISSION_TEXT_H;
 	sButInit.pDisplay	= displayTextOption;
-	// If won or in debug mode
-	if (result || getDebugMappingStatus() || bMultiPlayer)
+	//if won
+	if (result || bMultiPlayer)
 	{
 		//continue
 		sButInit.x			= MISSION_2_X;
