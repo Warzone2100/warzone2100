@@ -346,7 +346,7 @@ void recvStructureInfo(NETQUEUE queue)
 
 	if (psStruct == nullptr)
 	{
-		debug(LOG_ERROR, "Could not find structure %u to change production for", structId);
+		debug(LOG_WARNING, "Could not find structure %u to change production for", structId);
 		return;
 	}
 	if (!canGiveOrdersFor(queue.index, psStruct->player))
