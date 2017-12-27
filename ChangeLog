@@ -1,3 +1,118 @@
+2018-01-XX: Version 3.2.4
+ * General:
+   * Add: New challenge "Two-Faced" from forum member Forgon (commit:2535b921a40afc0a760a54f9efe31494d95dcc7b)
+   * Add: Chat link to main menu (commit:6797cf4681ebe35f50785f08f54c4da8d42e432e)
+   * Add: New save game file "main.json" (commit:6670ce187a559dbed0fcbd7a0b49ee61488801fb)
+   * Change: C++11 modernization (commit:9d0f604d5ac7a5968d3b8582ed5934eb4117bee4, commit:8aa07d1939c8e66759828df7b524f9b4854cebb4, commit:4c4b2845f95901245d5d90153d55a5d3db7b3b80)
+   * Change: Only scroll one tab when pressing Tab Scroll Left and Tab Scroll Right (commit:8bac137cf94252241e20f667b9e60639d19e5641, ticket:4643)
+   * Change: No longer show the game credits screen upon exit (commit:cf1c3fbf4706f7a3657ba369db235af8b6f3e981, ticket:3322)
+   * Change: Abolish a slight camera rotation at the start of every game (commit:c83236b788f3decae8843d3480f64ed91f14316e, ticket:4642)
+   * Change: Factories being destroyed could cause annoying asserts. Now set to quiet warnings (commit:616f142c6a031fc36aceb05f8c40156c563225bb)
+   * Fix: Trying not to crash on loading unknown templates (commit:44a1e1085d4811a0ceeeac8406457098f190c4a3, ticket:4581)
+   * Fix: Always show template designs (commit:20c70fd00a5f155a5ff465866841591e4a23946e, ticket:4440)
+   * Fix: Do not desync when destroying droids with animations (commit:123ded59aedc53dc2344be9807c321774613946f)
+   * Fix: Mods not read properly on save-load (commit:bd2bac6a5a81205f131b2bbe6efb41b6129b0c4c)
+   * Fix: Can create Mac builds again (commit:32d4fb46776bbf4f30b99f36f3534d06ea23477e, commit:e4491400c34902ee992adbe43fed95f0d401382f)
+   * Fix: Player properties names and AI (commit:18ec97beb53fb5c0677e2ccaaec4686edca25fd1, ticket:4628)
+   * Fix: Do not try loading videos if none are available (commit:81bf12847181ce7ddc7b096f2049e2c8bb949e35, ticket:4631)
+   * Fix: Primary hold order working (commit:27460ef00625c9c2d8594892bd5263896f1afcfb, commit:561bbbc7653927d9326a43657648ccec9a2a34d7)
+   * Fix: Try to store designs when they are created (commit:c693e7c11249692bd111c8d51acf024aa107c52e)
+   * Fix: Do not show resolutions below 640x480 (commit:3312e06e84f22a2d9c3b2687b9aeda99b8dbe1fc, ticket:4623)
+   * Fix: Music not playing on save-load or not playing the right music in skirmish (commit:b016f609d704ce4df022e3a89f4f70f6eaabbee7)
+   * Fix: Being put in cheat mode on loading saves (commit:4b91398c86a8d3e1e9c05787768508ad5929dcbc, ticket:4612)
+ * Graphics:
+   * Add: Wrap texture objects (commit:ac08585f245b1dd36bbd8d0a9f88b2352418f845, commit:d3b81130ae12006f54f7a8cd17846ff42ac01398)
+   * Fix: Make shaders compile on more systems (commit:3ec60e361e6bab478af77b51f79ab88f1ceac6db, ticket:4584)
+   * Fix: Rename similar variables in shaders (commit:c1131be441afa534f9ec5be76baeb6137dc94844, ticket:4589)
+   * Fix: Graphics driver warning when building structures (commit:f2d71eea0e03a6c2f7afcc8698a3883796f09346)
+ * Campaign:
+   * Add: Dynamic difficulty making missions significantly easier or harder based on difficulty. Adds Insane difficulty (commit:cb19c7672fe915b95795e3af33c63c9d567faccc)
+   * Add: Power limits for Hard and Insane difficulty (commit:45abd912e08d0802edc5aaf6d591370ec95682ba)
+   * Change: Do not store or load templates which are already saved in the save file anyway (commit:d935f57c26d48fd5b431075ac0b7c6bec1315da8)
+   * Change: Research uses one file instead of three (commit:a696594896c9ec605d29bc58eb9b77af13e822f4)
+   * Change: Rename stats for scavenger weapons (commit:25de2991b2da64125c8c863aeaafe4bec50ad81d, ticket:4674)
+   * Change: Campaign mission scripts completely rewritten to JavaScript (too many commits)
+   * Change: Nexus uses more sounds in the home base defend mission (commit:acc508e0478558d0809d18f146b56d6f5a310ab6)
+   * Fix: Overall script stability is much better than before (too many commits)
+   * Fix: Limbo droids lost on save from the Gamma 2 mission (commit:8125a4098d3e73990e69d8e8b0738e837d4ff2e1)
+   * Fix: New Paradigm plateau transporter not arriving if all LZ's occupied with droids (commit:bd752be52f1c4d8d755c7bad3c9953b4eac0af8b)
+   * Fix: Mission end backdrop displaying after winning (commit:9efc45a48b6ef906d628d80a2a57cae998d6f1e1, commit:9d3c2ce8dcc1c7fafcacce9d94c3661350365b7f)
+   * Fix: Do not share ally vision with player (commit:8c9e7260333d6388438a091aad493bd2e11a965e, commit:e36ebcf38e76a4992878dec18f040f7db41851c7, ticket:4673)
+   * Fix: Show droid rank in transporter when not off-world also (commit:4cfa002cecd071406a18dbf7046b9ebfd1466f83)
+   * Fix: Race condition with danger maps (commit:9f25071068dd2edefb0f9fc9e17873a7c5e7a230, ticket:4633)
+   * Fix: Show the correct options for mission fail when in debug mode (commit:1595decca92330bd1c00b14bb884b23ae5c2b0d1, ticket:4683)
+   * Fix: Do not use the Arizona sky texture in Beta and Gamma campaigns (commit:5f9aa021e8e719b1705f135b39042f22641b540c)
+   * Fix: Beta scavengers use the civilian texture again (commit:fa6e0cb16c7d2a1b08c3a94e25dcc191eb3e3c8d)
+   * Fix: Being able to build Command Relay in off-world missions (commit:bb0ce5fd50a0a596e18895ef4955d31a0823d9d0)
+   * Fix: Potential power exploit in Alpha 3 before building power module (commit:33bea183138c4836abd9342dc11dd03200ea2a45)
+   * Fix: Campaign library not warning player about incoming enemy transporter (commit:c39da0858ba7f1926b8633859e85ade8166610d9)
+   * Fix: Droids placed in the corner of the home map when producing them and then loading a save off-world (commit:fc172d8338f16ca4ef79747c04625e5e2fb2751d, ticket:3907)
+   * Fix: Potential temporary lockup on sudden vision field increases (commit:800c1b6df440670f45f595e49fb83ff7ee7f724d, ticket:4644)
+ * Multiplayer:
+   * Change: Move Technology level scripts to JavaScript (commit:d31f6a2c704ada8f46957a34279af78deafdeec7)
+   * Change: Move structure limiting into structure.json (commit:924135c98d630d638fcee74b8ebf85d10af2dfa1, commit:9c272aa528bab38fb8d598a7f2676745ca347a4b)
+   * Fix: Do not assert on loading skirmish saves when the player has lost or won (commit:77f9e5cada8469948c66ca9c3851e6991f533142, ticket:4590, ticket:3928)
+   * Fix: Score and kills not showing in skirmish (commit:a74041b99442caa1c7e14c0ff409fc120c20e666, ticket:3491)
+ * Scripting:
+   * Add: Add a way for a script library to register a namespace (commit:19d37399c3fcb31fbb87cb1419125c6cb133aa16)
+   * Add: useSafetyTransport() function (commit:d511cad4d15ca7ae5ecefc678527bb0a253cafde)
+   * Add: setObjectFlag function (commit:6ea98200a90304a7dd54cdddb6a11910ad57cc39)
+   * Add: Events and functions for alliances (commit:3670bbdb5b193a8ff59342e171810fe44415d9bb)
+   * Add: fireWeaponAtLoc() function (commit:3c907bd4e4cd6290b306e847c81c060656a45fcd, commit:1cdd7bdb91fd99c7a5c9db73333c29bb76e32ff5)
+   * Add: clearConsole() function (commit:e26b9516d3e065527e41fe5006f9f94983653882)
+   * Add: restoreLimboMissionData() function (commit:8109d46e619fd5ca5f1220a5858b513db4114d6c)
+   * Add: hackPlayIngameAudio() and hackStopIngameAudio() functions (commit:e26b9516d3e065527e41fe5006f9f94983653882)
+   * Add: getMultiTechLevel() function (commit:d31f6a2c704ada8f46957a34279af78deafdeec7)
+   * Add: setCampaignNumber() function (commit:b016f609d704ce4df022e3a89f4f70f6eaabbee7, commit:d60d6559c8fd930963b66bb6c3929f703b5d70f6)
+   * Add: A lot of events for menus (commit:629d43771b4ab621fcedb8403165f7557b235bdf, commit:b5f8a07af0f1cbad8379dfa11724ceacc9f50ce8)
+   * Change: Move weather scripts to JavaScript (commit:b016f609d704ce4df022e3a89f4f70f6eaabbee7, commit:d60d6559c8fd930963b66bb6c3929f703b5d70f6)
+   * Change: Allow mods to use more than one HQ before removing the radar mini-map (commit:590434843c202e92d7ab7e5488f31de9e196ecfa, ticket:3465)
+   * Fix: removeTimer function (commit:4a24e8e2753d02775b6732d59c23a75a79b83f72)
+   * Remove: Base game wzscript files (commit:2999513e057beae4940209a18de2b74cfa5026dc, commit:76ac44c84b7f89a860c743202bb002586d137e63, commit:88cb1b6123bbd5fd9d3a66ea6dfb0e5eca15e6c3)
+ * AI:
+   * Fix: Improved SemperFi-JS (commit:7af101472e0d66c4a73e684f17edf79f8d52505c, commit:6ed849c61a927184095fe7cbf3faa039e1f78860, commit:5b0de613a973ba96faab14ccf7f19a96c10c6a61)
+   * Fix: Cyborg engineer and Cyborg mechanic having nothing but legs (commit:490b91d4420ba0985289955520229a1b8b022096, commit:a856dea5afb52fc4436304f66d1fa375293110e0)
+   * Fix: Nullbot can research Super Pulse Laser cyborgs without asserting (commit:52db9416a8fbb7984165bbdc58b4b96efe872c33, ticket:4639)
+ * Other:
+   * Add: Docker file for cross-compilation (commit:b866f11b48c9043a505a8444b295b1c22aeffb6c)
+   * Add: Basic CMakeLists.txt structure (commit:fa0bde7ab818174ea09505d4fc6b560588522146, commit:ae921a9ca922434ce0ad445d1dfc52e36059ff39)
+   * Add: Configuration option to enable or disable radar north arrow (commit:c5db25a75ea34d263ce3243f04ba4110b936ac52)
+   * Change: Use datarootdir as prefix for non game-Specific system paths (commit:65152d8110d02357202941b21b819f047d2f1536)
+   * Change: Print console message when re-aligning direction (commit:e8718ea80464e8768c12261a06c277cf3d153dcf, ticket:4620)
+   * Change: Replace OpenSSL with micro-ECC and SHA2 libraries (commit:f1c474153f7c55b5b39a9fdb805a7a7a4c1819c8)
+   * Change: Make zip file creation reproducible (commit:714399bfd5c9effa0a9b1bba8f26b625eadeb1da)
+   * Change: Play music in intelligence screen (commit:92722cb9726b8a1eb094b217857fc0a14f430741, ticket:4632)
+   * Change: Create all configuration folder subdirectories on program start (commit:2007f14910d36b4a05e1a308a0b2b720634d4c40, ticket:4664)
+   * Change: Convert fast-play demo to JavaScript (commit:04f2ffe87d50d5ce2a24091a4b4c7a89bf8180d6)
+   * Change: Convert tutorial to JavaScript (commit:8ff03b8b2f232df6e2528a8badd58849b35488b9, commit:410869b15d5e57d8774be74b4b7e399fb968527e)
+   * Change: Improved debug menu (commit:9765b31136f18f21eb11627a7a705260d3d70641, commit:c3ef25159a0e4eae0ba3bfa68d34d303b124d1a8, commit:ad70d31cb77212ec215b907bf8c46ff52b8fcc52)
+   * Change: Clear information messages after game end (commit:9edf1e646ce99fd99a895b771b63678710d2378a, ticket:4621)
+   * Change: address player as Commander in campaign and tutorial (commit:3a871f21d8bbc5a660d5ce996a56e65761905fe5, ticket:4612)
+   * Change: Allow exiting the main menu "Campaign" with the escape  key (commit:c64a9a3430b45aa6879241c53f42a62d4db084d7, ticket:4648)
+   * Fix: Clang build fixes (commit:3e224b79a8c2ea98603444ac9827670f55db8004, commit:7b022c5a6c359f4053b314b3ee750c2b5561c41f)
+   * Fix: Spaces in folder names breaking autorevision (commit:178dd3f1f15e02ad7fe8e1266379448550eaf55f)
+   * Fix: Crash when opening debug menu in tutorial (commit:c0c20ab39965f4c062dc51d34ad8367d0e2b88f3, ticket:4681)
+   * Fix: Logging or source code spelling corrections (commit:d0dd6cf6b801918cba042b65bdc56e183fb675fd, commit:2ce9492056d84846a07174770cfc2c46abf44e7b, ticket:4612)
+   * Remove: Unused sensor turret properties in design menu (commit:c6b628e2c0c815467f0799c6c65e2f88d31585d3, ticket:4619)
+   * Remove: Do not save showFPS configuration option twice (commit:55c77847e4137c219170fff80d0342a0742499dd, ticket:4645)
+ * Modding:
+   * Add: Ability to make weapon have no friendly fire with NoFriendlyFire (commit:d75ccdea67fb48f41b370a0c15cea3b6703f344e)
+ * Balance:
+   * Change: Droid ranks are now a brain property and can be upgraded (commit:e760917fef73e172f0149a632a7505303b25080b)
+   * Change: HitPoint handling in stats (commit:b1cb129247bca05fb35e50b15e8bedee2d6f4a8a)
+   * Change: Jammer tower and droid balancing (commit:0e78612aebdf738677bfb1d5986771667373e354, commit:6f919d4d87b32aa72b8ea65e20460795c8cbbc1b)
+   * Fix: Autoreplace cyborg flamer with thermite flamer (commit:8dca9a6bbabd0ff0923a088a9d0ee95d078d8ad3)
+   * Fix: Autoreplace cyborg rocket for cyborg scourge missile and heavy gunner for hyper velocity cannon (commit:55f5998c52a0cb2e889aa60c92e79167fc6dc8ed)
+   * Fix: Structures not having initial thermal armor (commit:3dd4cdbe548e64ad18c3e06ad427e90fd00c1aa8, ticket:4616)
+ * Translation
+   * Add: Indonesian (commit:3c050b0cc0a909eaa73d540bffa5224f2631f149)
+   * Fix: German translation updates (commit:e5d7e20d49a5737a69365bb5b5e96c959e03ac9d, commit:4bc390378c90e807b31775b5e59c845d0398789e, ticket:4597)
+   * Fix: Turkish translation updates (commit:013f6a95415f61232d137cf415b93cb9c8652f93, ticket:4608)
+   * Fix: Polish translation update (commit:64bd5a1c5b984e62ddca87d542d53f9ab909cfbf)
+   * Fix: Greek translation updates (commit:0490eaa237b0fd8f3a0e8bac722fbb12ff67d5b2, commit:13270626cdfb4304e38e4096a75c25c34998b96c)
+   * Fix: Russian translation updates (commit:19b767af2354a69b1d21199763188f44689c548f)
+   * Fix: Chinese translation update (commit:600eff0af390810582c5362b8d29ce93b9cd1080)
+
 2017-04-23: Version 3.2.3
  * General:
    * Fix: Rescale body points if players have different armour levels when transferring units (commit:d0934ff3adb980f4c3c67d3c6c4a3572af0a6890, ticket:4554)
@@ -828,7 +943,7 @@ master_20110717
    * Change: Suppress windows console. (commit:600952d5d1ac998a6cd2de415893b17215ae4b94)
  * Networking:
    * Change: Lobby login and lots of related improvements. (ticket:2678, commit:793c30a862627427282630bed87af8a3774bf719)
- 
+
  master_20110705
  * General:
    * Change: More script and savegame porting
@@ -1887,7 +2002,7 @@ master_20110320qt and before:
    * Change: Do not use texture compression for interface textures. (r7348)
    * Change: Scale down textures used for 3D when they exceed the size specified with the textureSize option (r7347)
  * Network:
-   * Fix / Change: Modify the server & client code to detect when the Host can't host a game, Change how 'addg' works + other enhancements (r7325) 
+   * Fix / Change: Modify the server & client code to detect when the Host can't host a game, Change how 'addg' works + other enhancements (r7325)
    * Change: Use a more descriptive error message instead of the worthless SDLnet message. (r7344)
 
 2009-05-01: Version 2.2_beta2
@@ -2514,7 +2629,7 @@ Pre-GPL releases:
  * Fortresses: OK we lied about not adding anything new. Huge heavily armoured structures that pack weapons that are too large to ever fit on a vehicle.
    * Super Cannon Fortress - a 2x2 structure with a huge cannon
    * Heavy Rocket Bastion  - a 2x2 structure with a heavy rocket
-   * Mass Driver           - a 2x2 structure with a super-railgun 
+   * Mass Driver           - a 2x2 structure with a super-railgun
    * Missile Fortress      - a 2x2 structure with a heavy AT missile.
  * EMP Turret. The EMP turret is the mobile answer to stopping enemy units dead in their tracks
  * Wide Spectrum Sensor Turret. Design and build mobile WSS turrets to target enemy bases.
@@ -2535,7 +2650,7 @@ Pre-GPL releases:
  * LasSats - Gain control of the LasSats and use them to blast your enemies. The ultimate in WZ weaponry has arrived!
  * New Weapons:
    * Plasma Cannon - Long range heavy hitting fire power
-   * EMP Cannon - Fires an electro-magnetic pulse to disable enemy units. 
+   * EMP Cannon - Fires an electro-magnetic pulse to disable enemy units.
    * Super-Cyborg Reinforcements
    * Anti-Tank Missile Super-cyborg - A cyborg gunner with a heavier punch!
    * Pulse Laser Cyborg - A heavier laser to take out enemy cyborgs
@@ -2574,14 +2689,14 @@ Pre-GPL releases:
    * Little Egypt - 4 player desert map. In a claustrophobic map the enemy are never far away.
      If you're losing the battle then use politics to turn the tables. Choosing the right alliances in Little Egypt might well win you the war.
      One more thing: don't be lulled into a false sense of security by the water surrounding your base - hover units and VTOL's are easily manufactured!
-   * Sand Castle - 8 player urban map.  Capture the remains of this once great city block by block, securing the bridges with defences as you progress. 
+   * Sand Castle - 8 player urban map.  Capture the remains of this once great city block by block, securing the bridges with defences as you progress.
      Howitzers, mortars and VTOL's will help you reach enemies across the water when they're least expecting it.
  * To help see how resistive your units are to electronic warfare we’ve added a new ‘power bar’. Hold ctrl with a unit/structure selected to display it's resistance. This feature was also in 1.04 , but we’ve moved it from overlaying the unit’s power bar to overlaying the reload bar.
  * Choose your own base.
    You can now be any player and any color in a skirmish / multiplayer game. Choose your base on the flag-requester in the multiplayer setup menu. Each number corresponds to a particular base on the map. To find your favourite base play a skirmish game, press keypad-enter to list the players. The number of each players base is next to the players' name. (eg on 'rush' the top left is base 0, top right 1,  bottom right 2, bottom left 3)
  * Bug fixes:
    * Fixed crash in skirmish when turning off most skirmish players crashed the game on startup.
-   * Factory upgrades in multiplayer were sometimes displaying incorrectly (medium looked like large). 
+   * Factory upgrades in multiplayer were sometimes displaying incorrectly (medium looked like large).
    * Slight Cyborg fix.
    * Fixed the awkward cd swap on loading a saved skirmish game.
    * Large repair turret is now correctly named.
@@ -2634,7 +2749,7 @@ Pre-GPL releases:
    Press and hold Z to see a snapshot of your sensor range. Perfect for finding those spots you’ve missed.
  * Skirmish Improvements:
    * Each skirmish player can now be assigned a difficulty. Drag the slider to the right to increase the difficulty.  Drag all the way to the left to turn off the player (the last player can’t be turned off).
-   * Skirmish players now build walls, and don’t build on burning oil pools. Most cheats now work in one player skirmish.  Computer players don’t cheat as much. Bug fixes to skirmish save-game. No more ‘mystery units’ in the middle of the map! 
+   * Skirmish players now build walls, and don’t build on burning oil pools. Most cheats now work in one player skirmish.  Computer players don’t cheat as much. Bug fixes to skirmish save-game. No more ‘mystery units’ in the middle of the map!
    * In one player Skirmish mode, computer players now have a score and are ranked on the multiplayer score screen, as a human player would be.
  * Multiplayer Research Info.
    A small heart appears by any research topic your allies are working on. Now you can see what they are researching! Move the mouse over the heart to see which player is researching that topic. (note that in TeamPlay, research is automatically shared: you don’t have to give a research gift)
@@ -2647,7 +2762,7 @@ Pre-GPL releases:
  * Campaign 3 Technology Trees.
    Research and Develop Campaign 3 Technologies - adds rail guns, lasers and missiles!
  * One-Player Skirmish Save Games.
-   Now you can save in one player skirmish games. Ideal for those long battles against the computer. 
+   Now you can save in one player skirmish games. Ideal for those long battles against the computer.
  * Improved Skirmish AI.
    This skirmish update improves on enemy detection and how the enemy chooses research and units. It’s much more realistic and a lot tougher. If you find it too hard, try turning off alliances, or remove a few skirmish players on big maps. (click the computer icon where the flags usually appear in the host game screen)
  * Commanders and Repair.
@@ -2670,7 +2785,7 @@ Pre-GPL releases:
  * Thicker D3D smoke!
  * Modification to video playback in single player.
  * Minor Changes to Skirmish code in preparation for a future update.(eg players don’t build themselves in anymore)
- 
+
 0000-00-00: Version 1.02
  * Two New Maps:
    * Concrete Playground - A massive 250 x 250 sized 8 player map. Our biggest yet!
