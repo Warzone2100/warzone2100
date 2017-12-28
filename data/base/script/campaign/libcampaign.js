@@ -2180,7 +2180,15 @@ function __camAddDroidToFactoryGroup(droid, structure)
 function __camBuildDroid(template, structure)
 {
 	if (!camDef(structure))
+	{
 		return false;
+	}
+	//if not a normal factory and the template is a constructor then keep it in the
+	//queue until a factory can deal with it.
+	if (template.weap === "Spade1Mk1" && structure.stattype !== FACTORY)
+	{
+		return false;
+	}
 	makeComponentAvailable(template.body, structure.player);
 	makeComponentAvailable(template.prop, structure.player);
 	makeComponentAvailable(template.weap, structure.player);
@@ -2267,7 +2275,9 @@ function __camContinueProduction(structure)
 	// loop through templates
 	++fi.state;
 	if (fi.state >= fi.templates.length)
+	{
 		fi.state = -1;
+	}
 	fi.lastprod = gameTime;
 }
 

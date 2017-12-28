@@ -77,15 +77,15 @@
 	},
 	"position_19": {
 		"label": "NXCybFac1Assembly",
-		"pos": [1856, 6720]
+		"pos": [1856, 6848]
 	},
 	"position_20": {
 		"label": "NXCybFac2Assembly",
-		"pos": [1600, 6720]
+		"pos": [1600, 6848]
 	},
 	"position_21": {
 		"label": "NXMediumFacAssembly",
-		"pos": [1984, 7488]
+		"pos": [1600, 7488]
 	},
 
 	"area_0": {

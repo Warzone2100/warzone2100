@@ -154,11 +154,7 @@ function setupNextMission()
 		playSound(MISSLE_ABORT, CAM_HUMAN_PLAYER);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
-
-		if (getMissionTime() > 3600)
-		{
-			setMissionTime(camChangeOnDiff(3600));
-		}
+		setMissionTime(camChangeOnDiff(1800)); // 30 min
 
 		hackRemoveMessage("CM31_TAR_UPLINK", PROX_MSG, CAM_HUMAN_PLAYER);
 		hackAddMessage("CM31_HIDE_LOC", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -355,7 +351,7 @@ function eventStartLevel()
 	getCountdown();
 
 	queue("setupNextMission", 8000);
-	queue("enableReinforcements", 10000);
+	queue("enableReinforcements", 15000);
 	queue("hoverAttack", camChangeOnDiff(240000)); // 4 min
 	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
 	queue("enableAllFactories", camChangeOnDiff(300000)); //5 min
