@@ -2901,12 +2901,14 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	return QScriptValue();
 }
 
-//-- \subsection{completeResearch(research[, player])}
+//-- \subsection{completeResearch(research[, player [, forceResearch]])}
 //-- Finish a research for the given player.
+//-- forceResearch will allow a research topic to be researched again. 3.2.4+
 static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QString researchName = context->argument(0).toString();
 	int player;
+	bool forceIt = false;
 	if (context->argumentCount() > 1)
 	{
 		player = context->argument(1).toInt32();
@@ -2915,11 +2917,15 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 	{
 		player = engine->globalObject().property("me").toInt32();
 	}
+	if (context->argumentCount() > 2)
+	{
+		forceIt = context->argument(2).toBool();
+	}
 	RESEARCH *psResearch = getResearch(researchName.toUtf8().constData());
 	SCRIPT_ASSERT(context, psResearch, "No such research %s for player %d", researchName.toUtf8().constData(), player);
 	SCRIPT_ASSERT(context, psResearch->index < asResearch.size(), "Research index out of bounds");
 	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
-	if (IsResearchCompleted(plrRes))
+	if (!forceIt && IsResearchCompleted(plrRes))
 	{
 		return QScriptValue();
 	}

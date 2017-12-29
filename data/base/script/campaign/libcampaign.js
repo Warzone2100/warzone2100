@@ -404,6 +404,11 @@ function camCompleteRequiredResearch(items, player)
 
 		if (reqRes.length === 0)
 		{
+			//HACK: autorepair like upgrades don't work after mission transition.
+			if (items[i] === "R-Sys-NEXUSrepair")
+			{
+				completeResearch("R-Sys-NEXUSrepair", player, true);
+			}
 			continue;
 		}
 
