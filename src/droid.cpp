@@ -2685,7 +2685,7 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 		return false;
 	}
 
-	if (psDroid->psActionTarget[0] != nullptr)
+	if (psDroid->psActionTarget[0] != nullptr && psDroid->psActionTarget[0] != psStruct)
 	{
 		// vtol is rearming at a different base
 		return false;
