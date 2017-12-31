@@ -12,7 +12,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Cannon-Damage04", "R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage04", "R-Wpn-Flamer-ROF01",
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01", "R-Wpn-RocketSlow-Accuracy03",
-	"R-Wpn-RocketSlow-Damage03", "R-Wpn-RocketSlow-ROF03"
+	"R-Wpn-RocketSlow-Damage03",
 ];
 
 //trigger event when droid reaches the downed transport.

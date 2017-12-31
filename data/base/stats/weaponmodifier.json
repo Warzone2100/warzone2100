@@ -10,7 +10,7 @@
     "ANTI PERSONNEL": {
         "Half-Tracked": 75,
         "Hover": 100,
-        "Legged": 140,
+        "Legged": 125,
         "Lift": 25,
         "Tracked": 75,
         "Wheeled": 100

@@ -1926,7 +1926,7 @@
     "MG4ROTARYMk1": {
         "buildPoints": 500,
         "buildPower": 100,
-        "damage": 22,
+        "damage": 20,
         "designable": 1,
         "effectSize": 100,
         "facePlayer": 1,

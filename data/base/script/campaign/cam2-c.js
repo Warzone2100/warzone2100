@@ -21,7 +21,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
 	"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
 	"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy02",
-	"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF03",
+	"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF02",
 ];
 
 //Play video about civilians being captured by the Collective. Triggered
