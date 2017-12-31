@@ -1132,8 +1132,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 	case DACTION_MOVETOATTACK:
 		// send vtols back to rearm
-		if (isVtolDroid(psDroid) &&
-		    vtolEmpty(psDroid))
+		if (isVtolDroid(psDroid) && vtolEmpty(psDroid))
 		{
 			moveToRearm(psDroid);
 			break;
@@ -1551,9 +1550,9 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_MOVETOREARMPOINT:
-		/* moving to rearm pad */
 		if (DROID_STOPPED(psDroid))
 		{
+			objTrace(psDroid->id, "Finished moving onto the rearm pad");
 			psDroid->action = DACTION_WAITDURINGREARM;
 		}
 		break;
@@ -1755,15 +1754,17 @@ void actionUpdateDroid(DROID *psDroid)
 			break;
 		}
 	case DACTION_WAITFORREARM:
-		// wait here for the rearm pad to ask the vtol to move
+		// wait here for the rearm pad to instruct the vtol to move
 		if (psDroid->psActionTarget[0] == nullptr)
 		{
 			// rearm pad destroyed - move to another
+			objTrace(psDroid->id, "rearm pad gone - switch to new one");
 			moveToRearm(psDroid);
 			break;
 		}
 		if (DROID_STOPPED(psDroid) && vtolHappy(psDroid))
 		{
+			objTrace(psDroid->id, "do not need to rearm after all");
 			// don't actually need to rearm so just sit next to the rearm pad
 			psDroid->action = DACTION_NONE;
 		}
@@ -1772,6 +1773,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (DROID_STOPPED(psDroid))
 		{
 			psDroid->action = DACTION_NONE;
+			objTrace(psDroid->id, "clearing rearm pad");
 			if (!vtolHappy(psDroid))  // Droid has cleared the rearm pad without getting rearmed. One way this can happen if a rearming pad was built under the VTOL while it was waiting for a pad.
 			{
 				moveToRearm(psDroid);  // Rearm somewhere else instead.
@@ -1785,6 +1787,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (psDroid->psActionTarget[0] == nullptr)
 		{
 			// base destroyed - find another
+			objTrace(psDroid->id, "rearm gone - find another");
 			moveToRearm(psDroid);
 			break;
 		}
@@ -1805,8 +1808,7 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_WAITFORREARM;
 		}
 
-		if (DROID_STOPPED(psDroid) ||
-		    (psDroid->action == DACTION_WAITFORREARM))
+		if (DROID_STOPPED(psDroid) || psDroid->action == DACTION_WAITFORREARM)
 		{
 			Vector2i pos = psDroid->psActionTarget[0]->pos.xy;
 			if (!actionVTOLLandingPos(psDroid, &pos))
@@ -1816,6 +1818,7 @@ void actionUpdateDroid(DROID *psDroid)
 				orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 				break;
 			}
+			objTrace(psDroid->id, "moving to rearm pad at %d,%d (%d,%d)", (int)pos.x, (int)pos.y, (int)(pos.x/TILE_UNITS), (int)(pos.y/TILE_UNITS));
 			moveDroidToDirect(psDroid, pos.x, pos.y);
 		}
 		break;
@@ -1868,6 +1871,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	psDroid->actionStarted = gameTime;
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
+	objTrace(psDroid->id, "base set action to %s (was %s)", getDroidActionName(psAction->action), getDroidActionName(psDroid->action));
 
 	DROID_ORDER_DATA *order = &psDroid->order;
 
@@ -1983,9 +1987,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (!actionVTOLLandingPos(psDroid, &pos))
 		{
 			// totally bunged up - give up
+			objTrace(psDroid->id, "move to rearm action failed!");
 			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
+		objTrace(psDroid->id, "move to rearm");
 		moveDroidToDirect(psDroid, pos.x, pos.y);
 		break;
 	case DACTION_CLEARREARMPAD:
@@ -1996,9 +2002,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (!actionVTOLLandingPos(psDroid, &pos))
 		{
 			// totally bunged up - give up
+			objTrace(psDroid->id, "clear rearm pad action failed!");
 			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
+		objTrace(psDroid->id, "move to clear rearm pad");
 		moveDroidToDirect(psDroid, pos.x, pos.y);
 		break;
 	case DACTION_MOVE:
@@ -2092,7 +2100,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->action = DACTION_WAITDURINGREPAIR;
 		break;
 	case DACTION_MOVETOREARMPOINT:
-		debug(LOG_NEVER, "Unit %d moving to rearm point", psDroid->id);
+		objTrace(psDroid->id, "set to move to rearm pad");
 		psDroid->action = psAction->action;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
@@ -2192,7 +2200,6 @@ void actionDroid(DROID *psDroid, DROID_ACTION action,
 
 /*send the vtol droid back to the nearest rearming pad - if one otherwise
 return to base*/
-// IF YOU CHANGE THE ORDER/ACTION RESULTS TELL ALEXL!!!! && recvvtolrearm
 void moveToRearm(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
@@ -2234,6 +2241,7 @@ void moveToRearm(DROID *psDroid)
 	else
 	{
 		//return to base un-armed
+		objTrace(psDroid->id, "Did not find an available rearm pad - RTB instead");
 		orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 	}
 }
@@ -2242,18 +2250,16 @@ void moveToRearm(DROID *psDroid)
 // whether a tile is suitable for a vtol to land on
 static bool vtolLandingTile(SDWORD x, SDWORD y)
 {
-	if (x < 0 || x >= (SDWORD)mapWidth ||
-	    y < 0 || y >= (SDWORD)mapHeight)
+	if (x < 0 || x >= (SDWORD)mapWidth || y < 0 || y >= (SDWORD)mapHeight)
 	{
 		return false;
 	}
 
-	MAPTILE *psTile = mapTile(x, y);
-
-	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
-	    (TileIsOccupied(psTile)) ||
-	    (terrainType(psTile) == TER_CLIFFFACE) ||
-	    (terrainType(psTile) == TER_WATER))
+	const MAPTILE *psTile = mapTile(x, y);
+	if (psTile->tileInfoBits & BITS_FPATHBLOCK ||
+	    TileIsOccupied(psTile) ||
+	    terrainType(psTile) == TER_CLIFFFACE ||
+	    terrainType(psTile) == TER_WATER)
 	{
 		return false;
 	}
@@ -2347,7 +2353,8 @@ static bool vtolLandingTileSearchFunction(int x, int y, void *matchState)
 	return false;
 }
 
-// choose a landing position for a VTOL when it goes to rearm
+// Choose a landing position for a VTOL when it goes to rearm that is close to rearm
+// pad but not on it, since it may be busy by the time we get there.
 bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 {
 	CHECK_DROID(psDroid);
@@ -2357,7 +2364,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	int startY = map_coord(p->y);
 
 	// set blocking flags for all the other droids
-	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (const DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		Vector2i t;
 		if (DROID_STOPPED(psCurr))
@@ -2383,7 +2390,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	                                    vtolLandingTileSearchFunction, &xyCoords);
 	if (foundTile)
 	{
-		debug(LOG_NEVER, "Unit %d landing pos (%d,%d)", psDroid->id, xyCoords.x, xyCoords.y);
+		objTrace(psDroid->id, "Unit %d landing pos (%d,%d)", psDroid->id, xyCoords.x, xyCoords.y);
 		p->x = world_coord(xyCoords.x) + TILE_UNITS / 2;
 		p->y = world_coord(xyCoords.y) + TILE_UNITS / 2;
 	}

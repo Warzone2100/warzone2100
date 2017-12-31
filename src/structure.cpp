@@ -2941,30 +2941,32 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			/* select next droid if none being rearmed*/
 			if (psChosenObj == nullptr)
 			{
-				for (psDroid = apsDroidLists[psStructure->player]; psDroid;
-				     psDroid = psDroid->psNext)
+				objTrace(psStructure->id, "Rearm pad idle - look for victim");
+				for (psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
 					// move next droid waiting on ground to rearm pad
 					if (vtolReadyToRearm(psDroid, psStructure) &&
 					    (psChosenObj == nullptr || (((DROID *)psChosenObj)->actionStarted > psDroid->actionStarted)))
 					{
+						objTrace(psDroid->id, "rearm pad candidate");
+						objTrace(psStructure->id, "we found %s to rearm", objInfo(psDroid));
 						psChosenObj = psDroid;
 					}
 				}
-				if (!psChosenObj) // None available? Try allies.
+				// None available? Try allies.
+				for (int i = 0; i < MAX_PLAYERS && !psChosenObj; i++)
 				{
-					for (i = 0; i < MAX_PLAYERS; i++)
+					if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
 					{
-						if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
+						for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 						{
-							for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+							// move next droid waiting on ground to rearm pad
+							if (vtolReadyToRearm(psDroid, psStructure))
 							{
-								// move next droid waiting on ground to rearm pad
-								if (vtolReadyToRearm(psDroid, psStructure))
-								{
-									psChosenObj = psDroid;
-									break;
-								}
+								psChosenObj = psDroid;
+								objTrace(psDroid->id, "allied rearm pad candidate");
+								objTrace(psStructure->id, "we found allied %s to rearm", objInfo(psDroid));
+								break;
 							}
 						}
 					}
@@ -2982,6 +2984,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				     psDroid->sMove.Status == MOVEHOVER) &&
 				    psDroid->action == DACTION_WAITFORREARM)
 				{
+					objTrace(psDroid->id, "supposed to go to rearm but not on our way -- fixing"); // this should never happen...
 					actionDroid(psDroid, DACTION_MOVETOREARMPOINT, psStructure);
 				}
 			}
@@ -3302,6 +3305,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psDroid->died || (psDroid->action != DACTION_MOVETOREARMPOINT && psDroid->action != DACTION_WAITDURINGREARM))
 			{
 				psReArmPad->psObj = nullptr;
+				objTrace(psDroid->id, "VTOL has wrong action or is dead");
 				return;
 			}
 			if (psDroid->action == DACTION_WAITDURINGREARM && psDroid->sMove.Status == MOVEINACTIVE)
@@ -3324,6 +3328,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].upgrade[psDroid->player].numRounds;
 						psDroid->asWeaps[i].lastFired = 0;
 					}
+					objTrace(psDroid->id, "fully loaded");
 				}
 				else
 				{
@@ -3366,6 +3371,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->psObj = nullptr;
 					auxStructureNonblocking(psStructure);
 					triggerEventDroidIdle(psDroid);
+					objTrace(psDroid->id, "VTOL happy and ready for action!");
 				}
 			}
 		}
@@ -6678,6 +6684,10 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 	if (bClear && (psTotallyClear != nullptr))
 	{
 		psNearest = psTotallyClear;
+	}
+	if (!psNearest)
+	{
+		objTrace(psDroid->id, "Failed to find a landing spot (%s)!", bClear ? "req clear" : "any");
 	}
 	return psNearest;
 }

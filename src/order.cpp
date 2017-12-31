@@ -1304,6 +1304,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->type));
+	objTrace(psDroid->id, "base set order to %s (was %s)", getDroidOrderName(psOrder->type), getDroidOrderName(psDroid->order.type));
 
 	if (psOrder->type != DORDER_TRANSPORTIN         // transporters special
 	    && psOrder->psObj == nullptr			// location-type order
@@ -1691,6 +1692,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			// no repair facility or HQ go to the landing zone
 			if (!bMultiPlayer && selectedPlayer == 0)
 			{
+				objTrace(psDroid->id, "could not RTR, doing RTL instead");
 				orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			}
 		}

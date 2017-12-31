@@ -2661,8 +2661,7 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 {
 	CHECK_DROID(psDroid);
 
-	if (!isVtolDroid(psDroid)
-	    || psDroid->action != DACTION_WAITFORREARM)
+	if (!isVtolDroid(psDroid) || psDroid->action != DACTION_WAITFORREARM)
 	{
 		return false;
 	}
@@ -2674,20 +2673,22 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 	    && !vtolOnRearmPad((STRUCTURE *)psRearmPad, psDroid))
 	{
 		// target rearm pad is clear - let it go there
+		objTrace(psDroid->id, "rearm pad at %d,%d won't snatch us - we already have another available at %d,%d", psStruct->pos.x / TILE_UNITS, psStruct->pos.y / TILE_UNITS, psRearmPad->pos.x / TILE_UNITS, psRearmPad->pos.y / TILE_UNITS);
 		return false;
 	}
 
-	if (vtolHappy(psDroid) &&
-	    vtolOnRearmPad(psStruct, psDroid))
+	if (vtolHappy(psDroid) && vtolOnRearmPad(psStruct, psDroid))
 	{
 		// there is a vtol on the pad and this vtol is already rearmed
 		// don't bother shifting the other vtol off
+		objTrace(psDroid->id, "rearm pad at %d,%d won't snatch us - we're rearmed and pad is busy", psStruct->pos.x / TILE_UNITS, psStruct->pos.y / TILE_UNITS);
 		return false;
 	}
 
 	if (psDroid->psActionTarget[0] != nullptr && psDroid->psActionTarget[0] != psStruct)
 	{
 		// vtol is rearming at a different base
+		objTrace(psDroid->id, "rearm pad at %d,%d won't snatch us - we already are snatched by %d,%d", psStruct->pos.x / TILE_UNITS, psStruct->pos.y / TILE_UNITS, psDroid->psActionTarget[0]->pos.x / TILE_UNITS, psDroid->psActionTarget[0]->pos.y / TILE_UNITS);
 		return false;
 	}
 

@@ -72,6 +72,11 @@ const char *objInfo(const BASE_OBJECT *psObj)
 {
 	static char	info[PATH_MAX];
 
+	if (!psObj)
+	{
+		return "null";
+	}
+
 	switch (psObj->type)
 	{
 	case OBJ_DROID:

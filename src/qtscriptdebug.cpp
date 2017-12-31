@@ -48,6 +48,7 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/netplay/netplay.h"
 
+#include "action.h"
 #include "difficulty.h"
 #include "multiplay.h"
 #include "objects.h"
@@ -581,6 +582,7 @@ static QString arrayToString(const T *array, int length)
 }
 
 // Using ^ to denote stats that are in templates, and as such do not change.
+// Using : to denote stats that come from structure specializations.
 QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *psStats, int player)
 {
 	QStandardItem *key = new QStandardItem(name);
@@ -705,7 +707,7 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		setPair(row, selectedModel, "Frustrated time", QString::number(psDroid->lastFrustratedTime));
 		setPair(row, selectedModel, "Resistance", QString::number(psDroid->resistance));
 		setPair(row, selectedModel, "Secondary order", QString::number(psDroid->secondaryOrder));
-		setPair(row, selectedModel, "Action", QString::number(psDroid->action));
+		setPair(row, selectedModel, "Action", QString(getDroidActionName(psDroid->action)));
 		setPair(row, selectedModel, "Action position", QString::fromStdString(glm::to_string(psDroid->actionPos)));
 		setPair(row, selectedModel, "Action started", QString::number(psDroid->actionStarted));
 		setPair(row, selectedModel, "Action points", QString::number(psDroid->actionPoints));
@@ -748,6 +750,12 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		setPair(row, selectedModel, "^Height", QString::number(psStruct->pStructureType->height));
 		setPair(row, selectedModel, componentToString("ECM", psStruct->pStructureType->pECM, psObj->player));
 		setPair(row, selectedModel, componentToString("Sensor", psStruct->pStructureType->pSensor, psObj->player));
+		if (psStruct->pStructureType->type == REF_REARM_PAD)
+		{
+			setPair(row, selectedModel, ":timeStarted", QString::number(psStruct->pFunctionality->rearmPad.timeStarted));
+			setPair(row, selectedModel, ":timeLastUpdated", QString::number(psStruct->pFunctionality->rearmPad.timeLastUpdated));
+			setPair(row, selectedModel, ":Rearm target", QString(objInfo(psStruct->pFunctionality->rearmPad.psObj)));
+		}
 	}
 	else if (psObj->type == OBJ_FEATURE)
 	{
