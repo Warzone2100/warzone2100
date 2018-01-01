@@ -120,6 +120,12 @@
 		"pos1": [448, 4000],
 		"pos2": [7600, 4500]
 	},
+	"area_7": {
+		"label": "mockBattleTrigger",
+		"subscriber": 0,
+		"pos1": [448, 5400],
+		"pos2": [7600, 5500]
+	},
 
 	"object_0": {
 		"label": "NXCommandCenter",

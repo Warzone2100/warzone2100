@@ -2,6 +2,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 include("script/campaign/transitionTech.js");
 
+var trapActive;
 const GAMMA = 1; // Player 1 is Gamma team.
 const NEXUS_RES = [
 	"R-Defense-WallUpgrade08", "R-Struc-Materials08", "R-Struc-Factory-Upgrade06",
@@ -31,15 +32,13 @@ camAreaEvent("vtolRemoveZone", function(droid)
 
 camAreaEvent("trapTrigger", function(droid)
 {
-	if (droid.player === CAM_HUMAN_PLAYER)
-	{
-		playSound("pcv455.ogg"); //Incoming message.
-		queue("trapSprung", 2000);
-	}
-	else
-	{
-		resetLabel("trapTrigger", CAM_HUMAN_PLAYER);
-	}
+	camCallOnce("setupCapture");
+});
+
+camAreaEvent("mockBattleTrigger", function(droid)
+{
+	setAlliance(GAMMA, NEXUS, false); //brief mockup battle
+	camCallOnce("activateNexusGroups"); //help destroy Gamma base
 });
 
 //Setup Nexus VTOL hit and runners.
@@ -168,12 +167,23 @@ function activateNexusGroups()
 //Take everything Gamma has and donate to Nexus.
 function trapSprung()
 {
+	if (!trapActive)
+	{
+		playSound("pcv455.ogg"); //Incoming message.
+		trapActive = true;
+		setAlliance(GAMMA, NEXUS, false);
+		queue("trapSprung", 2000); //call this a few seconds later
+		return;
+	}
+
+	setAlliance(GAMMA, NEXUS, true);
+	setAlliance(GAMMA, CAM_HUMAN_PLAYER, false);
 	camPlayVideos("MB3_B_MSG3");
 	hackRemoveMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(5400));
 
-	activateNexusGroups();
+	camCallOnce("activateNexusGroups");
 	enableAllFactories();
 
 	sendNXlandReinforcements();
@@ -182,9 +192,23 @@ function trapSprung()
 	playSound(SYNAPTICS_ACTIVATED);
 }
 
+function setupCapture()
+{
+	trapSprung();
+}
+
+function eventAttacked(victim, attacker)
+{
+	if (!trapActive && victim.player === GAMMA)
+	{
+		camCallOnce("setupCapture");
+	}
+}
+
 function eventStartLevel()
 {
-	const MISSION_TIME = camChangeOnDiff(1800); //30 minutes. Rescue part.
+	trapActive = false;
+	const MISSION_TIME = camChangeOnDiff(1200); //20 minutes. Rescue part.
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
@@ -259,6 +283,7 @@ function eventStartLevel()
 		}
 	});
 
+	setAlliance(GAMMA, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	camPlayVideos(["MB3_B_MSG", "MB3_B_MSG2"]);
 
@@ -266,5 +291,4 @@ function eventStartLevel()
 
 	queue("transferPower", 3000);
 	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
-	queue("enableAllFactories", camChangeOnDiff(301000)); //5 min
 }
