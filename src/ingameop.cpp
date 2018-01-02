@@ -97,7 +97,6 @@ static bool addQuitOptions()
 	inGameOp->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
-	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
 	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)		// only show for real MP games
 	{
@@ -110,6 +109,12 @@ static bool addQuitOptions()
 		label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
 		label->setTextAlignment(WLAB_ALIGNCENTRE);
 		label->setFont(font_medium, WZCOL_YELLOW);
+
+		addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
+	}
+	else
+	{
+		addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 
 	return true;
@@ -200,7 +205,14 @@ static bool _intAddInGameOptions()
 	ingameOp->setGeometry(INTINGAMEOP_X, INTINGAMEOP_Y, INTINGAMEOP_W, s ? INTINGAMEOP_HS : INTINGAMEOP_H);
 
 	// add 'quit' text
-	addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)
+	{
+		addIGTextButton(INTINGAMEOP_QUIT , INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
+	}
+	else
+	{
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+	}
 
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
