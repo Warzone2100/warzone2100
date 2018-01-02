@@ -53,6 +53,7 @@
 #include "main.h"
 #include "warzoneconfig.h"
 
+bool quitConfirmation;
 
 bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;
@@ -207,11 +208,11 @@ static bool _intAddInGameOptions()
 	// add 'quit' text
 	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)
 	{
-		addIGTextButton(INTINGAMEOP_QUIT , INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
+		addIGTextButton(quitConfirmation ? INTINGAMEOP_QUIT : INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
 	}
 	else
 	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+		addIGTextButton(quitConfirmation ? INTINGAMEOP_QUIT : INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 
 	// add 'resume'

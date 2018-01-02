@@ -37,6 +37,7 @@
 #include "configuration.h"
 #include "difficulty.h"
 #include "display3d.h"
+#include "ingameop.h"
 #include "multiint.h"
 #include "multiplay.h"
 #include "radar.h"
@@ -99,6 +100,7 @@ bool loadConfig()
 	setMiddleClickRotate(ini.value("MiddleClickRotate", false).toBool());
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	radarRotationArrow = ini.value("radarRotationArrow", true).toBool();
+	quitConfirmation = ini.value("quitConfirmation", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
 	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
@@ -222,6 +224,7 @@ bool saveConfig()
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("radarRotationArrow", radarRotationArrow);
+	ini.setValue("quitConfirmation", quitConfirmation);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	ini.setValue("masterserver_name", NETgetMasterserverName());
 	ini.setValue("masterserver_port", NETgetMasterserverPort());

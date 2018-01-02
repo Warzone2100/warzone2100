@@ -32,6 +32,8 @@ bool intRunInGameOptions();
 void intProcessInGameOptions(UDWORD);
 void intAddInGamePopup();
 
+extern bool quitConfirmation;
+
 // status bools.
 extern bool	InGameOpUp;
 extern bool isInGamePopupUp;
