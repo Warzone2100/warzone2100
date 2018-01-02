@@ -211,7 +211,8 @@ function cam2Setup()
 	camCompleteRequiredResearch(PLAYER_RES_BETA, CAM_HUMAN_PLAYER);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 	camCompleteRequiredResearch(ALPHA_RESEARCH, CAM_HUMAN_PLAYER);
-	enableResearch("R-Wpn-Cannon-Accuracy02", CAM_HUMAN_PLAYER);
+	enableResearch("R-Wpn-Cannon-Damage04", CAM_HUMAN_PLAYER);
+	enableResearch("R-Wpn-Rocket-Damage04", CAM_HUMAN_PLAYER);
 	preDamageStuff();
 }
 

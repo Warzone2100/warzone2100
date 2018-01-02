@@ -99,8 +99,8 @@ const STRUCTS_GAMMA = [
 	"A0VtolPad", "Sys-CB-Tower01", "Sys-SensoTower02", "Sys-VTOL-CB-Tower01",
 	"Sys-VTOL-RadarTower01", "AASite-QuadBof", "AASite-QuadRotMg",
 	"Emplacement-HPVcannon", "Emplacement-Howitzer105", "Emplacement-Howitzer150",
-	"Emplacement-Rocket06-IDF", "Emplacement-RotMor", "Emplacement-Rocket06-IDF",
-	"Emplacement-HvyATrocket", "Wall-RotMg", "Wall-VulcanCan", "WallTower-HvATrocket",
+	"Emplacement-Rocket06-IDF", "Emplacement-RotMor", "Emplacement-HvyATrocket",
+	"Wall-RotMg", "Wall-VulcanCan", "WallTower-HvATrocket",
 	"WallTower-HPVcannon", "Tower-Projector", "Pillbox-RotMG",
 ];
 
@@ -127,6 +127,7 @@ const PLAYER_RES_GAMMA = [
 	"R-Cyborg-Wpn-RotMG", "R-Defense-AASite-QuadRotMg", "R-Defense-Emplacement-HPVcannon",
 	"R-Defense-Howitzer", "R-Defense-HvyFlamer", "R-Defense-RotMG", "R-Defense-Wall-VulcanCan",
 	"R-Defense-WallTower-HPVcannon", "R-Defense-HvyHowitzer", "R-Defense-Wall-RotMg",
+	"R-Defense-IDFRocket",
 ];
 
 //This is used for giving allies in Gamma technology (3-b/3-2/3-c)

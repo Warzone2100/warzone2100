@@ -44,8 +44,14 @@ camAreaEvent("mockBattleTrigger", function(droid)
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxmheapv, nxmtherv, nxlscouv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), "NXCommandCenter"); //2 min
+	var list; with (camTemplates) list = [nxmheapv, nxlscouv, nxmtherv, nxlscouv];
+	var ext = {
+		limit: [5, 2, 5, 2], //paired with template list
+		alternate: true,
+		altIdx: 0
+	};
+
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), "NXCommandCenter", ext); //2 min
 }
 
 function enableAllFactories()

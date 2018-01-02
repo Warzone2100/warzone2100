@@ -2727,7 +2727,7 @@ function camSetupTransporter(x, y, x1, y1)
 
 //Setup hit and runner VTOLs. Passing in obj is optional and will automatically
 //disable the vtol spawner once that object is dead.
-function camSetVtolData(player, startPos, exitPos, templates, timer, obj)
+function camSetVtolData(player, startPos, exitPos, templates, timer, obj, extras)
 {
 	__camVtolPlayer = player;
 	__camVtolStartPosition = startPos;
@@ -2735,6 +2735,7 @@ function camSetVtolData(player, startPos, exitPos, templates, timer, obj)
 	__camVtolTemplates = templates;
 	__camVtolTimer = timer;
 	__camVtolSpawnStopObject = obj;
+	__camVtolExtras = extras;
 
 	camSetVtolSpawn(true);
 	__checkVtolSpawnObject();
@@ -2755,6 +2756,7 @@ var __camVtolExitPosition;
 var __camVtolTimer;
 var __camVtolSpawnActive;
 var __camVtolSpawnStopObject;
+var __camVtolExtras;
 
 function __checkVtolSpawnObject()
 {
@@ -2774,7 +2776,9 @@ function __checkVtolSpawnObject()
 function __camSpawnVtols()
 {
 	if (__camVtolSpawnActive === false)
+	{
 		return;
+	}
 
 	var amount = 5 + camRand(2);
 	var droids = [];
@@ -2790,10 +2794,59 @@ function __camSpawnVtols()
 		pos = __camVtolStartPosition;
 	}
 
-	//Pick some droids randomly.
-	for (var i = 0; i < amount; ++i)
+	if (!camDef(__camVtolExtras))
 	{
-		droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
+		//Pick some droids randomly.
+		for (var i = 0; i < amount; ++i)
+		{
+			droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
+		}
+	}
+	else
+	{
+		var lim = amount;
+		var alternate = false;
+		if (camDef(__camVtolExtras.alternate))
+		{
+			alternate = __camVtolExtras.alternate; //Only use one template type
+		}
+		if (!camDef(__camVtolExtras.altIdx))
+		{
+			__camVtolExtras.altIdx = 0;
+		}
+		if (camDef(__camVtolExtras.limit))
+		{
+			//support an array of limits for each template
+			if (__camVtolExtras.limit instanceof Array)
+			{
+				lim = __camVtolExtras.limit[__camVtolExtras.altIdx]; //max templates to use
+			}
+			else
+			{
+				lim = __camVtolExtras.limit;
+			}
+		}
+
+		for (var i = 0; i < lim; ++i)
+		{
+			if (!alternate)
+			{
+				droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
+			}
+			else
+			{
+				droids.push(__camVtolTemplates[__camVtolExtras.altIdx]);
+			}
+		}
+
+		if (__camVtolExtras.altIdx < __camVtolTemplates.length)
+		{
+			++__camVtolExtras.altIdx;
+		}
+		else
+		{
+			__camVtolExtras.altIdx = 0;
+		}
 	}
 
 	//...And send them.
@@ -2821,15 +2874,15 @@ function __camRetreatVtols()
 	for (var i = 0, l = vtols.length; i < l; ++i)
 	{
 		var vt = vtols[i];
-		if (!camDef(vt) || (vt.id === 0))
+		if (!camDef(vt))
+		{
 			continue;
+		}
 		for (var c = 0, d = vt.weapons.length; c < d; ++c)
 		{
-			if ((vt.order == DORDER_RTB)
-				|| (vt.weapons[c].armed < 1) || (vt.health < 40))
+			if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < 1) || (vt.health < 40))
 			{
-				orderDroidLoc(vt, DORDER_MOVE, __camVtolExitPosition.x,
-					__camVtolExitPosition.y);
+				orderDroidLoc(vt, DORDER_MOVE, __camVtolExitPosition.x, __camVtolExitPosition.y);
 				break;
 			}
 		}
@@ -3192,6 +3245,7 @@ function cam_eventStartLevel()
 	__camVtolExitPosition = {};
 	__camVtolTimer = 0;
 	__camVtolSpawnActive = false;
+	__camVtolExtras = {};
 	__camLastNexusAttack = 0;
 	__camNexusActivated = false;
 	__camNewGroupCounter = 0;

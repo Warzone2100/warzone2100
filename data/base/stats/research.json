@@ -3172,7 +3172,7 @@
         "msgName": "RES_W_SRK_AC2",
         "name": "Rocket Laser Designator",
         "requiredResearch": [
-            "R-Wpn-Cannon-Accuracy02",
+            "R-Wpn-RocketSlow-Damage04",
             "R-Wpn-RocketSlow-Accuracy01"
         ],
         "researchPoints": 4800,
@@ -3558,7 +3558,7 @@
     "R-Defense-WallTower-HvyFlamer": {
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-WallTower-HvyFlamer",
-		"keyTopic": 1,
+        "keyTopic": 1,
         "msgName": "RES_WT11_HFL",
         "name": "Inferno Hardpoint",
         "requiredResearch": [
@@ -4779,11 +4779,11 @@
     "R-Wpn-Cannon-Accuracy02": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Cannon-Accuracy02",
-        "keyTopic": 1,
         "msgName": "RES_W_CNAC2",
         "name": "Cannon Laser Designator",
-		"requiredResearch": [
-			"R-Wpn-Cannon-Accuracy01"
+        "requiredResearch": [
+             "R-Wpn-Cannon-Accuracy01",
+             "R-Wpn-Cannon-Damage04"
         ],
         "researchPoints": 4800,
         "researchPower": 150,
@@ -4802,11 +4802,11 @@
     "R-Wpn-Cannon-Damage04": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Cannon-Damage04",
+        "keyTopic": 1,
         "msgName": "RES_W_CN_D4",
         "name": "APFSDS Cannon Rounds",
         "requiredResearch": [
-            "R-Wpn-Cannon-Accuracy02",
-			"R-Wpn-Cannon-Damage03"
+            "R-Wpn-Cannon-Damage03"
         ],
         "researchPoints": 6000,
         "researchPower": 187,
@@ -5840,11 +5840,12 @@
     "R-Wpn-Rocket-Damage04": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Rocket-Damage04",
+        "keyTopic": 1,
         "msgName": "RES_W_RK_D4",
         "name": "HEAP Mini-Rockets",
         "requiredResearch": [
             "R-Wpn-Cannon-Damage04",
-			"R-Wpn-Rocket-Damage03"
+            "R-Wpn-Rocket-Damage03"
         ],
         "researchPoints": 4800,
         "researchPower": 150,
@@ -5967,7 +5968,7 @@
         "name": "HESH Rocket Warhead",
         "requiredResearch": [
             "R-Wpn-Rocket03-HvAT",
-            "R-Wpn-Rocket-Damage04",
+            "R-Wpn-Rocket-Damage06",
             "R-Wpn-RocketSlow-Damage03"
         ],
         "researchPoints": 6000,
@@ -6025,7 +6026,8 @@
         "id": "R-Wpn-RocketSlow-Damage06",
         "name": "HESH Rocket Warhead Mk3",
         "requiredResearch": [
-            "R-Wpn-RocketSlow-Damage05"
+            "R-Wpn-RocketSlow-Damage05",
+            "R-Wpn-Rocket06-IDF"
         ],
         "researchPoints": 10000,
         "researchPower": 312,
@@ -7331,7 +7333,7 @@
         "name": "HVAPFSDS Cannon Rounds",
         "requiredResearch": [
             "R-Wpn-MG-Damage08",
-			"R-Wpn-Cannon-Damage06"
+            "R-Wpn-Cannon-Damage06"
         ],
         "researchPoints": 9600,
         "researchPower": 300,

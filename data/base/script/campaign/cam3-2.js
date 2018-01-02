@@ -51,7 +51,9 @@ function playVideos()
 //Activate edge map queues and play videos, donate alpha to the player, setup reinforcements.
 camAreaEvent("phantomFacTrigger", function(droid)
 {
-	sendEdgeMapDroids();
+	queue("phantomFactoryNE", camChangeOnDiff(180000)); //3 min;
+	queue("phantomFactorySW", camChangeOnDiff(240000)); //4 min;
+	queue("phantomFactorySE", camChangeOnDiff(360000)); //6 min;
 
 	setAlliance(ALPHA, NEXUS, false);
 	playSound("pcv456.ogg"); //Incoming transmission...
@@ -89,35 +91,40 @@ function getAlphaUnitIDs()
 	}
 }
 
-function sendEdgeMapDroids()
+function phantomFactoryNE()
 {
-	const COUNT = 9 + camRand(8); // 9 - 16.
-	const EDGE = ["NE-PhantomFactory", "SW-PhantomFactory", "SE-PhantomFactory"];
-	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh];
-	if (!camDef(edgeMapIndex))
-	{
-		edgeMapIndex = 0;
-	}
+	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas, nxlflash];
+	sendEdgeMapDroids(4, "NE-PhantomFactory", list);
+	queue("phantomFactoryNE", camChangeOnDiff(180000)); //3 min;
+}
 
+function phantomFactorySW()
+{
+	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas, nxlflash];
+	sendEdgeMapDroids(6, "SW-PhantomFactory", list);
+	queue("phantomFactorySW", camChangeOnDiff(240000)); //4 min;
+}
+
+function phantomFactorySE()
+{
+	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh];
+	sendEdgeMapDroids(8 + camRand(5), "SE-PhantomFactory", list);
+	queue("phantomFactorySE", camChangeOnDiff(360000)); //6 min;
+}
+
+function sendEdgeMapDroids(droidCount, location, list)
+{
 	var droids = [];
-	for (var i = 0; i < COUNT; ++i)
+	for (var i = 0; i < droidCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
 
-	camSendReinforcement(NEXUS, camMakePos(EDGE[edgeMapIndex]), droids,
+	camSendReinforcement(NEXUS, camMakePos(location), droids,
 		CAM_REINFORCE_GROUND, {
 			data: {regroup: true, count: -1}
 		}
 	);
-
-	edgeMapIndex += 1;
-	if (edgeMapIndex === EDGE.length)
-	{
-		edgeMapIndex = 0;
-	}
-
-	queue("sendEdgeMapDroids", camChangeOnDiff(150000)); // ~2.5 min.
 }
 
 function setupPatrolGroups()
@@ -193,7 +200,12 @@ function setupPatrolGroups()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxlscouv, nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(240000)); //4 min
+	var ext = {
+		limit: [2, 4], //paired with template list
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), undefined, ext); //2 min
 }
 
 //reinforcements not available until team Alpha brief about VTOLS.
