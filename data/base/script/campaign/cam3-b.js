@@ -3,6 +3,7 @@ include("script/campaign/templates.js");
 include("script/campaign/transitionTech.js");
 
 var trapActive;
+var gammaAttackCount;
 const GAMMA = 1; // Player 1 is Gamma team.
 const NEXUS_RES = [
 	"R-Defense-WallUpgrade08", "R-Struc-Materials08", "R-Struc-Factory-Upgrade06",
@@ -106,15 +107,18 @@ function sendNXTransporter()
 		pos = "nexusWestTransportPos";
 	}
 
-	camSendReinforcement(NEXUS, camMakePos(pos), list,
-		CAM_REINFORCE_TRANSPORT, {
-			message: LZ_ALIAS + lzNum,
-			entry: { x: 63, y: 4 },
-			exit: { x: 63, y: 4 }
-		}
-	);
+	if (camDef(pos))
+	{
+		camSendReinforcement(NEXUS, camMakePos(pos), list,
+			CAM_REINFORCE_TRANSPORT, {
+				message: LZ_ALIAS + lzNum,
+				entry: { x: 63, y: 4 },
+				exit: { x: 63, y: 4 }
+			}
+		);
 
-	queue("sendNXTransporter", camChangeOnDiff(180000)); //3 min
+		queue("sendNXTransporter", camChangeOnDiff(180000)); //3 min
+	}
 }
 
 //Send Nexus land units
@@ -203,7 +207,7 @@ function trapSprung()
 	camCallOnce("activateNexusGroups");
 	enableAllFactories();
 
-	queue("sendNXlandReinforcements", camChangeOnDiff(240000)); // 4 min
+	queue("sendNXlandReinforcements", camChangeOnDiff(300000)); //5 min
 	sendNXTransporter();
 	changePlayerColour(GAMMA, NEXUS); // Black painting.
 	playSound(SYNAPTICS_ACTIVATED);
@@ -216,15 +220,21 @@ function setupCapture()
 
 function eventAttacked(victim, attacker)
 {
-	if (!trapActive && victim.player === GAMMA)
+	if (!trapActive && gammaAttackCount > 4)
 	{
 		camCallOnce("setupCapture");
+	}
+
+	if (victim.player === GAMMA && attacker.player === NEXUS)
+	{
+		gammaAttackCount = gammaAttackCount + 1;
 	}
 }
 
 function eventStartLevel()
 {
 	trapActive = false;
+	gammaAttackCount = 0;
 	const MISSION_TIME = camChangeOnDiff(1200); //20 minutes. Rescue part.
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
@@ -242,6 +252,7 @@ function eventStartLevel()
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);
 	camCompleteRequiredResearch(NEXUS_RES, GAMMA); //They get even more research.
 
+	setAlliance(GAMMA, CAM_HUMAN_PLAYER, false);
 	setAlliance(GAMMA, NEXUS, true);
 
 	camSetArtifacts({
@@ -305,6 +316,7 @@ function eventStartLevel()
 	camPlayVideos(["MB3_B_MSG", "MB3_B_MSG2"]);
 
 	changePlayerColour(GAMMA, 0);
+	setAlliance(GAMMA, CAM_HUMAN_PLAYER, true);
 
 	queue("transferPower", 3000);
 	queue("vtolAttack", camChangeOnDiff(300000)); //5 min

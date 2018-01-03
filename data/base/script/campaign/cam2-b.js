@@ -80,7 +80,12 @@ function vtolAttack()
 		"vtolAppearPosW",
 		"vtolAppearPosN",
 	];
-	camSetVtolData(THE_COLLECTIVE, POSITIONS, "vtolRemove", list, camChangeOnDiff(300000), "COCommandCenter"); //5 min
+	var ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(THE_COLLECTIVE, POSITIONS, "vtolRemove", list, camChangeOnDiff(300000), "COCommandCenter", ext); //5 min
 }
 
 function truckDefense()
