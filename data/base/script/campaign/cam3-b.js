@@ -90,9 +90,21 @@ function sendNXTransporter()
 	}
 
 	const LZ_ALIAS = "CM3B_TRANS"; //1 and 2
-	var lzNum = camRand(2) + 1;
 	var list = getDroidsForNXLZ(true);
-	var pos = (lzNum === 1) ? "nexusEastTransportPos" : "nexusWestTransportPos";
+	var lzNum;
+	var pos;
+
+	if (enumArea("NXEastBaseCleanup", NEXUS, false).length)
+	{
+		lzNum = 1;
+		pos = "nexusEastTransportPos";
+	}
+
+	if (enumArea("NXWestBaseCleanup", NEXUS, false).length && (camRand(2) || !camDef(pos)))
+	{
+		lzNum = 2;
+		pos = "nexusWestTransportPos";
+	}
 
 	camSendReinforcement(NEXUS, camMakePos(pos), list,
 		CAM_REINFORCE_TRANSPORT, {
@@ -105,7 +117,7 @@ function sendNXTransporter()
 	queue("sendNXTransporter", camChangeOnDiff(180000)); //3 min
 }
 
-//Send Nexus transport units
+//Send Nexus land units
 function sendNXlandReinforcements()
 {
 	if (!enumArea("NXWestBaseCleanup", NEXUS, false).length)
@@ -188,11 +200,10 @@ function trapSprung()
 	hackRemoveMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(5400));
-
 	camCallOnce("activateNexusGroups");
 	enableAllFactories();
 
-	sendNXlandReinforcements();
+	queue("sendNXlandReinforcements", camChangeOnDiff(240000)); // 4 min
 	sendNXTransporter();
 	changePlayerColour(GAMMA, NEXUS); // Black painting.
 	playSound(SYNAPTICS_ACTIVATED);

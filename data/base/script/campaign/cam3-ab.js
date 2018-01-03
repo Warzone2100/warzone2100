@@ -32,7 +32,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 
 function sendEdgeMapDroids()
 {
-	const COUNT = 13 + camRand(8); // 13 - 20.
+	const COUNT = 10 + camRand(6); // 10 - 15.
 	const EDGE = ["SWPhantomFactory", "NWPhantomFactory"];
 	var list; with (camTemplates) list = [
 		nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh, nxmscouh,
@@ -69,15 +69,7 @@ function sendEdgeMapDroids()
 		edgeMapCounter = 0;
 	}
 
-	//If the counter is zero, then a whole pass has completed. Then wait longer to send more.
-	if (!edgeMapCounter)
-	{
-		queue("sendEdgeMapDroids", camChangeOnDiff(240000)); // ~4 min.
-	}
-	else
-	{
-		queue("sendEdgeMapDroids", camChangeOnDiff(5000)); // 5 sec.
-	}
+	queue("sendEdgeMapDroids", camChangeOnDiff(240000)); // 4 min.
 }
 
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
@@ -148,10 +140,10 @@ function eventStartLevel()
 	winFlag = false;
 
 	vtolAttack();
-	sendEdgeMapDroids();
 	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS, true);
 
 	queue("powerTransfer", 800);
 	queue("synapticsSound", 5000);
 	queue("hackPlayer", 8000);
+	queue("sendEdgeMapDroids", 15000); // 15 sec
 }
