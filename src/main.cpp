@@ -217,19 +217,20 @@ static void getPlatformUserDir(char *const tmpstr, size_t const size)
 		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
 	}
 	else
+#elif defined(WZ_OS_UNIX)
+	if (strlcpy(tmpstr, getenv("HOME"), size))
+	{
+		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
+	}
+	else
 #endif
-		if (PHYSFS_getUserDir())
-		{
-			strlcpy(tmpstr, PHYSFS_getUserDir(), size); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
-		}
-	// If PhysicsFS fails (might happen if environment variable HOME is unset or wrong) then use the current working directory
-		else if (getCurrentDir(tmpstr, size))
+		if (getCurrentDir(tmpstr, size))
 		{
 			strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
 		}
 		else
 		{
-			debug(LOG_FATAL, "Can't get UserDir?");
+			debug(LOG_FATAL, "Can't get home directory?");
 			abort();
 		}
 }
