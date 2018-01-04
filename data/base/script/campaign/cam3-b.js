@@ -42,6 +42,16 @@ camAreaEvent("mockBattleTrigger", function(droid)
 	camCallOnce("activateNexusGroups"); //help destroy Gamma base
 });
 
+function camEnemyBaseEliminated_NXEastBase()
+{
+	camRemoveEnemyTransporterBlip();
+}
+
+function camEnemyBaseEliminated_NXWestBase()
+{
+	camRemoveEnemyTransporterBlip();
+}
+
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {

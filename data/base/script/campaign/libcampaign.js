@@ -1021,6 +1021,17 @@ function camSetBaseReinforcements(blabel, interval, callback, kind, data)
 	bi.reinforce_data = data;
 }
 
+//;; \subsection{camRemoveEnemyTransporterBlip()}
+//;; Removes the last blip that an enemy transporter left behind, if any.
+function camRemoveEnemyTransporterBlip()
+{
+	if (camDef(__camTransporterMessage))
+	{
+		hackRemoveMessage(__camTransporterMessage, PROX_MSG, CAM_HUMAN_PLAYER);
+		__camTransporterMessage = undefined;
+	}
+}
+
 //////////// privates
 
 var __camEnemyBases;
@@ -1083,10 +1094,9 @@ function __camDispatchTransporterUnsafe()
 	setNoGoArea(pos.x - 2, pos.y - 2, pos.x + 2, pos.y + 2, player);
 
 	//Delete previous enemy reinforcement transport blip
-	if (player !== CAM_HUMAN_PLAYER && camDef(__camTransporterMessage))
+	if (player !== CAM_HUMAN_PLAYER)
 	{
-		hackRemoveMessage(__camTransporterMessage, PROX_MSG, CAM_HUMAN_PLAYER);
-		__camTransporterMessage = undefined;
+		camRemoveEnemyTransporterBlip();
 	}
 
 	if(player !== CAM_HUMAN_PLAYER)
