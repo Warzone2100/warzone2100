@@ -79,7 +79,7 @@ function getDroidsForNXLZ(isTransport)
 		isTransport = false;
 	}
 
-	const COUNT = isTransport ? 10 : 8 + camRand(8);
+	const COUNT = isTransport ? 10 : 10 + camRand(6);
 	var units;
 	with (camTemplates) units = [nxcyrail, nxcyscou, nxcylas, nxmlinkh, nxmrailh, nxmsamh];
 
@@ -246,7 +246,7 @@ function eventStartLevel()
 {
 	trapActive = false;
 	gammaAttackCount = 0;
-	const MISSION_TIME = camChangeOnDiff(1200); //20 minutes. Rescue part.
+	const MISSION_TIME = camChangeOnDiff(1800); //30 minutes. Rescue part.
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 

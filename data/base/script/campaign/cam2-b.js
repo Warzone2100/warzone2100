@@ -34,6 +34,16 @@ camAreaEvent("factoryTrigger", function(droid)
 function camEnemyBaseDetected_COMiddleBase()
 {
 	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
+
+	var droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && obj.group === null;
+	});
+
+	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+		count: -1,
+		regroup: false,
+		repair: 67
+	});
 }
 
 function activateBase1Defenders()
@@ -67,9 +77,9 @@ function activateBase1Defenders2()
 function ambushPlayer()
 {
 	camManageGroup(camMakeGroup("centralBaseGroup"), CAM_ORDER_ATTACK, {
-		fallback: camMakePos("COCybFacR-b2Assembly"),
-		morale: 50,
+		count: -1,
 		regroup: false,
+		repair: 67
 	});
 }
 
@@ -231,7 +241,7 @@ function eventStartLevel()
 	camEnableFactory("COCybFac-b4");
 
 	queue("transferPower", 2000);
-	queue("ambushPlayer", 10000); // 10 sec
+	queue("ambushPlayer", 3000); // 3 sec
 	queue("vtolAttack", camChangeOnDiff(240000)); //4 min
 	queue("activateBase1Defenders2", camChangeOnDiff(1200000)); //20 min.
 	queue("activateBase1Defenders", camChangeOnDiff(1800000)); //30 min.
