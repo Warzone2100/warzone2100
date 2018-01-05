@@ -233,11 +233,15 @@ function camRemoveDuplicates(array)
 	});
 }
 
-//;; \subsection{camCountStructuresInArea(label)}
+//;; \subsection{camCountStructuresInArea(label, [player])}
 //;; Mimics wzscript's numStructsButNotWallsInArea().
-function camCountStructuresInArea(lab)
+function camCountStructuresInArea(lab, player)
 {
-	var list = enumArea(lab, CAM_HUMAN_PLAYER, false);
+	if (!camDef(player))
+	{
+		player = CAM_HUMAN_PLAYER;
+	}
+	var list = enumArea(lab, player, false);
 	var ret = 0;
 	for (var i = 0, l = list.length; i < l; ++i)
 	{

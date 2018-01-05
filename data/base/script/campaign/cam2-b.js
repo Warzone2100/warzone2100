@@ -68,7 +68,7 @@ function ambushPlayer()
 {
 	camManageGroup(camMakeGroup("centralBaseGroup"), CAM_ORDER_ATTACK, {
 		fallback: camMakePos("COCybFacR-b2Assembly"),
-		morale: 20,
+		morale: 50,
 		regroup: false,
 	});
 }

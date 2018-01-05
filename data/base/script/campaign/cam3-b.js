@@ -95,7 +95,8 @@ function getDroidsForNXLZ(isTransport)
 //Send Nexus transport units
 function sendNXTransporter()
 {
-	if (!enumArea("NXEastBaseCleanup", NEXUS, false).length && !enumArea("NXWestBaseCleanup", NEXUS, false).length)
+	if (camCountStructuresInArea("NXEastBaseCleanup", NEXUS) === 0
+		&& camCountStructuresInArea("NXWestBaseCleanup", NEXUS) === 0)
 	{
 		return; //Call off transport when both west and east Nexus bases are destroyed.
 	}
@@ -105,13 +106,13 @@ function sendNXTransporter()
 	var lzNum;
 	var pos;
 
-	if (enumArea("NXEastBaseCleanup", NEXUS, false).length)
+	if (camCountStructuresInArea("NXEastBaseCleanup", NEXUS) > 0)
 	{
 		lzNum = 1;
 		pos = "nexusEastTransportPos";
 	}
 
-	if (enumArea("NXWestBaseCleanup", NEXUS, false).length && (camRand(2) || !camDef(pos)))
+	if (camCountStructuresInArea("NXWestBaseCleanup", NEXUS) > 0 && (camRand(2) || !camDef(pos)))
 	{
 		lzNum = 2;
 		pos = "nexusWestTransportPos";
