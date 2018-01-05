@@ -5040,7 +5040,7 @@
         "name": "Superhot Flamer Gel",
         "requiredResearch": [
             "R-Wpn-Flame2",
-			"R-Wpn-Flamer-Damage03"
+            "R-Wpn-Flamer-Damage03"
         ],
         "researchPoints": 7200,
         "researchPower": 225,
@@ -5066,7 +5066,6 @@
     "R-Wpn-Flamer-Damage05": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Flamer-Damage05",
-		"keyTopic": 1,
         "name": "Superhot Flamer Gel Mk2",
         "requiredResearch": [
             "R-Wpn-Flamer-Damage04"
@@ -5125,6 +5124,7 @@
     "R-Wpn-Flamer-ROF02": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Flamer-ROF02",
+        "keyTopic": 1,
         "name": "Flamer Autoloader Mk2",
         "requiredResearch": [
             "R-Wpn-Flamer-Damage04"
@@ -5154,7 +5154,7 @@
     "R-Wpn-Flamer-ROF03": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Flamer-ROF03",
-		"keyTopic": 1,
+        "keyTopic": 1,
         "name": "Flamer Autoloader Mk3",
         "requiredResearch": [
             "R-Wpn-Flamer-ROF02"
@@ -5935,7 +5935,7 @@
         "requiredResearch": [
             "R-Wpn-Rocket02-MRL",
             "R-Sys-CBSensor-Tower01",
-            "R-Wpn-RocketSlow-ROF02"
+            "R-Wpn-RocketSlow-ROF01"
         ],
         "researchPoints": 7200,
         "researchPower": 225,
@@ -6084,6 +6084,7 @@
     "R-Wpn-RocketSlow-ROF02": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-RocketSlow-ROF02",
+        "keyTopic": 1,
         "name": "Rocket Autoloader Mk2",
         "requiredResearch": [
             "R-Wpn-RocketSlow-Damage04",
@@ -7313,7 +7314,7 @@
     "R-Wpn-Bomb04": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Bomb04",
-		"keyTopic": 1,
+        "keyTopic": 1,
         "imdName": "trmvtlin.PIE",
         "msgName": "RES_W_BMB4",
         "name": "Thermite Bomb Bay",
