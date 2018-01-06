@@ -30,10 +30,10 @@
 
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set radar colour for given terrain type.
 
-#define MAX_RADARZOOM		(16 * 4)    // 3.00x
-#define MIN_RADARZOOM		(16 * 2/4)  // 0.75x
-#define DEFAULT_RADARZOOM	(16)        // 1.00x
-#define RADARZOOM_STEP		(16 * 1/4)  // 0.25x
+#define MAX_RADARZOOM		(64)
+#define MIN_RADARZOOM		(8)
+#define DEFAULT_RADARZOOM	(32)
+#define RADARZOOM_STEP		(4)
 
 bool InitRadar();				///< Initialize minimap subsystem.
 bool ShutdownRadar();			///< Shutdown minimap subsystem.
