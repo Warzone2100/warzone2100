@@ -129,5 +129,11 @@
 		"id": 421,
 		"player": 2,
 		"type": 1
+	},
+	"object_5": {
+		"label": "COTankKillerHardpoint",
+		"id": 402,
+		"player": 2,
+		"type": 1
 	}
 }

@@ -5154,7 +5154,6 @@
     "R-Wpn-Flamer-ROF03": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Flamer-ROF03",
-        "keyTopic": 1,
         "name": "Flamer Autoloader Mk3",
         "requiredResearch": [
             "R-Wpn-Flamer-ROF02"
@@ -6115,6 +6114,7 @@
     "R-Wpn-RocketSlow-ROF03": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-RocketSlow-ROF03",
+        "keyTopic": 1,
         "name": "Rocket Autoloader Mk3",
         "requiredResearch": [
             "R-Wpn-RocketSlow-Damage05",

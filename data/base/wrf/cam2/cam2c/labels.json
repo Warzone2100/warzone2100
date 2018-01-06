@@ -223,5 +223,11 @@
 		"id": 2293,
 		"player": 2,
 		"type": 1
+	},
+	"object_10": {
+		"label": "COInfernoEmplacement-Arti",
+		"id": 4308,
+		"player": 2,
+		"type": 1
 	}
 }

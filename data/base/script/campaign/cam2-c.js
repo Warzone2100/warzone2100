@@ -287,6 +287,7 @@ function eventStartLevel()
 		"COHeavyFac-Leopard": { tech: "R-Vehicle-Body02" }, //leopard
 		"COHeavyFac-Upgrade": { tech: "R-Struc-Factory-Upgrade04" },
 		"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
+		"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
 	});
 
 	setPower(AI_POWER, THE_COLLECTIVE);

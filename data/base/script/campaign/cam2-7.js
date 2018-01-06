@@ -118,6 +118,7 @@ function eventStartLevel()
 
 	camSetArtifacts({
 		"COHeavyFac-Arti-b2": { tech: "R-Wpn-Cannon5" },
+		"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-ROF03" },
 	});
 
 	setPower(AI_POWER, THE_COLLECTIVE);
