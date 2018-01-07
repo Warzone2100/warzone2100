@@ -1730,17 +1730,19 @@ function __camTacticsTickForGroup(group)
 						continue;
 					}
 				}
-				var vt = (droid.type === DROID) && isVTOL(droid);
 				//Rearm vtols.
-				if (vt && ((Math.floor(droid.weapons[0].armed) < 1)
-					|| ((droid.order === DORDER_REARM)
-					&& (Math.ceil(droid.weapons[0].armed) < 100))))
+				if (droid.type === DROID && isVTOL(droid))
 				{
-					var pads = countStruct("A0VtolPad", droid.player);
-					if (pads && (droid.order !== DORDER_REARM))
-						orderDroid(droid, DORDER_REARM);
-					else
-						continue;
+					var arm = Math.floor(droid.weapons[0].armed);
+					var isRearming = droid.order === DORDER_REARM;
+					var health = Math.floor(droid.health);
+					if ((arm < 1) || (isRearming && (arm < 100 || health < 100)))
+					{
+						var pads = countStruct("A0VtolPad", droid.player);
+						if (pads && !isRearming)
+							orderDroid(droid, DORDER_REARM);
+						continue; //Rearming. Try not to attack stuff.
+					}
 				}
 				if (camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 				{
