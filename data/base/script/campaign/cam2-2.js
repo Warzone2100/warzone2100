@@ -80,7 +80,7 @@ camAreaEvent("wayPoint2Rad", function(droid)
 		pos: camMakePos("defensePos"),
 		regroup: false,
 		radius: 10,
-		repair: 45,
+		repair: 67,
 	});
 
 	playSound(warning);
@@ -122,7 +122,6 @@ function showGameOver()
 
 function failSequence()
 {
-	camTrace("Collective Commander escaped with artifact");
 	queue("showGameOver", 300);
 }
 
@@ -212,11 +211,13 @@ function eventStartLevel()
 		"COFactoryWest": {
 			assembly: camMakePos("westAssembly"),
 			order: CAM_ORDER_DEFEND,
-			throttle: camChangeOnDiff(50000),
+			groupSize: 5,
+			throttle: camChangeOnDiff(80000),
 			data: {
+				pos: camMakePos("westAssembly"),
 				regroup: false,
-				repair: 45,
-				radius: 15,
+				repair: 67,
+				radius: 18,
 				count: -1,
 			},
 			templates: [comtath] //Hover lancers
