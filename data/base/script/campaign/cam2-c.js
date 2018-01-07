@@ -38,16 +38,30 @@ function videoTrigger()
 }
 
 //Enable heavy factories and make groups do what they need to.
-camAreaEvent("groupTrigger", function()
+camAreaEvent("groupTrigger", function(droid)
 {
 	activateGroups();
 });
 
 //Play second video and add 30 minutes to timer when base3Trigger is crossed.
-camAreaEvent("base3Trigger", function()
+camAreaEvent("base3Trigger", function(droid)
 {
 	camCallOnce("videoTrigger");
 });
+
+//Send idle droids in this base to attack when the player spots the base
+function camEnemyBaseDetected_COAirBase()
+{
+	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && obj.group === null;
+	});
+
+	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+		count: -1,
+		regroup: false,
+		repair: 67
+	});
+}
 
 //...Or if the player destroys the VTOL base.
 function camEnemyBaseEliminated_COAirBase()
@@ -198,8 +212,8 @@ function civilianOrders()
 		}
 	}
 
-	//Play the "Civilian rescued" sound and throttle it for ten seconds.
-	if (rescued && ((lastSoundTime + 10000) < gameTime))
+	//Play the "Civilian rescued" sound and throttle it.
+	if (rescued && ((lastSoundTime + 30000) < gameTime))
 	{
 		lastSoundTime = gameTime;
 		playSound(rescueSound);
@@ -329,7 +343,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comit, cohct, comhpv, cohbbt]
+			templates: [comit, cohct, comhpv, cohbbt, comsens]
 		},
 		"COHeavyFac-Leopard": {
 			assembly: "COHeavyFac-LeopardAssembly",
@@ -341,7 +355,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comit, cohct, comhpv, cohbbt]
+			templates: [comsens, cohbbt, comhpv, cohct, comit]
 		},
 		"COCyborgFactoryL": {
 			assembly: "COCyborgFactoryLAssembly",
@@ -369,8 +383,8 @@ function eventStartLevel()
 		},
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
-			throttle: camChangeOnDiff(70000),
+			groupSize: 4,
+			throttle: camChangeOnDiff(50000),
 			data: {
 				regroup: false,
 				count: -1,
@@ -379,8 +393,8 @@ function eventStartLevel()
 		},
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
-			groupSize: 5,
-			throttle: camChangeOnDiff(70000),
+			groupSize: 4,
+			throttle: camChangeOnDiff(50000),
 			data: {
 				regroup: false,
 				count: -1,
