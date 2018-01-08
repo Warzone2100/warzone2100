@@ -3378,10 +3378,35 @@ function cam_eventMissionTimeout()
 
 function cam_eventAttacked(victim, attacker)
 {
-	if (camDef(victim) && victim &&
-	    victim.type === DROID && camDef(__camGroupInfo[victim.group]))
+	if (camDef(victim) && victim && victim.type === DROID)
 	{
-		__camGroupInfo[victim.group].lastHit = gameTime;
+		if (victim.player !== CAM_HUMAN_PLAYER && !allianceExistsBetween(CAM_HUMAN_PLAYER, victim.player))
+		{
+			//Try dynamically creating a group of nearby droids not part
+			//of a group. Only supports those who can hit ground units.
+			if (victim.group === null)
+			{
+				const DEFAULT_RADIUS = 6;
+				var loc = {x: victim.x, y: victim.y};
+				var droids = enumRange(loc.x, loc.y, DEFAULT_RADIUS, victim.player, false).filter(function(obj) {
+					return obj.type === DROID && obj.group === null && (obj.canHitGround || obj.isSensor);
+				});
+				if (droids.length === 0)
+				{
+					return;
+				}
+				camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+					count: -1,
+					regroup: false,
+					repair: 70
+				});
+			}
+
+			if (camDef(__camGroupInfo[victim.group]))
+			{
+				__camGroupInfo[victim.group].lastHit = gameTime;
+			}
+		}
 	}
 }
 
