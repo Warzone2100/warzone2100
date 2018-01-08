@@ -84,20 +84,19 @@
 	},
 	"area_6": {
 		"label": "baseCleanup",
-		"pos1": [5120, 0],
+		"pos1": [3200, 0],
 		"pos2": [7936, 3840]
 	},
 	"area_7": {
 		"label": "factoryTrigger",
 		"subscriber": 0,
-		"pos1": [0, 3500],
-		"pos2": [5312, 5200]
+		"pos1": [0, 5000],
+		"pos2": [7936, 5400]
 	},
 	"area_8": {
-		"label": "damTrigger",
-		"subscriber": 0,
-		"pos1": [5440, 6080],
-		"pos2": [5952, 7872]
+		"label": "damBaseCleanup",
+		"pos1": [5248, 4608],
+		"pos2": [6400, 5632]
 	},
 
 	"object_0": {

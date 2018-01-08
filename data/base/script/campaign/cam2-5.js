@@ -19,19 +19,35 @@ const COLLECTIVE_RES = [
 
 camAreaEvent("factoryTrigger", function(droid)
 {
-	camEnableFactory("COMediumFactory");
-	camEnableFactory("COCyborgFactoryL");
-	camEnableFactory("COCyborgFactoryR");
-
+	enableFactories();
 	camManageGroup(camMakeGroup("canalGuards"), CAM_ORDER_ATTACK, {
 		morale: 60,
-		fallback: camMakePos("mediumFactoryAssembly"),
-		repair: 30,
+		fallback: camMakePos("COMediumFactoryAssembly"),
+		repair: 67,
 		regroup: false,
 	});
 });
 
-camAreaEvent("damTrigger", function(droid)
+function camEnemyBaseEliminated_COEastBase()
+{
+	hackRemoveMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
+}
+
+//Tell everything not grouped on map to attack
+function camEnemyBaseDetected_COEastBase()
+{
+	var droids = enumArea(0, 0, mapWidth, mapHeight, THE_COLLECTIVE, false).filter(function(obj) {
+		return obj.type === DROID && obj.group === null && obj.canHitGround;
+	});
+
+	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+		count: -1,
+		regroup: false,
+		repair: 80
+	});
+}
+
+function setupDamHovers()
 {
 	camManageGroup(camMakeGroup("damGroup"), CAM_ORDER_PATROL, {
 		pos: [
@@ -41,22 +57,17 @@ camAreaEvent("damTrigger", function(droid)
 		],
 		//morale: 10,
 		//fallback: camMakePos("damWaypoint1"),
-		repair: 40,
+		repair: 67,
 		regroup: true,
 	});
-});
-
-function camEnemyBaseEliminated_COEastBase()
-{
-	hackRemoveMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
 function setupCyborgsNorth()
 {
 	camManageGroup(camMakeGroup("northCyborgs"), CAM_ORDER_ATTACK, {
 		morale: 70,
-		fallback: camMakePos("mediumFactoryAssembly"),
-		repair: 30,
+		fallback: camMakePos("COMediumFactoryAssembly"),
+		repair: 67,
 		regroup: false,
 	});
 }
@@ -70,6 +81,13 @@ function setupCyborgsEast()
 		repair: 30,
 		regroup: false,
 	});
+}
+
+function enableFactories()
+{
+	camEnableFactory("COMediumFactory");
+	camEnableFactory("COCyborgFactoryL");
+	camEnableFactory("COCyborgFactoryR");
 }
 
 function enableReinforcements()
@@ -116,6 +134,12 @@ function eventStartLevel()
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
 		},
+		"CODamBase": {
+			cleanup: "damBaseCleanup",
+			detectMsg: "C25_BASE2",
+			detectSnd: "pcv379.ogg",
+			eliminateSnd: "pcv394.ogg",
+		},
 	});
 
 	with (camTemplates) camSetFactories({
@@ -123,7 +147,7 @@ function eventStartLevel()
 			assembly: "COMediumFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(50000),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -135,7 +159,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactoryLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(30000),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -147,7 +171,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactoryRAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(30000),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -160,6 +184,8 @@ function eventStartLevel()
 	hackAddMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("enableReinforcements", 15000);
+	queue("setupDamHovers", 3000);
 	queue("setupCyborgsEast", camChangeOnDiff(180000));//3 min
+	queue("enableFactories", camChangeOnDiff(480000));//8 min
 	queue("setupCyborgsNorth", camChangeOnDiff(600000));//10 min
 }
