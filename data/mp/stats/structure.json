@@ -668,7 +668,7 @@
         ],
         "thermal": 10,
         "type": "REARM PAD",
-        "userLimits": [ 0, 50, 50 ],
+        "userLimits": [ 0, 50, 99 ],
         "width": 1
     },
     "AASite-QuadBof": {
