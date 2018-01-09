@@ -148,7 +148,10 @@ struct PathNonblockingArea
 		return x >= x1 && x < x2 && y >= y1 && y < y2;
 	}
 
-	int16_t x1, x2, y1, y2;
+	int16_t x1 = 0;
+	int16_t x2 = 0;
+	int16_t y1 = 0;
+	int16_t y2 = 0;
 };
 
 // Data structures used for pathfinding, can contain cached results.
