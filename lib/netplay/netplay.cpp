@@ -2205,6 +2205,7 @@ static void NETregisterServer(int state)
 					socketClose(rs_socket);
 					server_not_there = true;
 					rs_socket = nullptr;
+					return;
 				}
 
 				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
