@@ -97,8 +97,6 @@
 /** This instance is a global instance of RUN_DATA. It has the information of each player about retreat position and minimum moral/health for a unit to retreat to. */
 RUN_DATA	asRunData[MAX_PLAYERS];
 
-static bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order);
-
 static void orderClearDroidList(DROID *psDroid);
 
 /** Whether an order effect has been displayed
@@ -1322,9 +1320,17 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	}
 
 	// deal with a droid receiving a primary order
-	if (secondaryGotPrimaryOrder(psDroid, psOrder->type))
+	if (!isTransporter(psDroid) && psOrder->type != DORDER_NONE && psOrder->type != DORDER_STOP && psOrder->type != DORDER_GUARD)
 	{
-		psOrder->type = DORDER_NONE;
+		// reset secondary order
+		const unsigned oldState = psDroid->secondaryOrder;
+		psDroid->secondaryOrder &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
+		psDroid->secondaryOrderPending &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
+		objTrace(psDroid->id, "secondary order reset due to primary order set");
+		if (oldState != psDroid->secondaryOrder && psDroid->player == selectedPlayer)
+		{
+			intRefreshScreen();
+		}
 	}
 
 	// if this is a command droid - all it's units do the same thing
@@ -3525,39 +3531,6 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 
 	return retVal;
 }
-
-
-/** This function returns false and resets the droid's secondary order.
- * @todo this function seems strange (always return false?) and is only used once on the entire code. Consider refactoring it to something more tangible.
- */
-bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
-{
-	UDWORD	oldState;
-
-	if (isTransporter(psDroid))
-	{
-		return false;
-	}
-
-	if (order != DORDER_NONE &&
-	    order != DORDER_STOP &&
-	    order != DORDER_GUARD)
-	{
-		//reset 2ndary order
-		oldState = psDroid->secondaryOrder;
-		psDroid->secondaryOrder &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
-		psDroid->secondaryOrderPending &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
-
-		if ((oldState != psDroid->secondaryOrder) &&
-		    (psDroid->player == selectedPlayer))
-		{
-			intRefreshScreen();
-		}
-	}
-
-	return false;
-}
-
 
 /** This function assigns all droids of the group to the state.
  * @todo this function runs through all the player's droids. Consider something more efficient to select a group.

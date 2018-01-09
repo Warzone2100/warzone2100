@@ -566,13 +566,10 @@ void loadMapPreview(bool hideInterface)
 		debug(LOG_ERROR, "Failed to load terrain types file: [%s]", aFileName);
 		return;
 	}
-	if (pFileData)
+	if (!loadTerrainTypeMap(pFileData, fileSize))
 	{
-		if (!loadTerrainTypeMap(pFileData, fileSize))
-		{
-			debug(LOG_ERROR, "Failed to load terrain types");
-			return;
-		}
+		debug(LOG_ERROR, "Failed to load terrain types");
+		return;
 	}
 
 	// load the map data
