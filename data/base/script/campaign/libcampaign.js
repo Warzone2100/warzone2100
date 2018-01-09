@@ -3014,7 +3014,10 @@ function camHackIntoPlayer(player, to)
 		camTrace("stealing object: " + obj.name);
 		if (obj.type === STRUCTURE && obj.stattype === HQ)
 		{
-			camSafeRemoveObject(obj, false);
+			if (!donateObject(obj, to))
+			{
+				camSafeRemoveObject(obj, false);
+			}
 			if (player === CAM_HUMAN_PLAYER)
 			{
 				setMiniMap(false);
@@ -3023,7 +3026,10 @@ function camHackIntoPlayer(player, to)
 		}
 		else
 		{
-			donateObject(obj, to);
+			if (!donateObject(obj, to))
+			{
+				camSafeRemoveObject(obj, true); //Explode it then.
+			}
 		}
      }
 }

@@ -13,7 +13,7 @@ const NEXUS_RES = [
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
 var edgeMapIndex;
-var edgeMapCounter;
+var edgeMapCounter; //how many Nexus reinforcement runs have happened.
 var winFlag;
 
 //Remove Nexus VTOL droids.
@@ -32,7 +32,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 
 function sendEdgeMapDroids()
 {
-	const COUNT = 10 + camRand(6); // 10 - 15.
+	const COUNT = 16 + camRand(5); // 16 - 20.
 	const EDGE = ["SWPhantomFactory", "NWPhantomFactory"];
 	var list; with (camTemplates) list = [
 		nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh, nxmscouh,
@@ -51,32 +51,32 @@ function sendEdgeMapDroids()
 		droids.push(list[camRand(list.length)]);
 	}
 
-	camSendReinforcement(NEXUS, camMakePos(EDGE[edgeMapIndex]), list,
+	camSendReinforcement(NEXUS, camMakePos(EDGE[edgeMapIndex]), droids,
 		CAM_REINFORCE_GROUND, {
-			data: {regroup: true, count: -1}
+			data: {regroup: false, count: -1}
 		}
 	);
 
 	edgeMapIndex += 1;
+	edgeMapCounter += 1;
 	if (edgeMapIndex === EDGE.length)
 	{
 		edgeMapIndex = 0;
 	}
 
-	edgeMapCounter += 1;
-	if (edgeMapCounter === EDGE.length)
-	{
-		edgeMapCounter = 0;
-	}
-
-	queue("sendEdgeMapDroids", camChangeOnDiff(240000)); // 4 min.
+	queue("sendEdgeMapDroids", camChangeOnDiff(180000)); // 3 min.
 }
 
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxlscouv, nxmtherv, nxmheapv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(240000)); //4 min
+	var list; with (camTemplates) list = [nxlscouv, nxmtherv, nxlscouv, nxmheapv];
+	var ext = {
+		limit: [2, 4, 2, 4],
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), undefined, ext); //2 min
 }
 
 function powerTransfer()
@@ -89,6 +89,10 @@ function eventResearched(research, structure, player)
 {
 	if (research.name === "R-Sys-Resistance-Upgrade01")
 	{
+		camSetNexusState(false);
+	}
+	if (research.name === "R-Sys-Resistance-Upgrade03")
+	{
 		winFlag = true;
 	}
 }
@@ -98,21 +102,23 @@ function hackPlayer()
 	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
 	if (camGetNexusState())
 	{
-		queue("hackPlayer", 6000);
+		queue("hackPlayer", 5000);
 	}
 }
 
 function synapticsSound()
 {
 	playSound(SYNAPTICS_ACTIVATED);
+	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
 }
 
+//winFlag is set in eventResearched.
 function resistanceResearched()
 {
-	if (winFlag)
+	const MIN_EDGE_COUNT = 15;
+	if (winFlag && edgeMapCounter >= MIN_EDGE_COUNT)
 	{
-		camSetNexusState(false);
-		return true; //Set in eventResearched().
+		return true;
 	}
 }
 
@@ -140,10 +146,9 @@ function eventStartLevel()
 	winFlag = false;
 
 	vtolAttack();
-	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS, true);
 
 	queue("powerTransfer", 800);
-	queue("synapticsSound", 5000);
+	queue("synapticsSound", 2500);
 	queue("hackPlayer", 8000);
 	queue("sendEdgeMapDroids", 15000); // 15 sec
 }
