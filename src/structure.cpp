@@ -6657,7 +6657,6 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 	for (STRUCTURE *psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_REARM_PAD
-		    && psTarget == nullptr
 		    && (!bClear || clearRearmPad(psStruct)))
 		{
 			xdiff = (SDWORD)psStruct->pos.x - cx;
