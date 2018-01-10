@@ -61,8 +61,6 @@ win32/libs/png/*-stamp
 win32/libs/png/libpng-*/
 win32/libs/popt/*-stamp
 win32/libs/popt/popt-*/
-win32/libs/quesoglc/*-stamp
-win32/libs/quesoglc/quesoglc-*/
 win32/libs/sdl/SDL-*/
 win32/libs/sdl/*-stamp
 win32/libs/theora/*-stamp

@@ -12,7 +12,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: physfs-devel openal-devel bison flex zip
 BuildRequires: libjpeg-devel libpng-devel libogg-devel libvorbis-devel
-BuildRequires: quesoglc-devel popt-devel gettext
+BuildRequires: popt-devel gettext
 BuildRequires: automake >= 1.8
 BuildRequires: desktop-file-utils
 

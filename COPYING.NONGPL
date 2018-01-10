@@ -15,8 +15,6 @@ data/base/texpages/page-25-sky-urban.png
 	- BSD, Copyright (c) 2002, Dr Brian Gladman, Worcester, UK
 3rdparty/miniupnpc/*
 	- BSD, copyright Thomas Bernard (http://miniupnp.free.fr)
-3rdparty/quesoglc/*
-	- LGPL 2.1, copyright Bertrand Coconnier
 data/base/texpages/page-6-features-rockies.png
 	- CC BY SA 3.0	- Copyright (c) 2009 <Mysteryem>
 data/base/texpages/page-17-droid-weapons.png
