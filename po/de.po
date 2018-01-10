@@ -6,15 +6,15 @@
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
-# Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2017.
+# Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2018.
 # raymond, 2011.
-# Frank Ehlers <ehlersfrank@gmail.com>, 2017.
+# Frank Ehlers <ehlersfrank@gmail.com>, 2017-2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-12-28 00:06+0100\n"
-"PO-Revision-Date: 2017-06-25 18:57+0200\n"
+"PO-Revision-Date: 2018-01-10 19:41+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: de\n"
@@ -1501,13 +1501,11 @@ msgstr "CB-Sensorverbesserung"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
 msgstr "CB-Sensorverbesserung Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
 msgstr "CB-Sensorverbesserung Mk3"
 
@@ -1518,13 +1516,11 @@ msgstr "VTOL-CB-Sensorverbesserung"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
 msgstr "VTOL-CB-Sensorverbesserung Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
 msgstr "VTOL-CB-Sensorverbesserung Mk3"
 
@@ -3227,7 +3223,7 @@ msgstr "Produktion (F1)"
 #: data/base/script/tutorial.js:471
 #: data/mp/multiplay/skirmish/rules.js:29
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Produktion - bauen Sie zuerst eine Fabrik"
 
 #: data/base/script/rules.js:34
 #: data/base/script/rules.js:96
@@ -3240,9 +3236,8 @@ msgstr "Forschung (F2)"
 #: data/base/script/rules.js:38
 #: data/base/script/tutorial.js:472
 #: data/mp/multiplay/skirmish/rules.js:37
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "Das Forschungsmodul erweitert Forschungseinrichtungen"
+msgstr "Forschung - bauen Sie zuerst eine Forschungseinrichtung"
 
 #: data/base/script/rules.js:42
 #: data/base/script/rules.js:97
@@ -3257,7 +3252,7 @@ msgstr "Konstruktion (F3)"
 #: data/base/script/tutorial.js:473
 #: data/mp/multiplay/skirmish/rules.js:45
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Konstruktion - stellen Sie zuerst Baueinheiten her"
 
 #: data/base/script/rules.js:50
 #: data/base/script/rules.js:98
@@ -3271,7 +3266,7 @@ msgstr "Entwurf (F4)"
 #: data/base/script/rules.js:54
 #: data/mp/multiplay/skirmish/rules.js:53
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "Entwurf - errichten Sie zuerst ein Hauptquartier"
 
 #: data/base/script/rules.js:56
 #: data/base/script/rules.js:99
@@ -3292,7 +3287,7 @@ msgstr "Commander (F6)"
 #: data/base/script/tutorial.js:476
 #: data/mp/multiplay/skirmish/rules.js:62
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Commander - stellen Sie zuerst Commander her"
 
 #: data/base/script/tutorial.js:26
 msgid "In this training session you'll learn how to build an effective base"
@@ -3315,7 +3310,6 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "Der Ölbohrturm ist außer Betrieb. Bauen Sie ein Kraftwerk, um das Öl in Energie umzuwandeln"
 
 #: data/base/script/tutorial.js:32
-#, fuzzy
 msgid "Left click the flashing build icon"
 msgstr "Linksklicken Sie auf das aufleuchtende KONSTRUKTION-Symbol"
 
@@ -3937,7 +3931,7 @@ msgstr "Eure Belohnung ist bereits auf dem Weg."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr "Die Anhänger des Projekts fliehen und stehlen dabei eure Techologie."
+msgstr "Die Anhänger des Projekts fliehen und stehlen dabei eure Technologie."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
