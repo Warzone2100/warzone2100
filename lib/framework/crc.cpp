@@ -328,12 +328,20 @@ private:
 				return curveData_secp256r1();
 			default:
 				debug(LOG_FATAL, "Unimplemented curve ID");
+				#pragma GCC diagnostic push
+				// for gcc < 5 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55805
+				#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 				return ecCurveData { };
+				#pragma GCC diagnostic pop
 		}
 	}
 	static ecCurveData curveData_secp224r1()
 	{
+		#pragma GCC diagnostic push
+		// for gcc < 5 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55805
+		#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 		ecCurveData data = { };
+		#pragma GCC diagnostic pop
 		data.curveID = secp224r1;
 		data.prelude = wz_secp_privateKey_format::secp224r1::prelude;
 		data.prelude_len = sizeof(wz_secp_privateKey_format::secp224r1::prelude);
@@ -347,7 +355,11 @@ private:
 	}
 	static ecCurveData curveData_secp256r1()
 	{
+		#pragma GCC diagnostic push
+		// for gcc < 5 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55805
+		#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 		ecCurveData data = { };
+		#pragma GCC diagnostic pop
 		data.curveID = secp256r1;
 		data.prelude = wz_secp_privateKey_format::secp256r1::prelude;
 		data.prelude_len = sizeof(wz_secp_privateKey_format::secp256r1::prelude);
