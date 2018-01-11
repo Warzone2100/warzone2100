@@ -119,8 +119,6 @@ function checkCrashedTeam()
 {
 	if (getObject("transporter") === null)
 	{
-		const BADSND = "pcv622.ogg";
-		playSound(BADSND);
 		return false;
 	}
 

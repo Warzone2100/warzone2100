@@ -177,7 +177,6 @@ function checkMissileSilos()
 	if (!countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER)
 		&& !countStruct("NX-ANTI-SATSite", SILO_PLAYER))
 	{
-		playSound("pcv622.ogg"); //Objective failed.
 		return false;
 	}
 

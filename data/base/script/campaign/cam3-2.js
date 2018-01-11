@@ -254,7 +254,6 @@ function alphaTeamAlive()
 
 		if (!alphaAlive)
 		{
-			playSound("pcv622.ogg"); //objective destroyed.
 			return false;
 		}
 

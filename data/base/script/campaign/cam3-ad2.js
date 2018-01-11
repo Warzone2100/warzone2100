@@ -243,7 +243,6 @@ function checkMissileSilos()
 
 	if (!isCheating() && !countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER))
 	{
-		playSound("pcv622.ogg"); //Objective failed.
 		return false;
 	}
 }

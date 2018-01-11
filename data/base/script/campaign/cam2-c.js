@@ -106,18 +106,6 @@ function activateGroups()
 		regroup: false,
 	});
 
-	/*
-	camManageGroup(camMakeGroup("defensegroup1"), CAM_ORDER_PATROL, {
-		pos: [
-			camMakePos("defensePoint1"),
-			camMakePos("defensePoint2"),
-		],
-		//morale: 50,
-		interval: 25000,
-		regroup: false,
-	});
-	*/
-
 	camManageGroup(camMakeGroup("vtolGroup1"), CAM_ORDER_PATROL, {
 		pos: [
 			//camMakePos("VtolWayPoint1"),

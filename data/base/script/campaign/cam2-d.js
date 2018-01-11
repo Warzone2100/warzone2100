@@ -55,19 +55,9 @@ function captureUplink()
 	//setAlliance(UPLINK, THE_COLLECTIVE, false);
 }
 
-//Extra win condition callback. Failure code works, however the uplink is far too
-//fragile for this to work properly. Thus it is unused for now.
+//Extra win condition callback.
 function checkNASDACentral()
 {
-	/*
-	if(getObject("uplink") == null)
-	{
-		const BADSND = "pcv622.ogg"	//"Objective destroyed"
-		playSound(BADSND);
-		return false;
-	}
-	*/
-
 	var enemyStuff = enumArea("uplinkClearArea", THE_COLLECTIVE, false);
 	if(!enemyStuff.length)
 	{
