@@ -3228,14 +3228,14 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "Damage",
-                "value": 30
+                "value": 20
             },
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "RadiusDamage",
-                "value": 30
+                "value": 20
             }
         ],
         "statID": "Rocket-LtA-T",
@@ -3256,14 +3256,14 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "Damage",
-                "value": 30
+                "value": 20
             },
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "RadiusDamage",
-                "value": 30
+                "value": 20
             }
         ],
         "statID": "Rocket-LtA-T",
@@ -3285,14 +3285,14 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "Damage",
-                "value": 30
+                "value": 20
             },
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "RadiusDamage",
-                "value": 30
+                "value": 20
             }
         ],
         "statID": "Rocket-LtA-T",
@@ -5978,14 +5978,14 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "Damage",
-                "value": 30
+                "value": 20
             },
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "RadiusDamage",
-                "value": 30
+                "value": 20
             }
         ],
         "statID": "Rocket-LtA-T",
@@ -6006,14 +6006,14 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "Damage",
-                "value": 30
+                "value": 20
             },
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "RadiusDamage",
-                "value": 30
+                "value": 20
             }
         ],
         "statID": "Rocket-LtA-T",
@@ -6036,14 +6036,14 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "Damage",
-                "value": 30
+                "value": 20
             },
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "RadiusDamage",
-                "value": 30
+                "value": 20
             }
         ],
         "statID": "Rocket-LtA-T",
