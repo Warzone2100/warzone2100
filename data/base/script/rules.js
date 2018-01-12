@@ -67,6 +67,7 @@ function setMainReticule()
 
 function setupGame()
 {
+	setLimits();
 	if (tilesetType == "ARIZONA")
 	{
 		setCampaignNumber(1);
@@ -115,7 +116,31 @@ function eventGameInit()
 	queue("resetPower", 1000)
 }
 
-function resetPower() {
+function setLimits()
+{
+	setDroidLimit(selectedPlayer, 100, DROID_ANY);
+	setDroidLimit(selectedPlayer, 10, DROID_COMMAND);
+	setDroidLimit(selectedPlayer, 15, DROID_CONSTRUCT);
+
+	for (var i = 0; i < maxPlayers; ++i)
+	{
+		setStructureLimits("A0PowerGenerator", 5, i);
+		setStructureLimits("A0ResourceExtractor", 200, i);
+		setStructureLimits("A0ResearchFacility", 5, i);
+		setStructureLimits("A0LightFactory", 5, i);
+		setStructureLimits("A0CyborgFactory", 5, i);
+		setStructureLimits("A0VTolFactory1", 5, i);
+		//non human players get five of these
+		setStructureLimits("A0CommandCentre", i === selectedPlayer ? 1 : 5, i);
+		setStructureLimits("A0ComDroidControl", i === selectedPlayer ? 1 : 5, i);
+		setStructureLimits("A0CommandCentreNP", 5, i);
+		setStructureLimits("A0CommandCentreCO", 5, i);
+		setStructureLimits("A0CommandCentreNE", 5, i);
+	}
+}
+
+function resetPower()
+{
 	var powerLimit = 999999;
 	var powerProductionRate = 100;
 
@@ -166,18 +191,6 @@ function eventStartLevel()
 	// Disable by default
 	setMiniMap(false);
 	setDesign(false);
-	setDroidLimit(selectedPlayer, 100, DROID_ANY);
-	setDroidLimit(selectedPlayer, 10, DROID_COMMAND);
-	setDroidLimit(selectedPlayer, 15, DROID_CONSTRUCT);
-
-	setStructureLimits("A0PowerGenerator", 5, selectedPlayer);
-	setStructureLimits("A0ResourceExtractor", 200, selectedPlayer);
-	setStructureLimits("A0ResearchFacility", 5, selectedPlayer);
-	setStructureLimits("A0LightFactory", 5, selectedPlayer);
-	setStructureLimits("A0CommandCentre", 1, selectedPlayer);
-	setStructureLimits("A0ComDroidControl", 1, selectedPlayer);
-	setStructureLimits("A0CyborgFactory", 5, selectedPlayer);
-	setStructureLimits("A0VTolFactory1", 5, selectedPlayer);
 
 	var structlist = enumStruct(selectedPlayer, HQ);
 	for (var i = 0; i < structlist.length; i++)
