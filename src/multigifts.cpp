@@ -122,8 +122,8 @@ bool recvGift(NETQUEUE queue)
 		break;
 	}
 
-	// If we are on the receiving end play an audio alert
-	if (to == selectedPlayer)
+	// If we are on the receiving end play an audio alert.
+	if (bMultiPlayer && to == selectedPlayer)
 	{
 		audio_QueueTrack(audioTrack);
 	}

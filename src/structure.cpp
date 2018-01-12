@@ -6807,8 +6807,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			}
 
 			//check through the 'attackPlayer' players list of structures to see if any are targetting it
-			for (psStruct = apsStructLists[attackPlayer]; psStruct != nullptr; psStruct =
-			         psStruct->psNext)
+			for (psStruct = apsStructLists[attackPlayer]; psStruct != nullptr; psStruct = psStruct->psNext)
 			{
 				if (psStruct->psTarget[0] == psStructure)
 				{
@@ -6861,16 +6860,14 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			case REF_POWER_GEN:
 			case REF_RESEARCH:
 				//build the module for powerGen and research
-				buildStructure(psModule, psNewStruct->pos.x, psNewStruct->pos.y,
-				               attackPlayer, false);
+				buildStructure(psModule, psNewStruct->pos.x, psNewStruct->pos.y, attackPlayer, false);
 				break;
 			case REF_FACTORY:
 			case REF_VTOL_FACTORY:
 				//build the appropriate number of modules
 				while (capacity)
 				{
-					buildStructure(psModule, psNewStruct->pos.x, psNewStruct->pos.y,
-					               attackPlayer, false);
+					buildStructure(psModule, psNewStruct->pos.x, psNewStruct->pos.y, attackPlayer, false);
 					capacity--;
 				}
 				break;
@@ -6891,25 +6888,9 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 		}
 
 		if (!bMultiPlayer)
-
 		{
-			//inform selectedPlayer that takeover has happened
 			if (originalPlayer == selectedPlayer)
 			{
-				if (wallDefenceStruct(psNewStruct->pStructureType))
-				{
-
-					audio_QueueTrackPos(ID_SOUND_NEXUS_DEFENCES_ABSORBED,
-					                    psNewStruct->pos.x, psNewStruct->pos.y, psNewStruct->pos.z);
-
-				}
-				else
-				{
-
-					audio_QueueTrackPos(ID_SOUND_NEXUS_STRUCTURE_ABSORBED,
-					                    psNewStruct->pos.x, psNewStruct->pos.y, psNewStruct->pos.z);
-
-				}
 				//make sure this structure is visible to selectedPlayer if the structure used to be selectedPlayers'
 				psNewStruct->visible[selectedPlayer] = UBYTE_MAX;
 			}
