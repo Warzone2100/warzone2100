@@ -8,8 +8,8 @@
 		"pos": [11136, 12800]
 	},
 	"position_2": {
-		"label": "vtolAppearPosW",
-		"pos": [8896, 8512]
+		"label": "vtolAppearPos",
+		"pos": [1000, 1000]
 	},
 	"position_3": {
 		"label": "COHeavyFacL-b1Assembly",
@@ -93,11 +93,7 @@
 	},
 	"position_23": {
 		"label": "vtolRemove",
-		"pos": [8576, 9500]
-	},
-	"position_24": {
-		"label": "vtolAppearPosN",
-		"pos": [8576, 1152]
+		"pos": [128, 128]
 	},
 
 	"area_0": {
@@ -199,7 +195,7 @@
 	"radius_0": {
 		"label": "vtolRemoveZone",
 		"subscriber": 2,
-		"pos": [8576, 9500],
+		"pos": [128, 128],
 		"radius": 300
 	}
 }

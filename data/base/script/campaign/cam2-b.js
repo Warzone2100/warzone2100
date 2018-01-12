@@ -15,11 +15,10 @@ const COLLECTIVE_RES = [
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if ((droid.player === THE_COLLECTIVE) && isVTOL(droid))
+	if (isVTOL(droid))
 	{
 		camSafeRemoveObject(droid, false);
 	}
-
 	resetLabel("vtolRemoveZone");
 });
 
@@ -86,16 +85,12 @@ function ambushPlayer()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
-	const POSITIONS = [
-		"vtolAppearPosW",
-		"vtolAppearPosN",
-	];
 	var ext = {
 		limit: [4, 4], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(THE_COLLECTIVE, POSITIONS, "vtolRemove", list, camChangeOnDiff(300000), "COCommandCenter", ext); //5 min
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(300000), "COCommandCenter", ext); //5 min
 }
 
 function truckDefense()
