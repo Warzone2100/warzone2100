@@ -730,7 +730,7 @@ void readAIs()
 		sstrcpy(ai.vlo, aiconf.value("vlo", "").toString().toUtf8().constData());
 		sstrcpy(ai.js, aiconf.value("js", "").toString().toUtf8().constData());
 		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toUtf8().constData());
-		if (strcmp(ai.name, "Nexus") == 0)
+		if (strcmp(ai.name, "Nullbot") == 0)
 		{
 			std::vector<AIDATA>::iterator it;
 			it = aidata.begin();
