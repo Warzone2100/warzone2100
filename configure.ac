@@ -500,7 +500,6 @@ AC_CONFIG_FILES([Makefile
 		data/music/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
-		tests/Makefile
 		3rdparty/miniupnpc/Makefile
 		3rdparty/micro-ecc/Makefile
 		3rdparty/sha2/Makefile

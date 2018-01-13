@@ -25,8 +25,7 @@ SUBDIRS = \
 	po \
 	doc \
 	icons \
-	pkg/nsis \
-	tests
+	pkg/nsis
 
 dist_doc_DATA = \
 	AUTHORS \
