@@ -81,9 +81,6 @@ static std::vector<SPOTTER *> apsInvisibleViewers;
 
 #define MIN_VIS_HEIGHT 80
 
-static int *gNumWalls = nullptr;
-static Vector2i *gWall = nullptr;
-
 // forward declarations
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val);
 
@@ -487,14 +484,14 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	}
 
 	/* First see if the target is in sensor range */
-	int dist = iHypot((psTarget->pos - psViewer->pos).xy);
+	const int dist = iHypot((psTarget->pos - psViewer->pos).xy);
 	if (dist == 0)
 	{
 		return UBYTE_MAX;	// Should never be on top of each other, but ...
 	}
 
-	MAPTILE *psTile = mapTile(map_coord(psTarget->pos.x), map_coord(psTarget->pos.y));
-	bool jammed = psTile->jammerBits & ~alliancebits[psViewer->player];
+	const MAPTILE *psTile = mapTile(map_coord(psTarget->pos.x), map_coord(psTarget->pos.y));
+	const bool jammed = psTile->jammerBits & ~alliancebits[psViewer->player];
 
 	// Special rule for VTOLs, as they are not affected by ECM
 	if (((psTarget->type == OBJ_DROID && isVtolDroid((DROID *)psTarget))
@@ -525,38 +522,10 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 // Find the wall that is blocking LOS to a target (if any)
 STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget)
 {
-	int numWalls = 0;
-	Vector2i wall;
-
-	// HACK Using globals to not clutter visibleObject() interface too much
-	gNumWalls = &numWalls;
-	gWall = &wall;
-
-	visibleObject(psViewer, psTarget, true);
-
-	gNumWalls = nullptr;
-	gWall = nullptr;
-
-	// see if there was a wall in the way
-	if (numWalls > 0)
-	{
-		Vector2i tile = map_coord(wall);
-		unsigned int player;
-
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			STRUCTURE *psWall;
-
-			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
-			{
-				if (map_coord(psWall->pos.xy) == tile)
-				{
-					return psWall;
-				}
-			}
-		}
-	}
-
+	// TBD - reimplement this function; the previous implementation ended up
+	// doing nothing due to changes in other code. The perils of doing magic
+	// by globals - all dependencies are sometimes quite hard to see. Broken
+	// in commit 55a6259b121515b2d0ca9b2c580361dca970171d
 	return nullptr;
 }
 
@@ -575,8 +544,7 @@ bool hasSharedVision(unsigned viewer, unsigned ally)
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
 	//forward out vision to our allies
-	int ally;
-	for (ally = 0; ally < MAX_PLAYERS; ++ally)
+	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
 		if (hasSharedVision(viewer, ally))
 		{
@@ -588,8 +556,7 @@ static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX
 static void setSeenByInstantly(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)
 {
 	//forward out vision to our allies
-	int ally;
-	for (ally = 0; ally < MAX_PLAYERS; ++ally)
+	for (int ally = 0; ally < MAX_PLAYERS; ++ally)
 	{
 		if (hasSharedVision(viewer, ally))
 		{
