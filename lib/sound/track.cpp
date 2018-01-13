@@ -115,6 +115,10 @@ unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 	{
 		// No pre-assigned ID available, produce one
 		trackID = sound_GetAvailableID();
+		if (trackID == SAMPLE_NOT_ALLOCATED)
+		{
+			return 0;
+		}
 	}
 
 	if (g_apTrack[trackID] != nullptr)

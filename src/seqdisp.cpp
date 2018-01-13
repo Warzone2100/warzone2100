@@ -591,7 +591,7 @@ bool seq_AnySeqLeft()
 	int nextSeq = currentPlaySeq + 1;
 
 	//check haven't reached end
-	if (nextSeq > MAX_SEQ_LIST)
+	if (nextSeq >= MAX_SEQ_LIST)
 	{
 		return false;
 	}
