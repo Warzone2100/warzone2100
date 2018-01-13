@@ -52,7 +52,6 @@ function captureUplink()
 	const GOODSND = "pcv621.ogg";	//"Objective captured"
 	playSound(GOODSND);
 	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	//setAlliance(UPLINK, THE_COLLECTIVE, false);
 }
 
 //Extra win condition callback.

@@ -331,7 +331,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comit, cohct, comhpv, cohbbt, comsens]
+			templates: [comorb, comit, cohct, comhpv, cohbbt, comsens]
 		},
 		"COHeavyFac-Leopard": {
 			assembly: "COHeavyFac-LeopardAssembly",
@@ -343,7 +343,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comsens, cohbbt, comhpv, cohct, comit]
+			templates: [comsens, cohbbt, comhpv, cohct, comit, comorb]
 		},
 		"COCyborgFactoryL": {
 			assembly: "COCyborgFactoryLAssembly",

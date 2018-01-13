@@ -2520,10 +2520,14 @@ function __camGameWon()
 	}
 }
 
+//NOTE: Do not count cyborg factory here since combat engineer does not exist
+//in campaign at the moment.
 function __camPlayerDead()
 {
-	if (countStruct("A0LightFactory") + countStruct("A0CyborgFactory") > 0)
+	if (countStruct("A0LightFactory") > 0)
+	{
 		return false;
+	}
 	return (countDroid(DROID_CONSTRUCT) === 0);
 }
 
