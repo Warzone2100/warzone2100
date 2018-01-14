@@ -538,12 +538,6 @@ static void pie_DrawShadows()
 
 void pie_RemainingPasses()
 {
-	GL_DEBUG("Remaining passes - shadows");
-	// Draw shadows
-	if (shadows)
-	{
-		pie_DrawShadows();
-	}
 	// Draw models
 	// TODO, sort list to reduce state changes
 	GL_DEBUG("Remaining passes - opaque models");
@@ -551,6 +545,12 @@ void pie_RemainingPasses()
 	{
 		pie_SetShaderStretchDepth(shape.stretch);
 		pie_Draw3DShape2(shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+	}
+	GL_DEBUG("Remaining passes - shadows");
+	// Draw shadows
+	if (shadows)
+	{
+		pie_DrawShadows();
 	}
 	// Draw translucent models last
 	// TODO, sort list by Z order to do translucency correctly
