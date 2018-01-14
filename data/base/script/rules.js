@@ -67,7 +67,6 @@ function setMainReticule()
 
 function setupGame()
 {
-	setLimits();
 	if (tilesetType == "ARIZONA")
 	{
 		setCampaignNumber(1);
@@ -191,6 +190,7 @@ function eventStartLevel()
 	// Disable by default
 	setMiniMap(false);
 	setDesign(false);
+	setLimits();
 
 	var structlist = enumStruct(selectedPlayer, HQ);
 	for (var i = 0; i < structlist.length; i++)

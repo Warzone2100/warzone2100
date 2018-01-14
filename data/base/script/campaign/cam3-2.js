@@ -44,6 +44,7 @@ camAreaEvent("rescueTrigger", function(droid)
 		fallback: camMakePos("healthRetreatPos")
 	});
 	//Donate All of alpha to the player.
+	phantomFactorySE();
 	setAlliance(ALPHA, NEXUS, false);
 	camAbsorbPlayer(ALPHA, CAM_HUMAN_PLAYER);
 	queue("getAlphaUnitIDs", 2000);
@@ -60,7 +61,6 @@ function playVtolWarningVideo()
 camAreaEvent("phantomFacTrigger", function(droid)
 {
 	vtolAttack();
-	phantomFactorySE();
 	playSound("pcv456.ogg"); //Incoming transmission...
 	queue("playVtolWarningVideo", 2500);
 	queue("enableReinforcements", 5000);
