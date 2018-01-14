@@ -14,7 +14,9 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" ST
   add_custom_command(
     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
     COMMAND "${CMAKE_SOURCE_DIR}/build_tools/autorevision"
-    ARGS "-t" "h" "-o" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" ">" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h")
+    ARGS "-t" "h" "-o" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" ">" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    )
 endif()
 
 add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc")
