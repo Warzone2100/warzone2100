@@ -8,7 +8,7 @@ subdir = po
 #top_builddir = ..
 
 # These options get passed to xgettext.
-XGETTEXT_OPTIONS = --from-code=UTF-8 --no-wrap --width=1 --keyword=_ --keyword=N_ --keyword=P_:1c,2 --keyword=NP_:1c,2
+XGETTEXT_OPTIONS = --language=C++ --from-code=UTF-8 --no-wrap --width=1 --keyword=_ --keyword=N_ --keyword=P_:1c,2 --keyword=NP_:1c,2
 # --nowrap and --width=1 are needed so that msges are not broken up,
 #   but there is only one source reference on each line (while gettext would have more on one for greater widths)
 
