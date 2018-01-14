@@ -4704,8 +4704,8 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 "Erro ao conectar com o servidor de lobby: %s. \n"
-"\vTenha certeza de que a porta %d está aberta para conexões de entrada. \n"
-"\vSe você está usando um roteador, configure-o para usar UPnP,\n"
+"Tenha certeza de que a porta %d está aberta para conexões de entrada. \n"
+"Se você está usando um roteador, configure-o para usar UPnP,\n"
 "ou encaminhe a porta ao seu sistema."
 
 #: lib/netplay/netplay.cpp:2866
