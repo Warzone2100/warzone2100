@@ -9,6 +9,8 @@ AM_CFLAGS = $(WZ_CFLAGS) $(WZ_C99FLAGS) -UDEBUG
 
 noinst_LIBRARIES = libmicroecc.a
 noinst_HEADERS = \
+	curve-specific.inc \
+	platform-specific.inc \
 	types.h \
 	uECC_vli.h \
 	uECC.h
