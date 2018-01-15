@@ -12,7 +12,6 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var edgeMapIndex;
 var edgeMapCounter; //how many Nexus reinforcement runs have happened.
 var winFlag;
 
@@ -38,32 +37,25 @@ function sendEdgeMapDroids()
 		nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh, nxmscouh,
 		nxmsamh, nxmstrike,
 	];
-
-	if (!camDef(edgeMapIndex) || !camDef(edgeMapCounter))
+	var droids = [];
+	
+	if (!camDef(edgeMapCounter))
 	{
-		edgeMapIndex = 0;
 		edgeMapCounter = 0;
 	}
 
-	var droids = [];
 	for (var i = 0; i < COUNT; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
 
-	camSendReinforcement(NEXUS, camMakePos(EDGE[edgeMapIndex]), droids,
+	camSendReinforcement(NEXUS, camMakePos(EDGE[camRand(EDGE.length)]), droids,
 		CAM_REINFORCE_GROUND, {
 			data: {regroup: false, count: -1}
 		}
 	);
 
-	edgeMapIndex += 1;
 	edgeMapCounter += 1;
-	if (edgeMapIndex === EDGE.length)
-	{
-		edgeMapIndex = 0;
-	}
-
 	queue("sendEdgeMapDroids", camChangeOnDiff(180000)); // 3 min.
 }
 

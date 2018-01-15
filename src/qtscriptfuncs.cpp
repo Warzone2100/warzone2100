@@ -4488,6 +4488,13 @@ static QScriptValue js_setCampaignNumber(QScriptContext *context, QScriptEngine 
 	return QScriptValue();
 }
 
+//-- \subsection{getMissionType()}
+//-- Return the current mission type. (3.2.4+ only)
+static QScriptValue js_getMissionType(QScriptContext *context, QScriptEngine *)
+{
+	return (int)mission.type;
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -5540,6 +5547,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("restoreLimboMissionData", engine->newFunction(js_restoreLimboMissionData));
 	engine->globalObject().setProperty("getMultiTechLevel", engine->newFunction(js_getMultiTechLevel));
 	engine->globalObject().setProperty("setCampaignNumber", engine->newFunction(js_setCampaignNumber));
+	engine->globalObject().setProperty("getMissionType", engine->newFunction(js_getMissionType));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

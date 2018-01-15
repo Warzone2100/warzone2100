@@ -43,7 +43,7 @@ camAreaEvent("rescueTrigger", function(droid)
 		morale: 90,
 		fallback: camMakePos("healthRetreatPos")
 	});
-	//Donate All of alpha to the player.
+	//Activate edge map queue and donate all of alpha to the player.
 	phantomFactorySE();
 	setAlliance(ALPHA, NEXUS, false);
 	camAbsorbPlayer(ALPHA, CAM_HUMAN_PLAYER);
@@ -57,7 +57,7 @@ function playVtolWarningVideo()
 	camPlayVideos("MB3_2_MSG3");
 }
 
-//Activate edge map queues and play videos, donate alpha to the player, setup reinforcements.
+//Play videos, donate alpha to the player and setup reinforcements.
 camAreaEvent("phantomFacTrigger", function(droid)
 {
 	vtolAttack();
@@ -204,7 +204,7 @@ function setupPatrolGroups()
 	});
 }
 
-//Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
+//Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [nxlscouv, nxmtherv];
@@ -216,15 +216,17 @@ function vtolAttack()
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), undefined, ext); //2 min
 }
 
-//reinforcements not available until team Alpha brief about VTOLS.
+//Reinforcements not available until team Alpha brief about VTOLS.
 function enableReinforcements()
 {
 	const REINFORCEMENT_TIME = 180; //3 minute.
 	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM3A-B", {
 		area: "RTLZ",
+		message: "C32_LZ",
 		reinforcements: REINFORCEMENT_TIME,
-		callback: "alphaTeamAlive"
+		callback: "alphaTeamAlive",
+		retlz: true
 	});
 }
 
@@ -234,9 +236,6 @@ function alphaTeamAlive()
 	{
 		var alphaAlive = false;
 		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-			return obj.type === DROID;
-		});
-		var allDroidsAtLZ = enumArea("RTLZ", CAM_HUMAN_PLAYER, false).filter(function(obj) {
 			return obj.type === DROID;
 		});
 
@@ -252,14 +251,13 @@ function alphaTeamAlive()
 			}
 		}
 
-		if (!alphaAlive)
+		if (alphaAlive === false)
 		{
 			return false;
 		}
 
-		if (alphaAlive && (alive.length === allDroidsAtLZ.length))
+		if (alphaAlive === true && alive.length > 0)
 		{
-			enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);
 			return true;
 		}
 	}
@@ -276,8 +274,10 @@ function eventStartLevel()
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM3A-B", {
 		area: "RTLZ",
+		message: "C32_LZ",
 		reinforcements: -1,
-		callback: "alphaTeamAlive"
+		callback: "alphaTeamAlive",
+		retlz: true
 	});
 
 	centreView(startpos.x, startpos.y);

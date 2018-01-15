@@ -61,6 +61,7 @@ function setupPatrolGroups()
 function enableAllFactories()
 {
 	camEnableFactory("NXbase1HeavyFacArti");
+	camEnableFactory("NXsouthCybFac");
 	camEnableFactory("NXcybFacArti");
 	camEnableFactory("NXvtolFacArti");
 }
@@ -121,8 +122,6 @@ function betaAlive()
 	}
 }
 
-
-//Vtol factory this time.
 function eventStartLevel()
 {
 	var startpos = getObject("startPosition");
@@ -173,6 +172,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"NXbase1HeavyFacArti": {
+			assembly: "NXHeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(50000),
@@ -183,7 +183,20 @@ function eventStartLevel()
 			},
 			templates: [nxmrailh, nxlflash, nxmlinkh] //nxmsamh
 		},
+		"NXsouthCybFac": {
+			assembly: "NXsouthCybFacAssembly",
+			order: CAM_ORDER_ATTACK,
+			groupSize: 4,
+			throttle: camChangeOnDiff(30000),
+			data: {
+				regroup: false,
+				repair: 40,
+				count: -1,
+			},
+			templates: [nxcyrail, nxcyscou, nxcylas]
+		},
 		"NXcybFacArti": {
+			assembly: "NXcybFacArtiAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(30000),
@@ -195,6 +208,7 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NXvtolFacArti": {
+			assembly: "NXvtolAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(40000),

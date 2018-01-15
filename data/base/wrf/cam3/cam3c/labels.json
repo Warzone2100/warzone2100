@@ -31,6 +31,22 @@
 		"label": "eastRidgeGammaBase",
 		"pos": [2112, 22208]
 	},
+	"position_8": {
+		"label": "NXHeavyAssembly",
+		"pos": [6592, 22464]
+	},
+	"position_9": {
+		"label": "NXcybFacArtiAssembly",
+		"pos": [3776, 17600]
+	},
+	"position_10": {
+		"label": "NXsouthCybFacAssembly",
+		"pos": [6592, 23232]
+	},
+	"position_11": {
+		"label": "NXvtolAssembly",
+		"pos": [4288, 21314]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -54,8 +70,8 @@
 	},
 	"area_4": {
 		"label": "limboDroidLZ",
-		"pos1": [1024, 17536],
-		"pos2": [1280, 17792]
+		"pos1": [384, 17920],
+		"pos2": [896, 18688]
 	},
 	"area_5": {
 		"label": "NEgroup",
@@ -84,7 +100,7 @@
 	},
 	"area_10": {
 		"label": "southBaseCleanup",
-		"pos1": [5568, 21952],
+		"pos1": [5376, 21760],
 		"pos2": [8000, 24896]
 	},
 

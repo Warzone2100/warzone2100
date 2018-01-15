@@ -3008,7 +3008,6 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 	if (psD->player == selectedPlayer && to != selectedPlayer && !bMultiPlayer)
 	{
 		scoreUpdateVar(WD_UNITS_LOST);
-		audio_QueueTrackPos(ID_SOUND_NEXUS_UNIT_ABSORBED, psD->pos.x, psD->pos.y, psD->pos.z);
 	}
 	// make the old droid vanish (but is not deleted until next tick)
 	vanishDroid(psD);

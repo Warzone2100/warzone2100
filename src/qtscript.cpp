@@ -600,8 +600,6 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	{
 		engine->globalObject().setProperty("difficulty", (int)getDifficultyLevel(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
-	//== \item[levelType] The type of the current level.
-	engine->globalObject().setProperty("levelType", (int)mission.type, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[mapName] The name of the current map.
 	engine->globalObject().setProperty("mapName", QString(game.map), QScriptValue::ReadOnly | QScriptValue::Undeletable);  // QString cast to work around bug in Qt5 QScriptValue(char *) constructor.
 	//== \item[tilesetType] The area name of the map.

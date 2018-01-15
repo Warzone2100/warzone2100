@@ -3,13 +3,13 @@
 // * Enable unit design and minimap only when an HQ exists
 receiveAllEvents(true); //Needed to allow enemy research to apply to them
 
-var mainReticule = true;
 var allowDesign = false;
 
 function setMainReticule()
 {
 	var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
 	var offRes = enumStructOffWorld(selectedPlayer, "A0ResearchFacility");
+	var offCr = enumStructOffWorld(selectedPlayer, "A0ComDroidControl");
 	var fCount = 0;
 	var facs = ["A0LightFactory", "A0CyborgFactory", "A0VTolFactory1"];
 
@@ -17,11 +17,15 @@ function setMainReticule()
 	{
 		var f = facs[i];
 		var offWorldCount = enumStructOffWorld(selectedPlayer, f);
-		fCount = fCount + countStruct(f) + (offWorldCount != null ? offWorldCount.length : 0);
+		fCount = fCount + countStruct(f) + (offWorldCount !== null ? offWorldCount.length : 0);
+		if (fCount > 0)
+		{
+			break; //found a factory
+		}
 	}
 
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	if (fCount > 0 && levelType != LDS_EXPAND_LIMBO)
+	if (fCount > 0 && getMissionType() != LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 	}
@@ -29,7 +33,7 @@ function setMainReticule()
 	{
 		setReticuleButton(1, _("Manufacture - build factory first"), "", "");
 	}
-	if (countStruct("A0ResearchFacility") + (offRes != null ? offRes.length : 0) > 0 && levelType != LDS_EXPAND_LIMBO)
+	if (countStruct("A0ResearchFacility") + (offRes !== null ? offRes.length : 0) > 0 && getMissionType() != LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	}
@@ -45,7 +49,7 @@ function setMainReticule()
 	{
 		setReticuleButton(3, _("Build - manufacture constructor droids first"), "", "");
 	}
-	if (allowDesign == true || (offHQ != null ? offHQ.length > 0 : false))
+	if (allowDesign == true || (offHQ !== null ? offHQ.length > 0 : false))
 	{
 		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
 	}
@@ -54,7 +58,7 @@ function setMainReticule()
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
 	}
 	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
-	if (countDroid(DROID_COMMAND, selectedPlayer) > 0)
+	if (countDroid(DROID_COMMAND, selectedPlayer) > 0 && countStruct("A0ComDroidControl") + (offCr !== null ? offCr.length : 0) > 0)
 	{
 		setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	}
@@ -62,7 +66,6 @@ function setMainReticule()
 	{
 		setReticuleButton(6, _("Commanders - manufacture commanders first"), "", "");
 	}
-	mainReticule = true; // main reticule window is open
 }
 
 function setupGame()
@@ -205,86 +208,35 @@ function eventStartLevel()
 	}
 
 	resetPower();
+	setTimer("setMainReticule", 800);
 }
 
 function eventDroidBuilt(droid, structure)
 {
-	var update_reticule = false;
-
 	if (droid.player == selectedPlayer && droid.type == DROID
 	    && (droid.droidType == DROID_CONSTRUCT || droid.droidType == DROID_COMMAND))
 	{
 		update_reticule = true;
 	}
-
-	if (mainReticule && update_reticule)
-	{
-		setMainReticule();
-	}
 }
 
 function eventStructureBuilt(struct)
 {
-	var update_reticule = false;
-
 	if (struct.player == selectedPlayer && struct.type == STRUCTURE && struct.stattype == HQ)
 	{
 		setMiniMap(true); // show minimap
 		setDesign(true); // permit designs
 		allowDesign = true;
-		update_reticule = true;
-	}
-
-	if (struct.player == selectedPlayer && struct.type == STRUCTURE
-	    && (struct.stattype == RESEARCH_LAB || struct.stattype == CYBORG_FACTORY
-	        || struct.stattype == VTOL_FACTORY || struct.stattype == FACTORY))
-	{
-		update_reticule = true;
-	}
-
-	if (mainReticule && update_reticule)
-	{
-		setMainReticule();
 	}
 }
 
 function eventDestroyed(victim)
 {
-	var update_reticule = false;
-
 	if (victim.player == selectedPlayer && victim.type == STRUCTURE && victim.stattype == HQ && !enumStruct(selectedPlayer, HQ).length)
 	{
 		setMiniMap(false); // hide minimap if HQ is destroyed and no other HQs are present
 		setDesign(false); // and disallow design
 		allowDesign = false;
-		update_reticule = true;
-	}
-
-	if (victim.player == selectedPlayer && victim.type == STRUCTURE
-	    && (victim.stattype == RESEARCH_LAB || victim.stattype == CYBORG_FACTORY
-	        || victim.stattype == VTOL_FACTORY || victim.stattype == FACTORY))
-	{
-		update_reticule = true;
-	}
-
-	if (victim.player == selectedPlayer && victim.type == DROID
-	    && (victim.droidType == DROID_CONSTRUCT || victim.droidType == DROID_COMMAND))
-	{
-		update_reticule = true;
-	}
-
-	if (mainReticule && update_reticule)
-	{
-		setMainReticule();
-	}
-}
-
-//The mission may not start with any constructors until they come from a transporter.
-function eventTransporterLanded(transport)
-{
-	if (transport.player == 0)
-	{
-		queue("setMainReticule", 1000);
 	}
 }
 

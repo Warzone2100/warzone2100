@@ -2633,8 +2633,9 @@ function __camVictoryOffworld()
 			}
 
 			//Missions that are not won based on artifact count (see missions 2-1 and 3-2).
+			//If either forceLZ or destroyAll is true then ignore this.
 			var arti = camGetArtifacts();
-			if(arti.length === 0)
+			if (arti.length === 0 && !forceLZ && !destroyAll)
 			{
 				__camGameWon();
 				return;
@@ -2931,12 +2932,12 @@ const UNIT_NEUTRALIZE = "untnut.ogg";
 //Play a random laugh.
 function camNexusLaugh()
 {
-	if (camRand(101) < 35)
+	if (camRand(101) < 45)
 	{
 		var rnd = camRand(3) + 1;
 		var snd;
 
-		if (!rnd)
+		if (rnd === 0)
 		{
 			snd = LAUGH1;
 		}
@@ -3299,10 +3300,12 @@ function cam_eventDestroyed(obj)
 {
 	__camCheckPlaceArtifact(obj);
 	if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
+	{
 		__camCheckDeadTruck(obj);
+	}
 
 	//Nexus neutralize sounds.
-	if (__camNexusActivated && (camRand(101) < 35) && (obj.player === CAM_HUMAN_PLAYER))
+	if (__camNexusActivated === true && camRand(101) < 75 && obj.player === CAM_HUMAN_PLAYER)
 	{
 		var snd;
 		if (obj.type === STRUCTURE)
@@ -3316,7 +3319,7 @@ function cam_eventDestroyed(obj)
 				snd = STRUCTURE_NEUTRALIZE;
 			}
 		}
-		else if (obj.tpye === DROID)
+		else if (obj.type === DROID)
 		{
 			snd = UNIT_NEUTRALIZE;
 		}
@@ -3324,8 +3327,8 @@ function cam_eventDestroyed(obj)
 		if (camDef(snd))
 		{
 			playSound(snd);
-			queue("camNexusLaugh", 3000 + camRand(3000));
 		}
+		queue("camNexusLaugh", 1500);
 	}
 }
 
@@ -3399,7 +3402,11 @@ function cam_eventAttacked(victim, attacker)
 				const DEFAULT_RADIUS = 6;
 				var loc = {x: victim.x, y: victim.y};
 				var droids = enumRange(loc.x, loc.y, DEFAULT_RADIUS, victim.player, false).filter(function(obj) {
-					return obj.type === DROID && obj.group === null && (obj.canHitGround || obj.isSensor);
+					return obj.type === DROID
+						&& obj.group === null
+						&& (obj.canHitGround || obj.isSensor)
+						&& obj.droidType !== DROID_CONSTRUCT
+						&& !camIsTransporter(obj);
 				});
 				if (droids.length === 0)
 				{
@@ -3457,10 +3464,11 @@ function cam_eventGameLoaded()
 }
 
 //Plays Nexus sounds if nexusActivated is true.
-function cam_eventObjectTranfer(obj, from)
+function cam_eventObjectTransfer(obj, from)
 {
-	if ((from === CAM_HUMAN_PLAYER) && __camNexusActivated)
+	if (from === CAM_HUMAN_PLAYER && __camNexusActivated === true)
 	{
+		var loc = {x: obj.x, y: obj.y, z: obj.z};
 		var snd;
 		if (obj.type === STRUCTURE)
 		{
@@ -3476,24 +3484,24 @@ function cam_eventObjectTranfer(obj, from)
 			{
 				snd = STRUCTURE_ABSORBED;
 			}
+
+			if (obj.stattype === FACTORY
+				|| obj.stattype === CYBORG_FACTORY
+				|| obj.stattype === VTOL_FACTORY)
+			{
+				//TODO: add to the factory list.
+			}
 		}
 		else if (obj.type === DROID)
 		{
 			snd = UNIT_ABSORBED;
 		}
 
-		if (obj.stattype === FACTORY
-			|| obj.stattype === CYBORG_FACTORY
-			|| obj.stattype === VTOL_FACTORY)
-		{
-			//TODO: add to the factory list.
-		}
-
 		if (camDef(snd))
 		{
 			playSound(snd);
-			queue("camNexusLaugh", 3000 + camRand(3000));
 		}
+		queue("camNexusLaugh", 1500);
 	}
 }
 
