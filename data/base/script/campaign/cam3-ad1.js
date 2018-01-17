@@ -242,6 +242,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"NXbase1VtolFacArti": {
+			assembly: "NxVtolAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
@@ -253,6 +254,7 @@ function eventStartLevel()
 			templates: [nxmheapv, nxlscouv] //nxlpulsev, nxmtherv
 		},
 		"NXbase2HeavyFac": {
+			assembly: "NxHeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(50000),
@@ -264,6 +266,7 @@ function eventStartLevel()
 			templates: [nxmrailh, nxmscouh, nxmpulseh, nxmlinkh] //nxmsamh
 		},
 		"NXcyborgFac1": {
+			assembly: "NXcyborgFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(30000),
@@ -275,6 +278,7 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NXcyborgFac2Arti": {
+			assembly: "NXcyborgFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(30000),

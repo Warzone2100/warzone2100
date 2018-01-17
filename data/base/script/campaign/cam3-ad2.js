@@ -71,7 +71,7 @@ function phantomFactorySpawn()
 	switch (camRand(3))
 	{
 		case 0:
-			with (camTemplates) list = [nxcylas, nxcyrail, nxcyscou];
+			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
 			chosenFactory = "phantomFacWest";
 			break;
 		case 1:
@@ -83,7 +83,7 @@ function phantomFactorySpawn()
 			chosenFactory = "phantomFacMiddle";
 			break;
 		default:
-			with (camTemplates) list = [nxcylas, nxcyrail, nxcyscou];
+			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
 			chosenFactory = "phantomFacWest";
 	}
 

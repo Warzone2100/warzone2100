@@ -35,7 +35,23 @@
 		"label": "gammaBasePos",
 		"pos": [1600, 23488]
 	},
-
+	"position_9": {
+		"label": "NxVtolAssembly",
+		"pos": [832, 30272]
+	},
+	"position_10": {
+		"label": "NxHeavyAssembly",
+		"pos": [5696, 30144]
+	},
+	"position_11": {
+		"label": "NXcyborgFac1Assembly",
+		"pos": [5824, 30912]
+	},
+	"position_12": {
+		"label": "NXcyborgFac2Assembly",
+		"pos": [5696, 30912]
+	},
+	
 	"area_0": {
 		"label": "landingZone",
 		"pos1": [7040, 15232],
