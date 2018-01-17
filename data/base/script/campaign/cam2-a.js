@@ -188,7 +188,7 @@ function cam2Setup()
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering02",
 		"R-Defense-WallUpgrade03", "R-Struc-Materials03",
 		"R-Struc-Factory-Upgrade03", "R-Struc-Factory-Cyborg-Upgrade03",
-		"R-Vehicle-Engine03", "R-Vehicle-Metals04", "R-Cyborg-Metals04",
+		"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
 		"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon-Damage03",
 		"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
 		"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
