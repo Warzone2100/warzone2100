@@ -47,16 +47,10 @@ camAreaEvent("NWDefenseZone", function(droid) {
 	});
 });
 
-function setupPatrolGroups()
+function setupGroups()
 {
-	camManageGroup(camMakeGroup("NXVtolBaseCleanup"), CAM_ORDER_DEFEND, {
-		pos: [
-			camMakePos("westMainEntrance"),
-			camMakePos("vtolBaseEntrance"),
-		],
-		radius: 18,
-		fallback: camMakePos("missileSiloRetreat"),
-		morale: 90,
+	camManageGroup(camMakeGroup("NXVtolBaseCleanup"), CAM_ORDER_ATTACK, {
+		count: -1,
 		regroup: false
 	});
 
@@ -77,7 +71,7 @@ function setupPatrolGroups()
 	});
 }
 
-//Activate all trigger factories after 10 minutes if not done already.
+//Activate all trigger factories if not done already.
 function enableAllFactories()
 {
 	camEnableFactory("NXbase2HeavyFac");
@@ -101,9 +95,12 @@ function vaporizeTarget()
 			"y": camRand(Math.floor(mapLimit)),
 		};
 
-		if (Math.floor(mapLimit) < mapHeight)
+		if (Math.floor(mapLimit) < Math.floor(mapHeight / 2))
 		{
-			mapLimit = mapLimit + 0.178; //sector clear; move closer
+			//total tiles = 256. 256 / 2 = 128 tiles. 128 / 60 = 2.13 tiles per minute.
+			//2.13 / 60 = 0.0355 tiles per second. 0.0355 * 10 = ~0.36 tiles every 10 seconds.
+			//This assumes an hour to completely cover the upper half of the home map.
+			mapLimit = mapLimit + 0.36; //sector clear; move closer
 		}
 	}
 	else
@@ -123,7 +120,7 @@ function vaporizeTarget()
 	}
 
 	laserSatFuzzyStrike(target);
-	queue("vaporizeTarget", 5000);
+	queue("vaporizeTarget", 10000);
 }
 
 //A simple way to fire the LasSat with a chance of missing.
@@ -211,7 +208,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS); //LZ for cam3-4s.
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
-	setMissionTime(7200); //2 hr
+	setMissionTime(camChangeOnDiff(7200)); //2 hr
 
 	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
@@ -251,7 +248,7 @@ function eventStartLevel()
 				repair: 67,
 				count: -1,
 			},
-			templates: [nxmheapv, nxlscouv] //nxlpulsev, nxmtherv
+			templates: [nxmheapv, nxlscouv]
 		},
 		"NXbase2HeavyFac": {
 			assembly: "NxHeavyAssembly",
@@ -263,7 +260,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [nxmrailh, nxmscouh, nxmpulseh, nxmlinkh] //nxmsamh
+			templates: [nxmrailh, nxmscouh, nxmpulseh, nxmlinkh]
 		},
 		"NXcyborgFac1": {
 			assembly: "NXcyborgFac1Assembly",
@@ -297,6 +294,6 @@ function eventStartLevel()
 	camEnableFactory("NXcyborgFac1");
 
 	queue("vaporizeTarget", 2000);
-	queue("setupPatrolGroups", 10000); // 10 sec.
-	queue("enableAllFactories", camChangeOnDiff(600000)); // 10 min.
+	queue("setupGroups", 5000); // 5 sec
+	queue("enableAllFactories", camChangeOnDiff(300000)); // 5 min.
 }
