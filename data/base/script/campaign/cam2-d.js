@@ -39,7 +39,7 @@ function truckDefense()
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("uplinkPos"));
 }
 
-//Triggers after 1 minute. Then attacks every 2 minutes until HQ is destroyed.
+//Attacks every 2 minutes until HQ is destroyed.
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colatv];
@@ -57,15 +57,15 @@ function captureUplink()
 //Extra win condition callback.
 function checkNASDACentral()
 {
-	var enemyStuff = enumArea("uplinkClearArea", THE_COLLECTIVE, false);
-	if(!enemyStuff.length)
+	if (getObject("uplink") === null)
 	{
-		camCallOnce("captureUplink");
+		return false; //It was destroyed
 	}
 
-	if(!enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length)
+	if (camCountStructuresInArea("uplinkClearArea", THE_COLLECTIVE) === 0)
 	{
-		return true; //Must destroy everything to win.
+		camCallOnce("captureUplink");
+		return true;
 	}
 }
 
@@ -76,16 +76,20 @@ function enableReinforcements()
 		area: "RTLZ",
 		message: "C2D_LZ",
 		reinforcements: 300, //5 min
-		callback: "checkNASDACentral"
+		callback: "checkNASDACentral",
+		annihilate: true,
+		retlz: true
 	});
 }
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S",{
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
 		area: "RTLZ",
 		message: "C2D_LZ",
-		reinforcements: -1
+		reinforcements: -1,
+		annihilate: true,
+		retlz: true
 	});
 
 	var startpos = getObject("startPosition");
@@ -124,7 +128,7 @@ function eventStartLevel()
 			assembly: "COHeavyFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(60000),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -154,5 +158,5 @@ function eventStartLevel()
 	camEnableFactory("COSouthCyborgFactory");
 
 	queue("enableReinforcements", 22000);
-	queue("vtolAttack", 60000);
+	queue("vtolAttack", 120000); // 2 min
 }

@@ -370,6 +370,22 @@ function camMakeGroup(what, filter)
 	camDebug("Cannot parse", what);
 }
 
+//;; \subsection{camBreakAlliances()}
+//;; Break alliances between all players. 
+function camBreakAlliances()
+{
+	for (var i = 0; i < CAM_MAX_PLAYERS; ++i)
+	{
+		for (var c = 0; c < CAM_MAX_PLAYERS; ++c)
+		{
+			if (i !== c && allianceExistsBetween(i, c) === true)
+			{
+				setAlliance(i, c, false);
+			}
+		}
+	}
+}
+
 //////////// privates
 
 var __camCalledOnce = {};
@@ -2323,16 +2339,20 @@ function camNextLevel(nextLevel)
 		{
 			var bonus = 110;
 			if (difficulty === HARD)
+			{
 				bonus = 105;
+			}
 			else if (difficulty === INSANE)
+			{
 				bonus = 100;
-
+			}
 			camTrace("Bonus time", bonusTime);
 			setPowerModifier(bonus); // Bonus percentage for completing fast
 			extraPowerTime(bonusTime);
 			setPowerModifier(100);
 		}
 	}
+	camBreakAlliances();
 	loadLevel(nextLevel);
 }
 
