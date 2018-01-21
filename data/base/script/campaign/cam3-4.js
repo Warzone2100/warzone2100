@@ -223,7 +223,7 @@ function eventStartLevel()
 		"NX-NEFactory": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(30000),
 			data: {
 				regroup: false,
 				repair: 45,

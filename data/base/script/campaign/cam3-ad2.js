@@ -19,6 +19,7 @@ const VTOL_POSITIONS = [
 ];
 var winFlag;
 var mapLimit;
+var videoInfo; //holds some info about when to play a video.
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -118,15 +119,9 @@ function vaporizeTarget()
 		{
 			target.y = Math.floor(mapLimit);
 		}
-
-		if (Math.floor(mapLimit) < mapHeight)
-		{
-			mapLimit = mapLimit + 0.165; //sector clear; move closer
-		}
 	}
 	else
 	{
-		// prefer droids over structures
 		var dr = targets.filter(function(obj) { return obj.type === DROID; });
 		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
 
@@ -134,17 +129,32 @@ function vaporizeTarget()
 		{
 			target = camMakePos(dr[0]);
 		}
-		else if (st.length)
+		if (st.length && !camRand(2)) //chance to focus on a structure
 		{
 			target = camMakePos(st[0]);
 		}
 	}
 
+
 	//Stop firing LasSat if the third missile unlock code was researched.
 	if (winFlag === false)
 	{
+		//Droid or structure was destroyed before firing so pick a new one.
+		if (!camDef(target))
+		{
+			queue("vaporizeTarget", 100);
+			return;
+		}
+		if (Math.floor(mapLimit) < mapHeight)
+		{
+			//Need to travel about 119 tiles in ~1 hour so:
+			//119 tiles / 60 minutes = 1.983 tiles per minute
+			//1.983 tile per minute / 60 seconds = 0.03305 tiles per second
+			//0.03305 * 10 sec = ~0.33 tiles per blast at 10 second intervals.
+			mapLimit = mapLimit + 0.33; //sector clear; move closer
+		}
 		laserSatFuzzyStrike(target);
-		queue("vaporizeTarget", 5000);
+		queue("vaporizeTarget", 10000);
 	}
 }
 
@@ -196,23 +206,21 @@ function laserSatFuzzyStrike(obj)
 //Play videos and allow winning once the final one is researched.
 function eventResearched(research, structure, player)
 {
-	if (research.name === "R-Sys-Resistance")
+	for (var i = 0, l = videoInfo.length; i < l; ++i)
 	{
-		camPlayVideos("MB3_AD2_MSG3");
-		enableResearch("R-Comp-MissileCodes01", CAM_HUMAN_PLAYER);
-	}
-	else if (research.name === "R-Comp-MissileCodes01")
-	{
-		camPlayVideos("MB3_AD2_MSG4");
-	}
-	else if (research.name === "R-Comp-MissileCodes02")
-	{
-		camPlayVideos("MB3_AD2_MSG5");
-	}
-	else if (research.name === "R-Comp-MissileCodes03")
-	{
-		camPlayVideos("MB3_AD2_MSG6");
-		winFlag = true;
+		if (research.name === videoInfo[i].res && !videoInfo[i].played)
+		{
+			videoInfo[i].played = true;
+			camPlayVideos(videoInfo[i].video);
+			if (videoInfo[i].res === "R-Sys-Resistance")
+			{
+				enableResearch("R-Comp-MissileCodes01", CAM_HUMAN_PLAYER);
+			}
+			else if (videoInfo[i].res === "R-Comp-MissileCodes03")
+			{
+				winFlag = true;
+			}
+		}
 	}
 }
 
@@ -253,6 +261,12 @@ function eventStartLevel()
 	var lz = getObject("landingZone");
 	mapLimit = 137.0;
 	winFlag = false;
+	videoInfo = [
+		{played: false, video: "MB3_AD2_MSG3", res: "R-Sys-Resistance"},
+		{played: false, video: "MB3_AD2_MSG4", res: "R-Comp-MissileCodes01"},
+		{played: false, video: "MB3_AD2_MSG5", res: "R-Comp-MissileCodes02"},
+		{played: false, video: "MB3_AD2_MSG6", res: "R-Comp-MissileCodes03"},
+	];
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_3_4S", {
 		callback: "checkMissileSilos"

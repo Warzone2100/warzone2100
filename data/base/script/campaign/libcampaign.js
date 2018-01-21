@@ -371,7 +371,7 @@ function camMakeGroup(what, filter)
 }
 
 //;; \subsection{camBreakAlliances()}
-//;; Break alliances between all players. 
+//;; Break alliances between all players.
 function camBreakAlliances()
 {
 	for (var i = 0; i < CAM_MAX_PLAYERS; ++i)
@@ -1627,6 +1627,12 @@ function __camTacticsTick()
 	var dt = CAM_TICKS_PER_FRAME;
 	for (var group in __camGroupInfo)
 	{
+		//Remove groups with no droids.
+		if (enumGroup(group).length === 0)
+		{
+			camStopManagingGroup(group);
+			break;
+		}
 		queue("__camTacticsTickForGroup", dt, group);
 		dt += CAM_TICKS_PER_FRAME;
 	}

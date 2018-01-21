@@ -94,14 +94,6 @@ function vaporizeTarget()
 			"x": camRand(mapWidth),
 			"y": camRand(Math.floor(mapLimit)),
 		};
-
-		if (Math.floor(mapLimit) < Math.floor(mapHeight / 2))
-		{
-			//total tiles = 256. 256 / 2 = 128 tiles. 128 / 60 = 2.13 tiles per minute.
-			//2.13 / 60 = 0.0355 tiles per second. 0.0355 * 10 = ~0.36 tiles every 10 seconds.
-			//This assumes an hour to completely cover the upper half of the home map.
-			mapLimit = mapLimit + 0.36; //sector clear; move closer
-		}
 	}
 	else
 	{
@@ -119,6 +111,19 @@ function vaporizeTarget()
 		}
 	}
 
+	//Droid or structure was destroyed before firing so pick a new one.
+	if (!camDef(target))
+	{
+		queue("vaporizeTarget", 100);
+		return;
+	}
+	if (Math.floor(mapLimit) < Math.floor(mapHeight / 2))
+	{
+		//total tiles = 256. 256 / 2 = 128 tiles. 128 / 60 = 2.13 tiles per minute.
+		//2.13 / 60 = 0.0355 tiles per second. 0.0355 * 10 = ~0.36 tiles every 10 seconds.
+		//This assumes an hour to completely cover the upper half of the home map.
+		mapLimit = mapLimit + 0.36; //sector clear; move closer
+	}
 	laserSatFuzzyStrike(target);
 	queue("vaporizeTarget", 10000);
 }
