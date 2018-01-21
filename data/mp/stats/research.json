@@ -7,6 +7,9 @@
         "requiredResearch": [
             "R-Struc-CommandRelay"
         ],
+        "requiredStructures": [
+            "A0ComDroidControl"
+        ],
         "researchPoints": 1200,
         "researchPower": 37,
         "resultComponents": [
@@ -23,6 +26,9 @@
         "requiredResearch": [
             "R-Comp-CommandTurret01",
             "R-Struc-Research-Upgrade07"
+        ],
+        "requiredStructures": [
+            "A0ComDroidControl"
         ],
         "researchPoints": 5000,
         "researchPower": 450,
@@ -1427,6 +1433,9 @@
         "name": "Heavy Machinegun Guard Tower",
         "requiredResearch": [
             "R-Wpn-MG1Mk1"
+        ],
+        "requiredStructures": [
+            "A0CommandCentre"
         ],
         "researchPoints": 600,
         "researchPower": 18,
