@@ -114,7 +114,14 @@ function truckDefense()
 		}
 	}
 
-	queue("truckDefense", 300000); // 5 min
+	queue("truckDefense", camChangeOnDiff(300000)); // 5 min
+}
+
+//This mission has a heavy load on resources for Nexus so reset it every so often.
+function resetNexusPower()
+{
+	setPower(AI_POWER, NEXUS);
+	queue("resetNexusPower", 300000); // 5 min
 }
 
 function eventStartLevel()
@@ -188,6 +195,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"NX-NWFactory1": {
+			assembly: "NX-NWFactory1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
 			throttle: camChangeOnDiff(40000),
@@ -199,6 +207,7 @@ function eventStartLevel()
 			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
 		},
 		"NX-NWFactory2": {
+			assembly: "NX-NWFactory2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
 			throttle: camChangeOnDiff(40000),
@@ -210,6 +219,7 @@ function eventStartLevel()
 			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
 		},
 		"NX-NWCyborgFactory": {
+			assembly: "NX-NWCyborgFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(30000),
@@ -221,6 +231,7 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NX-NEFactory": {
+			assembly: "NX-NEFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(30000),
@@ -232,6 +243,7 @@ function eventStartLevel()
 			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
 		},
 		"NX-SWFactory": {
+			assembly: "NX-SWFactoryAssembly",
 			order: CAM_ORDER_PATROL,
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
@@ -251,6 +263,7 @@ function eventStartLevel()
 			templates: [nxmlinkh, nxllinkh] //Nexus link factory
 		},
 		"NX-SWCyborgFactory1": {
+			assembly: "NX-SWCyborgFactory1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(35000),
@@ -262,6 +275,7 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NX-SWCyborgFactory2": {
+			assembly: "NX-SWCyborgFactory2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(35000),
@@ -273,6 +287,7 @@ function eventStartLevel()
 			templates: [nxcyrail, nxcyscou, nxcylas]
 		},
 		"NX-SEFactory": {
+			assembly: "NX-SEFactoryAssembly",
 			order: CAM_ORDER_PATROL,
 			groupSize: 5,
 			throttle: camChangeOnDiff(30000),
@@ -289,6 +304,7 @@ function eventStartLevel()
 			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
 		},
 		"NX-VtolFactory1": {
+			assembly: "NX-VtolFactory1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(60000),
@@ -300,6 +316,7 @@ function eventStartLevel()
 			templates: [nxmheapv, nxlscouv]
 		},
 		"NX-VtolFactory2": {
+			assembly: "NX-VtolFactory2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(50000),
@@ -326,5 +343,6 @@ function eventStartLevel()
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	queue("enableReinforcements", 16000);
+	queue("resetNexusPower", 300000); // 5 min
 	queue("enableAllFactories", camChangeOnDiff(600000)); // 10 min.
 }

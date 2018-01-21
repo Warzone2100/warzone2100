@@ -67,6 +67,46 @@
 		"label": "NWPatrolPos3",
 		"pos": [704, 4160]
 	},
+	"position_17": {
+		"label": "NX-NWFactory1Assembly",
+		"pos": [1728, 2752]
+	},
+	"position_18": {
+		"label": "NX-NWFactory2Assembly",
+		"pos": [1984, 2368]
+	},
+	"position_19": {
+		"label": "NX-NEFactoryAssembly",
+		"pos": [8640, 4288]
+	},
+	"position_20": {
+		"label": "NX-SWFactoryAssembly",
+		"pos": [3008, 8768]
+	},
+	"position_21": {
+		"label": "NX-SEFactoryAssembly",
+		"pos": [10816, 11328]
+	},
+	"position_22": {
+		"label": "NX-VtolFactory1Assembly",
+		"pos": [6208, 11456]
+	},
+	"position_23": {
+		"label": "NX-VtolFactory2Assembly",
+		"pos": [7616, 11456]
+	},
+	"position_24": {
+		"label": "NX-NWCyborgFactoryAssembly",
+		"pos": [1344, 1600]
+	},
+	"position_25": {
+		"label": "NX-SWCyborgFactory1Assembly",
+		"pos": [1856, 10944]
+	},
+	"position_26": {
+		"label": "NX-SWCyborgFactory2Assembly",
+		"pos": [1856, 11584]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -101,7 +141,7 @@
 	"area_6": {
 		"label": "factoryTriggerW",
 		"subscriber": 0,
-		"pos1": [8567, 0],
+		"pos1": [8576, 0],
 		"pos2": [9216, 2560]
 	},
 	"area_7": {
