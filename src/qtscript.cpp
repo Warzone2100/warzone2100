@@ -51,6 +51,7 @@
 #include "console.h"
 #include "clparse.h"
 #include "mission.h"
+#include "modding.h"
 
 #include <set>
 #include <utility>
@@ -590,6 +591,10 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	engine->globalObject().setProperty("selectedPlayer", selectedPlayer, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[gameTime] The current game time. Updated before every invokation of a script.
 	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[modList] The current loaded mods.
+	engine->globalObject().setProperty("modList", QString(getModList().c_str()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+
 	//== \item[difficulty] The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
 	//== EASY, MEDIUM, HARD or INSANE.
 	if (game.type == SKIRMISH)
