@@ -1082,7 +1082,7 @@ bool runVideoOptionsMenu()
 	case FRONTEND_VSYNC:
 	case FRONTEND_VSYNC_R:
 		wzSetSwapInterval(!war_GetVsync());
-		war_SetVsync(wzGetSwapInterval());
+		war_SetVsync(!war_GetVsync());
 		widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
 		break;
 
