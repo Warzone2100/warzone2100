@@ -116,18 +116,18 @@ bool CancelPressed()
 template <typename T>
 static T stepCycle(T value, T min, T max)
 {
-	return !mouseReleased(MOUSE_RMB) ?
-	       value < max ? T(value + 1) : min :  // Cycle forwards. The T cast is to cycle through enums.
-	       min < value ? T(value - 1) : max;  // Cycle backwards.
+	return widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY ?
+		value < max ? T(value + inc) : min :  // Cycle forwards.
+		min < value ? T(value - inc) : max;  // Cycle backwards.
 }
 
 // Cycle through options, which are powers of two, such as [128, 256, 512, 1024, 2048].
 template <typename T>
 static T pow2Cycle(T value, T min, T max)
 {
-	return !mouseReleased(MOUSE_RMB) ?
-	       value < max ? std::max<T>(1, value) * 2 : min :  // Cycle forwards.
-	       min < value ? (value / 2 > 1 ? value / 2 : 0) : max;  // Cycle backwards.
+	return widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY ?
+		value < max ? std::max<T>(1, value) * 2 : min :  // Cycle forwards.
+		min < value ? (value / 2 > 1 ? value / 2 : 0) : max;  // Cycle backwards.
 }
 
 
@@ -1313,7 +1313,8 @@ bool runGameOptionsMenu()
 	{
 	case FRONTEND_LANGUAGE:
 	case FRONTEND_LANGUAGE_R:
-		setNextLanguage(mouseReleased(MOUSE_RMB));
+
+		setNextLanguage(widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY);
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
 		/* Hack to reset current menu text, which looks fancy. */
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
