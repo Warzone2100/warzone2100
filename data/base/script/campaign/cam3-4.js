@@ -91,6 +91,7 @@ function enableAllFactories()
 
 function enableReinforcements()
 {
+	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
 		area: "RTLZ",
 		reinforcements: 60, // 1 min

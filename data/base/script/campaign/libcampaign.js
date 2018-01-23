@@ -2684,7 +2684,7 @@ function __camVictoryOffworld()
 				__camTriggerLastAttack();
 			}
 
-			if (!destroyAll || forceLZ)
+			if (!destroyAll || (forceLZ && destroyAll && !enemyLen))
 			{
 				if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
 				{
@@ -2698,7 +2698,7 @@ function __camVictoryOffworld()
 				{
 					var pos = camMakePos(lz);
 					playSound("pcv427.ogg", pos.x, pos.y, 0);
-					console("Return to LZ");
+					console(_("Return to LZ"));
 				}
 				++__camRTLZTicker;
 			}

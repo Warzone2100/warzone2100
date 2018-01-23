@@ -72,18 +72,18 @@
 	},
 	"area_2": {
 		"label": "uplinkBaseCleanup",
-		"pos1": [448, 448],
-		"pos2": [2368, 1728]
+		"pos1": [128, 128],
+		"pos2": [3456, 1792]
 	},
 	"area_3": {
 		"label": "mainBaseCleanup",
 		"pos1": [1984, 3648],
-		"pos2": [4032, 5440]
+		"pos2": [4096, 5504]
 	},
 	"area_4": {
 		"label": "mediumBaseCleanup",
-		"pos1": [5952, 576],
-		"pos2": [7744, 3136]
+		"pos1": [5952, 128],
+		"pos2": [7936, 3200]
 	},
 	"area_5": {
 		"label": "uplinkBaseGroup",
@@ -106,26 +106,6 @@
 		"pos2": [7360, 7872]
 	},
 	"area_9": {
-		"label": "regionGroup2",
-		"pos1": [576, 3136],
-		"pos2": [1216, 4032]
-	},
-	"area_10": {
-		"label": "regionGroup3",
-		"pos1": [576, 1728],
-		"pos2": [1600, 4032]
-	},
-	"area_11": {
-		"label": "regionGroup4",
-		"pos1": [704, 704],
-		"pos2": [2112, 1728]
-	},
-	"area_12": {
-		"label": "regionGroup5",
-		"pos1": [4032, 2368],
-		"pos2": [4800, 3136]
-	},
-	"area_13": {
 		"label": "groupTrigger",
 		"subscriber": 0,
 		"pos1": [960, 5184],
