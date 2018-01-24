@@ -4386,6 +4386,54 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 	}
 }
 
+// show selected widget from reticule menu
+void intShowWidget(int buttonID)
+{
+switch (buttonID)
+	{
+	case RETBUT_FACTORY:
+		intResetScreen(true);
+		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
+		intAddManufacture(nullptr);
+		reticuleCallback(RETBUT_FACTORY);
+		break;
+	case RETBUT_RESEARCH:
+		intResetScreen(true);
+		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
+		(void)intAddResearch(nullptr);
+		reticuleCallback(RETBUT_RESEARCH);
+		break;
+	case RETBUT_BUILD:
+		intResetScreen(true);
+		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
+		intAddBuild(nullptr);
+		reticuleCallback(RETBUT_BUILD);
+		break;
+	case RETBUT_DESIGN:
+		intResetScreen(true);
+		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
+		/*add the power bar - for looks! */
+		intShowPowerBar();
+		intAddDesign(false);
+		intMode = INT_DESIGN;
+		reticuleCallback(RETBUT_DESIGN);
+		triggerEvent(TRIGGER_MENU_DESIGN_UP);
+		break;
+	case RETBUT_COMMAND:
+		intResetScreen(false);
+		widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
+		intAddCommand(nullptr);
+		reticuleCallback(RETBUT_COMMAND);
+		break;
+	default:
+		intResetScreen(false);
+		psCurrentMsg = nullptr;
+		reticuleCallback(RETBUT_CANCEL);
+		break;
+	}
+}
+
+
 //displays the Power Bar
 void intShowPowerBar()
 {

@@ -3186,6 +3186,15 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	return QScriptValue();
 }
 
+//-- \subsection{showReticuleWidget(id)} Open the reticule menu widget. (3.2.4+ only)
+static QScriptValue js_showReticuleWidget(QScriptContext *context, QScriptEngine *engine)
+{
+	int button = context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, button >= 0 && button <= 6, "Invalid button %d", button);
+	intShowWidget(button);
+	return QScriptValue();
+}
+
 //-- \subsection{setReticuleFlash(id, flash)} Set reticule flash on or off. (3.2.3+ only)
 static QScriptValue js_setReticuleFlash(QScriptContext *context, QScriptEngine *engine)
 {
@@ -5644,6 +5653,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("setReticuleButton", engine->newFunction(js_setReticuleButton));
 	engine->globalObject().setProperty("setReticuleFlash", engine->newFunction(js_setReticuleFlash));
+	engine->globalObject().setProperty("showReticuleWidget", engine->newFunction(js_showReticuleWidget));
 	engine->globalObject().setProperty("showInterface", engine->newFunction(js_showInterface));
 	engine->globalObject().setProperty("hideInterface", engine->newFunction(js_hideInterface));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_removeReticuleButton)); // deprecated!!
