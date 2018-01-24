@@ -221,7 +221,7 @@ function eventStartLevel()
 			},
 			groupSize: 4,
 			maxSize: 10,
-			throttle: camChangeOnDiff(25000),
+			throttle: camChangeOnDiff(15000),
 			templates: [ rbuggy, bloke, rbjeep, buggy ]
 		},
 		"NPFactory": {

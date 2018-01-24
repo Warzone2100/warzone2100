@@ -173,7 +173,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,
-			throttle: camChangeOnDiff(35000),
+			throttle: camChangeOnDiff(20000),
 			templates: [ rbuggy, bjeep, buscan, trike ]
 		},
 		"NorthScavFactory": {
@@ -185,7 +185,7 @@ function eventStartLevel()
 			},
 			groupSize: 4,
 			maxSize: 6,
-			throttle: camChangeOnDiff(35000),
+			throttle: camChangeOnDiff(20000),
 			templates: [ firecan, rbjeep, bloke, buggy ]
 		},
 		"HeavyNPFactory": {
@@ -211,5 +211,5 @@ function eventStartLevel()
 	camManageTrucks(NEW_PARADIGM);
 
 	queue("buildDefenses", 2000);
-	queue("enableSouthScavFactory", 10000);
+	queue("enableSouthScavFactory", camChangeOnDiff(10000));
 }

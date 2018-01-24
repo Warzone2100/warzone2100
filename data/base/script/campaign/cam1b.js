@@ -21,7 +21,7 @@ camAreaEvent("AttackArea1", function(droid)
 		data: { pos: "playerBase" }, // changes
 		groupSize: 10, // changes
 		maxSize: 10,
-		throttle: camChangeOnDiff(40000),
+		throttle: camChangeOnDiff(25000),
 		templates: [ trike, bloke, buggy, bloke, ] // changes
 	});
 	camEnableFactory("base2factory"); // re-enable
@@ -127,7 +127,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 6,
 			maxSize: 6,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(25000),
 			templates: [ trike, bloke, buggy, bloke ]
 		},
 		"base2factory": { // the hill harass factory
@@ -140,7 +140,7 @@ function eventStartLevel()
 			group: camMakeGroup("hillForce"), // will override later
 			groupSize: 4, // will override later
 			maxSize: 10,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(25000),
 			templates: [ bloke ] // will override later
 		},
 		"base4factory": {
@@ -149,7 +149,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
  			groupSize: 8,
 			maxSize: 8,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(25000),
 			templates: [ trike, bloke, buggy, bjeep ]
 		},
 	});
