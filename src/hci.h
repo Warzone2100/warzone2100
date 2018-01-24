@@ -365,6 +365,8 @@ void togglePowerBar();
 void intShowPowerBar();
 void intHidePowerBar();
 
+void intShowWidget(int buttonID);
+
 //hides the power bar from the display - regardless of what player requested!
 void forceHidePowerBar();
 
