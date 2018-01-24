@@ -67,8 +67,8 @@ struct DROID_TEMPLATE : public BASE_STATS
 	 */
 	uint8_t         asParts[DROID_MAXCOMP];
 	/* The weapon systems */
-	int8_t          numWeaps;                   ///< Number of weapons
-	uint8_t         asWeaps[MAX_WEAPONS];       ///< weapon indices
+	int16_t          numWeaps;                   ///< Number of weapons
+	uint16_t         asWeaps[MAX_WEAPONS];       ///< weapon indices
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
 	bool            prefab;                     ///< Not player designed, not saved, never delete or change

@@ -1364,7 +1364,7 @@ UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 	return weight;
 }
 
-static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsigned numWeaps, uint8_t (&asWeaps)[MAX_WEAPONS], unsigned player)
+static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsigned numWeaps, uint16_t (&asWeaps)[MAX_WEAPONS], unsigned player)
 {
 	const auto &bodyStats = asBodyStats[asParts[COMP_BODY]];
 
@@ -1419,7 +1419,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 // Calculate the base body points of a droid with upgrades
 static UDWORD calcDroidBaseBody(DROID *psDroid)
 {
-	uint8_t asWeaps[MAX_WEAPONS];
+	uint16_t asWeaps[MAX_WEAPONS];
 	std::transform(std::begin(psDroid->asWeaps), std::end(psDroid->asWeaps), asWeaps, [](WEAPON &weap) {
 		return weap.nStat;
 	});
