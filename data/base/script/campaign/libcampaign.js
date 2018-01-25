@@ -1162,15 +1162,21 @@ function __camCheckBaseSeen(seen)
 {
 	var group = seen; // group?
 	if (camDef(seen.group)) // object?
+	{
 		group = seen.group;
+	}
 	if (!camDef(group) || !group)
+	{
 		return;
+	}
 	// FIXME: O(n) lookup here
 	for (var blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
 		if (bi.group !== group)
+		{
 			continue;
+		}
 		camDetectEnemyBase(blabel);
 	}
 }
@@ -1197,17 +1203,15 @@ function __camCheckBaseEliminated(group)
 	{
 		var bi = __camEnemyBases[blabel];
 		if (bi.eliminated || (bi.group !== group))
+		{
 			continue;
+		}
+		if (enumGroup(bi.group).length !== 0)
+		{
+			return; //still has something in the base group
+		}
 		if (camDef(bi.cleanup))
 		{
-			var nonLeftovers = enumArea(bi.cleanup, ENEMIES, false).filter(function(obj) {
-				return (obj.type === STRUCTURE
-					&& obj.status === BUILT
-					&& !__camIsValidLeftover(obj)
-					&& (!camDef(bi.player)
-					|| (camDef(bi.player) && camPlayerMatchesFilter(obj.player, bi.player)))
-				);
-			});
 			var leftovers = enumArea(bi.cleanup, ENEMIES, false).filter(function(obj) {
 				return (obj.type === STRUCTURE
 					&& obj.status === BUILT
@@ -1216,10 +1220,6 @@ function __camCheckBaseEliminated(group)
 					|| (camDef(bi.player) && camPlayerMatchesFilter(obj.player, bi.player)))
 				);
 			});
-			if (nonLeftovers.length > 0)
-			{
-				continue;
-			}
 			for (var i = 0, l = leftovers.length; i < l; i++)
 			{
 				// remove with special effect
@@ -1238,7 +1238,9 @@ function __camCheckBaseEliminated(group)
 			continue;
 		}
 		if (camDef(bi.detectMsg) && bi.detected) // remove the beacon
+		{
 			hackRemoveMessage(bi.detectMsg, PROX_MSG, CAM_HUMAN_PLAYER);
+		}
 		camTrace("Enemy base", blabel, "eliminated");
 		bi.eliminated = true;
 		// bump counter before the callback, so that it was
@@ -1246,7 +1248,9 @@ function __camCheckBaseEliminated(group)
 		++__camNumEnemyBases;
 		var callback = __camGlobalContext()["camEnemyBaseEliminated_" + blabel];
 		if (camDef(callback))
+		{
 			callback();
+		}
 	}
 }
 
@@ -3225,12 +3229,21 @@ function cam_eventPickup(feature, droid)
 	}
 }
 
+var __camSaveLoading;
 function cam_eventGroupLoss(obj, group, newsize)
 {
+	if (__camSaveLoading === true)
+	{
+		return;
+	}
 	if (newsize === 0)
+	{
 		__camCheckBaseEliminated(group);
+	}
 	if (camDef(__camGroupInfo[group]))
+	{
 		profile("__camCheckGroupMorale", group);
+	}
 }
 
 function cam_eventCheatMode(entered)
@@ -3303,6 +3316,7 @@ function cam_eventStartLevel()
 	__camNexusActivated = false;
 	__camNewGroupCounter = 0;
 	__camVideoSequences = [];
+	__camSaveLoading = false;
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
@@ -3457,6 +3471,7 @@ function cam_eventAttacked(victim, attacker)
 function cam_eventGameLoaded()
 {
 	isReceivingAllEvents = true;
+	__camSaveLoading = true;
 	const SCAV_KEVLAR_MISSIONS = [
 		"CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
 		"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "CAM_1END", "SUB_2_5S"
@@ -3487,6 +3502,7 @@ function cam_eventGameLoaded()
 
 	//Subscribe to eventGroupSeen again.
 	camSetEnemyBases();
+	__camSaveLoading = false;
 }
 
 //Plays Nexus sounds if nexusActivated is true.
