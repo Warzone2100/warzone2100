@@ -10,12 +10,14 @@ receiveAllEvents(true);  // If doing this in eventGameInit, it seems to be too l
 
 include("multiplay/script/camTechEnabler.js");
 include("multiplay/script/weather.js");
+include("multiplay/script/builders.js");
 
 var lastHitTime = 0;
 var cheatmode = false;
 var maxOilDrums = 0;
 var mainReticule = true;
 var allowDesign = false;
+var buildersAssistRadius = 7;
 
 function setMainReticule()
 {
@@ -390,6 +392,18 @@ function eventDroidBuilt(droid, structure)
 	if (mainReticule && update_reticule)
 	{
 		setMainReticule();
+	}
+}
+
+//Somewhere someone start (or demolish) the building
+//v3.2.4+
+function eventStructureBeginBuilt(structure, demolish, droid)
+{
+	//Assistance in the construction of the building
+	//Just for "me" and "my" ally
+	if(allianceExistsBetween(me, structure.player))
+	{
+		buildersAssist(structure, demolish);
 	}
 }
 

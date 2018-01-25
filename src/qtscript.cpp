@@ -1200,6 +1200,31 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 	return true;
 }
 
+//__ \subsection{eventStructureBeginBuilt(structure, demolish [, droid])}
+//__ An event that is run every time when the Foundation is laid and construction begins construction of a new building.
+//__ Or when the Builder starts to demolish the building.
+bool triggerEventStructBeginBuilt(STRUCTURE *psStruct, bool demolish, DROID *psDroid)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *engine : scripts)
+	{
+		int player = engine->globalObject().property("me").toInt32();
+		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		if (player == psStruct->player || receiveAll)
+		{
+			QScriptValueList args;
+			args += convStructure(psStruct, engine);
+			args += demolish;
+			if (psDroid)
+			{
+				args += convDroid(psDroid, engine);
+			}
+			callFunction(engine, "eventStructureBeginBuilt", args);
+		}
+	}
+	return true;
+}
+
 //__ \subsection{eventStructureBuilt(structure[, droid])}
 //__ An event that is run every time a structure is produced. The droid parameter is set
 //__ if the structure was built by a droid. It is not triggered for building theft

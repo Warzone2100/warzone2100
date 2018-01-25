@@ -763,6 +763,12 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		{
 			buildPoints = 0;  // No power to build.
 		}
+		triggerEventStructBeginBuilt(psStruct, false, psDroid);
+	}
+
+	if (psStruct->body == 1000 && buildPoints < 0)
+	{
+		triggerEventStructBeginBuilt(psStruct, true, psDroid);
 	}
 
 	int newBuildPoints = psStruct->currentBuildPts + buildPoints;

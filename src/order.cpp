@@ -248,11 +248,11 @@ static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid
 			best = {structure, DACTION_REPAIR};
 		}
 		// Check for structures to help build.
-		else if (structure->status == SS_BEING_BUILT)
-		{
-			bestDistanceSq = distanceSq;
-			best = {structure, DACTION_BUILD};
-		}
+//		else if (structure->status == SS_BEING_BUILT)
+//		{
+//			bestDistanceSq = distanceSq;
+//			best = {structure, DACTION_BUILD};
+//		}
 	}
 
 	return best;
