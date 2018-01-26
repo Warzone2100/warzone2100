@@ -162,6 +162,7 @@ function eventStartLevel()
 	var pos = getObject("NPSensorAppear");
 	NPScout = addDroid(NEW_PARADIGM, pos.x, pos.y, "Scout",
 	                   "Body4ABT", "wheeled01", 0, 0, "SensorTurret1Mk1");
+	camNeverGroupDroid(NPScout);
 	pos = getObject("NPSensorWatch");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 }

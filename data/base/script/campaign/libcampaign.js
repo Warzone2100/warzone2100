@@ -3090,7 +3090,7 @@ var __camLastNexusAttack;
 var __camNexusActivated;
 
 ////////////////////////////////////////////////////////////////////////////////
-// Group numerical ID functionality
+// Group functionality
 ////////////////////////////////////////////////////////////////////////////////
 
 //;; \subsection{camNewGroup()}
@@ -3105,8 +3105,94 @@ function camNewGroup()
 	return __camNewGroupCounter;
 }
 
+//;; \subsection{camInNeverGroup(droid)}
+//;; check if this droid is forced to never group.
+function camInNeverGroup(droid)
+{
+	if (droid.type !== DROID)
+	{
+		camDebug("Non-droid in camInNeverGroup.");
+		return false;
+	}
+	for (var i = 0, l = __camNeverGroupDroids.length; i < l; ++i)
+	{
+		if (droid.id === __camNeverGroupDroids[i])
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//;; \subsection{camNeverGroupDroid(what, [filter])}
+//;; A means to not auto group some droids.
+function camNeverGroupDroid(what, filter)
+{
+	if (!camDef(filter))
+	{
+		filter = ENEMIES;
+	}
+	var array;
+	var obj;
+	if (camIsString(what)) // label
+	{
+		obj = getObject(what);
+	}
+	else if (camDef(what.length)) // array
+	{
+		array = what;
+	}
+	else if (camDef(what.type)) // object
+	{
+		obj = what;
+	}
+	if (camDef(obj))
+	{
+		switch (obj.type) {
+			case POSITION:
+				obj = getObject(obj.x, obj.y);
+				// fall-through
+			case DROID:
+			case STRUCTURE:
+			case FEATURE:
+				array = [ obj ];
+				break;
+			case AREA:
+				array = enumArea(obj.x, obj.y, obj.x2, obj.y2, ALL_PLAYERS, false);
+				break;
+			case RADIUS:
+				array = enumRange(obj.x, obj.y, obj.radius, ALL_PLAYERS, false);
+				break;
+			case GROUP:
+				array = enumGroup(obj.id);
+				break;
+			default:
+				camDebug("Unknown object type", obj.type);
+		}
+	}
+	if (camDef(array))
+	{
+		for (var i = 0, l = array.length; i < l; ++i)
+		{
+			var o = array[i];
+			if (!camDef(o) || !o)
+			{
+				continue;
+			}
+			if (o.type === DROID && camPlayerMatchesFilter(o.player, filter))
+			{
+				__camNeverGroupDroids.push(o.id);
+			}
+		}
+		return;
+	}
+	camDebug("Cannot parse", what);
+}
+
 // privates
 var __camNewGroupCounter;
+var __camNeverGroupDroids;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Video playback related logic
@@ -3323,6 +3409,7 @@ function cam_eventStartLevel()
 	__camNewGroupCounter = 0;
 	__camVideoSequences = [];
 	__camSaveLoading = false;
+	__camNeverGroupDroids = [];
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
@@ -3448,11 +3535,13 @@ function cam_eventAttacked(victim, attacker)
 				const DEFAULT_RADIUS = 6;
 				var loc = {x: victim.x, y: victim.y};
 				var droids = enumRange(loc.x, loc.y, DEFAULT_RADIUS, victim.player, false).filter(function(obj) {
-					return obj.type === DROID
+					return (obj.type === DROID
 						&& obj.group === null
 						&& (obj.canHitGround || obj.isSensor)
 						&& obj.droidType !== DROID_CONSTRUCT
-						&& !camIsTransporter(obj);
+						&& !camIsTransporter(obj)
+						&& !camInNeverGroup(obj)
+					);
 				});
 				if (droids.length === 0)
 				{
