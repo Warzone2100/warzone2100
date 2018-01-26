@@ -143,6 +143,6 @@ function eventStartLevel()
 		},
 	});
 
-	queue("enableReinforcements", 10000);
+	queue("enableReinforcements", 20000);
 	queue("enableWestFactory", 30000);
 }
