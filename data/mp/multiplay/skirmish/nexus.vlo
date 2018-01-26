@@ -56,7 +56,7 @@ run
 	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 
 	//number of research topics for each research branch
-	techCount[0]	int					6
+	techCount[0]	int					7
 
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[0]	int					-1
@@ -66,10 +66,11 @@ run
 	tech[0][2]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
 	tech[0][3]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
 	tech[0][4]		RESEARCHSTAT		"R-Wpn-MG-Damage03"
-	tech[0][5]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
+	tech[0][5]		RESEARCHSTAT		"R-Sys-MobileRepairTurret01" //repair turret
+	tech[0][6]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
-	techCount[1]	int					19
+	techCount[1]	int					20
 
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[1]	int					3
@@ -77,26 +78,27 @@ run
 	tech[1][0]		RESEARCHSTAT		"R-Struc-VTOLFactory"
 	tech[1][1]		RESEARCHSTAT		"R-Struc-VTOLPad"
 	tech[1][2]		RESEARCHSTAT		"R-Wpn-MG3Mk1"				//HMG
+	tech[1][3]		RESEARCHSTAT		"R-Sys-MobileRepairTurret01" //repair turret
 
-	tech[1][3]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
-	tech[1][4]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
+	tech[1][4]		RESEARCHSTAT		"R-Wpn-Rocket02-MRL"	//mini rocket artillery
+	tech[1][5]		RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
 
-	tech[1][5]		RESEARCHSTAT		"R-Wpn-Flamer-Damage03"		//flamer damage 03
-	tech[1][6]		RESEARCHSTAT		"R-Wpn-Flamer-ROF03"		//flamer ROF 03
+	tech[1][6]		RESEARCHSTAT		"R-Wpn-Flamer-Damage03"		//flamer damage 03
+	tech[1][7]		RESEARCHSTAT		"R-Wpn-Flamer-ROF03"		//flamer ROF 03
 
-	tech[1][7]		RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//Lancer
-	tech[1][8]		RESEARCHSTAT		"R-Vehicle-Body08"			//Scorpion body
-	tech[1][9]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
-	tech[1][10]		RESEARCHSTAT		"R-Wpn-Missile-Accuracy02"	//lancer accuracy
-	tech[1][11]		RESEARCHSTAT		"R-Wpn-Missile-Damage03"	//lancer damage
+	tech[1][8]		RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//Lancer
+	tech[1][9]		RESEARCHSTAT		"R-Vehicle-Body08"			//Scorpion body
+	tech[1][10]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
+	tech[1][11]		RESEARCHSTAT		"R-Wpn-Missile-Accuracy02"	//lancer accuracy
+	tech[1][12]		RESEARCHSTAT		"R-Wpn-Missile-Damage03"	//lancer damage
 
-	tech[1][12]		RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB
-	tech[1][13]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"
-	tech[1][14]		RESEARCHSTAT		"R-Struc-Factory-Upgrade04"
-	tech[1][15]		RESEARCHSTAT		"R-Sys-Autorepair-General"		//autorepair
-	tech[1][16]		RESEARCHSTAT		"R-Sys-Sensor-UpLink"
-	tech[1][17]		RESEARCHSTAT		"R-Sys-VTOLCBS-Turret01"
-	tech[1][18]		RESEARCHSTAT		"R-Sys-VTOLStrike-Tower01"
+	tech[1][13]		RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB
+	tech[1][14]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"
+	tech[1][15]		RESEARCHSTAT		"R-Struc-Factory-Upgrade04"
+	tech[1][16]		RESEARCHSTAT		"R-Sys-Autorepair-General"		//autorepair
+	tech[1][17]		RESEARCHSTAT		"R-Sys-Sensor-UpLink"
+	tech[1][18]		RESEARCHSTAT		"R-Sys-VTOLCBS-Turret01"
+	tech[1][19]		RESEARCHSTAT		"R-Sys-VTOLStrike-Tower01"
 
 	maxVtolFacs[0]	int					1
 	maxVtolFacs[1]	int					4

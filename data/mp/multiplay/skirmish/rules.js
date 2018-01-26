@@ -212,7 +212,6 @@ function eventGameInit()
 
 		// enable cyborgs components that can't be enabled with research
 		makeComponentAvailable("CyborgSpade", playnum);
-		makeComponentAvailable("CyborgRepair", playnum);
 
 		if (baseType == CAMP_CLEAN)
 		{

@@ -372,7 +372,7 @@ event initialisedEvent(CALL_GAMEINIT)
 	}
 
 	fundamentalBeingBuilt = derrick;	// to avoid ever being null
-	
+
 	if(aiResponsibleForPlayer(me))
 	{
 		bRunning = true;
@@ -385,7 +385,7 @@ event initialisedEvent(CALL_GAMEINIT)
 }
 
 // check whether we have at least one structure of that type
-function bool haveStructure(STRUCTURESTAT type) 
+function bool haveStructure(STRUCTURESTAT type)
 {
 	return getStructure(type, me) != NULLOBJECT;
 }
@@ -1106,7 +1106,7 @@ event buildExpand( buildExpandTr )
 //	Structure (fac/res/pow) upgrades
 event upgradeStructures(upgradeStructuresTr )
 {
-	if (not havePowerSource()) 
+	if (not havePowerSource())
 	{
 		exit;
 	}
@@ -1377,7 +1377,7 @@ event droidBuiltAssign(droidBuiltTr)
 		{
 			numRepairUnits = numRepairUnits + 1;
 		}
-		
+
 		if((droid.droidType == DROID_CONSTRUCT)
 			or (droid.droidType == DROID_CYBORG_CONSTRUCT))				// if constructor droid
 		{
@@ -1606,16 +1606,16 @@ event conDroids(conDroidsTr)
 	_maxTruckFactories = 3; 		//max factories to use for truck production
 
 	_haveTrucks = buildGroup.members;
-	
+
 	//Find out how many trucks and combat engineers are already in production
 	_numBuilding = numTemplatesInProduction(constructor,me);	//trucks
 	_numBuilding = _numBuilding + numTemplatesInProduction(cybEngineer,me);	//engineers
 
 	_totalTrucks = _numBuilding + _haveTrucks;
-	
+
 	initEnumStruct(FALSE,factory,me,me);
 	_factory = enumStruct();
-	
+
 	while ((_factory != NULLOBJECT) and (_numBuilding < _maxTruckFactories) and (_totalTrucks < _maxTrucks))
 	{
 		//Try to build a truck
@@ -1627,17 +1627,17 @@ event conDroids(conDroidsTr)
 		{
 			_bStartedBuilding = buildUnit(constructor, _factory, factory, FALSE);	//build truck even if not idle
 		}
-		
+
 		//Update statistics if started building a truck
 		if(_bStartedBuilding)
 		{
 			_numBuilding++;
 			_totalTrucks++;
 		}
-		
+
 		_factory = enumStruct();
 	}
-	
+
 	//build cyborg engineers if needed, no building structure limit here
 	initEnumStruct(FALSE,cybFactory,me,me);
 	_factory = enumStruct();
@@ -1647,7 +1647,7 @@ event conDroids(conDroidsTr)
 		if( skCanBuildTemplate(me,_factory, cybEngineer) )	//make sure we have researched cyb engineer
 		{
 			_bStartedBuilding = buildUnit(cybEngineer, _factory, cybFactory, FALSE);	//build a cyb eng even if not idle
-			
+
 			//Update statistics if started building a cyborg engineer
 			if(_bStartedBuilding)
 			{
@@ -1705,7 +1705,7 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 
 		_structure = enumStruct();
 	}
-	
+
 	return NULLOBJECT;	//none found
 }
 
@@ -1755,7 +1755,7 @@ function bool needTank()
 	{
 		return FALSE;
 	}
-	
+
 	if((defendGroup.members < maxDefenders[curTech]) or (maxDefenders[curTech] == UNLIMITED))
 	{
 		return TRUE;
@@ -1850,7 +1850,10 @@ function void cybFactorBuildCyborg(STRUCTURE _factory)
 		{
 			if(random(5) == 1)
 			{
-				buildDroid(cybMechanic,_factory,me,1);
+				if(skCanBuildTemplate(me, _factory, cybMechanic))
+				{
+					buildDroid(cybMechanic, _factory, me, 1);
+				}
 			}
 			else
 			{
@@ -2250,7 +2253,7 @@ event doResearch(doResearchTr)
 		setEventTrigger(doResearch, doResearchTr);
 		exit;
 	}
-	
+
 	_techIndex = 0;	//research start
 	_numResearching = numStructBusyByType(resLab);
 
@@ -4127,7 +4130,7 @@ event consoleEv(consoleTr)
 		if(bRunning)		//make sure this AI is active
 		{
 			console(getPlayerName(me) & " is deactivated");
-			
+
 			shutDownAI();
 		}
 	}
