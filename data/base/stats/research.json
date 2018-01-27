@@ -29,9 +29,6 @@
         "keyTopic": 1,
         "msgName": "RES_HALFT2",
         "name": "Half-tracked Propulsion II",
-        "replacedComponents": [
-            "HalfTrack:HalfTrack02"
-        ],
         "requiredResearch": [
             "R-Struc-Factory-Upgrade04"
         ],
@@ -48,9 +45,6 @@
         "keyTopic": 1,
         "msgName": "RES_TRACK2",
         "name": "Tracked Propulsion II",
-        "replacedComponents": [
-            "tracked01:tracked02"
-        ],
         "requiredResearch": [
             "R-Struc-Factory-Upgrade04"
         ],
@@ -67,9 +61,6 @@
         "keyTopic": 1,
         "msgName": "RES_V_P_H2",
         "name": "Hover Propulsion II",
-        "replacedComponents": [
-            "hover01:hover02"
-        ],
         "requiredResearch": [
             "R-Struc-Factory-Upgrade04"
         ],
@@ -87,9 +78,6 @@
         "keyTopic": 1,
         "msgName": "RES_V_P_V2",
         "name": "VTOL Propulsion II",
-        "replacedComponents": [
-            "V-Tol:V-Tol02"
-        ],
         "requiredResearch": [
             "R-Struc-VTOLFactory-Upgrade04"
         ],
@@ -105,9 +93,6 @@
         "keyTopic": 1,
         "msgName": "RES_V_P_W2",
         "name": "Wheeled Propulsion II",
-        "replacedComponents": [
-            "wheeled01:wheeled02"
-        ],
         "requiredResearch": [
             "R-Struc-Factory-Upgrade04"
         ],
@@ -121,13 +106,10 @@
 	"R-Cyborg-Legs02": {
         "iconID": "IMAGE_RES_CYBORGTECH",
         "id": "R-Cyborg-Legs02",
-		"keyTopic": 1,
+        "keyTopic": 1,
         "name": "Cyborg Propulsion II",
-		"replacedComponents": [
-            "CyborgLegs:CyborgLegs02"
-        ],
-		"requiredResearch": [
-            "R-Struc-Factory-Upgrade04"
+        "requiredResearch": [
+             "R-Struc-Factory-Upgrade04"
         ],
         "researchPoints": 7800,
         "researchPower": 300,
