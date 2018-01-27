@@ -112,6 +112,9 @@ static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
 
+// local rendered text cache
+static std::vector<WzText> wzCachedSeqText;
+
 /***************************************************************************/
 /*
  *	local ProtoTypes
@@ -340,17 +343,20 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 			if (((realTime >= currentText.startTime) && (realTime <= currentText.endTime)) ||
 			    (aSeqList[currentPlaySeq].bSeqLoop)) //if its a looped video always draw the text
 			{
+				if (i >= wzCachedSeqText.size())
+				{
+					wzCachedSeqText.resize(i + 1);
+				}
 				if (bMoreThanOneSequenceLine)
 				{
 					currentText.x = 20 + D_W2;
 				}
-				iV_SetTextColour(WZCOL_GREY);
-				iV_DrawText(&(currentText.pText[0]), currentText.x - 1, currentText.y - 1, font_scaled);
-				iV_DrawText(&(currentText.pText[0]), currentText.x - 1, currentText.y + 1, font_scaled);
-				iV_DrawText(&(currentText.pText[0]), currentText.x - 1, currentText.y + 1, font_scaled);
-				iV_DrawText(&(currentText.pText[0]), currentText.x + 1, currentText.y + 1, font_scaled);
-				iV_SetTextColour(WZCOL_WHITE);
-				iV_DrawText(&(currentText.pText[0]), currentText.x, currentText.y, font_scaled);
+				wzCachedSeqText[i].setText(&(currentText.pText[0]), font_scaled);
+				wzCachedSeqText[i].render(currentText.x - 1, currentText.y - 1, WZCOL_GREY);
+				wzCachedSeqText[i].render(currentText.x - 1, currentText.y + 1, WZCOL_GREY);
+				wzCachedSeqText[i].render(currentText.x + 1, currentText.y - 1, WZCOL_GREY);
+				wzCachedSeqText[i].render(currentText.x + 1, currentText.y + 1, WZCOL_GREY);
+				wzCachedSeqText[i].render(currentText.x, currentText.y, WZCOL_WHITE);
 			}
 		}
 	}
@@ -390,6 +396,8 @@ bool seq_StopFullScreenVideo()
 	}
 
 	seq_Shutdown();
+
+	wzCachedSeqText.clear();
 
 	return true;
 }

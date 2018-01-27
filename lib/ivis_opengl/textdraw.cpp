@@ -50,6 +50,9 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 #include <unordered_map>
 #include <memory>
 
+float _horizScaleFactor = 1.0f;
+float _vertScaleFactor = 1.0f;
+
 /***************************************************************************
  *
  *	Internal classes
@@ -244,6 +247,7 @@ struct TextShaper
 		hb_buffer_destroy(m_buffer);
 	}
 
+	// Returns the text width and height *IN PIXELS*
 	std::tuple<uint32_t, uint32_t> getTextMetrics(const TextRun& text, FTFace &face)
 	{
 		const std::vector<HarfbuzzPosition> &shapingResult = shapeText(text, face);
@@ -271,6 +275,7 @@ struct TextShaper
 		return std::make_tuple(max_x - min_x + 1, max_y - min_y + 1);
 	}
 
+	// Draws the text and returns the text buffer, width and height, etc *IN PIXELS*
 	std::tuple<std::unique_ptr<unsigned char[]>, uint32_t, uint32_t, int32_t, int32_t> drawText(const TextRun& text, FTFace &face)
 	{
 		const std::vector<HarfbuzzPosition> &shapingResult = shapeText(text, face);
@@ -404,7 +409,19 @@ TextShaper &getShaper()
 	return shaper;
 }
 
-#define DPI 72
+inline float iV_GetHorizScaleFactor()
+{
+	return _horizScaleFactor;
+}
+
+inline float iV_GetVertScaleFactor()
+{
+	return _vertScaleFactor;
+}
+
+// The base DPI used internally.
+// Do not change this, or various layout in the game interface & menus will break.
+#define DEFAULT_DPI 72.0f
 
 static FTFace *regular = nullptr;
 static FTFace *bold = nullptr;
@@ -432,13 +449,25 @@ static FTFace &getFTFace(iV_fonts FontID)
 
 static gfx_api::texture* textureID = nullptr;
 
-void iV_TextInit()
+const GLint text_filtering = GL_LINEAR;
+
+void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 {
-	regular = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, DPI, DPI);
-	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, DPI, DPI);
-	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, DPI, DPI);
-	small = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, DPI, DPI);
-	smallBold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, DPI, DPI);
+	assert(horizScaleFactor >= 1.0f);
+	assert(vertScaleFactor >= 1.0f);
+
+	// Use the scaling factors to multiply the default DPI (72) to determine the desired internal font rendering DPI.
+	_horizScaleFactor = horizScaleFactor;
+	_vertScaleFactor = vertScaleFactor;
+	float horizDPI = DEFAULT_DPI * horizScaleFactor;
+	float vertDPI = DEFAULT_DPI * vertScaleFactor;
+	debug(LOG_WZ, "Text-Rendering Scaling Factor: %f x %f; Internal Font DPI: %f x %f", _horizScaleFactor, _vertScaleFactor, horizDPI, vertDPI);
+
+	regular = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI);
+	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI);
+	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI);
+	small = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI);
+	smallBold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI);
 }
 
 void iV_TextShutdown()
@@ -458,48 +487,73 @@ void iV_TextShutdown()
 	textureID = nullptr;
 }
 
+void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor)
+{
+	iV_TextShutdown();
+	iV_TextInit(horizScaleFactor, vertScaleFactor);
+}
+
+unsigned int width_pixelsToPoints(unsigned int widthInPixels)
+{
+	return ceil((float)widthInPixels / _horizScaleFactor);
+}
+unsigned int height_pixelsToPoints(unsigned int heightInPixels)
+{
+	return ceil((float)heightInPixels / _vertScaleFactor);
+}
+
+// Returns the text width *in points*
 unsigned int iV_GetTextWidth(const char *string, iV_fonts fontID)
 {
 	uint32_t width;
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	std::tie(width, std::ignore) = getShaper().getTextMetrics(tr, getFTFace(fontID));
-	return width;
+	return width_pixelsToPoints(width);
 }
 
+// Returns the counted text width *in points*
 unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV_fonts fontID)
 {
 	return iV_GetTextWidth(string, fontID);
 }
 
+// Returns the text height *in points*
 unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID)
 {
 	uint32_t height;
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	std::tie(std::ignore, height) = getShaper().getTextMetrics(tr, getFTFace(fontID));
-	return height;
+	return height_pixelsToPoints(height);
 }
 
+// Returns the character width *in points*
 unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID)
 {
-	return getFTFace(fontID).getGlyphWidth(charCode) >> 6;
+	return width_pixelsToPoints(getFTFace(fontID).getGlyphWidth(charCode) >> 6);
+}
+
+int metricsHeight_PixelsToPoints(int heightMetric)
+{
+	float ptMetric = (float)heightMetric / _vertScaleFactor;
+	return (ptMetric < 0) ? floor(ptMetric) : ceil(ptMetric);
 }
 
 int iV_GetTextLineSize(iV_fonts fontID)
 {
 	FT_Face face = getFTFace(fontID);
-	return (face->size->metrics.ascender - face->size->metrics.descender) >> 6;
+	return metricsHeight_PixelsToPoints((face->size->metrics.ascender - face->size->metrics.descender) >> 6);
 }
 
 int iV_GetTextAboveBase(iV_fonts fontID)
 {
 	FT_Face face = getFTFace(fontID);
-	return -(face->size->metrics.ascender >> 6);
+	return metricsHeight_PixelsToPoints(-(face->size->metrics.ascender >> 6));
 }
 
 int iV_GetTextBelowBase(iV_fonts fontID)
 {
 	FT_Face face = getFTFace(fontID);
-	return face->size->metrics.descender >> 6;
+	return metricsHeight_PixelsToPoints(face->size->metrics.descender >> 6);
 }
 
 void iV_SetTextColour(PIELIGHT colour)
@@ -677,6 +731,7 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 	std::unique_ptr<unsigned char[]> texture;
 	int32_t xoffset, yoffset;
 	std::tie(texture, width, height, xoffset, yoffset) = getShaper().drawText(tr, getFTFace(fontID));
+
 	if (width > 0 && height > 0)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
@@ -684,12 +739,12 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 			delete textureID;
 		textureID = gfx_api::context::get().create_texture(width, height, gfx_api::pixel_format::rgba);
 		textureID->upload(0u, 0u, 0u, width, height, gfx_api::pixel_format::rgba, texture.get());
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, text_filtering);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, text_filtering);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glDisable(GL_CULL_FACE);
-		iV_DrawImageText(*textureID, Vector2i(XPos, YPos), Vector2i(xoffset, yoffset), Vector2i(width, height), rotation, REND_TEXT, color);
+		iV_DrawImageText(*textureID, Vector2i(XPos, YPos), Vector2f((float)xoffset / _horizScaleFactor, (float)yoffset / _vertScaleFactor), Vector2f((float)width / _horizScaleFactor, (float)height / _vertScaleFactor), rotation, REND_TEXT, color);
 		glEnable(GL_CULL_FACE);
 	}
 }
@@ -729,36 +784,78 @@ void iV_DrawTextF(float x, float y, const char *format, ...)
 }
 #endif
 
-void WzText::setText(const std::string &string, iV_fonts fontID)
+int WzText::width()
+{
+	updateCacheIfNecessary();
+	return width_pixelsToPoints(dimensions.x);
+}
+int WzText::height()
+{
+	updateCacheIfNecessary();
+	return height_pixelsToPoints(dimensions.y);
+}
+int WzText::aboveBase()
+{
+	updateCacheIfNecessary();
+	return mPtsAboveBase;
+}
+int WzText::belowBase()
+{
+	updateCacheIfNecessary();
+	return mPtsBelowBase;
+}
+int WzText::lineSize()
+{
+	updateCacheIfNecessary();
+	return mPtsLineSize;
+}
+
+void WzText::setText(const std::string &string, iV_fonts fontID/*, bool delayRender*/)
 {
 	if (mText == string && fontID == mFontID)
 	{
 		return; // cached
 	}
+	drawAndCacheText(string, fontID);
+}
+
+void WzText::drawAndCacheText(const std::string &string, iV_fonts fontID)
+{
 	mFontID = fontID;
 	mText = string;
+	mRenderingHorizScaleFactor = iV_GetHorizScaleFactor();
+	mRenderingVertScaleFactor = iV_GetVertScaleFactor();
+
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	std::unique_ptr<unsigned char[]> data;
 	FTFace &face = getFTFace(fontID);
 	FT_Face &type = face.face();
+
+	mPtsAboveBase = metricsHeight_PixelsToPoints(-(type->size->metrics.ascender >> 6));
+	mPtsLineSize = metricsHeight_PixelsToPoints((type->size->metrics.ascender - type->size->metrics.descender) >> 6);
+	mPtsBelowBase = metricsHeight_PixelsToPoints(type->size->metrics.descender >> 6);
+
 	std::tie(data, dimensions.x, dimensions.y, offsets.x, offsets.y) = getShaper().drawText(tr, face);
+
+	if (texture)
+		delete texture;
+
 	if (dimensions.x > 0 && dimensions.y > 0)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
-		if (texture)
-			delete texture;
 		texture = gfx_api::context::get().create_texture(dimensions.x, dimensions.y, gfx_api::pixel_format::rgba);
 		texture->upload(0u, 0u, 0u, dimensions.x , dimensions.y, gfx_api::pixel_format::rgba, data.get());
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, text_filtering);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, text_filtering);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-		mAboveBase = -(type->size->metrics.ascender >> 6);
-		mLineSize = (type->size->metrics.ascender - type->size->metrics.descender) >> 6;
-		mBelowBase = type->size->metrics.descender >> 6;
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void WzText::redrawAndCacheText()
+{
+	drawAndCacheText(mText, mFontID);
 }
 
 WzText::WzText(const std::string &string, iV_fonts fontID)
@@ -772,14 +869,69 @@ WzText::~WzText()
 		delete texture;
 }
 
+WzText& WzText::operator=(WzText&& other)
+{
+	if (this != &other)
+	{
+		// Free the existing texture, if any.
+		if (texture)
+		{
+			delete texture;
+		}
+
+		// Get the other data
+		texture = other.texture;
+		mFontID = other.mFontID;
+		mText = std::move(other.mText);
+		mPtsAboveBase = other.mPtsAboveBase;
+		mPtsBelowBase = other.mPtsBelowBase;
+		mPtsLineSize = other.mPtsLineSize;
+		offsets = other.offsets;
+		dimensions = other.dimensions;
+		mRenderingHorizScaleFactor = other.mRenderingHorizScaleFactor;
+		mRenderingVertScaleFactor = other.mRenderingVertScaleFactor;
+
+		// Reset other's texture
+		other.texture = nullptr;
+	}
+	return *this;
+}
+
+WzText::WzText(WzText&& other)
+{
+	*this = std::move(other);
+}
+
+inline void WzText::updateCacheIfNecessary()
+{
+	if (mText.empty())
+	{
+		return; // string is empty (or hasn't yet been set), thus changes have no effect
+	}
+	if (mRenderingHorizScaleFactor != iV_GetHorizScaleFactor() || mRenderingVertScaleFactor != iV_GetVertScaleFactor())
+	{
+		// The text rendering subsystem's scale factor has changed, so the rendered (cached) text must be re-rendered.
+		redrawAndCacheText();
+		// debug(LOG_WZ, "Redrawing / re-calculating WzText text - scale factor has changed.");
+	}
+}
+
 void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
 {
-	ASSERT(texture != 0 || dimensions.x == 0 || dimensions.y == 0, "Text not initialized before rendering");
+	updateCacheIfNecessary();
+
+	if (texture == nullptr)
+	{
+		// A texture will not always be created. (For example, if the rendered text is empty.)
+		// No need to render if there's nothing to render.
+		return;
+	}
+
 	if (rotation != 0.f)
 	{
 		rotation = 180. - rotation;
 	}
 	glDisable(GL_CULL_FACE);
-	iV_DrawImageText(*texture, position, offsets, dimensions, rotation, REND_TEXT, colour);
+	iV_DrawImageText(*texture, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f(dimensions.x / mRenderingHorizScaleFactor, dimensions.y / mRenderingVertScaleFactor), rotation, REND_TEXT, colour);
 	glEnable(GL_CULL_FACE);
 }

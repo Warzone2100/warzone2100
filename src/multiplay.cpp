@@ -235,6 +235,7 @@ bool multiPlayerLoop()
 		if (keyPressed(KEY_ESC))// check for cancel
 		{
 			bDisplayMultiJoiningStatus = 0;
+			clearDisplayMultiJoiningStatusCache();
 			setWidgetsStatus(true);
 			setPlayerHasLost(true);
 		}
@@ -244,6 +245,7 @@ bool multiPlayerLoop()
 		if (bDisplayMultiJoiningStatus)
 		{
 			bDisplayMultiJoiningStatus = 0;
+			clearDisplayMultiJoiningStatusCache();
 			setWidgetsStatus(true);
 		}
 		if (!ingame.TimeEveryoneIsInGame)

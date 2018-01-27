@@ -89,10 +89,24 @@ enum
 	STAT_ACE
 };
 
+#include "lib/ivis_opengl/textdraw.h"
+struct ScoreDataToScreenCache {
+	WzText wzLabelText_UnitLosses;
+	WzText wzLabelText_StructureLosses;
+	WzText wzLabelText_ForceInformation;
+
+	std::vector<WzText> wzInfoBarText;
+
+	WzText wzInfoText_ArtifactsFound;
+	WzText wzInfoText_MissionTime;
+	WzText wzInfoText_TotalGameTime;
+	WzText wzInfoText_Cheated;
+};
+
 bool scoreInitSystem();
 void scoreUpdateVar(DATA_INDEX var);
 void scoreDataToConsole();
-void scoreDataToScreen(WIDGET *psWidget);
+void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache);
 void getAsciiTime(char *psText, unsigned time);
 bool readScoreData(const char *fileName);
 bool writeScoreData(const char *fileName);

@@ -255,7 +255,9 @@ bool intAddIntelMap()
 	// Add the main Intelligence Map form
 	IntFormAnimated *intMapForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
 	intMapForm->id = IDINTMAP_FORM;
-	intMapForm->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
+	intMapForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
+	}));
 
 	if (!intAddMessageForm(playCurrent))
 	{
@@ -386,7 +388,9 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	IntFormAnimated *intMapMsgView = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
 	intMapMsgView->id = IDINTMAP_MSGVIEW;
-	intMapMsgView->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
+	intMapMsgView->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
+	}));
 
 	/* Add the close box */
 	W_BUTINIT sButInit;

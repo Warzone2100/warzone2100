@@ -118,11 +118,11 @@ void W_EDITBOX::initialise()
 
 
 /* Insert a character into a text buffer */
-void W_EDITBOX::insertChar(QChar ch)
+bool W_EDITBOX::insertChar(QChar ch)
 {
 	if (ch == QChar('\0'))
 	{
-		return;
+		return false;
 	}
 
 	ASSERT(insPos <= aText.length(), "Invalid insertion point");
@@ -132,7 +132,7 @@ void W_EDITBOX::insertChar(QChar ch)
 		{
 			AudioCallback(ErrorAudioID);
 		}
-		return;		// string too big, just return
+		return false;		// string too big, just return
 	}
 	/* Move the end of the string up by one (including terminating \0) */
 	/* Insert the character */
@@ -140,15 +140,17 @@ void W_EDITBOX::insertChar(QChar ch)
 
 	/* Update the insertion point */
 	++insPos;
+
+	return true;
 }
 
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-void W_EDITBOX::overwriteChar(QChar ch)
+bool W_EDITBOX::overwriteChar(QChar ch)
 {
 	if (ch == QChar('\0'))
 	{
-		return;
+		return false;
 	}
 
 	ASSERT(insPos <= aText.length(), "overwriteChar: Invalid insertion point");
@@ -157,8 +159,7 @@ void W_EDITBOX::overwriteChar(QChar ch)
 	if (insPos == aText.length())
 	{
 		// At end of string.
-		insertChar(ch);
-		return;
+		return insertChar(ch);
 	}
 
 	/* Store the character */
@@ -166,6 +167,8 @@ void W_EDITBOX::overwriteChar(QChar ch)
 
 	/* Update the insertion point */
 	++insPos;
+
+	return true;
 }
 
 
@@ -438,29 +441,33 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				break;
 			}
 			/* Dealt with everything else this must be a printable character */
+			bool changedText = false;
 			if (editState == WEDBS_INSERT)
 			{
-				insertChar(unicode);
+				changedText = insertChar(unicode);
 			}
 			else
 			{
-				overwriteChar(unicode);
+				changedText = overwriteChar(unicode);
 			}
-			len = aText.length();
-			/* Update the printable chars */
-			if (insPos == len)
+			if (changedText)
 			{
-				fitStringEnd();
-			}
-			else
-			{
-				fitStringStart();
-				if (insPos > printStart + printChars)
+				len = aText.length();
+				/* Update the printable chars */
+				if (insPos == len)
 				{
-					printStart = MIN(printStart + WEDB_CHARJUMP, len - 1);
-					if (printStart >= len)
+					fitStringEnd();
+				}
+				else
+				{
+					fitStringStart();
+					if (insPos > printStart + printChars)
 					{
-						fitStringStart();
+						printStart = MIN(printStart + WEDB_CHARJUMP, len - 1);
+						if (printStart >= len)
+						{
+							fitStringStart();
+						}
 					}
 				}
 			}
@@ -593,16 +600,15 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 
 	int fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
 
-	iV_SetTextColour(WZCOL_FORM_TEXT);
-
 	int fy = y0 + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
 
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
-	QString tmp = aText;
-	tmp.remove(0, printStart);  // Erase anything there isn't room to display.
-	tmp.remove(printChars, tmp.length());
+	QString displayedText = aText;
+	displayedText.remove(0, printStart);  // Erase anything there isn't room to display.
+	displayedText.remove(printChars, displayedText.length());
 
-	iV_DrawText(tmp.toUtf8().constData(), fx, fy, FontID);
+	displayCache.wzDisplayedText.setText(displayedText.toUtf8().constData(), FontID);
+	displayCache.wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
 
 	// Display the cursor if editing
 #if CURSOR_BLINK
@@ -617,8 +623,11 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
 		tmp.remove(0, printStart);
 
-		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData(), FontID);
-		cx += iV_GetTextWidth("-", FontID);
+		displayCache.modeText.setText(tmp.toUtf8().constData(), FontID);
+
+		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
+		displayCache.wzHyphen.setText("-", FontID);
+		cx += displayCache.wzHyphen.width();
 		int cy = fy;
 		iV_Line(cx, cy + iV_GetTextAboveBase(FontID), cx, cy - iV_GetTextBelowBase(FontID), WZCOL_FORM_CURSOR);
 	}
@@ -633,7 +642,9 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
 		tmp.remove(0, printStart);
 
-		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData(), FontID);
+		displayCache.modeText.setText(tmp.toUtf8().constData(), FontID);
+
+		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
 		int cy = fy;
 		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, WZCOL_FORM_CURSOR);
 	}

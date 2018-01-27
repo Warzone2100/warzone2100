@@ -37,12 +37,21 @@ struct screeninfo
 };
 
 void wzMain(int &argc, char **argv);
-bool wzMainScreenSetup(int antialiasing = 0, bool fullscreen = false, bool vsync = true);
+bool wzMainScreenSetup(int antialiasing = 0, bool fullscreen = false, bool vsync = true, bool highDPI = true);
+void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzMainEventLoop();
 void wzQuit();              ///< Quit game
 void wzShutdown();
 void wzToggleFullscreen();
 bool wzIsFullscreen();
+void wzSetWindowIsResizable(bool resizable);
+bool wzIsWindowResizable();
+bool wzSupportsLiveResolutionChanges();
+bool wzChangeDisplayScale(unsigned int displayScale);
+bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height);
+unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight);
+unsigned int wzGetCurrentDisplayScale();
+void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
 void wzSetCursor(CURSOR index);
 void wzScreenFlip();	///< Swap the graphics buffers
 void wzShowMouse(bool visible); ///< Show the Mouse?
@@ -53,6 +62,7 @@ int wzGetTicks();		///< Milliseconds since start of game
 WZ_DECL_NONNULL(1) void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
 
 std::vector<screeninfo> wzAvailableResolutions();
+std::vector<unsigned int> wzAvailableDisplayScales();
 void wzSetSwapInterval(int swap);
 int wzGetSwapInterval();
 QString wzGetSelection();

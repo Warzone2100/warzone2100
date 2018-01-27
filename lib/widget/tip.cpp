@@ -50,6 +50,9 @@ static enum _tip_state
 	TIP_ACTIVE,			// A tip is being displayed
 } tipState;
 
+struct TipDisplayCache {
+	std::vector<WzText> wzTip;
+};
 
 static SDWORD		startTime;			// When the tip was created
 static SDWORD		mx, my;				// Last mouse coords
@@ -61,6 +64,7 @@ static QStringList      pTip;                   // Tip text
 static WIDGET		*psWidget;			// The button the tip is for
 static enum iV_fonts FontID = font_regular;	// ID for the Ivis Font.
 static PIELIGHT TipColour;
+static TipDisplayCache displayCache;
 
 /* Initialise the tool tip module */
 void tipInitialise(void)
@@ -99,6 +103,7 @@ void tipStart(WIDGET *psSource, const QString& pNewTip, iV_fonts NewFontID, int 
 	pTip = pNewTip.split('\n');
 	psWidget = psSource;
 	FontID = NewFontID;
+	displayCache.wzTip.clear();
 }
 
 
@@ -143,9 +148,11 @@ void tipDisplay()
 			lineHeight = iV_GetTextLineSize(FontID);
 
 			fw = 0;
+			displayCache.wzTip.resize(pTip.size());
 			for (int n = 0; n < pTip.size(); ++n)
 			{
-				fw = std::max<int>(fw, iV_GetTextWidth(pTip[n].toUtf8().constData(), FontID));
+				displayCache.wzTip[n].setText(pTip[n].toUtf8().constData(), FontID);
+				fw = std::max<int>(fw, displayCache.wzTip[n].width());
 			}
 			tw = fw + TIP_HGAP * 2;
 			th = topGap * 2 + lineHeight * pTip.size() + iV_GetTextBelowBase(FontID);
@@ -176,12 +183,15 @@ void tipDisplay()
 		}
 		break;
 	case TIP_ACTIVE:
-		/* Draw the tool tip */
-		iV_ShadowBox(tx - 2, ty - 2, tx + tw + 2, ty + th + 2, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
-		iV_SetTextColour(TipColour);
-		for (int n = 0; n < pTip.size(); ++n)
 		{
-			iV_DrawText(pTip[n].toUtf8().constData(), fx, fy + lineHeight * n, FontID);
+			/* Draw the tool tip */
+			iV_ShadowBox(tx - 2, ty - 2, tx + tw + 2, ty + th + 2, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
+			size_t n = 0;
+			for (auto it = displayCache.wzTip.begin(); it != displayCache.wzTip.end(); ++it)
+			{
+				it->render(fx, fy + lineHeight * n, TipColour);
+				++n;
+			}
 		}
 
 		break;

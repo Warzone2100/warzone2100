@@ -2207,7 +2207,11 @@ void intRemoveTransporterTimer()
 
 static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	scoreDataToScreen(psWidget);
+	// Any widget using intDisplayMissionBackDrop must have its pUserData initialized to a (ScoreDataToScreenCache*)
+	assert(psWidget->pUserData != nullptr);
+	ScoreDataToScreenCache& cache = *static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
+
+	scoreDataToScreen(psWidget, cache);
 }
 
 static void missionResetInGameState()
@@ -2248,18 +2252,30 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
 	sFormInit.style			= WFORM_PLAIN;
 	sFormInit.pDisplay		= intDisplayMissionBackDrop;
+	sFormInit.pUserData = new ScoreDataToScreenCache();
+	sFormInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	W_FORM *missionResBackForm = widgAddForm(psWScreen, &sFormInit);
-	missionResBackForm->setGeometry(0 + D_W, 0 + D_H, 640, 480);
+	missionResBackForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(0 + D_W, 0 + D_H, 640, 480);
+	}));
 
 	// TITLE
 	IntFormAnimated *missionResTitle = new IntFormAnimated(missionResBackForm);
 	missionResTitle->id = IDMISSIONRES_TITLE;
-	missionResTitle->setGeometry(MISSIONRES_TITLE_X, MISSIONRES_TITLE_Y, MISSIONRES_TITLE_W, MISSIONRES_TITLE_H);
+	missionResTitle->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_TITLE_X, MISSIONRES_TITLE_Y, MISSIONRES_TITLE_W, MISSIONRES_TITLE_H);
+	}));
 
 	// add form
 	IntFormAnimated *missionResForm = new IntFormAnimated(missionResBackForm);
 	missionResForm->id = IDMISSIONRES_FORM;
-	missionResForm->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
+	missionResForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
+	}));
 
 	// description of success/fail
 	W_LABINIT sLabInit;
@@ -2296,6 +2312,12 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sButInit.width		= MISSION_TEXT_W;
 	sButInit.height		= MISSION_TEXT_H;
 	sButInit.pDisplay	= displayTextOption;
+	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	//if won
 	if (result || bMultiPlayer)
 	{
@@ -2454,6 +2476,12 @@ void intProcessMissionResult(UDWORD id)
 			sButInit.width		= MISSION_TEXT_W;
 			sButInit.height		= MISSION_TEXT_H;
 			sButInit.pDisplay	= displayTextOption;
+			sButInit.pUserData = new DisplayTextOptionCache();
+			sButInit.onDelete = [](WIDGET *psWidget) {
+				assert(psWidget->pUserData != nullptr);
+				delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+				psWidget->pUserData = nullptr;
+			};
 			sButInit.id			= IDMISSIONRES_QUIT;
 			sButInit.x			= MISSION_3_X;
 			sButInit.y			= MISSION_3_Y;

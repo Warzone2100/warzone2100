@@ -48,7 +48,7 @@ void wzMain(int &argc, char **argv)
 	appPtr = new QApplication(argc, argv);
 }
 
-bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
+bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
 	debug(LOG_MAIN, "Qt initialization");
 	//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on many platforms, doesn't exist in Qt5…
@@ -142,6 +142,86 @@ std::vector<screeninfo> wzAvailableResolutions()
 		res.push_back(info);
 	}
 	return res;
+}
+
+std::vector<unsigned int> wzAvailableDisplayScales()
+{
+	// TODO: Currently, Qt backend only supports 100% display scale.
+	static const unsigned int wzDisplayScales[] = { 100 };
+	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
+}
+
+void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor)
+{
+	// TODO: Support high-DPI with Qt backend
+	if (horizScaleFactor != nullptr)
+	{
+		*horizScaleFactor = 1.0f
+	}
+	if (vertScaleFactor != nullptr)
+	{
+		*vertScaleFactor = 1.0f
+	}
+}
+
+void wzSetWindowIsResizable(bool resizable)
+{
+	// TODO: Implement
+}
+
+bool wzIsWindowResizable()
+{
+	// TODO: Implement
+	return false;
+}
+
+bool wzSupportsLiveResolutionChanges()
+{
+	// TODO: Implement support for live resolution changes (several of the other functions with TODOs here)
+	return false;
+}
+
+bool wzChangeDisplayScale(unsigned int displayScale)
+{
+	// TODO: Implement
+	return false;
+}
+
+bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height)
+{
+	// TODO: Implement support for live resolution changes
+	return false;
+}
+
+unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight)
+{
+	// TODO: Implement
+	return 100;
+}
+
+unsigned int wzGetCurrentDisplayScale()
+{
+	// TODO: Implement
+	return 100;
+}
+
+void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height)
+{
+	assert(mainWindowPtr != nullptr);
+	WzMainWindow &mainwindow = *mainWindowPtr;
+	if (screen != nullptr)
+	{
+		// FIXME: Determine which screen the window is on
+		*screen = 0;
+	}
+	if (width != nullptr)
+	{
+		*width = mainwindow.width();
+	}
+	if (height != nullptr)
+	{
+		*height = mainwindow.height();
+	}
 }
 
 void wzSetSwapInterval(int swap)

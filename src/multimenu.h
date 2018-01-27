@@ -43,6 +43,8 @@ bool intCloseMultiMenu();
 void intCloseMultiMenuNoAnim();
 bool intAddMultiMenu();
 
+void multiMenuScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+
 extern bool		MultiMenuUp;
 
 extern UDWORD		current_numplayers;

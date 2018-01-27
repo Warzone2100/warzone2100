@@ -42,30 +42,68 @@ class WzText
 {
 public:
 	WzText() {}
-	WzText& operator =(WzText&& in) = default;
 	WzText(const std::string &text, iV_fonts fontID);
-	void setText(const std::string &text, iV_fonts fontID);
+	void setText(const std::string &text, iV_fonts fontID/*, bool delayRender = false*/);
 	~WzText();
-	int width() { return dimensions.x; }
-	int height() { return dimensions.y; }
+	// Width (in points)
+	int width();
+	// Height (in points)
+	int height();
 	void render(Vector2i position, PIELIGHT colour, float rotation = 0.0f);
 	void render(int x, int y, PIELIGHT colour, float rotation = 0.0f) { render(Vector2i{x,y}, colour, rotation); }
-	int aboveBase() { return mAboveBase; }
-	int belowBase() { return mBelowBase; }
-	int lineSize() { return mLineSize; }
+	int aboveBase(); // (in points)
+	int belowBase(); // (in points)
+	int lineSize(); // (in points)
 
+public:
+	WzText(const WzText& other) = delete; // TODO: Make this copyable?
+	WzText& operator=(WzText&& other);
+	WzText(WzText&& other);
+
+private:
+	void drawAndCacheText(const std::string &text, iV_fonts fontID);
+	void redrawAndCacheText();
+	void updateCacheIfNecessary();
 private:
 	iV_fonts mFontID = font_count;
 	std::string mText;
 	gfx_api::texture* texture = nullptr;
-	int mAboveBase = 0;
-	int mBelowBase = 0;
-	int mLineSize = 0;
+	int mPtsAboveBase = 0;
+	int mPtsBelowBase = 0;
+	int mPtsLineSize = 0;
 	Vector2i offsets;
 	Vector2i dimensions;
+	float mRenderingHorizScaleFactor = 0.f;
+	float mRenderingVertScaleFactor = 0.f;
 };
 
-void iV_TextInit();
+/**
+ Initialize the text rendering subsystem.
+
+ The scale factors are used to scale the rendering / rasterization of the text to a higher DPI.
+ It is expected that they will be >= 1.0.
+
+ @param horizScaleFactor The horizontal DPI scale factor.
+ @param vertScaleFactor The vertical DPI scale factor.
+ */
+void iV_TextInit(float horizScaleFactor, float vertScaleFactor);
+
+/**
+ Reinitializes the text rendering subsystem with a new horizontal & vertical scale factor.
+
+ (See iv_TextInit for more details.)
+
+ This function is useful if the DPI used for rendering / rasterization of the text must change.
+
+ Keep in mind that this function merely reinitializes the text rendering subsystem - if any
+ prior rendering output of the text rendering subsystem is stored or cached, it may be desirable
+ to re-render that text once the text subsystem has reinitialized.
+ (WzText instances handle run-time changes of the text rendering scale factor automatically.)
+
+ @param horizScaleFactor The new horizontal DPI scale factor.
+ @param vertScaleFactor The new vertical DPI scale factor.
+ */
+void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor);
 void iV_TextShutdown();
 void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
 

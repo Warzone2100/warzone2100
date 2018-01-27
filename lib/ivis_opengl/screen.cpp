@@ -76,6 +76,7 @@ static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
 
 static GFX *backdropGfx = nullptr;
+static bool backdropIsMapPreview = false;
 
 static bool perfStarted = false;
 static GLuint perfpos[PERF_COUNT];
@@ -88,6 +89,7 @@ static PERF_POINT queryActive = PERF_COUNT;
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
+static WzText player_Text[MAX_PLAYERS];
 static bool mappreview = false;
 OPENGL_DATA opengl;
 static bool khr_debug = false;
@@ -500,13 +502,12 @@ void screen_Display()
 			x = screenWidth / 2 - w / 2 + x * scale;
 			y = screenHeight / 2 - h / 2 + y * scale;
 			ssprintf(text, "%d", i);
-			iV_SetTextColour(WZCOL_BLACK);
-			iV_DrawText(text, x - 1, y - 1, font_large);
-			iV_DrawText(text, x + 1, y - 1, font_large);
-			iV_DrawText(text, x - 1, y + 1, font_large);
-			iV_DrawText(text, x + 1, y + 1, font_large);
-			iV_SetTextColour(WZCOL_WHITE);
-			iV_DrawText(text, x, y, font_large);
+			player_Text[i].setText(text, font_large);
+			player_Text[i].render(x - 1, y - 1, WZCOL_BLACK);
+			player_Text[i].render(x + 1, y - 1, WZCOL_BLACK);
+			player_Text[i].render(x - 1, y + 1, WZCOL_BLACK);
+			player_Text[i].render(x + 1, y + 1, WZCOL_BLACK);
+			player_Text[i].render(x, y, WZCOL_WHITE);
 		}
 	}
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
@@ -515,8 +516,10 @@ void screen_Display()
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_Upload(const char *newBackDropBmp)
+void screen_GenerateCoordinatesAndVBOs()
 {
+	assert(backdropGfx != nullptr);
+
 	GLfloat x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight;
 	GLfloat tx = 1, ty = 1;
 	int scale = 0, w = 0, h = 0;
@@ -535,10 +538,8 @@ void screen_Upload(const char *newBackDropBmp)
 		y2 -= offset;
 	}
 
-	if (newBackDropBmp) // preview
+	if (backdropIsMapPreview) // preview
 	{
-		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, GL_NEAREST, gfx_api::pixel_format::rgb, newBackDropBmp);
-
 		int s1 = screenWidth / preview_width;
 		int s2 = screenHeight / preview_height;
 		scale = MIN(s1, s2);
@@ -558,6 +559,30 @@ void screen_Upload(const char *newBackDropBmp)
 	GLfloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
 	GLfloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
 	backdropGfx->buffers(4, vertices, texcoords);
+}
+
+void screen_Upload(const char *newBackDropBmp)
+{
+	backdropIsMapPreview = false;
+
+	if (newBackDropBmp) // preview
+	{
+		// Slight hack to display maps previews in background.
+		// Bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
+		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, GL_NEAREST, gfx_api::pixel_format::rgb, newBackDropBmp);
+		backdropIsMapPreview = true;
+	}
+
+	// Generate coordinates and put them into VBOs
+	screen_GenerateCoordinatesAndVBOs();
+}
+
+void screen_updateGeometry()
+{
+	if (backdropGfx != nullptr)
+	{
+		screen_GenerateCoordinatesAndVBOs();
+	}
 }
 
 void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)

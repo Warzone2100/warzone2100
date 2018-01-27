@@ -133,4 +133,7 @@ UDWORD getSaveGameType();
 
 bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
 
+void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor);
+
 #endif // __INCLUDED_SRC_GAME_H__

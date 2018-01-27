@@ -26,6 +26,7 @@
 
 #include "droiddef.h"
 
+void clearDisplayMultiJoiningStatusCache();						// Call when bDisplayMultiJoiningStatus is set to 0
 bool intDisplayMultiJoiningStatus(UBYTE joinCount);
 void recvPlayerLeft(NETQUEUE queue);
 bool MultiPlayerLeave(UDWORD playerIndex);						// A player has left the game.

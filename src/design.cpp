@@ -365,7 +365,9 @@ bool intAddDesign(bool bShowCentreScreen)
 	/* Add the main design form */
 	IntFormAnimated *desForm = new IntFormAnimated(parent, false);
 	desForm->id = IDDES_FORM;
-	desForm->setGeometry(DES_CENTERFORMX, DES_CENTERFORMY, DES_CENTERFORMWIDTH, DES_CENTERFORMHEIGHT);
+	desForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(DES_CENTERFORMX, DES_CENTERFORMY, DES_CENTERFORMWIDTH, DES_CENTERFORMHEIGHT);
+	}));
 
 	/* add the edit name box */
 	sEdInit.formID = IDDES_FORM;
@@ -546,7 +548,9 @@ bool intAddDesign(bool bShowCentreScreen)
 	/* add central stats form */
 	IntFormAnimated *statsForm = new IntFormAnimated(parent, false);
 	statsForm->id = IDDES_STATSFORM;
-	statsForm->setGeometry(DES_STATSFORMX, DES_STATSFORMY, DES_STATSFORMWIDTH, DES_STATSFORMHEIGHT);
+	statsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(DES_STATSFORMX, DES_STATSFORMY, DES_STATSFORMWIDTH, DES_STATSFORMHEIGHT);
+	}));
 
 	/* Add the body form */
 	sFormInit.formID = IDDES_STATSFORM;
@@ -577,6 +581,12 @@ bool intAddDesign(bool bShowCentreScreen)
 	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
 	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
 	sBarInit.pDisplay = intDisplayStatsBar;
+	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
+	sBarInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	sBarInit.pTip = _("Kinetic Armour");
 	sBarInit.iRange = getMaxBodyArmour();
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -688,6 +698,12 @@ bool intAddDesign(bool bShowCentreScreen)
 	                         iV_GetImageWidth(IntImages, IMAGE_DES_BODYPOINTS));
 	sBarInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_POWERBACK);
 	sBarInit.pDisplay = intDisplayDesignPowerBar;//intDisplayStatsBar;
+	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
+	sBarInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	sBarInit.pTip = _("Total Power Required");
 	sBarInit.iRange = DBAR_TEMPLATEMAXPOWER;//WBAR_SCALE;
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -717,6 +733,12 @@ bool intAddDesign(bool bShowCentreScreen)
 	                         iV_GetImageWidth(IntImages, IMAGE_DES_BODYPOINTS));
 	sBarInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_POWERBACK);
 	sBarInit.pDisplay = intDisplayDesignPowerBar;//intDisplayStatsBar;
+	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
+	sBarInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	sBarInit.pTip = _("Total Body Points");
 	sBarInit.iRange = DBAR_TEMPLATEMAXPOINTS;//(UWORD)getMaxBodyPoints();//DBAR_BODYMAXPOINTS;
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -774,17 +796,25 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	/* add a form to place the tabbed form on */
 	IntFormAnimated *templbaseForm = new IntFormAnimated(parent, false);
 	templbaseForm->id = IDDES_TEMPLBASE;
-	templbaseForm->setGeometry(RET_X, DESIGN_Y, RET_FORMWIDTH, DES_LEFTFORMHEIGHT);
+	templbaseForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(RET_X, DESIGN_Y, RET_FORMWIDTH, DES_LEFTFORMHEIGHT);
+	}));
 
 	// Add the obsolete items button.
 	makeObsoleteButton(templbaseForm);
 
 	/* Add the design templates form */
 	IntListTabWidget *templList = new IntListTabWidget(templbaseForm);
-	templList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
-	templList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
-	int templListWidth = OBJ_BUTWIDTH * 2 + DES_TABBUTGAP;
-	templList->setGeometry((RET_FORMWIDTH - templListWidth) / 2, 18, templListWidth, templbaseForm->height() - 18);
+	templList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		IntListTabWidget *templList = static_cast<IntListTabWidget *>(psWidget);
+		assert(templList != nullptr);
+		WIDGET *templbaseForm = templList->parent();
+		assert(templbaseForm != nullptr);
+		templList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
+		templList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
+		int templListWidth = OBJ_BUTWIDTH * 2 + DES_TABBUTGAP;
+		templList->setGeometry((RET_FORMWIDTH - templListWidth) / 2, 18, templListWidth, templbaseForm->height() - 18);
+	}));
 
 	/* Put the buttons on it */
 	return intAddTemplateButtons(templList, psSelected);
@@ -1201,6 +1231,12 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
 	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
 	sBarInit.pDisplay = intDisplayStatsBar;
+	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
+	sBarInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	/* Initialise the label struct */
 	W_LABINIT sLabInit;
@@ -1528,6 +1564,12 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
 	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
 	sBarInit.pDisplay = intDisplayStatsBar;
+	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
+	sBarInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	/* Initialise the label struct */
 	W_LABINIT sLabInit;
@@ -1675,14 +1717,22 @@ static ListTabWidget *intAddComponentForm()
 	/* add a form to place the tabbed form on */
 	IntFormAnimated *rightBase = new IntFormAnimated(parent, false);
 	rightBase->id = IDDES_RIGHTBASE;
-	rightBase->setGeometry(RADTLX - 2, DESIGN_Y, RET_FORMWIDTH, DES_RIGHTFORMHEIGHT);
+	rightBase->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(RADTLX - 2, DESIGN_Y, RET_FORMWIDTH, DES_RIGHTFORMHEIGHT);
+	}));
 
 	//now a single form
 	IntListTabWidget *compList = new IntListTabWidget(rightBase);
-	compList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
-	compList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
-	int objListWidth = DES_TABBUTWIDTH * 2 + DES_TABBUTGAP;
-	compList->setGeometry((rightBase->width() - objListWidth) / 2, 40, objListWidth, rightBase->height() - 40);
+	compList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		IntListTabWidget *compList = static_cast<IntListTabWidget *>(psWidget);
+		assert(compList != nullptr);
+		WIDGET * rightBase = compList->parent();
+		assert(rightBase != nullptr);
+		compList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
+		compList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
+		int objListWidth = DES_TABBUTWIDTH * 2 + DES_TABBUTGAP;
+		compList->setGeometry((rightBase->width() - objListWidth) / 2, 40, objListWidth, rightBase->height() - 40);
+	}));
 	return compList;
 }
 
@@ -3881,7 +3931,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	iV_DrawImage(IntImages, (UWORD)(IMAGE_DES_STATBACKLEFT), x0, y0);
 	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATBACKMID, x0 + iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT), y0,
-	                    Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT) - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT));
+	                    Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT) - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), defaultProjectionMatrix(), true);
 	iV_DrawImage(IntImages, IMAGE_DES_STATBACKRIGHT, x0 + Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), y0);
 
 	/* display current component */

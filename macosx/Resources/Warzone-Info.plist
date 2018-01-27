@@ -148,5 +148,7 @@
 	<string>VCS_FULL_HASH</string>
 	<key>VCSShortHash</key>
 	<string>VCS_SHORT_HASH</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 </dict>
 </plist>

@@ -101,6 +101,8 @@ STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY);  ///< Gets the
 bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir);  ///< Checks if any blueprint is too close to the given structure.
 void clearBlueprints();
 
+void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+
 extern SDWORD mouseTileX, mouseTileY;
 extern Vector2i mousePos;
 
@@ -127,6 +129,6 @@ extern bool CauseCrash;
 extern bool tuiTargetOrigin;
 
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
-void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix);
+bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix);
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

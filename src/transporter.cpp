@@ -185,7 +185,9 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 
 	IntFormAnimated *transForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
 	transForm->id = IDTRANS_FORM;
-	transForm->setGeometry(TRANS_X, TRANS_Y, TRANS_WIDTH, TRANS_HEIGHT);
+	transForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(TRANS_X, TRANS_Y, TRANS_WIDTH, TRANS_HEIGHT);
+	}));
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
@@ -244,16 +246,17 @@ bool intAddTransporterContents()
 
 	IntFormAnimated *transContentForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
 	transContentForm->id = IDTRANS_CONTENTFORM;
-	transContentForm->setGeometry(TRANSCONT_X, TRANSCONT_Y, TRANSCONT_WIDTH, TRANSCONT_HEIGHT);
+	transContentForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(TRANSCONT_X, TRANSCONT_Y, TRANSCONT_WIDTH, TRANSCONT_HEIGHT);
+	}));
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
 	sButInit.formID = IDTRANS_CONTENTFORM;
 	sButInit.id = IDTRANS_CONTCLOSE;
-	sButInit.x = STAT_WIDTH - CLOSE_WIDTH;
-	sButInit.y = 0;
-	sButInit.width = CLOSE_WIDTH;
-	sButInit.height = CLOSE_HEIGHT;
+	sButInit.calcLayout = (LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(STAT_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+	}));
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -522,16 +525,17 @@ bool intAddDroidsAvailForm()
 	/* Add the droids available form */
 	IntFormAnimated *transDroids = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
 	transDroids->id = IDTRANS_DROIDS;
-	transDroids->setGeometry(TRANSDROID_X, TRANSDROID_Y, TRANSDROID_WIDTH, TRANSDROID_HEIGHT);
+	transDroids->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(TRANSDROID_X, TRANSDROID_Y, TRANSDROID_WIDTH, TRANSDROID_HEIGHT);
+	}));
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
 	sButInit.formID = IDTRANS_DROIDS;
 	sButInit.id = IDTRANS_DROIDCLOSE;
-	sButInit.x = TRANSDROID_WIDTH - CLOSE_WIDTH;
-	sButInit.y = 0;
-	sButInit.width = CLOSE_WIDTH;
-	sButInit.height = CLOSE_HEIGHT;
+	sButInit.calcLayout = (LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(TRANSDROID_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+	}));
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -543,10 +547,14 @@ bool intAddDroidsAvailForm()
 	//now add the tabbed droids available form
 	IntListTabWidget *droidList = new IntListTabWidget(transDroids);
 	droidList->id = IDTRANS_DROIDTAB;
-	droidList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
-	droidList->setChildSpacing(OBJ_GAP, OBJ_GAP);
-	int droidListWidth = OBJ_BUTWIDTH * 2 + OBJ_GAP;
-	droidList->setGeometry((TRANSDROID_WIDTH - droidListWidth) / 2, AVAIL_STARTY + 15, droidListWidth, TRANSDROID_HEIGHT - (AVAIL_STARTY + 15));
+	droidList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		IntListTabWidget *droidList = static_cast<IntListTabWidget *>(psWidget);
+		assert(droidList != nullptr);
+		droidList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+		droidList->setChildSpacing(OBJ_GAP, OBJ_GAP);
+		int droidListWidth = OBJ_BUTWIDTH * 2 + OBJ_GAP;
+		droidList->setGeometry((TRANSDROID_WIDTH - droidListWidth) / 2, AVAIL_STARTY + 15, droidListWidth, TRANSDROID_HEIGHT - (AVAIL_STARTY + 15));
+	}));
 
 	/* Add the droids available buttons */
 	int nextButtonId = IDTRANS_DROIDSTART;

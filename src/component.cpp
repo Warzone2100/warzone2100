@@ -377,7 +377,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
-static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMatrix)
+static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMatrix)
 {
 	iIMDShape *psMoveAnim, *psStillAnim;
 	SDWORD				iConnector;
@@ -386,6 +386,7 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	PIELIGHT			brightness;
 	UDWORD				colour;
 	UBYTE	i;
+	bool				didDrawSomething = false;
 
 	glm::mat4 modelMatrix = glm::mat4(1.f);
 
@@ -400,7 +401,7 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 
 	/* get propulsion stats */
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT_OR_RETURN(, psPropStats != nullptr, "invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(didDrawSomething, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 	//set pieflag for button object or ingame object
 	if (bButton)
@@ -443,7 +444,10 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	iIMDShape *psShapeProp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix);
+		if (pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix))
+		{
+			didDrawSomething = true;
+		}
 	}
 
 	/* set default components transparent */
@@ -471,9 +475,13 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 		{
 			strImd = psShapeBody->objanimpie[psDroid->animationEvent];
 		}
+		glm::mat4 viewModelMatrix = viewMatrix * modelMatrix;
 		while (strImd)
 		{
-			drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix);
+			if (drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData, viewModelMatrix))
+			{
+				didDrawSomething = true;
+			}
 			strImd = strImd->next;
 		}
 	}
@@ -481,20 +489,27 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	/* Render animation effects based on movement or lack thereof, if any */
 	psMoveAnim = asBodyStats[psDroid->asBits[COMP_BODY]].ppMoveIMDList[psDroid->asBits[COMP_PROPULSION]];
 	psStillAnim = asBodyStats[psDroid->asBits[COMP_BODY]].ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
+	glm::mat4 viewModelMatrix = viewMatrix * modelMatrix;
 	if (!bButton && psMoveAnim && psDroid->sMove.Status != MOVEINACTIVE)
 	{
-		pie_Draw3DShape(psMoveAnim, getModularScaledGraphicsTime(psMoveAnim->animInterval, psMoveAnim->numFrames), colour, brightness, pie_ADDITIVE, 200, viewMatrix * modelMatrix);
+		if (pie_Draw3DShape(psMoveAnim, getModularScaledGraphicsTime(psMoveAnim->animInterval, psMoveAnim->numFrames), colour, brightness, pie_ADDITIVE, 200, viewModelMatrix))
+		{
+			didDrawSomething = true;
+		}
 	}
 	else if (!bButton && psStillAnim) // standing still
 	{
-		pie_Draw3DShape(psStillAnim, getModularScaledGraphicsTime(psStillAnim->animInterval, psStillAnim->numFrames), colour, brightness, 0, 0, viewMatrix * modelMatrix);
+		if (pie_Draw3DShape(psStillAnim, getModularScaledGraphicsTime(psStillAnim->animInterval, psStillAnim->numFrames), colour, brightness, 0, 0, viewModelMatrix))
+		{
+			didDrawSomething = true;
+		}
 	}
 
 	//don't change the screen coords of an object if drawing it in a button
 	if (!bButton)
 	{
 		/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
-		calcScreenCoords(psDroid, viewMatrix * modelMatrix);
+		calcScreenCoords(psDroid, viewModelMatrix);
 	}
 
 	/* set default components transparent */
@@ -578,7 +593,10 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 					/* Draw it */
 					if (psShape)
 					{
-						pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
+						if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix))
+						{
+							didDrawSomething = true;
+						}
 					}
 					localModelMatrix *= glm::translate(0, 0, recoilValue);
 
@@ -606,8 +624,12 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 					// We have a weapon so we draw it and a muzzle flash from weapon connector
 					if (psShape)
 					{
-						pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
-						drawMuzzleFlash(psDroid->asWeaps[i], psShape, MUZZLE_FLASH_PIE(psDroid, i), brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
+						glm::mat4 localViewModelMatrix = viewMatrix * localModelMatrix;
+						if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localViewModelMatrix))
+						{
+							didDrawSomething = true;
+						}
+						drawMuzzleFlash(psDroid->asWeaps[i], psShape, MUZZLE_FLASH_PIE(psDroid, i), brightness, pieFlag, iPieData, localViewModelMatrix);
 					}
 				}
 			}
@@ -671,7 +693,10 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 				/* Draw it */
 				if (psMountShape)
 				{
-					pie_Draw3DShape(psMountShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
+					if (pie_Draw3DShape(psMountShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix))
+					{
+						didDrawSomething = true;
+					}
 				}
 
 				/* translate for construct mount point if cyborg */
@@ -683,7 +708,10 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 				/* Draw it */
 				if (psShape)
 				{
-					pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
+					if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix))
+					{
+						didDrawSomething = true;
+					}
 
 					// In repair droid case only:
 					if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR) &&
@@ -705,7 +733,10 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 						localModelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f));
 						localModelMatrix *= glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
 
-						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140, viewMatrix * localModelMatrix);
+						if (pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140, viewMatrix * localModelMatrix))
+						{
+							didDrawSomething = true;
+						}
 
 						localModelMatrix *= glm::rotate(UNDEG(player.r.x), glm::vec3(1.f, 0.f, 0.f));
 						localModelMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 1.f, 0.f));
@@ -738,8 +769,13 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	psShapeProp = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix);
+		if (pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewModelMatrix)) // Safe to use viewModelMatrix because modelView has not been changed since it was calculated
+		{
+			didDrawSomething = true;
+		}
 	}
+
+	return didDrawSomething;
 }
 
 
@@ -781,7 +817,6 @@ void displayComponentButtonObject(DROID *psDroid, const Vector3i *Rotation, cons
 	//draw multi component object as a button object
 	displayCompObj(psDroid, true, matrix);
 }
-
 
 /* Assumes matrix context is already set */
 // multiple turrets display removed the pointless mountRotation
@@ -835,12 +870,19 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 	{
 		//ingame not button object
 		//should render 3 mounted weapons now
-		displayCompObj(psDroid, false, viewMatrix * modelMatrix);
+		if (displayCompObj(psDroid, false, viewMatrix * modelMatrix))
+		{
+			// did draw something to the screen - update the framenumber
+			psDroid->sDisplay.frameNumber = frameGetFrameNumber();
+		}
 	}
 	else
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
-		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2, viewMatrix * modelMatrix);
+		if (pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2, viewMatrix * modelMatrix))
+		{
+			psDroid->sDisplay.frameNumber = frameGetFrameNumber();
+		}
 	}
 }
 

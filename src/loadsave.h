@@ -74,4 +74,6 @@ bool saveMidMission();
 
 void deleteSaveGame(char *saveGameName);
 
+void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+
 #endif // __INCLUDED_SRC_LOADSAVE_H__
