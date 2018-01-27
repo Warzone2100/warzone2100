@@ -176,6 +176,17 @@ bool loadConfig()
 	war_SetColouredCursor(ini.value("coloredCursor", true).toBool());
 	// this should be enabled on all systems by default
 	war_SetVsync(ini.value("vsync", true).toBool());
+	// the default (and minimum) display scale is 100 (%)
+	unsigned int displayScale = ini.value("displayScale", war_GetDisplayScale()).toUInt();
+	if (displayScale < 100)
+	{
+		displayScale = 100;
+	}
+	if (displayScale > 500) // Maximum supported display scale of 500%. (Further testing needed for anything greater.)
+	{
+		displayScale = 500;
+	}
+	war_SetDisplayScale(displayScale);
 	// 640x480 is minimum that we will support, but default to something more sensible
 	int width = ini.value("width", war_GetWidth()).toInt();
 	int height = ini.value("height", war_GetHeight()).toInt();
@@ -248,6 +259,7 @@ bool saveConfig()
 	ini.setValue("radarTerrainMode", (SDWORD)radarDrawMode);
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
+	ini.setValue("displayScale", war_GetDisplayScale());
 	ini.setValue("textureSize", getTextureSize());
 	ini.setValue("antialiasing", war_getAntialiasing());
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);

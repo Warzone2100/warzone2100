@@ -87,6 +87,11 @@
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
+struct LoadSaveDisplayLoadSlotCache {
+	std::string fullText;
+	WzText wzText;
+};
+
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 static	bool		mode;
 static	UDWORD		chosenSlotId;
@@ -111,6 +116,12 @@ bool saveInMissionRes()
 bool saveMidMission()
 {
 	return bLoadSaveMode == SAVE_INGAME_MISSION;
+}
+
+void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	if (psRequestScreen == nullptr) return;
+	psRequestScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -193,7 +204,9 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	// and * the gaps, add the banner, and finally, the fudge factor ;)
 	IntFormAnimated *loadSaveForm = new IntFormAnimated(parent);
 	loadSaveForm->id = LOADSAVE_FORM;
-	loadSaveForm->setGeometry(LOADSAVE_X, LOADSAVE_Y, LOADSAVE_W, slotsInColumn * (LOADENTRY_H + LOADSAVE_HGAP) + LOADSAVE_BANNER_DEPTH + 20);
+	loadSaveForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(LOADSAVE_X, LOADSAVE_Y, LOADSAVE_W, slotsInColumn * (LOADENTRY_H + LOADSAVE_HGAP) + LOADSAVE_BANNER_DEPTH + 20);
+	}));
 
 	// Add Banner
 	W_FORMINIT sFormInit;
@@ -242,6 +255,12 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	sButInit.width		= LOADENTRY_W;
 	sButInit.height		= LOADENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
+	sButInit.initPUserDataFunc = []() -> void * { return new LoadSaveDisplayLoadSlotCache(); };
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<LoadSaveDisplayLoadSlotCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	for (slotCount = 0; slotCount < totalslots; slotCount++)
 	{
@@ -645,6 +664,10 @@ static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	// Any widget using displayLoadSlot must have its pUserData initialized to a (LoadSaveDisplayLoadSlotCache*)
+	assert(psWidget->pUserData != nullptr);
+	LoadSaveDisplayLoadSlotCache& cache = *static_cast<LoadSaveDisplayLoadSlotCache *>(psWidget->pUserData);
+
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 	char  butString[64];
@@ -655,13 +678,18 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
-		iV_SetTextColour(WZCOL_FORM_TEXT);
-		while (iV_GetTextWidth(butString, font_regular) > psWidget->width())
+		if (cache.fullText != butString)
 		{
-			butString[strlen(butString) - 1] = '\0';
+			// Update cache
+			while (iV_GetTextWidth(butString, font_regular) > psWidget->width())
+			{
+				butString[strlen(butString) - 1] = '\0';
+			}
+			cache.wzText.setText(butString, font_regular);
+			cache.fullText = butString;
 		}
 
-		iV_DrawText(butString, x + 4, y + 17, font_regular);
+		cache.wzText.render(x + 4, y + 17, WZCOL_FORM_TEXT);
 	}
 }
 

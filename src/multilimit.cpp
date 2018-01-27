@@ -77,6 +77,11 @@
 
 static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
+struct DisplayStructureBarCache {
+	WzText wzNameText;
+	WzText wzLimitText;
+};
+
 // ////////////////////////////////////////////////////////////////////////////
 static inline void freeLimitSet()
 {
@@ -131,7 +136,9 @@ bool startLimitScreen()
 
 	IntFormAnimated *limitsForm = new IntFormAnimated(parent, false);
 	limitsForm->id = IDLIMITS;
-	limitsForm->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
+	limitsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
+	}));
 
 	// return button.
 	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_RETURN,
@@ -149,9 +156,13 @@ bool startLimitScreen()
 
 	// add tab form..
 	IntListTabWidget *limitsList = new IntListTabWidget(limitsForm);
-	limitsList->setChildSize(BARWIDTH, BARHEIGHT);
-	limitsList->setChildSpacing(5, 5);
-	limitsList->setGeometry(50, 10, BARWIDTH, 370);
+	limitsList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		IntListTabWidget *limitsList = static_cast<IntListTabWidget *>(psWidget);
+		assert(limitsList != nullptr);
+		limitsList->setChildSize(BARWIDTH, BARHEIGHT);
+		limitsList->setChildSpacing(5, 5);
+		limitsList->setGeometry(50, 10, BARWIDTH, 370);
+	}));
 
 	//Put the buttons on it
 	int limitsButtonId = IDLIMITS_ENTRIES_START;
@@ -164,6 +175,12 @@ bool startLimitScreen()
 			button->id = limitsButtonId;
 			button->displayFunction = displayStructureBar;
 			button->UserData = i;
+			button->pUserData = new DisplayStructureBarCache();
+			button->setOnDelete([](WIDGET *psWidget) {
+				assert(psWidget->pUserData != nullptr);
+				delete static_cast<DisplayStructureBarCache *>(psWidget->pUserData);
+				psWidget->pUserData = nullptr;
+			});
 			limitsList->addWidgetToLayout(button);
 			++limitsButtonId;
 
@@ -324,6 +341,10 @@ void applyLimitSet()
 
 static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	// Any widget using displayStructureBar must have its pUserData initialized to a (DisplayStructureBarCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayStructureBarCache& cache = *static_cast<DisplayStructureBarCache *>(psWidget->pUserData);
+
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 	int w = psWidget->width();
@@ -365,12 +386,13 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(_(getName(stat)), x + 80, y + psWidget->height() / 2 + 3, font_regular);
+	cache.wzNameText.setText(_(getName(stat)), font_regular);
+	cache.wzNameText.render(x + 80, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	// draw limit
 	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
-	iV_DrawText(str, x + 270, y + psWidget->height() / 2 + 3, font_regular);
+	cache.wzLimitText.setText(str, font_regular);
+	cache.wzLimitText.render(x + 270, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	return;
 }

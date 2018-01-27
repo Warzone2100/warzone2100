@@ -340,14 +340,14 @@ static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 	return true;
 }
 
-static void iv_DrawImageImpl(Vector2i offset, Vector2i size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour, const glm::mat4 &modelViewProjection, SHADER_MODE mode = SHADER_TEXRECT)
+static void iv_DrawImageImpl(Vector2f offset, Vector2f size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour, const glm::mat4 &modelViewProjection, SHADER_MODE mode = SHADER_TEXRECT)
 {
-	glm::mat4 transformMat = modelViewProjection * glm::translate(offset.x, offset.y, 0) * glm::scale(size.x, size.y, 1);
+	glm::mat4 transformMat = modelViewProjection * glm::translate(offset.x, offset.y, 0.f) * glm::scale(size.x, size.y, 1.f);
 
 	pie_ActivateShader(mode,
 		transformMat,
-		Vector2f(TextureUV.x, TextureUV.y),
-		Vector2f(TextureSize.x, TextureSize.y),
+		TextureUV,
+		TextureSize,
 		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f), 0);
 	enableRect();
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -355,7 +355,7 @@ static void iv_DrawImageImpl(Vector2i offset, Vector2i size, Vector2f TextureUV,
 	pie_DeactivateShader();
 }
 
-void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour)
+void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour)
 {
 	pie_SetRendMode(mode);
 	pie_SetTexturePage(TEXPAGE_EXTERN);
@@ -366,7 +366,7 @@ void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i
 	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
 }
 
-void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour)
+void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour)
 {
 	pie_SetRendMode(mode);
 	pie_SetTexturePage(TEXPAGE_EXTERN);
@@ -377,20 +377,20 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2i o
 	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
 
-static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection)
+static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
 	GLuint texPage = imageFile->pages[image2.TPageID].id;
-	GLfloat invTextureSize = 1.f / imageFile->pages[image2.TPageID].size;
-	float tu = image2.Tu * invTextureSize;
-	float tv = image2.Tv * invTextureSize;
-	float su = size.x * invTextureSize;
-	float sv = size.y * invTextureSize;
+	GLfloat invTextureSize = 1.f / (float)imageFile->pages[image2.TPageID].size;
+	float tu = (float)(image2.Tu + textureInset.x) * invTextureSize;
+	float tv = (float)(image2.Tv + textureInset.y) * invTextureSize;
+	float su = (float)(size.x - (textureInset.x * 2)) * invTextureSize;
+	float sv = (float)(size.y - (textureInset.y * 2)) * invTextureSize;
 
-	glm::mat4 mvp = modelViewProjection * glm::translate(dest->x, dest->y, 0);
+	glm::mat4 mvp = modelViewProjection * glm::translate((float)dest->x, (float)dest->y, 0.f);
 
 	pie_SetTexturePage(texPage);
-	iv_DrawImageImpl(Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
+	iv_DrawImageImpl(Vector2f(0.f, 0.f), Vector2f(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
 }
 
 static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, int x, int y)
@@ -423,7 +423,7 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 	pie_SetRendMode(REND_ALPHA);
 
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(x, y, 0);
-	iv_DrawImageImpl(Vector2i(0, 0), Vector2i(w, h),
+	iv_DrawImageImpl(Vector2f(0.f, 0.f), Vector2f(w, h),
 		Vector2f(tu * invTextureSize, tv * invTextureSize),
 		Vector2f(image->Width * invTextureSize, image->Height * invTextureSize),
 		WZCOL_WHITE, mvp);
@@ -462,7 +462,7 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, c
 }
 
 // Repeat a texture
-void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection)
+void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection, bool enableHorizontalTilingSeamWorkaround)
 {
 	assertValidImage(ImageFile, ID);
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
@@ -472,12 +472,23 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
-	unsigned hRemainder = Width % Image->Width;
-
-	for (unsigned hRep = 0; hRep < Width / Image->Width; hRep++)
+	unsigned int usableImageWidth = Image->Width;
+	unsigned int imageXInset = 0;
+	if (enableHorizontalTilingSeamWorkaround)
 	{
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
-		dest.x += Image->Width;
+		// Inset the portion of the image that is used by 1 on both the left + right sides
+		usableImageWidth -= 2;
+		imageXInset = 1;
+		dest.w -= 2;
+	}
+	assert(usableImageWidth > 0);
+
+	unsigned hRemainder = (Width % usableImageWidth);
+
+	for (unsigned hRep = 0; hRep < Width / usableImageWidth; hRep++)
+	{
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection, Vector2i(imageXInset, 0));
+		dest.x += usableImageWidth;
 	}
 
 	// draw remainder
@@ -485,7 +496,7 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	{
 		pieImage.x = hRemainder;
 		dest.w = hRemainder;
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection, Vector2i(imageXInset, 0));
 	}
 }
 

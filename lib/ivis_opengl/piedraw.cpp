@@ -425,7 +425,7 @@ void pie_CleanUp()
 	scshapes.clear();
 }
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
 {
 	pieCount++;
 
@@ -493,6 +493,8 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 			shapes.push_back(tshape);
 		}
 	}
+
+	return true;
 }
 
 static void pie_ShadowDrawLoop()

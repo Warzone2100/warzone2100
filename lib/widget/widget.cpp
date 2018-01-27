@@ -109,6 +109,9 @@ W_INIT::W_INIT()
 	, pCallback(nullptr)
 	, pUserData(nullptr)
 	, UserData(0)
+	, calcLayout(nullptr)
+	, onDelete(nullptr)
+	, initPUserDataFunc(nullptr)
 {}
 
 WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
@@ -120,10 +123,22 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, pUserData(init->pUserData)
 	, UserData(init->UserData)
 	, screenPointer(nullptr)
+	, calcLayout(init->calcLayout)
+	, onDelete(init->onDelete)
 	, parentWidget(nullptr)
 	, dim(init->x, init->y, init->width, init->height)
 	, dirty(true)
-{}
+{
+	/* Initialize and set the pUserData if necessary */
+	if (init->initPUserDataFunc != nullptr)
+	{
+		assert(pUserData == nullptr); // if the initPUserDataFunc is set, pUserData should not be already set
+		pUserData = init->initPUserDataFunc();
+	}
+
+	// if calclayout is not null, call it
+	callCalcLayout();
+}
 
 WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	: id(0xFFFFEEEEu)
@@ -134,6 +149,8 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	, pUserData(nullptr)
 	, UserData(0)
 	, screenPointer(nullptr)
+	, calcLayout(nullptr)
+	, onDelete(nullptr)
 	, parentWidget(nullptr)
 	, dim(0, 0, 1, 1)
 	, dirty(true)
@@ -143,6 +160,11 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 
 WIDGET::~WIDGET()
 {
+	if (onDelete != nullptr)
+	{
+		onDelete(this);	// Call the onDelete function to handle any extra logic
+	}
+
 	setScreenPointer(nullptr);  // Clear any pointers to us directly from screenPointer.
 	tipStop(this);  // Stop showing tooltip, if we are.
 
@@ -171,6 +193,48 @@ void WIDGET::setGeometry(QRect const &r)
 	dim = r;
 	geometryChanged();
 	dirty = true;
+}
+
+void WIDGET::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	// Default implementation of screenSizeDidChange calls its own calcLayout callback function (if present)
+	callCalcLayout();
+
+	// Then propagates the event to all children
+	for (Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	{
+		WIDGET *psCurr = *i;
+		psCurr->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	}
+}
+
+void WIDGET::setCalcLayout(const WIDGET_CALCLAYOUT_FUNC& calcLayoutFunc)
+{
+	calcLayout = calcLayoutFunc;
+	callCalcLayout();
+}
+
+void WIDGET::callCalcLayout()
+{
+	if (calcLayout)
+	{
+		calcLayout(this, screenWidth, screenHeight, screenWidth, screenHeight);
+	}
+#if DEBUG
+//	// FOR DEBUGGING:
+//	// To help track down WIDGETs missing a calc layout function
+//	// (because something isn't properly re-adjusting when live window resizing occurs)
+//	// uncomment the else branch below.
+//	else
+//	{
+//		debug(LOG_ERROR, "Object is missing calc layout function");
+//	}
+#endif
+}
+
+void WIDGET::setOnDelete(const WIDGET_ONDELETE_FUNC& onDeleteFunc)
+{
+	onDelete = onDeleteFunc;
 }
 
 void WIDGET::attach(WIDGET *widget)
@@ -247,6 +311,15 @@ W_SCREEN::W_SCREEN()
 W_SCREEN::~W_SCREEN()
 {
 	delete psForm;
+}
+
+void W_SCREEN::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	// resize the top-level form
+	psForm->setGeometry(0, 0, screenWidth - 1, screenHeight - 1);
+
+	// inform the top-level form of the event
+	psForm->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
 /* Check whether an ID has been used on a form */

@@ -574,7 +574,14 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	BarWidth = BarGraph->width();
 	sprintf(szVal, "%d", realPower);
-	textWidth = iV_GetTextWidth(szVal, font_regular);
+
+	// Any widget using intDisplayPowerBar must have its pUserData initialized to a (DisplayPowerBarCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayPowerBarCache& cache = *static_cast<DisplayPowerBarCache*>(psWidget->pUserData);
+
+	cache.wzText.setText(szVal, font_regular);
+
+	textWidth = cache.wzText.width();
 	BarWidth -= textWidth;
 
 	if (ManPow > Avail)
@@ -606,7 +613,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 
-	iV_DrawImage(IntImages, IMAGE_PBAR_TOP, x0, y0);
+	int top_x0 = x0;
+	int top_y0 = y0;
 
 	iX = x0 + 3;
 	iY = y0 + 10;
@@ -616,58 +624,63 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	//fill in the empty section behind text
 	if (textWidth > 0)
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0, y0, textWidth);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0 - 1, y0, textWidth + 1, defaultProjectionMatrix(), true); // Overdraw by 1 to reduce seam with left-beginning-piece when scaling
 		x0 += textWidth;
 	}
+
+	//draw the left-most beginning tip
+	//to reduce a visible seam when scaling, this must come *after* the empty / text section above
+	iV_DrawImage(IntImages, IMAGE_PBAR_TOP, top_x0, top_y0);
 
 	//draw required section
 	if (ManPow > Avail)
 	{
 		//draw the required in red
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_USED, x0, y0, ManPow);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_USED, x0, y0, ManPow, defaultProjectionMatrix(), true);
 	}
 	else
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_REQUIRED, x0, y0, ManPow);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_REQUIRED, x0, y0, ManPow, defaultProjectionMatrix(), true);
 	}
 	x0 += ManPow;
 
 	//draw the available section if any!
 	if (Avail - ManPow > 0)
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_AVAIL, x0, y0, Avail - ManPow);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_AVAIL, x0, y0, Avail - ManPow, defaultProjectionMatrix(), true);
 		x0 += Avail - ManPow;
 	}
 
 	//fill in the rest with empty section
 	if (Empty > 0)
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0, y0, Empty);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0, y0, Empty + 1, defaultProjectionMatrix(), true); // Overdraw by 1 to reduce seam with right-end-piece when scaling
 		x0 += Empty;
 	}
 
 	iV_DrawImage(IntImages, IMAGE_PBAR_BOTTOM, x0, y0);
+
+	PIELIGHT colour;
 	if (Avail < 0)
 	{
 		const char *need = _("Need more resources!");
+		cache.wzNeedText.setText(need, font_small);
 		if ((realTime / 1250) % 5 == 0)
 		{
-			iV_SetTextColour(WZCOL_BLACK);
-			iV_DrawText(need, iX + 102, iY - 1, font_small);
-			iV_SetTextColour(WZCOL_RED);
+			cache.wzNeedText.render(iX + 102, iY - 1, WZCOL_BLACK);
 		}
 		else
 		{
-			iV_SetTextColour(WZCOL_RED);
-			iV_DrawText(need, iX + 102, iY - 1, font_small);
+			cache.wzNeedText.render(iX + 102, iY - 1, WZCOL_RED);
 		}
+		colour = WZCOL_RED;
 	}
 	else
 	{
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		colour = WZCOL_TEXT_BRIGHT;
 	}
 	// draw text value
-	iV_DrawText(szVal, iX, iY, font_regular);
+	cache.wzText.render(iX, iY, colour);
 }
 
 IntFancyButton::IntFancyButton(WIDGET *parent)
@@ -1212,7 +1225,7 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	W_EDITBOX	*psEditBox = (W_EDITBOX *) psWidget;
 	UWORD		iImageIDLeft, iImageIDMid, iImageIDRight;
-	UDWORD		iX, iY, iDX, iXRight;
+	UDWORD		iX, iY, iXRight;
 	UDWORD          iXLeft = xOffset + psWidget->x(),
 	                iYLeft = yOffset + psWidget->y();
 
@@ -1236,12 +1249,10 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	/* draw middle of bar */
 	iX += iV_GetImageWidth(IntImages, iImageIDLeft);
-	iDX = iV_GetImageWidth(IntImages, iImageIDMid);
 	iXRight = xOffset + psWidget->width() - iV_GetImageWidth(IntImages, iImageIDRight);
-	while (iX < iXRight)
+	if (iX < iXRight)
 	{
-		iV_DrawImage(IntImages, iImageIDMid, iX, iY);
-		iX += iDX;
+		iV_DrawImageRepeatX(IntImages, iImageIDMid, iX, iY, (iXRight - iX) + 3, defaultProjectionMatrix(), true);
 	}
 
 	/* draw right side of bar */
@@ -1973,7 +1984,7 @@ static void StatGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **S
 	}
 }
 
-static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool isPowerBar)
+static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool isPowerBar, DisplayBarCache& cache)
 {
 	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
 	char szVal[30];
@@ -1984,6 +1995,8 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	int iX, iY;
 	int barWidth = 100, width;
 	int i, precisionFactor = 1, value;
+
+	cache.wzCheckWidthText.setText(szCheckWidth, font_regular);
 
 	if (isPowerBar)
 	{
@@ -1997,7 +2010,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	y0 += arbitraryOffset;
 
 	/* indent to allow text value */
-	iX = x0 + iV_GetTextWidth(szCheckWidth, font_regular);
+	iX = x0 + cache.wzCheckWidthText.width();
 	iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize(font_regular)) / 2 - iV_GetTextAboveBase(font_regular);
 
 	if (isPowerBar)
@@ -2008,7 +2021,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 
 	//draw current value section
 	width = MIN(BarGraph->majorSize * barWidth / 100, barWidth);
-	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, width);
+	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, width, defaultProjectionMatrix(), true);
 
 	/* draw text value */
 	for (i = 0; i < BarGraph->precision; ++i)
@@ -2017,8 +2030,8 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	}
 	value = (BarGraph->iOriginal * precisionFactor + BarGraph->denominator / 2) / BarGraph->denominator;
 	sprintf(szVal, "%d%s%.*d", value / precisionFactor, precisionFactor == 1 ? "" : ".", BarGraph->precision, value % precisionFactor);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(szVal, x0, iY, font_regular);
+	cache.wzText.setText(szVal, font_regular);
+	cache.wzText.render(x0, iY, WZCOL_TEXT_BRIGHT);
 
 	//draw the comparison value - only if not zero
 	if (BarGraph->minorSize != 0)
@@ -2031,13 +2044,21 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 /* Draws a stats bar for the design screen */
 void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	intDisplayBar(psWidget, xOffset, yOffset, false);
+	// Any widget using intDisplayStatsBar must have its pUserData initialized to a (DisplayBarCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayBarCache& cache = *static_cast<DisplayBarCache*>(psWidget->pUserData);
+
+	intDisplayBar(psWidget, xOffset, yOffset, false, cache);
 }
 
 /* Draws a Template Power Bar for the Design Screen */
 void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	intDisplayBar(psWidget, xOffset, yOffset, true);
+	// Any widget using intDisplayDesignPowerBar must have its pUserData initialized to a (DisplayBarCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayBarCache& cache = *static_cast<DisplayBarCache*>(psWidget->pUserData);
+
+	intDisplayBar(psWidget, xOffset, yOffset, true, cache);
 }
 
 // Widget callback function to play an audio track.

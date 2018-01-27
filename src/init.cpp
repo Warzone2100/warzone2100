@@ -152,6 +152,7 @@ bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, c
 	if (!levParse(pBuffer, size, datadir, ignoreWrf, realFileName))
 	{
 		debug(LOG_ERROR, "Parse error in %s\n", filename);
+		free(pBuffer);
 		return false;
 	}
 	free(pBuffer);
@@ -679,7 +680,7 @@ bool buildMapList()
 // ////////////////////////////////////////////////////////////////////////////
 // Called once on program startup.
 //
-bool systemInitialise()
+bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 {
 	if (!widgInitialise())
 	{
@@ -720,7 +721,7 @@ bool systemInitialise()
 
 	// Initialize the iVis text rendering module
 	wzSceneBegin("Main menu loop");
-	iV_TextInit();
+	iV_TextInit(horizScaleFactor, vertScaleFactor);
 
 	pie_InitRadar();
 

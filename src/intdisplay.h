@@ -116,6 +116,12 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext);
 //callback to display the production quantity number for a template
 void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
+/* Holds the cached rendered text for the power bar */
+struct DisplayPowerBarCache
+{
+	WzText wzText;
+	WzText wzNeedText;
+};
 void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 class IntFancyButton : public W_CLICKFORM
@@ -260,6 +266,12 @@ SDWORD StatIsComponent(BASE_STATS *Stat);
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD);
 
 bool StatIsResearch(BASE_STATS *Stat);
+
+/* The cache (pUserData) expected by both intDisplayStatsBar and intDisplayDesignPowerBar */
+struct DisplayBarCache {
+	WzText wzCheckWidthText;
+	WzText wzText;
+};
 
 /* Draws a stats bar for the design screen */
 void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

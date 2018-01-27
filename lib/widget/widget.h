@@ -101,6 +101,10 @@ enum WzTextAlignment
 
 /***********************************************************************************/
 
+/* An optional function that is used to initialize the pUserData pointer per widget instance */
+/* (Useful if re-using a W_*INIT structure for multiple widget instances) */
+typedef std::function<void* ()> WIDGET_INITIALIZE_PUSERDATA_FUNC;
+
 /** The basic initialisation structure */
 struct W_INIT
 {
@@ -116,6 +120,9 @@ struct W_INIT
 	WIDGET_CALLBACK         pCallback;              ///< Optional callback function
 	void                   *pUserData;              ///< Optional user data pointer
 	UDWORD                  UserData;               ///< User data (if any)
+	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calculate layout callback function
+	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
+	WIDGET_INITIALIZE_PUSERDATA_FUNC initPUserDataFunc;	///< (Optional) Used to initialize the pUserData pointer per widget instance
 };
 
 /** Form initialisation structure */

@@ -77,6 +77,25 @@
 static void resetMultiVisibility(UDWORD player);
 
 // ////////////////////////////////////////////////////////////////////////////
+// Local Variables
+
+struct DisplayMultiJoiningStatusCache {
+	WzText wzMainProgressText;
+	WzText wzPlayerCountText;
+	std::vector<WzText> wzPlayerNameAndStatus;
+};
+
+DisplayMultiJoiningStatusCache textCache;
+
+// ////////////////////////////////////////////////////////////////////////////
+// Clear Local Display Caches
+
+void clearDisplayMultiJoiningStatusCache()
+{
+	textCache = DisplayMultiJoiningStatusCache();
+}
+
+// ////////////////////////////////////////////////////////////////////////////
 // Wait For Players
 
 bool intDisplayMultiJoiningStatus(UBYTE joinCount)
@@ -92,9 +111,10 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	RenderWindowFrame(FRAME_NORMAL, x, y , w, h);		// draw a wee blue box.
 
 	// display how far done..
-	iV_DrawText(_("Players Still Joining"),
-	            x + (w / 2) - (iV_GetTextWidth(_("Players Still Joining"), font_regular) / 2),
-	            y + (h / 2) - 8, font_regular);
+	textCache.wzMainProgressText.setText(_("Players Still Joining"), font_regular);
+	textCache.wzMainProgressText.render(x + (w / 2) - (textCache.wzMainProgressText.width() / 2),
+										y + (h / 2) - 8, WZCOL_TEXT_BRIGHT);
+
 	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
 	for (unsigned player = 0; player < game.maxPlayers; ++player)
 	{
@@ -108,7 +128,8 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 		return true;
 	}
 	sprintf(sTmp, "%d%%", PERCENT(playerCount - joinCount, playerCount));
-	iV_DrawText(sTmp , x + (w / 2) - 10, y + (h / 2) + 10, font_large);
+	textCache.wzPlayerCountText.setText(sTmp, font_large);
+	textCache.wzPlayerCountText.render(x + (w / 2) - 10, y + (h / 2) + 10, WZCOL_TEXT_BRIGHT);
 
 	int yStep = iV_GetTextLineSize(font_small);
 	int yPos = RET_Y - yStep * game.maxPlayers;
@@ -128,7 +149,12 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 		}
 		if (status >= 0)
 		{
-			iV_DrawText((statusStrings[status] + getPlayerName(player)).c_str(), x + 5, yPos + yStep * NetPlay.players[player].position, font_small);
+			if (player >= textCache.wzPlayerNameAndStatus.size())
+			{
+				textCache.wzPlayerNameAndStatus.resize(player + 1);
+			}
+			textCache.wzPlayerNameAndStatus[player].setText((statusStrings[status] + getPlayerName(player)).c_str(), font_small);
+			textCache.wzPlayerNameAndStatus[player].render(x + 5, yPos + yStep * NetPlay.players[player].position, WZCOL_TEXT_BRIGHT);
 		}
 	}
 

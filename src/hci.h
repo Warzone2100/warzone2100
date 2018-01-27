@@ -339,6 +339,8 @@ void addIntelScreen();
 /* Reset the widget screen to just the reticule */
 void intResetScreen(bool NoAnim);
 
+void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
+
 /* Refresh icons on the interface, without disturbing the layout. i.e. smartreset*/
 void intRefreshScreen();
 

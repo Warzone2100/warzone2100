@@ -57,7 +57,7 @@ struct iIMDShape;
  *	Global ProtoTypes
  */
 /***************************************************************************/
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView);
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView);
 
 void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount);
 

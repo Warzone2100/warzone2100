@@ -564,6 +564,15 @@ static void startGameLoop()
 		wzGrabMouse();
 	}
 
+	// Disable resizable windows if it's a multiplayer game
+	if (runningMultiplayer())
+	{
+		// This is because the main loop gets frozen while the window resizing / edge dragging occurs
+		// which effectively pauses the game, and pausing is otherwise disabled in multiplayer games.
+		// FIXME: Figure out a workaround?
+		wzSetWindowIsResizable(false);
+	}
+
 	// set a flag for the trigger/event system to indicate initialisation is complete
 	gameInitialised = true;
 
@@ -607,6 +616,13 @@ static void stopGameLoop()
 	if (war_GetTrapCursor())
 	{
 		wzReleaseMouse();
+	}
+
+	// Re-enable resizable windows
+	if (!wzIsFullscreen())
+	{
+		// FIXME: This is required because of the disabling in startGameLoop()
+		wzSetWindowIsResizable(true);
 	}
 
 	gameInitialised = false;
@@ -1024,6 +1040,10 @@ int realmain(int argc, char *argv[])
 	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, war_getFullscreen() ? "fullscreen" : "window");
 	addDumpInfo(buf);
 
+	float horizScaleFactor, vertScaleFactor;
+	wzGetGameToRendererScaleFactor(&horizScaleFactor, &vertScaleFactor);
+	debug(LOG_WZ, "Game to Renderer Scale Factor (w x h): %f x %f", horizScaleFactor, vertScaleFactor);
+
 	debug(LOG_MAIN, "Final initialization");
 	if (!frameInitialise())
 	{
@@ -1037,8 +1057,10 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
-	war_SetWidth(pie_GetVideoBufferWidth());
-	war_SetHeight(pie_GetVideoBufferHeight());
+	unsigned int windowWidth = 0, windowHeight = 0;
+	wzGetWindowResolution(nullptr, &windowWidth, &windowHeight);
+	war_SetWidth(windowWidth);
+	war_SetHeight(windowHeight);
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
@@ -1049,7 +1071,7 @@ int realmain(int argc, char *argv[])
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 
-	if (!systemInitialise())
+	if (!systemInitialise(horizScaleFactor, vertScaleFactor))
 	{
 		return EXIT_FAILURE;
 	}

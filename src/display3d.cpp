@@ -125,6 +125,15 @@ static WzText txtLevelName;
 static WzText txtDebugStatus;
 static WzText txtCurrentTime;
 static WzText txtShowFPS;
+// show Samples text
+static WzText txtShowSamples_Que;
+static WzText txtShowSamples_Lst;
+static WzText txtShowSamples_Act;
+// show Orders text
+static WzText txtShowOrders;
+// show Droid visible/draw counts text
+static WzText droidText;
+
 
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
@@ -208,6 +217,10 @@ bool showSAMPLES = false;
  *  default OFF, turn ON via console command 'showorders'
  */
 bool showORDERS = false;
+/**  Show the drawn/undrawn counts for droids
+  * default OFF, turn ON by flipping it here
+  */
+bool showDROIDcounts = false;
 
 /** When we have a connection issue, we will flash a message on screen
 */
@@ -322,7 +335,12 @@ static const int BLUEPRINT_OPACITY = 120;
 
 /********************  Functions  ********************/
 
-void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix)
+void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	resizeRadar(); // recalculate radar position
+}
+
+bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix)
 {
 	glm::mat4 modelMatrix;
 	int animFrame = 0; // for texture animation
@@ -335,13 +353,13 @@ void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		const int elapsed = graphicsTime - psObj->timeAnimationStarted;
 		if (elapsed < 0)
 		{
-			return;  // Animation hasn't started yet.
+			return false;  // Animation hasn't started yet.
 		}
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
 		const ANIMFRAME &state = strImd->objanimdata.at(frame);
 		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
-			return;
+			return false;
 		}
 		modelMatrix *= glm::translate(state.pos) *
 			glm::rotate(UNDEG(state.rot.pitch), glm::vec3(1.f, 0.f, 0.f)) *
@@ -350,7 +368,7 @@ void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 			glm::scale(state.scale);
 	}
 
-	pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);
+	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);
 }
 
 static void setScreenDisp(SCREEN_DISP_DATA *sDisplay, const glm::mat4 &modelViewMatrix)
@@ -599,8 +617,9 @@ static void setupConnectionStatusForm()
 		sFormInit.formID = 0;
 		sFormInit.id = NETWORK_FORM_ID;
 		sFormInit.style = WFORM_PLAIN;
-		sFormInit.x = (int)(pie_GetVideoBufferWidth() - 52);
-		sFormInit.y = 80;
+		sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->move((int)(pie_GetVideoBufferWidth() - 52), 80);
+		});
 		sFormInit.width = 36;
 		sFormInit.height = (24 + separation) * total - separation;
 		if (!widgAddForm(psWScreen, &sFormInit))
@@ -767,12 +786,16 @@ void draw3DScene()
 		sasprintf((char **)&Qbuf, "Que: %04u", audio_GetSampleQueueCount());
 		sasprintf((char **)&Lbuf, "Lst: %04u", audio_GetSampleListCount());
 		sasprintf((char **)&Abuf, "Act: %04u", sound_GetActiveSamplesCount());
-		width = iV_GetTextWidth(Qbuf, font_regular) + 11;
-		height = iV_GetTextHeight(Qbuf, font_regular);
+		txtShowSamples_Que.setText(Qbuf, font_regular);
+		txtShowSamples_Lst.setText(Lbuf, font_regular);
+		txtShowSamples_Act.setText(Abuf, font_regular);
 
-		iV_DrawText(Qbuf, pie_GetVideoBufferWidth() - width, height + 2, font_regular);
-		iV_DrawText(Lbuf, pie_GetVideoBufferWidth() - width, height + 48, font_regular);
-		iV_DrawText(Abuf, pie_GetVideoBufferWidth() - width, height + 59, font_regular);
+		width = txtShowSamples_Que.width() + 11;
+		height = txtShowSamples_Que.height();
+
+		txtShowSamples_Que.render(pie_GetVideoBufferWidth() - width, height + 2, WZCOL_TEXT_BRIGHT);
+		txtShowSamples_Lst.render(pie_GetVideoBufferWidth() - width, height + 48, WZCOL_TEXT_BRIGHT);
+		txtShowSamples_Act.render(pie_GetVideoBufferWidth() - width, height + 59, WZCOL_TEXT_BRIGHT);
 	}
 	if (showFPS)
 	{
@@ -786,8 +809,27 @@ void draw3DScene()
 	if (showORDERS)
 	{
 		unsigned int height;
-		height = iV_GetTextHeight(DROIDDOING, font_regular);
-		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight() - height, font_regular);
+		txtShowOrders.setText(DROIDDOING, font_regular);
+		height = txtShowOrders.height();
+		txtShowOrders.render(0, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
+	}
+	if (showDROIDcounts)
+	{
+		int visibleDroids = 0;
+		int undrawnDroids = 0;
+		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		{
+			if (psDroid->sDisplay.frameNumber != currentGameFrame)
+			{
+				++undrawnDroids;
+				continue;
+			}
+			++visibleDroids;
+		}
+		char droidCounts[255];
+		sprintf(droidCounts, "Droids: %d drawn, %d undrawn", visibleDroids, undrawnDroids);
+		droidText.setText(droidCounts, font_regular);
+		droidText.render(pie_GetVideoBufferWidth() - droidText.width() - 10, droidText.height() + 2, WZCOL_TEXT_BRIGHT);
 	}
 
 	setupConnectionStatusForm();

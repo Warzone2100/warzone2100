@@ -271,7 +271,7 @@ void getAsciiTime(char *psText, unsigned time)
 	}
 }
 
-void scoreDataToScreen(WIDGET *psWidget)
+void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 {
 	int index, x, y, width, height;
 	bool bMoreBars;
@@ -288,9 +288,12 @@ void scoreDataToScreen(WIDGET *psWidget)
 	pie_UniTransBoxFill(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256 + 16, WZCOL_SCORE_BOX);
 	iV_Box(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256 + 16, WZCOL_SCORE_BOX_BORDER);
 
-	iV_DrawText(_("Unit Losses"), LC_X + D_W, 80 + 16 + D_H, font_regular);
-	iV_DrawText(_("Structure Losses"), LC_X + D_W, 140 + 16 + D_H, font_regular);
-	iV_DrawText(_("Force Information"), LC_X + D_W, 200 + 16 + D_H, font_regular);
+	cache.wzLabelText_UnitLosses.setText(_("Unit Losses"), font_regular);
+	cache.wzLabelText_UnitLosses.render(LC_X + D_W, 80 + 16 + D_H, WZCOL_FORM_TEXT);
+	cache.wzLabelText_StructureLosses.setText(_("Structure Losses"), font_regular);
+	cache.wzLabelText_StructureLosses.render(LC_X + D_W, 140 + 16 + D_H, WZCOL_FORM_TEXT);
+	cache.wzLabelText_ForceInformation.setText(_("Force Information"), font_regular);
+	cache.wzLabelText_ForceInformation.render(LC_X + D_W, 200 + 16 + D_H, WZCOL_FORM_TEXT);
 
 	index = 0;
 	bMoreBars = true;
@@ -342,7 +345,12 @@ void scoreDataToScreen(WIDGET *psWidget)
 			}
 			/* Now render the text by the bar */
 			sprintf(text, getDescription((MR_STRING)infoBars[index].stringID), infoBars[index].number);
-			iV_DrawText(text, x + width + 16, y + 12, font_regular);
+			if (index >= cache.wzInfoBarText.size())
+			{
+				cache.wzInfoBarText.resize(index + 1);
+			}
+			cache.wzInfoBarText[index].setText(text, font_regular);
+			cache.wzInfoBarText[index].render(x + width + 16, y + 12, WZCOL_FORM_TEXT);
 
 			/* If we're beyond STAT_ROOKIE, then we're on rankings */
 			if (index >= STAT_GREEN && index <= STAT_ACE)
@@ -362,24 +370,27 @@ void scoreDataToScreen(WIDGET *psWidget)
 
 	/* Firstly, top of the screen, number of artefacts found */
 	sprintf(text, _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound);
-	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 300 + D_H, font_regular);
+	cache.wzInfoText_ArtifactsFound.setText(text, font_regular);
+	cache.wzInfoText_ArtifactsFound.render((pie_GetVideoBufferWidth() - cache.wzInfoText_ArtifactsFound.width()) / 2, 300 + D_H, WZCOL_FORM_TEXT);
 
 	/* Get the mission result time in a string - and write it out */
 	getAsciiTime((char *)&text2, gameTime - missionData.missionStarted);
 	sprintf(text, _("Mission Time - %s"), text2);
-	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 320 + D_H, font_regular);
+	cache.wzInfoText_MissionTime.setText(text, font_regular);
+	cache.wzInfoText_MissionTime.render((pie_GetVideoBufferWidth() - cache.wzInfoText_MissionTime.width()) / 2, 320 + D_H, WZCOL_FORM_TEXT);
 
 	/* Write out total game time so far */
 	getAsciiTime((char *)&text2, gameTime);
 	sprintf(text, _("Total Game Time - %s"), text2);
-	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 340 + D_H, font_regular);
+	cache.wzInfoText_TotalGameTime.setText(text, font_regular);
+	cache.wzInfoText_TotalGameTime.render((pie_GetVideoBufferWidth() - cache.wzInfoText_TotalGameTime.width()) / 2, 340 + D_H, WZCOL_FORM_TEXT);
 	if (Cheated)
 	{
 		// A quick way to flash the text
-		((realTime / 250) % 2) ? iV_SetTextColour(WZCOL_RED) : iV_SetTextColour(WZCOL_YELLOW);
+		PIELIGHT cheatedTextColor = ((realTime / 250) % 2) ? WZCOL_RED : WZCOL_YELLOW;
 		sprintf(text, _("You cheated!"));
-		iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 360 + D_H, font_regular);
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		cache.wzInfoText_Cheated.setText(text, font_regular);
+		cache.wzInfoText_Cheated.render((pie_GetVideoBufferWidth() - cache.wzInfoText_Cheated.width()) / 2, 360 + D_H, cheatedTextColor);
 	}
 }
 
