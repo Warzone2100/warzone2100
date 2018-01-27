@@ -218,5 +218,7 @@ void setZoom(float zoomSpeed, float zoomTarget);
 float getZoom();
 float getZoomSpeed();
 void zoom();
+bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
+bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
 
 #endif // __INCLUDED_SRC_DISPLAY_H__

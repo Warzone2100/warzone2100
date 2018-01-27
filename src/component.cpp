@@ -738,8 +738,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 							didDrawSomething = true;
 						}
 
-						localModelMatrix *= glm::rotate(UNDEG(player.r.x), glm::vec3(1.f, 0.f, 0.f));
-						localModelMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 1.f, 0.f));
+//						localModelMatrix *= glm::rotate(UNDEG(player.r.x), glm::vec3(1.f, 0.f, 0.f)); // Not used?
+//						localModelMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 1.f, 0.f)); // Not used?
 					}
 				}
 				break;
@@ -852,6 +852,12 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{
 		modelMatrix *= objectShimmy((BASE_OBJECT *) psDroid);
+	}
+
+	// now check if the projected circle is within the screen boundaries
+	if(!clipDroidOnScreen(psDroid, viewMatrix * modelMatrix))
+	{
+		return;
 	}
 
 	if (psDroid->lastHitWeapon == WSC_EMP && graphicsTime - psDroid->timeLastHit < EMP_DISABLE_TIME)
