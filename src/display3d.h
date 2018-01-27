@@ -83,6 +83,9 @@ bool doWeDrawProximitys();
 void setProximityDraw(bool val);
 
 bool	clipXY(SDWORD x, SDWORD y);
+inline bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4& viewModelMatrix, int overdrawScreenPoints = 10);
+bool clipDroidOnScreen(DROID *psDroid, const glm::mat4& viewModelMatrix, int overdrawScreenPoints = 25);
+bool clipStructureOnScreen(STRUCTURE *psStructure, const glm::mat4 &viewModelMatrix, int overdrawScreenPoints = 0);
 
 bool init3DView();
 extern iView player;

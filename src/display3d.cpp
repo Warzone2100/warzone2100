@@ -170,6 +170,7 @@ static float distance;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static Vector3i tileScreenInfo[VISIBLE_YTILES + 1][VISIBLE_XTILES + 1];
+static bool tileScreenVisible[VISIBLE_YTILES + 1][VISIBLE_XTILES + 1] = {false};
 
 /// Records the present X and Y values for the current mouse tile (in tiles)
 SDWORD mouseTileX, mouseTileY;
@@ -950,6 +951,27 @@ static void calcAverageTerrainHeight(iView *player)
 	}
 }
 
+inline bool quadIntersectsWithScreen(const QUAD & quad)
+{
+	const int screenWidth = pie_GetVideoBufferWidth();
+	const int screenHeight = pie_GetVideoBufferHeight();
+	for (int iCoordIdx = 0; iCoordIdx < 4; ++iCoordIdx)
+	{
+		if ((quad.coords[iCoordIdx].x < 0) || (quad.coords[iCoordIdx].x > screenWidth))
+		{
+			continue;
+		}
+		if ((quad.coords[iCoordIdx].y < 0) || (quad.coords[iCoordIdx].y > screenHeight))
+		{
+			continue;
+		}
+
+		return true; // corner (x,y) is within the screen bounds
+	}
+
+	return false;
+}
+
 /// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player)
 {
@@ -1024,6 +1046,31 @@ static void drawTiles(iView *player)
 			tileScreenInfo[idx][jdx].y = screen.y;
 		}
 	}
+
+	// Determine whether each tile in the drawable range is actually visible on-screen
+	// (used for more accurate clipping elsewhere)
+	for (int idx = 0; idx < visibleTiles.y; ++idx)
+	{
+		for (int jdx = 0; jdx < visibleTiles.x; ++jdx)
+		{
+			QUAD quad;
+
+			quad.coords[0].x = tileScreenInfo[idx + 0][jdx + 0].x;
+			quad.coords[0].y = tileScreenInfo[idx + 0][jdx + 0].y;
+
+			quad.coords[1].x = tileScreenInfo[idx + 0][jdx + 1].x;
+			quad.coords[1].y = tileScreenInfo[idx + 0][jdx + 1].y;
+
+			quad.coords[2].x = tileScreenInfo[idx + 1][jdx + 1].x;
+			quad.coords[2].y = tileScreenInfo[idx + 1][jdx + 1].y;
+
+			quad.coords[3].x = tileScreenInfo[idx + 1][jdx + 0].x;
+			quad.coords[3].y = tileScreenInfo[idx + 1][jdx + 0].y;
+
+			tileScreenVisible[idx][jdx] = quadIntersectsWithScreen(quad);
+		}
+	}
+
 	wzPerfEnd(PERF_START_FRAME);
 
 	/* This is done here as effects can light the terrain - pause mode problems though */
@@ -1160,12 +1207,13 @@ void disp3d_getView(iView *newView)
 	memcpy(newView, &player, sizeof(iView));
 }
 
-/// Are the current tile coordinates visible on screen?
-bool clipXY(SDWORD x, SDWORD y)
+/// Are the current world coordinates within the processed range of tiles on the screen?
+/// (Warzone has a maximum range of tiles around the current player camera position that it will display.)
+bool quickClipXYToMaximumTilesFromCurrentPosition(SDWORD x, SDWORD y)
 {
 	// +2 for edge of visibility fading (see terrain.cpp)
 	if (std::abs(x - player.p.x) < world_coord(visibleTiles.x / 2 + 2) &&
-	    std::abs(y - player.p.z) < world_coord(visibleTiles.y / 2 + 2))
+		std::abs(y - player.p.z) < world_coord(visibleTiles.y / 2 + 2))
 	{
 		return (true);
 	}
@@ -1173,6 +1221,117 @@ bool clipXY(SDWORD x, SDWORD y)
 	{
 		return (false);
 	}
+}
+
+/// Are the current tile coordinates visible on screen?
+bool clipXY(SDWORD x, SDWORD y)
+{
+	// +2 for edge of visibility fading (see terrain.cpp)
+	if (std::abs(x - player.p.x) < world_coord(visibleTiles.x / 2 + 2) &&
+	    std::abs(y - player.p.z) < world_coord(visibleTiles.y / 2 + 2))
+	{
+		// additional check using the tileScreenVisible matrix
+		int mapX = map_coord(x - player.p.x) + visibleTiles.x / 2;
+		int mapY = map_coord(y - player.p.z) + visibleTiles.y / 2;
+		if (mapX < 0 || mapY < 0)
+		{
+			return false;
+		}
+		if (mapX > visibleTiles.x || mapY > visibleTiles.y)
+		{
+			return false;
+		}
+		return tileScreenVisible[mapY][mapX];
+	}
+	else
+	{
+		return (false);
+	}
+}
+
+bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix)
+{
+	Vector2i pixel;
+	pie_RotateProject(&normalizedPosition, viewMatrix, &pixel);
+	return pixel.x >= 0 && pixel.y >= 0 && pixel.x < pie_GetVideoBufferWidth() && pixel.y < pie_GetVideoBufferHeight();
+}
+
+/// Are the current 3d game-world coordinates visible on screen?
+/// (Does not take into account occlusion)
+bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix)
+{
+	Vector3i position;
+	position.x = x - player.p.x;
+	position.z = -(y - player.p.z);
+	position.y = z;
+
+	return clipXYZNormalized(position, viewMatrix);
+}
+
+bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4& viewModelMatrix, int overdrawScreenPoints /*= 10*/)
+{
+	/* Get its absolute dimensions */
+	Vector3i origin;
+	Vector2i center;
+	int wsRadius = 22; // World space radius, 22 = magic minimum
+	float radius;
+
+	if (pIMD)
+	{
+		wsRadius = MAX(wsRadius, pIMD->radius);
+	}
+
+	origin = Vector3i(0, wsRadius, 0); // take the center of the object
+
+	/* get the screen coordinates */
+	const float cZ = pie_RotateProject(&origin, viewModelMatrix, &center) * 0.1;
+
+	//Watermelon:added a crash protection hack...
+	if (cZ >= 0)
+	{
+		radius = wsRadius / cZ * pie_GetResScalingFactor();
+	}
+	else
+	{
+		radius = 1; // 1 just in case some other code assumes radius != 0
+	}
+
+	const int screenMinX = -overdrawScreenPoints;
+	const int screenMinY = -overdrawScreenPoints;
+
+	return (center.x + radius >  screenMinX &&
+			center.x - radius < (pie_GetVideoBufferWidth() + overdrawScreenPoints) &&
+			center.y + radius >  screenMinY &&
+			center.y - radius < (pie_GetVideoBufferHeight() + overdrawScreenPoints));
+}
+
+// Use overdrawScreenPoints as a workaround for casting shadows when the main unit is off-screen (but right at the edge)
+bool clipDroidOnScreen(DROID *psDroid, const glm::mat4& viewModelMatrix, int overdrawScreenPoints /*= 25*/)
+{
+	/* Get its absolute dimensions */
+	// NOTE: This only takes into account body, but is "good enough"
+	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
+	const iIMDShape * pIMD = (psBStats != nullptr) ? psBStats->pIMD : nullptr;
+
+	return clipShapeOnScreen(pIMD, viewModelMatrix, overdrawScreenPoints);
+}
+
+bool clipStructureOnScreen(STRUCTURE *psStructure)
+{
+	StructureBounds b = getStructureBounds(psStructure);
+	assert(b.size.x != 0 && b.size.y != 0);
+	for (int breadth = 0; breadth < b.size.y + 2; ++breadth) // +2 to make room for shadows on the terrain
+	{
+		for (int width = 0; width < b.size.x + 2; ++width)
+		{
+			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 /** Get the screen coordinates for the current transform matrix.
@@ -1257,9 +1416,9 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix)
 	missing target, in flight etc - JUST DO IN FLIGHT FOR NOW! */
 	pIMD = psStats->pInFlightGraphic;
 
-	if (!clipXY(st.pos.x, st.pos.y))
+	if (!clipXYZ(st.pos.x, st.pos.y, st.pos.z, viewMatrix))
 	{
-		return;
+		return; // Projectile is not on the screen (Note: This uses the position point of the projectile, not a full shape clipping check, for speed.)
 	}
 	for (; pIMD != nullptr; pIMD = pIMD->next)
 	{
@@ -1366,20 +1525,25 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix)
 	pie_SetDepthOffset(-1.0f);
 
 	/* Go through all the players */
-	for (unsigned player = 0; player <= MAX_PLAYERS; ++player)
+	for (unsigned aPlayer = 0; aPlayer <= MAX_PLAYERS; ++aPlayer)
 	{
-		BASE_OBJECT *list = player < MAX_PLAYERS ? apsStructLists[player] : psDestroyedObj;
+		BASE_OBJECT *list = aPlayer < MAX_PLAYERS ? apsStructLists[aPlayer] : psDestroyedObj;
 
 		/* Now go all buildings for that player */
 		for (; list != nullptr; list = list->psNext)
 		{
 			/* Worth rendering the structure? */
-			if (list->type != OBJ_STRUCTURE || (list->died != 0 && list->died < graphicsTime)
-			    || !clipXY(list->pos.x, list->pos.y))
+			if (list->type != OBJ_STRUCTURE || (list->died != 0 && list->died < graphicsTime))
 			{
 				continue;
 			}
 			STRUCTURE *psStructure = castStructure(list);
+
+			if (!clipStructureOnScreen(psStructure))
+			{
+				continue;
+			}
+
 			renderStructure(psStructure, viewMatrix);
 		}
 	}
@@ -1644,7 +1808,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 		for (; list != nullptr; list = list->psNext)
 		{
 			if (list->type != OBJ_DROID || (list->died != 0 && list->died < graphicsTime)
-			    || !clipXY(list->pos.x, list->pos.y))
+			    || !quickClipXYToMaximumTilesFromCurrentPosition(list->pos.x, list->pos.y))
 			{
 				continue;
 			}
@@ -1653,7 +1817,6 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 			/* No point in adding it if you can't see it? */
 			if (psDroid->visible[selectedPlayer])
 			{
-				psDroid->sDisplay.frameNumber = currentGameFrame;
 				displayComponentObject(psDroid, viewMatrix);
 			}
 		}
@@ -2056,7 +2219,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			{
 				iIMDShape *lImd;
 				lImd = getImdFromIndex(MI_LANDING);
-				pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0, 
+				pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0,
 				                modelViewMatrix * glm::translate(psStructure->sDisplay.imd->connectors->xzy));
 			}
 		}
@@ -2073,6 +2236,8 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	bool defensive = false;
 	iIMDShape *strImd = psStructure->sDisplay.imd;
 	MAPTILE	*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+
+	glm::mat4 modelMatrix = glm::translate(dv) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
 	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
 	    || psStructure->pStructureType->type == REF_GATE)
@@ -2108,7 +2273,6 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 
 	/* Mark it as having been drawn */
 	psStructure->sDisplay.frameNumber = currentGameFrame;
-	glm::mat4 modelMatrix = glm::translate(dv) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
 	if (!defensive
 	    && graphicsTime - psStructure->timeLastHit < ELEC_DAMAGE_DURATION
@@ -2150,6 +2314,8 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		modelMatrix *= objectShimmy((BASE_OBJECT *)psStructure);
 	}
 
+	const glm::mat4 viewModelMatrix = viewMatrix * modelMatrix;
+
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT)
 	{
@@ -2157,11 +2323,10 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		{
 			// strImd is a module, so render the already-built part at full height.
 			pie_Draw3DShape(psStructure->prebuiltImd, 0, colour, buildingBrightness, pie_SHADOW, 0,
-				viewMatrix * modelMatrix);
+				viewModelMatrix);
 		}
-		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE,
-			viewMatrix * modelMatrix);
-		setScreenDisp(&psStructure->sDisplay, viewMatrix * modelMatrix);
+		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, viewModelMatrix);
+		setScreenDisp(&psStructure->sDisplay, viewModelMatrix);
 		return;
 	}
 
@@ -2188,15 +2353,15 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		{
 			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 		}
-		drawShape(psStructure, strImd, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);
+		drawShape(psStructure, strImd, colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix);
 		pie_SetShaderStretchDepth(0);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
-			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewMatrix * modelMatrix);
+			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewModelMatrix);
 		}
 		strImd = strImd->next;
 	}
-	setScreenDisp(&psStructure->sDisplay, viewMatrix * modelMatrix);
+	setScreenDisp(&psStructure->sDisplay, viewModelMatrix);
 }
 
 /// draw the delivery points
@@ -2571,7 +2736,7 @@ static void	drawStructureSelections()
 	/* Go thru' all the buildings */
 	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
-		if (clipXY(psStruct->pos.x, psStruct->pos.y) && psStruct->sDisplay.frameNumber == currentGameFrame)
+		if (psStruct->sDisplay.frameNumber == currentGameFrame)
 		{
 			/* If it's selected */
 			if (psStruct->selected ||
@@ -2604,8 +2769,7 @@ static void	drawStructureSelections()
 		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 		{
 			/* If it's targetted and on-screen */
-			if (clipXY(psStruct->pos.x, psStruct->pos.y)
-			    && psStruct->flags.test(OBJECT_FLAG_TARGETED)
+			if (psStruct->flags.test(OBJECT_FLAG_TARGETED)
 			    && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
 				scrX = psStruct->sDisplay.screenX;
@@ -2706,11 +2870,12 @@ static void	drawDroidSelections()
 		}
 	}
 
+	std::vector<PIERECT_DrawRequest> rectsToDraw; // batch rect drawing
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (psDroid->sDisplay.frameNumber != currentGameFrame || !clipXY(psDroid->pos.x, psDroid->pos.y))
+		if (psDroid->sDisplay.frameNumber != currentGameFrame)
 		{
 			continue;  // Not visible, anyway. Don't bother with health bars.
 		}
@@ -2722,6 +2887,7 @@ static void	drawDroidSelections()
 		    barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES
 		   )
 		{
+			rectsToDraw.clear();
 			damage = PERCENT(psDroid->body, psDroid->originalBody);
 
 			if (damage > REPAIRLEV_HIGH)
@@ -2755,16 +2921,19 @@ static void	drawDroidSelections()
 
 			if (psDroid->selected)
 			{
-				pie_BoxFill(scrX - scrR, scrY + scrR - 7, scrX - scrR + 1, scrY + scrR, boxCol);
-				pie_BoxFill(scrX - scrR, scrY + scrR, scrX - scrR + 7, scrY + scrR + 1, boxCol);
-				pie_BoxFill(scrX + scrR - 7, scrY + scrR, scrX + scrR, scrY + scrR + 1, boxCol);
-				pie_BoxFill(scrX + scrR, scrY + scrR - 7, scrX + scrR + 1, scrY + scrR + 1, boxCol);
+				rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR - 7, scrX - scrR + 1, scrY + scrR, boxCol));
+				rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR, scrX - scrR + 7, scrY + scrR + 1, boxCol));
+				rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR - 7, scrY + scrR, scrX + scrR, scrY + scrR + 1, boxCol));
+				rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR, scrY + scrR - 7, scrX + scrR + 1, scrY + scrR + 1, boxCol));
 			}
 
 			/* Power bars */
-			pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND);
-			pie_BoxFill(scrX - scrR, scrY + scrR + 3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
-			pie_BoxFill(scrX - scrR, scrY + scrR + 4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow);
+			rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND));
+			rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 3, scrX - scrR + damage, scrY + scrR + 4, powerCol));
+			rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow));
+
+			pie_DrawMultiRect(rectsToDraw);
+
 
 			/* Write the droid rank out */
 			if ((scrX + scrR) > 0

@@ -266,6 +266,35 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 	pie_DeactivateShader();
 }
 
+void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects, REND_MODE rendermode)
+{
+	const auto projectionMatrix = defaultProjectionMatrix();
+	pie_SetRendMode(rendermode);
+	pie_SetTexturePage(TEXPAGE_NONE);
+
+	enableRect();
+	for (auto it = rects.begin(); it != rects.end(); ++it)
+	{
+		if (it->x0 > it->x1)
+		{
+			std::swap(it->x0, it->x1);
+		}
+		if (it->y0 > it->y1)
+		{
+			std::swap(it->y0, it->y1);
+		}
+		const auto& colour = it->color;
+		const auto& center = Vector2f(it->x0, it->y0);
+		const auto& mvp = projectionMatrix * glm::translate(Vector3f(center, 0.f)) * glm::scale(it->x1 - it->x0, it->y1 - it->y0, 1.f);
+		pie_ActivateShader(SHADER_RECT, mvp,
+						   glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f));
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	}
+	disableRect();
+	pie_DeactivateShader();
+}
+
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill)
 {
 	pie_SetRendMode(REND_OPAQUE);
