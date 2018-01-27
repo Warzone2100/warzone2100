@@ -1816,7 +1816,8 @@ function __camTacticsTickForGroup(group)
 
 		//As of this refactor patrol groups can react to stuff within the
 		//tile scan limits in the attack code while waiting
-		if (gi.order === CAM_ORDER_PATROL)
+		var patrol = (gi.order === CAM_ORDER_PATROL);
+		if (patrol)
 		{
 			if (!camDef(gi.data.interval))
 			{
@@ -1825,6 +1826,7 @@ function __camTacticsTickForGroup(group)
 			if (!camDef(gi.lastmove) || !camDef(gi.lastspot))
 			{
 				gi.lastspot = 0;
+				gi.lastmove = 0;
 			}
 			else
 			{
@@ -1852,10 +1854,13 @@ function __camTacticsTickForGroup(group)
 			}
 		}
 
-		if (camDef(target) && camDist(droid, target) >= __CAM_CLOSE_RADIUS)
+		if (patrol || (camDef(target) && camDist(droid, target) >= __CAM_CLOSE_RADIUS))
 		{
 			var defending = gi.order === CAM_ORDER_DEFEND;
-			var rng = droid.droidType === DROID_SENSOR ? 15 : 10;
+			var sensorRange = patrol ? 8 : 12;
+			var normalRange = patrol ? 6 : 9;
+
+			var rng = droid.droidType === DROID_SENSOR ? sensorRange : normalRange;
 			var closeBy = enumRange(droid.x, droid.y, rng, CAM_HUMAN_PLAYER, false);
 			closeBy = closeBy.sort(function(obj1, obj2) {
 				var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
