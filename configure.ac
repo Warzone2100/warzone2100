@@ -409,7 +409,7 @@ fi
 # Checks for modules:
 
 if test "$backend" = "sdl"; then
-	PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.5])
+	PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0])
 fi
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
