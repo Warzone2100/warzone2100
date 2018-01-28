@@ -2667,10 +2667,8 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 	}
 
 	// If a unit has been ordered to rearm make sure it goes to the correct base
-	BASE_OBJECT *psRearmPad = orderStateObj(psDroid, DORDER_REARM);
-	if (psRearmPad
-	    && (STRUCTURE *)psRearmPad != psStruct
-	    && !vtolOnRearmPad((STRUCTURE *)psRearmPad, psDroid))
+	STRUCTURE *psRearmPad = castStructure(orderStateObj(psDroid, DORDER_REARM));
+	if (psRearmPad && psRearmPad != psStruct && !vtolOnRearmPad(psRearmPad, psDroid))
 	{
 		// target rearm pad is clear - let it go there
 		objTrace(psDroid->id, "rearm pad at %d,%d won't snatch us - we already have another available at %d,%d", psStruct->pos.x / TILE_UNITS, psStruct->pos.y / TILE_UNITS, psRearmPad->pos.x / TILE_UNITS, psRearmPad->pos.y / TILE_UNITS);
@@ -2685,10 +2683,11 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 		return false;
 	}
 
-	if (psDroid->psActionTarget[0] != nullptr && psDroid->psActionTarget[0] != psStruct)
+	STRUCTURE *psTarget = castStructure(psDroid->psActionTarget[0]);
+	if (psTarget && psTarget->pFunctionality->rearmPad.psObj == psDroid)
 	{
-		// vtol is rearming at a different base
-		objTrace(psDroid->id, "rearm pad at %d,%d won't snatch us - we already are snatched by %d,%d", psStruct->pos.x / TILE_UNITS, psStruct->pos.y / TILE_UNITS, psDroid->psActionTarget[0]->pos.x / TILE_UNITS, psDroid->psActionTarget[0]->pos.y / TILE_UNITS);
+		// vtol is rearming at a different base, leave it alone
+		objTrace(psDroid->id, "rearm pad at %d,%d won't snatch us - we already are snatched by %d,%d", psStruct->pos.x / TILE_UNITS, psStruct->pos.y / TILE_UNITS, psTarget->pos.x / TILE_UNITS, psTarget->pos.y / TILE_UNITS);
 		return false;
 	}
 

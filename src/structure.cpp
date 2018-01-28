@@ -5481,6 +5481,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 			console("ID %u - Research Points: %u", psStructure->id, getBuildingResearchPoints(psStructure));
 		}
 		break;
+	case REF_REARM_PAD:
+		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		if (getDebugMappingStatus())
+		{
+			console("tile %d,%d - target %s", psStructure->pos.x / TILE_UNITS, psStructure->pos.y / TILE_UNITS,
+			        objInfo(psStructure->pFunctionality->rearmPad.psObj));
+		}
+		break;
 	default:
 		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
