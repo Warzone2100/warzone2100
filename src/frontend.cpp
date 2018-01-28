@@ -1127,7 +1127,10 @@ void refreshCurrentVideoOptionsValues()
 {
 	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
 	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
-	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_R)) // Resolution option may not be available
+	{
+		widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+	}
 	widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString().c_str());
 	widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
 	if (widgGetFromID(psWScreen, FRONTEND_DISPLAYSCALE_R)) // Display Scale option may not be available
@@ -1165,7 +1168,10 @@ bool runVideoOptionsMenu()
 			//
 			// Update the "Requires restart" status of the Resolution + Display Scale entries to match.
 			//
-			widgSetString(psWScreen, FRONTEND_RESOLUTION, videoOptionsResolutionLabel());
+			if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION)) // Resolution option may not be available
+			{
+				widgSetString(psWScreen, FRONTEND_RESOLUTION, videoOptionsResolutionLabel());
+			}
 			if (widgGetFromID(psWScreen, FRONTEND_DISPLAYSCALE)) // Display Scale option may not be available
 			{
 				widgSetString(psWScreen, FRONTEND_DISPLAYSCALE, videoOptionsDisplayScaleLabel());
@@ -1270,6 +1276,15 @@ bool runVideoOptionsMenu()
 
 			if (canChangeResolutionLive())
 			{
+				// Disable the ability to use the Video options menu to live-change the window size when in windowed mode.
+				// Why?
+				//	- Certain window managers don't report their own changes to window size through SDL in all circumstances.
+				//	  (For example, attempting to set a window size of 800x600 might result in no actual change when using a
+				//	   tiling window manager (ex. i3), but SDL thinks the window size has been set to 800x600. This obviously
+				//     breaks things.)
+				//  - Manual window resizing is supported (so there is no need for this functionality in the Video menu).
+				if (!wzIsFullscreen()) break;
+
 				while (current != startingResolution)
 				{
 					// Attempt to change the resolution
