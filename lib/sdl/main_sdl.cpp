@@ -1496,6 +1496,40 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 	}
 #endif
 
+	// Get current window size + position + bounds
+	int prev_x = 0, prev_y = 0, prev_width = 0, prev_height = 0;
+	SDL_GetWindowPosition(WZwindow, &prev_x, &prev_y);
+	SDL_GetWindowSize(WZwindow, &prev_width, &prev_height);
+
+	// Get the usable bounds for the current screen
+	SDL_Rect bounds;
+	if (wzIsFullscreen())
+	{
+		// When in fullscreen mode, obtain the screen's overall bounds
+		if (SDL_GetDisplayBounds(screen, &bounds) != 0) {
+			debug(LOG_ERROR, "Failed to get display bounds for screen: %d", screen);
+			return false;
+		}
+		debug(LOG_WZ, "SDL_GetDisplayBounds for screen [%d]: pos %d x %d : res %d x %d", screen, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
+	}
+	else
+	{
+		// When in windowed mode, obtain the screen's *usable* display bounds
+		if (SDL_GetDisplayUsableBounds(screen, &bounds) != 0) {
+			debug(LOG_ERROR, "Failed to get usable display bounds for screen: %d", screen);
+			return false;
+		}
+		debug(LOG_WZ, "SDL_GetDisplayUsableBounds for screen [%d]: pos %d x %d : WxH %d x %d", screen, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
+
+		// Verify that the desired window size does not exceed the usable bounds of the specified display.
+		if ((width > bounds.w) || (height > bounds.h))
+		{
+			debug(LOG_WZ, "Unable to change window size to (%d x %d) because it is larger than the screen's usable bounds", width, height);
+			return false;
+		}
+	}
+
+	// Check whether the desired window size is smaller than the minimum required for the current Display Scale
 	unsigned int priorDisplayScale = current_displayScale;
 	if (wzWindowSizeIsSmallerThanMinimumRequired(width, height))
 	{
@@ -1517,20 +1551,9 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 		war_SetDisplayScale(maxDisplayScale);
 	}
 
-	// Get current window size + position + bounds
-	int prev_x = 0, prev_y = 0, prev_width = 0, prev_height = 0;
-	SDL_GetWindowPosition(WZwindow, &prev_x, &prev_y);
-	SDL_GetWindowSize(WZwindow, &prev_width, &prev_height);
-
-	SDL_Rect bounds;
-	if (SDL_GetDisplayBounds(screen, &bounds) != 0) {
-		debug(LOG_ERROR, "Failed to get display bounds for screen: %d", screen);
-		return false;
-	}
+	// Position the window (centered) on the screen (for its upcoming new size)
 	bounds.w -= (bounds.w + width) / 2;
 	bounds.h -= (bounds.h + height) / 2;
-
-	// Position the window (centered) on the screen (for its upcoming new size)
 	SDL_SetWindowPosition(WZwindow, bounds.x + bounds.w, bounds.y + bounds.h);
 
 	// Change the window size

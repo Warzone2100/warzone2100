@@ -1257,7 +1257,10 @@ bool runVideoOptionsMenu()
 			auto current = std::lower_bound(modes.begin(), modes.end(), config, compareLess);
 			if (current == modes.end() || !compareEq(*current, config))
 			{
-				--current;  // If current resolution doesn't exist, round down to next-highest one.
+				if (current != modes.begin())
+				{
+					--current;  // If current resolution doesn't exist, round down to next-highest one.
+				}
 			}
 
 			// Increment/decrement and loop if required.
