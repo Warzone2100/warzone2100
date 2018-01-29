@@ -155,9 +155,6 @@ static GLfloat Scrnvidpos[3];
 
 static SCANLINE_MODE use_scanlines;
 
-//HACK: This is used to play a sequence where audio/video is not synced fast enough.
-static int playAttempts = 0;
-
 // Helper; just grab some more compressed bitstream and sync it for page extraction
 static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
 {
@@ -809,7 +806,6 @@ bool seq_Update()
 			else
 			{
 				/* we need more data; break out to suck in another page */
-				playAttempts += 1;
 				break;
 			}
 		}
@@ -850,11 +846,9 @@ bool seq_Update()
 	alGetSourcei(audiodata.source, AL_SOURCE_STATE, &sourcestate);
 
 	if (PHYSFS_eof(fpInfile)
-		&& playAttempts > 2
 		&& !videobuf_ready
 		&& ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
-		&& sourcestate != AL_PLAYING
-	)
+		&& sourcestate != AL_PLAYING)
 	{
 		video_write(false);
 		seq_Shutdown();
@@ -956,7 +950,6 @@ void seq_Shutdown()
 	}
 
 	videoplaying = false;
-	playAttempts = 0;
 	Timer_stop();
 
 	audioTime = 0;
