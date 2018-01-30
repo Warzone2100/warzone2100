@@ -9,11 +9,11 @@
 	},
 	"position_2": {
 		"label": "NPLeftAssembly",
-		"pos": [4800, 3008]
+		"pos": [4928, 3136]
 	},
 	"position_3": {
 		"label": "NPRightAssembly",
-		"pos": [5184, 3008]
+		"pos": [5440, 3008]
 	},
 	"position_4": {
 		"label": "NPCyborgAssembly",
@@ -21,11 +21,11 @@
 	},
 	"position_5": {
 		"label": "ScavSouthWestAssembly",
-		"pos": [4928, 7488]
+		"pos": [4672, 6976]
 	},
 	"position_6": {
 		"label": "ScavSouthEastAssembly",
-		"pos": [6336, 7616]
+		"pos": [5184, 6976]
 	},
 	"position_7": {
 		"label": "ScavNorthAssembly",
@@ -70,6 +70,12 @@
 		"label": "NPBase",
 		"pos1": [3520, 1728],
 		"pos2": [6976, 5056]
+	},
+	"area_7": {
+		"label": "NPFactoryTrigger",
+		"subscriber": 0,
+		"pos1": [3776, 5568],
+		"pos2": [4800, 6080]
 	},
 
 	"object_0": {
@@ -143,13 +149,13 @@
 		"label": "SouthWestScavFactoryTrigger",
 		"subscriber": 0,
 		"pos": [4200, 7500],
-		"radius": 800
+		"radius": 1024
 	},
 	"radius_2": {
 		"label": "SouthEastScavFactoryTrigger",
 		"subscriber": 0,
 		"pos": [5600, 7500],
-		"radius": 800
+		"radius": 1024
 	},
 	"radius_3": {
 		"label": "NPLZTrigger",

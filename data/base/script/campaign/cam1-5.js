@@ -17,7 +17,6 @@ const SCAVENGER_RES = [
 	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage02",
 ];
 
-
 //Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
@@ -46,20 +45,37 @@ function getDroidsForNPLZ(args)
 	return list;
 }
 
-//These enable scav factories when close enough
-camAreaEvent("NorthScavFactoryTrigger", function()
+//These enable Scav and NP factories when close enough
+camAreaEvent("NorthScavFactoryTrigger", function(droid)
 {
 	camEnableFactory("ScavNorthFactory");
+	camEnableFactory("NPCyborgFactory");
+	camEnableFactory("NPLeftFactory");
+	camEnableFactory("NPRightFactory");
 });
 
-camAreaEvent("SouthWestScavFactoryTrigger", function()
+camAreaEvent("SouthWestScavFactoryTrigger", function(droid)
 {
 	camEnableFactory("ScavSouthWestFactory");
 });
 
-camAreaEvent("SouthEastScavFactoryTrigger", function()
+camAreaEvent("SouthEastScavFactoryTrigger", function(droid)
 {
 	camEnableFactory("ScavSouthEastFactory");
+});
+
+camAreaEvent("NPFactoryTrigger", function(droid)
+{
+	if (camIsTransporter(droid) === false)
+	{
+		camEnableFactory("NPCyborgFactory");
+		camEnableFactory("NPLeftFactory");
+		camEnableFactory("NPRightFactory");
+	}
+	else
+	{
+		resetLabel("NPFactoryTrigger", CAM_HUMAN_PLAYER);
+	}
 });
 
 //Land New Paradigm transport in the LZ area (protected by four hardpoints in the New Paradigm base)
@@ -199,7 +215,7 @@ function eventStartLevel()
 			assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(40000),
 			templates: [ npmrl, npmmct, npsbb, nphmg ],
 			data: {
 				regroup: false,
@@ -211,7 +227,7 @@ function eventStartLevel()
 			assembly: "NPRightAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(50000),
 			templates: [ npmor, npsens, npsbb, nphmg ],
 			data: {
 				regroup: false,
@@ -223,7 +239,7 @@ function eventStartLevel()
 			assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(30000),
 			templates: [ npcybc, npcybf, npcybm ],
 			data: {
 				regroup: false,
