@@ -369,18 +369,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		else if (isTransporter(psDroid) && !bMultiPlayer)
 		{
-			//check transporter isn't sitting there waiting to be filled when nothing exists!
-			if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag()
-			    && !missionDroidsRemaining(selectedPlayer))
-			{
-				// check that nothing is on the transporter (transporter counts as first in group)
-				if (psDroid->psGroup && psDroid->psGroup->refCount < 2)
-				{
-					// the script can call startMission for this callback for offworld missions
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-					triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
-				}
-			}
+
 		}
 		// default to guarding
 		else if (!tryDoRepairlikeAction(psDroid)
@@ -403,32 +392,31 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_TRANSPORTOUT:
 		if (psDroid->action == DACTION_NONE)
 		{
-			//if moving droids to safety and still got some droids left don't do callback
-			if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag() &&
-			    missionDroidsRemaining(selectedPlayer))
+			if (psDroid->player == selectedPlayer)
 			{
-				//move droids in Transporter into holding list
-				moveDroidsToSafety(psDroid);
-				//we need the transporter to just sit off world for a while...
-				orderDroid(psDroid, DORDER_TRANSPORTIN, ModeImmediate);
-				/* set action transporter waits for timer */
-				actionDroid(psDroid, DACTION_TRANSPORTWAITTOFLYIN);
+				if (getDroidsToSafetyFlag())
+				{
+					//move droids in Transporter into holding list
+					moveDroidsToSafety(psDroid);
+					//we need the transporter to just sit off world for a while...
+					orderDroid(psDroid, DORDER_TRANSPORTIN, ModeImmediate);
+					/* set action transporter waits for timer */
+					actionDroid(psDroid, DACTION_TRANSPORTWAITTOFLYIN);
 
-				missionSetReinforcementTime(gameTime);
-
-				//don't do this until waited for the required time
-				//fly Transporter back to get some more droids
-				//orderDroidLoc( psDroid, DORDER_TRANSPORTIN,
-				//    getLandingX(selectedPlayer), getLandingY(selectedPlayer));
-			}
-			else
-			{
-				//the script can call startMission for this callback for offworld missions
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-				triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
-
-				/* clear order */
-				psDroid->order = DroidOrder(DORDER_NONE);
+					missionSetReinforcementTime(gameTime);
+					//don't do this until waited for the required time
+					//fly Transporter back to get some more droids
+					//orderDroidLoc( psDroid, DORDER_TRANSPORTIN,
+					//getLandingX(selectedPlayer), getLandingY(selectedPlayer));
+				}
+				else
+				{
+					//the script can call startMission for this callback for offworld missions
+					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
+					triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
+					/* clear order */
+					psDroid->order = DroidOrder(DORDER_NONE);
+				}
 			}
 		}
 		break;
@@ -787,7 +775,7 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_EMBARK:
 		{
 			// only place it can be trapped - in multiPlayer can only put cyborgs onto a Cyborg Transporter
-			DROID *temp = (DROID *)psDroid->order.psObj;	// NOTE: It is possible to have a NULL here 
+			DROID *temp = (DROID *)psDroid->order.psObj;	// NOTE: It is possible to have a NULL here
 
 			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
 			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
@@ -1109,18 +1097,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		else if (isTransporter(psDroid))
 		{
-			// check transporter isn't sitting there waiting to be filled when nothing exists!
-			if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag() &&
-			    !missionDroidsRemaining(selectedPlayer))
-			{
-				// check that nothing is on the transporter (transporter counts as first in group)
-				if (psDroid->psGroup && psDroid->psGroup->refCount < 2)
-				{
-					// the script can call startMission for this callback for offworld missions
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-					triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
-				}
-			}
+
 		}
 		else
 		{

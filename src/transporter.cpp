@@ -1122,29 +1122,6 @@ bool updateTransporter(DROID *psTransporter)
 		return true;
 	}
 
-	/*if the transporter (selectedPlayer only) is moving droids to safety and
-	all remaining droids are destroyed then we need to flag the end of mission
-	as long as we're not flying out*/
-	if (psTransporter->player == selectedPlayer && getDroidsToSafetyFlag()
-	    && psTransporter->action != DACTION_TRANSPORTOUT)
-	{
-		//if there aren't any droids left...
-		if (!missionDroidsRemaining(selectedPlayer))
-		{
-			// Set the Transporter to have arrived at its destination
-			psTransporter->action = DACTION_NONE;
-
-			//the script can call startMission for this callback for offworld missions
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-			triggerEvent(TRIGGER_TRANSPORTER_EXIT, psTransporter);
-
-			// clear order
-			psTransporter->order = DroidOrder(DORDER_NONE);
-
-			return true;
-		}
-	}
-
 	// moving to a location
 	// if we're coming back for more droids then we want the transporter to
 	// fly to edge of map before turning round again

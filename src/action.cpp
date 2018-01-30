@@ -741,17 +741,6 @@ void actionUpdateDroid(DROID *psDroid)
 				orderDroidLoc(psDroid, DORDER_TRANSPORTIN,
 				              getLandingX(selectedPlayer), getLandingY(selectedPlayer), ModeImmediate);
 			}
-			else
-			{
-				/*if we're currently moving units to safety and waiting to fly
-				back in - check there is something to fly back for!*/
-				if (!missionDroidsRemaining(selectedPlayer))
-				{
-					//the script can call startMission for this callback for offworld missions
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-					triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
-				}
-			}
 		}
 		break;
 

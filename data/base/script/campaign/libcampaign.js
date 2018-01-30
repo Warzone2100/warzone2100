@@ -3523,7 +3523,7 @@ function cam_eventMissionTimeout()
 			__camGameLost();
 			return;
 		}
-		queue("__camGameWon", 200);
+		__camGameWon();
 	}
 }
 

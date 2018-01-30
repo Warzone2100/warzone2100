@@ -2,7 +2,6 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var allowWin;
-var launchedBeforeExit;
 var launchCount;
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06",
@@ -44,21 +43,15 @@ function checkEnemyVtolArea()
 //Play last video sequence and destroy all droids on map.
 function playLastVideo()
 {
-	var droids = enumArea(0, 0, mapWidth, mapHeight, false).filter(function(obj) {
-		return obj.type === DROID;
+	var droids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+		return (obj.type === DROID && !camIsTransporter(obj));
 	});
 
 	for (var i = 0, l = droids.length; i < l; ++i)
 	{
 		camSafeRemoveObject(droids[i], false);
 	}
-
 	camPlayVideos("CAM2_OUT");
-}
-
-function eventMissionTimeout()
-{
-	camCallOnce("playLastVideo");
 }
 
 // Allow win if the transporter was launched at least three times.
@@ -66,33 +59,12 @@ function eventTransporterLaunch(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
-		launchedBeforeExit = true;
 		launchCount = launchCount + 1;
 		if (launchCount > 2)
 		{
 			allowWin = true;
 		}
 	}
-}
-
-//This is triggered all over the source to end these type of missions if no
-//droids remain on map.
-function eventTransporterExit(transport)
-{
-	var len = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
-		return !camIsTransporter(dr);
-	}).length;
-	if ((!launchedBeforeExit || (!len && launchedBeforeExit)) && transport.player === CAM_HUMAN_PLAYER)
-	{
-		camCallOnce("fastMissionEnd");
-	}
-
-	launchedBeforeExit = false;
-}
-
-function fastMissionEnd()
-{
-	setMissionTime(1);
 }
 
 //Return randomly selected droid templates.
@@ -154,17 +126,23 @@ function tankAttack()
 	queue("tankAttack", camChangeOnDiff(180000));
 }
 
+//NOTE: this is only called once from the library's eventMissionTimeout().
 function checkIfLaunched()
 {
-	if (allowWin)
+	var transporters = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+		return (obj.type === DROID && camIsTransporter(obj));
+	});
+	if (transporters.length > 0)
 	{
-		return true;
+		allowWin = false;
 	}
 
-	if ((getMissionTime() <= 1) && !allowWin)
+	if (allowWin)
 	{
-		return false;
+		camCallOnce("playLastVideo");
+		return true;
 	}
+	return false;
 }
 
 //Everything in this level mostly just requeues itself until the mission ends.
@@ -186,9 +164,7 @@ function eventStartLevel()
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 	setPower(AI_POWER, THE_COLLECTIVE);
 
-	videoIndex = 0;
 	allowWin = false;
-	launchedBeforeExit = false;
 	launchCount = 0;
 	camPlayVideos(["MB2_DII_MSG", "MB2_DII_MSG2"]);
 
@@ -196,6 +172,5 @@ function eventStartLevel()
 	vtolAttack();
 	cyborgAttack();
 	tankAttack();
-	//collectiveTransportScouts();
 	checkEnemyVtolArea();
 }
