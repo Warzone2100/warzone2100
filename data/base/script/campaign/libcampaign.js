@@ -1385,13 +1385,19 @@ function camManageGroup(group, order, data)
 {
 	var saneData = data;
 	if (!camDef(saneData))
+	{
 		saneData = {};
+	}
 	if (camDef(saneData.pos)) // sanitize pos now to make ticks faster
 	{
 		if (camIsString(saneData.pos)) // single label?
+		{
 			saneData.pos = [ saneData.pos ];
+		}
 		else if (!camDef(saneData.pos.length)) // single position object?
+		{
 			saneData.pos = [ saneData.pos ];
+		}
 		for (var i = 0, l = saneData.pos.length; i < l; ++i) // array of labels?
 		{
 			saneData.pos[i] = camMakePos(saneData.pos[i]);
@@ -1399,8 +1405,7 @@ function camManageGroup(group, order, data)
 	}
 	if (camDef(__camGroupInfo[group]) && order !== __camGroupInfo[group].order)
 	{
-		camTrace("Group", group, "receives a new order:",
-		         camOrderToString(order));
+		camTrace("Group", group, "receives a new order:", camOrderToString(order));
 	}
 	__camGroupInfo[group] = {
 		target: undefined,
@@ -1499,7 +1504,8 @@ function __camFindClusters(list, size)
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
 	for (var i = list.length - 1; i >= 0; --i)
 	{
-		var x = list[i].x, y = list[i].y;
+		var x = list[i].x;
+		var y = list[i].y;
 		var found = false;
 		for (var j = 0; j < ret.clusters.length; ++j)
 		{
@@ -1556,7 +1562,9 @@ function __camPickTarget(group)
 				{
 					var radius = gi.data.radius;
 					if (!camDef(radius))
+					{
 						radius = __CAM_PLAYER_BASE_RADIUS;
+					}
 					targets = enumRange(gi.data.pos[i].x,
 					                    gi.data.pos[i].y,
 					                    radius,
@@ -1571,7 +1579,9 @@ function __camPickTarget(group)
 					return undefined;
 				}
 				else
+				{
 					targets = [ gi.data.pos[gi.data.pos.length - 1] ];
+				}
 			}
 			var dr = droids[0];
 			targets = targets.filter(function(obj) {
@@ -1598,30 +1608,38 @@ function __camPickTarget(group)
 			}
 			var radius = gi.data.radius;
 			if (!camDef(radius))
+			{
 				radius = __CAM_DEFENSE_RADIUS;
-			if (camDef(gi.target)
-				&& camDist(gi.target, gi.data.pos[0]) < radius)
+			}
+			if (camDef(gi.target) && camDist(gi.target, gi.data.pos[0]) < radius)
 			{
 				targets = enumRange(gi.target.x, gi.target.y,
 				                    __CAM_TARGET_TRACKING_RADIUS,
 				                    CAM_HUMAN_PLAYER, false);
 			}
 			if (!targets.length)
+			{
 				targets = enumRange(gi.data.pos[0].x, gi.data.pos[0].y,
 				                    radius, CAM_HUMAN_PLAYER, false);
+			}
 			if (!targets.length)
+			{
 				targets = [ gi.data.pos[0] ];
+			}
 			break;
 		default:
-			camDebug("Unsupported group order", gi.order,
-			         camOrderToString(gi.order));
+			camDebug("Unsupported group order", gi.order, camOrderToString(gi.order));
 			break;
 	}
 	if (!targets.length)
+	{
 		return undefined;
+	}
 	var target = targets[0];
-	if (target.type === DROID && camIsTransporter(target))
+	if (camDef(target) && camDef(target.type) && target.type === DROID && camIsTransporter(target))
+	{
 		return undefined;
+	}
 	__camGroupInfo[group].target = { x: target.x, y: target.y };
 	return __camGroupInfo[group].target;
 }
@@ -1634,6 +1652,11 @@ function __camTacticsTick()
 		//Remove groups with no droids.
 		if (enumGroup(group).length === 0)
 		{
+			//Useful if the group has manual management (seen in cam1-3 script).
+			if (camDef(__camGroupInfo[group].data.removable) && __camGroupInfo[group].data.removable === false)
+			{
+				continue;
+			}
 			camStopManagingGroup(group);
 			break;
 		}
@@ -1641,6 +1664,35 @@ function __camTacticsTick()
 		dt += CAM_TICKS_PER_FRAME;
 	}
 	queue("__camTacticsTick", dt);
+}
+
+//Return the range (in tiles) a droid will scout for stuff to attack around it.
+function __camScanRange(order, drType)
+{
+	var rng = 7; //default
+	switch (order)
+	{
+		case CAM_ORDER_ATTACK:
+		case CAM_ORDER_DEFEND:
+		case CAM_ORDER_FOLLOW:
+			rng = 8;
+			break;
+		case CAM_ORDER_PATROL:
+			rng = 6;
+			break;
+		case CAM_ORDER_COMPROMISE:
+			rng = 4;
+			break;
+		default:
+			camDebug("Unsupported group order", order, camOrderToString(order));
+	}
+
+	if (drType === DROID_SENSOR)
+	{
+		rng = Math.floor(rng * 1.5);
+	}
+
+	return rng;
 }
 
 function __camTacticsTickForGroup(group)
@@ -1856,12 +1908,10 @@ function __camTacticsTickForGroup(group)
 
 		if (patrol || (camDef(target) && camDist(droid, target) >= __CAM_CLOSE_RADIUS))
 		{
-			var defending = gi.order === CAM_ORDER_DEFEND;
-			var sensorRange = patrol ? 8 : 12;
-			var normalRange = patrol ? 6 : 9;
+			const SCAN_RANGE = __camScanRange(gi.order, droid.droidType);
+			var defending = (gi.order === CAM_ORDER_DEFEND);
 
-			var rng = droid.droidType === DROID_SENSOR ? sensorRange : normalRange;
-			var closeBy = enumRange(droid.x, droid.y, rng, CAM_HUMAN_PLAYER, false);
+			var closeBy = enumRange(droid.x, droid.y, SCAN_RANGE, CAM_HUMAN_PLAYER, false);
 			closeBy = closeBy.sort(function(obj1, obj2) {
 				var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
 				var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
@@ -1898,15 +1948,19 @@ function __camCheckGroupMorale(group)
 {
 	var gi = __camGroupInfo[group];
 	if (!camDef(gi.data.morale))
+	{
 		return;
+	}
 	// morale is %.
 	var msize = Math.floor((100 - gi.data.morale) * gi.count / 100);
 	var gsize = groupSize(group);
-	switch(gi.order)
+	switch (gi.order)
 	{
 		case CAM_ORDER_ATTACK:
 			if (gsize > msize)
+			{
 				break;
+			}
 			camTrace("Group", group, "falls back");
 			gi.order = CAM_ORDER_DEFEND;
 			// swap pos and fallback
@@ -1918,7 +1972,9 @@ function __camCheckGroupMorale(group)
 			break;
 		case CAM_ORDER_DEFEND:
 			if (gsize <= msize)
+			{
 				break;
+			}
 			camTrace("Group", group, "restores");
 			gi.order = CAM_ORDER_ATTACK;
 			// swap pos and fallback

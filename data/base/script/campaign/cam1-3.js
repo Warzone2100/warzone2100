@@ -60,6 +60,7 @@ function playYouAreInContraventionOfTheNewParadigm()
 		pos: camMakePos("RTLZ"),
 		repair: 66,
 		regroup: true,
+		removable: false,
 	});
 	camManageGroup(NPDefenseGroup, CAM_ORDER_FOLLOW, {
 		droid: "NPCommander",
@@ -83,8 +84,9 @@ function enableNP(args)
 
 function sendScouts()
 {
-	camManageGroup(camMakeGroup("ScavScoutForce"), CAM_ORDER_COMPROMISE,
-	               { pos: camMakePos("RTLZ") });
+	camManageGroup(camMakeGroup("ScavScoutForce"), CAM_ORDER_COMPROMISE, {
+		pos: camMakePos("RTLZ")
+	});
 }
 
 camAreaEvent("ScavTrigger", function(droid)
