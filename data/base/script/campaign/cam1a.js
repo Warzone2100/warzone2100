@@ -14,14 +14,11 @@ camAreaEvent("LaunchScavAttack", function(droid)
 	camPlayVideos("MB1A_MSG");
 	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	// send scavengers on war path if triggered above
-	camManageGroup(
-		camMakeGroup("ScavAttack1", ENEMIES), CAM_ORDER_ATTACK,
-		{
-			pos: camMakePos("playerBase"),
-			fallback: camMakePos("retreat1"),
-			morale: 50
-		}
-	);
+	camManageGroup(camMakeGroup("ScavAttack1", ENEMIES), CAM_ORDER_ATTACK, {
+		pos: camMakePos("playerBase"),
+		fallback: camMakePos("retreat1"),
+		morale: 50
+	});
 	// activate mission timer, unlike the original campaign.
 	setMissionTime(camChangeOnDiff(3600));
 });
@@ -61,18 +58,15 @@ camAreaEvent("RoadblockArea", function(droid)
 
 camAreaEvent("raidTrigger", function(droid)
 {
-	camManageGroup(
-		camMakeGroup("raidTrigger", ENEMIES),
-		CAM_ORDER_ATTACK, { pos: camMakePos("scavbase3area") }
-	);
-	camManageGroup(
-		camMakeGroup("raidGroup", ENEMIES),
-		CAM_ORDER_ATTACK, { pos: camMakePos("scavbase3area") }
-	);
-	camManageGroup(
-		camMakeGroup("scavbase3area", ENEMIES),
-		CAM_ORDER_DEFEND, { pos: camMakePos("scavbase3area") }
-	);
+	camManageGroup( camMakeGroup("raidTrigger", ENEMIES), CAM_ORDER_ATTACK, {
+		pos: camMakePos("scavbase3area")
+	});
+	camManageGroup(camMakeGroup("raidGroup", ENEMIES), CAM_ORDER_ATTACK, {
+		pos: camMakePos("scavbase3area")
+	});
+	camManageGroup(camMakeGroup("scavbase3area", ENEMIES), CAM_ORDER_DEFEND, {
+		pos: camMakePos("scavbase3area")
+	});
 	camEnableFactory("base2factory1");
 });
 

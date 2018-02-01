@@ -176,8 +176,7 @@ function allySiloWithPlayer()
 //Check if the silos still exist and only allow winning if the player captured them.
 function checkMissileSilos()
 {
-	if (!countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER)
-		&& !countStruct("NX-ANTI-SATSite", SILO_PLAYER))
+	if (!countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER) && !countStruct("NX-ANTI-SATSite", SILO_PLAYER))
 	{
 		return false;
 	}

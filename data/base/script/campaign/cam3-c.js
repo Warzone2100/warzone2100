@@ -16,7 +16,7 @@ const NEXUS_RES = [
 ];
 var reunited;
 
-camAreaEvent("gammaBaseTrigger", function() {
+camAreaEvent("gammaBaseTrigger", function(droid) {
 	discoverGammaBase();
 });
 

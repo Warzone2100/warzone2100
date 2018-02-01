@@ -128,11 +128,9 @@ function sendEdgeMapDroids(droidCount, location, list)
 		droids.push(list[camRand(list.length)]);
 	}
 
-	camSendReinforcement(NEXUS, camMakePos(location), droids,
-		CAM_REINFORCE_GROUND, {
-			data: {regroup: true, count: -1}
-		}
-	);
+	camSendReinforcement(NEXUS, camMakePos(location), droids, CAM_REINFORCE_GROUND, {
+		data: {regroup: true, count: -1}
+	});
 }
 
 function setupPatrolGroups()

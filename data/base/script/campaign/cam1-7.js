@@ -41,9 +41,10 @@ camAreaEvent("middleScavFactoryTrigger", function()
 //New Paradigm landing zone.
 camAreaEvent("NPWayPointTrigger", function()
 {
-	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("NPTransportPos"), regroup: false }
-	);
+	camManageGroup(artiGroup, CAM_ORDER_DEFEND, {
+		pos: camMakePos("NPTransportPos"),
+		regroup: false
+	});
 });
 
 //Land New Paradigm transport if the New Paradigm have the artifact.
@@ -71,9 +72,10 @@ camAreaEvent("artifactCheckNP", function()
 	hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
 	camCallOnce("removeCanyonBlip");
 
-	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("NPWayPoint"), regroup: false }
-	);
+	camManageGroup(artiGroup, CAM_ORDER_DEFEND, {
+		pos: camMakePos("NPWayPoint"),
+		regroup: false
+	});
 });
 
 //Remove nearby droids. Make sure the player loses if the NP still has the artifact
@@ -125,9 +127,10 @@ function eventGroupLoss(obj, group, newsize)
 //Moves some New Paradigm forces to the artifact
 function getArtifact()
 {
-	camManageGroup(artiGroup, CAM_ORDER_DEFEND,
-		{ pos: camMakePos("artifactLocation"), regroup: false }
-	);
+	camManageGroup(artiGroup, CAM_ORDER_DEFEND, {
+		pos: camMakePos("artifactLocation"),
+		regroup: false
+	});
 }
 
 //New Paradigm truck builds six lancer hardpoints around LZ

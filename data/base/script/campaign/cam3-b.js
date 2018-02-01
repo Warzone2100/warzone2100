@@ -120,13 +120,11 @@ function sendNXTransporter()
 
 	if (camDef(pos))
 	{
-		camSendReinforcement(NEXUS, camMakePos(pos), list,
-			CAM_REINFORCE_TRANSPORT, {
-				message: LZ_ALIAS + lzNum,
-				entry: { x: 63, y: 4 },
-				exit: { x: 63, y: 4 }
-			}
-		);
+		camSendReinforcement(NEXUS, camMakePos(pos), list, CAM_REINFORCE_TRANSPORT, {
+			message: LZ_ALIAS + lzNum,
+			entry: { x: 63, y: 4 },
+			exit: { x: 63, y: 4 }
+		});
 
 		queue("sendNXTransporter", camChangeOnDiff(180000)); //3 min
 	}

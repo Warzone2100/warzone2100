@@ -96,7 +96,9 @@ function vtolAttack()
 function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	{
 		queue("truckDefense", 160000);
+	}
 
 	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-Tower-MdCan", "CO-Tower-LtATRkt"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);

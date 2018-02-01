@@ -30,17 +30,15 @@ camAreaEvent("causeWayTrig", function()
 	cyborgGroupPatrol();
 
 	camDetectEnemyBase("NPLZGroup");
-	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ",
-		CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 0, y: 0 },
-			exit: { x: 0, y: 0 },
-			data: {
-				regroup: false,
-				count: -1,
-				repair: 40,
-			},
-		}
-	);
+	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
+		entry: { x: 0, y: 0 },
+		exit: { x: 0, y: 0 },
+		data: {
+			regroup: false,
+			count: -1,
+			repair: 40,
+		},
+	});
 });
 
 function getDroidsForNPLZ()
@@ -125,10 +123,12 @@ function sensorGroupAttack()
 
 function IDFGroupAmbush()
 {
-	camManageGroup(camMakeGroup("IDF1"), CAM_ORDER_ATTACK,
-		{ pos: camMakePos("attackPoint3") });
-	camManageGroup(camMakeGroup("IDF2"), CAM_ORDER_ATTACK,
-		{ pos: camMakePos("attackPoint3") });
+	camManageGroup(camMakeGroup("IDF1"), CAM_ORDER_ATTACK, {
+		pos: camMakePos("attackPoint3")
+	});
+	camManageGroup(camMakeGroup("IDF2"), CAM_ORDER_ATTACK, {
+		pos: camMakePos("attackPoint3")
+	});
 }
 
 function setupPatrols()

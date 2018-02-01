@@ -101,7 +101,9 @@ camAreaEvent("NPTrigger", function(droid)
 
 function eventAttacked(victim, attacker) {
 	if (!camDef(victim) || !victim || victim.player === CAM_HUMAN_PLAYER)
+	{
 		return;
+	}
 	if (victim.player === NEW_PARADIGM)
 	{
 		camCallOnce("enableNP");
@@ -154,11 +156,17 @@ function eventDroidBuilt(droid, structure)
 {
 	// An example of manually managing factory groups.
 	if (!camDef(structure) || !structure || structure.id !== NPFactory.id)
+	{
 		return;
+	}
 	if (getObject("NPCommander") !== null && groupSize(NPDefenseGroup) < 6) // watch out! commander control limit
+	{
 		groupAdd(NPDefenseGroup, droid);
+	}
 	else if (groupSize(NPScoutGroup) < 4 && droid.body !== camTemplates.npsmc.body)
-		groupAdd(NPScoutGroup, droid);// heavy tanks don't go scouting
+	{
+		groupAdd(NPScoutGroup, droid); // heavy tanks don't go scouting
+	}
 	// As libcampaign.js pre-hook has already fired,
 	// the droid would remain assigned to the factory's
 	// managed group if not reassigned here,

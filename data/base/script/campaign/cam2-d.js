@@ -33,7 +33,9 @@ camAreaEvent("vtolRemoveZone", function(droid)
 function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	{
 		queue("truckDefense", 160000);
+	}
 
 	var list = ["AASite-QuadBof", "WallTower04", "GuardTower-RotMg", "WallTower-Projector"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("uplinkPos"));

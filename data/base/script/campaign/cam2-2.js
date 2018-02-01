@@ -94,7 +94,9 @@ camAreaEvent("failZone", function(droid)
 		failSequence();
 	}
 	else
+	{
 		resetLabel("failZone");
+	}
 });
 
 function vtolAttack()
@@ -107,7 +109,9 @@ function vtolAttack()
 function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	{
 		queue("truckDefense", 160000);
+	}
 
 	const list = ["WallTower06", "PillBox1", "WallTower03"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);

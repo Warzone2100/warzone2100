@@ -113,7 +113,9 @@ function camIsString(something)
 function camRand(max)
 {
 	if (max > 0)
+	{
 		return Math.floor(Math.random() * max);
+	}
 	camDebug("Max should be positive");
 }
 
@@ -122,7 +124,9 @@ function camRand(max)
 function camCallOnce(callback)
 {
 	if (camDef(__camCalledOnce[callback]) && __camCalledOnce[callback])
+	{
 		return;
+	}
 	__camCalledOnce[callback] = true;
 	__camGlobalContext()[callback]();
 }
@@ -132,11 +136,17 @@ function camCallOnce(callback)
 function camSafeRemoveObject(obj, flashy)
 {
 	if (__camLevelEnded)
+	{
 		return;
+	}
 	if (camIsString(obj))
+	{
 		obj = getObject(obj);
+	}
 	if (camDef(obj) && obj)
+	{
 		removeObject(obj, flashy);
+	}
 }
 
 //;; \subsection{camMakePos(x, y | label | object)}
@@ -148,12 +158,18 @@ function camSafeRemoveObject(obj, flashy)
 function camMakePos(xx, yy)
 {
 	if (camDef(yy))
+	{
 		return { x : xx, y : yy };
+	}
 	if (!camDef(xx))
+	{
 		return undefined;
+	}
 	var obj = xx;
 	if (camIsString(xx))
+	{
 		obj = getObject(xx);
+	}
 	if (!camDef(obj) || !obj)
 	{
 		camDebug("Failed at", xx);
@@ -178,7 +194,9 @@ function camMakePos(xx, yy)
 		default:
 			// already a pos-like object?
 			if (camDef(obj.x) && camDef(obj.y))
+			{
 				return { x: obj.x, y: obj.y };
+			}
 			camDebug("Not implemented:", obj.type);
 			return undefined;
 	}
@@ -189,14 +207,22 @@ function camMakePos(xx, yy)
 function camDist(x1, y1, x2, y2)
 {
 	if (camDef(y2)) // standard
+	{
 		return distBetweenTwoPoints(x1, y1, x2, y2);
+	}
 	var pos2 = camMakePos(x2, y2);
 	if (!camDef(pos2)) // pos1, pos2
+	{
 		return distBetweenTwoPoints(x1.x, x1.y, y1.x, y1.y);
+	}
 	if (camDef(pos2.x)) // x2 is pos2
+	{
 		return distBetweenTwoPoints(x1, y1, pos2.x, pos2.y);
+	}
 	else // pos1, x2, y2
+	{
 		return distBetweenTwoPoints(x1.x, x1.y, y1, x2);
+	}
 }
 
 //;; \subsection{camPlayerMatchesFilter(player, filter)}
@@ -226,10 +252,14 @@ function camRemoveDuplicates(array)
 
 	return array.filter(function(item) {
 		var type = typeof item;
-		if(type in prims)
+		if (type in prims)
+		{
 			return prims[type].hasOwnProperty(item) ? false : (prims[type][item] = true);
+		}
 		else
+		{
 			return objs.indexOf(item) >= 0 ? false : objs.push(item);
+		}
 	});
 }
 
@@ -316,15 +346,23 @@ function camIsSystemDroid(obj)
 function camMakeGroup(what, filter)
 {
 	if (!camDef(filter))
+	{
 		filter = ENEMIES;
+	}
 	var array;
 	var obj;
 	if (camIsString(what)) // label
+	{
 		obj = getObject(what);
+	}
 	else if (camDef(what.length)) // array
+	{
 		array = what;
+	}
 	else if (camDef(what.type)) // object
+	{
 		obj = what;
+	}
 	if (camDef(obj))
 	{
 		switch(obj.type) {
@@ -363,7 +401,9 @@ function camMakeGroup(what, filter)
 				continue;
 			}
 			if (o.type === DROID && camPlayerMatchesFilter(o.player, filter))
+			{
 				groupAdd(group, o);
+			}
 		}
 		return group;
 	}
@@ -510,7 +550,9 @@ function camDebugOnce()
 	var str = arguments.callee.caller.name
 		+ ": " + Array.prototype.join.call(arguments, " ");
 	if (camDef(__camDebuggedOnce[str]))
+	{
 		return;
+	}
 	__camDebuggedOnce[str] = true;
 	__camGenericDebug("DEBUG",
 	                  arguments.callee.caller.name,
@@ -526,7 +568,9 @@ function camDebugOnce()
 function camTrace()
 {
 	if (!__camCheatMode)
+	{
 		return;
+	}
 	__camGenericDebug("TRACE",
 	                  arguments.callee.caller.name,
 	                  arguments);
@@ -538,11 +582,15 @@ function camTrace()
 function camTraceOnce()
 {
 	if (!__camCheatMode)
+	{
 		return;
+	}
 	var str = arguments.callee.caller.name
 		+ ": " + Array.prototype.join.call(arguments, " ");
 	if (camDef(__camTracedOnce[str]))
+	{
 		return;
+	}
 	__camTracedOnce[str] = true;
 	__camGenericDebug("TRACE",
 	                  arguments.callee.caller.name,
@@ -600,12 +648,15 @@ function __camGenericDebug(flag, func, args, err, bt)
 		}
 	}
 	if (!func)
+	{
 		func = "<anonymous>";
-	var str = flag + ": " + func + ": " +
-	      Array.prototype.join.call(args, " ");
+	}
+	var str = flag + ": " + func + ": " + Array.prototype.join.call(args, " ");
 	debug(str);
 	if (camDef(err) && err)
+	{
 		dump(str);
+	}
 }
 
 function __camBacktrace()
@@ -615,9 +666,13 @@ function __camBacktrace()
 	while (camDef(func) && func)
 	{
 		if (func.name)
+		{
 			list.push(func.name);
+		}
 		else
+		{
 			list.push("<anonymous>");
+		}
 		func = func.caller;
 	}
 	return list;
@@ -683,9 +738,9 @@ function camAllArtifactsPickedUp()
 function camGetArtifacts()
 {
 	var camArti = [];
-	for(var alabel in __camArtifacts)
+	for (var alabel in __camArtifacts)
 	{
-		if(camDef(__camArtifacts[alabel]))
+		if (camDef(__camArtifacts[alabel]))
 		{
 			camArti.push(__camGetArtifactLabel(alabel));
 		}
@@ -714,14 +769,17 @@ function __camCheckPlaceArtifact(obj)
 	// FIXME: O(n) lookup here
 	var alabel = getLabel(obj);
 	if (!camDef(alabel) || !alabel)
+	{
 		return;
+	}
 	var ai = __camArtifacts[alabel];
 	if (!camDef(ai))
+	{
 		return;
+	}
 	if (ai.placed)
 	{
-		camDebug("Object to which artifact", alabel,
-			"is bound has died twice");
+		camDebug("Object to which artifact", alabel, "is bound has died twice");
 		return;
 	}
 	camTrace("Placing", ai.tech);
@@ -756,7 +814,9 @@ function __camPickupArtifact(artifact)
 	++__camNumArtifacts;
 	var callback = __camGlobalContext()["camArtifactPickup_" + alabel];
 	if (camDef(callback))
+	{
 		callback();
+	}
 }
 
 function __camLetMeWinArtifacts()
@@ -769,7 +829,9 @@ function __camLetMeWinArtifacts()
 			var label = __camGetArtifactLabel(alabel);
 			var artifact = getObject(label);
 			if (!camDef(artifact) || !artifact)
+			{
 				continue;
+			}
 			__camPickupArtifact(artifact);
 		}
 		else
@@ -847,9 +909,10 @@ function camSetEnemyBases(bases)
 				{
 					var s = structures[i];
 					if (s.type !== STRUCTURE || __camIsValidLeftover(s))
+					{
 						continue;
-					if (!camDef(bi.player) ||
-					    camPlayerMatchesFilter(s.player, bi.player))
+					}
+					if (!camDef(bi.player) || camPlayerMatchesFilter(s.player, bi.player))
 					{
 						camTrace("Auto-adding", s.id, "to base", blabel);
 						groupAdd(bi.group, s);
@@ -899,9 +962,10 @@ function camSetEnemyBases(bases)
 			{
 				var s = structs[i];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
+				{
 					continue;
-				if (!camDef(bi.player) ||
-				    camPlayerMatchesFilter(s.player, bi.player))
+				}
+				if (!camDef(bi.player) || camPlayerMatchesFilter(s.player, bi.player))
 				{
 					camTrace("Auto-adding", s.id, "to base", blabel);
 					groupAdd(bi.group, s);
@@ -909,7 +973,9 @@ function camSetEnemyBases(bases)
 			}
 		}
 		if (groupSize(bi.group) === 0)
+		{
 			camDebug("Base", blabel, "defined as empty group");
+		}
 		if(!reload)
 		{
 			bi.detected = false;
@@ -928,7 +994,9 @@ function camDetectEnemyBase(blabel)
 {
 	var bi = __camEnemyBases[blabel];
 	if (bi.detected || bi.eliminated)
+	{
 		return;
+	}
 	camTrace("Enemy base", blabel, "detected");
 	bi.detected = true;
 	if (camDef(bi.detectSnd))
@@ -938,16 +1006,24 @@ function camDetectEnemyBase(blabel)
 		{
 			var objs = enumGroup(bi.group);
 			if (objs.length > 0)
+			{
 				pos = camMakePos(objs[0]);
+			}
 		}
 		if (camDef(pos))
+		{
 			playSound(bi.detectSnd, pos.x, pos.y, 0);
+		}
 	}
 	if (camDef(bi.detectMsg))
+	{
 		hackAddMessage(bi.detectMsg, PROX_MSG, 0, false);
+	}
 	var callback = __camGlobalContext()["camEnemyBaseDetected_" + blabel];
 	if (camDef(callback))
+	{
 		callback();
+	}
 }
 
 //;; \subsection{camAllEnemyBasesEliminated()}
@@ -1033,7 +1109,9 @@ function camSendReinforcement(player, position, list, kind, data)
 function camSetBaseReinforcements(blabel, interval, callback, kind, data)
 {
 	if (!camIsString(callback))
+	{
 		camDebug("Callback name must be a string (received", callback, ")");
+	}
 	var bi = __camEnemyBases[blabel];
 	bi.reinforce_kind = kind;
 	bi.reinforce_interval = interval;
@@ -1133,7 +1211,9 @@ function __camDispatchTransporterUnsafe()
 function __camDispatchTransporterSafe(player, position, list, data)
 {
 	if (!profile("__camDispatchTransporterUnsafe"))
+	{
 		queue("__camDispatchTransporterSafe", 1000);
+	}
 }
 
 function __camLandTransporter(player, pos)
@@ -1186,12 +1266,16 @@ function __camIsValidLeftover(obj)
 	if (camPlayerMatchesFilter(obj.player, ENEMIES))
 	{
 		if (obj.type === STRUCTURE && obj.stattype === WALL)
+		{
 			return true;
+		}
 	}
 	if (obj.type === FEATURE)
 	{
 		if (obj.stattype === BUILDING)
+		{
 			return true;
+		}
 	}
 	return false;
 }
@@ -1260,9 +1344,13 @@ function __camBasesTick()
 	{
 		var bi = __camEnemyBases[blabel];
 		if (bi.eliminated || !camDef(bi.reinforce_kind))
+		{
 			continue;
+		}
 		if (gameTime - bi.reinforce_last < bi.reinforce_interval)
+		{
 			continue;
+		}
 		if (!camDef(bi.player))
 		{
 			camDebug("Enemy base player needs to be set for", blabel);
@@ -1807,7 +1895,6 @@ function __camTacticsTickForGroup(group)
 		default:
 			camDebug("Unknown group order given: " + gi.order);
 			return;
-			break;
 	}
 
 	for (var i = 0, l = droids.length; i < l; ++i)
@@ -2010,7 +2097,9 @@ function __camGetClosestTruck(player, pos)
 {
 	var droids = __camEnumFreeTrucks(player);
 	if (droids.length <= 0)
+	{
 		return undefined;
+	}
 
 	// Find out which one is the closest.
 	var minDroid = droids[0];
@@ -2069,8 +2158,7 @@ function __camTruckTick()
 			var loc = pickStructLocation(truck, qi.stat, pos.x, pos.y);
 			if (camDef(loc) && camDef(truck))
 			{
-				if (orderDroidBuild(truck, DORDER_BUILD,
-				                    qi.stat, loc.x, loc.y))
+				if (orderDroidBuild(truck, DORDER_BUILD, qi.stat, loc.x, loc.y))
 				{
 					ti.queue.shift(); // consider it handled
 				}
@@ -2088,8 +2176,7 @@ function __camTruckTick()
 		if (camDef(truck))
 		{
 			enableStructure("A0ResourceExtractor", player);
-			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor",
-			                oil.x, oil.y);
+			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor", oil.x, oil.y);
 			continue;
 		}
 	}
@@ -2184,21 +2271,29 @@ function camSetFactoryData(flabel, fdata)
 	// remember the old factory group, if any
 	var droids = [];
 	if (camDef(__camFactoryInfo[flabel]))
+	{
 		droids = enumGroup(__camFactoryInfo[flabel].group);
+	}
 	__camFactoryInfo[flabel] = fdata;
 	var fi = __camFactoryInfo[flabel];
 	if (!camDef(fi.data))
+	{
 		fi.data = {};
+	}
 	fi.enabled = false;
 	fi.state = 0;
 	if (!camDef(fi.group))
+	{
 		fi.group = camNewGroup();
+	}
 	for (var i = 0, l = droids.length; i < l; ++i)
 	{
 		groupAdd(fi.group, droids[i]);
 	}
 	if (!camDef(fi.data.count))
+	{
 		fi.data.count = fi.groupSize;
+	}
 }
 
 //;; \subsection{camEnableFactory(factory label)}
@@ -2237,7 +2332,9 @@ function camEnableFactory(flabel)
 function camQueueDroidProduction(player, template)
 {
 	if (!camDef(__camFactoryQueue[player]))
+	{
 		__camFactoryQueue[player] = [];
+	}
 	__camFactoryQueue[player][__camFactoryQueue[player].length] = template;
 }
 
@@ -2264,7 +2361,9 @@ function __camFactoryUpdateTactics(flabel)
 	{
 		var pos = camMakePos(fi.assembly);
 		if (!camDef(pos))
+		{
 			pos = camMakePos(flabel);
+		}
 		camManageGroup(fi.group, CAM_ORDER_DEFEND, { pos: pos });
 	}
 }
@@ -2273,11 +2372,15 @@ function __camAddDroidToFactoryGroup(droid, structure)
 {
 	// don't manage trucks in this function
 	if (droid.droidType === DROID_CONSTRUCT)
+	{
 		return;
+	}
 	// FIXME: O(n) lookup here
 	var flabel = getLabel(structure);
 	if (!camDef(flabel) || !flabel)
+	{
 		return;
+	}
 	var fi = __camFactoryInfo[flabel];
 	groupAdd(fi.group, droid);
 	if (camDef(fi.assembly))
@@ -2306,11 +2409,9 @@ function __camBuildDroid(template, structure)
 	makeComponentAvailable(template.body, structure.player);
 	makeComponentAvailable(template.prop, structure.player);
 	makeComponentAvailable(template.weap, structure.player);
-	var n = [ structure.name, structure.id,
-	          template.body, template.prop, template.weap ].join(" ");
+	var n = [ structure.name, structure.id, template.body, template.prop, template.weap ].join(" ");
 	// multi-turret templates are not supported yet
-	return buildDroid(structure, n, template.body, template.prop,
-	                          "", "", template.weap);
+	return buildDroid(structure, n, template.body, template.prop, "", "", template.weap);
 }
 
 function __camResetFactories()
@@ -2664,7 +2765,9 @@ function __camVictoryStandard()
 			return;
 		}
 		else
+		{
 			__camTriggerLastAttack();
+		}
 	}
 }
 
@@ -2778,7 +2881,9 @@ function __camVictoryOffworld()
 	if (enumArea(lz, ENEMIES, false).length > 0)
 	{
 		if (__camLZCompromisedTicker === 0)
+		{
 			camTrace("LZ compromised");
+		}
 		if (__camLZCompromisedTicker % 30 === 1) // every 30 seconds
 		{
 			var pos = camMakePos(lz);
@@ -2787,7 +2892,9 @@ function __camVictoryOffworld()
 		}
 		++__camLZCompromisedTicker;
 		if (__camRTLZTicker === 0)
+		{
 			camMarkTiles(lz);
+		}
 	}
 	else if (__camLZCompromisedTicker > 0)
 	{
@@ -2797,7 +2904,9 @@ function __camVictoryOffworld()
 		setReinforcementTime(__camVictoryData.reinforcements);
 		__camLZCompromisedTicker = 0;
 		if (__camRTLZTicker === 0)
+		{
 			camUnmarkTiles(lz);
+		}
 	}
 }
 
@@ -2810,7 +2919,7 @@ function __camVictoryOffworld()
 //;; Determine if the object is a transporter.
 function camIsTransporter(object)
 {
-	if(!camDef(object) || !object)
+	if (!camDef(object) || !object)
 	{
 		return false;
 	}
@@ -2832,8 +2941,7 @@ function camIsTransporter(object)
 //;; is set up as well.
 function camSetupTransporter(x, y, x1, y1)
 {
-	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport",
-	         "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
+	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
 	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
 }
 
@@ -2968,12 +3076,10 @@ function __camSpawnVtols()
 	}
 
 	//...And send them.
-	camSendReinforcement(__camVtolPlayer, camMakePos(pos), droids,
-		CAM_REINFORCE_GROUND,
-		{
-			order: CAM_ORDER_ATTACK,
-			data: { regroup: false, count: -1 }
-		});
+	camSendReinforcement(__camVtolPlayer, camMakePos(pos), droids, CAM_REINFORCE_GROUND, {
+		order: CAM_ORDER_ATTACK,
+		data: { regroup: false, count: -1 }
+	});
 
 	queue("__camSpawnVtols", __camVtolTimer);
 }
@@ -3112,7 +3218,9 @@ function camHackIntoPlayer(player, to)
 		var obj = !__camLastNexusAttack ? enumStruct(player, HQ)[0] : tmp[camRand(tmp.length)];
 		__camLastNexusAttack = gameTime;
 		if (!camDef(obj))
+		{
 			return;
+		}
 		camTrace("stealing object: " + obj.name);
 		if (obj.type === STRUCTURE && obj.stattype === HQ)
 		{
@@ -3158,7 +3266,7 @@ var __camNexusActivated;
 //;; A saveload safe version of newGroup() so as not to create group ID clashes.
 function camNewGroup()
 {
-	if(!camDef(__camNewGroupCounter))
+	if (!camDef(__camNewGroupCounter))
 	{
 		__camNewGroupCounter = 0;
 	}
@@ -3296,7 +3404,7 @@ function __camEnqueueVideos()
 	}
 
 	var what = __camVideoSequences[0];
-	if(!camIsString(what))
+	if (!camIsString(what))
 	{
 		camDebug("Non string found in __camVideoSequences. Stopping playback.");
 		return;
@@ -3324,7 +3432,9 @@ function camAreaEvent(label, code)
 	__camPreHookEvent(eventName, function(droid)
 	{
 		if (camDef(droid))
+		{
 			camTrace("Player", droid.player, "enters", label);
+		}
 		camUnmarkTiles(label);
 		code(droid);
 	});
@@ -3346,7 +3456,9 @@ function __camPreHookEvent(eventname, hookcode)
 {
 	// store the original event handler
 	if (camDef(__camGlobalContext()[eventname]))
+	{
 		__camOriginalEvents[eventname] = __camGlobalContext()[eventname];
+	}
 
 	__camGlobalContext()[eventname] = function()
 	{
@@ -3356,10 +3468,14 @@ function __camPreHookEvent(eventname, hookcode)
 		// and we are not documenting which exactly events are hooked.
 		// We should not intervene with level events in unobvious ways.
 		if (!__camLevelEnded)
+		{
 			hookcode.apply(__camGlobalContext(), arguments);
+		}
 		// otherwise, call the original event if any
 		if (camDef(__camOriginalEvents[eventname]))
+		{
 			__camOriginalEvents[eventname].apply(__camGlobalContext(), arguments);
+		}
 	};
 }
 
@@ -3367,7 +3483,9 @@ function __camPreHookEvent(eventname, hookcode)
 function __camTick()
 {
 	if (camDef(__camWinLossCallback))
+	{
 		__camGlobalContext()[__camWinLossCallback]();
+	}
 	__camBasesTick();
 }
 
@@ -3417,12 +3535,18 @@ function cam_eventCheatMode(entered)
 function cam_eventChat(from, to, message)
 {
 	if (!__camCheatMode)
+	{
 		return;
+	}
 	camTrace(from, to, message);
 	if (message === "let me win" && __camNextLevel !== "SUB_1_1")
+	{
 		__camLetMeWin();
+	}
 	if (message === "win info")
+	{
 		__camWinInfo();
+	}
 	if (message === "make cc")
 	{
 		setMiniMap(true);
@@ -3479,13 +3603,21 @@ function cam_eventStartLevel()
 function cam_eventDroidBuilt(droid, structure)
 {
 	if (!camDef(structure)) // "clone wars" cheat
+	{
 		return;
+	}
 	if (!camPlayerMatchesFilter(structure.player, ENEMIES))
+	{
 		return;
+	}
 	if (!camPlayerMatchesFilter(droid.player, ENEMIES))
+	{
 		return;
+	}
 	if (!camDef(__camFactoryInfo))
+	{
 		return;
+	}
 	__camContinueProduction(structure);
 	__camAddDroidToFactoryGroup(droid, structure);
 }
@@ -3546,7 +3678,9 @@ function cam_eventTransporterExit(transport)
 	{
 		// allow the next transport to enter
 		if (camDef(__camIncomingTransports[transport.player]))
+		{
 			delete __camIncomingTransports[transport.player];
+		}
 	}
 	else if (__camWinLossCallback === "__camVictoryPreOffworld")
 	{

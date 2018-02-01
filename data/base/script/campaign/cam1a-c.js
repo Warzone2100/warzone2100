@@ -29,7 +29,9 @@ function extraVictoryCondition()
 {
 	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 	if(index === 5 && enemies.length === 0)
+	{
 		return true;
+	}
 }
 
 //Makes a large group of ground units appear on map
@@ -48,12 +50,18 @@ function checkForGroundForces()
 
 		for (var i = 0; i <= maxTanks; ++i)
 		{
-			if(i <= firstAmount)
+			if (i <= firstAmount)
+			{
 				droidGroup1[i] = templates[0];
-			if(i === firstAmount + 1)
+			}
+			if (i === firstAmount + 1)
+			{
 				droidGroup2[i - 1 - firstAmount] = templates[1];
+			}
 			else
+			{
 				droidGroup2[i - 1 - firstAmount] = templates[2];
+			}
 		}
 
 		//What part of map to appear at
@@ -117,9 +125,13 @@ function sendTransport()
 	}
 
 	if (index === 5)
+	{
 		return;
+	}
 	else
+	{
 		queue("sendTransport", camChangeOnDiff(60000)); //1 min
+	}
 }
 
 function eventStartLevel()

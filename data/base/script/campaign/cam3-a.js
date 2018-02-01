@@ -159,7 +159,9 @@ function groupPatrolNoTrigger()
 function truckDefense()
 {
 	if (enumDroid(NEXUS, DROID_CONSTRUCT).length > 0)
+	{
 		queue("truckDefense", 160000);
+	}
 
 	const DEFENSE = ["NX-Tower-Rail1", "NX-Tower-ATMiss"];
 	camQueueBuilding(NEXUS, DEFENSE[camRand(DEFENSE.length)]);
