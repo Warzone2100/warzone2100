@@ -80,7 +80,7 @@ function discoverGammaBase()
 	playSound("pcv616.ogg"); //Group rescued.
 
 	camAbsorbPlayer(GAMMA, CAM_HUMAN_PLAYER); //Take everything they got!
-	setAlliance(GAMMA, NEXUS, false); //Probably don't need this.
+	setAlliance(NEXUS, GAMMA, false);
 
 	hackRemoveMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 	hackRemoveMessage("CM3C_BETATEAM", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -141,6 +141,9 @@ function eventStartLevel()
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);
 	hackAddMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("CM3C_BETATEAM", PROX_MSG, CAM_HUMAN_PLAYER, true);
+
+	setAlliance(CAM_HUMAN_PLAYER, GAMMA, true);
+	setAlliance(NEXUS, GAMMA, true);
 
 	camSetArtifacts({
 		"NXbase1HeavyFacArti": { tech: "R-Vehicle-Body07" }, //retribution
