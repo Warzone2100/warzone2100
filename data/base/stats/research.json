@@ -1526,6 +1526,24 @@
         ],
         "statID": "A0FacMod1"
     },
+    "R-Struc-Factory-Upgrade-AI": {
+        "iconID": "IMAGE_RES_STRUCTURETECH",
+        "id": "R-Struc-Factory-Upgrade-AI",
+        "imdName": "BLFACT1.PIE",
+        "keyTopic": 1,
+        "msgName": "RES_ST_FU1",
+        "name": "Automated Factory Production",
+        "researchPoints": 2400,
+        "researchPower": 75,
+        "results": [
+            {
+                "class": "Building",
+                "parameter": "ProductionPoints",
+                "value": 30000
+            }
+        ],
+        "subgroupIconID": "IMAGE_RES_GRPUPG"
+    },
     "R-Struc-Factory-Upgrade01": {
         "iconID": "IMAGE_RES_STRUCTURETECH",
         "id": "R-Struc-Factory-Upgrade01",

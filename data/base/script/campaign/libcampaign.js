@@ -482,6 +482,21 @@ function camCompleteRequiredResearch(items, player)
 	}
 }
 
+//privates
+
+//granted shortly after mission start to give enemy players instant droid production.
+function __camGrantSpecialResearch()
+{
+	for (var i = 1; i < CAM_MAX_PLAYERS; ++i)
+	{
+		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, i) && (countDroid(DROID_ANY, i) || enumStruct(i).length))
+		{
+			//Boost AI production to produce all droids within a factory throttle
+			completeResearch("R-Struc-Factory-Upgrade-AI", i);
+		}
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
@@ -1076,9 +1091,10 @@ function camSendReinforcement(player, position, list, kind, data)
 			var droids = [];
 			for (var i = 0, l = list.length; i < l; ++i)
 			{
+				var prop = __camChangePropulsionOnDiff(list[i].prop);
 				droids[droids.length] = addDroid(player, pos.x, pos.y,
 				                        "Reinforcement", list[i].body,
-				                        list[i].prop, "", "", list[i].weap);
+				                        prop, "", "", list[i].weap);
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
@@ -1173,9 +1189,10 @@ function __camDispatchTransporterUnsafe()
 	var droids = [];
 	for (var i = 0, l = list.length; i < l; ++i)
 	{
+		var prop = __camChangePropulsionOnDiff(list[i].prop);
 		var droid = addDroid(player, -1, -1,
 		                     "Reinforcement", list[i].body,
-		                     list[i].prop, "", "", list[i].weap);
+		                     prop, "", "", list[i].weap);
 		droids.push(droid);
 		addDroidToTransporter(trans, droid);
 	}
@@ -2355,10 +2372,32 @@ function camQueueDroidProduction(player, template)
 	__camFactoryQueue[player][__camFactoryQueue[player].length] = template;
 }
 
+//;; \subsection{camSetPropulsionTypeLimit(number)}
+//;; On hard and insane the propulsion type can be limited with this. For type II
+//;; pass in 2, and for type III pass in 3. Hard defaults to type II and
+//;; insane defaults to type III. If nothing is passed in then the type
+//;; limit will match what is in templates.json.
+function camSetPropulsionTypeLimit(num)
+{
+	if (!camDef(num))
+	{
+		__camPropulsionTypeLimit = "NO_USE";
+	}
+	else if (num === 2)
+	{
+		__camPropulsionTypeLimit = "02";
+	}
+	else if (num === 3)
+	{
+		__camPropulsionTypeLimit = "03";
+	}
+}
+
 //////////// privates
 
 var __camFactoryInfo;
 var __camFactoryQueue;
+var __camPropulsionTypeLimit;
 
 function __camFactoryUpdateTactics(flabel)
 {
@@ -2411,6 +2450,54 @@ function __camAddDroidToFactoryGroup(droid, structure)
 	__camFactoryUpdateTactics(flabel);
 }
 
+function __camChangePropulsionOnDiff(propulsion)
+{
+	if (difficulty === EASY || difficulty === MEDIUM)
+	{
+		return propulsion;
+	}
+	if (camDef(__camPropulsionTypeLimit) && __camPropulsionTypeLimit === "NO_USE")
+	{
+		return propulsion; //this mission don't want this feature then
+	}
+
+	var name = propulsion;
+	var typeModifier = difficulty === HARD ? "02" : "03";
+	const VALID_PROPS = [
+		"CyborgLegs", "HalfTrack", "V-Tol", "hover", "tracked", "wheeled",
+	];
+
+	var lastTwo = name.substring(name.length - 2);
+	if (lastTwo === "01" || lastTwo === "02" || lastTwo === "03")
+	{
+		name = name.substring(0, name.length - 2)
+	}
+
+	for (var i = 0, l = VALID_PROPS.length; i < l; ++i)
+	{
+		var currentProp = VALID_PROPS[i];
+		if (name === currentProp)
+		{
+			//if hard difficulty and a future template has a type III then this will
+			//ensure it stays type III.
+			if (difficulty === HARD && lastTwo === "02")
+			{
+				typeModifier = "03";
+			}
+			//maybe a mission wants to set a limit on the highest propulsion type
+			if (camDef(__camPropulsionTypeLimit))
+			{
+				typeModifier = __camPropulsionTypeLimit;
+			}
+			//return a stronger propulsion based on difficulty
+			return currentProp.concat(typeModifier);
+		}
+	}
+
+	//If all else fails then return the propulsion that came with the template
+	return propulsion;
+}
+
 function __camBuildDroid(template, structure)
 {
 	if (!camDef(structure))
@@ -2423,12 +2510,13 @@ function __camBuildDroid(template, structure)
 	{
 		return false;
 	}
+	var prop = __camChangePropulsionOnDiff(template.prop);
 	makeComponentAvailable(template.body, structure.player);
-	makeComponentAvailable(template.prop, structure.player);
+	makeComponentAvailable(prop, structure.player);
 	makeComponentAvailable(template.weap, structure.player);
-	var n = [ structure.name, structure.id, template.body, template.prop, template.weap ].join(" ");
+	var n = [ structure.name, structure.id, template.body, prop, template.weap ].join(" ");
 	// multi-turret templates are not supported yet
-	return buildDroid(structure, n, template.body, template.prop, "", "", template.weap);
+	return buildDroid(structure, n, template.body, prop, "", "", template.weap);
 }
 
 function __camResetFactories()
@@ -3612,9 +3700,11 @@ function cam_eventStartLevel()
 	__camVideoSequences = [];
 	__camSaveLoading = false;
 	__camNeverGroupDroids = [];
+	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
+	queue("__camGrantSpecialResearch", 6000);
 }
 
 function cam_eventDroidBuilt(droid, structure)
