@@ -2,7 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var NPScout; // Sensor scout (initialized when droid is created)
+var NPScout; // Sensor scout
 
 camAreaEvent("AttackArea1", function(droid)
 {
@@ -158,11 +158,9 @@ function eventStartLevel()
 	//Timed attacks if player dawdles
 	queue("eventAreaAttackArea2", camChangeOnDiff(360000));
 
-	// New Paradigm sensor scout
-	var pos = getObject("NPSensorAppear");
-	NPScout = addDroid(NEW_PARADIGM, pos.x, pos.y, "Scout",
-	                   "Body4ABT", "wheeled01", 0, 0, "SensorTurret1Mk1");
+	// New Paradigm sensor scout. Now comes with the map!
+	NPScout = getObject("npscout");
 	camNeverGroupDroid(NPScout);
-	pos = getObject("NPSensorWatch");
+	var pos = getObject("NPSensorWatch");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 }

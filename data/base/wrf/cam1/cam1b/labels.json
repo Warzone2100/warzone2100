@@ -44,10 +44,6 @@
 		"pos": [4928, 9024]
 	},
 	"position_11": {
-		"label": "NPSensorAppear",
-		"pos": [4928, 8896]
-	},
-	"position_12": {
 		"label": "NPSensorWatch",
 		"pos": [4800, 9200]
 	},
@@ -132,7 +128,7 @@
 	},
 	"object_3": {
 		"label": "base4gen",
-		"id": 62,
+		"id": 3576,
 		"player": 7,
 		"type": 1
 	},
@@ -141,5 +137,11 @@
 		"id": 3236,
 		"player": 7,
 		"type": 1
+	},
+	"object_5": {
+		"label": "npscout",
+		"id": 3577,
+		"player": 1,
+		"type": 0
 	}
 }
