@@ -1601,8 +1601,8 @@ function __camFindClusters(list, size)
 			{
 				var n = ret.clusters[j].length;
 				ret.clusters[j][n] = list[i];
-				ret.xav[j] = (n * ret.xav[j] + x) / (n + 1);
-				ret.yav[j] = (n * ret.yav[j] + y) / (n + 1);
+				ret.xav[j] = Math.floor((n * ret.xav[j] + x) / (n + 1));
+				ret.yav[j] = Math.floor((n * ret.yav[j] + y) / (n + 1));
 				if (ret.clusters[j].length > ret.maxCount)
 				{
 					ret.maxIdx = j;
@@ -1738,15 +1738,19 @@ function __camTacticsTick()
 	for (var group in __camGroupInfo)
 	{
 		//Remove groups with no droids.
-		if (enumGroup(group).length === 0)
+		if (groupSize(group) === 0)
 		{
+			var remove = true;
 			//Useful if the group has manual management (seen in cam1-3 script).
 			if (camDef(__camGroupInfo[group].data.removable) && __camGroupInfo[group].data.removable === false)
 			{
-				continue;
+				remove = false;
 			}
-			camStopManagingGroup(group);
-			break;
+			if (remove === true)
+			{
+				camStopManagingGroup(group);
+				break;
+			}
 		}
 		queue("__camTacticsTickForGroup", dt, group);
 		dt += CAM_TICKS_PER_FRAME;
@@ -1763,13 +1767,13 @@ function __camScanRange(order, drType)
 		case CAM_ORDER_ATTACK:
 		case CAM_ORDER_DEFEND:
 		case CAM_ORDER_FOLLOW:
-			rng = 8;
+			rng = 9;
 			break;
 		case CAM_ORDER_PATROL:
-			rng = 6;
+			rng = 5;
 			break;
 		case CAM_ORDER_COMPROMISE:
-			rng = 4;
+			rng = 2; //very small so they don't track stuff too far
 			break;
 		default:
 			camDebug("Unsupported group order", order, camOrderToString(order));
@@ -1781,6 +1785,20 @@ function __camScanRange(order, drType)
 	}
 
 	return rng;
+}
+
+function __camCountHQ(player)
+{
+	var count = 0;
+	const HQ_TYPE = [
+		"A0CommandCentre", "A0CommandCentreNP", "A0CommandCentreCO", "A0CommandCentreNE",
+	];
+	for (var i = 0, l = HQ_TYPE.length; i < l; ++i)
+	{
+		count = count + countStruct(HQ_TYPE[i], player);
+	}
+
+	return count;
 }
 
 function __camTacticsTickForGroup(group)
@@ -1797,6 +1815,7 @@ function __camTacticsTickForGroup(group)
 	}
 	var healthyDroids = [];
 	var cRepFac = countStruct("A0RepairCentre3", rawDroids[0].player);
+	var hasRTB = __camCountHQ(rawDroids[0].player);
 
 	// Handle the case when we need to repair
 	if (rawDroids.length > 0 && camDef(gi.data.repair) && cRepFac > 0)
@@ -1842,24 +1861,22 @@ function __camTacticsTickForGroup(group)
 				}
 			}
 		}
-		var back = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
+		var hitRecently = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
 		// not enough droids grouped?
-		if (gi.count < 0
-		    ? (ret.maxCount < groupSize(group) * 0.66)
-		    : (ret.maxCount < gi.count))
+		if (gi.count < 0 ? (ret.maxCount < groupSize(group) * 0.66) : (ret.maxCount < gi.count))
 		{
 			for (var i = 0, l = droids.length; i < l; ++i)
 			{
 				var droid = droids[i];
 				if (droid.order !== DORDER_RTR)
 				{
-					if (back)
+					if (hitRecently && hasRTB)
 					{
 						orderDroid(droid, DORDER_RTB);
 					}
-					else
+					else if (droid.order !== DORDER_HOLD)
 					{
-						orderDroid(droid, DORDER_STOP);
+						orderDroid(droid, DORDER_HOLD);
 					}
 				}
 			}
@@ -1882,7 +1899,7 @@ function __camTacticsTickForGroup(group)
 		case CAM_ORDER_ATTACK:
 		case CAM_ORDER_DEFEND:
 		case CAM_ORDER_COMPROMISE:
-			var target = profile("__camPickTarget", group);
+			target = profile("__camPickTarget", group);
 			if (!camDef(target))
 			{
 				return;
