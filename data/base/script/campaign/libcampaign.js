@@ -3662,6 +3662,13 @@ function cam_eventChat(from, to, message)
 		__camNextLevel = message.substring(7).toUpperCase().replace(/-/g, "_");
 		__camLetMeWin();
 	}
+	if (message === "deity")
+	{
+		for (var blabel in __camEnemyBases)
+		{
+			camDetectEnemyBase(blabel);
+		}
+	}
 }
 
 function cam_eventStartLevel()
