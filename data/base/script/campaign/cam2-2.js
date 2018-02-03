@@ -181,7 +181,6 @@ function eventStartLevel()
 		"COCommander": { tech: "R-Wpn-RocketSlow-Accuracy03" },
 	});
 
-	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLEVTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

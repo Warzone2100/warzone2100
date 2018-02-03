@@ -121,7 +121,6 @@ function eventStartLevel()
 		"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-ROF03" },
 	});
 
-	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

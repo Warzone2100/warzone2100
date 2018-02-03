@@ -132,8 +132,6 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	setPower(AI_POWER, NEW_PARADIGM);
-	setPower(AI_POWER, SCAVS);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
 	setAlliance(NEW_PARADIGM, SCAVS, true);

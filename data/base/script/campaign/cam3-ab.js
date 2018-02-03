@@ -38,7 +38,7 @@ function sendEdgeMapDroids()
 		nxmsamh, nxmstrike,
 	];
 	var droids = [];
-	
+
 	if (!camDef(edgeMapCounter))
 	{
 		edgeMapCounter = 0;
@@ -73,7 +73,7 @@ function vtolAttack()
 
 function powerTransfer()
 {
-	setPower(playerPower(me) + 5000);
+	setPower(playerPower(CAM_HUMAN_PLAYER) + 5000);
 	playSound("power-transferred.ogg");
 }
 
@@ -131,7 +131,6 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(3600)); //1 hour.
 
-	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);

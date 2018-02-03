@@ -151,7 +151,7 @@ function transferPower()
 {
     const AWARD = 5000;
     var powerTransferSound = "power-transferred.ogg";
-    setPower(playerPower(me) + AWARD, me);
+    setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
     playSound(powerTransferSound);
 }
 
@@ -253,9 +253,6 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-
-	setPower(AI_POWER, NEXUS);
-	setPower(AI_POWER, GAMMA);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);

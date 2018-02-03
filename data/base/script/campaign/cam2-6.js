@@ -125,7 +125,6 @@ function eventStartLevel()
 		"uplink": { tech: "R-Sys-VTOLCBS-Tower01" },
 	});
 
-	setPower(AI_POWER, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

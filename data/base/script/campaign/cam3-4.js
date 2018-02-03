@@ -118,13 +118,6 @@ function truckDefense()
 	queue("truckDefense", camChangeOnDiff(300000)); // 5 min
 }
 
-//This mission has a heavy load on resources for Nexus so reset it every so often.
-function resetNexusPower()
-{
-	setPower(AI_POWER, NEXUS);
-	queue("resetNexusPower", 300000); // 5 min
-}
-
 function eventStartLevel()
 {
 	var startpos = getObject("startPosition");
@@ -143,7 +136,6 @@ function eventStartLevel()
 	setTransporterExit(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setMissionTime(-1); //Infinite time
 
-	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	setupNexusPatrols();
 	camManageTrucks(NEXUS);
@@ -344,6 +336,5 @@ function eventStartLevel()
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	queue("enableReinforcements", 16000);
-	queue("resetNexusPower", 300000); // 5 min
 	queue("enableAllFactories", camChangeOnDiff(600000)); // 10 min.
 }

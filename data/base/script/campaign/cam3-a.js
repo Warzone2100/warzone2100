@@ -226,7 +226,6 @@ function eventStartLevel()
 		"NXResearchLabArti": { tech: "R-Sys-Engineering03" },
 	});
 
-	setPower(AI_POWER, NEXUS);
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	cam3Setup();
 

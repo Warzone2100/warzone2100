@@ -312,7 +312,6 @@ function eventStartLevel()
 	});
 
 	setMissionTime(MISSION_TIME);
-	setPower(AI_POWER, THE_COLLECTIVE);
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	cam2Setup();
 

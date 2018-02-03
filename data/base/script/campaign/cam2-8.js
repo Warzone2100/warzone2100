@@ -116,7 +116,6 @@ function eventStartLevel()
 		"COHeavyFacL-b2": { tech: "R-Wpn-HvyHowitzer" },
 	});
 
-	setPower(AI_POWER, THE_COLLECTIVE); //10000.
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

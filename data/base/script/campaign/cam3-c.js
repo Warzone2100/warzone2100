@@ -74,7 +74,7 @@ function discoverGammaBase()
 	restoreLimboMissionData();
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(5400)); // 1.5 hr.
-	setPower(playerPower(me) + camChangeOnDiff(10000));
+	setPower(playerPower(CAM_HUMAN_PLAYER) + camChangeOnDiff(10000));
 
 	playSound("power-transferred.ogg");
 	playSound("pcv616.ogg"); //Group rescued.
@@ -136,7 +136,6 @@ function eventStartLevel()
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
 	setMissionTime(camChangeOnDiff(600)); //10 minutes for first part.
 
-	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);
 	hackAddMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, true);

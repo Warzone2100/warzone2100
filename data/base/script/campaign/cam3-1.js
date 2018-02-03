@@ -287,7 +287,6 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 	setScrollLimits(0, 32, 64, 64);
 
-	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	camSetEnemyBases({

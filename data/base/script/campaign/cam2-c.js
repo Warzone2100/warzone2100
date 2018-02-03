@@ -292,7 +292,6 @@ function eventStartLevel()
 		"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
 	});
 
-	setPower(AI_POWER, THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); //120 min
 
 	setAlliance(THE_COLLECTIVE, CIVILIAN, true);

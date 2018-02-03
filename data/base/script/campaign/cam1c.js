@@ -189,9 +189,6 @@ function eventStartLevel()
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, 7);
 
-	setPower(AI_POWER, NEW_PARADIGM);
-	setPower(AI_POWER, 7);
-
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {
 			cleanup: "ScavSouthDerrick",

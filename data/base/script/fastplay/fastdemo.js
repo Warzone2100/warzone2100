@@ -134,7 +134,6 @@ function eventStartLevel()
 	grantStartTech();
 
 	setPower(1000, CAM_HUMAN_PLAYER);
-	setPower(AI_POWER, SCAVENGER_PLAYER);
 
 	camSetEnemyBases({
 		"northBase": {

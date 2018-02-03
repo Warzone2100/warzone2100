@@ -128,7 +128,6 @@ function eventStartLevel()
 	var lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setPower(AI_POWER, NEW_PARADIGM);
 
 	// make sure player doesn't build on enemy LZs
 	for (var i = 1; i <= 5; ++i)

@@ -216,9 +216,6 @@ function eventStartLevel()
 		"artifactLocation": { tech: "R-Wpn-Cannon3Mk1" },
 	});
 
-	setPower(AI_POWER, NEW_PARADIGM);
-	setPower(AI_POWER, SCAVS);
-
 	camCompleteRequiredResearch(NEW_PARADIGM_RESEARCH, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
 

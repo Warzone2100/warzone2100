@@ -286,7 +286,6 @@ function eventStartLevel()
 	setMissionTime(300); //5 min
 	enableResearch("R-Sys-Resistance", CAM_HUMAN_PLAYER);
 
-	setPower(AI_POWER, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camPlayVideos("MB3_AD2_MSG");
 

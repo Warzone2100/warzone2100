@@ -110,8 +110,6 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
-	setPower(AI_POWER, 6);
-	setPower(AI_POWER, 7);
 	setAlliance(6, 7, true);
 
 	enableStartingBuildings();

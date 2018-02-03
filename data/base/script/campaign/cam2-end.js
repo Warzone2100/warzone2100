@@ -162,7 +162,6 @@ function eventStartLevel()
 
 	setMissionTime(1800); // 30 min.
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	setPower(AI_POWER, THE_COLLECTIVE);
 
 	allowWin = false;
 	launchCount = 0;

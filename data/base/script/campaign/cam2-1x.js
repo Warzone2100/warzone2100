@@ -130,7 +130,6 @@ function eventStartLevel()
 	//Add crash site blip and from an alliance with the crashed team.
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
-	setPower(AI_POWER, THE_COLLECTIVE);
 
 	//set downed transport team colour to be Project Green.
 	changePlayerColour(TRANSPORT_TEAM, 0);

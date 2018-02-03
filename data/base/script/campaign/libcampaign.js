@@ -2111,6 +2111,15 @@ function __camCheckGroupMorale(group)
 	}
 }
 
+//Reset AI power back to highest storage possible.
+function __camAiPowerReset()
+{
+	for (var i = 1; i < CAM_MAX_PLAYERS; ++i)
+	{
+		setPower(AI_POWER, i);
+	}
+}
+
 function __camEnumFreeTrucks(player)
 {
 	var rawDroids = enumDroid(player, DROID_CONSTRUCT);
@@ -2519,22 +2528,24 @@ function __camBuildDroid(template, structure)
 	return buildDroid(structure, n, template.body, prop, "", "", template.weap);
 }
 
-function __camResetFactories()
+//Check if an enabled factory can begin manufacturing something. Doing this
+//by timer has the perk of not breaking production if something went wrong in
+//cam_eventDroidBuilt (or the mere act of reloading saves).
+function __checkEnemyFactoryProductionTick()
 {
-	for (var fl in __camFactoryInfo)
+	for (var flabel in __camFactoryInfo)
 	{
-		if ((getObject(fl) !== null) && (__camFactoryInfo[fl].enabled === true))
+		if (getObject(flabel) !== null && __camFactoryInfo[flabel].enabled === true)
 		{
-			__camFactoryInfo[fl].enabled = false;
-			__camFactoryInfo[fl].state = -1;
-			camEnableFactory(fl);
+			__camContinueProduction(flabel);
 		}
 	}
 }
 
 function __camContinueProduction(structure)
 {
-	var flabel, struct;
+	var flabel;
+	var struct;
 	if (camIsString(structure))
 	{
 		flabel = structure;
@@ -2557,14 +2568,12 @@ function __camContinueProduction(structure)
 	}
 	if (!structureIdle(struct))
 	{
-		camDebug("Already enabled?");
 		return;
 	}
 	var fi = __camFactoryInfo[flabel];
 	if (camDef(fi.maxSize) && groupSize(fi.group) >= fi.maxSize)
 	{
-		// retry in 5 seconds
-		queue("__camContinueProduction", 5000, flabel);
+		// retry later
 		return;
 	}
 	if (camDef(fi.throttle) && camDef(fi.lastprod))
@@ -2573,7 +2582,6 @@ function __camContinueProduction(structure)
 		if (throttle < fi.throttle)
 		{
 			// do throttle
-			queue("__camContinueProduction", fi.throttle - throttle, flabel);
 			return;
 		}
 	}
@@ -3708,8 +3716,11 @@ function cam_eventStartLevel()
 	__camSaveLoading = false;
 	__camNeverGroupDroids = [];
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
+	__camAiPowerReset(); //grant power to the AI
+	setTimer("__checkEnemyFactoryProductionTick", 800);
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 40100); // some slower campaign pollers
+	setTimer("__camAiPowerReset", 180000); //reset AI power every so often
 	queue("__camTacticsTick", 100); // would re-queue itself
 	queue("__camGrantSpecialResearch", 6000);
 }
@@ -3732,7 +3743,6 @@ function cam_eventDroidBuilt(droid, structure)
 	{
 		return;
 	}
-	__camContinueProduction(structure);
 	__camAddDroidToFactoryGroup(droid, structure);
 }
 
@@ -3900,9 +3910,6 @@ function cam_eventGameLoaded()
 			break;
 		}
 	}
-
-	//reset active factory management.
-	__camResetFactories();
 
 	//Subscribe to eventGroupSeen again.
 	camSetEnemyBases();

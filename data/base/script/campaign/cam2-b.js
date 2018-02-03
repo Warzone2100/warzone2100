@@ -107,7 +107,7 @@ function truckDefense()
 function transferPower()
 {
 	//increase player power level and play sound
-     setPower(playerPower(me) + 4000);
+     setPower(playerPower(CAM_HUMAN_PLAYER) + 4000);
      playSound("power-transferred.ogg");
 }
 
@@ -120,7 +120,6 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setPower(AI_POWER, THE_COLLECTIVE);
 	setMissionTime(camChangeOnDiff(7200)); // 2 hr.
 	camPlayVideos(["MB2_B_MSG", "MB2_B_MSG2"]);
 
@@ -131,7 +130,6 @@ function eventStartLevel()
 		"COCommandCenter": { tech: "R-Vehicle-Body06" }, //Panther
 	});
 
-	setPower(camChangeOnDiff(20000, true), THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({

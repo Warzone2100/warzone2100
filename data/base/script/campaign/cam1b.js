@@ -80,9 +80,6 @@ function eventStartLevel()
 	setAlliance(NEW_PARADIGM, 7, true);
 	setAlliance(6, 7, true);
 
-	setPower(AI_POWER, 6);
-	setPower(AI_POWER, 7);
-
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
 		"base2factory": { tech: "R-Wpn-MG2Mk1" },
