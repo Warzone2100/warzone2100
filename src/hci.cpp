@@ -394,6 +394,7 @@ void setReticuleStats(int ButId, QString tip, QString filename, QString filename
 	retbutstats[ButId].flashTime = 0;
 	retbutstats[ButId].func = func;
 	retbutstats[ButId].engine = engine;
+	ReticuleEnabled[ButId].Enabled = false;
 
 	if (!retbutstats[ButId].button) // not quite set up yet
 	{
@@ -411,6 +412,7 @@ void setReticuleStats(int ButId, QString tip, QString filename, QString filename
 	}
 	else
 	{
+		ReticuleEnabled[ButId].Enabled = true;
 		retbutstats[ButId].button->setState(0);
 	}
 }
@@ -4418,6 +4420,10 @@ switch (buttonID)
 		intMode = INT_DESIGN;
 		reticuleCallback(RETBUT_DESIGN);
 		triggerEvent(TRIGGER_MENU_DESIGN_UP);
+		break;
+	case RETBUT_INTELMAP:
+		addIntelScreen();
+		reticuleCallback(RETBUT_INTELMAP);
 		break;
 	case RETBUT_COMMAND:
 		intResetScreen(false);
