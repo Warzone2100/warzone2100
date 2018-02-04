@@ -159,6 +159,18 @@
 		"pos1": [6912, 5376],
 		"pos2": [7808, 6400]
 	},
+	"area_15": {
+		"label": "northWayTrigger",
+		"subscriber": 0,
+		"pos1": [0, 12160],
+		"pos2": [10112, 12800]
+	},	
+	"area_16": {
+		"label": "causeWayTrig",
+		"subscriber": 0,
+		"pos1": [0, 10880],
+		"pos2": [10112, 11520]
+	},
 
 	"object_0": {
 		"label": "artifact1",
@@ -216,15 +228,9 @@
 	},
 
 	"radius_0": {
-		"label": "causeWayTrig",
-		"subscriber": 0,
-		"pos": [5888, 11776],
-		"radius": 1000
-	},
-	"radius_1": {
 		"label": "tankTrapTrig",
 		"subscriber": 0,
 		"pos": [4736, 13824],
-		"radius": 2000
+		"radius": 2048
 	}
 }

@@ -14,16 +14,21 @@ const NEW_PARADIGM_RES = [
 ];
 
 
-camAreaEvent("tankTrapTrig", function()
+camAreaEvent("tankTrapTrig", function(droid)
 {
 	camEnableFactory("NPFactoryW");
 	camEnableFactory("NPCybFactoryW");
+	mrlGroupAttack();
+});
+
+camAreaEvent("northWayTrigger", function(droid)
+{
 	camEnableFactory("NPFactoryE");
 	camEnableFactory("NPCybFactoryE");
 	mrlGroupAttack();
 });
 
-camAreaEvent("causeWayTrig", function()
+camAreaEvent("causeWayTrig", function(droid)
 {
 	camEnableFactory("NPFactoryNE");
 	camEnableFactory("NPCybFactoryNE");
@@ -209,10 +214,10 @@ function eventStartLevel()
 			assembly: "NPFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(50000),
 			data: {
 				regroup: false,
-				repair: 45,
+				repair: 66,
 				count: -1,
 			},
 			templates: [ nphmgh, npltath, nphch ] //Hover factory
@@ -221,10 +226,10 @@ function eventStartLevel()
 			assembly: "NPFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(90000),
+			throttle: camChangeOnDiff(60000),
 			data: {
 				regroup: false,
-				repair: 30,
+				repair: 66,
 				count: -1,
 			},
 			templates: [ npltat, npmsens, npmorb, npsmct, nphct ] //variety
@@ -233,10 +238,10 @@ function eventStartLevel()
 			assembly: "NPFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(120000),
+			throttle: camChangeOnDiff(90000),
 			data: {
 				regroup: false,
-				repair: 25,
+				repair: 66,
 				count: -1,
 			},
 			templates: [ nphct, npsbb, npmorb ] //tough units
@@ -245,10 +250,10 @@ function eventStartLevel()
 			assembly: "NPCybFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(30000),
 			data: {
 				regroup: false,
-				repair: 25,
+				repair: 66,
 				count: -1,
 			},
 			templates: [ npcybc, npcybf, npcybr ]
@@ -257,10 +262,10 @@ function eventStartLevel()
 			assembly: "NPCybFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(30000),
 			data: {
 				regroup: false,
-				repair: 25,
+				repair: 66,
 				count: -1,
 			},
 			templates: [ npcybc, npcybf, npcybr ]
@@ -269,10 +274,10 @@ function eventStartLevel()
 			assembly: "NPCybFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(40000),
 			data: {
 				regroup: false,
-				repair: 25,
+				repair: 66,
 				count: -1,
 			},
 			templates: [ npcybc, npcybf, npcybr ]

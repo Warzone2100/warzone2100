@@ -221,21 +221,18 @@ function eventStartLevel()
 
 	camSetEnemyBases({
 		"ScavMiddleGroup": {
-			assembly: "middleAssembly",
 			cleanup: "scavMiddle",
 			detectMsg: "C1-7_BASE1",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
 		},
 		"ScavSouthEastGroup": {
-			assembly: "southAssembly",
 			cleanup: "scavSouthEast",
 			detectMsg: "C1-7_BASE2",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
 		},
 		"ScavNorthEastGroup": {
-			assembly: "northAssembly",
 			cleanup: "scavNorth",
 			detectMsg: "C1-7_BASE3",
 			detectSnd: "pcv374.ogg",
@@ -245,6 +242,7 @@ function eventStartLevel()
 
 	with (camTemplates) camSetFactories({
 		"scavMiddleFactory": {
+			assembly: "middleAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(10000),
@@ -255,6 +253,7 @@ function eventStartLevel()
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 		"scavSouthEastFactory": {
+			assembly: "southAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(10000),
@@ -265,6 +264,7 @@ function eventStartLevel()
 			templates: [ firecan, rbjeep, rbuggy, bloke ]
 		},
 		"scavNorthEastFactory": {
+			assembly: "northAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(10000),

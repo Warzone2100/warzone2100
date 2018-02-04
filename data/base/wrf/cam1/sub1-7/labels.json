@@ -45,11 +45,11 @@
 	},
 	"position_12": {
 		"label": "southAssembly",
-		"pos": [5824, 6080]
+		"pos": [5568, 5952]
 	},
 	"position_13": {
 		"label": "northAssembly",
-		"pos": [4800, 576]
+		"pos": [5696, 576]
 	},
 	"position_14": {
 		"label": "artifactLocation",
@@ -130,13 +130,13 @@
 		"label": "southScavFactoryTrigger",
 		"subscriber": 0,
 		"pos": [6784, 6144],
-		"radius": 1450
+		"radius": 1472
 	},
 	"radius_2": {
 		"label": "middleScavFactoryTrigger",
 		"subscriber": 0,
 		"pos": [4224, 4864],
-		"radius": 1280
+		"radius": 1344
 	},
 	"radius_3": {
 		"label": "artifactCheckNP",
