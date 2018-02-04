@@ -49,7 +49,7 @@
 std::vector<pie_internal::SHADER_PROGRAM> pie_internal::shaderProgram;
 static GLfloat shaderStretch = 0;
 SHADER_MODE pie_internal::currentShaderMode = SHADER_NONE;
-GLuint pie_internal::rectBuffer = 0;
+gfx_api::buffer* pie_internal::rectBuffer = nullptr;
 static RENDER_STATE rendStates;
 static GLint ecmState = 0;
 static GLfloat timeState = 0.0f;
@@ -432,9 +432,10 @@ bool pie_LoadShaders()
 		1, 1, 0, 1,
 		1, 0, 0, 1
 	};
-	glGenBuffers(1, &pie_internal::rectBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, pie_internal::rectBuffer);
-	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLbyte), rect, GL_STATIC_DRAW);
+	if (pie_internal::rectBuffer)
+		delete pie_internal::rectBuffer;
+	pie_internal::rectBuffer = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, 16 * sizeof(uint8_t));
+	pie_internal::rectBuffer->upload(0, 16 * sizeof(GLbyte), rect);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return true;

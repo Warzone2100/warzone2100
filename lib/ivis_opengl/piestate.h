@@ -37,6 +37,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 #include "lib/framework/opengl.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "piedef.h"
 
@@ -108,7 +109,7 @@ namespace pie_internal
 
 	extern std::vector<SHADER_PROGRAM> shaderProgram;
 	extern SHADER_MODE currentShaderMode;
-	extern GLuint rectBuffer;
+	extern gfx_api::buffer* rectBuffer;
 
 	/**
 	 * setUniforms is an overloaded wrapper around glUniform* functions

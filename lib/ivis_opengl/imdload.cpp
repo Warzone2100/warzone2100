@@ -101,7 +101,8 @@ static void iV_IMDRelease(iIMDShape *s)
 			free(s->shadowEdgeList);
 			s->shadowEdgeList = nullptr;
 		}
-		glDeleteBuffers(VBO_COUNT, s->buffers);
+		for (auto* buffer : s->buffers)
+			delete buffer;
 		// shader deleted later, if any
 		d = s->next;
 		delete s;
@@ -616,11 +617,11 @@ bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 }
 
 // performance hack
-static QVector<GLfloat> vertices;
-static QVector<GLfloat> normals;
-static QVector<GLfloat> texcoords;
-static QVector<GLfloat> tangents;
-static QVector<uint16_t> indices; // size is npolys * 3 * numFrames
+static std::vector<gfx_api::gfxFloat> vertices;
+static std::vector<gfx_api::gfxFloat> normals;
+static std::vector<gfx_api::gfxFloat> texcoords;
+static std::vector<gfx_api::gfxFloat> tangents;
+static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
 static int vertexCount;
 
 static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx)
@@ -645,14 +646,14 @@ static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx
 		}
 	}
 	// We don't have it, add it.
-	normals.append(p->normal.x);
-	normals.append(p->normal.y);
-	normals.append(p->normal.z);
-	texcoords.append(p->texCoord[frame * 3 + i].x);
-	texcoords.append(p->texCoord[frame * 3 + i].y);
-	vertices.append(s->points[p->pindex[i]].x);
-	vertices.append(s->points[p->pindex[i]].y);
-	vertices.append(s->points[p->pindex[i]].z);
+	normals.push_back(p->normal.x);
+	normals.push_back(p->normal.y);
+	normals.push_back(p->normal.z);
+	texcoords.push_back(p->texCoord[frame * 3 + i].x);
+	texcoords.push_back(p->texCoord[frame * 3 + i].y);
+	vertices.push_back(s->points[p->pindex[i]].x);
+	vertices.push_back(s->points[p->pindex[i]].y);
+	vertices.push_back(s->points[p->pindex[i]].z);
 	vertexCount++;
 	return vertexCount - 1;
 }
@@ -794,7 +795,6 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 	}
 
 	// FINALLY, massage the data into what can stream directly to OpenGL
-	glGenBuffers(VBO_COUNT, s->buffers);
 	vertexCount = 0;
 	for (int k = 0; k < MAX(1, s->numFrames); k++)
 	{
@@ -804,19 +804,19 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 			const iIMDPoly *pPolys = &s->polys[i];
 
 			// Do we already have the vertex data for this polygon?
-			indices.append(addVertex(s, 0, pPolys, k));
-			indices.append(addVertex(s, 1, pPolys, k));
-			indices.append(addVertex(s, 2, pPolys, k));
+			indices.push_back(addVertex(s, 0, pPolys, k));
+			indices.push_back(addVertex(s, 1, pPolys, k));
+			indices.push_back(addVertex(s, 2, pPolys, k));
 		}
 	}
-	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_VERTEX]);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.constData(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_NORMAL]);
-	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), normals.constData(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[VBO_INDEX]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.constData(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_TEXCOORD]);
-	glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(GLfloat), texcoords.constData(), GL_STATIC_DRAW);
+	s->buffers[VBO_VERTEX] = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, vertices.size() * sizeof(gfx_api::gfxFloat));
+	s->buffers[VBO_VERTEX]->upload(0, vertices.size() * sizeof(float), vertices.data());
+	s->buffers[VBO_NORMAL] = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, normals.size() * sizeof(gfx_api::gfxFloat));
+	s->buffers[VBO_NORMAL]->upload(0, normals.size() * sizeof(float), normals.data());
+	s->buffers[VBO_INDEX] = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::index_buffer, indices.size() * sizeof(uint16_t));
+	s->buffers[VBO_INDEX]->upload(0, indices.size() * sizeof(uint16_t), indices.data());
+	s->buffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer(gfx_api::buffer::usage::vertex_buffer, texcoords.size() * sizeof(gfx_api::gfxFloat));
+	s->buffers[VBO_TEXCOORD]->upload(0, texcoords.size() * sizeof(float), texcoords.data());
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind
 
 	indices.resize(0);
