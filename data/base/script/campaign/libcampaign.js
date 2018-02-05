@@ -1831,22 +1831,40 @@ function __camTacticsTickForGroup(group)
 		return;
 	}
 	var healthyDroids = [];
-	var cRepFac = countStruct("A0RepairCentre3", rawDroids[0].player);
+	var hasRepairFacility = (countStruct("A0RepairCentre3", rawDroids[0].player) > 0);
 	var hasRTB = __camCountHQ(rawDroids[0].player);
+	var hasRepairPos = camDef(gi.data.repairPos);
+	var repairPercent = (camDef(gi.data.repair) ? gi.data.repair : 66);
 
 	// Handle the case when we need to repair
-	if (rawDroids.length > 0 && camDef(gi.data.repair) && cRepFac > 0)
+	if (rawDroids.length > 0 && (hasRepairFacility || hasRepairPos))
 	{
 		for (var i = 0, l = rawDroids.length; i < l; ++i)
 		{
 			var droid = rawDroids[i];
-			if (droid.order !== DORDER_RTR)
+			var repairLikeAction = false;
+			//has a repair facility so use it
+			if (hasRepairFacility && camDef(gi.data.repair) && droid.order !== DORDER_RTR)
 			{
 				if (droid.health < gi.data.repair)
 				{
 					orderDroid(droid, DORDER_RTR);
-					continue;
+					repairLikeAction = true;
 				}
+			}
+			//Or they have auto-repair and run to some position for a while
+			else if (!hasRepairFacility && hasRepairPos && droid.order !== DORDER_RTR)
+			{
+				if (droid.health < repairPercent)
+				{
+					var loc = camMakePos(gi.data.repairPos);
+					orderDroidLoc(droid, DORDER_MOVE, loc.x, loc.y);
+					repairLikeAction = true;
+				}
+			}
+
+			if (!repairLikeAction)
+			{
 				healthyDroids.push(droid);
 			}
 		}
@@ -1855,6 +1873,7 @@ function __camTacticsTickForGroup(group)
 	{
 		healthyDroids = rawDroids;
 	}
+
 
 	if (camDef(gi.data.regroup) && gi.data.regroup && healthyDroids.length > 0)
 	{
