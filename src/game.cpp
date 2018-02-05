@@ -38,6 +38,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
@@ -92,6 +93,31 @@
 #include "lib/ivis_opengl/screen.h"
 #include "keymap.h"
 #include <ctime>
+#include "multimenu.h"
+#include "console.h"
+
+
+void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	intScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	loadSaveScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	challengesScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	multiOptionsScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	multiMenuScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	display3dScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	consoleScreenDidChangeSize(oldWidth, oldHeight, newWidth, newHeight);
+	frontendScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+}
+
+void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor)
+{
+	// The text subsystem requires the game -> renderer scale factor, which potentially differs from
+	// the display scale factor.
+	float horizGameToRendererScaleFactor = 0.f, vertGameToRendererScaleFactor = 0.f;
+	wzGetGameToRendererScaleFactor(&horizGameToRendererScaleFactor, &vertGameToRendererScaleFactor);
+	iV_TextUpdateScaleFactor(horizGameToRendererScaleFactor, vertGameToRendererScaleFactor);
+}
+
 
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60

@@ -84,6 +84,14 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 bool CancelPressed();
 
+/* Tell the frontend when the screen has been resized */
+void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
+
+struct DisplayTextOptionCache
+{
+	WzText wzText;
+};
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
@@ -243,6 +251,8 @@ enum
 	FRONTEND_VSYNC_R,
 	FRONTEND_FSAA,
 	FRONTEND_FSAA_R,
+	FRONTEND_DISPLAYSCALE,
+	FRONTEND_DISPLAYSCALE_R,
 
 	FRONTEND_MOUSEOPTIONS = 25000,          // Mouse Options Menu
 	FRONTEND_CURSORMODE,

@@ -99,12 +99,23 @@ static int allowNewMessages;					/** Whether new messages are allowed to be adde
 
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];	/// Globally available string for new console messages.
 
+static CONSOLE_CALC_LAYOUT_FUNC calcLayoutFunc;
+
 /**
 	Specify how long messages will stay on screen.
 */
 static void	setConsoleMessageDuration(UDWORD time)
 {
 	messageDuration = time;
+}
+
+void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc)
+{
+	calcLayoutFunc = layoutFunc;
+	if (calcLayoutFunc != nullptr)
+	{
+		calcLayoutFunc();
+	}
 }
 
 /** Sets the system up */
@@ -117,13 +128,21 @@ void	initConsoleMessages()
 	enableConsoleDisplay(true);								// Turn on the console display
 
 	//	Set up the main console size and position x,y,width
-	setConsoleSizePos(16, 32, pie_GetVideoBufferWidth() - 32);
+	setConsoleCalcLayout([]() {
+		setConsoleSizePos(16, 32, pie_GetVideoBufferWidth() - 32);
+	});
 	historyConsole.topX = HISTORYBOX_X;
 	historyConsole.topY = HISTORYBOX_Y;
 	historyConsole.width = pie_GetVideoBufferWidth() - 32;
 	setConsoleLineInfo(MAX_CONSOLE_MESSAGES / 4 + 4);
 	setConsolePermanence(false, true);						// We're not initially having permanent messages
 	permitNewConsoleMessages(true);							// Allow new messages
+}
+
+void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	if (calcLayoutFunc == nullptr) return;
+	calcLayoutFunc();
 }
 
 // toggle between team & global history
@@ -454,7 +473,9 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 
 	/* Should be done below */
 	mainConsole.textDepth = 8;
-	flushConsoleMessages();
+
+	// Do not call flushConsoleMessages() when simply changing console size/position -
+	// it is possible for the console size/pos to change during display.
 }
 
 /**	Establishes whether the console messages stay there */

@@ -44,7 +44,7 @@ static inline Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2
 }
 
 int32_t pie_RotateProject(const Vector3i *src, const glm::mat4& matrix, Vector2i *dest);
-glm::mat4 pie_PerspectiveGet();
+const glm::mat4& pie_PerspectiveGet();
 void pie_SetGeometricOffset(int x, int y);
 void pie_Begin3DScene();
 void pie_BeginInterface();

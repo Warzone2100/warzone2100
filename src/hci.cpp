@@ -2444,6 +2444,13 @@ void intNewObj(BASE_OBJECT *psObj)
 	}
 }
 
+/* Tell the interface when the screen has been resized */
+void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	if (psWScreen == nullptr) return;
+	psWScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+}
+
 
 // clean up when an object dies
 static void intObjectDied(UDWORD objID)
@@ -2708,7 +2715,9 @@ bool intAddReticule()
 	WIDGET *parent = psWScreen->psForm;
 	IntFormAnimated *retForm = new IntFormAnimated(parent, false);
 	retForm->id = IDRET_FORM;
-	retForm->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
+	retForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
+	}));
 	for (int i = 0; i < NUMRETBUTS; i++)
 	{
 		setReticuleBut(i);
@@ -2752,12 +2761,17 @@ bool intAddPower()
 	sBarInit.id = IDPOW_POWERBAR_T;
 	//start the power bar off in view (default)
 	sBarInit.style = WBAR_TROUGH;
-	sBarInit.x = (SWORD)POW_X;
-	sBarInit.y = (SWORD)POW_Y;
-	sBarInit.width = POW_BARWIDTH;
-	sBarInit.height = iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY);
+	sBarInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+	});
 	sBarInit.sCol = WZCOL_POWER_BAR;
 	sBarInit.pDisplay = intDisplayPowerBar;
+	sBarInit.pUserData = new DisplayPowerBarCache();
+	sBarInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayPowerBarCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	sBarInit.iRange = POWERBAR_SCALE;
 
 	sBarInit.pTip = _("Power");
@@ -2895,16 +2909,17 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	/* Create the basic form */
 	IntFormAnimated *objForm = new IntFormAnimated(parent, false);
 	objForm->id = IDOBJ_FORM;
-	objForm->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
+	objForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
+	}));
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
 	sButInit.formID = IDOBJ_FORM;
 	sButInit.id = IDOBJ_CLOSE;
-	sButInit.x = OBJ_BACKWIDTH - CLOSE_WIDTH;
-	sButInit.y = 0;
-	sButInit.width = CLOSE_WIDTH;
-	sButInit.height = CLOSE_HEIGHT;
+	sButInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(OBJ_BACKWIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+	});
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
@@ -2916,10 +2931,14 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	/*add the tabbed form */
 	IntListTabWidget *objList = new IntListTabWidget(objForm);
 	objList->id = IDOBJ_TABFORM;
-	objList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
-	objList->setChildSpacing(OBJ_GAP, OBJ_GAP);
-	int objListWidth = OBJ_BUTWIDTH * 5 + STAT_GAP * 4;
-	objList->setGeometry((OBJ_BACKWIDTH - objListWidth) / 2, OBJ_TABY, objListWidth, OBJ_BACKHEIGHT - OBJ_TABY);
+	objList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		IntListTabWidget *objList = static_cast<IntListTabWidget *>(psWidget);
+		assert(objList != nullptr);
+		objList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
+		objList->setChildSpacing(OBJ_GAP, OBJ_GAP);
+		int objListWidth = OBJ_BUTWIDTH * 5 + STAT_GAP * 4;
+		objList->setGeometry((OBJ_BACKWIDTH - objListWidth) / 2, OBJ_TABY, objListWidth, OBJ_BACKHEIGHT - OBJ_TABY);
+	}));
 
 	/* Add the object and stats buttons */
 	int nextObjButtonId = IDOBJ_OBJSTART;
@@ -2930,10 +2949,9 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sBarInit.formID = IDOBJ_OBJSTART;
 	sBarInit.id = IDOBJ_PROGBARSTART;
 	sBarInit.style = WBAR_TROUGH | WIDG_HIDDEN;
-	sBarInit.x = STAT_PROGBARX;
-	sBarInit.y = STAT_PROGBARY;
-	sBarInit.width = STAT_PROGBARWIDTH;
-	sBarInit.height = STAT_PROGBARHEIGHT;
+	sBarInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(STAT_PROGBARX, STAT_PROGBARY, STAT_PROGBARWIDTH, STAT_PROGBARHEIGHT);
+	});
 	sBarInit.size = 0;
 	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
@@ -2943,17 +2961,17 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	W_BARINIT sBarInit2 = sBarInit;
 	sBarInit2.id = IDOBJ_POWERBARSTART;
 	sBarInit2.style = WBAR_PLAIN;
-	sBarInit2.x = STAT_POWERBARX;
-	sBarInit2.y = STAT_POWERBARY;
+	sBarInit2.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move(STAT_POWERBARX, STAT_POWERBARY);
+	});
 	sBarInit2.size = 50;
 
 	W_LABINIT sLabInit;
 	sLabInit.id = IDOBJ_COUNTSTART;
 	sLabInit.style = WIDG_HIDDEN;
-	sLabInit.x = OBJ_TEXTX;
-	sLabInit.y = OBJ_T1TEXTY;
-	sLabInit.width = 16;
-	sLabInit.height = 16;
+	sLabInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(OBJ_TEXTX, OBJ_T1TEXTY, 16, 16);
+	});
 	sLabInit.pText = "BUG! (a)";
 
 	W_LABINIT sLabInitCmdFac;
@@ -3533,7 +3551,9 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	/* Create the basic form */
 	IntFormAnimated *statForm = new IntFormAnimated(parent, false);
 	statForm->id = IDSTAT_FORM;
-	statForm->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
+	statForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
+	}));
 
 	W_LABINIT sLabInit;
 
@@ -4896,7 +4916,9 @@ void chatDialog(int mode)
 
 		consoleBox = new IntFormAnimated(parent);
 		consoleBox->id = CHAT_CONSOLEBOX;
-		consoleBox->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
+		consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
+		}));
 
 		chatBox = new W_EDITBOX(consoleBox);
 		chatBox->id = CHAT_EDITBOX;

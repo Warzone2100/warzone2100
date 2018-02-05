@@ -29,6 +29,10 @@
 #include "lib/ivis_opengl/textdraw.h"
 
 
+struct LabelDisplayCache {
+	WzText wzText;
+};
+
 class W_LABEL : public WIDGET
 {
 	Q_OBJECT
@@ -69,6 +73,7 @@ public:
 
 private:
 	PIELIGHT fontColour;
+	LabelDisplayCache displayCache;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

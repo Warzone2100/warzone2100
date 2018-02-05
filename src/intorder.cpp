@@ -555,7 +555,9 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	/* Create the basic form */
 	IntFormAnimated *orderForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
 	orderForm->id = IDORDER_FORM;
-	orderForm->setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);
+	orderForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);
+	}));
 
 	// Add the close button.
 	W_BUTINIT sButInit;

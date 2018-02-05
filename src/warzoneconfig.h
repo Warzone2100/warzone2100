@@ -65,6 +65,8 @@ bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
 void war_SetVsync(bool b);
 bool war_GetVsync();
+void war_SetDisplayScale(unsigned int scale);
+unsigned int war_GetDisplayScale();
 void war_SetWidth(UDWORD width);
 UDWORD war_GetWidth();
 void war_SetScreen(int screen);

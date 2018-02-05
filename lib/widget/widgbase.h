@@ -29,6 +29,7 @@
 #include "lib/ivis_opengl/textdraw.h"
 #include <QtCore/QRect>
 #include <QtCore/QObject>
+#include <functional>
 
 
 /* Forward definitions */
@@ -51,6 +52,17 @@ typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 /* The optional user callback function */
 typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, W_CONTEXT *psContext);
 typedef void (*WIDGET_AUDIOCALLBACK)(int AudioID);
+
+/* The optional "calc layout" callback function, to support runtime layout recalculation */
+typedef std::function<void (WIDGET *psWidget, unsigned int oldScreenWidth, unsigned int oldScreenHeight, unsigned int newScreenWidth, unsigned int newScreenHeight)> WIDGET_CALCLAYOUT_FUNC;
+
+// To avoid typing, use the following define to construct a lambda for WIDGET_CALCLAYOUT_FUNC
+// psWidget is the widget
+// The { } are still required (for clarity).
+#define LAMBDA_CALCLAYOUT_SIMPLE(x) [](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) x
+
+/* The optional "onDelete" callback function */
+typedef std::function<void (WIDGET *psWidget)> WIDGET_ONDELETE_FUNC;
 
 
 /* The different base types of widget */
@@ -112,6 +124,8 @@ public:
 	virtual QString getString() const;
 	virtual void setString(QString string);
 	virtual void setTip(QString string);
+
+	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight); // used to handle screen resizing
 
 	void show(bool doShow = true)
 	{
@@ -176,6 +190,11 @@ public:
 	void attach(WIDGET *widget);
 	void detach(WIDGET *widget);
 
+	void setCalcLayout(const WIDGET_CALCLAYOUT_FUNC& calcLayoutFunc);
+	void callCalcLayout();
+
+	void setOnDelete(const WIDGET_ONDELETE_FUNC& onDeleteFunc);
+
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
 	UDWORD                  style;                  ///< The style of the widget
@@ -186,6 +205,8 @@ public:
 	W_SCREEN               *screenPointer;          ///< Pointer to screen the widget is on (if attached).
 
 private:
+	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calc layout callback
+	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
 public:
 	void processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
@@ -221,6 +242,7 @@ struct W_SCREEN
 
 	void setFocus(WIDGET *widget);  ///< Sets psFocus, notifying the old widget, if any.
 	void setReturn(WIDGET *psWidget);  ///< Adds psWidget to retWidgets.
+	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight); // used to handle screen resizing
 
 	W_FORM          *psForm;        ///< The root form of the screen
 	WIDGET          *psFocus;       ///< The widget that has keyboard focus

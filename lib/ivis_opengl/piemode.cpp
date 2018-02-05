@@ -47,6 +47,18 @@
 
 iSurface rendSurface;
 
+void pie_UpdateSurfaceGeometry()
+{
+	rendSurface.width	= pie_GetVideoBufferWidth();
+	rendSurface.height	= pie_GetVideoBufferHeight();
+	rendSurface.xcentre	= pie_GetVideoBufferWidth() / 2;
+	rendSurface.ycentre	= pie_GetVideoBufferHeight() / 2;
+	rendSurface.clip.left	= 0;
+	rendSurface.clip.top	= 0;
+	rendSurface.clip.right	= pie_GetVideoBufferWidth();
+	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
+}
+
 bool pie_Initialise()
 {
 	pie_SetUp();
@@ -62,14 +74,7 @@ bool pie_Initialise()
 		debug(LOG_TEXTURE, "Texture compression: No");
 	}
 
-	rendSurface.width	= pie_GetVideoBufferWidth();
-	rendSurface.height	= pie_GetVideoBufferHeight();
-	rendSurface.xcentre	= pie_GetVideoBufferWidth() / 2;
-	rendSurface.ycentre	= pie_GetVideoBufferHeight() / 2;
-	rendSurface.clip.left	= 0;
-	rendSurface.clip.top	= 0;
-	rendSurface.clip.right	= pie_GetVideoBufferWidth();
-	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
+	pie_UpdateSurfaceGeometry();
 
 	pie_SetDefaultStates();
 	debug(LOG_3D, "xcentre %d; ycentre %d", rendSurface.xcentre, rendSurface.ycentre);

@@ -119,8 +119,22 @@ void updateChallenge(bool gameWon)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+
+struct DisplayLoadSlotCache {
+	std::string fullText;
+	WzText wzText;
+};
+
+struct DisplayLoadSlotData {
+	DisplayLoadSlotCache cache;
+	const char * filename;
+};
+
 static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	// Any widget using displayLoadSlot must have its pUserData initialized to a (DisplayLoadSlotData*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayLoadSlotData& data = *static_cast<DisplayLoadSlotData *>(psWidget->pUserData);
 
 	UDWORD	x = xOffset + psWidget->x();
 	UDWORD	y = yOffset + psWidget->y();
@@ -132,15 +146,25 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
-		iV_SetTextColour(WZCOL_FORM_TEXT);
-
-		while (iV_GetTextWidth(butString, font_regular) > psWidget->width())
+		if (data.cache.fullText != butString)
 		{
-			butString[strlen(butString) - 1] = '\0';
+			// Update cache
+			while (iV_GetTextWidth(butString, font_regular) > psWidget->width())
+			{
+				butString[strlen(butString) - 1] = '\0';
+			}
+			data.cache.wzText.setText(butString, font_regular);
+			data.cache.fullText = butString;
 		}
 
-		iV_DrawText(butString, x + 4, y + 17, font_regular);
+		data.cache.wzText.render(x + 4, y + 17, WZCOL_FORM_TEXT);
 	}
+}
+
+void challengesScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	if (psRequestScreen == nullptr) return;
+	psRequestScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
 //****************************************************************************************
@@ -163,7 +187,9 @@ bool addChallenges()
 	/* add a form to place the tabbed form on */
 	IntFormAnimated *challengeForm = new IntFormAnimated(parent);
 	challengeForm->id = CHALLENGE_FORM;
-	challengeForm->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
+	challengeForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
+	}));
 
 	// Add Banner
 	W_FORMINIT sFormInit;
@@ -210,6 +236,12 @@ bool addChallenges()
 	sButInit.width		= CHALLENGE_ENTRY_W;
 	sButInit.height		= CHALLENGE_ENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
+	sButInit.initPUserDataFunc = []() -> void * { return new DisplayLoadSlotData(); };
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayLoadSlotData *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	for (slotCount = 0; slotCount < totalslots; slotCount++)
 	{
@@ -298,7 +330,8 @@ bool addChallenges()
 		/* Add button */
 		button->pTip = sSlotTips[slotCount];
 		button->pText = sSlotCaps[slotCount];
-		button->pUserData = (void *)sSlotFile[slotCount];
+		assert(button->pUserData != nullptr);
+		static_cast<DisplayLoadSlotData *>(button->pUserData)->filename = sSlotFile[slotCount];
 		slotCount++;		// go to next button...
 		if (slotCount == totalslots)
 		{
@@ -346,9 +379,14 @@ bool runChallenges()
 		// clicked a load entry
 		if (id >= CHALLENGE_ENTRY_START  &&  id <= CHALLENGE_ENTRY_END)
 		{
-			if (!((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.isEmpty())
+			W_BUTTON * psWidget = static_cast<W_BUTTON *>(widgGetFromID(psRequestScreen, id));
+			assert(psWidget != nullptr);
+			if (!(psWidget->pText.isEmpty()))
 			{
-				sstrcpy(sRequestResult, (const char *)((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pUserData);
+				DisplayLoadSlotData * data = static_cast<DisplayLoadSlotData *>(psWidget->pUserData);
+				assert(data != nullptr);
+				assert(data->filename != nullptr);
+				sstrcpy(sRequestResult, data->filename);
 			}
 			else
 			{

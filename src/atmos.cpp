@@ -305,8 +305,8 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix)
 		/* Don't bother unless it's active */
 		if (asAtmosParts[i].status == APS_ACTIVE)
 		{
-			/* Is it on the grid */
-			if (clipXY(asAtmosParts[i].position.x, asAtmosParts[i].position.z))
+			/* Is it visible on the screen? */
+			if (clipXYZ(asAtmosParts[i].position.x, asAtmosParts[i].position.z, asAtmosParts[i].position.y, viewMatrix))
 			{
 				renderParticle(&asAtmosParts[i], viewMatrix);
 			}

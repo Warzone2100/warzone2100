@@ -243,7 +243,9 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	polyCount += shape->npolys;
 
 	pie_SetShaderEcmEffect(false);
-	pie_DeactivateShader();
+	// NOTE: Do *not* call pie_DeactivateShader() here, to avoid unecessary state transitions.
+	// Avoiding a call to pie_DeactivateShader() here yields a 10%+ CPU usage reduction overall.
+	// (activateShader handles changing the active shader *if necessary*.)
 }
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
@@ -301,7 +303,15 @@ namespace
 }
 
 /// Draw the shadow for a shape
-static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm::vec4 &light, const glm::mat4 &modelViewMatrix)
+/// Prequisite:
+///		Caller must call the following before all calls to pie_DrawShadow():
+///			const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet(), glm::vec4());
+///			glEnableVertexAttribArray(program.locVertex);
+///		and must call the following after all calls to pie_DrawShadow():
+///			glDisableVertexAttribArray(program.locVertex);
+///			pie_DeactivateShader();
+///		The only place this is currently called is pie_ShadowDrawLoop(), which handles this properly.
+static inline void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm::vec4 &light, const glm::mat4 &modelViewMatrix)
 {
 	static std::vector<EDGE> edgelist;  // Static, to save allocations.
 	static std::vector<EDGE> edgelistFlipped;  // Static, to save allocations.
@@ -318,10 +328,10 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 	else
 	{
 		edgelist.clear();
+		glm::vec3 p[3];
 		iIMDPoly *end = shape->polys + shape->npolys;
 		for (iIMDPoly *pPolys = shape->polys; pPolys != end; ++pPolys)
 		{
-			glm::vec3 p[3];
 			for (int j = 0; j < 3; ++j)
 			{
 				int current = pPolys->pindex[j];
@@ -358,22 +368,22 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 		}
 	}
 
-	std::vector<Vector3f> vertexes;
+	static std::vector<Vector3f> vertexes;
+	vertexes.clear();
+	vertexes.reserve(edge_count * 6);
 	for (unsigned i = 0; i < edge_count; i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
 
 		glm::vec3 v1(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
-		glm::vec3 v2(pVertices[b].x + light[0], scale_y(pVertices[b].y, flag, flag_data) + light[1], pVertices[b].z + light[2]);
 		glm::vec3 v3(pVertices[a].x + light[0], scale_y(pVertices[a].y, flag, flag_data) + light[1], pVertices[a].z + light[2]);
-		glm::vec3 v4(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
 
 		vertexes.push_back(v1);
-		vertexes.push_back(v2);
+		vertexes.push_back(glm::vec3(pVertices[b].x + light[0], scale_y(pVertices[b].y, flag, flag_data) + light[1], pVertices[b].z + light[2])); //v2
 		vertexes.push_back(v3);
 
 		vertexes.push_back(v3);
-		vertexes.push_back(v4);
+		vertexes.push_back(glm::vec3(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z)); //v4
 		vertexes.push_back(v1);
 	}
 
@@ -382,12 +392,10 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 	static glBufferWrapper buffer;
 	glBindBuffer(GL_ARRAY_BUFFER, buffer.id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * vertexes.size(), vertexes.data(), GL_STREAM_DRAW);
-	glEnableVertexAttribArray(program.locVertex);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	glDrawArrays(GL_TRIANGLES, 0, edge_count * 2 * 3);
-	glDisableVertexAttribArray(program.locVertex);
-	pie_DeactivateShader();
+	// NOTE: Do not call pie_DeactivateShader() here. The parent loop calls it at the end of all pie_DrawShadow() calls, for a 10%+ CPU usage reduction.
 }
 
 void pie_SetUp()
@@ -425,7 +433,7 @@ void pie_CleanUp()
 	scshapes.clear();
 }
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
+bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
 {
 	pieCount++;
 
@@ -493,14 +501,20 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 			shapes.push_back(tshape);
 		}
 	}
+
+	return true;
 }
 
 static void pie_ShadowDrawLoop()
 {
+	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet(), glm::vec4());
+	glEnableVertexAttribArray(program.locVertex);
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
 		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].matrix);
 	}
+	glDisableVertexAttribArray(program.locVertex);
+	pie_DeactivateShader();
 }
 
 static void pie_DrawShadows()

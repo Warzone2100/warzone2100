@@ -35,6 +35,12 @@
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
+struct EditBoxDisplayCache {
+	WzText wzDisplayedText;
+	WzText modeText;
+	WzText wzHyphen;
+};
+
 class W_EDITBOX : public WIDGET
 {
 	Q_OBJECT
@@ -76,13 +82,14 @@ private:
 	void initialise();  // Moves the cursor to the end.
 	void delCharRight();
 	void delCharLeft();
-	void insertChar(QChar ch);
-	void overwriteChar(QChar ch);
+	bool insertChar(QChar ch);
+	bool overwriteChar(QChar ch);
 	void fitStringStart();  // Calculate how much of the start of a string can fit into the edit box
 	void fitStringEnd();
 	void setCursorPosPixels(int xPos);
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
+	EditBoxDisplayCache displayCache;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

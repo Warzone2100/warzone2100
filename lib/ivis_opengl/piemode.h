@@ -53,6 +53,7 @@ extern iSurface rendSurface;
 bool pie_Initialise();
 void pie_ShutDown();
 void pie_ScreenFlip(int ClearMode);
+void pie_UpdateSurfaceGeometry();
 UDWORD pie_GetResScalingFactor();
 
 #endif

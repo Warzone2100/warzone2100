@@ -74,6 +74,23 @@ ImageDef *iV_GetImage(const QString &filename)
 	return images.value(filename);
 }
 
+// Used to provide empty space between sprites arranged on the page, to avoid display glitches when scaling + drawing
+#define SPRITE_BUFFER_PIXELS 1
+
+void checkRect(const ImageMergeRectangle& rect, const int pageSize)
+{
+	if ((rect.loc.x + rect.siz.x) > pageSize)
+	{
+		debug(LOG_ERROR, "Merge rectangle bounds extend outside of pageSize bounds: %d > %d", (rect.loc.x + rect.siz.x), pageSize);
+	}
+	if ((rect.loc.y + rect.siz.y) > pageSize)
+	{
+		debug(LOG_ERROR, "Merge rectangle bounds extend outside of pageSize bounds: %d > %d", (rect.loc.y + rect.siz.y), pageSize);
+	}
+	assert(rect.loc.x >= 0);
+	assert(rect.loc.y >= 0);
+}
+
 inline void ImageMerge::arrange()
 {
 	std::multiset<ImageMergeRectangle> freeSpace;
@@ -112,10 +129,10 @@ inline void ImageMerge::arrange()
 		ImageMergeRectangle spDown;
 		spRight.page = f->page;
 		spDown.page  = f->page;
-		spRight.loc = f->loc + Vector2i(r->siz.x, 0);
-		spDown.loc  = f->loc + Vector2i(0, r->siz.y);
-		spRight.siz = Vector2i(f->siz.x - r->siz.x, r->siz.y);
-		spDown.siz  = Vector2i(r->siz.x, f->siz.y - r->siz.y);
+		spRight.loc = f->loc + Vector2i(r->siz.x + SPRITE_BUFFER_PIXELS, 0);
+		spDown.loc  = f->loc + Vector2i(0, r->siz.y + SPRITE_BUFFER_PIXELS);
+		spRight.siz = Vector2i(f->siz.x - (r->siz.x + SPRITE_BUFFER_PIXELS), r->siz.y);
+		spDown.siz  = Vector2i(r->siz.x, f->siz.y - (r->siz.y + SPRITE_BUFFER_PIXELS));
 		if (spRight.siz.x <= spDown.siz.y)
 		{
 			// Split horizontally.
@@ -126,6 +143,8 @@ inline void ImageMerge::arrange()
 			// Split vertically.
 			spRight.siz.y = f->siz.y;
 		}
+		checkRect(spDown, pages.at(spDown.page));
+		checkRect(spRight, pages.at(spRight.page));
 		if (spRight.siz.x > 0 && spRight.siz.y > 0)
 		{
 			freeSpace.insert(spRight);

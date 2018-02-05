@@ -331,19 +331,21 @@ endif
 # Here, we need to bring in the "plugins" for Qt5 and they MUST come before the other QT libs.
 # FIXME: At a future date, we should check if they want static builds, but, since we only support those for now...
 if MINGW32
-SQT5_LIBS =  -L$(QT5_PLUGIN)/plugins/platforms -lQt5PlatformSupport -lqwindows
+SQT5_LIBS = -L$(QT5_PLUGIN)/plugins/platforms -lqwindows -lqminimal
+SQT5_LIBS2 = -lQt5FontDatabaseSupport -lQt5EventDispatcherSupport -lQt5ThemeSupport -lQt5Gui -lfreetype
 else
 SQT5_LIBS =
+SQT5_LIBS2 =
 endif
 
 if PORTABLE
 warzone2100_portable_LDADD = $(warzone2100_portable_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
 	$(THEORA_LIBS) $(OPENAL_LIBS) $(FONT_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
-	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS)
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS) $(SQT5_LIBS2)
 else
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
 	$(THEORA_LIBS) $(OPENAL_LIBS) $(FONT_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
-	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS)
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS) $(SQT5_LIBS2)
 endif
 
 

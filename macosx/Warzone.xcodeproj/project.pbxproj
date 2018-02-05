@@ -780,6 +780,7 @@
 		BCD210A21F3D82830028012B /* WZSDLAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 436D24DF149642EB00BF74E3 /* WZSDLAppDelegate.mm */; };
 		BCF97EF61F3CCCF100343E05 /* upnpdev.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF97EF31F3CCCE600343E05 /* upnpdev.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D72B3A791F4E4C1F0011D653 /* gfx_api_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72B3A6D1F4E4C160011D653 /* gfx_api_gl.cpp */; };
+		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -2311,6 +2312,8 @@
 		BFFD67681421661B00967210 /* macosx_screen_resolutions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = macosx_screen_resolutions.h; path = ../lib/qtgame/macosx_screen_resolutions.h; sourceTree = SOURCE_ROOT; };
 		D72B3A6D1F4E4C160011D653 /* gfx_api_gl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gfx_api_gl.cpp; path = ../lib/ivis_opengl/gfx_api_gl.cpp; sourceTree = "<group>"; };
 		D72B3A6E1F4E4C160011D653 /* gfx_api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gfx_api.h; path = ../lib/ivis_opengl/gfx_api.h; sourceTree = "<group>"; };
+		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
+		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3394,6 +3397,8 @@
 				4301EC4A149A3DE90054BABB /* cursors_sdl.h */,
 				4301EC4B149A3DE90054BABB /* wz2100icon.h */,
 				436D248314963CF200BF74E3 /* main_sdl.cpp */,
+				D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */,
+				D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */,
 			);
 			name = SDL;
 			sourceTree = "<group>";
@@ -5544,6 +5549,7 @@
 				0246A1950BD3CCBD004D1C70 /* tip.cpp in Sources */,
 				0246A1960BD3CCBD004D1C70 /* widget.cpp in Sources */,
 				0246A28D0BD3CCDC004D1C70 /* action.cpp in Sources */,
+				D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */,
 				0246A28E0BD3CCDC004D1C70 /* advvis.cpp in Sources */,
 				0246A28F0BD3CCDC004D1C70 /* ai.cpp in Sources */,
 				0246A2920BD3CCDC004D1C70 /* astar.cpp in Sources */,

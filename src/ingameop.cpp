@@ -79,6 +79,12 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 
 	sButInit.pDisplay	= displayTextOption;
 	sButInit.pText		= string;
+	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	widgAddButton(psWScreen, &sButInit);
 
 	return true;
@@ -87,15 +93,17 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 static bool addQuitOptions()
 {
 	// get rid of the old stuff.
-	delete widgGetFromID(psWScreen, INTINGAMEOP);
 	delete widgGetFromID(psWScreen, INTINGAMEPOPUP);
+	delete widgGetFromID(psWScreen, INTINGAMEOP);
 
 	WIDGET *parent = psWScreen->psForm;
 
 	// add form
 	auto inGameOp = new IntFormAnimated(parent);
 	inGameOp->id = INTINGAMEOP;
-	inGameOp->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
+	inGameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
+	}));
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
@@ -103,7 +111,12 @@ static bool addQuitOptions()
 	{
 		auto inGamePopup = new IntFormAnimated(parent);
 		inGamePopup->id = INTINGAMEPOPUP;
-		inGamePopup->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
+		inGamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			assert(psWScreen != nullptr);
+			WIDGET * inGameOp = widgGetFromID(psWScreen, INTINGAMEOP);
+			assert(inGameOp != nullptr);
+			psWidget->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
+		}));
 
 		auto label = new W_LABEL(inGamePopup);
 		label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
@@ -131,7 +144,9 @@ static bool addSlideOptions()
 	// add form
 	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setGeometry(INTINGAMEOP2_X, INTINGAMEOP2_Y, INTINGAMEOP2_W, INTINGAMEOP2_H);
+	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOP2_Y, INTINGAMEOP2_W, INTINGAMEOP2_H);
+	}));
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_2_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
@@ -203,7 +218,10 @@ static bool _intAddInGameOptions()
 	// add form
 	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setGeometry(INTINGAMEOP_X, INTINGAMEOP_Y, INTINGAMEOP_W, s ? INTINGAMEOP_HS : INTINGAMEOP_H);
+	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
+		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOP_Y, INTINGAMEOP_W, s ? INTINGAMEOP_HS : INTINGAMEOP_H);
+	}));
 
 	// add 'quit' text
 	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)
@@ -280,7 +298,9 @@ void intAddInGamePopup()
 
 	IntFormAnimated *ingamePopup = new IntFormAnimated(parent);
 	ingamePopup->id = INTINGAMEPOPUP;
-	ingamePopup->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
+	ingamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
+	}));
 
 	// add the text "buttons" now
 	W_BUTINIT sButInit;
@@ -292,6 +312,12 @@ void intAddInGamePopup()
 	sButInit.x			= 0;
 	sButInit.height		= 10;
 	sButInit.pDisplay	= displayTextOption;
+	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	sButInit.id			= INTINGAMEOP_POPUP_MSG2;
 	sButInit.y			= 20;

@@ -986,6 +986,15 @@ bool runAudioAndZoomOptionsMenu()
 	return true;
 }
 
+bool canChangeResolutionLive()
+{
+	// Since changing fullscreen mode without restarting is not yet supported (because of various SDL/OS issues),
+	// if the fullscreen mode does not match the *current* mode, the resolution changes are queued until the
+	// next program restart.
+	//
+	return wzSupportsLiveResolutionChanges() && (war_getFullscreen() == wzIsFullscreen());
+}
+
 static char const *videoOptionsWindowModeString()
 {
 	return war_getFullscreen()? _("Fullscreen") : _("Windowed");
@@ -1001,6 +1010,16 @@ static std::string videoOptionsAntialiasingString()
 	{
 		return std::to_string(war_getAntialiasing()) + "×";
 	}
+}
+
+static char const *videoOptionsResolutionLabel()
+{
+	return (!canChangeResolutionLive())? _("Resolution*") : _("Resolution");
+}
+
+static char const *videoOptionsDisplayScaleLabel()
+{
+	return (!canChangeResolutionLive())? _("Display Scale*") : _("Display Scale");
 }
 
 static std::string videoOptionsResolutionString()
@@ -1020,6 +1039,13 @@ static std::string videoOptionsTextureSizeString()
 static char const *videoOptionsVsyncString()
 {
 	return war_GetVsync()? _("On") : _("Off");
+}
+
+static std::string videoOptionsDisplayScaleString()
+{
+	char resolution[100];
+	ssprintf(resolution, "%d%%", war_GetDisplayScale());
+	return resolution;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1044,7 +1070,7 @@ static bool startVideoOptionsMenu()
 	addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, videoOptionsWindowModeString(), WBUT_SECONDARY);
 
 	// Resolution
-	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Resolution*"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY);
 	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, videoOptionsResolutionString(), WBUT_SECONDARY);
 
 	// Texture size
@@ -1059,6 +1085,13 @@ static bool startVideoOptionsMenu()
 	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "Antialiasing*", WBUT_SECONDARY);
 	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsAntialiasingString(), WBUT_SECONDARY);
 
+	// Display Scale
+	if (wzAvailableDisplayScales().size() > 1)
+	{
+		addTextButton(FRONTEND_DISPLAYSCALE, FRONTEND_POS6X - 35, FRONTEND_POS7Y, videoOptionsDisplayScaleLabel(), WBUT_SECONDARY);
+		addTextButton(FRONTEND_DISPLAYSCALE_R, FRONTEND_POS6M - 55, FRONTEND_POS7Y, videoOptionsDisplayScaleString(), WBUT_SECONDARY);
+	}
+
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
 
@@ -1068,17 +1101,134 @@ static bool startVideoOptionsMenu()
 	return true;
 }
 
+// Get available resolutions list, sorted, with duplicates removed.
+std::vector<screeninfo> availableResolutionsSorted()
+{
+	auto compareKey = [](screeninfo const &x) { return std::make_tuple(x.screen, x.width, x.height); };
+	auto compareLess = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) < compareKey(b); };
+	auto compareEq = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) == compareKey(b); };
+
+	// Get resolutions, sorted with duplicates removed.
+	std::vector<screeninfo> modes = wzAvailableResolutions();
+	std::sort(modes.begin(), modes.end(), compareLess);
+	modes.erase(std::unique(modes.begin(), modes.end(), compareEq), modes.end());
+
+	return modes;
+}
+
+std::vector<unsigned int> availableDisplayScalesSorted()
+{
+	std::vector<unsigned int> displayScales = wzAvailableDisplayScales();
+	std::sort(displayScales.begin(), displayScales.end());
+	return displayScales;
+}
+
+void refreshCurrentVideoOptionsValues()
+{
+	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
+	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
+	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_R)) // Resolution option may not be available
+	{
+		widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+	}
+	widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString().c_str());
+	widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+	if (widgGetFromID(psWScreen, FRONTEND_DISPLAYSCALE_R)) // Display Scale option may not be available
+	{
+		widgSetString(psWScreen, FRONTEND_DISPLAYSCALE_R, videoOptionsDisplayScaleString().c_str());
+	}
+}
+
 bool runVideoOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
+	auto compareKey = [](screeninfo const &x) { return std::make_tuple(x.screen, x.width, x.height); };
+	auto compareLess = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) < compareKey(b); };
+	auto compareEq = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) == compareKey(b); };
+
 	switch (id)
 	{
 	case FRONTEND_WINDOWMODE:
 	case FRONTEND_WINDOWMODE_R:
-		war_setFullscreen(!war_getFullscreen());
-		widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
+		{
+			war_setFullscreen(!war_getFullscreen());
+			widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
+
+			if (!wzSupportsLiveResolutionChanges())
+			{
+				refreshCurrentVideoOptionsValues();
+				break;
+			}
+
+			// Since changing fullscreen mode without restarting is not yet supported (because of various issues),
+			// if the fullscreen mode does not match the *current* mode, the resolution changes are queued until
+			// the next program restart.
+			//
+			// Update the "Requires restart" status of the Resolution + Display Scale entries to match.
+			//
+			if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION)) // Resolution option may not be available
+			{
+				widgSetString(psWScreen, FRONTEND_RESOLUTION, videoOptionsResolutionLabel());
+			}
+			if (widgGetFromID(psWScreen, FRONTEND_DISPLAYSCALE)) // Display Scale option may not be available
+			{
+				widgSetString(psWScreen, FRONTEND_DISPLAYSCALE, videoOptionsDisplayScaleLabel());
+			}
+
+			if (war_getFullscreen() == wzIsFullscreen())
+			{
+				// Update the resolution to reflect the current resolution / display scale settings.
+				// This reverts any queued changes if the user changes their mind and switches back to the current
+				// window mode.
+				int screen = 0;
+				unsigned int width = 0, height = 0;
+				wzGetWindowResolution(&screen, &width, &height);
+				war_SetScreen(screen);
+				war_SetWidth(width);
+				war_SetHeight(height);
+				unsigned int displayScale = wzGetCurrentDisplayScale();
+				war_SetDisplayScale(displayScale);
+			}
+			else if (war_getFullscreen())
+			{
+				// If configuring a fullscreen window mode (when it's currently windowed), the current resolution
+				// must be set to the nearest supported resolution in the wzAvailableResolutions list.
+				// (As the user may have manually resized the window to a custom size.)
+
+				// Get resolutions, sorted with duplicates removed.
+				std::vector<screeninfo> modes = availableResolutionsSorted();
+
+				// We can't pick a resolution if there aren't any.
+				if (modes.empty())
+				{
+					debug(LOG_ERROR, "No resolutions available to change.");
+					break;
+				}
+
+				// Get currently configured resolution.
+				screeninfo config;
+				config.screen = war_GetScreen();
+				config.width = war_GetWidth();
+				config.height = war_GetHeight();
+				config.refresh_rate = -1;  // Unused.
+
+				// Find current resolution in list.
+				auto current = std::lower_bound(modes.begin(), modes.end(), config, compareLess);
+				if (current == modes.end() || !compareEq(*current, config))
+				{
+					--current;  // If current resolution doesn't exist, round down to next-highest one.
+				}
+
+				// Set the current resolution to the nearest available resolution
+				war_SetScreen(current->screen);
+				war_SetWidth(current->width);
+				war_SetHeight(current->height);
+			}
+			// Update the widget(s)
+			refreshCurrentVideoOptionsValues();
+		}
 		break;
 
 	case FRONTEND_FSAA:
@@ -1092,14 +1242,8 @@ bool runVideoOptionsMenu()
 	case FRONTEND_RESOLUTION:
 	case FRONTEND_RESOLUTION_R:
 		{
-			auto compareKey = [](screeninfo const &x) { return std::make_tuple(x.screen, x.width, x.height); };
-			auto compareLess = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) < compareKey(b); };
-			auto compareEq = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) == compareKey(b); };
-
 			// Get resolutions, sorted with duplicates removed.
-			std::vector<screeninfo> modes = wzAvailableResolutions();
-			std::sort(modes.begin(), modes.end(), compareLess);
-			modes.erase(std::unique(modes.begin(), modes.end(), compareEq), modes.end());
+			std::vector<screeninfo> modes = availableResolutionsSorted();
 
 			// We can't pick resolutions if there aren't any.
 			if (modes.empty())
@@ -1119,19 +1263,67 @@ bool runVideoOptionsMenu()
 			auto current = std::lower_bound(modes.begin(), modes.end(), config, compareLess);
 			if (current == modes.end() || !compareEq(*current, config))
 			{
-				--current;  // If current resolution doesn't exist, round down to next-highest one.
+				if (current != modes.begin())
+				{
+					--current;  // If current resolution doesn't exist, round down to next-highest one.
+				}
 			}
 
 			// Increment/decrement and loop if required.
+			auto startingResolution = current;
+			bool successfulResolutionChange = false;
 			current = seqCycle(current, modes.begin(), 1, modes.end() - 1);
 
-			// Set the new width and height (takes effect on restart)
+			if (canChangeResolutionLive())
+			{
+				// Disable the ability to use the Video options menu to live-change the window size when in windowed mode.
+				// Why?
+				//	- Certain window managers don't report their own changes to window size through SDL in all circumstances.
+				//	  (For example, attempting to set a window size of 800x600 might result in no actual change when using a
+				//	   tiling window manager (ex. i3), but SDL thinks the window size has been set to 800x600. This obviously
+				//     breaks things.)
+				//  - Manual window resizing is supported (so there is no need for this functionality in the Video menu).
+				if (!wzIsFullscreen()) break;
+
+				while (current != startingResolution)
+				{
+					// Attempt to change the resolution
+					if (!wzChangeWindowResolution(current->screen, current->width, current->height))
+					{
+						debug(LOG_WARNING, "Failed to change active resolution from: [%d] %d x %d to: [%d] %d x %d", config.screen, config.width, config.height, current->screen, current->width, current->height);
+
+						// try the next resolution, and loop
+						current = seqCycle(current, modes.begin(), 1, modes.end() - 1);
+						continue;
+					}
+					else
+					{
+						successfulResolutionChange = true;
+						break;
+					}
+				}
+
+				if (!successfulResolutionChange) break;
+			}
+			else
+			{
+				// when live resolution changes are unavailable, check to see if the current display scale is supported at the desired resolution
+				unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(current->width, current->height);
+				unsigned int current_displayScale = war_GetDisplayScale();
+				if (maxDisplayScale < current_displayScale)
+				{
+					// Reduce the display scale to the maximum supported for this resolution
+					war_SetDisplayScale(maxDisplayScale);
+				}
+			}
+
+			// Store the new width and height
 			war_SetScreen(current->screen);
 			war_SetWidth(current->width);
 			war_SetHeight(current->height);
 
-			// Update the widget
-			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+			// Update the widget(s)
+			refreshCurrentVideoOptionsValues();
 			break;
 		}
 
@@ -1154,6 +1346,76 @@ bool runVideoOptionsMenu()
 		wzSetSwapInterval(!war_GetVsync());
 		war_SetVsync(!war_GetVsync());
 		widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+		break;
+
+	case FRONTEND_DISPLAYSCALE:
+	case FRONTEND_DISPLAYSCALE_R:
+		{
+			std::vector<unsigned int> displayScales = availableDisplayScalesSorted();
+			assert(!displayScales.empty());
+
+			// Get currently-configured display scale.
+			unsigned int current_displayScale = war_GetDisplayScale();
+
+			// Find current display scale in list.
+			auto current = std::lower_bound(displayScales.begin(), displayScales.end(), current_displayScale);
+			if (current == displayScales.end() || *current != current_displayScale)
+			{
+				--current;  // If current display scale doesn't exist, round down to next-highest one.
+			}
+
+			// Increment/decrement and loop if required.
+			auto startingDisplayScale = current;
+			bool successfulDisplayScaleChange = false;
+			current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
+
+			unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(war_GetWidth(), war_GetHeight());
+
+			while (current != startingDisplayScale)
+			{
+				if (canChangeResolutionLive())
+				{
+					// Attempt to change the display scale
+					if (!wzChangeDisplayScale(*current))
+					{
+						debug(LOG_WARNING, "Failed to change display scale from: %d to: %d", current_displayScale, *current);
+
+						// try the next display scale factor, and loop
+						current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
+						continue;
+					}
+					else
+					{
+						successfulDisplayScaleChange = true;
+						break;
+					}
+				}
+				else
+				{
+					// when live resolution changes are unavailable, check to see if the display scale is supported at the desired resolution
+					if (maxDisplayScale < *current)
+					{
+						// try the next display scale factor, and loop
+						current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
+						continue;
+					}
+					else
+					{
+						successfulDisplayScaleChange = true;
+						break;
+					}
+				}
+			}
+
+			if (!successfulDisplayScaleChange) break;
+
+			// Store the new display scale
+			war_SetDisplayScale(*current);
+
+			// Update the widget(s)
+			refreshCurrentVideoOptionsValues();
+
+		}
 		break;
 
 	case FRONTEND_QUIT:
@@ -1518,6 +1780,10 @@ bool runGameOptionsMenu()
 	return true;
 }
 
+struct TitleBitmapCache {
+	WzText formattedVersionString;
+	WzText modListText;
+};
 
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
@@ -1527,22 +1793,31 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 {
 	char modListText[MAX_STR_LENGTH] = "";
 
-	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, 270.f, font_regular);
-
 	if (!getModList().empty())
 	{
 		sstrcat(modListText, _("Mod: "));
 		sstrcat(modListText, getModList().c_str());
-		iV_DrawText(modListText, 9, 14, font_regular);
 	}
 
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f, font_regular);
+	assert(psWidget->pUserData != nullptr);
+	TitleBitmapCache& cache = *static_cast<TitleBitmapCache*>(psWidget->pUserData);
+
+	cache.formattedVersionString.setText(version_getFormattedVersionString(), font_regular);
+	cache.modListText.setText(modListText, font_regular);
+
+	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, WZCOL_GREY, 270.f);
 
 	if (!getModList().empty())
 	{
-		iV_DrawText(modListText, 10, 15, font_regular);
+		cache.modListText.render(9, 14, WZCOL_GREY);
+	}
+
+	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, WZCOL_TEXT_BRIGHT, 270.f);
+
+
+	if (!getModList().empty())
+	{
+		cache.modListText.render(10, 15, WZCOL_TEXT_BRIGHT);
 	}
 }
 
@@ -1577,13 +1852,17 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	psLab = (W_LABEL *)psWidget;
 
-	fx = xOffset + psWidget->x();
-	fy = yOffset + psWidget->y() + iV_GetTextWidth(psLab->aText.toUtf8().constData(), font_large);
+	// Any widget using displayTextAt270 must have its pUserData initialized to a (DisplayTextOptionCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
 
-	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx + 2, fy + 2, 270.f, font_large);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx, fy, 270.f, font_large);
+	cache.wzText.setText(psLab->aText.toUtf8().constData(), font_large);
+
+	fx = xOffset + psWidget->x();
+	fy = yOffset + psWidget->y() + cache.wzText.width();
+
+	cache.wzText.render(fx + 2, fy + 2, WZCOL_GREY, 270.f);
+	cache.wzText.render(fx, fy, WZCOL_TEXT_BRIGHT, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1595,13 +1874,19 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	bool			hilight = false;
 	bool			greyOut = psWidget->UserData; // if option is unavailable.
 
+	// Any widget using displayTextOption must have its pUserData initialized to a (DisplayTextOptionCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
+
+	cache.wzText.setText(psBut->pText.toUtf8().constData(), psBut->FontID);
+
 	if (widgGetMouseOver(psWScreen) == psBut->id)					// if mouse is over text then hilight.
 	{
 		hilight = true;
 	}
 
-	fw = iV_GetTextWidth(psBut->pText.toUtf8().constData(), psBut->FontID);
-	fy = yOffset + psWidget->y() + (psWidget->height() - iV_GetTextLineSize(psBut->FontID)) / 2 - iV_GetTextAboveBase(psBut->FontID);
+	fw = cache.wzText.width();
+	fy = yOffset + psWidget->y() + (psWidget->height() - cache.wzText.lineSize()) / 2 - cache.wzText.aboveBase();
 
 	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
 	{
@@ -1612,27 +1897,29 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		fx = xOffset + psWidget->x();
 	}
 
+	PIELIGHT colour;
+
 	if (greyOut)														// unavailable
 	{
-		iV_SetTextColour(WZCOL_TEXT_DARK);
+		colour = WZCOL_TEXT_DARK;
 	}
 	else															// available
 	{
 		if (hilight)													// hilight
 		{
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+			colour = WZCOL_TEXT_BRIGHT;
 		}
 		else if (psWidget->id == FRONTEND_HYPERLINK || psWidget->id == FRONTEND_DONATELINK || psWidget->id == FRONTEND_CHATLINK) // special case for our hyperlink
 		{
-			iV_SetTextColour(WZCOL_YELLOW);
+			colour = WZCOL_YELLOW;
 		}
 		else														// don't highlight
 		{
-			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+			colour = WZCOL_TEXT_MEDIUM;
 		}
 	}
 
-	iV_DrawText(psBut->pText.toUtf8().constData(), fx, fy, psBut->FontID);
+	cache.wzText.render(fx, fy, colour);
 
 	return;
 }
@@ -1649,11 +1936,19 @@ void addBackdrop()
 	sFormInit.formID = 0;
 	sFormInit.id = FRONTEND_BACKDROP;
 	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)((pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2);
-	sFormInit.y = (SWORD)((pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT) / 2);
-	sFormInit.width = HIDDEN_FRONTEND_WIDTH - 1;
-	sFormInit.height = HIDDEN_FRONTEND_HEIGHT - 1;
+	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry((SWORD)((pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2),
+							  (SWORD)((pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT) / 2),
+							  HIDDEN_FRONTEND_WIDTH - 1,
+							  HIDDEN_FRONTEND_HEIGHT - 1);
+	});
 	sFormInit.pDisplay = displayTitleBitmap;
+	sFormInit.pUserData = new TitleBitmapCache();
+	sFormInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete ((TitleBitmapCache *)psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	widgAddForm(psWScreen, &sFormInit);
 }
 
@@ -1664,14 +1959,16 @@ void addTopForm()
 
 	IntFormAnimated *topForm = new IntFormAnimated(parent, false);
 	topForm->id = FRONTEND_TOPFORM;
-	if (titleMode == MULTIOPTION)
-	{
-		topForm->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
-	}
-	else
-	{
-		topForm->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
-	}
+	topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		if (titleMode == MULTIOPTION)
+		{
+			psWidget->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
+		}
+		else
+		{
+			psWidget->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
+		}
+	}));
 
 	W_FORMINIT sFormInit;
 	sFormInit.formID = FRONTEND_TOPFORM;
@@ -1703,7 +2000,9 @@ void addBottomForm()
 
 	IntFormAnimated *botForm = new IntFormAnimated(parent);
 	botForm->id = FRONTEND_BOTFORM;
-	botForm->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
+	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
+	}));
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1735,6 +2034,12 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 
 	sLabInit.pDisplay = displayTextAt270;
 	sLabInit.pText = txt;
+	sLabInit.pUserData = new DisplayTextOptionCache();
+	sLabInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	widgAddLabel(psWScreen, &sLabInit);
 }
 
@@ -1767,6 +2072,12 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 	}
 
 	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
+	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
@@ -1809,6 +2120,12 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 	}
 
 	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
+	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
@@ -1918,4 +2235,21 @@ void changeTitleMode(tMode mode)
 	}
 
 	return;
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+// Handling Screen Size Changes
+
+/* Tell the frontend when the screen has been resized */
+void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	// NOTE:
+	// By setting the appropriate calcLayout functions on all interface elements,
+	// they should automatically recalculate their layout on screen resize.
+
+	// If the Video Options screen is up, the current resolution text must be updated
+	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_R) != nullptr)
+	{
+		widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+	}
 }

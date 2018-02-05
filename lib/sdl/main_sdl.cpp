@@ -35,8 +35,11 @@
 #include "lib/framework/utf.h"
 #include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/screen.h"
 #include "lib/gamelib/gtime.h"
 #include "src/warzoneconfig.h"
+#include "src/game.h"
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_clipboard.h>
@@ -68,8 +71,18 @@ int main(int argc, char *argv[])
 // At this time, we only have 1 window and 1 GL context.
 static SDL_Window *WZwindow = nullptr;
 static SDL_GLContext WZglcontext = nullptr;
+
+// The screen that the game window is on.
+int screenIndex = 0;
+// The logical resolution of the game in the game's coordinate system (points).
 unsigned int screenWidth = 0;
 unsigned int screenHeight = 0;
+// The logical resolution of the SDL window in the window's coordinate system (points) - i.e. not accounting for the Game Display Scale setting.
+unsigned int windowWidth = 0;
+unsigned int windowHeight = 0;
+// The current display scale factor.
+unsigned int current_displayScale = 100;
+float current_displayScaleFactor = 1.f;
 
 static std::vector<screeninfo> displaylist;	// holds all our possible display lists
 
@@ -124,6 +137,22 @@ static int dragY = 0;
 /* The current mouse button state */
 static INPUT_STATE aMouseState[MOUSE_END];
 static MousePresses mousePresses;
+
+/* The current screen resizing state for this iteration through the game loop, in the game coordinate system */
+struct ScreenSizeChange
+{
+	ScreenSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+	:	oldWidth(oldWidth)
+	,	oldHeight(oldHeight)
+	,	newWidth(newWidth)
+	,	newHeight(newHeight)
+	{ }
+	unsigned int oldWidth;
+	unsigned int oldHeight;
+	unsigned int newWidth;
+	unsigned int newHeight;
+};
+static ScreenSizeChange* currentScreenResizingStatus = nullptr;
 
 /* The size of the input buffer */
 #define INPUT_MAXSTR 256
@@ -416,6 +445,23 @@ std::vector<screeninfo> wzAvailableResolutions()
 	return displaylist;
 }
 
+std::vector<unsigned int> wzAvailableDisplayScales()
+{
+	static const unsigned int wzDisplayScales[] = { 100, 125, 150, 200, 250, 300, 400, 500 };
+	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
+}
+
+void setDisplayScale(unsigned int displayScale)
+{
+	current_displayScale = displayScale;
+	current_displayScaleFactor = (float)displayScale / 100.f;
+}
+
+unsigned int wzGetCurrentDisplayScale()
+{
+	return current_displayScale;
+}
+
 void wzShowMouse(bool visible)
 {
 	SDL_ShowCursor(visible ? SDL_ENABLE : SDL_DISABLE);
@@ -453,8 +499,24 @@ void wzToggleFullscreen()
 
 bool wzIsFullscreen()
 {
+	assert(WZwindow != nullptr);
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
-	if (flags & SDL_WINDOW_FULLSCREEN)
+	if ((flags & SDL_WINDOW_FULLSCREEN) || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP))
+	{
+		return true;
+	}
+	return false;
+}
+
+#if defined(WZ_OS_MAC)
+#include "cocoa_sdl_helpers.h"
+#endif
+
+bool wzIsMaximized()
+{
+	assert(WZwindow != nullptr);
+	Uint32 flags = SDL_GetWindowFlags(WZwindow);
+	if (flags & SDL_WINDOW_MAXIMIZED)
 	{
 		return true;
 	}
@@ -1135,8 +1197,8 @@ static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
  */
 static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 {
-	mouseXPos = buttonEvent->x;
-	mouseYPos = buttonEvent->y;
+	mouseXPos = (int)((float)buttonEvent->x / current_displayScaleFactor);
+	mouseYPos = (int)((float)buttonEvent->y / current_displayScaleFactor);
 
 	MOUSE_KEY_CODE mouseKeyCode;
 	switch (buttonEvent->button)
@@ -1216,8 +1278,8 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	{
 	case SDL_MOUSEMOTION:
 		/* store the current mouse position */
-		mouseXPos = motionEvent->x;
-		mouseYPos = motionEvent->y;
+		mouseXPos = (int)((float)motionEvent->x / current_displayScaleFactor);
+		mouseYPos = (int)((float)motionEvent->y / current_displayScaleFactor);
 
 		/* now see if a drag has started */
 		if ((aMouseState[dragKey].state == KEY_PRESSED ||
@@ -1240,10 +1302,316 @@ void wzMain(int &argc, char **argv)
 	appPtr = new QApplication(argc, argv);
 }
 
+#define MIN_WZ_GAMESCREEN_WIDTH 640
+#define MIN_WZ_GAMESCREEN_HEIGHT 480
+
+void handleGameScreenSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	screenWidth = newWidth;
+	screenHeight = newHeight;
+
+	pie_SetVideoBufferWidth(screenWidth);
+	pie_SetVideoBufferHeight(screenHeight);
+	pie_UpdateSurfaceGeometry();
+	screen_updateGeometry();
+
+	if (currentScreenResizingStatus == nullptr)
+	{
+		// The screen size change details are stored in scaled, logical units (points)
+		// i.e. the values expect by the game engine.
+		currentScreenResizingStatus = new ScreenSizeChange(oldWidth, oldHeight, screenWidth, screenHeight);
+	}
+	else
+	{
+		// update the new screen width / height, in case more than one resize message is processed this event loop
+		currentScreenResizingStatus->newWidth = screenWidth;
+		currentScreenResizingStatus->newHeight = screenHeight;
+	}
+}
+
+void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	windowWidth = newWidth;
+	windowHeight = newHeight;
+
+	// NOTE: This function receives the window size in the window's logical units, but not accounting for the interface scale factor.
+	// Therefore, the provided old/newWidth/Height must be divided by the interface scale factor to calculate the new
+	// *game* screen logical width / height.
+	unsigned int oldScreenWidth = oldWidth / current_displayScaleFactor;
+	unsigned int oldScreenHeight = oldHeight / current_displayScaleFactor;
+	unsigned int newScreenWidth = newWidth / current_displayScaleFactor;
+	unsigned int newScreenHeight = newHeight / current_displayScaleFactor;
+
+	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
+
+	// Update the viewport to use the new *drawable* size (which may be greater than the new window size
+	// if SDL's built-in high-DPI support is enabled and functioning).
+	int drawableWidth = 0, drawableHeight = 0;
+	SDL_GL_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
+	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
+	glViewport(0, 0, drawableWidth, drawableHeight);
+	glCullFace(GL_FRONT);
+	glEnable(GL_CULL_FACE);
+}
+
+
+void wzGetMinimumWindowSizeForDisplayScaleFactor(unsigned int *minWindowWidth, unsigned int *minWindowHeight, float displayScaleFactor = current_displayScaleFactor)
+{
+	if (minWindowWidth != nullptr)
+	{
+		*minWindowWidth = (int)ceil(MIN_WZ_GAMESCREEN_WIDTH * displayScaleFactor);
+	}
+	if (minWindowHeight != nullptr)
+	{
+		*minWindowHeight = (int)ceil(MIN_WZ_GAMESCREEN_HEIGHT * displayScaleFactor);
+	}
+}
+
+void wzGetMaximumDisplayScaleFactorsForWindowSize(unsigned int windowWidth, unsigned int windowHeight, float *horizScaleFactor, float *vertScaleFactor)
+{
+	if (horizScaleFactor != nullptr)
+	{
+		*horizScaleFactor = (float)windowWidth / (float)MIN_WZ_GAMESCREEN_WIDTH;
+	}
+	if (vertScaleFactor != nullptr)
+	{
+		*vertScaleFactor = (float)windowHeight / (float)MIN_WZ_GAMESCREEN_HEIGHT;
+	}
+}
+
+float wzGetMaximumDisplayScaleFactorForWindowSize(unsigned int windowWidth, unsigned int windowHeight)
+{
+	float maxHorizScaleFactor = 0.f, maxVertScaleFactor = 0.f;
+	wzGetMaximumDisplayScaleFactorsForWindowSize(windowWidth, windowHeight, &maxHorizScaleFactor, &maxVertScaleFactor);
+	return std::min(maxHorizScaleFactor, maxVertScaleFactor);
+}
+
+// returns: the maximum display scale percentage (sourced from wzAvailableDisplayScales), or 0 if window is below the minimum required size for the minimum support display scale
+unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight)
+{
+	float maxDisplayScaleFactor = wzGetMaximumDisplayScaleFactorForWindowSize(windowWidth, windowHeight);
+	unsigned int maxDisplayScalePercentage = floor(maxDisplayScaleFactor * 100.f);
+
+	auto availableDisplayScales = wzAvailableDisplayScales();
+	std::sort(availableDisplayScales.begin(), availableDisplayScales.end());
+
+	auto maxDisplayScale = std::lower_bound(availableDisplayScales.begin(), availableDisplayScales.end(), maxDisplayScalePercentage);
+	if (maxDisplayScale == availableDisplayScales.end())
+	{
+		return 0;
+	}
+	if (*maxDisplayScale != maxDisplayScalePercentage)
+	{
+		--maxDisplayScale;
+	}
+	return *maxDisplayScale;
+}
+
+bool wzWindowSizeIsSmallerThanMinimumRequired(unsigned int windowWidth, unsigned int windowHeight, float displayScaleFactor = current_displayScaleFactor)
+{
+	unsigned int minWindowWidth = 0, minWindowHeight = 0;
+	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, displayScaleFactor);
+	return ((windowWidth < minWindowWidth) || (windowHeight < minWindowHeight));
+}
+
+void processScreenSizeChangeNotificationIfNeeded()
+{
+	if (currentScreenResizingStatus != nullptr)
+	{
+		// WZ must process the screen size change
+		gameScreenSizeDidChange(currentScreenResizingStatus->oldWidth, currentScreenResizingStatus->oldHeight, currentScreenResizingStatus->newWidth, currentScreenResizingStatus->newHeight);
+		delete currentScreenResizingStatus;
+		currentScreenResizingStatus = nullptr;
+	}
+}
+
+bool wzChangeDisplayScale(unsigned int displayScale)
+{
+	float newDisplayScaleFactor = (float)displayScale / 100.f;
+
+	if (wzWindowSizeIsSmallerThanMinimumRequired(windowWidth, windowHeight, newDisplayScaleFactor))
+	{
+		// The current window width and/or height are below the required minimum window size
+		// for this display scale factor.
+		return false;
+	}
+
+	// Store the new display scale factor
+	setDisplayScale(displayScale);
+
+	// Set the new minimum window size
+	unsigned int minWindowWidth = 0, minWindowHeight = 0;
+	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, newDisplayScaleFactor);
+	SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
+
+	// Update the game's logical screen size
+	unsigned int oldScreenWidth = screenWidth, oldScreenHeight = screenHeight;
+	unsigned int newScreenWidth = windowWidth, newScreenHeight = windowHeight;
+	if (newDisplayScaleFactor > 1.0)
+	{
+		newScreenWidth = windowWidth / newDisplayScaleFactor;
+		newScreenHeight = windowHeight / newDisplayScaleFactor;
+	}
+	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
+	gameDisplayScaleFactorDidChange(newDisplayScaleFactor);
+
+	// Update the current mouse coordinates
+	// (The prior stored mouseXPos / mouseYPos apply to the old coordinate system, and must be translated to the
+	// new game coordinate system. Since the mouse hasn't moved - or it would generate events that override this -
+	// the current position with respect to the window (which hasn't changed size) can be queried and used to
+	// calculate the new game coordinate system mouse position.)
+	//
+	int windowMouseXPos = 0, windowMouseYPos = 0;
+	SDL_GetMouseState(&windowMouseXPos, &windowMouseYPos);
+	debug(LOG_WZ, "Old mouse position: %d, %d", mouseXPos, mouseYPos);
+	mouseXPos = (int)((float)windowMouseXPos / current_displayScaleFactor);
+	mouseYPos = (int)((float)windowMouseYPos / current_displayScaleFactor);
+	debug(LOG_WZ, "New mouse position: %d, %d", mouseXPos, mouseYPos);
+
+
+	processScreenSizeChangeNotificationIfNeeded();
+
+	return true;
+}
+
+bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height)
+{
+	assert(WZwindow != nullptr);
+
+#if defined(WZ_OS_MAC)
+	// Workaround for SDL (2.0.5) quirk on macOS:
+	//	When the green titlebar button is used to fullscreen the app in a new space:
+	//		- SDL does not return SDL_WINDOW_MAXIMIZED nor SDL_WINDOW_FULLSCREEN.
+	//		- Attempting to change the window resolution "succeeds" (in that the new window size is "set" and returned
+	//		  by the SDL GetWindowSize functions).
+	//		- But other things break (ex. mouse coordinate translation) if the resolution is changed while the window
+	//        is maximized in this way.
+	//		- And the GL drawable size remains unchanged.
+	//		- So if it's been fullscreened by the user like this, but doesn't show as SDL_WINDOW_FULLSCREEN,
+	//		  prevent window resolution changes.
+	if (cocoaIsSDLWindowFullscreened(WZwindow) && !wzIsFullscreen())
+	{
+		debug(LOG_WZ, "The main window is fullscreened, but SDL doesn't think it is. Changing window resolution is not possible in this state. (SDL Bug).");
+		return false;
+	}
+#endif
+
+	// Get current window size + position + bounds
+	int prev_x = 0, prev_y = 0, prev_width = 0, prev_height = 0;
+	SDL_GetWindowPosition(WZwindow, &prev_x, &prev_y);
+	SDL_GetWindowSize(WZwindow, &prev_width, &prev_height);
+
+	// Get the usable bounds for the current screen
+	SDL_Rect bounds;
+	if (wzIsFullscreen())
+	{
+		// When in fullscreen mode, obtain the screen's overall bounds
+		if (SDL_GetDisplayBounds(screen, &bounds) != 0) {
+			debug(LOG_ERROR, "Failed to get display bounds for screen: %d", screen);
+			return false;
+		}
+		debug(LOG_WZ, "SDL_GetDisplayBounds for screen [%d]: pos %d x %d : res %d x %d", screen, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
+	}
+	else
+	{
+		// When in windowed mode, obtain the screen's *usable* display bounds
+		if (SDL_GetDisplayUsableBounds(screen, &bounds) != 0) {
+			debug(LOG_ERROR, "Failed to get usable display bounds for screen: %d", screen);
+			return false;
+		}
+		debug(LOG_WZ, "SDL_GetDisplayUsableBounds for screen [%d]: pos %d x %d : WxH %d x %d", screen, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
+
+		// Verify that the desired window size does not exceed the usable bounds of the specified display.
+		if ((width > bounds.w) || (height > bounds.h))
+		{
+			debug(LOG_WZ, "Unable to change window size to (%d x %d) because it is larger than the screen's usable bounds", width, height);
+			return false;
+		}
+	}
+
+	// Check whether the desired window size is smaller than the minimum required for the current Display Scale
+	unsigned int priorDisplayScale = current_displayScale;
+	if (wzWindowSizeIsSmallerThanMinimumRequired(width, height))
+	{
+		// The new window size is smaller than the minimum required size for the current display scale level.
+
+		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(width, height);
+		if (maxDisplayScale < 100)
+		{
+			// Cannot adjust display scale factor below 1. Desired window size is below the minimum supported.
+			debug(LOG_WZ, "Unable to change window size to (%d x %d) because it is smaller than the minimum supported at a 100%% display scale", width, height);
+			return false;
+		}
+
+		// Adjust the current display scale level to the nearest supported level.
+		debug(LOG_WZ, "The current Display Scale (%d%%) is too high for the desired window size. Reducing the current Display Scale to the maximum possible for the desired window size: %d%%.", current_displayScale, maxDisplayScale);
+		wzChangeDisplayScale(maxDisplayScale);
+
+		// Store the new display scale
+		war_SetDisplayScale(maxDisplayScale);
+	}
+
+	// Position the window (centered) on the screen (for its upcoming new size)
+	bounds.w -= (bounds.w + width) / 2;
+	bounds.h -= (bounds.h + height) / 2;
+	SDL_SetWindowPosition(WZwindow, bounds.x + bounds.w, bounds.y + bounds.h);
+
+	// Change the window size
+	// NOTE: Changing the window size will trigger an SDL window size changed event which will handle recalculating layout.
+	SDL_SetWindowSize(WZwindow, width, height);
+
+	// Check that the new size is the desired size
+	int resultingWidth, resultingHeight = 0;
+	SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
+	if (resultingWidth != width || resultingHeight != height) {
+		// Attempting to set the resolution failed
+		// Revert to the prior position + resolution + display scale, and return false
+		SDL_SetWindowSize(WZwindow, prev_width, prev_height);
+		SDL_SetWindowPosition(WZwindow, prev_x, prev_y);
+		if (current_displayScale != priorDisplayScale)
+		{
+			// Reverse the correction applied to the Display Scale to support the desired resolution.
+			wzChangeDisplayScale(priorDisplayScale);
+			war_SetDisplayScale(priorDisplayScale);
+		}
+		return false;
+	}
+
+	// Store the updated screenIndex
+	screenIndex = screen;
+
+	return true;
+}
+
+// Returns the current window screen, width, and height
+void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height)
+{
+	if (screen != nullptr)
+	{
+		*screen = screenIndex;
+	}
+
+	int currentWidth = 0, currentHeight = 0;
+	SDL_GetWindowSize(WZwindow, &currentWidth, &currentHeight);
+	assert(currentWidth >= 0);
+	assert(currentHeight >= 0);
+	if (width != nullptr)
+	{
+		*width = currentWidth;
+	}
+	if (height != nullptr)
+	{
+		*height = currentHeight;
+	}
+}
+
 // This stage, we handle display mode setting
-bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
+bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
 	// populate with the saved values (if we had any)
+	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
+	// (i.e. not taking into account the game display scale). This function later sets the display system
+	// to the *game screen* width and height (taking into account the display scale).
 	int width = pie_GetVideoBufferWidth();
 	int height = pie_GetVideoBufferHeight();
 	int bitDepth = pie_GetVideoBufferDepth();
@@ -1253,6 +1621,14 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		debug(LOG_ERROR, "Error: Could not initialise SDL (%s).", SDL_GetError());
 		return false;
 	}
+
+#if defined(WZ_OS_MAC)
+	// on macOS, support maximizing to a fullscreen space (modern behavior)
+	if (SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "1") == SDL_FALSE)
+	{
+		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES");
+	}
+#endif
 
 	// Set the double buffer OpenGL attribute.
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -1284,9 +1660,9 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 			}
 
 			debug(LOG_WZ, "Monitor [%d] %dx%d %d %s", i, displaymode.w, displaymode.h, displaymode.refresh_rate, SDL_GetPixelFormatName(displaymode.format));
-			if (displaymode.w < 640 || displaymode.h < 480)
+			if ((displaymode.w < MIN_WZ_GAMESCREEN_WIDTH) || (displaymode.h < MIN_WZ_GAMESCREEN_HEIGHT))
 			{
-				debug(LOG_WZ, "Monitor mode resolution < 640x480 -- discarding entry");
+				debug(LOG_WZ, "Monitor mode resolution < %d x %d -- discarding entry", MIN_WZ_GAMESCREEN_WIDTH, MIN_WZ_GAMESCREEN_HEIGHT);
 			}
 			else if (displaymode.refresh_rate < 59)
 			{
@@ -1319,16 +1695,33 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 
 	if (width == 0 || height == 0)
 	{
-		pie_SetVideoBufferWidth(width = screenWidth = current.w);
-		pie_SetVideoBufferHeight(height = screenHeight = current.h);
+		width = windowWidth = current.w;
+		height = windowHeight = current.h;
 	}
 	else
 	{
-		screenWidth = width;
-		screenHeight = height;
+		windowWidth = width;
+		windowHeight = height;
 	}
-	screenWidth = MAX(screenWidth, 640);
-	screenHeight = MAX(screenHeight, 480);
+
+	setDisplayScale(war_GetDisplayScale());
+
+	// Calculate the minimum window size given the current display scale
+	unsigned int minWindowWidth = 0, minWindowHeight = 0;
+	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
+
+	if ((windowWidth < minWindowWidth) || (windowHeight < minWindowHeight))
+	{
+		// The current window width and/or height is lower than the required minimum for the current display scale.
+		//
+		// Reset the display scale to 100%, and recalculate the required minimum window size.
+		setDisplayScale(100);
+		war_SetDisplayScale(100); // save the new display scale configuration
+		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
+	}
+
+	windowWidth = MAX(windowWidth, minWindowWidth);
+	windowHeight = MAX(windowHeight, minWindowHeight);
 
 	//// The flags to pass to SDL_CreateWindow
 	int video_flags  = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
@@ -1336,6 +1729,21 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	if (fullscreen)
 	{
 		video_flags |= SDL_WINDOW_FULLSCREEN;
+
+		// FIXME: SDL's High-DPI mode does not currently work properly when fullscreened (as of SDL 2.0.5)
+		highDPI = false;
+	}
+	else
+	{
+		// Allow the window to be manually resized, if not fullscreen
+		video_flags |= SDL_WINDOW_RESIZABLE;
+	}
+
+	if (highDPI)
+	{
+		// Allow SDL to enable its built-in High-DPI display support.
+		// As of SDL 2.0.5, this only works on macOS. (But SDL 2.1.x+ may enable Windows support.)
+		video_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 	}
 
 	SDL_Rect bounds;
@@ -1350,10 +1758,11 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		SDL_Quit();
 		exit(EXIT_FAILURE);
 	}
-	SDL_GetDisplayBounds(war_GetScreen(), &bounds);
-	bounds.w -= (bounds.w + screenWidth) / 2;
-	bounds.h -= (bounds.h + screenHeight) / 2;
-	WZwindow = SDL_CreateWindow(PACKAGE_NAME, bounds.x + bounds.w, bounds.y + bounds.h, screenWidth, screenHeight, video_flags);
+	screenIndex = war_GetScreen();
+	SDL_GetDisplayBounds(screenIndex, &bounds);
+	int xOffset = bounds.w - ((bounds.w + windowWidth) / 2);
+	int yOffset = bounds.h - ((bounds.h + windowHeight) / 2);
+	WZwindow = SDL_CreateWindow(PACKAGE_NAME, bounds.x + xOffset, bounds.y + yOffset, windowWidth, windowHeight, video_flags);
 
 	if (!WZwindow)
 	{
@@ -1362,11 +1771,51 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		exit(EXIT_FAILURE);
 	}
 
+	// Check that the actual window size matches the desired window size
+	int resultingWidth, resultingHeight = 0;
+	SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
+	if (resultingWidth != windowWidth || resultingHeight != windowHeight) {
+		// Failed to create window at desired size (This can happen for a number of reasons)
+		debug(LOG_ERROR, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; Reverting to default resolution of %d x %d", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
+
+		// Default to base resolution
+		SDL_SetWindowSize(WZwindow, minWindowWidth, minWindowHeight);
+		windowWidth = minWindowWidth;
+		windowHeight = minWindowHeight;
+	}
+
+	// Calculate the game screen's logical dimensions
+	screenWidth = windowWidth;
+	screenHeight = windowHeight;
+	if (current_displayScaleFactor > 1.0f)
+	{
+		screenWidth = windowWidth / current_displayScaleFactor;
+		screenHeight = windowHeight / current_displayScaleFactor;
+	}
+	pie_SetVideoBufferWidth(screenWidth);
+	pie_SetVideoBufferHeight(screenHeight);
+
+	// Set the minimum window size
+	SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
+
 	WZglcontext = SDL_GL_CreateContext(WZwindow);
 	if (!WZglcontext)
 	{
 		debug(LOG_ERROR, "Failed to create a openGL context! [%s]", SDL_GetError());
 		return false;
+	}
+
+	if (highDPI)
+	{
+		// When high-DPI mode is enabled, retrieve the DrawableSize in pixels
+		// for use in the glViewport function - this will be the actual
+		// pixel dimensions, not the window size (which is in points).
+		//
+		// NOTE: Do not do this if high-DPI support is disabled, or the viewport
+		// size may be set inappropriately.
+
+		SDL_GL_GetDrawableSize(WZwindow, &width, &height);
+		debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", windowWidth, windowHeight, width, height);
 	}
 
 	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
@@ -1408,17 +1857,19 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		exit(1);
 	}
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	uint32_t rmask = 0xff000000;
-	uint32_t gmask = 0x00ff0000;
-	uint32_t bmask = 0x0000ff00;
-	uint32_t amask = 0x000000ff;
-#else
-	uint32_t rmask = 0x000000ff;
-	uint32_t gmask = 0x0000ff00;
-	uint32_t bmask = 0x00ff0000;
-	uint32_t amask = 0xff000000;
-#endif
+#if !defined(WZ_OS_MAC) // Do not use this method to set the window icon on macOS.
+
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		uint32_t rmask = 0xff000000;
+		uint32_t gmask = 0x00ff0000;
+		uint32_t bmask = 0x0000ff00;
+		uint32_t amask = 0x000000ff;
+	#else
+		uint32_t rmask = 0x000000ff;
+		uint32_t gmask = 0x0000ff00;
+		uint32_t bmask = 0x00ff0000;
+		uint32_t amask = 0xff000000;
+	#endif
 
 	SDL_Surface *surface_icon = SDL_CreateRGBSurfaceFrom((void *)wz2100icon.pixel_data, wz2100icon.width, wz2100icon.height, wz2100icon.bytes_per_pixel * 8,
 	                            wz2100icon.width * wz2100icon.bytes_per_pixel, rmask, gmask, bmask, amask);
@@ -1431,6 +1882,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	{
 		debug(LOG_ERROR, "Could not set window icon because %s", SDL_GetError());
 	}
+#endif
 
 	SDL_SetWindowTitle(WZwindow, PACKAGE_NAME);
 
@@ -1449,6 +1901,111 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	glCullFace(GL_FRONT);
 	glEnable(GL_CULL_FACE);
 
+	return true;
+}
+
+
+// Calculates and returns the scale factor from the SDL window's coordinate system (in points) to the raw
+// underlying pixels of the viewport / renderer.
+//
+// IMPORTANT: This value is *non-inclusive* of any user-configured Game Display Scale.
+//
+// This exposes what is effectively the SDL window's "High-DPI Scale Factor", if SDL's high-DPI support is enabled and functioning.
+//
+// In the normal, non-high-DPI-supported case, (in which the context's drawable size in pixels and the window's logical
+// size in points are equal) this will return 1.0 for both values.
+//
+void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor)
+{
+	assert(WZwindow != nullptr);
+
+	// Obtain the window context's drawable size in pixels
+	int drawableWidth, drawableHeight = 0;
+	SDL_GL_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
+
+	// Obtain the logical window size (in points)
+	int windowWidth, windowHeight = 0;
+	SDL_GetWindowSize(WZwindow, &windowWidth, &windowHeight);
+
+	debug(LOG_WZ, "Window Logical Size (%d, %d) vs Drawable Size in Pixels (%d, %d)", windowWidth, windowHeight, drawableWidth, drawableHeight);
+
+	if (horizScaleFactor != nullptr)
+	{
+		*horizScaleFactor = ((float)drawableWidth / (float)windowWidth) * current_displayScaleFactor;
+	}
+	if (vertScaleFactor != nullptr)
+	{
+		*vertScaleFactor = ((float)drawableHeight / (float)windowHeight) * current_displayScaleFactor;
+	}
+
+	int displayIndex = SDL_GetWindowDisplayIndex(WZwindow);
+	if (displayIndex < 0)
+	{
+		debug(LOG_ERROR, "Failed to get the display index for the window because : %s", SDL_GetError());
+	}
+
+	float hdpi, vdpi;
+	if (SDL_GetDisplayDPI(displayIndex, nullptr, &hdpi, &vdpi) < 0)
+	{
+		debug(LOG_ERROR, "Failed to get the display DPI because : %s", SDL_GetError());
+	}
+	else
+	{
+		debug(LOG_WZ, "Display DPI: %f, %f", hdpi, vdpi);
+	}
+}
+
+// Calculates and returns the total scale factor from the game's coordinate system (in points)
+// to the raw underlying pixels of the viewport / renderer.
+//
+// IMPORTANT: This value is *inclusive* of both the user-configured "Display Scale" *AND* any underlying
+// high-DPI / "Retina" display support provided by SDL.
+//
+// It is equivalent to: (SDL Window's High-DPI Scale Factor) x (WZ Game Display Scale Factor)
+//
+// Therefore, if SDL is providing a supported high-DPI window / context, this value will be greater
+// than the WZ (user-configured) Display Scale Factor.
+//
+// It should be used only for internal (non-user-displayed) cases in which the full scaling factor from
+// the game system's coordinate system (in points) to the underlying display pixels is required.
+// (For example, when rasterizing text for best display.)
+//
+void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor)
+{
+	float horizWindowScaleFactor = 0.f, vertWindowScaleFactor = 0.f;
+	wzGetWindowToRendererScaleFactor(&horizWindowScaleFactor, &vertWindowScaleFactor);
+	assert(horizWindowScaleFactor != 0.f);
+	assert(vertWindowScaleFactor != 0.f);
+
+	if (horizScaleFactor != nullptr)
+	{
+		*horizScaleFactor = horizWindowScaleFactor * current_displayScaleFactor;
+	}
+	if (vertScaleFactor != nullptr)
+	{
+		*vertScaleFactor = vertWindowScaleFactor * current_displayScaleFactor;
+	}
+}
+
+void wzSetWindowIsResizable(bool resizable)
+{
+	assert(WZwindow != nullptr);
+	SDL_bool sdl_resizable = (resizable) ? SDL_TRUE : SDL_FALSE;
+	SDL_SetWindowResizable(WZwindow, sdl_resizable);
+}
+
+bool wzIsWindowResizable()
+{
+	Uint32 flags = SDL_GetWindowFlags(WZwindow);
+	if (flags & SDL_WINDOW_RESIZABLE)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool wzSupportsLiveResolutionChanges()
+{
 	return true;
 }
 
@@ -1472,9 +2029,34 @@ static void handleActiveEvent(SDL_Event *event)
 			break;
 		case SDL_WINDOWEVENT_MOVED:
 			debug(LOG_WZ, "Window %d moved to %d,%d", event->window.windowID, event->window.data1, event->window.data2);
+				// FIXME: Handle detecting which screen the window was moved to, and update saved war_SetScreen?
 			break;
 		case SDL_WINDOWEVENT_RESIZED:
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
 			debug(LOG_WZ, "Window %d resized to %dx%d", event->window.windowID, event->window.data1, event->window.data2);
+			{
+				unsigned int oldWindowWidth = windowWidth;
+				unsigned int oldWindowHeight = windowHeight;
+
+				Uint32 windowFlags = SDL_GetWindowFlags(WZwindow);
+				debug(LOG_WZ, "Window resized to window flags: %u", windowFlags);
+
+				int newWindowWidth = 0, newWindowHeight = 0;
+				SDL_GetWindowSize(WZwindow, &newWindowWidth, &newWindowHeight);
+
+				if ((event->window.data1 != newWindowWidth) || (event->window.data2 != newWindowHeight))
+				{
+					// This can happen - so we use the values retrieved from SDL_GetWindowSize in any case - but
+					// log it for tracking down the SDL-related causes later.
+					debug(LOG_WARNING, "Received width and height (%d x %d) do not match those from GetWindowSize (%d x %d)", event->window.data1, event->window.data2, newWindowWidth, newWindowHeight);
+				}
+
+				handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+
+				// Store the new values (in case the user manually resized the window bounds)
+				war_SetWidth(newWindowWidth);
+				war_SetHeight(newWindowHeight);
+			}
 			break;
 		case SDL_WINDOWEVENT_MINIMIZED:
 			debug(LOG_WZ, "Window %d minimized", event->window.windowID);
@@ -1548,6 +2130,7 @@ void wzMainEventLoop(void)
 			}
 		}
 		appPtr->processEvents();		// Qt needs to do its stuff
+		processScreenSizeChangeNotificationIfNeeded();
 		mainLoop();				// WZ does its thing
 		inputNewFrame();			// reset input states
 	}

@@ -67,6 +67,20 @@
 #define KM_ENTRYH			(16)
 
 
+struct DisplayKeyMapCache {
+	WzText wzNameText;
+	WzText wzBindingText;
+};
+
+struct DisplayKeyMapData {
+	DisplayKeyMapData(KEY_MAPPING *psMapping)
+	: psMapping(psMapping)
+	{ }
+
+	KEY_MAPPING *psMapping;
+	DisplayKeyMapCache cache;
+};
+
 // ////////////////////////////////////////////////////////////////////////////
 // variables
 
@@ -77,7 +91,7 @@ static KEY_MAPPING	*selectedKeyMap;
 
 static bool pushedKeyMap(UDWORD key)
 {
-	selectedKeyMap = (KEY_MAPPING *)widgGetFromID(psWScreen, key)->pUserData;
+	selectedKeyMap = static_cast<DisplayKeyMapData *>(widgGetFromID(psWScreen, key)->pUserData)->psMapping;
 	if (selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
 	{
 		selectedKeyMap = nullptr;
@@ -249,11 +263,15 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 // display a keymap on the interface.
 static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	// Any widget using displayKeyMap must have its pUserData initialized to a (DisplayKeyMapData*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayKeyMapData& data = *static_cast<DisplayKeyMapData *>(psWidget->pUserData);
+
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 	int w = psWidget->width();
 	int h = psWidget->height();
-	KEY_MAPPING *psMapping = (KEY_MAPPING *)psWidget->pUserData;
+	KEY_MAPPING *psMapping = data.psMapping;
 	char sKey[MAX_STR_LENGTH];
 
 	if (psMapping == selectedKeyMap)
@@ -271,18 +289,20 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// draw name
-	iV_SetTextColour(WZCOL_FORM_TEXT);
-	iV_DrawText(_(psMapping->name.c_str()), x + 2, y + (psWidget->height() / 2) + 3, font_regular);
+	data.cache.wzNameText.setText(_(psMapping->name.c_str()), font_regular);
+	data.cache.wzNameText.render(x + 2, y + (psWidget->height() / 2) + 3, WZCOL_FORM_TEXT);
 
 	// draw binding
 	keyMapToString(sKey, psMapping);
 	// Check to see if key is on the numpad, if so tell user and change color
+	PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
 	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
 	{
-		iV_SetTextColour(WZCOL_YELLOW);
+		bindingTextColor = WZCOL_YELLOW;
 		sstrcat(sKey, " (numpad)");
 	}
-	iV_DrawText(sKey, x + 364, y + (psWidget->height() / 2) + 3, font_regular);
+	data.cache.wzBindingText.setText(sKey, font_regular);
+	data.cache.wzBindingText.render(x + 364, y + (psWidget->height() / 2) + 3, bindingTextColor);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -300,7 +320,9 @@ bool startKeyMapEditor(bool first)
 
 	IntFormAnimated *kmForm = new IntFormAnimated(parent, false);
 	kmForm->id = KM_FORM;
-	kmForm->setGeometry(KM_X, KM_Y, KM_W, KM_H);
+	kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);
+	}));
 
 	addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
 	            8, 5,
@@ -338,8 +360,13 @@ bool startKeyMapEditor(bool first)
 	{
 		W_BUTTON *button = new W_BUTTON(kmList);
 		button->id = KM_START + (i - mappings.begin());
-		button->pUserData = *i;
 		button->displayFunction = displayKeyMap;
+		button->pUserData = new DisplayKeyMapData(*i);
+		button->setOnDelete([](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayKeyMapData *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		});
 		kmList->addWidgetToLayout(button);
 	}
 

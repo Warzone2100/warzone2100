@@ -155,33 +155,80 @@ static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
  * \param mode  the specified alliance
  * \param player the specified player
  */
-static void SetPlayerTextColor(int mode, UDWORD player)
+static PIELIGHT GetPlayerTextColor(int mode, UDWORD player)
 {
 	// override color if they are dead...
 	if (!apsDroidLists[player] && !apsStructLists[player])
 	{
-		iV_SetTextColour(WZCOL_GREY);			// dead text color
+		return WZCOL_GREY;			// dead text color
 	}
 	// the colors were chosen to match the FRIEND/FOE radar map colors.
 	else if (mode == ALLIANCE_FORMED)
 	{
-		iV_SetTextColour(WZCOL_YELLOW);			// Human alliance text color
+		return WZCOL_YELLOW;		// Human alliance text color
 	}
-	else if (isHumanPlayer(player))				// Human player, no alliance
+	else if (isHumanPlayer(player))		// Human player, no alliance
 	{
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);	// Normal text color
+		return WZCOL_TEXT_BRIGHT;	// Normal text color
 	}
 	else
 	{
-		iV_SetTextColour(WZCOL_RED);			// Enemy color
+		return WZCOL_RED;			// Enemy color
 	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
+
+struct DisplayRequestOptionCache {
+	Sha256 hash;
+	WzText wzHashText;
+
+private:
+	WzText wzText;
+	std::string _fullButString;
+	int _widgetWidth = 0;
+
+public:
+	// For utilizing the cached (main) display text
+	bool canUseCachedText(const std::string &fullButString, int widgetWidth)
+	{
+		return (_widgetWidth == widgetWidth) && (_fullButString == fullButString);
+	}
+	void setCachedText(const std::string &text, iV_fonts fontID, const std::string &fullButString, int widgetWidth)
+	{
+		wzText.setText(text, fontID);
+		_fullButString = fullButString;
+		_widgetWidth = widgetWidth;
+	}
+	void renderCachedText(Vector2i position, PIELIGHT colour, float rotation = 0.0f)
+	{
+		wzText.render(position, colour, rotation);
+	}
+	void renderCachedText(int x, int y, PIELIGHT colour, float rotation = 0.0f)
+	{
+		renderCachedText(Vector2i{x,y}, colour, rotation);
+	}
+};
+
+struct DisplayRequestOptionData {
+
+	DisplayRequestOptionData(LEVEL_DATASET *pMapData = nullptr)
+	: pMapData(pMapData)
+	, cache()
+	{ }
+
+	LEVEL_DATASET				*pMapData;
+	DisplayRequestOptionCache	cache;
+};
+
 void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	LEVEL_DATASET *mapData = (LEVEL_DATASET *)psWidget->pUserData;
+	// Any widget using displayRequestOption must have its pUserData initialized to a (DisplayRequestOptionData*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayRequestOptionData& data = *static_cast<DisplayRequestOptionData *>(psWidget->pUserData);
+
+	LEVEL_DATASET *mapData = data.pMapData;
 
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -191,22 +238,27 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
+	PIELIGHT colour;
 	if (mapData && CheckForMod(mapData->realFileName))
 	{
-		iV_SetTextColour(WZCOL_RED);
+		colour = WZCOL_RED;
 	}
 	else
 	{
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		colour = WZCOL_TEXT_BRIGHT;
 	}
 
-
-	while (iV_GetTextWidth(butString, font_regular) > psWidget->width() - 10)
+	if (!data.cache.canUseCachedText(butString, psWidget->width()))
 	{
-		butString[strlen(butString) - 1] = '\0';
+		std::string fullButString = butString;
+		while (iV_GetTextWidth(butString, font_regular) > psWidget->width() - 10)
+		{
+			butString[strlen(butString) - 1] = '\0';
+		}
+		data.cache.setCachedText(butString, font_regular, fullButString, psWidget->width());
 	}
 
-	iV_DrawText(butString, x + 6, y + 12, font_regular);	//draw text
+	data.cache.renderCachedText(x + 6, y + 12, colour);	//draw text
 
 	if (mapData != nullptr)
 	{
@@ -223,13 +275,19 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 		if (!hash.isZero())
 		{
-			iV_SetTextColour(WZCOL_TEXT_DARK);
-			sstrcpy(butString, hash.toString().c_str());
-			while (iV_GetTextWidth(butString, font_small) > psWidget->width() - 10 - (8 + mapData->players * 6))
+			if (hash != data.cache.hash)
 			{
-				butString[strlen(butString) - 1] = '\0';
+				sstrcpy(butString, hash.toString().c_str());
+				while (iV_GetTextWidth(butString, font_small) > psWidget->width() - 10 - (8 + mapData->players * 6))
+				{
+					butString[strlen(butString) - 1] = '\0';
+				}
+
+				// Update the cached hash text
+				data.cache.hash = hash;
+				data.cache.wzHashText.setText(butString, font_small);
 			}
-			iV_DrawText(butString, x + 6 + 8 + mapData->players * 6, y + 26, font_small);
+			data.cache.wzHashText.render(x + 6 + 8 + mapData->players * 6, y + 26, WZCOL_TEXT_DARK);
 		}
 
 		// if map, then draw no. of players.
@@ -243,39 +301,60 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
+struct DisplayCamTypeButCache {
+	WzText wzText;
+};
+
 static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 	char buffer[8];
 
+	// Any widget using displayCamTypeBut must have its pUserData initialized to a (DisplayCamTypeButCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayCamTypeButCache& cache = *static_cast<DisplayCamTypeButCache *>(psWidget->pUserData);
+
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	sprintf(buffer, "T%i", (int)(psWidget->UserData));
+
+	PIELIGHT colour;
 	if ((unsigned int)(psWidget->UserData) == current_tech)
 	{
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		colour = WZCOL_TEXT_BRIGHT;
 	}
 	else
 	{
-		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+		colour = WZCOL_TEXT_MEDIUM;
 	}
-	iV_DrawText(buffer, x + 2, y + 12, font_regular);
+	cache.wzText.setText(buffer, font_regular);
+	cache.wzText.render(x + 2, y + 12, colour);
 }
+
+struct DisplayNumPlayersButCache {
+	WzText wzText;
+};
 
 static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	// Any widget using displayNumPlayersBut must have its pUserData initialized to a (DisplayNumPlayersButCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayNumPlayersButCache& cache = *static_cast<DisplayNumPlayersButCache*>(psWidget->pUserData);
+
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 	char buffer[8];
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+
+	PIELIGHT colour;
 	if ((unsigned int)(psWidget->UserData) == current_numplayers)
 	{
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		colour = WZCOL_TEXT_BRIGHT;
 	}
 	else
 	{
-		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+		colour = WZCOL_TEXT_MEDIUM;
 	}
 	if ((unsigned int)(psWidget->UserData) == 0)
 	{
@@ -286,7 +365,8 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 		sprintf(buffer, "%iP", (int)(psWidget->UserData));
 		buffer[2] = '\0';  // Truncate 'P' if 2 digits, since there isn't room.
 	}
-	iV_DrawText(buffer, x + 2, y + 12, font_regular);
+	cache.wzText.setText(buffer, font_regular);
+	cache.wzText.render(x + 2, y + 12, colour);
 }
 
 static int stringRelevance(std::string const &string, std::string const &search)
@@ -334,6 +414,12 @@ static int stringRelevance(std::string const &string, std::string const &search)
 	return scores[str.size() + sea.size() * strDim];
 }
 
+void multiMenuScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	if (psRScreen == nullptr) return;
+	psRScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+}
+
 /** Searches in the given search directory for files ending with the
  *  given extension. Then will create a window with buttons for each
  *  found file.
@@ -366,7 +452,9 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	/* add a form to place the tabbed form on */
 	IntFormAnimated *requestForm = new IntFormAnimated(parent);
 	requestForm->id = M_REQUEST;
-	requestForm->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
+	requestForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
+	}));
 
 	// Add the button list.
 	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
@@ -409,6 +497,12 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		button->setTip(withoutExtension);
 		button->setString(withoutExtension);
 		button->displayFunction = displayRequestOption;
+		button->pUserData = new DisplayRequestOptionData();
+		button->setOnDelete([](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayRequestOptionData *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		});
 		requestList->addWidgetToLayout(button);
 
 		free(withoutExtension);
@@ -436,8 +530,13 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 			button->id = nextButtonId;
 			button->setTip(mapData->pName);
 			button->setString(mapData->pName);
-			button->pUserData = mapData;
 			button->displayFunction = displayRequestOption;
+			button->pUserData = new DisplayRequestOptionData(mapData);
+			button->setOnDelete([](WIDGET *psWidget) {
+				assert(psWidget->pUserData != nullptr);
+				delete static_cast<DisplayRequestOptionData *>(psWidget->pUserData);
+				psWidget->pUserData = nullptr;
+			});
 			buttons.push_back({stringRelevance(mapData->pName, searchString), button});
 
 			++nextButtonId;
@@ -461,6 +560,12 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		sButInit.UserData	= 1;
 		sButInit.pTip		= _("Technology level 1");
 		sButInit.pDisplay	= displayCamTypeBut;
+		sButInit.initPUserDataFunc = []() -> void * { return new DisplayCamTypeButCache(); };
+		sButInit.onDelete = [](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayCamTypeButCache *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		};
 
 		widgAddButton(psRScreen, &sButInit);
 
@@ -481,6 +586,12 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		sButInit.UserData	= 0;
 		sButInit.pTip		= _("Any number of players");
 		sButInit.pDisplay	= displayNumPlayersBut;
+		sButInit.initPUserDataFunc = []() -> void * { return new DisplayNumPlayersButCache(); };
+		sButInit.onDelete = [](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayNumPlayersButCache *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		};
 		widgAddButton(psRScreen, &sButInit);
 
 		STATIC_ASSERT(MAX_PLAYERS_IN_GUI <= ARRAY_SIZE(M_REQUEST_NP) + 1);
@@ -539,7 +650,9 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET *
 	{
 		*chosen = ((W_BUTTON *)widgGetFromID(psRScreen, id))->pText;
 
-		*chosenValue = (LEVEL_DATASET *)((W_BUTTON *)widgGetFromID(psRScreen, id))->pUserData;
+		DisplayRequestOptionData * pData = static_cast<DisplayRequestOptionData *>(((W_BUTTON *)widgGetFromID(psRScreen, id))->pUserData);
+		assert(pData != nullptr);
+		*chosenValue = (LEVEL_DATASET *)pData->pMapData;
 		*mode = context;
 		*isHoverPreview = hoverPreview;
 		hoverPreviewId = id;
@@ -596,8 +709,16 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET *
 // ////////////////////////////////////////////////////////////////////////////
 // Display Functions
 
+struct ExtraGubbinsCache {
+	WzText wzTimerText;
+	WzText wzTitleText_Alliances;
+	WzText wzTitleText_Score;
+	WzText wzTitleText_Kills;
+	WzText wzTitleText_Units;
+	WzText wzTitleText_RightColumn; // purpose differs depending on mode
+};
 
-static void displayExtraGubbins(UDWORD height)
+static void displayExtraGubbins(UDWORD height, ExtraGubbinsCache& cache)
 {
 	char str[128];
 
@@ -615,30 +736,36 @@ static void displayExtraGubbins(UDWORD height)
 
 	// draw timer
 	getAsciiTime(str, gameTime);
-	iV_DrawText(str, MULTIMENU_FORM_X + MULTIMENU_C2, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
+	cache.wzTimerText.setText(str, font_regular);
+	cache.wzTimerText.render(MULTIMENU_FORM_X + MULTIMENU_C2, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
 
 	// draw titles.
-	iV_DrawText(_("Alliances"), MULTIMENU_FORM_X + MULTIMENU_C0, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
-	iV_DrawText(_("Score"), MULTIMENU_FORM_X + MULTIMENU_C8, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
-	iV_DrawText(_("Kills"), MULTIMENU_FORM_X + MULTIMENU_C9, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
-	iV_DrawText(_("Units"), MULTIMENU_FORM_X + MULTIMENU_C10, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
+	cache.wzTitleText_Alliances.setText(_("Alliances"), font_regular);
+	cache.wzTitleText_Alliances.render(MULTIMENU_FORM_X + MULTIMENU_C0, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
+	cache.wzTitleText_Score.setText(_("Score"), font_regular);
+	cache.wzTitleText_Score.render(MULTIMENU_FORM_X + MULTIMENU_C8, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
+	cache.wzTitleText_Kills.setText(_("Kills"), font_regular);
+	cache.wzTitleText_Kills.render(MULTIMENU_FORM_X + MULTIMENU_C9, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
+	cache.wzTitleText_Units.setText(_("Units"), font_regular);
+	cache.wzTitleText_Units.render(MULTIMENU_FORM_X + MULTIMENU_C10, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
 
 	if (getDebugMappingStatus())
 	{
-		iV_DrawText(_("Power"), MULTIMENU_FORM_X + MULTIMENU_C11, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
+		cache.wzTitleText_RightColumn.setText(_("Power"), font_regular);
 	}
 	else
 	{
 		// ping is useless for non MP games, so display something useful depending on mode.
 		if (runningMultiplayer())
 		{
-			iV_DrawText(_("Ping"), MULTIMENU_FORM_X + MULTIMENU_C11, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
+			cache.wzTitleText_RightColumn.setText(_("Ping"), font_regular);
 		}
 		else
 		{
-			iV_DrawText(_("Structs"), MULTIMENU_FORM_X + MULTIMENU_C11, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, font_regular);
+			cache.wzTitleText_RightColumn.setText(_("Structs"), font_regular);
 		}
 	}
+	cache.wzTitleText_RightColumn.render(MULTIMENU_FORM_X + MULTIMENU_C11, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
 
 #ifdef DEBUG
 	for (unsigned q = 0; q < 2; ++q)
@@ -668,8 +795,21 @@ static void displayExtraGubbins(UDWORD height)
 }
 
 
+struct DisplayMultiPlayerData {
+	ExtraGubbinsCache extraGubbinsCache;
+	WzText wzPosAndNameText;
+	WzText wzScoreText;
+	WzText wzKillsText;
+	WzText wzUnitsText;
+	WzText wzRightmostColumnText; // purpose differs depending on mode
+};
+
 static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	// Any widget using displayMultiPlayer must have its pUserData initialized to a (DisplayMultiPlayerData*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayMultiPlayerData& data = *static_cast<DisplayMultiPlayerData *>(psWidget->pUserData);
+
 	char str[128];
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -677,16 +817,14 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (responsibleFor(player, 0))
 	{
-		displayExtraGubbins(widgGetFromID(psWScreen, MULTIMENU_FORM)->height());
+		displayExtraGubbins(widgGetFromID(psWScreen, MULTIMENU_FORM)->height(), data.extraGubbinsCache);
 	}
-
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	const bool isHuman = isHumanPlayer(player);
 	const bool isAlly = aiCheckAlliances(selectedPlayer, player);
 	const bool isSelectedPlayer = player == selectedPlayer;
 
-	SetPlayerTextColor(alliances[selectedPlayer][player], player);
+	PIELIGHT playerTextColor = GetPlayerTextColor(alliances[selectedPlayer][player], player);
 
 	if (isHuman || (game.type == SKIRMISH && player < game.maxPlayers))
 	{
@@ -696,7 +834,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			str[strlen(str) - 1] = '\0';
 		}
-		iV_DrawText(str, x + MULTIMENU_C2, y + MULTIMENU_FONT_OSET, font_regular);
+		data.wzPosAndNameText.setText(str, font_regular);
+		data.wzPosAndNameText.render(x + MULTIMENU_C2, y + MULTIMENU_FONT_OSET, playerTextColor);
 
 		//c3-7 alliance
 		//manage buttons by showing or hiding them. gifts only in campaign,
@@ -738,28 +877,31 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			sprintf(str, "%d", getMultiStats(player).recentScore);
 		}
-		iV_DrawText(str, x + MULTIMENU_C8, y + MULTIMENU_FONT_OSET, font_regular);
+		data.wzScoreText.setText(str, font_regular);
 
 		//c9:kills,
 		sprintf(str, "%d", getMultiStats(player).recentKills);
-		iV_DrawText(str, x + MULTIMENU_C9, y + MULTIMENU_FONT_OSET, font_regular);
+		data.wzKillsText.setText(str, font_regular);
 	}
 	else
 	{
 		// estimate of score for skirmish games
 		sprintf(str, "%d", ingame.skScores[player][0]);
-		iV_DrawText(str, x + MULTIMENU_C8, y + MULTIMENU_FONT_OSET, font_regular);
+		data.wzScoreText.setText(str, font_regular);
 		// estimated kills
 		sprintf(str, "%d", ingame.skScores[player][1]);
-		iV_DrawText(str, x + MULTIMENU_C9, y + MULTIMENU_FONT_OSET, font_regular);
+		data.wzKillsText.setText(str, font_regular);
 	}
+	data.wzScoreText.render(x + MULTIMENU_C8, y + MULTIMENU_FONT_OSET, playerTextColor);
+	data.wzKillsText.render(x + MULTIMENU_C9, y + MULTIMENU_FONT_OSET, playerTextColor);
 
 	//only show player's and allies' unit counts, and nobody elses.
 	//c10:units
 	if (isAlly || getDebugMappingStatus())
 	{
 		sprintf(str, "%d", getNumDroids(player) + getNumTransporterDroids(player));
-		iV_DrawText(str, x + MULTIMENU_C10, y + MULTIMENU_FONT_OSET, font_regular);
+		data.wzUnitsText.setText(str, font_regular);
+		data.wzUnitsText.render(x + MULTIMENU_C10, y + MULTIMENU_FONT_OSET, playerTextColor);
 	}
 
 	/* Display player power instead of number of played games
@@ -769,7 +911,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		//c11: Player power
 		sprintf(str, "%u", (int)getPower(player));
-		iV_DrawText(str, MULTIMENU_FORM_X + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, font_regular);
+		data.wzRightmostColumnText.setText(str, font_regular);
+		data.wzRightmostColumnText.render(MULTIMENU_FORM_X + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, playerTextColor);
 	}
 	else if (runningMultiplayer())
 	{
@@ -784,7 +927,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			{
 				sprintf(str, "∞");
 			}
-			iV_DrawText(str, x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, font_regular);
+			data.wzRightmostColumnText.setText(str, font_regular);
+			data.wzRightmostColumnText.render(x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, playerTextColor);
 		}
 	}
 	else
@@ -799,7 +943,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				++num;
 			}
 			sprintf(str, "%d", num);
-			iV_DrawText(str, x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, font_regular);
+			data.wzRightmostColumnText.setText(str, font_regular);
+			data.wzRightmostColumnText.render(x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, playerTextColor);
 		}
 	}
 
@@ -923,6 +1068,12 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 	sFormInit.height		  = MULTIMENU_PLAYER_H;
 	sFormInit.pDisplay		  = displayMultiPlayer;
 	sFormInit.UserData		  = player;
+	sFormInit.pUserData = new DisplayMultiPlayerData();
+	sFormInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayMultiPlayerData *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 	widgAddForm(psWScreen, &sFormInit);
 
 	W_BUTINIT sButInit;
@@ -1017,7 +1168,9 @@ bool intAddMultiMenu()
 	// add form
 	IntFormAnimated *multiMenuForm = new IntFormAnimated(parent);
 	multiMenuForm->id = MULTIMENU_FORM;
-	multiMenuForm->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7);
+	multiMenuForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7);
+	}));
 
 	// add any players
 	for (i = 0; i < MAX_PLAYERS; i++)

@@ -86,4 +86,13 @@ void console(const char *pFormat, ...); /// Print always to the ingame console
 	sprintf x; \
 	addConsoleMessage(s, DEFAULT_JUSTIFY, INFO_MESSAGE)
 
+
+#include <functional>
+
+typedef std::function<void ()> CONSOLE_CALC_LAYOUT_FUNC;
+void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc);
+
+void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+
+
 #endif // __INCLUDED_SRC_CONSOLE_H__

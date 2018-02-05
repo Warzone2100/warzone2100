@@ -40,6 +40,7 @@ struct WARZONE_GLOBALS
 	FMV_MODE FMVmode = FMV_FULLSCREEN;
 	UDWORD width = 1024;
 	UDWORD height = 768;
+	int displayScale = 100;
 	int screen = 0;
 	int8_t SPcolor = 0;
 	int MPcolour = -1;
@@ -131,6 +132,16 @@ void war_SetVsync(bool b)
 bool war_GetVsync()
 {
 	return warGlobs.vsync;
+}
+
+unsigned int war_GetDisplayScale()
+{
+	return warGlobs.displayScale;
+}
+
+void war_SetDisplayScale(unsigned int scale)
+{
+	warGlobs.displayScale = scale;
 }
 
 void war_SetWidth(UDWORD width)

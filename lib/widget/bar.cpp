@@ -127,21 +127,21 @@ static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 	if (!barGraph->text.isEmpty())
 	{
 		QByteArray utf = barGraph->text.toUtf8();
-		int textWidth = iV_GetTextWidth(utf.constData(), font_bar);
+		barGraph->wzCachedText.setText(utf.constData(), font_bar);
+		int textWidth = barGraph->wzCachedText.width();
 		Vector2i pos((x0 + x1 - textWidth) / 2, y1);
-		iV_SetTextColour(WZCOL_BLACK);  // Add a shadow, to make it visible against any background.
+		// Add a shadow, to make it visible against any background.
 		for (int dx = -2; dx <= 2; ++dx)
 		{
 			for (int dy = -2; dy <= 2; ++dy)
 			{
 				if (dx*dx + dy*dy <= 4)
 				{
-					iV_DrawText(utf.constData(), pos.x + dx, pos.y + dy, font_bar);
+					barGraph->wzCachedText.render(pos.x + dx, pos.y + dy, WZCOL_BLACK);
 				}
 			}
 		}
-		iV_SetTextColour(barGraph->textCol);
-		iV_DrawText(utf.constData(), pos.x, pos.y, font_bar);
+		barGraph->wzCachedText.render(pos.x, pos.y, barGraph->textCol);
 	}
 }
 
