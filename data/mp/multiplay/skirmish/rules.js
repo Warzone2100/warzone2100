@@ -17,6 +17,10 @@ var maxOilDrums = 0;
 var mainReticule = true;
 var allowDesign = false;
 
+const CREATE_LIKE_EVENT = 0;
+const DESTROY_LIKE_EVENT = 1;
+const TRANSFER_LIKE_EVENT = 2;
+
 function setMainReticule()
 {
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
@@ -53,7 +57,7 @@ function setMainReticule()
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
 	}
 	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
-	if (countDroid(DROID_COMMAND, selectedPlayer) > 0)
+	if (countDroid(DROID_COMMAND, selectedPlayer) > 0 && countStruct("A0ComDroidControl") > 0)
 	{
 		setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	}
@@ -62,6 +66,44 @@ function setMainReticule()
 		setReticuleButton(6, _("Commanders - manufacture commanders first"), "", "");
 	}
 	mainReticule = true; // main reticule window is open
+}
+
+function reticuleUpdate(obj, eventType)
+{
+	var update_reticule = false;
+	var tryUpdate = (obj.player === selectedPlayer || eventType === TRANSFER_LIKE_EVENT);
+
+	if (tryUpdate && obj.type === STRUCTURE)
+	{
+		if (obj.stattype === HQ)
+		{
+			var flag = (countStruct("A0CommandCentre", selectedPlayer) > 0);
+			setMiniMap(flag); // show minimap or not
+			setDesign(flag); // permit designs or not
+			allowDesign = flag;
+			update_reticule = true;
+		}
+
+		if (obj.stattype === RESEARCH_LAB || obj.stattype === CYBORG_FACTORY ||
+			obj.stattype === VTOL_FACTORY || obj.stattype === FACTORY || obj.stattype === COMMAND_CONTROL)
+		{
+			update_reticule = true;
+		}
+	}
+	else if (tryUpdate && obj.type === DROID)
+	{
+		if (obj.droidType === DROID_CONSTRUCT || obj.droidType === DROID_COMMAND)
+		{
+			update_reticule = true;
+		}
+	}
+
+	if (mainReticule && update_reticule)
+	{
+		//Wait a tick for the counts to update
+		const TICK_TIME = 100;
+		queue("setMainReticule", TICK_TIME);
+	}
 }
 
 function setupGame()
@@ -378,74 +420,31 @@ function eventAttacked(victimObj, attackerObj)
 
 function eventDroidBuilt(droid, structure)
 {
-	var update_reticule = false;
-
-	if (droid.player == selectedPlayer && droid.type == DROID
-	    && (droid.droidType == DROID_CONSTRUCT || droid.droidType == DROID_COMMAND))
+	if (droid.player === selectedPlayer)
 	{
-		update_reticule = true;
-	}
-
-	if (mainReticule && update_reticule)
-	{
-		setMainReticule();
+		reticuleUpdate(droid, CREATE_LIKE_EVENT);
 	}
 }
 
 function eventStructureBuilt(struct)
 {
-	var update_reticule = false;
-
-	if (struct.player == selectedPlayer && struct.type == STRUCTURE && struct.stattype == HQ)
+	if (struct.player === selectedPlayer)
 	{
-		setMiniMap(true); // show minimap
-		setDesign(true); // permit designs
-		allowDesign = true;
-		update_reticule = true;
-	}
-
-	if (struct.player == selectedPlayer && struct.type == STRUCTURE
-	    && (struct.stattype == RESEARCH_LAB || struct.stattype == CYBORG_FACTORY
-	        || struct.stattype == VTOL_FACTORY || struct.stattype == FACTORY))
-	{
-		update_reticule = true;
-	}
-
-	if (mainReticule && update_reticule)
-	{
-		setMainReticule();
+		reticuleUpdate(struct, CREATE_LIKE_EVENT);
 	}
 }
 
 function eventDestroyed(victim)
 {
-	var update_reticule = false;
-
-	if (victim.player == selectedPlayer && victim.type == STRUCTURE && victim.stattype == HQ && !enumStruct(selectedPlayer, HQ).length)
+	if (victim.player === selectedPlayer)
 	{
-		setMiniMap(false); // hide minimap if HQ is destroyed and no other HQs are present
-		setDesign(false); // and disallow design
-		allowDesign = false;
-		update_reticule = true;
+		reticuleUpdate(victim, DESTROY_LIKE_EVENT);
 	}
+}
 
-	if (victim.player == selectedPlayer && victim.type == STRUCTURE
-	    && (victim.stattype == RESEARCH_LAB || victim.stattype == CYBORG_FACTORY
-	        || victim.stattype == VTOL_FACTORY || victim.stattype == FACTORY))
-	{
-		update_reticule = true;
-	}
-
-	if (victim.player == selectedPlayer && victim.type == DROID
-	    && (victim.droidType == DROID_CONSTRUCT || victim.droidType == DROID_COMMAND))
-	{
-		update_reticule = true;
-	}
-
-	if (mainReticule && update_reticule)
-	{
-		setMainReticule();
-	}
+function eventObjectTransfer(obj, from)
+{
+	reticuleUpdate(obj, TRANSFER_LIKE_EVENT);
 }
 
 function eventResearched(research, structure, player)

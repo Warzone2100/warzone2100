@@ -3,7 +3,11 @@
 // * Enable unit design and minimap only when an HQ exists
 receiveAllEvents(true); //Needed to allow enemy research to apply to them
 
+var mainReticule = true;
 var allowDesign = false;
+const CREATE_LIKE_EVENT = 0;
+const DESTROY_LIKE_EVENT = 1;
+const TRANSFER_LIKE_EVENT = 2;
 
 function setMainReticule()
 {
@@ -65,6 +69,52 @@ function setMainReticule()
 	else
 	{
 		setReticuleButton(6, _("Commanders - manufacture commanders first"), "", "");
+	}
+	mainReticule = true; // main reticule window is open
+}
+
+function reticuleUpdate(obj, eventType)
+{
+	var update_reticule = false;
+	var tryUpdate = (obj.player === selectedPlayer || eventType === TRANSFER_LIKE_EVENT);
+
+	if (tryUpdate && obj.type === STRUCTURE)
+	{
+		if (obj.stattype === HQ)
+		{
+			var flag = (countStruct("A0CommandCentre", selectedPlayer) > 0);
+			//See if one is on the home map
+			if (flag === false)
+			{
+				var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
+				flag = (offHQ !== null ? offHQ.length > 0 : false);
+			}
+			setMiniMap(flag); // show minimap or not
+			setDesign(flag); // permit designs or not
+			allowDesign = flag;
+			update_reticule = true;
+		}
+
+		if (obj.stattype === RESEARCH_LAB || obj.stattype === CYBORG_FACTORY ||
+			obj.stattype === VTOL_FACTORY || obj.stattype === FACTORY || obj.stattype === COMMAND_CONTROL)
+		{
+			update_reticule = true;
+		}
+	}
+	else if (tryUpdate && obj.type === DROID)
+	{
+		if (obj.droidType === DROID_CONSTRUCT || obj.droidType === DROID_COMMAND ||
+			obj.droidType === DROID_TRANSPORTER || obj.droidType === DROID_SUPERTRANSPORTER)
+		{
+			update_reticule = true;
+		}
+	}
+
+	if (mainReticule && update_reticule)
+	{
+		//Wait a tick for the counts to update
+		const TICK_TIME = 100;
+		queue("setMainReticule", TICK_TIME);
 	}
 }
 
@@ -208,35 +258,43 @@ function eventStartLevel()
 	}
 
 	resetPower();
-	setTimer("setMainReticule", 800);
 }
 
 function eventDroidBuilt(droid, structure)
 {
-	if (droid.player == selectedPlayer && droid.type == DROID
-	    && (droid.droidType == DROID_CONSTRUCT || droid.droidType == DROID_COMMAND))
+	if (droid.player === selectedPlayer)
 	{
-		update_reticule = true;
+		reticuleUpdate(droid, CREATE_LIKE_EVENT);
 	}
 }
 
 function eventStructureBuilt(struct)
 {
-	if (struct.player == selectedPlayer && struct.type == STRUCTURE && struct.stattype == HQ)
+	if (struct.player === selectedPlayer)
 	{
-		setMiniMap(true); // show minimap
-		setDesign(true); // permit designs
-		allowDesign = true;
+		reticuleUpdate(struct, CREATE_LIKE_EVENT);
 	}
 }
 
 function eventDestroyed(victim)
 {
-	if (victim.player == selectedPlayer && victim.type == STRUCTURE && victim.stattype == HQ && !enumStruct(selectedPlayer, HQ).length)
+	if (victim.player === selectedPlayer)
 	{
-		setMiniMap(false); // hide minimap if HQ is destroyed and no other HQs are present
-		setDesign(false); // and disallow design
-		allowDesign = false;
+		reticuleUpdate(victim, DESTROY_LIKE_EVENT);
+	}
+}
+
+function eventObjectTransfer(obj, from)
+{
+	reticuleUpdate(obj, TRANSFER_LIKE_EVENT);
+}
+
+//Could be the last remaining trucks are on it.
+function eventTransporterLanded(transport)
+{
+	if (transport.player === selectedPlayer)
+	{
+		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
 	}
 }
 
