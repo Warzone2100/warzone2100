@@ -219,8 +219,8 @@ enum  				  // Reticule button indecies.
 #define STAT_POWERBARY			(OBJ_BUTHEIGHT-STAT_PROGBARHEIGHT-6)
 
 /* maximum array sizes */
-#define	MAXSTRUCTURES	200	//bumped up from 80.  NOTE: was used for max # in build menus.
-#define	MAXRESEARCH		200 //was 80 topic displayed   "           "
+#define	MAXSTRUCTURES	65535	//bumped up from 80.  NOTE: was used for max # in build menus.
+#define	MAXRESEARCH		65535	//was 80 topic displayed   "           "
 #define	MAXFEATURES		80
 #define	MAXCOMPONENT	200
 #define	MAXEXTRASYS		80

@@ -346,10 +346,10 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 		NETuint8_t(&pTemplate->asParts[COMP_ECM]);
 		NETuint8_t(&pTemplate->asParts[COMP_SENSOR]);
 		NETuint8_t(&pTemplate->asParts[COMP_CONSTRUCT]);
-		NETint16_t(&pTemplate->numWeaps);
+		NETint8_t(&pTemplate->numWeaps);
 		for (int i = 0; i < pTemplate->numWeaps; i++)
 		{
-			NETuint16_t(&pTemplate->asWeaps[i]);
+			NETuint32_t(&pTemplate->asWeaps[i]);
 		}
 		NETbool(&haveInitialOrders);
 		if (haveInitialOrders)
@@ -394,11 +394,11 @@ bool recvDroid(NETQUEUE queue)
 		NETuint8_t(&pT->asParts[COMP_ECM]);
 		NETuint8_t(&pT->asParts[COMP_SENSOR]);
 		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
-		NETint16_t(&pT->numWeaps);
+		NETint8_t(&pT->numWeaps);
 		ASSERT_OR_RETURN(false, pT->numWeaps >= 0 && pT->numWeaps <= ARRAY_SIZE(pT->asWeaps), "Bad numWeaps %d", pT->numWeaps);
 		for (int i = 0; i < pT->numWeaps; i++)
 		{
-			NETuint16_t(&pT->asWeaps[i]);
+			NETuint32_t(&pT->asWeaps[i]);
 		}
 		NETbool(&haveInitialOrders);
 		if (haveInitialOrders)

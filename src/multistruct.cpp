@@ -295,10 +295,10 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 		NETuint8_t(&pT->asParts[COMP_ECM]);
 		NETuint8_t(&pT->asParts[COMP_SENSOR]);
 		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
-		NETint16_t(&pT->numWeaps);
+		NETint8_t(&pT->numWeaps);
 		for (int i = 0; i < pT->numWeaps; i++)
 		{
-			NETuint16_t(&pT->asWeaps[i]);
+			NETuint32_t(&pT->asWeaps[i]);
 		}
 	}
 	NETend();
@@ -329,11 +329,11 @@ void recvStructureInfo(NETQUEUE queue)
 		NETuint8_t(&pT->asParts[COMP_ECM]);
 		NETuint8_t(&pT->asParts[COMP_SENSOR]);
 		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
-		NETint16_t(&pT->numWeaps);
+		NETint8_t(&pT->numWeaps);
 		ASSERT_OR_RETURN(, pT->numWeaps >= 0 && pT->numWeaps <= ARRAY_SIZE(pT->asWeaps), "Bad numWeaps %d", pT->numWeaps);
 		for (int i = 0; i < pT->numWeaps; i++)
 		{
-			NETuint16_t(&pT->asWeaps[i]);
+			NETuint32_t(&pT->asWeaps[i]);
 		}
 		pT->droidType = (DROID_TYPE)droidType;
 		pT = copyTemplate(player, pT);

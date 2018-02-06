@@ -107,8 +107,8 @@
 #define IDDES_TEMPLEND			5339		// The last design template button
 #define IDDES_BARSTART			5400
 #define IDDES_BAREND			5499
-#define IDDES_COMPSTART			5500		// The first component button
-#define IDDES_COMPEND			5699		// The last component button
+#define IDDES_COMPSTART			5500000		// The first component button
+#define IDDES_COMPEND			5565535		// The last component button
 #define IDDES_EXTRASYSSTART		5700		// The first extra system button
 #define IDDES_EXTRASYSEND		5899		// The last extra system button
 

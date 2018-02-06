@@ -69,7 +69,7 @@
 
 
 #define MAX_DESIGN_COMPONENTS 40		// Max number of stats the design screen can cope with.
-#define MAX_SYSTEM_COMPONENTS 128
+#define MAX_SYSTEM_COMPONENTS 65535
 
 
 /***************************************************************************************/
