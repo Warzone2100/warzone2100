@@ -32,7 +32,6 @@ camAreaEvent("causeWayTrig", function(droid)
 {
 	camEnableFactory("NPFactoryNE");
 	camEnableFactory("NPCybFactoryNE");
-	cyborgGroupPatrol();
 
 	camDetectEnemyBase("NPLZGroup");
 	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
@@ -78,7 +77,8 @@ function HoverGroupPatrol()
 			camMakePos("hoverDefense3"),
 			camMakePos("hoverDefense4")
 		],
-		interval: 90000 //90 sec
+		interval: 90000, //90 sec
+		repair: 70
 	});
 }
 
@@ -89,58 +89,45 @@ function cyborgGroupPatrol()
 			camMakePos("genRetreatPoint"),
 			camMakePos("cybRetreatPoint"),
 			camMakePos("NPTransportPos")
-		]
+		],
+		repair: 66
 	});
 	camManageGroup(camMakeGroup("cyborgs2"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("genRetreatPoint"),
 			camMakePos("cybRetreatPoint"),
 			camMakePos("NPTransportPos")
-		]
+		],
+		repair: 66
 	});
 }
 
 function mrlGroupAttack()
 {
 	camManageGroup(camMakeGroup("MRL1"), CAM_ORDER_ATTACK, {
-		pos: camMakePos("attackPoint3"),
-		fallback: camMakePos("genRetreatPoint"),
-		morale: 60,
-		regroup: true
-	});
-}
-
-function sensorGroupAttack()
-{
-	camManageGroup(camMakeGroup("sensor1"), CAM_ORDER_ATTACK, {
-		pos: camMakePos("attackPoint3"),
-		fallback: camMakePos("genRetreatPoint"),
-		morale: 50,
-		regroup: true
-	});
-	camManageGroup(camMakeGroup("sensor2"), CAM_ORDER_ATTACK, {
-		pos: camMakePos("attackPoint3"),
-		fallback: camMakePos("genRetreatPoint"),
-		morale: 50,
-		regroup: true
+		count: -1,
+		repair: 80,
+		regroup: false
 	});
 }
 
 function IDFGroupAmbush()
 {
 	camManageGroup(camMakeGroup("IDF1"), CAM_ORDER_ATTACK, {
-		pos: camMakePos("attackPoint3")
+		count: -1,
+		regroup: false
 	});
 	camManageGroup(camMakeGroup("IDF2"), CAM_ORDER_ATTACK, {
-		pos: camMakePos("attackPoint3")
+		count: -1,
+		regroup: false
 	});
 }
 
 function setupPatrols()
 {
 	IDFGroupAmbush();
-	sensorGroupAttack();
 	HoverGroupPatrol();
+	cyborgGroupPatrol();
 }
 
 function enableReinforcements()
@@ -250,7 +237,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(55000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -262,7 +249,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(50000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -274,7 +261,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(45000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -286,6 +273,6 @@ function eventStartLevel()
 
 	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 15000);
+	queue("enableReinforcements", 12000);
 	queue("setupPatrols", 160000); // 2.5 min.
 }

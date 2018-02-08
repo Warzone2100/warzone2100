@@ -96,76 +96,66 @@
 	},
 	"area_2": {
 		"label": "IDF1",
-		"pos1": [4032, 15168],
-		"pos2": [4416, 15552]
+		"pos1": [2688, 12672],
+		"pos2": [5376, 14208]
 	},
 	"area_3": {
 		"label": "IDF2",
-		"pos1": [4672, 12864],
-		"pos2": [5440, 13376]
+		"pos1": [3072, 14976],
+		"pos2": [4352, 15616]
 	},
 	"area_4": {
-		"label": "sensor1",
-		"pos1": [3136, 15168],
-		"pos2": [5440, 13376]
-	},
-	"area_5": {
-		"label": "sensor2",
-		"pos1": [3136, 13632],
-		"pos2": [3520, 14016]
-	},
-	"area_6": {
 		"label": "MRL1",
 		"pos1": [4288, 8000],
 		"pos2": [5056, 8640]
 	},
-	"area_7": {
+	"area_5": {
 		"label": "cyborgs1",
 		"pos1": [5184, 7232],
 		"pos2": [5696, 7744]
 	},
-	"area_8": {
+	"area_6": {
 		"label": "cyborgs2",
 		"pos1": [4928, 6592],
 		"pos2": [5440, 7104]
 	},
-	"area_9": {
+	"area_7": {
 		"label": "hoversAttack",
 		"pos1": [832, 1216],
 		"pos2": [1344, 1728]
 	},
-	"area_10": {
+	"area_8": {
 		"label": "hoversDefense",
 		"pos1": [3776, 2112],
 		"pos2": [4160, 2624]
 	},
-	"area_11": {
+	"area_9": {
 		"label": "NPSouthEast",
 		"pos1": [3072, 12800],
 		"pos2": [6272, 16000]
 	},
-	"area_12": {
+	"area_10": {
 		"label": "NPMiddle",
 		"pos1": [3392, 1984],
 		"pos2": [6080, 5184]
 	},
-	"area_13": {
+	"area_11": {
 		"label": "NPNorthEast",
 		"pos1": [6016, 128],
 		"pos2": [9984, 3968]
 	},
-	"area_14": {
+	"area_12": {
 		"label": "NPLZ1",
 		"pos1": [6912, 5376],
 		"pos2": [7808, 6400]
 	},
-	"area_15": {
+	"area_13": {
 		"label": "northWayTrigger",
 		"subscriber": 0,
 		"pos1": [0, 12160],
 		"pos2": [10112, 12800]
-	},	
-	"area_16": {
+	},
+	"area_14": {
 		"label": "causeWayTrig",
 		"subscriber": 0,
 		"pos1": [0, 10880],
