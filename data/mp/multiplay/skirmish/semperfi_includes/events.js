@@ -27,10 +27,18 @@ function eventGameInit()
 {
 	attackGroup = newGroup();
 	vtolGroup = newGroup();
+
+	enumDroid(me).forEach(function(droid) {
+		if (droid.droidType !== DROID_CONSTRUCT)
+		{
+			eventDroidBuilt(droid, null);
+		}
+	});
+
 	baseBuilders = newGroup();
 	oilBuilders = newGroup();
-
 	var cons = enumDroid(me, DROID_CONSTRUCT);
+
 	for (var i = 0, l = cons.length; i < l; ++i)
 	{
 		if (l < MIN_TRUCKS)
@@ -178,5 +186,16 @@ function eventBeacon(x, y, from, to, message)
 			}
 		}
 
+	}
+}
+
+function eventObjectTransfer(obj, from)
+{
+	if (obj.player === me)
+	{
+		if (obj.type === DROID)
+		{
+			eventDroidBuilt(obj, null); //put it in a group
+		}
 	}
 }
