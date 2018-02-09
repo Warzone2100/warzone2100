@@ -84,14 +84,14 @@ javascript-doc-base:
 
 javascript-doc: javascript-doc-base
 if PDFLATEX
-	(cd doc ; pdflatex javascript.tex)
+	(cd doc; pdflatex javascript.tex)
 else
 	echo "You need pdflatex installed!"
 endif
 
 javascript-doc-html: javascript-doc-base
 if HEVEA
-	(cd doc; hevea javascript.tex; hevea javascript.tex)
+	(cd doc; hevea -fix javascript.tex)
 if HACHA
 	(cd doc; hacha -o javascript-index.html javascript.html)
 endif

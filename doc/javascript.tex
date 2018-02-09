@@ -1,16 +1,16 @@
 \documentclass[12pt]{article}
 \usepackage{listings}
+\lstset{frame=trBL, aboveskip=15pt, belowskip=15pt, xleftmargin=20pt, xrightmargin=20pt}
+\usepackage[utf8]{inputenc}
 \usepackage{underscore}
-\lstloadlanguages{C++}
-\lstset{language=C++, frame=trBL, aboveskip=15pt, belowskip=15pt, xleftmargin=20pt, xrightmargin=20pt}
-\title{Warzone2100 JavaScript Scripting API}
-\date{}
+\title{Warzone 2100 JavaScript Scripting API}
+\author{}
 \begin{document}
 \maketitle
 
 \section{Introduction}
 
-Warzone2100 contains a scripting language for implementing AIs, campaigns and some of the game
+Warzone 2100 contains a scripting language for implementing AIs, campaigns and some of the game
 rules. It uses JavaScript, so you should become familiar with this language before proceeding
 with this document. A number of very good guides to JavaScript exist on the Internet.
 
@@ -24,7 +24,7 @@ The following hard-coded files exist for game rules that use this API:
 For ordinary AI scripts, these are controlled using '.ai' files that are present in the 'multiplayer/skirmish'
 directory. Here is an example of an '.ai' file that defines an AI implemented using this API:
 
-\begin{lstlisting}
+\begin{lstlisting}[]
 	[AI]
 	name = "Semperfi JS"
 	js = semperfi.js
@@ -71,7 +71,7 @@ key sets up an alternative rules file, which means that the "rules.js" mentioned
 this case, you must implement your own rules for winning and losing, among other things. Here is an example
 of such a scripts section:
 
-\begin{lstlisting}
+\begin{lstlisting}[]
 	[scripts]
 	rules = towerdefense.js
 \end{lstlisting}
@@ -82,7 +82,7 @@ directory ("challenges/"). If you do not want an AI script to be loaded for a pl
 this player to be controlled from one of your challenge scripts), then you can give it the special value "null". 
 Here is an example if a challenge player definition with its AI specified:
 
-\begin{lstlisting}
+\begin{lstlisting}[]
 	[player_2]
 	name = "Enemy"
 	team = 1
@@ -156,4 +156,3 @@ though they might look that way.
 \input{campaign}
 
 \end{document}
-
