@@ -522,10 +522,9 @@ AS_IF([test "x$enable_debug" = "xyes"],[
 	AC_MSG_NOTICE([*** Running in debug mode! ***])
 ])
 
-AS_IF([test "x$with_distributor" = "xUNKNOWN"],[
+AS_IF([test "x$with_distributor" != "xUNKNOWN"],[
 	AC_MSG_NOTICE()
-	AC_MSG_WARN([Distributor unknown!])
-	AC_MSG_NOTICE([Use --with-distributor when compiling package for distribution])
+	AC_MSG_NOTICE([*** Distributor $with_distributor ***])
 ])
 
 AS_IF([test -z "$PERL"],[
