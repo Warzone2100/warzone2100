@@ -493,7 +493,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 	return value;
 }
 
-//;; \subsection{Structure\label{objects:structure}}
+//;; \subsection{Structure\label{subsec:Structure}}
 //;; Describes a structure (building). It inherits all the properties of the base object (see below).
 //;; In addition, the following properties are defined:
 //;; \begin{description}
@@ -1951,7 +1951,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
 //-- can be either a string with the name of the structure type as defined in
-//-- "structures.json", or a stattype as defined in \ref{objects:structure}. The
+//-- "structures.json", or a stattype as defined in \ref{subsec:Structure}. The
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
@@ -2004,7 +2004,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 //-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 //-- If no parameters given, it will return all of the structures for the current player.
 //-- The second parameter can be either a string with the name of the structure type as defined
-//-- in "structures.json", or a stattype as defined in \ref{objects:structure}.
+//-- in "structures.json", or a stattype as defined in \ref{subsec:Structure}.
 //-- The third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine *engine)
