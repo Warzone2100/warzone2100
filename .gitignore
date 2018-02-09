@@ -33,6 +33,7 @@
 *.ncb
 *.suo
 *.user
+*.dds
 /devpkg/*
 build_tools/autorevision/Debug/*
 build_tools/autorevision/Release/*

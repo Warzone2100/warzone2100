@@ -1,5 +1,5 @@
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" AND ${CMAKE_CROSSCOMPILING})
-
+endif()
 set(INSTALLER_VERSION "0.0.0.0" CACHE STRING "NSIS version")
 set(INSTALLER_EXTDIR "" CACHE STRING "NSIS ext dir")
 set(INSTALLER_COMPRESSION 1 CACHE STRING "NSIS compression level")
@@ -12,8 +12,19 @@ set(CPACK_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(CPACK_GENERATOR "NSIS")
 INCLUDE(CPack)
 
+cpack_add_component(Core
+	DISPLAY_NAME "Core files"
+	DESCRIPTION "The core files required to run Warzone 2100."
+	REQUIRED)
+cpack_add_component(Data
+	DISPLAY_NAME "Data files"
+	DESCRIPTION "The data files required to run Warzone 2100."
+	REQUIRED)
+cpack_add_component(Lang
+	DISPLAY_NAME "Language files"
+	DESCRIPTION "Support for languages other than English.")
+
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/NSIS.definitions.in
   ${CMAKE_BINARY_DIR}/NSIS.definitions.nsh
 )
-endif()

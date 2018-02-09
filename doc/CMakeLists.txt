@@ -1,5 +1,5 @@
-project(doc)
 
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 add_custom_target(doc_wz2100 ALL)
 
 set(doc_DATA
@@ -85,6 +85,8 @@ add_custom_command(
 
 endif()
 
-install(FILES ${doc_DATA} DESTINATION "doc/images/")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/docbook-xsl.css" DESTINATION "doc/")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.html" DESTINATION "doc/")
+install(FILES ${doc_DATA} COMPONENT Doc DESTINATION "doc/images/")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/docbook-xsl.css" COMPONENT Doc DESTINATION "doc/")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.html" COMPONENT Doc DESTINATION "doc/")
+
+endif()
