@@ -236,7 +236,7 @@ function eventStartLevel()
 			assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(35000),
 			templates: [ npcybc, npcybf, npcybm ],
 			data: {
 				regroup: false,

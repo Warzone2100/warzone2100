@@ -201,7 +201,7 @@ function eventStartLevel()
 			assembly: "NPFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(55000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -213,7 +213,7 @@ function eventStartLevel()
 			assembly: "NPFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(65000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -237,7 +237,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(55000),
+			throttle: camChangeOnDiff(50000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -249,7 +249,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(45000),
 			data: {
 				regroup: false,
 				repair: 66,
