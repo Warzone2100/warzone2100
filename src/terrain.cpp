@@ -1290,7 +1290,7 @@ void drawTerrain(const glm::mat4 &mvp)
 	glActiveTexture(GL_TEXTURE0);
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	const glm::mat4 lightMatrix = glm::translate(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f);
+	const glm::mat4 lightMatrix = glm::translate(glm::vec3{ 1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f });
 
 	//////////////////////////////////////
 	// canvas to draw on
@@ -1327,7 +1327,7 @@ void drawWater(const glm::mat4 &viewMatrix)
 	const auto &renderState = getCurrentRenderState();
 
 	const auto &program = pie_ActivateShader(SHADER_WATER, viewMatrix, paramsX, paramsY, paramsX2, paramsY2, 0, 1,
-		glm::translate(waterOffset, 0.f, 0.f), glm::mat4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
+		glm::translate(glm::vec3{ waterOffset, 0.f, 0.f }), glm::mat4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
 
 	glDepthMask(GL_FALSE);
 

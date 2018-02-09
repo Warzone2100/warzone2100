@@ -1084,7 +1084,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 			/* circle around target if hovering and not cyborg */
 			Vector2i attackRunDelta = psDroid->pos.xy - psDroid->sMove.destination;
-			if (DROID_STOPPED(psDroid) || attackRunDelta * attackRunDelta < TILE_UNITS * TILE_UNITS)
+			if (DROID_STOPPED(psDroid) || dot(attackRunDelta, attackRunDelta) < TILE_UNITS * TILE_UNITS)
 			{
 				actionAddVtolAttackRun(psDroid);
 			}
@@ -1092,12 +1092,12 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				// if the vtol is close to the target, go around again
 				const Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy;
-				const unsigned rangeSq = diff * diff;
+				const unsigned rangeSq = dot(diff, diff);
 				if (rangeSq < VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 				{
 					// don't do another attack run if already moving away from the target
 					const Vector2i diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy;
-					if (diff * diff < VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
+					if (dot(diff, diff) < VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 					{
 						actionAddVtolAttackRun(psDroid);
 					}
@@ -1110,7 +1110,7 @@ void actionUpdateDroid(DROID *psDroid)
 					{
 						// don't do another attack run if already heading for the target
 						const Vector2i diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy;
-						if (diff * diff > VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
+						if (dot(diff, diff) > VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 						{
 							moveDroidToDirect(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
 						}
@@ -1618,7 +1618,7 @@ void actionUpdateDroid(DROID *psDroid)
 			Vector2i diff = (psDroid->pos - order->psObj->pos).xy;
 			int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].maxRange / 2; // move close to sensor
 			rangeSq = rangeSq * rangeSq;
-			if (diff * diff < rangeSq)
+			if (dot(diff, diff) < rangeSq)
 			{
 				if (!DROID_STOPPED(psDroid))
 				{
@@ -1631,7 +1631,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					diff = order->psObj->pos.xy - psDroid->sMove.destination;
 				}
-				if (DROID_STOPPED(psDroid) || diff * diff > rangeSq)
+				if (DROID_STOPPED(psDroid) || dot(diff, diff) > rangeSq)
 				{
 					// move in range
 					moveDroidTo(psDroid, order->psObj->pos.x, order->psObj->pos.y);
@@ -1644,12 +1644,12 @@ void actionUpdateDroid(DROID *psDroid)
 			Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy;
 			// moving to repair a droid
 			if (!psDroid->psActionTarget[0] ||  // Target missing.
-				(psDroid->order.type != DORDER_DROIDREPAIR && diff * diff > 2 * REPAIR_MAXDIST * REPAIR_MAXDIST))  // Target farther then 1.4142 * REPAIR_MAXDIST and we aren't ordered to follow.
+				(psDroid->order.type != DORDER_DROIDREPAIR && dot(diff, diff) > 2 * REPAIR_MAXDIST * REPAIR_MAXDIST))  // Target farther then 1.4142 * REPAIR_MAXDIST and we aren't ordered to follow.
 			{
 				psDroid->action = DACTION_NONE;
 				return;
 			}
-			if (diff * diff < REPAIR_RANGE * REPAIR_RANGE)
+			if (dot(diff, diff) < REPAIR_RANGE * REPAIR_RANGE)
 			{
 				// Got to destination - start repair
 				//rotate turret to point at droid being repaired

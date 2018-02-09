@@ -324,10 +324,10 @@ void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 	dv.z = -(psPart->position.z - player.p.z);
 	/* Make it face camera */
 	/* Scale it... */
-	const glm::mat4 modelMatrix = glm::translate(dv) *
+	const glm::mat4 modelMatrix = glm::translate(glm::vec3{ dv }) *
 		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(-player.r.x), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::scale(psPart->size / 100.f, psPart->size / 100.f, psPart->size / 100.f);
+		glm::scale(glm::vec3{ psPart->size / 100.f });
 	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
 	/* Draw it... */
 }

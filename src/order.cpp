@@ -633,7 +633,7 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 
 			Vector2i edgeDiff = psDroid->pos.xy - psDroid->actionPos;
-			if (psDroid->action != DACTION_MOVE || edgeDiff * edgeDiff <= TILE_UNITS * 4 * TILE_UNITS * 4)
+			if (psDroid->action != DACTION_MOVE || dot(edgeDiff, edgeDiff) <= TILE_UNITS * 4 * TILE_UNITS * 4)
 			{
 				//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
 				Vector2i diff = psDroid->pos.xy - psDroid->order.pos;

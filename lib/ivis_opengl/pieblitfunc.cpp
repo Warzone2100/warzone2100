@@ -256,7 +256,7 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 		std::swap(y0, y1);
 	}
 	const auto& center = Vector2f(x0, y0);
-	const auto& mvp = defaultProjectionMatrix() * glm::translate(Vector3f(center, 0.f)) * glm::scale(x1 - x0, y1 - y0, 1.f);
+	const auto& mvp = defaultProjectionMatrix() * glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3{ x1 - x0, y1 - y0, 1.f });
 
 	pie_ActivateShader(SHADER_RECT, mvp,
 		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f));
@@ -342,7 +342,7 @@ static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 
 static void iv_DrawImageImpl(Vector2i offset, Vector2i size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour, const glm::mat4 &modelViewProjection, SHADER_MODE mode = SHADER_TEXRECT)
 {
-	glm::mat4 transformMat = modelViewProjection * glm::translate(offset.x, offset.y, 0) * glm::scale(size.x, size.y, 1);
+	glm::mat4 transformMat = modelViewProjection * glm::translate(glm::vec3{ offset.x, offset.y, 0 }) * glm::scale(glm::vec3{ size.x, size.y, 1 });
 
 	pie_ActivateShader(mode,
 		transformMat,
@@ -361,7 +361,7 @@ void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 	glBindTexture(GL_TEXTURE_2D, TextureID);
 
-	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(Position.x, Position.y, 0) * glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
+	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3{ Position.x, Position.y, 0 }) * glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
 
 	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
 }
@@ -372,7 +372,7 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2i o
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 	TextureID.bind();
 
-	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(Position.x, Position.y, 0) * glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
+	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3{ Position.x, Position.y, 0 }) * glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
 
 	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
@@ -387,7 +387,7 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 	float su = size.x * invTextureSize;
 	float sv = size.y * invTextureSize;
 
-	glm::mat4 mvp = modelViewProjection * glm::translate(dest->x, dest->y, 0);
+	glm::mat4 mvp = modelViewProjection * glm::translate(glm::vec3{ dest->x, dest->y, 0 });
 
 	pie_SetTexturePage(texPage);
 	iv_DrawImageImpl(Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
@@ -422,7 +422,7 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 	pie_SetTexturePage(image->textureId);
 	pie_SetRendMode(REND_ALPHA);
 
-	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(x, y, 0);
+	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3{ x, y, 0 });
 	iv_DrawImageImpl(Vector2i(0, 0), Vector2i(w, h),
 		Vector2f(tu * invTextureSize, tv * invTextureSize),
 		Vector2f(image->Width * invTextureSize, image->Height * invTextureSize),
