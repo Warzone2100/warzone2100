@@ -58,8 +58,7 @@ AM_CONDITIONAL(HACHA, test -n "$HACHA")
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
-# __builtin_expect
-AX_C___BUILTIN_EXPECT
+AX_GCC_BUILTIN(__builtin_expect)
 
 # Check for the strlcpy and strlcat functions
 AX_CHECK_STRLCPY
