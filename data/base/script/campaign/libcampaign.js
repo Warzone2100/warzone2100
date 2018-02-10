@@ -757,7 +757,14 @@ function camGetArtifacts()
 	{
 		if (camDef(__camArtifacts[alabel]))
 		{
-			camArti.push(__camGetArtifactLabel(alabel));
+			if (getObject(__camGetArtifactLabel(alabel)))
+			{
+				camArti.push(__camGetArtifactLabel(alabel));
+			}
+			else
+			{
+				camArti.push(alabel);
+			}
 		}
 	}
 	return camArti;

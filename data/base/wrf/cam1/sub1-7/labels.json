@@ -139,18 +139,12 @@
 		"radius": 1344
 	},
 	"radius_3": {
-		"label": "artifactCheckNP",
-		"subscriber": 1,
-		"pos": [1344, 3904],
-		"radius": 220
-	},
-	"radius_4": {
 		"label": "NPWayPointTrigger",
 		"subscriber": 1,
 		"pos": [5760, 768],
 		"radius": 500
 	},
-	"radius_5": {
+	"radius_4": {
 		"label": "NPTransportTrigger",
 		"subscriber": 1,
 		"pos": [1190, 1352],

@@ -3413,6 +3413,7 @@
     "R-Defense-HvyMor": {
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-HvyMor",
+        "keyTopic": 1,
         "msgName": "RES_EMP_HvyMor",
         "name": "Bombard Pit",
         "redStructures": [
