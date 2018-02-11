@@ -2312,7 +2312,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sButInit.width		= MISSION_TEXT_W;
 	sButInit.height		= MISSION_TEXT_H;
 	sButInit.pDisplay	= displayTextOption;
-	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
 	sButInit.onDelete = [](WIDGET *psWidget) {
 		assert(psWidget->pUserData != nullptr);
 		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
