@@ -93,7 +93,6 @@ struct FTFace
 	FTFace(FT_Library &lib, const std::string &fileName, int32_t charSize, int32_t horizDPI, int32_t vertDPI)
 	{
 		UDWORD pFileSize = 0;
-		char *pFileData = nullptr;
 		if (!loadFile(fileName.c_str(), &pFileData, &pFileSize))
 		{
 			debug(LOG_FATAL, "Unknown font file format for %s", fileName.c_str());
@@ -119,6 +118,10 @@ struct FTFace
 	{
 		hb_font_destroy(m_font);
 		FT_Done_Face(m_face);
+		if (pFileData != nullptr)
+		{
+			free(pFileData);
+		}
 	}
 
 	uint32_t getGlyphWidth(uint32_t codePoint)
@@ -192,6 +195,7 @@ struct FTFace
 	FT_Face &face() { return m_face; }
 
 	hb_font_t *m_font;
+	char *pFileData = nullptr;
 
 private:
 	FT_Face m_face;
