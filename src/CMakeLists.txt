@@ -56,4 +56,13 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     )
 endif()
 
+if(WIN32)
+    # Enable Data Execution Prevention and Address Space Layout Randomization
+    if (MSVC)
+        set_property(TARGET warzone2100 APPEND_STRING PROPERTY LINK_FLAGS " /NXCOMPAT /DYNAMICBASE")
+    else ()
+        set_property(TARGET warzone2100 APPEND_STRING PROPERTY LINK_FLAGS " -Wl,--nxcompat -Wl,--dynamicbase")
+    endif ()
+endif()
+
 install(TARGETS warzone2100 DESTINATION ".")
