@@ -130,11 +130,13 @@ static bool tryLoad(const QString &path, const QString &filename)
 			return false;
 		}
 		fileEnd = pFileData + size;
-		iIMDShape *s = iV_ProcessIMD(filename, (const char **)&pFileData, fileEnd);
+		const char *pFileDataPt = pFileData;
+		iIMDShape *s = iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd);
 		if (s)
 		{
 			models.insert(filename, s);
 		}
+		free(pFileData);
 		return true;
 	}
 	return false;
@@ -700,6 +702,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 		if (sscanf(pFileData, "%255s %255s %255s%n", buffer, vertex, fragment, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "%s shader corrupt: %s", filename.toUtf8().constData(), buffer);
+			delete s;
 			return nullptr;
 		}
 		std::vector<std::string> uniform_names { "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap",
@@ -711,6 +714,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npoints, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(2): file corrupt");
+		delete s;
 		return nullptr;
 	}
 	pFileData += cnt;
@@ -761,6 +765,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 			if (sscanf(pFileData, "%d %d%n", &s->objanimcycles, &s->objanimframes, &cnt) != 2)
 			{
 				debug(LOG_ERROR, "%s bad ANIMOBJ: %s", filename.toUtf8().constData(), pFileData);
+				delete s;
 				return nullptr;
 			}
 			pFileData += cnt;

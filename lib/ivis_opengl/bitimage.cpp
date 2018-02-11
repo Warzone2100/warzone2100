@@ -202,6 +202,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		{
 			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
 			delete imageFile;
+			free(pFileData);
 			return nullptr;
 		}
 		imageFile->imageNames[numImages].first = tmpName;
@@ -215,6 +216,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		{
 			debug(LOG_ERROR, "Failed to find image \"%s\" listed in \"%s\".", spriteName.c_str(), fileName);
 			delete imageFile;
+			free(pFileData);
 			return nullptr;
 		}
 		imageRect->siz = Vector2i(imageRect->data->width, imageRect->data->height);
