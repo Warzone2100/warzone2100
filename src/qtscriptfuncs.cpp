@@ -4465,8 +4465,9 @@ static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weapon;
-	// send the projectile using the selectedPlayer so that it can always be seen
-	proj_SendProjectile(&sWeapon, nullptr, selectedPlayer, target, nullptr, true, 0);
+	// Send the projectile using the selectedPlayer so that it can always be seen.
+	// A player other than selectedPlayer is needed for the campaign lassat to damage player droids.
+	proj_SendProjectile(&sWeapon, nullptr, bMultiPlayer ? selectedPlayer : 8, target, nullptr, true, 0);
 	return QScriptValue();
 }
 
