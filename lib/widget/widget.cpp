@@ -220,7 +220,7 @@ void WIDGET::callCalcLayout()
 	{
 		calcLayout(this, screenWidth, screenHeight, screenWidth, screenHeight);
 	}
-#if DEBUG
+#ifdef DEBUG
 //	// FOR DEBUGGING:
 //	// To help track down WIDGETs missing a calc layout function
 //	// (because something isn't properly re-adjusting when live window resizing occurs)
