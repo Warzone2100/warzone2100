@@ -995,6 +995,22 @@ bool canChangeResolutionLive()
 	return wzSupportsLiveResolutionChanges() && (war_getFullscreen() == wzIsFullscreen());
 }
 
+void videoOptionsDisableResolutionButtons(QString toolTip)
+{
+	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, WBUT_DISABLE);
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION, toolTip);
+	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION_R, WBUT_DISABLE);
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION_R, toolTip);
+}
+
+void videoOptionsEnableResolutionButtons()
+{
+	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, 0);
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION, _(""));
+	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION_R, 0);
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION_R, _(""));
+}
+
 static char const *videoOptionsWindowModeString()
 {
 	return war_getFullscreen()? _("Fullscreen") : _("Windowed");
@@ -1050,6 +1066,39 @@ static std::string videoOptionsDisplayScaleString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
+void refreshCurrentVideoOptionsValues()
+{
+	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
+	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
+	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_R)) // Resolution option may not be available
+	{
+		widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+		if (canChangeResolutionLive())
+		{
+			if (!war_getFullscreen())
+			{
+				// If live window resizing is supported & the current mode is "windowed", disable the Resolution option and add a tooltip
+				// explaining the user can now resize the window normally.
+				videoOptionsDisableResolutionButtons(_("You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"));
+			}
+			else
+			{
+				videoOptionsEnableResolutionButtons();
+			}
+		}
+		else
+		{
+			videoOptionsEnableResolutionButtons();
+		}
+	}
+	widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString().c_str());
+	widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+	if (widgGetFromID(psWScreen, FRONTEND_DISPLAYSCALE_R)) // Display Scale option may not be available
+	{
+		widgSetString(psWScreen, FRONTEND_DISPLAYSCALE_R, videoOptionsDisplayScaleString().c_str());
+	}
+}
+
 static bool startVideoOptionsMenu()
 {
 	addBackdrop();
@@ -1098,6 +1147,8 @@ static bool startVideoOptionsMenu()
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
+	refreshCurrentVideoOptionsValues();
+	
 	return true;
 }
 
@@ -1121,22 +1172,6 @@ std::vector<unsigned int> availableDisplayScalesSorted()
 	std::vector<unsigned int> displayScales = wzAvailableDisplayScales();
 	std::sort(displayScales.begin(), displayScales.end());
 	return displayScales;
-}
-
-void refreshCurrentVideoOptionsValues()
-{
-	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
-	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
-	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_R)) // Resolution option may not be available
-	{
-		widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
-	}
-	widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString().c_str());
-	widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
-	if (widgGetFromID(psWScreen, FRONTEND_DISPLAYSCALE_R)) // Display Scale option may not be available
-	{
-		widgSetString(psWScreen, FRONTEND_DISPLAYSCALE_R, videoOptionsDisplayScaleString().c_str());
-	}
 }
 
 bool runVideoOptionsMenu()
@@ -1872,7 +1907,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	SDWORD			fx, fy, fw;
 	W_BUTTON		*psBut = (W_BUTTON *)psWidget;
 	bool			hilight = false;
-	bool			greyOut = psWidget->UserData; // if option is unavailable.
+	bool			greyOut = psWidget->UserData || (psBut->getState() & WBUT_DISABLE); // if option is unavailable.
 
 	// Any widget using displayTextOption must have its pUserData initialized to a (DisplayTextOptionCache*)
 	assert(psWidget->pUserData != nullptr);
