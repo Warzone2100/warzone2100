@@ -312,7 +312,7 @@ void intAddInGamePopup()
 	sButInit.x			= 0;
 	sButInit.height		= 10;
 	sButInit.pDisplay	= displayTextOption;
-	sButInit.pUserData = new DisplayTextOptionCache();
+	sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
 	sButInit.onDelete = [](WIDGET *psWidget) {
 		assert(psWidget->pUserData != nullptr);
 		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
