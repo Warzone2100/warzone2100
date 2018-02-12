@@ -4637,12 +4637,12 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			if (psGroup->type == GT_TRANSPORTER)
 			{
 				psDroid->selected = false;  // Droid should be visible in the transporter interface.
+				visRemoveVisibility(psDroid); // should not have visibility data when in a transporter
 			}
 		}
 		else
 		{
-			if (isTransporter(psDroid)
-			    || psDroid->droidType == DROID_COMMAND)
+			if (isTransporter(psDroid) || psDroid->droidType == DROID_COMMAND)
 			{
 				DROID_GROUP *psGroup = grpCreate();
 				psGroup->add(psDroid);

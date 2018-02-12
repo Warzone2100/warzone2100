@@ -432,6 +432,12 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 
 	int range = objSensorRange(psViewer);
 
+	// transporter in campaign ignores normal rules, can eg be off map
+	if (game.type == CAMPAIGN && psTarget->type == OBJ_DROID && isTransporter(castDroid(psTarget)))
+	{
+		return 0;
+	}
+
 	/* Get the sensor range */
 	switch (psViewer->type)
 	{
