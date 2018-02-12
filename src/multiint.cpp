@@ -196,6 +196,23 @@ struct DisplayAICache {
 struct DisplayDifficultyCache {
 	WzText wzDifficultyText;
 };
+struct DisplayRemoteGameHeaderCache
+{
+	WzText wzHeaderText_GameName;
+	WzText wzHeaderText_MapName;
+	WzText wzHeaderText_Players;
+	WzText wzHeaderText_Status;
+};
+struct DisplayRemoteGameCache
+{
+	WzText wzText_CurrentVsMaxNumPlayers;
+	WidthLimitedWzText wzText_GameName;
+	WidthLimitedWzText wzText_MapName;
+	WidthLimitedWzText wzText_ModNames;
+	WidthLimitedWzText wzText_VersionString;
+};
+
+static DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 
 // find games
 static void addGames();
@@ -1044,6 +1061,12 @@ static void addGames()
 	sButInit.width = GAMES_GAMEWIDTH;
 	sButInit.height = GAMES_GAMEHEIGHT;
 	sButInit.pDisplay = displayRemoteGame;
+	sButInit.initPUserDataFunc = []() -> void * { return new DisplayRemoteGameCache(); };
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayRemoteGameCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
 
 	// we want the old games deleted, and only list games when we should
 	if (getLobbyError() || !gcount)
@@ -4073,6 +4096,10 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	UDWORD	gameID = psWidget->UserData;
 	char tmp[80], name[StringSize];
 
+	// Any widget using displayRemoteGame must have its pUserData initialized to a (DisplayRemoteGameCache*)
+	assert(psWidget->pUserData != nullptr);
+	DisplayRemoteGameCache& cache = *static_cast<DisplayRemoteGameCache*>(psWidget->pUserData);
+
 	if ((LobbyError != ERROR_NOERROR) && (bMultiPlayer && !NetPlay.bComms))
 	{
 		addConsoleMessage(_("Can't connect to lobby server!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
@@ -4088,7 +4115,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int lamp = IMAGE_LAMP_RED;
 	int statusStart = IMAGE_NOJOIN;
 	bool disableButton = true;
-	iV_SetTextColour(WZCOL_TEXT_DARK);
+	PIELIGHT textColor = WZCOL_TEXT_DARK;
 
 	// As long as they got room, and mods are the same then we process the button(s)
 	if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
@@ -4101,7 +4128,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		else
 		{
 			// Game is ok to join!
-			iV_SetTextColour(WZCOL_FORM_TEXT);
+			textColor = WZCOL_FORM_TEXT;
 			statusStart = IMAGE_SKIRMISH_OVER;
 			lamp = IMAGE_LAMP_GREEN;
 			disableButton = false;
@@ -4118,7 +4145,8 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
-		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18, font_regular);
+		cache.wzText_CurrentVsMaxNumPlayers.setText(tmp, font_regular);
+		cache.wzText_CurrentVsMaxNumPlayers.render(x + GAMES_PLAYERS_START + 4 , y + 18, textColor);
 
 		// see what host limits are... then draw them.
 		if (NetPlay.games[gameID].limits)
@@ -4147,31 +4175,23 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	//draw game name, chop when we get a too long name
 	sstrcpy(name, NetPlay.games[gameID].name);
-	// box size in pixels
-	while (iV_GetTextWidth(name, font_regular) > (GAMES_MAPNAME_START - GAMES_GAMENAME_START - 4))
-	{
-		name[strlen(name) - 1] = '\0';
-	}
-	iV_DrawText(name, x + GAMES_GAMENAME_START, y + 12, font_regular);
+	cache.wzText_GameName.setTruncatableText(name, font_regular, (GAMES_MAPNAME_START - GAMES_GAMENAME_START - 4));
+	cache.wzText_GameName.render(x + GAMES_GAMENAME_START, y + 12, textColor);
 
 	if (NetPlay.games[gameID].pureMap)
 	{
-		iV_SetTextColour(WZCOL_RED);
+		textColor = WZCOL_RED;
 	}
 	else
 	{
-		iV_SetTextColour(WZCOL_FORM_TEXT);
+		textColor = WZCOL_FORM_TEXT;
 	}
 	// draw map name, chop when we get a too long name
 	sstrcpy(name, NetPlay.games[gameID].mapname);
-	// box size in pixels
-	while (iV_GetTextWidth(name, font_regular) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4))
-	{
-		name[strlen(name) - 1] = '\0';
-	}
-	iV_DrawText(name, x + GAMES_MAPNAME_START, y + 12, font_regular);	// map name
+	cache.wzText_MapName.setTruncatableText(name, font_regular, (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4));
+	cache.wzText_MapName.render(x + GAMES_MAPNAME_START, y + 12, textColor);
 
-	iV_SetTextColour(WZCOL_FORM_TEXT);
+	textColor = WZCOL_FORM_TEXT;
 	// draw mod name (if any)
 	if (strlen(NetPlay.games[gameID].modlist))
 	{
@@ -4185,32 +4205,31 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		sstrcpy(name, _("Mods: None!"));
 	}
-	// box size in pixels
-	while (iV_GetTextWidth(name, font_small) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 8))
-	{
-		name[strlen(name) - 1] = '\0';
-	}
-	iV_DrawText(name, x + GAMES_MODNAME_START, y + 24, font_small);
+	cache.wzText_ModNames.setTruncatableText(name, font_small, (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 8));
+	cache.wzText_ModNames.render(x + GAMES_MODNAME_START, y + 24, textColor);
 
 	// draw version string
 	sprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
-	// box size in pixels
-	while (iV_GetTextWidth(name, font_small) > (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4))
-	{
-		name[strlen(name) - 1] = '\0';
-	}
-	iV_DrawText(name, x + GAMES_GAMENAME_START + 6, y + 24, font_small);
+	cache.wzText_VersionString.setTruncatableText(name, font_small, (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4));
+	cache.wzText_VersionString.render(x + GAMES_GAMENAME_START + 6, y + 24, textColor);
 
 	// crappy hack to only draw this once for the header.  TODO fix GUI
 	if (gameID == 0)
 	{
-		iV_SetTextColour(WZCOL_YELLOW);
 		// make the 'header' for the table...
 		drawBlueBox(x , y - 12 , GAMES_GAMEWIDTH, 12);
-		iV_DrawText(_("Game Name"), x - 2 + GAMES_GAMENAME_START + 48, y - 3, font_small);
-		iV_DrawText(_("Map Name"), x - 2 + GAMES_MAPNAME_START + 48, y - 3, font_small);
-		iV_DrawText(_("Players"), x - 2 + GAMES_PLAYERS_START, y - 3, font_small);
-		iV_DrawText(_("Status"), x - 2 + GAMES_STATUS_START + 48, y - 3, font_small);
+
+		remoteGameListHeaderCache.wzHeaderText_GameName.setText(_("Game Name"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_GameName.render(x - 2 + GAMES_GAMENAME_START + 48, y - 3, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_MapName.setText(_("Map Name"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_MapName.render(x - 2 + GAMES_MAPNAME_START + 48, y - 3, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_Players.setText(_("Players"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_Players.render(x - 2 + GAMES_PLAYERS_START, y - 3, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_Status.setText(_("Status"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_Status.render(x - 2 + GAMES_STATUS_START + 48, y - 3, WZCOL_YELLOW);
 	}
 }
 
