@@ -842,7 +842,10 @@ void WzText::drawAndCacheText(const std::string &string, iV_fonts fontID)
 	std::tie(data, dimensions.x, dimensions.y, offsets.x, offsets.y) = getShaper().drawText(tr, face);
 
 	if (texture)
+	{
 		delete texture;
+		texture = nullptr;
+	}
 
 	if (dimensions.x > 0 && dimensions.y > 0)
 	{
