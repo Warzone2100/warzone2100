@@ -942,3 +942,25 @@ void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
 	iV_DrawImageText(*texture, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f(dimensions.x / mRenderingHorizScaleFactor, dimensions.y / mRenderingVertScaleFactor), rotation, REND_TEXT, colour);
 	glEnable(GL_CULL_FACE);
 }
+
+// Sets the text, truncating to a desired width limit (in *points*) if needed
+// returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
+size_t WidthLimitedWzText::setTruncatableText(const std::string &text, iV_fonts fontID, size_t limitWidthInPoints)
+{
+	if ((mFullText == text) && (mLimitWidthPts == limitWidthInPoints) && (getFontID() == fontID))
+	{
+		return getText().length(); // skip; no change
+	}
+
+	mFullText = text;
+	mLimitWidthPts = limitWidthInPoints;
+
+	std::string truncatedText = text;
+	while ((truncatedText.length() > 0) && (iV_GetTextWidth(truncatedText.c_str(), fontID) > limitWidthInPoints))
+	{
+		truncatedText.pop_back();
+	}
+
+	WzText::setText(truncatedText, fontID);
+	return truncatedText.length();
+}

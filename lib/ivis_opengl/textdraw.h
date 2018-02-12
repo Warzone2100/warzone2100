@@ -60,6 +60,10 @@ public:
 	WzText& operator=(WzText&& other);
 	WzText(WzText&& other);
 
+protected:
+	const std::string& getText() { return mText; }
+	iV_fonts getFontID() { return mFontID; }
+
 private:
 	void drawAndCacheText(const std::string &text, iV_fonts fontID);
 	void redrawAndCacheText();
@@ -75,6 +79,18 @@ private:
 	Vector2i dimensions;
 	float mRenderingHorizScaleFactor = 0.f;
 	float mRenderingVertScaleFactor = 0.f;
+};
+
+class WidthLimitedWzText: public WzText
+{
+public:
+	// Sets the text, truncating to a desired width limit (in *points*) if needed
+	// returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
+	size_t setTruncatableText(const std::string &text, iV_fonts fontID, size_t limitWidthInPoints);
+
+private:
+	std::string mFullText;
+	size_t mLimitWidthPts = 0;
 };
 
 /**
