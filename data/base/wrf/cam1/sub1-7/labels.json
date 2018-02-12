@@ -136,7 +136,7 @@
 		"label": "middleScavFactoryTrigger",
 		"subscriber": 0,
 		"pos": [4224, 4864],
-		"radius": 1344
+		"radius": 1984
 	},
 	"radius_3": {
 		"label": "NPWayPointTrigger",
