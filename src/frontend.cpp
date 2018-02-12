@@ -1131,7 +1131,7 @@ static bool startVideoOptionsMenu()
 	addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, videoOptionsVsyncString(), WBUT_SECONDARY);
 
 	// Antialiasing
-	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "Antialiasing*", WBUT_SECONDARY);
+	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, _("Antialiasing*"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsAntialiasingString(), WBUT_SECONDARY);
 
 	// Display Scale
