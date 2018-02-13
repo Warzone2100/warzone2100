@@ -5,6 +5,7 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 find_package(OpenAL REQUIRED)
+find_package(OggVorbis REQUIRED)
 
 add_library(sequence ${HEADERS} ${SRC})
 target_compile_definitions(sequence PRIVATE "AL_LIBTYPE_STATIC")
