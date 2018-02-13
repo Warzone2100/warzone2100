@@ -40,9 +40,9 @@ file(GLOB SRC
 	"textdraw.cpp"
 )
 
-find_package(PNG REQUIRED)
+find_package(PNG 1.4 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
+find_package(GLEW 1.5.2 REQUIRED)
 find_package(Freetype REQUIRED)
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
