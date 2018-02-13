@@ -4,7 +4,9 @@ project (sdl-backend CXX)
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
-find_package(SDL2 REQUIRED)
+set(SDL2_MIN_VERSION "2.0.5")
+
+find_package(SDL2 ${SDL2_MIN_VERSION} REQUIRED)
 
 add_library(sdl-backend ${HEADERS} ${SRC})
 target_include_directories(sdl-backend PRIVATE ${SDL2_INCLUDE_DIR})
