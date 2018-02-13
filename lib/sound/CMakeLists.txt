@@ -4,6 +4,7 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 find_package(OpenAL REQUIRED)
+find_package(OggVorbis REQUIRED)
 
 add_library(sound ${HEADERS} ${SRC})
 target_compile_definitions(sound PRIVATE "-DAL_LIBTYPE_STATIC")
