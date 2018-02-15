@@ -3,11 +3,25 @@
 # Note:
 # This script is meant to be run from the root of the working copy.
 # 
-# This script cleans up warzone but not the libs so builds will go faster.
+# This script cleans up warzone.
 
-# Config
+##############################
+# General Setup
+
+. macosx/BuildBot/_xcodebuild_helpers.sh
+
+
+##############################
+# Clean Warzone
 
 cd macosx
 
-xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Warzone" -configuration "Release" -nodependencies clean
+execute_xcodebuild_command clean -project Warzone.xcodeproj -target "Warzone" -configuration "Release" -destination "platform=macOS"
+result=${?}
+if [ $result -ne 0 ]; then
+	exit ${result}
+fi
+
+rm -rf build/Release
+
 exit ${?}
