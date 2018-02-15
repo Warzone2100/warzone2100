@@ -220,12 +220,6 @@ Section $(TEXT_SecBase) SecBase
   Push "README.md.txt"
   Call unix2dos
 
-; Create mod directories
-  CreateDirectory "$INSTDIR\mods\campaign"
-  CreateDirectory "$INSTDIR\mods\music"
-  CreateDirectory "$INSTDIR\mods\global"
-  CreateDirectory "$INSTDIR\mods\multiplay"
-
   SetOutPath "$INSTDIR\doc"
   File "${TOP_SRCDIR}\doc\quickstartguide.html"
   File "${TOP_SRCDIR}\doc\quickstartguide.pdf"
@@ -558,9 +552,6 @@ FunctionEnd
   LangString TEXT_SecOpenAL ${LANG_ENGLISH} "OpenAL libraries"
   LangString DESC_SecOpenAL ${LANG_ENGLISH} "Runtime libraries for OpenAL, a free Audio interface. Implementation by Creative Labs."
 
-;  LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
-;  LangString DESC_SecMods ${LANG_ENGLISH} "Various mods for Warzone 2100."
-
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
 
@@ -582,9 +573,6 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_ENGLISH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_ENGLISH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
 
-;  LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "1.10 balance"
-;  LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
-
   ;Dutch
   LangString WZWelcomeText ${LANG_DUTCH} "Deze installatiewizard leidt u door het installatieproces van Warzone 2100.\r\n\r\nHet is aangeraden om alle andere applicaties te sluiten alvorens verder te gaan met deze installatie. Dit maakt het mogelijk om de betreffende systeembestanden te vervangen zonder uw computer opnieuw op te starten"
   LangString WZ_GPL_NEXT ${LANG_DUTCH} "volgende"
@@ -595,9 +583,6 @@ FunctionEnd
 
   LangString TEXT_SecOpenAL ${LANG_DUTCH} "OpenAL bibliotheken"
   LangString DESC_SecOpenAL ${LANG_DUTCH} "Vereiste bibliotheken voor OpenAL, een opensource/vrije Audio Bibliotheek."
-
-;  LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
-;  LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
 
   LangString TEXT_SecFMVs ${LANG_DUTCH} "Videos"
   LangString DESC_SecFMVs ${LANG_DUTCH} "Download and install in-game cutscenes."
@@ -620,9 +605,6 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_DUTCH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_DUTCH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
 
-;  LangString TEXT_SecOriginalMod ${LANG_DUTCH} "1.10 balance"
-;  LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
-
   ;German
   LangString WZWelcomeText ${LANG_GERMAN} "Dieser Wizard wird Sie durch die Warzone-2100-Installation führen.\r\n\r\nEs wird empfohlen sämtliche anderen Anwendungen zu schließen, bevor Sie das Setup starten. Dies ermöglicht es relevante Systemdateien zu aktualisieren, ohne neustarten zu müssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafür gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
   LangString WZ_GPL_NEXT ${LANG_GERMAN} "nächste"
@@ -633,9 +615,6 @@ FunctionEnd
 
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
   LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
-
-;  LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
-;  LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
   LangString TEXT_SecFMVs ${LANG_GERMAN} "Videos"
   LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
@@ -658,9 +637,6 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie später eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und später langsam sein!"
 
-;  LangString TEXT_SecOriginalMod ${LANG_GERMAN} "1.10 balance"
-;  LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
-
   ;Russian
   LangString WZWelcomeText ${LANG_RUSSIAN} "Этот помощник установки поможет вам установить Warzone2100.\r\n\r\nПеред началом рекомендуем закрыть все другие приложения. Это позволит обновить соответствующие системные файлы без перезагрузки системы.\r\n\r\nWarzone2100 100% бесплатный, если вы за него заплатили сообщите нам!\r\n\r\nНажмите Далее для продолжения."
   LangString WZ_GPL_NEXT ${LANG_RUSSIAN} "Согласен"
@@ -671,9 +647,6 @@ FunctionEnd
 
   LangString TEXT_SecOpenAL ${LANG_RUSSIAN} "Библиотека OpenAL"
   LangString DESC_SecOpenAL ${LANG_RUSSIAN} "Свободно распространяемый аппаратно- программный интерфейс (API) для работы с аудиоданными. Версия от Creative Labs."
-
-;  LangString TEXT_SecMods ${LANG_RUSSIAN} "Модификации"
-;  LangString DESC_SecMods ${LANG_RUSSIAN} "Различные модификации для Warzone 2100."
 
   LangString TEXT_SecFMVs ${LANG_RUSSIAN} "Видео"
   LangString DESC_SecFMVs ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики."
@@ -696,17 +669,11 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_RUSSIAN} "WinШрифты"
   LangString DESC_SecNLS_WinFonts ${LANG_RUSSIAN} "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
 
-;  LangString TEXT_SecOriginalMod ${LANG_RUSSIAN} "Баланс 1.10"
-;  LangString DESC_SecOriginalMod ${LANG_RUSSIAN} "Играть в игру с балансом от оригинальной версии 1.10."
-
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
-
-;    !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
-;    !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
@@ -769,18 +736,6 @@ Section "Uninstall"
   Delete "$INSTDIR\fonts\DejaVuSans.ttf"
   Delete "$INSTDIR\fonts\DejaVuSans-Bold.ttf"
   RMDir "$INSTDIR\fonts"
-
-  Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
-  Delete "$INSTDIR\mods\music\music_1.0.wz"
-
-  Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
-
-  RMDir "$INSTDIR\mods\multiplay"
-  RMDir "$INSTDIR\mods\music"
-  RMDir "$INSTDIR\mods\campaign"
-  RMDir "$INSTDIR\mods\global"
-
-  RMDir "$INSTDIR\mods"
 
 ; remove all the locales
 
@@ -923,7 +878,6 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\${PACKAGE_NAME}- Old 1.10 Balance.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Quick Start Guide (html).lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Quick Start Guide (pdf).lnk"
 
