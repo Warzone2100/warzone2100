@@ -1,12 +1,40 @@
-language: c
-dist:
-# precise doesn't have `qtscript5-dev`
-- trusty
-- xenial
-install:
-- sudo apt-get update
-- sudo apt-get build-dep warzone2100
-- sudo apt-get install qtscript5-dev libsdl2-dev libharfbuzz-dev
-script:
-- export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
-- ./autogen.sh && ./configure && make && make check && sudo make install
+matrix:
+  include:
+    ## Build for Ubuntu using Dockerfile
+    ## Commented out until Ubuntu Dockerfile can be fixed for SDL >= 2.0.5
+    #- language: c
+    #  sudo: required
+    #  services:
+    #    - docker
+    #  install:
+    #    - cd docker/ubuntu/
+    #    - docker build -t ubuntu .
+    #    - cd ../..
+    #  script:
+    #    - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
+    #    # TODO:
+    #    # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
+    #    # To do this, append the following to the pertinent lines before —rm:
+    #    # -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
+    #    - docker run --rm -v $(pwd):/code ubuntu ./autogen.sh
+    #    - docker run --rm -v $(pwd):/code ubuntu ./configure
+    #    - docker run --rm -v $(pwd):/code ubuntu make
+    #    - docker run --rm -v $(pwd):/code ubuntu make check
+    #    - docker run --rm -v $(pwd):/code ubuntu make install
+
+    # Build for macOS
+    - language: objective-c
+      os: osx
+      osx_image: xcode8.3
+      before_install:
+        #- brew update
+        - brew install gettext
+        - brew install asciidoc
+        - brew install docbook-xsl
+        - wget https://tug.org/cgi-bin/mactex-download/BasicTeX.pkg && pkgutil --check-signature BasicTeX.pkg && sudo installer -pkg BasicTeX.pkg -target /
+        - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+        - gem install xcpretty-travis-formatter --no-rdoc --no-ri --no-document --quiet
+      script:
+        - macosx/BuildBot/travis_build.sh regular "tmp/wz_upload"
+      after_success:
+        - macosx/BuildBot/travis_deploy.sh "tmp/wz_upload" "warzone2100-*.zip"
