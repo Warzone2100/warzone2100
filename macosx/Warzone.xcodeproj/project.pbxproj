@@ -44,6 +44,7 @@
 			buildConfigurationList = 43D180881336B6D6001906EB /* Build configuration list for PBXAggregateTarget "Autorevision" */;
 			buildPhases = (
 				43D180761336B6BF001906EB /* Run autorevision */,
+				D7B6A912203513EA00156517 /* Touch Info.plist */,
 			);
 			dependencies = (
 			);
@@ -5350,7 +5351,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ". configs/autorevision.sh";
+			shellScript = ". configs/autorevision.sh\n";
 		};
 		43F77C7610F0125E00E04615 /* Make DMG(s) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5451,6 +5452,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = ". configs/fetchscripts/FreeType-FetchSource.sh";
+		};
+		D7B6A912203513EA00156517 /* Touch Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Touch Info.plist";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -f \"$INFOPLIST_FILE\" ]; then\n    echo \"info: Touching '$INFOPLIST_FILE' to ensure that any dependent targets (like Warzone.app) pick up changes immediately.\"\n    touch \"$INFOPLIST_FILE\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -6684,6 +6699,7 @@
 		43D1807F1336B6C0001906EB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INFOPLIST_FILE = "Resources/Warzone-Info.plist";
 				PRODUCT_NAME = Autorevision;
 			};
 			name = Debug;
@@ -6691,6 +6707,7 @@
 		43D180801336B6C0001906EB /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INFOPLIST_FILE = "Resources/Warzone-Info.plist";
 				PRODUCT_NAME = Autorevision;
 			};
 			name = StaticAnalyzer;
@@ -6698,6 +6715,7 @@
 		43D180811336B6C0001906EB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INFOPLIST_FILE = "Resources/Warzone-Info.plist";
 				PRODUCT_NAME = Autorevision;
 			};
 			name = Release;

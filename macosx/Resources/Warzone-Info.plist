@@ -29,11 +29,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>VCS_TAG :VCS_SHORT_HASH:</string>
+	<string>MAC_VERSION_NUMBER</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>VCS_NUM</string>
+	<string>MAC_BUILD_NUMBER</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.strategy-games</string>
 	<key>LSHasLocalizedDisplayName</key>
