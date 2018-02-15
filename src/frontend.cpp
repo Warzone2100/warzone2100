@@ -1006,9 +1006,9 @@ void videoOptionsDisableResolutionButtons(QString toolTip)
 void videoOptionsEnableResolutionButtons()
 {
 	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, 0);
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION, _(""));
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION, "");
 	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION_R, 0);
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION_R, _(""));
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION_R, "");
 }
 
 static char const *videoOptionsWindowModeString()
