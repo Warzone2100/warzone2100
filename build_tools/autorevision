@@ -174,6 +174,41 @@ gitRepo() {
 	VCS_BRANCH_COMMIT_COUNT=$(git rev-list --count master..)
 }
 
+# For Travis-CI builds
+travisCIBuild() {
+	# Information must be extracted from a combination of Travis-set environment
+	# variables and other sources
+
+	# Start by calling gitRepo, since certain values should be obtained directly from git
+	# IMPORTANT: Since Travis uses a shallow clone by default, unshallow must be performed before
+	#            this script is run so that the correct values can be obtained by gitRepo().
+	gitRepo
+
+	# The full revision hash
+	VCS_FULL_HASH="${TRAVIS_COMMIT}"
+	# The short hash
+	VCS_SHORT_HASH="$(echo "${VCS_FULL_HASH}" | cut -b 1-7)"
+
+	# Current branch
+	VCS_BRANCH="${TRAVIS_BRANCH}"
+	if [ -n "${TRAVIS_PULL_REQUEST_BRANCH}" ]; then
+		# When triggered by a pull request, TRAVIS_BRANCH is set to the *target* branch name
+		# But we want the source branch name, so use TRAVIS_PULL_REQUEST_BRANCH
+		VCS_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH}"
+	fi
+
+	# Check if we are on a tag
+	VCS_TAG=
+	if [ -n "${TRAVIS_TAG}" ]; then
+		VCS_TAG="${TRAVIS_TAG}"
+
+		# When on a tag, clear VCS_BRANCH
+		VCS_BRANCH=
+	fi
+
+	VCS_EXTRA=
+}
+
 
 # Functions to output data in different formats.
 # For header output
@@ -196,12 +231,10 @@ hOutput() {
 #define VCS_WC_MODIFIED		${VCS_WC_MODIFIED}
 
 #define VCS_COMMIT_COUNT	${VCS_COMMIT_COUNT}
-#define VCS_MOST_RECENT_TAGGED_VERSION	${VCS_MOST_RECENT_TAGGED_VERSION}
+#define VCS_MOST_RECENT_TAGGED_VERSION	"${VCS_MOST_RECENT_TAGGED_VERSION}"
 #define VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION	${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}
 #define VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH	${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}
 #define VCS_BRANCH_COMMIT_COUNT	${VCS_BRANCH_COMMIT_COUNT}
-
-## AUTOINSERT MARK
 
 #endif
 
@@ -228,10 +261,12 @@ xcodeOutput() {
 #define VCS_WC_MODIFIED		${VCS_WC_MODIFIED}
 
 #define VCS_COMMIT_COUNT	${VCS_COMMIT_COUNT}
-#define VCS_MOST_RECENT_TAGGED_VERSION	"${VCS_MOST_RECENT_TAGGED_VERSION}"
+#define VCS_MOST_RECENT_TAGGED_VERSION	${VCS_MOST_RECENT_TAGGED_VERSION}
 #define VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION	${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}
 #define VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH	${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}
 #define VCS_BRANCH_COMMIT_COUNT	${VCS_BRANCH_COMMIT_COUNT}
+
+## AUTOINSERT MARK
 
 #endif
 
@@ -268,6 +303,9 @@ EOF
 if [ -f "${CACHEFILE}" ] && [ "${CACHEFORCE}" = "1" ]; then
 	# When requested only read from the cache to populate our symbols.
 	. "${CACHEFILE}"
+elif [ -n "${TRAVIS}" ] && [ "${TRAVIS}" == "true" ]; then
+	# Autorevision is being executed from a Travis-CI build
+	travisCIBuild
 elif [ ! -z "$(git rev-parse HEAD 2>/dev/null)" ]; then
 	gitRepo
 elif [ -f "${CACHEFILE}" ]; then
@@ -276,7 +314,7 @@ elif [ -f "${CACHEFILE}" ]; then
 	# Do not overwrite the cache if we know we are not going to write anything new.
 	CACHEFORCE="1"
 else
-	echo "error: No repo or cache detected." 1>&2
+	echo "error: No repo, cache, or other data source detected." 1>&2
 	exit 1
 fi
 
