@@ -120,7 +120,7 @@ nxmcommh: { body: "Body7ABT", prop: "hover02", weap: "CommandTurret1" },
 nxcylas: { body: "CyborgLightBody", prop: "CyborgLegs02", weap: "Cyb-Wpn-Laser" },
 
 // CAM_3_B
-nxmlinkh: { body: "Body7ABT", prop: "hover02", weap: "SpyTurret01" },
+nxmlinkh: { body: "Body7ABT", prop: "hover02", weap: "NEXUSlink" },
 nxmsamh: { body: "Body7ABT", prop: "hover02", weap: "Missile-HvySAM" },
 nxmheapv: { body: "Body7ABT", prop: "V-Tol02", weap: "Bomb2-VTOL-HvHE" },
 
@@ -139,7 +139,7 @@ nxhgauss: { body: "Body10MBT", prop: "hover02", weap: "RailGun3Mk1" },
 nxhrailv: { body: "Body10MBT", prop: "V-Tol02", weap: "RailGun2-VTOL" },
 
 // CAM_3_4
-nxllinkh: { body: "Body3MBT", prop: "hover02", weap: "SpyTurret01" },
+nxllinkh: { body: "Body3MBT", prop: "hover02", weap: "NEXUSlink" },
 nxmpulsev: { body: "Body7ABT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
 
 
