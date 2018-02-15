@@ -99,3 +99,7 @@ WarnForCpp = $(WarnForCppDep)
 // Additional build flags for both c and c++ files
 FlagsForCandCpp = $(BuildDependentFlagsForCandCpp) $(WarnForCandCpp)
 FlagsForCandCpp[arch=i386] = $(inherited) // Flags for intel 32 bit only
+
+// Embed the dSYM file in the app bundle
+DWARF_DSYM_FOLDER_PATH = $(CONFIGURATION_BUILD_DIR)/$(EXECUTABLE_FOLDER_PATH)
+DWARF_DSYM_FILE_NAME = $(EXECUTABLE_NAME).dSYM
