@@ -146,9 +146,15 @@ gitRepo() {
 	# find the most recent "version" tag in the current history
 	VCS_MOST_RECENT_TAGGED_VERSION=
 	local tag_skip=0
-	while true; do
-		local current_tag="$(git describe --abbrev=0 --tags `git rev-list --tags --skip=${tag_skip} --max-count=1` 2> /dev/null)"
-		if [ -z current_tag ]; then
+	# to avoid an infinite loop (if Git repo is in an unexpected state), set an upper bound
+	while [ "$tag_skip" -le "100000" ]; do
+		local revision="$(git rev-list --tags --skip=${tag_skip} --max-count=1)"
+		if [ -z "$revision" ]; then
+			VCS_MOST_RECENT_TAGGED_VERSION=
+			break
+		fi
+		local current_tag="$(git describe --abbrev=0 --tags ${revision} 2> /dev/null)"
+		if [ -z "$current_tag" ]; then
 			# Reached end of tags
 			VCS_MOST_RECENT_TAGGED_VERSION=
 			break
