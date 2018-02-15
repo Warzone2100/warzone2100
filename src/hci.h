@@ -38,7 +38,7 @@ struct PROXIMITY_DISPLAY;
 struct STRUCTURE;
 struct W_SCREEN;
 struct iIMDShape;
-struct QScriptEngine;
+class QScriptEngine;
 
 enum  				  // Reticule button indecies.
 {
