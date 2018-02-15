@@ -33,12 +33,17 @@ The following are valid symbols:
 	VCS_FULL_HASH
 	VCS_SHORT_HASH
 	VCS_WC_MODIFIED
+	VCS_COMMIT_COUNT
+	VCS_MOST_RECENT_TAGGED_VERSION
+	VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION
+	VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH
+	VCS_BRANCH_COMMIT_COUNT
 EOF
 	exit 1
 }
 
 # Config
-ARVERSION="1.7-Warzone"
+ARVERSION="1.8-Warzone"
 TARGETFILE="/dev/stdout"
 while getopts ":t:o:s:Vf" OPTION; do
 	case "${OPTION}" in
@@ -88,6 +93,26 @@ fi
 
 
 # Functions to extract data from different repo types.
+#
+canExtractVersionNumberFromGitTag() {
+	local version_tag="$1"
+
+	# Remove "v/" or "v" prefix (as in "v3.2.2"), if present
+	version_tag="$(echo "${version_tag}" | sed -e 's:^v/::' -e 's:^v::')"
+
+	# Remove _beta* or _rc* suffix, if present
+	version_tag="$(echo "${version_tag}" | sed -e 's:_beta.*$::' -e 's:_rc.*$::')"
+
+	# Extract up to a 3-component version # from the beginning of the tag (i.e. 3.2.2)
+	version_tag="$(echo "${version_tag}" | grep -Eo '^\d+(.\d+){0,2}')"
+
+	if [ -n "${version_tag}" ]; then
+		return 0
+	else
+		return 1 # failed to extract version #
+	fi
+}
+
 # For git repos
 gitRepo() {
 	cd "$(git rev-parse --show-toplevel)"
@@ -113,6 +138,40 @@ gitRepo() {
 	VCS_TAG="$(git describe --exact-match 2> /dev/null)"
 	# get some extra data in case we are not on a branch or a tag...
 	VCS_EXTRA="$(git describe 2> /dev/null)"
+
+	# get the # of commits in the current history
+	# IMPORTANT: This value is incorrect if operating from a shallow clone
+	VCS_COMMIT_COUNT="$(git rev-list --count HEAD 2> /dev/null)"
+
+	# find the most recent "version" tag in the current history
+	VCS_MOST_RECENT_TAGGED_VERSION=
+	local tag_skip=0
+	while true; do
+		local current_tag="$(git describe --abbrev=0 --tags `git rev-list --tags --skip=${tag_skip} --max-count=1` 2> /dev/null)"
+		if [ -z current_tag ]; then
+			# Reached end of tags
+			VCS_MOST_RECENT_TAGGED_VERSION=
+			break
+		fi
+		if canExtractVersionNumberFromGitTag "${current_tag}"; then
+			# Found a tag that looks like a version number
+			VCS_MOST_RECENT_TAGGED_VERSION="${current_tag}"
+			break
+		fi
+		tag_skip=$((tag_skip + 1))
+	done
+	if [ -n "${VCS_MOST_RECENT_TAGGED_VERSION}" ]; then
+		VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=$(git rev-list --count ${VCS_MOST_RECENT_TAGGED_VERSION}.. 2> /dev/null)
+	else
+		echo "error: No version tag detected in Git history. VCS_MOST_RECENT_TAGGED_VERSION and VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION will be empty"
+		VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=
+	fi
+
+	# get the commit count on master until the branch
+	VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH=$(git rev-list --count $(git rev-list master.. | tail -n 1)^ 2> /dev/null)
+
+	# get the commit count on this branch *since* the branch from master
+	VCS_BRANCH_COMMIT_COUNT=$(git rev-list --count master..)
 }
 
 
@@ -135,6 +194,14 @@ hOutput() {
 #define VCS_SHORT_HASH		"${VCS_SHORT_HASH}"
 
 #define VCS_WC_MODIFIED		${VCS_WC_MODIFIED}
+
+#define VCS_COMMIT_COUNT	${VCS_COMMIT_COUNT}
+#define VCS_MOST_RECENT_TAGGED_VERSION	${VCS_MOST_RECENT_TAGGED_VERSION}
+#define VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION	${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}
+#define VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH	${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}
+#define VCS_BRANCH_COMMIT_COUNT	${VCS_BRANCH_COMMIT_COUNT}
+
+## AUTOINSERT MARK
 
 #endif
 
@@ -160,6 +227,12 @@ xcodeOutput() {
 
 #define VCS_WC_MODIFIED		${VCS_WC_MODIFIED}
 
+#define VCS_COMMIT_COUNT	${VCS_COMMIT_COUNT}
+#define VCS_MOST_RECENT_TAGGED_VERSION	"${VCS_MOST_RECENT_TAGGED_VERSION}"
+#define VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION	${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}
+#define VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH	${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}
+#define VCS_BRANCH_COMMIT_COUNT	${VCS_BRANCH_COMMIT_COUNT}
+
 #endif
 
 /* end */
@@ -181,6 +254,12 @@ VCS_FULL_HASH="${VCS_FULL_HASH}"
 VCS_SHORT_HASH="${VCS_SHORT_HASH}"
 
 VCS_WC_MODIFIED=${VCS_WC_MODIFIED}
+
+VCS_COMMIT_COUNT=${VCS_COMMIT_COUNT}
+VCS_MOST_RECENT_TAGGED_VERSION="${VCS_MOST_RECENT_TAGGED_VERSION}"
+VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}
+VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH=${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}
+VCS_BRANCH_COMMIT_COUNT=${VCS_BRANCH_COMMIT_COUNT}
 
 # end
 EOF
@@ -220,6 +299,16 @@ if [ ! -z "${VAROUT}" ]; then
 		echo "${VCS_SHORT_HASH}"
 	elif [ "${VAROUT}" = "VCS_WC_MODIFIED" ]; then
 		echo "${VCS_WC_MODIFIED}"
+	elif [ "${VAROUT}" = "VCS_COMMIT_COUNT" ]; then
+		echo "${VCS_COMMIT_COUNT}"
+	elif [ "${VAROUT}" = "VCS_MOST_RECENT_TAGGED_VERSION" ]; then
+		echo "${VCS_MOST_RECENT_TAGGED_VERSION}"
+	elif [ "${VAROUT}" = "VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION" ]; then
+		echo "${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}"
+	elif [ "${VAROUT}" = "VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH" ]; then
+		echo "${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}"
+	elif [ "${VAROUT}" = "VCS_BRANCH_COMMIT_COUNT" ]; then
+		echo "${VCS_BRANCH_COMMIT_COUNT}"
 	else
 		echo "error: Not a valid output symbol." 1>&2
 		exit 1
