@@ -6,7 +6,7 @@ OutDir="$2"
 FileName="$3"
 SourceDLP="$4"
 SHA256Sum="$5"
-BackupDLP="http://wz2100.net/~dak180/BuildTools/external/"
+BackupDLP="https://github.com/past-due/wz2100-mac-build-tools/raw/master/sources/"
 
 if ! type -aP shasum > /dev/null; then
 	echo "error: Missing command `shasum`. Are you sure Xcode is properly installed?" >&2
@@ -55,27 +55,71 @@ elif [[ -d "${OutDir}" ]] && [[ -f "${FileName}" ]]; then
 	fi
 fi
 
-# Fetch
+function checkFileSHA256 {
+	local FileName="$1"
+	local SHA256Sum="$2"
+
+	local SHA256SumLoc="$(shasum -a 256 "${FileName}" | awk '{ print $1 }')"
+	if [ -z "${SHA256SumLoc}" ]; then
+		echo "warning: Unable to compute SHA256 for ${FileName}" >&2
+		return 1
+	elif [ "${SHA256SumLoc}" != "${SHA256Sum}" ]; then
+		echo "warning: SHA256 does not match for ${FileName}; (received: ${SHA256SumLoc}) (expecting: ${SHA256Sum}) (file size: $(stat -f%z "${FileName}"))" >&2
+		rm -f "${FileName}"
+		return 1
+	fi
+
+	return 0
+}
+
+function fetchAndCheckSHA256 {
+	local DLURL="$1"
+	local FileName="$2"
+	local SHA256Sum="$3"
+
+	# Fetch the file
+	echo "info: Fetching: ${DLURL}" >&2
+	curl -Lfo "${FileName}" --connect-timeout "30" "${DLURL}"
+	local result=${?}
+	if [ $result -ne 0 ]; then
+		echo "warning: Fetch failed: ${DLURL}" >&2
+		return ${result}
+	fi
+
+	# Check SHA256 sum of downloaded file
+	checkFileSHA256 "${FileName}" "${SHA256Sum}"
+	result=${?}
+	if [ $result -ne 0 ]; then
+		return ${result}
+	fi
+
+	return 0
+}
+
+# Fetch and check SHA256 sum
 if [ ! -r "${FileName}" ]; then
-	echo "Fetching ${SourceDLP}"
-	if ! curl -Lfo "${FileName}" --connect-timeout "30" "${SourceDLP}"; then
-		if ! curl -LfOC - --connect-timeout "30" "${BackupDLP}${FileName}"; then
+	fetchAndCheckSHA256 "${SourceDLP}" "${FileName}" "${SHA256Sum}"
+	result=${?}
+	if [ $result -ne 0 ]; then
+		echo "warning: Fetching from backup source ..." >&2
+		fetchAndCheckSHA256 "${BackupDLP}${FileName}" "${FileName}" "${SHA256Sum}"
+		result=${?}
+		if [ $result -ne 0 ]; then
 			echo "error: Unable to fetch ${SourceDLP}" >&2
 			exit 1
 		fi
 	fi
 else
-	echo "${FileName} already exists, skipping" >&2
-fi
+	echo "info: ${FileName} already exists, skipping fetch" >&2
 
-# Check our sums
-SHA256SumLoc="$(shasum -a 256 "${FileName}" | awk '{ print $1 }')"
-if [ -z "${SHA256SumLoc}" ]; then
-	echo "error: Unable to compute SHA256 for ${FileName}" >&2
-	exit 1
-elif [ "${SHA256SumLoc}" != "${SHA256Sum}" ]; then
-	echo "error: SHA256 does not match for ${FileName}" >&2
-	exit 1
+	# Check SHA256
+	checkFileSHA256 "${FileName}" "${SHA256Sum}"
+	result=${?}
+	if [ $result -ne 0 ]; then
+		# SHA256 of existing file does not match expected
+		echo "error: Existing \"${FileName}\" does not match expected SHA256 hash" >&2
+		exit ${result}
+	fi
 fi
 
 # Unpack
@@ -96,7 +140,7 @@ else
 fi
 
 # Save the sum
-echo "${SHA256SumLoc}" > "${DirectorY}/.SHA256SumLoc"
+echo "${SHA256Sum}" > "${DirectorY}/.SHA256SumLoc"
 
 # Move
 if [ ! -d "${DirectorY}" ]; then
