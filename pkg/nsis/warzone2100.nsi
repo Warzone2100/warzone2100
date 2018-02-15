@@ -294,8 +294,9 @@ SectionEnd
 
 !ifndef INSTALLVIDS
 SectionGroup $(TEXT_SecFMVs) SecFMVs
-Section /o $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
 
+Section /o $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
+  SetOutPath "$INSTDIR"
   IfFileExists "sequences.wz" +5
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
@@ -304,6 +305,7 @@ Section /o $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
 SectionEnd
 
 Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
+  SetOutPath "$INSTDIR"
   IfFileExists "sequences.wz" +5
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
@@ -312,6 +314,7 @@ Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
 SectionEnd
 
 Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
+  SetOutPath "$INSTDIR"
   IfFileExists "sequences.wz" +5
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/low-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
@@ -320,7 +323,7 @@ Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
 SectionEnd
 
 ;Section /o $(TEXT_SecFMVs_Ger) SecFMVs_Ger
-;
+;  SetOutPath "$INSTDIR"
 ;  IfFileExists "sequences.wz" +5
 ;    NSISdl::download "http://download.gna.org/warzone/videos/2.2/warzone2100-sequences-ger-hi-2.2.wz"               "sequences.wz"
 ;    Pop $R0 ; Get the return value
