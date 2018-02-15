@@ -2670,6 +2670,10 @@ function camNextLevel(nextLevel)
 		}
 	}
 	camBreakAlliances();
+	//Set these limits again for the home map before exiting this mission
+	setStructureLimits("A0CommandCentre", 1, CAM_HUMAN_PLAYER);
+	setStructureLimits("A0ComDroidControl", 1, CAM_HUMAN_PLAYER);
+
 	loadLevel(nextLevel);
 }
 
