@@ -25,11 +25,11 @@
     - AsciiDoc
         - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
             ```shell
-            brew install asciidoc
+            brew install asciidoc docbook-xsl
             ```
         - If you have [Macports](https://www.macports.org/install.php) installed, you can use the following command in Terminal:
             ```shell
-            sudo port install asciidoc
+            sudo port install asciidoc docbook-xsl
             ```
     - LaTeX
         - We recommend installing `Basic TeX` directly from: https://tug.org/mactex/morepackages.html

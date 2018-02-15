@@ -79,7 +79,9 @@ if [[ brewCheckSuccess -eq 0 ]] && [[ $A2XPATH == $BREWPREFIX/* ]]; then
 fi
 
 # quickstartguide
-if a2x -f chunked -D "${mWarzoneHelpLproj}" doc/quickstartguide.asciidoc; then
+a2x_run_output=$(a2x -f chunked -D "${mWarzoneHelpLproj}" doc/quickstartguide.asciidoc 2>&1)
+a2x_result=${?}
+if [ $a2x_result -eq 0 ]; then
 	cp -af ${mWarzoneHelpLproj}/quickstartguide.chunked/* ${mWarzoneHelpLproj}
 	rm -fr ${mWarzoneHelpLproj}/quickstartguide.chunked
 
@@ -93,8 +95,9 @@ if a2x -f chunked -D "${mWarzoneHelpLproj}" doc/quickstartguide.asciidoc; then
 	sed -i '' -e 's:src="images/:src="../images/:g' ${mWarzoneHelpLproj}/*.html
 	sed -i '' -e 's:warzone2100:Warzone:g' ${mWarzoneHelpLproj}/warzone2100.6.html
 else
-	echo "error: Something went wrong with a2x, the quickstart guide and manpage could not be generated."
-	exit 1
+	echo "error: Something went wrong with a2x, the quickstart guide and manpage could not be generated. (Try manually running `brew install docbook-xsl`.)"
+	echo "warning: ${a2x_run_output}"
+	exit ${a2x_result}
 fi
 
 
