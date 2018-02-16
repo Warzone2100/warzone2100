@@ -156,11 +156,11 @@ void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFac
 	// TODO: Support high-DPI with Qt backend
 	if (horizScaleFactor != nullptr)
 	{
-		*horizScaleFactor = 1.0f
+		*horizScaleFactor = 1.0f;
 	}
 	if (vertScaleFactor != nullptr)
 	{
-		*vertScaleFactor = 1.0f
+		*vertScaleFactor = 1.0f;
 	}
 }
 

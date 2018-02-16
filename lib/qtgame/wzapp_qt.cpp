@@ -120,7 +120,7 @@ static QImage loadQImage(char const *fileName, char const *format = nullptr)
 		return {};
 	}
 	int64_t fileSizeGuess = PHYSFS_fileLength(fileHandle);  // PHYSFS_fileLength may return -1.
-	int64_t lengthRead = 0;
+	size_t lengthRead = 0;
 	std::vector<unsigned char> data(fileSizeGuess != -1? fileSizeGuess : 16384);
 	while (true)
 	{
@@ -180,7 +180,7 @@ WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *p
 	loadCursor(CURSOR_JAM, "images/intfac/image_cursor_ecm.png");  // FIX ME: This is NOT in infac.img, and is using IMAGE CURSOR ECM ?
 	loadCursor(CURSOR_ATTACH, "images/intfac/image_cursor_attach.png");
 	loadCursor(CURSOR_BRIDGE, "images/intfac/image_cursor_bridge.png");
-	loadCursor(CURSOR_BOMB, "images/intfac/image_cursor_bomb.png");
+	//loadCursor(CURSOR_BOMB, "images/intfac/image_cursor_bomb.png");
 
 	// Reused (unused) cursors
 	cursors[CURSOR_ARROW] = new QCursor(Qt::ArrowCursor);
@@ -705,7 +705,7 @@ void WzMainWindow::inputMethodEvent(QInputMethodEvent *event)
 	QWidget::inputMethodEvent(event);
 }
 
-void WzMainWindow::focusOutEvent(QFocusEvent *event)
+void WzMainWindow::focusOutEvent(QFocusEvent */*event*/)
 {
 	debug(LOG_INPUT, "Main window lost focus.");
 	inputLoseFocus();
@@ -778,7 +778,7 @@ void wzReleaseMouse()
 	WzMainWindow::instance()->freeMouse();
 }
 
-void wzDelay(unsigned int delay)
+void wzDelay(unsigned int /*delay*/)
 {
 	//SDL_Delay(delay);
 }
