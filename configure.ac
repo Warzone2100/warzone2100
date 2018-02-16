@@ -125,7 +125,7 @@ case ${host_os} in
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
 		WIN32_LIBS='-ldbghelp -lshfolder -lshlwapi -lpsapi -lshell32 -lwinmm -lws2_32 -liphlpapi -ladvapi32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
-		LDFLAGS="-Wl,-subsystem,windows ${LDFLAGS}"
+		LDFLAGS="-Wl,-subsystem,windows ${LDFLAGS} -Wl,--dynamicbase -Wl,--nxcompat"
 		;;
 	*)
 		# Some platforms don't need _XOPEN_SOURCE
