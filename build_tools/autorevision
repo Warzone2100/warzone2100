@@ -147,15 +147,22 @@ gitRepo() {
 	VCS_MOST_RECENT_TAGGED_VERSION=
 	local tag_skip=0
 	# to avoid an infinite loop (if Git repo is in an unexpected state), set an upper bound
-	while [ "$tag_skip" -le "100000" ]; do
-		local revision="$(git rev-list --tags --skip=${tag_skip} --max-count=1)"
-		if [ -z "$revision" ]; then
+	while [ "$tag_skip" -le "50000" ]; do
+		# Important: the "local" variable declaration must be on its own line so that the exit status
+		# of the git command can be retrieved
+		local revision
+		local exstatus
+		local current_tag
+		revision="$(git rev-list --tags --skip=${tag_skip} --max-count=1 2> /dev/null)"
+		exstatus=${?}
+		if [ $exstatus -ne 0 ] || [ -z "$revision" ]; then
 			VCS_MOST_RECENT_TAGGED_VERSION=
 			break
 		fi
-		local current_tag="$(git describe --abbrev=0 --tags ${revision} 2> /dev/null)"
-		if [ -z "$current_tag" ]; then
-			# Reached end of tags
+		current_tag="$(git describe --abbrev=0 --tags "${revision}" 2> /dev/null)"
+		exstatus=${?}
+		if [ $exstatus -ne 0 ] || [ -z "$current_tag" ]; then
+			# Reached end of tags (or git returned an error code)
 			VCS_MOST_RECENT_TAGGED_VERSION=
 			break
 		fi
@@ -164,20 +171,34 @@ gitRepo() {
 			VCS_MOST_RECENT_TAGGED_VERSION="${current_tag}"
 			break
 		fi
-		tag_skip=$((tag_skip + 1))
+		tag_skip=$(($tag_skip + 1))
 	done
 	if [ -n "${VCS_MOST_RECENT_TAGGED_VERSION}" ]; then
-		VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=$(git rev-list --count ${VCS_MOST_RECENT_TAGGED_VERSION}.. 2> /dev/null)
+		VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION="$(git rev-list --count ${VCS_MOST_RECENT_TAGGED_VERSION}.. 2> /dev/null)"
 	else
-		echo "error: No version tag detected in Git history. VCS_MOST_RECENT_TAGGED_VERSION and VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION will be empty"
+		echo "warning: No version tag detected in Git history. VCS_MOST_RECENT_TAGGED_VERSION and VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION will be empty"
 		VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=
 	fi
 
-	# get the commit count on master until the branch
-	VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH=$(git rev-list --count $(git rev-list master.. | tail -n 1)^ 2> /dev/null)
-
 	# get the commit count on this branch *since* the branch from master
-	VCS_BRANCH_COMMIT_COUNT=$(git rev-list --count master..)
+	VCS_BRANCH_COMMIT_COUNT="$(git rev-list --count master.. 2> /dev/null)"
+
+	# get the commit count on master until the branch
+	local first_new_commit_on_branch_since_master
+	local result
+	VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH=
+	first_new_commit_on_branch_since_master="$(git rev-list master.. | tail -n 1)"
+	result=${?}
+	if [ ${result} -eq 0 ]; then
+		if [ -z "${first_new_commit_on_branch_since_master}" ] && [ -n "${VCS_BRANCH_COMMIT_COUNT}" ] && [ "${VCS_BRANCH_COMMIT_COUNT}" -eq 0 ]; then
+			# The call succeeded, but git returned nothing
+			# The number of commits since master is 0, so set VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH
+			# to be equal to VCS_COMMIT_COUNT
+			VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH="${VCS_COMMIT_COUNT}"
+		else
+			VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH="$(git rev-list --count ${first_new_commit_on_branch_since_master}^ 2> /dev/null)"
+		fi
+	fi
 }
 
 # For Travis-CI builds
