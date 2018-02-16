@@ -104,7 +104,7 @@ canExtractVersionNumberFromGitTag() {
 	version_tag="$(echo "${version_tag}" | sed -e 's:_beta.*$::' -e 's:_rc.*$::')"
 
 	# Extract up to a 3-component version # from the beginning of the tag (i.e. 3.2.2)
-	version_tag="$(echo "${version_tag}" | grep -Eo '^\d+(.\d+){0,2}')"
+	version_tag="$(echo "${version_tag}" | grep -Eo '^[[:digit:]]+(.[[:digit:]]+){0,2}')"
 
 	if [ -n "${version_tag}" ]; then
 		return 0
@@ -176,7 +176,7 @@ gitRepo() {
 	if [ -n "${VCS_MOST_RECENT_TAGGED_VERSION}" ]; then
 		VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION="$(git rev-list --count ${VCS_MOST_RECENT_TAGGED_VERSION}.. 2> /dev/null)"
 	else
-		echo "warning: No version tag detected in Git history. VCS_MOST_RECENT_TAGGED_VERSION and VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION will be empty"
+		# No version tag detected in Git history. VCS_MOST_RECENT_TAGGED_VERSION and VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION will be empty
 		VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=
 	fi
 
