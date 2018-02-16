@@ -120,6 +120,9 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
+	var enemyLz = getObject("COLandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+
 	setMissionTime(camChangeOnDiff(7200)); // 2 hr.
 	camPlayVideos(["MB2_B_MSG", "MB2_B_MSG2"]);
 

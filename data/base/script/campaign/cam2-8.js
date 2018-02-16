@@ -111,6 +111,9 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
+	var enemyLz = getObject("COLandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+
 	camSetArtifacts({
 		"COVtolFac-b3": { tech: "R-Vehicle-Body09" }, //Tiger body
 		"COHeavyFacL-b2": { tech: "R-Wpn-HvyHowitzer" },

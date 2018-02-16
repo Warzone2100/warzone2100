@@ -163,6 +163,11 @@
 		"pos1": [2432, 7808],
 		"pos2": [6016, 8832]
 	},
+	"area_13": {
+		"label": "COLandingZone",
+		"pos1": [6272, 10624],
+		"pos2": [6528, 10880]
+	},
 
 	"object_0": {
 		"label": "rippleRocket",

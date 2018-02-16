@@ -160,6 +160,9 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	camSetupTransporter(tCoords.xStart, tCoords.yStart, tCoords.xOut, tCoords.yOut);
 
+	var enemyLz = {"x": 49, "y": 83, "x2": 51, "y2": 85};
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+
 	setMissionTime(1800); // 30 min.
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 

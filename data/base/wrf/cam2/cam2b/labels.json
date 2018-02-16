@@ -142,6 +142,11 @@
 		"pos1": [8128, 4672],
 		"pos2": [16064, 5824]
 	},
+	"area_9": {
+		"label": "COLandingZone",
+		"pos1": [14464, 14464],
+		"pos2": [15360, 15360]
+	},
 
 	"object_0": {
 		"label": "COHeavyFacL-b1",

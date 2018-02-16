@@ -65,6 +65,11 @@
 		"pos1": [192, 6720],
 		"pos2": [1856, 8000]
 	},
+	"area_8": {
+		"label": "COLandingZone",
+		"pos1": [1152, 1152],
+		"pos2": [1408, 1408]
+	},
 
 	"object_0": {
 		"label": "transporter",

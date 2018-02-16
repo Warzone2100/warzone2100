@@ -92,6 +92,11 @@
 		"pos1": [960, 6464],
 		"pos2": [1472, 6976]
 	},
+	"area_8": {
+		"label": "COLandingZone",
+		"pos1": [512, 640],
+		"pos2": [768, 896]
+	},
 
 	"object_0": {
 		"label": "COCyborgFac-b1",

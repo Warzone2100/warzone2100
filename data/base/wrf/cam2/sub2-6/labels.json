@@ -111,6 +111,11 @@
 		"pos1": [960, 5184],
 		"pos2": [4160, 6080]
 	},
+	"area_10": {
+		"label": "COLandingZone",
+		"pos1": [7040, 1664],
+		"pos2": [7296, 1920]
+	},
 
 	"object_0": {
 		"label": "COCommandCenter",

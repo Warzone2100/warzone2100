@@ -98,6 +98,11 @@
 		"pos1": [5248, 4608],
 		"pos2": [6400, 5632]
 	},
+	"area_9": {
+		"label": "COLandingZone",
+		"pos1": [6272, 896],
+		"pos2": [6528, 1152]
+	},
 
 	"object_0": {
 		"label": "COMediumFactory",
