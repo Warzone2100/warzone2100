@@ -87,7 +87,7 @@
    * Change: Convert tutorial to JavaScript (commit:8ff03b8b2f232df6e2528a8badd58849b35488b9, commit:410869b15d5e57d8774be74b4b7e399fb968527e)
    * Change: Improved debug menu (commit:9765b31136f18f21eb11627a7a705260d3d70641, commit:c3ef25159a0e4eae0ba3bfa68d34d303b124d1a8, commit:ad70d31cb77212ec215b907bf8c46ff52b8fcc52)
    * Change: Clear information messages after game end (commit:9edf1e646ce99fd99a895b771b63678710d2378a, ticket:4621)
-   * Change: address player as Commander in campaign and tutorial (commit:3a871f21d8bbc5a660d5ce996a56e65761905fe5, ticket:4612)
+   * Change: Address player as Commander in campaign and tutorials (commit:3a871f21d8bbc5a660d5ce996a56e65761905fe5, ticket:4612)
    * Change: Allow exiting the main menu "Campaign" with the escape  key (commit:c64a9a3430b45aa6879241c53f42a62d4db084d7, ticket:4648)
    * Fix: Clang build fixes (commit:3e224b79a8c2ea98603444ac9827670f55db8004, commit:7b022c5a6c359f4053b314b3ee750c2b5561c41f)
    * Fix: Spaces in folder names breaking autorevision (commit:178dd3f1f15e02ad7fe8e1266379448550eaf55f)
@@ -350,7 +350,7 @@
  * Multiplayer:
    * Fix: Command line options for host & join (commit:8cba7f3463db890999c3ada48dcc384c77523d4b, ticket:4094)
    * Change: Decrease cannons production time 375->250. (commit:72a73175bbd915e1083f5ed5ffbd8b174bb49b88)
-   * Change: Needle Gun: weight 400 -> 1000 (commit:ffcc03f1418afabd9c58c284787a79e6301429b1)
+   * Change: Needle Gun: Weight 400 -> 1000 (commit:ffcc03f1418afabd9c58c284787a79e6301429b1)
  * Translations:
    * Update: Hungarian translation by mtomi78 (commit:4868883811bf7dc01efc91454bb86968a8722bcc)
    * Update: Spanish translation by Saberuneko (commit:4f37b25b91e9b1bd8589c056ca8b2c0cdd81ef57)
@@ -566,32 +566,32 @@
    * Fix: Play "Artifact recovered" sound only to the player who actually found it (ticket:3488, commit:acaf4620e0f14d50b0c1696e0236ef9e82ca8e6a)
  * Multiplayer balance (commit:ea7b1912fdd6d733288e9b5e783af8cd1c3cf408):
    * Nerf flamers, mostly by decreasing incendiary damage of flamers, to compensate the fact that it is unaffected by armor type modifiers. Also decrease incendiary radius to prevent ground flamers from causing incendiary damage to walls.
-     * Inferno: price 80->110, incendiary radius 64->48, incendiary damage 40->32
-     * Thermite Cyborg: incendiary damage 38->32
-     * Plasmite: price 80->130, incendiary radius 96->60, incendiary damage 63->50
-     * incendiary Mortar: price 150->200, pit price 135->170, incendiary damage 30->22
-     * incendiary Howitzer: price 250->300, emplacement price 325->400, incendiary damage 60->32
-     * Thermite Bombs: incendiary damage 200->120
-     * Plasmite Bombs: incendiary damage 200->140
+     * Inferno: Price 80->110, incendiary radius 64->48, incendiary damage 40->32
+     * Thermite Cyborg: Incendiary damage 38->32
+     * Plasmite: Price 80->130, incendiary radius 96->60, incendiary damage 63->50
+     * Incendiary Mortar: Price 150->200, pit price 135->170, incendiary damage 30->22
+     * Incendiary Howitzer: Price 250->300, emplacement price 325->400, incendiary damage 60->32
+     * Thermite Bombs: Incendiary damage 200->120
+     * Plasmite Bombs: Incendiary damage 200->140
    * Nerf machineguns to compensate the ROF fix that used to decrease with game FPS.
      * HMG: damage 18->17
      * AG: fire pause 3->4, damage 20->19
      * TAG: price 100->120, fire pause 3->4, damage 30->28
-     * AG Cyborg: fire pause 4->5, damage 20->18
+     * AG Cyborg: Fire pause 4->5, damage 20->18
      * MG: ROF upgrades 15%/30%/45% -> 17%/34%/50%.
-     * Whirlwind: fire pause 3->4
+     * Whirlwind: Fire pause 3->4
    * Slightly nerf rocket branch in comparison to cannons. Most importantly, nerf MRAs to compensate the fix in indirect fire mechanics.
-     * Minipod: range 1152->1088
+     * Minipod: Range 1152->1088
      * MRA: damage 34->29, splash damage 30->29, reload time 145->165
      * MC: research points 4800->3600
      * HPV: research points 7200->4800
    * Make T3 missiles homing, making use of the new homing-indirect targeting class. Nerf Seraphs to compensate that fact.
-     * Seraph: damage 120->110, splash 100->90, targeting class INDIRECT->HOMING-INDIRECT
-     * Archangel: targeting class INDIRECT->HOMING-INDIRECT
+     * Seraph: Damage 120->110, splash 100->90, targeting class INDIRECT->HOMING-INDIRECT
+     * Archangel: Targeting class INDIRECT->HOMING-INDIRECT
    * Make walls effective even after gates are invented.
-     * Gates: price 25->75
+     * Gates: Price 25->75
    * Make cannon fortresses cheaper, while nerfing range, in order to make them usable in low oil matchups and less effective in high-oil settings.
-     * Cannon Fortress: price 1000->900, range 1792->1408
+     * Cannon Fortress: Price 1000->900, range 1792->1408
  * Translations:
    * Update: Polish (ticket:1347, commit:9fc92b7d64200c65f7ea8baab617ed8d19a773cf)
    * Update: French (ticket:3483, ticket:3512, commit:badb8c05cb3e9e8a8e1af529288d57b96126e482, commit:113796a9d6a8e34ced9c93bae213ba53b19d5944)
@@ -1403,7 +1403,7 @@ master_20110320qt and before:
 2010-03-29: Version 2.3 beta 12
  * General:
    * Change: Double-clicking trucks will now select them for consistency (r10391, ticket:1472)
-   * Change: let users toggle level name via 'showlevelname' console command (r10366)
+   * Change: Let users toggle level name via 'showlevelname' console command (r10366)
    * Change: Template loading code changes for backward compatibility with older mods (r10418, ticket:1686, r10425)
    * Fix: Multiple zooming of radar fixes / changes (r10346)
    * Fix: Stop landing VTOLs even if they are below the map height (r10051)
@@ -1436,7 +1436,7 @@ master_20110320qt and before:
 2010-02-26: Version 2.3 beta 11a
  * General:
    * Change: Display time and level name in release builds now (r9860)
-   * Change: add 'logs' directory in config dir to store all netplay logs. (r9779, ticket:1564)
+   * Change: Add 'logs' directory in config dir to store all netplay logs. (r9779, ticket:1564)
    * Change: Use -fstack-protector if available (r9940)
    * Fix: NSIS updates (r9764, r9907, r10017)
    * Fix: Only drop artifacts on a fully built factory (r9795, r9787, ticket:1574)
@@ -1804,7 +1804,7 @@ master_20110320qt and before:
    * Fix: Use Enable GLC_AUTO_FONT to enable it to fallback to different fonts if the default font doesn't contain the needed font. (r8365)
    * Fix: Reduce the time it takes to rebuild font cache on Vista and Windows 7 (ticket:1013, r8322)
    * Fix: Collection of smaller bugfixes (ticket:997, ticket:1018, ticket:1021, ticket:1006)
-   * Fix: make distcheck should now work after initial make (to generate yacc/lex files) (r8360)
+   * Fix: After initial make, make distcheck should now work (to generate yacc/lex files) (r8360)
  * Multiplayer:
    * Change: Drop SDL_NET in favor of using BSD sockets (same as trunk code) (r8342, ticket:1038)
    * Change: Try to mitigate turnOffMultiMsg() via setting isMPDirtyBit when needed. (r8369)
@@ -1950,18 +1950,18 @@ master_20110320qt and before:
    * Fix: Angel missile no longer obsoletes long-range artillery, Ripple Rockets no longer autoupgrades to Archie, and Mortar Fast Loader requires Mortar Rapid Loader Mk3 (r7559, ticket:533, 292, 398)
    * New: Add a new translation:  zh_TW.po  by chtsau (r7561, ticket:239)
    * Change: Allow up to 36 savegame 'slots' (r7535)
-   * Change: add 'mod/music' directory to be use for custom music. (r7557)
-   * Fix: set the volume of the FMV based on the user's preferences (r7489, ticket:526)
+   * Change: Add 'mod/music' directory for custom music (r7557)
+   * Fix: Set the volume of the FMV based on the user's preferences (r7489, ticket:526)
    * Fix: Check if the unit has weapons, before trying to see what weapons they have. (r7488, ticket:523)
-   * Change: remove 'autoload' handling.  (r7474)
+   * Change: Remove 'autoload' handling.  (r7474)
    * Fix: Fix windows crash dump output (r7473)
    * Fix: Fix handling of limbo & expand missions (r7454)
    * Change: Let players save games with Num-Enter as well as Return - should make it easier on international keyboards (r7412)
-   * Change: translation of ru.po by Maxim (r7444, ticket:347)
+   * Change: Translation of ru.po by Maxim (r7444, ticket:347)
    * Fix: We now return the truncated string, instead of returning NULL if the string is too long. (r7426, ticket:493)
-   * Fix: pl.po file by Makary (r7423, ticket:241)
+   * Fix: Polish translation by Makary (r7423, ticket:241)
    * New: Slovenian translation sl.po file by ThomasCarstein (r7422, ticket:392)
-   * Fix: pt_BR.po update by Tucalipe (r7421, ticket:350)
+   * Fix: Brazilian translation update by Tucalipe (r7421, ticket:350)
    * Fix: Clear out old effects (prevents burning lasting between missions) (r7416)
    * Fix: Don't allow the transporter to be controlled in SP games. (r7414)
    * Fix: Remember player number and tech level for map selection screen (r7400)
@@ -2274,7 +2274,7 @@ master_20110320qt and before:
 
 2008-02-17: Version 2.1_beta1
  * General:
-   * New: i18n support (German translation at 95%, dansk 13%, dutch 11%)
+   * New: Support i18n (German translation at 95%, dansk 13%, dutch 11%)
    * New: Optional additional AI: Aivolution
    * New: 64bit compatibility
    * New: Video options menu to allow for things such as resolution to be
@@ -2292,7 +2292,7 @@ master_20110320qt and before:
    * Change: Store data in "Local Settings\Application Data" instead of "My Documents\My Games", as Microsoft recommends.
    * Fix: Skirmish difficulty slider now applies settings to the right players.
  * Campaign Mode:
-   * Fix: accuracy, damage and ROF upgrades, which were mistakenly applied to Mini-Pods and Mini-Rocket
+   * Fix: Accuracy, damage and ROF upgrades, which were mistakenly applied to Mini-Pods and Mini-Rocket
           Artillery, are now correctly applied to Lancer, Bunker Buster, Tank Killer and Ripple Rockets.
  * Unit AI:
    * New: Multi-criteria target selection routine to automatically choose the best suitable target.
@@ -2429,7 +2429,7 @@ master_20110320qt and before:
    * Change: --viewport becomes --resolution
  * Build system:
    * New: MinGW32 crosscompilation support
-   * Change: src/version.* not used anymore. In MSVC define VERSION=\"...\" in preprocessor settings instead
+   * Change: Instead of using src/version.*, in MSVC define VERSION=\"...\" in preprocessor settings
    * Change: Raw Makefile improvements for WIN32: Now adding an icon ressource
    * Change: Install desktop icons via "make install"
 
