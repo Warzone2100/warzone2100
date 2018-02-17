@@ -93,6 +93,7 @@ set +x
 # Get the encrypted private key from the Travis-CI settings
 echo ${SECURE_UPLOAD_BASE64_KEY} | base64 --decode > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_rsa
 
 # BE CAREFUL ABOUT CHANGING THE LINES ABOVE: The private key *MUST NOT* be output to the build log.
 
