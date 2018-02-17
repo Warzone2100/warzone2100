@@ -1,8 +1,7 @@
-
-!define PACKAGE_NAME "warzone2100"
+!define OUTFILE "warzone2100_portable.exe"
+!define PACKAGE "warzone2100_portable"
+!define PACKAGE_NAME "Warzone 2100 Portable"
+!define VERSIONNUM "@INSTALLER_VERSION@"
 !define TOP_SRCDIR "@SOURCE_DIR@"
 !define TOP_BUILDDIR "@BUILD_DIR@"
-!define PACKAGE "warzone2100"
-!define PACKAGE_VERSION "3.2"
-!define OUTFILE "warzone2100_portable.exe"
-!define VERSIONNUM "@INSTALLER_VERSION@"
+!define PACKAGE_VERSION "master"
