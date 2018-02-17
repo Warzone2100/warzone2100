@@ -194,7 +194,7 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 
-	queue("enableReinforcements", 15000);
+	queue("enableReinforcements", 11000);
 	queue("setupLandGroups", 50000);
 	queue("vtolAttack", 60000);
 	queue("enableFactories", camChangeOnDiff(90000)); // 90 sec
