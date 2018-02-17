@@ -20,6 +20,7 @@
    * Fix: Do not show resolutions below 640x480 (commit:3312e06e84f22a2d9c3b2687b9aeda99b8dbe1fc, ticket:4623)
    * Fix: Music not playing on save-load or not playing the right music in skirmish (commit:b016f609d704ce4df022e3a89f4f70f6eaabbee7)
    * Fix: Being put in cheat mode on loading saves (commit:4b91398c86a8d3e1e9c05787768508ad5929dcbc, ticket:4612)
+   * Change: Improved Windows installers (ticket:4748)
  * Graphics:
    * Add: Wrap texture objects (commit:ac08585f245b1dd36bbd8d0a9f88b2352418f845, commit:d3b81130ae12006f54f7a8cd17846ff42ac01398)
    * Fix: Make shaders compile on more systems (commit:3ec60e361e6bab478af77b51f79ab88f1ceac6db, ticket:4584)
