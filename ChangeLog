@@ -2435,7 +2435,7 @@ master_20110320qt and before:
 
 2006-08-25: Version 2.0.4
  * General:
-   * Changed namings: Project: Warzone Resurrection Project, Product: Warzone 2100, Binary: warzone2100(.exe)
+   * Changed names: Project: Warzone Resurrection Project, Product: Warzone 2100, Binary: warzone2100(.exe)
    * MacOS / big endian support
    * Desktopmenu entry for Linux (AutoPackage/Debian package)
    * Different minimap modes (backported from 0.2.3)
