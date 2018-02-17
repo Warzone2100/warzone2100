@@ -1,4 +1,4 @@
-2018-03-XX: Version 3.3.0
+2018-01-XX: Version 3.2.4
  * General:
    * Add: New challenge "Two-Faced" from forum member Forgon (commit:2535b921a40afc0a760a54f9efe31494d95dcc7b)
    * Add: Chat link to main menu (commit:6797cf4681ebe35f50785f08f54c4da8d42e432e)
@@ -25,7 +25,6 @@
    * Fix: Make shaders compile on more systems (commit:3ec60e361e6bab478af77b51f79ab88f1ceac6db, ticket:4584)
    * Fix: Rename similar variables in shaders (commit:c1131be441afa534f9ec5be76baeb6137dc94844, ticket:4589)
    * Fix: Graphics driver warning when building structures (commit:f2d71eea0e03a6c2f7afcc8698a3883796f09346)
-   * Add: Introduce display scaling with new configuration option, live window resizing and high-DPI support (ticket:4720)
  * Campaign:
    * Add: Dynamic difficulty making missions significantly easier or harder based on difficulty. Adds Insane difficulty (commit:cb19c7672fe915b95795e3af33c63c9d567faccc)
    * Add: Power limits for Hard and Insane difficulty (commit:45abd912e08d0802edc5aaf6d591370ec95682ba)
@@ -96,14 +95,8 @@
    * Fix: Logging or source code spelling corrections (commit:d0dd6cf6b801918cba042b65bdc56e183fb675fd, commit:2ce9492056d84846a07174770cfc2c46abf44e7b, ticket:4612)
    * Remove: Unused sensor turret properties in design menu (commit:c6b628e2c0c815467f0799c6c65e2f88d31585d3, ticket:4619)
    * Remove: Do not save showFPS configuration option twice (commit:55c77847e4137c219170fff80d0342a0742499dd, ticket:4645)
-   * Change: Simpler minimap size calculation (ticket:4689)
-   * Add: Configuration option to quit a game without confirmation (ticket:4692)
-   * Change: Increase default radar size to 32 (ticket:4699)
-   * Change: Increased maximum VTOL rearming pad limit to 99 (commit:be03e188ba4b2661e175b4875b2a0be9898c279f)
-   * Add: Configuration options to set default map size, map zoom rate, default minimap size, camera speed (replaces scroll speed), turn off camera acceleration, turn off delay when jumping to new location by clicking on minimap, functionality of the scroll wheel (ticket:4629)
  * Modding:
    * Add: Ability to make weapon have no friendly fire with NoFriendlyFire (commit:d75ccdea67fb48f41b370a0c15cea3b6703f344e)
-   * Change: Increase capacity of design, build and research screens (ticket:4677, ticket:4721)
  * Balance:
    * Change: Droid ranks are now a brain property and can be upgraded (commit:e760917fef73e172f0149a632a7505303b25080b)
    * Change: HitPoint handling in stats (commit:b1cb129247bca05fb35e50b15e8bedee2d6f4a8a)
@@ -116,7 +109,7 @@
    * Fix: German translation updates (commit:e5d7e20d49a5737a69365bb5b5e96c959e03ac9d, commit:4bc390378c90e807b31775b5e59c845d0398789e, ticket:4597)
    * Fix: Turkish translation updates (commit:013f6a95415f61232d137cf415b93cb9c8652f93, ticket:4608)
    * Fix: Polish translation update (commit:64bd5a1c5b984e62ddca87d542d53f9ab909cfbf)
-   * Fix: Greek translation updates (commit:0490eaa237b0fd8f3a0e8bac722fbb12ff67d5b2, commit:13270626cdfb4304e38e4096a75c25c34998b96c, ticket:3703)
+   * Fix: Greek translation updates (commit:0490eaa237b0fd8f3a0e8bac722fbb12ff67d5b2, commit:13270626cdfb4304e38e4096a75c25c34998b96c)
    * Fix: Russian translation updates (commit:19b767af2354a69b1d21199763188f44689c548f)
    * Fix: Chinese translation update (commit:600eff0af390810582c5362b8d29ce93b9cd1080)
 
