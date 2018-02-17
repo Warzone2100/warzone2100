@@ -214,6 +214,9 @@ function eventStartLevel()
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
 	setMissionTime(camChangeOnDiff(7200)); //2 hr
 
+	var enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	setAlliance(CAM_HUMAN_PLAYER, SILO_PLAYER, true);

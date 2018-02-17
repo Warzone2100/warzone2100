@@ -1,12 +1,44 @@
 {
-	"position_0": { "label": "startPosition",	"pos": [ 7360, 15296 ] },
-	"position_1": { "label": "vtolAppearPos",	"pos": [ 832, 6464 ] },
-	"position_2": { "label": "vtolRemovePos",	"pos": [ 128, 10240 ] },
-	"position_3": { "label": "healthRetreatPos",	"pos": [ 6976, 15168 ] },
-	"position_4": { "label": "SWPhantomFactory",	"pos": [ 64, 10816 ] },
-	"position_5": { "label": "NWPhantomFactory",	"pos": [ 64, 2624 ] },
+	"position_0": {
+		"label": "startPosition",
+		"pos": [7360, 15296]
+	},
+	"position_1": {
+		"label": "vtolAppearPos",
+		"pos": [832, 6464]
+	},
+	"position_2": {
+		"label": "vtolRemovePos",
+		"pos": [128, 10240]
+	},
+	"position_3": {
+		"label": "healthRetreatPos",
+		"pos": [6976, 15168]
+	},
+	"position_4": {
+		"label": "SWPhantomFactory",
+		"pos": [64, 10816]
+	},
+	"position_5": {
+		"label": "NWPhantomFactory",
+		"pos": [64, 2624]
+	},
 
-	"area_0": { "label": "landingZone",	"pos1": [ 7040, 15232 ], "pos2": [ 7296, 15488 ] },
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [7040, 15232],
+		"pos2": [7296, 15488]
+	},
+	"area_1": {
+		"label": "NXlandingZone",
+		"pos1": [896, 6656],
+		"pos2": [1152, 6912]
+	},
 
-	"radius_0": { "label": "vtolRemoveZone",	"subscriber": 3, "pos" : [ 128, 10240 ], "radius": 250 }
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 3,
+		"pos": [128, 10240],
+		"radius": 250
+	}
 }

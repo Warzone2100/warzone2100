@@ -221,6 +221,9 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
+	var enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+
 	camSetArtifacts({
 		"NXPowerGenArti": { tech: "R-Struc-Power-Upgrade02" },
 		"NXResearchLabArti": { tech: "R-Sys-Engineering03" },

@@ -136,6 +136,9 @@ function eventStartLevel()
 	setTransporterExit(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setMissionTime(-1); //Infinite time
 
+	var enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	setupNexusPatrols();
 	camManageTrucks(NEXUS);

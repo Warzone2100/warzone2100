@@ -103,6 +103,11 @@
 		"pos1": [5376, 21760],
 		"pos2": [8000, 24896]
 	},
+	"area_11": {
+		"label": "NXlandingZone",
+		"pos1": [896, 6656],
+		"pos2": [1152, 6912]
+	},
 
 	"object_0": {
 		"label": "NXbase1HeavyFacArti",

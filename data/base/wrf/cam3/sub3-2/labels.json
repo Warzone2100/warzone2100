@@ -133,6 +133,11 @@
 		"pos1": [64, 4544],
 		"pos2": [5568, 5568]
 	},
+	"area_11": {
+		"label": "NXlandingZone",
+		"pos1": [2432, 10752],
+		"pos2": [2688, 11108]
+	},
 
 	"radius_0": {
 		"label": "vtolRemoveZone",

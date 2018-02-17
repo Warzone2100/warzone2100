@@ -139,6 +139,11 @@
 		"pos1": [320, 3136],
 		"pos2": [7616, 4160]
 	},
+	"area_10": {
+		"label": "NXlandingZone",
+		"pos1": [4992, 768],
+		"pos2": [5248, 1024]
+	},
 
 	"object_0": {
 		"label": "NXCommandCenter",

@@ -282,6 +282,9 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
+	var enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camCompleteRequiredResearch(GAMMA_ALLY_RES, ALPHA);
 	setAlliance(ALPHA, NEXUS, true);

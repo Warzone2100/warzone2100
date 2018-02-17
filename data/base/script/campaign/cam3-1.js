@@ -287,6 +287,9 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 	setScrollLimits(0, 32, 64, 64);
 
+	var enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	camSetEnemyBases({

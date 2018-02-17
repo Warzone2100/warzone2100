@@ -154,6 +154,11 @@
 		"pos1": [5312, 13632],
 		"pos2": [6080, 14656]
 	},
+	"area_12": {
+		"label": "NXlandingZone",
+		"pos1": [896, 6656],
+		"pos2": [1152, 6912]
+	},
 
 	"object_0": {
 		"label": "NXPowerGenArti",

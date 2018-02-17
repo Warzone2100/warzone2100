@@ -160,6 +160,11 @@
 		"pos1": [6912, 128],
 		"pos2": [8960, 1920]
 	},
+	"area_10": {
+		"label": "NXlandingZone",
+		"pos1": [1408, 11392],
+		"pos2": [1792, 11648]
+	},
 
 	"object_0": {
 		"label": "NX-NWFactory1",

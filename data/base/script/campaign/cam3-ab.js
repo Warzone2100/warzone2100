@@ -131,6 +131,9 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(3600)); //1 hour.
 
+	var enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);
