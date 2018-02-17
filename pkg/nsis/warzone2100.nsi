@@ -554,8 +554,10 @@ FunctionEnd
   LangString TEXT_SecBase ${LANG_ENGLISH} "Core files"
   LangString DESC_SecBase ${LANG_ENGLISH} "The core files required to run Warzone 2100."
 
+!ifndef PORTABLE
   LangString TEXT_SecOpenAL ${LANG_ENGLISH} "OpenAL libraries"
   LangString DESC_SecOpenAL ${LANG_ENGLISH} "Runtime libraries for OpenAL, a free Audio interface. Implementation by Creative Labs."
+!endif
 
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
@@ -586,8 +588,10 @@ FunctionEnd
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
 
+!ifndef PORTABLE
   LangString TEXT_SecOpenAL ${LANG_DUTCH} "OpenAL bibliotheken"
   LangString DESC_SecOpenAL ${LANG_DUTCH} "Vereiste bibliotheken voor OpenAL, een opensource/vrije Audio Bibliotheek."
+!endif
 
   LangString TEXT_SecFMVs ${LANG_DUTCH} "Videos"
   LangString DESC_SecFMVs ${LANG_DUTCH} "Download and install in-game cutscenes."
@@ -618,8 +622,10 @@ FunctionEnd
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
   LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die für Warzone 2100 benötigt werden."
 
+!ifndef PORTABLE
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
   LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
+!endif
 
   LangString TEXT_SecFMVs ${LANG_GERMAN} "Videos"
   LangString DESC_SecFMVs ${LANG_GERMAN} "Videos herunterladen und installieren."
@@ -650,8 +656,10 @@ FunctionEnd
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
   LangString DESC_SecBase ${LANG_RUSSIAN} "Файлы требуемые для запуска Warzone 2100."
 
+!ifndef PORTABLE
   LangString TEXT_SecOpenAL ${LANG_RUSSIAN} "Библиотека OpenAL"
   LangString DESC_SecOpenAL ${LANG_RUSSIAN} "Свободно распространяемый аппаратно- программный интерфейс (API) для работы с аудиоданными. Версия от Creative Labs."
+!endif
 
   LangString TEXT_SecFMVs ${LANG_RUSSIAN} "Видео"
   LangString DESC_SecFMVs ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики."
@@ -678,7 +686,9 @@ FunctionEnd
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
 
+!ifndef PORTABLE
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
+!endif
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
