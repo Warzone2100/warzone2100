@@ -111,8 +111,8 @@ cd "${INPUT_DIR}"
 for file in `find . -type f -name "${FILE_MATCH_PATTERN}"`; do
 	filename=$(basename $file)
 	echo "  -> ${filename} ..."
-	echo "       scp -pvC \"${file}\" \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}\""
-	scp -pvC "${file}" "${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}"
+	echo "       scp -pC \"${file}\" \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}\""
+	scp -pC "${file}" "${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}"
 	result=${?}
 	if [ $result -ne 0 ]; then
 		echo "error: Upload did not complete!"
