@@ -129,7 +129,7 @@
  * Graphics:
    * Add: We now support higher than 8x MSAA, if supported by driver - do not show 8x if not supported (commit:33057c24ed87423e8a5e2d9d9aa5a53dee5dda08)
    * Change: Optimizing graphics rendering (commit:92b50b766582f1712756aca1321fa06c0380c4ad, commit:c1f697f28aa8d4817a6ed8c6bb1e150a56050c4f, commit:a70920985ef860c1a1adf01bdda49a28411df09d, commit:486dd8e9c0283a92f7fa109271c2edd623800441)
-   * Change: Increase default resolution to 1024x768 rather than 640x480 (commit:9b0fa9e79a0e941c2f6d2e86795674872ef44217)
+   * Change: Increase default resolution to 1024x720 rather than 640x480 (commit:9b0fa9e79a0e941c2f6d2e86795674872ef44217)
    * Fix: Avoiding some techniques to hopefully run with more drivers (commit:8a2ff4499d0e732832dac0db264d4a735c10b8c8, commit:4134f82d22fe557791ab7a988629a8539ee3700a, commit:871fa31c809a9808b0d12787c523ecf4821f9a25)
    * Fix: Fix clipped letters (commit:9c04d4ad6b378c6d246203b57e5038259f13348a)
    * Fix: Fix text rendering blend mode, makes progress bar more readable (commit:0bfd2179408383de94dc120782b5bc23cdf884a5, ticket:4569)
