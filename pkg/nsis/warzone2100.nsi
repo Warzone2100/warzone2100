@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2013  Warzone 2100 Project
+;  Copyright (C) 2006-2018  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 
 ;--------------------------------
 ;General
-  CRCCheck on   ;make sure this isn't corrupted
+  CRCCheck on  ;make sure this isn't corrupted
 
   ;Name and file
   Name "${PACKAGE_NAME}"
@@ -45,27 +45,31 @@
 !else
   RequestExecutionLevel user
 !endif
+
 ;--------------------------------
 ;Versioninfo
 
 VIProductVersion "${VERSIONNUM}"
-VIAddVersionKey "CompanyName"	"Warzone 2100 Project"
-VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
-VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
-VIAddVersionKey "InternalName"	"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright (c) 2006-2013 Warzone 2100 Project"
-VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
-VIAddVersionKey "ProductName"	"${PACKAGE_NAME}"
-VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
+VIAddVersionKey "CompanyName"      "Warzone 2100 Project"
+VIAddVersionKey "FileDescription"  "${PACKAGE_NAME} Installer"
+VIAddVersionKey "FileVersion"      "${PACKAGE_VERSION}"
+VIAddVersionKey "InternalName"     "${PACKAGE_NAME}"
+VIAddVersionKey "LegalCopyright"   "Copyright (c) 2006-2018 Warzone 2100 Project"
+VIAddVersionKey "OriginalFilename" "${PACKAGE}-${PACKAGE_VERSION}.exe"
+VIAddVersionKey "ProductName"      "${PACKAGE_NAME}"
+VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
 
-!ifndef PORTABLE
 ;--------------------------------
 ;Variables
+
+!ifndef PORTABLE
   Var MUI_TEMP
   Var STARTMENU_FOLDER
-;--------------------------------
 !endif
+
+;--------------------------------
 ;Interface Settings
+
 !ifndef PORTABLE
   !define MUI_HEADERIMAGE
   !define MUI_HEADERIMAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100header.bmp"
@@ -158,8 +162,8 @@ Function WelcomePageSetupLinkShow
   CreateFont $1 "$(^Font)" "$(^FontSize)" "400" /UNDERLINE
   SendMessage $0 ${WM_SETFONT} $1 1
   Pop $0
-
 FunctionEnd
+
 ;--------------------------------
 ;Installer Sections
 
@@ -241,6 +245,7 @@ Section $(TEXT_SecBase) SecBase
   File "${EXTDIR}\etc\fonts\DejaVuSans-Bold.ttf"
 
 !ifndef PORTABLE
+
   ;Store installation folder
   WriteRegStr HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}" "" $INSTDIR
 
@@ -271,7 +276,7 @@ Section $(TEXT_SecBase) SecBase
 
   SetOutPath "$INSTDIR"
   CreateShortCut "$DESKTOP\${PACKAGE_NAME}-${PACKAGE_VERSION}.lnk" "$INSTDIR\${PACKAGE}.exe"
-!endif #PORTABLE
+!endif
 SectionEnd
 
 ; NOTE: you need upgraded security privs to install shortcut on desktop for portable.
@@ -486,12 +491,12 @@ ${If} ${SectionIsSelected} ${SecFMVs_Eng}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngHi}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
 ;${OrIf} ${SectionIsSelected} ${SecFMVs_Ger}
-	!insertmacro StartRadioButtons $5
-		!insertmacro RadioButton ${SecFMVs_EngHi}
-		!insertmacro RadioButton ${SecFMVs_Eng}
-		!insertmacro RadioButton ${SecFMVs_EngLo}
-;		!insertmacro RadioButton ${SecFMVs_Ger}
-	!insertmacro EndRadioButtons
+  !insertmacro StartRadioButtons $5
+    !insertmacro RadioButton ${SecFMVs_EngHi}
+    !insertmacro RadioButton ${SecFMVs_Eng}
+    !insertmacro RadioButton ${SecFMVs_EngLo}
+;   !insertmacro RadioButton ${SecFMVs_Ger}
+  !insertmacro EndRadioButtons
 ${EndIf}
 FunctionEnd
 !endif
@@ -500,37 +505,37 @@ Function unix2dos
     ; strips all CRs and then converts all LFs into CRLFs
     ; (this is roughly equivalent to "cat file | dos2unix | unix2dos")
     ; beware that this function destroys $0 $1 $2
-	;
+    ;
     ; usage:
     ;    Push "infile"
     ;    Push "outfile"
     ;    Call unix2dos
     ClearErrors
     Pop $2
-    FileOpen $1 $2 w			;$1 = file output (opened for writing)
+    FileOpen $1 $2 w      ;$1 = file output (opened for writing)
     Pop $2
-    FileOpen $0 $2 r			;$0 = file input (opened for reading)
-    Push $2						;save name for deleting
+    FileOpen $0 $2 r      ;$0 = file input (opened for reading)
+    Push $2               ;save name for deleting
     IfErrors unix2dos_done
 
 unix2dos_loop:
-    FileReadByte $0 $2			; read a byte (stored in $2)
-    IfErrors unix2dos_done		; EOL
-    StrCmp $2 13 unix2dos_loop	; skip CR
-    StrCmp $2 10 unix2dos_cr unix2dos_write	; if LF write an extra CR
+    FileReadByte $0 $2  ; read a byte (stored in $2)
+    IfErrors unix2dos_done  ; EOL
+    StrCmp $2 13 unix2dos_loop  ; skip CR
+    StrCmp $2 10 unix2dos_cr unix2dos_write  ; if LF write an extra CR
 
 unix2dos_cr:
     FileWriteByte $1 13
 
 unix2dos_write:
-    FileWriteByte $1 $2			; write byte
-    Goto unix2dos_loop			; read next byte
+    FileWriteByte $1 $2  ; write byte
+    Goto unix2dos_loop   ; read next byte
 
 unix2dos_done:
-    FileClose $0				; close files
+    FileClose $0         ; close files
     FileClose $1
     Pop $0
-    Delete $0					; delete original
+    Delete $0            ; delete original
 
 FunctionEnd
 
@@ -676,10 +681,10 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
-;	!insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
+;  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
@@ -885,7 +890,7 @@ Section "Uninstall"
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}"
 
   startMenuDeleteLoop:
-	ClearErrors
+    ClearErrors
     RMDir $MUI_TEMP
     GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
 
@@ -903,12 +908,10 @@ Section "Uninstall"
 
 SectionEnd
 !endif
+
 ;--------------------------------
 ;Uninstaller Functions
 
 Function un.onInit
-
   !insertmacro MUI_UNGETLANGUAGE
-
 FunctionEnd
-
