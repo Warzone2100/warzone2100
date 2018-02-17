@@ -922,6 +922,10 @@ SectionEnd
 ;--------------------------------
 ;Uninstaller Functions
 
+!ifndef PORTABLE
 Function un.onInit
+  !verbose push
+  !verbose push
   !insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
+!endif
