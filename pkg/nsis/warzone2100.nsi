@@ -737,6 +737,7 @@ Section "Uninstall"
   Delete "$INSTDIR\stderr.txt"
   Delete "$INSTDIR\stdout.txt"
 
+  Delete "$INSTDIR\README.md.txt"
   Delete "$INSTDIR\COPYING.NONGPL.txt"
   Delete "$INSTDIR\COPYING.README.txt"
   Delete "$INSTDIR\COPYING.txt"
