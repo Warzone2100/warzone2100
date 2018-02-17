@@ -55,19 +55,19 @@
    * Fix: Score and kills not showing in skirmish (commit:a74041b99442caa1c7e14c0ff409fc120c20e666, ticket:3491)
  * Scripting:
    * Add: Add a way for a script library to register a namespace (commit:19d37399c3fcb31fbb87cb1419125c6cb133aa16)
-   * Add: useSafetyTransport() function (commit:d511cad4d15ca7ae5ecefc678527bb0a253cafde)
-   * Add: setObjectFlag function (commit:6ea98200a90304a7dd54cdddb6a11910ad57cc39)
+   * Add: Function useSafetyTransport() (commit:d511cad4d15ca7ae5ecefc678527bb0a253cafde)
+   * Add: Function setObjectFlag() (commit:6ea98200a90304a7dd54cdddb6a11910ad57cc39)
    * Add: Events and functions for alliances (commit:3670bbdb5b193a8ff59342e171810fe44415d9bb)
-   * Add: fireWeaponAtLoc() function (commit:3c907bd4e4cd6290b306e847c81c060656a45fcd, commit:1cdd7bdb91fd99c7a5c9db73333c29bb76e32ff5)
-   * Add: clearConsole() function (commit:e26b9516d3e065527e41fe5006f9f94983653882)
-   * Add: restoreLimboMissionData() function (commit:8109d46e619fd5ca5f1220a5858b513db4114d6c)
-   * Add: hackPlayIngameAudio() and hackStopIngameAudio() functions (commit:e26b9516d3e065527e41fe5006f9f94983653882)
-   * Add: getMultiTechLevel() function (commit:d31f6a2c704ada8f46957a34279af78deafdeec7)
-   * Add: setCampaignNumber() function (commit:b016f609d704ce4df022e3a89f4f70f6eaabbee7, commit:d60d6559c8fd930963b66bb6c3929f703b5d70f6)
+   * Add: Function fireWeaponAtLoc() (commit:3c907bd4e4cd6290b306e847c81c060656a45fcd, commit:1cdd7bdb91fd99c7a5c9db73333c29bb76e32ff5)
+   * Add: Function clearConsole() (commit:e26b9516d3e065527e41fe5006f9f94983653882)
+   * Add: Function restoreLimboMissionData() (commit:8109d46e619fd5ca5f1220a5858b513db4114d6c)
+   * Add: Functions hackPlayIngameAudio() and hackStopIngameAudio() (commit:e26b9516d3e065527e41fe5006f9f94983653882)
+   * Add: Function getMultiTechLevel() (commit:d31f6a2c704ada8f46957a34279af78deafdeec7)
+   * Add: Function setCampaignNumber() (commit:b016f609d704ce4df022e3a89f4f70f6eaabbee7, commit:d60d6559c8fd930963b66bb6c3929f703b5d70f6)
    * Add: A lot of events for menus (commit:629d43771b4ab621fcedb8403165f7557b235bdf, commit:b5f8a07af0f1cbad8379dfa11724ceacc9f50ce8)
    * Change: Move weather scripts to JavaScript (commit:b016f609d704ce4df022e3a89f4f70f6eaabbee7, commit:d60d6559c8fd930963b66bb6c3929f703b5d70f6)
    * Change: Allow mods to use more than one HQ before removing the radar mini-map (commit:590434843c202e92d7ab7e5488f31de9e196ecfa, ticket:3465)
-   * Fix: removeTimer function (commit:4a24e8e2753d02775b6732d59c23a75a79b83f72)
+   * Fix: Function removeTimer() (commit:4a24e8e2753d02775b6732d59c23a75a79b83f72)
    * Remove: Base game wzscript files (commit:2999513e057beae4940209a18de2b74cfa5026dc, commit:76ac44c84b7f89a860c743202bb002586d137e63, commit:88cb1b6123bbd5fd9d3a66ea6dfb0e5eca15e6c3)
  * AI:
    * Fix: Improved SemperFi-JS (commit:7af101472e0d66c4a73e684f17edf79f8d52505c, commit:6ed849c61a927184095fe7cbf3faa039e1f78860, commit:5b0de613a973ba96faab14ccf7f19a96c10c6a61)
@@ -131,7 +131,7 @@
  * Campaign:
    * Change: Lots of initial campaign ported to Javascript. Discuss these changes in our new porting forum here: http://forums.wz2100.net/viewforum.php?f=51
  * Scripting:
-   * Add: donateObject() works on structures. findResearch() works on other players (commit:839e0b0f5c0ec3a2b5b6018d1c82697db0804d22)
+   * Change: Function donateObject() works on structures. Function findResearch() works on other players (commit:839e0b0f5c0ec3a2b5b6018d1c82697db0804d22)
    * Add: New function hackDoNotSave(global name) to prevent variable from being put in savegames (commit:ff57dc5733b69123b76a8f5dc469c4555f7b49f1)
    * Add: Add setHealth(object, health %) to set a game object's health (commit:62a7c961683266d7ce53fdd23b3fe913d9b9b01a)
 
@@ -421,8 +421,8 @@
  * Multiplayer:
    * Change: AI droids shoot at blocking features again, and can move through each other when jammed (commit:a19e41c15d78106c7128e63662e8824454b8900c)
  * Scripting:
-   * New: getStructureLimit(), countDroid() and countStruct() (commit:af757d28bd082384355272f890fe6d79fd5369a8, commit:def9fb81c34a7c6d3c343c659507ed1b6f40f5ee)
-   * New: orderDroidBuild() now takes an optional direction parameter for rotation (commit:24414caa0c6a8db7459e7204a1c12546d27f7441)
+   * New: Functions getStructureLimit(), countDroid() and countStruct() (commit:af757d28bd082384355272f890fe6d79fd5369a8, commit:def9fb81c34a7c6d3c343c659507ed1b6f40f5ee)
+   * Change: Function orderDroidBuild() now takes an optional direction parameter for rotation (commit:24414caa0c6a8db7459e7204a1c12546d27f7441)
    * Change: Updated Nullbot (commit:a2e69a8a2e14c7173d615a78455464a6f264b3a3)
 
 2012-10-08: Version 3.1 rc3
@@ -1419,7 +1419,7 @@ master_20110320qt and before:
    * Change: AI script fixes for trucks grabbed on duty, distance limits, power limit for factories, placement checks (r10293, r10323, ticket:1626)
    * Fix: Make sure all templates get all weapons. This hopefully fixes the cyborg leg issue (r10352, ticket:1687)
    * Fix: On new player joining, init the struct before setting flags (r10331, ticket:1688)
-   * Fix: Make use of new AI script function pickDroidStructLocation (see below) to fix AI not building a power generator (r10323, ticket:1626)
+   * Fix: Make use of new AI script function pickDroidStructLocation() (see below) to fix AI not building a power generator (r10323, ticket:1626)
    * Fix: When droids are taken over, don't send droid count, since droid count isn't read, making the message unparsable (r10038, ticket:894)
    * Fix: Use isFlying instead of isVtolDroid for checking AA targets, AA can now also shoot down transports (r10319)
    * Fix: Only let host set player position/colour, send new players info about unallocated slots too. (r10218)
