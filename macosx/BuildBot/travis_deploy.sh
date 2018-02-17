@@ -21,7 +21,13 @@
 #
 # - SECURE_UPLOAD_BASE64_KEY: The base64-encoded private SSH key used for uploading to the buildbot.
 # - DEPLOY_UURL: Used in the scp command. Example: "buildbot@buildbot.wz2100.net"
+# - DEPLOY_KNOWN_HOSTS_BASE64: The base64-encoded data to be added to the SSH known_hosts file.
 # - DEPLOY_UPLOAD_PATH: The path into which to upload the files. Example: "public_html/files/"
+#
+# To get the latest SSH public keys for the server in the DEPLOY_UURL (to be added to known_hosts), 
+# execute:
+# 	ssh-keyscan -H <server>
+# (Note: Always verify the information that ssh-keyscan produces with a trusted source.)
 #
 #
 # Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
@@ -91,6 +97,12 @@ chmod 600 ~/.ssh/id_rsa
 # BE CAREFUL ABOUT CHANGING THE LINES ABOVE: The private key *MUST NOT* be output to the build log.
 
 
+# Output to the known_hosts file any required entries
+if [ -n "${DEPLOY_KNOWN_HOSTS_BASE64}" ]; then
+	echo "Adding known_hosts data"
+	echo ${DEPLOY_KNOWN_HOSTS_BASE64} | base64 --decode >> ~/.ssh/known_hosts
+fi
+
 echo "Upload all \"${FILE_MATCH_PATTERN}\" in \"$INPUT_DIR\" -> \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
 
 # Upload all matching files in the input directory
@@ -98,8 +110,8 @@ cd "${INPUT_DIR}"
 for file in `find . -type f -name "${FILE_MATCH_PATTERN}"`; do
 	filename=$(basename $file)
 	echo "  -> ${filename} ..."
-	echo "       scp -pqCl 320 \"${file}\" \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}\""
-	scp -pqCl 320 "${file}" "${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}"
+	echo "       scp -pqC \"${file}\" \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}\""
+	scp -pqC "${file}" "${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}"
 	result=${?}
 	if [ $result -ne 0 ]; then
 		echo "error: Upload did not complete!"
