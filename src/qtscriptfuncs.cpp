@@ -5774,12 +5774,56 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("RESEARCH_DATA", SCRIPT_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("LZ_COMPROMISED_TIME", JS_LZ_COMPROMISED_TIME, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("OBJECT_FLAG_UNSELECTABLE", OBJECT_FLAG_UNSELECTABLE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// Pass droid actions too
+	engine->globalObject().setProperty("DACTION_NONE", DACTION_NONE, QScriptValue::ReadOnly | QScriptValue::Undeletable);									// 0 idle
+	engine->globalObject().setProperty("DACTION_MOVE", DACTION_MOVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_BUILD", DACTION_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_UNUSED3", DACTION_UNUSED3, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_DEMOLISH", DACTION_DEMOLISH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_REPAIR", DACTION_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);								// 5
+	engine->globalObject().setProperty("DACTION_ATTACK", DACTION_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_OBSERVE", DACTION_OBSERVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_FIRESUPPORT", DACTION_FIRESUPPORT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_SULK", DACTION_SULK, QScriptValue::ReadOnly | QScriptValue::Undeletable);									// 9
+	engine->globalObject().setProperty("DACTION_TRANSPORTOUT", DACTION_TRANSPORTOUT, QScriptValue::ReadOnly | QScriptValue::Undeletable);					// 11
+	engine->globalObject().setProperty("DACTION_TRANSPORTWAITTOFLYIN", DACTION_TRANSPORTWAITTOFLYIN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_TRANSPORTIN", DACTION_TRANSPORTIN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_DROIDREPAIR", DACTION_DROIDREPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_RESTORE", DACTION_RESTORE, QScriptValue::ReadOnly | QScriptValue::Undeletable);								// 15
+	// The states below are used by the action system
+	engine->globalObject().setProperty("DACTION_MOVEFIRE", DACTION_MOVEFIRE, QScriptValue::ReadOnly | QScriptValue::Undeletable);							// 17
+	engine->globalObject().setProperty("DACTION_MOVETOBUILD", DACTION_MOVETOBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_MOVETODEMOLISH", DACTION_MOVETODEMOLISH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_MOVETOREPAIR", DACTION_MOVETOREPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_BUILDWANDER", DACTION_BUILDWANDER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_UNUSED4", DACTION_UNUSED4, QScriptValue::ReadOnly | QScriptValue::Undeletable);								// 22 used to be moving around while building the foundation
+	engine->globalObject().setProperty("DACTION_MOVETOATTACK", DACTION_MOVETOATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_ROTATETOATTACK", DACTION_ROTATETOATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_MOVETOOBSERVE", DACTION_MOVETOOBSERVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_WAITFORREPAIR", DACTION_WAITFORREPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_MOVETOREPAIRPOINT", DACTION_MOVETOREPAIRPOINT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_WAITDURINGREPAIR", DACTION_WAITDURINGREPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_MOVETODROIDREPAIR", DACTION_MOVETODROIDREPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_MOVETORESTORE", DACTION_MOVETORESTORE, QScriptValue::ReadOnly | QScriptValue::Undeletable);					// 30
+	engine->globalObject().setProperty("DACTION_MOVETOREARM", DACTION_MOVETOREARM, QScriptValue::ReadOnly | QScriptValue::Undeletable);						// 32
+	engine->globalObject().setProperty("DACTION_WAITFORREARM", DACTION_WAITFORREARM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_MOVETOREARMPOINT", DACTION_MOVETOREARMPOINT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_WAITDURINGREARM", DACTION_WAITDURINGREARM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_VTOLATTACK", DACTION_VTOLATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_CLEARREARMPAD", DACTION_CLEARREARMPAD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_RETURNTOPOS", DACTION_RETURNTOPOS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DACTION_FIRESUPPORT_RETREAT", DACTION_FIRESUPPORT_RETREAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);		// 39
+	engine->globalObject().setProperty("DACTION_CIRCLE", DACTION_CIRCLE, QScriptValue::ReadOnly | QScriptValue::Undeletable);								// 41
+
 	// the constants below are subject to change without notice...
 	engine->globalObject().setProperty("PROX_MSG", MSG_PROXIMITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("CAMP_MSG", MSG_CAMPAIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MISS_MSG", MSG_MISSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RES_MSG", MSG_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("LDS_EXPAND_LIMBO", LDS_EXPAND_LIMBO, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+
 
 	/// Place to store group sizes
 	//== \item[groupSizes] A sparse array of group sizes. If a group has never been used, the entry in this array will

@@ -119,6 +119,7 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj = nullptr);
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
 bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit);
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
+bool triggerEventStructBeginBuilt(STRUCTURE *psStruct, bool demolish, DROID *psDroid);
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
