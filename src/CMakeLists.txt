@@ -76,4 +76,4 @@ ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,now" CA
 
 #######################
 # Install
-install(TARGETS warzone2100 DESTINATION ".")
+install(TARGETS warzone2100 COMPONENT Core DESTINATION ".")
