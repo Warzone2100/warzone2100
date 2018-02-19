@@ -1,4 +1,3 @@
-#cmake_policy(SET CMP0040 OLD)
 cmake_minimum_required(VERSION 3.5)
 project(wz2100)
 
@@ -12,9 +11,41 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
   if(${CMAKE_CROSSCOMPILING})
     pkg_check_modules(QT5ALL REQUIRED Qt5Widgets Qt5Core Qt5Script)
     link_directories(${QT5ALL_LIBRARY_DIRS})
-  else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
   endif()
+endif()
+
+# Use "-fPIC" / "-fPIE" for all targets by default, including static libs
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# CMake doesn't add "-pie" by default for executables (CMake issue #14983)
+INCLUDE(AddTargetLinkFlagsIfSupported)
+CHECK_CXX_LINKER_FLAGS("${CMAKE_EXE_LINKER_FLAGS} -pie" LINK_FLAG_PIE_SUPPORTED)
+if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
+endif()
+
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
+
+# Enable stack protection, if supported by the compiler
+# Prefer -fstack-protector-strong if supported, fall-back to -fstack-protector
+check_c_compiler_flag(-fstack-protector-strong HAS_CFLAG_FSTACK_PROTECTOR_STRONG)
+if (HAS_CFLAG_FSTACK_PROTECTOR_STRONG)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong")
+else()
+	check_c_compiler_flag(-fstack-protector HAS_CFLAG_FSTACK_PROTECTOR)
+	if (HAS_CFLAG_FSTACK_PROTECTOR)
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
+	endif()
+endif()
+check_cxx_compiler_flag(-fstack-protector-strong HAS_CXXFLAG_FSTACK_PROTECTOR_STRONG)
+if (HAS_CXXFLAG_FSTACK_PROTECTOR_STRONG)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong")
+else()
+	check_cxx_compiler_flag(-fstack-protector HAS_CXXFLAG_FSTACK_PROTECTOR)
+	if (HAS_CXXFLAG_FSTACK_PROTECTOR)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
+	endif()
 endif()
 
 add_definitions("-DHAVE_CONFIG_H")
