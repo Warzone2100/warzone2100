@@ -1,5 +1,11 @@
 project(doc)
 
+find_package(A2X)
+if(NOT A2X_FOUND)
+	message( WARNING "a2x is not found. Documentation cannot be generated if asciidoc is not installed. (Skipping documentation generation.)" )
+	return()
+endif()
+
 add_custom_target(doc_wz2100 ALL)
 
 set(doc_DATA
@@ -53,7 +59,7 @@ set(doc_DATA
 
 add_custom_command(
 	TARGET doc_wz2100
-	COMMAND "a2x"
+	COMMAND ${A2X_COMMAND}
 	ARGS
 		"-f"
 		"xhtml"
@@ -64,7 +70,7 @@ add_custom_command(
 
 add_custom_command(
 	TARGET doc_wz2100
-	COMMAND "a2x"
+	COMMAND ${A2X_COMMAND}
 	ARGS
 		"-f"
 		"xhtml"
