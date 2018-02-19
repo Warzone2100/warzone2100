@@ -134,6 +134,7 @@ else()
 endif()
 foreach(rfile ${ROOT_FILES})
 	install(FILES ${rfile}
+			COMPONENT Core
 			DESTINATION "."
 	)
 endforeach()

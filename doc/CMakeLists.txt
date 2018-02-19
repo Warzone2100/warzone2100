@@ -91,6 +91,6 @@ add_custom_command(
 
 endif()
 
-install(FILES ${doc_DATA} DESTINATION "doc/images/")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/docbook-xsl.css" DESTINATION "doc/")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.html" DESTINATION "doc/")
+install(FILES ${doc_DATA} DESTINATION "doc/images/" COMPONENT Core)
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/docbook-xsl.css" DESTINATION "doc/" COMPONENT Core)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.html" DESTINATION "doc/" COMPONENT Core)

@@ -56,6 +56,7 @@ install(FILES
 	"${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 	"${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 	DESTINATION "data"
+	COMPONENT Core
 )
 install(FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/music/menu.ogg"
@@ -64,4 +65,5 @@ install(FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/music/track3.ogg"
 	"${CMAKE_CURRENT_SOURCE_DIR}/music/music.wpl"
 	DESTINATION "data/music"
+	COMPONENT Core
 )
