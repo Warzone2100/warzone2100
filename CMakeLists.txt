@@ -73,3 +73,36 @@ add_subdirectory(po)
 add_subdirectory(data)
 add_subdirectory(doc)
 add_subdirectory(pkg/nsis)
+
+# Install base text / info files
+set(ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	# Target system is Windows
+	# Must convert the ROOT_FILES to Windows line endings, and rename with ".txt" at the end
+	set(_new_ROOT_FILES)
+	foreach(rfile ${ROOT_FILES})
+		get_filename_component(_rfile_filename ${rfile} NAME)
+		# Read in the file
+		file(READ ${rfile} _contents)
+		# Strip all CRs
+		string(REPLACE "\r" "" _contents ${_contents})
+		# Convert all LFs to CRLFs
+		string(REPLACE "\n" "\r\n" _contents ${_contents})
+		# Write out the converted file
+		set(_rfile_newfilename "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}.txt")
+		file(WRITE "${_rfile_newfilename}" ${_contents})
+		list(APPEND _new_ROOT_FILES "${_rfile_newfilename}")
+	endforeach()
+	set(ROOT_FILES ${_new_ROOT_FILES})
+else()
+	# Just copy the files to the build directory
+	foreach(rfile ${ROOT_FILES})
+		get_filename_component(_rfile_filename ${rfile} NAME)
+		configure_file(${rfile} "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}" COPYONLY)
+	endforeach()
+endif()
+foreach(rfile ${ROOT_FILES})
+	install(FILES ${rfile}
+			DESTINATION "."
+	)
+endforeach()
