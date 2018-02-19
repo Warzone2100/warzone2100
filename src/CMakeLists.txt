@@ -39,7 +39,7 @@ endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     target_link_libraries(warzone2100 ogg vorbis vorbisfile theora)
-  if (${CMAKE_CROSSCOMPILING})
+  if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group,-subsystem,windows")
     target_link_libraries(warzone2100 ${QT5ALL_LIBRARIES} ${QT5ALL_LDFLAGS_OTHER})
     target_link_libraries(warzone2100 version Qt5::QWindowsIntegrationPlugin Qt5ThemeSupport Qt5FontDatabaseSupport Qt5EventDispatcherSupport)
@@ -56,13 +56,24 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     )
 endif()
 
-if(WIN32)
+#######################
+# Hardening / Security
+
+INCLUDE(AddTargetLinkFlagsIfSupported)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     # Enable Data Execution Prevention and Address Space Layout Randomization
-    if (MSVC)
-        set_property(TARGET warzone2100 APPEND_STRING PROPERTY LINK_FLAGS " /NXCOMPAT /DYNAMICBASE")
-    else ()
-        set_property(TARGET warzone2100 APPEND_STRING PROPERTY LINK_FLAGS " -Wl,--nxcompat -Wl,--dynamicbase")
-    endif ()
+
+	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/NXCOMPAT" CACHED_RESULT_NAME FLAG_SLASH_NXCOMPAT_SUPPORTED)
+	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--nxcompat" CACHED_RESULT_NAME FLAG_WL_NXCOMPAT_SUPPORTED)
+	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/DYNAMICBASE" CACHED_RESULT_NAME FLAG_SLASH_DYNAMICBASE_SUPPORTED)
+	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--dynamicbase" CACHED_RESULT_NAME FLAG_WL_DYNAMICBASE_SUPPORTED)
 endif()
 
+# Enable RELRO (if supported)
+ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,relro" CACHED_RESULT_NAME FLAG_WL_Z_RELRO_SUPPORTED)
+ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,now" CACHED_RESULT_NAME FLAG_WL_Z_NOW_SUPPORTED)
+
+#######################
+# Install
 install(TARGETS warzone2100 DESTINATION ".")
