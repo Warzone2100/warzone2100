@@ -2,7 +2,7 @@
 # Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2018-02-18a
+# Script Version: 2018-02-19a
 #
 
 # ADD_TARGET_LINK_FLAGS_IF_SUPPORTED( TARGET <target>
@@ -76,9 +76,9 @@ function(ADD_TARGET_LINK_FLAGS_IF_SUPPORTED)
 	endif()
 
 	if(_parsedArguments_COMPILER_TYPE MATCHES "CXX")
-		CHECK_CXX_LINKER_FLAGS("${_parsedArguments_LINK_FLAGS}" ${_cached_result_variable_name})
+		CHECK_CXX_LINKER_FLAGS("${_parsedArguments_LINK_FLAGS}" ${_cached_result_variable_name} QUIET)
 	elseif(_parsedArguments_COMPILER_TYPE MATCHES "C")
-		CHECK_C_LINKER_FLAGS("${_parsedArguments_LINK_FLAGS}" ${_cached_result_variable_name})
+		CHECK_C_LINKER_FLAGS("${_parsedArguments_LINK_FLAGS}" ${_cached_result_variable_name} QUIET)
 	else()
 		message( FATAL_ERROR "ADD_TARGET_LINK_FLAGS_IF_SUPPORTED invalid COMPILER_TYPE value - must be one of: (C, CXX)" )
 	endif()
@@ -102,30 +102,52 @@ endfunction()
 
 INCLUDE(CheckCSourceRuns)
 INCLUDE(CheckCSourceCompiles)
+# CHECK_C_LINKER_FLAGS( <_FLAGS> <_RESULT>
+#						[QUIET] )
 function(CHECK_C_LINKER_FLAGS _FLAGS _RESULT)
+	set(_options QUIET)
+	set(_oneValueArgs)
+	set(_multiValueArgs)
+	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
+
 	set(CMAKE_REQUIRED_FLAGS "${_FLAGS}")
-	set(CMAKE_REQUIRED_QUIET ON)
+	if(_parsedArguments_QUIET)
+		set(CMAKE_REQUIRED_QUIET ON)
+	endif()
 	set(_test_source "int main() { return 0; }")
 	if(NOT CMAKE_CROSSCOMPILING)
 		CHECK_C_SOURCE_RUNS("${_test_source}" ${_RESULT})
 	else()
 		CHECK_C_SOURCE_COMPILES("${_test_source}" ${_RESULT})
 	endif()
-	unset(CMAKE_REQUIRED_QUIET)
+	if(_parsedArguments_QUIET)
+		unset(CMAKE_REQUIRED_QUIET)
+	endif()
 	set(CMAKE_REQUIRED_FLAGS "")
 endfunction(CHECK_C_LINKER_FLAGS)
 
 INCLUDE(CheckCXXSourceRuns)
 INCLUDE(CheckCXXSourceCompiles)
+# CHECK_CXX_LINKER_FLAGS( <_FLAGS> <_RESULT>
+#						  [QUIET] )
 function(CHECK_CXX_LINKER_FLAGS _FLAGS _RESULT)
+	set(_options QUIET)
+	set(_oneValueArgs)
+	set(_multiValueArgs)
+	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
+
 	set(CMAKE_REQUIRED_FLAGS "${_FLAGS}")
-	set(CMAKE_REQUIRED_QUIET ON)
+	if(_parsedArguments_QUIET)
+		set(CMAKE_REQUIRED_QUIET ON)
+	endif()
 	set(_test_source "int main() { return 0; }")
 	if(NOT CMAKE_CROSSCOMPILING)
 		CHECK_CXX_SOURCE_RUNS("${_test_source}" ${_RESULT})
 	else()
 		CHECK_CXX_SOURCE_COMPILES("${_test_source}" ${_RESULT})
 	endif()
-	unset(CMAKE_REQUIRED_QUIET)
+	if(_parsedArguments_QUIET)
+		unset(CMAKE_REQUIRED_QUIET)
+	endif()
 	set(CMAKE_REQUIRED_FLAGS "")
 endfunction(CHECK_CXX_LINKER_FLAGS)
