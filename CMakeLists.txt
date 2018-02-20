@@ -54,7 +54,13 @@ include_directories(".")
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 OPTION(ENABLE_NLS "Native Language Support" ON)
-OPTION(WZ_PORTABLE "Portable" ON)
+OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
+
+if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
+	message( WARNING "Portable build is only supported on Windows; Ignoring WZ_PORTABLE option" )
+	unset(WZ_PORTABLE)
+endif()
+
 SET(STDC_HEADERS ON)
 SET(HAVE_CFPREFERENCESCOPYAPPVALUE OFF)
 SET(_MINIX OFF)
