@@ -9,8 +9,10 @@
 /* Windows */
 
 // use pragma syntax to prevent tweaking the linker script for getting CryptXYZ function
+#ifdef _MSC_VER
 #pragma comment(lib, "crypt32.lib")
 #pragma comment(lib, "advapi32.lib")
+#endif
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
