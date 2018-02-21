@@ -12,8 +12,8 @@ AC_CONFIG_SRCDIR([lib/framework/frame.cpp])
 # HACK
 # Workaround stupid autoconf CFLAGS default
 # (Bash considers set but empty variables different from null for the ${VAR:+alt} operator)
-CFLAGS="${CFLAGS} -fPIC"
-CXXFLAGS="${CXXFLAGS} -fPIC -std=c++11"
+CFLAGS="${CFLAGS}"
+CXXFLAGS="${CXXFLAGS} -std=c++11"
 
 # Make cross compilation options available in --help
 AC_CANONICAL_HOST
@@ -133,6 +133,9 @@ case ${host_os} in
 		LDFLAGS="-Wl,-subsystem,windows ${LDFLAGS} -Wl,--dynamicbase -Wl,--nxcompat"
 		;;
 	*)
+		CFLAGS="${CFLAGS} -fPIC"
+		CXXFLAGS="${CXXFLAGS} -fPIC"
+
 		# Some platforms don't need _XOPEN_SOURCE
 		case ${host_os} in
 			*bsd* | dragonfly* | bitrig*) ;;
