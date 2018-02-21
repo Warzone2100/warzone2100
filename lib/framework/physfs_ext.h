@@ -96,7 +96,11 @@ static inline bool PHYSFS_readBEFloat(PHYSFS_file *file, float *val)
 	return (PHYSFS_readUBE32(file, readValue) != 0);
 }
 
+#ifdef WZ_CC_MINGW
+bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...) WZ_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 2, 3);
+#else
 bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
+#endif
 
 /**
  * @brief      fgets() implemented using PHYSFS.

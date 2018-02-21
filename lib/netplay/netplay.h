@@ -336,7 +336,12 @@ const char *messageTypeToString(unsigned messageType);
 
 /// Sync debugging. Only prints anything, if different players would print different things.
 #define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
+#ifdef WZ_CC_MINGW
+void _syncDebug(const char *function, const char *str, ...) WZ_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 2, 3);
+#else
 void _syncDebug(const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 2, 3);
+#endif
+
 /// Faster than syncDebug. Make sure that str is a format string that takes ints only.
 void _syncDebugIntList(const char *function, const char *str, int *ints, size_t numInts);
 #define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)

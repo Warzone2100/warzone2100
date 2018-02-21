@@ -72,6 +72,7 @@ typedef signed   long long int64_t;
 # define UINT32_MAX             (4294967295U)
 #endif
 #else
+#define __USE_MINGW_ANSI_STDIO 1
 #include <stdint.h>		// MSVC 2010 does have those defined
 #endif
 #endif
