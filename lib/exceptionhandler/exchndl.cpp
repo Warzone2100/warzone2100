@@ -1372,7 +1372,7 @@ void ExchndlSetup(const char *packageVersion)
 	}
 #else
 	// we use where they installed it on, since this is a removeable drive (most likely), we will use where the program is located in.
-	if (dwRetVal = GetCurrentDirectoryW(MAX_PATH, miniDumpPath))
+	if ((dwRetVal = GetCurrentDirectoryW(MAX_PATH, miniDumpPath)))
 	{
 		if (dwRetVal > MAX_PATH)
 		{

@@ -195,7 +195,7 @@ static void getPlatformUserDir(char *const tmpstr, size_t const size)
 	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr)))
 	{
 #else
-	if (dwRet = GetCurrentDirectoryW(MAX_PATH, tmpWStr))
+	if ((dwRet = GetCurrentDirectoryW(MAX_PATH, tmpWStr)))
 	{
 		if (dwRet > MAX_PATH)
 		{
