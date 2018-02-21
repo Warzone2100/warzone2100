@@ -172,7 +172,7 @@ static void runLink(char const *link)
 {
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
 #if defined(WZ_OS_WIN)
-	wchar_t  wszDest[250] = {'/0'};
+	wchar_t  wszDest[250] = {'\0'};
 	MultiByteToWideChar(CP_UTF8, 0, link, -1, wszDest, 250);
 
 	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
