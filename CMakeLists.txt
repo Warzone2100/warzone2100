@@ -109,7 +109,7 @@ add_subdirectory(src)
 add_subdirectory(po)
 add_subdirectory(data)
 add_subdirectory(doc)
-add_subdirectory(pkg/nsis)
+add_subdirectory(pkg)
 
 # Install base text / info files
 set(ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)

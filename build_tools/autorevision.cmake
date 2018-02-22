@@ -342,11 +342,15 @@ endif()
 
 
 # Detect and collect repo data.
-if(EXISTS ${CACHEFILE} AND CACHEFORCE)
-	# When requested only read from the cache to populate our symbols.
-	_importCache("${CACHEFILE}" ${LOGGING_QUIET})
-	if(NOT LOGGING_QUIET)
-		message( STATUS "Imported revision data from cache file (forced)" )
+if(CACHEFORCE)
+	if(EXISTS ${CACHEFILE})
+		# When requested only read from the cache to populate our symbols.
+		_importCache("${CACHEFILE}" ${LOGGING_QUIET})
+		if(NOT LOGGING_QUIET)
+			message( STATUS "Imported revision data from cache file (forced)" )
+		endif()
+	else()
+		message( FATAL_ERROR "Option CACHEFORCE declared, but the specified CACHEFILE does not exist at: ${CACHEFILE}" )
 	endif()
 elseif(Git_FOUND AND _currentDirectoryIsInGitRepo)
 	_gitRepo()
