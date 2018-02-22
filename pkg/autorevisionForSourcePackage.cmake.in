@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.3)
+
+# Runs autorevision to copy autorevision.cache to the source package
+# (it should not be copied to binary package).
+
+set(_STANDARD_CPACK_SOURCE_GENERATORS 7Z TGZ TXZ STGZ TBZ2 TZ ZIP CygwinSource)
+
+# To detect if this is a CPack build of the *source* package, check whether $CPACK_GENERATOR
+# (which is set to the current CPack generator) is in a standard list of source generators
+# or is in the $CPACK_SOURCE_GENERATOR list.
+#
+if(("${CPACK_GENERATOR}" IN_LIST CPACK_SOURCE_GENERATOR) OR ("${CPACK_GENERATOR}" IN_LIST _STANDARD_CPACK_SOURCE_GENERATORS))
+
+	# When packaging source, generate (and include) src/autorevision.cache
+
+	set(OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/src/autorevision.cache")
+	set(CACHEFILE "@PROJECT_SOURCE_DIR@/src/autorevision.cache")
+
+	execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CACHEFILE} -DOUTPUT_TYPE=sh -DOUTPUT_FILE=${OUTPUT_FILE} -DSKIPUPDATECACHE="1" -P "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cmake"
+		WORKING_DIRECTORY "@PROJECT_SOURCE_DIR@")
+
+endif()

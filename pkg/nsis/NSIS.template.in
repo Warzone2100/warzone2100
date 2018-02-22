@@ -27,6 +27,7 @@
   !include "FileFunc.nsh"
   !include "LogicLib.nsh"
   !include "../../../NSIS.definitions.nsh"
+  !include "../../../NSIS.version.nsh"
 
 ;--------------------------------
 ;General
