@@ -1,41 +1,13 @@
 cmake_minimum_required(VERSION 3.3)
 cmake_policy(SET CMP0054 NEW)
 
-function(extractVersionNumberFromGitTag _gitTag)
-	set(version_tag ${_gitTag})
-
-	# Remove "v/" or "v" prefix (as in "v3.2.2"), if present
-	STRING(REGEX REPLACE "^v/" "" version_tag "${version_tag}")
-	STRING(REGEX REPLACE "^v" "" version_tag "${version_tag}")
-
-	# Remove _beta* or _rc* suffix, if present
-	STRING(REGEX REPLACE "_beta.*$" "" version_tag "${version_tag}")
-	STRING(REGEX REPLACE "_rc.*$" "" version_tag "${version_tag}")
-
-	# Extract up to a 3-component version # from the beginning of the tag (i.e. 3.2.2)
-	STRING(REGEX MATCH "^([0-9]+)(.[0-9]+)?(.[0-9]+)?" version_tag "${version_tag}")
-
-	set(DID_EXTRACT_VERSION OFF PARENT_SCOPE)
-	unset(EXTRACTED_VERSION PARENT_SCOPE)
-	unset(EXTRACTED_VERSION_MAJOR PARENT_SCOPE)
-	unset(EXTRACTED_VERSION_MINOR PARENT_SCOPE)
-	unset(EXTRACTED_VERSION_PATCH PARENT_SCOPE)
-
-	if(version_tag)
-		set(DID_EXTRACT_VERSION ON PARENT_SCOPE)
-		set(EXTRACTED_VERSION ${version_tag} PARENT_SCOPE)
-		if(DEFINED CMAKE_MATCH_1)
-			set(EXTRACTED_VERSION_MAJOR "${CMAKE_MATCH_1}" PARENT_SCOPE)
-		endif()
-		if(DEFINED CMAKE_MATCH_2)
-			string(SUBSTRING "${CMAKE_MATCH_2}" 1 -1 _version_minor) # remove the first "." character
-			set(EXTRACTED_VERSION_MINOR "${_version_minor}" PARENT_SCOPE)
-		endif()
-		if(DEFINED CMAKE_MATCH_3)
-			string(SUBSTRING "${CMAKE_MATCH_3}" 1 -1 _version_patch) # remove the first "." character
-			set(EXTRACTED_VERSION_PATCH "${_version_patch}" PARENT_SCOPE)
-		endif()
-	endif()
+function(copyFileToDir _file _destDir)
+	get_filename_component(_filename "${_file}" NAME)
+	configure_file(
+		${_file}
+		${_destDir}/${_filename}
+		COPYONLY
+	)
 endfunction()
 
 set(CPACK_PACKAGE_NAME			"Warzone 2100")
@@ -99,6 +71,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		${CMAKE_CURRENT_SOURCE_DIR}/nsis/NSIS.definitions.in
 		${CMAKE_BINARY_DIR}/NSIS.definitions.nsh
 	)
+
+	# Copy Installer Language files
+	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-English.nsh" "${CMAKE_BINARY_DIR}")
+	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-Dutch.nsh" "${CMAKE_BINARY_DIR}")
+	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-German.nsh" "${CMAKE_BINARY_DIR}")
+	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-Russian.nsh" "${CMAKE_BINARY_DIR}")
 
 	# IMPORTANT: To generate the NSIS script, CPack must use `nsis/NSIS.template.in`
 	list(INSERT CPACK_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/nsis")
