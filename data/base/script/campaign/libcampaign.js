@@ -1785,16 +1785,16 @@ function __camTacticsTick()
 //Return the range (in tiles) a droid will scout for stuff to attack around it.
 function __camScanRange(order, drType)
 {
-	var rng = 7; //default
+	var rng = __CAM_TARGET_TRACKING_RADIUS; //default
 	switch (order)
 	{
 		case CAM_ORDER_ATTACK:
 		case CAM_ORDER_DEFEND:
 		case CAM_ORDER_FOLLOW:
-			rng = 9;
+			rng = __CAM_TARGET_TRACKING_RADIUS;
 			break;
 		case CAM_ORDER_PATROL:
-			rng = 5;
+			rng = 4;
 			break;
 		case CAM_ORDER_COMPROMISE:
 			rng = 2; //very small so they don't track stuff too far
