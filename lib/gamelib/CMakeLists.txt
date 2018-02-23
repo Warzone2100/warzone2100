@@ -1,9 +1,17 @@
 cmake_minimum_required (VERSION 3.5)
 project (gamelib CXX)
 
+if(ENABLE_NLS)
+	find_package (Intl REQUIRED)
+endif()
+
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 add_library(gamelib STATIC ${HEADERS} ${SRC})
 target_link_libraries(gamelib PRIVATE framework)
+if(ENABLE_NLS)
+	target_include_directories(gamelib PRIVATE "${Intl_INCLUDE_DIRS}")
+	target_link_libraries(gamelib PRIVATE ${Intl_LIBRARIES})
+endif()
 target_compile_definitions(gamelib PRIVATE "YY_NO_UNISTD_H")

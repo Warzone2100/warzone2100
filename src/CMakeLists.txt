@@ -28,6 +28,10 @@ add_custom_command(
 ############################
 # Main Executable
 
+if(ENABLE_NLS)
+	find_package (Intl REQUIRED)
+endif()
+
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 qt5_wrap_cpp(MOCFILES multiint.h qtscriptdebug.h)
@@ -48,6 +52,9 @@ target_link_libraries(warzone2100
 	Qt5::Gui
 	Qt5::Widgets
 	)
+if(ENABLE_NLS)
+	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
+endif()
 
 if(WIN32)
     target_link_libraries(warzone2100 ws2_32 iphlpapi ${SDL2MAIN_LIBRARY})
