@@ -549,33 +549,12 @@ Section "Uninstall"
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
 
-  Delete "$INSTDIR\base.wz"
-  Delete "$INSTDIR\mp.wz"
   Delete "$INSTDIR\sequences.wz"
 
   Delete "$INSTDIR\stderr.txt"
   Delete "$INSTDIR\stdout.txt"
 
-  Delete "$INSTDIR\README.md.txt"
-  Delete "$INSTDIR\COPYING.NONGPL.txt"
-  Delete "$INSTDIR\COPYING.README.txt"
-  Delete "$INSTDIR\COPYING.txt"
-
-  Delete "$INSTDIR\doc\images\*.*"
-  Delete "$INSTDIR\doc\*.*"
-  RMDir "$INSTDIR\doc\images"
-  RMDIR "$INSTDIR\doc"
-
   Delete "$INSTDIR\License.txt"
-  Delete "$INSTDIR\Authors.txt"
-  Delete "$INSTDIR\ChangeLog.txt"
-
-  Delete "$INSTDIR\music\menu.ogg"
-  Delete "$INSTDIR\music\track1.ogg"
-  Delete "$INSTDIR\music\track2.ogg"
-  Delete "$INSTDIR\music\track3.ogg"
-  Delete "$INSTDIR\music\music.wpl"
-  RMDir "$INSTDIR\music"
 
   Delete "$INSTDIR\uninstall.exe"
 
