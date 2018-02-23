@@ -1,23 +1,36 @@
 cmake_minimum_required(VERSION 3.5)
 
+############################
+# Versioning (autorevision)
+
+if(EXISTS "autorevision.cache")
+	# Copy autorevision.cache from the src directory (if present)
+	# This supports proper versioning from distribution source archives
+	configure_file("autorevision.cache" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" COPYONLY)
+endif()
+
+# Autorevision target that will run *every* build
+add_custom_target(autorevision ALL
+    DEPENDS
+        "${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"
+)
+
+# Autorevision command that will run *every* build
+add_custom_command(
+    OUTPUT
+		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"  # fake - ensure we run
+		"${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
+	# this command must generate: ${CMAKE_CURRENT_BINARY_DIR}/autorevision.h
+    COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DOUTPUT_TYPE=h -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" -P "${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake"
+	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+)
+
+############################
+# Main Executable
+
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 qt5_wrap_cpp(MOCFILES multiint.h qtscriptdebug.h)
-
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  add_custom_command(
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
-    COMMAND "powershell.exe"
-    ARGS "-File" "${CMAKE_SOURCE_DIR}/build_tools/autorevision.ps1" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  add_custom_command(
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
-    COMMAND "${CMAKE_SOURCE_DIR}/build_tools/autorevision"
-    ARGS "-t" "h" "-o" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" ">" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-    )
-endif()
 
 add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc")
 target_compile_definitions(warzone2100 PRIVATE "YY_NO_UNISTD_H")
