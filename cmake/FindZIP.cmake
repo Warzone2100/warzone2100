@@ -20,15 +20,16 @@
 
 cmake_minimum_required(VERSION 3.3)
 
+set(_PF32BIT "ProgramFiles(x86)")
 
 # Search for a supported executable to use for ZIP compression
 #
-# The search is a simplified version of the search code in: https://github.com/Kitware/CMake/blob/master/Modules/CPackZIP.cmake
+# The search is a modified version of the search code in: https://github.com/Kitware/CMake/blob/master/Modules/CPackZIP.cmake
 # Which is distributed under the OSI-approved BSD 3-Clause License (https://cmake.org/licensing)
 #
 
 # Search for 7-Zip
-find_program(ZIP_EXECUTABLE 7z PATHS "$ENV{ProgramFiles}/7-Zip")
+find_program(ZIP_EXECUTABLE 7z PATHS "$ENV{ProgramFiles}/7-Zip" "$ENV{${_PF32BIT}}/7-Zip" "$ENV{ProgramW6432}/7-Zip")
 
 if(NOT ZIP_EXECUTABLE)
 	# Search for "zip"
