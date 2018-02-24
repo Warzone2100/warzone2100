@@ -2065,8 +2065,7 @@ function __camTacticsTickForGroup(group)
 
 		//As of this refactor patrol groups can react to stuff within the
 		//tile scan limits in the attack code while waiting
-		var patrol = (gi.order === CAM_ORDER_PATROL);
-		if (patrol)
+		if (gi.order === CAM_ORDER_PATROL)
 		{
 			if (!camDef(gi.data.interval))
 			{
@@ -2103,12 +2102,24 @@ function __camTacticsTickForGroup(group)
 			}
 		}
 
-		if (patrol || (camDef(target) && camDist(droid, target) >= __CAM_CLOSE_RADIUS))
+		if (camDef(target) && camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 		{
 			const SCAN_RANGE = __camScanRange(gi.order, droid.droidType);
+			const CLOSE_Z = 1;
+			var artilleryLike = (droid.isCB || droid.hasIndirect || droid.isSensor);
 			var defending = (gi.order === CAM_ORDER_DEFEND);
-
 			var closeBy = enumRange(droid.x, droid.y, SCAN_RANGE, CAM_HUMAN_PLAYER, false);
+
+			//We only care about explicit observe/attack if the object is close
+			//on the z coordinate. We should not chase things up or down hills
+			//that may be far away, at least path-wise.
+			if (!isVTOL(droid) && !artilleryLike)
+			{
+				closeBy = closeBy.filter(function(obj) {
+					return Math.abs(Math.floor((droid.z + obj.z) / 2)) <= CLOSE_Z;
+				});
+			}
+
 			closeBy = closeBy.sort(function(obj1, obj2) {
 				var temp1 = distBetweenTwoPoints(droid.x, droid.y, obj1.x, obj1.y);
 				var temp2 = distBetweenTwoPoints(droid.x, droid.y, obj2.x, obj2.y);
@@ -2128,13 +2139,13 @@ function __camTacticsTickForGroup(group)
 			}
 			else
 			{
-				if (!defending)
+				if (defending || !(artilleryLike || isVTOL(droid)))
 				{
-					orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+					orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
 				}
 				else
 				{
-					orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
+					orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
 				}
 			}
 		}
