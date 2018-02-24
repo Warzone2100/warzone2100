@@ -104,6 +104,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINAR
 add_subdirectory(3rdparty/miniupnpc)
 add_subdirectory(3rdparty/micro-ecc)
 add_subdirectory(3rdparty/sha2)
+add_subdirectory(3rdparty/fonts)
 add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(po)
