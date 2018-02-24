@@ -241,8 +241,9 @@ Section $(TEXT_SecBase) SecBase
 
   SetOutPath "$INSTDIR\fonts"
   File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
-  File "${EXTDIR}\etc\fonts\DejaVuSans.ttf"
-  File "${EXTDIR}\etc\fonts\DejaVuSans-Bold.ttf"
+  File "${TOP_SRCDIR}\3rdparty\fonts\DejaVu\DejaVuSans.ttf"
+  File "${TOP_SRCDIR}\3rdparty\fonts\DejaVu\DejaVuSans-Bold.ttf"
+  File "/oname=DejaVu.LICENSE.txt" "${TOP_SRCDIR}\3rdparty\fonts\DejaVu\LICENSE"
 
 !ifndef PORTABLE
 
