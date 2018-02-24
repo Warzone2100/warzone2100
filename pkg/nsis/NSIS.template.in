@@ -195,10 +195,6 @@ Section # hidden section, required
 
   ;ADD YOUR OWN FILES HERE...
 
-  ; Windows dbghelp library
-  File "${EXTDIR}\bin\dbghelp.dll.license.txt"
-  File "${EXTDIR}\bin\dbghelp.dll"
-
 !ifdef PORTABLE
 ; openAL installer
   File "${EXTDIR}\bin\oalinst.exe"

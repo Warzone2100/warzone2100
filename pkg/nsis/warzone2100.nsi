@@ -178,8 +178,8 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_BUILDDIR}\src\${PACKAGE}.exe"
 
   ; Windows dbghelp library
-  File "${EXTDIR}\bin\dbghelp.dll.license.txt"
-  File "${EXTDIR}\bin\dbghelp.dll"
+  File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll.license.txt"
+  File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll"
 
 !ifdef PORTABLE
 ; openAL installer
