@@ -32,11 +32,6 @@
   LangString TEXT_SecBase ${LANG_ENGLISH} "Core files"
   LangString DESC_SecBase ${LANG_ENGLISH} "The core files required to run Warzone 2100."
 
-!ifndef PORTABLE
-  LangString TEXT_SecOpenAL ${LANG_ENGLISH} "OpenAL libraries"
-  LangString DESC_SecOpenAL ${LANG_ENGLISH} "Runtime libraries for OpenAL, a free Audio interface. Implementation by Creative Labs."
-!endif
-
   LangString TEXT_SecFMVs ${LANG_ENGLISH} "Videos"
   LangString DESC_SecFMVs ${LANG_ENGLISH} "Download and install in-game cutscenes."
 

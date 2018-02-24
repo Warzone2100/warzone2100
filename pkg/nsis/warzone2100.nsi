@@ -181,10 +181,6 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll.license.txt"
   File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll"
 
-!ifdef PORTABLE
-; openAL installer
-  File "${EXTDIR}\bin\oalinst.exe"
-!endif
 !ifdef INSTALLVIDS
 ; sequences.wz
   File "${EXTDIR}\opt\sequences.wz"
@@ -281,16 +277,6 @@ Section $(TEXT_SecBase) SecBase
 SectionEnd
 
 ; NOTE: you need upgraded security privs to install shortcut on desktop for portable.
-
-; Installs OpenAL runtime libraries, using Creative's installer
-!ifndef PORTABLE
-Section $(TEXT_SecOpenAL) SecOpenAL
-  SetOutPath "$INSTDIR"
-  File "${EXTDIR}\bin\oalinst.exe"
-  ExecWait '"$INSTDIR\oalinst.exe" --silent'
-SectionEnd
-!endif
-
 
 !ifndef INSTALLVIDS
 SectionGroup $(TEXT_SecFMVs) SecFMVs
@@ -552,10 +538,6 @@ FunctionEnd
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
 
-!ifndef PORTABLE
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
-!endif
-
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
@@ -575,8 +557,6 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\${PACKAGE}.exe"
-
-  Delete "$INSTDIR\oalinst.exe"
 
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
