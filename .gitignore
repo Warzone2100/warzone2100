@@ -2,6 +2,8 @@
 *~
 *.bak
 .*.swp
+*.log
+*.out
 
 # Generated binary files:
 *.o
@@ -13,12 +15,6 @@
 *.wz
 # Doxygen files
 /doc/code/html
-# LaTeX generated (binary) files
-*.aux
-*.log
-*.out
-*.pdf
-*.toc
 # windows generated binary files:
 *.obj
 *.lib
@@ -94,10 +90,6 @@ win32/packages
 /doc/quickstartguide.html
 /doc/quickstartguide.pdf
 /doc/warzone2100.6
-/doc/events.tex
-/doc/functions.tex
-/doc/globals.tex
-/doc/objects.tex
 
 # Generated executables:
 /src/warzone2100

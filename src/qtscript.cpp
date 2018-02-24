@@ -22,6 +22,35 @@
  * New scripting system
  */
 
+// Documentation stuff follows. The build system will parse the comment prefixes
+// and sort the comments into the appropriate Markdown documentation files.
+
+//== # Globals
+//==
+//== This section describes global variables (or 'globals' for short) that are
+//== available from all scripts. You typically cannot write to these variables,
+//== they are read-only.
+//==
+//__ # Events
+//__
+//__ This section describes event callbacks (or 'events' for short) that are
+//__ called from the game when something specific happens. Which scripts
+//__ receive them is usually filtered by player. Call ```receiveAllEvents(true)```
+//__ to start receiving all events unfiltered.
+//__
+//-- # Functions
+//--
+//-- This section describes functions that can be called from scripts to make
+//-- things happen in the game (usually called our script 'API').
+//--
+//;; # Game objects
+//;;
+//;; This section describes various **game objects** defined by the script interface,
+//;; and which are both accepted by functions and returned by them. Changing the
+//;; fields of a **game object** has no effect on the game before it is passed to a
+//;; function that does something with the **game object**.
+//;;
+
 #include "qtscript.h"
 
 #include <QtCore/QTextStream>
@@ -218,22 +247,24 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 	return result;
 }
 
-//-- \subsection{setTimer(function, milliseconds[, object])}
+//-- ## setTimer(function, milliseconds[, object])
+//--
 //-- Set a function to run repeated at some given time interval. The function to run
-//-- is the first parameter, and it \underline{must be quoted}, otherwise the function will
+//-- is the first parameter, and it _must be quoted_, otherwise the function will
 //-- be inlined. The second parameter is the interval, in milliseconds. A third, optional
-//-- parameter can be a \emph{game object} to pass to the timer function. If the \emph{game object}
+//-- parameter can be a **game object** to pass to the timer function. If the **game object**
 //-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
-//-- \begin{lstlisting}
+//-- ```javascript
 //--   function conDroids()
 //--   {
 //--      ... do stuff ...
 //--   }
 //--   // call conDroids every 4 seconds
 //--   setTimer("conDroids", 4000);
-//-- \end{lstlisting}
+//-- ```
+//--
 static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
@@ -262,9 +293,11 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-//-- \subsection{removeTimer(function)}
+//-- ## removeTimer(function)
+//--
 //-- Removes an existing timer. The first parameter is the function timer to remove,
-//-- and its name \underline{must be quoted}.
+//-- and its name _must be quoted_.
+//--
 static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
@@ -289,15 +322,17 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue();
 }
 
-//-- \subsection{queue(function[, milliseconds[, object]])}
+//-- ## queue(function[, milliseconds[, object]])
+//--
 //-- Queues up a function to run at a later game frame. This is useful to prevent
 //-- stuttering during the game, which can happen if too much script processing is
 //-- done at once.  The function to run is the first parameter, and it
-//-- \underline{must be quoted}, otherwise the function will be inlined.
+//-- _must be quoted_, otherwise the function will be inlined.
 //-- The second parameter is the delay in milliseconds, if it is omitted or 0,
 //-- the function will be run at a later frame.  A third optional
-//-- parameter can be a \emph{game object} to pass to the queued function. If the \emph{game object}
+//-- parameter can be a **game object** to pass to the queued function. If the **game object**
 //-- dies before the queued call runs, nothing happens.
+//--
 // TODO, check if an identical call is already queued up - and in this case,
 // do not add anything.
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
@@ -332,11 +367,12 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-//-- \subsection{profile(function[, arguments])}
+//-- ## profile(function[, arguments])
 //-- Calls a function with given arguments, measures time it took to evaluate the function,
 //-- and adds this time to performance monitor statistics. Transparently returns the
 //-- function's return value. The function to run is the first parameter, and it
-//-- \underline{must be quoted}. (3.2+ only)
+//-- _must be quoted_. (3.2+ only)
+//--
 static QScriptValue js_profile(QScriptContext *context, QScriptEngine *engine)
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Profiled functions must be quoted");
@@ -367,11 +403,12 @@ void scriptRemoveObject(BASE_OBJECT *psObj)
 	groupRemoveObject(psObj);
 }
 
-//-- \subsection{namespace(prefix)}
+//-- ## namespace(prefix)
 //-- Registers a new event namespace. All events can now have this prefix. This is useful for
 //-- code libraries, to implement event that do not conflict with events in main code. This
 //-- function should be called from global; do not (for hopefully obvious reasons) put it
 //-- inside an event.
+//--
 static QScriptValue js_namespace(QScriptContext *context, QScriptEngine *engine)
 {
 	QString prefix(context->argument(0).toString());
@@ -379,9 +416,10 @@ static QScriptValue js_namespace(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(true);
 }
 
-//-- \subsection{include(file)}
+//-- ## include(file)
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
+//--
 static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 {
 	QString basePath = engine->globalObject().property("scriptPath").toString();
@@ -585,18 +623,18 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	engine->globalObject().setProperty("namespace", engine->newFunction(js_namespace));
 
 	// Special global variables
-	//== \item[version] Current version of the game, set in \emph{major.minor} format.
+	//== * ```version``` Current version of the game, set in *major.minor* format.
 	engine->globalObject().setProperty("version", "3.2", QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[selectedPlayer] The player ontrolled by the client on which the script runs.
+	//== * ```selectedPlayer``` The player controlled by the client on which the script runs.
 	engine->globalObject().setProperty("selectedPlayer", selectedPlayer, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[gameTime] The current game time. Updated before every invokation of a script.
+	//== * ```gameTime``` The current game time. Updated before every invokation of a script.
 	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[modList] The current loaded mods.
+	//== * ```modList``` The current loaded mods.
 	engine->globalObject().setProperty("modList", QString(getModList().c_str()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 
-	//== \item[difficulty] The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
-	//== EASY, MEDIUM, HARD or INSANE.
+	//== * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
+	//== ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
 	if (game.type == SKIRMISH)
 	{
 		engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -605,9 +643,9 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	{
 		engine->globalObject().setProperty("difficulty", (int)getDifficultyLevel(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
-	//== \item[mapName] The name of the current map.
+	//== * ```mapName``` The name of the current map.
 	engine->globalObject().setProperty("mapName", QString(game.map), QScriptValue::ReadOnly | QScriptValue::Undeletable);  // QString cast to work around bug in Qt5 QScriptValue(char *) constructor.
-	//== \item[tilesetType] The area name of the map.
+	//== * ```tilesetType``` The area name of the map.
 	QString tilesetType("CUSTOM");
 	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
@@ -622,23 +660,23 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 		tilesetType = "ROCKIES";
 	}
 	engine->globalObject().setProperty("tilesetType", tilesetType, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[baseType] The type of base that the game starts with. It will be one of CAMP_CLEAN, CAMP_BASE or CAMP_WALLS.
+	//== * ```baseType``` The type of base that the game starts with. It will be one of ```CAMP_CLEAN```, ```CAMP_BASE``` or ```CAMP_WALLS```.
 	engine->globalObject().setProperty("baseType", game.base, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[alliancesType] The type of alliances permitted in this game. It will be one of NO_ALLIANCES, ALLIANCES or ALLIANCES_TEAMS.
+	//== * ```alliancesType``` The type of alliances permitted in this game. It will be one of ```NO_ALLIANCES```, ```ALLIANCES``` or ```ALLIANCES_TEAMS```.
 	engine->globalObject().setProperty("alliancesType", game.alliance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[powerType] The power level set for this game.
+	//== * ```powerType``` The power level set for this game.
 	engine->globalObject().setProperty("powerType", game.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[maxPlayers] The number of active players in this game.
+	//== * ```maxPlayers``` The number of active players in this game.
 	engine->globalObject().setProperty("maxPlayers", game.maxPlayers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[scavengers] Whether or not scavengers are activated in this game.
+	//== * ```scavengers``` Whether or not scavengers are activated in this game.
 	engine->globalObject().setProperty("scavengers", game.scavengers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[mapWidth] Width of map in tiles.
+	//== * ```mapWidth``` Width of map in tiles.
 	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[mapHeight] Height of map in tiles.
+	//== * ```mapHeight``` Height of map in tiles.
 	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[scavengerPlayer] Index of scavenger player. (3.2+ only)
+	//== * ```scavengerPlayer``` Index of scavenger player. (3.2+ only)
 	engine->globalObject().setProperty("scavengerPlayer", scavengerSlot(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//== \item[isMultiplayer] If the current game is a online multiplayer game or not. (3.2+ only)
+	//== * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
 	engine->globalObject().setProperty("isMultiplayer", NetPlay.bComms, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	// un-documented placeholder variable
 	engine->globalObject().setProperty("isReceivingAllEvents", false, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -656,15 +694,15 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	}
 
 	// We need to always save the 'me' special variable.
-	//== \item[me] The player the script is currently running as.
+	//== * ```me``` The player the script is currently running as.
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// We also need to save the special 'scriptName' variable.
-	//== \item[scriptName] Base name of the script that is running.
+	//== * ```scriptName``` Base name of the script that is running.
 	engine->globalObject().setProperty("scriptName", basename.baseName(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// We also need to save the special 'scriptPath' variable.
-	//== \item[scriptPath] Base path of the script that is running.
+	//== * ```scriptPath``` Base path of the script that is running.
 	engine->globalObject().setProperty("scriptPath", basename.path(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	QScriptValue result = engine->evaluate(source, path);
@@ -960,55 +998,102 @@ void jsShowDebug()
 // Events
 
 /// For generic, parameter-less triggers
-//__ \subsection{eventGameInit()}
+//__ ## eventGameInit()
+//__
 //__ An event that is run once as the game is initialized. Not all game state may have been
 //__ properly initialized by this time, so use this only to initialize script state.
-//__ \subsection{eventStartLevel()}
+//__
+//__ ## eventStartLevel()
+//__
 //__ An event that is run once the game has started and all game data has been loaded.
-//__ \subsection{eventMissionTimeout()}
+//__
+//__ ## eventMissionTimeout()
+//__
 //__ An event that is run when the mission timer has run out.
-//__ \subsection{eventVideoDone()}
+//__
+//__ ## eventVideoDone()
+//__
 //__ An event that is run when a video show stopped playing.
-//__ \subsection{eventGameLoaded()}
+//__
+//__ ## eventGameLoaded()
+//__
 //__ An event that is run when game is loaded from a saved game. There is usually no need to use this event.
-//__ \subsection{eventGameSaving()}
+//__
+//__ ## eventGameSaving()
+//__
 //__ An event that is run before game is saved. There is usually no need to use this event.
-//__ \subsection{eventGameSaved()}
+//__
+//__ ## eventGameSaved()
+//__
 //__ An event that is run after game is saved. There is usually no need to use this event.
-//__ \subsection{eventDeliveryPointMoving()}
+//__
+//__ ## eventDeliveryPointMoving()
+//__
 //__ An event that is run when the current player starts to move a delivery point.
-//__ \subsection{eventDeliveryPointMoved()}
+//__
+//__ ## eventDeliveryPointMoved()
+//__
 //__ An event that is run after the current player has moved a delivery point.
-//__ \subsection{eventTransporterLaunch(transport)}
+//__
+//__ ## eventTransporterLaunch(transport)
+//__
 //__ An event that is run when the mission transporter has been ordered to fly off.
-//__ \subsection{eventTransporterArrived(transport)}
+//__
+//__ ## eventTransporterArrived(transport)
+//__
 //__ An event that is run when the mission transporter has arrived at the map edge with reinforcements.
-//__ \subsection{eventTransporterExit(transport)}
+//__
+//__ ## eventTransporterExit(transport)
+//__
 //__ An event that is run when the mission transporter has left the map.
-//__ \subsection{eventTransporterDone(transport)}
+//__
+//__ ## eventTransporterDone(transport)
+//__
 //__ An event that is run when the mission transporter has no more reinforcements to deliver.
-//__ \subsection{eventTransporterLanded(transport)}
+//__
+//__ ## eventTransporterLanded(transport)
+//__
 //__ An event that is run when the mission transporter has landed with reinforcements.
-//__ \subsection{eventDesignBody()}
+//__
+//__ ## eventDesignBody()
+//__
 //__An event that is run when current user picks a body in the design menu.
-//__ \subsection{eventDesignPropulsion()}
+//__
+//__ ## eventDesignPropulsion()
+//__
 //__An event that is run when current user picks a propulsion in the design menu.
-//__ \subsection{eventDesignWeapon()}
+//__
+//__ ## eventDesignWeapon()
+//__
 //__An event that is run when current user picks a weapon in the design menu.
-//__ \subsection{eventDesignCommand()}
+//__
+//__ ## eventDesignCommand()
+//__
 //__An event that is run when current user picks a command turret in the design menu.
-//__ \subsection{eventDesignSystem()}
+//__
+//__ ## eventDesignSystem()
+//__
 //__An event that is run when current user picks a system other than command turret in the design menu.
-//__ \subsection{eventDesignQuit()}
+//__
+//__ ## eventDesignQuit()
+//__
 //__An event that is run when current user leaves the design menu.
-//__ \subsection{eventMenuBuildSelected()}
+//__
+//__ ## eventMenuBuildSelected()
+//__
 //__An event that is run when current user picks something new in the build menu.
-//__ \subsection{eventMenuBuild()}
+//__
+//__ ## eventMenuBuild()
+//__
 //__An event that is run when current user opens the build menu.
-//__ \subsection{eventMenuResearch()}
+//__
+//__ ## eventMenuResearch()
+//__
 //__An event that is run when current user opens the research menu.
-//__ \subsection{eventMenuManufacture()}
+//__
+//__ ## eventMenuManufacture()
 //__An event that is run when current user opens the manufacture menu.
+//__
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 {
 	// HACK: TRIGGER_VIDEO_QUIT is called before scripts for initial campaign video
@@ -1130,8 +1215,10 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 	return true;
 }
 
-//__ \subsection{eventPlayerLeft(player index)}
+//__ ## eventPlayerLeft(player index)
+//__
 //__ An event that is run after a player has left the game.
+//__
 bool triggerEventPlayerLeft(int id)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1144,8 +1231,11 @@ bool triggerEventPlayerLeft(int id)
 	return true;
 }
 
-//__ \subsection{eventCheatMode(entered)} Game entered or left cheat/debug mode.
+//__ ## eventCheatMode(entered)
+//__
+//__ Game entered or left cheat/debug mode.
 //__ The entered parameter is true if cheat mode entered, false otherwise.
+//__
 bool triggerEventCheatMode(bool entered)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1158,7 +1248,10 @@ bool triggerEventCheatMode(bool entered)
 	return true;
 }
 
-//__ \subsection{eventDroidIdle(droid)} A droid should be given new orders.
+//__ ## eventDroidIdle(droid)
+//__
+//__ A droid should be given new orders.
+//__
 bool triggerEventDroidIdle(DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1175,10 +1268,12 @@ bool triggerEventDroidIdle(DROID *psDroid)
 	return true;
 }
 
-//__ \subsection{eventDroidBuilt(droid[, structure])}
+//__ ## eventDroidBuilt(droid[, structure])
+//__
 //__ An event that is run every time a droid is built. The structure parameter is set
 //__ if the droid was produced in a factory. It is not triggered for droid theft or
-//__ gift (check \emph{eventObjectTransfer} for that).
+//__ gift (check ```eventObjectTransfer``` for that).
+//__
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1200,10 +1295,12 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 	return true;
 }
 
-//__ \subsection{eventStructureBuilt(structure[, droid])}
+//__ ## eventStructureBuilt(structure[, droid])
+//__
 //__ An event that is run every time a structure is produced. The droid parameter is set
 //__ if the structure was built by a droid. It is not triggered for building theft
-//__ (check \emph{eventObjectTransfer} for that).
+//__ (check ```eventObjectTransfer``` for that).
+//__
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1225,10 +1322,12 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 	return true;
 }
 
-//__ \subsection{eventStructureReady(structure)}
+//__ ## eventStructureReady(structure)
+//__
 //__ An event that is run every time a structure is ready to perform some
 //__ special ability. It will only fire once, so if the time is not right,
 //__ register your own timer to keep checking.
+//__
 bool triggerEventStructureReady(STRUCTURE *psStruct)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1246,9 +1345,11 @@ bool triggerEventStructureReady(STRUCTURE *psStruct)
 	return true;
 }
 
-//__ \subsection{eventAttacked(victim, attacker)}
+//__ ## eventAttacked(victim, attacker)
+//__
 //__ An event that is run when an object belonging to the script's controlling player is
 //__ attacked. The attacker parameter may be either a structure or a droid.
+//__
 bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1278,11 +1379,13 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 	return true;
 }
 
-//__ \subsection{eventResearched(research, structure, player)}
+//__ ## eventResearched(research, structure, player)
+//__
 //__ An event that is run whenever a new research is available. The structure
 //__ parameter is set if the research comes from a research lab owned by the
 //__ current player. If an ally does the research, the structure parameter will
 //__ be set to null. The player parameter gives the player it is called for.
+//__
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
 	//HACK: This event can be triggered when loading savegames, before the script engines are initialized.
@@ -1315,9 +1418,11 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 	return true;
 }
 
-//__ \subsection{eventDestroyed(object)}
+//__ ## eventDestroyed(object)
+//__
 //__ An event that is run whenever an object is destroyed. Careful passing
 //__ the parameter object around, since it is about to vanish!
+//__
 bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1331,10 +1436,12 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 	return true;
 }
 
-//__ \subsection{eventPickup(feature, droid)}
+//__ ## eventPickup(feature, droid)
+//__
 //__ An event that is run whenever a feature is picked up. It is called for
 //__ all players / scripts.
 //__ Careful passing the parameter object around, since it is about to vanish! (3.2+ only)
+//__
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1348,17 +1455,21 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 	return true;
 }
 
-//__ \subsection{eventObjectSeen(viewer, seen)}
+//__ ## eventObjectSeen(viewer, seen)
+//__
 //__ An event that is run sometimes when an object, which was marked by an object label,
 //__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
 //__ An event that is run sometimes when an objectm  goes from not seen to seen.
-//__ First parameter is \emph{game object} doing the seeing, the next the game
+//__ First parameter is **game object** doing the seeing, the next the game
 //__ object being seen.
-//__ \subsection{eventGroupSeen(viewer, group)}
+//__
+//__ ## eventGroupSeen(viewer, group)
+//__
 //__ An event that is run sometimes when a member of a group, which was marked by a group label,
 //__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
-//__ First parameter is \emph{game object} doing the seeing, the next the id of the group
+//__ First parameter is **game object** doing the seeing, the next the id of the group
 //__ being seen.
+//__
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1384,11 +1495,13 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 	return true;
 }
 
-//__ \subsection{eventObjectTransfer(object, from)}
+//__ ## eventObjectTransfer(object, from)
+//__
 //__ An event that is run whenever an object is transferred between players,
 //__ for example due to a Nexus Link weapon. The event is called after the
 //__ object has been transferred, so the target player is in object.player.
 //__ The event is called for both players.
+//__
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1408,10 +1521,12 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 	return true;
 }
 
-//__ \subsection{eventChat(from, to, message)}
-//__ An event that is run whenever a chat message is received. The \emph{from} parameter is the
-//__ player sending the chat message. For the moment, the \emph{to} parameter is always the script
+//__ ## eventChat(from, to, message)
+//__
+//__ An event that is run whenever a chat message is received. The ```from``` parameter is the
+//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
 //__ player.
+//__
 bool triggerEventChat(int from, int to, const char *message)
 {
 	for (int i = 0; scriptsReady && message && i < scripts.size(); ++i)
@@ -1431,10 +1546,12 @@ bool triggerEventChat(int from, int to, const char *message)
 	return true;
 }
 
-//__ \subsection{eventBeacon(x, y, from, to[, message])}
-//__ An event that is run whenever a beacon message is received. The \emph{from} parameter is the
-//__ player sending the beacon. For the moment, the \emph{to} parameter is always the script player.
+//__ ## eventBeacon(x, y, from, to[, message])
+//__
+//__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
+//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
 //__ Message may be undefined.
+//__
 bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 {
 	for (auto *engine : scripts)
@@ -1458,9 +1575,11 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 	return true;
 }
 
-//__ \subsection{eventBeaconRemoved(from, to)}
-//__ An event that is run whenever a beacon message is removed. The \emph{from} parameter is the
-//__ player sending the beacon. For the moment, the \emph{to} parameter is always the script player.
+//__ ## eventBeaconRemoved(from, to)
+//__
+//__ An event that is run whenever a beacon message is removed. The ```from``` parameter is the
+//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
+//__
 bool triggerEventBeaconRemoved(int from, int to)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1479,14 +1598,16 @@ bool triggerEventBeaconRemoved(int from, int to)
 	return true;
 }
 
-//__ \subsection{eventSelectionChanged(objects)}
+//__ ## eventSelectionChanged(objects)
+//__
 //__ An event that is triggered whenever the host player selects one or more game objects.
-//__ The \emph{objects} parameter contains an array of the currently selected game objects.
+//__ The ```objects``` parameter contains an array of the currently selected game objects.
 //__ Keep in mind that the player may drag and drop select many units at once, select one
 //__ unit specifically, or even add more selections to a current selection one at a time.
 //__ This event will trigger once for each user action, not once for each selected or
-//__ deselected object. If all selected game objects are deselected, \emph{objects} will
+//__ deselected object. If all selected game objects are deselected, ```objects``` will
 //__ be empty.
+//__
 bool triggerEventSelected()
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1494,9 +1615,11 @@ bool triggerEventSelected()
 	return true;
 }
 
-//__ \subsection{eventGroupLoss(object, group id, new size)}
+//__ ## eventGroupLoss(object, group id, new size)
+//__
 //__ An event that is run whenever a group becomes empty. Input parameter
 //__ is the about to be killed object, the group's id, and the new group size.
+//__
 // Since groups are entities local to one context, we do not iterate over them here.
 bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine)
 {
@@ -1515,10 +1638,12 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 	return areaLabelCheck(psDroid);
 }
 
-//__ \subsection{eventArea<label>(droid)}
+//__ ## eventArea<label>(droid)
+//__
 //__ An event that is run whenever a droid enters an area label. The area is then
 //__ deactived. Call resetArea() to reactivate it. The name of the event is
 //__ eventArea + the name of the label.
+//__
 bool triggerEventArea(const QString& label, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1534,9 +1659,11 @@ bool triggerEventArea(const QString& label, DROID *psDroid)
 	return true;
 }
 
-//__ \subsection{eventDesignCreated(template)}
+//__ ## eventDesignCreated(template)
+//__
 //__ An event that is run whenever a new droid template is created. It is only
 //__ run on the client of the player designing the template.
+//__
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1549,8 +1676,10 @@ bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 	return true;
 }
 
-//__ \subsection{eventAllianceOffer(from, to)}
+//__ ## eventAllianceOffer(from, to)
+//__
 //__ An event that is called whenever an alliance offer is requested.
+//__
 bool triggerEventAllianceOffer(uint8_t from, uint8_t to)
 {
 	for (auto *engine : scripts)
@@ -1563,8 +1692,10 @@ bool triggerEventAllianceOffer(uint8_t from, uint8_t to)
 	return true;
 }
 
-//__ \subsection{eventAllianceAccepted(from, to)}
+//__ ## eventAllianceAccepted(from, to)
+//__
 //__ An event that is called whenever an alliance is accepted.
+//__
 bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 {
 	for (auto *engine : scripts)
@@ -1577,8 +1708,10 @@ bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 	return true;
 }
 
-//__ \subsection{eventAllianceBroken(from, to)}
+//__ ## eventAllianceBroken(from, to)
+//__
 //__ An event that is called whenever an alliance is broken.
+//__
 bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 {
 	for (auto *engine : scripts)
@@ -1591,10 +1724,12 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 	return true;
 }
 
-//__ \subsection{eventSyncRequest(req_id, x, y, obj_id, obj_id2)}
+//__ ## eventSyncRequest(req_id, x, y, obj_id, obj_id2)
+//__
 //__ An event that is called from a script and synchronized with all other scripts and hosts
 //__ to prevent desync from happening. Sync requests must be carefully validated to prevent
 //__ cheating!
+//__
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
@@ -1618,7 +1753,8 @@ bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *ps
 	return true;
 }
 
-//__ \subsection{eventKeyPressed(meta, key)}
+//__ ## eventKeyPressed(meta, key)
+//__
 //__ An event that is called whenever user presses a key in the game, not counting chat
 //__ or other pop-up user interfaces. The key values are currently undocumented.
 bool triggerEventKeyPressed(int meta, int key)

@@ -1,27 +1,27 @@
-
-//;; \section{libcampaign.js documentation}
+//;; # libcampaign.js documentation
 //;;
-//;; \texttt{libcampaign.js} is a JavaScript library supplied with the game,
+//;; ```libcampaign.js``` is a JavaScript library supplied with the game,
 //;; which contains reusable code for campaign scenarios. It is designed to
 //;; make scenario development as high-level and declarative as possible.
 //;; It also contains a few simple convenient wrappers.
-//;; Public API functions of \texttt{libcampaign.js} are prefixed with
-//;; `\texttt{cam}'. To use \texttt{libcampaign.js}, add the following include
+//;; Public API functions of ```libcampaign.js``` are prefixed with
+//;; ```cam```. To use ```libcampaign.js```, add the following include
 //;; into your scenario code:
 //;;
-//;; \begin{lstlisting}
+//;; ```javascript
 //;; include("script/campaign/libcampaign.js");
-//;; \end{lstlisting}
+//;; ```
 //;;
-//;; Also, most of the \texttt{libcampaign.js} features require some of the
+//;; Also, most of the ```libcampaign.js``` features require some of the
 //;; game events handled by the library. Transparent JavaScript pre-hooks are
 //;; therefore injected into your global event handlers upon include. For
-//;; example, if \texttt{camSetArtifacts()} was called to let
-//;; \texttt{libcampaign.js} manage scenario artifacts, then
-//;; \texttt{eventPickup()} will be first handled by the library, and only then
+//;; example, if ```camSetArtifacts()``` was called to let
+//;; ```libcampaign.js``` manage scenario artifacts, then
+//;; ```eventPickup()``` will be first handled by the library, and only then
 //;; your handler will be called, if any.
 //;; All of this happens automagically and does not normally require
 //;; your attention.
+//;;
 
 /*
 	Private vars and functions are prefixed with `__cam'.
@@ -63,11 +63,7 @@
 	outside cheat mode.
 
 	Lines prefixed with // followed by ;; are docstrings for JavaScript API
-	documentation. Visit
-		http://buildbot.wz2100.net/files/javascript/javascript.html
-	to see how it looks. The documentation is coded in TeX; but please
-	use only very simple TeX, because it would then be compiled to
-	HTML by HeVeA, which fails to support most of the complicated stuff.
+	documentation.
 */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -94,22 +90,28 @@ const CAM_MAX_PLAYERS = 8;
 const CAM_TICKS_PER_FRAME = 100;
 const AI_POWER = 999999;
 
-//;; \subsection{camDef(something)}
+//;; ## camDef(something)
+//;;
 //;; Returns false if something is JavaScript-undefined, true otherwise.
+//;;
 function camDef(something)
 {
 	return typeof(something) !== "undefined";
 }
 
-//;; \subsection{camIsString(something)}
+//;; ## camIsString(something)
+//;;
 //;; Returns true if something is a string, false otherwise.
+//;;
 function camIsString(something)
 {
 	return typeof(something) === "string";
 }
 
-//;; \subsection{camRand(max)}
+//;; ## camRand(max)
+//;;
 //;; A non-synchronous random integer in range [0, max - 1].
+//;;
 function camRand(max)
 {
 	if (max > 0)
@@ -119,8 +121,10 @@ function camRand(max)
 	camDebug("Max should be positive");
 }
 
-//;; \subsection{camCallOnce(function name)}
+//;; ## camCallOnce(function name)
+//;;
 //;; Call a function by name, but only if it has not been called yet.
+//;;
 function camCallOnce(callback)
 {
 	if (camDef(__camCalledOnce[callback]) && __camCalledOnce[callback])
@@ -131,8 +135,10 @@ function camCallOnce(callback)
 	__camGlobalContext()[callback]();
 }
 
-//;; \subsection{camSafeRemoveObject(obj[, special effects?])}
+//;; ## camSafeRemoveObject(obj[, special effects?])
+//;;
 //;; Remove a game object (by value or label) if it exists, do nothing otherwise.
+//;;
 function camSafeRemoveObject(obj, flashy)
 {
 	if (__camLevelEnded)
@@ -149,12 +155,14 @@ function camSafeRemoveObject(obj, flashy)
 	}
 }
 
-//;; \subsection{camMakePos(x, y | label | object)}
+//;; ## camMakePos(x, y | label | object)
+//;;
 //;; Make a POSITION-like object, unless already done. Often useful
 //;; for making functions that would accept positions in both xx,yy and {x:xx,y:yy} forms.
 //;; Also accepts labels. If label of AREA is given, returns the center of the area.
 //;; If an existing object or label of such is given, returns a safe JavaScript
 //;; object containing its x, y and id.
+//;;
 function camMakePos(xx, yy)
 {
 	if (camDef(yy))
@@ -202,8 +210,10 @@ function camMakePos(xx, yy)
 	}
 }
 
-//;; \subsection{camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)}
-//;; A wrapper for \texttt{distBetweenTwoPoints()}.
+//;; ## camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)
+//;;
+//;; A wrapper for ```distBetweenTwoPoints()```.
+//;;
 function camDist(x1, y1, x2, y2)
 {
 	if (camDef(y2)) // standard
@@ -225,9 +235,11 @@ function camDist(x1, y1, x2, y2)
 	}
 }
 
-//;; \subsection{camPlayerMatchesFilter(player, filter)}
+//;; ## camPlayerMatchesFilter(player, filter)
+//;;
 //;; A function to handle player filters in a way similar to
-//;; how JS API functions (eg. \texttt{enumDroid(filter, ...)}) handle them.
+//;; how JS API functions (eg. ```enumDroid(filter, ...)```) handle them.
+//;;
 function camPlayerMatchesFilter(player, filter)
 {
 	switch(filter) {
@@ -243,8 +255,10 @@ function camPlayerMatchesFilter(player, filter)
 	}
 }
 
-//;; \subsection{camRemoveDuplicates(array)}
+//;; ## camRemoveDuplicates(array)
+//;;
 //;; Remove duplicate items from an array.
+//;;
 function camRemoveDuplicates(array)
 {
 	var prims = {"boolean":{}, "number":{}, "string":{}};
@@ -263,8 +277,10 @@ function camRemoveDuplicates(array)
 	});
 }
 
-//;; \subsection{camCountStructuresInArea(label, [player])}
+//;; ## camCountStructuresInArea(label, [player])
+//;;
 //;; Mimics wzscript's numStructsButNotWallsInArea().
+//;;
 function camCountStructuresInArea(lab, player)
 {
 	if (!camDef(player))
@@ -284,9 +300,11 @@ function camCountStructuresInArea(lab, player)
 	return ret;
 }
 
-//;; \subsection{camChangeOnDiff(numeric value, [bool])}
+//;; ## camChangeOnDiff(numeric value, [bool])
+//;;
 //;; Change a numeric value based on campaign difficulty. If the second option is defined
 //;; then the opposite effect will occur on that value.
+//;;
 function camChangeOnDiff(num, invert)
 {
 	var modifier = 0;
@@ -317,8 +335,10 @@ function camChangeOnDiff(num, invert)
 	return Math.floor(num * modifier);
 }
 
-//;; \subsection{camIsSystemDroid(game object)}
+//;; ## camIsSystemDroid(game object)
+//;;
 //;; Determine if the passed in object is a non-weapon based droid.
+//;;
 function camIsSystemDroid(obj)
 {
 	if(!camDef(obj) || !obj)
@@ -338,11 +358,14 @@ function camIsSystemDroid(obj)
 	);
 }
 
-//;; \subsection{camMakeGroup(what, filter)}
+//;; ## camMakeGroup(what, filter)
+//;;
 //;; Make a new group out of array of droids, single game object,
 //;; or label string, with fuzzy auto-detection of argument type.
-//;; Only droids would be added to the group. \textbf{filter} can be one of
-//;; a player index, ALL_PLAYERS, ALLIES or ENEMIES; defaults to ENEMIES.
+//;; Only droids would be added to the group. ```filter``` can be one of
+//;; a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```;
+//;; defaults to ```ENEMIES```.
+//;;
 function camMakeGroup(what, filter)
 {
 	if (!camDef(filter))
@@ -410,8 +433,10 @@ function camMakeGroup(what, filter)
 	camDebug("Cannot parse", what);
 }
 
-//;; \subsection{camBreakAlliances()}
+//;; ## camBreakAlliances()
+//;;
 //;; Break alliances between all players.
+//;;
 function camBreakAlliances()
 {
 	for (var i = 0; i < CAM_MAX_PLAYERS; ++i)
@@ -439,8 +464,10 @@ function __camGlobalContext()
 // Research and structure related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camEnableRes(list, player)}
+//;; ## camEnableRes(list, player)
+//;;
 //;; Grants research from the given list to player
+//;;
 function camEnableRes(list, player)
 {
 	for(var i = 0, l = list.length; i < l; ++i)
@@ -450,9 +477,11 @@ function camEnableRes(list, player)
 	}
 }
 
-//;; \subsection{camCompleteRequiredResearch(items, player)}
+//;; ## camCompleteRequiredResearch(items, player)
+//;;
 //;; Grants research from the given list to player and also researches
 //;; the required research for that item.
+//;;
 function camCompleteRequiredResearch(items, player)
 {
 	dump("\n*Player " + player + " requesting accelerated research.");
@@ -501,9 +530,11 @@ function __camGrantSpecialResearch()
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camMarkTiles(label | array of labels)}
+//;; ## camMarkTiles(label | array of labels)
+//;;
 //;; Mark area on the map by label(s), but only if debug mode is enabled.
 //;; Otherwise, remember what to mark in case it is going to be.
+//;;
 function camMarkTiles(label)
 {
 	if (camIsString(label))
@@ -521,8 +552,10 @@ function camMarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; \subsection{camUnmarkTiles(label | array of labels)}
+//;; ## camUnmarkTiles(label | array of labels)
+//;;
 //;; No longer mark area(s) with given label(s) in debug mode.
+//;;
 function camUnmarkTiles(label)
 {
 	if (camIsString(label))
@@ -540,14 +573,16 @@ function camUnmarkTiles(label)
 	__camUpdateMarkedTiles();
 }
 
-//;; \subsection{camDebug(string...)}
-//;; Pretty debug prints - a wrapper around \texttt{debug()}.
+//;; ## camDebug(string...)
+//;;
+//;; Pretty debug prints - a wrapper around ```debug()```.
 //;; Prints a function call stack and the argument message,
 //;; prefixed with "DEBUG". Only use this function to indicate
 //;; actual bugs in the scenario script, because game shouldn't
 //;; print things when nothing is broken. If you want to keep
 //;; some prints around to make debugging easier without distracting
-//;; the user, use \texttt{camTrace()}.
+//;; the user, use ```camTrace()```.
+//;;
 function camDebug()
 {
 	__camGenericDebug("DEBUG",
@@ -557,9 +592,11 @@ function camDebug()
 	                  __camBacktrace());
 }
 
-//;; \subsection{camDebugOnce(string...)}
-//;; Same as \texttt{camDebug()}, but prints each message only once
+//;; ## camDebugOnce(string...)
+//;;
+//;; Same as ```camDebug()```, but prints each message only once
 //;; during script lifetime.
+//;;
 function camDebugOnce()
 {
 	var str = arguments.callee.caller.name
@@ -576,10 +613,12 @@ function camDebugOnce()
 	                  __camBacktrace());
 }
 
-//;; \subsection{camTrace(string...)}
-//;; Same as \texttt{camDebug()}, but only warns in cheat mode.
-//;; Prefixed with "TRACE". It's safe and natural to keep \texttt{camTrace()}
+//;; ## camTrace(string...)
+//;;
+//;; Same as ```camDebug()```, but only warns in cheat mode.
+//;; Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
 //;; calls in your code for easier debugging.
+//;;
 function camTrace()
 {
 	if (!__camCheatMode)
@@ -591,9 +630,11 @@ function camTrace()
 	                  arguments);
 }
 
-//;; \subsection{camTraceOnce(string...)}
-//;; Same as \texttt{camTrace()}, but prints each message only once
+//;; ## camTraceOnce(string...)
+//;;
+//;; Same as ```camTrace()```, but prints each message only once
 //;; during script lifetime.
+//;;
 function camTraceOnce()
 {
 	if (!__camCheatMode)
@@ -612,8 +653,10 @@ function camTraceOnce()
 	                  arguments);
 }
 
-//;; \subsection{isCheating()}
+//;; ## isCheating()
+//;;
 //;; Check if the player is in cheat mode.
+//;;
 function isCheating()
 {
 	return __camCheatMode;
@@ -698,25 +741,24 @@ function __camBacktrace()
 // Artifacts management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camSetArtifacts(artifacts)}
-//;; Tell \texttt{libcampaign.js} to manage a certain set of artifacts.
+//;; ## camSetArtifacts(artifacts)
+//;;
+//;; Tell ```libcampaign.js``` to manage a certain set of artifacts.
 //;; The argument is a JavaScript map from object labels to artifact
 //;; description. If the label points to a game object, artifact will be
 //;; placed when this object is destroyed; if the label is a position, the
 //;; artifact will be placed instantly. Artifact description is a JavaScript
 //;; object with the following fields:
-//;; \begin{description}
-//;; 	\item[tech] The technology to grant when the artifact is recovered.
-//;; \end{description}
-//;; On \textbf{let me win} cheat, all technologies stored in the artifacts
+//;;
+//;; * ```tech``` The technology to grant when the artifact is recovered.
+//;; On __let me win__ cheat, all technologies stored in the artifacts
 //;; managed by this function are automatically granted.
 //;; Additionally, this function would call special event callbacks if they are
 //;; defined in your script, which should be named as follows,
 //;; where LABEL is the artifact label:
-//;; \begin{description}
-//;; 	\item[camArtifactPickup_LABEL] Called when the player picks up
+//;; * ```camArtifactPickup_LABEL``` Called when the player picks up
 //;; 	the artifact.
-//;; \end{description}
+//;;
 function camSetArtifacts(artifacts)
 {
 	__camArtifacts = artifacts;
@@ -740,9 +782,11 @@ function camSetArtifacts(artifacts)
 	}
 }
 
-//;; \subsection{camAllArtifactsPickedUp()}
-//;; Returns true if all artifacts managed by \texttt{libcampaign.js}
+//;; ## camAllArtifactsPickedUp()
+//;;
+//;; Returns true if all artifacts managed by ```libcampaign.js```
 //;; were picked up.
+//;;
 function camAllArtifactsPickedUp()
 {
 	// FIXME: O(n) lookup here
@@ -872,38 +916,37 @@ const CAM_REINFORCE_NONE = 0;
 const CAM_REINFORCE_GROUND = 1;
 const CAM_REINFORCE_TRANSPORT = 2;
 
-//;; \subsection{camSetEnemyBases(bases)}
-//;; Tell \texttt{libcampaign.js} to manage a certain set of enemy bases.
+//;; ## camSetEnemyBases(bases)
+//;;
+//;; Tell ```libcampaign.js``` to manage a certain set of enemy bases.
 //;; Management assumes auto-cleanup of leftovers on destruction, and also
 //;; counting how many bases have been successfully destroyed by the player.
 //;; The argument is a JavaScript map from group labels to base descriptions.
 //;; Each label points to a group of vital base structures. If no group label
 //;; with this name is defined, a group is created automatically
-//;; based on \textbf{cleanup} area and labeled. Base description
+//;; based on ```cleanup``` area and labeled. Base description
 //;; is a JavaScript object with the following optional fields:
-//;; \begin{description}
-//;; 	\item[cleanup] An area label to clean up features in once base is
+//;;
+//;; * ```cleanup``` An area label to clean up features in once base is
 //;; 	destroyed. If base id is not a group label, this field is required
 //;; 	in order to auto-create the group of stuff in the area which doesn't
 //;; 	qualify as a valid leftover.
-//;; 	\item[detectMsg] A PROX_MSG message id to play when the base is detected.
-//;; 	\item[detectSnd] A sound file to play when the base is detected.
-//;; 	\item[eliminateSnd] A sound file to play when the base is eliminated.
+//;; * ```detectMsg``` A ```PROX_MSG``` message id to play when the base is detected.
+//;; * ```detectSnd``` A sound file to play when the base is detected.
+//;; * ```eliminateSnd``` A sound file to play when the base is eliminated.
 //;; 	The sound is played in the center of the cleanup area,
 //;; 	which needs to be defined.
-//;; 	\item{player} If base is detected by cleanup area, only objects
+//;; * ```player``` If base is detected by cleanup area, only objects
 //;; 	matching this player filter would be added to the base group or
 //;; 	cleaned up. Note that this most likely disables feature cleanup.
-//;; \end{description}
 //;; Additionally, this function would call special event callbacks if they are
 //;; defined in your script, which should be named as follows,
 //;; where LABEL is the label of the base group:
-//;; \begin{description}
-//;; 	\item[camEnemyBaseDetected_LABEL] Called when the player sees an object from
+//;; * ```camEnemyBaseDetected_LABEL``` Called when the player sees an object from
 //;; 	the enemy base group for the first time.
-//;; 	\item[camEnemyBaseEliminated_LABEL] Called when the base is eliminated,
+//;; * ```camEnemyBaseEliminated_LABEL``` Called when the base is eliminated,
 //;; 	right after leftovers were cleaned up.
-//;; \end{description}
+//;;
 function camSetEnemyBases(bases)
 {
 	var reload = !camDef(bases);
@@ -1008,10 +1051,12 @@ function camSetEnemyBases(bases)
 	}
 }
 
-//;; \subsection{camDetectEnemyBase(base label)}
+//;; ## camDetectEnemyBase(base label)
+//;;
 //;; Plays the "enemy base detected" message and places a beacon
 //;; for the enemy base defined by the label, as if the base
 //;; was actually found by the player.
+//;;
 function camDetectEnemyBase(blabel)
 {
 	var bi = __camEnemyBases[blabel];
@@ -1048,37 +1093,38 @@ function camDetectEnemyBase(blabel)
 	}
 }
 
-//;; \subsection{camAllEnemyBasesEliminated()}
-//;; Returns true if all enemy bases managed by \texttt{libcampaign.js}
+//;; ## camAllEnemyBasesEliminated()
+//;;
+//;; Returns true if all enemy bases managed by ```libcampaign.js```
 //;; are destroyed.
+//;;
 function camAllEnemyBasesEliminated()
 {
 	// FIXME: O(n) lookup here
 	return __camNumEnemyBases === Object.keys(__camEnemyBases).length;
 }
 
-//;; \subsection{camSendReinforcement(player, position, droids, kind, data)}
+//;; ## camSendReinforcement(player, position, droids, kind, data)
+//;;
 //;; Give a single bunch of droids (template list) for a player at
 //;; a position label. Kind can be one of:
-//;; \begin{description}
-//;; 	\item[CAM_REINFORCE_GROUND] Reinforcements magically appear
+//;;
+//;; * ```CAM_REINFORCE_GROUND``` Reinforcements magically appear
 //;; 	on the ground.
-//;; 	\item[CAM_REINFORCE_TRANSPORT] Reinforcements are unloaded from
+//;; * ```CAM_REINFORCE_TRANSPORT``` Reinforcements are unloaded from
 //;; 	a transporter.
-//;; 	\textbf{NOTE:} the game engine doesn't seem to support two simultaneous
+//;; 	__NOTE:__ the game engine doesn't seem to support two simultaneous
 //;; 	incoming transporters for the same player. Avoid this at all costs!
 //;; 	The following data fields are required:
-//;; 	\begin{description}
-//;; 		\item[entry] Transporter entry position.
-//;; 		\item[exit] Transporter exit position.
-//;; 		\item[message] PROX_MSG to display when transport is landing.
-//;; 		\item[order] Order to give to newly landed droids
-//;; 		\item[data] Order data.
-//;; 	\end{description}
-//;; 	 \textbf{NOTE:} the game engine doesn't seem to support two simultaneous
+//;;   * ```entry``` Transporter entry position.
+//;;   * ```exit``` Transporter exit position.
+//;;   * ```message``` ```PROX_MSG``` to display when transport is landing.
+//;;   * ```order``` Order to give to newly landed droids
+//;;   * ```data``` Order data.
+//;; 	 __NOTE:__ the game engine doesn't seem to support two simultaneous
 //;; 	incoming transporters for the same player. If a transporter is already
 //;; 	on map, it will be correctly queued up and sent later.
-//;; \end{description}
+//;;
 function camSendReinforcement(player, position, list, kind, data)
 {
 	var pos = camMakePos(position);
@@ -1122,13 +1168,15 @@ function camSendReinforcement(player, position, list, kind, data)
 	}
 }
 
-//;; \subsection{camSetBaseReinforcements(base label, interval, callback, kind, data)}
+//;; ## camSetBaseReinforcements(base label, interval, callback, kind, data)
+//;;
 //;; Periodically brings reinforcements to an enemy base, until the base is
 //;; eliminated. Interval is the pause, in milliseconds, between reinforcements.
 //;; Callback is name of a function that returns a list of droid templates to spawn,
 //;; which may be different every time. Kind and data work similarly to
-//;; \texttt{camSendReinforcement()}.
+//;; ```camSendReinforcement()```.
 //;; Use CAM_REINFORCE_NONE as kind to disable previously set reinforcements.
+//;;
 function camSetBaseReinforcements(blabel, interval, callback, kind, data)
 {
 	if (!camIsString(callback))
@@ -1142,8 +1190,10 @@ function camSetBaseReinforcements(blabel, interval, callback, kind, data)
 	bi.reinforce_data = data;
 }
 
-//;; \subsection{camRemoveEnemyTransporterBlip()}
+//;; ## camRemoveEnemyTransporterBlip()
+//;;
 //;; Removes the last blip that an enemy transporter left behind, if any.
+//;;
 function camRemoveEnemyTransporterBlip()
 {
 	if (camDef(__camTransporterMessage))
@@ -1403,96 +1453,86 @@ const CAM_ORDER_PATROL = 2;
 const CAM_ORDER_COMPROMISE = 3;
 const CAM_ORDER_FOLLOW = 4;
 
-//;; \subsection{camManageGroup(group, order, data)}
-//;; Tell \texttt{libcampaign.js} to manage a certain group. The group
+//;; ## camManageGroup(group, order, data)
+//;;
+//;; Tell ```libcampaign.js``` to manage a certain group. The group
 //;; would be permanently managed depending on the high-level orders given.
 //;; For each order, data parameter is a JavaScript object that controls
 //;; different aspects of behavior. The order parameter is one of:
-//;; \begin{description}
-//;; 	\item[CAM_ORDER_ATTACK] Pursue human player, preferably around
+//;;
+//;; * ```CAM_ORDER_ATTACK``` Pursue human player, preferably around
 //;; 	the given position. The following optional data object fields are
 //;; 	available, none of which is required:
-//;; 	\begin{description}
-//;; 		\item[pos] Position or list of positions to attack. If pos is a list,
+//;;   * ```pos``` Position or list of positions to attack. If pos is a list,
 //;; 		first positions in the list will be attacked first.
-//;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
-//;; 		\item[fallback] Position to retreat.
-//;; 		\item[morale] An integer from 1 to 100. If that high percentage
+//;;   * ```radius``` Circle radius around ```pos``` to scan for targets.
+//;;   * ```fallback``` Position to retreat.
+//;;   * ```morale``` An integer from 1 to 100. If that high percentage
 //;; 		of the original group dies, fall back to the fallback position.
 //;; 		If new droids are added to the group, it can recover and attack
 //;; 		again.
-//;; 		\item[count] Override size of the original group. If unspecified,
+//;;   * ```count``` Override size of the original group. If unspecified,
 //;; 		number of droids in the group at call time. Retreat on low morale
 //;; 		and regroup is calculated against this value.
-//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;;   * ```repair``` Health percentage to fall back to repair facility,
 //;; 		if any.
-//;; 		\item[regroup] If set to true, the group will not move forward unless
-//;; 		it has at least \textbf{count} droids in its biggest cluster.
-//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;;   * ```regroup``` If set to true, the group will not move forward unless
+//;; 		it has at least ```count``` droids in its biggest cluster.
+//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
 //;; 		the biggest cluster.
-//;; 	\end{description}
-//;; 	\item[CAM_ORDER_DEFEND] Protect the given position. If too far, retreat
+//;; * ```CAM_ORDER_DEFEND``` Protect the given position. If too far, retreat
 //;; 	back there ignoring fire. The following data object fields are
 //;; 	available:
-//;; 	\begin{description}
-//;; 		\item[pos] Position to defend.
-//;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
-//;; 		\item[count] Override size of the original group. If unspecified,
+//;;   * ```pos``` Position to defend.
+//;;   * ```radius``` Circle radius around ```pos``` to scan for targets.
+//;;   * ```count``` Override size of the original group. If unspecified,
 //;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
-//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;;   * ```repair``` Health percentage to fall back to repair facility,
 //;; 		if any.
-//;; 		\item[regroup] If set to true, the group will not move forward unless
-//;; 		it has at least \textbf{count} droids in its biggest cluster.
-//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;;   * ```regroup``` If set to true, the group will not move forward unless
+//;; 		it has at least ```count``` droids in its biggest cluster.
+//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
 //;; 		the biggest cluster.
-//;; 	\end{description}
-//;; 	\item[CAM_ORDER_PATROL] Move droids randomly between a given list of
+//;; * ```CAM_ORDER_PATROL``` Move droids randomly between a given list of
 //;; 	positions. The following data object fields are available:
-//;; 	\begin{description}
-//;; 		\item[pos] An array of positions to patrol between.
-//;; 		\item[interval] Change positions every this many milliseconds.
-//;; 		\item[count] Override size of the original group. If unspecified,
+//;;   * ```pos``` An array of positions to patrol between.
+//;;   * ```interval``` Change positions every this many milliseconds.
+//;;   * ```count``` Override size of the original group. If unspecified,
 //;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
-//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;;   * ```repair``` Health percentage to fall back to repair facility,
 //;; 		if any.
-//;; 		\item[regroup] If set to true, the group will not move forward unless
-//;; 		it has at least \textbf{count} droids in its biggest cluster.
-//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;;   * ```regroup``` If set to true, the group will not move forward unless
+//;; 		it has at least ```count``` droids in its biggest cluster.
+//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
 //;; 		the biggest cluster.
-//;; 	\end{description}
-//;; 	\item[CAM_ORDER_COMPROMISE] Same as CAM_ORDER_ATTACK, just stay near the
+//;; * ```CAM_ORDER_COMPROMISE``` Same as CAM_ORDER_ATTACK, just stay near the
 //;; 	last (or only) attack position instead of looking for the player
 //;; 	around the whole map. Useful for offworld missions,
 //;; 	with player's LZ as the final position. The following data object fields
 //;; 	are available:
-//;; 	\begin{description}
-//;; 		\item[pos] Position or list of positions to compromise. If pos is a list,
+//;;   * ```pos``` Position or list of positions to compromise. If pos is a list,
 //;; 		first positions in the list will be compromised first.
-//;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
-//;; 		\item[count] Override size of the original group. If unspecified,
+//;;   * ```radius``` Circle radius around ```pos``` to scan for targets.
+//;;   * ```count``` Override size of the original group. If unspecified,
 //;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
-//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;;   * ```repair``` Health percentage to fall back to repair facility,
 //;; 		if any.
-//;; 		\item[regroup] If set to true, the group will not move forward unless
-//;; 		it has at least \textbf{count} droids in its biggest cluster.
-//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;;   * ```regroup``` If set to true, the group will not move forward unless
+//;; 		it has at least ```count``` droids in its biggest cluster.
+//;; 		If ```count``` is set to -1, at least 2/3 of group's droids should be in
 //;; 		the biggest cluster.
-//;; 	\end{description}
-//;; 	\item[CAM_ORDER_FOLLOW] Assign the group to commander. The sub-order
+//;; * ```CAM_ORDER_FOLLOW``` Assign the group to commander. The sub-order
 //;; 	is defined to be given to the commander. When commander dies,
 //;; 	the group continues to execute the sub-order. The following data object
 //;; 	fields are available:
-//;; 	\begin{description}
-//;; 		\item[droid] Commander droid label.
-//;; 		\item[order] The order to give to the commander.
-//;; 		\item[data] Data of the commander's order.
-//;; 		\item[repair] Health percentage to fall back to repair facility,
-//;; 		if any.
-//;; 	\end{description}
-//;; \end{description}
+//;;   * ```droid``` Commander droid label.
+//;;   * ```order``` The order to give to the commander.
+//;;   * ```data``` Data of the commander's order.
+//;;   * ```repair``` Health percentage to fall back to repair facility, if any.
+//;;
 function camManageGroup(group, order, data)
 {
 	var saneData = data;
@@ -1534,8 +1574,10 @@ function camManageGroup(group, order, data)
 	queue("__camTacticsTickForGroup", CAM_TICKS_PER_FRAME, group);
 }
 
-//;; \subsection{camStopManagingGroup(group)}
-//;; Tell \texttt{libcampaign.js} to stop managing a certain group.
+//;; ## camStopManagingGroup(group)
+//;;
+//;; Tell ```libcampaign.js``` to stop managing a certain group.
+//;;
 function camStopManagingGroup(group)
 {
 	if (!camDef(__camGroupInfo[group]))
@@ -1547,16 +1589,19 @@ function camStopManagingGroup(group)
 	delete __camGroupInfo[group];
 }
 
-//;; \subsection{camManageTrucks(player)}
+//;; ## camManageTrucks(player)
+//;;
 //;; Manage trucks for an AI player. This assumes recapturing oils and
 //;; rebuilding destroyed trucks in factories, the latter is implemented
-//;; via \texttt{camQueueDroidProduction()} mechanism.
+//;; via ```camQueueDroidProduction()``` mechanism.
+//;;
 function camManageTrucks(player)
 {
 	__camTruckInfo[player] = { enabled: 1, queue: [] };
 }
 
-//;; \subsection{camQueueBuilding(player, stat[, pos])}
+//;; ## camQueueBuilding(player, stat[, pos])
+//;;
 //;; Assuming truck management is enabled for the player, issue an order
 //;; to build a specific building near a certain position. The order
 //;; would be issued once as soon as a free truck becomes available. It will
@@ -1564,14 +1609,17 @@ function camManageTrucks(player)
 //;; is finished. If position is unspecified, the building would be built
 //;; near the first available truck. Otherwise, position may be a label
 //;; or a POSITION-like object.
+//;;
 function camQueueBuilding(player, stat, pos)
 {
 	var ti = __camTruckInfo[player];
 	ti.queue[ti.queue.length] = { stat: stat, pos: camMakePos(pos) };
 }
 
-//;; \subsection{camOrderToString(order)}
+//;; ## camOrderToString(order)
+//;;
 //;; Print campaign order as string, useful for debugging.
+//;;
 function camOrderToString(order)
 {
 	switch(order)
@@ -1591,8 +1639,10 @@ function camOrderToString(order)
 	}
 }
 
-//;; \subsection{camSortByHealth(object 1, object 2)}
+//;; ## camSortByHealth(object 1, object 2)
+//;;
 //;; Use this to sort an array of objects by health value.
+//;;
 function camSortByHealth(a, b)
 {
 	return (a.health - b.health);
@@ -2275,44 +2325,43 @@ function __camCheckDeadTruck(obj)
 // Factories won't start production immediately; call camEnableFactory()
 // to turn them on.
 
-//;; \subsection{camSetFactories(factories)}
-//;; Tell \texttt{libcampaign.js} to manage a certain set of enemy factories.
+//;; ## camSetFactories(factories)
+//;;
+//;; Tell ```libcampaign.js``` to manage a certain set of enemy factories.
 //;; Management assumes producing droids, packing them into groups and
 //;; executing orders once the group becomes large-enough.
 //;; The argument is a JavaScript map from group labels to factory descriptions.
 //;; Each label points to a factory object. Factory description
+//;;
 //;; is a JavaScript object with the following fields:
-//;; \begin{description}
-//;; 	\item[assembly] A rally point position label, where the group would
+//;; * ```assembly``` A rally point position label, where the group would
 //;; 	gather.
-//;; 	\item[order] An order to execute for every group produced in the
-//;; 	factory. Same as the order parameter for \texttt{camManageGroup()}.
-//;; 	\item[data] Order data. Same as the data parameter for
-//;; 	\texttt{camManageGroup()}.
-//;; 	\item[groupSize] Number of droids to produce before executing the order.
-//;; 	Also, if order is CAM_ORDER_ATTACK, data.count defaults to this value.
-//;; 	\item[maxSize] Halt production when reaching that many droids in the
+//;; * ```order``` An order to execute for every group produced in the
+//;; 	factory. Same as the order parameter for ```camManageGroup()```.
+//;; * ```data``` Order data. Same as the data parameter for
+//;; 	```camManageGroup()```.
+//;; * ```groupSize``` Number of droids to produce before executing the order.
+//;; 	Also, if order is ```CAM_ORDER_ATTACK```, data.count defaults to this value.
+//;; * ```maxSize``` Halt production when reaching that many droids in the
 //;; 	factory group. Resume when some droids die. Unlimited if unspecified.
-//;; 	\item[throttle] If defined, produce droids only every that many
+//;; * ```throttle``` If defined, produce droids only every that many
 //;; 	milliseconds, and keep the factory idle between ticks.
-//;; 	\item[group] If defined, make the factory manage this group,
+//;; * ```group``` If defined, make the factory manage this group,
 //;; 	otherwise create a new empty group to manage.
 //;; 	Droids produced in the factory would automatically be
 //;; 	added to the group, and order and data parameters
 //;; 	would be applied to this group.
-//;; 	\item[templates] List of droid templates to produce in the factory.
+//;; * ```templates``` List of droid templates to produce in the factory.
 //;; 	Each template is a JavaScript object with the following fields:
-//;; 	\begin{description}
-//;; 		\item[body] Body stat name.
-//;; 		\item[prop] Propulsion stat name.
-//;; 		\item[weap] Weapon stat name. Only single-turret droids are
+//;;   * ```body``` Body stat name.
+//;;   * ```prop``` Propulsion stat name.
+//;;   * ```weap``` Weapon stat name. Only single-turret droids are
 //;; 		currently supported.
-//;; 	\end{description}
 //;; 	Note that all template components are automatically made available
 //;; 	to the factory owner.
-//;; \end{description}
 //;; Factories won't start production immediately; call
-//;; \texttt{camEnableFactory()} to turn them on when necessary.
+//;; ```camEnableFactory()``` to turn them on when necessary.
+//;;
 function camSetFactories(factories)
 {
 	for (var flabel in factories)
@@ -2321,12 +2370,14 @@ function camSetFactories(factories)
 	}
 }
 
-//;; \subsection{camSetFactoryData(factory label, factory description)}
-//;; Similar to \texttt{camSetFactories()}, but one factory at a time.
+//;; ## camSetFactoryData(factory label, factory description)
+//;;
+//;; Similar to ```camSetFactories()```, but one factory at a time.
 //;; If the factory was already managing a group of droids, it keeps
 //;; managing it. If a new group is specified in the description,
 //;; the old group is merged into it. NOTE: This function disables the
-//;; factory. You would need to call \texttt{camEnableFactory()} again.
+//;; factory. You would need to call ```camEnableFactory()``` again.
+//;;
 function camSetFactoryData(flabel, fdata)
 {
 	var structure = getObject(flabel);
@@ -2365,9 +2416,11 @@ function camSetFactoryData(flabel, fdata)
 	}
 }
 
-//;; \subsection{camEnableFactory(factory label)}
+//;; ## camEnableFactory(factory label)
+//;;
 //;; Enable a managed factory by the given label. Once the factory is enabled,
 //;; it starts producing units and executing orders as given.
+//;;
 function camEnableFactory(flabel)
 {
 	var fi = __camFactoryInfo[flabel];
@@ -2394,10 +2447,12 @@ function camEnableFactory(flabel)
 	__camFactoryUpdateTactics(flabel);
 }
 
-//;; \subsection{camQueueDroidProduction(player, template)}
+//;; ## camQueueDroidProduction(player, template)
+//;;
 //;; Queues up an extra droid template for production. It would be produced
 //;; in the first factory that is capable of producing it, at the end of
 //;; its production loop, first queued first served.
+//;;
 function camQueueDroidProduction(player, template)
 {
 	if (!camDef(__camFactoryQueue[player]))
@@ -2407,11 +2462,13 @@ function camQueueDroidProduction(player, template)
 	__camFactoryQueue[player][__camFactoryQueue[player].length] = template;
 }
 
-//;; \subsection{camSetPropulsionTypeLimit(number)}
+//;; ## camSetPropulsionTypeLimit(number)
+//;;
 //;; On hard and insane the propulsion type can be limited with this. For type II
 //;; pass in 2, and for type III pass in 3. Hard defaults to type II and
 //;; insane defaults to type III. If nothing is passed in then the type
 //;; limit will match what is in templates.json.
+//;;
 function camSetPropulsionTypeLimit(num)
 {
 	if (!camDef(num))
@@ -2640,9 +2697,11 @@ function __camContinueProduction(structure)
 // Victory celebration helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camNextLevel(next level)}
-//;; A wrapper around \texttt{loadLevel()}. Remembers to give bonus power
+//;; ## camNextLevel(next level)
+//;;
+//;; A wrapper around ```loadLevel()```. Remembers to give bonus power
 //;; for completing the mission faster.
+//;;
 function camNextLevel(nextLevel)
 {
 	if (__camNeedBonusTime)
@@ -2682,59 +2741,49 @@ const CAM_VICTORY_PRE_OFFWORLD = 1;
 const CAM_VICTORY_OFFWORLD = 2;
 const CAM_VICTORY_TIMEOUT = 3;
 
-//;; \subsection{camSetStandardWinLossConditions(kind, nextLevel, data)}
+//;; ## camSetStandardWinLossConditions(kind, nextLevel, data)
+//;;
 //;; Set victory and defeat conditions to one of the common
 //;; options. On victory, load nextLevel. The extra data parameter
 //;; contains extra data required to define some of the victory
 //;; conditions. The following options are available:
-//;; \begin{description}
-//;; 	\item[CAM_VICTORY_STANDARD] Defeat if all ground factories
+//;;
+//;; * ```CAM_VICTORY_STANDARD``` Defeat if all ground factories
 //;; 	and construction droids are lost, or on mission timeout.
 //;; 	Victory when all enemies are destroyed and all artifacts
 //;; 	are recovered.
-//;; 	\item[CAM_VICTORY_PRE_OFFWORLD] Defeat on timeout. Victory on
+//;; * ```CAM_VICTORY_PRE_OFFWORLD``` Defeat on timeout. Victory on
 //;; 	transporter launch, then load the sub-level.
-//;; 	\item[CAM_VICTORY_OFFWORLD] Defeat on timeout or all units lost.
+//;; * ```CAM_VICTORY_OFFWORLD``` Defeat on timeout or all units lost.
 //;; 	Victory when all artifacts are recovered and either all enemies
 //;; 	are dead (not just bases) or all droids are at the LZ.
 //;; 	Also automatically handles the "LZ compromised" message,
 //;; 	which is why it needs to know reinforcement interval to restore.
 //;; 	The following data parameter fields are available:
-//;; 	\begin{description}
-//;; 		\item[area] The landing zone to return to.
-//;; 		\item[message] The "Return to LZ" message ID. Optional.
-//;; 		\item[reinforcements] Reinforcements interval, in seconds.
-//;; 	\end{description}
+//;;   * ```area``` The landing zone to return to.
+//;;   * ```message``` The "Return to LZ" message ID. Optional.
+//;;   * ```reinforcements``` Reinforcements interval, in seconds.
 //;; For standard and offworld victory, some extra data parameters can be defined:
-//;; 	\begin{description}
-//;; 		\item[callback] A function callback to check for extra win/loss
+//;; * ```callback``` A function callback to check for extra win/loss
 //;; 		conditions. Return values are interpreted as follows:
-//;; 		\textbf{false} means instant defeat ("objective failed"),
-//;; 		\textbf{true} means victory as long as other standard victory
-//;; 		conditions are met, \textbf{undefined} means suppress
+//;;   * __false__ means instant defeat ("objective failed"),
+//;;   * __true__ means victory as long as other standard victory
+//;; 		conditions are met,
+//;;   * __undefined__ means suppress
 //;; 		other victory checks ("clearly not won yet").
-//;; 	\end{description}
-//;; 	\begin{description}
-//;; 		\item[victoryVideo] Pass in the name of a video string here
+//;; * ```victoryVideo``` Pass in the name of a video string here
 //;;			and it will be played before attempting to load the next level.
-//;; 	\end{description}
 //;; For offworld victory, some more extra data parameters can be defined:
-//;; 	\begin{description}
-//;;		\item[retlz] Force the player to return to the LZ area:
-//;; 		\textbf{false} mission does not require a LZ return,
-//;; 		\textbf{true} mission requires all units to be at LZ to win.
-//;; 	\end{description}
-//;; 	\begin{description}
-//;;		\item[annihilate] Player must destroy every thing on map to win:
-//;; 		\textbf{false} mission does not require everything destroyed,
-//;; 		\textbf{true} mission requires total map annihilation.
-//;; 	\end{description}
-//;; 	\begin{description}
-//;;		\item[eliminateBases] Instant win when all enemy units and bases are destroyed:
-//;; 		\textbf{false} does not require all bases to be destroyed,
-//;; 		\textbf{true} requires all bases destroyed.
-//;; 	\end{description}
-//;; \end{description}
+//;; * ```retlz``` Force the player to return to the LZ area:
+//;;   * __false__ mission does not require a LZ return,
+//;;   * __true__ mission requires all units to be at LZ to win.
+//;; * ```annihilate``` Player must destroy every thing on map to win:
+//;;   * __false__ mission does not require everything destroyed,
+//;;   * __true__ mission requires total map annihilation.
+//;; * ```eliminateBases``` Instant win when all enemy units and bases are destroyed:
+//;;   * __false__ does not require all bases to be destroyed,
+//;;   * __true__ requires all bases destroyed.
+//;;
 function camSetStandardWinLossConditions(kind, nextLevel, data)
 {
 	switch(kind)
@@ -3058,8 +3107,10 @@ function __camVictoryOffworld()
 // Transporter management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camIsTransporter(game object)}
+//;; ## camIsTransporter(game object)
+//;;
 //;; Determine if the object is a transporter.
+//;;
 function camIsTransporter(object)
 {
 	if (!camDef(object) || !object)
@@ -3078,10 +3129,12 @@ function camIsTransporter(object)
 	);
 }
 
-//;; \subsection{camSetupTransport(place x, place y, exit x, exit y)}
+//;; ## camSetupTransport(place x, place y, exit x, exit y)
+//;;
 //;; A convenient function for placing the standard campaign transport
 //;; for loading in pre-away missions. The exit point for the transport
 //;; is set up as well.
+//;;
 function camSetupTransporter(x, y, x1, y1)
 {
 	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
@@ -3405,8 +3458,10 @@ var __camNexusActivated;
 // Group functionality
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camNewGroup()}
+//;; ## camNewGroup()
+//;;
 //;; A saveload safe version of newGroup() so as not to create group ID clashes.
+//;;
 function camNewGroup()
 {
 	if (!camDef(__camNewGroupCounter))
@@ -3417,8 +3472,10 @@ function camNewGroup()
 	return __camNewGroupCounter;
 }
 
-//;; \subsection{camInNeverGroup(droid)}
+//;; ## camInNeverGroup(droid)
+//;;
 //;; check if this droid is forced to never group.
+//;;
 function camInNeverGroup(droid)
 {
 	if (droid.type !== DROID)
@@ -3437,8 +3494,10 @@ function camInNeverGroup(droid)
 	return false;
 }
 
-//;; \subsection{camNeverGroupDroid(what, [filter])}
+//;; ## camNeverGroupDroid(what, [filter])
+//;;
 //;; A means to not auto group some droids.
+//;;
 function camNeverGroupDroid(what, filter)
 {
 	if (!camDef(filter))
@@ -3513,9 +3572,11 @@ var __camNeverGroupDroids;
 // Be aware that eventVideoDone will be triggered for each video
 // and will be received by the mission script's eventVideoDone, should it exist.
 
-//;; \subsection{camPlayVideos(videos)}
+//;; ## camPlayVideos(videos)
+//;;
 //;; If videos is an array, queue up all of them for immediate playing. This
 //;; function will play one video sequence should one be provided.
+//;;
 function camPlayVideos(videos)
 {
 	if (videos instanceof Array)
@@ -3564,10 +3625,12 @@ function __camEnqueueVideos()
 // or something BAD would happen.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camAreaEvent(label, function(droid))}
+//;; ## camAreaEvent(label, function(droid))
+//;;
 //;; Implement eventArea<label> in a debugging-friendly way. The function
 //;; marks the area until the event is triggered, and traces entering the area
 //;; in the TRACE log.
+//;;
 function camAreaEvent(label, code)
 {
 	var eventName = "eventArea" + label;

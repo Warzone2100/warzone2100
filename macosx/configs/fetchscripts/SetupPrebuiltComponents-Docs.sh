@@ -2,7 +2,7 @@
 
 if [ -z "$XCODE_VERSION_ACTUAL" ]; then
 	# Apparently not being run by Xcode, so assume that $PATH is properly
-	# configured to expose a2x and pdflatex (if installed).
+	# configured to expose a2x (if installed).
 	echo "info: Using supplied PATH without modification: ${PATH}"
 else
 	# Script is being run by Xcode
@@ -12,10 +12,9 @@ else
 	#	- MacPorts installation folders (/opt/local/bin:/opt/local/sbin)
 	#   - The Homebrew symlink location (/usr/local/bin)
 	#	- The original $PATH provided by Xcode
-	#	- The MacTeX / BasicTeX standard install path (/Library/TeX/texbin)
 	# IMPORTANT: The MacPorts and Homebrew paths *must* come before the original PATH, or a2x breaks.
 
-    export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:${PATH}:/Library/TeX/texbin
+    export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:${PATH}
 fi
 
 OutDir="WarzoneHelp"
@@ -24,7 +23,7 @@ FileName="${DirectorY}.tgz"
 BuiltDLP="http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/${FileName}"
 SHA256Sum="4447ce854b9a634f9c67d13ac03479b8c58981f256cb65f0a563a8b4ee629cfe"
 
-if [[ ! "0" == "$(type -aP a2x &> /dev/null; echo ${?})" ]] || [[ ! "0" == "$(type -aP pdflatex &> /dev/null; echo ${?})" ]]; then
+if [[ ! "0" == "$(type -aP a2x &> /dev/null; echo ${?})" ]]; then
 	echo "warning: Cannot build docs locally; downloaded materials may be outdated"
 	echo "info: Follow the instructions in macosx/README.md to install the prerequisites for building the docs"
 	configs/FetchPrebuilt.sh "${DirectorY}" "${OutDir}" "${FileName}" "${BuiltDLP}" "${SHA256Sum}"
@@ -100,28 +99,19 @@ else
 	exit ${a2x_result}
 fi
 
-
-# LaTeX based docs
-export TEXINPUTS=${TEXINPUTS}:${SRCROOT}/../3rdparty/texinputs/
-
 # javascript doc
-grep src/qtscript.cpp -e '//==' | sed 's://==::' > doc/globals.tex
-grep src/qtscriptfuncs.cpp -e '//==' | sed 's://==::' >> doc/globals.tex
-grep src/qtscript.cpp -e '//__' | sed 's://__::' > doc/events.tex
-grep src/qtscript.cpp -e '//--' | sed 's://--::' > doc/functions.tex
-grep src/qtscriptfuncs.cpp -e '//--' | sed 's://--::' >> doc/functions.tex
-grep src/qtscriptfuncs.cpp -e '//;;' | sed 's://;;::' > doc/objects.tex
-grep data/base/script/campaign/libcampaign.js -e '//;;' | sed 's://;;::' > doc/campaign.tex
-cd doc/
-if ! pdflatex javascript.tex; then
-	exit 1
-fi
-pdflatex javascript.tex
-cd ..
-cp -af doc/javascript.pdf ${mWarzoneHelpLproj}
+	grep $(top_srcdir)/src/qtscript.cpp -e '//==' | sed 's:.*//== \?::' > $(top_srcdir)/doc/js-globals.md
+	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//==' | sed 's:.*//== \?::' >> $(top_srcdir)/doc/js-globals.md
+	grep $(top_srcdir)/src/qtscript.cpp -e '//__' | sed 's:.*//__ \?::' > $(top_srcdir)/doc/js-events.md
+	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's:.*//-- \?::' > $(top_srcdir)/doc/js-functions.md
+	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's:.*//-- \?::' >> $(top_srcdir)/doc/js-functions.md
+	grep $(top_srcdir)/src/qtscript.cpp -e '//;;' | sed 's:.*//;; \?::' > $(top_srcdir)/doc/js-objects.md
+	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's:.*//;; \?::' >> $(top_srcdir)/doc/js-objects.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign.js -e '.*//;;' | sed 's://;; \?::' > $(top_srcdir)/doc/js-campaign.md
+cp -af doc/Scripting.md ${mWarzoneHelpLproj}
+cp -af doc/js-{globals,events,functions,objects,campaign}*.md ${mWarzoneHelpLproj}
 
 # Cleanup
-rm -f doc/campaign.tex
 
 # Build the index
 rm -f "${mWarzoneHelpLproj}/WarzoneHelp.helpindex"

@@ -166,6 +166,7 @@ Modding information
 Warzone AI, maps and campaign can be scripted using javascript.
 
 Links to further information
+* [Scripting](doc/Scripting.md)
 * [Model format](doc/PIE.md)
 * [Animation](doc/Animation.md)
 

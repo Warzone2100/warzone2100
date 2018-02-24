@@ -31,6 +31,8 @@ dist_doc_DATA = \
 	AUTHORS \
 	ChangeLog \
 	README.md \
+	doc/Scripting.md \
+	doc/js-globals.md \
 	COPYING \
 	COPYING.NONGPL \
 	COPYING.README
@@ -68,33 +70,14 @@ EXTRA_DIST= \
 	po/custom/mac-infoplist.txt \
 	po/custom/warzone2100.desktop.txt
 
-# get rid of SVN stuff in the tarball
-dist-hook:
-	rm -rf `find $(distdir) -type d -name .svn`
-
-javascript-doc-base:
-	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's://;;::' > doc/objects.tex
-	grep $(top_srcdir)/src/qtscript.cpp -e '//__' | sed 's://__::' > doc/events.tex
-	grep $(top_srcdir)/src/qtscript.cpp -e '//==' | sed 's://==::' > doc/globals.tex
-	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//==' | sed 's://==::' >> doc/globals.tex
-	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's://--::' > doc/functions.tex
-	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's://--::' >> doc/functions.tex
-	grep $(top_srcdir)/data/base/script/campaign/libcampaign.js -e '//;;' | sed 's://;;::' > doc/campaign.tex
-	test $(abs_top_srcdir) = $(abs_top_builddir) || cp $(top_srcdir)/doc/javascript.tex doc/
-
-javascript-doc: javascript-doc-base
-if PDFLATEX
-	(cd doc; pdflatex javascript.tex)
-else
-	echo "You need pdflatex installed!"
-endif
-
-javascript-doc-html: javascript-doc-base
-if HEVEA
-	(cd doc; hevea -fix javascript.tex)
-if HACHA
-	(cd doc; hacha -o javascript-index.html javascript.html)
-endif
-else
-	echo "You need hevea installed!"
-endif
+doc/js-globals.md:
+	grep $(top_srcdir)/src/qtscript.cpp -e '//==' | sed 's:.*//== \?::' > $(top_srcdir)/doc/js-globals.md
+	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//==' | sed 's:.*//== \?::' >> $(top_srcdir)/doc/js-globals.md
+	grep $(top_srcdir)/src/qtscript.cpp -e '//__' | sed 's:.*//__ \?::' > $(top_srcdir)/doc/js-events.md
+	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's:.*//-- \?::' > $(top_srcdir)/doc/js-functions.md
+	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's:.*//-- \?::' >> $(top_srcdir)/doc/js-functions.md
+	grep $(top_srcdir)/src/qtscript.cpp -e '//;;' | sed 's:.*//;; \?::' > $(top_srcdir)/doc/js-objects.md
+	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's:.*//;; \?::' >> $(top_srcdir)/doc/js-objects.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign.js -e '.*//;;' | sed 's://;; \?::' > $(top_srcdir)/doc/js-campaign.md
+	test $(abs_top_srcdir) = $(abs_top_builddir) || cp $(top_srcdir)/doc/*.md doc/
+.PHONY: doc/js-globals.md

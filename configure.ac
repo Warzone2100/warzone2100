@@ -48,13 +48,6 @@ AC_CHECK_PROG(WKHTMLTOPDF, wkhtmltopdf, wkhtmltopdf)
 AM_CONDITIONAL([A2X_AVAILABLE], test -n "$A2X")
 AM_CONDITIONAL([WKHTMLTOPDF_AVAILABLE], test -n "$WKHTMLTOPDF")
 
-AC_CHECK_PROG(PDFLATEX, pdflatex, pdflatex)
-AC_CHECK_PROG(HEVEA, hevea, hevea)
-AC_CHECK_PROG(HACHA, hacha, hacha)
-AM_CONDITIONAL(PDFLATEX, test -n "$PDFLATEX")
-AM_CONDITIONAL(HEVEA, test -n "$HEVEA")
-AM_CONDITIONAL(HACHA, test -n "$HACHA")
-
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 

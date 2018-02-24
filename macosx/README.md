@@ -21,7 +21,7 @@
         sudo port install gettext
         ```
 
-4. **AsciiDoc** & **LaTeX** (required to build the documentation / help files)
+4. **AsciiDoc** (required to build the documentation / help files)
     - AsciiDoc
         - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
             ```shell
@@ -31,9 +31,6 @@
             ```shell
             sudo port install asciidoc docbook-xsl
             ```
-    - LaTeX
-        - We recommend installing `Basic TeX` directly from: https://tug.org/mactex/morepackages.html
-        - If you so choose, you can install the full `MacTeX` package instead of `Basic TeX`, but the full package is not required for the WZ macOS build.
 
 ## Building:
 
