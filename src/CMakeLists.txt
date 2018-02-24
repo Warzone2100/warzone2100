@@ -80,6 +80,41 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 endif()
 
 #######################
+# Additional Components
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+
+	# Note: We cannot use CMAKE_SYSTEM_PROCESSOR to detect the target architecture because it isn't always set properly.
+
+	include(TargetArch)
+	target_architecture(CURRENT_TARGET_ARCHITECTURES)
+	list(LENGTH CURRENT_TARGET_ARCHITECTURES cmake_target_arch_len)
+
+	if(NOT "${cmake_target_arch_len}" STREQUAL "1")
+		message( WARNING "Detected more than one target architecture. This is not expected behavior when targeting Windows." )
+	endif()
+
+	# Install dbghelp.dll
+	if(CURRENT_TARGET_ARCHITECTURES MATCHES "x86_64")
+		install(FILES
+				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll"
+				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll.license.txt"
+				COMPONENT Core DESTINATION "."
+		)
+	elseif(CURRENT_TARGET_ARCHITECTURES MATCHES "i386")
+		install(FILES
+				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll"
+				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll.license.txt"
+				COMPONENT Core DESTINATION "."
+		)
+	else()
+		# We do not currently have the dbghelp.dll for this processor architecture in the repo
+		message( WARNING "Currently-unsupported target architecture for dbghelp.dll: \"${CURRENT_TARGET_ARCHITECTURES}\"; expecting x86_64 or i386" )
+	endif()
+
+endif()
+
+#######################
 # Hardening / Security
 
 INCLUDE(AddTargetLinkFlagsIfSupported)
