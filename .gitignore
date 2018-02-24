@@ -278,3 +278,7 @@ win32/CodeAnalyst
 
 # Locale
 /locale
+
+# Exclusions
+# Do not ignore .dll files under the /win32/dbghelp folder
+!/win32/dbghelp/*/*/*.dll
