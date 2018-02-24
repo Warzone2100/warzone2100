@@ -37,6 +37,9 @@
   Name "${PACKAGE_NAME}"
   OutFile "@CPACK_TOPLEVEL_DIRECTORY@/@CPACK_OUTPUT_FILE_NAME@"
 
+  ;Set compression
+  SetCompressor @CPACK_NSIS_COMPRESSOR@
+
 !ifndef PORTABLE
   ;Default installation folder
   InstallDir "$PROGRAMFILES\${PACKAGE_NAME}-${PACKAGE_VERSION}"
@@ -182,7 +185,7 @@ FunctionEnd
 ;--------------------------------
 ;Installer Sections
 
-Section $(TEXT_SecBase) SecBase
+Section # hidden section, required
   SectionIn RO
   SetOutPath "$INSTDIR"
   SetShellVarContext all
@@ -376,7 +379,8 @@ FunctionEnd
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Core} "$(DESC_SecBase)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${Languages} "$(DESC_SecNLS)"
 
 !ifndef PORTABLE
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
@@ -388,11 +392,9 @@ FunctionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
 ;  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
-  @CPACK_NSIS_INSTALLER_MUI_COMPONENTS_DESC@
 
 ;--------------------------------
 ;Uninstaller Section
