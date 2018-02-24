@@ -16,19 +16,6 @@ noinst_HEADERS = \
 	slider.h \
 	widgbase.h
 
-nodist_libwidget_a_SOURCES = \
-	bar_moc.cpp \
-	button_moc.cpp \
-	editbox_moc.cpp \
-	form_moc.cpp \
-	label_moc.cpp \
-	listwidget_moc.cpp \
-	slider_moc.cpp \
-	tip_moc.cpp \
-	widgbase_moc.cpp \
-	widget_moc.cpp \
-	widgint_moc.cpp
-
 libwidget_a_SOURCES = \
 	bar.cpp \
 	button.cpp \
