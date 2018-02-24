@@ -11,7 +11,6 @@ AM_CXXFLAGS += -DQT_STATICPLUGIN
 endif
 
 MOCHEADER = \
-	multiint.h \
 	qtscriptdebug.h
 MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 
@@ -167,7 +166,6 @@ noinst_HEADERS = \
 	$(MOCHEADER)
 
 nodist_COMMONSOURCES = \
-	multiint_moc.cpp \
 	qtscriptdebug_moc.cpp
 
 COMMONSOURCES = \

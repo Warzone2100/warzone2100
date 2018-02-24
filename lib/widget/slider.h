@@ -34,7 +34,6 @@
 
 class W_SLIDER : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	W_SLIDER(W_SLDINIT const *init);

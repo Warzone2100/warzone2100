@@ -143,7 +143,16 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			emit clicked();
+			/* Call all onClick event handlers */
+			for (auto it = onClickHandlers.begin(); it != onClickHandlers.end(); it++)
+			{
+				auto onClickHandler = *it;
+				if (onClickHandler)
+				{
+					onClickHandler(*this);
+				}
+			}
+
 			screenPointer->setReturn(this);
 			state &= ~WBUT_DOWN;
 			dirty = true;
@@ -262,6 +271,11 @@ void W_BUTTON::setImages(Image image, Image imageDown, Image imageHighlight, Ima
 {
 	dirty = true;
 	setImages(Images(image, imageDown, imageHighlight, imageDisabled));
+}
+
+void W_BUTTON::addOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc)
+{
+	onClickHandlers.push_back(onClickFunc);
 }
 
 void StateButton::setState(unsigned state)

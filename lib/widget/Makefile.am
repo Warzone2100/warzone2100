@@ -2,8 +2,11 @@ AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT5_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 
-# Signals/slots
-MOCHEADER = \
+noinst_LIBRARIES = libwidget.a
+noinst_HEADERS = \
+	tip.h \
+	widget.h \
+	widgint.h \
 	bar.h \
 	button.h \
 	editbox.h \
@@ -13,20 +16,6 @@ MOCHEADER = \
 	slider.h \
 	widgbase.h
 
-MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
-%_moc.cpp: %.h
-	$(MOC5) -o $@ $<
-CLEANFILES = \
-	$(MOCEDFILES)
-
-noinst_LIBRARIES = libwidget.a
-noinst_HEADERS = \
-	tip.h \
-	widget.h \
-	widgint.h \
-	$(MOCHEADER)
-
-#"nodist_libwidget_a_SOURCES = $(MOCEDFILES)" doesn't work here (not sure why).
 nodist_libwidget_a_SOURCES = \
 	bar_moc.cpp \
 	button_moc.cpp \

@@ -30,7 +30,6 @@
 /* The standard form */
 class W_FORM : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	W_FORM(W_FORMINIT const *init);
@@ -46,7 +45,6 @@ public:
 /* The clickable form data structure */
 class W_CLICKFORM : public W_FORM
 {
-	Q_OBJECT
 
 public:
 	W_CLICKFORM(W_FORMINIT const *init);

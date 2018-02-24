@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/ivisdef.h"
 
 #include "widget.h"
+#include <functional>
 
 
 struct TabSelectionStyle
@@ -45,7 +46,6 @@ struct TabSelectionStyle
 
 class TabSelectionWidget : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	TabSelectionWidget(WIDGET *parent);
@@ -58,14 +58,16 @@ public:
 		return tabButtons.size();
 	}
 
-signals:
-	void tabChanged(int);
+	/* The optional "onTabChanged" callback function */
+	typedef std::function<void (TabSelectionWidget& widget, int currentTab)> W_TABSELECTION_ON_TAB_CHANGED_FUNC;
 
-public slots:
+	void addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHANGED_FUNC& onTabChangedFunc);
+
+public:
 	void setTab(int tab);
 	void setNumberOfTabs(int tabs);
 
-private slots:
+private:
 	void prevTabPage();
 	void nextTabPage();
 
@@ -78,12 +80,11 @@ private:
 	std::vector<W_BUTTON *> tabButtons;
 	W_BUTTON *prevTabPageButton;
 	W_BUTTON *nextTabPageButton;
-	class QSignalMapper *setTabMapper;
+	std::vector<W_TABSELECTION_ON_TAB_CHANGED_FUNC> onTabChangedHandlers;
 };
 
 class ListWidget : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	enum Order {RightThenDown, DownThenRight};
@@ -106,11 +107,16 @@ public:
 		return std::max(((int)myChildren.size() - 1) / widgetsPerPage(), 0) + 1;
 	}
 
-signals:
-	void currentPageChanged(int);
-	void numberOfPagesChanged(int);
+	/* The optional "onCurrentPageChanged" callback function */
+	typedef std::function<void (ListWidget& psWidget, int currentPage)> W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC;
 
-public slots:
+	/* The optional "onNumberOfPagesChanged" callback function */
+	typedef std::function<void (ListWidget& psWidget, int numberOfPages)> W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC;
+
+	void addOnCurrentPageChangedHandler(const W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC& handlerFunc);
+	void addOnNumberOfPagesChangedHandler(const W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC& handlerFunc);
+
+public:
 	void setCurrentPage(int page);
 
 private:
@@ -143,11 +149,12 @@ private:
 	unsigned currentPage_;
 	std::vector<WIDGET *> myChildren;
 	Order order;
+	std::vector<W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC> onCurrentPageChangedHandlers;
+	std::vector<W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC> onNumberOfPagesChangedHandlers;
 };
 
 class ListTabWidget : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	enum TabPosition {Top, Bottom};
