@@ -28,7 +28,7 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include <QtCore/QRect>
-#include <QtCore/QObject>
+#include <vector>
 #include <functional>
 
 
@@ -91,9 +91,8 @@ enum
 };
 
 /* The base widget data type */
-class WIDGET : public QObject
+class WIDGET
 {
-	Q_OBJECT
 
 public:
 	typedef std::vector<WIDGET *> Children;

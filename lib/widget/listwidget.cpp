@@ -23,7 +23,6 @@
 
 #include "listwidget.h"
 #include "button.h"
-#include <QtCore/QSignalMapper>
 #include "lib/framework/math_ext.h"
 
 TabSelectionStyle::TabSelectionStyle(Image tab, Image tabDown, Image tabHighlight, Image prev, Image prevDown, Image prevHighlight, Image next, Image nextDown, Image nextHighlight, int gap)
@@ -46,11 +45,17 @@ TabSelectionWidget::TabSelectionWidget(WIDGET *parent)
 	, tabsAtOnce(1)
 	, prevTabPageButton(new W_BUTTON(this))
 	, nextTabPageButton(new W_BUTTON(this))
-	, setTabMapper(new QSignalMapper(this))
 {
-	connect(setTabMapper, SIGNAL(mapped(int)), this, SLOT(setTab(int)));
-	connect(prevTabPageButton, SIGNAL(clicked()), this, SLOT(prevTabPage()));
-	connect(nextTabPageButton, SIGNAL(clicked()), this, SLOT(nextTabPage()));
+	prevTabPageButton->addOnClickHandler([](W_BUTTON& button) {
+		TabSelectionWidget* pParent = static_cast<TabSelectionWidget*>(button.parent());
+		assert(pParent != nullptr);
+		pParent->prevTabPage();
+	});
+	nextTabPageButton->addOnClickHandler([](W_BUTTON& button) {
+		TabSelectionWidget* pParent = static_cast<TabSelectionWidget*>(button.parent());
+		assert(pParent != nullptr);
+		pParent->nextTabPage();
+	});
 
 	prevTabPageButton->setTip(_("Tab Scroll left"));
 	nextTabPageButton->setTip(_("Tab Scroll right"));
@@ -80,7 +85,21 @@ void TabSelectionWidget::setTab(int tab)
 		return;  // Nothing to do.
 	}
 	doLayoutAll();
-	emit tabChanged(currentTab);
+
+	/* Call all onTabChanged event handlers */
+	for (auto it = onTabChangedHandlers.begin(); it != onTabChangedHandlers.end(); it++)
+	{
+		auto onTabChanged = *it;
+		if (onTabChanged)
+		{
+			onTabChanged(*this, currentTab);
+		}
+	}
+}
+
+void TabSelectionWidget::addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHANGED_FUNC& onTabChangedFunc)
+{
+	onTabChangedHandlers.push_back(onTabChangedFunc);
 }
 
 void TabSelectionWidget::setNumberOfTabs(int tabs)
@@ -96,8 +115,11 @@ void TabSelectionWidget::setNumberOfTabs(int tabs)
 	for (unsigned n = previousSize; n < tabButtons.size(); ++n)
 	{
 		tabButtons[n] = new W_BUTTON(this);
-		connect(tabButtons[n], SIGNAL(clicked()), setTabMapper, SLOT(map()));
-		setTabMapper->setMapping(tabButtons[n], n);
+		tabButtons[n]->addOnClickHandler([n](W_BUTTON& button) {
+			TabSelectionWidget* pParent = static_cast<TabSelectionWidget*>(button.parent());
+			assert(pParent != nullptr);
+			pParent->setTab(n);
+		});
 	}
 
 	doLayoutAll();
@@ -199,7 +221,15 @@ void ListWidget::addWidgetToLayout(WIDGET *widget)
 	int numPages = pages();
 	if (oldNumPages != numPages)
 	{
-		emit numberOfPagesChanged(numPages);
+		/* Call all onNumberOfPagesChanged event handlers */
+		for (auto it = onNumberOfPagesChangedHandlers.begin(); it != onNumberOfPagesChangedHandlers.end(); it++)
+		{
+			auto onNumberOfPagesChanged = *it;
+			if (onNumberOfPagesChanged)
+			{
+				onNumberOfPagesChanged(*this, numPages);
+			}
+		}
 	}
 }
 
@@ -220,7 +250,16 @@ void ListWidget::setCurrentPage(int page)
 	{
 		myChildren[n]->show();
 	}
-	emit currentPageChanged(currentPage_);
+
+	/* Call all onCurrentPageChanged event handlers */
+	for (auto it = onCurrentPageChangedHandlers.begin(); it != onCurrentPageChangedHandlers.end(); it++)
+	{
+		auto onCurrentPageChanged = *it;
+		if (onCurrentPageChanged)
+		{
+			onCurrentPageChanged(*this, currentPage_);
+		}
+	}
 }
 
 void ListWidget::doLayoutAll()
@@ -251,15 +290,37 @@ void ListWidget::doLayout(int num)
 	myChildren[num]->show(page == currentPage_);
 }
 
+void ListWidget::addOnCurrentPageChangedHandler(const W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC& handlerFunc)
+{
+	onCurrentPageChangedHandlers.push_back(handlerFunc);
+}
+
+void ListWidget::addOnNumberOfPagesChangedHandler(const W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC& handlerFunc)
+{
+	onNumberOfPagesChangedHandlers.push_back(handlerFunc);
+}
+
 ListTabWidget::ListTabWidget(WIDGET *parent)
 	: WIDGET(parent)
 	, tabs(new TabSelectionWidget(this))
 	, widgets(new ListWidget(this))
 	, tabPos(Top)
 {
-	connect(tabs, SIGNAL(tabChanged(int)), widgets, SLOT(setCurrentPage(int)));
-	connect(widgets, SIGNAL(currentPageChanged(int)), tabs, SLOT(setTab(int)));
-	connect(widgets, SIGNAL(numberOfPagesChanged(int)), tabs, SLOT(setNumberOfTabs(int)));
+	tabs->addOnTabChangedHandler([](TabSelectionWidget& tabsWidget, int currentTab) {
+		ListTabWidget* pParent = static_cast<ListTabWidget*>(tabsWidget.parent());
+		assert(pParent != nullptr);
+		pParent->setCurrentPage(currentTab);
+	});
+	widgets->addOnCurrentPageChangedHandler([](ListWidget& listWidget, int currentPage) {
+		ListTabWidget* pParent = static_cast<ListTabWidget*>(listWidget.parent());
+		assert(pParent != nullptr);
+		pParent->tabs->setTab(currentPage);
+	});
+	widgets->addOnNumberOfPagesChangedHandler([](ListWidget& listWidget, int numberOfPages) {
+		ListTabWidget* pParent = static_cast<ListTabWidget*>(listWidget.parent());
+		assert(pParent != nullptr);
+		pParent->tabs->setNumberOfTabs(numberOfPages);
+	});
 	tabs->setNumberOfTabs(widgets->pages());
 }
 

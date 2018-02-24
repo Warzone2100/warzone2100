@@ -34,7 +34,7 @@ endif()
 
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
-qt5_wrap_cpp(MOCFILES multiint.h qtscriptdebug.h)
+qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
 
 add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc")
 target_compile_definitions(warzone2100 PRIVATE "YY_NO_UNISTD_H")

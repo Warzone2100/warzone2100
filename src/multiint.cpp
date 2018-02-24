@@ -1505,13 +1505,11 @@ static void showPasswordForm()
 MultibuttonWidget::MultibuttonWidget(WIDGET *parent, int value)
 	: W_FORM(parent)
 	, label(nullptr)
-	, mapper(new QSignalMapper(this))
 	, currentValue_(value)
 	, disabled(false)
 	, gap_(3)
 	, lockCurrent(false)
 {
-	connect(mapper, SIGNAL(mapped(int)), this, SLOT(choose(int)));
 }
 
 void MultibuttonWidget::display(int xOffset, int yOffset)
@@ -1550,8 +1548,11 @@ void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char 
 	button->setState(value == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
 	buttons.push_back(std::make_pair(button, value));
 
-	mapper->setMapping(button, value);
-	connect(button, SIGNAL(clicked()), mapper, SLOT(map()));
+	button->addOnClickHandler([value](W_BUTTON& button) {
+		MultibuttonWidget* pParent = static_cast<MultibuttonWidget*>(button.parent());
+		assert(pParent != nullptr);
+		pParent->choose(value);
+	});
 
 	geometryChanged();
 }
@@ -1588,7 +1589,16 @@ void MultibuttonWidget::choose(int value)
 	currentValue_ = value;
 	stateChanged();
 
-	emit chosen(currentValue_);
+	/* Call all onChoose event handlers */
+	for (auto it = onChooseHandlers.begin(); it != onChooseHandlers.end(); it++)
+	{
+		auto onChoose = *it;
+		if (onChoose)
+		{
+			onChoose(*this, currentValue_);
+		}
+	}
+
 	screenPointer->setReturn(this);
 }
 

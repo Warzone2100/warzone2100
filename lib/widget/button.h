@@ -29,11 +29,11 @@
 #include "widget.h"
 #include "widgbase.h"
 #include <map>
+#include <functional>
 
 
 class W_BUTTON : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	struct Images
@@ -71,8 +71,10 @@ public:
 	using WIDGET::setString;
 	using WIDGET::setTip;
 
-signals:
-	void clicked();
+	/* The optional "onClick" callback function */
+	typedef std::function<void (W_BUTTON& button)> W_BUTTON_ONCLICK_FUNC;
+
+	void addOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc);
 
 public:
 	UDWORD		state;				// The current button state
@@ -83,11 +85,12 @@ public:
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 	iV_fonts        FontID;
+private:
+	std::vector<W_BUTTON_ONCLICK_FUNC> onClickHandlers;
 };
 
 class StateButton : public W_BUTTON
 {
-	Q_OBJECT
 
 public:
 	StateButton(WIDGET *parent) : W_BUTTON(parent) {}

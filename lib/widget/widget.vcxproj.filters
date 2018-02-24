@@ -73,11 +73,5 @@
     <ClInclude Include="listwidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="label_moc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="slider_moc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

@@ -92,18 +92,6 @@
       <WarningLevel>Level4</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
-    <PreBuildEvent>
-      <Command>$(Qt5dir)\bin\moc.exe bar.h. -o bar_moc.h
-$(Qt5dir)\bin\moc.exe  button.h -o button_moc.h 
-$(Qt5dir)\bin\moc.exe  editbox.h -o editbox_moc.h
-$(Qt5dir)\bin\moc.exe  form.h   -o form_moc.h 
-$(Qt5dir)\bin\moc.exe  label.h  -o label_moc.h 
-$(Qt5dir)\bin\moc.exe  listwidget.h -o listwidget_moc.h 
-$(Qt5dir)\bin\moc.exe  slider.h -o slider_moc.h 
-$(Qt5dir)\bin\moc.exe  widgbase.h -o widgbase_moc.h
-
-</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_QT_backend|Win32'">
     <ClCompile>
@@ -120,18 +108,6 @@ $(Qt5dir)\bin\moc.exe  widgbase.h -o widgbase_moc.h
       <WarningLevel>Level4</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
-    <PreBuildEvent>
-      <Command>$(Qt5dir)\bin\moc.exe bar.h. -o bar_moc.h
-$(Qt5dir)\bin\moc.exe  button.h -o button_moc.h 
-$(Qt5dir)\bin\moc.exe  editbox.h -o editbox_moc.h
-$(Qt5dir)\bin\moc.exe  form.h   -o form_moc.h 
-$(Qt5dir)\bin\moc.exe  label.h  -o label_moc.h 
-$(Qt5dir)\bin\moc.exe  listwidget.h -o listwidget_moc.h 
-$(Qt5dir)\bin\moc.exe  slider.h -o slider_moc.h 
-$(Qt5dir)\bin\moc.exe  widgbase.h -o widgbase_moc.h
-
-</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -176,10 +152,8 @@ $(Qt5dir)\bin\moc.exe  widgbase.h -o widgbase_moc.h
     <ClInclude Include="editbox.h" />
     <ClInclude Include="form.h" />
     <ClInclude Include="label.h" />
-    <ClInclude Include="label_moc.h" />
     <ClInclude Include="listwidget.h" />
     <ClInclude Include="slider.h" />
-    <ClInclude Include="slider_moc.h" />
     <ClInclude Include="tip.h" />
     <ClInclude Include="widgbase.h" />
     <ClInclude Include="widget.h" />

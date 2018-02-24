@@ -29,7 +29,6 @@
 
 class W_BARGRAPH : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	W_BARGRAPH(W_BARINIT const *init);

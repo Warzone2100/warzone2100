@@ -43,7 +43,6 @@ struct EditBoxDisplayCache {
 
 class W_EDITBOX : public WIDGET
 {
-	Q_OBJECT
 
 public:
 	W_EDITBOX(W_EDBINIT const *init);
