@@ -195,10 +195,6 @@ Section # hidden section, required
 
   ;ADD YOUR OWN FILES HERE...
 
-!ifdef PORTABLE
-; openAL installer
-  File "${EXTDIR}\bin\oalinst.exe"
-!endif
 !ifdef INSTALLVIDS
 ; sequences.wz
   File "${EXTDIR}\opt\sequences.wz"
@@ -247,16 +243,6 @@ Section # hidden section, required
 SectionEnd
 
 ; NOTE: you need upgraded security privs to install shortcut on desktop for portable.
-
-; Installs OpenAL runtime libraries, using Creative's installer
-!ifndef PORTABLE
-Section $(TEXT_SecOpenAL) SecOpenAL
-  SetOutPath "$INSTDIR"
-  File "${EXTDIR}\bin\oalinst.exe"
-  ExecWait '"$INSTDIR\oalinst.exe" --silent'
-SectionEnd
-!endif
-
 
 !ifndef INSTALLVIDS
 SectionGroup $(TEXT_SecFMVs) SecFMVs
@@ -376,10 +362,6 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${Core} "$(DESC_SecBase)"
     !insertmacro MUI_DESCRIPTION_TEXT ${Languages} "$(DESC_SecNLS)"
 
-!ifndef PORTABLE
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
-!endif
-
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
@@ -404,8 +386,6 @@ Section "Uninstall"
   @CPACK_NSIS_DELETE_DIRECTORIES@
 
   Delete "$INSTDIR\${PACKAGE}.exe"
-
-  Delete "$INSTDIR\oalinst.exe"
 
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
