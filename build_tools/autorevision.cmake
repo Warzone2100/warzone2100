@@ -303,8 +303,12 @@ macro(_gitRepo)
 						 OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 	if(exstatus EQUAL 0)
 		STRING(REGEX REPLACE "\n" ";" _commits_since_master_branch "${_commits_since_master_branch}")
-		list(GET _commits_since_master_branch -1 first_new_commit_on_branch_since_master)
-		if(($first_new_commit_on_branch_since_master STREQUAL "") AND (DEFINED VCS_BRANCH_COMMIT_COUNT) AND (VCS_BRANCH_COMMIT_COUNT EQUAL 0))
+		if(_commits_since_master_branch)
+			list(GET _commits_since_master_branch -1 first_new_commit_on_branch_since_master)
+		else()
+			set(first_new_commit_on_branch_since_master)
+		endif()
+		if(("${first_new_commit_on_branch_since_master}" STREQUAL "") AND (DEFINED VCS_BRANCH_COMMIT_COUNT) AND (VCS_BRANCH_COMMIT_COUNT EQUAL 0))
 			# The call succeeded, but git returned nothing
 			# The number of commits since master is 0, so set VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH
 			# to be equal to VCS_COMMIT_COUNT
