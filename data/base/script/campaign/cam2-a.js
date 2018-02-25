@@ -43,27 +43,33 @@ function preDamageStuff()
 
 function getDroidsForCOLZ()
 {
-	const count = [3,3,3,4,4,4,4,4,4][camRand(9)];
-	var t;
-	var scouts;
-	var artillery;
-	with (camTemplates) scouts = [npcybm, npcybc, commgt, comsens];
-	with (camTemplates) artillery = [npcybc, npcybr, cohct, comct, comorb];
-
 	var droids = [];
+	var count = 6 + camRand(5);
+	var templates;
+	var sensors;
+	var usingHeavy = false;
+
+	with (camTemplates) sensors = [comsens, comsens];
+	if (camRand(100) < 50)
+	{
+		with (camTemplates) templates = [npcybm, commgt, npcybc, npcybr];
+	}
+	else
+	{
+		with (camTemplates) templates = [cohct, comct, comorb];
+		usingHeavy = true;
+	}
+
 	for (var i = 0; i < count; ++i)
 	{
-		if (camRand(3) === 0)
+		if (!i && usingHeavy)
 		{
-			t = scouts[camRand(scouts.length)];
+			droids.push(sensors[camRand(sensors.length)]); //bring a sensor
 		}
 		else
 		{
-			t = artillery[camRand(artillery.length)];
+			droids.push(templates[camRand(templates.length)]);
 		}
-
-		droids.push(t);
-		droids.push(t);
 	}
 
 	return droids;
