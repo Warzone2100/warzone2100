@@ -2240,8 +2240,7 @@ bool writeFXData(const char *fileName)
 
 		if (it->imd)
 		{
-			const QString &imd_name = modelName(it->imd);
-			ini.setValue("imd_name", imd_name);
+			ini.setValue("imd_name", QString::fromStdString(modelName(it->imd)));
 		}
 
 		// Move on to reading the next effect

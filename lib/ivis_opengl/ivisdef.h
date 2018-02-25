@@ -32,6 +32,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
 #include "pietypes.h"
+#include "tex.h"
 
 #include <vector>
 #include <QtCore/QVector>
@@ -72,19 +73,19 @@ struct EDGE
 
 struct ANIMFRAME
 {
+	Vector3f scale;
 	Position pos;
 	Rotation rot;
-	Vector3f scale;
 };
 
 struct iIMDPoly
 {
-	uint32_t flags;
-	int32_t zcentre;
-	Vector3f normal;
-	int pindex[3];
-	Vector2f *texCoord;
+	Vector2f *texCoord = nullptr;
 	Vector2f texAnim;
+	uint32_t flags = 0;
+	int32_t zcentre = 0;
+	Vector3f normal;
+	int pindex[3] = { 0 };
 };
 
 enum VBO_TYPE
@@ -108,46 +109,46 @@ enum ANIMATION_EVENTS
 
 struct iIMDShape
 {
-	iIMDShape();
+	~iIMDShape();
 
-	unsigned int flags;
-	int texpage;
-	int tcmaskpage;
-	int normalpage;
-	int specularpage;
-	int sradius, radius;
-	Vector3i min, max;
+	Vector3i min;
+	Vector3i max;
+	unsigned int flags = 0;
+	int texpage = iV_TEX_INVALID;
+	int tcmaskpage = iV_TEX_INVALID;
+	int normalpage = iV_TEX_INVALID;
+	int specularpage = iV_TEX_INVALID;
+	int sradius = 0;
+	int radius = 0;
 
 	Vector3f ocen;
-	unsigned short numFrames;
-	unsigned short animInterval;
+	unsigned short numFrames = 0;
+	unsigned short animInterval = 0;
 
-	unsigned int nconnectors;
-	Vector3i *connectors;
+	unsigned int nconnectors = 0;
+	Vector3i *connectors = 0;
 
-	unsigned int nShadowEdges;
-	EDGE *shadowEdgeList;
+	EDGE *shadowEdgeList = nullptr;
+	unsigned int nShadowEdges = 0;
 
 	// The old rendering data
-	unsigned int npoints;
-	Vector3f *points;
-	unsigned int npolys;
-	iIMDPoly *polys;
+	std::vector<Vector3f> points;
+	std::vector<iIMDPoly> polys;
 
 	// The new rendering data
-	GLuint buffers[VBO_COUNT];
-	SHADER_MODE shaderProgram; // if using specialized shader for this model
+	GLuint buffers[VBO_COUNT] = { 0 };
+	SHADER_MODE shaderProgram = SHADER_NONE; // if using specialized shader for this model
 
 	// object animation (animating a level, rather than its texture)
 	std::vector<ANIMFRAME> objanimdata;
-	int objanimframes;
+	int objanimframes = 0;
 
 	// more object animation, but these are only set for the first level
-	int objanimtime; ///< total time to render all animation frames
-	int objanimcycles; ///< Number of cycles to render, zero means infinitely many
-	iIMDShape *objanimpie[ANIM_EVENT_COUNT];
+	int objanimtime = 0; ///< total time to render all animation frames
+	int objanimcycles = 0; ///< Number of cycles to render, zero means infinitely many
+	iIMDShape *objanimpie[ANIM_EVENT_COUNT] = { nullptr };
 
-	iIMDShape *next;  // next pie in multilevel pies (NULL for non multilevel !)
+	iIMDShape *next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 };
 
 

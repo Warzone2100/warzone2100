@@ -3816,8 +3816,8 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 
 	pts[0] = Vector3f(psDroid->pos.x - player.p.x, psDroid->pos.z + 24, -(psDroid->pos.y - player.p.z));
 
-	pointIndex = rand() % (psStructure->sDisplay.imd->npoints - 1);
-	point = &(psStructure->sDisplay.imd->points[pointIndex]);
+	pointIndex = rand() % (psStructure->sDisplay.imd->points.size() - 1);
+	point = &(psStructure->sDisplay.imd->points.at(pointIndex));
 
 	each.x = psStructure->pos.x + point->x;
 	each.y = psStructure->pos.z + (structHeightScale(psStructure) * point->y);
@@ -3831,8 +3831,8 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 
 	pts[1] = Vector3f(each.x - player.p.x, each.y, -(each.z - player.p.z));
 
-	pointIndex = rand() % (psStructure->sDisplay.imd->npoints - 1);
-	point = &(psStructure->sDisplay.imd->points[pointIndex]);
+	pointIndex = rand() % (psStructure->sDisplay.imd->points.size() - 1);
+	point = &(psStructure->sDisplay.imd->points.at(pointIndex));
 
 	each.x = psStructure->pos.x + point->x;
 	each.y = psStructure->pos.z + (structHeightScale(psStructure) * point->y);

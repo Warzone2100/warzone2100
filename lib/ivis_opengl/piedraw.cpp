@@ -166,9 +166,9 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
-	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, nullptr);
+	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, nullptr);
 	disableArrays();
-	polyCount += shape->npolys;
+	polyCount += shape->polys.size();
 	pie_DeactivateShader();
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 }
@@ -237,10 +237,10 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
-	glDrawElements(GL_TRIANGLES, shape->npolys * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->npolys * 3 * sizeof(uint16_t)));
+	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->polys.size() * 3 * sizeof(uint16_t)));
 	disableArrays();
 
-	polyCount += shape->npolys;
+	polyCount += shape->polys.size();
 
 	pie_SetShaderEcmEffect(false);
 	// NOTE: Do *not* call pie_DeactivateShader() here, to avoid unecessary state transitions.
@@ -319,7 +319,7 @@ static inline void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, con
 	EDGE *drawlist = nullptr;
 
 	unsigned edge_count;
-	Vector3f *pVertices = shape->points;
+	const Vector3f *pVertices = shape->points.data();
 	if (flag & pie_STATIC_SHADOW && shape->shadowEdgeList)
 	{
 		drawlist = shape->shadowEdgeList;
@@ -329,12 +329,11 @@ static inline void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, con
 	{
 		edgelist.clear();
 		glm::vec3 p[3];
-		iIMDPoly *end = shape->polys + shape->npolys;
-		for (iIMDPoly *pPolys = shape->polys; pPolys != end; ++pPolys)
+		for (const iIMDPoly &poly : shape->polys)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				int current = pPolys->pindex[j];
+				int current = poly.pindex[j];
 				p[j] = glm::vec3(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
 			if (glm::dot(glm::cross(p[2] - p[0], p[1] - p[0]), glm::vec3(light)) > 0.0f)
@@ -342,7 +341,7 @@ static inline void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, con
 				for (int n = 0; n < 3; ++n)
 				{
 					// Add the edges
-					edgelist.push_back({pPolys->pindex[n], pPolys->pindex[(n + 1)%3]});
+					edgelist.push_back({poly.pindex[n], poly.pindex[(n + 1)%3]});
 				}
 			}
 		}

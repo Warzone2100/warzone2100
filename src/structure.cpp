@@ -3690,8 +3690,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 				SDWORD	realY;
 				UDWORD	pointIndex;
 
-				pointIndex = rand() % (psBuilding->sDisplay.imd->npoints - 1);
-				point = &(psBuilding->sDisplay.imd->points[pointIndex]);
+				pointIndex = rand() % (psBuilding->sDisplay.imd->points.size() - 1);
+				point = &(psBuilding->sDisplay.imd->points.at(pointIndex));
 				position.x = psBuilding->pos.x + point->x;
 				realY = structHeightScale(psBuilding) * point->y;
 				position.y = psBuilding->pos.z + realY;
