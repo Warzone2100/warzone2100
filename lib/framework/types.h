@@ -81,9 +81,12 @@ typedef signed   long long int64_t;
 # define PRIu32					"u"
 # define PRIu64					"I64u"
 # define PRId64					"I64d"
-typedef SSIZE_T ssize_t;
 #endif
 #endif // WZ_C99
+
+#ifdef WZ_CC_MSVC
+typedef SSIZE_T ssize_t;
+#endif
 
 #ifndef INT8_MAX
 #error inttypes.h and stdint.h defines missing! Make sure that __STDC_FORMAT_MACROS and __STDC_LIMIT_MACROS are defined when compiling C++ files.
