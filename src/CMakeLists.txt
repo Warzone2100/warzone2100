@@ -46,6 +46,11 @@ if(WZ_PORTABLE)
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100_portable")
 endif()
 
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	# Build warzone exe as a Windows app (not a console app)
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+
 target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay script sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100
 	Qt5::Script
