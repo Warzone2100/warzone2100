@@ -85,25 +85,12 @@ else (VORBIS_INCLUDE_DIR AND VORBIS_LIBRARY AND VORBISFILE_LIBRARY)
 #endif (VORBIS_INCLUDE_DIR AND VORBIS_LIBRARY AND VORBISFILE_LIBRARY AND VORBISENC_LIBRARY) # Remove Enc - WZ
 endif (VORBIS_INCLUDE_DIR AND VORBIS_LIBRARY AND VORBISFILE_LIBRARY)
 
-
-if (OGGVORBIS_FOUND)
-   if (NOT OggVorbis_FIND_QUIETLY)
-      message(STATUS "Found OggVorbis: ${OGGVORBIS_LIBRARIES}")
-   endif (NOT OggVorbis_FIND_QUIETLY)
-else (OGGVORBIS_FOUND)
-   if (OggVorbis_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find OggVorbis libraries")
-   endif (OggVorbis_FIND_REQUIRED)
-   if (NOT OggVorbis_FIND_QUIETLY)
-      message(STATUS "Could NOT find OggVorbis libraries")
-   endif (NOT OggVorbis_FIND_QUIETLY)
-endif (OGGVORBIS_FOUND)
-
+set(OGGVORBIS_INCLUDE_DIR ${VORBIS_INCLUDE_DIR} ${OGG_INCLUDE_DIR})
 
 # Add FindPackageHandleStdArgs - WZ
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(OggVorbis REQUIRED_VARS VORBIS_LIBRARY OGG_LIBRARY VORBISFILE_LIBRARY
-                                                          VORBIS_INCLUDE_DIR)
+find_package_handle_standard_args(OggVorbis REQUIRED_VARS OGGVORBIS_LIBRARIES VORBIS_LIBRARY OGG_LIBRARY VORBISFILE_LIBRARY
+                                                          VORBIS_INCLUDE_DIR OGG_INCLUDE_DIR OGGVORBIS_INCLUDE_DIR)
 
 #check_include_files(vorbis/vorbisfile.h HAVE_VORBISFILE_H)
 #check_library_exists(ogg ogg_page_version "" HAVE_LIBOGG)
