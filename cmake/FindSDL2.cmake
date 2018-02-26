@@ -9,10 +9,20 @@
 # Portions derived from FindSDL.cmake, distributed under the OSI-approved BSD 3-Clause License (https://cmake.org/licensing)
 #
 
-FIND_PATH(SDL2_INCLUDE_DIR NAMES SDL.h PATH_SUFFIXES SDL2)
+find_path(SDL2_INCLUDE_DIR NAMES SDL.h PATH_SUFFIXES SDL2)
 
-FIND_LIBRARY(SDL2_LIBRARY NAMES SDL2)
-FIND_LIBRARY(SDL2MAIN_LIBRARY NAMES SDL2main)
+find_library(SDL2_LIBRARY_RELEASE NAMES SDL2)
+find_library(SDL2_LIBRARY_DEBUG NAMES SDL2d)
+
+find_library(SDL2MAIN_LIBRARY_RELEASE NAMES SDL2main)
+find_library(SDL2MAIN_LIBRARY_DEBUG NAMES SDL2maind)
+
+include(SelectLibraryConfigurations)
+select_library_configurations(SDL2)
+select_library_configurations(SDL2MAIN)
+
+mark_as_advanced(SDL2_LIBRARY_RELEASE SDL2_LIBRARY_DEBUG)
+mark_as_advanced(SDL2MAIN_LIBRARY_RELEASE SDL2MAIN_LIBRARY_DEBUG)
 
 if (SDL2_INCLUDE_DIR AND EXISTS "${SDL2_INCLUDE_DIR}/SDL_version.h")
   file(STRINGS "${SDL2_INCLUDE_DIR}/SDL_version.h" SDL2_VERSION_MAJOR_LINE REGEX "^#define[ \t]+SDL_MAJOR_VERSION[ \t]+[0-9]+$")
@@ -35,8 +45,14 @@ else()
   set(SDL2_VERSION_STRING "")
 endif()
 
-INCLUDE(FindPackageHandleStandardArgs)
+# Set by select_library_configurations(), but we want the one from
+# find_package_handle_standard_args() below.
+unset(SDL2_FOUND)
+unset(SDL2MAIN_FOUND)
 
+include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2 REQUIRED_VARS SDL2_INCLUDE_DIR SDL2_LIBRARY VERSION_VAR SDL2_VERSION_STRING)
 
-MARK_AS_ADVANCED(SDL2_INCLUDE_DIR SDL2_LIBRARY SDL2MAIN_LIBRARY)
+set(SDL2MAIN_LIBRARY "${SDL2MAIN_LIBRARY}" CACHE STRING "Where the SDL2main Library can be found")
+
+mark_as_advanced(SDL2_INCLUDE_DIR SDL2_LIBRARY SDL2MAIN_LIBRARY)

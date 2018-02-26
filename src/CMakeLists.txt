@@ -56,7 +56,10 @@ if(ENABLE_NLS)
 	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
 endif()
 
-if(WIN32)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	if("${SDL2MAIN_LIBRARY}" STREQUAL "")
+		message( WARNING "SDL2Main library not found. Linking will not succeed." )
+	endif()
     target_link_libraries(warzone2100 ws2_32 iphlpapi ${SDL2MAIN_LIBRARY})
 endif()
 
@@ -71,7 +74,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
   endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     target_link_libraries(warzone2100
-        "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/SDL2.lib"
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/ogg.lib"
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/vorbis.lib"
         "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/vorbisfile.lib"
