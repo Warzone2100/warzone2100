@@ -100,14 +100,14 @@ else
 fi
 
 # javascript doc
-	grep $(top_srcdir)/src/qtscript.cpp -e '//==' | sed 's:.*//== \?::' > $(top_srcdir)/doc/js-globals.md
-	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//==' | sed 's:.*//== \?::' >> $(top_srcdir)/doc/js-globals.md
-	grep $(top_srcdir)/src/qtscript.cpp -e '//__' | sed 's:.*//__ \?::' > $(top_srcdir)/doc/js-events.md
-	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's:.*//-- \?::' > $(top_srcdir)/doc/js-functions.md
-	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's:.*//-- \?::' >> $(top_srcdir)/doc/js-functions.md
-	grep $(top_srcdir)/src/qtscript.cpp -e '//;;' | sed 's:.*//;; \?::' > $(top_srcdir)/doc/js-objects.md
-	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's:.*//;; \?::' >> $(top_srcdir)/doc/js-objects.md
-	grep $(top_srcdir)/data/base/script/campaign/libcampaign.js -e '.*//;;' | sed 's://;; \?::' > $(top_srcdir)/doc/js-campaign.md
+	grep src/qtscript.cpp -e '//==' | sed -E 's:.*//==[[:space:]]?::' > doc/js-globals.md
+	grep src/qtscriptfuncs.cpp -e '//==' | sed -E 's:.*//==[[:space:]]?::' >> doc/js-globals.md
+	grep src/qtscript.cpp -e '//__' | sed -E 's:.*//__[[:space:]]?::' > doc/js-events.md
+	grep src/qtscript.cpp -e '//--' | sed -E 's:.*//--[[:space:]]?::' > doc/js-functions.md
+	grep src/qtscriptfuncs.cpp -e '//--' | sed -E 's:.*//--[[:space:]]?::' >> doc/js-functions.md
+	grep src/qtscript.cpp -e '//;;' | sed -E 's:.*//;;[[:space:]]?::' > doc/js-objects.md
+	grep src/qtscriptfuncs.cpp -e '//;;' | sed -E 's:.*//;;[[:space:]]?::' >> doc/js-objects.md
+	grep data/base/script/campaign/libcampaign.js -e '.*//;;' | sed -E 's://;;[[:space:]]?::' > doc/js-campaign.md
 cp -af doc/Scripting.md ${mWarzoneHelpLproj}
 cp -af doc/js-{globals,events,functions,objects,campaign}*.md ${mWarzoneHelpLproj}
 
