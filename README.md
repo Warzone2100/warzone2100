@@ -181,8 +181,33 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
 
 ### Windows using MSVC
 
-* You need Visual Studio 2015 or 2017 (recommended) CMake (https://cmake.org/) and QT 5.9.1 (https://www.qt.io/)
-* Build dependencies are provided with vcpkg project from Microsoft. Run "get-dependencies.ps1" script from powershell in order to download source and build them.
-* From now you can use cmake the canonical way or directly from Visual Studio 2017 ; the only requirement is to pass the CMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystem/vcpkg.cmake variable.
-* The canonical way is the command 'cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystem\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015" '
-* With VS2017 open the warzone 2100 folder, then  "CMake menu > Change Cmake settings" will create a json file. There add "-DCMAKE_TOOLCHAIN_FILE=vcpkg\\scripts\\buildsystems\\vcpkg.cmake" to cmakeCommandArgs.
+* Prerequisites
+   * **Visual Studio 2017** (Visual Studio 2015 may work, but 2017 is strongly encouraged)
+      - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
+      - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
+   * **CMake 3.10+** (https://cmake.org/)
+   * **QT 5.9.1+** (https://www.qt.io/)
+   * **Git** (if not building from a release source archive)
+   * **7-Zip** (http://www.7-zip.org)
+* **Preparing to build:**
+   Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
+   * Run the `get-dependencies.ps1` script from powershell in order to download and build the dependencies.
+* **Building from the command-line:**
+   * Change directory to the warzone2100 repo directory
+   * Configure
+      * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystem\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
+      * Visual Studio 2015: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystem\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015"`
+   * Build
+      * Release: `cmake --build build --config Release`
+      * Debug: `cmake --build build --config Debug`
+* **Building using Visual Studio 2017:**
+   1. Open Visual Studio 2017
+   2. Open the warzone2100 folder using **File** > **Open** > **Folder...**
+      - Allow Visual Studio some time to load the project and retrieve information from CMake.
+   3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**.
+      - This creates `CMakeSettings.json`
+   4. Add the following variables to `cmakeCommandArgs` in `CMakeSettings.json`:
+      - `-DCMAKE_PREFIX_PATH=C:\Qt\Qt5.9.4\5.9.4\msvc2015` (change to use the appropriate path to your Qt installation)
+      - `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake`
+      - Note: Visual Studio should automatically escape and turn each `\` into `\\`
+   5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
