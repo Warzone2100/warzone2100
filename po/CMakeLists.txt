@@ -1,14 +1,25 @@
+cmake_minimum_required(VERSION 3.5)
 project(translation)
-
-if (CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
-	# Because of a Windows-related bugfix in FindGettext.cmake in CMake 3.10,
-	# CMake 3.10+ is required if compiling *on* Windows.
-	cmake_minimum_required(VERSION 3.10)
-endif()
 
 find_package(Gettext 0.18)
 if(NOT GETTEXT_FOUND)
 	message( WARNING "Gettext is not found. Skipping language file generation. (Only the default language, English, will be available.)" )
+	if (CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+		# Because of a Windows-related bugfix in FindGettext.cmake in CMake 3.10,
+		# CMake 3.10+ may be required (if compiling *on* Windows) to properly
+		# detect Gettext.
+		#
+		# However, Visual Studio 2017 currently bundles CMake < 3.10, so requiring
+		# CMake 3.10+ at the top of this file leads to an inability to compile via
+		# Visual Studio itself.
+		#
+		# Instead of using cmake_minimum_required(VERSION 3.10), detect the
+		# CMake version and emit a warning if it's below 3.10.
+		#
+		if(${CMAKE_VERSION} VERSION_LESS "3.10.0")
+			message ( WARNING "CMake is < 3.10. This *may* be the cause of not finding Gettext on Windows (if it's installed)." )
+		endif()
+	endif()
 	return()
 endif()
 
