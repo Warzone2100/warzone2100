@@ -61,7 +61,7 @@ OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 
 if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
 	message( WARNING "Portable build is only supported on Windows; Ignoring WZ_PORTABLE option" )
-	unset(WZ_PORTABLE)
+	unset(WZ_PORTABLE CACHE)
 endif()
 
 SET(STDC_HEADERS ON)
