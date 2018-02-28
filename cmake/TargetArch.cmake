@@ -27,6 +27,9 @@
 #
 # ----------------
 #
+# WZ Modifications:
+# - Clean-up arch.c after use
+#
 
 # Based on the Qt 5 processor detection code, so should be very accurate
 # https://qt.gitorious.org/qt/qtbase/blobs/master/src/corelib/global/qprocessordetection.h
@@ -158,6 +161,9 @@ function(target_architecture output_var)
         if (NOT ARCH)
             set(ARCH unknown)
         endif()
+
+		# Clean-up arch.c
+		file(REMOVE "${CMAKE_BINARY_DIR}/arch.c")
     endif()
 
     set(${output_var} "${ARCH}" PARENT_SCOPE)
