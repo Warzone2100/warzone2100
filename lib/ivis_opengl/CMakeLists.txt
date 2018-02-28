@@ -40,7 +40,7 @@ file(GLOB SRC
 	"textdraw.cpp"
 )
 
-find_package(PNG 1.4 REQUIRED)
+find_package(PNG 1.2 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW 1.5.2 REQUIRED)
 find_package(Freetype REQUIRED)
