@@ -1,12 +1,36 @@
 project(doc)
 
+add_custom_target(doc_wz2100 ALL)
+
+#######################
+# Scripting docs
+
+add_custom_command(
+	TARGET doc_wz2100
+	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}" -P "${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake"
+	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+)
+
+configure_file(Scripting.md ${CMAKE_CURRENT_BINARY_DIR}/Scripting.md COPYONLY)
+
+install(FILES
+		"${CMAKE_CURRENT_BINARY_DIR}/js-globals.md"
+		"${CMAKE_CURRENT_BINARY_DIR}/js-events.md"
+		"${CMAKE_CURRENT_BINARY_DIR}/js-functions.md"
+		"${CMAKE_CURRENT_BINARY_DIR}/js-objects.md"
+		"${CMAKE_CURRENT_BINARY_DIR}/js-campaign.md"
+		"${CMAKE_CURRENT_BINARY_DIR}/Scripting.md"
+		DESTINATION "doc/" COMPONENT Core
+)
+
+#######################
+# Main documentation
+
 find_package(A2X)
 if(NOT A2X_FOUND)
 	message( WARNING "a2x is not found. Documentation cannot be generated if asciidoc is not installed. (Skipping documentation generation.)" )
 	return()
 endif()
-
-add_custom_target(doc_wz2100 ALL)
 
 set(doc_DATA
 	"images/artillery-far-away.jpg"
