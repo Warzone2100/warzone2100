@@ -24,6 +24,7 @@
 #include "lib/framework/opengl.h"
 
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -140,7 +141,7 @@ static char *readShaderBuf(const char *name)
 	buffer = (char *)malloc(filesize + 1);
 	if (buffer)
 	{
-		PHYSFS_read(fp, buffer, 1, filesize);
+		WZ_PHYSFS_readBytes(fp, buffer, filesize);
 		buffer[filesize] = '\0';
 	}
 	PHYSFS_close(fp);

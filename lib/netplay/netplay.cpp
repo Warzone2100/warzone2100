@@ -1938,7 +1938,7 @@ int NETsendFile(WZFile &file, unsigned player)
 	memset(inBuff, 0x0, sizeof(inBuff));
 
 	// read some bytes.
-	uint32_t bytesToRead = PHYSFS_read(file.handle, inBuff, 1, MAX_FILE_TRANSFER_PACKET);
+	uint32_t bytesToRead = WZ_PHYSFS_readBytes(file.handle, inBuff, MAX_FILE_TRANSFER_PACKET);
 	ASSERT_OR_RETURN(100, (int32_t)bytesToRead >= 0, "Error reading file.");
 
 	NETbeginEncode(NETnetQueue(player), NET_FILE_PAYLOAD);

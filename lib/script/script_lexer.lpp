@@ -96,7 +96,7 @@ static char *pScrMacroBuffer[MAX_SCR_MACRO_DEPTH];
 		} \
 		else \
 		{ \
-			result = PHYSFS_read(pScrInputFiles[scr_include_stack_ptr], buf, 1, max_size); \
+			result = WZ_PHYSFS_readBytes(pScrInputFiles[scr_include_stack_ptr], buf, max_size); \
 			if (result == -1) \
 			{ \
 				buf[0] = EOF; \
