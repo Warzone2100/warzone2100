@@ -201,7 +201,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	}
 
 	/* Load the file data */
-	PHYSFS_sint64 length_read = PHYSFS_read(pfile, *ppFileData, 1, filesize);
+	PHYSFS_sint64 length_read = WZ_PHYSFS_readBytes(pfile, *ppFileData, filesize);
 	if (length_read != filesize)
 	{
 		if (AllocateMem)

@@ -156,8 +156,8 @@ static bool serializeSaveGameHeader(PHYSFS_file *fileHandle, const GAME_SAVEHEAD
 static bool deserializeSaveGameHeader(PHYSFS_file *fileHandle, GAME_SAVEHEADER *serializeHeader)
 {
 	// Read in the header from the file
-	if (PHYSFS_read(fileHandle, serializeHeader->aFileType, 4, 1) != 1
-	    || PHYSFS_read(fileHandle, &serializeHeader->version, sizeof(uint32_t), 1) != 1)
+	if (WZ_PHYSFS_readBytes(fileHandle, serializeHeader->aFileType, 4) != 4
+	    || WZ_PHYSFS_readBytes(fileHandle, &serializeHeader->version, sizeof(uint32_t)) != sizeof(uint32_t))
 	{
 		return false;
 	}
@@ -396,16 +396,16 @@ static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME 
 	serializeMulti->hash.setZero();
 
 	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
-	    || PHYSFS_read(fileHandle, serializeMulti->map, 1, 128) != 128
-	    || PHYSFS_read(fileHandle, dummy8c, 1, 8) != 8
+	    || WZ_PHYSFS_readBytes(fileHandle, serializeMulti->map, 128) != 128
+	    || WZ_PHYSFS_readBytes(fileHandle, dummy8c, 8) != 8
 	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
-	    || PHYSFS_read(fileHandle, serializeMulti->name, 1, 128) != 128
+	    || WZ_PHYSFS_readBytes(fileHandle, serializeMulti->name, 128) != 128
 	    || !PHYSFS_readSBE32(fileHandle, &boolFog)
 	    || !PHYSFS_readUBE32(fileHandle, &serializeMulti->power)
 	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->base)
 	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->alliance)
 	    || !PHYSFS_readUBE8(fileHandle, &hashSize)
-	    || (hashSize == serializeMulti->hash.Bytes && !PHYSFS_read(fileHandle, serializeMulti->hash.bytes, serializeMulti->hash.Bytes, 1))
+	    || (hashSize == serializeMulti->hash.Bytes && !WZ_PHYSFS_readBytes(fileHandle, serializeMulti->hash.bytes, serializeMulti->hash.Bytes))
 	    || !PHYSFS_readUBE16(fileHandle, &dummy16)	// dummy, was bytesPerSec
 	    || !PHYSFS_readUBE8(fileHandle, &dummy8)	// dummy, was packetsPerSec
 	    || !PHYSFS_readUBE8(fileHandle, &dummy8))	// reused for challenge, was encryptKey
@@ -444,8 +444,8 @@ static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, 
 	uint8_t allocated = 0;
 
 	retval = (PHYSFS_readUBE32(fileHandle, &position)
-	          && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
-	          && PHYSFS_read(fileHandle, aiName, MAX_LEN_AI_NAME, 1) == 1
+	          && WZ_PHYSFS_readBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
+	          && WZ_PHYSFS_readBytes(fileHandle, aiName, MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
 	          && PHYSFS_readSBE8(fileHandle, &serializePlayer->difficulty)
 	          && PHYSFS_readUBE8(fileHandle, &allocated)
 	          && PHYSFS_readUBE32(fileHandle, &colour)
@@ -541,7 +541,7 @@ static bool deserializeSaveGameV7Data(PHYSFS_file *fileHandle, SAVE_GAME_V7 *ser
 	        && PHYSFS_readSBE32(fileHandle, &serializeGame->ScrollMinY)
 	        && PHYSFS_readUBE32(fileHandle, &serializeGame->ScrollMaxX)
 	        && PHYSFS_readUBE32(fileHandle, &serializeGame->ScrollMaxY)
-	        && PHYSFS_read(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE, 1) == 1);
+	        && WZ_PHYSFS_readBytes(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE) == MAX_LEVEL_SIZE);
 }
 
 struct SAVE_GAME_V10 : public SAVE_GAME_V7
@@ -943,7 +943,7 @@ static bool serializeSaveGameV18Data(PHYSFS_file *fileHandle, const SAVE_GAME_V1
 static bool deserializeSaveGameV18Data(PHYSFS_file *fileHandle, SAVE_GAME_V18 *serializeGame)
 {
 	return (deserializeSaveGameV17Data(fileHandle, (SAVE_GAME_V17 *) serializeGame)
-	        && PHYSFS_read(fileHandle, serializeGame->buildDate, MAX_STR_LENGTH, 1) == 1
+	        && WZ_PHYSFS_readBytes(fileHandle, serializeGame->buildDate, MAX_STR_LENGTH) == MAX_STR_LENGTH
 	        && PHYSFS_readUBE32(fileHandle, &serializeGame->oldestVersion)
 	        && PHYSFS_readUBE32(fileHandle, &serializeGame->validityKey));
 }
@@ -1311,7 +1311,7 @@ static bool deserializeSaveGameV33Data(PHYSFS_file *fileHandle, SAVE_GAME_V33 *s
 	    || !deserializeMultiplayerGame(fileHandle, &serializeGame->sGame)
 	    || !deserializeNetPlay(fileHandle, &serializeGame->sNetPlay)
 	    || !PHYSFS_readUBE32(fileHandle, &serializeGame->savePlayer)
-	    || PHYSFS_read(fileHandle, serializeGame->sPName, 1, 32) != 32
+	    || WZ_PHYSFS_readBytes(fileHandle, serializeGame->sPName, 32) != 32
 	    || !PHYSFS_readSBE32(fileHandle, &boolMultiPlayer))
 	{
 		return false;
@@ -1366,7 +1366,7 @@ static bool deserializeSaveGameV34Data(PHYSFS_file *fileHandle, SAVE_GAME_V34 *s
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (PHYSFS_read(fileHandle, serializeGame->sPlayerName[i], StringSize, 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, serializeGame->sPlayerName[i], StringSize) != StringSize)
 		{
 			return false;
 		}
@@ -1418,7 +1418,7 @@ static bool deserializeSaveGameV38Data(PHYSFS_file *fileHandle, SAVE_GAME_V38 *s
 		return false;
 	}
 
-	if (PHYSFS_read(fileHandle, serializeGame->modList, modlist_string_size, 1) != 1)
+	if (WZ_PHYSFS_readBytes(fileHandle, serializeGame->modList, modlist_string_size) != modlist_string_size)
 	{
 		return false;
 	}
@@ -3216,7 +3216,7 @@ static UDWORD getCampaignV(PHYSFS_file *fileHandle, unsigned int version)
 	// We only need VERSION 12 data (saveGame.saveKey)
 	else if (version <= VERSION_34)
 	{
-		if (PHYSFS_read(fileHandle, &saveGame, sizeof(SAVE_GAME_V14), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGame, sizeof(SAVE_GAME_V14)) != sizeof(SAVE_GAME_V14))
 		{
 			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", WZ_PHYSFS_getLastError());
 
@@ -3325,7 +3325,7 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 {
 	SAVE_GAME_V7 saveGame;
 
-	if (PHYSFS_read(fileHandle, &saveGame, sizeof(saveGame), 1) != 1)
+	if (WZ_PHYSFS_readBytes(fileHandle, &saveGame, sizeof(saveGame)) != sizeof(saveGame))
 	{
 		debug(LOG_ERROR, "gameLoadV7: error while reading file: %s", WZ_PHYSFS_getLastError());
 
@@ -3403,7 +3403,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	//size is now variable so only check old save games
 	if (version <= VERSION_10)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V10), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V10)) != sizeof(SAVE_GAME_V10))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3412,7 +3412,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version == VERSION_11)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V11), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V11)) != sizeof(SAVE_GAME_V11))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3421,7 +3421,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_12)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V12), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V12)) != sizeof(SAVE_GAME_V12))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3430,7 +3430,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_14)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V14), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V14)) != sizeof(SAVE_GAME_V14))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3439,7 +3439,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_15)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V15), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V15)) != sizeof(SAVE_GAME_V15))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3448,7 +3448,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_16)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V16), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V16)) != sizeof(SAVE_GAME_V16))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3457,7 +3457,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_17)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V17), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V17)) != sizeof(SAVE_GAME_V17))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3466,7 +3466,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_18)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V18), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V18)) != sizeof(SAVE_GAME_V18))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3475,7 +3475,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_19)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V19), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V19)) != sizeof(SAVE_GAME_V19))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3484,7 +3484,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_21)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V20), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V20)) != sizeof(SAVE_GAME_V20))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3493,7 +3493,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_23)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V22), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V22)) != sizeof(SAVE_GAME_V22))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3502,7 +3502,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_26)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V24), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V24)) != sizeof(SAVE_GAME_V24))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3511,7 +3511,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_28)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V27), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V27)) != sizeof(SAVE_GAME_V27))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3520,7 +3520,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_29)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V29), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V29)) != sizeof(SAVE_GAME_V29))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3529,7 +3529,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_30)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V30), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V30)) != sizeof(SAVE_GAME_V30))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3538,7 +3538,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_32)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V31), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V31)) != sizeof(SAVE_GAME_V31))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3547,7 +3547,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_33)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V33), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V33)) != sizeof(SAVE_GAME_V33))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
@@ -3556,7 +3556,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	}
 	else if (version <= VERSION_34)
 	{
-		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V34), 1) != 1)
+		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V34)) != sizeof(SAVE_GAME_V34))
 		{
 			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 

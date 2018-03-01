@@ -747,7 +747,7 @@ bool mapLoad(char *filename, bool preview)
 		debug(LOG_ERROR, "%s not found", filename);
 		return false;
 	}
-	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	else if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
 	         || !PHYSFS_readULE32(fp, &version)
 	         || !PHYSFS_readULE32(fp, &width)
 	         || !PHYSFS_readULE32(fp, &height)
@@ -1585,7 +1585,7 @@ bool readVisibilityData(const char *fileName)
 	}
 
 	// Read the header from the file
-	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	if (WZ_PHYSFS_readBytes(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType)) != sizeof(fileHeader.aFileType)
 	    || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
 	{
 		debug(LOG_ERROR, "readVisibilityData: error while reading header from file: %s", WZ_PHYSFS_getLastError());

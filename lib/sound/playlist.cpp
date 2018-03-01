@@ -89,7 +89,7 @@ bool PlayList_Read(const char *path)
 
 		// Read a single line
 		while (buf_pos < sizeof(filename) - 1
-		       && PHYSFS_read(fileHandle, &filename[buf_pos], 1, 1)
+		       && WZ_PHYSFS_readBytes(fileHandle, &filename[buf_pos], 1)
 		       && filename[buf_pos] != '\n'
 		       && filename[buf_pos] != '\r')
 		{

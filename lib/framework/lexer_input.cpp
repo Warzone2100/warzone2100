@@ -19,6 +19,7 @@
 */
 #include "frame.h"
 #include "lexer_input.h"
+#include "physfs_ext.h"
 
 int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 {
@@ -44,7 +45,7 @@ int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 		}
 		else
 		{
-			int result = PHYSFS_read(input->input.physfsfile, buf, 1, max_size);
+			int result = WZ_PHYSFS_readBytes(input->input.physfsfile, buf, max_size);
 			if (result == -1)
 			{
 				buf[0] = EOF;

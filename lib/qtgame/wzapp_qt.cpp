@@ -124,7 +124,7 @@ static QImage loadQImage(char const *fileName, char const *format = nullptr)
 	std::vector<unsigned char> data(fileSizeGuess != -1? fileSizeGuess : 16384);
 	while (true)
 	{
-		int64_t moreRead = PHYSFS_read(fileHandle, &data[lengthRead], 1, data.size() - lengthRead);
+		int64_t moreRead = WZ_PHYSFS_readBytes(fileHandle, &data[lengthRead], data.size() - lengthRead);
 		lengthRead += std::max<int64_t>(moreRead, 0);
 		if (lengthRead < data.size())
 		{

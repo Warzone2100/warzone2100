@@ -121,12 +121,12 @@ static inline bool PHYSFS_writeULE8(PHYSFS_file *file, uint8_t val)
 
 static inline bool PHYSFS_readSLE8(PHYSFS_file *file, int8_t *val)
 {
-	return (PHYSFS_read(file, val, sizeof(int8_t), 1) == 1);
+	return (WZ_PHYSFS_readBytes(file, val, sizeof(int8_t)) == sizeof(int8_t));
 }
 
 static inline bool PHYSFS_readULE8(PHYSFS_file *file, uint8_t *val)
 {
-	return (PHYSFS_read(file, val, sizeof(uint8_t), 1) == 1);
+	return (WZ_PHYSFS_readBytes(file, val, sizeof(uint8_t)) == sizeof(uint8_t));
 }
 
 static inline bool PHYSFS_writeSBE8(PHYSFS_file *file, int8_t val)
@@ -141,12 +141,12 @@ static inline bool PHYSFS_writeUBE8(PHYSFS_file *file, uint8_t val)
 
 static inline bool PHYSFS_readSBE8(PHYSFS_file *file, int8_t *val)
 {
-	return (PHYSFS_read(file, val, sizeof(int8_t), 1) == 1);
+	return (WZ_PHYSFS_readBytes(file, val, sizeof(int8_t)) == sizeof(int8_t));
 }
 
 static inline bool PHYSFS_readUBE8(PHYSFS_file *file, uint8_t *val)
 {
-	return (PHYSFS_read(file, val, sizeof(uint8_t), 1) == 1);
+	return (WZ_PHYSFS_readBytes(file, val, sizeof(uint8_t)) == sizeof(uint8_t));
 }
 
 static inline bool PHYSFS_writeBEFloat(PHYSFS_file *file, float val)
@@ -205,7 +205,7 @@ static inline char *PHYSFS_fgets(char *s, int size, PHYSFS_file *stream)
 	}
 	do
 	{
-		retval = PHYSFS_read(stream, &c, 1, 1);
+		retval = WZ_PHYSFS_readBytes(stream, &c, 1);
 
 		if (retval < 1)
 		{

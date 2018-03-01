@@ -61,7 +61,7 @@ GAMEMAP *mapLoad(char *filename)
 		map->mMapTiles = NULL;
 		goto mapfailure;
 	}
-	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	else if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
 		|| !readU32(&map->mapVersion)
 		|| !readU32(&map->width)
 		|| !readU32(&map->height)
@@ -145,7 +145,7 @@ mapfailure:
 		debug(LOG_ERROR, "Game file %s not found", path);
 		goto failure;
 	}
-	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	else if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
 		|| aFileType[0] != 'g'
 		|| aFileType[1] != 'a'
 		|| aFileType[2] != 'm'
@@ -165,7 +165,7 @@ mapfailure:
 		|| !readS32(&map->scrollMinY)
 		|| !readU32(&map->scrollMaxX)
 		|| !readU32(&map->scrollMaxY)
-		|| PHYSFS_read(fp, map->levelName, 20, 1) != 1)
+		|| WZ_PHYSFS_readBytes(fp, map->levelName, 20) != 20)
 	{
 		debug(LOG_ERROR, "Bad data in %s", filename);
 		goto failure;
@@ -204,7 +204,7 @@ mapfailure:
 		map->mLndObjects[IMD_FEATURE] = NULL;
 		goto featfailure;
 	}
-	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	else if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
 		|| aFileType[0] != 'f'
 		|| aFileType[1] != 'e'
 		|| aFileType[2] != 'a'
@@ -227,7 +227,7 @@ mapfailure:
 		{
 			nameLength = 40;
 		}
-		if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
+		if (WZ_PHYSFS_readBytes(fp, psObj->name, nameLength) != nameLength
 			|| !readU32(&psObj->id)
 			|| !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
 			|| !readU32(&psObj->direction)
@@ -240,7 +240,7 @@ mapfailure:
 			goto failure;
 		}
 		psObj->player = 0;	// work around invalid feature owner
-		if (map->featVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
+		if (map->featVersion >= 14 && WZ_PHYSFS_readBytes(fp, &visibility, 8) != 8)
 		{
 			debug(LOG_ERROR, "Failed to read feature visibility from %s", path);
 			goto failure;
@@ -268,7 +268,7 @@ featfailure:
 		map->terrainVersion = 0;
 		goto terrainfailure;
 	}
-	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+	else if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
 		|| aFileType[0] != 't'
 		|| aFileType[1] != 't'
 		|| aFileType[2] != 'y'
@@ -335,7 +335,7 @@ terrainfailure:
 	fp = PHYSFS_openRead(path);
 	if (fp)
 	{
-		if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+		if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
 			|| aFileType[0] != 's'
 			|| aFileType[1] != 't'
 			|| aFileType[2] != 'r'
@@ -361,7 +361,7 @@ terrainfailure:
 			{
 				nameLength = 40;
 			}
-			if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
+			if (WZ_PHYSFS_readBytes(fp, psObj->name, nameLength) != nameLength
 				|| !readU32(&psObj->id)
 				|| !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
 				|| !readU32(&psObj->direction)
@@ -402,12 +402,12 @@ terrainfailure:
 				debug(LOG_ERROR, "Failed to read structure v12 part from %s", path);
 				goto failure;
 			}
-			if (map->structVersion >= 14 && PHYSFS_read(fp, &visibility, 1, 8) != 8)
+			if (map->structVersion >= 14 && WZ_PHYSFS_readBytes(fp, &visibility, 8) != 8)
 			{
 				debug(LOG_ERROR, "Failed to read structure visibility from %s", path);
 				goto failure;
 			}
-			if (map->structVersion >= 15 && PHYSFS_read(fp, researchName, nameLength, 1) != 1)
+			if (map->structVersion >= 15 && WZ_PHYSFS_readBytes(fp, researchName, nameLength) != nameLength)
 			{
 				// If version < 20, then this causes no padding, but the short below
 				// will still cause two bytes padding; however, if version >= 20, we
@@ -459,7 +459,7 @@ terrainfailure:
 	fp = PHYSFS_openRead(path);
 	if (fp)
 	{
-		if (PHYSFS_read(fp, aFileType, 4, 1) != 1
+		if (WZ_PHYSFS_readBytes(fp, aFileType, 4) != 4
 			|| aFileType[0] != 'd'
 			|| aFileType[1] != 'i'
 			|| aFileType[2] != 'n'
@@ -481,7 +481,7 @@ terrainfailure:
 			{
 				nameLength = 40;
 			}
-			if (PHYSFS_read(fp, psObj->name, nameLength, 1) != 1
+			if (WZ_PHYSFS_readBytes(fp, psObj->name, nameLength) != nameLength
 				|| !readU32(&psObj->id)
 				|| !readU32(&psObj->x) || !readU32(&psObj->y) || !readU32(&psObj->z)
 				|| !readU32(&psObj->direction)

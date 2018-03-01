@@ -79,6 +79,8 @@
 #include <AL/al.h>
 #endif
 
+#include "lib/framework/physfs_ext.h"
+
 // stick this in sequence.h perhaps?
 struct AudioData
 {
@@ -161,7 +163,7 @@ static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
 	// read in 256K chunks
 	const int size = 262144;
 	char *buffer = ogg_sync_buffer(oy, size);
-	int bytes = PHYSFS_read(in, buffer, 1, size);
+	int bytes = WZ_PHYSFS_readBytes(in, buffer, size);
 
 	ogg_sync_wrote(oy, bytes);
 	return (bytes);
