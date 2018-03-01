@@ -52,6 +52,7 @@
 
 /*	The vector that holds the sun's lighting direction - planar */
 static Vector3f theSun;
+static Vector3f theSun_ForTileIllumination;
 
 /*	Module function Prototypes */
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
@@ -60,6 +61,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY);
 void setTheSun(Vector3f newSun)
 {
 	theSun = normalise(newSun) * float(FP12_MULTIPLIER);
+	theSun_ForTileIllumination = Vector3f(-theSun.x, -theSun.y, theSun.z);
 }
 
 Vector3f getTheSun()
@@ -212,7 +214,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 		finalVector = finalVector + normals[i];
 	}
 
-	dotProduct = glm::dot(normalise(finalVector), theSun);
+	dotProduct = glm::dot(normalise(finalVector), theSun_ForTileIllumination);
 
 	val = abs(dotProduct) / 16;
 	if (val == 0)
