@@ -60,8 +60,14 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY);
 
 void setTheSun(Vector3f newSun)
 {
+	Vector3f oldSun = theSun;
 	theSun = normalise(newSun) * float(FP12_MULTIPLIER);
 	theSun_ForTileIllumination = Vector3f(-theSun.x, -theSun.y, theSun.z);
+	if(oldSun != theSun)
+	{
+		// The sun has changed - must relcalulate lighting
+		initLighting(0, 0, mapWidth, mapHeight);
+	}
 }
 
 Vector3f getTheSun()
