@@ -40,7 +40,7 @@ static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t len
 {
 	PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(png_ptr);
 
-	PHYSFS_write(fileHandle, data, length, 1);
+	WZ_PHYSFS_writeBytes(fileHandle, data, length);
 }
 
 static void wzpng_flush_data(png_structp png_ptr)
@@ -342,7 +342,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	}
 
 	jpeg_end = jpeg_encode_image(buffer, jpeg, 1, JPEG_FORMAT_RGB, image->width, image->height);
-	PHYSFS_write(fileHandle, jpeg, jpeg_end - jpeg, 1);
+	WZ_PHYSFS_writeBytes(fileHandle, jpeg, jpeg_end - jpeg);
 
 	free(buffer);
 	free(jpeg);
