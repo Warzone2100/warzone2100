@@ -24,6 +24,7 @@
 #include "png_util.h"
 #include <png.h>
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 
 #define PNG_BYTES_TO_CHECK 8
 
@@ -92,13 +93,13 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 	// Open file
 	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open %s: %s", fileName, PHYSFS_getLastError());
+	ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open %s: %s", fileName, WZ_PHYSFS_getLastError());
 
 	// Read PNG header from file
 	readSize = PHYSFS_read(fileHandle, PNGheader, 1, PNG_BYTES_TO_CHECK);
 	if (readSize < PNG_BYTES_TO_CHECK)
 	{
-		debug(LOG_FATAL, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_FATAL, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
@@ -196,7 +197,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == nullptr)
 	{
-		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, WZ_PHYSFS_getLastError());
 		return;
 	}
 
@@ -313,7 +314,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	fileHandle = PHYSFS_openWrite(newfilename);
 	if (fileHandle == nullptr)
 	{
-		debug(LOG_ERROR, "pie_JPEGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "pie_JPEGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, WZ_PHYSFS_getLastError());
 		return;
 	}
 

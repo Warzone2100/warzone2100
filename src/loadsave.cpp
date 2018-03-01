@@ -27,6 +27,7 @@
 
 #include <ctype.h>
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 #include <time.h>
 
 #include "lib/framework/frame.h"
@@ -400,14 +401,14 @@ void deleteSaveGame(char *saveGameName)
 		// Delete the file
 		if (!PHYSFS_delete(del_file))
 		{
-			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file, PHYSFS_getLastError());
+			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file, WZ_PHYSFS_getLastError());
 		}
 	}
 	PHYSFS_freeList(files);
 
 	if (!PHYSFS_delete(saveGameName))		// now (should be)empty directory
 	{
-		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", saveGameName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", saveGameName, WZ_PHYSFS_getLastError());
 	}
 
 	return;

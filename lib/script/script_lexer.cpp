@@ -723,6 +723,7 @@ char *scr_text;
  * Script file lexer.
  */
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/script/interpreter.h"
@@ -1137,7 +1138,7 @@ static void pushInclude(const char *pIncludePath)
 
 	if(!newInput){
 		scr_error("FLEX: Couldn't open include: '%s'\n%s",
-			pIncludePath, PHYSFS_getLastError() );
+			pIncludePath, WZ_PHYSFS_getLastError() );
 	}
 
 	/* Push current flex buffer */

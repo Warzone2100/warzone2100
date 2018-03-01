@@ -29,6 +29,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/physfs_ext.h"
 #include "map.h"
 
 #include "game.h"									// for loading maps
@@ -1636,7 +1637,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 	PHYSFS_file *pFileHandle = PHYSFS_openRead(filename.c_str());
 	if (pFileHandle == nullptr)
 	{
-		debug(LOG_ERROR, "Failed to open %s for reading: %s", filename.c_str(), PHYSFS_getLastError());
+		debug(LOG_ERROR, "Failed to open %s for reading: %s", filename.c_str(), WZ_PHYSFS_getLastError());
 		debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format! (No map packs!)", filename.c_str());
 		// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
 		// Which also means, that we can't continue.

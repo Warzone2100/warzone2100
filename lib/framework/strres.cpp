@@ -35,6 +35,7 @@
 #include "treap.h"
 #include "strres.h"
 #include "strresly.h"
+#include "physfs_ext.h"
 
 /* A String Resource */
 struct STR_RES
@@ -104,7 +105,7 @@ bool strresLoad(STR_RES *psRes, const char *fileName)
 	debug(LOG_WZ, "Reading...[directory %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (!input.input.physfsfile)
 	{
-		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
 		return false;
 	}
 

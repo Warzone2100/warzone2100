@@ -21,6 +21,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/physfs_ext.h"
 
 #include "playlist.h"
 #include "cdaudio.h"
@@ -73,7 +74,7 @@ bool PlayList_Read(const char *path)
 	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(listName), listName);
 	if (fileHandle == nullptr)
 	{
-		debug(LOG_INFO, "PHYSFS_openRead(\"%s\") failed with error: %s\n", listName, PHYSFS_getLastError());
+		debug(LOG_INFO, "PHYSFS_openRead(\"%s\") failed with error: %s\n", listName, WZ_PHYSFS_getLastError());
 		return false;
 	}
 

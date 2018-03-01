@@ -1544,7 +1544,7 @@ bool writeVisibilityData(const char *fileName)
 	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
 	    || !PHYSFS_writeUBE32(fileHandle, fileHeader.version))
 	{
-		debug(LOG_ERROR, "writeVisibilityData: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "writeVisibilityData: could not write header to %s; PHYSFS error: %s", fileName, WZ_PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
 		return false;
 	}
@@ -1557,7 +1557,7 @@ bool writeVisibilityData(const char *fileName)
 		{
 			if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits >> (plane * 8)))
 			{
-				debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+				debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, WZ_PHYSFS_getLastError());
 				PHYSFS_close(fileHandle);
 				return false;
 			}
@@ -1588,7 +1588,7 @@ bool readVisibilityData(const char *fileName)
 	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
 	    || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
 	{
-		debug(LOG_ERROR, "readVisibilityData: error while reading header from file: %s", PHYSFS_getLastError());
+		debug(LOG_ERROR, "readVisibilityData: error while reading header from file: %s", WZ_PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
 		return false;
 	}
@@ -1635,7 +1635,7 @@ bool readVisibilityData(const char *fileName)
 			uint8_t val = 0;
 			if (!PHYSFS_readUBE8(fileHandle, &val))
 			{
-				debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+				debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, WZ_PHYSFS_getLastError());
 				PHYSFS_close(fileHandle);
 				return false;
 			}

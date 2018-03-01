@@ -23,6 +23,7 @@
 
 #include <time.h>
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 
 #include "netlog.h"
 #include "netplay.h"
@@ -61,7 +62,7 @@ bool NETstartLogging(void)
 	if (!pFileHandle)
 	{
 		debug(LOG_ERROR, "Could not create net log %s: %s", filename,
-		      PHYSFS_getLastError());
+		      WZ_PHYSFS_getLastError());
 		return false;
 	}
 	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(newtime));
@@ -129,7 +130,7 @@ bool NETstopLogging(void)
 
 	if (!PHYSFS_close(pFileHandle))
 	{
-		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
+		debug(LOG_ERROR, "Could not close net log: %s", WZ_PHYSFS_getLastError());
 		return false;
 	}
 	pFileHandle = nullptr;
