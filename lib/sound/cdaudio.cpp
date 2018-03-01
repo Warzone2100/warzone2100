@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
@@ -86,7 +87,7 @@ static bool cdAudio_OpenTrack(const char *filename)
 		debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 		if (music_file == nullptr)
 		{
-			debug(LOG_ERROR, "Failed opening file [directory: %s] %s, with error %s", PHYSFS_getRealDir(filename), filename, PHYSFS_getLastError());
+			debug(LOG_ERROR, "Failed opening file [directory: %s] %s, with error %s", PHYSFS_getRealDir(filename), filename, WZ_PHYSFS_getLastError());
 			return false;
 		}
 

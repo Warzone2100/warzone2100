@@ -36,6 +36,7 @@
 
 #include <time.h>			// for stats
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 #include <string.h>
 #include <memory>
 #include <thread>
@@ -2006,7 +2007,7 @@ int NETrecvFile(NETQUEUE queue)
 		int noError = PHYSFS_close(file->handle);
 		if (noError == 0)
 		{
-			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", WZ_PHYSFS_getLastError());
 		}
 		file->handle = nullptr;
 		NetPlay.wzFiles.erase(file);

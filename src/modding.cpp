@@ -144,7 +144,7 @@ void removeSubdirs(const char *basedir, const char *subdir)
 		if (!PHYSFS_removeFromSearchPath(tmpstr))
 		{
 #ifdef DEBUG	// spams a ton!
-			debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, PHYSFS_getLastError());
+			debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, WZ_PHYSFS_getLastError());
 #endif // DEBUG
 		}
 		i++;

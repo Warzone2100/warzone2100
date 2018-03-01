@@ -530,7 +530,7 @@ static MapFileList listMapFiles()
 		}
 		else
 		{
-			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), PHYSFS_getLastError());
+			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
 		}
 	}
 
@@ -589,7 +589,7 @@ static bool CheckInMap(const char *archive, const char *mountpoint, const char *
 	if (!PHYSFS_mount(archive, mountpoint, PHYSFS_APPEND))
 	{
 		// We already checked to see if this was valid before, and now, something went seriously wrong.
-		debug(LOG_FATAL, "Could not mount %s, because: %s. Please delete the file, and run the game again. Game will now exit.", archive, PHYSFS_getLastError());
+		debug(LOG_FATAL, "Could not mount %s, because: %s. Please delete the file, and run the game again. Game will now exit.", archive, WZ_PHYSFS_getLastError());
 		exit(-1);
 	}
 
@@ -618,7 +618,7 @@ static bool CheckInMap(const char *archive, const char *mountpoint, const char *
 
 	if (!PHYSFS_removeFromSearchPath(archive))
 	{
-		debug(LOG_ERROR, "Could not unmount %s, %s", archive, PHYSFS_getLastError());
+		debug(LOG_ERROR, "Could not unmount %s, %s", archive, WZ_PHYSFS_getLastError());
 	}
 	return mapmod;
 }
@@ -659,7 +659,7 @@ bool buildMapList()
 
 		if (PHYSFS_removeFromSearchPath(realFilePathAndName.c_str()) == 0)
 		{
-			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), PHYSFS_getLastError());
+			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
 		}
 
 		mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap");

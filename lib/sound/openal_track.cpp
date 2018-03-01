@@ -36,6 +36,7 @@
 #endif
 
 #include <physfs.h>
+#include "lib/framework/physfs_ext.h"
 #include <string.h>
 #include <math.h>
 
@@ -520,7 +521,7 @@ TRACK *sound_LoadTrackFromFile(const char *fileName)
 	debug(LOG_NEVER, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == nullptr)
 	{
-		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
 		return nullptr;
 	}
 
