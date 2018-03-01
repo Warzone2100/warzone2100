@@ -1994,7 +1994,7 @@ int NETrecvFile(NETQUEUE queue)
 	}
 
 	// Write packet to the file.
-	PHYSFS_write(file->handle, buf, bytesToRead, 1);
+	WZ_PHYSFS_writeBytes(file->handle, buf, bytesToRead);
 
 	uint32_t newPos = pos + bytesToRead;
 	file->pos = newPos;
@@ -3520,7 +3520,7 @@ static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned p
 
 	ssprintf(fname, "logs/desync%u_p%u.txt", time, player);
 	fp = openSaveFile(fname);
-	PHYSFS_write(fp, buf, bufLen, 1);
+	WZ_PHYSFS_writeBytes(fp, buf, bufLen);
 	PHYSFS_close(fp);
 
 	debug(LOG_ERROR, "Dumped player %u's sync error at gameTime %u to file: %s%s", player, time, PHYSFS_getRealDir(fname), fname);
