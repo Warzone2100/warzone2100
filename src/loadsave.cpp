@@ -315,7 +315,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 		/* Figure save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
-		savetime = PHYSFS_getLastModTime(savefile);
+		savetime = WZ_PHYSFS_getLastModTime(savefile);
 		timeinfo = localtime(&savetime);
 		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%x %X", timeinfo);
 
