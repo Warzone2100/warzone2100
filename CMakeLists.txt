@@ -144,3 +144,14 @@ foreach(rfile ${ROOT_FILES})
 			DESTINATION "."
 	)
 endforeach()
+
+# Add "dist" target alias (using CPack package_source)
+get_filename_component(_cmake_path ${CMAKE_COMMAND} PATH)
+find_program(CPACK_COMMAND cpack ${_cmake_path})
+unset(_cmake_path)
+if(CPACK_COMMAND)
+	add_custom_target(dist
+		COMMAND ${CPACK_COMMAND} --config ${CMAKE_CURRENT_BINARY_DIR}/CPackSourceConfig.cmake
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
+endif()
