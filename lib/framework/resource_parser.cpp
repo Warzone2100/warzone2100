@@ -79,6 +79,7 @@ extern char* res_get_text(void);
 #include "lib/framework/string_ext.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/resly.h"
+#include "lib/framework/physfs_ext.h"
 
 extern void yyerror(const char* msg);
 void yyerror(const char* msg)
@@ -1421,7 +1422,7 @@ yyreduce:
 					}
 					if (strlen((yyvsp[(2) - (2)].sval)) > 0)
 					{
-						ASSERT(PHYSFS_isDirectory(aCurrResDir), "%s is not a directory!", aCurrResDir);
+						ASSERT(WZ_PHYSFS_isDirectory(aCurrResDir), "%s is not a directory!", aCurrResDir);
 						// Add a trailing '/'
 						len = strlen(aCurrResDir);
 						aCurrResDir[len] = '/';
