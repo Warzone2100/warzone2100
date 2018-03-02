@@ -11,7 +11,6 @@ file		SMSG		"prox2b.txt"
 
 directory "script"
 file JAVASCRIPT "rules.js"
-file JAVASCRIPT "weather.js"
 
 directory       "script/campaign"
 file            JAVASCRIPT      "cam2-b.js"

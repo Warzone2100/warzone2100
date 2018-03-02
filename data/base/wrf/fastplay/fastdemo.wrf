@@ -11,7 +11,6 @@ file		SMSG		"proxdemo.txt"
 
 directory "script"
 file JAVASCRIPT "rules.js"
-file JAVASCRIPT "weather.js"
 
 directory "script/fastplay"
 file JAVASCRIPT "fastdemo.js"

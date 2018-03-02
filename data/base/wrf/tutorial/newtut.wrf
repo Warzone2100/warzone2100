@@ -9,5 +9,4 @@ file		SMSG		"proxtut.txt"
 
 /* Directory for javascript files*/
 directory "script"
-file JAVASCRIPT "weather.js"
 file JAVASCRIPT "tutorial.js"

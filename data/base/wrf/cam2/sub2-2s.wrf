@@ -9,7 +9,6 @@ file		SMSG		"brief2-2.txt"
 
 directory "script"
 file JAVASCRIPT "rules.js"
-file JAVASCRIPT "weather.js"
 
 directory "script/campaign"
 file JAVASCRIPT "cam2-2s.js"

@@ -3,6 +3,8 @@
 // * Enable unit design and minimap only when an HQ exists
 receiveAllEvents(true); //Needed to allow enemy research to apply to them
 
+include("script/weather.js");
+
 var mainReticule = true;
 var allowDesign = false;
 const CREATE_LIKE_EVENT = 0;
@@ -258,6 +260,11 @@ function eventStartLevel()
 	}
 
 	resetPower();
+	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
+	{
+		weatherCycle();
+		setTimer("weatherCycle", 45000);
+	}
 }
 
 function eventDroidBuilt(droid, structure)
