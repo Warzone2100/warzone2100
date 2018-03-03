@@ -236,7 +236,7 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_SRCDIR}\data\music\music.wpl"
 
   SetOutPath "$INSTDIR\fonts"
-  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
+  File "/oname=fonts.conf" "${TOP_SRCDIR}\win32\fontconfig\fonts.conf.wd_disable"
   File "${TOP_SRCDIR}\3rdparty\fonts\DejaVu\DejaVuSans.ttf"
   File "${TOP_SRCDIR}\3rdparty\fonts\DejaVu\DejaVuSans-Bold.ttf"
   File "/oname=DejaVu.LICENSE.txt" "${TOP_SRCDIR}\3rdparty\fonts\DejaVu\LICENSE"
@@ -423,7 +423,7 @@ SectionEnd
 Section /o $(TEXT_SecNLS_WinFonts) SecNLS_WinFonts
   SetOutPath "$INSTDIR\fonts"
   Delete "$INSTDIR\fonts\fonts.conf"
-  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_enable"
+  File "/oname=fonts.conf" "${TOP_SRCDIR}\win32\fontconfig\fonts.conf.wd_enable"
 SectionEnd
 
 SectionGroupEnd

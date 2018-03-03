@@ -201,7 +201,7 @@ Section # hidden section, required
 !endif
 
   SetOutPath "$INSTDIR\fonts"
-  File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
+  File "/oname=fonts.conf" "${TOP_SRCDIR}\win32\fontconfig\fonts.conf.wd_disable"
 
 !ifndef PORTABLE
 
