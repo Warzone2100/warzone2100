@@ -26,8 +26,8 @@
   !include "MUI.nsh"
   !include "FileFunc.nsh"
   !include "LogicLib.nsh"
-  !include "../../../NSIS.definitions.nsh"
-  !include "../../../NSIS.version.nsh"
+  !include "..\..\..\NSIS.definitions.nsh"
+  !include "..\..\..\NSIS.version.nsh"
 
 ;--------------------------------
 ;General
@@ -352,10 +352,10 @@ FunctionEnd
 ;--------------------------------
 ;Descriptions
 
-  !include "../../../Lang-English.nsh"
-  !include "../../../Lang-Dutch.nsh"
-  !include "../../../Lang-German.nsh"
-  !include "../../../Lang-Russian.nsh"
+  !include "..\..\..\Lang-English.nsh"
+  !include "..\..\..\Lang-Dutch.nsh"
+  !include "..\..\..\Lang-German.nsh"
+  !include "..\..\..\Lang-Russian.nsh"
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
