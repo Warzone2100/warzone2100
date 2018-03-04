@@ -148,6 +148,11 @@ function eventStructureBuilt(structure, droid)
 {
 	const MIN_DEFENSES = 2;
 
+	if (!droid) // happens if building was created by cheating
+	{
+		return;
+	}
+
 	var defenses = enumRange(droid.x, droid.y, 10, me, false).filter(function (obj) {
 		return (obj.type === STRUCTURE && obj.stattype === DEFENSE);
 	});
