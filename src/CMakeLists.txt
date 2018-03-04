@@ -139,3 +139,32 @@ ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,now" CA
 #######################
 # Install
 install(TARGETS warzone2100 COMPONENT Core DESTINATION ".")
+
+#####################
+# Installing Required Runtime Dependencies
+
+# Install required system libraries (ex. the VC runtime when linking dynamically via MSVC)
+set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT Core)
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
+include(InstallRequiredSystemLibraries)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_CROSSCOMPILING)
+	# Install any required runtime dependencies / DLLs (ex. from vcpkg when dynamically linking)
+	get_target_property(_mainexename warzone2100 OUTPUT_NAME)
+	if(_mainexename)
+		# Install
+		install(CODE "
+			if(\"\${CMAKE_BUILD_TYPE}\" STREQUAL \"Debug\")
+				set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/debug/bin/\")
+			else()
+				set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/bin/\")
+			endif()
+			set(BU_CHMOD_BUNDLE_ITEMS ON)
+			include(BundleUtilities)
+			fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${_mainexename}.exe\" \"\" \"\${dll_source_dirs}\")
+		" COMPONENT Core)
+	else()
+		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )
+	endif()
+endif()
