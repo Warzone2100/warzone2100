@@ -7,11 +7,12 @@ add_custom_target(doc_wz2100 ALL)
 
 add_custom_command(
 	TARGET doc_wz2100
-	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}" -P "${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake"
+	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR} -P "${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake"
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+	VERBATIM
 )
 
-configure_file(Scripting.md ${CMAKE_CURRENT_BINARY_DIR}/Scripting.md COPYONLY)
+configure_file(Scripting.md "${CMAKE_CURRENT_BINARY_DIR}/Scripting.md" COPYONLY)
 
 install(FILES
 		"${CMAKE_CURRENT_BINARY_DIR}/js-globals.md"

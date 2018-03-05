@@ -65,33 +65,35 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
    endif()
 
    foreach (_currentPoFile ${_parsedArguments_POFILES})
-      get_filename_component(_currentPoFileName ${_currentPoFile} NAME)
-      get_filename_component(_absFile ${_currentPoFile} ABSOLUTE)
-      get_filename_component(_abs_PATH ${_absFile} PATH)
-      get_filename_component(_lang ${_absFile} NAME_WE)
-      set(_updatedPoFile ${CMAKE_CURRENT_BINARY_DIR}/${_currentPoFileName})
-      set(_gmoFile ${CMAKE_CURRENT_BINARY_DIR}/${_lang}.gmo)
+      get_filename_component(_currentPoFileName "${_currentPoFile}" NAME)
+      get_filename_component(_absFile "${_currentPoFile}" ABSOLUTE)
+      get_filename_component(_abs_PATH "${_absFile}" PATH)
+      get_filename_component(_lang "${_absFile}" NAME_WE)
+      set(_updatedPoFile "${CMAKE_CURRENT_BINARY_DIR}/${_currentPoFileName}")
+      set(_gmoFile "${CMAKE_CURRENT_BINARY_DIR}/${_lang}.gmo")
 
       add_custom_command(
-         OUTPUT ${_updatedPoFile}
-         COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE} ${_msgmerge_options} --output-file="${_updatedPoFile}" ${_absFile} ${_absPotFile}
-         DEPENDS ${_absPotFile} ${_absFile}
+         OUTPUT "${_updatedPoFile}"
+         COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE} ${_msgmerge_options} --output-file=${_updatedPoFile} ${_absFile} ${_absPotFile}
+         DEPENDS "${_absPotFile}" "${_absFile}"
+         VERBATIM
       )
 
       add_custom_command(
-         OUTPUT ${_gmoFile}
+         OUTPUT "${_gmoFile}"
          COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} -o ${_gmoFile} ${_updatedPoFile}
-         DEPENDS ${_absPotFile} ${_updatedPoFile}
+         DEPENDS "${_absPotFile}" "${_updatedPoFile}"
+         VERBATIM
       )
 
       if(_parsedArguments_INSTALL_DESTINATION)
 	     if (DEFINED _parsedArguments_INSTALL_COMPONENT)
-            install(FILES ${_gmoFile} COMPONENT ${_parsedArguments_INSTALL_COMPONENT} DESTINATION ${_parsedArguments_INSTALL_DESTINATION}/${_lang}/LC_MESSAGES RENAME ${_potBasename}.mo)
+            install(FILES "${_gmoFile}" COMPONENT "${_parsedArguments_INSTALL_COMPONENT}" DESTINATION "${_parsedArguments_INSTALL_DESTINATION}/${_lang}/LC_MESSAGES" RENAME ${_potBasename}.mo)
          else()
-            install(FILES ${_gmoFile} DESTINATION ${_parsedArguments_INSTALL_DESTINATION}/${_lang}/LC_MESSAGES RENAME ${_potBasename}.mo)
+            install(FILES "${_gmoFile}" DESTINATION "${_parsedArguments_INSTALL_DESTINATION}/${_lang}/LC_MESSAGES" RENAME ${_potBasename}.mo)
          endif()
 	  endif()
-      list(APPEND _gmoFiles ${_gmoFile})
+      list(APPEND _gmoFiles "${_gmoFile}")
 
    endforeach ()
 
@@ -99,7 +101,7 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       add_custom_target(translations)
    endif()
 
-	_GETTEXT_GET_UNIQUE_TARGET_NAME(translations uniqueTargetName)
+   _GETTEXT_GET_UNIQUE_TARGET_NAME(translations uniqueTargetName)
 
    if(_parsedArguments_ALL)
       add_custom_target(${uniqueTargetName} ALL DEPENDS ${_gmoFiles})
@@ -113,7 +115,7 @@ endfunction()
 
 # Must be set to warzone2100.pot, as the filename (without its extension) is used later
 # to form the install .gmo file name (warzone2100.gmo) in each locale directory
-set(_potFile ${CMAKE_CURRENT_BINARY_DIR}/warzone2100.pot)
+set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.pot")
 
 # Configure the xgettext options
 # NOTE: This matches what Makevars "XGETTEXT_OPTIONS" (and other values) provides
@@ -131,7 +133,7 @@ set(_xgettext_option_list --language=C++
 
 # To preserve the same order that the makefile builds use, read in POTFILES.in
 # and build a list of source paths in the same order.
-file(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in potfiles
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in" potfiles
 	REGEX "^[^#].*"
 )
 foreach(potfile ${potfiles})
@@ -146,14 +148,15 @@ ADD_CUSTOM_COMMAND(OUTPUT ${_potFile}
 	COMMAND ${XGETTEXT_CMD} ${_xgettext_option_list} -o ${_potFile} ${source_translatable}
 	DEPENDS ${source_translatable_depends}
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	COMMENT "Extract translatable messages to ${_potFile}")
+	COMMENT "Extract translatable messages to ${_potFile}"
+	VERBATIM)
 
 ADD_CUSTOM_TARGET(pot_file ALL
 	DEPENDS ${_potFile})
 
 # Build the *.gmo files from the *.po files (using the .pot file)
 file (GLOB POFILES *.po)
-GETTEXT_CREATE_TRANSLATIONS_WZ (${_potFile} ALL
+GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
 	INSTALL_DESTINATION locale
 	INSTALL_COMPONENT Languages
 	MSGMERGE_OPTIONS --quiet --no-wrap --width=1
