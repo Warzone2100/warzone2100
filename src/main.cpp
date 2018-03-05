@@ -848,10 +848,6 @@ int realmain(int argc, char *argv[])
 	const char **utfargv = (const char **)argv;
 	wzMain(argc, argv);		// init Qt integration first
 
-#ifdef WZ_OS_MAC
-	cocoaInit();
-#endif
-
 	debug_init();
 	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
 #if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
@@ -1106,12 +1102,7 @@ int realmain(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
-#ifndef WZ_OS_MAC
 	wzMainEventLoop();
-#else // WZ_OS_MAC
-	// On Mac, use special method of launching NSApplication properly
-	cocoaRunApplication(&wzMainEventLoop);
-#endif
 	saveConfig();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion

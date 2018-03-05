@@ -2129,7 +2129,18 @@ void wzMainEventLoop(void)
 				break;
 			}
 		}
+#if !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC)
+		// Ideally, we don't want Qt processing events in addition to SDL - this causes
+		// all kinds of issues (crashes taking screenshots on Windows, freezing on
+		// macOS without a nasty workaround) - but without the following line the script
+		// debugger window won't display properly on Linux.
+		//
+		// Therefore, do not include it on Windows and macOS builds, which does not
+		// impact the script debugger's functionality, but include it (for now) on other
+		// builds until an alternative script debugger UI is available.
+		//
 		appPtr->processEvents();		// Qt needs to do its stuff
+#endif
 		processScreenSizeChangeNotificationIfNeeded();
 		mainLoop();				// WZ does its thing
 		inputNewFrame();			// reset input states

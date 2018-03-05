@@ -602,6 +602,9 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
+	// Set processEventsInterval to -1 because the interpreter should *never* call
+	// QCoreApplication::processEvents() (or SDL builds will break in various ways).
+	engine->setProcessEventsInterval(-1);
 	UDWORD size;
 	char *bytes = nullptr;
 	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
