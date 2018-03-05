@@ -86,8 +86,8 @@ function(COMPRESS_ZIP _outputFile)
 	# Build depends paths
 	set(_depends_PATHS)
 	foreach (_path ${_parsedArguments_PATHS})
-		set(_dependPath ${_workingDirectory}/${_path})
-		list(APPEND _depends_PATHS ${_dependPath})
+		set(_dependPath "${_workingDirectory}/${_path}")
+		list(APPEND _depends_PATHS "${_dependPath}")
 	endforeach()
 
 	if(ZIP_EXECUTABLE MATCHES "7z")
@@ -99,10 +99,11 @@ function(COMPRESS_ZIP _outputFile)
 		endif()
 
 		add_custom_command(
-			OUTPUT ${_outputFile}
+			OUTPUT "${_outputFile}"
 			COMMAND ${ZIP_EXECUTABLE} a -tzip ${_additionalOptions} ${_outputFile} ${_parsedArguments_PATHS}
 			DEPENDS ${_depends_PATHS}
-			WORKING_DIRECTORY ${_workingDirectory}
+			WORKING_DIRECTORY "${_workingDirectory}"
+			VERBATIM
 		)
 	elseif(ZIP_EXECUTABLE MATCHES "zip")
 		set(_additionalOptions)
@@ -112,10 +113,11 @@ function(COMPRESS_ZIP _outputFile)
 		endif()
 
 		add_custom_command(
-			OUTPUT ${_outputFile}
+			OUTPUT "${_outputFile}"
 			COMMAND ${ZIP_EXECUTABLE} -r ${_additionalOptions} ${_outputFile} ${_parsedArguments_PATHS}
 			DEPENDS ${_depends_PATHS}
-			WORKING_DIRECTORY ${_workingDirectory}
+			WORKING_DIRECTORY "${_workingDirectory}"
+			VERBATIM
 		)
 	else()
 		# COMPRESS_ZIP does not (yet) have support for the detected zip executable
