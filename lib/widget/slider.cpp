@@ -217,7 +217,7 @@ void W_SLIDER::highlightLost()
 	dirty = true;
 }
 
-void W_SLIDER::setTip(QString string)
+void W_SLIDER::setTip(std::string string)
 {
 	pTip = string;
 }

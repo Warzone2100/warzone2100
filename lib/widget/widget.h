@@ -33,6 +33,7 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "widgbase.h"
+#include <string>
 
 /***********************************************************************************
  *
@@ -131,7 +132,7 @@ struct W_FORMINIT : public W_INIT
 	W_FORMINIT();
 
 	bool                    disableChildren;
-	QString	                pTip;			///< Tool tip for the form itself
+	std::string	            pTip;			///< Tool tip for the form itself
 };
 
 /** Label initialisation structure */
@@ -140,7 +141,7 @@ struct W_LABINIT : public W_INIT
 	W_LABINIT();
 
 	QString	                pText;			///< label text
-	QString	                pTip;			///< Tool tip for the label.
+	std::string	            pTip;			///< Tool tip for the label.
 	enum iV_fonts           FontID;			///< ID of the IVIS font to use for this widget.
 };
 
@@ -150,7 +151,7 @@ struct W_BUTINIT : public W_INIT
 	W_BUTINIT();
 
 	const char *pText;	///< Button text
-	QString pTip;		///< Tool tip text
+	std::string pTip;	///< Tool tip text
 	enum iV_fonts FontID;	//< ID of the IVIS font to use for this widget.
 };
 
@@ -186,7 +187,7 @@ struct W_BARINIT : public W_INIT
 	int             precision;              ///< Number of places after the decimal point to display, 0 by default.
 	PIELIGHT	sCol;			///< Bar colour
 	PIELIGHT	sMinorCol;		///< Minor bar colour
-	QString         pTip;			///< Tool tip text
+	std::string      pTip;			///< Tool tip text
 };
 
 
@@ -208,7 +209,7 @@ struct W_SLDINIT : public W_INIT
 	UWORD		numStops;		///< Number of stops on the slider
 	UWORD		barSize;		///< Size of the bar
 	UWORD		pos;			///< Initial position of the slider bar
-	QString         pTip;			///< Tip string
+	std::string pTip;			///< Tip string
 };
 
 /***********************************************************************************/
@@ -295,7 +296,7 @@ WZ_DECL_NONNULL(1) void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD U
 WZ_DECL_NONNULL(1) WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /** Set tip string for a widget */
-WZ_DECL_NONNULL(1) void widgSetTip(W_SCREEN *psScreen, UDWORD id, QString pTip);
+WZ_DECL_NONNULL(1) void widgSetTip(W_SCREEN *psScreen, UDWORD id, std::string pTip);
 
 /** Colour numbers */
 enum _w_colour

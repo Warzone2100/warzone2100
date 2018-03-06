@@ -25,6 +25,7 @@
 #define __INCLUDED_LIB_WIDGET_BAR_H__
 
 #include "widget.h"
+#include <string>
 
 
 class W_BARGRAPH : public WIDGET
@@ -37,7 +38,7 @@ public:
 	void highlightLost();
 	void display(int xOffset, int yOffset);
 
-	void setTip(QString string);
+	void setTip(std::string string);
 
 	void setBackgroundColour(PIELIGHT colour)
 	{
@@ -55,8 +56,8 @@ public:
 	PIELIGHT	majorCol;			// Colour for the major bar
 	PIELIGHT	minorCol;			// Colour for the minor bar
 	PIELIGHT        textCol;                        // Colour for the text on the bar.
-	QString         pTip;                           // The tool tip for the graph
-	QString         text;                           // Text on the bar.
+	std::string         pTip;                           // The tool tip for the graph
+	std::string         text;                           // Text on the bar.
 
 //private:
 	PIELIGHT backgroundColour;

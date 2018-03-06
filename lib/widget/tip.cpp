@@ -29,7 +29,10 @@
 #include "widgint.h"
 #include "tip.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
-#include <QtCore/QStringList>
+#include <sstream>
+#include <iostream>
+#include <vector>
+#include <string>
 
 /* Time delay before showing the tool tip */
 #define TIP_PAUSE	200
@@ -60,7 +63,7 @@ static SDWORD		wx, wy, ww, wh;		// Position and size of button to place tip by
 static SDWORD		tx, ty, tw, th;		// Position and size of the tip box
 static SDWORD		fx, fy;				// Position of the text
 static int              lineHeight;
-static QStringList      pTip;                   // Tip text
+static std::vector<std::string>  pTip;	// Tip text
 static WIDGET		*psWidget;			// The button the tip is for
 static enum iV_fonts FontID = font_regular;	// ID for the Ivis Font.
 static PIELIGHT TipColour;
@@ -79,6 +82,18 @@ void widgSetTipColour(PIELIGHT colour)
 	TipColour = colour;
 }
 
+static std::vector<std::string> splitString(const std::string& str, char delimiter)
+{
+	std::vector<std::string> strings;
+	std::istringstream str_stream(str);
+	std::string s;
+	while (getline(str_stream, s, delimiter)) {
+		std::cout << s << std::endl;
+		strings.push_back(s);
+	}
+	return strings;
+}
+
 /*
  * Setup a tool tip.
  * The tip module will then wait until the correct points to
@@ -90,7 +105,7 @@ void widgSetTipColour(PIELIGHT colour)
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-void tipStart(WIDGET *psSource, const QString& pNewTip, iV_fonts NewFontID, int x, int y, int width, int height)
+void tipStart(WIDGET *psSource, const std::string& pNewTip, iV_fonts NewFontID, int x, int y, int width, int height)
 {
 	ASSERT(psSource != nullptr, "Invalid widget pointer");
 
@@ -100,7 +115,7 @@ void tipStart(WIDGET *psSource, const QString& pNewTip, iV_fonts NewFontID, int 
 	my = mouseY();
 	wx = x; wy = y;
 	ww = width; wh = height;
-	pTip = pNewTip.split('\n');
+	pTip = splitString(pNewTip, '\n');
 	psWidget = psSource;
 	FontID = NewFontID;
 	displayCache.wzTip.clear();
@@ -151,7 +166,7 @@ void tipDisplay()
 			displayCache.wzTip.resize(pTip.size());
 			for (int n = 0; n < pTip.size(); ++n)
 			{
-				displayCache.wzTip[n].setText(pTip[n].toUtf8().constData(), FontID);
+				displayCache.wzTip[n].setText(pTip[n], FontID);
 				fw = std::max<int>(fw, displayCache.wzTip[n].width());
 			}
 			tw = fw + TIP_HGAP * 2;

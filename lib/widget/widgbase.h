@@ -30,6 +30,7 @@
 #include <QtCore/QRect>
 #include <vector>
 #include <functional>
+#include <string>
 
 
 /* Forward definitions */
@@ -122,7 +123,7 @@ public:
 	virtual void setFlash(bool enable);
 	virtual QString getString() const;
 	virtual void setString(QString string);
-	virtual void setTip(QString string);
+	virtual void setTip(std::string string);
 
 	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight); // used to handle screen resizing
 
@@ -145,7 +146,7 @@ public:
 	}
 	void setTip(char const *stringUtf8)
 	{
-		setTip(QString::fromUtf8(stringUtf8));
+		setTip((stringUtf8 != nullptr) ? std::string(stringUtf8) : std::string());
 	}
 
 	WIDGET *parent()

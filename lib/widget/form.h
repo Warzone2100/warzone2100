@@ -59,7 +59,7 @@ public:
 	unsigned getState();
 	void setState(unsigned state);
 	void setFlash(bool enable);
-	void setTip(QString string);
+	void setTip(std::string string);
 
 	using WIDGET::setString;
 	using WIDGET::setTip;
@@ -68,7 +68,7 @@ public:
 	bool isHighlighted() const;
 
 	UDWORD		state;					// Button state of the form
-	QString         pTip;                   // Tip for the form
+	std::string pTip;                   // Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function

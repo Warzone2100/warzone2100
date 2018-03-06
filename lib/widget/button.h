@@ -30,6 +30,7 @@
 #include "widgbase.h"
 #include <map>
 #include <functional>
+#include <string>
 
 
 class W_BUTTON : public WIDGET
@@ -62,7 +63,7 @@ public:
 	void setFlash(bool enable);
 	QString getString() const;
 	void setString(QString string);
-	void setTip(QString string);
+	void setTip(std::string string);
 	void unlock();
 
 	void setImages(Images const &images);
@@ -80,7 +81,7 @@ public:
 	UDWORD		state;				// The current button state
 	QString         pText;                          // The text for the button
 	Images          images;                         ///< The images for the button.
-	QString         pTip;                           // The tool tip for the button
+	std::string     pTip;                           // The tool tip for the button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
@@ -95,7 +96,7 @@ class StateButton : public W_BUTTON
 public:
 	StateButton(WIDGET *parent) : W_BUTTON(parent) {}
 	void setState(unsigned state);
-	void setTip(int state, const QString& string);
+	void setTip(int state, const std::string& string);
 	void setTip(int state, char const *stringUtf8);
 	void setImages(int state, Images const &images);
 
@@ -103,7 +104,7 @@ public:
 
 private:
 	int currentState;
-	std::map<int, QString> tips;
+	std::map<int, std::string> tips;
 	std::map<int, Images> imageSets;
 };
 

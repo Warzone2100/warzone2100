@@ -147,7 +147,7 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 	state |= WBUT_HIGHLIGHT;
 
 	// If there is a tip string start the tool tip.
-	if (!pTip.isEmpty())
+	if (!pTip.empty())
 	{
 		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
@@ -188,7 +188,7 @@ void W_FORM::display(int xOffset, int yOffset)
 	}
 }
 
-void W_CLICKFORM::setTip(QString string)
+void W_CLICKFORM::setTip(std::string string)
 {
 	pTip = string;
 }

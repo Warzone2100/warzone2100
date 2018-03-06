@@ -366,7 +366,7 @@ struct RETBUTSTATS
 	int downTime = 0;
 	QString filename;
 	QString filenameDown;
-	QString tip;
+	std::string tip;
 	QString func;
 	bool flashing = false;
 	int flashTime = 0;
@@ -384,7 +384,7 @@ void setReticuleFlash(int ButId, bool flash)
 	}
 }
 
-void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown, QString func, QScriptEngine *engine)
+void setReticuleStats(int ButId, std::string tip, QString filename, QString filenameDown, QString func, QScriptEngine *engine)
 {
 	retbutstats[ButId].tip = tip;
 	retbutstats[ButId].filename = filename;
@@ -401,7 +401,7 @@ void setReticuleStats(int ButId, QString tip, QString filename, QString filename
 		return;
 	}
 
-	if (!retbutstats[ButId].tip.isEmpty())
+	if (!retbutstats[ButId].tip.empty())
 	{
 		retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
 	}
@@ -3803,7 +3803,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			bar->setBackgroundColour(WZCOL_BLACK);
 		}
 		tipString.append(QString::fromUtf8(_("\nCost: %1")).arg(powerCost));
-		button->setTip(tipString);
+		button->setTip(tipString.toUtf8().constData());
 
 		/* If this matches psSelected note the form and button */
 		if (ppsStatsList[i] == psSelected)
