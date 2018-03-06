@@ -35,7 +35,7 @@ TabSelectionStyle::TabSelectionStyle(Image tab, Image tabDown, Image tabHighligh
 {
 	if (!prev.isNull())
 	{
-		scrollTabSize = QSize(prev.width(), prev.height());
+		scrollTabSize = WzSize(prev.width(), prev.height());
 	}
 }
 
@@ -140,8 +140,8 @@ void TabSelectionWidget::doLayoutAll()
 	TabSelectionStyle style;
 	int scrollSpace = 0;
 	tabsAtOnce = tabs();
-	style.tabSize = QSize(width() / tabs(), height());
-	style.scrollTabSize = QSize(0, 0);
+	style.tabSize = WzSize(width() / tabs(), height());
+	style.scrollTabSize = WzSize(0, 0);
 	style.tabGap = 0;
 	for (unsigned n = 0; n < styles.size(); ++n)
 	{
@@ -195,13 +195,13 @@ void ListWidget::widgetLost(WIDGET *widget)
 
 void ListWidget::setChildSize(int width, int height)
 {
-	childSize = QSize(width, height);
+	childSize = WzSize(width, height);
 	doLayoutAll();
 }
 
 void ListWidget::setChildSpacing(int width, int height)
 {
-	spacing = QSize(width, height);
+	spacing = WzSize(width, height);
 	doLayoutAll();
 }
 
