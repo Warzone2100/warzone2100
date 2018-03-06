@@ -29,7 +29,6 @@
 
 #include "widget.h"
 #include <functional>
-#include <QtCore/QSize>
 
 
 struct TabSelectionStyle
@@ -37,8 +36,8 @@ struct TabSelectionStyle
 	TabSelectionStyle() {}
 	TabSelectionStyle(Image tab, Image tabDown, Image tabHighlight, Image prev, Image prevDown, Image prevHighlight, Image next, Image nextDown, Image nextHighlight, int gap);
 
-	QSize tabSize;
-	QSize scrollTabSize;
+	WzSize tabSize;
+	WzSize scrollTabSize;
 	Image tabImage, tabImageDown, tabImageHighlight;
 	Image prevScrollTabImage, prevScrollTabImageDown, prevScrollTabImageHighlight;
 	Image nextScrollTabImage, nextScrollTabImageDown, nextScrollTabImageHighlight;
@@ -145,8 +144,8 @@ private:
 		return childSize.height() + spacing.height();
 	}
 
-	QSize childSize;
-	QSize spacing;
+	WzSize childSize;
+	WzSize spacing;
 	unsigned currentPage_;
 	std::vector<WIDGET *> myChildren;
 	Order order;

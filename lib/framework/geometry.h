@@ -63,6 +63,34 @@ public:
 	Vector3i InvRot(const Vector3i) const;
 };
 
+class WzSize
+{
+public:
+	WzSize(int width, int height)
+	: _width(width), _height(height)
+	{ }
+
+	WzSize()
+	: _width(0), _height(0)
+	{ }
+
+	int height(void) const { return _height; }
+	int width(void) const { return _width; }
+
+	// Returns true if either of the width and height is less than or equal to 0; otherwise returns false.
+	bool isEmpty() const
+	{
+		return _width <= 0 || _height <= 0;
+	}
+
+	void setHeight(int height) { _height = height; }
+	void setWidth(int width) { _width = width; }
+
+private:
+	int _width;
+	int _height;
+};
+
 class WzPoint
 {
 public:
