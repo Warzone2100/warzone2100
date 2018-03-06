@@ -29,6 +29,7 @@
 
 #include "widget.h"
 #include <functional>
+#include <QtCore/QSize>
 
 
 struct TabSelectionStyle

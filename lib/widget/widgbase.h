@@ -27,10 +27,10 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/textdraw.h"
-#include <QtCore/QRect>
 #include <vector>
 #include <functional>
 #include <string>
+#include "lib/framework/geometry.h"
 
 
 /* Forward definitions */
@@ -157,7 +157,7 @@ public:
 	{
 		return childWidgets;
 	}
-	QRect const &geometry() const
+	WzRect const &geometry() const
 	{
 		return dim;
 	}
@@ -179,13 +179,13 @@ public:
 	}
 	void move(int x, int y)
 	{
-		setGeometry(QRect(x, y, width(), height()));
+		setGeometry(WzRect(x, y, width(), height()));
 	}
 	void setGeometry(int x, int y, int w, int h)
 	{
-		setGeometry(QRect(x, y, w, h));
+		setGeometry(WzRect(x, y, w, h));
 	}
-	void setGeometry(QRect const &r);
+	void setGeometry(WzRect const &r);
 
 	void attach(WIDGET *widget);
 	void detach(WIDGET *widget);
@@ -218,7 +218,7 @@ private:
 	WIDGET                 *parentWidget;           ///< Parent widget.
 	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
 
-	QRect                   dim;
+	WzRect                  dim;
 
 	WIDGET(WIDGET const &) = delete;
 	WIDGET &operator =(WIDGET const &) = delete;

@@ -1017,10 +1017,10 @@ void IntFormAnimated::closeAnimateDelete()
 
 void IntFormAnimated::display(int xOffset, int yOffset)
 {
-	QRect aOpen(xOffset + x(), yOffset + y(), width(), height());
-	QRect aClosed(aOpen.x() + aOpen.width() / 4, aOpen.y() + aOpen.height() / 2 - 4, aOpen.width() / 2, 8);
-	QRect aBegin;
-	QRect aEnd;
+	WzRect aOpen(xOffset + x(), yOffset + y(), width(), height());
+	WzRect aClosed(aOpen.x() + aOpen.width() / 4, aOpen.y() + aOpen.height() / 2 - 4, aOpen.width() / 2, 8);
+	WzRect aBegin;
+	WzRect aEnd;
 	switch (currentAction)
 	{
 	case 1: FormOpenCount = 0;  break;
@@ -1072,7 +1072,7 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		}
 	}
 
-	QRect aCur = QRect(aBegin.x()      + (aEnd.x()      - aBegin.x())     * num / den,
+	WzRect aCur = WzRect(aBegin.x()      + (aEnd.x()      - aBegin.x())     * num / den,
 	                   aBegin.y()      + (aEnd.y()      - aBegin.y())     * num / den,
 	                   aBegin.width()  + (aEnd.width()  - aBegin.width()) * num / den,
 	                   aBegin.height() + (aEnd.height() - aBegin.height()) * num / den);
