@@ -108,7 +108,7 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 /* Respond to a mouse moving over a barGraph */
 void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 {
-	if (!pTip.isEmpty())
+	if (!pTip.empty())
 	{
 		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
@@ -124,10 +124,9 @@ void W_BARGRAPH::highlightLost()
 
 static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 {
-	if (!barGraph->text.isEmpty())
+	if (!barGraph->text.empty())
 	{
-		QByteArray utf = barGraph->text.toUtf8();
-		barGraph->wzCachedText.setText(utf.constData(), font_bar);
+		barGraph->wzCachedText.setText(barGraph->text, font_bar);
 		int textWidth = barGraph->wzCachedText.width();
 		Vector2i pos((x0 + x1 - textWidth) / 2, y1);
 		// Add a shadow, to make it visible against any background.
@@ -379,7 +378,7 @@ void W_BARGRAPH::display(int xOffset, int yOffset)
 	}
 }
 
-void W_BARGRAPH::setTip(QString string)
+void W_BARGRAPH::setTip(std::string string)
 {
 	pTip = string;
 }

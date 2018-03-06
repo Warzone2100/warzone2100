@@ -234,7 +234,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int y = yOffset + psWidget->y();
 	char  butString[255];
 
-	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip.toUtf8().constData());
+	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip.c_str());
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 

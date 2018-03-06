@@ -317,7 +317,7 @@ static bool intAddMessageForm(bool playCurrent)
 			psResearch = getResearchForMsg(psMessage->pViewData);
 			if (psResearch)
 			{
-				button->setTip(psResearch->name);
+				button->setTip(psResearch->name.toUtf8().constData());
 			}
 			else
 			{

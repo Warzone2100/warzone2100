@@ -89,7 +89,7 @@ void W_LABEL::display(int xOffset, int yOffset)
 void W_LABEL::highlight(W_CONTEXT *psContext)
 {
 	/* If there is a tip string start the tool tip */
-	if (!pTip.isEmpty())
+	if (!pTip.empty())
 	{
 		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
@@ -99,7 +99,7 @@ void W_LABEL::highlight(W_CONTEXT *psContext)
 /* Respond to the mouse moving off a label */
 void W_LABEL::highlightLost()
 {
-	if (!pTip.isEmpty())
+	if (!pTip.empty())
 	{
 		tipStop(this);
 	}
@@ -116,7 +116,7 @@ void W_LABEL::setString(QString string)
 	dirty = true;
 }
 
-void W_LABEL::setTip(QString string)
+void W_LABEL::setTip(std::string string)
 {
 	pTip = string;
 }

@@ -991,7 +991,7 @@ bool canChangeResolutionLive()
 	return wzSupportsLiveResolutionChanges();
 }
 
-void videoOptionsDisableResolutionButtons(QString toolTip)
+void videoOptionsDisableResolutionButtons(std::string toolTip)
 {
 	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, WBUT_DISABLE);
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION, toolTip);

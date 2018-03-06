@@ -2424,7 +2424,7 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	else if (bestCompletion > 0)
 	{
 		// Waiting for module...
-		psBar->text = QString::fromUtf8("—*—");
+		psBar->text = std::string("—*—");
 	}
 	else if (bestPowerNeeded != researchNotStarted)
 	{

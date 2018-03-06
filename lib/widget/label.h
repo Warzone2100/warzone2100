@@ -27,7 +27,7 @@
 #include "widget.h"
 #include "widgbase.h"
 #include "lib/ivis_opengl/textdraw.h"
-
+#include <string>
 
 struct LabelDisplayCache {
 	WzText wzText;
@@ -46,7 +46,7 @@ public:
 
 	QString getString() const;
 	void setString(QString string);
-	void setTip(QString string);
+	void setTip(std::string string);
 
 	void setFont(iV_fonts font)
 	{
@@ -68,7 +68,7 @@ public:
 
 	QString  aText;         // Text on the label
 	iV_fonts FontID;
-	QString  pTip;          // The tool tip for the button
+	std::string		pTip;          // The tool tip for the button
 
 private:
 	PIELIGHT fontColour;

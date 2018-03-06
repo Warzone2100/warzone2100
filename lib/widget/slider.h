@@ -44,14 +44,14 @@ public:
 	void run(W_CONTEXT *psContext);
 	void display(int xOffset, int yOffset);
 
-	void setTip(QString string);
+	void setTip(std::string string);
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar
 	UWORD		pos;				// Current stop position of the slider
 	UWORD		state;				// Slider state
-	QString         pTip;                           // Tool tip
+	std::string pTip;                           // Tool tip
 };
 
 #endif // __INCLUDED_LIB_WIDGET_SLIDER_H__

@@ -102,7 +102,7 @@ void W_BUTTON::setString(QString string)
 	dirty = true;
 }
 
-void W_BUTTON::setTip(QString string)
+void W_BUTTON::setTip(std::string string)
 {
 	pTip = string;
 }
@@ -128,7 +128,7 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 	}
 
 	/* Kill the tip if there is one */
-	if (!pTip.isEmpty())
+	if (!pTip.empty())
 	{
 		tipStop(this);
 	}
@@ -174,7 +174,7 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 		AudioCallback(HilightAudioID);
 	}
 	/* If there is a tip string start the tool tip */
-	if (!pTip.isEmpty())
+	if (!pTip.empty())
 	{
 		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
@@ -186,7 +186,7 @@ void W_BUTTON::highlightLost()
 {
 	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
 	dirty = true;
-	if (!pTip.isEmpty())
+	if (!pTip.empty())
 	{
 		tipStop(this);
 	}
@@ -291,14 +291,14 @@ void StateButton::setState(unsigned state)
 	{
 		W_BUTTON::setImages(image->second);
 	}
-	std::map<int, QString>::const_iterator tip = tips.find(state);
+	std::map<int, std::string>::const_iterator tip = tips.find(state);
 	if (tip != tips.end())
 	{
 		W_BUTTON::setTip(tip->second);
 	}
 }
 
-void StateButton::setTip(int state, const QString& string)
+void StateButton::setTip(int state, const std::string& string)
 {
 	tips[state] = string;
 	if (currentState == state)
@@ -309,7 +309,7 @@ void StateButton::setTip(int state, const QString& string)
 
 void StateButton::setTip(int state, char const *stringUtf8)
 {
-	setTip(state, QString::fromUtf8(stringUtf8));
+	setTip(state, (stringUtf8 != nullptr) ? std::string(stringUtf8) : std::string());
 }
 
 void StateButton::setImages(int state, Images const &images)

@@ -2689,7 +2689,7 @@ void addPlayerBox(bool players)
 				}
 				if (NetPlay.players[i].allocated && !getMultiStats(i).identity.empty())
 				{
-					if (!sButInit.pTip.isEmpty())
+					if (!sButInit.pTip.empty())
 					{
 						sButInit.pTip += "\n";
 					}
@@ -4698,7 +4698,7 @@ bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	WzMultiButton *button = new WzMultiButton(widgGetFromID(screen, formid));
 	button->id = id;
 	button->setGeometry(x, y, width, height);
-	button->setTip(QString::fromUtf8(tipres));
+	button->setTip((tipres != nullptr) ? std::string(tipres) : std::string());
 	button->imNormal = Image(FrontImages, norm);
 	button->imDown = Image(FrontImages, down);
 	button->doHighlight = hi;

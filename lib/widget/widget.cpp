@@ -551,13 +551,13 @@ void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData)
 	}
 }
 
-void WIDGET::setTip(QString)
+void WIDGET::setTip(std::string)
 {
 	ASSERT(false, "Can't set widget type %u's tip.", type);
 }
 
 /* Set tip string for a widget */
-void widgSetTip(W_SCREEN *psScreen, UDWORD id, QString pTip)
+void widgSetTip(W_SCREEN *psScreen, UDWORD id, std::string pTip)
 {
 	WIDGET *psWidget = widgGetFromID(psScreen, id);
 
