@@ -184,7 +184,7 @@ void WIDGET::deleteLater()
 	widgetDeletionQueue.push_back(this);
 }
 
-void WIDGET::setGeometry(QRect const &r)
+void WIDGET::setGeometry(WzRect const &r)
 {
 	if (dim == r)
 	{
