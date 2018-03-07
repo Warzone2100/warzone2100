@@ -484,7 +484,7 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, i
 	return pieImage;
 }
 
-void iV_DrawImage2(const QString &filename, float x, float y, float width, float height)
+void iV_DrawImage2(const WzString &filename, float x, float y, float width, float height)
 {
 	ImageDef *image = iV_GetImage(filename);
 	const GLfloat invTextureSize = image->invTextureSize;

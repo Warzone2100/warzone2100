@@ -3336,8 +3336,8 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	int button = context->argument(0).toInt32();
 	SCRIPT_ASSERT(context, button >= 0 && button <= 6, "Invalid button %d", button);
 	std::string tip = std::string(context->argument(1).toString().toUtf8().constData());
-	QString file = context->argument(2).toString();
-	QString fileDown = context->argument(3).toString();
+	std::string file = std::string(context->argument(2).toString().toUtf8().constData());
+	std::string fileDown = std::string(context->argument(3).toString().toUtf8().constData());
 	QString func;
 	if (context->argumentCount() > 4)
 	{

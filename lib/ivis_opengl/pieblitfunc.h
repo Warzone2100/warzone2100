@@ -35,6 +35,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/vector.h"
+#include "lib/framework/wzstring.h"
 #include "glm/core/type.hpp"
 #include "piedef.h"
 #include "ivisdef.h"
@@ -194,7 +195,7 @@ private:
 void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2f offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
 void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
-void iV_DrawImage2(const QString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
+void iV_DrawImage2(const WzString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), bool enableHorizontalTilingSeamWorkaround = false, BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
