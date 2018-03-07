@@ -833,7 +833,7 @@ static bool OptionsInet()			//internet options
 	sLabInit.y		= 10;
 	sLabInit.width	= CON_SETTINGSWIDTH;
 	sLabInit.height = 20;
-	sLabInit.pText	= _("IP Address or Machine Name");
+	sLabInit.pText	= WzString::fromUtf8(_("IP Address or Machine Name"));
 	widgAddLabel(psConScreen, &sLabInit);
 
 
@@ -1638,7 +1638,7 @@ static void addBlueForm(UDWORD parent, UDWORD id, const char *txt, UDWORD x, UDW
 		sLabInit.y		= 4;
 		sLabInit.width	= 80;
 		sLabInit.height = 20;
-		sLabInit.pText	= txt;
+		sLabInit.pText	= WzString::fromUtf8(txt);
 		widgAddLabel(psWScreen, &sLabInit);
 	}
 	return;
@@ -3813,7 +3813,7 @@ void runMultiOptions()
 
 		LEVEL_DATASET *mapData;
 		bool isHoverPreview;
-		QString sTemp;
+		WzString sTemp;
 		if (runMultiRequester(id, &id, &sTemp, &mapData, &isHoverPreview))
 		{
 			Sha256 oldGameHash;
@@ -3821,8 +3821,8 @@ void runMultiOptions()
 			switch (id)
 			{
 			case MULTIOP_PNAME:
-				sstrcpy(sPlayer, sTemp.toUtf8().constData());
-				widgSetString(psWScreen, MULTIOP_PNAME, sTemp.toUtf8().constData());
+				sstrcpy(sPlayer, sTemp.toUtf8().c_str());
+				widgSetString(psWScreen, MULTIOP_PNAME, sTemp.toUtf8().c_str());
 
 				removeWildcards((char *)sPlayer);
 

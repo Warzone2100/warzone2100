@@ -50,10 +50,9 @@ W_LABEL::W_LABEL(WIDGET *parent)
 
 void W_LABEL::display(int xOffset, int yOffset)
 {
-	QByteArray text = aText.toUtf8();
 	int fx;
 
-	displayCache.wzText.setText(text.constData(), FontID);
+	displayCache.wzText.setText(aText.toUtf8(), FontID);
 
 	if (style & WLAB_ALIGNCENTRE)
 	{
@@ -105,12 +104,12 @@ void W_LABEL::highlightLost()
 	}
 }
 
-QString W_LABEL::getString() const
+WzString W_LABEL::getString() const
 {
 	return aText;
 }
 
-void W_LABEL::setString(QString string)
+void W_LABEL::setString(WzString string)
 {
 	aText = string;
 	dirty = true;

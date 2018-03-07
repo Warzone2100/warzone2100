@@ -274,7 +274,7 @@ bool intAddTransporterContents()
 		sLabInit.y = 0;
 		sLabInit.width = 16;
 		sLabInit.height = 16;
-		sLabInit.pText = "00/10";
+		sLabInit.pText = WzString::fromUtf8("00/10");
 		sLabInit.pCallback = intUpdateTransCapacity;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -358,7 +358,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	sLabInit.y = 0;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
-	sLabInit.pText = "00/10";
+	sLabInit.pText = WzString::fromUtf8("00/10");
 	sLabInit.pCallback = intUpdateTransCapacity;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -657,7 +657,7 @@ bool transporterIsEmpty(const DROID *psTransporter)
 	        || psTransporter->psGroup->psList == psTransporter);
 }
 
-static void intSetTransCapacityLabel(QString &text)
+static void intSetTransCapacityLabel(WzString &text)
 {
 	if (psCurrTransporter)
 	{
@@ -668,7 +668,7 @@ static void intSetTransCapacityLabel(QString &text)
 
 		char tmp[40];
 		ssprintf(tmp, "%02d/10", capacity);
-		text = QString::fromUtf8(tmp);
+		text = WzString::fromUtf8(tmp);
 	}
 }
 

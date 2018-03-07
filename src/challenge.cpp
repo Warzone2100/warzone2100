@@ -144,7 +144,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().c_str());
 
 		if (data.cache.fullText != butString)
 		{
@@ -213,7 +213,7 @@ bool addChallenges()
 	sLabInit.y		= 3;
 	sLabInit.width		= CHALLENGE_W - (2 * CHALLENGE_HGAP);	//CHALLENGE_W;
 	sLabInit.height		= CHALLENGE_BANNER_DEPTH;		//This looks right -Q
-	sLabInit.pText		= "Challenge";
+	sLabInit.pText		= WzString::fromUtf8("Challenge");
 	widgAddLabel(psRequestScreen, &sLabInit);
 
 	// add cancel.
@@ -329,7 +329,7 @@ bool addChallenges()
 
 		/* Add button */
 		button->pTip = sSlotTips[slotCount];
-		button->pText = sSlotCaps[slotCount];
+		button->pText = WzString::fromUtf8(sSlotCaps[slotCount]);
 		assert(button->pUserData != nullptr);
 		static_cast<DisplayLoadSlotData *>(button->pUserData)->filename = sSlotFile[slotCount];
 		slotCount++;		// go to next button...

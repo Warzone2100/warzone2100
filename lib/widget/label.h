@@ -44,8 +44,8 @@ public:
 	void highlightLost();
 	void display(int xOffset, int yOffset);
 
-	QString getString() const;
-	void setString(QString string);
+	WzString getString() const;
+	void setString(WzString string);
 	void setTip(std::string string);
 
 	void setFont(iV_fonts font)
@@ -66,7 +66,7 @@ public:
 	using WIDGET::setString;
 	using WIDGET::setTip;
 
-	QString  aText;         // Text on the label
+	WzString aText;         // Text on the label
 	iV_fonts FontID;
 	std::string		pTip;          // The tool tip for the button
 

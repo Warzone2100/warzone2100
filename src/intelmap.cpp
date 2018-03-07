@@ -239,7 +239,7 @@ bool intAddIntelMap()
 			sLabInit.y = INTMAP_LABELY + PAUSEMESSAGE_YOFFSET;
 			sLabInit.width = INTMAP_LABELWIDTH;
 			sLabInit.height = INTMAP_LABELHEIGHT;
-			sLabInit.pText = _("PAUSED");
+			sLabInit.pText = WzString::fromUtf8(_("PAUSED"));
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
 				return false;
@@ -453,7 +453,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	ASSERT_OR_RETURN(false, psResearch != nullptr, "Research not found");
 	//sLabInit.pText=psResearch->pName;
-	sLabInit.pText = psResearch->name;
+	sLabInit.pText = WzString::fromUtf8(psResearch->name.toUtf8().constData());
 
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))

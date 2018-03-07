@@ -2972,7 +2972,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sLabInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(OBJ_TEXTX, OBJ_T1TEXTY, 16, 16);
 	});
-	sLabInit.pText = "BUG! (a)";
+	sLabInit.pText = WzString::fromUtf8("BUG! (a)");
 
 	W_LABINIT sLabInitCmdFac;
 	sLabInitCmdFac.id = IDOBJ_CMDFACSTART;
@@ -2981,7 +2981,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sLabInitCmdFac.y = OBJ_T2TEXTY;
 	sLabInitCmdFac.width = 16;
 	sLabInitCmdFac.height = 16;
-	sLabInitCmdFac.pText = "BUG! (b)";
+	sLabInitCmdFac.pText = WzString::fromUtf8("BUG! (b)");
 
 	W_LABINIT sLabInitCmdFac2;
 	sLabInitCmdFac2.id = IDOBJ_CMDVTOLFACSTART;
@@ -2990,7 +2990,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sLabInitCmdFac2.y = OBJ_T3TEXTY;
 	sLabInitCmdFac2.width = 16;
 	sLabInitCmdFac2.height = 16;
-	sLabInitCmdFac2.pText = "BUG! (c)";
+	sLabInitCmdFac2.pText = WzString::fromUtf8("BUG! (c)");
 
 	W_LABINIT sLabIntObjText;
 	sLabIntObjText.id = IDOBJ_FACTORYSTART;
@@ -2999,7 +2999,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sLabIntObjText.y = OBJ_B1TEXTY;
 	sLabIntObjText.width = 16;
 	sLabIntObjText.height = 16;
-	sLabIntObjText.pText = "xxx/xxx - overrun";
+	sLabIntObjText.pText = WzString::fromUtf8("xxx/xxx - overrun");
 
 	W_LABINIT sLabInitCmdExp;
 	sLabInitCmdExp.id = IDOBJ_CMDEXPSTART;
@@ -3008,7 +3008,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sLabInitCmdExp.y = STAT_POWERBARY;
 	sLabInitCmdExp.width = 16;
 	sLabInitCmdExp.height = 16;
-	sLabInitCmdExp.pText = "@@@@@ - overrun";
+	sLabInitCmdExp.pText = WzString::fromUtf8("@@@@@ - overrun");
 
 	W_LABINIT sAllyResearch;
 	sAllyResearch.id = IDOBJ_ALLYRESEARCHSTART;
@@ -3462,7 +3462,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
-	sLabInit.pText = "BUG! (d)";
+	sLabInit.pText = WzString::fromUtf8("BUG! (d)");
 
 	if (psStats)
 	{
