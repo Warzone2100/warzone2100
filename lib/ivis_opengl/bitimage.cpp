@@ -27,11 +27,11 @@
 
 #include <set>
 #include <algorithm>
-#include <QtCore/QHash>
-#include <QtCore/QString>
+#include <unordered_map>
+#include <vector>
 
-static QHash<QString, ImageDef *> images;
-static QList<IMAGEFILE *> files;
+static std::unordered_map<WzString, ImageDef *> images;
+static std::vector<IMAGEFILE *> files;
 
 struct ImageMergeRectangle
 {
@@ -64,14 +64,15 @@ struct ImageMerge
 	std::vector<int> pages;  // List of page sizes, normally all pageSize, unless an image is too large for a normal page.
 };
 
-ImageDef *iV_GetImage(const QString &filename)
+ImageDef *iV_GetImage(const WzString &filename)
 {
-	if (!images.contains(filename))
+	auto it = images.find(filename);
+	if (it == images.end())
 	{
-		debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().constData());
+		debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().c_str());
 		return nullptr;
 	}
-	return images.value(filename);
+	return it->second;
 }
 
 // Used to provide empty space between sprites arranged on the page, to avoid display glitches when scaling + drawing
@@ -224,7 +225,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		ptr += temp;
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
 
-		images.insert(tmpName, ImageDef);
+		images.insert(std::make_pair(WzString::fromUtf8(tmpName), ImageDef));
 	}
 	free(pFileData);
 
@@ -309,7 +310,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		imageFile->imageDefs[i].invTextureSize = 1.f / imageFile->pages[imageFile->imageDefs[i].TPageID].size;
 	}
 
-	files.append(imageFile);
+	files.push_back(imageFile);
 
 	return imageFile;
 }

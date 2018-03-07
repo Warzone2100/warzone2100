@@ -120,4 +120,18 @@ private:
 	std::string _utf8String;
 };
 
+namespace std
+{
+	template <>
+	struct hash<WzString>
+	{
+		typedef std::size_t result_type;
+		result_type operator()( const WzString& k ) const
+		{
+			// Simply use the hash of the internal _utf8String
+			return std::hash<std::string>{}(k.toUtf8());
+		}
+	};
+}
+
 #endif // _LIB_FRAMEWORK_WZSTRING_H

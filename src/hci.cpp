@@ -364,8 +364,8 @@ static SDWORD intNumSelectedDroids(UDWORD droidType);
 struct RETBUTSTATS
 {
 	int downTime = 0;
-	QString filename;
-	QString filenameDown;
+	WzString filename;
+	WzString filenameDown;
 	std::string tip;
 	QString func;
 	bool flashing = false;
@@ -384,11 +384,11 @@ void setReticuleFlash(int ButId, bool flash)
 	}
 }
 
-void setReticuleStats(int ButId, std::string tip, QString filename, QString filenameDown, QString func, QScriptEngine *engine)
+void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, QString func, QScriptEngine *engine)
 {
 	retbutstats[ButId].tip = tip;
-	retbutstats[ButId].filename = filename;
-	retbutstats[ButId].filenameDown = filenameDown;
+	retbutstats[ButId].filename = WzString::fromUtf8(filename.c_str());
+	retbutstats[ButId].filenameDown = WzString::fromUtf8(filenameDown.c_str());
 	retbutstats[ButId].downTime = 0;
 	retbutstats[ButId].flashing = false;
 	retbutstats[ButId].flashTime = 0;
