@@ -25,6 +25,7 @@ function conCanHelp(mydroid, bx, by)
 		&& mydroid.order !== DORDER_LINEBUILD
 		&& mydroid.order !== DORDER_RECYCLE
 		&& mydroid.order !== DORDER_DEMOLISH
+		&& !droidNeedsRepair(mydroid.id, 80)
 		&& droidCanReach(mydroid, bx, by)
 	);
 }
@@ -39,7 +40,7 @@ function findIdleTrucks(obj)
 		obj = BASE;
 	}
 
-	for (var i = 0, d = builders.length; i < d; i++)
+	for (var i = 0, d = builders.length; i < d; ++i)
 	{
 		if (conCanHelp(builders[i], obj.x, obj.y))
 		{
@@ -56,7 +57,7 @@ function demolishThis(object)
 	var success = false;
 	var droidList = findIdleTrucks(object);
 
-	for (var i = 0, d = droidList.length; i < d; i++)
+	for (var i = 0, d = droidList.length; i < d; ++i)
 	{
 		if(orderDroidObj(droidList[i], DORDER_DEMOLISH, object))
 		{
@@ -83,7 +84,7 @@ function grabTrucksAndBuild(structure, maxBlockingTiles)
 	var droidList = findIdleTrucks();
 	var found = false;
 
-	for (var i = 0, d = droidList.length; i < d; i++)
+	for (var i = 0, d = droidList.length; i < d; ++i)
 	{
 		var result = pickStructLocation(droidList[i], structure, BASE.x, BASE.y, maxBlockingTiles);
 		if (result)
@@ -138,17 +139,17 @@ function lookForOil()
 	//log("looking for oil... " + oils.length + " available");
 
 	oils = oils.sort(sortByDistToBase); // grab closer oils first
-	for (var i = 0, oilLen = oils.length; i < oilLen; i++)
+	for (var i = 0, oilLen = oils.length; i < oilLen; ++i)
 	{
-		for (var j = 0, drLen = droids.length; j < drLen; j++)
+		for (var j = 0, drLen = droids.length; j < drLen; ++j)
 		{
 			var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
 			var unsafe = enumRange(oils[i].x, oils[i].y, 9, ENEMIES, false);
 			unsafe = unsafe.filter(isUnsafeEnemyObject);
 			if (droidCanReach(droids[j], oils[i].x, oils[i].y)
 				&& !defined(unsafe[0])
-				&& droids[j].order != DORDER_BUILD  // but can snatch from HELPBUILD
-				&& droids[j].order != DORDER_LINEBUILD
+				&& droids[j].order !== DORDER_BUILD  // but can snatch from HELPBUILD
+				&& droids[j].order !== DORDER_LINEBUILD
 				&& bestDist > dist
 				&& !droids[j].busy)
 			{
@@ -173,7 +174,7 @@ function lookForOil()
 // Build anti air rockets. TODO: demolish obsolete antiair structures.
 function buildAntiAir()
 {
-	const MAX_DEFENSES = countStruct(FACTORY) * 2;
+	const MAX_DEFENSES = countStruct(FACTORY) * 3;
 	const SAM_SITES = ["P0-AASite-SAM2", "P0-AASite-SAM1", "P0-AASite-Sunburst"];
 	var antiAir = enumStruct(me).filter(function(obj) { return obj.canHitAir; });
 
@@ -207,7 +208,7 @@ function returnDefense(type)
 	}
 
 	//Choose a random electronic warfare defense if possible.
-	if (random(101) < ELECTRONIC_CHANCE)
+	if (random(100) < ELECTRONIC_CHANCE)
 	{
 		var avail = 0;
 		for (var i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
@@ -372,14 +373,19 @@ function buildFundamentals2()
 		return;
 	}
 
-	if (!researchDone && countStruct(RES_LAB) < 5 && grabTrucksAndBuild(RES_LAB, 0))
+	//Build VTOL pads if needed
+	var needVtolPads = 2 * countStruct(VTOL_PAD) < enumGroup(vtolGroup).length;
+	if (needVtolPads && grabTrucksAndBuild(VTOL_PAD, 2))
 	{
 		return;
 	}
 
-	//Build VTOL pads if needed
-	var needVtolPads = 2 * countStruct(VTOL_PAD) < enumGroup(vtolGroup).length;
-	if (needVtolPads && grabTrucksAndBuild(VTOL_PAD, 2))
+	if (!researchDone && countStruct(RES_LAB) < 4 && grabTrucksAndBuild(RES_LAB, 0))
+	{
+		return;
+	}
+
+	if (!researchDone && countStruct(REPAIR_FACILITY) < 2 && grabTrucksAndBuild(REPAIR_FACILITY, 0))
 	{
 		return;
 	}
@@ -389,7 +395,18 @@ function buildFundamentals2()
 		return;
 	}
 
-	if (factoryBuildOrder())
+	if (random(2) && factoryBuildOrder())
+	{
+		return;
+	}
+
+	var res = countStruct(RES_LAB);
+	if (!researchDone && res < 5 && res < countStruct(POW_GEN) + 1 && grabTrucksAndBuild(RES_LAB, 0))
+	{
+		return;
+	}
+
+	if (!countStruct(UPLINK) && grabTrucksAndBuild(UPLINK, 0))
 	{
 		return;
 	}
@@ -410,9 +427,9 @@ function buildFundamentals2()
 		}
 	}
 
-	if (!countStruct(UPLINK) && grabTrucksAndBuild(UPLINK, 0))
+	if (random(2) && countStruct(REPAIR_FACILITY) < 5)
 	{
-		return;
+		grabTrucksAndBuild(REPAIR_FACILITY);
 	}
 
 	if (buildDefenses())
@@ -432,7 +449,7 @@ function checkResearchCompletion()
 		//log("Done researching - salvage unusable buildings");
 		researchDone = true; // and do not rebuild them
 		var lablist = enumStruct(me, RES_LAB);
-		for (var i = 0, l = lablist.length; i < l; i++)
+		for (var i = 0, l = lablist.length; i < l; ++i)
 		{
 			if(demolishThis(lablist[i]))
 			{
@@ -483,7 +500,7 @@ function maintenance()
 	{
 		//log("Found a structure to upgrade");
 		var builders = findIdleTrucks(struct);
-		for (var j = 0, t = builders.length; j < t; j++)
+		for (var j = 0, t = builders.length; j < t; ++j)
 		{
 			mydroid = builders[j];
 			if (conCanHelp(mydroid, struct.x, struct.y))

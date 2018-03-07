@@ -18,6 +18,40 @@ function vtolReady(vtolID)
 	return true;
 }
 
+//Does a droid need to repair.
+function droidNeedsRepair(droidID, percent)
+{
+	var dr = getObject(DROID, me, droidID);
+	if (dr === null)
+	{
+		return true; //lets say its busy then
+	}
+	if (!defined(percent))
+	{
+		if (dr.propulsion === "hover01")
+		{
+			percent = 80;
+		}
+		else
+		{
+			percent = 65;
+		}
+	}
+
+	if (dr.order === DORDER_RTR && dr.health < 100)
+	{
+		return true;
+	}
+
+	if (dr.order !== DORDER_RTR && countStruct(REPAIR_FACILITY) > 0 && dr.health < percent)
+	{
+		orderDroid(dr, DORDER_RTR);
+		return true;
+	}
+
+	return false;
+}
+
 //Return all enemy players that are still alive. An optional argument can be
 //passed to determine if that specific player is alive or not.
 function getAliveEnemyPlayers(player)
@@ -33,13 +67,13 @@ function getAliveEnemyPlayers(player)
 	}
 
 	var numEnemies = [];
-	for (var i = 0; i < maxPlayers; i++)
+	for (var i = 0; i < maxPlayers; ++i)
 	{
-		if (!allianceExistsBetween(me, i) && i !== me)
+		if (i !== me && !allianceExistsBetween(i, me))
 		{
 			//Are they alive (have factories and constructs)
 			//Even if they still have attack droids, eventAttacked() will find them anyway if they do attack.
-			if (countStruct(FACTORY, i) + countStruct(CYBORG_FACTORY, i) + countDroid(DROID_CONSTRUCT, i) > 0)
+			if ((countStruct(FACTORY, i) + countStruct(CYBORG_FACTORY, i) + countDroid(DROID_CONSTRUCT, i)) > 0)
 			{
 				numEnemies.push(i); // count 'em, then kill 'em :)
 			}
@@ -118,7 +152,7 @@ function getCurrentEnemy()
 //Attack the current selected enemy.
 function attackEnemy()
 {
-	const MIN_GROUP_SIZE = 8;
+	const MIN_GROUP_SIZE = 9;
 	const MIN_VTOL_SIZE = 5;
 
 	if (groupSizes[attackGroup] > MIN_GROUP_SIZE)
@@ -175,7 +209,7 @@ function attackEnemy()
 		for (var j = 0, a = attackers.length; j < a; ++j)
 		{
 			var tank = attackers[j];
-			if (tank.order !== DORDER_RECYCLE && random(101) < 50)
+			if (tank.order !== DORDER_RECYCLE && !droidNeedsRepair(tank.id) && random(100) < 50)
 			{
 				orderDroidLoc(tank, DORDER_SCOUT, loc.x, loc.y);
 			}
@@ -185,7 +219,7 @@ function attackEnemy()
 		var vtolLen = vtols.length;
 		if (vtolLen > MIN_VTOL_SIZE)
 		{
-			for (var j = 0; j < vtolLen; j++)
+			for (var j = 0; j < vtolLen; ++j)
 			{
 				var vt = vtols[j];
 				if (vtolReady(vt.id))
@@ -211,8 +245,12 @@ function isHoverMap()
 			var temp = 0;
 			for (var t = 0; t < maxPlayers; ++t)
 			{
-				if(!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
+				var b1 = startPositions[i];
+				var b2 = startPositions[t];
+				if(!propulsionCanReach("hover01", b1.x, b1.y, b2.x, b2.y))
+				{
 					temp = temp + 1;
+				}
 			}
 
 			if (temp !== maxPlayers - 1)

@@ -11,23 +11,89 @@ function eventDroidBuilt(droid, struct)
 	}
 	else if (droid.droidType === DROID_CONSTRUCT)
 	{
-		if (enumGroup(oilBuilders).length < 3)
+		if (enumGroup(baseBuilders).length < 3)
 		{
-			groupAdd(oilBuilders, droid);
+			groupAdd(baseBuilders, droid);
 		}
 		else
 		{
-			groupAdd(baseBuilders, droid);
+			groupAdd(oilBuilders, droid);
 		}
 		checkLocalJobs();
 	}
 }
 
-function eventGameInit()
+function eventAttacked(victim, attacker)
 {
+	const MIN_GROUND_UNITS = 9;
+	const MIN_VTOL_UNITS = 4;
+
+	// TBD, for now -- SEND EVERYONE!!!
+	if (attacker && victim && attacker.player !== me && !allianceExistsBetween(attacker.player, me))
+	{
+		if (attacker.type === DROID && isVTOL(attacker))
+		{
+			return; //ignore vtols
+		}
+
+		if (victim.type === DROID && victim.player === me)
+		{
+			droidNeedsRepair(victim.id);
+		}
+
+		var enemyNumber = getCurrentEnemy();
+		if (!defined(enemyNumber))
+		{
+			return;
+		}
+
+		var loc = {x: attacker.x, y: attacker.y };
+		//Set this player as the current enemy
+		if (enemyNumber !== attacker.player)
+		{
+			currentEnemy = attacker.player; //Focus on this player
+		}
+
+		//log("Defend!");
+		var defenders = enumGroup(attackGroup);
+		var defLen = defenders.length;
+		if (defLen > MIN_GROUND_UNITS)
+		{
+			for (var i = 0; i < defLen; ++i)
+			{
+				var dr = defenders[i];
+				if (dr.order !== DORDER_RECYCLE && !droidNeedsRepair(dr.id))
+				{
+					orderDroidLoc(dr, DORDER_SCOUT, loc.x, loc.y);
+				}
+			}
+		}
+
+		var vtols = enumGroup(vtolGroup);
+		var vtolLen = vtols.length;
+		if (vtolLen > MIN_VTOL_UNITS)
+		{
+			for (var j = 0; j < vtolLen; ++j)
+			{
+				var vt = vtols[j];
+				if (vtolReady(vt.id))
+				{
+					orderDroidLoc(vt, DORDER_SCOUT, loc.x, loc.y);
+				}
+			}
+		}
+	}
+}
+
+function eventStartLevel()
+{
+	//log("== level started ==");
+
+	//setup groups
 	attackGroup = newGroup();
 	vtolGroup = newGroup();
-
+	baseBuilders = newGroup();
+	oilBuilders = newGroup();
 	enumDroid(me).forEach(function(droid) {
 		if (droid.droidType !== DROID_CONSTRUCT)
 		{
@@ -35,10 +101,7 @@ function eventGameInit()
 		}
 	});
 
-	baseBuilders = newGroup();
-	oilBuilders = newGroup();
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-
 	for (var i = 0, l = cons.length; i < l; ++i)
 	{
 		if (l < MIN_TRUCKS)
@@ -57,78 +120,18 @@ function eventGameInit()
 			}
 		}
 	}
-}
 
-function eventAttacked(victim, attacker)
-{
-	const MIN_GROUND_UNITS = 6;
-	const MIN_VTOL_UNITS = 4;
-
-	// TBD, for now -- SEND EVERYONE!!!
-	if (attacker && victim && attacker.player !== me && !allianceExistsBetween(attacker.player, me))
-	{
-		if (attacker.type === DROID && isVTOL(attacker))
-		{
-			return; //ignore vtols
-		}
-
-		var currEnemy = getCurrentEnemy();
-		if (!defined(currEnemy))
-		{
-			return;
-		}
-
-		var loc = {x: attacker.x, y: attacker.y };
-		//Set this player as the current enemy
-		if (currEnemy !== attacker.player)
-		{
-			currentEnemy = attacker; //Focus on this player
-		}
-
-		//log("Defend!");
-		var defenders = enumGroup(attackGroup);
-		var defLen = defenders.length;
-		if (defLen > MIN_GROUND_UNITS)
-		{
-			for (var i = 0; i < defLen; i++)
-			{
-				if (defenders[i].order != DORDER_RECYCLE)
-				{
-					orderDroidLoc(defenders[i], DORDER_SCOUT, loc.x, loc.y);
-				}
-			}
-		}
-
-		var vtols = enumGroup(vtolGroup);
-		var vtolLen = vtols.length;
-		if (vtolLen > MIN_VTOL_UNITS)
-		{
-			for (var j = 0; j < vtolLen; j++)
-			{
-				var vt = vtols[j];
-				if (vtolReady(vt.id))
-				{
-					orderDroidLoc(vt, DORDER_SCOUT, loc.x, loc.y);
-				}
-			}
-		}
-	}
-}
-
-function eventStartLevel()
-{
-	//log("== level started ==");
 	recycleDroidsForHover();
 	buildFundamentals();
 	isSeaMap = isHoverMap();
 
 	// Set the timer call randomly so as not to compute on the same tick if more than one semperfi is on map.
-	setTimer("buildFundamentals", 1500 + ((1 + random(3)) * random(60))); // build stuff
-	setTimer("lookForOil", 2000 + ((1 + random(4)) * random(30)));
-	setTimer("findResearch", 2500 + ((1 + random(4)) * random(40)));
-	setTimer("produce", 3000 + ((1 + random(4)) * random(70)));
+	setTimer("findResearch", 400 + ((1 + random(4)) * random(40)));
+	setTimer("produce", 1000 + ((1 + random(4)) * random(70)));
+	setTimer("buildFundamentals", 1300 + ((1 + random(3)) * random(60))); // build stuff
+	setTimer("lookForOil", 1600 + ((1 + random(4)) * random(30)));
+	setTimer("attackEnemy", 2000 + ((1 + random(4)) * random(100)));
 	setTimer("recycleDroidsForHover", 10000 + ((1 + random(4)) * random(100)));
-	setTimer("attackEnemy", 20000 + ((1 + random(4)) * random(100)));
 }
 
 function eventGroupLoss(droid, group, size)
@@ -153,10 +156,10 @@ function eventStructureBuilt(structure, droid)
 		return;
 	}
 
-	var defenses = enumRange(droid.x, droid.y, 10, me, false).filter(function (obj) {
+	var defenses = enumRange(droid.x, droid.y, 5, me, false).filter(function (obj) {
 		return (obj.type === STRUCTURE && obj.stattype === DEFENSE);
 	});
-	var chance = (structure.stattype === RESOURCE_EXTRACTOR || random(101) < 10);
+	var chance = (structure.stattype === RESOURCE_EXTRACTOR || random(100) < 20);
 
 	//Build a defense structure here.
 	if (chance || (defenses.length < MIN_DEFENSES))
@@ -181,13 +184,17 @@ function eventBeacon(x, y, from, to, message)
 		var attackers = enumGroup(attackGroup).filter(function(dr) {
 			return droidCanReach(dr, x, y);
 		});
-		var attackLen = attackers.length;
 
+		var attackLen = attackers.length;
 		if (attackLen > MIN_ATTACKERS)
 		{
-			for (var i = 0; i < attackLen; i++)
+			for (var i = 0; i < attackLen; ++i)
 			{
-				orderDroidLoc(attackers[i], DORDER_SCOUT, x, y);
+				var dr = attackers[i];
+				if (dr.order !== DORDER_RECYCLE && !droidNeedsRepair(dr.id))
+				{
+					orderDroidLoc(dr, DORDER_SCOUT, x, y);
+				}
 			}
 		}
 

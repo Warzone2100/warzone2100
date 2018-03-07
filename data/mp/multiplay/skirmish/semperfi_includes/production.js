@@ -4,6 +4,7 @@ const TANK_BODY_LIST = [
 	"Body14SUP", // dragon
 	"Body10MBT", //vengeance
 	"Body7ABT", // retribution
+	"Body9REC", //Tiger
 	"Body6SUPP", // panther
 	"Body11ABT", // python
 	"Body5REC", // cobra
@@ -71,17 +72,17 @@ function buildAttacker(struct)
 	const EMP_CHANCE = 40;
 
 	//Choose either artillery or anti-tank.
-	var weaponChoice = (random(101) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
-	var secondary = (random(101) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
+	var weaponChoice = (random(100) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
+	var secondary = (random(100) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
 	var prop = TANK_PROP_LIST;
 
 	//When dragon is available, try a chance at useing EMP-Cannon as secondary.
-	if (componentAvailable("Body14SUP") && componentAvailable("EMP-Cannon") && random(101) < EMP_CHANCE)
+	if (componentAvailable("Body14SUP") && componentAvailable("EMP-Cannon") && random(100) < EMP_CHANCE)
 	{
 		secondary = "EMP-Cannon";
 	}
 
-	if ((isSeaMap || (random(101) < HOVER_CHANCE)) && componentAvailable("hover01"))
+	if ((isSeaMap || (random(100) < HOVER_CHANCE)) && componentAvailable("hover01"))
 	{
 		prop = "hover01";
 	}
@@ -94,7 +95,10 @@ function buildAttacker(struct)
 
 function buildTruck(struct)
 {
-	buildDroid(struct, "Constructor", SYSTEM_BODY_LIST, SYSTEM_PROP_LIST, "", "", "Spade1Mk1");
+	if (getRealPower() > MIN_POWER)
+	{
+		buildDroid(struct, "Constructor", SYSTEM_BODY_LIST, SYSTEM_PROP_LIST, "", "", "Spade1Mk1");
+	}
 }
 
 function buildCyborg(struct)
@@ -118,8 +122,8 @@ function buildVTOL(struct)
 	const WEAPON_CHANCE = 50;
 	const EMP_CHANCE = 20;
 
-	var weaponChoice = (random(101) < WEAPON_CHANCE) ? BOMB_LIST : VTOL_ROCKETS;
-	if (random(101) < EMP_CHANCE && componentAvailable("Bomb6-VTOL-EMP"))
+	var weaponChoice = (random(100) < WEAPON_CHANCE) ? BOMB_LIST : VTOL_ROCKETS;
+	if (random(100) < EMP_CHANCE && componentAvailable("Bomb6-VTOL-EMP"))
 	{
 		weaponChoice = "Bomb6-VTOL-EMP";
 	}

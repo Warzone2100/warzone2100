@@ -9,6 +9,7 @@ const CYBORG_FACTORY = "A0CyborgFactory";
 const PLAYER_HQ = "A0CommandCentre";
 const VTOL_PAD = "A0VtolPad";
 const VTOL_FACTORY = "A0VTolFactory1";
+const REPAIR_FACILITY = "A0RepairCentre3";
 const CB_TOWER = "Sys-CB-Tower01";
 const WIDE_SPECTRUM_TOWER = "Sys-SensoTowerWS";
 const UPLINK = "A0Sat-linkCentre";
