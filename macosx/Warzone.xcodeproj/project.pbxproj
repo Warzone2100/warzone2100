@@ -773,6 +773,7 @@
 		BCF97EF61F3CCCF100343E05 /* upnpdev.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF97EF31F3CCCE600343E05 /* upnpdev.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D72B3A791F4E4C1F0011D653 /* gfx_api_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72B3A6D1F4E4C160011D653 /* gfx_api_gl.cpp */; };
 		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
+		D7CC6429204F234F004AEF50 /* wzstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7CC6428204F234F004AEF50 /* wzstring.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -2306,6 +2307,8 @@
 		D72B3A6E1F4E4C160011D653 /* gfx_api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gfx_api.h; path = ../lib/ivis_opengl/gfx_api.h; sourceTree = "<group>"; };
 		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
 		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
+		D7CC641D204F2347004AEF50 /* wzstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wzstring.h; path = ../lib/framework/wzstring.h; sourceTree = "<group>"; };
+		D7CC6428204F234F004AEF50 /* wzstring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzstring.cpp; path = ../lib/framework/wzstring.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2560,6 +2563,8 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				D7CC6428204F234F004AEF50 /* wzstring.cpp */,
+				D7CC641D204F2347004AEF50 /* wzstring.h */,
 				43F4DA1816FD0A6600C566E3 /* resource_lexer.cpp */,
 				43F4DA1916FD0A6600C566E3 /* resource_parser.cpp */,
 				43F4DA1A16FD0A6600C566E3 /* resource_parser.h */,
@@ -5522,6 +5527,7 @@
 				0246A1210BD3CC43004D1C70 /* piematrix.cpp in Sources */,
 				0246A1220BD3CC43004D1C70 /* piemode.cpp in Sources */,
 				0246A1230BD3CC43004D1C70 /* piepalette.cpp in Sources */,
+				D7CC6429204F234F004AEF50 /* wzstring.cpp in Sources */,
 				0246A1240BD3CC43004D1C70 /* piestate.cpp in Sources */,
 				0246A1280BD3CC43004D1C70 /* screen.cpp in Sources */,
 				0246A1290BD3CC43004D1C70 /* tex.cpp in Sources */,

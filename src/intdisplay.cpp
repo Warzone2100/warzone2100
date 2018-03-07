@@ -340,7 +340,7 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	{
 		char tmp[20];
 		ssprintf(tmp, "%d", remaining);
-		Label->aText = QString::fromUtf8(tmp);
+		Label->aText = WzString::fromUtf8(tmp);
 		Label->show();
 	}
 	else
@@ -364,7 +364,7 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 			FACTORY		*Factory = &Structure->pFunctionality->factory;
 			char tmp[20];
 			ssprintf(tmp, "%u", Factory->psAssemblyPoint->factoryInc + 1);
-			Label->aText = QString::fromUtf8(tmp);
+			Label->aText = WzString::fromUtf8(tmp);
 			Label->show();
 			return;
 		}
@@ -408,7 +408,7 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 			{
 				ssprintf(tmp, "%u", entry.numRemaining());
 			}
-			Label->aText = QString::fromUtf8(tmp);
+			Label->aText = WzString::fromUtf8(tmp);
 			Label->show();
 		}
 		else
@@ -432,13 +432,13 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		if (psFactory->productionLoops == INFINITE_PRODUCTION)
 		{
-			Label->aText = QString::fromUtf8("∞");
+			Label->aText = WzString::fromUtf8("∞");
 		}
 		else if (psFactory->productionLoops != 0)
 		{
 			char tmp[20];
 			ssprintf(tmp, "%u", psFactory->productionLoops + DEFAULT_LOOP);
-			Label->aText = QString::fromUtf8(tmp);
+			Label->aText = WzString::fromUtf8(tmp);
 		}
 		else
 		{
@@ -470,7 +470,7 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		char tmp[40];
 		ssprintf(tmp, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
-		Label->aText = QString::fromUtf8(tmp);
+		Label->aText = WzString::fromUtf8(tmp);
 		Label->show();
 	}
 	else
@@ -495,7 +495,7 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
 		int numStars = std::max((int)getDroidLevel(psDroid) - 1, 0);
-		Label->aText = QString(numStars, '*');
+		Label->aText = WzString(numStars, WzUniCodepoint::fromUT8('*'));
 		Label->show();
 	}
 	else
@@ -539,7 +539,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		{
 			if (psDroid->secondaryOrder & (1 << (i + start)))
 			{
-				Label->aText.append((char)('0' + i + 1));
+				Label->aText.append(WzUniCodepoint::fromUT8((char)('0' + i + 1)));
 			}
 		}
 		Label->show();

@@ -39,7 +39,7 @@ W_BUTINIT::W_BUTINIT()
 W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
 	, state(WBUT_PLAIN)
-	, pText(QString::fromUtf8(init->pText))
+	, pText(WzString::fromUtf8(init->pText))
 	, pTip(init->pTip)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
@@ -91,12 +91,12 @@ void W_BUTTON::setState(unsigned newState)
 	dirty = true;
 }
 
-QString W_BUTTON::getString() const
+WzString W_BUTTON::getString() const
 {
 	return pText;
 }
 
-void W_BUTTON::setString(QString string)
+void W_BUTTON::setString(WzString string)
 {
 	pText = string;
 	dirty = true;
@@ -233,21 +233,20 @@ void W_BUTTON::display(int xOffset, int yOffset)
 
 	if (haveText)
 	{
-		QByteArray textBytes = pText.toUtf8();
-		int fw = iV_GetTextWidth(textBytes.constData(), FontID);
+		int fw = iV_GetTextWidth(pText.toUtf8().c_str(), FontID);
 		int fx = x0 + (width() - fw) / 2;
 		int fy = y0 + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
 		if (isDisabled)
 		{
 			iV_SetTextColour(WZCOL_FORM_LIGHT);
-			iV_DrawText(textBytes.constData(), fx + 1, fy + 1, FontID);
+			iV_DrawText(pText.toUtf8().c_str(), fx + 1, fy + 1, FontID);
 			iV_SetTextColour(WZCOL_FORM_DISABLE);
 		}
 		else
 		{
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
-		iV_DrawText(textBytes.constData(), fx, fy, FontID);
+		iV_DrawText(pText.toUtf8().c_str(), fx, fy, FontID);
 	}
 
 	if (isDisabled && !images.normal.isNull() && images.disabled.isNull())

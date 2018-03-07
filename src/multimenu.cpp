@@ -617,7 +617,7 @@ static void closeMultiRequester()
 	return;
 }
 
-bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
+bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
 {
 	static unsigned hoverId = 0;
 	static unsigned hoverStartTime = 0;

@@ -635,10 +635,10 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 	psWidget->setState(state);
 }
 
-QString WIDGET::getString() const
+WzString WIDGET::getString() const
 {
 	ASSERT(false, "Can't get widget type %u's string.", type);
-	return QString();
+	return WzString();
 }
 
 /* Return a pointer to a buffer containing the current string of a widget.
@@ -649,12 +649,12 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 	const WIDGET *psWidget = widgGetFromID(psScreen, id);
 	ASSERT_OR_RETURN("", psWidget, "Couldn't find widget by ID %u", id);
 
-	static QByteArray ret;  // Must be static so it isn't immediately freed when this function returns.
-	ret = psWidget->getString().toUtf8();
-	return ret.constData();
+	static WzString ret;  // Must be static so it isn't immediately freed when this function returns.
+	ret = psWidget->getString();
+	return ret.toUtf8().c_str();
 }
 
-void WIDGET::setString(QString)
+void WIDGET::setString(WzString)
 {
 	ASSERT(false, "Can't set widget type %u's string.", type);
 }
@@ -671,7 +671,7 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 		psScreen->setFocus(nullptr);
 	}
 
-	psWidget->setString(QString::fromUtf8(pText));
+	psWidget->setString(WzString::fromUtf8(pText));
 }
 
 void WIDGET::processCallbacksRecursive(W_CONTEXT *psContext)

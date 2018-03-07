@@ -140,7 +140,7 @@ struct W_LABINIT : public W_INIT
 {
 	W_LABINIT();
 
-	QString	                pText;			///< label text
+	WzString	            pText;			///< label text
 	std::string	            pTip;			///< Tool tip for the label.
 	enum iV_fonts           FontID;			///< ID of the IVIS font to use for this widget.
 };

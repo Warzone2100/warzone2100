@@ -33,7 +33,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD id
 extern bool multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 
-bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview);
+bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview);
 void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 // multimenu

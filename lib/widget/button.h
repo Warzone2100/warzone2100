@@ -61,8 +61,8 @@ public:
 	unsigned getState();
 	void setState(unsigned state);
 	void setFlash(bool enable);
-	QString getString() const;
-	void setString(QString string);
+	WzString getString() const;
+	void setString(WzString string);
 	void setTip(std::string string);
 	void unlock();
 
@@ -79,7 +79,7 @@ public:
 
 public:
 	UDWORD		state;				// The current button state
-	QString         pText;                          // The text for the button
+	WzString        pText;                          // The text for the button
 	Images          images;                         ///< The images for the button.
 	std::string     pTip;                           // The tool tip for the button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound

@@ -31,6 +31,7 @@
 #include <functional>
 #include <string>
 #include "lib/framework/geometry.h"
+#include "lib/framework/wzstring.h"
 
 
 /* Forward definitions */
@@ -121,8 +122,8 @@ public:
 	virtual unsigned getState();
 	virtual void setState(unsigned state);
 	virtual void setFlash(bool enable);
-	virtual QString getString() const;
-	virtual void setString(QString string);
+	virtual WzString getString() const;
+	virtual void setString(WzString string);
 	virtual void setTip(std::string string);
 
 	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight); // used to handle screen resizing
@@ -142,7 +143,7 @@ public:
 
 	void setString(char const *stringUtf8)
 	{
-		setString(QString::fromUtf8(stringUtf8));
+		setString(WzString::fromUtf8(stringUtf8));
 	}
 	void setTip(char const *stringUtf8)
 	{

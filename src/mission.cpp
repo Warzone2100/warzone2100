@@ -1902,7 +1902,7 @@ bool intAddMissionTimer()
 	sLabInit.y = TIMER_LABELY;
 	sLabInit.width = sFormInit.width;//TIMER_WIDTH;
 	sLabInit.height = sFormInit.height;//TIMER_HEIGHT;
-	sLabInit.pText = "00:00:00";
+	sLabInit.pText = WzString::fromUtf8("00:00:00");
 	sLabInit.pCallback = intUpdateMissionTimer;
 
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -1966,7 +1966,7 @@ bool intAddTransporterTimer()
 	sLabInit.y = 1;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
-	sLabInit.pText = "00/10";
+	sLabInit.pText = WzString::fromUtf8("00/10");
 	sLabInit.pCallback = intUpdateTransCapacity;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -1987,7 +1987,7 @@ UDWORD  missionGetReinforcementTime()
 }
 
 //fills in a hours(if bHours = true), minutes and seconds display for a given time in 1000th sec
-static void fillTimeDisplay(QString &text, UDWORD time, bool bHours)
+static void fillTimeDisplay(WzString &text, UDWORD time, bool bHours)
 {
 	char psText[100];
 	//this is only for the transporter timer - never have hours!
@@ -2001,7 +2001,7 @@ static void fillTimeDisplay(QString &text, UDWORD time, bool bHours)
 		struct tm *tmp = gmtime(&secs);
 		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", tmp);
 	}
-	text = QString::fromUtf8(psText);
+	text = WzString::fromUtf8(psText);
 }
 
 
@@ -2292,13 +2292,13 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		//don't bother adding the text if haven't played the audio
 		if (bPlaySuccess)
 		{
-			sLabInit.pText = Cheated ? _("OBJECTIVE ACHIEVED by cheating!") : _("OBJECTIVE ACHIEVED");//"Objective Achieved";
+			sLabInit.pText = WzString::fromUtf8(Cheated ? _("OBJECTIVE ACHIEVED by cheating!") : _("OBJECTIVE ACHIEVED"));//"Objective Achieved";
 		}
 
 	}
 	else
 	{
-		sLabInit.pText = Cheated ? _("OBJECTIVE FAILED--and you cheated!") : _("OBJECTIVE FAILED"); //"Objective Failed;
+		sLabInit.pText = WzString::fromUtf8(Cheated ? _("OBJECTIVE FAILED--and you cheated!") : _("OBJECTIVE FAILED")); //"Objective Failed;
 	}
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))

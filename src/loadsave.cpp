@@ -231,7 +231,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	sLabInit.y		= 0;
 	sLabInit.width	= LOADSAVE_W - (2 * LOADSAVE_HGAP);	//LOADSAVE_W;
 	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
-	sLabInit.pText	= title;
+	sLabInit.pText	= WzString::fromUtf8(title);
 	widgAddLabel(psRequestScreen, &sLabInit);
 
 	// add cancel.
@@ -325,7 +325,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 		/* Add button */
 		button->pTip = sSlotTips[slotCount];
-		button->pText = sSlotCaps[slotCount];
+		button->pText = WzString::fromUtf8(sSlotCaps[slotCount]);
 		slotCount++;		// goto next but...
 		if (slotCount == totalslots)
 		{
@@ -453,7 +453,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			if (!slotButton->pText.isEmpty())
 			{
-				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().constData(), sExt);
+				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), sExt);
 			}
 			else
 			{
@@ -478,7 +478,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 				if (!slotButton->pText.isEmpty())
 				{
-					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().constData(), sExt);
+					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().c_str(), sExt);
 				}
 				else
 				{
@@ -524,7 +524,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 			{
 
 				if (!((W_BUTTON *)widgGetFromID(psRequestScreen, i))->pText.isEmpty()
-				    && strcmp(sTemp, ((W_BUTTON *)widgGetFromID(psRequestScreen, i))->pText.toUtf8().constData()) == 0)
+				    && strcmp(sTemp, ((W_BUTTON *)widgGetFromID(psRequestScreen, i))->pText.toUtf8().c_str()) == 0)
 				{
 					widgDelete(psRequestScreen, SAVEENTRY_EDIT);	//unselect this box, and go back ..
 					widgReveal(psRequestScreen, chosenSlotId);
@@ -677,7 +677,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().c_str());
 
 		if (cache.fullText != butString)
 		{

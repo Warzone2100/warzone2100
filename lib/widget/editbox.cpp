@@ -81,7 +81,7 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	{
 		text = "";
 	}
-	aText = QString::fromUtf8(text);
+	aText = WzString::fromUtf8(text);
 
 	initialise();
 
@@ -118,9 +118,9 @@ void W_EDITBOX::initialise()
 
 
 /* Insert a character into a text buffer */
-bool W_EDITBOX::insertChar(QChar ch)
+bool W_EDITBOX::insertChar(WzUniCodepoint ch)
 {
-	if (ch == QChar('\0'))
+	if (ch.isNull())
 	{
 		return false;
 	}
@@ -146,9 +146,9 @@ bool W_EDITBOX::insertChar(QChar ch)
 
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-bool W_EDITBOX::overwriteChar(QChar ch)
+bool W_EDITBOX::overwriteChar(WzUniCodepoint ch)
 {
-	if (ch == QChar('\0'))
+	if (ch.isNull())
 	{
 		return false;
 	}
@@ -204,12 +204,12 @@ void W_EDITBOX::fitStringStart()
 	// From QuesoGLC's notes: additional processing like kerning creates strings of text whose dimensions are not directly
 	// related to the simple juxtaposition of individual glyph metrics. For example, the advance width of "VA" isn't the
 	// sum of the advances of "V" and "A" taken separately.
-	QString tmp = aText;
+	WzString tmp = aText;
 	tmp.remove(0, printStart);  // Ignore the first printStart characters.
 
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
 
 		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
@@ -229,13 +229,13 @@ void W_EDITBOX::fitStringStart()
 /* Calculate how much of the end of a string can fit into the edit box */
 void W_EDITBOX::fitStringEnd()
 {
-	QString tmp = aText;
+	WzString tmp = aText;
 
 	printStart = 0;
 
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
 
 		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
@@ -254,7 +254,7 @@ void W_EDITBOX::fitStringEnd()
 
 void W_EDITBOX::setCursorPosPixels(int xPos)
 {
-	QString tmp = aText;
+	WzString tmp = aText;
 	tmp.remove(0, printStart);  // Consider only the visible text.
 	tmp.remove(printChars, tmp.length());
 
@@ -262,7 +262,7 @@ void W_EDITBOX::setCursorPosPixels(int xPos)
 	int prevPos = printStart + tmp.length();
 	while (!tmp.isEmpty())
 	{
-		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData(), FontID);
+		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().c_str(), FontID);
 		int delta = pixelWidth - (xPos - (WEDB_XGAP + WEDB_CURSORSIZE / 2));
 		int pos = printStart + tmp.length();
 
@@ -425,7 +425,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				switch (key)
 				{
 				case KEY_V:
-					aText = wzGetSelection();
+					aText = WzString::fromUtf8(wzGetSelection().toUtf8().constData());
 					if (aText.length() >= maxStringSize)
 					{
 						aText.truncate(maxStringSize);
@@ -444,11 +444,11 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			bool changedText = false;
 			if (editState == WEDBS_INSERT)
 			{
-				changedText = insertChar(unicode);
+				changedText = insertChar(WzUniCodepoint::fromUTF32(unicode));
 			}
 			else
 			{
-				changedText = overwriteChar(unicode);
+				changedText = overwriteChar(WzUniCodepoint::fromUTF32(unicode));
 			}
 			if (changedText)
 			{
@@ -479,14 +479,16 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	state = (state & ~WEDBS_MASK) | editState;
 }
 
-QString W_EDITBOX::getString() const
+WzString W_EDITBOX::getString() const
 {
+//	return QString::fromUtf8(aText.toUtf8().c_str());
 	return aText;
 }
 
 /* Set the current string for the edit box */
-void W_EDITBOX::setString(QString string)
+void W_EDITBOX::setString(WzString string)
 {
+//	aText = WzString::fromUtf8(string.toUtf8().constData());
 	aText = string;
 	initialise();
 	dirty = true;
@@ -603,11 +605,11 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	int fy = y0 + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
 
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
-	QString displayedText = aText;
+	WzString displayedText = aText;
 	displayedText.remove(0, printStart);  // Erase anything there isn't room to display.
 	displayedText.remove(printChars, displayedText.length());
 
-	displayCache.wzDisplayedText.setText(displayedText.toUtf8().constData(), FontID);
+	displayCache.wzDisplayedText.setText(displayedText.toUtf8(), FontID);
 	displayCache.wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
 
 	// Display the cursor if editing
@@ -619,11 +621,11 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 #endif
 	{
 		// insert mode
-		QString tmp = aText;
+		WzString tmp = aText;
 		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
 		tmp.remove(0, printStart);
 
-		displayCache.modeText.setText(tmp.toUtf8().constData(), FontID);
+		displayCache.modeText.setText(tmp.toUtf8(), FontID);
 
 		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
 		displayCache.wzHyphen.setText("-", FontID);
@@ -638,11 +640,11 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 #endif
 	{
 		// overwrite mode
-		QString tmp = aText;
+		WzString tmp = aText;
 		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
 		tmp.remove(0, printStart);
 
-		displayCache.modeText.setText(tmp.toUtf8().constData(), FontID);
+		displayCache.modeText.setText(tmp.toUtf8(), FontID);
 
 		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
 		int cy = fy;

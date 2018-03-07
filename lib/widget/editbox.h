@@ -26,6 +26,7 @@
 
 #include "widget.h"
 #include "widgbase.h"
+#include "lib/framework/wzstring.h"
 
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
@@ -56,14 +57,14 @@ public:
 	void display(int xOffset, int yOffset);
 
 	void setState(unsigned state);
-	QString getString() const;
-	void setString(QString string);
+	WzString getString() const;
+	void setString(WzString string);
 	void setMaxStringSize(int size);
 
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
 
 	UDWORD		state;						// The current edit box state
-	QString		aText;						// The text in the edit box
+	WzString	aText;						// The text in the edit box
 	iV_fonts	FontID;
 	int			blinkOffset;				// Cursor should be visible at time blinkOffset.
 	int			maxStringSize;				// max characters string will accept
@@ -81,8 +82,8 @@ private:
 	void initialise();  // Moves the cursor to the end.
 	void delCharRight();
 	void delCharLeft();
-	bool insertChar(QChar ch);
-	bool overwriteChar(QChar ch);
+	bool insertChar(WzUniCodepoint ch);
+	bool overwriteChar(WzUniCodepoint ch);
 	void fitStringStart();  // Calculate how much of the start of a string can fit into the edit box
 	void fitStringEnd();
 	void setCursorPosPixels(int xPos);

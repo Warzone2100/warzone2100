@@ -1832,7 +1832,7 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
 
-	cache.wzText.setText(psLab->aText.toUtf8().constData(), font_large);
+	cache.wzText.setText(psLab->aText.toUtf8(), font_large);
 
 	fx = xOffset + psWidget->x();
 	fy = yOffset + psWidget->y() + cache.wzText.width();
@@ -1854,7 +1854,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
 
-	cache.wzText.setText(psBut->pText.toUtf8().constData(), psBut->FontID);
+	cache.wzText.setText(psBut->pText.toUtf8(), psBut->FontID);
 
 	if (widgGetMouseOver(psWScreen) == psBut->id)					// if mouse is over text then hilight.
 	{
@@ -2009,7 +2009,7 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 	sLabInit.FontID = font_large;
 
 	sLabInit.pDisplay = displayTextAt270;
-	sLabInit.pText = txt;
+	sLabInit.pText = WzString::fromUtf8(txt);
 	sLabInit.pUserData = new DisplayTextOptionCache();
 	sLabInit.onDelete = [](WIDGET *psWidget) {
 		assert(psWidget->pUserData != nullptr);
