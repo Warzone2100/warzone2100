@@ -112,8 +112,8 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	static glBufferWrapper buffer;
 	glBindBuffer(GL_ARRAY_BUFFER, buffer.id);
 	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vector3f), vrt.data(), GL_STREAM_DRAW);
-	glEnableVertexAttribArray(program.locVertex);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(program.locVertex);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
 	glDisableVertexAttribArray(program.locVertex);
 }

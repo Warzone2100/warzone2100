@@ -156,21 +156,21 @@ void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 		pie_SetTexturePage(TEXPAGE_EXTERN);
 		mTexture->bind();
 		pie_ActivateShader(SHADER_GFX_TEXT, modelViewProjectionMatrix, glm::vec4(1), 0);
-		glEnableVertexAttribArray(VERTEX_COORDS_ATTRIB_INDEX);
 		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
 		glVertexAttribPointer(VERTEX_COORDS_ATTRIB_INDEX, 2, GL_FLOAT, false, 0, nullptr);
+		glEnableVertexAttribArray(VERTEX_COORDS_ATTRIB_INDEX);
 	}
 	else if (mType == GFX_COLOUR)
 	{
 		pie_SetTexturePage(TEXPAGE_NONE);
 		pie_ActivateShader(SHADER_GFX_COLOUR, modelViewProjectionMatrix);
-		glEnableVertexAttribArray(VERTEX_COLOR_ATTRIB_INDEX);
 		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
 		glVertexAttribPointer(VERTEX_COLOR_ATTRIB_INDEX, 4, GL_UNSIGNED_BYTE, true, 0, nullptr);
+		glEnableVertexAttribArray(VERTEX_COLOR_ATTRIB_INDEX);
 	}
-	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
 	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_VERTEX]);
 	glVertexAttribPointer(VERTEX_POS_ATTRIB_INDEX, mCoordsPerVertex, GL_FLOAT, false, 0, nullptr);
+	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
 	glDrawArrays(mdrawType, 0, mSize);
 	glDisableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
 	if (mType == GFX_TEXTURE)
@@ -194,10 +194,10 @@ GFX::~GFX()
 
 static void enableRect()
 {
-	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
 	glBindBuffer(GL_ARRAY_BUFFER, pie_internal::rectBuffer);
 	glVertexAttribPointer(VERTEX_POS_ATTRIB_INDEX, 4, GL_BYTE, false, 0, nullptr);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
 }
 
 static void disableRect()

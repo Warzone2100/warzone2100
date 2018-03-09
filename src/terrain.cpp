@@ -1090,11 +1090,11 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	glPolygonOffset(0.1f, 1.0f);
 
 	// bind the vertex buffer
-	glEnableVertexAttribArray(program.locVertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometryIndexVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO);
 
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(program.locVertex);
 
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -1148,10 +1148,9 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 
 	// load the vertex (geometry) buffer
 	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO);
-	glEnableVertexAttribArray(program.locVertex);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(program.locVertex);
 
-	glEnableVertexAttribArray(program.locColor);
 	glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
 
 	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
@@ -1172,6 +1171,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 
 		// load the color buffer
 		glVertexAttribPointer(program.locColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(PIELIGHT), BUFFER_OFFSET(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer));
+		glEnableVertexAttribArray(program.locColor);
 
 		for (int x = 0; x < xSectors; x++)
 		{
@@ -1216,12 +1216,12 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 	pie_SetRendMode(REND_ALPHA);
 
 	// and the texture coordinates buffer
-	glEnableVertexAttribArray(program.locVertex);
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(DecalVertex), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(program.locVertex);
 
-	glEnableVertexAttribArray(program.locTexCoord);
 	glVertexAttribPointer(program.locTexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(DecalVertex), BUFFER_OFFSET(12));
+	glEnableVertexAttribArray(program.locTexCoord);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	int size = 0;
@@ -1348,8 +1348,8 @@ void drawWater(const glm::mat4 &viewMatrix)
 	// bind the vertex buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, waterIndexVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, waterVBO);
-	glEnableVertexAttribArray(program.locVertex);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(program.locVertex);
 
 	for (x = 0; x < xSectors; x++)
 	{
