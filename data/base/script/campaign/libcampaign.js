@@ -1653,7 +1653,7 @@ function camSortByHealth(a, b)
 var __camGroupInfo;
 var __camTruckInfo;
 
-const __CAM_TARGET_TRACKING_RADIUS = 5;
+const __CAM_TARGET_TRACKING_RADIUS = 7;
 const __CAM_PLAYER_BASE_RADIUS = 20;
 const __CAM_DEFENSE_RADIUS = 4;
 const __CAM_CLOSE_RADIUS = 2;
@@ -1844,7 +1844,7 @@ function __camScanRange(order, drType)
 			rng = __CAM_TARGET_TRACKING_RADIUS;
 			break;
 		case CAM_ORDER_PATROL:
-			rng = 4;
+			rng = 5;
 			break;
 		case CAM_ORDER_COMPROMISE:
 			rng = 2; //very small so they don't track stuff too far
@@ -2116,7 +2116,7 @@ function __camTacticsTickForGroup(group)
 			if (!isVTOL(droid) && !artilleryLike)
 			{
 				closeBy = closeBy.filter(function(obj) {
-					return Math.abs(Math.floor((droid.z + obj.z) / 2)) <= CLOSE_Z;
+					return Math.abs(Math.floor(droid.z - obj.z)) <= CLOSE_Z;
 				});
 			}
 
