@@ -69,7 +69,7 @@ void featureInitVars()
 bool loadFeatureStats(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	asFeatureStats = new FEATURE_STATS[list.size()];
 	numFeatureStats = list.size();
 	for (int i = 0; i < list.size(); ++i)
@@ -77,7 +77,7 @@ bool loadFeatureStats(const char *pFileName)
 		ini.beginGroup(list[i]);
 		asFeatureStats[i] = FEATURE_STATS(REF_FEATURE_START + i);
 		FEATURE_STATS *p = &asFeatureStats[i];
-		p->name = ini.value("name").toString();
+		p->name = ini.string(WzString::fromUtf8("name"));
 		p->id = list[i];
 		QString subType = ini.value("type").toString();
 		if (subType == "TANK WRECK")
@@ -518,7 +518,7 @@ SDWORD getFeatureStatFromName(const char *pName)
 	for (int inc = 0; inc < numFeatureStats; inc++)
 	{
 		psStat = &asFeatureStats[inc];
-		if (psStat->id.compare(pName) == 0)
+		if (psStat->id.compare(WzString::fromUtf8(pName)) == 0)
 		{
 			return inc;
 		}

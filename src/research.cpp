@@ -25,7 +25,6 @@
  */
 #include <string.h>
 #include <map>
-#include <QtCore/QJsonArray>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzconfig.h"
@@ -106,7 +105,7 @@ bool researchInitVars()
 bool loadResearch(const QString& filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	PLAYER_RESEARCH dummy;
 	memset(&dummy, 0, sizeof(dummy));
 	QVector<QStringList> preResearch;
@@ -122,7 +121,7 @@ bool loadResearch(const QString& filename)
 		ini.beginGroup(list[inc]);
 		RESEARCH research;
 		research.index = inc;
-		research.name = ini.value("name").toString();
+		research.name = ini.string("name");
 		research.id = list[inc];
 
 		//check the name hasn't been used already
@@ -130,7 +129,7 @@ bool loadResearch(const QString& filename)
 
 		research.ref = REF_RESEARCH_START + inc;
 
-		research.results = ini.json("results", QJsonArray());
+		research.results = ini.json("results", nlohmann::json::array());
 
 		//set subGroup icon
 		QString subGroup = ini.value("subgroupIconID", "").toString();

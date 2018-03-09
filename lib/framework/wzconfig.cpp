@@ -22,10 +22,6 @@
  *  Ini related functions.
  */
 
-#include <QtCore/QJsonParseError>
-#include <QtCore/QJsonValue>
-#include <QtCore/QJsonDocument>
-
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
 #include "wzconfig.h"
@@ -35,45 +31,49 @@ WzConfig::~WzConfig()
 {
 	if (mWarning == ReadAndWrite)
 	{
-		ASSERT(mObjStack.empty(), "Some json groups have not been closed, stack size %d.", mObjStack.size());
-		QJsonDocument doc(mObj);
-		QByteArray json = doc.toJson();
-		saveFile(mFilename.toUtf8().constData(), json.constData(), json.size());
+		ASSERT(mObjStack.empty(), "Some json groups have not been closed, stack size %lu.", mObjStack.size());
+		std::ostringstream stream;
+		stream << mRoot.dump(4) << std::endl;
+		std::string jsonString = stream.str();
+		saveFile(mFilename.toUtf8().c_str(), jsonString.c_str(), jsonString.size());
 	}
-	debug(LOG_SAVE, "%s %s", mWarning == ReadAndWrite? "Saving" : "Closing", mFilename.toUtf8().constData());
+	debug(LOG_SAVE, "%s %s", mWarning == ReadAndWrite? "Saving" : "Closing", mFilename.toUtf8().c_str());
 }
 
-static QJsonObject jsonMerge(QJsonObject original, const QJsonObject& override)
+static nlohmann::json jsonMerge(nlohmann::json original, const nlohmann::json& override)
 {
-	for (const QString &key : override.keys())
+	for (auto it_override = override.begin(); it_override != override.end(); ++it_override)
 	{
-		if (override[key].isObject() && original.contains(key))
+		auto key = it_override.key();
+		auto it_original = original.find(key);
+		if (it_override.value().is_object() && (it_original != original.end()))
 		{
-			original[key] = jsonMerge(original[key].toObject(), override[key].toObject());
+			original[key] = jsonMerge(it_original.value(), it_override.value());
 		}
-		else if (override[key].isNull())
+		else if (it_override.value().is_null())
 		{
-			original.remove(key);
+			original.erase(key);
 		}
 		else
 		{
-			original[key] = override[key];
+			original[key] = it_override.value();
 		}
 	}
 	return original;
 }
 
-WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *parent)
+WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
+: mArray(nlohmann::json::array())
 {
 	UDWORD size;
 	char *data;
-	QJsonParseError error;
 
 	mFilename = name;
 	mStatus = true;
 	mWarning = warning;
+	pCurrentObj = &mRoot;
 
-	if (!PHYSFS_exists(name.toUtf8().constData()))
+	if (!PHYSFS_exists(name.toUtf8().c_str()))
 	{
 		if (warning == ReadOnly)
 		{
@@ -82,7 +82,7 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 		}
 		else if (warning == ReadOnlyAndRequired)
 		{
-			debug(LOG_FATAL, "Missing required file %s", name.toUtf8().constData());
+			debug(LOG_FATAL, "Missing required file %s", name.toUtf8().c_str());
 			abort();
 		}
 		else if (warning == ReadAndWrite)
@@ -90,166 +90,295 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 			return;
 		}
 	}
-	if (!loadFile(name.toUtf8().constData(), &data, &size))
+	if (!loadFile(name.toUtf8().c_str(), &data, &size))
 	{
-		debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().constData());
+		debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().c_str());
 	}
-	QJsonDocument mJson = QJsonDocument::fromJson(QByteArray(data, size), &error);
-	ASSERT(!mJson.isNull(), "JSON document from %s is invalid: %s", name.toUtf8().constData(), error.errorString().toUtf8().constData());
-	ASSERT(mJson.isObject(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().constData(), data);
-	mObj = mJson.object();
+
+	try {
+		mRoot = nlohmann::json::parse(data, data + size);
+	}
+	catch (const std::exception& e) {
+		ASSERT(false, "JSON document from %s is invalid: %s", name.toUtf8().c_str(), e.what());
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception parsing JSON %s", name.toUtf8().c_str());
+	}
+	pCurrentObj = &mRoot;
+	ASSERT(!mRoot.is_null(), "JSON document from %s is null", name.toUtf8().c_str());
+	ASSERT(mRoot.is_object(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
 	free(data);
 	char **diffList = PHYSFS_enumerateFiles("diffs");
 	for (char **i = diffList; *i != nullptr; i++)
 	{
-		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().constData());
+		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().c_str());
 		if (!PHYSFS_exists(str.c_str()))
 		{
 			continue;
 		}
 		if (!loadFile(str.c_str(), &data, &size))
 		{
-			debug(LOG_FATAL, "jsondiff file \"%s\" could not be opened!", name.toUtf8().constData());
+			debug(LOG_FATAL, "jsondiff file \"%s\" could not be opened!", name.toUtf8().c_str());
 		}
-		QJsonDocument tmpJson = QJsonDocument::fromJson(QByteArray(data, size), &error);
-		ASSERT(!tmpJson.isNull(), "JSON diff from %s is invalid: %s", name.toUtf8().constData(), error.errorString().toUtf8().constData());
-		ASSERT(tmpJson.isObject(), "JSON diff from %s is not an object. Read: \n%s", name.toUtf8().constData(), data);
-		QJsonObject tmpObj = tmpJson.object();
-		mObj = jsonMerge(mObj, tmpObj);
+		nlohmann::json tmpJson;
+		try {
+			tmpJson = nlohmann::json::parse(data, data + size);
+		}
+		catch (const std::exception& e) {
+			ASSERT(false, "JSON diff from %s is invalid: %s", name.toUtf8().c_str(), e.what());
+		}
+		catch (...) {
+			debug(LOG_FATAL, "Unexpected exception parsing JSON diff from %s", name.toUtf8().c_str());
+		}
+		ASSERT(!tmpJson.is_null(), "JSON diff from %s is null", name.toUtf8().c_str());
+		ASSERT(tmpJson.is_object(), "JSON diff from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
+		mRoot = jsonMerge(mRoot, tmpJson);
 		free(data);
 		debug(LOG_INFO, "jsondiff \"%s\" loaded and merged", str.c_str());
 	}
 	PHYSFS_freeList(diffList);
-	debug(LOG_SAVE, "Opening %s", name.toUtf8().constData());
+	debug(LOG_SAVE, "Opening %s", name.toUtf8().c_str());
+	pCurrentObj = &mRoot;
 }
 
-QStringList WzConfig::childGroups() const
+WzConfig::WzConfig(const QString &name, WzConfig::warning warning)
+: WzConfig(WzString::fromUtf8(name.toUtf8().constData()), warning)
 {
-	QStringList keys;
-	for (QString const &key : mObj.keys())
+}
+
+std::vector<WzString> WzConfig::childGroups() const
+{
+	std::vector<WzString> keys;
+	for (auto it = pCurrentObj->begin(); it != pCurrentObj->end(); ++it)
 	{
-		if (mObj[key].isObject())
+		if (it.value().is_object())
 		{
-			keys.push_back(key);
+			keys.push_back(WzString::fromUtf8(it.key().c_str()));
 		}
 	}
 	return keys;
 }
 
-QStringList WzConfig::childKeys() const
+std::vector<WzString> WzConfig::childKeys() const
 {
-	return mObj.keys();
+	std::vector<WzString> keys;
+	for (auto it = pCurrentObj->begin(); it != pCurrentObj->end(); ++it)
+	{
+		keys.push_back(WzString::fromUtf8(it.key().c_str()));
+	}
+	return keys;
+}
+
+bool WzConfig::contains(const WzString &key) const
+{
+	return pCurrentObj->find(key.toUtf8()) != pCurrentObj->end();
 }
 
 bool WzConfig::contains(const QString &key) const
 {
-	return mObj.contains(key);
+	return contains(WzString::fromUtf8(key.toUtf8().constData()));
 }
 
-QVariant WzConfig::value(const QString &key, const QVariant &defaultValue) const
+json_variant WzConfig::value(const WzString &key, const json_variant &defaultValue) const
 {
-	if (!contains(key))
+	return json_getValue(*pCurrentObj, key, defaultValue);
+}
+json_variant WzConfig::value(const QString &key, const json_variant &defaultValue) const
+{
+	return value(WzString::fromUtf8(key.toUtf8().constData()), defaultValue);
+}
+
+nlohmann::json WzConfig::json(const WzString &key, const nlohmann::json &defaultValue) const
+{
+	auto it = pCurrentObj->find(key.toUtf8());
+	if (it == pCurrentObj->end())
 	{
 		return defaultValue;
 	}
 	else
 	{
-		return mObj.value(key).toVariant();
+		return it.value();
 	}
 }
 
-QJsonValue WzConfig::json(const QString &key, const QJsonValue &defaultValue) const
+nlohmann::json WzConfig::json(const QString &key, const nlohmann::json &defaultValue) const
 {
-	if (!contains(key))
+	return WzConfig::json(WzString::fromUtf8(key.toUtf8().constData()), defaultValue);
+}
+
+WzString WzConfig::string(const std::string &key, const std::string &defaultValue) const
+{
+	auto it = pCurrentObj->find(key);
+	if (it == pCurrentObj->end())
 	{
-		return defaultValue;
+		return WzString::fromUtf8(defaultValue.c_str());
 	}
 	else
 	{
-		return mObj.value(key);
+		try {
+			return it.value().get<WzString>();
+		}
+		catch (const std::exception &e) {
+			return WzString::fromUtf8(defaultValue.c_str());
+		}
+		catch (...) {
+			debug(LOG_FATAL, "Unexpected exception encountered");
+			return WzString::fromUtf8(defaultValue.c_str());
+		}
 	}
 }
 
+WzString WzConfig::string(const WzString &key, const WzString &defaultValue) const
+{
+	return string(key.toUtf8(), defaultValue.toUtf8());
+}
+
+void WzConfig::setVector3f(const WzString &name, const Vector3f &v)
+{
+	(*pCurrentObj)[name.toUtf8()] = nlohmann::json::array({ v.x, v.y, v.z });
+}
+
+Vector3f WzConfig::vector3f(const WzString &name)
+{
+	Vector3f r(0.0, 0.0, 0.0);
+	auto it = pCurrentObj->find(name.toUtf8());
+	if (it == pCurrentObj->end())
+	{
+		return r;
+	}
+	auto v = it.value();
+	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
+	try {
+		r.x = v[0];
+		r.y = v[1];
+		r.z = v[2];
+	}
+	catch (const std::exception& e) {
+		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception encountered in vector3f");
+	}
+	return r;
+}
+
+void WzConfig::setVector3i(const WzString &name, const Vector3i &v)
+{
+	(*pCurrentObj)[name.toUtf8()] = nlohmann::json::array({ v.x, v.y, v.z });
+}
+
+Vector3i WzConfig::vector3i(const WzString &name)
+{
+	Vector3i r(0, 0, 0);
+	auto it = pCurrentObj->find(name.toUtf8());
+	if (it == pCurrentObj->end())
+	{
+		return r;
+	}
+	auto v = it.value();
+	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
+	try {
+		r.x = v[0];
+		r.y = v[1];
+		r.z = v[2];
+	}
+	catch (const std::exception& e) {
+		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception encountered in vector3f");
+	}
+	return r;
+}
+
+void WzConfig::setVector2i(const WzString &name, const Vector2i &v)
+{
+	(*pCurrentObj)[name.toUtf8()] = nlohmann::json::array({ v.x, v.y });
+}
+
+Vector2i WzConfig::vector2i(const WzString &name)
+{
+	Vector2i r(0, 0);
+	auto it = pCurrentObj->find(name.toUtf8());
+	if (it == pCurrentObj->end())
+	{
+		return r;
+	}
+	auto v = it.value();
+	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().c_str());
+	try {
+		r.x = v[0];
+		r.y = v[1];
+	}
+	catch (const std::exception& e) {
+		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception encountered in vector3f");
+	}
+	return r;
+}
+
+// temporary overloads that take QString
 void WzConfig::setVector3f(const QString &name, const Vector3f &v)
 {
-	mObj.insert(name, QJsonArray({ v.x, v.y, v.z }));
+	setVector3f(WzString::fromUtf8(name.toUtf8().constData()), v);
 }
 
 Vector3f WzConfig::vector3f(const QString &name)
 {
-	Vector3f r(0.0, 0.0, 0.0);
-	if (!contains(name))
-	{
-		return r;
-	}
-	QStringList v = value(name).toStringList();
-	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().constData(), name.toUtf8().constData());
-	r.x = v[0].toDouble();
-	r.y = v[1].toDouble();
-	r.z = v[2].toDouble();
-	return r;
+	return vector3f(WzString::fromUtf8(name.toUtf8().constData()));
 }
 
 void WzConfig::setVector3i(const QString &name, const Vector3i &v)
 {
-	mObj.insert(name, QJsonArray({ v.x, v.y, v.z }));
+	setVector3i(WzString::fromUtf8(name.toUtf8().constData()), v);
 }
 
 Vector3i WzConfig::vector3i(const QString &name)
 {
-	Vector3i r(0, 0, 0);
-	if (!contains(name))
-	{
-		return r;
-	}
-	QStringList v = value(name).toStringList();
-	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().constData(), name.toUtf8().constData());
-	r.x = v[0].toInt();
-	r.y = v[1].toInt();
-	r.z = v[2].toInt();
-	return r;
+	return vector3i(WzString::fromUtf8(name.toUtf8().constData()));
 }
 
 void WzConfig::setVector2i(const QString &name, const Vector2i &v)
 {
-	mObj.insert(name, QJsonArray({ v.x, v.y }));
+	setVector2i(WzString::fromUtf8(name.toUtf8().constData()), v);
 }
 
 Vector2i WzConfig::vector2i(const QString &name)
 {
-	Vector2i r(0, 0);
-	if (!contains(name))
+	return vector2i(WzString::fromUtf8(name.toUtf8().constData()));
+}
+
+bool WzConfig::beginGroup(const WzString &prefix)
+{
+	mObjNameStack.push_back(mName);
+	mObjStack.push_back(pCurrentObj);
+	mName = prefix;
+	if (mWarning == ReadAndWrite)
 	{
-		return r;
+		mNewObjStack.push_back(nlohmann::json::object());
+		pCurrentObj = &mNewObjStack.back();
 	}
-	QStringList v = value(name).toStringList();
-	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().constData());
-	r.x = v[0].toInt();
-	r.y = v[1].toInt();
-	return r;
+	else
+	{
+		auto it = pCurrentObj->find(prefix.toUtf8());
+		// Check if mObj contains the prefix
+		if (it == pCurrentObj->end()) // handled in this way for backwards compatibility
+		{
+			mNewObjStack.push_back(nlohmann::json::object());
+			pCurrentObj = &mNewObjStack.back();
+			return false;
+		}
+		ASSERT(it.value().is_object(), "%s: beginGroup() on non-object key \"%s\"", mFilename.toUtf8().c_str(), prefix.toUtf8().c_str());
+		pCurrentObj = &it.value();
+	}
+	return true;
 }
 
 bool WzConfig::beginGroup(const QString &prefix)
 {
-	mObjNameStack.append(mName);
-	mObjStack.append(mObj);
-	mName = prefix;
-	if (mWarning == ReadAndWrite)
-	{
-		mObj = QJsonObject();
-	}
-	else
-	{
-		if (!contains(prefix)) // handled in this way for backwards compatibility
-		{
-			mObj = QJsonObject();
-			return false;
-		}
-		QJsonValue value = mObj.value(prefix);
-		ASSERT(value.isObject(), "%s: beginGroup() on non-object key \"%s\"", mFilename.toUtf8().constData(), prefix.toUtf8().constData());
-		mObj = value.toObject();
-	}
-	return true;
+	return beginGroup(WzString::fromUtf8(prefix.toUtf8().constData()));
 }
 
 void WzConfig::endGroup()
@@ -257,59 +386,111 @@ void WzConfig::endGroup()
 	ASSERT(!mObjStack.empty(), "An endGroup() too much!");
 	if (mWarning == ReadAndWrite)
 	{
-		QJsonObject latestObj = mObj;
-		mObj = mObjStack.takeLast();
-		mObj[mName] = latestObj;
-		mName = mObjNameStack.takeLast();
+		nlohmann::json *pLatestObj = pCurrentObj;
+		pCurrentObj = mObjStack.back();
+		mObjStack.pop_back();
+		if (!mNewObjStack.empty() && &mNewObjStack.back() == pLatestObj)
+		{
+			(*pCurrentObj)[mName.toUtf8()] = *pLatestObj;
+			mNewObjStack.pop_back();
+		}
+		else
+		{
+			// this object is not a "new" object, and so is already source from the current obj
+			debug(LOG_INFO, "Got it");
+		}
+		mName = mObjNameStack.back();
+		mObjNameStack.pop_back();
 	}
 	else
 	{
-		mName = mObjNameStack.takeLast();
-		mObj = mObjStack.takeLast();
+		if (!mNewObjStack.empty() && &mNewObjStack.back() == pCurrentObj)
+		{
+			mNewObjStack.pop_back();
+		}
+		mName = mObjNameStack.back();
+		mObjNameStack.pop_back();
+		pCurrentObj = mObjStack.back();
+		mObjStack.pop_back();
+	}
+}
+
+// This function is intended to be paired with endArray().
+//
+// [Creation Case]:
+//
+// By calling beginArray with a name, a new array value at the desired key (name) is created in the current object.
+// The current object is then set to a **new JSON object**, which can be further manipulated.
+//
+// Calling nextArrayItem() inserts the current object into the current array, and then sets the current object
+// to a new JSON object.
+//
+// Calling endArray() then finalizes and sets the array value in the (original / parent) object for key "name".
+//
+// [Read-only Case]:
+//
+// Similarly, beginArray() let's you traverse the array of objects found at key "name". (With some backwards-compatibility quirks.)
+//
+// The current object is set to the first object in the array. Subsequent calls to nextArrayItem() will increment which array object
+// the current object points to.
+//
+void WzConfig::beginArray(const WzString &name)
+{
+	ASSERT(mArray.empty(), "beginArray() cannot be nested");
+	mObjNameStack.push_back(mName);
+	mObjStack.push_back(pCurrentObj);
+	mName = name;
+	if (mWarning == ReadAndWrite)
+	{
+		mNewObjStack.push_back(nlohmann::json::object());
+		pCurrentObj = &mNewObjStack.back();
+	}
+	else
+	{
+		auto it = pCurrentObj->find(name.toUtf8());
+		// Check if mObj contains the name
+		if (it == pCurrentObj->end()) // handled in this way for backwards compatibility
+		{
+			return;
+		}
+		ASSERT(it.value().is_array(), "%s: beginArray() on non-array key \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
+		mArray = it.value();
+		ASSERT(mArray.front().is_object(), "%s: beginArray() on non-object array \"%s\"", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
+		pCurrentObj = &mArray.front();
 	}
 }
 
 void WzConfig::beginArray(const QString &name)
 {
-	ASSERT(mArray.isEmpty(), "beginArray() cannot be nested");
-	mObjNameStack.append(mName);
-	mObjStack.append(mObj);
-	mName = name;
-	if (mWarning == ReadAndWrite)
-	{
-		mObj = QJsonObject();
-	}
-	else
-	{
-		if (!contains(name)) // handled in this way for backwards compatibility
-		{
-			return;
-		}
-		QJsonValue value = mObj.value(name);
-		ASSERT(value.isArray(), "%s: beginArray() on non-array key \"%s\"", mFilename.toUtf8().constData(), name.toUtf8().constData());
-		mArray = value.toArray();
-		ASSERT(mArray.first().isObject(), "%s: beginArray() on non-object array \"%s\"", mFilename.toUtf8().constData(), name.toUtf8().constData());
-		mObj = mArray.first().toObject();
-	}
+	return beginArray(WzString::fromUtf8(name.toUtf8().constData()));
 }
 
 void WzConfig::nextArrayItem()
 {
 	if (mWarning == ReadAndWrite)
 	{
-		mArray.push_back(mObj);
-		mObj = QJsonObject();
+		mArray.push_back(*pCurrentObj);
+		if (!mNewObjStack.empty() && &mNewObjStack.back() == pCurrentObj)
+		{
+			mNewObjStack.pop_back();
+		}
+		mNewObjStack.push_back(nlohmann::json::object());
+		pCurrentObj = &mNewObjStack.back();
 	}
 	else
 	{
-		mArray.removeFirst();
 		if (!mArray.empty())
 		{
-			mObj = mArray.first().toObject();
-		}
-		else
-		{
-			mObj = QJsonObject();
+			mArray.erase(mArray.begin());
+			if (!mArray.empty())
+			{
+				pCurrentObj = &mArray.front();
+			}
+			else
+			{
+				mNewObjStack.push_back(nlohmann::json::object());
+				pCurrentObj = &mNewObjStack.back();
+			}
 		}
 	}
 }
@@ -323,31 +504,423 @@ void WzConfig::endArray()
 {
 	if (mWarning == ReadAndWrite)
 	{
-		if (!mObj.isEmpty())
+		if (!pCurrentObj->empty())
 		{
-			mArray.push_back(mObj);
+			mArray.push_back(*pCurrentObj);
 		}
-		mObj = mObjStack.takeLast();
-		if (!mArray.isEmpty())
+		if (!mNewObjStack.empty() && &mNewObjStack.back() == pCurrentObj)
 		{
-			mObj[mName] = mArray;
+			mNewObjStack.pop_back();
 		}
-		mName = mObjNameStack.takeLast();
+		pCurrentObj = mObjStack.back();
+		mObjStack.pop_back();
+		if (!mArray.empty())
+		{
+			ASSERT(pCurrentObj != nullptr, "pCurrentObj is null");
+			(*pCurrentObj)[mName.toUtf8()] = mArray;
+		}
+		mName = mObjNameStack.back();
+		mObjNameStack.pop_back();
 	}
 	else
 	{
-		mName = mObjNameStack.takeLast();
-		mObj = mObjStack.takeLast();
+		if (!mNewObjStack.empty() && &mNewObjStack.back() == pCurrentObj)
+		{
+			mNewObjStack.pop_back();
+		}
+		mName = mObjNameStack.back();
+		mObjNameStack.pop_back();
+		pCurrentObj = mObjStack.back();
+		mObjStack.pop_back();
 	}
-	mArray = QJsonArray();
+	mArray = nlohmann::json::array();
 }
 
-void WzConfig::setValue(const QString &key, const QVariant &value)
+void WzConfig::setValue(const WzString &key, const nlohmann::json &value)
 {
-	mObj.insert(key, QJsonValue::fromVariant(value));
+	ASSERT(pCurrentObj != nullptr, "pCurrentObj is null");
+	(*pCurrentObj)[key.toUtf8()] = value;
 }
 
-void WzConfig::set(const QString &key, const QJsonValue &value)
+void WzConfig::setValue(const char *key, const nlohmann::json &value)
 {
-	mObj.insert(key, value);
+	// Note: This makes an assumption that char * values in the files are in UTF-8
+	setValue(WzString::fromUtf8(key), value);
+}
+
+void WzConfig::setValue(const QString &key, const nlohmann::json &value)
+{
+	setValue(WzString::fromUtf8(key.toUtf8().constData()), value);
+}
+
+void WzConfig::set(const WzString &key, const nlohmann::json &value)
+{
+	setValue(key, value);
+}
+
+void WzConfig::set(const QString &key, const nlohmann::json &value)
+{
+	setValue(key, value);
+}
+
+// MARK: json_variant
+
+json_variant::json_variant(int i)
+: mObj(i)
+{ }
+
+json_variant::json_variant(const char * str)
+: mObj(str)
+{ }
+
+json_variant::json_variant(const std::string & str)
+: mObj(str)
+{ }
+
+json_variant::json_variant(const QString & str)
+: mObj(str.toUtf8().constData())
+{ }
+
+const nlohmann::json& json_variant::jsonValue() const
+{
+	return mObj;
+}
+
+#include <typeinfo>
+template<typename TYPE>
+static TYPE json_variant_toType(const json_variant& json, bool *ok, TYPE defaultValue)
+{
+	TYPE result = defaultValue;
+	try {
+		result = json.jsonValue().get<TYPE>();
+		if (ok != nullptr)
+		{
+			*ok = true;
+		}
+	}
+	catch (const std::exception &e) {
+		debug(LOG_WARNING, "Failed to convert json_variant to %s because of error: %s", typeid(TYPE).name(), e.what());
+		if (ok != nullptr)
+		{
+			*ok = false;
+		}
+		result = defaultValue;
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception encountered: json_variant::toType<%s>", typeid(TYPE).name());
+	}
+	return result;
+}
+
+int json_variant::toInt(bool *ok /*= nullptr*/) const
+{
+	if (mObj.is_number())
+	{
+		return json_variant_toType<int>(*this, ok, 0);
+	}
+	else if (mObj.is_boolean())
+	{
+		bool result = json_variant_toType<bool>(*this, ok, false);
+		return (uint)result;
+	}
+	else if (mObj.is_string())
+	{
+		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
+		try {
+			return std::stoi(result);
+		}
+		catch (const std::exception &e) {
+			debug(LOG_WARNING, "Failed to convert string '%s' to int because of error: %s", result.c_str(), e.what());
+			return 0;
+		}
+	}
+	else if (mObj.is_null())
+	{
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+uint json_variant::toUInt(bool *ok /*= nullptr*/) const
+{
+	if (mObj.is_number())
+	{
+		return json_variant_toType<uint>(*this, ok, 0);
+	}
+	else if (mObj.is_boolean())
+	{
+		bool result = json_variant_toType<bool>(*this, ok, false);
+		return (uint)result;
+	}
+	else if (mObj.is_string())
+	{
+		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
+		try {
+			unsigned long ulongValue = std::stoul(result);
+			if (ulongValue > std::numeric_limits<uint>::max())
+			{
+				debug(LOG_WARNING, "Failed to convert string '%s' to uint because of error: value is > std::numeric_limits<uint>::max()", result.c_str());
+				return 0;
+			}
+			return (uint)ulongValue;
+		}
+		catch (const std::exception &e) {
+			debug(LOG_WARNING, "Failed to convert string '%s' to uint because of error: %s", result.c_str(), e.what());
+			return 0;
+		}
+	}
+	else if (mObj.is_null())
+	{
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+#include <algorithm>
+
+bool json_variant::toBool() const
+{
+	if (mObj.is_boolean())
+	{
+		return json_variant_toType<bool>(*this, nullptr, false);
+	}
+	else if (mObj.is_number())
+	{
+		double result = json_variant_toType<double>(*this, nullptr, 0);
+		return result != 0;
+	}
+	else if (mObj.is_string())
+	{
+		std::string result = json_variant_toType<std::string>(*this, nullptr, std::string());
+		std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+		return !result.empty() && result != "0" && result != "false";
+	}
+	else
+	{
+		debug(LOG_INFO, "Expected a json value that can be converted to a boolean, instead received: %s", mObj.type_name());
+		return false;
+	}
+}
+
+double json_variant::toDouble(bool *ok /*= nullptr*/) const
+{
+	if (mObj.is_number_float())
+	{
+		return json_variant_toType<double>(*this, ok, 0.0);
+	}
+	else if (mObj.is_number_unsigned())
+	{
+		json::number_unsigned_t intValue = json_variant_toType<json::number_unsigned_t>(*this, ok, 0);
+		return (double)intValue;
+	}
+	else if (mObj.is_number_integer())
+	{
+		json::number_integer_t intValue = json_variant_toType<json::number_integer_t>(*this, ok, 0);
+		return (double)intValue;
+	}
+	else if (mObj.is_boolean())
+	{
+		return (double)json_variant_toType<bool>(*this, ok, false);
+	}
+	else if (mObj.is_string())
+	{
+		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
+		try {
+			return std::stod(result);
+		}
+		catch (const std::exception &e) {
+			debug(LOG_WARNING, "Failed to convert string '%s' to double because of error: %s", result.c_str(), e.what());
+			return 0;
+		}
+	}
+	else if (mObj.is_null())
+	{
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+float json_variant::toFloat(bool *ok /*= nullptr*/) const
+{
+	if (mObj.is_number_float())
+	{
+		return json_variant_toType<float>(*this, ok, 0.0);
+	}
+	else if (mObj.is_number_unsigned())
+	{
+		json::number_unsigned_t intValue = json_variant_toType<json::number_unsigned_t>(*this, ok, 0);
+		return (float)intValue;
+	}
+	else if (mObj.is_number_integer())
+	{
+		json::number_integer_t intValue = json_variant_toType<json::number_integer_t>(*this, ok, 0);
+		return (float)intValue;
+	}
+	else if (mObj.is_boolean())
+	{
+		return (float)json_variant_toType<bool>(*this, ok, false);
+	}
+	else if (mObj.is_string())
+	{
+		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
+		try {
+			return std::stof(result);
+		}
+		catch (const std::exception &e) {
+			debug(LOG_WARNING, "Failed to convert string '%s' to float because of error: %s", result.c_str(), e.what());
+			return 0;
+		}
+	}
+	else if (mObj.is_null())
+	{
+		return 0;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+WzString json_variant::toWzString() const
+{
+	if (mObj.is_string())
+	{
+		return json_variant_toType<WzString>(*this, nullptr, WzString());
+	}
+	else if (mObj.is_boolean())
+	{
+		bool result = json_variant_toType<bool>(*this, nullptr, false);
+		return (result) ? WzString::fromUtf8("true") : WzString::fromUtf8("false");
+	}
+	else if (mObj.is_number_unsigned())
+	{
+		json::number_unsigned_t intValue = json_variant_toType<json::number_unsigned_t>(*this, nullptr, 0);
+		return WzString::number(intValue);
+	}
+	else if (mObj.is_number_integer())
+	{
+		json::number_integer_t intValue = json_variant_toType<json::number_integer_t>(*this, nullptr, 0);
+		return WzString::number(intValue);
+	}
+	else if (mObj.is_number_float())
+	{
+		json::number_float_t floatValue = json_variant_toType<json::number_float_t>(*this, nullptr, 0);
+		return WzString::number(floatValue);
+	}
+	else if (mObj.is_null())
+	{
+		return WzString();
+	}
+	else
+	{
+		return WzString();
+	}
+}
+
+QString json_variant::toString() const
+{
+	if (mObj.is_string())
+	{
+		return QString::fromUtf8(json_variant_toType<std::string>(*this, nullptr, std::string()).c_str());
+	}
+	else if (mObj.is_boolean())
+	{
+		bool result = json_variant_toType<bool>(*this, nullptr, false);
+		return (result) ? "true" : "false";
+	}
+	else if (mObj.is_number_unsigned())
+	{
+		json::number_unsigned_t intValue = json_variant_toType<json::number_unsigned_t>(*this, nullptr, 0);
+		return QString::number(intValue);
+	}
+	else if (mObj.is_number_integer())
+	{
+		json::number_integer_t intValue = json_variant_toType<json::number_integer_t>(*this, nullptr, 0);
+		return QString::number(intValue);
+	}
+	else if (mObj.is_number_float())
+	{
+		json::number_float_t floatValue = json_variant_toType<json::number_float_t>(*this, nullptr, 0);
+		return QString::number(floatValue);
+	}
+	else if (mObj.is_null())
+	{
+		return QString();
+	}
+	else
+	{
+		return QString();
+	}
+}
+
+QStringList json_variant::toStringList() const
+{
+	QStringList result;
+
+	if (!mObj.is_array())
+	{
+		// attempt to convert the non-array to a string, and return as a vector of 1 entry (if the string is non-empty)
+		QString selfAsString = toString();
+		if (!selfAsString.isEmpty())
+		{
+			result.append(selfAsString);
+		}
+		return result;
+	}
+
+	std::string str;
+	for (const auto& v : mObj)
+	{
+		try {
+			str = v.get<std::string>();
+		}
+		catch (const std::exception &e) {
+			debug(LOG_WARNING, "Encountered a JSON value in the array that cannot be converted to a string; error: %s", e.what());
+			break;
+		}
+		catch (...) {
+			debug(LOG_FATAL, "Encountered an unexpected exception in json_variant::toStringList()");
+			break;
+		}
+		result.append(QString::fromUtf8(str.c_str()));
+	}
+	return result;
+}
+
+// Convenience methods
+
+json_variant json_getValue(const nlohmann::json& json, const WzString &key, const json_variant &defaultValue /*= json_variant()*/)
+{
+	auto it = json.find(key.toUtf8());
+	if (it == json.end())
+	{
+		return defaultValue;
+	}
+	else
+	{
+		return json_variant(it.value());
+	}
+}
+
+json_variant json_getValue(const nlohmann::json& json, nlohmann::json::size_type idx, const json_variant &defaultValue /*= json_variant()*/)
+{
+	try {
+		return json_variant(json.at(idx));
+	}
+	catch (const std::exception &e) {
+		return defaultValue;
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Encountered unexpected exception in json_getValue");
+		return defaultValue;
+	}
 }

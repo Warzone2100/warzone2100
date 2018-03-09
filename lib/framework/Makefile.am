@@ -40,7 +40,8 @@ noinst_HEADERS = \
 	vector.h \
 	wzapp.h \
 	wzconfig.h \
-	wzglobal.h
+	wzglobal.h \
+	wzstring.h
 
 libframework_a_SOURCES = \
 	crc.cpp \
@@ -59,4 +60,5 @@ libframework_a_SOURCES = \
 	treap.cpp \
 	trig.cpp \
 	utf.cpp \
-	wzconfig.cpp
+	wzconfig.cpp \
+	wzstring.cpp

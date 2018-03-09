@@ -54,10 +54,20 @@ class WzString {
 public:
 	WzString() { }
 	WzString(int size, const WzUniCodepoint& ch);
+	WzString(WzString&& other) noexcept : _utf8String(std::move(other._utf8String)) { }
+	WzString(const WzString& other) noexcept : _utf8String(other._utf8String) { }
 
 	static WzString fromUtf8(const char *str, int size = -1);
+	static WzString fromUtf16(const std::vector<uint16_t>& utf16);
 
 	const std::string& toUtf8() const;
+
+	// Same as `toUtf8()`
+	const std::string& toStdString() const;
+
+	const std::vector<uint16_t> toUtf16() const;
+
+	int toInt(bool *ok = nullptr, int base = 10) const;
 
 	bool isEmpty() const;
 
@@ -80,15 +90,32 @@ public:
 
 	void truncate(int position);
 	void clear();
+public:
+	// Create from numbers
+	static WzString number(int32_t n);
+	static WzString number(uint32_t n);
+	static WzString number(int64_t n);
+	static WzString number(uint64_t n);
+	static WzString number(double n);
 
 public:
 	WzString& operator+=(const WzString &other);
 	WzString& operator+=(const WzUniCodepoint &ch);
 	WzString& operator=(const WzString &other);
 	WzString& operator=(const WzUniCodepoint& ch);
+	WzString& operator=(WzString&& other);
+
+	const WzString operator+(const WzString &other) const;
 
 	bool operator==(const WzString &other) const;
 	bool operator!=(const WzString &other) const;
+	bool operator < (const WzString& str) const;
+
+	int compare(const WzString &other) const;
+	int compare(const char *other) const;
+
+	bool startsWith(const WzString &other) const;
+	bool startsWith(const char* other) const;
 
 	// Used to expose a modifiable "view" of a WzUniCodepoint inside a WzString
 	class WzUniCodepointRef {
@@ -115,6 +142,8 @@ private:
 
 	template <typename octet_iterator, typename distance_type>
 	bool _utf8_advance (octet_iterator& it, distance_type n, octet_iterator end) const;
+
+	static bool isValidUtf8(const char * str, size_t len);
 
 private:
 	std::string _utf8String;

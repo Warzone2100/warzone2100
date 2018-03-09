@@ -173,6 +173,8 @@ static bool globalDialog = false;
 
 static void updateGlobalModels();
 
+void to_json(nlohmann::json& j, const QVariant& value); // forward-declare
+
 // ----------------------------------------------------------
 
 void doNotSaveGlobal(const QString &global)
@@ -763,7 +765,7 @@ bool saveScriptStates(const char *filename)
 		ini.setValue("function", node.function);
 		if (node.baseobj >= 0)
 		{
-			ini.setValue("object", QVariant(node.baseobj));
+			ini.setValue("object", node.baseobj);
 		}
 		ini.setValue("frame", node.frameTime);
 		ini.setValue("type", (int)node.type);
@@ -792,7 +794,7 @@ static QScriptEngine *findEngineForPlayer(int match, const QString& scriptName)
 bool loadScriptStates(const char *filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -816,17 +818,20 @@ bool loadScriptStates(const char *filename)
 		}
 		else if (engine && list[i].startsWith("globals_"))
 		{
-			QStringList keys = ini.childKeys();
-			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %d values",
+			std::vector<WzString> keys = ini.childKeys();
+			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %lu values",
 			      player, scriptName.toUtf8().constData(), keys.size());
 			for (int j = 0; j < keys.size(); ++j)
 			{
-				engine->globalObject().setProperty(keys.at(j), engine->toScriptValue(ini.value(keys.at(j))));
+				// IMPORTANT: "null" JSON values *MUST* map to QScriptValue::UndefinedValue.
+				//			  If they are set to QScriptValue::NullValue, it causes issues for libcampaign.js. (As the values become "defined".)
+				//			  (mapJsonToQScriptValue handles this properly.)
+				engine->globalObject().setProperty(QString::fromUtf8(keys.at(j).toUtf8().c_str()), mapJsonToQScriptValue(engine, ini.json(keys.at(j)), 0));
 			}
 		}
 		else if (engine && list[i].startsWith("groups_"))
 		{
-			QStringList keys = ini.childKeys();
+			std::vector<WzString> keys = ini.childKeys();
 			for (int j = 0; j < keys.size(); ++j)
 			{
 				QStringList values = ini.value(keys.at(j)).toStringList();
@@ -837,6 +842,13 @@ bool loadScriptStates(const char *filename)
 					int groupId = values.at(k).toInt();
 					loadGroup(engine, groupId, droidId);
 				}
+			}
+		}
+		else
+		{
+			if (engine)
+			{
+				debug(LOG_WARNING, "Encountered unexpected group '%s' in loadScriptStates", list[i].toUtf8().c_str());
 			}
 		}
 		ini.endGroup();
@@ -1781,3 +1793,103 @@ bool namedScriptCallback(QScriptEngine *engine, const QString& func, int player)
 	callFunction(engine, func, args);
 	return true;
 }
+
+// Enable JSON support for custom types
+
+// QVariant
+void to_json(nlohmann::json& j, const QVariant& value) {
+	// IMPORTANT: This largely follows the Qt documentation on QJsonValue::fromVariant
+	// See: http://doc.qt.io/qt-5/qjsonvalue.html#fromVariant
+	//
+	// The main change is that numeric types are independently handled (instead of
+	// converting everything to `double`), because nlohmann::json handles them a bit
+	// differently.
+
+	// Note: Older versions of Qt 5.x (5.6?) do not define QMetaType::Nullptr,
+	//		 so check value.isNull() instead.
+	if (value.isNull())
+	{
+		j = nlohmann::json(); // null value
+		return;
+	}
+
+	switch (value.userType())
+	{
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
+		case QMetaType::Nullptr:
+			j = nlohmann::json(); // null value
+			break;
+#endif
+		case QMetaType::Bool:
+			j = value.toBool();
+			break;
+		case QMetaType::Int:
+			j = value.toInt();
+			break;
+		case QMetaType::UInt:
+			j = value.toUInt();
+			break;
+		case QMetaType::LongLong:
+			j = value.toLongLong();
+			break;
+		case QMetaType::ULongLong:
+			j = value.toULongLong();
+			break;
+		case QMetaType::Float:
+		case QVariant::Double:
+			j = value.toDouble();
+			break;
+		case QMetaType::QString:
+			j = value.toString();
+			break;
+		case QMetaType::QStringList:
+		case QMetaType::QVariantList:
+		{
+			// an array
+			j = nlohmann::json::array();
+			QList<QVariant> list = value.toList();
+			for (QVariant& list_variant : list)
+			{
+				nlohmann::json list_variant_json_value;
+				to_json(list_variant_json_value, list_variant);
+				j.push_back(list_variant_json_value);
+			}
+			break;
+		}
+		case QMetaType::QVariantMap:
+		{
+			// an object
+			j = nlohmann::json::object();
+			QMap<QString, QVariant> map = value.toMap();
+			for (QMap<QString, QVariant>::const_iterator i = map.constBegin(); i != map.constEnd(); ++i)
+			{
+				j[i.key().toUtf8().constData()] = i.value();
+			}
+			break;
+		}
+		case QMetaType::QVariantHash:
+		{
+			// an object
+			j = nlohmann::json::object();
+			QHash<QString, QVariant> hash = value.toHash();
+			for (QHash<QString, QVariant>::const_iterator i = hash.constBegin(); i != hash.constEnd(); ++i)
+			{
+				j[i.key().toUtf8().constData()] = i.value();
+			}
+			break;
+		}
+		default:
+			// For all other QVariant types a conversion to a QString will be attempted.
+			QString qstring = value.toString();
+			// If the returned string is empty, a Null QJsonValue will be stored, otherwise a String value using the returned QString.
+			if (qstring.isEmpty())
+			{
+				j = nlohmann::json(); // null value
+			}
+			else
+			{
+				j = std::string(qstring.toUtf8().constData());
+			}
+	}
+}
+

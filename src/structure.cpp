@@ -420,20 +420,20 @@ size_t sizeOfArray(const T(&)[ N ])
 /* load the structure stats from the ini file */
 bool loadStructureStats(const QString& filename)
 {
-	QMap<QString, STRUCTURE_TYPE> structType;
+	std::map<WzString, STRUCTURE_TYPE> structType;
 	for (int i = 0; i < sizeOfArray(map_STRUCTURE_TYPE); i++)
 	{
-		structType.insert(map_STRUCTURE_TYPE[i].string, map_STRUCTURE_TYPE[i].value);
+		structType.emplace(WzString::fromUtf8(map_STRUCTURE_TYPE[i].string), map_STRUCTURE_TYPE[i].value);
 	}
 
-	QMap<QString, STRUCT_STRENGTH> structStrength;
+	std::map<WzString, STRUCT_STRENGTH> structStrength;
 	for (int i = 0; i < sizeOfArray(map_STRUCT_STRENGTH); i++)
 	{
-		structStrength.insert(map_STRUCT_STRENGTH[i].string, map_STRUCT_STRENGTH[i].value);
+		structStrength.emplace(WzString::fromUtf8(map_STRUCT_STRENGTH[i].string), map_STRUCT_STRENGTH[i].value);
 	}
 
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = list.size();
 	for (int inc = 0; inc < list.size(); ++inc)
@@ -445,8 +445,8 @@ bool loadStructureStats(const QString& filename)
 		psStats->ref = REF_STRUCTURE_START + inc;
 
 		// set structure type
-		QString type = ini.value("type", "").toString();
-		ASSERT_OR_RETURN(false, structType.contains(type), "Invalid type '%s' of structure '%s'", type.toUtf8().constData(), getID(psStats));
+		WzString type = ini.value("type", "").toWzString();
+		ASSERT_OR_RETURN(false, structType.find(type) != structType.end(), "Invalid type '%s' of structure '%s'", type.toUtf8().c_str(), getID(psStats));
 		psStats->type = structType[type];
 
 		// save indexes of special structures for futher use
@@ -505,8 +505,8 @@ bool loadStructureStats(const QString& filename)
 		}
 
 		// set structure strength
-		QString strength = ini.value("strength", "").toString();
-		ASSERT_OR_RETURN(false, structStrength.contains(strength), "Invalid strength '%s' of structure '%s'", strength.toUtf8().constData(), getID(psStats));
+		WzString strength = ini.value("strength", "").toWzString();
+		ASSERT_OR_RETURN(false, structStrength.find(strength) != structStrength.end(), "Invalid strength '%s' of structure '%s'", strength.toUtf8().c_str(), getID(psStats));
 		psStats->strength = structStrength[strength];
 
 		// set baseWidth
@@ -621,21 +621,21 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 		}
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); i++)
 	{
 		WEAPON_EFFECT effectInc;
 		ini.beginGroup(list[i]);
-		if (!getWeaponEffect(list[i].toUtf8().constData(), &effectInc))
+		if (!getWeaponEffect(list[i].toUtf8().c_str(), &effectInc))
 		{
-			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().constData());
+			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().c_str());
 			ini.endGroup();
 			continue;
 		}
-		QStringList keys = ini.childKeys();
+		std::vector<WzString> keys = ini.childKeys();
 		for (int j = 0; j < keys.size(); j++)
 		{
-			const QString& strength = keys.at(j);
+			const WzString& strength = keys.at(j);
 			int modifier = ini.value(strength).toInt();
 			// FIXME - add support for dynamic categories
 			if (strength.compare("SOFT") == 0)
@@ -656,7 +656,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 			}
 			else
 			{
-				debug(LOG_ERROR, "Unsupported structure strength %s", strength.toUtf8().constData());
+				debug(LOG_ERROR, "Unsupported structure strength %s", strength.toUtf8().c_str());
 			}
 		}
 		ini.endGroup();
@@ -2473,7 +2473,7 @@ bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 			if (getNumCommandDroids(psStructure->player) >= getMaxCommanders(psStructure->player))
 			{
 				isLimit = true;
-				ssprintf(limitMsg, _("Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"), templ->name.toUtf8().constData());
+				ssprintf(limitMsg, _("Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			break;
 		case DROID_CONSTRUCT:
@@ -2481,7 +2481,7 @@ bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 			if (getNumConstructorDroids(psStructure->player) >= getMaxConstructors(psStructure->player))
 			{
 				isLimit = true;
-				ssprintf(limitMsg, _("Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().constData());
+				ssprintf(limitMsg, _("Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			break;
 		default:

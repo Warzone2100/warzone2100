@@ -437,15 +437,14 @@ std::string getShaderVersionDirective(const char* shaderData)
 	// Check if the first non-ignored characters start a #version directive
 	std::string shaderStringTrimmedBeginning(pChar);
 	std::string versionPrefix("#version");
-	try {
-		if (shaderStringTrimmedBeginning.compare(0, versionPrefix.length(), versionPrefix) != 0)
-		{
-			// Does not start with a version directive
-			return "";
-		}
+	if (shaderStringTrimmedBeginning.length() < versionPrefix.length())
+	{
+		// not enough remaining characters to form the "#version" prefix
+		return "";
 	}
-	catch (const std::exception &e) {
-		// Does not start with a version directive (likely too short a string)
+	if (shaderStringTrimmedBeginning.compare(0, versionPrefix.length(), versionPrefix) != 0)
+	{
+		// Does not start with a version directive
 		return "";
 	}
 

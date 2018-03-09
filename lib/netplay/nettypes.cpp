@@ -695,6 +695,42 @@ void NETqstring(QString &str)
 	}
 }
 
+void NETwzstring(WzString &str)
+{
+	std::vector<uint16_t> u16_characters;
+	uint32_t len = 0;
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		u16_characters = str.toUtf16();
+		len = u16_characters.size();
+	}
+
+	queueAuto(len);
+
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		u16_characters.resize(len);
+	}
+	for (unsigned i = 0; i < len; ++i)
+	{
+		uint16_t c;
+		if (NETgetPacketDir() == PACKET_ENCODE)
+		{
+			c = u16_characters[i];
+		}
+		queueAuto(c);
+		if (NETgetPacketDir() == PACKET_DECODE)
+		{
+			u16_characters[i] = c;
+		}
+	}
+
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		str = WzString::fromUtf16(u16_characters);
+	}
+}
+
 void NETstring(char const *str, uint16_t maxlen)
 {
 	ASSERT(NETgetPacketDir() == PACKET_ENCODE, "Writing to const!");

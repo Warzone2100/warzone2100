@@ -594,9 +594,9 @@ bool scrGroupObjGet(UDWORD index)
 
 
 // get the name from a stat pointer
-static const QString scrGetStatName(INTERP_TYPE type, UDWORD data)
+static const WzString scrGetStatName(INTERP_TYPE type, UDWORD data)
 {
-	QString pName;
+	WzString pName;
 
 	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
@@ -678,7 +678,7 @@ static const QString scrGetStatName(INTERP_TYPE type, UDWORD data)
 bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 {
 	VIEWDATA	*psIntMessage;
-	QString		pName;
+	WzString	pName;
 	RESEARCH	*psResearch;
 	DROID		*psCDroid;
 
@@ -699,7 +699,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		// just save the id
 		if (psVal->v.oval && ((BASE_OBJECT *)psVal->v.oval)->died <= NOT_CURRENT_LIST)
 		{
-			ini.setValue("data", QVariant(((BASE_OBJECT *)psVal->v.oval)->id));
+			ini.setValue("data", ((BASE_OBJECT *)psVal->v.oval)->id);
 		}
 		break;
 	case ST_BASESTATS:
@@ -717,7 +717,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		pName = scrGetStatName(psVal->type, psVal->v.ival);
 		if (!pName.isEmpty())
 		{
-			ini.setValue("data", QString(pName));
+			ini.setValue("data", pName);
 		}
 		break;
 	case ST_TEMPLATE:
@@ -761,15 +761,15 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 					checkValidId(psCDroid->id);
 					droids.push_back(QString::number(psCDroid->id));
 				}
-				ini.setValue("members", QVariant(members));
+				ini.setValue("members", members);
 				if (!droids.empty())
 				{
 					ini.setValue("data", droids);
 				}
 				ini.setVector2i("runpos", psGroup->sRunData.sPos);
-				ini.setValue("forceLevel", QVariant(psGroup->sRunData.forceLevel));
-				ini.setValue("leadership", QVariant(psGroup->sRunData.leadership));
-				ini.setValue("healthLevel", QVariant(psGroup->sRunData.healthLevel));
+				ini.setValue("forceLevel", psGroup->sRunData.forceLevel);
+				ini.setValue("leadership", psGroup->sRunData.leadership);
+				ini.setValue("healthLevel", psGroup->sRunData.healthLevel);
 			}
 			break;
 		}
@@ -777,7 +777,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		if (psVal->v.ival)
 		{
 			// can also return NULL
-			pName = sound_GetTrackName((UDWORD)psVal->v.ival);
+			pName = WzString::fromUtf8(sound_GetTrackName((UDWORD)psVal->v.ival));
 		}
 		if (pName.isEmpty())
 		{
@@ -790,7 +790,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		break;
 	case ST_STRUCTUREID:
 	case ST_DROIDID:
-		ini.setValue("data", QVariant(psVal->v.ival));
+		ini.setValue("data", psVal->v.ival);
 		break;
 	default:
 		ASSERT(false, "Unknown script variable type for save");

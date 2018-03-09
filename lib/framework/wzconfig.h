@@ -21,17 +21,53 @@
 #define WZCONFIG_H
 
 #include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
 #include <physfs.h>
 #include <stdbool.h>
+#include <vector>
+#include <3rdparty/json/json.hpp>
+
+using json = nlohmann::json;
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
+#include "lib/framework/wzstring.h"
+
+
+class json_variant {
+	// Wraps a json object and provides conversion methods that conform to older (QVariant) syntax and behavior
+public:
+	json_variant(const nlohmann::json& jObj)
+	: mObj(jObj)
+	{ }
+
+	json_variant()
+	// initializes to null json value
+	{ }
+
+	json_variant(int i);
+	json_variant(const char * str);
+	json_variant(const std::string & str);
+
+	json_variant(const QString & str);
+public:
+	// QVariant-like conversion methods
+	int toInt(bool *ok = nullptr) const;
+	uint toUInt(bool *ok = nullptr) const;
+	bool toBool() const;
+	double toDouble(bool *ok = nullptr) const;
+	float toFloat(bool *ok = nullptr) const;
+	WzString toWzString() const;
+	QString toString() const;
+	QStringList toStringList() const;
+
+public:
+	const nlohmann::json& jsonValue() const;
+
+private:
+	nlohmann::json mObj;
+};
 
 class WzConfig
 {
@@ -39,19 +75,31 @@ public:
 	enum warning { ReadAndWrite, ReadOnly, ReadOnlyAndRequired };
 
 private:
-	QJsonObject mObj;
-	QJsonArray mArray;
-	QString mName;
-	QList<QJsonObject> mObjStack;
-	QStringList mObjNameStack;
-	QString mFilename;
+	nlohmann::json mRoot = nlohmann::json::object();
+	nlohmann::json *pCurrentObj = nullptr; // the "current" json object
+	nlohmann::json mArray;
+	WzString mName;
+	std::list<nlohmann::json *> mObjStack;
+	std::list<nlohmann::json> mNewObjStack; // stores newly-created objects (before they are added to root)
+	std::list<WzString> mObjNameStack;
+	WzString mFilename;
 	bool mStatus;
 	warning mWarning;
 
 public:
-	WzConfig(const QString &name, WzConfig::warning warning, QObject *parent = nullptr);
+	WzConfig(const WzString &name, WzConfig::warning warning);
+	// temporarily add a constructor that takes a QString
+	WzConfig(const QString &name, WzConfig::warning warning);
 	~WzConfig();
 
+	Vector3f vector3f(const WzString &name);
+	void setVector3f(const WzString &name, const Vector3f &v);
+	Vector3i vector3i(const WzString &name);
+	void setVector3i(const WzString &name, const Vector3i &v);
+	Vector2i vector2i(const WzString &name);
+	void setVector2i(const WzString &name, const Vector2i &v);
+
+	// temporary overloads that take QString
 	Vector3f vector3f(const QString &name);
 	void setVector3f(const QString &name, const Vector3f &v);
 	Vector3i vector3i(const QString &name);
@@ -59,21 +107,28 @@ public:
 	Vector2i vector2i(const QString &name);
 	void setVector2i(const QString &name, const Vector2i &v);
 
-	QStringList childGroups() const;
-	QStringList childKeys() const;
+	std::vector<WzString> childGroups() const;
+	std::vector<WzString> childKeys() const;
+	bool contains(const WzString &key) const;
 	bool contains(const QString &key) const;
-	QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
-	QJsonValue json(const QString &key, const QJsonValue &defaultValue = QJsonValue()) const;
+	json_variant value(const WzString &key, const json_variant &defaultValue = json_variant()) const;
+	json_variant value(const QString &key, const json_variant &defaultValue = json_variant()) const;
+	nlohmann::json json(const WzString &key, const nlohmann::json &defaultValue = nlohmann::json()) const;
+	nlohmann::json json(const QString &key, const nlohmann::json &defaultValue = nlohmann::json()) const;
+	WzString string(const WzString &key, const WzString &defaultValue = WzString()) const;
+	WzString string(const std::string &key, const std::string &defaultValue = std::string()) const;
 
+	void beginArray(const WzString &name);
 	void beginArray(const QString &name);
 	void nextArrayItem();
 	void endArray();
 	int remainingArrayItems();
 
+	bool beginGroup(const WzString &name);
 	bool beginGroup(const QString &name);
 	void endGroup();
 
-	QString fileName() const
+	WzString fileName() const
 	{
 		return mFilename;
 	}
@@ -83,10 +138,13 @@ public:
 		return mWarning == ReadAndWrite && mStatus;
 	}
 
-	void setValue(const QString &key, const QVariant &value);
-	void set(const QString &key, const QJsonValue &value);
+	void setValue(const WzString &key, const nlohmann::json &value);
+	void setValue(const char *key, const nlohmann::json &value);
+	void setValue(const QString &key, const nlohmann::json &value);
+	void set(const WzString &key, const nlohmann::json &value);
+	void set(const QString &key, const nlohmann::json &value);
 
-	QString group()
+	WzString group()
 	{
 		return mName;
 	}
@@ -96,5 +154,31 @@ public:
 		return mStatus;
 	}
 };
+
+// Enable JSON support for custom types
+
+// QString
+inline void to_json(json& j, const QString& p) {
+	j = json(p.toUtf8().constData());
+}
+
+inline void from_json(const json& j, QString& p) {
+	std::string str = j.get<std::string>();
+	p = QString::fromUtf8(str.c_str());
+}
+
+// WzString
+inline void to_json(json& j, const WzString& p) {
+	j = json(p.toUtf8());
+}
+
+inline void from_json(const json& j, WzString& p) {
+	std::string str = j.get<std::string>();
+	p = WzString::fromUtf8(str.c_str());
+}
+
+// Convenience methods to retrieve a json_variant from any json object
+json_variant json_getValue(const nlohmann::json& json, const WzString &key, const json_variant &defaultValue = json_variant());
+json_variant json_getValue(const nlohmann::json& json, nlohmann::json::size_type idx, const json_variant &defaultValue = json_variant());
 
 #endif

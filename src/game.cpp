@@ -3827,10 +3827,10 @@ static bool loadMainFile(const std::string &fileName)
 	while (save.remainingArrayItems() > 0)
 	{
 		int index = save.value("index").toInt();
-		QVariant value = save.value("recycled_droids");
-		for (const QVariant &v : value.toList())
+		auto value = save.value("recycled_droids").jsonValue();
+		for (const auto &v : value)
 		{
-			add_to_experience_queue(index, v.toInt());
+			add_to_experience_queue(index, json_variant(v).toInt());
 		}
 		save.nextArrayItem();
 	}
@@ -3899,18 +3899,18 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setVector2i("VTOL_return_position", asVTOLReturnPos[i]);
 
 		std::priority_queue<int> experience = copy_experience_queue(i);
-		QJsonArray recycled_droids;
+		nlohmann::json recycled_droids = nlohmann::json::array();
 		while (!experience.empty())
 		{
-			recycled_droids.append(experience.top());
+			recycled_droids.push_back(experience.top());
 			experience.pop();
 		}
 		save.set("recycled_droids", recycled_droids);
 
-		QJsonArray allies;
+		nlohmann::json allies = nlohmann::json::array();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
-			allies.append(alliances[i][j]);
+			allies.push_back(alliances[i][j]);
 		}
 		save.set("alliances", allies);
 		save.setValue("difficulty", game.skDiff[i]);
@@ -4284,7 +4284,7 @@ static int getPlayer(WzConfig &ini)
 {
 	if (ini.contains("player"))
 	{
-		QVariant result = ini.value("player");
+		json_variant result = ini.value("player");
 		if (result.toString().startsWith("scavenger"))
 		{
 			game.mapHasScavengers = true;
@@ -4336,7 +4336,7 @@ static bool skipForDifficulty(WzConfig &ini, int player)
 static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDroidLists)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -4512,9 +4512,9 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		return false;	// try to use fallback method
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
-	std::vector<std::pair<int, QString> > sortedList;
+	std::vector<std::pair<int, WzString> > sortedList;
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -4565,7 +4565,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		else
 		{
 			// Create fake template
-			templ.name = ini.value("name", "UNKNOWN").toString();
+			templ.name = ini.string("name", "UNKNOWN");
 			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
 			psTemplate->numWeaps = ini.value("weapons", 0).toInt();
 			ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
@@ -4592,7 +4592,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		/* Create the Droid */
 		turnOffMultiMsg(true);
 		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
-		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().constData());
+		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().c_str());
 		turnOffMultiMsg(false);
 
 		// Copy the values across
@@ -5056,7 +5056,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 
 	freeAllFlagPositions();		//clear any flags put in during level loads
 
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		FACTORY *psFactory;
@@ -5072,7 +5072,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		int id = ini.value("id", -1).toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
-		QString name = ini.value("name").toString();
+		WzString name = ini.string("name");
 
 		//get the stats for this structure
 		found = false;
@@ -5087,7 +5087,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			}
 		}
 		//if haven't found the structure - ignore this record!
-		ASSERT(found, "This structure no longer exists - %s", name.toUtf8().constData());
+		ASSERT(found, "This structure no longer exists - %s", name.toUtf8().c_str());
 		if (!found)
 		{
 			ini.endGroup();
@@ -5100,7 +5100,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			STRUCTURE *psStructure = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 			if (psStructure == nullptr)
 			{
-				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", name.toUtf8().constData(), player);
+				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", name.toUtf8().c_str(), player);
 				ini.endGroup();
 				continue; // ignore this module
 			}
@@ -5109,7 +5109,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		if (map_coord(pos.x) < TOO_NEAR_EDGE || map_coord(pos.x) > mapWidth - TOO_NEAR_EDGE
 		    || map_coord(pos.y) < TOO_NEAR_EDGE || map_coord(pos.y) > mapHeight - TOO_NEAR_EDGE)
 		{
-			debug(LOG_ERROR, "Structure %s (%s), coord too near the edge of the map", name.toUtf8().constData(), list[i].toUtf8().constData());
+			debug(LOG_ERROR, "Structure %s (%s), coord too near the edge of the map", name.toUtf8().c_str(), list[i].toUtf8().c_str());
 			ini.endGroup();
 			continue; // skip it
 		}
@@ -5490,7 +5490,7 @@ bool writeStructFile(const char *pFileName)
 bool loadSaveStructurePointers(const QString& filename, STRUCTURE **ppList)
 {
 	WzConfig ini(filename, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -5685,14 +5685,14 @@ bool loadSaveFeature2(const char *pFileName)
 		return false;
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
-	debug(LOG_SAVE, "Loading new style features (%d found)", list.size());
+	std::vector<WzString> list = ini.childGroups();
+	debug(LOG_SAVE, "Loading new style features (%lu found)", list.size());
 
 	for (int i = 0; i < list.size(); ++i)
 	{
 		FEATURE *pFeature;
 		ini.beginGroup(list[i]);
-		QString name = ini.value("name").toString();
+		WzString name = ini.string("name");
 		Position pos = ini.vector3i("position");
 		int statInc;
 		bool found = false;
@@ -5712,7 +5712,7 @@ bool loadSaveFeature2(const char *pFileName)
 		//if haven't found the feature - ignore this record!
 		if (!found)
 		{
-			debug(LOG_ERROR, "This feature no longer exists - %s", name.toUtf8().constData());
+			debug(LOG_ERROR, "This feature no longer exists - %s", name.toUtf8().c_str());
 			//ignore this
 			continue;
 		}
@@ -5720,7 +5720,7 @@ bool loadSaveFeature2(const char *pFileName)
 		pFeature = buildFeature(psStats, pos.x, pos.y, true);
 		if (!pFeature)
 		{
-			debug(LOG_ERROR, "Unable to create feature %s", name.toUtf8().constData());
+			debug(LOG_ERROR, "Unable to create feature %s", name.toUtf8().c_str());
 			continue;
 		}
 		if (pFeature->psStats->subType == FEAT_OIL_RESOURCE)
@@ -5772,11 +5772,11 @@ bool writeFeatureFile(const char *pFileName)
 bool loadSaveTemplate(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 
 	auto loadTemplate = [&]() {
 		DROID_TEMPLATE t = loadTemplateCommon(ini);
-		t.name = ini.value("name").toString();
+		t.name = ini.string("name");
 		t.multiPlayerID = ini.value("multiPlayerID", generateNewObjectId()).toInt();
 		t.enabled = ini.value("enabled", false).toBool();
 		t.stored = ini.value("stored", false).toBool();
@@ -5977,10 +5977,10 @@ bool loadSaveCompList(const char *pFileName)
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
-		QStringList list = ini.childKeys();
+		std::vector<WzString> list = ini.childKeys();
 		for (int i = 0; i < list.size(); ++i)
 		{
-			QString name = list[i];
+			QString name = QString::fromUtf8(list[i].toUtf8().c_str());
 			int state = ini.value(name, UNAVAILABLE).toInt();
 			COMPONENT_STATS *psComp = getCompStatsFromName(name);
 			ASSERT_OR_RETURN(false, psComp, "Bad component %s", name.toUtf8().constData());
@@ -6090,15 +6090,15 @@ static bool loadSaveStructTypeList(const char *pFileName)
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
-		QStringList list = ini.childKeys();
+		std::vector<WzString> list = ini.childKeys();
 		for (int i = 0; i < list.size(); ++i)
 		{
-			QString name = list[i];
+			WzString name = list[i];
 			int state = ini.value(name, UNAVAILABLE).toInt();
 			int statInc;
 
 			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
-			                 "Bad state %d for %s", state, name.toUtf8().constData());
+			                 "Bad state %d for %s", state, name.toUtf8().c_str());
 			for (statInc = 0; statInc < numStructureStats; statInc++) // loop until find the same name
 			{
 				STRUCTURE_STATS *psStats = asStructureStats + statInc;
@@ -6109,7 +6109,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 					break;
 				}
 			}
-			ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().constData());
+			ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().c_str());
 		}
 		ini.endGroup();
 	}
@@ -6145,7 +6145,7 @@ bool loadSaveResearch(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	const int players = game.maxPlayers;
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -6169,18 +6169,21 @@ bool loadSaveResearch(const char *pFileName)
 			//ignore this record
 			continue;
 		}
-		QStringList researchedList = ini.value("researched").toStringList();
-		QStringList possiblesList = ini.value("possible").toStringList();
-		QStringList pointsList = ini.value("currentPoints").toStringList();
+		auto researchedList = ini.value("researched").jsonValue();
+		auto possiblesList = ini.value("possible").jsonValue();
+		auto pointsList = ini.value("currentPoints").jsonValue();
+		ASSERT(researchedList.is_array(), "Bad (non-array) researched list for %s", name);
+		ASSERT(possiblesList.is_array(), "Bad (non-array) possible list for %s", name);
+		ASSERT(pointsList.is_array(), "Bad (non-array) points list for %s", name);
 		ASSERT(researchedList.size() == players, "Bad researched list for %s", name);
 		ASSERT(possiblesList.size() == players, "Bad possible list for %s", name);
 		ASSERT(pointsList.size() == players, "Bad points list for %s", name);
 		for (int plr = 0; plr < players; plr++)
 		{
 			PLAYER_RESEARCH *psPlRes;
-			int researched = researchedList.at(plr).toInt();
-			int possible = possiblesList.at(plr).toInt();
-			int points = pointsList.at(plr).toInt();
+			int researched = json_getValue(researchedList, plr).toInt();
+			int possible = json_getValue(possiblesList, plr).toInt();
+			int points = json_getValue(pointsList, plr).toInt();
 
 			psPlRes = &asPlayerResList[plr][statInc];
 			// Copy the research status
@@ -6255,7 +6258,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 	}
 
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -6444,10 +6447,10 @@ bool loadSaveStructLimits(const char *pFileName)
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
-		QStringList list = ini.childKeys();
+		std::vector<WzString> list = ini.childKeys();
 		for (int i = 0; i < list.size(); ++i)
 		{
-			QString name = list[i];
+			WzString name = list[i];
 			int limit = ini.value(name, 0).toInt();
 
 			if (name.compare("@Droid") == 0)
@@ -6474,7 +6477,7 @@ bool loadSaveStructLimits(const char *pFileName)
 						break;
 					}
 				}
-				ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().constData());
+				ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().c_str());
 			}
 		}
 		ini.endGroup();
@@ -6519,7 +6522,7 @@ bool writeStructLimitsFile(const char *pFileName)
 bool readFiresupportDesignators(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -6686,7 +6689,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		aFileName[strlen(aFileName) - 4] = '\0';
 		strcat(aFileName, "/struct.json");
 		WzConfig ini(aFileName, WzConfig::ReadOnly);
-		QStringList list = ini.childGroups();
+		std::vector<WzString> list = ini.childGroups();
 		for (int i = 0; i < list.size(); ++i)
 		{
 			ini.beginGroup(list[i]);
@@ -6890,7 +6893,7 @@ static void plotFeature(char *backDropSprite)
 			debug(LOG_ERROR, "Could not open %s", aFileName);
 			return;
 		}
-		QStringList list = ini.childGroups();
+		std::vector<WzString> list = ini.childGroups();
 		for (int i = 0; i < list.size(); ++i)
 		{
 			ini.beginGroup(list[i]);

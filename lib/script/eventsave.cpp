@@ -67,29 +67,29 @@ static bool eventSaveContext(WzConfig &ini)
 				ASSERT(psVal->type < SWORD_MAX, "Variable type number %d too big", (int)psVal->type);
 
 				ini.beginGroup(QString::number(countVar));
-				ini.setValue("type", QVariant(psVal->type));
-				ini.setValue("typename", QString(scriptTypeToString(psVal->type))); // for debugging
+				ini.setValue("type", psVal->type);
+				ini.setValue("typename", scriptTypeToString(psVal->type)); // for debugging
 
 				// store the variable value
 				if (psVal->type == VAL_STRING)
 				{
-					ini.setValue("data", QString(psVal->v.sval));
+					ini.setValue("data", psVal->v.sval);
 				}
 				else if (psVal->type == VAL_BOOL)
 				{
-					ini.setValue("data", QVariant((bool)psVal->v.bval));
+					ini.setValue("data", (bool)psVal->v.bval);
 				}
 				else if (psVal->type == VAL_FLOAT)
 				{
-					ini.setValue("data", QVariant((float)psVal->v.fval));
+					ini.setValue("data", (float)psVal->v.fval);
 				}
 				else if (psVal->type == VAL_OBJ_GETSET || psVal->type == VAL_FUNC_EXTERN)
 				{
-					ini.setValue("data", QString("n/a"));
+					ini.setValue("data", "n/a");
 				}
 				else if (psVal->type < VAL_USERTYPESTART)
 				{
-					ini.setValue("data", QVariant(psVal->v.ival));
+					ini.setValue("data", psVal->v.ival);
 				}
 				else
 				{
@@ -123,7 +123,7 @@ static bool eventSaveContext(WzConfig &ini)
 	}
 
 	// actually store how many contexts have been saved
-	ini.setValue("general/contexts", QVariant(numContext));
+	ini.setValue("general/contexts", numContext);
 
 	return true;
 }
@@ -288,16 +288,16 @@ static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, const QString& tname, W
 			return false;
 		}
 		ini.beginGroup(tname + "_" + QString::number(numTriggers));
-		ini.setValue("time", QVariant(psCurr->testTime));
-		ini.setValue("context", QVariant(context));
-		ini.setValue("type", QVariant(psCurr->type));
-		ini.setValue("trigger", QVariant(psCurr->trigger));
-		ini.setValue("event", QVariant(psCurr->event));
-		ini.setValue("offset", QVariant(psCurr->offset));
+		ini.setValue("time", psCurr->testTime);
+		ini.setValue("context", context);
+		ini.setValue("type", psCurr->type);
+		ini.setValue("trigger", psCurr->trigger);
+		ini.setValue("event", psCurr->event);
+		ini.setValue("offset", psCurr->offset);
 		ini.endGroup();
 		numTriggers++;
 	}
-	ini.setValue("general/num" + tname, QVariant(numTriggers));
+	ini.setValue("general/num" + tname, numTriggers);
 	return true;
 }
 

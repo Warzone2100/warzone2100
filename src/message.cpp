@@ -688,14 +688,14 @@ const char *loadResearchViewData(const char *fileName)
 {
 	ASSERT_OR_RETURN(nullptr, PHYSFS_exists(fileName), "%s not found", fileName);
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		VIEWDATA *v = new VIEWDATA;
 		VIEW_RESEARCH *r = new VIEW_RESEARCH;
 
 		v->pData = nullptr;
-		v->name = list[i];
+		v->name = QString::fromUtf8(list[i].toUtf8().c_str());
 		v->fileName = fileName;
 
 		ini.beginGroup(list[i]);

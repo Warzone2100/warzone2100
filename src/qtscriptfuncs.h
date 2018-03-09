@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 #include "qtscript.h"
 #include "featuredef.h"
+#include "3rdparty/json/json_fwd.hpp"
 
 class QStandardItemModel;
 
@@ -55,6 +56,8 @@ bool loadGroup(QScriptEngine *engine, int groupId, int objId);
 void prepareLabels();
 
 bool areaLabelCheck(DROID *psDroid);
+
+QScriptValue mapJsonToQScriptValue(QScriptEngine *engine, const nlohmann::json &instance, QScriptValue::PropertyFlags flags);
 
 // Utility conversion functions
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);

@@ -285,7 +285,8 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 	{
 		int32_t droidType = pT->droidType;
-		NETqstring(pT->name);
+		QString name = QString::fromUtf8(pT->name.toUtf8().c_str());
+		NETqstring(name);
 		NETuint32_t(&pT->multiPlayerID);
 		NETint32_t(&droidType);
 		NETuint8_t(&pT->asParts[COMP_BODY]);
@@ -319,7 +320,9 @@ void recvStructureInfo(NETQUEUE queue)
 	NETuint8_t(&structureInfo);
 	if (structureInfo == STRUCTUREINFO_MANUFACTURE)
 	{
-		NETqstring(pT->name);
+		QString name;
+		NETqstring(name);
+		pT->name = WzString::fromUtf8(name.toUtf8().constData());
 		NETuint32_t(&pT->multiPlayerID);
 		NETint32_t(&droidType);
 		NETuint8_t(&pT->asParts[COMP_BODY]);
@@ -359,12 +362,12 @@ void recvStructureInfo(NETQUEUE queue)
 
 	if (structureInfo == STRUCTUREINFO_MANUFACTURE && !researchedTemplate(pT, player, true, true))
 	{
-		debug(LOG_ERROR, "Invalid droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
+		debug(LOG_ERROR, "Invalid droid received from player %d with name %s", (int)player, pT->name.toUtf8().c_str());
 		return;
 	}
 	if (structureInfo == STRUCTUREINFO_MANUFACTURE && !intValidTemplate(pT, nullptr, true, player))
 	{
-		debug(LOG_ERROR, "Illegal droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
+		debug(LOG_ERROR, "Illegal droid received from player %d with name %s", (int)player, pT->name.toUtf8().c_str());
 		return;
 	}
 
