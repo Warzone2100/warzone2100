@@ -181,28 +181,28 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 	{
 		WTopLeft = (SWORD)iV_GetImageWidth(IntImages, Frame->TopLeft);
 		HTopLeft = (SWORD)iV_GetImageHeight(IntImages, Frame->TopLeft);
-		iV_DrawImage(IntImages, Frame->TopLeft, x, y);
+		iV_DrawImage(IntImages, Frame->TopLeft, x, y, modelViewProjectionMatrix);
 	}
 
 	if (Frame->TopRight >= 0)
 	{
 		WTopRight = (SWORD)iV_GetImageWidth(IntImages, Frame->TopRight);
 		HTopRight = (SWORD)iV_GetImageHeight(IntImages, Frame->TopRight);
-		iV_DrawImage(IntImages, Frame->TopRight, x + Width - WTopRight, y);
+		iV_DrawImage(IntImages, Frame->TopRight, x + Width - WTopRight, y, modelViewProjectionMatrix);
 	}
 
 	if (Frame->BottomRight >= 0)
 	{
 		WBottomRight = (SWORD)iV_GetImageWidth(IntImages, Frame->BottomRight);
 		HBottomRight = (SWORD)iV_GetImageHeight(IntImages, Frame->BottomRight);
-		iV_DrawImage(IntImages, Frame->BottomRight, x + Width - WBottomRight, y + Height - HBottomRight);
+		iV_DrawImage(IntImages, Frame->BottomRight, x + Width - WBottomRight, y + Height - HBottomRight, modelViewProjectionMatrix);
 	}
 
 	if (Frame->BottomLeft >= 0)
 	{
 		WBottomLeft = (SWORD)iV_GetImageWidth(IntImages, Frame->BottomLeft);
 		HBottomLeft = (SWORD)iV_GetImageHeight(IntImages, Frame->BottomLeft);
-		iV_DrawImage(IntImages, Frame->BottomLeft, x, y + Height - HBottomLeft);
+		iV_DrawImage(IntImages, Frame->BottomLeft, x, y + Height - HBottomLeft, modelViewProjectionMatrix);
 	}
 
 	if (Frame->TopEdge >= 0)
