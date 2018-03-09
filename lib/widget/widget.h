@@ -259,6 +259,11 @@ WZ_DECL_NONNULL(1) void widgReveal(W_SCREEN *psScreen, UDWORD id);
  */
 WZ_DECL_NONNULL(1) const char *widgGetString(W_SCREEN *psScreen, UDWORD id);
 
+/** Return the current string of a widget, if any.
+ * This will always return a string. If the widget doesn't have a string, it will return an empty WzString.
+ */
+WZ_DECL_NONNULL(1) const WzString& widgGetWzString(W_SCREEN *psScreen, UDWORD id);
+
 /** Set the text in a widget */
 WZ_DECL_NONNULL(1) void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
 

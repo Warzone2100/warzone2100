@@ -29,6 +29,7 @@ struct iIMDShape;
 #include <vector>
 #include <algorithm>
 #include <bitset>
+#include "lib/framework/wzstring.h"
 
 /* The different types of droid */
 // NOTE, if you add to, or change this list then you'll need
@@ -254,14 +255,14 @@ struct BASE_STATS
 {
 	BASE_STATS(unsigned ref = 0) : ref(ref) {}
 
-	QString id;     ///< Text id (i.e. short language-independent name)
-	QString name;   ///< Full / real name of the item
+	WzString id;    ///< Text id (i.e. short language-independent name)
+	WzString name;  ///< Full / real name of the item
 	unsigned ref;   ///< Unique ID of the item
 	int index = 0;  ///< Index into containing array
 };
 
-#define getName(_psStats) ((_psStats)->name.isEmpty()? "" : gettext((_psStats)->name.toUtf8().constData()))
-#define getID(_psStats) (_psStats)->id.toUtf8().constData()
+#define getName(_psStats) ((_psStats)->name.isEmpty()? "" : gettext((_psStats)->name.toUtf8().c_str()))
+#define getID(_psStats) (_psStats)->id.toUtf8().c_str()
 
 /* Stats common to all droid components */
 struct COMPONENT_STATS : public BASE_STATS

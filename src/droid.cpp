@@ -932,7 +932,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		ItemAvailability ia = (ItemAvailability)apStructTypeLists[psDroid->player][psStructStat - asStructureStats];
 		if (ia != AVAILABLE && ia != REDUNDANT)
 		{
-			ASSERT(false, "Cannot build \"%s\" for player %d.", psStructStat->name.toUtf8().constData(), psDroid->player);
+			ASSERT(false, "Cannot build \"%s\" for player %d.", psStructStat->name.toUtf8().c_str(), psDroid->player);
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
 			objTrace(psDroid->id, "DroidStartBuildFailed: not researched");
@@ -3002,7 +3002,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 		return nullptr;
 	}
 	templateSetParts(psD, &sTemplate);	// create a template based on the droid
-	sTemplate.name = psD->aName;	// copy the name across
+	sTemplate.name = WzString::fromUtf8(psD->aName);	// copy the name across
 	// only play the nexus sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
 	if (psD->player == selectedPlayer && to != selectedPlayer && !bMultiPlayer)
 	{

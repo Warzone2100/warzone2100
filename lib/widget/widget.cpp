@@ -654,6 +654,17 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 	return ret.toUtf8().c_str();
 }
 
+const WzString& widgGetWzString(W_SCREEN *psScreen, UDWORD id)
+{
+	static WzString emptyString = WzString();
+	const WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(emptyString, psWidget, "Couldn't find widget by ID %u", id);
+
+	static WzString ret;  // Must be static so it isn't immediately freed when this function returns.
+	ret = psWidget->getString();
+	return ret;
+}
+
 void WIDGET::setString(WzString)
 {
 	ASSERT(false, "Can't set widget type %u's string.", type);

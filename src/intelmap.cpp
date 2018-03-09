@@ -317,7 +317,7 @@ static bool intAddMessageForm(bool playCurrent)
 			psResearch = getResearchForMsg(psMessage->pViewData);
 			if (psResearch)
 			{
-				button->setTip(psResearch->name.toUtf8().constData());
+				button->setTip(psResearch->name.toUtf8().c_str());
 			}
 			else
 			{
@@ -453,7 +453,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	ASSERT_OR_RETURN(false, psResearch != nullptr, "Research not found");
 	//sLabInit.pText=psResearch->pName;
-	sLabInit.pText = WzString::fromUtf8(psResearch->name.toUtf8().constData());
+	sLabInit.pText = WzString::fromUtf8(psResearch->name.toUtf8().c_str());
 
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))

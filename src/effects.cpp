@@ -2240,7 +2240,7 @@ bool writeFXData(const char *fileName)
 
 		if (it->imd)
 		{
-			ini.setValue("imd_name", QString::fromStdString(modelName(it->imd)));
+			ini.setValue("imd_name", modelName(it->imd));
 		}
 
 		// Move on to reading the next effect
@@ -2258,7 +2258,7 @@ bool readFXData(const char *fileName)
 	initEffectsSystem();
 
 	WzConfig ini(fileName, WzConfig::ReadOnly);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 
 	for (int i = 0; i < list.size(); ++i)
 	{

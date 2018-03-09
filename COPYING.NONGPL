@@ -9,12 +9,17 @@ data/texpages/bdrops/backdrop6.png
 	- CC0		- Copyright (c) 2010-2011 jorzi
 data/base/texpages/page-25-sky-urban.png
 	- CC0, original work by cybersphinx
+3rdparty/json/*
+	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
 3rdparty/micro-ecc/*
 	- BSD, Copyright (c) 2014, Kenneth MacKay (https://github.com/kmackay/micro-ecc)
 3rdparty/sha2/*
 	- BSD, Copyright (c) 2002, Dr Brian Gladman, Worcester, UK
 3rdparty/miniupnpc/*
 	- BSD, copyright Thomas Bernard (http://miniupnp.free.fr)
+3rdparty/utfcpp/*
+	- MIT Variant, Copyright (c) 2006-2016 Nemanja Trifunovic
+	- (https://fedoraproject.org/wiki/Licensing:MIT#Thrift_variant)
 data/base/texpages/page-6-features-rockies.png
 	- CC BY SA 3.0	- Copyright (c) 2009 <Mysteryem>
 data/base/texpages/page-17-droid-weapons.png

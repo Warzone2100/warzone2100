@@ -385,7 +385,7 @@ bool saveKeyMap()
 	if (!ini.status() || !ini.isWritable())
 	{
 		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
-		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().constData());
+		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().c_str());
 		return false;
 	}
 

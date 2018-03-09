@@ -388,7 +388,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sCurrDesign = sDefaultDesignTemplate;
 	sCurrDesign.stored = false;
 	sstrcpy(aCurrName, _("New Vehicle"));
-	sCurrDesign.name = aCurrName;
+	sCurrDesign.name = WzString::fromUtf8(aCurrName);
 
 	/* Add the design templates form */
 	if (!intAddTemplateForm(nullptr))  // Was psCurrTemplate instead of NULL, but psCurrTemplate was always NULL. Deleted psCurrTemplate, but leaving this here, in case intAddTemplateForm(NULL) does something useful.
@@ -3001,7 +3001,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	/* copy name into template */
 	if (newName)
 	{
-		psTempl->name = newName;
+		psTempl->name = WzString::fromUtf8(newName);
 	}
 
 	return true;
@@ -3096,7 +3096,7 @@ void intProcessDesign(UDWORD id)
 			desCreateDefaultTemplate();
 
 			aCurrName[0] = '\0';
-			sCurrDesign.name = aCurrName;
+			sCurrDesign.name = WzString();
 
 			/* reveal body button */
 			widgReveal(psWScreen, IDDES_BODYBUTTON);
@@ -3438,7 +3438,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if (bTemplateNameCustomised == false)
 		{
-			sCurrDesign.name = GetDefaultTemplateName(&sCurrDesign);
+			sCurrDesign.name = WzString::fromUtf8(GetDefaultTemplateName(&sCurrDesign));
 		}
 
 		/* Update the name in the edit box */
@@ -3570,7 +3570,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if (bTemplateNameCustomised == false)
 		{
-			sCurrDesign.name = GetDefaultTemplateName(&sCurrDesign);
+			sCurrDesign.name = WzString::fromUtf8(GetDefaultTemplateName(&sCurrDesign));
 		}
 
 		/* Update the name in the edit box */
@@ -3624,7 +3624,7 @@ void intProcessDesign(UDWORD id)
 			break;
 		/* The name edit box */
 		case IDDES_NAMEBOX:
-			sCurrDesign.name = widgGetString(psWScreen, IDDES_NAMEBOX);
+			sCurrDesign.name = widgGetWzString(psWScreen, IDDES_NAMEBOX);
 			sstrcpy(aCurrName, getName(&sCurrDesign));
 			break;
 		case IDDES_BIN:

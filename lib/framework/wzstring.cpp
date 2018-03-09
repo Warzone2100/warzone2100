@@ -1,4 +1,6 @@
 #include "wzstring.h"
+#include <sstream>
+#include <iomanip>
 #include <utfcpp/utf8.h>
 #include "frame.h"
 
@@ -50,13 +52,70 @@ WzString WzString::fromUtf8(const char *str, int size /*= -1*/)
 	}
 	ASSERT(utf8::is_valid(str, str + size), "Input text is not valid UTF-8");
 	std::string replace_invalid_result;
-	utf8::replace_invalid(str, str + size, back_inserter(replace_invalid_result), '?');
+	try {
+		utf8::replace_invalid(str, str + size, back_inserter(replace_invalid_result), '?');
+	}
+	catch (const std::exception &e) {
+		// Likely passed an incomplete UTF-8 sequence
+		ASSERT(false, "Encountered error parsing input UTF-8 sequence: %s", e.what());
+		replace_invalid_result.clear();
+	}
 	return WzString(replace_invalid_result);
+}
+
+WzString WzString::fromUtf16(const std::vector<uint16_t>& utf16)
+{
+	std::string utf8str;
+	try {
+		utf8::utf16to8(utf16.begin(), utf16.end(), back_inserter(utf8str));
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Conversion from UTF16 failed with error: %s", e.what());
+		utf8str.clear();
+	}
+	return WzString(utf8str);
+}
+
+bool WzString::isValidUtf8(const char * str, size_t len)
+{
+	return utf8::is_valid(str, str + len);
 }
 
 const std::string& WzString::toUtf8() const
 {
 	return _utf8String;
+}
+
+const std::string& WzString::toStdString() const
+{
+	return toUtf8();
+}
+
+const std::vector<uint16_t> WzString::toUtf16() const
+{
+	std::vector<uint16_t> utf16result;
+	utf8::utf8to16(_utf8String.begin(), _utf8String.end(), back_inserter(utf16result));
+	return utf16result;
+}
+
+int WzString::toInt(bool *ok /*= nullptr*/, int base /*= 10*/) const
+{
+	int result = 0;
+	try {
+		result = std::stoi(_utf8String, 0, base);
+		if (ok != nullptr)
+		{
+			*ok = true;
+		}
+	}
+	catch (const std::exception &e) {
+		if (ok != nullptr)
+		{
+			*ok = false;
+		}
+		result = 0;
+	}
+	return result;
 }
 
 bool WzString::isEmpty() const
@@ -196,6 +255,50 @@ void WzString::clear()
 	_utf8String.clear();
 }
 
+// MARK: - Create from numbers
+
+WzString WzString::number(int32_t n)
+{
+	WzString newString;
+	newString._utf8String = std::to_string(n);
+	return newString;
+}
+
+WzString WzString::number(uint32_t n)
+{
+	WzString newString;
+	newString._utf8String = std::to_string(n);
+	return newString;
+}
+
+WzString WzString::number(int64_t n)
+{
+	WzString newString;
+	newString._utf8String = std::to_string(n);
+	return newString;
+}
+
+WzString WzString::number(uint64_t n)
+{
+	WzString newString;
+	newString._utf8String = std::to_string(n);
+	return newString;
+}
+
+WzString WzString::number(double n)
+{
+	WzString newString;
+	// Note: Don't use std::to_string because it respects the current C locale
+	// and we want locale-independent conversion (plus control over precision).
+	std::stringstream ss;
+	ss.imbue(std::locale::classic());
+	ss << std::setprecision(std::numeric_limits<double>::digits10) << n;
+	newString._utf8String = ss.str();
+	return newString;
+}
+
+// MARK: - Operators
+
 WzString& WzString::operator+=(const WzString &other)
 {
 	append(other);
@@ -206,6 +309,13 @@ WzString& WzString::operator+=(const WzUniCodepoint &ch)
 {
 	append(ch);
 	return *this;
+}
+
+const WzString WzString::operator+(const WzString &other) const
+{
+	WzString newString = *this;
+	newString.append(other);
+	return newString;
 }
 
 WzString& WzString::operator=(const WzString &other)
@@ -221,6 +331,16 @@ WzString& WzString::operator=(const WzUniCodepoint& ch)
 	return *this;
 }
 
+WzString& WzString::operator=(WzString&& other)
+{
+	if (this != &other)
+	{
+		_utf8String = std::move(other._utf8String);
+		other._utf8String.clear();
+	}
+	return *this;
+}
+
 bool WzString::operator==(const WzString &other) const
 {
 	return _utf8String == other._utf8String;
@@ -229,6 +349,52 @@ bool WzString::operator==(const WzString &other) const
 bool WzString::operator!=(const WzString &other) const
 {
 	return ! (*this == other);
+}
+
+bool WzString::operator < (const WzString& str) const
+{
+	return (_utf8String < str._utf8String);
+}
+
+int WzString::compare(const WzString &other) const
+{
+	if (_utf8String < other._utf8String) { return -1; }
+	else if (_utf8String == other._utf8String) { return 0; }
+	else { return 1; }
+}
+
+int WzString::compare(const char *other) const
+{
+	auto first1 = _utf8String.begin();
+	auto last1 = _utf8String.end();
+	auto first2 = other;
+	while (first1 != last1)
+	{
+		if (*first2 == 0 || *first2 < *first1) return 1;
+		else if (*first1 < *first2) return -1;
+		++first1; ++first2;
+	}
+	if (*first2 == 0)
+	{
+		// reached the end of 1st and 2nd strings - they are equal
+		return 0;
+	}
+	else
+	{
+		// reached the end of the 1st string, but not the 2nd
+		return -1;
+	}
+}
+
+bool WzString::startsWith(const WzString &other) const
+{
+	return _utf8String.compare(0, other._utf8String.length(), other._utf8String) == 0;
+}
+
+bool WzString::startsWith(const char* other) const
+{
+	// NOTE: This currently assumes that the char* is UTF-8-encoded.
+	return _utf8String.compare(0, strlen(other), other) == 0;
 }
 
 template <typename octet_iterator, typename distance_type>

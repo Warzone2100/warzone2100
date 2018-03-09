@@ -97,7 +97,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 {
 	DROID_TEMPLATE design;
-	design.name = ini.value("name").toString();
+	design.name = ini.string("name");
 	QString droidType = ini.value("type").toString();
 
 	if (droidType == "ECM")
@@ -182,7 +182,7 @@ bool initTemplates()
 	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
 	if (!ini.status())
 	{
-		debug(LOG_WZ, "Could not open %s", ini.fileName().toUtf8().constData());
+		debug(LOG_WZ, "Could not open %s", ini.fileName().toUtf8().c_str());
 		return false;
 	}
 	int version = ini.value("version", 0).toInt();
@@ -200,12 +200,12 @@ bool initTemplates()
 		if (std::find(std::begin(design.asParts), std::end(design.asParts), -1) != std::end(design.asParts)
 			|| std::find(std::begin(design.asWeaps), std::end(design.asWeaps), -1) != std::end(design.asWeaps))
 		{
-			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", design.name.toUtf8().constData());
+			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", design.name.toUtf8().c_str());
 			continue;
 		}
 
 		char const *failPart = nullptr;
-		QString failPartName;
+		WzString failPartName;
 		auto designablePart = [&](COMPONENT_STATS const &component, char const *part) {
 			if (!component.designable)
 			{
@@ -229,13 +229,13 @@ bool initTemplates()
 			&& (design.numWeaps <= 2 || designablePart(asWeaponStats[design.asWeaps[2]], "Weapon 2"));
 		if (!designable)
 		{
-			debug(LOG_ERROR, "%s \"%s\" for \"%s\" from stored templates cannot be designed", failPart, failPartName.toUtf8().constData(), design.name.toUtf8().constData());
+			debug(LOG_ERROR, "%s \"%s\" for \"%s\" from stored templates cannot be designed", failPart, failPartName.toUtf8().c_str(), design.name.toUtf8().c_str());
 			continue;
 		}
 		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
 		if (!valid)
 		{
-			debug(LOG_ERROR, "Invalid template \"%s\" from stored templates", design.name.toUtf8().constData());
+			debug(LOG_ERROR, "Invalid template \"%s\" from stored templates", design.name.toUtf8().c_str());
 			continue;
 		}
 		DROID_TEMPLATE *psDestTemplate = nullptr;
@@ -293,7 +293,7 @@ void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
 	case DROID_COMMAND: ini.setValue("type", "DROID_COMMAND"); break;
 	case DROID_REPAIR: ini.setValue("type", "REPAIR"); break;
 	case DROID_DEFAULT: ini.setValue("type", "DROID"); break;
-	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().constData());
+	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().c_str());
 	}
 	ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
 	ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
@@ -317,10 +317,10 @@ void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
 	{
 		ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
 	}
-	QStringList weapons;
+	std::vector<WzString> weapons;
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		weapons += (asWeaponStats + psCurr->asWeaps[j])->id;
+		weapons.push_back((asWeaponStats + psCurr->asWeaps[j])->id);
 	}
 	if (!weapons.empty())
 	{
@@ -334,7 +334,7 @@ bool storeTemplates()
 	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json", WzConfig::ReadAndWrite);
 	if (!ini.status() || !ini.isWritable())
 	{
-		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().constData());
+		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().c_str());
 		return false;
 	}
 	ini.setValue("version", 1); // for breaking backwards compatibility in a nice way
@@ -375,20 +375,20 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 bool loadDroidTemplates(const char *filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
+	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		DROID_TEMPLATE design = loadTemplateCommon(ini);
 		design.id = list[i];
-		design.name = ini.value("name").toString();
+		design.name = ini.string("name");
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = true;
 		design.stored = false;
 		design.enabled = true;
 		bool available = ini.value("available", false).toBool();
-		char const *droidResourceName = getDroidResourceName(list[i].toUtf8().constData());
-		design.name = droidResourceName != nullptr ? droidResourceName : GetDefaultTemplateName(&design);
+		char const *droidResourceName = getDroidResourceName(list[i].toUtf8().c_str());
+		design.name = WzString::fromUtf8(droidResourceName != nullptr ? droidResourceName : GetDefaultTemplateName(&design));
 		ini.endGroup();
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
