@@ -2,10 +2,11 @@ cmake_minimum_required (VERSION 3.5)
 project (exception-handler CXX)
 
 file(GLOB HEADERS "*.h")
-if(WIN32)
-file(GLOB SRC "*.cpp")
-else()
 set(SRC "dumpinfo.cpp" "exceptionhandler.cpp")
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" AND ${CMAKE_CROSSCOMPILING})
+	# Include exchndl.cpp when cross-compiling for Windows with MINGW
+	list(APPEND SRC "exchndl.cpp")
 endif()
 
 add_library(exception-handler STATIC ${HEADERS} ${SRC})
