@@ -164,6 +164,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_CROSSCOMPILING)
 			include(BundleUtilities)
 			fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${_mainexename}.exe\" \"\" \"\${dll_source_dirs}\")
 		" COMPONENT Core)
+
+		if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+			# Must install the PDB file or crash dumps won't be as useful
+			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT Core DESTINATION ".")
+		endif()
 	else()
 		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )
 	endif()
