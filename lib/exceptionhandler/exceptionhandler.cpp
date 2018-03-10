@@ -70,7 +70,9 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 		if (miniDumpFile != INVALID_HANDLE_VALUE)
 		{
-			MINIDUMP_USER_STREAM uStream = { LastReservedStream + 1, strlen(PACKAGE_VERSION), PACKAGE_VERSION };
+			size_t package_version_len = strlen(PACKAGE_VERSION);
+			ULONG package_version_len_ulong = (package_version_len <= ULONG_MAX) ? (ULONG)package_version_len : 0;
+			MINIDUMP_USER_STREAM uStream = { LastReservedStream + 1, package_version_len_ulong, PACKAGE_VERSION };
 			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
 			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, false };
 
@@ -83,7 +85,14 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 			        &uInfo,
 			        NULL))
 			{
-				snprintf(resultMessage, sizeof(resultMessage), "Saved dump file to '%s'", miniDumpPath);
+				if (pExceptionInfo != nullptr)
+				{
+					snprintf(resultMessage, sizeof(resultMessage), "Saved dump file to '%s'", miniDumpPath);
+				}
+				else
+				{
+					snprintf(resultMessage, sizeof(resultMessage), "Saved dump file to '%s'\n(Exception Info: Unavailable)", miniDumpPath);
+				}
 			}
 			else
 			{
