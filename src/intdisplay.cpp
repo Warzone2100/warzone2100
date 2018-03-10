@@ -621,44 +621,48 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	x0 += iV_GetImageWidth(IntImages, IMAGE_PBAR_TOP);
 
+	BatchedImageDrawRequests imageDrawBatch(true); // defer drawing
+
 	//fill in the empty section behind text
 	if (textWidth > 0)
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0 - 1, y0, textWidth + 1, defaultProjectionMatrix(), true); // Overdraw by 1 to reduce seam with left-beginning-piece when scaling
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0 - 1, y0, textWidth + 1, defaultProjectionMatrix(), true, &imageDrawBatch); // Overdraw by 1 to reduce seam with left-beginning-piece when scaling
 		x0 += textWidth;
 	}
 
 	//draw the left-most beginning tip
 	//to reduce a visible seam when scaling, this must come *after* the empty / text section above
-	iV_DrawImage(IntImages, IMAGE_PBAR_TOP, top_x0, top_y0);
+	iV_DrawImage(IntImages, IMAGE_PBAR_TOP, top_x0, top_y0, defaultProjectionMatrix(), &imageDrawBatch);
 
 	//draw required section
 	if (ManPow > Avail)
 	{
 		//draw the required in red
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_USED, x0, y0, ManPow, defaultProjectionMatrix(), true);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_USED, x0, y0, ManPow, defaultProjectionMatrix(), true, &imageDrawBatch);
 	}
 	else
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_REQUIRED, x0, y0, ManPow, defaultProjectionMatrix(), true);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_REQUIRED, x0, y0, ManPow, defaultProjectionMatrix(), true, &imageDrawBatch);
 	}
 	x0 += ManPow;
 
 	//draw the available section if any!
 	if (Avail - ManPow > 0)
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_AVAIL, x0, y0, Avail - ManPow, defaultProjectionMatrix(), true);
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_AVAIL, x0, y0, Avail - ManPow, defaultProjectionMatrix(), true, &imageDrawBatch);
 		x0 += Avail - ManPow;
 	}
 
 	//fill in the rest with empty section
 	if (Empty > 0)
 	{
-		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0, y0, Empty + 1, defaultProjectionMatrix(), true); // Overdraw by 1 to reduce seam with right-end-piece when scaling
+		iV_DrawImageRepeatX(IntImages, IMAGE_PBAR_EMPTY, x0, y0, Empty + 1, defaultProjectionMatrix(), true, &imageDrawBatch); // Overdraw by 1 to reduce seam with right-end-piece when scaling
 		x0 += Empty;
 	}
 
-	iV_DrawImage(IntImages, IMAGE_PBAR_BOTTOM, x0, y0);
+	iV_DrawImage(IntImages, IMAGE_PBAR_BOTTOM, x0, y0, defaultProjectionMatrix(), &imageDrawBatch);
+
+	imageDrawBatch.draw(true);
 
 	PIELIGHT colour;
 	if (Avail < 0)
