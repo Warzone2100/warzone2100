@@ -51,11 +51,6 @@
 
 static GFX *radarGfx = nullptr;
 
-struct PIERECT  ///< Screen rectangle.
-{
-	float x, y, w, h;
-};
-
 /***************************************************************************/
 /*
  *	Static function forward declarations
@@ -422,6 +417,52 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 	iv_DrawImageImpl(Vector2f(0.f, 0.f), Vector2f(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
 }
 
+static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& requests)
+{
+	bool didEnableRect = false;
+	if (requests.empty()) { return; }
+	for (auto& request : requests)
+	{
+		pie_SetRendMode(request.rendMode);
+
+		// The following is the equivalent of:
+		// pie_DrawImage(request.imageFile, request.ID, request.size, &request.dest, request.colour, request.modelViewProjection, request.textureInset)
+		// but is tweaked to use custom implementation of iv_DrawImageImpl that does not disable the shader after every glDrawArrays call.
+
+		ImageDef const &image2 = request.imageFile->imageDefs[request.ID];
+		GLuint texPage = request.imageFile->pages[image2.TPageID].id;
+		GLfloat invTextureSize = 1.f / (float)request.imageFile->pages[image2.TPageID].size;
+		float tu = (float)(image2.Tu + request.textureInset.x) * invTextureSize;
+		float tv = (float)(image2.Tv + request.textureInset.y) * invTextureSize;
+		float su = (float)(request.size.x - (request.textureInset.x * 2)) * invTextureSize;
+		float sv = (float)(request.size.y - (request.textureInset.y * 2)) * invTextureSize;
+
+		glm::mat4 mvp = request.modelViewProjection * glm::translate((float)request.dest.x, (float)request.dest.y, 0.f);
+
+		pie_SetTexturePage(texPage);
+
+		Vector2f offset = Vector2f(0.f, 0.f);
+		Vector2f size = Vector2f(request.dest.w, request.dest.h);
+		Vector2f TextureUV = Vector2f(tu, tv);
+		Vector2f TextureSize = Vector2f(su, sv);
+		glm::mat4 transformMat = mvp * glm::translate(offset.x, offset.y, 0.f) * glm::scale(size.x, size.y, 1.f);
+
+		pie_ActivateShader(SHADER_TEXRECT,
+						   transformMat,
+						   TextureUV,
+						   TextureSize,
+						   glm::vec4(request.colour.vector[0] / 255.f, request.colour.vector[1] / 255.f, request.colour.vector[2] / 255.f, request.colour.vector[3] / 255.f), 0);
+		if (!didEnableRect)
+		{
+			enableRect();
+			didEnableRect = true;
+		}
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	}
+	disableRect();
+	pie_DeactivateShader();
+}
+
 static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, int x, int y)
 {
 	ImageDef const &image = imageFile->imageDefs[id];
@@ -458,7 +499,7 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 		WZCOL_WHITE, mvp);
 }
 
-void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection)
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
 {
 	if (!assertValidImage(ImageFile, ID))
 	{
@@ -468,9 +509,16 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
-	pie_SetRendMode(REND_ALPHA);
-
-	pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+	if (pBatchedRequests == nullptr)
+	{
+		pie_SetRendMode(REND_ALPHA);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+	}
+	else
+	{
+		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, WZCOL_WHITE, modelViewProjection);
+		pBatchedRequests->draw(); // draw only if not deferred
+	}
 }
 
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection)
@@ -491,12 +539,19 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, c
 }
 
 // Repeat a texture
-void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection, bool enableHorizontalTilingSeamWorkaround)
+void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection, bool enableHorizontalTilingSeamWorkaround, BatchedImageDrawRequests *pBatchedRequests)
 {
+	static BatchedImageDrawRequests localBatch;
+	if (pBatchedRequests == nullptr)
+	{
+		localBatch.clear();
+		pBatchedRequests = &localBatch;
+	}
+
 	assertValidImage(ImageFile, ID);
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
 
-	pie_SetRendMode(REND_OPAQUE);
+	REND_MODE mode = REND_OPAQUE;
 
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
@@ -516,7 +571,7 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 	for (unsigned hRep = 0; hRep < Width / usableImageWidth; hRep++)
 	{
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection, Vector2i(imageXInset, 0));
+		pBatchedRequests->queuePieImageDraw(mode, ImageFile, ID, pieImage, dest, WZCOL_WHITE, modelViewProjection, Vector2i(imageXInset, 0));
 		dest.x += usableImageWidth;
 	}
 
@@ -525,16 +580,26 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	{
 		pieImage.x = hRemainder;
 		dest.w = hRemainder;
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection, Vector2i(imageXInset, 0));
+		pBatchedRequests->queuePieImageDraw(mode, ImageFile, ID, pieImage, dest, WZCOL_WHITE, modelViewProjection, Vector2i(imageXInset, 0));
 	}
+
+	// draw batched requests (unless batch is deferred)
+	pBatchedRequests->draw();
 }
 
-void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection)
+void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
 {
+	static BatchedImageDrawRequests localBatch;
+	if (pBatchedRequests == nullptr)
+	{
+		localBatch.clear();
+		pBatchedRequests = &localBatch;
+	}
+
 	assertValidImage(ImageFile, ID);
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
 
-	pie_SetRendMode(REND_OPAQUE);
+	REND_MODE mode = REND_OPAQUE;
 
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
@@ -543,7 +608,7 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 
 	for (unsigned vRep = 0; vRep < Height / Image->Height; vRep++)
 	{
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+		pBatchedRequests->queuePieImageDraw(mode, ImageFile, ID, pieImage, dest, WZCOL_WHITE, modelViewProjection);
 		dest.y += Image->Height;
 	}
 
@@ -552,8 +617,11 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 	{
 		pieImage.y = vRemainder;
 		dest.h = vRemainder;
-		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+		pBatchedRequests->queuePieImageDraw(mode, ImageFile, ID, pieImage, dest, WZCOL_WHITE, modelViewProjection);
 	}
+
+	// draw batched requests (unless batch is deferred)
+	pBatchedRequests->draw();
 }
 
 bool pie_InitRadar()
@@ -613,4 +681,19 @@ glm::mat4 defaultProjectionMatrix()
         float h = pie_GetVideoBufferHeight();
 
         return glm::ortho(0.f, static_cast<float>(w), static_cast<float>(h), 0.f);
+}
+
+
+void BatchedImageDrawRequests::clear()
+{
+	ASSERT(_imageDrawRequests.empty(), "Clearing a BatchedImageDrawRequests that isn't empty. Images have not been drawn!");
+	_imageDrawRequests.clear();
+}
+
+bool BatchedImageDrawRequests::draw(bool force /*= false*/)
+{
+	if (deferRender && !force) { return false; }
+	pie_DrawMultipleImages(_imageDrawRequests);
+	_imageDrawRequests.clear();
+	return true;
 }

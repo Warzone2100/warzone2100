@@ -177,56 +177,60 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 		}
 	}
 
+	BatchedImageDrawRequests imageDrawBatch(true); // defer drawing
+
 	if (Frame->TopLeft >= 0)
 	{
 		WTopLeft = (SWORD)iV_GetImageWidth(IntImages, Frame->TopLeft);
 		HTopLeft = (SWORD)iV_GetImageHeight(IntImages, Frame->TopLeft);
-		iV_DrawImage(IntImages, Frame->TopLeft, x, y, modelViewProjectionMatrix);
+		iV_DrawImage(IntImages, Frame->TopLeft, x, y, modelViewProjectionMatrix, &imageDrawBatch);
 	}
 
 	if (Frame->TopRight >= 0)
 	{
 		WTopRight = (SWORD)iV_GetImageWidth(IntImages, Frame->TopRight);
 		HTopRight = (SWORD)iV_GetImageHeight(IntImages, Frame->TopRight);
-		iV_DrawImage(IntImages, Frame->TopRight, x + Width - WTopRight, y, modelViewProjectionMatrix);
+		iV_DrawImage(IntImages, Frame->TopRight, x + Width - WTopRight, y, modelViewProjectionMatrix, &imageDrawBatch);
 	}
 
 	if (Frame->BottomRight >= 0)
 	{
 		WBottomRight = (SWORD)iV_GetImageWidth(IntImages, Frame->BottomRight);
 		HBottomRight = (SWORD)iV_GetImageHeight(IntImages, Frame->BottomRight);
-		iV_DrawImage(IntImages, Frame->BottomRight, x + Width - WBottomRight, y + Height - HBottomRight, modelViewProjectionMatrix);
+		iV_DrawImage(IntImages, Frame->BottomRight, x + Width - WBottomRight, y + Height - HBottomRight, modelViewProjectionMatrix, &imageDrawBatch);
 	}
 
 	if (Frame->BottomLeft >= 0)
 	{
 		WBottomLeft = (SWORD)iV_GetImageWidth(IntImages, Frame->BottomLeft);
 		HBottomLeft = (SWORD)iV_GetImageHeight(IntImages, Frame->BottomLeft);
-		iV_DrawImage(IntImages, Frame->BottomLeft, x, y + Height - HBottomLeft, modelViewProjectionMatrix);
+		iV_DrawImage(IntImages, Frame->BottomLeft, x, y + Height - HBottomLeft, modelViewProjectionMatrix, &imageDrawBatch);
 	}
 
 	if (Frame->TopEdge >= 0)
 	{
 		iV_DrawImageRepeatX(IntImages, Frame->TopEdge, x + iV_GetImageWidth(IntImages, Frame->TopLeft), y,
-		                    Width - WTopLeft - WTopRight, modelViewProjectionMatrix);
+		                    Width - WTopLeft - WTopRight, modelViewProjectionMatrix, false, &imageDrawBatch);
 	}
 
 	if (Frame->BottomEdge >= 0)
 	{
 		iV_DrawImageRepeatX(IntImages, Frame->BottomEdge, x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge),
-		                    Width - WBottomLeft - WBottomRight, modelViewProjectionMatrix);
+		                    Width - WBottomLeft - WBottomRight, modelViewProjectionMatrix, false, &imageDrawBatch);
 	}
 
 	if (Frame->LeftEdge >= 0)
 	{
-		iV_DrawImageRepeatY(IntImages, Frame->LeftEdge, x, y + HTopLeft, Height - HTopLeft - HBottomLeft, modelViewProjectionMatrix);
+		iV_DrawImageRepeatY(IntImages, Frame->LeftEdge, x, y + HTopLeft, Height - HTopLeft - HBottomLeft, modelViewProjectionMatrix, &imageDrawBatch);
 	}
 
 	if (Frame->RightEdge >= 0)
 	{
 		iV_DrawImageRepeatY(IntImages, Frame->RightEdge, x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
-		                    Height - HTopRight - HBottomRight, modelViewProjectionMatrix);
+		                    Height - HTopRight - HBottomRight, modelViewProjectionMatrix, &imageDrawBatch);
 	}
+
+	imageDrawBatch.draw(true);
 }
 
 IntListTabWidget::IntListTabWidget(WIDGET *parent)

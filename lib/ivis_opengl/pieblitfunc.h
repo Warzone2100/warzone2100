@@ -137,13 +137,67 @@ struct PIERECT_DrawRequest
 	PIELIGHT color;
 };
 void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects, REND_MODE rendermode = REND_OPAQUE);
+struct PIERECT  ///< Screen rectangle.
+{
+	float x, y, w, h;
+};
+struct PieDrawImageRequest {
+public:
+	PieDrawImageRequest(REND_MODE rendMode, IMAGEFILE *imageFile, int ID, Vector2i size, const PIERECT& dest, PIELIGHT colour, const glm::mat4& modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
+	: rendMode(rendMode),
+	imageFile(imageFile),
+	ID(ID),
+	size(size),
+	dest(dest),
+	colour(colour),
+	modelViewProjection(modelViewProjection),
+	textureInset(textureInset)
+	{ }
+
+public:
+	REND_MODE rendMode;
+
+	IMAGEFILE *imageFile;
+	int ID;
+	Vector2i size;
+	const PIERECT dest;
+	PIELIGHT colour;
+	glm::mat4 modelViewProjection;
+	Vector2i textureInset;
+};
+struct BatchedImageDrawRequests {
+public:
+	BatchedImageDrawRequests(bool deferRender = false)
+	: deferRender(deferRender)
+	{ }
+public:
+	void queuePieImageDraw(REND_MODE rendMode, IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT& dest, PIELIGHT colour, const glm::mat4& modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
+	{
+		queuePieImageDraw(PieDrawImageRequest(rendMode, imageFile, id, size, dest, colour, modelViewProjection, textureInset));
+	}
+	void queuePieImageDraw(const PieDrawImageRequest& request)
+	{
+		_imageDrawRequests.push_back(request);
+	}
+	void queuePieImageDraw(const PieDrawImageRequest&& request)
+	{
+		_imageDrawRequests.push_back(std::move(request));
+	}
+
+	bool draw(bool force = false);
+	void clear();
+public:
+	bool deferRender = false;
+private:
+	std::list<PieDrawImageRequest> _imageDrawRequests;
+};
 void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2f offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
 void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour);
-void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImage2(const QString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
-void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), bool enableHorizontalTilingSeamWorkaround = false);
-void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
+void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), bool enableHorizontalTilingSeamWorkaround = false, BatchedImageDrawRequests* pBatchedRequests = nullptr);
+void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 
 static inline void iV_DrawImage(Image image, int x, int y)
 {
