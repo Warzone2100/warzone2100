@@ -26,16 +26,20 @@ Current or former contributors to the GPL version (alphabetical order):
 - (bornemix) Programming
 - (Bulldozer) MacOSX Packaging
 - (ckorn) Programming
+- (dak180) former MacOSX Packaging
 - (Delphinio) NTW
 - (devnexen) Build system, Programming
 - (duda) Artist & Maps
+- (Duha) Addons site
 - (DylanDog) AI script
 - (Emdek) Translator
 - (Flail13) flaME (Map Editor)
 - (Forgon) Programming, Build system, Docs
 - (greedy10101) Translator
+- (Hatsjoe) 2D Graphics
 - (hidden-primary-net) Build system (CMake)
 - (ilario) Programming
+- (i-NoD) Programming
 - (Jorzi) Artist
 - (Khadis) Translator
 - (Kriss7475) Translator
@@ -57,26 +61,22 @@ Current or former contributors to the GPL version (alphabetical order):
 - (pastdue) Mac Build system / CMake support, Programming
 - (-Philosopher-) Campaign testing
 - (Prot) Programming, Translator
+- (Pseudonym404) Programming + original 64bit support
 - (Rimbok) Translator
 - (Romano FC) Translator
 - (Saberuneko) Translator
+- (Safety0ff) programmer
+- (skiz) Programming
 - (stwf) MacOSX Packaging
 - (Tenoh) Campaign testing
 - (themousemaster) Walkthrough / Docs
+- (tintou) Build system
 - (Tucalipe) Translator
 - (urgood2 ) Translator
-- (Zerovirus) Artist
-- (Bulldozer) MacOSX Packaging
-- (dak180) 	former MacOSX Packaging
-- (Duha) Addons site
-- (Hatsjoe) 	2D Graphics
-- (i-NoD) 	Programming
-- (Pseudonym404) 	Programming + original 64bit support
-- (Safety0ff) 	programmer
-- (skiz) Programming
-- (tintou) Build system
 - (Vincent) Programming, Build system / CMake support
-- (vs2k5) 	Programming
+- (vs2k5) Programming
+- (Zerovirus) Artist
+
 Adam Holland (coppercore) 	Testing
 Angus Lees (gus) 	Debian Packaging
 Ari Johnson (iamtheari) 	Programming and MacOSX Packaging + original MacOSX port
