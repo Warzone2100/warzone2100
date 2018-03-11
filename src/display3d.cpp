@@ -1131,7 +1131,7 @@ static void drawTiles(iView *player)
 	GL_DEBUG("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix);
 
-	pie_RemainingPasses(); // draws shadows and transparent shapes
+	pie_RemainingPasses(currentGameFrame); // draws shadows and transparent shapes
 
 	if (!gamePaused())
 	{
