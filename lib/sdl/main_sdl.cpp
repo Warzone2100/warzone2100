@@ -1654,6 +1654,13 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
 	}
 
+#if defined(WZ_USE_OPENGL_3_2_CORE_PROFILE)
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#endif
+
 	// Populated our resolution list (does all displays now)
 	SDL_DisplayMode	displaymode;
 	struct screeninfo screenlist;

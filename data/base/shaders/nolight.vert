@@ -1,12 +1,20 @@
-#version 120
 //#pragma debug(on)
 
 uniform mat4 ModelViewProjectionMatrix;
 
+#if __VERSION__ >= 130
+in vec4 vertex;
+in vec2 vertexTexCoord;
+#else
 attribute vec4 vertex;
 attribute vec2 vertexTexCoord;
+#endif
 
+#if __VERSION__ >= 130
+out vec2 texCoord;
+#else
 varying vec2 texCoord;
+#endif
 
 void main()
 {

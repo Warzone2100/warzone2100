@@ -1,5 +1,3 @@
-#version 120
-
 // gl_VertexID seems to not be supported on 120, despite documentation to the contrary.
 
 // Old comment:
@@ -12,9 +10,17 @@ uniform mat4 transformationMatrix;
 uniform vec2 tuv_offset;
 uniform vec2 tuv_scale;
 
+#if __VERSION__ >= 130
+in vec4 vertex;
+#else
 attribute vec4 vertex;
+#endif
 
+#if __VERSION__ >= 130
+out vec2 uv;
+#else
 varying vec2 uv;
+#endif
 
 
 void main()
