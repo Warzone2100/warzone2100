@@ -1,4 +1,3 @@
-#version 120
 //#pragma debug(on)
 
 uniform float stretch;
@@ -8,13 +7,25 @@ uniform mat4 NormalMatrix;
 
 uniform vec4 lightPosition;
 
+#if __VERSION__ >= 130
+in vec4 vertex;
+in vec3 vertexNormal;
+in vec2 vertexTexCoord;
+#else
 attribute vec4 vertex;
 attribute vec3 vertexNormal;
 attribute vec2 vertexTexCoord;
+#endif
 
+#if __VERSION__ >= 130
+out float vertexDistance;
+out vec3 normal, lightDir, eyeVec;
+out vec2 texCoord;
+#else
 varying float vertexDistance;
 varying vec3 normal, lightDir, eyeVec;
 varying vec2 texCoord;
+#endif
 
 void main()
 {

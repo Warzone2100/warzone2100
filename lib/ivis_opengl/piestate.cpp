@@ -213,14 +213,300 @@ void pie_FreeShaders()
 	}
 }
 
+GLint wz_GetGLIntegerv(GLenum pname, GLint defaultValue = 0)
+{
+	GLint retVal = defaultValue;
+	while(glGetError() != GL_NO_ERROR) { } // clear the OpenGL error queue
+	glGetIntegerv(pname, &retVal);
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR)
+	{
+		retVal = defaultValue;
+	}
+	return retVal;
+}
+
+SHADER_VERSION getMinimumShaderVersionForCurrentGLContext()
+{
+	// Determine the shader version directive we should use by examining the current OpenGL context
+	GLint gl_majorversion = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+	GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+
+	SHADER_VERSION version = VERSION_120; // for OpenGL < 3.2, we default to VERSION_120 shaders
+	if ((gl_majorversion > 3) || ((gl_majorversion == 3) && (gl_minorversion >= 2)))
+	{
+		// OpenGL 3.2+
+		// Since WZ only supports Core contexts with OpenGL 3.2+, we cannot use the version_120 directive
+		// (which only works in compatbility contexts). Instead, use GLSL version "150 core".
+		version = VERSION_150_CORE;
+	}
+	return version;
+}
+
+SHADER_VERSION getMaximumShaderVersionForCurrentGLContext()
+{
+	// Instead of querying the GL_SHADING_LANGUAGE_VERSION string and trying to parse it,
+	// which is rife with difficulties because drivers can report very different strings (and formats),
+	// use the known (and explicit) mapping table between OpenGL version and supported GLSL version.
+
+	GLint gl_majorversion = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+	GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+
+	// For OpenGL < 3.2, default to VERSION_120 shaders
+	SHADER_VERSION version = VERSION_120;
+	if(gl_majorversion == 3)
+	{
+		switch(gl_minorversion)
+		{
+			case 0: // 3.0 => 1.30
+				version = VERSION_130;
+			case 1: // 3.1 => 1.40
+				version = VERSION_140;
+			case 2: // 3.2 => 1.50
+				version = VERSION_150_CORE;
+			case 3: // 3.3 => 3.30
+				version = VERSION_330_CORE;
+			default:
+				// Return the 3.3 value
+				version = VERSION_330_CORE;
+		}
+	}
+	else if (gl_majorversion == 4)
+	{
+		switch(gl_minorversion)
+		{
+			case 0: // 4.0 => 4.00
+				version = VERSION_400_CORE;
+			case 1: // 4.1 => 4.10
+				version = VERSION_410_CORE;
+			default:
+				// Return the 4.1 value
+				// NOTE: Nothing above OpenGL 4.1 is supported on macOS
+				version = VERSION_410_CORE;
+		}
+	}
+	else if (gl_majorversion > 4)
+	{
+		// Return the OpenGL 4.1 value (for now)
+		version = VERSION_410_CORE;
+	}
+	return version;
+}
+
+const char * shaderVersionString(SHADER_VERSION version)
+{
+	switch(version)
+	{
+		case VERSION_120:
+			return "#version 120\n";
+		case VERSION_130:
+			return "#version 130\n";
+		case VERSION_140:
+			return "#version 140\n";
+		case VERSION_150_CORE:
+			return "#version 150 core\n";
+		case VERSION_330_CORE:
+			return "#version 330 core\n";
+		case VERSION_400_CORE:
+			return "#version 400 core\n";
+		case VERSION_410_CORE:
+			return "#version 410 core\n";
+		case VERSION_AUTODETECT_FROM_LEVEL_LOAD:
+			return "";
+		case VERSION_FIXED_IN_FILE:
+			return "";
+	}
+}
+
+std::string getShaderVersionDirective(const char* shaderData)
+{
+	// Relying on the GLSL documentation, which says:
+	// "The #version directive must occur in a shader before anything else, except for comments and white space."
+	// Look for the first line that contains a non-whitespace character (that isn't preceeded by a comment indicator)
+	//
+	// White space: the space character, horizontal tab, vertical tab, form feed, carriage-return, and line-feed.
+	const char glsl_whitespace_chars[] = " \t\v\f\r\n";
+
+	enum CommentMode {
+		NONE,
+		LINE_DELIMITED_COMMENT,
+		ASTERISK_SLASH_DELIMITED_COMMENT
+	};
+
+	const size_t shaderLen = strlen(shaderData);
+	CommentMode currentCommentMode = CommentMode::NONE;
+	const char* pChar = shaderData;
+	// Find first non-whitespace, non-comment character
+	for (; pChar < shaderData + shaderLen; ++pChar)
+	{
+		bool foundFirstNonIgnoredChar = false;
+		switch (*pChar)
+		{
+			// the non-newline whitespace chars
+			case ' ':
+			case '\t':
+			case '\v':
+			case '\f':
+				// ignore whitespace
+				break;
+			case '\r':
+			case '\n':
+				// newlines reset line-comment state
+				if (currentCommentMode == CommentMode::LINE_DELIMITED_COMMENT)
+				{
+					currentCommentMode = CommentMode::NONE;
+				}
+				// otherwise, ignore
+				break;
+			case '/':
+				if (currentCommentMode == CommentMode::NONE)
+				{
+					// peek-ahead at next char to see if this starts a comment, or should be treated as a usable character
+					switch(*(pChar + 1))
+					{
+						case '/':
+							// "//" starts a comment on a line
+							currentCommentMode = CommentMode::LINE_DELIMITED_COMMENT;
+							++pChar;
+							break;
+						case '*':
+							// "/*" starts a comment until "*/" is detected
+							currentCommentMode = CommentMode::ASTERISK_SLASH_DELIMITED_COMMENT;
+							++pChar;
+							break;
+						default:
+							// this doesn't start a comment - it's the first usable character
+							foundFirstNonIgnoredChar = true;
+							break;
+					}
+				}
+				else
+				{
+					// ignore, part of a comment
+				}
+				break;
+			case '*':
+				if (currentCommentMode == CommentMode::ASTERISK_SLASH_DELIMITED_COMMENT)
+				{
+					// peek-ahead at next char to see if this ends the current comment
+					if (*(pChar + 1) == '/')
+					{
+						// this is the beginning of a "*/" that terminates the current comment
+						currentCommentMode = CommentMode::NONE;
+						++pChar;
+						break;
+					}
+				}
+				else if (currentCommentMode == CommentMode::LINE_DELIMITED_COMMENT)
+				{
+					// ignore - part of a comment
+					break;
+				}
+				else if (currentCommentMode == CommentMode::NONE)
+				{
+					// this is the first usable character
+					foundFirstNonIgnoredChar = true;
+				}
+				break;
+			default:
+				if (currentCommentMode == CommentMode::NONE)
+				{
+					foundFirstNonIgnoredChar = true;
+				}
+		}
+
+		if (foundFirstNonIgnoredChar) break;
+	}
+
+	if (pChar >= shaderData + shaderLen)
+	{
+		// Did not find a non-ignored (whitespace/comment) character before the end of the shader?
+		return "";
+	}
+
+	// Check if the first non-ignored characters start a #version directive
+	std::string shaderStringTrimmedBeginning(pChar);
+	std::string versionPrefix("#version");
+	try {
+		if (shaderStringTrimmedBeginning.compare(0, versionPrefix.length(), versionPrefix) != 0)
+		{
+			// Does not start with a version directive
+			return "";
+		}
+	}
+	catch (const std::exception &e) {
+		// Does not start with a version directive (likely too short a string)
+		return "";
+	}
+
+	// Starts with a #version directive - extract all the characters after versionPrefix until a newline
+	size_t posNextNewline = shaderStringTrimmedBeginning.find_first_of("\r\n", versionPrefix.length());
+	size_t lenVersionLine = (posNextNewline != std::string::npos) ? (posNextNewline - versionPrefix.length()) : std::string::npos;
+	std::string versionLine = shaderStringTrimmedBeginning.substr(versionPrefix.length(), lenVersionLine);
+	// Remove any trailing comment (starting with "//" or "/*")
+	size_t posCommentStart = versionLine.find("//");
+	if (posCommentStart != std::string::npos)
+	{
+		versionLine = versionLine.substr(0, posCommentStart);
+	}
+	posCommentStart = versionLine.find("/*");
+	if (posCommentStart != std::string::npos)
+	{
+		versionLine = versionLine.substr(0, posCommentStart);
+	}
+
+	// trim whitespace chars from beginning/end
+	versionLine = versionLine.substr(versionLine.find_first_not_of(glsl_whitespace_chars));
+	versionLine.erase(versionLine.find_last_not_of(glsl_whitespace_chars)+1);
+
+	return versionLine;
+}
+
+SHADER_VERSION pie_detectShaderVersion(const char* shaderData)
+{
+	std::string shaderVersionDirective = getShaderVersionDirective(shaderData);
+
+	// Special case for external loaded shaders that want to opt-in to an automatic #version header
+	// that is the minimum supported on the current OpenGL context.
+	// To properly support this, the shaders should be written to support GLSL "version 120" through "version 150 core".
+	//
+	// For examples on how to do this, see the built-in shaders in the data/shaders directory, and pay
+	// particular attention to their use of "#if __VERSION__" preprocessor directives.
+	if (shaderVersionDirective == "WZ_GLSL_VERSION_MINIMUM_FOR_CONTEXT")
+	{
+		return getMinimumShaderVersionForCurrentGLContext();
+	}
+	// Special case for external loaded shaders that want to opt-in to an automatic #version header
+	// that is the maximum supported on the current OpenGL context.
+	//
+	// Important: For compatibility with the same systems that Warzone supports, you should strive to ensure the
+	// shaders are compatible with a minimum of GLSL version 1.20 / GLSL version 1.50 core (and / or fallback gracefully).
+	else if (shaderVersionDirective == "WZ_GLSL_VERSION_MAXIMUM_FOR_CONTEXT")
+	{
+		return getMaximumShaderVersionForCurrentGLContext();
+	}
+	else
+	{
+		return SHADER_VERSION::VERSION_FIXED_IN_FILE;
+	}
+}
+
+SHADER_VERSION autodetectShaderVersion_FromLevelLoad(const char* filePath, const char* shaderContents)
+{
+	SHADER_VERSION version = pie_detectShaderVersion(shaderContents);
+	if (version == SHADER_VERSION::VERSION_FIXED_IN_FILE)
+	{
+		debug(LOG_WARNING, "SHADER '%s' specifies a fixed #version directive. This may not work with Warzone's ability to use either OpenGL < 3.2 Compatibility Profiles, or OpenGL 3.2+ Core Profiles.", filePath);
+	}
+}
+
 // Read/compile/link shaders
-SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath,
+SHADER_MODE pie_LoadShader(SHADER_VERSION vertex_version, SHADER_VERSION fragment_version, const char *programName, const std::string &vertexPath, const std::string &fragmentPath,
 	const std::vector<std::string> &uniformNames)
 {
 	pie_internal::SHADER_PROGRAM program;
 	GLint status;
 	bool success = true; // Assume overall success
-	char *buffer[2];
 
 	program.program = glCreateProgram();
 	glBindAttribLocation(program.program, 0, "vertex");
@@ -228,24 +514,31 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 	glBindAttribLocation(program.program, 2, "vertexColor");
 	ASSERT_OR_RETURN(SHADER_NONE, program.program, "Could not create shader program!");
 
-	*buffer = (char *)"";
+	char* shaderContents = nullptr;
 
-	if (vertexPath)
+	if (!vertexPath.empty())
 	{
 		success = false; // Assume failure before reading shader file
 
-		if ((*(buffer + 1) = readShaderBuf(vertexPath)))
+		if ((shaderContents = readShaderBuf(vertexPath.c_str())))
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 
-			glShaderSource(shader, 2, (const char **)buffer, nullptr);
+			if (vertex_version == SHADER_VERSION::VERSION_AUTODETECT_FROM_LEVEL_LOAD)
+			{
+				vertex_version = autodetectShaderVersion_FromLevelLoad(vertexPath.c_str(), shaderContents);
+			}
+
+			const char* ShaderStrings[2] = { shaderVersionString(vertex_version), shaderContents };
+
+			glShaderSource(shader, 2, ShaderStrings, nullptr);
 			glCompileShader(shader);
 
 			// Check for compilation errors
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 			if (!status)
 			{
-				debug(LOG_ERROR, "Vertex shader compilation has failed [%s]", vertexPath);
+				debug(LOG_ERROR, "Vertex shader compilation has failed [%s]", vertexPath.c_str());
 				printShaderInfoLog(LOG_ERROR, shader);
 			}
 			else
@@ -256,28 +549,36 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 			}
 			if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
 			{
-				glObjectLabel(GL_SHADER, shader, -1, vertexPath);
+				glObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 			}
-			free(*(buffer + 1));
+			free(shaderContents);
+			shaderContents = nullptr;
 		}
 	}
 
-	if (success && fragmentPath)
+	if (success && !fragmentPath.empty())
 	{
 		success = false; // Assume failure before reading shader file
 
-		if ((*(buffer + 1) = readShaderBuf(fragmentPath)))
+		if ((shaderContents = readShaderBuf(fragmentPath.c_str())))
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-			glShaderSource(shader, 2, (const char **)buffer, nullptr);
+			if (fragment_version == SHADER_VERSION::VERSION_AUTODETECT_FROM_LEVEL_LOAD)
+			{
+				fragment_version = autodetectShaderVersion_FromLevelLoad(fragmentPath.c_str(), shaderContents);
+			}
+
+			const char* ShaderStrings[2] = { shaderVersionString(fragment_version), shaderContents };
+
+			glShaderSource(shader, 2, ShaderStrings, nullptr);
 			glCompileShader(shader);
 
 			// Check for compilation errors
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 			if (!status)
 			{
-				debug(LOG_ERROR, "Fragment shader compilation has failed [%s]", fragmentPath);
+				debug(LOG_ERROR, "Fragment shader compilation has failed [%s]", fragmentPath.c_str());
 				printShaderInfoLog(LOG_ERROR, shader);
 			}
 			else
@@ -288,9 +589,10 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 			}
 			if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
 			{
-				glObjectLabel(GL_SHADER, shader, -1, fragmentPath);
+				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 			}
-			free(*(buffer + 1));
+			free(shaderContents);
+			shaderContents = nullptr;
 		}
 	}
 
@@ -302,7 +604,7 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 		glGetProgramiv(program.program, GL_LINK_STATUS, &status);
 		if (!status)
 		{
-			debug(LOG_ERROR, "Shader program linkage has failed [%s, %s]", vertexPath, fragmentPath);
+			debug(LOG_ERROR, "Shader program linkage has failed [%s, %s]", vertexPath.c_str(), fragmentPath.c_str());
 			printProgramInfoLog(LOG_ERROR, program.program);
 			success = false;
 		}
@@ -337,6 +639,10 @@ bool pie_LoadShaders()
 	pie_internal::SHADER_PROGRAM program;
 	int result;
 
+	// Determine the shader version directive we should use by examining the current OpenGL context
+	// (The built-in shaders support (and have been tested with) VERSION_120 and VERSION_150_CORE)
+	SHADER_VERSION version = getMinimumShaderVersionForCurrentGLContext();
+
 	// Load some basic shaders
 	memset(&program, 0, sizeof(program));
 	pie_internal::shaderProgram.push_back(program);
@@ -344,7 +650,7 @@ bool pie_LoadShaders()
 
 	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
-	result = pie_LoadShader("Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
+	result = pie_LoadShader(version, "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
 		"fogEnd", "fogStart", "fogColor" });
@@ -352,7 +658,7 @@ bool pie_LoadShaders()
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
-	result = pie_LoadShader("Button program", "shaders/button.vert", "shaders/button.frag",
+	result = pie_LoadShader(version, "Button program", "shaders/button.vert", "shaders/button.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
 		"fogEnd", "fogStart", "fogColor" });
@@ -360,69 +666,69 @@ bool pie_LoadShaders()
 
 	// Plain shader for no lighting
 	debug(LOG_3D, "Loading shader: SHADER_NOLIGHT");
-	result = pie_LoadShader("Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
+	result = pie_LoadShader(version, "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
 		"fogEnd", "fogStart", "fogColor" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_NOLIGHT, "Failed to load no-lighting shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_TERRAIN");
-	result = pie_LoadShader("terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
+	result = pie_LoadShader(version, "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
 		"fogEnabled", "fogEnd", "fogStart", "fogColor" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TERRAIN, "Failed to load terrain shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_TERRAIN_DEPTH");
-	result = pie_LoadShader("terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
+	result = pie_LoadShader(version, "terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
 	{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "textureMatrix1", "textureMatrix2" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TERRAIN_DEPTH, "Failed to load terrain_depth shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_DECALS");
-	result = pie_LoadShader("decals program", "shaders/decals.vert", "shaders/decals.frag",
+	result = pie_LoadShader(version, "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "paramxlight", "paramylight", "tex", "lightmap_tex", "lightTextureMatrix",
 		"fogEnabled", "fogEnd", "fogStart", "fogColor" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_DECALS, "Failed to load decals shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_WATER");
-	result = pie_LoadShader("water program", "shaders/terrain_water.vert", "shaders/water.frag",
+	result = pie_LoadShader(version, "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1", "textureMatrix2",
 		"fogEnabled", "fogEnd", "fogStart" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_WATER, "Failed to load water shader");
 
 	// Rectangular shader
 	debug(LOG_3D, "Loading shader: SHADER_RECT");
-	result = pie_LoadShader("Rect program", "shaders/rect.vert", "shaders/rect.frag",
+	result = pie_LoadShader(version, "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_RECT, "Failed to load rect shader");
 
 	// Textured rectangular shader
 	debug(LOG_3D, "Loading shader: SHADER_TEXRECT");
-	result = pie_LoadShader("Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" });
+	result = pie_LoadShader(version, "Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
+		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "theTexture" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TEXRECT, "Failed to load textured rect shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_GFX_COLOUR");
-	result = pie_LoadShader("gfx_color program", "shaders/gfx.vert", "shaders/gfx.frag",
+	result = pie_LoadShader(version, "gfx_color program", "shaders/gfx.vert", "shaders/gfx.frag",
 		{ "posMatrix" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_GFX_COLOUR, "Failed to load textured gfx shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_GFX_TEXT");
-	result = pie_LoadShader("gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
-		{ "posMatrix", "color", "texture" });
+	result = pie_LoadShader(version, "gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
+		{ "posMatrix", "color", "theTexture" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_GFX_TEXT, "Failed to load textured gfx shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_GENERIC_COLOR");
-	result = pie_LoadShader("generic color program", "shaders/generic.vert", "shaders/rect.frag", { "ModelViewProjectionMatrix", "color" });
+	result = pie_LoadShader(version, "generic color program", "shaders/generic.vert", "shaders/rect.frag", { "ModelViewProjectionMatrix", "color" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_GENERIC_COLOR, "Failed to load generic color shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_LINE");
-	result = pie_LoadShader("line program", "shaders/line.vert", "shaders/rect.frag", { "from", "to", "color", "ModelViewProjectionMatrix" });
+	result = pie_LoadShader(version, "line program", "shaders/line.vert", "shaders/rect.frag", { "from", "to", "color", "ModelViewProjectionMatrix" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_LINE, "Failed to load line shader");
 
 	// Text shader
 	debug(LOG_3D, "Loading shader: SHADER_TEXT");
-	result = pie_LoadShader("Text program", "shaders/rect.vert", "shaders/text.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" });
+	result = pie_LoadShader(version, "Text program", "shaders/rect.vert", "shaders/text.frag",
+		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "theTexture" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TEXT, "Failed to load text shader");
 
 	pie_internal::currentShaderMode = SHADER_NONE;
