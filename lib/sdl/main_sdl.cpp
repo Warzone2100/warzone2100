@@ -1295,11 +1295,23 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	}
 }
 
-// This stage, we only setup keycodes, and let Qt (for the script engine) know we are alive.
+static int copied_argc = 0;
+static char** copied_argv = nullptr;
+
+// This stage, we only setup keycodes, and copy argc & argv for later use initializing Qt stuff for the script engine.
 void wzMain(int &argc, char **argv)
 {
 	initKeycodes();
-	appPtr = new QApplication(argc, argv);
+
+	// Create copies of argc and arv (for later use initializing QApplication for the script engine)
+	copied_argv = new char*[argc+1];
+	for(int i=0; i < argc; i++) {
+		int len = strlen(argv[i]) + 1;
+		copied_argv[i] = new char[len];
+		memcpy(copied_argv[i], argv[i], len);
+	}
+	copied_argv[argc] = NULL;
+	copied_argc = argc;
 }
 
 #define MIN_WZ_GAMESCREEN_WIDTH 640
@@ -1896,6 +1908,14 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		sdlInitCursors();
 	}
 
+	// For the script engine, let Qt know we're alive
+	//
+	// IMPORTANT: This must come *after* SDL has had a chance to initialize,
+	//			  or Qt can step on certain SDL functionality.
+	//			  (For example, on macOS, Qt can break the "Quit" menu
+	//			  functionality if QApplication is initialized before SDL.)
+	appPtr = new QApplication(copied_argc, copied_argv);
+
 	// FIXME: aspect ratio
 	glViewport(0, 0, width, height);
 	glCullFace(GL_FRONT);
@@ -2156,4 +2176,15 @@ void wzShutdown()
 	appPtr->quit();
 	delete appPtr;
 	appPtr = nullptr;
+
+	// delete copies of argc, argv
+	if (copied_argv != nullptr)
+	{
+		for(int i=0; i < copied_argc; i++) {
+			delete [] copied_argv[i];
+		}
+		delete [] copied_argv;
+		copied_argv = nullptr;
+		copied_argc = 0;
+	}
 }
