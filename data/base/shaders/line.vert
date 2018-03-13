@@ -1,3 +1,6 @@
+// Version directive is set by Warzone when loading the shader
+// (This shader supports GLSL 1.20 - 1.50 core.)
+
 uniform vec2 from;
 uniform vec2 to;
 uniform mat4 ModelViewProjectionMatrix;
