@@ -11,7 +11,7 @@ uniform vec4 paramy2;
 uniform mat4 textureMatrix1;
 uniform mat4 textureMatrix2;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 in vec4 vertexColor;
 #else
@@ -19,7 +19,7 @@ attribute vec4 vertex;
 attribute vec4 vertexColor;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec4 color;
 out vec2 uv1;
 out vec2 uv2;

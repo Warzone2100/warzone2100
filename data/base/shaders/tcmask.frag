@@ -26,7 +26,7 @@ uniform float fogEnd;
 uniform float fogStart;
 uniform vec4 fogColor;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in float vertexDistance;
 in vec3 normal, lightDir, eyeVec;
 in vec2 texCoord;
@@ -36,7 +36,7 @@ varying vec3 normal, lightDir, eyeVec;
 varying vec2 texCoord;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
@@ -58,7 +58,7 @@ void main()
 	}
 
 	// Get color from texture unit 0, merge with lighting
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	vec4 texColour = texture(Texture, texCoord) * light;
 	#else
 	vec4 texColour = texture2D(Texture, texCoord) * light;
@@ -68,7 +68,7 @@ void main()
 	if (tcmask == 1)
 	{
 		// Get tcmask information from texture unit 1
-		#if __VERSION__ >= 130
+		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 		vec4 mask = texture(TextureTcmask, texCoord);
 		#else
 		vec4 mask = texture2D(TextureTcmask, texCoord);
@@ -102,7 +102,7 @@ void main()
 		discard;
 	}
 
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = fragColour;
 	#else
 	gl_FragColor = fragColour;

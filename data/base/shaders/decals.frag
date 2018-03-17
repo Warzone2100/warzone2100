@@ -9,7 +9,7 @@ uniform float fogEnd;
 uniform float fogStart;
 uniform vec4 fogColor;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec2 uv_tex;
 in vec2 uv_lightmap;
 in float vertexDistance;
@@ -19,7 +19,7 @@ varying vec2 uv_lightmap;
 varying float vertexDistance;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
@@ -27,7 +27,7 @@ out vec4 FragColor;
 
 void main()
 {
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	vec4 fragColor = texture(tex, uv_tex) * texture(lightmap_tex, uv_lightmap);
 	#else
 	vec4 fragColor = texture2D(tex, uv_tex) * texture2D(lightmap_tex, uv_lightmap);
@@ -41,7 +41,7 @@ void main()
 		// Return fragment color
 		fragColor = mix(fogColor, fragColor, fogFactor);
 	}
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = fragColor;
 	#else
 	gl_FragColor = fragColor;

@@ -4,17 +4,21 @@
 uniform vec4 color;
 uniform sampler2D theTexture;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec2 uv;
-
-out vec4 FragColor;
 #else
 varying vec2 uv;
 #endif
 
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+out vec4 FragColor;
+#else
+// Uses gl_FragColor
+#endif
+
 void main()
 {
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = texture(theTexture, uv) * color;
 	#else
 	gl_FragColor = texture2D(theTexture, uv) * color;
