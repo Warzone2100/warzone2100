@@ -27,6 +27,7 @@
    * Fix: Rename similar variables in shaders (commit:c1131be441afa534f9ec5be76baeb6137dc94844, ticket:4589)
    * Fix: Graphics driver warning when building structures (commit:f2d71eea0e03a6c2f7afcc8698a3883796f09346)
    * Add: Introduce display scaling with new configuration option, live window resizing and high-DPI support (ticket:4720)
+   * Fix: Terrain lighting direction (commit:ec8a386f1e65246de3807f15ec510236dd652597)
  * Campaign:
    * Add: Dynamic difficulty making missions significantly easier or harder based on difficulty. Adds Insane difficulty (commit:cb19c7672fe915b95795e3af33c63c9d567faccc)
    * Add: Power limits for Hard and Insane difficulty (commit:45abd912e08d0802edc5aaf6d591370ec95682ba)
