@@ -3,7 +3,7 @@
 
 uniform vec4 color;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
@@ -11,7 +11,7 @@ out vec4 FragColor;
 
 void main()
 {
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = color;
 	#else
 	gl_FragColor = color;

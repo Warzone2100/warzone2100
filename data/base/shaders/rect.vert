@@ -13,13 +13,13 @@ uniform mat4 transformationMatrix;
 uniform vec2 tuv_offset;
 uniform vec2 tuv_scale;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 #else
 attribute vec4 vertex;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 uv;
 #else
 varying vec2 uv;

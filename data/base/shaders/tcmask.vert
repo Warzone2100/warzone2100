@@ -10,7 +10,7 @@ uniform mat4 NormalMatrix;
 
 uniform vec4 lightPosition;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 in vec3 vertexNormal;
 in vec2 vertexTexCoord;
@@ -20,7 +20,7 @@ attribute vec3 vertexNormal;
 attribute vec2 vertexTexCoord;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out float vertexDistance;
 out vec3 normal, lightDir, eyeVec;
 out vec2 texCoord;

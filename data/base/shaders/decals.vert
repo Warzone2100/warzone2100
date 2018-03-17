@@ -7,7 +7,7 @@ uniform vec4 paramxlight;
 uniform vec4 paramylight;
 uniform mat4 lightTextureMatrix;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 in vec2 vertexTexCoord;
 #else
@@ -15,7 +15,7 @@ attribute vec4 vertex;
 attribute vec2 vertexTexCoord;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 uv_tex;
 out vec2 uv_lightmap;
 out float vertexDistance;

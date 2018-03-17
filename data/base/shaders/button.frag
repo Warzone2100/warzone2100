@@ -10,13 +10,13 @@ uniform vec4 teamcolour;
 uniform int tcmask;
 uniform bool alphaTest;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec2 texCoord;
 #else
 varying vec2 texCoord;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
@@ -25,7 +25,7 @@ out vec4 FragColor;
 void main()
 {
 	// Get color from texture unit 0
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	vec4 texColour = texture(Texture, texCoord);
 	#else
 	vec4 texColour = texture2D(Texture, texCoord);
@@ -35,7 +35,7 @@ void main()
 	if (tcmask == 1)
 	{
 		// Get tcmask information from texture unit 1
-		#if __VERSION__ >= 130
+		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 		vec4 mask = texture(TextureTcmask, texCoord);
 		#else
 		vec4 mask = texture2D(TextureTcmask, texCoord);
@@ -54,7 +54,7 @@ void main()
 		discard;
 	}
 
-	#if __VERSION__ >= 130
+	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = fragColour;
 	#else
 	gl_FragColor = fragColour;

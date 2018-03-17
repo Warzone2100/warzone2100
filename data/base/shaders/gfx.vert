@@ -3,7 +3,7 @@
 
 uniform mat4 posMatrix;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 in vec2 vertexTexCoord;
 in vec4 vertexColor;
@@ -13,7 +13,7 @@ attribute vec2 vertexTexCoord;
 attribute vec4 vertexColor;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 uv;
 out vec4 vColour;
 #else

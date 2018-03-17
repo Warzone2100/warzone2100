@@ -5,7 +5,7 @@ uniform vec2 from;
 uniform vec2 to;
 uniform mat4 ModelViewProjectionMatrix;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 #else
 attribute vec4 vertex;

@@ -5,7 +5,7 @@
 
 uniform mat4 ModelViewProjectionMatrix;
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 in vec2 vertexTexCoord;
 #else
@@ -13,7 +13,7 @@ attribute vec4 vertex;
 attribute vec2 vertexTexCoord;
 #endif
 
-#if __VERSION__ >= 130
+#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 texCoord;
 #else
 varying vec2 texCoord;
