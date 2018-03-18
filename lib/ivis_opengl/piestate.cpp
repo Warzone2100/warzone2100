@@ -260,15 +260,20 @@ SHADER_VERSION getMaximumShaderVersionForCurrentGLContext()
 		{
 			case 0: // 3.0 => 1.30
 				version = VERSION_130;
+				break;
 			case 1: // 3.1 => 1.40
 				version = VERSION_140;
+				break;
 			case 2: // 3.2 => 1.50
 				version = VERSION_150_CORE;
+				break;
 			case 3: // 3.3 => 3.30
 				version = VERSION_330_CORE;
+				break;
 			default:
 				// Return the 3.3 value
 				version = VERSION_330_CORE;
+				break;
 		}
 	}
 	else if (gl_majorversion == 4)
@@ -277,12 +282,15 @@ SHADER_VERSION getMaximumShaderVersionForCurrentGLContext()
 		{
 			case 0: // 4.0 => 4.00
 				version = VERSION_400_CORE;
+				break;
 			case 1: // 4.1 => 4.10
 				version = VERSION_410_CORE;
+				break;
 			default:
 				// Return the 4.1 value
 				// NOTE: Nothing above OpenGL 4.1 is supported on macOS
 				version = VERSION_410_CORE;
+				break;
 		}
 	}
 	else if (gl_majorversion > 4)
@@ -315,7 +323,9 @@ const char * shaderVersionString(SHADER_VERSION version)
 			return "";
 		case VERSION_FIXED_IN_FILE:
 			return "";
+		// Deliberately omit "default:" case to trigger a compiler warning if the SHADER_VERSION enum is expanded but the new cases aren't handled here
 	}
+	return ""; // Should not not reach here - silence a GCC warning
 }
 
 std::string getShaderVersionDirective(const char* shaderData)
