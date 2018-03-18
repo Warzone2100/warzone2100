@@ -498,6 +498,7 @@ SHADER_VERSION autodetectShaderVersion_FromLevelLoad(const char* filePath, const
 	{
 		debug(LOG_WARNING, "SHADER '%s' specifies a fixed #version directive. This may not work with Warzone's ability to use either OpenGL < 3.2 Compatibility Profiles, or OpenGL 3.2+ Core Profiles.", filePath);
 	}
+	return version;
 }
 
 // Read/compile/link shaders
