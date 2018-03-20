@@ -184,6 +184,20 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 				include(BundleUtilities)
 				fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${_mainexename}.exe\" \"\" \"\${dll_source_dirs}\")
 			" COMPONENT Core)
+
+			# Run windeployqt to pick up all Qt dependencies
+			find_program(TOOL_WINDEPLOYQT NAMES windeployqt)
+			if(TOOL_WINDEPLOYQT)
+				install(CODE "
+					execute_process(
+						COMMAND ${TOOL_WINDEPLOYQT} \"\${CMAKE_INSTALL_PREFIX}/${_mainexename}.exe\" --no-compiler-runtime --no-angle --no-svg
+					)
+				" COMPONENT Core)
+			else()
+				message( WARNING "Unable to find windeployqt; installation may not included all required Qt libraries" )
+			endif()
+		else()
+			message( STATUS "CMAKE_CROSSCOMPILING is defined - skipping BundleUtilities" )
 		endif()
 
 		if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
