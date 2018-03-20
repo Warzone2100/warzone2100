@@ -1303,6 +1303,7 @@ void wzMain(int &argc, char **argv)
 {
 	initKeycodes();
 
+#if defined(WZ_OS_MAC)
 	// Create copies of argc and arv (for later use initializing QApplication for the script engine)
 	copied_argv = new char*[argc+1];
 	for(int i=0; i < argc; i++) {
@@ -1312,6 +1313,12 @@ void wzMain(int &argc, char **argv)
 	}
 	copied_argv[argc] = NULL;
 	copied_argc = argc;
+#else
+	// For now, just initialize QApplication here
+	// We currently rely on side-effects of QApplication's initialization on Windows (such as how DPI-awareness is enabled)
+	// TODO: Implement proper Win32 API calls to replicate Qt's preparation for DPI awareness (or set in the manifest?)
+	appPtr = new QApplication(copied_argc, copied_argv);
+#endif
 }
 
 #define MIN_WZ_GAMESCREEN_WIDTH 640
@@ -1916,6 +1923,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		sdlInitCursors();
 	}
 
+#if defined(WZ_OS_MAC)
 	// For the script engine, let Qt know we're alive
 	//
 	// IMPORTANT: This must come *after* SDL has had a chance to initialize,
@@ -1923,6 +1931,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	//			  (For example, on macOS, Qt can break the "Quit" menu
 	//			  functionality if QApplication is initialized before SDL.)
 	appPtr = new QApplication(copied_argc, copied_argv);
+#endif
 
 	// FIXME: aspect ratio
 	glViewport(0, 0, width, height);
