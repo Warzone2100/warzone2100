@@ -131,21 +131,21 @@ set(_xgettext_option_list --language=C++
 	--package-version=${PROJECT_VERSION}
 	--msgid-bugs-address=warzone2100-project@lists.sourceforge.net)
 
-# To preserve the same order that the makefile builds use, read in POTFILES.in
-# and build a list of source paths in the same order.
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in" potfiles
+# Read in `POTFILES.in` to build a list of dependency paths in the same order.
+set(_potfiles_in_path "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
+file(STRINGS "${_potfiles_in_path}" potfiles
 	REGEX "^[^#].*"
 )
 foreach(potfile ${potfiles})
-	list(APPEND source_translatable
-		"${potfile}")
 	list(APPEND source_translatable_depends
 		"../${potfile}")
 endforeach()
 
 # Build the .pot file
+# Note: This uses the `--files-from=` parameter instead of passing in a giant command-line of files
+#		because the latter option likes to break when building on Windows.
 ADD_CUSTOM_COMMAND(OUTPUT ${_potFile}
-	COMMAND ${XGETTEXT_CMD} ${_xgettext_option_list} -o ${_potFile} ${source_translatable}
+	COMMAND ${XGETTEXT_CMD} ${_xgettext_option_list} -o ${_potFile} --files-from=${_potfiles_in_path}
 	DEPENDS ${source_translatable_depends}
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	COMMENT "Extract translatable messages to ${_potFile}"
