@@ -970,51 +970,71 @@ int realmain(int argc, char *argv[])
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
 		char modtocheck[256];
-		int result = 0;
+#if defined WZ_PHYSFS_2_1_OR_GREATER
+		PHYSFS_Stat metaData;
+#endif
 
-		// check global mods
-		for (auto const &modname : global_mods)
+		// check whether given global mods are regular files
+		for (auto iterator = global_mods.begin(); iterator != global_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/global/%s", modname.c_str());
-			result = PHYSFS_exists(modtocheck);
-			result |= WZ_PHYSFS_isDirectory(modtocheck);
-			if (!result)
+			ssprintf(modtocheck, "mods/global/%s", iterator->c_str());
+#if defined WZ_PHYSFS_2_0_OR_GREATER
+			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+#elif defined WZ_PHYSFS_2_1_OR_GREATER
+			PHYSFS_stat(modtocheck, &metaData);
+			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
+#endif
 			{
-				debug(LOG_ERROR, "The (global) mod (%s) you have specified doesn't exist!", modtocheck);
+				debug(LOG_ERROR, "The global mod \"%s\" you have specified doesn't exist!", iterator->c_str());
+				global_mods.erase(iterator);
+				rebuildSearchPath(mod_multiplay, true);
 			}
 			else
 			{
-				info("(global) mod (%s) is enabled", modname.c_str());
+				info("global mod \"%s\" is enabled", iterator->c_str());
+				++iterator;
 			}
 		}
-		// check campaign mods
-		for (auto const &modname : campaign_mods)
+		// check whether given campaign mods are regular files
+		for (auto iterator = campaign_mods.begin(); iterator != campaign_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/campaign/%s", modname.c_str());
-			result = PHYSFS_exists(modtocheck);
-			result |= WZ_PHYSFS_isDirectory(modtocheck);
-			if (!result)
+			ssprintf(modtocheck, "mods/campaign/%s", iterator->c_str());
+#if defined WZ_PHYSFS_2_0_OR_GREATER
+			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+#elif defined WZ_PHYSFS_2_1_OR_GREATER
+			PHYSFS_stat(modtocheck, &metaData);
+			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
+#endif
 			{
-				debug(LOG_ERROR, "The mod_ca (%s) you have specified doesn't exist!", modtocheck);
+				debug(LOG_ERROR, "The campaign mod \"%s\" you have specified doesn't exist!", iterator->c_str());
+				campaign_mods.erase(iterator);
+				rebuildSearchPath(mod_campaign, true);
 			}
 			else
 			{
-				info("mod_ca (%s) is enabled", modname.c_str());
+				info("campaign mod \"%s\" is enabled", iterator->c_str());
+				++iterator;
 			}
 		}
-		// check multiplay mods
-		for (auto const &modname : multiplay_mods)
+		// check whether given multiplay mods are regular files
+		for (auto iterator = multiplay_mods.begin(); iterator != multiplay_mods.end();)
 		{
-			ssprintf(modtocheck, "mods/multiplay/%s", modname.c_str());
-			result = PHYSFS_exists(modtocheck);
-			result |= WZ_PHYSFS_isDirectory(modtocheck);
-			if (!result)
+			ssprintf(modtocheck, "mods/multiplay/%s", iterator->c_str());
+#if defined WZ_PHYSFS_2_0_OR_GREATER
+			if (!PHYSFS_exists(modtocheck) || WZ_PHYSFS_isDirectory(modtocheck))
+#elif defined WZ_PHYSFS_2_1_OR_GREATER
+			PHYSFS_stat(modtocheck, &metaData);
+			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
+#endif
 			{
-				debug(LOG_ERROR, "The mod_mp (%s) you have specified doesn't exist!", modtocheck);
+				debug(LOG_ERROR, "The multiplay mod \"%s\" you have specified doesn't exist!", iterator->c_str());
+				multiplay_mods.erase(iterator);
+				rebuildSearchPath(mod_multiplay, true);
 			}
 			else
 			{
-				info("mod_mp (%s) is enabled", modname.c_str());
+				info("multiplay mod \"%s\" is enabled", iterator->c_str());
+				++iterator;
 			}
 		}
 	}
