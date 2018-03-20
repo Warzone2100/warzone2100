@@ -1,22 +1,72 @@
 environment:
-  QT5DIR: C:\Qt\5.9.1\msvc2015
+  global:
+    APPVEYOR_CACHE_ENTRY_ZIP_ARGS: -t7z -m0=lzma -mx=4
+  matrix:
+  # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
+  # Note: This uses the VS 2015 AppVeyor image because we need Qt 5.6.x
+  # If the AppVeyor VS 2017 image gains Qt 5.6.x (https://github.com/appveyor/ci/issues/2185), we could use that image with toolchain v141_xp
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    # TODO: Change VCPKG_DEFAULT_TRIPLET to one that supports XP once https://github.com/Microsoft/vcpkg/pull/1732 is finalized & merged.
+    VCPKG_DEFAULT_TRIPLET: x86-windows
+    WZ_VC_GENERATOR: "Visual Studio 14 2015"
+    QT5DIR: C:\Qt\5.6\msvc2015
+    WZ_VC_TOOLCHAIN: v140_xp
+    WZ_VC_TARGET_PLATFORMNAME: Win32
+    WZ_OUTPUT_PLATFORMNAME: x86
+  ## NOTE: Unfortunately, 64-bit Windows builds are currently broken because of QScript (see: http://developer.wz2100.net/ticket/4763)
+  ## Whenever that ticket is resolved, the following will build 64-bit:
+  # 64-bit (x64) builds use the latest Qt and VC toolchain (and support Windows 7+)
+  # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+  #   VCPKG_DEFAULT_TRIPLET: x64-windows
+  #   WZ_VC_GENERATOR: "Visual Studio 15 2017"
+  #   QT5DIR: C:\Qt\5.9.4\msvc2017_64
+  #   WZ_VC_TOOLCHAIN: v141
+  #   WZ_VC_TARGET_PLATFORMNAME: x64
+  #   WZ_OUTPUT_PLATFORMNAME: x64
 
+# Cache
+# - Maintains a separate cache for each build matrix entry
+#
+# To manually clear the project's cache, open the Javascript console when logged-in to AppVeyor, and execute:
+# $.ajax({ url: 'https://ci.appveyor.com/api/projects/<username>/<project>/buildcache', type: 'DELETE'})
+# For more, see: https://github.com/appveyor/ci/issues/985
 cache:
+  # 1. The vcpkg directory
+  #    - Cache built dependencies to reduce frequent build time by 20+ minutes.
+  #    - The vcpkg cache is invalidated if get-dependencies.ps1 changes (and get-dependencies.ps1 is what contains the pinned vcpkg commit).
   - vcpkg/ -> get-dependencies.ps1
 
 platform:
-  - Win32
+  - x64
 
 configuration:
-  - Debug
   - Release
 
 before_build:
- - set PATH=%PATH%;%QT5DIR%\bin;
- - ps: Invoke-WebRequest "https://onedrive.live.com/download?cid=363DD3AAFA342F70&resid=363DD3AAFA342F70%2120519&authkey=AIoZ_CRK7-Ckq9I" -OutFile vcpkg.7z
- - 7z x vcpkg.7z > NUL
- - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE=C:\projects\warzone2100\vcpkg\scripts\buildsystems\vcpkg.cmake -G "Visual Studio 14 2015" 
+  - set PATH=%PATH%;%QT5DIR%\bin;
+  # We cannot currently limit vcpkg to build type "release" because the freetype port fails
+  # - ps: .\get-dependencies.ps1 -VCPKG_BUILD_TYPE "release"
+  - ps: .\get-dependencies.ps1
+  # Remove the vcpkg\buildtrees folder. (Once all dependencies are installed, it isn't needed, and it takes up a lot of space in the cache.)
+  - ps: if (Test-Path .\vcpkg\buildtrees) { Remove-Item .\vcpkg\buildtrees -Force -Recurse -ErrorAction SilentlyContinue; }
+  # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
+  - msbuild .\vcpkg\toolsrc\vcpkg.sln /t:Clean /p:Configuration=Release /p:Platform=x86
+  # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
+  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
 
 build:
- parallel: true
- project: build/src/warzone2100.vcxproj
+  parallel: true
+  project: build/PACKAGE.vcxproj
+
+after_build:
+  # Package the setup exe into a zip
+  # Name the zip file based on the autorevision info: warzone2100-<BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>-<PLATFORM: x86, x64>.zip
+  - ps: cmd /c 7z a "warzone2100-$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))-$($env:WZ_OUTPUT_PLATFORMNAME).zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100.exe"
+  # Package the .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive
+  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 "warzone2100-$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))-$($env:WZ_OUTPUT_PLATFORMNAME).DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+
+artifacts:
+  - path: warzone2100-*.zip
+    name: Warzone2100 Installer
+  - path: warzone2100-*.DEBUGSYMBOLS.7z
+    name: Debug Symbols (7z)
