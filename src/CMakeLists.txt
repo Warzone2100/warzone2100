@@ -137,6 +137,26 @@ ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,relro" 
 ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,now" CACHED_RESULT_NAME LINK_FLAG_WL_Z_NOW_SUPPORTED)
 
 #######################
+# Supporting google-breakpad tools for processing minidumps
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+	# Find dump_syms.exe
+	find_program(DUMP_SYMS dump_syms HINTS ${PROJECT_SOURCE_DIR})
+	if(DUMP_SYMS)
+		# Generate the .sym file from the .pdb
+		get_target_property(_mainexename warzone2100 OUTPUT_NAME)
+		add_custom_command(TARGET warzone2100 POST_BUILD
+			COMMAND ${DUMP_SYMS} "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" > "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym"
+		)
+
+		# Install the .sym file (to ensure it's always with the .exe)
+		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT Core DESTINATION ".")
+	else()
+		message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
+	endif()
+endif()
+
+#######################
 # Install
 install(TARGETS warzone2100 COMPONENT Core DESTINATION ".")
 
