@@ -22,8 +22,10 @@
 #define __INCLUDED_VERSION_H__
 
 #include "lib/framework/types.h"
+#include <string>
 
 const char *version_getVersionString();
 const char *version_getFormattedVersionString();
+std::string version_getVersionedAppDirFolderName();
 
 #endif // __INCLUDED_VERSION_H__

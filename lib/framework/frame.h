@@ -75,14 +75,6 @@ typedef uint16_t PlayerMask;
 #error Warzone 2100 is not a MMO.
 #endif
 
-#if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 master"
-#elif defined(WZ_OS_MAC)
-# define WZ_WRITEDIR "Warzone 2100 master"
-#else
-# define WZ_WRITEDIR ".warzone2100-master"
-#endif
-
 enum QUEUE_MODE
 {
 	ModeQueue,      ///< Sends a message on the game queue, which will get synchronised, by sending a GAME_ message.

@@ -1334,7 +1334,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 	}
 }
 
-void ExchndlSetup(const char *packageVersion)
+void ExchndlSetup(const char *packageVersion, const std::string &writeDir)
 {
 # if defined(WZ_CC_MINGW)
 	wchar_t miniDumpPath[PATH_MAX] = {'\0'};
@@ -1348,12 +1348,27 @@ void ExchndlSetup(const char *packageVersion)
 
 	// Retrieve the current version
 	formattedVersionString = strdup(packageVersion);
+
+	// Convert the writeDir to WSTRING (UTF-16)
+	int wcharsRequired = MultiByteToWideChar(CP_UTF8, 0, writeDir.c_str(), -1, NULL, 0);
+	if (wcharsRequired == 0)
+	{
+		MessageBox((HWND)MB_ICONEXCLAMATION, "Failed to convert writeDir string to wide chars!\nProgram will now exit." , _T("Error"), MB_OK);
+		exit(1);
+	}
+	wchar_t wchar_writeDir[wcharsRequired];
+	if(MultiByteToWideChar(CP_UTF8, 0, writeDir.c_str(), -1, wchar_writeDir, wcharsRequired) == 0)
+	{
+		MessageBox((HWND)MB_ICONEXCLAMATION, "Failed to convert writeDir string to wide chars! (2)\nProgram will now exit." , _T("Error"), MB_OK);
+		exit(1);
+	}
+
 #ifndef WZ_PORTABLE
 	// Because of UAC on vista / win7 we use this to write our dumps to (unless we override it via OverrideRPTDirectory())
 	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
 	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath)))
 	{
-		PathAppendW(miniDumpPath, WSTRING(WZ_WRITEDIR));
+		PathAppendW(miniDumpPath, wchar_writeDir);
 		PathAppendW(miniDumpPath, L"\\logs");
 
 		if (!PathFileExistsW(miniDumpPath))
@@ -1379,7 +1394,7 @@ void ExchndlSetup(const char *packageVersion)
 			MessageBox((HWND)MB_ICONEXCLAMATION, "Buffer exceeds maximum path to create directory.  Exiting.", _T("Error"), MB_OK);
 			exit(1);
 		}
-		PathAppendW(miniDumpPath, WSTRING(WZ_WRITEDIR));
+		PathAppendW(miniDumpPath, wchar_writeDir);
 		PathAppendW(miniDumpPath, L"\\logs");
 	}
 #endif
