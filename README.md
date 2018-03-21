@@ -57,20 +57,42 @@ location of this directory depends on the operating system.
 
 ### Warzone directory under GNU/Linux
 
-Under GNU/Linux the warzone-dir can be found in your home-directory, it is called
-".warzone2100-<version>". The leading dot indicates that it is a hidden
-directory so depending on your configuration you may not be able to see it.
+Under GNU/Linux, Warzone conforms to the [XDG base directory spec]
+(https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+
+By default, the directory `warzone2100-<version>` can be found in your home-directory 
+under the path `~/.local/share/`.
+(If the `XDG_DATA_HOME` environment variable is defined, the Warzone folder will
+be located within `$XDG_DATA_HOME`.)
+
+The leading dot in the `.local` part of the path indicates that it is a hidden
+directory, so depending on your configuration you may not be able to see it. 
 However, you can still access it by typing the path into your address-bar.
 
 ### Warzone directory under Windows
 
-The directory is called "Warzone 2100 <version>" and is located in "My
-Documents".
+The directory `Warzone 2100 Project\Warzone 2100 <version>` is located under the 
+`%APPDATA%` folder.
+
+Typical `%APPDATA%` paths:
+- Windows XP: `\Documents and Settings\$USER$\Application Data`
+- Windows Vista+: `\Users\$USER$\AppData\Roaming`
+
+Hence, the default path for the Warzone configuration data on Windows Vista+ would be:
+`C:\Users\$USER$\AppData\Roaming\Warzone 2100 Project\Warzone 2100 <version>\`
+
+By default, the `%APPDATA%` folder is hidden. Entering:
+`%APPDATA%\Warzone 2100 Project\` into the address bar of Windows Explorer
+will browse to your Warzone directory.
 
 ### Warzone directory under Mac OS X
 
-The directory "Warzone 2100 <version>" can be found in your home-directory at:
-~/Library/Application Support/
+The directory `Warzone 2100 <version>` can be found in your home-directory at:
+`~/Library/Application Support/`
+
+By default, recent version of macOS hide your account's Library folder. To view it in
+Finder, hold down the Option key while clicking the Go menu, and your Library folder
+will appear as a menu choice.
 
 ### Configuration file
 

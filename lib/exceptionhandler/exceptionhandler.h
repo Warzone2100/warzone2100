@@ -22,6 +22,6 @@
 
 extern void setupExceptionHandler(int argc, const char **argv, const char *packageVersion);
 
-extern bool OverrideRPTDirectory(char *newPath);
+extern bool OverrideRPTDirectory(const char *newPath);
 
 #endif // __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
