@@ -1,4 +1,4 @@
-2018-03-XX: Version 3.3.0
+2018-06-XX: Version 3.3.0
  * General:
    * Add: New challenge "Two-Faced" from forum member Forgon (commit:2535b921a40afc0a760a54f9efe31494d95dcc7b)
    * Add: Chat link to main menu (commit:6797cf4681ebe35f50785f08f54c4da8d42e432e)
@@ -33,6 +33,7 @@
    * Fix: Graphics driver warning when building structures (commit:f2d71eea0e03a6c2f7afcc8698a3883796f09346)
    * Fix: Terrain lighting direction (commit:ec8a386f1e65246de3807f15ec510236dd652597)
    * Fix: Attempt a workaround with Nvidia driver bug causing crashes (commit:5a898bd8f1a0c916811b266026173455bb87e1c8)
+   * Fix: Broken upgrade icons (ticket:4759)
  * Campaign:
    * Add: Dynamic difficulty making missions significantly easier or harder based on difficulty. Adds Insane difficulty (commit:cb19c7672fe915b95795e3af33c63c9d567faccc)
    * Add: Power limits for Hard and Insane difficulty (commit:45abd912e08d0802edc5aaf6d591370ec95682ba)
@@ -89,6 +90,7 @@
    * Add: Configuration option to enable or disable radar north arrow (commit:c5db25a75ea34d263ce3243f04ba4110b936ac52)
    * Add: Configuration option to quit a game without confirmation (ticket:4692)
    * Add: Configuration options to set default map size, map zoom rate, default minimap size, camera speed (replaces scroll speed), turn off camera acceleration, turn off delay when jumping to new location by clicking on minimap, functionality of the scroll wheel (ticket:4629)
+   * Add: Support for PhysFS 2.1+ (ticket:4693)
    * Change: Use datarootdir as prefix for non game-Specific system paths (commit:65152d8110d02357202941b21b819f047d2f1536)
    * Change: Print console message when re-aligning direction (commit:e8718ea80464e8768c12261a06c277cf3d153dcf, ticket:4620)
    * Change: Replace OpenSSL with micro-ECC and SHA2 libraries (commit:f1c474153f7c55b5b39a9fdb805a7a7a4c1819c8)
