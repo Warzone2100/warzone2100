@@ -828,7 +828,7 @@ void setupExceptionHandler(int argc, const char **argv, const char *packageVersi
 	setFatalSignalHandler(posixExceptionHandler);
 #endif // WZ_OS_*
 }
-bool OverrideRPTDirectory(char *newPath)
+bool OverrideRPTDirectory(const char *newPath)
 {
 # if defined(WZ_CC_MINGW)
 	wchar_t buf[MAX_PATH];

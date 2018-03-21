@@ -184,15 +184,20 @@ static bool getCurrentDir(char *const dest, size_t const size)
 	return true;
 }
 
-
-static void getPlatformUserDir(char *const tmpstr, size_t const size)
+// Fallback method for earlier PhysFS verions that do not support PHYSFS_getPrefDir
+// Importantly, this creates the folders if they do not exist
+static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 {
+	std::string basePath;
+	std::string appendPath;
+	char tmpstr[PATH_MAX] = { '\0' };
+	const size_t size = sizeof(tmpstr);
 #if defined(WZ_OS_WIN)
 //  When WZ_PORTABLE is passed, that means we want the config directory at the same location as the program file
 	DWORD dwRet;
 	wchar_t tmpWStr[MAX_PATH];
 #ifndef WZ_PORTABLE
-	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr)))
+	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr)))
 	{
 #else
 	if ((dwRet = GetCurrentDirectoryW(MAX_PATH, tmpWStr)))
@@ -208,94 +213,164 @@ static void getPlatformUserDir(char *const tmpstr, size_t const size)
 			debug(LOG_FATAL, "Config directory encoding conversion error.");
 			exit(1);
 		}
-		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
+		basePath = std::string(tmpstr);
+
+		appendPath = std::string();
+#ifndef WZ_PORTABLE
+		// Must append org\app to APPDATA path
+		appendPath += org;
+		appendPath += PHYSFS_getDirSeparator();
+#endif
+		appendPath += app;
 	}
 	else
 #elif defined(WZ_OS_MAC)
 	if (cocoaGetApplicationSupportDir(tmpstr, size))
 	{
-		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
+		basePath = std::string(tmpstr);
+		appendPath = std::string(app);
 	}
 	else
 #elif defined(WZ_OS_UNIX)
-	if (strlcpy(tmpstr, getenv("HOME"), size))
+	// Following PhysFS, use XDG's base directory spec, even if not on Linux.
+	// Reference: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+	const char *envPath = getenv("XDG_DATA_HOME");
+	if (envPath == nullptr)
 	{
-		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
+		// XDG_DATA_HOME isn't defined
+		// Use HOME, and append ".local/share/" to match XDG's base directory spec
+		envPath = getenv("HOME");
+
+		#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
+		if (envPath == nullptr)
+		{
+			// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() if HOME isn't defined
+			debug(LOG_INFO, "HOME environment variable isn't defined - falling back to PHYSFS_getUserDir()");
+			envPath = PHYSFS_getUserDir();
+		}
+		#endif
+
+		appendPath = std::string(".local") + PHYSFS_getDirSeparator() + "share";
+	}
+
+	if (envPath != nullptr)
+	{
+		basePath = std::string(envPath);
+
+		if (!appendPath.empty())
+		{
+			appendPath += PHYSFS_getDirSeparator();
+		}
+		appendPath += app;
+	}
+	else
+#elif !defined(WZ_PHYSFS_2_1_OR_GREATER)
+	// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() for other OSes
+	if (PHYSFS_getUserDir())
+	{
+		basePath = std::string(PHYSFS_getUserDir());
+		appendPath = std::string(app);
 	}
 	else
 #endif
-		if (getCurrentDir(tmpstr, size))
-		{
-			strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
-		}
-		else
-		{
-			debug(LOG_FATAL, "Can't get home directory?");
-			abort();
-		}
+	if (getCurrentDir(tmpstr, size))
+	{
+		basePath = std::string(tmpstr);
+		appendPath = std::string(app);
+	}
+	else
+	{
+		debug(LOG_FATAL, "Can't get home / prefs directory?");
+		abort();
+	}
+
+	// Create the folders within the basePath if they don't exist
+
+	if (!PHYSFS_setWriteDir(basePath.c_str())) // Workaround for PhysFS not creating the writedir as expected.
+	{
+		debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
+			  basePath.c_str(), WZ_PHYSFS_getLastError());
+		exit(1);
+	}
+
+	if (!PHYSFS_mkdir(appendPath.c_str()))
+	{
+		debug(LOG_FATAL, "Error creating directory \"%s\" in \"%s\": %s",
+			  appendPath.c_str(), PHYSFS_getWriteDir(), WZ_PHYSFS_getLastError());
+		exit(1);
+	}
+
+	return basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator();
+}
+
+// Retrieves the appropriate storage directory for application-created files / prefs
+// (Ensures the directory exists. Creates folders if necessary.)
+static std::string getPlatformPrefDir(const char * org, const char * app)
+{
+#if defined(WZ_PHYSFS_2_1_OR_GREATER)
+	const char * prefsDir = PHYSFS_getPrefDir(org, app);
+	if (prefsDir == nullptr)
+	{
+		debug(LOG_FATAL, "Failed to obtain prefs directory: %s", WZ_PHYSFS_getLastError());
+		exit(1);
+	}
+	return std::string(prefsDir) + PHYSFS_getDirSeparator();
+#else
+	// PHYSFS_getPrefDir is not available - use fallback method (which requires OS-specific code)
+	std::string prefDir = getPlatformPrefDir_Fallback(org, app);
+	if (prefDir.empty())
+	{
+		debug(LOG_FATAL, "Failed to obtain prefs directory (fallback)");
+		exit(1);
+	}
+	return prefDir;
+#endif // defined(WZ_PHYSFS_2_1_OR_GREATER)
+}
+
+bool endsWith (std::string const &fullString, std::string const &endString) {
+	if (fullString.length() >= endString.length()) {
+		return (0 == fullString.compare (fullString.length() - endString.length(), endString.length(), endString));
+	} else {
+		return false;
+	}
 }
 
 static void initialize_ConfigDir()
 {
-	char tmpstr[PATH_MAX] = { '\0' };
+	std::string configDir;
 
 	if (strlen(configdir) == 0)
 	{
-		getPlatformUserDir(tmpstr, sizeof(tmpstr));
-
-		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
-		{
-			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			      tmpstr, WZ_PHYSFS_getLastError());
-			exit(1);
-		}
-
-		if (!PHYSFS_mkdir(WZ_WRITEDIR)) // s.a.
-		{
-			debug(LOG_FATAL, "Error creating directory \"%s\": %s",
-			      WZ_WRITEDIR, WZ_PHYSFS_getLastError());
-			exit(1);
-		}
-
-		// Append the Warzone subdir
-		sstrcat(tmpstr, WZ_WRITEDIR);
-		sstrcat(tmpstr, PHYSFS_getDirSeparator());
-
-		if (!PHYSFS_setWriteDir(tmpstr))
-		{
-			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			      tmpstr, WZ_PHYSFS_getLastError());
-			exit(1);
-		}
+		configDir = getPlatformPrefDir("Warzone 2100 Project", WZ_WRITEDIR);
 	}
 	else
 	{
-		sstrcpy(tmpstr, configdir);
+		configDir = std::string(configdir);
 
 		// Make sure that we have a directory separator at the end of the string
-		if (tmpstr[strlen(tmpstr) - 1] != PHYSFS_getDirSeparator()[0])
+		if (!endsWith(configDir, PHYSFS_getDirSeparator()))
 		{
-			sstrcat(tmpstr, PHYSFS_getDirSeparator());
+			configDir += PHYSFS_getDirSeparator();
 		}
 
-		debug(LOG_WZ, "Using custom configuration directory: %s", tmpstr);
-
-		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
-		{
-			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			      tmpstr, WZ_PHYSFS_getLastError());
-			exit(1);
-		}
+		debug(LOG_WZ, "Using custom configuration directory: %s", configDir.c_str());
 	}
 
-	if (!OverrideRPTDirectory(tmpstr))
+	if (!PHYSFS_setWriteDir(configDir.c_str())) // Workaround for PhysFS not creating the writedir as expected.
+	{
+		debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
+			  configDir.c_str(), WZ_PHYSFS_getLastError());
+		exit(1);
+	}
+
+	if (!OverrideRPTDirectory(configDir.c_str()))
 	{
 		// since it failed, we just use our default path, and not the user supplied one.
-		debug(LOG_ERROR, "Error setting exception hanlder to use directory %s", tmpstr);
+		debug(LOG_ERROR, "Error setting exception handler to use directory %s", configDir.c_str());
 	}
 
 
-	// User's home dir first so we always see what we write
+	// Config dir first so we always see what we write
 	PHYSFS_mount(PHYSFS_getWriteDir(), NULL, PHYSFS_PREPEND);
 
 	PHYSFS_permitSymbolicLinks(1);
