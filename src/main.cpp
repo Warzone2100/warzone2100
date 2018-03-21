@@ -305,10 +305,10 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 
 // Retrieves the appropriate storage directory for application-created files / prefs
 // (Ensures the directory exists. Creates folders if necessary.)
-static std::string getPlatformPrefDir(const char * org, const char * app)
+static std::string getPlatformPrefDir(const char * org, const std::string &app)
 {
 #if defined(WZ_PHYSFS_2_1_OR_GREATER)
-	const char * prefsDir = PHYSFS_getPrefDir(org, app);
+	const char * prefsDir = PHYSFS_getPrefDir(org, app.c_str());
 	if (prefsDir == nullptr)
 	{
 		debug(LOG_FATAL, "Failed to obtain prefs directory: %s", WZ_PHYSFS_getLastError());
@@ -317,7 +317,7 @@ static std::string getPlatformPrefDir(const char * org, const char * app)
 	return std::string(prefsDir) + PHYSFS_getDirSeparator();
 #else
 	// PHYSFS_getPrefDir is not available - use fallback method (which requires OS-specific code)
-	std::string prefDir = getPlatformPrefDir_Fallback(org, app);
+	std::string prefDir = getPlatformPrefDir_Fallback(org, app.c_str());
 	if (prefDir.empty())
 	{
 		debug(LOG_FATAL, "Failed to obtain prefs directory (fallback)");
@@ -341,7 +341,7 @@ static void initialize_ConfigDir()
 
 	if (strlen(configdir) == 0)
 	{
-		configDir = getPlatformPrefDir("Warzone 2100 Project", WZ_WRITEDIR);
+		configDir = getPlatformPrefDir("Warzone 2100 Project", version_getVersionedAppDirFolderName());
 	}
 	else
 	{
@@ -938,7 +938,7 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString());
+	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(), version_getVersionedAppDirFolderName());
 
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);

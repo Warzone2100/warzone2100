@@ -30,6 +30,48 @@
 static const char vcs_branch_cstr[] = VCS_BRANCH;
 static const char vcs_tag[] = VCS_TAG;
 
+/** Obtain the versioned application-data / config writedir folder name
+ *  If on a tag, this is "Warzone 2100 <tag>" / "warzone2100-<tag>"
+ *  If not on a tag, this is "Warzone 2100 <branch>" / "warzone2100-<branch>"
+ *  If no branch is defined, this is "Warzone 2100 <VCS_EXTRA>" / "warzone2100-<VCS_EXTRA>"
+ */
+std::string version_getVersionedAppDirFolderName()
+{
+	std::string versionedWriteDirFolderName;
+
+#if defined(WZ_OS_WIN) || defined(WZ_OS_MAC)
+	versionedWriteDirFolderName = "Warzone 2100 ";
+#else
+	versionedWriteDirFolderName = "warzone2100-";
+#endif
+
+	if (strlen(vcs_tag))
+	{
+		versionedWriteDirFolderName += vcs_tag;
+	}
+	else if (strlen(vcs_branch_cstr))
+	{
+#if defined(DEBUG) || defined(WZ_USE_MASTER_BRANCH_APP_DIR)
+		// To ease testing new branches with existing files, DEBUG builds
+		// (or when WZ_USE_MASTER_BRANCH_APP_DIR is defined)
+		// default to using "master" as the branch
+		versionedWriteDirFolderName += "master";
+#else
+		// For Release builds, use the actual branch name
+		versionedWriteDirFolderName += vcs_branch_cstr;
+#endif
+	}
+	else
+	{
+		// not a branch or a tag, so we are detached most likely.
+		std::string vcs_extra_str = VCS_EXTRA;
+		// remove any spaces from VCS_EXTRA
+		std::remove(vcs_extra_str.begin(), vcs_extra_str.end(), ' ');
+		versionedWriteDirFolderName += vcs_extra_str;
+	}
+	return versionedWriteDirFolderName;
+}
+
 /** Composes a nicely formatted version string.
 * Determine if we are on a tag (which will NOT show the hash)
 * or a branch (which WILL show the hash)
