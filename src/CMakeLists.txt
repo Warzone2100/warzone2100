@@ -20,10 +20,22 @@ add_custom_command(
     OUTPUT
 		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"  # fake - ensure we run
 		"${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
+		"${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
 	# this command must generate: ${CMAKE_CURRENT_BINARY_DIR}/autorevision.h
     COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DOUTPUT_TYPE=h -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" -P "${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake"
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 )
+
+# On Windows, configure warzone2100.rc with updated version info
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	set(_rc_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc.in")
+	add_custom_command(
+		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_rc_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc" -DPORTABLE="${WZ_PORTABLE}" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		DEPENDS "${_rc_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
+	)
+endif()
 
 ############################
 # Main Executable
@@ -36,7 +48,12 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
 
-add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc")
+set(_additionalSourceFiles)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	set(_additionalSourceFiles "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
+endif()
+
+add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" ${_additionalSourceFiles})
 target_compile_definitions(warzone2100 PRIVATE "YY_NO_UNISTD_H")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
