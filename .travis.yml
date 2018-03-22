@@ -44,7 +44,7 @@ matrix:
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
 
     ## NOTE: The following is commented-out until we solidify how we're caching Docker images
-	## (The current ubuntu Dockerfile does not install Clang.)
+    ## (The current ubuntu Dockerfile does not install Clang.)
     ## Build for Ubuntu (CMake) (Clang)
     #- language: cpp
     #  env:
@@ -66,7 +66,7 @@ matrix:
     #    - docker run --rm -e "CC=clang" -e "CXX=clang++" -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
 
     # Build for macOS
-	# (This also deploys the macOS build to the buildbot)
+    # (This also deploys the macOS build to the buildbot)
     - language: objective-c
       env:
         - NAME="macOS"
@@ -83,3 +83,15 @@ matrix:
         - macosx/BuildBot/travis_build.sh regular "tmp/wz_upload"
       after_success:
         - macosx/BuildBot/travis_deploy.sh "tmp/wz_upload" "warzone2100-*.zip"
+
+# The channel name "chat.freenode.net#warzone2100-dev" is encrypted against Warzone2100/warzone2100 to prevent IRC spam of forks
+notifications:
+  irc: 
+    channels: 
+      - secure: AvYOScfrjmtSqC6+qvVe3nxCjonN07eNp6ebzT3YdBo9e0JH4/elxSJVRC96E8ViSGia/6m8rBWMSEoJhDkykyUSVCn/gHr2FRtCNJz+iJ7ZEgzx90++q5XxtJM4R49e5HDF5dyoImiuwREXXhhqDX1oKCqFRgI4M17XfsYD+NM=
+    on_success: always # default: always
+    on_failure: always # default: always
+    use_notice: true
+    skip_join: true
+    template:
+      - "[travis-ci] \x0313%{repository_slug}\x03/\x036%{branch}\x03 \x0314%{commit}\x03 \x0315%{author}\x03: Build #%{build_number}: \x031%{message}\x03  Build details: %{build_url}"
