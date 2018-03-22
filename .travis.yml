@@ -31,7 +31,6 @@ matrix:
         - brew install gettext
         - brew install asciidoc
         - brew install docbook-xsl
-        - wget https://tug.org/cgi-bin/mactex-download/BasicTeX.pkg && pkgutil --check-signature BasicTeX.pkg && sudo installer -pkg BasicTeX.pkg -target /
         - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
         - gem install xcpretty-travis-formatter --no-rdoc --no-ri --no-document --quiet
       script:
