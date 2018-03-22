@@ -1,29 +1,32 @@
 matrix:
   include:
-    ## Build for Ubuntu using Dockerfile
-    ## Commented out until Ubuntu Dockerfile can be fixed for SDL >= 2.0.5
-    #- language: c
-    #  sudo: required
-    #  services:
-    #    - docker
-    #  install:
-    #    - cd docker/ubuntu/
-    #    - docker build -t ubuntu .
-    #    - cd ../..
-    #  script:
-    #    - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
-    #    # TODO:
-    #    # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
-    #    # To do this, append the following to the pertinent lines before —rm:
-    #    # -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
-    #    - docker run --rm -v $(pwd):/code ubuntu ./autogen.sh
-    #    - docker run --rm -v $(pwd):/code ubuntu ./configure
-    #    - docker run --rm -v $(pwd):/code ubuntu make
-    #    - docker run --rm -v $(pwd):/code ubuntu make check
-    #    - docker run --rm -v $(pwd):/code ubuntu make install
+    # Build for Ubuntu (Makefile) (GCC)
+    - language: cpp
+      env:
+        - NAME="Ubuntu (Makefile)”
+      compiler: gcc
+      sudo: required
+      services:
+        - docker
+      install:
+        - cd docker/ubuntu/
+        - docker build -t ubuntu .
+        - cd ../..
+      script:
+        - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
+        # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
+        # To do this, append the following to the pertinent lines after —rm:
+        # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
+        - docker run --rm -v $(pwd):/code ubuntu ./autogen.sh
+        - docker run --rm -e MAKEFLAGS -v $(pwd):/code ubuntu ./configure
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu make
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu make check
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu sudo make install
 
     # Build for macOS
     - language: objective-c
+      env:
+        - NAME="macOS"
       os: osx
       osx_image: xcode8.3
       before_install:
