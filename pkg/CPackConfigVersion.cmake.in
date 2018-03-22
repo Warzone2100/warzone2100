@@ -40,70 +40,10 @@ else()
 )
 endif()
 
-# Import the autorevision values into the environment
-STRING(REGEX REPLACE "\n" ";" autorevision_info "${autorevision_info}")
-foreach(_varoutLine ${autorevision_info})
-	STRING(REGEX MATCH "^-- ([^=]+)=(.*)" _line_Matched "${_varoutLine}")
-	if(DEFINED CMAKE_MATCH_1 AND NOT "${CMAKE_MATCH_1}" STREQUAL "")
-		if(DEFINED CMAKE_MATCH_2)
-			set(${CMAKE_MATCH_1} "${CMAKE_MATCH_2}")
-		else()
-			set(${CMAKE_MATCH_1} "")
-		endif()
-	endif()
-endforeach()
+include("@PROJECT_SOURCE_DIR@/build_tools/autorevision_helpers.cmake")
 
-function(extractVersionNumberFromGitTag _gitTag)
-	set(version_tag ${_gitTag})
-
-	# Remove "v/" or "v" prefix (as in "v3.2.2"), if present
-	STRING(REGEX REPLACE "^v/" "" version_tag "${version_tag}")
-	STRING(REGEX REPLACE "^v" "" version_tag "${version_tag}")
-
-	# Remove _beta* or _rc* suffix, if present
-	STRING(REGEX REPLACE "_beta.*$" "" version_tag "${version_tag}")
-	STRING(REGEX REPLACE "_rc.*$" "" version_tag "${version_tag}")
-
-	# Extract up to a 3-component version # from the beginning of the tag (i.e. 3.2.2)
-	STRING(REGEX MATCH "^([0-9]+)(.[0-9]+)?(.[0-9]+)?" version_tag "${version_tag}")
-
-	set(DID_EXTRACT_VERSION OFF PARENT_SCOPE)
-	unset(EXTRACTED_VERSION PARENT_SCOPE)
-	unset(EXTRACTED_VERSION_MAJOR PARENT_SCOPE)
-	unset(EXTRACTED_VERSION_MINOR PARENT_SCOPE)
-	unset(EXTRACTED_VERSION_PATCH PARENT_SCOPE)
-
-	if(version_tag)
-		set(DID_EXTRACT_VERSION ON PARENT_SCOPE)
-		set(EXTRACTED_VERSION ${version_tag} PARENT_SCOPE)
-		if(DEFINED CMAKE_MATCH_1)
-			set(EXTRACTED_VERSION_MAJOR "${CMAKE_MATCH_1}" PARENT_SCOPE)
-		endif()
-		if(DEFINED CMAKE_MATCH_2)
-			string(SUBSTRING "${CMAKE_MATCH_2}" 1 -1 _version_minor) # remove the first "." character
-			set(EXTRACTED_VERSION_MINOR "${_version_minor}" PARENT_SCOPE)
-		endif()
-		if(DEFINED CMAKE_MATCH_3)
-			string(SUBSTRING "${CMAKE_MATCH_3}" 1 -1 _version_patch) # remove the first "." character
-			set(EXTRACTED_VERSION_PATCH "${_version_patch}" PARENT_SCOPE)
-		endif()
-	endif()
-endfunction()
-
-macro(getVersionString)
-	if(DEFINED VCS_TAG AND NOT "${VCS_TAG}" STREQUAL "")
-		# Use the Tag
-		set(VERSION_STRING "${VCS_TAG}")
-	elseif(DEFINED VCS_BRANCH AND NOT "${VCS_BRANCH}" STREQUAL "")
-		# Use the branch
-		set(VERSION_STRING "${VCS_BRANCH}")
-	elseif(DEFINED VCS_EXTRA AND NOT "${VCS_EXTRA}" STREQUAL "")
-		# Use VCS_EXTRA
-		set(VERSION_STRING "${VCS_EXTRA}")
-	else()
-		set(VERSION_STRING "unknown")
-	endif()
-endmacro()
+# Import the autorevision values into the current scope
+cmakeSetAutorevisionValues("${autorevision_info}")
 
 # Extract a proper version number from the git tag
 extractVersionNumberFromGitTag("${VCS_MOST_RECENT_TAGGED_VERSION}")
