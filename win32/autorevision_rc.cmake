@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 
-# Automatically update the VERSION_INFO in the warzone2100.rc file
+# Automatically update the VERSION_INFO in the warzone2100.rc and the .manifest file
 #
 # Required input defines:
 # - CACHEFILE: the path to the autorevision.cache file generated for the build
 # - PROJECT_ROOT: the path the project root (${PROJECT_SOURCE_DIR})
-# - TEMPLATE_FILE: the full filename + path for the input rc.in template file
-# - OUTPUT_FILE: the full filename + path for the output .rc file
+# - TEMPLATE_FILE: the full filename + path for the input rc.in or manifest.in template file
+# - OUTPUT_FILE: the full filename + path for the output .rc or .manifest file
 #
 # Optional input defines:
 # - PORTABLE: "ON" if portable build
@@ -44,6 +44,7 @@ unset(RC_FILEVERSION)
 unset(RC_PRODUCTVERSION)
 unset(RC_StringFileInfo_FileVersion)
 unset(RC_StringFileInfo_ProductVersion)
+unset(MANIFEST_assemblyIdentityVersion)
 
 ##################################
 # Determine the ProductVersion
@@ -131,6 +132,7 @@ if(_file_version_build GREATER 65534)
 	endif()
 endif()
 set(RC_FILEVERSION "1,${_file_version_minor},${_file_version_patch},${_file_version_build}")
+set(MANIFEST_assemblyIdentityVersion "1.${_file_version_minor}.${_file_version_patch}.${_file_version_build}")
 
 ##################################
 # Determine the other .rc settings

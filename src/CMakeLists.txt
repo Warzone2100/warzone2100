@@ -26,14 +26,24 @@ add_custom_command(
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 )
 
-# On Windows, configure warzone2100.rc with updated version info
+# On Windows, configure warzone2100.rc and the .manifest with updated version info
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	# warzone2100.manifest
+	set(_manifest_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.manifest.in")
+	add_custom_command(
+		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_manifest_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest" -DPORTABLE="${WZ_PORTABLE}" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		DEPENDS "${_manifest_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
+	)
+
+	# warzone2100.rc
 	set(_rc_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc.in")
 	add_custom_command(
 		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc"
 		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_rc_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc" -DPORTABLE="${WZ_PORTABLE}" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_rc_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
+		DEPENDS "${_rc_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest"
 	)
 endif()
 
@@ -66,6 +76,10 @@ endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Build warzone exe as a Windows app (not a console app)
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES WIN32_EXECUTABLE TRUE)
+
+	# Add the "/MANIFEST:NO" linker flag (if supported) because a manifest is already included by warzone2100.rc
+	# (This is required for MSVC builds)
+	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/MANIFEST:NO" CACHED_RESULT_NAME LINK_FLAG_SLASH_MANFIEST_NO_SUPPORTED)
 endif()
 
 target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay script sdl-backend framework sequence sound widget)
