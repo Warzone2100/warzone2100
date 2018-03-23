@@ -1503,6 +1503,7 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height)
 {
 	assert(WZwindow != nullptr);
+	debug(LOG_WZ, "Attempt to change resolution to [%d] %dx%d", screen, width, height);
 
 #if defined(WZ_OS_MAC)
 	// Workaround for SDL (2.0.5) quirk on macOS:
@@ -1591,6 +1592,8 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 	SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
 	if (resultingWidth != width || resultingHeight != height) {
 		// Attempting to set the resolution failed
+		debug(LOG_WZ, "Attempting to change the resolution to %dx%d seems to have failed (result: %dx%d).", width, height, resultingWidth, resultingHeight);
+
 		// Revert to the prior position + resolution + display scale, and return false
 		SDL_SetWindowSize(WZwindow, prev_width, prev_height);
 		SDL_SetWindowPosition(WZwindow, prev_x, prev_y);
