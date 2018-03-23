@@ -1786,13 +1786,20 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		SDL_GetDisplayBounds(i, &bounds);
 		debug(LOG_WZ, "Monitor %d: pos %d x %d : res %d x %d", i, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
 	}
-	if (war_GetScreen() > SDL_GetNumVideoDisplays())
+	screenIndex = war_GetScreen();
+	const int currentNumDisplays = SDL_GetNumVideoDisplays();
+	if (currentNumDisplays < 1)
 	{
-		debug(LOG_FATAL, "Invalid screen defined in configuration");
+		debug(LOG_FATAL, "SDL_GetNumVideoDisplays returned: %d, with error: %s", currentNumDisplays, SDL_GetError());
 		SDL_Quit();
 		exit(EXIT_FAILURE);
 	}
-	screenIndex = war_GetScreen();
+	if (screenIndex > currentNumDisplays)
+	{
+		debug(LOG_WARNING, "Invalid screen [%d] defined in configuration; there are only %d displays; falling back to display 0", screenIndex, currentNumDisplays);
+		screenIndex = 0;
+		war_SetScreen(0);
+	}
 	WZwindow = SDL_CreateWindow(PACKAGE_NAME, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), windowWidth, windowHeight, video_flags);
 
 	if (!WZwindow)
