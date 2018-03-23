@@ -1579,9 +1579,7 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 	}
 
 	// Position the window (centered) on the screen (for its upcoming new size)
-	bounds.w -= (bounds.w + width) / 2;
-	bounds.h -= (bounds.h + height) / 2;
-	SDL_SetWindowPosition(WZwindow, bounds.x + bounds.w, bounds.y + bounds.h);
+	SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screen), SDL_WINDOWPOS_CENTERED_DISPLAY(screen));
 
 	// Change the window size
 	// NOTE: Changing the window size will trigger an SDL window size changed event which will handle recalculating layout.
@@ -1795,10 +1793,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		exit(EXIT_FAILURE);
 	}
 	screenIndex = war_GetScreen();
-	SDL_GetDisplayBounds(screenIndex, &bounds);
-	int xOffset = bounds.w - ((bounds.w + windowWidth) / 2);
-	int yOffset = bounds.h - ((bounds.h + windowHeight) / 2);
-	WZwindow = SDL_CreateWindow(PACKAGE_NAME, bounds.x + xOffset, bounds.y + yOffset, windowWidth, windowHeight, video_flags);
+	WZwindow = SDL_CreateWindow(PACKAGE_NAME, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), windowWidth, windowHeight, video_flags);
 
 	if (!WZwindow)
 	{
@@ -1818,6 +1813,9 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		SDL_SetWindowSize(WZwindow, minWindowWidth, minWindowHeight);
 		windowWidth = minWindowWidth;
 		windowHeight = minWindowHeight;
+
+		// Center window on screen
+		SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
 	}
 
 	// Calculate the game screen's logical dimensions
