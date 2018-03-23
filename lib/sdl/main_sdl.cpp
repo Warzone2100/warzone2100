@@ -88,6 +88,13 @@ static std::vector<screeninfo> displaylist;	// holds all our possible display li
 
 QCoreApplication *appPtr;				// Needed for qtscript
 
+#if defined(WZ_OS_MAC)
+// on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
+const SDL_WindowFlags WZ_SDL_FULLSCREEN_MODE = SDL_WINDOW_FULLSCREEN_DESKTOP;
+#else
+const SDL_WindowFlags WZ_SDL_FULLSCREEN_MODE = SDL_WINDOW_FULLSCREEN;
+#endif
+
 /* The possible states for keys */
 enum KEY_STATE
 {
@@ -485,16 +492,16 @@ void wzScreenFlip()
 void wzToggleFullscreen()
 {
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
-	if (flags & SDL_WINDOW_FULLSCREEN)
+	if (flags & WZ_SDL_FULLSCREEN_MODE)
 	{
-		flags &= ~SDL_WINDOW_FULLSCREEN;
+		SDL_SetWindowFullscreen(WZwindow, 0);
+		wzSetWindowIsResizable(true);
 	}
 	else
 	{
-		flags |= SDL_WINDOW_FULLSCREEN;
+		SDL_SetWindowFullscreen(WZwindow, WZ_SDL_FULLSCREEN_MODE);
+		wzSetWindowIsResizable(false);
 	}
-
-	SDL_SetWindowFullscreen(WZwindow, flags);
 }
 
 bool wzIsFullscreen()
@@ -1755,10 +1762,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	if (fullscreen)
 	{
-		video_flags |= SDL_WINDOW_FULLSCREEN;
-
-		// FIXME: SDL's High-DPI mode does not currently work properly when fullscreened (as of SDL 2.0.5)
-		highDPI = false;
+		video_flags |= WZ_SDL_FULLSCREEN_MODE;
 	}
 	else
 	{
@@ -1768,9 +1772,11 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	if (highDPI)
 	{
+#if defined(WZ_OS_MAC)
 		// Allow SDL to enable its built-in High-DPI display support.
-		// As of SDL 2.0.5, this only works on macOS. (But SDL 2.1.x+ may enable Windows support.)
+		// As of SDL 2.0.5, this only works on macOS. (But SDL 2.1.x+ may enable Windows support via a different interface.)
 		video_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
+#endif
 	}
 
 	SDL_Rect bounds;
