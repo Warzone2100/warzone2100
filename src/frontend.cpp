@@ -2282,9 +2282,10 @@ void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 	// By setting the appropriate calcLayout functions on all interface elements,
 	// they should automatically recalculate their layout on screen resize.
 
-	// If the Video Options screen is up, the current resolution text must be updated
-	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_R) != nullptr)
+	// If the Video Options screen is up, the current resolution text (and other values) should be refreshed
+	if (titleMode == VIDEO_OPTIONS)
 	{
-		widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+		ASSERT(widgGetFromID(psWScreen, FRONTEND_WINDOWMODE_R) != nullptr, "Expected the Video options menu to be open.");
+		refreshCurrentVideoOptionsValues();
 	}
 }
