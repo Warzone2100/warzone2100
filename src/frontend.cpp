@@ -988,11 +988,7 @@ bool runAudioAndZoomOptionsMenu()
 
 bool canChangeResolutionLive()
 {
-	// Since changing fullscreen mode without restarting is not yet supported (because of various SDL/OS issues),
-	// if the fullscreen mode does not match the *current* mode, the resolution changes are queued until the
-	// next program restart.
-	//
-	return wzSupportsLiveResolutionChanges() && (war_getFullscreen() == wzIsFullscreen());
+	return wzSupportsLiveResolutionChanges();
 }
 
 void videoOptionsDisableResolutionButtons(QString toolTip)
@@ -1026,6 +1022,11 @@ static std::string videoOptionsAntialiasingString()
 	{
 		return std::to_string(war_getAntialiasing()) + "×";
 	}
+}
+
+static char const *videoOptionsWindowModeLabel()
+{
+	return (!canChangeResolutionLive())? _("Graphics Mode*") : _("Graphics Mode");
 }
 
 static char const *videoOptionsResolutionLabel()
@@ -1115,7 +1116,7 @@ static bool startVideoOptionsMenu()
 	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Fullscreen/windowed
-	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Graphics Mode*"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X - 35, FRONTEND_POS2Y, videoOptionsWindowModeLabel(), WBUT_SECONDARY);
 	addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, videoOptionsWindowModeString(), WBUT_SECONDARY);
 
 	// Resolution
@@ -1197,70 +1198,10 @@ bool runVideoOptionsMenu()
 				break;
 			}
 
-			// Since changing fullscreen mode without restarting is not yet supported (because of various issues),
-			// if the fullscreen mode does not match the *current* mode, the resolution changes are queued until
-			// the next program restart.
-			//
-			// Update the "Requires restart" status of the Resolution + Display Scale entries to match.
-			//
-			if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION)) // Resolution option may not be available
-			{
-				widgSetString(psWScreen, FRONTEND_RESOLUTION, videoOptionsResolutionLabel());
-			}
-			if (widgGetFromID(psWScreen, FRONTEND_DISPLAYSCALE)) // Display Scale option may not be available
-			{
-				widgSetString(psWScreen, FRONTEND_DISPLAYSCALE, videoOptionsDisplayScaleLabel());
-			}
 
-			if (war_getFullscreen() == wzIsFullscreen())
-			{
-				// Update the resolution to reflect the current resolution / display scale settings.
-				// This reverts any queued changes if the user changes their mind and switches back to the current
-				// window mode.
-				int screen = 0;
-				unsigned int width = 0, height = 0;
-				wzGetWindowResolution(&screen, &width, &height);
-				war_SetScreen(screen);
-				war_SetWidth(width);
-				war_SetHeight(height);
-				unsigned int displayScale = wzGetCurrentDisplayScale();
-				war_SetDisplayScale(displayScale);
-			}
-			else if (war_getFullscreen())
-			{
-				// If configuring a fullscreen window mode (when it's currently windowed), the current resolution
-				// must be set to the nearest supported resolution in the wzAvailableResolutions list.
-				// (As the user may have manually resized the window to a custom size.)
+			wzToggleFullscreen();
 
-				// Get resolutions, sorted with duplicates removed.
-				std::vector<screeninfo> modes = availableResolutionsSorted();
 
-				// We can't pick a resolution if there aren't any.
-				if (modes.empty())
-				{
-					debug(LOG_ERROR, "No resolutions available to change.");
-					break;
-				}
-
-				// Get currently configured resolution.
-				screeninfo config;
-				config.screen = war_GetScreen();
-				config.width = war_GetWidth();
-				config.height = war_GetHeight();
-				config.refresh_rate = -1;  // Unused.
-
-				// Find current resolution in list.
-				auto current = std::lower_bound(modes.begin(), modes.end(), config, compareLess);
-				if (current == modes.end() || !compareEq(*current, config))
-				{
-					--current;  // If current resolution doesn't exist, round down to next-highest one.
-				}
-
-				// Set the current resolution to the nearest available resolution
-				war_SetScreen(current->screen);
-				war_SetWidth(current->width);
-				war_SetHeight(current->height);
-			}
 			// Update the widget(s)
 			refreshCurrentVideoOptionsValues();
 		}
