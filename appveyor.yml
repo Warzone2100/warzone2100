@@ -1,3 +1,7 @@
+init:
+  # Only save build cache on master branch
+  - ps: IF ($env:APPVEYOR_REPO_BRANCH -ne "master") {$env:APPVEYOR_CACHE_SKIP_SAVE = "true"}
+
 environment:
   global:
     APPVEYOR_CACHE_ENTRY_ZIP_ARGS: -t7z -m0=lzma -mx=4
