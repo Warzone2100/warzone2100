@@ -695,8 +695,6 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 	static std::vector<size_t> priorBufferSize(10, 0);
 	static size_t currBuffer = 0;
 
-	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet(), glm::vec4());
-	glEnableVertexAttribArray(program.locVertex);
 	size_t cachedShadowDraws = 0;
 	size_t uncachedShadowDraws = 0;
 	for (unsigned i = 0; i < scshapes.size(); i++)
@@ -716,11 +714,12 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 	const auto &premultipliedVertexes = shadowCache.getPremultipliedVertexes();
 	// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
 	// Thus we only need to include the perspective matrix
-	const auto &program2 = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() /** modelViewMatrix*/, glm::vec4());
+	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() /** modelViewMatrix*/, glm::vec4());
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[currBuffer].id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * premultipliedVertexes.size(), premultipliedVertexes.data(), GL_STREAM_DRAW);
 	priorBufferSize[currBuffer] = sizeof(Vector3f) * premultipliedVertexes.size();
-	glVertexAttribPointer(program2.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(program.locVertex);
 
 	// Batch into glDrawArrays calls of <= SHADOW_BATCH_MAX
 	static const size_t SHADOW_BATCH_MAX = 8192 * 3; // must be divisible by 3
