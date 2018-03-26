@@ -5,7 +5,7 @@ In the `Dockerfile` directory:
 
 For example:
 ```
-cd ubuntu
+cd ubuntu-16.04
 docker build -t ubuntu .
 ```
 
