@@ -626,6 +626,9 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
+	// Ensure that the LC_NUMERIC locale setting is "C"
+	ASSERT(strcmp(setlocale(LC_NUMERIC, NULL), "C") == 0, "The LC_NUMERIC locale is not \"C\" - this may break level-data parsing depending on the user's system locale settings");
+
 	levelLoadType = saveType;
 
 	// find the level dataset
