@@ -1,15 +1,15 @@
 matrix:
   include:
-    # Build for Ubuntu (Makefile) (GCC)
+    # Build for Ubuntu 16.04 (Makefile) (GCC)
     - language: cpp
       env:
-        - NAME="Ubuntu (Makefile)”
+        - NAME="Ubuntu 16.04 (Makefile)”
       compiler: gcc
       sudo: required
       services:
         - docker
       install:
-        - cd docker/ubuntu/
+        - cd docker/ubuntu-16.04/
         - docker build -t ubuntu .
         - cd ../..
       script:
@@ -23,16 +23,16 @@ matrix:
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu make check
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu sudo make install
 
-    # Build for Ubuntu (CMake) (GCC)
+    # Build for Ubuntu 16.04 (CMake) (GCC)
     - language: cpp
       env:
-        - NAME="Ubuntu (CMake)”
+        - NAME="Ubuntu 16.04 (CMake)”
       compiler: gcc
       sudo: required
       services:
         - docker
       install:
-        - cd docker/ubuntu/
+        - cd docker/ubuntu-16.04/
         - docker build -t ubuntu .
         - cd ../..
       script:
@@ -54,7 +54,7 @@ matrix:
     #  services:
     #    - docker
     #  install:
-    #    - cd docker/ubuntu/
+    #    - cd docker/ubuntu-16.04/
     #    - docker build -t ubuntu .
     #    - cd ../..
     #  script:
@@ -64,6 +64,29 @@ matrix:
     #    # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
     #    - docker run --rm -e "CC=clang" -e "CXX=clang++" -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
     #    - docker run --rm -e "CC=clang" -e "CXX=clang++" -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
+
+    # Build for Ubuntu 18.04 (Makefile) (GCC)
+    - language: cpp
+      env:
+        - NAME="Ubuntu 18.04 (Makefile)”
+      compiler: gcc
+      sudo: required
+      services:
+        - docker
+      install:
+        - cd docker/ubuntu-18.04/
+        - docker build -t ubuntu .
+        - cd ../..
+      script:
+        - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
+        # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
+        # To do this, append the following to the pertinent lines after —rm:
+        # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
+        - docker run --rm -v $(pwd):/code ubuntu ./autogen.sh
+        - docker run --rm -e MAKEFLAGS -v $(pwd):/code ubuntu ./configure
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu make
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu make check
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu sudo make install
 
     # Build for macOS
     # (This also deploys the macOS build to the buildbot)
