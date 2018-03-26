@@ -47,6 +47,7 @@
 #include "cursors_sdl.h"
 #include <algorithm>
 #include <map>
+#include <locale.h>
 
 // This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
 #if defined(QT_STATICPLUGIN)
@@ -1945,6 +1946,11 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	//			  (For example, on macOS, Qt can break the "Quit" menu
 	//			  functionality if QApplication is initialized before SDL.)
 	appPtr = new QApplication(copied_argc, copied_argv);
+
+	// IMPORTANT: Because QApplication calls setlocale(LC_ALL,""),
+	//			  we *must* immediately call setlocale(LC_NUMERIC,"C") after initializing
+	//			  or things like loading (parsing) levels / resources can fail
+	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
 #endif
 
 	// FIXME: aspect ratio
