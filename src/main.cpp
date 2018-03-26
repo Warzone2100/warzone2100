@@ -127,6 +127,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
  * \param size the size (in bytes) of \c dest
  * \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
  */
+#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
 static bool getCurrentDir(char *const dest, size_t const size)
 {
 #if defined(WZ_OS_UNIX)
@@ -183,9 +184,11 @@ static bool getCurrentDir(char *const dest, size_t const size)
 	// If we got here everything went well
 	return true;
 }
+#endif
 
 // Fallback method for earlier PhysFS verions that do not support PHYSFS_getPrefDir
 // Importantly, this creates the folders if they do not exist
+#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
 static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 {
 	std::string basePath;
@@ -241,14 +244,12 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 		// Use HOME, and append ".local/share/" to match XDG's base directory spec
 		envPath = getenv("HOME");
 
-		#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
 		if (envPath == nullptr)
 		{
 			// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() if HOME isn't defined
 			debug(LOG_INFO, "HOME environment variable isn't defined - falling back to PHYSFS_getUserDir()");
 			envPath = PHYSFS_getUserDir();
 		}
-		#endif
 
 		appendPath = std::string(".local") + PHYSFS_getDirSeparator() + "share";
 	}
@@ -264,7 +265,7 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 		appendPath += app;
 	}
 	else
-#elif !defined(WZ_PHYSFS_2_1_OR_GREATER)
+#else
 	// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() for other OSes
 	if (PHYSFS_getUserDir())
 	{
@@ -302,6 +303,7 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 
 	return basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator();
 }
+#endif
 
 // Retrieves the appropriate storage directory for application-created files / prefs
 // (Ensures the directory exists. Creates folders if necessary.)

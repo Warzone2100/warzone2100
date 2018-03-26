@@ -9,6 +9,7 @@
    * Change: Abolish a slight camera rotation at the start of every game (commit:c83236b788f3decae8843d3480f64ed91f14316e, ticket:4642)
    * Change: Factories being destroyed could cause annoying asserts. Now set to quiet warnings (commit:616f142c6a031fc36aceb05f8c40156c563225bb)
    * Change: Improved Windows installers (ticket:4748)
+   * Change: Location of configuration directory (commit:54901bcd1672c9e22db35c66741ec2eda123b491)
    * Fix: Trying not to crash on loading unknown templates (commit:44a1e1085d4811a0ceeeac8406457098f190c4a3, ticket:4581)
    * Fix: Always show template designs (commit:20c70fd00a5f155a5ff465866841591e4a23946e, ticket:4440)
    * Fix: Do not desync when destroying droids with animations (commit:123ded59aedc53dc2344be9807c321774613946f)
