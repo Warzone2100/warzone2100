@@ -10,7 +10,7 @@ data/texpages/bdrops/backdrop6.png
 data/base/texpages/page-25-sky-urban.png
 	- CC0, original work by cybersphinx
 3rdparty/micro-ecc/*
-	- BSD, Copyright (c) 2014, Kenneth MacKay
+	- BSD, Copyright (c) 2014, Kenneth MacKay (https://github.com/kmackay/micro-ecc)
 3rdparty/sha2/*
 	- BSD, Copyright (c) 2002, Dr Brian Gladman, Worcester, UK
 3rdparty/miniupnpc/*

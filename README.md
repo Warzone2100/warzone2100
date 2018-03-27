@@ -57,8 +57,7 @@ location of this directory depends on the operating system.
 
 ### Warzone directory under GNU/Linux
 
-Under GNU/Linux, Warzone conforms to the [XDG base directory spec]
-(https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+Under GNU/Linux, Warzone conforms to the [XDG base directory spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
 
 By default, the directory `warzone2100-<version>` can be found in your home-directory 
 under the path `~/.local/share/`.
@@ -233,3 +232,6 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
       - `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake`
       - Note: Visual Studio should automatically escape and turn each `\` into `\\`
    5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
+
+### macOS
+See [macosx/README.md](macosx/README.md)
