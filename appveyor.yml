@@ -48,9 +48,9 @@ configuration:
 
 before_build:
   - set PATH=%PATH%;%QT5DIR%\bin;
-  # We cannot currently limit vcpkg to build type "release" because the freetype port fails
-  # - ps: .\get-dependencies.ps1 -VCPKG_BUILD_TYPE "release"
-  - ps: .\get-dependencies.ps1
+  # If a future version of vcpkg breaks the "VCPKG_BUILD_TYPE=release" setting for the dependencies we need, use the following line instead:
+  # - ps: .\get-dependencies.ps1
+  - ps: .\get-dependencies.ps1 -VCPKG_BUILD_TYPE "release"
   # Remove the vcpkg\buildtrees folder. (Once all dependencies are installed, it isn't needed, and it takes up a lot of space in the cache.)
   - ps: if (Test-Path .\vcpkg\buildtrees) { Remove-Item .\vcpkg\buildtrees -Force -Recurse -ErrorAction SilentlyContinue; }
   # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
