@@ -4747,7 +4747,7 @@ static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *)
 {
 	QString oldfile = context->argument(0).toString();
 	QString newfile = context->argument(1).toString();
-	replaceTexture(oldfile, newfile);
+	replaceTexture(WzString::fromUtf8(oldfile.toUtf8().constData()), WzString::fromUtf8(newfile.toUtf8().constData()));
 	return QScriptValue();
 }
 
