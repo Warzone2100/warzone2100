@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 project(wz2100)
 
-set (CMAKE_CXX_STANDARD 14)
+if(MSVC)
+	set(CMAKE_CXX_STANDARD 14)
+else()
+	set(CMAKE_CXX_STANDARD 11)
+endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 find_package(Qt5 COMPONENTS Core Widgets Script Gui REQUIRED)
