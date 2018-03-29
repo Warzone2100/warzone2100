@@ -1,4 +1,6 @@
 #include "wzstring.h"
+#include <algorithm>
+#include <cctype>
 #include <sstream>
 #include <iomanip>
 #include <utfcpp/utf8.h>
@@ -291,6 +293,43 @@ void WzString::truncate(int position)
 void WzString::clear()
 {
 	_utf8String.clear();
+}
+
+// Returns a lowercase copy of the string.
+// The case conversion will always happen in the 'C' locale.
+WzString WzString::toLower() const
+{
+	std::string lowercasedUtf8String = _utf8String;
+	for (auto &ch : lowercasedUtf8String)
+	{
+		ch = std::tolower(ch, std::locale::classic());
+	}
+	return WzString::fromUtf8(lowercasedUtf8String);
+}
+
+// Trim whitespace from start (in place)
+static inline void ltrim(std::string &s, const std::locale &loc = std::locale::classic()) {
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(), [loc](char ch) {
+		return !std::isspace(ch, loc);
+	}));
+}
+
+// Trim whitespace from end (in place)
+static inline void rtrim(std::string &s, const std::locale &loc = std::locale::classic()) {
+	s.erase(std::find_if(s.rbegin(), s.rend(), [loc](char ch) {
+		return !std::isspace(ch, loc);
+	}).base(), s.end());
+}
+
+// Returns a string that has whitespace removed from the start and the end.
+// Whitespace is any character for which std::isspace returns true - for the specified locale.
+// (The default locale is the "C" locale, which treats the following ASCII characters as whitespace: ' ', '\f', '\n', '\r', '\t', '\v')
+WzString WzString::trimmed(const std::locale &loc /*= std::locale::classic()*/) const
+{
+	std::string utf8StringCopy = _utf8String;
+	ltrim(utf8StringCopy, loc);
+	rtrim(utf8StringCopy, loc);
+	return WzString::fromUtf8(utf8StringCopy);
 }
 
 // MARK: - Create from numbers

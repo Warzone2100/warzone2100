@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <locale>
 
 // Stores a unicode codepoint
 // Internally, this stores the codepoint as UTF-32
@@ -96,6 +97,10 @@ public:
 
 	void truncate(int position);
 	void clear();
+
+	WzString toLower() const;
+	WzString trimmed(const std::locale &loc = std::locale::classic()) const;
+
 public:
 	// Create from numbers
 	static WzString number(int32_t n);

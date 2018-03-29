@@ -25,6 +25,7 @@
 # include <physfs.h>
 #endif
 #include <QtCore/QString>
+#include "wzstring.h"
 
 #include "wzglobal.h"
 
@@ -100,6 +101,11 @@ static inline int WZ_PHYSFS_isDirectory (const char * fname)
 #else
 	return PHYSFS_isDirectory(fname);
 #endif
+}
+
+static inline bool PHYSFS_exists(const WzString &filename)
+{
+	return PHYSFS_exists(filename.toUtf8().c_str());
 }
 
 // Older wrappers

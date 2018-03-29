@@ -257,10 +257,10 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 			}
 			value = obj[key2.toUtf8()];
 		}
-		QString filename = json_variant(value).toString();
+		WzString filename = json_variant(value).toWzString();
 		retval = modelGet(filename);
 		ASSERT(retval != nullptr, "Cannot find the PIE model %s for stat %s in %s",
-		       filename.toUtf8().constData(), getName(psStats), json.fileName().toUtf8().c_str());
+		       filename.toUtf8().c_str(), getName(psStats), json.fileName().toUtf8().c_str());
 	}
 	return retval;
 }

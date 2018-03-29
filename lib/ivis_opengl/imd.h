@@ -20,7 +20,7 @@
 #ifndef _imd_
 #define _imd_
 
-#include <QtCore/qstring.h>
+#include "lib/framework/wzstring.h"
 
 struct iIMDShape;
 
@@ -54,6 +54,6 @@ void modelShutdown();
 /// purposes, for example.
 const std::string &modelName(iIMDShape *model);
 
-iIMDShape *modelGet(const QString &filename);
+iIMDShape *modelGet(const WzString &filename);
 
 #endif
