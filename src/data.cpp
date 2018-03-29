@@ -334,7 +334,7 @@ static void dataSTEMPLRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Structure stats */
 static bool bufferSSTRUCTLoad(const char *fileName, void **ppData)
 {
-	if (!loadStructureStats(QString(fileName)))
+	if (!loadStructureStats(WzString::fromUtf8(fileName)))
 	{
 		return false;
 	}
@@ -406,7 +406,7 @@ static bool bufferRESCHLoad(const char *fileName, void **ppData)
 		dataRESCHRelease(nullptr);
 	}
 
-	if (!loadResearch(QString(fileName)))
+	if (!loadResearch(WzString::fromUtf8(fileName)))
 	{
 		return false;
 	}

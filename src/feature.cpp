@@ -68,7 +68,7 @@ void featureInitVars()
 /* Load the feature stats */
 bool loadFeatureStats(const char *pFileName)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadOnlyAndRequired);
 	std::vector<WzString> list = ini.childGroups();
 	asFeatureStats = new FEATURE_STATS[list.size()];
 	numFeatureStats = list.size();

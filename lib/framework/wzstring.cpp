@@ -4,63 +4,70 @@
 #include <utfcpp/utf8.h>
 #include "frame.h"
 
-WzUniCodepoint WzUniCodepoint::fromUT8(unsigned char utf_8_char)
+WzUniCodepoint WzUniCodepoint::fromASCII(unsigned char charLiteral)
 {
-	uint8_t* p_utf8 = &utf_8_char;
-	uint32_t codepoint = 0;
-	try {
-		codepoint = utf8::next(p_utf8, p_utf8 + 1);
-	}
-	catch (const utf8::not_enough_room &e)
+	uint8_t* p_utf8 = &charLiteral;
+	if ((charLiteral >> 7) != 0)
 	{
-		ASSERT(false, "WzUniCodepoint::fromUT8 was passed an invalid utf8 char (not_enough_room): %u", utf_8_char);
+		ASSERT(false, "Invalid character literal - only proper 7-bit ASCII is supported");
+		return WzUniCodepoint(0);
 	}
-	catch (const utf8::invalid_utf8 &e)
-	{
-		ASSERT(false, "WzUniCodepoint::fromUT8 was passed an invalid utf8 char: %u", utf_8_char);
-	}
-	catch (const utf8::invalid_code_point &e)
-	{
-		ASSERT(false, "WzUniCodepoint::fromUT8 was passed an invalid utf8 char (invalid_code_point): %u", utf_8_char);
-	}
+
+	// This should not throw an exception, since we check for valid 7-bit ASCII above.
+	uint32_t codepoint = utf8::next(p_utf8, p_utf8 + 1);
 	return WzUniCodepoint(codepoint);
 }
 
-std::vector<unsigned char> WzUniCodepoint::toUTF8() const
+WzString WzString::fromCodepoint(const WzUniCodepoint& codepoint)
 {
-	uint32_t utf32string[] = {_codepoint, 0};
-	std::vector<unsigned char> utf8result;
+	uint32_t utf32string[] = {codepoint.UTF32(), 0};
+	std::string utf8result;
 	utf8::utf32to8(utf32string, utf32string + 1, back_inserter(utf8result));
-	return utf8result;
+	return WzString(utf8result);
 }
 
 // Constructs a string of the given size with every codepoint set to ch.
 WzString::WzString(int size, const WzUniCodepoint& ch)
 {
-	for (size_t i = 0; i < size; i++)
-	{
-		utf8::append(ch.UTF32(), back_inserter(_utf8String));
+	try {
+		for (size_t i = 0; i < size; i++)
+		{
+			utf8::append(ch.UTF32(), back_inserter(_utf8String));
+		}
+	}
+	catch (const std::exception &e) {
+		// Likely an invalid codepoint
+		ASSERT(false, "Encountered error parsing input codepoint: %s", e.what());
 	}
 }
 
-WzString WzString::fromUtf8(const char *str, int size /*= -1*/)
+// NOTE: The char * should be valid UTF-8.
+WzString::WzString(const char * str, int size /*= -1*/)
 {
-	if (str == nullptr) { return WzString(); }
+	if (str == nullptr) { return; }
 	if (size < 0)
 	{
 		size = strlen(str);
 	}
 	ASSERT(utf8::is_valid(str, str + size), "Input text is not valid UTF-8");
-	std::string replace_invalid_result;
 	try {
-		utf8::replace_invalid(str, str + size, back_inserter(replace_invalid_result), '?');
+		utf8::replace_invalid(str, str + size, back_inserter(_utf8String), '?');
 	}
 	catch (const std::exception &e) {
 		// Likely passed an incomplete UTF-8 sequence
 		ASSERT(false, "Encountered error parsing input UTF-8 sequence: %s", e.what());
-		replace_invalid_result.clear();
+		_utf8String.clear();
 	}
-	return WzString(replace_invalid_result);
+}
+
+WzString WzString::fromUtf8(const char *str, int size /*= -1*/)
+{
+	return WzString(str, size);
+}
+
+WzString WzString::fromUtf8(const std::string &str)
+{
+	return WzString(str.c_str(), str.length());
 }
 
 WzString WzString::fromUtf16(const std::vector<uint16_t>& utf16)
@@ -146,6 +153,12 @@ WzString& WzString::append(const WzUniCodepoint &c)
 	utf8::append(c.UTF32(), back_inserter(_utf8String));
 	return *this;
 }
+// NOTE: The char * should be valid UTF-8.
+WzString& WzString::append(const char* str)
+{
+	_utf8String.append(WzString::fromUtf8(str)._utf8String);
+	return *this;
+}
 
 WzString& WzString::insert(size_t position, const WzString &str)
 {
@@ -159,6 +172,7 @@ WzString& WzString::insert(size_t position, const WzString &str)
 			// TODO: To match QString behavior, we need to extend the string?
 			ASSERT(it != _utf8String.end(), "Cannot find position in string prior to end of string.");
 		}
+		// deliberately fall-through
 	}
 	_utf8String.insert(it, str._utf8String.begin(), str._utf8String.end());
 	return *this;
@@ -177,8 +191,8 @@ WzString& WzString::insert(size_t i, WzUniCodepoint c)
 			ASSERT(it != _utf8String.end(), "Cannot find position in string prior to end of string.");
 		}
 	}
-	auto cUtf8Codepoints = c.toUTF8();
-	_utf8String.insert(it, cUtf8Codepoints.begin(), cUtf8Codepoints.end());
+	auto cUtf8Codepoints = WzString::fromCodepoint(c);
+	_utf8String.insert(it, cUtf8Codepoints._utf8String.begin(), cUtf8Codepoints._utf8String.end());
 	return *this;
 }
 
@@ -224,13 +238,37 @@ WzString& WzString::replace(size_t position, int n, const WzUniCodepoint &after)
 	auto it_replace_end = it_replace_start;
 	_utf8_advance(it_replace_end, n, _utf8String.end());
 	size_t numCodepoints = utf8::distance(it_replace_start, it_replace_end);
-	auto cUtf8After = after.toUTF8();
+	auto cUtf8After = WzString::fromCodepoint(after);
 	std::vector<unsigned char> cUtf8Codepoints;
 	for (size_t i = 0; i < numCodepoints; i++)
 	{
-		cUtf8Codepoints.insert(cUtf8Codepoints.end(), cUtf8After.begin(), cUtf8After.end());
+		cUtf8Codepoints.insert(cUtf8Codepoints.end(), cUtf8After._utf8String.begin(), cUtf8After._utf8String.end());
 	}
 	_utf8String.replace(it_replace_start, it_replace_end, cUtf8Codepoints.begin(), cUtf8Codepoints.end());
+	return *this;
+}
+
+WzString& WzString::replace(const WzUniCodepoint &before, const WzUniCodepoint &after)
+{
+	WzString cUtf8Before = WzString::fromCodepoint(before);
+	WzString cUtf8After = WzString::fromCodepoint(after);
+	return replace(cUtf8Before, cUtf8After);
+}
+
+WzString& WzString::replace(const WzUniCodepoint &before, const WzString &after)
+{
+	WzString cUtf8Before = WzString::fromCodepoint(before);
+	return replace(cUtf8Before, after);
+}
+
+WzString& WzString::replace(const WzString &before, const WzString &after)
+{
+	if (before._utf8String.empty()) { return *this; }
+	std::string::size_type pos = 0;
+	while((pos = _utf8String.find(before._utf8String, pos)) != std::string::npos) {
+		_utf8String.replace(pos, before._utf8String.length(), after._utf8String);
+		pos += after._utf8String.length();
+	}
 	return *this;
 }
 
@@ -297,6 +335,26 @@ WzString WzString::number(double n)
 	return newString;
 }
 
+// Left-pads the current string with codepoint ch up to the minimumStringLength
+// If the current string length() is already >= minimumStringLength, no padding occurs.
+WzString& WzString::leftPadToMinimumLength(const WzUniCodepoint &ch, size_t minimumStringLength)
+{
+	if (length() >= minimumStringLength)
+	{
+		return *this;
+	}
+
+	size_t leftPaddingRequired = minimumStringLength - length();
+	const WzString chUtf8 = WzString::fromCodepoint(ch);
+	WzString utf8Padding;
+	for (size_t i = 0; i < leftPaddingRequired; i++)
+	{
+		utf8Padding._utf8String.insert(utf8Padding._utf8String.end(), chUtf8._utf8String.begin(), chUtf8._utf8String.end());
+	}
+	insert(0, utf8Padding);
+	return *this;
+}
+
 // MARK: - Operators
 
 WzString& WzString::operator+=(const WzString &other)
@@ -311,7 +369,21 @@ WzString& WzString::operator+=(const WzUniCodepoint &ch)
 	return *this;
 }
 
+WzString& WzString::operator+=(const char* str)
+{
+	append(str);
+	return *this;
+}
+
 const WzString WzString::operator+(const WzString &other) const
+{
+	WzString newString = *this;
+	newString.append(other);
+	return newString;
+}
+
+// NOTE: The char * should be valid UTF-8.
+const WzString WzString::operator+(const char* other) const
 {
 	WzString newString = *this;
 	newString.append(other);
@@ -395,6 +467,28 @@ bool WzString::startsWith(const char* other) const
 {
 	// NOTE: This currently assumes that the char* is UTF-8-encoded.
 	return _utf8String.compare(0, strlen(other), other) == 0;
+}
+
+bool WzString::endsWith(const WzString &other) const
+{
+	if (_utf8String.length() >= other._utf8String.length())
+	{
+		return _utf8String.compare(_utf8String.length() - other._utf8String.length(), other._utf8String.length(), other._utf8String) == 0;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool WzString::contains(const WzUniCodepoint &codepoint) const
+{
+	return contains(WzString::fromCodepoint(codepoint));
+}
+
+bool WzString::contains(const WzString &other) const
+{
+	return _utf8String.find(other._utf8String) != std::string::npos;
 }
 
 template <typename octet_iterator, typename distance_type>

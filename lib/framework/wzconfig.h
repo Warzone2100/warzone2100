@@ -88,8 +88,6 @@ private:
 
 public:
 	WzConfig(const WzString &name, WzConfig::warning warning);
-	// temporarily add a constructor that takes a QString
-	WzConfig(const QString &name, WzConfig::warning warning);
 	~WzConfig();
 
 	Vector3f vector3f(const WzString &name);
@@ -99,33 +97,19 @@ public:
 	Vector2i vector2i(const WzString &name);
 	void setVector2i(const WzString &name, const Vector2i &v);
 
-	// temporary overloads that take QString
-	Vector3f vector3f(const QString &name);
-	void setVector3f(const QString &name, const Vector3f &v);
-	Vector3i vector3i(const QString &name);
-	void setVector3i(const QString &name, const Vector3i &v);
-	Vector2i vector2i(const QString &name);
-	void setVector2i(const QString &name, const Vector2i &v);
-
 	std::vector<WzString> childGroups() const;
 	std::vector<WzString> childKeys() const;
 	bool contains(const WzString &key) const;
-	bool contains(const QString &key) const;
 	json_variant value(const WzString &key, const json_variant &defaultValue = json_variant()) const;
-	json_variant value(const QString &key, const json_variant &defaultValue = json_variant()) const;
 	nlohmann::json json(const WzString &key, const nlohmann::json &defaultValue = nlohmann::json()) const;
-	nlohmann::json json(const QString &key, const nlohmann::json &defaultValue = nlohmann::json()) const;
 	WzString string(const WzString &key, const WzString &defaultValue = WzString()) const;
-	WzString string(const std::string &key, const std::string &defaultValue = std::string()) const;
 
 	void beginArray(const WzString &name);
-	void beginArray(const QString &name);
 	void nextArrayItem();
 	void endArray();
 	int remainingArrayItems();
 
 	bool beginGroup(const WzString &name);
-	bool beginGroup(const QString &name);
 	void endGroup();
 
 	WzString fileName() const
@@ -139,10 +123,7 @@ public:
 	}
 
 	void setValue(const WzString &key, const nlohmann::json &value);
-	void setValue(const char *key, const nlohmann::json &value);
-	void setValue(const QString &key, const nlohmann::json &value);
 	void set(const WzString &key, const nlohmann::json &value);
-	void set(const QString &key, const nlohmann::json &value);
 
 	WzString group()
 	{

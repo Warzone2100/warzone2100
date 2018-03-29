@@ -481,14 +481,12 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 
 WzString W_EDITBOX::getString() const
 {
-//	return QString::fromUtf8(aText.toUtf8().c_str());
 	return aText;
 }
 
 /* Set the current string for the edit box */
 void W_EDITBOX::setString(WzString string)
 {
-//	aText = WzString::fromUtf8(string.toUtf8().constData());
 	aText = string;
 	initialise();
 	dirty = true;

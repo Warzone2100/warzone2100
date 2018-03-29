@@ -179,7 +179,7 @@ int getCompFromName(COMPONENT_TYPE compType, const QString &name);
 int getCompFromID(COMPONENT_TYPE compType, const QString &name);
 
 /// Get the component pointer for a component based on the name
-COMPONENT_STATS *getCompStatsFromName(const QString &name);
+COMPONENT_STATS *getCompStatsFromName(const WzString &name);
 
 /*returns the weapon sub class based on the string name passed in */
 bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);

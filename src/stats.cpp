@@ -265,11 +265,6 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 	return retval;
 }
 
-static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const QString& key, const QString& key2 = QString())
-{
-	return statsGetIMD(json, psStats, WzString::fromUtf8(key.toUtf8().constData()), WzString::fromUtf8(key2.toUtf8().constData()));
-}
-
 void loadStats(WzConfig &json, BASE_STATS *psStats, int index)
 {
 	psStats->id = json.group();
@@ -1426,10 +1421,10 @@ int getCompFromID(COMPONENT_TYPE compType, const QString &name)
 
 /// Get the component for a stat based on the name alone.
 /// Returns NULL if record not found
-COMPONENT_STATS *getCompStatsFromName(const QString &name)
+COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 {
 	COMPONENT_STATS *psComp = nullptr;
-	auto it = lookupStatPtr.find(WzString::fromUtf8(name.toUtf8().constData()));
+	auto it = lookupStatPtr.find(name);
 	if (it != lookupStatPtr.end())
 	{
 		psComp = (COMPONENT_STATS *)it->second;

@@ -495,7 +495,7 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
 		int numStars = std::max((int)getDroidLevel(psDroid) - 1, 0);
-		Label->aText = WzString(numStars, WzUniCodepoint::fromUT8('*'));
+		Label->aText = WzString(numStars, WzUniCodepoint::fromASCII('*'));
 		Label->show();
 	}
 	else
@@ -539,7 +539,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		{
 			if (psDroid->secondaryOrder & (1 << (i + start)))
 			{
-				Label->aText.append(WzUniCodepoint::fromUT8((char)('0' + i + 1)));
+				Label->aText.append(WzUniCodepoint::fromASCII((char)('0' + i + 1)));
 			}
 		}
 		Label->show();

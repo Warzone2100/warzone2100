@@ -418,7 +418,7 @@ size_t sizeOfArray(const T(&)[ N ])
 }
 
 /* load the structure stats from the ini file */
-bool loadStructureStats(const QString& filename)
+bool loadStructureStats(const WzString& filename)
 {
 	std::map<WzString, STRUCTURE_TYPE> structType;
 	for (int i = 0; i < sizeOfArray(map_STRUCTURE_TYPE); i++)
