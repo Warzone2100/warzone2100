@@ -187,14 +187,14 @@ bool loadResearch(const WzString& filename)
 			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getName(&research));
 		}
 
-		QString imdName = ini.value("imdName", "").toString();
+		WzString imdName = ini.value("imdName", "").toWzString();
 		if (imdName.compare("") != 0)
 		{
 			research.pIMD = modelGet(imdName);
 			ASSERT(research.pIMD != nullptr, "Cannot find the research PIE '%s' for record '%s'", imdName.toUtf8().data(), getName(&research));
 		}
 
-		QString imdName2 = ini.value("imdName2", "").toString();
+		WzString imdName2 = ini.value("imdName2", "").toWzString();
 		if (imdName2.compare("") != 0)
 		{
 			research.pIMD2 = modelGet(imdName2);

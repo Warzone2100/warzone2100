@@ -522,20 +522,20 @@ bool loadStructureStats(const WzString& filename)
 		psStats->buildPoints = ini.value("buildPoints").toUInt();
 
 		// set structure models
-		QStringList models = ini.value("structureModel").toStringList();
+		std::vector<WzString> models = ini.value("structureModel").toWzStringList();
 		for (int j = 0; j < models.size(); j++)
 		{
 			iIMDShape *imd = modelGet(models[j].trimmed());
-			ASSERT(imd != nullptr, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().constData(), getID(psStats));
+			ASSERT(imd != nullptr, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().c_str(), getID(psStats));
 			psStats->pIMD.push_back(imd);
 		}
 
 		// set base model
-		QString baseModel = ini.value("baseModel", "").toString();
+		WzString baseModel = ini.value("baseModel", "").toWzString();
 		if (baseModel.compare("") != 0)
 		{
 			iIMDShape *imd = modelGet(baseModel);
-			ASSERT(imd != nullptr, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().constData(), getID(psStats));
+			ASSERT(imd != nullptr, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().c_str(), getID(psStats));
 			psStats->pBaseIMD = imd;
 		}
 

@@ -120,7 +120,7 @@ bool loadFeatureStats(const char *pFileName)
 		{
 			ASSERT(false, "Unknown feature type: %s", subType.toUtf8().constData());
 		}
-		p->psImd = modelGet(ini.value("model").toString());
+		p->psImd = modelGet(ini.value("model").toWzString());
 		p->baseWidth = ini.value("width", 1).toInt();
 		p->baseBreadth = ini.value("breadth", 1).toInt();
 		p->tileDraw = ini.value("tileDraw", 1).toInt();

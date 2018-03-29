@@ -711,11 +711,11 @@ const char *loadResearchViewData(const char *fileName)
 		v->pData = r;
 		if (ini.contains("imdName"))
 		{
-			r->pIMD = modelGet(ini.value("imdName").toString());
+			r->pIMD = modelGet(ini.value("imdName").toWzString());
 		}
 		if (ini.contains("imdName2"))
 		{
-			r->pIMD2 = modelGet(ini.value("imdName2").toString());
+			r->pIMD2 = modelGet(ini.value("imdName2").toWzString());
 		}
 		if (ini.contains("sequenceName"))
 		{

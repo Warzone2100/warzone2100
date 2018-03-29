@@ -746,6 +746,40 @@ WzString json_variant::toWzString() const
 	}
 }
 
+std::vector<WzString> json_variant::toWzStringList() const
+{
+	std::vector<WzString> result;
+
+	if (!mObj.is_array())
+	{
+		// attempt to convert the non-array to a string, and return as a vector of 1 entry (if the string is non-empty)
+		WzString selfAsString = toWzString();
+		if (!selfAsString.isEmpty())
+		{
+			result.push_back(selfAsString);
+		}
+		return result;
+	}
+
+	std::string str;
+	for (const auto& v : mObj)
+	{
+		try {
+			str = v.get<std::string>();
+		}
+		catch (const std::exception &e) {
+			debug(LOG_WARNING, "Encountered a JSON value in the array that cannot be converted to a string; error: %s", e.what());
+			break;
+		}
+		catch (...) {
+			debug(LOG_FATAL, "Encountered an unexpected exception in json_variant::toStringList()");
+			break;
+		}
+		result.push_back(WzString::fromUtf8(str));
+	}
+	return result;
+}
+
 QString json_variant::toString() const
 {
 	if (mObj.is_string())

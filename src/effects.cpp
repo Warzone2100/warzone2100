@@ -2283,7 +2283,7 @@ bool readFXData(const char *fileName)
 		curEffect->radius       = ini.value("radius").toInt();
 		if (ini.contains("imd_name"))
 		{
-			QString imd_name = ini.value("imd_name").toString();
+			WzString imd_name = ini.value("imd_name").toWzString();
 			if (!imd_name.isEmpty())
 			{
 				curEffect->imd = modelGet(imd_name);
