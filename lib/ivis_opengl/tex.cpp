@@ -26,7 +26,6 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/png_util.h"
 
-#include <QtCore/QList>
 #include "screen.h"
 
 //*************************************************************************
@@ -224,18 +223,18 @@ int iV_GetTexture(const char *filename, bool compression)
 	return pie_AddTexPage(&sSprite, path, compression);
 }
 
-bool replaceTexture(const QString &oldfile, const QString &newfile)
+bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 {
 	char tmpname[iV_TEXNAME_MAX];
 
 	// Load new one to replace it
 	iV_Image image;
-	if (!iV_loadImage_PNG(QString("texpages/" + newfile).toUtf8().constData(), &image))
+	if (!iV_loadImage_PNG(WzString("texpages/" + newfile).toUtf8().c_str(), &image))
 	{
-		debug(LOG_ERROR, "Failed to load image: %s", newfile.toUtf8().constData());
+		debug(LOG_ERROR, "Failed to load image: %s", newfile.toUtf8().c_str());
 		return false;
 	}
-	sstrcpy(tmpname, oldfile.toUtf8().constData());
+	sstrcpy(tmpname, oldfile.toUtf8().c_str());
 	pie_MakeTexPageName(tmpname);
 	// Have we already loaded this one?
 	for (int i = 0; i < _TEX_PAGE.size(); i++)
@@ -243,8 +242,8 @@ bool replaceTexture(const QString &oldfile, const QString &newfile)
 		if (strcmp(tmpname, _TEX_PAGE[i].name) == 0)
 		{
 			GL_DEBUG("Replacing texture");
-			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %d (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().constData(), i, _TEX_PAGE[i].id->id());
-			sstrcpy(tmpname, newfile.toUtf8().constData());
+			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %d (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().c_str(), i, _TEX_PAGE[i].id->id());
+			sstrcpy(tmpname, newfile.toUtf8().c_str());
 			pie_MakeTexPageName(tmpname);
 			pie_AddTexPage(&image, tmpname, true, i);
 			iV_unloadImage(&image);

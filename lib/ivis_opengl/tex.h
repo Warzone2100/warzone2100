@@ -20,6 +20,7 @@
 #ifndef _tex_
 #define _tex_
 
+#include "lib/framework/wzstring.h"
 #include "gfx_api.h"
 #include "png_util.h"
 
@@ -41,7 +42,7 @@ int iV_GetTexture(const char *filename, bool compression = true);
 void iV_unloadImage(iV_Image *image);
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
-bool replaceTexture(const QString &oldfile, const QString &newfile);
+bool replaceTexture(const WzString &oldfile, const WzString &newfile);
 int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page = -1);
 void pie_TexInit();
 
