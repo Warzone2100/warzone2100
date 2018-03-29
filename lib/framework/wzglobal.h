@@ -592,9 +592,6 @@
 #    define alloca _alloca
 #    define fileno _fileno
 
-#    define isnan _isnan
-#    define isfinite _finite
-
 #    define PATH_MAX MAX_PATH
 
 // These are useless for MSVC builds, since we don't populate them / use them at this time.
