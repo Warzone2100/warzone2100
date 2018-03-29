@@ -65,9 +65,13 @@ WZ_DECL_NONNULL(1, 2) int asprintf(char **strp, const char *format, ...) WZ_DECL
  int wz_vsnprintf(char *str, size_t size, const char *format, va_list ap);
 WZ_DECL_NONNULL(3) int wz_snprintf(char *str, size_t size, const char *format, ...);
 
-// Necessary to prevent conflicting symbols with MSVC's own (incorrect!) implementations of these functions
-# define vsnprintf wz_vsnprintf
-# define snprintf  wz_snprintf
+#if defined(_MSC_VER) && _MSC_VER < 1900
+	// Necessary to prevent conflicting symbols with MSVC's own (incorrect!) implementations of these functions
+	// on MSVC < 2015
+	# define vsnprintf wz_vsnprintf
+	# define snprintf  wz_snprintf
+#endif // defined(_MSC_VER) && _MSC_VER < 1900
+
 #elif defined(__cplusplus) && defined(WZ_CC_GNU)
 // Do nothing here, and assume that G++ has a proper implementation of snprintf and vsnprintf
 #elif !defined(WZ_CC_GNU) && !defined(WZ_C99)

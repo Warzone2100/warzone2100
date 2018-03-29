@@ -20,13 +20,13 @@
 #ifndef WZCONFIG_H
 #define WZCONFIG_H
 
+#include <3rdparty/json/json.hpp>
+using json = nlohmann::json;
+
 #include <QtCore/QStringList>
 #include <physfs.h>
 #include <stdbool.h>
 #include <vector>
-#include <3rdparty/json/json.hpp>
-
-using json = nlohmann::json;
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
