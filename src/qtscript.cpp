@@ -736,7 +736,7 @@ bool saveScriptStates(const char *filename)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		QScriptValueIterator it(engine->globalObject());
-		ini.beginGroup(QString("globals_") + QString::number(i));
+		ini.beginGroup("globals_" + WzString::number(i));
 		// we save 'scriptName' and 'me' implicitly
 		while (it.hasNext())
 		{
@@ -744,11 +744,11 @@ bool saveScriptStates(const char *filename)
 			if (internalNamespace.count(it.name()) == 0 && !it.value().isFunction()
 			    && !it.value().equals(engine->globalObject()))
 			{
-				ini.setValue(it.name(), it.value().toVariant());
+				ini.setValue(WzString::fromUtf8(it.name().toUtf8().constData()), it.value().toVariant());
 			}
 		}
 		ini.endGroup();
-		ini.beginGroup(QString("groups_") + QString::number(i));
+		ini.beginGroup("groups_" + WzString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", engine->globalObject().property("me").toInt32());
 		ini.setValue("scriptName", engine->globalObject().property("scriptName").toString());
@@ -758,7 +758,7 @@ bool saveScriptStates(const char *filename)
 	for (int i = 0; i < timers.size(); ++i)
 	{
 		timerNode node = timers.at(i);
-		ini.beginGroup(QString("triggers_") + QString::number(i));
+		ini.beginGroup("triggers_" + WzString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", node.player);
 		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString());

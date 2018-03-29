@@ -338,7 +338,7 @@ void setupChallengeAIs()
 		for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 		{
 			// set ai property for all players, so that getAIName() can name them accordingly
-			ini.beginGroup("player_" + QString::number(i));
+			ini.beginGroup("player_" + WzString::number(i));
 			if (ini.contains("ai"))
 			{
 				QString val = ini.value("ai").toString();
@@ -383,12 +383,12 @@ void loadMultiScripts()
 	sstrcpy(aPathName, aFileName);
 	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
-	QString ininame = challengeActive ? sRequestResult : aFileName;
+	WzString ininame = challengeActive ? sRequestResult : aFileName;
 	QString path = challengeActive ? "challenges/" : aPathName;
 
 	if (hostlaunch == 2)
 	{
-		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
+		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "tests/";
 	}
 
@@ -399,7 +399,7 @@ void loadMultiScripts()
 	}
 
 	// Load map scripts
-	if (PHYSFS_exists(ininame.toUtf8().constData()))
+	if (PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
 		WzConfig ini(ininame, WzConfig::ReadOnly);
 		debug(LOG_SAVE, "Loading map scripts");
@@ -443,10 +443,10 @@ void loadMultiScripts()
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && (NetPlay.players[i].ai >= 0 || hostlaunch == 2) && myResponsibility(i))
 		{
-			if (PHYSFS_exists(ininame.toUtf8().constData())) // challenge file may override AI
+			if (PHYSFS_exists(ininame.toUtf8().c_str())) // challenge file may override AI
 			{
 				WzConfig ini(ininame, WzConfig::ReadOnly);
-				ini.beginGroup("player_" + QString::number(i));
+				ini.beginGroup("player_" + WzString::number(i));
 				if (ini.contains("ai"))
 				{
 					QString val = ini.value("ai").toString();
@@ -2931,12 +2931,12 @@ static void loadMapSettings1()
 	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
 	sstrcat(aFileName, ".json");
 
-	QString ininame = challengeActive ? sRequestResult : aFileName;
+	WzString ininame = challengeActive ? sRequestResult : aFileName;
 	if (hostlaunch == 2)
 	{
-		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
+		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 	}
-	if (!PHYSFS_exists(ininame.toUtf8().constData()))
+	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
 		return;
 	}
@@ -2974,12 +2974,12 @@ static void loadMapSettings2()
 	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
 	sstrcat(aFileName, ".json");
 
-	QString ininame = challengeActive ? sRequestResult : aFileName;
+	WzString ininame = challengeActive ? sRequestResult : aFileName;
 	if (hostlaunch == 2)
 	{
-		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
+		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 	}
-	if (!PHYSFS_exists(ininame.toUtf8().constData()))
+	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
 		return;
 	}
@@ -2987,7 +2987,7 @@ static void loadMapSettings2()
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		ini.beginGroup("player_" + QString::number(i));
+		ini.beginGroup("player_" + WzString::number(i));
 		if (ini.contains("team"))
 		{
 			NetPlay.players[i].team = ini.value("team").toInt();
@@ -3913,7 +3913,7 @@ void runMultiOptions()
 	}
 }
 
-static bool loadSettings(const QString &filename)
+static bool loadSettings(const WzString &filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 	ini.beginGroup("challenge");
@@ -4072,7 +4072,7 @@ bool startMultiOptions(bool bReenter)
 		SendReadyRequest(selectedPlayer, true);
 		if (hostlaunch == 2)
 		{
-			loadSettings("tests/" + QString::fromStdString(wz_skirmish_test()));
+			loadSettings("tests/" + WzString::fromUtf8(wz_skirmish_test()));
 			startMultiplayerGame();
 			// reset flag in case people dropped/quit on join screen
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);

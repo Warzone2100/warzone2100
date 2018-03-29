@@ -102,7 +102,7 @@ bool researchInitVars()
 }
 
 /** Load the research stats */
-bool loadResearch(const QString& filename)
+bool loadResearch(const WzString& filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 	std::vector<WzString> list = ini.childGroups();
@@ -178,13 +178,13 @@ bool loadResearch(const QString& filename)
 		}
 
 		//get the IMDs used in the interface
-		QString statID = ini.value("statID", "").toString();
+		WzString statID = ini.value("statID", "").toWzString();
 		research.psStat = nullptr;
 		if (statID.compare("") != 0)
 		{
 			//try find the structure stat with given name
 			research.psStat = getCompStatsFromName(statID);
-			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().constData(), getName(&research));
+			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getName(&research));
 		}
 
 		QString imdName = ini.value("imdName", "").toString();
@@ -229,7 +229,7 @@ bool loadResearch(const QString& filename)
 		QStringList compResults = ini.value("resultComponents").toStringList();
 		for (int j = 0; j < compResults.size(); j++)
 		{
-			QString compID = compResults[j].trimmed();
+			WzString compID = WzString::fromUtf8(compResults[j].trimmed().toUtf8().constData());
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp != nullptr)
 			{
@@ -237,7 +237,7 @@ bool loadResearch(const QString& filename)
 			}
 			else
 			{
-				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().constData(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().c_str(), getName(&research));
 			}
 		}
 
@@ -252,18 +252,18 @@ bool loadResearch(const QString& filename)
 			{
 				continue; //skip invalid entries
 			}
-			QString oldCompID = pair[0].trimmed();
-			QString newCompID = pair[1].trimmed();
+			WzString oldCompID = WzString::fromUtf8(pair[0].trimmed().toUtf8().constData());
+			WzString newCompID = WzString::fromUtf8(pair[1].trimmed().toUtf8().constData());
 			COMPONENT_STATS *oldComp = getCompStatsFromName(oldCompID);
 			if (oldComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().constData(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().c_str(), getName(&research));
 				continue;
 			}
 			COMPONENT_STATS *newComp = getCompStatsFromName(newCompID);
 			if (newComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().constData(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().c_str(), getName(&research));
 				continue;
 			}
 			RES_COMP_REPLACEMENT replItem;
@@ -276,11 +276,11 @@ bool loadResearch(const QString& filename)
 		QStringList redComp = ini.value("redComponents").toStringList();
 		for (int j = 0; j < redComp.size(); j++)
 		{
-			QString compID = redComp[j].trimmed();
+			WzString compID = WzString::fromUtf8(redComp[j].trimmed().toUtf8().constData());
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().constData(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().c_str(), getName(&research));
 			}
 			else
 			{

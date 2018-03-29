@@ -141,11 +141,6 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	pCurrentObj = &mRoot;
 }
 
-WzConfig::WzConfig(const QString &name, WzConfig::warning warning)
-: WzConfig(WzString::fromUtf8(name.toUtf8().constData()), warning)
-{
-}
-
 std::vector<WzString> WzConfig::childGroups() const
 {
 	std::vector<WzString> keys;
@@ -174,18 +169,9 @@ bool WzConfig::contains(const WzString &key) const
 	return pCurrentObj->find(key.toUtf8()) != pCurrentObj->end();
 }
 
-bool WzConfig::contains(const QString &key) const
-{
-	return contains(WzString::fromUtf8(key.toUtf8().constData()));
-}
-
 json_variant WzConfig::value(const WzString &key, const json_variant &defaultValue) const
 {
 	return json_getValue(*pCurrentObj, key, defaultValue);
-}
-json_variant WzConfig::value(const QString &key, const json_variant &defaultValue) const
-{
-	return value(WzString::fromUtf8(key.toUtf8().constData()), defaultValue);
 }
 
 nlohmann::json WzConfig::json(const WzString &key, const nlohmann::json &defaultValue) const
@@ -201,17 +187,13 @@ nlohmann::json WzConfig::json(const WzString &key, const nlohmann::json &default
 	}
 }
 
-nlohmann::json WzConfig::json(const QString &key, const nlohmann::json &defaultValue) const
+WzString WzConfig::string(const WzString &key, const WzString &defaultValue) const
 {
-	return WzConfig::json(WzString::fromUtf8(key.toUtf8().constData()), defaultValue);
-}
-
-WzString WzConfig::string(const std::string &key, const std::string &defaultValue) const
-{
-	auto it = pCurrentObj->find(key);
+	// TODO: Should this use json_variant to support conversion from other types to string?
+	auto it = pCurrentObj->find(key.toUtf8());
 	if (it == pCurrentObj->end())
 	{
-		return WzString::fromUtf8(defaultValue.c_str());
+		return defaultValue;
 	}
 	else
 	{
@@ -219,18 +201,13 @@ WzString WzConfig::string(const std::string &key, const std::string &defaultValu
 			return it.value().get<WzString>();
 		}
 		catch (const std::exception &e) {
-			return WzString::fromUtf8(defaultValue.c_str());
+			return defaultValue;
 		}
 		catch (...) {
 			debug(LOG_FATAL, "Unexpected exception encountered");
-			return WzString::fromUtf8(defaultValue.c_str());
+			return defaultValue;
 		}
 	}
-}
-
-WzString WzConfig::string(const WzString &key, const WzString &defaultValue) const
-{
-	return string(key.toUtf8(), defaultValue.toUtf8());
 }
 
 void WzConfig::setVector3f(const WzString &name, const Vector3f &v)
@@ -319,37 +296,6 @@ Vector2i WzConfig::vector2i(const WzString &name)
 	return r;
 }
 
-// temporary overloads that take QString
-void WzConfig::setVector3f(const QString &name, const Vector3f &v)
-{
-	setVector3f(WzString::fromUtf8(name.toUtf8().constData()), v);
-}
-
-Vector3f WzConfig::vector3f(const QString &name)
-{
-	return vector3f(WzString::fromUtf8(name.toUtf8().constData()));
-}
-
-void WzConfig::setVector3i(const QString &name, const Vector3i &v)
-{
-	setVector3i(WzString::fromUtf8(name.toUtf8().constData()), v);
-}
-
-Vector3i WzConfig::vector3i(const QString &name)
-{
-	return vector3i(WzString::fromUtf8(name.toUtf8().constData()));
-}
-
-void WzConfig::setVector2i(const QString &name, const Vector2i &v)
-{
-	setVector2i(WzString::fromUtf8(name.toUtf8().constData()), v);
-}
-
-Vector2i WzConfig::vector2i(const QString &name)
-{
-	return vector2i(WzString::fromUtf8(name.toUtf8().constData()));
-}
-
 bool WzConfig::beginGroup(const WzString &prefix)
 {
 	mObjNameStack.push_back(mName);
@@ -374,11 +320,6 @@ bool WzConfig::beginGroup(const WzString &prefix)
 		pCurrentObj = &it.value();
 	}
 	return true;
-}
-
-bool WzConfig::beginGroup(const QString &prefix)
-{
-	return beginGroup(WzString::fromUtf8(prefix.toUtf8().constData()));
 }
 
 void WzConfig::endGroup()
@@ -460,11 +401,6 @@ void WzConfig::beginArray(const WzString &name)
 	}
 }
 
-void WzConfig::beginArray(const QString &name)
-{
-	return beginArray(WzString::fromUtf8(name.toUtf8().constData()));
-}
-
 void WzConfig::nextArrayItem()
 {
 	if (mWarning == ReadAndWrite)
@@ -542,23 +478,7 @@ void WzConfig::setValue(const WzString &key, const nlohmann::json &value)
 	(*pCurrentObj)[key.toUtf8()] = value;
 }
 
-void WzConfig::setValue(const char *key, const nlohmann::json &value)
-{
-	// Note: This makes an assumption that char * values in the files are in UTF-8
-	setValue(WzString::fromUtf8(key), value);
-}
-
-void WzConfig::setValue(const QString &key, const nlohmann::json &value)
-{
-	setValue(WzString::fromUtf8(key.toUtf8().constData()), value);
-}
-
 void WzConfig::set(const WzString &key, const nlohmann::json &value)
-{
-	setValue(key, value);
-}
-
-void WzConfig::set(const QString &key, const nlohmann::json &value)
 {
 	setValue(key, value);
 }

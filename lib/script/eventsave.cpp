@@ -50,7 +50,7 @@ static bool eventSaveContext(WzConfig &ini)
 		}
 		numVars = psCCont->psCode->numGlobals + psCCont->psCode->arraySize;
 
-		ini.beginGroup("context_" + QString::number(numContext));
+		ini.beginGroup("context_" + WzString::number(numContext));
 		ini.setValue("context", hashedName);
 		ini.setValue("numVars", numVars);
 		ini.setValue("release", psCCont->release);
@@ -66,7 +66,7 @@ static bool eventSaveContext(WzConfig &ini)
 
 				ASSERT(psVal->type < SWORD_MAX, "Variable type number %d too big", (int)psVal->type);
 
-				ini.beginGroup(QString::number(countVar));
+				ini.beginGroup(WzString::number(countVar));
 				ini.setValue("type", psVal->type);
 				ini.setValue("typename", scriptTypeToString(psVal->type)); // for debugging
 
@@ -145,7 +145,7 @@ static bool eventLoadContext(WzConfig &ini)
 	// go through the contexts
 	for (int context = 0; context < numContext; context++)
 	{
-		ini.beginGroup("context_" + QString::number(context));
+		ini.beginGroup("context_" + WzString::number(context));
 		hashedName = ini.value("context").toUInt();
 		numVars = ini.value("numVars").toInt();
 		release = (CONTEXT_RELEASE)ini.value("release").toInt();
@@ -172,7 +172,7 @@ static bool eventLoadContext(WzConfig &ini)
 		// set the context variables
 		for (int i = 0; i < numVars; i++)
 		{
-			ini.beginGroup(QString::number(i));
+			ini.beginGroup(WzString::number(i));
 			// get the variable type
 			INTERP_TYPE type = (INTERP_TYPE)ini.value("type").toInt();
 
@@ -199,7 +199,7 @@ static bool eventLoadContext(WzConfig &ini)
 					break;
 				case VAL_STRING:
 					data.v.sval = (char *)malloc(MAXSTRLEN);
-					strcpy(data.v.sval, ini.value("var/" + QString::number(i) + "/data").toString().toUtf8().constData());
+					strcpy(data.v.sval, ini.value("var/" + WzString::number(i) + "/data").toString().toUtf8().constData());
 					break;
 				case VAL_OBJ_GETSET:
 				case VAL_FUNC_EXTERN:
@@ -276,7 +276,7 @@ static bool eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 }
 
 // save a list of triggers
-static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, const QString& tname, WzConfig &ini)
+static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, const WzString& tname, WzConfig &ini)
 {
 	int numTriggers = 0, context = 0;
 
@@ -287,7 +287,7 @@ static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, const QString& tname, W
 			debug(LOG_FATAL, "Could not find context");
 			return false;
 		}
-		ini.beginGroup(tname + "_" + QString::number(numTriggers));
+		ini.beginGroup(tname + "_" + WzString::number(numTriggers));
 		ini.setValue("time", psCurr->testTime);
 		ini.setValue("context", context);
 		ini.setValue("type", psCurr->type);
@@ -302,7 +302,7 @@ static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, const QString& tname, W
 }
 
 // load a list of triggers
-static bool eventLoadTriggerList(WzConfig &ini, const QString& tname)
+static bool eventLoadTriggerList(WzConfig &ini, const WzString& tname)
 {
 	UDWORD			event, offset, time;
 	int			numTriggers, context, type, trigger;
@@ -312,7 +312,7 @@ static bool eventLoadTriggerList(WzConfig &ini, const QString& tname)
 
 	for (int i = 0; i < numTriggers; i++)
 	{
-		ini.beginGroup(tname + "_" + QString::number(i));
+		ini.beginGroup(tname + "_" + WzString::number(i));
 		time = ini.value("time").toInt();
 		context = ini.value("context").toInt();
 		if (!eventFindContext(context, &psContext))
@@ -337,7 +337,7 @@ static bool eventLoadTriggerList(WzConfig &ini, const QString& tname)
 // Save the state of the event system
 bool eventSaveState(const char *pFilename)
 {
-	WzConfig ini(pFilename, WzConfig::ReadAndWrite);
+	WzConfig ini(WzString::fromUtf8(pFilename), WzConfig::ReadAndWrite);
 	if (!eventSaveContext(ini) || !eventSaveTriggerList(psTrigList, "trig", ini) || !eventSaveTriggerList(psCallbackList, "callback", ini))
 	{
 		return false;

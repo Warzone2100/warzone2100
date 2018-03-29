@@ -179,7 +179,7 @@ DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 
 bool initTemplates()
 {
-	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
+	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
 	if (!ini.status())
 	{
 		debug(LOG_WZ, "Could not open %s", ini.fileName().toUtf8().c_str());
@@ -331,7 +331,7 @@ void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
 bool storeTemplates()
 {
 	// Write stored templates (back) to file
-	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json", WzConfig::ReadAndWrite);
+	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadAndWrite);
 	if (!ini.status() || !ini.isWritable())
 	{
 		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().c_str());

@@ -354,7 +354,7 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 	for (char **i = files; *i != nullptr; ++i)
 	{
 		CAMPAIGN_FILE c;
-		QString filename("campaigns/");
+		WzString filename("campaigns/");
 		filename += *i;
 		if (!filename.endsWith(".json"))
 		{

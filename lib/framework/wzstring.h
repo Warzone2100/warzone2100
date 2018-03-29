@@ -31,10 +31,9 @@ public:
 	{
 		return WzUniCodepoint(utf_32_codepoint);
 	}
-	static WzUniCodepoint fromUT8(unsigned char utf_8_char);
+	static WzUniCodepoint fromASCII(unsigned char charLiteral);
 
 	uint32_t UTF32() const { return _codepoint; }
-	std::vector<unsigned char> toUTF8() const;
 
 	bool isNull() const { return _codepoint == 0; }
 
@@ -56,9 +55,12 @@ public:
 	WzString(int size, const WzUniCodepoint& ch);
 	WzString(WzString&& other) noexcept : _utf8String(std::move(other._utf8String)) { }
 	WzString(const WzString& other) noexcept : _utf8String(other._utf8String) { }
+	WzString(const char * str, int size = -1);
 
 	static WzString fromUtf8(const char *str, int size = -1);
+	static WzString fromUtf8(const std::string &str);
 	static WzString fromUtf16(const std::vector<uint16_t>& utf16);
+	static WzString fromCodepoint(const WzUniCodepoint& codepoint);
 
 	const std::string& toUtf8() const;
 
@@ -81,12 +83,16 @@ public:
 
 	WzString& append(const WzString &str);
 	WzString& append(const WzUniCodepoint &c);
+	WzString& append(const char* str);
 
 	WzString& insert(size_t position, const WzString &str);
 	WzString& insert(size_t i, WzUniCodepoint c);
 	WzString& remove(size_t i, int len);
 
 	WzString& replace(size_t position, int n, const WzUniCodepoint &after);
+	WzString& replace(const WzUniCodepoint &before, const WzUniCodepoint &after);
+	WzString& replace(const WzUniCodepoint &before, const WzString &after);
+	WzString& replace(const WzString &before, const WzString &after);
 
 	void truncate(int position);
 	void clear();
@@ -98,14 +104,19 @@ public:
 	static WzString number(uint64_t n);
 	static WzString number(double n);
 
+	// Useful when padding is needed
+	WzString& leftPadToMinimumLength(const WzUniCodepoint &ch, size_t minimumStringLength);
+
 public:
 	WzString& operator+=(const WzString &other);
 	WzString& operator+=(const WzUniCodepoint &ch);
+	WzString& operator+=(const char* str);
 	WzString& operator=(const WzString &other);
 	WzString& operator=(const WzUniCodepoint& ch);
 	WzString& operator=(WzString&& other);
 
 	const WzString operator+(const WzString &other) const;
+	const WzString operator+(const char* other) const;
 
 	bool operator==(const WzString &other) const;
 	bool operator!=(const WzString &other) const;
@@ -116,6 +127,10 @@ public:
 
 	bool startsWith(const WzString &other) const;
 	bool startsWith(const char* other) const;
+	bool endsWith(const WzString &other) const;
+
+	bool contains(const WzUniCodepoint &codepoint) const;
+	bool contains(const WzString &other) const;
 
 	// Used to expose a modifiable "view" of a WzUniCodepoint inside a WzString
 	class WzUniCodepointRef {
@@ -148,6 +163,12 @@ private:
 private:
 	std::string _utf8String;
 };
+
+// NOTE: The char * should be valid UTF-8.
+inline WzString operator+ (const char* a, const WzString &b)
+{
+	return WzString::fromUtf8(a) + b;
+}
 
 namespace std
 {

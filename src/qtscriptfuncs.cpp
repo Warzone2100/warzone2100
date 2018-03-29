@@ -895,12 +895,12 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 		QStringList value;
 		BASE_OBJECT *psObj = i.key();
 		ASSERT(!isDead(psObj), "Wanted to save dead %s to savegame!", objInfo(psObj));
-		if (ini.contains(QString::number(psObj->id)))
+		if (ini.contains(WzString::number(psObj->id)))
 		{
-			value.push_back(ini.value(QString::number(psObj->id)).toString());
+			value.push_back(ini.value(WzString::number(psObj->id)).toString());
 		}
 		value.push_back(QString::number(i.value()));
-		ini.setValue(QString::number(psObj->id), value);
+		ini.setValue(WzString::number(psObj->id), value);
 	}
 	return true;
 }
@@ -1013,7 +1013,7 @@ bool writeLabels(const char *filename)
 		LABEL l = i.value();
 		if (l.type == SCRIPT_POSITION)
 		{
-			ini.beginGroup("position_" + QString::number(c[0]++));
+			ini.beginGroup("position_" + WzString::number(c[0]++));
 			ini.setVector2i("pos", l.p1);
 			ini.setValue("label", key);
 			ini.setValue("triggered", l.triggered);
@@ -1021,7 +1021,7 @@ bool writeLabels(const char *filename)
 		}
 		else if (l.type == SCRIPT_AREA)
 		{
-			ini.beginGroup("area_" + QString::number(c[1]++));
+			ini.beginGroup("area_" + WzString::number(c[1]++));
 			ini.setVector2i("pos1", l.p1);
 			ini.setVector2i("pos2", l.p2);
 			ini.setValue("label", key);
@@ -1032,7 +1032,7 @@ bool writeLabels(const char *filename)
 		}
 		else if (l.type == SCRIPT_RADIUS)
 		{
-			ini.beginGroup("radius_" + QString::number(c[2]++));
+			ini.beginGroup("radius_" + WzString::number(c[2]++));
 			ini.setVector2i("pos", l.p1);
 			ini.setValue("radius", l.p2.x);
 			ini.setValue("label", key);
@@ -1043,7 +1043,7 @@ bool writeLabels(const char *filename)
 		}
 		else if (l.type == SCRIPT_GROUP)
 		{
-			ini.beginGroup("group_" + QString::number(c[3]++));
+			ini.beginGroup("group_" + WzString::number(c[3]++));
 			ini.setValue("player", l.player);
 			ini.setValue("triggered", l.triggered);
 			QStringList list;
@@ -1058,7 +1058,7 @@ bool writeLabels(const char *filename)
 		}
 		else
 		{
-			ini.beginGroup("object_" + QString::number(c[4]++));
+			ini.beginGroup("object_" + WzString::number(c[4]++));
 			ini.setValue("id", l.id);
 			ini.setValue("player", l.player);
 			ini.setValue("type", l.type);
@@ -1689,7 +1689,7 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 {
 	int player = engine->globalObject().property("me").toInt32();
 	QString id = (context->argumentCount() == 1) ? context->argument(0).toString() : context->argument(1).toString();
-	COMPONENT_STATS *psComp = getCompStatsFromName(id);
+	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(id.toUtf8().constData()));
 	SCRIPT_ASSERT(context, psComp, "No such component: %s", id.toUtf8().constData());
 	return QScriptValue(apCompLists[player][psComp->compType][psComp->index] == AVAILABLE);
 }
@@ -1796,7 +1796,7 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 	{
 		compName = context->argument(firstTurret).toString();
 	}
-	COMPONENT_STATS *psComp = getCompStatsFromName(compName);
+	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(compName.toUtf8().constData()));
 	if (psComp == nullptr)
 	{
 		debug(LOG_ERROR, "Wanted to build %s but %s does not exist", templName.toUtf8().constData(), compName.toUtf8().constData());
@@ -3422,7 +3422,7 @@ static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *eng
 
 static void setComponent(const QString& name, int player, int value)
 {
-	COMPONENT_STATS *psComp = getCompStatsFromName(name);
+	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(name.toUtf8().constData()));
 	ASSERT_OR_RETURN(, psComp, "Bad component %s", name.toUtf8().constData());
 	apCompLists[player][psComp->compType][psComp->index] = value;
 }
