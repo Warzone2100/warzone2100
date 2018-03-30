@@ -107,6 +107,13 @@ const std::vector<uint16_t> WzString::toUtf16() const
 	return utf16result;
 }
 
+const std::vector<uint32_t> WzString::toUtf32() const
+{
+	std::vector<uint32_t> utf32result;
+	utf8::utf8to32(_utf8String.begin(), _utf8String.end(), back_inserter(utf32result));
+	return utf32result;
+}
+
 int WzString::toInt(bool *ok /*= nullptr*/, int base /*= 10*/) const
 {
 	int result = 0;
@@ -330,6 +337,53 @@ WzString WzString::trimmed(const std::locale &loc /*= std::locale::classic()*/) 
 	ltrim(utf8StringCopy, loc);
 	rtrim(utf8StringCopy, loc);
 	return WzString::fromUtf8(utf8StringCopy);
+}
+
+std::vector<WzString> WzString::split(const WzString & delimiter) const
+{
+	std::vector<WzString> tokens;
+	const std::vector<uint32_t> delimiterUtf32Codepoints = delimiter.toUtf32();
+	auto currentDelimiterCodepoint = delimiterUtf32Codepoints.begin();
+	auto it = _utf8String.begin();
+	auto it_currenttokenstart = _utf8String.begin();
+	bool lastCodepointWasDelimiterEnd = false;
+	uint32_t codepoint = 0;
+	while (it != _utf8String.end())
+	{
+		codepoint = utf8::next(it, _utf8String.end());
+		if (!delimiterUtf32Codepoints.empty())
+		{
+			if (codepoint != *currentDelimiterCodepoint)
+			{
+				currentDelimiterCodepoint = delimiterUtf32Codepoints.begin();
+				lastCodepointWasDelimiterEnd = false;
+			}
+			else
+			{
+				++currentDelimiterCodepoint;
+			}
+		}
+
+		if (currentDelimiterCodepoint == delimiterUtf32Codepoints.end())
+		{
+			tokens.push_back(WzString(std::string(it_currenttokenstart, it - delimiter._utf8String.length())));
+			it_currenttokenstart = it;
+			currentDelimiterCodepoint = delimiterUtf32Codepoints.begin();
+			lastCodepointWasDelimiterEnd = true;
+		}
+	}
+
+	if (it_currenttokenstart != _utf8String.end())
+	{
+		tokens.push_back(WzString(std::string(it_currenttokenstart, it)));
+	}
+	else if (lastCodepointWasDelimiterEnd && !delimiterUtf32Codepoints.empty())
+	{
+		// string ends with delimiter (and delimiter is not an empty string)
+		// append an empty string to the end of the list
+		tokens.push_back(WzString());
+	}
+	return tokens;
 }
 
 // MARK: - Create from numbers
