@@ -489,9 +489,9 @@
         "sequenceName": "res_systech.ogg",
         "text": [
             "New Systems Tower Available",
-            "Radar detector tower detects enemy sensors",
-            "Orders assigned indirect fire units to fire at the enemy sensors",
-            "Counter-battery fire continues until enemy sensor is suppressed"
+            "New Systems Turret Available",
+            "Radar detector detects enemy sensors",
+            "Farther range compared to other sensors"
         ]
     },
     "RES_SY_SPT": {
