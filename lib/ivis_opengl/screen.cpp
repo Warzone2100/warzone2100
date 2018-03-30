@@ -24,8 +24,6 @@
  *
  */
 
-#include <QtCore/QFile>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -38,6 +36,7 @@
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/framework/physfs_ext.h"
 
 #include "screen.h"
 #include "src/console.h"
@@ -85,7 +84,7 @@ struct PERF_STORE
 {
 	GLuint64 counters[PERF_COUNT];
 };
-static QList<PERF_STORE> perfList;
+static std::vector<PERF_STORE> perfList;
 static PERF_POINT queryActive = PERF_COUNT;
 
 static int preview_width = 0, preview_height = 0;
@@ -356,29 +355,55 @@ void wzPerfStart()
 	}
 }
 
+void wzPerfWriteOut(const std::vector<PERF_STORE> &perfList, const WzString &outfile)
+{
+	PHYSFS_file *fileHandle = PHYSFS_openWrite(outfile.toUtf8().c_str());
+	if (fileHandle)
+	{
+		const char fileHeader[] = "START, EFF, TERRAIN, SKY, LOAD, PRTCL, WATER, MODELS, MISC, GUI\n";
+		if (WZ_PHYSFS_writeBytes(fileHandle, fileHeader, sizeof(fileHeader)) != sizeof(fileHeader))
+		{
+			// Failed to write header to file
+			debug(LOG_ERROR, "wzPerfWriteOut: could not write header to %s; PHYSFS error: %s", outfile.toUtf8().c_str(), WZ_PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+			return;
+		}
+		for (int i = 0; i < perfList.size(); i++)
+		{
+			WzString line;
+			line += WzString::number(perfList[i].counters[PERF_START_FRAME]);
+			for (int j = 1; j < PERF_COUNT; j++)
+			{
+				line += ", " + WzString::number(perfList[i].counters[j]);
+			}
+			line += "\n";
+			if (WZ_PHYSFS_writeBytes(fileHandle, line.toUtf8().c_str(), line.toUtf8().length()) != line.toUtf8().length())
+			{
+				// Failed to write line to file
+				debug(LOG_ERROR, "wzPerfWriteOut: could not line to %s; PHYSFS error: %s", outfile.toUtf8().c_str(), WZ_PHYSFS_getLastError());
+				PHYSFS_close(fileHandle);
+				return;
+			}
+		}
+		PHYSFS_close(fileHandle);
+	}
+	else
+	{
+		debug(LOG_ERROR, "%s could not be opened: %s", outfile.toUtf8().c_str(), WZ_PHYSFS_getLastError());
+		assert(!"wzPerfWriteOut: couldn't open file for writing");
+	}
+}
+
 void wzPerfShutdown()
 {
 	if (perfList.empty())
 	{
 		return;
 	}
-	QString ourfile = PHYSFS_getWriteDir();
-	ourfile.append("gfx-performance.csv");
+
 	// write performance counter list to file
-	QFile perf(ourfile);
-	perf.open(QIODevice::WriteOnly);
-	perf.write("START, EFF, TERRAIN, SKY, LOAD, PRTCL, WATER, MODELS, MISC, GUI\n");
-	for (int i = 0; i < perfList.size(); i++)
-	{
-		QString line;
-		line += QString::number(perfList[i].counters[PERF_START_FRAME]);
-		for (int j = 1; j < PERF_COUNT; j++)
-		{
-			line += ", " + QString::number(perfList[i].counters[j]);
-		}
-		line += "\n";
-		perf.write(line.toUtf8());
-	}
+	wzPerfWriteOut(perfList, "gfx-performance.csv");
+
 	// all done, clear data
 	perfStarted = false;
 	perfList.clear();
@@ -398,7 +423,7 @@ void wzPerfFrame()
 	{
 		glGetQueryObjectui64v(perfpos[i], GL_QUERY_RESULT, &store.counters[i]);
 	}
-	perfList.append(store);
+	perfList.push_back(store);
 	perfStarted = false;
 
 	// Make a screenshot to document sample content
