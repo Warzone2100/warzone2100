@@ -3390,9 +3390,9 @@
         "researchPoints": 4800,
         "researchPower": 150,
         "resultStructures": [
-            "WallTower-Projector"
+            "Tower-Projector"
         ],
-        "statID": "WallTower-Projector"
+        "statID": "Tower-Projector"
     },
     "R-Defense-HvyHowitzer": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -3555,19 +3555,6 @@
             "WallTower-HPVcannon"
         ],
         "statID": "WallTower-HPVcannon"
-    },
-    "R-Defense-WallTower-HvyFlamer": {
-        "iconID": "IMAGE_RES_DEFENCE",
-        "id": "R-Defense-WallTower-HvyFlamer",
-        "keyTopic": 1,
-        "msgName": "RES_WT11_HFL",
-        "name": "Inferno Hardpoint",
-        "requiredResearch": [
-            "R-Defense-HvyFlamer"
-        ],
-        "researchPoints": 3600,
-        "researchPower": 112,
-        "statID": "WallTower-Projector"
     },
     "R-Defense-WallUpgrade04": {
         "iconID": "IMAGE_RES_DEFENCE",
