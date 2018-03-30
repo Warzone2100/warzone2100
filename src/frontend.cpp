@@ -73,12 +73,12 @@
 
 struct CAMPAIGN_FILE
 {
-	QString name;
-	QString level;
-	QString video;
-	QString captions;
-	QString package;
-	QString loading;
+	WzString name;
+	WzString level;
+	WzString video;
+	WzString captions;
+	WzString package;
+	WzString loading;
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -347,9 +347,9 @@ static void startSinglePlayerMenu()
 	}
 }
 
-static QList<CAMPAIGN_FILE> readCampaignFiles()
+static std::vector<CAMPAIGN_FILE> readCampaignFiles()
 {
-	QList<CAMPAIGN_FILE> result;
+	std::vector<CAMPAIGN_FILE> result;
 	char **files = PHYSFS_enumerateFiles("campaigns");
 	for (char **i = files; *i != nullptr; ++i)
 	{
@@ -361,13 +361,13 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 			continue;
 		}
 		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-		c.name = ini.value("name").toString();
-		c.level = ini.value("level").toString();
-		c.package = ini.value("package").toString();
-		c.loading = ini.value("loading").toString();
-		c.video = ini.value("video").toString();
-		c.captions = ini.value("captions").toString();
-		result += c;
+		c.name = ini.value("name").toWzString();
+		c.level = ini.value("level").toWzString();
+		c.package = ini.value("package").toWzString();
+		c.loading = ini.value("loading").toWzString();
+		c.video = ini.value("video").toWzString();
+		c.captions = ini.value("captions").toWzString();
+		result.push_back(c);
 	}
 	PHYSFS_freeList(files);
 	return result;
@@ -379,10 +379,10 @@ static void startCampaignSelector()
 	addTopForm();
 	addBottomForm();
 
-	QList<CAMPAIGN_FILE> list = readCampaignFiles();
+	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
 	for (int i = 0; i < list.size(); i++)
 	{
-		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, gettext(list[i].name.toUtf8().constData()), WBUT_TXTCENTRE);
+		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, gettext(list[i].name.toUtf8().c_str()), WBUT_TXTCENTRE);
 	}
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -395,38 +395,38 @@ static void startCampaignSelector()
 
 static void frontEndNewGame(int which)
 {
-	QList<CAMPAIGN_FILE> list = readCampaignFiles();
-	sstrcpy(aLevelName, list[which].level.toUtf8().constData());
+	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
+	sstrcpy(aLevelName, list[which].level.toUtf8().c_str());
 	// show this only when the video sequences are installed
 	if (PHYSFS_exists("sequences/devastation.ogg"))
 	{
 		if (!list[which].video.isEmpty())
 		{
 			seq_ClearSeqList();
-			seq_AddSeqToList(list[which].video.toUtf8().constData(), nullptr, list[which].captions.toUtf8().constData(), false);
+			seq_AddSeqToList(list[which].video.toUtf8().c_str(), nullptr, list[which].captions.toUtf8().c_str(), false);
 			seq_StartNextFullScreenVideo();
 		}
 	}
 	if (!list[which].package.isEmpty())
 	{
-		QString path;
+		WzString path;
 		path += PHYSFS_getWriteDir();
 		path += PHYSFS_getDirSeparator();
 		path += "campaigns";
 		path += PHYSFS_getDirSeparator();
 		path += list[which].package;
-		if (!PHYSFS_mount(path.toUtf8().constData(), NULL, PHYSFS_APPEND))
+		if (!PHYSFS_mount(path.toUtf8().c_str(), NULL, PHYSFS_APPEND))
 		{
 			debug(LOG_ERROR, "Failed to load campaign mod \"%s\": %s",
-			      path.toUtf8().constData(), WZ_PHYSFS_getLastError());
+			      path.toUtf8().c_str(), WZ_PHYSFS_getLastError());
 		}
 	}
 	if (!list[which].loading.isEmpty())
 	{
-		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().constData());
-		if (!loadLevFile(list[which].loading.toUtf8().constData(), mod_campaign, false, nullptr))
+		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().c_str());
+		if (!loadLevFile(list[which].loading.toUtf8().c_str(), mod_campaign, false, nullptr))
 		{
-			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().constData());
+			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().c_str());
 			return;
 		}
 	}
