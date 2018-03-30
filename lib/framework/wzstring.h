@@ -69,6 +69,7 @@ public:
 	const std::string& toStdString() const;
 
 	const std::vector<uint16_t> toUtf16() const;
+	const std::vector<uint32_t> toUtf32() const;
 
 	int toInt(bool *ok = nullptr, int base = 10) const;
 
@@ -100,6 +101,8 @@ public:
 
 	WzString toLower() const;
 	WzString trimmed(const std::locale &loc = std::locale::classic()) const;
+
+	std::vector<WzString> split(const WzString &delimiter) const;
 
 public:
 	// Create from numbers

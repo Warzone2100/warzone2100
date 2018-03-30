@@ -66,7 +66,7 @@ UDWORD					aDefaultECM[MAX_PLAYERS];
 UDWORD					aDefaultRepair[MAX_PLAYERS];
 
 //set the iconID based on the name read in in the stats
-static UWORD setIconID(char *pIconName, const char *pName);
+static UWORD setIconID(const char *pIconName, const char *pName);
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
                              UBYTE player);
 static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
@@ -108,7 +108,7 @@ bool loadResearch(const WzString& filename)
 	std::vector<WzString> list = ini.childGroups();
 	PLAYER_RESEARCH dummy;
 	memset(&dummy, 0, sizeof(dummy));
-	QVector<QStringList> preResearch;
+	std::vector< std::vector<WzString> > preResearch;
 	preResearch.resize(list.size());
 	for (int inc = 0; inc < list.size(); ++inc)
 	{
@@ -132,10 +132,10 @@ bool loadResearch(const WzString& filename)
 		research.results = ini.json("results", nlohmann::json::array());
 
 		//set subGroup icon
-		QString subGroup = ini.value("subgroupIconID", "").toString();
+		WzString subGroup = ini.value("subgroupIconID", "").toWzString();
 		if (subGroup.compare("") != 0)
 		{
-			research.subGroup = setIconID(subGroup.toUtf8().data(), getName(&research));
+			research.subGroup = setIconID(subGroup.toUtf8().c_str(), getName(&research));
 		}
 		else
 		{
@@ -167,10 +167,10 @@ bool loadResearch(const WzString& filename)
 		}
 
 		//set the iconID
-		QString iconID = ini.value("iconID", "").toString();
+		WzString iconID = ini.value("iconID", "").toWzString();
 		if (iconID.compare("") != 0)
 		{
-			research.iconID = setIconID(iconID.toUtf8().data(), getName(&research));
+			research.iconID = setIconID(iconID.toUtf8().c_str(), getName(&research));
 		}
 		else
 		{
@@ -201,14 +201,14 @@ bool loadResearch(const WzString& filename)
 			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getName(&research));
 		}
 
-		QString msgName = ini.value("msgName", "").toString();
+		WzString msgName = ini.value("msgName", "").toWzString();
 		if (msgName.compare("") != 0)
 		{
 			//check its a major tech code
 			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getName(&research));
 			if (research.techCode == TC_MAJOR)
 			{
-				research.pViewData = getViewData(msgName.toUtf8().data());
+				research.pViewData = getViewData(msgName.toUtf8().c_str());
 			}
 		}
 
@@ -223,13 +223,13 @@ bool loadResearch(const WzString& filename)
 		research.researchPower = resPower;
 
 		//remember research pre-requisites for futher checking
-		preResearch[inc] = ini.value("requiredResearch").toStringList();
+		preResearch[inc] = ini.value("requiredResearch").toWzStringList();
 
 		//set components results
-		QStringList compResults = ini.value("resultComponents").toStringList();
+		std::vector<WzString> compResults = ini.value("resultComponents").toWzStringList();
 		for (int j = 0; j < compResults.size(); j++)
 		{
-			WzString compID = WzString::fromUtf8(compResults[j].trimmed().toUtf8().constData());
+			WzString compID = compResults[j].trimmed();
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp != nullptr)
 			{
@@ -242,18 +242,18 @@ bool loadResearch(const WzString& filename)
 		}
 
 		//set replaced components
-		QStringList replacedComp = ini.value("replacedComponents").toStringList();
+		std::vector<WzString> replacedComp = ini.value("replacedComponents").toWzStringList();
 		for (int j = 0; j < replacedComp.size(); j++)
 		{
 			//read pair of components oldComponent:newComponent
-			QStringList pair = replacedComp[j].split(':');
-			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().constData(), getName(&research));
+			std::vector<WzString> pair = replacedComp[j].split(":");
+			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().c_str(), getName(&research));
 			if (pair.size() != 2)
 			{
 				continue; //skip invalid entries
 			}
-			WzString oldCompID = WzString::fromUtf8(pair[0].trimmed().toUtf8().constData());
-			WzString newCompID = WzString::fromUtf8(pair[1].trimmed().toUtf8().constData());
+			WzString oldCompID = pair[0].trimmed();
+			WzString newCompID = pair[1].trimmed();
 			COMPONENT_STATS *oldComp = getCompStatsFromName(oldCompID);
 			if (oldComp == nullptr)
 			{
@@ -273,10 +273,10 @@ bool loadResearch(const WzString& filename)
 		}
 
 		//set redundant components
-		QStringList redComp = ini.value("redComponents").toStringList();
+		std::vector<WzString> redComp = ini.value("redComponents").toWzStringList();
 		for (int j = 0; j < redComp.size(); j++)
 		{
-			WzString compID = WzString::fromUtf8(redComp[j].trimmed().toUtf8().constData());
+			WzString compID = redComp[j].trimmed();
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp == nullptr)
 			{
@@ -289,12 +289,12 @@ bool loadResearch(const WzString& filename)
 		}
 
 		//set result structures
-		QStringList resStruct = ini.value("resultStructures").toStringList();
+		std::vector<WzString> resStruct = ini.value("resultStructures").toWzStringList();
 		for (int j = 0; j < resStruct.size(); j++)
 		{
-			QString strucID = resStruct[j].trimmed();
-			int structIndex = getStructStatFromName(strucID.toUtf8().data());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().constData(), getName(&research));
+			WzString strucID = resStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
 			if (structIndex >= 0)
 			{
 				research.pStructureResults.push_back(structIndex);
@@ -302,12 +302,12 @@ bool loadResearch(const WzString& filename)
 		}
 
 		//set required structures
-		QStringList reqStruct = ini.value("requiredStructures").toStringList();
+		std::vector<WzString> reqStruct = ini.value("requiredStructures").toWzStringList();
 		for (int j = 0; j < reqStruct.size(); j++)
 		{
-			QString strucID = reqStruct[j].trimmed();
-			int structIndex = getStructStatFromName(strucID.toUtf8().data());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().constData(), getName(&research));
+			WzString strucID = reqStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
 			if (structIndex >= 0)
 			{
 				research.pStructList.push_back(structIndex);
@@ -315,12 +315,12 @@ bool loadResearch(const WzString& filename)
 		}
 
 		//set redundant structures
-		QStringList redStruct = ini.value("redStructures").toStringList();
+		std::vector<WzString> redStruct = ini.value("redStructures").toWzStringList();
 		for (int j = 0; j < redStruct.size(); j++)
 		{
-			QString strucID = redStruct[j].trimmed();
-			int structIndex = getStructStatFromName(strucID.toUtf8().data());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().constData(), getName(&research));
+			WzString strucID = redStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
 			if (structIndex >= 0)
 			{
 				research.pRedStructs.push_back(structIndex);
@@ -334,12 +334,12 @@ bool loadResearch(const WzString& filename)
 	//Load and check research pre-requisites (need do it AFTER loading research items)
 	for (int inc = 0; inc < asResearch.size(); inc++)
 	{
-		QStringList preRes = preResearch[inc];
+		std::vector<WzString> &preRes = preResearch[inc];
 		for (int j = 0; j < preRes.size(); j++)
 		{
-			QString resID = preRes[j].trimmed();
-			RESEARCH *preResItem = getResearch(resID.toUtf8().constData());
-			ASSERT(preResItem != nullptr, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().constData(), getName(&asResearch[inc]));
+			WzString resID = preRes[j].trimmed();
+			RESEARCH *preResItem = getResearch(resID.toUtf8().c_str());
+			ASSERT(preResItem != nullptr, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().c_str(), getName(&asResearch[inc]));
 			if (preResItem != nullptr)
 			{
 				asResearch[inc].pPRList.push_back(preResItem->index);
@@ -767,7 +767,7 @@ RESEARCH *getResearchForMsg(const VIEWDATA *pViewData)
 }
 
 //set the iconID based on the name read in in the stats
-static UWORD setIconID(char *pIconName, const char *pName)
+static UWORD setIconID(const char *pIconName, const char *pName)
 {
 	//compare the names with those created in 'Framer'
 	if (!strcmp(pIconName, "IMAGE_ROCKET"))
