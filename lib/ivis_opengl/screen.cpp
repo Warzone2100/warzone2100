@@ -678,8 +678,15 @@ void screenDoDumpToDiskIfRequired()
 	}
 	debug(LOG_3D, "Saving screenshot %s", fileName);
 
-	image.width = screenWidth;
-	image.height = screenHeight;
+	// IMPORTANT: Must get the size of the viewport directly from the viewport, to account for
+	//            high-DPI / display scaling factors (or only a sub-rect of the full viewport
+	//            will be captured, as the logical screenWidth/Height may differ from the
+	//            underlying viewport pixel dimensions).
+	GLint m_viewport[4];
+	glGetIntegerv(GL_VIEWPORT, m_viewport);
+
+	image.width = m_viewport[2];
+	image.height = m_viewport[3];
 	image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
