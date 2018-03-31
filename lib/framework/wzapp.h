@@ -23,10 +23,39 @@
 
 #include "frame.h"
 #include <vector>
+#include <functional>
 
 struct WZ_THREAD;
 struct WZ_MUTEX;
 struct WZ_SEMAPHORE;
+
+class WZ_MAINTHREADEXEC
+{
+public:
+	WZ_MAINTHREADEXEC() { }
+	virtual ~WZ_MAINTHREADEXEC() { };
+
+	// subclass should override this
+	virtual void doExecOnMainThread() { };
+};
+
+class WZ_MAINTHREADEXECFUNC: public WZ_MAINTHREADEXEC
+{
+public:
+	typedef std::function<void ()> execFuncType;
+public:
+	WZ_MAINTHREADEXECFUNC(const execFuncType &execFunc)
+	: execFunc(execFunc)
+	{ }
+	virtual ~WZ_MAINTHREADEXECFUNC() { };
+
+	void doExecOnMainThread()
+	{
+		execFunc();
+	};
+private:
+	execFuncType execFunc;
+};
 
 struct screeninfo
 {
@@ -86,6 +115,19 @@ WZ_SEMAPHORE *wzSemaphoreCreate(int startValue);
 WZ_DECL_NONNULL(1) void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
+WZ_DECL_NONNULL(1) void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec);
+
+// Asynchronously executes execFunc() on the main thread.
+// This function must be thread-safe, and may be safely called from any thread.
+//
+// No guarantees are made about when execFunc() will be called relative to the
+// calling of this function - this function may return before, during, or after
+// execFunc()'s execution on the main thread.
+inline void wzAsyncExecOnMainThread(const std::function<void ()> &execFunc)
+{
+	wzAsyncExecOnMainThread(new WZ_MAINTHREADEXECFUNC(execFunc));
+	// receiver handles deleting the parameter on the main thread after doExecOnMainThread() has been called
+}
 
 #if !defined(WZ_CC_MINGW)
 

@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/screen.h"
 #include "wzapp_qt.h"
+#include <atomic>
 
 // used in crash reports & version info
 const char *BACKEND = "Qt";
@@ -38,8 +39,9 @@ int main(int argc, char *argv[])
 	return realmain(argc, argv);
 }
 
-QApplication *appPtr;
-WzMainWindow *mainWindowPtr;
+std::atomic<QApplication *> appPtr = nullptr;
+std::atomic<WzMainWindow *> mainWindowPtr = nullptr;
+std::atomic<int> wzAppQEventType(-1);
 
 void wzMain(int &argc, char **argv)
 {
@@ -53,6 +55,9 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	debug(LOG_MAIN, "Qt initialization");
 	//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on many platforms, doesn't exist in Qt5…
 
+	// Register custom WZ app event type
+	wzAppQEventType = QEvent::registerEventType();
+
 	// Setting up OpenGL
 	QGLFormat format;
 	format.setDoubleBuffer(true);
@@ -65,8 +70,8 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		format.setSampleBuffers(true);
 		format.setSamples(antialiasing);
 	}
-	mainWindowPtr = new WzMainWindow(QSize(w, h), format);
-	WzMainWindow &mainwindow = *mainWindowPtr;
+	mainWindowPtr = new WzMainWindow(QSize(w, h), format, wzAppQEventType.load());
+	WzMainWindow &mainwindow = *(mainWindowPtr.load());
 	mainwindow.setMinimumResolution(QSize(800, 600));
 	if (!mainwindow.context()->isValid())
 	{
@@ -106,17 +111,17 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 void wzMainEventLoop()
 {
-	QApplication &app = *appPtr;
-	WzMainWindow &mainwindow = *mainWindowPtr;
+	QApplication &app = *(appPtr.load());
+	WzMainWindow &mainwindow = *(mainWindowPtr.load());
 	mainwindow.update(); // kick off painting, needed on macosx
 	app.exec();
 }
 
 void wzShutdown()
 {
-	delete mainWindowPtr;
+	delete mainWindowPtr.load();
 	mainWindowPtr = nullptr;
-	delete appPtr;
+	delete appPtr.load();
 	appPtr = nullptr;
 }
 
@@ -207,8 +212,9 @@ unsigned int wzGetCurrentDisplayScale()
 
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height)
 {
-	assert(mainWindowPtr != nullptr);
-	WzMainWindow &mainwindow = *mainWindowPtr;
+	WzMainWindow * _mainWindowPtr = mainWindowPtr.load();
+	assert(_mainWindowPtr != nullptr);
+	WzMainWindow &mainwindow = *_mainWindowPtr;
 	if (screen != nullptr)
 	{
 		// FIXME: Determine which screen the window is on
@@ -242,4 +248,21 @@ void StartTextInput()
 void StopTextInput()
 {
 	// Whatever it was, it stopped…
+}
+
+void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
+{
+	assert(exec != nullptr);
+
+	QApplication * _appPtr = appPtr.load();
+	assert(_appPtr != nullptr);
+
+	WzMainWindow * _mainWindowPtr = mainWindowPtr.load();
+	assert(_mainWindowPtr != nullptr);
+
+	int _wzAppQEventType = wzAppQEventType.load();
+	assert(_wzAppQEventType != -1);
+
+	QWzAppEvent *pWzAppEvent = new QWzAppEvent(_wzAppQEventType, wzQtAppEventCodes::MAINTHREADEXEC, exec);
+	_appPtr->postEvent(_mainWindowPtr, pWzAppEvent);
 }

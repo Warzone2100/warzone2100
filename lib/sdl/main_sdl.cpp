@@ -48,6 +48,7 @@
 #include <algorithm>
 #include <map>
 #include <locale.h>
+#include <atomic>
 
 // This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
 #if defined(QT_STATICPLUGIN)
@@ -95,6 +96,12 @@ const SDL_WindowFlags WZ_SDL_FULLSCREEN_MODE = SDL_WINDOW_FULLSCREEN_DESKTOP;
 #else
 const SDL_WindowFlags WZ_SDL_FULLSCREEN_MODE = SDL_WINDOW_FULLSCREEN;
 #endif
+
+std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
+enum wzSDLAppEventCodes
+{
+	MAINTHREADEXEC
+};
 
 /* The possible states for keys */
 enum KEY_STATE
@@ -622,6 +629,35 @@ void wzSemaphoreWait(WZ_SEMAPHORE *semaphore)
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 {
 	SDL_SemPost((SDL_sem *)semaphore);
+}
+
+// Asynchronously executes exec->doExecOnMainThread() on the main thread
+// `exec` should be a subclass of `WZ_MAINTHREADEXEC`
+//
+// `exec` must be allocated on the heap since the main event loop takes ownership of it
+// and will handle deleting it once it has been processed.
+// It is not safe to access `exec` after calling wzAsyncExecOnMainThread.
+//
+// No guarantees are made about when execFunc() will be called relative to the
+// calling of this function - this function may return before, during, or after
+// execFunc()'s execution on the main thread.
+void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
+{
+	assert(exec != nullptr);
+	Uint32 _wzSDLAppEvent = wzSDLAppEvent.load();
+	assert(_wzSDLAppEvent != ((Uint32)-1));
+	if (_wzSDLAppEvent == ((Uint32)-1)) {
+		// The app-defined event has not yet been registered with SDL
+		return;
+	}
+	SDL_Event event;
+	SDL_memset(&event, 0, sizeof(event));
+	event.type = _wzSDLAppEvent;
+	event.user.code = wzSDLAppEventCodes::MAINTHREADEXEC;
+	event.user.data1 = exec;
+	event.user.data2 = 0;
+	SDL_PushEvent(&event);
+	// receiver handles deleting `exec` on the main thread after doExecOnMainThread() has been called
 }
 
 /*!
@@ -1650,6 +1686,13 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		return false;
 	}
 
+	wzSDLAppEvent = SDL_RegisterEvents(1);
+	if (wzSDLAppEvent == ((Uint32)-1)) {
+		// Failed to register app-defined event with SDL
+		debug(LOG_ERROR, "Error: Failed to register app-defined SDL event (%s).", SDL_GetError());
+		return false;
+	}
+
 #if defined(WZ_OS_MAC)
 	// on macOS, support maximizing to a fullscreen space (modern behavior)
 	if (SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "1") == SDL_FALSE)
@@ -2184,6 +2227,24 @@ void wzMainEventLoop(void)
 				return;
 			default:
 				break;
+			}
+
+			if (wzSDLAppEvent == event.type)
+			{
+				// Custom WZ App Event
+				switch (event.user.code)
+				{
+					case wzSDLAppEventCodes::MAINTHREADEXEC:
+						if (event.user.data1 != nullptr)
+						{
+							WZ_MAINTHREADEXEC * pExec = static_cast<WZ_MAINTHREADEXEC *>(event.user.data1);
+							pExec->doExecOnMainThread();
+							delete pExec;
+						}
+						break;
+					default:
+						break;
+				}
 			}
 		}
 #if !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC)
