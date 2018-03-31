@@ -23,6 +23,24 @@
 
 #include "pietypes.h"
 
+struct IMGSaveError
+{
+	IMGSaveError()
+	{ }
+
+	IMGSaveError(std::string error)
+	: text(error)
+	{ }
+
+	inline bool noError() const
+	{
+		return text.empty();
+	}
+	std::string text;
+
+	static IMGSaveError None;
+};
+
 /*!
  * Load a PNG from file into image
  *
@@ -35,20 +53,24 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image);
 /*!
  * Save a PNG from image into file
  *
+ * This function is safe to call from any thread
+ *
  * \param fileName output file to save to
  * \param image Texture to read from
- * \return true on success, false otherwise
+ * \return an IMGSaveError struct. On failure, its "text" contains a description of the error.
  */
-void iV_saveImage_PNG(const char *fileName, const iV_Image *image);
+IMGSaveError iV_saveImage_PNG(const char *fileName, const iV_Image *image);
 
 /*!
  * Save a PNG from image into file using grayscale colour model.
  *
+ * This function is safe to call from any thread
+ *
  * \param fileName output file to save to
  * \param image Texture to read from
- * \return true on success, false otherwise
+ * \return an IMGSaveError struct. On failure, its "text" contains a description of the error.
  */
-void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
+IMGSaveError iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
 
 void iV_saveImage_JPEG(const char *fileName, const iV_Image *image);
 
