@@ -28,6 +28,8 @@
 
 #define PNG_BYTES_TO_CHECK 8
 
+IMGSaveError IMGSaveError::None = IMGSaveError();
+
 // PNG callbacks
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 {
@@ -184,7 +186,9 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	return true;
 }
 
-static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
+// Note: This function must be thread-safe.
+//       It does not call the debug() macro directly, but instead returns an IMGSaveError structure with the text of any error.
+static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
 {
 	unsigned char **volatile scanlines = nullptr;  // Must be volatile to reliably preserve value if modified between setjmp/longjmp.
 	png_infop info_ptr = nullptr;
@@ -197,30 +201,34 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == nullptr)
 	{
-		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, WZ_PHYSFS_getLastError());
-		return;
+		IMGSaveError error;
+		error.text = "pie_PNGSaveFile: PHYSFS_openWrite failed (while opening file ";
+		error.text += fileName;
+		error.text += ") with error: ";
+		error.text += WZ_PHYSFS_getLastError();
+		return error;
 	}
 
 	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 	if (png_ptr == nullptr)
 	{
-		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png struct\n");
 		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
-		return;
+		return IMGSaveError("pie_PNGSaveFile: Unable to create png struct");
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == nullptr)
 	{
-		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png info struct\n");
 		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
-		return;
+		return IMGSaveError("pie_PNGSaveFile: Unable to create png info struct");
 	}
 
 	// If libpng encounters an error, it will jump into this if-branch
 	if (setjmp(png_jmpbuf(png_ptr)))
 	{
-		debug(LOG_ERROR, "pie_PNGSaveFile: Error encoding PNG data\n");
+		free(scanlines);
+		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		return IMGSaveError("pie_PNGSaveFile: Error encoding PNG data");
 	}
 	else
 	{
@@ -236,9 +244,8 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * image->height);
 		if (scanlines == nullptr)
 		{
-			debug(LOG_ERROR, "pie_PNGSaveFile: Couldn't allocate memory\n");
 			PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
-			return;
+			return IMGSaveError("pie_PNGSaveFile: Couldn't allocate memory");
 		}
 
 		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
@@ -287,18 +294,22 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 
 	free(scanlines);
 	PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+	return IMGSaveError::None;
 }
 
-void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
+// Note: This function must be thread-safe.
+IMGSaveError iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 {
-	internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_RGB);
+	return internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_RGB);
 }
 
-void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image)
+// Note: This function must be thread-safe.
+IMGSaveError iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image)
 {
-	internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_GRAY);
+	return internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_GRAY);
 }
 
+// Note: This function is *NOT* thread-safe (jpeg_encode_image is not thread-safe).
 void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 {
 	unsigned char *buffer = nullptr;
