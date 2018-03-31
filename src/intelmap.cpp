@@ -568,7 +568,7 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 		{
 			if (render)
 			{
-				cur_y = iV_DrawFormattedText(psSeqDisplay->textMsg[i].toUtf8().constData(),
+				cur_y = iV_DrawFormattedText(psSeqDisplay->textMsg[i].toUtf8().c_str(),
 				                             x0 + TEXT_XINDENT, cur_y, width, false, font_regular);
 			}
 			else
@@ -1145,7 +1145,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		x = VIDEO_TEXT_TOP_X;
 		y = VIDEO_TEXT_TOP_Y;
 
-		seq_AddTextForVideo(psSeqDisplay->textMsg[0].toUtf8().constData(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
+		seq_AddTextForVideo(psSeqDisplay->textMsg[0].toUtf8().c_str(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
 
 		//add each message, the rest at the bottom
 		x = VIDEO_TEXT_BOTTOM_X;
@@ -1154,7 +1154,7 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 		i = 1;
 		while (i < psSeqDisplay->textMsg.size())
 		{
-			seq_AddTextForVideo(psSeqDisplay->textMsg[i].toUtf8().constData(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
+			seq_AddTextForVideo(psSeqDisplay->textMsg[i].toUtf8().c_str(), x, y, TEXT_START_FRAME, TEXT_END_FRAME, SEQ_TEXT_POSITION); //startframe endFrame
 			//initialise after the first setting
 			x = y = 0;
 			i++;

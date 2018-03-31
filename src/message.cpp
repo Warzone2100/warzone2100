@@ -592,7 +592,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					// Get the string from the ID string
 					const char *str = strresGetString(psStringRes, name);
 					ASSERT(str, "Cannot find the view data string with id \"%s\"", name);
-					QString qstr = QString::fromUtf8(str);
+					WzString qstr = WzString::fromUtf8(str);
 					psViewReplay->seqList[dataInc].textMsg.push_back(qstr);
 				}
 				//get the audio text string
@@ -719,11 +719,11 @@ const char *loadResearchViewData(const char *fileName)
 		}
 		if (ini.contains("sequenceName"))
 		{
-			r->sequenceName = ini.value("sequenceName").toString();
+			r->sequenceName = ini.value("sequenceName").toWzString();
 		}
 		if (ini.contains("audioName"))
 		{
-			r->audio = ini.value("audioName").toString();
+			r->audio = ini.value("audioName").toWzString();
 		}
 
 		ini.endGroup();
