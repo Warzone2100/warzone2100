@@ -25,7 +25,6 @@
 #define __INCLUDED_MESSAGEDEF_H__
 
 #include <vector>
-#include <QtCore/QStringList>
 #include "lib/framework/wzstring.h"
 #include "positiondef.h"
 #include "stringdef.h"
@@ -105,11 +104,11 @@ struct VIEW_PROXIMITY : VIEW_BASE
 
 struct VIEWDATA
 {
-	QString		name;		//name ID of the message - used for loading in and identifying
-	VIEW_TYPE	type;		//the type of view
-	QStringList     textMsg;        //Text messages, if any
-	VIEW_BASE       *pData = nullptr; // the data required to view - either VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY
-	QString         fileName;       // file it came from, for piecemeal destruction (pretty lame reason)
+	WzString				name;			//name ID of the message - used for loading in and identifying
+	VIEW_TYPE				type;			//the type of view
+	std::vector<WzString>	textMsg;        //Text messages, if any
+	VIEW_BASE				*pData = nullptr; // the data required to view - either VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY
+	WzString				fileName;       // file it came from, for piecemeal destruction (pretty lame reason)
 };
 
 enum MSG_DATA_TYPE

@@ -70,7 +70,7 @@ const char *loadResearchViewData(const char *fileName);
 VIEWDATA *getViewData(const char *pTextMsg);
 
 /// Get a list of viewdata entries
-QStringList getViewDataKeys();
+std::vector<WzString> getViewDataKeys();
 
 /** Release the viewdata memory. */
 void viewDataShutDown(const char *fileName);

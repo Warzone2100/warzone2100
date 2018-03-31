@@ -24,7 +24,7 @@
  *
  */
 
-#include <QtCore/QMap>
+#include <map>
 #include "lib/framework/frame.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/frameresource.h"
@@ -38,7 +38,7 @@
 #include "stats.h"
 #include "text.h"
 
-static QMap<QString, VIEWDATA *> apsViewData;
+static std::map<WzString, VIEWDATA *> apsViewData;
 
 /* The id number for the next message allocated
  * Each message will have a unique id number irrespective of type
@@ -482,7 +482,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 
 		//allocate storage for the name
 		psViewData->name = name;
-		debug(LOG_MSG, "Loaded %s", psViewData->name.toUtf8().constData());
+		debug(LOG_MSG, "Loaded %s", psViewData->name.toUtf8().c_str());
 
 		//read in the data for the text strings
 		for (unsigned dataInc = 0; dataInc < numText; dataInc++)
@@ -494,8 +494,8 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			// Get the string from the ID string
 			const char *str = strresGetString(psStringRes, name);
 			ASSERT(str, "Cannot find the view data string with id \"%s\"", name);
-			QString qstr = QString::fromUtf8(str);
-			psViewData->textMsg.push_back(qstr);
+			WzString wstr = WzString::fromUtf8(str);
+			psViewData->textMsg.push_back(wstr);
 		}
 
 		sscanf(pViewMsgData, ",%d%n", &readint, &cnt);
@@ -678,7 +678,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pViewMsgData = strchr(pViewMsgData, '\n') + 1;
 
-		apsViewData.insert(psViewData->name, psViewData);
+		apsViewData[psViewData->name] = psViewData;
 	}
 
 	return filename; // so that cleanup function will be called for correct data
@@ -695,16 +695,16 @@ const char *loadResearchViewData(const char *fileName)
 		VIEW_RESEARCH *r = new VIEW_RESEARCH;
 
 		v->pData = nullptr;
-		v->name = QString::fromUtf8(list[i].toUtf8().c_str());
+		v->name = list[i];
 		v->fileName = fileName;
 
 		ini.beginGroup(list[i]);
 
-		v->textMsg = ini.value("text").toStringList();
+		v->textMsg = ini.value("text").toWzStringList();
 		for (int j = 0; j < v->textMsg.size(); j++)
 		{
-			v->textMsg[j].remove('\t');
-			v->textMsg[j] = QString(_(v->textMsg[j].toUtf8().constData()));
+			v->textMsg[j].remove("\t");
+			v->textMsg[j] = WzString::fromUtf8(_(v->textMsg[j].toUtf8().c_str()));
 			v->textMsg[j].replace("%%", "%");
 		}
 		v->type = VIEW_RES;
@@ -727,7 +727,7 @@ const char *loadResearchViewData(const char *fileName)
 		}
 
 		ini.endGroup();
-		apsViewData.insert(v->name, v);
+		apsViewData[v->name] = v;
 	}
 	return fileName; // so that cleanup function will be called on right data
 }
@@ -735,14 +735,15 @@ const char *loadResearchViewData(const char *fileName)
 /* Get the view data identified by the name */
 VIEWDATA *getViewData(const char *pName)
 {
-	VIEWDATA *ptr = apsViewData.value(pName);
+	std::map<WzString, VIEWDATA *>::iterator it = apsViewData.find(pName);
+	VIEWDATA *ptr = (it != apsViewData.end()) ? it->second : nullptr;
 	if (!ptr) // dump for debugging
 	{
-		QMap<QString, VIEWDATA *>::iterator iter = apsViewData.begin();
-		while (iter != apsViewData.constEnd())
+		std::map<WzString, VIEWDATA *>::iterator iter = apsViewData.begin();
+		while (iter != apsViewData.end())
 		{
-			VIEWDATA *psViewData = iter.value();
-			debug(LOG_WZ, "\t%s", psViewData->name.toUtf8().constData());
+			VIEWDATA *psViewData = iter->second;
+			debug(LOG_WZ, "\t%s", psViewData->name.toUtf8().c_str());
 			++iter;
 		}
 	}
@@ -750,9 +751,15 @@ VIEWDATA *getViewData(const char *pName)
 	return ptr;
 }
 
-QStringList getViewDataKeys()
+std::vector<WzString> getViewDataKeys()
 {
-	return apsViewData.keys();
+	std::vector<WzString> keys;
+	keys.reserve(apsViewData.size());
+	for(auto const& kvpair: apsViewData)
+	{
+		keys.push_back(kvpair.first);
+	}
+	return keys;
 }
 
 /* Release the message heaps */
@@ -784,10 +791,10 @@ static void checkMessages(VIEWDATA *psViewData)
 void viewDataShutDown(const char *fileName)
 {
 	debug(LOG_MSG, "calling shutdown for %s", fileName);
-	QMap<QString, VIEWDATA *>::iterator iter = apsViewData.begin();
-	while (iter != apsViewData.constEnd())
+	std::map<WzString, VIEWDATA *>::iterator iter = apsViewData.begin();
+	while (iter != apsViewData.end())
 	{
-		VIEWDATA *psViewData = iter.value();
+		VIEWDATA *psViewData = iter->second;
 
 		if (psViewData->fileName.compare(fileName) != 0)
 		{
@@ -849,7 +856,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		//display text - if any
 		if (!psViewData->textMsg.empty() && psViewData->type != VIEW_BEACON)
 		{
-			addConsoleMessage(psViewData->textMsg[0].toUtf8().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(psViewData->textMsg[0].toUtf8().c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 
 		//play message - if any
