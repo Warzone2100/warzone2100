@@ -42,6 +42,7 @@
 #include "screen.h"
 #include "src/console.h"
 #include "src/levels.h"
+#include "lib/framework/wzapp.h"
 
 #include <time.h>
 #include <vector>
@@ -657,6 +658,63 @@ void screen_disableMapPreview()
 // Screenshot code goes below this
 static const unsigned int channelsPerPixel = 3;
 
+class ScreenshotSaveRequest {
+public:
+	typedef std::function<void (const ScreenshotSaveRequest&)> onDeleteFunc;
+
+	std::string fileName;
+	iV_Image image;
+	onDeleteFunc onDelete;
+
+	ScreenshotSaveRequest(const std::string & fileName, iV_Image image, const onDeleteFunc & onDelete)
+	: fileName(fileName)
+	, image(image)
+	, onDelete(onDelete)
+	{ }
+
+	~ScreenshotSaveRequest()
+	{
+		onDelete(*this);
+	}
+};
+
+/** This runs in a separate thread */
+static int saveScreenshotThreadFunc(void * saveRequest)
+{
+	assert(saveRequest != nullptr);
+	ScreenshotSaveRequest * pSaveRequest = static_cast<ScreenshotSaveRequest *>(saveRequest);
+	
+	IMGSaveError pngerror = iV_saveImage_PNG(pSaveRequest->fileName.c_str(), &(pSaveRequest->image));
+
+//	//iV_saveImage_JPEG is *NOT* thread-safe, and cannot be safely called from another thread
+//	iV_saveImage_JPEG(fileName, &image);
+
+	if (!pngerror.noError())
+	{
+		// dispatch logging the error to the main thread
+		wzAsyncExecOnMainThread([pngerror]
+			{
+				debug(LOG_ERROR, "%s\n", pngerror.text.c_str());
+			}
+		);
+	}
+	else
+	{
+		// display message to user about screenshot
+		// this must be dispatched back to the main thread
+		std::string fileName = pSaveRequest->fileName;
+		wzAsyncExecOnMainThread([fileName]
+		   {
+			   snprintf(ConsoleString, sizeof(ConsoleString), "Screenshot %s saved!", fileName.c_str());
+			   addConsoleMessage(ConsoleString, LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		   }
+		);
+	}
+
+	delete pSaveRequest;
+	return 0;
+}
+
 /** Writes a screenshot of the current frame to file.
  *
  *  Performs the actual work of writing the frame currently displayed on screen
@@ -692,16 +750,33 @@ void screenDoDumpToDiskIfRequired()
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
 
-	iV_saveImage_PNG(fileName, &image);
-	iV_saveImage_JPEG(fileName, &image);
-
-	// display message to user about screenshot
-	snprintf(ConsoleString, sizeof(ConsoleString), "Screenshot %s saved!", fileName);
-	addConsoleMessage(ConsoleString, LEFT_JUSTIFY, SYSTEM_MESSAGE);
-	if (image.bmp)
+	// Dispatch encoding and saving screenshot to a background thread (since this is fairly costly)
+	snprintf(ConsoleString, sizeof(ConsoleString), "Saving screenshot %s ...", fileName);
+	addConsoleMessage(ConsoleString, LEFT_JUSTIFY, INFO_MESSAGE);
+	ScreenshotSaveRequest * pSaveRequest =
+		new ScreenshotSaveRequest(
+			fileName,
+			image,
+			[](const ScreenshotSaveRequest& request)
+			{
+				if (request.image.bmp)
+				{
+					free(request.image.bmp);
+				}
+			}
+		);
+	WZ_THREAD * pSaveThread = wzThreadCreate(saveScreenshotThreadFunc, pSaveRequest);
+	if (pSaveThread == nullptr)
 	{
-		free(image.bmp);
+		debug(LOG_ERROR, "Failed to create thread for PNG encoding");
+		delete pSaveRequest;
 	}
+	else
+	{
+		wzThreadDetach(pSaveThread);
+		// the thread handles deleting pSaveRequest
+	}
+
 	screendump_required = false;
 }
 
