@@ -286,10 +286,10 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	{
 		aiPlayerComboBox.addItem(QString::number(i));
 	}
-	const QStringList AIs = getAINames();
-	for (const QString &name : AIs)
+	const std::vector<WzString> AIs = getAINames();
+	for (const WzString &name : AIs)
 	{
-		aiScriptComboBox.addItem(name);
+		aiScriptComboBox.addItem(QString::fromUtf8(name.toUtf8().c_str()));
 	}
 	addAILayout->addWidget(addAILabel);
 	addAILayout->addWidget(&aiScriptComboBox);

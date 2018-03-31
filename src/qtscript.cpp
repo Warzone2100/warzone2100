@@ -600,7 +600,7 @@ bool updateScripts()
 	return true;
 }
 
-QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
+QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
@@ -609,16 +609,16 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	engine->setProcessEventsInterval(-1);
 	UDWORD size;
 	char *bytes = nullptr;
-	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
+	if (!loadFile(path.toUtf8().c_str(), &bytes, &size))
 	{
-		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().constData());
+		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
 		return nullptr;
 	}
 	QString source = QString::fromUtf8(bytes, size);
 	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	ASSERT_OR_RETURN(nullptr, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s",
-	                 path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
+	                 path.toUtf8().c_str(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
 	// Special functions
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
 	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
@@ -687,7 +687,7 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	engine->globalObject().setProperty("isReceivingAllEvents", false, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions
-	QFileInfo basename(path);
+	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
 	registerFunctions(engine, basename.baseName());
 
 	// Remember internal, reserved names
@@ -710,9 +710,9 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	//== * ```scriptPath``` Base path of the script that is running.
 	engine->globalObject().setProperty("scriptPath", basename.path(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
-	QScriptValue result = engine->evaluate(source, path);
+	QScriptValue result = engine->evaluate(source, QString::fromUtf8(path.toUtf8().c_str()));
 	ASSERT_OR_RETURN(nullptr, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s",
-	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().constData(), result.toString().toUtf8().constData());
+	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().c_str(), result.toString().toUtf8().constData());
 
 	// Register script
 	scripts.push_back(engine);
@@ -720,11 +720,11 @@ QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty)
 	MONITOR *monitor = new MONITOR;
 	monitors.insert(engine, monitor);
 
-	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().constData());
+	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().c_str());
 	return engine;
 }
 
-bool loadGlobalScript(QString path)
+bool loadGlobalScript(WzString path)
 {
 	return loadPlayerScript(std::move(path), selectedPlayer, 0);
 }
@@ -958,7 +958,7 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text)
 
 void jsAutogameSpecific(const QString &name, int player)
 {
-	QScriptEngine *engine = loadPlayerScript(name, player, DIFFICULTY_MEDIUM);
+	QScriptEngine *engine = loadPlayerScript(WzString::fromUtf8(name.toUtf8().constData()), player, DIFFICULTY_MEDIUM);
 	if (!engine)
 	{
 		console("Failed to load selected AI! Check your logs to see why.");

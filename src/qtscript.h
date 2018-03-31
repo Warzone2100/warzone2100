@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 
 class QScriptEngine;
+class WzString;
 struct BASE_OBJECT;
 struct DROID;
 struct DROID_TEMPLATE;
@@ -77,8 +78,8 @@ bool prepareScripts(bool loadGame);
 bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
-bool loadGlobalScript(QString path);
-QScriptEngine *loadPlayerScript(const QString& path, int player, int difficulty);
+bool loadGlobalScript(WzString path);
+QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.

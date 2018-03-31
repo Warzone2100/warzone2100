@@ -284,14 +284,14 @@ struct WzMultiButton : public W_BUTTON
 	unsigned tc;
 };
 
-const QStringList getAINames()
+const std::vector<WzString> getAINames()
 {
-	QStringList l;
+	std::vector<WzString> l;
 	for (const auto &i : aidata)
 	{
 		if (i.js[0] != '\0')
 		{
-			l.append(i.js);
+			l.push_back(WzString::fromUtf8(i.js));
 		}
 	}
 	return l;
@@ -341,7 +341,7 @@ void setupChallengeAIs()
 			ini.beginGroup("player_" + WzString::number(i));
 			if (ini.contains("ai"))
 			{
-				QString val = ini.value("ai").toString();
+				WzString val = ini.value("ai").toWzString();
 				ini.endGroup();
 				if (val.compare("null") == 0)
 				{
@@ -349,7 +349,7 @@ void setupChallengeAIs()
 				}
 
 				// strip given path down to filename
-				QString filename(QFileInfo(val).fileName());
+				WzString filename(QFileInfo(QString::fromUtf8(val.toUtf8().c_str())).fileName().toUtf8().constData());
 
 				// look up AI value in vector of known skirmish AIs
 				for (int ai = 0; ai < aidata.size(); ++ai)
@@ -384,7 +384,7 @@ void loadMultiScripts()
 	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
 	WzString ininame = challengeActive ? sRequestResult : aFileName;
-	QString path = challengeActive ? "challenges/" : aPathName;
+	WzString path = challengeActive ? "challenges/" : aPathName;
 
 	if (hostlaunch == 2)
 	{
@@ -407,11 +407,11 @@ void loadMultiScripts()
 		{
 			if (ini.contains("extra"))
 			{
-				loadGlobalScript(path + ini.value("extra").toString());
+				loadGlobalScript(path + ini.value("extra").toWzString());
 			}
 			if (ini.contains("rules"))
 			{
-				loadGlobalScript(path + ini.value("rules").toString());
+				loadGlobalScript(path + ini.value("rules").toWzString());
 				defaultRules = false;
 			}
 		}
@@ -449,7 +449,7 @@ void loadMultiScripts()
 				ini.beginGroup("player_" + WzString::number(i));
 				if (ini.contains("ai"))
 				{
-					QString val = ini.value("ai").toString();
+					WzString val = ini.value("ai").toWzString();
 					ini.endGroup();
 					if (val.compare("null") == 0)
 					{
@@ -457,7 +457,7 @@ void loadMultiScripts()
 					}
 					loadPlayerScript(val, i, NetPlay.players[i].difficulty);
 
-					debug(LOG_WZ, "AI %s loaded for player %u", val.toUtf8().constData(), i);
+					debug(LOG_WZ, "AI %s loaded for player %u", val.toUtf8().c_str(), i);
 					continue;
 				}
 				ini.endGroup();
@@ -472,7 +472,7 @@ void loadMultiScripts()
 			if (!NetPlay.players[i].allocated && aidata[NetPlay.players[i].ai].js[0] != '\0')
 			{
 				debug(LOG_SAVE, "Loading javascript AI for player %d", i);
-				loadPlayerScript(QString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
+				loadPlayerScript(WzString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
 			}
 		}
 	}
@@ -1109,7 +1109,7 @@ static void addGames()
 				}
 				else
 				{
-					QString flags;
+					WzString flags;
 					if (NetPlay.games[i].privateGame)
 					{
 						flags += " "; flags += _("[Password required]");
@@ -1132,7 +1132,7 @@ static void addGames()
 					}
 					else
 					{
-						ssprintf(tooltipbuffer[i], _("Hosted by %s —%s"), NetPlay.games[i].hostname, flags.toUtf8().constData());
+						ssprintf(tooltipbuffer[i], _("Hosted by %s —%s"), NetPlay.games[i].hostname, flags.toUtf8().c_str());
 					}
 					sButInit.pTip = tooltipbuffer[i];
 				}
@@ -2799,9 +2799,9 @@ static void addChatBox(bool preserveOldChat)
 
 	if (!getModList().empty())
 	{
-		QString modListMessage = _("Mod: ");
+		WzString modListMessage = _("Mod: ");
 		modListMessage += getModList().c_str();
-		addConsoleMessage(modListMessage.toUtf8().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(modListMessage.toUtf8().c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 	return;
@@ -3007,10 +3007,10 @@ static void loadMapSettings2()
 		}
 		if (ini.contains("difficulty"))
 		{
-			QString value = ini.value("difficulty", "Medium").toString();
+			WzString value = ini.value("difficulty", "Medium").toWzString();
 			for (unsigned j = 0; j < ARRAY_SIZE(difficultyList); ++j)
 			{
-				if (strcasecmp(difficultyList[j], value.toUtf8().constData()) == 0)
+				if (strcasecmp(difficultyList[j], value.toUtf8().c_str()) == 0)
 				{
 					game.skDiff[i] = difficultyValue[j];
 					NetPlay.players[i].difficulty = j;
