@@ -248,9 +248,9 @@ void StopTextInput()
 	debug(LOG_INPUT, "SDL text events stopped");
 }
 
-QString wzGetCurrentText()
+WzString wzGetCurrentText()
 {
-	return QString::fromUtf8(text);
+	return WzString::fromUtf8(text);
 }
 
 unsigned int wzGetCurrentKey(void)
@@ -259,14 +259,14 @@ unsigned int wzGetCurrentKey(void)
 }
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-QString wzGetSelection()
+WzString wzGetSelection()
 {
-	QString retval = nullptr;
+	WzString retval;
 	static char *scrap = nullptr;
 
 	if (get_scrap(&scrap))
 	{
-		retval = QString::fromUtf8(scrap);
+		retval = WzString::fromUtf8(scrap);
 		strlcpy(text, scrap, strlen(scrap));
 	}
 	return retval;

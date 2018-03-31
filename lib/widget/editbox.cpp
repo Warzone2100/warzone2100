@@ -425,7 +425,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				switch (key)
 				{
 				case KEY_V:
-					aText = WzString::fromUtf8(wzGetSelection().toUtf8().constData());
+					aText = wzGetSelection();
 					if (aText.length() >= maxStringSize)
 					{
 						aText.truncate(maxStringSize);
