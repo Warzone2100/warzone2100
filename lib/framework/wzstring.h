@@ -96,6 +96,8 @@ public:
 	WzString& replace(const WzUniCodepoint &before, const WzString &after);
 	WzString& replace(const WzString &before, const WzString &after);
 
+	WzString& remove(const WzString &substr);
+
 	void truncate(int position);
 	void clear();
 

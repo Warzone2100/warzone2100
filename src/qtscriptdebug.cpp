@@ -128,13 +128,13 @@ static void fillViewdataModel(QStandardItemModel &m)
 	int row = 0;
 	m.setRowCount(0);
 	m.setHorizontalHeaderLabels({"Name", "Type", "Source"});
-	QStringList keys = getViewDataKeys();
-	for (QString& key : keys)
+	std::vector<WzString> keys = getViewDataKeys();
+	for (const WzString& key : keys)
 	{
-		VIEWDATA *ptr = getViewData(key.toUtf8().constData());
-		m.setItem(row, 0, new QStandardItem(key));
+		VIEWDATA *ptr = getViewData(key.toUtf8().c_str());
+		m.setItem(row, 0, new QStandardItem(QString::fromUtf8(key.toUtf8().c_str())));
 		m.setItem(row, 1, new QStandardItem(view_type.at(ptr->type)));
-		m.setItem(row, 2, new QStandardItem(ptr->fileName));
+		m.setItem(row, 2, new QStandardItem(QString::fromUtf8(ptr->fileName.toUtf8().c_str())));
 		row++;
 	}
 }
@@ -162,7 +162,7 @@ static void fillMessageModel(QStandardItemModel &m)
 			if (psCurr->pViewData)
 			{
 				ASSERT(psCurr->pViewData->type < view_type.size(), "Bad viewdata type");
-				m.setItem(row, 4, new QStandardItem(psCurr->pViewData->name));
+				m.setItem(row, 4, new QStandardItem(QString::fromUtf8(psCurr->pViewData->name.toUtf8().c_str())));
 				m.setItem(row, 5, new QStandardItem(view_type.at(psCurr->pViewData->type)));
 			}
 			else if (psCurr->psObj)

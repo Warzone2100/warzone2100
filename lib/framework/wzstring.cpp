@@ -281,6 +281,11 @@ WzString& WzString::replace(const WzString &before, const WzString &after)
 	return *this;
 }
 
+WzString& WzString::remove(const WzString &substr)
+{
+	return replace(substr, "");
+}
+
 void WzString::truncate(int position)
 {
 	if (position < 0) { position = 0; }

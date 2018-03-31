@@ -4365,7 +4365,7 @@ static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
 		VIEWDATA *psViewData = getViewData(mess.toUtf8().constData());
 		SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
 		psMessage->pViewData = psViewData;
-		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().constData(), psMessage->pViewData);
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), psMessage->pViewData);
 		if (msgType == MSG_PROXIMITY)
 		{
 			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;
@@ -4399,12 +4399,12 @@ static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine 
 	MESSAGE *psMessage = findMessage(psViewData, msgType, player);
 	if (psMessage)
 	{
-		debug(LOG_MSG, "Removing %s", psViewData->name.toUtf8().constData());
+		debug(LOG_MSG, "Removing %s", psViewData->name.toUtf8().c_str());
 		removeMessage(psMessage, player);
 	}
 	else
 	{
-		debug(LOG_ERROR, "cannot find message - %s", psViewData->name.toUtf8().constData());
+		debug(LOG_ERROR, "cannot find message - %s", psViewData->name.toUtf8().c_str());
 	}
 	jsDebugMessageUpdate();
 	return QScriptValue();

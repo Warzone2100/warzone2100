@@ -1126,7 +1126,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				return;
 			}
 			//need to check the string will fit!
-			iV_DrawText(_(psMessage->pViewData->textMsg[i].toUtf8().constData()), x0 + TEXT_XINDENT,
+			iV_DrawText(_(psMessage->pViewData->textMsg[i].toUtf8().c_str()), x0 + TEXT_XINDENT,
 			            (ty + TEXT_YINDENT * 3) + (i * linePitch), font_regular);
 		}
 	}

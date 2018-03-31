@@ -1402,7 +1402,7 @@ bool scrAddMessage()
 	{
 		//set the data
 		psMessage->pViewData = psViewData;
-		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().constData(), psMessage->pViewData);
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), psMessage->pViewData);
 		if (msgType == MSG_PROXIMITY)
 		{
 			//check the z value is at least the height of the terrain
@@ -1448,12 +1448,12 @@ bool scrRemoveMessage()
 	if (psMessage)
 	{
 		//delete it
-		debug(LOG_MSG, "Removing %s", psViewData->name.toUtf8().constData());
+		debug(LOG_MSG, "Removing %s", psViewData->name.toUtf8().c_str());
 		removeMessage(psMessage, player);
 	}
 	else
 	{
-		debug(LOG_ERROR, "cannot find message - %s", psViewData->name.toUtf8().constData());
+		debug(LOG_ERROR, "cannot find message - %s", psViewData->name.toUtf8().c_str());
 	}
 	jsDebugMessageUpdate();
 
@@ -9035,7 +9035,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	psViewData->name = name;
 
 	//store text message, hardcoded for now
-	psViewData->textMsg.push_back(QString::fromUtf8(getPlayerName(sender)));
+	psViewData->textMsg.push_back(WzString::fromUtf8(getPlayerName(sender)));
 
 	//store message type
 	psViewData->type = VIEW_BEACON;
