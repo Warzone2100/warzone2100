@@ -30,6 +30,7 @@
 #include "lib/widget/form.h"
 #include <functional>
 #include <vector>
+#include "lib/framework/wzstring.h"
 
 
 #define MAX_LEN_AI_NAME   40
@@ -94,7 +95,7 @@ void readAIs();	///< step 1, load AI definition files
 void setupChallengeAIs();	///< dirty hack to allow correct display of names from challenges
 void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
-const QStringList getAINames();
+const std::vector<WzString> getAINames();
 int matchAIbyName(const char *name);	///< only run this -after- readAIs() is called
 int getNextAIAssignment(const char *name);
 
