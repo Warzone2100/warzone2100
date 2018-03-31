@@ -22,6 +22,7 @@
 #define __INCLUDED_WZAPP_C_H__
 
 #include "frame.h"
+#include "wzstring.h"
 #include <vector>
 #include <functional>
 
@@ -94,8 +95,8 @@ std::vector<screeninfo> wzAvailableResolutions();
 std::vector<unsigned int> wzAvailableDisplayScales();
 void wzSetSwapInterval(int swap);
 int wzGetSwapInterval();
-QString wzGetSelection();
-QString wzGetCurrentText();
+WzString wzGetSelection();
+WzString wzGetCurrentText();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support

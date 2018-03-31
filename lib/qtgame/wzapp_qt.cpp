@@ -1218,7 +1218,7 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 
 #endif
 
-QString wzGetSelection()
+WzString wzGetSelection()
 {
 	QString aText;
 	QClipboard *clipboard = QApplication::clipboard();
@@ -1227,7 +1227,7 @@ QString wzGetSelection()
 	{
 		aText = clipboard->text(QClipboard::Clipboard);    // if not, try generic clipboard
 	}
-	return aText;
+	return WzString::fromUtf8(aText.toUtf8().constData());
 }
 
 void wzFatalDialog(const char *text)
