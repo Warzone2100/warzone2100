@@ -40,11 +40,30 @@
 #include "lib/ivis_opengl/textdraw.h"
 #include "lib/framework/input.h"
 
+class QWzAppEvent: public QEvent
+{
+public:
+	QWzAppEvent(QEvent::Type type, int code, void * userData)
+	: QEvent(type)
+	, code(code)
+	, userData(userData)
+	{ }
+
+	int code;
+	void * userData;
+};
+
+enum wzQtAppEventCodes
+{
+	MAINTHREADEXEC
+};
+
 class WzMainWindow : public QtGameWidget
 {
 	Q_OBJECT
 
 private:
+	bool event(QEvent *event);
 	void loadCursor(CURSOR cursor, char const *name);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
@@ -62,9 +81,10 @@ private:
 	QFont regularFont, boldFont, smallFont, scaledFont;
 	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
 	static WzMainWindow *myself;
+	const int wzAppQEventType;
 
 public:
-	WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent = nullptr);
+	WzMainWindow(QSize resolution, const QGLFormat &format, int wzAppQEventType, QWidget *parent = nullptr);
 	~WzMainWindow();
 	void initializeGL();
 	void resizeGL(int w, int h);

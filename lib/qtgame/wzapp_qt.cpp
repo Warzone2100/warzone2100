@@ -138,13 +138,38 @@ static QImage loadQImage(char const *fileName, char const *format = nullptr)
 	}
 }
 
+bool WzMainWindow::event(QEvent *event)
+{
+	if (wzAppQEventType != -1 && event->type() == wzAppQEventType) {
+		QWzAppEvent *pWzAppEvent = static_cast<QWzAppEvent *>(event);
+		// custom app event handling
+		switch (pWzAppEvent->code)
+		{
+			case wzQtAppEventCodes::MAINTHREADEXEC:
+				if (pWzAppEvent->userData != nullptr)
+				{
+					WZ_MAINTHREADEXEC * pExec = static_cast<WZ_MAINTHREADEXEC *>(pWzAppEvent->userData);
+					pExec->doExecOnMainThread();
+					delete pExec;
+				}
+				break;
+			default:
+				break;
+		}
+		return true;
+	}
+
+	return QtGameWidget::event(event);
+}
 
 void WzMainWindow::loadCursor(CURSOR cursor, char const *name)
 {
 	cursors[cursor] = new QCursor(QPixmap::fromImage(loadQImage(name, "PNG")));
 }
 
-WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent) : QtGameWidget(resolution, format, parent)
+WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, int wzAppQEventType, QWidget *parent)
+	: QtGameWidget(resolution, format, parent)
+	, wzAppQEventType(wzAppQEventType)
 {
 	myself = this;
 	notReadyToPaint = true;
