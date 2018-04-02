@@ -378,9 +378,9 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 			// Add the selected map first, for mapmod support
 			if (current_map != nullptr)
 			{
-				QString realPathAndDir = QString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
-				realPathAndDir.replace('/', PHYSFS_getDirSeparator()); // Windows fix
-				PHYSFS_mount(realPathAndDir.toUtf8().constData(), NULL, PHYSFS_APPEND);
+				WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
+				realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
+				PHYSFS_mount(realPathAndDir.toUtf8().c_str(), NULL, PHYSFS_APPEND);
 			}
 			curSearchPath = searchPathRegistry;
 			while (curSearchPath->lowerPriority)
