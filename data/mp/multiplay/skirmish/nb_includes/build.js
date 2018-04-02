@@ -1,7 +1,7 @@
 
 /*
  * This file describes building construction procedures.
- * 
+ *
  */
 
 (function(_global) {
@@ -13,7 +13,7 @@ function randomLocation() {
 	if (x < 3 || y < 3 || x > mapWidth - 4 || y > mapHeight - 4)
 		return baseLocation;
 	return {x: x, y: y};
-	
+
 }
 
 // a function for checking the presence of enemy units at the construction site
@@ -49,8 +49,8 @@ function getTwoFreeTrucks() {
 }
 
 function getFreeTruckAround(x, y) {
-	var list = enumTrucks().filter(truckFree).filter(function(droid) { 
-		return droidCanReach(droid, x, y); 
+	var list = enumTrucks().filter(truckFree).filter(function(droid) {
+		return droidCanReach(droid, x, y);
 	}).sort(function(one, two) {
 		return distance(one, x, y) - distance(two, x, y);
 	});
@@ -68,7 +68,7 @@ function buildModule(struct) {
 	if (struct.modules >= moduleInfo.count)
 		return BUILDRET.UNAVAILABLE;
 	var success = false;
-	for (var i = 0; i < trucks.length; ++i) 
+	for (var i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, moduleInfo.module, struct.x, struct.y) || success;
 	if (success)
 		return BUILDRET.SUCCESS;
@@ -83,7 +83,7 @@ function buildBasicStructure(statlist, importance) {
 	trucks = getTwoFreeTrucks();
 	if (trucks.length <= 0)
 		return BUILDRET.FAILURE;
-	// choose structure type (out of the statlist), 
+	// choose structure type (out of the statlist),
 	// together with suitable location
 	var idx, loc, avail = false;
 	for (var i = 0; i < statlist.length; ++i)
@@ -106,7 +106,7 @@ function buildBasicStructure(statlist, importance) {
 		return BUILDRET.FAILURE;
 	// now actually build
 	var success = false;
-	for (var i = 0; i < trucks.length; ++i) 
+	for (var i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, statlist[idx], loc.x, loc.y) || success;
 	if (success)
 		return BUILDRET.SUCCESS;
@@ -155,7 +155,7 @@ function buildStructureAround(statlist, loc, unique) {
 	// if we're not into turtling, don't build too many towers
 	if (personality.defensiveness < 100 && distance(loc2, loc) > baseScale / 5)
 		return BUILDRET.FAILURE;
-	if (orderDroidBuild(truck, DORDER_BUILD, stat, loc2.x, loc2.y)) 
+	if (orderDroidBuild(truck, DORDER_BUILD, stat, loc2.x, loc2.y))
 		return BUILDRET.SUCCESS;
 	return BUILDRET.FAILURE;
 }
@@ -171,7 +171,7 @@ function captureOil(oil) {
 		return BUILDRET.UNAVAILABLE;
 	if (throttled(90000, oil.y * mapWidth + oil.x))
 		return BUILDRET.FAILURE;
-	if (orderDroidBuild(truck, DORDER_BUILD, stat, oil.x, oil.y)) 
+	if (orderDroidBuild(truck, DORDER_BUILD, stat, oil.x, oil.y))
 		return BUILDRET.SUCCESS;
 	return BUILDRET.FAILURE;
 }
@@ -190,25 +190,32 @@ function buildTowers() {
 }
 
 function buildGateways() {
-	var oils = countStructList(structures.derricks);
-	if (oils <= 0)
-		return BUILDRET.FAILURE;
-	var gates = enumGateways().filter(function(gate) {
-		var l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
-		if (l < 0)
-			l = -l;
-		var cnt = enumRange(gate.x1, gate.y1, l, ALLIES).filterProperty("stattype", DEFENSE).length;
-		cnt    += enumRange(gate.x2, gate.y2, l, ALLIES).filterProperty("stattype", DEFENSE).length;
-		cnt    -= enumRange(gate.x1, gate.y1, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
-		cnt    -= enumRange(gate.x2, gate.y2, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
-		return cnt >= 0 && (cnt < l || (personality.defensiveness === 100 && withChance(70))); // turtle AI needs to keep building towers
-	}).sort(function(one, two) { return distanceToBase({x: one.x1, y: one.y1}) - distanceToBase({x: two.x1, y: two.y1}); });
-	if (gates.length === 0)
-		return;
-	if (withChance(50))
-		return buildStructureAround(chooseDefense(DEFROLE.GATEWAY), {x: gates[0].x1, y: gates[0].y1}) !== BUILDRET.UNAVAILABLE;
-	else
-		return buildStructureAround(chooseDefense(DEFROLE.GATEWAY), {x: gates[0].x2, y: gates[0].y2}) !== BUILDRET.UNAVAILABLE;
+	function uncached() {
+		var oils = countStructList(structures.derricks);
+		if (oils <= 0)
+			return BUILDRET.FAILURE;
+		// lets not cycle through all gateways on the map
+		var gates = whereAreTheGateways();
+		if (gates.length === 0)
+			return BUILDRET.FAILURE;
+		var gates = gates.filter(function(gate) {
+			var l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
+			if (l < 0)
+				l = -l;
+			var cnt = enumRange(gate.x1, gate.y1, l, ALLIES).filterProperty("stattype", DEFENSE).length;
+			cnt    += enumRange(gate.x2, gate.y2, l, ALLIES).filterProperty("stattype", DEFENSE).length;
+			cnt    -= enumRange(gate.x1, gate.y1, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
+			cnt    -= enumRange(gate.x2, gate.y2, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
+			return cnt >= 0 && (cnt < l || (personality.defensiveness === 100 && withChance(70))); // turtle AI needs to keep building towers
+		}).sort(function(one, two) { return distanceToBase({x: one.x1, y: one.y1}) - distanceToBase({x: two.x1, y: two.y1}); });
+		if (gates.length === 0)
+			return BUILDRET.FAILURE;
+		if (withChance(50))
+			return buildStructureAround(chooseDefense(DEFROLE.GATEWAY), {x: gates[0].x1, y: gates[0].y1}) !== BUILDRET.UNAVAILABLE;
+		else
+			return buildStructureAround(chooseDefense(DEFROLE.GATEWAY), {x: gates[0].x2, y: gates[0].y2}) !== BUILDRET.UNAVAILABLE;
+	}
+	return cached(uncached, 200);
 }
 
 function buildArty() {
@@ -315,11 +322,11 @@ function buildExtras() {
 _global.buildDefenses = function() {
 	if (chooseObjectType() !== 2)
 		return false;
-	if (withChance(33)) {
-		if (buildTowers()) // includes sensor towers and forts
+	if (withChance(33) && areThereGW() === true) {
+		if (buildGateways())
 			return true;
 	} else if (withChance(50)) {
-		if (buildGateways())
+		if (buildTowers()) // includes sensor towers and forts
 			return true;
 	} else
 		if (buildArty())

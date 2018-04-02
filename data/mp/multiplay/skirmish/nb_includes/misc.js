@@ -54,3 +54,21 @@ function enumTrucks() {
 function goEasy() {
 	personality = randomItem(subpersonalities);
 }
+
+function areThereGW() {
+	function uncached() {	//should only need to be evaluated once at the start
+		if(enumGateways().length > 0)
+			return true;
+		return false;
+	}
+	return cached(uncached, Infinity);
+}
+
+function whereAreTheGateways(){
+	function uncached() {	//should only need to be evaluated once at the start
+		var gateways = [];
+		gateways = enumGateways();
+		return gateways;
+	}
+	return cached(uncached, Infinity);
+}
