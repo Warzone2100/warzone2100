@@ -5298,10 +5298,6 @@ void buildingComplete(STRUCTURE *psBuilding)
 		break;
 	case REF_RESOURCE_EXTRACTOR:
 		checkForPowerGen(psBuilding);
-		if (selectedPlayer == psBuilding->player)
-		{
-			audio_PlayObjStaticTrack(psBuilding, ID_SOUND_OIL_PUMP_2);
-		}
 		break;
 	case REF_RESEARCH:
 		//this deals with research facilities that are upgraded whilst mid-research

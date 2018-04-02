@@ -5266,10 +5266,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				break;
 			case REF_RESOURCE_EXTRACTOR:
 				checkForPowerGen(psStructure);
-				if (selectedPlayer == psStructure->player)
-				{
-					audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
-				}
 				break;
 			default:
 				//do nothing for factories etc
