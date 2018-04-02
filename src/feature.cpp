@@ -79,7 +79,7 @@ bool loadFeatureStats(const char *pFileName)
 		FEATURE_STATS *p = &asFeatureStats[i];
 		p->name = ini.string(WzString::fromUtf8("name"));
 		p->id = list[i];
-		QString subType = ini.value("type").toString();
+		WzString subType = ini.value("type").toWzString();
 		if (subType == "TANK WRECK")
 		{
 			p->subType = FEAT_TANK;
@@ -118,7 +118,7 @@ bool loadFeatureStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT(false, "Unknown feature type: %s", subType.toUtf8().constData());
+			ASSERT(false, "Unknown feature type: %s", subType.toUtf8().c_str());
 		}
 		p->psImd = modelGet(ini.value("model").toWzString());
 		p->baseWidth = ini.value("width", 1).toInt();
