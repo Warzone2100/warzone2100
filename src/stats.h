@@ -173,10 +173,10 @@ UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 
 /// Get the component index for a component based on the name, verifying with type.
 /// It is currently identical to getCompFromID, but may not be in the future.
-int getCompFromName(COMPONENT_TYPE compType, const QString &name);
+int getCompFromName(COMPONENT_TYPE compType, const WzString &name);
 
 /// This function only allows you to use the old, deprecated ID name.
-int getCompFromID(COMPONENT_TYPE compType, const QString &name);
+int getCompFromID(COMPONENT_TYPE compType, const WzString &name);
 
 /// Get the component pointer for a component based on the name
 COMPONENT_STATS *getCompStatsFromName(const WzString &name);
@@ -256,7 +256,7 @@ WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 void statsInitVars();
 
 bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect);
-bool getWeaponClass(const QString& weaponClassStr, WEAPON_CLASS *weaponClass);
+bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass);
 
 /* Wrappers */
 

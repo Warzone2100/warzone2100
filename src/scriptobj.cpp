@@ -863,7 +863,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_BODY:
-		index = getCompFromName(COMP_BODY, ini.value("data").toString());
+		index = getCompFromName(COMP_BODY, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find body component");
@@ -872,7 +872,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_PROPULSION:
-		index = getCompFromName(COMP_PROPULSION, ini.value("data").toString());
+		index = getCompFromName(COMP_PROPULSION, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find propulsion component");
@@ -881,7 +881,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_ECM:
-		index = getCompFromName(COMP_ECM, ini.value("data").toString());
+		index = getCompFromName(COMP_ECM, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find ECM component");
@@ -890,7 +890,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_SENSOR:
-		index = getCompFromName(COMP_SENSOR, ini.value("data").toString());
+		index = getCompFromName(COMP_SENSOR, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find sensor component");
@@ -899,7 +899,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_CONSTRUCT:
-		index = getCompFromName(COMP_CONSTRUCT, ini.value("data").toString());
+		index = getCompFromName(COMP_CONSTRUCT, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find constructor component");
@@ -908,7 +908,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_WEAPON:
-		index = getCompFromName(COMP_WEAPON, ini.value("data").toString());
+		index = getCompFromName(COMP_WEAPON, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find weapon");
@@ -917,7 +917,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_REPAIR:
-		index = getCompFromName(COMP_REPAIRUNIT, ini.value("data").toString());
+		index = getCompFromName(COMP_REPAIRUNIT, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find repair component");
@@ -926,7 +926,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_BRAIN:
-		index = getCompFromName(COMP_BRAIN, ini.value("data").toString());
+		index = getCompFromName(COMP_BRAIN, ini.value("data").toWzString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find repair brain");

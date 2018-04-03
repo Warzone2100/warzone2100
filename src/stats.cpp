@@ -25,7 +25,6 @@
  */
 #include <string.h>
 #include <algorithm>
-#include <QtCore/QHash>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -93,7 +92,7 @@ UBYTE		*apStructTypeLists[MAX_PLAYERS];
 static std::unordered_map<WzString, BASE_STATS *> lookupStatPtr;
 
 static bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model);
-static bool statsGetAudioIDFromString(const WzString &szStatName, const QString &szWavName, int *piWavID);
+static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString &szWavName, int *piWavID);
 
 //Access functions for the max values to be used in the Design Screen
 static void setMaxComponentWeight(UDWORD weight);
@@ -284,7 +283,7 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
 	psStats->pBase->hitpoints = json.value("hitpoints", 0).toUInt();
 	psStats->pBase->hitpointPct = json.value("hitpointPct", 100).toUInt();
 
-	QString dtype = json.value("droidType", "DROID").toString();
+	WzString dtype = json.value("droidType", "DROID").toWzString();
 	psStats->droidTypeOverride = DROID_ANY;
 	if (dtype.compare("PERSON") == 0)
 	{
@@ -332,7 +331,7 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
 	}
 	else if (dtype.compare("DROID") != 0)
 	{
-		debug(LOG_ERROR, "Unrecognized droidType %s", dtype.toUtf8().constData());
+		debug(LOG_ERROR, "Unrecognized droidType %s", dtype.toUtf8().c_str());
 	}
 }
 
@@ -349,7 +348,7 @@ bool loadWeaponStats(const char *pFileName)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		WEAPON_STATS *psStats = &asWeaponStats[i];
-		QStringList flags;
+		std::vector<WzString> flags;
 
 		ini.beginGroup(list[i]);
 		loadCompStats(ini, psStats, i);
@@ -388,7 +387,14 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->maxElevation = ini.value("maxElevation").toInt();
 		psStats->recoilValue = ini.value("recoilValue").toUInt();
 		psStats->effectSize = ini.value("effectSize").toUInt();
-		flags = ini.value("flags", 0).toStringList();
+		std::vector<WzString> flags_raw = ini.value("flags", 0).toWzStringList();
+		// convert flags entries to lowercase
+		std::transform(
+					   flags_raw.begin(),
+					   flags_raw.end(),
+					   std::back_inserter(flags),
+					   [](const WzString& in) { return in.toLower(); }
+		);
 		psStats->vtolAttackRuns = ini.value("numAttackRuns", 0).toUInt();
 		psStats->penetrate = ini.value("penetrate", false).toBool();
 		// weapon size limitation
@@ -415,7 +421,7 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->fireOnMove = ini.value("fireOnMove", true).toBool();
 
 		//set the weapon class
-		if (!getWeaponClass(ini.value("weaponClass").toString(), &psStats->weaponClass))
+		if (!getWeaponClass(ini.value("weaponClass").toWzString(), &psStats->weaponClass))
 		{
 			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getName(psStats));
 			psStats->weaponClass = WC_KINETIC;
@@ -449,7 +455,7 @@ bool loadWeaponStats(const char *pFileName)
 		}
 
 		//set periodical damage weapon class
-		QString periodicalDamageWeaponClass = ini.value("periodicalDamageWeaponClass", "").toString();
+		WzString periodicalDamageWeaponClass = ini.value("periodicalDamageWeaponClass", "").toWzString();
 		if (periodicalDamageWeaponClass.compare("") == 0)
 		{
 			//was not setted in ini - use default value
@@ -462,26 +468,26 @@ bool loadWeaponStats(const char *pFileName)
 		}
 
 		//set periodical damage weapon subclass
-		QString periodicalDamageWeaponSubClass = ini.value("periodicalDamageWeaponSubClass", "").toString();
+		WzString periodicalDamageWeaponSubClass = ini.value("periodicalDamageWeaponSubClass", "").toWzString();
 		if (periodicalDamageWeaponSubClass.compare("") == 0)
 		{
 			//was not setted in ini - use default value
 			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
 		}
-		else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().data(), &psStats->periodicalDamageWeaponSubClass))
+		else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().c_str(), &psStats->periodicalDamageWeaponSubClass))
 		{
 			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getName(psStats));
 			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
 		}
 
 		//set periodical damage weapon effect
-		QString periodicalDamageWeaponEffect = ini.value("periodicalDamageWeaponEffect", "").toString();
+		WzString periodicalDamageWeaponEffect = ini.value("periodicalDamageWeaponEffect", "").toWzString();
 		if (periodicalDamageWeaponEffect.compare("") == 0)
 		{
 			//was not setted in ini - use default value
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
 		}
-		else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().data(), &psStats->periodicalDamageWeaponEffect))
+		else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().c_str(), &psStats->periodicalDamageWeaponEffect))
 		{
 			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getName(psStats));
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
@@ -504,15 +510,15 @@ bool loadWeaponStats(const char *pFileName)
 
 		// interpret flags
 		psStats->surfaceToAir = SHOOT_ON_GROUND; // default
-		if (flags.contains("AirOnly", Qt::CaseInsensitive))
+		if (std::find(flags.begin(), flags.end(), "aironly") != flags.end()) // "AirOnly"
 		{
 			psStats->surfaceToAir = SHOOT_IN_AIR;
 		}
-		else if (flags.contains("ShootAir", Qt::CaseInsensitive))
+		else if (std::find(flags.begin(), flags.end(), "shootair") != flags.end()) // "ShootAir"
 		{
 			psStats->surfaceToAir |= SHOOT_IN_AIR;
 		}
-		if (flags.contains("NoFriendlyFire", Qt::CaseInsensitive))
+		if (std::find(flags.begin(), flags.end(), "nofriendlyfire") != flags.end()) // "NoFriendlyFire"
 		{
 			psStats->flags.set(WEAPON_FLAG_NO_FRIENDLY_FIRE, true);
 		}
@@ -523,12 +529,12 @@ bool loadWeaponStats(const char *pFileName)
 
 		// load sounds
 		int weaponSoundID, explosionSoundID;
-		QString szWeaponWav = ini.value("weaponWav", "-1").toString();
-		QString szExplosionWav = ini.value("explosionWav", "-1").toString();
+		WzString szWeaponWav = ini.value("weaponWav", "-1").toWzString();
+		WzString szExplosionWav = ini.value("explosionWav", "-1").toWzString();
 		bool result = statsGetAudioIDFromString(list[i], szWeaponWav, &weaponSoundID);
-		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().constData(), getName(psStats));
+		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().c_str(), getName(psStats));
 		result = statsGetAudioIDFromString(list[i], szExplosionWav, &explosionSoundID);
-		ASSERT_OR_RETURN(false, result, "Explosion sound %s not found for %s", szExplosionWav.toUtf8().constData(), getName(psStats));
+		ASSERT_OR_RETURN(false, result, "Explosion sound %s not found for %s", szExplosionWav.toUtf8().c_str(), getName(psStats));
 		psStats->iAudioFireID = weaponSoundID;
 		psStats->iAudioImpactID = explosionSoundID;
 
@@ -608,7 +614,7 @@ bool loadBodyStats(const char *pFileName)
 	}
 	for (int i = 0; i < list.size(); ++i)
 	{
-		QString propulsionName, leftIMD, rightIMD;
+		WzString propulsionName, leftIMD, rightIMD;
 		BODY_STATS *psBodyStat = nullptr;
 		int numStats;
 
@@ -705,7 +711,7 @@ bool loadBrainStats(const char *pFileName)
 		psStats->psWeaponStat = nullptr;
 		if (ini.contains("turret"))
 		{
-			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toString());
+			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toWzString());
 			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getName(psStats));
 			psStats->psWeaponStat = asWeaponStats + weapon;
 		}
@@ -854,7 +860,7 @@ bool loadSensorStats(const char *pFileName)
 
 		psStats->ref = REF_SENSOR_START + i;
 
-		QString location = ini.value("location").toString();
+		WzString location = ini.value("location").toWzString();
 		if (location.compare("DEFAULT") == 0)
 		{
 			psStats->location = LOC_DEFAULT;
@@ -865,9 +871,9 @@ bool loadSensorStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT(false, "Invalid Sensor location");
+			ASSERT(false, "Invalid Sensor location: %s", location.toUtf8().c_str());
 		}
-		QString type = ini.value("type").toString();
+		WzString type = ini.value("type").toWzString();
 		if (type.compare("STANDARD") == 0)
 		{
 			psStats->type = STANDARD_SENSOR;
@@ -894,7 +900,7 @@ bool loadSensorStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT(false, "Invalid Sensor type");
+			ASSERT(false, "Invalid Sensor type: %s", type.toUtf8().c_str());
 		}
 
 		//get the IMD for the component
@@ -940,7 +946,7 @@ bool loadECMStats(const char *pFileName)
 
 		psStats->ref = REF_ECM_START + i;
 
-		QString location = ini.value("location").toString();
+		WzString location = ini.value("location").toWzString();
 		if (location.compare("DEFAULT") == 0)
 		{
 			psStats->location = LOC_DEFAULT;
@@ -951,7 +957,7 @@ bool loadECMStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT(false, "Invalid ECM location");
+			ASSERT(false, "Invalid ECM location: %s", location.toUtf8().c_str());
 		}
 
 		//get the IMD for the component
@@ -997,7 +1003,7 @@ bool loadRepairStats(const char *pFileName)
 
 		psStats->ref = REF_REPAIR_START + i;
 
-		QString location = ini.value("location").toString();
+		WzString location = ini.value("location").toWzString();
 		if (location.compare("DEFAULT") == 0)
 		{
 			psStats->location = LOC_DEFAULT;
@@ -1008,7 +1014,7 @@ bool loadRepairStats(const char *pFileName)
 		}
 		else
 		{
-			ASSERT(false, "Invalid Repair location");
+			ASSERT(false, "Invalid Repair location: %s", location.toUtf8().c_str());
 		}
 
 		//check its not 0 since we will be dividing by it at a later stage
@@ -1100,7 +1106,7 @@ bool loadPropulsionTypes(const char *pFileName)
 
 		pPropType = asPropulsionTypes + type;
 
-		QString flightName = ini.value("flightName").toString();
+		WzString flightName = ini.value("flightName").toWzString();
 		if (flightName.compare("GROUND") == 0)
 		{
 			pPropType->travel = GROUND;
@@ -1111,7 +1117,7 @@ bool loadPropulsionTypes(const char *pFileName)
 		}
 		else
 		{
-			ASSERT(false, "Invalid travel type for Propulsion");
+			ASSERT(false, "Invalid travel type for Propulsion: %s", flightName.toUtf8().c_str());
 		}
 
 		//don't care about this anymore! AB FRIDAY 13/11/98
@@ -1161,15 +1167,15 @@ bool loadTerrainTable(const char *pFileName)
 	return true;
 }
 
-static bool statsGetAudioIDFromString(const WzString &szStatName, const QString &szWavName, int *piWavID)
+static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString &szWavName, int *piWavID)
 {
 	if (szWavName.compare("-1") == 0)
 	{
 		*piWavID = NO_SOUND;
 	}
-	else if ((*piWavID = audio_GetIDFromStr(szWavName.toUtf8().constData())) == NO_SOUND)
+	else if ((*piWavID = audio_GetIDFromStr(szWavName.toUtf8().c_str())) == NO_SOUND)
 	{
-		debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName.toUtf8().constData());
+		debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName.toUtf8().c_str());
 		return false;
 	}
 	if ((*piWavID < 0 || *piWavID > ID_MAX_SOUND) && *piWavID != NO_SOUND)
@@ -1247,27 +1253,27 @@ bool loadPropulsionSounds(const char *pFileName)
 	for (i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		if (!statsGetAudioIDFromString(list[i], ini.value("szStart").toString(), &startID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szStart").toWzString(), &startID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i], ini.value("szIdle").toString(), &idleID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szIdle").toWzString(), &idleID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i], ini.value("szMoveOff").toString(), &moveOffID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szMoveOff").toWzString(), &moveOffID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i], ini.value("szMove").toString(), &moveID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szMove").toWzString(), &moveID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i], ini.value("szHiss").toString(), &hissID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szHiss").toWzString(), &hissID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i], ini.value("szShutDown").toString(), &shutDownID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szShutDown").toWzString(), &shutDownID))
 		{
 			return false;
 		}
@@ -1401,21 +1407,21 @@ UDWORD statRefStart(UDWORD stat)
 	return start;
 }
 
-int getCompFromName(COMPONENT_TYPE compType, const QString &name)
+int getCompFromName(COMPONENT_TYPE compType, const WzString &name)
 {
 	return getCompFromID(compType, name);
 }
 
-int getCompFromID(COMPONENT_TYPE compType, const QString &name)
+int getCompFromID(COMPONENT_TYPE compType, const WzString &name)
 {
 	COMPONENT_STATS *psComp = nullptr;
-	auto it = lookupStatPtr.find(WzString::fromUtf8(name.toUtf8().constData()));
+	auto it = lookupStatPtr.find(WzString::fromUtf8(name.toUtf8().c_str()));
 	if (it != lookupStatPtr.end())
 	{
 		psComp = (COMPONENT_STATS *)it->second;
 	}
-	ASSERT_OR_RETURN(-1, psComp, "No such component ID [%s] found", name.toUtf8().constData());
-	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for ID %s", name.toUtf8().constData());
+	ASSERT_OR_RETURN(-1, psComp, "No such component ID [%s] found", name.toUtf8().c_str());
+	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for ID %s", name.toUtf8().c_str());
 	return psComp->index;
 }
 
@@ -1653,7 +1659,7 @@ bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect)
 	return true;
 }
 
-bool getWeaponClass(const QString& weaponClassStr, WEAPON_CLASS *weaponClass)
+bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass)
 {
 	if (weaponClassStr.compare("KINETIC") == 0)
 	{
@@ -1665,7 +1671,7 @@ bool getWeaponClass(const QString& weaponClassStr, WEAPON_CLASS *weaponClass)
 	}
 	else
 	{
-		ASSERT(false, "Bad weapon class %s", weaponClassStr.toUtf8().constData());
+		ASSERT(false, "Bad weapon class %s", weaponClassStr.toUtf8().c_str());
 		return false;
 	};
 	return true;

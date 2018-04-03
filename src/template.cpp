@@ -161,18 +161,19 @@ DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 		ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
 	}
 
-	design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body").toString());
-	design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString());
-	design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString());
-	design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString());
-	design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString());
-	design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString());
-	design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString());
-	QStringList weapons = ini.value("weapons").toStringList();
+	design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body").toWzString());
+	design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toWzString());
+	design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toWzString());
+	design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toWzString());
+	design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toWzString());
+	design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toWzString());
+	design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toWzString());
+	std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
+	ASSERT(weapons.size() <= MAX_WEAPONS, "Number of weapons (%lu) exceeds MAX_WEAPONS (%d)", weapons.size(), MAX_WEAPONS);
 	design.numWeaps = weapons.size();
-	design.asWeaps[0] = getCompFromName(COMP_WEAPON, weapons.value(0, QString("ZNULLWEAPON")));
-	design.asWeaps[1] = getCompFromName(COMP_WEAPON, weapons.value(1, QString("ZNULLWEAPON")));
-	design.asWeaps[2] = getCompFromName(COMP_WEAPON, weapons.value(2, QString("ZNULLWEAPON")));
+	design.asWeaps[0] = getCompFromName(COMP_WEAPON, (weapons.size() >= 1) ? weapons[0] : "ZNULLWEAPON");
+	design.asWeaps[1] = getCompFromName(COMP_WEAPON, (weapons.size() >= 2) ? weapons[1] : "ZNULLWEAPON");
+	design.asWeaps[2] = getCompFromName(COMP_WEAPON, (weapons.size() >= 3) ? weapons[2] : "ZNULLWEAPON");
 
 	return design;
 }

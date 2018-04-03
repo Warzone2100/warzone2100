@@ -495,7 +495,7 @@ bool loadStructureStats(const WzString& filename)
 		}
 
 		psStats->flags = 0;
-		QStringList flags = ini.value("flags").toStringList();
+		std::vector<WzString> flags = ini.value("flags").toWzStringList();
 		for (int i = 0; i < flags.size(); i++)
 		{
 			if (flags[i] == "Connected")
@@ -539,24 +539,24 @@ bool loadStructureStats(const WzString& filename)
 			psStats->pBaseIMD = imd;
 		}
 
-		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toString());
+		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toWzString());
 		ASSERT(ecm >= 0, "Invalid ECM found for '%s'", getID(psStats));
 		psStats->pECM = asECMStats + ecm;
 
-		int sensor = getCompFromName(COMP_SENSOR, ini.value("sensorID", "ZNULLSENSOR").toString());
+		int sensor = getCompFromName(COMP_SENSOR, ini.value("sensorID", "ZNULLSENSOR").toWzString());
 		ASSERT(sensor >= 0, "Invalid sensor found for structure '%s'", getID(psStats));
 		psStats->pSensor = asSensorStats + sensor;
 
 		// set list of weapons
 		std::fill_n(psStats->psWeapStat, MAX_WEAPONS, (WEAPON_STATS *)nullptr);
-		QStringList weapons = ini.value("weapons").toStringList();
+		std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
 		ASSERT_OR_RETURN(false, weapons.size() <= MAX_WEAPONS, "Too many weapons are attached to structure '%s'. Maximum is %d", getID(psStats), MAX_WEAPONS);
 		psStats->numWeaps = weapons.size();
 		for (int j = 0; j < psStats->numWeaps; j++)
 		{
-			QString weaponsID = weapons[j].trimmed();
+			WzString weaponsID = weapons[j].trimmed();
 			int weapon = getCompFromName(COMP_WEAPON, weaponsID);
-			ASSERT_OR_RETURN(false, weapon >= 0, "Invalid item '%s' in list of weapons of structure '%s' ", weaponsID.toUtf8().constData(), getID(psStats));
+			ASSERT_OR_RETURN(false, weapon >= 0, "Invalid item '%s' in list of weapons of structure '%s' ", weaponsID.toUtf8().c_str(), getID(psStats));
 			WEAPON_STATS *pWeap = asWeaponStats + weapon;
 			psStats->psWeapStat[j] = pWeap;
 		}

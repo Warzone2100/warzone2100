@@ -133,6 +133,9 @@ static QStandardItemModel *labelModel = nullptr;
 #define WzStringToQScriptValue(_engine, _wzstring) \
 	QScriptValue(_engine, QString::fromUtf8(_wzstring.toUtf8().c_str()))
 
+#define QStringToWzString(_qstring) \
+	WzString::fromUtf8(_qstring.toUtf8().constData())
+
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
@@ -1082,7 +1085,7 @@ bool writeLabels(const char *filename)
 static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *engine)
 {
 	QString id = context->argument(0).toString();
-	int idx = getCompFromName(COMP_WEAPON, id);
+	int idx = getCompFromName(COMP_WEAPON, QStringToWzString(id));
 	SCRIPT_ASSERT(context, idx >= 0, "No such weapon: %s", id.toUtf8().constData());
 	WEAPON_STATS *psStats = asWeaponStats + idx;
 	QScriptValue info = engine->newObject();
@@ -1724,7 +1727,7 @@ static int get_first_available_component(int player, int capacity, const QScript
 		for (k = 0; k < length; k++)
 		{
 			QString compName = list.property(k).toString();
-			int result = getCompFromName(type, compName);
+			int result = getCompFromName(type, QStringToWzString(compName));
 			if (result >= 0 && (apCompLists[player][type][result] == AVAILABLE || !strict)
 			    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 			{
@@ -1738,7 +1741,7 @@ static int get_first_available_component(int player, int capacity, const QScript
 	}
 	else if (list.isString())
 	{
-		int result = getCompFromName(type, list.toString());
+		int result = getCompFromName(type, QStringToWzString(list.toString()));
 		if (result >= 0 && (apCompLists[player][type][result] == AVAILABLE || !strict)
 		    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 		{
@@ -2615,7 +2618,7 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 static QScriptValue js_propulsionCanReach(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue propulsionValue = context->argument(0);
-	int propulsion = getCompFromName(COMP_PROPULSION, propulsionValue.toString());
+	int propulsion = getCompFromName(COMP_PROPULSION, QStringToWzString(propulsionValue.toString()));
 	SCRIPT_ASSERT(context, propulsion > 0, "No such propulsion: %s", propulsionValue.toString().toUtf8().constData());
 	int x1 = context->argument(1).toInt32();
 	int y1 = context->argument(2).toInt32();
@@ -4761,7 +4764,7 @@ static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
 	int yLocation = context->argument(1).toInt32();
 
 	QScriptValue weaponValue = context->argument(2);
-	int weapon = getCompFromName(COMP_WEAPON, weaponValue.toString());
+	int weapon = getCompFromName(COMP_WEAPON, QStringToWzString(weaponValue.toString()));
 	SCRIPT_ASSERT(context, weapon > 0, "No such weapon: %s", weaponValue.toString().toUtf8().constData());
 
 	Vector3i target;
