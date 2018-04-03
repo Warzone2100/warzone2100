@@ -367,7 +367,7 @@ struct RETBUTSTATS
 	WzString filename;
 	WzString filenameDown;
 	std::string tip;
-	QString func;
+	WzString func;
 	bool flashing = false;
 	int flashTime = 0;
 	W_BUTTON *button = nullptr;
@@ -384,7 +384,7 @@ void setReticuleFlash(int ButId, bool flash)
 	}
 }
 
-void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, QString func, QScriptEngine *engine)
+void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, WzString func, QScriptEngine *engine)
 {
 	retbutstats[ButId].tip = tip;
 	retbutstats[ButId].filename = WzString::fromUtf8(filename.c_str());
@@ -3687,7 +3687,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		statList->addWidgetToLayout(button);
 
 		BASE_STATS *Stat = ppsStatsList[i];
-		QString tipString = getName(ppsStatsList[i]);
+		WzString tipString = getName(ppsStatsList[i]);
 		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
 		if (Stat->ref >= REF_STRUCTURE_START &&
@@ -3802,8 +3802,10 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
 		}
-		tipString.append(QString::fromUtf8(_("\nCost: %1")).arg(powerCost));
-		button->setTip(tipString.toUtf8().constData());
+		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
+		costString.replace("%1", WzString::number(powerCost));
+		tipString.append(costString);
+		button->setTip(tipString.toUtf8().c_str());
 
 		/* If this matches psSelected note the form and button */
 		if (ppsStatsList[i] == psSelected)

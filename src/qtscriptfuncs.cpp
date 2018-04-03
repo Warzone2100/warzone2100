@@ -3346,10 +3346,10 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	std::string tip = std::string(context->argument(1).toString().toUtf8().constData());
 	std::string file = std::string(context->argument(2).toString().toUtf8().constData());
 	std::string fileDown = std::string(context->argument(3).toString().toUtf8().constData());
-	QString func;
+	WzString func;
 	if (context->argumentCount() > 4)
 	{
-		func = context->argument(4).toString();
+		func = QStringToWzString(context->argument(4).toString());
 	}
 	setReticuleStats(button, tip, file, fileDown, func, engine);
 	return QScriptValue();

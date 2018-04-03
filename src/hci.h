@@ -296,7 +296,7 @@ void intDisplayWidgets();
 bool intAddReticule();
 bool intAddPower();
 void intRemoveReticule();
-void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), QString func = QString(), QScriptEngine *engine = nullptr);
+void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), WzString func = WzString(), QScriptEngine *engine = nullptr);
 void setReticuleFlash(int ButId, bool flash);
 
 /* Set the map view point to the world coordinates x,y */

@@ -108,7 +108,7 @@ void jsAutogameSpecific(const QString &name, int player);
 bool jsEvaluate(QScriptEngine *engine, const QString &text);
 
 /// Run a named script callback
-bool namedScriptCallback(QScriptEngine *engine, const QString& func, int player);
+bool namedScriptCallback(QScriptEngine *engine, const WzString& func, int player);
 
 // ----------------------------------------------
 // Event functions
