@@ -1785,12 +1785,12 @@ bool triggerEventKeyPressed(int meta, int key)
 	return true;
 }
 
-bool namedScriptCallback(QScriptEngine *engine, const QString& func, int player)
+bool namedScriptCallback(QScriptEngine *engine, const WzString& func, int player)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	QScriptValueList args;
 	args += QScriptValue(player);
-	callFunction(engine, func, args);
+	callFunction(engine, QString::fromUtf8(func.toUtf8().c_str()), args);
 	return true;
 }
 
