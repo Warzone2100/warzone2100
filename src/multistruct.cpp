@@ -285,8 +285,8 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 	{
 		int32_t droidType = pT->droidType;
-		QString name = QString::fromUtf8(pT->name.toUtf8().c_str());
-		NETqstring(name);
+		WzString name = pT->name;
+		NETwzstring(name);
 		NETuint32_t(&pT->multiPlayerID);
 		NETint32_t(&droidType);
 		NETuint8_t(&pT->asParts[COMP_BODY]);
@@ -320,9 +320,9 @@ void recvStructureInfo(NETQUEUE queue)
 	NETuint8_t(&structureInfo);
 	if (structureInfo == STRUCTUREINFO_MANUFACTURE)
 	{
-		QString name;
-		NETqstring(name);
-		pT->name = WzString::fromUtf8(name.toUtf8().constData());
+		WzString name;
+		NETwzstring(name);
+		pT->name = name;
 		NETuint32_t(&pT->multiPlayerID);
 		NETint32_t(&droidType);
 		NETuint8_t(&pT->asParts[COMP_BODY]);
