@@ -337,8 +337,8 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETPosition(&pos);
-		QString name = QString::fromUtf8(pTemplate->name.toUtf8().c_str());
-		NETqstring(name);
+		WzString name = pTemplate->name;
+		NETwzstring(name);
 		NETint32_t(&droidType);
 		NETuint8_t(&pTemplate->asParts[COMP_BODY]);
 		NETuint8_t(&pTemplate->asParts[COMP_BRAIN]);
@@ -385,9 +385,9 @@ bool recvDroid(NETQUEUE queue)
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETPosition(&pos);
-		QString name;
-		NETqstring(name);
-		pT->name = WzString::fromUtf8(name.toUtf8().constData());
+		WzString name;
+		NETwzstring(name);
+		pT->name = name;
 		pT->id = pT->name;
 		NETint32_t(&droidType);
 		NETuint8_t(&pT->asParts[COMP_BODY]);
