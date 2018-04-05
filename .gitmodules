@@ -10,3 +10,6 @@
 [submodule "3rdparty/theora"]
 	path = 3rdparty/theora
 	url = https://git.xiph.org/theora.git
+[submodule "3rdparty/utf8proc"]
+	path = 3rdparty/utf8proc
+	url = https://github.com/JuliaLang/utf8proc.git

@@ -774,6 +774,7 @@
 		D72B3A791F4E4C1F0011D653 /* gfx_api_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72B3A6D1F4E4C160011D653 /* gfx_api_gl.cpp */; };
 		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
 		D7CC6429204F234F004AEF50 /* wzstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7CC6428204F234F004AEF50 /* wzstring.cpp */; };
+		D7DA4DDA2076BB930072959F /* utf8proc.c in Sources */ = {isa = PBXBuildFile; fileRef = D7DA4DD82076BB8B0072959F /* utf8proc.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -2309,6 +2310,9 @@
 		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
 		D7CC641D204F2347004AEF50 /* wzstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wzstring.h; path = ../lib/framework/wzstring.h; sourceTree = "<group>"; };
 		D7CC6428204F234F004AEF50 /* wzstring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzstring.cpp; path = ../lib/framework/wzstring.cpp; sourceTree = "<group>"; };
+		D7DA4DD72076BB8B0072959F /* utf8proc_data.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = utf8proc_data.c; path = ../3rdparty/utf8proc/utf8proc_data.c; sourceTree = "<group>"; };
+		D7DA4DD82076BB8B0072959F /* utf8proc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = utf8proc.c; path = ../3rdparty/utf8proc/utf8proc.c; sourceTree = "<group>"; };
+		D7DA4DD92076BB8B0072959F /* utf8proc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = utf8proc.h; path = ../3rdparty/utf8proc/utf8proc.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3206,6 +3210,7 @@
 		430B59F010D45990008EA88A /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
+				D7DA4DCC2076BB620072959F /* utf8proc sources */,
 				BC3155961F439F0400B96A71 /* sha2 sources */,
 				BC3155921F4234D700B96A71 /* micro-ecc sources */,
 				BCC95CE31F3CDE8700A243A4 /* Harfbuzz sources */,
@@ -4124,6 +4129,16 @@
 				BCC95CE71F3CE47500A243A4 /* src */,
 			);
 			name = "FreeType sources";
+			sourceTree = "<group>";
+		};
+		D7DA4DCC2076BB620072959F /* utf8proc sources */ = {
+			isa = PBXGroup;
+			children = (
+				D7DA4DD72076BB8B0072959F /* utf8proc_data.c */,
+				D7DA4DD82076BB8B0072959F /* utf8proc.c */,
+				D7DA4DD92076BB8B0072959F /* utf8proc.h */,
+			);
+			name = "utf8proc sources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -5618,6 +5633,7 @@
 				0246A2DC0BD3CCDC004D1C70 /* multisync.cpp in Sources */,
 				0246A2DD0BD3CCDC004D1C70 /* objects.cpp in Sources */,
 				0246A2DE0BD3CCDC004D1C70 /* objmem.cpp in Sources */,
+				D7DA4DDA2076BB930072959F /* utf8proc.c in Sources */,
 				0246A2DF0BD3CCDC004D1C70 /* oprint.cpp in Sources */,
 				BCD210A21F3D82830028012B /* WZSDLAppDelegate.mm in Sources */,
 				0246A2E10BD3CCDC004D1C70 /* order.cpp in Sources */,

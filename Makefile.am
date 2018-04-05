@@ -4,11 +4,15 @@ else
 backend_subdir=lib/sdl
 endif
 
+UTF8PROC_DEFINES = -DUTF8PROC_STATIC
+AM_MAKEFLAGS = UTF8PROC_DEFINES=$(UTF8PROC_DEFINES)
+
 SUBDIRS = \
 	win32 \
 	3rdparty/miniupnpc \
 	3rdparty/micro-ecc \
 	3rdparty/sha2 \
+	3rdparty \
 	lib/framework \
 	lib/exceptionhandler \
 	lib/script \
