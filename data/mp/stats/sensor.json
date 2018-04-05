@@ -141,21 +141,6 @@
         "type": "INDIRECT CB",
         "weight": 100
     },
-    "Sys-NXLinkTurret01": {
-        "buildPoints": 100,
-        "buildPower": 20,
-        "designable": 1,
-        "hitpoints": 200,
-        "id": "Sys-NXLinkTurret01",
-        "location": "TURRET",
-        "mountModel": "TRMSNSR2.PIE",
-        "name": "Nexus Link",
-        "power": 1000,
-        "range": 2048,
-        "sensorModel": "GNMECM2.PIE",
-        "type": "STANDARD",
-        "weight": 100
-    },
     "Sys-VTOLCBTower01": {
         "buildPoints": 100,
         "buildPower": 20,

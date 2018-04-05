@@ -118,6 +118,7 @@
    * Fix: MXE compiler warnings (too many commits, ticket:4753)
    * Remove: Unused sensor turret properties in design menu (commit:c6b628e2c0c815467f0799c6c65e2f88d31585d3, ticket:4619)
    * Remove: Do not save showFPS configuration option twice (commit:55c77847e4137c219170fff80d0342a0742499dd, ticket:4645)
+   * Remove: Unused sensor "Nexus Link" (not the weapon with the same name!) (ticket:4768)
  * Modding:
    * Add: Ability to make weapon have no friendly fire with NoFriendlyFire (commit:d75ccdea67fb48f41b370a0c15cea3b6703f344e)
    * Change: Increase capacity of design, build and research screens (ticket:4677, ticket:4721)
