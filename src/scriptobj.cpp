@@ -731,14 +731,14 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 			const char *const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : nullptr;
 			if (idStr)
 			{
-				ini.setValue("data", QString(idStr));
+				ini.setValue("data", WzString(idStr));
 			}
 			break;
 		}
 	case ST_LEVEL:
 		if (psVal->v.sval)
 		{
-			ini.setValue("data", QString(psVal->v.sval));
+			ini.setValue("data", WzString(psVal->v.sval));
 		}
 		break;
 	case ST_RESEARCH:
@@ -755,13 +755,14 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 			if (psGroup)
 			{
 				const int members = psGroup->getNumMembers();
-				QStringList droids;
+				std::vector<WzString> droids;
 				for (psCDroid = psGroup->psList; psCDroid; psCDroid = psCDroid->psGrpNext)
 				{
 					checkValidId(psCDroid->id);
-					droids.push_back(QString::number(psCDroid->id));
+					droids.push_back(WzString::number(psCDroid->id));
 				}
-				ini.setValue("members", members);
+				ASSERT(members == droids.size(), "Group membership count");
+				ini.setValue("members", droids.size());
 				if (!droids.empty())
 				{
 					ini.setValue("data", droids);
@@ -970,11 +971,11 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.oval = nullptr;
 		if (ini.contains("data"))
 		{
-			QString research = ini.value("data").toString();
+			WzString research = ini.value("data").toWzString();
 			if (!research.isEmpty())
 			{
-				psVal->v.oval = (void *)getResearch(research.toUtf8().constData());
-				ASSERT_OR_RETURN(false, psVal->v.oval, "Could not find research %s", research.toUtf8().constData());
+				psVal->v.oval = (void *)getResearch(research.toUtf8().c_str());
+				ASSERT_OR_RETURN(false, psVal->v.oval, "Could not find research %s", research.toUtf8().c_str());
 			}
 		}
 		break;
@@ -989,7 +990,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		members = ini.value("members", 0).toInt();
 		if (psGroup && members > 0)
 		{
-			QStringList droids = ini.value("data").toStringList();
+			std::vector<WzString> droids = ini.value("data").toWzStringList();
 
 			// load the retreat data
 			psGroup->sRunData.sPos = ini.vector2i("runpos");
@@ -998,9 +999,11 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			psGroup->sRunData.healthLevel = ini.value("healthLevel").toInt();
 
 			// load the droids
-			while (members > 0)
+			size_t i = droids.size();
+			while (i > 0)
 			{
-				id = droids.takeLast().toInt();
+				i--;
+				id = droids[i].toInt();
 				psCDroid = (DROID *)getBaseObjFromId(id);
 				if (!psCDroid)
 				{
@@ -1010,7 +1013,6 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 				{
 					((DROID_GROUP *)(psVal->v.oval))->add(psCDroid);
 				}
-				members--;
 			}
 		}
 		break;
@@ -1028,12 +1030,12 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		if (index == SAMPLE_NOT_FOUND)
 		{
 			// find empty id and set track vals
-			QString soundname = ini.value("data").toString();
-			index = audio_SetTrackVals(soundname.toUtf8().constData(), false, 100, 1800);
+			WzString soundname = ini.value("data").toWzString();
+			index = audio_SetTrackVals(soundname.toUtf8().c_str(), false, 100, 1800);
 			if (!index)			// this is a NON fatal error.
 			{
 				// We can't find filename of the sound for some reason.
-				debug(LOG_ERROR, "Sound ID not available %s not found", soundname.toUtf8().constData());
+				debug(LOG_ERROR, "Sound ID not available %s not found", soundname.toUtf8().c_str());
 				break;
 			}
 		}
