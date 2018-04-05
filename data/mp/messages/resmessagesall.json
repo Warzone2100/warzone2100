@@ -527,6 +527,17 @@
             "May be assigned as spotter for indirect fire weapons"
         ]
     },
+    "RES_SY_SUE1": {
+        "id": "RES_SY_SUE1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Sensor Available",
+            "New Thermal Emissions detection",
+            "Objects become difficult to locate near it",
+            "May be assigned to follow units"
+        ]
+    },
     "RES_SY_SU1": {
         "id": "RES_SY_SU1",
         "imdName": "MICAPSUL.PIE",
