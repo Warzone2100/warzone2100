@@ -504,6 +504,7 @@ AC_CONFIG_FILES([Makefile
 		3rdparty/miniupnpc/Makefile
 		3rdparty/micro-ecc/Makefile
 		3rdparty/sha2/Makefile
+		3rdparty/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile

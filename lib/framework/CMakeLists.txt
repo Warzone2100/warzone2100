@@ -10,7 +10,7 @@ file(GLOB SRC "*.cpp")
 
 add_library(framework STATIC ${HEADERS} ${SRC})
 target_link_libraries(framework PUBLIC Qt5::Core ${PHYSFS_LIBRARY})
-target_link_libraries(framework PRIVATE microecc sha2)
+target_link_libraries(framework PRIVATE microecc sha2 utf8proc)
 if(ENABLE_NLS)
 	target_include_directories(framework PRIVATE "${Intl_INCLUDE_DIRS}")
 	target_link_libraries(framework PRIVATE ${Intl_LIBRARIES})
