@@ -98,7 +98,7 @@ DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 {
 	DROID_TEMPLATE design;
 	design.name = ini.string("name");
-	QString droidType = ini.value("type").toString();
+	WzString droidType = ini.value("type").toWzString();
 
 	if (droidType == "ECM")
 	{
@@ -158,16 +158,16 @@ DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 	}
 	else
 	{
-		ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
+		ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().c_str(), getID(&design));
 	}
 
 	design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body").toWzString());
-	design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toWzString());
-	design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toWzString());
-	design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toWzString());
-	design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toWzString());
-	design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toWzString());
-	design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toWzString());
+	design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", WzString("ZNULLBRAIN")).toWzString());
+	design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", WzString("ZNULLPROP")).toWzString());
+	design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", WzString("ZNULLREPAIR")).toWzString());
+	design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", WzString("ZNULLECM")).toWzString());
+	design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", WzString("ZNULLSENSOR")).toWzString());
+	design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", WzString("ZNULLCONSTRUCT")).toWzString());
 	std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
 	ASSERT(weapons.size() <= MAX_WEAPONS, "Number of weapons (%lu) exceeds MAX_WEAPONS (%d)", weapons.size(), MAX_WEAPONS);
 	design.numWeaps = weapons.size();

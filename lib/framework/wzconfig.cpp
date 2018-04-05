@@ -501,6 +501,10 @@ json_variant::json_variant(const QString & str)
 : mObj(str.toUtf8().constData())
 { }
 
+json_variant::json_variant(const WzString & str)
+: mObj(str.toUtf8())
+{ }
+
 const nlohmann::json& json_variant::jsonValue() const
 {
 	return mObj;
