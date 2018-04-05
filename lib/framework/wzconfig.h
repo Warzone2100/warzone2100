@@ -51,6 +51,7 @@ public:
 	json_variant(const std::string & str);
 
 	json_variant(const QString & str);
+	json_variant(const WzString & str);
 public:
 	// QVariant-like conversion methods
 	int toInt(bool *ok = nullptr) const;
