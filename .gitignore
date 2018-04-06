@@ -212,6 +212,7 @@ macosx/Warzone.xcodeproj/xcuserdata/*
 macosx/Warzone.xcodeproj/project.xcworkspace/xcuserdata/*
 macosx/Warzone.xcworkspace/xcuserdata/*
 macosx/configs/CS-ID.xcconfig
+*.xcscmblueprint
 
 # build folders
 /macosx/build/
