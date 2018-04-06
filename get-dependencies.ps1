@@ -45,7 +45,18 @@ If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
 	}
 }
 
-.\vcpkg install physfs harfbuzz libiconv libogg libtheora libvorbis libpng openal-soft sdl2 glew freetype gettext zlib;
+$vcpkg_succeeded = -1;
+$vcpkg_attempts = 0;
+While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
+{
+	.\vcpkg install physfs harfbuzz libiconv libogg libtheora libvorbis libpng openal-soft sdl2 glew freetype gettext zlib;
+	$vcpkg_succeeded = $LastExitCode;
+	$vcpkg_attempts++;
+}
+If ($vcpkg_succeeded -ne 0)
+{
+	Write-Error "vcpkg install failed ($vcpkg_attempts attempts)";
+}
 popd;
 
 # Download google-breakpad's dump_syms.exe (if necessary)
