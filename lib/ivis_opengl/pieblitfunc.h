@@ -42,6 +42,7 @@
 #include "pietypes.h"
 #include "piepalette.h"
 #include "pieclip.h"
+#include <list>
 
 /***************************************************************************/
 /*
