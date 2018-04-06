@@ -371,8 +371,8 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 
 static int stringRelevance(std::string const &string, std::string const &search)
 {
-	QString str = QString::fromUtf8(string.c_str()).normalized(QString::NormalizationForm_KD);
-	QString sea = QString::fromUtf8(search.c_str()).normalized(QString::NormalizationForm_KD);
+	WzString str = WzString::fromUtf8(string).normalized(WzString::NormalizationForm_KD);
+	WzString sea = WzString::fromUtf8(search).normalized(WzString::NormalizationForm_KD);
 	int strDim = str.size() + 1;
 	int seaDim = sea.size() + 1;
 
@@ -390,12 +390,12 @@ static int stringRelevance(std::string const &string, std::string const &search)
 			if (iStr > 0 && iSea > 0)
 			{
 				score = (scores[iStr - 1 + (iSea - 1) * strDim] + 1) | 1;
-				QChar a = str[iStr - 1], b = sea[iSea - 1];
+				WzString::WzUniCodepointRef a = str[iStr - 1], b = sea[iSea - 1];
 				if (a == b)
 				{
 					score += 100;
 				}
-				else if (a.toUpper() == b.toUpper())
+				else if (a.value().caseFolded() == b.value().caseFolded())
 				{
 					score += 80;
 				}

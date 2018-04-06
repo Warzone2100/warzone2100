@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <utfcpp/utf8.h>
 #include "frame.h"
+#include <utf8proc/utf8proc.h>
 
 WzUniCodepoint WzUniCodepoint::fromASCII(unsigned char charLiteral)
 {
@@ -18,6 +19,26 @@ WzUniCodepoint WzUniCodepoint::fromASCII(unsigned char charLiteral)
 	// This should not throw an exception, since we check for valid 7-bit ASCII above.
 	uint32_t codepoint = utf8::next(p_utf8, p_utf8 + 1);
 	return WzUniCodepoint(codepoint);
+}
+
+std::vector<WzUniCodepoint> WzUniCodepoint::caseFolded() const
+{
+	#define CODEPOINT_CASEFOLDING_BUFF_SIZE 100
+	utf8proc_int32_t dst[CODEPOINT_CASEFOLDING_BUFF_SIZE] = { 0 };
+	utf8proc_ssize_t retVal = utf8proc_decompose_char(_codepoint, dst, CODEPOINT_CASEFOLDING_BUFF_SIZE, UTF8PROC_CASEFOLD, nullptr);
+	if (retVal < 0)
+	{
+		// case folding failed
+		ASSERT(retVal > 0, "Case folding attempt failed with error code: %ld", retVal);
+		return std::vector<WzUniCodepoint>();
+	}
+	std::vector<WzUniCodepoint> resultCodepoints;
+	resultCodepoints.reserve(retVal);
+	for (utf8proc_ssize_t i = 0; i < retVal; ++i)
+	{
+		resultCodepoints.push_back(WzUniCodepoint(dst[i]));
+	}
+	return resultCodepoints;
 }
 
 WzString WzString::fromCodepoint(const WzUniCodepoint& codepoint)
@@ -391,6 +412,25 @@ std::vector<WzString> WzString::split(const WzString & delimiter) const
 	return tokens;
 }
 
+// MARK: - Normalization
+
+WzString WzString::normalized(WzString::NormalizationForm mode) const
+{
+	static_assert(std::is_same<unsigned char, utf8proc_uint8_t>::value, "uint8_t is not unsigned char. This function requires this to avoid a violation of the strict aliasing rule.");
+	// The reinterpret_cast from char* to const uint8_t* is only safe when std::uint8_t is *not* implemented as an extended unsigned integer type.
+	// See: https://stackoverflow.com/a/16261758
+	utf8proc_uint8_t *result = utf8proc_NFKD(reinterpret_cast<const utf8proc_uint8_t*>(_utf8String.c_str()));
+	if (result == nullptr)
+	{
+		// Normalization failed
+		debug(LOG_ERROR, "Unicode normalization failed for string: '%s'", _utf8String.c_str());
+		return WzString();
+	}
+	WzString retVal = WzString::fromUtf8(reinterpret_cast<char *>(result));
+	free(result);
+	return retVal;
+}
+
 // MARK: - Create from numbers
 
 WzString WzString::number(int32_t n)
@@ -609,4 +649,9 @@ WzString::WzUniCodepointRef& WzString::WzUniCodepointRef::operator=(const WzUniC
 	_parentString.replace(_position, 1, ch);
 
 	return *this;
+}
+
+bool WzString::WzUniCodepointRef::operator==(const WzUniCodepointRef& ch) const
+{
+	return _codepoint == ch._codepoint;
 }
