@@ -46,6 +46,9 @@ platform:
 configuration:
   - Release
 
+install:
+  - git submodule update --init --recursive
+
 before_build:
   - set PATH=%PATH%;%QT5DIR%\bin;
   # If a future version of vcpkg breaks the "VCPKG_BUILD_TYPE=release" setting for the dependencies we need, use the following line instead:
