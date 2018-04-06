@@ -38,8 +38,11 @@ public:
 
 	bool isNull() const { return _codepoint == 0; }
 
+	std::vector<WzUniCodepoint> caseFolded() const;
+
 public:
 	WzUniCodepoint& operator=(const WzUniCodepoint& ch) { _codepoint = ch._codepoint; return *this; }
+	bool operator==(const WzUniCodepoint& ch) const { return _codepoint == ch._codepoint; }
 
 protected:
 	WzUniCodepoint(uint32_t utf_32_codepoint)
@@ -107,6 +110,14 @@ public:
 	std::vector<WzString> split(const WzString &delimiter) const;
 
 public:
+	// Normalization
+	enum NormalizationForm {
+		NormalizationForm_KD
+	};
+
+	WzString normalized(WzString::NormalizationForm mode) const;
+
+public:
 	// Create from numbers
 	static WzString number(int32_t n);
 	static WzString number(uint32_t n);
@@ -152,6 +163,9 @@ public:
 		{ }
 	public:
 		WzUniCodepointRef& operator=(const WzUniCodepoint& ch);
+		bool operator==(const WzUniCodepointRef& ch) const;
+
+		inline const WzUniCodepoint& value() const { return _codepoint; }
 	private:
 		WzUniCodepoint _codepoint;
 		WzString& _parentString;
