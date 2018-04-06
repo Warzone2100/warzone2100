@@ -23,7 +23,6 @@
  */
 
 // Get platform defines before checking for them!
-#include <QtCore/QString>
 #include "lib/framework/wzapp.h"
 
 #include <QtWidgets/QApplication>

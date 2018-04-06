@@ -23,9 +23,6 @@
 
 // Get platform defines before checking for them!
 #include "lib/framework/wzapp.h"
-#include <QtCore/QTextCodec>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMessageBox>
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */

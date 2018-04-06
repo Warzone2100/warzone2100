@@ -35,7 +35,6 @@
 #include "tex.h"
 
 #include <vector>
-#include <QtCore/QVector>
 #include <string>
 
 
