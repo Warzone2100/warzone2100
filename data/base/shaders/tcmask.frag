@@ -84,7 +84,7 @@ void main()
 
 	if (ecmEffect)
 	{
-		fragColour.a = 0.45 + 0.225 * graphicsCycle;
+		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
 
 	if (fogEnabled > 0)
