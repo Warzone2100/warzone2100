@@ -32,6 +32,7 @@
    * Change: Repaint Jammer to same colour as Radar Detector and adjust the blurring effect it causes within its range (ticket:4769)
    * Change: Replace icons for obsolete technology used in build and manufacture screens (ticket:4770)
    * Change: Replace icons for teams with shared research used in host screen (ticket:4771)
+   * Change: Replace icons for easy and medium AI difficulties used in host screen (ticket:4772)
    * Fix: Make shaders compile on more systems (commit:3ec60e361e6bab478af77b51f79ab88f1ceac6db, ticket:4584)
    * Fix: Rename similar variables in shaders (commit:c1131be441afa534f9ec5be76baeb6137dc94844, ticket:4589)
    * Fix: Graphics driver warning when building structures (commit:f2d71eea0e03a6c2f7afcc8698a3883796f09346)
