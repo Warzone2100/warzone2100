@@ -3555,6 +3555,12 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
 	}));
 
+	if ((objMode == IOBJ_MANUFACTURE || objMode == IOBJ_BUILD) && psOwner != nullptr)
+	{
+		// Add the obsolete items button.
+		makeObsoleteButton(statForm);
+	}
+
 	W_LABINIT sLabInit;
 
 	// Add the quantity slider ( if it's a factory ).
@@ -3624,12 +3630,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.width = 12;
 		sLabInit.height = 15;
 		sLabInit.pCallback = intAddProdQuantity;
-	}
-
-	if ((objMode == IOBJ_MANUFACTURE || objMode == IOBJ_BUILD) && psOwner != nullptr)
-	{
-		// Add the obsolete items button.
-		makeObsoleteButton(statForm);
 	}
 
 	/* Add the close button */
