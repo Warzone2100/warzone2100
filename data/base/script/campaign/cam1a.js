@@ -5,21 +5,19 @@ const PLAYER_RES = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 ];
 
-// player zero's droid enteres this area
-camAreaEvent("LaunchScavAttack", function(droid)
+// Player zero's droid enters area next to first oil patch.
+camAreaEvent("launchScavAttack", function(droid)
 {
-	var spos = getObject("scav1soundpos");
-	playSound("pcv375.ogg", spos.x, spos.y, 0);
 	playSound("pcv456.ogg");
 	camPlayVideos("MB1A_MSG");
 	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
-	// send scavengers on war path if triggered above
-	camManageGroup(camMakeGroup("ScavAttack1", ENEMIES), CAM_ORDER_ATTACK, {
+	// Send scavengers on war path if triggered above.
+	camManageGroup(camMakeGroup("scavAttack1", ENEMIES), CAM_ORDER_ATTACK, {
 		pos: camMakePos("playerBase"),
 		fallback: camMakePos("retreat1"),
 		morale: 50
 	});
-	// activate mission timer, unlike the original campaign.
+	// Activate mission timer, unlike the original campaign.
 	setMissionTime(camChangeOnDiff(3600));
 });
 
@@ -28,64 +26,91 @@ function runAway()
 	var oilPatch = getObject("oilPatch");
 	var droids = enumRange(oilPatch.x, oilPatch.y, 7, 7, false);
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
-		pos: camMakePos("ScavAttack1"),
+		pos: camMakePos("scavAttack1"),
 		fallback: camMakePos("retreat1"),
-		morale: 20 // will run away after losing a few people
+		morale: 20 // Will run away after losing a few people.
 	});
 }
 
 function doAmbush()
 {
-	camManageGroup(camMakeGroup("RoadblockArea"), CAM_ORDER_ATTACK, {
+	camManageGroup(camMakeGroup("roadblockArea"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("oilPatch"),
 		fallback: camMakePos("retreat2"),
-		morale: 50 // will mostly die
+		morale: 50 // Will mostly die.
 	});
 }
 
-// player zero's droid enteres this area
-camAreaEvent("ScavAttack1", function(droid)
+// Area with the radar blip just before the first scavenger outpost.
+camAreaEvent("scavAttack1", function(droid)
 {
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	queue("runAway", 1000);
 	queue("doAmbush", 5000);
 });
 
-camAreaEvent("RoadblockArea", function(droid)
+// Road between first outpost and base two.
+camAreaEvent("roadblockArea", function(droid)
 {
-	camEnableFactory("base1factory");
+	camEnableFactory("base2Factory");
 });
 
-camAreaEvent("raidTrigger", function(droid)
+// Scavengers hiding in the split canyon area between base two and three.
+function raidAttack()
 {
 	camManageGroup( camMakeGroup("raidTrigger", ENEMIES), CAM_ORDER_ATTACK, {
-		pos: camMakePos("scavbase3area")
+		pos: camMakePos("scavBase3Cleanup")
 	});
 	camManageGroup(camMakeGroup("raidGroup", ENEMIES), CAM_ORDER_ATTACK, {
-		pos: camMakePos("scavbase3area")
+		pos: camMakePos("scavBase3Cleanup")
 	});
-	camManageGroup(camMakeGroup("scavbase3area", ENEMIES), CAM_ORDER_DEFEND, {
-		pos: camMakePos("scavbase3area")
+	camManageGroup(camMakeGroup("scavBase3Cleanup", ENEMIES), CAM_ORDER_DEFEND, {
+		pos: camMakePos("scavBase3Cleanup")
 	});
-	camEnableFactory("base2factory1");
-});
-
-camAreaEvent("scavbase3area", function(droid)
-{
-	camEnableFactory("base2factory2");
-});
-
-function camEnemyBaseEliminated_scavgroup1()
-{
-	camEnableFactory("base1factory");
+	camEnableFactory("base3Factory");
 }
 
-function camEnemyBaseEliminated_scavgroup2()
+// Wait for player to get close to the split canyon and attack, if not already.
+camAreaEvent("raidTrigger", function(droid)
 {
-	queue("camDetectEnemyBase", 2000, "scavgroup3");
+	camCallOnce("raidAttack");
+});
+
+// Or, they built on base two's oil patch instead. Initiate a surprise attack.
+function eventStructureBuilt(structure, droid)
+{
+	if (structure.player === CAM_HUMAN_PLAYER && structure.stattype === RESOURCE_EXTRACTOR)
+	{
+		// Is it in the base two area?
+		var objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
+		for (var i = 0, l = objs.length; i < l; ++i)
+		{
+			var obj = objs[i];
+			if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
+			{
+				camCallOnce("raidAttack");
+				break;
+			}
+		}
+	}
 }
 
-function enableStartingBuildings()
+camAreaEvent("scavBase3Cleanup", function(droid)
+{
+	camEnableFactory("base4Factory");
+});
+
+function camEnemyBaseEliminated_scavGroup1()
+{
+	camEnableFactory("base2Factory");
+}
+
+function camEnemyBaseEliminated_scavGroup2()
+{
+	queue("camDetectEnemyBase", 2000, "scavGroup3");
+}
+
+function enableBaseStructures()
 {
 	const STRUCTS = [
 		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
@@ -112,38 +137,38 @@ function eventStartLevel()
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	setAlliance(6, 7, true);
 
-	enableStartingBuildings();
+	enableBaseStructures();
 	camCompleteRequiredResearch(PLAYER_RES, CAM_HUMAN_PLAYER);
-	//These are available without needing to build a HQ.
+	// These are available without needing to build a HQ.
 	enableTemplate("ConstructionDroid");
 	enableTemplate("ViperLtMGWheels");
 
-	// give player briefing
+	// Give player briefing.
 	hackAddMessage("CMB1_MSG", CAMP_MSG, CAM_HUMAN_PLAYER, false);
 	setMissionTime(-1);
 
-	// feed libcampaign.js with data to do the rest
+	// Feed libcampaign.js with data to do the rest.
 	camSetEnemyBases({
-		"scavgroup1": {
-			cleanup: "scavbase1area",
+		"scavGroup1": {
+			cleanup: "scavBase1Cleanup",
 			detectMsg: "C1A_BASE0",
 			detectSnd: "pcv375.ogg",
 			eliminateSnd: "pcv391.ogg"
 		},
-		"scavgroup2": {
-			cleanup: "scavbase2area",
+		"scavGroup2": {
+			cleanup: "scavBase2Cleanup",
 			detectMsg: "C1A_BASE1",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
 		},
-		"scavgroup3": {
-			cleanup: "scavbase3area",
+		"scavGroup3": {
+			cleanup: "scavBase3Cleanup",
 			detectMsg: "C1A_BASE2",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
 		},
-		"scavgroup4": {
-			cleanup: "scavbase4area",
+		"scavGroup4": {
+			cleanup: "scavBase4Cleanup",
 			detectMsg: "C1A_BASE3",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
@@ -151,15 +176,15 @@ function eventStartLevel()
 	});
 
 	camSetArtifacts({
-		"base1factory": { tech: "R-Wpn-Flamer01Mk1" },
-		"base2factory2": { tech: "R-Sys-Engineering01" },
-		"base2factory1": { tech: "R-Defense-Tower01" },
-		"artifact4pos": { tech: "R-Wpn-MG-Damage01" },
+		"base1ArtifactPos": { tech: "R-Wpn-MG-Damage01" },
+		"base2Factory": { tech: "R-Wpn-Flamer01Mk1" },
+		"base3Factory": { tech: "R-Defense-Tower01" },
+		"base4Factory": { tech: "R-Sys-Engineering01" },
 	});
 
 	with (camTemplates) camSetFactories({
-		"base1factory": {
-			assembly: "assembly1",
+		"base2Factory": {
+			assembly: "base2Assembly",
 			order: CAM_ORDER_ATTACK,
 			data: { pos: "playerBase" },
 			groupSize: 3,
@@ -167,8 +192,8 @@ function eventStartLevel()
 			throttle: camChangeOnDiff(20000),
 			templates: [ trike, bloke ]
 		},
-		"base2factory1": {
-			assembly: "assembly2",
+		"base3Factory": {
+			assembly: "base3Assembly",
 			order: CAM_ORDER_ATTACK,
 			data: { pos: "playerBase" },
 			groupSize: 4,
@@ -176,8 +201,8 @@ function eventStartLevel()
 			throttle: camChangeOnDiff(16000),
 			templates: [ bloke, buggy, bloke ]
 		},
-		"base2factory2": {
-			assembly: "assembly3",
+		"base4Factory": {
+			assembly: "base4Assembly",
 			order: CAM_ORDER_ATTACK,
 			data: { pos: "playerBase" },
 			groupSize: 4,
