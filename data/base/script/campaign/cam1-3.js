@@ -53,9 +53,11 @@ camAreaEvent("WestConvoyTrigger", function(droid)
 	});
 });
 
-function playYouAreInContraventionOfTheNewParadigm()
+function enableNP(args)
 {
-	camPlayVideos("SB1_3_MSG4");
+	camEnableFactory("ScavFactory");
+	camEnableFactory("NPFactory");
+
 	camManageGroup(NPScoutGroup, CAM_ORDER_COMPROMISE, {
 		pos: camMakePos("RTLZ"),
 		repair: 66,
@@ -72,14 +74,8 @@ function playYouAreInContraventionOfTheNewParadigm()
 		},
 		repair: 66,
 	});
-}
 
-function enableNP(args)
-{
-	camEnableFactory("ScavFactory");
-	camEnableFactory("NPFactory");
-	playSound("pcv455.ogg");
-	queue("playYouAreInContraventionOfTheNewParadigm", 2000);
+	camPlayVideos(["pcv455.ogg", "SB1_3_MSG4"]);
 }
 
 function sendScouts()
@@ -143,13 +139,7 @@ function camEnemyBaseEliminated_ScavBaseGroup()
 
 function playNPWarningMessage()
 {
-	camPlayVideos("SB1_3_MSG3");
-}
-
-function playNPWarningSound()
-{
-	playSound("pcv455.ogg");
-	queue("playNPWarningMessage", 2000);
+	camPlayVideos(["pcv455.ogg", "SB1_3_MSG3"]);
 }
 
 function eventDroidBuilt(droid, structure)
@@ -250,6 +240,6 @@ function eventStartLevel()
 	NPDefenseGroup = camMakeGroup("NPDefense");
 	NPFactory = getObject("NPFactory");
 
-	queue("playNPWarningSound", 3000);
+	queue("playNPWarningMessage", 3000);
 	queue("sendScouts", 60000);
 }

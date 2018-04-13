@@ -149,9 +149,7 @@ function setupNextMission()
 {
 	if (missileSilosDestroyed())
 	{
-		const MISSLE_ABORT = "labort.ogg";
-		camPlayVideos(["MB3_1B_MSG", "MB3_1B_MSG2"]);
-		playSound(MISSLE_ABORT, CAM_HUMAN_PLAYER);
+		camPlayVideos(["labort.ogg", "MB3_1B_MSG", "MB3_1B_MSG2"]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
 		setMissionTime(camChangeOnDiff(1800)); // 30 min

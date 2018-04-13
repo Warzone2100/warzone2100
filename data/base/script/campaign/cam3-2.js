@@ -51,18 +51,11 @@ camAreaEvent("rescueTrigger", function(droid)
 	camPlayVideos("MB3_2_MSG4");
 });
 
-//Warn about VTOLs.
-function playVtolWarningVideo()
-{
-	camPlayVideos("MB3_2_MSG3");
-}
-
 //Play videos, donate alpha to the player and setup reinforcements.
 camAreaEvent("phantomFacTrigger", function(droid)
 {
 	vtolAttack();
-	playSound("pcv456.ogg"); //Incoming transmission...
-	queue("playVtolWarningVideo", 2500);
+	camPlayVideos(["pcv456.ogg", "MB3_2_MSG3"]); //Warn about VTOLs.
 	queue("enableReinforcements", 5000);
 });
 

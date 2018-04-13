@@ -50,12 +50,25 @@ camAreaEvent("triggerLZ2Blip", function()
 
 camAreaEvent("LandingZoneTrigger", function()
 {
+	camPlayVideos(["pcv456.ogg", "SB1_4_B"]);
+	hackRemoveMessage("C1-4_LZ", PROX_MSG, CAM_HUMAN_PLAYER); //Remove LZ 2 blip.
+
 	var lz = getObject("LandingZone2"); // will override later
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	hackRemoveMessage("C1-4_LZ", PROX_MSG, CAM_HUMAN_PLAYER); //Remove LZ 2 blip.
-	playSound("pcv456.ogg");
-	// continue after 4 seconds
-	queue("moreLandingZoneTrigger", 4000);
+
+	// Give extra 30 minutes.
+	setMissionTime(camChangeOnDiff(1800) + getMissionTime());
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
+		area: "RTLZ",
+		message: "C1-4_LZ",
+		reinforcements: 90, // changes!
+		retlz: true
+	});
+	// enables all factories
+	camEnableFactory("SouthScavFactory");
+	camEnableFactory("NorthScavFactory");
+	camEnableFactory("HeavyNPFactory");
+	camEnableFactory("MediumNPFactory");
 });
 
 function NPBaseDetect()
@@ -73,24 +86,6 @@ function NPBaseDetect()
 		regroup: true
 	});
 
-	camEnableFactory("HeavyNPFactory");
-	camEnableFactory("MediumNPFactory");
-}
-
-function moreLandingZoneTrigger()
-{
-	camPlayVideos("SB1_4_B");
-	// Give extra 30 minutes.
-	setMissionTime(camChangeOnDiff(1800) + getMissionTime());
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
-		area: "RTLZ",
-		message: "C1-4_LZ",
-		reinforcements: 90, // changes!
-		retlz: true
-	});
-	// enables all factories
-	camEnableFactory("SouthScavFactory");
-	camEnableFactory("NorthScavFactory");
 	camEnableFactory("HeavyNPFactory");
 	camEnableFactory("MediumNPFactory");
 }

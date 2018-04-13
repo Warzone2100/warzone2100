@@ -8,8 +8,7 @@ const PLAYER_RES = [
 // Player zero's droid enters area next to first oil patch.
 camAreaEvent("launchScavAttack", function(droid)
 {
-	playSound("pcv456.ogg");
-	camPlayVideos("MB1A_MSG");
+	camPlayVideos(["pcv456.ogg", "MB1A_MSG"]);
 	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	// Send scavengers on war path if triggered above.
 	camManageGroup(camMakeGroup("scavAttack1", ENEMIES), CAM_ORDER_ATTACK, {
