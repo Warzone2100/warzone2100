@@ -20,6 +20,13 @@
 ;  Warzone 2100 Project Installer script
 ;
 
+; IMPORTANT: This installer script should be compiled with NSIS 3.0+.
+;            Because source-builds of NSIS may not define NSIS_PACKEDVERSION
+;            it is not explicitly checked here.
+
+;Create a Unicode installer (must come first)
+Unicode true
+
 ;--------------------------------
 ;Include section
 
@@ -39,6 +46,14 @@
 
   ;Set compression
   SetCompressor @CPACK_NSIS_COMPRESSOR@
+
+  ;Ensure that the installer is explicitly marked as supporting Win7 through Win10
+  ;to ensure Windows version checks return the true value
+  ManifestSupportedOS Win7 Win8 Win8.1 {8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}
+
+  ;Enable high-DPI support for the installer
+  ;NOTE: The only quirk detected is with the checkbox bitmap used for the tree control (which doesn't scale), but it's still functional
+  ManifestDPIAware true
 
 !ifndef PORTABLE
   ;Default installation folder
@@ -292,6 +307,10 @@ SectionGroupEnd
 ;Installer Functions
 
 Function .onInit
+
+  ; Initialize the plugins dir (important)
+  InitPluginsDir
+
   !insertmacro MUI_LANGDLL_DISPLAY
 !ifndef INSTALLVIDS
   # increase required size of section 'SecFMVs_EngHi' by file size
@@ -363,10 +382,10 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${Languages} "$(DESC_SecNLS)"
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
-;  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
+;    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
