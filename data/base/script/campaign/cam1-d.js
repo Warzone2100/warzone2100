@@ -13,26 +13,39 @@ const NEW_PARADIGM_RES = [
 	"R-Wpn-RocketSlow-Damage03", "R-Struc-RprFac-Upgrade03",
 ];
 
-
 camAreaEvent("tankTrapTrig", function(droid)
 {
 	camEnableFactory("NPFactoryW");
 	camEnableFactory("NPCybFactoryW");
-	mrlGroupAttack();
+	camCallOnce("mrlGroupAttack");
 });
 
 camAreaEvent("northWayTrigger", function(droid)
 {
 	camEnableFactory("NPFactoryE");
 	camEnableFactory("NPCybFactoryE");
-	mrlGroupAttack();
+	camCallOnce("mrlGroupAttack");
 });
 
 camAreaEvent("causeWayTrig", function(droid)
 {
 	camEnableFactory("NPFactoryNE");
 	camEnableFactory("NPCybFactoryNE");
+	camCallOnce("transportBaseSetup");
+});
 
+camAreaEvent("westWayTrigger", function(droid)
+{
+	camEnableFactory("NPFactoryNE");
+	camEnableFactory("NPCybFactoryNE");
+	camEnableFactory("NPFactoryE");
+	camEnableFactory("NPCybFactoryE");
+	camCallOnce("mrlGroupAttack");
+	camCallOnce("transportBaseSetup");
+});
+
+function transportBaseSetup()
+{
 	camDetectEnemyBase("NPLZGroup");
 	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 0, y: 0 },
@@ -43,21 +56,18 @@ camAreaEvent("causeWayTrig", function(droid)
 			repair: 40,
 		},
 	});
-});
+}
 
 function getDroidsForNPLZ()
 {
-	const count = 4; //Last alpha mission always has 8 transport units
+	const LIM = 8; //Last alpha mission always has 8 transport units
 	var templates;
-	with (camTemplates) templates = [ nphct, npsbb, npmorb ];
+	with (camTemplates) templates = [ nphct, nphct, npmorb, npmorb, npsbb ];
 
 	var droids = [];
-	for (var i = 0; i < count; ++i)
+	for (var i = 0; i < LIM; ++i)
 	{
-		var t = templates[camRand(templates.length)];
-		// two droids of each template
-		droids[droids.length] = t;
-		droids[droids.length] = t;
+		droids.push(templates[camRand(templates.length)]);
 	}
 	return droids;
 }
@@ -237,7 +247,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(35000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -249,7 +259,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(45000),
+			throttle: camChangeOnDiff(30000),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -261,7 +271,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(45000),
+			throttle: camChangeOnDiff(40000),
 			data: {
 				regroup: false,
 				repair: 66,
