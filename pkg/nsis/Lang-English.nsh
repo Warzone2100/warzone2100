@@ -52,3 +52,6 @@
 
   LangString TEXT_SecNLS_WinFonts ${LANG_ENGLISH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_ENGLISH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+
+  LangString TEXT_SecMSSysLibraries ${LANG_ENGLISH} "Important Microsoft Runtime DLLs"
+  LangString DESC_SecMSSysLibraries ${LANG_ENGLISH} "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."

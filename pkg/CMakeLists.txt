@@ -67,6 +67,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(CPACK_COMPONENT_LANGUAGES_DISPLAY_NAME "$(TEXT_SecNLS)")
 	set(CPACK_COMPONENT_LANGUAGES_DESCRIPTION "$(DESC_SecNLS)")
 
+	if(MSVC)
+		set(NSIS_MSVCRUNTIME "on")
+	else()
+		unset(NSIS_MSVCRUNTIME)
+	endif()
+
 	configure_file(
 		${CMAKE_CURRENT_SOURCE_DIR}/nsis/NSIS.definitions.in
 		${CMAKE_BINARY_DIR}/NSIS.definitions.nsh

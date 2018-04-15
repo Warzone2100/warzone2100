@@ -4,3 +4,6 @@
 !define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
 !define TOP_SRCDIR "@SOURCE_DIR@"
 !define TOP_BUILDDIR "@BUILD_DIR@"
+!if "@NSIS_MSVCRUNTIME@" == "on"
+  !define MSVCRUNTIME "on"
+!endif
