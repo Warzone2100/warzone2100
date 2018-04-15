@@ -33,8 +33,20 @@ Unicode true
   !include "MUI.nsh"
   !include "FileFunc.nsh"
   !include "LogicLib.nsh"
+  !include "x64.nsh"
+
   !include "..\..\..\NSIS.definitions.nsh"
-  !include "..\..\..\NSIS.version.nsh"
+  !include "${TOP_BUILDDIR}\NSIS.version.nsh"
+
+  !include "${TOP_SRCDIR}\pkg\nsis\stringhelpers.nsh"
+
+;--------------------------------
+;Required plugins
+
+  !define ADDITIONAL_PLUGINS_DIR "${TOP_SRCDIR}\pkg\nsis\plugins"
+
+  !addplugindir /x86-ansi "${ADDITIONAL_PLUGINS_DIR}\x86-ansi"
+  !addplugindir /x86-unicode "${ADDITIONAL_PLUGINS_DIR}\x86-unicode"
 
 ;--------------------------------
 ;General
@@ -259,6 +271,76 @@ SectionEnd
 
 ; NOTE: you need upgraded security privs to install shortcut on desktop for portable.
 
+!macro DownloadMSSysLib URL Caption OutputFile ExpectedFileDescriptionPrefix Result
+inetc::get /CAPTION "${Caption}" "${URL}" "${OutputFile}"
+Pop $R0 # return value = exit code, "OK" if OK
+${If} $R0 == "OK"
+  ; Download succeeded - check file
+  filecheck::verifyFileSignature "${OutputFile}" /ROOT "microsoft" /CERTNAME "Microsoft Corporation" /CERTISSUERNAME "Microsoft Code Signing PCA"
+  Pop $R0 ; Get the return value
+  ${If} $R0 == "OK"
+	filecheck::getFileVersionInfoString "${OutputFile}" "FileDescription" /LANGUAGE 1033 /CODEPAGE 1252
+	Pop $R0 ; Get the return value
+	${StrLoc} $R1 "$R0" "${ExpectedFileDescriptionPrefix}" ">"
+	${If} $R1 == 0
+	  ; Passed code signature & file version info checks
+      StrCpy ${Result} "OK"
+    ${Else}
+      ; File version info did not match expected
+      StrCpy ${Result} "FILE_INFO"
+	${EndIf}
+  ${Else}
+	; Failed to verify file code signature
+    ; MessageBox MB_OK|MB_ICONSTOP "Download of system library failed: CODE_SIGNATURE"
+    StrCpy ${Result} "CODE_SIGNATURE"
+  ${EndIf}
+${Else}
+  ; Download failed
+  ; MessageBox MB_OK|MB_ICONSTOP "Download of system library failed: $R0"
+  StrCpy ${Result} $R0
+${EndIf}
+!macroend
+
+!ifdef MSVCRUNTIME
+  Var MSVCRT15_x86_NotPresent
+  Var MSVCRT15_x64_NotPresent
+  Var Result_MSVCDownload
+
+  !ifndef PORTABLE
+    ; Provide option to download and install missing / outdated system libraries
+    Section "" SecMSSysLibraries
+      SetOutPath "$INSTDIR"
+
+      ${If} $MSVCRT15_x86_NotPresent == 1
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/15/release/vc_redist.x86.exe" "Downloading vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2017 Redistributable" $Result_MSVCDownload
+        ${If} $Result_MSVCDownload == "OK"
+          ; Download succeeded
+          DetailPrint "vc_redist.x86.exe ..."
+          ExecWait '"$PLUGINSDIR\vc_redist.x86.exe" /q'
+        ${Else}
+          MessageBox MB_OK|MB_ICONSTOP "Download of system library (x86) failed: $Result_MSVCDownload"
+        ${EndIf}
+      ${EndIf}
+	  ${If} ${RunningX64}
+      ${AndIf} $MSVCRT15_x64_NotPresent == 1
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/15/release/vc_redist.x64.exe" "Downloading vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2017 Redistributable" $Result_MSVCDownload
+        ${If} $Result_MSVCDownload == "OK"
+          ; Download succeeded
+          DetailPrint "vc_redist.x64.exe ..."
+          ExecWait '"$PLUGINSDIR\vc_redist.x64.exe" /q'
+        ${Else}
+          MessageBox MB_OK|MB_ICONSTOP "Download of system library (x64) failed: $Result_MSVCDownload"
+        ${EndIf}
+      ${EndIf}
+    SectionEnd
+  !else
+    ; TODO: For Portable installer, offer to download app-local system runtimes (if the user wishes)
+    Section "" SecMSSysLibraries
+      ; TODO:
+    SectionEnd
+  !endif
+!endif
+
 !ifndef INSTALLVIDS
 SectionGroup $(TEXT_SecFMVs) SecFMVs
 
@@ -342,6 +424,46 @@ Function .onInit
   ;FIXME: Select default video sub-component
   ; Default is still set to standard instead of high, since there is a ~450MB difference
   StrCpy $5 ${SecFMVs_Eng}
+
+  ; Determine whether Microsoft system libraries are installed
+  !ifdef MSVCRUNTIME
+      StrCpy $MSVCRT15_x86_NotPresent 0
+      StrCpy $MSVCRT15_x64_NotPresent 0
+
+      ; Check for presence of MSVC++ 14 System Runtime (VC2017, works with 2015)
+      ; NOTE: Because VC 15 is ABI compatible with VC 14, the version # used is still 14.
+      ; The VCRuntime includes the Universal C Runtime system component (the UCRT does not have to be detected / handled separately)
+      !define MSVCRT14_BLD_MINIMUM 26020 ; (14.13.26020)
+
+      ${If} ${RunningX64}
+        SetRegView 64
+        ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Bld"
+        SetRegView lastused
+        ;MessageBox MB_OK|MB_ICONSTOP "x64 VC14 Runtime Bld: $R1"
+        ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
+          StrCpy $MSVCRT15_x64_NotPresent 1
+        ${EndIf}
+      ${EndIf}
+      StrCpy $R1 ""
+      SetRegView 32
+      ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Bld"
+      ; MessageBox MB_OK|MB_ICONSTOP "x86 VC14 Runtime Bld: $R1"
+      SetRegView lastused
+      ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
+        StrCpy $MSVCRT15_x86_NotPresent 1
+      ${EndIf}
+
+      ${If} $MSVCRT15_x64_NotPresent = 1
+      ${OrIf} $MSVCRT15_x86_NotPresent = 1
+        SectionSetText ${SecMSSysLibraries} "$(TEXT_SecMSSysLibraries)"
+        ; very rough estimate - we can't know exactly how much space will be taken up, but it's better to signify *something*
+        SectionSetSize ${SecMSSysLibraries} 10000
+      ${Else}
+        !insertmacro UnSelectSection ${SecMSSysLibraries}
+        SectionSetText ${SecMSSysLibraries} ""
+      ${EndIf}
+  !endif
+
 !endif
 
 !ifdef PORTABLE
@@ -388,6 +510,10 @@ FunctionEnd
 ;    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
+
+    !ifdef MSVCRUNTIME
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecMSSysLibraries} $(DESC_SecMSSysLibraries)
+    !endif
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 

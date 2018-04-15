@@ -48,3 +48,6 @@
 
   LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie später eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und später langsam sein!"
+
+  LangString TEXT_SecMSSysLibraries ${LANG_GERMAN} "Important Microsoft Runtime DLLs"
+  LangString DESC_SecMSSysLibraries ${LANG_GERMAN} "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."

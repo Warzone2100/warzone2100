@@ -48,3 +48,6 @@
 
   LangString TEXT_SecNLS_WinFonts ${LANG_RUSSIAN} "WinШрифты"
   LangString DESC_SecNLS_WinFonts ${LANG_RUSSIAN} "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
+
+  LangString TEXT_SecMSSysLibraries ${LANG_RUSSIAN} "Important Microsoft Runtime DLLs"
+  LangString DESC_SecMSSysLibraries ${LANG_RUSSIAN} "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
