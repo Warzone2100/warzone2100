@@ -1298,6 +1298,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 		{
 			if (i == selectedPlayer && from != i)
 			{
+				sstrcat(display, curStr);
 				printchatmsg(display, from); // also display it
 			}
 			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
