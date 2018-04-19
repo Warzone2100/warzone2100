@@ -65,6 +65,7 @@
    * Fix: Potential temporary lockup on sudden vision field increases (commit:800c1b6df440670f45f595e49fb83ff7ee7f724d, ticket:4644)
    * Fix: More visibility asserts (commit:530d67a8b74025187edf80139edbd40bbfc4293a, ticket:4743)
    * Fix: All features are now aligned (ticket:4775)
+   * Remove: Unused mission sub3-x (ticket:4776)
  * Multiplayer:
    * Change: Move Technology level scripts to JavaScript (commit:d31f6a2c704ada8f46957a34279af78deafdeec7)
    * Change: Move structure limiting into structure.json (commit:924135c98d630d638fcee74b8ebf85d10af2dfa1, commit:9c272aa528bab38fb8d598a7f2676745ca347a4b)
