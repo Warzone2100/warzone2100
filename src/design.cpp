@@ -2472,6 +2472,7 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		widgSetMinorBarSize(psWScreen, IDDES_POWERBAR, 0);
 		return;
 	}
+	unsigned int weaponCount = 1; // Edge case when going with lower turret bodies
 
 	COMPONENT_TYPE type = psStats->compType;
 	UDWORD power;
@@ -2524,14 +2525,17 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		brainPower = 0;
 		if (desCompMode == IDES_TURRET_A)
 		{
+			weaponCount = 2 + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
 			weaponPower2 = newComponentPower;
 		}
 		else if (desCompMode == IDES_TURRET_B)
 		{
+			weaponCount = 3;
 			weaponPower3 = newComponentPower;
 		}
 		else
 		{
+			weaponCount = 1 + (sCurrDesign.numWeaps >= 2 ? 1 : 0) + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
 			weaponPower1 = newComponentPower;
 		}
 		break;
@@ -2548,7 +2552,23 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 	power += (propulsionPower * bodyPower) / 100;
 
 	//add weapon power
-	power += weaponPower1 + weaponPower2 + weaponPower3;
+	for (unsigned i = 0; i < weaponCount; ++i)
+	{
+		switch (i)
+		{
+			case 0:
+				power += weaponPower1;
+				break;
+			case 1:
+				power += weaponPower2;
+				break;
+			case 2:
+				power += weaponPower3;
+				break;
+			default:
+				ASSERT(false, "Bad weapon slot for shadow power calculation");
+		}
+	}
 	widgSetMinorBarSize(psWScreen, IDDES_POWERBAR, power);
 }
 
@@ -2562,16 +2582,17 @@ static void intSetBodyPoints(DROID_TEMPLATE *psTemplate)
 /* Set the shadow bar graphs for the template Body points - psStats is new hilited stats*/
 static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 {
-	const int plr = selectedPlayer;
 	if (!psStats)
 	{
 		/* Reset the shadow bar */
 		widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, 0);
 		return;
 	}
+	const int plr = selectedPlayer;
+	unsigned int weaponCount = 1; // Edge case when going with lower turret bodies
 
 	COMPONENT_TYPE type = psStats->compType;
-	UDWORD body;
+	UDWORD bodyHitPoints;
 	UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[plr].hitpoints;
 	UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].upgrade[plr].hitpoints;
 	UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].upgrade[plr].hitpoints;
@@ -2579,15 +2600,31 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].upgrade[plr].hitpoints;
 	UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].upgrade[plr].hitpoints;
 	UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].upgrade[plr].hitpoints;
-	UDWORD weaponBody1     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].upgrade[plr].hitpoints;
-	UDWORD weaponBody2     = asWeaponStats[sCurrDesign.numWeaps >= 2 ? sCurrDesign.asWeaps[1] : 0].upgrade[plr].hitpoints;
-	UDWORD weaponBody3     = asWeaponStats[sCurrDesign.numWeaps >= 3 ? sCurrDesign.asWeaps[2] : 0].upgrade[plr].hitpoints;
-	UDWORD newComponentBody = psStats->pUpgrade[plr]->hitpoints;
+	UDWORD weapon1Body     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].upgrade[plr].hitpoints;
+	UDWORD weapon2Body     = asWeaponStats[sCurrDesign.numWeaps >= 2 ? sCurrDesign.asWeaps[1] : 0].upgrade[plr].hitpoints;
+	UDWORD weapon3Body     = asWeaponStats[sCurrDesign.numWeaps >= 3 ? sCurrDesign.asWeaps[2] : 0].upgrade[plr].hitpoints;
+	UDWORD newComponentHP = psStats->pUpgrade[plr]->hitpoints;
+
+	UDWORD hitPointPct;
+	UDWORD bodyPct        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[plr].hitpointPct - 100;
+	UDWORD brainPct       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].upgrade[plr].hitpointPct - 100;
+	UDWORD sensorPct      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].upgrade[plr].hitpointPct - 100;
+	UDWORD ECMPct         = asECMStats[sCurrDesign.asParts[COMP_ECM]].upgrade[plr].hitpointPct - 100;
+	UDWORD repairPct      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].upgrade[plr].hitpointPct - 100;
+	UDWORD constructPct   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].upgrade[plr].hitpointPct - 100;
+	UDWORD propulsionPct  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].upgrade[plr].hitpointPct - 100;
+	UDWORD weapon1Pct     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].upgrade[plr].hitpointPct - 100;
+	UDWORD weapon2Pct     = asWeaponStats[sCurrDesign.numWeaps >= 2 ? sCurrDesign.asWeaps[1] : 0].upgrade[plr].hitpointPct - 100;
+	UDWORD weapon3Pct     = asWeaponStats[sCurrDesign.numWeaps >= 3 ? sCurrDesign.asWeaps[2] : 0].upgrade[plr].hitpointPct - 100;
+	UDWORD newComponentPct = psStats->pUpgrade[plr]->hitpointPct - 100;
+
+	UDWORD psPropPctBody = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].upgrade[plr].hitpointPctOfBody / 100;
 
 	// Commanders receive the stats of their associated weapon.
 	if (type == COMP_BRAIN)
 	{
-		newComponentBody += ((BRAIN_STATS *)psStats)->psWeaponStat->upgrade[plr].hitpoints;
+		newComponentHP += ((BRAIN_STATS *)psStats)->psWeaponStat->upgrade[plr].hitpoints;
+		newComponentPct += ((BRAIN_STATS *)psStats)->psWeaponStat->upgrade[plr].hitpointPct - 100;
 	}
 
 	/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
@@ -2601,36 +2638,50 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	switch (type)
 	{
 	case COMP_BODY:
-		bodyBody = newComponentBody;
+		bodyBody = newComponentHP;
+		bodyPct = newComponentPct;
 		break;
 	case COMP_PROPULSION:
-		propulsionBody = newComponentBody;
+		propulsionBody = newComponentHP;
+		propulsionPct = newComponentPct;
+		psPropPctBody = asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].upgrade[plr].hitpointPctOfBody / 100;
 		break;
 	case COMP_ECM:
-		ECMBody = newComponentBody;
+		ECMBody = newComponentHP;
+		ECMPct = newComponentPct;
 		break;
 	case COMP_SENSOR:
-		sensorBody = newComponentBody;
+		sensorBody = newComponentHP;
+		sensorPct = newComponentPct;
 		break;
 	case COMP_CONSTRUCT:
-		constructBody = newComponentBody;
+		constructBody = newComponentHP;
+		constructPct = newComponentPct;
 		break;
 	case COMP_REPAIRUNIT:
-		repairBody = newComponentBody;
+		repairBody = newComponentHP;
+		repairPct = newComponentPct;
 		break;
 	case COMP_WEAPON:
 		brainBody = 0;
+		brainPct = 0;
 		if (desCompMode == IDES_TURRET_A)
 		{
-			weaponBody2 = newComponentBody;
+			weaponCount = 2 + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
+			weapon2Body = newComponentHP;
+			weapon2Pct = newComponentPct;
 		}
 		else if (desCompMode == IDES_TURRET_B)
 		{
-			weaponBody3 = newComponentBody;
+			weaponCount = 3;
+			weapon3Body = newComponentHP;
+			weapon3Pct = newComponentPct;
 		}
 		else
 		{
-			weaponBody1 = newComponentBody;
+			weaponCount = 1 + (sCurrDesign.numWeaps >= 2 ? 1 : 0) + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
+			weapon1Body = newComponentHP;
+			weapon1Pct = newComponentPct;
 		}
 		break;
 	default:
@@ -2639,14 +2690,38 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	// this code is from calcTemplateBody
 
 	//get the component HP
-	body = bodyBody + brainBody + sensorBody + ECMBody + repairBody + constructBody;
+	bodyHitPoints = bodyBody + brainBody + sensorBody + ECMBody + repairBody + propulsionBody + constructBody;
+	hitPointPct = bodyPct + brainPct + sensorPct + ECMPct + repairPct + propulsionPct + constructPct;
 
-	/* propulsion HP are a percentage of the body's HP */
-	body += bodyBody * propulsionBody / 100;
+	// propulsion hitpoints can be a percentage of the body's hitpoints
+	bodyHitPoints += bodyBody * psPropPctBody;
 
-	//add weapon HP
-	body += weaponBody1 + weaponBody2 + weaponBody3;
-	widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, body);
+	// Add the weapon body points
+	for (unsigned i = 0; i < weaponCount; ++i)
+	{
+		switch (i)
+		{
+			case 0:
+				bodyHitPoints += weapon1Body;
+				hitPointPct += weapon1Pct;
+				break;
+			case 1:
+				bodyHitPoints += weapon2Body;
+				hitPointPct += weapon2Pct;
+				break;
+			case 2:
+				bodyHitPoints += weapon3Body;
+				hitPointPct += weapon3Pct;
+				break;
+			default:
+				ASSERT(false, "Bad weapon slot for shadow bodyPoint calculation");
+		}
+	}
+
+	// Final adjustment based on the hitpoint modifier
+	bodyHitPoints = (bodyHitPoints * (100 + hitPointPct)) / 100;
+
+	widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, bodyHitPoints);
 }
 
 

@@ -5531,7 +5531,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 		{
 			PROPULSION_STATS *psStats = asPropulsionStats + j;
 			QScriptValue v = register_common(engine, psStats);
-			v.setProperty("HitpointPctOfBody", psStats->maxSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			v.setProperty("HitpointPctOfBody", psStats->base.hitpointPctOfBody, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			v.setProperty("MaxSpeed", psStats->maxSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			v.setProperty("TurnSpeed", psStats->turnSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			v.setProperty("SpinSpeed", psStats->spinSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
