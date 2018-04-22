@@ -2433,35 +2433,6 @@ static void intSetDesignPower(DROID_TEMPLATE *psTemplate)
 	widgSetBarSize(psWScreen, IDDES_POWERBAR, calcTemplatePower(psTemplate));
 }
 
-// work out current system component
-static COMPONENT_TYPE getSystemType(DROID_TEMPLATE *droidTemplate)
-{
-	if (droidTemplate->asParts[COMP_ECM])
-	{
-		return COMP_ECM;
-	}
-	else if (droidTemplate->asParts[COMP_SENSOR])
-	{
-		return COMP_SENSOR;
-	}
-	else if (droidTemplate->asParts[COMP_CONSTRUCT])
-	{
-		return COMP_CONSTRUCT;
-	}
-	else if (droidTemplate->asParts[COMP_REPAIRUNIT])
-	{
-		return COMP_REPAIRUNIT;
-	}
-	else if (droidTemplate->asWeaps[0])
-	{
-		return COMP_WEAPON;
-	}
-	else
-	{
-		// compare it with the current weapon
-		return COMP_WEAPON;
-	}
-}
 
 /* Set the shadow bar graphs for the template power points - psStats is new hilited stats*/
 static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
@@ -2493,13 +2464,6 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 	{
 		newComponentPower += ((BRAIN_STATS *)psStats)->psWeaponStat->buildPower;
 	}
-	/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
-	a 'system' stat then need to find out which 'system' is currently in place so the
-	comparison is meaningful*/
-	if (desCompMode == IDES_SYSTEM)
-	{
-		type = getSystemType(&sCurrDesign);
-	}
 
 	switch (type)
 	{
@@ -2507,22 +2471,39 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		bodyPower = newComponentPower;
 		break;
 	case COMP_PROPULSION:
+		weaponCount = sCurrDesign.numWeaps;
 		propulsionPower = newComponentPower;
+		//Ignore all system components if a template switches to air.
+		if (asPropulsionTypes[asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].propulsionType].travel == AIR && desPropMode == IDES_GROUND)
+		{
+			brainPower = repairPower = constructPower = sensorPower = ECMPower = 0;
+		}
 		break;
 	case COMP_ECM:
+		weaponCount = 0;
+		brainPower = repairPower = constructPower = sensorPower = 0;
 		ECMPower = newComponentPower;
 		break;
 	case COMP_SENSOR:
+		weaponCount = 0;
+		brainPower = repairPower = constructPower = ECMPower = 0;
 		sensorPower = newComponentPower;
 		break;
 	case COMP_CONSTRUCT:
+		weaponCount = 0;
+		brainPower = repairPower = sensorPower = ECMPower = 0;
 		constructPower = newComponentPower;
 		break;
 	case COMP_REPAIRUNIT:
+		weaponCount = 0;
+		brainPower = constructPower = sensorPower = ECMPower = 0;
 		repairPower = newComponentPower;
 		break;
+	case COMP_BRAIN:
 	case COMP_WEAPON:
-		brainPower = 0;
+		weaponCount = 0;
+		brainPower = type == COMP_BRAIN ? newComponentPower : 0;
+		repairPower = constructPower = sensorPower = ECMPower = 0;
 		if (desCompMode == IDES_TURRET_A)
 		{
 			weaponCount = 2 + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
@@ -2533,7 +2514,7 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 			weaponCount = 3;
 			weaponPower3 = newComponentPower;
 		}
-		else
+		else if (type != COMP_BRAIN)
 		{
 			weaponCount = 1 + (sCurrDesign.numWeaps >= 2 ? 1 : 0) + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
 			weaponPower1 = newComponentPower;
@@ -2551,7 +2532,15 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 	/* propulsion power points are a percentage of the bodys' power points */
 	power += (propulsionPower * bodyPower) / 100;
 
-	//add weapon power
+	//add weapon power. In the case we are switching between air and ground
+	//we do not want to include the weapons should any exist.
+	if (type == COMP_PROPULSION &&
+		((asPropulsionTypes[asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].propulsionType].travel == GROUND && desPropMode == IDES_AIR) ||
+		(asPropulsionTypes[asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].propulsionType].travel == AIR && desPropMode == IDES_GROUND)))
+	{
+		weaponCount = 0;
+	}
+
 	for (unsigned i = 0; i < weaponCount; ++i)
 	{
 		switch (i)
@@ -2627,14 +2616,6 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		newComponentPct += ((BRAIN_STATS *)psStats)->psWeaponStat->upgrade[plr].hitpointPct - 100;
 	}
 
-	/*if type = BODY or PROPULSION can do a straight comparison but if the new stat is
-	a 'system' stat then need to find out which 'system' is currently in place so the
-	comparison is meaningful*/
-	if (desCompMode == IDES_SYSTEM)
-	{
-		type = getSystemType(&sCurrDesign);
-	}
-
 	switch (type)
 	{
 	case COMP_BODY:
@@ -2642,29 +2623,52 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		bodyPct = newComponentPct;
 		break;
 	case COMP_PROPULSION:
+		weaponCount = sCurrDesign.numWeaps;
 		propulsionBody = newComponentHP;
 		propulsionPct = newComponentPct;
 		psPropPctBody = asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].upgrade[plr].hitpointPctOfBody / 100;
+		//Ignore all system components if a template switches to air.
+		if (asPropulsionTypes[asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].propulsionType].travel == AIR && desPropMode == IDES_GROUND)
+		{
+			brainBody = sensorBody = repairBody = constructBody = ECMBody = 0;
+			brainPct = sensorPct = repairPct = constructPct = ECMPct = 0;
+		}
 		break;
 	case COMP_ECM:
+		weaponCount = 0;
+		brainBody = sensorBody = repairBody = constructBody = 0;
+		brainPct = sensorPct = repairPct = constructPct = 0;
 		ECMBody = newComponentHP;
 		ECMPct = newComponentPct;
 		break;
 	case COMP_SENSOR:
+		weaponCount = 0;
+		brainBody = ECMBody = repairBody = constructBody = 0;
+		brainPct = ECMPct = repairPct = constructPct = 0;
 		sensorBody = newComponentHP;
 		sensorPct = newComponentPct;
 		break;
 	case COMP_CONSTRUCT:
+		weaponCount = 0;
+		brainBody = sensorBody = repairBody = ECMBody = 0;
+		brainPct = sensorPct = repairPct = ECMPct = 0;
 		constructBody = newComponentHP;
 		constructPct = newComponentPct;
 		break;
 	case COMP_REPAIRUNIT:
+		weaponCount = 0;
+		brainBody = sensorBody = ECMBody = constructBody = 0;
+		brainPct = sensorPct = ECMPct = constructPct = 0;
 		repairBody = newComponentHP;
 		repairPct = newComponentPct;
 		break;
+	case COMP_BRAIN:
 	case COMP_WEAPON:
-		brainBody = 0;
-		brainPct = 0;
+		weaponCount = 0;
+		brainBody = type == COMP_BRAIN ? newComponentHP : 0;
+		brainPct = type == COMP_BRAIN ? newComponentPct : 0;
+		sensorBody = repairBody = constructBody = ECMBody = 0;
+		sensorPct = repairPct = constructPct = ECMPct = 0;
 		if (desCompMode == IDES_TURRET_A)
 		{
 			weaponCount = 2 + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
@@ -2677,7 +2681,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 			weapon3Body = newComponentHP;
 			weapon3Pct = newComponentPct;
 		}
-		else
+		else if (type != COMP_BRAIN)
 		{
 			weaponCount = 1 + (sCurrDesign.numWeaps >= 2 ? 1 : 0) + (sCurrDesign.numWeaps >= 3 ? 1 : 0);
 			weapon1Body = newComponentHP;
@@ -2696,7 +2700,14 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	// propulsion hitpoints can be a percentage of the body's hitpoints
 	bodyHitPoints += bodyBody * psPropPctBody;
 
-	// Add the weapon body points
+	//Add the weapon body points. In the case we are switching between air and ground
+	//we do not want to include the weapons should any exist.
+	if (type == COMP_PROPULSION &&
+		((asPropulsionTypes[asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].propulsionType].travel == GROUND && desPropMode == IDES_AIR) ||
+		(asPropulsionTypes[asPropulsionStats[(PROPULSION_STATS *)psStats - asPropulsionStats].propulsionType].travel == AIR && desPropMode == IDES_GROUND)))
+	{
+		weaponCount = 0;
+	}
 	for (unsigned i = 0; i < weaponCount; ++i)
 	{
 		switch (i)
