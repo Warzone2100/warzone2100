@@ -2739,9 +2739,16 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 /* Calculate the speed of a droid over a type of terrain */
 static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 {
-	UDWORD weight = calcDroidWeight(&sCurrDesign);
+	if (calcDroidWeight(&sCurrDesign) == 0)
+	{
+		return 0;
+	}
+	DROID_TEMPLATE *psTempl = new DROID_TEMPLATE(sCurrDesign);
+	psTempl->asParts[COMP_PROPULSION] = getCompFromID(COMP_PROPULSION, psProp->id);
+	UDWORD weight = calcDroidWeight(psTempl);
 	if (weight == 0)
 	{
+		delete psTempl;
 		return 0;
 	}
 	//we want the design screen to show zero speed over water for all prop types except Hover and Vtol
@@ -2749,10 +2756,13 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 	{
 		if (!(psProp->propulsionType == PROPULSION_TYPE_HOVER || psProp->propulsionType == PROPULSION_TYPE_LIFT))
 		{
+			delete psTempl;
 			return 0;
 		}
 	}
-	return calcDroidSpeed(calcDroidBaseSpeed(&sCurrDesign, weight, selectedPlayer), type, psProp - asPropulsionStats, 0);
+	UDWORD droidSpeed = calcDroidSpeed(calcDroidBaseSpeed(psTempl, weight, selectedPlayer), type, psProp - asPropulsionStats, 0);
+	delete psTempl;
+	return droidSpeed;
 }
 
 
@@ -2824,10 +2834,28 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 	/* Only set the shadow stats if they are the right type */
 	if (psStats &&
 	    ((asPropulsionTypes[psStats->propulsionType].travel == GROUND &&
-	      desPropMode != IDES_GROUND) ||
+	      desPropMode == IDES_AIR) ||
 	     (asPropulsionTypes[psStats->propulsionType].travel == AIR &&
-	      desPropMode != IDES_AIR)))
+	      desPropMode == IDES_GROUND)))
 	{
+		// Reset the shadow bars. Prevent an incredibly trivial case where
+		// hovering over a valid propulsion and then to an invalid one to compare
+		// against (design is wheels, then hovered over half-tracks, then VTOL)
+		// causes the last shadow marker set to stay.
+		if (asPropulsionTypes[psStats->propulsionType].travel == GROUND && desPropMode == IDES_AIR)
+		{
+			widgSetMinorBarSize(psWScreen, IDDES_PROPAIR, 0);
+		}
+		else
+		{
+			widgSetMinorBarSize(psWScreen, IDDES_PROPROAD, 0);
+			widgSetMinorBarSize(psWScreen, IDDES_PROPCOUNTRY, 0);
+			widgSetMinorBarSize(psWScreen, IDDES_PROPWATER, 0);
+		}
+		if (sCurrDesign.asParts[COMP_BODY] != 0)
+		{
+			widgSetMinorBarSize(psWScreen, IDDES_PROPWEIGHT, psStats->weight * asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100);
+		}
 		return;
 	}
 
