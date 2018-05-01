@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2018  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1927,7 +1927,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 		imd = imd->next;
 	}
 
-	setScreenDisp(&psFeature->sDisplay, viewMatrix);
+	setScreenDisp(&psFeature->sDisplay, viewMatrix * modelMatrix);
 }
 
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatrix)
@@ -2773,7 +2773,7 @@ static void	drawStructureSelections()
 			    && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
 				scrX = psStruct->sDisplay.screenX;
-				scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->max.y / 4);
+				scrY = psStruct->sDisplay.screenY;
 				iV_DrawImage(IntImages, getTargettingGfx(), scrX, scrY);
 			}
 		}
