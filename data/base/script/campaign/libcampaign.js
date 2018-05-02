@@ -2887,12 +2887,6 @@ function __camGameLostCB()
 
 function __camGameLost()
 {
-	//HACK: Allows the player to survive in Gamma 3-A. If they did not
-	//bring in a construction droid then they lose.
-	if(__camNextLevel === "SUB_3_1S" && getMissionTime() > (camChangeOnDiff(7200) - 60))
-	{
-		return; // Campaign 3A needs to get units setup first.
-	}
 	camCallOnce("__camGameLostCB");
 }
 
@@ -2929,7 +2923,23 @@ function __camPlayerDead()
 	{
 		return false;
 	}
-	return (countDroid(DROID_CONSTRUCT) === 0);
+	if (countDroid(DROID_CONSTRUCT) > 0)
+	{
+		return false;
+	}
+	var transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER);
+	for (var j = 0, c = transporter.length; j < c; ++j)
+	{
+		var droids = enumCargo(transporter[j]);
+		for (var i = 0, l = droids.length; i < l; ++i)
+		{
+			if (droids[i].droidType === DROID_CONSTRUCT)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 function __camTriggerLastAttack()
