@@ -834,7 +834,7 @@ bool loadScriptStates(const char *filename)
 			std::vector<WzString> keys = ini.childKeys();
 			for (int j = 0; j < keys.size(); ++j)
 			{
-				QStringList values = ini.value(keys.at(j)).toStringList();
+				std::vector<WzString> values = ini.value(keys.at(j)).toWzStringList();
 				bool ok = false; // check if number
 				int droidId = keys.at(j).toInt(&ok);
 				for (int k = 0; ok && k < values.size(); k++)
