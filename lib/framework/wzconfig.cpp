@@ -98,7 +98,7 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	try {
 		mRoot = nlohmann::json::parse(data, data + size);
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		ASSERT(false, "JSON document from %s is invalid: %s", name.toUtf8().c_str(), e.what());
 	}
 	catch (...) {
@@ -124,7 +124,7 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 		try {
 			tmpJson = nlohmann::json::parse(data, data + size);
 		}
-		catch (const std::exception& e) {
+		catch (const std::exception &e) {
 			ASSERT(false, "JSON diff from %s is invalid: %s", name.toUtf8().c_str(), e.what());
 		}
 		catch (...) {
@@ -189,7 +189,6 @@ nlohmann::json WzConfig::json(const WzString &key, const nlohmann::json &default
 
 WzString WzConfig::string(const WzString &key, const WzString &defaultValue) const
 {
-	// TODO: Should this use json_variant to support conversion from other types to string?
 	auto it = pCurrentObj->find(key.toUtf8());
 	if (it == pCurrentObj->end())
 	{
@@ -197,16 +196,15 @@ WzString WzConfig::string(const WzString &key, const WzString &defaultValue) con
 	}
 	else
 	{
-		try {
-			return it.value().get<WzString>();
-		}
-		catch (const std::exception &e) {
+		// Use json_variant to support conversion from other value types to string
+		bool ok = false;
+		WzString stringValue = json_variant(it.value()).toWzString(&ok);
+		if (!ok)
+		{
+			ASSERT(false, "Failed to convert value of key \"%s\" to string", key.toUtf8().c_str());
 			return defaultValue;
 		}
-		catch (...) {
-			debug(LOG_FATAL, "Unexpected exception encountered");
-			return defaultValue;
-		}
+		return stringValue;
 	}
 }
 
@@ -230,7 +228,7 @@ Vector3f WzConfig::vector3f(const WzString &name)
 		r.y = v[1];
 		r.z = v[2];
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
 	}
 	catch (...) {
@@ -259,7 +257,7 @@ Vector3i WzConfig::vector3i(const WzString &name)
 		r.y = v[1];
 		r.z = v[2];
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
 	}
 	catch (...) {
@@ -287,7 +285,7 @@ Vector2i WzConfig::vector2i(const WzString &name)
 		r.x = v[0];
 		r.y = v[1];
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
 	}
 	catch (...) {
@@ -714,30 +712,30 @@ float json_variant::toFloat(bool *ok /*= nullptr*/) const
 	}
 }
 
-WzString json_variant::toWzString() const
+WzString json_variant::toWzString(bool *ok /*= nullptr*/) const
 {
 	if (mObj.is_string())
 	{
-		return json_variant_toType<WzString>(*this, nullptr, WzString());
+		return json_variant_toType<WzString>(*this, ok, WzString());
 	}
 	else if (mObj.is_boolean())
 	{
-		bool result = json_variant_toType<bool>(*this, nullptr, false);
+		bool result = json_variant_toType<bool>(*this, ok, false);
 		return (result) ? WzString::fromUtf8("true") : WzString::fromUtf8("false");
 	}
 	else if (mObj.is_number_unsigned())
 	{
-		json::number_unsigned_t intValue = json_variant_toType<json::number_unsigned_t>(*this, nullptr, 0);
+		json::number_unsigned_t intValue = json_variant_toType<json::number_unsigned_t>(*this, ok, 0);
 		return WzString::number(intValue);
 	}
 	else if (mObj.is_number_integer())
 	{
-		json::number_integer_t intValue = json_variant_toType<json::number_integer_t>(*this, nullptr, 0);
+		json::number_integer_t intValue = json_variant_toType<json::number_integer_t>(*this, ok, 0);
 		return WzString::number(intValue);
 	}
 	else if (mObj.is_number_float())
 	{
-		json::number_float_t floatValue = json_variant_toType<json::number_float_t>(*this, nullptr, 0);
+		json::number_float_t floatValue = json_variant_toType<json::number_float_t>(*this, ok, 0);
 		return WzString::number(floatValue);
 	}
 	else if (mObj.is_null())
@@ -746,6 +744,10 @@ WzString json_variant::toWzString() const
 	}
 	else
 	{
+		if (ok != nullptr)
+		{
+			*ok = false;
+		}
 		return WzString();
 	}
 }
@@ -765,21 +767,18 @@ std::vector<WzString> json_variant::toWzStringList() const
 		return result;
 	}
 
-	std::string str;
+	WzString str;
+	bool ok = false;
 	for (const auto& v : mObj)
 	{
-		try {
-			str = v.get<std::string>();
-		}
-		catch (const std::exception &e) {
-			debug(LOG_WARNING, "Encountered a JSON value in the array that cannot be converted to a string; error: %s", e.what());
+		// Use json_variant to support conversion from other value types to string
+		str = json_variant(v).toWzString(&ok);
+		if (!ok)
+		{
+			debug(LOG_WARNING, "Encountered a JSON value in the array that cannot be converted to a string (type: %s)", v.type_name());
 			break;
 		}
-		catch (...) {
-			debug(LOG_FATAL, "Encountered an unexpected exception in json_variant::toStringList()");
-			break;
-		}
-		result.push_back(WzString::fromUtf8(str));
+		result.push_back(str);
 	}
 	return result;
 }

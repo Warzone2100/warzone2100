@@ -59,7 +59,7 @@ public:
 	bool toBool() const;
 	double toDouble(bool *ok = nullptr) const;
 	float toFloat(bool *ok = nullptr) const;
-	WzString toWzString() const;
+	WzString toWzString(bool *ok = nullptr) const;
 	std::vector<WzString> toWzStringList() const;
 	QString toString() const;
 	QStringList toStringList() const;
