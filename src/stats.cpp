@@ -428,7 +428,7 @@ bool loadWeaponStats(const char *pFileName)
 		}
 
 		//set the subClass
-		if (!getWeaponSubClass(ini.value("weaponSubClass").toString().toUtf8().data(), &psStats->weaponSubClass))
+		if (!getWeaponSubClass(ini.value("weaponSubClass").toWzString().toUtf8().c_str(), &psStats->weaponSubClass))
 		{
 			return false;
 		}
@@ -795,7 +795,7 @@ bool loadPropulsionStats(const char *pFileName)
 		{
 			psStats->upgrade[j] = psStats->base;
 		}
-		if (!getPropulsionType(ini.value("type").toString().toUtf8().constData(), &psStats->propulsionType))
+		if (!getPropulsionType(ini.value("type").toWzString().toUtf8().c_str(), &psStats->propulsionType))
 		{
 			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getName(psStats));
 			return false;

@@ -233,7 +233,7 @@ bool initTemplates()
 			debug(LOG_ERROR, "%s \"%s\" for \"%s\" from stored templates cannot be designed", failPart, failPartName.toUtf8().c_str(), design.name.toUtf8().c_str());
 			continue;
 		}
-		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
+		bool valid = intValidTemplate(&design, ini.value("name").toWzString().toUtf8().c_str(), false, selectedPlayer);
 		if (!valid)
 		{
 			debug(LOG_ERROR, "Invalid template \"%s\" from stored templates", design.name.toUtf8().c_str());

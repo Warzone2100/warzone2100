@@ -733,9 +733,9 @@ const char *loadResearchViewData(const char *fileName)
 }
 
 /* Get the view data identified by the name */
-VIEWDATA *getViewData(const char *pName)
+VIEWDATA *getViewData(const WzString &name)
 {
-	std::map<WzString, VIEWDATA *>::iterator it = apsViewData.find(pName);
+	std::map<WzString, VIEWDATA *>::iterator it = apsViewData.find(name);
 	VIEWDATA *ptr = (it != apsViewData.end()) ? it->second : nullptr;
 	if (!ptr) // dump for debugging
 	{
@@ -747,7 +747,7 @@ VIEWDATA *getViewData(const char *pName)
 			++iter;
 		}
 	}
-	ASSERT(ptr, "Message %s not found, run with --debug=wz to get a list of all known messages", pName);
+	ASSERT(ptr, "Message %s not found, run with --debug=wz to get a list of all known messages", name.toUtf8().c_str());
 	return ptr;
 }
 

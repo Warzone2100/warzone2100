@@ -759,11 +759,11 @@ void readAIs()
 		WzConfig aiconf(path, WzConfig::ReadOnly);
 		AIDATA ai;
 		aiconf.beginGroup("AI");
-		sstrcpy(ai.name, aiconf.value("name", "error").toString().toUtf8().constData());
-		sstrcpy(ai.slo, aiconf.value("slo", "").toString().toUtf8().constData());
-		sstrcpy(ai.vlo, aiconf.value("vlo", "").toString().toUtf8().constData());
-		sstrcpy(ai.js, aiconf.value("js", "").toString().toUtf8().constData());
-		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toUtf8().constData());
+		sstrcpy(ai.name, aiconf.value("name", "error").toWzString().toUtf8().c_str());
+		sstrcpy(ai.slo, aiconf.value("slo", "").toWzString().toUtf8().c_str());
+		sstrcpy(ai.vlo, aiconf.value("vlo", "").toWzString().toUtf8().c_str());
+		sstrcpy(ai.js, aiconf.value("js", "").toWzString().toUtf8().c_str());
+		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toWzString().toUtf8().c_str());
 		if (strcmp(ai.name, "Nullbot") == 0)
 		{
 			std::vector<AIDATA>::iterator it;
@@ -2998,7 +2998,7 @@ static void loadMapSettings2()
 		}
 		if (ini.contains("name"))
 		{
-			sstrcpy(NetPlay.players[i].name, ini.value("name").toString().toUtf8().constData());
+			sstrcpy(NetPlay.players[i].name, ini.value("name").toWzString().toUtf8().c_str());
 		}
 		NetPlay.players[i].position = MAX_PLAYERS;  // Invalid value, fix later.
 		if (ini.contains("position"))
