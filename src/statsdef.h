@@ -493,7 +493,7 @@ struct BODY_STATS : public COMPONENT_STATS
 	std::vector<iIMDShape *> ppIMDList;	///< list of IMDs to use for propulsion unit - up to numPropulsionStats
 	std::vector<iIMDShape *> ppMoveIMDList;	///< list of IMDs to use when droid is moving - up to numPropulsionStats
 	std::vector<iIMDShape *> ppStillIMDList;///< list of IMDs to use when droid is still - up to numPropulsionStats
-	QString         bodyClass;		///< rules hint to script about its classification
+	WzString         bodyClass;		///< rules hint to script about its classification
 
 	struct : UPGRADE
 	{

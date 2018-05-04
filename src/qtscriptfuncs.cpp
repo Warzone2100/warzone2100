@@ -5506,7 +5506,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			body.setProperty("Resistance", psStats->base.resistance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("Size", psStats->size, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("WeaponSlots", psStats->weaponSlots, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("BodyClass", psStats->bodyClass, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			body.setProperty("BodyClass", QString::fromUtf8(psStats->bodyClass.toUtf8().c_str()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			bodybase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
