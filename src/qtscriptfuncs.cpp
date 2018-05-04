@@ -984,8 +984,8 @@ bool loadLabels(const char *filename)
 			p.id = groupidx--;
 			p.type = SCRIPT_GROUP;
 			p.player = ini.value("player").toInt();
-			QStringList memberList = ini.value("members").toStringList();
-			for (QString const &j : memberList)
+			std::vector<WzString> memberList = ini.value("members").toWzStringList();
+			for (WzString const &j : memberList)
 			{
 				int id = j.toInt();
 				BASE_OBJECT *psObj = IdToPointer(id, p.player);
