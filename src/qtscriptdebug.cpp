@@ -599,7 +599,7 @@ QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *
 		const BODY_STATS *psBody = (const BODY_STATS *)psStats;
 		key->appendRow(QStandardItemList{ new QStandardItem("^Size"), new QStandardItem(QString::number(psBody->size)) });
 		key->appendRow(QStandardItemList{ new QStandardItem("^Max weapons"), new QStandardItem(QString::number(psBody->weaponSlots)) });
-		key->appendRow(QStandardItemList{ new QStandardItem("^Body class"), new QStandardItem(psBody->bodyClass) });
+		key->appendRow(QStandardItemList{ new QStandardItem("^Body class"), new QStandardItem(QString::fromUtf8(psBody->bodyClass.toUtf8().c_str())) });
 	}
 	else if (psStats->compType == COMP_PROPULSION)
 	{

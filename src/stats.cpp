@@ -571,7 +571,7 @@ bool loadBodyStats(const char *pFileName)
 		psStats->compType = COMP_BODY;
 
 		psStats->weaponSlots = ini.value("weaponSlots").toInt();
-		psStats->bodyClass = ini.value("class").toString();
+		psStats->bodyClass = ini.value("class").toWzString();
 		psStats->base.thermal = ini.value("armourHeat").toInt();
 		psStats->base.armour = ini.value("armourKinetic").toInt();
 		psStats->base.power = ini.value("powerOutput").toInt();
