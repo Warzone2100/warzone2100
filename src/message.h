@@ -66,8 +66,8 @@ void releaseAllProxDisp();
 const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
 const char *loadResearchViewData(const char *fileName);
 
-/** Get the view data that contains the text message pointer passed in. */
-VIEWDATA *getViewData(const char *pTextMsg);
+/** Get the view data identified by the name */
+VIEWDATA *getViewData(const WzString &name);
 
 /// Get a list of viewdata entries
 std::vector<WzString> getViewDataKeys();

@@ -511,14 +511,14 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 }
 
 
-SDWORD getFeatureStatFromName(const char *pName)
+SDWORD getFeatureStatFromName(const WzString &name)
 {
 	FEATURE_STATS *psStat;
 
 	for (int inc = 0; inc < numFeatureStats; inc++)
 	{
 		psStat = &asFeatureStats[inc];
-		if (psStat->id.compare(WzString::fromUtf8(pName)) == 0)
+		if (psStat->id.compare(name) == 0)
 		{
 			return inc;
 		}

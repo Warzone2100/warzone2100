@@ -208,7 +208,7 @@ bool loadResearch(const WzString& filename)
 			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getName(&research));
 			if (research.techCode == TC_MAJOR)
 			{
-				research.pViewData = getViewData(msgName.toUtf8().c_str());
+				research.pViewData = getViewData(msgName);
 			}
 		}
 
@@ -293,7 +293,7 @@ bool loadResearch(const WzString& filename)
 		for (int j = 0; j < resStruct.size(); j++)
 		{
 			WzString strucID = resStruct[j].trimmed();
-			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
+			int structIndex = getStructStatFromName(strucID);
 			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
 			if (structIndex >= 0)
 			{

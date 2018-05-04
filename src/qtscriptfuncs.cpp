@@ -895,14 +895,14 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 	GROUPMAP *psMap = groups.value(engine);
 	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
 	{
-		QStringList value;
+		std::vector<WzString> value;
 		BASE_OBJECT *psObj = i.key();
 		ASSERT(!isDead(psObj), "Wanted to save dead %s to savegame!", objInfo(psObj));
 		if (ini.contains(WzString::number(psObj->id)))
 		{
-			value.push_back(ini.value(WzString::number(psObj->id)).toString());
+			value.push_back(ini.value(WzString::number(psObj->id)).toWzString());
 		}
-		value.push_back(QString::number(i.value()));
+		value.push_back(WzString::number(i.value()));
 		ini.setValue(WzString::number(psObj->id), value);
 	}
 	return true;
@@ -1707,7 +1707,7 @@ static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine
 	QString featName = context->argument(0).toString();
 	int x = context->argument(1).toInt32();
 	int y = context->argument(2).toInt32();
-	int feature = getFeatureStatFromName(featName.toUtf8().constData());
+	int feature = getFeatureStatFromName(QStringToWzString(featName));
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 	{
@@ -2303,7 +2303,7 @@ static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine
 	const int player = droidVal.property("player").toInt32();
 	DROID *psDroid = IdToDroid(id, player);
 	QString statName = context->argument(1).toString();
-	int index = getStructStatFromName(statName.toUtf8().constData());
+	int index = getStructStatFromName(QStringToWzString(statName));
 	SCRIPT_ASSERT(context, index >= 0, "%s not found", statName.toUtf8().constData());
 	STRUCTURE_STATS	*psStat = &asStructureStats[index];
 	const int startX = context->argument(2).toInt32();
@@ -2708,7 +2708,7 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	DROID *psDroid = IdToDroid(id, player);
 	DROID_ORDER order = (DROID_ORDER)context->argument(1).toInt32();
 	QString statName = context->argument(2).toString();
-	int index = getStructStatFromName(statName.toUtf8().constData());
+	int index = getStructStatFromName(QStringToWzString(statName));
 	SCRIPT_ASSERT(context, index >= 0, "%s not found", statName.toUtf8().constData());
 	STRUCTURE_STATS	*psStats = &asStructureStats[index];
 	int x = context->argument(3).toInt32();
@@ -2884,7 +2884,7 @@ static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine
 	QString building = context->argument(0).toString();
 	int limit = context->argument(1).toInt32();
 	int player;
-	int structInc = getStructStatFromName(building.toUtf8().constData());
+	int structInc = getStructStatFromName(QStringToWzString(building));
 	if (context->argumentCount() > 2)
 	{
 		player = context->argument(2).toInt32();
@@ -3199,7 +3199,7 @@ static QScriptValue js_setPowerStorageMaximum(QScriptContext *context, QScriptEn
 static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
-	int index = getStructStatFromName(building.toUtf8().constData());
+	int index = getStructStatFromName(QStringToWzString(building));
 	int player;
 	if (context->argumentCount() > 1)
 	{
@@ -3511,7 +3511,7 @@ static QScriptValue js_queuedPower(QScriptContext *context, QScriptEngine *engin
 static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
-	int index = getStructStatFromName(building.toUtf8().constData());
+	int index = getStructStatFromName(QStringToWzString(building));
 	SCRIPT_ASSERT(context, index >= 0, "%s not found", building.toUtf8().constData());
 	int player;
 	if (context->argumentCount() > 1)
@@ -3728,7 +3728,7 @@ static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
 static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
-	int index = getStructStatFromName(building.toUtf8().constData());
+	int index = getStructStatFromName(QStringToWzString(building));
 	SCRIPT_ASSERT(context, index >= 0, "%s not found", building.toUtf8().constData());
 	int player = context->argument(1).toInt32();
 	SCRIPT_ASSERT_PLAYER(context, player);
@@ -3752,7 +3752,7 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *engi
 static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
-	int index = getStructStatFromName(building.toUtf8().constData());
+	int index = getStructStatFromName(QStringToWzString(building));
 	SCRIPT_ASSERT(context, index >= 0, "%s not found", building.toUtf8().constData());
 	int player;
 	if (context->argumentCount() > 1)
@@ -3774,7 +3774,7 @@ static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine 
 static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
-	int index = getStructStatFromName(building.toUtf8().constData());
+	int index = getStructStatFromName(QStringToWzString(building));
 	int me = engine->globalObject().property("me").toInt32();
 	int player = me;
 	int quantity = 0;
@@ -4365,7 +4365,7 @@ static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
 	MESSAGE *psMessage = addMessage(msgType, false, player);
 	if (psMessage)
 	{
-		VIEWDATA *psViewData = getViewData(mess.toUtf8().constData());
+		VIEWDATA *psViewData = getViewData(QStringToWzString(mess));
 		SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
 		psMessage->pViewData = psViewData;
 		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), psMessage->pViewData);
@@ -4397,7 +4397,7 @@ static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine 
 	QString mess = context->argument(0).toString();
 	MESSAGE_TYPE msgType = (MESSAGE_TYPE)context->argument(1).toInt32();
 	int player = context->argument(2).toInt32();
-	VIEWDATA *psViewData = getViewData(mess.toUtf8().constData());
+	VIEWDATA *psViewData = getViewData(QStringToWzString(mess));
 	SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
 	MESSAGE *psMessage = findMessage(psViewData, msgType, player);
 	if (psMessage)

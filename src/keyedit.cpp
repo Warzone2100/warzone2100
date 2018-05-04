@@ -428,21 +428,21 @@ bool loadKeyMap()
 
 	for (ini.beginArray("mappings"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
-		auto name = ini.value("name", "").toString();
+		auto name = ini.value("name", "").toWzString();
 		auto status = (KEY_STATUS)ini.value("status", 0).toInt();
 		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
 		auto sub = (KEY_CODE)ini.value("sub", 0).toInt();
 		auto action = (KEY_ACTION)ini.value("action", 0).toInt();
-		auto functionName = ini.value("function", "").toString().toUtf8();
-		auto function = keymapEntryByName(functionName.constData());
+		auto functionName = ini.value("function", "").toWzString();
+		auto function = keymapEntryByName(functionName.toUtf8().c_str());
 		if (function == nullptr)
 		{
-			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.constData());
+			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.toUtf8().c_str());
 			continue;
 		}
 
 		// add mapping
-		keyAddMapping(status, meta, sub, action, function->function, name.toUtf8().constData());
+		keyAddMapping(status, meta, sub, action, function->function, name.toUtf8().c_str());
 	}
 	ini.endArray();
 	return true;

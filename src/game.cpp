@@ -1742,7 +1742,7 @@ static void getIniStructureStats(WzConfig &ini, WzString const &key, STRUCTURE_S
 	if (ini.contains(key))
 	{
 		WzString statName = ini.value(key).toWzString();
-		int tid = getStructStatFromName(statName.toUtf8().c_str());
+		int tid = getStructStatFromName(statName);
 		ASSERT_OR_RETURN(, tid >= 0, "Target stats not found %s", statName.toUtf8().c_str());
 		stats = &asStructureStats[tid];
 	}
@@ -4282,7 +4282,7 @@ static int getPlayer(WzConfig &ini)
 	if (ini.contains("player"))
 	{
 		json_variant result = ini.value("player");
-		if (result.toString().startsWith("scavenger"))
+		if (result.toWzString().startsWith("scavenger"))
 		{
 			game.mapHasScavengers = true;
 			return scavengerSlot();
@@ -5027,16 +5027,16 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 //return id of a research topic based on the name
-static UDWORD getResearchIdFromName(const char *pName)
+static UDWORD getResearchIdFromName(const WzString &name)
 {
 	for (int inc = 0; inc < asResearch.size(); inc++)
 	{
-		if (asResearch[inc].id.compare(pName) == 0)
+		if (asResearch[inc].id.compare(name) == 0)
 		{
 			return inc;
 		}
 	}
-	debug(LOG_ERROR, "Unknown research - %s", pName);
+	debug(LOG_ERROR, "Unknown research - %s", name.toUtf8().c_str());
 	return NULL_ID;
 }
 
@@ -5204,7 +5204,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			//set the subject
 			if (ini.contains("Research/target"))
 			{
-				researchId = getResearchIdFromName(ini.value("Research/target").toString().toUtf8().constData());
+				researchId = getResearchIdFromName(ini.value("Research/target").toWzString());
 				if (researchId != NULL_ID)
 				{
 					psResearch->psSubject = &asResearch[researchId];
@@ -5212,7 +5212,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				}
 				else
 				{
-					debug(LOG_ERROR, "Failed to look up research target %s", ini.value("Research/target").toString().toUtf8().constData());
+					debug(LOG_ERROR, "Failed to look up research target %s", ini.value("Research/target").toWzString().toUtf8().c_str());
 				}
 			}
 			break;
@@ -6312,7 +6312,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 						}
 						else if (ini.contains("name"))
 						{
-							psViewData = getViewData(ini.value("name").toString().toUtf8().constData());
+							psViewData = getViewData(ini.value("name").toWzString());
 							ASSERT(psViewData, "Failed to find view data for proximity position - skipping message %d", id);
 							if (psViewData == nullptr)
 							{
@@ -6352,7 +6352,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 				ASSERT(psMessage, "Could not create message %d", id);
 				if (psMessage)
 				{
-					psMessage->pViewData = getViewData(ini.value("name").toString().toUtf8().constData());
+					psMessage->pViewData = getViewData(ini.value("name").toWzString());
 					ASSERT(psMessage->pViewData, "Failed to find view data for message %d", id);
 				}
 			}

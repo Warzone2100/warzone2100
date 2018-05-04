@@ -4670,9 +4670,9 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 
 /* gets a structure stat from its name - relies on the name being unique (or it will
 return the first one it finds!! */
-int32_t getStructStatFromName(char const *pName)
+int32_t getStructStatFromName(const WzString &name)
 {
-	BASE_STATS *psStat = getCompStatsFromName(pName);
+	BASE_STATS *psStat = getCompStatsFromName(name);
 	if (psStat)
 	{
 		return psStat->index;

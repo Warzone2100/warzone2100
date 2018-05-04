@@ -814,7 +814,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_INTMESSAGE:
 		if (ini.contains("data"))
 		{
-			psVal->v.oval = (void *)getViewData(ini.value("data").toString().toUtf8().constData());
+			psVal->v.oval = (void *)getViewData(ini.value("data").toWzString());
 		}
 		else
 		{
@@ -841,7 +841,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		index = 0;
 		if (ini.contains("data"))
 		{
-			index = getStructStatFromName(ini.value("data").toString().toUtf8().constData());
+			index = getStructStatFromName(ini.value("data").toWzString());
 			if (index == -1)
 			{
 				debug(LOG_FATAL, "Could not find stat");
@@ -854,7 +854,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		index = 0;
 		if (ini.contains("data"))
 		{
-			index = getFeatureStatFromName(ini.value("data").toString().toUtf8().constData());
+			index = getFeatureStatFromName(ini.value("data").toWzString());
 			if (index == -1)
 			{
 				debug(LOG_FATAL, "Could not find stat");
@@ -951,14 +951,14 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.sval = nullptr;
 		if (ini.contains("data"))
 		{
-			psVal->v.sval = strdup(ini.value("data").toString().toUtf8().constData());
+			psVal->v.sval = strdup(ini.value("data").toWzString().toUtf8().c_str());
 		}
 		break;
 	case ST_LEVEL:
 		psVal->v.sval = nullptr;
 		if (ini.contains("data"))
 		{
-			psLevel = levFindDataSet(ini.value("data").toString().toUtf8().constData());
+			psLevel = levFindDataSet(ini.value("data").toWzString().toUtf8().c_str());
 			if (psLevel == nullptr)
 			{
 				debug(LOG_FATAL, "Could not find level dataset");
@@ -1026,7 +1026,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			break;
 		}
 
-		index = audio_GetTrackID(ini.value("data").toString().toUtf8().constData());
+		index = audio_GetTrackID(ini.value("data").toWzString().toUtf8().c_str());
 		if (index == SAMPLE_NOT_FOUND)
 		{
 			// find empty id and set track vals

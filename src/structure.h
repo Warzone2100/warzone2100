@@ -146,7 +146,7 @@ void alignStructure(STRUCTURE *psBuilding);
 /* set the current number of structures of each type built */
 void setCurrentStructQuantity(bool displayError);
 /* get a stat inc based on the name */
-int32_t getStructStatFromName(char const *pName);
+int32_t getStructStatFromName(const WzString &name);
 /*check to see if the structure is 'doing' anything  - return true if idle*/
 bool  structureIdle(STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */

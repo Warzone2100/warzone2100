@@ -199,7 +199,7 @@ static bool eventLoadContext(WzConfig &ini)
 					break;
 				case VAL_STRING:
 					data.v.sval = (char *)malloc(MAXSTRLEN);
-					strcpy(data.v.sval, ini.value("var/" + WzString::number(i) + "/data").toString().toUtf8().constData());
+					strcpy(data.v.sval, ini.value("var/" + WzString::number(i) + "/data").toWzString().toUtf8().c_str());
 					break;
 				case VAL_OBJ_GETSET:
 				case VAL_FUNC_EXTERN:

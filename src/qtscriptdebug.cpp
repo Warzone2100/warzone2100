@@ -131,7 +131,7 @@ static void fillViewdataModel(QStandardItemModel &m)
 	std::vector<WzString> keys = getViewDataKeys();
 	for (const WzString& key : keys)
 	{
-		VIEWDATA *ptr = getViewData(key.toUtf8().c_str());
+		VIEWDATA *ptr = getViewData(key);
 		m.setItem(row, 0, new QStandardItem(QString::fromUtf8(key.toUtf8().c_str())));
 		m.setItem(row, 1, new QStandardItem(view_type.at(ptr->type)));
 		m.setItem(row, 2, new QStandardItem(QString::fromUtf8(ptr->fileName.toUtf8().c_str())));
