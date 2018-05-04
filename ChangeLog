@@ -133,9 +133,11 @@
    * Change: Droid ranks are now a brain property and can be upgraded (commit:e760917fef73e172f0149a632a7505303b25080b)
    * Change: HitPoint handling in stats (commit:b1cb129247bca05fb35e50b15e8bedee2d6f4a8a)
    * Change: Jammer tower and droid balancing (commit:0e78612aebdf738677bfb1d5986771667373e354, commit:6f919d4d87b32aa72b8ea65e20460795c8cbbc1b)
-   * Fix: Autoreplace cyborg flamer with thermite flamer (commit:8dca9a6bbabd0ff0923a088a9d0ee95d078d8ad3)
-   * Fix: Autoreplace cyborg rocket for cyborg scourge missile and heavy gunner for hyper velocity cannon (commit:55f5998c52a0cb2e889aa60c92e79167fc6dc8ed)
+   * Fix: Do not replace cyborg flamer with thermite flamer for built droids (commit:8dca9a6bbabd0ff0923a088a9d0ee95d078d8ad3)
+   * Fix: Do not replace cyborg rocket with cyborg scourge missile and cyborg heavy gunner with cyborg hyper velocity cannon (commit:55f5998c52a0cb2e889aa60c92e79167fc6dc8ed)
    * Fix: Structures not having initial thermal armor (commit:3dd4cdbe548e64ad18c3e06ad427e90fd00c1aa8, ticket:4616)
+   * Fix: Various sensor tower research being available before the turret (commit:7487247ead349a9a497ad75e74d634e080a0d58c, ticket:666)
+   * Fix: ECM research upgrades not extending the range of the jammer (commit:29a88d15a803ae86c8156378526144840d4f84d4)
  * Translation
    * Add: Indonesian (commit:3c050b0cc0a909eaa73d540bffa5224f2631f149)
    * Fix: German translation updates (commit:e5d7e20d49a5737a69365bb5b5e96c959e03ac9d, commit:4bc390378c90e807b31775b5e59c845d0398789e, ticket:4597)
