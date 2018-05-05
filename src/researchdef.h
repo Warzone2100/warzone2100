@@ -58,8 +58,8 @@ struct RESEARCH : public BASE_STATS
 	std::vector<UWORD>	pRedStructs;		///< List of Structures that become redundant
 	std::vector<COMPONENT_STATS *> pRedArtefacts;	///< List of Artefacts that become redundant
 	std::vector<UWORD>	pStructureResults;	///< List of Structures that are possible after this research
-	QList<COMPONENT_STATS *> componentResults;	///< List of Components that are possible after this research
-	QList<RES_COMP_REPLACEMENT> componentReplacement;	///< List of Components that are automatically replaced with new onew after research
+	std::vector<COMPONENT_STATS *> componentResults;	///< List of Components that are possible after this research
+	std::vector<RES_COMP_REPLACEMENT> componentReplacement;	///< List of Components that are automatically replaced with new onew after research
 	nlohmann::json	results;		///< Research upgrades
 	VIEWDATA                *pViewData;             ///< Data used to display a message in the Intelligence Screen
 	UWORD			iconID;				/* the ID from 'Framer' for which graphic to draw in interface*/
