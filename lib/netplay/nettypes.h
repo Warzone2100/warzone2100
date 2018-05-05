@@ -89,7 +89,6 @@ void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETbool(bool *bp);
 void NETbool(bool *bp);
-void NETqstring(QString &str);
 void NETwzstring(WzString &str);
 void NETstring(char *str, uint16_t maxlen);
 void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of NETstring.
