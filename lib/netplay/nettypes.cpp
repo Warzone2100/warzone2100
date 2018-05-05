@@ -670,33 +670,11 @@ void NETstring(char *str, uint16_t maxlen)
 	}
 }
 
-void NETqstring(QString &str)
-{
-	uint32_t len = str.size();
-
-	queueAuto(len);
-
-	if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		str.resize(len);
-	}
-	for (unsigned i = 0; i < len; ++i)
-	{
-		uint16_t c;
-		if (NETgetPacketDir() == PACKET_ENCODE)
-		{
-			c = str[i].unicode();
-		}
-		queueAuto(c);
-		if (NETgetPacketDir() == PACKET_DECODE)
-		{
-			str[i] = QChar(c);
-		}
-	}
-}
-
 void NETwzstring(WzString &str)
 {
+	// NOTE: To be backwards-compatible with the old NETqstring (QString-based) function,
+	// this uses UTF-16 encoding.
+
 	std::vector<uint16_t> u16_characters;
 	uint32_t len = 0;
 	if (NETgetPacketDir() == PACKET_ENCODE)
