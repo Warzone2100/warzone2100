@@ -2762,10 +2762,6 @@ static void	drawStructureSelections()
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (i == selectedPlayer)
-		{
-			continue;	// not interesting in our own buildings
-		}
 		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 		{
 			/* If it's targetted and on-screen */
@@ -3047,7 +3043,7 @@ static void	drawDroidSelections()
 			{
 				drawDroidOrder(psDroid);
 			}
-			if (i != selectedPlayer && !psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
+			if (!psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
 				/* If it's selected */
 				if (psDroid->flags.test(OBJECT_FLAG_TARGETED) && psDroid->visible[selectedPlayer] == UBYTE_MAX)
