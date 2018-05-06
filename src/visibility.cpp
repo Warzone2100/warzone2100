@@ -435,7 +435,11 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	// transporter in campaign ignores normal rules, can eg be off map
 	if (game.type == CAMPAIGN && psTarget->type == OBJ_DROID && isTransporter(castDroid(psTarget)))
 	{
-		return 0;
+		// the player should see an ally/enemy transporter
+		if (psViewer->player != selectedPlayer || psTarget->player == selectedPlayer)
+		{
+			return 0;
+		}
 	}
 
 	/* Get the sensor range */
