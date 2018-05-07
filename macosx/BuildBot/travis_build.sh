@@ -166,9 +166,12 @@ elif [ -n "${TRAVIS_BRANCH}" ]; then
 	GIT_BRANCH="${TRAVIS_BRANCH}"
 fi
 
+# Replace "/" so the GIT_BRANCH can be used in a filename
+GIT_BRANCH_SANITIZED="$(echo "${GIT_BRANCH}" | sed -e 's:/:_:')"
+
 # Move Warzone.zip to the output directory, renaming it to:
-#  warzone2100-{GIT_BRANCH}-{BUILT_DATETIME}-{GIT_REVISION_SHORT}_macOS.zip
-DESIRED_ZIP_NAME="warzone2100-${GIT_BRANCH}-${BUILT_DATETIME}-${GIT_REVISION_SHORT}_macOS.zip"
+#  warzone2100-{GIT_BRANCH_SANITIZED}-{BUILT_DATETIME}-{GIT_REVISION_SHORT}_macOS.zip
+DESIRED_ZIP_NAME="warzone2100-${GIT_BRANCH_SANITIZED}-${BUILT_DATETIME}-${GIT_REVISION_SHORT}_macOS.zip"
 mv "$BUILT_WARZONE_ZIP" "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}"
 result=${?}
 if [ $result -ne 0 ]; then
