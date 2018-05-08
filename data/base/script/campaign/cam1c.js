@@ -113,13 +113,9 @@ function camEnemyBaseEliminated_NPCentralFactory()
 
 function getDroidsForNPLZ(args)
 {
-	var scouts;
-	var heavies;
+	var scouts = [ cTempl.npsens, cTempl.nppod, cTempl.nphmg ];
+	var heavies = [ cTempl.npslc, cTempl.npsmct, cTempl.npmor ];
 
-	with (camTemplates) {
-		scouts = [ npsens, nppod, nphmg ];
-		heavies = [ npslc, npsmct, npmor ];
-	}
 
 	var numScouts = camRand(5) + 1;
 	var heavy = heavies[camRand(heavies.length)];
@@ -130,7 +126,7 @@ function getDroidsForNPLZ(args)
 		list[list.length] = scouts[camRand(scouts.length)];
 	}
 
-	for (var i = numScouts; i < 8; ++i)
+	for (var a = numScouts; a < 8; ++a)
 	{
 		list[list.length] = heavy;
 	}
@@ -270,27 +266,27 @@ function eventStartLevel()
 		"NPNorthFactory": { tech: "R-Vehicle-Engine01" },
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"ScavSouthFactory": {
 			assembly: "ScavSouthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(20000),
-			templates: [ buscan, rbjeep, trike, buggy ]
+			templates: [ cTempl.buscan, cTempl.rbjeep, cTempl.trike, cTempl.buggy ]
 		},
 		"ScavCentralFactory": {
 			assembly: "ScavCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(20000),
-			templates: [ firecan, rbuggy, bjeep, bloke ]
+			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeep, cTempl.bloke ]
 		},
 		"ScavNorthFactory": {
 			assembly: "ScavNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(20000),
-			templates: [ firecan, rbuggy, buscan, trike ]
+			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trike ]
 		},
 		"NPCentralFactory": {
 			assembly: "NPCentralFactoryAssembly",
@@ -302,7 +298,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [ npmor, npsens, npslc ]
+			templates: [ cTempl.npmor, cTempl.npsens, cTempl.npslc ]
 		},
 		"NPNorthFactory": {
 			assembly: "NPNorthFactoryAssembly",
@@ -314,7 +310,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ nppod, npsmct, npmor ]
+			templates: [ cTempl.nppod, cTempl.npsmct, cTempl.npmor ]
 		},
 	});
 

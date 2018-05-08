@@ -101,7 +101,7 @@ camAreaEvent("failZone", function(droid)
 
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [colatv, colatv];
+	var list = [cTempl.colatv, cTempl.colatv];
 	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(300000), "COCommandCenter"); // 5 min
 }
 
@@ -141,10 +141,10 @@ function retreatCommander()
 //Make the enemy commander flee back to the NW base if attacked.
 function eventAttacked(victim, attacker)
 {
-	if (camDef(victim)
-		&& victim.player === THE_COLLECTIVE
-		&& victim.y > Math.floor(mapHeight / 3) //only if the commander is escaping to the south
-		&& victim.group === commandGroup)
+	if (camDef(victim) &&
+		victim.player === THE_COLLECTIVE &&
+		victim.y > Math.floor(mapHeight / 3) && //only if the commander is escaping to the south
+		victim.group === commandGroup)
 	{
 		camCallOnce("retreatCommander");
 	}
@@ -201,7 +201,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"COFactoryEast": {
 			assembly: camMakePos("eastAssembly"),
 			order: CAM_ORDER_ATTACK,
@@ -212,7 +212,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cohct, comtathh, comorb] //Heavy factory
+			templates: [cTempl.cohct, cTempl.comtathh, cTempl.comorb] //Heavy factory
 		},
 		"COFactoryWest": {
 			assembly: camMakePos("westAssembly"),
@@ -226,7 +226,7 @@ function eventStartLevel()
 				radius: 18,
 				count: -1,
 			},
-			templates: [comtath] //Hover lancers
+			templates: [cTempl.comtath] //Hover lancers
 		},
 	});
 

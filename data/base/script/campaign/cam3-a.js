@@ -96,8 +96,7 @@ function sendPlayerTransporter()
 	}
 
 	var droids = [];
-	var list;
-	with (camTemplates) list = [prhasgnt, prhhpvt, prhaacnt, prtruck];
+	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaacnt, cTempl.prtruck];
 
 	for (var i = 0, d = list.length; i < 10; ++i)
 	{
@@ -118,7 +117,7 @@ function sendPlayerTransporter()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxlneedv, nxlscouv, nxmtherv];
+	var list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
 }
 
@@ -170,6 +169,8 @@ function truckDefense()
 //Gives starting tech and research.
 function cam3Setup()
 {
+	var x = 0;
+	var l = 0;
 	const NEXUS_RES = [
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering03", "R-Defense-WallUpgrade07",
 		"R-Struc-Materials07", "R-Struc-Factory-Upgrade06",
@@ -182,12 +183,12 @@ function cam3Setup()
 		"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
 	];
 
-	for (var x = 0, l = BETA_TECH.length; x < l; ++x)
+	for (x = 0, l = BETA_TECH.length; x < l; ++x)
 	{
 		makeComponentAvailable(BETA_TECH[x], CAM_HUMAN_PLAYER);
 	}
 
-	for (var x = 0, l = STRUCTS_GAMMA.length; x < l; ++x)
+	for (x = 0, l = STRUCTS_GAMMA.length; x < l; ++x)
 	{
 		enableStructure(STRUCTS_GAMMA[x], CAM_HUMAN_PLAYER);
 	}
@@ -259,7 +260,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"NXcybFac-b3": {
 			assembly: "NXcybFac-b3Assembly",
 			order: CAM_ORDER_ATTACK,
@@ -271,7 +272,7 @@ function eventStartLevel()
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
 			group: camMakeGroup("NEAttackerGroup"),
-			templates: [nxcyrail, nxcyscou]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 		"NXcybFac-b2-1": {
 			assembly: "NXcybFac-b2-1Assembly",
@@ -284,7 +285,7 @@ function eventStartLevel()
 			groupSize: 4,
 			throttle: camChangeOnDiff(30000),
 			group: camMakeGroup("cybAttackers"),
-			templates: [nxcyrail, nxcyscou]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 		"NXcybFac-b2-2": {
 			assembly: "NXcybFac-b2-2Assembly",
@@ -302,7 +303,7 @@ function eventStartLevel()
 			groupSize: 4,
 			throttle: camChangeOnDiff(30000),
 			group: camMakeGroup("cybValleyPatrol"),
-			templates: [nxcyrail, nxcyscou]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 		"NXHvyFac-b2": {
 			assembly: "NXHvyFac-b2Assembly",
@@ -320,7 +321,7 @@ function eventStartLevel()
 			groupSize: 4,
 			throttle: camChangeOnDiff(60000),
 			group: camMakeGroup("hoverPatrolGrp"),
-			templates: [nxmscouh]
+			templates: [cTempl.nxmscouh]
 		},
 		"NXcybFac-b4": {
 			assembly: "NXcybFac-b4Assembly",
@@ -337,7 +338,7 @@ function eventStartLevel()
 			groupSize: 4,
 			throttle: camChangeOnDiff(30000),
 			group: camMakeGroup("NEDefenderGroup"),
-			templates: [nxcyrail, nxcyscou]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 	});
 

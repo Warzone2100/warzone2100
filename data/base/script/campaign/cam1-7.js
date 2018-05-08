@@ -51,8 +51,7 @@ camAreaEvent("NPTransportTrigger", function()
 {
 	if (enemyHasArtifact)
 	{
-		var list = [];
-		with (camTemplates) list = [npmrl, npmrl];
+		var list = [cTempl.npmrl, cTempl.npmrl];
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 39, y: 0 },
 			exit: { x: 32, y: 62 }
@@ -285,7 +284,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"scavMiddleFactory": {
 			assembly: "middleAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -295,7 +294,7 @@ function eventStartLevel()
 				regroup: true,
 				count: -1,
 			},
-			templates: [ firecan, rbjeep, rbuggy, bloke ]
+			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ]
 		},
 		"scavSouthEastFactory": {
 			assembly: "southAssembly",
@@ -306,7 +305,7 @@ function eventStartLevel()
 				regroup: true,
 				count: -1,
 			},
-			templates: [ firecan, rbjeep, rbuggy, bloke ]
+			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ]
 		},
 		"scavNorthEastFactory": {
 			assembly: "northAssembly",
@@ -317,7 +316,7 @@ function eventStartLevel()
 				regroup: true,
 				count: -1,
 			},
-			templates: [ firecan, rbjeep, rbuggy, bloke ]
+			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ]
 		},
 	});
 

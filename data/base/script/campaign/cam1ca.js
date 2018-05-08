@@ -56,7 +56,8 @@ function sendTransport()
 	}
 	// find an LZ that is not compromised
 	var list = [];
-	for (var i = 0; i < landingZoneList.length; ++i)
+	var i = 0;
+	for (i = 0; i < landingZoneList.length; ++i)
 	{
 		var lz = landingZoneList[i];
 		if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
@@ -67,7 +68,7 @@ function sendTransport()
 	//If all are compromised then choose the LZ randomly
 	if (list.length === 0)
 	{
-		for (var i = 0; i < 2; ++i)
+		for (i = 0; i < 2; ++i)
 		{
 			var rnd = camRand(landingZoneList.length);
 			list.push({ idx: rnd, label: landingZoneList[rnd] });
@@ -86,18 +87,17 @@ function sendTransport()
 	{
 		lastHeavy = false;
 		queue("sendTransport", camChangeOnDiff(90000));
-		with (camTemplates) templates = [ nppod, nphmg, npmrl, npsmc ];
+		templates = [ cTempl.nppod, cTempl.nphmg, cTempl.npmrl, cTempl.npsmc ];
 	}
 	else
 	{
 		lastHeavy = true;
 		queue("sendTransport", camChangeOnDiff(180000));
-		with (camTemplates) templates = [ npsmct, npmor, npsmc, npmmct,
-		                                  npmrl, nphmg, npsbb ];
+		templates = [ cTempl.npsmct, cTempl.npmor, cTempl.npsmc, cTempl.npmmct, cTempl.npmrl, cTempl.nphmg, cTempl.npsbb ];
 	}
 
 	var droids = [];
-	for (var i = 0; i < count; ++i)
+	for (i = 0; i < count; ++i)
 	{
 		var t = templates[camRand(templates.length)];
 		// two droids of each template

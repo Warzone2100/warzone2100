@@ -243,7 +243,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"NXbase1VtolFacArti": {
 			assembly: "NxVtolAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -254,7 +254,7 @@ function eventStartLevel()
 				repair: 67,
 				count: -1,
 			},
-			templates: [nxmheapv, nxlscouv]
+			templates: [cTempl.nxmheapv, cTempl.nxlscouv]
 		},
 		"NXbase2HeavyFac": {
 			assembly: "NxHeavyAssembly",
@@ -266,7 +266,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [nxmrailh, nxmscouh, nxmpulseh, nxmlinkh]
+			templates: [cTempl.nxmrailh, cTempl.nxmscouh, cTempl.nxmpulseh, cTempl.nxmlinkh]
 		},
 		"NXcyborgFac1": {
 			assembly: "NXcyborgFac1Assembly",
@@ -278,7 +278,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		},
 		"NXcyborgFac2Arti": {
 			assembly: "NXcyborgFac2Assembly",
@@ -290,7 +290,7 @@ function eventStartLevel()
 				repair: 50,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		},
 	});
 

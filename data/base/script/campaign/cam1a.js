@@ -181,7 +181,7 @@ function eventStartLevel()
 		"base4Factory": { tech: "R-Sys-Engineering01" },
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"base2Factory": {
 			assembly: "base2Assembly",
 			order: CAM_ORDER_ATTACK,
@@ -189,7 +189,7 @@ function eventStartLevel()
 			groupSize: 3,
 			maxSize: 3,
 			throttle: camChangeOnDiff(20000),
-			templates: [ trike, bloke ]
+			templates: [ cTempl.trike, cTempl.bloke ]
 		},
 		"base3Factory": {
 			assembly: "base3Assembly",
@@ -198,7 +198,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 4,
 			throttle: camChangeOnDiff(16000),
-			templates: [ bloke, buggy, bloke ]
+			templates: [ cTempl.bloke, cTempl.buggy, cTempl.bloke ]
 		},
 		"base4Factory": {
 			assembly: "base4Assembly",
@@ -207,7 +207,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 4,
 			throttle: camChangeOnDiff(13000),
-			templates: [ bjeep, bloke, trike, bloke ]
+			templates: [ cTempl.bjeep, cTempl.bloke, cTempl.trike, cTempl.bloke ]
 		},
 	});
 }

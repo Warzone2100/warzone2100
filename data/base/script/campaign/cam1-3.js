@@ -104,8 +104,8 @@ function eventAttacked(victim, attacker) {
 	{
 		camCallOnce("enableNP");
 		var commander = getObject("NPCommander");
-		if (camDef(attacker) && attacker && camDef(commander) && commander
-		    && commander.order !== DORDER_SCOUT && commander.order !== DORDER_RTR)
+		if (camDef(attacker) && attacker && camDef(commander) && commander &&
+			commander.order !== DORDER_SCOUT && commander.order !== DORDER_RTR)
 		{
 			orderDroidLoc(commander, DORDER_SCOUT, attacker.x, attacker.y);
 		}
@@ -153,7 +153,7 @@ function eventDroidBuilt(droid, structure)
 	{
 		groupAdd(NPDefenseGroup, droid);
 	}
-	else if (groupSize(NPScoutGroup) < 4 && droid.body !== camTemplates.npsmc.body)
+	else if (groupSize(NPScoutGroup) < 4 && droid.body !== cTempl.npsmc.body)
 	{
 		groupAdd(NPScoutGroup, droid); // heavy tanks don't go scouting
 	}
@@ -209,7 +209,7 @@ function eventStartLevel()
 		"NPCRC": { tech: "R-Struc-CommandRelay" },
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"ScavFactory": {
 			assembly: "ScavAssembly",
 			order: CAM_ORDER_COMPROMISE,
@@ -220,7 +220,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 10,
 			throttle: camChangeOnDiff(15000),
-			templates: [ rbuggy, bloke, rbjeep, buggy ]
+			templates: [ cTempl.rbuggy, cTempl.bloke, cTempl.rbjeep, cTempl.buggy ]
 		},
 		"NPFactory": {
 			assembly: "NPAssembly",
@@ -232,7 +232,7 @@ function eventStartLevel()
 			groupSize: 4, // sic! scouts, at most
 			maxSize: 20,
 			throttle: camChangeOnDiff(40000),
-			templates: [ nppod, nphmg, npsmc, npsmc ]
+			templates: [ cTempl.nppod, cTempl.nphmg, cTempl.npsmc, cTempl.npsmc ]
 		},
 	});
 

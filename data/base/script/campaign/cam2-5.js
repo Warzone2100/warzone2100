@@ -144,7 +144,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"COMediumFactory": {
 			assembly: "COMediumFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -155,7 +155,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comct, comatt, comhpv]
+			templates: [cTempl.comct, cTempl.comatt, cTempl.comhpv]
 		},
 		"COCyborgFactoryL": {
 			assembly: "COCyborgFactoryLAssembly",
@@ -167,7 +167,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cocybag, npcybf, npcybr]
+			templates: [cTempl.cocybag, cTempl.npcybf, cTempl.npcybr]
 		},
 		"COCyborgFactoryR": {
 			assembly: "COCyborgFactoryRAssembly",
@@ -179,7 +179,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [npcybr, npcybc]
+			templates: [cTempl.npcybr, cTempl.npcybc]
 		},
 	});
 

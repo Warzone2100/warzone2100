@@ -55,7 +55,7 @@ function camEnemyBaseEliminated_NXWestBase()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxmheapv, nxlscouv, nxmtherv, nxlscouv];
+	var list = [cTempl.nxmheapv, cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv];
 	var ext = {
 		limit: [5, 2, 5, 2], //paired with template list
 		alternate: true,
@@ -80,8 +80,7 @@ function getDroidsForNXLZ(isTransport)
 	}
 
 	const COUNT = isTransport ? 10 : 10 + camRand(6);
-	var units;
-	with (camTemplates) units = [nxcyrail, nxcyscou, nxcylas, nxmlinkh, nxmrailh, nxmsamh];
+	var units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmlinkh, cTempl.nxmrailh, cTempl.nxmsamh];
 
 	var droids = [];
 	for (var i = 0; i < COUNT; ++i)
@@ -95,8 +94,8 @@ function getDroidsForNXLZ(isTransport)
 //Send Nexus transport units
 function sendNXTransporter()
 {
-	if (camCountStructuresInArea("NXEastBaseCleanup", NEXUS) === 0
-		&& camCountStructuresInArea("NXWestBaseCleanup", NEXUS) === 0)
+	if (camCountStructuresInArea("NXEastBaseCleanup", NEXUS) === 0 &&
+		camCountStructuresInArea("NXWestBaseCleanup", NEXUS) === 0)
 	{
 		return; //Call off transport when both west and east Nexus bases are destroyed.
 	}
@@ -294,7 +293,7 @@ function eventStartLevel()
 		}
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"gammaFactory": {
 			assembly: "gammaFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -305,7 +304,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxmrailh, nxmscouh]
+			templates: [cTempl.nxmrailh, cTempl.nxmscouh]
 		},
 		"gammaCyborgFactory": {
 			assembly: "gammaCyborgFactoryAssembly",
@@ -318,7 +317,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		}
 	});
 

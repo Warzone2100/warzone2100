@@ -45,8 +45,7 @@ function checkForGroundForces()
 
 		var droidGroup1 = []; //Heavy cannon mantis track units
 		var droidGroup2 = []; //Sensor and heavy mortar units
-		var templates;
-		with (camTemplates) templates = [ nphct, npmsens, npmorb ];
+		var templates = [ cTempl.nphct, cTempl.npmsens, cTempl.npmorb ];
 
 		for (var i = 0; i <= maxTanks; ++i)
 		{
@@ -84,8 +83,7 @@ function sendTransport()
 	// This emulates wzcam's droid count distribution.
 	var count = [ 2, 3, 4, 4, 4, 4, 4, 4, 4 ][camRand(9)];
 
-	var templates;
-	with (camTemplates) templates = [ npcybc, npcybf, npcybm ];
+	var templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
 
 	var droids = [];
 	for (var i = 0; i < count; ++i)

@@ -171,27 +171,27 @@ function eventStartLevel()
 		"bunkerArti": { tech: "R-Sys-Engineering01" },
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"base1Factory": {
 			assembly: "base1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(15000),
-			templates: [bloke, trike, buggy]
+			templates: [cTempl.bloke, cTempl.trike, cTempl.buggy]
 		},
 		"base2Factory": {
 			assembly: "base2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(15000),
-			templates: [bloke, trike, buggy, bjeep]
+			templates: [cTempl.bloke, cTempl.trike, cTempl.buggy, cTempl.bjeep]
 		},
 		"base3Factory": {
 			assembly: "base3Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
 			throttle: camChangeOnDiff(15000),
-			templates: [rbjeep, trike, buggy, rbjeep]
+			templates: [cTempl.rbjeep, cTempl.trike, cTempl.buggy, cTempl.rbjeep]
 		}
 	});
 

@@ -24,8 +24,9 @@ function preDamageStuff()
 {
 	var droids = enumDroid(CAM_HUMAN_PLAYER);
 	var structures = enumStruct(CAM_HUMAN_PLAYER);
+	var x = 0;
 
-	for (var x = 0; x < droids.length; ++x)
+	for (x = 0; x < droids.length; ++x)
 	{
 		var droid = droids[x];
 		if (!camIsTransporter(droid))
@@ -34,7 +35,7 @@ function preDamageStuff()
 		}
 	}
 
-	for (var x = 0; x < structures.length; ++x)
+	for (x = 0; x < structures.length; ++x)
 	{
 		var struc = structures[x];
 		setHealth(struc, 45 + camRand(45));
@@ -46,17 +47,16 @@ function getDroidsForCOLZ()
 	var droids = [];
 	var count = 6 + camRand(5);
 	var templates;
-	var sensors;
+	var sensors = [cTempl.comsens, cTempl.comsens];
 	var usingHeavy = false;
 
-	with (camTemplates) sensors = [comsens, comsens];
 	if (camRand(100) < 50)
 	{
-		with (camTemplates) templates = [npcybm, commgt, npcybc, npcybr];
+		templates = [cTempl.npcybm, cTempl.commgt, cTempl.npcybc, cTempl.npcybr];
 	}
 	else
 	{
-		with (camTemplates) templates = [cohct, comct, comorb];
+		templates = [cTempl.cohct, cTempl.comct, cTempl.comorb];
 		usingHeavy = true;
 	}
 
@@ -112,8 +112,7 @@ function sendPlayerTransporter()
 
 	var ti = (index === (TRANSPORT_LIMIT - 1)) ? 60000 : 300000; //5 min
 	var droids = [];
-	var list;
-	with (camTemplates) list = [prhct, prhct, prhct, prltat, prltat, npcybr, prrept];
+	var list = [cTempl.prhct, cTempl.prhct, cTempl.prhct, cTempl.prltat, cTempl.prltat, cTempl.npcybr, cTempl.prrept];
 
 	for (var i = 0; i < 10; ++i)
 	{
@@ -134,8 +133,7 @@ function sendPlayerTransporter()
 function mapEdgeDroids()
 {
 	var TankNum = 8 + camRand(6);
-	var list;
-	with (camTemplates) list = [npcybm, npcybr, comct, cohct];
+	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.comct, cTempl.cohct];
 
 	var droids = [];
 	for (var i = 0; i < TankNum; ++i)
@@ -149,7 +147,7 @@ function mapEdgeDroids()
 
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [colcbv];
+	var list = [cTempl.colcbv];
 	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(180000), "COCommandCenter"); //3 min
 }
 
@@ -190,6 +188,7 @@ function truckDefense()
 //Gives starting tech and research.
 function cam2Setup()
 {
+	var x = 0;
 	const COLLECTIVE_RES = [
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering02",
 		"R-Defense-WallUpgrade03", "R-Struc-Materials03",
@@ -204,12 +203,12 @@ function cam2Setup()
 		"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01"
 	];
 
-	for (var x = 0; x < ALPHA_TECH.length; ++x)
+	for (x = 0; x < ALPHA_TECH.length; ++x)
 	{
 		makeComponentAvailable(ALPHA_TECH[x], CAM_HUMAN_PLAYER);
 	}
 
-	for (var x = 0; x < STRUCTS_ALPHA.length; ++x)
+	for (x = 0; x < STRUCTS_ALPHA.length; ++x)
 	{
 		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}

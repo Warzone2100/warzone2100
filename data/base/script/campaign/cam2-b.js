@@ -84,7 +84,7 @@ function ambushPlayer()
 
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [colcbv, colatv];
+	var list = [cTempl.colcbv, cTempl.colatv];
 	var ext = {
 		limit: [4, 4], //paired with list array
 		alternate: true,
@@ -156,7 +156,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"COHeavyFacL-b1": {
 			assembly: "COHeavyFacL-b1Assembly",
 			order: CAM_ORDER_ATTACK,
@@ -167,7 +167,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [comatt, cohct, comct]
+			templates: [cTempl.comatt, cTempl.cohct, cTempl.comct]
 		},
 		"COHeavyFacR-b1": {
 			assembly: "COHeavyFacR-b1Assembly",
@@ -179,7 +179,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [comatt, cohct, comct]
+			templates: [cTempl.comatt, cTempl.cohct, cTempl.comct]
 		},
 		"COCybFacL-b2": {
 			assembly: "COCybFacL-b2Assembly",
@@ -191,7 +191,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybc, npcybr]
+			templates: [cTempl.npcybc, cTempl.npcybr]
 		},
 		"COCybFacR-b2": {
 			assembly: "COCybFacR-b2Assembly",
@@ -203,7 +203,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybc, npcybr, npcybf, npcybm]
+			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf, cTempl.npcybm]
 		},
 		"COHeavyFac-b4": {
 			assembly: "COHeavyFac-b4Assembly",
@@ -215,7 +215,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [comatt, comit]
+			templates: [cTempl.comatt, cTempl.comit]
 		},
 		"COCybFac-b4": {
 			assembly: "COCybFac-b4Assembly",
@@ -227,7 +227,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybc, npcybr, npcybf]
+			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf]
 		},
 	});
 

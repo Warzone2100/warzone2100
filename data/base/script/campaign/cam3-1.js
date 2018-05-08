@@ -63,7 +63,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxlscouv, nxmtherv];
+	var list = [cTempl.nxlscouv, cTempl.nxmtherv];
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
 }
 
@@ -299,7 +299,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"NXCybFac1": {
 			assembly: "NXCybFac1Assembly",
 			order: CAM_ORDER_ATTACK,
@@ -310,7 +310,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		},
 		"NXCybFac2": {
 			assembly: "NXCybFac2Assembly",
@@ -322,7 +322,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		},
 		"NXMediumFac": {
 			assembly: "NXMediumFacAssembly",
@@ -341,7 +341,7 @@ function eventStartLevel()
 			group: camMakeGroup("baseDefenderGroup"),
 			groupSize: 5,
 			throttle: camChangeOnDiff(60000),
-			templates: [nxmscouh, nxmrailh]
+			templates: [cTempl.nxmscouh, cTempl.nxmrailh]
 		},
 	});
 

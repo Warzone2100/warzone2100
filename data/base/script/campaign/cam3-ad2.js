@@ -38,17 +38,18 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Return a random assortment of droids with the given templates.
 function randomTemplates(list)
 {
-	var extras; with (camTemplates) extras = [nxmstrike, nxmsamh];
+	var i = 0;
+	var extras = [cTempl.nxmstrike, cTempl.nxmsamh];
 	var droids = [];
 	var size = 12 + camRand(4); //Max of 15.
 
-	for (var i = 0; i < size; ++i)
+	for (i = 0; i < size; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
 
 	//Vtol strike sensor and vindicator hovers.
-	for (var i = 0; i < 4; ++i)
+	for (i = 0; i < 4; ++i)
 	{
 		droids.push(extras[camRand(extras.length)]);
 	}
@@ -59,7 +60,7 @@ function randomTemplates(list)
 //Chose a random spawn point for the VTOLs.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxmheapv, nxlpulsev];
+	var list = [cTempl.nxmheapv, cTempl.nxlpulsev];
 	camSetVtolData(NEXUS, VTOL_POSITIONS, "vtolRemovePos", list, camChangeOnDiff(180000)); // 3 min
 }
 
@@ -72,19 +73,19 @@ function phantomFactorySpawn()
 	switch (camRand(3))
 	{
 		case 0:
-			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
+			list = [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
 			chosenFactory = "phantomFacWest";
 			break;
 		case 1:
-			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
+			list = [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
 			chosenFactory = "phantomFacEast";
 			break;
 		case 2:
-			with (camTemplates) list = [nxcylas, nxcyrail, nxcyscou, nxhgauss, nxmpulseh, nxmlinkh];
+			list = [cTempl.nxcylas, cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
 			chosenFactory = "phantomFacMiddle";
 			break;
 		default:
-			with (camTemplates) list = [nxhgauss, nxmpulseh, nxmlinkh];
+			list = [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
 			chosenFactory = "phantomFacWest";
 	}
 

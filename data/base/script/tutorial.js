@@ -465,7 +465,7 @@ function eventStartLevel()
 	setMiniMap(true);
 	setDesign(false);
 	removeTemplate("ConstructionDroid");
-	removeTemplate("ViperLtMGWheels")
+	removeTemplate("ViperLtMGWheels");
 
 	setReticuleButton(CLOSE_BUTTON, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
 	setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");

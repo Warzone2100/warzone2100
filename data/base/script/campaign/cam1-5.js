@@ -20,13 +20,8 @@ const SCAVENGER_RES = [
 //Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
-	var scouts;
-	var heavies;
-
-	with (camTemplates) {
-		scouts = [ npsens, nppod, nphmg ];
-		heavies = [ npsbb, npmmct, npmrl ];
-	}
+	var scouts = [ cTempl.npsens, cTempl.nppod, cTempl.nphmg ];
+	var heavies = [ cTempl.npsbb, cTempl.npmmct, cTempl.npmrl ];
 
 	var numScouts = camRand(5) + 1;
 	var heavy = heavies[camRand(heavies.length)];
@@ -37,7 +32,7 @@ function getDroidsForNPLZ(args)
 		list[list.length] = scouts[camRand(scouts.length)];
 	}
 
-	for (var i = numScouts; i < 8; ++i)
+	for (var a = numScouts; a < 8; ++a)
 	{
 		list[list.length] = heavy;
 	}
@@ -207,13 +202,13 @@ function eventStartLevel()
 		"NPResearchFacility": { tech: "R-Comp-SynapticLink" },
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"NPLeftFactory": {
 			assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(40000),
-			templates: [ npmrl, npmmct, npsbb, nphmg ],
+			templates: [ cTempl.npmrl, cTempl.npmmct, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
 				repair: 40,
@@ -225,7 +220,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(50000),
-			templates: [ npmor, npsens, npsbb, nphmg ],
+			templates: [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
 				repair: 40,
@@ -237,7 +232,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(35000),
-			templates: [ npcybc, npcybf, npcybm ],
+			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ],
 			data: {
 				regroup: false,
 				repair: 40,
@@ -249,7 +244,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(15000),
-			templates: [ firecan, rbjeep, rbuggy, bloke ],
+			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
 				count: -1,
@@ -260,7 +255,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(15000),
-			templates: [ firecan, rbjeep, rbuggy, bloke ],
+			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
 				count: -1,
@@ -271,7 +266,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(15000),
-			templates: [ firecan, rbjeep, rbuggy, bloke ],
+			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
 				count: -1,

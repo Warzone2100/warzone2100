@@ -189,7 +189,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"NX-NWFactory1": {
 			assembly: "NX-NWFactory1Assembly",
 			order: CAM_ORDER_ATTACK,
@@ -200,7 +200,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
 		},
 		"NX-NWFactory2": {
 			assembly: "NX-NWFactory2Assembly",
@@ -212,7 +212,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
 		},
 		"NX-NWCyborgFactory": {
 			assembly: "NX-NWCyborgFactoryAssembly",
@@ -224,7 +224,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		},
 		"NX-NEFactory": {
 			assembly: "NX-NEFactoryAssembly",
@@ -236,7 +236,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
 		},
 		"NX-SWFactory": {
 			assembly: "NX-SWFactoryAssembly",
@@ -256,7 +256,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxmlinkh, nxllinkh] //Nexus link factory
+			templates: [cTempl.nxmlinkh, cTempl.nxllinkh] //Nexus link factory
 		},
 		"NX-SWCyborgFactory1": {
 			assembly: "NX-SWCyborgFactory1Assembly",
@@ -268,7 +268,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		},
 		"NX-SWCyborgFactory2": {
 			assembly: "NX-SWCyborgFactory2Assembly",
@@ -280,7 +280,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxcyrail, nxcyscou, nxcylas]
+			templates: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas]
 		},
 		"NX-SEFactory": {
 			assembly: "NX-SEFactoryAssembly",
@@ -297,7 +297,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxhgauss, nxmpulseh, nxmscouh, nxmsamh, nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
 		},
 		"NX-VtolFactory1": {
 			assembly: "NX-VtolFactory1Assembly",
@@ -309,7 +309,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxmheapv, nxlscouv]
+			templates: [cTempl.nxmheapv, cTempl.nxlscouv]
 		},
 		"NX-VtolFactory2": {
 			assembly: "NX-VtolFactory2Assembly",
@@ -321,7 +321,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [nxmpulsev]
+			templates: [cTempl.nxmpulsev]
 		},
 	});
 

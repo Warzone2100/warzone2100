@@ -146,8 +146,9 @@ function captureCivilians()
 	if (shepardDroids.length)
 	{
 		//add some civs
+		var i = 0;
 		var num = 1 + camRand(3);
-		for (var i = 0; i < num; ++i)
+		for (i = 0; i < num; ++i)
 		{
 			addDroid(CIVILIAN, currPos.x, currPos.y, "Civilian",
 					"B1BaBaPerson01", "BaBaLegs", "", "", "BabaMG");
@@ -156,14 +157,14 @@ function captureCivilians()
 		//Only count civilians that are not in the the transporter base.
 		var civs = enumArea(0, 0, 35, mapHeight, CIVILIAN, false);
 		//Move them
-		for (var i = 0; i < civs.length; ++i)
+		for (i = 0; i < civs.length; ++i)
 		{
 			orderDroidLoc(civs[i], DORDER_MOVE, currPos.x, currPos.y);
 		}
 
 		if (civilianPosIndex <= 5)
 		{
-			for (var i = 0; i < shepardDroids.length; ++i)
+			for (i = 0; i < shepardDroids.length; ++i)
 			{
 				orderDroidLoc(shepardDroids[i], DORDER_MOVE, currPos.x, currPos.y);
 			}
@@ -190,13 +191,15 @@ function civilianOrders()
 	//Check if a civilian is close to a player droid.
 	for (var i = 0; i < civs.length; ++i)
 	{
-		var pDroids = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-			return obj.type === DROID;
-		});
-		if (pDroids.length)
+		var objs = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
+		for (var j = 0; j < objs.length; ++j)
 		{
-			rescued = true;
-			orderDroidLoc(civs[i], DORDER_MOVE, lz.x, lz.y);
+			if (objs[j].type === DROID)
+			{
+				rescued = true;
+				orderDroidLoc(civs[i], DORDER_MOVE, lz.x, lz.y);
+				break;
+			}
 		}
 	}
 
@@ -231,7 +234,7 @@ function eventTransporterLanded(transport)
 //Send Collective transport as long as the player has not entered the base.
 function sendCOTransporter()
 {
-	var list; with (camTemplates) list = [npcybr, npcybr];
+	var list = [cTempl.npcybr, cTempl.npcybr];
 	var tPos = getObject("COTransportPos");
 	var pDroid = enumRange(tPos.x, tPos.y, 6, CAM_HUMAN_PLAYER, false);
 
@@ -322,7 +325,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"COHeavyFac-Upgrade": {
 			assembly: "COHeavyFac-UpgradeAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -333,7 +336,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comorb, comit, cohct, comhpv, cohbbt, comsens]
+			templates: [cTempl.comorb, cTempl.comit, cTempl.cohct, cTempl.comhpv, cTempl.cohbbt, cTempl.comsens]
 		},
 		"COHeavyFac-Leopard": {
 			assembly: "COHeavyFac-LeopardAssembly",
@@ -345,7 +348,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comsens, cohbbt, comhpv, cohct, comit, comorb]
+			templates: [cTempl.comsens, cTempl.cohbbt, cTempl.comhpv, cTempl.cohct, cTempl.comit, cTempl.comorb]
 		},
 		"COCyborgFactoryL": {
 			assembly: "COCyborgFactoryLAssembly",
@@ -357,7 +360,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybf, npcybc, npcybr]
+			templates: [cTempl.npcybf, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COCyborgFactoryR": {
 			assembly: "COCyborgFactoryRAssembly",
@@ -369,7 +372,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybf, npcybc, npcybr]
+			templates: [cTempl.npcybf, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,
@@ -379,7 +382,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [commorv, colagv]
+			templates: [cTempl.commorv, cTempl.colagv]
 		},
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
@@ -389,7 +392,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [colagv, commorv]
+			templates: [cTempl.colagv, cTempl.commorv]
 		},
 	});
 

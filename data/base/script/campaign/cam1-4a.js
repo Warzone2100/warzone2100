@@ -160,14 +160,14 @@ function eventStartLevel()
 		"MediumNPFactory": { tech: "R-Wpn-Rocket02-MRL" },
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"SouthScavFactory": {
 			assembly: "SouthScavFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(20000),
-			templates: [ rbuggy, bjeep, buscan, trike ]
+			templates: [ cTempl.rbuggy, cTempl.bjeep, cTempl.buscan, cTempl.trike ]
 		},
 		"NorthScavFactory": {
 			assembly: "NorthScavFactoryAssembly",
@@ -179,7 +179,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(20000),
-			templates: [ firecan, rbjeep, bloke, buggy ]
+			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.bloke, cTempl.buggy ]
 		},
 		"HeavyNPFactory": {
 			assembly: "HeavyNPFactoryAssembly",
@@ -187,7 +187,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,         // this one was exclusively producing trucks
 			throttle: camChangeOnDiff(40000),    // but we simplify this out
-			templates: [ npmmct, npsmct, npsmc ]
+			templates: [ cTempl.npmmct, cTempl.npsmct, cTempl.npsmc ]
 		},
 		"MediumNPFactory": {
 			assembly: "MediumNPFactoryAssembly",
@@ -195,7 +195,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(40000),
-			templates: [ npmrl, nphmg, npsbb, npmor ]
+			templates: [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
 		},
 	});
 

@@ -33,9 +33,10 @@ function sendEdgeMapDroids()
 {
 	const COUNT = 16 + camRand(5); // 16 - 20.
 	const EDGE = ["SWPhantomFactory", "NWPhantomFactory"];
-	var list; with (camTemplates) list = [
-		nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh, nxmscouh,
-		nxmsamh, nxmstrike,
+	var list = [
+		cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,
+		cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh,
+		cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike,
 	];
 	var droids = [];
 
@@ -62,7 +63,7 @@ function sendEdgeMapDroids()
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxlscouv, nxmtherv, nxlscouv, nxmheapv];
+	var list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
 	var ext = {
 		limit: [2, 4, 2, 4],
 		alternate: true,

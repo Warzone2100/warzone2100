@@ -44,7 +44,7 @@ function truckDefense()
 //Attacks every 2 minutes until HQ is destroyed.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [colatv];
+	var list = [cTempl.colatv];
 	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), "COCommandCenter");
 }
 
@@ -127,7 +127,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"COHeavyFactory": {
 			assembly: "COHeavyFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -138,7 +138,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [cohhpv, comhltat, cohct]
+			templates: [cTempl.cohhpv, cTempl.comhltat, cTempl.cohct]
 		},
 		"COSouthCyborgFactory": {
 			assembly: "COSouthCyborgFactoryAssembly",
@@ -150,7 +150,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybc, npcybf, npcybr, cocybag]
+			templates: [cTempl.npcybc, cTempl.npcybf, cTempl.npcybr, cTempl.cocybag]
 		},
 	});
 

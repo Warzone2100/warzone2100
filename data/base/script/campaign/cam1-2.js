@@ -11,7 +11,7 @@ function exposeNorthBase()
 function camArtifactPickup_ScavLab()
 {
 	camCallOnce("exposeNorthBase");
-	with (camTemplates) camSetFactoryData("WestFactory", {
+	camSetFactoryData("WestFactory", {
 		assembly: "WestAssembly",
 		order: CAM_ORDER_COMPROMISE,
 		data: {
@@ -25,7 +25,7 @@ function camArtifactPickup_ScavLab()
 		groupSize: 5,
 		maxSize: 9,
 		throttle: camChangeOnDiff(10000),
-		templates: [ trike, bloke, buggy, bjeep ]
+		templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 	});
 	camEnableFactory("WestFactory");
 }
@@ -105,7 +105,7 @@ function eventStartLevel()
 		"NorthFactory": { tech: "R-Vehicle-Prop-Halftracks" },
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"NorthFactory": {
 			assembly: "NorthAssembly",
 			order: CAM_ORDER_COMPROMISE,
@@ -121,7 +121,7 @@ function eventStartLevel()
 			maxSize: 9,
 			throttle: camChangeOnDiff(15000),
 			group: camMakeGroup("NorthTankGroup"),
-			templates: [ trike, bloke, buggy, bjeep ]
+			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 		"WestFactory": {
 			assembly: "WestAssembly",
@@ -137,7 +137,7 @@ function eventStartLevel()
 			groupSize: 5,
 			maxSize: 9,
 			throttle: camChangeOnDiff(10000),
-			templates: [ trike, bloke, buggy, bjeep ]
+			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 	});
 

@@ -153,7 +153,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"COHeavyFac-Arti-b2": {
 			assembly: "base2HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -164,7 +164,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comagt, cohact, cohhpv, comtath]
+			templates: [cTempl.comagt, cTempl.cohact, cTempl.cohhpv, cTempl.comtath]
 		},
 		"COCyborgFac-b2": {
 			assembly: "base2CybAssembly",
@@ -176,7 +176,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybc, cocybag]
+			templates: [cTempl.npcybc, cTempl.cocybag]
 		},
 		"COCyborgFac-b3": {
 			assembly: "base3CybAssembly",
@@ -188,7 +188,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybf, npcybr]
+			templates: [cTempl.npcybf, cTempl.npcybr]
 		},
 		"COHeavyFac-b4": {
 			assembly: "base4HeavyAssembly",
@@ -200,7 +200,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comrotmh, comhltat, cohct]
+			templates: [cTempl.comrotmh, cTempl.comhltat, cTempl.cohct]
 		},
 		"COCyborgFac-b4": {
 			assembly: "base4CybAssembly",
@@ -212,7 +212,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cocybag, npcybc, npcybr]
+			templates: [cTempl.cocybag, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COVtolFactory-b4": {
 			assembly: "base4VTOLAssembly",
@@ -223,7 +223,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [colagv, commorv]
+			templates: [cTempl.colagv, cTempl.commorv]
 		},
 	});
 

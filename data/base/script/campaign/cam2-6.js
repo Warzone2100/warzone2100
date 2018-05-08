@@ -42,7 +42,7 @@ function camEnemyBaseDetected_COMainBase()
 	camEnableFactory("COCyborgFactory-b2");
 	camEnableFactory("COHeavyFactory-b2R");
 	enableTimeBasedFactories(); //Might as well since the player is attacking.
-};
+}
 
 function camEnemyBaseEliminated_COUplinkBase()
 {
@@ -151,7 +151,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"COCyborgFactory-Arti": {
 			assembly: "COCyborgFactory-ArtiAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -162,7 +162,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybc, npcybf, cocybag, npcybr]
+			templates: [cTempl.npcybc, cTempl.npcybf, cTempl.cocybag, cTempl.npcybr]
 		},
 		"COCyborgFactory-b1": {
 			assembly: "COCyborgFactory-b1Assembly",
@@ -174,7 +174,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cocybag, npcybr]
+			templates: [cTempl.cocybag, cTempl.npcybr]
 		},
 		"COCyborgFactory-b2": {
 			assembly: "COCyborgFactory-b2Assembly",
@@ -186,7 +186,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [npcybc, npcybf]
+			templates: [cTempl.npcybc, cTempl.npcybf]
 		},
 		"COHeavyFactory-b2L": {
 			assembly: "COHeavyFactory-b2LAssembly",
@@ -198,7 +198,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [cohact, comhpv, comrotm]
+			templates: [cTempl.cohact, cTempl.comhpv, cTempl.comrotm]
 		},
 		"COHeavyFactory-b2R": {
 			assembly: "COHeavyFactory-b2RAssembly",
@@ -210,7 +210,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [comrotm, comhltat, cohact, comsensh]
+			templates: [cTempl.comrotm, cTempl.comhltat, cTempl.cohact, cTempl.comsensh]
 		},
 		"COMediumFactory": {
 			assembly: "COMediumFactoryAssembly",
@@ -222,7 +222,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [comhpv, comagt, comrotm]
+			templates: [cTempl.comhpv, cTempl.comagt, cTempl.comrotm]
 		},
 	});
 

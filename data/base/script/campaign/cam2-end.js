@@ -93,7 +93,7 @@ function vtolAttack()
 	];
 	var vtolRemovePos = {"x": 127, "y": 64};
 
-	var list; with (camTemplates) list = [commorv, colcbv, colagv, comhvat];
+	var list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat];
 	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(30000));
 }
 
@@ -101,7 +101,7 @@ function vtolAttack()
 function cyborgAttack()
 {
 	var southCyborgAssembly = {"x": 123, "y": 125};
-	var list; with (camTemplates) list = [npcybr, cocybag, npcybc, comhltat, cohhpv];
+	var list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(southCyborgAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
@@ -116,7 +116,7 @@ function tankAttack()
 	var northTankAssembly = {"x": 95, "y": 3};
 	//var westTankAssembly = {"x": 3, "y": 112}; //This was unused.
 
-	var list; with (camTemplates) list = [comhltat, cohact, cohhpv, comagt, cohbbt];
+	var list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
 	var pos = [];
 	pos.push(northTankAssembly);
 

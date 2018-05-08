@@ -953,6 +953,10 @@ function camSetEnemyBases(bases)
 	{
 		var bi = __camEnemyBases[blabel];
 		var obj = getObject(blabel);
+		//define these here to avoid linter warnings
+		var idx = 0;
+		var len = 0;
+		var s;
 		if (camDef(obj) && obj) // group already defined
 		{
 			if (!camDef(bi.group))
@@ -963,9 +967,9 @@ function camSetEnemyBases(bases)
 			{
 				var structures = enumGroup(bi.group);
 				addLabel({ type: GROUP, id: bi.group }, blabel);
-				for (var i = 0, l = structures.length; i < l; ++i)
+				for (idx = 0, len = structures.length; idx < len; ++idx)
 				{
-					var s = structures[i];
+					s = structures[idx];
 					if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 					{
 						continue;
@@ -988,9 +992,9 @@ function camSetEnemyBases(bases)
 						x2: 0, y2: 0
 					};
 					// smallest rectangle to contain all objects
-					for (var i = 0, l = objs.length; i < l; ++i)
+					for (idx = 0, len = objs.length; idx < len; ++idx)
 					{
-						var o = objs[i];
+						var o = objs[idx];
 						if (o.x < a.x) a.x = o.x;
 						if (o.y < a.y) a.y = o.y;
 						if (o.x > a.x2) a.x2 = o.x;
@@ -1014,9 +1018,9 @@ function camSetEnemyBases(bases)
 			bi.group = camNewGroup();
 			addLabel({ type: GROUP, id: bi.group }, blabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
-			for (var i = 0, l = structs.length; i < l; ++i)
+			for (idx = 0, len = structs.length; idx < len; ++idx)
 			{
-				var s = structs[i];
+				s = structs[idx];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 				{
 					continue;
@@ -1367,6 +1371,8 @@ function __camCheckBaseEliminated(group)
 		var bi = __camEnemyBases[blabel];
 		var leftovers = [];
 		var objInfo = {};
+		var i = 0;
+		var j = 0;
 		if (bi.eliminated || (bi.group !== group))
 		{
 			continue;
@@ -1378,19 +1384,19 @@ function __camCheckBaseEliminated(group)
 		if (camDef(bi.cleanup))
 		{
 			var objects = enumArea(bi.cleanup, ENEMIES, false);
-			for (var j = 0, l = objects.length; j < l; ++j)
+			for (i = 0, j = objects.length; i < j; ++i)
 			{
 				objInfo = {
-					type: objects[j].type,
-					player: objects[j].player,
-					id: objects[j].id
+					type: objects[i].type,
+					player: objects[i].player,
+					id: objects[i].id
 				};
 				if (__camShouldDestroyLeftover(objInfo, bi.player))
 				{
-					leftovers.push(objects[j]);
+					leftovers.push(objects[i]);
 				}
 			}
-			for (var i = 0, l = leftovers.length; i < l; i++)
+			for (i = 0, j = leftovers.length; i < j; i++)
 			{
 				// remove with special effect
 				camSafeRemoveObject(leftovers[i], true);
@@ -1680,11 +1686,12 @@ function __camFindClusters(list, size)
 		var x = list[i].x;
 		var y = list[i].y;
 		var found = false;
+		var n = 0;
 		for (var j = 0; j < ret.clusters.length; ++j)
 		{
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
 			{
-				var n = ret.clusters[j].length;
+				n = ret.clusters[j].length;
 				ret.clusters[j][n] = list[i];
 				ret.xav[j] = Math.floor((n * ret.xav[j] + x) / (n + 1));
 				ret.yav[j] = Math.floor((n * ret.yav[j] + y) / (n + 1));
@@ -1699,7 +1706,7 @@ function __camFindClusters(list, size)
 		}
 		if (!found)
 		{
-			var n = ret.clusters.length;
+			n = ret.clusters.length;
 			ret.clusters[n] = [list[i]];
 			ret.xav[n] = x;
 			ret.yav[n] = y;
@@ -1718,6 +1725,7 @@ function __camPickTarget(group)
 	var targets = [];
 	var gi = __camGroupInfo[group];
 	var droids = enumGroup(group);
+	var radius = 0;
 	switch(gi.order)
 	{
 		case CAM_ORDER_ATTACK:
@@ -1733,7 +1741,7 @@ function __camPickTarget(group)
 			{
 				for (var i = 0; i < gi.data.pos.length && !targets.length; ++i)
 				{
-					var radius = gi.data.radius;
+					radius = gi.data.radius;
 					if (!camDef(radius))
 					{
 						radius = __CAM_PLAYER_BASE_RADIUS;
@@ -1779,7 +1787,7 @@ function __camPickTarget(group)
 				camDebug("'pos' is required for DEFEND order");
 				return undefined;
 			}
-			var radius = gi.data.radius;
+			radius = gi.data.radius;
 			if (!camDef(radius))
 			{
 				radius = __CAM_DEFENSE_RADIUS;
@@ -1903,13 +1911,20 @@ function __camTacticsTickForGroup(group)
 	var hasRTB = __camCountHQ(rawDroids[0].player);
 	var hasRepairPos = camDef(gi.data.repairPos);
 	var repairPercent = (camDef(gi.data.repair) ? gi.data.repair : 66);
+	//define these here to avoid linter warnings with the for loops.
+	var i = 0;
+	var j = 0;
+	var len = 0;
+	var len2 = 0;
+	var droid;
+	var droids;
 
 	// Handle the case when we need to repair
 	if (rawDroids.length > 0 && (hasRepairFacility || hasRepairPos))
 	{
-		for (var i = 0, l = rawDroids.length; i < l; ++i)
+		for (i = 0, len = rawDroids.length; i < len; ++i)
 		{
-			var droid = rawDroids[i];
+			droid = rawDroids[i];
 			var repairLikeAction = false;
 			//has a repair facility so use it
 			if (hasRepairFacility && camDef(gi.data.repair) && droid.order !== DORDER_RTR)
@@ -1948,16 +1963,16 @@ function __camTacticsTickForGroup(group)
 		var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
 		var groupX = ret.xav[ret.maxIdx];
 		var groupY = ret.yav[ret.maxIdx];
-		var droids = ret.clusters[ret.maxIdx].filter(function(obj) {
+		droids = ret.clusters[ret.maxIdx].filter(function(obj) {
 			return (obj.type === DROID && obj.droidType !== DROID_CONSTRUCT);
 		});
-		for (var i = 0; i < ret.clusters.length; ++i)
+		for (i = 0, len = ret.clusters.length; i < len; ++i)
 		{
 			if (i !== ret.maxIdx) // move other droids towards main cluster
 			{
-				for (var j = 0; j < ret.clusters[i].length; ++j)
+				for (j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
 				{
-					var droid = ret.clusters[i][j];
+					droid = ret.clusters[i][j];
 					if (droid.type === DROID && droid.order !== DORDER_RTR)
 					{
 						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
@@ -1969,9 +1984,9 @@ function __camTacticsTickForGroup(group)
 		// not enough droids grouped?
 		if (gi.count < 0 ? (ret.maxCount < groupSize(group) * 0.66) : (ret.maxCount < gi.count))
 		{
-			for (var i = 0, l = droids.length; i < l; ++i)
+			for (i = 0, len = droids.length; i < len; ++i)
 			{
-				var droid = droids[i];
+				droid = droids[i];
 				if (droid.order !== DORDER_RTR)
 				{
 					if (hitRecently && hasRTB)
@@ -1988,7 +2003,7 @@ function __camTacticsTickForGroup(group)
 		}
 	}
 
-	var droids = healthyDroids.filter(function(dr) {
+	droids = healthyDroids.filter(function(dr) {
 		return (dr.type === DROID && dr.droidType !== DROID_CONSTRUCT && dr.order !== DORDER_RTR);
 	});
 
@@ -2015,9 +2030,9 @@ function __camTacticsTickForGroup(group)
 			return;
 	}
 
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (i = 0, len = droids.length; i < len; ++i)
 	{
-		var droid = droids[i];
+		droid = droids[i];
 		if (droid.player === CAM_HUMAN_PLAYER)
 		{
 			camDebug("Controlling a human player's droid");
@@ -2090,11 +2105,11 @@ function __camTacticsTickForGroup(group)
 				{
 					// find random new position to visit
 					var list = [];
-					for (var i = 0, l = gi.data.pos.length; i < l; ++i)
+					for (j = 0, len2 = gi.data.pos.length; j < len2; ++j)
 					{
-						if (i !== gi.lastspot)
+						if (j !== gi.lastspot)
 						{
-							list[list.length] = i;
+							list[list.length] = j;
 						}
 					}
 					gi.lastspot = list[camRand(list.length)];
@@ -2124,7 +2139,7 @@ function __camTacticsTickForGroup(group)
 			//that may be far away, at least path-wise.
 			if (!isVTOL(droid) && !artilleryLike)
 			{
-				for (var j = 0, s = closeBy.length; j < s; ++j)
+				for (j = 0, len2 = closeBy.length; j < len2; ++j)
 				{
 					if (Math.abs(Math.floor(droid.z - closeBy[j].z)) <= CLOSE_Z)
 					{
@@ -2170,6 +2185,7 @@ function __camCheckGroupMorale(group)
 	// morale is %.
 	var msize = Math.floor((100 - gi.data.morale) * gi.count / 100);
 	var gsize = groupSize(group);
+	var temp;
 	switch (gi.order)
 	{
 		case CAM_ORDER_ATTACK:
@@ -2180,7 +2196,7 @@ function __camCheckGroupMorale(group)
 			camTrace("Group", group, "falls back");
 			gi.order = CAM_ORDER_DEFEND;
 			// swap pos and fallback
-			var temp = gi.data.pos;
+			temp = gi.data.pos;
 			gi.data.pos = [ camMakePos(gi.data.fallback) ];
 			gi.data.fallback = temp;
 			// apply orders instantly
@@ -2194,7 +2210,7 @@ function __camCheckGroupMorale(group)
 			camTrace("Group", group, "restores");
 			gi.order = CAM_ORDER_ATTACK;
 			// swap pos and fallback
-			var temp = gi.data.pos;
+			temp = gi.data.pos;
 			gi.data.pos = gi.data.fallback;
 			gi.data.fallback = temp[0];
 			// apply orders instantly
@@ -2265,13 +2281,13 @@ function __camTruckTick()
 	for (var player in __camTruckInfo)
 	{
 		var ti = __camTruckInfo[player];
+		var truck;
 
 		// First, build things that were explicitly ordered.
 		while (ti.queue.length > 0)
 		{
 			var qi = ti.queue[0];
 			var pos = qi.pos;
-			var truck;
 			if (camDef(pos))
 			{
 				// Find the truck most suitable for the job.
@@ -2311,7 +2327,7 @@ function __camTruckTick()
 			continue;
 		}
 		var oil = oils[0];
-		var truck = __camGetClosestTruck(player, oil);
+		truck = __camGetClosestTruck(player, oil);
 		if (camDef(truck))
 		{
 			enableStructure("A0ResourceExtractor", player);
@@ -3027,6 +3043,7 @@ function __camVictoryOffworld()
 	var forceLZ = camDef(__camVictoryData.retlz) ? __camVictoryData.retlz : false;
 	var destroyAll = camDef(__camVictoryData.annihilate) ? __camVictoryData.annihilate : false;
 	var elimBases = camDef(__camVictoryData.eliminateBases) ? __camVictoryData.eliminateBases : false;
+	var pos;
 
 	if (camCheckExtraObjective() && camAllArtifactsPickedUp())
 	{
@@ -3087,7 +3104,7 @@ function __camVictoryOffworld()
 				}
 				if (__camRTLZTicker % 30 === 0) // every 30 seconds
 				{
-					var pos = camMakePos(lz);
+					pos = camMakePos(lz);
 					playSound("pcv427.ogg", pos.x, pos.y, 0);
 					console(_("Return to LZ"));
 				}
@@ -3103,7 +3120,7 @@ function __camVictoryOffworld()
 		}
 		if (__camLZCompromisedTicker % 30 === 1) // every 30 seconds
 		{
-			var pos = camMakePos(lz);
+			pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);
 			setReinforcementTime(LZ_COMPROMISED_TIME);
 		}
@@ -3116,7 +3133,7 @@ function __camVictoryOffworld()
 	else if (__camLZCompromisedTicker > 0)
 	{
 		camTrace("LZ clear");
-		var pos = camMakePos(lz);
+		pos = camMakePos(lz);
 		playSound("lz-clear.ogg", pos.x, pos.y, 0);
 		setReinforcementTime(__camVictoryData.reinforcements);
 		__camLZCompromisedTicker = 0;
@@ -3227,6 +3244,7 @@ function __camSpawnVtols()
 
 	var amount = 5 + camRand(2);
 	var droids = [];
+	var i = 0;
 	var pos;
 
 	//Make sure to catch multiple start positions also.
@@ -3242,7 +3260,7 @@ function __camSpawnVtols()
 	if (!camDef(__camVtolExtras))
 	{
 		//Pick some droids randomly.
-		for (var i = 0; i < amount; ++i)
+		for (i = 0; i < amount; ++i)
 		{
 			droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
 		}
@@ -3272,7 +3290,7 @@ function __camSpawnVtols()
 			}
 		}
 
-		for (var i = 0; i < lim; ++i)
+		for (i = 0; i < lim; ++i)
 		{
 			if (!alternate)
 			{
@@ -3388,7 +3406,9 @@ function camAbsorbPlayer(who, to)
      }
 
      var units = enumDroid(who);
-	for (var i = 0, l = units.length; i < l; i++)
+	var i = 0;
+	var len = 0;
+	for (i = 0, len = units.length; i < len; i++)
 	{
 		if (!donateObject(units[i], to))
 		{
@@ -3397,7 +3417,7 @@ function camAbsorbPlayer(who, to)
 	}
 
     var structs = enumStruct(who);
-    for (var i = 0, l = structs.length; i < l; i++)
+    for (i = 0, len = structs.length; i < len; i++)
     {
          if (!donateObject(structs[i], to))
 	    {

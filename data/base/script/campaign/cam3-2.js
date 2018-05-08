@@ -94,21 +94,21 @@ function getAlphaUnitIDs()
 
 function phantomFactoryNE()
 {
-	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas];
+	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
 	sendEdgeMapDroids(6, "NE-PhantomFactory", list);
 	queue("phantomFactoryNE", camChangeOnDiff(120000)); //2 min
 }
 
 function phantomFactorySW()
 {
-	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas];
+	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
 	sendEdgeMapDroids(8, "SW-PhantomFactory", list);
 	queue("phantomFactorySW", camChangeOnDiff(180000)); //3 min
 }
 
 function phantomFactorySE()
 {
-	var list; with (camTemplates) list = [nxcyrail, nxcyscou, nxcylas, nxlflash, nxmrailh, nxmlinkh];
+	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh];
 	sendEdgeMapDroids(10 + camRand(6), "SE-PhantomFactory", list); //10-15 units
 	queue("phantomFactorySE", camChangeOnDiff(240000)); //4 min
 }
@@ -198,7 +198,7 @@ function setupPatrolGroups()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list; with (camTemplates) list = [nxlscouv, nxmtherv];
+	var list = [cTempl.nxlscouv, cTempl.nxmtherv];
 	var ext = {
 		limit: [2, 4], //paired with template list
 		alternate: true,

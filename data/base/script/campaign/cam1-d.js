@@ -61,8 +61,7 @@ function transportBaseSetup()
 function getDroidsForNPLZ()
 {
 	const LIM = 8; //Last alpha mission always has 8 transport units
-	var templates;
-	with (camTemplates) templates = [ nphct, nphct, npmorb, npmorb, npsbb ];
+	var templates = [ cTempl.nphct, cTempl.nphct, cTempl.npmorb, cTempl.npmorb, cTempl.npsbb ];
 
 	var droids = [];
 	for (var i = 0; i < LIM; ++i)
@@ -206,7 +205,7 @@ function eventStartLevel()
 		},
 	});
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"NPFactoryW": {
 			assembly: "NPFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
@@ -217,7 +216,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ nphmgh, npltath, nphch ] //Hover factory
+			templates: [ cTempl.nphmgh, cTempl.npltath, cTempl.nphch ] //Hover factory
 		},
 		"NPFactoryE": {
 			assembly: "NPFactoryEAssembly",
@@ -229,7 +228,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ npltat, npmsens, npmorb, npsmct, nphct ] //variety
+			templates: [ cTempl.npltat, cTempl.npmsens, cTempl.npmorb, cTempl.npsmct, cTempl.nphct ] //variety
 		},
 		"NPFactoryNE": {
 			assembly: "NPFactoryNEAssembly",
@@ -241,7 +240,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ nphct, npsbb, npmorb ] //tough units
+			templates: [ cTempl.nphct, cTempl.npsbb, cTempl.npmorb ] //tough units
 		},
 		"NPCybFactoryW": {
 			assembly: "NPCybFactoryWAssembly",
@@ -253,7 +252,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ npcybc, npcybf, npcybr ]
+			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybr ]
 		},
 		"NPCybFactoryE": {
 			assembly: "NPCybFactoryEAssembly",
@@ -265,7 +264,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ npcybc, npcybf, npcybr ]
+			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybr ]
 		},
 		"NPCybFactoryNE": {
 			assembly: "NPCybFactoryNEAssembly",
@@ -277,7 +276,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ npcybc, npcybf, npcybr ]
+			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybr ]
 		},
 	});
 

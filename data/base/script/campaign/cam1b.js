@@ -15,14 +15,14 @@ camAreaEvent("AttackArea1", function(droid)
 	// pink factory
 	camEnableFactory("base1factory");
 	// sic! hill factory
-	with (camTemplates) camSetFactoryData("base2factory", {
+	camSetFactoryData("base2factory", {
  		assembly: "assembly2",
 		order: CAM_ORDER_ATTACK,  // changes
 		data: { pos: "playerBase" }, // changes
 		groupSize: 10, // changes
 		maxSize: 10,
 		throttle: camChangeOnDiff(25000),
-		templates: [ trike, bloke, buggy, bloke, ] // changes
+		templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bloke, ] // changes
 	});
 	camEnableFactory("base2factory"); // re-enable
 });
@@ -117,7 +117,7 @@ function eventStartLevel()
 	camPlayVideos("MB1B_MSG");
 	camDetectEnemyBase("base4group"); // power surge detected
 
-	with (camTemplates) camSetFactories({
+	camSetFactories({
 		"base1factory": {
 			assembly: "assembly1",
 			order: CAM_ORDER_ATTACK,
@@ -125,7 +125,7 @@ function eventStartLevel()
 			groupSize: 6,
 			maxSize: 6,
 			throttle: camChangeOnDiff(25000),
-			templates: [ trike, bloke, buggy, bloke ]
+			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bloke ]
 		},
 		"base2factory": { // the hill harass factory
 			assembly: "assembly2",
@@ -138,7 +138,7 @@ function eventStartLevel()
 			groupSize: 4, // will override later
 			maxSize: 10,
 			throttle: camChangeOnDiff(25000),
-			templates: [ bloke ] // will override later
+			templates: [ cTempl.bloke ] // will override later
 		},
 		"base4factory": {
 			assembly: "assembly4",
@@ -147,7 +147,7 @@ function eventStartLevel()
  			groupSize: 8,
 			maxSize: 8,
 			throttle: camChangeOnDiff(25000),
-			templates: [ trike, bloke, buggy, bjeep ]
+			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 	});
 	camEnableFactory("base2factory");
