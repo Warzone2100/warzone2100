@@ -50,6 +50,15 @@
 #include <miniupnpc/miniupnpc.h>
 #include <miniupnpc/upnpcommands.h>
 
+// Enforce minimum MINIUPNPC_API_VERSION
+#if defined(MINIUPNPC_API_VERSION)
+	#if MINIUPNPC_API_VERSION < 15
+		#error lib/netplay requires MINIUPNPC_API_VERSION >= 15
+	#endif
+#else
+	#error lib/netplay requires MINIUPNPC_API_VERSION >= 15
+#endif
+
 #include "src/multistat.h"
 #include "src/multijoin.h"
 #include "src/multiint.h"
@@ -974,7 +983,21 @@ static void upnp_init(std::atomic_int &retval)
 
 		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
 
+		#if MINIUPNPC_API_VERSION >= 16
+		int status_code = -1;
+		descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id, &status_code);
+		if (status_code != 200)
+		{
+			if (descXML)
+			{
+				free(descXML);
+				descXML = nullptr;
+			}
+			debug(LOG_NET, "HTTP error %d fetching: %s", status_code, (dev->descURL) ? dev->descURL : "");
+		}
+		#else
 		descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id);
+		#endif
 		debug(LOG_NET, "LAN address: %s", lanaddr);
 		if (descXML)
 		{
