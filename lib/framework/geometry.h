@@ -91,77 +91,50 @@ private:
 	int _height;
 };
 
-class WzPoint
-{
-public:
-	WzPoint(int x, int y)
-	: _x(x), _y(y)
-	{ }
-
-	WzPoint()
-	: _x(0), _y(0)
-	{ }
-
-	int x(void) const { return _x; }
-	int y(void) const { return _y; }
-
-	void setX(int x) { _x = x; }
-	void setY(int y) { _y = y; }
-
-	inline bool operator== (const WzPoint &rhs) const
-	{
-		return (_x == rhs._x &&
-				_y == rhs._y);
-	}
-private:
-	int _x;
-	int _y;
-};
-
 class WzRect
 {
 public:
-	WzRect(const WzPoint &topLeft, const WzPoint &bottomRight)
+	WzRect(const glm::ivec2 &topLeft, const glm::ivec2 &bottomRight)
 	: _topLeft(topLeft), _bottomRight(bottomRight)
 	{ }
 
 	// Constructs a rectangle with (x, y) as its top-left corner and the given width and height.
 	WzRect(int x, int y, int width, int height)
-	: WzRect(WzPoint(x, y), WzPoint(x + width, y + height))
+	: WzRect(glm::ivec2(x, y), glm::ivec2(x + width, y + height))
 	{ }
 
 	WzRect()
 	: WzRect(0, 0, 0, 0)
 	{ }
 
-	bool contains(const WzPoint& point) const
+	bool contains(const glm::ivec2& point) const
 	{
-		return !(point.x() < _topLeft.x()) && (point.x() < _bottomRight.x()) &&
-		!(point.y() < _topLeft.y()) && (point.y() < _bottomRight.y());
+		return !(point.x < _topLeft.x) && (point.x < _bottomRight.x) &&
+		!(point.y < _topLeft.y) && (point.y < _bottomRight.y);
 	}
 
-	bool contains(int x, int y) const { return contains(WzPoint(x, y)); }
+	bool contains(int x, int y) const { return contains(glm::ivec2(x, y)); }
 
 	int width(void) const
 	{
-		return _bottomRight.x() - _topLeft.x();
+		return _bottomRight.x - _topLeft.x;
 	}
 
 	int height(void) const
 	{
-		return _bottomRight.y() - _topLeft.y();
+		return _bottomRight.y - _topLeft.y;
 	}
 
 	// Returns the x-coordinate of the rectangle's left edge. Equivalent to x().
 	int left(void) const
 	{
-		return _topLeft.x();
+		return _topLeft.x;
 	}
 
 	// Returns the y-coordinate of the rectangle's top edge. Equivalent to y().
 	int top(void) const
 	{
-		return _topLeft.y();
+		return _topLeft.y;
 	}
 
 	// Returns the x-coordinate of the rectangle's left edge. Equivalent to left().
@@ -170,10 +143,10 @@ public:
 	// Returns the y-coordinate of the rectangle's top edge. Equivalent to top().
 	int y(void) const { return top(); }
 
-	void setHeight(int height) { _bottomRight.setY(y() + height); }
-	void setWidth(int width) { _bottomRight.setX(x() + width); }
-	void setX(int x) { _topLeft.setX(x); }
-	void setY(int y) { _topLeft.setY(y); }
+	void setHeight(int height) { _bottomRight.y = y() + height; }
+	void setWidth(int width) { _bottomRight.x = x() + width; }
+	void setX(int x) { _topLeft.x = x; }
+	void setY(int y) { _topLeft.y = y; }
 
 	inline bool operator== (const WzRect &rhs) const
 	{
@@ -182,8 +155,8 @@ public:
 	}
 
 private:
-	WzPoint _topLeft;
-	WzPoint _bottomRight;
+	glm::ivec2 _topLeft;
+	glm::ivec2 _bottomRight;
 };
 
 #endif // _LIB_FRAMEWORK_GEOMETRY_H
