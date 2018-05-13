@@ -744,6 +744,8 @@ function __camBacktrace()
 //;; object with the following fields:
 //;;
 //;; * ```tech``` The technology to grant when the artifact is recovered.
+//;; Note that this can be made into an array to make artifacts give out
+//;; more than one technology, if desired.
 //;; On __let me win__ cheat, all technologies stored in the artifacts
 //;; managed by this function are automatically granted.
 //;; Additionally, this function would call special event callbacks if they are
@@ -841,7 +843,18 @@ function __camCheckPlaceArtifact(obj)
 		camDebug("Object to which artifact", alabel, "is bound has died twice");
 		return;
 	}
-	camTrace("Placing", ai.tech);
+	if (ai.tech instanceof Array)
+	{
+		camTrace("Placing multi-tech granting artifact");
+		for (var i = 0; i < ai.tech.length; ++i)
+		{
+			camTrace(i, ":", ai.tech[i]);
+		}
+	}
+	else
+	{
+		camTrace("Placing", ai.tech);
+	}
 	var acrate = addFeature("Crate", obj.x, obj.y);
 	addLabel(acrate, __camGetArtifactLabel(alabel));
 	ai.placed = true;
@@ -867,7 +880,17 @@ function __camPickupArtifact(artifact)
 	playSound("pcv352.ogg", artifact.x, artifact.y, artifact.z);
 	// artifacts are not self-removing...
 	camSafeRemoveObject(artifact);
-	enableResearch(ai.tech);
+	if (ai.tech instanceof Array)
+	{
+		for (var i = 0; i < ai.tech.length; ++i)
+		{
+			enableResearch(ai.tech[i]);
+		}
+	}
+	else
+	{
+		enableResearch(ai.tech);
+	}
 	// bump counter before the callback, so that it was
 	// actual during the callback
 	++__camNumArtifacts;
@@ -895,7 +918,17 @@ function __camLetMeWinArtifacts()
 		}
 		else
 		{
-			enableResearch(ai.tech);
+			if (ai.tech instanceof Array)
+			{
+				for (var i = 0; i < ai.tech.length; ++i)
+				{
+					enableResearch(ai.tech[i]);
+				}
+			}
+			else
+			{
+				enableResearch(ai.tech);
+			}
 		}
 	}
 }
