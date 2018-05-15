@@ -1,5 +1,7 @@
 !define PACKAGE "@PACKAGE@"
-!define PORTABLE "@PORTABLE@"
+!if "@WZ_PORTABLE@" == "on"
+  !define PORTABLE "on"
+!endif
 !define PACKAGE_NAME "@PACKAGE_NAME@"
 !define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
 !define TOP_SRCDIR "@SOURCE_DIR@"
