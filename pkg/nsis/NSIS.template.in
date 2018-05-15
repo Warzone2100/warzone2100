@@ -301,6 +301,39 @@ ${Else}
 ${EndIf}
 !macroend
 
+!macro DownloadFile URL Caption OutputFile ExpectedSHA512Hash Result
+inetc::get /CAPTION "${Caption}" "${URL}" "${OutputFile}"
+Pop $R0 # return value = exit code, "OK" if OK
+${If} $R0 == "OK"
+  ; Download succeeded - check file hash
+  filecheck::calcFileHash "${OutputFile}" sha512
+  Pop $R0 ; Get the return value
+  ${If} $R0 == "${ExpectedSHA512Hash}"
+    ; Passed hash check
+    StrCpy ${Result} "OK"
+  ${Else}
+    ; Failed to verify file hash
+    ; MessageBox MB_OK|MB_ICONSTOP "Download of file failed: UNEXPECTED_HASH"
+    StrCpy ${Result} "UNEXPECTED_HASH"
+  ${EndIf}
+${Else}
+  ; Download failed
+  ; MessageBox MB_OK|MB_ICONSTOP "Download of file failed: $R0"
+  StrCpy ${Result} $R0
+${EndIf}
+!macroend
+
+!macro DownloadFile2 URL URLAlt Caption OutputFile ExpectedSHA512Hash Result
+!insertmacro DownloadFile "${URL}" "${Caption}" "${OutputFile}" "${ExpectedSHA512Hash}" ${Result}
+${IfNot} ${Result} == "OK"
+  DetailPrint "Download attempt (1) from ${URL} failed with error: ${Result}."
+  !insertmacro DownloadFile "${URLAlt}" "${Caption}" "${OutputFile}" "${ExpectedSHA512Hash}" ${Result}
+  ${IfNot} ${Result} == "OK"
+    DetailPrint "Download attempt (2) from ${URLAlt} failed with error: ${Result}."
+  ${EndIf}
+${EndIf}
+!macroend
+
 !ifdef MSVCRUNTIME
   Var MSVCRT15_x86_NotPresent
   Var MSVCRT15_x64_NotPresent
@@ -334,9 +367,24 @@ ${EndIf}
       ${EndIf}
     SectionEnd
   !else
-    ; TODO: For Portable installer, offer to download app-local system runtimes (if the user wishes)
+    ; For Portable installer, provide option to download app-local system runtimes
     Section "" SecMSSysLibraries
-      ; TODO:
+      SetOutPath "$INSTDIR"
+
+      !insertmacro DownloadFile2 "https://github.com/past-due/applocalconfig/releases/download/v1.0/applocalconfig-vc2017-x86.zip" "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0/applocalconfig-vc2017-x86.zip" "Downloading applocalconfig-vc2017-x86.zip" "$PLUGINSDIR\applocalconfig-vc2017-x86.zip" "3b2b4e6ce73e55cdc6f7bd98657ecd1c5407e1577bfaec8b336705466d108f7a50e45a4b20d8ac16b9403fa048708bc1f4bf5149d7bc41cf9c47b6b6a6390a58" $Result_MSVCDownload
+      ${If} $Result_MSVCDownload == "OK"
+        ; Download succeeded
+        nsisunz::UnzipToLog "$PLUGINSDIR\applocalconfig-vc2017-x86.zip" "$INSTDIR"
+        Pop $0 ; Get the return value
+        ${IfNot} $0 == "success"
+          ; Failed to unzip downloaded file
+          DetailPrint "$0" ; print error message to log
+        ${EndIf}
+      ${Else}
+        MessageBox MB_OK|MB_ICONSTOP "Download of applocal system library (x86) failed: $Result_MSVCDownload"
+      ${EndIf}
+
+      ; TODO: In the future, also support downloading the x64 applocal runtimes?
     SectionEnd
   !endif
 !endif
@@ -427,8 +475,10 @@ Function .onInit
 
   ; Determine whether Microsoft system libraries are installed
   !ifdef MSVCRUNTIME
-      StrCpy $MSVCRT15_x86_NotPresent 0
-      StrCpy $MSVCRT15_x64_NotPresent 0
+    StrCpy $MSVCRT15_x86_NotPresent 0
+    StrCpy $MSVCRT15_x64_NotPresent 0
+
+    !ifndef PORTABLE
 
       ; Check for presence of MSVC++ 14 System Runtime (VC2017, works with 2015)
       ; NOTE: Because VC 15 is ABI compatible with VC 14, the version # used is still 14.
@@ -462,6 +512,15 @@ Function .onInit
         !insertmacro UnSelectSection ${SecMSSysLibraries}
         SectionSetText ${SecMSSysLibraries} ""
       ${EndIf}
+
+    !else
+
+      ; For Portable builds, always offer the option
+      SectionSetText ${SecMSSysLibraries} "$(TEXT_SecMSSysLibraries)"
+      ; rough estimate
+      SectionSetSize ${SecMSSysLibraries} 3000
+
+    !endif
   !endif
 
 !endif
