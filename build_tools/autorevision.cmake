@@ -346,9 +346,22 @@ macro(_appVeyorBuild)
 		if (DEFINED ENV{APPVEYOR_REPO_BRANCH} AND NOT "$ENV{APPVEYOR_REPO_BRANCH}" STREQUAL "")
 			set(VCS_BRANCH "$ENV{APPVEYOR_REPO_BRANCH}")
 		else()
-			message( WARNING "APPVEYOR_REPO_BRANCH is empty; VCS_BRANCH may be empty" )
+			if(NOT LOGGING_QUIET)
+				message( WARNING "APPVEYOR_REPO_BRANCH is empty; VCS_BRANCH may be empty" )
+			endif()
 		endif()
 	endif()
+
+	# Determine VCS_TAG
+	if (DEFINED ENV{APPVEYOR_REPO_TAG_NAME} AND NOT "$ENV{APPVEYOR_REPO_TAG_NAME}" STREQUAL "")
+		if(DEFINED VCS_TAG AND NOT "${VCS_TAG}" STREQUAL "")
+			if(NOT LOGGING_QUIET)
+				message( STATUS "VCS_TAG is already set to '${VCS_TAG}'; overwriting it with ENV:APPVEYOR_REPO_TAG_NAME ('$ENV{APPVEYOR_REPO_TAG_NAME}')" )
+			endif()
+		endif()
+		set(VCS_TAG "$ENV{APPVEYOR_REPO_TAG_NAME}")
+	endif()
+
 endmacro()
 
 if(LOGGING_QUIET)
