@@ -391,6 +391,10 @@ bool ParseCommandLineEarly(int argc, const char **argv)
 			{
 				qFatal("Unrecognised configuration directory");
 			}
+			if (strlen(token) >= (sizeof(configdir) / sizeof(configdir[0])))
+			{
+				qFatal("Configuration directory exceeds maximum supported length on this platform");
+			}
 			sstrcpy(configdir, token);
 			break;
 
