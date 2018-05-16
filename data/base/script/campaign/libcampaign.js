@@ -3831,6 +3831,7 @@ function cam_eventCheatMode(entered)
 
 function cam_eventChat(from, to, message)
 {
+	var i = 0;
 	if (!__camCheatMode)
 	{
 		return;
@@ -3859,6 +3860,21 @@ function cam_eventChat(from, to, message)
 		for (var blabel in __camEnemyBases)
 		{
 			camDetectEnemyBase(blabel);
+		}
+	}
+	if (message === "research available")
+	{
+		while (true)
+		{
+			var research = enumResearch();
+			if (research.length === 0)
+			{
+				break;
+			}
+			for (i = 0; i < research.length; ++i)
+			{
+				completeResearch(research[i].name, CAM_HUMAN_PLAYER);
+			}
 		}
 	}
 }
