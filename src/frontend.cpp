@@ -1135,6 +1135,12 @@ static bool startVideoOptionsMenu()
 	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, _("Antialiasing*"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsAntialiasingString(), WBUT_SECONDARY);
 
+	W_LABEL *antialiasing_label = new W_LABEL(parent);
+	antialiasing_label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y - 18, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
+	antialiasing_label->setFontColour(WZCOL_YELLOW);
+	antialiasing_label->setString(_("Warning: Antialiasing can cause crashes, especially with values > 16"));
+	antialiasing_label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
+
 	// Display Scale
 	if (wzAvailableDisplayScales().size() > 1)
 	{

@@ -106,6 +106,10 @@ bool war_getFullscreen()
 
 void war_setAntialiasing(int antialiasing)
 {
+	if (antialiasing > 16)
+	{
+		debug(LOG_WARNING, "Antialising set to value > 16, which can cause crashes.");
+	}
 	warGlobs.antialiasing = antialiasing;
 }
 
