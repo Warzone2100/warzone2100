@@ -329,6 +329,42 @@ macro(_gitRepo)
 	unset(_repo_top_directory)
 endmacro()
 
+macro(_travisCIBuild)
+	# Information must be extracted from a combination of Travis-set environment
+	# variables and other sources
+
+	# Start by calling gitRepo, since certain values should be obtained directly from git
+	# IMPORTANT: Since Travis uses a shallow clone by default, unshallow must be performed before
+	#            this script is run so that the correct values can be obtained by gitRepo().
+	_gitRepo()
+
+	# The full revision hash
+	set(VCS_FULL_HASH "$ENV{TRAVIS_COMMIT}")
+
+	# The short hash
+	string(SUBSTRING ${VCS_FULL_HASH} 0 7 VCS_SHORT_HASH)
+
+	# Current branch
+	set(VCS_BRANCH "$ENV{TRAVIS_BRANCH}")
+	if (DEFINED ENV{TRAVIS_PULL_REQUEST_BRANCH} AND NOT "$ENV{TRAVIS_PULL_REQUEST_BRANCH}" STREQUAL "")
+		# When triggered by a pull request, TRAVIS_BRANCH is set to the *target* branch name
+		# But we want the source branch name, so use TRAVIS_PULL_REQUEST_BRANCH
+		set(VCS_BRANCH "$ENV{TRAVIS_PULL_REQUEST_BRANCH}")
+	endif()
+
+	# Check if we are on a tag
+	set(VCS_TAG "")
+	if (DEFINED ENV{TRAVIS_TAG} AND NOT "$ENV{TRAVIS_TAG}" STREQUAL "")
+		set(VCS_TAG "$ENV{TRAVIS_TAG}")
+
+		# When on a tag, clear VCS_BRANCH
+		set(VCS_BRANCH "")
+	endif()
+
+	set(VCS_EXTRA "")
+
+endmacro()
+
 macro(_appVeyorBuild)
 	# Extract most symbols from the Git repo first
 	_gitRepo()
@@ -397,6 +433,12 @@ elseif(Git_FOUND AND _currentDirectoryIsInGitRepo)
 		_appVeyorBuild()
 		if(NOT LOGGING_QUIET)
 			message( STATUS "Gathered revision data from Git + AppVeyor environment" )
+		endif()
+	elseif(DEFINED ENV{CI} AND "$ENV{CI}" STREQUAL "true" AND DEFINED ENV{TRAVIS} AND "$ENV{TRAVIS}" STREQUAL "true")
+		# On Travis-CI
+		_travisCIBuild()
+		if(NOT LOGGING_QUIET)
+			message( STATUS "Gathered revision data from Git + Travis-CI environment" )
 		endif()
 	else()
 		_gitRepo()
