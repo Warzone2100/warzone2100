@@ -1112,7 +1112,7 @@ static bool startVideoOptionsMenu()
 	W_LABEL *label = new W_LABEL(parent);
 	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
 	label->setFontColour(WZCOL_TEXT_BRIGHT);
-	label->setString(_("* Takes effect on game restart"));
+	label->setString(_("* Takes effect on game restart. Warning: values > 16 can cause crashes."));
 	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Fullscreen/windowed
