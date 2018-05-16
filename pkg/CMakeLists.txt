@@ -122,6 +122,10 @@ list (APPEND CPACK_SOURCE_IGNORE_FILES "/data/sequences.wz")
 # (the install script below handles generating a fresh one)
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/src/autorevision.cache")
 
+# The macosx build directories
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/macosx/build/")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/macosx/external/.*/")
+
 ######################
 # Configure Installer Version-info at Package Build-Time
 
