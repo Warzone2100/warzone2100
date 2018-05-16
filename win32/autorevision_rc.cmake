@@ -8,8 +8,6 @@ cmake_minimum_required(VERSION 3.5)
 # - TEMPLATE_FILE: the full filename + path for the input rc.in or manifest.in template file
 # - OUTPUT_FILE: the full filename + path for the output .rc or .manifest file
 #
-# Optional input defines:
-# - PORTABLE: "ON" if portable build
 
 if(NOT DEFINED CACHEFILE OR "${CACHEFILE}" STREQUAL "")
 	message( FATAL_ERROR "Missing required input define: CACHEFILE" )
@@ -137,17 +135,10 @@ set(MANIFEST_assemblyIdentityVersion "1.${_file_version_minor}.${_file_version_p
 ##################################
 # Determine the other .rc settings
 
-if(DEFINED PORTABLE AND PORTABLE)
-	set(RC_StringFileInfo_FileDescription "Warzone 2100 portable")
-	set(RC_StringFileInfo_OriginalFilename "warzone2100_portable.exe")
-	set(RC_StringFileInfo_ProductName "Warzone 2100 portable")
-	set(RC_Icon_Filename "wz2100portable.ico")
-else()
-	set(RC_StringFileInfo_FileDescription "Warzone 2100")
-	set(RC_StringFileInfo_OriginalFilename "warzone2100.exe")
-	set(RC_StringFileInfo_ProductName "Warzone 2100")
-	set(RC_Icon_Filename "warzone2100.obsolete.ico")
-endif()
+set(RC_StringFileInfo_FileDescription "Warzone 2100")
+set(RC_StringFileInfo_OriginalFilename "warzone2100.exe")
+set(RC_StringFileInfo_ProductName "Warzone 2100")
+set(RC_Icon_Filename "warzone2100.obsolete.ico")
 
 ##################################
 # Debug output

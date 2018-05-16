@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__
 
-void ExchndlSetup(const char *packageVersion, const std::string &writeDir);
+void ExchndlSetup(const char *packageVersion, const std::string &writeDir, bool portable_mode);
 void ExchndlShutdown();
 void ResetRPTDirectory(wchar_t *newPath);
 

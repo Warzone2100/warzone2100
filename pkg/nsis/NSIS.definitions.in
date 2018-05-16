@@ -1,11 +1,11 @@
 !define PACKAGE "@PACKAGE@"
-!if "@WZ_PORTABLE@" == "on"
-  !define PORTABLE "on"
+!if "@WZ_PORTABLE@" == "ON"
+  !define PORTABLE "ON"
 !endif
 !define PACKAGE_NAME "@PACKAGE_NAME@"
 !define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
 !define TOP_SRCDIR "@SOURCE_DIR@"
 !define TOP_BUILDDIR "@BUILD_DIR@"
-!if "@NSIS_MSVCRUNTIME@" == "on"
-  !define MSVCRUNTIME "on"
+!if "@NSIS_MSVCRUNTIME@" == "ON"
+  !define MSVCRUNTIME "ON"
 !endif

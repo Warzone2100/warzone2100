@@ -72,6 +72,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		unset(NSIS_MSVCRUNTIME)
 	endif()
 
+	# Note: NSIS.definitions.in also uses WZ_PORTABLE directly
 	configure_file(
 		${CMAKE_CURRENT_SOURCE_DIR}/nsis/NSIS.definitions.in
 		${CMAKE_BINARY_DIR}/NSIS.definitions.nsh
