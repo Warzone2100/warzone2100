@@ -119,9 +119,6 @@
 /* Version number of package */
 #cmakedefine VERSION
 
-/* Makes builds become portable (windows ONLY) */
-#cmakedefine WZ_PORTABLE
-
 /* Define to 1 if on MINIX. */
 #cmakedefine _MINIX
 

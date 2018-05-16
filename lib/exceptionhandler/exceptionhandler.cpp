@@ -792,7 +792,7 @@ static bool fetchProgramPath(char *const programPath, size_t const bufSize, cons
  *
  * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(int argc, const char **argv, const char *packageVersion, const std::string &writeDir)
+void setupExceptionHandler(int argc, const char **argv, const char *packageVersion, const std::string &writeDir, bool portable_mode)
 {
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	const char *programCommand;
@@ -805,7 +805,7 @@ void setupExceptionHandler(int argc, const char **argv, const char *packageVersi
 
 #if defined(WZ_OS_WIN)
 # if defined(WZ_CC_MINGW)
-	ExchndlSetup(packageVersion, writeDir);
+	ExchndlSetup(packageVersion, writeDir, portable_mode);
 # else
 	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
 # endif // !defined(WZ_CC_MINGW)

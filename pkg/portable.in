@@ -1,0 +1,6 @@
+# A .portable file in the same directory as the warzone2100 executable enables Portable mode.
+#
+# All Warzone 2100 user data will be saved in a subfolder of the directory that contains the warzone2100 executable.
+#
+# Removing or renaming this file will disable Portable mode.
+#

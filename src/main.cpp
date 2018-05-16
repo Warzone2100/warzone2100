@@ -118,6 +118,112 @@ static GAMECODE gameLoopStatus = GAMECODE_CONTINUE;
 static FOCUS_STATE focusState = FOCUS_IN;
 
 
+#if defined(WZ_OS_WIN)
+
+#define WIN_MAX_EXTENDED_PATH 32767
+
+// Gets the full path to the application executable (UTF-16)
+static std::wstring getCurrentApplicationPath_WIN()
+{
+	// On Windows, use GetModuleFileNameW to obtain the full path to the current EXE
+
+	std::vector<wchar_t> buffer(WIN_MAX_EXTENDED_PATH + 1, 0);
+	DWORD moduleFileNameLen = GetModuleFileNameW(NULL, &buffer[0], buffer.size() - 1);
+	DWORD lastError = GetLastError();
+	if ((moduleFileNameLen == 0) && (lastError != ERROR_SUCCESS))
+	{
+		// GetModuleFileName failed
+		debug(LOG_ERROR, "GetModuleFileName failed: %lu", moduleFileNameLen);
+		return std::wstring();
+	}
+	else if (moduleFileNameLen > (buffer.size() - 1))
+	{
+		debug(LOG_ERROR, "GetModuleFileName returned a length: %lu >= buffer length: %zu", moduleFileNameLen, buffer.size());
+		return std::wstring();
+	}
+
+	// Because Windows XP's GetModuleFileName does not guarantee null-termination,
+	// always append a null-terminator
+	buffer[moduleFileNameLen] = 0;
+
+	return std::wstring(buffer.data());
+}
+
+// Gets the full path to the folder that contains the application executable (UTF-16)
+static std::wstring getCurrentApplicationFolder_WIN()
+{
+	std::wstring applicationExecutablePath = getCurrentApplicationPath_WIN();
+	if (applicationExecutablePath.empty())
+	{
+		return std::wstring();
+	}
+
+	// Find the position of the last slash in the application executable path
+	size_t lastSlash = applicationExecutablePath.find_last_of(L"\\/", std::wstring::npos);
+	if (lastSlash == std::wstring::npos)
+	{
+		// Did not find a path separator - does not appear to be a valid application executable path?
+		debug(LOG_ERROR, "Unable to find path separator in application executable path");
+		return std::wstring();
+	}
+
+	// Trim off the executable name
+	return applicationExecutablePath.substr(0, lastSlash);
+}
+#endif
+
+// Gets the full path to the folder that contains the application executable (UTF-8)
+static std::string getCurrentApplicationFolder()
+{
+#if defined(WZ_OS_WIN)
+	std::wstring applicationFolderPath_utf16 = getCurrentApplicationFolder_WIN();
+
+	// Convert the UTF-16 to UTF-8
+	int outputLength = WideCharToMultiByte(CP_UTF8, 0, applicationFolderPath_utf16.c_str(), -1, NULL, 0, NULL, NULL);
+	if (outputLength <= 0)
+	{
+		debug(LOG_ERROR, "Encoding conversion error.");
+		return std::string();
+	}
+	std::vector<char> u8_buffer(outputLength, 0);
+	if (WideCharToMultiByte(CP_UTF8, 0, applicationFolderPath_utf16.c_str(), -1, &u8_buffer[0], outputLength, NULL, NULL) == 0)
+	{
+		debug(LOG_ERROR, "Encoding conversion error.");
+		return std::string();
+	}
+
+	return std::string(u8_buffer.data());
+#else
+	// Not yet implemented for this platform
+	return std::string();
+#endif
+}
+
+static bool isPortableMode()
+{
+	static bool _checkedMode = false;
+	static bool _isPortableMode = false;
+	if (!_checkedMode)
+	{
+#if defined(WZ_OS_WIN)
+		// On Windows, check for the presence of a ".portable" file in the same directory as the application EXE
+		std::wstring portableFilePath = getCurrentApplicationFolder_WIN();
+		portableFilePath += L"\\.portable";
+
+		if (GetFileAttributesW(portableFilePath.c_str()) != INVALID_FILE_ATTRIBUTES)
+		{
+			// A .portable file exists in the application directory
+			debug(LOG_WARNING, ".portable file detected - enabling portable mode");
+			_isPortableMode = true;
+		}
+#else
+		// Not yet implemented for this platform.
+#endif
+		_checkedMode = true;
+	}
+	return _isPortableMode;
+}
+
 /*!
  * Retrieves the current working directory and copies it into the provided output buffer
  * \param[out] dest the output buffer to put the current working directory in
@@ -193,21 +299,10 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 	char tmpstr[PATH_MAX] = { '\0' };
 	const size_t size = sizeof(tmpstr);
 #if defined(WZ_OS_WIN)
-//  When WZ_PORTABLE is passed, that means we want the config directory at the same location as the program file
-	DWORD dwRet;
 	wchar_t tmpWStr[MAX_PATH];
-#ifndef WZ_PORTABLE
+
 	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr)))
 	{
-#else
-	if ((dwRet = GetCurrentDirectoryW(MAX_PATH, tmpWStr)))
-	{
-		if (dwRet > MAX_PATH)
-		{
-			debug(LOG_FATAL, "Buffer exceeds maximum path to create directory. Exiting.");
-			exit(1);
-		}
-#endif
 		if (WideCharToMultiByte(CP_UTF8, 0, tmpWStr, -1, tmpstr, size, NULL, NULL) == 0)
 		{
 			debug(LOG_FATAL, "Config directory encoding conversion error.");
@@ -216,11 +311,9 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 		basePath = std::string(tmpstr);
 
 		appendPath = std::string();
-#ifndef WZ_PORTABLE
 		// Must append org\app to APPDATA path
 		appendPath += org;
 		appendPath += PHYSFS_getDirSeparator();
-#endif
 		appendPath += app;
 	}
 	else
@@ -306,6 +399,37 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 // (Ensures the directory exists. Creates folders if necessary.)
 static std::string getPlatformPrefDir(const char * org, const std::string &app)
 {
+	if (isPortableMode())
+	{
+		// When isPortableMode is true, the config directory should be at the same location as the program file
+		std::string basePath = getCurrentApplicationFolder();
+		if (basePath.empty())
+		{
+			// Failed to get the current application folder
+			debug(LOG_FATAL, "Error getting the current application folder - unable to proceed with portable mode");
+			exit(1);
+		}
+
+		std::string appendPath = app;
+
+		// Create the folders within the basePath if they don't exist
+		if (!PHYSFS_setWriteDir(basePath.c_str())) // Workaround for PhysFS not creating the writedir as expected.
+		{
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
+				  basePath.c_str(), WZ_PHYSFS_getLastError());
+			exit(1);
+		}
+
+		if (!PHYSFS_mkdir(appendPath.c_str()))
+		{
+			debug(LOG_FATAL, "Error creating directory \"%s\" in \"%s\": %s",
+				  appendPath.c_str(), PHYSFS_getWriteDir(), WZ_PHYSFS_getLastError());
+			exit(1);
+		}
+
+		return basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator();
+	}
+
 #if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	const char * prefsDir = PHYSFS_getPrefDir(org, app.c_str());
 	if (prefsDir == nullptr)
@@ -937,7 +1061,7 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(), version_getVersionedAppDirFolderName());
+	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(), version_getVersionedAppDirFolderName(), isPortableMode());
 
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);

@@ -32,7 +32,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_manifest_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.manifest.in")
 	add_custom_command(
 		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_manifest_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest" -DPORTABLE="${WZ_PORTABLE}" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_manifest_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 		DEPENDS "${_manifest_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
 	)
@@ -41,7 +41,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_rc_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc.in")
 	add_custom_command(
 		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_rc_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc" -DPORTABLE="${WZ_PORTABLE}" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_rc_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 		DEPENDS "${_rc_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest"
 	)
@@ -69,11 +69,7 @@ SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "$
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
-if(WZ_PORTABLE)
-	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100_portable")
-else()
-	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100")
-endif()
+SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Build warzone exe as a Windows app (not a console app)
@@ -192,6 +188,10 @@ endif()
 #######################
 # Install
 install(TARGETS warzone2100 COMPONENT Core DESTINATION ".")
+
+if(WZ_PORTABLE)
+	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT Core DESTINATION "." RENAME ".portable")
+endif()
 
 #####################
 # Installing Required Runtime Dependencies

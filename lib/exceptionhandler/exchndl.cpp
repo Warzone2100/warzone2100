@@ -1334,7 +1334,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 	}
 }
 
-void ExchndlSetup(const char *packageVersion, const std::string &writeDir)
+void ExchndlSetup(const char *packageVersion, const std::string &writeDir, bool portable_mode)
 {
 # if defined(WZ_CC_MINGW)
 	wchar_t miniDumpPath[PATH_MAX] = {'\0'};
@@ -1363,10 +1363,9 @@ void ExchndlSetup(const char *packageVersion, const std::string &writeDir)
 		exit(1);
 	}
 
-#ifndef WZ_PORTABLE
 	// Because of UAC on vista / win7 we use this to write our dumps to (unless we override it via OverrideRPTDirectory())
 	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
-	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath)))
+	if (!portable_mode && SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath)))
 	{
 		PathAppendW(miniDumpPath, wchar_writeDir);
 		PathAppendW(miniDumpPath, L"\\logs");
@@ -1385,9 +1384,8 @@ void ExchndlSetup(const char *packageVersion, const std::string &writeDir)
 			}
 		}
 	}
-#else
-	// we use where they installed it on, since this is a removeable drive (most likely), we will use where the program is located in.
-	if ((dwRetVal = GetCurrentDirectoryW(MAX_PATH, miniDumpPath)))
+	// in portable mode, we use where they installed it on, since this is a removeable drive (most likely), we will use where the program is located in.
+	else if (portable_mode && ((dwRetVal = GetCurrentDirectoryW(MAX_PATH, miniDumpPath))))
 	{
 		if (dwRetVal > MAX_PATH)
 		{
@@ -1397,7 +1395,6 @@ void ExchndlSetup(const char *packageVersion, const std::string &writeDir)
 		PathAppendW(miniDumpPath, wchar_writeDir);
 		PathAppendW(miniDumpPath, L"\\logs");
 	}
-#endif
 	else
 	{
 		// should never fail, but if it does, we fall back to this
