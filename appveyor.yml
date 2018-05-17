@@ -58,22 +58,61 @@ before_build:
   - ps: if (Test-Path .\vcpkg\buildtrees) { Remove-Item .\vcpkg\buildtrees -Force -Recurse -ErrorAction SilentlyContinue; }
   # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
   - msbuild .\vcpkg\toolsrc\vcpkg.sln /t:Clean /p:Configuration=Release /p:Platform=x86
-  # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
-  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
+  # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform (portable build)
+  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
 
 build:
   parallel: true
   project: build/PACKAGE.vcxproj
 
 after_build:
-  # Package the setup exe into a zip
-  # Name the zip file based on the autorevision info: warzone2100-<BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>-<PLATFORM: x86, x64>.zip
-  - ps: cmd /c 7z a "warzone2100-$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))-$($env:WZ_OUTPUT_PLATFORMNAME).zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100.exe"
-  # Package the .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive
-  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 "warzone2100-$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))-$($env:WZ_OUTPUT_PLATFORMNAME).DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+  # Determine the build output description (nightly vs tag/release builds)
+  # For nightly builds, base on the autorevision info: warzone2100-<BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>-<PLATFORM: x86, x64>_<PORTABLE/INSTALLER>.zip
+  # For tags/releases, base on the tag name: warzone2100-<TAG_NAME>_<PORTABLE/INSTALLER>.zip (so it can go right to GitHub releases)
+  - ps: |
+      if (Test-Path 'env:APPVEYOR_REPO_TAG_NAME') {
+        # For tag builds, simply use <TAG_NAME>
+        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_TAG_NAME)"
+      }
+      else {
+        # For normal builds, use <BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>-<PLATFORM: x86, x64>
+        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))-$($env:WZ_OUTPUT_PLATFORMNAME)"
+      }
+  - ps: Write-Host "env:WZ_BUILD_DESC='$env:WZ_BUILD_DESC'"
+
+  # Package the portable installer into a zip
+  - ps: cmd /c 7z a "warzone2100-$($env:WZ_BUILD_DESC)_portable.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe"
+  # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
+  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+  
+  # Re-run CMake configure for non-portable (regular) installer
+  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
+  # Build the regular installer package (this should only rebuild the installer itself)
+  - msbuild build/PACKAGE.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+  
+  # Package the regular installer into a zip
+  - ps: cmd /c 7z a "warzone2100-$($env:WZ_BUILD_DESC)_installer.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe"
+  # Package the regular installer .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
+  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+  
+  # Compare the two DEBUGSYMBOLS.7z files
+  # If they are equal (as they should be if only the installer was rebuilt), keep only one and remove the "PORTABLE/INSTALLER" suffix
+  # If they are not equal, we have to keep both (but output a notice, as the CMake build should probably be tweaked to avoid this)
+  - ps: |
+      if ((Get-FileHash -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash -eq (Get-FileHash -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash) {
+        # The two archives' hashes match - delete one, and rename the other
+        Remove-Item -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Force -ErrorAction SilentlyContinue
+        Rename-Item -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -NewName "warzone2100-$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
+      }
+      else {
+        Write-Warning "The DEBUGSYMBOLS.7z files for the portable + regular builds do not match. This may mean that the executable was rebuilt when switching portable / non-portable mode. (Check the CMake scripts to fix.)"
+      }
 
 artifacts:
-  - path: warzone2100-*.zip
+  - path: warzone2100-*_portable.zip
+    name: Warzone2100 Portable
+  # TODO: Only upload the full installer on "tag" builds (releases)
+  - path: warzone2100-*_installer.zip
     name: Warzone2100 Installer
   - path: warzone2100-*.DEBUGSYMBOLS.7z
     name: Debug Symbols (7z)
