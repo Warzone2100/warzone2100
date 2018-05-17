@@ -176,6 +176,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windo
 		get_target_property(_mainexename warzone2100 OUTPUT_NAME)
 		add_custom_command(TARGET warzone2100 POST_BUILD
 			COMMAND ${DUMP_SYMS} "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" > "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym"
+			DEPENDS "${DUMP_SYMS}" "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb"
 		)
 
 		# Install the .sym file (to ensure it's always with the .exe)
