@@ -196,12 +196,6 @@ endif()
 #####################
 # Installing Required Runtime Dependencies
 
-# Install required system libraries (ex. the VC runtime when linking dynamically via MSVC)
-set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
-set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT Core)
-set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
-include(InstallRequiredSystemLibraries)
-
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	get_target_property(_mainexename warzone2100 OUTPUT_NAME)
 	if(_mainexename)
