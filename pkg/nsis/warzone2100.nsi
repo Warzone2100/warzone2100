@@ -177,6 +177,10 @@ Section $(TEXT_SecBase) SecBase
   ; Main executable
   File "${TOP_BUILDDIR}\src\${PACKAGE}.exe"
 
+  !ifdef PORTABLE
+    File "/oname=.portable" "${TOP_SRCDIR}\pkg\portable.in"
+  !endif
+
   ; Windows dbghelp library
   File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll.license.txt"
   File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll"
