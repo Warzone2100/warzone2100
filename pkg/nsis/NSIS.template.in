@@ -302,6 +302,7 @@ ${EndIf}
 !macroend
 
 !macro DownloadFile URL Caption OutputFile ExpectedSHA512Hash Result
+DetailPrint "Downloading ${URL} ..."
 inetc::get /CAPTION "${Caption}" "${URL}" "${OutputFile}"
 Pop $R0 # return value = exit code, "OK" if OK
 ${If} $R0 == "OK"
@@ -371,10 +372,10 @@ ${EndIf}
     Section "" SecMSSysLibraries
       SetOutPath "$INSTDIR"
 
-      !insertmacro DownloadFile2 "https://github.com/past-due/applocalconfig/releases/download/v1.0/applocalconfig-vc2017-x86.zip" "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0/applocalconfig-vc2017-x86.zip" "Downloading applocalconfig-vc2017-x86.zip" "$PLUGINSDIR\applocalconfig-vc2017-x86.zip" "3b2b4e6ce73e55cdc6f7bd98657ecd1c5407e1577bfaec8b336705466d108f7a50e45a4b20d8ac16b9403fa048708bc1f4bf5149d7bc41cf9c47b6b6a6390a58" $Result_MSVCDownload
+      !insertmacro DownloadFile2 "https://github.com/past-due/applocalconfig/releases/download/v1.0.1/applocalconfig-vc2017-x86.zip" "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.1/applocalconfig-vc2017-x86.zip" "Downloading applocalconfig-vc2017-x86.zip" "$PLUGINSDIR\applocalconfig.zip" "a7b435294f0beace13823bb9b3b070a1af7e974d952aef9441bf55eeda5bffcac83780c31da981fd45bd23e5aae098ad35c325692cfa2061a72ae1ce2bdc5bc6" $Result_MSVCDownload
       ${If} $Result_MSVCDownload == "OK"
         ; Download succeeded
-        nsisunz::UnzipToLog "$PLUGINSDIR\applocalconfig-vc2017-x86.zip" "$INSTDIR"
+        nsisunz::UnzipToLog "$PLUGINSDIR\applocalconfig.zip" "$INSTDIR"
         Pop $0 ; Get the return value
         ${IfNot} $0 == "success"
           ; Failed to unzip downloaded file
@@ -483,7 +484,9 @@ Function .onInit
       ; Check for presence of MSVC++ 14 System Runtime (VC2017, works with 2015)
       ; NOTE: Because VC 15 is ABI compatible with VC 14, the version # used is still 14.
       ; The VCRuntime includes the Universal C Runtime system component (the UCRT does not have to be detected / handled separately)
-      !define MSVCRT14_BLD_MINIMUM 26020 ; (14.13.26020)
+      !ifndef MSVCRT14_BLD_MINIMUM
+        !error "MSVCRT14_BLD_MINIMUM is not defined"
+      !endif
 
       ${If} ${RunningX64}
         SetRegView 64

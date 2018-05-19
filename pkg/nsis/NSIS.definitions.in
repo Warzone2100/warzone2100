@@ -8,4 +8,5 @@
 !define TOP_BUILDDIR "@BUILD_DIR@"
 !if "@NSIS_MSVCRUNTIME@" == "ON"
   !define MSVCRUNTIME "ON"
+  !define MSVCRT14_BLD_MINIMUM 26405 ; (14.14.26405)
 !endif
