@@ -294,8 +294,8 @@ static bool getCurrentDir(char *const dest, size_t const size)
 #if !defined(WZ_PHYSFS_2_1_OR_GREATER)
 static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 {
-	std::string basePath;
-	std::string appendPath;
+	WzString basePath;
+	WzString appendPath;
 	char tmpstr[PATH_MAX] = { '\0' };
 	const size_t size = sizeof(tmpstr);
 #if defined(WZ_OS_WIN)
@@ -308,9 +308,9 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 			debug(LOG_FATAL, "Config directory encoding conversion error.");
 			exit(1);
 		}
-		basePath = std::string(tmpstr);
+		basePath = WzString::fromUtf8(tmpstr);
 
-		appendPath = std::string();
+		appendPath = WzString();
 		// Must append org\app to APPDATA path
 		appendPath += org;
 		appendPath += PHYSFS_getDirSeparator();
@@ -320,8 +320,8 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 #elif defined(WZ_OS_MAC)
 	if (cocoaGetApplicationSupportDir(tmpstr, size))
 	{
-		basePath = std::string(tmpstr);
-		appendPath = std::string(app);
+		basePath = WzString::fromUtf8(tmpstr);
+		appendPath = WzString::fromUtf8(app);
 	}
 	else
 #elif defined(WZ_OS_UNIX)
@@ -341,14 +341,14 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 			envPath = PHYSFS_getUserDir();
 		}
 
-		appendPath = std::string(".local") + PHYSFS_getDirSeparator() + "share";
+		appendPath = WzString(".local") + PHYSFS_getDirSeparator() + "share";
 	}
 
 	if (envPath != nullptr)
 	{
-		basePath = std::string(envPath);
+		basePath = WzString::fromUtf8(envPath);
 
-		if (!appendPath.empty())
+		if (!appendPath.isEmpty())
 		{
 			appendPath += PHYSFS_getDirSeparator();
 		}
@@ -359,15 +359,15 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 	// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() for other OSes
 	if (PHYSFS_getUserDir())
 	{
-		basePath = std::string(PHYSFS_getUserDir());
-		appendPath = std::string(app);
+		basePath = WzString::fromUtf8(PHYSFS_getUserDir());
+		appendPath = WzString::fromUtf8(app);
 	}
 	else
 #endif
 	if (getCurrentDir(tmpstr, size))
 	{
-		basePath = std::string(tmpstr);
-		appendPath = std::string(app);
+		basePath = WzString::fromUtf8(tmpstr);
+		appendPath = WzString::fromUtf8(app);
 	}
 	else
 	{
@@ -377,21 +377,36 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 
 	// Create the folders within the basePath if they don't exist
 
-	if (!PHYSFS_setWriteDir(basePath.c_str())) // Workaround for PhysFS not creating the writedir as expected.
+	if (!PHYSFS_setWriteDir(basePath.toUtf8().c_str())) // Workaround for PhysFS not creating the writedir as expected.
 	{
 		debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			  basePath.c_str(), WZ_PHYSFS_getLastError());
+			  basePath.toUtf8().c_str(), WZ_PHYSFS_getLastError());
 		exit(1);
 	}
 
-	if (!PHYSFS_mkdir(appendPath.c_str()))
+	WzString currentBasePath = basePath;
+	const std::vector<WzString> appendPaths = appendPath.split(PHYSFS_getDirSeparator());
+	for (const auto &folder : appendPaths)
 	{
-		debug(LOG_FATAL, "Error creating directory \"%s\" in \"%s\": %s",
-			  appendPath.c_str(), PHYSFS_getWriteDir(), WZ_PHYSFS_getLastError());
-		exit(1);
+		if (!PHYSFS_mkdir(folder.toUtf8().c_str()))
+		{
+			debug(LOG_FATAL, "Error creating directory \"%s\" in \"%s\": %s",
+				  folder.toUtf8().c_str(), PHYSFS_getWriteDir(), WZ_PHYSFS_getLastError());
+			exit(1);
+		}
+
+		currentBasePath += PHYSFS_getDirSeparator();
+		currentBasePath += folder;
+
+		if (!PHYSFS_setWriteDir(currentBasePath.toUtf8().c_str())) // Workaround for PhysFS not creating the writedir as expected.
+		{
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
+				  currentBasePath.toUtf8().c_str(), WZ_PHYSFS_getLastError());
+			exit(1);
+		}
 	}
 
-	return basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator();
+	return (basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator()).toUtf8();
 }
 #endif
 
