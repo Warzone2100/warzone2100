@@ -691,7 +691,7 @@ void NETwzstring(WzString &str)
 	}
 	for (unsigned i = 0; i < len; ++i)
 	{
-		uint16_t c;
+		uint16_t c = 0;
 		if (NETgetPacketDir() == PACKET_ENCODE)
 		{
 			c = u16_characters[i];
