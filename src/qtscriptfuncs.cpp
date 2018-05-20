@@ -2574,10 +2574,10 @@ static QScriptValue js_groupAdd(QScriptContext *context, QScriptEngine *engine)
 //--
 static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngine *engine)
 {
-	int x1 = context->argument(0).toNumber();
-	int y1 = context->argument(1).toNumber();
-	int x2 = context->argument(2).toNumber();
-	int y2 = context->argument(3).toNumber();
+	int32_t x1 = context->argument(0).toInt32();
+	int32_t y1 = context->argument(1).toInt32();
+	int32_t x2 = context->argument(2).toInt32();
+	int32_t y2 = context->argument(3).toInt32();
 	return QScriptValue(iHypot(x1 - x2, y1 - y2));
 }
 
