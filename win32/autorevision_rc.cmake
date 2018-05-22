@@ -138,7 +138,7 @@ set(MANIFEST_assemblyIdentityVersion "1.${_file_version_minor}.${_file_version_p
 set(RC_StringFileInfo_FileDescription "Warzone 2100")
 set(RC_StringFileInfo_OriginalFilename "warzone2100.exe")
 set(RC_StringFileInfo_ProductName "Warzone 2100")
-set(RC_Icon_Filename "warzone2100.obsolete.ico")
+set(RC_Icon_Filename "warzone2100.ico")
 
 ##################################
 # Debug output
