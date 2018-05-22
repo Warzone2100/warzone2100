@@ -34,8 +34,14 @@
 /* Have FreeType 2 library */
 #define HAVE_FREETYPE 1
 
+/* Define to 1 if you have the `FT_Done_MM_Var' function. */
+/* #undef HAVE_FT_DONE_MM_VAR */
+
 /* Define to 1 if you have the `FT_Get_Var_Blend_Coordinates' function. */
-/* #undef HAVE_FT_GET_VAR_BLEND_COORDINATES */
+#define HAVE_FT_GET_VAR_BLEND_COORDINATES 1
+
+/* Define to 1 if you have the `FT_Set_Var_Blend_Coordinates' function. */
+#define HAVE_FT_SET_VAR_BLEND_COORDINATES 1
 
 /* Define to 1 if you have the `getpagesize' function. */
 #define HAVE_GETPAGESIZE 1
@@ -73,6 +79,9 @@
 /* Define to 1 if you have the `mprotect' function. */
 #define HAVE_MPROTECT 1
 
+/* Define to 1 if you have the `newlocale' function. */
+#define HAVE_NEWLOCALE 1
+
 /* Have native OpenType Layout backend */
 #define HAVE_OT 1
 
@@ -88,6 +97,9 @@
 /* Have sched_yield */
 /* #undef HAVE_SCHED_YIELD */
 
+/* Define to 1 if you have the `setlinebuf' function. */
+#define HAVE_SETLINEBUF 1
+
 /* Have Solaris __machine_*_barrier and atomic_* operations */
 /* #undef HAVE_SOLARIS_ATOMIC_OPS */
 
@@ -102,6 +114,9 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
+
+/* Define to 1 if you have the `strtod_l' function. */
+#define HAVE_STRTOD_L 1
 
 /* Define to 1 if you have the `sysconf' function. */
 #define HAVE_SYSCONF 1
@@ -130,18 +145,20 @@
 /* Define to 1 if you have the <windows.h> header file. */
 /* #undef HAVE_WINDOWS_H */
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to 1 if you have the <xlocale.h> header file. */
+#define HAVE_XLOCALE_H 1
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "https://github.com/behdad/harfbuzz/issues/new"
+#define PACKAGE_BUGREPORT "https://github.com/harfbuzz/harfbuzz/issues/new"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "HarfBuzz"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "HarfBuzz 1.4.8"
+#define PACKAGE_STRING "HarfBuzz 1.7.6"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "harfbuzz"
@@ -150,7 +167,7 @@
 #define PACKAGE_URL "http://harfbuzz.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.4.8"
+#define PACKAGE_VERSION "1.7.6"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
