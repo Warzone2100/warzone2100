@@ -778,6 +778,9 @@
 		D75F2F5620B4715900F81A9A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75F2F5520B4715900F81A9A /* Foundation.framework */; };
 		D75F2F5920B474D300F81A9A /* DejaVuSans-Bold.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = D75F2F5720B474BD00F81A9A /* DejaVuSans-Bold.ttf */; };
 		D75F2F5A20B474D300F81A9A /* DejaVuSans.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = D75F2F5820B474BD00F81A9A /* DejaVuSans.ttf */; };
+		D75F2F5E20B47E8800F81A9A /* hb-aat-layout.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */; };
+		D75F2F6020B47EAA00F81A9A /* hb-ot-color.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */; };
+		D75F2F6220B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */; };
 		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
 		D7CC6429204F234F004AEF50 /* wzstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7CC6428204F234F004AEF50 /* wzstring.cpp */; };
 		D7DA4DDA2076BB930072959F /* utf8proc.c in Sources */ = {isa = PBXBuildFile; fileRef = D7DA4DD82076BB8B0072959F /* utf8proc.c */; };
@@ -2320,6 +2323,9 @@
 		D75F2F5520B4715900F81A9A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D75F2F5720B474BD00F81A9A /* DejaVuSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DejaVuSans-Bold.ttf"; path = "../3rdparty/fonts/DejaVu/DejaVuSans-Bold.ttf"; sourceTree = "<group>"; };
 		D75F2F5820B474BD00F81A9A /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = DejaVuSans.ttf; path = ../3rdparty/fonts/DejaVu/DejaVuSans.ttf; sourceTree = "<group>"; };
+		D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-aat-layout.cc"; path = "external/harfbuzz/src/hb-aat-layout.cc"; sourceTree = "<group>"; };
+		D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-color.cc"; path = "external/harfbuzz/src/hb-ot-color.cc"; sourceTree = "<group>"; };
+		D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-shape-complex-khmer.cc"; path = "external/harfbuzz/src/hb-ot-shape-complex-khmer.cc"; sourceTree = "<group>"; };
 		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
 		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
 		D7CC641D204F2347004AEF50 /* wzstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wzstring.h; path = ../lib/framework/wzstring.h; sourceTree = "<group>"; };
@@ -3840,6 +3846,7 @@
 		BC80239E1F3D049B001E75F8 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */,
 				BC8023BE1F3D05B7001E75F8 /* hb-blob.cc */,
 				BC316E681F46543200B8D306 /* hb-buffer-serialize.cc */,
 				BC8023BF1F3D05B7001E75F8 /* hb-buffer.cc */,
@@ -3848,6 +3855,7 @@
 				BC8023BD1F3D05A6001E75F8 /* hb-fallback-shape.cc */,
 				BC8023BC1F3D05A6001E75F8 /* hb-font.cc */,
 				BC8023BA1F3D0585001E75F8 /* hb-ft.cc */,
+				D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */,
 				BC8023AE1F3D053A001E75F8 /* hb-ot-font.cc */,
 				BC8023B91F3D053A001E75F8 /* hb-ot-layout.cc */,
 				BC8023B21F3D053A001E75F8 /* hb-ot-map.cc */,
@@ -3858,6 +3866,7 @@
 				BC8023AD1F3D053A001E75F8 /* hb-ot-shape-complex-hebrew.cc */,
 				BC8023A81F3D0538001E75F8 /* hb-ot-shape-complex-indic-table.cc */,
 				BC8023B11F3D053A001E75F8 /* hb-ot-shape-complex-indic.cc */,
+				D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */,
 				BC8023B71F3D053A001E75F8 /* hb-ot-shape-complex-myanmar.cc */,
 				BC8023A71F3D0538001E75F8 /* hb-ot-shape-complex-thai.cc */,
 				BC8023AB1F3D0539001E75F8 /* hb-ot-shape-complex-tibetan.cc */,
@@ -5917,7 +5926,10 @@
 				BC8023DC1F3D05C1001E75F8 /* hb-shaper.cc in Sources */,
 				BC316E6A1F46544200B8D306 /* hb-buffer-serialize.cc in Sources */,
 				BC8023C51F3D05C1001E75F8 /* hb-fallback-shape.cc in Sources */,
+				D75F2F6220B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc in Sources */,
+				D75F2F5E20B47E8800F81A9A /* hb-aat-layout.cc in Sources */,
 				BC8023CA1F3D05C1001E75F8 /* hb-ot-map.cc in Sources */,
+				D75F2F6020B47EAA00F81A9A /* hb-ot-color.cc in Sources */,
 				BC8023F71F3D1394001E75F8 /* hb-ot-shape-complex-hebrew.cc in Sources */,
 				BC316E6D1F46548D00B8D306 /* hb-ot-math.cc in Sources */,
 				BC8023C21F3D05C1001E75F8 /* hb-buffer.cc in Sources */,
