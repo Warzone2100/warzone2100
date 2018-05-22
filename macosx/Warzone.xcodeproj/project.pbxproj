@@ -70,7 +70,6 @@
 			buildConfigurationList = 43FA570F10FF8EBB0074E914 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */;
 			buildPhases = (
 				4345290E1130F84E002AD731 /* msgfmt */,
-				43B8FF2D127CD57D006F5A13 /* Fonts */,
 				436D24A4149641D200BF74E3 /* SDL */,
 				4311544C14BA01F900332251 /* Docs */,
 				433360A711A0796D00380F5E /* Qt */,
@@ -412,8 +411,6 @@
 		43B8FD33127CB13F006F5A13 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD32127CB13F006F5A13 /* OpenAL.framework */; };
 		43B8FE84127CB29D006F5A13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */; };
 		43B8FE9D127CB327006F5A13 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FE9C127CB327006F5A13 /* IOKit.framework */; };
-		43B8FF6C127CD9E4006F5A13 /* DejaVuSans-Bold.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = 43B8FF3D127CD999006F5A13 /* DejaVuSans-Bold.ttf */; };
-		43B8FF6D127CD9E4006F5A13 /* DejaVuSans.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = 43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */; };
 		43B9DE3913846038004C7351 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B9DE3813846038004C7351 /* libiconv.dylib */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
 		43C18FD0114FF38B0028741B /* netlog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA8114FF38B0028741B /* netlog.cpp */; };
@@ -779,6 +776,8 @@
 		D75F2F4920B470AC00F81A9A /* physfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F3120B470AC00F81A9A /* physfs.c */; };
 		D75F2F4A20B470AC00F81A9A /* physfs.h in Headers */ = {isa = PBXBuildFile; fileRef = D75F2F3220B470AC00F81A9A /* physfs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D75F2F5620B4715900F81A9A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75F2F5520B4715900F81A9A /* Foundation.framework */; };
+		D75F2F5920B474D300F81A9A /* DejaVuSans-Bold.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = D75F2F5720B474BD00F81A9A /* DejaVuSans-Bold.ttf */; };
+		D75F2F5A20B474D300F81A9A /* DejaVuSans.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = D75F2F5820B474BD00F81A9A /* DejaVuSans.ttf */; };
 		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
 		D7CC6429204F234F004AEF50 /* wzstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7CC6428204F234F004AEF50 /* wzstring.cpp */; };
 		D7DA4DDA2076BB930072959F /* utf8proc.c in Sources */ = {isa = PBXBuildFile; fileRef = D7DA4DD82076BB8B0072959F /* utf8proc.c */; };
@@ -1219,8 +1218,8 @@
 			dstPath = Fonts;
 			dstSubfolderSpec = 7;
 			files = (
-				43B8FF6C127CD9E4006F5A13 /* DejaVuSans-Bold.ttf in Copy Fonts */,
-				43B8FF6D127CD9E4006F5A13 /* DejaVuSans.ttf in Copy Fonts */,
+				D75F2F5920B474D300F81A9A /* DejaVuSans-Bold.ttf in Copy Fonts */,
+				D75F2F5A20B474D300F81A9A /* DejaVuSans.ttf in Copy Fonts */,
 			);
 			name = "Copy Fonts";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1941,8 +1940,6 @@
 		43B8FD34127CB13F006F5A13 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43B8FE9C127CB327006F5A13 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		43B8FF3D127CD999006F5A13 /* DejaVuSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DejaVuSans-Bold.ttf"; path = "external/fonts/DejaVuSans-Bold.ttf"; sourceTree = SOURCE_ROOT; };
-		43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = DejaVuSans.ttf; path = external/fonts/DejaVuSans.ttf; sourceTree = SOURCE_ROOT; };
 		43B9DE3813846038004C7351 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		43B9DE9F1384675E004C7351 /* Base-Framework.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Base-Framework.xcconfig"; path = "configs/Base-Framework.xcconfig"; sourceTree = SOURCE_ROOT; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
@@ -2321,6 +2318,8 @@
 		D75F2F3120B470AC00F81A9A /* physfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs.c; path = external/physfs/src/physfs.c; sourceTree = "<group>"; };
 		D75F2F3220B470AC00F81A9A /* physfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs.h; path = external/physfs/src/physfs.h; sourceTree = "<group>"; };
 		D75F2F5520B4715900F81A9A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D75F2F5720B474BD00F81A9A /* DejaVuSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DejaVuSans-Bold.ttf"; path = "../3rdparty/fonts/DejaVu/DejaVuSans-Bold.ttf"; sourceTree = "<group>"; };
+		D75F2F5820B474BD00F81A9A /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = DejaVuSans.ttf; path = ../3rdparty/fonts/DejaVu/DejaVuSans.ttf; sourceTree = "<group>"; };
 		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
 		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
 		D7CC641D204F2347004AEF50 /* wzstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wzstring.h; path = ../lib/framework/wzstring.h; sourceTree = "<group>"; };
@@ -3479,8 +3478,8 @@
 		43B8FF3C127CD949006F5A13 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				43B8FF3D127CD999006F5A13 /* DejaVuSans-Bold.ttf */,
-				43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */,
+				D75F2F5720B474BD00F81A9A /* DejaVuSans-Bold.ttf */,
+				D75F2F5820B474BD00F81A9A /* DejaVuSans.ttf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -5344,20 +5343,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = ". configs/patchscripts/Vorbis-PatchSource.sh";
-		};
-		43B8FF2D127CD57D006F5A13 /* Fonts */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Fonts;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = ". configs/fetchscripts/SetupPrebuiltComponents-Fonts.sh";
 		};
 		43D180761336B6BF001906EB /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
