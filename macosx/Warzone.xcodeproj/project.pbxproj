@@ -338,16 +338,6 @@
 		02DDA8910BD3C27D0049AB60 /* setup_44.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA8800BD3C27D0049AB60 /* setup_44.h */; };
 		02DDA8920BD3C27D0049AB60 /* setup_44u.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA8810BD3C27D0049AB60 /* setup_44u.h */; };
 		02DDA8930BD3C27D0049AB60 /* setup_X.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA8820BD3C27D0049AB60 /* setup_X.h */; };
-		02DDA8BC0BD3C32D0049AB60 /* physfs_byteorder.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8B80BD3C32D0049AB60 /* physfs_byteorder.c */; };
-		02DDA8BD0BD3C32D0049AB60 /* physfs_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA8B90BD3C32D0049AB60 /* physfs_internal.h */; };
-		02DDA8BE0BD3C32D0049AB60 /* physfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8BA0BD3C32D0049AB60 /* physfs.c */; };
-		02DDA8BF0BD3C32D0049AB60 /* physfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA8BB0BD3C32D0049AB60 /* physfs.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		02DDA8C70BD3C3450049AB60 /* dir.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C00BD3C3450049AB60 /* dir.c */; };
-		02DDA8C80BD3C3450049AB60 /* grp.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C10BD3C3450049AB60 /* grp.c */; };
-		02DDA8CC0BD3C3450049AB60 /* wad.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C50BD3C3450049AB60 /* wad.c */; };
-		02DDA8CD0BD3C3450049AB60 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C60BD3C3450049AB60 /* zip.c */; };
-		02DDA8D00BD3C3600049AB60 /* posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CE0BD3C3600049AB60 /* posix.c */; };
-		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		22E244D70E65361800EC2B3E /* baseobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.cpp */; };
 		43119DC51353AFE7004C54BB /* pnginfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC21353AFD7004C54BB /* pnginfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -396,7 +386,6 @@
 		435213E316BD7F97001B3D42 /* qtscriptdebug.h in Sources */ = {isa = PBXBuildFile; fileRef = 435213DE16BD7F6D001B3D42 /* qtscriptdebug.h */; };
 		4352143416BD809A001B3D42 /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611F11A07FB900380F5E /* QtGui.framework */; };
 		4352143616BD80AC001B3D42 /* QtGui.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333611F11A07FB900380F5E /* QtGui.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */; };
 		4355E13010D6028C00A19EE4 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12C10D6028C00A19EE4 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -422,7 +411,6 @@
 		43B8FD2F127CB13F006F5A13 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		43B8FD33127CB13F006F5A13 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD32127CB13F006F5A13 /* OpenAL.framework */; };
 		43B8FE84127CB29D006F5A13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */; };
-		43B8FE9B127CB327006F5A13 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD2D127CB13F006F5A13 /* Carbon.framework */; };
 		43B8FE9D127CB327006F5A13 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FE9C127CB327006F5A13 /* IOKit.framework */; };
 		43B8FF6C127CD9E4006F5A13 /* DejaVuSans-Bold.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = 43B8FF3D127CD999006F5A13 /* DejaVuSans-Bold.ttf */; };
 		43B8FF6D127CD9E4006F5A13 /* DejaVuSans.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = 43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */; };
@@ -451,7 +439,6 @@
 		43CB73DB181E0E0100D1D1DD /* receivedata.c in Sources */ = {isa = PBXBuildFile; fileRef = 43CB73D6181E0E0100D1D1DD /* receivedata.c */; };
 		43CB73DC181E0E0100D1D1DD /* receivedata.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CB73D7181E0E0100D1D1DD /* receivedata.h */; };
 		43CCE06514BA636900B21363 /* netjoin_stub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CCE06414BA636900B21363 /* netjoin_stub.cpp */; };
-		43D180B01336B99C001906EB /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D180AF1336B99C001906EB /* physfs_casefolding.h */; };
 		43D338581364F5A8005F6725 /* connecthostport.c in Sources */ = {isa = PBXBuildFile; fileRef = 43D338561364F5A8005F6725 /* connecthostport.c */; };
 		43D338591364F5A8005F6725 /* connecthostport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D338571364F5A8005F6725 /* connecthostport.h */; };
 		43DF5A8A12BEE01B00DD5A37 /* cocoa_wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */; };
@@ -507,11 +494,6 @@
 		43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		43F1D9D21343F542001478EC /* qtscript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9CE1343F542001478EC /* qtscript.cpp */; };
 		43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */; };
-		43F3001410D3410C00707B6E /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFE10D33F4D00707B6E /* macosx.c */; };
-		43F3003310D341F000707B6E /* hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C20BD3C3450049AB60 /* hog.c */; };
-		43F3003410D341F100707B6E /* mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C30BD3C3450049AB60 /* mvl.c */; };
-		43F3003510D341F200707B6E /* qpak.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C40BD3C3450049AB60 /* qpak.c */; };
-		43F3004110D3422400707B6E /* physfs_unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFF10D33F6600707B6E /* physfs_unicode.c */; };
 		43F3008D10D344B000707B6E /* analyze.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3005510D344AF00707B6E /* analyze.c */; };
 		43F3008E10D344B000707B6E /* apiwrapper.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3005610D344AF00707B6E /* apiwrapper.c */; };
 		43F3008F10D344B000707B6E /* apiwrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F3005710D344AF00707B6E /* apiwrapper.h */; };
@@ -772,6 +754,31 @@
 		BCD210A21F3D82830028012B /* WZSDLAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 436D24DF149642EB00BF74E3 /* WZSDLAppDelegate.mm */; };
 		BCF97EF61F3CCCF100343E05 /* upnpdev.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF97EF31F3CCCE600343E05 /* upnpdev.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D72B3A791F4E4C1F0011D653 /* gfx_api_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72B3A6D1F4E4C160011D653 /* gfx_api_gl.cpp */; };
+		D75F2F3320B470AC00F81A9A /* physfs_archiver_7z.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F1B20B470AC00F81A9A /* physfs_archiver_7z.c */; };
+		D75F2F3420B470AC00F81A9A /* physfs_archiver_dir.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F1C20B470AC00F81A9A /* physfs_archiver_dir.c */; };
+		D75F2F3520B470AC00F81A9A /* physfs_archiver_grp.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F1D20B470AC00F81A9A /* physfs_archiver_grp.c */; };
+		D75F2F3620B470AC00F81A9A /* physfs_archiver_hog.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F1E20B470AC00F81A9A /* physfs_archiver_hog.c */; };
+		D75F2F3720B470AC00F81A9A /* physfs_archiver_iso9660.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F1F20B470AC00F81A9A /* physfs_archiver_iso9660.c */; };
+		D75F2F3820B470AC00F81A9A /* physfs_archiver_mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2020B470AC00F81A9A /* physfs_archiver_mvl.c */; };
+		D75F2F3920B470AC00F81A9A /* physfs_archiver_qpak.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2120B470AC00F81A9A /* physfs_archiver_qpak.c */; };
+		D75F2F3A20B470AC00F81A9A /* physfs_archiver_slb.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2220B470AC00F81A9A /* physfs_archiver_slb.c */; };
+		D75F2F3B20B470AC00F81A9A /* physfs_archiver_unpacked.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2320B470AC00F81A9A /* physfs_archiver_unpacked.c */; };
+		D75F2F3C20B470AC00F81A9A /* physfs_archiver_vdf.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2420B470AC00F81A9A /* physfs_archiver_vdf.c */; };
+		D75F2F3D20B470AC00F81A9A /* physfs_archiver_wad.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2520B470AC00F81A9A /* physfs_archiver_wad.c */; };
+		D75F2F3E20B470AC00F81A9A /* physfs_archiver_zip.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2620B470AC00F81A9A /* physfs_archiver_zip.c */; };
+		D75F2F3F20B470AC00F81A9A /* physfs_byteorder.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2720B470AC00F81A9A /* physfs_byteorder.c */; };
+		D75F2F4020B470AC00F81A9A /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = D75F2F2820B470AC00F81A9A /* physfs_casefolding.h */; };
+		D75F2F4120B470AC00F81A9A /* physfs_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = D75F2F2920B470AC00F81A9A /* physfs_internal.h */; };
+		D75F2F4220B470AC00F81A9A /* physfs_lzmasdk.h in Headers */ = {isa = PBXBuildFile; fileRef = D75F2F2A20B470AC00F81A9A /* physfs_lzmasdk.h */; };
+		D75F2F4320B470AC00F81A9A /* physfs_miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = D75F2F2B20B470AC00F81A9A /* physfs_miniz.h */; };
+		D75F2F4420B470AC00F81A9A /* physfs_platform_apple.m in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2C20B470AC00F81A9A /* physfs_platform_apple.m */; };
+		D75F2F4520B470AC00F81A9A /* physfs_platform_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2D20B470AC00F81A9A /* physfs_platform_posix.c */; };
+		D75F2F4620B470AC00F81A9A /* physfs_platform_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F2E20B470AC00F81A9A /* physfs_platform_unix.c */; };
+		D75F2F4720B470AC00F81A9A /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = D75F2F2F20B470AC00F81A9A /* physfs_platforms.h */; };
+		D75F2F4820B470AC00F81A9A /* physfs_unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F3020B470AC00F81A9A /* physfs_unicode.c */; };
+		D75F2F4920B470AC00F81A9A /* physfs.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F3120B470AC00F81A9A /* physfs.c */; };
+		D75F2F4A20B470AC00F81A9A /* physfs.h in Headers */ = {isa = PBXBuildFile; fileRef = D75F2F3220B470AC00F81A9A /* physfs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D75F2F5620B4715900F81A9A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D75F2F5520B4715900F81A9A /* Foundation.framework */; };
 		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
 		D7CC6429204F234F004AEF50 /* wzstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7CC6428204F234F004AEF50 /* wzstring.cpp */; };
 		D7DA4DDA2076BB930072959F /* utf8proc.c in Sources */ = {isa = PBXBuildFile; fileRef = D7DA4DD82076BB8B0072959F /* utf8proc.c */; };
@@ -1791,19 +1798,6 @@
 		02DDA8810BD3C27D0049AB60 /* setup_44u.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup_44u.h; path = external/libvorbis/lib/modes/setup_44u.h; sourceTree = SOURCE_ROOT; };
 		02DDA8820BD3C27D0049AB60 /* setup_X.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup_X.h; path = external/libvorbis/lib/modes/setup_X.h; sourceTree = SOURCE_ROOT; };
 		02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhysFS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02DDA8B80BD3C32D0049AB60 /* physfs_byteorder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = physfs_byteorder.c; path = external/physfs/physfs_byteorder.c; sourceTree = SOURCE_ROOT; };
-		02DDA8B90BD3C32D0049AB60 /* physfs_internal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs_internal.h; path = external/physfs/physfs_internal.h; sourceTree = SOURCE_ROOT; };
-		02DDA8BA0BD3C32D0049AB60 /* physfs.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = physfs.c; path = external/physfs/physfs.c; sourceTree = SOURCE_ROOT; };
-		02DDA8BB0BD3C32D0049AB60 /* physfs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = physfs.h; path = external/physfs/physfs.h; sourceTree = SOURCE_ROOT; };
-		02DDA8C00BD3C3450049AB60 /* dir.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dir.c; path = external/physfs/archivers/dir.c; sourceTree = SOURCE_ROOT; };
-		02DDA8C10BD3C3450049AB60 /* grp.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = grp.c; path = external/physfs/archivers/grp.c; sourceTree = SOURCE_ROOT; };
-		02DDA8C20BD3C3450049AB60 /* hog.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hog.c; path = external/physfs/archivers/hog.c; sourceTree = SOURCE_ROOT; };
-		02DDA8C30BD3C3450049AB60 /* mvl.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mvl.c; path = external/physfs/archivers/mvl.c; sourceTree = SOURCE_ROOT; };
-		02DDA8C40BD3C3450049AB60 /* qpak.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = qpak.c; path = external/physfs/archivers/qpak.c; sourceTree = SOURCE_ROOT; };
-		02DDA8C50BD3C3450049AB60 /* wad.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = wad.c; path = external/physfs/archivers/wad.c; sourceTree = SOURCE_ROOT; };
-		02DDA8C60BD3C3450049AB60 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = zip.c; path = external/physfs/archivers/zip.c; sourceTree = SOURCE_ROOT; };
-		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = SOURCE_ROOT; };
-		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = SOURCE_ROOT; };
 		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = baseobject.cpp; path = ../src/baseobject.cpp; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
@@ -1883,7 +1877,6 @@
 		435213DD16BD7F6D001B3D42 /* qtscriptdebug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtscriptdebug.cpp; path = ../src/qtscriptdebug.cpp; sourceTree = SOURCE_ROOT; };
 		435213DE16BD7F6D001B3D42 /* qtscriptdebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtscriptdebug.h; path = ../src/qtscriptdebug.h; sourceTree = SOURCE_ROOT; };
 		43536BD210DFEB37006B579C /* GenericFramework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GenericFramework-Info.plist"; path = "Resources/GenericFramework-Info.plist"; sourceTree = SOURCE_ROOT; };
-		4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = external/physfs/physfs_platforms.h; sourceTree = SOURCE_ROOT; };
 		4355E12C10D6028C00A19EE4 /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec.h; path = external/libtheora/include/theora/codec.h; sourceTree = SOURCE_ROOT; };
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = SOURCE_ROOT; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = SOURCE_ROOT; };
@@ -2006,7 +1999,6 @@
 		43CB73D7181E0E0100D1D1DD /* receivedata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = receivedata.h; path = ../3rdparty/miniupnpc/receivedata.h; sourceTree = SOURCE_ROOT; };
 		43CCE06414BA636900B21363 /* netjoin_stub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netjoin_stub.cpp; path = ../lib/netplay/netjoin_stub.cpp; sourceTree = SOURCE_ROOT; };
 		43CEAE21141D71560001637B /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = "external/usr-freetype/local/lib/libfreetype.a"; sourceTree = SOURCE_ROOT; };
-		43D180AF1336B99C001906EB /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = external/physfs/physfs_casefolding.h; sourceTree = SOURCE_ROOT; };
 		43D338561364F5A8005F6725 /* connecthostport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = connecthostport.c; path = ../3rdparty/miniupnpc/connecthostport.c; sourceTree = SOURCE_ROOT; };
 		43D338571364F5A8005F6725 /* connecthostport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connecthostport.h; path = ../3rdparty/miniupnpc/connecthostport.h; sourceTree = SOURCE_ROOT; };
 		43D6167F12048D2D004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = Resources/wzlocal/ko.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
@@ -2078,8 +2070,6 @@
 		43F3008A10D344B000707B6E /* x86enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = x86enc.h; path = external/libtheora/lib/x86/x86enc.h; sourceTree = SOURCE_ROOT; };
 		43F3008B10D344B000707B6E /* x86int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = x86int.h; path = external/libtheora/lib/x86/x86int.h; sourceTree = SOURCE_ROOT; };
 		43F3008C10D344B000707B6E /* x86state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = x86state.c; path = external/libtheora/lib/x86/x86state.c; sourceTree = SOURCE_ROOT; };
-		43F3FFFE10D33F4D00707B6E /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = macosx.c; path = external/physfs/platform/macosx.c; sourceTree = SOURCE_ROOT; };
-		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = SOURCE_ROOT; };
 		43F4DA1816FD0A6600C566E3 /* resource_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = resource_lexer.cpp; path = ../lib/framework/resource_lexer.cpp; sourceTree = SOURCE_ROOT; };
 		43F4DA1916FD0A6600C566E3 /* resource_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = resource_parser.cpp; path = ../lib/framework/resource_parser.cpp; sourceTree = SOURCE_ROOT; };
 		43F4DA1A16FD0A6600C566E3 /* resource_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resource_parser.h; path = ../lib/framework/resource_parser.h; sourceTree = SOURCE_ROOT; };
@@ -2306,6 +2296,31 @@
 		BFFD67681421661B00967210 /* macosx_screen_resolutions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = macosx_screen_resolutions.h; path = ../lib/qtgame/macosx_screen_resolutions.h; sourceTree = SOURCE_ROOT; };
 		D72B3A6D1F4E4C160011D653 /* gfx_api_gl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gfx_api_gl.cpp; path = ../lib/ivis_opengl/gfx_api_gl.cpp; sourceTree = "<group>"; };
 		D72B3A6E1F4E4C160011D653 /* gfx_api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gfx_api.h; path = ../lib/ivis_opengl/gfx_api.h; sourceTree = "<group>"; };
+		D75F2F1B20B470AC00F81A9A /* physfs_archiver_7z.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_7z.c; path = external/physfs/src/physfs_archiver_7z.c; sourceTree = "<group>"; };
+		D75F2F1C20B470AC00F81A9A /* physfs_archiver_dir.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_dir.c; path = external/physfs/src/physfs_archiver_dir.c; sourceTree = "<group>"; };
+		D75F2F1D20B470AC00F81A9A /* physfs_archiver_grp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_grp.c; path = external/physfs/src/physfs_archiver_grp.c; sourceTree = "<group>"; };
+		D75F2F1E20B470AC00F81A9A /* physfs_archiver_hog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_hog.c; path = external/physfs/src/physfs_archiver_hog.c; sourceTree = "<group>"; };
+		D75F2F1F20B470AC00F81A9A /* physfs_archiver_iso9660.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_iso9660.c; path = external/physfs/src/physfs_archiver_iso9660.c; sourceTree = "<group>"; };
+		D75F2F2020B470AC00F81A9A /* physfs_archiver_mvl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_mvl.c; path = external/physfs/src/physfs_archiver_mvl.c; sourceTree = "<group>"; };
+		D75F2F2120B470AC00F81A9A /* physfs_archiver_qpak.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_qpak.c; path = external/physfs/src/physfs_archiver_qpak.c; sourceTree = "<group>"; };
+		D75F2F2220B470AC00F81A9A /* physfs_archiver_slb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_slb.c; path = external/physfs/src/physfs_archiver_slb.c; sourceTree = "<group>"; };
+		D75F2F2320B470AC00F81A9A /* physfs_archiver_unpacked.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_unpacked.c; path = external/physfs/src/physfs_archiver_unpacked.c; sourceTree = "<group>"; };
+		D75F2F2420B470AC00F81A9A /* physfs_archiver_vdf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_vdf.c; path = external/physfs/src/physfs_archiver_vdf.c; sourceTree = "<group>"; };
+		D75F2F2520B470AC00F81A9A /* physfs_archiver_wad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_wad.c; path = external/physfs/src/physfs_archiver_wad.c; sourceTree = "<group>"; };
+		D75F2F2620B470AC00F81A9A /* physfs_archiver_zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_archiver_zip.c; path = external/physfs/src/physfs_archiver_zip.c; sourceTree = "<group>"; };
+		D75F2F2720B470AC00F81A9A /* physfs_byteorder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_byteorder.c; path = external/physfs/src/physfs_byteorder.c; sourceTree = "<group>"; };
+		D75F2F2820B470AC00F81A9A /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = external/physfs/src/physfs_casefolding.h; sourceTree = "<group>"; };
+		D75F2F2920B470AC00F81A9A /* physfs_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_internal.h; path = external/physfs/src/physfs_internal.h; sourceTree = "<group>"; };
+		D75F2F2A20B470AC00F81A9A /* physfs_lzmasdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_lzmasdk.h; path = external/physfs/src/physfs_lzmasdk.h; sourceTree = "<group>"; };
+		D75F2F2B20B470AC00F81A9A /* physfs_miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_miniz.h; path = external/physfs/src/physfs_miniz.h; sourceTree = "<group>"; };
+		D75F2F2C20B470AC00F81A9A /* physfs_platform_apple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = physfs_platform_apple.m; path = external/physfs/src/physfs_platform_apple.m; sourceTree = "<group>"; };
+		D75F2F2D20B470AC00F81A9A /* physfs_platform_posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_platform_posix.c; path = external/physfs/src/physfs_platform_posix.c; sourceTree = "<group>"; };
+		D75F2F2E20B470AC00F81A9A /* physfs_platform_unix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_platform_unix.c; path = external/physfs/src/physfs_platform_unix.c; sourceTree = "<group>"; };
+		D75F2F2F20B470AC00F81A9A /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = external/physfs/src/physfs_platforms.h; sourceTree = "<group>"; };
+		D75F2F3020B470AC00F81A9A /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/src/physfs_unicode.c; sourceTree = "<group>"; };
+		D75F2F3120B470AC00F81A9A /* physfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs.c; path = external/physfs/src/physfs.c; sourceTree = "<group>"; };
+		D75F2F3220B470AC00F81A9A /* physfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs.h; path = external/physfs/src/physfs.h; sourceTree = "<group>"; };
+		D75F2F5520B4715900F81A9A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
 		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
 		D7CC641D204F2347004AEF50 /* wzstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wzstring.h; path = ../lib/framework/wzstring.h; sourceTree = "<group>"; };
@@ -2388,8 +2403,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D75F2F5620B4715900F81A9A /* Foundation.framework in Frameworks */,
 				02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */,
-				43B8FE9B127CB327006F5A13 /* Carbon.framework in Frameworks */,
 				43B8FE9D127CB327006F5A13 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3121,15 +3136,30 @@
 		02DDA8DE0BD3C3930049AB60 /* PhysFS sources */ = {
 			isa = PBXGroup;
 			children = (
-				43F3FFCC10D33E6400707B6E /* archivers */,
-				43F3FFF610D33EB000707B6E /* platform */,
-				02DDA8BB0BD3C32D0049AB60 /* physfs.h */,
-				4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */,
-				02DDA8B90BD3C32D0049AB60 /* physfs_internal.h */,
-				43D180AF1336B99C001906EB /* physfs_casefolding.h */,
-				02DDA8BA0BD3C32D0049AB60 /* physfs.c */,
-				02DDA8B80BD3C32D0049AB60 /* physfs_byteorder.c */,
-				43F3FFFF10D33F6600707B6E /* physfs_unicode.c */,
+				D75F2F1B20B470AC00F81A9A /* physfs_archiver_7z.c */,
+				D75F2F1C20B470AC00F81A9A /* physfs_archiver_dir.c */,
+				D75F2F1D20B470AC00F81A9A /* physfs_archiver_grp.c */,
+				D75F2F1E20B470AC00F81A9A /* physfs_archiver_hog.c */,
+				D75F2F1F20B470AC00F81A9A /* physfs_archiver_iso9660.c */,
+				D75F2F2020B470AC00F81A9A /* physfs_archiver_mvl.c */,
+				D75F2F2120B470AC00F81A9A /* physfs_archiver_qpak.c */,
+				D75F2F2220B470AC00F81A9A /* physfs_archiver_slb.c */,
+				D75F2F2320B470AC00F81A9A /* physfs_archiver_unpacked.c */,
+				D75F2F2420B470AC00F81A9A /* physfs_archiver_vdf.c */,
+				D75F2F2520B470AC00F81A9A /* physfs_archiver_wad.c */,
+				D75F2F2620B470AC00F81A9A /* physfs_archiver_zip.c */,
+				D75F2F2720B470AC00F81A9A /* physfs_byteorder.c */,
+				D75F2F2820B470AC00F81A9A /* physfs_casefolding.h */,
+				D75F2F2920B470AC00F81A9A /* physfs_internal.h */,
+				D75F2F2A20B470AC00F81A9A /* physfs_lzmasdk.h */,
+				D75F2F2B20B470AC00F81A9A /* physfs_miniz.h */,
+				D75F2F2C20B470AC00F81A9A /* physfs_platform_apple.m */,
+				D75F2F2D20B470AC00F81A9A /* physfs_platform_posix.c */,
+				D75F2F2E20B470AC00F81A9A /* physfs_platform_unix.c */,
+				D75F2F2F20B470AC00F81A9A /* physfs_platforms.h */,
+				D75F2F3020B470AC00F81A9A /* physfs_unicode.c */,
+				D75F2F3120B470AC00F81A9A /* physfs.c */,
+				D75F2F3220B470AC00F81A9A /* physfs.h */,
 			);
 			name = "PhysFS sources";
 			sourceTree = "<group>";
@@ -3655,30 +3685,6 @@
 			path = external/libtheora/lib/x86;
 			sourceTree = "<group>";
 		};
-		43F3FFCC10D33E6400707B6E /* archivers */ = {
-			isa = PBXGroup;
-			children = (
-				02DDA8C00BD3C3450049AB60 /* dir.c */,
-				02DDA8C10BD3C3450049AB60 /* grp.c */,
-				02DDA8C20BD3C3450049AB60 /* hog.c */,
-				02DDA8C30BD3C3450049AB60 /* mvl.c */,
-				02DDA8C40BD3C3450049AB60 /* qpak.c */,
-				02DDA8C50BD3C3450049AB60 /* wad.c */,
-				02DDA8C60BD3C3450049AB60 /* zip.c */,
-			);
-			name = archivers;
-			sourceTree = "<group>";
-		};
-		43F3FFF610D33EB000707B6E /* platform */ = {
-			isa = PBXGroup;
-			children = (
-				43F3FFFE10D33F4D00707B6E /* macosx.c */,
-				02DDA8CE0BD3C3600049AB60 /* posix.c */,
-				02DDA8CF0BD3C3600049AB60 /* unix.c */,
-			);
-			name = platform;
-			sourceTree = "<group>";
-		};
 		9730E8000E8CEB3B009C9481 /* Theora sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -3798,6 +3804,7 @@
 		BC78AFBE1F3F768800369407 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D75F2F5520B4715900F81A9A /* Foundation.framework */,
 				BC638B4E1F40D92900E81A0A /* libbz2.tbd */,
 				BC78AFBF1F3F768900369407 /* Security.framework */,
 			);
@@ -4269,10 +4276,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02DDA8BD0BD3C32D0049AB60 /* physfs_internal.h in Headers */,
-				02DDA8BF0BD3C32D0049AB60 /* physfs.h in Headers */,
-				4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */,
-				43D180B01336B99C001906EB /* physfs_casefolding.h in Headers */,
+				D75F2F4120B470AC00F81A9A /* physfs_internal.h in Headers */,
+				D75F2F4720B470AC00F81A9A /* physfs_platforms.h in Headers */,
+				D75F2F4220B470AC00F81A9A /* physfs_lzmasdk.h in Headers */,
+				D75F2F4A20B470AC00F81A9A /* physfs.h in Headers */,
+				D75F2F4020B470AC00F81A9A /* physfs_casefolding.h in Headers */,
+				D75F2F4320B470AC00F81A9A /* physfs_miniz.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5805,19 +5814,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02DDA8BC0BD3C32D0049AB60 /* physfs_byteorder.c in Sources */,
-				02DDA8BE0BD3C32D0049AB60 /* physfs.c in Sources */,
-				02DDA8C70BD3C3450049AB60 /* dir.c in Sources */,
-				02DDA8C80BD3C3450049AB60 /* grp.c in Sources */,
-				02DDA8CC0BD3C3450049AB60 /* wad.c in Sources */,
-				02DDA8CD0BD3C3450049AB60 /* zip.c in Sources */,
-				02DDA8D00BD3C3600049AB60 /* posix.c in Sources */,
-				02DDA8D10BD3C3600049AB60 /* unix.c in Sources */,
-				43F3001410D3410C00707B6E /* macosx.c in Sources */,
-				43F3003310D341F000707B6E /* hog.c in Sources */,
-				43F3003410D341F100707B6E /* mvl.c in Sources */,
-				43F3003510D341F200707B6E /* qpak.c in Sources */,
-				43F3004110D3422400707B6E /* physfs_unicode.c in Sources */,
+				D75F2F3320B470AC00F81A9A /* physfs_archiver_7z.c in Sources */,
+				D75F2F4520B470AC00F81A9A /* physfs_platform_posix.c in Sources */,
+				D75F2F3420B470AC00F81A9A /* physfs_archiver_dir.c in Sources */,
+				D75F2F4620B470AC00F81A9A /* physfs_platform_unix.c in Sources */,
+				D75F2F3820B470AC00F81A9A /* physfs_archiver_mvl.c in Sources */,
+				D75F2F4820B470AC00F81A9A /* physfs_unicode.c in Sources */,
+				D75F2F4920B470AC00F81A9A /* physfs.c in Sources */,
+				D75F2F3F20B470AC00F81A9A /* physfs_byteorder.c in Sources */,
+				D75F2F3720B470AC00F81A9A /* physfs_archiver_iso9660.c in Sources */,
+				D75F2F3E20B470AC00F81A9A /* physfs_archiver_zip.c in Sources */,
+				D75F2F3620B470AC00F81A9A /* physfs_archiver_hog.c in Sources */,
+				D75F2F3B20B470AC00F81A9A /* physfs_archiver_unpacked.c in Sources */,
+				D75F2F3A20B470AC00F81A9A /* physfs_archiver_slb.c in Sources */,
+				D75F2F3D20B470AC00F81A9A /* physfs_archiver_wad.c in Sources */,
+				D75F2F3920B470AC00F81A9A /* physfs_archiver_qpak.c in Sources */,
+				D75F2F3C20B470AC00F81A9A /* physfs_archiver_vdf.c in Sources */,
+				D75F2F4420B470AC00F81A9A /* physfs_platform_apple.m in Sources */,
+				D75F2F3520B470AC00F81A9A /* physfs_archiver_grp.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

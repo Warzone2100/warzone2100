@@ -1,10 +1,10 @@
 #!/bin/sh
 
 OutDir="physfs"
-DirectorY="${OutDir}-2.0.3"
+DirectorY="${OutDir}-3.0.1"
 FileName="${DirectorY}.tar.bz2"
-SourceDLP="http://icculus.org/physfs/downloads/${FileName}"
-SHA256Sum="ca862097c0fb451f2cacd286194d071289342c107b6fe69079c079883ff66b69"
+SourceDLP="https://icculus.org/physfs/downloads/${FileName}"
+SHA256Sum="b77b9f853168d9636a44f75fca372b363106f52d789d18a2f776397bf117f2f1"
 
 configs/FetchSource.sh "${DirectorY}" "${OutDir}" "${FileName}" "${SourceDLP}" "${SHA256Sum}"
 exit ${?}
