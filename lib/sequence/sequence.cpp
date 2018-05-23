@@ -66,6 +66,9 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 #include "lib/ivis_opengl/pieclip.h"
 

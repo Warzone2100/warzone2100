@@ -23,6 +23,7 @@
 
 #include "projectiledef.h"
 #include "weapondef.h"
+#include <glm/fwd.hpp>
 
 /**
  *	@file projectile.h

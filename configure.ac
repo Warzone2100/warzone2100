@@ -484,6 +484,8 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 # 3rdparty libs
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty"
+# glm
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/glm"
 
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])

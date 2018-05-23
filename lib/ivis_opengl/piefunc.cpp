@@ -205,5 +205,5 @@ void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix)
 	pie_SetRendMode(REND_ALPHA);
 
 	// Apply scale matrix
-	skyboxGfx->draw(pie_PerspectiveGet() * viewMatrix * glm::scale(scale, scale / 2.f, scale));
+	skyboxGfx->draw(pie_PerspectiveGet() * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale)));
 }

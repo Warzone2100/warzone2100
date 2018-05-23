@@ -22,6 +22,9 @@
 #define _pieMatrix_h
 
 #include "lib/ivis_opengl/piedef.h"
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 // FIXME: Zero vector normalization should be handled on caller side.
@@ -48,30 +51,5 @@ const glm::mat4& pie_PerspectiveGet();
 void pie_SetGeometricOffset(int x, int y);
 void pie_Begin3DScene();
 void pie_BeginInterface();
-
-namespace glm
-{
-
-static inline glm::mat4 translate(int x, int y, int z)
-{
-	return glm::translate(Vector3f{static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)});
-}
-
-static inline glm::mat4 translate(const Vector3i &v)
-{
-	return glm::translate(Vector3f{static_cast<float>(v.x), static_cast<float>(v.y), static_cast<float>(v.z)});
-}
-
-static inline glm::mat4 scale(int x, int y, int z)
-{
-	return glm::scale(Vector3f{static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)});
-}
-
-static inline glm::mat4 scale(const Vector3i &v)
-{
-	return glm::scale(Vector3f{static_cast<float>(v.x), static_cast<float>(v.y), static_cast<float>(v.z)});
-}
-
-};
 
 #endif

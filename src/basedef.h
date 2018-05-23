@@ -170,7 +170,7 @@ static inline bool isDead(const BASE_OBJECT *psObj)
 static inline int objPosDiffSq(Position pos1, Position pos2)
 {
 	const Vector2i diff = (pos1 - pos2).xy;
-	return diff * diff;
+	return dot(diff, diff);
 }
 
 static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *pos2)

@@ -24,6 +24,7 @@
 #include "lib/ivis_opengl/pietypes.h"
 #include "droiddef.h"
 #include "structuredef.h"
+#include <glm/fwd.hpp>
 
 /*
 	Header file for component.c

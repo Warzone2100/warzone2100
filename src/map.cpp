@@ -1324,8 +1324,8 @@ unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
 		numer[2] = -(-src.x + src.y);
 		denom[2] =   -dif.x + dif.y;
 		Vector3i normal(2 * (height[1] - height[0]), height[2] + height[3] - height[0] - height[1], -2 * TILE_UNITS); // Normal pointing down, and not normalised.
-		numer[3] = height[0] * normal.z - src * normal;
-		denom[3] =                      dif * normal;
+		numer[3] = height[0] * normal.z - dot(src, normal);
+		denom[3] =                      dot(dif, normal);
 		numer[4] = 1;
 		denom[4] = 1;
 		int firstIntersection = 0;
