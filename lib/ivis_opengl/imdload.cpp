@@ -34,6 +34,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/pienormalize.h"
 #include "lib/ivis_opengl/piestate.h"
 
 #include "ivisdef.h" // for imd structures

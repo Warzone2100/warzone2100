@@ -34,6 +34,11 @@
 #include "map.h"
 #include "miscimd.h"
 
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
+#include <glm/gtx/transform.hpp>
+
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // Shift all this gubbins into a .h file if it makes it into game

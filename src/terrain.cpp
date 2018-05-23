@@ -43,6 +43,9 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include <glm/mat4x4.hpp>
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 #include "terrain.h"

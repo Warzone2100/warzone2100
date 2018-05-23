@@ -67,6 +67,9 @@
 
 #include "multiplay.h"
 #include "component.h"
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 #define	GRAVITON_GRAVITY	((float)-800)

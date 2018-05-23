@@ -2326,6 +2326,7 @@
 		D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-aat-layout.cc"; path = "external/harfbuzz/src/hb-aat-layout.cc"; sourceTree = "<group>"; };
 		D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-color.cc"; path = "external/harfbuzz/src/hb-ot-color.cc"; sourceTree = "<group>"; };
 		D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-shape-complex-khmer.cc"; path = "external/harfbuzz/src/hb-ot-shape-complex-khmer.cc"; sourceTree = "<group>"; };
+		D794D1DB20B5F0C50016BE99 /* pienormalize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pienormalize.h; path = ../lib/ivis_opengl/pienormalize.h; sourceTree = "<group>"; };
 		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
 		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
 		D7CC641D204F2347004AEF50 /* wzstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = wzstring.h; path = ../lib/framework/wzstring.h; sourceTree = "<group>"; };
@@ -2679,6 +2680,7 @@
 				0246A0F80BD3CC29004D1C70 /* piedef.h */,
 				0246A0F90BD3CC29004D1C70 /* piefunc.h */,
 				0246A0FA0BD3CC29004D1C70 /* piemode.h */,
+				D794D1DB20B5F0C50016BE99 /* pienormalize.h */,
 				0246A0FB0BD3CC29004D1C70 /* piepalette.h */,
 				02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */,
 				02C8AEF70BE68A5600E9D8A7 /* png_util.h */,

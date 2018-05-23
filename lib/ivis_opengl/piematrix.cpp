@@ -29,6 +29,9 @@
 #include "piematrix.h"
 #include "lib/ivis_opengl/piemode.h"
 
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

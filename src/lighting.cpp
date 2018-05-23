@@ -29,6 +29,7 @@
 
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/pienormalize.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/framework/fixedpoint.h"
 

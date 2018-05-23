@@ -59,6 +59,9 @@
 
 #include <algorithm>
 #include <functional>
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 #define VTOL_HITBOX_MODIFICATOR 100
