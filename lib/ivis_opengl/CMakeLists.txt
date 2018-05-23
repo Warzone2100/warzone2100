@@ -12,6 +12,7 @@ file(GLOB HEADERS
 	"piefunc.h"
 	"piematrix.h"
 	"piemode.h"
+	"pienormalize.h"
 	"piepalette.h"
 	"piestate.h"
 	"pietypes.h"

@@ -49,6 +49,9 @@
 #include "intdisplay.h"
 #include "texture.h"
 #include "warzoneconfig.h"
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC * 2)

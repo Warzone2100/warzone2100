@@ -16,6 +16,7 @@ noinst_HEADERS = \
 	piedef.h \
 	piefunc.h \
 	piemode.h \
+	pienormalize.h \
 	piepalette.h \
 	piestate.h \
 	pietypes.h \

@@ -18,16 +18,29 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _pieMatrix_h
-#define _pieMatrix_h
+#ifndef _pieNormalize_h
+#define _pieNormalize_h
 
 #include "lib/ivis_opengl/piedef.h"
-#include <glm/fwd.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-int32_t pie_RotateProject(const Vector3i *src, const glm::mat4& matrix, Vector2i *dest);
-const glm::mat4& pie_PerspectiveGet();
-void pie_SetGeometricOffset(int x, int y);
-void pie_Begin3DScene();
-void pie_BeginInterface();
+// FIXME: Zero vector normalization should be handled on caller side.
+template<typename T>
+WZ_DECL_PURE T normalise(const T&a)
+{
+	return glm::dot(a, a) > 0.f ? glm::normalize(a) : a;
+}
+
+/*!
+ * Calculate surface normal
+ * Eg. if a polygon (with n points in clockwise order) normal is required,
+ * \c p1 = point 0, \c p2 = point 1, \c p3 = point n-1
+ * \param p1,p2,p3 Points for forming 2 vector for cross product
+ * \return Normal vector
+ */
+static inline Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2, const Vector3f p3)
+{
+	return normalise(glm::cross(p3 - p1, p2 - p1));
+}
 
 #endif

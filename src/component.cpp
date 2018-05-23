@@ -38,6 +38,9 @@
 #include "projectile.h"
 #include "transporter.h"
 #include "mission.h"
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 #define GetRadius(x) ((x)->sradius)
