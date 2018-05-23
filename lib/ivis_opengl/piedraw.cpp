@@ -160,7 +160,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	const PIELIGHT colour = WZCOL_WHITE;
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour, matrix, pie_PerspectiveGet(),
-		glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4());
+		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f));
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(shape->texpage);
 	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
@@ -714,7 +714,7 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 	const auto &premultipliedVertexes = shadowCache.getPremultipliedVertexes();
 	// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
 	// Thus we only need to include the perspective matrix
-	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() /** modelViewMatrix*/, glm::vec4());
+	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() /** modelViewMatrix*/, glm::vec4(0.f));
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[currBuffer].id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * premultipliedVertexes.size(), premultipliedVertexes.data(), GL_STREAM_DRAW);
 	priorBufferSize[currBuffer] = sizeof(Vector3f) * premultipliedVertexes.size();

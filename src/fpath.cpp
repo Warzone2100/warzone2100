@@ -275,7 +275,7 @@ static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion
 		{
 			Vector2i tile = centreTile + Vector2i(x, y);
 			Vector2i diff = world_coord(tile) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2) - pos.xy;
-			int distSq = diff * diff;
+			int distSq = dot(diff, diff);
 			if (distSq < bestDistSq && !fpathBaseBlockingTile(tile.x, tile.y, propulsion, player, moveType))
 			{
 				bestTile = tile;

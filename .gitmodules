@@ -13,3 +13,6 @@
 [submodule "3rdparty/utf8proc"]
 	path = 3rdparty/utf8proc
 	url = https://github.com/JuliaLang/utf8proc.git
+[submodule "3rdparty/glm"]
+	path = 3rdparty/glm
+	url = https://github.com/g-truc/glm.git

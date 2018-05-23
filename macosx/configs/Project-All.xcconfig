@@ -29,5 +29,6 @@ LIBRARY_SEARCH_PATHS_QUOTED_4 = "$(SRCROOT)/external/SDL2"
 HEADER_SEARCH_PATHS_QUOTED_1 = "$(SRCROOT)/external/glew/include/**"
 HEADER_SEARCH_PATHS_QUOTED_2 = "$(SRCROOT)/external/SDL2/SDL2.framework/Headers"
 HEADER_SEARCH_PATHS_QUOTED_3 = "$(SRCROOT)/../3rdparty"
+HEADER_SEARCH_PATHS_QUOTED_4 = "$(SRCROOT)/../3rdparty/glm"
 
 BACKEND = BACKEND_SDL // May also be BACKEND_QT but requires additional changes to the project file to switch

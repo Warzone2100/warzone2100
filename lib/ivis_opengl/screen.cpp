@@ -51,6 +51,9 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 /* global used to indicate preferred internal OpenGL format */

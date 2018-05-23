@@ -91,8 +91,8 @@ const glm::mat4& pie_PerspectiveGet()
 		// update the current perspective matrix (can be a semi-costly operation)
 		const float xangle = width / 6.0f;
 		const float yangle = height / 6.0f;
-		perspectiveCache.currentPerspectiveMatrix = glm::translate((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)
-		* glm::frustum(-xangle, xangle, -yangle, yangle, 330.f, 100000.f) * glm::scale(1.f, 1.f, -1.f);
+		perspectiveCache.currentPerspectiveMatrix = glm::translate(glm::vec3((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f))
+		* glm::frustum(-xangle, xangle, -yangle, yangle, 330.f, 100000.f) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
 		perspectiveCache._width = width;
 		perspectiveCache._height = height;
 		perspectiveCache._rendSurface_xcentre = rendSurface.xcentre;

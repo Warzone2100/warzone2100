@@ -121,8 +121,8 @@ Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
 		Vector2i edge = quad.coords[j] - quad.coords[i];
 		Vector2i pos  = quad.coords[j] - pt;
 		Vector2i posRot(pos.y, -pos.x);
-		lenSq[i] = edge * edge;
-		ptDot[i] = posRot * edge;
+		lenSq[i] = dot(edge, edge);
+		ptDot[i] = dot(posRot, edge);
 	}
 	int ret[2];
 	for (int i = 0; i < 2; ++i)

@@ -34,6 +34,9 @@
 #include "screen.h"
 #include "pieclip.h"
 #include <glm/gtc/type_ptr.hpp>
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/transform.hpp>
 
 #ifndef GLEW_VERSION_4_3
@@ -63,6 +66,16 @@ void rendStatesRendModeHack()
 /*
  *	Source
  */
+
+static inline glm::vec4 pal_PIELIGHTtoVec4(PIELIGHT rgba)
+{
+	return (1 / 255.0f) * glm::vec4{
+		rgba.byte.r,
+		rgba.byte.g,
+		rgba.byte.b,
+		rgba.byte.a
+	};
+}
 
 void pie_SetDefaultStates()//Sets all states
 {

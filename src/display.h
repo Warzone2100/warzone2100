@@ -26,6 +26,7 @@
 
 #include "basedef.h"
 #include "structure.h"
+#include <glm/fwd.hpp>
 
 /* Initialise the display system */
 bool dispInitialise();

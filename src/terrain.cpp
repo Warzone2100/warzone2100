@@ -42,6 +42,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include <glm/mat4x4.hpp>
 #include <glm/gtx/transform.hpp>
 
 #include "terrain.h"
@@ -1074,7 +1075,7 @@ static void cullTerrain()
 
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight)
 {
-	const auto &program = pie_ActivateShader(SHADER_TERRAIN_DEPTH, ModelViewProjection, paramsXLight, paramsYLight, 1, glm::mat4(), glm::mat4());
+	const auto &program = pie_ActivateShader(SHADER_TERRAIN_DEPTH, ModelViewProjection, paramsXLight, paramsYLight, 1, glm::mat4(1.f), glm::mat4(1.f));
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_OPAQUE);
 
@@ -1135,8 +1136,8 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 		renderState.fogColour.vector[2] / 255.f,
 		renderState.fogColour.vector[3] / 255.f
 	);
-	const auto &program = pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, glm::vec4(), glm::vec4(), paramsXLight, paramsYLight, 0, 1,
-		glm::mat4(), textureMatrix, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
+	const auto &program = pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, glm::vec4(0.f), glm::vec4(0.f), paramsXLight, paramsYLight, 0, 1,
+		glm::mat4(1.f), textureMatrix, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
 
 	// additive blending
 	pie_SetRendMode(REND_ADDITIVE);
@@ -1160,7 +1161,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	{
 		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0 );
 		const glm::vec4 paramsY(1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0 );
-		pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, 0, 1, glm::mat4(), textureMatrix,
+		pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, 0, 1, glm::mat4(1.f), textureMatrix,
 			renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
 
 		// load the texture
@@ -1290,7 +1291,7 @@ void drawTerrain(const glm::mat4 &mvp)
 	glActiveTexture(GL_TEXTURE0);
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	const glm::mat4 lightMatrix = glm::translate(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f);
+	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f));
 
 	//////////////////////////////////////
 	// canvas to draw on
@@ -1327,7 +1328,7 @@ void drawWater(const glm::mat4 &viewMatrix)
 	const auto &renderState = getCurrentRenderState();
 
 	const auto &program = pie_ActivateShader(SHADER_WATER, viewMatrix, paramsX, paramsY, paramsX2, paramsY2, 0, 1,
-		glm::translate(waterOffset, 0.f, 0.f), glm::mat4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
+		glm::translate(glm::vec3(waterOffset, 0.f, 0.f)), glm::mat4(1.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
 
 	glDepthMask(GL_FALSE);
 

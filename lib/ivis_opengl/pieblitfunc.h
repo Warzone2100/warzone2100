@@ -36,7 +36,7 @@
 #include "lib/framework/string_ext.h"
 #include "lib/framework/vector.h"
 #include "lib/framework/wzstring.h"
-#include "glm/core/type.hpp"
+#include <glm/mat4x4.hpp>
 #include "piedef.h"
 #include "ivisdef.h"
 #include "pietypes.h"

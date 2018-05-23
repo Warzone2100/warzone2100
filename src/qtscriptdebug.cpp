@@ -41,6 +41,9 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QStandardItemModel>
 
+#ifndef GLM_ENABLE_EXPERIMENTAL
+	#define GLM_ENABLE_EXPERIMENTAL
+#endif
 #include <glm/gtx/string_cast.hpp>
 
 #include "lib/framework/frame.h"
