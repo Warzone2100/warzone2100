@@ -88,7 +88,6 @@ static std::vector<std::string> splitString(const std::string& str, char delimit
 	std::istringstream str_stream(str);
 	std::string s;
 	while (getline(str_stream, s, delimiter)) {
-		std::cout << s << std::endl;
 		strings.push_back(s);
 	}
 	return strings;
