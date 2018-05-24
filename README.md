@@ -1,4 +1,4 @@
-Warzone 2100
+Warzone 2100 [![Build Status](https://travis-ci.org/Warzone2100/warzone2100.svg?branch=master)](https://travis-ci.org/Warzone2100/warzone2100)
 ============
 
 [Homepage of the Warzone 2100 Project](http://wz2100.net/)
@@ -19,9 +19,8 @@ State of the game
 After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
 proprietary technologies have been replaced with open-source counterparts.
 
-Right now supported platforms are Linux and Windows. It should be possible to
-build it on MacOS X, and there are reports that Warzone 2100 is working on BSD,
-too.
+Right now supported platforms are Linux, Windows, and macOS. There are reports 
+that Warzone 2100 is working on BSD, too.
 
 Reporting bugs
 --------------
@@ -32,7 +31,7 @@ those bugs we require that you follow these rules:
 
    1. If the game crashes you may save a memory dump. Please do so and upload it
       when reporting the bug. (Linux locates that file at /tmp/warzone2100.gdmp,
-      Windows at /Program Files/Warzone 2100/warzone2100.RPT, Mac OS X by
+      Windows at /Program Files/Warzone 2100/warzone2100.RPT, macOS by
       clicking "Details" in the crash error message)
       A self created backtrace is just as useful.
    2. Give as much information about what you were doing before the crash/bug
@@ -84,13 +83,13 @@ By default, the `%APPDATA%` folder is hidden. Entering:
 `%APPDATA%\Warzone 2100 Project\` into the address bar of Windows Explorer
 will browse to your Warzone directory.
 
-### Warzone directory under Mac OS X
+### Warzone directory under macOS
 
 The directory `Warzone 2100 <version>` can be found in your home-directory at:
 `~/Library/Application Support/`
 
 By default, recent version of macOS hide your account's Library folder. To view it in
-Finder, hold down the Option key while clicking the Go menu, and your Library folder
+**Finder**, hold down the **Option (⌥)** key while clicking the **Go** menu, and your Library folder
 will appear as a menu choice.
 
 ### Configuration file
@@ -193,6 +192,23 @@ Links to further information
 
 How to build
 -------------------
+
+### Getting the Source
+
+To properly build the game, either:
+- Download a release `tar.xz`, which contains all the source code and revision information.
+
+  _OR_
+
+- Clone the Git repo:
+  ```
+  git clone https://github.com/Warzone2100/warzone2100.git
+  cd warzone2100
+  git submodule update --init --recursive
+  ```
+  > Note: Initializing submodules is required.
+
+Do **not** use GitHub's "Download Zip" option, as it does not contain submodules or the Git-based autorevision information.
 
 ### Linux
 See http://developer.wz2100.net/wiki/CompileGuideLinux
