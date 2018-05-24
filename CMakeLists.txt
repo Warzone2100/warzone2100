@@ -121,6 +121,7 @@ add_subdirectory(src)
 add_subdirectory(po)
 add_subdirectory(data)
 add_subdirectory(doc)
+add_subdirectory(icons)
 add_subdirectory(pkg)
 
 # Install base text / info files
