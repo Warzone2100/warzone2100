@@ -8,23 +8,12 @@ environment:
   matrix:
   # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    # TODO: Change VCPKG_DEFAULT_TRIPLET to one that supports XP once https://github.com/Microsoft/vcpkg/pull/1732 is finalized & merged.
-    VCPKG_DEFAULT_TRIPLET: x86-windows
-    WZ_VC_GENERATOR: "Visual Studio 15 2017"
-    QT5DIR: C:\Qt\5.6\msvc2015
-    WZ_VC_TOOLCHAIN: v141_xp
-    WZ_VC_TARGET_PLATFORMNAME: Win32
-    WZ_OUTPUT_PLATFORMNAME: x86
+    WZ_JOB_ID: release_x86
+    # NOTE: Additional environment variables are set later to maintain consistent job identifiers
   ## NOTE: Unfortunately, 64-bit Windows builds are currently broken because of QScript (see: http://developer.wz2100.net/ticket/4763)
   ## Whenever that ticket is resolved, the following will build 64-bit:
-  # 64-bit (x64) builds use the latest Qt and VC toolchain (and support Windows 7+)
   # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-  #   VCPKG_DEFAULT_TRIPLET: x64-windows
-  #   WZ_VC_GENERATOR: "Visual Studio 15 2017"
-  #   QT5DIR: C:\Qt\5.9.4\msvc2017_64
-  #   WZ_VC_TOOLCHAIN: v141
-  #   WZ_VC_TARGET_PLATFORMNAME: x64
-  #   WZ_OUTPUT_PLATFORMNAME: x64
+  #   WZ_JOB_ID: release_x64
 
 # Cache
 # - Maintains a separate cache for each build matrix entry
@@ -48,6 +37,32 @@ install:
   - git submodule update --init --recursive
 
 before_build:
+  # Set expanded environment variables for release build jobs
+  # NOTE: These are set here, instead of in the build matrix above, to maintain consistent job identifiers for release builds
+  #       (as the job is identified based on the environment configuration in the matrix)
+  - ps: |
+      if ($env:WZ_JOB_ID -eq "release_x86") {
+        # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
+        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        # TODO: Change VCPKG_DEFAULT_TRIPLET to one that supports XP once https://github.com/Microsoft/vcpkg/pull/1732 is finalized & merged.
+        $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
+        $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
+        $env:QT5DIR = "C:\Qt\5.6\msvc2015"
+        $env:WZ_VC_TOOLCHAIN = "v141_xp"
+        $env:WZ_VC_TARGET_PLATFORMNAME = "Win32"
+        $env:WZ_OUTPUT_PLATFORMNAME = "x86"
+      }
+      elseif ($env:WZ_JOB_ID -eq "release_x64") {
+        # 64-bit (x64) builds use the latest Qt and VC toolchain (and support Windows 7+)
+        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
+        $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
+        $env:QT5DIR = "C:\Qt\5.9\msvc2017_64"
+        $env:WZ_VC_TOOLCHAIN = "v141"
+        $env:WZ_VC_TARGET_PLATFORMNAME = "x64"
+        $env:WZ_OUTPUT_PLATFORMNAME = "x64"
+      }
+  # Add the QT5 \bin dir to PATH
   - set PATH=%PATH%;%QT5DIR%\bin;
   # If a future version of vcpkg breaks the "VCPKG_BUILD_TYPE=release" setting for the dependencies we need, use the following line instead:
   # - ps: .\get-dependencies.ps1
@@ -65,23 +80,26 @@ build:
 
 after_build:
   # Determine the build output description (nightly vs tag/release builds)
-  # For nightly builds, base on the autorevision info: warzone2100-<BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>-<PLATFORM: x86, x64>_<PORTABLE/INSTALLER>.zip
-  # For tags/releases, base on the tag name: warzone2100-<TAG_NAME>_<PORTABLE/INSTALLER>.zip (so it can go right to GitHub releases)
+  # For nightly builds, base on the autorevision info: warzone2100-<BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>_<PLATFORM: x86, x64>_<PORTABLE/INSTALLER>.zip
+  # For tags/releases, base on the tag name: warzone2100-<TAG_NAME>_<PLATFORM>_<PORTABLE/INSTALLER>.zip (so it can go right to GitHub releases)
   - ps: |
       if (Test-Path 'env:APPVEYOR_REPO_TAG_NAME') {
-        # For tag builds, simply use <TAG_NAME>
-        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_TAG_NAME)"
+        # For tag builds, simply use <TAG_NAME>_<PLATFORM>
+        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_TAG_NAME)_$($env:WZ_OUTPUT_PLATFORMNAME)"
       }
       else {
         # For normal builds, use <BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>-<PLATFORM: x86, x64>
-        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))-$($env:WZ_OUTPUT_PLATFORMNAME)"
+        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))_$($env:WZ_OUTPUT_PLATFORMNAME)"
       }
+      $env:WZ_ZIP_DESC = "$($env:APPVEYOR_REPO_BRANCH)_$($env:WZ_OUTPUT_PLATFORMNAME)"
   - ps: Write-Host "env:WZ_BUILD_DESC='$env:WZ_BUILD_DESC'"
 
   # Package the portable installer into a zip
-  - ps: cmd /c 7z a "warzone2100-$($env:WZ_BUILD_DESC)_portable.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe"
+  - ps: cmd /c 7z a "warzone2100-$($env:WZ_ZIP_DESC)_portable.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe"
+  # Rename the portable installer inside the zip using the WZ_BUILD_DESC (to preserve the commit + other info)
+  - ps: cmd /c 7z rn "warzone2100-$($env:WZ_ZIP_DESC)_portable.zip" "warzone2100_portable.exe" "warzone2100-$($env:WZ_BUILD_DESC)_portable.exe"
   # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
-  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
   
   # Re-run CMake configure for non-portable (regular) installer
   - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
@@ -89,18 +107,20 @@ after_build:
   - msbuild build/PACKAGE.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   
   # Package the regular installer into a zip
-  - ps: cmd /c 7z a "warzone2100-$($env:WZ_BUILD_DESC)_installer.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe"
+  - ps: cmd /c 7z a "warzone2100-$($env:WZ_ZIP_DESC)_installer.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe"
+  # Rename the regular installer inside the zip using the WZ_BUILD_DESC (to preserve the commit + other info)
+  - ps: cmd /c 7z rn "warzone2100-$($env:WZ_ZIP_DESC)_installer.zip" "warzone2100_installer.exe" "warzone2100-$($env:WZ_BUILD_DESC)_installer.exe"
   # Package the regular installer .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
-  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_ZIP_DESC)_installer.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
   
   # Compare the two DEBUGSYMBOLS.7z files
   # If they are equal (as they should be if only the installer was rebuilt), keep only one and remove the "PORTABLE/INSTALLER" suffix
   # If they are not equal, we have to keep both (but output a notice, as the CMake build should probably be tweaked to avoid this)
   - ps: |
-      if ((Get-FileHash -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash -eq (Get-FileHash -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash) {
+      if ((Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash -eq (Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_installer.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash) {
         # The two archives' hashes match - delete one, and rename the other
-        Remove-Item -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Force -ErrorAction SilentlyContinue
-        Rename-Item -LiteralPath "warzone2100-$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -NewName "warzone2100-$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
+        Remove-Item -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_installer.DEBUGSYMBOLS.7z" -Force -ErrorAction SilentlyContinue
+        Rename-Item -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" -NewName "warzone2100-$($env:WZ_ZIP_DESC).DEBUGSYMBOLS.7z"
       }
       else {
         Write-Warning "The DEBUGSYMBOLS.7z files for the portable + regular builds do not match. This may mean that the executable was rebuilt when switching portable / non-portable mode. (Check the CMake scripts to fix.)"
