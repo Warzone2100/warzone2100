@@ -5,7 +5,7 @@ receiveAllEvents(true); //Needed to allow enemy research to apply to them
 
 include("script/weather.js");
 
-var mainReticule = true;
+var mainReticule = false;
 var allowDesign = false;
 const CREATE_LIKE_EVENT = 0;
 const DESTROY_LIKE_EVENT = 1;
@@ -31,7 +31,7 @@ function setMainReticule()
 	}
 
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	if (fCount > 0 && getMissionType() != LDS_EXPAND_LIMBO)
+	if (fCount > 0 && getMissionType() !== LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 	}
@@ -39,7 +39,7 @@ function setMainReticule()
 	{
 		setReticuleButton(1, _("Manufacture - build factory first"), "", "");
 	}
-	if (countStruct("A0ResearchFacility") + (offRes !== null ? offRes.length : 0) > 0 && getMissionType() != LDS_EXPAND_LIMBO)
+	if (countStruct("A0ResearchFacility") + (offRes !== null ? offRes.length : 0) > 0 && getMissionType() !== LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	}
@@ -47,7 +47,7 @@ function setMainReticule()
 	{
 		setReticuleButton(2, _("Research - build research facility first"), "", "");
 	}
-	if (countDroid(DROID_CONSTRUCT, selectedPlayer) > 0)
+	if (enumDroid(selectedPlayer, DROID_CONSTRUCT).length > 0)
 	{
 		setReticuleButton(3, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 	}
@@ -55,7 +55,7 @@ function setMainReticule()
 	{
 		setReticuleButton(3, _("Build - manufacture constructor droids first"), "", "");
 	}
-	if (allowDesign == true || (offHQ !== null ? offHQ.length > 0 : false))
+	if (allowDesign === true || (offHQ !== null ? offHQ.length > 0 : false))
 	{
 		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
 	}
@@ -64,7 +64,7 @@ function setMainReticule()
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
 	}
 	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
-	if (countDroid(DROID_COMMAND, selectedPlayer) > 0 && countStruct("A0ComDroidControl") + (offCr !== null ? offCr.length : 0) > 0)
+	if (enumDroid(selectedPlayer, DROID_COMMAND).length > 0 && countStruct("A0ComDroidControl") + (offCr !== null ? offCr.length : 0) > 0)
 	{
 		setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	}
@@ -72,7 +72,6 @@ function setMainReticule()
 	{
 		setReticuleButton(6, _("Commanders - manufacture commanders first"), "", "");
 	}
-	mainReticule = true; // main reticule window is open
 }
 
 function reticuleUpdate(obj, eventType)
@@ -122,18 +121,18 @@ function reticuleUpdate(obj, eventType)
 
 function setupGame()
 {
-	if (tilesetType == "ARIZONA")
+	if (tilesetType === "ARIZONA")
 	{
 		setCampaignNumber(1);
 	}
-	else if (tilesetType == "URBAN")
+	else if (tilesetType === "URBAN")
 	{
 		setCampaignNumber(2);
 		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-urban.png");
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-urban.png");
 	}
-	else if (tilesetType == "ROCKIES")
+	else if (tilesetType === "ROCKIES")
 	{
 		setCampaignNumber(3);
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-rockies.png");
@@ -141,33 +140,40 @@ function setupGame()
 		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-kevlar.png");
 	}
 
-	if (tilesetType != "ARIZONA")
+	if (tilesetType !== "ARIZONA")
 	{
 		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
 	}
 
-	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
-	setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
-	setReticuleButton(3, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
-	setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
-	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
-	setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
+	// Disable by default
+	setMiniMap(false);
+	setDesign(false);
+
+	allowDesign = (countStruct("A0CommandCentre", selectedPlayer) > 0);
+	if (allowDesign === false)
+	{
+		var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
+		allowDesign = (offHQ !== null ? offHQ.length > 0 : false);
+	}
+
+	setMiniMap(allowDesign);
+	setDesign(allowDesign);
+
 	setMainReticule();
 	showInterface();
 	hackPlayIngameAudio();
+	mainReticule = true;
+	queue("resetPower", 1000);
 }
 
 function eventGameLoaded()
 {
 	setupGame();
-	queue("resetPower", 1000);
 }
 
 function eventGameInit()
 {
 	setupGame();
-	queue("resetPower", 1000)
 }
 
 function setLimits()
@@ -199,34 +205,34 @@ function resetPower()
 	var powerProductionRate = 100;
 
 	// set income modifier/power storage for player 0 (human)
-	if (difficulty == EASY)
+	if (difficulty === EASY)
 	{
 		powerProductionRate = 115;
 	}
-	else if (difficulty == HARD)
+	else if (difficulty === HARD)
 	{
 		powerProductionRate = 85;
 		powerLimit = 20000; //base value for Alpha
 
-		if (tilesetType == "URBAN")
+		if (tilesetType === "URBAN")
 		{
 			powerLimit = powerLimit + 5000;
 		}
-		else if (tilesetType == "ROCKIES")
+		else if (tilesetType === "ROCKIES")
 		{
 			powerLimit = powerLimit + 10000;
 		}
 	}
-	else if (difficulty == INSANE)
+	else if (difficulty === INSANE)
 	{
 		powerProductionRate = 70;
 		powerLimit = 12000; //base value for Alpha
 
-		if (tilesetType == "URBAN")
+		if (tilesetType === "URBAN")
 		{
 			powerLimit = powerLimit + 2000;
 		}
-		else if (tilesetType == "ROCKIES")
+		else if (tilesetType === "ROCKIES")
 		{
 			powerLimit = powerLimit + 4000;
 		}
@@ -242,24 +248,7 @@ function resetPower()
 
 function eventStartLevel()
 {
-	// Disable by default
-	setMiniMap(false);
-	setDesign(false);
 	setLimits();
-
-	var structlist = enumStruct(selectedPlayer, HQ);
-	for (var i = 0; i < structlist.length; i++)
-	{
-		// Simulate build events to enable minimap/unit design when an HQ exists
-		eventStructureBuilt(structlist[i]);
-	}
-	structlist = enumStructOffWorld(selectedPlayer, HQ);
-	for (var i = 0; i < structlist.length; i++)
-	{
-		eventStructureBuilt(structlist[i]);
-	}
-
-	resetPower();
 	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
 	{
 		weatherCycle();
@@ -332,13 +321,18 @@ function eventResearched(research, structure, player)
 }
 
 var lastHitTime = 0;
-function eventAttacked(victim, attacker) {
-	if ((victim.player == selectedPlayer) && gameTime > lastHitTime + 5000)
+function eventAttacked(victim, attacker)
+{
+	if ((victim.player === selectedPlayer) && gameTime > lastHitTime + 5000)
 	{
 		lastHitTime = gameTime;
 		if (victim.type === STRUCTURE)
+		{
 			playSound("pcv337.ogg", victim.x, victim.y, victim.z);
+		}
 		else
+		{
 			playSound("pcv399.ogg", victim.x, victim.y, victim.z);
+		}
 	}
 }
