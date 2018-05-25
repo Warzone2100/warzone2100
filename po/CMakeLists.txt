@@ -70,7 +70,8 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       get_filename_component(_abs_PATH "${_absFile}" PATH)
       get_filename_component(_lang "${_absFile}" NAME_WE)
       set(_updatedPoFile "${CMAKE_CURRENT_BINARY_DIR}/${_currentPoFileName}")
-      set(_gmoFile "${CMAKE_CURRENT_BINARY_DIR}/${_lang}.gmo")
+      set(_gmoDirectory "${CMAKE_CURRENT_BINARY_DIR}/locale/${_lang}/LC_MESSAGES")
+      set(_gmoFile "${_gmoDirectory}/${_potBasename}.mo")
 
       add_custom_command(
          OUTPUT "${_updatedPoFile}"
@@ -81,6 +82,7 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
 
       add_custom_command(
          OUTPUT "${_gmoFile}"
+         COMMAND ${CMAKE_COMMAND} -E make_directory ${_gmoDirectory}
          COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} -o ${_gmoFile} ${_updatedPoFile}
          DEPENDS "${_absPotFile}" "${_updatedPoFile}"
          VERBATIM
@@ -154,6 +156,11 @@ ADD_CUSTOM_COMMAND(OUTPUT ${_potFile}
 ADD_CUSTOM_TARGET(pot_file ALL
 	DEPENDS ${_potFile})
 
+set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
+
+# On CMake configure, clear the build dir "locale" folder (to ensure re-generation)
+file(REMOVE_RECURSE "${wz2100_translations_LOCALE_FOLDER}/")
+
 # Build the *.gmo files from the *.po files (using the .pot file)
 file (GLOB POFILES *.po)
 GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
@@ -161,3 +168,5 @@ GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
 	INSTALL_COMPONENT Languages
 	MSGMERGE_OPTIONS --quiet --no-wrap --width=1
 	POFILES ${POFILES})
+
+set(wz2100_translations_LOCALE_FOLDER "${wz2100_translations_LOCALE_FOLDER}" PARENT_SCOPE)
