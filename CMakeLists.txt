@@ -25,7 +25,25 @@ endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-find_package(Qt5 COMPONENTS Core Widgets Script Gui REQUIRED)
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	# Disable compiler-specific extensions for macOS builds
+	set(CMAKE_CXX_EXTENSIONS OFF)
+
+	# Enable macOS-specific find scripts
+	list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/macosx/cmake")
+endif()
+
+if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
+	# Enable detection of Homebrew-installed Gettext
+	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/gettext")
+endif()
+
+set(_wz_additional_qt_components)
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	# Workaround: Qt5's Cocoa platform integration plugin requires Qt5::PrintSupport
+	set(_wz_additional_qt_components "PrintSupport")
+endif()
+find_package(Qt5 COMPONENTS Core Widgets Script Gui ${_wz_additional_qt_components} REQUIRED)
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
   find_package(PkgConfig)
@@ -41,7 +59,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # CMake doesn't add "-pie" by default for executables (CMake issue #14983)
 INCLUDE(AddTargetLinkFlagsIfSupported)
 CHECK_CXX_LINKER_FLAGS("${CMAKE_EXE_LINKER_FLAGS} -pie" LINK_FLAG_PIE_SUPPORTED)
-if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
+if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
 endif()
 
@@ -76,6 +94,8 @@ else()
 endif()
 
 include(CheckCompilerFlagsOutput)
+
+set(WZ_TARGET_ADDITIONAL_PROPERTIES) # Set below to any additional properties that should be added to Warzone targets (src/, lib/*/)
 
 # Configure compiler warnings for WZ
 # NOTE: This should be called after the 3rdparty/ libs are added, so it only affects WZ code & frameworks
@@ -149,6 +169,137 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Qt headers (at least 5.6.x) necessitate disabling some warnings
 		# C4127: conditional expression is constant
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4127")
+
+	elseif(CMAKE_GENERATOR STREQUAL "Xcode")
+		# Set Xcode generator project-level configuration + warning flags
+
+		# Enable Objective-C ARC
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES)
+
+		# Debugging Symbols
+		set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
+
+		# WORKAROUND: Ensure debugging symbols are always generated for Release builds
+		#
+		# Required because the CMake Xcode generator (at least, as of CMake 3.11.x) automatically
+		# sets "Generate Debugging Symbols" to NO for Release builds, and cannot be overridden by
+		# setting CMAKE_XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS.
+		add_compile_options($<$<CONFIG:MinSizeRel>:-g>)
+		add_compile_options($<$<CONFIG:Release>:-g>)
+
+		# Make sure the CLANG_CXX_LANGUAGE_STANDARD Xcode attribute matches the CMAKE_CXX_STANDARD
+		if (CMAKE_CXX_STANDARD EQUAL 11)
+			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
+		elseif (CMAKE_CXX_STANDARD EQUAL 14)
+			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
+		elseif (CMAKE_CXX_STANDARD EQUAL 17)
+			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++1z")
+		else()
+			# Additional mapping required for CMAKE_CXX_STANDARD => Xcode's CLANG_CXX_LANGUAGE_STANDARD attribute (above)
+			# Also may need to bump the minimum supported version of Xcode for compilation
+			message( FATAL_ERROR "Don't know how to map from CMAKE_CXX_STANDARD \"${CMAKE_CXX_STANDARD}\" => Xcode's CLANG_CXX_LANGUAGE_STANDARD. See CMakeLists.txt" )
+		endif()
+
+		# -stdlib=libc++
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+
+		# Linking
+		set(CMAKE_XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING YES)
+
+		# Apple Clang - Custom Compiler Flags
+		# Custom Warning Flags (for which an Xcode attribute is not available)
+		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith")
+
+		# Custom Disabling Warning Flags (which are required because of warning flags specified above
+		# and by CMake's Xcode project generator)
+		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-sign-compare")
+		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-unused-parameter")
+
+		# Custom Warning Flags - No Error Tweaks
+		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-error=deprecated-declarations")
+
+		# Apple Clang - Preprocessing
+		set(CMAKE_XCODE_ATTRIBUTE_ENABLE_STRICT_OBJC_MSGSEND YES)
+
+		# Apple Clang - Warning Policies
+#		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_PEDANTIC YES)	# Cannot currently enable in Xcode because of Qt headers
+		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
+			# Enable GCC_TREAT_WARNINGS_AS_ERRORS for WZ targets only
+			list(APPEND WZ_TARGET_ADDITIONAL_PROPERTIES XCODE_ATTRIBUTE_GCC_TREAT_WARNINGS_AS_ERRORS YES)
+		else()
+			message( STATUS "WZ will *NOT* enable \"Warnings As Errors\" for WZ targets" )
+		endif()
+
+		# Apple Clang - Warnings - All languages
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING YES)		# -Wblock-capture-autoreleasing
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_CHECK_SWITCH_STATEMENTS YES)				# -Wswitch
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS YES)			# -Wdeprecated-declarations
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_DOCUMENTATION_COMMENTS NO)				# -Wdocumentation		[DISABLED]
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_EMPTY_BODY YES)						# -Wempty-body
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_FOUR_CHARACTER_CONSTANTS YES)			# -Wfour-char-constants
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_SHADOW NO)								# -Wshadow				[DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_BOOL_CONVERSION YES)					# -Wbool-conversion
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_CONSTANT_CONVERSION YES)				# -Wconstant-conversion
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_64_TO_32_BIT_CONVERSION NO)				# -Wshorten-64-to-32	[DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_ENUM_CONVERSION YES)					# -Wenum-conversion
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_FLOAT_CONVERSION NO)					# -Wfloat-conversion	[DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_INT_CONVERSION YES)					# -Wint-conversion
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_NON_LITERAL_NULL_CONVERSION YES)		# -Wnon-literal-null-conversion
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_IMPLICIT_SIGN_CONVERSION NO)			# -Wsign-conversion		[DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_INFINITE_RECURSION YES)				# -Winfinite-recursion
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED YES)		# -Wmissing-braces
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ABOUT_RETURN_TYPE YES)					# -Wreturn-type
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_MISSING_PARENTHESES YES)					# -Wparentheses
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS YES)	# -Wmissing-field-initializers
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_PROTOTYPES NO)				# -Wmissing-prototypes	[DISABLED]
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_NEWLINE YES)				# -Wnewline-eof
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_ASSIGN_ENUM YES)						# -Wassign-enum (TODO: ADD BELOW TO CLANG?)
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ABOUT_POINTER_SIGNEDNESS YES)			# -Wpointer-sign
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY YES)		# -Wsemicolon-before-method-body
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_SIGN_COMPARE NO)							# -Wsign-compare		[DISABLED]
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_STRICT_PROTOTYPES NO)					# -Wstrict-prototypes	[DISABLED]
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_COMMA YES)								# -Wcomma
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION NO)		## [DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS YES)
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS NO)
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_TYPECHECK_CALLS_TO_PRINTF YES)			# -Wformat
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_UNGUARDED_AVAILABILITY YES_AGGRESSIVE) # -Wunguarded-availability
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNINITIALIZED_AUTOS YES_AGGRESSIVE)		# -Wuninitialized
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNKNOWN_PRAGMAS YES)						# -Wunknown-pragmas
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_UNREACHABLE_CODE NO)					# -Wunreachable-code	[DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNUSED_FUNCTION YES)						# -Wunused-function
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNUSED_LABEL YES)						# -Wunused-label
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNUSED_PARAMETER NO)						# -Wunused-parameter	[DISABLED] - FIXME?
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNUSED_VALUE YES)						# -Wunused-value
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNUSED_VARIABLE YES)						# -Wunused-variable
+
+		# Apple Clang - Warnings - C++
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN__EXIT_TIME_DESTRUCTORS NO)				# -Wexit-time-destructors	[DISABLED]
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_NON_VIRTUAL_DESTRUCTOR YES)				# -Wnon-virtual-dtor
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS YES)			# -Woverloaded-virtual
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_RANGE_LOOP_ANALYSIS YES)				# -Wrange-loop-analysis
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_SUSPICIOUS_MOVE YES)					# -Wmove
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO YES)		# -Winvalid-offsetof
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_CXX0X_EXTENSIONS YES)					# -Wc++11-extensions
+
+		# Apple Clang - Warnings - Objective-C
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_DIRECT_OBJC_ISA_USAGE YES_ERROR)		# -Wdeprecated-objc-isa-usage
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN__DUPLICATE_METHOD_MATCH YES)			# -Wduplicate-method-match
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES YES)	# -Wmplicit-atomic-properties
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_OBJC_LITERAL_CONVERSION YES)			# -Wobjc-literal-conversion
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL YES)			# -Wprotocol
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_OBJC_INTERFACE_IVARS YES)				# -Wobjc-interface-ivars
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS YES)	# -Wdeprecated-implementations
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_STRICT_SELECTOR_MATCH YES)				# -Wstrict-selector-match
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_UNDECLARED_SELECTOR YES)					# -Wundeclared-selector
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_OBJC_ROOT_CLASS YES_ERROR)				# -Wobjc-root-class
+
+		# Apple LLVM - Warnings - Objective-C and ARC
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE YES)		# -Wexplicit-ownership-type
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF YES)			# -Wimplicit-retain-self
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK YES)			# -Warc-repeated-use-of-weak
+		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN__ARC_BRIDGE_CAST_NONARC YES)			# -Warc-bridge-casts-disallowed-in-nonarc
+
 	else()
 		# GCC, Clang, etc
 		# Comments are provided next to each warning option detailing expected compiler support (from GCC 3.4+, Clang 3.2+ - earlier versions may / may not support these options)
@@ -378,22 +529,24 @@ add_subdirectory(3rdparty/micro-ecc)
 add_subdirectory(3rdparty/sha2)
 add_subdirectory(3rdparty/fonts)
 add_subdirectory(3rdparty/utf8proc)
+
+set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
+
 CONFIGURE_WZ_COMPILER_WARNINGS()
 add_subdirectory(lib)
-add_subdirectory(src)
-add_subdirectory(po)
 add_subdirectory(data)
 add_subdirectory(doc)
 add_subdirectory(icons)
+add_subdirectory(po)
+add_subdirectory(src)
 add_subdirectory(pkg)
 
 # Install base text / info files
-set(ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Target system is Windows
-	# Must convert the ROOT_FILES to Windows line endings, and rename with ".txt" at the end
-	set(_new_ROOT_FILES)
-	foreach(rfile ${ROOT_FILES})
+	# Must convert the wz2100_ROOT_FILES to Windows line endings, and rename with ".txt" at the end
+	set(_new_wz2100_ROOT_FILES)
+	foreach(rfile ${wz2100_ROOT_FILES})
 		get_filename_component(_rfile_filename ${rfile} NAME)
 		# Read in the file
 		file(READ ${rfile} _contents)
@@ -404,17 +557,17 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		# Write out the converted file
 		set(_rfile_newfilename "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}.txt")
 		file(WRITE "${_rfile_newfilename}" ${_contents})
-		list(APPEND _new_ROOT_FILES "${_rfile_newfilename}")
+		list(APPEND _new_wz2100_ROOT_FILES "${_rfile_newfilename}")
 	endforeach()
-	set(ROOT_FILES ${_new_ROOT_FILES})
+	set(wz2100_ROOT_FILES ${_new_wz2100_ROOT_FILES})
 else()
 	# Just copy the files to the build directory
-	foreach(rfile ${ROOT_FILES})
+	foreach(rfile ${wz2100_ROOT_FILES})
 		get_filename_component(_rfile_filename ${rfile} NAME)
 		configure_file(${rfile} "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}" COPYONLY)
 	endforeach()
 endif()
-foreach(rfile ${ROOT_FILES})
+foreach(rfile ${wz2100_ROOT_FILES})
 	install(FILES ${rfile}
 			COMPONENT Core
 			DESTINATION "."

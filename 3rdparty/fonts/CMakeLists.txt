@@ -1,13 +1,20 @@
 cmake_minimum_required (VERSION 3.5)
 
-install(FILES
-		"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/DejaVuSans-Bold.ttf"
-		"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/DejaVuSans.ttf"
-		COMPONENT Core DESTINATION "fonts"
+configure_file(
+	"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/LICENSE"
+	"${CMAKE_CURRENT_BINARY_DIR}/DejaVu/DejaVu.LICENSE.txt"
+	COPYONLY
+)
+
+set(wz2100_fonts_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/DejaVuSans-Bold.ttf"
+	"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/DejaVuSans.ttf"
+	"${CMAKE_CURRENT_BINARY_DIR}/DejaVu/DejaVu.LICENSE.txt"
 )
 
 install(FILES
-		"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/LICENSE"
-		RENAME "DejaVu.LICENSE.txt"
-		COMPONENT Core DESTINATION "fonts"
+	${wz2100_fonts_FILES}
+	COMPONENT Core DESTINATION "fonts"
 )
+
+set(wz2100_fonts_FILES ${wz2100_fonts_FILES} PARENT_SCOPE)

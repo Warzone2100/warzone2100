@@ -4,6 +4,10 @@ project (sdl-backend CXX)
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	list(APPEND SRC "cocoa_sdl_helpers.mm" "swapinterval.mm" "cocoa_wz_menus.mm")
+endif()
+
 set(SDL2_MIN_VERSION "2.0.5")
 
 set(_sdl2_library)
@@ -44,6 +48,9 @@ if(NOT _sdl2_library OR NOT SDL2_FOUND)
 endif()
 
 add_library(sdl-backend ${HEADERS} ${SRC})
+if(WZ_TARGET_ADDITIONAL_PROPERTIES)
+	SET_TARGET_PROPERTIES(sdl-backend PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
+endif()
 
 target_link_libraries(sdl-backend PRIVATE framework)
 message( STATUS "Linking to SDL2 library: ${_sdl2_library}" )
