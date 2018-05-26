@@ -513,7 +513,7 @@ function __camGrantSpecialResearch()
 {
 	for (var i = 1; i < CAM_MAX_PLAYERS; ++i)
 	{
-		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, i) && (countDroid(DROID_ANY, i) || enumStruct(i).length))
+		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, i) && (countDroid(DROID_ANY, i) > 0 || enumStruct(i).length > 0))
 		{
 			//Boost AI production to produce all droids within a factory throttle
 			completeResearch("R-Struc-Factory-Upgrade-AI", i);
@@ -1672,30 +1672,28 @@ function camQueueBuilding(player, stat, pos)
 //;;
 function camOrderToString(order)
 {
+	var orderString;
 	switch(order)
 	{
 		case CAM_ORDER_ATTACK:
-			return "ATTACK";
+			orderString = "ATTACK";
+			break;
 		case CAM_ORDER_DEFEND:
-			return "DEFEND";
+			orderString = "DEFEND";
+			break;
 		case CAM_ORDER_PATROL:
-			return "PATROL";
+			orderString = "PATROL";
+			break;
 		case CAM_ORDER_COMPROMISE:
-			return "COMPROMISE";
+			orderString = "COMPROMISE";
+			break;
 		case CAM_ORDER_FOLLOW:
-			return "FOLLOW";
+			orderString = "FOLLOW";
+			break;
 		default:
-			return "UNKNOWN";
+			orderString = "UNKNOWN";
 	}
-}
-
-//;; ## camSortByHealth(object 1, object 2)
-//;;
-//;; Use this to sort an array of objects by health value.
-//;;
-function camSortByHealth(a, b)
-{
-	return (a.health - b.health);
+	return orderString;
 }
 
 //////////// privates
@@ -1772,8 +1770,12 @@ function __camPickTarget(group)
 		case CAM_ORDER_COMPROMISE:
 			if (camDef(gi.data.pos))
 			{
-				for (var i = 0; i < gi.data.pos.length && !targets.length; ++i)
+				for (var i = 0; i < gi.data.pos.length; ++i)
 				{
+					if (targets.length > 0)
+					{
+						break;
+					}
 					radius = gi.data.radius;
 					if (!camDef(radius))
 					{
@@ -1785,7 +1787,7 @@ function __camPickTarget(group)
 					                    CAM_HUMAN_PLAYER, false);
 				}
 			}
-			if (gi.order === CAM_ORDER_COMPROMISE && !targets.length)
+			if (gi.order === CAM_ORDER_COMPROMISE && targets.length === 0)
 			{
 				if (!camDef(gi.data.pos))
 				{
@@ -1801,12 +1803,12 @@ function __camPickTarget(group)
 			targets = targets.filter(function(obj) {
 				return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 			});
-			if (!targets.length)
+			if (targets.length === 0)
 			{
 				targets = enumStruct(CAM_HUMAN_PLAYER).filter(function(obj) {
 					return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
 				});
-				if (!targets.length)
+				if (targets.length === 0)
 				{
 					targets = enumDroid(CAM_HUMAN_PLAYER).filter(function(obj) {
 						return propulsionCanReach(dr.propulsion, dr.x, dr.y, obj.x, obj.y);
@@ -1831,12 +1833,12 @@ function __camPickTarget(group)
 				                    __CAM_TARGET_TRACKING_RADIUS,
 				                    CAM_HUMAN_PLAYER, false);
 			}
-			if (!targets.length)
+			if (targets.length === 0)
 			{
 				targets = enumRange(gi.data.pos[0].x, gi.data.pos[0].y,
 				                    radius, CAM_HUMAN_PLAYER, false);
 			}
-			if (!targets.length)
+			if (targets.length === 0)
 			{
 				targets = [ gi.data.pos[0] ];
 			}
@@ -1845,7 +1847,7 @@ function __camPickTarget(group)
 			camDebug("Unsupported group order", gi.order, camOrderToString(gi.order));
 			break;
 	}
-	if (!targets.length)
+	if (targets.length === 0)
 	{
 		return undefined;
 	}
@@ -2078,8 +2080,8 @@ function __camTacticsTickForGroup(group)
 			var health = Math.floor(droid.health);
 			if ((arm < 1) || (isRearming && (arm < 100 || health < 100)))
 			{
-				var pads = countStruct("A0VtolPad", droid.player);
-				if (pads && !isRearming)
+				var havePads = (countStruct("A0VtolPad", droid.player) > 0);
+				if (havePads && !isRearming)
 				{
 					orderDroid(droid, DORDER_REARM);
 				}
@@ -3356,7 +3358,7 @@ function __camSpawnVtols()
 
 function __camRetreatVtols()
 {
-	if(countStruct("A0VtolPad", __camVtolPlayer))
+	if (countStruct("A0VtolPad", __camVtolPlayer) > 0)
 	{
 		return; //Got to destroy those rearming pads now.
 	}
@@ -3681,7 +3683,7 @@ var __camVideoSequences;
 // cam_eventVideoDone will call this function repeatedly.
 function __camEnqueueVideos()
 {
-	if (!__camVideoSequences.length)
+	if (__camVideoSequences.length === 0)
 	{
 		return; //Nothing to play
 	}
