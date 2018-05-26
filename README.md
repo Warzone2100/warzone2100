@@ -26,7 +26,7 @@ Latest development builds
 -------------------------
 
 [![Build Status](https://travis-ci.org/Warzone2100/warzone2100.svg?branch=master)](https://travis-ci.org/Warzone2100/warzone2100)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/sb700hl7lnvktj2j/branch/master?svg=true)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/1s4547mjbkprt4qr/branch/master?svg=true)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
 
 - **Windows** (x86): [**Portable**](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_portable.zip?branch=master&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) | 
 [Installer](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_installer.zip?branch=master&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) | 
