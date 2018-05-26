@@ -2116,7 +2116,7 @@ function __camTacticsTickForGroup(group)
 			}
 			if (dist > radius)
 			{
-				orderDroidLoc(droid, DORDER_MOVE, gi.data.pos.x, gi.data.pos.y);
+				orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
 				continue;
 			}
 		}
