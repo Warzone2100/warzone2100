@@ -324,13 +324,46 @@ ${Else}
 ${EndIf}
 !macroend
 
-!macro DownloadFile2 URL URLAlt Caption OutputFile ExpectedSHA512Hash Result
+!macro HTTPDownloadFile URL Caption OutputFile ExpectedHashType ExpectedHash Result
+; Note: Caption is currently ignored
+DetailPrint "Downloading ${URL} ..."
+NSISdl::download "${URL}" "${OutputFile}"
+Pop $R0 # return value, "success" if OK
+${If} $R0 == "success"
+  ; Download succeeded - check file hash
+  filecheck::calcFileHash "${OutputFile}" "${ExpectedHashType}"
+  Pop $R0 ; Get the return value
+  ${If} $R0 == "${ExpectedHash}"
+    ; Passed hash check
+    StrCpy ${Result} "OK"
+  ${Else}
+    ; Failed to verify file hash
+    ; MessageBox MB_OK|MB_ICONSTOP "Download of file failed: UNEXPECTED_HASH"
+    StrCpy ${Result} "UNEXPECTED_HASH"
+  ${EndIf}
+${Else}
+  ; NSISdl::download failed
+  ; MessageBox MB_OK|MB_ICONSTOP "Download of file failed: $R0"
+  ${IfNot} $R0 == "OK"
+    StrCpy ${Result} "$R0"
+  ${Else}
+    StrCpy ${Result} "NSISdl::download failed"
+  ${EndIf}
+${EndIf}
+!macroend
+
+!macro DownloadFile2 URL URLAlt URLHTTPAlt Caption OutputFile ExpectedSHA512Hash Result
 !insertmacro DownloadFile "${URL}" "${Caption}" "${OutputFile}" "${ExpectedSHA512Hash}" ${Result}
 ${IfNot} ${Result} == "OK"
   DetailPrint "Download attempt (1) from ${URL} failed with error: ${Result}."
   !insertmacro DownloadFile "${URLAlt}" "${Caption}" "${OutputFile}" "${ExpectedSHA512Hash}" ${Result}
   ${IfNot} ${Result} == "OK"
     DetailPrint "Download attempt (2) from ${URLAlt} failed with error: ${Result}."
+    ; Make one more attempt, this time with the HTTP URL (required for some versions of Windows < 10, depending on server + client settings and patches installed)
+    !insertmacro HTTPDownloadFile "${URLHTTPAlt}" "${Caption}" "${OutputFile}" "sha512" "${ExpectedSHA512Hash}" ${Result}
+    ${IfNot} ${Result} == "OK"
+      DetailPrint "Download attempt (3) (HTTP) from ${URLHTTPAlt} failed with error: ${Result}."
+    ${EndIf}
   ${EndIf}
 ${EndIf}
 !macroend
@@ -372,10 +405,10 @@ ${EndIf}
     Section "" SecMSSysLibraries
       SetOutPath "$INSTDIR"
 
-      !insertmacro DownloadFile2 "https://github.com/past-due/applocalconfig/releases/download/v1.0.1/applocalconfig-vc2017-x86.zip" "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.1/applocalconfig-vc2017-x86.zip" "Downloading applocalconfig-vc2017-x86.zip" "$PLUGINSDIR\applocalconfig.zip" "a7b435294f0beace13823bb9b3b070a1af7e974d952aef9441bf55eeda5bffcac83780c31da981fd45bd23e5aae098ad35c325692cfa2061a72ae1ce2bdc5bc6" $Result_MSVCDownload
+      !insertmacro DownloadFile2 "${MSVCRT_PORTABLE_DL_URL1}" "${MSVCRT_PORTABLE_DL_URL2}" "${MSVCRT_PORTABLE_DL_URL_HTTPALT}" "${MSVCRT_PORTABLE_DL_CAPTION}" "$PLUGINSDIR\applocaldl.zip" "${MSVCRT_PORTABLE_DL_SHA512}" $Result_MSVCDownload
       ${If} $Result_MSVCDownload == "OK"
         ; Download succeeded
-        nsisunz::UnzipToLog "$PLUGINSDIR\applocalconfig.zip" "$INSTDIR"
+        nsisunz::UnzipToLog "$PLUGINSDIR\applocaldl.zip" "$INSTDIR"
         Pop $0 ; Get the return value
         ${IfNot} $0 == "success"
           ; Failed to unzip downloaded file

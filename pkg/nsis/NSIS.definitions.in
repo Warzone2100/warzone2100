@@ -9,4 +9,10 @@
 !if "@NSIS_MSVCRUNTIME@" == "ON"
   !define MSVCRUNTIME "ON"
   !define MSVCRT14_BLD_MINIMUM 26405 ; (14.14.26405)
+
+  !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.0.1/applocalconfig-vc2017-x86.zip"
+  !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.1/applocalconfig-vc2017-x86.zip"
+  !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.0.1/applocalconfig-vc2017-x86.zip"
+  !define MSVCRT_PORTABLE_DL_SHA512 "a7b435294f0beace13823bb9b3b070a1af7e974d952aef9441bf55eeda5bffcac83780c31da981fd45bd23e5aae098ad35c325692cfa2061a72ae1ce2bdc5bc6"
+  !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2017-x86.zip"
 !endif
