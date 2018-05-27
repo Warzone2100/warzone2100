@@ -14,17 +14,31 @@ include("multiplay/script/weather.js");
 var lastHitTime = 0;
 var cheatmode = false;
 var maxOilDrums = 0;
-var mainReticule = true;
-var allowDesign = false;
+var mainReticule = false;
 
 const CREATE_LIKE_EVENT = 0;
 const DESTROY_LIKE_EVENT = 1;
 const TRANSFER_LIKE_EVENT = 2;
 
-function setMainReticule()
+function reticuleManufactureCheck()
 {
-	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	if (countStruct("A0LightFactory") + countStruct("A0CyborgFactory") + countStruct("A0VTolFactory1") > 0)
+	var structureComplete = false;
+	var facs = ["A0LightFactory", "A0CyborgFactory", "A0VTolFactory1"];
+
+	for (var i = 0, len = facs.length; i < len; ++i)
+	{
+		var onMapFacs = enumStruct(selectedPlayer, facs[i]);
+		for (var j = 0, len2 = onMapFacs.length; j < len2; ++j)
+		{
+			if (onMapFacs[j].status === BUILT)
+			{
+				structureComplete = true;
+				break;
+			}
+		}
+	}
+
+	if (structureComplete === true)
 	{
 		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 	}
@@ -32,7 +46,23 @@ function setMainReticule()
 	{
 		setReticuleButton(1, _("Manufacture - build factory first"), "", "");
 	}
-	if (countStruct("A0ResearchFacility") > 0)
+}
+
+function reticuleResearchCheck()
+{
+	var structureComplete = false;
+	var onMapResLabs = enumStruct(selectedPlayer, "A0ResearchFacility");
+
+	for (var i = 0, len = onMapResLabs.length; i < len; ++i)
+	{
+		if (onMapResLabs[i].status === BUILT)
+		{
+			structureComplete = true;
+			break;
+		}
+	}
+
+	if (structureComplete === true)
 	{
 		setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	}
@@ -40,7 +70,11 @@ function setMainReticule()
 	{
 		setReticuleButton(2, _("Research - build research facility first"), "", "");
 	}
-	if (countDroid(DROID_CONSTRUCT, selectedPlayer) > 0)
+}
+
+function reticuleBuildCheck()
+{
+	if (enumDroid(selectedPlayer, DROID_CONSTRUCT).length > 0)
 	{
 		setReticuleButton(3, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 	}
@@ -48,16 +82,39 @@ function setMainReticule()
 	{
 		setReticuleButton(3, _("Build - manufacture constructor droids first"), "", "");
 	}
-	if (allowDesign == true)
+}
+
+function reticuleDesignCheck()
+{
+	var structureComplete = false;
+	var onMapHQ = enumStruct(selectedPlayer, "A0CommandCentre");
+
+	for (var i = 0, len = onMapHQ.length; i < len; ++i)
+	{
+		if (onMapHQ[i].status === BUILT)
+		{
+			structureComplete = true;
+			break;
+		}
+	}
+
+	if (structureComplete === true)
 	{
 		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
+		setMiniMap(true);
+		setDesign(true);
 	}
 	else
 	{
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
+		setMiniMap(false);
+		setDesign(false);
 	}
-	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
-	if (countDroid(DROID_COMMAND, selectedPlayer) > 0 && countStruct("A0ComDroidControl") > 0)
+}
+
+function reticuleCommandCheck()
+{
+	if (enumDroid(selectedPlayer, DROID_COMMAND).length > 0)
 	{
 		setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	}
@@ -65,32 +122,36 @@ function setMainReticule()
 	{
 		setReticuleButton(6, _("Commanders - manufacture commanders first"), "", "");
 	}
-	mainReticule = true; // main reticule window is open
+}
+
+function setMainReticule()
+{
+	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
+	reticuleManufactureCheck();
+	reticuleResearchCheck();
+	reticuleBuildCheck();
+	reticuleDesignCheck();
+	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
+	reticuleCommandCheck();
 }
 
 function reticuleUpdate(obj, eventType)
 {
 	var update_reticule = false;
-	var tryUpdate = (obj.player === selectedPlayer || eventType === TRANSFER_LIKE_EVENT);
 
-	if (tryUpdate && obj.type === STRUCTURE)
+	if (eventType === TRANSFER_LIKE_EVENT)
 	{
-		if (obj.stattype === HQ)
-		{
-			var flag = (countStruct("A0CommandCentre", selectedPlayer) > 0);
-			setMiniMap(flag); // show minimap or not
-			setDesign(flag); // permit designs or not
-			allowDesign = flag;
-			update_reticule = true;
-		}
-
-		if (obj.stattype === RESEARCH_LAB || obj.stattype === CYBORG_FACTORY ||
+		update_reticule = true;
+	}
+	else if (obj.player === selectedPlayer && obj.type === STRUCTURE)
+	{
+		if (obj.stattype === HQ || obj.stattype === RESEARCH_LAB || obj.stattype === CYBORG_FACTORY ||
 			obj.stattype === VTOL_FACTORY || obj.stattype === FACTORY || obj.stattype === COMMAND_CONTROL)
 		{
 			update_reticule = true;
 		}
 	}
-	else if (tryUpdate && obj.type === DROID)
+	else if (obj.player === selectedPlayer && obj.type === DROID)
 	{
 		if (obj.droidType === DROID_CONSTRUCT || obj.droidType === DROID_COMMAND)
 		{
@@ -125,8 +186,13 @@ function setupGame()
 	{
 		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
 	}
+	// Disabled by default
+	setMiniMap(false);
+	setDesign(false);
+
 	setMainReticule();
 	showInterface();
+	mainReticule = true;
 	hackPlayIngameAudio();
 }
 
@@ -145,7 +211,6 @@ function eventGameInit()
 	{
 		queue("placeOilDrum", 10000 * i);
 	}
-
 
 	hackNetOff();
 	makeComponentAvailable("B4body-sml-trike01", scavengerPlayer);
@@ -314,19 +379,8 @@ function eventGameInit()
 		grantTech(TECH_THREE);
 	}
 
-	// Disabled by default
-	setMiniMap(false);
-	setDesign(false);
-	allowDesign = false;
 	// This is the only template that should be enabled before design is allowed
 	enableTemplate("ConstructionDroid");
-
-	var structlist = enumStruct(selectedPlayer, HQ);
-	for (var i = 0; i < structlist.length; i++)
-	{
-		// Simulate build events to enable minimap/unit design when an HQ exists
-		eventStructureBuilt(structlist[i]);
-	}
 
 	hackNetOn();
 	setTimer("checkEndConditions", 3000);

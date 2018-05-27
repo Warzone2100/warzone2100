@@ -6,32 +6,53 @@ receiveAllEvents(true); //Needed to allow enemy research to apply to them
 include("script/weather.js");
 
 var mainReticule = false;
-var allowDesign = false;
 const CREATE_LIKE_EVENT = 0;
 const DESTROY_LIKE_EVENT = 1;
 const TRANSFER_LIKE_EVENT = 2;
 
-function setMainReticule()
+function reticuleManufactureCheck()
 {
-	var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
-	var offRes = enumStructOffWorld(selectedPlayer, "A0ResearchFacility");
-	var offCr = enumStructOffWorld(selectedPlayer, "A0ComDroidControl");
-	var fCount = 0;
+	var j = 0;
+	var len2 = 0;
+	var structureComplete = false;
 	var facs = ["A0LightFactory", "A0CyborgFactory", "A0VTolFactory1"];
 
-	for (var i = 0, l = facs.length; i < l; ++i)
+	for (var i = 0, len = facs.length; i < len; ++i)
 	{
-		var f = facs[i];
-		var offWorldCount = enumStructOffWorld(selectedPlayer, f);
-		fCount = fCount + countStruct(f) + (offWorldCount !== null ? offWorldCount.length : 0);
-		if (fCount > 0)
+		var facType = facs[i];
+		var offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
+		var onMapFacs = enumStruct(selectedPlayer, facType);
+
+		if (offWorldFacs !== null)
 		{
-			break; //found a factory
+			for (j = 0, len2 = offWorldFacs.length; j < len2; ++j)
+			{
+				if (offWorldFacs[j].status === BUILT)
+				{
+					structureComplete = true;
+					break;
+				}
+			}
+		}
+		if (!structureComplete)
+		{
+			for (j = 0, len2 = onMapFacs.length; j < len2; ++j)
+			{
+				if (onMapFacs[j].status === BUILT)
+				{
+					structureComplete = true;
+					break;
+				}
+			}
+		}
+
+		if (structureComplete === true)
+		{
+			break;
 		}
 	}
 
-	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
-	if (fCount > 0 && getMissionType() !== LDS_EXPAND_LIMBO)
+	if (structureComplete === true && getMissionType() !== LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 	}
@@ -39,7 +60,40 @@ function setMainReticule()
 	{
 		setReticuleButton(1, _("Manufacture - build factory first"), "", "");
 	}
-	if (countStruct("A0ResearchFacility") + (offRes !== null ? offRes.length : 0) > 0 && getMissionType() !== LDS_EXPAND_LIMBO)
+}
+
+function reticuleResearchCheck()
+{
+	var i = 0;
+	var len = 0;
+	var structureComplete = false;
+	var offRes = enumStructOffWorld(selectedPlayer, "A0ResearchFacility");
+	var onMapResLabs = enumStruct(selectedPlayer, "A0ResearchFacility");
+
+	if (offRes !== null)
+	{
+		for (i = 0, len = offRes.length; i < len; ++i)
+		{
+			if (offRes[i].status === BUILT)
+			{
+				structureComplete = true;
+				break;
+			}
+		}
+	}
+	if (!structureComplete)
+	{
+		for (i = 0, len = onMapResLabs.length; i < len; ++i)
+		{
+			if (onMapResLabs[i].status === BUILT)
+			{
+				structureComplete = true;
+				break;
+			}
+		}
+	}
+
+	if (structureComplete === true && getMissionType() !== LDS_EXPAND_LIMBO)
 	{
 		setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	}
@@ -47,6 +101,10 @@ function setMainReticule()
 	{
 		setReticuleButton(2, _("Research - build research facility first"), "", "");
 	}
+}
+
+function reticuleBuildCheck()
+{
 	if (enumDroid(selectedPlayer, DROID_CONSTRUCT).length > 0)
 	{
 		setReticuleButton(3, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
@@ -55,16 +113,56 @@ function setMainReticule()
 	{
 		setReticuleButton(3, _("Build - manufacture constructor droids first"), "", "");
 	}
-	if (allowDesign === true || (offHQ !== null ? offHQ.length > 0 : false))
+}
+
+function reticuleDesignCheck()
+{
+	var i = 0;
+	var len = 0;
+	var structureComplete = false;
+	var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
+	var onMapHQ = enumStruct(selectedPlayer, "A0CommandCentre");
+
+	if (offHQ !== null)
+	{
+		for (i = 0, len = offHQ.length; i < len; ++i)
+		{
+			if (offHQ[i].status === BUILT)
+			{
+				structureComplete = true;
+				break;
+			}
+		}
+	}
+	if (!structureComplete)
+	{
+		for (i = 0, len = onMapHQ.length; i < len; ++i)
+		{
+			if (onMapHQ[i].status === BUILT)
+			{
+				structureComplete = true;
+				break;
+			}
+		}
+	}
+
+	if (structureComplete === true)
 	{
 		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
+		setMiniMap(true);
+		setDesign(true);
 	}
 	else
 	{
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
+		setMiniMap(false);
+		setDesign(false);
 	}
-	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
-	if (enumDroid(selectedPlayer, DROID_COMMAND).length > 0 && countStruct("A0ComDroidControl") + (offCr !== null ? offCr.length : 0) > 0)
+}
+
+function reticuleCommandCheck()
+{
+	if (enumDroid(selectedPlayer, DROID_COMMAND).length > 0)
 	{
 		setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	}
@@ -74,35 +172,34 @@ function setMainReticule()
 	}
 }
 
+function setMainReticule()
+{
+	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
+	reticuleManufactureCheck();
+	reticuleResearchCheck();
+	reticuleBuildCheck();
+	reticuleDesignCheck();
+	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
+	reticuleCommandCheck();
+}
+
 function reticuleUpdate(obj, eventType)
 {
 	var update_reticule = false;
-	var tryUpdate = (obj.player === selectedPlayer || eventType === TRANSFER_LIKE_EVENT);
 
-	if (tryUpdate && obj.type === STRUCTURE)
+	if (eventType === TRANSFER_LIKE_EVENT)
 	{
-		if (obj.stattype === HQ)
-		{
-			var flag = (countStruct("A0CommandCentre", selectedPlayer) > 0);
-			//See if one is on the home map
-			if (flag === false)
-			{
-				var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
-				flag = (offHQ !== null ? offHQ.length > 0 : false);
-			}
-			setMiniMap(flag); // show minimap or not
-			setDesign(flag); // permit designs or not
-			allowDesign = flag;
-			update_reticule = true;
-		}
-
-		if (obj.stattype === RESEARCH_LAB || obj.stattype === CYBORG_FACTORY ||
+		update_reticule = true;
+	}
+	else if (obj.player === selectedPlayer && obj.type === STRUCTURE)
+	{
+		if (obj.stattype === HQ || obj.stattype === RESEARCH_LAB || obj.stattype === CYBORG_FACTORY ||
 			obj.stattype === VTOL_FACTORY || obj.stattype === FACTORY || obj.stattype === COMMAND_CONTROL)
 		{
 			update_reticule = true;
 		}
 	}
-	else if (tryUpdate && obj.type === DROID)
+	else if (obj.player === selectedPlayer && obj.type === DROID)
 	{
 		if (obj.droidType === DROID_CONSTRUCT || obj.droidType === DROID_COMMAND ||
 			obj.droidType === DROID_TRANSPORTER || obj.droidType === DROID_SUPERTRANSPORTER)
@@ -148,16 +245,6 @@ function setupGame()
 	// Disable by default
 	setMiniMap(false);
 	setDesign(false);
-
-	allowDesign = (countStruct("A0CommandCentre", selectedPlayer) > 0);
-	if (allowDesign === false)
-	{
-		var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
-		allowDesign = (offHQ !== null ? offHQ.length > 0 : false);
-	}
-
-	setMiniMap(allowDesign);
-	setDesign(allowDesign);
 
 	setMainReticule();
 	showInterface();
