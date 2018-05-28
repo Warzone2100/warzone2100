@@ -1878,7 +1878,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 	}
 	if (getDebugMappingStatus())
 	{
-		console("(Feature) %s ID: %d ref: %d Hipoints: %d/%d", getID(psFeature->psStats), psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body);
+		console("(Feature) %s ID: %d ref: %d Hitpoints: %d/%d", getID(psFeature->psStats), psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body);
 	}
 }
 
