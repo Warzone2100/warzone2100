@@ -24,32 +24,32 @@ var artiMovePos; //where artiGroup members are moving to
 
 
 //These enable scav factories when close enough
-camAreaEvent("northScavFactoryTrigger", function()
+camAreaEvent("northScavFactoryTrigger", function(droid)
 {
 	camEnableFactory("scavNorthEastFactory");
 });
 
-camAreaEvent("southScavFactoryTrigger", function()
+camAreaEvent("southScavFactoryTrigger", function(droid)
 {
 	camEnableFactory("scavSouthEastFactory");
 });
 
-camAreaEvent("middleScavFactoryTrigger", function()
+camAreaEvent("middleScavFactoryTrigger", function(droid)
 {
 	camEnableFactory("scavMiddleFactory");
 });
 
 //If a group member of artiGroup gets to the waypoint, then go to the
 //New Paradigm landing zone.
-camAreaEvent("NPWayPointTrigger", function()
+camAreaEvent("NPWayPointTrigger", function(droid)
 {
 	artiMovePos = "NPTransportPos";
 });
 
 //Land New Paradigm transport if the New Paradigm have the artifact.
-camAreaEvent("NPTransportTrigger", function()
+camAreaEvent("NPTransportTrigger", function(droid)
 {
-	if (enemyHasArtifact)
+	if (enemyHasArtifact && droid.group === artiGroup)
 	{
 		var list = [cTempl.npmrl, cTempl.npmrl];
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
@@ -57,6 +57,10 @@ camAreaEvent("NPTransportTrigger", function()
 			exit: { x: 32, y: 62 }
 		});
 		playSound("pcv632.ogg"); //enemy transport escaping warning sound
+	}
+	else
+	{
+		resetLabel("NPTransportTrigger", NEW_PARADIGM);
 	}
 });
 
@@ -114,6 +118,7 @@ function getArtifact()
 		return;
 	}
 
+	const GRAB_RADIUS = 2;
 	var artifact = camGetArtifacts();
 	var artiLoc = artiMovePos;
 
@@ -142,7 +147,7 @@ function getArtifact()
 		}
 
 		//Now take it if close enough
-		if (camDist(artiMembers[idx], artiLoc) < 2)
+		if (camDist(artiMembers[idx], artiLoc) < GRAB_RADIUS)
 		{
 			camCallOnce("artifactVideoSetup");
 			hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
@@ -156,6 +161,7 @@ function getArtifact()
 	{
 		camManageGroup(artiGroup, CAM_ORDER_DEFEND, {
 			pos: artiLoc,
+			radius: 0,
 			regroup: false
 		});
 	}

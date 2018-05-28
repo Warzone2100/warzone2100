@@ -31,13 +31,14 @@ camAreaEvent("vtolRemoveZone", function(droid)
 });
 
 
-camAreaEvent("group1Trigger", function()
+camAreaEvent("group1Trigger", function(droid)
 {
 	hackRemoveMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	camEnableFactory("COFactoryEast");
 
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("wayPoint1"),
+		radius: 0,
 		regroup: false,
 	});
 });
@@ -51,6 +52,7 @@ camAreaEvent("wayPoint1Rad", function(droid)
 	}
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("wayPoint3"),
+		radius: 0,
 		regroup: false,
 	});
 });
@@ -70,9 +72,9 @@ camAreaEvent("wayPoint2Rad", function(droid)
 		return (obj.droidType === DROID_WEAPON);
 	});
 
-
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("wayPoint4"),
+		radius: 0,
 		regroup: false
 	});
 
@@ -133,7 +135,8 @@ function retreatCommander()
 {
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("wayPoint3"),
-		repair: 30,
+		radius: 6,
+		repair: 67,
 		regroup: false
 	});
 }
