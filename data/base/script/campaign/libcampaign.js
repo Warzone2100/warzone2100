@@ -2108,7 +2108,7 @@ function __camTacticsTickForGroup(group)
 		if (gi.order === CAM_ORDER_DEFEND)
 		{
 			// fall back to defense position
-			var dist = camDist(droid, gi.data.pos);
+			var dist = camDist(droid, gi.data.pos[0]);
 			var radius = gi.data.radius;
 			if (!camDef(radius))
 			{
@@ -2197,14 +2197,7 @@ function __camTacticsTickForGroup(group)
 			}
 			else
 			{
-				if (defending || !(artilleryLike || isVTOL(droid)))
-				{
-					orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
-				}
-				else
-				{
-					orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
-				}
+				orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
 			}
 		}
 	}
