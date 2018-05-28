@@ -81,6 +81,7 @@
 #include "clparse.h"
 #include "mission.h"
 #include "modding.h"
+#include "version.h"
 
 #include <set>
 #include <utility>
@@ -629,7 +630,7 @@ QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty
 
 	// Special global variables
 	//== * ```version``` Current version of the game, set in *major.minor* format.
-	engine->globalObject().setProperty("version", "3.2", QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("version", QString(version_getVersionString()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== * ```selectedPlayer``` The player controlled by the client on which the script runs.
 	engine->globalObject().setProperty("selectedPlayer", selectedPlayer, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== * ```gameTime``` The current game time. Updated before every invokation of a script.
