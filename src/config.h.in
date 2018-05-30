@@ -2,7 +2,7 @@
 
 /* Define to 1 if translation of program messages to the user's native
    language is requested. */
-#cmakedefine ENABLE_NLS @ENABLE_NLS@
+#cmakedefine01 ENABLE_NLS
 
 /* Define to 1 if you have the <alloca.h> header file. */
 #cmakedefine HAVE_ALLOCA_H @HAVE_ALLOCA_H@
