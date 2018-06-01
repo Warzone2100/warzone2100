@@ -27,98 +27,7 @@
 #include <shlobj.h>
 #include <shlwapi.h>
 
-# include "dbghelp.h"
-# include "exchndl.h"
-
-#if !defined(WZ_CC_MINGW)
-static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionHandler = NULL;
-
-/**
- * Exception handling on Windows.
- * Ask the user whether he wants to safe a Minidump and then dump it into the temp directory.
- * NOTE: This is only for MSVC compiled programs.
- *
- * \param pExceptionInfo Information on the exception, passed from Windows
- * \return whether further exception handlers (i.e. the Windows internal one) should be invoked
- */
-static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
-{
-	LPCSTR applicationName = "Warzone 2100";
-
-	char miniDumpPath[PATH_MAX] = {'\0'}, resultMessage[PATH_MAX] = {'\0'};
-
-	// Write to temp dir, to support unprivileged users
-	if (!GetTempPathA(sizeof(miniDumpPath), miniDumpPath))
-	{
-		sstrcpy(miniDumpPath, "c:\\temp\\");
-	}
-
-	// Append the filename
-	sstrcat(miniDumpPath, "warzone2100.mdmp");
-
-	/*
-	Alternative:
-	GetModuleFileName( NULL, miniDumpPath, MAX_PATH );
-
-	// Append extension
-	sstrcat(miniDumpPath, ".mdmp");
-	*/
-
-	if (MessageBoxA(NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO) == IDYES)
-	{
-		HANDLE miniDumpFile = CreateFileA(miniDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-		if (miniDumpFile != INVALID_HANDLE_VALUE)
-		{
-			size_t package_version_len = strlen(PACKAGE_VERSION);
-			ULONG package_version_len_ulong = (package_version_len <= ULONG_MAX) ? (ULONG)package_version_len : 0;
-			MINIDUMP_USER_STREAM uStream = { LastReservedStream + 1, package_version_len_ulong, PACKAGE_VERSION };
-			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
-			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, false };
-
-			if (MiniDumpWriteDump(
-			        GetCurrentProcess(),
-			        GetCurrentProcessId(),
-			        miniDumpFile,
-			        MiniDumpNormal,
-			        pExceptionInfo ? &eInfo : NULL,
-			        &uInfo,
-			        NULL))
-			{
-				if (pExceptionInfo != nullptr)
-				{
-					snprintf(resultMessage, sizeof(resultMessage), "Saved dump file to '%s'", miniDumpPath);
-				}
-				else
-				{
-					snprintf(resultMessage, sizeof(resultMessage), "Saved dump file to '%s'\n(Exception Info: Unavailable)", miniDumpPath);
-				}
-			}
-			else
-			{
-				snprintf(resultMessage, sizeof(resultMessage), "Failed to save dump file to '%s' (error %d)", miniDumpPath, (int)GetLastError());
-			}
-
-			CloseHandle(miniDumpFile);
-		}
-		else
-		{
-			snprintf(resultMessage, sizeof(resultMessage), "Failed to create dump file '%s' (error %d)", miniDumpPath, (int)GetLastError());
-		}
-
-		MessageBoxA(NULL, resultMessage, applicationName, MB_OK);
-	}
-
-	if (prevExceptionHandler)
-	{
-		return prevExceptionHandler(pExceptionInfo);
-	}
-	else
-	{
-		return EXCEPTION_CONTINUE_SEARCH;
-	}
-}
-#endif
+#include "exchndl.h"
 
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 
@@ -804,11 +713,7 @@ void setupExceptionHandler(int argc, const char **argv, const char *packageVersi
 #endif
 
 #if defined(WZ_OS_WIN)
-# if defined(WZ_CC_MINGW)
 	ExchndlSetup(packageVersion, writeDir, portable_mode);
-# else
-	prevExceptionHandler = SetUnhandledExceptionFilter(windowsExceptionHandler);
-# endif // !defined(WZ_CC_MINGW)
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	programCommand = argv[0];
 
@@ -830,7 +735,7 @@ void setupExceptionHandler(int argc, const char **argv, const char *packageVersi
 }
 bool OverrideRPTDirectory(const char *newPath)
 {
-# if defined(WZ_CC_MINGW)
+# if defined(WZ_OS_WIN)
 	wchar_t buf[MAX_PATH];
 
 	if (!MultiByteToWideChar(CP_UTF8, 0, newPath, -1, buf, MAX_PATH))
@@ -859,8 +764,6 @@ bool OverrideRPTDirectory(const char *newPath)
 		return false;
 	}
 	PathRemoveFileSpecW(buf);
-	wcscat(buf, L"\\logs\\"); // stuff it in the logs directory
-	wcscat(buf, L"Warzone2100.RPT");
 	ResetRPTDirectory(buf);
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	sstrcpy(WritePath, newPath);

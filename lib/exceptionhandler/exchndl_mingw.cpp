@@ -1416,7 +1416,13 @@ void ExchndlSetup(const char *packageVersion, const std::string &writeDir, bool 
 }
 void ResetRPTDirectory(wchar_t *newPath)
 {
-	wcscpy(szLogFileName, newPath);
+	wchar_t miniDumpPath[PATH_MAX] = { '\0' };
+	size_t newPathLen = wcslen(newPath);
+	ASSERT(newPathLen < PATH_MAX, "ResetRPTDirectory: length of newPath exceeds maximum allowed");
+	wcscpy(miniDumpPath, newPath);
+	ASSERT((newPathLen + wcslen(L"\\logs\\Warzone2100.RPT")) < PATH_MAX, "ResetRPTDirectory: insufficient buffer length");
+	wcscat(miniDumpPath, L"\\logs\\Warzone2100.RPT");
+	wcscpy(szLogFileName, miniDumpPath);
 }
 void ExchndlShutdown(void)
 {
