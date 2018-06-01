@@ -174,10 +174,31 @@ static std::string getProgramPath(const char *programCommand)
 	std::vector<char> buf(PATH_MAX);
 
 #if defined(WZ_OS_WIN)
-	while (GetModuleFileNameA(nullptr, &buf[0], buf.size()) == buf.size())
+	std::vector<wchar_t> wbuff(PATH_MAX + 1, 0);
+	DWORD moduleFileNameLen = 0;
+	while ((moduleFileNameLen = GetModuleFileNameW(nullptr, &wbuff[0], wbuff.size() - 1)) == (wbuff.size() - 1))
 	{
-		buf.resize(buf.size() * 2);
+		wbuff.resize(wbuff.size() * 2);
 	}
+	// Because Windows XP's GetModuleFileName does not guarantee null-termination,
+	// always append a null-terminator
+	wbuff[moduleFileNameLen] = 0;
+	wbuff.resize(moduleFileNameLen + 1);
+
+	// Convert the UTF-16 to UTF-8
+	int outputLength = WideCharToMultiByte(CP_UTF8, 0, wbuff.data(), -1, NULL, 0, NULL, NULL);
+	if (outputLength <= 0)
+	{
+		debug(LOG_ERROR, "Encoding conversion error.");
+		return std::string();
+	}
+	buf.resize(outputLength, 0);
+	if (WideCharToMultiByte(CP_UTF8, 0, wbuff.data(), -1, &buf[0], outputLength, NULL, NULL) == 0)
+	{
+		debug(LOG_ERROR, "Encoding conversion error.");
+		return std::string();
+	}
+
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	{
 		FILE *whichProgramStream;
@@ -295,7 +316,7 @@ static void createHeader(int const argc, const char **argv, const char *packageV
 {
 	std::ostringstream os;
 
-	os << "Program: "     << getProgramPath(argv[0]) << "(" PACKAGE ")" << endl
+	os << "Program: "     << getProgramPath(argv[0]) << " (" PACKAGE ")" << endl
 	   << "Command line: ";
 
 	/* Dump all command line arguments surrounded by double quotes and
