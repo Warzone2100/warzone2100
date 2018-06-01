@@ -155,7 +155,7 @@ data/mp/multiplay/skirmish/semperfi.js
 data/mp/multiplay/skirmish/semperfi.slo
 lib/exceptionhandler/dumpinfo.cpp
 lib/exceptionhandler/exceptionhandler.cpp
-lib/exceptionhandler/exchndl.cpp
+lib/exceptionhandler/exchndl_mingw.cpp
 lib/framework/crc.cpp
 lib/framework/debug.cpp
 lib/framework/frame.cpp

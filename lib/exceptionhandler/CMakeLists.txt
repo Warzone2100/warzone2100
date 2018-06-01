@@ -6,7 +6,7 @@ set(SRC "dumpinfo.cpp" "exceptionhandler.cpp")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" AND ${CMAKE_CROSSCOMPILING})
 	# Include exchndl.cpp when cross-compiling for Windows with MINGW
-	list(APPEND SRC "exchndl.cpp")
+	list(APPEND SRC "exchndl_mingw.cpp")
 endif()
 
 add_library(exception-handler STATIC ${HEADERS} ${SRC})

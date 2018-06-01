@@ -15,5 +15,7 @@ libexceptionhandler_a_SOURCES = \
 	exceptionhandler.cpp
 
 if MINGW32
-libexceptionhandler_a_SOURCES += exchndl.cpp
+libexceptionhandler_a_SOURCES += exchndl_mingw.cpp
+else
+EXTRA_DIST += exchndl_mingw.cpp
 endif
