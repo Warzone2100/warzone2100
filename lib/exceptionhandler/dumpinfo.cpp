@@ -317,6 +317,13 @@ static void createHeader(int const argc, const char **argv, const char *packageV
 #elif defined(WZ_CC_INTEL)
 	   // Intel includes the compiler name within the version string
 	   << __VERSION__ << endl
+#elif defined(WZ_CC_MSVC)
+	   << "MSVC " << _MSC_FULL_VER
+#  if defined(_MSVC_LANG)
+	   << " (c++ std: " << _MSVC_LANG << ")" << endl
+#  else
+	   << endl
+#  endif
 #else
 	   << "UNKNOWN" << endl
 #endif
