@@ -37,3 +37,5 @@ data/base/components/prop/prllwhl1.pie
 data/base/components/prop/prhrwhl1.pie
 data/base/components/prop/prhlwhl1.pie
 	- CC BY SA 3.0 - Copyright (c) 2008 <Mysteryem>
+lib/exceptionhandler/3rdparty/StackWalker.*
+	- BSD 3-Clause License - Copyright (c) 2005 - 2017, Jochen Kalmbach
