@@ -2197,7 +2197,14 @@ function __camTacticsTickForGroup(group)
 			}
 			else
 			{
-				orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+				if (defending || !(artilleryLike || isVTOL(droid)))
+				{
+					orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
+				}
+				else
+				{
+					orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+				}
 			}
 		}
 	}
