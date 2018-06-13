@@ -1,6 +1,6 @@
 
 //A simple throttle function to make sure something is not executed too much.
-function stopExecution(throttleThis, time)
+function ThrottleThis(throttleThis, time)
 {
      if (!defined(time))
      {

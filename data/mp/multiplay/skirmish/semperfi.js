@@ -1,35 +1,40 @@
 
 // -- definitions
-const OIL_RES = "OilResource";
-const RES_LAB = "A0ResearchFacility";
-const POW_GEN = "A0PowerGenerator";
-const FACTORY = "A0LightFactory";
-const DERRICK = "A0ResourceExtractor";
-const CYBORG_FACTORY = "A0CyborgFactory";
-const PLAYER_HQ = "A0CommandCentre";
-const VTOL_PAD = "A0VtolPad";
-const VTOL_FACTORY = "A0VTolFactory1";
-const REPAIR_FACILITY = "A0RepairCentre3";
-const CB_TOWER = "Sys-CB-Tower01";
-const WIDE_SPECTRUM_TOWER = "Sys-SensoTowerWS";
-const UPLINK = "A0Sat-linkCentre";
+const OIL_RES_STAT = "OilResource";
+const RES_LAB_STAT = "A0ResearchFacility";
+const POW_GEN_STAT = "A0PowerGenerator";
+const FACTORY_STAT = "A0LightFactory";
+const DERRICK_STAT = "A0ResourceExtractor";
+const CYBORG_FACTORY_STAT = "A0CyborgFactory";
+const PLAYER_HQ_STAT = "A0CommandCentre";
+const VTOL_PAD_STAT = "A0VtolPad";
+const VTOL_FACTORY_STAT = "A0VTolFactory1";
+const REPAIR_FACILITY_STAT = "A0RepairCentre3";
+const SENSOR_TOWERS = ["Sys-SensoTower02", "Sys-SensoTowerWS"];
+const UPLINK_STAT = "A0Sat-linkCentre";
 const ELECTRONIC_DEFENSES = ["Sys-SpyTower", "WallTower-EMP", "Emplacement-MortarEMP"];
 
 // -- globals
-const MIN_TRUCKS = 6;
-const MIN_POWER = 210;
-const MIN_BUILD_POWER = 230;
+const MIN_BASE_TRUCKS = 3;
+const MIN_OIL_TRUCKS = 4;
+const MIN_BUILD_POWER = 80;
+const MIN_RESEARCH_POWER = -50;
+const MIN_PRODUCTION_POWER = 60;
+const MIN_BUSTERS = 5;
 const HELP_CONSTRUCT_AREA = 20;
+const AVG_BASE_RADIUS = 20; // Magic, but how will we determine the size of a "base" anyway.
 const BASE = startPositions[me];
 var attackGroup;
+var busterGroup;
 var vtolGroup;
 var baseBuilders;
 var oilBuilders;
-var researchDone = false;
+var researchDone;
+var truckRoleSwapped;
 var isSeaMap; // Used to determine if it is a hover map.
-var lastBeaconDrop = 0; // last game time SemperFi sent a beacon.
 var currentEnemy; // Current enemy SemperFi is attacking.
 var currentEnemyTick; // Last time the enemy was changed.
+var enemyHasVtol;
 
 //And include the rest here.
 include("/multiplay/skirmish/semperfi_includes/performance.js");

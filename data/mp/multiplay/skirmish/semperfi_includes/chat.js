@@ -9,7 +9,7 @@ function eventChat(from, to, message)
 	{
 		// donate first truck
 		var droids = enumDroid(me, DROID_CONSTRUCT);
-		if (droids.length)
+		if (droids.length > 0)
 		{
 			donateObject(droids[0], from);
 		}
@@ -17,6 +17,10 @@ function eventChat(from, to, message)
 	else if (message === "donatepower" && allianceExistsBetween(from, to))
 	{
 		donatePower(playerPower(me) / 2, from);
+	}
+	else if (message === "antiair" && allianceExistsBetween(from, to))
+	{
+		enemyHasVtol = true;
 	}
 	else if (message === "crazycolours")
 	{

@@ -39,9 +39,23 @@ function sortByDistToBase(obj1, obj2)
 //Used for deciding if a truck will capture oil.
 function isUnsafeEnemyObject(obj)
 {
-	return ((obj.type === DROID)
-		|| (obj.type === STRUCTURE
-		&& obj.stattype === DEFENSE
-		&& obj.status === BUILT)
-	);
+	var isAlly = allianceExistsBetween(me, obj.player);
+	if (obj.player === me || isAlly)
+	{
+		return false;
+	}
+
+	if (obj.type === DROID && !isAlly)
+	{
+		return true;
+	}
+
+	return (!isAlly && obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT);
+}
+
+//Used for deciding if a truck will build a defense near an enemy derrick if it was stolen
+//when trying to grab it.
+function isDerrick(obj)
+{
+	return (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR);
 }
