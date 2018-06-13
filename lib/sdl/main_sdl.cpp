@@ -642,7 +642,6 @@ void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 // execFunc()'s execution on the main thread.
 void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
 {
-	assert(exec != nullptr);
 	Uint32 _wzSDLAppEvent = wzSDLAppEvent.load();
 	assert(_wzSDLAppEvent != ((Uint32)-1));
 	if (_wzSDLAppEvent == ((Uint32)-1)) {
@@ -654,6 +653,7 @@ void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
 	event.type = _wzSDLAppEvent;
 	event.user.code = wzSDLAppEventCodes::MAINTHREADEXEC;
 	event.user.data1 = exec;
+	assert(event.user.data1 != nullptr);
 	event.user.data2 = 0;
 	SDL_PushEvent(&event);
 	// receiver handles deleting `exec` on the main thread after doExecOnMainThread() has been called
