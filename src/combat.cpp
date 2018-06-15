@@ -404,7 +404,6 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 
 		bMultiMessages = bMultiMessagesBackup;
 	}
-	debug(LOG_ATTACK, "objDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 
 	if (psObj->type == OBJ_DROID)
 	{
@@ -422,6 +421,8 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 
 	// And at least MIN_WEAPON_DAMAGE points
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
+
+	debug(LOG_ATTACK, "objDamage(%d): body: %d, armour: %d, basic damage: %d, actual damage: %d", psObj->id, psObj->body, armour, damage, actualDamage);
 
 	if (isDamagePerSecond)
 	{
