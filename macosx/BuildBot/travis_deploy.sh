@@ -4,14 +4,17 @@
 # USAGE:
 #
 # Execute travis_deploy.sh, specifying the input path and file matching pattern
+# Optionally, clean up older uploads by specifying --cleanold
 #
 # So, for example:
-#	./travis_deploy.sh "tmp/build_output" "warzone2100-*.zip"
-# Will scp all files matching `warzone2100-*.zip` in the input path to the deployment path.
+#	./travis_deploy.sh "tmp/build_output" "warzone2100-*_macOS.zip" --cleanold
+# Will:
+#   1. Clean up older files matching `warzone2100-*_macOS.zip` in the deployment path on the server.
+#   2. scp all files matching `warzone2100-*_macOS.zip` in the input path to the deployment path on the server.
 #
 # Example (using this with travis_build.sh):
-#	./travis_build.sh nightly "tmp/build_output"
-#	./travis_deploy.sh "tmp/build_output" "warzone2100-*.zip"
+#	./travis_build.sh regular "tmp/build_output"
+#	./travis_deploy.sh "tmp/build_output" "warzone2100-*_macOS.zip" --cleanold
 #
 # ########
 # REQUIRED ENVIRONMENT VARIABLES:
@@ -49,6 +52,16 @@ if [ -z "$2" ]; then
 	exit 1
 fi
 FILE_MATCH_PATTERN="$2"
+if [[ "${FILE_MATCH_PATTERN}" == *\/* ]] || [[ "${FILE_MATCH_PATTERN}" == *\\* ]]; then
+	# Error: FILE_MATCH_PATTERN cannot contain \ or /
+	echo "error: File matching pattern cannot contain '\' or '/' (pattern is: \"${FILE_MATCH_PATTERN}\")"
+	exit 1
+fi
+
+CLEAN_OLD=false
+if [ -n "$3" ] && [ "$3" == "--cleanold" ]; then
+	CLEAN_OLD=true
+fi
 
 # Handle scenarios in which deployment should never happen
 if [ -n "${TRAVIS_PULL_REQUEST}" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
@@ -104,6 +117,27 @@ if [ -n "${DEPLOY_KNOWN_HOSTS_BASE64}" ]; then
 	echo ${DEPLOY_KNOWN_HOSTS_BASE64} | base64 --decode >> ~/.ssh/known_hosts
 fi
 
+if [ "$CLEAN_OLD" = true ] ; then
+	# Clean up older uploads
+	if [[ "${DEPLOY_UPLOAD_PATH}" == *\\* ]] || [[ "${DEPLOY_UPLOAD_PATH}" == *\'* ]]; then
+		# Error: DEPLOY_UPLOAD_PATH cannot contain \ or '
+		echo "error: DEPLOY_UPLOAD_PATH cannot contain \ or ' (is: \"${DEPLOY_UPLOAD_PATH}\")"
+		exit 2
+	fi
+	if [[ "${FILE_MATCH_PATTERN}" == *\\* ]] || [[ "${FILE_MATCH_PATTERN}" == *\'* ]]; then
+		# Error: FILE_MATCH_PATTERN cannot contain \ or '
+		echo "error: FILE_MATCH_PATTERN cannot contain \ or ' (is: \"${FILE_MATCH_PATTERN}\")"
+		exit 2
+	fi
+	echo "Clean-up older \"${FILE_MATCH_PATTERN}\" in \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
+	if ! ssh "${DEPLOY_UURL}" -C "cd '${DEPLOY_UPLOAD_PATH}' && find . -maxdepth 1 -type f -name '${FILE_MATCH_PATTERN}' -printf '%T@ %f\n' | sort -k1,1r | cut -d' ' -f2 | grep -v '/$' | tail -n +3 | xargs -I {} rm -- {}"; then
+		result="${?}"
+		echo "error: Failed to clean up older uploads!
+		#exit ${result}
+	fi
+	echo "  -> Clean complete."
+fi
+
 echo "Upload all \"${FILE_MATCH_PATTERN}\" in \"$INPUT_DIR\" -> \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
 
 # Upload all matching files in the input directory
@@ -123,4 +157,5 @@ done
 
 
 echo "Finished uploading all matching files."
+
 exit 0

@@ -128,7 +128,7 @@ matrix:
       script:
         - macosx/BuildBot/travis_build.sh regular "tmp/wz_upload"
       after_success:
-        - macosx/BuildBot/travis_deploy.sh "tmp/wz_upload" "warzone2100-*.zip"
+        - macosx/BuildBot/travis_deploy.sh "tmp/wz_upload" "warzone2100-*_macOS.zip" --cleanold
 
 # The channel name "chat.freenode.net#warzone2100-dev" is encrypted against Warzone2100/warzone2100 to prevent IRC spam of forks
 notifications:
