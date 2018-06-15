@@ -132,7 +132,7 @@ if [ "$CLEAN_OLD" = true ] ; then
 	echo "Clean-up older \"${FILE_MATCH_PATTERN}\" in \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
 	if ! ssh "${DEPLOY_UURL}" -C "cd '${DEPLOY_UPLOAD_PATH}' && find . -maxdepth 1 -type f -name '${FILE_MATCH_PATTERN}' -printf '%T@ %f\n' | sort -k1,1r | cut -d' ' -f2 | grep -v '/$' | tail -n +3 | xargs -I {} rm -- {}"; then
 		result="${?}"
-		echo "error: Failed to clean up older uploads!
+		echo "error: Failed to clean up older uploads!"
 		#exit ${result}
 	fi
 	echo "  -> Clean complete."
