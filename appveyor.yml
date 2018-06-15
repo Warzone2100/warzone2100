@@ -125,6 +125,10 @@ after_build:
       else {
         Write-Warning "The DEBUGSYMBOLS.7z files for the portable + regular builds do not match. This may mean that the executable was rebuilt when switching portable / non-portable mode. (Check the CMake scripts to fix.)"
       }
+  
+  # Log hashes of the generated output ZIP files
+  - ps: Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_portable.zip" -Algorithm SHA512 | Format-List
+  - ps: Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_installer.zip" -Algorithm SHA512 | Format-List
 
 artifacts:
   - path: warzone2100-*_portable.zip
