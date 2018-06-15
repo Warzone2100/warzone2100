@@ -179,5 +179,9 @@ if [ $result -ne 0 ]; then
 	exit ${result}
 fi
 echo "Generated Warzone.zip: \"${OUTPUT_DIR}/${DESIRED_ZIP_NAME}\""
+ZIP_HASH="$(shasum -a 512 "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+ZIP_SIZE="$(stat -f '%z' "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+echo "  -> SHA512: ${ZIP_HASH}"
+echo "  -> Size (bytes): ${ZIP_SIZE}"
 
 exit 0
