@@ -715,7 +715,7 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		setPair(row, selectedModel, "Blocked bits", QString::number(psDroid->blockedBits));
 		setPair(row, selectedModel, "Move status", QString::number(psDroid->sMove.Status));
 		setPair(row, selectedModel, "Move index", QString::number(psDroid->sMove.pathIndex));
-		setPair(row, selectedModel, "Move points", QString::number(psDroid->sMove.numPoints));
+		setPair(row, selectedModel, "Move points", QString::number(psDroid->sMove.asPath.size()));
 		setPair(row, selectedModel, "Move destination", QString::fromStdString(glm::to_string(psDroid->sMove.destination)));
 		setPair(row, selectedModel, "Move source", QString::fromStdString(glm::to_string(psDroid->sMove.src)));
 		setPair(row, selectedModel, "Move target", QString::fromStdString(glm::to_string(psDroid->sMove.target)));

@@ -144,10 +144,10 @@ enum SECONDARY_STATE
 /** struct used to store the data for retreating. */
 struct RUN_DATA
 {
-	Vector2i    sPos;       /**< position to where units should flee to. */
-	uint8_t     forceLevel; /**< number of units below which others might flee. */
-	uint8_t     healthLevel;/**< health percentage value below which it might flee. This value is used for groups only. */
-	uint8_t     leadership; /**< basic value that will be used on calculations of the flee probability. */
+	Vector2i sPos;           ///< position to where units should flee to.
+	uint8_t forceLevel = 0;  ///< number of units below which others might flee.
+	uint8_t healthLevel = 0; ///< health percentage value below which it might flee. This value is used for groups only.
+	uint8_t leadership = 0;  ///< basic value that will be used on calculations of the flee probability.
 };
 
 struct STRUCTURE_STATS;

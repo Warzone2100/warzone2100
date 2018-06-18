@@ -4652,9 +4652,9 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 
 		psDroid->sMove.Status = (MOVE_STATUS)ini.value("moveStatus", 0).toInt();
 		psDroid->sMove.pathIndex = ini.value("pathIndex", 0).toInt();
-		psDroid->sMove.numPoints = ini.value("pathLength", 0).toInt();
-		psDroid->sMove.asPath = (Vector2i *)malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
-		for (int j = 0; j < psDroid->sMove.numPoints; j++)
+		const int numPoints = ini.value("pathLength", 0).toInt();
+		psDroid->sMove.asPath.resize(numPoints);
+		for (int j = 0; j < numPoints; j++)
 		{
 			psDroid->sMove.asPath[j] = ini.vector2i("pathNode/" + WzString::number(j));
 		}
@@ -4803,8 +4803,8 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	ini.endGroup();
 	ini.setValue("moveStatus", psCurr->sMove.Status);
 	ini.setValue("pathIndex", psCurr->sMove.pathIndex);
-	ini.setValue("pathLength", psCurr->sMove.numPoints);
-	for (int i = 0; i < psCurr->sMove.numPoints; i++)
+	ini.setValue("pathLength", psCurr->sMove.asPath.size());
+	for (unsigned i = 0; i < psCurr->sMove.asPath.size(); i++)
 	{
 		ini.setVector2i("pathNode/" + WzString::number(i), psCurr->sMove.asPath[i]);
 	}

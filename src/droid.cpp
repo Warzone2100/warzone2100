@@ -325,7 +325,6 @@ DROID::DROID(uint32_t id, unsigned player)
 	order.direction = 0;
 	order.psObj = nullptr;
 	order.psStats = nullptr;
-	sMove.asPath = nullptr;
 	sMove.Status = MOVEINACTIVE;
 	listSize = 0;
 	listPendingBegin = 0;
@@ -381,8 +380,6 @@ DROID::~DROID()
 	{
 		psDroid->psGroup->remove(psDroid);
 	}
-
-	free(sMove.asPath);
 }
 
 std::priority_queue<int> copy_experience_queue(int player)
@@ -651,9 +648,9 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 		(int)psDroid->body,
 		(int)psDroid->sMove.Status,
 		psDroid->sMove.speed, psDroid->sMove.moveDir,
-		psDroid->sMove.pathIndex, psDroid->sMove.numPoints,
+		psDroid->sMove.pathIndex, (int)psDroid->sMove.asPath.size(),
 		psDroid->sMove.src.x, psDroid->sMove.src.y, psDroid->sMove.target.x, psDroid->sMove.target.y, psDroid->sMove.destination.x, psDroid->sMove.destination.y,
-		psDroid->sMove.bumpDir, (int)psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpPos.x, psDroid->sMove.bumpPos.y, (int)psDroid->sMove.shuffleStart,
+		psDroid->sMove.bumpDir, (int)psDroid->sMove.bumpTime, (int)psDroid->sMove.lastBump, (int)psDroid->sMove.pauseTime, psDroid->sMove.bumpPos.x, psDroid->sMove.bumpPos.y, (int)psDroid->sMove.shuffleStart,
 		(int)psDroid->experience,
 	};
 	_syncDebugIntList(function, "%c droid%d = p%d;pos(%d,%d,%d),rot(%d,%d,%d),order%d(%d,%d)^%d,action%d,secondaryOrder%X,body%d,sMove(status%d,speed%d,moveDir%d,path%d/%d,src(%d,%d),target(%d,%d),destination(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u", list, ARRAY_SIZE(list));
@@ -1724,8 +1721,7 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 //initialises the droid movement model
 void initDroidMovement(DROID *psDroid)
 {
-	free(psDroid->sMove.asPath);
-	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
+	psDroid->sMove.asPath.clear();
 }
 
 // Set the asBits in a DROID structure given it's template.

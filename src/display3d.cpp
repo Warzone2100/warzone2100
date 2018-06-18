@@ -511,7 +511,7 @@ static void showDroidPaths()
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
-			const int len = psDroid->sMove.numPoints;
+			const int len = psDroid->sMove.asPath.size();
 			for (int i = std::max(psDroid->sMove.pathIndex - 1, 0); i < len; i++)
 			{
 				Vector3i pos;
@@ -1191,7 +1191,7 @@ bool init3DView()
 /// set the view position from save game
 void disp3d_setView(iView *newView)
 {
-	memcpy(&player, newView, sizeof(iView));
+	player = *newView;
 }
 
 /// reset the camera rotation (used for save games <= 10)
@@ -1204,7 +1204,7 @@ void disp3d_oldView()
 /// get the view position for save game
 void disp3d_getView(iView *newView)
 {
-	memcpy(newView, &player, sizeof(iView));
+	*newView = player;
 }
 
 /// Are the current world coordinates within the processed range of tiles on the screen?

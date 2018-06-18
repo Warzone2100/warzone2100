@@ -155,23 +155,23 @@ struct QueuedDroidInfo
 		return 0;
 	}
 
-	uint8_t     player;
-	uint32_t    droidId;
-	SubType     subType;
+	uint8_t     player = 0;
+	uint32_t    droidId = 0;
+	SubType     subType = ObjOrder;
 	// subType == ObjOrder || subType == LocOrder
-	DROID_ORDER order;
-	uint32_t    destId;     // if (subType == ObjOrder)
-	OBJECT_TYPE destType;   // if (subType == ObjOrder)
-	Vector2i    pos;        // if (subType == LocOrder)
-	uint32_t    y;          // if (subType == LocOrder)
-	uint32_t    structRef;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
-	uint16_t    direction;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
-	uint32_t    index;      // if (order == DORDER_BUILDMODULE)
-	Vector2i    pos2;       // if (order == DORDER_LINEBUILD)
-	bool        add;
+	DROID_ORDER order = DORDER_NONE;
+	uint32_t    destId = 0;     // if (subType == ObjOrder)
+	OBJECT_TYPE destType = OBJ_DROID;   // if (subType == ObjOrder)
+	Vector2i    pos;            // if (subType == LocOrder)
+	uint32_t    y = 0;          // if (subType == LocOrder)
+	uint32_t    structRef = 0;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	uint16_t    direction = 0;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
+	uint32_t    index = 0;      // if (order == DORDER_BUILDMODULE)
+	Vector2i    pos2;           // if (order == DORDER_LINEBUILD)
+	bool        add = false;
 	// subType == SecondaryOrder
-	SECONDARY_ORDER secOrder;
-	SECONDARY_STATE secState;
+	SECONDARY_ORDER secOrder = DSO_UNUSED;
+	SECONDARY_STATE secState = DSS_NONE;
 };
 
 static std::vector<QueuedDroidInfo> queuedOrders;
@@ -202,7 +202,6 @@ bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 	}
 
 	QueuedDroidInfo info;
-	memset(&info, 0x00, sizeof(info));  // Suppress uninitialised warnings. (The uninitialised values in the queue would be ignored when reading the queue.)
 
 	info.player = psDroid->player;
 	info.droidId = psDroid->id;
@@ -566,7 +565,6 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 	}
 
 	QueuedDroidInfo info;
-	memset(&info, 0x00, sizeof(info));  // Suppress uninitialised warnings. (The uninitialised values in the queue would be ignored when reading the queue.)
 
 	info.player = psDroid->player;
 	info.droidId = psDroid->id;
@@ -620,7 +618,6 @@ bool recvDroidInfo(NETQUEUE queue)
 	NETbeginDecode(queue, GAME_DROIDINFO);
 	{
 		QueuedDroidInfo info;
-		memset(&info, 0x00, sizeof(info));
 		NETQueuedDroidInfo(&info);
 
 		STRUCTURE_STATS *psStats = nullptr;

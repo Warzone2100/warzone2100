@@ -141,13 +141,12 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 /// Space-time coordinate, including orientation.
 struct Spacetime
 {
-	Spacetime() : time(0), pos(0, 0, 0), rot(0, 0, 0) {}
+	Spacetime() {}
 	Spacetime(Position pos_, Rotation rot_, uint32_t time_) : time(time_), pos(pos_), rot(rot_) {}
 
-	uint32_t  time;        ///< Game time
-
-	Position  pos;         ///< Position of the object
-	Rotation  rot;         ///< Rotation of the object
+	uint32_t time = 0;  ///< Game time
+	Position pos;       ///< Position of the object
+	Rotation rot;       ///< Rotation of the object
 };
 
 static inline Spacetime getSpacetime(SIMPLE_OBJECT const *psObj)

@@ -338,7 +338,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	psDroid->sMove.Status = MOVESHUFFLE;
 	psDroid->sMove.src = psDroid->pos.xy;
 	psDroid->sMove.target = tar;
-	psDroid->sMove.numPoints = 0;
+	psDroid->sMove.asPath.clear();
 	psDroid->sMove.pathIndex = 0;
 
 	CHECK_DROID(psDroid);
@@ -474,7 +474,7 @@ static bool moveBestTarget(DROID *psDroid)
 		while (dist >= 0 && dist < TILE_UNITS * 5)
 		{
 			++positionIndex;
-			if (positionIndex >= psDroid->sMove.numPoints)
+			if (positionIndex >= (int)psDroid->sMove.asPath.size())
 			{
 				dist = -1;
 				break;  // Reached end of path.
@@ -511,7 +511,7 @@ static bool moveNextTarget(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	// See if there is anything left in the move list
-	if (psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
+	if (psDroid->sMove.pathIndex == (int)psDroid->sMove.asPath.size())
 	{
 		return false;
 	}
@@ -684,7 +684,7 @@ static bool moveBlocked(DROID *psDroid)
 		}
 		// if the unit cannot see the next way point - reroute it's got stuck
 		if ((bMultiPlayer || psDroid->player == selectedPlayer || psDroid->lastFrustratedTime == gameTime)
-		    && psDroid->sMove.pathIndex != psDroid->sMove.numPoints)
+		    && psDroid->sMove.pathIndex != (int)psDroid->sMove.asPath.size())
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
@@ -1276,7 +1276,7 @@ static bool moveReachedWayPoint(DROID *psDroid)
 {
 	// Calculate the vector to the droid
 	const Vector2i droid = Vector2i(psDroid->pos.xy) - psDroid->sMove.target;
-	const bool last = psDroid->sMove.pathIndex == psDroid->sMove.numPoints;
+	const bool last = psDroid->sMove.pathIndex == (int)psDroid->sMove.asPath.size();
 	int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
 
 	if (last && psDroid->sMove.bumpTime != 0)
@@ -1491,7 +1491,7 @@ static void moveCheckFinalWaypoint(DROID *psDroid, SDWORD *pSpeed)
 	}
 
 	if (psDroid->sMove.Status != MOVESHUFFLE &&
-	    psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
+	    psDroid->sMove.pathIndex == (int)psDroid->sMove.asPath.size())
 	{
 		Vector2i diff = psDroid->pos.xy - psDroid->sMove.target;
 		int distSq = diff * diff;
@@ -2136,17 +2136,13 @@ void moveUpdateDroid(DROID *psDroid)
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
 		// moving between two way points
-		if (psDroid->sMove.numPoints == 0)
+		if (psDroid->sMove.asPath.size() == 0)
 		{
 			debug(LOG_WARNING, "No path to follow, but psDroid->sMove.Status = %d", psDroid->sMove.Status);
 		}
-		else
-		{
-			ASSERT_OR_RETURN(, psDroid->sMove.asPath != nullptr, "NULL path of non-zero length!");
-		}
 
 		// Get the best control point.
-		if (psDroid->sMove.numPoints == 0 || !moveBestTarget(psDroid))
+		if (psDroid->sMove.asPath.size() == 0 || !moveBestTarget(psDroid))
 		{
 			// Got stuck somewhere, can't find the path.
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);

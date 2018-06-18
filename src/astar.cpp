@@ -556,17 +556,8 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		}
 	}
 
-	// TODO FIXME once we can change numPoints to something larger than int
-	psMove->numPoints = std::min<size_t>(INT32_MAX - 1, path.size());
-
 	// Allocate memory
-	psMove->asPath = static_cast<Vector2i *>(malloc(sizeof(*psMove->asPath) * path.size()));
-	ASSERT(psMove->asPath, "Out of memory");
-	if (!psMove->asPath)
-	{
-		fpathHardTableReset();
-		return ASR_FAILED;
-	}
+	psMove->asPath.resize(path.size());
 
 	// get the route in the correct order
 	// If as I suspect this is to reverse the list, then it's my suspicion that
@@ -582,7 +573,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	if (mustReverse)
 	{
 		// Copy the list, in reverse.
-		std::copy(path.rbegin(), path.rend(), psMove->asPath);
+		std::copy(path.rbegin(), path.rend(), psMove->asPath.data());
 
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
@@ -593,7 +584,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	else
 	{
 		// Copy the list.
-		std::copy(path.begin(), path.end(), psMove->asPath);
+		std::copy(path.begin(), path.end(), psMove->asPath.data());
 	}
 
 	// Move context to beginning of last recently used list.

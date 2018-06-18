@@ -681,7 +681,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	const unsigned int LAS_SAT_DELAY = 4;
 	BASE_OBJECT *closestCollisionObject = nullptr;
 	Spacetime closestCollisionSpacetime;
-	memset(&closestCollisionSpacetime, 0, sizeof(Spacetime));  // Squelch uninitialised warning.
 
 	CHECK_PROJECTILE(psProj);
 

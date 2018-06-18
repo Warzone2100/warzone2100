@@ -111,16 +111,16 @@ namespace pie_internal
 {
 	struct SHADER_PROGRAM
 	{
-		GLuint program;
+		GLuint program = 0;
 
 		// Uniforms
 		std::vector<GLint> locations;
 
 		// Attributes
-		GLint locVertex;
-		GLint locNormal;
-		GLint locTexCoord;
-		GLint locColor;
+		GLint locVertex = 0;
+		GLint locNormal = 0;
+		GLint locTexCoord = 0;
+		GLint locColor = 0;
 	};
 
 	extern std::vector<SHADER_PROGRAM> shaderProgram;

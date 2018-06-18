@@ -26,6 +26,8 @@
 
 #include "lib/framework/vector.h"
 
+#include <vector>
+
 enum MOVE_STATUS
 {
 	MOVEINACTIVE,
@@ -41,26 +43,25 @@ enum MOVE_STATUS
 
 struct MOVE_CONTROL
 {
-	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
-	int             pathIndex;                              // Position in asPath
-	int             numPoints;                              // number of points in asPath
-	Vector2i	 *asPath;				// Pointer to list of block X,Y map coordinates.
+	MOVE_STATUS Status = MOVEINACTIVE;    ///< Inactive, Navigating or moving point to point status
+	int pathIndex = 0;                    ///< Position in asPath
+	std::vector<Vector2i> asPath;         ///< Pointer to list of block X,Y map coordinates.
 
-	Vector2i destination;                                   // World coordinates of movement destination
-	Vector2i src, target;
-	int	speed;						// Speed of motion
+	Vector2i destination;                 ///< World coordinates of movement destination
+	Vector2i src;
+	Vector2i target;
+	int speed = 0;                        ///< Speed of motion
 
-	uint16_t moveDir;					// direction of motion (not the direction the droid is facing)
-	uint16_t bumpDir;					// direction at last bump
-	UDWORD	bumpTime;					// time of first bump with something
-	UWORD	lastBump;					// time of last bump with a droid - relative to bumpTime
-	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime
-	Position bumpPos;					// position of last bump
+	uint16_t moveDir = 0;                 ///< Direction of motion (not the direction the droid is facing)
+	uint16_t bumpDir = 0;                 ///< Direction at last bump
+	unsigned bumpTime = 0;                ///< Time of first bump with something
+	uint16_t lastBump = 0;                ///< Time of last bump with a droid - relative to bumpTime
+	uint16_t pauseTime = 0;               ///< When MOVEPAUSE started - relative to bumpTime
+	Position bumpPos;                     ///< Position of last bump
 
-	UDWORD	shuffleStart;				// when a shuffle started
+	unsigned shuffleStart = 0;            ///< When a shuffle started
 
-	/* vtol movement - GJ */
-	SWORD	iVertSpeed;
+	int iVertSpeed = 0;                   ///< VTOL movement
 };
 
 #endif // __INCLUDED_MOVEDEF_H__

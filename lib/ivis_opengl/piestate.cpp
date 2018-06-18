@@ -654,7 +654,6 @@ bool pie_LoadShaders()
 	SHADER_VERSION version = getMinimumShaderVersionForCurrentGLContext();
 
 	// Load some basic shaders
-	memset(&program, 0, sizeof(program));
 	pie_internal::shaderProgram.push_back(program);
 	int shaderEnum = 0;
 

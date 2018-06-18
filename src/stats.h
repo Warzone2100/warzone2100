@@ -43,7 +43,7 @@ extern ECM_STATS			*asECMStats;
 extern REPAIR_STATS			*asRepairStats;
 extern WEAPON_STATS			*asWeaponStats;
 extern CONSTRUCT_STATS		*asConstructStats;
-extern PROPULSION_TYPES		*asPropulsionTypes;
+extern std::vector<PROPULSION_TYPES> asPropulsionTypes;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];

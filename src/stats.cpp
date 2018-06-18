@@ -52,7 +52,7 @@ ECM_STATS		*asECMStats;
 REPAIR_STATS		*asRepairStats;
 WEAPON_STATS		*asWeaponStats;
 CONSTRUCT_STATS		*asConstructStats;
-PROPULSION_TYPES	*asPropulsionTypes;
+std::vector<PROPULSION_TYPES> asPropulsionTypes;
 static int		*asTerrainTable;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
@@ -122,8 +122,7 @@ static void updateMaxConstStats(UWORD maxValue);
 //Deallocate the storage assigned for the Propulsion Types table
 static void deallocPropulsionTypes()
 {
-	free(asPropulsionTypes);
-	asPropulsionTypes = nullptr;
+	asPropulsionTypes.clear();
 }
 
 //dealloc the storage assigned for the terrain table
@@ -1082,20 +1081,18 @@ bool loadConstructStats(const char *pFileName)
 bool loadPropulsionTypes(const char *pFileName)
 {
 	const unsigned int NumTypes = PROPULSION_TYPE_NUM;
-	PROPULSION_TYPES *pPropType;
-	unsigned int multiplier;
-	PROPULSION_TYPE type;
 
 	//allocate storage for the stats
-	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES) * NumTypes);
-	memset(asPropulsionTypes, 0, (sizeof(PROPULSION_TYPES)*NumTypes));
+	asPropulsionTypes.resize(NumTypes);
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	std::vector<WzString> list = ini.childGroups();
 
 	for (int i = 0; i < NumTypes; ++i)
 	{
+		PROPULSION_TYPE type;
+
 		ini.beginGroup(list[i]);
-		multiplier = ini.value("multiplier").toInt();
+		unsigned multiplier = ini.value("multiplier").toUInt();
 
 		//set the pointer for this record based on the name
 		if (!getPropulsionType(list[i].toUtf8().c_str(), &type))
@@ -1104,7 +1101,7 @@ bool loadPropulsionTypes(const char *pFileName)
 			return false;
 		}
 
-		pPropType = asPropulsionTypes + type;
+		PROPULSION_TYPES *pPropType = &asPropulsionTypes[type];
 
 		WzString flightName = ini.value("flightName").toWzString();
 		if (flightName.compare("GROUND") == 0)
@@ -1244,9 +1241,8 @@ bool loadPropulsionSounds(const char *pFileName)
 {
 	SDWORD	i, startID, idleID, moveOffID, moveID, hissID, shutDownID;
 	PROPULSION_TYPE type;
-	PROPULSION_TYPES *pPropType;
 
-	ASSERT(asPropulsionTypes != nullptr, "loadPropulsionSounds: Propulsion type stats not loaded");
+	ASSERT(asPropulsionTypes.size() != 0, "loadPropulsionSounds: Propulsion type stats not loaded");
 
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	std::vector<WzString> list = ini.childGroups();
@@ -1282,7 +1278,7 @@ bool loadPropulsionSounds(const char *pFileName)
 			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().c_str());
 			return false;
 		}
-		pPropType = asPropulsionTypes + type;
+		PROPULSION_TYPES *pPropType = &asPropulsionTypes[type];
 		pPropType->startID = (SWORD)startID;
 		pPropType->idleID = (SWORD)idleID;
 		pPropType->moveOffID = (SWORD)moveOffID;
