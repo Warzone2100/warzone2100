@@ -5818,7 +5818,6 @@ bool scrFireWeaponAtObj()
 	BASE_OBJECT *psTarget;
 	WEAPON sWeapon;
 
-	memset(&sWeapon, 0, sizeof(sWeapon));
 	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
 		return false;
@@ -5844,7 +5843,6 @@ bool scrFireWeaponAtLoc()
 	Vector3i target;
 	WEAPON sWeapon;
 
-	memset(&sWeapon, 0, sizeof(sWeapon));
 	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{
 		return false;
@@ -6128,7 +6126,7 @@ bool scrDbg()
 	if (scrDebug[player])
 	{
 		char	sTmp[255];
-		sprintf(sTmp, "%d) %s", player, strParam1);
+		snprintf(sTmp, sizeof(sTmp), "%d) %s", player, strParam1);
 		addConsoleMessage(sTmp, DEFAULT_JUSTIFY, player);
 	}
 
@@ -9662,7 +9660,7 @@ bool scrASSERT()
 
 #ifdef DEBUG
 	/* Just pass the expression and message from script */
-	sprintf(sTmp, "%d) %s", player, strParam1);
+	snprintf(sTmp, sizeof(sTmp), "%d) %s", player, strParam1);
 	ASSERT(bExpression, "%s", sTmp);
 #else
 	if (scrDebug[player])

@@ -96,7 +96,6 @@ std::vector<unsigned int> wzAvailableDisplayScales();
 void wzSetSwapInterval(int swap);
 int wzGetSwapInterval();
 WzString wzGetSelection();
-WzString wzGetCurrentText();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support

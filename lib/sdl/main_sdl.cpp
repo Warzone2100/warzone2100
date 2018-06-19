@@ -181,7 +181,6 @@ struct InputKey
 static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
-static char text[INPUT_MAXSTR] = {'\0'};		// string where are text is located (only for debugging)
 static unsigned int CurrentKey = 0;			// Our Current keypress
 bool GetTextEvents = false;
 /**************************/
@@ -231,7 +230,6 @@ void StartTextInput()
 	if (!GetTextEvents)
 	{
 		SDL_StartTextInput();	// enable text events
-		memset(text, 0x0, sizeof(text));
 		CurrentKey = 0;
 		GetTextEvents = true;
 		debug(LOG_INPUT, "SDL text events started");
@@ -242,19 +240,8 @@ void StopTextInput()
 {
 	SDL_StopTextInput();	// disable text events
 	CurrentKey = 0;
-	memset(text, 0x0, sizeof(text));
 	GetTextEvents = false;
 	debug(LOG_INPUT, "SDL text events stopped");
-}
-
-WzString wzGetCurrentText()
-{
-	return WzString::fromUtf8(text);
-}
-
-unsigned int wzGetCurrentKey(void)
-{
-	return CurrentKey;
 }
 
 /* Put a character into a text buffer overwriting any text under the cursor */
@@ -266,7 +253,6 @@ WzString wzGetSelection()
 	if (get_scrap(&scrap))
 	{
 		retval = WzString::fromUtf8(scrap);
-		strlcpy(text, scrap, strlen(scrap));
 	}
 	return retval;
 }
@@ -1210,11 +1196,6 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
 		utf8Buf = UTF8toUTF32(Tevent->text, newtextsize);
 		debug(LOG_INPUT, "Keyboard: text input \"%s\"", Tevent->text);
 		inputAddBuffer(CurrentKey, *utf8Buf);
-		if (SDL_strlen(text) + SDL_strlen(Tevent->text) < sizeof(text))
-		{
-			SDL_strlcat(text, Tevent->text, sizeof(text));
-		}
-		debug(LOG_INPUT, "adding text inputed: %s, to string [%s]", Tevent->text, text);
 	}
 }
 

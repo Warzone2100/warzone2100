@@ -1973,7 +1973,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
 			for (inc = 0; inc < MAX_PLAYERS; inc++)
 			{
-				memcpy(&asVTOLReturnPos[inc], &(saveGameData.asVTOLReturnPos[inc]), sizeof(Vector2i));
+				asVTOLReturnPos[inc] = saveGameData.asVTOLReturnPos[inc];
 			}
 		}
 
@@ -1981,7 +1981,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			for (inc = 0; inc < MAX_PLAYERS; inc++)
 			{
-				memcpy(&asRunData[inc], &(saveGameData.asRunData[inc]), sizeof(RUN_DATA));
+				asRunData[inc] = saveGameData.asRunData[inc];
 			}
 		}
 
@@ -3691,7 +3691,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
 		for (i = 0; i < MAX_PLAYERS; ++i)
 		{
-			memcpy(&asVTOLReturnPos[i], &saveGameData.asVTOLReturnPos[i], sizeof(Vector2i));
+			asVTOLReturnPos[i] = saveGameData.asVTOLReturnPos[i];
 		}
 	}
 
@@ -3699,7 +3699,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	{
 		for (i = 0; i < MAX_PLAYERS; ++i)
 		{
-			memcpy(&asRunData[i], &saveGameData.asRunData[i], sizeof(RUN_DATA));
+			asRunData[i] = saveGameData.asRunData[i];
 		}
 	}
 
@@ -4102,13 +4102,13 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	saveGame.bDroidsToSafetyFlag = (UBYTE)getDroidsToSafetyFlag();
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		memcpy(&saveGame.asVTOLReturnPos[i], &asVTOLReturnPos[i], sizeof(Vector2i));
+		saveGame.asVTOLReturnPos[i] = asVTOLReturnPos[i];
 	}
 
 	//version 22
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		memcpy(&saveGame.asRunData[i], &asRunData[i], sizeof(RUN_DATA));
+		saveGame.asRunData[i] = asRunData[i];
 	}
 
 	//version 24

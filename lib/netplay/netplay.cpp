@@ -1616,7 +1616,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbool(&NetPlay.players[index].allocated);
 				NETbool(&NetPlay.players[index].heartbeat);
 				NETbool(&NetPlay.players[index].kick);
-				strncpy(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
+				memset(oldName, 0, sizeof(oldName));
+				strncpy(oldName, NetPlay.players[index].name, sizeof(oldName) - 1);
 				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 				NETuint32_t(&NetPlay.players[index].heartattacktime);
 				NETint32_t(&colour);

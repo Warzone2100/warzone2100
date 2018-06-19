@@ -204,7 +204,7 @@ bool texLoad(const char *fileName)
 		{
 			iV_Image tile;
 
-			sprintf(fullPath, "%s/tile-%02d.png", partialPath, k);
+			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d.png", partialPath, k);
 			if (PHYSFS_exists(fullPath)) // avoid dire warning
 			{
 				bool retval = iV_loadImage_PNG(fullPath, &tile);

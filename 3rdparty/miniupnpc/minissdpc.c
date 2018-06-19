@@ -190,7 +190,8 @@ connectToMiniSSDPD(const char * socketpath)
 	if(!socketpath)
 		socketpath = "/var/run/minissdpd.sock";
 	addr.sun_family = AF_UNIX;
-	strncpy(addr.sun_path, socketpath, sizeof(addr.sun_path));
+	memset(addr.sun_path, 0, sizeof(addr.sun_path));
+	strncpy(addr.sun_path, socketpath, sizeof(addr.sun_path) - 1);
 	/* TODO : check if we need to handle the EINTR */
 	if(connect(s, (struct sockaddr *)&addr, sizeof(struct sockaddr_un)) < 0)
 	{

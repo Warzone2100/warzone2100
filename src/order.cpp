@@ -113,11 +113,9 @@ extern char DROIDDOING[512];
 /** This function initializes asRunData, allocking it. It should be called AFTER every mission so that asRunData gets reset. */
 void initRunData()
 {
-	UBYTE   i;
-
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		memset(&asRunData[i], 0, sizeof(RUN_DATA));
+		asRunData[i] = RUN_DATA();
 	}
 }
 
