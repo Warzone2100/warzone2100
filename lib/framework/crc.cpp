@@ -206,6 +206,7 @@ const uint8_t wz_secp_privateKey_format::secp256r1::numPublicKeyBytes = 65;
 
 // The curves currently supported by the code
 enum CurveID: int {
+	invalid_curve = 0,
 	secp224r1 = 224,
 	secp256r1 = 256
 };
@@ -230,15 +231,15 @@ private:
 	}
 
 	struct ecCurveData {
-		CurveID curveID;
-		const uint8_t* prelude;
-		size_t prelude_len;
-		uint8_t numPrivateKeyBytes;
-		const uint8_t* ecDomainParameters;
-		size_t ecDomainParameters_len;
-		const uint8_t* publicKeyPrelude;
-		size_t publicKeyPrelude_len;
-		uint8_t numPublicKeyBytes;
+		CurveID curveID = invalid_curve;
+		const uint8_t* prelude = nullptr;
+		size_t prelude_len = 0;
+		uint8_t numPrivateKeyBytes = 0;
+		const uint8_t* ecDomainParameters = nullptr;
+		size_t ecDomainParameters_len = 0;
+		const uint8_t* publicKeyPrelude = nullptr;
+		size_t publicKeyPrelude_len = 0;
+		uint8_t numPublicKeyBytes = 0;
 
 		size_t totalSize() const
 		{
@@ -264,6 +265,35 @@ private:
 		{
 			return bytesBeforePublicKeyPrelude() + publicKeyPrelude_len;
 		}
+
+		static ecCurveData get_secp224r1()
+		{
+			ecCurveData data;
+			data.curveID = secp224r1;
+			data.prelude = wz_secp_privateKey_format::secp224r1::prelude;
+			data.prelude_len = sizeof(wz_secp_privateKey_format::secp224r1::prelude);
+			data.numPrivateKeyBytes = wz_secp_privateKey_format::secp224r1::numPrivateKeyBytes;
+			data.ecDomainParameters = wz_secp_privateKey_format::secp224r1::ecDomainParameters;
+			data.ecDomainParameters_len = sizeof(wz_secp_privateKey_format::secp224r1::ecDomainParameters);
+			data.publicKeyPrelude = wz_secp_privateKey_format::secp224r1::publicKeyPrelude;
+			data.publicKeyPrelude_len = sizeof(wz_secp_privateKey_format::secp224r1::publicKeyPrelude);
+			data.numPublicKeyBytes = wz_secp_privateKey_format::secp224r1::numPublicKeyBytes;
+			return data;
+		}
+		static ecCurveData get_secp256r1()
+		{
+			ecCurveData data;
+			data.curveID = secp256r1;
+			data.prelude = wz_secp_privateKey_format::secp256r1::prelude;
+			data.prelude_len = sizeof(wz_secp_privateKey_format::secp256r1::prelude);
+			data.numPrivateKeyBytes = wz_secp_privateKey_format::secp256r1::numPrivateKeyBytes;
+			data.ecDomainParameters = wz_secp_privateKey_format::secp256r1::ecDomainParameters;
+			data.ecDomainParameters_len = sizeof(wz_secp_privateKey_format::secp256r1::ecDomainParameters);
+			data.publicKeyPrelude = wz_secp_privateKey_format::secp256r1::publicKeyPrelude;
+			data.publicKeyPrelude_len = sizeof(wz_secp_privateKey_format::secp256r1::publicKeyPrelude);
+			data.numPublicKeyBytes = wz_secp_privateKey_format::secp256r1::numPublicKeyBytes;
+			return data;
+		}
 	};
 public:
 	static std::shared_ptr<ecPrivateKeyDERExternalRepresentation> createFromRawKeyBytes(CurveID curve, const std::vector<uint8_t> &privateKeyBytes, const std::vector<uint8_t>& publicKeyBytes)
@@ -279,11 +309,11 @@ public:
 		std::shared_ptr<ecPrivateKeyDERExternalRepresentation> result(nullptr);
 
 		// secp224r1
-		result = _fromExternalRepresentation(curveData_secp224r1(), derECPrivateKey);
+		result = _fromExternalRepresentation(ecCurveData::get_secp224r1(), derECPrivateKey);
 		if (result) return result;
 
 		// secp256r1
-		result = _fromExternalRepresentation(curveData_secp256r1(), derECPrivateKey);
+		result = _fromExternalRepresentation(ecCurveData::get_secp256r1(), derECPrivateKey);
 
 		return result;
 	}
@@ -323,53 +353,13 @@ private:
 		switch (curve)
 		{
 			case secp224r1:
-				return curveData_secp224r1();
+				return ecCurveData::get_secp224r1();
 			case secp256r1:
-				return curveData_secp256r1();
+				return ecCurveData::get_secp256r1();
 			default:
 				debug(LOG_FATAL, "Unimplemented curve ID");
-				#pragma GCC diagnostic push
-				// for gcc < 5 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55805
-				#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-				return ecCurveData { };
-				#pragma GCC diagnostic pop
+				return ecCurveData();
 		}
-	}
-	static ecCurveData curveData_secp224r1()
-	{
-		#pragma GCC diagnostic push
-		// for gcc < 5 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55805
-		#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-		ecCurveData data = { };
-		#pragma GCC diagnostic pop
-		data.curveID = secp224r1;
-		data.prelude = wz_secp_privateKey_format::secp224r1::prelude;
-		data.prelude_len = sizeof(wz_secp_privateKey_format::secp224r1::prelude);
-		data.numPrivateKeyBytes = wz_secp_privateKey_format::secp224r1::numPrivateKeyBytes;
-		data.ecDomainParameters = wz_secp_privateKey_format::secp224r1::ecDomainParameters;
-		data.ecDomainParameters_len = sizeof(wz_secp_privateKey_format::secp224r1::ecDomainParameters);
-		data.publicKeyPrelude = wz_secp_privateKey_format::secp224r1::publicKeyPrelude;
-		data.publicKeyPrelude_len = sizeof(wz_secp_privateKey_format::secp224r1::publicKeyPrelude);
-		data.numPublicKeyBytes = wz_secp_privateKey_format::secp224r1::numPublicKeyBytes;
-		return data;
-	}
-	static ecCurveData curveData_secp256r1()
-	{
-		#pragma GCC diagnostic push
-		// for gcc < 5 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55805
-		#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-		ecCurveData data = { };
-		#pragma GCC diagnostic pop
-		data.curveID = secp256r1;
-		data.prelude = wz_secp_privateKey_format::secp256r1::prelude;
-		data.prelude_len = sizeof(wz_secp_privateKey_format::secp256r1::prelude);
-		data.numPrivateKeyBytes = wz_secp_privateKey_format::secp256r1::numPrivateKeyBytes;
-		data.ecDomainParameters = wz_secp_privateKey_format::secp256r1::ecDomainParameters;
-		data.ecDomainParameters_len = sizeof(wz_secp_privateKey_format::secp256r1::ecDomainParameters);
-		data.publicKeyPrelude = wz_secp_privateKey_format::secp256r1::publicKeyPrelude;
-		data.publicKeyPrelude_len = sizeof(wz_secp_privateKey_format::secp256r1::publicKeyPrelude);
-		data.numPublicKeyBytes = wz_secp_privateKey_format::secp256r1::numPublicKeyBytes;
-		return data;
 	}
 
 	static std::shared_ptr<ecPrivateKeyDERExternalRepresentation> _makeExternalRepresentation(const ecCurveData& curve, const std::vector<uint8_t>& privateKeyBytes, const std::vector<uint8_t>& publicKeyBytes)
