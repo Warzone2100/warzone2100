@@ -1,15 +1,3 @@
-[submodule "3rdparty/openal-soft"]
-	path = 3rdparty/openal-soft
-	url = https://github.com/kcat/openal-soft.git
-[submodule "3rdparty/vorbis"]
-	path = 3rdparty/vorbis
-	url = https://git.xiph.org/vorbis.git
-[submodule "3rdparty/ogg"]
-	path = 3rdparty/ogg
-	url = https://git.xiph.org/ogg.git
-[submodule "3rdparty/theora"]
-	path = 3rdparty/theora
-	url = https://git.xiph.org/theora.git
 [submodule "3rdparty/utf8proc"]
 	path = 3rdparty/utf8proc
 	url = https://github.com/JuliaLang/utf8proc.git
