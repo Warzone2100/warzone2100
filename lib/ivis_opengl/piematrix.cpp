@@ -60,7 +60,7 @@ static PerspectiveCache perspectiveCache;
  */
 int32_t pie_RotateProject(const Vector3i *v3d, const glm::mat4& matrix, Vector2i *v2d)
 {
-	float hackScaleFactor = 1.0 / (3 * 330);  // HACK: This seems to work by experimentation, not sure why.
+	float hackScaleFactor = 1.0f / (3 * 330);  // HACK: This seems to work by experimentation, not sure why.
 
 	/*
 	 * v = curMatrix . v3d
