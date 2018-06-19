@@ -260,7 +260,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Deal with score increase/decrease and messages to the player
 		if (psDroid->player == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("Unit Lost!")));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Unit Lost!")));
 			scoreUpdateVar(WD_UNITS_LOST);
 			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED, UNIT_LOST_DELAY,
 			                            psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
@@ -2993,7 +2993,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 	{
 		if (to == selectedPlayer || psD->player == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("Unit transfer failed -- unit limits exceeded")));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Unit transfer failed -- unit limits exceeded")));
 		}
 		return nullptr;
 	}

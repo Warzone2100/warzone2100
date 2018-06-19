@@ -388,7 +388,7 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 	{
 		// A quick way to flash the text
 		PIELIGHT cheatedTextColor = ((realTime / 250) % 2) ? WZCOL_RED : WZCOL_YELLOW;
-		sprintf(text, _("You cheated!"));
+		sprintf(text, "%s", _("You cheated!"));
 		cache.wzInfoText_Cheated.setText(text, font_regular);
 		cache.wzInfoText_Cheated.render((pie_GetVideoBufferWidth() - cache.wzInfoText_Cheated.width()) / 2, 360 + D_H, cheatedTextColor);
 	}

@@ -323,7 +323,7 @@ void	kf_FaceSouth()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, _("View Aligned to South")));
+	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to South")));
 }
 // --------------------------------------------------------------------------
 void	kf_FaceEast()
@@ -333,7 +333,7 @@ void	kf_FaceEast()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, _("View Aligned to East")));
+	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to East")));
 }
 // --------------------------------------------------------------------------
 void	kf_FaceWest()
@@ -343,7 +343,7 @@ void	kf_FaceWest()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, _("View Aligned to West")));
+	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to West")));
 }
 // --------------------------------------------------------------------------
 
@@ -613,11 +613,11 @@ void kf_ToggleFPS() //This shows *just FPS* and is always visible (when active) 
 
 	if (showFPS)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("FPS display is enabled.")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("FPS display is enabled.")));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("FPS display is disabled.")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("FPS display is disabled.")));
 	}
 }
 void kf_ToggleSamples() //Displays number of sound sample in the sound queues & lists.
@@ -1356,7 +1356,7 @@ void	kf_SeekNorth()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, _("View Aligned to North")));
+	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to North")));
 }
 
 void kf_toggleTrapCursor()
@@ -1475,7 +1475,7 @@ void kf_Reload()
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psCurr->asWeaps[0].nStat], psCurr->player);
 
 			psCurr->asWeaps[0].lastFired -= firePause;
-			CONPRINTF(ConsoleString, (ConsoleString, _("Selected buildings instantly recharged!")));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Selected buildings instantly recharged!")));
 		}
 	}
 }
@@ -1862,7 +1862,7 @@ void	kf_KillEnemy()
 
 	debug(LOG_DEATH, "Destroying enemy droids and structures");
 	CONPRINTF(ConsoleString, (ConsoleString,
-	                          _("Warning! This can have drastic consequences if used incorrectly in missions.")));
+	                          "%s", _("Warning! This can have drastic consequences if used incorrectly in missions.")));
 	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All enemies destroyed by cheating!"));
 	sendTextMessage(cmsg, true);
@@ -2303,12 +2303,12 @@ void	kf_ToggleVisibility()
 {
 	if (getRevealStatus())
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("Reveal OFF")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Reveal OFF")));
 		setRevealStatus(false);
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("Reveal ON")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Reveal ON")));
 		setRevealStatus(true);
 	}
 }
@@ -2457,12 +2457,12 @@ void	kf_ToggleMouseInvert()
 	if (getInvertMouseStatus())
 	{
 		setInvertMouseStatus(false);
-		CONPRINTF(ConsoleString, (ConsoleString, _("Vertical rotation direction: Normal")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Vertical rotation direction: Normal")));
 	}
 	else
 	{
 		setInvertMouseStatus(true);
-		CONPRINTF(ConsoleString, (ConsoleString, _("Vertical rotation direction: Flipped")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Vertical rotation direction: Flipped")));
 	}
 }
 
@@ -2549,7 +2549,7 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 
 	if (newMod == 1)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Reset")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Game Speed Reset")));
 	}
 	else if (newMod > oldMod)
 	{
@@ -2603,7 +2603,7 @@ void kf_NormalSpeed()
 		return;
 	}
 
-	CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Reset")));
+	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Game Speed Reset")));
 	gameTimeResetMod();
 }
 
@@ -2615,11 +2615,11 @@ void kf_ToggleRadarAllyEnemy()
 
 	if (bEnemyAllyRadarColor)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing friend-foe colors")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing friend-foe colors")));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing player colors")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing player colors")));
 	}
 	resizeRadar();
 }
@@ -2634,16 +2634,16 @@ void kf_ToggleRadarTerrain()
 	switch (radarDrawMode)
 	{
 	case RADAR_MODE_NO_TERRAIN:
-		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing only objects")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing only objects")));
 		break;
 	case RADAR_MODE_COMBINED:
-		CONPRINTF(ConsoleString, (ConsoleString, _("Radar blending terrain and height")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar blending terrain and height")));
 		break;
 	case RADAR_MODE_TERRAIN:
-		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing terrain")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing terrain")));
 		break;
 	case RADAR_MODE_HEIGHT_MAP:
-		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing height")));
+		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing height")));
 		break;
 	case NUM_RADAR_MODES:
 		assert(false);

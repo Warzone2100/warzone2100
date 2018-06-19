@@ -775,7 +775,7 @@ static void displayExtraGubbins(UDWORD height, ExtraGubbinsCache& cache)
 		bool isTotal = q != 0;
 
 		char const *srText[2] = {_("Sent/Received per sec —"), _("Total Sent/Received —")};
-		sprintf(str, srText[q]);
+		sprintf(str, "%s", srText[q]);
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 		xPos += iV_GetTextWidth(str, font_small) + 20;
 
