@@ -1471,7 +1471,7 @@ void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 {
 	/*	Toggle selection on and off - allows you drag around a big
 		area of droids and then exclude certain individuals */
-	if (!bDragBox && psDroid->selected == true)
+	if (!bDragBox && (psDroid->selected))
 	{
 		DeSelectDroid(psDroid);
 	}
@@ -2123,7 +2123,7 @@ static void dealWithRMB()
 					}
 					else
 					{
-						if (psDroid->selected != true)
+						if (!(psDroid->selected))
 						{
 							clearSelection();
 							SelectDroid(psDroid);
@@ -2136,7 +2136,7 @@ static void dealWithRMB()
 				{
 					if (bMultiPlayer)
 					{
-						if (bRightClickOrders && psDroid->selected != true)
+						if (bRightClickOrders && !(psDroid->selected))
 						{
 							clearSelection();
 							SelectDroid(psDroid);
@@ -2180,7 +2180,7 @@ static void dealWithRMB()
 						intDemolishCancel();
 					}
 				}
-				else if (psStructure->selected == true)
+				else if (psStructure->selected)
 				{
 					psStructure->selected = false;
 					intObjectSelected(nullptr);
