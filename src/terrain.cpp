@@ -419,7 +419,7 @@ static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize
 			}
 			if (TILE_HAS_DECAL(mapTile(i, j)))
 			{
-				Vector2f center = getTileTexCoords(*uv, mapTile(i, j)->texture);
+				center = getTileTexCoords(*uv, mapTile(i, j)->texture);
 
 				getGridPos(&pos, i, j, true, false);
 				decaldata[*decalSize].pos = pos;

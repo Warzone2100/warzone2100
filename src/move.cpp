@@ -1504,8 +1504,6 @@ static void moveCheckFinalWaypoint(DROID *psDroid, SDWORD *pSpeed)
 
 static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 {
-	Position newPos;	// high precision coordinates (unusable for squared calculations)
-
 	CHECK_DROID(psDroid);
 
 	if (psDroid->sMove.Status == MOVEPAUSE || isDead((BASE_OBJECT *)psDroid))
