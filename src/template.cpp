@@ -46,7 +46,7 @@ bool allowDesign = true;
 bool includeRedundantDesigns = false;
 
 
-static bool researchedItem(const DROID_TEMPLATE */*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
+static bool researchedItem(const DROID_TEMPLATE* /*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
 	if (allowZero && part <= 0)
 	{
