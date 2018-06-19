@@ -145,7 +145,7 @@ int WzString::toInt(bool *ok /*= nullptr*/, int base /*= 10*/) const
 			*ok = true;
 		}
 	}
-	catch (const std::exception &e) {
+	catch (const std::exception&) {
 		if (ok != nullptr)
 		{
 			*ok = false;
@@ -635,7 +635,7 @@ bool WzString::_utf8_advance (octet_iterator& it, distance_type n, octet_iterato
 	try {
 		utf8::advance(it, n, end);
 	}
-	catch (const utf8::not_enough_room& e) {
+	catch (const utf8::not_enough_room&) {
 		// reached end of the utf8 string before n codepoints were traversed
 		it = end;
 		return false;

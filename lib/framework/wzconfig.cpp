@@ -873,7 +873,7 @@ json_variant json_getValue(const nlohmann::json& json, nlohmann::json::size_type
 	try {
 		return json_variant(json.at(idx));
 	}
-	catch (const std::exception &e) {
+	catch (const std::exception&) {
 		return defaultValue;
 	}
 	catch (...) {
