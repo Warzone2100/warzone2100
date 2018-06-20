@@ -3,12 +3,6 @@ cmake_minimum_required(VERSION 3.5)
 ############################
 # Versioning (autorevision)
 
-if(EXISTS "autorevision.cache")
-	# Copy autorevision.cache from the src directory (if present)
-	# This supports proper versioning from distribution source archives
-	configure_file("autorevision.cache" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" COPYONLY)
-endif()
-
 # Autorevision target that will run *every* build
 add_custom_target(autorevision ALL
     DEPENDS
@@ -21,8 +15,12 @@ add_custom_command(
 		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"  # fake - ensure we run
 		"${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
 		"${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
+	# Copy autorevision.cache from the src directory (if present)
+	# This supports proper versioning from distribution source archives
+	COMMAND ${CMAKE_COMMAND} -DINPUT_FILE="${CMAKE_CURRENT_SOURCE_DIR}/autorevision.cache" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DSKIP_IF_INPUT_MISSING="ON" -DSKIP_IF_OUTPUT_EXISTS="ON" -P "${CMAKE_SOURCE_DIR}/cmake/CopyFileHelper.cmake"
+	# Autorevision.cmake
 	# this command must generate: ${CMAKE_CURRENT_BINARY_DIR}/autorevision.h
-    COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DOUTPUT_TYPE=h -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" -P "${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake"
+	COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DOUTPUT_TYPE=h -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" -P "${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake"
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 )
 
