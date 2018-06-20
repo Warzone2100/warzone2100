@@ -100,7 +100,8 @@ matrix:
         - cd docker/ubuntu-18.04/
         - docker build -t ubuntu .
         - cd ../..
-      script:
+      before_script:
+        # Package the source tarball
         - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
         # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
         # To do this, append the following to the pertinent lines after —rm:
@@ -108,8 +109,16 @@ matrix:
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake -P "/code/build_tools/ci/travis/prepare_git_repo.cmake"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build --target package_source
+        # Extract the .tar.xz into a new location
+        - mkdir extracted && tar -xf build/warzone2100.tar.xz -C extracted
+      script:
+        # Attempt a build from the tarball source (using CMake)
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake --build build
       # after_success:
-        # TODO: Deploy the generated /code/warzone2100.tar.xz to the buildbot
+        # TODO: Copy & rename the /code/warzone2100.tar.xz
+        # TODO: Output the SHA512 of the .tar.xz
+        # TODO: Deploy the generated .tar.xz to the buildbot
 
     # Build for macOS
     # (This also deploys the macOS build to the buildbot)
