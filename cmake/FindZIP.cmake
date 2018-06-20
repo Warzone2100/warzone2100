@@ -30,6 +30,23 @@ set(_PF32BIT "ProgramFiles(x86)")
 
 # Search for 7-Zip
 find_program(ZIP_EXECUTABLE 7z PATHS "$ENV{ProgramFiles}/7-Zip" "$ENV{${_PF32BIT}}/7-Zip" "$ENV{ProgramW6432}/7-Zip")
+if(ZIP_EXECUTABLE MATCHES "7z")
+	# Test whether 7-Zip supports the "-bb0" option to disable log output
+	execute_process(COMMAND ${ZIP_EXECUTABLE} i -bb0
+					RESULT_VARIABLE 7z_bb_result
+					OUTPUT_VARIABLE 7z_bb_info
+					OUTPUT_STRIP_TRAILING_WHITESPACE
+					ERROR_QUIET
+	)
+	if (7z_bb_result EQUAL 0)
+		message( STATUS "7z supports switch: -bb0 ... YES" )
+		set(7Z_SUPPORTS_SWITCH_BB0 ON CACHE BOOL "7z supports switch: -bb0")
+	else()
+		message( STATUS "7z supports switch: -bb0 ... no" )
+		set(7Z_SUPPORTS_SWITCH_BB0 OFF CACHE BOOL "7z supports switch: -bb0")
+	endif()
+	MARK_AS_ADVANCED(7Z_SUPPORTS_SWITCH_BB0)
+endif()
 
 if(NOT ZIP_EXECUTABLE)
 	# Search for "zip"
@@ -48,7 +65,8 @@ MARK_AS_ADVANCED(ZIP_EXECUTABLE)
 # COMPRESS_ZIP(outputFile
 #			   [COMPRESSION_LEVEL <0 | 1 | 3 | 5 | 7 | 9>]
 #			   [WORKING_DIRECTORY dir]
-#			   PATHS file1 ...  fileN)
+#			   PATHS file1 ...  fileN
+#			   [QUIET])
 #
 # Compress a list of files / folders into a ZIP file, named <outputFile>.
 # Any directories specified will cause the directory's contents to be recursively included.
@@ -65,7 +83,7 @@ function(COMPRESS_ZIP _outputFile)
 		message ( FATAL_ERROR "Unable to find zip executable. Unable to zip." )
 	endif()
 
-	set(_options ALL)
+	set(_options ALL QUIET)
 	set(_oneValueArgs COMPRESSION_LEVEL WORKING_DIRECTORY)
 	set(_multiValueArgs PATHS)
 
@@ -97,6 +115,11 @@ function(COMPRESS_ZIP _outputFile)
 			# only supports compression levels: 0, 1, 3, 5, 7, 9
 			list(APPEND _additionalOptions "-mx=${_parsedArguments_COMPRESSION_LEVEL}")
 		endif()
+		if(_parsedArguments_QUIET)
+			if(7Z_SUPPORTS_SWITCH_BB0)
+				list(APPEND _additionalOptions "-bb0")
+			endif()
+		endif()
 
 		add_custom_command(
 			OUTPUT "${_outputFile}"
@@ -110,6 +133,9 @@ function(COMPRESS_ZIP _outputFile)
 		if(DEFINED _parsedArguments_COMPRESSION_LEVEL)
 			# zip command-line option for compression level is "-#" (ex. "-0")
 			list(APPEND _additionalOptions "-${_parsedArguments_COMPRESSION_LEVEL}")
+		endif()
+		if(_parsedArguments_QUIET)
+			list(APPEND _additionalOptions "-q")
 		endif()
 
 		add_custom_command(

@@ -26,7 +26,8 @@ COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 		"texpages"
 		"tileset"
 		"wrf"
-	)
+	QUIET
+)
 
 ADD_CUSTOM_TARGET(data_base ALL
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/base.wz")
@@ -47,7 +48,8 @@ COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 		"stats"
 		"structs"
 		"wrf"
-	)
+	QUIET
+)
 
 ADD_CUSTOM_TARGET(data_mp ALL
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/mp.wz")
