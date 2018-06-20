@@ -43,6 +43,7 @@ unset(RC_PRODUCTVERSION)
 unset(RC_StringFileInfo_FileVersion)
 unset(RC_StringFileInfo_ProductVersion)
 unset(MANIFEST_assemblyIdentityVersion)
+unset(RC_StringFileInfo_LegalCopyright)
 
 ##################################
 # Determine the ProductVersion
@@ -135,6 +136,8 @@ set(MANIFEST_assemblyIdentityVersion "1.${_file_version_minor}.${_file_version_p
 ##################################
 # Determine the other .rc settings
 
+set(RC_StringFileInfo_LegalCopyright "Copyright (C) 2005-${VCS_MOST_RECENT_COMMIT_YEAR} Warzone 2100 Project, Copyright (C) 1999-2004 Eidos Interactive")
+
 set(RC_StringFileInfo_FileDescription "Warzone 2100")
 set(RC_StringFileInfo_OriginalFilename "warzone2100.exe")
 set(RC_StringFileInfo_ProductName "Warzone 2100")
@@ -147,6 +150,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++FILEVERSION: ${RC_FILEVERSIO
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++PRODUCTVERSION: ${RC_PRODUCTVERSION}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++(StringInfo) FileVersion: ${RC_StringFileInfo_FileVersion}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++(StringInfo) ProductVersion: ${RC_StringFileInfo_ProductVersion}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++(StringInfo) LegalCopyright: ${RC_StringFileInfo_LegalCopyright}")
 
 ##################################
 # Output configured file based on the template

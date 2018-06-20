@@ -35,7 +35,7 @@ BEGIN
 			VALUE "FileDescription", "@RC_StringFileInfo_FileDescription@"
 			VALUE "FileVersion", "@RC_StringFileInfo_FileVersion@"
 			VALUE "InternalName", "Warzone 2100"
-			VALUE "LegalCopyright", "Copyright (C) 2005-2018 Warzone 2100 Project"
+			VALUE "LegalCopyright", "@RC_StringFileInfo_LegalCopyright@"
 			VALUE "OriginalFilename", "@RC_StringFileInfo_OriginalFilename@"
 			VALUE "ProductName", "@RC_StringFileInfo_ProductName@"
 			VALUE "ProductVersion", "@RC_StringFileInfo_ProductVersion@"
