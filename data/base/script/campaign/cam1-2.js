@@ -94,6 +94,7 @@ function eventStartLevel()
 			eliminateSnd: "pcv392.ogg"
 		},
 		"ScavLabGroup": {
+			cleanup: "ScavLabCleanup",
 			detectMsg: "C1-2_OBJ1",
 		},
 	});

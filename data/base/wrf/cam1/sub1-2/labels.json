@@ -48,6 +48,21 @@
 		"pos1": [3136, 1728],
 		"pos2": [5440, 2624]
 	},
+	"area_4": {
+		"label": "RaidGroup",
+		"pos1": [3968, 3968],
+		"pos2": [5248, 4864]
+	},
+	"area_5": {
+		"label": "NorthTankGroup",
+		"pos1": [2304, 5888],
+		"pos2": [3328, 6144]
+	},
+	"area_6": {
+		"label": "ScavLabCleanup",
+		"pos1": [1792, 3072],
+		"pos2": [3328, 4352]
+	},
 
 	"object_0": {
 		"label": "NorthFactory",
@@ -73,21 +88,5 @@
 		"subscriber": 0,
 		"pos": [3968, 1792],
 		"radius": 2000
-	},
-
-	"group_0": {
-		"label": "NorthTankGroup",
-		"members": [57, 66, 67, 68],
-		"player": 7
-	},
-	"group_1": {
-		"label": "ScavLabGroup",
-		"members": [340],
-		"player": 7
-	},
-	"group_2": {
-		"label": "RaidGroup",
-		"members": [147, 225, 227, 235, 279, 280, 281, 282],
-		"player": 7
 	}
 }
