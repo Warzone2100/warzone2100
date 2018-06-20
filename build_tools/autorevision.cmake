@@ -80,6 +80,8 @@ macro(_hOutput _outputFile _quiet)
 	string(CONCAT _hContents ${_hContents} "#define VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION	${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}\n")
 	string(CONCAT _hContents ${_hContents} "#define VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH	${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}\n")
 	string(CONCAT _hContents ${_hContents} "#define VCS_BRANCH_COMMIT_COUNT	${VCS_BRANCH_COMMIT_COUNT}\n")
+	string(CONCAT _hContents ${_hContents} "#define VCS_MOST_RECENT_COMMIT_DATE	\"${VCS_MOST_RECENT_COMMIT_DATE}\"\n")
+	string(CONCAT _hContents ${_hContents} "#define VCS_MOST_RECENT_COMMIT_YEAR	\"${VCS_MOST_RECENT_COMMIT_YEAR}\"\n")
 	string(CONCAT _hContents ${_hContents} "\n")
 	string(CONCAT _hContents ${_hContents} "#endif\n")
 	string(CONCAT _hContents ${_hContents} "\n")
@@ -117,6 +119,8 @@ macro(_shOutput _outputFile _quiet)
 	string(CONCAT _hContents ${_hContents} "VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}\n")
 	string(CONCAT _hContents ${_hContents} "VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH=${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}\n")
 	string(CONCAT _hContents ${_hContents} "VCS_BRANCH_COMMIT_COUNT=${VCS_BRANCH_COMMIT_COUNT}\n")
+	string(CONCAT _hContents ${_hContents} "VCS_MOST_RECENT_COMMIT_DATE=\"${VCS_MOST_RECENT_COMMIT_DATE}\"\n")
+	string(CONCAT _hContents ${_hContents} "VCS_MOST_RECENT_COMMIT_YEAR=\"${VCS_MOST_RECENT_COMMIT_YEAR}\"\n")
 	string(CONCAT _hContents ${_hContents} "\n")
 	string(CONCAT _hContents ${_hContents} "# end\n")
 
@@ -322,6 +326,15 @@ macro(_gitRepo)
 		endif()
 	endif()
 
+	# get the most recent commit date
+	# VCS_MOST_RECENT_COMMIT_DATE="$(git log -1 --format=%cI)"
+	execute_process( COMMAND ${GIT_EXECUTABLE} log -1 --format=%cI
+						 WORKING_DIRECTORY "${_repo_top_directory}"
+						 OUTPUT_VARIABLE VCS_MOST_RECENT_COMMIT_DATE
+						 OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+	# VCS_MOST_RECENT_COMMIT_YEAR="$(git log -1 --format=%cI | cut -d "-" -f1)"
+	STRING(REGEX MATCH "^[^-]+" VCS_MOST_RECENT_COMMIT_YEAR "${VCS_MOST_RECENT_COMMIT_DATE}")
+
 	# cleanup
 	unset(first_new_commit_on_branch_since_master)
 	unset(exstatus)
@@ -473,6 +486,8 @@ if(DEFINED VAROUT)
 	message( STATUS "VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION=${VCS_COMMIT_COUNT_SINCE_MOST_RECENT_TAGGED_VERSION}" )
 	message( STATUS "VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH=${VCS_COMMIT_COUNT_ON_MASTER_UNTIL_BRANCH}" )
 	message( STATUS "VCS_BRANCH_COMMIT_COUNT=${VCS_BRANCH_COMMIT_COUNT}" )
+	message( STATUS "VCS_MOST_RECENT_COMMIT_DATE=${VCS_MOST_RECENT_COMMIT_DATE}" )
+	message( STATUS "VCS_MOST_RECENT_COMMIT_YEAR=${VCS_MOST_RECENT_COMMIT_YEAR}" )
 endif()
 
 # Detect requested output type and use it.
