@@ -1169,7 +1169,10 @@ void aiUpdateDroid(DROID *psDroid)
 		{
 			if (aiChooseSensorTarget(psDroid, &psTarget))
 			{
-			        psDroid->order = DroidOrder(DORDER_OBSERVE, psTarget);
+				if (!orderState(psDroid, DORDER_HOLD))
+				{
+					psDroid->order = DroidOrder(DORDER_OBSERVE, psTarget);
+				}
 				actionDroid(psDroid, DACTION_OBSERVE, psTarget);
 			}
 		}
@@ -1177,7 +1180,10 @@ void aiUpdateDroid(DROID *psDroid)
 		{
 			if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true, nullptr))
 			{
-			        psDroid->order = DroidOrder(DORDER_ATTACK, psTarget);
+				if (!orderState(psDroid, DORDER_HOLD))
+				{
+					psDroid->order = DroidOrder(DORDER_ATTACK, psTarget);
+				}
 				actionDroid(psDroid, DACTION_ATTACK, psTarget);
 			}
 		}
