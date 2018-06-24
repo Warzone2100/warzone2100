@@ -101,6 +101,7 @@ matrix:
         - docker build -t ubuntu .
         - cd ../..
       before_script:
+        - source build_tools/ci/travis/export_build_output_desc.sh
         # Package the source tarball
         - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
         # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
@@ -115,10 +116,11 @@ matrix:
         # Attempt a build from the tarball source (using CMake)
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake --build build
-      # after_success:
-        # TODO: Copy & rename the /code/warzone2100.tar.xz
-        # TODO: Output the SHA512 of the .tar.xz
-        # TODO: Deploy the generated .tar.xz to the buildbot
+        # Prepare the source tarball for deployment
+        - build_tools/ci/travis/packaged_source_deploy_prepare.sh "build/warzone2100.tar.xz" "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
+      after_success:
+        # Deploy the generated .tar.xz to the buildbot
+        - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}*_src.tar.xz" --cleanold
 
     # Build for macOS
     # (This also deploys the macOS build to the buildbot)
