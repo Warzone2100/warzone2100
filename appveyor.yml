@@ -126,9 +126,12 @@ after_build:
         Write-Warning "The DEBUGSYMBOLS.7z files for the portable + regular builds do not match. This may mean that the executable was rebuilt when switching portable / non-portable mode. (Check the CMake scripts to fix.)"
       }
   
-  # Log hashes of the generated output ZIP files
-  - ps: Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_portable.zip" -Algorithm SHA512 | Format-List
-  - ps: Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_installer.zip" -Algorithm SHA512 | Format-List
+  # Log hashes of the setup EXEs (stored inside the ZIP files)
+  - ps: |
+      Write-Host "SHA512 Hashes:"
+      Write-Host "warzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Algorithm SHA512).Hash)"
+      Write-Host "warzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Algorithm SHA512).Hash)"
+      Write-Host ""
 
 artifacts:
   - path: warzone2100-*_portable.zip
