@@ -135,9 +135,10 @@ matrix:
         - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
         - gem install xcpretty-travis-formatter --no-rdoc --no-ri --no-document --quiet
       script:
-        - macosx/BuildBot/travis_build.sh regular "tmp/wz_upload"
+        - source build_tools/ci/travis/export_build_output_desc.sh
+        - macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
       after_success:
-        - macosx/BuildBot/travis_deploy.sh "tmp/wz_upload" "warzone2100-*_macOS.zip" --cleanold
+        - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}*_macOS.zip" --cleanold
 
 # The channel name "chat.freenode.net#warzone2100-dev" is encrypted against Warzone2100/warzone2100 to prevent IRC spam of forks
 notifications:

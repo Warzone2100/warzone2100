@@ -4,12 +4,14 @@
 # This script is meant to be run from the root of the working copy.
 #
 # USAGE:
-# Execute travis_build.sh with 1-2 parameters
+# Execute travis_build.sh with 2-3 parameters
 # 1.) Specify one of the valid modes: ("regular", "release") REQUIRED
-# 2.) Specify an output path for the created warzone2100*_macOS.zip files (optional, default: macosx/build/wz_output)
+# 2.) Specify a build output description prefix (ex. "master-") REQUIRED
+# 3.) Specify an output path for the created warzone2100-${BUILD_OUTPUT_DESCRIPTION_PREFIX}-*_macOS.zip files (optional, default: macosx/build/wz_output)
 #
 # Example:
-#	./travis_build.sh nightly "tmp/build_output"
+#  source build_tools/ci/travis/export_build_output_desc.sh
+#  macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}" "tmp/build_output"
 #
 # Regular builds:
 # - Warzone.zip containing:
@@ -36,11 +38,17 @@ if ! [[ "$1" =~ ^(regular|release)$ ]]; then
 	echo "travis_build.sh requires an argument specifying one of the valid modes: (\"regular\", \"release\")"
 	exit 1
 fi
-
 BUILD_MODE="$1"
+
+if [ -z "$2" ]; then
+	echo "travis_build.sh requires an argument specifying a build output description prefix"
+	exit 1
+fi
+BUILD_OUTPUT_DESCRIPTION_PREFIX="$2"
+
 OUTPUT_DIR="macosx/build/wz_output"
-if [ -n "$2" ]; then
-	OUTPUT_DIR="$2"
+if [ -n "$3" ]; then
+	OUTPUT_DIR="$3"
 fi
 if [ ! -d "${OUTPUT_DIR}" ]; then
 	mkdir -p "${OUTPUT_DIR}"
@@ -153,25 +161,14 @@ if [ ! -f "${BUILT_WARZONE_ZIP}" ]; then
 	exit 1
 fi
 
-# Collect current working copy Git information
-GIT_BRANCH="$(git branch --no-color | sed -e '/^[^*]/d' -e 's:* \(.*\):\1:')"
+# Determine the build output description
+# <BUILD_OUTPUT_DESCRIPTION_PREFIX><BUILT_DATETIME>-<GIT_REVISION_SHORT>
 BUILT_DATETIME=$(date '+%Y%m%d-%H%M%S')
 GIT_REVISION_SHORT="$(git rev-parse -q --short --verify HEAD | cut -c1-7)"
+WZ_BUILD_DESC="${BUILD_OUTPUT_DESCRIPTION_PREFIX}${BUILT_DATETIME}-${GIT_REVISION_SHORT}"
 
-if [ -n "${TRAVIS_PULL_REQUEST_BRANCH}" ]; then
-	echo "Triggered by a Pull Request - use the TRAVIS_PULL_REQUEST_BRANCH (${TRAVIS_PULL_REQUEST_BRANCH}) as the branch for the output filename"
-	GIT_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH}"
-elif [ -n "${TRAVIS_BRANCH}" ]; then
-	echo "Use the TRAVIS_BRANCH (${TRAVIS_BRANCH}) as the branch for the output filename"
-	GIT_BRANCH="${TRAVIS_BRANCH}"
-fi
-
-# Replace "/" so the GIT_BRANCH can be used in a filename
-GIT_BRANCH_SANITIZED="$(echo "${GIT_BRANCH}" | sed -e 's:/:_:')"
-
-# Move Warzone.zip to the output directory, renaming it to:
-#  warzone2100-{GIT_BRANCH_SANITIZED}-{BUILT_DATETIME}-{GIT_REVISION_SHORT}_macOS.zip
-DESIRED_ZIP_NAME="warzone2100-${GIT_BRANCH_SANITIZED}-${BUILT_DATETIME}-${GIT_REVISION_SHORT}_macOS.zip"
+# Move Warzone.zip to the output directory, renaming it
+DESIRED_ZIP_NAME="warzone2100-${WZ_BUILD_DESC}_macOS.zip"
 mv "$BUILT_WARZONE_ZIP" "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}"
 result=${?}
 if [ $result -ne 0 ]; then
