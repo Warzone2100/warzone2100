@@ -29,6 +29,10 @@
 # Future TODO: Use TRAVIS_TAG to detect if the build is for a git tag, and parse the
 #              tag to see if it's likely a release (to automatically set MODE="release")
 
+# Security:
+#   Unset Travis-CI secure environment variables, so they are not passed to any of the subsequent build scripts / commands
+unset SECURE_UPLOAD_BASE64_KEY
+
 # Handle arguments
 if [ -z "$1" ]; then
 	echo "travis_build.sh requires an argument specifying one of the valid modes: (\"regular\", \"release\")"
