@@ -134,8 +134,7 @@ matrix:
         - brew install gettext
         - brew install asciidoc
         - brew install docbook-xsl
-        - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
-        - gem install xcpretty-travis-formatter --no-rdoc --no-ri --no-document --quiet
+        - bundle install --gemfile="macosx/BuildBot/Gemfile"
       script:
         - source build_tools/ci/travis/export_build_output_desc.sh
         - macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
