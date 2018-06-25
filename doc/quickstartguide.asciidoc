@@ -740,7 +740,7 @@ image:images/intelligencedisplay.jpg[]
 'Intelligence display with piece of intelligence selected'
 
 What's displayed
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 When you open the Intelligence Display, two rows of icons appear on the bottom
 of the screen. Selecting an icon will display information in the middle of the
@@ -748,7 +748,7 @@ screen. This is helpful for looking at technologies you have researched. During
 Campaign, a piece of intelligence always displayed is your mission objective.
 
 We Brake For Nobody
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 Please note that while the Intelligence Display pauses the game in Campaign
 mode, it doesn't do so in Multiplayer and Skirmish!
