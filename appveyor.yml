@@ -129,8 +129,8 @@ after_build:
   # Log hashes of the setup EXEs (stored inside the ZIP files)
   - ps: |
       Write-Host "SHA512 Hashes:"
-      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Algorithm SHA512).Hash)"
-      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Algorithm SHA512).Hash)"
+      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Algorithm SHA512).Hash)`n  -> Size (bytes): $((Get-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe").Length)"
+      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Algorithm SHA512).Hash)`n  -> Size (bytes): $((Get-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe").Length)"
       Write-Host ""
 
 artifacts:
