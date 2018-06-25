@@ -129,14 +129,13 @@ after_build:
   # Log hashes of the setup EXEs (stored inside the ZIP files)
   - ps: |
       Write-Host "SHA512 Hashes:"
-      Write-Host "warzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Algorithm SHA512).Hash)"
-      Write-Host "warzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Algorithm SHA512).Hash)"
+      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Algorithm SHA512).Hash)"
+      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Algorithm SHA512).Hash)"
       Write-Host ""
 
 artifacts:
   - path: warzone2100-*_portable.zip
     name: Warzone2100 Portable
-  # TODO: Only upload the full installer on "tag" builds (releases)
   - path: warzone2100-*_installer.zip
     name: Warzone2100 Installer
   - path: warzone2100-*.DEBUGSYMBOLS.7z
