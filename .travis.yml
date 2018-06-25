@@ -120,6 +120,7 @@ matrix:
         - build_tools/ci/travis/packaged_source_deploy_prepare.sh "build/warzone2100.tar.xz" "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
       after_success:
         # Deploy the generated .tar.xz to the buildbot
+        - eval "$(ssh-agent -s)" #start the ssh agent
         - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}*_src.tar.xz" --cleanold
 
     # Build for macOS
