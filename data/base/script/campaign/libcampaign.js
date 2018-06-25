@@ -3431,37 +3431,40 @@ function camNexusLaugh()
 
 function camAbsorbPlayer(who, to)
 {
-     if (!camDef(who))
-     {
-          who = CAM_HUMAN_PLAYER;
-     }
-     if (!camDef(to))
-     {
-          to = NEXUS;
-     }
+	if (!camDef(who))
+	{
+		who = CAM_HUMAN_PLAYER;
+	}
+	if (!camDef(to))
+	{
+		to = NEXUS;
+	}
 
-     var units = enumDroid(who);
+	var units = enumDroid(who);
 	var i = 0;
 	var len = 0;
+
 	for (i = 0, len = units.length; i < len; i++)
 	{
-		if (!donateObject(units[i], to))
+		var droid = units[i];
+		if (!donateObject(droid, to))
 		{
-			camSafeRemoveObject(units[i], false);
+			camSafeRemoveObject(droid, false);
 		}
 	}
 
-    var structs = enumStruct(who);
-    for (i = 0, len = structs.length; i < len; i++)
-    {
-         if (!donateObject(structs[i], to))
-	    {
-		    camSafeRemoveObject(structs[i], false);
-	    }
-    }
+	var structs = enumStruct(who);
+	for (i = 0, len = structs.length; i < len; i++)
+	{
+		var structure = structs[i];
+		if (!donateObject(structure, to))
+		{
+			camSafeRemoveObject(structure, false);
+		}
+	}
 
-    camTrace("Player " + who + " has been absorbed by player" + to);
-    changePlayerColour(who, to);
+	camTrace("Player " + who + " has been absorbed by player" + to);
+	changePlayerColour(who, to);
 }
 
 //Steal a droid or structure from a player.
@@ -3472,50 +3475,54 @@ function camHackIntoPlayer(player, to)
 		return;
 	}
 
-     if (!camDef(player))
-     {
-          player = CAM_HUMAN_PLAYER;
-     }
-     if (!camDef(to))
-     {
-          to = NEXUS;
-     }
-     if (!camDef(__camLastNexusAttack))
-     {
-          lastNexusHit = 0;
-     }
+	if (!camDef(player))
+	{
+		player = CAM_HUMAN_PLAYER;
+	}
+	if (!camDef(to))
+	{
+		to = NEXUS;
+	}
+	if (!camDef(__camLastNexusAttack))
+	{
+		__camLastNexusAttack = 0;
+	}
 
-	//HACK: Seems HQ can not be donated yet so destroy it for now.
-     var tmp = camRand(2) ? enumDroid(player) : enumStruct(player).filter(function(s) { return (s.status === BUILT); });
-	if (!__camLastNexusAttack || (gameTime > (__camLastNexusAttack + 5000)) && (camRand(101) <= 25))
-     {
-		var obj = !__camLastNexusAttack ? enumStruct(player, HQ)[0] : tmp[camRand(tmp.length)];
+	var tmp = [];
+	if (camRand(2) === 0)
+	{
+		tmp = enumDroid(player).filter(function(d) {
+			return !camIsTransporter(d);
+		});
+	}
+	if (tmp.length === 0)
+	{
+		tmp = enumStruct(player).filter(function(s) {
+			return (s.status === BUILT);
+		});
+	}
+	if (tmp.length === 0)
+	{
+		return;
+	}
+
+	if (__camLastNexusAttack === 0 || (gameTime > (__camLastNexusAttack + 5000)) && (camRand(100) < 25))
+	{
+		//Try stealing the HQ first.
+		var obj;
+		var objects = (__camLastNexusAttack === 0) ? enumStruct(player, HQ) : tmp;
 		__camLastNexusAttack = gameTime;
-		if (!camDef(obj))
+		if (objects.length === 0)
 		{
 			return;
 		}
+		obj = objects[camRand(objects.length)];
 		camTrace("stealing object: " + obj.name);
-		if (obj.type === STRUCTURE && obj.stattype === HQ)
+		if (!donateObject(obj, to))
 		{
-			if (!donateObject(obj, to))
-			{
-				camSafeRemoveObject(obj, false);
-			}
-			if (player === CAM_HUMAN_PLAYER)
-			{
-				setMiniMap(false);
-				setDesign(false);
-			}
+			camSafeRemoveObject(obj, true); //Explode it then.
 		}
-		else
-		{
-			if (!donateObject(obj, to))
-			{
-				camSafeRemoveObject(obj, true); //Explode it then.
-			}
-		}
-     }
+	}
 }
 
 function camSetNexusState(flag)
