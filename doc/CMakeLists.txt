@@ -27,10 +27,13 @@ install(FILES
 #######################
 # Main documentation
 
-find_package(A2X)
-if(NOT A2X_FOUND)
-	message( WARNING "a2x is not found. Documentation cannot be generated if asciidoc is not installed. (Skipping documentation generation.)" )
-	return()
+find_package(Asciidoctor)
+if(NOT Asciidoctor_FOUND)
+	find_package(A2X)
+	if(NOT A2X_FOUND)
+		message( WARNING "Neither Asciidoctor nor a2x was found. Documentation cannot be generated unless at least one is installed. (Skipping documentation generation.)" )
+		return()
+	endif()
 endif()
 
 set(doc_DATA
@@ -82,38 +85,80 @@ set(doc_DATA
 	"ScriptingManual.htm"
 	"docbook-xsl.css")
 
-add_custom_command(
-	TARGET doc_wz2100
-	COMMAND ${A2X_COMMAND}
-	ARGS
-		"-f"
-		"xhtml"
-		"-D"
-		"${CMAKE_CURRENT_BINARY_DIR}"
-		"${CMAKE_CURRENT_SOURCE_DIR}/quickstartguide.asciidoc"
-	)
+if(Asciidoctor_FOUND)
+	# Prefer Asciidoctor if it's available
 
-add_custom_command(
-	TARGET doc_wz2100
-	COMMAND ${A2X_COMMAND}
-	ARGS
-		"-f"
-		"xhtml"
-		"-D"
-		"${CMAKE_CURRENT_BINARY_DIR}"
-		"${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.6.asciidoc"
-	)
+	configure_file("quickstartguide.asciidoc" "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc" COPYONLY)
 
-if (${WKHTMLTOPDF_AVAILABLE})
+	add_custom_command(
+		TARGET doc_wz2100
+		COMMAND ${Asciidoctor_COMMAND}
+		ARGS
+			"-S"
+			"server"
+			"--failure-level=ERROR"
+			"-B"
+			"${CMAKE_CURRENT_BINARY_DIR}"
+			"-b"
+			"html5"
+			"-D"
+			"${CMAKE_CURRENT_BINARY_DIR}"
+			"${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc"
+		)
 
-add_custom_command(
-	TARGET doc_wz2100
-	COMMAND "wkhtmltopdf"
-	ARGS
-		"${CMAKE_CURRENT_SOURCE_DIR}/quickstartguide.htm"
-		"${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.pdf"
-	)
+	configure_file("warzone2100.6.asciidoc" "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc" COPYONLY)
 
+	add_custom_command(
+		TARGET doc_wz2100
+		COMMAND ${Asciidoctor_COMMAND}
+		ARGS
+			"-S"
+			"server"
+			"--failure-level=ERROR"
+			"-B"
+			"${CMAKE_CURRENT_BINARY_DIR}"
+			"-b"
+			"html5"
+			"-D"
+			"${CMAKE_CURRENT_BINARY_DIR}"
+			"${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc"
+		)
+
+elseif(A2X_FOUND)
+
+	add_custom_command(
+		TARGET doc_wz2100
+		COMMAND ${A2X_COMMAND}
+		ARGS
+			"-f"
+			"xhtml"
+			"-D"
+			"${CMAKE_CURRENT_BINARY_DIR}"
+			"${CMAKE_CURRENT_SOURCE_DIR}/quickstartguide.asciidoc"
+		)
+
+	add_custom_command(
+		TARGET doc_wz2100
+		COMMAND ${A2X_COMMAND}
+		ARGS
+			"-f"
+			"xhtml"
+			"-D"
+			"${CMAKE_CURRENT_BINARY_DIR}"
+			"${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.6.asciidoc"
+		)
+
+	if (${WKHTMLTOPDF_AVAILABLE})
+
+		add_custom_command(
+			TARGET doc_wz2100
+			COMMAND "wkhtmltopdf"
+			ARGS
+				"${CMAKE_CURRENT_SOURCE_DIR}/quickstartguide.htm"
+				"${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.pdf"
+			)
+
+	endif()
 endif()
 
 install(FILES ${doc_DATA} DESTINATION "doc/images/" COMPONENT Core)
