@@ -4,3 +4,6 @@
 [submodule "3rdparty/glm"]
 	path = 3rdparty/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "3rdparty/miniupnp"]
+	path = 3rdparty/miniupnp
+	url = https://github.com/miniupnp/miniupnp.git
