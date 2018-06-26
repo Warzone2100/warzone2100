@@ -23,6 +23,11 @@
  */
 /* GIMP RGBA C-Source image dump (wz2100icon.c) */
 
+#if defined( _MSC_VER )
+	#pragma warning( push )
+	#pragma warning( disable : 4125 ) // warning C4125: decimal digit terminates octal escape sequence
+#endif
+
 static const struct
 {
 	unsigned int 	 width;
@@ -192,3 +197,6 @@ static const struct
 	"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
 };
 
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
