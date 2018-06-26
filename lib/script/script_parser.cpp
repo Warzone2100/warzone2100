@@ -17,6 +17,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#if defined( _MSC_VER )
+	#pragma warning( disable : 4702 ) // warning C4702: unreachable code
+#endif
+
 /* All symbols defined below should begin with yy or YY, to avoid
    infringing on user name space.  This should be done even for local
    variables, as they might otherwise be expanded by user macros.
