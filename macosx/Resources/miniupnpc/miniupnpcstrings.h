@@ -1,8 +1,8 @@
 #ifndef MINIUPNPCSTRINGS_H_INCLUDED
 #define MINIUPNPCSTRINGS_H_INCLUDED
 
-#define OS_STRING "Windows"
-#define MINIUPNPC_VERSION_STRING "1.9"
+#define OS_STRING "Darwin"
+#define MINIUPNPC_VERSION_STRING "2.1"
 
 #if 0
 /* according to "UPnP Device Architecture 1.0" */

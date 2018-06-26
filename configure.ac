@@ -293,6 +293,7 @@ WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-st
 WZ_WARNINGS_GCC_CXX="${WZ_Wno_}enum-compare ${WZ_WARNINGS_GCC}"
 # gcc 8.0 added some fairly obnoxious string truncation warnings
 AX_C_CHECK_FLAG([-Werror -Wno-stringop-truncation -Wno-error=cpp], [#warning x], , WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC_CXX} -Wno-stringop-truncation")
+AX_C_CHECK_FLAG([-Werror -Wno-stringop-truncation -Wno-error=cpp], [#warning x], , WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC_C} -Wno-stringop-truncation")
 AX_C_CHECK_FLAG([-Werror -Wno-format-truncation -Wno-error=cpp], [#warning x], , WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC_CXX} -Wno-format-truncation")
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
@@ -489,6 +490,8 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty"
 # glm
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/glm"
+# miniupnpc
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/miniupnp"
 
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
@@ -506,7 +509,6 @@ AC_CONFIG_FILES([Makefile
 		data/music/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
-		3rdparty/miniupnpc/Makefile
 		3rdparty/micro-ecc/Makefile
 		3rdparty/sha2/Makefile
 		3rdparty/Makefile
