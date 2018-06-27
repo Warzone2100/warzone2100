@@ -212,7 +212,7 @@ int NETGetMinorVersion()
 void NETGameLocked(bool flag)
 {
 	NetPlay.GamePassworded = flag;
-	bool flagChanged = gamestruct.privateGame != flag;
+	bool flagChanged = gamestruct.privateGame != (uint32_t)flag;
 	gamestruct.privateGame = flag;
 	if (allow_joining && NetPlay.isHost && flagChanged)
 	{
