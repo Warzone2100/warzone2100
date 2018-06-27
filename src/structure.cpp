@@ -496,7 +496,7 @@ bool loadStructureStats(const WzString& filename)
 
 		psStats->flags = 0;
 		std::vector<WzString> flags = ini.value("flags").toWzStringList();
-		for (int i = 0; i < flags.size(); i++)
+		for (size_t i = 0; i < flags.size(); i++)
 		{
 			if (flags[i] == "Connected")
 			{
@@ -523,7 +523,7 @@ bool loadStructureStats(const WzString& filename)
 
 		// set structure models
 		std::vector<WzString> models = ini.value("structureModel").toWzStringList();
-		for (int j = 0; j < models.size(); j++)
+		for (size_t j = 0; j < models.size(); j++)
 		{
 			iIMDShape *imd = modelGet(models[j].trimmed());
 			ASSERT(imd != nullptr, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().c_str(), getID(psStats));
@@ -622,7 +622,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	std::vector<WzString> list = ini.childGroups();
-	for (int i = 0; i < list.size(); i++)
+	for (size_t i = 0; i < list.size(); i++)
 	{
 		WEAPON_EFFECT effectInc;
 		ini.beginGroup(list[i]);
@@ -633,7 +633,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 			continue;
 		}
 		std::vector<WzString> keys = ini.childKeys();
-		for (int j = 0; j < keys.size(); j++)
+		for (size_t j = 0; j < keys.size(); j++)
 		{
 			const WzString& strength = keys.at(j);
 			int modifier = ini.value(strength).toInt();

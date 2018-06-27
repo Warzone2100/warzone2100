@@ -50,7 +50,7 @@ WzString WzString::fromCodepoint(const WzUniCodepoint& codepoint)
 }
 
 // Constructs a string of the given size with every codepoint set to ch.
-WzString::WzString(int size, const WzUniCodepoint& ch)
+WzString::WzString(size_t size, const WzUniCodepoint& ch)
 {
 	try {
 		for (size_t i = 0; i < size; i++)
@@ -162,7 +162,13 @@ bool WzString::isEmpty() const
 
 int WzString::length() const
 {
-	return utf8::distance(_utf8String.begin(), _utf8String.end());
+	auto len_distance = utf8::distance(_utf8String.begin(), _utf8String.end());
+	if (len_distance > std::numeric_limits<int>::max())
+	{
+		ASSERT(len_distance <= std::numeric_limits<int>::max(), "The length (in codepoints) of a WzString exceeds the max of the return type for length()");
+		return std::numeric_limits<int>::max();
+	}
+	return (int)len_distance;
 }
 
 const WzUniCodepoint WzString::at(int position) const
@@ -433,28 +439,42 @@ WzString WzString::normalized(WzString::NormalizationForm mode) const
 
 // MARK: - Create from numbers
 
-WzString WzString::number(int32_t n)
+WzString WzString::number(int n)
 {
 	WzString newString;
 	newString._utf8String = std::to_string(n);
 	return newString;
 }
 
-WzString WzString::number(uint32_t n)
+WzString WzString::number(unsigned int n)
 {
 	WzString newString;
 	newString._utf8String = std::to_string(n);
 	return newString;
 }
 
-WzString WzString::number(int64_t n)
+WzString WzString::number(long n)
 {
 	WzString newString;
 	newString._utf8String = std::to_string(n);
 	return newString;
 }
 
-WzString WzString::number(uint64_t n)
+WzString WzString::number(unsigned long n)
+{
+	WzString newString;
+	newString._utf8String = std::to_string(n);
+	return newString;
+}
+
+WzString WzString::number(long long n)
+{
+	WzString newString;
+	newString._utf8String = std::to_string(n);
+	return newString;
+}
+
+WzString WzString::number(unsigned long long n)
 {
 	WzString newString;
 	newString._utf8String = std::to_string(n);

@@ -110,7 +110,7 @@ bool loadResearch(const WzString& filename)
 	memset(&dummy, 0, sizeof(dummy));
 	std::vector< std::vector<WzString> > preResearch;
 	preResearch.resize(list.size());
-	for (int inc = 0; inc < list.size(); ++inc)
+	for (size_t inc = 0; inc < list.size(); ++inc)
 	{
 		// HACK FIXME: the code assumes we have empty PLAYER_RESEARCH entries to throw around
 		for (auto &j : asPlayerResList)
@@ -227,7 +227,7 @@ bool loadResearch(const WzString& filename)
 
 		//set components results
 		std::vector<WzString> compResults = ini.value("resultComponents").toWzStringList();
-		for (int j = 0; j < compResults.size(); j++)
+		for (size_t j = 0; j < compResults.size(); j++)
 		{
 			WzString compID = compResults[j].trimmed();
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
@@ -243,7 +243,7 @@ bool loadResearch(const WzString& filename)
 
 		//set replaced components
 		std::vector<WzString> replacedComp = ini.value("replacedComponents").toWzStringList();
-		for (int j = 0; j < replacedComp.size(); j++)
+		for (size_t j = 0; j < replacedComp.size(); j++)
 		{
 			//read pair of components oldComponent:newComponent
 			std::vector<WzString> pair = replacedComp[j].split(":");
@@ -274,7 +274,7 @@ bool loadResearch(const WzString& filename)
 
 		//set redundant components
 		std::vector<WzString> redComp = ini.value("redComponents").toWzStringList();
-		for (int j = 0; j < redComp.size(); j++)
+		for (size_t j = 0; j < redComp.size(); j++)
 		{
 			WzString compID = redComp[j].trimmed();
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
@@ -290,7 +290,7 @@ bool loadResearch(const WzString& filename)
 
 		//set result structures
 		std::vector<WzString> resStruct = ini.value("resultStructures").toWzStringList();
-		for (int j = 0; j < resStruct.size(); j++)
+		for (size_t j = 0; j < resStruct.size(); j++)
 		{
 			WzString strucID = resStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID);
@@ -303,7 +303,7 @@ bool loadResearch(const WzString& filename)
 
 		//set required structures
 		std::vector<WzString> reqStruct = ini.value("requiredStructures").toWzStringList();
-		for (int j = 0; j < reqStruct.size(); j++)
+		for (size_t j = 0; j < reqStruct.size(); j++)
 		{
 			WzString strucID = reqStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
@@ -316,7 +316,7 @@ bool loadResearch(const WzString& filename)
 
 		//set redundant structures
 		std::vector<WzString> redStruct = ini.value("redStructures").toWzStringList();
-		for (int j = 0; j < redStruct.size(); j++)
+		for (size_t j = 0; j < redStruct.size(); j++)
 		{
 			WzString strucID = redStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
@@ -332,10 +332,10 @@ bool loadResearch(const WzString& filename)
 	}
 
 	//Load and check research pre-requisites (need do it AFTER loading research items)
-	for (int inc = 0; inc < asResearch.size(); inc++)
+	for (size_t inc = 0; inc < asResearch.size(); inc++)
 	{
 		std::vector<WzString> &preRes = preResearch[inc];
-		for (int j = 0; j < preRes.size(); j++)
+		for (size_t j = 0; j < preRes.size(); j++)
 		{
 			WzString resID = preRes[j].trimmed();
 			RESEARCH *preResItem = getResearch(resID.toUtf8().c_str());
@@ -1090,7 +1090,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 a duplicate*/
 static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 {
-	for (int inc = 0; inc < numStats; inc++)
+	for (size_t inc = 0; inc < numStats; inc++)
 	{
 
 		ASSERT_OR_RETURN(false, asResearch[inc].id.compare(psResearch->id) != 0,

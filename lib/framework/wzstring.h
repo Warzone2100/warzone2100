@@ -56,7 +56,7 @@ private:
 class WzString {
 public:
 	WzString() { }
-	WzString(int size, const WzUniCodepoint& ch);
+	WzString(size_t size, const WzUniCodepoint& ch);
 	WzString(WzString&& other) noexcept : _utf8String(std::move(other._utf8String)) { }
 	WzString(const WzString& other) noexcept : _utf8String(other._utf8String) { }
 	WzString(const char * str, int size = -1);
@@ -119,10 +119,12 @@ public:
 
 public:
 	// Create from numbers
-	static WzString number(int32_t n);
-	static WzString number(uint32_t n);
-	static WzString number(int64_t n);
-	static WzString number(uint64_t n);
+	static WzString number(int n);
+	static WzString number(unsigned int n);
+	static WzString number(long n);
+	static WzString number(unsigned long n);
+	static WzString number(long long n);
+	static WzString number(unsigned long long n);
 	static WzString number(double n);
 
 	// Useful when padding is needed

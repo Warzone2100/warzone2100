@@ -36,7 +36,7 @@
 // save the context information for the script system
 static bool eventSaveContext(WzConfig &ini)
 {
-	int numVars, numContext = 0;
+	UDWORD numVars, numContext = 0;
 	UDWORD hashedName;
 
 	// go through the context list
@@ -131,7 +131,7 @@ static bool eventSaveContext(WzConfig &ini)
 // load the context information for the script system
 static bool eventLoadContext(WzConfig &ini)
 {
-	SDWORD				numVars, numContext;
+	UDWORD				numVars, numContext;
 	SCRIPT_CONTEXT		*psCCont;
 	SCR_VAL_LOAD		loadFunc;
 	UDWORD				hashedName;
@@ -140,14 +140,14 @@ static bool eventLoadContext(WzConfig &ini)
 	INTERP_VAL			*psVal, data;
 
 	// get the number of contexts in the save file
-	numContext = ini.value("general/contexts", 0).toInt();
+	numContext = ini.value("general/contexts", 0).toUInt();
 
 	// go through the contexts
-	for (int context = 0; context < numContext; context++)
+	for (UDWORD context = 0; context < numContext; context++)
 	{
 		ini.beginGroup("context_" + WzString::number(context));
 		hashedName = ini.value("context").toUInt();
-		numVars = ini.value("numVars").toInt();
+		numVars = ini.value("numVars").toUInt();
 		release = (CONTEXT_RELEASE)ini.value("release").toInt();
 
 		psCode = (SCRIPT_CODE *)resGetDataFromHash("SCRIPT", hashedName);
@@ -170,7 +170,7 @@ static bool eventLoadContext(WzConfig &ini)
 		ini.beginGroup("var");
 
 		// set the context variables
-		for (int i = 0; i < numVars; i++)
+		for (UDWORD i = 0; i < numVars; i++)
 		{
 			ini.beginGroup(WzString::number(i));
 			// get the variable type

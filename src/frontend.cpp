@@ -380,7 +380,7 @@ static void startCampaignSelector()
 	addBottomForm();
 
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
-	for (int i = 0; i < list.size(); i++)
+	for (size_t i = 0; i < list.size(); i++)
 	{
 		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, gettext(list[i].name.toUtf8().c_str()), WBUT_TXTCENTRE);
 	}

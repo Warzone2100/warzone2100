@@ -371,7 +371,7 @@ void wzPerfWriteOut(const std::vector<PERF_STORE> &perfList, const WzString &out
 			PHYSFS_close(fileHandle);
 			return;
 		}
-		for (int i = 0; i < perfList.size(); i++)
+		for (size_t i = 0; i < perfList.size(); i++)
 		{
 			WzString line;
 			line += WzString::number(perfList[i].counters[PERF_START_FRAME]);

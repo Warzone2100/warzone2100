@@ -689,7 +689,7 @@ const char *loadResearchViewData(const char *fileName)
 	ASSERT_OR_RETURN(nullptr, PHYSFS_exists(fileName), "%s not found", fileName);
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	std::vector<WzString> list = ini.childGroups();
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		VIEWDATA *v = new VIEWDATA;
 		VIEW_RESEARCH *r = new VIEW_RESEARCH;
@@ -701,7 +701,7 @@ const char *loadResearchViewData(const char *fileName)
 		ini.beginGroup(list[i]);
 
 		v->textMsg = ini.value("text").toWzStringList();
-		for (int j = 0; j < v->textMsg.size(); j++)
+		for (size_t j = 0; j < v->textMsg.size(); j++)
 		{
 			v->textMsg[j].remove("\t");
 			v->textMsg[j] = WzString::fromUtf8(_(v->textMsg[j].toUtf8().c_str()));

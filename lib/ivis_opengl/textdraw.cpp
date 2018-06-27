@@ -380,7 +380,7 @@ public:
 		int32_t x = 0;
 		int32_t y = 0;
 		std::vector<HarfbuzzPosition> glyphes;
-		for (int glyphIndex = 0; glyphIndex < glyphCount; ++glyphIndex)
+		for (unsigned int glyphIndex = 0; glyphIndex < glyphCount; ++glyphIndex)
 		{
 			glyphes.emplace_back(glyphInfo[glyphIndex].codepoint, Vector2i(x + glyphPos[glyphIndex].x_offset, y + glyphPos[glyphIndex].y_offset));
 
