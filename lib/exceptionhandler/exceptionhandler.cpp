@@ -24,7 +24,16 @@
 
 #if defined(WZ_OS_WIN)
 #include <tchar.h>
+#if defined( _MSC_VER )
+	// Silence warning when using MSVC + the Windows 7 SDK (required for XP compatibility)
+	//	warning C4091: 'typedef ': ignored on left of 'tagGPFIDL_FLAGS' when no variable is declared
+	#pragma warning( push )
+	#pragma warning( disable : 4091 )
+#endif
 #include <shlobj.h>
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
 #include <shlwapi.h>
 
 #include "exchndl.h"
