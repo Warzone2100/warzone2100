@@ -185,12 +185,21 @@ static void queue(const Q &q, int32_t &v)
 	// Example: int32_t -5 -4 -3 -2 -1  0  1  2  3  4  5
 	// becomes uint32_t  9  7  5  3  1  0  2  4  6  8 10
 
+#if defined( _MSC_VER )
+	#pragma warning( push )
+	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
+#endif
+
 	uint32_t b = (uint32_t)v << 1 ^ (-((uint32_t)v >> 31));
 	queue(q, b);
 	if (Q::Direction == Q::Read)
 	{
 		v = b >> 1 ^ -(b & 1);
 	}
+
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
 }
