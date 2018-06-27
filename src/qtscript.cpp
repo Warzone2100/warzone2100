@@ -797,7 +797,7 @@ bool loadScriptStates(const char *filename)
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		int player = ini.value("me").toInt();
@@ -810,7 +810,7 @@ bool loadScriptStates(const char *filename)
 			node.ms = ini.value("ms").toInt();
 			node.frameTime = ini.value("frame").toInt();
 			node.engine = engine;
-			debug(LOG_SAVE, "Registering trigger %d for player %d, script %s",
+			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
 			      i, node.player, scriptName.toUtf8().constData());
 			node.function = ini.value("function").toString();
 			node.baseobj = ini.value("baseobj", -1).toInt();
@@ -822,7 +822,7 @@ bool loadScriptStates(const char *filename)
 			std::vector<WzString> keys = ini.childKeys();
 			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %lu values",
 			      player, scriptName.toUtf8().constData(), keys.size());
-			for (int j = 0; j < keys.size(); ++j)
+			for (size_t j = 0; j < keys.size(); ++j)
 			{
 				// IMPORTANT: "null" JSON values *MUST* map to QScriptValue::UndefinedValue.
 				//			  If they are set to QScriptValue::NullValue, it causes issues for libcampaign.js. (As the values become "defined".)
@@ -833,12 +833,12 @@ bool loadScriptStates(const char *filename)
 		else if (engine && list[i].startsWith("groups_"))
 		{
 			std::vector<WzString> keys = ini.childKeys();
-			for (int j = 0; j < keys.size(); ++j)
+			for (size_t j = 0; j < keys.size(); ++j)
 			{
 				std::vector<WzString> values = ini.value(keys.at(j)).toWzStringList();
 				bool ok = false; // check if number
 				int droidId = keys.at(j).toInt(&ok);
-				for (int k = 0; ok && k < values.size(); k++)
+				for (size_t k = 0; ok && k < values.size(); k++)
 				{
 					int groupId = values.at(k).toInt();
 					loadGroup(engine, groupId, droidId);

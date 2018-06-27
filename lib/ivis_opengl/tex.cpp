@@ -202,7 +202,7 @@ int iV_GetTexture(const char *filename, bool compression)
 	/* Have we already loaded this one then? */
 	sstrcpy(path, filename);
 	pie_MakeTexPageName(path);
-	for (int i = 0; i < _TEX_PAGE.size(); i++)
+	for (size_t i = 0; i < _TEX_PAGE.size(); i++)
 	{
 		if (strncmp(path, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0)
 		{
@@ -237,12 +237,12 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 	sstrcpy(tmpname, oldfile.toUtf8().c_str());
 	pie_MakeTexPageName(tmpname);
 	// Have we already loaded this one?
-	for (int i = 0; i < _TEX_PAGE.size(); i++)
+	for (size_t i = 0; i < _TEX_PAGE.size(); i++)
 	{
 		if (strcmp(tmpname, _TEX_PAGE[i].name) == 0)
 		{
 			GL_DEBUG("Replacing texture");
-			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %d (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().c_str(), i, _TEX_PAGE[i].id->id());
+			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %zu (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().c_str(), i, _TEX_PAGE[i].id->id());
 			sstrcpy(tmpname, newfile.toUtf8().c_str());
 			pie_MakeTexPageName(tmpname);
 			pie_AddTexPage(&image, tmpname, true, i);

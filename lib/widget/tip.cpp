@@ -163,7 +163,7 @@ void tipDisplay()
 
 			fw = 0;
 			displayCache.wzTip.resize(pTip.size());
-			for (int n = 0; n < pTip.size(); ++n)
+			for (size_t n = 0; n < pTip.size(); ++n)
 			{
 				displayCache.wzTip[n].setText(pTip[n], FontID);
 				fw = std::max<int>(fw, displayCache.wzTip[n].width());

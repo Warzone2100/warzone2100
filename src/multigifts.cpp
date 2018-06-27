@@ -338,7 +338,6 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 // give technologies.
 static void giftResearch(uint8_t from, uint8_t to, bool send)
 {
-	int		i;
 	uint32_t	dummy = 0;
 
 	if (send)
@@ -359,7 +358,7 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You Technology Documents"), getPlayerName(from)));
 		}
 		// For each topic
-		for (i = 0; i < asResearch.size(); i++)
+		for (size_t i = 0; i < asResearch.size(); i++)
 		{
 			// If they have it and we don't research it
 			if (IsResearchCompleted(&asPlayerResList[from][i])

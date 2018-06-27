@@ -4335,7 +4335,7 @@ static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentD
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		DROID *psDroid;
@@ -4512,7 +4512,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 	std::vector<WzString> list = ini.childGroups();
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
 	std::vector<std::pair<int, WzString> > sortedList;
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		DROID_TYPE droidType = (DROID_TYPE)ini.value("droidType").toInt();
@@ -5028,7 +5028,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 //return id of a research topic based on the name
 static UDWORD getResearchIdFromName(const WzString &name)
 {
-	for (int inc = 0; inc < asResearch.size(); inc++)
+	for (size_t inc = 0; inc < asResearch.size(); inc++)
 	{
 		if (asResearch[inc].id.compare(name) == 0)
 		{
@@ -5053,7 +5053,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 	freeAllFlagPositions();		//clear any flags put in during level loads
 
 	std::vector<WzString> list = ini.childGroups();
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		FACTORY *psFactory;
 		RESEARCH_FACILITY *psResearch;
@@ -5418,7 +5418,7 @@ bool writeStructFile(const char *pFileName)
 					bool haveRun = psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size();
 					ProductionRun const &productionRun = haveRun ? asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc] : emptyRun;
 					ini.setValue("Factory/productionRuns", (int)productionRun.size());
-					for (int runNum = 0; runNum < productionRun.size(); runNum++)
+					for (size_t runNum = 0; runNum < productionRun.size(); runNum++)
 					{
 						ProductionRunEntry psCurrentProd = productionRun.at(runNum);
 						ini.setValue("Factory/Run/" + WzString::number(runNum) + "/quantity", psCurrentProd.quantity);
@@ -5488,7 +5488,7 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		STRUCTURE *psStruct;
@@ -5684,7 +5684,7 @@ bool loadSaveFeature2(const char *pFileName)
 	std::vector<WzString> list = ini.childGroups();
 	debug(LOG_SAVE, "Loading new style features (%lu found)", list.size());
 
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		FEATURE *pFeature;
 		ini.beginGroup(list[i]);
@@ -5786,7 +5786,7 @@ bool loadSaveTemplate(const char *pFileName)
 	{
 		return false;
 	}
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		int player = getPlayer(ini);
@@ -5974,7 +5974,7 @@ bool loadSaveCompList(const char *pFileName)
 	{
 		ini.beginGroup("player_" + WzString::number(player));
 		std::vector<WzString> list = ini.childKeys();
-		for (int i = 0; i < list.size(); ++i)
+		for (size_t i = 0; i < list.size(); ++i)
 		{
 			WzString name = list[i];
 			int state = ini.value(name, UNAVAILABLE).toInt();
@@ -6087,7 +6087,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 	{
 		ini.beginGroup("player_" + WzString::number(player));
 		std::vector<WzString> list = ini.childKeys();
-		for (int i = 0; i < list.size(); ++i)
+		for (size_t i = 0; i < list.size(); ++i)
 		{
 			WzString name = list[i];
 			int state = ini.value(name, UNAVAILABLE).toInt();
@@ -6142,7 +6142,7 @@ bool loadSaveResearch(const char *pFileName)
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	const int players = game.maxPlayers;
 	std::vector<WzString> list = ini.childGroups();
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		bool found = false;
@@ -6206,7 +6206,7 @@ static bool writeResearchFile(char *pFileName)
 {
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
 
-	for (int i = 0; i < asResearch.size(); ++i)
+	for (size_t i = 0; i < asResearch.size(); ++i)
 	{
 		RESEARCH *psStats = &asResearch[i];
 		bool valid = false;
@@ -6255,7 +6255,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		MESSAGE_TYPE type = (MESSAGE_TYPE)ini.value("type").toInt();
@@ -6444,7 +6444,7 @@ bool loadSaveStructLimits(const char *pFileName)
 	{
 		ini.beginGroup("player_" + WzString::number(player));
 		std::vector<WzString> list = ini.childKeys();
-		for (int i = 0; i < list.size(); ++i)
+		for (size_t i = 0; i < list.size(); ++i)
 		{
 			WzString name = list[i];
 			int limit = ini.value(name, 0).toInt();
@@ -6520,7 +6520,7 @@ bool readFiresupportDesignators(const char *pFileName)
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		uint32_t id = ini.value("Player_" + WzString::number(i) + "/id", NULL_ID).toInt();
 		if (id != NULL_ID)
@@ -6686,7 +6686,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		strcat(aFileName, "/struct.json");
 		WzConfig ini(aFileName, WzConfig::ReadOnly);
 		std::vector<WzString> list = ini.childGroups();
-		for (int i = 0; i < list.size(); ++i)
+		for (size_t i = 0; i < list.size(); ++i)
 		{
 			ini.beginGroup(list[i]);
 			WzString name = ini.value("name").toWzString();
@@ -6890,7 +6890,7 @@ static void plotFeature(char *backDropSprite)
 			return;
 		}
 		std::vector<WzString> list = ini.childGroups();
-		for (int i = 0; i < list.size(); ++i)
+		for (size_t i = 0; i < list.size(); ++i)
 		{
 			ini.beginGroup(list[i]);
 			WzString name = ini.value("name").toWzString();
