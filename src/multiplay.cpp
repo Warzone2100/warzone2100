@@ -1652,7 +1652,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 	ASSERT_OR_RETURN(false, fileSize_64 <= 0xFFFFFFFF, "File too big!");
 
 	// Schedule file to be sent.
-	files.emplace_back(pFileHandle, hash, fileSize_64);
+	files.emplace_back(pFileHandle, hash, (uint32_t)fileSize_64);
 
 	return true;
 }
