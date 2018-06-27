@@ -3111,7 +3111,7 @@ bool scrGameOver()
 	if (!bMultiPlayer)
 
 	{
-		if (gameOver == true && !bInTutorial)
+		if ((gameOver) && !bInTutorial)
 		{
 			//we need to set this here so the VIDEO_QUIT callback is not called
 			setScriptWinLoseVideo(PLAY_WIN);
