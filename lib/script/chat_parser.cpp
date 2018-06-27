@@ -19,6 +19,7 @@
 
 #if defined( _MSC_VER )
 	#pragma warning( disable : 4702 ) // warning C4702: unreachable code
+	#pragma warning( disable : 4065 ) // warning C4065: switch statement contains 'default' but no 'case' labels
 #endif
 
 /* All symbols defined below should begin with yy or YY, to avoid
