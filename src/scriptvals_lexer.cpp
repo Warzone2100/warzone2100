@@ -17,6 +17,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#if defined( _MSC_VER )
+	#pragma warning( disable : 4003 ) // warning C4003: not enough actual parameters for macro 'scrv_wrap'
+#endif
+
 #line 2 "scriptvals_lexer.cpp"
 
 #line 4 "scriptvals_lexer.cpp"
