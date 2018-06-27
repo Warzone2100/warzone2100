@@ -217,7 +217,14 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		{
 			const PROXIMITY_DISPLAY *ptr = (PROXIMITY_DISPLAY *)pObject;
 			position.x = ((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->x - player.p.x;
+#if defined( _MSC_VER )
+	#pragma warning( push )
+	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
+#endif
 			position.z = -(((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->y - player.p.z);
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
 			position.y = ((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->z;
 		}
 		else if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXOBJ)

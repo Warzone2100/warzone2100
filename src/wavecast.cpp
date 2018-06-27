@@ -78,6 +78,10 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 			for (unsigned s = 0; s < diamond; ++s)
 			{
 				WavecastTile tile;
+#if defined( _MSC_VER )
+	#pragma warning( push )
+	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
+#endif
 				switch (quadrant)
 				{
 				case 0: tile.dx =  diamond - s;     tile.dy =            s + 1; break;
@@ -85,6 +89,11 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 				case 2: tile.dx = -diamond + s + 1; tile.dy =          - s;     break;
 				case 3: tile.dx =            s + 1; tile.dy = -diamond + s + 1; break;
 				}
+
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
+
 				const int sdx = tile.dx * 2 - 1, sdy = tile.dy * 2 - 1; // 2*distance from sensor located at (0.5, 0.5)
 				const unsigned tileRadiusSq = sdx * sdx + sdy * sdy;
 

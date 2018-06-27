@@ -1980,7 +1980,14 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	}
 
 	dv.x = msgX - player.p.x;
+#if defined( _MSC_VER )
+	#pragma warning( push )
+	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
+#endif
 	dv.z = -(msgY - player.p.z);
+#if defined( _MSC_VER )
+	#pragma warning( pop )
+#endif
 
 	/* Translate the message */
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv));
