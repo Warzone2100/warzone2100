@@ -16,6 +16,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+#if defined( _MSC_VER )
+	#pragma warning( disable : 4003 ) // warning C4003: not enough actual parameters for macro 'strres_wrap'
+#endif
+
 #line 2 "strres_lexer.cpp"
 
 #line 4 "strres_lexer.cpp"
