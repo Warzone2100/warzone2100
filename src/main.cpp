@@ -25,7 +25,16 @@
 #include "lib/framework/wzapp.h"
 
 #if defined(WZ_OS_WIN)
+#  if defined( _MSC_VER )
+	// Silence warning when using MSVC + the Windows 7 SDK (required for XP compatibility)
+	//	warning C4091: 'typedef ': ignored on left of 'tagGPFIDL_FLAGS' when no variable is declared
+	#pragma warning( push )
+	#pragma warning( disable : 4091 )
+#  endif
 #  include <shlobj.h> /* For SHGetFolderPath */
+#  if defined( _MSC_VER )
+	#pragma warning( pop )
+#  endif
 #  include <shellapi.h> /* CommandLineToArgvW */
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
