@@ -5134,7 +5134,7 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	STRUCTURE_STATS	*psStat = &asStructureStats[index];
 	UDWORD			numIterations = 30;
 	bool			found = false;
-	int startX, startY, incX, incY, x, y;
+	int startX, startY, incX, incY, x = 0, y = 0;
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 

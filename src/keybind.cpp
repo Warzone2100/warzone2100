@@ -2654,7 +2654,7 @@ void kf_ToggleRadarTerrain()
 //Add a beacon (blip)
 void	kf_AddHelpBlip()
 {
-	int		worldX, worldY;
+	int		worldX = -1, worldY = -1;
 	UDWORD	i;
 	char	tempStr[255];
 	SDWORD	x, y;

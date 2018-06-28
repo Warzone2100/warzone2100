@@ -492,7 +492,7 @@ void loadMultiScripts()
 	resForceBaseDir("");
 }
 
-static int guessMapTilesetType(LEVEL_DATASET *psLevel)
+static MAP_TILESET_TYPE guessMapTilesetType(LEVEL_DATASET *psLevel)
 {
 	unsigned t = 0, c = 0;
 
