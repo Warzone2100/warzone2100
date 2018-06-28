@@ -88,6 +88,8 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 				case 1: tile.dx =          - s;     tile.dy =  diamond - s;     break;
 				case 2: tile.dx = -diamond + s + 1; tile.dy =          - s;     break;
 				case 3: tile.dx =            s + 1; tile.dy = -diamond + s + 1; break;
+				default:
+					debug(LOG_FATAL, "quadrant is unexpected value: %u", quadrant); // Silence later MSVC warning C4701: potentially uninitialized local variable 'tile' used
 				}
 
 #if defined( _MSC_VER )
