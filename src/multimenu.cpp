@@ -595,14 +595,14 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		widgAddButton(psRScreen, &sButInit);
 
 		STATIC_ASSERT(MAX_PLAYERS_IN_GUI <= ARRAY_SIZE(M_REQUEST_NP) + 1);
-		for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
+		for (unsigned mapNumPlayers = 2; mapNumPlayers <= MAX_PLAYERS_IN_GUI; ++mapNumPlayers)
 		{
-			static char ttip[MAX_PLAYERS_IN_GUI + 1][20];
-			sButInit.id             = M_REQUEST_NP[numPlayers - 2];
+			char ttip[100] = {0};
+			sButInit.id             = M_REQUEST_NP[mapNumPlayers - 2];
 			sButInit.y		+= 22;
-			sButInit.UserData	= numPlayers;
-			ssprintf(ttip[numPlayers], ngettext("%d player", "%d players", numPlayers), numPlayers);
-			sButInit.pTip		= ttip[numPlayers];
+			sButInit.UserData	= mapNumPlayers;
+			ssprintf(ttip, ngettext("%d player", "%d players", mapNumPlayers), mapNumPlayers);
+			sButInit.pTip		= ttip;
 			widgAddButton(psRScreen, &sButInit);
 		}
 	}
