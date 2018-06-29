@@ -1360,11 +1360,11 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		for (int y = map.y; y < map.y + size.y; ++y)
+		for (int tileY = map.y; tileY < map.y + size.y; ++tileY)
 		{
-			for (int x = map.x; x < map.x + size.x; ++x)
+			for (int tileX = map.x; tileX < map.x + size.x; ++tileX)
 			{
-				MAPTILE *psTile = mapTile(x, y);
+				MAPTILE *psTile = mapTile(tileX, tileY);
 
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
@@ -1376,24 +1376,24 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				{
 					debug(LOG_ERROR, "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
 					      player, isHumanPlayer(player) ? "Human" : "AI", getName(pStructureType), map.x, map.y,
-					      getName(getTileStructure(x, y)->pStructureType), x, y);
+					      getName(getTileStructure(tileX, tileY)->pStructureType), tileX, tileY);
 					delete psBuilding;
 					return nullptr;
 				}
 			}
 		}
-		for (int y = map.y; y < map.y + size.y; ++y)
+		for (int tileY = map.y; tileY < map.y + size.y; ++tileY)
 		{
-			for (int x = map.x; x < map.x + size.x; ++x)
+			for (int tileX = map.x; tileX < map.x + size.x; ++tileX)
 			{
 				// We now know the previous loop didn't return early, so it is safe to save references to psBuilding now.
-				MAPTILE *psTile = mapTile(x, y);
+				MAPTILE *psTile = mapTile(tileX, tileY);
 				psTile->psObject = psBuilding;
 
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					auxSetBlocking(x, y, AIR_BLOCKED);
+					auxSetBlocking(tileX, tileY, AIR_BLOCKED);
 				}
 			}
 		}
@@ -1554,9 +1554,9 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		// Move any delivery points under the new structure.
 		StructureBounds bounds = getStructureBounds(psBuilding);
-		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+		for (unsigned playerNum = 0; playerNum < MAX_PLAYERS; ++playerNum)
 		{
-			for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
+			for (STRUCTURE *psStruct = apsStructLists[playerNum]; psStruct != nullptr; psStruct = psStruct->psNext)
 			{
 				FLAG_POSITION *fp = nullptr;
 				if (StructIsFactory(psStruct))
@@ -1573,7 +1573,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					if (unsigned(pos.x - bounds.map.x) < unsigned(bounds.size.x) && unsigned(pos.y - bounds.map.y) < unsigned(bounds.size.y))
 					{
 						// Delivery point fp is under the new structure. Need to move it.
-						setAssemblyPoint(fp, fp->coords.x, fp->coords.y, player, true);
+						setAssemblyPoint(fp, fp->coords.x, fp->coords.y, playerNum, true);
 					}
 				}
 			}
