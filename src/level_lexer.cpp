@@ -20,6 +20,9 @@
 #if defined( _MSC_VER )
 	#pragma warning( disable : 4003 ) // warning C4003: not enough actual parameters for macro 'lev_wrap'
 #endif
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wunneeded-internal-declaration" // warning: function 'yyinput' is not needed and will not be emitted
+#endif
 
 #line 2 "level_lexer.cpp"
 

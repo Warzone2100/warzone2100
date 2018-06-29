@@ -1,4 +1,8 @@
 
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wunneeded-internal-declaration" // warning: function 'yyinput' is not needed and will not be emitted
+#endif
+
 #line 3 "lex.audp_.c"
 
 #define  YY_INT_ALIGNED short int

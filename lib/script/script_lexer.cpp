@@ -17,6 +17,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wunneeded-internal-declaration" // warning: function 'yyinput' is not needed and will not be emitted
+#endif
+
 #line 2 "script_lexer.cpp"
 
 #line 4 "script_lexer.cpp"
