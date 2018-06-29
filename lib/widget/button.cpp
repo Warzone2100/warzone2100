@@ -277,46 +277,48 @@ void W_BUTTON::addOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc)
 	onClickHandlers.push_back(onClickFunc);
 }
 
-void StateButton::setState(unsigned state)
+void StateButton::setState(unsigned newStateValue)
 {
-	if (currentState == state)
+	if (currentState == newStateValue)
 	{
 		return;
 	}
 	dirty = true;
-	currentState = state;
-	std::map<int, Images>::const_iterator image = imageSets.find(state);
+	currentState = newStateValue;
+	std::map<int, Images>::const_iterator image = imageSets.find(newStateValue);
 	if (image != imageSets.end())
 	{
 		W_BUTTON::setImages(image->second);
 	}
-	std::map<int, std::string>::const_iterator tip = tips.find(state);
+	std::map<int, std::string>::const_iterator tip = tips.find(newStateValue);
 	if (tip != tips.end())
 	{
 		W_BUTTON::setTip(tip->second);
 	}
 }
 
-void StateButton::setTip(int state, const std::string& string)
+void StateButton::setTip(int stateValue, const std::string& string)
 {
-	tips[state] = string;
-	if (currentState == state)
+	ASSERT(stateValue >= 0, "This state value can't be set later: %d (setState is limited to unsigned)", stateValue);
+	tips[stateValue] = string;
+	if (currentState == stateValue)
 	{
 		W_BUTTON::setTip(string);
 	}
 }
 
-void StateButton::setTip(int state, char const *stringUtf8)
+void StateButton::setTip(int stateValue, char const *stringUtf8)
 {
-	setTip(state, (stringUtf8 != nullptr) ? std::string(stringUtf8) : std::string());
+	setTip(stateValue, (stringUtf8 != nullptr) ? std::string(stringUtf8) : std::string());
 }
 
-void StateButton::setImages(int state, Images const &images)
+void StateButton::setImages(int stateValue, Images const &stateImages)
 {
-	imageSets[state] = images;
+	ASSERT(stateValue >= 0, "This state value can't be set later: %d (setState is limited to unsigned)", stateValue);
+	imageSets[stateValue] = stateImages;
 	dirty = true;
-	if (currentState == state)
+	if (currentState == stateValue)
 	{
-		W_BUTTON::setImages(images);
+		W_BUTTON::setImages(stateImages);
 	}
 }

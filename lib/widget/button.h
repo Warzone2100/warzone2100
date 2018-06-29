@@ -95,10 +95,10 @@ class StateButton : public W_BUTTON
 
 public:
 	StateButton(WIDGET *parent) : W_BUTTON(parent) {}
-	void setState(unsigned state);
-	void setTip(int state, const std::string& string);
-	void setTip(int state, char const *stringUtf8);
-	void setImages(int state, Images const &images);
+	void setState(unsigned newStateValue);
+	void setTip(int stateValue, const std::string& string);
+	void setTip(int stateValue, char const *stringUtf8);
+	void setImages(int stateValue, Images const &stateImages);
 
 	using WIDGET::setTip;
 

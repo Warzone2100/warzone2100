@@ -51,7 +51,7 @@ public:
 	TabSelectionWidget(WIDGET *parent);
 
 	void setHeight(int height);
-	void addStyle(TabSelectionStyle const &style);
+	void addStyle(TabSelectionStyle const &tabStyle);
 
 	int tabs() const
 	{
