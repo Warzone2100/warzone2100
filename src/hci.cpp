@@ -377,6 +377,10 @@ static RETBUTSTATS retbutstats[NUMRETBUTS];
 
 void setReticuleFlash(int ButId, bool flash)
 {
+	if (MissionResUp)
+	{
+		return;
+	}
 	if (flash != retbutstats[ButId].flashing)
 	{
 		retbutstats[ButId].flashing = flash;
@@ -386,6 +390,11 @@ void setReticuleFlash(int ButId, bool flash)
 
 void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, WzString func, QScriptEngine *engine)
 {
+	if (MissionResUp)
+	{
+		return;
+	}
+
 	retbutstats[ButId].tip = tip;
 	retbutstats[ButId].filename = WzString::fromUtf8(filename.c_str());
 	retbutstats[ButId].filenameDown = WzString::fromUtf8(filenameDown.c_str());
