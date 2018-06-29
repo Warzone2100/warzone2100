@@ -69,9 +69,9 @@ void TabSelectionWidget::setHeight(int height)
 	setGeometry(x(), y(), width(), height);
 }
 
-void TabSelectionWidget::addStyle(TabSelectionStyle const &style)
+void TabSelectionWidget::addStyle(TabSelectionStyle const &tabStyle)
 {
-	styles.push_back(style);
+	styles.push_back(tabStyle);
 
 	doLayoutAll();
 }
@@ -137,12 +137,12 @@ void TabSelectionWidget::nextTabPage()
 
 void TabSelectionWidget::doLayoutAll()
 {
-	TabSelectionStyle style;
+	TabSelectionStyle tabStyle;
 	int scrollSpace = 0;
 	tabsAtOnce = tabs();
-	style.tabSize = WzSize(width() / tabs(), height());
-	style.scrollTabSize = WzSize(0, 0);
-	style.tabGap = 0;
+	tabStyle.tabSize = WzSize(width() / tabs(), height());
+	tabStyle.scrollTabSize = WzSize(0, 0);
+	tabStyle.tabGap = 0;
 	for (unsigned n = 0; n < styles.size(); ++n)
 	{
 		bool haveScroll_ = !styles[n].scrollTabSize.isEmpty();
@@ -152,20 +152,20 @@ void TabSelectionWidget::doLayoutAll()
 		{
 			scrollSpace = scrollSpace_;
 			tabsAtOnce = tabsAtOnce_;
-			style = styles[n];
+			tabStyle = styles[n];
 			break;
 		}
 	}
-	prevTabPageButton->setGeometry(0, 0, style.scrollTabSize.width(), style.scrollTabSize.height());
-	prevTabPageButton->setImages(style.prevScrollTabImage, style.prevScrollTabImageDown, style.prevScrollTabImageHighlight);
+	prevTabPageButton->setGeometry(0, 0, tabStyle.scrollTabSize.width(), tabStyle.scrollTabSize.height());
+	prevTabPageButton->setImages(tabStyle.prevScrollTabImage, tabStyle.prevScrollTabImageDown, tabStyle.prevScrollTabImageHighlight);
 	prevTabPageButton->show(currentTab >= tabsAtOnce);
-	nextTabPageButton->setGeometry(width() - style.scrollTabSize.width(), 0, style.scrollTabSize.width(), style.scrollTabSize.height());
-	nextTabPageButton->setImages(style.nextScrollTabImage, style.nextScrollTabImageDown, style.nextScrollTabImageHighlight);
+	nextTabPageButton->setGeometry(width() - tabStyle.scrollTabSize.width(), 0, tabStyle.scrollTabSize.width(), tabStyle.scrollTabSize.height());
+	nextTabPageButton->setImages(tabStyle.nextScrollTabImage, tabStyle.nextScrollTabImageDown, tabStyle.nextScrollTabImageHighlight);
 	nextTabPageButton->show(currentTab / tabsAtOnce < (tabs() - 1) / tabsAtOnce);
 	for (unsigned n = 0; n < tabButtons.size(); ++n)
 	{
-		tabButtons[n]->setGeometry(scrollSpace + n % tabsAtOnce * (style.tabSize.width() + style.tabGap), 0, style.tabSize.width(), style.tabSize.height());
-		tabButtons[n]->setImages(style.tabImage, style.tabImageDown, style.tabImageHighlight);
+		tabButtons[n]->setGeometry(scrollSpace + n % tabsAtOnce * (tabStyle.tabSize.width() + tabStyle.tabGap), 0, tabStyle.tabSize.width(), tabStyle.tabSize.height());
+		tabButtons[n]->setImages(tabStyle.tabImage, tabStyle.tabImageDown, tabStyle.tabImageHighlight);
 		tabButtons[n]->show(currentTab / tabsAtOnce == n / tabsAtOnce);
 		tabButtons[n]->setState(n == currentTab ? WBUT_LOCK : 0);
 	}

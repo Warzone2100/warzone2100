@@ -358,16 +358,16 @@ DROID::~DROID()
 	audio_RemoveObj(this);
 
 	DROID *psDroid = this;
-	DROID	*psCurr, *psNext;
+	DROID	*psCurr, *pNextGroupDroid = nullptr;
 
 	if (isTransporter(psDroid))
 	{
 		if (psDroid->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDroid->psGroup->psList; psCurr != nullptr && psCurr != psDroid; psCurr = psNext)
+			for (psCurr = psDroid->psGroup->psList; psCurr != nullptr && psCurr != psDroid; psCurr = pNextGroupDroid)
 			{
-				psNext = psCurr->psGrpNext;
+				pNextGroupDroid = psCurr->psGrpNext;
 				delete psCurr;
 			}
 		}

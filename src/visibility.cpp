@@ -198,10 +198,10 @@ SPOTTER::~SPOTTER()
 {
 	for (int i = 0; i < numWatchedTiles; i++)
 	{
-		const TILEPOS pos = watchedTiles[i];
-		MAPTILE *psTile = mapTile(pos.x, pos.y);
-		uint8_t *visionType = (pos.type == 0) ? psTile->watchers : psTile->sensors;
-		ASSERT(visionType[player] > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
+		const TILEPOS tilePos = watchedTiles[i];
+		MAPTILE *psTile = mapTile(tilePos.x, tilePos.y);
+		uint8_t *visionType = (tilePos.type == 0) ? psTile->watchers : psTile->sensors;
+		ASSERT(visionType[player] > 0, "Not watching watched tile (%d, %d)", (int)tilePos.x, (int)tilePos.y);
 		visionType[player]--;
 		updateTileVis(psTile);
 	}
