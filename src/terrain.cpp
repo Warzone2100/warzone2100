@@ -85,8 +85,8 @@ using RenderVertex = Vector3f;
 /// A vertex with a position and texture coordinates
 struct DecalVertex
 {
-	Vector3f pos;
-	Vector2f uv;
+	Vector3f pos = Vector3f(0.f, 0.f, 0.f);
+	Vector2f uv = Vector2f(0.f, 0.f);
 };
 
 /// The lightmap texture

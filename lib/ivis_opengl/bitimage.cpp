@@ -50,7 +50,7 @@ struct ImageMergeRectangle
 
 	int index;  // Index in ImageDefs array.
 	int page;   // Texture page index.
-	Vector2i loc, siz;
+	Vector2i loc = Vector2i(0, 0), siz = Vector2i(0, 0);
 	iV_Image *data;
 };
 

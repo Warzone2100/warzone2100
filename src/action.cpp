@@ -1853,7 +1853,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	ASSERT_OR_RETURN(, psAction->psObj == nullptr || !psAction->psObj->died, "Droid dead");
 
 	WEAPON_STATS *psWeapStats = getWeaponStats(psDroid, 0);
-	Vector2i pos;
+	Vector2i pos(0, 0);
 
 	CHECK_DROID(psDroid);
 
@@ -2355,7 +2355,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	// set blocking flags for all the other droids
 	for (const DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
-		Vector2i t;
+		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))
 		{
 			t = map_coord(psCurr->pos.xy);
@@ -2374,7 +2374,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	}
 
 	// search for landing tile; will stop when found or radius exceeded
-	Vector2i xyCoords;
+	Vector2i xyCoords(0, 0);
 	const bool foundTile = spiralSearch(startX, startY, vtolLandingRadius,
 	                                    vtolLandingTileSearchFunction, &xyCoords);
 	if (foundTile)
@@ -2387,7 +2387,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	// clear blocking flags for all the other droids
 	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
-		Vector2i t;
+		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))
 		{
 			t = map_coord(psCurr->pos.xy);

@@ -142,7 +142,7 @@ struct EFFECT
 	EFFECT *prev, *next; // Previous and next element in linked list
 
 	EFFECT() : player(MAX_PLAYERS), control(0), group(EFFECT_FREED), type(EXPLOSION_TYPE_SMALL), frameNumber(0), size(0),
-	           baseScale(0), specific(0), birthTime(0), lastFrame(0), frameDelay(0), lifeSpan(0), radius(0),
+	           baseScale(0), specific(0), position(0.f, 0.f, 0.f), velocity(0.f, 0.f, 0.f), rotation(0, 0, 0), spin(0, 0, 0), birthTime(0), lastFrame(0), frameDelay(0), lifeSpan(0), radius(0),
 	           imd(nullptr), prev(nullptr), next(nullptr) {}
 };
 

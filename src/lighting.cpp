@@ -52,8 +52,8 @@
 #define FOG_END_SCALE 0.6
 
 /*	The vector that holds the sun's lighting direction - planar */
-static Vector3f theSun;
-static Vector3f theSun_ForTileIllumination;
+static Vector3f theSun(0.f, 0.f, 0.f);
+static Vector3f theSun_ForTileIllumination(0.f, 0.f, 0.f);
 
 /*	Module function Prototypes */
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);

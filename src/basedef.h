@@ -88,7 +88,7 @@ struct SIMPLE_OBJECT
 
 	const OBJECT_TYPE type;                         ///< The type of object
 	UDWORD          id;                             ///< ID number of the object
-	Position        pos;                            ///< Position of the object
+	Position        pos = Position(0, 0, 0);        ///< Position of the object
 	Rotation        rot;                            ///< Object's yaw +ve rotation around up-axis
 	UBYTE           player;                         ///< Which player the object belongs to
 	UDWORD          born;                           ///< Time the game object was born
@@ -144,9 +144,9 @@ struct Spacetime
 	Spacetime() {}
 	Spacetime(Position pos_, Rotation rot_, uint32_t time_) : time(time_), pos(pos_), rot(rot_) {}
 
-	uint32_t time = 0;  ///< Game time
-	Position pos;       ///< Position of the object
-	Rotation rot;       ///< Rotation of the object
+	uint32_t time = 0;                  ///< Game time
+	Position pos = Position(0, 0, 0);   ///< Position of the object
+	Rotation rot;                       ///< Rotation of the object
 };
 
 static inline Spacetime getSpacetime(SIMPLE_OBJECT const *psObj)

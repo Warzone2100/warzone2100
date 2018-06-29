@@ -65,7 +65,7 @@ bool radarRotationArrow; ///< display arrow when radar rotation enabled?
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
 static UDWORD		*radarBuffer = nullptr;
-static Vector3i		playerpos;
+static Vector3i		playerpos = {0, 0, 0};
 
 PIELIGHT clanColours[] =
 {
@@ -565,7 +565,7 @@ static SDWORD getLengthAdjust()
 static void setViewingWindow()
 {
 	float pixSizeH, pixSizeV;
-	Vector3i v[4], tv[4], centre;
+	Vector3i v[4] = {{0, 0, 0}}, tv[4] = {{0, 0, 0}}, centre = {0, 0, 0};
 	int	shortX, longX, yDrop, yDropVar;
 	int	dif = getDistanceAdjust();
 	int	dif2 = getLengthAdjust();

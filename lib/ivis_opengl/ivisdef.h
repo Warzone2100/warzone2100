@@ -72,18 +72,18 @@ struct EDGE
 
 struct ANIMFRAME
 {
-	Vector3f scale;
-	Position pos;
+	Vector3f scale = Vector3f(0.f, 0.f, 0.f);
+	Position pos = Position(0, 0, 0);
 	Rotation rot;
 };
 
 struct iIMDPoly
 {
 	Vector2f *texCoord = nullptr;
-	Vector2f texAnim;
+	Vector2f texAnim = Vector2f(0.f, 0.f);
 	uint32_t flags = 0;
 	int32_t zcentre = 0;
-	Vector3f normal;
+	Vector3f normal = Vector3f(0.f, 0.f, 0.f);
 	int pindex[3] = { 0 };
 };
 
@@ -110,8 +110,8 @@ struct iIMDShape
 {
 	~iIMDShape();
 
-	Vector3i min;
-	Vector3i max;
+	Vector3i min = Vector3i(0, 0, 0);
+	Vector3i max = Vector3i(0, 0, 0);
 	unsigned int flags = 0;
 	int texpage = iV_TEX_INVALID;
 	int tcmaskpage = iV_TEX_INVALID;
@@ -120,7 +120,7 @@ struct iIMDShape
 	int sradius = 0;
 	int radius = 0;
 
-	Vector3f ocen;
+	Vector3f ocen = Vector3f(0.f, 0.f, 0.f);
 	unsigned short numFrames = 0;
 	unsigned short animInterval = 0;
 

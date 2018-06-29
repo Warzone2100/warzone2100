@@ -163,7 +163,7 @@ struct MousePress
 {
 	enum Action {None, Press, Release};
 
-	MousePress(Action action = None, MOUSE_KEY_CODE key = MOUSE_END) : action(action), key(key) {}
+	MousePress(Action action = None, MOUSE_KEY_CODE key = MOUSE_END) : action(action), key(key), pos(0,0) {}
 	bool empty() const
 	{
 		return action == None;

@@ -925,9 +925,9 @@ static inline void angle_check(int64_t *angletan, int positionSq, int height, in
  */
 static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock, bool direct)
 {
-	Vector3i pos, dest;
-	Vector2i start, diff, current, halfway, next, part;
-	Vector3i muzzle;
+	Vector3i pos(0, 0, 0), dest(0, 0, 0);
+	Vector2i start(0, 0), diff(0, 0), current(0, 0), halfway(0, 0), next(0, 0), part(0, 0);
+	Vector3i muzzle(0, 0, 0);
 	int distSq, partSq, oldPartSq;
 	int64_t angletan;
 

@@ -541,7 +541,10 @@ static void loadEmptyMapPreview()
 
 	// Slight hack to init array with a special value used to determine how many players on map
 	Vector2i playerpos[MAX_PLAYERS];
-	memset(playerpos, 0x77, sizeof(playerpos));
+	for (size_t i = 0; i < MAX_PLAYERS; ++i)
+	{
+		playerpos[i] = Vector2i(0x77777777, 0x77777777);
+	}
 
 	screen_enableMapPreview(ex, ey, playerpos);
 
@@ -698,7 +701,10 @@ void loadMapPreview(bool hideInterface)
 		psTile += mapWidth;
 	}
 	// Slight hack to init array with a special value used to determine how many players on map
-	memset(playerpos, 0x77, sizeof(playerpos));
+	for (size_t i = 0; i < MAX_PLAYERS; ++i)
+	{
+		playerpos[i] = Vector2i(0x77777777, 0x77777777);
+	}
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, playerpos);
 

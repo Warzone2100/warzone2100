@@ -115,7 +115,7 @@ void pie_setShadows(bool drawShadows)
 	shadows = drawShadows;
 }
 
-static Vector3f currentSunPosition;
+static Vector3f currentSunPosition(0.f, 0.f, 0.f);
 
 void pie_BeginLighting(const Vector3f &light)
 {

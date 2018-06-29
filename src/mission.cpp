@@ -271,7 +271,10 @@ void initMission()
 	}
 
 	// init the vtol return pos
-	memset(asVTOLReturnPos, 0, sizeof(Vector2i) * MAX_PLAYERS);
+	for (size_t i = 0; i < MAX_PLAYERS; ++i)
+	{
+		asVTOLReturnPos[i] = Vector2i(0, 0);
+	}
 
 	bDroidsToSafety = false;
 	setPlayCountDown(true);
@@ -283,7 +286,10 @@ void initMission()
 // reset the vtol landing pos
 void resetVTOLLandingPos()
 {
-	memset(asVTOLReturnPos, 0, sizeof(Vector2i)*MAX_PLAYERS);
+	for (size_t i = 0; i < MAX_PLAYERS; ++i)
+	{
+		asVTOLReturnPos[i] = Vector2i(0, 0);
+	}
 }
 
 //this is called everytime the game is quit

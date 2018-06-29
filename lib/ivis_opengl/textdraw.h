@@ -74,8 +74,8 @@ private:
 	int mPtsAboveBase = 0;
 	int mPtsBelowBase = 0;
 	int mPtsLineSize = 0;
-	Vector2i offsets;
-	Vector2i dimensions;
+	Vector2i offsets = Vector2i(0, 0);
+	Vector2i dimensions = Vector2i(0, 0);
 	float mRenderingHorizScaleFactor = 0.f;
 	float mRenderingVertScaleFactor = 0.f;
 	iV_fonts mFontID = font_count;

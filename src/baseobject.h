@@ -34,7 +34,10 @@ struct Spacetime;
 
 struct StructureBounds
 {
-	StructureBounds() {}
+	StructureBounds()
+		: map(0,0)
+		, size(0,0)
+	{}
 	StructureBounds(Vector2i const &map, Vector2i const &size) : map(map), size(size) {}
 	bool valid()
 	{

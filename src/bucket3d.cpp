@@ -62,8 +62,8 @@ static std::vector<BUCKET_TAG> bucketArray;
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm::mat4 &viewMatrix)
 {
 	SDWORD				z = 0, radius;
-	Vector2i				pixel;
-	Vector3i				position;
+	Vector2i				pixel(0, 0);
+	Vector3i				position(0, 0, 0);
 	UDWORD				droidSize;
 	DROID				*psDroid;
 	BODY_STATS			*psBStats;

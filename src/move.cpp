@@ -2039,7 +2039,7 @@ void moveUpdateDroid(DROID *psDroid)
 	SDWORD				moveSpeed;
 	uint16_t			moveDir;
 	PROPULSION_STATS	*psPropStats;
-	Vector3i 			pos;
+	Vector3i 			pos(0, 0, 0);
 	bool				bStarted = false, bStopped;
 
 	CHECK_DROID(psDroid);

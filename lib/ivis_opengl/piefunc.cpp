@@ -54,6 +54,7 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 		radarViewGfx[1] = new GFX(GFX_COLOUR, GL_LINE_STRIP, 2);
 	}
 
+	static_assert(VW_VERTICES == 5, "Assumption that VW_VERTICES == 5 invalid. Update the following code.");
 	pieVrts[0] = v[1];
 	pieVrts[1] = v[0];
 	pieVrts[2] = v[2];

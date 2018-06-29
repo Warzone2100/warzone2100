@@ -162,12 +162,12 @@ struct QueuedDroidInfo
 	DROID_ORDER order = DORDER_NONE;
 	uint32_t    destId = 0;     // if (subType == ObjOrder)
 	OBJECT_TYPE destType = OBJ_DROID;   // if (subType == ObjOrder)
-	Vector2i    pos;            // if (subType == LocOrder)
+	Vector2i    pos = Vector2i(0, 0);            // if (subType == LocOrder)
 	uint32_t    y = 0;          // if (subType == LocOrder)
 	uint32_t    structRef = 0;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 	uint16_t    direction = 0;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 	uint32_t    index = 0;      // if (order == DORDER_BUILDMODULE)
-	Vector2i    pos2;           // if (order == DORDER_LINEBUILD)
+	Vector2i    pos2 = Vector2i(0, 0);           // if (order == DORDER_LINEBUILD)
 	bool        add = false;
 	// subType == SecondaryOrder
 	SECONDARY_ORDER secOrder = DSO_UNUSED;

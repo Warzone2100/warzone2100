@@ -516,7 +516,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	static std::vector<Vector2i> path;  // Declared static to save allocations.
 	path.clear();
 
-	Vector2i newP;
+	Vector2i newP(0, 0);
 	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS / 2, world_coord(endCoord.y) + TILE_UNITS / 2); true; p = newP)
 	{
 		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
