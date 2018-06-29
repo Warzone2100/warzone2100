@@ -124,7 +124,7 @@ static int xSectors, ySectors;
 static bool terrainInitialised = false;
 
 /// Helper to specify the offset in a VBO
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+#define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 
 /// Helper variables for the DrawRangeElements functions
 GLuint dreStart, dreEnd, dreOffset;
