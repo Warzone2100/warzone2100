@@ -325,24 +325,6 @@ void showLabel(const QString &key, bool clear_old, bool jump_to)
 			}
 		}
 	}
-	else if (l.type == SCRIPT_RADIUS)
-	{
-		if (jump_to)
-		{
-			setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
-		}
-		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), mapWidth); x++)
-		{
-			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), mapHeight); y++) // l.p2.x is radius, not a bug
-			{
-				if (iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
-				{
-					MAPTILE *psTile = mapTile(x, y);
-					psTile->tileInfoBits |= BITS_MARKED;
-				}
-			}
-		}
-	}
 	else if (l.type == OBJ_DROID || l.type == OBJ_FEATURE || l.type == OBJ_STRUCTURE)
 	{
 		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)l.type, l.id, l.player);
