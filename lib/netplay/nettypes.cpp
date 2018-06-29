@@ -657,7 +657,7 @@ void NETstring(char *str, uint16_t maxlen)
 	 * unsigned 16-bit integer, not including \0 termination.
 	 */
 
-	uint16_t len = NETgetPacketDir() == PACKET_ENCODE ? strnlen1(str, maxlen) - 1 : 0;
+	uint16_t len = (NETgetPacketDir() == PACKET_ENCODE) ? ((uint16_t)strnlen1(str, maxlen)) - 1 : 0;
 	queueAuto(len);
 
 	// Truncate length if necessary

@@ -249,11 +249,11 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
 #define MAX_WAVECAST_LIST_SIZE 1360  // Trivial upper bound to what a fully upgraded WSS can use (its number of angles). Should probably be some factor times the maximum possible radius. Is probably a lot more than needed. Tested to need at least 180.
 	int heights[2][MAX_WAVECAST_LIST_SIZE];
-	int angles[2][MAX_WAVECAST_LIST_SIZE + 1];
+	size_t angles[2][MAX_WAVECAST_LIST_SIZE + 1];
 	int readListSize = 0, readListPos = 0, writeListPos = 0;  // readListSize, readListPos dummy initialisations.
 	int readList = 0;  // Reading from this list, writing to the other. Could also initialise to rand()%2.
 	int lastHeight = 0;  // lastHeight dummy initialisation.
-	int lastAngle = 0x7FFFFFFF;
+	size_t lastAngle = std::numeric_limits<size_t>::max();
 
 	// Start with full vision of all angles. (If someday wanting to make droids that can only look in one direction, change here, after getting the original angle values saved in the wavecast table.)
 	heights[!readList][writeListPos] = -0x7FFFFFFF - 1; // Smallest integer.

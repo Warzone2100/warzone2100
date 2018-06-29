@@ -24,7 +24,7 @@ struct WavecastTile
 {
 	int16_t dx, dy;            ///< Tile coordinates.
 	int32_t invRadius;         ///< Arbitrary constant divided by radius.
-	int16_t angBegin, angEnd;  ///< Start and finish angles for obstruction of view. Non-linear units, for comparison purposes only.
+	size_t angBegin, angEnd;  ///< Start and finish angles for obstruction of view. Non-linear units, for comparison purposes only.
 };
 
 

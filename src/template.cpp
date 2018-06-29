@@ -170,7 +170,7 @@ DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 	design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", WzString("ZNULLCONSTRUCT")).toWzString());
 	std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
 	ASSERT(weapons.size() <= MAX_WEAPONS, "Number of weapons (%lu) exceeds MAX_WEAPONS (%d)", weapons.size(), MAX_WEAPONS);
-	design.numWeaps = weapons.size();
+	design.numWeaps = (weapons.size() <= MAX_WEAPONS) ? (int8_t)weapons.size() : MAX_WEAPONS;
 	design.asWeaps[0] = getCompFromName(COMP_WEAPON, (weapons.size() >= 1) ? weapons[0] : "ZNULLWEAPON");
 	design.asWeaps[1] = getCompFromName(COMP_WEAPON, (weapons.size() >= 2) ? weapons[1] : "ZNULLWEAPON");
 	design.asWeaps[2] = getCompFromName(COMP_WEAPON, (weapons.size() >= 3) ? weapons[2] : "ZNULLWEAPON");
