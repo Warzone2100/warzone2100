@@ -4537,7 +4537,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		int id = ini.value("id", -1).toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
-		Vector2i tmp;
 		bool onMission = ini.value("onMission", false).toBool();
 		DROID_TEMPLATE templ, *psTemplate = &templ;
 
@@ -4673,7 +4672,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 		psDroid->sMove.lastBump = ini.value("lastBump").toInt();
 		psDroid->sMove.pauseTime = ini.value("pauseTime").toInt();
-		tmp = ini.vector2i("bumpPosition");
+		Vector2i tmp = ini.vector2i("bumpPosition");
 		psDroid->sMove.bumpPos = Vector3i(tmp.x, tmp.y, 0);
 
 		// Recreate path-finding jobs

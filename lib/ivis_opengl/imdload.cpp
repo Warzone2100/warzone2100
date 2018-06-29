@@ -697,7 +697,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 			for (int i = 0; i < s.objanimframes; i++)
 			{
 				int frame;
-				Vector3i pos, rot;
+				Vector3i pos(0, 0, 0), rot(0, 0, 0);
 
 				if (sscanf(pFileData, "%d %d %d %d %d %d %d %f %f %f%n",
 				           &frame, &pos.x, &pos.y, &pos.z, &rot.x, &rot.y, &rot.z,

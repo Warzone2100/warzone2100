@@ -2143,7 +2143,7 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	// Only display one arrow, bOrderEffectDisplayed must be set to false once per arrow.
 	if (!bOrderEffectDisplayed)
 	{
-		Vector3i position;
+		Vector3i position(0, 0, 0);
 		if (psOrder->psObj == nullptr)
 		{
 			position.x = psOrder->pos.x;

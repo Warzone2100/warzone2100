@@ -97,7 +97,7 @@ BASE_OBJECT		*g_pProjLastAttacker;
 
 struct ObjectShape
 {
-	ObjectShape() {}
+	ObjectShape() : isRectangular(false), size(0, 0) {}
 	ObjectShape(int radius) : isRectangular(false), size(radius, radius) {}
 	ObjectShape(int width, int breadth) : isRectangular(true), size(width, breadth) {}
 	ObjectShape(Vector2i widthBreadth) : isRectangular(true), size(widthBreadth) {}

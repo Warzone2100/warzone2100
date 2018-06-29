@@ -49,7 +49,8 @@ enum ENERGY_BAR
 
 struct iView
 {
-	Vector3i p, r;
+	Vector3i p = Vector3i(0, 0, 0);
+	Vector3i r = Vector3i(0, 0, 0);
 };
 
 extern bool showFPS;

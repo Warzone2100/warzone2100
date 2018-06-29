@@ -73,7 +73,7 @@ void rayCast(Vector2i src, Vector2i dst, RAY_CALLBACK callback, void *data)
 	Vector2i srcM = map_coord(src);
 	Vector2i dstM = map_coord(dst);
 
-	Vector2i step, tile, cur, end;
+	Vector2i step(0, 0), tile(0, 0), cur(0, 0), end(0, 0);
 	initSteps(srcM.x, dstM.x, tile.x, step.x, cur.x, end.x);
 	initSteps(srcM.y, dstM.y, tile.y, step.y, cur.y, end.y);
 

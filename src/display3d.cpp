@@ -1254,7 +1254,7 @@ bool clipXY(SDWORD x, SDWORD y)
 
 bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix)
 {
-	Vector2i pixel;
+	Vector2i pixel(0, 0);
 	pie_RotateProject(&normalizedPosition, viewMatrix, &pixel);
 	return pixel.x >= 0 && pixel.y >= 0 && pixel.x < pie_GetVideoBufferWidth() && pixel.y < pie_GetVideoBufferHeight();
 }
@@ -1275,7 +1275,7 @@ bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4& viewModelMatrix, 
 {
 	/* Get its absolute dimensions */
 	Vector3i origin;
-	Vector2i center;
+	Vector2i center(0, 0);
 	int wsRadius = 22; // World space radius, 22 = magic minimum
 	float radius;
 
@@ -3215,7 +3215,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	/* Get it's absolute dimensions */
 	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 	Vector3i origin;
-	Vector2i center;
+	Vector2i center(0, 0);
 	int wsRadius = 22; // World space radius, 22 = magic minimum
 	float radius;
 

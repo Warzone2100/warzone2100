@@ -130,8 +130,7 @@ void turnOffMultiMsg(bool bDoit)
 // throw a party when you win!
 bool multiplayerWinSequence(bool firstCall)
 {
-	static Position pos;
-	Position pos2;
+	static Position pos = Position(0, 0, 0);
 	static UDWORD last = 0;
 	float		rotAmount;
 	STRUCTURE	*psStruct;
@@ -176,7 +175,7 @@ bool multiplayerWinSequence(bool firstCall)
 
 	if (rand() % 3 == 0)
 	{
-		pos2 = pos;
+		Position pos2 = pos;
 		pos2.x += (rand() % world_coord(8)) - world_coord(4);
 		pos2.z += (rand() % world_coord(8)) - world_coord(4);
 
@@ -564,7 +563,6 @@ int scavengerPlayer()
 // probably temporary. Places the camera on the players 1st droid or struct.
 Vector3i cameraToHome(UDWORD player, bool scroll)
 {
-	Vector3i res;
 	UDWORD x, y;
 	STRUCTURE	*psBuilding;
 
@@ -601,6 +599,7 @@ Vector3i cameraToHome(UDWORD player, bool scroll)
 		setViewPos(x, y, true);
 	}
 
+	Vector3i res;
 	res.x = world_coord(x);
 	res.y = map_TileHeight(x, y);
 	res.z = world_coord(y);

@@ -25,7 +25,7 @@
 
 struct LIGHT
 {
-	Vector3i position;
+	Vector3i position = Vector3i(0, 0, 0);
 	UDWORD range;
 	PIELIGHT colour;
 };

@@ -111,7 +111,7 @@ static bool	structHasModule(STRUCTURE *psStruct);
 static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
 /// Hold the previously assigned player
-Vector2i positions[MAX_PLAYERS];
+Vector2i positions[MAX_PLAYERS] = {{0,0}};
 std::vector<Vector2i> derricks;
 
 bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2)

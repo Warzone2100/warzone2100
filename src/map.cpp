@@ -1781,7 +1781,7 @@ static int dangerFloodFill(int player)
 {
 	int i;
 	Vector2i pos = getPlayerStartPosition(player);
-	Vector2i npos;
+	Vector2i npos(0, 0);
 	uint8_t aux, block;
 	int x, y;
 	bool start = true;	// hack to disregard the blocking status of any building exactly on the starting position
