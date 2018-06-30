@@ -1048,7 +1048,7 @@ static bool upnp_add_redirect(int port)
 	r = UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, externalIPAddress);
 	if (r != UPNPCOMMAND_SUCCESS)
 	{
-		ssprintf(externalIPAddress, "???");
+		ssprintf(externalIPAddress, "%s", "???");
 	}
 	ssprintf(buf, _("Game configured port (%s) correctly on (%s)\nYour external IP is %s"), port_str, lanaddr, externalIPAddress);
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
