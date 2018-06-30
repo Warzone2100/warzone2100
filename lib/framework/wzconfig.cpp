@@ -620,7 +620,7 @@ bool json_variant::toBool() const
 	else if (mObj.is_string())
 	{
 		std::string result = json_variant_toType<std::string>(*this, nullptr, std::string());
-		std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+		std::transform(result.begin(), result.end(), result.begin(), [](const std::string::value_type& c) { return std::tolower(c, std::locale::classic()); });
 		return !result.empty() && result != "0" && result != "false";
 	}
 	else
