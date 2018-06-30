@@ -1,0 +1,38 @@
+FROM debian:stretch
+
+RUN set -ex; \
+	\
+	generalRequirements=' \
+		asciidoc-base \
+		autoconf \
+		automake \
+		build-essential \
+		docbook-xml \
+		gdb \
+		gettext \
+		git \
+		libfontconfig1-dev \
+		libfreetype6-dev \
+		libfribidi-dev \
+		libglew-dev \
+		libharfbuzz-dev \
+		libopenal-dev \
+		libphysfs-dev \
+		libpng-dev \
+		libsdl2-dev \
+		libtheora-dev \
+		libvorbis-dev \
+		pkg-config \
+		qtscript5-dev \
+		unzip \
+		xauth \
+		xsltproc \
+		xvfb \
+		wkhtmltopdf \
+		zip \
+	'; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends $generalRequirements; \
+	rm -rf /var/lib/apt/lists/*; \
+	printf '#!/bin/bash\nxvfb-run -a --server-args="-screen 0, 1024x768x24" /usr/bin/wkhtmltopdf $*' > /usr/local/bin/wkhtmltopdf; \
+	chmod +x /usr/local/bin/wkhtmltopdf;

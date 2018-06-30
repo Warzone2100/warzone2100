@@ -1,0 +1,47 @@
+#
+# dobi.yaml - resources for building, testing, and developing warzone2100
+#
+
+meta:
+    project: warzone2100
+    default: all
+
+#
+# Mounts
+#
+
+mount=source:
+    bind: .
+    path: "%%WORKDIR%%"
+
+#
+# Images
+#
+
+image=builder:
+    image: warzone2100-dev
+    context: docker/dobi
+    dockerfile: Dockerfile.build
+
+#
+# Jobs
+#
+
+job=binary:
+    use: builder
+    mounts: [source]
+    command: /bin/sh -c './autogen.sh && ./configure && make'
+    user: "{user.uid}"
+    working-dir: "%%WORKDIR%%"
+    annotations:
+      description: "Build the static binary"
+      tags: [binary]
+
+#
+# Aliases
+#
+
+alias=all:
+    tasks: [binary]
+    annotations:
+      description: "Run all build tasks"
