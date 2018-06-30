@@ -4001,6 +4001,8 @@ void intRunDesign()
 		{
 		case IDES_SYSTEM:
 		case IDES_TURRET:
+		case IDES_TURRET_A:
+		case IDES_TURRET_B:
 			intSetSystemShadowStats(psStats);
 			intSetBodyShadowStats(nullptr);
 			intSetPropulsionShadowStats(nullptr);
