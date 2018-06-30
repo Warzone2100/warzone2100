@@ -879,7 +879,7 @@ static void initialize_quantization_tables(UINT32 quality_factor)
 		}
 
 		Lqt[index] = (UINT8) value;
-		ILqt[i] = 0x8000 / value;
+		ILqt[i] = (UINT16)(0x8000 / value);
 
 		/* chrominance quantization table * quality factor */
 		value = chrominance_quant_table[i] * quality_factor;
@@ -895,7 +895,7 @@ static void initialize_quantization_tables(UINT32 quality_factor)
 		}
 
 		Cqt[index] = (UINT8) value;
-		ICqt[i] = 0x8000 / value;
+		ICqt[i] = (UINT16)(0x8000 / value);
 	}
 }
 
