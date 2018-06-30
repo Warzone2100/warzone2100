@@ -542,16 +542,16 @@ static std::vector<GLfloat> normals;
 static std::vector<GLfloat> texcoords;
 static std::vector<GLfloat> tangents;
 static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
-static int vertexCount;
+static uint16_t vertexCount = 0;
 
-static inline int addVertex(iIMDShape &s, int i, const iIMDPoly *p, int frameidx)
+static inline uint16_t addVertex(iIMDShape &s, int i, const iIMDPoly *p, int frameidx)
 {
 	// if texture animation flag is present, fetch animation coordinates for this polygon
 	// otherwise just show the first set of texel coordinates
 	int frame = (p->flags & iV_IMD_TEXANIM) ? frameidx : 0;
 
 	// See if we already have this defined, if so, return reference to it.
-	for (int j = 0; j < vertexCount; j++)
+	for (uint16_t j = 0; j < vertexCount; j++)
 	{
 		if (texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
 		    && texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
