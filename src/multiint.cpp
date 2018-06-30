@@ -4419,7 +4419,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 			else
 			{
-				ssprintf(buf, "∞");  // Player has ping of somewhat questionable quality.
+				ssprintf(buf, "%s", "∞");  // Player has ping of somewhat questionable quality.
 			}
 			subText += buf;
 		}
