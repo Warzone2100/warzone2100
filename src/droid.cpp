@@ -1965,9 +1965,9 @@ void	groupConsoleInformOfCentering(UDWORD groupNumber)
 /**
  * calculate muzzle base location in 3d world
  */
-bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
+bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
-	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
+	const iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
 	CHECK_DROID(psDroid);
 
@@ -2002,9 +2002,9 @@ bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_sl
 /**
  * calculate muzzle tip location in 3d world
  */
-bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
+bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
-	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
+	const iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
 	CHECK_DROID(psDroid);
 
@@ -2013,7 +2013,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 		char debugStr[250], debugLen = 0;  // Each "(%d,%d,%d)" uses up to 34 bytes, for very large values. So 250 isn't exaggerating.
 
 		Vector3i barrel(0, 0, 0);
-		iIMDShape *psWeaponImd = nullptr, *psMountImd = nullptr;
+		const iIMDShape *psWeaponImd = nullptr, *psMountImd = nullptr;
 
 		if (psDroid->asWeaps[weapon_slot].nStat)
 		{
@@ -2134,7 +2134,7 @@ unsigned int getDroidLevel(const DROID *psDroid)
 	return vec.size() - 1;
 }
 
-UDWORD getDroidEffectiveLevel(DROID *psDroid)
+UDWORD getDroidEffectiveLevel(const DROID *psDroid)
 {
 	UDWORD level = getDroidLevel(psDroid);
 	UDWORD cmdLevel = 0;
@@ -2151,7 +2151,7 @@ UDWORD getDroidEffectiveLevel(DROID *psDroid)
 	return MAX(level, cmdLevel);
 }
 
-const char *getDroidLevelName(DROID *psDroid)
+const char *getDroidLevelName(const DROID *psDroid)
 {
 	const BRAIN_STATS *psStats = getBrainStats(psDroid);
 	return PE_("rank", psStats->rankNames[getDroidLevel(psDroid)].c_str());
@@ -2486,7 +2486,7 @@ void setUpBuildModule(DROID *psDroid)
 }
 
 /* Just returns true if the droid's present body points aren't as high as the original*/
-bool	droidIsDamaged(DROID *psDroid)
+bool	droidIsDamaged(const DROID *psDroid)
 {
 	if (psDroid->body < psDroid->originalBody)
 	{
@@ -2509,7 +2509,7 @@ char const *getDroidResourceName(char const *pName)
 
 
 /*checks to see if an electronic warfare weapon is attached to the droid*/
-bool electronicDroid(DROID *psDroid)
+bool electronicDroid(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -2522,7 +2522,7 @@ bool electronicDroid(DROID *psDroid)
 	if (psDroid->droidType == DROID_COMMAND && psDroid->psGroup && psDroid->psGroup->psCommander == psDroid)
 	{
 		// if a commander has EW units attached it is electronic
-		for (DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (const DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			if (psDroid != psCurr && electronicDroid(psCurr))
 			{
@@ -2535,7 +2535,7 @@ bool electronicDroid(DROID *psDroid)
 }
 
 /*checks to see if the droid is currently being repaired by another*/
-bool droidUnderRepair(DROID *psDroid)
+bool droidUnderRepair(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -2543,7 +2543,7 @@ bool droidUnderRepair(DROID *psDroid)
 	if (droidIsDamaged(psDroid))
 	{
 		//look thru the list of players droids to see if any are repairing this droid
-		for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (const DROID *psCurr = apsDroidLists[psDroid->player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
 			     DROID_CYBORG_REPAIR) && psCurr->action ==
@@ -2601,7 +2601,7 @@ bool isFlying(const DROID *psDroid)
 }
 
 /* returns true if it's a VTOL weapon droid which has completed all runs */
-bool vtolEmpty(DROID *psDroid)
+bool vtolEmpty(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -2627,7 +2627,7 @@ bool vtolEmpty(DROID *psDroid)
 }
 
 /* returns true if it's a VTOL weapon droid which still has full ammo */
-bool vtolFull(DROID *psDroid)
+bool vtolFull(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -2691,7 +2691,7 @@ bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 }
 
 // true if a vtol droid currently returning to be rearmed
-bool vtolRearming(DROID *psDroid)
+bool vtolRearming(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -2716,7 +2716,7 @@ bool vtolRearming(DROID *psDroid)
 }
 
 // true if a droid is currently attacking
-bool droidAttacking(DROID *psDroid)
+bool droidAttacking(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -2741,7 +2741,7 @@ bool droidAttacking(DROID *psDroid)
 
 // see if there are any other vtols attacking the same target
 // but still rearming
-bool allVtolsRearmed(DROID *psDroid)
+bool allVtolsRearmed(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -2752,7 +2752,7 @@ bool allVtolsRearmed(DROID *psDroid)
 	}
 
 	bool stillRearming = false;
-	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (const DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (vtolRearming(psCurr) &&
 		    psCurr->order.type == psDroid->order.type &&
@@ -2768,7 +2768,7 @@ bool allVtolsRearmed(DROID *psDroid)
 
 
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/
-UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
+UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot)
 {
 	ASSERT_OR_RETURN(0, isVtolDroid(psDroid), "not a VTOL Droid");
 	// if weapon is a salvo weapon, then number of shots that can be fired = vtolAttackRuns * numRounds
@@ -2853,9 +2853,9 @@ void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
 
 /*compares the droid sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/
-bool droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
+bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 {
-	SENSOR_STATS	*psStats = nullptr;
+	const SENSOR_STATS	*psStats = nullptr;
 	int compIndex;
 
 	CHECK_DROID(psDroid);
@@ -2880,17 +2880,17 @@ bool droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		if (((DROID *)psObj)->droidType != DROID_SENSOR &&
-		    ((DROID *)psObj)->droidType != DROID_COMMAND)
+		if (((const DROID *)psObj)->droidType != DROID_SENSOR &&
+		    ((const DROID *)psObj)->droidType != DROID_COMMAND)
 		{
 			return false;
 		}
-		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR];
+		compIndex = ((const DROID *)psObj)->asBits[COMP_SENSOR];
 		ASSERT_OR_RETURN(false, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = asSensorStats + compIndex;
 		break;
 	case OBJ_STRUCTURE:
-		psStats = ((STRUCTURE *)psObj)->pStructureType->pSensor;
+		psStats = ((const STRUCTURE *)psObj)->pStructureType->pSensor;
 		if ((psStats == nullptr) ||
 		    (psStats->location != LOC_TURRET))
 		{
@@ -2911,7 +2911,7 @@ bool droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 	//finally check the right droid/sensor combination
 	// check vtol droid with commander
 	if ((isVtolDroid(psDroid) || !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-	    psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_COMMAND)
+	    psObj->type == OBJ_DROID && ((const DROID *)psObj)->droidType == DROID_COMMAND)
 	{
 		return true;
 	}
@@ -2939,7 +2939,7 @@ bool droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 }
 
 // return whether a droid has a CB sensor on it
-bool cbSensorDroid(DROID *psDroid)
+bool cbSensorDroid(const DROID *psDroid)
 {
 	if (psDroid->droidType != DROID_SENSOR)
 	{
@@ -2955,7 +2955,7 @@ bool cbSensorDroid(DROID *psDroid)
 }
 
 // return whether a droid has a standard sensor on it (standard, VTOL strike, or wide spectrum)
-bool standardSensorDroid(DROID *psDroid)
+bool standardSensorDroid(const DROID *psDroid)
 {
 	if (psDroid->droidType != DROID_SENSOR)
 	{
@@ -3027,10 +3027,10 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 }
 
 /*calculates the electronic resistance of a droid based on its experience level*/
-SWORD   droidResistance(DROID *psDroid)
+SWORD   droidResistance(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
-	BODY_STATS *psStats = asBodyStats + psDroid->asBits[COMP_BODY];
+	const BODY_STATS *psStats = asBodyStats + psDroid->asBits[COMP_BODY];
 	int resistance = psDroid->experience / (65536 / MAX(1, psStats->upgrade[psDroid->player].resistance));
 	// ensure resistance is a base minimum
 	resistance = MAX(resistance, psStats->upgrade[psDroid->player].resistance);

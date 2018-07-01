@@ -4952,9 +4952,9 @@ bool getLasSatExists(UDWORD player)
 
 
 /* calculate muzzle base location in 3d world */
-bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
+bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
-	iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
+	const iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -4986,9 +4986,9 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 }
 
 /* calculate muzzle tip location in 3d world */
-bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
+bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
-	iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
+	const iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -4996,7 +4996,7 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 	{
 		Vector3i barrel(0, 0, 0);
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
-		iIMDShape *psWeaponImd = nullptr, *psMountImd = nullptr;
+		const iIMDShape *psWeaponImd = nullptr, *psMountImd = nullptr;
 
 		if (nWeaponStat)
 		{

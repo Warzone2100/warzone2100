@@ -447,7 +447,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	{
 	case OBJ_DROID:
 		{
-			DROID *psDroid = (DROID *)psViewer;
+			const DROID *psDroid = (const DROID *)psViewer;
 
 			if (psDroid->order.psObj == psTarget && cbSensorDroid(psDroid))
 			{
@@ -458,7 +458,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 		}
 	case OBJ_STRUCTURE:
 		{
-			const STRUCTURE *psStruct = (STRUCTURE *)psViewer;
+			const STRUCTURE *psStruct = (const STRUCTURE *)psViewer;
 
 			// a structure that is being built cannot see anything
 			if (psStruct->status != SS_BUILT)
@@ -473,7 +473,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 				return 0;
 			}
 
-			if (psTarget->type == OBJ_DROID && isVtolDroid((DROID *)psTarget)
+			if (psTarget->type == OBJ_DROID && isVtolDroid((const DROID *)psTarget)
 			    && asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
 			{
 				range = 3 * range / 2;	// increase vision range of AA vs VTOL
@@ -504,8 +504,8 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	const bool jammed = psTile->jammerBits & ~alliancebits[psViewer->player];
 
 	// Special rule for VTOLs, as they are not affected by ECM
-	if (((psTarget->type == OBJ_DROID && isVtolDroid((DROID *)psTarget))
-	     || (psViewer->type == OBJ_DROID && isVtolDroid((DROID *)psViewer)))
+	if (((psTarget->type == OBJ_DROID && isVtolDroid((const DROID *)psTarget))
+	     || (psViewer->type == OBJ_DROID && isVtolDroid((const DROID *)psViewer)))
 	    && dist < range)
 	{
 		return UBYTE_MAX;
@@ -837,11 +837,11 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 
 	if (psViewer->type == OBJ_DROID)
 	{
-		psStats = asWeaponStats + ((DROID *)psViewer)->asWeaps[weapon_slot].nStat;
+		psStats = asWeaponStats + ((const DROID *)psViewer)->asWeaps[weapon_slot].nStat;
 	}
 	else if (psViewer->type == OBJ_STRUCTURE)
 	{
-		psStats = asWeaponStats + ((STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat;
+		psStats = asWeaponStats + ((const STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat;
 	}
 	// 2d distance
 	int distance = iHypot((psTarget->pos - psViewer->pos).xy);
@@ -941,11 +941,11 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 	/* CorvusCorax: get muzzle offset (code from projectile.c)*/
 	if (psViewer->type == OBJ_DROID && weapon_slot >= 0)
 	{
-		calcDroidMuzzleBaseLocation((DROID *)psViewer, &muzzle, weapon_slot);
+		calcDroidMuzzleBaseLocation((const DROID *)psViewer, &muzzle, weapon_slot);
 	}
 	else if (psViewer->type == OBJ_STRUCTURE && weapon_slot >= 0)
 	{
-		calcStructureMuzzleBaseLocation((STRUCTURE *)psViewer, &muzzle, weapon_slot);
+		calcStructureMuzzleBaseLocation((const STRUCTURE *)psViewer, &muzzle, weapon_slot);
 	}
 	else // incase anything wants a projectile
 	{
