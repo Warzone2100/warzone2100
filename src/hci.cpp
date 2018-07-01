@@ -1536,7 +1536,7 @@ INT_RETVAL intRunWidgets()
 							tmp.pos.x = structX;
 							tmp.pos.y = structY;
 							tmp.pos.z = map_Height(structX, structY) + world_coord(1) / 10;
-							const char *msg;
+							char *msg;
 
 							// In multiplayer games be sure to send a message to the
 							// other players, telling them a new structure has been
@@ -1545,7 +1545,7 @@ INT_RETVAL intRunWidgets()
 							// Send a text message to all players, notifying them of
 							// the fact that we're cheating ourselves a new
 							// structure.
-							sasprintf((char **)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."),
+							sasprintf(&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."),
 							          selectedPlayer, getName(psStructure->pStructureType));
 							sendTextMessage(msg, true);
 							Cheated = true;
@@ -1553,10 +1553,10 @@ INT_RETVAL intRunWidgets()
 					}
 					else if (psPositionStats->ref >= REF_FEATURE_START && psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
 					{
-						const char *msg;
+						char *msg;
 
 						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
-						sasprintf((char **)&msg, _("Player %u is cheating (debug menu) him/herself a new feature: %s."),
+						sasprintf(&msg, _("Player %u is cheating (debug menu) him/herself a new feature: %s."),
 						          selectedPlayer, getName(psPositionStats));
 						sendTextMessage(msg, true);
 						Cheated = true;
@@ -1567,7 +1567,7 @@ INT_RETVAL intRunWidgets()
 					else if (psPositionStats->ref >= REF_TEMPLATE_START &&
 					         psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 					{
-						const char *msg;
+						char *msg;
 						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
 						                     world_coord(structX) + TILE_UNITS / 2, world_coord(structY) + TILE_UNITS / 2,
 						                     selectedPlayer, false, nullptr);
@@ -1578,7 +1578,7 @@ INT_RETVAL intRunWidgets()
 
 							// Send a text message to all players, notifying them of
 							// the fact that we're cheating ourselves a new droid.
-							sasprintf((char **)&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
+							sasprintf(&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
 
 							psScrCBNewDroid = psDroid;
 							psScrCBNewDroidFact = nullptr;
@@ -1591,7 +1591,7 @@ INT_RETVAL intRunWidgets()
 						{
 							// Send a text message to all players, notifying them of
 							// the fact that we're cheating ourselves a new droid.
-							sasprintf((char **)&msg, _("Player %u is cheating (debug menu) him/herself a new droid."), selectedPlayer);
+							sasprintf(&msg, _("Player %u is cheating (debug menu) him/herself a new droid."), selectedPlayer);
 						}
 						sendTextMessage(msg, true);
 						Cheated = true;

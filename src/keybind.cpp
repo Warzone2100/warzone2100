@@ -364,7 +364,7 @@ void	kf_DebugDroidInfo()
 void kf_CloneSelected(int limit)
 {
 	DROID_TEMPLATE	*sTemplate = nullptr;
-	const char *msg;
+	char *msg;
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -412,7 +412,7 @@ void kf_CloneSelected(int limit)
 					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", getID(sTemplate), sTemplate->multiPlayerID);
 				}
 			}
-			sasprintf((char **)&msg, _("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, psDroid->aName);
+			sasprintf(&msg, _("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, psDroid->aName);
 			sendTextMessage(msg, true);
 			Cheated = true;
 			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
@@ -500,7 +500,7 @@ void kf_ToggleTeamChat()
 // --------------------------------------------------------------------------
 void	kf_SetKillerLevel()
 {
-	const char *cmsg;
+	char *cmsg;
 
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -510,7 +510,7 @@ void	kf_SetKillerLevel()
 	}
 
 	setDifficultyLevel(DL_KILLER);
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Hard as nails!!!"));
 	sendTextMessage(cmsg, true);
 }
@@ -531,7 +531,7 @@ void	kf_SetEasyLevel()
 // --------------------------------------------------------------------------
 void	kf_UpThePower()
 {
-	const char *cmsg;
+	char *cmsg;
 
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -540,7 +540,7 @@ void	kf_UpThePower()
 		return;
 	}
 	addPower(selectedPlayer, 1000);
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("1000 big ones!!!"));
 	sendTextMessage(cmsg, true);
 }
@@ -548,7 +548,7 @@ void	kf_UpThePower()
 // --------------------------------------------------------------------------
 void	kf_MaxPower()
 {
-	const char *cmsg;
+	char *cmsg;
 
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -557,7 +557,7 @@ void	kf_MaxPower()
 		return;
 	}
 	setPower(selectedPlayer, 100000);
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Power overwhelming"));
 	sendTextMessage(cmsg, true);
 }
@@ -591,7 +591,7 @@ void	kf_SetHardLevel()
 // --------------------------------------------------------------------------
 void	kf_SetToughUnitsLevel()
 {
-	const char *cmsg;
+	char *cmsg;
 
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -601,7 +601,7 @@ void	kf_SetToughUnitsLevel()
 	}
 
 	setDifficultyLevel(DL_TOUGH);
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Twice as nice!"));
 	sendTextMessage(cmsg, true);
 }
@@ -660,7 +660,7 @@ void	kf_FrameRate()
 void kf_ShowNumObjects()
 {
 	int droids, structures, features;
-	const char *cmsg;
+	char *cmsg;
 
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -670,7 +670,7 @@ void kf_ShowNumObjects()
 	}
 
 	objCount(&droids, &structures, &features);
-	sasprintf((char **)&cmsg, _("(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"),
+	sasprintf(&cmsg, _("(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"),
 	          selectedPlayer, droids, structures, features);
 	sendTextMessage(cmsg, true);
 }
@@ -688,7 +688,7 @@ void	kf_ToggleRadar()
 /* Toggles infinite power on/off */
 void	kf_TogglePower()
 {
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -705,7 +705,7 @@ void	kf_TogglePower()
 		powerCalc(true);
 	}
 
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, powerCalculated ? _("Infinite power disabled") : _("Infinite power enabled"));
 	sendTextMessage(cmsg, true);
 }
@@ -732,7 +732,7 @@ void	kf_ScreenDump()
 /* Make all functions available */
 void	kf_AllAvailable()
 {
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -744,7 +744,7 @@ void	kf_AllAvailable()
 #endif
 
 	makeAllAvailable();
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All items made available"));
 	sendTextMessage(cmsg, true);
 }
@@ -777,7 +777,7 @@ void	kf_TileInfo()
 void	kf_ToggleFog()
 {
 	static bool fogEnabled = false;
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -800,7 +800,7 @@ void	kf_ToggleFog()
 		pie_EnableFog(fogEnabled);
 	}
 
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, fogEnabled ? _("Fog on") : _("Fog off"));
 	sendTextMessage(cmsg, true);
 }
@@ -1218,7 +1218,7 @@ void	kf_AddMissionOffWorld()
 /* Tell the scripts to end a mission*/
 void	kf_EndMissionOffWorld()
 {
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game
@@ -1229,7 +1229,7 @@ void	kf_EndMissionOffWorld()
 	}
 #endif
 
-	sasprintf((char **)&cmsg, _("Warning!  This cheat can cause dire problems later on! [%s]"), _("Ending Mission."));
+	sasprintf(&cmsg, _("Warning!  This cheat can cause dire problems later on! [%s]"), _("Ending Mission."));
 	sendTextMessage(cmsg, true);
 
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_END);
@@ -1293,7 +1293,7 @@ void	kf_ToggleDebugMappings()
 
 void	kf_ToggleGodMode()
 {
-	const char *cmsg;
+	char *cmsg;
 	static bool pastReveal = true;
 
 #ifndef DEBUG
@@ -1343,7 +1343,7 @@ void	kf_ToggleGodMode()
 		setRevealStatus(true); // view the entire map
 	}
 
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, godMode ? _("God Mode ON") : _("God Mode OFF"));
 	sendTextMessage(cmsg, true);
 }
@@ -1361,11 +1361,11 @@ void	kf_SeekNorth()
 
 void kf_toggleTrapCursor()
 {
-	const char *msg;
+	char *msg;
 	bool trap = !war_GetTrapCursor();
 	war_SetTrapCursor(trap);
 	(trap ? wzGrabMouse : wzReleaseMouse)();
-	sasprintf((char **)&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
+	sasprintf(&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -1423,7 +1423,7 @@ void	kf_TogglePauseMode()
 void	kf_FinishAllResearch()
 {
 	UDWORD	j;
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1450,7 +1450,7 @@ void	kf_FinishAllResearch()
 			}
 		}
 	}
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Researched EVERYTHING for you!"));
 	sendTextMessage(cmsg, true);
 }
@@ -1485,7 +1485,7 @@ void kf_Reload()
 void	kf_FinishResearch()
 {
 	STRUCTURE	*psCurr;
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1516,7 +1516,7 @@ void	kf_FinishResearch()
 				{
 					researchResult(rindex, selectedPlayer, true, psCurr, true);
 				}
-				sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject));
+				sasprintf(&cmsg, _("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject));
 				sendTextMessage(cmsg, true);
 				intResearchFinished(psCurr);
 			}
@@ -1553,9 +1553,9 @@ void	kf_ToggleEnergyBars()
 // --------------------------------------------------------------------------
 void	kf_ChooseOptions()
 {
-	const char *cmsg;
+	char *cmsg;
 
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Debug menu is Open"));
 	sendTextMessage(cmsg, true);
 	jsShowDebug();
@@ -1849,7 +1849,7 @@ void	kf_KillEnemy()
 	UDWORD		player;
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1863,7 +1863,7 @@ void	kf_KillEnemy()
 	debug(LOG_DEATH, "Destroying enemy droids and structures");
 	CONPRINTF(ConsoleString, (ConsoleString,
 	                          "%s", _("Warning! This can have drastic consequences if used incorrectly in missions.")));
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All enemies destroyed by cheating!"));
 	sendTextMessage(cmsg, true);
 	Cheated = true;
@@ -1893,7 +1893,7 @@ void kf_KillSelected()
 {
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
-	const char *cmsg;
+	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1904,7 +1904,7 @@ void kf_KillSelected()
 	}
 #endif
 
-	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
+	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Destroying selected droids and structures!"));
 	sendTextMessage(cmsg, true);
 
