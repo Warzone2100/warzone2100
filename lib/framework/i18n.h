@@ -27,6 +27,9 @@
 #endif
 
 
+// To avoid `warning: ISO C++ forbids variable length array 'msg_ctxt_id' [-Wvla]`,
+// explicitly disable variable-sized arrays before including gettext.h
+#define _LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS 0
 #include "gettext.h"
 
 // Enable NLS for our parsers when it's enabled for us
