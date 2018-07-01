@@ -622,10 +622,10 @@ up different amount depending on their body size - currently all are set to one!
 int calcRemainingCapacity(const DROID *psTransporter)
 {
 	int capacity = TRANSPORTER_CAPACITY;
-	DROID *psDroid, *psNext;
+	const DROID *psDroid, *psNext;
 
 	// If it's dead then just return 0.
-	if (isDead((BASE_OBJECT *)psTransporter))
+	if (isDead((const BASE_OBJECT *)psTransporter))
 	{
 		return 0;
 	}

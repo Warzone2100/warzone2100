@@ -232,7 +232,7 @@ bool structureIsBlueprint(const STRUCTURE *psStructure)
 
 bool isBlueprint(const BASE_OBJECT *psObject)
 {
-	return psObject->type == OBJ_STRUCTURE && structureIsBlueprint((STRUCTURE *)psObject);
+	return psObject->type == OBJ_STRUCTURE && structureIsBlueprint((const STRUCTURE *)psObject);
 }
 
 void initStructLimits()

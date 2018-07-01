@@ -161,7 +161,7 @@ static void printWeaponInfo(const WEAPON_STATS *psStats)
 	}
 
 	CONPRINTF(ConsoleString, (ConsoleString, "Weapon: "));
-	printComponentInfo((COMPONENT_STATS *)psStats);
+	printComponentInfo((const COMPONENT_STATS *)psStats);
 	CONPRINTF(ConsoleString, (ConsoleString, "   lRng %d mRng %d %s\n"
 	                          "   lHt %d pause %d dam %d\n",
 	                          proj_GetLongRange(psStats, selectedPlayer), psStats->upgrade[selectedPlayer].minRange,
@@ -193,7 +193,7 @@ void printDroidInfo(const DROID *psDroid)
 	CONSTRUCT_STATS		*psConstStats;
 	REPAIR_STATS		*psRepairStats;
 
-	printBaseObjInfo((BASE_OBJECT *)psDroid);
+	printBaseObjInfo((const BASE_OBJECT *)psDroid);
 
 	CONPRINTF(ConsoleString, (ConsoleString, "   wt %d bSpeed %d sRng %d ECM %d bdy %d\n",
 	                          psDroid->weight, psDroid->baseSpeed, droidSensorRange(psDroid), objJammerPower(psDroid), psDroid->body));

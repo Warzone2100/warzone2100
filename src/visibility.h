@@ -80,21 +80,21 @@ static inline int objSensorRange(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		const int ecmrange = asECMStats[((DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+		const int ecmrange = asECMStats[((const DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
 		if (ecmrange > 0)
 		{
 			return ecmrange;
 		}
-		return asSensorStats[((DROID *)psObj)->asBits[COMP_SENSOR]].upgrade[psObj->player].range;
+		return asSensorStats[((const DROID *)psObj)->asBits[COMP_SENSOR]].upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		const int ecmrange = ((STRUCTURE *)psObj)->pStructureType->pECM->upgrade[psObj->player].range;
+		const int ecmrange = ((const STRUCTURE *)psObj)->pStructureType->pECM->upgrade[psObj->player].range;
 		if (ecmrange)
 		{
 			return ecmrange;
 		}
-		return ((STRUCTURE *)psObj)->pStructureType->pSensor->upgrade[psObj->player].range;
+		return ((const STRUCTURE *)psObj)->pStructureType->pSensor->upgrade[psObj->player].range;
 	}
 	return 0;
 }
@@ -103,11 +103,11 @@ static inline int objJammerPower(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		return asECMStats[((DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+		return asECMStats[((const DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		return ((STRUCTURE *)psObj)->pStructureType->pECM->upgrade[psObj->player].range;
+		return ((const STRUCTURE *)psObj)->pStructureType->pECM->upgrade[psObj->player].range;
 	}
 	return 0;
 }

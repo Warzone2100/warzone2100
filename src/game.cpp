@@ -5862,7 +5862,8 @@ bool writeTemplateFile(const char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up a terrain tile type map file
-bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
+// note: This function modifies pFileData directly while loading! (FIXME?)
+bool loadTerrainTypeMap(char *pFileData, UDWORD filesize)
 {
 	TILETYPE_SAVEHEADER	*psHeader;
 	UDWORD				i;

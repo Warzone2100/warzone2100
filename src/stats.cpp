@@ -2058,14 +2058,14 @@ bool objHasWeapon(const BASE_OBJECT *psObj)
 	//check if valid type
 	if (psObj->type == OBJ_DROID)
 	{
-		if (((DROID *)psObj)->numWeaps > 0)
+		if (((const DROID *)psObj)->numWeaps > 0)
 		{
 			return true;
 		}
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		if (((STRUCTURE *)psObj)->numWeaps > 0)
+		if (((const STRUCTURE *)psObj)->numWeaps > 0)
 		{
 			return true;
 		}
@@ -2082,17 +2082,17 @@ SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		if (((DROID *)psObj)->droidType != DROID_SENSOR && ((DROID *)psObj)->droidType != DROID_COMMAND)
+		if (((const DROID *)psObj)->droidType != DROID_SENSOR && ((const DROID *)psObj)->droidType != DROID_COMMAND)
 		{
 			return nullptr;
 		}
-		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR];
+		compIndex = ((const DROID *)psObj)->asBits[COMP_SENSOR];
 		ASSERT_OR_RETURN(nullptr, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = asSensorStats + compIndex;
 		break;
 	case OBJ_STRUCTURE:
-		psStats = ((STRUCTURE *)psObj)->pStructureType->pSensor;
-		if (psStats == nullptr || psStats->location != LOC_TURRET || ((STRUCTURE *)psObj)->status != SS_BUILT)
+		psStats = ((const STRUCTURE *)psObj)->pStructureType->pSensor;
+		if (psStats == nullptr || psStats->location != LOC_TURRET || ((const STRUCTURE *)psObj)->status != SS_BUILT)
 		{
 			return nullptr;
 		}
@@ -2107,13 +2107,13 @@ bool objRadarDetector(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_STRUCTURE)
 	{
-		STRUCTURE *psStruct = (STRUCTURE *)psObj;
+		const STRUCTURE *psStruct = (const STRUCTURE *)psObj;
 
 		return (psStruct->status == SS_BUILT && psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR);
 	}
 	else if (psObj->type == OBJ_DROID)
 	{
-		DROID *psDroid = (DROID *)psObj;
+		const DROID *psDroid = (const DROID *)psObj;
 		SENSOR_STATS *psSensor = getSensorStats(psDroid);
 
 		return (psSensor && psSensor->type == RADAR_DETECTOR_SENSOR);

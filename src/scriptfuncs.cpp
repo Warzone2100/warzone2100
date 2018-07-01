@@ -7309,7 +7309,7 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->visible[lookingPlayer]	//if can see it
-		    && objHasWeapon((BASE_OBJECT *) psStruct)) // check whether this structure is "dangerous"
+		    && objHasWeapon((const BASE_OBJECT *) psStruct)) // check whether this structure is "dangerous"
 		{
 			if (!bFinished || psStruct->status == SS_BUILT)
 			{
@@ -7336,7 +7336,7 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->visible[lookingPlayer]	//if can see it
-		    && objHasWeapon((BASE_OBJECT *) psStruct))
+		    && objHasWeapon((const BASE_OBJECT *) psStruct))
 		{
 			if (!bFinished
 			    || psStruct->status == SS_BUILT)
