@@ -1616,7 +1616,7 @@ const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 	{"ARTILLERY ROUND",     WE_ARTILLERY_ROUND      },
 	{"FLAMER",              WE_FLAMER               },
 	{"ANTI AIRCRAFT",       WE_ANTI_AIRCRAFT        },
-	{"ALL ROUNDER",         WE_ANTI_AIRCRAFT        },  // Alternative name for WE_ANTI_AIRCRAFT.
+	{"ALL ROUNDER",         WE_ALL_ROUNDER       },
 };
 const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFECT;
 
@@ -1642,9 +1642,13 @@ bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect)
 	{
 		*effect = WE_FLAMER;
 	}
-	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0 || strcmp(weaponEffect, "ALL ROUNDER") == 0)
+	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0)
 	{
 		*effect = WE_ANTI_AIRCRAFT;
+	}
+	else if (strcmp(weaponEffect, "ALL ROUNDER") == 0)
+	{
+		*effect = WE_ALL_ROUNDER;
 	}
 	else
 	{

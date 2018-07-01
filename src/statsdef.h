@@ -203,6 +203,7 @@ enum WEAPON_EFFECT
 	WE_ARTILLERY_ROUND,
 	WE_FLAMER,
 	WE_ANTI_AIRCRAFT,
+	WE_ALL_ROUNDER,
 	WE_NUMEFFECTS,			/**  The number of enumerators in this enum. */
 };
 
