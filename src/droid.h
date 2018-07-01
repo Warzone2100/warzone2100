@@ -172,17 +172,17 @@ UDWORD getNumDroidsForLevel(UDWORD level);
 
 bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
-bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
+bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 /* calculate muzzle base location in 3d world added int weapon_slot to fix the always slot 0 hack*/
-bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
+bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
 // finds a droid for the player and sets it to be the current selected droid
 bool selectDroidByID(UDWORD id, UDWORD player);
 
 /* Droid experience stuff */
 unsigned int getDroidLevel(const DROID *psDroid);
-UDWORD getDroidEffectiveLevel(DROID *psDroid);
-const char *getDroidLevelName(DROID *psDroid);
+UDWORD getDroidEffectiveLevel(const DROID *psDroid);
+const char *getDroidLevelName(const DROID *psDroid);
 
 // Get a droid's name.
 const char *droidGetName(const DROID *psDroid);
@@ -217,15 +217,15 @@ int nextModuleToBuild(STRUCTURE const *psStruct, int lastOrderedModule);
 void setUpBuildModule(DROID *psDroid);
 
 /// Just returns true if the droid's present body points aren't as high as the original
-bool droidIsDamaged(DROID *psDroid);
+bool droidIsDamaged(const DROID *psDroid);
 
 char const *getDroidResourceName(char const *pName);
 
 /// Checks to see if an electronic warfare weapon is attached to the droid
-bool electronicDroid(DROID *psDroid);
+bool electronicDroid(const DROID *psDroid);
 
 /// checks to see if the droid is currently being repaired by another
-bool droidUnderRepair(DROID *psDroid);
+bool droidUnderRepair(const DROID *psDroid);
 
 /// Count how many Command Droids exist in the world at any one moment
 UBYTE checkCommandExist(UBYTE player);
@@ -241,42 +241,42 @@ bool isVtolDroid(const DROID *psDroid);
 /// Returns true if the droid has VTOL propulsion and is moving.
 bool isFlying(const DROID *psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
-bool vtolEmpty(DROID *psDroid);
+bool vtolEmpty(const DROID *psDroid);
 /*returns true if a VTOL weapon droid which still has full ammo*/
-bool vtolFull(DROID *psDroid);
+bool vtolFull(const DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
 bool  vtolHappy(const DROID *psDroid);
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
 void updateVtolAttackRun(DROID *psDroid, int weapon_slot);
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/
-UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot);
+UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot);
 //assign rearmPad to the VTOL
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct);
 // true if a vtol droid currently returning to be rearmed
-bool vtolRearming(DROID *psDroid);
+bool vtolRearming(const DROID *psDroid);
 // true if a droid is currently attacking
-bool droidAttacking(DROID *psDroid);
+bool droidAttacking(const DROID *psDroid);
 // see if there are any other vtols attacking the same target
 // but still rearming
-bool allVtolsRearmed(DROID *psDroid);
+bool allVtolsRearmed(const DROID *psDroid);
 
 /// Compares the droid sensor type with the droid weapon type to see if the FIRE_SUPPORT order can be assigned
-bool droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid);
+bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid);
 
 /// Return whether a droid has a CB sensor on it
-bool cbSensorDroid(DROID *psDroid);
+bool cbSensorDroid(const DROID *psDroid);
 
 /// Return whether a droid has a standard sensor on it (standard, VTOL strike, or wide spectrum)
-bool standardSensorDroid(DROID *psDroid);
+bool standardSensorDroid(const DROID *psDroid);
 
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
  DROID *giftSingleDroid(DROID *psD, UDWORD to);
 
 /// Calculates the electronic resistance of a droid based on its experience level
-SWORD droidResistance(DROID *psDroid);
+SWORD droidResistance(const DROID *psDroid);
 
 /// This is called to check the weapon is allowed
 bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);

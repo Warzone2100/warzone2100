@@ -188,8 +188,8 @@ void setLasSatExists(bool state, UDWORD player);
 bool getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
-bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
-bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
+bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
+bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
 void buildingComplete(STRUCTURE *psBuilding);

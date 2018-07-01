@@ -31,7 +31,7 @@
 #include "display3d.h"
 #include "map.h"
 
-bool audio_ObjectDead(SIMPLE_OBJECT *psSimpleObj)
+bool audio_ObjectDead(const SIMPLE_OBJECT *psSimpleObj)
 {
 	/* check is valid simple object pointer */
 	if (psSimpleObj == nullptr)
@@ -89,7 +89,7 @@ void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY
 }
 
 // @FIXME we don't need to do this, since we are not using qsound.
-void audio_GetObjectPos(SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
+void audio_GetObjectPos(const SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	/* check is valid pointer */
 	ASSERT_OR_RETURN(, psBaseObj != nullptr, "Game object pointer invalid");
