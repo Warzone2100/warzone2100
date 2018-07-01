@@ -785,11 +785,11 @@ void draw3DScene()
 	if (showSAMPLES)		//Displays the number of sound samples we currently have
 	{
 		unsigned int width, height;
-		const char *Qbuf, *Lbuf, *Abuf;
+		char *Qbuf, *Lbuf, *Abuf;
 
-		sasprintf((char **)&Qbuf, "Que: %04u", audio_GetSampleQueueCount());
-		sasprintf((char **)&Lbuf, "Lst: %04u", audio_GetSampleListCount());
-		sasprintf((char **)&Abuf, "Act: %04u", sound_GetActiveSamplesCount());
+		sasprintf(&Qbuf, "Que: %04u", audio_GetSampleQueueCount());
+		sasprintf(&Lbuf, "Lst: %04u", audio_GetSampleListCount());
+		sasprintf(&Abuf, "Act: %04u", sound_GetActiveSamplesCount());
 		txtShowSamples_Que.setText(Qbuf, font_regular);
 		txtShowSamples_Lst.setText(Lbuf, font_regular);
 		txtShowSamples_Act.setText(Abuf, font_regular);
@@ -803,8 +803,8 @@ void draw3DScene()
 	}
 	if (showFPS)
 	{
-		const char *fps;
-		sasprintf((char **)&fps, "FPS: %d", frameRate());
+		char *fps;
+		sasprintf(&fps, "FPS: %d", frameRate());
 		txtShowFPS.setText(fps, font_regular);
 		const unsigned width = txtShowFPS.width() + 10;
 		const unsigned height = txtShowFPS.height();
