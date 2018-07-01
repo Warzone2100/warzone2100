@@ -118,7 +118,7 @@ bool loadMissionExtras(const char *pGameToLoad, SWORD levelType);
 bool loadScriptState(char *pFileName);
 
 /// Load the terrain types
-bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
+bool loadTerrainTypeMap(char *pFileData, UDWORD filesize);
 
 bool saveGame(const char *aFileName, GAME_TYPE saveType);
 

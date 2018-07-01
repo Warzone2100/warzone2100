@@ -170,7 +170,7 @@ static size_t unicode_utf8_char_length(const utf_32_char unicode_char)
 	return 0;
 }
 
-char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
+const char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
 {
 	while (*utf8_string != '\0'
 	       && index != 0)
@@ -186,7 +186,7 @@ char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
 		return nullptr;
 	}
 
-	return (char *)utf8_string;
+	return utf8_string;
 }
 
 /** Encodes a single Unicode character to a UTF-8 encoded string.
@@ -434,7 +434,7 @@ utf_16_char *UTF8toUTF16(const char *utf8_string, size_t *nbytes)
 	return unicode_string;
 }
 
-utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t index)
+const utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t index)
 {
 	while (*utf16_string != '\0'
 	       && index != 0)
@@ -450,7 +450,7 @@ utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t inde
 		return nullptr;
 	}
 
-	return (utf_16_char *)utf16_string;
+	return utf16_string;
 }
 
 

@@ -2744,7 +2744,7 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	// send a kick msg
 	NETbeginEncode(NETbroadcastQueue(), NET_KICK);
 	NETuint32_t(&player_id);
-	NETstring((char *) reason, MAX_KICK_REASON);
+	NETstring(reason, MAX_KICK_REASON);
 	NETenum(&type);
 	NETend();
 	NETflush();

@@ -31,6 +31,9 @@
 #include <algorithm>
 #include <map>
 
+#if !defined(ZLIB_CONST)
+#  define ZLIB_CONST
+#endif
 #include <zlib.h>
 
 enum
@@ -227,9 +230,9 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 	case AF_INET6:
 		{
 
-			uint16_t *address = (uint16_t *) & ((const struct sockaddr_in6 *)addr)->sin6_addr.s6_addr;
+			const uint16_t *address = (const uint16_t *) & ((const struct sockaddr_in6 *)addr)->sin6_addr.s6_addr;
 			// Check to see if this is really a IPv6 address
-			struct sockaddr_in6 *mappedIP = (struct sockaddr_in6 *)addr;
+			const struct sockaddr_in6 *mappedIP = (const struct sockaddr_in6 *)addr;
 			if (IN6_IS_ADDR_V4MAPPED(&mappedIP->sin6_addr))
 			{
 				// looks like it is ::ffff:(...) so lets set up a IPv4 socket address structure
@@ -622,7 +625,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 		}
 		else
 		{
-			sock->zDeflate.next_in = (Bytef *)buf;
+			sock->zDeflate.next_in = (const Bytef *)buf;
 			sock->zDeflate.avail_in = size;
 			sock->zDeflateInSize += sock->zDeflate.avail_in;
 			do
@@ -1285,7 +1288,7 @@ Socket *socketListen(unsigned int port)
 #if defined(IPV6_V6ONLY)
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (const char *)&ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
 		{
 			debug(LOG_INFO, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
 		}
@@ -1304,7 +1307,7 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, (const char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
@@ -1326,7 +1329,7 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, (const char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_INFO, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
