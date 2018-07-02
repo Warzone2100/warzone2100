@@ -359,7 +359,7 @@ bool scrOrderGroup()
 		return false;
 	}
 
-	debug(LOG_NEVER, "group %p (%u) order %d", psGroup, psGroup->getNumMembers(), order);
+	debug(LOG_NEVER, "group %p (%u) order %d", static_cast<void *>(psGroup), psGroup->getNumMembers(), order);
 	psGroup->orderGroup(order);
 
 	return true;
@@ -398,7 +398,7 @@ bool scrOrderGroupLoc()
 	}
 
 	debug(LOG_NEVER, "group %p (%u) order %d (%d,%d)",
-	      psGroup, psGroup->getNumMembers(), order, x, y);
+	      static_cast<void *>(psGroup), psGroup->getNumMembers(), order, x, y);
 	psGroup->orderGroup(order, (UDWORD)x, (UDWORD)y);
 
 	return true;
@@ -434,7 +434,7 @@ bool scrOrderGroupObj()
 	}
 
 	debug(LOG_NEVER, "group %p (%u) order %d,  obj type %d player %d id %d",
-	      psGroup, psGroup->getNumMembers(), order, psObj->type, psObj->player, psObj->id);
+	      static_cast<void *>(psGroup), psGroup->getNumMembers(), order, psObj->type, psObj->player, psObj->id);
 
 	psGroup->orderGroup(order, psObj);
 

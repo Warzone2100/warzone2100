@@ -766,12 +766,12 @@ void SocketSet_AddSocket(SocketSet *set, Socket *socket)
 	size_t i = std::find(set->fds.begin(), set->fds.end(), socket) - set->fds.begin();
 	if (i != set->fds.size())
 	{
-		debug(LOG_NET, "Already found, socket: (set->fds[%lu]) %p", (unsigned long)i, socket);
+		debug(LOG_NET, "Already found, socket: (set->fds[%lu]) %p", (unsigned long)i, static_cast<void *>(socket));
 		return;
 	}
 
 	set->fds.push_back(socket);
-	debug(LOG_NET, "Socket added: set->fds[%lu] = %p", (unsigned long)i, socket);
+	debug(LOG_NET, "Socket added: set->fds[%lu] = %p", (unsigned long)i, static_cast<void *>(socket));
 }
 
 /**
@@ -782,7 +782,7 @@ void SocketSet_DelSocket(SocketSet *set, Socket *socket)
 	size_t i = std::find(set->fds.begin(), set->fds.end(), socket) - set->fds.begin();
 	if (i != set->fds.size())
 	{
-		debug(LOG_NET, "Socket %p erased (set->fds[%lu])", socket, (unsigned long)i);
+		debug(LOG_NET, "Socket %p erased (set->fds[%lu])", static_cast<void *>(socket), (unsigned long)i);
 		set->fds.erase(set->fds.begin() + i);
 	}
 }
@@ -935,7 +935,7 @@ ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", sock, sock->fd[SOCK_CONNECTION]);
+		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", static_cast<void *>(sock), sock->fd[SOCK_CONNECTION]);
 		setSockErr(EBADF);
 		return SOCKET_ERROR;
 	}
@@ -1006,7 +1006,7 @@ static void socketCloseNow(Socket *sock)
 #endif
 			if (err)
 			{
-				debug(LOG_ERROR, "Failed to close socket %p: %s", sock, strSockError(getSockErr()));
+				debug(LOG_ERROR, "Failed to close socket %p: %s", static_cast<void *>(sock), strSockError(getSockErr()));
 			}
 
 			/* Make sure that dangling pointers to this
@@ -1059,7 +1059,7 @@ Socket *socketAccept(Socket *sock)
 				if (getSockErr() != EAGAIN
 				    && getSockErr() != EWOULDBLOCK)
 				{
-					debug(LOG_ERROR, "accept failed for socket %p: %s", sock, strSockError(getSockErr()));
+					debug(LOG_ERROR, "accept failed for socket %p: %s", static_cast<void *>(sock), strSockError(getSockErr()));
 				}
 
 				continue;
@@ -1073,10 +1073,10 @@ Socket *socketAccept(Socket *sock)
 				return nullptr;
 			}
 
-			debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
+			debug(LOG_NET, "setting socket (%p) blocking status (false).", static_cast<void *>(conn));
 			if (!setSocketBlocking(newConn, false))
 			{
-				debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
+				debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", static_cast<void *>(conn));
 				socketClose(conn);
 				return nullptr;
 			}
@@ -1095,7 +1095,7 @@ Socket *socketAccept(Socket *sock)
 
 			addressToText((const struct sockaddr *)&addr, conn->textAddress, sizeof(conn->textAddress));
 			debug(LOG_NET, "Incoming connection from [%s]:/*%%d*/ (FIXME: gives strict-aliasing error)", conn->textAddress/*, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port)*/);
-			debug(LOG_NET, "Using socket %p", conn);
+			debug(LOG_NET, "Using socket %p", static_cast<void *>(conn));
 			return conn;
 		}
 	}
@@ -1131,15 +1131,15 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 
 	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create a socket (%p): %s", conn, strSockError(getSockErr()));
+		debug(LOG_ERROR, "Failed to create a socket (%p): %s", static_cast<void *>(conn), strSockError(getSockErr()));
 		socketClose(conn);
 		return nullptr;
 	}
 
-	debug(LOG_NET, "setting socket (%p) blocking status (false).", conn);
+	debug(LOG_NET, "setting socket (%p) blocking status (false).", static_cast<void *>(conn));
 	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], false))
 	{
-		debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
+		debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", static_cast<void *>(conn));
 		socketClose(conn);
 		return nullptr;
 	}
@@ -1162,7 +1162,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 #endif
 		    || timeout == 0)
 		{
-			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), conn);
+			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), static_cast<void *>(conn));
 			socketClose(conn);
 			return nullptr;
 		}
@@ -1188,7 +1188,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 
 		if (ret == SOCKET_ERROR)
 		{
-			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(getSockErr()), conn);
+			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(getSockErr()), static_cast<void *>(conn));
 			socketClose(conn);
 			return nullptr;
 		}
@@ -1196,7 +1196,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		if (ret == 0)
 		{
 			setSockErr(ETIMEDOUT);
-			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(getSockErr()), conn);
+			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(getSockErr()), static_cast<void *>(conn));
 			socketClose(conn);
 			return nullptr;
 		}
@@ -1214,7 +1214,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		    && getSockErr() != EISCONN)
 #endif
 		{
-			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), conn);
+			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), static_cast<void *>(conn));
 			socketClose(conn);
 			return nullptr;
 		}
@@ -1270,19 +1270,19 @@ Socket *socketListen(unsigned int port)
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
 	    && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", conn, strSockError(getSockErr()));
+		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", static_cast<void *>(conn), strSockError(getSockErr()));
 		socketClose(conn);
 		return nullptr;
 	}
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Successfully created an IPv4 socket (%p)", conn);
+		debug(LOG_NET, "Successfully created an IPv4 socket (%p)", static_cast<void *>(conn));
 	}
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		debug(LOG_NET, "Successfully created an IPv6 socket (%p)", conn);
+		debug(LOG_NET, "Successfully created an IPv6 socket (%p)", static_cast<void *>(conn));
 	}
 
 #if defined(IPV6_V6ONLY)
@@ -1312,7 +1312,7 @@ Socket *socketListen(unsigned int port)
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
 
-		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv4).", conn);
+		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv4).", static_cast<void *>(conn));
 		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr *)&addr4, sizeof(addr4)) == SOCKET_ERROR
 		    || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
 		    || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
@@ -1334,7 +1334,7 @@ Socket *socketListen(unsigned int port)
 			debug(LOG_INFO, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
 
-		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv6).", conn);
+		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv6).", static_cast<void *>(conn));
 		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr *)&addr6, sizeof(addr6)) == SOCKET_ERROR
 		    || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
 		    || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))

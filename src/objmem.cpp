@@ -142,25 +142,25 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		debug(LOG_MEMORY, "freeing droid at %p", psObj);
+		debug(LOG_MEMORY, "freeing droid at %p", static_cast<void *>(psObj));
 		break;
 
 	case OBJ_STRUCTURE:
-		debug(LOG_MEMORY, "freeing structure at %p", psObj);
+		debug(LOG_MEMORY, "freeing structure at %p", static_cast<void *>(psObj));
 		break;
 
 	case OBJ_FEATURE:
-		debug(LOG_MEMORY, "freeing feature at %p", psObj);
+		debug(LOG_MEMORY, "freeing feature at %p", static_cast<void *>(psObj));
 		break;
 
 	default:
-		ASSERT(!"unknown object type", "unknown object type in destroyed list at 0x%p", psObj);
+		ASSERT(!"unknown object type", "unknown object type in destroyed list at 0x%p", static_cast<void *>(psObj));
 	}
 	if (!checkReferences(psObj))
 	{
 		return false;
 	}
-	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
+	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", static_cast<void *>(psObj));
 	delete psObj;
 	return true;
 }
@@ -265,7 +265,7 @@ template <typename OBJECT>
 static inline void addObjectToFuncList(OBJECT *list[], OBJECT *object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
-	ASSERT_OR_RETURN(, static_cast<OBJECT *>(object->psNextFunc) == nullptr, "%s(%p) is already in a function list!", objInfo(object), object);
+	ASSERT_OR_RETURN(, static_cast<OBJECT *>(object->psNextFunc) == nullptr, "%s(%p) is already in a function list!", objInfo(object), static_cast<void *>(object));
 
 	// Prepend the object to the top of the list
 	object->psNextFunc = list[player];
@@ -342,7 +342,7 @@ static inline void removeObjectFromList(OBJECT *list[], OBJECT *object, int play
 		psPrev = psCurr;
 	}
 
-	ASSERT_OR_RETURN(, psCurr != nullptr, "Object %p not found in list", object);
+	ASSERT_OR_RETURN(, psCurr != nullptr, "Object %p not found in list", static_cast<void *>(object));
 
 	// Modify the "next" pointer of the previous item to
 	// point to the "next" item of the item to delete.
@@ -374,7 +374,7 @@ static inline void removeObjectFromFuncList(OBJECT *list[], OBJECT *object, int 
 		psPrev = psCurr;
 	}
 
-	ASSERT_OR_RETURN(, psCurr != nullptr, "Object %p not found in list", object);
+	ASSERT_OR_RETURN(, psCurr != nullptr, "Object %p not found in list", static_cast<void *>(object));
 
 	// Modify the "next" pointer of the previous item to
 	// point to the "next" item of the item to delete.

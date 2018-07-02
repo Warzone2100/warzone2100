@@ -697,7 +697,7 @@ void CancelAllResearch(UDWORD pl)
 			    && (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject != nullptr)
 			)
 			{
-				debug(LOG_NEVER, "canceling research for %p\n", psCurr);
+				debug(LOG_NEVER, "canceling research for %p\n", static_cast<void *>(psCurr));
 				cancelResearch(psCurr, ModeQueue);
 			}
 		}

@@ -137,7 +137,7 @@ static bool baseObjDead(INTERP_VAL *psVal)
 	BASE_OBJECT *psObj = (BASE_OBJECT *)psVal->v.oval;
 	if (psObj && isDead(psObj))
 	{
-		debug(LOG_DEATH, "Removing %p (%s) from the wzscript system", psObj, objInfo(psObj));
+		debug(LOG_DEATH, "Removing %p (%s) from the wzscript system", static_cast<void *>(psObj), objInfo(psObj));
 		psVal->v.oval = nullptr;
 		return true;
 	}

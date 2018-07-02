@@ -1402,7 +1402,7 @@ bool scrAddMessage()
 	{
 		//set the data
 		psMessage->pViewData = psViewData;
-		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), psMessage->pViewData);
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), static_cast<void *>(psMessage->pViewData));
 		if (msgType == MSG_PROXIMITY)
 		{
 			//check the z value is at least the height of the terrain
@@ -8965,7 +8965,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 		VIEWDATA *pTempData = CreateBeaconViewData(sender, locX, locY);
 		ASSERT_OR_RETURN(false, pTempData != nullptr, "Empty help data for radar beacon");
 		psMessage->pViewData = pTempData;
-		debug(LOG_MSG, "blip added, pViewData=%p", psMessage->pViewData);
+		debug(LOG_MSG, "blip added, pViewData=%p", static_cast<void *>(psMessage->pViewData));
 	}
 	else
 	{

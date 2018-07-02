@@ -4523,7 +4523,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 
 	if (bDestroy)
 	{
-		debug(LOG_DEATH, "Killing off %s id %d (%p)", objInfo(psDel), psDel->id, psDel);
+		debug(LOG_DEATH, "Killing off %s id %d (%p)", objInfo(psDel), psDel->id, static_cast<void *>(psDel));
 		killStruct(psDel);
 	}
 

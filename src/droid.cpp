@@ -273,7 +273,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Do we have a dying animation?
 		if (psDroid->sDisplay.imd->objanimpie[ANIM_EVENT_DYING] && psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
-			debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, psDroid);
+			debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
 			psDroid->timeAnimationStarted = gameTime;
 			psDroid->animationEvent = ANIM_EVENT_DYING;
 			if (psDroid->droidType == DROID_PERSON)
@@ -285,7 +285,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Otherwise use the default destruction animation
 		else if (psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
-			debug(LOG_DEATH, "%s droid %d (%p) is toast", objInfo(psDroid), (int)psDroid->id, psDroid);
+			debug(LOG_DEATH, "%s droid %d (%p) is toast", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
 			// This should be sent even if multi messages are turned off, as the group message that was
 			// sent won't contain the destroyed droid
 			if (bMultiPlayer && !bMultiMessages)
@@ -680,7 +680,7 @@ void droidUpdate(DROID *psDroid)
 			}
 		}
 		ASSERT(psSensor == (BASE_OBJECT *)psDroid, "%s(%p) not in sensor list!",
-		       droidGetName(psDroid), psDroid);
+		       droidGetName(psDroid), static_cast<void *>(psDroid));
 	}
 #endif
 
@@ -1698,7 +1698,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		scoreUpdateVar(WD_UNITS_BUILT);
 	}
 
-	debug(LOG_LIFE, "created droid for player %d, droid = %p, id=%d (%s): position: x(%d)y(%d)z(%d)", player, psDroid, (int)psDroid->id, psDroid->aName, psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
+	debug(LOG_LIFE, "created droid for player %d, droid = %p, id=%d (%s): position: x(%d)y(%d)z(%d)", player, static_cast<void *>(psDroid), (int)psDroid->id, psDroid->aName, psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
 
 	return psDroid;
 }

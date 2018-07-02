@@ -1121,7 +1121,7 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 			// Make sure to keep our linked list iterator valid
 			psSample = psSample->psNext;
 
-			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", toRemove->pCallback, toRemove->iTrack);
+			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", reinterpret_cast<void *>(toRemove->pCallback), toRemove->iTrack);
 			// Remove sound from global active list
 			sound_RemoveActiveSample(toRemove);   //remove from global active list.
 
@@ -1140,7 +1140,7 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 
 	if (count)
 	{
-		debug(LOG_MEMORY, "audio_RemoveObj: BASE_OBJECT* 0x%p was found %u times in the audio sample queue", psObj, count);
+		debug(LOG_MEMORY, "audio_RemoveObj: BASE_OBJECT* 0x%p was found %u times in the audio sample queue", static_cast<const void *>(psObj), count);
 	}
 
 	// Reset the deletion count
@@ -1160,7 +1160,7 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 			// Make sure to keep our linked list iterator valid
 			psSample = psSample->psNext;
 
-			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", toRemove->pCallback, toRemove->iTrack);
+			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", reinterpret_cast<void *>(toRemove->pCallback), toRemove->iTrack);
 			// Stop this sound sample
 			sound_RemoveActiveSample(toRemove);   //remove from global active list.
 
@@ -1179,6 +1179,6 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 
 	if (count)
 	{
-		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", psObj, count);
+		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", static_cast<const void *>(psObj), count);
 	}
 }
