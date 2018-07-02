@@ -175,7 +175,7 @@ static const char *getDORDDescription(int id)
 
 	default : return "";  // make compiler shut up
 	}
-};
+}
 
 // Define the order button groups.
 static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
