@@ -953,10 +953,10 @@ ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 			{
 				if (ret == 0)
 				{
-					debug(LOG_NET, "socket (%p) has timed out.", socket);
+					debug(LOG_NET, "socket (%p) has timed out.", static_cast<void *>(sock));
 					setSockErr(ETIMEDOUT);
 				}
-				debug(LOG_NET, "socket (%p) error.", socket);
+				debug(LOG_NET, "socket (%p) error.", static_cast<void *>(sock));
 				return SOCKET_ERROR;
 			}
 		}
