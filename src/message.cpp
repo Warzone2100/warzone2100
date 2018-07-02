@@ -452,7 +452,8 @@ static unsigned numCR(const char *pFileBuffer, unsigned fileSize)
 /*load the view data for the messages from the file */
 const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {
-	UDWORD			numData, count, dummy;
+	UDWORD			numData, count;
+	int				dummy;
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
 	char				name[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
@@ -477,7 +478,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimited using comma's
-		sscanf(pViewMsgData, "%255[^,'\r\n],%d%n", name, &numText, &cnt);
+		sscanf(pViewMsgData, "%255[^,'\r\n],%u%n", name, &numText, &cnt);
 		pViewMsgData += cnt;
 
 		//allocate storage for the name
@@ -552,7 +553,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			psViewReplay = (VIEW_REPLAY *)psViewData->pData;
 
 			//read in number of sequences for this message
-			sscanf(pViewMsgData, ",%d%n", &count, &cnt);
+			sscanf(pViewMsgData, ",%u%n", &count, &cnt);
 			pViewMsgData += cnt;
 
 			psViewReplay->seqList.resize(count);
@@ -566,7 +567,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				//load extradat for extended type only
 				if (psViewData->type == VIEW_RPL)
 				{
-					sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", name, &count, &cnt);
+					sscanf(pViewMsgData, ",%255[^,'\r\n],%u%n", name, &count, &cnt);
 					pViewMsgData += cnt;
 					//set the flag to default
 					psViewReplay->seqList[dataInc].flag = 0;
@@ -575,7 +576,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				else //extended type
 				{
 					int count2;
-					sscanf(pViewMsgData, ",%255[^,'\r\n],%d,%d%n", name, &count, &count2, &cnt);
+					sscanf(pViewMsgData, ",%255[^,'\r\n],%u,%d%n", name, &count, &count2, &cnt);
 					pViewMsgData += cnt;
 					psViewReplay->seqList[dataInc].flag = (UBYTE)count;
 					numText = count2;

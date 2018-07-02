@@ -975,7 +975,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	}
 
 	/* Read first LEVEL directive */
-	if (sscanf(pFileData, "%255s %d%n", buffer, &level, &cnt) != 2)
+	if (sscanf(pFileData, "%255s %u%n", buffer, &level, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "(_load_level) file corrupt -J");
 		return;
