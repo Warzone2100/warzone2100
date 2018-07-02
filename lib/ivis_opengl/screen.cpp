@@ -136,7 +136,7 @@ static const char *cbseverity(GLenum severity)
 	}
 }
 
-static void khr_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
+static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
 {
 	(void)userParam; // we pass in NULL here
 	(void)length; // length of message, buggy on some drivers, don't use
@@ -332,7 +332,7 @@ bool screenInitialise()
 
 	if (khr_debug)
 	{
-		glDebugMessageCallback((GLDEBUGPROC)khr_callback, nullptr);
+		glDebugMessageCallback(khr_callback, nullptr);
 		glEnable(GL_DEBUG_OUTPUT);
 		// Do not want to output notifications. Some drivers spam them too much.
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
