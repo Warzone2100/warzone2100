@@ -1,5 +1,6 @@
 // Modifications for WZ:
 //	2018-05-31 - Added BeforeLoadModules() and BeforeStackTrace()
+//	2018-07-02 - Disable warning C4191
 //
 /**********************************************************************
  * 
@@ -90,6 +91,7 @@
 #include <stdlib.h>
 #pragma comment(lib, "version.lib")  // for "VerQueryValue"
 #pragma warning(disable:4826)
+#pragma warning(disable:4191)
 
 #include "StackWalker.h"
 
