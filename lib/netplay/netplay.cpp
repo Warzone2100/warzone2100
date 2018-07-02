@@ -270,7 +270,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet *socket_set, uint8_t *b
 		}
 		else
 		{
-			debug(LOG_NET, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), socket);
+			debug(LOG_NET, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), static_cast<void *>(socket));
 		}
 
 		// an error occurred, or the remote host has closed the connection.
@@ -494,7 +494,7 @@ static void NETplayerClientDisconnect(uint32_t index)
 
 	if (connected_bsocket[index])
 	{
-		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p", index, connected_bsocket[index]);
+		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p", index, static_cast<void *>(connected_bsocket[index]));
 
 		NETplayerLeaving(index);
 
@@ -523,7 +523,7 @@ static void NETplayerLeaving(UDWORD index)
 {
 	if (connected_bsocket[index])
 	{
-		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]);
+		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, static_cast<void *>(connected_bsocket[index]));
 		NETlogEntry("Player has left nicely.", SYNC_FLAG, index);
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
@@ -1199,7 +1199,7 @@ int NETclose()
 	{
 		if (connected_bsocket[i])
 		{
-			debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, connected_bsocket[i]);
+			debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, static_cast<void *>(connected_bsocket[i]));
 			socketClose(connected_bsocket[i]);
 			connected_bsocket[i] = nullptr;
 		}
@@ -1208,7 +1208,7 @@ int NETclose()
 
 	if (tmp_socket_set)
 	{
-		debug(LOG_NET, "Freeing tmp_socket_set %p", tmp_socket_set);
+		debug(LOG_NET, "Freeing tmp_socket_set %p", static_cast<void *>(tmp_socket_set));
 		deleteSocketSet(tmp_socket_set);
 		tmp_socket_set = nullptr;
 	}
@@ -1218,7 +1218,7 @@ int NETclose()
 		if (tmp_socket[i])
 		{
 			// FIXME: need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
-			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, tmp_socket[i]);
+			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, static_cast<void *>(tmp_socket[i]));
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = nullptr;
 		}
@@ -1235,19 +1235,19 @@ int NETclose()
 		{
 			SocketSet_DelSocket(socket_set, bsocket);
 		}
-		debug(LOG_NET, "Freeing socket_set %p", socket_set);
+		debug(LOG_NET, "Freeing socket_set %p", static_cast<void *>(socket_set));
 		deleteSocketSet(socket_set);
 		socket_set = nullptr;
 	}
 	if (tcp_socket)
 	{
-		debug(LOG_NET, "Closing tcp_socket %p", tcp_socket);
+		debug(LOG_NET, "Closing tcp_socket %p", static_cast<void *>(tcp_socket));
 		socketClose(tcp_socket);
 		tcp_socket = nullptr;
 	}
 	if (bsocket)
 	{
-		debug(LOG_NET, "Closing bsocket %p", bsocket);
+		debug(LOG_NET, "Closing bsocket %p", static_cast<void *>(bsocket));
 		socketClose(bsocket);
 		bsocket = nullptr;
 	}
@@ -1378,7 +1378,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 			{
 				// Write error, most likely host disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-				debug(LOG_ERROR, "Host connection was broken, socket %p.", bsocket);
+				debug(LOG_ERROR, "Host connection was broken, socket %p.", static_cast<void *>(bsocket));
 				NETlogEntry("write error--client disconnect.", SYNC_FLAG, player);
 				SocketSet_DelSocket(socket_set, bsocket);            // mark it invalid
 				socketClose(bsocket);
@@ -1668,7 +1668,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETend();
 
 			debug(LOG_NET, "Receiving NET_PLAYER_JOINED for player %u using socket %p",
-			      (unsigned int)index, bsocket);
+			      (unsigned int)index, static_cast<void *>(bsocket));
 
 			MultiPlayerJoin(index);
 			netPlayersUpdated = true;
@@ -1691,7 +1691,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			if (connected_bsocket[index])
 			{
-				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u on socket %p", (unsigned int)index, connected_bsocket[index]);
+				debug(LOG_NET, "Receiving NET_PLAYER_LEAVING for player %u on socket %p", (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
 			}
 			else
 			{
@@ -2427,7 +2427,7 @@ static void NETallowJoining()
 		// Remove a failed connection.
 		if (connectFailed)
 		{
-			debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
+			debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
 			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = nullptr;
@@ -2456,7 +2456,7 @@ static void NETallowJoining()
 						debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
 					}
 					NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, i);
-					debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
+					debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = nullptr;
@@ -2486,7 +2486,7 @@ static void NETallowJoining()
 
 					if (tmp == -1)
 					{
-						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", tmp_socket[i]);
+						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
 
 						// Tell the player that we are full.
 						uint8_t rejected = ERROR_FULL;
@@ -2506,7 +2506,7 @@ static void NETallowJoining()
 					NETpop(NETnetTmpQueue(i));
 					index = tmp;
 
-					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", tmp_socket[i], __LINE__);
+					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", static_cast<void *>(tmp_socket[i]), __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					connected_bsocket[index] = tmp_socket[i];
 					tmp_socket[i] = nullptr;
@@ -2572,7 +2572,7 @@ static void NETallowJoining()
 					debug(LOG_INFO, "%s", buf);
 					NETlogEntry(buf, SYNC_FLAG, index);
 
-					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, connected_bsocket[index]);
+					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
 
 					// Increment player count
 					gamestruct.desc.dwCurrentPlayers++;
@@ -2657,7 +2657,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 		debug(LOG_ERROR, "Cannot connect to master self: %s", strSockError(getSockErr()));
 		return false;
 	}
-	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
+	debug(LOG_NET, "New tcp_socket = %p", static_cast<void *>(tcp_socket));
 	// Host needs to create a socket set for MAX_PLAYERS
 	if (!socket_set)
 	{
@@ -2791,7 +2791,7 @@ bool NETfindGame()
 
 	if (tcp_socket != nullptr)
 	{
-		debug(LOG_NET, "Deleting tcp_socket %p", tcp_socket);
+		debug(LOG_NET, "Deleting tcp_socket %p", static_cast<void *>(tcp_socket));
 		if (socket_set)
 		{
 			SocketSet_DelSocket(socket_set, tcp_socket);
@@ -2811,7 +2811,7 @@ bool NETfindGame()
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
-	debug(LOG_NET, "New tcp_socket = %p", tcp_socket);
+	debug(LOG_NET, "New tcp_socket = %p", static_cast<void *>(tcp_socket));
 	// client machines only need 1 socket set
 	socket_set = allocSocketSet();
 	if (socket_set == nullptr)
@@ -2820,7 +2820,7 @@ bool NETfindGame()
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
-	debug(LOG_NET, "Created socket_set %p", socket_set);
+	debug(LOG_NET, "Created socket_set %p", static_cast<void *>(socket_set));
 
 	SocketSet_AddSocket(socket_set, tcp_socket);
 
@@ -2950,7 +2950,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
 		return false;
 	}
-	debug(LOG_NET, "Created socket_set %p", socket_set);
+	debug(LOG_NET, "Created socket_set %p", static_cast<void *>(socket_set));
 
 	// tcp_socket is used to talk to host machine
 	SocketSet_AddSocket(socket_set, tcp_socket);
@@ -3039,7 +3039,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 
 			selectedPlayer = index;
 			realSelectedPlayer = selectedPlayer;
-			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p", (unsigned int)index, bsocket);
+			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p", (unsigned int)index, static_cast<void *>(bsocket));
 			NetPlay.isHost = false;
 			NetPlay.isHostAlive = true;
 

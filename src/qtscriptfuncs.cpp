@@ -4350,7 +4350,7 @@ static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *)
 		VIEWDATA *psViewData = getViewData(QStringToWzString(mess));
 		SCRIPT_ASSERT(context, psViewData, "Viewdata not found");
 		psMessage->pViewData = psViewData;
-		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), psMessage->pViewData);
+		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), static_cast<void *>(psMessage->pViewData));
 		if (msgType == MSG_PROXIMITY)
 		{
 			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;
@@ -5463,7 +5463,7 @@ QScriptValue register_common(QScriptEngine *engine, COMPONENT_STATS *psStats)
 
 bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 {
-	debug(LOG_WZ, "Loading functions for engine %p, script %s", engine, scriptName.toUtf8().constData());
+	debug(LOG_WZ, "Loading functions for engine %p, script %s", static_cast<void *>(engine), scriptName.toUtf8().constData());
 
 	// Create group map
 	GROUPMAP *psMap = new GROUPMAP;

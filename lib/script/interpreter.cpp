@@ -1143,7 +1143,7 @@ void scrOutputCallTrace(code_part part)
 				pEvent = eventGetEventID(psCurProg, retStack[i].CallerIndex);
 			}
 
-			debug(part, "%d: %s (return address: %p)", i, pEvent, retStack[i].ReturnAddress);
+			debug(part, "%d: %s (return address: %p)", i, pEvent, static_cast<void *>(retStack[i].ReturnAddress));
 		}
 	}
 	else

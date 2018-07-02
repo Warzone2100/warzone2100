@@ -156,7 +156,7 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 void cdAudio_Stop()
 {
 	stopping = true;
-	debug(LOG_SOUND, "called, cdStream=%p", cdStream);
+	debug(LOG_SOUND, "called, cdStream=%p", static_cast<void *>(cdStream));
 
 	if (cdStream)
 	{

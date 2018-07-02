@@ -679,7 +679,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			{
 				// there is a dataset loaded but it isn't the correct one
 				debug(LOG_WZ, "Incorrect base dataset loaded (%p != %p, %d - %d)",
-				      psCurrLevel->psBaseData, psNewLevel->psBaseData, (int)psCurrLevel->type, (int)psNewLevel->type);
+				      static_cast<void *>(psCurrLevel->psBaseData), static_cast<void *>(psNewLevel->psBaseData), (int)psCurrLevel->type, (int)psNewLevel->type);
 				if (!levReleaseAll())	// this sets psCurrLevel to NULL
 				{
 					debug(LOG_ERROR, "Failed to release old data");

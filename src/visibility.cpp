@@ -710,7 +710,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj)
 					if (psMessage)
 					{
 						psMessage->psObj = psObj;
-						debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", psMessage->pViewData);
+						debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", static_cast<void *>(psMessage->pViewData));
 					}
 					if (!bInTutorial && player == selectedPlayer)
 					{

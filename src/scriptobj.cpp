@@ -69,7 +69,7 @@ bool scrBaseObjGet(UDWORD index)
 	// Check this is a valid pointer
 	ASSERT_OR_RETURN(false, psObj, "Passed a NULL pointer to a base object");
 	ASSERT_OR_RETURN(false, psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE,
-	                 "Invalid object %p of type %d", psObj, psObj->type);
+	                 "Invalid object %p of type %d", static_cast<void *>(psObj), psObj->type);
 
 	// set the type and return value
 	switch (index)

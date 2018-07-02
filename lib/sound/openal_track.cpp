@@ -595,7 +595,7 @@ void sound_RemoveActiveSample(AUDIO_SAMPLE *psSample)
 	{
 		if (node->curr->psObj == psSample->psObj)
 		{
-			debug(LOG_MEMORY, "Removing object 0x%p from active_samples list 0x%p\n", psSample->psObj, node);
+			debug(LOG_MEMORY, "Removing object 0x%p from active_samples list 0x%p\n", static_cast<void *>(psSample->psObj), static_cast<void *>(node));
 
 			// Buginator: should we wait for it to finish, or just stop it?
 			sound_StopSample(node->curr);

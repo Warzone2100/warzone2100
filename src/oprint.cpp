@@ -62,7 +62,7 @@ static void printComponentInfo(const COMPONENT_STATS *psStats)
 	                          "   bPwr %d bPnts %d wt %d bdy %d imd %p\n",
 	                          getName(psStats), psStats->ref, psStats->buildPower,
 	                          psStats->buildPoints, psStats->weight, psStats->pBase->hitpoints,
-	                          psStats->pIMD));
+	                          static_cast<void *>(psStats->pIMD)));
 }
 
 /** print out weapon information
@@ -241,7 +241,7 @@ void printDroidInfo(const DROID *psDroid)
 				printComponentInfo((COMPONENT_STATS *)psECMStats);
 				CONPRINTF(ConsoleString, (ConsoleString, "   range %d loc %d imd %p\n",
 				                          ecmRange(psECMStats, psDroid->player), psECMStats->location,
-				                          psECMStats->pMountGraphic));
+				                          static_cast<void *>(psECMStats->pMountGraphic)));
 			}
 			else
 			{
@@ -256,7 +256,7 @@ void printDroidInfo(const DROID *psDroid)
 				printComponentInfo((COMPONENT_STATS *)psSensStats);
 				CONPRINTF(ConsoleString, (ConsoleString, "   rng %d loc %d imd %p\n",
 				                          sensorRange(psSensStats, psDroid->player),
-				                          psSensStats->location, psSensStats->pMountGraphic));
+				                          psSensStats->location, static_cast<void *>(psSensStats->pMountGraphic)));
 			}
 			else
 			{
@@ -271,7 +271,7 @@ void printDroidInfo(const DROID *psDroid)
 				printComponentInfo((COMPONENT_STATS *)psConstStats);
 				CONPRINTF(ConsoleString, (ConsoleString, "   cPnts %d imd %p\n",
 				                          constructorPoints(psConstStats, psDroid->player),
-				                          psConstStats->pMountGraphic));
+				                          static_cast<void *>(psConstStats->pMountGraphic)));
 			}
 			break;
 		case COMP_REPAIRUNIT:
@@ -283,7 +283,7 @@ void printDroidInfo(const DROID *psDroid)
 				CONPRINTF(ConsoleString, (ConsoleString, "   repPnts %d loc %d imd %p\n",
 				                          repairPoints(psRepairStats, psDroid->player),
 				                          psRepairStats->location,
-				                          psRepairStats->pMountGraphic));
+				                          static_cast<void *>(psRepairStats->pMountGraphic)));
 			}
 			break;
 		case COMP_WEAPON:
