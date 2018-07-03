@@ -1016,7 +1016,7 @@ void mainLoop()
 	}
 }
 
-bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, const char *** const utfargv WZ_DECL_UNUSED) // explicitely pass by reference
+bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ_DECL_UNUSED) // explicitely pass by reference
 {
 #ifdef WZ_OS_WIN
 	int wargc;
@@ -1037,7 +1037,7 @@ bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, const char *** const utfa
 		return false;
 	}
 	// the following malloc and UTF16toUTF8 will be cleaned up in realmain().
-	*utfargv = (const char **)malloc(sizeof(const char *) * wargc);
+	*utfargv = (char **)malloc(sizeof(char *) * wargc);
 	if (!*utfargv)
 	{
 		debug(LOG_FATAL, "Out of memory!");
@@ -1068,7 +1068,7 @@ extern const char *BACKEND;
 int realmain(int argc, char *argv[])
 {
 	int utfargc = argc;
-	const char **utfargv = (const char **)argv;
+	char **utfargv = (char **)argv;
 	wzMain(argc, argv);		// init Qt integration first
 
 	debug_init();
@@ -1351,7 +1351,7 @@ int realmain(int argc, char *argv[])
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
 	for (int i = 0; i < argc; i++)
 	{
-		const char *** const utfargvF = &utfargv;
+		char *** const utfargvF = &utfargv;
 		free((void *)(*utfargvF)[i]);
 	}
 	free(utfargv);

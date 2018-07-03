@@ -20,7 +20,7 @@
 #ifndef __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
 
-extern void setupExceptionHandler(int argc, const char **argv, const char *packageVersion, const std::string &writeDir, bool portable_mode);
+extern void setupExceptionHandler(int argc, const char * const *argv, const char *packageVersion, const std::string &writeDir, bool portable_mode);
 
 extern bool OverrideRPTDirectory(const char *newPath);
 

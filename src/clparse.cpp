@@ -68,7 +68,7 @@ typedef struct _poptContext
 	int argc = 0;
 	int current = 0;
 	int size = 0;
-	const char **argv = nullptr;
+	const char * const *argv = nullptr;
 	const char *parameter = nullptr;
 	const char *bad = nullptr;
 	const struct poptOption *table = nullptr;
@@ -203,7 +203,7 @@ static int poptGetNextOpt(poptContext ctx)
 	return POPT_ERROR_BADOPT;
 }
 
-static poptContext poptGetContext(WZ_DECL_UNUSED void *unused, int argc, const char **argv, const struct poptOption *table, WZ_DECL_UNUSED int none)
+static poptContext poptGetContext(WZ_DECL_UNUSED void *unused, int argc, const char * const *argv, const struct poptOption *table, WZ_DECL_UNUSED int none)
 {
 	static struct _poptContext ctx;
 
@@ -331,7 +331,7 @@ static const struct poptOption *getOptionsTable()
  * \param argc number of arguments given
  * \param argv string array of the arguments
  * \return Returns true on success, false on error */
-bool ParseCommandLineEarly(int argc, const char **argv)
+bool ParseCommandLineEarly(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
 	int iOption;
@@ -422,7 +422,7 @@ bool ParseCommandLineEarly(int argc, const char **argv)
  * \param argc number of arguments given
  * \param argv string array of the arguments
  * \return Returns true on success, false on error */
-bool ParseCommandLine(int argc, const char **argv)
+bool ParseCommandLine(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
 	int iOption;
