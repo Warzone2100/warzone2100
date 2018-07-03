@@ -125,7 +125,7 @@ bool sound_isStreamPlaying(AUDIO_STREAM *stream);
 void sound_StopStream(AUDIO_STREAM *stream);
 void sound_PauseStream(AUDIO_STREAM *stream);
 void sound_ResumeStream(AUDIO_STREAM *stream);
-AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count);
+AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(const void *), const void *user_data, size_t streamBufferSize, unsigned int buffer_count);
 float sound_GetStreamVolume(const AUDIO_STREAM *stream);
 void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
 

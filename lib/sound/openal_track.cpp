@@ -59,8 +59,8 @@ struct AUDIO_STREAM
 	float                   volume;
 
 	// Callbacks
-	void (*onFinished)(void *);
-	void                    *user_data;
+	void (*onFinished)(const void *);
+	const void              *user_data;
 
 	size_t                  bufferSize;
 
@@ -771,7 +771,7 @@ bool sound_Play3DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample)
  *  \note You must _never_ manually free() the memory used by the returned
  *        pointer.
  */
-AUDIO_STREAM *sound_PlayStream(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data)
+AUDIO_STREAM *sound_PlayStream(PHYSFS_file *fileHandle, float volume, void (*onFinished)(const void *), const void *user_data)
 {
 	// Default buffer size
 	static const size_t streamBufferSize = 16 * 1024;
@@ -788,7 +788,7 @@ AUDIO_STREAM *sound_PlayStream(PHYSFS_file *fileHandle, float volume, void (*onF
  *  \see sound_PlayStream() for details about the rest of the function
  *       parameters and other details.
  */
-AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count)
+AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(const void *), const void *user_data, size_t streamBufferSize, unsigned int buffer_count)
 {
 	AUDIO_STREAM *stream;
 	ALuint       *buffers = (ALuint *)alloca(sizeof(ALuint) * buffer_count);

@@ -68,7 +68,7 @@ void cdAudio_Close(void)
 	stopping = true;
 }
 
-static void cdAudio_TrackFinished(void *);
+static void cdAudio_TrackFinished(const void *);
 
 static bool cdAudio_OpenTrack(const char *filename)
 {
@@ -91,7 +91,7 @@ static bool cdAudio_OpenTrack(const char *filename)
 			return false;
 		}
 
-		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, (char *)filename, bufferSize, buffer_count);
+		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, filename, bufferSize, buffer_count);
 		if (cdStream == nullptr)
 		{
 			PHYSFS_close(music_file);
@@ -107,7 +107,7 @@ static bool cdAudio_OpenTrack(const char *filename)
 	return false; // unhandled
 }
 
-static void cdAudio_TrackFinished(void *user_data)
+static void cdAudio_TrackFinished(const void *user_data)
 {
 	const char *filename = PlayList_NextSong();
 
@@ -116,13 +116,13 @@ static void cdAudio_TrackFinished(void *user_data)
 
 	if (filename == nullptr)
 	{
-		debug(LOG_ERROR, "Out of playlist?! was playing %s", (char *)user_data);
+		debug(LOG_ERROR, "Out of playlist?! was playing %s", (const char *)user_data);
 		return;
 	}
 
 	if (!stopping && cdAudio_OpenTrack(filename))
 	{
-		debug(LOG_SOUND, "Now playing %s (was playing %s)", filename, (char *)user_data);
+		debug(LOG_SOUND, "Now playing %s (was playing %s)", filename, (const char *)user_data);
 	}
 }
 
