@@ -312,7 +312,7 @@ std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> 
 	       << "." << static_cast<unsigned int>(ver.patch);
 }
 
-static void createHeader(int const argc, const char **argv, const char *packageVersion)
+static void createHeader(int const argc, const char * const *argv, const char *packageVersion)
 {
 	std::ostringstream os;
 
@@ -397,7 +397,7 @@ void addDumpInfo(const char *inbuffer)
 	miscData.insert(miscData.end(), msg.begin(), msg.end());
 }
 
-void dbgDumpInit(int argc, const char **argv, const char *packageVersion)
+void dbgDumpInit(int argc, const char * const *argv, const char *packageVersion)
 {
 	debug_register_callback(&debug_exceptionhandler_data, nullptr, nullptr, nullptr);
 	createHeader(argc, argv, packageVersion);
