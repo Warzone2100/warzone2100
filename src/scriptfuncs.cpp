@@ -98,6 +98,13 @@
 #include "template.h"
 #include "qtscript.h" // this is fun...
 
+#if defined(__GNUC__)
+	#pragma GCC diagnostic ignored "-Wcast-qual"
+#endif
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wcast-qual"
+#endif
+
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // If this is defined then check max number of units not reached before adding more.
