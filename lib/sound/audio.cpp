@@ -864,7 +864,7 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
  *  \note You must _never_ manually free() the memory used by the returned
  *        pointer.
  */
-AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFinished)(void *), void *user_data)
+AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFinished)(const void *), const void *user_data)
 {
 	PHYSFS_file *fileHandle;
 	AUDIO_STREAM *stream;
