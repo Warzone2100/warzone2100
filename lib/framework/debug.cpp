@@ -203,7 +203,26 @@ bool debug_callback_file_init(void **data)
 	ASSERT(pFileName, "Debug filename required");
 	WZDebugfilename = *pFileName;
 
+#if defined(WZ_OS_WIN)
+	// On Windows, path strings passed to fopen() are interpreted using the ANSI or OEM codepage
+	// (and not as UTF-8). To support Unicode paths, the string must be converted to a wide-char
+	// string and passed to _wfopen.
+	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, WZDebugfilename.toUtf8().c_str(), -1, NULL, 0);
+	if (wstr_len <= 0)
+	{
+		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
+		return false;
+	}
+	std::vector<wchar_t> wstr_filename(wstr_len, 0);
+	if (MultiByteToWideChar(CP_UTF8, 0, WZDebugfilename.toUtf8().c_str(), -1, &wstr_filename[0], wstr_len) == 0)
+	{
+		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
+		return false;
+	}
+	FILE *const logfile = _wfopen(&wstr_filename[0], L"w");
+#else
 	FILE *const logfile = fopen(WZDebugfilename.toUtf8().c_str(), "w");
+#endif
 	if (!logfile)
 	{
 		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename.toUtf8().c_str());
