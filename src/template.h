@@ -43,6 +43,6 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 void listTemplates();
 
 void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr);
-DROID_TEMPLATE loadTemplateCommon(WzConfig &ini);
+bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate);
 
 #endif // TEMPLATE_H

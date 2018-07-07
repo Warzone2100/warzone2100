@@ -436,7 +436,7 @@ bool loadStructureStats(const WzString& filename)
 	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = list.size();
-	for (int inc = 0; inc < list.size(); ++inc)
+	for (size_t inc = 0; inc < list.size(); ++inc)
 	{
 		ini.beginGroup(list[inc]);
 		STRUCTURE_STATS *psStats = &asStructureStats[inc];

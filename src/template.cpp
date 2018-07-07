@@ -94,9 +94,47 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 	return researchedEverything;
 }
 
-DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
+bool droidTemplate_LoadPartByName(COMPONENT_TYPE compType, const WzString &name, DROID_TEMPLATE &outputTemplate)
 {
-	DROID_TEMPLATE design;
+	int index = getCompFromName(compType, name);
+	if (index < 0)
+	{
+		debug(LOG_ERROR, "Stored template contains an unknown (type: %d) component: %s.", compType, name.toUtf8().c_str());
+		return false;
+	}
+	if (index > UINT8_MAX)
+	{
+		// returned index exceeds uint8_t max - consider changing type of asParts in DROID_TEMPLATE?
+		debug(LOG_ERROR, "Stored template contains a (type: %d) component (%s) index that exceeds UINT8_MAX: %d", compType, name.toUtf8().c_str(), index);
+		return false;
+	}
+	outputTemplate.asParts[compType] = static_cast<uint8_t>(index);
+	return true;
+}
+
+bool droidTemplate_LoadWeapByName(size_t destIndex, const WzString &name, DROID_TEMPLATE &outputTemplate)
+{
+	int index = getCompFromName(COMP_WEAPON, name);
+	if (index < 0)
+	{
+		debug(LOG_ERROR, "Stored template contains an unknown (type: %d) component: %s.", COMP_WEAPON, name.toUtf8().c_str());
+		return false;
+	}
+#if INT_MAX > UINT32_MAX
+	if (index > (int)UINT32_MAX)
+	{
+		// returned index exceeds uint32_t max - consider changing type of asWeaps in DROID_TEMPLATE?
+		debug(LOG_ERROR, "Stored template contains a (type: %d) component (%s) index that exceeds UINT32_MAX: %d", COMP_WEAPON, name.toUtf8().c_str(), index);
+		return false;
+	}
+#endif
+	outputTemplate.asWeaps[destIndex] = static_cast<uint32_t>(index);
+	return true;
+}
+
+bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
+{
+	DROID_TEMPLATE &design = outputTemplate;
 	design.name = ini.string("name");
 	WzString droidType = ini.value("type").toWzString();
 
@@ -161,21 +199,22 @@ DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 		ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().c_str(), getID(&design));
 	}
 
-	design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body").toWzString());
-	design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", WzString("ZNULLBRAIN")).toWzString());
-	design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", WzString("ZNULLPROP")).toWzString());
-	design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", WzString("ZNULLREPAIR")).toWzString());
-	design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", WzString("ZNULLECM")).toWzString());
-	design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", WzString("ZNULLSENSOR")).toWzString());
-	design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", WzString("ZNULLCONSTRUCT")).toWzString());
+	if (!droidTemplate_LoadPartByName(COMP_BODY, ini.value("body").toWzString(), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_BRAIN, ini.value("brain", WzString("ZNULLBRAIN")).toWzString(), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_PROPULSION, ini.value("propulsion", WzString("ZNULLPROP")).toWzString(), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_REPAIRUNIT, ini.value("repair", WzString("ZNULLREPAIR")).toWzString(), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_ECM, ini.value("ecm", WzString("ZNULLECM")).toWzString(), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_SENSOR, ini.value("sensor", WzString("ZNULLSENSOR")).toWzString(), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_CONSTRUCT, ini.value("construct", WzString("ZNULLCONSTRUCT")).toWzString(), design)) return false;
+
 	std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
 	ASSERT(weapons.size() <= MAX_WEAPONS, "Number of weapons (%lu) exceeds MAX_WEAPONS (%d)", weapons.size(), MAX_WEAPONS);
 	design.numWeaps = (weapons.size() <= MAX_WEAPONS) ? (int8_t)weapons.size() : MAX_WEAPONS;
-	design.asWeaps[0] = getCompFromName(COMP_WEAPON, (weapons.size() >= 1) ? weapons[0] : "ZNULLWEAPON");
-	design.asWeaps[1] = getCompFromName(COMP_WEAPON, (weapons.size() >= 2) ? weapons[1] : "ZNULLWEAPON");
-	design.asWeaps[2] = getCompFromName(COMP_WEAPON, (weapons.size() >= 3) ? weapons[2] : "ZNULLWEAPON");
+	if (!droidTemplate_LoadWeapByName(0, (weapons.size() >= 1) ? weapons[0] : "ZNULLWEAPON", design)) return false;
+	if (!droidTemplate_LoadWeapByName(1, (weapons.size() >= 2) ? weapons[1] : "ZNULLWEAPON", design)) return false;
+	if (!droidTemplate_LoadWeapByName(2, (weapons.size() >= 3) ? weapons[2] : "ZNULLWEAPON", design)) return false;
 
-	return design;
+	return true;
 }
 
 bool initTemplates()
@@ -193,13 +232,13 @@ bool initTemplates()
 	}
 	for (ini.beginArray("templates"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
-		DROID_TEMPLATE design = loadTemplateCommon(ini);
+		DROID_TEMPLATE design;
+		bool loadCommonSuccess = loadTemplateCommon(ini, design);
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = false;		// not AI template
 		design.stored = true;
 
-		if (std::find(std::begin(design.asParts), std::end(design.asParts), -1) != std::end(design.asParts)
-			|| std::find(std::begin(design.asWeaps), std::end(design.asWeaps), -1) != std::end(design.asWeaps))
+		if (!loadCommonSuccess)
 		{
 			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", design.name.toUtf8().c_str());
 			continue;
@@ -380,7 +419,12 @@ bool loadDroidTemplates(const char *filename)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		DROID_TEMPLATE design = loadTemplateCommon(ini);
+		DROID_TEMPLATE design;
+		if (!loadTemplateCommon(ini, design))
+		{
+			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", ini.string("name").toUtf8().c_str());
+			continue;
+		}
 		design.id = list[i];
 		design.name = ini.string("name");
 		design.multiPlayerID = generateNewObjectId();

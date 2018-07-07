@@ -124,7 +124,7 @@ bool statsAllocConstruct(UDWORD numEntries);
 /*******************************************************************************
 *		Load stats functions
 *******************************************************************************/
-void loadStats(WzConfig &json, BASE_STATS *psStats, int index);
+void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index);
 
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(const char *pFileName);

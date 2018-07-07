@@ -263,7 +263,7 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 	return retval;
 }
 
-void loadStats(WzConfig &json, BASE_STATS *psStats, int index)
+void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
 {
 	psStats->id = json.group();
 	psStats->name = json.string("name");
@@ -272,7 +272,7 @@ void loadStats(WzConfig &json, BASE_STATS *psStats, int index)
 	lookupStatPtr.insert(std::make_pair(psStats->id, psStats));
 }
 
-static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
+static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index)
 {
 	loadStats(json, psStats, index);
 	psStats->buildPower = json.value("buildPower", 0).toUInt();
@@ -344,7 +344,7 @@ bool loadWeaponStats(const char *pFileName)
 	auto nullweapon = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLWEAPON"));
 	ASSERT_OR_RETURN(false, nullweapon != list.end(), "ZNULLWEAPON is mandatory");
 	std::iter_swap(nullweapon, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		WEAPON_STATS *psStats = &asWeaponStats[i];
 		std::vector<WzString> flags;
@@ -561,7 +561,7 @@ bool loadBodyStats(const char *pFileName)
 	auto nullbody = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLBODY"));
 	ASSERT_OR_RETURN(false, nullbody != list.end(), "ZNULLBODY is mandatory");
 	std::iter_swap(nullbody, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		BODY_STATS *psStats = &asBodyStats[i];
 
@@ -611,7 +611,7 @@ bool loadBodyStats(const char *pFileName)
 		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
 		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
 	}
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		WzString propulsionName, leftIMD, rightIMD;
 		BODY_STATS *psBodyStat = nullptr;
@@ -639,7 +639,7 @@ bool loadBodyStats(const char *pFileName)
 			return false;
 		}
 		std::vector<WzString> keys = ini.childKeys();
-		for (int j = 0; j < keys.size(); j++)
+		for (size_t j = 0; j < keys.size(); j++)
 		{
 			for (numStats = 0; numStats < numPropulsionStats; numStats++)
 			{
@@ -677,7 +677,7 @@ bool loadBrainStats(const char *pFileName)
 	auto nullbrain = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLBRAIN"));
 	ASSERT_OR_RETURN(false, nullbrain != list.end(), "ZNULLBRAIN is mandatory");
 	std::iter_swap(nullbrain, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		BRAIN_STATS *psStats = &asBrainStats[i];
 
@@ -771,7 +771,7 @@ bool loadPropulsionStats(const char *pFileName)
 	auto nullprop = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLPROP"));
 	ASSERT_OR_RETURN(false, nullprop != list.end(), "ZNULLPROP is mandatory");
 	std::iter_swap(nullprop, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_STATS *psStats = &asPropulsionStats[i];
 
@@ -843,7 +843,7 @@ bool loadSensorStats(const char *pFileName)
 	auto nullsensor = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLSENSOR"));
 	ASSERT_OR_RETURN(false, nullsensor != list.end(), "ZNULLSENSOR is mandatory");
 	std::iter_swap(nullsensor, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		SENSOR_STATS *psStats = &asSensorStats[i];
 
@@ -929,7 +929,7 @@ bool loadECMStats(const char *pFileName)
 	auto nullecm = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLECM"));
 	ASSERT_OR_RETURN(false, nullecm != list.end(), "ZNULLECM is mandatory");
 	std::iter_swap(nullecm, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ECM_STATS *psStats = &asECMStats[i];
 
@@ -985,7 +985,7 @@ bool loadRepairStats(const char *pFileName)
 	auto nullrepair = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLREPAIR"));
 	ASSERT_OR_RETURN(false, nullrepair != list.end(), "ZNULLREPAIR is mandatory");
 	std::iter_swap(nullrepair, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		REPAIR_STATS *psStats = &asRepairStats[i];
 
@@ -1045,7 +1045,7 @@ bool loadConstructStats(const char *pFileName)
 	auto nullconstruct = std::find(list.begin(), list.end(), WzString::fromUtf8("ZNULLCONSTRUCT"));
 	ASSERT_OR_RETURN(false, nullconstruct != list.end(), "ZNULLCONSTRUCT is mandatory");
 	std::iter_swap(nullconstruct, list.begin());
-	for (int i = 0; i < list.size(); ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		CONSTRUCT_STATS *psStats = &asConstructStats[i];
 
@@ -1418,7 +1418,8 @@ int getCompFromID(COMPONENT_TYPE compType, const WzString &name)
 	}
 	ASSERT_OR_RETURN(-1, psComp, "No such component ID [%s] found", name.toUtf8().c_str());
 	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for ID %s", name.toUtf8().c_str());
-	return psComp->index;
+	ASSERT_OR_RETURN(-1, psComp->index <= INT_MAX, "Component index is too large for ID %s", name.toUtf8().c_str());
+	return static_cast<int>(psComp->index);
 }
 
 /// Get the component for a stat based on the name alone.
