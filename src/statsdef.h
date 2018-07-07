@@ -258,7 +258,7 @@ struct BASE_STATS
 	WzString id;    ///< Text id (i.e. short language-independent name)
 	WzString name;  ///< Full / real name of the item
 	unsigned ref;   ///< Unique ID of the item
-	int index = 0;  ///< Index into containing array
+	size_t index = 0;  ///< Index into containing array
 };
 
 #define getName(_psStats) ((_psStats)->name.isEmpty()? "" : gettext((_psStats)->name.toUtf8().c_str()))

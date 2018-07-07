@@ -5771,7 +5771,11 @@ bool loadSaveTemplate(const char *pFileName)
 	std::vector<WzString> list = ini.childGroups();
 
 	auto loadTemplate = [&]() {
-		DROID_TEMPLATE t = loadTemplateCommon(ini);
+		DROID_TEMPLATE t;
+		if (!loadTemplateCommon(ini, t))
+		{
+			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", ini.string("name").toUtf8().c_str());
+		}
 		t.name = ini.string("name");
 		t.multiPlayerID = ini.value("multiPlayerID", generateNewObjectId()).toInt();
 		t.enabled = ini.value("enabled", false).toBool();
