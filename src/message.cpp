@@ -450,7 +450,7 @@ static unsigned numCR(const char *pFileBuffer, unsigned fileSize)
 }
 
 /*load the view data for the messages from the file */
-const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
+WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {
 	UDWORD			numData, count;
 	int				dummy;
@@ -463,7 +463,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	SDWORD				LocX, LocY, LocZ, audioID;
 	PROX_TYPE	proxType;
 	int cnt;
-	const char *filename = strdup(GetLastResourceFilename());
+	WzString *filename = new WzString(GetLastResourceFilename());
 
 	numData = numCR(pViewMsgData, bufferSize);
 	for (unsigned i = 0; i < numData; i++)
@@ -474,7 +474,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 
 		psViewData->pData = nullptr;
 		psViewData->type = VIEW_SIZE;
-		psViewData->fileName = filename;
+		psViewData->fileName = *filename;
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimited using comma's
@@ -685,7 +685,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	return filename; // so that cleanup function will be called for correct data
 }
 
-const char *loadResearchViewData(const char *fileName)
+WzString *loadResearchViewData(const char *fileName)
 {
 	ASSERT_OR_RETURN(nullptr, PHYSFS_exists(fileName), "%s not found", fileName);
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
@@ -730,7 +730,7 @@ const char *loadResearchViewData(const char *fileName)
 		ini.endGroup();
 		apsViewData[v->name] = v;
 	}
-	return fileName; // so that cleanup function will be called on right data
+	return new WzString(fileName); // so that cleanup function will be called on right data
 }
 
 /* Get the view data identified by the name */

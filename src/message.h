@@ -26,6 +26,7 @@
 
 #include "structure.h"
 #include "messagedef.h"
+#include "lib/framework/wzstring.h"
 
 #define NO_AUDIO_MSG		-1
 
@@ -63,8 +64,8 @@ void freeMessages();
 void releaseAllProxDisp();
 
 /** Load the view data for the messages from the file exported from the world editor. */
-const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
-const char *loadResearchViewData(const char *fileName);
+WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
+WzString *loadResearchViewData(const char *fileName);
 
 /** Get the view data identified by the name */
 VIEWDATA *getViewData(const WzString &name);

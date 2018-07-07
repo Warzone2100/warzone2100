@@ -417,9 +417,7 @@ static bool bufferRESCHLoad(const char *fileName, void **ppData)
 /* Load the message viewdata */
 static bool bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	const char *ptr;
-
-	ptr = loadViewData(pBuffer, size);
+	WzString *ptr = loadViewData(pBuffer, size);
 	if (!ptr)
 	{
 		return false;
@@ -433,7 +431,7 @@ static bool bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load research message viewdata */
 static bool dataResearchMsgLoad(const char *fileName, void **ppData)
 {
-	const char *ptr = loadResearchViewData(fileName);
+	WzString *ptr = loadResearchViewData(fileName);
 	if (!ptr)
 	{
 		return false;
@@ -447,7 +445,10 @@ static bool dataResearchMsgLoad(const char *fileName, void **ppData)
 // release the message viewdata
 static void dataSMSGRelease(void *pData)
 {
-	viewDataShutDown((const char *)pData);
+	ASSERT(pData, "pData unexpectedly null");
+	WzString *pFilename = static_cast<WzString *>(pData);
+	viewDataShutDown(pFilename->toUtf8().c_str());
+	delete pFilename;
 }
 
 /*!
