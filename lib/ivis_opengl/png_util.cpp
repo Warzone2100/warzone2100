@@ -85,6 +85,10 @@ static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PH
 	}
 }
 
+// FIXME?: disable MSVC warning C4611: interaction between '_setjmp' and C++ object destruction is non-portable
+MSVC_PRAGMA(warning( push )) // see matching "pop" below
+MSVC_PRAGMA(warning( disable : 4611 ))
+
 bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 {
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
@@ -296,6 +300,8 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 	PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
 	return IMGSaveError::None;
 }
+
+MSVC_PRAGMA(warning( pop )) // FIXME?: re-enable MSVC warning C4611: interaction between '_setjmp' and C++ object destruction is non-portable
 
 // Note: This function must be thread-safe.
 IMGSaveError iV_saveImage_PNG(const char *fileName, const iV_Image *image)
