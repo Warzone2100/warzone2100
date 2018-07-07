@@ -657,7 +657,7 @@ function maintenance()
 		var builders = findIdleTrucks(struct);
 		for (var j = 0, t = builders.length; j < t; ++j)
 		{
-			mydroid = builders[j];
+			var mydroid = builders[j];
 			if (conCanHelp(mydroid, struct.x, struct.y))
 			{
 				if (orderDroidBuild(mydroid, DORDER_BUILD, module, struct.x, struct.y))
