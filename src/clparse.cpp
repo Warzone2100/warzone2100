@@ -369,15 +369,18 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 			break;
 
 		case CLI_DEBUGFILE:
+		{
 			// find the file name
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
 				qFatal("Missing debugfile filename?");
 			}
-			debug_register_callback(debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void *)token);
+			WzString debug_filename = token;
+			debug_register_callback(debug_callback_file, debug_callback_file_init, debug_callback_file_exit, &debug_filename); // note: by the time this function returns, all use of debug_filename has completed
 			customDebugfile = true;
 			break;
+		}
 
 		case CLI_FLUSHDEBUGSTDERR:
 			// Tell the debug stderr output callback to always flush its output
