@@ -100,7 +100,7 @@ bool loadConfig()
 	}
 	if (ini.contains("notexturecompression"))
 	{
-		wz_texture_compression = GL_RGBA;
+		wz_texture_compression = false;
 	}
 	showFPS = ini.value("showFPS", false).toBool();
 	if (ini.contains("cameraSpeed"))
