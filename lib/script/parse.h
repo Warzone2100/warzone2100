@@ -305,6 +305,9 @@ extern bool scriptInitParser();
 extern int scr_parse();
 
 /* Give an error message */
+#ifndef DEBUG
+[[ noreturn ]]
+#endif
 void scr_error(const char *pMessage, ...);
 
 extern void scriptGetErrorData(int *pLine, char **ppText);
