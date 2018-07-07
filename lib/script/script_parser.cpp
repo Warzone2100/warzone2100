@@ -8927,6 +8927,9 @@ SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugType)
 
 
 /* A simple error reporting routine */
+#ifndef DEBUG
+[[ noreturn ]]
+#endif
 void scr_error(const char *pMessage, ...)
 {
 	int		line;

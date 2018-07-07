@@ -389,7 +389,7 @@ extern char *audp_text;
 static yy_state_type yy_get_previous_state (void );
 static yy_state_type yy_try_NUL_trans (yy_state_type current_state  );
 static int yy_get_next_buffer (void );
-static void yy_fatal_error (yyconst char msg[]  );
+[[ noreturn ]] static void yy_fatal_error (yyconst char msg[]  );
 
 /* Done after the current pattern has been matched and before the
  * corresponding action - sets up audp_text.
@@ -1787,7 +1787,7 @@ YY_BUFFER_STATE audp__scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_l
 #define YY_EXIT_FAILURE 2
 #endif
 
-static void yy_fatal_error (yyconst char* msg )
+[[ noreturn ]] static void yy_fatal_error (yyconst char* msg )
 {
     	(void) fprintf( stderr, "%s\n", msg );
 	exit( YY_EXIT_FAILURE );
