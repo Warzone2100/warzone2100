@@ -196,20 +196,22 @@ char WZ_DBGFile[PATH_MAX] = {0};	//Used to save path of the created log file
  * \param[in,out]	data	In: 	The filename to output to.
  * 							Out:	The filehandle.
  */
-const char *WZDebugfilename;
+WzString WZDebugfilename;
 bool debug_callback_file_init(void **data)
 {
-	WZDebugfilename = (const char *)*data;
+	WzString * pFileName = (WzString *)*data;
+	ASSERT(pFileName, "Debug filename required");
+	WZDebugfilename = *pFileName;
 
-	FILE *const logfile = fopen(WZDebugfilename, "w");
+	FILE *const logfile = fopen(WZDebugfilename.toUtf8().c_str(), "w");
 	if (!logfile)
 	{
-		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename);
+		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename.toUtf8().c_str());
 		return false;
 	}
-	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename);
+	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename.toUtf8().c_str());
 	setbuf(logfile, nullptr);
-	fprintf(logfile, "--- Starting log [%s]---\n", WZDebugfilename);
+	fprintf(logfile, "--- Starting log [%s]---\n", WZDebugfilename.toUtf8().c_str());
 	*data = logfile;
 
 	return true;
@@ -323,7 +325,7 @@ void debug_register_callback(debug_callback_fn callback, debug_callback_init ini
 	if (tmpCallback->init
 	    && !tmpCallback->init(&tmpCallback->data))
 	{
-		fprintf(stderr, "Failed to initialise debug callback, debugfile set to [%s]!\n", WZDebugfilename);
+		fprintf(stderr, "Failed to initialise debug callback, debugfile set to [%s]!\n", WZDebugfilename.toUtf8().c_str());
 		free(tmpCallback);
 		return;
 	}
