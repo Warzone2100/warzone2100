@@ -107,7 +107,7 @@ static SDWORD msgStackPos = -1;				//top element pointer
 
 static bool recvBeacon(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
-static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to);
+static bool sendAIMessage(const char *pStr, UDWORD player, UDWORD to);
 
 bool multiplayPlayersReady(bool bNotifyStatus);
 void startMultiplayerGame();
@@ -1212,7 +1212,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
-	char				*curStr = (char *)pStr;
+	const char			*curStr = pStr;
 
 	memset(display, 0x0, sizeof(display));	//clear buffer
 	memset(msg, 0x0, sizeof(msg));		//clear buffer
@@ -1388,7 +1388,7 @@ void printConsoleNameChange(const char *oldName, const char *newName)
 
 
 //AI multiplayer message, send from a certain player index to another player index
-static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
+static bool sendAIMessage(const char *pStr, UDWORD player, UDWORD to)
 {
 	UDWORD	sendPlayer;
 
@@ -1449,8 +1449,7 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	NETint32_t(&locX);                                  // save location
 	NETint32_t(&locY);
 
-	// const_cast: need to cast away constness because of the const-incorrectness of NETstring (const-incorrect when sending/encoding a packet)
-	NETstring((char *)pStr, MAX_CONSOLE_STRING_LENGTH); // copy message in.
+	NETstring(pStr, MAX_CONSOLE_STRING_LENGTH); // copy message in.
 	NETend();
 
 	return true;
