@@ -1936,8 +1936,18 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		uint32_t amask = 0xff000000;
 	#endif
 
+#if defined(__GNUC__)
+	#pragma GCC diagnostic push
+	// ignore warning: cast from type 'const unsigned char*' to type 'void*' casts away qualifiers [-Wcast-qual]
+	// FIXME?
+	#pragma GCC diagnostic ignored "-Wcast-qual"
+#endif
 	SDL_Surface *surface_icon = SDL_CreateRGBSurfaceFrom((void *)wz2100icon.pixel_data, wz2100icon.width, wz2100icon.height, wz2100icon.bytes_per_pixel * 8,
 	                            wz2100icon.width * wz2100icon.bytes_per_pixel, rmask, gmask, bmask, amask);
+#if defined(__GNUC__)
+	#pragma GCC diagnostic pop
+#endif
+
 	if (surface_icon)
 	{
 		SDL_SetWindowIcon(WZwindow, surface_icon);
