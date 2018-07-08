@@ -4,6 +4,7 @@ project(wz2100)
 OPTION(ENABLE_NLS "Native Language Support" ON)
 OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" ON)
+OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 
 if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
 	message( WARNING "Portable build is only supported on Windows; Ignoring WZ_PORTABLE option" )
@@ -118,6 +119,13 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 #		# NOTE: The following cannot currently be enabled because of Qt headers (at least Qt 5.6.x)
 #		# C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
 #		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14946")
+
+		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
+			# Enable /WX
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
+		else()
+			message( STATUS "WZ will *NOT* enable /WX" )
+		endif()
 
 		# Disable some warnings for WZ (permanently)
 		# C4800: 'type' : forcing value to bool 'true' or 'false' (performance warning)
@@ -252,6 +260,14 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# -Wrestrict				(GCC 7.0+)
 		check_compiler_flags_output("-Werror -Wrestrict -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wrestrict" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wrestrict -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wrestrict" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
+			# Enable -Werror (if supported)
+			check_compiler_flags_output("-Werror" COMPILER_TYPE C   OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+			check_compiler_flags_output("-Werror" COMPILER_TYPE CXX OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		else()
+			message( STATUS "WZ will *NOT* enable -Werror" )
+		endif()
 
 		# Enable -Wlogical-op (if supported) (warning-only for now)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}logical-op -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}logical-op" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
