@@ -252,10 +252,165 @@ static std::string getProgramPath(const char *programCommand)
 	return programPath;
 }
 
+#if defined(WZ_OS_WIN)
+
+#include <ntverp.h>				// Windows SDK - include for access to VER_PRODUCTBUILD
+#if VER_PRODUCTBUILD >= 9200
+	// 9200 is the Windows SDK 8.0 (which introduced family support)
+	#include <winapifamily.h>	// Windows SDK
+#else
+	// Earlier SDKs don't have the concept of families - provide simple implementation
+	// that treats everything as "desktop"
+	#define WINAPI_PARTITION_DESKTOP			0x00000001
+	#define WINAPI_FAMILY_PARTITION(Partition)	((WINAPI_PARTITION_DESKTOP & Partition) == Partition)
+#endif
+
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+static std::string getWindowsVersionString()
+{
+	const DWORD WIN_MAX_EXTENDED_PATH = 32767;
+
+	// Get the Windows version using a method unaffected by compatibility modes
+	// See: https://docs.microsoft.com/en-us/windows/desktop/sysinfo/getting-the-system-version
+
+	// Get a handle to the loaded kernel32.dll
+	HMODULE hKernel32 = GetModuleHandleW(L"kernel32.dll");
+	if (hKernel32 == NULL)
+	{
+		// Failed to get a handle to kernel32.dll??
+		return "Failed to access kernel32";
+	}
+
+	// Allocate a buffer for the path to kernel32.dll
+	std::vector<wchar_t> kernel32_path(WIN_MAX_EXTENDED_PATH, 0);
+	DWORD moduleFileNameLen = GetModuleFileNameW(hKernel32, &kernel32_path[0], WIN_MAX_EXTENDED_PATH);
+	DWORD lastError = GetLastError();
+	if (moduleFileNameLen == 0)
+	{
+		// GetModuleFileNameW failed
+		return std::string("GetModuleFileNameW failed with error code: ") + std::to_string(lastError);
+	}
+	if (moduleFileNameLen >= WIN_MAX_EXTENDED_PATH)
+	{
+		// GetModuleFileNameW failed - insufficient buffer length
+		return "GetModuleFileNameW failed - buffer";
+	}
+
+	// Always append a null-terminator
+	// (Windows XP's GetModuleFileName does not guarantee null-termination)
+	kernel32_path[moduleFileNameLen] = 0;
+
+	// Get the ProductVersion of kernel32.dll
+	DWORD dwDummy = 0;
+	DWORD dwFileVersionInfoSize = GetFileVersionInfoSizeW(&kernel32_path[0], &dwDummy);
+	if (dwFileVersionInfoSize == 0)
+	{
+		// GetFileVersionInfoSizeW failed
+		lastError = GetLastError();
+		return std::string("GetFileVersionInfoSizeW failed with error code: ") + std::to_string(lastError);
+	}
+
+	void *lpData = malloc(dwFileVersionInfoSize);
+	if (lpData == nullptr)
+	{
+		// Unable to allocate buffer
+		return std::string("malloc failed to allocate ") + std::to_string(dwFileVersionInfoSize) + " bytes";
+	}
+
+	if (GetFileVersionInfoW(&kernel32_path[0], 0, dwFileVersionInfoSize, lpData) == 0)
+	{
+		// GetFileVersionInfoW failed
+		lastError = GetLastError();
+		free(lpData);
+		return std::string("GetFileVersionInfoW failed with error code: ") + std::to_string(lastError);
+	}
+
+	VS_FIXEDFILEINFO *version = nullptr;
+	UINT version_len = 0;
+	if (!VerQueryValueW(lpData, L"\\", (LPVOID*)&version, &version_len))
+	{
+		// VerQueryValueW failed
+		free(lpData);
+		return "VerQueryValueW failed";
+	}
+
+	std::string productVersionString;
+	productVersionString = std::to_string(HIWORD(version->dwProductVersionMS)) + ".";
+	productVersionString += std::to_string(LOWORD(version->dwProductVersionMS)) + ".";
+	productVersionString += std::to_string(HIWORD(version->dwProductVersionLS)) + ".";
+	productVersionString += std::to_string(LOWORD(version->dwProductVersionLS));
+
+	free(lpData);
+
+	return productVersionString;
+}
+#else // !WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+static std::string getWindowsVersionString()
+{
+	// FIXME: Implement Windows version detection for non-desktop builds?
+	return std::string("n/a");
+}
+#endif // WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+
+#ifndef PROCESSOR_ARCHITECTURE_AMD64
+#define PROCESSOR_ARCHITECTURE_AMD64 9
+#endif
+
+#ifndef PROCESSOR_ARCHITECTURE_ARM
+#define PROCESSOR_ARCHITECTURE_ARM 5
+#endif
+
+#ifndef PROCESSOR_ARCHITECTURE_ARM64
+#define PROCESSOR_ARCHITECTURE_ARM64 12
+#endif
+
+static std::string getWindowsProcessorArchitecture()
+{
+	SYSTEM_INFO siSysInfo = {0};
+	GetNativeSystemInfo(&siSysInfo);
+
+	std::string machine;
+	switch (siSysInfo.wProcessorArchitecture)
+	{
+		case PROCESSOR_ARCHITECTURE_INTEL:
+			machine = "x86";
+			break;
+		case PROCESSOR_ARCHITECTURE_IA64:
+			machine = "Intel Itanium-based";
+			break;
+		case PROCESSOR_ARCHITECTURE_AMD64:
+			machine = "x86_64";
+			break;
+		case PROCESSOR_ARCHITECTURE_ARM:
+			machine = "ARM";
+			break;
+		case PROCESSOR_ARCHITECTURE_ARM64:
+			machine = "ARM64";
+			break;
+		case PROCESSOR_ARCHITECTURE_UNKNOWN:
+			machine = "Unknown";
+			break;
+		default:
+			machine = "wProcessorArchitecture (";
+			machine += std::to_string(siSysInfo.wProcessorArchitecture) + ")";
+			break;
+	}
+
+	return machine;
+}
+#endif // defined(WZ_OS_WIN)
+
+
 static std::string getSysinfo()
 {
 #if defined(WZ_OS_WIN)
-	return std::string();
+	std::ostringstream os;
+
+	os << "Operating system: " << "Windows" << endl
+	<< "Version: "          << getWindowsVersionString() << endl
+	<< "Machine: "          << getWindowsProcessorArchitecture() << endl;
+
+	return os.str();
 #elif defined(WZ_OS_UNIX)
 	struct utsname sysInfo;
 	std::ostringstream os;
@@ -271,6 +426,9 @@ static std::string getSysinfo()
 	   << "Machine: "          << sysInfo.machine  << endl;
 
 	return os.str();
+#else
+	// Not yet implemented for other platforms
+	return std::string();
 #endif
 }
 
