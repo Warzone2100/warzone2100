@@ -333,8 +333,10 @@ static void createHeader(int const argc, const char * const *argv, const char *p
 	   << "Distributor: " PACKAGE_DISTRIBUTOR << endl
 	   << "Compiled on: " __DATE__ " " __TIME__ << endl
 	   << "Compiled by: "
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG)
 	   << "GCC " __VERSION__ << endl
+#elif defined(WZ_CC_CLANG)
+	   << "Clang " __clang_version__ << endl
 #elif defined(WZ_CC_INTEL)
 	   // Intel includes the compiler name within the version string
 	   << __VERSION__ << endl
