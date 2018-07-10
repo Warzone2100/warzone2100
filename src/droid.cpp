@@ -1388,6 +1388,7 @@ static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsig
 	hitpoints += bodyStats.upgrade[player].hitpoints * asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player].hitpointPctOfBody / 100;
 
 	// Add the weapon body points
+	ASSERT(numWeaps <= MAX_WEAPONS, "numWeaps (%u) exceeds MAX_WEAPONS (%d)", numWeaps, MAX_WEAPONS);
 	for (unsigned i = 0; i < numWeaps; ++i)
 	{
 		if (asWeaps[i] > 0)
