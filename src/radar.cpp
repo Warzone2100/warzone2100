@@ -139,6 +139,7 @@ void radarInitVars()
 	debug(LOG_WZ, "Resetting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 	playerpos = Vector3i(-1, -1, -1);
+	frameSkip = 0;
 }
 
 bool InitRadar()
@@ -161,6 +162,7 @@ bool resizeRadar()
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
 	radarBuffer = (uint32_t *)malloc(radarBufferSize);
 	memset(radarBuffer, 0, radarBufferSize);
+	frameSkip = 0;
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 	pie_SetRadar(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, radarWidth, radarHeight, radarTexWidth, radarTexHeight);
@@ -173,6 +175,7 @@ bool ShutdownRadar()
 {
 	free(radarBuffer);
 	radarBuffer = nullptr;
+	frameSkip = 0;
 	return true;
 }
 
