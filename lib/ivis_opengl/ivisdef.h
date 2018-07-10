@@ -79,7 +79,7 @@ struct ANIMFRAME
 
 struct iIMDPoly
 {
-	Vector2f *texCoord = nullptr;
+	std::vector<Vector2f> texCoord;
 	Vector2f texAnim = Vector2f(0.f, 0.f);
 	uint32_t flags = 0;
 	int32_t zcentre = 0;
