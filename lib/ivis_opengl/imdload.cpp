@@ -242,8 +242,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 				poly->texAnim.y = 0;
 			}
 
-			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * 3);
-			ASSERT_OR_RETURN(false, poly->texCoord, "Out of memory allocating texture coordinates");
+			poly->texCoord.resize(nFrames * 3);
 			for (unsigned j = 0; j < 3; j++)
 			{
 				float VertexU, VertexV;
@@ -275,7 +274,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 		else
 		{
 			ASSERT_OR_RETURN(false, !(poly->flags & iV_IMD_TEXANIM), "Polygons with texture animation must have textures!");
-			poly->texCoord = nullptr;
+			poly->texCoord.clear();
 		}
 	}
 
