@@ -124,12 +124,12 @@ bool fpathInitialise()
 
 void fpathShutdown()
 {
-	// Signal the path finding thread to quit
-	fpathQuit = true;
-	wzSemaphorePost(fpathSemaphore);  // Wake up thread.
-
 	if (fpathThread)
 	{
+		// Signal the path finding thread to quit
+		fpathQuit = true;
+		wzSemaphorePost(fpathSemaphore);  // Wake up thread.
+
 		wzThreadJoin(fpathThread);
 		fpathThread = nullptr;
 		wzMutexDestroy(fpathMutex);

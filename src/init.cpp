@@ -1325,6 +1325,8 @@ bool stageThreeShutDown()
 
 	setScriptWinLoseVideo(PLAY_NONE);
 
+	fpathShutdown();
+
 	return true;
 }
 
