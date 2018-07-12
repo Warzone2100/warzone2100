@@ -714,11 +714,6 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 		return false;
 	}
 
-	if (!fpathInitialise())
-	{
-		return false;
-	}
-
 	// Initialize the iVis text rendering module
 	wzSceneBegin("Main menu loop");
 	iV_TextInit(horizScaleFactor, vertScaleFactor);
