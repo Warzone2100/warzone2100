@@ -129,6 +129,8 @@ public:
 	bool beginGroup(const WzString &name);
 	void endGroup();
 
+	bool isAtDocumentRoot() const;
+
 	WzString fileName() const
 	{
 		return mFilename;
@@ -151,6 +153,8 @@ public:
 	{
 		return mStatus;
 	}
+
+	std::string compactStringRepresentation(const bool ensure_ascii = false) const;
 };
 
 // Enable JSON support for custom types

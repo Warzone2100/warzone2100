@@ -127,40 +127,40 @@ bool statsAllocConstruct(UDWORD numEntries);
 void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index);
 
 /*Load the weapon stats from the file exported from Access*/
-bool loadWeaponStats(const char *pFileName);
+bool loadWeaponStats(WzConfig &ini);
 
 /*Load the body stats from the file exported from Access*/
-bool loadBodyStats(const char *pFileName);
+bool loadBodyStats(WzConfig &ini);
 
 /*Load the brain stats from the file exported from Access*/
-bool loadBrainStats(const char *pFileName);
+bool loadBrainStats(WzConfig &ini);
 
 /*Load the propulsion stats from the file exported from Access*/
-bool loadPropulsionStats(const char *pFileName);
+bool loadPropulsionStats(WzConfig &ini);
 
 /*Load the sensor stats from the file exported from Access*/
-bool loadSensorStats(const char *pFileName);
+bool loadSensorStats(WzConfig &ini);
 
 /*Load the ecm stats from the file exported from Access*/
-bool loadECMStats(const char *fileName);
+bool loadECMStats(WzConfig &ini);
 
 /*Load the repair stats from the file exported from Access*/
-bool loadRepairStats(const char *pFileName);
+bool loadRepairStats(WzConfig &ini);
 
 /*Load the construct stats from the file exported from Access*/
-bool loadConstructStats(const char *pFileName);
+bool loadConstructStats(WzConfig &ini);
 
 /*Load the Propulsion Types from the file exported from Access*/
-bool loadPropulsionTypes(const char *pFileName);
+bool loadPropulsionTypes(WzConfig &ini);
 
 /*Load the propulsion sounds from the file exported from Access*/
 bool loadPropulsionSounds(const char *pFileName);
 
 /*Load the Terrain Table from the file exported from Access*/
-bool loadTerrainTable(const char *pFileName);
+bool loadTerrainTable(WzConfig &ini);
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
-bool loadWeaponModifiers(const char *pFileName);
+bool loadWeaponModifiers(WzConfig &ini);
 
 /*******************************************************************************
 *		Generic stats functions

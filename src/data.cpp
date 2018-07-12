@@ -66,7 +66,7 @@ uint32_t	DataHash[DATA_MAXDATA] = {0};
 *	This is almost the same routine that Pumpkin had, minus the ugly bug :)
 *	And minus the old algorithm and debugging trace, replaced with a simple CRC...
 */
-static UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
+static UDWORD	hashBuffer(const uint8_t *pData, uint32_t size)
 {
 	char nl = '\n';
 	uint32_t crc = 0;
@@ -94,7 +94,7 @@ static UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 
 // create the hash for that data block.
 // Data should be converted to Network byte order
-static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
+static void calcDataHash(const uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
 	const uint32_t oldHash = DataHash[index];
 
@@ -113,6 +113,12 @@ static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 	debug(LOG_NET, "DataHash[%2u] = %08x", index, DataHash[index]);
 
 	return;
+}
+
+static void calcDataHash(const WzConfig &ini, uint32_t index)
+{
+	std::string jsonDump = ini.compactStringRepresentation();
+	calcDataHash(reinterpret_cast<const uint8_t *>(jsonDump.data()), jsonDump.size(), index);
 }
 
 void resetDataHash()
@@ -140,7 +146,10 @@ void dataClearSaveFlag()
 /* Load the body stats */
 static bool bufferSBODYLoad(const char *fileName, void **ppData)
 {
-	if (!loadBodyStats(fileName) || !allocComponentList(COMP_BODY, numBodyStats))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SBODY);
+
+	if (!loadBodyStats(ini) || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return false;
 	}
@@ -159,7 +168,10 @@ static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 /* Load the weapon stats */
 static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 {
-	if (!loadWeaponStats(fileName)
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SWEAPON);
+
+	if (!loadWeaponStats(ini)
 	    || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return false;
@@ -173,7 +185,10 @@ static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 /* Load the constructor stats */
 static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 {
-	if (!loadConstructStats(fileName)
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SCONSTR);
+
+	if (!loadConstructStats(ini)
 	    || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
 	{
 		return false;
@@ -187,7 +202,10 @@ static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 /* Load the ECM stats */
 static bool bufferSECMLoad(const char *fileName, void **ppData)
 {
-	if (!loadECMStats(fileName)
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SECM);
+
+	if (!loadECMStats(ini)
 	    || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return false;
@@ -201,7 +219,10 @@ static bool bufferSECMLoad(const char *fileName, void **ppData)
 /* Load the Propulsion stats */
 static bool bufferSPROPLoad(const char *fileName, void **ppData)
 {
-	if (!loadPropulsionStats(fileName) || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SPROP);
+
+	if (!loadPropulsionStats(ini) || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
 		return false;
 	}
@@ -213,7 +234,10 @@ static bool bufferSPROPLoad(const char *fileName, void **ppData)
 
 static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 {
-	if (!loadSensorStats(fileName)
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SSENSOR);
+
+	if (!loadSensorStats(ini)
 	    || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return false;
@@ -227,7 +251,10 @@ static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 /* Load the Repair stats */
 static bool bufferSREPAIRLoad(const char *fileName, void **ppData)
 {
-	if (!loadRepairStats(fileName) || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SREPAIR);
+
+	if (!loadRepairStats(ini) || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
 	{
 		return false;
 	}
@@ -240,7 +267,10 @@ static bool bufferSREPAIRLoad(const char *fileName, void **ppData)
 /* Load the Brain stats */
 static bool bufferSBRAINLoad(const char *fileName, void **ppData)
 {
-	if (!loadBrainStats(fileName) || !allocComponentList(COMP_BRAIN, numBrainStats))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SBRAIN);
+
+	if (!loadBrainStats(ini) || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return false;
 	}
@@ -252,11 +282,13 @@ static bool bufferSBRAINLoad(const char *fileName, void **ppData)
 /* Load the PropulsionType stats */
 static bool bufferSPROPTYPESLoad(const char *fileName, void **ppData)
 {
-	if (!loadPropulsionTypes(fileName))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SPROPTY);
+
+	if (!loadPropulsionTypes(ini))
 	{
 		return false;
 	}
-
 
 	//not interested in this value
 	*ppData = nullptr;
@@ -279,7 +311,10 @@ static bool bufferSPROPSNDLoad(const char *fileName, void **ppData)
 /* Load the STERRTABLE stats */
 static bool bufferSTERRTABLELoad(const char *fileName, void **ppData)
 {
-	if (!loadTerrainTable(fileName))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_STERRT);
+
+	if (!loadTerrainTable(ini))
 	{
 		return false;
 	}
@@ -300,7 +335,10 @@ static bool bufferSBPIMDLoad(const char *fileName, void **ppData)
 /* Load the Weapon Effect modifier stats */
 static bool bufferSWEAPMODLoad(const char *fileName, void **ppData)
 {
-	if (!loadWeaponModifiers(fileName))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SWEAPMOD);
+
+	if (!loadWeaponModifiers(ini))
 	{
 		return false;
 	}
@@ -334,7 +372,10 @@ static void dataSTEMPLRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Structure stats */
 static bool bufferSSTRUCTLoad(const char *fileName, void **ppData)
 {
-	if (!loadStructureStats(WzString::fromUtf8(fileName)))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SSTRUCT);
+
+	if (!loadStructureStats(ini))
 	{
 		return false;
 	}
@@ -359,7 +400,10 @@ static void dataSSTRUCTRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Structure strength modifier stats */
 static bool bufferSSTRMODLoad(const char *fileName, void **ppData)
 {
-	if (!loadStructureStrengthModifiers(fileName))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SSTRMOD);
+
+	if (!loadStructureStrengthModifiers(ini))
 	{
 		return false;
 	}
@@ -372,7 +416,10 @@ static bool bufferSSTRMODLoad(const char *fileName, void **ppData)
 /* Load the Feature stats */
 static bool bufferSFEATLoad(const char *fileName, void **ppData)
 {
-	if (!loadFeatureStats(fileName))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_SFEAT);
+
+	if (!loadFeatureStats(ini))
 	{
 		return false;
 	}
@@ -397,8 +444,6 @@ static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Research stats */
 static bool bufferRESCHLoad(const char *fileName, void **ppData)
 {
-	//calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
-
 	//check to see if already loaded
 	if (!asResearch.empty())
 	{
@@ -406,7 +451,10 @@ static bool bufferRESCHLoad(const char *fileName, void **ppData)
 		dataRESCHRelease(nullptr);
 	}
 
-	if (!loadResearch(WzString::fromUtf8(fileName)))
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	calcDataHash(ini, DATA_RESCH);
+
+	if (!loadResearch(ini))
 	{
 		return false;
 	}

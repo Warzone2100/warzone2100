@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_FEATURE_H__
 
 #include "objectdef.h"
+#include "lib/framework/wzconfig.h"
 
 /* The statistics for the features */
 extern FEATURE_STATS	*asFeatureStats;
@@ -34,7 +35,7 @@ extern UDWORD			numFeatureStats;
 extern FEATURE_STATS *oilResFeature;
 
 /* Load the feature stats */
-bool loadFeatureStats(const char *pFileName);
+bool loadFeatureStats(WzConfig &ini);
 
 /* Release the feature stats memory */
 void featureStatsShutDown();

@@ -27,7 +27,6 @@
 #include <map>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/wzconfig.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/imd.h"
 #include "objects.h"
@@ -102,9 +101,9 @@ bool researchInitVars()
 }
 
 /** Load the research stats */
-bool loadResearch(const WzString& filename)
+bool loadResearch(WzConfig &ini)
 {
-	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	PLAYER_RESEARCH dummy;
 	memset(&dummy, 0, sizeof(dummy));

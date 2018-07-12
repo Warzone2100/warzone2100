@@ -30,7 +30,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/geometry.h"
-#include "lib/framework/wzconfig.h"
 #include "lib/ivis_opengl/imd.h"
 #include "objects.h"
 #include "ai.h"
@@ -418,7 +417,7 @@ size_t sizeOfArray(const T(&)[ N ])
 }
 
 /* load the structure stats from the ini file */
-bool loadStructureStats(const WzString& filename)
+bool loadStructureStats(WzConfig &ini)
 {
 	std::map<WzString, STRUCTURE_TYPE> structType;
 	for (int i = 0; i < sizeOfArray(map_STRUCTURE_TYPE); i++)
@@ -432,7 +431,7 @@ bool loadStructureStats(const WzString& filename)
 		structStrength.emplace(WzString::fromUtf8(map_STRUCT_STRENGTH[i].string), map_STRUCT_STRENGTH[i].value);
 	}
 
-	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = list.size();
@@ -610,7 +609,7 @@ void setCurrentStructQuantity(bool displayError)
 }
 
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-bool loadStructureStrengthModifiers(const char *pFileName)
+bool loadStructureStrengthModifiers(WzConfig &ini)
 {
 	//initialise to 100%
 	for (unsigned i = 0; i < WE_NUMEFFECTS; ++i)
@@ -620,7 +619,7 @@ bool loadStructureStrengthModifiers(const char *pFileName)
 			asStructStrengthModifier[i][j] = 100;
 		}
 	}
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	for (size_t i = 0; i < list.size(); i++)
 	{
