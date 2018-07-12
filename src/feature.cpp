@@ -23,7 +23,6 @@
  * Load feature stats
  */
 #include "lib/framework/frame.h"
-#include "lib/framework/wzconfig.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
@@ -66,9 +65,9 @@ void featureInitVars()
 }
 
 /* Load the feature stats */
-bool loadFeatureStats(const char *pFileName)
+bool loadFeatureStats(WzConfig &ini)
 {
-	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	asFeatureStats = new FEATURE_STATS[list.size()];
 	numFeatureStats = list.size();

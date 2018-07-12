@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_STRUCTURE_H__
 
 #include "lib/framework/string_ext.h"
+#include "lib/framework/wzconfig.h"
 
 #include "objectdef.h"
 #include "structuredef.h"
@@ -80,9 +81,9 @@ void setMaxConstructors(int player, int value);
 bool IsPlayerDroidLimitReached(int player);
 bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 
-bool loadStructureStats(const WzString& filename);
+bool loadStructureStats(WzConfig &ini);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-bool loadStructureStrengthModifiers(const char *pFileName);
+bool loadStructureStrengthModifiers(WzConfig &ini);
 
 bool structureStatsShutDown();
 

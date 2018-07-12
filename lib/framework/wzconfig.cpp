@@ -141,6 +141,17 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	pCurrentObj = &mRoot;
 }
 
+bool WzConfig::isAtDocumentRoot() const
+{
+	return pCurrentObj == &mRoot;
+}
+
+std::string WzConfig::compactStringRepresentation(const bool ensure_ascii) const
+{
+	// Use the most compact representation of the JSON
+	return mRoot.dump(-1, ' ', ensure_ascii);
+}
+
 std::vector<WzString> WzConfig::childGroups() const
 {
 	std::vector<WzString> keys;

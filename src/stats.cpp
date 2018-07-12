@@ -335,9 +335,9 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index
 }
 
 /*Load the weapon stats from the file exported from Access*/
-bool loadWeaponStats(const char *pFileName)
+bool loadWeaponStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocWeapons(list.size());
 	// Hack to make sure ZNULLWEAPON is always first in list
@@ -552,9 +552,9 @@ bool loadWeaponStats(const char *pFileName)
 	return true;
 }
 
-bool loadBodyStats(const char *pFileName)
+bool loadBodyStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocBody(list.size());
 	// Hack to make sure ZNULLBODY is always first in list
@@ -668,9 +668,9 @@ bool loadBodyStats(const char *pFileName)
 }
 
 /*Load the Brain stats from the file exported from Access*/
-bool loadBrainStats(const char *pFileName)
+bool loadBrainStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocBrain(list.size());
 	// Hack to make sure ZNULLBRAIN is always first in list
@@ -762,9 +762,9 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 }
 
 /*Load the Propulsion stats from the file exported from Access*/
-bool loadPropulsionStats(const char *pFileName)
+bool loadPropulsionStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocPropulsion(list.size());
 	// Hack to make sure ZNULLPROP is always first in list
@@ -834,9 +834,9 @@ bool loadPropulsionStats(const char *pFileName)
 }
 
 /*Load the Sensor stats from the file exported from Access*/
-bool loadSensorStats(const char *pFileName)
+bool loadSensorStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocSensor(list.size());
 	// Hack to make sure ZNULLSENSOR is always first in list
@@ -920,9 +920,9 @@ bool loadSensorStats(const char *pFileName)
 }
 
 /*Load the ECM stats from the file exported from Access*/
-bool loadECMStats(const char *pFileName)
+bool loadECMStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocECM(list.size());
 	// Hack to make sure ZNULLECM is always first in list
@@ -976,9 +976,9 @@ bool loadECMStats(const char *pFileName)
 }
 
 /*Load the Repair stats from the file exported from Access*/
-bool loadRepairStats(const char *pFileName)
+bool loadRepairStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocRepair(list.size());
 	// Hack to make sure ZNULLREPAIR is always first in list
@@ -1036,9 +1036,9 @@ bool loadRepairStats(const char *pFileName)
 }
 
 /*Load the Construct stats from the file exported from Access*/
-bool loadConstructStats(const char *pFileName)
+bool loadConstructStats(WzConfig &ini)
 {
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	statsAllocConstruct(list.size());
 	// Hack to make sure ZNULLCONSTRUCT is always first in list
@@ -1078,13 +1078,13 @@ bool loadConstructStats(const char *pFileName)
 
 
 /*Load the Propulsion Types from the file exported from Access*/
-bool loadPropulsionTypes(const char *pFileName)
+bool loadPropulsionTypes(WzConfig &ini)
 {
 	const unsigned int NumTypes = PROPULSION_TYPE_NUM;
 
 	//allocate storage for the stats
 	asPropulsionTypes.resize(NumTypes);
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 
 	for (int i = 0; i < NumTypes; ++i)
@@ -1141,10 +1141,10 @@ bool loadPropulsionTypes(const char *pFileName)
 	return true;
 }
 
-bool loadTerrainTable(const char *pFileName)
+bool loadTerrainTable(WzConfig &ini)
 {
 	asTerrainTable = (int *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
@@ -1183,7 +1183,7 @@ static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString
 	return true;
 }
 
-bool loadWeaponModifiers(const char *pFileName)
+bool loadWeaponModifiers(WzConfig &ini)
 {
 	//initialise to 100%
 	for (int i = 0; i < WE_NUMEFFECTS; i++)
@@ -1197,7 +1197,7 @@ bool loadWeaponModifiers(const char *pFileName)
 			asWeaponModifierBody[i][j] = 100;
 		}
 	}
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); i++)
 	{

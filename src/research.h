@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_RESEARCH_H__
 #define __INCLUDED_SRC_RESEARCH_H__
 
+#include "lib/framework/wzconfig.h"
+
 #include "objectdef.h"
 
 struct VIEWDATA;
@@ -81,7 +83,7 @@ extern UDWORD	aDefaultSensor[MAX_PLAYERS];
 extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
-bool loadResearch(const WzString& filename);
+bool loadResearch(WzConfig &ini);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
