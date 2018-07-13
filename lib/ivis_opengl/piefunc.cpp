@@ -46,28 +46,30 @@ static GFX *radarViewGfx[2] = { nullptr, nullptr };
 
 void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 {
-	Vector3i pieVrts[VW_VERTICES];
+	Vector3i pieVrts_insidefill[VW_VERTICES - 1];
+	Vector3i pieVrts_outline[VW_VERTICES];
 
 	if (!radarViewGfx[0])
 	{
-		radarViewGfx[0] = new GFX(GFX_COLOUR, GL_TRIANGLE_FAN, 2);
+		radarViewGfx[0] = new GFX(GFX_COLOUR, GL_TRIANGLE_STRIP, 2);
 		radarViewGfx[1] = new GFX(GFX_COLOUR, GL_LINE_STRIP, 2);
 	}
 
 	static_assert(VW_VERTICES == 5, "Assumption that VW_VERTICES == 5 invalid. Update the following code.");
-	pieVrts[0] = v[1];
-	pieVrts[1] = v[0];
-	pieVrts[2] = v[2];
-	pieVrts[3] = v[3];
-	pieVrts[4] = v[1];
+	pieVrts_outline[0] = v[1];
+	pieVrts_outline[1] = v[0];
+	pieVrts_outline[2] = v[2];
+	pieVrts_outline[3] = v[3];
+	pieVrts_outline[4] = v[1];
+	pieVrts_insidefill[0] = v[2];
+	pieVrts_insidefill[1] = v[3];
+	pieVrts_insidefill[2] = v[0];
+	pieVrts_insidefill[3] = v[1];
 
 	GLfloat vert[VW_VERTICES * 2];
 	GLbyte cols[VW_VERTICES * 4];
-	for (int i = 0; i < VW_VERTICES; i++)
-	{
-		vert[i * 2 + 0] = pieVrts[i].x;
-		vert[i * 2 + 1] = pieVrts[i].y;
-	}
+
+	// Initialize the RGB values for both, and the alpha for the inside fill
 	for (int i = 0; i < VW_VERTICES * 4; i += 4)
 	{
 		cols[i + 0] = colour.byte.r;
@@ -75,8 +77,22 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 		cols[i + 2] = colour.byte.b;
 		cols[i + 3] = colour.byte.a >> 1;
 	}
-	radarViewGfx[0]->buffers(VW_VERTICES, vert, cols);
-	for (int i = 0; i < VW_VERTICES * 4; i += 4) // set proper alpha
+
+	// Inside fill
+	for (int i = 0; i < (VW_VERTICES - 1); i++)
+	{
+		vert[i * 2 + 0] = pieVrts_insidefill[i].x;
+		vert[i * 2 + 1] = pieVrts_insidefill[i].y;
+	}
+	radarViewGfx[0]->buffers(VW_VERTICES - 1, vert, cols);
+
+	// Outline
+	for (int i = 0; i < VW_VERTICES; i++)
+	{
+		vert[i * 2 + 0] = pieVrts_outline[i].x;
+		vert[i * 2 + 1] = pieVrts_outline[i].y;
+	}
+	for (int i = 0; i < VW_VERTICES * 4; i += 4) // set the proper alpha for the outline
 	{
 		cols[i + 3] = colour.byte.a;
 	}
@@ -119,7 +135,7 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vector3f), vrt.data(), GL_STREAM_DRAW);
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(program.locVertex);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glDisableVertexAttribArray(program.locVertex);
 }
 
