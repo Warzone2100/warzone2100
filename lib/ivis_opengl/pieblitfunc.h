@@ -42,6 +42,7 @@
 #include "pietypes.h"
 #include "piepalette.h"
 #include "pieclip.h"
+#include "lib/framework/opengl.h"
 #include <list>
 
 /***************************************************************************/
@@ -102,7 +103,7 @@ private:
 	int mHeight;
 	GLenum mdrawType;
 	int mCoordsPerVertex;
-	GLuint mBuffers[VBO_COUNT];
+	gfx_api::buffer* mBuffers[VBO_COUNT] = { nullptr };
 	gfx_api::texture* mTexture = nullptr;
 	int mSize;
 };
