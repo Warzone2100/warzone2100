@@ -69,14 +69,15 @@ static GLfloat lighting0[LIGHT_MAX][4];
 static std::vector<GLint> enabledAttribArrays;
 
 
-void enableArray(GLint buffer, GLint loc, GLint size, GLenum type, GLboolean normalised, GLsizei stride, std::size_t offset)
+void enableArray(gfx_api::buffer *buffer, GLint loc, GLint size, GLenum type, GLboolean normalised, GLsizei stride, std::size_t offset)
 {
+	ASSERT(buffer, "buffer is NULL");
 	if (loc == -1)
 	{
 		return;
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	buffer->bind();
 	glVertexAttribPointer(loc, size, type, normalised, stride, BUFFER_OFFSET(offset));
 	glEnableVertexAttribArray(loc);
 	enabledAttribArrays.push_back(loc);
@@ -166,7 +167,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
+	shape->buffers[VBO_INDEX]->bind();
 	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, nullptr);
 	disableArrays();
 	polyCount += shape->polys.size();
@@ -237,7 +238,7 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape->buffers[VBO_INDEX]);
+	shape->buffers[VBO_INDEX]->bind();
 	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->polys.size() * 3 * sizeof(uint16_t)));
 	disableArrays();
 
@@ -283,45 +284,6 @@ static inline float scale_y(float y, int flag, int flag_data)
 		}
 	}
 	return tempY;
-}
-
-namespace
-{
-	struct glBufferWrapper
-	{
-		GLuint id = 0;
-
-		glBufferWrapper()
-		{
-			glGenBuffers(1, &id);
-		}
-
-		~glBufferWrapper()
-		{
-			glDeleteBuffers(1, &id);
-		}
-
-		glBufferWrapper( const glBufferWrapper& other ) = delete; // non construction-copyable
-		glBufferWrapper& operator=( const glBufferWrapper& ) = delete; // non copyable
-
-		glBufferWrapper( glBufferWrapper&& other )
-		{
-			glDeleteBuffers(1, &id);
-			id = other.id;
-			other.id = 0;
-		}
-		glBufferWrapper& operator=( glBufferWrapper&& other )
-		{
-			if (this != &other)
-			{
-				glDeleteBuffers(1, &id);
-				id = other.id;
-				other.id = 0;
-			}
-			return *this;
-		}
-
-	};
 }
 
 inline void hash_combine(std::size_t& seed) { }
@@ -691,8 +653,7 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 {
 	// Use several buffers and a round-robin algorithm to attempt to avoid implicit synchronization
-	static std::vector<glBufferWrapper> buffers(10);
-	static std::vector<size_t> priorBufferSize(10, 0);
+	static std::vector<gfx_api::buffer*> buffers(10, nullptr);
 	static size_t currBuffer = 0;
 
 	size_t cachedShadowDraws = 0;
@@ -710,14 +671,16 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 		}
 	}
 
+	if (!buffers[currBuffer])
+		buffers[currBuffer] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
+
 	// Draw the shadow volume
 	const auto &premultipliedVertexes = shadowCache.getPremultipliedVertexes();
 	// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
 	// Thus we only need to include the perspective matrix
 	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() /** modelViewMatrix*/, glm::vec4(0.f));
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[currBuffer].id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * premultipliedVertexes.size(), premultipliedVertexes.data(), GL_STREAM_DRAW);
-	priorBufferSize[currBuffer] = sizeof(Vector3f) * premultipliedVertexes.size();
+	buffers[currBuffer]->upload(sizeof(Vector3f) * premultipliedVertexes.size(), premultipliedVertexes.data());
+	buffers[currBuffer]->bind();
 	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(program.locVertex);
 

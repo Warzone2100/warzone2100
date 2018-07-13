@@ -30,7 +30,7 @@
 #define _ivisdef_h
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include "pietypes.h"
 #include "tex.h"
 
@@ -135,7 +135,7 @@ struct iIMDShape
 	std::vector<iIMDPoly> polys;
 
 	// The new rendering data
-	GLuint buffers[VBO_COUNT] = { 0 };
+	gfx_api::buffer* buffers[VBO_COUNT] = { nullptr };
 	SHADER_MODE shaderProgram = SHADER_NONE; // if using specialized shader for this model
 
 	// object animation (animating a level, rather than its texture)
@@ -168,7 +168,7 @@ struct ImageDef
 	int YOffset;            /**< Y offset into source position */
 
 	int textureId;		///< duplicate of below, fix later
-	GLfloat invTextureSize;
+	gfx_api::gfxFloat invTextureSize;
 };
 
 struct Image;
