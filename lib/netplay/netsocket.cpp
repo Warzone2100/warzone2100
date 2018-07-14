@@ -625,7 +625,31 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 		}
 		else
 		{
+		#if ZLIB_VERNUM < 0x1252
+			// zlib < 1.2.5.2 does not support `#define ZLIB_CONST`
+			// Unfortunately, some OSes (ex. OpenBSD) ship with zlib < 1.2.5.2
+			// Workaround: cast away the const of the input, and disable the resulting -Wcast-qual warning
+			#if defined(__clang__)
+			#  pragma clang diagnostic push
+			#  pragma clang diagnostic ignored "-Wcast-qual"
+			#elif defined(__GNUC__)
+			#  pragma GCC diagnostic push
+			#  pragma GCC diagnostic ignored "-Wcast-qual"
+			#endif
+
+			// cast away the const for earlier zlib versions
+			sock->zDeflate.next_in = (Bytef *)buf; // -Wcast-qual
+
+			#if defined(__clang__)
+			#  pragma clang diagnostic pop
+			#elif defined(__GNUC__)
+			#  pragma GCC diagnostic pop
+			#endif
+		#else
+			// zlib >= 1.2.5.2 supports ZLIB_CONST
 			sock->zDeflate.next_in = (const Bytef *)buf;
+		#endif
+
 			sock->zDeflate.avail_in = size;
 			sock->zDeflateInSize += sock->zDeflate.avail_in;
 			do
