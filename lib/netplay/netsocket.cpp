@@ -625,7 +625,9 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 		}
 		else
 		{
-			sock->zDeflate.next_in = (const Bytef *)buf;
+			std::unique_ptr<Bytef> ubuf(new Bytef[size]);
+			::memcpy(ubuf.get(), buf, size);
+			sock->zDeflate.next_in = ubuf.get();
 			sock->zDeflate.avail_in = size;
 			sock->zDeflateInSize += sock->zDeflate.avail_in;
 			do
