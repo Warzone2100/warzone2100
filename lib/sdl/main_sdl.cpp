@@ -260,7 +260,20 @@ WzString wzGetSelection()
 // Here we handle VSYNC enable/disabling
 #if defined(WZ_WS_X11)
 
+#if defined(__clang__)
+// Some versions of the X11 headers (which are included by <GL/glx.h>)
+// trigger `named variadic macros are a GNU extension [-Wvariadic-macros]`
+// on Clang. https://lists.x.org/archives/xorg-devel/2015-January/045216.html
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wvariadic-macros"
+#endif
+
 #include <GL/glx.h> // GLXDrawable
+
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#endif
+
 // X11 polution
 #ifdef Status
 #undef Status
