@@ -96,7 +96,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_link_libraries(warzone2100 theora)
   if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group,-subsystem,windows")
     target_link_libraries(warzone2100 ${QT5ALL_LIBRARIES} ${QT5ALL_LDFLAGS_OTHER})
@@ -104,10 +103,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
   else()
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group")
   endif()
-elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-    target_link_libraries(warzone2100
-        "${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/theora.lib"
-    )
 endif()
 
 #######################
