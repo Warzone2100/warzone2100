@@ -21,34 +21,9 @@
 #import "cocoa_wrapper.h"
 
 #ifdef WZ_OS_MAC
+
+
 #import <AppKit/AppKit.h>
-#import <stdarg.h>
-#import "WZSDLAppDelegate.h"
-
-void cocoaInit()
-{
-	NSApplicationLoad();
-}
-
-void cocoaRunApplication(void (*mainEventLoop)()) {
-	assert([NSThread isMainThread]); // Must be called from the main thread.
-	
-    @autoreleasepool {
-        NSApplication * application = [NSApplication sharedApplication];
-        
-        // Configure the WZ SDL Application Delegate
-        WZSDLAppDelegate * delegate = [[WZSDLAppDelegate alloc] init];
-        [delegate setMainEventLoop: mainEventLoop];
-        
-        [application setDelegate:delegate];
-
-        // Run the NSApplication
-        [application run];
-        
-        // NSApp.run has returned, app is exiting
-        [application setDelegate:nil];
-    }
-}
 
 static inline NSString * _Nonnull nsstringify(const char *str)
 {

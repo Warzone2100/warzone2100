@@ -25,10 +25,6 @@
 
 #ifdef WZ_OS_MAC
 
-void cocoaInit(void);
-
-void cocoaRunApplication( void (*mainEventLoop)() );
-
 /*!
  * Display an alert dialog.
  * This blocks until the dialog is dismissed.
