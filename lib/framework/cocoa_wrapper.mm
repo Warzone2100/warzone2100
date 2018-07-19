@@ -22,6 +22,9 @@
 
 #ifdef WZ_OS_MAC
 
+#if ! __has_feature(objc_arc)
+#error "Objective-C ARC (Automatic Reference Counting) is off"
+#endif
 
 #import <AppKit/AppKit.h>
 
