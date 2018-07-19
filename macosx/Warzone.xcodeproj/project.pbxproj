@@ -748,7 +748,6 @@
 		BCC95E921F3CF36F00A243A4 /* apinames.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC95E7B1F3CF15D00A243A4 /* apinames.c */; };
 		BCC95E931F3CF37800A243A4 /* truetype.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC95E7D1F3CF17700A243A4 /* truetype.c */; };
 		BCD210A11F3D5E080028012B /* upnpdev.c in Sources */ = {isa = PBXBuildFile; fileRef = BCF97EF41F3CCCE600343E05 /* upnpdev.c */; };
-		BCD210A21F3D82830028012B /* WZSDLAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 436D24DF149642EB00BF74E3 /* WZSDLAppDelegate.mm */; };
 		BCF97EF61F3CCCF100343E05 /* upnpdev.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF97EF31F3CCCE600343E05 /* upnpdev.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D72B3A791F4E4C1F0011D653 /* gfx_api_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72B3A6D1F4E4C160011D653 /* gfx_api_gl.cpp */; };
 		D75F2F3320B470AC00F81A9A /* physfs_archiver_7z.c in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F1B20B470AC00F81A9A /* physfs_archiver_7z.c */; };
@@ -1886,8 +1885,6 @@
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = SOURCE_ROOT; };
 		436D248314963CF200BF74E3 /* main_sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main_sdl.cpp; path = ../lib/sdl/main_sdl.cpp; sourceTree = SOURCE_ROOT; };
 		436D248814963E8800BF74E3 /* main_qt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main_qt.cpp; path = ../lib/qtgame/main_qt.cpp; sourceTree = SOURCE_ROOT; };
-		436D24DE149642EB00BF74E3 /* WZSDLAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WZSDLAppDelegate.h; path = ../3rdparty/SDL/mac/WZSDLAppDelegate.h; sourceTree = SOURCE_ROOT; };
-		436D24DF149642EB00BF74E3 /* WZSDLAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WZSDLAppDelegate.mm; path = ../3rdparty/SDL/mac/WZSDLAppDelegate.mm; sourceTree = SOURCE_ROOT; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = SOURCE_ROOT; };
 		4377CF1416F7E89B008B1083 /* listwidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = listwidget.cpp; path = ../lib/widget/listwidget.cpp; sourceTree = SOURCE_ROOT; };
 		4377CF1516F7E89C008B1083 /* listwidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = listwidget.h; path = ../lib/widget/listwidget.h; sourceTree = SOURCE_ROOT; };
@@ -3258,7 +3255,6 @@
 				43502DAB1347650100A02A1F /* GLExtensionWrangler sources */,
 				43C18F79114FF38B0028741B /* MiniUPnPc sources */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
-				436D24A5149641E000BF74E3 /* SDL sources */,
 				02DDA8610BD3C1B50049AB60 /* Ogg sources */,
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
 				02DDA8620BD3C1BB0049AB60 /* Vorbis sources */,
@@ -3442,15 +3438,6 @@
 				D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */,
 			);
 			name = SDL;
-			sourceTree = "<group>";
-		};
-		436D24A5149641E000BF74E3 /* SDL sources */ = {
-			isa = PBXGroup;
-			children = (
-				436D24DE149642EB00BF74E3 /* WZSDLAppDelegate.h */,
-				436D24DF149642EB00BF74E3 /* WZSDLAppDelegate.mm */,
-			);
-			name = "SDL sources";
 			sourceTree = "<group>";
 		};
 		437D32BE150A474700B45AAE /* Sub-Projects */ = {
@@ -5644,7 +5631,6 @@
 				0246A2DE0BD3CCDC004D1C70 /* objmem.cpp in Sources */,
 				D7DA4DDA2076BB930072959F /* utf8proc.c in Sources */,
 				0246A2DF0BD3CCDC004D1C70 /* oprint.cpp in Sources */,
-				BCD210A21F3D82830028012B /* WZSDLAppDelegate.mm in Sources */,
 				0246A2E10BD3CCDC004D1C70 /* order.cpp in Sources */,
 				0246A2E30BD3CCDC004D1C70 /* power.cpp in Sources */,
 				0246A2E40BD3CCDC004D1C70 /* projectile.cpp in Sources */,
