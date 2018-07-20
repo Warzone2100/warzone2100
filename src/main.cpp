@@ -88,7 +88,7 @@
 // NOTE: Moving these defines is likely to (and has in the past) break the mac builds
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
-# include "cocoa_wrapper.h"
+# include "lib/framework/cocoa_wrapper.h"
 #endif // WZ_OS_MAC
 
 /* Always use fallbacks on Windows */
