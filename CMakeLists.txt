@@ -264,6 +264,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# -Wrange-loop-analysis		(Clang 3.7+)
 		check_compiler_flags_output("-Werror -Wrange-loop-analysis -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wrange-loop-analysis" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
+		# -Wcomma					(Clang 3.9+)
+		check_compiler_flags_output("-Werror -Wcomma -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wcomma" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -Wcomma -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wcomma" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
 		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
 			# Enable -Werror (if supported)
 			check_compiler_flags_output("-Werror" COMPILER_TYPE C   OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
