@@ -608,7 +608,6 @@
 		BC32B07B1F3D48FB0046142A /* QtWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC32B07A1F3D48F60046142A /* QtWidgets.framework */; };
 		BC32B07C1F3D48FB0046142A /* QtWidgets.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = BC32B07A1F3D48F60046142A /* QtWidgets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BC32B07E1F3D495A0046142A /* modding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC32B07D1F3D49590046142A /* modding.cpp */; };
-		BC438B7D1F4A43A700640CEB /* WarzoneHelp in Resources */ = {isa = PBXBuildFile; fileRef = BC438B7C1F4A438E00640CEB /* WarzoneHelp */; };
 		BC4B62CE1F3E602500BF5BA4 /* libqcocoa.dylib in Copy Qt Plugins - Platform */ = {isa = PBXBuildFile; fileRef = BC4B62C21F3E5FF600BF5BA4 /* libqcocoa.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BC4B62D41F3E694300BF5BA4 /* libcocoaprintersupport.dylib in Copy Qt Plugins - PrintSupport */ = {isa = PBXBuildFile; fileRef = BC4B62D21F3E690400BF5BA4 /* libcocoaprintersupport.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BC4B62D51F3E697100BF5BA4 /* QtPrintSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC4B62CF1F3E633500BF5BA4 /* QtPrintSupport.framework */; };
@@ -780,6 +779,7 @@
 		D75F2F5E20B47E8800F81A9A /* hb-aat-layout.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */; };
 		D75F2F6020B47EAA00F81A9A /* hb-ot-color.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */; };
 		D75F2F6220B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */; };
+		D763F6082103FDA2008AEB0A /* docs in Resources */ = {isa = PBXBuildFile; fileRef = D763F6072103FD87008AEB0A /* docs */; };
 		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
 		D7AFDC2B20E295D500DA9E62 /* miniupnpc_socketdef.h in Headers */ = {isa = PBXBuildFile; fileRef = D7AFDC2A20E295D500DA9E62 /* miniupnpc_socketdef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D7CC6429204F234F004AEF50 /* wzstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7CC6428204F234F004AEF50 /* wzstring.cpp */; };
@@ -2189,7 +2189,6 @@
 		BC32B0751F3D36480046142A /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = external/SDL2/SDL2.framework; sourceTree = "<group>"; };
 		BC32B07A1F3D48F60046142A /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtWidgets.framework; sourceTree = "<group>"; };
 		BC32B07D1F3D49590046142A /* modding.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modding.cpp; path = ../src/modding.cpp; sourceTree = "<group>"; };
-		BC438B7C1F4A438E00640CEB /* WarzoneHelp */ = {isa = PBXFileReference; lastKnownFileType = text; path = WarzoneHelp; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC4B62C21F3E5FF600BF5BA4 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
 		BC4B62CF1F3E633500BF5BA4 /* QtPrintSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtPrintSupport.framework; sourceTree = "<group>"; };
 		BC4B62D21F3E690400BF5BA4 /* libcocoaprintersupport.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcocoaprintersupport.dylib; path = plugins/printsupport/libcocoaprintersupport.dylib; sourceTree = "<group>"; };
@@ -2324,6 +2323,7 @@
 		D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-aat-layout.cc"; path = "external/harfbuzz/src/hb-aat-layout.cc"; sourceTree = "<group>"; };
 		D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-color.cc"; path = "external/harfbuzz/src/hb-ot-color.cc"; sourceTree = "<group>"; };
 		D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-shape-complex-khmer.cc"; path = "external/harfbuzz/src/hb-ot-shape-complex-khmer.cc"; sourceTree = "<group>"; };
+		D763F6072103FD87008AEB0A /* docs */ = {isa = PBXFileReference; lastKnownFileType = text; path = docs; sourceTree = BUILT_PRODUCTS_DIR; };
 		D794D1DB20B5F0C50016BE99 /* pienormalize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pienormalize.h; path = ../lib/ivis_opengl/pienormalize.h; sourceTree = "<group>"; };
 		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
 		D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_sdl_helpers.mm; path = ../lib/sdl/cocoa_sdl_helpers.mm; sourceTree = "<group>"; };
@@ -2562,7 +2562,7 @@
 		023A1D4F0D2DAEC900EFEB37 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BC438B7C1F4A438E00640CEB /* WarzoneHelp */,
+				D763F6072103FD87008AEB0A /* docs */,
 				43536BD210DFEB37006B579C /* GenericFramework-Info.plist */,
 				432BE3ED10D9CB4D00A486AB /* theora */,
 				432BE3C010D9C79400A486AB /* ogg */,
@@ -4841,7 +4841,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC438B7D1F4A43A700640CEB /* WarzoneHelp in Resources */,
+				D763F6082103FDA2008AEB0A /* docs in Resources */,
 				BCC809D51F491F65001F546D /* COPYING in Resources */,
 				BCC809D61F491F65001F546D /* COPYING.NONGPL in Resources */,
 				BCC809D71F491F65001F546D /* COPYING.README in Resources */,
@@ -5138,13 +5138,10 @@
 			);
 			name = Docs;
 			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/WarzoneHelp/Contents/Info.plist",
-				"$(BUILT_PRODUCTS_DIR)/WarzoneHelp/Contents/Resources/docbook-xsl.css",
-				"$(BUILT_PRODUCTS_DIR)/WarzoneHelp/Contents/Resources/en.lproj/index.html",
-				"$(BUILT_PRODUCTS_DIR)/WarzoneHelp/Contents/Resources/en.lproj/javascript.pdf",
-				"$(BUILT_PRODUCTS_DIR)/WarzoneHelp/Contents/Resources/en.lproj/warzone2100.6.html",
-				"$(BUILT_PRODUCTS_DIR)/WarzoneHelp/Contents/Resources/en.lproj/WarzoneHelp.helpindex",
-				"$(BUILT_PRODUCTS_DIR)/WarzoneHelp/Contents/Resources/images",
+				"$(BUILT_PRODUCTS_DIR)/docs/docbook-xsl.css",
+				"$(BUILT_PRODUCTS_DIR)/docs/quickstartguide.html",
+				"$(BUILT_PRODUCTS_DIR)/docs/warzone2100.6.html",
+				"$(BUILT_PRODUCTS_DIR)/docs/images",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
