@@ -779,6 +779,7 @@
 		D75F2F5E20B47E8800F81A9A /* hb-aat-layout.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */; };
 		D75F2F6020B47EAA00F81A9A /* hb-ot-color.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */; };
 		D75F2F6220B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc in Sources */ = {isa = PBXBuildFile; fileRef = D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */; };
+		D763F5FC2103D6C0008AEB0A /* cocoa_wz_menus.mm in Sources */ = {isa = PBXBuildFile; fileRef = D763F5FB2103D6C0008AEB0A /* cocoa_wz_menus.mm */; };
 		D763F6082103FDA2008AEB0A /* docs in Resources */ = {isa = PBXBuildFile; fileRef = D763F6072103FD87008AEB0A /* docs */; };
 		D7AD5BB8201BD65B000760A1 /* cocoa_sdl_helpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */; };
 		D7AFDC2B20E295D500DA9E62 /* miniupnpc_socketdef.h in Headers */ = {isa = PBXBuildFile; fileRef = D7AFDC2A20E295D500DA9E62 /* miniupnpc_socketdef.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2323,6 +2324,8 @@
 		D75F2F5D20B47E8800F81A9A /* hb-aat-layout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-aat-layout.cc"; path = "external/harfbuzz/src/hb-aat-layout.cc"; sourceTree = "<group>"; };
 		D75F2F5F20B47EAA00F81A9A /* hb-ot-color.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-color.cc"; path = "external/harfbuzz/src/hb-ot-color.cc"; sourceTree = "<group>"; };
 		D75F2F6120B47EBB00F81A9A /* hb-ot-shape-complex-khmer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-shape-complex-khmer.cc"; path = "external/harfbuzz/src/hb-ot-shape-complex-khmer.cc"; sourceTree = "<group>"; };
+		D763F5FA2103D6C0008AEB0A /* cocoa_wz_menus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_wz_menus.h; path = ../lib/sdl/cocoa_wz_menus.h; sourceTree = "<group>"; };
+		D763F5FB2103D6C0008AEB0A /* cocoa_wz_menus.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_wz_menus.mm; path = ../lib/sdl/cocoa_wz_menus.mm; sourceTree = "<group>"; };
 		D763F6072103FD87008AEB0A /* docs */ = {isa = PBXFileReference; lastKnownFileType = text; path = docs; sourceTree = BUILT_PRODUCTS_DIR; };
 		D794D1DB20B5F0C50016BE99 /* pienormalize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pienormalize.h; path = ../lib/ivis_opengl/pienormalize.h; sourceTree = "<group>"; };
 		D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_sdl_helpers.h; path = ../lib/sdl/cocoa_sdl_helpers.h; sourceTree = "<group>"; };
@@ -3436,6 +3439,8 @@
 				436D248314963CF200BF74E3 /* main_sdl.cpp */,
 				D7AD5BB6201BD65B000760A1 /* cocoa_sdl_helpers.h */,
 				D7AD5BB7201BD65B000760A1 /* cocoa_sdl_helpers.mm */,
+				D763F5FA2103D6C0008AEB0A /* cocoa_wz_menus.h */,
+				D763F5FB2103D6C0008AEB0A /* cocoa_wz_menus.mm */,
 			);
 			name = SDL;
 			sourceTree = "<group>";
@@ -5531,6 +5536,7 @@
 				0246A1070BD3CC29004D1C70 /* pieclip.cpp in Sources */,
 				0246A11E0BD3CC43004D1C70 /* pieblitfunc.cpp in Sources */,
 				0246A11F0BD3CC43004D1C70 /* piedraw.cpp in Sources */,
+				D763F5FC2103D6C0008AEB0A /* cocoa_wz_menus.mm in Sources */,
 				0246A1200BD3CC43004D1C70 /* piefunc.cpp in Sources */,
 				0246A1210BD3CC43004D1C70 /* piematrix.cpp in Sources */,
 				0246A1220BD3CC43004D1C70 /* piemode.cpp in Sources */,

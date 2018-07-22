@@ -54,6 +54,11 @@
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
 
+#if defined(WZ_OS_MAC)
+#include "cocoa_sdl_helpers.h"
+#include "cocoa_wz_menus.h"
+#endif
+
 void mainLoop();
 // used in crash reports & version info
 const char *BACKEND = "SDL";
@@ -520,10 +525,6 @@ bool wzIsFullscreen()
 	}
 	return false;
 }
-
-#if defined(WZ_OS_MAC)
-#include "cocoa_sdl_helpers.h"
-#endif
 
 bool wzIsMaximized()
 {
@@ -1997,6 +1998,10 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	//			  we *must* immediately call setlocale(LC_NUMERIC,"C") after initializing
 	//			  or things like loading (parsing) levels / resources can fail
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
+#endif
+
+#if defined(WZ_OS_MAC)
+	cocoaSetupWZMenus();
 #endif
 
 	// FIXME: aspect ratio
