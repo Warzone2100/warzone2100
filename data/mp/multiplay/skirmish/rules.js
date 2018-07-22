@@ -521,12 +521,12 @@ function eventResearched(research, structure, player)
 			}
 			if (Stats[ctype][cname][parameter] instanceof Array)
 			{
-				var dst = Upgrades[player][ctype][cname][parameter].slice()
+				var dst = Upgrades[player][ctype][cname][parameter].slice();
 				for (var x = 0; x < dst.length; x++)
 				{
 					dst[x] += Math.ceil(Stats[ctype][cname][parameter][x] * v['value'] / 100);
 				}
-				Upgrades[player][ctype][cname][parameter] = dst
+				Upgrades[player][ctype][cname][parameter] = dst;
 				//debug("    upgraded to " + dst);
 			}
 			else if (Stats[ctype][cname][parameter] > 0) // only applies if stat has above zero value already
