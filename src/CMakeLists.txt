@@ -89,10 +89,7 @@ if(ENABLE_NLS)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-	if("${SDL2MAIN_LIBRARY}" STREQUAL "")
-		message( WARNING "SDL2Main library not found. Linking will not succeed." )
-	endif()
-    target_link_libraries(warzone2100 ws2_32 iphlpapi ${SDL2MAIN_LIBRARY})
+    target_link_libraries(warzone2100 ws2_32 iphlpapi)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
