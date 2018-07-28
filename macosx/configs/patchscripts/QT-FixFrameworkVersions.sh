@@ -6,6 +6,7 @@
 # Specifically:
 #       - The Version is "5" at /Versions/5, instead of "A" at /Versions/A (breaks automatic code-signing)
 #       - The frameworks contain additional debug libraries, which can be safely removed (also breaks automatic code-signing)
+#       - The frameworks contain ".prl" files in their root folder that must be removed (also breaks verifying code signature of containing app bundle)
 #       - The internal linker paths point to /Versions/5 in other Qt frameworks (which must be fixed-up if we are changing the Version of everything to A)
 
 OutDir="QT"
@@ -13,6 +14,20 @@ DirectorY="external/${OutDir}"
 
 QtFrameworks=('QtCore' 'QtGui' 'QtNetwork' 'QtOpenGL' 'QtPrintSupport' 'QtScript' 'QtWidgets')
 QtPlugins=('platforms/libqcocoa.dylib' 'printsupport/libcocoaprintersupport.dylib')
+
+
+get_script_dir () {
+	# See: https://stackoverflow.com/a/246128
+	SOURCE="${BASH_SOURCE[0]}"
+	while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+	  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+	  SOURCE="$(readlink "$SOURCE")"
+	  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+	done
+	DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+	echo "$DIR"
+}
+SCRIPT_DIR="$(get_script_dir)"
 
 updateInternalLibraryPaths() {
     f=$1
@@ -35,7 +50,7 @@ updateInternalLibraryPaths() {
 
 fixFrameworkVersion() {
     # call FixFrameworkVersion.sh
-    configs/FixFrameworkVersion.sh "${DirectorY}/$1"
+	"${SCRIPT_DIR}/../FixFrameworkVersion.sh" "${DirectorY}/$1"
     if [ $? -ne 0 ]; then
         echo "error: [$1] FixFrameworkVersion.sh \"${DirectorY}/$1\" failed"
         exit 1
@@ -47,6 +62,18 @@ fixFrameworkVersion() {
         cd - > /dev/null
     else
         echo "error: [$1] Unable to change directory into the framework's A Version"
+        exit 1
+    fi
+
+	# Clean up the framework root
+	if cd "${DirectorY}/$1"; then
+        # Remove the "_debug" symlink
+        rm *_debug 2> /dev/null
+        # Remove the ".prl" files
+        rm *.prl 2> /dev/null
+        cd - > /dev/null
+    else
+        echo "error: [$1] Unable to change directory into the framework's root"
         exit 1
     fi
 

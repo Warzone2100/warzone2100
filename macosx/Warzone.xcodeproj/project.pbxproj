@@ -74,7 +74,6 @@
 				4311544C14BA01F900332251 /* Docs */,
 				433360A711A0796D00380F5E /* Qt */,
 				433360B311A079F700380F5E /* Moc */,
-				BC461C981F3E20AC0064CB45 /* Fix Qt */,
 			);
 			dependencies = (
 			);
@@ -5375,20 +5374,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "configs/mkdmgs.sh\nexit ${?}\n";
-		};
-		BC461C981F3E20AC0064CB45 /* Fix Qt */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fix Qt";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = ". configs/patchscripts/QT-FixFrameworkVersions.sh";
 		};
 		BC8023251F3D032C001E75F8 /* Designated Requirement */ = {
 			isa = PBXShellScriptBuildPhase;
