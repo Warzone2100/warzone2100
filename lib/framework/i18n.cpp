@@ -318,11 +318,43 @@ static bool setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
  */
 static bool setLocaleUnix(const char *locale)
 {
+#ifdef WZ_OS_MAC
+	// Set the appropriate language environment variable *before* the call to libintl's `setlocale`.
+
+	// First, check if LC_ALL or LC_MESSAGES is set, as these may override LANG
+	const char *pEnvLang = getenv("LC_ALL");
+	if ((pEnvLang != nullptr) && (pEnvLang[0] != '\0'))
+	{
+		debug(LOG_WARNING, "Environment variable \"LC_ALL\" is set, and may override runtime language changes.");
+	}
+	pEnvLang = getenv("LC_MESSAGES");
+	if ((pEnvLang != nullptr) && (pEnvLang[0] != '\0'))
+	{
+		debug(LOG_WARNING, "Environment variable \"LC_MESSAGES\" is set, and may override runtime language changes.");
+	}
+
+	// Set the LANG env-var (temporarily saving the old value)
+	pEnvLang = getenv("LANG");
+	std::string prior_LANG((pEnvLang != nullptr) ? pEnvLang : "");
+#  if defined HAVE_SETENV
+	setenv("LANG", locale, 1);
+#  else
+	# warning "No supported method to set environment variables"
+#  endif
+#endif // (ifdef WZ_OS_MAC)
+
 	const char *actualLocale = setlocale(LC_ALL, locale);
 
 	if (actualLocale == NULL)
 	{
 		info("Failed to set locale to \"%s\"", locale);
+#ifdef WZ_OS_MAC
+#  if defined HAVE_SETENV
+		setenv("LANG", prior_LANG.c_str(), 1);
+#  else
+		# warning "No supported method to set environment variables"
+#  endif
+#endif
 	}
 	else
 	{
@@ -332,7 +364,8 @@ static bool setLocaleUnix(const char *locale)
 		}
 	}
 
-	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
+	const char * numericLocale = setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
+	debug(LOG_WZ, "LC_NUMERIC: \"%s\"", (numericLocale != nullptr) ? numericLocale : "<null>");
 
 	return (actualLocale != NULL);
 }
