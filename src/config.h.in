@@ -34,6 +34,12 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #cmakedefine HAVE_MEMORY_H @HAVE_MEMORY_H@
 
+/* Define to 1 if you have the `putenv' function. */
+#cmakedefine HAVE_PUTENV @HAVE_PUTENV@
+
+/* Define to 1 if you have the `setenv' function. */
+#cmakedefine HAVE_SETENV @HAVE_SETENV@
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H @HAVE_STDINT_H@
 
