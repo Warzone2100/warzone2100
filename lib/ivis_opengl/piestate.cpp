@@ -1012,6 +1012,24 @@ RENDER_STATE getCurrentRenderState()
 	return rendStates;
 }
 
+// A replacement for gluErrorString()
+// NOTE: May return `nullptr` if error is unknown
+const char * wzGLErrorString(GLenum error)
+{
+	switch (error) {
+		case GL_NO_ERROR: return "GL_NO_ERROR";
+		case GL_INVALID_ENUM: return "GL_INVALID_ENUM";
+		case GL_INVALID_VALUE: return "GL_INVALID_VALUE";
+		case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
+		case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
+		case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
+		case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
+		case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
+		default:
+			return nullptr;
+	}
+}
+
 bool _glerrors(const char *function, const char *file, int line)
 {
 	bool ret = false;
@@ -1019,7 +1037,15 @@ bool _glerrors(const char *function, const char *file, int line)
 	while (err != GL_NO_ERROR)
 	{
 		ret = true;
-		debug(LOG_ERROR, "OpenGL error in function %s at %s:%u: %s\n", function, file, line, gluErrorString(err));
+		const char * pErrorString = wzGLErrorString(err);
+		if (pErrorString)
+		{
+			debug(LOG_ERROR, "OpenGL error in function %s at %s:%u: %s\n", function, file, line, pErrorString);
+		}
+		else
+		{
+			debug(LOG_ERROR, "OpenGL error in function %s at %s:%u: <unknown GL error: %u>\n", function, file, line, err);
+		}
 		err = glGetError();
 	}
 	return ret;
