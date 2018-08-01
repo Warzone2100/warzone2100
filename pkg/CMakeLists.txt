@@ -13,10 +13,43 @@ endfunction()
 set(CPACK_PACKAGE_NAME			"Warzone 2100")
 set(CPACK_PACKAGE_VENDOR		"Warzone 2100 Project")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_CHECKSUM SHA256)
+set(CPACK_PACKAGE_CHECKSUM		SHA256)
 
+#########################
 # Default components that are added to package
-set(CPACK_COMPONENTS_ALL Core Languages)
+
+set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages)
+set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
+
+#########################
+# Default component info
+
+set(CPACK_COMPONENT_CORE_DISPLAY_NAME "Application")
+set(CPACK_COMPONENT_CORE_REQUIRED ON)
+set(CPACK_COMPONENT_CORE_DESCRIPTION "Application")
+set(CPACK_COMPONENT_CORE_GROUP "CoreGroup")
+set(CPACK_COMPONENT_CORE_DEPENDS Data Docs Info)
+
+set(CPACK_COMPONENT_DATA_DISPLAY_NAME "Data Files")
+set(CPACK_COMPONENT_DATA_REQUIRED ON)
+set(CPACK_COMPONENT_DATA_DESCRIPTION "Data Files")
+set(CPACK_COMPONENT_DATA_GROUP "CoreGroup")
+
+set(CPACK_COMPONENT_DOCS_DISPLAY_NAME "Documentation")
+set(CPACK_COMPONENT_DOCS_REQUIRED ON)
+set(CPACK_COMPONENT_DOCS_DESCRIPTION "Documentation")
+set(CPACK_COMPONENT_DOCS_GROUP "CoreGroup")
+
+set(CPACK_COMPONENT_INFO_DISPLAY_NAME "Info")
+set(CPACK_COMPONENT_INFO_REQUIRED ON)
+set(CPACK_COMPONENT_INFO_DESCRIPTION "Info Files")
+set(CPACK_COMPONENT_INFO_GROUP "CoreGroup")
+
+set(CPACK_COMPONENT_GROUP_COREGROUP_DISPLAY_NAME "Core files")
+set(CPACK_COMPONENT_GROUP_COREGROUP_REQUIRED ON)
+set(CPACK_COMPONENT_GROUP_COREGROUP_DESCRIPTION "The core files required to run Warzone 2100.")
+
+#########################
 
 if(NOT DEFINED CPACK_MODULE_PATH)
 	set(CPACK_MODULE_PATH)
@@ -59,10 +92,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(SOURCE_DIR "${CMAKE_SOURCE_DIR}")
 	set(BUILD_DIR "${CMAKE_BINARY_DIR}")
 
-	set(CPACK_COMPONENT_CORE_DISPLAY_NAME "$(TEXT_SecBase)")
-	set(CPACK_COMPONENT_CORE_REQUIRED ON)
-	set(CPACK_COMPONENT_CORE_DESCRIPTION "$(DESC_SecBase)")
-
+	# Localize component names & descriptions
+	set(CPACK_COMPONENT_GROUP_COREGROUP_DISPLAY_NAME "$(TEXT_SecBase)")
+	set(CPACK_COMPONENT_GROUP_COREGROUP_DESCRIPTION "$(DESC_SecBase)")
 	set(CPACK_COMPONENT_LANGUAGES_DISPLAY_NAME "$(TEXT_SecNLS)")
 	set(CPACK_COMPONENT_LANGUAGES_DESCRIPTION "$(DESC_SecNLS)")
 
@@ -90,10 +122,33 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# NSIS installer should always have component installation enabled
 	set(CPACK_NSIS_COMPONENT_INSTALL ON)
 
+	# Additional information
+	set(CPACK_NSIS_HELP_LINK "http://wz2100.net")
+	set(CPACK_NSIS_URL_INFO_ABOUT "http://wz2100.net")
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	# macOS builds
+
+	# Only install the "Core" component (the application), as the macOS app bundle contains all of the data & supporting files & languages
+	set(CPACK_COMPONENTS_ALL Core)
+	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+
+	# Default package generators on macOS
+	set(CPACK_GENERATOR "ZIP;DragNDrop")
+
+	# Support Archive generator
+	set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)
+
+	# Support DragNDrop generator
+	set(CPACK_DMG_BACKGROUND_IMAGE "${CMAKE_CURRENT_SOURCE_DIR}/dmg/WZDMGBackground.tiff")
+	set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/dmg/WZDMGSetup.scpt")
+	set(CPACK_DMG_VOLUME_NAME "Warzone 2100")
+
 endif()
 
 #####################
 # Package Source
+
 set(CPACK_SOURCE_GENERATOR "TXZ")
 
 if(NOT DEFINED CPACK_SOURCE_IGNORE_FILES)
@@ -125,6 +180,9 @@ list (APPEND CPACK_SOURCE_IGNORE_FILES "/src/autorevision.cache")
 # The macosx build directories
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/macosx/build/")
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/macosx/external/.*/")
+
+# Ignore in-source vcpkg directory
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/vcpkg/")
 
 ######################
 # Configure Installer Version-info at Package Build-Time

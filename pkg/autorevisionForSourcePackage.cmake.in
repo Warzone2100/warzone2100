@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.5)
 
 # Runs autorevision to copy autorevision.cache to the source package
 # (it should not be copied to binary package).
@@ -10,6 +10,11 @@ set(_STANDARD_CPACK_SOURCE_GENERATORS 7Z TGZ TXZ STGZ TBZ2 TZ ZIP CygwinSource)
 # or is in the $CPACK_SOURCE_GENERATOR list.
 #
 if(("${CPACK_GENERATOR}" IN_LIST CPACK_SOURCE_GENERATOR) OR ("${CPACK_GENERATOR}" IN_LIST _STANDARD_CPACK_SOURCE_GENERATORS))
+
+	if(NOT CPACK_SOURCE_INSTALLED_DIRECTORIES)
+		execute_process(COMMAND "${CMAKE_COMMAND}" -E echo "Generator is \"${CPACK_GENERATOR}\", but this does not appear to be a source package")
+		return()
+	endif()
 
 	# When packaging source, generate (and include) src/autorevision.cache
 

@@ -14,7 +14,7 @@ set(wz2100_fonts_FILES
 
 install(FILES
 	${wz2100_fonts_FILES}
-	COMPONENT Core DESTINATION "fonts"
+	COMPONENT Data DESTINATION "fonts"
 )
 
 set(wz2100_fonts_FILES ${wz2100_fonts_FILES} PARENT_SCOPE)

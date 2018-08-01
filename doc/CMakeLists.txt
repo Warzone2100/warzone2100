@@ -199,9 +199,9 @@ else()
 endif()
 
 if(wz2100_doc_IMAGES_FILES)
-	install(FILES ${wz2100_doc_IMAGES_FILES} DESTINATION "doc/images/" COMPONENT Core)
+	install(FILES ${wz2100_doc_IMAGES_FILES} DESTINATION "doc/images/" COMPONENT Docs)
 endif()
-install(FILES ${wz2100_doc_FILES} DESTINATION "doc/" COMPONENT Core)
+install(FILES ${wz2100_doc_FILES} DESTINATION "doc/" COMPONENT Docs)
 
 set(wz2100_doc_IMAGES_FILES ${wz2100_doc_IMAGES_FILES} PARENT_SCOPE)
 set(wz2100_doc_FILES ${wz2100_doc_FILES} PARENT_SCOPE)
