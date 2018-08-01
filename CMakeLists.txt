@@ -571,7 +571,7 @@ else()
 endif()
 foreach(rfile ${wz2100_ROOT_FILES})
 	install(FILES ${rfile}
-			COMPONENT Core
+			COMPONENT Info
 			DESTINATION "."
 	)
 endforeach()
