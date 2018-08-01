@@ -3656,7 +3656,7 @@ static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engi
 		STRUCTURE *psStruct = IdToStruct(id, player);
 		SCRIPT_ASSERT(context, psStruct, "No such struct id %u belonging to player %u", id, player);
 		const int statidx = psStruct->pStructureType - asStructureStats;
-		if (asStructureStats[statidx].curCount[player] + 1 > asStructureStats[statidx].upgrade[player].limit)
+		if (asStructureStats[statidx].curCount[to] + 1 > asStructureStats[statidx].upgrade[to].limit)
 		{
 			return QScriptValue(false);
 		}
