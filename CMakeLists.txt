@@ -53,9 +53,9 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
   endif()
 endif()
 
-# Attempt to find Miniupnpc (minimum supported API version = 15)
+# Attempt to find Miniupnpc (minimum supported API version = 9)
 # NOTE: This is not available on every platform / distro
-find_package(Miniupnpc 15)
+find_package(Miniupnpc 9)
 if(MINIUPNPC_FOUND)
 	set(WZ_USE_IMPORTED_MINIUPNPC ON)
 else()

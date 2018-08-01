@@ -51,12 +51,8 @@
 #include <miniupnpc/upnpcommands.h>
 
 // Enforce minimum MINIUPNPC_API_VERSION
-#if defined(MINIUPNPC_API_VERSION)
-	#if MINIUPNPC_API_VERSION < 15
-		#error lib/netplay requires MINIUPNPC_API_VERSION >= 15
-	#endif
-#else
-	#error lib/netplay requires MINIUPNPC_API_VERSION >= 15
+#if !defined(MINIUPNPC_API_VERSION) || (MINIUPNPC_API_VERSION < 9)
+	#error lib/netplay requires MINIUPNPC_API_VERSION >= 9
 #endif
 
 #include "src/multistat.h"
@@ -962,7 +958,11 @@ static void upnp_init(std::atomic_int &retval)
 	memset(&data, 0, sizeof(struct IGDdatas));
 
 	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
+#if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 14)
 	devlist = upnpDiscover(3000, nullptr, nullptr, 0, 0, 2, &result);
+#else
+	devlist = upnpDiscover(3000, nullptr, nullptr, 0, 0, &result);
+#endif
 	debug(LOG_NET, "UPnP device search finished.");
 
 	if (devlist)
@@ -983,7 +983,7 @@ static void upnp_init(std::atomic_int &retval)
 
 		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
 
-		#if MINIUPNPC_API_VERSION >= 16
+#if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 16)
 		int status_code = -1;
 		descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id, &status_code);
 		if (status_code != 200)
@@ -995,9 +995,9 @@ static void upnp_init(std::atomic_int &retval)
 			}
 			debug(LOG_NET, "HTTP error %d fetching: %s", status_code, (dev->descURL) ? dev->descURL : "");
 		}
-		#else
+#else
 		descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id);
-		#endif
+#endif
 		debug(LOG_NET, "LAN address: %s", lanaddr);
 		if (descXML)
 		{
