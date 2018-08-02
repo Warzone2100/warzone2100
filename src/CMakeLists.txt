@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
+include(GNUInstallDirs)
+
 ############################
 # Versioning (autorevision)
 
@@ -366,13 +368,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		install(FILES
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll"
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll.license.txt"
-				COMPONENT Core DESTINATION "."
+				COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}"
 		)
 	elseif(CURRENT_TARGET_ARCHITECTURES MATCHES "i386")
 		install(FILES
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll"
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll.license.txt"
-				COMPONENT Core DESTINATION "."
+				COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}"
 		)
 	else()
 		# We do not currently have the dbghelp.dll for this processor architecture in the repo
@@ -416,7 +418,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windo
 		)
 
 		# Install the .sym file (to ensure it's always with the .exe)
-		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT Core DESTINATION ".")
+		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}")
 	else()
 		message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
 	endif()
@@ -424,10 +426,10 @@ endif()
 
 #######################
 # Install
-install(TARGETS warzone2100 COMPONENT Core DESTINATION ".")
+install(TARGETS warzone2100 COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
 if(WZ_PORTABLE)
-	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT Core DESTINATION "." RENAME ".portable")
+	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}" RENAME ".portable")
 endif()
 
 #####################
@@ -446,7 +448,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 				endif()
 				set(BU_CHMOD_BUNDLE_ITEMS ON)
 				include(BundleUtilities)
-				fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${_mainexename}.exe\" \"\" \"\${dll_source_dirs}\")
+				fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${_mainexename}.exe\" \"\" \"\${dll_source_dirs}\")
 			" COMPONENT Core)
 
 			# Run windeployqt to pick up all Qt dependencies
@@ -454,7 +456,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			if(TOOL_WINDEPLOYQT)
 				install(CODE "
 					execute_process(
-						COMMAND ${TOOL_WINDEPLOYQT} \"\${CMAKE_INSTALL_PREFIX}/${_mainexename}.exe\" --no-compiler-runtime --no-angle --no-svg
+						COMMAND ${TOOL_WINDEPLOYQT} \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${_mainexename}.exe\" --no-compiler-runtime --no-angle --no-svg
 					)
 				" COMPONENT Core)
 			else()
@@ -466,7 +468,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
 		if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 			# Must install the PDB file or crash dumps won't be as useful
-			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT Core DESTINATION ".")
+			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}")
 		endif()
 	else()
 		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )

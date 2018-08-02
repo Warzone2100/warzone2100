@@ -238,7 +238,7 @@ Section # hidden section, required
   ; Write the Windows-uninstall keys
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "DisplayName" "${PACKAGE_NAME}-${PACKAGE_VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "DisplayVersion" "${PACKAGE_VERSION}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "DisplayIcon" "$INSTDIR\${PACKAGE}.exe,0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "DisplayIcon" "$INSTDIR\bin\${PACKAGE}.exe,0"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "Publisher" "Warzone 2100 Project"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "URLInfoAbout" "${PACKAGE_BUGREPORT}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}-${PACKAGE_VERSION}" "InstallLocation" "$INSTDIR"
@@ -254,14 +254,14 @@ Section # hidden section, required
     ;Create shortcuts
     CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\${PACKAGE_NAME}.lnk" "$INSTDIR\bin\${PACKAGE}.exe"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Quick Start Guide (html).lnk" "$INSTDIR\doc\quickstartguide.html"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Quick Start Guide (pdf).lnk" "$INSTDIR\doc\quickstartguide.pdf"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
   SetOutPath "$INSTDIR"
-  CreateShortCut "$DESKTOP\${PACKAGE_NAME}-${PACKAGE_VERSION}.lnk" "$INSTDIR\${PACKAGE}.exe"
+  CreateShortCut "$DESKTOP\${PACKAGE_NAME}-${PACKAGE_VERSION}.lnk" "$INSTDIR\bin\${PACKAGE}.exe"
 
 !endif #PORTABLE
 
@@ -408,7 +408,7 @@ ${EndIf}
       !insertmacro DownloadFile2 "${MSVCRT_PORTABLE_DL_URL1}" "${MSVCRT_PORTABLE_DL_URL2}" "${MSVCRT_PORTABLE_DL_URL_HTTPALT}" "${MSVCRT_PORTABLE_DL_CAPTION}" "$PLUGINSDIR\applocaldl.zip" "${MSVCRT_PORTABLE_DL_SHA512}" $Result_MSVCDownload
       ${If} $Result_MSVCDownload == "OK"
         ; Download succeeded
-        nsisunz::UnzipToLog "$PLUGINSDIR\applocaldl.zip" "$INSTDIR"
+        nsisunz::UnzipToLog "$PLUGINSDIR\applocaldl.zip" "$INSTDIR\bin"
         Pop $0 ; Get the return value
         ${IfNot} $0 == "success"
           ; Failed to unzip downloaded file

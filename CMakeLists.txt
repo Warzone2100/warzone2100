@@ -6,6 +6,9 @@ OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" ON)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
+# Handle options
 if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
 	message( WARNING "Portable build is only supported on Windows; Ignoring WZ_PORTABLE option" )
 	unset(WZ_PORTABLE CACHE)
@@ -17,13 +20,60 @@ else()
 	set(WZ_Wno_ "-Wno-")
 endif()
 
+# CXX Standard
 if(MSVC)
 	set(CMAKE_CXX_STANDARD 14)
 else()
 	set(CMAKE_CXX_STANDARD 11)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
+# Handle install paths
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	# On Windows, set the default DATAROOTDIR to "."
+	# - No need to put everything in a nested "share" folder, as the expectation is that
+	#   WZ will be installed in its own directory (ex. a subdirectory of Program Files)
+	if(NOT DEFINED CMAKE_INSTALL_DATAROOTDIR)
+		set(CMAKE_INSTALL_DATAROOTDIR "." CACHE PATH "Read-only architecture-independent data root" FORCE)
+	endif()
+	# Set the default DOCDIR to "DATAROOTDIR/doc"
+	if(NOT DEFINED CMAKE_INSTALL_DOCDIR)
+		set(CMAKE_INSTALL_DOCDIR "${CMAKE_INSTALL_DATAROOTDIR}/doc" CACHE PATH "Documentation root (DATAROOTDIR/doc)" FORCE)
+	endif()
+endif()
+include(GNUInstallDirs)
+if(NOT DEFINED WZ_DATADIR)
+	# Set default WZ_DATADIR based on target platform
+	if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/data")
+	elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100") # not used on macOS (macOS always creates an app bundle)
+	else()
+		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100")
+	endif()
+endif()
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	if(NOT CMAKE_INSTALL_BINDIR STREQUAL "bin")
+		# Windows builds expect a non-empty BINDIR
+		# Windows NSIS installer scripts expect a BINDIR that is "bin"
+		message( WARNING "Windows builds currently require CMAKE_INSTALL_BINDIR to be \"bin\" - resetting value" )
+		set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "User executables (bin)" FORCE)
+	endif()
+endif()
+if(IS_ABSOLUTE "${CMAKE_INSTALL_BINDIR}")
+	# Since the main executable install location is used to determine the install prefix,
+	# an absolute bindir requires an absolute CMAKE_INSTALL_LOCALEDIR + WZ_DATADIR (or locales + data won't be found)
+	set(_nonAbsolutePaths)
+	if(NOT IS_ABSOLUTE "${CMAKE_INSTALL_LOCALEDIR}")
+		list(APPEND _nonAbsolutePaths "CMAKE_INSTALL_LOCALEDIR")
+	endif()
+	if(NOT IS_ABSOLUTE "${WZ_DATADIR}")
+		list(APPEND _nonAbsolutePaths "WZ_DATADIR")
+	endif()
+	if(_nonAbsolutePaths)
+		message( FATAL_ERROR "An absolute CMAKE_INSTALL_BINDIR path cannot be used if the following are not also absolute paths: ${_nonAbsolutePaths}\nRECOMMENDED SOLUTION:\nMake all of these *relative* paths, and use CMAKE_INSTALL_DIR and/or CPACK_PACKAGING_INSTALL_PREFIX to affect the install prefix / location (which can be absolute)." )
+	endif()
+endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	# Disable compiler-specific extensions for macOS builds
@@ -531,6 +581,19 @@ CHECK_FUNCTION_EXISTS(strlcat HAVE_VALID_STRLCAT)
 CHECK_FUNCTION_EXISTS(strlcpy HAVE_VALID_STRLCPY)
 CHECK_FUNCTION_EXISTS(putenv HAVE_PUTENV)
 CHECK_FUNCTION_EXISTS(setenv HAVE_SETENV)
+set(WZ_BINDIR "${CMAKE_INSTALL_BINDIR}")
+set(WZ_LOCALEDIR "${CMAKE_INSTALL_LOCALEDIR}")
+message(STATUS "WZ_BINDIR=\"${WZ_BINDIR}\"")
+message(STATUS "WZ_LOCALEDIR=\"${WZ_LOCALEDIR}\"")
+function(CHECK_IS_ABSOLUTE_PATH _var _output)
+	if(IS_ABSOLUTE "${${_var}}")
+		set(${_output} ON PARENT_SCOPE)
+	else()
+		unset(${_output} PARENT_SCOPE)
+	endif()
+endfunction()
+CHECK_IS_ABSOLUTE_PATH(WZ_DATADIR WZ_DATADIR_ISABSOLUTE)
+CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 if(NOT WZ_USE_IMPORTED_MINIUPNPC)
@@ -585,7 +648,7 @@ endif()
 foreach(rfile ${wz2100_ROOT_FILES})
 	install(FILES ${rfile}
 			COMPONENT Info
-			DESTINATION "."
+			DESTINATION "${CMAKE_INSTALL_DOCDIR}"
 	)
 endforeach()
 

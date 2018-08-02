@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.5)
-project(translation)
 
 find_package(Gettext 0.18)
 if(NOT GETTEXT_FOUND)
@@ -162,9 +161,10 @@ set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 file(REMOVE_RECURSE "${wz2100_translations_LOCALE_FOLDER}/")
 
 # Build the *.gmo files from the *.po files (using the .pot file)
+include(GNUInstallDirs)
 file (GLOB POFILES *.po)
 GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
-	INSTALL_DESTINATION locale
+	INSTALL_DESTINATION "${CMAKE_INSTALL_LOCALEDIR}"
 	INSTALL_COMPONENT Languages
 	MSGMERGE_OPTIONS --quiet --no-wrap --width=1
 	POFILES ${POFILES})
