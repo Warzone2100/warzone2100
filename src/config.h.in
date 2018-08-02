@@ -137,3 +137,19 @@
 
 /* Enable POSIX extensions if present */
 #cmakedefine _XOPEN_SOURCE
+
+/* Explicitly-configured data dir search path
+ - It will be treated as a relative path, and appended to the install PREFIX,
+   unless WZ_DATADIR_ISABSOLUTE is defined. */
+#cmakedefine WZ_DATADIR "@WZ_DATADIR@"
+#cmakedefine WZ_DATADIR_ISABSOLUTE
+
+/* The "BINDIR" used for install (within the install prefix) */
+#cmakedefine WZ_BINDIR "@WZ_BINDIR@"
+
+/* The location of the WZ locale information
+ - It will be treated as a relative path, and appended to the install PREFIX,
+   unless WZ_LOCALEDIR_ISABSOLUTE is defined. */
+#cmakedefine WZ_LOCALEDIR "@WZ_LOCALEDIR@"
+#cmakedefine WZ_LOCALEDIR_ISABSOLUTE
+

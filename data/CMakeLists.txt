@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
-project(data)
+
+if(NOT DEFINED WZ_DATADIR)
+	message(FATAL_ERROR "This file should be included in the project's root CMakeLists.txt, after WZ_DATADIR is defined.")
+endif()
 
 find_package(ZIP REQUIRED)
 
@@ -57,7 +60,7 @@ set(DATA_FILES
 	"${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 )
 install(FILES ${DATA_FILES}
-	DESTINATION "data"
+	DESTINATION "${WZ_DATADIR}"
 	COMPONENT Data
 )
 
@@ -69,7 +72,7 @@ set(DATA_MUSIC_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/music/music.wpl"
 )
 install(FILES ${DATA_MUSIC_FILES}
-	DESTINATION "data/music"
+	DESTINATION "${WZ_DATADIR}/music"
 	COMPONENT Data
 )
 

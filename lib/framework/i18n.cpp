@@ -20,6 +20,7 @@
 
 #include <locale.h>
 #include <physfs.h>
+#include "wzpaths.h"
 
 #ifdef WZ_OS_MAC
 # include <CoreFoundation/CoreFoundation.h>
@@ -422,17 +423,6 @@ void initI18n()
 		// no system default?
 		debug(LOG_ERROR, "initI18n: No system language found");
 	}
-#if defined(WZ_OS_WIN)
-	{
-		// Retrieve an absolute path to the locale directory
-		char localeDir[PATH_MAX];
-		sstrcpy(localeDir, PHYSFS_getBaseDir());
-		sstrcat(localeDir, "\\" LOCALEDIR);
-
-		// Set locale directory and translation domain name
-		textdomainDirectory = bindtextdomain(PACKAGE, localeDir);
-	}
-#else
 #ifdef WZ_OS_MAC
 	{
 		char resourcePath[PATH_MAX];
@@ -455,9 +445,23 @@ void initI18n()
 		debug(LOG_INFO, "resourcePath is %s", resourcePath);
 	}
 #else
+# ifdef WZ_LOCALEDIR
+	// New locale-dir setup (CMake)
+	#ifndef WZ_LOCALEDIR_ISABSOLUTE
+	// Treat WZ_LOCALEDIR as a relative path - append to the install PREFIX
+	const std::string prefixDir = getWZInstallPrefix();
+	const std::string dirSeparator(PHYSFS_getDirSeparator());
+	std::string localeDir = prefixDir + dirSeparator + WZ_LOCALEDIR;
+	textdomainDirectory = bindtextdomain(PACKAGE, localeDir.c_str());
+	#else
+	// Treat WZ_LOCALEDIR as an absolute path, and use directly
+	textdomainDirectory = bindtextdomain(PACKAGE, WZ_LOCALEDIR);
+	#endif
+# else
+	// Old locale-dir setup (autotools)
 	textdomainDirectory = bindtextdomain(PACKAGE, LOCALEDIR);
-#endif
-#endif
+# endif
+#endif // ifdef WZ_OS_MAC
 	if (!textdomainDirectory)
 	{
 		debug(LOG_ERROR, "initI18n: bindtextdomain failed!");

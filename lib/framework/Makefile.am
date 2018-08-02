@@ -41,6 +41,7 @@ noinst_HEADERS = \
 	wzapp.h \
 	wzconfig.h \
 	wzglobal.h \
+	wzpaths.h \
 	wzstring.h
 
 libframework_a_SOURCES = \
@@ -61,4 +62,5 @@ libframework_a_SOURCES = \
 	trig.cpp \
 	utf.cpp \
 	wzconfig.cpp \
+	wzpaths.cpp \
 	wzstring.cpp

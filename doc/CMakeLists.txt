@@ -1,4 +1,4 @@
-project(doc)
+cmake_minimum_required(VERSION 3.5)
 
 add_custom_target(wz2100_doc ALL)
 
@@ -198,10 +198,11 @@ else()
 	unset(wz2100_doc_IMAGES_FILES)
 endif()
 
+include(GNUInstallDirs)
 if(wz2100_doc_IMAGES_FILES)
-	install(FILES ${wz2100_doc_IMAGES_FILES} DESTINATION "doc/images/" COMPONENT Docs)
+	install(FILES ${wz2100_doc_IMAGES_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}/images" COMPONENT Docs)
 endif()
-install(FILES ${wz2100_doc_FILES} DESTINATION "doc/" COMPONENT Docs)
+install(FILES ${wz2100_doc_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}" COMPONENT Docs)
 
 set(wz2100_doc_IMAGES_FILES ${wz2100_doc_IMAGES_FILES} PARENT_SCOPE)
 set(wz2100_doc_FILES ${wz2100_doc_FILES} PARENT_SCOPE)

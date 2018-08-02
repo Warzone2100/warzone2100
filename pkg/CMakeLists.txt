@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0054 NEW)
 
 function(copyFileToDir _file _destDir)
@@ -18,7 +18,7 @@ set(CPACK_PACKAGE_CHECKSUM		SHA256)
 #########################
 # Default components that are added to package
 
-set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages)
+set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages Fonts)
 set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 
 #########################
@@ -44,6 +44,11 @@ set(CPACK_COMPONENT_INFO_DISPLAY_NAME "Info")
 set(CPACK_COMPONENT_INFO_REQUIRED ON)
 set(CPACK_COMPONENT_INFO_DESCRIPTION "Info Files")
 set(CPACK_COMPONENT_INFO_GROUP "CoreGroup")
+
+set(CPACK_COMPONENT_FONTS_DISPLAY_NAME "Fonts")
+set(CPACK_COMPONENT_FONTS_REQUIRED ON)
+set(CPACK_COMPONENT_FONTS_DESCRIPTION "Fonts")
+set(CPACK_COMPONENT_FONTS_GROUP "CoreGroup")
 
 set(CPACK_COMPONENT_GROUP_COREGROUP_DISPLAY_NAME "Core files")
 set(CPACK_COMPONENT_GROUP_COREGROUP_REQUIRED ON)

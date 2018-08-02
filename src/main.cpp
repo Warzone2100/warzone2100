@@ -42,6 +42,7 @@
 
 #include "lib/framework/input.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wzpaths.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
@@ -597,28 +598,10 @@ static void check_Physfs()
  */
 static void scanDataDirs()
 {
-	char tmpstr[PATH_MAX], prefix[PATH_MAX];
-	char *separator;
-
 #if defined(WZ_OS_MAC)
 	// version-independent location for video files
 	registerSearchPath("/Library/Application Support/Warzone 2100/", 1);
 #endif
-
-	// Find out which PREFIX we are in...
-	sstrcpy(prefix, PHYSFS_getBaseDir());
-
-	separator = strrchr(prefix, *PHYSFS_getDirSeparator());
-	if (separator)
-	{
-		*separator = '\0'; // Trim ending '/', which getBaseDir always provides
-
-		separator = strrchr(prefix, *PHYSFS_getDirSeparator());
-		if (separator)
-		{
-			*separator = '\0'; // Skip the last dir from base dir
-		}
-	}
 
 	// Commandline supplied datadir
 	if (strlen(datadir) != 0)
@@ -630,20 +613,26 @@ static void scanDataDirs()
 	registerSearchPath(PHYSFS_getWriteDir(), 2);
 	rebuildSearchPath(mod_multiplay, true);
 
+#if !defined(WZ_OS_MAC)
+	// Check PREFIX-based paths
+	std::string tmpstr;
+
+	// Find out which PREFIX we are in...
+	std::string prefix = getWZInstallPrefix();
+	std::string dirSeparator(PHYSFS_getDirSeparator());
+
 	if (!PHYSFS_exists("gamedesc.lev"))
 	{
-		// Data in source tree
-		sstrcpy(tmpstr, prefix);
-		sstrcat(tmpstr, "/data/");
-		registerSearchPath(tmpstr, 3);
+		// Data in source tree (<prefix>/data/)
+		tmpstr = prefix + dirSeparator + "data" + dirSeparator;
+		registerSearchPath(tmpstr.c_str(), 3);
 		rebuildSearchPath(mod_multiplay, true);
 
 		if (!PHYSFS_exists("gamedesc.lev"))
 		{
-			// Relocation for AutoPackage
-			sstrcpy(tmpstr, prefix);
-			sstrcat(tmpstr, "/share/warzone2100/");
-			registerSearchPath(tmpstr, 4);
+			// Relocation for AutoPackage (<prefix>/share/warzone2100/)
+			tmpstr = prefix + dirSeparator + "share" + dirSeparator + "warzone2100" + dirSeparator;
+			registerSearchPath(tmpstr.c_str(), 4);
 			rebuildSearchPath(mod_multiplay, true);
 
 			if (!PHYSFS_exists("gamedesc.lev"))
@@ -655,12 +644,34 @@ static void scanDataDirs()
 				if (!PHYSFS_exists("gamedesc.lev"))
 				{
 					// Guessed fallback default datadir on Unix
-					registerSearchPath(WZ_DATADIR, 6);
-					rebuildSearchPath(mod_multiplay, true);
+					std::string wzDataDir = WZ_DATADIR;
+					if(!wzDataDir.empty())
+					{
+					#ifndef WZ_DATADIR_ISABSOLUTE
+						// Treat WZ_DATADIR as a relative path - append to the install PREFIX
+						tmpstr = prefix + dirSeparator + wzDataDir;
+						registerSearchPath(tmpstr.c_str(), 6);
+						rebuildSearchPath(mod_multiplay, true);
+					#else
+						// Treat WZ_DATADIR as an absolute path, and use directly
+						registerSearchPath(wzDataDir.c_str(), 6);
+						rebuildSearchPath(mod_multiplay, true);
+					#endif
+					}
+
+					if (!PHYSFS_exists("gamedesc.lev"))
+					{
+						// Guessed fallback default datadir on Unix
+						// TEMPORARY: Fallback to ensure old WZ_DATADIR behavior as a last-resort
+						//			  This is only present for the benefit of the automake build toolchain.
+						registerSearchPath(WZ_DATADIR, 7);
+						rebuildSearchPath(mod_multiplay, true);
+					}
 				}
 			}
 		}
 	}
+#endif
 
 #ifdef WZ_OS_MAC
 	if (!PHYSFS_exists("gamedesc.lev"))
@@ -671,8 +682,9 @@ static void scanDataDirs()
 		                                     (UInt8 *) resourcePath,
 		                                     PATH_MAX))
 		{
-			chdir(resourcePath);
-			registerSearchPath("data", 7);
+			WzString resourceDataPath(resourcePath);
+			resourceDataPath += "/data";
+			registerSearchPath(resourceDataPath.toUtf8().c_str(), 8);
 			rebuildSearchPath(mod_multiplay, true);
 		}
 		else

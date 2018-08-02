@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.5)
 
+include(GNUInstallDirs)
+
 configure_file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/DejaVu/LICENSE"
 	"${CMAKE_CURRENT_BINARY_DIR}/DejaVu/DejaVu.LICENSE.txt"
@@ -14,7 +16,7 @@ set(wz2100_fonts_FILES
 
 install(FILES
 	${wz2100_fonts_FILES}
-	COMPONENT Data DESTINATION "fonts"
+	COMPONENT Fonts DESTINATION "${CMAKE_INSTALL_DATADIR}/fonts"
 )
 
 set(wz2100_fonts_FILES ${wz2100_fonts_FILES} PARENT_SCOPE)
