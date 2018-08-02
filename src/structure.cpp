@@ -6770,12 +6770,14 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	visRemoveVisibility(psStructure);
 
 	int prevState = intGetResearchState();
+	bool reward = electronicReward(psStructure, attackPlayer);
 
 	if (bMultiPlayer)
 	{
 		//certain structures give specific results - the rest swap sides!
-		if (!electronic_warfare || !electronicReward(psStructure, attackPlayer))
+		if (!electronic_warfare || !reward)
 		{
+			originalPlayer = psStructure->player;
 			//tell the system the structure no longer exists
 			(void)removeStruct(psStructure, false);
 
@@ -6829,7 +6831,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			//since the structure isn't being rebuilt, the visibility code needs to be adjusted
 			//make sure this structure is visible to selectedPlayer
 			psStructure->visible[attackPlayer] = UINT8_MAX;
-			triggerEventObjectTransfer(psStructure, attackPlayer);
+			triggerEventObjectTransfer(psStructure, originalPlayer);
 		}
 		intNotifyResearchButton(prevState);
 		return nullptr;
@@ -6891,7 +6893,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 		{
 			psNewStruct->status = SS_BUILT;
 			buildingComplete(psNewStruct);
-			triggerEventStructBuilt(psStructure, nullptr);
+			triggerEventStructBuilt(psNewStruct, nullptr);
 		}
 
 		if (!bMultiPlayer)
@@ -6900,6 +6902,10 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			{
 				//make sure this structure is visible to selectedPlayer if the structure used to be selectedPlayers'
 				psNewStruct->visible[selectedPlayer] = UBYTE_MAX;
+			}
+			if (!electronic_warfare || !reward)
+			{
+				triggerEventObjectTransfer(psNewStruct, originalPlayer);
 			}
 		}
 	}
