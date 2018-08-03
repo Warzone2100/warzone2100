@@ -209,6 +209,35 @@ static std::string getCurrentApplicationFolder()
 #endif
 }
 
+// Gets the full path to the prefix of the folder that contains the application executable (UTF-8)
+static std::string getCurrentApplicationFolderPrefix()
+{
+	// Remove the last path component
+	std::string appPath = getCurrentApplicationFolder();
+	if (appPath.empty())
+	{
+		return appPath;
+	}
+
+	// Remove trailing path separators (slashes)
+	while (!appPath.empty() && (appPath.back() == '\\' || appPath.back() == '/'))
+	{
+		appPath.pop_back();
+	}
+
+	// Find the position of the last slash in the application folder
+	size_t lastSlash = appPath.find_last_of("\\/", std::string::npos);
+	if (lastSlash == std::string::npos)
+	{
+		// Did not find a path separator - does not appear to be a valid app folder?
+		debug(LOG_ERROR, "Unable to find path separator in application executable path");
+		return std::string();
+	}
+
+	// Trim off the last path component
+	return appPath.substr(0, lastSlash);
+}
+
 static bool isPortableMode()
 {
 	static bool _checkedMode = false;
@@ -426,22 +455,24 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 {
 	if (isPortableMode())
 	{
-		// When isPortableMode is true, the config directory should be at the same location as the program file
-		std::string basePath = getCurrentApplicationFolder();
-		if (basePath.empty())
+		// When isPortableMode is true, the config dir should be stored in the same prefix as the app's bindir.
+		// i.e. If the app executable path is:  <prefix>/bin/warzone2100.exe
+		//      the config directory should be: <prefix>/<app>/
+		std::string prefixPath = getCurrentApplicationFolderPrefix();
+		if (prefixPath.empty())
 		{
 			// Failed to get the current application folder
-			debug(LOG_FATAL, "Error getting the current application folder - unable to proceed with portable mode");
+			debug(LOG_FATAL, "Error getting the current application folder prefix - unable to proceed with portable mode");
 			exit(1);
 		}
 
 		std::string appendPath = app;
 
-		// Create the folders within the basePath if they don't exist
-		if (!PHYSFS_setWriteDir(basePath.c_str())) // Workaround for PhysFS not creating the writedir as expected.
+		// Create the folders within the prefixPath if they don't exist
+		if (!PHYSFS_setWriteDir(prefixPath.c_str())) // Workaround for PhysFS not creating the writedir as expected.
 		{
 			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-				  basePath.c_str(), WZ_PHYSFS_getLastError());
+				  prefixPath.c_str(), WZ_PHYSFS_getLastError());
 			exit(1);
 		}
 
@@ -452,7 +483,7 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 			exit(1);
 		}
 
-		return basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator();
+		return prefixPath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator();
 	}
 
 #if defined(WZ_PHYSFS_2_1_OR_GREATER)
