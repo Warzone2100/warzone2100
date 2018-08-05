@@ -407,18 +407,6 @@ static bool gameInit()
 {
 	UDWORD			player;
 
-	// If this is from a savegame, stop here!
-	if (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION)
-	{
-		// these two lines are the biggest hack in the world.
-		// the reticule seems to get detached from 'reticuleup'
-		// this forces it back in sync...
-		intRemoveReticule();
-		intAddReticule();
-
-		return true;
-	}
-
 	for (player = 1; player < MAX_PLAYERS; player++)
 	{
 		// we want to remove disabled AI & all the other players that don't belong

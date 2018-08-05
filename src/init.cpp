@@ -1168,7 +1168,8 @@ bool stageThreeInitialise()
 {
 	STRUCTURE *psStr;
 	UDWORD i;
-	DROID		*psDroid;
+	DROID *psDroid;
+	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
 
 	debug(LOG_WZ, "== stageThreeInitialise ==");
 
@@ -1191,9 +1192,21 @@ bool stageThreeInitialise()
 	initLighting(0, 0, mapWidth, mapHeight);
 	pie_InitLighting();
 
+	if (fromSave)
+	{
+		// these two lines are the biggest hack in the world.
+		// the reticule seems to get detached from 'reticuleup'
+		// this forces it back in sync...
+		intRemoveReticule();
+		intAddReticule();
+	}
+
 	if (bMultiPlayer)
 	{
-		multiGameInit();
+		if (!fromSave)
+		{
+			multiGameInit();
+		}
 		initTemplates();
 	}
 
