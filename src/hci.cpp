@@ -415,11 +415,7 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 		retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
 	}
 
-	if (retbutstats[ButId].filename.isEmpty())
-	{
-		retbutstats[ButId].button->setState(WBUT_DISABLE);
-	}
-	else
+	if (!retbutstats[ButId].filename.isEmpty())
 	{
 		ReticuleEnabled[ButId].Enabled = true;
 		retbutstats[ButId].button->setState(0);
@@ -435,8 +431,15 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	int flashTime = retbutstats[psWidget->UserData].flashTime;
 	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
 	W_BUTTON *psButton = (W_BUTTON *)psWidget;
+	bool butDisabled = psButton->state & WBUT_DISABLE;
 
-	if ((psButton->state & WBUT_DISABLE) || retbutstats[psWidget->UserData].filename.isEmpty())
+	if (retbutstats[psWidget->UserData].filename.isEmpty() && !butDisabled)
+	{
+		butDisabled = true;
+		retbutstats[psWidget->UserData].button->setState(WBUT_DISABLE);
+	}
+
+	if (butDisabled)
 	{
 		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
 		return;
