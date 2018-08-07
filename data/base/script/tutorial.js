@@ -100,7 +100,7 @@ function eventDroidBuilt()
 	if (tutState === 25)
 	{
 		increaseTutorialState();
-		//removeReticuleButton(PRODUCTION_BUTTON);
+		setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
 	}
 }
 
@@ -202,7 +202,7 @@ function eventMenuResearchSelected()
 	if (tutState === 13)
 	{
 		increaseTutorialState();
-		//removeReticuleButton(RESEARCH_BUTTON);
+		setReticuleButton(RESEARCH_BUTTON, _("Research - build research facility first"), "", "");
 	}
 }
 
@@ -236,6 +236,7 @@ function eventDesignWeapon()
 	if (tutState === 18)
 	{
 		increaseTutorialState();
+		setReticuleButton(CLOSE_BUTTON, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
 		setReticuleFlash(CLOSE_BUTTON, true);
 	}
 }
@@ -245,10 +246,10 @@ function eventDesignQuit()
 	if (tutState === 19)
 	{
 		increaseTutorialState();
-		//removeReticuleButton(DESIGN_BUTTON);
+		setReticuleButton(DESIGN_BUTTON, _("Design - construct HQ first"), "", "");
 		enableStructure("A0LightFactory", CAM_HUMAN_PLAYER);
 		setReticuleFlash(CLOSE_BUTTON, false);
-		setReticuleButton(3, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
+		setReticuleButton(BUILD_BUTTON, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 		setReticuleFlash(BUILD_BUTTON, true);
 		enableTemplate("ConstructionDroid");
 	}
@@ -261,7 +262,7 @@ function checkForPowGen()
 	{
 		if (countStruct("A0PowerGenerator", CAM_HUMAN_PLAYER) > 0)
 		{
-			//removeReticuleButton(BUILD_BUTTON);
+			setReticuleButton(BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
 			increaseTutorialState();
 		}
 		else
@@ -277,7 +278,7 @@ function checkResFac()
 	{
 		if (countStruct("A0ResearchFacility", CAM_HUMAN_PLAYER) > 0)
 		{
-			//removeReticuleButton(BUILD_BUTTON);
+			setReticuleButton(BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
 		}
 		else
 		{
@@ -318,6 +319,7 @@ function eventPickup(feature, droid)
 	if (tutState === 8)
 	{
 		increaseTutorialState();
+		setReticuleButton(BUILD_BUTTON, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 		setReticuleFlash(BUILD_BUTTON, true);
 		enableStructure("A0ResearchFacility", CAM_HUMAN_PLAYER);
 	}
@@ -426,7 +428,7 @@ function eventStructureBuilt(structure, droid)
 	else if (tutState === 22 && structure.stattype === FACTORY)
 	{
 		increaseTutorialState();
-		//removeReticuleButton(BUILD_BUTTON);
+		setReticuleButton(BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
 	}
 }
 
@@ -467,12 +469,12 @@ function eventStartLevel()
 	removeTemplate("ConstructionDroid");
 	removeTemplate("ViperLtMGWheels");
 
-	setReticuleButton(CLOSE_BUTTON, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
+	setReticuleButton(CLOSE_BUTTON, _("Close"), "", "");
 	setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
 	setReticuleButton(RESEARCH_BUTTON, _("Research - build research facility first"), "", "");
 	setReticuleButton(BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
-	setReticuleButton(DESIGN_BUTTON, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
-	setReticuleButton(INTEL_BUTTON, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
+	setReticuleButton(DESIGN_BUTTON, _("Design - construct HQ first"), "", "");
+	setReticuleButton(INTEL_BUTTON, _("Intelligence Display (F5)"), "", "");
 	setReticuleButton(COMMAND_BUTTON, _("Commanders - manufacture commanders first"), "", "");
 	showInterface();
 
