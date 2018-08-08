@@ -127,6 +127,13 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
   endif()
 endif()
 
+############################
+# Main App install location
+
+# To change the install destination at configure-time, please change the value of CMAKE_INSTALL_BINDIR
+# (WZ_APP_INSTALL_DEST is for the platform / generator-specific overrides *in* this file)
+set(WZ_APP_INSTALL_DEST "${CMAKE_INSTALL_BINDIR}")
+
 #######################
 # macOS Build Config
 
@@ -346,6 +353,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	# Since the dependencies are bundled as part of the build stages (and not at install-time), build with the install rpath
 	set_target_properties(warzone2100 PROPERTIES BUILD_WITH_INSTALL_RPATH True)
 
+	# Install the app bundle directly in the destination root
+	set(WZ_APP_INSTALL_DEST ".")
+
 endif()
 
 #######################
@@ -368,13 +378,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		install(FILES
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll"
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll.license.txt"
-				COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}"
+				COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
 		)
 	elseif(CURRENT_TARGET_ARCHITECTURES MATCHES "i386")
 		install(FILES
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll"
 				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll.license.txt"
-				COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}"
+				COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
 		)
 	else()
 		# We do not currently have the dbghelp.dll for this processor architecture in the repo
@@ -418,7 +428,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windo
 		)
 
 		# Install the .sym file (to ensure it's always with the .exe)
-		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}")
+		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 	else()
 		message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
 	endif()
@@ -426,10 +436,10 @@ endif()
 
 #######################
 # Install
-install(TARGETS warzone2100 COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}")
+install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 
 if(WZ_PORTABLE)
-	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}" RENAME ".portable")
+	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable")
 endif()
 
 #####################
@@ -477,12 +487,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 				endif()
 				set(BU_CHMOD_BUNDLE_ITEMS ON)
 				include(BundleUtilities)
-				fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${_mainexename}.exe\" \"\" \"\${dll_source_dirs}\" ${_wz_fixup_bundle_ignore_item})
+				fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/${_mainexename}.exe\" \"\" \"\${dll_source_dirs}\" ${_wz_fixup_bundle_ignore_item})
 				# Passing IGNORE_ITEM to fixup_bundle does not prevent fixup_bundle from copying the ignored items themselves to the BINDIR
 				# Iterate over _wz_fixup_bundle_nocopy_libraries and remove them if they've been copied
 				set(_nocopy_libs \"${_wz_fixup_bundle_nocopy_libraries}\")
 				foreach(lib \${_nocopy_libs})
-					set(_lib_fullpath \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/\${lib}\")
+					set(_lib_fullpath \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${lib}\")
 					if(EXISTS \"\${_lib_fullpath}\")
 						execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++Removing lib: \${lib}\")
 						file(REMOVE \"\${_lib_fullpath}\")
@@ -495,7 +505,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			if(TOOL_WINDEPLOYQT)
 				install(CODE "
 					execute_process(
-						COMMAND ${TOOL_WINDEPLOYQT} \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${_mainexename}.exe\" --no-compiler-runtime --no-angle --no-svg
+						COMMAND ${TOOL_WINDEPLOYQT} \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/${_mainexename}.exe\" --no-compiler-runtime --no-angle --no-svg
 					)
 				" COMPONENT Core)
 			else()
@@ -507,7 +517,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
 		if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 			# Must install the PDB file or crash dumps won't be as useful
-			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT Core DESTINATION "${CMAKE_INSTALL_BINDIR}")
+			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 		endif()
 	else()
 		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )
