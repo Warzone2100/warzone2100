@@ -4781,7 +4781,7 @@ static QScriptValue js_changePlayerColour(QScriptContext *context, QScriptEngine
 //--
 static QScriptValue js_getMultiTechLevel(QScriptContext *context, QScriptEngine *)
 {
-	return current_tech;
+	return QScriptValue(game.techLevel);
 }
 
 //-- ## setCampaignNumber(num)

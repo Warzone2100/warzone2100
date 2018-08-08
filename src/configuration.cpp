@@ -145,6 +145,8 @@ bool loadConfig()
 	game.hash.setZero();
 	game.maxPlayers = 4;
 
+	game.techLevel = 1;
+
 	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();

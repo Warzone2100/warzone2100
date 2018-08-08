@@ -442,6 +442,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		current_tech = mapCam;
 		current_numplayers = numPlayers;
 		current_searchString = searchString;
+		game.techLevel = current_tech;
 	}
 	char **fileList = PHYSFS_enumerateFiles(searchDir);
 
