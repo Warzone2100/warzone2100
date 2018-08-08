@@ -59,3 +59,5 @@ find_package_handle_standard_args(
 	REQUIRED_VARS Asciidoctor_COMMAND
 	VERSION_VAR Asciidoctor_VERSION
 )
+
+MARK_AS_ADVANCED(ASCIIDOCTOR_EXECUTABLE ASCIIDOCTOR_BAT)
