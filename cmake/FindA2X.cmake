@@ -78,3 +78,5 @@ find_package_handle_standard_args(
     A2X
     REQUIRED_VARS A2X_COMMAND
     VERSION_VAR A2X_VERSION )
+
+MARK_AS_ADVANCED(A2X_PROGRAM)

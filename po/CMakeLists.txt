@@ -21,8 +21,10 @@ if(NOT GETTEXT_FOUND)
 	endif()
 	return()
 endif()
+MARK_AS_ADVANCED(GETTEXT_MSGFMT_EXECUTABLE GETTEXT_MSGMERGE_EXECUTABLE)
 
 find_program(XGETTEXT_CMD xgettext)
+MARK_AS_ADVANCED(XGETTEXT_CMD)
 
 if(NOT XGETTEXT_CMD)
 	MESSAGE( WARNING "xgettext not found. Unable to generate Language translations without Gettext." )
