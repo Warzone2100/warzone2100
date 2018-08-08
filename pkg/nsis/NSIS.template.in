@@ -227,9 +227,6 @@ Section # hidden section, required
   File "${EXTDIR}\opt\sequences.wz"
 !endif
 
-  SetOutPath "$INSTDIR\fonts"
-  File "/oname=fonts.conf" "${TOP_SRCDIR}\win32\fontconfig\fonts.conf.wd_disable"
-
 !ifndef PORTABLE
 
   ;Store installation folder
@@ -256,7 +253,6 @@ Section # hidden section, required
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\${PACKAGE_NAME}.lnk" "$INSTDIR\bin\${PACKAGE}.exe"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Quick Start Guide (html).lnk" "$INSTDIR\doc\quickstartguide.html"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER-${PACKAGE_VERSION}\Quick Start Guide (pdf).lnk" "$INSTDIR\doc\quickstartguide.pdf"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
@@ -625,11 +621,6 @@ Section "Uninstall"
   @CPACK_NSIS_DELETE_FILES@
   @CPACK_NSIS_DELETE_DIRECTORIES@
 
-  Delete "$INSTDIR\${PACKAGE}.exe"
-
-  Delete "$INSTDIR\dbghelp.dll.license.txt"
-  Delete "$INSTDIR\dbghelp.dll"
-
   Delete "$INSTDIR\sequences.wz"
 
   Delete "$INSTDIR\stderr.txt"
@@ -638,13 +629,6 @@ Section "Uninstall"
   Delete "$INSTDIR\License.txt"
 
   Delete "$INSTDIR\uninstall.exe"
-
-  Delete "$INSTDIR\fonts\fonts.conf"
-  Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
-  Delete "$INSTDIR\fonts\DejaVuSansMono-Bold.ttf"
-  Delete "$INSTDIR\fonts\DejaVuSans.ttf"
-  Delete "$INSTDIR\fonts\DejaVuSans-Bold.ttf"
-  RMDir "$INSTDIR\fonts"
 
   RMDir "$INSTDIR"
 
@@ -661,7 +645,6 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Quick Start Guide (html).lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}\Quick Start Guide (pdf).lnk"
 
   ;Delete empty start menu parent directories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP-${PACKAGE_VERSION}"
