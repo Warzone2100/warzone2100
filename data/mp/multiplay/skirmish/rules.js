@@ -498,7 +498,10 @@ function eventDestroyed(victim)
 
 function eventObjectTransfer(obj, from)
 {
-	reticuleUpdate(obj, TRANSFER_LIKE_EVENT);
+	if (obj.player === selectedPlayer || from === selectedPlayer)
+	{
+		reticuleUpdate(obj, TRANSFER_LIKE_EVENT);
+	}
 }
 
 function eventResearched(research, structure, player)

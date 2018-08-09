@@ -369,7 +369,10 @@ function eventDestroyed(victim)
 
 function eventObjectTransfer(obj, from)
 {
-	reticuleUpdate(obj, TRANSFER_LIKE_EVENT);
+	if (obj.player === selectedPlayer || from === selectedPlayer)
+	{
+		reticuleUpdate(obj, TRANSFER_LIKE_EVENT);
+	}
 }
 
 //Could be the last remaining trucks are on it.
