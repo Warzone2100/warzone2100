@@ -25,12 +25,18 @@
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+#import <Availability.h>
 #import "cocoa_sdl_helpers.h"
 #include "SDL_syswm.h"
 
 bool cocoaIsNSWindowFullscreened(NSWindow __unsafe_unretained *window)
 {
+// note use of 101200 instead of __MAC_10_12 (to support earlier SDKs)
+#if __MAC_OS_X_VERSION_MIN_REQUIRED < 101200
 	return [window styleMask] & NSFullScreenWindowMask;
+#else
+	return [window styleMask] & NSWindowStyleMaskFullScreen;
+#endif
 }
 
 bool cocoaIsSDLWindowFullscreened(SDL_Window *window)
