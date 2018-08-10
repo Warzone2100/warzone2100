@@ -3,10 +3,23 @@
 
 cmake_minimum_required(VERSION 3.5)
 
-get_filename_component(_qt5_framework_prefix "${CMAKE_CURRENT_LIST_DIR}/../external/QT" ABSOLUTE)
+get_filename_component(_qt5_framework_prefix "${CMAKE_BINARY_DIR}/macosx/external/QT" ABSOLUTE)
 
+set(_download_script_path "${CMAKE_CURRENT_LIST_DIR}/../configs/fetchscripts/SetupPrebuiltComponents-QT.sh")
 if(NOT EXISTS "${_qt5_framework_prefix}")
-	message( FATAL_ERROR "Expected Qt5 minimal bundle does not exist at: ${_qt5_framework_prefix}" )
+	# Download the Qt5 minimal bundle for macOS to the build dir
+	if(NOT EXISTS "${_download_script_path}")
+		message( FATAL_ERROR "Missing required download script: \"${_download_script_path}\"" )
+	endif()
+	message( STATUS "Downloading missing Qt5 minimal bundle to: \"${_qt5_framework_prefix}\"" )
+	execute_process(
+		COMMAND ${CMAKE_COMMAND} -E make_directory macosx
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+	)
+	execute_process(
+		COMMAND bash ${_download_script_path}
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/macosx"
+	)
 endif()
 
 if(NOT IS_DIRECTORY "${_qt5_framework_prefix}")
