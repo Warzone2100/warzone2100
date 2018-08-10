@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(wz2100)
+project(warzone2100)
 
 OPTION(ENABLE_NLS "Native Language Support" ON)
 OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)

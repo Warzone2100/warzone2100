@@ -4,6 +4,15 @@ cmake_policy(SET CMP0054 NEW)
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+Executing CPackConfigVersion.cmake")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++Running for: CPACK_GENERATOR: ${CPACK_GENERATOR}")
 
+# set a variable if the variable is not currently set
+function(setDefault var defaultValue)
+	if(NOT DEFINED ${var})
+		set(${var} "${defaultValue}" PARENT_SCOPE)
+	else()
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++\"${var}\"=\"${{var}}\" (ignoring default: \"${defaultValue}\")")
+	endif()
+endfunction()
+
 set(_STANDARD_CPACK_SOURCE_GENERATORS 7Z TGZ TXZ STGZ TBZ2 TZ ZIP CygwinSource)
 
 # Get the version info from autorevision
@@ -82,5 +91,74 @@ if(CPACK_GENERATOR MATCHES "NSIS")
 		@CMAKE_CURRENT_SOURCE_DIR@/nsis/NSIS.version.in
 		@CMAKE_BINARY_DIR@/NSIS.version.nsh
 	)
+
+endif()
+
+if(CPACK_GENERATOR STREQUAL "DEB")
+
+	setDefault(CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}")
+	setDefault(CPACK_DEB_COMPONENT_INSTALL ON)
+
+	set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages)
+
+	############################################
+	# Support component DEB install
+	set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+
+	# "warzone2100" package ("Core" group)
+	# - members
+	set(CPACK_COMPONENT_CORE_GROUP "CoreGroup")
+	set(CPACK_COMPONENT_INFO_GROUP "CoreGroup")
+	# - package settings
+	set(CPACK_DEBIAN_COREGROUP_PACKAGE_NAME "warzone2100")
+	set(CPACK_DEBIAN_COREGROUP_FILE_NAME DEB-DEFAULT)
+	set(CPACK_DEBIAN_COREGROUP_PACKAGE_DEPENDS "warzone2100-data (= ${CPACK_DEBIAN_PACKAGE_VERSION})")
+
+	# "warzone2100-data" package ("Data" group)
+	# - members
+	set(CPACK_COMPONENT_DATA_GROUP "DataGroup")
+	set(CPACK_COMPONENT_DOCS_GROUP "DataGroup")
+	set(CPACK_COMPONENT_LANGUAGES_GROUP "DataGroup")
+	#set(CPACK_COMPONENT_FONTS_GROUP "DataGroup")
+	# - package settings
+	set(CPACK_DEBIAN_DATAGROUP_PACKAGE_NAME "warzone2100-data")
+	set(CPACK_DEBIAN_DATAGROUP_FILE_NAME DEB-DEFAULT)
+	set(CPACK_DEBIAN_DATAGROUP_PACKAGE_ARCHITECTURE "all")
+	set(CPACK_DEBIAN_DATAGROUP_PACKAGE_RECOMMENDS "warzone2100")
+	set(CPACK_DEBIAN_DATAGROUP_PACKAGE_SHLIBDEPS OFF)
+
+endif()
+
+if(CPACK_GENERATOR STREQUAL "RPM")
+
+	setDefault(CPACK_RPM_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}")
+	setDefault(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
+
+	set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages)
+
+	############################################
+	# Support component RPM install
+	# - If desired, set the following at configure-time: -D CPACK_RPM_COMPONENT_INSTALL=ON
+	set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+
+	# "warzone2100" package ("Core" group)
+	# - members
+	set(CPACK_COMPONENT_CORE_GROUP "CoreGroup")
+	set(CPACK_COMPONENT_INFO_GROUP "CoreGroup")
+	# - package settings
+	set(CPACK_RPM_COREGROUP_PACKAGE_NAME "warzone2100")
+	set(CPACK_RPM_COREGROUP_FILE_NAME "warzone2100-${CPACK_RPM_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}.rpm")
+	set(CPACK_RPM_COREGROUP_PACKAGE_REQUIRES "warzone2100-data = ${CPACK_RPM_PACKAGE_VERSION}")
+
+	# "warzone2100-data" package ("Data" group)
+	# - members
+	set(CPACK_COMPONENT_DATA_GROUP "DataGroup")
+	set(CPACK_COMPONENT_DOCS_GROUP "DataGroup")
+	set(CPACK_COMPONENT_LANGUAGES_GROUP "DataGroup")
+	#set(CPACK_COMPONENT_FONTS_GROUP "DataGroup")
+	# - package settings
+	set(CPACK_RPM_DATAGROUP_PACKAGE_NAME "warzone2100-data")
+	set(CPACK_RPM_DATAGROUP_FILE_NAME "warzone2100-data-${CPACK_RPM_PACKAGE_VERSION}-noarch.rpm")
+	set(CPACK_RPM_DATAGROUP_PACKAGE_ARCHITECTURE "noarch")
 
 endif()

@@ -152,6 +152,25 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 endif()
 
 #####################
+# RPM Settings
+
+set(CPACK_RPM_PACKAGE_SUMMARY   "Innovative 3D real-time strategy")
+set(CPACK_RPM_PACKAGE_GROUP     "Amusements/Games")
+set(CPACK_RPM_PACKAGE_LICENSE   "GPLv2+ and CC-BY-SA")
+set(CPACK_RPM_PACKAGE_URL       "http://wz2100.net/")
+
+set(CPACK_RPM_PACKAGE_DESCRIPTION "Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studios in 1999, and released in 2004 under the GPL. Development is continued by the Warzone 2100 Project to produce this improved version.")
+
+#####################
+# DEB Settings
+
+set(CPACK_DEBIAN_PACKAGE_SECTION  "games")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://wz2100.net/")
+
+set(CPACK_DEBIAN_ENABLE_COMPONENT_DEPENDS ON)
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
+#####################
 # Package Source
 
 set(CPACK_SOURCE_GENERATOR "TXZ")
