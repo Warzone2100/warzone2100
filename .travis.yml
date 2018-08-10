@@ -140,7 +140,7 @@ matrix:
 
     # Build for macOS
     # (This also deploys the macOS build to the buildbot)
-    - name: "macOS [Xcode 8.3]"
+    - name: "macOS (Xcodeproj) [Xcode 8.3, macOS 10.12 SDK]"
       language: objective-c
       os: osx
       osx_image: xcode8.3
@@ -155,6 +155,47 @@ matrix:
         - macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
       after_success:
         - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}*_macOS.zip" --cleanold
+
+    # Build for macOS (CMake)
+    - name: "macOS (CMake) [Xcode 8.3, macOS 10.12 SDK]"
+      language: objective-c
+      os: osx
+      osx_image: xcode8.3
+      env:
+        - MACOSX_DEPLOYMENT_TARGET=10.9
+      before_install:
+        #- brew update
+        - brew install gettext
+        - brew install asciidoc
+        - brew install docbook-xsl
+        # gcc6+ is currently required to bootstrap vcpkg on macOS
+        - brew install gcc@7 || brew link --overwrite gcc@7
+        - bundle install --gemfile="macosx/BuildBot/Gemfile"
+      script:
+        - source build_tools/ci/travis/export_build_output_desc.sh
+        - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
+      # do not deploy
+
+    # Build for macOS (CMake)
+    - name: "macOS (CMake) [Xcode 9.4, macOS 10.13 SDK]"
+      language: objective-c
+      os: osx
+      osx_image: xcode9.4
+      env:
+        - MACOSX_DEPLOYMENT_TARGET=10.9
+      before_install:
+        #- brew update
+        - brew install gettext
+        - brew install asciidoc
+        - brew install docbook-xsl
+        # gcc6+ is currently required to bootstrap vcpkg on macOS
+        - brew install gcc@7 || brew link --overwrite gcc@7
+        - bundle install --gemfile="macosx/BuildBot/Gemfile"
+      script:
+        - source build_tools/ci/travis/export_build_output_desc.sh
+        - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
+      #after_success:
+        #- build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}*_macOS.zip" --cleanold
 
 # The channel name "chat.freenode.net#warzone2100-dev" is encrypted against Warzone2100/warzone2100 to prevent IRC spam of forks
 notifications:
