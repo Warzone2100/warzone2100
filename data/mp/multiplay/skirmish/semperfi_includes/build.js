@@ -205,25 +205,28 @@ function lookForOil()
 	{
 		for (var j = 0, drLen = droids.length; j < drLen; ++j)
 		{
-			var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
-			var unsafe = enumRange(oils[i].x, oils[i].y, UNSAFE_AREA_RANGE, ENEMIES, false).filter(isUnsafeEnemyObject);
-			if (droidCanReach(droids[j], oils[i].x, oils[i].y) &&
-				droids[j].order !== DORDER_BUILD  && // but can snatch from HELPBUILD
-				droids[j].order !== DORDER_LINEBUILD &&
-				!droids[j].busy)
+			var droid = droids[j];
+			var oil = oils[i];
+			var dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
+			var unsafe = enumRange(oil.x, oil.y, UNSAFE_AREA_RANGE, ENEMIES, false).filter(isUnsafeEnemyObject);
+			if (droidCanReach(droid, oil.x, oil.y) &&
+				droid.order !== DORDER_BUILD  && // but can snatch from HELPBUILD
+				droid.order !== DORDER_LINEBUILD &&
+				droid.order !== DORDER_RECYCLE &&
+				!droid.busy)
 			{
 				if (dist < bestDist && unsafe.length === 0)
 				{
-					bestDroid = droids[j];
+					bestDroid = droid;
 					bestDist = dist;
 				}
 			}
 		}
 
-		if (bestDroid && !ThrottleThis("oil" + oils[i].y * mapWidth * oils[i].x, 50000))
+		if (bestDroid && !ThrottleThis("oil" + oil.y * mapWidth * oil.x, 50000))
 		{
 			bestDroid.busy = true;
-			orderDroidBuild(bestDroid, DORDER_BUILD, DERRICK_STAT, oils[i].x, oils[i].y);
+			orderDroidBuild(bestDroid, DORDER_BUILD, DERRICK_STAT, oil.x, oil.y);
 			bestDist = 99999;
 			bestDroid = null;
 			success = true;

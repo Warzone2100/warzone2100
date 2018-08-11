@@ -5,13 +5,12 @@ const FUNDAMENTALS = [
 	"R-Wpn-MG1Mk1",
 	"R-Defense-Tower01",
 	"R-Wpn-MG2Mk1",
-	"R-Wpn-MG-Damage03",
-	"R-Struc-Power-Upgrade03a", // final power upgrade
-	"R-Struc-Research-Upgrade09", // Faster research
-	"R-Wpn-MG-Damage04",
+	"R-Wpn-MG-Damage02",
+	"R-Struc-PowerModuleMk1",
+	"R-Struc-Research-Upgrade01",
 	"R-Defense-WallUpgrade02",
-	"R-Vehicle-Metals02",
-	"R-Cyborg-Metals02",
+	"R-Vehicle-Metals01",
+	"R-Cyborg-Metals01",
 ];
 const LATE_GAME_TECH = [
 	"R-Vehicle-Body14", // dragon body
@@ -22,19 +21,13 @@ const LATE_GAME_TECH = [
 	"R-Defense-EMPCannon",
 	"R-Defense-EMPMortar",
 ];
-const SENSOR_TECH = [
-	"R-Sys-Sensor-Tower02",
-	"R-Sys-Sensor-Upgrade03", // increase vision field
-	"R-Sys-Sensor-WSTower",
-	"R-Sys-Sensor-UpLink",
-];
 const ROCKET_TECH = [
 	"R-Wpn-Rocket-ROF03",
 	"R-Wpn-Rocket03-HvAT",
-	"R-Defense-IDFRocket", // ripple rocket battery
 	"R-Cyborg-Hvywpn-TK", //tank killer cyborg
 	"R-Defense-WallTower-HvyA-Trocket", //Tank-killer rocket and hardpoint
 	"R-Wpn-Rocket-Damage09",
+	"R-Defense-IDFRocket", // ripple rocket battery
 ];
 const MISSILE_TECH = [
 	"R-Defense-WallTower-A-Tmiss", // Scourge hardpoint
@@ -65,11 +58,15 @@ const START_COMPONENTS = [
 ];
 const FUNDAMENTALS2 = [
 	"R-Vehicle-Prop-Hover",
-	"R-Sys-Engineering03",
 	"R-Vehicle-Body09", //tiger
+	"R-Sys-Engineering03",
 	"R-Sys-Autorepair-General",
+	"R-Sys-Sensor-Upgrade03", // increase vision field
+	"R-Sys-Sensor-Tower02",
 	"R-Struc-RprFac-Upgrade06",
 	"R-Struc-Factory-Upgrade09",
+	"R-Sys-Sensor-WSTower",
+	"R-Sys-Sensor-UpLink",
 ];
 const THERMAL_ALLOYS = [
 	"R-Vehicle-Armor-Heat09",
@@ -87,6 +84,10 @@ const ANTI_AIR_TECH = [
 	"R-Defense-Sunburst",
 	"R-Defense-SamSite1",
 	"R-Defense-SamSite2",
+];
+const POWER_AND_RESEARCH_TECH = [
+	"R-Struc-Power-Upgrade03a", // final power upgrade
+	"R-Struc-Research-Upgrade09", // Faster research
 ];
 
 //This function aims to more cleanly discover available research topics
@@ -143,9 +144,9 @@ function findResearch(tech, labParam)
 		if (!found && getRealPower() > MIN_RESEARCH_POWER)
 		{
 			found = evalResearch(lab.id, START_COMPONENTS);
-			if (!found && random(4) === 0)
+			if (!found && random(3) === 0)
 			{
-				found = evalResearch(lab.id, STRUCTURE_DEFENSE_UPGRADES);
+				found = evalResearch(lab.id, POWER_AND_RESEARCH_TECH);
 			}
 			if (!found && enemyHasVtol)
 			{
@@ -153,8 +154,17 @@ function findResearch(tech, labParam)
 				//The side effect is missile research will be prioritized
 				//much earlier. Probably not much of an issue.
 				found = evalResearch(lab.id, ANTI_AIR_TECH);
+				if (!found)
+				{
+					found = evalResearch(lab.id, MISSILE_TECH);
+				}
+				if (!found)
+				{
+					found = evalResearch(lab.id, VTOL_WEAPONRY);
+				}
 			}
-			if (!found && random(2) === 0)
+			//If they have vtols then push rocket tech later (for bunker buster at that point).
+			if (!found && !enemyHasVtol && random(2) === 0)
 			{
 				found = evalResearch(lab.id, ROCKET_TECH);
 			}
@@ -162,9 +172,9 @@ function findResearch(tech, labParam)
 			{
 				found = evalResearch(lab.id, FLAMER_TECH);
 			}
-			if (!found && random(5) === 0)
+			if (!found && random(3) === 0)
 			{
-				found = evalResearch(lab.id, SENSOR_TECH);
+				found = evalResearch(lab.id, STRUCTURE_DEFENSE_UPGRADES);
 			}
 			if (!found)
 			{
@@ -189,13 +199,23 @@ function findResearch(tech, labParam)
 					}
 				}
 			}
-			if (!found)
+			if (!enemyHasVtol)
 			{
-				found = evalResearch(lab.id, MISSILE_TECH);
+				if (!found)
+				{
+					found = evalResearch(lab.id, MISSILE_TECH);
+				}
+				if (!found)
+				{
+					found = evalResearch(lab.id, VTOL_WEAPONRY);
+				}
 			}
-			if (!found)
+			else
 			{
-				found = evalResearch(lab.id, VTOL_WEAPONRY);
+				if (!found)
+				{
+					found = evalResearch(lab.id, ROCKET_TECH);
+				}
 			}
 			if (!found)
 			{

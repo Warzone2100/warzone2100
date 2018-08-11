@@ -61,8 +61,10 @@ function eventAttacked(victim, attacker)
 			return;
 		}
 
-		//Set this player as the current enemy
-		if (enemyNumber !== attacker.player)
+		//Set this player as the current enemy. Also, only do this if they are
+		//somewhat close to our base so our units don't shuffle around rapidly
+		//picking many different players to focus on in intense multi-battles.
+		if (enemyNumber !== attacker.player && distBetweenTwoPoints(attacker.x, attacker.y, BASE.x, BASE.y) <= (AVG_BASE_RADIUS + 10))
 		{
 			setPlayerAsTarget(attacker.player);
 		}
