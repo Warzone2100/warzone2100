@@ -3,7 +3,7 @@ project(warzone2100)
 
 OPTION(ENABLE_NLS "Native Language Support" ON)
 OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
-OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" ON)
+OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
