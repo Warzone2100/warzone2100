@@ -316,7 +316,7 @@ bool addChallenges()
 		ASSERT(challenge.contains("map"), "Invalid challenge file %s - no map", sPath);
 		map = challenge.value("map", "BAD MAP").toString();
 		difficulty = challenge.value("difficulty", "BAD DIFFICULTY").toString();
-		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("Description", "").toString();
+		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("description", "").toString();
 
 		button = (W_BUTTON *)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
 
@@ -420,4 +420,3 @@ bool displayChallenges()
 	widgDisplayScreen(psRequestScreen);	// display widgets.
 	return true;
 }
-
