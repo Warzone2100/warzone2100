@@ -252,6 +252,7 @@ typedef enum
 	CLI_AUTOGAME,
 	CLI_SAVEANDQUIT,
 	CLI_SKIRMISH,
+	CLI_AUTOHOST,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -288,6 +289,7 @@ static const struct poptOption *getOptionsTable()
 		{ "autogame",   '\0', POPT_ARG_NONE,   nullptr, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr, true },
 		{ "saveandquit", '\0', POPT_ARG_STRING, nullptr, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name"), true },
 		{ "skirmish",   '\0', POPT_ARG_STRING, nullptr, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test"), true },
+		{ "autohost",   '\0', POPT_ARG_STRING, NULL, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost"), true },
 		// Terminating entry
 		{ nullptr,         '\0', 0,               nullptr, 0,              nullptr,                                    nullptr, true },
 	};
@@ -651,6 +653,15 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			hostlaunch = 2;
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
+			{
+				qFatal("Bad test key");
+			}
+			wz_test = token;
+			break;
+		case CLI_AUTOHOST:
+			hostlaunch = 3;
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
 			{
 				qFatal("Bad test key");
 			}

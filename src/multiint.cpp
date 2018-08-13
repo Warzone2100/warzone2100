@@ -391,7 +391,12 @@ void loadMultiScripts()
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "tests/";
 	}
-
+    if (hostlaunch == 3)
+	{
+		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
+		path = "autohost/";
+	}
+	
 	// Reset assigned counter
 	for (auto it = aidata.begin(); it < aidata.end(); ++it)
 	{
@@ -2942,6 +2947,11 @@ static void loadMapSettings1()
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 	}
+	if (hostlaunch == 3)
+	{
+		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
+	}
+	
 	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
 		return;
@@ -2985,6 +2995,11 @@ static void loadMapSettings2()
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 	}
+	if (hostlaunch == 3)
+	{
+		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
+	}
+
 	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
 		return;
@@ -4069,13 +4084,24 @@ bool startMultiOptions(bool bReenter)
 
 	loadMapPreview(false);
 
-	if (autogame_enabled())
+	if (autogame_enabled() || hostlaunch == 3)
 	{
+		
+		if (hostlaunch == 3)
+		{
+			loadSettings("autohost/" + WzString::fromUtf8(wz_skirmish_test()));
+		}
+		
 		if (!ingame.localJoiningInProgress)
 		{
 			processMultiopWidgets(MULTIOP_HOST);
 		}
-		SendReadyRequest(selectedPlayer, true);
+		
+		if (hostlaunch == 3)
+		{
+			SendReadyRequest(selectedPlayer, true);
+		}
+		
 		if (hostlaunch == 2)
 		{
 			loadSettings("tests/" + WzString::fromUtf8(wz_skirmish_test()));
