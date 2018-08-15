@@ -1113,6 +1113,15 @@ bool stageTwoInitialise()
 		}
 	}
 
+	// NOTE:
+	// - Loading savegames calls `fPathDroidRoute` (from `loadSaveDroid`) before `stageThreeInitialise`
+	//   is called, hence removing this call to `fpathInitialise` will currently break loading certain
+	//   savegames (if they interact with the fPath system).
+	if (!fpathInitialise())
+	{
+		return false;
+	}
+
 	debug(LOG_MAIN, "stageTwoInitialise: done");
 
 	return true;
@@ -1125,6 +1134,8 @@ bool stageTwoInitialise()
 bool stageTwoShutDown()
 {
 	debug(LOG_WZ, "== stageTwoShutDown ==");
+
+	fpathShutdown();
 
 	cdAudio_Stop();
 
@@ -1332,8 +1343,6 @@ bool stageThreeShutDown()
 	resetVTOLLandingPos();
 
 	setScriptWinLoseVideo(PLAY_NONE);
-
-	fpathShutdown();
 
 	return true;
 }
