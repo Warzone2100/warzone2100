@@ -4707,8 +4707,8 @@ static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 		int oid = objVal.property("id").toInt32();
 		int oplayer = objVal.property("player").toInt32();
 		OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
-		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
 		psObj = IdToObject(otype, oid, oplayer);
+		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
 	}
 	if (context->argumentCount() > 4)
 	{
@@ -4716,8 +4716,8 @@ static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 		int oid = objVal.property("id").toInt32();
 		int oplayer = objVal.property("player").toInt32();
 		OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
-		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
 		psObj2 = IdToObject(otype, oid, oplayer);
+		SCRIPT_ASSERT(context, psObj2, "No such object id %d belonging to player %d", oid, oplayer);
 	}
 	sendSyncRequest(req_id, x, y, psObj, psObj2);
 	return QScriptValue();
