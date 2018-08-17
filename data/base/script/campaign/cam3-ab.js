@@ -72,6 +72,102 @@ function vtolAttack()
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), undefined, ext); //2 min
 }
 
+// Order any absorbed trucks to start building defenses near themselves.
+function truckDefense()
+{
+	var droids = enumDroid(NEXUS, DROID_CONSTRUCT);
+	var defenses = [
+		"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
+		"NX-Tower-ATMiss", "Sys-NX-CBTower",
+	];
+
+	for (var i = 0, len = droids.length; i < len; ++i)
+	{
+		var truck = droids[i];
+		if (truck.order !== DORDER_BUILD)
+		{
+			var defense = defenses[camRand(defenses.length)];
+			var loc = pickStructLocation(truck, defense, truck.x, truck.y);
+			enableStructure(defense, NEXUS);
+			if (camDef(loc))
+			{
+				orderDroidBuild(truck, DORDER_BUILD, defense, truck.x, truck.y);
+			}
+		}
+	}
+}
+
+function hackManufacture(structure, template)
+{
+	makeComponentAvailable(template.body, structure.player);
+	makeComponentAvailable(template.prop, structure.player);
+	makeComponentAvailable(template.weap, structure.player);
+	return buildDroid(structure, "Nexus unit", template.body, template.prop, "", "", template.weap);
+}
+
+function nexusManufacture()
+{
+	if (countDroid(DROID_ANY, NEXUS) > 100)
+	{
+		return;
+	}
+	var factoryType = [
+		{structure: "A0LightFactory", temps: [cTempl.nxmrailh, cTempl.nxmlinkh, cTempl.nxmscouh, cTempl.nxlflash,]},
+		{structure: "A0CyborgFactory", temps: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,]},
+		{structure: "A0VTolFactory1", temps: [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxmheapv,]},
+	];
+
+	for (var i = 0; i < factoryType.length; ++i)
+	{
+		var factories = enumStruct(NEXUS, factoryType[i].structure);
+		var templs = factoryType[i].temps;
+
+		for (var j = 0, len = factories.length; j < len; ++j)
+		{
+			var fac = factories[j];
+			if (fac.status !== BUILT || !structureIdle(fac))
+			{
+				return;
+			}
+			hackManufacture(fac, templs[camRand(templs.length)]);
+		}
+	}
+
+	queue("manualGrouping", 1500);
+}
+
+function manualGrouping()
+{
+	var vtols = enumDroid(NEXUS).filter(function(obj) {
+		return obj.group === null && isVTOL(obj);
+	});
+	var nonVtols = enumDroid(NEXUS).filter(function(obj) {
+		return obj.group === null && !isVTOL(obj);
+	});
+	if (vtols.length)
+	{
+		camManageGroup(camMakeGroup(vtols), CAM_ORDER_ATTACK, { regroup: false, count: -1 });
+	}
+	if (nonVtols.length)
+	{
+		camManageGroup(camMakeGroup(nonVtols), CAM_ORDER_ATTACK, { regroup: false, count: -1 });
+	}
+}
+
+function eventObjectTransfer(obj, from)
+{
+	if (obj.player === NEXUS && from === CAM_HUMAN_PLAYER)
+	{
+		if (obj.type === STRUCTURE)
+		{
+			if (obj.stattype === FACTORY || obj.stattype === CYBORG_FACTORY || obj.stattype === VTOL_FACTORY)
+			{
+				queue("nexusManufacture", 100); //build immediately if possible.
+			}
+		}
+	}
+}
+
 function powerTransfer()
 {
 	setPower(playerPower(CAM_HUMAN_PLAYER) + 5000);
@@ -146,4 +242,7 @@ function eventStartLevel()
 	queue("synapticsSound", 2500);
 	queue("hackPlayer", 8000);
 	queue("sendEdgeMapDroids", 15000); // 15 sec
+
+	setTimer("truckDefense", 2000);
+	setTimer("nexusManufacture", 10000);
 }

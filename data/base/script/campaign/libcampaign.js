@@ -3489,7 +3489,7 @@ function camHackIntoPlayer(player, to)
 	}
 
 	var tmp = [];
-	if (camRand(2) === 0)
+	if (camRand(100) < 40)
 	{
 		tmp = enumDroid(player).filter(function(d) {
 			return !camIsTransporter(d);
@@ -3497,9 +3497,19 @@ function camHackIntoPlayer(player, to)
 	}
 	if (tmp.length === 0)
 	{
-		tmp = enumStruct(player).filter(function(s) {
-			return (s.status === BUILT);
-		});
+		//Has explicit chances to target factories or research labs.
+		switch (camRand(8))
+		{
+			case 0: tmp = enumStruct(player, "A0LightFactory").filter(function(s) { return (s.status === BUILT); }); break;
+			case 1: tmp = enumStruct(player, "A0CyborgFactory").filter(function(s) { return (s.status === BUILT); }); break;
+			case 2: tmp = enumStruct(player, "A0VTolFactory1").filter(function(s) { return (s.status === BUILT); }); break;
+			case 3: tmp = enumStruct(player, "A0ResearchFacility").filter(function(r) { return (r.status === BUILT); }); break;
+			default: //do nothing
+		}
+		if (tmp.length === 0)
+		{
+			tmp = enumStruct(player).filter(function(s) { return (s.status === BUILT); });
+		}
 	}
 	if (tmp.length === 0)
 	{
@@ -3508,19 +3518,69 @@ function camHackIntoPlayer(player, to)
 
 	if (__camLastNexusAttack === 0 || (gameTime > (__camLastNexusAttack + 5000)) && (camRand(100) < 25))
 	{
-		//Try stealing the HQ first.
 		var obj;
-		var objects = (__camLastNexusAttack === 0) ? enumStruct(player, HQ) : tmp;
+		var steal = true;
+		var objects;
+
+		//Try stealing the HQ first.
+		if (__camLastNexusAttack === 0)
+		{
+			objects = enumStruct(player, HQ);
+		}
+		else
+		{
+			steal = (camRand(100) < 70) ? true : false;
+			objects = tmp;
+		}
+
 		__camLastNexusAttack = gameTime;
 		if (objects.length === 0)
 		{
 			return;
 		}
+
 		obj = objects[camRand(objects.length)];
-		camTrace("stealing object: " + obj.name);
-		if (!donateObject(obj, to))
+
+		if (steal === true)
 		{
-			camSafeRemoveObject(obj, true); //Explode it then.
+			camTrace("Hacking " + obj.name + " at (x,y): " + obj.x + " " + obj.y);
+			if (!donateObject(obj, to))
+			{
+				camSafeRemoveObject(obj, true); //Explode it then.
+			}
+		}
+		else
+		{
+			camTrace("neutralized " + obj.name + " at (x,y): " + obj.x + " " + obj.y);
+			//Nexus neutralize sounds.
+			if (obj.player === CAM_HUMAN_PLAYER)
+			{
+				var snd;
+				if (obj.type === STRUCTURE)
+				{
+					if (obj.stattype === DEFENSE)
+					{
+						snd = DEFENSE_NEUTRALIZE;
+					}
+					else
+					{
+						snd = STRUCTURE_NEUTRALIZE;
+					}
+				}
+				else if (obj.type === DROID)
+				{
+					snd = UNIT_NEUTRALIZE;
+				}
+
+				camSafeRemoveObject(obj, true);
+
+				if (camDef(snd))
+				{
+					playSound(snd);
+				}
+
+				queue("camNexusLaugh", 1500);
+			}
 		}
 	}
 }
@@ -3962,33 +4022,6 @@ function cam_eventDestroyed(obj)
 	{
 		__camCheckDeadTruck(obj);
 	}
-
-	//Nexus neutralize sounds.
-	if (__camNexusActivated === true && camRand(101) < 75 && obj.player === CAM_HUMAN_PLAYER)
-	{
-		var snd;
-		if (obj.type === STRUCTURE)
-		{
-			if (obj.stattype === DEFENSE)
-			{
-				snd = DEFENSE_NEUTRALIZE;
-			}
-			else
-			{
-				snd = STRUCTURE_NEUTRALIZE;
-			}
-		}
-		else if (obj.type === DROID)
-		{
-			snd = UNIT_NEUTRALIZE;
-		}
-
-		if (camDef(snd))
-		{
-			playSound(snd);
-		}
-		queue("camNexusLaugh", 1500);
-	}
 }
 
 function cam_eventObjectSeen(viewer, seen)
@@ -4128,7 +4161,7 @@ function cam_eventGameLoaded()
 //Plays Nexus sounds if nexusActivated is true.
 function cam_eventObjectTransfer(obj, from)
 {
-	if (from === CAM_HUMAN_PLAYER && __camNexusActivated === true)
+	if (from === CAM_HUMAN_PLAYER && obj.player === NEXUS && __camNexusActivated === true)
 	{
 		var snd;
 		if (obj.type === STRUCTURE)
