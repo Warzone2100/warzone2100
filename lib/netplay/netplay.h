@@ -120,6 +120,10 @@ enum MESSAGE_TYPES
 
 #define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
 
+#define WZ_SERVER_DISCONNECT 0
+#define WZ_SERVER_CONNECT    1
+#define WZ_SERVER_UPDATE     3
+
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
 #define MaxMsgSize		16384		// max size of a message in bytes.
@@ -208,6 +212,15 @@ struct WZFile
 enum
 {
 	DIFFICULTY_EASY, DIFFICULTY_MEDIUM, DIFFICULTY_HARD, DIFFICULTY_INSANE
+};
+
+enum class NET_LOBBY_OPT_FIELD
+{
+	INVALID,
+	GNAME,
+	MAPNAME,
+	HOSTNAME,
+	MAX
 };
 
 // ////////////////////////////////////////////////////////////////////////
@@ -326,9 +339,11 @@ int NETGetMinorVersion();
 void NET_InitPlayer(int i, bool initPosition, bool initTeams = false);
 void NET_InitPlayers(bool initTeams = false);
 
+void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
+
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
-
+void NETregisterServer(int state);
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 
