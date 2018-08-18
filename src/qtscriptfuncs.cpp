@@ -4736,18 +4736,30 @@ static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- ## fireWeaponAtLoc(x, y, weapon_name)
+//-- ## fireWeaponAtLoc(weapon, x, y[, player])
 //--
-//-- Fires a weapon at the given coordinates (3.3+ only).
+//-- Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+//-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
+//-- may have different friendly fire logic for a few weapons (like the lassat).
 //--
-static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
+static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *engine)
 {
-	int xLocation = context->argument(0).toInt32();
-	int yLocation = context->argument(1).toInt32();
-
-	QScriptValue weaponValue = context->argument(2);
+	QScriptValue weaponValue = context->argument(0);
 	int weapon = getCompFromName(COMP_WEAPON, QStringToWzString(weaponValue.toString()));
 	SCRIPT_ASSERT(context, weapon > 0, "No such weapon: %s", weaponValue.toString().toUtf8().constData());
+
+	int xLocation = context->argument(1).toInt32();
+	int yLocation = context->argument(2).toInt32();
+
+	int player;
+	if (context->argumentCount() > 3)
+	{
+		player = context->argument(3).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
 
 	Vector3i target;
 	target.x = world_coord(xLocation);
@@ -4756,9 +4768,45 @@ static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weapon;
-	// Send the projectile using the selectedPlayer so that it can always be seen.
-	// A player other than selectedPlayer is needed for the campaign lassat to damage player droids.
-	proj_SendProjectile(&sWeapon, nullptr, bMultiPlayer ? selectedPlayer : 8, target, nullptr, true, 0);
+
+	proj_SendProjectile(&sWeapon, nullptr, player, target, nullptr, true, 0);
+	return QScriptValue();
+}
+
+//-- ## fireWeaponAtObj(weapon, game object[, player])
+//--
+//-- Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
+//--
+static QScriptValue js_fireWeaponAtObj(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue weaponValue = context->argument(0);
+	int weapon = getCompFromName(COMP_WEAPON, QStringToWzString(weaponValue.toString()));
+	SCRIPT_ASSERT(context, weapon > 0, "No such weapon: %s", weaponValue.toString().toUtf8().constData());
+
+	BASE_OBJECT *psObj = nullptr;
+	QScriptValue objVal = context->argument(1);
+	int oid = objVal.property("id").toInt32();
+	int oplayer = objVal.property("player").toInt32();
+	OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
+	psObj = IdToObject(otype, oid, oplayer);
+	SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
+
+	int player;
+	if (context->argumentCount() > 3)
+	{
+		player = context->argument(3).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+
+	Vector3i target = psObj->pos;
+
+	WEAPON sWeapon;
+	sWeapon.nStat = weapon;
+
+	proj_SendProjectile(&sWeapon, nullptr, player, target, psObj, true, 0);
 	return QScriptValue();
 }
 
@@ -5975,6 +6023,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("setTransporterExit", engine->newFunction(js_setTransporterExit));
 	engine->globalObject().setProperty("setObjectFlag", engine->newFunction(js_setObjectFlag));
 	engine->globalObject().setProperty("fireWeaponAtLoc", engine->newFunction(js_fireWeaponAtLoc));
+	engine->globalObject().setProperty("fireWeaponAtObj", engine->newFunction(js_fireWeaponAtObj));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("TER_WATER", TER_WATER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
