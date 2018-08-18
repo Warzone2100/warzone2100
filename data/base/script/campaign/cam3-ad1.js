@@ -97,17 +97,16 @@ function vaporizeTarget()
 	}
 	else
 	{
-		// prefer droids over structures
 		var dr = targets.filter(function(obj) { return obj.type === DROID; });
 		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
 
 		if (dr.length)
 		{
-			target = camMakePos(dr[0]);
+			target = dr[0];
 		}
-		else if (st.length)
+		if (st.length && !camRand(2)) //chance to focus on a structure
 		{
-			target = camMakePos(st[0]);
+			target = st[0];
 		}
 	}
 
@@ -132,12 +131,18 @@ function vaporizeTarget()
 function laserSatFuzzyStrike(obj)
 {
 	const LOC = camMakePos(obj);
+	//Initially lock onto target
+	var xCoord = LOC.x;
+	var yCoord = LOC.y;
 
 	//Introduce some randomness
-	var xRand = camRand(2);
-	var yRand = camRand(2);
-	var xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
-	var yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
+	if (camRand(101) < 67)
+	{
+		var xRand = camRand(3);
+		var yRand = camRand(3);
+		xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
+		yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
+	}
 
 	if (xCoord < 0)
 	{
@@ -161,7 +166,17 @@ function laserSatFuzzyStrike(obj)
 	{
 		playSound(LASSAT_FIRING, xCoord, yCoord);
 	}
-	fireWeaponAtLoc(xCoord, yCoord, "LasSat");
+
+	//Missed it so hit close to target.
+	if (LOC.x !== xCoord || LOC.y !== yCoord || !camDef(obj.id))
+	{
+		fireWeaponAtLoc("LasSat", xCoord, yCoord, CAM_HUMAN_PLAYER);
+	}
+	else
+	{
+		//Hit it directly
+		fireWeaponAtObj("LasSat", obj, CAM_HUMAN_PLAYER);
+	}
 }
 
 //Donate the silos to the player. Allow capturedSilos victory flag to be true.

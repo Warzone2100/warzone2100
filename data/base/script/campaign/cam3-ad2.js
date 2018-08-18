@@ -128,11 +128,11 @@ function vaporizeTarget()
 
 		if (dr.length)
 		{
-			target = camMakePos(dr[0]);
+			target = dr[0];
 		}
 		if (st.length && !camRand(2)) //chance to focus on a structure
 		{
-			target = camMakePos(st[0]);
+			target = st[0];
 		}
 	}
 
@@ -167,8 +167,8 @@ function laserSatFuzzyStrike(obj)
 	var xCoord = LOC.x;
 	var yCoord = LOC.y;
 
-	//Introduce some randomness
-	if (camRand(101) < 67)
+	//Introduce some randomness. More accurate than last mission.
+	if (camRand(101) < 33)
 	{
 		var xRand = camRand(2);
 		var yRand = camRand(2);
@@ -200,7 +200,17 @@ function laserSatFuzzyStrike(obj)
 		{
 			playSound(LASSAT_FIRING, xCoord, yCoord);
 		}
-		fireWeaponAtLoc(xCoord, yCoord, "LasSat");
+
+		//Missed it so hit close to target
+		if (LOC.x !== xCoord || LOC.y !== yCoord || !camDef(obj.id))
+		{
+			fireWeaponAtLoc("LasSat", xCoord, yCoord, CAM_HUMAN_PLAYER);
+		}
+		else
+		{
+			//Hit it directly
+			fireWeaponAtObj("LasSat", obj, CAM_HUMAN_PLAYER);
+		}
 	}
 }
 
