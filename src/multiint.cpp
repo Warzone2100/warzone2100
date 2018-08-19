@@ -3499,6 +3499,11 @@ TITLECODE WzMultiOptionTitleUI::run()
 				break;
 			case MULTIOP_MAP:
 				{
+					if (NetPlay.bComms && bHosted && !isHoverPreview && NET_numHumanPlayers() > mapData->players)
+					{
+						addConsoleMessage(_("Cannot change to a map with too few slots for all players."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+						break;
+					}
 					sstrcpy(oldGameMap, game.map);
 					oldGameHash = game.hash;
 					oldMaxPlayers = game.maxPlayers;
@@ -3520,6 +3525,20 @@ TITLECODE WzMultiOptionTitleUI::run()
 					else
 					{
 						loadMapSettings1();
+					}
+
+					//Reset player slots if it's a smaller map.
+					if (NetPlay.isHost && NetPlay.bComms && bHosted && !isHoverPreview && oldMaxPlayers > game.maxPlayers)
+					{
+						const std::vector<uint8_t> &Humans = NET_getHumanPlayers();
+
+						//This is pretty ugly tbh, but seems like the easiest way to achieve the goal to my tired mind.
+						size_t PlayerInc = 0;
+						for (uint8_t SlotInc = 0; SlotInc < game.maxPlayers && PlayerInc < Humans.size(); ++SlotInc)
+						{
+							changePosition(Humans[PlayerInc], SlotInc);
+							++PlayerInc;
+						}
 					}
 
 					WzString name = formatGameName(game.map);
