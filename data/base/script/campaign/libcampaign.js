@@ -3358,28 +3358,24 @@ function __camSpawnVtols()
 
 function __camRetreatVtols()
 {
-	if (countStruct("A0VtolPad", __camVtolPlayer) > 0)
+	if (camDef(__camVtolExitPosition.x) &&
+		camDef(__camVtolExitPosition.y) &&
+		countStruct("A0VtolPad", __camVtolPlayer) <= 0)
 	{
-		return; //Got to destroy those rearming pads now.
-	}
+		var vtols = enumDroid(__camVtolPlayer).filter(function(obj) {
+			return isVTOL(obj);
+		});
 
-	var vtols = enumDroid(__camVtolPlayer).filter(function(obj) {
-		return isVTOL(obj);
-	});
-
-	for (var i = 0, l = vtols.length; i < l; ++i)
-	{
-		var vt = vtols[i];
-		if (!camDef(vt))
+		for (var i = 0, l = vtols.length; i < l; ++i)
 		{
-			continue;
-		}
-		for (var c = 0, d = vt.weapons.length; c < d; ++c)
-		{
-			if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < 1) || (vt.health < 40))
+			var vt = vtols[i];
+			for (var c = 0, d = vt.weapons.length; c < d; ++c)
 			{
-				orderDroidLoc(vt, DORDER_MOVE, __camVtolExitPosition.x, __camVtolExitPosition.y);
-				break;
+				if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < 1) || (vt.health < 40))
+				{
+					orderDroidLoc(vt, DORDER_MOVE, __camVtolExitPosition.x, __camVtolExitPosition.y);
+					break;
+				}
 			}
 		}
 	}
