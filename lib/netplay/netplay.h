@@ -29,7 +29,7 @@
 #include "lib/framework/crc.h"
 #include "nettypes.h"
 #include <physfs.h>
-
+#include <vector>
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -341,6 +341,7 @@ void NET_InitPlayers(bool initTeams = false);
 
 uint8_t NET_numHumanPlayers(void);
 void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
+std::vector<uint8_t> NET_getHumanPlayers(void);
 
 void NETGameLocked(bool flag);
 void NETresetGamePassword();

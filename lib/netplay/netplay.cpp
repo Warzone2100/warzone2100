@@ -371,6 +371,19 @@ uint8_t NET_numHumanPlayers(void)
 	return RetVal;
 }
 
+std::vector<uint8_t> NET_getHumanPlayers(void)
+{
+	std::vector<uint8_t> RetVal;
+	RetVal.reserve(MAX_PLAYERS);
+
+	for (uint8_t Inc = 0; Inc < MAX_PLAYERS; ++Inc)
+	{
+		if (NetPlay.players[Inc].allocated) RetVal.push_back(Inc);
+	}
+
+	return RetVal;
+}
+
 void NET_InitPlayers(bool initTeams)
 {
 	unsigned int i;
