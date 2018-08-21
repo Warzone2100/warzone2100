@@ -26,6 +26,7 @@
 // Qt headers MUST come before platform specific stuff!
 #include "wzconfig.h"
 #include "file.h"
+#include <sstream>
 
 WzConfig::~WzConfig()
 {
