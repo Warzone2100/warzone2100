@@ -121,6 +121,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
 bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit);
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
+bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 bool triggerEventStructureReady(STRUCTURE *psStruct);

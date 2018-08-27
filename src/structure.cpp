@@ -842,6 +842,14 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		if (prevStatus == SS_BUILT)
 		{
 			// Starting to demolish.
+			if (psDroid)
+			{
+				triggerEventStructDemolish(psStruct, psDroid);
+			}
+			else
+			{
+				triggerEventStructDemolish(psStruct, nullptr);
+			}
 			switch (psStruct->pStructureType->type)
 			{
 			case REF_POWER_GEN:

@@ -1338,6 +1338,32 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 	return true;
 }
 
+//__ ## eventStructureDemolish(structure[, droid])
+//__
+//__ An event that is run every time a structure begins to be demolished. This does
+//__ not trigger again if the structure is partially demolished.
+//__
+bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *engine : scripts)
+	{
+		int player = engine->globalObject().property("me").toInt32();
+		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		if (player == psStruct->player || receiveAll)
+		{
+			QScriptValueList args;
+			args += convStructure(psStruct, engine);
+			if (psDroid)
+			{
+				args += convDroid(psDroid, engine);
+			}
+			callFunction(engine, "eventStructureDemolish", args);
+		}
+	}
+	return true;
+}
+
 //__ ## eventStructureReady(structure)
 //__
 //__ An event that is run every time a structure is ready to perform some
@@ -1893,4 +1919,3 @@ void to_json(nlohmann::json& j, const QVariant& value) {
 			}
 	}
 }
-
