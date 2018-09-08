@@ -277,7 +277,7 @@ void W_BUTTON::addOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc)
 	onClickHandlers.push_back(onClickFunc);
 }
 
-void StateButton::setState(unsigned newStateValue)
+void StateButton::setState(int newStateValue)
 {
 	if (currentState == newStateValue)
 	{
