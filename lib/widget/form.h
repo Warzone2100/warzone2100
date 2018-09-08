@@ -35,9 +35,9 @@ public:
 	W_FORM(W_FORMINIT const *init);
 	W_FORM(WIDGET *parent);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlightLost();
-	void display(int xOffset, int yOffset);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void highlightLost() override;
+	void display(int xOffset, int yOffset) override;
 
 	bool            disableChildren;        ///< Disable all child widgets if true
 };
@@ -50,16 +50,16 @@ public:
 	W_CLICKFORM(W_FORMINIT const *init);
 	W_CLICKFORM(WIDGET *parent);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
-	void released(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlight(W_CONTEXT *psContext);
-	void highlightLost();
-	void display(int xOffset, int yOffset);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void highlight(W_CONTEXT *psContext) override;
+	void highlightLost() override;
+	void display(int xOffset, int yOffset) override;
 
-	unsigned getState();
-	void setState(unsigned state);
-	void setFlash(bool enable);
-	void setTip(std::string string);
+	unsigned getState() override;
+	void setState(unsigned state) override;
+	void setFlash(bool enable) override;
+	void setTip(std::string string) override;
 
 	using WIDGET::setString;
 	using WIDGET::setTip;
@@ -67,7 +67,7 @@ public:
 	bool isDown() const;
 	bool isHighlighted() const;
 
-	UDWORD		state;					// Button state of the form
+	unsigned state;                     // Button state of the form
 	std::string pTip;                   // Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound

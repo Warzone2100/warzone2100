@@ -2295,8 +2295,8 @@ static void intProcessStats(UDWORD id)
 	else if (id == IDSTAT_OBSOLETE_BUTTON)
 	{
 		includeRedundantDesigns = !includeRedundantDesigns;
-		StateButton *obsoleteButton = (StateButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
-		obsoleteButton->setState(includeRedundantDesigns);
+		auto obsoleteButton = (MultipleChoiceButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
+		obsoleteButton->setChoice(includeRedundantDesigns);
 		intRefreshScreen();
 	}
 }
@@ -3508,15 +3508,15 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	}
 }
 
-StateButton *makeObsoleteButton(WIDGET *parent)
+MultipleChoiceButton *makeObsoleteButton(WIDGET *parent)
 {
-	StateButton *obsoleteButton = new StateButton(parent);
+	auto obsoleteButton = new MultipleChoiceButton(parent);
 	obsoleteButton->id = IDSTAT_OBSOLETE_BUTTON;
 	obsoleteButton->style |= WBUT_SECONDARY;
-	obsoleteButton->setState(includeRedundantDesigns);
-	obsoleteButton->setImages(false, StateButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
+	obsoleteButton->setChoice(includeRedundantDesigns);
+	obsoleteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
 	obsoleteButton->setTip(false, _("Hiding Obsolete Tech"));
-	obsoleteButton->setImages(true,  StateButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
+	obsoleteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
 	obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
 	obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 	return obsoleteButton;

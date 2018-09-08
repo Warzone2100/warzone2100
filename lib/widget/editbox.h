@@ -49,16 +49,16 @@ public:
 	W_EDITBOX(W_EDBINIT const *init);
 	W_EDITBOX(WIDGET *parent);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY);
-	void highlight(W_CONTEXT *psContext);
-	void highlightLost();
-	void focusLost();
-	void run(W_CONTEXT *psContext);
-	void display(int xOffset, int yOffset);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
+	void highlight(W_CONTEXT *psContext) override;
+	void highlightLost() override;
+	void focusLost() override;
+	void run(W_CONTEXT *psContext) override;
+	void display(int xOffset, int yOffset) override;
 
-	void setState(unsigned state);
-	WzString getString() const;
-	void setString(WzString string);
+	void setState(unsigned state) override;
+	WzString getString() const override;
+	void setString(WzString string) override;
 	void setMaxStringSize(int size);
 
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);

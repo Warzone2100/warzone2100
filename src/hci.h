@@ -31,7 +31,7 @@
 
 #include "message.h"
 
-class StateButton;
+class MultipleChoiceButton;
 class WIDGET;
 struct DROID;
 struct PROXIMITY_DISPLAY;
@@ -404,7 +404,7 @@ bool intIsRefreshing();
 
 void intDemolishCancel();
 
-StateButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
+MultipleChoiceButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
 
 void chatDialog(int mode);
 bool isChatUp();

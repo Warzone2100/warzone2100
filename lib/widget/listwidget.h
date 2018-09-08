@@ -91,7 +91,7 @@ public:
 
 	ListWidget(WIDGET *parent);
 
-	virtual void widgetLost(WIDGET *widget);
+	void widgetLost(WIDGET *widget) override;
 
 	void setChildSize(int width, int height);  ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
 	void setChildSpacing(int width, int height);  ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
@@ -161,7 +161,7 @@ public:
 
 	ListTabWidget(WIDGET *parent);
 
-	virtual void geometryChanged();
+	void geometryChanged() override;
 
 	void setChildSize(int width, int height)
 	{

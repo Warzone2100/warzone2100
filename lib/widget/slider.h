@@ -38,13 +38,13 @@ class W_SLIDER : public WIDGET
 public:
 	W_SLIDER(W_SLDINIT const *init);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlight(W_CONTEXT *psContext);
-	void highlightLost();
-	void run(W_CONTEXT *psContext);
-	void display(int xOffset, int yOffset);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void highlight(W_CONTEXT *psContext) override;
+	void highlightLost() override;
+	void run(W_CONTEXT *psContext) override;
+	void display(int xOffset, int yOffset) override;
 
-	void setTip(std::string string);
+	void setTip(std::string string) override;
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider

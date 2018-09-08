@@ -3827,8 +3827,8 @@ void intProcessDesign(UDWORD id)
 			break;
 		case IDSTAT_OBSOLETE_BUTTON:
 			includeRedundantDesigns = !includeRedundantDesigns;
-			StateButton *obsoleteButton = (StateButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
-			obsoleteButton->setState(includeRedundantDesigns);
+			auto obsoleteButton = (MultipleChoiceButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
+			obsoleteButton->setChoice(includeRedundantDesigns);
 			// Refresh lists.
 			if (droidTemplID != IDDES_TEMPLSTART)
 			{

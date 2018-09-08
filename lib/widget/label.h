@@ -40,13 +40,13 @@ public:
 	W_LABEL(W_LABINIT const *init);
 	W_LABEL(WIDGET *parent);
 
-	void highlight(W_CONTEXT *psContext);
-	void highlightLost();
-	void display(int xOffset, int yOffset);
+	void highlight(W_CONTEXT *psContext) override;
+	void highlightLost() override;
+	void display(int xOffset, int yOffset) override;
 
-	WzString getString() const;
-	void setString(WzString string);
-	void setTip(std::string string);
+	WzString getString() const override;
+	void setString(WzString string) override;
+	void setTip(std::string string) override;
 
 	void setFont(iV_fonts font)
 	{

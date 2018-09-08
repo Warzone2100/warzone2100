@@ -52,18 +52,18 @@ public:
 	W_BUTTON(W_BUTINIT const *init);
 	W_BUTTON(WIDGET *parent);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
-	void released(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlight(W_CONTEXT *psContext);
-	void highlightLost();
-	void display(int xOffset, int yOffset);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void highlight(W_CONTEXT *psContext) override;
+	void highlightLost() override;
+	void display(int xOffset, int yOffset) override;
 
-	unsigned getState();
-	void setState(unsigned state);
-	void setFlash(bool enable);
-	WzString getString() const;
-	void setString(WzString string);
-	void setTip(std::string string);
+	unsigned getState() override;
+	void setState(unsigned state) override;
+	void setFlash(bool enable) override;
+	WzString getString() const override;
+	void setString(WzString string) override;
+	void setTip(std::string string) override;
 	void unlock();
 
 	void setImages(Images const &images);
@@ -78,7 +78,7 @@ public:
 	void addOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc);
 
 public:
-	UDWORD		state;				// The current button state
+	unsigned        state;                          // The current button state
 	WzString        pText;                          // The text for the button
 	Images          images;                         ///< The images for the button.
 	std::string     pTip;                           // The tool tip for the button
@@ -90,20 +90,20 @@ private:
 	std::vector<W_BUTTON_ONCLICK_FUNC> onClickHandlers;
 };
 
-class StateButton : public W_BUTTON
+class MultipleChoiceButton : public W_BUTTON
 {
 
 public:
-	StateButton(WIDGET *parent) : W_BUTTON(parent), currentState(-1) {}
-	void setState(int newStateValue);
-	void setTip(int stateValue, const std::string& string);
-	void setTip(int stateValue, char const *stringUtf8);
-	void setImages(int stateValue, Images const &stateImages);
+	MultipleChoiceButton(WIDGET *parent) : W_BUTTON(parent), choice(0) {}
+	void setChoice(unsigned newChoice);
+	void setTip(unsigned stateValue, std::string const &string);
+	void setTip(unsigned stateValue, char const *stringUtf8);
+	void setImages(unsigned stateValue, Images const &stateImages);
 
 	using WIDGET::setTip;
 
 private:
-	int currentState;
+	unsigned choice;
 	std::map<int, std::string> tips;
 	std::map<int, Images> imageSets;
 };
