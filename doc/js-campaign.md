@@ -146,6 +146,8 @@ artifact will be placed instantly. Artifact description is a JavaScript
 object with the following fields:
 
 * ```tech``` The technology to grant when the artifact is recovered.
+Note that this can be made into an array to make artifacts give out
+more than one technology, if desired.
 On __let me win__ cheat, all technologies stored in the artifacts
 managed by this function are automatically granted.
 Additionally, this function would call special event callbacks if they are
@@ -339,10 +341,6 @@ or a POSITION-like object.
 
 Print campaign order as string, useful for debugging.
 
-## camSortByHealth(object 1, object 2)
-
-Use this to sort an array of objects by health value.
-
 ## camSetFactories(factories)
 
 Tell ```libcampaign.js``` to manage a certain set of enemy factories.
@@ -479,7 +477,10 @@ A means to not auto group some droids.
 ## camPlayVideos(videos)
 
 If videos is an array, queue up all of them for immediate playing. This
-function will play one video sequence should one be provided.
+function will play one video sequence should one be provided. Also,
+should a sound file be in a string (pcvX.ogg)  __camEnqueueVideos() will recognize it
+as a sound to play before a video. Of which is only supported when passed as
+an array.
 
 ## camAreaEvent(label, function(droid))
 

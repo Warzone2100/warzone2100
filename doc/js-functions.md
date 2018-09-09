@@ -757,9 +757,15 @@ take care only to define sync requests that can be validated against cheating. (
 Replace one texture with another. This can be used to for example give buildings on a specific tileset different
 looks, or to add variety to the looks of droids in campaign missions. (3.2+ only)
 
-## fireWeaponAtLoc(x, y, weapon_name)
+## fireWeaponAtLoc(weapon, x, y[, player])
 
-Fires a weapon at the given coordinates (3.3+ only).
+Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
+may have different friendly fire logic for a few weapons (like the lassat).
+
+## fireWeaponAtObj(weapon, game object[, player])
+
+Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
 
 ## changePlayerColour(player, colour)
 
