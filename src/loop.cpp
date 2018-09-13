@@ -118,13 +118,13 @@ struct PAUSE_STATE
 	bool scrollPause;
 	bool consolePause;
 };
+static PAUSE_STATE pauseState;
 
-static PAUSE_STATE	pauseState;
-static	UDWORD	numDroids[MAX_PLAYERS];
-static	UDWORD	numMissionDroids[MAX_PLAYERS];
-static	UDWORD	numTransporterDroids[MAX_PLAYERS];
-static	UDWORD	numCommandDroids[MAX_PLAYERS];
-static	UDWORD	numConstructorDroids[MAX_PLAYERS];
+static unsigned numDroids[MAX_PLAYERS];
+static unsigned numMissionDroids[MAX_PLAYERS];
+static unsigned numTransporterDroids[MAX_PLAYERS];
+static unsigned numCommandDroids[MAX_PLAYERS];
+static unsigned numConstructorDroids[MAX_PLAYERS];
 
 static SDWORD videoMode = 0;
 
@@ -551,6 +551,9 @@ static void gameStateUpdate()
 		syncDebug("Player %d = \"%s\"", n, NetPlay.players[n].name);
 	}
 
+	// Must be at the beginning of gameStateUpdate, since countUpdate is also called randomly (unsynchronised) between gameStateUpdate calls.
+	countUpdate(true);
+
 	// Add version string to desynch logs. Different version strings will not trigger a desynch dump per se, due to the syncDebug{Get, Set}Crc guard.
 	auto crc = syncDebugGetCrc();
 	syncDebug("My client version = %s", version_getVersionString());
@@ -655,9 +658,6 @@ static void gameStateUpdate()
 
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
-
-	// Must be at the beginning or end of each tick, since countUpdate is also called randomly (unsynchronised) between ticks.
-	countUpdate(true);
 
 	static int i = 0;
 	if (i++ % 10 == 0) // trigger every second
@@ -869,17 +869,17 @@ void setAllPauseStates(bool state)
 
 UDWORD	getNumDroids(UDWORD player)
 {
-	return (numDroids[player]);
+	return numDroids[player];
 }
 
 UDWORD	getNumTransporterDroids(UDWORD player)
 {
-	return (numTransporterDroids[player]);
+	return numTransporterDroids[player];
 }
 
 UDWORD	getNumMissionDroids(UDWORD player)
 {
-	return (numMissionDroids[player]);
+	return numMissionDroids[player];
 }
 
 UDWORD	getNumCommandDroids(UDWORD player)

@@ -2459,7 +2459,7 @@ bool IsPlayerDroidLimitReached(int player)
 
 // Check for max number of units reached and halt production.
 //
-bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
+static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 {
 	CHECK_STRUCTURE(psStructure);
 
@@ -3122,26 +3122,23 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			psFactory = &psStructure->pFunctionality->factory;
 
 			//if on hold don't do anything
-syncDebug("timeStartHold = %u", psFactory->timeStartHold);  //TODO Remove after #4785 is fixed.
 			if (psFactory->timeStartHold)
 			{
 				return;
 			}
 
 			//electronic warfare affects the functionality of some structures in multiPlayer
-syncDebug("resistance = %d", psStructure->resistance);  //TODO Remove after #4785 is fixed.
 			if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
 			{
 				return;
 			}
 
-syncDebug("timeStarted = %d", psFactory->timeStarted);  //TODO Remove after #4785 is fixed.
 			if (psFactory->timeStarted == ACTION_START_TIME)
 			{
 				// also need to check if a command droid's group is full
 
 				// If the factory commanders group is full - return
-				if (IsFactoryCommanderGroupFull(psFactory) || CheckHaltOnMaxUnitsReached(psStructure))
+				if (IsFactoryCommanderGroupFull(psFactory) || checkHaltOnMaxUnitsReached(psStructure))
 				{
 					return;
 				}
@@ -3150,16 +3147,13 @@ syncDebug("timeStarted = %d", psFactory->timeStarted);  //TODO Remove after #478
 				psFactory->timeStarted = gameTime;
 			}
 
-syncDebug("buildPointsRemaining = %d", psFactory->buildPointsRemaining);  //TODO Remove after #4785 is fixed.
 			if (psFactory->buildPointsRemaining > 0)
 			{
 				int progress = gameTimeAdjustedAverage(getBuildingProductionPoints(psStructure));
-syncDebug("calcTemplateBuild(psSubject) = %d", calcTemplateBuild(psFactory->psSubject));  //TODO Remove after #4785 is fixed.
 				if ((unsigned)psFactory->buildPointsRemaining == calcTemplateBuild(psFactory->psSubject) && progress > 0)
 				{
 					// We're just starting to build, check for power.
 					bool haveEnoughPower = requestPowerFor(psStructure, calcTemplatePower(psFactory->psSubject));
-syncDebug("haveEnoughPower = %d", haveEnoughPower);  //TODO Remove after #4785 is fixed.
 					if (!haveEnoughPower)
 					{
 						progress = 0;
@@ -3169,11 +3163,8 @@ syncDebug("haveEnoughPower = %d", haveEnoughPower);  //TODO Remove after #4785 i
 			}
 
 			//check for manufacture to be complete
-syncDebug("IsFactoryCommanderGroupFull(psFactory) = %d", IsFactoryCommanderGroupFull(psFactory));  //TODO Remove after #4785 is fixed.
-syncDebug("CheckHaltOnMaxUnitsReached(psStructure) = %d", CheckHaltOnMaxUnitsReached(psStructure));  //TODO Remove after #4785 is fixed.
-			if ((psFactory->buildPointsRemaining <= 0) && !IsFactoryCommanderGroupFull(psFactory) && !CheckHaltOnMaxUnitsReached(psStructure))
+			if (psFactory->buildPointsRemaining <= 0 && !IsFactoryCommanderGroupFull(psFactory) && !checkHaltOnMaxUnitsReached(psStructure))
 			{
-syncDebug("isMission = %d", isMission);  //TODO Remove after #4785 is fixed.
 				if (isMission)
 				{
 					// put it in the mission list
