@@ -65,6 +65,7 @@ void cmdDroidUpdate()
 	{
 		if (i && i->died)
 		{
+			ASSERT(i->type == OBJ_DROID, "Bad droid pointer! type=%u", i->type);
 			i = nullptr;
 		}
 	}

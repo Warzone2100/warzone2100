@@ -1053,6 +1053,7 @@ void hciUpdate()
 		{
 			if (apsObjectList[i] && apsObjectList[i]->died)
 			{
+				ASSERT(apsObjectList[i]->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", apsObjectList[i]->type);
 				intObjectDied(i + IDOBJ_OBJSTART);
 				apsObjectList[i] = nullptr;
 			}
@@ -1064,6 +1065,7 @@ void hciUpdate()
 	{
 		if (i && i->died)
 		{
+			ASSERT(i->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", i->type);
 			i = nullptr;
 		}
 	}
@@ -1071,6 +1073,7 @@ void hciUpdate()
 	if (psObjSelected && psObjSelected->died)
 	{
 		// refresh when unit dies
+		ASSERT(psObjSelected->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psObjSelected->type);
 		psObjSelected = nullptr;
 	}
 }
@@ -3332,18 +3335,12 @@ static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, boo
 {
 	intAddObjectWindow(psObjects, psSelected, bForceStats);
 
-	// if the stats screen is up and..
-	if (StatsUp)
+	// if the stats screen is up and it's owner is dead then..
+	if (StatsUp && psStatsScreenOwner != nullptr && psStatsScreenOwner->died != 0)
 	{
-		if (psStatsScreenOwner != nullptr)
-		{
-			// it's owner is dead then..
-			if (psStatsScreenOwner->died != 0)
-			{
-				// remove it.
-				intRemoveStatsNoAnim();
-			}
-		}
+		// remove it.
+		ASSERT(psStatsScreenOwner->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psStatsScreenOwner->type);
+		intRemoveStatsNoAnim();
 	}
 
 	return true;
@@ -3552,6 +3549,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if (psOwner->died)
 		{
 			debug(LOG_GUI, "intAddStats: Owner is dead");
+			ASSERT(psOwner->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psOwner->type);
 			return false;
 		}
 	}
@@ -3900,18 +3898,11 @@ static bool setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BA
 /* Select a construction droid */
 static bool selectConstruction(BASE_OBJECT *psObj)
 {
-	DROID	*psDroid;
-
 	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_DROID, "Invalid droid pointer");
-	psDroid = (DROID *)psObj;
+	auto psDroid = (DROID *)psObj;
 
 	//check the droid type
-	if ((psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT) && (psDroid->died == 0))
-	{
-		return true;
-	}
-
-	return false;
+	return (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT) && psDroid->died == 0;
 }
 
 /* Return the stats for a construction droid */
@@ -3987,20 +3978,12 @@ static bool setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 /* Select a research facility */
 static bool selectResearch(BASE_OBJECT *psObj)
 {
-	STRUCTURE	*psResFacility;
-
 	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
 
-	psResFacility = (STRUCTURE *)psObj;
+	auto psResFacility = (STRUCTURE *)psObj;
 
-	/* A Structure is a research facility if its type = REF_RESEARCH and is
-	   completely built*/
-	if (psResFacility->pStructureType->type == REF_RESEARCH && (psResFacility->
-	        status == SS_BUILT) && (psResFacility->died == 0))
-	{
-		return true;
-	}
-	return false;
+	// A Structure is a research facility if its type = REF_RESEARCH and is completely built
+	return psResFacility->pStructureType->type == REF_RESEARCH && psResFacility->status == SS_BUILT && psResFacility->died == 0;
 }
 
 /* Return the stats for a research facility */
@@ -4080,15 +4063,10 @@ static bool selectManufacture(BASE_OBJECT *psObj)
 
 	/* A Structure is a Factory if its type = REF_FACTORY or REF_CYBORG_FACTORY or
 	REF_VTOL_FACTORY and it is completely built*/
-	if ((psBuilding->pStructureType->type == REF_FACTORY ||
+	return (psBuilding->pStructureType->type == REF_FACTORY ||
 	     psBuilding->pStructureType->type == REF_CYBORG_FACTORY ||
 	     psBuilding->pStructureType->type == REF_VTOL_FACTORY) &&
-	    (psBuilding->status == SS_BUILT) && (psBuilding->died == 0))
-	{
-		return true;
-	}
-
-	return false;
+	    psBuilding->status == SS_BUILT && psBuilding->died == 0;
 }
 
 /* Return the stats for a Factory */

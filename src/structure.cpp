@@ -2715,6 +2715,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			    psStructure->pFunctionality->factory.psCommander->died)
 			{
 				//remove the commander from the factory
+				syncDebugDroid(psStructure->pFunctionality->factory.psCommander, '-');
 				assignFactoryCommandDroid(psStructure, nullptr);
 			}
 			break;
@@ -2729,6 +2730,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// If the droid we're repairing just died, find a new one
 			if (psDroid && psDroid->died)
 			{
+				syncDebugDroid(psDroid, '-');
 				psDroid = nullptr;
 				psChosenObj = nullptr;
 				psRepairFac->psObj = nullptr;
@@ -3294,6 +3296,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// also clear out any previously repaired droid
 			if (psDroid->died || (psDroid->action != DACTION_MOVETOREARMPOINT && psDroid->action != DACTION_WAITDURINGREARM))
 			{
+				syncDebugDroid(psDroid, '-');
 				psReArmPad->psObj = nullptr;
 				objTrace(psDroid->id, "VTOL has wrong action or is dead");
 				return;
@@ -3390,6 +3393,10 @@ static float CalcStructureSmokeInterval(float damage)
 
 void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch)
 {
+	if (psStruct->type != OBJ_STRUCTURE) {
+		ASSERT(false, "%c Broken psStruct->type %u!", ch, psStruct->type);
+		syncDebug("Broken psStruct->type %u!", psStruct->type);
+	}
 	int ref = 0;
 	int refChr = ' ';
 
@@ -3554,6 +3561,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	{
 		if (psBuilding->psTarget[i] && psBuilding->psTarget[i]->died)
 		{
+			syncDebugObject(psBuilding->psTarget[i], '-');
 			setStructureTarget(psBuilding, nullptr, i, ORIGIN_UNKNOWN);
 		}
 	}

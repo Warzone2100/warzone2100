@@ -433,7 +433,7 @@ bool removeDroidBase(DROID *psDel)
 
 	CHECK_DROID(psDel);
 
-	if (isDead((BASE_OBJECT *)psDel))
+	if (isDead(psDel))
 	{
 		// droid has already been killed, quit
 		return true;
@@ -605,7 +605,7 @@ bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
 	CHECK_DROID(psDroid);
 
-	if (isDead((BASE_OBJECT *) psDroid))
+	if (isDead(psDroid))
 	{
 		// droid has already been killed, quit
 		return false;
@@ -633,6 +633,10 @@ bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 {
+	if (psDroid->type != OBJ_DROID) {
+		ASSERT(false, "%c Broken psDroid->type %u!", ch, psDroid->type);
+		syncDebug("Broken psDroid->type %u!", psDroid->type);
+	}
 	int list[] =
 	{
 		ch,
@@ -802,7 +806,7 @@ void droidUpdate(DROID *psDroid)
 	}
 
 	// At this point, the droid may be dead due to periodical damage or hardcoded burn damage.
-	if (isDead((BASE_OBJECT *)psDroid))
+	if (isDead(psDroid))
 	{
 		return;
 	}
@@ -868,35 +872,22 @@ static bool droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 	return false;
 }
 
-static bool
-droidCheckBuildStillInProgress(void *psObj)
+static bool droidCheckBuildStillInProgress(void *psObj)
 {
-	DROID	*psDroid;
-
 	if (psObj == nullptr)
 	{
 		return false;
 	}
 
-	psDroid = (DROID *)psObj;
+	auto psDroid = (DROID *)psObj;
 	CHECK_DROID(psDroid);
 
-	if (!psDroid->died && psDroid->action == DACTION_BUILD)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return !psDroid->died && psDroid->action == DACTION_BUILD;
 }
 
-static bool
-droidBuildStartAudioCallback(void *psObj)
+static bool droidBuildStartAudioCallback(void *psObj)
 {
-	DROID	*psDroid;
-
-	psDroid = (DROID *)psObj;
+	auto psDroid = (DROID *)psObj;
 
 	if (psDroid == nullptr)
 	{

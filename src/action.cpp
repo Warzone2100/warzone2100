@@ -594,6 +594,7 @@ void actionSanity(DROID *psDroid)
 		bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
 		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect) : psDroid->psActionTarget[i]->died))
 		{
+			syncDebugObject(psDroid->psActionTarget[i], '-');
 			setDroidActionTarget(psDroid, nullptr, i);
 			if (i == 0)
 			{

@@ -5354,7 +5354,7 @@ bool writeStructFile(const char *pFileName)
 				ini.setValue("status", psCurr->status);
 			}
 			ini.setValue("weapons", psCurr->numWeaps);
-			for (int j = 0; j < psCurr->numWeaps; j++)
+			for (unsigned j = 0; j < psCurr->numWeaps; j++)
 			{
 				ini.setValue("parts/weapon/" + WzString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->id);
 				if (psCurr->asWeaps[j].nStat > 0)
@@ -5365,7 +5365,7 @@ bool writeStructFile(const char *pFileName)
 					ini.setVector3i("rotation/" + WzString::number(j), toVector(psCurr->asWeaps[j].rot));
 				}
 			}
-			for (int i = 0; i < psCurr->numWeaps; i++)
+			for (unsigned i = 0; i < psCurr->numWeaps; i++)
 			{
 				if (psCurr->psTarget[i] && !psCurr->psTarget[i]->died)
 				{

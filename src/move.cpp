@@ -515,6 +515,7 @@ static bool moveNextTarget(DROID *psDroid)
 	{
 		return false;
 	}
+	ASSERT_OR_RETURN(false, psDroid->sMove.pathIndex >= 0 && psDroid->sMove.pathIndex < (int)psDroid->sMove.asPath.size(), "psDroid->sMove.pathIndex out of bounds %d/%d.", psDroid->sMove.pathIndex, (int)psDroid->sMove.asPath.size());
 
 	if (psDroid->sMove.pathIndex == 0)
 	{
@@ -1044,6 +1045,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		BASE_OBJECT *psObj = *gi;
 		if (psObj->died)
 		{
+			ASSERT(psObj->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psObj->type);
 			continue;
 		}
 		if (psObj->type == OBJ_DROID)

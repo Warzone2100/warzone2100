@@ -314,6 +314,10 @@ FEATURE::~FEATURE()
 
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {
+	if (psFeature->type != OBJ_FEATURE) {
+		ASSERT(false, "%c Broken psFeature->type %u!", ch, psFeature->type);
+		syncDebug("Broken psFeature->type %u!", psFeature->type);
+	}
 	int list[] =
 	{
 		ch,
@@ -514,7 +518,7 @@ SDWORD getFeatureStatFromName(const WzString &name)
 {
 	FEATURE_STATS *psStat;
 
-	for (int inc = 0; inc < numFeatureStats; inc++)
+	for (unsigned inc = 0; inc < numFeatureStats; inc++)
 	{
 		psStat = &asFeatureStats[inc];
 		if (psStat->id.compare(name) == 0)

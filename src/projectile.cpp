@@ -342,6 +342,10 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char ch)
 {
+	if (psProj->type != OBJ_PROJECTILE) {
+		ASSERT(false, "%c Broken psProj->type %u!", ch, psProj->type);
+		syncDebug("Broken psProj->type %u!", psProj->type);
+	}
 	int list[] =
 	{
 		ch,
@@ -821,6 +825,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		else if (psTempObj->died)
 		{
 			// Do not damage dead objects further
+			ASSERT(psTempObj->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psTempObj->type);
 			continue;
 		}
 		else if (psTempObj->type == OBJ_FEATURE && !((FEATURE *)psTempObj)->psStats->damageable)
@@ -1173,6 +1178,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			BASE_OBJECT *psCurr = *gi;
 			if (psCurr->died)
 			{
+				ASSERT(psCurr->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psCurr->type);
 				continue;  // Do not damage dead objects further.
 			}
 
@@ -1284,10 +1290,12 @@ void PROJECTILE::update()
 	 */
 	if (psObj->psSource && psObj->psSource->died)
 	{
+		syncDebugObject(psObj->psSource, '-');
 		setProjectileSource(psObj, nullptr);
 	}
 	if (psObj->psDest && psObj->psDest->died)
 	{
+		syncDebugObject(psObj->psDest, '-');
 		setProjectileDestination(psObj, nullptr);
 	}
 	// Remove dead objects from psDamaged.
@@ -1360,6 +1368,7 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 		BASE_OBJECT *psCurr = *gi;
 		if (psCurr->died)
 		{
+			syncDebugObject(psCurr, '-');
 			continue;  // Do not damage dead objects further.
 		}
 

@@ -3565,7 +3565,6 @@ static void structureEffectsPlayer(UDWORD player)
 				if (!psDroid->died && psDroid->action == DACTION_WAITDURINGREARM)
 				{
 					bFXSize = 30;
-
 				}
 				/* Then it's repairing...? */
 				radius = psStructure->sDisplay.imd->radius;

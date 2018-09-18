@@ -330,6 +330,7 @@ void orderUpdateDroid(DROID *psDroid)
 	// clear the target if it has died
 	if (psDroid->order.psObj && psDroid->order.psObj->died)
 	{
+		syncDebugObject(psDroid->order.psObj, '-');
 		setDroidTarget(psDroid, nullptr);
 		objTrace(psDroid->id, "Target dead");
 	}
@@ -337,6 +338,7 @@ void orderUpdateDroid(DROID *psDroid)
 	//clear its base struct if its died
 	if (psDroid->psBaseStruct && psDroid->psBaseStruct->died)
 	{
+		syncDebugStructure(psDroid->psBaseStruct, '-');
 		setDroidBase(psDroid, nullptr);
 		objTrace(psDroid->id, "Base struct dead");
 	}
@@ -1119,9 +1121,9 @@ void orderUpdateDroid(DROID *psDroid)
 		// get combat units in a command group to attack the commanders target
 		if (hasCommander(psDroid) && (psDroid->numWeaps > 0))
 		{
-			if ((psDroid->psGroup->psCommander->action == DACTION_ATTACK) &&
-			    (psDroid->psGroup->psCommander->psActionTarget[0] != nullptr) &&
-			    (!psDroid->psGroup->psCommander->psActionTarget[0]->died))
+			if (psDroid->psGroup->psCommander->action == DACTION_ATTACK &&
+			    psDroid->psGroup->psCommander->psActionTarget[0] != nullptr &&
+			    !psDroid->psGroup->psCommander->psActionTarget[0]->died)
 			{
 				psObj = psDroid->psGroup->psCommander->psActionTarget[0];
 				if (psDroid->action == DACTION_ATTACK ||
@@ -2271,7 +2273,7 @@ void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget)
 	{
 		if (psDroid->asOrderList[i].psObj == psTarget)
 		{
-			if (i < psDroid->listSize)
+			if ((int)i < psDroid->listSize)
 			{
 				syncDebug("droid%d list erase%d", psDroid->id, psTarget->id);
 			}
@@ -2290,8 +2292,9 @@ void orderCheckList(DROID *psDroid)
 		BASE_OBJECT *psTarget = psDroid->asOrderList[i].psObj;
 		if (psTarget != nullptr && psTarget->died)
 		{
-			if (i < psDroid->listSize)
+			if ((int)i < psDroid->listSize)
 			{
+				syncDebugObject(psTarget, '-');
 				syncDebug("droid%d list erase dead droid%d", psDroid->id, psTarget->id);
 			}
 			orderDroidListEraseRange(psDroid, i, i + 1);
