@@ -127,6 +127,7 @@
    * Fix: Warnings with distributor name (commit:5ed40f3153cad4b983a473add191fcb7724416a2, commit:f7f4334869eeaad243b734341908be50ddcba0a0, ticket:4752)
    * Fix: Upgrade icon having extra pixels (commit:11fc00b329551893d88b8f837702c4af43d53240, ticket:4759)
    * Fix: MXE compiler warnings (too many commits, ticket:4753)
+   * Fix: Warcam started at distance < 0 no longer breaks zoom when stopped (ticket:4830)
    * Remove: Unused sensor turret properties in design menu (commit:c6b628e2c0c815467f0799c6c65e2f88d31585d3, ticket:4619)
    * Remove: Do not save showFPS configuration option twice (commit:55c77847e4137c219170fff80d0342a0742499dd, ticket:4645)
    * Remove: Unused sensor "Nexus Link" (not the weapon with the same name!) (ticket:4768)

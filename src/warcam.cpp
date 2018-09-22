@@ -74,7 +74,7 @@ struct WARCAM
 	Vector3f rotVel = Vector3f(0.f, 0.f, 0.f);
 	Vector3f rotAccel = Vector3f(0.f, 0.f, 0.f);
 
-	UDWORD oldDistance;
+	float oldDistance;
 	BASE_OBJECT *target;
 };
 
