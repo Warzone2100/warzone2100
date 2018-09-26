@@ -98,9 +98,10 @@ function sendPlayerTransporter()
 	var droids = [];
 	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaacnt, cTempl.prtruck];
 
+	// send 4 Assault Guns, 2 Hyper Velocity Cannons, 2 Cyclone AA Turrets and 2 Trucks
 	for (var i = 0, d = list.length; i < 10; ++i)
 	{
-		droids.push((i < d) ? list[i] : list[camRand(d)]);
+		droids.push(i < d * 2 ? list[i % 4] : list[0]);
 	}
 
 	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
