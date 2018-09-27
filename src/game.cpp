@@ -6468,7 +6468,7 @@ bool loadSaveStructLimits(const char *pFileName)
 			}
 			else
 			{
-				int statInc;
+				unsigned statInc;
 				for (statInc = 0; statInc < numStructureStats; ++statInc)
 				{
 					STRUCTURE_STATS *psStats = asStructureStats + statInc;

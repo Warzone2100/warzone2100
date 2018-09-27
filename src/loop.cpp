@@ -551,9 +551,6 @@ static void gameStateUpdate()
 		syncDebug("Player %d = \"%s\"", n, NetPlay.players[n].name);
 	}
 
-	// Must be at the beginning of gameStateUpdate, since countUpdate is also called randomly (unsynchronised) between gameStateUpdate calls.
-	countUpdate(true);
-
 	// Add version string to desynch logs. Different version strings will not trigger a desynch dump per se, due to the syncDebug{Get, Set}Crc guard.
 	auto crc = syncDebugGetCrc();
 	syncDebug("My client version = %s", version_getVersionString());
@@ -659,6 +656,9 @@ static void gameStateUpdate()
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
 
+	// Must be at the end of gameStateUpdate, since countUpdate is also called randomly (unsynchronised) between gameStateUpdate calls, but should have no effect if we already called it, and recvMessage requires consistent counts on all clients.
+	countUpdate(true);
+
 	static int i = 0;
 	if (i++ % 10 == 0) // trigger every second
 	{
@@ -676,6 +676,7 @@ GAMECODE gameLoop()
 	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
 	const Rational updateFraction = Rational(1) - renderFraction;
 
+	// Shouldn't this be when initialising the game, rather than randomly called between ticks?
 	countUpdate(false); // kick off with correct counts
 
 	while (true)
@@ -892,19 +893,23 @@ UDWORD	getNumConstructorDroids(UDWORD player)
 	return numConstructorDroids[player];
 }
 
-
 // increase the droid counts - used by update factory to keep the counts in sync
-void incNumDroids(UDWORD player)
-{
-	numDroids[player] += 1;
-}
-void incNumCommandDroids(UDWORD player)
-{
-	numCommandDroids[player] += 1;
-}
-void incNumConstructorDroids(UDWORD player)
-{
-	numConstructorDroids[player] += 1;
+void adjustDroidCount(DROID *droid, int delta) {
+	int player = droid->player;
+	syncDebug("numDroids[%d]:%d=%d→%d", player, droid->droidType, numDroids[player], numDroids[player] + delta);
+	numDroids[player] += delta;
+	switch (droid->droidType)
+	{
+	case DROID_COMMAND:
+		numCommandDroids[player] += delta;
+		break;
+	case DROID_CONSTRUCT:
+	case DROID_CYBORG_CONSTRUCT:
+		numConstructorDroids[player] += delta;
+		break;
+	default:
+		break;
+	}
 }
 
 /* Fire waiting beacon messages which we couldn't run before */

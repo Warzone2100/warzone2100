@@ -89,9 +89,7 @@ UDWORD getNumMissionDroids(UDWORD player);
 UDWORD getNumCommandDroids(UDWORD player);
 UDWORD getNumConstructorDroids(UDWORD player);
 // increase the droid counts - used by update factory to keep the counts in sync
-void incNumDroids(UDWORD player);
-void incNumCommandDroids(UDWORD player);
-void incNumConstructorDroids(UDWORD player);
+void adjustDroidCount(struct DROID *droid, int delta);
 
 void countUpdate(bool synch = false);
 

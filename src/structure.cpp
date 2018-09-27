@@ -2281,19 +2281,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		}
 
 		// update the droid counts
-		incNumDroids(psNewDroid->player);
-		switch (psNewDroid->droidType)
-		{
-		case DROID_COMMAND:
-			incNumCommandDroids(psNewDroid->player);
-			break;
-		case DROID_CONSTRUCT:
-		case DROID_CYBORG_CONSTRUCT:
-			incNumConstructorDroids(psNewDroid->player);
-			break;
-		default:
-			break;
-		}
+		adjustDroidCount(psNewDroid, 1);
 
 		psFact = &psStructure->pFunctionality->factory;
 

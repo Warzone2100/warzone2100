@@ -428,14 +428,12 @@ void recycleDroid(DROID *psDroid)
 
 bool removeDroidBase(DROID *psDel)
 {
-	DROID	*psCurr, *psNext;
-	STRUCTURE	*psStruct;
-
 	CHECK_DROID(psDel);
 
 	if (isDead(psDel))
 	{
 		// droid has already been killed, quit
+		syncDebug("droid already dead");
 		return true;
 	}
 
@@ -447,7 +445,8 @@ bool removeDroidBase(DROID *psDel)
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDel->psGroup->psList; psCurr != nullptr && psCurr != psDel; psCurr = psNext)
+			DROID *psNext;
+			for (auto psCurr = psDel->psGroup->psList; psCurr != nullptr && psCurr != psDel; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
 
@@ -484,7 +483,7 @@ bool removeDroidBase(DROID *psDel)
 	/* Put Deliv. Pts back into world when a command droid dies */
 	if (psDel->droidType == DROID_COMMAND)
 	{
-		for (psStruct = apsStructLists[psDel->player]; psStruct; psStruct = psStruct->psNext)
+		for (auto psStruct = apsStructLists[psDel->player]; psStruct; psStruct = psStruct->psNext)
 		{
 			// alexl's stab at a right answer.
 			if (StructIsFactory(psStruct)
@@ -593,7 +592,7 @@ bool destroyDroid(DROID *psDel, unsigned impactTime)
 	return true;
 }
 
-void	vanishDroid(DROID *psDel)
+void vanishDroid(DROID *psDel)
 {
 	removeDroidBase(psDel);
 }
@@ -2977,11 +2976,12 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 	ASSERT_OR_RETURN(psD, psD->player != to, "Cannot gift to self");
 
 	// Check unit limits (multiplayer only)
+	syncDebug("Limits: %u/%d %u/%d %u/%d", getNumDroids(to), getMaxDroids(to), getNumConstructorDroids(to), getMaxConstructors(to), getNumCommandDroids(to), getMaxCommanders(to));
 	if (bMultiPlayer
-	    && (getNumDroids(to) + 1 > getMaxDroids(to)
+	    && ((int)getNumDroids(to) >= getMaxDroids(to)
 	        || ((psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
-	            && getNumConstructorDroids(to) + 1 > getMaxConstructors(to))
-	        || (psD->droidType == DROID_COMMAND && getNumCommandDroids(to) + 1 > getMaxCommanders(to))))
+	            && (int)getNumConstructorDroids(to) >= getMaxConstructors(to))
+	        || (psD->droidType == DROID_COMMAND && (int)getNumCommandDroids(to) >= getMaxCommanders(to))))
 	{
 		if (to == selectedPlayer || psD->player == selectedPlayer)
 		{
@@ -2997,11 +2997,13 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 		scoreUpdateVar(WD_UNITS_LOST);
 	}
 	// make the old droid vanish (but is not deleted until next tick)
+	adjustDroidCount(psD, -1);
 	vanishDroid(psD);
 	// create a new droid
 	psNewDroid = reallyBuildDroid(&sTemplate, Position(psD->pos.x, psD->pos.y, 0), to, false, psD->rot);
 	ASSERT_OR_RETURN(nullptr, psNewDroid, "Unable to build unit");
 	addDroid(psNewDroid, apsDroidLists);
+	adjustDroidCount(psNewDroid, 1);
 	psNewDroid->body = clip((psD->body*psNewDroid->originalBody + psD->originalBody/2)/std::max(psD->originalBody, 1u), 1u, psNewDroid->originalBody);
 	psNewDroid->experience = psD->experience;
 	if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || isTransporter(psNewDroid)))
