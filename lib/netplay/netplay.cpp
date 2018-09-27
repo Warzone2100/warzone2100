@@ -71,10 +71,6 @@
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
 
-#define WZ_SERVER_DISCONNECT 0
-#define WZ_SERVER_CONNECT    1
-#define WZ_SERVER_UPDATE     3
-
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
 /*
@@ -95,7 +91,6 @@ static unsigned int masterserver_port = 0, gameserver_port = 0;
 // Function prototypes
 static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
-static void NETregisterServer(int state);
 static void NETallowJoining();
 static void recvDebugSync(NETQUEUE queue);
 static bool onBanList(const char *ip);
@@ -217,6 +212,25 @@ void NETGameLocked(bool flag)
 	}
 	NETlogEntry("Password is", SYNC_FLAG, NetPlay.GamePassworded);
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE");
+}
+
+void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field)
+{
+	switch (Field)
+	{
+		case NET_LOBBY_OPT_FIELD::GNAME:
+			sstrcpy(gamestruct.name, Value);
+			break;
+		case NET_LOBBY_OPT_FIELD::MAPNAME:
+			sstrcpy(gamestruct.mapname, Value);
+			break;
+		case NET_LOBBY_OPT_FIELD::HOSTNAME:
+			sstrcpy(gamestruct.hostname, Value);
+			break;
+		default:
+			debug(LOG_WARNING, "Invalid field specified for NETsetGameOptField()");
+			break;
+	}
 }
 
 //	Sets the game password
@@ -344,6 +358,30 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 	NetPlay.players[i].difficulty = 1;		// normal
 	NetPlay.players[i].wzFiles.clear();
 	ingame.JoiningInProgress[i] = false;
+}
+
+uint8_t NET_numHumanPlayers(void)
+{
+	uint8_t RetVal = 0;
+	for (uint8_t Inc = 0; Inc < MAX_PLAYERS; ++Inc)
+	{
+		if (NetPlay.players[Inc].allocated) ++RetVal;
+	}
+
+	return RetVal;
+}
+
+std::vector<uint8_t> NET_getHumanPlayers(void)
+{
+	std::vector<uint8_t> RetVal;
+	RetVal.reserve(MAX_PLAYERS);
+
+	for (uint8_t Inc = 0; Inc < MAX_PLAYERS; ++Inc)
+	{
+		if (NetPlay.players[Inc].allocated) RetVal.push_back(Inc);
+	}
+
+	return RetVal;
 }
 
 void NET_InitPlayers(bool initTeams)
@@ -2132,7 +2170,7 @@ error:
 	return SOCKET_ERROR;
 }
 
-static void NETregisterServer(int state)
+void NETregisterServer(int state)
 {
 	static Socket *rs_socket = nullptr;
 	static int registered = 0;
