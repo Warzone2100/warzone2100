@@ -2670,9 +2670,6 @@ void	kf_AddHelpBlip()
 	if (isMouseOverRadar())
 	{
 		CalcRadarPosition(x, y, &worldX, &worldY);
-
-		CLIP(worldX, 0, mapWidth - 1);	// temporary hack until CalcRadarPosition is fixed
-		CLIP(worldY, 0, mapHeight - 1);
 		worldX = worldX * TILE_UNITS + TILE_UNITS / 2;
 		worldY = worldY * TILE_UNITS + TILE_UNITS / 2;
 	}
