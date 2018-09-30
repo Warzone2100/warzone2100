@@ -260,7 +260,7 @@ void ProcessRadarInput()
 
 	/* Only allow jump-to-area-of-map if radar is on-screen */
 	mouseOverRadar = false;
-	if (radarOnScreen && radarPermitted)
+	if (radarVisible())
 	{
 		if (CoordInRadar(x, y))
 		{
@@ -419,7 +419,7 @@ void processInput()
 
 static bool OverRadarAndNotDragging()
 {
-	return mouseOverRadar && dragBox3D.status != DRAG_DRAGGING && radarPermitted && wallDrag.status != DRAG_DRAGGING;
+	return mouseOverRadar && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING;
 }
 
 static void CheckFinishedDrag()

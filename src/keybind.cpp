@@ -1716,13 +1716,11 @@ void	kf_MovePause()
 			/* And stop the clock */
 			gameTimeStop();
 			setWidgetsStatus(false);
-			radarOnScreen = false;
 			bMovePause = true;
 		}
 		else
 		{
 			setWidgetsStatus(true);
-			radarOnScreen = true;
 			/* Else get it going again */
 			setGamePauseStatus(false);
 			setConsolePause(false);
@@ -2670,7 +2668,7 @@ void	kf_AddHelpBlip()
 	/* check if clicked on radar */
 	x = mouseX();
 	y = mouseY();
-	if (radarOnScreen && radarPermitted)
+	if (radarVisible())
 	{
 		if (CoordInRadar(x, y))
 		{

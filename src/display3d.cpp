@@ -181,7 +181,19 @@ Vector2i mousePos(0, 0);
 
 /// Do we want the radar to be rendered
 bool radarOnScreen = true;
-bool	radarPermitted = true;
+bool radarPermitted = true;
+
+bool radarVisible()
+{
+	if (radarOnScreen && radarPermitted && getWidgetsStatus())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 /// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
@@ -740,15 +752,12 @@ void draw3DScene()
 
 	drawStructureSelections();
 
-	if (radarOnScreen && radarPermitted)
+	if (radarVisible)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
-		if (getWidgetsStatus())
-		{
-			GL_DEBUG("Draw 3D scene - radar");
-			drawRadar();
-		}
+		GL_DEBUG("Draw 3D scene - radar");
+		drawRadar();
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
 	}

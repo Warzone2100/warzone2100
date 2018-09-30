@@ -61,6 +61,8 @@ float getViewDistance();
 void setViewDistance(float dist);
 extern bool	radarOnScreen;
 extern bool	radarPermitted;
+bool radarVisible();
+
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
 void setViewPos(UDWORD x, UDWORD y, bool Pan);
 Vector2i    getPlayerPos();
