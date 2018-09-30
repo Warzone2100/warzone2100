@@ -160,7 +160,7 @@ static GAMECODE renderLoop()
 		if (!gameUpdatePaused() && intRetVal != INT_QUIT)
 		{
 			if (dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING
-			    && (intRetVal == INT_INTERCEPT || (radarVisible() && CoordInRadar(mouseX()))))
+			    && (intRetVal == INT_INTERCEPT || isMouseOverRadar()))
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 				wzSetCursor(CURSOR_DEFAULT);

@@ -2655,7 +2655,6 @@ void	kf_AddHelpBlip()
 	UDWORD	i;
 	char	tempStr[255];
 	SDWORD	x, y;
-	bool	mOverR = false;
 
 	/* not needed in campaign */
 	if (!bMultiPlayer)
@@ -2668,22 +2667,17 @@ void	kf_AddHelpBlip()
 	/* check if clicked on radar */
 	x = mouseX();
 	y = mouseY();
-	if (radarVisible())
+	if (isMouseOverRadar())
 	{
-		if (CoordInRadar(x, y))
-		{
-			mOverR = true;
-			CalcRadarPosition(x, y, &worldX, &worldY);
+		CalcRadarPosition(x, y, &worldX, &worldY);
 
-			CLIP(worldX, 0, mapWidth - 1);	// temporary hack until CalcRadarPosition is fixed
-			CLIP(worldY, 0, mapHeight - 1);
-			worldX = worldX * TILE_UNITS + TILE_UNITS / 2;
-			worldY = worldY * TILE_UNITS + TILE_UNITS / 2;
-		}
+		CLIP(worldX, 0, mapWidth - 1);	// temporary hack until CalcRadarPosition is fixed
+		CLIP(worldY, 0, mapHeight - 1);
+		worldX = worldX * TILE_UNITS + TILE_UNITS / 2;
+		worldY = worldY * TILE_UNITS + TILE_UNITS / 2;
 	}
-
 	/* convert screen to world */
-	if (!mOverR)
+	else
 	{
 		worldX = mouseTileX * TILE_UNITS + TILE_UNITS / 2;
 		worldY = mouseTileY * TILE_UNITS + TILE_UNITS / 2;
