@@ -752,21 +752,22 @@ void draw3DScene()
 
 	drawStructureSelections();
 
-	if (radarVisible)
-	{
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-		pie_SetFogStatus(false);
-		GL_DEBUG("Draw 3D scene - radar");
-		drawRadar();
-		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-		pie_SetFogStatus(true);
-	}
-
 	if (!bRender3DOnly)
 	{
+		if (radarVisible())
+		{
+			pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+			pie_SetFogStatus(false);
+			GL_DEBUG("Draw 3D scene - radar");
+			drawRadar();
+			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
+			pie_SetFogStatus(true);
+		}
+
 		/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(false);
 		displayConsoleMessages();
+		bRender3DOnly = true;
 	}
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
@@ -1182,8 +1183,6 @@ bool init3DView()
 
 	// Set the initial fog distance
 	UpdateFogDistance(distance);
-
-	bRender3DOnly = false;
 
 	// default skybox, will override in script if not satisfactory
 	setSkyBox("texpages/page-25-sky-arizona.png", 0.0f, 10000.0f);

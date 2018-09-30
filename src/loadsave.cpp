@@ -173,15 +173,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 			gameTimeStop();
 			if (GetGameMode() == GS_NORMAL)
 			{
-				bool radOnScreen = radarOnScreen;				// Only do this in main game.
-
-				bRender3DOnly = true;
-				radarOnScreen = false;
-
-				displayWorld();									// Just display the 3d, no interface
-
-				radarOnScreen = radOnScreen;
-				bRender3DOnly = false;
+				// just display the 3d, no interface
+				displayWorld();
 			}
 
 			setGamePauseStatus(true);

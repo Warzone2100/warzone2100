@@ -332,9 +332,6 @@ static DROID_TEMPLATE sCurrDesign;
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-extern bool bRender3DOnly;
-
-
 /* Add the design widgets to the widget screen */
 bool intAddDesign(bool bShowCentreScreen)
 {
@@ -351,13 +348,8 @@ bool intAddDesign(bool bShowCentreScreen)
 
 	if (GetGameMode() == GS_NORMAL && !bMultiPlayer)
 	{
-		bool radOnScreen = radarOnScreen;
-		bRender3DOnly = true;
-		radarOnScreen = false;
 		// Just display the 3d, no interface
 		displayWorld();
-		radarOnScreen = radOnScreen;
-		bRender3DOnly = false;
 	}
 
 	WIDGET *parent = psWScreen->psForm;

@@ -314,6 +314,7 @@ static GAMECODE renderLoop()
 				CURSOR cursor2 = processMouseClickInput();
 				cursor = cursor2 == CURSOR_DEFAULT? cursor : cursor2;
 			}
+			bRender3DOnly = false;
 			displayWorld();
 		}
 		wzPerfBegin(PERF_GUI, "User interface");

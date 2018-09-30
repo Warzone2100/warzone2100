@@ -4322,8 +4322,6 @@ static void intObjStatRMBPressed(UDWORD id)
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen()
 {
-	bool	radOnScreen;
-
 	intResetScreen(false);
 
 	//lock the reticule button
@@ -4335,16 +4333,8 @@ void addIntelScreen()
 	// Only do this in main game.
 	if ((GetGameMode() == GS_NORMAL) && !bMultiPlayer)
 	{
-		radOnScreen = radarOnScreen;
-
-		bRender3DOnly = true;
-		radarOnScreen = false;
-
 		// Just display the 3d, no interface
 		displayWorld();
-
-		radarOnScreen = radOnScreen;
-		bRender3DOnly = false;
 	}
 
 	//add all the intelligence screen interface
