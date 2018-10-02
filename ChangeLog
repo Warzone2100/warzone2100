@@ -97,6 +97,7 @@
    * Fix: Improved SemperFi-JS (commit:7af101472e0d66c4a73e684f17edf79f8d52505c, commit:6ed849c61a927184095fe7cbf3faa039e1f78860, commit:5b0de613a973ba96faab14ccf7f19a96c10c6a61, commit:4acfc135083ce3406668aa402e7852a0b5712832, commit:f5d3eda6a4aae357fa1d90491ab2f84d6612a6d4)
    * Fix: Cyborg engineer and Cyborg mechanic having nothing but legs (commit:490b91d4420ba0985289955520229a1b8b022096, commit:a856dea5afb52fc4436304f66d1fa375293110e0)
    * Fix: Nullbot can research Super Pulse Laser cyborgs without asserting (commit:52db9416a8fbb7984165bbdc58b4b96efe872c33, ticket:4639)
+   * Fix: Nullbot no longer ignores starting units that cannot build (ticket:4834)
  * Other:
    * Add: Docker file for cross-compilation (commit:b866f11b48c9043a505a8444b295b1c22aeffb6c)
    * Add: Basic CMakeLists.txt structure (commit:fa0bde7ab818174ea09505d4fc6b560588522146, commit:ae921a9ca922434ce0ad445d1dfc52e36059ff39)

@@ -32,11 +32,18 @@ function eventStartLevel() {
 		// initialize the subpersonality randomly and don't care
 		personality = randomItem(subpersonalities);
 	}
-	// the following code is necessary to avoid some strange game bug when droids that 
-	// are initially buried into the ground fail to move out of the way when a building 
-	// is being placed right above them
-	enumTrucks().forEach(function(droid) {
-		orderDroidLoc(droid, DORDER_MOVE, droid.x + random(3) - 1, droid.y + random(3) - 1);
+	enumDroid(me).forEach(function(droid) {
+		if (droid.droidType === DROID_CONSTRUCT)
+		{
+			// the following code is necessary to avoid some strange game bug when droids that
+			// are initially buried into the ground fail to move out of the way when a building
+			// is being placed right above them
+			orderDroidLoc(droid, DORDER_MOVE, droid.x + random(3) - 1, droid.y + random(3) - 1);
+		}
+		else
+		{	// add other droids to groups so they won't be idle
+			groupDroid(droid);
+		}
 	});
 }
 
