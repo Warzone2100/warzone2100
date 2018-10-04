@@ -51,6 +51,7 @@
    * Change: Campaign mission scripts completely rewritten to JavaScript (too many commits)
    * Change: Nexus uses more sounds in the home base defend mission (commit:acc508e0478558d0809d18f146b56d6f5a310ab6)
    * Change: Map corrections for the sub-2-8 map (commit:8cc67d0c5ed0ed4b38d582fbb2a64abd3f95a2b6, commit:308bccdfc3352550b22310b754133fc65bd2074f)
+   * Change: Flamers and AA units can fire on the move, just like in multiplayer games (ticket:4832)
    * Fix: Overall script stability is much better than before (too many commits)
    * Fix: Limbo droids lost on save from the Gamma 2 mission (commit:8125a4098d3e73990e69d8e8b0738e837d4ff2e1)
    * Fix: New Paradigm plateau transporter not arriving if all LZ's occupied with droids (commit:bd752be52f1c4d8d755c7bad3c9953b4eac0af8b)
