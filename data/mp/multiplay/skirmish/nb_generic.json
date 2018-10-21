@@ -2,6 +2,6 @@
     "AI": {
         "js": "nb_generic.js",
         "name": "NullBot",
-        "tip": "NullBot - an adaptive skirmish AI"
+        "tip": "Adaptive AI with multiple personalities"
     }
 }

@@ -1,7 +1,7 @@
 {
     "AI": {
         "js": "semperfi.js",
-        "name": "SemperFi JS",
-        "tip": "Rocket and missile technology based AI."
+        "name": "SemperFi JavaScript",
+        "tip": "Prototypical JavaScript AI focusing on rockets/missiles"
     }
 }

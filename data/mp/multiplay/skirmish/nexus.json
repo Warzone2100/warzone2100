@@ -2,7 +2,7 @@
     "AI": {
         "name": "Nexus",
         "slo": "nexus.slo",
-        "tip": "Default AI",
+        "tip": "Initial AI, now supplanted by NullBot",
         "vlo": "nexus.vlo"
     }
 }

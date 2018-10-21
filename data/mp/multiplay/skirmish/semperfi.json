@@ -1,8 +1,8 @@
 {
     "AI": {
-        "name": "Semperfi",
+        "name": "SemperFi",
         "slo": "semperfi.slo",
-        "tip": "Experimental AI",
+        "tip": "Enhanced Nexus AI",
         "vlo": "semperfi.vlo"
     }
 }

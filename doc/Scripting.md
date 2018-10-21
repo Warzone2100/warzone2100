@@ -18,8 +18,8 @@ directory. Here is an example of such a file that defines an AI implemented usin
 {
     "AI": {
 	"js": "semperfi.js",
-        "name": "SemperFi JS",
-        "tip": "Rocket and missile technology based AI."
+        "name": "SemperFi JavaScript",
+        "tip": "Prototypical JavaScript AI focusing on rockets/missiles"
     }
 }
 ```
