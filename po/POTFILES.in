@@ -61,8 +61,8 @@ data/base/script/campaign/templates.js
 data/base/script/campaign/transitionTech.js
 data/base/script/fastplay/fastdemo.js
 data/base/script/rules.js
-data/base/script/weather.js
 data/base/script/tutorial.js
+data/base/script/weather.js
 data/base/sequenceaudio/cam1/c001end.txt
 data/base/sequenceaudio/cam1/c001.txa
 data/base/sequenceaudio/cam1/c001.txt
@@ -153,6 +153,7 @@ data/mp/multiplay/skirmish/semperfi_includes/research.js
 data/mp/multiplay/skirmish/semperfi_includes/tactics.js
 data/mp/multiplay/skirmish/semperfi.js
 data/mp/multiplay/skirmish/semperfi.slo
+lib/exceptionhandler/3rdparty/StackWalker.cpp
 lib/exceptionhandler/dumpinfo.cpp
 lib/exceptionhandler/exceptionhandler.cpp
 lib/exceptionhandler/exchndl_mingw.cpp
@@ -170,6 +171,8 @@ lib/framework/treap.cpp
 lib/framework/trig.cpp
 lib/framework/utf.cpp
 lib/framework/wzconfig.cpp
+lib/framework/wzpaths.cpp
+lib/framework/wzstring.cpp
 lib/gamelib/gtime.cpp
 lib/ivis_opengl/bitimage.cpp
 lib/ivis_opengl/gfx_api_gl.cpp
