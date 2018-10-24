@@ -75,6 +75,7 @@
    * Change: Move structure limiting into structure.json (commit:924135c98d630d638fcee74b8ebf85d10af2dfa1, commit:9c272aa528bab38fb8d598a7f2676745ca347a4b)
    * Fix: Do not assert on loading skirmish saves when the player has lost or won (commit:77f9e5cada8469948c66ca9c3851e6991f533142, ticket:4590, ticket:3928)
    * Fix: Score and kills not showing in skirmish (commit:a74041b99442caa1c7e14c0ff409fc120c20e666, ticket:3491)
+   * Fix: Missing artifacts after destroying factories (ticket:4836)
  * Scripting:
    * Add: Add a way for a script library to register a namespace (commit:19d37399c3fcb31fbb87cb1419125c6cb133aa16)
    * Add: Function useSafetyTransport() (commit:d511cad4d15ca7ae5ecefc678527bb0a253cafde)

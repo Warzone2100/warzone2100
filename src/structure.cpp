@@ -4637,6 +4637,11 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 		}
 	}
 
+	if (bMultiPlayer)
+	{
+		technologyGiveAway(psDel);  // Drop an artifact, if applicable.
+	}
+
 	// updates score stats only if not wall
 	if (!bMinor)
 	{
