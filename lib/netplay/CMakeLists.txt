@@ -15,6 +15,7 @@ if(WZ_USE_IMPORTED_MINIUPNPC)
 else()
 	# Link with in-tree miniupnpc
 	target_link_libraries(netplay PRIVATE libminiupnpc-static)
+	target_include_directories(netplay PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/miniupnp")
 endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 	target_link_libraries(netplay PRIVATE pthread)
