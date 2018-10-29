@@ -10,7 +10,6 @@ AM_MAKEFLAGS = UTF8PROC_DEFINES=$(UTF8PROC_DEFINES)
 SUBDIRS = \
 	win32 \
 	3rdparty/micro-ecc \
-	3rdparty/sha2 \
 	3rdparty \
 	lib/framework \
 	lib/exceptionhandler \

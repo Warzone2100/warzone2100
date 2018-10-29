@@ -4,12 +4,24 @@ AM_CPPFLAGS = $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS) $(WZ_C99FLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
+# sha2
+
+noinst_LIBRARIES = sha2/libsha2.a
+noinst_HEADERS = \
+	sha2/brg_endian.h \
+	sha2/brg_types.h \
+	sha2/sha2.h
+
+sha2_libsha2_a_SOURCES = \
+	sha2/sha2.c
+
+
 # utf8proc
 
 utf8proc_libutf8proc_a_CFLAGS = $(WZ_CFLAGS) -fPIC -std=c99 -Wall -pedantic -I$(srcdir)/utf8proc -DUTF8PROC_EXPORTS $(UTF8PROC_DEFINES)
 
-noinst_LIBRARIES = utf8proc/libutf8proc.a
-noinst_HEADERS = \
+noinst_LIBRARIES += utf8proc/libutf8proc.a
+noinst_HEADERS += \
 	utf8proc/utf8proc.h
 
 utf8proc_libutf8proc_a_SOURCES = \

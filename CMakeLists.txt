@@ -103,16 +103,6 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
   endif()
 endif()
 
-# Attempt to find Miniupnpc (minimum supported API version = 9)
-# NOTE: This is not available on every platform / distro
-find_package(Miniupnpc 9)
-if(MINIUPNPC_FOUND)
-	set(WZ_USE_IMPORTED_MINIUPNPC ON)
-else()
-	message(STATUS "Using in-tree Miniupnpc")
-	set(WZ_USE_IMPORTED_MINIUPNPC OFF)
-endif()
-
 # Use "-fPIC" / "-fPIE" for all targets by default, including static libs
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -541,9 +531,6 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories(".")
 include_directories("3rdparty")
 include_directories("3rdparty/glm")
-if(NOT WZ_USE_IMPORTED_MINIUPNPC)
-	include_directories("3rdparty/miniupnp")
-endif()
 
 SET(STDC_HEADERS ON)
 SET(HAVE_CFPREFERENCESCOPYAPPVALUE OFF)
@@ -596,17 +583,22 @@ CHECK_IS_ABSOLUTE_PATH(WZ_DATADIR WZ_DATADIR_ISABSOLUTE)
 CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-if(NOT WZ_USE_IMPORTED_MINIUPNPC)
+# Attempt to find Miniupnpc (minimum supported API version = 9)
+# NOTE: This is not available on every platform / distro
+find_package(Miniupnpc 9)
+if(MINIUPNPC_FOUND)
+	set(WZ_USE_IMPORTED_MINIUPNPC ON)
+else()
+	message(STATUS "Using in-tree Miniupnpc")
+	set(WZ_USE_IMPORTED_MINIUPNPC OFF)
 	SET(UPNPC_BUILD_STATIC ON CACHE BOOL "miniupnpc - Build static library" FORCE)
 	SET(UPNPC_BUILD_SHARED OFF CACHE BOOL "miniupnpc - Build shared library" FORCE)
 	SET(UPNPC_BUILD_TESTS OFF CACHE BOOL "miniupnpc - Build tests" FORCE)
 	SET(UPNPC_BUILD_SAMPLE OFF CACHE BOOL "miniupnpc - Build samples" FORCE)
 	add_subdirectory(3rdparty/miniupnp/miniupnpc)
 endif()
-add_subdirectory(3rdparty/micro-ecc)
-add_subdirectory(3rdparty/sha2)
-add_subdirectory(3rdparty/fonts)
-add_subdirectory(3rdparty/utf8proc)
+
+add_subdirectory(3rdparty)
 
 set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
 

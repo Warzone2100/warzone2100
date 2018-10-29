@@ -510,7 +510,6 @@ AC_CONFIG_FILES([Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		3rdparty/micro-ecc/Makefile
-		3rdparty/sha2/Makefile
 		3rdparty/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
