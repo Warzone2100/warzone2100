@@ -2158,8 +2158,8 @@
 		BC2F24851F40CFC400DC804B /* ttnameid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ttnameid.h; path = external/freetype/include/freetype/ttnameid.h; sourceTree = "<group>"; };
 		BC3155931F42354800B96A71 /* uECC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = uECC.h; path = "../3rdparty/micro-ecc/uECC.h"; sourceTree = "<group>"; };
 		BC3155941F42354800B96A71 /* uECC.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = uECC.c; path = "../3rdparty/micro-ecc/uECC.c"; sourceTree = "<group>"; };
-		BC3155981F439FB600B96A71 /* sha2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = sha2.c; path = ../3rdparty/sha2/sha2.c; sourceTree = "<group>"; };
-		BC3155991F439FB600B96A71 /* sha2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sha2.h; path = ../3rdparty/sha2/sha2.h; sourceTree = "<group>"; };
+		BC3155981F439FB600B96A71 /* sha2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = sha2.c; path = ../3rdparty/sha/sha2.c; sourceTree = "<group>"; };
+		BC3155991F439FB600B96A71 /* sha2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sha2.h; path = ../3rdparty/sha/sha2.h; sourceTree = "<group>"; };
 		BC316E661F46500A00B8D306 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = "Resources/gettext/gettext-runtime/config.h"; sourceTree = "<group>"; };
 		BC316E681F46543200B8D306 /* hb-buffer-serialize.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-buffer-serialize.cc"; path = "external/harfbuzz/src/hb-buffer-serialize.cc"; sourceTree = "<group>"; };
 		BC316E6B1F46548800B8D306 /* hb-ot-math.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "hb-ot-math.cc"; path = "external/harfbuzz/src/hb-ot-math.cc"; sourceTree = "<group>"; };

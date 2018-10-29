@@ -7,3 +7,6 @@
 [submodule "3rdparty/miniupnp"]
 	path = 3rdparty/miniupnp
 	url = https://github.com/miniupnp/miniupnp.git
+[submodule "3rdparty/sha"]
+	path = 3rdparty/sha
+	url = https://github.com/BrianGladman/sha.git
