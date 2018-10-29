@@ -13,8 +13,8 @@ data/base/texpages/page-25-sky-urban.png
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
 3rdparty/micro-ecc/*
 	- BSD, Copyright (c) 2014, Kenneth MacKay (https://github.com/kmackay/micro-ecc)
-3rdparty/sha2/*
-	- BSD, Copyright (c) 2002, Dr Brian Gladman, Worcester, UK
+3rdparty/sha/*
+	- BSD, Copyright (c) 1998-2010, Brian Gladman, Worcester, UK. (https://github.com/BrianGladman/sha)
 3rdparty/miniupnp/*
 	- BSD, Copyright (c) 2005-2017, Thomas BERNARD (http://miniupnp.free.fr)
 3rdparty/utf8proc/*

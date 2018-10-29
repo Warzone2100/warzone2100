@@ -78,7 +78,7 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 // MARK: - SHA256
 //================================================================================
 
-#include <sha2/sha2.h>
+#include <sha/sha2.h>
 Sha256 sha256Sum(void const *data, size_t dataLen)
 {
 	static_assert(Sha256::Bytes == SHA256_DIGEST_SIZE, "Size mismatch.");

@@ -6,14 +6,14 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
 # sha2
 
-noinst_LIBRARIES = sha2/libsha2.a
+noinst_LIBRARIES = sha/libsha2.a
 noinst_HEADERS = \
-	sha2/brg_endian.h \
-	sha2/brg_types.h \
-	sha2/sha2.h
+	sha/brg_endian.h \
+	sha/brg_types.h \
+	sha/sha2.h
 
-sha2_libsha2_a_SOURCES = \
-	sha2/sha2.c
+sha_libsha2_a_SOURCES = \
+	sha/sha2.c
 
 
 # utf8proc
