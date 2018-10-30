@@ -22,7 +22,7 @@
 #include <cctype>
 #include <sstream>
 #include <iomanip>
-#include <utfcpp/utf8.h>
+#include <utfcpp/source/utf8.h>
 #include "frame.h"
 #include <utf8proc/utf8proc.h>
 
