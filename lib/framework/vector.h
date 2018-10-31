@@ -24,6 +24,7 @@
 #pragma warning( disable : 4201)
 #endif
 #define GLM_FORCE_SWIZZLE
+#define GLM_FORCE_SILENT_WARNINGS
 
 #include <stdint.h>
 
