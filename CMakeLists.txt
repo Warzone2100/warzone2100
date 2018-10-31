@@ -6,6 +6,8 @@ OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 
+set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")
+
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Handle options
@@ -542,6 +544,7 @@ SET(PACKAGE "warzone2100")
 SET(PACKAGE_BUGREPORT "http://wz2100.net/")
 SET(PACKAGE_NAME "Warzone 2100")
 SET(PACKAGE_TARNAME "warzone2100")
+SET(PACKAGE_DISTRIBUTOR "${WZ_DISTRIBUTOR}")
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   SET(_GNU_SOURCE ON)
 endif()
