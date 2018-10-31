@@ -68,6 +68,12 @@ before_build:
         $env:WZ_VC_TARGET_PLATFORMNAME = "x64"
         $env:WZ_OUTPUT_PLATFORMNAME = "x64"
       }
+  # Set distributor (if building from the main repo)
+  - ps: |
+      $env:WZ_DISTRIBUTOR = "UNKNOWN"
+      if ($env:APPVEYOR_ACCOUNT_NAME -eq "Warzone2100") {
+        $env:WZ_DISTRIBUTOR = "wz2100.net"
+      }
   # Add the QT5 \bin dir to PATH
   - set PATH=%PATH%;%QT5DIR%\bin;
   # If a future version of vcpkg breaks the "VCPKG_BUILD_TYPE=release" setting for the dependencies we need, use the following line instead:
@@ -78,7 +84,7 @@ before_build:
   # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
   - msbuild .\vcpkg\toolsrc\vcpkg.sln /t:Clean /p:Configuration=Release /p:Platform=x86
   # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform (portable build)
-  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
+  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
 
 build:
   parallel: true
@@ -108,7 +114,7 @@ after_build:
   - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
   
   # Re-run CMake configure for non-portable (regular) installer
-  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
+  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
   # Build the regular installer package (this should only rebuild the installer itself)
   - msbuild build/PACKAGE.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   
