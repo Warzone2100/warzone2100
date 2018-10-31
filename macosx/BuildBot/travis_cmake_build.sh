@@ -98,8 +98,13 @@ rm -rf build
 
 # CMake configure
 echo "travis_fold:start:wz.cmake.configure"
-echo "cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -G\"Xcode\""
-cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -G"Xcode"
+WZ_DISTRIBUTOR="UNKNOWN"
+if [ "${TRAVIS_REPO_SLUG}" == "Warzone2100/warzone2100" ]; then
+	# Building from main repo - set distributor
+	WZ_DISTRIBUTOR="wz2100.net"
+fi
+echo "cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -G\"Xcode\""
+cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -G"Xcode"
 result=${?}
 echo "travis_fold:end:wz.cmake.configure"
 if [ $result -ne 0 ]; then
