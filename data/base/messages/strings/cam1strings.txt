@@ -59,7 +59,7 @@ CAM1D_MSG3			_("This is our chance to defeat the New Paradigm and destroy their 
 
 
 /* New Paradigm - incoming transmission */
-NP_MSG2				_(" ")
+NP_MSG2				" "
 
 /* Cam 1B Player Ident Congrats */
 P1B_MSG1			_("ALPHA BASE MISSION: Power Surge Detected") 
@@ -69,7 +69,7 @@ P1B_MSG3			_("We now have a further task for you.")
 /* Cam 1.1 Player Ident Congrats */
 P1-1_MSG1			_("ALPHA BASE MISSION: Locate and Recover Artifacts")
 P1-1_MSG2			_("The first two zones are now secure.")
-P1-1_MSG3			_(" ")
+P1-1_MSG3			" "
 
 /* Project Team updates */
 P1-3A_MSG1			_("PROJECT TEAM UPDATES")
@@ -87,7 +87,7 @@ GAMMA_MSG3			_("We've discovered no artifacts and encountered no hostiles.")
 /* Map1c mission brief - intelligence report */
 CAM1C_MSG4			_("ALPHA BASE INTELLIGENCE REPORT: Enemy Attack")
 CAM1C_MSG5			_("We are detecting an enemy attack force at this location.")
-CAM1C_MSG6			_(" ")
+CAM1C_MSG6			" "
 
 /* Map1c project update - enemy attack */
 CAM1C_MSG7			_("PRIMARY OBJECTIVE")
@@ -113,7 +113,7 @@ SUP_MSG3			_("Establish a forward base then continue the search for the synaptic
 /* Submap1_4 Player ident */
 SUB1_4A_MSG4			_("INCOMING TRANSMISSION")
 SUB1_4A_MSG5			_("Decoding in progress.....")
-SUB1_4A_MSG6			_(" ")
+SUB1_4A_MSG6			" "
 
 /* Submap 1_4b - Destroy Enemy Base */
 SUB1_4B_MSG2			_("Commander.")
@@ -151,7 +151,7 @@ CAM1OUT_MSG1			_("Congratulations on defeating the New Paradigm, this sector is 
 CAM1OUT_MSG2			_("The Nexus Intruder Program was in the New Paradigm system.")
 CAM1OUT_MSG3			_("We recorded two conversations with it, extracts follow...")
 
-CAM1OUT_MSG4			_(" ")
+CAM1OUT_MSG4			" "
 CAM1OUT_MSG5			_("We'll keep you informed of further developments")
 
 CAM1OUT_MSG6			_("Commander you are to assist Team Beta")

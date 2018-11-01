@@ -105,7 +105,7 @@ CAM2_5_MSG6			_("Do not allow the Collective to bring the reactor on-line.")
 /* Cam2DI Capture NASDA central - briefing */
 CAM2_DI_MSG3			_("BETA BASE MISSION: Capture NASDA Central")
 CAM2_DI_MSG4			_("Capture NASDA central before NEXUS and the Collective can use it.")
-CAM2_DI_MSG5			_(" ")
+CAM2_DI_MSG5			" "
 
 /* Cam2_6 part2 Satellite Uplink - player ident*/
 CAM2_6_MSG			_("TRANSPORT MISSION: Satellite Uplink Site")
