@@ -189,16 +189,6 @@ msgstr "Estamos detectando forças inimigas nessas localidades."
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
 msgstr "Essa é nossa chance de derrotar o Novo Paradigma e destruir sua base."
 
-#: data/base/messages/strings/cam1strings.txt:62
-#: data/base/messages/strings/cam1strings.txt:72
-#: data/base/messages/strings/cam1strings.txt:90
-#: data/base/messages/strings/cam1strings.txt:116
-#: data/base/messages/strings/cam1strings.txt:154
-#: data/base/messages/strings/cam2strings.txt:108
-#: data/base/messages/strings/cam3strings.txt:156
-msgid " "
-msgstr " "
-
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
 msgstr "Parabéns, Comandante."

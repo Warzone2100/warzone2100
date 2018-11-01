@@ -153,7 +153,7 @@ CAM3A_D2_MSG6		_("Assign this task to a research facility.")
 CAM3A_D2_MSG7		_("NEXUS forces detected at these locations.")
 
 /* Cam3A-D2 NEXUS Counter-attacks - player ident part 3 restored */
-CAM3A_D2_MSG8		_(" ")
+CAM3A_D2_MSG8		" "
 CAM3A_D2_MSG9		_("NEXUS has been eradicated from all Project systems.")
 CAM3A_D2_MSG10		_("We are attempting to access the missile control codes.")
 

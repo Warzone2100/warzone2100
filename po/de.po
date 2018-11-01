@@ -201,16 +201,6 @@ msgstr "Wir orten feindliche Truppen an diesen Positionen."
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
 msgstr "Das ist unsere Chance das New Paradigm zu besiegen und ihre Basis zu zerstören."
 
-#: data/base/messages/strings/cam1strings.txt:62
-#: data/base/messages/strings/cam1strings.txt:72
-#: data/base/messages/strings/cam1strings.txt:90
-#: data/base/messages/strings/cam1strings.txt:116
-#: data/base/messages/strings/cam1strings.txt:154
-#: data/base/messages/strings/cam2strings.txt:108
-#: data/base/messages/strings/cam3strings.txt:156
-msgid " "
-msgstr " "
-
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
 msgstr "Glückwunsch, Commander."
