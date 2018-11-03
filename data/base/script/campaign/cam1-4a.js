@@ -69,6 +69,7 @@ camAreaEvent("LandingZoneTrigger", function()
 	camEnableFactory("NorthScavFactory");
 	camEnableFactory("HeavyNPFactory");
 	camEnableFactory("MediumNPFactory");
+	buildDefenses();
 });
 
 function NPBaseDetect()
@@ -203,6 +204,5 @@ function eventStartLevel()
 	// and also to rebuild dead trucks.
 	camManageTrucks(NEW_PARADIGM);
 
-	queue("buildDefenses", 2000);
 	queue("enableSouthScavFactory", camChangeOnDiff(10000));
 }
