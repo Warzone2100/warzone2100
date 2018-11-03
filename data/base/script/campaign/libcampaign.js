@@ -646,11 +646,11 @@ function camTraceOnce()
 	                  arguments);
 }
 
-//;; ## isCheating()
+//;; ## camIsCheating()
 //;;
 //;; Check if the player is in cheat mode.
 //;;
-function isCheating()
+function camIsCheating()
 {
 	return __camCheatMode;
 }

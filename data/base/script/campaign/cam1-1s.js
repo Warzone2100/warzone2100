@@ -4,7 +4,7 @@ var cheat;
 
 function eventChat(from, to, message)
 {
-	if (isCheating() && message === "let me win")
+	if (camIsCheating() && message === "let me win")
 	{
 		cheat = true;
 	}
