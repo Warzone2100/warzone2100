@@ -260,7 +260,7 @@ function checkMissileSilos()
 		return true;
 	}
 
-	if (!isCheating() && !countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER))
+	if (!camIsCheating() && !countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER))
 	{
 		return false;
 	}
