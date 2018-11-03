@@ -12,10 +12,8 @@ const NEXUS_RES = [
 	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
 	"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
 ];
-var launchTimes;
-var detTimes;
-var launchSounds;
-var detSounds;
+var launchInfo;
+var detonateInfo;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -166,45 +164,41 @@ function setupNextMission()
 }
 
 
-//Play countdown sounds. Elements are shifted out of the sound arrays as they play.
+//Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {
-	var missilesDead = missileSilosDestroyed();
-	var times = missilesDead ? detTimes : launchTimes;
-	var sounds = missilesDead ? detSounds : launchSounds;
+	var silosDestroyed = missileSilosDestroyed();
+	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
 
-	for (var i = 0, t = times.length; i < t; ++i)
+	for (var i = 0, len = countdownObject.length; i < len; ++i)
 	{
 		var currentTime = getMissionTime();
-		if (currentTime <= times[0])
+		if (currentTime <= countdownObject[0].time)
 		{
-			if (camDef(times[1]) && (currentTime <= times[1]))
+			if (len > 1 && (currentTime <= countdownObject[1].time))
 			{
 				skip = true; //Huge time jump?
 			}
-
 			if (!skip)
 			{
-				playSound(sounds[0], CAM_HUMAN_PLAYER);
+				playSound(countdownObject[0].sound, CAM_HUMAN_PLAYER);
 			}
 
-			if (missilesDead)
+			if (silosDestroyed)
 			{
-				detTimes.shift();
-				detSounds.shift();
+				detonateInfo.shift();
 			}
 			else
 			{
-				launchSounds.shift();
-				launchTimes.shift();
+				launchInfo.shift();
 			}
 
 			break;
 		}
 	}
 
-	queue("getCountdown", 120);
+	queue("getCountdown", 100);
 }
 
 function enableAllFactories()
@@ -242,24 +236,38 @@ function eventStartLevel()
 	var tent = getObject("transporterEntry");
 	var text = getObject("transporterExit");
 
-	launchTimes = [
-		3600, 3000, 2400, 1800, 1200, 600, 310, 300,
-		240, 180, 120, 60, 25, 11, 2,
+	launchInfo = [
+		{sound: "60min.ogg", time: 3600},
+		{sound: "50min.ogg", time: 3000},
+		{sound: "40min.ogg", time: 2400},
+		{sound: "30min.ogg", time: 1800},
+		{sound: "20min.ogg", time: 1200},
+		{sound: "10min.ogg", time: 600},
+		{sound: "meflp.ogg", time: 310},
+		{sound: "5min.ogg", time: 300},
+		{sound: "4min.ogg", time: 240},
+		{sound: "3min.ogg", time: 180},
+		{sound: "2min.ogg", time: 120},
+		{sound: "1min.ogg", time: 60},
+		{sound: "flseq.ogg", time: 25},
+		{sound: "10to1.ogg", time: 11},
+		{sound: "mlaunch.ogg", time: 2},
 	];
-	detTimes = [
-		3591, 3590, 3000, 2400, 1800, 1200, 600, 300,
-		240, 180, 120, 60, 20, 10,
-	];
-	launchSounds = [
-		"60min.ogg", "50min.ogg", "40min.ogg", "30min.ogg", "20min.ogg",
-		"10min.ogg", "meflp.ogg", "5min.ogg", "4min.ogg", "3min.ogg",
-		"2min.ogg", "1min.ogg", "flseq.ogg", "10to1.ogg", "mlaunch.ogg",
-	];
-	detSounds = [
-		"mlaunch.ogg", "det60min.ogg", "det50min.ogg", "det40min.ogg",
-		"det30min.ogg", "det20min.ogg", "det10min.ogg", "det5min.ogg",
-		"det4min.ogg", "det3min.ogg", "det2min.ogg", "det1min.ogg",
-		"fdetseq.ogg", "10to1.ogg",
+	detonateInfo = [
+		{sound: "mlaunch.ogg", time: 3591},
+		{sound: "det60min.ogg", time: 3590},
+		{sound: "det50min.ogg", time: 3000},
+		{sound: "det40min.ogg", time: 2400},
+		{sound: "det30min.ogg", time: 1800},
+		{sound: "det20min.ogg", time: 1200},
+		{sound: "det10min.ogg", time: 600},
+		{sound: "det5min.ogg", time: 300},
+		{sound: "det4min.ogg", time: 240},
+		{sound: "det3min.ogg", time: 180},
+		{sound: "det2min.ogg", time: 120},
+		{sound: "det1min.ogg", time: 60},
+		{sound: "fdetseq.ogg", time: 20},
+		{sound: "10to1.ogg", time: 10},
 	];
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
