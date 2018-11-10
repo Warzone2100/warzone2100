@@ -168,6 +168,8 @@ matrix:
         - brew install gettext
         - brew install asciidoc
         - brew install docbook-xsl
+        # Try to workaround issues with brew downloading gcc
+        - brew fetch --retry gcc@7
         # gcc6+ is currently required to bootstrap vcpkg on macOS
         - brew install gcc@7 || brew link --overwrite gcc@7
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
