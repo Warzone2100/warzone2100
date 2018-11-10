@@ -36,7 +36,10 @@ if [ ! -d "vcpkg/.git" ]; then
 else
 	# On CI (for example), the vcpkg directory may have been cached and restored
 	echo "Skipping git clone for vcpkg (local copy already exists)"
-	git pull
+	# Fetch origin updates
+	cd vcpkg
+	git fetch origin
+	cd - > /dev/null
 fi
 cd vcpkg
 git reset --hard $VCPKG_COMMIT_SHA
