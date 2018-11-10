@@ -242,7 +242,7 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
    * **7-Zip** (http://www.7-zip.org)
 * **Preparing to build:**
    Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
-   * Run the `get-dependencies.ps1` script from powershell in order to download and build the dependencies.
+   * Run the `get-dependencies_win.ps1` script from powershell in order to download and build the dependencies.
 * **Building from the command-line:**
    * Change directory to the warzone2100 repo directory
    * Configure
