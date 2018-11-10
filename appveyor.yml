@@ -24,8 +24,8 @@ environment:
 cache:
   # 1. The vcpkg directory
   #    - Cache built dependencies to reduce frequent build time by 20+ minutes.
-  #    - The vcpkg cache is invalidated if get-dependencies.ps1 changes (and get-dependencies.ps1 is what contains the pinned vcpkg commit).
-  - vcpkg/ -> get-dependencies.ps1
+  #    - The vcpkg cache is invalidated if get-dependencies_win.ps1 changes (and get-dependencies_win.ps1 is what contains the pinned vcpkg commit).
+  - vcpkg/ -> get-dependencies_win.ps1
 
 platform:
   - x64
@@ -77,8 +77,8 @@ before_build:
   # Add the QT5 \bin dir to PATH
   - set PATH=%PATH%;%QT5DIR%\bin;
   # If a future version of vcpkg breaks the "VCPKG_BUILD_TYPE=release" setting for the dependencies we need, use the following line instead:
-  # - ps: .\get-dependencies.ps1
-  - ps: .\get-dependencies.ps1 -VCPKG_BUILD_TYPE "release"
+  # - ps: .\get-dependencies_win.ps1
+  - ps: .\get-dependencies_win.ps1 -VCPKG_BUILD_TYPE "release"
   # Remove the vcpkg\buildtrees folder. (Once all dependencies are installed, it isn't needed, and it takes up a lot of space in the cache.)
   - ps: if (Test-Path .\vcpkg\buildtrees) { Remove-Item .\vcpkg\buildtrees -Force -Recurse -ErrorAction SilentlyContinue; }
   # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
