@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     rouge (2.0.7)
-    xcpretty (0.2.8)
+    xcpretty (0.3.0)
       rouge (~> 2.0.7)
     xcpretty-travis-formatter (1.0.0)
       xcpretty (~> 0.2, >= 0.0.7)
