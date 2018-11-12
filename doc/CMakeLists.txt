@@ -107,6 +107,8 @@ if(Asciidoctor_FOUND)
 			"html5"
 			"-D"
 			"${CMAKE_CURRENT_BINARY_DIR}"
+			"-a"
+			"toc"
 			"${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc"
 		)
 
