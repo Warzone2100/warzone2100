@@ -258,6 +258,9 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Linking
 		set(CMAKE_XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING YES)
 
+		# Apple LLVM - Code Generation
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_NO_COMMON_BLOCKS YES)							# -fno-common
+
 		# Apple Clang - Custom Compiler Flags
 		# Custom Warning Flags (for which an Xcode attribute is not available)
 		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith")
@@ -370,6 +373,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Enable -Wextra (if supported)
 		check_compiler_flags_output("-Werror -Wextra -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wextra" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wextra -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wextra" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# Enable -fno-common (if supported)
+		check_compiler_flags_output("-Werror -fno-common -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-fno-common" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -fno-common -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-fno-common" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# -Wcast-align				(GCC 3.4+, Clang 3.2+)
 		check_compiler_flags_output("-Werror -Wcast-align -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wcast-align" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
