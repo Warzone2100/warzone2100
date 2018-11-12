@@ -188,8 +188,8 @@ matrix:
       before_install:
         #- brew update
         - brew install gettext
-        - brew install asciidoc
-        - brew install docbook-xsl
+        # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
+        - gem install asciidoctor -v 1.5.8 --no-rdoc --no-ri --no-document
         # gcc6+ is currently required to bootstrap vcpkg on macOS
         - brew install gcc@7 || brew link --overwrite gcc@7
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
