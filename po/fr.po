@@ -6350,7 +6350,7 @@ msgstr "Canon magnétique Python chenilles"
 
 #: po/custom/fromJson.txt:511
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Canon magnétique Varan chenilles"
+msgstr "Canon magnétique Vouivre chenilles"
 
 #: po/custom/fromJson.txt:512
 msgid "Generates and concentrates bursts of laser energy"
@@ -6562,7 +6562,7 @@ msgstr "Châssis lourd - Vengeance"
 
 #: po/custom/fromJson.txt:569
 msgid "Heavy Body - Wyvern"
-msgstr "Châssis super lourd - Varan"
+msgstr "Châssis super lourd - Vouivre"
 
 #: po/custom/fromJson.txt:570
 msgid "Heavy Cannon"
@@ -6630,7 +6630,7 @@ msgstr "Laser lourd Tigre chenilles"
 
 #: po/custom/fromJson.txt:588
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "Laser lourd Varan chenilles"
+msgstr "Laser lourd Vouivre chenilles"
 
 #: po/custom/fromJson.txt:589
 msgid "Heavy Machinegun"
@@ -8125,7 +8125,7 @@ msgstr "Canon tirant des grosses munitions explosives au plasma"
 
 #: po/custom/fromJson.txt:1038
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Canon plasma Varan chenilles"
+msgstr "Canon plasma Vouivre chenilles"
 
 #: po/custom/fromJson.txt:1039
 msgid "Plasmite Bomb"
@@ -8265,7 +8265,7 @@ msgstr "Tour à laser à impulsions"
 
 #: po/custom/fromJson.txt:1076
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "Laser à impulsions Varan chenilles"
+msgstr "Laser à impulsions Vouivre chenilles"
 
 #: po/custom/fromJson.txt:1077
 msgid "Python"
@@ -8718,7 +8718,7 @@ msgstr "Tour à missiles anti-char"
 
 #: po/custom/fromJson.txt:1204
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Missiles anti-char Varan chenilles"
+msgstr "Missiles anti-char Vouivre chenilles"
 
 #: po/custom/fromJson.txt:1205
 msgid "Scourge Python Tracks"
@@ -9689,7 +9689,7 @@ msgstr "Carcasse de voiture"
 
 #: po/custom/fromJson.txt:1479
 msgid "Wyvern"
-msgstr "Varan"
+msgstr "Vouivre"
 
 #: po/custom/mac-infoplist.txt:1
 #, fuzzy
@@ -13208,13 +13208,13 @@ msgstr "Version: %s,%s Built:%s%s"
 #~ msgstr "Laser lourd Tigre chenilles"
 
 #~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "Canon magnétique Varan chenilles"
+#~ msgstr "Canon magnétique Vouivre chenilles"
 
 #~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "Laser à impulsions Varan chenilles"
+#~ msgstr "Laser à impulsions Vouivre chenilles"
 
 #~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "Laser lourd Varan chenilles"
+#~ msgstr "Laser lourd Vouivre chenilles"
 
 #~ msgid "Viper Machinegun Half-Track"
 #~ msgstr "Mitrailleuse Vipère autochenilles"

@@ -570,7 +570,7 @@
    * Change: Disable translations below 80% (ticket:3136, commit:a39f61281c2703a6d952da27b750b60c6706f6be, commit:16b06c03923dc371418b8e056fdddc59b41ce3fe)
    * Update: Polish (ticket:1347, commit:0cec33c0fceeb65fac3c26412a3d2d3667c04886)
    * Update: German (ticket:3564, commit:44c810bc73ca8f17bdbf8fc28bcbae8ec81233ab)
-   * Update: French (ticket:3577, ticket:3671, commit:875be5fda1b9ecf4aae3ece1fa5639904f3c06ab, commit:674ca3edd22b74508c49d11cff7bf6b62720657e)
+   * Update: French (ticket:3577, ticket:3671, ticket:4841, commit:875be5fda1b9ecf4aae3ece1fa5639904f3c06ab, commit:674ca3edd22b74508c49d11cff7bf6b62720657e)
    * Update: Catalan (ticket:3582, commit:3b261c24d2dfe39eae6f51f3a4827bc3b67e927f)
    * Update: Turkish (ticket:3591, commit:da43686ad35b33850a97ffcb8023c60e5ff55f83)
 
