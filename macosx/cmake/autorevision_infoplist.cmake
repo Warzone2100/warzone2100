@@ -34,7 +34,7 @@ endfunction()
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++Get build revision info from: ${CACHEFILE}")
 
 # Attempt to get version information from the current build's autorevision cache. Fail if cache is not present.
-execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CACHEFILE} -DSKIPUPDATECACHE="1" -DCACHEFORCE="1" -DVAROUT=1 -P "${PROJECT_ROOT}/build_tools/autorevision.cmake"
+execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CACHEFILE}" -DSKIPUPDATECACHE="1" -DCACHEFORCE="1" -DVAROUT=1 -P "${PROJECT_ROOT}/build_tools/autorevision.cmake"
 	WORKING_DIRECTORY "${PROJECT_ROOT}"
 	OUTPUT_VARIABLE autorevision_info
 	OUTPUT_STRIP_TRAILING_WHITESPACE
