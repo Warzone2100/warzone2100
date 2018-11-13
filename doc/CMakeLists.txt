@@ -9,7 +9,7 @@ set(wz2100_doc_FILES)
 
 add_custom_command(
 	TARGET wz2100_doc
-	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR} -P "${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake"
+	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	VERBATIM
 )
@@ -97,20 +97,15 @@ if(Asciidoctor_FOUND)
 	add_custom_command(
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
-		ARGS
-			"-S"
-			"server"
-			"--failure-level=ERROR"
-			"-B"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"-b"
-			"html5"
-			"-D"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"-a"
-			"toc"
-			"${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc"
-		)
+			-S server
+			--failure-level=ERROR
+			-B ${CMAKE_CURRENT_BINARY_DIR}
+			-b html5
+			-D ${CMAKE_CURRENT_BINARY_DIR}
+			-a toc
+			${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc
+		VERBATIM
+	)
 
 	configure_file("warzone2100.6.asciidoc" "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc" COPYONLY)
 
@@ -118,37 +113,28 @@ if(Asciidoctor_FOUND)
 	add_custom_command(
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
-		ARGS
-			"-S"
-			"server"
-			"--failure-level=ERROR"
-			"-B"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"-b"
-			"html5"
-			"-D"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc"
-		)
+			-S server
+			--failure-level=ERROR
+			-B ${CMAKE_CURRENT_BINARY_DIR}
+			-b html5
+			-D ${CMAKE_CURRENT_BINARY_DIR}
+			${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc
+		VERBATIM
+	)
 
 	# warzone2100.6 - man-page format
 	add_custom_command(
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
-		ARGS
-			"-S"
-			"server"
-			"--failure-level=ERROR"
-			"-B"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"-b"
-			"manpage"
-			"-D"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"-o"
-			"warzone2100.6"
-			"${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc"
-		)
+			-S server
+			--failure-level=ERROR
+			-B ${CMAKE_CURRENT_BINARY_DIR}
+			-b manpage
+			-D ${CMAKE_CURRENT_BINARY_DIR}
+			-o warzone2100.6
+			${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc
+		VERBATIM
+	)
 
 elseif(A2X_FOUND)
 
