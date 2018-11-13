@@ -168,6 +168,7 @@
    * Fix: Russian translation updates (commit:19b767af2354a69b1d21199763188f44689c548f, commit:314a90469f38b4391ac17671f323b4b32c91ce5f)
    * Fix: Chinese translation update (commit:600eff0af390810582c5362b8d29ce93b9cd1080)
    * Fix: Slovenian translation update (commit:7b23d84eea28f45239f8632e4a6f882371d719d7, ticket:4838)
+   * Fix: French translation for "wyvern" (commit:def430e0bef132ea54c797b5f3b2d4251bd9352f, ticket:4841)
 
 2017-04-23: Version 3.2.3
  * General:
@@ -570,7 +571,7 @@
    * Change: Disable translations below 80% (ticket:3136, commit:a39f61281c2703a6d952da27b750b60c6706f6be, commit:16b06c03923dc371418b8e056fdddc59b41ce3fe)
    * Update: Polish (ticket:1347, commit:0cec33c0fceeb65fac3c26412a3d2d3667c04886)
    * Update: German (ticket:3564, commit:44c810bc73ca8f17bdbf8fc28bcbae8ec81233ab)
-   * Update: French (ticket:3577, ticket:3671, ticket:4841, commit:875be5fda1b9ecf4aae3ece1fa5639904f3c06ab, commit:674ca3edd22b74508c49d11cff7bf6b62720657e)
+   * Update: French (ticket:3577, ticket:3671, commit:875be5fda1b9ecf4aae3ece1fa5639904f3c06ab, commit:674ca3edd22b74508c49d11cff7bf6b62720657e)
    * Update: Catalan (ticket:3582, commit:3b261c24d2dfe39eae6f51f3a4827bc3b67e927f)
    * Update: Turkish (ticket:3591, commit:da43686ad35b33850a97ffcb8023c60e5ff55f83)
 
