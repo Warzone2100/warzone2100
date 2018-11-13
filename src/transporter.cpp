@@ -103,6 +103,8 @@
 //start y position of the available droids buttons
 #define AVAIL_STARTY			0
 
+#define MAX_TRANSPORT_FULL_MESSAGE_PAUSE 20000
+
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
@@ -115,6 +117,8 @@ static	UDWORD			g_iLaunchTime = 0;
 static  bool            bFirstTransporter;
 //the tab positions of the DroidsAvail window
 static  UWORD           objMajor = 0;
+// Last time the transporter is full message was displayed
+static UDWORD lastTransportIsFullMsgTime = 0;
 
 /*functions */
 static bool intAddTransporterContents();
@@ -976,7 +980,11 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		if (psTransporter->player == selectedPlayer)
 		{
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-			addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+			if (lastTransportIsFullMsgTime + MAX_TRANSPORT_FULL_MESSAGE_PAUSE < gameTime)
+			{
+				addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+				lastTransportIsFullMsgTime = gameTime;
+			}
 		}
 		return;
 	}
