@@ -152,7 +152,7 @@ static int commanderLimit[MAX_PLAYERS];
 // max number of constructors
 static int constructorLimit[MAX_PLAYERS];
 
-#define MAX_UNIT_MESSAGE_PAUSE 20000
+#define MAX_UNIT_MESSAGE_PAUSE 40000
 
 static void auxStructureNonblocking(STRUCTURE *psStructure)
 {
