@@ -41,7 +41,12 @@
 extern UDWORD selectedPlayer;
 
 /** This global instance is responsible for dealing with the each player's target designator.*/
-DROID	*apsCmdDesignator[MAX_PLAYERS];
+DROID *apsCmdDesignator[MAX_PLAYERS];
+
+// Last time the max commander limit message was displayed
+static UDWORD lastMaxCmdLimitMsgTime = 0;
+
+#define MAX_COMMAND_LIMIT_MESSAGE_PAUSE 10000
 
 
 /** This function allocs the global instance apsCmdDesignator.*/
@@ -100,7 +105,12 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	else
 	{
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		//Do not potentially spam the console with this message
+		if (psCommander->player == selectedPlayer && lastMaxCmdLimitMsgTime + MAX_COMMAND_LIMIT_MESSAGE_PAUSE < gameTime)
+		{
+			addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+			lastMaxCmdLimitMsgTime = gameTime;
+		}
 	}
 }
 
