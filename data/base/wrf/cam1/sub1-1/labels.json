@@ -61,7 +61,7 @@
 	"area_6": {
 		"label": "ambush1Trigger",
 		"pos1": [2816, 6272],
-		"pos2": [5376, 6600]
+		"pos2": [5504, 6600]
 	},
 	"area_7": {
 		"label": "ambush2Trigger",
@@ -71,7 +71,7 @@
 	"area_8": {
 		"label": "scavBaseTrigger",
 		"pos1": [2048, 3000],
-		"pos2": [6600, 3300]
+		"pos2": [5504, 3300]
 	},
 
 	"object_0": {
