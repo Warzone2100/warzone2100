@@ -35,10 +35,11 @@
 
 // ------------------------------------------------------------------------------------
 
-static DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
-static int              fDifPlayerModifier;
-static int              fDifEnemyModifier;
+static DIFFICULTY_LEVEL presDifLevel = DL_NORMAL;
+static DIFFICULTY_LEVEL lastNonCheatLevel = DL_NORMAL;
 
+static int fDifPlayerModifier;
+static int fDifEnemyModifier;
 
 // ------------------------------------------------------------------------------------
 /* Sets the game difficulty level */
@@ -70,13 +71,35 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 		break;
 	}
 	presDifLevel = lev;
+	if (!isCheatDifficulty(presDifLevel))
+	{
+		lastNonCheatLevel = presDifLevel;
+	}
 }
 
 // ------------------------------------------------------------------------------------
 /* Returns the difficulty level */
-DIFFICULTY_LEVEL	getDifficultyLevel()
+DIFFICULTY_LEVEL getDifficultyLevel()
 {
-	return (presDifLevel);
+	return presDifLevel;
+}
+
+DIFFICULTY_LEVEL getLastNonCheatDifficultyLevel()
+{
+	return lastNonCheatLevel;
+}
+
+bool isCheatDifficulty(DIFFICULTY_LEVEL lev)
+{
+	return lev > DL_INSANE;
+}
+
+void revertToNonCheatDifficulty()
+{
+	if (isCheatDifficulty(getDifficultyLevel()))
+	{
+		setDifficultyLevel(getLastNonCheatDifficultyLevel());
+	}
 }
 
 // ------------------------------------------------------------------------------------

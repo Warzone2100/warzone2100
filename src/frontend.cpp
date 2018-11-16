@@ -165,6 +165,8 @@ static bool startTitleMenu()
 	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 
+	revertToNonCheatDifficulty();
+
 	return true;
 }
 
@@ -1155,7 +1157,7 @@ static bool startVideoOptionsMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	refreshCurrentVideoOptionsValues();
-	
+
 	return true;
 }
 

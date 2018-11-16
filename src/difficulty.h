@@ -33,6 +33,9 @@ enum DIFFICULTY_LEVEL
 
 void setDifficultyLevel(DIFFICULTY_LEVEL lev);
 DIFFICULTY_LEVEL getDifficultyLevel();
+DIFFICULTY_LEVEL getLastNonCheatDifficultyLevel();
+bool isCheatDifficulty(DIFFICULTY_LEVEL lev);
+void revertToNonCheatDifficulty();
 int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
 
 #endif // __INCLUDED_SRC_DIFFICULTY_H__
