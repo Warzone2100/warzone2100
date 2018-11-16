@@ -166,6 +166,9 @@ STRUCTURE_STATS *structGetDemolishStat();
 /*find a location near to the factory to start the droid of*/
 bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
 
+//Set the factory secondary orders to a droid
+void setFactorySecondaryState(DROID *psDroid, STRUCTURE *psStructure);
+
 /* is this a lassat structure? */
 static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
 {

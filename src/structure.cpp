@@ -2205,6 +2205,31 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	return true;
 }
 
+//Set the factory secondary orders to a droid
+void setFactorySecondaryState(DROID *psDroid, STRUCTURE *psStructure)
+{
+	CHECK_STRUCTURE(psStructure);
+	ASSERT_OR_RETURN(, StructIsFactory(psStructure), "structure not a factory");
+
+	if (myResponsibility(psStructure->player))
+	{
+		uint32_t newState = psStructure->pFunctionality->factory.secondaryOrder;
+		uint32_t diff = newState ^ psDroid->secondaryOrder;
+		if ((diff & DSS_REPLEV_MASK) != 0)
+		{
+			secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(newState & DSS_REPLEV_MASK));
+		}
+		if ((diff & DSS_ALEV_MASK) != 0)
+		{
+			secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(newState & DSS_ALEV_MASK));
+		}
+		if ((diff & DSS_CIRCLE_MASK) != 0)
+		{
+			secondarySetState(psDroid, DSO_CIRCLE, (SECONDARY_STATE)(newState & DSS_CIRCLE_MASK));
+		}
+	}
+}
+
 /* Place a newly manufactured droid next to a factory  and then send if off
 to the assembly point, returns true if droid was placed successfully */
 static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DROID **ppsDroid)
@@ -2236,23 +2261,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			return false;
 		}
 
-		if (myResponsibility(psStructure->player))
-		{
-			uint32_t newState = psStructure->pFunctionality->factory.secondaryOrder;
-			uint32_t diff = newState ^ psNewDroid->secondaryOrder;
-			if ((diff & DSS_REPLEV_MASK) != 0)
-			{
-				secondarySetState(psNewDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(newState & DSS_REPLEV_MASK));
-			}
-			if ((diff & DSS_ALEV_MASK) != 0)
-			{
-				secondarySetState(psNewDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(newState & DSS_ALEV_MASK));
-			}
-			if ((diff & DSS_CIRCLE_MASK) != 0)
-			{
-				secondarySetState(psNewDroid, DSO_CIRCLE, (SECONDARY_STATE)(newState & DSS_CIRCLE_MASK));
-			}
-		}
+		setFactorySecondaryState(psNewDroid, psStructure);
 
 		if (psStructure->visible[selectedPlayer])
 		{
@@ -3163,6 +3172,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					                            psStructure->player);
 					if (psDroid)
 					{
+						psDroid->secondaryOrder = psFactory->secondaryOrder;
+						psDroid->secondaryOrderPending = psDroid->secondaryOrder;
+						setFactorySecondaryState(psDroid, psStructure);
 						setDroidBase(psDroid, psStructure);
 						bDroidPlaced = true;
 					}

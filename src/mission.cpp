@@ -2517,8 +2517,7 @@ void intProcessMissionResult(UDWORD id)
 
 /*builds a droid back at the home base whilst on a mission - stored in a list made
 available to the transporter interface*/
-DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
-                         UDWORD player)
+DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y, UDWORD player)
 {
 	DROID		*psNewDroid;
 
