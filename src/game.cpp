@@ -1955,7 +1955,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 					{
 						alliances[i][j] = ALLIANCE_FORMED;    // hack to fix old savegames
 					}
-					if (alliancesSharedVision(game.alliance) && alliances[i][j] == ALLIANCE_FORMED)
+					if (bMultiPlayer && alliancesSharedVision(game.alliance) && alliances[i][j] == ALLIANCE_FORMED)
 					{
 						alliancebits[i] |= 1 << j;
 					}
