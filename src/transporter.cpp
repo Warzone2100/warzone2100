@@ -1167,6 +1167,12 @@ bool updateTransporter(DROID *psTransporter)
 			return true;
 		}
 
+		//Remove visibility so tiles are not bright around where the transporter left the map
+		if (psTransporter->action != DACTION_TRANSPORTIN)
+		{
+			visRemoveVisibility((BASE_OBJECT *) psTransporter);
+		}
+
 		// Got to destination
 		psTransporter->action = DACTION_NONE;
 
