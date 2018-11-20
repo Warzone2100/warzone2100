@@ -273,17 +273,29 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Do we have a dying animation?
 		if (psDroid->sDisplay.imd->objanimpie[ANIM_EVENT_DYING] && psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
-			debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
-			psDroid->timeAnimationStarted = gameTime;
-			psDroid->animationEvent = ANIM_EVENT_DYING;
+			bool useDeathAnimation = true;
+			//Babas should not burst into flames from non-heat weapons
 			if (psDroid->droidType == DROID_PERSON)
 			{
-				// NOTE: 3 types of screams are available ID_SOUND_BARB_SCREAM - ID_SOUND_BARB_SCREAM3
-				audio_PlayObjDynamicTrack(psDroid, ID_SOUND_BARB_SCREAM + (rand() % 3), nullptr);
+				if (weaponClass == WC_HEAT)
+				{
+					// NOTE: 3 types of screams are available ID_SOUND_BARB_SCREAM - ID_SOUND_BARB_SCREAM3
+					audio_PlayObjDynamicTrack(psDroid, ID_SOUND_BARB_SCREAM + (rand() % 3), nullptr);
+				}
+				else
+				{
+					useDeathAnimation = false;
+				}
+			}
+			if (useDeathAnimation)
+			{
+				debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
+				psDroid->timeAnimationStarted = gameTime;
+				psDroid->animationEvent = ANIM_EVENT_DYING;
 			}
 		}
 		// Otherwise use the default destruction animation
-		else if (psDroid->animationEvent != ANIM_EVENT_DYING)
+		if (psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
 			debug(LOG_DEATH, "%s droid %d (%p) is toast", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
 			// This should be sent even if multi messages are turned off, as the group message that was
