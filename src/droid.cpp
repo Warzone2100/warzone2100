@@ -551,12 +551,12 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 	}
 
 	/* if baba then squish */
-	if (psDel->droidType == DROID_PERSON && psDel->visible[selectedPlayer])
+	if (psDel->droidType == DROID_PERSON)
 	{
 		// The barbarian has been run over ...
 		audio_PlayStaticTrack(psDel->pos.x, psDel->pos.y, ID_SOUND_BARB_SQUISH);
 	}
-	else if (psDel->visible[selectedPlayer])
+	else
 	{
 		destroyFXDroid(psDel, impactTime);
 		pos.x = psDel->pos.x;
