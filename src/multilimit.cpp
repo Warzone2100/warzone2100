@@ -130,7 +130,8 @@ bool startLimitScreen()
 		sliderEnableDrag(true);
 	}
 
-	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, "LIMITS");	// draw sidetext...
+	// TRANSLATORS: Sidetext of structure limits screen
+	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, _("LIMITS"));
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
