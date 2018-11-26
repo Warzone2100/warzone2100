@@ -48,8 +48,8 @@ function transportBaseSetup()
 {
 	camDetectEnemyBase("NPLZGroup");
 	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
-		entry: { x: 0, y: 0 },
-		exit: { x: 0, y: 0 },
+		entry: { x: 2, y: 2 },
+		exit: { x: 2, y: 2 },
 		data: {
 			regroup: false,
 			count: -1,

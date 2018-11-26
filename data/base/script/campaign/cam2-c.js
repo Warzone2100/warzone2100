@@ -242,8 +242,8 @@ function sendCOTransporter()
 	{
 		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
 			CAM_REINFORCE_TRANSPORT, {
-				entry: { x: 1, y: 80 },
-				exit: { x: 1, y: 80 }
+				entry: { x: 2, y: 80 },
+				exit: { x: 2, y: 80 }
 			}
 		);
 	}

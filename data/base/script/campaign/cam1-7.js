@@ -53,8 +53,8 @@ camAreaEvent("NPTransportTrigger", function(droid)
 	{
 		var list = [cTempl.npmrl, cTempl.npmrl];
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 39, y: 0 },
-			exit: { x: 32, y: 62 }
+			entry: { x: 39, y: 2 },
+			exit: { x: 32, y: 60 }
 		});
 		playSound("pcv632.ogg"); //enemy transport escaping warning sound
 	}

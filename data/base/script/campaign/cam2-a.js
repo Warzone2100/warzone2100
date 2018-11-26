@@ -86,8 +86,8 @@ function sendCOTransporter()
 		var list = getDroidsForCOLZ();
 		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
 			CAM_REINFORCE_TRANSPORT, {
-				entry: { x: 126, y: 100 },
-				exit: { x: 126, y: 70 }
+				entry: { x: 125, y: 100 },
+				exit: { x: 125, y: 70 }
 			}
 		);
 

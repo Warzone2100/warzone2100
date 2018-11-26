@@ -88,8 +88,8 @@ function sendNPTransport()
 	{
 		var list = getDroidsForNPLZ();
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 1, y: 42 },
-			exit: { x: 1, y: 42 },
+			entry: { x: 2, y: 42 },
+			exit: { x: 2, y: 42 },
 			order: CAM_ORDER_ATTACK,
 			data: {
 				regroup: true,
