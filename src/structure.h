@@ -78,6 +78,8 @@ void setMaxDroids(int player, int value);
 void setMaxCommanders(int player, int value);
 void setMaxConstructors(int player, int value);
 
+bool hasBuiltCommandRelay(bool isMission, int player);
+
 bool IsPlayerDroidLimitReached(int player);
 
 bool loadStructureStats(WzConfig &ini);

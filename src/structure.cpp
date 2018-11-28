@@ -2413,6 +2413,22 @@ static bool IsFactoryCommanderGroupFull(const FACTORY *psFactory)
 	return true;
 }
 
+// Check if a player has built a command relay.
+bool hasBuiltCommandRelay(bool isMission, int player)
+{
+	bool hasRelay = false;
+
+	for (STRUCTURE *psCurr = isMission ? mission.apsStructLists[player] : apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	{
+		if (psCurr->pStructureType->type == REF_COMMAND_CONTROL && psCurr->status == SS_BUILT)
+		{
+			hasRelay = true;
+			break;
+		}
+	}
+
+	return hasRelay;
+}
 
 // Disallow manufacture of units once these limits are reached,
 // doesn't mean that these numbers can't be exceeded if units are
@@ -2455,19 +2471,19 @@ bool IsPlayerDroidLimitReached(int player)
 }
 
 // Check for max number of units reached and halt production.
-//
-static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure)
+static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 {
 	CHECK_STRUCTURE(psStructure);
 
 	char limitMsg[300];
 	bool isLimit = false;
+	int player = psStructure->player;
 
 	DROID_TEMPLATE *templ = psStructure->pFunctionality->factory.psSubject;
 
 	// if the players that owns the factory has reached his (or hers) droid limit
 	// then put production on hold & return - we need a message to be displayed here !!!!!!!
-	if (IsPlayerDroidLimitReached(psStructure->player))
+	if (IsPlayerDroidLimitReached(player))
 	{
 		isLimit = true;
 		sstrcpy(limitMsg, _("Can't build anymore units, Unit Limit Reached — Production Halted"));
@@ -2475,7 +2491,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 	else switch (droidTemplateType(templ))
 		{
 		case DROID_COMMAND:
-			if (getNumCommandDroids(psStructure->player) >= getMaxCommanders(psStructure->player))
+			if (!hasBuiltCommandRelay(isMission, player) || getNumCommandDroids(player) >= getMaxCommanders(player))
 			{
 				isLimit = true;
 				ssprintf(limitMsg, _("Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
@@ -2483,7 +2499,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 			break;
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
-			if (getNumConstructorDroids(psStructure->player) >= getMaxConstructors(psStructure->player))
+			if (getNumConstructorDroids(player) >= getMaxConstructors(player))
 			{
 				isLimit = true;
 				ssprintf(limitMsg, _("Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
@@ -2493,7 +2509,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 			break;
 		}
 
-	if (isLimit && psStructure->player == selectedPlayer && lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime)
+	if (isLimit && player == selectedPlayer && lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime)
 	{
 		addConsoleMessage(limitMsg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		lastMaxUnitMessage = gameTime;
@@ -3137,7 +3153,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				// also need to check if a command droid's group is full
 
 				// If the factory commanders group is full - return
-				if (IsFactoryCommanderGroupFull(psFactory) || checkHaltOnMaxUnitsReached(psStructure))
+				if (IsFactoryCommanderGroupFull(psFactory) || checkHaltOnMaxUnitsReached(psStructure, isMission))
 				{
 					return;
 				}
@@ -3162,7 +3178,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			}
 
 			//check for manufacture to be complete
-			if (psFactory->buildPointsRemaining <= 0 && !IsFactoryCommanderGroupFull(psFactory) && !checkHaltOnMaxUnitsReached(psStructure))
+			if (psFactory->buildPointsRemaining <= 0 && !IsFactoryCommanderGroupFull(psFactory) && !checkHaltOnMaxUnitsReached(psStructure, isMission))
 			{
 				if (isMission)
 				{
