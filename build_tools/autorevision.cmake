@@ -431,7 +431,7 @@ endif()
 
 # Detect and collect repo data.
 if(CACHEFORCE)
-	if(EXISTS ${CACHEFILE})
+	if(EXISTS "${CACHEFILE}")
 		# When requested only read from the cache to populate our symbols.
 		_importCache("${CACHEFILE}" ${LOGGING_QUIET})
 		if(NOT LOGGING_QUIET)
@@ -459,7 +459,7 @@ elseif(Git_FOUND AND _currentDirectoryIsInGitRepo)
 			message( STATUS "Gathered revision data from Git" )
 		endif()
 	endif()
-elseif(EXISTS ${CACHEFILE})
+elseif(EXISTS "${CACHEFILE}")
 	# We are not in a repo; try to use a previously generated cache to populate our symbols.
 	_importCache("${CACHEFILE}" ${LOGGING_QUIET})
 	# Do not overwrite the cache if we know we are not going to write anything new.
