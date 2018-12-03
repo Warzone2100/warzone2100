@@ -141,7 +141,7 @@ bool loadConfig()
 	sstrcpy(sPlayer, ini.value("playerName", _("Player")).toString().toUtf8().constData());
 
 	// Set a default map to prevent hosting games without a map.
-	sstrcpy(game.map, "Sk-Rush");
+	sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 	game.hash.setZero();
 	game.maxPlayers = 4;
 
@@ -344,7 +344,7 @@ bool reloadMPConfig()
 		}
 
 		// Set a default map to prevent hosting games without a map.
-		sstrcpy(game.map, "Sk-Rush");
+		sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 		game.hash.setZero();
 		game.maxPlayers = 4;
 
@@ -363,7 +363,7 @@ bool reloadMPConfig()
 	}
 
 	// Set a default map to prevent hosting games without a map.
-	sstrcpy(game.map, "Sk-Rush");
+	sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 	game.hash.setZero();
 	game.maxPlayers = 4;
 
