@@ -5444,7 +5444,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		    && psStructure->pStructureType->pSensor->location == LOC_TURRET)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
-			console(ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
+			console(ngettext("%s - %u Unit assigned - Damage %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
 			        getName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 		}
 		else
