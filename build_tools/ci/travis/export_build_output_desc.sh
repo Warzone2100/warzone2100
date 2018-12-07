@@ -20,7 +20,7 @@
 if [ -n "${TRAVIS_TAG}" ] && [ -z "${TRAVIS_PULL_REQUEST_BRANCH}" ]; then
 	# Replace "/" so the TRAVIS_TAG can be used in a filename
 	TRAVIS_TAG_SANITIZED="$(echo "${TRAVIS_TAG}" | sed -e 's:/:_:' -e 's:-:_:')"
-	export WZ_BUILD_DESC_PREFIX="${TRAVIS_TAG_SANITIZED}-"
+	export WZ_BUILD_DESC_PREFIX="${TRAVIS_TAG_SANITIZED}"
 else
 	# Collect current working copy Git information
 	GIT_BRANCH="$(git branch --no-color | sed -e '/^[^*]/d' -e 's:* \(.*\):\1:')"
@@ -35,7 +35,7 @@ else
 
 	# Replace "/" so the GIT_BRANCH can be used in a filename
 	GIT_BRANCH_SANITIZED="$(echo "${GIT_BRANCH}" | sed -e 's:/:_:' -e 's:-:_:')"
-	export WZ_BUILD_DESC_PREFIX="${GIT_BRANCH_SANITIZED}-"
+	export WZ_BUILD_DESC_PREFIX="${GIT_BRANCH_SANITIZED}"
 fi
 
 echo "WZ_BUILD_DESC_PREFIX=${WZ_BUILD_DESC_PREFIX}"

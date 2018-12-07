@@ -25,7 +25,7 @@
 # - SECURE_UPLOAD_BASE64_KEY: The base64-encoded private SSH key used for uploading to the buildbot.
 # - DEPLOY_UURL: Used in the scp command. Example: "buildbot@buildbot.wz2100.net"
 # - DEPLOY_KNOWN_HOSTS_BASE64: The base64-encoded data to be added to the SSH known_hosts file.
-# - DEPLOY_UPLOAD_PATH: The path into which to upload the files. Example: "public_html/files/"
+# - DEPLOY_UPLOAD_PATH: The path into which to upload the files. Example: "public_html/"
 #
 # To get the latest SSH public keys for the server in the DEPLOY_UURL (to be added to known_hosts), 
 # execute:
@@ -117,18 +117,26 @@ if [ -n "${DEPLOY_KNOWN_HOSTS_BASE64}" ]; then
 	echo ${DEPLOY_KNOWN_HOSTS_BASE64} | base64 --decode >> ~/.ssh/known_hosts
 fi
 
+if [[ "${DEPLOY_UPLOAD_PATH}" == *\\* ]] || [[ "${DEPLOY_UPLOAD_PATH}" == *\'* ]] || [[ "${DEPLOY_UPLOAD_PATH}" == *..* ]]; then
+	# Error: DEPLOY_UPLOAD_PATH cannot contain \ or ' or ..
+	echo "error: DEPLOY_UPLOAD_PATH cannot contain \ or ' or .. (is: \"${DEPLOY_UPLOAD_PATH}\")"
+	exit 2
+fi
+if [[ "${FILE_MATCH_PATTERN}" == *\\* ]] || [[ "${FILE_MATCH_PATTERN}" == *\'* ]]; then
+	# Error: FILE_MATCH_PATTERN cannot contain \ or '
+	echo "error: FILE_MATCH_PATTERN cannot contain \ or ' (is: \"${FILE_MATCH_PATTERN}\")"
+	exit 2
+fi
+
+# Sanity-check:
+if ! [[ "${DEPLOY_UPLOAD_PATH}" == public_html* ]]; then
+	# Error: DEPLOY_UPLOAD_PATH must begin with "public_html" (sanity-check)
+	echo "error: DEPLOY_UPLOAD_PATH must begin with \"public_html\" (is: \"${DEPLOY_UPLOAD_PATH}\")"
+	exit 2
+fi
+
 if [ "$CLEAN_OLD" = true ] ; then
 	# Clean up older uploads
-	if [[ "${DEPLOY_UPLOAD_PATH}" == *\\* ]] || [[ "${DEPLOY_UPLOAD_PATH}" == *\'* ]]; then
-		# Error: DEPLOY_UPLOAD_PATH cannot contain \ or '
-		echo "error: DEPLOY_UPLOAD_PATH cannot contain \ or ' (is: \"${DEPLOY_UPLOAD_PATH}\")"
-		exit 2
-	fi
-	if [[ "${FILE_MATCH_PATTERN}" == *\\* ]] || [[ "${FILE_MATCH_PATTERN}" == *\'* ]]; then
-		# Error: FILE_MATCH_PATTERN cannot contain \ or '
-		echo "error: FILE_MATCH_PATTERN cannot contain \ or ' (is: \"${FILE_MATCH_PATTERN}\")"
-		exit 2
-	fi
 	echo "Clean-up older \"${FILE_MATCH_PATTERN}\" in \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
 	if ! ssh "${DEPLOY_UURL}" -C "cd '${DEPLOY_UPLOAD_PATH}' && find . -maxdepth 1 -type f -name '${FILE_MATCH_PATTERN}' -printf '%T@ %f\n' | sort -k1,1r | cut -d' ' -f2 | grep -v '/$' | tail -n +3 | xargs -I {} rm -- {}"; then
 		result="${?}"
@@ -140,13 +148,20 @@ fi
 
 echo "Upload all \"${FILE_MATCH_PATTERN}\" in \"$INPUT_DIR\" -> \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
 
+# Ensure the desired upload path exists
+if ! ssh "${DEPLOY_UURL}" -C "mkdir -p '${DEPLOY_UPLOAD_PATH}'"; then
+	result="${?}"
+	echo "error: Failed to ensure DEPLOY_UPLOAD_PATH exists: \"${DEPLOY_UPLOAD_PATH}\""
+	#exit ${result}
+fi
+
 # Upload all matching files in the input directory
 cd "${INPUT_DIR}"
 for file in `find . -type f -name "${FILE_MATCH_PATTERN}"`; do
 	filename=$(basename $file)
 	echo "  -> ${filename} ..."
-	echo "       scp -pC \"${file}\" \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}\""
-	scp -pC "${file}" "${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}${filename}"
+	echo "       scp -pC \"${file}\" \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}/${filename}\""
+	scp -pC "${file}" "${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}/${filename}"
 	result=${?}
 	if [ $result -ne 0 ]; then
 		echo "error: Upload did not complete!"
@@ -155,7 +170,12 @@ for file in `find . -type f -name "${FILE_MATCH_PATTERN}"`; do
 	echo "       Upload complete."
 done
 
-
 echo "Finished uploading all matching files."
+
+# Remove the private key
+ssh-add -d ~/.ssh/id_rsa
+rm -f ~/.ssh/id_rsa
+
+echo "Cleaned-up SSH"
 
 exit 0
