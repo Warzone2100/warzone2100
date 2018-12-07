@@ -11,7 +11,7 @@
 #
 # Example:
 #  source build_tools/ci/travis/export_build_output_desc.sh
-#  macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}" "tmp/build_output"
+#  macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}-" "tmp/build_output"
 #
 # Regular builds:
 # - Warzone.zip containing:
