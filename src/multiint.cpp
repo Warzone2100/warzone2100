@@ -4039,7 +4039,7 @@ bool startMultiOptions(bool bReenter)
 			game.type = SKIRMISH;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			game.hash = levGetMapNameHash(game.map);
-			game.maxPlayers = 4;
+			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 		}
 
 		ingame.localOptionsReceived = false;

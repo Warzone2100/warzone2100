@@ -30,5 +30,6 @@ bool reloadMPConfig();
 
 /// Default map for Skirmish
 static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";
+static const int DEFAULTSKIRMISHMAPMAXPLAYERS = 4;
 
 #endif // __INCLUDED_SRC_CONFIGURATION_H__

@@ -143,7 +143,7 @@ bool loadConfig()
 	// Set a default map to prevent hosting games without a map.
 	sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 	game.hash.setZero();
-	game.maxPlayers = 4;
+	game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
 	game.techLevel = 1;
 
@@ -346,7 +346,7 @@ bool reloadMPConfig()
 		// Set a default map to prevent hosting games without a map.
 		sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 		game.hash.setZero();
-		game.maxPlayers = 4;
+		game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
 		ini.setValue("powerLevel", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
@@ -365,7 +365,7 @@ bool reloadMPConfig()
 	// Set a default map to prevent hosting games without a map.
 	sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 	game.hash.setZero();
-	game.maxPlayers = 4;
+	game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
 	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
