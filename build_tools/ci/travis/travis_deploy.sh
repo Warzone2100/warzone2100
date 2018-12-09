@@ -108,6 +108,9 @@ echo ${SECURE_UPLOAD_BASE64_KEY} | base64 --decode > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 ssh-add ~/.ssh/id_rsa
 
+# Create a public key file
+ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+
 # BE CAREFUL ABOUT CHANGING THE LINES ABOVE: The private key *MUST NOT* be output to the build log.
 
 
@@ -135,6 +138,13 @@ if ! [[ "${DEPLOY_UPLOAD_PATH}" == public_html* ]]; then
 	exit 2
 fi
 
+# Ensure the desired upload path exists
+if ! ssh "${DEPLOY_UURL}" -C "mkdir -p '${DEPLOY_UPLOAD_PATH}'"; then
+	result="${?}"
+	echo "error: Failed to ensure DEPLOY_UPLOAD_PATH exists: \"${DEPLOY_UPLOAD_PATH}\""
+	#exit ${result}
+fi
+
 if [ "$CLEAN_OLD" = true ] ; then
 	# Clean up older uploads
 	echo "Clean-up older \"${FILE_MATCH_PATTERN}\" in \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
@@ -147,13 +157,6 @@ if [ "$CLEAN_OLD" = true ] ; then
 fi
 
 echo "Upload all \"${FILE_MATCH_PATTERN}\" in \"$INPUT_DIR\" -> \"${DEPLOY_UURL}:${DEPLOY_UPLOAD_PATH}\""
-
-# Ensure the desired upload path exists
-if ! ssh "${DEPLOY_UURL}" -C "mkdir -p '${DEPLOY_UPLOAD_PATH}'"; then
-	result="${?}"
-	echo "error: Failed to ensure DEPLOY_UPLOAD_PATH exists: \"${DEPLOY_UPLOAD_PATH}\""
-	#exit ${result}
-fi
 
 # Upload all matching files in the input directory
 cd "${INPUT_DIR}"
@@ -172,7 +175,7 @@ done
 
 echo "Finished uploading all matching files."
 
-# Remove the private key
+# Remove the SSH key
 ssh-add -d ~/.ssh/id_rsa
 rm -f ~/.ssh/id_rsa
 
