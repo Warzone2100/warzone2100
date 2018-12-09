@@ -139,25 +139,6 @@ matrix:
         - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/src/"
         - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_src.tar.xz" --cleanold
 
-    # Build for macOS
-    # (This also deploys the macOS build to the buildbot)
-    - name: "macOS (Xcodeproj) [Xcode 8.3, macOS 10.12 SDK]"
-      language: objective-c
-      os: osx
-      osx_image: xcode8.3
-      before_install:
-        #- brew update
-        - brew install gettext
-        - brew install asciidoc
-        - brew install docbook-xsl
-        - bundle install --gemfile="macosx/BuildBot/Gemfile"
-      script:
-        - source build_tools/ci/travis/export_build_output_desc.sh
-        - macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
-      after_success:
-        - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/macOS/"
-        #- build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
-
     # Build for macOS (CMake)
     - name: "macOS (CMake) [Xcode 8.3, macOS 10.12 SDK]"
       language: objective-c
@@ -181,6 +162,7 @@ matrix:
       # do not deploy
 
     # Build for macOS (CMake)
+    # (This also deploys the macOS build to the buildbot)
     - name: "macOS (CMake) [Xcode 9.4, macOS 10.13 SDK]"
       language: objective-c
       os: osx
