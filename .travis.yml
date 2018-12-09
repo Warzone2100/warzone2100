@@ -156,7 +156,7 @@ matrix:
         - macosx/BuildBot/travis_build.sh regular "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
       after_success:
         - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/macOS/"
-        - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
+        #- build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
 
     # Build for macOS (CMake)
     - name: "macOS (CMake) [Xcode 8.3, macOS 10.12 SDK]"
@@ -200,7 +200,7 @@ matrix:
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
       after_success:
         - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/macOS/"
-        #- build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
+        - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
 
 # The channel name "chat.freenode.net#warzone2100-dev" is encrypted against Warzone2100/warzone2100 to prevent IRC spam of forks
 notifications:
