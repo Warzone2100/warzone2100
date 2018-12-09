@@ -1,6 +1,0 @@
-// Harfbuzz settings for Release configuration
-
-#include "Harfbuzz-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO

@@ -1,9 +1,0 @@
-// Png settings for all configurations
-
-#include "Base-Framework.xcconfig"
-
-
-PRODUCT_NAME = Png
-FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2)
-
-HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/Zlib.framework/Headers"
