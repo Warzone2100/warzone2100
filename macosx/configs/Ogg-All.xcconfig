@@ -1,9 +1,0 @@
-// Ogg settings for all configurations
-
-#include "Base-Framework.xcconfig"
-
-
-PRODUCT_NAME = Ogg
-
-// Silence warnings that are not ours
-GCC_WARN_64_TO_32_BIT_CONVERSION = NO // Silence "Implicit conversion loses integer precision" warnings

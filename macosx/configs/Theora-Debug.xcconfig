@@ -1,8 +1,0 @@
-// Theora settings for Debug configuration
-
-#include "Theora-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = YES
-GCC_DYNAMIC_NO_PIC = NO
-GCC_OPTIMIZATION_LEVEL = 0

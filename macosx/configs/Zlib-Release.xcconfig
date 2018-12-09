@@ -1,6 +1,0 @@
-// Zlib settings for Release configuration
-
-#include "Zlib-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO

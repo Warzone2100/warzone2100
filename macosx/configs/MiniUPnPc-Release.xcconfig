@@ -1,6 +1,0 @@
-// MiniUPnPc settings for Release configuration
-
-#include "MiniUPnPc-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO
