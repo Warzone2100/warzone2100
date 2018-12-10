@@ -141,6 +141,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	# Only install the "Core" component (the application), as the macOS app bundle contains all of the data & supporting files & languages
 	set(CPACK_COMPONENTS_ALL Core)
+	unset(CPACK_COMPONENT_CORE_DEPENDS)
 	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 
 	# Default package generators on macOS
