@@ -93,6 +93,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(PACKAGE "${_warzone_target_output_name}")
 	if(WZ_PORTABLE)
 		set(PACKAGE_NAME "Warzone 2100 Portable")
+
+		# For the portable build, install `launch_warzone.bat` in the base folder
+		install(FILES
+			"${CMAKE_CURRENT_SOURCE_DIR}/nsis/launch_warzone.bat"
+			COMPONENT Core DESTINATION "."
+		)
 	else()
 		set(PACKAGE_NAME "Warzone 2100")
 	endif()
