@@ -16,6 +16,9 @@ if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
 	unset(WZ_PORTABLE CACHE)
 endif()
 
+# Disallow in-source builds
+include(DisallowInSourceBuilds)
+
 if(WZ_ENABLE_WARNINGS)
 	set(WZ_Wno_ "-Wno-error=")
 else()
