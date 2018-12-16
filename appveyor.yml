@@ -6,7 +6,7 @@ environment:
   global:
     APPVEYOR_CACHE_ENTRY_ZIP_ARGS: -t7z -m0=lzma -mx=4
   matrix:
-  # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
+  # 32-bit (x86) builds
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     WZ_JOB_ID: release_x86
     # NOTE: Additional environment variables are set later to maintain consistent job identifiers
@@ -47,7 +47,7 @@ before_build:
   # NOTE: These are set here, instead of in the build matrix above, to maintain consistent job identifiers for release builds
   #       (as the job is identified based on the environment configuration in the matrix)
   - ps: |
-      if ($env:WZ_JOB_ID -eq "release_x86") {
+      if ($env:WZ_JOB_ID -eq "release_x86_xp") {
         # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
         # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
         # TODO: Change VCPKG_DEFAULT_TRIPLET to one that supports XP once https://github.com/Microsoft/vcpkg/pull/1732 is finalized & merged.
@@ -55,6 +55,16 @@ before_build:
         $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
         $env:QT5DIR = "C:\Qt\5.6\msvc2015"
         $env:WZ_VC_TOOLCHAIN = "v141_xp"
+        $env:WZ_VC_TARGET_PLATFORMNAME = "Win32"
+        $env:WZ_OUTPUT_PLATFORMNAME = "x86"
+      }
+      elseif ($env:WZ_JOB_ID -eq "release_x86") {
+        # 32-bit (x86) builds use more recent Qt and the latest VC toolchain (and support Windows 7+)
+        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
+        $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
+        $env:QT5DIR = "C:\Qt\5.9\msvc2015"
+        $env:WZ_VC_TOOLCHAIN = "v141"
         $env:WZ_VC_TARGET_PLATFORMNAME = "Win32"
         $env:WZ_OUTPUT_PLATFORMNAME = "x86"
       }
