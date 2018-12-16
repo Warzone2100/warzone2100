@@ -215,14 +215,14 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 	{
 	case AF_INET:
 		{
-			return handleIpv4(((const struct sockaddr_in *)addr)->sin_addr.s_addr);
+			return handleIpv4((reinterpret_cast<const sockaddr_in *>(addr))->sin_addr.s_addr);
 		}
 	case AF_INET6:
 		{
 
-			const uint16_t *address = (const uint16_t *) & ((const struct sockaddr_in6 *)addr)->sin6_addr.s6_addr;
+			const uint16_t *address = (const uint16_t *) & (reinterpret_cast<const sockaddr_in6 *>(addr))->sin6_addr.s6_addr;
 			// Check to see if this is really a IPv6 address
-			const struct sockaddr_in6 *mappedIP = (const struct sockaddr_in6 *)addr;
+			const struct sockaddr_in6 *mappedIP = reinterpret_cast<const sockaddr_in6 *>(addr);
 			if (IN6_IS_ADDR_V4MAPPED(&mappedIP->sin6_addr))
 			{
 				// looks like it is ::ffff:(...) so lets set up a IPv4 socket address structure
@@ -1133,7 +1133,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	ASSERT(addr != nullptr, "NULL Socket provided");
 
 	addressToText(addr->ai_addr, conn->textAddress, sizeof(conn->textAddress));
-	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs(((const struct sockaddr_in *)addr->ai_addr)->sin_port));
+	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs((reinterpret_cast<const sockaddr_in *>(addr->ai_addr))->sin_port));
 
 	// Mark all unused socket handles as invalid
 	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
