@@ -8,11 +8,23 @@
 !define TOP_BUILDDIR "@BUILD_DIR@"
 !if "@NSIS_MSVCRUNTIME@" == "ON"
   !define MSVCRUNTIME "ON"
-  !define MSVCRT14_BLD_MINIMUM 26405 ; (14.14.26405)
+  !define MSVCRT14_BLD_MINIMUM 26706 ; (14.15.26706)
 
-  !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.0.1/applocalconfig-vc2017-x86.zip"
-  !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.1/applocalconfig-vc2017-x86.zip"
-  !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.0.1/applocalconfig-vc2017-x86.zip"
-  !define MSVCRT_PORTABLE_DL_SHA512 "a7b435294f0beace13823bb9b3b070a1af7e974d952aef9441bf55eeda5bffcac83780c31da981fd45bd23e5aae098ad35c325692cfa2061a72ae1ce2bdc5bc6"
-  !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2017-x86.zip"
+  !if "@CMAKE_VS_PLATFORM_NAME@" == "Win32"
+    !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.0.2/applocalconfig-vc2017-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x86.zip"
+    !define MSVCRT_PORTABLE_DL_SHA512 "1f679a3ed4f4af6a565111970446f1e0cf2911205178f7e1c26a1f245e85908f0c30585eab6fa37313c3375ee5bcdcb0cde9b0a3bc0c555688a28565e5073217"
+    !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2017-x86.zip"
+  !else
+    !if "@CMAKE_VS_PLATFORM_NAME@" == "x64"
+      !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.0.2/applocalconfig-vc2017-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x64.zip"
+      !define MSVCRT_PORTABLE_DL_SHA512 "1311c6b21c10cb8b0c5dafcc3c8c2de3266064fcdb9ce4317fb75d40507a411115858af9a8f9679d4c70280721d624e5dc0f08dbd22f9542ccaeba6cfad666ac"
+      !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2017-x64.zip"
+    !else
+      !warning "Missing defines for platform: (@CMAKE_VS_PLATFORM_NAME@) in NSIS.definitions.in"
+    !endif
+  !endif
 !endif

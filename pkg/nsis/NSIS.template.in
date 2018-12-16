@@ -411,10 +411,9 @@ ${EndIf}
           DetailPrint "$0" ; print error message to log
         ${EndIf}
       ${Else}
-        MessageBox MB_OK|MB_ICONSTOP "Download of applocal system library (x86) failed: $Result_MSVCDownload"
+        MessageBox MB_OK|MB_ICONSTOP "Download of applocal system library failed: $Result_MSVCDownload"
       ${EndIf}
 
-      ; TODO: In the future, also support downloading the x64 applocal runtimes?
     SectionEnd
   !endif
 !endif
