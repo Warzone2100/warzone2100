@@ -103,10 +103,16 @@ if [ -n "${VCPKG_BUILD_TYPE}" ]; then
 fi
 
 # Download & build WZ macOS dependencies
-./vcpkg install physfs harfbuzz libogg libtheora libvorbis libpng sdl2 glew freetype gettext zlib
-vcpkgInstallResult=${?}
+vcpkgInstallResult=-1
+vcpkgAttempts=0
+while [ $vcpkgInstallResult -ne 0 ] && [ $vcpkgAttempts -lt 3 ]; do
+	./vcpkg install physfs harfbuzz libogg libtheora libvorbis libpng sdl2 glew freetype gettext zlib
+	vcpkgInstallResult=${?}
+	let vcpkgAttempts=vcpkgAttempts+1
+done
+
 if [ $vcpkgInstallResult -ne 0 ]; then
-	echo "It appears that `vcpkg install` has failed (return code: $vcpkgInstallResult)"
+	echo "It appears that 'vcpkg install' has failed (return code: $vcpkgInstallResult) ($vcpkgAttempts attempts)"
 	exit 1
 fi
 
