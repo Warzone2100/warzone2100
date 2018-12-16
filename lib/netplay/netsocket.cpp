@@ -122,13 +122,25 @@ typedef int (WINAPI *GETADDRINFO_DLL_FUNC)(const char *node, const char *service
 typedef int (WINAPI *FREEADDRINFO_DLL_FUNC)(struct addrinfo *res);
 
 static HMODULE winsock2_dll = nullptr;
-static unsigned int major_windows_version = 0;
 
 static GETADDRINFO_DLL_FUNC getaddrinfo_dll_func = nullptr;
 static FREEADDRINFO_DLL_FUNC freeaddrinfo_dll_func = nullptr;
 
 # define getaddrinfo  getaddrinfo_dll_dispatcher
 # define freeaddrinfo freeaddrinfo_dll_dispatcher
+
+# include <ntverp.h>				// Windows SDK - include for access to VER_PRODUCTBUILD
+# if VER_PRODUCTBUILD >= 9600
+	// 9600 is the Windows SDK 8.1
+	# include <VersionHelpers.h>	// For IsWindowsVistaOrGreater()
+# else
+	// Earlier SDKs may not have VersionHelpers.h - use simple fallback
+	inline bool IsWindowsVistaOrGreater()
+	{
+		DWORD dwMajorVersion = (DWORD)(LOBYTE(LOWORD(GetVersion())));
+		return dwMajorVersion >= 6;
+	}
+# endif
 
 static int getaddrinfo(const char *node, const char *service,
                        const struct addrinfo *hints,
@@ -140,77 +152,55 @@ static int getaddrinfo(const char *node, const char *service,
 		memcpy(&hint, hints, sizeof(hint));
 	}
 
-	switch (major_windows_version)
-	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	// Windows 95, 98 and ME
-	case 4:
-		debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
-		return EAI_FAIL;
+//	// Windows 95, 98 and ME
+//		debug(LOG_ERROR, "Name resolution isn't supported on this version of Windows");
+//		return EAI_FAIL;
 
-	// Windows 2000, XP and Server 2003
-	case 5:
+	if (!IsWindowsVistaOrGreater())
+	{
+		// Windows 2000, XP and Server 2003
 		if (hints)
 		{
-			// These flags are only supported from version 6 and onward
+			// These flags are only supported from Windows Vista+
 			hint.ai_flags &= ~(AI_V4MAPPED | AI_ADDRCONFIG);
 		}
-	// Windows Vista and Server 2008
-	case 6:
-	// Onward (aka: in the future)
-	default:
-		if (!winsock2_dll)
-		{
-			debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-			return EAI_FAIL;
-		}
-
-		if (!getaddrinfo_dll_func)
-		{
-			debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-			return EAI_FAIL;
-		}
-
-		return getaddrinfo_dll_func(node, service, hints ? &hint : NULL, res);
 	}
+
+	if (!winsock2_dll)
+	{
+		debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
+		return EAI_FAIL;
+	}
+
+	if (!getaddrinfo_dll_func)
+	{
+		debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+		return EAI_FAIL;
+	}
+
+	return getaddrinfo_dll_func(node, service, hints ? &hint : NULL, res);
 }
 
 static void freeaddrinfo(struct addrinfo *res)
 {
-	switch (major_windows_version)
+
+//	// Windows 95, 98 and ME
+//		debug(LOG_ERROR, "Name resolution isn't supported on this version of Windows");
+//		return;
+
+	if (!winsock2_dll)
 	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	// Windows 95, 98 and ME
-	case 4:
-		debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+		debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
 		return;
-
-	// Windows 2000, XP and Server 2003
-	case 5:
-	// Windows Vista and Server 2008
-	case 6:
-	// Onward (aka: in the future)
-	default:
-		if (!winsock2_dll)
-		{
-			debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-			return;
-		}
-
-		if (!freeaddrinfo_dll_func)
-		{
-			debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-			return;
-		}
-
-		freeaddrinfo_dll_func(res);
 	}
+
+	if (!freeaddrinfo_dll_func)
+	{
+		debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+		return;
+	}
+
+	freeaddrinfo_dll_func(res);
 }
 #endif
 
@@ -1489,9 +1479,6 @@ void SOCKETinit()
 			getaddrinfo_dll_func = reinterpret_cast<GETADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "getaddrinfo")));
 			freeaddrinfo_dll_func = reinterpret_cast<FREEADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "freeaddrinfo")));
 		}
-
-		// Determine major Windows version
-		major_windows_version = LOBYTE(LOWORD(GetVersion()));
 	}
 #endif
 
