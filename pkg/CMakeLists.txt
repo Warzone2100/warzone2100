@@ -108,6 +108,17 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(SOURCE_DIR "${CMAKE_SOURCE_DIR}")
 	set(BUILD_DIR "${CMAKE_BINARY_DIR}")
 
+	if(NOT DEFINED WZ_DATADIR)
+		message(FATAL_ERROR "This file should be included in the project's root CMakeLists.txt, after WZ_DATADIR is defined.")
+	endif()
+	if(NOT WZ_DATADIR_ISABSOLUTE)
+		set(NSIS_WZ_DATADIR_APPEND "${WZ_DATADIR}")
+		# NSIS expects backslashes
+		string(REGEX REPLACE "/" "\\\\" NSIS_WZ_DATADIR_APPEND "${NSIS_WZ_DATADIR_APPEND}")
+	else()
+		message(FATAL_ERROR "NSIS installer does not support absolute WZ_DATADIR")
+	endif()
+
 	# Localize component names & descriptions
 	set(CPACK_COMPONENT_GROUP_COREGROUP_DISPLAY_NAME "$(TEXT_SecBase)")
 	set(CPACK_COMPONENT_GROUP_COREGROUP_DESCRIPTION "$(DESC_SecBase)")
