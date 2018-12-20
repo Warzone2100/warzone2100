@@ -7,7 +7,7 @@
 ############################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-VCPKG_COMMIT_SHA="fcde2e64eb46295b64b3caa58d0d32eab0b6a49d"
+VCPKG_COMMIT_SHA="99b06bba5d86a6982f2491d9f4ea7ef637ff3747"
 
 ############################
 
