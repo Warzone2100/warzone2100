@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-10-22 17:06+0100\n"
-"PO-Revision-Date: 2018-01-10 19:41+0200\n"
+"PO-Revision-Date: 2018-12-09 20:14+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: de\n"
@@ -77,7 +77,7 @@ msgstr "Das New Paradigm kontrolliert überlegene Waffentechnologie."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Sie könnten die Technologie der synaptischen Verbindungen besitzen, es ist lebenswichtig, dass wir diese bergen."
+msgstr "Sie könnten die Technologie der synaptischen Verbindung besitzen, es ist lebenswichtig, dass wir diese bergen."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -126,11 +126,11 @@ msgstr "Durchsuchen Sie das gekennzeichnete Gebiet nach feindlichen Forschungsei
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Rücken Sie zur Landezone 2 vor. Greifen Sie zu diesem Zeitpunkt den Gegner noch nicht an."
+msgstr "Rücken Sie zur Landezone 2 vor. Greifen Sie zu diesem Zeitpunkt den Feind noch nicht an."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "TRANSPORTERMISSION: Position der synaptischen Verbindungen"
+msgstr "TRANSPORTERMISSION: Position der synaptischen Verbindung"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -138,7 +138,7 @@ msgstr "Das New Paradigm analysiert an dieser Position die Technologie der synap
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Stellen Sie einen Angriffstrupp zusammen und bergen Sie die Technologie für synaptische Verbindungen."
+msgstr "Stellen Sie einen Angriffstrupp zusammen und bergen Sie die Technologie für synaptische Verbindung."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -186,7 +186,7 @@ msgstr "Feindliche Truppen rücken von Osten und Norden an."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr "Halten Sie die Stellungen und schlagen Sie den Angriff zurück."
+msgstr "Halten Sie die Stellungen und schlagen Sie alle Angriffe zurück."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
@@ -300,11 +300,11 @@ msgstr "Ergänzend"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "Die Technologie für synaptische Verbindungen war hier, wurde jedoch entfernt."
+msgstr "Die Technologie für synaptische Verbindung war hier, wurde jedoch entfernt."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Errichten Sie eine vorgelagerte Basis und setzen Sie dann die Suche nach den synaptischen Verbindungen fort."
+msgstr "Errichten Sie eine vorgelagerte Basis und setzen Sie dann die Suche nach der synaptischen Verbindung fort."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -336,7 +336,7 @@ msgstr "Zerstören Sie die Basis und bergen Sie alle vorhandenen Artefakte."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr "Die Technologie der synaptischen Verbindungen wurde geborgen!"
+msgstr "Die Technologie der synaptischen Verbindung wurde geborgen!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
@@ -443,7 +443,7 @@ msgstr "Entschlüsseln..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "TRANSPORTMISSION: Transporter abgestürzt"
+msgstr "TRANSPORTERMISSION: Transporter abgestürzt"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -507,7 +507,7 @@ msgstr "Bevor NEXUS sich selbst deaktiviert hat, bekamen wir Zugriff auf folgend
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "Ein feindlicher Commander sammelt eine Lieferung für NEXUS an dieser Position ein."
+msgstr "Ein feindlicher Commander sammelt eine Lieferung von NEXUS an dieser Position ein."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
@@ -561,7 +561,7 @@ msgstr "Zerstören Sie dann das Lager."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "BETABASISMISSION: Luftstützpunkt zerstören und VTOLs bergen."
+msgstr "BETABASISMISSION: Feindlichen Luftstützpunkt zerstören und VTOLs bergen."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
@@ -569,11 +569,11 @@ msgstr "Analysen der Flugbahnen zeigen, dass die VTOLs des Kollektivs von hier s
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "BETABASISMISSION: Luftstützpunkt zerstören und VTOLs bergen"
+msgstr "BETABASISMISSION: Feindlichen Luftstützpunkt zerstören und VTOLs bergen"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "Der gegnerische Luftstützpunkt ist hier; dies ist Ihr Primärziel."
+msgstr "Der feindliche Luftstützpunkt ist hier; dies ist Ihr Primärziel."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -661,7 +661,7 @@ msgstr "Zerstören Sie die Einrichtung und kehren Sie zur Basis zurück."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "TRASNPORTERMISSION: Feindliche Boden-Luft-Raketenstellungen ausschalten"
+msgstr "TRANSPORTERMISSION: Feindliche Boden-Luft-Raketenstellungen ausschalten"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
@@ -727,7 +727,7 @@ msgstr "Viel Glück, Commander."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "TRANSPORTMISSION: Nördlicher Sektor"
+msgstr "TRANSPORTERMISSION: Nördlicher Sektor"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
@@ -836,7 +836,7 @@ msgstr "Sie sollen Team Gamma unterstützen."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "Wenn Sie die Gammabasis erreicht haben, sichern Sie das Gebiet vor weiteren Angiffen durch NEXUS."
+msgstr "Wenn Sie die Gammabasis erreicht haben, sichern Sie das Gebiet vor weiteren Angriffen durch NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -920,7 +920,7 @@ msgstr "Sie haben die Möglichkeit NEXUS' Truppen zu zerstören, bevor sie dort 
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr "Stellen Sie einen Angriffstrupp zuammen und überfallen Sie NEXUS' Sonderkommando aus einem Hinterhalt ..... das ....."
+msgstr "Stellen Sie einen Angriffstrupp zusammen und überfallen Sie NEXUS' Sonderkommando aus einem Hinterhalt ..... das ....."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
@@ -964,7 +964,7 @@ msgstr "Eintreffende Übertragung..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr "Teile des Gammeteams haben uns kontaktiert."
+msgstr "Teile des Gammateams haben uns kontaktiert."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
@@ -1480,7 +1480,7 @@ msgstr "Automatisierte Reparatur für Fahrzeuge Mk3"
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
-msgstr "Schwerer Reparaturturm"
+msgstr "Schwerer mobiler Reparaturturm"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/resstrings.txt:450
@@ -1797,7 +1797,7 @@ msgstr "Verteidigungsanlagen verbessert"
 #: data/mp/messages/strings/resstrings.txt:32
 #: po/custom/fromJson.txt:659
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Hochbelastbarer mit Bor verstärkter Hartbeton"
+msgstr "Hochbelastbarer, mit Bor verstärkter Hartbeton"
 
 #: data/base/messages/strings/resstrings.txt:105
 #: data/base/messages/strings/resstrings.txt:401
@@ -1811,7 +1811,7 @@ msgstr "Erhöht Panzerung und Rumpfpunkte"
 #: data/mp/messages/strings/resstrings.txt:34
 #: po/custom/fromJson.txt:74
 msgid "All defenses and walls upgraded automatically"
-msgstr "Verteidigungsanlagen und Mauern wurden automatisch aufgerüstet"
+msgstr "Alle Verteidigungsanlagen und Mauern wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:113
 #: data/base/messages/strings/resstrings.txt:119
@@ -2007,7 +2007,7 @@ msgstr "Gepanzerte Stellung mit Hellstorm-Haubitze"
 #: data/mp/messages/strings/resstrings.txt:92
 #: po/custom/fromJson.txt:186
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr "Gepanzerte Aufhängung mit Tank-Killer-Rakete"
+msgstr "Gepanzerte Stellung mit Tank-Killer-Rakete"
 
 #: data/base/messages/strings/resstrings.txt:193
 #: data/base/messages/strings/resstrings.txt:199
@@ -2027,7 +2027,7 @@ msgstr "Greift automatisch Ziele in Reichweite an"
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:181
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Gepanzerte Aufhängung mit Hochgeschwindigkeitsgeschütz"
+msgstr "Gepanzerte Stellung mit Hochgeschwindigkeitsgeschütz"
 
 #: data/base/messages/strings/resstrings.txt:200
 #: data/base/messages/strings/resstrings.txt:220
@@ -2055,13 +2055,13 @@ msgstr "Verteidigungsstärke: hoch"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:182
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Gepanzerte Aufhängung mit Inferno-Flammenwerfer"
+msgstr "Gepanzerte Stellung mit Inferno-Flammenwerfer"
 
 #: data/base/messages/strings/resstrings.txt:218
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:177
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Gepanzerte Aufhängung mit Sturmgeschütz"
+msgstr "Gepanzerte Stellung mit Sturmgeschütz"
 
 #: data/base/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:112
@@ -2284,7 +2284,7 @@ msgstr "Erhöht die Widerstandsfähigkeit gegen Schäden"
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:529
 msgid "Hardened Base Structure Materials"
-msgstr "Gehärtete Gebäudematerialien"
+msgstr "Gehärtete Basisgebäudematerialien"
 
 #: data/base/messages/strings/resstrings.txt:402
 #: data/mp/messages/strings/resstrings.txt:199
@@ -2479,7 +2479,7 @@ msgstr "Störer verbessert"
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
 msgid "Improvement in synaptic link technology"
-msgstr "Verbesserung in der Technologie der synaptischen Verbindungen"
+msgstr "Verbesserung in der Technologie der synaptischen Verbindung"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
@@ -3308,7 +3308,7 @@ msgstr "Um einen Ölbohrturm zu bauen, wählen Sie einen Ihrer LKW"
 
 #: data/base/script/tutorial.js:29
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Linksklicken Sie auf die Ölquelle, die durch den Radarimpuls angezeigt wird, um Ihrem LKW anzuweisen dort zu bauen"
+msgstr "Linksklicken Sie auf die Ölquelle, die durch den Radarimpuls angezeigt wird, um Ihren LKW anzuweisen dort zu bauen"
 
 #: data/base/script/tutorial.js:30
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
@@ -3453,7 +3453,7 @@ msgstr "Linksklicken Sie nun im Menü auf der linken Seite auf die Einheit, die 
 
 #: data/base/script/tutorial.js:74
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Bitte warten Sie, während die Fabrik die neuen Einheiten produziert"
+msgstr "Bitte warten Sie, während die Fabrik die neue(n) Einheit(en) produziert"
 
 #: data/base/script/tutorial.js:76
 msgid "Congratulations commander - you are ready for your first mission"
@@ -3559,7 +3559,7 @@ msgstr "Sie verstoßen gegen die Gesetze des New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr "Alle Gruppen beginnen mit den Angriff auf den Feind."
+msgstr "Alle Gruppen beginnen mit dem Angriff auf den Feind."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
@@ -3624,7 +3624,7 @@ msgstr "Ihr mögt mich hier besiegen, aber ich werde wieder auferstehen."
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "So wie ich die Welt einst mit Feuer gereinigt habe, werde ich Euch und Euer lächerliches Projekt zerstören."
+msgstr "So wie ich einst die Welt mit Feuer gereinigt habe, werde ich Euch und Euer lächerliches Projekt zerstören."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -3656,7 +3656,7 @@ msgstr "Die Verbindung verfügt über eine Hochgeschwindigkeitsdatenschnittstell
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr "Noch wichtiger ist, dass die synaptische Verbindung die Erschaffung von Cyborgs möglich machte. Erste Versuche mit Kraftanzügen für einzelne Soldaten erwiesen sich wegen ihrer Langsamki3eit und Trägheit als Fehlschläge."
+msgstr "Noch wichtiger ist, dass die synaptische Verbindung die Erschaffung von Cyborgs möglich machte. Erste Versuche mit Kraftanzügen für einzelne Soldaten erwiesen sich wegen ihrer Langsamkeit und Trägheit als Fehlschläge."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
@@ -4064,7 +4064,7 @@ msgstr "Die Reed Corporation wurde von Dr. Allan Reed gegründet. Im Jahre 2080 
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr "Nachdem die synaptischen Verbindungen fünf Jahre später patentiert worden waren, wandte sich Dr. Reed der Erforschung der Kybernetik zu."
+msgstr "Nachdem die synaptische Verbindung fünf Jahre später patentiert worden waren, wandte sich Dr. Reed der Erforschung der Kybernetik zu."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
@@ -4285,7 +4285,7 @@ msgstr "Wir haben viele der verlorengegangenen Technologien wieder bergen könne
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr "Nun ist es an der Zeit sie für den Wiederaufbau der Welt zu nutzen."
+msgstr "Nun ist es an der Zeit, sie für den Wiederaufbau der Welt zu nutzen."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
@@ -4330,16 +4330,16 @@ msgstr "NEXUS-Mauer"
 
 #: data/mp/messages/strings/names.txt:317
 msgid "Nexus Corner Wall"
-msgstr "Hartbetonmauer (Eckstück)"
+msgstr "Nexus-Hartbetonmauer (Eckstück)"
 
 #: data/mp/messages/strings/names.txt:335
 msgid "CAM1 RESEARCH"
-msgstr "CAM1-FORSCHUNGEN"
+msgstr "CAM1-FORSCHUNG"
 
 #: data/mp/messages/strings/names.txt:336
 #: po/custom/fromJson.txt:57
 msgid "ADVANCED RESEARCH"
-msgstr "FORTGESCHRITTENE FORSCHUNGEN"
+msgstr "FORTGESCHRITTENE FORSCHUNG"
 
 #: data/mp/messages/strings/names.txt:337
 msgid "CAM1 VEHICLES"
@@ -4355,7 +4355,7 @@ msgstr "CAM1-SYSTEME"
 
 #: data/mp/messages/strings/names.txt:340
 msgid "CAM1 DEFENSES"
-msgstr "CAM1-VERTEIDIGUNG"
+msgstr "CAM1-VERTEIDIGUNGSANLAGEN"
 
 #: data/mp/messages/strings/names.txt:341
 msgid "CAM1 STRUCTURES"
@@ -4363,7 +4363,7 @@ msgstr "CAM1-GEBÄUDE"
 
 #: data/mp/messages/strings/names.txt:342
 msgid "CAM2 RESEARCH"
-msgstr "CAM2-FORSCHUNGEN"
+msgstr "CAM2-FORSCHUNG"
 
 #: data/mp/messages/strings/names.txt:343
 msgid "CAM2 VEHICLES"
@@ -4383,7 +4383,7 @@ msgstr "CAM2-SYSTEME"
 
 #: data/mp/messages/strings/names.txt:347
 msgid "CAM2 DEFENSES"
-msgstr "CAM2-VERTEIDIGUNG"
+msgstr "CAM2-VERTEIDIGUNGSANLAGEN"
 
 #: data/mp/messages/strings/names.txt:348
 msgid "CAM2 STRUCTURES"
@@ -4391,7 +4391,7 @@ msgstr "CAM2-GEBÄUDE"
 
 #: data/mp/messages/strings/names.txt:350
 msgid "CAM3 RESEARCH"
-msgstr "CAM3-FORSCHUNGEN"
+msgstr "CAM3-FORSCHUNG"
 
 #: data/mp/messages/strings/names.txt:361
 #: po/custom/fromJson.txt:907
@@ -4842,11 +4842,11 @@ msgstr "Fortschrittliche Gebäudematerialien"
 
 #: po/custom/fromJson.txt:39
 msgid "Advanced Base Structure Materials Mk2"
-msgstr "Fortschrittliche Gebäudematerialien MK2"
+msgstr "Fortschrittliche Gebäudematerialien Mk2"
 
 #: po/custom/fromJson.txt:40
 msgid "Advanced Base Structure Materials Mk3"
-msgstr "Fortschrittliche Gebäudematerialien MK3"
+msgstr "Fortschrittliche Gebäudematerialien Mk3"
 
 #: po/custom/fromJson.txt:41
 msgid "Advanced Bomb Warhead"
@@ -4929,7 +4929,6 @@ msgstr "Fortschrittliche VTOL-Produktion Mk3"
 msgid "Aerodynamic Jump Pack"
 msgstr "Aerodynamische Sprungausrüstung"
 
-# Pack wie Equipment übersetzt -Kreuvf
 #: po/custom/fromJson.txt:65
 msgid "Aerodynamicslab"
 msgstr "Aerodynamiklabor"
@@ -5232,11 +5231,11 @@ msgstr "Gepanzerte Mörsergrube"
 
 #: po/custom/fromJson.txt:178
 msgid "Armored strongpoint with Flashlight laser"
-msgstr "Gepanzerte Aufhängung mit Flashlight-Laser"
+msgstr "Gepanzerte Stellung mit Flashlight-Laser"
 
 #: po/custom/fromJson.txt:179
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Gepanzerte Aufhängung mit Gaußkanone"
+msgstr "Gepanzerte Stellung mit Gaußkanone"
 
 #: po/custom/fromJson.txt:180
 msgid "Armored strongpoint with Heavy Laser"
@@ -5248,11 +5247,11 @@ msgstr "Gepanzerte Stellung mit Plasmitflammenwerfer"
 
 #: po/custom/fromJson.txt:184
 msgid "Armored strongpoint with Pulse Laser"
-msgstr "Gepanzerte Aufhängung mit Pulslaser"
+msgstr "Gepanzerte Stellung mit Pulslaser"
 
 #: po/custom/fromJson.txt:185
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Gepanzerte Aufhängung mit Magnetgeschütz"
+msgstr "Gepanzerte Stellung mit Magnetgeschütz"
 
 #: po/custom/fromJson.txt:187
 msgid "Armored Tracks"
@@ -5260,7 +5259,7 @@ msgstr "Gepanzerte Ketten"
 
 #: po/custom/fromJson.txt:188
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr "Panzerbrechende Treibspiegelprojektile"
+msgstr "Panzerbrechende Treibspiegelgeschosse"
 
 #: po/custom/fromJson.txt:189
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
@@ -6070,9 +6069,8 @@ msgid "Electronic Countermeasures Mk2"
 msgstr "Elektronische Gegenmaßnahmen Mk2"
 
 #: po/custom/fromJson.txt:430
-#, fuzzy
 msgid "Electronic Countermeasures Mk3"
-msgstr "Elektronische Gegenmaßnahmen Mk2"
+msgstr "Elektronische Gegenmaßnahmen Mk3"
 
 #: po/custom/fromJson.txt:431
 msgid "EMP Cannon"
@@ -6181,7 +6179,7 @@ msgstr "Fabrikproduktionsgeschwindigkeit +60%"
 
 #: po/custom/fromJson.txt:459
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Höhere Reichweite verglichen mit anderen Sensoren"
 
 #: po/custom/fromJson.txt:460
 msgid "Faster than Cobra"
@@ -6365,7 +6363,7 @@ msgstr "Aufhängung mit Gaußkanone"
 
 #: po/custom/fromJson.txt:510
 msgid "Gauss Cannon Python Tracks"
-msgstr "Gausskanone Python Ketten"
+msgstr "Gaußkanone Python Ketten"
 
 #: po/custom/fromJson.txt:511
 msgid "Gauss Cannon Wyvern Tracks"
@@ -7514,9 +7512,8 @@ msgid "Maximum armor and body points"
 msgstr "Maximale Panzerung und Rumpfpunkte"
 
 #: po/custom/fromJson.txt:861
-#, fuzzy
 msgid "May be assigned to follow units"
-msgstr "Kann Sensoren zugewiesen werden"
+msgstr "Kann angewiesen werden Einheiten zu folgen"
 
 #: po/custom/fromJson.txt:862
 msgid "May be targeted directly or assigned to a sensor turret or tower"
@@ -7600,7 +7597,7 @@ msgstr "Mittlerer superschwerer Rumpf"
 
 #: po/custom/fromJson.txt:882
 msgid "Mini-rocket armored strongpoint"
-msgstr "Gepanzerte Aufhängung mit Miniraketen"
+msgstr "Gepanzerte Stellung mit Miniraketen"
 
 #: po/custom/fromJson.txt:883
 msgid "Mini-Rocket Array"
@@ -7909,9 +7906,8 @@ msgid "New System Available"
 msgstr "Neues System verfügbar"
 
 #: po/custom/fromJson.txt:977
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Neuer Systemturm verfügbar"
+msgstr "Neuer Systemsensor verfügbar"
 
 #: po/custom/fromJson.txt:978
 msgid "New Systems Structure Available"
@@ -8048,7 +8044,7 @@ msgstr "NullBot"
 
 #: po/custom/fromJson.txt:1013
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "Objekte in der Nähe lassen sich schwieriger ausmachen"
 
 #: po/custom/fromJson.txt:1014
 msgid "Oil Derrick"
@@ -8161,7 +8157,7 @@ msgstr "Plasmitflammenwerfer"
 
 #: po/custom/fromJson.txt:1043
 msgid "Plasmite Retribution VTOL"
-msgstr "VTOL-Plasmitbombenabwurfschacht"
+msgstr "Plasmitbombenabwurfschacht Retribution VTOL"
 
 #: po/custom/fromJson.txt:1044
 msgid "Plasteel"
@@ -8304,7 +8300,6 @@ msgid "Radar Detector"
 msgstr "Radardetektor"
 
 #: po/custom/fromJson.txt:1084
-#, fuzzy
 msgid "Radar detector detects enemy sensors"
 msgstr "Radardetektor ortet feindliche Sensoren"
 
@@ -8350,15 +8345,15 @@ msgstr "Magnetwaffennachladezeit -15%"
 
 #: po/custom/fromJson.txt:1095
 msgid "Rail Gun ROF"
-msgstr "Verbesserte Feuerrate von Magnetgeschützen"
+msgstr "Verbesserte Feuerrate von Magnetwaffen"
 
 #: po/custom/fromJson.txt:1096
 msgid "Rail Gun ROF Mk2"
-msgstr "Verbesserte Feuerrate von Magnetgeschützen Mk2"
+msgstr "Verbesserte Feuerrate von Magnetwaffen Mk2"
 
 #: po/custom/fromJson.txt:1097
 msgid "Rail Gun ROF Mk3"
-msgstr "Verbesserte Feuerrate von Magnetgeschützen Mk3"
+msgstr "Verbesserte Feuerrate von Magnetwaffen Mk3"
 
 #: po/custom/fromJson.txt:1098
 msgid "Rail Gun Tiger Hover"
@@ -8962,15 +8957,15 @@ msgstr "Flammenwerfergel für sehr hohe Temperaturen Mk3"
 
 #: po/custom/fromJson.txt:1268
 msgid "Superhot Plasmite gel"
-msgstr "Superheißes Plasmitlammenwerfergel"
+msgstr "Superheißes Plasmitflammenwerfergel"
 
 #: po/custom/fromJson.txt:1269
 msgid "Superhot Plasmite gel Mk2"
-msgstr "Superheißes Plasmitlammenwerfergel Mk2"
+msgstr "Superheißes Plasmitflammenwerfergel Mk2"
 
 #: po/custom/fromJson.txt:1270
 msgid "Superhot Plasmite gel Mk3"
-msgstr "Superheißes Plasmitlammenwerfergel Mk3"
+msgstr "Superheißes Plasmitflammenwerfergel Mk3"
 
 #: po/custom/fromJson.txt:1278
 #: src/design.cpp:1063
@@ -8995,7 +8990,7 @@ msgstr "Synaptische Verbindung"
 
 #: po/custom/fromJson.txt:1283
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr "Synaptische Verbindungen ermöglichen direkte Verbindung zwischen Mensch und Maschine"
+msgstr "Synaptische Verbindung ermöglicht direkte Verbindung zwischen Mensch und Maschine"
 
 #: po/custom/fromJson.txt:1284
 msgid "Synaptic link data analysis"
@@ -9016,11 +9011,11 @@ msgstr "Analyse der synaptischen Verbindung Mk3"
 # Ist die Frage: Störtechnologie, die syn. Verb. nutzt oder die dagegen eingesetzt wird -Kreuvf
 #: po/custom/fromJson.txt:1288
 msgid "Synaptic Link Scrambler technology"
-msgstr "Störtechnologie gegen synaptische Verbindungen"
+msgstr "Störtechnologie gegen synaptische Verbindung"
 
 #: po/custom/fromJson.txt:1289
 msgid "Synaptic Link technology breakthrough"
-msgstr "Technologischer Durchbruch bei synaptischen Verbindungen"
+msgstr "Technologischer Durchbruch bei synaptischer Verbindung"
 
 #: po/custom/fromJson.txt:1290
 msgid "Systems Research Completed"
@@ -9044,11 +9039,11 @@ msgstr "Tank Killer Mantis Hover"
 
 #: po/custom/fromJson.txt:1295
 msgid "Tank Killer Mantis Tracks"
-msgstr "Tank Killer Mantis Tracks"
+msgstr "Tank Killer Mantis Ketten"
 
 #: po/custom/fromJson.txt:1296
 msgid "Tank Killer Python Tracks"
-msgstr "Tank Killer Python Tracks"
+msgstr "Tank Killer Python Ketten"
 
 #: po/custom/fromJson.txt:1297
 msgid "Tank Killer Rocket"
@@ -9056,7 +9051,7 @@ msgstr "Tank-Killer-Rakete"
 
 #: po/custom/fromJson.txt:1298
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Tank Killer Vengeance Tracks"
+msgstr "Tank Killer Vengeance Ketten"
 
 #: po/custom/fromJson.txt:1299
 msgid "Tank Traps"
@@ -9586,7 +9581,7 @@ msgstr "VTOL-Pulslaser"
 
 #: po/custom/fromJson.txt:1444
 msgid "VTOL Radar Tower"
-msgstr "VTOL-Schlagturm"
+msgstr "VTOL-Radarturm"
 
 #: po/custom/fromJson.txt:1445
 msgid "VTOL Rail Gun"
@@ -10126,7 +10121,7 @@ msgstr "Synchronisierung verloren"
 #: src/display3d.cpp:1869
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr ""
+msgstr "Setze Zoom auf %.0f"
 
 #: src/display.cpp:1519
 msgid "Cannot Build. Oil Resource Burning."
@@ -10345,9 +10340,8 @@ msgid "Video Options"
 msgstr "Videoeinstellungen"
 
 #: src/frontend.cpp:658
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "Audioeinstellungen"
+msgstr "Audio- und Zoomeinstellungen"
 
 #: src/frontend.cpp:659
 msgid "Mouse Options"
@@ -10417,12 +10411,11 @@ msgstr "Fest"
 
 #: src/frontend.cpp:748
 msgid "Instant"
-msgstr ""
+msgstr "Sofort"
 
 #: src/frontend.cpp:748
-#, fuzzy
 msgid "Tracked"
-msgstr "Ketten"
+msgstr "Sanft"
 
 #: src/frontend.cpp:761
 msgid "Video Playback"
@@ -10445,9 +10438,8 @@ msgid "Radar"
 msgstr "Radar"
 
 #: src/frontend.cpp:783
-#, fuzzy
 msgid "Radar Jump"
-msgstr "Radar"
+msgstr "Minikartensprung"
 
 #: src/frontend.cpp:787
 msgid "GRAPHICS OPTIONS"
@@ -10469,23 +10461,20 @@ msgid "Music Volume"
 msgstr "Musiklautstärke"
 
 #: src/frontend.cpp:901
-#, fuzzy
 msgid "Map Zoom"
-msgstr "Kartenname"
+msgstr "Spielfeldzoom"
 
 #: src/frontend.cpp:905
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "Spielfeldzoomrate"
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Radar Zoom"
-msgstr "Radar"
+msgstr "Minikartenzoom"
 
 #: src/frontend.cpp:916
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "AUDIOOPTIONEN"
+msgstr "AUDIO- UND ZOOMEINSTELLUNGEN"
 
 #: src/frontend.cpp:1012
 msgid "Windowed"
@@ -10493,35 +10482,31 @@ msgstr "Fenster"
 
 #: src/frontend.cpp:1029
 msgid "Graphics Mode*"
-msgstr "Grafikmodus*"
+msgstr "Darstellungsmodus*"
 
 #: src/frontend.cpp:1029
-#, fuzzy
 msgid "Graphics Mode"
-msgstr "Grafikmodus*"
+msgstr "Darstellungsmodus"
 
 #: src/frontend.cpp:1034
 msgid "Resolution*"
 msgstr "Auflösung*"
 
 #: src/frontend.cpp:1034
-#, fuzzy
 msgid "Resolution"
-msgstr "Auflösung*"
+msgstr "Auflösung"
 
 #: src/frontend.cpp:1039
-#, fuzzy
 msgid "Display Scale*"
-msgstr "Zeige Darstellungsoptionen"
+msgstr "Anzeigemaßstab*"
 
 #: src/frontend.cpp:1039
-#, fuzzy
 msgid "Display Scale"
-msgstr "Zeige Darstellungsoptionen"
+msgstr "Anzeigemaßstab"
 
 #: src/frontend.cpp:1083
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Sie können die Auflösung durch bloße Größenänderungen des Fensters verändern. (Versuchen Sie eine Ecke/Kante zu ziehen.)"
 
 #: src/frontend.cpp:1115
 msgid "* Takes effect on game restart"
@@ -10536,13 +10521,12 @@ msgid "Vertical sync"
 msgstr "Vertikale Synchronisation"
 
 #: src/frontend.cpp:1135
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "Italienisch"
+msgstr "Antialiasing*"
 
 #: src/frontend.cpp:1141
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Warnung: Antialiasing cann Abstürze versuchen, insbesondere bei Werten > 16"
 
 #: src/frontend.cpp:1152
 msgid "VIDEO OPTIONS"
@@ -10558,17 +10542,15 @@ msgstr "Rechte Maustaste"
 
 #: src/frontend.cpp:1451
 msgid "Map/Radar Zoom"
-msgstr ""
+msgstr "Karten-/Minikartenzoom"
 
 #: src/frontend.cpp:1452
-#, fuzzy
 msgid "Game Speed"
-msgstr "Spielgeschwindigkeit zurückgesetzt"
+msgstr "Spielgeschwindigkeit"
 
 #: src/frontend.cpp:1453
-#, fuzzy
 msgid "Camera Pitch"
-msgstr "Neigung zurücksetzen"
+msgstr "Kameraneigung"
 
 #: src/frontend.cpp:1468
 msgid "Reverse Rotation"
@@ -10591,9 +10573,8 @@ msgid "Colored Cursors"
 msgstr "Bunte Mauszeiger"
 
 #: src/frontend.cpp:1490
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Reiter nach links durchschalten"
+msgstr "Scroll-Wirkung"
 
 #: src/frontend.cpp:1494
 msgid "MOUSE OPTIONS"
@@ -10638,9 +10619,8 @@ msgstr "Kampagnenschwierigkeitsgrad"
 
 #: src/frontend.cpp:1613
 #: src/frontend.cpp:1678
-#, fuzzy
 msgid "Camera Speed"
-msgstr "Wassergeschwindigkeit"
+msgstr "Kamerageschwindigkeit"
 
 #: src/frontend.cpp:1617
 #: src/frontend.cpp:1674
@@ -10751,9 +10731,8 @@ msgstr "WARNUNG: Sie sind Spielleiter. Wenn Sie das Spiel verlassen, endet es f�
 
 #: src/ingameop.cpp:127
 #: src/ingameop.cpp:229
-#, fuzzy
 msgid "Host Quit"
-msgstr "Beenden"
+msgstr "Abbruch durch Spielleiter"
 
 #: src/ingameop.cpp:131
 #: src/ingameop.cpp:233
@@ -11057,7 +11036,7 @@ msgstr "Nebel aus"
 #: src/keybind.cpp:926
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "Setze Minikartenzoom auf %u"
 
 #: src/keybind.cpp:1232
 #, c-format
@@ -12232,9 +12211,8 @@ msgid "Connecting to the lobby server..."
 msgstr "Verbinde zum Lobbyserver..."
 
 #: src/multiint.cpp:3082
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Spielname"
+msgstr "Spielname aktualisiert."
 
 #: src/multiint.cpp:3195
 #, c-format
@@ -12266,7 +12244,7 @@ msgstr "Der Spielleiter startet das Spiel"
 
 #: src/multiint.cpp:3877
 msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
+msgstr "Wechsel auf Karte ohne ausreichend Plätze für alle Spieler nicht möglich."
 
 #: src/multiint.cpp:4087
 msgid "UPnP has been enabled."
@@ -12866,9 +12844,9 @@ msgstr " - DEBUG"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Version %s,%s Erstellt:%s%s"
+msgstr "Version: %s,%s Erstellt: %s%s"
 
 #~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
 #~ msgstr "Counter-battery-Feuer hält an bis der feindliche Sensor vernichtet ist"
