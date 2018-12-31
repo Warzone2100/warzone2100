@@ -84,7 +84,7 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       add_custom_command(
          OUTPUT "${_gmoFile}"
          COMMAND ${CMAKE_COMMAND} -E make_directory ${_gmoDirectory}
-         COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} -o ${_gmoFile} ${_updatedPoFile}
+         COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} -c --statistics -o ${_gmoFile} ${_updatedPoFile}
          DEPENDS "${_absPotFile}" "${_updatedPoFile}"
          VERBATIM
       )
