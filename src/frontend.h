@@ -159,6 +159,7 @@ enum
 	FRONTEND_BOTFORM,
 	FRONTEND_LOGO,
 	FRONTEND_SIDETEXT,					// sideways text
+	FRONTEND_MULTILINE_SIDETEXT,				// sideways text
 	FRONTEND_SIDETEXT1,					// sideways text
 	FRONTEND_SIDETEXT2,					// sideways text
 	FRONTEND_SIDETEXT3,					// sideways text
