@@ -921,8 +921,20 @@ static bool startAudioAndZoomOptionsMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	//add some text down the side of the form
-	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("AUDIO / ZOOM OPTIONS"));
-
+	// TRANSLATORS: "AUDIO" options determine the volume of game sounds.
+	// "OPTIONS" means "SETTINGS".
+	// To break this message into two lines, you can use the delimiter "\n",
+	// e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
+	WzString messageString = WzString::fromUtf8(_("AUDIO / ZOOM OPTIONS"));
+	std::vector<WzString> messageStringLines = messageString.split("\n");
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, messageStringLines[0].toUtf8().c_str());
+	// show a second sidetext line if the translation requires it
+	if (messageStringLines.size() > 1)
+	{
+		messageString.remove(0, messageStringLines[0].length() + 1);
+		addSideText(FRONTEND_MULTILINE_SIDETEXT, FRONTEND_SIDEX + 22, \
+		FRONTEND_SIDEY, messageString.toUtf8().c_str());
+	}
 
 	return true;
 }
