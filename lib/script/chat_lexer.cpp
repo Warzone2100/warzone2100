@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -739,7 +739,7 @@ char *chat_text;
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2006-2008  Roman
-	Copyright (C) 2006-2012  Warzone 2100 Project
+	Copyright (C) 2006-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -2538,4 +2538,3 @@ int chat_lex_destroy(void)
 	return 0;
 }
 #endif
-
