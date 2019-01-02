@@ -31,7 +31,7 @@ list(APPEND wz2100_doc_FILES
 # Main documentation
 
 set(SKIPPED_DOC_GENERATION FALSE)
-find_package(Asciidoctor)
+find_package(Asciidoctor 1.5.3) # 1.5.3 adds built-in manpage backend; 1.5.1 adds "-S flag in cli recognizes safe mode name as lowercase string"
 if(NOT Asciidoctor_FOUND)
 	find_package(A2X)
 	if(NOT A2X_FOUND)
@@ -91,6 +91,12 @@ set(doc_IMAGES
 if(Asciidoctor_FOUND)
 	# Prefer Asciidoctor if it's available
 
+	set(_asciidoctor_option_failurelevel)
+	if((Asciidoctor_VERSION VERSION_GREATER "1.5.7") OR (Asciidoctor_VERSION VERSION_EQUAL "1.5.7"))
+		# Asciidoctor 1.5.7+ supports the "--failure-level" CLI option
+		set(_asciidoctor_option_failurelevel "--failure-level=ERROR")
+	endif()
+
 	configure_file("quickstartguide.asciidoc" "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc" COPYONLY)
 
 	# Quickstart Guide - HTML format
@@ -98,7 +104,7 @@ if(Asciidoctor_FOUND)
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
 			-S server
-			--failure-level=ERROR
+			${_asciidoctor_option_failurelevel}
 			-B ${CMAKE_CURRENT_BINARY_DIR}
 			-b html5
 			-D ${CMAKE_CURRENT_BINARY_DIR}
@@ -114,7 +120,7 @@ if(Asciidoctor_FOUND)
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
 			-S server
-			--failure-level=ERROR
+			${_asciidoctor_option_failurelevel}
 			-B ${CMAKE_CURRENT_BINARY_DIR}
 			-b html5
 			-D ${CMAKE_CURRENT_BINARY_DIR}
@@ -127,7 +133,7 @@ if(Asciidoctor_FOUND)
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
 			-S server
-			--failure-level=ERROR
+			${_asciidoctor_option_failurelevel}
 			-B ${CMAKE_CURRENT_BINARY_DIR}
 			-b manpage
 			-D ${CMAKE_CURRENT_BINARY_DIR}
@@ -135,6 +141,8 @@ if(Asciidoctor_FOUND)
 			${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc
 		VERBATIM
 	)
+
+	unset(_asciidoctor_option_failurelevel)
 
 elseif(A2X_FOUND)
 
