@@ -1978,7 +1978,7 @@ static bool pickupOilDrum(int toPlayer, int fromPlayer)
 
 	if (toPlayer == selectedPlayer)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
+		CONPRINTF(_("You found %u power in an oil drum."), OILDRUM_POWER);
 	}
 
 	return true;

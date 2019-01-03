@@ -1167,9 +1167,9 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward
-			CONPRINTF(ConsoleString, (ConsoleString, "%s :- %s",
+			CONPRINTF("%s :- %s",
 			                          _("Research Award"),
-			                          getName(&asResearch[rewardID])));
+			                          getName(&asResearch[rewardID]));
 		}
 	}
 }

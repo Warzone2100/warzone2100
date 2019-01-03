@@ -260,7 +260,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Deal with score increase/decrease and messages to the player
 		if (psDroid->player == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Unit Lost!")));
+			CONPRINTF("%s", _("Unit Lost!"));
 			scoreUpdateVar(WD_UNITS_LOST);
 			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED, UNIT_LOST_DELAY,
 			                            psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
@@ -1937,7 +1937,7 @@ void	groupConsoleInformOfSelection(UDWORD groupNumber)
 {
 	unsigned int num_selected = selNumSelected(selectedPlayer);
 
-	CONPRINTF(ConsoleString, (ConsoleString, ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected));
+	CONPRINTF(ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected);
 }
 
 void	groupConsoleInformOfCreation(UDWORD groupNumber)
@@ -1946,7 +1946,7 @@ void	groupConsoleInformOfCreation(UDWORD groupNumber)
 	{
 		unsigned int num_selected = selNumSelected(selectedPlayer);
 
-		CONPRINTF(ConsoleString, (ConsoleString, ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber));
+		CONPRINTF(ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber);
 	}
 
 }
@@ -1957,11 +1957,11 @@ void	groupConsoleInformOfCentering(UDWORD groupNumber)
 
 	if (!getWarCamStatus())
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected));
+		CONPRINTF(ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected));
+		CONPRINTF(ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
 }
 
@@ -2997,7 +2997,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 	{
 		if (to == selectedPlayer || psD->player == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Unit transfer failed -- unit limits exceeded")));
+			CONPRINTF("%s", _("Unit transfer failed -- unit limits exceeded"));
 		}
 		return nullptr;
 	}
