@@ -2004,8 +2004,13 @@ static void fillTimeDisplay(WzString &text, UDWORD time, bool bHours)
 	else
 	{
 		time_t secs = time / GAME_TICKS_PER_SEC;
-		struct tm *tmp = gmtime(&secs);
-		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", tmp);
+		struct tm tmp;
+#if defined(WZ_OS_WIN)
+		gmtime_s(&tmp, &secs);
+#else
+		gmtime_r(&secs, &tmp);
+#endif
+		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", &tmp);
 	}
 	text = WzString::fromUtf8(psText);
 }
