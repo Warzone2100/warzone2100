@@ -558,7 +558,7 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 		break;
 	}
 
-	CONPRINTF(ConsoleString, (ConsoleString, ngettext("%u unit selected", "%u units selected", retVal), retVal));
+	CONPRINTF(ngettext("%u unit selected", "%u units selected", retVal), retVal);
 
 	return retVal;
 }

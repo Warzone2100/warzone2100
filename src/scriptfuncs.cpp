@@ -8996,8 +8996,8 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 		if (selectedPlayer == forPlayer)
 		{
 			// show console message
-			CONPRINTF(ConsoleString, (ConsoleString, _("Beacon received from %s!"),
-			                          getPlayerName(sender)));
+			CONPRINTF(_("Beacon received from %s!"),
+			                          getPlayerName(sender));
 
 			// play audio
 			audio_QueueTrackPos(ID_SOUND_BEACON, locX, locY, 0);

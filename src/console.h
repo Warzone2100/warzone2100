@@ -74,17 +74,19 @@ void console(const char *pFormat, ...); /// Print always to the ingame console
 
 /**
  Usage:
-	CONPRINTF(StringPointer,(StringPointer,"format",data));
-	StringPointer should always be ConsoleString.
+	CONPRINTF("format", data);
 	NOTE: This class of messages are NOT saved in the history
 	logs.  These are "one shot" type of messages.
 
  eg.
-	CONPRINTF(ConsoleString,(ConsoleString,"Hello %d",123));
+	CONPRINTF("Hello %d", 123);
 */
-#define CONPRINTF(s,x) \
-	sprintf x; \
-	addConsoleMessage(s, DEFAULT_JUSTIFY, INFO_MESSAGE)
+template <typename... P>
+static inline void CONPRINTF(P &&... params)
+{
+	snprintf(ConsoleString, sizeof(ConsoleString), std::forward<P>(params)...);
+	addConsoleMessage(ConsoleString, DEFAULT_JUSTIFY, INFO_MESSAGE);
+}
 
 
 #include <functional>

@@ -4280,7 +4280,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	cache.wzText_ModNames.render(x + GAMES_MODNAME_START, y + 24, textColor);
 
 	// draw version string
-	sprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
+	ssprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
 	cache.wzText_VersionString.setTruncatableText(name, font_small, (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4));
 	cache.wzText_VersionString.render(x + GAMES_GAMENAME_START + 6, y + 24, textColor);
 

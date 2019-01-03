@@ -359,7 +359,7 @@ bool	processWarCam()
 			{
 				if (getWarCamStatus())
 				{
-					CONPRINTF(ConsoleString, (ConsoleString, "WZ/CAM  - %s", droidGetName((DROID *)foundTarget)));
+					CONPRINTF("WZ/CAM  - %s", droidGetName((DROID *)foundTarget));
 				}
 			}
 		}

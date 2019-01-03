@@ -753,11 +753,11 @@ static void keyShowMapping(KEY_MAPPING *psMapping)
 	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
 	if (onlySub)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s - %s", asciiSub, _(psMapping->name.c_str())));
+		CONPRINTF("%s - %s", asciiSub, _(psMapping->name.c_str()));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s and %s - %s", asciiMeta, asciiSub, _(psMapping->name.c_str())));
+		CONPRINTF("%s and %s - %s", asciiMeta, asciiSub, _(psMapping->name.c_str()));
 	}
 	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
 }
