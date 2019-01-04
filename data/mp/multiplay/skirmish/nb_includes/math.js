@@ -138,7 +138,7 @@ _global.naiveFindClusters = function(list, size) {
 			ret.yav[n] = y;
 			if (1 > ret.maxCount) {
 				ret.maxIdx = n;
-				ret.maxCount = 1
+				ret.maxCount = 1;
 			}
 		}
 	}

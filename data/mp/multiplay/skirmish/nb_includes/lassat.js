@@ -11,7 +11,7 @@
 
 // pick a target and fire
 _global.fireLassat = function(structure) {
-	list = [];
+	var list = [];
 	enumLivingPlayers().filter(isEnemy).forEach(function(i) {
 		list = list.concat(enumStruct(i), enumDroid(i));
 	});

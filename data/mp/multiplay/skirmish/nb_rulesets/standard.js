@@ -154,7 +154,7 @@ const classResearch = {
 			"R-Vehicle-Armor-Heat09",
 		],
 	],
-}
+};
 
 // NOTE: Please don't put hover propulsion into the ground list, etc.!
 // NOTE: Hover propulsion should be placed AFTER ground propulsion!

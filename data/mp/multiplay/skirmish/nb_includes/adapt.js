@@ -136,7 +136,7 @@ function canReachBy(scope, location) {
 function threatensBase(droid) {
 	if (isAlly(droid.player))
 		return false;
-	return canReachFromBase(droid.propulsion, droid.x, droid.y);
+	return canReachFromBase(droid.propulsion, droid);
 }
 
 // count target structures reachable by land
@@ -431,13 +431,17 @@ _global.chooseObjectType = function() {
 		var our = groupOurs(), their = groupTheirs();
 		// behaviour specific for a turtle AI
 		if (personality.defensiveness === 100)
+		{
 			if (iHaveVtol() && withChance(personality.vtolness) && adaptVote(
 				[ our.obj[OBJTYPE.DEFS], our.obj[OBJTYPE.VTOL] ],
 				[ their.role[ROLE.AA], their.role[ROLE.AT] + their.role[ROLE.AP] + 2 * their.role[ROLE.AS] ]
 			) === 1)
-			return OBJTYPE.VTOL;
-		else
-			return OBJTYPE.DEFS;
+			{
+				return OBJTYPE.VTOL;
+			}
+			else
+				return OBJTYPE.DEFS;
+		}
 		// behaviour of a generic AI
 		if (withChance(personality.defensiveness) && adaptVote(
 				[ our.obj[OBJTYPE.TANK] + our.obj[OBJTYPE.BORG] + our.obj[OBJTYPE.VTOL], our.obj[OBJTYPE.DEFS] ],

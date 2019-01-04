@@ -386,7 +386,7 @@ _global.rebalanceGroups = function() {
 			for (var i = 1; i < ret.length; ++i) {
 				var list = enumGroup(ret[i]);
 				for (var j = 0; j < list.length; ++j) {
-					target = findTarget(ret[0]);
+					var target = findTarget(ret[0]);
 					if (defined(target))
 						if (droidCanReach(list[j], target.x, target.y)) {
 							groupAdd(ret[0], list[j]);

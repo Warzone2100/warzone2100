@@ -76,7 +76,7 @@ function chooseBodyWeaponPair(bodies, weapons) {
 
 function produceTank(factory) {
     // TODO: needs refactoring. Make some more clever sorting.
-    var bodies = []
+    var bodies = [];
     if (chooseBodyClass() === BODYCLASS.KINETIC) {
         bodies = bodies.concat(
 			filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.KINETIC),
@@ -144,7 +144,7 @@ _global.checkTruckProduction = function() {
 	var trucks = enumTrucks();
 	var hoverTrucksCount = trucks.filter(function(droid) { return isHoverPropulsion(droid.propulsion); }).length;
 	if (iHaveHover() && hoverTrucksCount < personality.minHoverTrucks) {
-		groundTrucks = trucks.filter(function(droid) { return !isHoverPropulsion(droid.propulsion); });
+		var groundTrucks = trucks.filter(function(droid) { return !isHoverPropulsion(droid.propulsion); });
 		if (groundTrucks.length > personality.minTrucks) {
 			groundTrucks.length -= personality.minTrucks;
 			groundTrucks.forEach(function(droid) { orderDroid(droid, DORDER_RECYCLE); });

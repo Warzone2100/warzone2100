@@ -126,7 +126,7 @@ function eventStartLevel()
 {
 	var startpos = getObject("startPosition");
 	var limboLZ = getObject("limboDroidLZ");
-	var reunited = false;
+	reunited = false;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D1", {
 		callback: "betaAlive"
