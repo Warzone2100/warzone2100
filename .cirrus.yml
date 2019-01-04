@@ -1,0 +1,23 @@
+# CirrusCI - test builds on FreeBSD instances
+# See: https://cirrus-ci.org; https://cirrus-ci.org/guide/FreeBSD/
+
+freebsd_build_task:
+
+  freebsd_instance:
+    # See the list of available FreeBSD images here: https://cirrus-ci.org/guide/FreeBSD/
+    matrix:
+      image: freebsd-12-0-release-amd64
+      image: freebsd-11-2-release-amd64
+#    cpu: 4
+#    memory: 8G
+
+  install_script: pkg install -y git cmake ninja p7zip gettext qt5-core qt5-qmake qt5-buildtools qt5-widgets qt5-script png sdl2 openal-soft physfs libvorbis libtheora glew freetype2 harfbuzz rubygem-asciidoctor
+
+  init_git_submodules_script: git submodule update --init --recursive
+
+#  configure_debug_script: cmake '-H.' -Bbuild/debug -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
+#  build_debug_script: cmake --build build/debug
+#  clear_debug_build_script: rm -rf build/debug
+
+  configure_release_script: cmake '-H.' -Bbuild/release -DCMAKE_BUILD_TYPE=RelWithDebInfo -G"Ninja"
+  build_release_script: cmake --build build/release
