@@ -7,7 +7,6 @@ EXTRA_DIST = \
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
-	config-macosx.h \
 	crc.h \
 	cursors.h \
 	debug.h \
