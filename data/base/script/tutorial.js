@@ -87,10 +87,6 @@ function grantStartTech()
 	const TECH = [
 		"R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels"
 	];
-	const STRUCTS = [
-		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
-		"A0ResearchFacility", "A0LightFactory"
-	];
 
 	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
 }

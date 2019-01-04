@@ -80,10 +80,12 @@ _global.guessWeaponRole = function (name) {
 function guessWeaponMicro(name) {
 	function uncached() {
 		for (var stat in weaponStats)
+		{
 			if (weaponStats[stat].weapons.someProperty("stat", name))
 				return weaponStats[stat].micro;
 			if (weaponStats[stat].templates.some(function(i) { return i.weapons.indexOf(name) > -1; }))
 				return weaponStats[stat].micro;
+		}
 	}
 	return cached(uncached, Infinity, name);
 }

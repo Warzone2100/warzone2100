@@ -3126,7 +3126,7 @@ function __camVictoryOffworld()
 				__camTriggerLastAttack();
 			}
 
-			if (!destroyAll || (forceLZ && destroyAll && !enemyLen))
+			if (!destroyAll || (forceLZ && !enemyLen))
 			{
 				if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
 				{
