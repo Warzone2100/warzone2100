@@ -111,7 +111,20 @@ static void poptPrintHelp(poptContext ctx, FILE *output, bool show_all)
 			sstrcat(txt, ctx->table[i].argDescrip);
 		}
 
-		fprintf(output, "%-40s", txt);
+		// calculate number of terminal columns required to print
+		// for languages with multibyte characters
+		const size_t txtSize = strlen(txt) + 1;
+		int txtOffset = (int) mbstowcs(nullptr, txt, txtSize) + 1 - txtSize;
+		// CJK characters take up two columns
+		char language[3]; // stores ISO 639-1 code
+		strlcpy(language, setlocale(LC_MESSAGES, nullptr), sizeof(language));
+		if (strcmp(language, "zh") == 0 || strcmp(language, "ko") == 0)
+		{
+			txtOffset /= 2;
+		}
+
+		fprintf(output, "%-*s", 40 - txtOffset, txt);
+
 		if (ctx->table[i].descrip)
 		{
 			fprintf(output, "%s", ctx->table[i].descrip);
