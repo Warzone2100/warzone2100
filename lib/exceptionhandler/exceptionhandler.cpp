@@ -17,6 +17,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#define _WITH_DPRINTF  // Required for FreeBSD < 12 (?) for dprintf(); Must be before any include of stdio.h
+
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "exceptionhandler.h"
