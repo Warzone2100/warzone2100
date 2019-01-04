@@ -692,8 +692,7 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = ./lib/framework/config-macosx.h \
-                         ./lib/sqlite3/sqlite3.c \
+EXCLUDE                = ./lib/sqlite3/sqlite3.c \
                          ./lib/sqlite3/sqlite3.h \
                          ./lib/sqlite3/sqlite3ext.h \
                          ./lib/ivis_opengl/GLee.c \
