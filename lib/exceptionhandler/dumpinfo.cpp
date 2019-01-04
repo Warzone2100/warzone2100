@@ -31,6 +31,7 @@
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/wzapp.h"
+#include "lib/framework/i18n.h" // required to print build date in ISO 8601
 
 #if defined(WZ_OS_UNIX)
 # include <sys/utsname.h>
@@ -486,10 +487,9 @@ static void createHeader(int const argc, const char * const *argv, const char *p
 	}
 
 	os << endl;
-
 	os << "Version: "     << packageVersion << endl
 	   << "Distributor: " PACKAGE_DISTRIBUTOR << endl
-	   << "Compiled on: " __DATE__ " " __TIME__ << endl
+	   << "Compiled on: " << getCompileDate() << " " << __TIME__ << endl
 	   << "Compiled by: "
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG)
 	   << "GCC " __VERSION__ << endl

@@ -310,7 +310,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 		timeinfo = localtime(&savetime);
-		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%x %X", timeinfo);
+		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", timeinfo);
 
 		/* Set the button-text */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension

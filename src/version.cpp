@@ -124,11 +124,11 @@ const char *version_getFormattedVersionString()
 #else
 		const char *build_type = "";
 #endif
-
 		// Construct the version string
 		// TRANSLATORS: This string looks as follows when expanded.
-		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-		snprintf(versionString, MAX_STR_LENGTH, _("Version: %s,%s Built: %s%s"), version_getVersionString(), wc_state, __DATE__, build_type);
+		// "Version: <version name/number>, <working copy state>,
+		// Built: <BUILD DATE><BUILD TYPE>"
+		snprintf(versionString, MAX_STR_LENGTH, _("Version: %s,%s Built: %s%s"), version_getVersionString(), wc_state, getCompileDate(), build_type);
 	}
 
 	return versionString;

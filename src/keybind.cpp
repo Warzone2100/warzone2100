@@ -476,7 +476,7 @@ void kf_Unselectable()
 ///* Prints out the date and time of the build of the game */
 void	kf_BuildInfo()
 {
-	CONPRINTF("Built at %s on %s", __TIME__, __DATE__);
+	CONPRINTF("Built: %s %s", getCompileDate(), __TIME__);
 }
 
 // --------------------------------------------------------------------------
@@ -651,7 +651,7 @@ void	kf_FrameRate()
 		                          NETgetStatistic(NetStatisticPackets, false));
 	}
 	gameStats = !gameStats;
-	CONPRINTF("Built at %s on %s", __TIME__, __DATE__);
+	CONPRINTF("Built: %s %s", getCompileDate(), __TIME__);
 }
 
 // --------------------------------------------------------------------------
