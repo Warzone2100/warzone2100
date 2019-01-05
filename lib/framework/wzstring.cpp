@@ -17,13 +17,13 @@
  *	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include "frame.h"
 #include "wzstring.h"
 #include <algorithm>
 #include <cctype>
 #include <sstream>
 #include <iomanip>
 #include <utfcpp/source/utf8.h>
-#include "frame.h"
 #include <utf8proc/utf8proc.h>
 
 WzUniCodepoint WzUniCodepoint::fromASCII(unsigned char charLiteral)

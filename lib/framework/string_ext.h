@@ -26,6 +26,10 @@
 #include <stddef.h>
 #include <assert.h>
 
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
+
 
 /*!
  * On MSVC, in order to squelch tons of 'memory leaks' we set the allocator
