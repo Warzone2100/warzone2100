@@ -6151,8 +6151,7 @@ bool loadSaveResearch(const char *pFileName)
 	{
 		ini.beginGroup(list[i]);
 		bool found = false;
-		char name[MAX_SAVE_NAME_SIZE];
-		sstrcpy(name, ini.value("name").toString().toUtf8().constData());
+		WzString name = ini.value("name").toWzString();
 		int statInc;
 		for (statInc = 0; statInc < asResearch.size(); statInc++)
 		{
@@ -6173,12 +6172,12 @@ bool loadSaveResearch(const char *pFileName)
 		auto researchedList = ini.value("researched").jsonValue();
 		auto possiblesList = ini.value("possible").jsonValue();
 		auto pointsList = ini.value("currentPoints").jsonValue();
-		ASSERT(researchedList.is_array(), "Bad (non-array) researched list for %s", name);
-		ASSERT(possiblesList.is_array(), "Bad (non-array) possible list for %s", name);
-		ASSERT(pointsList.is_array(), "Bad (non-array) points list for %s", name);
-		ASSERT(researchedList.size() == players, "Bad researched list for %s", name);
-		ASSERT(possiblesList.size() == players, "Bad possible list for %s", name);
-		ASSERT(pointsList.size() == players, "Bad points list for %s", name);
+		ASSERT(researchedList.is_array(), "Bad (non-array) researched list for %s", name.toUtf8().c_str());
+		ASSERT(possiblesList.is_array(), "Bad (non-array) possible list for %s", name.toUtf8().c_str());
+		ASSERT(pointsList.is_array(), "Bad (non-array) points list for %s", name.toUtf8().c_str());
+		ASSERT(researchedList.size() == players, "Bad researched list for %s", name.toUtf8().c_str());
+		ASSERT(possiblesList.size() == players, "Bad possible list for %s", name.toUtf8().c_str());
+		ASSERT(pointsList.size() == players, "Bad points list for %s", name.toUtf8().c_str());
 		for (int plr = 0; plr < players; plr++)
 		{
 			PLAYER_RESEARCH *psPlRes;

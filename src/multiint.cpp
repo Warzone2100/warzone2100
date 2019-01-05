@@ -3923,14 +3923,14 @@ static bool loadSettings(const WzString &filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 	ini.beginGroup("challenge");
-	sstrcpy(game.map, ini.value("map", game.map).toString().toUtf8().constData());
+	sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
 	game.hash = levGetMapNameHash(game.map);
 	game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
 	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 	game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
 	game.power = ini.value("powerLevel", game.power).toInt();
 	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
-	sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
+	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
 	ini.endGroup();
 	return true;

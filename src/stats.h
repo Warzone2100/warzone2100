@@ -186,7 +186,7 @@ bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
-bool getBodySize(const char *pSize, BODY_SIZE *pStore);
+bool getBodySize(const WzString &size, BODY_SIZE *pStore);
 
 /**
  * Determines the propulsion type indicated by the @c typeName string passed
@@ -255,7 +255,7 @@ WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 
 void statsInitVars();
 
-bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect);
+bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect);
 bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass);
 
 /* Wrappers */
