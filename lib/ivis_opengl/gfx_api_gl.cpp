@@ -17,12 +17,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "lib/framework/frame.h"
 #include "gfx_api.h"
 
 #include <GL/glew.h>
 #include <algorithm>
 #include <cmath>
-#include "lib/framework/frame.h"
 
 static GLenum to_gl(const gfx_api::pixel_format& format)
 {

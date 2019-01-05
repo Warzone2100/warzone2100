@@ -17,9 +17,9 @@
  *	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include "frame.h"
 #include "wzpaths.h"
 
-#include "frame.h"
 #include <physfs.h>
 #include <vector>
 
