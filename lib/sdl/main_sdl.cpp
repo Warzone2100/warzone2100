@@ -1355,7 +1355,7 @@ void wzMain(int &argc, char **argv)
 	// For now, just initialize QApplication here
 	// We currently rely on side-effects of QApplication's initialization on Windows (such as how DPI-awareness is enabled)
 	// TODO: Implement proper Win32 API calls to replicate Qt's preparation for DPI awareness (or set in the manifest?)
-	appPtr = new QApplication(copied_argc, copied_argv);
+	appPtr = new QApplication(argc, argv);
 #endif
 }
 
