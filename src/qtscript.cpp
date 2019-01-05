@@ -801,7 +801,7 @@ bool loadScriptStates(const char *filename)
 	{
 		ini.beginGroup(list[i]);
 		int player = ini.value("me").toInt();
-		QString scriptName = ini.value("scriptName").toString();
+		QString scriptName = QString::fromUtf8(ini.value("scriptName").toWzString().toUtf8().c_str());
 		QScriptEngine *engine = findEngineForPlayer(player, scriptName);
 		if (engine && list[i].startsWith("triggers_"))
 		{
@@ -812,7 +812,7 @@ bool loadScriptStates(const char *filename)
 			node.engine = engine;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
 			      i, node.player, scriptName.toUtf8().constData());
-			node.function = ini.value("function").toString();
+			node.function = QString::fromUtf8(ini.value("function").toWzString().toUtf8().c_str());
 			node.baseobj = ini.value("baseobj", -1).toInt();
 			node.type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
 			timers.push_back(node);

@@ -173,7 +173,7 @@ QScriptValue mapJsonToQScriptValue(QScriptEngine *engine, const nlohmann::json &
 		case json::value_t::number_integer: return engine->toScriptValue(instance.get<int>());
 		case json::value_t::number_unsigned: return engine->toScriptValue(instance.get<unsigned>());
 		case json::value_t::number_float: return engine->toScriptValue(instance.get<double>());
-		case json::value_t::string	: return engine->toScriptValue(instance.get<QString>());
+		case json::value_t::string	: return engine->toScriptValue(QString::fromUtf8(instance.get<WzString>().toUtf8().c_str()));
 		case json::value_t::array : return mapJsonArrayToQScriptValue(engine, instance, flags);
 		case json::value_t::object : return mapJsonObjectToQScriptValue(engine, instance, flags);
 		case json::value_t::discarded : return QScriptValue::UndefinedValue;
@@ -912,7 +912,7 @@ bool loadLabels(const char *filename)
 	{
 		ini.beginGroup(list[i]);
 		LABEL p;
-		QString label(ini.value("label").toString());
+		QString label(QString::fromUtf8(ini.value("label").toWzString().toUtf8().c_str()));
 		if (labels.contains(label))
 		{
 			debug(LOG_ERROR, "Duplicate label found");
@@ -1000,7 +1000,7 @@ bool writeLabels(const char *filename)
 		{
 			ini.beginGroup("position_" + WzString::number(c[0]++));
 			ini.setVector2i("pos", l.p1);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("triggered", l.triggered);
 			ini.endGroup();
 		}
@@ -1009,7 +1009,7 @@ bool writeLabels(const char *filename)
 			ini.beginGroup("area_" + WzString::number(c[1]++));
 			ini.setVector2i("pos1", l.p1);
 			ini.setVector2i("pos2", l.p2);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("player", l.player);
 			ini.setValue("triggered", l.triggered);
 			ini.setValue("subscriber", l.subscriber);
@@ -1020,7 +1020,7 @@ bool writeLabels(const char *filename)
 			ini.beginGroup("radius_" + WzString::number(c[2]++));
 			ini.setVector2i("pos", l.p1);
 			ini.setValue("radius", l.p2.x);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("player", l.player);
 			ini.setValue("triggered", l.triggered);
 			ini.setValue("subscriber", l.subscriber);
@@ -1036,8 +1036,11 @@ bool writeLabels(const char *filename)
 			{
 				list += QString::number(i);
 			}
-			ini.setValue("members", list);
-			ini.setValue("label", key);
+			std::list<WzString> wzlist;
+			std::transform(list.constBegin(), list.constEnd(), std::back_inserter(wzlist),
+						   [](const QString& qs) -> WzString { return QStringToWzString(qs); });
+			ini.setValue("members", wzlist);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("subscriber", l.subscriber);
 			ini.endGroup();
 		}
@@ -1047,7 +1050,7 @@ bool writeLabels(const char *filename)
 			ini.setValue("id", l.id);
 			ini.setValue("player", l.player);
 			ini.setValue("type", l.type);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("triggered", l.triggered);
 			ini.endGroup();
 		}

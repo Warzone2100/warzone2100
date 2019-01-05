@@ -20,6 +20,10 @@
 #ifndef WZCONFIG_H
 #define WZCONFIG_H
 
+#include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
+#include "lib/framework/wzstring.h"
+
 #if (defined(WZ_OS_WIN) && defined(WZ_CC_MINGW))
 #  if (defined(snprintf) && !defined(_GL_STDIO_H) && defined(_LIBINTL_H))
 // On mingw / MXE builds, libintl's define of snprintf breaks json.hpp
@@ -38,17 +42,10 @@ using json = nlohmann::json;
 #  define snprintf libintl_snprintf
 #endif
 
-#include <QtCore/QStringList>
 #include <physfs.h>
 #include <stdbool.h>
 #include <vector>
-
-// Get platform defines before checking for them.
-// Qt headers MUST come before platform specific stuff!
-#include "lib/framework/frame.h"
-#include "lib/framework/vector.h"
-#include "lib/framework/wzstring.h"
-
+#include <list>
 
 class json_variant {
 	// Wraps a json object and provides conversion methods that conform to older (QVariant) syntax and behavior
@@ -76,8 +73,6 @@ public:
 	float toFloat(bool *ok = nullptr) const;
 	WzString toWzString(bool *ok = nullptr) const;
 	std::vector<WzString> toWzStringList() const;
-	QString toString() const;
-	QStringList toStringList() const;
 
 public:
 	const nlohmann::json& jsonValue() const;
@@ -158,16 +153,6 @@ public:
 };
 
 // Enable JSON support for custom types
-
-// QString
-inline void to_json(json& j, const QString& p) {
-	j = json(p.toUtf8().constData());
-}
-
-inline void from_json(const json& j, QString& p) {
-	std::string str = j.get<std::string>();
-	p = QString::fromUtf8(str.c_str());
-}
 
 // WzString
 inline void to_json(json& j, const WzString& p) {

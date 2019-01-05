@@ -625,7 +625,7 @@ bool loadStructureStrengthModifiers(WzConfig &ini)
 	{
 		WEAPON_EFFECT effectInc;
 		ini.beginGroup(list[i]);
-		if (!getWeaponEffect(list[i].toUtf8().c_str(), &effectInc))
+		if (!getWeaponEffect(list[i], &effectInc))
 		{
 			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().c_str());
 			ini.endGroup();
