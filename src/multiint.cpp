@@ -2851,15 +2851,16 @@ static void addConsoleBox()
 // ////////////////////////////////////////////////////////////////////////////
 static void disableMultiButs()
 {
+
+	// edit box icons.
+	widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
+	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
+
+	// edit boxes
+	widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
+
 	if (!NetPlay.isHost)
 	{
-		// edit box icons.
-		widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
-		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
-		
-		// edit boxes
-		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
-		
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->disable();  // Scavengers.
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->disable();  // camapign subtype.
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->disable();  // pow levels
@@ -3064,7 +3065,7 @@ static void processMultiopWidgets(UDWORD id)
 	PLAYERSTATS playerStats;
 
 	// host, who is setting up the game
-	if (ingame.bHostSetup)
+	if ((ingame.bHostSetup && !bHosted))
 	{
 		switch (id)												// Options buttons
 		{
@@ -3072,15 +3073,6 @@ static void processMultiopWidgets(UDWORD id)
 			sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));
 			removeWildcards(game.name);
 			widgSetString(psWScreen, MULTIOP_GNAME, game.name);
-			
-			if (NetPlay.isHost && NetPlay.bComms)
-			{
-				NETsetLobbyOptField(game.name, NET_LOBBY_OPT_FIELD::GNAME);
-				sendOptions();
-				NETregisterServer(WZ_SERVER_UPDATE);
-			
-				addConsoleMessage(_("Game Name Updated."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-			}
 			break;
 
 		case MULTIOP_GNAME_ICON:
@@ -3103,14 +3095,6 @@ static void processMultiopWidgets(UDWORD id)
 
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
-
-			if (NetPlay.isHost && bHosted && NetPlay.bComms)
-			{
-				sendOptions();
-			
-				NETsetLobbyOptField(game.map, NET_LOBBY_OPT_FIELD::MAPNAME);
-				NETregisterServer(WZ_SERVER_UPDATE);
-			}
 			break;
 
 		case MULTIOP_MAP_PREVIEW:
@@ -3238,14 +3222,6 @@ static void processMultiopWidgets(UDWORD id)
 		setMultiStats(selectedPlayer, playerStats, false);
 		setMultiStats(selectedPlayer, playerStats, true);
 		netPlayersUpdated = true;
-
-		if (NetPlay.isHost && bHosted && NetPlay.bComms)
-		{
-			sendOptions();
-			NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
-			NETregisterServer(WZ_SERVER_UPDATE);
-		}
-
 		break;
 
 	case MULTIOP_PNAME_ICON:
@@ -3863,12 +3839,6 @@ void runMultiOptions()
 				setMultiStats(selectedPlayer, playerStats, false);
 				setMultiStats(selectedPlayer, playerStats, true);
 				netPlayersUpdated = true;
-				if (NetPlay.isHost && bHosted && NetPlay.bComms)
-				{
-					sendOptions();
-					NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
-					NETregisterServer(WZ_SERVER_UPDATE);
-				}
 				break;
 			case MULTIOP_MAP:
 				{
@@ -3895,14 +3865,6 @@ void runMultiOptions()
 
 					widgSetString(psWScreen, MULTIOP_MAP + 1, mapData->pName); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 					addGameOptions();
-					
-					if (NetPlay.isHost && bHosted && NetPlay.bComms && !isHoverPreview)
-					{
-						sendOptions();
-						NETsetLobbyOptField(game.map, NET_LOBBY_OPT_FIELD::MAPNAME);
-						NETregisterServer(WZ_SERVER_UPDATE);
-					}
-
 					break;
 				}
 			default:
