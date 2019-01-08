@@ -41,6 +41,7 @@
 #include <memory>
 #include <thread>
 #include <atomic>
+#include <sodium.h>
 
 #include "netplay.h"
 #include "netlog.h"
@@ -70,6 +71,10 @@
 #include "src/version.h"
 #include "src/loadsave.h"
 #include "src/activity.h"
+
+#if defined (WZ_OS_MAC)
+# include "lib/framework/cocoa_wrapper.h"
+#endif
 
 #if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -2049,6 +2054,129 @@ int NETsendFile(WZFile &file, unsigned player)
 	return (uint64_t)file.pos * 100 / file.size;
 }
 
+bool validateReceivedFile(const WZFile& file)
+{
+	PHYSFS_file *fileHandle = PHYSFS_openRead(file.filename.c_str());
+	ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open downloaded file %s for reading: %s", file.filename.c_str(), WZ_PHYSFS_getLastError());
+
+	PHYSFS_sint64 actualFileSize64 = PHYSFS_fileLength(fileHandle);
+	if (actualFileSize64 < 0)
+	{
+		debug(LOG_ERROR, "Failed to determine file size of the downloaded file!");
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+	if(actualFileSize64 > std::numeric_limits<int32_t>::max())
+	{
+		debug(LOG_ERROR, "Downloaded file is too large!");
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	uint32_t actualFileSize = static_cast<uint32_t>(actualFileSize64);
+	if (actualFileSize != file.size)
+	{
+		debug(LOG_ERROR, "Downloaded map unexpected size! Got %" PRIu32", expected %" PRIu32"!", actualFileSize, file.size);
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	// verify actual downloaded file hash matches expected hash
+
+	Sha256 actualFileHash;
+	crypto_hash_sha256_state state;
+	crypto_hash_sha256_init(&state);
+	size_t bufferSize = std::min<size_t>(actualFileSize, 4 * 1024 * 1024);
+	std::vector<unsigned char> fileChunkBuffer(bufferSize, '\0');
+	PHYSFS_sint64 length_read = 0;
+	do {
+		length_read = WZ_PHYSFS_readBytes(fileHandle, fileChunkBuffer.data(), bufferSize);
+		if (length_read != bufferSize)
+		{
+			if (length_read < 0 || !PHYSFS_eof(fileHandle))
+			{
+				// did not read expected amount, but did not reach end of file - some other error reading the file occurred
+				debug(LOG_ERROR, "Failed to read downloaded file: %s", WZ_PHYSFS_getLastError());
+				PHYSFS_close(fileHandle);
+				return false;
+			}
+		}
+		crypto_hash_sha256_update(&state, fileChunkBuffer.data(), static_cast<unsigned long long>(length_read));
+	} while (length_read == bufferSize);
+	crypto_hash_sha256_final(&state, actualFileHash.bytes);
+	fileChunkBuffer.clear();
+
+	if (actualFileHash != file.hash)
+	{
+		debug(LOG_ERROR, "Downloaded file hash (%s) does not match requested file hash (%s)", actualFileHash.toString().c_str(), file.hash.toString().c_str());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	PHYSFS_close(fileHandle);
+	return true;
+}
+
+bool markAsDownloadedFile(const std::string &filename)
+{
+	// Files are written to the PhysFS writeDir
+	const char * current_writeDir = PHYSFS_getWriteDir();
+	ASSERT(current_writeDir != nullptr, "Failed to get PhysFS writeDir: %s", WZ_PHYSFS_getLastError());
+	std::string fullFilePath = std::string(current_writeDir) + PHYSFS_getDirSeparator() + filename;
+
+#if defined(WZ_OS_WIN)
+	// On Windows:
+	//	- Create the Alternate Data Stream required to set the Internet Zone identifier
+	const wchar_t kWindowsZoneIdentifierADSSuffix[] = L":Zone.Identifier";
+
+	// Convert fullFilePath to UTF-16 wchar_t
+	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, fullFilePath.c_str(), -1, NULL, 0);
+	if (wstr_len <= 0)
+	{
+		debug(LOG_ERROR, "Could not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		return false;
+	}
+	std::vector<wchar_t> wstr_filename(wstr_len, 0);
+	if (MultiByteToWideChar(CP_UTF8, 0, fullFilePath.c_str(), -1, &wstr_filename[0], wstr_len) == 0)
+	{
+		debug(LOG_ERROR, "Could not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		return false;
+	}
+	std::wstring fullFilePathUTF16(wstr_filename.data());
+	fullFilePathUTF16 += kWindowsZoneIdentifierADSSuffix;
+
+	HANDLE hStream = CreateFileW(fullFilePathUTF16.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if(hStream == INVALID_HANDLE_VALUE)
+	{
+		// Failed to open stream
+		debug(LOG_ERROR, "Could not open stream; failed with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		return false;
+	}
+
+	// Set it to "downloaded from the Internet Zone" (ZoneId 3)
+	const char kWindowsZoneIdentifierADSDataInternetZone[] = "[ZoneTransfer]\r\nZoneId=3\r\n";
+	DWORD dwNumberOfBytesWritten;
+	if (WriteFile(hStream, kWindowsZoneIdentifierADSDataInternetZone, strlen(kWindowsZoneIdentifierADSDataInternetZone), &dwNumberOfBytesWritten, NULL) == 0)
+	{
+		debug(LOG_ERROR, "Failed to write to stream with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		CloseHandle(hStream);
+		return false;
+	}
+
+	FlushFileBuffers(hStream);
+	CloseHandle(hStream);
+
+	return true;
+#elif defined (WZ_OS_MAC)
+	// On macOS:
+	//	- Set the quarantine attribute on the file
+	return cocoaSetFileQuarantineAttribute(fullFilePath.c_str());
+#else
+	// Not currently implemented
+#endif
+	return false;
+}
+
 // recv file. it returns % of the file so far recvd.
 int NETrecvFile(NETQUEUE queue)
 {
@@ -2074,12 +2202,61 @@ int NETrecvFile(NETQUEUE queue)
 
 	auto file = std::find_if(NetPlay.wzFiles.begin(), NetPlay.wzFiles.end(), [&](WZFile const &file) { return file.hash == hash; });
 
-	if (file == NetPlay.wzFiles.end())
-	{
-		debug(LOG_WARNING, "Receiving file data we didn't request.");
+	auto sendCancelFileDownload = [](Sha256 &hash) {
 		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_CANCELLED);
 		NETbin(hash.bytes, hash.Bytes);
 		NETend();
+	};
+
+	if (file == NetPlay.wzFiles.end())
+	{
+		debug(LOG_WARNING, "Receiving file data we didn't request.");
+		sendCancelFileDownload(hash);
+		return 100;
+	}
+
+	auto terminateFileDownload = [sendCancelFileDownload](std::vector<WZFile>::iterator &file) {
+		int noError = PHYSFS_close(file->handle);
+		if (noError == 0)
+		{
+			debug(LOG_ERROR, "Could not close file handle after trying to terminate download: %s", WZ_PHYSFS_getLastError());
+		}
+		file->handle = nullptr;
+		sendCancelFileDownload(file->hash);
+		NetPlay.wzFiles.erase(file);
+	};
+
+	//sanity checks
+	if (file->size != size)
+	{
+		if (file->size == 0)
+		{
+			// host does not send the file size until the first recvFile packet
+			file->size = size;
+		}
+		else
+		{
+			// host sent a different file size for this file with this chunk (vs the first chunk)
+			// this should not happen!
+			debug(LOG_ERROR, "Host sent a different file size for this file; (original size: %u, new size: %u)", file->size, size);
+			terminateFileDownload(file); // 'file' is now an invalidated iterator.
+			return 100;
+		}
+	}
+
+	if (size > MAX_NET_TRANSFERRABLE_FILE_SIZE)
+	{
+		// file size is too large
+		debug(LOG_ERROR, "Downloaded filesize is too large; (size: %" PRIu32")", size);
+		terminateFileDownload(file); // 'file' is now an invalidated iterator.
+		return 100;
+	}
+
+	if (PHYSFS_tell(file->handle) != static_cast<PHYSFS_sint64>(pos))
+	{
+		// actual position in file does not equal the expected position in the file (sent by the host)
+		debug(LOG_ERROR, "Invalid file position in downloaded file; (desired: %" PRIu32")", pos);
+		terminateFileDownload(file); // 'file' is now an invalidated iterator.
 		return 100;
 	}
 
@@ -2089,17 +2266,26 @@ int NETrecvFile(NETQUEUE queue)
 	uint32_t newPos = pos + bytesToRead;
 	file->pos = newPos;
 
-	if (newPos == size)  // last packet
+	if (newPos >= size)  // last packet
 	{
-		int actualFileSize = PHYSFS_fileLength(file->handle);
-		ASSERT((unsigned)actualFileSize == size, "Downloaded map too small! Got %d, expected %d!", actualFileSize, size);
-
 		int noError = PHYSFS_close(file->handle);
 		if (noError == 0)
 		{
 			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", WZ_PHYSFS_getLastError());
 		}
 		file->handle = nullptr;
+
+		if(!validateReceivedFile(*file))
+		{
+			// Delete the (invalid) downloaded file
+			PHYSFS_delete(file->filename.c_str());
+		}
+		else
+		{
+			// Attach Quarantine / "downloaded" file attribute to file
+			markAsDownloadedFile(file->filename.c_str());
+		}
+
 		NetPlay.wzFiles.erase(file);
 	}
 	// 'file' may now be an invalidated iterator.

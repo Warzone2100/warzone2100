@@ -106,4 +106,36 @@ bool cocoaGetApplicationSupportDir(char *const tmpstr, size_t const size)
 	}
 }
 
+bool cocoaSetFileQuarantineAttribute(const char *path)
+{
+	@autoreleasepool {
+		//	kLSQuarantineTypeKey -> kLSQuarantineTypeOtherDownload
+		NSDictionary * quarantineProperties = @{
+			(NSString *)kLSQuarantineTypeKey : (NSString *)kLSQuarantineTypeOtherDownload
+		};
+
+//		if (@available(macOS 10.10, *)) {	// "@available" is only available on Xcode 9+
+		if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_10) { // alternative to @available
+			NSURL *fileURL = [NSURL fileURLWithFileSystemRepresentation:path isDirectory:NO relativeToURL:NULL];
+			if (fileURL == nil) return false;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability" // only required until we can use @available
+			NSError *error = nil;
+			BOOL success = [fileURL setResourceValue:quarantineProperties forKey:NSURLQuarantinePropertiesKey error:&error];
+#pragma clang diagnostic pop
+			if (!success)
+			{
+				// Failed to set resource value
+				NSLog(@"Failed to set resource file: %@", error);
+				return false;
+			}
+		} else {
+			// macOS 10.9 and earlier require now-deprecated APIs
+			return false;
+		}
+		return true;
+	}
+}
+
 #endif // WZ_OS_MAC

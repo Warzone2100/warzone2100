@@ -142,6 +142,8 @@ enum MESSAGE_TYPES
 #define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
 
+#define MAX_NET_TRANSFERRABLE_FILE_SIZE	0x8000000
+
 struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 {
 	int32_t dwSize;
@@ -205,9 +207,10 @@ struct SYNC_COUNTER
 struct WZFile
 {
 	//WZFile() : handle(nullptr), size(0), pos(0) { hash.setZero(); }
-	WZFile(PHYSFS_file *handle, Sha256 hash, uint32_t size = 0) : handle(handle), hash(hash), size(size), pos(0) {}
+	WZFile(PHYSFS_file *handle, const std::string &filename, Sha256 hash, uint32_t size = 0) : handle(handle), filename(filename), hash(hash), size(size), pos(0) {}
 
 	PHYSFS_file *handle;
+	std::string filename;
 	Sha256 hash;
 	uint32_t size;
 	uint32_t pos;  // Current position, the range [0; currPos[ has been sent or received already.

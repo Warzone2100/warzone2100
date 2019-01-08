@@ -43,6 +43,8 @@ bool cocoaOpenUserCrashReportFolder();
 
 bool cocoaGetApplicationSupportDir(char *const tmpstr, size_t const size);
 
+bool cocoaSetFileQuarantineAttribute(const char *path);
+
 #endif // WZ_OS_MAC
 
 #endif // __INCLUDED_LIB_FRAMEWORK_COCOA_WRAPPER_H__
