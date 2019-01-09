@@ -18,18 +18,18 @@
 
 from __future__ import with_statement, division
 
-import re, hashlib
+import hashlib
+import json
 import pydot
 
+PATH = '../../data/mp/'
+RESEARCH = 'stats/research.json'
 
-PATH='../../data/mp/'
-PREREQS='stats/research/multiplayer/prresearch.txt'
-NAMES='messages/strings/names.txt'
-COSTS='stats/research/multiplayer/research.txt'
 
 class Tech(object):
     def __init__(self, name, rawcosttime):
         self.name = name
+        self.label = None
         self.rawcosttime = rawcosttime
         self.prereqs = set()
         self.dependents = set()
@@ -42,13 +42,16 @@ class Tech(object):
                 self._color = 'orange'
             elif self.matches(['missile', 'rocket', 'lancer', 'scourge', 'sam']):
                 self._color = 'red'
-            elif (self.matches(['cannon', 'mortar', 'shell', 'howitzer', 'pepperpot', 'rail', 'massdriver'])
-                    and not self.matches(['plasma', 'emp'])):
+            elif ((self.matches(['cannon', 'rail', 'massdriver']) or
+                   self.matches(['mortar', 'shell', 'howitzer', 'pepperpot'])) and not
+                  self.matches(['plasma', 'emp'])):
                 self._color = 'blue'
             elif (self.matches(['mg', 'machinegun']) or
-                    (self.matches(['aa']) and not self.matches(['sam', 'laser']))):
+                  (self.matches(['aa']) and not
+                   self.matches(['sam', 'laser']))):
                 self._color = 'purple'
-            elif self.matches(['plasma', 'laser', 'energy']) and not self.matches(['lassat', 'bomb']):
+            elif (self.matches(['plasma', 'laser', 'energy']) and not
+                  self.matches(['lassat', 'bomb'])):
                 self._color = 'green'
             else:
                 self._color = None
@@ -63,7 +66,9 @@ class Tech(object):
                 self._fillcolor = 'greenyellow'  # Really just light green
             elif self.matches(['r-vehicle-engine']):
                 self._fillcolor = '#32cd32'  # limegreen
-            elif self.matches(['bunker', 'hardpoint', 'emplacement', 'aasite', 'sam site', 'fortress', 'battery', 'tower', 'pit']):
+            elif (self.matches(['hardpoint', 'emplacement', 'tower']) or
+                  self.matches(['bunker', 'battery', 'pit']) or
+                  self.matches(['aasite', 'sam site', 'fortress'])):
                 self._fillcolor = 'peachpuff'
             elif self.matches(['r-struc-research-upgrade']):
                 self._fillcolor = 'darkkhaki'
@@ -77,18 +82,18 @@ class Tech(object):
     def edgestyle(self):
         if not hasattr(self, '_edgestyle'):
             #from random import choice
-            STYLES = 'dashed dotted solid'.split()
-            hashvalue = int(hashlib.sha256(self.name).hexdigest(), 16)
-            style = STYLES[hashvalue % len(STYLES)]
+            styles = 'dashed dotted solid'.split()
+            hashvalue = int(hashlib.sha256(self.name.encode('utf-8')).hexdigest(), 16)
+            style = styles[hashvalue % len(styles)]
             self._edgestyle = style
         return self._edgestyle
 
     @property
     def deepprereqs(self):
-        x = set(self.prereqs)
+        pre_reqs_deep = set(self.prereqs)
         for prereq in self.prereqs:
-            x.update(prereq.deepprereqs)
-        return x
+            pre_reqs_deep.update(prereq.deepprereqs)
+        return pre_reqs_deep
 
     @property
     def cost(self):
@@ -100,99 +105,92 @@ class Tech(object):
     def cumcost(self):
         if self._cumcost is None:
             self._cumcost = (self.cost +
-                sum(prereq.cost for prereq in self.deepprereqs))
+                             sum(prereq.cost for prereq in self.deepprereqs))
         return self._cumcost
-
-    def __repr__(self):
-        return 'Tech(%s, %s)' % (self.name, self.cost)
 
     def matches(self, names):
         for name in names:
             if name.lower() in self.label.lower() or name.lower() in self.name.lower():
                 return True
-        else:
-            return False
+        return False
 
-def main():
+
+def invalid_stat_string(stat_name):
+    return stat_name.startswith('CAM')
+
+def setup_tech():
+    cost_cap = 450 * 32
     techs = {}
 
-    with open(PATH + COSTS) as costs:
-        for line in costs:
-            x = line.split(',')
-            name, cost = x[0], int(x[11])
-            if name.startswith('CAM1'):  # Automatic stuff
-                continue
-            if cost > 450 * 32:
-                cost = 450 * 32  # A runtime cap, according to Zarel
-            techs[name] = Tech(name, cost)
+    data = json.load(open(PATH + RESEARCH, 'r', encoding='utf-8'))
 
-    from pprint import pprint
-    #pprint(techs)
+    for key, value in data.items():
+        if invalid_stat_string(key):
+            continue
 
-    with open(PATH + PREREQS) as prereqs:
-        for line in prereqs:
-            name, prereq, junk = line.split(',')
-            if name == prereq:  # This tells the game the tech is automatic
-                continue
-            if prereq.startswith('CAM1'):  # Automatic stuff
-                continue
-            techs[name].prereqs.add(techs[prereq])
-            techs[prereq].dependents.add(techs[name])
+        cost = 0
+        if 'researchPoints' in data[key]:
+            cost = data[key]['researchPoints']
+            if cost > cost_cap:
+                cost = cost_cap # A runtime cap, according to Zarel
 
-    with open(PATH + NAMES) as names:
-        for line in names:
-            m = re.match(r'^([a-zA-Z0-9-]+)\s+_\("(.*)"\)\s*$', line)
-            if m is not None:
-                name, label = m.groups()
-                if name in techs:
-                    techs[name].label = label
+        techs[key] = Tech(key, cost)
 
-    #print techs['R-Vehicle-Body01'].cumcost
-    #for tech in techs.itervalues():
-    #    print tech, list(tech.prereqs), tech.cumcost
+    # Find research prerequisites
+    for key, value in data.items():
+        if invalid_stat_string(key):
+            continue
 
-    #sortedtechs = sorted(techs.itervalues(), key=lambda tech: tech.cumcost)
-    #for tech in sortedtechs:
-    #    print tech.cumcost, tech, tech.prereqs
+        techs[key].label = data[key]['name']
+
+        if 'requiredResearch' in data[key]:
+            required_research = data[key]['requiredResearch']
+
+            for res in required_research:
+                if invalid_stat_string(res) or (res == key):
+                    continue
+                techs[key].prereqs.add(techs[res])
+                techs[res].dependents.add(techs[key])
+
+    return techs
+
+
+def find_deps(techs_with_deps):
+    tech_copy = techs_with_deps
+    dirty = set(tech_copy)
+    while dirty:
+        deps = set(dirty)
+        dirty.clear()
+        tech_copy |= deps
+        for tech in deps:
+            dirty.update(tech.prereqs - tech_copy)
+    return tech_copy
+
+
+def make_the_graph():
+    start_tech = ['R-Sys-Engineering01', 'R-Sys-Sensor-Turret01', 'R-Wpn-MG1Mk1']
+    techs = setup_tech()
 
     graph = pydot.Dot()
     graph.set_ranksep('1.0')
     graph.set_rank('min')
     graph.set_rankdir('LR')
     graph.set_concentrate('true')
-    #graph.set_size('60,60')
 
     automatic = pydot.Cluster()
     automatic.set_label("Automatic")
     automatic.set_fontcolor("darkgrey")  # Lighter than "grey".  Don't ask me why.
     graph.add_subgraph(automatic)
 
-    # Pick out the ones we want
-    #chosen_techs = techs.values()
-    #import random
-    #random.shuffle(techvalues)
-    chosen_techs = set(tech for tech in techs.values() if tech.prereqs) # if tech.color == 'red')
-    # Recursively grab their dependencies
-    dirty = set(chosen_techs)
-    while dirty:
-        x = set(dirty)
-        dirty.clear()
-        chosen_techs |= x
-        for tech in x:
-            dirty.update(tech.prereqs - chosen_techs)
-
-    #print "Retaliation:", techs['R-Vehicle-Body03'].cumcost
-    #print "Turbo-Charged Engine:", techs['R-Vehicle-Engine04'].cumcost
-    #print "Gas Turbine Engine:", techs['R-Vehicle-Engine07'].cumcost
-
-    chosen_techs = sorted(chosen_techs, key=lambda tech: (tech.cumcost, tech.label))
+    #get the technologies with dependencies
+    chosen_techs = set(tech for tech in techs.values() if tech.prereqs)
+    #sort by cumulative cost of the technology
+    chosen_techs = sorted(find_deps(chosen_techs), key=lambda tech: (tech.cumcost, tech.label))
 
     # Add nodes
     for tech in chosen_techs:
         node = pydot.Node(tech.name)
         node.set_label(tech.label)
-        #node.set_label(tech.name)
-        #node.set_label(r'%s\n%s' % (tech.label, tech.name))
         node.set_shape('box')
         node.set_style('filled,setlinewidth(3.0)')
         node.set_color('black')
@@ -205,8 +203,7 @@ def main():
         if tech.fillcolor is not None:
             node.set_fillcolor(tech.fillcolor)
 
-        if tech.name in ['R-Sys-Engineering01', 'R-Sys-Sensor-Turret01', 'R-Wpn-MG1Mk1']:
-            #node.set_URL(r"//wzguide.co.cc/new/r/sensorturret")
+        if tech.name in start_tech:
             automatic.add_node(node)
         else:
             graph.add_node(node)
@@ -218,10 +215,6 @@ def main():
             edge.set_tailport('e')
             edge.set_headport('w')
 
-            #if prereq.name in ['R-Struc-Research-Upgrade07', 'R-Sys-Sensor-Upgrade01']:
-            #    edge.set_style('dashed')
-            #elif prereq.name in ['R-Defense-HardcreteWall', 'R-Struc-Research-Upgrade04']:
-            #    edge.set_style('dotted')
             style = prereq.edgestyle
             if prereq.color is None:
                 edge.set_color('black')
@@ -238,7 +231,13 @@ def main():
             edge.set_weight(str(weight))
 
             graph.add_edge(edge)
+
     graph.write_svg('warzoneresearch.svg')
+
+
+def main():
+    make_the_graph()
+
 
 if __name__ == '__main__':
     main()
