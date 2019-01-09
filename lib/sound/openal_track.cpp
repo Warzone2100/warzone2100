@@ -1105,6 +1105,7 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
 {
 	ALint buffer_count;
 	ALuint *buffers;
+	bool freeBuffers = false;
 	ALint error;
 
 	// Stop the OpenAL source from playing
@@ -1131,13 +1132,35 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
 	}
 
 	// Detach all buffers and retrieve their ID numbers
-	buffers = (ALuint *)alloca(buffer_count * sizeof(ALuint));
-	alSourceUnqueueBuffers(stream->source, buffer_count, buffers);
-	sound_GetError();
+	if (buffer_count > 0)
+	{
+		if (buffer_count <= (1024 / sizeof(ALuint))) // See CMakeLists.txt for value of -Walloca-larger-than=<N>
+		{
+			buffers = (ALuint *)alloca(buffer_count * sizeof(ALuint));
+		}
+		else
+		{
+			// Too many buffers - don't allocate on the stack!
+			buffers = (ALuint *)malloc(buffer_count * sizeof(ALuint));
+			freeBuffers = true;
+		}
+		alSourceUnqueueBuffers(stream->source, buffer_count, buffers);
+		sound_GetError();
 
-	// Destroy all of these buffers
-	alDeleteBuffers(buffer_count, buffers);
-	sound_GetError();
+		// Destroy all of these buffers
+		alDeleteBuffers(buffer_count, buffers);
+		sound_GetError();
+		if(freeBuffers)
+		{
+			free(buffers);
+		}
+		buffers = nullptr;
+	}
+	else
+	{
+		// alGetSourcei(AL_BUFFERS_PROCESSED) returned a count <= 0?
+		debug(LOG_SOUND, "alGetSourcei(AL_BUFFERS_PROCESSED) returned count: %d", buffer_count);
+	}
 
 	// Destroy the OpenAL source
 	alDeleteSources(1, &stream->source);
