@@ -884,7 +884,14 @@ void draw3DScene()
 		writeGameInfo("WZdebuginfo.txt");		//also test writing out this file.
 		debug(LOG_FATAL, "Forcing a segfault! (crash handler test)");
 		// and here comes the crash
-		*crash = 0x3;
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+		*crash = 0x3; // deliberate null-dereference
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 		exit(-1);	// will never reach this, but just in case...
 	}
 	//visualize radius if needed
@@ -1810,12 +1817,12 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 
 		for (; list != nullptr; list = list->psNext)
 		{
-			if (list->type != OBJ_DROID || (list->died != 0 && list->died < graphicsTime)
+			DROID *psDroid = castDroid(list);
+			if (!psDroid || (list->died != 0 && list->died < graphicsTime)
 			    || !quickClipXYToMaximumTilesFromCurrentPosition(list->pos.x, list->pos.y))
 			{
 				continue;
 			}
-			DROID *psDroid = castDroid(list);
 
 			/* No point in adding it if you can't see it? */
 			if (psDroid->visible[selectedPlayer])
