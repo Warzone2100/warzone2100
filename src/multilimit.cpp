@@ -262,7 +262,7 @@ void runLimitScreen()
 void createLimitSet()
 {
 	UDWORD			numchanges = 0, bufSize, idx = 0;
-	MULTISTRUCTLIMITS	*pEntry;
+	MULTISTRUCTLIMITS	*pEntry = nullptr;
 
 	debug(LOG_NET, "LimitSet created");
 	// free old limiter structure
@@ -284,20 +284,23 @@ void createLimitSet()
 		}
 	}
 
-	// Allocate some memory for the changes
-	bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
-	pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
-	memset(pEntry, 255, bufSize);
-
-	// Prepare chunk
-	for (unsigned i = 0; i < numStructureStats; i++)
+	if (numchanges > 0)
 	{
-		if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
+		// Allocate some memory for the changes
+		bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
+		pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
+		memset(pEntry, 255, bufSize);
+
+		// Prepare chunk
+		for (unsigned i = 0; i < numStructureStats; i++)
 		{
-			ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
-			pEntry[idx].id		= i;
-			pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
-			idx++;
+			if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
+			{
+				ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
+				pEntry[idx].id		= i;
+				pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
+				idx++;
+			}
 		}
 	}
 
