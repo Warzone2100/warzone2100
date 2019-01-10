@@ -1354,6 +1354,11 @@ void actionUpdateDroid(DROID *psDroid)
 					{
 						// structure on the build location - see if it is the same type
 						STRUCTURE *const psStruct = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+						ASSERT(psStruct, "TileHasStructure, but getTileStructure returned nullptr");
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
 						if (psStruct->pStructureType == order->psStats)
 						{
 							// same type - do a help build
@@ -1375,6 +1380,9 @@ void actionUpdateDroid(DROID *psDroid)
 							objTrace(psDroid->id, "DACTION_MOVETOBUILD: line build hit building");
 							cancelBuild(psDroid);
 						}
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 					}
 					else
 					{

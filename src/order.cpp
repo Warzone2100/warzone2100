@@ -2765,7 +2765,16 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 				if (isConstructionDroid(psCurr))
 				{
 					// Help build the planned structure.
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+// avoid false-positive "potential null pointer dereference [-Wnull-dereference]"
+// `castStructure(psObj)` will not return nullptr, because `isBlueprint(psObj)` above already checks if psObj is a structure type
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
 					orderDroidStatsLocDirAdd(psCurr, DORDER_BUILD, castStructure(psObj)->pStructureType, psObj->pos.x, psObj->pos.y, castStructure(psObj)->rot.direction, add);
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 				}
 				else
 				{

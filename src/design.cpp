@@ -3689,6 +3689,7 @@ void intProcessDesign(UDWORD id)
 
 					/* get previous template and set as current */
 					psTempl = templateFromButtonId(droidTemplID - 1, true);  // droidTemplID - 1 always valid (might be the first template), since droidTemplID is not the first template.
+					ASSERT_OR_RETURN(, psTempl != nullptr, "template not found! - unexpected!"); // see above comment
 
 					/* update local list */
 					desSetupDesignTemplates();
