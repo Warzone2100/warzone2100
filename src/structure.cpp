@@ -231,7 +231,7 @@ bool structureIsBlueprint(const STRUCTURE *psStructure)
 
 bool isBlueprint(const BASE_OBJECT *psObject)
 {
-	return psObject->type == OBJ_STRUCTURE && structureIsBlueprint((const STRUCTURE *)psObject);
+	return psObject != nullptr && psObject->type == OBJ_STRUCTURE && structureIsBlueprint((const STRUCTURE *)psObject);
 }
 
 void initStructLimits()
@@ -1381,9 +1381,16 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				}
 				else if (TileHasStructure(psTile))
 				{
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
 					debug(LOG_ERROR, "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
 					      player, isHumanPlayer(player) ? "Human" : "AI", getName(pStructureType), map.x, map.y,
 					      getName(getTileStructure(tileX, tileY)->pStructureType), tileX, tileY);
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 					delete psBuilding;
 					return nullptr;
 				}
