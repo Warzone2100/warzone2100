@@ -9657,7 +9657,7 @@ bool scrASSERT()
 {
 	int32_t			bExpression;	// was BOOL (int) ** see warning about conversion
 	SDWORD			player;
-	char			sTmp[255];
+	char			sTmp[11+2+MAXSTRLEN]; // room for SDWORD (11) + ") " (2) + string (MAXSTRLEN)
 
 	if (!stackPopParams(3, VAL_BOOL, &bExpression, VAL_STRING, &strParam1, VAL_INT, &player))
 	{
@@ -9674,7 +9674,7 @@ bool scrASSERT()
 	{
 		if (!bExpression)
 		{
-			sprintf(sTmp, "%d) %s", player, strParam1);
+			snprintf(sTmp, sizeof(sTmp), "%d) %s", player, strParam1);
 			addConsoleMessage(sTmp, RIGHT_JUSTIFY, player);
 		}
 	}
