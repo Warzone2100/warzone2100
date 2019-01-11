@@ -115,12 +115,21 @@ static inline size_t strlcpy(char *WZ_DECL_RESTRICT dest, const char *WZ_DECL_RE
 	ASSERT_OR_RETURN(0, dest != NULL, "strlcpy was passed an invalid dest parameter.");
 #endif
 
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (8 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
+
 	if (size > 0)
 	{
 		strncpy(dest, src, size - 1);
 		// Guarantee to nul-terminate
 		dest[size - 1] = '\0';
 	}
+
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (8 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 
 	return strlen(src);
 }
