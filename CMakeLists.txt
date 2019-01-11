@@ -541,7 +541,7 @@ add_definitions("-DHAVE_CONFIG_H")
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories(".")
 include_directories("3rdparty")
-include_directories("3rdparty/glm")
+include_directories(SYSTEM "3rdparty/glm")
 
 SET(STDC_HEADERS ON)
 
