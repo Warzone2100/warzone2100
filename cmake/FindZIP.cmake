@@ -5,7 +5,7 @@
 #  ZIP_EXECUTABLE - the zip executable
 #
 # This script supports detection of the following programs:
-#	7-Zip (`7z`)
+#	7-Zip (`7z`, `7za`)
 #	`zip` (installed locally or through Cygwin)
 #
 # It also provides a function COMPRESS_ZIP that can be used to compress a list of files / folders,
@@ -15,7 +15,7 @@
 # Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2018-02-18a
+# Script Version: 2019-01-11a
 #
 
 cmake_minimum_required(VERSION 3.3)
@@ -29,8 +29,8 @@ set(_PF32BIT "ProgramFiles(x86)")
 #
 
 # Search for 7-Zip
-find_program(ZIP_EXECUTABLE 7z PATHS "$ENV{ProgramFiles}/7-Zip" "$ENV{${_PF32BIT}}/7-Zip" "$ENV{ProgramW6432}/7-Zip")
-if(ZIP_EXECUTABLE MATCHES "7z")
+find_program(ZIP_EXECUTABLE NAMES 7z 7za PATHS "$ENV{ProgramFiles}/7-Zip" "$ENV{${_PF32BIT}}/7-Zip" "$ENV{ProgramW6432}/7-Zip")
+if(ZIP_EXECUTABLE MATCHES "7z|7za")
 	# Test whether 7-Zip supports the "-bb0" option to disable log output
 	execute_process(COMMAND ${ZIP_EXECUTABLE} i -bb0
 					RESULT_VARIABLE 7z_bb_result
@@ -108,7 +108,7 @@ function(COMPRESS_ZIP _outputFile)
 		list(APPEND _depends_PATHS "${_dependPath}")
 	endforeach()
 
-	if(ZIP_EXECUTABLE MATCHES "7z")
+	if(ZIP_EXECUTABLE MATCHES "7z|7za")
 		set(_additionalOptions)
 		if(DEFINED _parsedArguments_COMPRESSION_LEVEL)
 			# 7z command-line option for compression level (when in ZIP mode) is: "-mx=#"
