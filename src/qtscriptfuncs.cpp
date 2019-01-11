@@ -366,6 +366,7 @@ void showLabel(const QString &key, bool clear_old, bool jump_to)
 std::pair<bool, int> seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BASE_OBJECT *viewer)
 {
 	GROUPMAP *psMap = groups.value(engine);
+	ASSERT_OR_RETURN(std::make_pair(false, 0), psMap != nullptr, "Non-existent groupmap for engine");
 	int groupId = psMap->value(seen);
 	bool foundObj = false, foundGroup = false;
 	for (auto &l : labels)
@@ -779,7 +780,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("name", objInfo(psObj), QScriptValue::ReadOnly);
 	value.setProperty("born", psObj->born, QScriptValue::ReadOnly);
 	GROUPMAP *psMap = groups.value(engine);
-	if (psMap->contains(psObj))
+	if (psMap != nullptr && psMap->contains(psObj))
 	{
 		int group = psMap->value(psObj);
 		value.setProperty("group", group, QScriptValue::ReadOnly);
@@ -875,6 +876,7 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 {
 	// Save group info as a list of group memberships for each droid
 	GROUPMAP *psMap = groups.value(engine);
+	ASSERT_OR_RETURN(false, psMap, "Non-existent groupmap for engine");
 	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
 	{
 		std::vector<WzString> value;
@@ -1408,11 +1410,14 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 	QList<BASE_OBJECT *> matches;
 	GROUPMAP *psMap = groups.value(engine);
 
-	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
+	if (psMap != nullptr)
 	{
-		if (i.value() == groupId)
+		for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
 		{
-			matches.push_back(i.key());
+			if (i.value() == groupId)
+			{
+				matches.push_back(i.key());
+			}
 		}
 	}
 	QScriptValue result = engine->newArray(matches.size());
