@@ -2047,19 +2047,21 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 	}
 
 	int displayIndex = SDL_GetWindowDisplayIndex(WZwindow);
-	if (displayIndex < 0)
+	if (displayIndex >= 0)
 	{
-		debug(LOG_ERROR, "Failed to get the display index for the window because : %s", SDL_GetError());
-	}
-
-	float hdpi, vdpi;
-	if (SDL_GetDisplayDPI(displayIndex, nullptr, &hdpi, &vdpi) < 0)
-	{
-		debug(LOG_ERROR, "Failed to get the display DPI because : %s", SDL_GetError());
+		float hdpi, vdpi;
+		if (SDL_GetDisplayDPI(displayIndex, nullptr, &hdpi, &vdpi) < 0)
+		{
+			debug(LOG_WARNING, "Failed to get the display (%d) DPI because : %s", displayIndex, SDL_GetError());
+		}
+		else
+		{
+			debug(LOG_WZ, "Display (%d) DPI: %f, %f", displayIndex, hdpi, vdpi);
+		}
 	}
 	else
 	{
-		debug(LOG_WZ, "Display DPI: %f, %f", hdpi, vdpi);
+		debug(LOG_WARNING, "Failed to get the display index for the window because : %s", SDL_GetError());
 	}
 }
 
