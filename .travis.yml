@@ -139,6 +139,25 @@ matrix:
         - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/src/"
         - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_src.tar.xz" --cleanold
 
+    # Build for Fedora :LATEST (CMake) (GCC)
+    - name: "Fedora :LATEST (CMake) [GCC]"
+      language: cpp
+      compiler: gcc
+      sudo: required
+      services:
+        - docker
+      install:
+        - cd docker/fedora-latest/
+        - docker build -t fedora .
+        - cd ../..
+      script:
+        - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
+        # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
+        # To do this, append the following to the pertinent lines after —rm:
+        # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code fedora cmake --build build
+
     # Build for macOS (CMake)
     - name: "macOS (CMake) [Xcode 8.3, macOS 10.12 SDK]"
       language: objective-c
