@@ -151,4 +151,7 @@ void jsDebugSelected(const BASE_OBJECT *psObj);
 void jsDebugMessageUpdate();
 void jsDebugUpdate();
 
+#define QStringToWzString(_qstring) \
+WzString::fromUtf8(_qstring.toUtf8().constData())
+
 #endif

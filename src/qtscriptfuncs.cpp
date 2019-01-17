@@ -133,9 +133,6 @@ static QStandardItemModel *labelModel = nullptr;
 #define WzStringToQScriptValue(_engine, _wzstring) \
 	QScriptValue(_engine, QString::fromUtf8(_wzstring.toUtf8().c_str()))
 
-#define QStringToWzString(_qstring) \
-	WzString::fromUtf8(_qstring.toUtf8().constData())
-
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
