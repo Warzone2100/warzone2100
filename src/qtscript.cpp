@@ -1867,8 +1867,11 @@ void to_json(nlohmann::json& j, const QVariant& value) {
 			j = value.toDouble();
 			break;
 		case QMetaType::QString:
-			j = value.toString();
+		{
+			QString qstring = value.toString();
+			j = json(qstring.toUtf8().constData());
 			break;
+		}
 		case QMetaType::QStringList:
 		case QMetaType::QVariantList:
 		{
