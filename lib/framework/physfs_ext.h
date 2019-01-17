@@ -24,7 +24,6 @@
 #else
 # include <physfs.h>
 #endif
-#include <QtCore/QString>
 #include "wzstring.h"
 
 #include "wzglobal.h"
@@ -109,11 +108,6 @@ static inline bool PHYSFS_exists(const WzString &filename)
 }
 
 // Older wrappers
-
-static inline bool PHYSFS_exists(const QString &filename)
-{
-	return PHYSFS_exists(filename.toUtf8().constData());
-}
 
 static inline bool PHYSFS_writeSLE8(PHYSFS_file *file, int8_t val)
 {
