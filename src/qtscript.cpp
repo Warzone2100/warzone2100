@@ -752,7 +752,7 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup("groups_" + WzString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", engine->globalObject().property("me").toInt32());
-		ini.setValue("scriptName", engine->globalObject().property("scriptName").toString());
+		ini.setValue("scriptName", QStringToWzString(engine->globalObject().property("scriptName").toString()));
 		saveGroups(ini, engine);
 		ini.endGroup();
 	}
@@ -762,8 +762,8 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup("triggers_" + WzString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", node.player);
-		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString());
-		ini.setValue("function", node.function);
+		ini.setValue("scriptName", QStringToWzString(node.engine->globalObject().property("scriptName").toString()));
+		ini.setValue("function", QStringToWzString(node.function));
 		if (node.baseobj >= 0)
 		{
 			ini.setValue("object", node.baseobj);
