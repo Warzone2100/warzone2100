@@ -110,6 +110,11 @@ function eventGroupLoss(obj, group, newsize)
 	}
 }
 
+function enemyCanTakeArtifact(label)
+{
+	return label.indexOf("newArtiLabel") !== -1 || label.indexOf("artifactLocation") !== -1;
+}
+
 //Moves some New Paradigm forces to the artifact
 function getArtifact()
 {
@@ -119,13 +124,16 @@ function getArtifact()
 	}
 
 	const GRAB_RADIUS = 2;
-	var artifact = camGetArtifacts();
+	var artifact = camGetArtifacts().filter(function(label) {
+		return enemyCanTakeArtifact(label) && getObject(label) !== null;
+	});
 	var artiLoc = artiMovePos;
 
 	if (!enemyHasArtifact && !enemyStoleArtifact && artifact.length > 0)
 	{
 		//Go to the artifact instead.
-		artiLoc = camMakePos(artifact[0]);
+		var realCrate = artifact[0];
+		artiLoc = camMakePos(realCrate);
 		if (!camDef(artiLoc))
 		{
 			return; //player must have snatched it
@@ -153,7 +161,7 @@ function getArtifact()
 			hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
 			droidWithArtiID = artiMembers[idx].id;
 			enemyHasArtifact = true;
-			camSafeRemoveObject(artifact[0], false);
+			camSafeRemoveObject(realCrate, false);
 		}
 	}
 
