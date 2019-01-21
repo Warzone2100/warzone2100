@@ -1898,6 +1898,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		// Stuff added after level load to avoid being reset or initialised during load
 		// always !keepObjects
 
+		if (saveGameVersion >= VERSION_33)
+		{
+			bMultiPlayer = saveGameData.multiPlayer;
+		}
+
 		if (saveGameVersion >= VERSION_12)
 		{
 			mission.startTime = saveGameData.missionTime;
@@ -2027,7 +2032,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			game			= saveGameData.sGame;
 			game.scavengers = scav;	// ok, so this is butt ugly. but i'm just getting inspiration from the rest of the code around here. ok? - per
 			productionPlayer = selectedPlayer;
-			bMultiPlayer	= saveGameData.multiPlayer;
 			bMultiMessages	= bMultiPlayer;
 
 			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
