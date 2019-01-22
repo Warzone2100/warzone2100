@@ -1,8 +1,4 @@
-if BACKEND_QT
-backend_subdir=lib/qtgame
-else
 backend_subdir=lib/sdl
-endif
 
 UTF8PROC_DEFINES = -DUTF8PROC_STATIC
 AM_MAKEFLAGS = UTF8PROC_DEFINES=$(UTF8PROC_DEFINES)
