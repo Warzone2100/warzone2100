@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.5)
 file(GLOB HEADERS
 	"bitimage.h"
 	"gfx_api.h"
+	"gfx_api_gl.h"
 	"imd.h"
 	"ivisdef.h"
 	"jpeg_encoder.h"
