@@ -600,8 +600,8 @@ void screen_GenerateCoordinatesAndVBOs()
 {
 	assert(backdropGfx != nullptr);
 
-	GLfloat x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight;
-	GLfloat tx = 1, ty = 1;
+	gfx_api::gfxFloat x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight;
+	gfx_api::gfxFloat tx = 1, ty = 1;
 	int scale = 0, w = 0, h = 0;
 	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
 
@@ -636,8 +636,8 @@ void screen_GenerateCoordinatesAndVBOs()
 	}
 
 	// Generate coordinates and put them into VBOs
-	GLfloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
-	GLfloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
+	gfx_api::gfxFloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
+	gfx_api::gfxFloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
 	backdropGfx->buffers(4, vertices, texcoords);
 }
 

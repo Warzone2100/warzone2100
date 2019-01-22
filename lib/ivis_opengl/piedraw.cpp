@@ -64,7 +64,7 @@ static GLenum ss_op_depth_pass_back = GL_DECR;
 static unsigned int pieCount = 0;
 static unsigned int polyCount = 0;
 static bool shadows = false;
-static GLfloat lighting0[LIGHT_MAX][4];
+static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 
 static std::vector<GLint> enabledAttribArrays;
 
@@ -99,7 +99,7 @@ void disableArrays()
 
 void pie_InitLighting()
 {
-	const GLfloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
+	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
 }
 

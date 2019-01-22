@@ -51,12 +51,12 @@
  */
 
 std::vector<pie_internal::SHADER_PROGRAM> pie_internal::shaderProgram;
-static GLfloat shaderStretch = 0;
+static gfx_api::gfxFloat shaderStretch = 0;
 SHADER_MODE pie_internal::currentShaderMode = SHADER_NONE;
 gfx_api::buffer* pie_internal::rectBuffer = nullptr;
 static RENDER_STATE rendStates;
 static GLint ecmState = 0;
-static GLfloat timeState = 0.0f;
+static gfx_api::gfxFloat timeState = 0.0f;
 
 void rendStatesRendModeHack()
 {
@@ -782,7 +782,7 @@ void pie_SetShaderTime(uint32_t shaderTime)
 	{
 		base = 1000 - base;	// cycle
 	}
-	timeState = (GLfloat)base / 1000.0f;
+	timeState = (gfx_api::gfxFloat)base / 1000.0f;
 }
 
 void pie_SetShaderEcmEffect(bool value)
