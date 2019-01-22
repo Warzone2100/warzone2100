@@ -420,7 +420,7 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
 	GLuint texPage = imageFile->pages[image2.TPageID].id;
-	GLfloat invTextureSize = 1.f / (float)imageFile->pages[image2.TPageID].size;
+	gfx_api::gfxFloat invTextureSize = 1.f / (float)imageFile->pages[image2.TPageID].size;
 	float tu = (float)(image2.Tu + textureInset.x) * invTextureSize;
 	float tv = (float)(image2.Tv + textureInset.y) * invTextureSize;
 	float su = (float)(size.x - (textureInset.x * 2)) * invTextureSize;
@@ -446,7 +446,7 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 
 		ImageDef const &image2 = request.imageFile->imageDefs[request.ID];
 		GLuint texPage = request.imageFile->pages[image2.TPageID].id;
-		GLfloat invTextureSize = 1.f / (float)request.imageFile->pages[image2.TPageID].size;
+		gfx_api::gfxFloat invTextureSize = 1.f / (float)request.imageFile->pages[image2.TPageID].size;
 		float tu = (float)(image2.Tu + request.textureInset.x) * invTextureSize;
 		float tv = (float)(image2.Tv + request.textureInset.y) * invTextureSize;
 		float su = (float)(request.size.x - (request.textureInset.x * 2)) * invTextureSize;
@@ -497,7 +497,7 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, i
 void iV_DrawImage2(const WzString &filename, float x, float y, float width, float height)
 {
 	ImageDef *image = iV_GetImage(filename);
-	const GLfloat invTextureSize = image->invTextureSize;
+	const gfx_api::gfxFloat invTextureSize = image->invTextureSize;
 	const int tu = image->Tu;
 	const int tv = image->Tv;
 	const int w = width > 0 ? width : image->Width;
@@ -652,12 +652,12 @@ bool pie_ShutdownRadar()
 	return true;
 }
 
-void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight)
+void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, int twidth, int theight)
 {
 	radarGfx->makeTexture(twidth, theight, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter.
-	GLfloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
-	GLfloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
+	gfx_api::gfxFloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
+	gfx_api::gfxFloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
 	radarGfx->buffers(4, vertices, texcoords);
 }
 

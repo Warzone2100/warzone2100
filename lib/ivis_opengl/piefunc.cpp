@@ -66,7 +66,7 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 	pieVrts_insidefill[2] = v[0];
 	pieVrts_insidefill[3] = v[1];
 
-	GLfloat vert[VW_VERTICES * 2];
+	gfx_api::gfxFloat vert[VW_VERTICES * 2];
 	GLbyte cols[VW_VERTICES * 4];
 
 	// Initialize the RGB values for both, and the alpha for the inside fill

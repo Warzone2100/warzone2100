@@ -100,7 +100,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
 	if (GLEW_EXT_texture_filter_anisotropic)
 	{
-		GLfloat max;
+		gfx_api::gfxFloat max;
 
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));

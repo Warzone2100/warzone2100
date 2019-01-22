@@ -155,8 +155,8 @@ static int dropped = 0;
 // Screen dimensions
 #define NUM_VERTICES 4
 static GFX *videoGfx = nullptr;
-static GLfloat vertices[NUM_VERTICES][2];
-static GLfloat Scrnvidpos[3];
+static gfx_api::gfxFloat vertices[NUM_VERTICES][2];
+static gfx_api::gfxFloat Scrnvidpos[3];
 
 static SCANLINE_MODE use_scanlines;
 
@@ -262,8 +262,8 @@ static double getRelativeTime(void)
 	return ((getTimeNow() - basetime) * .001);
 }
 
-const GLfloat texture_width = 1024.0f;
-const GLfloat texture_height = 1024.0f;
+const gfx_api::gfxFloat texture_width = 1024.0f;
+const gfx_api::gfxFloat texture_height = 1024.0f;
 
 /** Allocates memory to hold the decoded video frame
  */
@@ -710,9 +710,9 @@ bool seq_Play(const char *filename)
 
 		// when using scanlines we need to double the height
 		const int height_factor = (use_scanlines ? 2 : 1);
-		const GLfloat vtwidth = (float)videodata.ti.frame_width / texture_width;
-		const GLfloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
-		GLfloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
+		const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / texture_width;
+		const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
+		gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
 		videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
 	}
 

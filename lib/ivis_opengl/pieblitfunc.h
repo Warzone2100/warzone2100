@@ -218,7 +218,7 @@ bool pie_InitRadar();
 bool pie_ShutdownRadar();
 void pie_DownLoadRadar(UDWORD *buffer);
 void pie_RenderRadar(const glm::mat4 &modelViewProjectionMatrix);
-void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight);
+void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, int twidth, int theight);
 
 enum SCREENTYPE
 {

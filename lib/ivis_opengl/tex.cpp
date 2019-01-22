@@ -138,7 +138,7 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
 	if (GLEW_EXT_texture_filter_anisotropic)
 	{
-		GLfloat max;
+		gfx_api::gfxFloat max;
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
 	}
