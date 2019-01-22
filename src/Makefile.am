@@ -297,20 +297,10 @@ warzone2100_SOURCES = $(COMMONSOURCES) $(nodist_COMMONSOURCES)
 warzone2100_LIBS = $(COMMONLIBS)
 endif
 
-if BACKEND_QT
-if PORTABLE
-warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
-else
-warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
-endif
-endif
-
-if BACKEND_SDL
 if PORTABLE
 warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a
 else
 warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
-endif
 endif
 
 # lib/framework (and dependencies)

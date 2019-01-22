@@ -77,21 +77,8 @@ AM_GNU_GETTEXT_VERSION([0.15])
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 
-AC_MSG_CHECKING([for backend])
-AC_ARG_WITH([backend],
-	AS_HELP_STRING([--with-backend=sdl/qt], [Backend rendering code to use [sdl]]),
-	[ backend=${withval} ], [ backend="sdl" ])
-AM_CONDITIONAL([BACKEND_QT], test "$backend" = "qt")
-AM_CONDITIONAL([BACKEND_SDL], test "$backend" = "sdl")
+PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Script >= 5.4,,[:])
 
-# Check for Qt
-if test "$backend" = "qt"; then
-	AC_MSG_RESULT([Qt])
-	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Script >= 5.4 Qt5OpenGL Qt5X11Extras,,[:])
-else
-	AC_MSG_RESULT([SDL])
-	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Script >= 5.4,,[:])
-fi
 if test "$pkg_failed" = "yes" ; then
 	AC_MSG_ERROR([Qt 5.4 not found -- required!])
 fi
@@ -413,9 +400,7 @@ fi
 
 # Checks for modules:
 
-if test "$backend" = "sdl"; then
-	PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.5])
-fi
+PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.5])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
 PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
@@ -516,7 +501,6 @@ AC_CONFIG_FILES([Makefile
 		lib/gamelib/Makefile
 		lib/ivis_opengl/Makefile
 		lib/netplay/Makefile
-		lib/qtgame/Makefile
 		lib/sdl/Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
@@ -559,4 +543,4 @@ AS_IF([test "x$with_videos" = "xyes"],[
 
 
 AC_MSG_NOTICE()
-AC_MSG_NOTICE(Backend used: ${backend})
+AC_MSG_NOTICE(Backend used: SDL)
