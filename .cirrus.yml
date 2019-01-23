@@ -21,3 +21,33 @@ freebsd_build_task:
 
   configure_release_script: cmake '-H.' -Bbuild/release -DCMAKE_BUILD_TYPE=RelWithDebInfo -G"Ninja"
   build_release_script: cmake --build build/release
+
+
+# # CirrusCI - test builds on macOS VMs
+# # See: https://cirrus-ci.org; https://cirrus-ci.org/guide/macOS/
+#
+# macos_build_task:
+#
+#   osx_instance:
+#     # See the list of available macOS images here: https://cirrus-ci.org/guide/macOS/
+#     matrix:
+#       image: high-sierra-xcode-9.4.1
+#       image: mojave-xcode-10.1
+#
+#   env:
+#     MACOSX_DEPLOYMENT_TARGET: 10.9
+#
+#   install_script:
+#     - brew install cmake
+#     - brew install gettext
+#     # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
+#     - sudo gem install asciidoctor -v 1.5.8 --no-rdoc --no-ri --no-document
+#     # gcc6+ is currently required to bootstrap vcpkg on macOS
+#     - brew install gcc@7
+#     - sudo bundle install --gemfile="macosx/BuildBot/Gemfile"
+#
+#   init_git_submodules_script: git submodule update --init --recursive
+#
+#   build_script:
+#     - source build_tools/ci/travis/export_build_output_desc.sh
+#     - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
