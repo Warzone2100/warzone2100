@@ -162,7 +162,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 
 	# Default package generators on macOS
-	set(CPACK_GENERATOR "ZIP;DragNDrop")
+	set(CPACK_GENERATOR "ZIP")
 
 	# Support Archive generator
 	set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)
