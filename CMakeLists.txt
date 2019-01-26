@@ -33,6 +33,10 @@ else()
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Fix: Linking issues with static libraries when using certain generated project files (ex. Xcode in "Archive" build mode)
+# See: https://stackoverflow.com/questions/30318941/, https://stackoverflow.com/questions/33020245/
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "./")
+
 # Handle install paths
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# On Windows, set the default DATAROOTDIR to "."
