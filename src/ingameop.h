@@ -32,7 +32,7 @@ bool intRunInGameOptions();
 void intProcessInGameOptions(UDWORD);
 void intAddInGamePopup();
 
-extern bool quitConfirmation;
+extern bool hostQuitConfirmation;
 
 // status bools.
 extern bool	InGameOpUp;
@@ -74,8 +74,8 @@ enum
 {
 	INTINGAMEOP = 10500,
 	INTINGAMEPOPUP,
-	INTINGAMEOP_QUIT,
-	INTINGAMEOP_QUIT_CONFIRM,               ///< The all important quit button
+	INTINGAMEOP_HOSTQUIT,
+	INTINGAMEOP_QUIT,               ///< The all important quit button
 	INTINGAMEOP_RESUME,
 	INTINGAMEOP_LOAD_MISSION,
 	INTINGAMEOP_LOAD_SKIRMISH,

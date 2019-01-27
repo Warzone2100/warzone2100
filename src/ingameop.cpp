@@ -53,7 +53,7 @@
 #include "main.h"
 #include "warzoneconfig.h"
 
-bool quitConfirmation;
+bool hostQuitConfirmation;
 
 bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;
@@ -90,7 +90,7 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 	return true;
 }
 
-static bool addQuitOptions()
+static bool addHostQuitOptions()
 {
 	// get rid of the old stuff.
 	delete widgGetFromID(psWScreen, INTINGAMEPOPUP);
@@ -107,29 +107,22 @@ static bool addQuitOptions()
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
-	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)		// only show for real MP games
-	{
-		auto inGamePopup = new IntFormAnimated(parent);
-		inGamePopup->id = INTINGAMEPOPUP;
-		inGamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			assert(psWScreen != nullptr);
-			WIDGET * inGameOp = widgGetFromID(psWScreen, INTINGAMEOP);
-			assert(inGameOp != nullptr);
-			psWidget->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
-		}));
+	auto inGamePopup = new IntFormAnimated(parent);
+	inGamePopup->id = INTINGAMEPOPUP;
+	inGamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		assert(psWScreen != nullptr);
+		WIDGET * inGameOp = widgGetFromID(psWScreen, INTINGAMEOP);
+		assert(inGameOp != nullptr);
+		psWidget->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
+	}));
 
-		auto label = new W_LABEL(inGamePopup);
-		label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
-		label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
-		label->setTextAlignment(WLAB_ALIGNCENTRE);
-		label->setFont(font_medium, WZCOL_YELLOW);
+	auto label = new W_LABEL(inGamePopup);
+	label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
+	label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_medium, WZCOL_YELLOW);
 
-		addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
-	}
-	else
-	{
-		addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
-	}
+	addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
 
 	return true;
 }
@@ -226,11 +219,11 @@ static bool _intAddInGameOptions()
 	// add 'quit' text
 	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)
 	{
-		addIGTextButton(quitConfirmation ? INTINGAMEOP_QUIT : INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
+		addIGTextButton(hostQuitConfirmation ? INTINGAMEOP_HOSTQUIT : INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Host Quit"), OPALIGN);
 	}
 	else
 	{
-		addIGTextButton(quitConfirmation ? INTINGAMEOP_QUIT : INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 
 	// add 'resume'
@@ -439,12 +432,12 @@ void intProcessInGameOptions(UDWORD id)
 	switch (id)
 	{
 	// NORMAL KEYS
-	case INTINGAMEOP_QUIT:				//quit was pressed
-		addQuitOptions();
+	case INTINGAMEOP_HOSTQUIT:				//quit was pressed
+		addHostQuitOptions();
 		break;
 
 	case INTINGAMEOP_POPUP_QUIT:
-	case INTINGAMEOP_QUIT_CONFIRM:		//quit was confirmed.
+	case INTINGAMEOP_QUIT:		//quit was confirmed.
 		intCloseInGameOptions(false, false);
 		break;
 

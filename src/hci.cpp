@@ -1312,7 +1312,7 @@ INT_RETVAL intRunWidgets()
 		/* Catch the quit button here */
 		case INTINGAMEOP_POPUP_QUIT:
 		case IDMISSIONRES_QUIT:			// mission quit
-		case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confirm
+		case INTINGAMEOP_QUIT:			// esc quit confirm
 		case IDOPT_QUIT:						// options screen quit
 			intResetScreen(false);
 			quitting = true;
