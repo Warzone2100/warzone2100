@@ -438,11 +438,11 @@ Enable a specific template (even if design is disabled).
 
 Remove a template.
 
-## setReticuleButton(id, filename, filenameHigh, tooltip, callback)
+## setReticuleButton(id, enabled, tooltip, callback)
 
 Add reticule button. id is which button to change, where zero is zero is the middle button, then going clockwise from the
-uppermost button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when
-you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
+uppermost button. enabled enables/disables a button if set to true/false. The tooltip is the text you see when you move
+the mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
 for such changes to take effect. (3.2+ only)
 
 ## showReticuleWidget(id)
