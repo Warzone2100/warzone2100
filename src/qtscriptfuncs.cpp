@@ -3319,11 +3319,11 @@ static QScriptValue js_removeTemplate(QScriptContext *context, QScriptEngine *en
 	return QScriptValue();
 }
 
-//-- ## setReticuleButton(id, enabled, tooltip, callback)
+//-- ## setReticuleButton(id, filename, filenameHigh, tooltip, callback)
 //--
 //-- Add reticule button. id is which button to change, where zero is zero is the middle button, then going clockwise from the
-//-- uppermost button. enabled enables/disables a button if set to true/false. The tooltip is the text you see when you move
-//-- the mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
+//-- uppermost button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when
+//-- you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
 //-- for such changes to take effect. (3.2+ only)
 //--
 static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine *engine)
@@ -3331,13 +3331,14 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	int button = context->argument(0).toInt32();
 	SCRIPT_ASSERT(context, button >= 0 && button <= 6, "Invalid button %d", button);
 	std::string tip = std::string(context->argument(1).toString().toUtf8().constData());
-	bool enabled = context->argument(2).toBool();
+	std::string file = std::string(context->argument(2).toString().toUtf8().constData());
+	std::string fileDown = std::string(context->argument(3).toString().toUtf8().constData());
 	WzString func;
-	if (context->argumentCount() > 3)
+	if (context->argumentCount() > 4)
 	{
 		func = QStringToWzString(context->argument(4).toString());
 	}
-	setReticuleStats(button, tip, enabled, func, engine);
+	setReticuleStats(button, tip, file, fileDown, func, engine);
 	return QScriptValue();
 }
 

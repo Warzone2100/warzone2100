@@ -386,44 +386,22 @@ void setReticuleFlash(int ButId, bool flash)
 	}
 }
 
-void setReticuleStats(int ButId, std::string tip, bool enabled, WzString func, QScriptEngine *engine)
+void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, WzString func, QScriptEngine *engine)
 {
 	if (MissionResUp)
 	{
 		return;
 	}
 
-	WzString filenames[NUMRETBUTS] =
-	{
-		"image_cancel_up.png",
-		"image_manufacture_up.png",
-		"image_research_up.png",
-		"image_build_up.png",
-		"image_design_up.png",
-		"image_intelmap_up.png",
-		"image_commanddroid_up.png"
-	};
-
-	WzString filenamesDown[NUMRETBUTS] =
-	{
-		"image_cancel_down.png",
-		"image_manufacture_down.png",
-		"image_research_down.png",
-		"image_build_down.png",
-		"image_design_down.png",
-		"image_intelmap_down.png",
-		"image_commanddroid_down.png"
-	};
-
 	retbutstats[ButId].tip = tip;
-	retbutstats[ButId].filename = enabled ? filenames[ButId] : "";
-	retbutstats[ButId].filenameDown = enabled ? filenamesDown[ButId] : "";
+	retbutstats[ButId].filename = WzString::fromUtf8(filename.c_str());
+	retbutstats[ButId].filenameDown = WzString::fromUtf8(filenameDown.c_str());
 	retbutstats[ButId].downTime = 0;
 	retbutstats[ButId].flashing = false;
 	retbutstats[ButId].flashTime = 0;
 	retbutstats[ButId].func = func;
 	retbutstats[ButId].engine = engine;
-	ReticuleEnabled[ButId].Enabled = enabled;
+	ReticuleEnabled[ButId].Enabled = false;
 
 	if (!retbutstats[ButId].button) // not quite set up yet
 	{
@@ -435,8 +413,9 @@ void setReticuleStats(int ButId, std::string tip, bool enabled, WzString func, Q
 		retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
 	}
 
-	if (enabled)
+	if (!retbutstats[ButId].filename.isEmpty())
 	{
+		ReticuleEnabled[ButId].Enabled = true;
 		retbutstats[ButId].button->setState(0);
 	}
 }
