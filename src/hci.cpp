@@ -441,7 +441,14 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 
 	if (butDisabled)
 	{
-		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
+		if (psWidget->UserData != RETBUT_CANCEL)
+		{
+			iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
+		}
+		else
+		{
+			iV_DrawImage(IntImages, IMAGE_CANCEL_DOWN, x, y);
+		}
 		return;
 	}
 

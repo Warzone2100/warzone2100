@@ -105,7 +105,7 @@ function eventDeliveryPointMoved()
 	if (tutState === 23)
 	{
 		increaseTutorialState();
-		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
+		setReticuleButton(PRODUCTION_BUTTON, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 		setReticuleFlash(PRODUCTION_BUTTON, true);
 	}
 }
@@ -130,7 +130,7 @@ function enableBuild()
 //show the research button
 function enableRes()
 {
-	setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
+	setReticuleButton(RESEARCH_BUTTON, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	setReticuleFlash(RESEARCH_BUTTON, true);
 	enableStructure("A0ResearchFacility", CAM_HUMAN_PLAYER);
 }
