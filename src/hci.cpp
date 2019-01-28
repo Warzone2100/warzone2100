@@ -94,8 +94,6 @@ static bool SecondaryWindowUp = false;
 // Chat dialog
 static bool ChatDialogUp = false;
 
-#define RETXOFFSET (0)// Reticule button offset
-#define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
 
 struct BUTSTATE
@@ -113,13 +111,13 @@ struct BUTOFFSET
 
 static BUTOFFSET ReticuleOffsets[NUMRETBUTS] =  	// Reticule button form relative positions.
 {
-	{48, 47},	// RETBUT_CANCEL,
-	{53, 15},	// RETBUT_FACTORY,
-	{87, 33},	// RETBUT_RESEARCH,
-	{87, 68},	// RETBUT_BUILD,
-	{53, 86},	// RETBUT_DESIGN,
-	{19, 68},	// RETBUT_INTELMAP,
-	{19, 33},	// RETBUT_COMMAND,
+	{53, 45},	// RETBUT_CANCEL,
+	{58, 14},	// RETBUT_FACTORY,
+	{92, 32},	// RETBUT_RESEARCH,
+	{92, 67},	// RETBUT_BUILD,
+	{58, 85},	// RETBUT_DESIGN,
+	{24, 67},	// RETBUT_INTELMAP,
+	{24, 32},	// RETBUT_COMMAND,
 };
 
 static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states.
@@ -503,32 +501,6 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	retbutstats[psWidget->UserData].flashTime = flashTime;
 	retbutstats[psWidget->UserData].flashing = flashing;
 	retbutstats[psWidget->UserData].downTime = DownTime;
-}
-
-// Set the x,y members of a button widget initialiser given a reticule button index.
-//
-static void setReticuleBut(int ButId)
-{
-	/* Default button data */
-	W_BUTINIT sButInit;
-	sButInit.formID = IDRET_FORM;
-	sButInit.id = ReticuleEnabled[ButId].id;
-	sButInit.width = RET_BUTWIDTH;
-	sButInit.height = RET_BUTHEIGHT;
-	sButInit.pDisplay = intDisplayReticuleButton;
-	sButInit.x = ReticuleOffsets[ButId].x + RETXOFFSET;
-	sButInit.y = ReticuleOffsets[ButId].y + RETYOFFSET;
-	sButInit.pTip = retbutstats[ButId].tip;
-	sButInit.style = WBUT_SECONDARY;
-	sButInit.UserData = ButId;
-	retbutstats[ButId].downTime = 0;
-	retbutstats[ButId].flashing = false;
-	retbutstats[ButId].flashTime = 0;
-	retbutstats[ButId].button = widgAddButton(psWScreen, &sButInit);
-	if (!retbutstats[ButId].button)
-	{
-		debug(LOG_ERROR, "Failed to add reticule button");
-	}
 }
 
 /* Initialise the in game interface */
@@ -2742,7 +2714,28 @@ bool intAddReticule()
 	}));
 	for (int i = 0; i < NUMRETBUTS; i++)
 	{
-		setReticuleBut(i);
+		// Set the x,y members of a button widget initialiser
+		//
+		/* Default button data */
+		W_BUTINIT sButInit;
+		sButInit.formID = IDRET_FORM;
+		sButInit.id = ReticuleEnabled[i].id;
+		sButInit.width = RET_BUTWIDTH;
+		sButInit.height = RET_BUTHEIGHT;
+		sButInit.pDisplay = intDisplayReticuleButton;
+		sButInit.x = ReticuleOffsets[i].x;
+		sButInit.y = ReticuleOffsets[i].y;
+		sButInit.pTip = retbutstats[i].tip;
+		sButInit.style = WBUT_SECONDARY;
+		sButInit.UserData = i;
+		retbutstats[i].downTime = 0;
+		retbutstats[i].flashing = false;
+		retbutstats[i].flashTime = 0;
+		retbutstats[i].button = widgAddButton(psWScreen, &sButInit);
+		if (!retbutstats[i].button)
+		{
+			debug(LOG_ERROR, "Failed to add reticule button");
+		}
 	}
 	ReticuleUp = true;
 	return true;
