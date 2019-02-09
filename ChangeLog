@@ -1,6 +1,6 @@
-2019-02: Version 3.3.0 beta1
+2019-02-10: Version 3.3.0 beta1
  * General:
-   * Add: New challenge "Two-Faced" from forum member Forgon (commit:2535b921a40afc0a760a54f9efe31494d95dcc7b)
+   * Add: New challenge "Two-Faced" (commit:2535b921a40afc0a760a54f9efe31494d95dcc7b)
    * Add: Chat link to main menu (commit:6797cf4681ebe35f50785f08f54c4da8d42e432e)
    * Add: New save game file "main.json" (commit:6670ce187a559dbed0fcbd7a0b49ee61488801fb)
    * Change: C++11 modernization (commit:9d0f604d5ac7a5968d3b8582ed5934eb4117bee4, commit:8aa07d1939c8e66759828df7b524f9b4854cebb4, commit:4c4b2845f95901245d5d90153d55a5d3db7b3b80)

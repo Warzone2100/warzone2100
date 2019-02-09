@@ -15,8 +15,8 @@ APP_MANIFEST RT_MANIFEST warzone2100.manifest
 //
 
 1 VERSIONINFO
- FILEVERSION 9,9,9,9
- PRODUCTVERSION 9,9,9,9
+ FILEVERSION 3,3,0,0
+ PRODUCTVERSION 3,3,0,0
  FILEFLAGSMASK 0x0L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -33,12 +33,12 @@ BEGIN
 		BEGIN
 			VALUE "CompanyName", "Warzone 2100 Project"
 			VALUE "FileDescription", "Warzone 2100 portable"
-			VALUE "FileVersion", "bugfixes"
+			VALUE "FileVersion", "3.3.0-beta1"
 			VALUE "InternalName", "Warzone 2100"
 			VALUE "LegalCopyright", "Copyright (C) 2005-2019 Warzone 2100 Project"
 			VALUE "OriginalFilename", "warzone2100_portable.exe"
 			VALUE "ProductName", "Warzone 2100 portable"
-			VALUE "ProductVersion", "bugfixes"
+			VALUE "ProductVersion", "3.3.0-beta1"
 		END
 	END
 	BLOCK "VarFileInfo"
