@@ -1,153 +1,347 @@
-Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
+Contributors
+============
 
-The Warzone 2100 Project team (current GPL version):
-Christian Ohm (cybersphinx) 	programmer
-Per I. Mathisen (per / sendai)	programmer
-Stephen Swaney (stiv) programmer, web programmer
-- (Cyp) 	programmer
-- (vexed) 	programmer+++
+The Warzone 2100 Project team
+-----------------------------
 
+* Christian Ohm (cybersphinx/the_cybersphinx): Programming
+* (Cyp): Programming
+* (pastdue/past-due): Programming with focus on build systems
+* Per Inge Mathisen (perim/per/sendai): Programming
+* Stephen Swaney (stiv): Programming, web development
+* (vexed): Programming
 
+Current or former contributors to the GPL version
+-------------------------------------------------
 
-Current or former contributors to the GPL version (alphabetical order):
-- ([ARCH]T4l0n) Artist
-- (adimosh)
-- (akien-mga) Build system
-- (alfred007) Translator, Campaign testing / script helper, Testing
-- (Alpha93) Translator
-- (AMDmi3) Build system, Programming
-- (Amiral JCDG) Translator
-- (andrvaut) Translator
-- (Asraelite) Programming
-- (aubergine) Artist
-- (Berserk Cyborg) AI, Scripts, Campaign, Programming
-- (Bethrezen) Campaign testing / script helper, Testing
-- (bmwiedemann) Programming
-- (bornemix) Programming
-- (Bulldozer) MacOSX Packaging
-- (ckorn) Programming
-- (dak180) former MacOSX Packaging
-- (Delphinio) NTW
-- (devnexen) Build system, Programming
-- (duda) Artist & Maps
-- (Duha) Addons site
-- (DylanDog) AI script
-- (Emdek) Translator
-- (Eugen) Campaign testing
-- (Flail13) flaME (Map Editor)
-- (Forgon) Programming, Build system, Docs
-- (greedy10101) Translator
-- (Hatsjoe) 2D Graphics
-- (hidden-primary-net) Build system (CMake)
-- (ilario) Programming
-- (i-NoD) Programming
-- (Jorzi) Artist
-- (Khadis) Translator
-- (Kriss7475) Translator
-- (kritcher722) Programming
-- (littlepig) Programming
-- (lthls) Programming
-- (mailaender) Programming
-- (MaNGusT) Artist
-- (mecatxis) Translator
-- (metux) Build system
-- (mrxder) Programming
-- (mtomi78) Translator
-- (NanoTech) Mac programming
-- (nick87720z) Campaign testing
-- (nikoss) Translator
-- (NoQ) Maps / programming
-- (olexandr1986) Translator
-- (Olrox) Artist
-- (pastdue) Mac Build system / CMake support, Programming
-- (-Philosopher-) Campaign testing
-- (Prot) Programming, Translator
-- (Pseudonym404) Programming + original 64bit support
-- (Rimbok) Translator
-- (Romano FC) Translator
-- (Saberuneko) Translator
-- (Safety0ff) programmer
-- (skiz) Programming
-- (stwf) MacOSX Packaging
-- (Tenoh) Campaign testing
-- (themousemaster) Walkthrough / Docs
-- (ThomasCarstein) Translator
-- (tintou) Build system
-- (Tucalipe) Translator
-- (urgood2 ) Translator
-- (Vincent) Programming, Build system / CMake support
-- (vs2k5) Programming
-- (Zerovirus) Artist
+### Programming
 
-Adam Holland (coppercore) 	Testing
-Angus Lees (gus) 	Debian Packaging
-Ari Johnson (iamtheari) 	Programming and MacOSX Packaging + original MacOSX port
-Ben Russon (grizzly) 	Support
-Mr.Marney (Berg) 	Models, textures, Site theme designer, programmer
-Ben Latimore (BlueMaxima) 	guide/manual
-Bruce V. Edwards (cathuria) 	2D/3D Graphics
-Carl Hee (Watermelon) 	Programming + Multiturrets
-Christian Scholz (cnceo)	2D Graphics
-Denis Dupeyron (charun) 	Programming
-Dennis Luxen (pret) 	Programming
-Dennis Schridde (devurandom) 	Programming and general Linux and Windows Packaging
-Dion Mendel (noid) 	Programming, original Linux port
-Dmitri Shuralyov (shurcool) 	Programming
-Don Edwards 	2D Graphics support
-Elio Gubser (elio, ohyeh) 	2D Graphics
-Freddie Witherden (EvilGuru) 	Programming and MacOSX Packaging
-Garrett Wiens-Kind (Neuralize) Artist
-Gerard Krol (gerard_) 	Programming, Textures
-Giel van Schijndel (Giel) 	Programming and Debian Linux and Windows Packaging
-Guangcong Luo (Zarel) 	Programming, Balancing, and Documentation
-Hylke van der Schaaf (TheNoid) 	Programming
-Ivan Vasilov (Wolftrak) MacOSX Packaging
-Kevin Malec (Kevin`) 	Websupport
-Kim Metcalfe (lav-coyote25) 	Documentation, Maps and Support
-Marcus Rast (charon) 	Programming
-Martin Koller (mkoller) 	Programming
-Mike Gilmore (Chojun) 	Programming
-Phil Procario (GrimMoroe, grimandmandy) 	3D Graphics
-Rene Jochum (fastdeath / pcdummy) 	former Webmaster, programmer
-Rodolphe Suescun (rodzilla) 	Programming
-Roman C. troman 	Programming
-Scott Balneaves (sbalneav) 	Programming
-Stefan Huehner (shuehner) 	Programming + original 64bit support
-Steven Koenig (kreuvf) 	Documentation, translation
-Thomas Barlow (Mysteryem) 	3D Graphics
-Tim Perrei (kamaze) 	former Webmaster, Programming
-Vladimir Salnikov (crab_) Warzone Guide Database
-Victor Qamly (vqamly) 	Programming
+* Adam Holland (coppercore): Programming
+* Adam Olsen (Rhamphoryncus): Target prediction fixes, bug fixes
+* (Ai_Tak): Pointer bug fixes, bug reports
+* (ak_rosh/AK Rosh/Rosh): Research item dependency bug fix, bug reporting
+* Andrej (Cjkjvfnby): INI file corrections
+* Angus Lees (gus): RPL to AVI converter, Debian packaging, bug fixes
+* Anthony Berent (aberent): Bug fix for fullscreen resolution on Linux
+* (Beliar): Improved subtitle timing
+* Ben Dibell (Subsentient): Bug fixes, WZBlue lobby monitor, forks
+* Bernhard M. Wiedemann (bmwiedemann): Programming
+* (Berserk Cyborg/KJeff01): JavaScript campaign and tutorials, AI, Programming
+* Björn Bredthauer: Optimization of sinus and consinus functions
+* (Blacksabbath): Programming, TWZ fork
+* (bornemix): Mouse dragging bug fixes
+* (Buggy): Ready button crash fix, kill count bug fix, bug report
+* (Buginator): Keyboard shortcuts F1-F6, commandline options, MSVC support
+* (Calculus/MIH-XTC): Nexus AI improvements, EB mod
+* Carl Hee (Watermelon): Support for multiturrets, bug fixes
+* (CorvusCorax): Fix artillery pieces travelling through terrain
+* (crabster/Reg312): CSV conversion to INI, search path bug fix, bug report
+* Cristoph Korn (c-korn,ckorn): Enhanced snprintf(), linker error fix
+* (Crymson): Bug fix for pointer error
+* (dak180): Programming
+* Dale Gill: Bug reports for savegame loading and building on uneven terrain
+* (darkling): Nullbot AI performance improvement
+* David Carlier (devnexen): Memory bug and buffer overflow fixes
+* Dennis Luxen (pret): Better data structures, Doxygen comments
+* Dmitri Shuralyov (shurcool/shurcooL): Improved unit selection box
+* (DrZimmerman): Fix for improperly set variable
+* (DylanDog): DyDo AI
+* (enki): Unit formation bug fix
+* Enrico Weigelt (metux): File permission bug fix
+* (epilef/felipe/felippico): CSV conversion to INI, script functions, bug fixes
+* (EuPhobos/Prot): BoneCrusher! AI, AI tournament, Russian translation
+* (Ezio): Higher quality videos, refactoring
+* (falcon888/Chris): Structure limit bug fix
+* (Firechkn34): Map preview bug fix
+* (Flank): Log messages about NPOT and cubemap texture support in OpenGL
+* Florian Schanda: Improved map previews
+* (Forgon2100/Forgon): GUI enhancements, documentation, translation, bug fixes
+* Freddie Witherden (EvilGuru/FreddieWitherden/Fred): Refactoring, bug fixes
+* Gerard Krol (gerard_): Texture and skybox improvements, programming
+* Gerhard Schaden: Improved master server
+* (Ginger88895): Typo fix
+* (glogow): Default screen resolution of 800x600 (with fallback 640x480) pixels
+* (Goth Zagog-Thou): Programming, TWZ fork
+* Henri Valta: Network variable bug fixes
+* (Hikaru/Hikaru-orly): Repair units bug fix, segfault fix, bug reporting
+* (Hironaru): Consistent naming for scavenger equipment
+* Ilario Gelmetti (ilario): Support for 59Hz monitors
+* (Iluvalar): Balancing, NRS mod, bug reports, bug fixes
+* (i-nod/iNoD/iNoDlite): PIE format enhancements, bug fixes, bug reports
+* (JDW): Keyboard shortcuts for unit selection
+* Josh Martin (skiz): Refactoring
+* (jovie1024): Audio track bug fix
+* Kevin Gillette (kage): Python script tools
+* (klasskill): Skewed video sequence bug fix
+* (Kosh): More reliable overwriting of old savegames
+* Linus Lüssing (T-X): Balanced tree search bug fix, bug reporting
+* (LuckyLuke/Germanium): Balancing
+* Marcus Rast (charon): Segfault fix
+* Martijn Dekker (Dekker3D): Fullscreen resolution bug fix
+* Martin Koller (mkoller): Encoding fixes, internationalization, bug fixes
+* (mastersharp): Savegame loading commander bug fix
+* (MegabytePhreak): Prevent division by zero for object hitpoints, refactoring
+* (mfreire): Improved search for VTOL landing sites
+* Mike Gilmore (Chojun): Programming, custom music
+* N. Devillard: INI parser
+* (NoQ/hao/haoNoQ): Campaign bug fixes, Ultimate Scavenger mod, NullBot AI, maps
+* (nux): Improved building selection keyboard shortcuts
+* (Pallas): Bug fix
+* (Rawler): Tooltip with file modification time in savegame loading screens
+* (raycast): Improved targeting system
+* Rodolphe Suescun (rodzilla): Programming
+* Roman C. (Troman): AI, balancing, bug fixes, refactoring
+* Ryan P. Nicholl (Exaeta): Script messages bug fix
+* (Safety0ff): Bug fixes, refactoring, bug reporting
+* (Samowar): Structure completion on away missions bug fix
+* Scott Balneaves (sbalneav): Bug fixes
+* (Seismo): Fixes for return values of various functions
+* (ShadowWolfTJC): Multiple HQ support
+* (stratadrake): PIE Slicer, WZ Customizing Kit, bug reporting
+* (Suprano): Commandline option to toggle shadows
+* Thomas Frauendorfer (caotic): Fixes for unit assignment and design screen bugs
+* Thomas Rast: Sensor targeting bug fix, bug fixes, German translation
+* Thomas Rösner: PO file encoding fix
+* (tmp500): Balancing, bug reporting
+* (tnmurphy): Memory bug fix
+* Tuomas Salomäki (hwl): Units not following commander bug fix
+* (Vermithrax): Mist fog in campaign games, MacOSX fix
+* Victor Qamly (qamly): FPS counter
+* Vincent Lejeune (vlj): Shader and skybox improvement, bug fixes
+* (Wolfbyte): Keyboard shortcuts for unit selection
+* (zaaak): No texture compression for GUI images
 
+### Build systems
 
+* (abomination): MSVC warnings, programming
+* Alexander Stein: Autotools bug fixes
+* Antonio Rojas (arojas): ArchLinux packaging
+* Ari Johnson (iamtheari): MacOSX support, bug report
+* (Asraelite): Autotools bug fix
+* Bartłomiej Piotrowski (bpiotrowski): ArchLinux packaging
+* Ben Russon (grizzly): BerliOS setup, bug fixes
+* Bertrand Coconnier (bcoconni): Autotools warnings, bug fixes
+* (blb): XCode bug fix
+* (brad/brad0): BSD support
+* (Bulldozer): MacOSX Packaging
+* (cazfi): Autotools bug fixes
+* (clueless): Missing bison/flex files fix
+* Corentin Nöel (tintou): FreeDesktop AppData update
+* (cypr): MacOSX support
+* Denis Dupeyron (charun): Release preparation
+* Dennis Schridde (devurandom): Linux and Windows Packaging, bug fixes
+* Dion Mendel (noid): Original Linux port, filename conversion to lowercase
+* Dmitry Marakasov (AMDmi3): FreeBSD support
+* Evangelos Foutras (foutrelis): ArchLinux packaging
+* Giel van Schijndel (Giel/muggenhor): Debian and Windows support, bug fixes
+* (hidden-primary-net/Marc0/_Marc0_): CMake improvements
+* Ionut Biru (ibiru): ArchLinux packaging
+* Ivan Vasilov (Wolftrak): MacOSX packaging
+* (Jessica/Jessicatz): Bug fixes for compilation and wrong music track filenames
+* (JimPansen): Autotools bug report
+* (Jocke): Debian support, bug report
+* (kaikiai): MacOSX support
+* Karl-Philipp Richter (krichter722): Travis CI support
+* Kelly Anderson: Support for out-of-tree builds
+* Ken Rushia (krushia): Autotools bug reports related to translation
+* Laurent Carlier (lcarlier): ArchLinux packaging
+* (littlepig): MacOSX screen resolution bug fix, Doxygen support, refactoring
+* Marcus Hast: Autopackage bug fixes
+* Matthias Keim (mrxder): MacOSX compile error fix
+* Matthias Mailänder (Mailaender): FreeDesktop AppData file
+* Michael Dänzer: Debian bug fix
+* Mike Hearn: Autopackage bug fixes
+* (nanotech): MacOSX improvements
+* Paul Wise (pabs/pabs3): Autotools bug fixes, spelling corrections, bug fixes
+* (Pavel/Madman2k): Debian support
+* (Pseudonym404): 64-bit support, Yacc warning fix
+* (Purple Monkey): MSVC support
+* (Quix0r): Bug fix for out-of-tree builds
+* (rbt): Autotools support
+* Rémi Verschelde (akien-mga): Datarootdir support for autotools
+* (Richie): MacOSX crash report
+* (ruud): MacOSX compile error fix
+* Stefan Huehner (shuehner): 64-bit support, refactoring
+* (stwf): MacOSX support
+* Thaddeus J. Dziedzic (tdziedzic): ArchLinux packaging
+* Tim Baumgartner (baum): XCode bug fix
+* (Verminus): MacOSX QuesoGLC path fix
+* (vs2k5): MSVC support, bug fixes
 
-Non-project members whose content has been used in Warzone:
-Bart Everson 	Terrain textures
-Jennifer Boyer 	Terrain textures
-Konstantin Kleine-Niermann 	Terrain textures
-Mark A. Vargas 	Terrain textures
-Mitch Featherston 	Terrain textures
-Peter Kaminski 	Terrain textures
-Sherrie Thai 	Terrain textures
-Tristan Bethe 	Terrain textures
+### Artwork
 
+* ([ARCH]T4l0n): Artwork
+* (aubergine): Icons, EggPlant AI, Atlassian website
+* (Black Project): Textures, team colours for repair facility turrets, bug fixes
+* Bruce V. Edwards (cathuria): Backdrops
+* Christian Scholz (cnceo): Textures
+* (CinC): VTOL toggle icon
+* (Dark Project): Broken tileset decals fix
+* Don Edwards: Texture for backdrop of Hatsjoe
+* (duda): Forum header, maps
+* Elio Gubser (elio/ohyeh): Icons, radar detector turret, OBJ conversion to PIE
+* Garrett Wiens-Kind (Neuralize): Game logo, icons
+* (Hatsjoe): Backdrops
+* (Jorzi): Models, textures, kicking icon
+* (MaNGusT): Models, Art Revolution mod
+* Mr Marney (Berg): Models, textures, forum theme, bug reporting
+* (n2large0shirt): Cyborg toggle icon
+* (Olrox): Art Revolution mod
+* Phil Procario (GrimMoroe/grim/grimandmandy): Texture mod, models, bug reports
+* Rman Virgil: Tilesets
+* (slate): Refresh icon
+* (Terminator): Backdrops, Russian translation, bug report for transporters
+* Thomas Barlow (Mysteryem): Gate model, textures, maps, bug reporting
+* (Zerovirus): Cursors
 
-Pumpkin Studio--Original authors of Warzone 2100:
-Jim Bambra 	Director of Projects
-Nick Cook 	Director of Development
-Alex McLean 	Head of Software Engineering
-Annette Bell 	Software Engineer
-Tim Cannell 	Software Engineer
-Paul Dunning 	Software Engineer
-John Elliot 	Software Engineer
-Gareth Jones 	Software Engineer
-Alex Lee 	Software Engineer
-Jeremy Sallis 	Software Engineer
-Louise Anderson 	Project Coordinator
-Pete Ball 	Systems Manager
-Keith Ledger 	Designer
-Pete Johnson 	Graphic Artist
-Errol Kentli 	Graphic Artist
-Kevin Wick 	Graphic Artist
-Kevin Ayre 	Graphic Artist /Mission Designer
-Martin Severn 	Graphic Artist/Musician
+### Maps
+
+* Brian Chavez (bchavez): Map editor SharpFlame
+* (Flail13): Map editor flaME
+* René Jürgens (Delphinio): NTW mod
+* (zydonk): Maps, bug reports
+
+### Translation
+
+* (adimosh): Romanian translation
+* (_A-): Finnish translation
+* (Amiral JCDG): French translation
+* Arthur Filipe (trivial): Portuguese translation
+* Ayhan Görgülü: Turkish translation
+* Azamat H. Hackimov (winterheart): Russian translation
+* Cassarin-Grand Arthur (Zoloom): French translation
+* Christiano Odorico (CristianAlpha93/Alpha93): Italian translation
+* Christian Vest Hansen (Karmazilla): Danish translation
+* (chtsau): Taiwanese Chinese translation
+* Cyril Brulebois (kibi): French translation
+* Daniel Vijande (Saberuneko): Spanish translation
+* (Dorian): Chinese translation
+* (Erlando): Estonian translation
+* Filipp Chertiev: Russian translation
+* Frederico Aromolo: Italian translation
+* (gene69): French translation
+* Gilles J. Seguin: French translation
+* (greedy10101): Chinese translation
+* Gustavo Vivas: Spanish translation
+* (HappyLive6): Chinese translation
+* (HolyDragoon): Portuguese translation
+* (khadis): Indonesian translation
+* (Koapa): Slovak translation
+* (Kriss7475): Polish translation
+* (KukY/13KukYNexus66): Croation translation, enhanced structure limits screen
+* (kzernabog): Esperanto translation
+* (machintruc/cpasmoi): French translation
+* (Makary): Polish translation
+* Markus Enzenberger: German translation
+* (Mathijs): Dutch translation
+* (Maxim/Raptor9000): Russian translation
+* (mecatxis): Catalan translation
+* Mészáros Tamás (mtomi78/MeszarosTomi): Hungarian translation
+* (MetalWarrior95): Croation translation
+* Michał Dutkiewicz (Emdek): Polish translation, scripts, bug fixes
+* Molnár Gábor: Hungarian translation
+* Nikos Papadopoulos (nikoss): Greek translation
+* (nino_romans): Dutch translation
+* (olexandr1986): Ukrainian translation
+* (Peng): Chinese translation
+* (Qioxis): Dutch translation
+* (qwerty800): French translation
+* (Raymond): German translation
+* (Rimbok): Russian translation
+* (RomanoFC/Romano FC): Dutch translation
+* (rustamv.rman): Russian translation
+* (Ryo): German translation
+* Shinyu Wu: Chinese translation
+* Steven Koenig (Kreuvf): German translation, documentation, bug reporting
+* Szalai Kálmán: Hungarian translation
+* Thomas Carstein (ThomasCarstein): Slovenian translation
+* (Tucalipe): Brazilian and Portuguese translation
+* (urgood2): Korean translation
+* Vadim S. Sabinich (sabinich): Russian translation
+* Vincent Laviron (Althalus, lthls): French translation, bug fixes
+* Vitya Andreev (vaut/andrvaut): Russian translation, bug fix for MXE
+* (wakeup): Turkish translation
+
+### Documentation
+
+* Ben Latimore (BlueMaxima): Quick Start Guide, challenge descriptions
+* Guangcong Luo (Zarel): Programming, guide, cursors, balance mod
+* Jorge Cardoso Leitão: Doxygen support
+* Kim Metcalfe (lav-coyote25/lav-coyote): Documentation, maps, bug fixes
+* (LordGolias): Doxygen support
+* (themousemaster): Campaign walkthrough
+
+### Web development
+
+* (Duha): Addons website
+* Kevin Malec (Kevin`): Website support
+* Rene Jochum (fastdeath/pcdummy): Website administration, programming
+* Tim Perrei (kamaze): Website administration, programming
+* Vladimir Salnikov (crab_/crab312): Guide database, bug fixes, bug reporting
+
+### Testing
+
+* (alfred007): Campaign testing, German translation, bug reporting
+* (Andrey/andreykp): Bug report for ECM body points in CSV conversion to INI
+* (atis_home): Bug report for 64-bit compilers
+* (Beau): Bug report for broken player counts
+* (Bethrezen): Campaign testing, bug reporting
+* (Daltx): Bug report
+* David Brettle: Bug report for close button not flashing
+* (dch): Bug reports for loading campaign games
+* (dpblnt): Bug report for crash related to structure limits
+* (effigy): Bug reports for kicking players and mouse options screen
+* (Eugen): Campaign testing, bug reporting
+* Hylke van der Schaaf (TheNoid/Hylke): Bug reports
+* (icefire): Bug reports for gates
+* (jaakan): Bug reports for compiler warnings
+* Jan Dittberner: Bug reports for crashes when saving games
+* Luigi Auriemma: Buffer overflow bug report
+* Michael Strobel: Bug report for radar window drawing
+* (nick87720z): Campaign testing, bug reporting
+* (-Philosopher-): Campaign testing, bug reporting
+* (Quenton): Bug reporting
+* (Random Whiny User/whiny): Bug reports for wrong backdrop and edit boxes
+* (Sekmeton): Bug report for sensors aiming at targets outside of their range
+* (sicanjal): Windows testing
+* (Silvence/skellr): Bug report for crash with commanders as delivery points
+* (SmokyTGA1): Bug report for crash related to assignment of units to a sensor
+* (Tenoh): Campaign testing
+* (themac): Bug report for host sending map to player who already left
+* (Toksyuryel): Bug report for crash caused by wrong research status message
+* (WZ2100ModsFan): Bug reporting
+* (xNEXTx): Campaign testing
+* (Zepherian): Bug report for VTOL rearming
+
+### Non-project members whose content has been used in Warzone
+
+* Bart Everson: Terrain textures
+* Jennifer Boyer: Terrain textures
+* Konstantin Kleine-Niermann: Terrain textures
+* Mark A. Vargas: Terrain textures
+* Mitch Featherston: Terrain textures
+* Peter Kaminski: Terrain textures
+* Sherrie Thai: Terrain textures
+* Tristan Bethe: Terrain textures
+
+Original authors of Warzone 2100 of Pumpkin Studios
+---------------------------------------------------
+
+* Jim Bambra: Director of Projects
+* Nick Cook: Director of Development
+* Alex McLean: Head of Software Engineering
+* Annette Bell: Software Engineer
+* Tim Cannell: Software Engineer
+* Paul Dunning: Software Engineer
+* John Elliot: Software Engineer
+* Gareth Jones: Software Engineer
+* Alex Lee: Software Engineer
+* Jeremy Sallis: Software Engineer
+* Louise Anderson: Project Coordinator
+* Pete Ball: Systems Manager
+* Keith Ledger: Designer
+* Pete Johnson: Graphic Artist
+* Errol Kentli: Graphic Artist
+* Kevin Wick: Graphic Artist
+* Kevin Ayre: Graphic Artist/Mission Designer
+* Martin Severn: Graphic Artist/Musician
