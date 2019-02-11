@@ -1,3 +1,65 @@
+2019-03-XX: Version 3.3.0 beta2
+ * General:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Graphics:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Campaign:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Multiplayer:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Scripting:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * AI:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Other:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Modding:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Balance:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Translation:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Documentation:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+ * Build systems:
+   * Add:
+   * Change:
+   * Fix:
+   * Remove:
+
 2019-02-10: Version 3.3.0 beta1
  * General:
    * Add: Challenge "Two-Faced" (commit:2535b921a40afc0a760a54f9efe31494d95dcc7b)
