@@ -11448,31 +11448,31 @@ msgstr "Приблизить радар"
 
 #: src/keymap.cpp:353
 msgid "Zoom In"
-msgstr "Приблизить"
+msgstr "Приблизить камеру"
 
 #: src/keymap.cpp:354
 msgid "Zoom Out"
-msgstr "Отдалить"
+msgstr "Отдалить камеру"
 
 #: src/keymap.cpp:355
 msgid "Pitch Forward"
-msgstr "Бросок вперёд"
+msgstr "Опустить камеру"
 
 #: src/keymap.cpp:356
 msgid "Rotate Left"
-msgstr "Повернуть влево"
+msgstr "Повернуть камеру влево"
 
 #: src/keymap.cpp:357
 msgid "Reset Pitch"
-msgstr "Сброс броска"
+msgstr "Сбросить высоту камеры"
 
 #: src/keymap.cpp:358
 msgid "Rotate Right"
-msgstr "Повернуть вправо"
+msgstr "Повернуть камеру вправо"
 
 #: src/keymap.cpp:359
 msgid "Pitch Back"
-msgstr "Бросок назад"
+msgstr "Поднять камеру"
 
 #: src/keymap.cpp:360
 msgid "Orders Menu"
