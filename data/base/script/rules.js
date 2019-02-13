@@ -265,7 +265,20 @@ function eventGameInit()
 
 function setLimits()
 {
-	setDroidLimit(selectedPlayer, 100, DROID_ANY);
+	var armySize = 80;
+	switch (difficulty)
+	{
+		case EASY:
+			armySize = 100;
+			break;
+		case HARD:
+			armySize = 60;
+			break;
+		case INSANE:
+			armySize = 40;
+			break;
+	}
+	setDroidLimit(selectedPlayer, armySize, DROID_ANY);
 	setDroidLimit(selectedPlayer, 10, DROID_COMMAND);
 	setDroidLimit(selectedPlayer, 15, DROID_CONSTRUCT);
 
