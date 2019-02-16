@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2018-10-22 17:06+0100\n"
+"POT-Creation-Date: 2019-02-16 09:53+0000\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -1205,7 +1205,7 @@ msgid "Demolish"
 msgstr "Demolish"
 
 #: data/base/messages/strings/names.txt:156
-#: po/custom/fromJson.txt:929
+#: po/custom/fromJson.txt:926
 msgid "Naval"
 msgstr ""
 
@@ -1233,19 +1233,19 @@ msgstr "Dragon's Teeth"
 
 #: data/base/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:673
+#: po/custom/fromJson.txt:670
 msgid "Howitzer Emplacement"
 msgstr "Howitzer Emplacement"
 
 #: data/base/messages/strings/names.txt:216
 #: data/mp/messages/strings/names.txt:252
-#: po/custom/fromJson.txt:519
+#: po/custom/fromJson.txt:516
 msgid "Ground Shaker Emplacement"
 msgstr "Ground Shaker Emplacement"
 
 #: data/base/messages/strings/names.txt:217
 #: data/mp/messages/strings/names.txt:253
-#: po/custom/fromJson.txt:618
+#: po/custom/fromJson.txt:615
 msgid "Hellstorm Emplacement"
 msgstr "Hellstorm Emplacement"
 
@@ -1338,23 +1338,23 @@ msgstr "NP-Hardcrete"
 
 #: data/base/messages/strings/names.txt:314
 #: data/mp/messages/strings/names.txt:395
-#: po/custom/fromJson.txt:590
+#: po/custom/fromJson.txt:587
 msgid "Heavy Machinegun Bunker"
 msgstr "Heavy Machinegun Bunker"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:397
-#: po/custom/fromJson.txt:490
+#: po/custom/fromJson.txt:487
 msgid "Flashlight Emplacement"
 msgstr "Flashlight Emplacement"
 
 #: data/base/messages/strings/names.txt:322
-#: po/custom/fromJson.txt:595
+#: po/custom/fromJson.txt:592
 msgid "Heavy Machinegun Guard Tower"
 msgstr "Heavy Machinegun Guard Tower"
 
 #: data/base/messages/strings/names.txt:323
-#: po/custom/fromJson.txt:482
+#: po/custom/fromJson.txt:479
 msgid "Flamer Guard Tower"
 msgstr "Flamer Guard Tower"
 
@@ -1364,7 +1364,7 @@ msgstr "Lancer Guard Tower"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:409
-#: po/custom/fromJson.txt:483
+#: po/custom/fromJson.txt:480
 msgid "Flamer Hardpoint"
 msgstr "Flamer Hardpoint"
 
@@ -1676,13 +1676,13 @@ msgstr "Cyborg Materials Improved"
 #: data/base/messages/strings/resstrings.txt:572
 #: data/mp/messages/strings/resstrings.txt:2
 #: data/mp/messages/strings/resstrings.txt:262
-#: po/custom/fromJson.txt:822
+#: po/custom/fromJson.txt:819
 msgid "Layered dense composite alloys and energy-absorbing fibres"
 msgstr "Layered dense composite alloys and energy-absorbing fibres"
 
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:3
-#: po/custom/fromJson.txt:747
+#: po/custom/fromJson.txt:744
 msgid "Increases Kinetic Armor and Body Points"
 msgstr "Increases Kinetic Armour and Body Points"
 
@@ -1702,13 +1702,13 @@ msgstr "Cyborg Thermal Armour Improved"
 
 #: data/base/messages/strings/resstrings.txt:42
 #: data/mp/messages/strings/resstrings.txt:7
-#: po/custom/fromJson.txt:558
+#: po/custom/fromJson.txt:555
 msgid "Heat resistant armored layers"
 msgstr "Heat resistant armoured layers"
 
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:8
-#: po/custom/fromJson.txt:1313
+#: po/custom/fromJson.txt:1310
 msgid "Thermal Armor increased"
 msgstr "Thermal Armour increased"
 
@@ -1716,7 +1716,7 @@ msgstr "Thermal Armour increased"
 #: data/base/messages/strings/resstrings.txt:65
 #: data/mp/messages/strings/resstrings.txt:11
 #: data/mp/messages/strings/resstrings.txt:16
-#: po/custom/fromJson.txt:950
+#: po/custom/fromJson.txt:947
 msgid "New Cyborg Available"
 msgstr "New Cyborg Available"
 
@@ -1760,7 +1760,7 @@ msgstr "Body Points: Medium"
 #: data/mp/messages/strings/resstrings.txt:19
 #: data/mp/messages/strings/resstrings.txt:24
 #: data/mp/messages/strings/resstrings.txt:29
-#: po/custom/fromJson.txt:1130
+#: po/custom/fromJson.txt:1127
 msgid "Requires Cyborg factory to produce"
 msgstr "Requires Cyborg factory to produce"
 
@@ -1774,7 +1774,7 @@ msgstr "Armed with Cyborg Assault Gun"
 #: data/base/messages/strings/resstrings.txt:83
 #: data/mp/messages/strings/resstrings.txt:21
 #: data/mp/messages/strings/resstrings.txt:26
-#: po/custom/fromJson.txt:956
+#: po/custom/fromJson.txt:953
 msgid "New Jump Cyborg Available"
 msgstr "New Jump Cyborg Available"
 
@@ -1792,7 +1792,7 @@ msgstr "Defenses Improved"
 
 #: data/base/messages/strings/resstrings.txt:104
 #: data/mp/messages/strings/resstrings.txt:32
-#: po/custom/fromJson.txt:659
+#: po/custom/fromJson.txt:656
 msgid "High-tensile concrete reinforced with boron"
 msgstr "High-tensile concrete reinforced with boron"
 
@@ -1800,7 +1800,7 @@ msgstr "High-tensile concrete reinforced with boron"
 #: data/base/messages/strings/resstrings.txt:401
 #: data/mp/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:198
-#: po/custom/fromJson.txt:729
+#: po/custom/fromJson.txt:726
 msgid "Increases Armor and Body Points"
 msgstr "Increases Armour and Body Points"
 
@@ -1862,7 +1862,7 @@ msgstr "All defenses and walls upgraded automatically"
 #: data/mp/messages/strings/resstrings.txt:151
 #: data/mp/messages/strings/resstrings.txt:156
 #: data/mp/messages/strings/resstrings.txt:161
-#: po/custom/fromJson.txt:952
+#: po/custom/fromJson.txt:949
 msgid "New Defensive Structure Available"
 msgstr "New Defensive Structure Available"
 
@@ -1946,7 +1946,7 @@ msgstr "AA Site with Whirlwind Gun Turret"
 
 #: data/base/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:57
-#: po/custom/fromJson.txt:772
+#: po/custom/fromJson.txt:769
 msgid "Indirect fire rocket battery"
 msgstr "Indirect fire rocket battery"
 
@@ -2062,7 +2062,7 @@ msgstr "Armoured strongpoint with Assault Cannon"
 
 #: data/base/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:112
-#: po/custom/fromJson.txt:1113
+#: po/custom/fromJson.txt:1110
 msgid "Reinforced tower with Assault Gun"
 msgstr "Reinforced tower with Assault Gun"
 
@@ -2139,31 +2139,31 @@ msgstr "Armoured hardpoint with Tank Killer AT missile"
 
 #: data/base/messages/strings/resstrings.txt:324
 #: data/mp/messages/strings/resstrings.txt:162
-#: po/custom/fromJson.txt:1112
+#: po/custom/fromJson.txt:1109
 msgid "Reinforced concrete tank traps"
 msgstr "Reinforced concrete tank traps"
 
 #: data/base/messages/strings/resstrings.txt:325
 #: data/mp/messages/strings/resstrings.txt:163
-#: po/custom/fromJson.txt:1058
+#: po/custom/fromJson.txt:1055
 msgid "Prevents enemy movement"
 msgstr "Prevents enemy movement"
 
 #: data/base/messages/strings/resstrings.txt:333
 #: data/mp/messages/strings/resstrings.txt:166
-#: po/custom/fromJson.txt:1117
+#: po/custom/fromJson.txt:1114
 msgid "Repair Facility Improved"
 msgstr "Repair Facility Improved"
 
 #: data/base/messages/strings/resstrings.txt:334
 #: data/mp/messages/strings/resstrings.txt:167
-#: po/custom/fromJson.txt:972
+#: po/custom/fromJson.txt:969
 msgid "New robotic repair techniques"
 msgstr "New robotic repair techniques"
 
 #: data/base/messages/strings/resstrings.txt:335
 #: data/mp/messages/strings/resstrings.txt:168
-#: po/custom/fromJson.txt:765
+#: po/custom/fromJson.txt:762
 msgid "Increases Repair Speed"
 msgstr "Increases Repair Speed"
 
@@ -2183,7 +2183,7 @@ msgstr "Cyborg Production Improved"
 
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/strings/resstrings.txt:172
-#: po/custom/fromJson.txt:1146
+#: po/custom/fromJson.txt:1143
 msgid "Robotic Cyborg Production"
 msgstr "Robotic Cyborg Production"
 
@@ -2191,7 +2191,7 @@ msgstr "Robotic Cyborg Production"
 #: data/base/messages/strings/resstrings.txt:357
 #: data/mp/messages/strings/resstrings.txt:173
 #: data/mp/messages/strings/resstrings.txt:178
-#: po/custom/fromJson.txt:737
+#: po/custom/fromJson.txt:734
 msgid "Increases Cyborg factory output"
 msgstr "Increases Cyborg factory output"
 
@@ -2212,19 +2212,19 @@ msgstr "Self-Replicating Cyborg Production"
 #: data/base/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:181
 #: data/mp/messages/strings/resstrings.txt:186
-#: po/custom/fromJson.txt:1381
+#: po/custom/fromJson.txt:1378
 msgid "Vehicle Production Improved"
 msgstr "Vehicle Production Improved"
 
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/strings/resstrings.txt:182
-#: po/custom/fromJson.txt:973
+#: po/custom/fromJson.txt:970
 msgid "New Robotic Techniques improve factory production"
 msgstr "New Robotic Techniques improve factory production"
 
 #: data/base/messages/strings/resstrings.txt:367
 #: data/mp/messages/strings/resstrings.txt:183
-#: po/custom/fromJson.txt:740
+#: po/custom/fromJson.txt:737
 msgid "Increases factory production rate"
 msgstr "Increases factory production rate"
 
@@ -2243,13 +2243,13 @@ msgstr "Self-Replicating Factory Production"
 
 #: data/base/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:188
-#: po/custom/fromJson.txt:739
+#: po/custom/fromJson.txt:736
 msgid "Increases factory output"
 msgstr "Increases factory output"
 
 #: data/base/messages/strings/resstrings.txt:389
 #: data/mp/messages/strings/resstrings.txt:191
-#: po/custom/fromJson.txt:1134
+#: po/custom/fromJson.txt:1131
 msgid "Research Improved"
 msgstr "Research Improved"
 
@@ -2261,7 +2261,7 @@ msgstr "Dedicated Synaptic Link Data Analysis"
 
 #: data/base/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:193
-#: po/custom/fromJson.txt:766
+#: po/custom/fromJson.txt:763
 msgid "Increases research speed"
 msgstr "Increases research speed"
 
@@ -2273,13 +2273,13 @@ msgstr "All research facilities upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:399
 #: data/mp/messages/strings/resstrings.txt:196
-#: po/custom/fromJson.txt:738
+#: po/custom/fromJson.txt:735
 msgid "Increases Damage Resistance"
 msgstr "Increases Damage Resistance"
 
 #: data/base/messages/strings/resstrings.txt:400
 #: data/mp/messages/strings/resstrings.txt:197
-#: po/custom/fromJson.txt:529
+#: po/custom/fromJson.txt:526
 msgid "Hardened Base Structure Materials"
 msgstr "Hardened Base Structure Materials"
 
@@ -2291,19 +2291,19 @@ msgstr "All base structures upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/strings/resstrings.txt:201
-#: po/custom/fromJson.txt:1060
+#: po/custom/fromJson.txt:1057
 msgid "Production Improved"
 msgstr "Production Improved"
 
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/strings/resstrings.txt:202
-#: po/custom/fromJson.txt:1158
+#: po/custom/fromJson.txt:1155
 msgid "Robotic VTOL Production"
 msgstr "Robotic VTOL Production"
 
 #: data/base/messages/strings/resstrings.txt:413
 #: data/mp/messages/strings/resstrings.txt:203
-#: po/custom/fromJson.txt:771
+#: po/custom/fromJson.txt:768
 msgid "Increases VTOL factory output"
 msgstr "Increases VTOL factory output"
 
@@ -2315,7 +2315,7 @@ msgstr "All VTOL factories upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:421
 #: data/mp/messages/strings/resstrings.txt:206
-#: po/custom/fromJson.txt:1448
+#: po/custom/fromJson.txt:1445
 msgid "VTOL Rearming Times Reduced"
 msgstr "VTOL Rearming Times Reduced"
 
@@ -2327,7 +2327,7 @@ msgstr "Automated VTOL Rearming"
 
 #: data/base/messages/strings/resstrings.txt:423
 #: data/mp/messages/strings/resstrings.txt:208
-#: po/custom/fromJson.txt:1107
+#: po/custom/fromJson.txt:1104
 msgid "Reduces rearming time"
 msgstr "Reduces rearming time"
 
@@ -2341,13 +2341,13 @@ msgstr "All rearming pads upgraded automatically"
 #: data/base/messages/strings/resstrings.txt:479
 #: data/mp/messages/strings/resstrings.txt:211
 #: data/mp/messages/strings/resstrings.txt:226
-#: po/custom/fromJson.txt:980
+#: po/custom/fromJson.txt:977
 msgid "New Systems Turret Available"
 msgstr "New Systems Turret Available"
 
 #: data/base/messages/strings/resstrings.txt:444
 #: data/mp/messages/strings/resstrings.txt:212
-#: po/custom/fromJson.txt:608
+#: po/custom/fromJson.txt:605
 msgid "Heavy repair unit"
 msgstr "Heavy repair unit"
 
@@ -2359,7 +2359,7 @@ msgstr "Automatically Repairs Damaged Units"
 
 #: data/base/messages/strings/resstrings.txt:446
 #: data/mp/messages/strings/resstrings.txt:214
-#: po/custom/fromJson.txt:1020
+#: po/custom/fromJson.txt:1017
 msgid "Or damaged units may be selected as target"
 msgstr "Or damaged units may be selected as target"
 
@@ -2380,61 +2380,61 @@ msgstr "All mobile repair units upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:459
 #: data/mp/messages/strings/resstrings.txt:221
-#: po/custom/fromJson.txt:710
+#: po/custom/fromJson.txt:707
 msgid "Improved Sensor Tower Available"
 msgstr "Improved Sensor Tower Available"
 
 #: data/base/messages/strings/resstrings.txt:460
 #: data/mp/messages/strings/resstrings.txt:222
-#: po/custom/fromJson.txt:949
+#: po/custom/fromJson.txt:946
 msgid "New construction techniques improve tower"
 msgstr "New construction techniques improve tower"
 
 #: data/base/messages/strings/resstrings.txt:461
 #: data/mp/messages/strings/resstrings.txt:223
-#: po/custom/fromJson.txt:1127
+#: po/custom/fromJson.txt:1124
 msgid "Replaces existing sensor tower"
 msgstr "Replaces existing sensor tower"
 
 #: data/base/messages/strings/resstrings.txt:462
 #: data/mp/messages/strings/resstrings.txt:224
-#: po/custom/fromJson.txt:859
+#: po/custom/fromJson.txt:856
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "May be assigned as spotter for indirect fire weapons"
 
 #: data/base/messages/strings/resstrings.txt:480
 #: data/mp/messages/strings/resstrings.txt:227
-#: po/custom/fromJson.txt:1414
+#: po/custom/fromJson.txt:1411
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "VTOL CB turret detects enemy indirect fire batteries"
 
 #: data/base/messages/strings/resstrings.txt:481
 #: data/mp/messages/strings/resstrings.txt:228
-#: po/custom/fromJson.txt:1022
+#: po/custom/fromJson.txt:1019
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "Orders assigned VTOLs to attack the enemy batteries"
 
 #: data/base/messages/strings/resstrings.txt:482
 #: data/mp/messages/strings/resstrings.txt:229
-#: po/custom/fromJson.txt:1449
+#: po/custom/fromJson.txt:1446
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "VTOLs attack until enemy battery is suppressed"
 
 #: data/base/messages/strings/resstrings.txt:485
 #: data/mp/messages/strings/resstrings.txt:231
-#: po/custom/fromJson.txt:1408
+#: po/custom/fromJson.txt:1405
 msgid "VTOL CB Improved"
 msgstr "VTOL CB Improved"
 
 #: data/base/messages/strings/resstrings.txt:486
 #: data/mp/messages/strings/resstrings.txt:232
-#: po/custom/fromJson.txt:954
+#: po/custom/fromJson.txt:951
 msgid "New fire detection systems"
 msgstr "New fire detection systems"
 
 #: data/base/messages/strings/resstrings.txt:487
 #: data/mp/messages/strings/resstrings.txt:233
-#: po/custom/fromJson.txt:451
+#: po/custom/fromJson.txt:448
 msgid "Extends VTOL CB Range"
 msgstr "Extends VTOL CB Range"
 
@@ -2446,19 +2446,19 @@ msgstr "All VTOL CB sensors upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:499
 #: data/mp/messages/strings/resstrings.txt:236
-#: po/custom/fromJson.txt:1451
+#: po/custom/fromJson.txt:1448
 msgid "VTOL Strike Improved"
 msgstr "VTOL Strike Improved"
 
 #: data/base/messages/strings/resstrings.txt:500
 #: data/mp/messages/strings/resstrings.txt:237
-#: po/custom/fromJson.txt:983
+#: po/custom/fromJson.txt:980
 msgid "New target recognition systems"
 msgstr "New target recognition systems"
 
 #: data/base/messages/strings/resstrings.txt:501
 #: data/mp/messages/strings/resstrings.txt:238
-#: po/custom/fromJson.txt:452
+#: po/custom/fromJson.txt:449
 msgid "Extends VTOL Strike Range"
 msgstr "Extends VTOL Strike Range"
 
@@ -2496,19 +2496,19 @@ msgstr "Collective Light Body"
 
 #: data/base/messages/strings/resstrings.txt:528
 #: data/mp/messages/strings/resstrings.txt:247
-#: po/custom/fromJson.txt:1273
+#: po/custom/fromJson.txt:1270
 msgid "Superior armor and body points to Viper"
 msgstr "Superior armour and body points to Viper"
 
 #: data/base/messages/strings/resstrings.txt:529
 #: data/mp/messages/strings/resstrings.txt:248
-#: po/custom/fromJson.txt:1233
+#: po/custom/fromJson.txt:1230
 msgid "Slower than Viper"
 msgstr "Slower than Viper"
 
 #: data/base/messages/strings/resstrings.txt:530
 #: data/mp/messages/strings/resstrings.txt:249
-#: po/custom/fromJson.txt:653
+#: po/custom/fromJson.txt:650
 msgid "High power costs and slower to produce than Viper"
 msgstr "High power costs and slower to produce than Viper"
 
@@ -2520,37 +2520,37 @@ msgstr "Collective Medium Body"
 
 #: data/base/messages/strings/resstrings.txt:540
 #: data/mp/messages/strings/resstrings.txt:252
-#: po/custom/fromJson.txt:1272
+#: po/custom/fromJson.txt:1269
 msgid "Superior armor and body points to Cobra"
 msgstr "Superior armour and body points to Cobra"
 
 #: data/base/messages/strings/resstrings.txt:541
 #: data/mp/messages/strings/resstrings.txt:253
-#: po/custom/fromJson.txt:1231
+#: po/custom/fromJson.txt:1228
 msgid "Slower than Cobra"
 msgstr "Slower than Cobra"
 
 #: data/base/messages/strings/resstrings.txt:542
 #: data/mp/messages/strings/resstrings.txt:254
-#: po/custom/fromJson.txt:652
+#: po/custom/fromJson.txt:649
 msgid "High power costs and slower to produce than Cobra"
 msgstr "High power costs and slower to produce than Cobra"
 
 #: data/base/messages/strings/resstrings.txt:559
 #: data/mp/messages/strings/resstrings.txt:256
-#: po/custom/fromJson.txt:1380
+#: po/custom/fromJson.txt:1377
 msgid "Vehicle Engine Upgrade"
 msgstr "Vehicle Engine Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/strings/resstrings.txt:257
-#: po/custom/fromJson.txt:1345
+#: po/custom/fromJson.txt:1342
 msgid "Turbo-Charged Engine"
 msgstr "Turbo-Charged Engine"
 
 #: data/base/messages/strings/resstrings.txt:561
 #: data/mp/messages/strings/resstrings.txt:258
-#: po/custom/fromJson.txt:718
+#: po/custom/fromJson.txt:715
 msgid "Improves vehicle speed"
 msgstr "Improves vehicle speed"
 
@@ -2566,31 +2566,31 @@ msgstr "All vehicles upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:571
 #: data/mp/messages/strings/resstrings.txt:261
-#: po/custom/fromJson.txt:1379
+#: po/custom/fromJson.txt:1376
 msgid "Vehicle Bodies Improved"
 msgstr "Vehicle Bodies Improved"
 
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:263
-#: po/custom/fromJson.txt:746
+#: po/custom/fromJson.txt:743
 msgid "Increases kinetic armor and body points"
 msgstr "Increases kinetic armour and body points"
 
 #: data/base/messages/strings/resstrings.txt:581
 #: data/mp/messages/strings/resstrings.txt:266
-#: po/custom/fromJson.txt:1387
+#: po/custom/fromJson.txt:1384
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Vehicle Thermal Armour Improved"
 
 #: data/base/messages/strings/resstrings.txt:582
 #: data/mp/messages/strings/resstrings.txt:267
-#: po/custom/fromJson.txt:559
+#: po/custom/fromJson.txt:556
 msgid "Heat-resistant armored layers"
 msgstr "Heat-resistant armoured layers"
 
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:268
-#: po/custom/fromJson.txt:770
+#: po/custom/fromJson.txt:767
 msgid "Increases Thermal Armor"
 msgstr "Increases Thermal Armour"
 
@@ -2602,7 +2602,7 @@ msgstr "Increases Thermal Armour"
 #: data/mp/messages/strings/resstrings.txt:276
 #: data/mp/messages/strings/resstrings.txt:281
 #: data/mp/messages/strings/resstrings.txt:286
-#: po/custom/fromJson.txt:1382
+#: po/custom/fromJson.txt:1379
 msgid "Vehicle Propulsion Improved"
 msgstr "Vehicle Propulsion Improved"
 
@@ -2614,7 +2614,7 @@ msgstr "Vehicle Propulsion Improved"
 #: data/mp/messages/strings/resstrings.txt:277
 #: data/mp/messages/strings/resstrings.txt:282
 #: data/mp/messages/strings/resstrings.txt:287
-#: po/custom/fromJson.txt:942
+#: po/custom/fromJson.txt:939
 msgid "New armored construction"
 msgstr "New armoured construction"
 
@@ -2626,7 +2626,7 @@ msgstr "New armoured construction"
 #: data/mp/messages/strings/resstrings.txt:278
 #: data/mp/messages/strings/resstrings.txt:283
 #: data/mp/messages/strings/resstrings.txt:288
-#: po/custom/fromJson.txt:731
+#: po/custom/fromJson.txt:728
 msgid "Increases Body Points"
 msgstr "Increases Body Points"
 
@@ -2662,13 +2662,13 @@ msgstr "All wheels upgraded automatically"
 #: data/mp/messages/strings/resstrings.txt:296
 #: data/mp/messages/strings/resstrings.txt:301
 #: data/mp/messages/strings/resstrings.txt:306
-#: po/custom/fromJson.txt:940
+#: po/custom/fromJson.txt:937
 msgid "New AA Turret Available"
 msgstr "New AA Turret Available"
 
 #: data/base/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:292
-#: po/custom/fromJson.txt:1350
+#: po/custom/fromJson.txt:1347
 msgid "Twin 80mm flak weapon"
 msgstr "Twin 80mm flak weapon"
 
@@ -2686,7 +2686,7 @@ msgstr "Aerial targets only"
 
 #: data/base/messages/strings/resstrings.txt:642
 #: data/mp/messages/strings/resstrings.txt:297
-#: po/custom/fromJson.txt:1081
+#: po/custom/fromJson.txt:1078
 msgid "Quad 80mm flak weapon"
 msgstr "Quad 80mm flak weapon"
 
@@ -2698,7 +2698,7 @@ msgstr "30mm Anti-Aircraft machinegun"
 
 #: data/base/messages/strings/resstrings.txt:654
 #: data/mp/messages/strings/resstrings.txt:307
-#: po/custom/fromJson.txt:1079
+#: po/custom/fromJson.txt:1076
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "Quad 30mm Anti-Aircraft machinegun"
 
@@ -2718,7 +2718,7 @@ msgstr "Detects and locks-on to VTOL engine emissions"
 
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:313
-#: po/custom/fromJson.txt:726
+#: po/custom/fromJson.txt:723
 msgid "Increases AA accuracy"
 msgstr "Increases AA accuracy"
 
@@ -2738,13 +2738,13 @@ msgstr "AA Flak Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:317
-#: po/custom/fromJson.txt:644
+#: po/custom/fromJson.txt:641
 msgid "High Explosive Flak shards"
 msgstr "High Explosive Flak shards"
 
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:318
-#: po/custom/fromJson.txt:727
+#: po/custom/fromJson.txt:724
 msgid "Increases AA Flak damage"
 msgstr "Increases AA Flak damage"
 
@@ -2756,13 +2756,13 @@ msgstr "All AA flak weapons upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:322
-#: po/custom/fromJson.txt:1105
+#: po/custom/fromJson.txt:1102
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "Recoil loaded AA ammunition hopper"
 
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:323
-#: po/custom/fromJson.txt:728
+#: po/custom/fromJson.txt:725
 msgid "Increases AA ROF"
 msgstr "Increases AA ROF"
 
@@ -2770,7 +2770,7 @@ msgstr "Increases AA ROF"
 #: data/base/messages/strings/resstrings.txt:691
 #: data/mp/messages/strings/resstrings.txt:326
 #: data/mp/messages/strings/resstrings.txt:331
-#: po/custom/fromJson.txt:967
+#: po/custom/fromJson.txt:964
 msgid "New Proximity Bomb Turret Available"
 msgstr "New Proximity Bomb Turret Available"
 
@@ -2790,7 +2790,7 @@ msgstr "Best Targets: Base Structures and Defenses"
 
 #: data/base/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:332
-#: po/custom/fromJson.txt:1256
+#: po/custom/fromJson.txt:1253
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "Superbomb turret explodes in proximity to enemy"
 
@@ -2798,7 +2798,7 @@ msgstr "Superbomb turret explodes in proximity to enemy"
 #: data/base/messages/strings/resstrings.txt:703
 #: data/mp/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:341
-#: po/custom/fromJson.txt:947
+#: po/custom/fromJson.txt:944
 msgid "New Bomb Bay Available"
 msgstr "New Bomb Bay Available"
 
@@ -2850,13 +2850,13 @@ msgstr "Bombsight Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:347
-#: po/custom/fromJson.txt:839
+#: po/custom/fromJson.txt:836
 msgid "Locks on to thermal emissions"
 msgstr "Locks on to thermal emissions"
 
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:348
-#: po/custom/fromJson.txt:732
+#: po/custom/fromJson.txt:729
 msgid "Increases Bombing accuracy"
 msgstr "Increases Bombing accuracy"
 
@@ -2872,13 +2872,13 @@ msgstr "All bomb bays upgraded automatically"
 #: data/mp/messages/strings/resstrings.txt:351
 #: data/mp/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:361
-#: po/custom/fromJson.txt:986
+#: po/custom/fromJson.txt:983
 msgid "New Weapon Turret Available"
 msgstr "New Weapon Turret Available"
 
 #: data/base/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:352
-#: po/custom/fromJson.txt:687
+#: po/custom/fromJson.txt:684
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "Hyper-velocity automatic-cannon firing 88mm rounds"
 
@@ -2892,7 +2892,7 @@ msgstr "Best Targets: Vehicles"
 
 #: data/base/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:354
-#: po/custom/fromJson.txt:1128
+#: po/custom/fromJson.txt:1125
 msgid "Replaces Medium Cannon"
 msgstr "Replaces Medium Cannon"
 
@@ -2910,7 +2910,7 @@ msgstr "Body Points: High"
 
 #: data/base/messages/strings/resstrings.txt:758
 #: data/mp/messages/strings/resstrings.txt:362
-#: po/custom/fromJson.txt:581
+#: po/custom/fromJson.txt:578
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "Heavy Flame-thrower firing Propylene Oxide gel"
 
@@ -2922,19 +2922,19 @@ msgstr "Best Targets: Bunkers, wheeled and hover vehicles"
 
 #: data/base/messages/strings/resstrings.txt:765
 #: data/mp/messages/strings/resstrings.txt:366
-#: po/custom/fromJson.txt:485
+#: po/custom/fromJson.txt:482
 msgid "Flamer Upgrade"
 msgstr "Flamer Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:367
-#: po/custom/fromJson.txt:1065
+#: po/custom/fromJson.txt:1062
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "Propylene Oxide treated to burn at superhot temperatures"
 
 #: data/base/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:368
-#: po/custom/fromJson.txt:741
+#: po/custom/fromJson.txt:738
 msgid "Increases Flamer damage"
 msgstr "Increases Flamer damage"
 
@@ -2952,7 +2952,7 @@ msgstr "All flamers upgraded automatically"
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:381
 #: data/mp/messages/strings/resstrings.txt:411
-#: po/custom/fromJson.txt:955
+#: po/custom/fromJson.txt:952
 msgid "New Indirect Fire Weapon Available"
 msgstr "New Indirect Fire Weapon Available"
 
@@ -2994,19 +2994,19 @@ msgstr "Best Targets: Base Structures, bunkers"
 #: data/mp/messages/strings/resstrings.txt:386
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:396
-#: po/custom/fromJson.txt:676
+#: po/custom/fromJson.txt:673
 msgid "Howitzer Upgrade"
 msgstr "Howitzer Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:794
 #: data/mp/messages/strings/resstrings.txt:387
-#: po/custom/fromJson.txt:1211
+#: po/custom/fromJson.txt:1208
 msgid "Self-guided rocket powered shells"
 msgstr "Self-guided rocket powered shells"
 
 #: data/base/messages/strings/resstrings.txt:795
 #: data/mp/messages/strings/resstrings.txt:388
-#: po/custom/fromJson.txt:743
+#: po/custom/fromJson.txt:740
 msgid "Increases Howitzer accuracy"
 msgstr "Increases Howitzer accuracy"
 
@@ -3022,13 +3022,13 @@ msgstr "All howitzers upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:802
 #: data/mp/messages/strings/resstrings.txt:392
-#: po/custom/fromJson.txt:647
+#: po/custom/fromJson.txt:644
 msgid "High Explosive shells"
 msgstr "High Explosive shells"
 
 #: data/base/messages/strings/resstrings.txt:803
 #: data/mp/messages/strings/resstrings.txt:393
-#: po/custom/fromJson.txt:744
+#: po/custom/fromJson.txt:741
 msgid "Increases Howitzer damage"
 msgstr "Increases Howitzer damage"
 
@@ -3040,7 +3040,7 @@ msgstr "Automatic loading mechanism replaces manual loader"
 
 #: data/base/messages/strings/resstrings.txt:811
 #: data/mp/messages/strings/resstrings.txt:398
-#: po/custom/fromJson.txt:745
+#: po/custom/fromJson.txt:742
 msgid "Increases Howitzer ROF"
 msgstr "Increases Howitzer ROF"
 
@@ -3048,19 +3048,19 @@ msgstr "Increases Howitzer ROF"
 #: data/base/messages/strings/resstrings.txt:857
 #: data/mp/messages/strings/resstrings.txt:401
 #: data/mp/messages/strings/resstrings.txt:406
-#: po/custom/fromJson.txt:850
+#: po/custom/fromJson.txt:847
 msgid "Machinegun Upgrade"
 msgstr "Machinegun Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:846
 #: data/mp/messages/strings/resstrings.txt:402
-#: po/custom/fromJson.txt:1341
+#: po/custom/fromJson.txt:1338
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Tungsten-tipped armour-piercing bullets"
 
 #: data/base/messages/strings/resstrings.txt:847
 #: data/mp/messages/strings/resstrings.txt:403
-#: po/custom/fromJson.txt:751
+#: po/custom/fromJson.txt:748
 msgid "Increases Machinegun damage"
 msgstr "Increases Machinegun damage"
 
@@ -3074,19 +3074,19 @@ msgstr "All machineguns upgraded automatically"
 
 #: data/base/messages/strings/resstrings.txt:858
 #: data/mp/messages/strings/resstrings.txt:407
-#: po/custom/fromJson.txt:696
+#: po/custom/fromJson.txt:693
 msgid "Improved chaingun mechanism"
 msgstr "Improved chaingun mechanism"
 
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:408
-#: po/custom/fromJson.txt:752
+#: po/custom/fromJson.txt:749
 msgid "Increases Machinegun ROF"
 msgstr "Increases Machinegun ROF"
 
 #: data/base/messages/strings/resstrings.txt:892
 #: data/mp/messages/strings/resstrings.txt:412
-#: po/custom/fromJson.txt:860
+#: po/custom/fromJson.txt:857
 msgid "May be assigned to a sensor"
 msgstr "May be assigned to a sensor"
 
@@ -3104,19 +3104,19 @@ msgstr "Body Points: Very Low"
 
 #: data/base/messages/strings/resstrings.txt:905
 #: data/mp/messages/strings/resstrings.txt:416
-#: po/custom/fromJson.txt:923
+#: po/custom/fromJson.txt:920
 msgid "Mortar Upgrade"
 msgstr "Mortar Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:906
 #: data/mp/messages/strings/resstrings.txt:417
-#: po/custom/fromJson.txt:641
+#: po/custom/fromJson.txt:638
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "High Explosive Armour-Piercing Shells"
 
 #: data/base/messages/strings/resstrings.txt:907
 #: data/mp/messages/strings/resstrings.txt:418
-#: po/custom/fromJson.txt:760
+#: po/custom/fromJson.txt:757
 msgid "Increases Mortar damage"
 msgstr "Increases Mortar damage"
 
@@ -3130,19 +3130,19 @@ msgstr "All mortars upgraded automatically"
 #: data/base/messages/strings/resstrings.txt:951
 #: data/mp/messages/strings/resstrings.txt:421
 #: data/mp/messages/strings/resstrings.txt:426
-#: po/custom/fromJson.txt:897
+#: po/custom/fromJson.txt:894
 msgid "Mini-Rocket Upgrade"
 msgstr "Mini-Rocket Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/strings/resstrings.txt:422
-#: po/custom/fromJson.txt:642
+#: po/custom/fromJson.txt:639
 msgid "High Explosive Armor-Piercing warheads"
 msgstr "High Explosive Armour-Piercing warheads"
 
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:423
-#: po/custom/fromJson.txt:754
+#: po/custom/fromJson.txt:751
 msgid "Increases Mini-Rocket damage"
 msgstr "Increases Mini-Rocket damage"
 
@@ -3166,19 +3166,19 @@ msgstr "Increases Mini-Rocket ROF"
 
 #: data/base/messages/strings/resstrings.txt:965
 #: data/mp/messages/strings/resstrings.txt:431
-#: po/custom/fromJson.txt:1176
+#: po/custom/fromJson.txt:1173
 msgid "Rocket Upgrade"
 msgstr "Rocket Upgrade"
 
 #: data/base/messages/strings/resstrings.txt:966
 #: data/mp/messages/strings/resstrings.txt:432
-#: po/custom/fromJson.txt:648
+#: po/custom/fromJson.txt:645
 msgid "High Explosive Squash Head warhead"
 msgstr "High Explosive Squash Head warhead"
 
 #: data/base/messages/strings/resstrings.txt:967
 #: data/mp/messages/strings/resstrings.txt:433
-#: po/custom/fromJson.txt:768
+#: po/custom/fromJson.txt:765
 msgid "Increases Rocket damage"
 msgstr "Increases Rocket damage"
 
@@ -3193,62 +3193,62 @@ msgid "Return to LZ"
 msgstr "Return to LZ"
 
 #: data/base/script/rules.js:57
-#: data/base/script/tutorial.js:112
+#: data/base/script/tutorial.js:108
 #: data/mp/multiplay/skirmish/rules.js:43
 #: src/scriptfuncs.cpp:1313
 msgid "Manufacture (F1)"
 msgstr "Manufacture (F1)"
 
 #: data/base/script/rules.js:61
-#: data/base/script/tutorial.js:103
-#: data/base/script/tutorial.js:473
+#: data/base/script/tutorial.js:99
+#: data/base/script/tutorial.js:469
 #: data/mp/multiplay/skirmish/rules.js:47
 msgid "Manufacture - build factory first"
 msgstr ""
 
 #: data/base/script/rules.js:98
-#: data/base/script/tutorial.js:137
+#: data/base/script/tutorial.js:133
 #: data/mp/multiplay/skirmish/rules.js:67
 #: src/scriptfuncs.cpp:1316
 msgid "Research (F2)"
 msgstr "Research (F2)"
 
 #: data/base/script/rules.js:102
-#: data/base/script/tutorial.js:205
-#: data/base/script/tutorial.js:474
+#: data/base/script/tutorial.js:201
+#: data/base/script/tutorial.js:470
 #: data/mp/multiplay/skirmish/rules.js:71
 #, fuzzy
 msgid "Research - build research facility first"
 msgstr "Research module expands research facilities"
 
 #: data/base/script/rules.js:110
-#: data/base/script/tutorial.js:129
-#: data/base/script/tutorial.js:252
-#: data/base/script/tutorial.js:322
+#: data/base/script/tutorial.js:125
+#: data/base/script/tutorial.js:248
+#: data/base/script/tutorial.js:318
 #: data/mp/multiplay/skirmish/rules.js:79
 #: src/scriptfuncs.cpp:1310
 msgid "Build (F3)"
 msgstr "Build (F3)"
 
 #: data/base/script/rules.js:114
-#: data/base/script/tutorial.js:265
-#: data/base/script/tutorial.js:281
-#: data/base/script/tutorial.js:431
-#: data/base/script/tutorial.js:475
+#: data/base/script/tutorial.js:261
+#: data/base/script/tutorial.js:277
+#: data/base/script/tutorial.js:427
+#: data/base/script/tutorial.js:471
 #: data/mp/multiplay/skirmish/rules.js:83
 msgid "Build - manufacture constructor droids first"
 msgstr ""
 
 #: data/base/script/rules.js:151
-#: data/base/script/tutorial.js:195
+#: data/base/script/tutorial.js:191
 #: data/mp/multiplay/skirmish/rules.js:103
 #: src/scriptfuncs.cpp:1322
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
 #: data/base/script/rules.js:157
-#: data/base/script/tutorial.js:249
-#: data/base/script/tutorial.js:476
+#: data/base/script/tutorial.js:245
+#: data/base/script/tutorial.js:472
 #: data/mp/multiplay/skirmish/rules.js:109
 msgid "Design - construct HQ first"
 msgstr ""
@@ -3260,14 +3260,14 @@ msgid "Commanders (F6)"
 msgstr "Commanders (F6)"
 
 #: data/base/script/rules.js:171
-#: data/base/script/tutorial.js:478
+#: data/base/script/tutorial.js:474
 #: data/mp/multiplay/skirmish/rules.js:123
 msgid "Commanders - manufacture commanders first"
 msgstr ""
 
 #: data/base/script/rules.js:177
-#: data/base/script/tutorial.js:239
-#: data/base/script/tutorial.js:472
+#: data/base/script/tutorial.js:235
+#: data/base/script/tutorial.js:468
 #: data/mp/multiplay/skirmish/rules.js:129
 #: src/challenge.cpp:229
 #: src/hci.cpp:2938
@@ -3278,14 +3278,14 @@ msgstr ""
 #: src/multimenu.cpp:474
 #: src/multimenu.cpp:1193
 #: src/scriptfuncs.cpp:1325
-#: src/transporter.cpp:200
-#: src/transporter.cpp:260
-#: src/transporter.cpp:539
+#: src/transporter.cpp:204
+#: src/transporter.cpp:264
+#: src/transporter.cpp:543
 msgid "Close"
 msgstr "Close"
 
 #: data/base/script/rules.js:182
-#: data/base/script/tutorial.js:477
+#: data/base/script/tutorial.js:473
 #: data/mp/multiplay/skirmish/rules.js:134
 #: src/scriptfuncs.cpp:1319
 msgid "Intelligence Display (F5)"
@@ -4322,12 +4322,12 @@ msgid "Slowly, out of the ashes we will rise again..."
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:15
-#: po/custom/fromJson.txt:853
+#: po/custom/fromJson.txt:850
 msgid "Machinegun Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
 #: data/mp/messages/strings/names.txt:213
-#: po/custom/fromJson.txt:1221
+#: po/custom/fromJson.txt:1218
 msgid "Sensor Tower"
 msgstr "Sensor Tower"
 
@@ -4336,7 +4336,7 @@ msgid "Tornado AA Site"
 msgstr "Tornado AA Site"
 
 #: data/mp/messages/strings/names.txt:271
-#: po/custom/fromJson.txt:843
+#: po/custom/fromJson.txt:840
 msgid "Machinegun"
 msgstr "Machinegun"
 
@@ -4427,34 +4427,34 @@ msgid "CAM3 RESEARCH"
 msgstr "CAM3 RESEARCH"
 
 #: data/mp/messages/strings/names.txt:361
-#: po/custom/fromJson.txt:907
+#: po/custom/fromJson.txt:904
 msgid "Missile Targeting Codes"
 msgstr "Missile Targeting Codes"
 
 #: data/mp/messages/strings/names.txt:362
-#: po/custom/fromJson.txt:1209
+#: po/custom/fromJson.txt:1206
 msgid "Second Level Missile Targeting Codes"
 msgstr "Second Level Missile Targeting Codes"
 
 #: data/mp/messages/strings/names.txt:363
-#: po/custom/fromJson.txt:1325
+#: po/custom/fromJson.txt:1322
 msgid "Third Level Missile Firing Codes"
 msgstr "Third Level Missile Firing Codes"
 
 #: data/mp/messages/strings/names.txt:371
-#: po/custom/fromJson.txt:583
+#: po/custom/fromJson.txt:580
 #, fuzzy
 msgid "Heavy Gunner Cyborg"
 msgstr "Heavy Gunner"
 
 #: data/mp/messages/strings/names.txt:372
-#: po/custom/fromJson.txt:480
+#: po/custom/fromJson.txt:477
 #, fuzzy
 msgid "Flamer Cyborg"
 msgstr "Flamer"
 
 #: data/mp/messages/strings/names.txt:373
-#: po/custom/fromJson.txt:848
+#: po/custom/fromJson.txt:845
 #, fuzzy
 msgid "Machinegunner Cyborg"
 msgstr "Machinegunner"
@@ -4465,7 +4465,7 @@ msgid "Cyborg Propulsion"
 msgstr "Cyborg Propulsion"
 
 #: data/mp/messages/strings/names.txt:404
-#: po/custom/fromJson.txt:599
+#: po/custom/fromJson.txt:596
 #, fuzzy
 msgid "Heavy Machinegun Tower"
 msgstr "Heavy Machinegun Guard Tower"
@@ -4476,7 +4476,7 @@ msgid "Flamer Tower"
 msgstr "Flamer Guard Tower"
 
 #: data/mp/messages/strings/names.txt:406
-#: po/custom/fromJson.txt:805
+#: po/custom/fromJson.txt:802
 #, fuzzy
 msgid "Lancer Tower"
 msgstr "Lancer Guard Tower"
@@ -4502,7 +4502,7 @@ msgid "Advanced Repair Facility Mk3"
 msgstr "Advanced Repair Facility Upgrade Mk3"
 
 #: data/mp/messages/strings/names.txt:469
-#: po/custom/fromJson.txt:606
+#: po/custom/fromJson.txt:603
 msgid "Heavy Repair Turret"
 msgstr "Heavy Repair Turret"
 
@@ -4512,7 +4512,7 @@ msgid "Nexus Intruder Program"
 msgstr "NEXUS Intruder Program"
 
 #: data/mp/messages/strings/names.txt:490
-#: po/custom/fromJson.txt:997
+#: po/custom/fromJson.txt:994
 #, fuzzy
 msgid "Nexus Resistance Circuits"
 msgstr "Resistance Circuits"
@@ -4528,27 +4528,27 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr "NEXUS Resistance Circuits Mk3"
 
 #: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:666
+#: po/custom/fromJson.txt:663
 msgid "Hover Propulsion II"
 msgstr "Hover Propulsion II"
 
 #: data/mp/messages/strings/names.txt:506
-#: po/custom/fromJson.txt:521
+#: po/custom/fromJson.txt:518
 msgid "Half-tracked Propulsion II"
 msgstr "Half-tracked Propulsion II"
 
 #: data/mp/messages/strings/names.txt:508
-#: po/custom/fromJson.txt:1329
+#: po/custom/fromJson.txt:1326
 msgid "Tracked Propulsion II"
 msgstr "Tracked Propulsion II"
 
 #: data/mp/messages/strings/names.txt:510
-#: po/custom/fromJson.txt:1442
+#: po/custom/fromJson.txt:1439
 msgid "VTOL Propulsion II"
 msgstr "VTOL Propulsion II"
 
 #: data/mp/messages/strings/names.txt:512
-#: po/custom/fromJson.txt:1465
+#: po/custom/fromJson.txt:1462
 msgid "Wheeled Propulsion II"
 msgstr "Wheeled Propulsion II"
 
@@ -4558,13 +4558,13 @@ msgid "Depleted Uranium MG Bullets Mk2"
 msgstr "Depleted Uranium MG Bullets Mk2"
 
 #: data/mp/messages/strings/names.txt:566
-#: po/custom/fromJson.txt:844
+#: po/custom/fromJson.txt:841
 #, fuzzy
 msgid "Machinegun Artifact"
 msgstr "Machine Gun Artifact"
 
 #: data/mp/messages/strings/names.txt:569
-#: po/custom/fromJson.txt:959
+#: po/custom/fromJson.txt:956
 msgid "New Paradigm Command Center"
 msgstr "New Paradigm Command Centre"
 
@@ -4575,47 +4575,47 @@ msgstr "Collective Command Centre"
 
 #: data/mp/messages/strings/names.txt:723
 #: data/mp/messages/strings/names.txt:724
-#: po/custom/fromJson.txt:906
+#: po/custom/fromJson.txt:903
 msgid "Missile Silo"
 msgstr "Missile Silo"
 
 #: data/mp/messages/strings/names.txt:775
-#: po/custom/fromJson.txt:1264
+#: po/custom/fromJson.txt:1261
 msgid "Super Heavy-Gunner"
 msgstr "Super Heavy-Gunner"
 
 #: data/mp/messages/strings/names.txt:777
-#: po/custom/fromJson.txt:1255
+#: po/custom/fromJson.txt:1252
 msgid "Super Auto-Cannon Cyborg"
 msgstr "Super Auto-Cannon Cyborg"
 
 #: data/mp/messages/strings/names.txt:779
-#: po/custom/fromJson.txt:1271
+#: po/custom/fromJson.txt:1268
 msgid "Super HPV Cyborg"
 msgstr "Super HPV Cyborg"
 
 #: data/mp/messages/strings/names.txt:781
-#: po/custom/fromJson.txt:1277
+#: po/custom/fromJson.txt:1274
 msgid "Super Tank-Killer Cyborg"
 msgstr "Super Tank-Killer Cyborg"
 
 #: data/mp/messages/strings/names.txt:788
-#: po/custom/fromJson.txt:1184
+#: po/custom/fromJson.txt:1181
 msgid "Satellite Uplink Center"
 msgstr "Satellite Uplink Centre"
 
 #: data/mp/messages/strings/names.txt:799
-#: po/custom/fromJson.txt:1274
+#: po/custom/fromJson.txt:1271
 msgid "Super Pulse Laser Cyborg"
 msgstr "Super Pulse Laser Cyborg"
 
 #: data/mp/messages/strings/names.txt:801
-#: po/custom/fromJson.txt:1275
+#: po/custom/fromJson.txt:1272
 msgid "Super Rail-Gunner"
 msgstr "Super Rail-Gunner"
 
 #: data/mp/messages/strings/names.txt:803
-#: po/custom/fromJson.txt:1276
+#: po/custom/fromJson.txt:1273
 msgid "Super Scourge Cyborg"
 msgstr "Super Scourge Cyborg"
 
@@ -4722,39 +4722,39 @@ msgstr ""
 msgid "System locale"
 msgstr "System locale"
 
-#: lib/netplay/netplay.cpp:246
-#: lib/netplay/netplay.cpp:1175
+#: lib/netplay/netplay.cpp:232
+#: lib/netplay/netplay.cpp:1137
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1077
+#: lib/netplay/netplay.cpp:1039
 #, fuzzy, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr "Load a saved game"
 
-#: lib/netplay/netplay.cpp:1081
+#: lib/netplay/netplay.cpp:1043
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1091
+#: lib/netplay/netplay.cpp:1053
 #, c-format
 msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1863
+#: lib/netplay/netplay.cpp:1825
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2208
+#: lib/netplay/netplay.cpp:2170
 #, fuzzy, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Load a saved game"
 
-#: lib/netplay/netplay.cpp:2232
+#: lib/netplay/netplay.cpp:2194
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -4763,7 +4763,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2930
+#: lib/netplay/netplay.cpp:2892
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -5939,7 +5939,8 @@ msgid "Construction Unit"
 msgstr "Construction Unit"
 
 #: po/custom/fromJson.txt:360
-msgid "Controls up to five commanders"
+#, fuzzy
+msgid "Controls up to ten commanders"
 msgstr "Controls up to five commanders"
 
 #: po/custom/fromJson.txt:361
@@ -6158,3885 +6159,3870 @@ msgid "Electronically attacks and disrupts enemy structures"
 msgstr "Electronically attacks and disrupts enemy structures"
 
 #: po/custom/fromJson.txt:428
-#, fuzzy
-msgid "Electronic Countermeasures"
-msgstr "Electronics Laboratory"
-
-#: po/custom/fromJson.txt:429
-#, fuzzy
-msgid "Electronic Countermeasures Mk2"
-msgstr "Electronics Laboratory"
-
-#: po/custom/fromJson.txt:430
-#, fuzzy
-msgid "Electronic Countermeasures Mk3"
-msgstr "Electronics Laboratory"
-
-#: po/custom/fromJson.txt:431
 msgid "EMP Cannon"
 msgstr "EMP Cannon"
 
-#: po/custom/fromJson.txt:432
+#: po/custom/fromJson.txt:429
 msgid "EMP Cannon Tower"
 msgstr "EMP Cannon Tower"
 
-#: po/custom/fromJson.txt:433
+#: po/custom/fromJson.txt:430
 msgid "EMP Missile Launcher"
 msgstr "EMP Missile Launcher"
 
-#: po/custom/fromJson.txt:434
+#: po/custom/fromJson.txt:431
 msgid "EMP Mortar"
 msgstr "EMP Mortar"
 
-#: po/custom/fromJson.txt:435
+#: po/custom/fromJson.txt:432
 #, fuzzy
 msgid "EMP Mortar Pit"
 msgstr " Mortar Pit"
 
-#: po/custom/fromJson.txt:436
+#: po/custom/fromJson.txt:433
 msgid "Enables command turret research"
 msgstr "Enables command turret research"
 
-#: po/custom/fromJson.txt:437
+#: po/custom/fromJson.txt:434
 msgid "Enables Hardcrete walls"
 msgstr "Enables Hardcrete walls"
 
-#: po/custom/fromJson.txt:438
+#: po/custom/fromJson.txt:435
 msgid "Enables resistance to Nexus Link technology"
 msgstr "Enables resistance to Nexus Link technology"
 
-#: po/custom/fromJson.txt:439
+#: po/custom/fromJson.txt:436
 msgid "Enables self-repair"
 msgstr "Enables self-repair"
 
-#: po/custom/fromJson.txt:440
+#: po/custom/fromJson.txt:437
 msgid "Enables self-repair in all base structures"
 msgstr "Enables self-repair in all base structures"
 
-#: po/custom/fromJson.txt:441
+#: po/custom/fromJson.txt:438
 msgid "Enables self-repair in all Cyborgs"
 msgstr "Enables self-repair in all Cyborgs"
 
-#: po/custom/fromJson.txt:442
+#: po/custom/fromJson.txt:439
 msgid "Enables self-repair in all defenses"
 msgstr "Enables self-repair in all defenses"
 
-#: po/custom/fromJson.txt:443
+#: po/custom/fromJson.txt:440
 msgid "Enables self-repair in all vehicles"
 msgstr "Enables self-repair in all vehicles"
 
-#: po/custom/fromJson.txt:444
+#: po/custom/fromJson.txt:441
 #, fuzzy
 msgid "Enemy"
 msgstr "Enemy Base"
 
-#: po/custom/fromJson.txt:445
+#: po/custom/fromJson.txt:442
 msgid "Engineering"
 msgstr "Engineering"
 
-#: po/custom/fromJson.txt:446
+#: po/custom/fromJson.txt:443
 msgid "Expensive and slow to produce"
 msgstr "Expensive and slow to produce"
 
-#: po/custom/fromJson.txt:447
+#: po/custom/fromJson.txt:444
 msgid "Expensive to produce"
 msgstr "Expensive to produce"
 
-#: po/custom/fromJson.txt:448
+#: po/custom/fromJson.txt:445
 msgid "Extended sensor range"
 msgstr "Extended sensor range"
 
-#: po/custom/fromJson.txt:449
+#: po/custom/fromJson.txt:446
 msgid "Extends CB Range"
 msgstr "Extends CB Range"
 
-#: po/custom/fromJson.txt:450
+#: po/custom/fromJson.txt:447
 msgid "Extends Sensor Range"
 msgstr "Extends Sensor Range"
 
-#: po/custom/fromJson.txt:453
+#: po/custom/fromJson.txt:450
 msgid "Factory"
 msgstr "Factory"
 
-#: po/custom/fromJson.txt:454
+#: po/custom/fromJson.txt:451
 msgid "Factory Module"
 msgstr "Factory Module"
 
-#: po/custom/fromJson.txt:455
+#: po/custom/fromJson.txt:452
 msgid "Factory module enables medium and large bodies"
 msgstr "Factory module enables medium and large bodies"
 
-#: po/custom/fromJson.txt:456
+#: po/custom/fromJson.txt:453
 #, fuzzy, c-format
 msgid "Factory output speed +100%% per module"
 msgstr "Increases factory production rate"
 
-#: po/custom/fromJson.txt:457
+#: po/custom/fromJson.txt:454
 #, fuzzy
 msgid "Factory output speed +60%"
 msgstr "Increases factory production rate"
 
-#: po/custom/fromJson.txt:458
+#: po/custom/fromJson.txt:455
 #, fuzzy
 msgid "Factory production rate +60%"
 msgstr "Increases factory production rate"
 
-#: po/custom/fromJson.txt:459
+#: po/custom/fromJson.txt:456
 msgid "Farther range compared to other sensors"
 msgstr ""
 
-#: po/custom/fromJson.txt:460
+#: po/custom/fromJson.txt:457
 msgid "Faster than Cobra"
 msgstr "Faster than Cobra"
 
-#: po/custom/fromJson.txt:461
+#: po/custom/fromJson.txt:458
 msgid "Faster than Python"
 msgstr "Faster than Python"
 
-#: po/custom/fromJson.txt:462
+#: po/custom/fromJson.txt:459
 msgid "Faster than Viper"
 msgstr "Faster than Viper"
 
-#: po/custom/fromJson.txt:463
+#: po/custom/fromJson.txt:460
 msgid "Fast Fire Mini-Rockets"
 msgstr "Fast Fire Mini-Rockets"
 
-#: po/custom/fromJson.txt:464
+#: po/custom/fromJson.txt:461
 msgid "Fast Fire Mini-Rockets Mk2"
 msgstr "Fast Fire Mini-Rockets Mk2"
 
-#: po/custom/fromJson.txt:465
+#: po/custom/fromJson.txt:462
 msgid "Fast Fire Mini-Rockets Mk3"
 msgstr "Fast Fire Mini-Rockets Mk3"
 
-#: po/custom/fromJson.txt:466
+#: po/custom/fromJson.txt:463
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Fast firing light anti-vehicle rockets"
 
-#: po/custom/fromJson.txt:467
+#: po/custom/fromJson.txt:464
 msgid "Fast Loader"
 msgstr "Fast Loader"
 
-#: po/custom/fromJson.txt:468
+#: po/custom/fromJson.txt:465
 msgid "Fin-stabilization improves flight trajectory"
 msgstr "Fin-stabilisation improves flight trajectory"
 
-#: po/custom/fromJson.txt:469
+#: po/custom/fromJson.txt:466
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Fires Electronic Magnetic Pulse Missiles"
 
-#: po/custom/fromJson.txt:470
+#: po/custom/fromJson.txt:467
 msgid "Fires heavy pulses of laser light"
 msgstr "Fires heavy pulses of laser light"
 
-#: po/custom/fromJson.txt:471
+#: po/custom/fromJson.txt:468
 msgid "Fires pulses of laser light"
 msgstr "Fires pulses of laser light"
 
-#: po/custom/fromJson.txt:472
+#: po/custom/fromJson.txt:469
 msgid "Fires salvoes of mini-rockets"
 msgstr "Fires salvoes of mini-rockets"
 
-#: po/custom/fromJson.txt:473
+#: po/custom/fromJson.txt:470
 msgid "Fire Truck"
 msgstr "Fire Truck"
 
-#: po/custom/fromJson.txt:474
+#: po/custom/fromJson.txt:471
 msgid "Flamer"
 msgstr "Flamer"
 
-#: po/custom/fromJson.txt:475
+#: po/custom/fromJson.txt:472
 msgid "Flamer Autoloader"
 msgstr "Flamer Autoloader"
 
-#: po/custom/fromJson.txt:476
+#: po/custom/fromJson.txt:473
 msgid "Flamer Autoloader Mk2"
 msgstr "Flamer Autoloader Mk2"
 
-#: po/custom/fromJson.txt:477
+#: po/custom/fromJson.txt:474
 msgid "Flamer Autoloader Mk3"
 msgstr "Flamer Autoloader Mk3"
 
-#: po/custom/fromJson.txt:478
+#: po/custom/fromJson.txt:475
 msgid "Flamer Bunker"
 msgstr "Flamer Bunker"
 
-#: po/custom/fromJson.txt:479
+#: po/custom/fromJson.txt:476
 #, fuzzy
 msgid "Flamer Cobra Tracks"
 msgstr "Repair Cobra Tracks"
 
-#: po/custom/fromJson.txt:481
+#: po/custom/fromJson.txt:478
 #, fuzzy
 msgid "Flamer damage +25%"
 msgstr "Increases Flamer damage"
 
-#: po/custom/fromJson.txt:484
+#: po/custom/fromJson.txt:481
 #, fuzzy
 msgid "Flamer reload time -15%"
 msgstr "Flamer Autoloader"
 
-#: po/custom/fromJson.txt:486
+#: po/custom/fromJson.txt:483
 #, fuzzy
 msgid "Flamer Viper Half-Tracks"
 msgstr "Viper Repair Half-track"
 
-#: po/custom/fromJson.txt:487
+#: po/custom/fromJson.txt:484
 #, fuzzy
 msgid "Flamer Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
-#: po/custom/fromJson.txt:488
+#: po/custom/fromJson.txt:485
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Flame-thrower firing Propylene Oxide gel"
 
-#: po/custom/fromJson.txt:489
+#: po/custom/fromJson.txt:486
 msgid "Flashlight"
 msgstr "Flashlight"
 
-#: po/custom/fromJson.txt:491
+#: po/custom/fromJson.txt:488
 msgid "Flashlight Gunner"
 msgstr "Flashlight Gunner"
 
-#: po/custom/fromJson.txt:492
+#: po/custom/fromJson.txt:489
 #, fuzzy
 msgid "Flashlight Gunner Cyborg"
 msgstr "Flashlight Gunner"
 
-#: po/custom/fromJson.txt:493
+#: po/custom/fromJson.txt:490
 msgid "Flashlight Hardpoint"
 msgstr "Flashlight Hardpoint"
 
-#: po/custom/fromJson.txt:494
+#: po/custom/fromJson.txt:491
 #, fuzzy
 msgid "Flashlight Retribution Hover"
 msgstr "Flashlight Gunner"
 
-#: po/custom/fromJson.txt:495
+#: po/custom/fromJson.txt:492
 msgid "Fuel Injection Engine"
 msgstr "Fuel Injection Engine"
 
-#: po/custom/fromJson.txt:496
+#: po/custom/fromJson.txt:493
 msgid "Fuel Injection Engine Mk2"
 msgstr "Fuel Injection Engine Mk2"
 
-#: po/custom/fromJson.txt:497
+#: po/custom/fromJson.txt:494
 msgid "Fuel Injection Engine Mk3"
 msgstr "Fuel Injection Engine Mk3"
 
-#: po/custom/fromJson.txt:498
+#: po/custom/fromJson.txt:495
 msgid "Gamma"
 msgstr ""
 
-#: po/custom/fromJson.txt:499
+#: po/custom/fromJson.txt:496
 #, fuzzy
 msgid "Gamma Campaign"
 msgstr "New Campaign"
 
-#: po/custom/fromJson.txt:500
+#: po/custom/fromJson.txt:497
 msgid "Gas turbine boosts power output"
 msgstr "Gas turbine boosts power output"
 
-#: po/custom/fromJson.txt:501
+#: po/custom/fromJson.txt:498
 msgid "Gas Turbine Engine"
 msgstr "Gas Turbine Engine"
 
-#: po/custom/fromJson.txt:502
+#: po/custom/fromJson.txt:499
 msgid "Gas Turbine Engine Mk2"
 msgstr "Gas Turbine Engine Mk2"
 
-#: po/custom/fromJson.txt:503
+#: po/custom/fromJson.txt:500
 msgid "Gas Turbine Engine Mk3"
 msgstr "Gas Turbine Engine Mk3"
 
-#: po/custom/fromJson.txt:504
+#: po/custom/fromJson.txt:501
 msgid "Gas Turbine Generator"
 msgstr "Gas Turbine Generator"
 
-#: po/custom/fromJson.txt:505
+#: po/custom/fromJson.txt:502
 #, fuzzy
 msgid "Gas Turbine Generator Mk2"
 msgstr "Gas Turbine Generator"
 
-#: po/custom/fromJson.txt:506
+#: po/custom/fromJson.txt:503
 #, fuzzy
 msgid "Gas Turbine Generator Mk3"
 msgstr "Gas Turbine Generator"
 
-#: po/custom/fromJson.txt:507
+#: po/custom/fromJson.txt:504
 msgid "Gauss Cannon"
 msgstr "Gauss Cannon"
 
-#: po/custom/fromJson.txt:508
+#: po/custom/fromJson.txt:505
 msgid "Gauss Cannon Emplacement"
 msgstr "Gauss Cannon Emplacement"
 
-#: po/custom/fromJson.txt:509
+#: po/custom/fromJson.txt:506
 msgid "Gauss Cannon Hardpoint"
 msgstr "Gauss Cannon Hardpoint"
 
-#: po/custom/fromJson.txt:510
+#: po/custom/fromJson.txt:507
 #, fuzzy
 msgid "Gauss Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:511
+#: po/custom/fromJson.txt:508
 #, fuzzy
 msgid "Gauss Cannon Wyvern Tracks"
 msgstr "Python Gauss Cannon Tracks"
 
-#: po/custom/fromJson.txt:512
+#: po/custom/fromJson.txt:509
 msgid "Generates and concentrates bursts of laser energy"
 msgstr "Generates and concentrates bursts of laser energy"
 
-#: po/custom/fromJson.txt:513
+#: po/custom/fromJson.txt:510
 msgid "Gives Cyborg limited flight abilities"
 msgstr "Gives Cyborg limited flight abilities"
 
-#: po/custom/fromJson.txt:514
+#: po/custom/fromJson.txt:511
 msgid "Good main battle tank and heavy artillery platform"
 msgstr "Good main battle tank and heavy artillery platform"
 
-#: po/custom/fromJson.txt:515
+#: po/custom/fromJson.txt:512
 msgid "Good medium tank and support vehicle"
 msgstr "Good medium tank and support vehicle"
 
-#: po/custom/fromJson.txt:516
+#: po/custom/fromJson.txt:513
 msgid "Good scout vehicle"
 msgstr "Good scout vehicle"
 
-#: po/custom/fromJson.txt:517
+#: po/custom/fromJson.txt:514
 msgid "Grenadier"
 msgstr "Grenadier"
 
-#: po/custom/fromJson.txt:518
+#: po/custom/fromJson.txt:515
 msgid "Ground Shaker"
 msgstr "Ground Shaker"
 
-#: po/custom/fromJson.txt:520
+#: po/custom/fromJson.txt:517
 msgid "Half-tracked Propulsion"
 msgstr "Half-tracked Propulsion"
 
-#: po/custom/fromJson.txt:522
+#: po/custom/fromJson.txt:519
 msgid "Half-tracks"
 msgstr "Half-tracks"
 
-#: po/custom/fromJson.txt:523
+#: po/custom/fromJson.txt:520
 msgid "Half-tracks II"
 msgstr "Half-tracks II"
 
-#: po/custom/fromJson.txt:524
+#: po/custom/fromJson.txt:521
 msgid "Half-tracks III"
 msgstr "Half-tracks III"
 
-#: po/custom/fromJson.txt:525
+#: po/custom/fromJson.txt:522
 msgid "Hardcrete"
 msgstr "Hardcrete"
 
-#: po/custom/fromJson.txt:526
+#: po/custom/fromJson.txt:523
 msgid "Hardcrete Corner Wall"
 msgstr "Hardcrete Corner Wall"
 
-#: po/custom/fromJson.txt:527
+#: po/custom/fromJson.txt:524
 #, fuzzy
 msgid "Hardcrete Gate"
 msgstr "Hardcrete Wall"
 
-#: po/custom/fromJson.txt:528
+#: po/custom/fromJson.txt:525
 msgid "Hardcrete Wall"
 msgstr "Hardcrete Wall"
 
-#: po/custom/fromJson.txt:530
+#: po/custom/fromJson.txt:527
 msgid "Hardened Base Structure Materials Mk2"
 msgstr "Hardened Base Structure Materials Mk2"
 
-#: po/custom/fromJson.txt:531
+#: po/custom/fromJson.txt:528
 msgid "Hardened Base Structure Materials Mk3"
 msgstr "Hardened Base Structure Materials Mk3"
 
-#: po/custom/fromJson.txt:532
+#: po/custom/fromJson.txt:529
 msgid "Hardened case machinegun bullets"
 msgstr "Hardened case machinegun bullets"
 
-#: po/custom/fromJson.txt:533
+#: po/custom/fromJson.txt:530
 msgid "Hardened MG Bullets"
 msgstr "Hardened MG Bullets"
 
-#: po/custom/fromJson.txt:534
+#: po/custom/fromJson.txt:531
 msgid "Hardened Rail Dart"
 msgstr "Hardened Rail Dart"
 
-#: po/custom/fromJson.txt:535
+#: po/custom/fromJson.txt:532
 msgid "Hardened Rail Dart Mk2"
 msgstr "Hardened Rail Dart Mk2"
 
-#: po/custom/fromJson.txt:536
+#: po/custom/fromJson.txt:533
 msgid "Hardened Rail Dart Mk3"
 msgstr "Hardened Rail Dart Mk3"
 
-#: po/custom/fromJson.txt:537
+#: po/custom/fromJson.txt:534
 msgid "Hardened Sensor Tower"
 msgstr "Hardened Sensor Tower"
 
-#: po/custom/fromJson.txt:538
+#: po/custom/fromJson.txt:535
 msgid "Hardpoint Avenger SAM Site Available"
 msgstr "Hardpoint Avenger SAM Site Available"
 
-#: po/custom/fromJson.txt:539
+#: po/custom/fromJson.txt:536
 msgid "Hardpoint Cyclone AA Gun Available"
 msgstr "Hardpoint Cyclone AA Gun Available"
 
-#: po/custom/fromJson.txt:540
+#: po/custom/fromJson.txt:537
 msgid "Hardpoint Twin Assault Gun Available"
 msgstr "Hardpoint Twin Assault Gun Available"
 
-#: po/custom/fromJson.txt:541
+#: po/custom/fromJson.txt:538
 msgid "Hardpoint Vindicator SAM Site Available"
 msgstr "Hardpoint Vindicator SAM Site Available"
 
-#: po/custom/fromJson.txt:542
+#: po/custom/fromJson.txt:539
 msgid "Hardpoint Whirlwind AA Gun Available"
 msgstr "Hardpoint Whirlwind AA Gun Available"
 
-#: po/custom/fromJson.txt:543
+#: po/custom/fromJson.txt:540
 msgid "HEAP Bomb Bay"
 msgstr "HEAP Bomb Bay"
 
-#: po/custom/fromJson.txt:544
+#: po/custom/fromJson.txt:541
 #, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "VTOL Heap Bomb Bay"
 
-#: po/custom/fromJson.txt:545
+#: po/custom/fromJson.txt:542
 #, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
 msgstr "Medium Body - Retribution"
 
-#: po/custom/fromJson.txt:546
+#: po/custom/fromJson.txt:543
 msgid "HEAP Howitzer Shells"
 msgstr "HEAP Howitzer Shells"
 
-#: po/custom/fromJson.txt:547
+#: po/custom/fromJson.txt:544
 msgid "HEAP Howitzer Shells Mk2"
 msgstr "HEAP Howitzer Shells Mk2"
 
-#: po/custom/fromJson.txt:548
+#: po/custom/fromJson.txt:545
 msgid "HEAP Howitzer Shells Mk3"
 msgstr "HEAP Howitzer Shells Mk3"
 
-#: po/custom/fromJson.txt:549
+#: po/custom/fromJson.txt:546
 msgid "HEAP Mini-Rockets"
 msgstr "HEAP Mini-Rockets"
 
-#: po/custom/fromJson.txt:550
+#: po/custom/fromJson.txt:547
 msgid "HEAP Mini-Rockets Mk2"
 msgstr "HEAP Mini-Rockets Mk2"
 
-#: po/custom/fromJson.txt:551
+#: po/custom/fromJson.txt:548
 msgid "HEAP Mini-Rockets Mk3"
 msgstr "HEAP Mini-Rockets Mk3"
 
-#: po/custom/fromJson.txt:552
+#: po/custom/fromJson.txt:549
 msgid "HEAP Mortar Shells"
 msgstr "HEAP Mortar Shells"
 
-#: po/custom/fromJson.txt:553
+#: po/custom/fromJson.txt:550
 msgid "HEAP Mortar Shells Mk2"
 msgstr "HEAP Mortar Shells Mk2"
 
-#: po/custom/fromJson.txt:554
+#: po/custom/fromJson.txt:551
 msgid "HEAP Mortar Shells Mk3"
 msgstr "HEAP Mortar Shells Mk3"
 
-#: po/custom/fromJson.txt:555
+#: po/custom/fromJson.txt:552
 msgid "HEAT Cannon Shells"
 msgstr "HEAT Cannon Shells"
 
-#: po/custom/fromJson.txt:556
+#: po/custom/fromJson.txt:553
 msgid "HEAT Cannon Shells Mk2"
 msgstr "HEAT Cannon Shells Mk2"
 
-#: po/custom/fromJson.txt:557
+#: po/custom/fromJson.txt:554
 msgid "HEAT Cannon Shells Mk3"
 msgstr "HEAT Cannon Shells Mk3"
 
-#: po/custom/fromJson.txt:560
+#: po/custom/fromJson.txt:557
 msgid "HEAT Rocket Warhead"
 msgstr "HEAT Rocket Warhead"
 
-#: po/custom/fromJson.txt:561
+#: po/custom/fromJson.txt:558
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "HEAT Rocket Warhead Mk2"
 
-#: po/custom/fromJson.txt:562
+#: po/custom/fromJson.txt:559
 msgid "HEAT Rocket Warhead Mk3"
 msgstr "HEAT Rocket Warhead Mk3"
 
-#: po/custom/fromJson.txt:563
+#: po/custom/fromJson.txt:560
 msgid "Heavy anti-tank rocket"
 msgstr "Heavy anti-tank rocket"
 
-#: po/custom/fromJson.txt:564
+#: po/custom/fromJson.txt:561
 msgid "Heavy body increases armor and body points"
 msgstr "Heavy body increases armour and body points"
 
-#: po/custom/fromJson.txt:565
+#: po/custom/fromJson.txt:562
 msgid "Heavy Body - Mantis"
 msgstr "Heavy Body - Mantis"
 
-#: po/custom/fromJson.txt:566
+#: po/custom/fromJson.txt:563
 msgid "Heavy Body - Python"
 msgstr "Heavy Body - Python"
 
-#: po/custom/fromJson.txt:567
+#: po/custom/fromJson.txt:564
 msgid "Heavy Body - Tiger"
 msgstr "Heavy Body - Tiger"
 
-#: po/custom/fromJson.txt:568
+#: po/custom/fromJson.txt:565
 msgid "Heavy Body - Vengeance"
 msgstr "Heavy Body - Vengeance"
 
-#: po/custom/fromJson.txt:569
+#: po/custom/fromJson.txt:566
 #, fuzzy
 msgid "Heavy Body - Wyvern"
 msgstr "Super Heavy Body - Wyvern"
 
-#: po/custom/fromJson.txt:570
+#: po/custom/fromJson.txt:567
 msgid "Heavy Cannon"
 msgstr "Heavy Cannon"
 
-#: po/custom/fromJson.txt:571
+#: po/custom/fromJson.txt:568
 #, fuzzy
 msgid "Heavy Cannon Cobra Hover"
 msgstr "Heavy Cannon"
 
-#: po/custom/fromJson.txt:572
+#: po/custom/fromJson.txt:569
 #, fuzzy
 msgid "Heavy Cannon Cobra Tracks"
 msgstr "Cobra Heavy Cannon Tracks"
 
-#: po/custom/fromJson.txt:573
+#: po/custom/fromJson.txt:570
 msgid "Heavy Cannon firing 120 mm rounds"
 msgstr "Heavy Cannon firing 120mm rounds"
 
-#: po/custom/fromJson.txt:574
+#: po/custom/fromJson.txt:571
 msgid "Heavy Cannon Hardpoint"
 msgstr "Heavy Cannon Hardpoint"
 
-#: po/custom/fromJson.txt:575
+#: po/custom/fromJson.txt:572
 #, fuzzy
 msgid "Heavy Cannon Mantis Tracks"
 msgstr "Cobra Heavy Cannon Tracks"
 
-#: po/custom/fromJson.txt:576
+#: po/custom/fromJson.txt:573
 #, fuzzy
 msgid "Heavy Cannon Python Hover"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:577
+#: po/custom/fromJson.txt:574
 #, fuzzy
 msgid "Heavy Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:578
+#: po/custom/fromJson.txt:575
 #, fuzzy
 msgid "Heavy Cannon Scorpion Tracks"
 msgstr "Cobra Heavy Cannon Tracks"
 
-#: po/custom/fromJson.txt:579
+#: po/custom/fromJson.txt:576
 #, fuzzy
 msgid "Heavy Cannon Tiger Tracks"
 msgstr "Cobra Heavy Cannon Tracks"
 
-#: po/custom/fromJson.txt:580
+#: po/custom/fromJson.txt:577
 msgid "Heavy Flamer - Inferno"
 msgstr "Heavy Flamer - Inferno"
 
-#: po/custom/fromJson.txt:582
+#: po/custom/fromJson.txt:579
 msgid "Heavy Gunner"
 msgstr "Heavy Gunner"
 
-#: po/custom/fromJson.txt:584
+#: po/custom/fromJson.txt:581
 msgid "Heavy Howitzer - Ground Shaker"
 msgstr "Heavy Howitzer - Ground Shaker"
 
-#: po/custom/fromJson.txt:585
+#: po/custom/fromJson.txt:582
 msgid "Heavy Laser"
 msgstr "Heavy Laser"
 
-#: po/custom/fromJson.txt:586
+#: po/custom/fromJson.txt:583
 msgid "Heavy Laser Emplacement"
 msgstr "Heavy Laser Emplacement"
 
-#: po/custom/fromJson.txt:587
+#: po/custom/fromJson.txt:584
 #, fuzzy
 msgid "Heavy Laser Tiger Tracks"
 msgstr "Tiger Heavy Laser Tracks"
 
-#: po/custom/fromJson.txt:588
+#: po/custom/fromJson.txt:585
 #, fuzzy
 msgid "Heavy Laser Wyvern Tracks"
 msgstr "Tiger Heavy Laser Tracks"
 
-#: po/custom/fromJson.txt:589
+#: po/custom/fromJson.txt:586
 msgid "Heavy Machinegun"
 msgstr "Heavy Machinegun"
 
-#: po/custom/fromJson.txt:591
+#: po/custom/fromJson.txt:588
 #, fuzzy
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "Cobra Heavy Machinegun Half-track"
 
-#: po/custom/fromJson.txt:592
+#: po/custom/fromJson.txt:589
 #, fuzzy
 msgid "Heavy Machinegun Cobra Hover"
 msgstr "Heavy Machinegun Guard Tower"
 
-#: po/custom/fromJson.txt:593
+#: po/custom/fromJson.txt:590
 #, fuzzy
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
 
-#: po/custom/fromJson.txt:594
+#: po/custom/fromJson.txt:591
 #, fuzzy
 msgid "Heavy Machinegun Cobra Wheels"
 msgstr "Machinegun Viper Wheels"
 
-#: po/custom/fromJson.txt:596
+#: po/custom/fromJson.txt:593
 msgid "Heavy Machinegun Hardpoint"
 msgstr "Heavy Machinegun Hardpoint"
 
-#: po/custom/fromJson.txt:597
+#: po/custom/fromJson.txt:594
 #, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
 
-#: po/custom/fromJson.txt:598
+#: po/custom/fromJson.txt:595
 #, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
 
-#: po/custom/fromJson.txt:600
+#: po/custom/fromJson.txt:597
 #, fuzzy
 msgid "Heavy Machinegun Viper Half-tracks"
 msgstr "Cobra Heavy Machinegun Half-track"
 
-#: po/custom/fromJson.txt:601
+#: po/custom/fromJson.txt:598
 #, fuzzy
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
 
-#: po/custom/fromJson.txt:602
+#: po/custom/fromJson.txt:599
 #, fuzzy
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
-#: po/custom/fromJson.txt:603
+#: po/custom/fromJson.txt:600
 msgid "Heavy Mortar - Bombard"
 msgstr "Heavy Mortar - Bombard"
 
-#: po/custom/fromJson.txt:604
+#: po/custom/fromJson.txt:601
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "Heavy rail gun firing large kinetic energy darts"
 
-#: po/custom/fromJson.txt:605
+#: po/custom/fromJson.txt:602
 #, fuzzy
 msgid "Heavy Repair Scorpion Hover"
 msgstr "Scorpion Heavy Repair Hover"
 
-#: po/custom/fromJson.txt:607
+#: po/custom/fromJson.txt:604
 #, fuzzy
 msgid "Heavy Repair Turret Cobra Hover"
 msgstr "Heavy Repair Turret"
 
-#: po/custom/fromJson.txt:609
+#: po/custom/fromJson.txt:606
 msgid "Heavy Rocket Bastion"
 msgstr "Heavy Rocket Bastion"
 
-#: po/custom/fromJson.txt:610
+#: po/custom/fromJson.txt:607
 msgid "Heavy surface-to-air missile"
 msgstr "Heavy surface-to-air missile"
 
-#: po/custom/fromJson.txt:611
+#: po/custom/fromJson.txt:608
 msgid "Heavyweaponslab"
 msgstr ""
 
-#: po/custom/fromJson.txt:612
+#: po/custom/fromJson.txt:609
 #, fuzzy
 msgid "HE Bomb Shells"
 msgstr "HE Mortar Shells"
 
-#: po/custom/fromJson.txt:613
+#: po/custom/fromJson.txt:610
 msgid "HE Howitzer Shells"
 msgstr "HE Howitzer Shells"
 
-#: po/custom/fromJson.txt:614
+#: po/custom/fromJson.txt:611
 msgid "HE Howitzer Shells Mk2"
 msgstr "HE Howitzer Shells Mk2"
 
-#: po/custom/fromJson.txt:615
+#: po/custom/fromJson.txt:612
 msgid "HE Howitzer Shells Mk3"
 msgstr "HE Howitzer Shells Mk3"
 
-#: po/custom/fromJson.txt:616
+#: po/custom/fromJson.txt:613
 msgid "Helicopter"
 msgstr ""
 
-#: po/custom/fromJson.txt:617
+#: po/custom/fromJson.txt:614
 msgid "Hellstorm"
 msgstr "Hellstorm"
 
-#: po/custom/fromJson.txt:619
+#: po/custom/fromJson.txt:616
 msgid "HE Mini-Rockets"
 msgstr "HE Mini-Rockets"
 
-#: po/custom/fromJson.txt:620
+#: po/custom/fromJson.txt:617
 msgid "HE Mini-Rockets Mk2"
 msgstr "HE Mini-Rockets Mk2"
 
-#: po/custom/fromJson.txt:621
+#: po/custom/fromJson.txt:618
 msgid "HE Mini-Rockets Mk3"
 msgstr "HE Mini-Rockets Mk3"
 
-#: po/custom/fromJson.txt:622
+#: po/custom/fromJson.txt:619
 msgid "HE Mortar Shells"
 msgstr "HE Mortar Shells"
 
-#: po/custom/fromJson.txt:623
+#: po/custom/fromJson.txt:620
 msgid "HE Mortar Shells Mk2"
 msgstr "HE Mortar Shells Mk2"
 
-#: po/custom/fromJson.txt:624
+#: po/custom/fromJson.txt:621
 msgid "HE Mortar Shells Mk3"
 msgstr "HE Mortar Shells Mk3"
 
-#: po/custom/fromJson.txt:625
+#: po/custom/fromJson.txt:622
 #, fuzzy
 msgid "HE Rockets"
 msgstr "HE Mini-Rockets"
 
-#: po/custom/fromJson.txt:626
+#: po/custom/fromJson.txt:623
 #, fuzzy
 msgid "HE Rockets Mk2"
 msgstr "HE Mini-Rockets Mk2"
 
-#: po/custom/fromJson.txt:627
+#: po/custom/fromJson.txt:624
 #, fuzzy
 msgid "HE Rockets Mk3"
 msgstr "HE Mini-Rockets Mk3"
 
-#: po/custom/fromJson.txt:628
+#: po/custom/fromJson.txt:625
 msgid "HESH Rocket Warhead"
 msgstr "HESH Rocket Warhead"
 
-#: po/custom/fromJson.txt:629
+#: po/custom/fromJson.txt:626
 msgid "HESH Rocket Warhead Mk2"
 msgstr "HESH Rocket Warhead Mk2"
 
-#: po/custom/fromJson.txt:630
+#: po/custom/fromJson.txt:627
 msgid "HESH Rocket Warhead Mk3"
 msgstr "HESH Rocket Warhead Mk3"
 
-#: po/custom/fromJson.txt:631
+#: po/custom/fromJson.txt:628
 msgid "Hide Behind Me"
 msgstr ""
 
-#: po/custom/fromJson.txt:632
+#: po/custom/fromJson.txt:629
 msgid "Hi-Energy Laser Emitter"
 msgstr "Hi-Energy Laser Emitter"
 
-#: po/custom/fromJson.txt:633
+#: po/custom/fromJson.txt:630
 msgid "Hi-Energy Laser Emitter Mk2"
 msgstr "Hi-Energy Laser Emitter Mk2"
 
-#: po/custom/fromJson.txt:634
+#: po/custom/fromJson.txt:631
 msgid "Hi-Energy Laser Emitter Mk3"
 msgstr "Hi-Energy Laser Emitter Mk3"
 
-#: po/custom/fromJson.txt:635
+#: po/custom/fromJson.txt:632
 msgid "High Density Base Structure Materials"
 msgstr "High Density Base Structure Materials"
 
-#: po/custom/fromJson.txt:636
+#: po/custom/fromJson.txt:633
 msgid "High Explosive Anti-Tank Cannon Shells"
 msgstr "High Explosive Anti-Tank Cannon Shells"
 
-#: po/custom/fromJson.txt:637
+#: po/custom/fromJson.txt:634
 msgid "High Explosive Anti-Tank warhead"
 msgstr "High Explosive Anti-Tank warhead"
 
-#: po/custom/fromJson.txt:638
+#: po/custom/fromJson.txt:635
 #, fuzzy
 msgid "High Explosive Anti-Tank warheads"
 msgstr "High Explosive Anti-Tank warhead"
 
-#: po/custom/fromJson.txt:639
+#: po/custom/fromJson.txt:636
 msgid "High Explosive Armor Piercing Flak"
 msgstr "High Explosive Armour Piercing Flak"
 
-#: po/custom/fromJson.txt:640
+#: po/custom/fromJson.txt:637
 msgid "High Explosive Armor Piercing Shells"
 msgstr "High Explosive Armour Piercing Shells"
 
-#: po/custom/fromJson.txt:643
+#: po/custom/fromJson.txt:640
 msgid "High explosive artillery missile"
 msgstr "High explosive artillery missile"
 
-#: po/custom/fromJson.txt:645
+#: po/custom/fromJson.txt:642
 msgid "High explosive heavy artillery missile"
 msgstr "High explosive heavy artillery missile"
 
-#: po/custom/fromJson.txt:646
+#: po/custom/fromJson.txt:643
 msgid "High explosive shaped charge missile"
 msgstr "High explosive shaped charge missile"
 
-#: po/custom/fromJson.txt:649
+#: po/custom/fromJson.txt:646
 msgid "High Intensity Thermal Armor"
 msgstr "High Intensity Thermal Armour"
 
-#: po/custom/fromJson.txt:650
+#: po/custom/fromJson.txt:647
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "High Intensity Thermal Armour Mk2"
 
-#: po/custom/fromJson.txt:651
+#: po/custom/fromJson.txt:648
 msgid "High Intensity Thermal Armor Mk3"
 msgstr "High Intensity Thermal Armour Mk3"
 
-#: po/custom/fromJson.txt:654
+#: po/custom/fromJson.txt:651
 msgid "High power costs and slow to produce"
 msgstr "High power costs and slow to produce"
 
-#: po/custom/fromJson.txt:655
+#: po/custom/fromJson.txt:652
 msgid "High Temperature Flamer Gel"
 msgstr "High Temperature Flamer Gel"
 
-#: po/custom/fromJson.txt:656
+#: po/custom/fromJson.txt:653
 msgid "High Temperature Flamer Gel Mk2"
 msgstr "High Temperature Flamer Gel Mk2"
 
-#: po/custom/fromJson.txt:657
+#: po/custom/fromJson.txt:654
 msgid "High Temperature Flamer Gel Mk3"
 msgstr "High Temperature Flamer Gel Mk3"
 
-#: po/custom/fromJson.txt:658
+#: po/custom/fromJson.txt:655
 msgid "High tensile concrete-plastic composite"
 msgstr "High tensile concrete-plastic composite"
 
-#: po/custom/fromJson.txt:660
+#: po/custom/fromJson.txt:657
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr "High-Velocity Armour-Piercing Fin-Stabilised Discarding Sabot"
 
-#: po/custom/fromJson.txt:661
+#: po/custom/fromJson.txt:658
 msgid "Hover"
 msgstr "Hover"
 
-#: po/custom/fromJson.txt:662
+#: po/custom/fromJson.txt:659
 #, fuzzy
 msgid "Hover AI"
 msgstr "Hover II"
 
-#: po/custom/fromJson.txt:663
+#: po/custom/fromJson.txt:660
 msgid "Hover II"
 msgstr "Hover II"
 
-#: po/custom/fromJson.txt:664
+#: po/custom/fromJson.txt:661
 msgid "Hover III"
 msgstr "Hover III"
 
-#: po/custom/fromJson.txt:665
+#: po/custom/fromJson.txt:662
 msgid "Hover Propulsion"
 msgstr "Hover Propulsion"
 
-#: po/custom/fromJson.txt:667
+#: po/custom/fromJson.txt:664
 msgid "Howitzer"
 msgstr "Howitzer"
 
-#: po/custom/fromJson.txt:668
+#: po/custom/fromJson.txt:665
 #, fuzzy
 msgid "Howitzer accuracy +10%"
 msgstr "Increases Howitzer accuracy"
 
-#: po/custom/fromJson.txt:669
+#: po/custom/fromJson.txt:666
 msgid "Howitzer Autoloader"
 msgstr "Howitzer Autoloader"
 
-#: po/custom/fromJson.txt:670
+#: po/custom/fromJson.txt:667
 msgid "Howitzer Autoloader Mk2"
 msgstr "Howitzer Autoloader Mk2"
 
-#: po/custom/fromJson.txt:671
+#: po/custom/fromJson.txt:668
 msgid "Howitzer Autoloader Mk3"
 msgstr "Howitzer Autoloader Mk3"
 
-#: po/custom/fromJson.txt:672
+#: po/custom/fromJson.txt:669
 #, fuzzy
 msgid "Howitzer damage +25%"
 msgstr "Increases Howitzer damage"
 
-#: po/custom/fromJson.txt:674
+#: po/custom/fromJson.txt:671
 #, fuzzy
 msgid "Howitzer Fast Loader"
 msgstr "Mortar Fast Loader"
 
-#: po/custom/fromJson.txt:675
+#: po/custom/fromJson.txt:672
 #, fuzzy
 msgid "Howitzer reload time -10%"
 msgstr "Howitzer Autoloader"
 
-#: po/custom/fromJson.txt:677
+#: po/custom/fromJson.txt:674
 msgid "HPV Cannon Emplacement"
 msgstr "HPV Cannon Emplacement"
 
-#: po/custom/fromJson.txt:678
+#: po/custom/fromJson.txt:675
 msgid "HPV Cannon Hardpoint"
 msgstr "HPV Cannon Hardpoint"
 
-#: po/custom/fromJson.txt:679
+#: po/custom/fromJson.txt:676
 msgid "HPV Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:680
+#: po/custom/fromJson.txt:677
 msgid "Hurricane AA Site"
 msgstr "Hurricane AA Site"
 
-#: po/custom/fromJson.txt:681
+#: po/custom/fromJson.txt:678
 msgid "Hurricane AA Turret"
 msgstr "Hurricane AA Turret"
 
-#: po/custom/fromJson.txt:682
+#: po/custom/fromJson.txt:679
 msgid "Hut"
 msgstr "Hut"
 
-#: po/custom/fromJson.txt:683
+#: po/custom/fromJson.txt:680
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "HVAPFSDS Cannon Rounds"
 
-#: po/custom/fromJson.txt:684
+#: po/custom/fromJson.txt:681
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "HVAPFSDS Cannon Rounds Mk2"
 
-#: po/custom/fromJson.txt:685
+#: po/custom/fromJson.txt:682
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "HVAPFSDS Cannon Rounds Mk3"
 
-#: po/custom/fromJson.txt:686
+#: po/custom/fromJson.txt:683
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "Hyper Fire Chaingun Upgrade"
 
-#: po/custom/fromJson.txt:688
+#: po/custom/fromJson.txt:685
 msgid "Hyper Velocity Cannon"
 msgstr "Hyper Velocity Cannon"
 
-#: po/custom/fromJson.txt:689
+#: po/custom/fromJson.txt:686
 #, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "Hyper Velocity Cannon"
 
-#: po/custom/fromJson.txt:690
+#: po/custom/fromJson.txt:687
 #, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "Hyper Velocity Cannon"
 
-#: po/custom/fromJson.txt:691
+#: po/custom/fromJson.txt:688
 #, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:692
+#: po/custom/fromJson.txt:689
 #, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:693
+#: po/custom/fromJson.txt:690
 msgid "Immense damage infliction capability"
 msgstr "Immense damage infliction capability"
 
-#: po/custom/fromJson.txt:694
+#: po/custom/fromJson.txt:691
 msgid "Improved armor-piercing dart"
 msgstr "Improved armour-piercing dart"
 
-#: po/custom/fromJson.txt:695
+#: po/custom/fromJson.txt:692
 #, fuzzy
 msgid "Improved Bomb Warhead"
 msgstr "Improved shaped charge warhead"
 
-#: po/custom/fromJson.txt:697
+#: po/custom/fromJson.txt:694
 msgid "Improved Energizer reduces laser recharge time"
 msgstr "Improved Energiser reduces laser recharge time"
 
-#: po/custom/fromJson.txt:698
+#: po/custom/fromJson.txt:695
 msgid "Improved Engineering"
 msgstr "Improved Engineering"
 
-#: po/custom/fromJson.txt:699
+#: po/custom/fromJson.txt:696
 msgid "Improved Engineering Techniques"
 msgstr "Improved Engineering Techniques"
 
-#: po/custom/fromJson.txt:700
+#: po/custom/fromJson.txt:697
 msgid "Improved fire detection systems"
 msgstr "Improved fire detection systems"
 
-#: po/custom/fromJson.txt:701
+#: po/custom/fromJson.txt:698
 msgid "Improved Hardcrete"
 msgstr "Improved Hardcrete"
 
-#: po/custom/fromJson.txt:702
+#: po/custom/fromJson.txt:699
 msgid "Improved Hardcrete Mk2"
 msgstr "Improved Hardcrete Mk2"
 
-#: po/custom/fromJson.txt:703
+#: po/custom/fromJson.txt:700
 msgid "Improved Hardcrete Mk3"
 msgstr "Improved Hardcrete Mk3"
 
-#: po/custom/fromJson.txt:704
+#: po/custom/fromJson.txt:701
 msgid "Improved high explosive shells"
 msgstr "Improved high explosive shells"
 
-#: po/custom/fromJson.txt:705
+#: po/custom/fromJson.txt:702
 msgid "Improved Laser Focusing"
 msgstr "Improved Laser Focusing"
 
-#: po/custom/fromJson.txt:706
+#: po/custom/fromJson.txt:703
 msgid "Improved NEXUS resistance circuitry"
 msgstr "Improved NEXUS resistance circuitry"
 
-#: po/custom/fromJson.txt:707
+#: po/custom/fromJson.txt:704
 msgid "Improved Power Generator Performance"
 msgstr "Improved Power Generator Performance"
 
-#: po/custom/fromJson.txt:708
+#: po/custom/fromJson.txt:705
 msgid "Improved Rocket Wire Guidance"
 msgstr "Improved Rocket Wire Guidance"
 
-#: po/custom/fromJson.txt:709
+#: po/custom/fromJson.txt:706
 msgid "Improved sensor range"
 msgstr "Improved sensor range"
 
-#: po/custom/fromJson.txt:711
+#: po/custom/fromJson.txt:708
 msgid "Improved shaped charge warhead"
 msgstr "Improved shaped charge warhead"
 
-#: po/custom/fromJson.txt:712
+#: po/custom/fromJson.txt:709
 msgid "Improved target recognition systems"
 msgstr "Improved target recognition systems"
 
-#: po/custom/fromJson.txt:713
+#: po/custom/fromJson.txt:710
 #, fuzzy
 msgid "Improved Thermal Emissions detection"
 msgstr "New Thermal Emissions detection"
 
-#: po/custom/fromJson.txt:714
+#: po/custom/fromJson.txt:711
 msgid "Improved Titanium-reinforced concrete"
 msgstr "Improved Titanium-reinforced concrete"
 
-#: po/custom/fromJson.txt:715
+#: po/custom/fromJson.txt:712
 #, fuzzy
 msgid "Improved trinitramine explosive formula"
 msgstr "Improved high explosive shells"
 
-#: po/custom/fromJson.txt:716
+#: po/custom/fromJson.txt:713
 #, fuzzy
 msgid "Improvement in laser emission density"
 msgstr "Improvement in laser emission density "
 
-#: po/custom/fromJson.txt:717
+#: po/custom/fromJson.txt:714
 msgid "Improvement in laser optics reduces light dispersal"
 msgstr "Improvement in laser optics reduces light dispersal"
 
-#: po/custom/fromJson.txt:719
+#: po/custom/fromJson.txt:716
 #, fuzzy
 msgid "Incendiary Howitzer"
 msgstr "Incendiary Howitzer"
 
-#: po/custom/fromJson.txt:720
+#: po/custom/fromJson.txt:717
 msgid "Incendiary howitzer emplacement"
 msgstr "Incendiary howitzer emplacement"
 
-#: po/custom/fromJson.txt:721
+#: po/custom/fromJson.txt:718
 #, fuzzy
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Incendiary Howitzer Emplacement"
 
-#: po/custom/fromJson.txt:722
+#: po/custom/fromJson.txt:719
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Incendiary Howitzer may be assigned to a sensor"
 
-#: po/custom/fromJson.txt:723
+#: po/custom/fromJson.txt:720
 #, fuzzy
 msgid "Incendiary Mortar"
 msgstr "Incendiary Mortar"
 
-#: po/custom/fromJson.txt:724
+#: po/custom/fromJson.txt:721
 #, fuzzy
 msgid "Incendiary Mortar Pit"
 msgstr "Incendiary Mortar"
 
-#: po/custom/fromJson.txt:725
+#: po/custom/fromJson.txt:722
 msgid "Increased gauss output speeds up reload time"
 msgstr "Increased gauss output speeds up reload time"
 
-#: po/custom/fromJson.txt:730
+#: po/custom/fromJson.txt:727
 msgid "Increases Armour and Body Points"
 msgstr "Increases Armour and Body Points"
 
-#: po/custom/fromJson.txt:733
+#: po/custom/fromJson.txt:730
 msgid "Increases Cannon accuracy"
 msgstr "Increases Cannon accuracy"
 
-#: po/custom/fromJson.txt:734
+#: po/custom/fromJson.txt:731
 msgid "Increases Cannon damage"
 msgstr "Increases Cannon damage"
 
-#: po/custom/fromJson.txt:735
+#: po/custom/fromJson.txt:732
 msgid "Increases Cannon ROF"
 msgstr "Increases Cannon ROF"
 
-#: po/custom/fromJson.txt:736
+#: po/custom/fromJson.txt:733
 msgid "Increases construction speed"
 msgstr "Increases construction speed"
 
-#: po/custom/fromJson.txt:742
+#: po/custom/fromJson.txt:739
 msgid "Increases Flamer ROF"
 msgstr "Increases Flamer ROF"
 
-#: po/custom/fromJson.txt:748
+#: po/custom/fromJson.txt:745
 msgid "Increases Laser accuracy"
 msgstr "Increases Laser accuracy"
 
-#: po/custom/fromJson.txt:749
+#: po/custom/fromJson.txt:746
 msgid "Increases Laser damage"
 msgstr "Increases Laser damage"
 
-#: po/custom/fromJson.txt:750
+#: po/custom/fromJson.txt:747
 msgid "Increases Laser ROF"
 msgstr "Increases Laser ROF"
 
-#: po/custom/fromJson.txt:753
+#: po/custom/fromJson.txt:750
 msgid "Increases Mini-Rocket accuracy"
 msgstr "Increases Mini-Rocket accuracy"
 
-#: po/custom/fromJson.txt:755
+#: po/custom/fromJson.txt:752
 msgid "Increases Mini-Rockets ROF"
 msgstr "Increases Mini-Rockets ROF"
 
-#: po/custom/fromJson.txt:756
+#: po/custom/fromJson.txt:753
 msgid "Increases Missile accuracy"
 msgstr "Increases Missile accuracy"
 
-#: po/custom/fromJson.txt:757
+#: po/custom/fromJson.txt:754
 msgid "Increases Missile damage"
 msgstr "Increases Missile damage"
 
-#: po/custom/fromJson.txt:758
+#: po/custom/fromJson.txt:755
 msgid "Increases Missile ROF"
 msgstr "Increases Missile ROF"
 
-#: po/custom/fromJson.txt:759
+#: po/custom/fromJson.txt:756
 msgid "Increases Mortar accuracy"
 msgstr "Increases Mortar accuracy"
 
-#: po/custom/fromJson.txt:761
+#: po/custom/fromJson.txt:758
 msgid "Increases Mortar ROF"
 msgstr "Increases Mortar ROF"
 
-#: po/custom/fromJson.txt:762
+#: po/custom/fromJson.txt:759
 msgid "Increases Rail Gun accuracy"
 msgstr "Increases Rail Gun accuracy"
 
-#: po/custom/fromJson.txt:763
+#: po/custom/fromJson.txt:760
 msgid "Increases Rail Gun damage"
 msgstr "Increases Rail Gun damage"
 
-#: po/custom/fromJson.txt:764
+#: po/custom/fromJson.txt:761
 msgid "Increases Rail Gun ROF"
 msgstr "Increases Rail Gun ROF"
 
-#: po/custom/fromJson.txt:767
+#: po/custom/fromJson.txt:764
 msgid "Increases Rocket accuracy"
 msgstr "Increases Rocket accuracy"
 
-#: po/custom/fromJson.txt:769
+#: po/custom/fromJson.txt:766
 msgid "Increases Rocket ROF"
 msgstr "Increases Rocket ROF"
 
-#: po/custom/fromJson.txt:773
+#: po/custom/fromJson.txt:770
 #, fuzzy
 msgid "Indirectweaponslab"
 msgstr "New Indirect Fire Weapon Available"
 
-#: po/custom/fromJson.txt:774
+#: po/custom/fromJson.txt:771
 msgid "Inferior armor and body points to Cobra"
 msgstr "Inferior armour and body points to Cobra"
 
-#: po/custom/fromJson.txt:775
+#: po/custom/fromJson.txt:772
 msgid "Inferior armor and body points to Viper"
 msgstr "Inferior armour and body points to Viper"
 
-#: po/custom/fromJson.txt:776
+#: po/custom/fromJson.txt:773
 msgid "Inferno"
 msgstr "Inferno"
 
-#: po/custom/fromJson.txt:777
+#: po/custom/fromJson.txt:774
 #, fuzzy
 msgid "Inferno Bunker"
 msgstr "Lancer Bunker"
 
-#: po/custom/fromJson.txt:778
+#: po/custom/fromJson.txt:775
 #, fuzzy
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Lancer Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:779
+#: po/custom/fromJson.txt:776
 #, fuzzy
 msgid "Inferno Cobra Hover"
 msgstr "Lancer Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:780
+#: po/custom/fromJson.txt:777
 msgid "Inferno Emplacement"
 msgstr "Inferno Emplacement"
 
-#: po/custom/fromJson.txt:781
+#: po/custom/fromJson.txt:778
 msgid "Inferno Hardpoint"
 msgstr "Inferno Hardpoint"
 
-#: po/custom/fromJson.txt:782
+#: po/custom/fromJson.txt:779
 #, fuzzy
 msgid "Inferno Python Hover"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:783
+#: po/custom/fromJson.txt:780
 msgid "Intruder parasite isolated"
 msgstr "Intruder parasite isolated"
 
-#: po/custom/fromJson.txt:784
+#: po/custom/fromJson.txt:781
 msgid "Ionizing Turbine Engine"
 msgstr "Ionising Turbine Engine"
 
-#: po/custom/fromJson.txt:785
+#: po/custom/fromJson.txt:782
 #, fuzzy
 msgid "Jammer Tower"
 msgstr "Flamer Guard Tower"
 
-#: po/custom/fromJson.txt:786
+#: po/custom/fromJson.txt:783
 #, fuzzy
 msgid "Jammer Turret"
 msgstr "Scrambler Turret"
 
-#: po/custom/fromJson.txt:787
+#: po/custom/fromJson.txt:784
 msgid "Jeep"
 msgstr "Jeep"
 
-#: po/custom/fromJson.txt:788
+#: po/custom/fromJson.txt:785
 msgid "Jump Cyborgs can now be researched"
 msgstr "Jump Cyborgs can now be researched"
 
-#: po/custom/fromJson.txt:789
+#: po/custom/fromJson.txt:786
 msgid "Keeps map areas under constant surveillance"
 msgstr "Keeps map areas under constant surveillance"
 
-#: po/custom/fromJson.txt:790
+#: po/custom/fromJson.txt:787
 #, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
 msgstr "Increases kinetic armour and body points"
 
-#: po/custom/fromJson.txt:791
+#: po/custom/fromJson.txt:788
 #, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
 msgstr "Increases Kinetic Armour and Body Points"
 
-#: po/custom/fromJson.txt:792
+#: po/custom/fromJson.txt:789
 #, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
 msgstr "Increases Kinetic Armour and Body Points"
 
-#: po/custom/fromJson.txt:793
+#: po/custom/fromJson.txt:790
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "Laminated alloys bonded with energy-deflecting optic bundles"
 
-#: po/custom/fromJson.txt:794
+#: po/custom/fromJson.txt:791
 msgid "Lancer"
 msgstr "Lancer"
 
-#: po/custom/fromJson.txt:795
+#: po/custom/fromJson.txt:792
 msgid "Lancer AT Rocket"
 msgstr "Lancer AT Rocket"
 
-#: po/custom/fromJson.txt:796
+#: po/custom/fromJson.txt:793
 msgid "Lancer Bunker"
 msgstr "Lancer Bunker"
 
-#: po/custom/fromJson.txt:797
+#: po/custom/fromJson.txt:794
 msgid "Lancer Cobra Half-tracks"
 msgstr "Lancer Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:798
+#: po/custom/fromJson.txt:795
 #, fuzzy
 msgid "Lancer Cobra Tracks"
 msgstr "Lancer Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:799
+#: po/custom/fromJson.txt:796
 #, fuzzy
 msgid "Lancer Cyborg"
 msgstr "Lancer"
 
-#: po/custom/fromJson.txt:800
+#: po/custom/fromJson.txt:797
 msgid "Lancer Hardpoint"
 msgstr "Lancer Hardpoint"
 
-#: po/custom/fromJson.txt:801
+#: po/custom/fromJson.txt:798
 #, fuzzy
 msgid "Lancer Mantis Tracks"
 msgstr "Cobra Lancer Tracks"
 
-#: po/custom/fromJson.txt:802
+#: po/custom/fromJson.txt:799
 #, fuzzy
 msgid "Lancer Python Tracks"
 msgstr "Commander Python Tracks"
 
-#: po/custom/fromJson.txt:803
+#: po/custom/fromJson.txt:800
 #, fuzzy
 msgid "Lancer Scorpion Tracks"
 msgstr "Scorpion Lancer Tracks"
 
-#: po/custom/fromJson.txt:804
+#: po/custom/fromJson.txt:801
 #, fuzzy
 msgid "Lancer Scorpion VTOL"
 msgstr "Scorpion BB VTOL"
 
-#: po/custom/fromJson.txt:806
+#: po/custom/fromJson.txt:803
 #, fuzzy
 msgid "Lancer Viper Tracks"
 msgstr "Cobra Lancer Tracks"
 
-#: po/custom/fromJson.txt:807
+#: po/custom/fromJson.txt:804
 #, fuzzy
 msgid "Lancer Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
-#: po/custom/fromJson.txt:808
+#: po/custom/fromJson.txt:805
 msgid "Large Super Heavy Body"
 msgstr "Large Super Heavy Body"
 
-#: po/custom/fromJson.txt:809
+#: po/custom/fromJson.txt:806
 msgid "Laser AA Gun Available"
 msgstr "Laser AA Gun Available"
 
-#: po/custom/fromJson.txt:810
+#: po/custom/fromJson.txt:807
 #, fuzzy
 msgid "Laser accuracy +10%"
 msgstr "Increases Laser accuracy"
 
-#: po/custom/fromJson.txt:811
+#: po/custom/fromJson.txt:808
 #, fuzzy
 msgid "Laser damage +25%"
 msgstr "Increases Laser damage"
 
-#: po/custom/fromJson.txt:812
+#: po/custom/fromJson.txt:809
 msgid "Laser designator paints and guides bombs to the target"
 msgstr "Laser designator paints and guides bombs to the target"
 
-#: po/custom/fromJson.txt:813
+#: po/custom/fromJson.txt:810
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Laser designator paints and guides rounds to the target"
 
-#: po/custom/fromJson.txt:814
+#: po/custom/fromJson.txt:811
 msgid "Laser - Flashlight"
 msgstr "Laser - Flashlight"
 
-#: po/custom/fromJson.txt:815
+#: po/custom/fromJson.txt:812
 msgid "Laser Guided Bombsight"
 msgstr "Laser Guided Bombsight"
 
-#: po/custom/fromJson.txt:816
+#: po/custom/fromJson.txt:813
 #, fuzzy
 msgid "Laseropticslab"
 msgstr "Laser Optics Laboratory"
 
-#: po/custom/fromJson.txt:817
+#: po/custom/fromJson.txt:814
 #, fuzzy
 msgid "Laser reload time -15%"
 msgstr "Flamer Autoloader"
 
-#: po/custom/fromJson.txt:818
+#: po/custom/fromJson.txt:815
 msgid "Laser Satellite Command Post"
 msgstr "Laser Satellite Command Post"
 
-#: po/custom/fromJson.txt:819
+#: po/custom/fromJson.txt:816
 msgid "Laser Upgrade"
 msgstr "Laser Upgrade"
 
-#: po/custom/fromJson.txt:820
+#: po/custom/fromJson.txt:817
 msgid "LasSat"
 msgstr "LasSat"
 
-#: po/custom/fromJson.txt:821
+#: po/custom/fromJson.txt:818
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Layered composite alloys and energy-absorbing fibres"
 
-#: po/custom/fromJson.txt:823
+#: po/custom/fromJson.txt:820
 msgid "Leopard"
 msgstr "Leopard"
 
-#: po/custom/fromJson.txt:824
+#: po/custom/fromJson.txt:821
 msgid "Less armor and body points than Python"
 msgstr "Less armour and body points than Python"
 
-#: po/custom/fromJson.txt:825
+#: po/custom/fromJson.txt:822
 msgid "Light Body - Bug"
 msgstr "Light Body - Bug"
 
-#: po/custom/fromJson.txt:826
+#: po/custom/fromJson.txt:823
 msgid "Light Body - Leopard"
 msgstr "Light Body - Leopard"
 
-#: po/custom/fromJson.txt:827
+#: po/custom/fromJson.txt:824
 msgid "Light Body - Retaliation"
 msgstr "Light Body - Retaliation"
 
-#: po/custom/fromJson.txt:828
+#: po/custom/fromJson.txt:825
 msgid "Light Body - Viper"
 msgstr "Light Body - Viper"
 
-#: po/custom/fromJson.txt:829
+#: po/custom/fromJson.txt:826
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Light body vulnerable to heavy weapons"
 
-#: po/custom/fromJson.txt:830
+#: po/custom/fromJson.txt:827
 msgid "Light Cannon"
 msgstr "Light Cannon"
 
-#: po/custom/fromJson.txt:831
+#: po/custom/fromJson.txt:828
 msgid "Light Cannon Bunker"
 msgstr "Light Cannon Bunker"
 
-#: po/custom/fromJson.txt:832
+#: po/custom/fromJson.txt:829
 #, fuzzy
 msgid "Light Cannon Cobra Tracks"
 msgstr "Viper Light Cannon Tracks"
 
-#: po/custom/fromJson.txt:833
+#: po/custom/fromJson.txt:830
 msgid "Light Cannon firing 40mm rounds"
 msgstr "Light Cannon firing 40mm rounds"
 
-#: po/custom/fromJson.txt:834
+#: po/custom/fromJson.txt:831
 msgid "Light Cannon Hardpoint"
 msgstr "Light Cannon Hardpoint"
 
-#: po/custom/fromJson.txt:835
+#: po/custom/fromJson.txt:832
 #, fuzzy
 msgid "Light Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:836
+#: po/custom/fromJson.txt:833
 #, fuzzy
 msgid "Light Cannon Viper Half-tracks"
 msgstr "Viper Light Cannon Half-track"
 
-#: po/custom/fromJson.txt:837
+#: po/custom/fromJson.txt:834
 #, fuzzy
 msgid "Light Cannon Viper Tracks"
 msgstr "Viper Light Cannon Tracks"
 
-#: po/custom/fromJson.txt:838
+#: po/custom/fromJson.txt:835
 #, fuzzy
 msgid "Light Cannon Viper Wheels"
 msgstr "Viper Light Cannon Wheels"
 
-#: po/custom/fromJson.txt:840
+#: po/custom/fromJson.txt:837
 msgid "Look-Out Tower"
 msgstr "Look-Out Tower"
 
-#: po/custom/fromJson.txt:841
+#: po/custom/fromJson.txt:838
 msgid "Low power cost and low production times"
 msgstr "Low power cost and low production times"
 
-#: po/custom/fromJson.txt:842
+#: po/custom/fromJson.txt:839
 msgid "Low yield thermonuclear warhead"
 msgstr "Low yield thermonuclear warhead"
 
-#: po/custom/fromJson.txt:845
+#: po/custom/fromJson.txt:842
 msgid "Machinegun Bunker"
 msgstr "Machinegun Bunker"
 
-#: po/custom/fromJson.txt:846
+#: po/custom/fromJson.txt:843
 #, fuzzy
 msgid "Machinegun damage +25%"
 msgstr "Increases Machinegun damage"
 
-#: po/custom/fromJson.txt:847
+#: po/custom/fromJson.txt:844
 msgid "Machinegunner"
 msgstr "Machinegunner"
 
-#: po/custom/fromJson.txt:849
+#: po/custom/fromJson.txt:846
 #, fuzzy
 msgid "Machinegun reload time -15%"
 msgstr "Machinegun Upgrade"
 
-#: po/custom/fromJson.txt:851
+#: po/custom/fromJson.txt:848
 #, fuzzy
 msgid "Machinegun Viper Half-Tracks"
 msgstr "Viper Twin Machinegun Half-track"
 
-#: po/custom/fromJson.txt:852
+#: po/custom/fromJson.txt:849
 #, fuzzy
 msgid "Machinegun Viper Tracks"
 msgstr "Machinegun Viper Wheels"
 
-#: po/custom/fromJson.txt:854
+#: po/custom/fromJson.txt:851
 msgid "Makes excellent scout vehicle"
 msgstr "Makes excellent scout vehicle"
 
-#: po/custom/fromJson.txt:855
+#: po/custom/fromJson.txt:852
 msgid "Mantis"
 msgstr "Mantis"
 
-#: po/custom/fromJson.txt:856
+#: po/custom/fromJson.txt:853
 #, fuzzy
 msgid "Mass Driver"
 msgstr "Mass Driver Fortress"
 
-#: po/custom/fromJson.txt:857
+#: po/custom/fromJson.txt:854
 msgid "Mass Driver Fortress"
 msgstr "Mass Driver Fortress"
 
-#: po/custom/fromJson.txt:858
+#: po/custom/fromJson.txt:855
 msgid "Maximum armor and body points"
 msgstr "Maximum armour and body points"
 
-#: po/custom/fromJson.txt:861
+#: po/custom/fromJson.txt:858
 #, fuzzy
 msgid "May be assigned to follow units"
 msgstr "May be assigned to a sensor"
 
-#: po/custom/fromJson.txt:862
+#: po/custom/fromJson.txt:859
 msgid "May be targeted directly or assigned to a sensor turret or tower"
 msgstr "May be targeted directly or assigned to a sensor turret or tower"
 
-#: po/custom/fromJson.txt:863
+#: po/custom/fromJson.txt:860
 msgid "May be upgraded using factory modules"
 msgstr "May be upgraded using factory modules"
 
-#: po/custom/fromJson.txt:864
+#: po/custom/fromJson.txt:861
 msgid "Mechanic with repair ability"
 msgstr "Mechanic with repair ability"
 
-#: po/custom/fromJson.txt:865
+#: po/custom/fromJson.txt:862
 msgid "Medium Body - Cobra"
 msgstr "Medium Body - Cobra"
 
-#: po/custom/fromJson.txt:866
+#: po/custom/fromJson.txt:863
 msgid "Medium body increases armor and body points"
 msgstr "Medium body increases armour and body points"
 
-#: po/custom/fromJson.txt:867
+#: po/custom/fromJson.txt:864
 msgid "Medium Body - Panther"
 msgstr "Medium Body - Panther"
 
-#: po/custom/fromJson.txt:868
+#: po/custom/fromJson.txt:865
 msgid "Medium Body - Retribution"
 msgstr "Medium Body - Retribution"
 
-#: po/custom/fromJson.txt:869
+#: po/custom/fromJson.txt:866
 msgid "Medium Body - Scorpion"
 msgstr "Medium Body - Scorpion"
 
-#: po/custom/fromJson.txt:870
+#: po/custom/fromJson.txt:867
 msgid "Medium Cannon"
 msgstr "Medium Cannon"
 
-#: po/custom/fromJson.txt:871
+#: po/custom/fromJson.txt:868
 #, fuzzy
 msgid "Medium Cannon Cobra Half Track"
 msgstr "Viper Medium Cannon Tracks"
 
-#: po/custom/fromJson.txt:872
+#: po/custom/fromJson.txt:869
 #, fuzzy
 msgid "Medium Cannon Cobra Hover"
 msgstr "Medium Cannon"
 
-#: po/custom/fromJson.txt:873
+#: po/custom/fromJson.txt:870
 #, fuzzy
 msgid "Medium Cannon Cobra Tracks"
 msgstr "Viper Medium Cannon Tracks"
 
-#: po/custom/fromJson.txt:874
+#: po/custom/fromJson.txt:871
 msgid "Medium Cannon firing 76mm rounds"
 msgstr "Medium Cannon firing 76mm rounds"
 
-#: po/custom/fromJson.txt:875
+#: po/custom/fromJson.txt:872
 msgid "Medium Cannon Hardpoint"
 msgstr "Medium Cannon Hardpoint"
 
-#: po/custom/fromJson.txt:876
+#: po/custom/fromJson.txt:873
 #, fuzzy
 msgid "Medium Cannon Python Hover"
 msgstr "Medium Cannon"
 
-#: po/custom/fromJson.txt:877
+#: po/custom/fromJson.txt:874
 #, fuzzy
 msgid "Medium Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: po/custom/fromJson.txt:878
+#: po/custom/fromJson.txt:875
 #, fuzzy
 msgid "Medium Cannon Scorpion Hover"
 msgstr "Medium Cannon Hardpoint"
 
-#: po/custom/fromJson.txt:879
+#: po/custom/fromJson.txt:876
 #, fuzzy
 msgid "Medium Cannon Scorpion Tracks"
 msgstr "Viper Medium Cannon Tracks"
 
-#: po/custom/fromJson.txt:880
+#: po/custom/fromJson.txt:877
 #, fuzzy
 msgid "Medium Cannon Viper Tracks"
 msgstr "Viper Medium Cannon Tracks"
 
-#: po/custom/fromJson.txt:881
+#: po/custom/fromJson.txt:878
 msgid "Medium Super Heavy Body"
 msgstr "Medium Super Heavy Body"
 
-#: po/custom/fromJson.txt:882
+#: po/custom/fromJson.txt:879
 msgid "Mini-rocket armored strongpoint"
 msgstr "Mini-rocket armoured strongpoint"
 
-#: po/custom/fromJson.txt:883
+#: po/custom/fromJson.txt:880
 #, fuzzy
 msgid "Mini-Rocket Array"
 msgstr "Mini-Rocket Artillery"
 
-#: po/custom/fromJson.txt:884
+#: po/custom/fromJson.txt:881
 #, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Cobra Mini-Rocket Artillery Half-track"
 
-#: po/custom/fromJson.txt:885
+#: po/custom/fromJson.txt:882
 #, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Mini-Rocket Artillery"
 
-#: po/custom/fromJson.txt:886
+#: po/custom/fromJson.txt:883
 #, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
 msgstr "Mini-Rocket Artillery"
 
-#: po/custom/fromJson.txt:887
+#: po/custom/fromJson.txt:884
 #, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
 msgstr "Viper Mini-Rocket Artillery Wheels"
 
-#: po/custom/fromJson.txt:888
+#: po/custom/fromJson.txt:885
 msgid "Mini-Rocket Artillery"
 msgstr "Mini-Rocket Artillery"
 
-#: po/custom/fromJson.txt:889
+#: po/custom/fromJson.txt:886
 #, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
 msgstr "Cobra Mini-Rocket Artillery Half-track"
 
-#: po/custom/fromJson.txt:890
+#: po/custom/fromJson.txt:887
 #, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr "Viper Mini-Rocket Artillery Wheels"
 
-#: po/custom/fromJson.txt:891
+#: po/custom/fromJson.txt:888
 msgid "Mini-Rocket Battery"
 msgstr "Mini-Rocket Battery"
 
-#: po/custom/fromJson.txt:892
+#: po/custom/fromJson.txt:889
 #, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "HMG Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:893
+#: po/custom/fromJson.txt:890
 #, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "Mini-Pod Rockets"
 
-#: po/custom/fromJson.txt:894
+#: po/custom/fromJson.txt:891
 #, fuzzy
 msgid "Mini-Rocket Guard Tower"
 msgstr "Mini-Pod Rocket Guard Tower"
 
-#: po/custom/fromJson.txt:895
+#: po/custom/fromJson.txt:892
 #, fuzzy
 msgid "Mini-Rocket Pod"
 msgstr "Mini-Rocket Upgrade"
 
-#: po/custom/fromJson.txt:896
+#: po/custom/fromJson.txt:893
 #, fuzzy
 msgid "Mini-Rocket Tower"
 msgstr "Mini-Pod Rocket Guard Tower"
 
-#: po/custom/fromJson.txt:898
+#: po/custom/fromJson.txt:895
 #, fuzzy
 msgid "Mini-Rocket Viper Half Track"
 msgstr "HMG Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:899
+#: po/custom/fromJson.txt:896
 #, fuzzy
 msgid "Mini-Rocket Viper Wheels"
 msgstr "Viper Mini-Pod Rockets Wheels"
 
-#: po/custom/fromJson.txt:900
+#: po/custom/fromJson.txt:897
 #, fuzzy
 msgid "Missile accuracy +10%"
 msgstr "Increases Missile accuracy"
 
-#: po/custom/fromJson.txt:901
+#: po/custom/fromJson.txt:898
 msgid "Missile actively seeks and homes on targets"
 msgstr "Missile actively seeks and homes on targets"
 
-#: po/custom/fromJson.txt:902
+#: po/custom/fromJson.txt:899
 #, fuzzy
 msgid "Missile damage +25%"
 msgstr "Increases Missile damage"
 
-#: po/custom/fromJson.txt:903
+#: po/custom/fromJson.txt:900
 msgid "Missile Fortress"
 msgstr "Missile Fortress"
 
-#: po/custom/fromJson.txt:904
+#: po/custom/fromJson.txt:901
 #, fuzzy
 msgid "Missile reload time -15%"
 msgstr "Mission Time - %s"
 
-#: po/custom/fromJson.txt:905
+#: po/custom/fromJson.txt:902
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "Missiles detect and lock-on to targets while loading"
 
-#: po/custom/fromJson.txt:908
+#: po/custom/fromJson.txt:905
 msgid "Missile Upgrade"
 msgstr "Missile Upgrade"
 
-#: po/custom/fromJson.txt:909
+#: po/custom/fromJson.txt:906
 msgid "Mobile Repair Turret"
 msgstr "Mobile Repair Turret"
 
-#: po/custom/fromJson.txt:910
+#: po/custom/fromJson.txt:907
 msgid "More armor and body points than Python"
 msgstr "More armour and body points than Python"
 
-#: po/custom/fromJson.txt:911
+#: po/custom/fromJson.txt:908
 #, fuzzy
 msgid "More armor and body points than Vengeance"
 msgstr "More armour and body points than Vengance"
 
-#: po/custom/fromJson.txt:912
+#: po/custom/fromJson.txt:909
 msgid "Mortar"
 msgstr "Mortar"
 
-#: po/custom/fromJson.txt:913
+#: po/custom/fromJson.txt:910
 #, fuzzy
 msgid "Mortar accuracy +10%"
 msgstr "Increases Mortar accuracy"
 
-#: po/custom/fromJson.txt:914
+#: po/custom/fromJson.txt:911
 msgid "Mortar Autoloader"
 msgstr "Mortar Autoloader"
 
-#: po/custom/fromJson.txt:915
+#: po/custom/fromJson.txt:912
 msgid "Mortar Autoloader Mk2"
 msgstr "Mortar Autoloader Mk2"
 
-#: po/custom/fromJson.txt:916
+#: po/custom/fromJson.txt:913
 msgid "Mortar Autoloader Mk3"
 msgstr "Mortar Autoloader Mk3"
 
-#: po/custom/fromJson.txt:917
+#: po/custom/fromJson.txt:914
 #, fuzzy
 msgid "Mortar Cobra Half-tracks"
 msgstr "HMG Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:918
+#: po/custom/fromJson.txt:915
 #, fuzzy
 msgid "Mortar damage +25%"
 msgstr "Increases Mortar damage"
 
-#: po/custom/fromJson.txt:919
+#: po/custom/fromJson.txt:916
 msgid "Mortar Fast Loader"
 msgstr "Mortar Fast Loader"
 
-#: po/custom/fromJson.txt:920
+#: po/custom/fromJson.txt:917
 msgid "Mortar Pit"
 msgstr "Mortar Pit"
 
-#: po/custom/fromJson.txt:921
+#: po/custom/fromJson.txt:918
 #, fuzzy
 msgid "Mortar reload time -10%"
 msgstr "Mortar Autoloader"
 
-#: po/custom/fromJson.txt:922
+#: po/custom/fromJson.txt:919
 msgid "Mortar Targeting Computer"
 msgstr "Mortar Targeting Computer"
 
-#: po/custom/fromJson.txt:924
+#: po/custom/fromJson.txt:921
 msgid "MRL Emplacement"
 msgstr "MRL Emplacement"
 
-#: po/custom/fromJson.txt:925
+#: po/custom/fromJson.txt:922
 msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Multi-barrel, rapid-fire machinegun"
 
-#: po/custom/fromJson.txt:926
+#: po/custom/fromJson.txt:923
 #, fuzzy
 msgid "Multi Turret Body - Dragon"
 msgstr "Super Heavy Body - Dragon"
 
-#: po/custom/fromJson.txt:927
+#: po/custom/fromJson.txt:924
 msgid "Nanolab"
 msgstr ""
 
-#: po/custom/fromJson.txt:928
+#: po/custom/fromJson.txt:925
 #, fuzzy
 msgid "Narrow area of effect"
 msgstr "Narrow area of effect"
 
-#: po/custom/fromJson.txt:930
+#: po/custom/fromJson.txt:927
 msgid "Needle Gun"
 msgstr "Needle Gun"
 
-#: po/custom/fromJson.txt:931
+#: po/custom/fromJson.txt:928
 msgid "Needle Gunner"
 msgstr "Needle Gunner"
 
-#: po/custom/fromJson.txt:932
+#: po/custom/fromJson.txt:929
 #, fuzzy
 msgid "Needle Gunner Cyborg"
 msgstr "Needle Gunner"
 
-#: po/custom/fromJson.txt:933
+#: po/custom/fromJson.txt:930
 #, fuzzy
 msgid "Needle Gun Retribution Tracks"
 msgstr "Retribution Tracks Needle Gun"
 
-#: po/custom/fromJson.txt:934
+#: po/custom/fromJson.txt:931
 #, fuzzy
 msgid "Needle Gun Tiger Tracks"
 msgstr "Needle Gun Tower"
 
-#: po/custom/fromJson.txt:935
+#: po/custom/fromJson.txt:932
 msgid "Needle Gun Tower"
 msgstr "Needle Gun Tower"
 
-#: po/custom/fromJson.txt:936
+#: po/custom/fromJson.txt:933
 #, fuzzy
 msgid "Needle Gun Vengeance Tracks"
 msgstr "Needle Gunner"
 
-#: po/custom/fromJson.txt:937
+#: po/custom/fromJson.txt:934
 msgid "Neural Synapse Research Brain"
 msgstr "Neural Synapse Research Brain"
 
-#: po/custom/fromJson.txt:938
+#: po/custom/fromJson.txt:935
 msgid "Neural Synapse Research Brain Mk2"
 msgstr "Neural Synapse Research Brain Mk2"
 
-#: po/custom/fromJson.txt:939
+#: po/custom/fromJson.txt:936
 msgid "Neural Synapse Research Brain Mk3"
 msgstr "Neural Synapse Research Brain Mk3"
 
-#: po/custom/fromJson.txt:941
+#: po/custom/fromJson.txt:938
 msgid "New Advanced Weapon Available"
 msgstr "New Advanced Weapon Available"
 
-#: po/custom/fromJson.txt:943
+#: po/custom/fromJson.txt:940
 msgid "New Artillery Missile Turret Available"
 msgstr "New Artillery Missile Turret Available"
 
-#: po/custom/fromJson.txt:944
+#: po/custom/fromJson.txt:941
 msgid "New automated repair techniques"
 msgstr "New automated repair techniques"
 
-#: po/custom/fromJson.txt:945
+#: po/custom/fromJson.txt:942
 msgid "New Base Structure Available"
 msgstr "New Base Structure Available"
 
-#: po/custom/fromJson.txt:946
+#: po/custom/fromJson.txt:943
 msgid "New battlefield computer system"
 msgstr "New battlefield computer system"
 
-#: po/custom/fromJson.txt:948
+#: po/custom/fromJson.txt:945
 msgid "New Construction Options Available"
 msgstr "New Construction Options Available"
 
-#: po/custom/fromJson.txt:951
+#: po/custom/fromJson.txt:948
 msgid "New Cyborg Research Available"
 msgstr "New Cyborg Research Available"
 
-#: po/custom/fromJson.txt:953
+#: po/custom/fromJson.txt:950
 msgid "New Electronic Technology Discovered"
 msgstr "New Electronic Technology Discovered"
 
-#: po/custom/fromJson.txt:957
+#: po/custom/fromJson.txt:954
 msgid "New Laser Weapon Available"
 msgstr "New Laser Weapon Available"
 
-#: po/custom/fromJson.txt:958
+#: po/custom/fromJson.txt:955
 msgid "New Missile Turret Available"
 msgstr "New Missile Turret Available"
 
-#: po/custom/fromJson.txt:960
+#: po/custom/fromJson.txt:957
 msgid "New Paradigm Heavy Body"
 msgstr "New Paradigm Heavy Body"
 
-#: po/custom/fromJson.txt:961
+#: po/custom/fromJson.txt:958
 msgid "New Paradigm Light Body"
 msgstr "New Paradigm Light Body"
 
-#: po/custom/fromJson.txt:962
+#: po/custom/fromJson.txt:959
 msgid "New Paradigm Medium body"
 msgstr "New Paradigm Medium body"
 
-#: po/custom/fromJson.txt:963
+#: po/custom/fromJson.txt:960
 msgid "New power efficient propulsion"
 msgstr "New power efficient propulsion"
 
-#: po/custom/fromJson.txt:964
+#: po/custom/fromJson.txt:961
 msgid "New Power Generation Technology"
 msgstr "New Power Generation Technology"
 
-#: po/custom/fromJson.txt:965
+#: po/custom/fromJson.txt:962
 msgid "New Propulsion Available"
 msgstr "New Propulsion Available"
 
-#: po/custom/fromJson.txt:966
+#: po/custom/fromJson.txt:963
 msgid "New Propulsion Available for Design"
 msgstr "New Propulsion Available for Design"
 
-#: po/custom/fromJson.txt:968
+#: po/custom/fromJson.txt:965
 msgid "New Rail Gun Available"
 msgstr "New Rail Gun Available"
 
-#: po/custom/fromJson.txt:969
+#: po/custom/fromJson.txt:966
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "New Repair Facility Repairs Damaged Units"
 
-#: po/custom/fromJson.txt:970
+#: po/custom/fromJson.txt:967
 msgid "New Repair Technology Discovered"
 msgstr "New Repair Technology Discovered"
 
-#: po/custom/fromJson.txt:971
+#: po/custom/fromJson.txt:968
 msgid "New research options available"
 msgstr "New research options available"
 
-#: po/custom/fromJson.txt:974
+#: po/custom/fromJson.txt:971
 msgid "New Rocket Available"
 msgstr "New Rocket Available"
 
-#: po/custom/fromJson.txt:975
+#: po/custom/fromJson.txt:972
 msgid "New SAM Turret Available"
 msgstr "New SAM Turret Available"
 
-#: po/custom/fromJson.txt:976
+#: po/custom/fromJson.txt:973
 msgid "New System Available"
 msgstr "New System Available"
 
-#: po/custom/fromJson.txt:977
+#: po/custom/fromJson.txt:974
 #, fuzzy
 msgid "New Systems Sensor Available"
 msgstr "New Systems Tower Available"
 
-#: po/custom/fromJson.txt:978
+#: po/custom/fromJson.txt:975
 msgid "New Systems Structure Available"
 msgstr "New Systems Structure Available"
 
-#: po/custom/fromJson.txt:979
+#: po/custom/fromJson.txt:976
 msgid "New Systems Tower Available"
 msgstr "New Systems Tower Available"
 
-#: po/custom/fromJson.txt:981
+#: po/custom/fromJson.txt:978
 msgid "New Systems Turret Available for Design"
 msgstr "New Systems Turret Available for Design"
 
-#: po/custom/fromJson.txt:982
+#: po/custom/fromJson.txt:979
 msgid "New Systems Turret Available For Design"
 msgstr "New Systems Turret Available For Design"
 
-#: po/custom/fromJson.txt:984
+#: po/custom/fromJson.txt:981
 msgid "New Thermal Emissions detection"
 msgstr "New Thermal Emissions detection"
 
-#: po/custom/fromJson.txt:985
+#: po/custom/fromJson.txt:982
 msgid "New VTOL Missile Launcher"
 msgstr "New VTOL Missile Launcher"
 
-#: po/custom/fromJson.txt:987
+#: po/custom/fromJson.txt:984
 #, fuzzy
 msgid "Nexus"
 msgstr "Nexus Link Turret"
 
-#: po/custom/fromJson.txt:988
+#: po/custom/fromJson.txt:985
 msgid "NEXUS CWall"
 msgstr "NEXUS CWall"
 
-#: po/custom/fromJson.txt:989
+#: po/custom/fromJson.txt:986
 msgid "NEXUS Heavy Body"
 msgstr "NEXUS Heavy Body"
 
-#: po/custom/fromJson.txt:990
+#: po/custom/fromJson.txt:987
 msgid "NEXUS Intruder Program"
 msgstr "NEXUS Intruder Program"
 
-#: po/custom/fromJson.txt:991
+#: po/custom/fromJson.txt:988
 msgid "NEXUS Intruder Program analyzed"
 msgstr "NEXUS Intruder Program analysed"
 
-#: po/custom/fromJson.txt:992
+#: po/custom/fromJson.txt:989
 msgid "NEXUS Light Body"
 msgstr "NEXUS Light Body"
 
-#: po/custom/fromJson.txt:993
+#: po/custom/fromJson.txt:990
 #, fuzzy
 msgid "Nexus Link Tower"
 msgstr "Nexus Link Turret"
 
-#: po/custom/fromJson.txt:994
+#: po/custom/fromJson.txt:991
 msgid "Nexus Link Turret"
 msgstr "Nexus Link Turret"
 
-#: po/custom/fromJson.txt:995
+#: po/custom/fromJson.txt:992
 msgid "NEXUS Medium Body"
 msgstr "NEXUS Medium Body"
 
-#: po/custom/fromJson.txt:996
+#: po/custom/fromJson.txt:993
 #, fuzzy
 msgid "Nexus Missile Silo"
 msgstr "Missile Silo"
 
-#: po/custom/fromJson.txt:998
+#: po/custom/fromJson.txt:995
 msgid "NEXUS Resistance Circuits"
 msgstr "NEXUS Resistance Circuits"
 
-#: po/custom/fromJson.txt:999
+#: po/custom/fromJson.txt:996
 msgid "NEXUS Resistance Circuits Mk2"
 msgstr "NEXUS Resistance Circuits Mk2"
 
-#: po/custom/fromJson.txt:1000
+#: po/custom/fromJson.txt:997
 msgid "NEXUS Resistance Circuits Mk3"
 msgstr "NEXUS Resistance Circuits Mk3"
 
-#: po/custom/fromJson.txt:1001
+#: po/custom/fromJson.txt:998
 msgid "NEXUS Wall"
 msgstr "NEXUS Wall"
 
-#: po/custom/fromJson.txt:1002
+#: po/custom/fromJson.txt:999
 msgid "No Place To Hide"
 msgstr ""
 
-#: po/custom/fromJson.txt:1003
+#: po/custom/fromJson.txt:1000
 #, fuzzy
 msgctxt "rank"
 msgid "Elite"
 msgstr "Elite"
 
-#: po/custom/fromJson.txt:1004
+#: po/custom/fromJson.txt:1001
 msgctxt "rank"
 msgid "Green"
 msgstr "Green"
 
-#: po/custom/fromJson.txt:1005
+#: po/custom/fromJson.txt:1002
 #, fuzzy
 msgctxt "rank"
 msgid "Hero"
 msgstr "Hero"
 
-#: po/custom/fromJson.txt:1006
+#: po/custom/fromJson.txt:1003
 #, fuzzy
 msgctxt "rank"
 msgid "Professional"
 msgstr "Professional"
 
-#: po/custom/fromJson.txt:1007
+#: po/custom/fromJson.txt:1004
 #, fuzzy
 msgctxt "rank"
 msgid "Regular"
 msgstr "Regular"
 
-#: po/custom/fromJson.txt:1008
+#: po/custom/fromJson.txt:1005
 #, fuzzy
 msgctxt "rank"
 msgid "Rookie"
 msgstr "Rookie"
 
-#: po/custom/fromJson.txt:1009
+#: po/custom/fromJson.txt:1006
 #, fuzzy
 msgctxt "rank"
 msgid "Special"
 msgstr "Special"
 
-#: po/custom/fromJson.txt:1010
+#: po/custom/fromJson.txt:1007
 #, fuzzy
 msgctxt "rank"
 msgid "Trained"
 msgstr "Trained"
 
-#: po/custom/fromJson.txt:1011
+#: po/custom/fromJson.txt:1008
 #, fuzzy
 msgctxt "rank"
 msgid "Veteran"
 msgstr "Veteran"
 
-#: po/custom/fromJson.txt:1012
+#: po/custom/fromJson.txt:1009
 msgid "NullBot"
 msgstr ""
 
-#: po/custom/fromJson.txt:1013
+#: po/custom/fromJson.txt:1010
 msgid "Objects become difficult to locate near it"
 msgstr ""
 
-#: po/custom/fromJson.txt:1014
+#: po/custom/fromJson.txt:1011
 msgid "Oil Derrick"
 msgstr "Oil Derrick"
 
-#: po/custom/fromJson.txt:1015
+#: po/custom/fromJson.txt:1012
 msgid "Oil Drum"
 msgstr "Oil Drum"
 
-#: po/custom/fromJson.txt:1016
+#: po/custom/fromJson.txt:1013
 msgid "Oil Resource"
 msgstr "Oil Resource"
 
-#: po/custom/fromJson.txt:1017
+#: po/custom/fromJson.txt:1014
 msgid "On-board computer predicts target movement"
 msgstr "On-board computer predicts target movement"
 
-#: po/custom/fromJson.txt:1018
+#: po/custom/fromJson.txt:1015
 msgid "On-board diagnostic and repair systems"
 msgstr "On-board diagnostic and repair systems"
 
-#: po/custom/fromJson.txt:1019
+#: po/custom/fromJson.txt:1016
 msgid "On-board resistance circuit systems"
 msgstr "On-board resistance circuit systems"
 
-#: po/custom/fromJson.txt:1021
+#: po/custom/fromJson.txt:1018
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "Orders assigned indirect fire units to fire at the enemy batteries"
 
-#: po/custom/fromJson.txt:1023
+#: po/custom/fromJson.txt:1020
 #, fuzzy
 msgid "Original Campaign"
 msgstr "New Campaign"
 
-#: po/custom/fromJson.txt:1024
+#: po/custom/fromJson.txt:1021
 #, fuzzy
 msgid "Original Skirmish"
 msgstr "One Player Skirmish"
 
-#: po/custom/fromJson.txt:1025
+#: po/custom/fromJson.txt:1022
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "Or select the Repair Facility as a unit's target"
 
-#: po/custom/fromJson.txt:1026
+#: po/custom/fromJson.txt:1023
 msgid "Panther"
 msgstr "Panther"
 
-#: po/custom/fromJson.txt:1027
+#: po/custom/fromJson.txt:1024
 msgid "Pepperpot"
 msgstr "Pepperpot"
 
-#: po/custom/fromJson.txt:1028
+#: po/custom/fromJson.txt:1025
 msgid "Pepperpot Pit"
 msgstr "Pepperpot Pit"
 
-#: po/custom/fromJson.txt:1029
+#: po/custom/fromJson.txt:1026
 msgid "Phosphor Bomb Bay"
 msgstr "Phosphor Bomb Bay"
 
-#: po/custom/fromJson.txt:1030
+#: po/custom/fromJson.txt:1027
 #, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Phosphor Bomb Bay"
 
-#: po/custom/fromJson.txt:1031
+#: po/custom/fromJson.txt:1028
 msgid "Pick-Up Truck"
 msgstr "Pick-Up Truck"
 
-#: po/custom/fromJson.txt:1032
+#: po/custom/fromJson.txt:1029
 msgid "Plascrete"
 msgstr "Plascrete"
 
-#: po/custom/fromJson.txt:1033
+#: po/custom/fromJson.txt:1030
 msgid "Plascrete Mk2"
 msgstr "Plascrete Mk2"
 
-#: po/custom/fromJson.txt:1034
+#: po/custom/fromJson.txt:1031
 #, fuzzy
 msgid "Plascrete Mk3"
 msgstr "Plascrete Mk2"
 
-#: po/custom/fromJson.txt:1035
+#: po/custom/fromJson.txt:1032
 msgid "Plasma Cannon"
 msgstr "Plasma Cannon"
 
-#: po/custom/fromJson.txt:1036
+#: po/custom/fromJson.txt:1033
 msgid "Plasma Cannon Emplacement"
 msgstr "Plasma Cannon Emplacement"
 
-#: po/custom/fromJson.txt:1037
+#: po/custom/fromJson.txt:1034
 msgid "Plasma Cannon firing plasma"
 msgstr "Plasma Cannon firing plasma"
 
-#: po/custom/fromJson.txt:1038
+#: po/custom/fromJson.txt:1035
 #, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
 msgstr "Python Gauss Cannon Tracks"
 
-#: po/custom/fromJson.txt:1039
+#: po/custom/fromJson.txt:1036
 msgid "Plasmite Bomb"
 msgstr "Plasmite Bomb"
 
-#: po/custom/fromJson.txt:1040
+#: po/custom/fromJson.txt:1037
 msgid "Plasmite Flamer"
 msgstr "Plasmite Flamer"
 
-#: po/custom/fromJson.txt:1041
+#: po/custom/fromJson.txt:1038
 #, fuzzy
 msgid "Plasmite Flamer Bunker"
 msgstr "Plasmite Flamer"
 
-#: po/custom/fromJson.txt:1042
+#: po/custom/fromJson.txt:1039
 msgid "Plasmite Flame-thrower"
 msgstr "Plasmite Flame-thrower"
 
-#: po/custom/fromJson.txt:1043
+#: po/custom/fromJson.txt:1040
 #, fuzzy
 msgid "Plasmite Retribution VTOL"
 msgstr "Medium Body - Retribution"
 
-#: po/custom/fromJson.txt:1044
+#: po/custom/fromJson.txt:1041
 msgid "Plasteel"
 msgstr "Plasteel"
 
-#: po/custom/fromJson.txt:1045
+#: po/custom/fromJson.txt:1042
 msgid "Plasteel Mk2"
 msgstr "Plasteel Mk2"
 
-#: po/custom/fromJson.txt:1046
+#: po/custom/fromJson.txt:1043
 msgid "Plasteel Mk3"
 msgstr "Plasteel Mk3"
 
-#: po/custom/fromJson.txt:1047
+#: po/custom/fromJson.txt:1044
 msgid "Power cost and production time similar to Cobra"
 msgstr "Power cost and production time similar to Cobra"
 
-#: po/custom/fromJson.txt:1048
+#: po/custom/fromJson.txt:1045
 msgid "Power cost and production time similar to Viper"
 msgstr "Power cost and production time similar to Viper"
 
-#: po/custom/fromJson.txt:1049
+#: po/custom/fromJson.txt:1046
 msgid "Power cost and production time the same as Python"
 msgstr "Power cost and production time the same as Python"
 
-#: po/custom/fromJson.txt:1050
+#: po/custom/fromJson.txt:1047
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Powerful Electronic magnetic pulse weapon"
 
-#: po/custom/fromJson.txt:1051
+#: po/custom/fromJson.txt:1048
 msgid "Power Generator"
 msgstr "Power Generator"
 
-#: po/custom/fromJson.txt:1052
+#: po/custom/fromJson.txt:1049
 #, fuzzy
 msgid "Powerlab"
 msgstr "Power"
 
-#: po/custom/fromJson.txt:1053
+#: po/custom/fromJson.txt:1050
 msgid "Power Module"
 msgstr "Power Module"
 
-#: po/custom/fromJson.txt:1054
+#: po/custom/fromJson.txt:1051
 msgid "Power Module Available"
 msgstr "Power Module Available"
 
-#: po/custom/fromJson.txt:1055
+#: po/custom/fromJson.txt:1052
 msgid "Power output +25%"
 msgstr ""
 
-#: po/custom/fromJson.txt:1056
+#: po/custom/fromJson.txt:1053
 #, fuzzy
 msgid "Power output +30%"
 msgstr "Increases factory production rate"
 
-#: po/custom/fromJson.txt:1057
+#: po/custom/fromJson.txt:1054
 msgid "Power Research Completed"
 msgstr "Power Research Completed"
 
-#: po/custom/fromJson.txt:1059
+#: po/custom/fromJson.txt:1056
 msgid "Produces Cyborgs"
 msgstr "Produces Cyborgs"
 
-#: po/custom/fromJson.txt:1061
+#: po/custom/fromJson.txt:1058
 #, fuzzy
 msgid "Project Heavy Body"
 msgstr "Collective Heavy Body"
 
-#: po/custom/fromJson.txt:1062
+#: po/custom/fromJson.txt:1059
 #, fuzzy
 msgid "Project Light Body"
 msgstr "Collective Light Body"
 
-#: po/custom/fromJson.txt:1063
+#: po/custom/fromJson.txt:1060
 msgid "Project Medium Body"
 msgstr "Project Medium Body"
 
-#: po/custom/fromJson.txt:1064
+#: po/custom/fromJson.txt:1061
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Propylene Oxide gel treated to burn at higher temperatures"
 
-#: po/custom/fromJson.txt:1066
+#: po/custom/fromJson.txt:1063
 msgid "Pulse Laser"
 msgstr "Pulse Laser"
 
-#: po/custom/fromJson.txt:1067
+#: po/custom/fromJson.txt:1064
 msgid "Pulse Laser Emplacement"
 msgstr "Pulse Laser Emplacement"
 
-#: po/custom/fromJson.txt:1068
+#: po/custom/fromJson.txt:1065
 #, fuzzy
 msgid "Pulse Laser Hardpoint"
 msgstr "Flamer Hardpoint"
 
-#: po/custom/fromJson.txt:1069
+#: po/custom/fromJson.txt:1066
 #, fuzzy
 msgid "Pulse Laser Leopard Hover"
 msgstr "Pulse Laser"
 
-#: po/custom/fromJson.txt:1070
+#: po/custom/fromJson.txt:1067
 #, fuzzy
 msgid "Pulse Laser Mantis Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
-#: po/custom/fromJson.txt:1071
+#: po/custom/fromJson.txt:1068
 #, fuzzy
 msgid "Pulse Laser Panther Hover"
 msgstr "Pulse Laser"
 
-#: po/custom/fromJson.txt:1072
+#: po/custom/fromJson.txt:1069
 #, fuzzy
 msgid "Pulse Laser Python Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
-#: po/custom/fromJson.txt:1073
+#: po/custom/fromJson.txt:1070
 #, fuzzy
 msgid "Pulse Laser Tiger Hover"
 msgstr "Tiger Pulse Laser Tracks"
 
-#: po/custom/fromJson.txt:1074
+#: po/custom/fromJson.txt:1071
 #, fuzzy
 msgid "Pulse Laser Tiger Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
-#: po/custom/fromJson.txt:1075
+#: po/custom/fromJson.txt:1072
 #, fuzzy
 msgid "Pulse Laser Tower"
 msgstr "Pulse Laser"
 
-#: po/custom/fromJson.txt:1076
+#: po/custom/fromJson.txt:1073
 #, fuzzy
 msgid "Pulse Laser Wyvern Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
-#: po/custom/fromJson.txt:1077
+#: po/custom/fromJson.txt:1074
 msgid "Python"
 msgstr "Python"
 
-#: po/custom/fromJson.txt:1078
+#: po/custom/fromJson.txt:1075
 msgid "Python Heavy Cannon Tracks"
 msgstr "Python Heavy Cannon Tracks"
 
-#: po/custom/fromJson.txt:1080
+#: po/custom/fromJson.txt:1077
 msgid "Quad 80mm Anti-Aircraft machinegun"
 msgstr "Quad 80mm Anti-Aircraft machinegun"
 
-#: po/custom/fromJson.txt:1082
+#: po/custom/fromJson.txt:1079
 msgid "Racked missile dispensers allow for fast reloading"
 msgstr "Racked missile dispensers allow for fast reloading"
 
-#: po/custom/fromJson.txt:1083
+#: po/custom/fromJson.txt:1080
 msgid "Radar Detector"
 msgstr ""
 
-#: po/custom/fromJson.txt:1084
+#: po/custom/fromJson.txt:1081
 msgid "Radar detector detects enemy sensors"
 msgstr ""
 
-#: po/custom/fromJson.txt:1085
+#: po/custom/fromJson.txt:1082
 #, fuzzy
 msgid "Radar Detector Tower"
 msgstr "VTOL Radar Tower"
 
-#: po/custom/fromJson.txt:1086
+#: po/custom/fromJson.txt:1083
 msgid "Rail Gun"
 msgstr "Rail Gun"
 
-#: po/custom/fromJson.txt:1087
+#: po/custom/fromJson.txt:1084
 #, fuzzy
 msgid "Rail Gun accuracy +10%"
 msgstr "Increases Rail Gun accuracy"
 
-#: po/custom/fromJson.txt:1088
+#: po/custom/fromJson.txt:1085
 #, fuzzy
 msgid "Rail Gun damage +25%"
 msgstr "Increases Rail Gun damage"
 
-#: po/custom/fromJson.txt:1089
+#: po/custom/fromJson.txt:1086
 msgid "Railgun Emplacement"
 msgstr "Railgun Emplacement"
 
-#: po/custom/fromJson.txt:1090
+#: po/custom/fromJson.txt:1087
 msgid "Rail Gun Emplacement"
 msgstr "Rail Gun Emplacement"
 
-#: po/custom/fromJson.txt:1091
+#: po/custom/fromJson.txt:1088
 msgid "Rail gun firing armor-piercing darts"
 msgstr "Rail gun firing armour-piercing darts"
 
-#: po/custom/fromJson.txt:1092
+#: po/custom/fromJson.txt:1089
 msgid "Rail Gun Hardpoint"
 msgstr "Rail Gun Hardpoint"
 
-#: po/custom/fromJson.txt:1093
+#: po/custom/fromJson.txt:1090
 #, fuzzy
 msgid "Rail Gun Mantis Tracks"
 msgstr "Assault Gun Python Tracks"
 
-#: po/custom/fromJson.txt:1094
+#: po/custom/fromJson.txt:1091
 #, fuzzy
 msgid "Rail Gun reload time -15%"
 msgstr "Rail Gun Upgrade"
 
-#: po/custom/fromJson.txt:1095
+#: po/custom/fromJson.txt:1092
 msgid "Rail Gun ROF"
 msgstr "Rail Gun ROF"
 
-#: po/custom/fromJson.txt:1096
+#: po/custom/fromJson.txt:1093
 msgid "Rail Gun ROF Mk2"
 msgstr "Rail Gun ROF Mk2"
 
-#: po/custom/fromJson.txt:1097
+#: po/custom/fromJson.txt:1094
 msgid "Rail Gun ROF Mk3"
 msgstr "Rail Gun ROF Mk3"
 
-#: po/custom/fromJson.txt:1098
+#: po/custom/fromJson.txt:1095
 #, fuzzy
 msgid "Rail Gun Tiger Hover"
 msgstr "Rail Gun Upgrade"
 
-#: po/custom/fromJson.txt:1099
+#: po/custom/fromJson.txt:1096
 msgid "Rail Gun Upgrade"
 msgstr "Rail Gun Upgrade"
 
-#: po/custom/fromJson.txt:1100
+#: po/custom/fromJson.txt:1097
 #, fuzzy
 msgid "Rail Target Prediction Computer"
 msgstr "Target Prediction Computer"
 
-#: po/custom/fromJson.txt:1101
+#: po/custom/fromJson.txt:1098
 msgid "Rapid Fire Chaingun"
 msgstr "Rapid Fire Chaingun"
 
-#: po/custom/fromJson.txt:1102
+#: po/custom/fromJson.txt:1099
 msgid "Rapid Fire Chaingun Upgrade"
 msgstr "Rapid Fire Chaingun Upgrade"
 
-#: po/custom/fromJson.txt:1103
+#: po/custom/fromJson.txt:1100
 msgid "Rapid fire rail gun firing needle darts"
 msgstr "Rapid fire rail gun firing needle darts"
 
-#: po/custom/fromJson.txt:1104
+#: po/custom/fromJson.txt:1101
 #, fuzzy
 msgid "Rearming speed +30%"
 msgstr "Research completed: %s"
 
-#: po/custom/fromJson.txt:1106
+#: po/custom/fromJson.txt:1103
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Reduced chance of NEXUS take-over"
 
-#: po/custom/fromJson.txt:1108
+#: po/custom/fromJson.txt:1105
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Refuels, rearms and repairs VTOLs"
 
-#: po/custom/fromJson.txt:1109
+#: po/custom/fromJson.txt:1106
 msgid "Reinforced Base Structure Materials"
 msgstr "Reinforced Base Structure Materials"
 
-#: po/custom/fromJson.txt:1110
+#: po/custom/fromJson.txt:1107
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Reinforced Base Structure Materials Mk2"
 
-#: po/custom/fromJson.txt:1111
+#: po/custom/fromJson.txt:1108
 msgid "Reinforced Base Structure Materials Mk3"
 msgstr "Reinforced Base Structure Materials Mk3"
 
-#: po/custom/fromJson.txt:1114
+#: po/custom/fromJson.txt:1111
 #, fuzzy
 msgid "Repair Center Turret"
 msgstr "Repair Centre"
 
-#: po/custom/fromJson.txt:1115
+#: po/custom/fromJson.txt:1112
 msgid "Repair Cobra Tracks"
 msgstr "Repair Cobra Tracks"
 
-#: po/custom/fromJson.txt:1116
+#: po/custom/fromJson.txt:1113
 msgid "Repair Facility"
 msgstr "Repair Facility"
 
-#: po/custom/fromJson.txt:1118
+#: po/custom/fromJson.txt:1115
 #, fuzzy
 msgid "Repair Scorpion Tracks"
 msgstr "Repair Cobra Tracks"
 
-#: po/custom/fromJson.txt:1119
+#: po/custom/fromJson.txt:1116
 #, fuzzy
 msgid "Repair Speed +100%"
 msgstr "Increases Repair Speed"
 
-#: po/custom/fromJson.txt:1120
+#: po/custom/fromJson.txt:1117
 #, fuzzy
 msgid "Repair Turret"
 msgstr "Heavy Repair Turret"
 
-#: po/custom/fromJson.txt:1121
+#: po/custom/fromJson.txt:1118
 #, fuzzy
 msgid "Repair Turret Cobra Tracks"
 msgstr "Repair Cobra Tracks"
 
-#: po/custom/fromJson.txt:1122
+#: po/custom/fromJson.txt:1119
 #, fuzzy
 msgid "Repair Turret Mantis Tracks"
 msgstr "Repair Cobra Tracks"
 
-#: po/custom/fromJson.txt:1123
+#: po/custom/fromJson.txt:1120
 #, fuzzy
 msgid "Repair Turret Viper Half-track"
 msgstr "Viper Repair Half-track"
 
-#: po/custom/fromJson.txt:1124
+#: po/custom/fromJson.txt:1121
 #, fuzzy
 msgid "Repair Turret Viper Half-tracks"
 msgstr "Viper Repair Half-track"
 
-#: po/custom/fromJson.txt:1125
+#: po/custom/fromJson.txt:1122
 #, fuzzy
 msgid "Repair Turret Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
-#: po/custom/fromJson.txt:1126
+#: po/custom/fromJson.txt:1123
 msgid "Replaces all machineguns"
 msgstr "Replaces all machineguns"
 
-#: po/custom/fromJson.txt:1129
+#: po/custom/fromJson.txt:1126
 msgid "Requires cyborg factory to produce"
 msgstr "Requires cyborg factory to produce"
 
-#: po/custom/fromJson.txt:1131
+#: po/custom/fromJson.txt:1128
 msgid "Requires heavy VTOL factory to produce"
 msgstr "Requires heavy VTOL factory to produce"
 
-#: po/custom/fromJson.txt:1132
+#: po/custom/fromJson.txt:1129
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "Research Breakthrough Improves Construction Rates"
 
-#: po/custom/fromJson.txt:1133
+#: po/custom/fromJson.txt:1130
 msgid "Research Facility"
 msgstr "Research Facility"
 
-#: po/custom/fromJson.txt:1135
+#: po/custom/fromJson.txt:1132
 msgid "Research makes additional Cyborgs available"
 msgstr "Research makes additional Cyborgs available"
 
-#: po/custom/fromJson.txt:1136
+#: po/custom/fromJson.txt:1133
 msgid "Research Module"
 msgstr "Research Module"
 
-#: po/custom/fromJson.txt:1137
+#: po/custom/fromJson.txt:1134
 msgid "Research Module Available"
 msgstr "Research Module Available"
 
-#: po/custom/fromJson.txt:1138
+#: po/custom/fromJson.txt:1135
 msgid "Research module expands research facilities"
 msgstr "Research module expands research facilities"
 
-#: po/custom/fromJson.txt:1139
+#: po/custom/fromJson.txt:1136
 #, fuzzy
 msgid "Research speed +30%"
 msgstr "Research completed: %s"
 
-#: po/custom/fromJson.txt:1140
+#: po/custom/fromJson.txt:1137
 #, fuzzy
 msgid "Research speed +85%"
 msgstr "Research completed: %s"
 
-#: po/custom/fromJson.txt:1141
+#: po/custom/fromJson.txt:1138
 msgid "Retaliation"
 msgstr "Retaliation"
 
-#: po/custom/fromJson.txt:1142
+#: po/custom/fromJson.txt:1139
 msgid "Retribution"
 msgstr "Retribution"
 
-#: po/custom/fromJson.txt:1143
+#: po/custom/fromJson.txt:1140
 msgid "Ripple Rocket Battery"
 msgstr "Ripple Rocket Battery"
 
-#: po/custom/fromJson.txt:1144
+#: po/custom/fromJson.txt:1141
 msgid "Ripple Rockets"
 msgstr "Ripple Rockets"
 
-#: po/custom/fromJson.txt:1145
+#: po/custom/fromJson.txt:1142
 msgid "Robotic advances make new chaingun upgrade available"
 msgstr "Robotic advances make new chaingun upgrade available"
 
-#: po/custom/fromJson.txt:1147
+#: po/custom/fromJson.txt:1144
 msgid "Robotic Cyborg Production Mk2"
 msgstr "Robotic Cyborg Production Mk2"
 
-#: po/custom/fromJson.txt:1148
+#: po/custom/fromJson.txt:1145
 msgid "Robotic Cyborg Production Mk3"
 msgstr "Robotic Cyborg Production Mk3"
 
-#: po/custom/fromJson.txt:1149
+#: po/custom/fromJson.txt:1146
 msgid "Robotic Factory Production"
 msgstr "Robotic Factory Production"
 
-#: po/custom/fromJson.txt:1150
+#: po/custom/fromJson.txt:1147
 msgid "Robotic Factory Production Mk2"
 msgstr "Robotic Factory Production Mk2"
 
-#: po/custom/fromJson.txt:1151
+#: po/custom/fromJson.txt:1148
 msgid "Robotic Factory Production Mk3"
 msgstr "Robotic Factory Production Mk3"
 
-#: po/custom/fromJson.txt:1152
+#: po/custom/fromJson.txt:1149
 msgid "Robotic loading system feeds rounds into breech"
 msgstr "Robotic loading system feeds rounds into breech"
 
-#: po/custom/fromJson.txt:1153
+#: po/custom/fromJson.txt:1150
 #, fuzzy
 msgid "Robotic Manufacturing"
 msgstr "Manufacture"
 
-#: po/custom/fromJson.txt:1154
+#: po/custom/fromJson.txt:1151
 #, fuzzy
 msgid "Robotic Repair Facility"
 msgstr "Robotic Repair Facility Upgrade"
 
-#: po/custom/fromJson.txt:1155
+#: po/custom/fromJson.txt:1152
 msgid "Robotic Repair Facility Upgrade"
 msgstr "Robotic Repair Facility Upgrade"
 
-#: po/custom/fromJson.txt:1156
+#: po/custom/fromJson.txt:1153
 msgid "Robotic Repair Facility Upgrade Mk2"
 msgstr "Robotic Repair Facility Upgrade Mk2"
 
-#: po/custom/fromJson.txt:1157
+#: po/custom/fromJson.txt:1154
 msgid "Robotic Repair Facility Upgrade Mk3"
 msgstr "Robotic Repair Facility Upgrade Mk3"
 
-#: po/custom/fromJson.txt:1159
+#: po/custom/fromJson.txt:1156
 msgid "Robotic VTOL Production Mk2"
 msgstr "Robotic VTOL Production Mk2"
 
-#: po/custom/fromJson.txt:1160
+#: po/custom/fromJson.txt:1157
 msgid "Robotic VTOL Production Mk3"
 msgstr "Robotic VTOL Production Mk3"
 
-#: po/custom/fromJson.txt:1161
+#: po/custom/fromJson.txt:1158
 msgid "Robotic VTOL Rearming"
 msgstr "Robotic VTOL Rearming"
 
-#: po/custom/fromJson.txt:1162
+#: po/custom/fromJson.txt:1159
 msgid "Robotic VTOL Rearming Mk2"
 msgstr "Robotic VTOL Rearming Mk2"
 
-#: po/custom/fromJson.txt:1163
+#: po/custom/fromJson.txt:1160
 msgid "Robotic VTOL Rearming Mk3"
 msgstr "Robotic VTOL Rearming Mk3"
 
-#: po/custom/fromJson.txt:1164
+#: po/custom/fromJson.txt:1161
 #, fuzzy
 msgid "Rocket accuracy +10%"
 msgstr "Increases Rocket accuracy"
 
-#: po/custom/fromJson.txt:1165
+#: po/custom/fromJson.txt:1162
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Rocket artillery; can be assigned to a sensor"
 
-#: po/custom/fromJson.txt:1166
+#: po/custom/fromJson.txt:1163
 msgid "Rocket Autoloader"
 msgstr "Rocket Autoloader"
 
-#: po/custom/fromJson.txt:1167
+#: po/custom/fromJson.txt:1164
 msgid "Rocket Autoloader Mk2"
 msgstr "Rocket Autoloader Mk2"
 
-#: po/custom/fromJson.txt:1168
+#: po/custom/fromJson.txt:1165
 msgid "Rocket Autoloader Mk3"
 msgstr "Rocket Autoloader Mk3"
 
-#: po/custom/fromJson.txt:1169
+#: po/custom/fromJson.txt:1166
 msgid "Rocket Buggy"
 msgstr "Rocket Buggy"
 
-#: po/custom/fromJson.txt:1170
+#: po/custom/fromJson.txt:1167
 #, fuzzy
 msgid "Rocket damage +25%"
 msgstr "Increases Rocket damage"
 
-#: po/custom/fromJson.txt:1171
+#: po/custom/fromJson.txt:1168
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Rocket detects and locks on to engine emissions"
 
-#: po/custom/fromJson.txt:1172
+#: po/custom/fromJson.txt:1169
 msgid "Rocket Jeep"
 msgstr "Rocket Jeep"
 
-#: po/custom/fromJson.txt:1173
+#: po/custom/fromJson.txt:1170
 msgid "Rocket Laser Designator"
 msgstr "Rocket Laser Designator"
 
-#: po/custom/fromJson.txt:1174
+#: po/custom/fromJson.txt:1171
 #, fuzzy
 msgid "Rocket reload time -15%"
 msgstr "Rocket Autoloader"
 
-#: po/custom/fromJson.txt:1175
+#: po/custom/fromJson.txt:1172
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Rocket tracks the laser designator to the target"
 
-#: po/custom/fromJson.txt:1177
+#: po/custom/fromJson.txt:1174
 msgid "Rotary Howitzer - Hellstorm"
 msgstr "Rotary Howitzer - Hellstorm"
 
-#: po/custom/fromJson.txt:1178
+#: po/custom/fromJson.txt:1175
 msgid "Rotary MG Bunker"
 msgstr "Rotary MG Bunker"
 
-#: po/custom/fromJson.txt:1179
+#: po/custom/fromJson.txt:1176
 msgid "Rotary Mortar - Pepperpot"
 msgstr "Rotary Mortar - Pepperpot"
 
-#: po/custom/fromJson.txt:1180
+#: po/custom/fromJson.txt:1177
 msgid "Rotaryweaponslab"
 msgstr ""
 
-#: po/custom/fromJson.txt:1181
+#: po/custom/fromJson.txt:1178
 msgid "Ruined Factory"
 msgstr "Ruined Factory"
 
-#: po/custom/fromJson.txt:1182
+#: po/custom/fromJson.txt:1179
 msgid "SAM site with Avenger missiles"
 msgstr "SAM site with Avenger missiles"
 
-#: po/custom/fromJson.txt:1183
+#: po/custom/fromJson.txt:1180
 msgid "SAM site with Vindicator missiles"
 msgstr "SAM site with Vindicator missiles"
 
-#: po/custom/fromJson.txt:1185
+#: po/custom/fromJson.txt:1182
 msgid "Scavenger"
 msgstr "Scavenger"
 
-#: po/custom/fromJson.txt:1186
+#: po/custom/fromJson.txt:1183
 msgid "Scavenger AT-Rocket Pit"
 msgstr "Scavenger AT-Rocket Pit"
 
-#: po/custom/fromJson.txt:1187
+#: po/custom/fromJson.txt:1184
 msgid "Scavenger Bunker"
 msgstr "Scavenger Bunker"
 
-#: po/custom/fromJson.txt:1188
+#: po/custom/fromJson.txt:1185
 msgid "Scavenger CornerWall"
 msgstr "Scavenger CornerWall"
 
-#: po/custom/fromJson.txt:1189
+#: po/custom/fromJson.txt:1186
 msgid "Scavenger Factory"
 msgstr "Scavenger Factory"
 
-#: po/custom/fromJson.txt:1190
+#: po/custom/fromJson.txt:1187
 msgid "Scavenger Flame Tower"
 msgstr "Scavenger Flame Tower"
 
-#: po/custom/fromJson.txt:1191
+#: po/custom/fromJson.txt:1188
 msgid "Scavenger Gun Tower"
 msgstr "Scavenger Gun Tower"
 
-#: po/custom/fromJson.txt:1192
+#: po/custom/fromJson.txt:1189
 msgid "Scavenger Horizontal Wall"
 msgstr "Scavenger Horizontal Wall"
 
-#: po/custom/fromJson.txt:1193
+#: po/custom/fromJson.txt:1190
 msgid "Scavenger Power Generator"
 msgstr "Scavenger Power Generator"
 
-#: po/custom/fromJson.txt:1194
+#: po/custom/fromJson.txt:1191
 msgid "Scavenger Rocket Pit"
 msgstr "Scavenger Rocket Pit"
 
-#: po/custom/fromJson.txt:1195
+#: po/custom/fromJson.txt:1192
 msgid "School Bus"
 msgstr "School Bus"
 
-#: po/custom/fromJson.txt:1196
+#: po/custom/fromJson.txt:1193
 msgid "Scorpion"
 msgstr "Scorpion"
 
-#: po/custom/fromJson.txt:1197
+#: po/custom/fromJson.txt:1194
 msgid "Scourge"
 msgstr "Scourge"
 
-#: po/custom/fromJson.txt:1198
+#: po/custom/fromJson.txt:1195
 #, fuzzy
 msgid "Scourge Cyborg"
 msgstr "Super Scourge Cyborg"
 
-#: po/custom/fromJson.txt:1199
+#: po/custom/fromJson.txt:1196
 msgid "Scourge Mantis Hover"
 msgstr "Scourge Mantis Hover"
 
-#: po/custom/fromJson.txt:1200
+#: po/custom/fromJson.txt:1197
 #, fuzzy
 msgid "Scourge Mantis Tracks"
 msgstr "Scourge Mantis Hover"
 
-#: po/custom/fromJson.txt:1201
+#: po/custom/fromJson.txt:1198
 msgid "Scourge Missile"
 msgstr "Scourge Missile"
 
-#: po/custom/fromJson.txt:1202
+#: po/custom/fromJson.txt:1199
 msgid "Scourge Missile Hardpoint"
 msgstr "Scourge Missile Hardpoint"
 
-#: po/custom/fromJson.txt:1203
+#: po/custom/fromJson.txt:1200
 msgid "Scourge Missile Tower"
 msgstr "Scourge Missile Tower"
 
-#: po/custom/fromJson.txt:1204
+#: po/custom/fromJson.txt:1201
 #, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
 msgstr "Scourge Missile Tower"
 
-#: po/custom/fromJson.txt:1205
+#: po/custom/fromJson.txt:1202
 #, fuzzy
 msgid "Scourge Python Tracks"
 msgstr "Commander Python Tracks"
 
-#: po/custom/fromJson.txt:1206
+#: po/custom/fromJson.txt:1203
 #, fuzzy
 msgid "Scourge Retaliation VTOL"
 msgstr "Retaliation"
 
-#: po/custom/fromJson.txt:1207
+#: po/custom/fromJson.txt:1204
 msgid "Scrambler Turret"
 msgstr "Scrambler Turret"
 
-#: po/custom/fromJson.txt:1208
+#: po/custom/fromJson.txt:1205
 msgid "Search & Destroy Missiles"
 msgstr "Search & Destroy Missiles"
 
-#: po/custom/fromJson.txt:1210
+#: po/custom/fromJson.txt:1207
 msgid "Select new targets to continue the VTOL strikes"
 msgstr "Select new targets to continue the VTOL strikes"
 
-#: po/custom/fromJson.txt:1212
+#: po/custom/fromJson.txt:1209
 msgid "Self-guided rocket-powered shells"
 msgstr "Self-guided rocket-powered shells"
 
-#: po/custom/fromJson.txt:1213
+#: po/custom/fromJson.txt:1210
 #, fuzzy
 msgid "Self-Replicating Manufacturing"
 msgstr "Self-Replicating Factory Production"
 
-#: po/custom/fromJson.txt:1214
+#: po/custom/fromJson.txt:1211
 msgid "Semperfi"
 msgstr ""
 
-#: po/custom/fromJson.txt:1215
+#: po/custom/fromJson.txt:1212
 msgid "SemperFi JS"
 msgstr ""
 
-#: po/custom/fromJson.txt:1216
+#: po/custom/fromJson.txt:1213
 #, fuzzy
 msgid "Sensor Cobra Half-tracks"
 msgstr "Lancer Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:1217
+#: po/custom/fromJson.txt:1214
 #, fuzzy
 msgid "Sensor Range +10%"
 msgstr "Sensor Range"
 
-#: po/custom/fromJson.txt:1218
+#: po/custom/fromJson.txt:1215
 #, fuzzy
 msgid "Sensor Range +15%"
 msgstr "Sensor Range"
 
-#: po/custom/fromJson.txt:1219
+#: po/custom/fromJson.txt:1216
 #, fuzzy
 msgid "Sensor Range +25%"
 msgstr "Sensor Range"
 
-#: po/custom/fromJson.txt:1220
+#: po/custom/fromJson.txt:1217
 msgid "Sensors Improved"
 msgstr "Sensors Improved"
 
-#: po/custom/fromJson.txt:1222
+#: po/custom/fromJson.txt:1219
 msgid "Sensor Turret"
 msgstr "Sensor Turret"
 
-#: po/custom/fromJson.txt:1223
+#: po/custom/fromJson.txt:1220
 #, fuzzy
 msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Lancer Cobra Half-tracks"
 
-#: po/custom/fromJson.txt:1224
+#: po/custom/fromJson.txt:1221
 #, fuzzy
 msgid "Sensor Turret Viper Wheels"
 msgstr "Sensor Turret"
 
-#: po/custom/fromJson.txt:1225
+#: po/custom/fromJson.txt:1222
 msgid "Sensor Upgrade"
 msgstr "Sensor Upgrade"
 
-#: po/custom/fromJson.txt:1226
+#: po/custom/fromJson.txt:1223
 #, fuzzy
 msgid "Sensor Upgrade Mk2"
 msgstr "Sensor Upgrade"
 
-#: po/custom/fromJson.txt:1227
+#: po/custom/fromJson.txt:1224
 #, fuzzy
 msgid "Sensor Upgrade Mk3"
 msgstr "Sensor Upgrade"
 
-#: po/custom/fromJson.txt:1228
+#: po/custom/fromJson.txt:1225
 #, fuzzy
 msgid "Seraph Missile Array"
 msgstr "Increases Missile accuracy"
 
-#: po/custom/fromJson.txt:1229
+#: po/custom/fromJson.txt:1226
 #, fuzzy
 msgid "Seraph Missile Battery"
 msgstr "Angel Missile Battery"
 
-#: po/custom/fromJson.txt:1230
+#: po/custom/fromJson.txt:1227
 msgid "Shells detect and home to thermal heat signatures"
 msgstr "Shells detect and home to thermal heat signatures"
 
-#: po/custom/fromJson.txt:1232
+#: po/custom/fromJson.txt:1229
 msgid "Slower than Python"
 msgstr "Slower than Python"
 
-#: po/custom/fromJson.txt:1234
+#: po/custom/fromJson.txt:1231
 msgid "Slow moving Body"
 msgstr "Slow moving Body"
 
-#: po/custom/fromJson.txt:1235
+#: po/custom/fromJson.txt:1232
 msgid "Smashedcornerwall"
 msgstr ""
 
-#: po/custom/fromJson.txt:1236
+#: po/custom/fromJson.txt:1233
 msgid "Smashedwall"
 msgstr ""
 
-#: po/custom/fromJson.txt:1237
+#: po/custom/fromJson.txt:1234
 msgid "Speed: Fast"
 msgstr "Speed: Fast"
 
-#: po/custom/fromJson.txt:1238
+#: po/custom/fromJson.txt:1235
 msgid "Speed: Medium"
 msgstr "Speed: Medium"
 
-#: po/custom/fromJson.txt:1239
+#: po/custom/fromJson.txt:1236
 msgid "Speed: Slow"
 msgstr "Speed: Slow"
 
-#: po/custom/fromJson.txt:1240
+#: po/custom/fromJson.txt:1237
 msgid "Speed: VTOL"
 msgstr "Speed: VTOL"
 
-#: po/custom/fromJson.txt:1241
+#: po/custom/fromJson.txt:1238
 msgid "Stabilized Mini-Rockets"
 msgstr "Stabilised Mini-Rockets"
 
-#: po/custom/fromJson.txt:1242
+#: po/custom/fromJson.txt:1239
 msgid "Stabilized Mini-Rockets Mk2"
 msgstr "Stabilised Mini-Rockets Mk2"
 
-#: po/custom/fromJson.txt:1243
+#: po/custom/fromJson.txt:1240
 #, fuzzy
 msgid "Stabilized Rockets"
 msgstr "Stabilised Mini-Rockets"
 
-#: po/custom/fromJson.txt:1244
+#: po/custom/fromJson.txt:1241
 msgid "Steals technology from enemies"
 msgstr "Steals technology from enemies"
 
-#: po/custom/fromJson.txt:1245
+#: po/custom/fromJson.txt:1242
 msgid "Steals technology from structures and takes control of weapons"
 msgstr "Steals technology from structures and takes control of weapons"
 
-#: po/custom/fromJson.txt:1246
+#: po/custom/fromJson.txt:1243
 msgid "Steel tower with machinegun"
 msgstr "Steel tower with machinegun"
 
-#: po/custom/fromJson.txt:1247
+#: po/custom/fromJson.txt:1244
 msgid "Stormbringer AA Laser"
 msgstr "Stormbringer AA Laser"
 
-#: po/custom/fromJson.txt:1248
+#: po/custom/fromJson.txt:1245
 #, fuzzy
 msgid "Stormbringer Emplacement"
 msgstr "Bombard Emplacement"
 
-#: po/custom/fromJson.txt:1249
+#: po/custom/fromJson.txt:1246
 msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "Strike mission continues until enemy destroyed or they retreat"
 
-#: po/custom/fromJson.txt:1250
+#: po/custom/fromJson.txt:1247
 msgid "Stronger Commander Turret Available for Design"
 msgstr "Stronger Commander Turret Available for Design"
 
-#: po/custom/fromJson.txt:1251
+#: po/custom/fromJson.txt:1248
 msgid "Structure Research Completed"
 msgstr "Structure Research Completed"
 
-#: po/custom/fromJson.txt:1252
+#: po/custom/fromJson.txt:1249
 msgid "Sunburst AA"
 msgstr ""
 
-#: po/custom/fromJson.txt:1253
+#: po/custom/fromJson.txt:1250
 #, fuzzy
 msgid "Sunburst AA Rocket Array"
 msgstr "Mini-Rocket Artillery"
 
-#: po/custom/fromJson.txt:1254
+#: po/custom/fromJson.txt:1251
 #, fuzzy
 msgid "Sunburst AA Site"
 msgstr "Hurricane AA Site"
 
-#: po/custom/fromJson.txt:1257
+#: po/custom/fromJson.txt:1254
 msgid "Supercrete"
 msgstr "Supercrete"
 
-#: po/custom/fromJson.txt:1258
+#: po/custom/fromJson.txt:1255
 msgid "Supercrete Mk2"
 msgstr "Supercrete Mk2"
 
-#: po/custom/fromJson.txt:1259
+#: po/custom/fromJson.txt:1256
 msgid "Supercrete Mk3"
 msgstr "Supercrete Mk3"
 
-#: po/custom/fromJson.txt:1260
+#: po/custom/fromJson.txt:1257
 msgid "Superdense Composite Alloys"
 msgstr "Superdense Composite Alloys"
 
-#: po/custom/fromJson.txt:1261
+#: po/custom/fromJson.txt:1258
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr "Superdense composite alloys and energy-absorbing fibres"
 
-#: po/custom/fromJson.txt:1262
+#: po/custom/fromJson.txt:1259
 msgid "Superdense Composite Alloys Mk2"
 msgstr "Superdense Composite Alloys Mk2"
 
-#: po/custom/fromJson.txt:1263
+#: po/custom/fromJson.txt:1260
 msgid "Superdense Composite Alloys Mk3"
 msgstr "Superdense Composite Alloys Mk3"
 
-#: po/custom/fromJson.txt:1265
+#: po/custom/fromJson.txt:1262
 msgid "Superhot Flamer Gel"
 msgstr "Superhot Flamer Gel"
 
-#: po/custom/fromJson.txt:1266
+#: po/custom/fromJson.txt:1263
 msgid "Superhot Flamer Gel Mk2"
 msgstr "Superhot Flamer Gel Mk2"
 
-#: po/custom/fromJson.txt:1267
+#: po/custom/fromJson.txt:1264
 msgid "Superhot Flamer Gel Mk3"
 msgstr "Superhot Flamer Gel Mk3"
 
-#: po/custom/fromJson.txt:1268
+#: po/custom/fromJson.txt:1265
 msgid "Superhot Plasmite gel"
 msgstr "Superhot Plasmite gel"
 
-#: po/custom/fromJson.txt:1269
+#: po/custom/fromJson.txt:1266
 msgid "Superhot Plasmite gel Mk2"
 msgstr "Superhot Plasmite gel Mk2"
 
-#: po/custom/fromJson.txt:1270
+#: po/custom/fromJson.txt:1267
 msgid "Superhot Plasmite gel Mk3"
 msgstr "Superhot Plasmite gel Mk3"
 
-#: po/custom/fromJson.txt:1278
+#: po/custom/fromJson.txt:1275
 #: src/design.cpp:1063
 #, fuzzy
 msgid "Super Transport"
 msgstr "Transport"
 
-#: po/custom/fromJson.txt:1279
+#: po/custom/fromJson.txt:1276
 #, fuzzy
 msgid "Super Transport Available"
 msgstr "Cyborg Transport Available"
 
-#: po/custom/fromJson.txt:1280
+#: po/custom/fromJson.txt:1277
 #, fuzzy
 msgid "Super Transport Body"
 msgstr "Transport Body"
 
-#: po/custom/fromJson.txt:1281
+#: po/custom/fromJson.txt:1278
 msgid "Surface-to-air missile"
 msgstr "Surface-to-air missile"
 
-#: po/custom/fromJson.txt:1282
+#: po/custom/fromJson.txt:1279
 msgid "Synaptic Link"
 msgstr "Synaptic Link"
 
-#: po/custom/fromJson.txt:1283
+#: po/custom/fromJson.txt:1280
 msgid "Synaptic Link allows humans to interface directly with computers"
 msgstr "Synaptic Link allows humans to interface directly with computers"
 
-#: po/custom/fromJson.txt:1284
+#: po/custom/fromJson.txt:1281
 msgid "Synaptic link data analysis"
 msgstr "Synaptic link data analysis"
 
-#: po/custom/fromJson.txt:1285
+#: po/custom/fromJson.txt:1282
 msgid "Synaptic Link Data Analysis"
 msgstr "Synaptic Link Data Analysis"
 
-#: po/custom/fromJson.txt:1286
+#: po/custom/fromJson.txt:1283
 msgid "Synaptic Link Data Analysis Mk2"
 msgstr "Synaptic Link Data Analysis Mk2"
 
-#: po/custom/fromJson.txt:1287
+#: po/custom/fromJson.txt:1284
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Synaptic Link Data Analysis Mk3"
 
-#: po/custom/fromJson.txt:1288
+#: po/custom/fromJson.txt:1285
 msgid "Synaptic Link Scrambler technology"
 msgstr "Synaptic Link Scrambler technology"
 
-#: po/custom/fromJson.txt:1289
+#: po/custom/fromJson.txt:1286
 msgid "Synaptic Link technology breakthrough"
 msgstr "Synaptic Link technology breakthrough"
 
-#: po/custom/fromJson.txt:1290
+#: po/custom/fromJson.txt:1287
 msgid "Systems Research Completed"
 msgstr "Systems Research Completed"
 
-#: po/custom/fromJson.txt:1291
+#: po/custom/fromJson.txt:1288
 msgid "Tank Killer"
 msgstr "Tank Killer"
 
-#: po/custom/fromJson.txt:1292
+#: po/custom/fromJson.txt:1289
 msgid "Tank Killer Emplacement"
 msgstr "Tank Killer Emplacement"
 
-#: po/custom/fromJson.txt:1293
+#: po/custom/fromJson.txt:1290
 msgid "Tank Killer Hardpoint"
 msgstr "Tank Killer Hardpoint"
 
-#: po/custom/fromJson.txt:1294
+#: po/custom/fromJson.txt:1291
 #, fuzzy
 msgid "Tank Killer Mantis Hover"
 msgstr "TK Mantis Hover"
 
-#: po/custom/fromJson.txt:1295
+#: po/custom/fromJson.txt:1292
 #, fuzzy
 msgid "Tank Killer Mantis Tracks"
 msgstr "Tank Killer Python Tracks"
 
-#: po/custom/fromJson.txt:1296
+#: po/custom/fromJson.txt:1293
 msgid "Tank Killer Python Tracks"
 msgstr "Tank Killer Python Tracks"
 
-#: po/custom/fromJson.txt:1297
+#: po/custom/fromJson.txt:1294
 msgid "Tank Killer Rocket"
 msgstr "Tank Killer Rocket"
 
-#: po/custom/fromJson.txt:1298
+#: po/custom/fromJson.txt:1295
 #, fuzzy
 msgid "Tank Killer Vengeance Tracks"
 msgstr "Tank Killer Python Tracks"
 
-#: po/custom/fromJson.txt:1299
+#: po/custom/fromJson.txt:1296
 msgid "Tank Traps"
 msgstr "Tank Traps"
 
-#: po/custom/fromJson.txt:1300
+#: po/custom/fromJson.txt:1297
 msgid "Target Acquisition Artillery Shells"
 msgstr "Target Acquisition Artillery Shells"
 
-#: po/custom/fromJson.txt:1301
+#: po/custom/fromJson.txt:1298
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr "Target Acquisition Artillery Shells Mk2"
 
-#: po/custom/fromJson.txt:1302
+#: po/custom/fromJson.txt:1299
 msgid "Target Acquisition Bombsight"
 msgstr "Target Acquisition Bombsight"
 
-#: po/custom/fromJson.txt:1303
+#: po/custom/fromJson.txt:1300
 msgid "Target Acquisition Mortar Shells"
 msgstr "Target Acquisition Mortar Shells"
 
-#: po/custom/fromJson.txt:1304
+#: po/custom/fromJson.txt:1301
 msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "Targeting systems compensate for distance and weather conditions"
 
-#: po/custom/fromJson.txt:1305
+#: po/custom/fromJson.txt:1302
 msgid "Target Prediction Artillery Shells"
 msgstr "Target Prediction Artillery Shells"
 
-#: po/custom/fromJson.txt:1306
+#: po/custom/fromJson.txt:1303
 msgid "Target Prediction Computer"
 msgstr "Target Prediction Computer"
 
-#: po/custom/fromJson.txt:1307
+#: po/custom/fromJson.txt:1304
 msgid "Target Prediction Missiles"
 msgstr "Target Prediction Missiles"
 
-#: po/custom/fromJson.txt:1308
+#: po/custom/fromJson.txt:1305
 msgid "Thermal Armor"
 msgstr "Thermal Armour"
 
-#: po/custom/fromJson.txt:1309
+#: po/custom/fromJson.txt:1306
 #, fuzzy
 msgid "Thermal Armor +35%"
 msgstr "Thermal Armour Mk3"
 
-#: po/custom/fromJson.txt:1310
+#: po/custom/fromJson.txt:1307
 #, fuzzy
 msgid "Thermal armor +40%"
 msgstr "Thermal Armour"
 
-#: po/custom/fromJson.txt:1311
+#: po/custom/fromJson.txt:1308
 #, fuzzy
 msgid "Thermal Armor +40%"
 msgstr "Thermal Armour"
 
-#: po/custom/fromJson.txt:1312
+#: po/custom/fromJson.txt:1309
 #, fuzzy
 msgid "Thermal Armor +45%"
 msgstr "Thermal Armour"
 
-#: po/custom/fromJson.txt:1314
+#: po/custom/fromJson.txt:1311
 msgid "Thermal Armor Mk2"
 msgstr "Thermal Armour Mk2"
 
-#: po/custom/fromJson.txt:1315
+#: po/custom/fromJson.txt:1312
 msgid "Thermal Armor Mk3"
 msgstr "Thermal Armour Mk3"
 
-#: po/custom/fromJson.txt:1316
+#: po/custom/fromJson.txt:1313
 msgid "Thermal Imaging Bombsight"
 msgstr "Thermal Imaging Bombsight"
 
-#: po/custom/fromJson.txt:1317
+#: po/custom/fromJson.txt:1314
 msgid "Thermal Imaging Mortar Shells"
 msgstr "Thermal Imaging Mortar Shells"
 
-#: po/custom/fromJson.txt:1318
+#: po/custom/fromJson.txt:1315
 msgid "Thermal Imaging Rockets"
 msgstr "Thermal Imaging Rockets"
 
-#: po/custom/fromJson.txt:1319
+#: po/custom/fromJson.txt:1316
 msgid "Thermite Bomb Bay"
 msgstr "Thermite Bomb Bay"
 
-#: po/custom/fromJson.txt:1320
+#: po/custom/fromJson.txt:1317
 msgid "Thermite Flamer"
 msgstr "Thermite Flamer"
 
-#: po/custom/fromJson.txt:1321
+#: po/custom/fromJson.txt:1318
 msgid "Thermopole Energizer"
 msgstr "Thermopole Energiser"
 
-#: po/custom/fromJson.txt:1322
+#: po/custom/fromJson.txt:1319
 msgid "Thermopole Energizer Mk2"
 msgstr "Thermopole Energiser Mk2"
 
-#: po/custom/fromJson.txt:1323
+#: po/custom/fromJson.txt:1320
 msgid "Thermopole Energizer Mk3"
 msgstr "Thermopole Energiser Mk3"
 
-#: po/custom/fromJson.txt:1324
+#: po/custom/fromJson.txt:1321
 msgid "The VTOL returns to the selected pad for rearming"
 msgstr "The VTOL returns to the selected pad for rearming"
 
-#: po/custom/fromJson.txt:1326
+#: po/custom/fromJson.txt:1323
 msgid "Tiger"
 msgstr "Tiger"
 
-#: po/custom/fromJson.txt:1327
+#: po/custom/fromJson.txt:1324
 msgid "Titanium-reinforced concrete"
 msgstr "Titanium-reinforced concrete"
 
-#: po/custom/fromJson.txt:1328
+#: po/custom/fromJson.txt:1325
 msgid "Tracked Propulsion"
 msgstr "Tracked Propulsion"
 
-#: po/custom/fromJson.txt:1330
+#: po/custom/fromJson.txt:1327
 msgid "Tracks"
 msgstr "Tracks"
 
-#: po/custom/fromJson.txt:1331
+#: po/custom/fromJson.txt:1328
 msgid "Tracks and directs in-flight rocket to target"
 msgstr "Tracks and directs in-flight rocket to target"
 
-#: po/custom/fromJson.txt:1332
+#: po/custom/fromJson.txt:1329
 msgid "Tracks II"
 msgstr "Tracks II"
 
-#: po/custom/fromJson.txt:1333
+#: po/custom/fromJson.txt:1330
 msgid "Tracks III"
 msgstr "Tracks III"
 
-#: po/custom/fromJson.txt:1334
+#: po/custom/fromJson.txt:1331
 #: src/design.cpp:1058
 msgid "Transport"
 msgstr "Transport"
 
-#: po/custom/fromJson.txt:1335
+#: po/custom/fromJson.txt:1332
 msgid "Transport Body"
 msgstr "Transport Body"
 
-#: po/custom/fromJson.txt:1336
+#: po/custom/fromJson.txt:1333
 msgid "Trike"
 msgstr "Trike"
 
-#: po/custom/fromJson.txt:1337
+#: po/custom/fromJson.txt:1334
 msgid "Truck"
 msgstr "Truck"
 
-#: po/custom/fromJson.txt:1338
+#: po/custom/fromJson.txt:1335
 #, fuzzy
 msgid "Truck Cobra Hover"
 msgstr "Cobra Hover HC"
 
-#: po/custom/fromJson.txt:1339
+#: po/custom/fromJson.txt:1336
 #, fuzzy
 msgid "Truck Mantis Hover"
 msgstr "TK Mantis Hover"
 
-#: po/custom/fromJson.txt:1340
+#: po/custom/fromJson.txt:1337
 #, fuzzy
 msgid "Truck Scorpion Hover"
 msgstr "Scorpion Hover Truck"
 
-#: po/custom/fromJson.txt:1342
+#: po/custom/fromJson.txt:1339
 msgid "Tungsten-Tipped MG Bullets"
 msgstr "Tungsten-Tipped MG Bullets"
 
-#: po/custom/fromJson.txt:1343
+#: po/custom/fromJson.txt:1340
 msgid "Tungsten-Tipped MG Bullets Mk2"
 msgstr "Tungsten-Tipped MG Bullets Mk2"
 
-#: po/custom/fromJson.txt:1344
+#: po/custom/fromJson.txt:1341
 msgid "Tungsten-Tipped MG Bullets Mk3"
 msgstr "Tungsten-Tipped MG Bullets Mk3"
 
-#: po/custom/fromJson.txt:1346
+#: po/custom/fromJson.txt:1343
 msgid "Turbo-Charged Engine Mk2"
 msgstr "Turbo-Charged Engine Mk2"
 
-#: po/custom/fromJson.txt:1347
+#: po/custom/fromJson.txt:1344
 msgid "Turbo-Charged Engine Mk3"
 msgstr "Turbo-Charged Engine Mk3"
 
-#: po/custom/fromJson.txt:1348
+#: po/custom/fromJson.txt:1345
 msgid "Turtle AI"
 msgstr ""
 
-#: po/custom/fromJson.txt:1349
+#: po/custom/fromJson.txt:1346
 msgid "Twin 7.62mm machineguns"
 msgstr "Twin 7.62mm machineguns"
 
-#: po/custom/fromJson.txt:1351
+#: po/custom/fromJson.txt:1348
 msgid "Twin Assault Cannon"
 msgstr "Twin Assault Cannon"
 
-#: po/custom/fromJson.txt:1352
+#: po/custom/fromJson.txt:1349
 msgid "Twin Assault Cannon Bunker"
 msgstr "Twin Assault Cannon Bunker"
 
-#: po/custom/fromJson.txt:1353
+#: po/custom/fromJson.txt:1350
 msgid "Twin Assault Gun"
 msgstr "Twin Assault Gun"
 
-#: po/custom/fromJson.txt:1354
+#: po/custom/fromJson.txt:1351
 #, fuzzy
 msgid "Twin Assault Gun Hardpoint"
 msgstr "Assault Gun Hardpoint"
 
-#: po/custom/fromJson.txt:1355
+#: po/custom/fromJson.txt:1352
 msgid "Twin Machinegun"
 msgstr "Twin Machinegun"
 
-#: po/custom/fromJson.txt:1356
+#: po/custom/fromJson.txt:1353
 msgid "Twin Machinegun Bunker"
 msgstr "Twin Machinegun Bunker"
 
-#: po/custom/fromJson.txt:1357
+#: po/custom/fromJson.txt:1354
 msgid "Twin Machinegun Guard Tower"
 msgstr "Twin Machinegun Guard Tower"
 
-#: po/custom/fromJson.txt:1358
+#: po/custom/fromJson.txt:1355
 #, fuzzy
 msgid "Twin Machinegun Viper Half-tracks"
 msgstr "Viper Twin Machinegun Half-track"
 
-#: po/custom/fromJson.txt:1359
+#: po/custom/fromJson.txt:1356
 #, fuzzy
 msgid "Twin Machinegun Viper Tracks"
 msgstr "Twin Machinegun Guard Tower"
 
-#: po/custom/fromJson.txt:1360
+#: po/custom/fromJson.txt:1357
 #, fuzzy
 msgid "Twin Machinegun Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
-#: po/custom/fromJson.txt:1361
+#: po/custom/fromJson.txt:1358
 msgid "Twin Medium Anti-Aircraft Laser"
 msgstr "Twin Medium Anti-Aircraft Laser"
 
-#: po/custom/fromJson.txt:1362
+#: po/custom/fromJson.txt:1359
 msgid "Twin Multi-barrel, rapid-fire machinegun"
 msgstr "Twin Multi-barrel, rapid-fire machinegun"
 
-#: po/custom/fromJson.txt:1363
+#: po/custom/fromJson.txt:1360
 msgid "Two-faced"
 msgstr ""
 
-#: po/custom/fromJson.txt:1364
+#: po/custom/fromJson.txt:1361
 msgid "Unit Research Completed"
 msgstr "Unit Research Completed"
 
-#: po/custom/fromJson.txt:1365
+#: po/custom/fromJson.txt:1362
 msgid "Upgraded battlefield computer system"
 msgstr "Upgraded battlefield computer system"
 
-#: po/custom/fromJson.txt:1366
+#: po/custom/fromJson.txt:1363
 msgid "Uplink Sensor"
 msgstr "Uplink Sensor"
 
-#: po/custom/fromJson.txt:1367
+#: po/custom/fromJson.txt:1364
 msgid "Use a truck to add modules to a factory"
 msgstr "Use a truck to add modules to a factory"
 
-#: po/custom/fromJson.txt:1368
+#: po/custom/fromJson.txt:1365
 msgid "Use a truck to add the module to a power generator"
 msgstr "Use a truck to add the module to a power generator"
 
-#: po/custom/fromJson.txt:1369
+#: po/custom/fromJson.txt:1366
 msgid "Use a truck to add the module to a research facility"
 msgstr "Use a truck to add the module to a research facility"
 
-#: po/custom/fromJson.txt:1370
+#: po/custom/fromJson.txt:1367
 msgid "Uses advanced cannon technology"
 msgstr "Uses advanced cannon technology"
 
-#: po/custom/fromJson.txt:1371
+#: po/custom/fromJson.txt:1368
 msgid "Uses advanced mass driver railgun technology"
 msgstr "Uses advanced mass driver railgun technology"
 
-#: po/custom/fromJson.txt:1372
+#: po/custom/fromJson.txt:1369
 msgid "Uses advanced missile gun technology"
 msgstr "Uses advanced missile gun technology"
 
-#: po/custom/fromJson.txt:1373
+#: po/custom/fromJson.txt:1370
 msgid "Uses advanced rocket gun technology"
 msgstr "Uses advanced rocket gun technology"
 
-#: po/custom/fromJson.txt:1374
+#: po/custom/fromJson.txt:1371
 msgid "Use the Command Console to send units back for repair"
 msgstr "Use the Command Console to send units back for repair"
 
-#: po/custom/fromJson.txt:1375
+#: po/custom/fromJson.txt:1372
 msgid "Vapor Turbine boosts power output"
 msgstr "Vapour Turbine boosts power output"
 
-#: po/custom/fromJson.txt:1376
+#: po/custom/fromJson.txt:1373
 msgid "Vapor Turbine Generator"
 msgstr "Vapour Turbine Generator"
 
-#: po/custom/fromJson.txt:1377
+#: po/custom/fromJson.txt:1374
 #, fuzzy
 msgid "Vapor Turbine Generator Mk2"
 msgstr "Vapour Turbine Generator"
 
-#: po/custom/fromJson.txt:1378
+#: po/custom/fromJson.txt:1375
 #, fuzzy
 msgid "Vapor Turbine Generator Mk3"
 msgstr "Vapour Turbine Generator"
 
-#: po/custom/fromJson.txt:1383
+#: po/custom/fromJson.txt:1380
 #, fuzzy
 msgid "Vehicle speed +5%"
 msgstr "Vehicle Body"
 
-#: po/custom/fromJson.txt:1384
+#: po/custom/fromJson.txt:1381
 msgid "Vehicle Superdense Thermal Armor"
 msgstr "Vehicle Superdense Thermal Armour"
 
-#: po/custom/fromJson.txt:1385
+#: po/custom/fromJson.txt:1382
 msgid "Vehicle Superdense Thermal Armor Mk2"
 msgstr "Vehicle Superdense Thermal Armour Mk2"
 
-#: po/custom/fromJson.txt:1386
+#: po/custom/fromJson.txt:1383
 msgid "Vehicle Superdense Thermal Armor Mk3"
 msgstr "Vehicle Superdense Thermal Armour Mk3"
 
-#: po/custom/fromJson.txt:1388
+#: po/custom/fromJson.txt:1385
 msgid "Vengeance"
 msgstr "Vengeance"
 
-#: po/custom/fromJson.txt:1389
+#: po/custom/fromJson.txt:1386
 #, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Vengeance Tracks Guass Cannon"
 
-#: po/custom/fromJson.txt:1390
+#: po/custom/fromJson.txt:1387
 #, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Vengeance Tracks Guass Scourge"
 
-#: po/custom/fromJson.txt:1391
+#: po/custom/fromJson.txt:1388
 msgid "Vengeance Tracks Rail Gun"
 msgstr "Vengeance Tracks Rail Gun"
 
-#: po/custom/fromJson.txt:1392
+#: po/custom/fromJson.txt:1389
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "Vertical Take Off and Landing Propulsion"
 
-#: po/custom/fromJson.txt:1393
+#: po/custom/fromJson.txt:1390
 msgid "Very expensive to produce"
 msgstr "Very expensive to produce"
 
-#: po/custom/fromJson.txt:1394
+#: po/custom/fromJson.txt:1391
 msgid "Very high power costs and very slow to produce"
 msgstr "Very high power costs and very slow to produce"
 
-#: po/custom/fromJson.txt:1395
+#: po/custom/fromJson.txt:1392
 msgid "Very slow moving Body"
 msgstr "Very slow moving Body"
 
-#: po/custom/fromJson.txt:1396
+#: po/custom/fromJson.txt:1393
 msgid "Very slow recharge time"
 msgstr "Very slow recharge time"
 
-#: po/custom/fromJson.txt:1397
+#: po/custom/fromJson.txt:1394
 msgid "Vindicator Hardpoint"
 msgstr "Vindicator Hardpoint"
 
-#: po/custom/fromJson.txt:1398
+#: po/custom/fromJson.txt:1395
 msgid "Vindicator SAM"
 msgstr "Vindicator SAM"
 
-#: po/custom/fromJson.txt:1399
+#: po/custom/fromJson.txt:1396
 msgid "Vindicator SAM Site"
 msgstr "Vindicator SAM Site"
 
-#: po/custom/fromJson.txt:1400
+#: po/custom/fromJson.txt:1397
 msgid "Viper"
 msgstr "Viper"
 
-#: po/custom/fromJson.txt:1401
+#: po/custom/fromJson.txt:1398
 msgid "VTOL"
 msgstr "VTOL"
 
-#: po/custom/fromJson.txt:1402
+#: po/custom/fromJson.txt:1399
 msgid "VTOL Assault Cannon"
 msgstr "VTOL Assault Cannon"
 
-#: po/custom/fromJson.txt:1403
+#: po/custom/fromJson.txt:1400
 msgid "VTOL Assault Gun"
 msgstr "VTOL Assault Gun"
 
-#: po/custom/fromJson.txt:1404
+#: po/custom/fromJson.txt:1401
 msgid "VTOL Bunker Buster"
 msgstr "VTOL Bunker Buster"
 
-#: po/custom/fromJson.txt:1405
+#: po/custom/fromJson.txt:1402
 #, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "Bug Bunker Buster VTOL"
 
-#: po/custom/fromJson.txt:1406
+#: po/custom/fromJson.txt:1403
 #, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "Bug Bunker Buster VTOL"
 
-#: po/custom/fromJson.txt:1407
+#: po/custom/fromJson.txt:1404
 msgid "VTOL Cannon"
 msgstr "VTOL Cannon"
 
-#: po/custom/fromJson.txt:1409
+#: po/custom/fromJson.txt:1406
 msgid "VTOL CB Radar Tower"
 msgstr "VTOL CB Radar Tower"
 
-#: po/custom/fromJson.txt:1410
+#: po/custom/fromJson.txt:1407
 msgid "VTOL CB Radar Turret"
 msgstr "VTOL CB Radar Turret"
 
-#: po/custom/fromJson.txt:1411
+#: po/custom/fromJson.txt:1408
 msgid "VTOL CB Tower"
 msgstr "VTOL CB Tower"
 
-#: po/custom/fromJson.txt:1412
+#: po/custom/fromJson.txt:1409
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
 msgstr "VTOL CB Tower detects enemy indirect fire batteries"
 
-#: po/custom/fromJson.txt:1413
+#: po/custom/fromJson.txt:1410
 msgid "VTOL CB Turret"
 msgstr "VTOL CB Turret"
 
-#: po/custom/fromJson.txt:1415
+#: po/custom/fromJson.txt:1412
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay"
 msgstr "VTOL Cluster Bombs Bay"
 
-#: po/custom/fromJson.txt:1416
+#: po/custom/fromJson.txt:1413
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr "VTOL Cluster Bombs Bay"
 
-#: po/custom/fromJson.txt:1417
+#: po/custom/fromJson.txt:1414
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "Bug Cluster Bomb VTOL"
 
-#: po/custom/fromJson.txt:1418
+#: po/custom/fromJson.txt:1415
 msgid "VTOL Cluster Bombs Bay"
 msgstr "VTOL Cluster Bombs Bay"
 
-#: po/custom/fromJson.txt:1419
+#: po/custom/fromJson.txt:1416
 #, fuzzy
 msgid "VTOL EMP Missile Launcher"
 msgstr "EMP Missile Launcher"
 
-#: po/custom/fromJson.txt:1420
+#: po/custom/fromJson.txt:1417
 msgid "VTOL Factory"
 msgstr "VTOL Factory"
 
-#: po/custom/fromJson.txt:1421
+#: po/custom/fromJson.txt:1418
 msgid "VTOL factory enables VTOL production"
 msgstr "VTOL factory enables VTOL production"
 
-#: po/custom/fromJson.txt:1422
+#: po/custom/fromJson.txt:1419
 msgid "VTOL Flashlight"
 msgstr "VTOL Flashlight"
 
-#: po/custom/fromJson.txt:1423
+#: po/custom/fromJson.txt:1420
 msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL Heap Bomb Bay"
 
-#: po/custom/fromJson.txt:1424
+#: po/custom/fromJson.txt:1421
 #, fuzzy
 msgid "VTOL Heavy Laser"
 msgstr "Heavy Laser"
 
-#: po/custom/fromJson.txt:1425
+#: po/custom/fromJson.txt:1422
 msgid "VTOL Heavy Machinegun"
 msgstr "VTOL Heavy Machinegun"
 
-#: po/custom/fromJson.txt:1426
+#: po/custom/fromJson.txt:1423
 msgid "VTOL Hyper Velocity Cannon"
 msgstr "VTOL Hyper Velocity Cannon"
 
-#: po/custom/fromJson.txt:1427
+#: po/custom/fromJson.txt:1424
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "VTOL Hyper Velocity Cannon"
 
-#: po/custom/fromJson.txt:1428
+#: po/custom/fromJson.txt:1425
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "VTOL Hyper Velocity Cannon"
 
-#: po/custom/fromJson.txt:1429
+#: po/custom/fromJson.txt:1426
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "HPV Cannon Hardpoint"
 
-#: po/custom/fromJson.txt:1430
+#: po/custom/fromJson.txt:1427
 msgid "VTOL II"
 msgstr "VTOL II"
 
-#: po/custom/fromJson.txt:1431
+#: po/custom/fromJson.txt:1428
 msgid "VTOL III"
 msgstr "VTOL III"
 
-#: po/custom/fromJson.txt:1432
+#: po/custom/fromJson.txt:1429
 msgid "VTOL Lancer"
 msgstr "VTOL Lancer"
 
-#: po/custom/fromJson.txt:1433
+#: po/custom/fromJson.txt:1430
 #, fuzzy
 msgid "VTOL Lancer Bug VTOL"
 msgstr "VTOL Lancer"
 
-#: po/custom/fromJson.txt:1434
+#: po/custom/fromJson.txt:1431
 #, fuzzy
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "VTOL Lancer"
 
-#: po/custom/fromJson.txt:1435
+#: po/custom/fromJson.txt:1432
 #, fuzzy
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Scorpion BB VTOL"
 
-#: po/custom/fromJson.txt:1436
+#: po/custom/fromJson.txt:1433
 msgid "VTOL Machinegun"
 msgstr "VTOL Machinegun"
 
-#: po/custom/fromJson.txt:1437
+#: po/custom/fromJson.txt:1434
 #, fuzzy
 msgid "VTOL Mini-Rocket"
 msgstr "HE Mini-Rockets"
 
-#: po/custom/fromJson.txt:1438
+#: po/custom/fromJson.txt:1435
 msgid "VTOL Needle Gun"
 msgstr "VTOL Needle Gun"
 
-#: po/custom/fromJson.txt:1439
+#: po/custom/fromJson.txt:1436
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL Phosphor Bomb Bay"
 
-#: po/custom/fromJson.txt:1440
+#: po/custom/fromJson.txt:1437
 #, fuzzy
 msgid "VTOL Plasmite Bomb Bay"
 msgstr "VTOL Cluster Bombs Bay"
 
-#: po/custom/fromJson.txt:1441
+#: po/custom/fromJson.txt:1438
 msgid "VTOL Propulsion"
 msgstr "VTOL Propulsion"
 
-#: po/custom/fromJson.txt:1443
+#: po/custom/fromJson.txt:1440
 msgid "VTOL Pulse Laser"
 msgstr "VTOL Pulse Laser"
 
-#: po/custom/fromJson.txt:1444
+#: po/custom/fromJson.txt:1441
 msgid "VTOL Radar Tower"
 msgstr "VTOL Radar Tower"
 
-#: po/custom/fromJson.txt:1445
+#: po/custom/fromJson.txt:1442
 msgid "VTOL Rail Gun"
 msgstr "VTOL Rail Gun"
 
-#: po/custom/fromJson.txt:1446
+#: po/custom/fromJson.txt:1443
 msgid "VTOL Rearming Pad"
 msgstr "VTOL Rearming Pad"
 
-#: po/custom/fromJson.txt:1447
+#: po/custom/fromJson.txt:1444
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "VTOL rearming pads required to keep VTOLs flying"
 
-#: po/custom/fromJson.txt:1450
+#: po/custom/fromJson.txt:1447
 msgid "VTOL Scourge Missile"
 msgstr "VTOL Scourge Missile"
 
-#: po/custom/fromJson.txt:1452
+#: po/custom/fromJson.txt:1449
 msgid "VTOL Strike Tower"
 msgstr "VTOL Strike Tower"
 
-#: po/custom/fromJson.txt:1453
+#: po/custom/fromJson.txt:1450
 msgid "VTOL Strike Tower detects approaching enemies"
 msgstr "VTOL Strike Tower detects approaching enemies"
 
-#: po/custom/fromJson.txt:1454
+#: po/custom/fromJson.txt:1451
 msgid "VTOL Strike Turret"
 msgstr "VTOL Strike Turret"
 
-#: po/custom/fromJson.txt:1455
+#: po/custom/fromJson.txt:1452
 msgid "VTOL Strike turret used to spot targets"
 msgstr "VTOL Strike turret used to spot targets"
 
-#: po/custom/fromJson.txt:1456
+#: po/custom/fromJson.txt:1453
 msgid "VTOL Sunburst AA"
 msgstr ""
 
-#: po/custom/fromJson.txt:1457
+#: po/custom/fromJson.txt:1454
 msgid "VTOL Tank Killer"
 msgstr "VTOL Tank Killer"
 
-#: po/custom/fromJson.txt:1458
+#: po/custom/fromJson.txt:1455
 msgid "VTOL Thermite Bomb Bay"
 msgstr "VTOL Thermite Bomb Bay"
 
-#: po/custom/fromJson.txt:1459
+#: po/custom/fromJson.txt:1456
 msgid "VTOL Twin Machinegun"
 msgstr "VTOL Twin Machinegun"
 
-#: po/custom/fromJson.txt:1460
+#: po/custom/fromJson.txt:1457
 msgid "Wall"
 msgstr ""
 
-#: po/custom/fromJson.txt:1461
+#: po/custom/fromJson.txt:1458
 msgid "Wallcorner"
 msgstr ""
 
-#: po/custom/fromJson.txt:1462
+#: po/custom/fromJson.txt:1459
 msgid "Warehouse"
 msgstr "Warehouse"
 
-#: po/custom/fromJson.txt:1463
+#: po/custom/fromJson.txt:1460
 msgid "Weapon Research Completed"
 msgstr "Weapon Research Completed"
 
-#: po/custom/fromJson.txt:1464
+#: po/custom/fromJson.txt:1461
 msgid "Wheeled Propulsion"
 msgstr "Wheeled Propulsion"
 
-#: po/custom/fromJson.txt:1466
+#: po/custom/fromJson.txt:1463
 msgid "Wheels"
 msgstr "Wheels"
 
-#: po/custom/fromJson.txt:1467
+#: po/custom/fromJson.txt:1464
 msgid "Wheels II"
 msgstr "Wheels II"
 
-#: po/custom/fromJson.txt:1468
+#: po/custom/fromJson.txt:1465
 msgid "Wheels III"
 msgstr "Wheels III"
 
-#: po/custom/fromJson.txt:1469
+#: po/custom/fromJson.txt:1466
 msgid "Whirlwind AA Site"
 msgstr "Whirlwind AA Site"
 
-#: po/custom/fromJson.txt:1470
+#: po/custom/fromJson.txt:1467
 msgid "Whirlwind AA Turret"
 msgstr "Whirlwind AA Turret"
 
-#: po/custom/fromJson.txt:1471
+#: po/custom/fromJson.txt:1468
 msgid "Whirlwind Hardpoint"
 msgstr "Whirlwind Hardpoint"
 
-#: po/custom/fromJson.txt:1472
+#: po/custom/fromJson.txt:1469
 msgid "Wide Spectrum Sensor"
 msgstr "Wide Spectrum Sensor"
 
-#: po/custom/fromJson.txt:1473
+#: po/custom/fromJson.txt:1470
 msgid "Wide Spectrum Sensor Tower"
 msgstr "Wide Spectrum Sensor Tower"
 
-#: po/custom/fromJson.txt:1474
+#: po/custom/fromJson.txt:1471
 msgid "Wreck"
 msgstr "Wreck"
 
-#: po/custom/fromJson.txt:1475
+#: po/custom/fromJson.txt:1472
 msgid "Wrecked Bridge"
 msgstr "Wrecked Bridge"
 
-#: po/custom/fromJson.txt:1476
+#: po/custom/fromJson.txt:1473
 msgid "Wrecked Tanker"
 msgstr "Wrecked Tanker"
 
-#: po/custom/fromJson.txt:1477
+#: po/custom/fromJson.txt:1474
 msgid "Wrecked Van"
 msgstr "Wrecked Van"
 
-#: po/custom/fromJson.txt:1478
+#: po/custom/fromJson.txt:1475
 msgid "Wrecked Vehicle"
 msgstr "Wrecked Vehicle"
 
-#: po/custom/fromJson.txt:1479
+#: po/custom/fromJson.txt:1476
 msgid "Wyvern"
 msgstr "Wyvern"
 
@@ -10279,7 +10265,7 @@ msgstr ""
 msgid "test"
 msgstr ""
 
-#: src/cmddroid.cpp:103
+#: src/cmddroid.cpp:111
 msgid "Commander needs a higher level to command more units"
 msgstr ""
 
@@ -10433,12 +10419,12 @@ msgstr "Weapons"
 msgid "Systems"
 msgstr "Systems"
 
-#: src/design.cpp:4319
+#: src/design.cpp:4320
 #, fuzzy
 msgid "Do Not Store Design"
 msgstr "Delete Design"
 
-#: src/design.cpp:4324
+#: src/design.cpp:4325
 #, fuzzy
 msgid "Store Design"
 msgstr "New Design"
@@ -10462,7 +10448,7 @@ msgstr ""
 msgid "Out of sync"
 msgstr ""
 
-#: src/display3d.cpp:1869
+#: src/display3d.cpp:1876
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr ""
@@ -10485,39 +10471,39 @@ msgstr "%s - Damage %d%% - Experience %d, %s"
 msgid "Unit Lost!"
 msgstr "Unit Lost!"
 
-#: src/droid.cpp:1152
+#: src/droid.cpp:1164
 msgid "Structure Restored"
 msgstr "Structure Restored"
 
-#: src/droid.cpp:1928
+#: src/droid.cpp:1940
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Group %u selected - %u Unit"
 msgstr[1] "Group %u selected - %u Units"
 
-#: src/droid.cpp:1937
+#: src/droid.cpp:1949
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unit assigned to Group %u"
 msgstr[1] "%u units assigned to Group %u"
 
-#: src/droid.cpp:1948
+#: src/droid.cpp:1960
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centred on Group %u - %u Unit"
 msgstr[1] "Centred on Group %u - %u Units"
 
-#: src/droid.cpp:1952
+#: src/droid.cpp:1964
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.cpp:2988
+#: src/droid.cpp:3000
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -10532,7 +10518,7 @@ msgid "Multi Player"
 msgstr "Multi Player Game"
 
 #: src/frontend.cpp:145
-#: src/frontend.cpp:275
+#: src/frontend.cpp:277
 msgid "Tutorial"
 msgstr "Tutorial"
 
@@ -10586,471 +10572,471 @@ msgstr ""
 msgid "Check for a newer version"
 msgstr ""
 
-#: src/frontend.cpp:276
+#: src/frontend.cpp:278
 msgid "Fast Play"
 msgstr "Fast Play"
 
-#: src/frontend.cpp:277
+#: src/frontend.cpp:279
 msgid "TUTORIALS"
 msgstr "TUTORIALS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:279
-#: src/frontend.cpp:342
-#: src/frontend.cpp:388
-#: src/frontend.cpp:587
-#: src/frontend.cpp:661
-#: src/frontend.cpp:791
-#: src/frontend.cpp:913
-#: src/frontend.cpp:1155
-#: src/frontend.cpp:1497
-#: src/frontend.cpp:1650
-#: src/frontend.cpp:1672
+#: src/frontend.cpp:281
+#: src/frontend.cpp:344
+#: src/frontend.cpp:390
+#: src/frontend.cpp:589
+#: src/frontend.cpp:663
+#: src/frontend.cpp:793
+#: src/frontend.cpp:915
+#: src/frontend.cpp:1157
+#: src/frontend.cpp:1499
+#: src/frontend.cpp:1652
+#: src/frontend.cpp:1674
 msgctxt "menu"
 msgid "Return"
 msgstr "Return"
 
-#: src/frontend.cpp:335
+#: src/frontend.cpp:337
 msgid "New Campaign"
 msgstr "New Campaign"
 
-#: src/frontend.cpp:336
+#: src/frontend.cpp:338
 #, fuzzy
 msgid "Start Skirmish Game"
 msgstr "Start Hosting Game"
 
-#: src/frontend.cpp:337
+#: src/frontend.cpp:339
 #, fuzzy
 msgid "Challenges"
 msgstr "Scavenger"
 
-#: src/frontend.cpp:338
+#: src/frontend.cpp:340
 #, fuzzy
 msgid "Load Campaign Game"
 msgstr "Load Campaign"
 
-#: src/frontend.cpp:339
+#: src/frontend.cpp:341
 #, fuzzy
 msgid "Load Skirmish Game"
 msgstr "Start Hosting Game"
 
-#: src/frontend.cpp:341
+#: src/frontend.cpp:343
 msgid "SINGLE PLAYER"
 msgstr "SINGLE PLAYER"
 
-#: src/frontend.cpp:346
-#: src/frontend.cpp:392
+#: src/frontend.cpp:348
+#: src/frontend.cpp:394
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:387
+#: src/frontend.cpp:389
 msgid "CAMPAIGNS"
 msgstr ""
 
-#: src/frontend.cpp:522
-#: src/ingameop.cpp:471
+#: src/frontend.cpp:524
+#: src/ingameop.cpp:464
 #, fuzzy
 msgid "Load Campaign Saved Game"
 msgstr "Load Saved Game"
 
-#: src/frontend.cpp:528
-#: src/ingameop.cpp:475
+#: src/frontend.cpp:530
+#: src/ingameop.cpp:468
 #, fuzzy
 msgid "Load Skirmish Saved Game"
 msgstr "Load Saved Game"
 
-#: src/frontend.cpp:582
+#: src/frontend.cpp:584
 msgid "MULTI PLAYER"
 msgstr "MULTIPLAYER"
 
-#: src/frontend.cpp:584
+#: src/frontend.cpp:586
 msgid "Host Game"
 msgstr "Host Game"
 
-#: src/frontend.cpp:585
+#: src/frontend.cpp:587
 msgid "Join Game"
 msgstr "Join Game"
 
-#: src/frontend.cpp:590
+#: src/frontend.cpp:592
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:654
+#: src/frontend.cpp:656
 #: src/multiint.cpp:1704
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.cpp:655
+#: src/frontend.cpp:657
 msgid "Game Options"
 msgstr "Game Options"
 
-#: src/frontend.cpp:656
+#: src/frontend.cpp:658
 msgid "Graphics Options"
 msgstr "Graphics Options"
 
-#: src/frontend.cpp:657
+#: src/frontend.cpp:659
 #, fuzzy
 msgid "Video Options"
 msgstr "Audio Options"
 
-#: src/frontend.cpp:658
+#: src/frontend.cpp:660
 #, fuzzy
 msgid "Audio / Zoom Options"
 msgstr "Audio Options"
 
-#: src/frontend.cpp:659
+#: src/frontend.cpp:661
 #, fuzzy
 msgid "Mouse Options"
 msgstr "Game Options"
 
-#: src/frontend.cpp:660
+#: src/frontend.cpp:662
 msgid "Key Mappings"
 msgstr "Key Mappings"
 
-#: src/frontend.cpp:713
+#: src/frontend.cpp:715
 msgid "1×"
 msgstr ""
 
-#: src/frontend.cpp:714
+#: src/frontend.cpp:716
 msgid "2×"
 msgstr ""
 
-#: src/frontend.cpp:715
-#: src/frontend.cpp:1012
+#: src/frontend.cpp:717
+#: src/frontend.cpp:1014
 msgid "Fullscreen"
 msgstr "Fullscreen"
 
-#: src/frontend.cpp:716
-#: src/frontend.cpp:727
-#: src/frontend.cpp:1576
+#: src/frontend.cpp:718
+#: src/frontend.cpp:729
+#: src/frontend.cpp:1578
 #, fuzzy
 msgid "Unsupported"
 msgstr "Transporter"
 
-#: src/frontend.cpp:724
-#: src/frontend.cpp:733
-#: src/frontend.cpp:738
-#: src/frontend.cpp:1019
-#: src/frontend.cpp:1058
-#: src/frontend.cpp:1424
-#: src/frontend.cpp:1429
-#: src/frontend.cpp:1434
-#: src/frontend.cpp:1444
+#: src/frontend.cpp:726
+#: src/frontend.cpp:735
+#: src/frontend.cpp:740
+#: src/frontend.cpp:1021
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1426
+#: src/frontend.cpp:1431
+#: src/frontend.cpp:1436
+#: src/frontend.cpp:1446
 msgid "Off"
 msgstr "Off"
 
-#: src/frontend.cpp:725
+#: src/frontend.cpp:727
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:726
+#: src/frontend.cpp:728
 #: src/multiplay.cpp:2027
 msgid "Black"
 msgstr "Black"
 
-#: src/frontend.cpp:733
-#: src/frontend.cpp:738
-#: src/frontend.cpp:1058
-#: src/frontend.cpp:1424
-#: src/frontend.cpp:1429
-#: src/frontend.cpp:1434
-#: src/frontend.cpp:1444
+#: src/frontend.cpp:735
+#: src/frontend.cpp:740
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1426
+#: src/frontend.cpp:1431
+#: src/frontend.cpp:1436
+#: src/frontend.cpp:1446
 msgid "On"
 msgstr "On"
 
-#: src/frontend.cpp:743
+#: src/frontend.cpp:745
 #, fuzzy
 msgid "Rotating"
 msgstr "Rotate Right"
 
-#: src/frontend.cpp:743
+#: src/frontend.cpp:745
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:748
+#: src/frontend.cpp:750
 msgid "Instant"
 msgstr ""
 
-#: src/frontend.cpp:748
+#: src/frontend.cpp:750
 #, fuzzy
 msgid "Tracked"
 msgstr "Tracks"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:763
 msgid "Video Playback"
 msgstr "Video Playback"
 
-#: src/frontend.cpp:765
+#: src/frontend.cpp:767
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:770
+#: src/frontend.cpp:772
 msgid "Subtitles"
 msgstr "Subtitles"
 
-#: src/frontend.cpp:775
+#: src/frontend.cpp:777
 msgid "Shadows"
 msgstr "Shadows"
 
-#: src/frontend.cpp:779
+#: src/frontend.cpp:781
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:783
+#: src/frontend.cpp:785
 msgid "Radar Jump"
 msgstr ""
 
-#: src/frontend.cpp:787
+#: src/frontend.cpp:789
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:889
-#: src/ingameop.cpp:152
+#: src/frontend.cpp:891
+#: src/ingameop.cpp:145
 msgid "Voice Volume"
 msgstr "Voice Volume"
 
-#: src/frontend.cpp:893
-#: src/ingameop.cpp:157
+#: src/frontend.cpp:895
+#: src/ingameop.cpp:150
 msgid "FX Volume"
 msgstr "FX Volume"
 
-#: src/frontend.cpp:897
-#: src/ingameop.cpp:162
+#: src/frontend.cpp:899
+#: src/ingameop.cpp:155
 msgid "Music Volume"
 msgstr "Music Volume"
 
-#: src/frontend.cpp:901
+#: src/frontend.cpp:903
 msgid "Map Zoom"
 msgstr ""
 
-#: src/frontend.cpp:905
+#: src/frontend.cpp:907
 msgid "Map Zoom Rate"
 msgstr ""
 
-#: src/frontend.cpp:909
+#: src/frontend.cpp:911
 msgid "Radar Zoom"
 msgstr ""
 
-#: src/frontend.cpp:916
+#: src/frontend.cpp:918
 #, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:1012
+#: src/frontend.cpp:1014
 msgid "Windowed"
 msgstr "Windowed"
 
-#: src/frontend.cpp:1029
+#: src/frontend.cpp:1031
 msgid "Graphics Mode*"
 msgstr "Graphics Mode*"
 
-#: src/frontend.cpp:1029
+#: src/frontend.cpp:1031
 #, fuzzy
 msgid "Graphics Mode"
 msgstr "Graphics Mode*"
 
-#: src/frontend.cpp:1034
+#: src/frontend.cpp:1036
 msgid "Resolution*"
 msgstr "Resolution*"
 
-#: src/frontend.cpp:1034
+#: src/frontend.cpp:1036
 #, fuzzy
 msgid "Resolution"
 msgstr "Resolution*"
 
-#: src/frontend.cpp:1039
+#: src/frontend.cpp:1041
 #, fuzzy
 msgid "Display Scale*"
 msgstr "Display In-Game Options"
 
-#: src/frontend.cpp:1039
+#: src/frontend.cpp:1041
 #, fuzzy
 msgid "Display Scale"
 msgstr "Display In-Game Options"
 
-#: src/frontend.cpp:1083
+#: src/frontend.cpp:1085
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr ""
 
-#: src/frontend.cpp:1115
+#: src/frontend.cpp:1117
 msgid "* Takes effect on game restart"
 msgstr "* Takes effect on game restart"
 
-#: src/frontend.cpp:1127
+#: src/frontend.cpp:1129
 msgid "Texture size"
 msgstr "Texture size"
 
-#: src/frontend.cpp:1131
+#: src/frontend.cpp:1133
 msgid "Vertical sync"
 msgstr ""
 
-#: src/frontend.cpp:1135
+#: src/frontend.cpp:1137
 #, fuzzy
 msgid "Antialiasing*"
 msgstr "Italian"
 
-#: src/frontend.cpp:1141
+#: src/frontend.cpp:1143
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
-#: src/frontend.cpp:1152
+#: src/frontend.cpp:1154
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:1439
+#: src/frontend.cpp:1441
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1439
+#: src/frontend.cpp:1441
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1451
+#: src/frontend.cpp:1453
 msgid "Map/Radar Zoom"
 msgstr ""
 
-#: src/frontend.cpp:1452
+#: src/frontend.cpp:1454
 #, fuzzy
 msgid "Game Speed"
 msgstr "Game Speed Reset"
 
-#: src/frontend.cpp:1453
+#: src/frontend.cpp:1455
 #, fuzzy
 msgid "Camera Pitch"
 msgstr "Reset Pitch"
 
-#: src/frontend.cpp:1468
+#: src/frontend.cpp:1470
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "Reverse Mouse"
 
-#: src/frontend.cpp:1472
+#: src/frontend.cpp:1474
 msgid "Trap Cursor"
 msgstr "Trap Cursor"
 
-#: src/frontend.cpp:1477
+#: src/frontend.cpp:1479
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Game Options"
 
-#: src/frontend.cpp:1482
+#: src/frontend.cpp:1484
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Rotate Left"
 
-#: src/frontend.cpp:1486
+#: src/frontend.cpp:1488
 #, fuzzy
 msgid "Colored Cursors"
 msgstr "Trap Cursor"
 
-#: src/frontend.cpp:1490
+#: src/frontend.cpp:1492
 #, fuzzy
 msgid "Scroll Event"
 msgstr "Tab Scroll left"
 
-#: src/frontend.cpp:1494
+#: src/frontend.cpp:1496
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:1569
+#: src/frontend.cpp:1571
 #: src/multiint.cpp:249
 msgid "Easy"
 msgstr "Easy"
 
-#: src/frontend.cpp:1570
+#: src/frontend.cpp:1572
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1571
+#: src/frontend.cpp:1573
 #: src/multiint.cpp:249
 msgid "Hard"
 msgstr "Hard"
 
-#: src/frontend.cpp:1572
+#: src/frontend.cpp:1574
 #: src/multiint.cpp:249
 msgid "Insane"
 msgstr ""
 
-#: src/frontend.cpp:1573
+#: src/frontend.cpp:1575
 msgid "Tough"
 msgstr ""
 
-#: src/frontend.cpp:1574
+#: src/frontend.cpp:1576
 #, fuzzy
 msgid "Killer"
 msgstr "Kills"
 
-#: src/frontend.cpp:1605
-#: src/frontend.cpp:1673
+#: src/frontend.cpp:1607
+#: src/frontend.cpp:1675
 msgid "Language"
 msgstr "Language"
 
-#: src/frontend.cpp:1609
-#: src/frontend.cpp:1677
+#: src/frontend.cpp:1611
+#: src/frontend.cpp:1679
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Difficulty"
 
-#: src/frontend.cpp:1613
-#: src/frontend.cpp:1678
+#: src/frontend.cpp:1615
+#: src/frontend.cpp:1680
 #, fuzzy
 msgid "Camera Speed"
 msgstr "Water Speed"
 
-#: src/frontend.cpp:1617
-#: src/frontend.cpp:1674
+#: src/frontend.cpp:1619
+#: src/frontend.cpp:1676
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Unit Colour"
 
-#: src/frontend.cpp:1637
-#: src/frontend.cpp:1675
+#: src/frontend.cpp:1639
+#: src/frontend.cpp:1677
 #, fuzzy
 msgid "Campaign"
 msgstr "New Campaign"
 
-#: src/frontend.cpp:1647
-#: src/frontend.cpp:1676
+#: src/frontend.cpp:1649
+#: src/frontend.cpp:1678
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Multi Player Game"
 
-#: src/frontend.cpp:1653
-#: src/frontend.cpp:1671
+#: src/frontend.cpp:1655
+#: src/frontend.cpp:1673
 msgid "GAME OPTIONS"
 msgstr "GAME OPTIONS"
 
-#: src/frontend.cpp:1780
+#: src/frontend.cpp:1782
 #: src/multiint.cpp:2808
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.cpp:1150
+#: src/hci.cpp:1129
 #: src/loop.cpp:251
 #: src/loop.cpp:267
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "GAME SAVED!"
 
-#: src/hci.cpp:1554
+#: src/hci.cpp:1533
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new structure: %s."
 
-#: src/hci.cpp:1565
+#: src/hci.cpp:1544
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new feature: %s."
 
-#: src/hci.cpp:1587
+#: src/hci.cpp:1566
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
 
-#: src/hci.cpp:1600
+#: src/hci.cpp:1579
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
@@ -11102,70 +11088,69 @@ msgid "Chat: Team"
 msgstr "Locked Teams"
 
 #: src/ingameop.cpp:108
-#: src/ingameop.cpp:180
-#: src/ingameop.cpp:237
+#: src/ingameop.cpp:173
+#: src/ingameop.cpp:230
 msgid "Resume Game"
 msgstr "Resume Game"
 
-#: src/ingameop.cpp:123
+#: src/ingameop.cpp:121
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
-#: src/ingameop.cpp:127
-#: src/ingameop.cpp:229
+#: src/ingameop.cpp:125
+#: src/ingameop.cpp:222
 #, fuzzy
 msgid "Host Quit"
 msgstr "Quit"
 
-#: src/ingameop.cpp:131
-#: src/ingameop.cpp:233
-msgid "Quit"
-msgstr "Quit"
-
-#: src/ingameop.cpp:171
-#: src/ingameop.cpp:505
+#: src/ingameop.cpp:164
+#: src/ingameop.cpp:498
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.cpp:176
-#: src/ingameop.cpp:509
+#: src/ingameop.cpp:169
+#: src/ingameop.cpp:502
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.cpp:240
+#: src/ingameop.cpp:226
+msgid "Quit"
+msgstr "Quit"
+
+#: src/ingameop.cpp:233
 msgid "Audio Options"
 msgstr "Audio Options"
 
+#: src/ingameop.cpp:240
 #: src/ingameop.cpp:247
-#: src/ingameop.cpp:254
 msgid "Load Game"
 msgstr "Load Game"
 
+#: src/ingameop.cpp:242
 #: src/ingameop.cpp:249
-#: src/ingameop.cpp:256
-#: src/mission.cpp:2475
+#: src/mission.cpp:2480
 msgid "Save Game"
 msgstr "Save Game"
 
-#: src/ingameop.cpp:324
+#: src/ingameop.cpp:317
 #, fuzzy
 msgid "Host has quit the game!"
 msgstr "The host has left the game!"
 
-#: src/ingameop.cpp:330
+#: src/ingameop.cpp:323
 msgid "The game can't continue without the host."
 msgstr ""
 
-#: src/ingameop.cpp:336
+#: src/ingameop.cpp:329
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/ingameop.cpp:479
+#: src/ingameop.cpp:472
 #, fuzzy
 msgid "Save Campaign Game"
 msgstr "New Campaign"
 
-#: src/ingameop.cpp:483
+#: src/ingameop.cpp:476
 #, fuzzy
 msgid "Save Skirmish Game"
 msgstr "Start Hosting Game"
@@ -11357,8 +11342,8 @@ msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
 #: src/keybind.cpp:1346
 #: src/keybind.cpp:1453
 #: src/keybind.cpp:1558
-#: src/keybind.cpp:1866
-#: src/keybind.cpp:1907
+#: src/keybind.cpp:1865
+#: src/keybind.cpp:1906
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -11509,88 +11494,88 @@ msgstr "Singing in the rain, I'm singing in the rain... RAIN"
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Forecast : Clear skies for all areas... NO WEATHER"
 
-#: src/keybind.cpp:1865
+#: src/keybind.cpp:1864
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.cpp:1867
+#: src/keybind.cpp:1866
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "Enemy destroyed by cheating!"
 
-#: src/keybind.cpp:1908
+#: src/keybind.cpp:1907
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2306
+#: src/keybind.cpp:2305
 msgid "Reveal OFF"
 msgstr ""
 
-#: src/keybind.cpp:2311
+#: src/keybind.cpp:2310
 msgid "Reveal ON"
 msgstr ""
 
-#: src/keybind.cpp:2392
+#: src/keybind.cpp:2391
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Centred on player HQ, direction NORTH"
 
-#: src/keybind.cpp:2404
+#: src/keybind.cpp:2403
 msgid "Unable to locate HQ!"
 msgstr "Unable to locate HQ!"
 
-#: src/keybind.cpp:2411
+#: src/keybind.cpp:2410
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2460
+#: src/keybind.cpp:2459
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2465
+#: src/keybind.cpp:2464
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2517
+#: src/keybind.cpp:2516
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Sorry, that cheat is disabled in multiplayer games."
 
-#: src/keybind.cpp:2552
-#: src/keybind.cpp:2606
+#: src/keybind.cpp:2551
+#: src/keybind.cpp:2605
 msgid "Game Speed Reset"
 msgstr "Game Speed Reset"
 
-#: src/keybind.cpp:2556
+#: src/keybind.cpp:2555
 #, fuzzy, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Game Speed Increased to %3.1f"
 
-#: src/keybind.cpp:2560
+#: src/keybind.cpp:2559
 #, fuzzy, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Game Speed Reduced to %3.1f"
 
-#: src/keybind.cpp:2618
+#: src/keybind.cpp:2617
 msgid "Radar showing friend-foe colors"
 msgstr "Radar showing friend-foe colours"
 
-#: src/keybind.cpp:2622
+#: src/keybind.cpp:2621
 msgid "Radar showing player colors"
 msgstr "Radar showing player colours"
 
-#: src/keybind.cpp:2637
+#: src/keybind.cpp:2636
 msgid "Radar showing only objects"
 msgstr "Radar showing only objects"
 
-#: src/keybind.cpp:2640
+#: src/keybind.cpp:2639
 msgid "Radar blending terrain and height"
 msgstr "Radar blending terrain and height"
 
-#: src/keybind.cpp:2643
+#: src/keybind.cpp:2642
 msgid "Radar showing terrain"
 msgstr "Radar showing terrain"
 
-#: src/keybind.cpp:2646
+#: src/keybind.cpp:2645
 msgid "Radar showing height"
 msgstr "Radar showing height"
 
@@ -12164,40 +12149,40 @@ msgstr "Load a saved game"
 msgid "Load Transport"
 msgstr "Load Transport"
 
-#: src/mission.cpp:2301
+#: src/mission.cpp:2306
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJECTIVE ACHIEVED"
 
-#: src/mission.cpp:2301
+#: src/mission.cpp:2306
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJECTIVE ACHIEVED"
 
-#: src/mission.cpp:2307
+#: src/mission.cpp:2312
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJECTIVE FAILED"
 
-#: src/mission.cpp:2307
+#: src/mission.cpp:2312
 msgid "OBJECTIVE FAILED"
 msgstr "OBJECTIVE FAILED"
 
-#: src/mission.cpp:2337
-#: src/mission.cpp:2381
-#: src/mission.cpp:2494
+#: src/mission.cpp:2342
+#: src/mission.cpp:2386
+#: src/mission.cpp:2499
 msgid "Quit To Main Menu"
 msgstr "Quit To Main Menu"
 
-#: src/mission.cpp:2345
+#: src/mission.cpp:2350
 msgid "Continue Game"
 msgstr "Continue Game"
 
-#: src/mission.cpp:2375
-#: src/mission.cpp:2472
+#: src/mission.cpp:2380
+#: src/mission.cpp:2477
 msgid "Load Saved Game"
 msgstr "Load Saved Game"
 
-#: src/mission.cpp:2440
+#: src/mission.cpp:2445
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "GAME SAVED!"
@@ -12424,7 +12409,7 @@ msgid "Laser Satellite disabled."
 msgstr "Laser Satellite Command Post"
 
 #: src/multiint.cpp:1709
-#: src/multiint.cpp:4293
+#: src/multiint.cpp:4238
 #, fuzzy
 msgid "Game Name"
 msgstr "Select Game Name"
@@ -12666,129 +12651,120 @@ msgstr "CHAT"
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:3082
-#, fuzzy
-msgid "Game Name Updated."
-msgstr "Select Game Name"
-
-#: src/multiint.cpp:3195
+#: src/multiint.cpp:3179
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.cpp:3201
+#: src/multiint.cpp:3185
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.cpp:3215
+#: src/multiint.cpp:3199
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:3269
+#: src/multiint.cpp:3245
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3413
-#: src/multiint.cpp:3482
+#: src/multiint.cpp:3389
+#: src/multiint.cpp:3458
 #: src/multimenu.cpp:1309
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "The host has kicked %s from the game!"
 
-#: src/multiint.cpp:3539
+#: src/multiint.cpp:3515
 msgid "Host is Starting Game"
 msgstr "Host is Starting Game"
 
-#: src/multiint.cpp:3877
-msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
-
-#: src/multiint.cpp:4087
+#: src/multiint.cpp:4032
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:4093
+#: src/multiint.cpp:4038
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:4097
+#: src/multiint.cpp:4042
 #, fuzzy
 msgid "UPnP detection is in progress..."
 msgstr "Decoding in progress....."
 
-#: src/multiint.cpp:4104
+#: src/multiint.cpp:4049
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:4110
+#: src/multiint.cpp:4055
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:4114
+#: src/multiint.cpp:4059
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:4176
+#: src/multiint.cpp:4121
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:4271
+#: src/multiint.cpp:4216
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:4277
+#: src/multiint.cpp:4222
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:4283
+#: src/multiint.cpp:4228
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Version %s%s%s%s"
 
-#: src/multiint.cpp:4296
+#: src/multiint.cpp:4241
 msgid "Map Name"
 msgstr ""
 
-#: src/multiint.cpp:4299
+#: src/multiint.cpp:4244
 msgid "Players"
 msgstr "Players"
 
-#: src/multiint.cpp:4302
+#: src/multiint.cpp:4247
 msgid "Status"
 msgstr ""
 
-#: src/multiint.cpp:4335
+#: src/multiint.cpp:4280
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Radar showing player colours"
 
-#: src/multiint.cpp:4349
-#: src/multiint.cpp:4581
+#: src/multiint.cpp:4294
+#: src/multiint.cpp:4526
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4349
-#: src/multiint.cpp:4582
+#: src/multiint.cpp:4294
+#: src/multiint.cpp:4527
 #, fuzzy
 msgid "Closed"
 msgstr "Close"
 
-#: src/multiint.cpp:4414
+#: src/multiint.cpp:4359
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:4414
+#: src/multiint.cpp:4359
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:4462
+#: src/multiint.cpp:4407
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:4469
+#: src/multiint.cpp:4414
 #: src/multimenu.cpp:762
 msgid "Ping"
 msgstr "Ping"
@@ -13032,12 +13008,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:2982
+#: src/qtscriptfuncs.cpp:2987
 #: src/scriptfuncs.cpp:3064
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:2987
+#: src/qtscriptfuncs.cpp:2992
 #: src/scriptfuncs.cpp:3068
 #, fuzzy
 msgid "YOU WERE DEFEATED!"
@@ -13207,95 +13183,95 @@ msgid_plural "%u units selected"
 msgstr[0] "%u unit selected"
 msgstr[1] "%u units selected"
 
-#: src/structure.cpp:2464
+#: src/structure.cpp:2496
 #, fuzzy
 msgid "Can't build anymore units, Unit Limit Reached — Production Halted"
 msgstr "Command Control Limit Reached - Production Halted"
 
-#: src/structure.cpp:2472
+#: src/structure.cpp:2504
 #, fuzzy, c-format
 msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
 msgstr "Command Control Limit Reached - Production Halted"
 
-#: src/structure.cpp:2480
+#: src/structure.cpp:2512
 #, fuzzy, c-format
 msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr "Command Control Limit Reached - Production Halted"
 
-#: src/structure.cpp:5388
+#: src/structure.cpp:5428
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Unit assigned"
 msgstr[1] "%s - %u Units assigned"
 
-#: src/structure.cpp:5407
+#: src/structure.cpp:5447
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Unit assigned"
 msgstr[1] "%s - %u Units assigned"
 
-#: src/structure.cpp:5412
-#: src/structure.cpp:5422
-#: src/structure.cpp:5429
-#: src/structure.cpp:5455
-#: src/structure.cpp:5464
-#: src/structure.cpp:5471
-#: src/structure.cpp:5479
+#: src/structure.cpp:5452
+#: src/structure.cpp:5462
+#: src/structure.cpp:5469
+#: src/structure.cpp:5495
+#: src/structure.cpp:5504
+#: src/structure.cpp:5511
+#: src/structure.cpp:5519
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5445
+#: src/structure.cpp:5485
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr "%s - Connected %u of %u"
 
-#: src/structure.cpp:5600
-#: src/structure.cpp:5645
+#: src/structure.cpp:5640
+#: src/structure.cpp:5685
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Electronically Damaged"
 
-#: src/structure.cpp:5772
+#: src/structure.cpp:5812
 msgid "Electronic Reward - Visibility Report"
 msgstr "Electronic Reward - Visibility Report"
 
-#: src/structure.cpp:5811
+#: src/structure.cpp:5851
 msgid "Factory Reward - Propulsion"
 msgstr "Factory Reward - Propulsion"
 
-#: src/structure.cpp:5833
+#: src/structure.cpp:5873
 msgid "Factory Reward - Body"
 msgstr "Factory Reward - Body"
 
-#: src/structure.cpp:5855
+#: src/structure.cpp:5895
 msgid "Factory Reward - Weapon"
 msgstr "Factory Reward - Weapon"
 
-#: src/structure.cpp:5863
+#: src/structure.cpp:5903
 msgid "Factory Reward - Nothing"
 msgstr "Factory Reward - Nothing"
 
-#: src/structure.cpp:5890
+#: src/structure.cpp:5930
 msgid "Repair Facility Award - Repair"
 msgstr "Repair Facility Award - Repair"
 
-#: src/structure.cpp:5896
+#: src/structure.cpp:5936
 msgid "Repair Facility Award - Nothing"
 msgstr "Repair Facility Award - Nothing"
 
-#: src/transporter.cpp:297
-#: src/transporter.cpp:345
+#: src/transporter.cpp:301
+#: src/transporter.cpp:349
 msgid "Launch Transport"
 msgstr "Launch Transport"
 
-#: src/transporter.cpp:979
+#: src/transporter.cpp:985
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1156
+#: src/transporter.cpp:1164
 msgid "Reinforcements landing"
 msgstr "Reinforcements landing"
 
@@ -13313,6 +13289,22 @@ msgstr " - DEBUG"
 #, fuzzy, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Version %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Electronic Countermeasures"
+#~ msgstr "Electronics Laboratory"
+
+#, fuzzy
+#~ msgid "Electronic Countermeasures Mk2"
+#~ msgstr "Electronics Laboratory"
+
+#, fuzzy
+#~ msgid "Electronic Countermeasures Mk3"
+#~ msgstr "Electronics Laboratory"
+
+#, fuzzy
+#~ msgid "Game Name Updated."
+#~ msgstr "Select Game Name"
 
 #, fuzzy
 #~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
