@@ -71,25 +71,13 @@ function checkNASDACentral()
 	}
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
-		area: "RTLZ",
-		message: "C2D_LZ",
-		reinforcements: 300, //5 min
-		callback: "checkNASDACentral",
-		annihilate: true,
-		retlz: true
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
 		area: "RTLZ",
 		message: "C2D_LZ",
-		reinforcements: -1,
+		reinforcements: 300, //5 min
+		callback: "checkNASDACentral",
 		annihilate: true,
 		retlz: true
 	});
@@ -161,6 +149,5 @@ function eventStartLevel()
 	camEnableFactory("COHeavyFactory");
 	camEnableFactory("COSouthCyborgFactory");
 
-	queue("enableReinforcements", 22000);
 	queue("vtolAttack", 120000); // 2 min
 }

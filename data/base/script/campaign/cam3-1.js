@@ -235,17 +235,6 @@ function unitsInValley()
 	}
 }
 
-function enableReinforcements()
-{
-	const REINFORCEMENT_TIME = 180; //3 minutes.
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
-		area: "RTLZ",
-		reinforcements: REINFORCEMENT_TIME,
-		callback: "unitsInValley"
-	});
-}
-
 function eventStartLevel()
 {
 	var startpos = getObject("startPosition");
@@ -275,7 +264,7 @@ function eventStartLevel()
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
 		area: "RTLZ",
-		reinforcements: -1,
+		reinforcements: 180, //3 minutes.
 		callback: "unitsInValley"
 	});
 
@@ -351,7 +340,6 @@ function eventStartLevel()
 	getCountdown();
 
 	queue("setupNextMission", 8000);
-	queue("enableReinforcements", 15000);
 	queue("hoverAttack", camChangeOnDiff(240000)); // 4 min
 	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
 	queue("enableAllFactories", camChangeOnDiff(300000)); //5 min

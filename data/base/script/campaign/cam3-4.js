@@ -89,16 +89,6 @@ function enableAllFactories()
 	});
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
-		area: "RTLZ",
-		reinforcements: 60, // 1 min
-		annihilate: true
-	});
-}
-
 function truckDefense()
 {
 	var truckNum = countDroid(NEXUS, DROID_CONSTRUCT);
@@ -126,7 +116,7 @@ function eventStartLevel()
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
 		area: "RTLZ",
-		reinforcements: -1,
+		reinforcements: 60, // 1 min
 		annihilate: true
 	});
 
@@ -338,6 +328,5 @@ function eventStartLevel()
 	hackAddMessage("MB3_4_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	queue("enableReinforcements", 16000);
 	queue("enableAllFactories", camChangeOnDiff(600000)); // 10 min.
 }

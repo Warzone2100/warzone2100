@@ -87,24 +87,13 @@ function enableFactoriesAndHovers()
 	});
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_8S", {
-		eliminateBases: true,
-		area: "RTLZ",
-		message: "C27_LZ",
-		reinforcements: 180 //3 min
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_8S", {
 		eliminateBases: true,
 		area: "RTLZ",
 		message: "C27_LZ",
-		reinforcements: -1,
+		reinforcements: 180 //3 min
 	});
 
 	var startpos = getObject("startPosition");
@@ -235,7 +224,6 @@ function eventStartLevel()
 	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 20000);
 	queue("baseThreeVtolAttack", 30000);
 	queue("baseFourVtolAttack", 60000);
 	queue("enableFactoriesAndHovers", camChangeOnDiff(90000));
