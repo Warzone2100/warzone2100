@@ -91,23 +91,12 @@ function enableTimeBasedFactories()
 	camEnableFactory("COHeavyFactory-b2L");
 }
 
-
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_7S", {
-		area: "RTLZ",
-		message: "C26_LZ",
-		reinforcements: 180 //3 min
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_7S", {
 		area: "RTLZ",
 		message: "C26_LZ",
-		reinforcements: -1
+		reinforcements: 180 //3 min
 	});
 
 	var startpos = getObject("startPosition");
@@ -228,7 +217,6 @@ function eventStartLevel()
 
 	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 27000);
 	queue("northWestAttack", 120000);
 	queue("mainBaseAttackGroup", 180000);
 	queue("enableTimeBasedFactories", camChangeOnDiff(600000)); // 10 min

@@ -209,19 +209,6 @@ function extraVictory()
 	}
 }
 
-//Enable transport reinforcements
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
-		area: "RTLZ",
-		message: "C1-7_LZ",
-		reinforcements: 60, //1 min
-		callback: "extraVictory",
-		retlz: true,
-	});
-}
-
 function removeCanyonBlip()
 {
 	hackRemoveMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -260,7 +247,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
-		reinforcements: -1,
+		reinforcements: 60, //1 min
 		callback: "extraVictory",
 		retlz: true,
 	});
@@ -340,6 +327,5 @@ function eventStartLevel()
 	buildLancers();
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
-	queue("enableReinforcements", 15000);
 	queue("getArtifact", camChangeOnDiff(90000));
 }

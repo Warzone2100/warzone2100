@@ -103,18 +103,6 @@ function sendNPTransport()
 	}
 }
 
-//Enable transport reinforcements
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
-		area: "RTLZ",
-		message: "C1-5_LZ",
-		reinforcements: 180, //3 min
-		annihilate: true
-	});
-}
-
 function enableNPFactories()
 {
 	camEnableFactory("NPCyborgFactory");
@@ -143,7 +131,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
 		area: "RTLZ",
 		message: "C1-5_LZ",
-		reinforcements: -1,
+		reinforcements: 180, //3 min
 		annihilate: true
 	});
 
@@ -274,6 +262,5 @@ function eventStartLevel()
 		},
 	});
 
-	queue("enableReinforcements", 30000);
 	queue("enableNPFactories", camChangeOnDiff(600000)); // 10 minutes
 }

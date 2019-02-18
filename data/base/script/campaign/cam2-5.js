@@ -90,22 +90,12 @@ function enableFactories()
 	camEnableFactory("COCyborgFactoryR");
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2DS", {
-		area: "RTLZ",
-		message: "C25_LZ",
-		reinforcements: 180 //3 min
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2DS",{
 		area: "RTLZ",
 		message: "C25_LZ",
-		reinforcements: -1
+		reinforcements: 180 //3 min
 	});
 
 	var startpos = getObject("startPosition");
@@ -185,7 +175,6 @@ function eventStartLevel()
 
 	hackAddMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 15000);
 	queue("setupDamHovers", 3000);
 	queue("setupCyborgsEast", camChangeOnDiff(180000));//3 min
 	queue("enableFactories", camChangeOnDiff(480000));//8 min

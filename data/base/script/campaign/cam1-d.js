@@ -139,23 +139,12 @@ function setupPatrols()
 	cyborgGroupPatrol();
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
-		area: "RTLZ",
-		message: "C1D_LZ",
-		reinforcements: 120, //2 min
-		eliminateBases: true
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
 		area: "RTLZ",
 		message: "C1D_LZ",
-		reinforcements: -1,
+		reinforcements: 120, //2 min
 		eliminateBases: true
 	});
 
@@ -282,6 +271,5 @@ function eventStartLevel()
 
 	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 12000);
 	queue("setupPatrols", 160000); // 2.5 min.
 }

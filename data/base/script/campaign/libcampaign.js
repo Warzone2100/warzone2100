@@ -3216,6 +3216,9 @@ function camSetupTransporter(x, y, x1, y1)
 	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
 }
 
+//privates
+var __camNumTransporterExits;
+
 ////////////////////////////////////////////////////////////////////////////////
 // VTOL management.
 // These functions create the hit and run vtols for the given player.
@@ -3980,6 +3983,7 @@ function cam_eventStartLevel()
 	__camVideoSequences = [];
 	__camSaveLoading = false;
 	__camNeverGroupDroids = [];
+	__camNumTransporterExits = 0;
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	__camAiPowerReset(); //grant power to the AI
 	setTimer("__checkEnemyFactoryProductionTick", 800);
@@ -4033,6 +4037,23 @@ function cam_eventGroupSeen(viewer, group)
 function cam_eventTransporterExit(transport)
 {
 	camTrace("Transporter for player", transport.player + " has exited");
+
+	if (transport.player === CAM_HUMAN_PLAYER)
+	{
+		__camNumTransporterExits += 1;
+
+		//Audio cue to let the player know they can bring in reinforcements. This
+		//assumes the player can bring in reinforcements immediately after the first
+		//transporter leaves the map. Mission scripts can handle special situations.
+		if (__camNumTransporterExits === 1 &&
+			((__camWinLossCallback === "__camVictoryOffworld" &&
+			__camVictoryData.reinforcements > -1) ||
+			__camWinLossCallback === "__camVictoryStandard"))
+		{
+			const REINFORCEMENTS_AVAILABLE_SOUND = "pcv440.ogg";
+			playSound(REINFORCEMENTS_AVAILABLE_SOUND);
+		}
+	}
 
 	if (transport.player !== CAM_HUMAN_PLAYER ||
 		(__camWinLossCallback === "__camVictoryStandard" &&

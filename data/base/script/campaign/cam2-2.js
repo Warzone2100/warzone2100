@@ -153,22 +153,12 @@ function eventAttacked(victim, attacker)
 	}
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C", {
-		area: "RTLZ",
-		message: "C22_LZ",
-		reinforcements: 180 //3 min
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C",{
 		area: "RTLZ",
 		message: "C22_LZ",
-		reinforcements: -1
+		reinforcements: 180 //3 min
 	});
 
 	var startpos = getObject("startPosition");
@@ -240,6 +230,5 @@ function eventStartLevel()
 
 	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 20000);
 	queue("vtolAttack", 120000);
 }
