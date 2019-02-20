@@ -192,7 +192,7 @@ matrix:
         #- brew update
         - brew install gettext
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-        - gem install asciidoctor -v 1.5.8 --no-rdoc --no-ri --no-document
+        - gem install asciidoctor -v 1.5.8 --no-document
         # gcc6+ is currently required to bootstrap vcpkg on macOS
         - brew install gcc@7 || brew link --overwrite gcc@7
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
@@ -214,7 +214,7 @@ matrix:
         #- brew update
         - brew install gettext
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-        - gem install asciidoctor -v 1.5.8 --no-rdoc --no-ri --no-document
+        - gem install asciidoctor -v 1.5.8 --no-document
         # gcc6+ is currently required to bootstrap vcpkg on macOS
         - brew install gcc@7 || brew link --overwrite gcc@7
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
