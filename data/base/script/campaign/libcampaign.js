@@ -298,32 +298,27 @@ function camCountStructuresInArea(lab, player)
 	return ret;
 }
 
-//;; ## camChangeOnDiff(numeric value, [bool])
+//;; ## camChangeOnDiff(numeric value)
 //;;
-//;; Change a numeric value based on campaign difficulty. If the second option is defined
-//;; then the opposite effect will occur on that value.
+//;; Change a numeric value based on campaign difficulty.
 //;;
-function camChangeOnDiff(num, invert)
+function camChangeOnDiff(num)
 {
 	var modifier = 0;
-	if(!camDef(invert))
-	{
-		invert = false;
-	}
 
-	switch(difficulty)
+	switch (difficulty)
 	{
 		case EASY:
-			modifier = (invert === false) ? 1.25 : 0.67;
+			modifier = 1.25;
 			break;
 		case MEDIUM:
 			modifier = 1.00;
 			break;
 		case HARD:
-			modifier = (invert === false) ? 0.80 : 1.50;
+			modifier = 0.80;
 			break;
 		case INSANE:
-			modifier = (invert === false) ? 0.67 : 2.50;
+			modifier = 0.67;
 			break;
 		default:
 			modifier = 1.00;
