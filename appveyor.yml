@@ -40,7 +40,7 @@ install:
   - set PATH=C:\Ruby25-x64\bin;%PATH%
   # Install Asciidoctor (for documentation generation)
   # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-  - gem install asciidoctor -v 1.5.8 --no-rdoc --no-ri --no-document
+  - gem install asciidoctor -v 1.5.8 --no-document
 
 before_build:
   # Set expanded environment variables for release build jobs
