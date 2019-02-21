@@ -321,8 +321,8 @@ DROID::DROID(uint32_t id, unsigned player)
 	, droidType(DROID_ANY)
 	, psGroup(nullptr)
 	, psGrpNext(nullptr)
-	, secondaryOrder(DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS)
-	, secondaryOrderPending(DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS)
+	, secondaryOrder(DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
+	, secondaryOrderPending(DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
 	, secondaryOrderPendingCount(0)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
@@ -1694,6 +1694,9 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 
 		//set droid height to be above the terrain
 		psDroid->pos.z += TRANSPORTER_HOVER_HEIGHT;
+
+		/* reset halt secondary order from guard to hold */
+		secondarySetState( psDroid, DSO_HALTTYPE, DSS_HALT_HOLD );
 	}
 
 	if (player == selectedPlayer)

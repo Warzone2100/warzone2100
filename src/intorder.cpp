@@ -47,6 +47,7 @@
 #define IDORDER_REPAIR_LEVEL				8020
 #define IDORDER_ATTACK_LEVEL				8030
 #define IDORDER_PATROL						8040
+#define IDORDER_HALT_TYPE					8050
 #define IDORDER_RETURN						8060
 #define IDORDER_RECYCLE						8070
 #define IDORDER_ASSIGN_PRODUCTION			8080
@@ -138,6 +139,9 @@ enum
 	STR_DORD_FIRE2,
 	STR_DORD_FIRE3,
 	STR_DORD_PATROL,
+	STR_DORD_PURSUE,
+	STR_DORD_GUARD,
+	STR_DORD_HOLDPOS,
 	STR_DORD_RETREPAIR,
 	STR_DORD_RETBASE,
 	STR_DORD_EMBARK,
@@ -162,6 +166,9 @@ static const char *getDORDDescription(int id)
 	case STR_DORD_FIRE2          : return _("Return Fire");
 	case STR_DORD_FIRE3          : return _("Hold Fire");
 	case STR_DORD_PATROL         : return _("Patrol");
+	case STR_DORD_PURSUE         : return _("Pursue");
+	case STR_DORD_GUARD          : return _("Guard Position");
+	case STR_DORD_HOLDPOS        : return _("Hold Position");
 	case STR_DORD_RETREPAIR      : return _("Return For Repair");
 	case STR_DORD_RETBASE        : return _("Return To HQ");
 	case STR_DORD_EMBARK         : return _("Go to Transport");
@@ -249,6 +256,20 @@ static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 		{IMAGE_DES_HILIGHT,	0,	0},
 		{STR_DORD_CIRCLE,	0,	0},
 		{DSS_CIRCLE_SET,	0,	0}
+	},
+	{
+		ORDBUTCLASS_NORMAL,
+		DSO_HALTTYPE,
+		DSS_HALT_MASK,
+		ORD_BTYPE_RADIO,
+		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
+		IDORDER_HALT_TYPE,
+		3,0,
+		{IMAGE_ORD_PURSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
+		{IMAGE_ORD_PURSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
+		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
+		{STR_DORD_PURSUE,	STR_DORD_GUARD,	STR_DORD_HOLDPOS},
+		{DSS_HALT_PURSUE,	DSS_HALT_GUARD,	DSS_HALT_HOLD}
 	},
 	{
 		ORDBUTCLASS_NORMAL,
@@ -391,9 +412,10 @@ static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 	ASSERT_OR_RETURN(std::vector<AVORDER>(), StructIsFactory(psStructure), "BuildStructureOrderList: structure is not a factory");
 
 	//this can be hard-coded!
-	std::vector<AVORDER> orders(2);
+	std::vector<AVORDER> orders(3);
 	orders[0].OrderIndex = 0;//DSO_REPAIR_LEVEL;
 	orders[1].OrderIndex = 1;//DSO_ATTACK_LEVEL;
+	orders[2].OrderIndex = 2;//DSO_HALTTYPE;
 
 	return orders;
 }

@@ -2599,6 +2599,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DSO_ATTACK_LEVEL",	VAL_INT,	false,	DSO_ATTACK_LEVEL,	nullptr, nullptr, 0.0f },
 	{ "DSO_RECYCLE",		VAL_INT,	false,	DSO_RECYCLE,		nullptr, nullptr, 0.0f },
 	{ "DSO_PATROL",			VAL_INT,	false,	DSO_PATROL,			nullptr, nullptr, 0.0f },
+	{ "DSO_HALTTYPE",		VAL_INT,	false,	DSO_HALTTYPE,		NULL, NULL, 0.0f },
 	{ "DSO_RETURN_TO_LOC",	VAL_INT,	false,	DSO_RETURN_TO_LOC,	nullptr, nullptr, 0.0f },
 
 	// secondary order stats
@@ -2608,6 +2609,9 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DSS_ALEV_ALWAYS",	VAL_INT,	false,	DSS_ALEV_ALWAYS,	nullptr, nullptr, 0.0f },
 	{ "DSS_ALEV_ATTACKED",	VAL_INT,	false,	DSS_ALEV_ATTACKED,	nullptr, nullptr, 0.0f },
 	{ "DSS_ALEV_NEVER",		VAL_INT,	false,	DSS_ALEV_NEVER,		nullptr, nullptr, 0.0f },
+	{ "DSS_HALT_HOLD",		VAL_INT,	false,	DSS_HALT_HOLD,		NULL, NULL, 0.0f },
+	{ "DSS_HALT_GUARD",		VAL_INT,	false,	DSS_HALT_GUARD,		NULL, NULL, 0.0f },
+	{ "DSS_HALT_PERSUE",	VAL_INT,	false,	DSS_HALT_PURSUE,	NULL, NULL, 0.0f },
 	{ "DSS_RECYCLE_SET",	VAL_INT,	false,	DSS_RECYCLE_SET,	nullptr, nullptr, 0.0f },
 	{ "DSS_ASSPROD_START",	VAL_INT,	false,	DSS_ASSPROD_START,	nullptr, nullptr, 0.0f },
 	{ "DSS_ASSPROD_END ",	VAL_INT,	false,	DSS_ASSPROD_END ,	nullptr, nullptr, 0.0f },

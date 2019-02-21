@@ -178,7 +178,7 @@ DROID *checkForRepairRange(DROID *psDroid)
 
 	ASSERT(psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR, "Invalid droid type");
 
-	unsigned radius = psDroid->order.type == DORDER_HOLD ? REPAIR_RANGE : REPAIR_MAXDIST;
+	unsigned radius = ((psDroid->order.type == DORDER_HOLD) || (psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)) ? REPAIR_RANGE : REPAIR_MAXDIST;
 
 	unsigned bestDistanceSq = radius * radius;
 	DROID *best = nullptr;
@@ -219,7 +219,7 @@ static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid
 		psFailedTarget = (STRUCTURE *)psDroid->psActionTarget[0];
 	}
 
-	unsigned radius = psDroid->order.type == DORDER_HOLD ? REPAIR_RANGE : REPAIR_MAXDIST;
+	unsigned radius = ((psDroid->order.type == DORDER_HOLD) || (psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)) ? REPAIR_RANGE : REPAIR_MAXDIST;
 
 	unsigned bestDistanceSq = radius * radius;
 	std::pair<STRUCTURE *, DROID_ACTION> best = {nullptr, DACTION_NONE};
@@ -375,6 +375,7 @@ void orderUpdateDroid(DROID *psDroid)
 		else if (!tryDoRepairlikeAction(psDroid)
 		         && psDroid->order.type != DORDER_HOLD
 		         && psDroid->order.psStats != structGetDemolishStat()
+		         && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD
 		         && !isVtolDroid(psDroid))
 		{
 			orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
@@ -752,7 +753,14 @@ void orderUpdateDroid(DROID *psDroid)
 		else if ((psDroid->action == DACTION_NONE) ||
 		         (psDroid->action == DACTION_CLEARREARMPAD))
 		{
-			if (!isVtolDroid(psDroid) || allVtolsRearmed(psDroid))
+			if (psDroid->order.type == DORDER_ATTACKTARGET
+				&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD
+				&& !actionInRange(psDroid, psDroid->order.psObj, 0))
+			{
+				// on hold orders give up
+				psDroid->order = DroidOrder(DORDER_NONE);
+			}
+			else if (!isVtolDroid(psDroid) || allVtolsRearmed(psDroid))
 			{
 				actionDroid(psDroid, DACTION_ATTACK, psDroid->order.psObj);
 			}
@@ -1423,7 +1431,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			}
 			psDroid->order = *psOrder;
 
-			if (isVtolDroid(psDroid) || actionInRange(psDroid, psOrder->psObj, 0))
+			if (isVtolDroid(psDroid)
+				|| actionInRange(psDroid, psOrder->psObj, 0)
+				|| (psOrder->type == DORDER_ATTACKTARGET && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 			{
 				actionDroid(psDroid, DACTION_ATTACK, psOrder->psObj);
 			}
@@ -2963,6 +2973,7 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 
 	case DSO_REPAIR_LEVEL:
 	case DSO_PATROL:
+	case DSO_HALTTYPE:
 	case DSO_RETURN_TO_LOC:
 		break;
 
@@ -3016,6 +3027,13 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MOD
 		break;
 	case DSO_CIRCLE:
 		return (SECONDARY_STATE)(state & DSS_CIRCLE_MASK);
+		break;
+	case DSO_HALTTYPE:
+		if (psDroid->order.type == DORDER_HOLD)
+		{
+			return DSS_HALT_HOLD;
+		}
+		return (SECONDARY_STATE)(state & DSS_HALT_MASK);
 		break;
 	case DSO_RETURN_TO_LOC:
 		return (SECONDARY_STATE)(state & DSS_RTL_MASK);
@@ -3192,8 +3210,8 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	case DSO_RECYCLE:
 		if (State & DSS_RECYCLE_MASK)
 		{
-			secondaryMask = DSS_RTL_MASK | DSS_RECYCLE_MASK;
-			secondarySet = DSS_RECYCLE_SET;
+			secondaryMask = DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_HALT_MASK;
+			secondarySet = DSS_RECYCLE_SET | DSS_HALT_GUARD;
 		}
 		else
 		{
@@ -3207,6 +3225,17 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	case DSO_PATROL:  // This doesn't even make any sense whatsoever as a secondary order...
 		secondaryMask = DSS_PATROL_MASK;
 		secondarySet = (State & DSS_PATROL_SET) ? DSS_PATROL_SET : 0;
+		break;
+	case DSO_HALTTYPE:
+		switch (State & DSS_HALT_MASK)
+		{
+			case DSS_HALT_PURSUE:
+			case DSS_HALT_GUARD:
+			case DSS_HALT_HOLD:
+				secondaryMask = DSS_HALT_MASK;
+				secondarySet = State;
+				break;
+		}
 		break;
 	case DSO_RETURN_TO_LOC:
 		secondaryMask = DSS_RTL_MASK;
@@ -3224,9 +3253,13 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			}
 			break;
 		}
+		if ((CurrState & DSS_HALT_MASK) == DSS_HALT_HOLD)
+		{
+			secondaryMask |= DSS_HALT_MASK;
+			secondarySet |= DSS_HALT_GUARD;
+		}
 		break;
 	case DSO_UNUSED:
-	case DSO_UNUSED2:
 	case DSO_FIRE_DESIGNATOR:
 		// Do nothing.
 		break;
@@ -3385,8 +3418,8 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			{
 				orderDroid(psDroid, DORDER_RECYCLE, ModeImmediate);
 			}
-			CurrState &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK);
-			CurrState |= DSS_RECYCLE_SET;
+			CurrState &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_HALT_MASK);
+			CurrState |= DSS_RECYCLE_SET | DSS_HALT_GUARD;
 			psDroid->group = UBYTE_MAX;
 			if (psDroid->psGroup != nullptr)
 			{
@@ -3435,6 +3468,32 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			CurrState &= ~DSS_PATROL_MASK;
 		}
 		break;
+	case DSO_HALTTYPE:
+		switch (State & DSS_HALT_MASK)
+		{
+		case DSS_HALT_PURSUE:
+			CurrState &= ~ DSS_HALT_MASK;
+			CurrState |= DSS_HALT_PURSUE;
+			if (orderState(psDroid, DORDER_GUARD))
+			{
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+			}
+			break;
+		case DSS_HALT_GUARD:
+			CurrState &= ~ DSS_HALT_MASK;
+			CurrState |= DSS_HALT_GUARD;
+			orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
+			break;
+		case DSS_HALT_HOLD:
+			CurrState &= ~ DSS_HALT_MASK;
+			CurrState |= DSS_HALT_HOLD;
+			if (!orderState(psDroid, DORDER_FIRESUPPORT))
+			{
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+			}
+			break;
+		}
+		break;
 	case DSO_RETURN_TO_LOC:
 		if ((State & DSS_RTL_MASK) == 0)
 		{
@@ -3450,6 +3509,11 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		{
 			order = DORDER_NONE;
 			CurrState &= ~DSS_RTL_MASK;
+			if ((CurrState & DSS_HALT_MASK) == DSS_HALT_HOLD)
+			{
+				CurrState &= ~DSS_HALT_MASK;
+				CurrState |= DSS_HALT_GUARD;
+			}
 			switch (State & DSS_RTL_MASK)
 			{
 			case DSS_RTL_REPAIR:
@@ -3595,7 +3659,7 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 {
 	// lookup table for orders and masks
-#define MAX_ORDERS	2
+#define MAX_ORDERS	3
 	struct
 	{
 		SECONDARY_ORDER order;
@@ -3604,6 +3668,7 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 	{
 		{ DSO_REPAIR_LEVEL, DSS_REPLEV_MASK },
 		{ DSO_ATTACK_LEVEL, DSS_ALEV_MASK },
+		{ DSO_HALTTYPE, DSS_HALT_MASK },
 	};
 	SDWORD	i, state;
 
@@ -3849,6 +3914,24 @@ bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
 			CurrState &= ~DSS_PATROL_MASK;
 		}
 		break;
+
+	case DSO_HALTTYPE:
+		switch (State & DSS_HALT_MASK)
+		{
+		case DSS_HALT_PURSUE:
+			CurrState &= ~ DSS_HALT_MASK;
+			CurrState |= DSS_HALT_PURSUE;
+			break;
+		case DSS_HALT_GUARD:
+			CurrState &= ~ DSS_HALT_MASK;
+			CurrState |= DSS_HALT_GUARD;
+			break;
+		case DSS_HALT_HOLD:
+			CurrState &= ~ DSS_HALT_MASK;
+			CurrState |= DSS_HALT_HOLD;
+			break;
+		}
+		break;
 	default:
 		break;
 	}
@@ -3880,6 +3963,9 @@ bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
 			break;
 		case DSO_PATROL:
 			*pState = (SECONDARY_STATE)(state & DSS_PATROL_MASK);
+			break;
+		case DSO_HALTTYPE:
+			*pState = (SECONDARY_STATE)(state & DSS_HALT_MASK);
 			break;
 		default:
 			*pState = (SECONDARY_STATE)0;
