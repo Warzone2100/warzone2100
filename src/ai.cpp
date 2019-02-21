@@ -813,6 +813,11 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
 
+	if (psObj->type == OBJ_DROID && secondaryGetState((DROID *)psObj, DSO_HALTTYPE) == DSS_HALT_HOLD)
+	{
+		return false;	// Not sure why we check this here...
+	}
+
 	ASSERT_OR_RETURN(false, (unsigned)weapon_slot < psObj->numWeaps, "Invalid weapon selected");
 
 	/* See if there is a something in range */
