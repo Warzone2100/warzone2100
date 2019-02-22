@@ -107,7 +107,7 @@ bool loadResearch(WzConfig &ini)
 	std::vector<WzString> list = ini.childGroups();
 	PLAYER_RESEARCH dummy;
 	memset(&dummy, 0, sizeof(dummy));
-	std::vector< std::vector<WzString> > preResearch;
+	std::vector<std::vector<WzString>> preResearch;
 	preResearch.resize(list.size());
 	for (size_t inc = 0; inc < list.size(); ++inc)
 	{
@@ -1341,7 +1341,7 @@ static inline bool allyResearchSortFunction(AllyResearch const &a, AllyResearch 
 std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 {
 	static uint32_t lastGameTime = ~0;
-	static std::map<unsigned, std::vector<AllyResearch> > researches;
+	static std::map<unsigned, std::vector<AllyResearch>> researches;
 	static const std::vector<AllyResearch> noAllyResearch;
 
 	if (gameTime != lastGameTime)
@@ -1388,7 +1388,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 		}
 	}
 
-	std::map<unsigned, std::vector<AllyResearch> >::const_iterator i = researches.find(ref);
+	std::map<unsigned, std::vector<AllyResearch>>::const_iterator i = researches.find(ref);
 	if (i == researches.end())
 	{
 		return noAllyResearch;

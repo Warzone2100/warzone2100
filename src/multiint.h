@@ -75,7 +75,7 @@ private:
 
 protected:
 	W_LABEL *label;
-	std::vector<std::pair<W_BUTTON *, int> > buttons;
+	std::vector<std::pair<W_BUTTON *, int>> buttons;
 	int currentValue_;
 	bool disabled;
 	int gap_;

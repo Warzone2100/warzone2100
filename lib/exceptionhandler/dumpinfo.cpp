@@ -53,7 +53,7 @@ static const std::size_t max_debug_messages = 20;
 
 static char *dbgHeader = nullptr;
 static WZ_MUTEX *dbgMessagesMutex = wzMutexCreate();  // Protects dbgMessages.
-static std::deque<std::vector<char> > dbgMessages;
+static std::deque<std::vector<char>> dbgMessages;
 
 // used to add custom info to the crash log
 static std::vector<char> miscData;

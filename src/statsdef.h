@@ -71,9 +71,9 @@ struct StringToEnum
 };
 
 template <typename Enum>
-struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
+struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned>>
 {
-	typedef std::vector<std::pair<char const *, unsigned> > V;
+	typedef std::vector<std::pair<char const *, unsigned>> V;
 
 	template <int N>
 	static StringToEnumMap<Enum> const &FromArray(StringToEnum<Enum> const(&map)[N])

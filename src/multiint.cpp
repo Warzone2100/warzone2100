@@ -772,9 +772,7 @@ void readAIs()
 		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toWzString().toUtf8().c_str());
 		if (strcmp(ai.name, "Nullbot") == 0)
 		{
-			std::vector<AIDATA>::iterator it;
-			it = aidata.begin();
-			aidata.insert(it, ai);
+			aidata.insert(aidata.begin(), ai);
 		}
 		else
 		{
@@ -1526,7 +1524,7 @@ void MultibuttonWidget::display(int xOffset, int yOffset)
 void MultibuttonWidget::geometryChanged()
 {
 	int s = width() - gap_;
-	for (std::vector<std::pair<W_BUTTON *, int> >::const_reverse_iterator i = buttons.rbegin(); i != buttons.rend(); ++i)
+	for (auto i = buttons.crbegin(); i != buttons.crend(); ++i)
 	{
 		i->first->move(s - i->first->width(), (height() - i->first->height()) / 2);
 		s -= i->first->width() + gap_;
@@ -1610,7 +1608,7 @@ void MultibuttonWidget::choose(int value)
 
 void MultibuttonWidget::stateChanged()
 {
-	for (std::vector<std::pair<W_BUTTON *, int> >::const_iterator i = buttons.begin(); i != buttons.end(); ++i)
+	for (auto i = buttons.cbegin(); i != buttons.cend(); ++i)
 	{
 		i->first->setState(i->second == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
 	}

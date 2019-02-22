@@ -85,7 +85,7 @@ static WZ_MUTEX *socketThreadMutex;
 static WZ_SEMAPHORE *socketThreadSemaphore;
 static WZ_THREAD *socketThread = nullptr;
 static bool socketThreadQuit;
-typedef std::map<Socket *, std::vector<uint8_t> > SocketThreadWriteMap;
+typedef std::map<Socket *, std::vector<uint8_t>> SocketThreadWriteMap;
 static SocketThreadWriteMap socketThreadWrites;
 
 

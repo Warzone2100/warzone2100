@@ -185,7 +185,7 @@ struct IMAGEFILE
 
 	std::vector<Page> pages;          /// Texture pages.
 	std::vector<ImageDef> imageDefs;  /// Stored images.
-	std::vector<std::pair<std::string, int> > imageNames;  ///< Names of images, sorted by name. Can lookup indices from name.
+	std::vector<std::pair<std::string, int>> imageNames;  ///< Names of images, sorted by name. Can lookup indices from name.
 };
 
 struct Image

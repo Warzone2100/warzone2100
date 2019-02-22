@@ -4515,7 +4515,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
-	std::vector<std::pair<int, WzString> > sortedList;
+	std::vector<std::pair<int, WzString>> sortedList;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);

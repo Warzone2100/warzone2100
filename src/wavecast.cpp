@@ -164,7 +164,7 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 // Not thread safe if someone calls with a new radius. Thread safe, otherwise.
 const WavecastTile *getWavecastTable(unsigned radius, size_t *size)
 {
-	static std::map<unsigned, std::vector<WavecastTile> > tables;
+	static std::map<unsigned, std::vector<WavecastTile>> tables;
 
 	std::vector<WavecastTile> &table = tables[radius];
 	if (table.empty())
