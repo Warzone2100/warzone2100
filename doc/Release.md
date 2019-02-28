@@ -73,10 +73,11 @@ Wait for the Travis-CI and AppVeyor CI builds to complete, and verify they have 
 
 Testing
 -------
-You should locally test whether the game actually runs, in both single & skirmish and multiplayer.
-The CI builds may be downloaded from:
-* [AppVeyor](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
-* [MacOS Build](http://buildbot.wz2100.net/files/CI/master/)
+You should locally test whether the master branch of the game actually runs, in both single & skirmish and multiplayer.
+The CI (master branch) builds may be downloaded from:
+* [Windows (AppVeyor)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
+* [MacOS Build](http://buildbot.wz2100.net/files/CI/master/macOS/)
+* [Source Tarball](http://buildbot.wz2100.net/files/CI/master/src/)
 
 ### Test building with the source tarball on Linux
 
@@ -116,20 +117,26 @@ GitHub will then automatically trigger the CI builds via Travis-CI and AppVeyor.
 Download, verify, & upload the builds
 -------------------------------------
 
-* Download the Windows build results from [AppVeyor](https://ci.appveyor.com/project/Warzone2100/warzone2100/) (see the build artifacts). (Note: Make sure you are viewing the build for the tag you just made.)
+* Download the tag's Windows build results from [AppVeyor](https://ci.appveyor.com/project/Warzone2100/warzone2100/) (see the build artifacts). **(Note: Make sure you are viewing the build for the _tag_ you just made)**
    * `warzone2100-<TAG>_x86.DEBUGSYMBOLS.7z`
    * `warzone2100-<TAG>_x86_installer.zip`
    * `warzone2100-<TAG>_x86_portable.zip`
 * Extract the installer `.exe`s from the `.zip` files you downloaded.
 * Verify the SHA512 hashes in the AppVeyor Console (build log) match those of the installer `.exe`s you extracted.
 * Upload the installer `.exe`s (plus the `*.DEBUGSYMBOLS.7z`) to [SourceForge](https://sourceforge.net/projects/warzone2100/files/releases/)
-* Download the macOS build from [buildbot](http://buildbot.wz2100.net/files/CI/<TAG>/macOS/)
-   * `warzone2100-<TAG>_macOS.zip`
-* Verify the SHA512 hash towards the end of the Travis-CI build's ("macOS" job) log matches the file you downloaded.
+* Download the tag's macOS build from buildbot:
+   * Start here: http://buildbot.wz2100.net/files/CI/
+   * Browse to the folder for the **tag** you just made. (Note: **_Not_** the `master` branch folder.)
+   * Browse to the **`macOS`** folder.
+   * Grab the latest `warzone2100-<TAG>_macOS.zip` file.
+* Verify the SHA512 hash towards the end of the Travis-CI build's ("macOS" job) log matches the file you downloaded. **(Note: Make sure you are viewing the build for the _tag_ you just made)**
 * Upload the macOS `.zip` to [sourceforge](https://sourceforge.net/projects/warzone2100/files/releases/)
-* Download the source tarball from [buildbot](http://buildbot.wz2100.net/files/CI/<TAG>/src/)
-   * `warzone2100-<TAG>_src.tar.xz`
-* Verify the SHA512 hash towards the end of the Travis-CI build's ("Package Source" job) log matches the file you downloaded.
+* Download the tag's source tarball from buildbot:
+   * Start here: http://buildbot.wz2100.net/files/CI/
+   * Browse to the folder for the **tag** you just made. (Note: **_Not_** the `master` branch folder.)
+   * Browse to the **`src`** folder.
+   * Grab the latest `warzone2100-<TAG>_src.tar.xz` file.
+* Verify the SHA512 hash towards the end of the Travis-CI build's ("Package Source" job) log matches the file you downloaded. **(Note: Make sure you are viewing the build for the _tag_ you just made)**
 * Upload the source tarball to [sourceforge](https://sourceforge.net/projects/warzone2100/files/releases/)
 
 Additionally:
