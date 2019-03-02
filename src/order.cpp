@@ -580,11 +580,13 @@ void orderUpdateDroid(DROID *psDroid)
 				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x, psDroid->order.pos.y);
 			}
 		}
-		else if ((psDroid->action == DACTION_ATTACK) ||
+		else if (((psDroid->action == DACTION_ATTACK) ||
+		         (psDroid->action == DACTION_VTOLATTACK) ||
 		         (psDroid->action == DACTION_MOVETOATTACK) ||
 		         (psDroid->action == DACTION_ROTATETOATTACK) ||
 		         (psDroid->action == DACTION_OBSERVE) ||
-		         (psDroid->action == DACTION_MOVETOOBSERVE))
+		         (psDroid->action == DACTION_MOVETOOBSERVE)) &&
+		         secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_PURSUE)
 		{
 			// attacking something - see if the droid has gone too far, go up to twice the distance we want to go, so that we don't repeatedly turn back when the target is almost in range.
 			if (objPosDiffSq(psDroid->pos, Vector3i(psDroid->actionPos, 0)) > (SCOUT_ATTACK_DIST * 2 * SCOUT_ATTACK_DIST * 2))
@@ -655,11 +657,13 @@ void orderUpdateDroid(DROID *psDroid)
 				break;
 			}
 		}
-		else if ((psDroid->action == DACTION_ATTACK) ||
+		else if (((psDroid->action == DACTION_ATTACK) ||
+		         (psDroid->action == DACTION_VTOLATTACK) ||
 		         (psDroid->action == DACTION_MOVETOATTACK) ||
 		         (psDroid->action == DACTION_ROTATETOATTACK) ||
 		         (psDroid->action == DACTION_OBSERVE) ||
-		         (psDroid->action == DACTION_MOVETOOBSERVE))
+		         (psDroid->action == DACTION_MOVETOOBSERVE)) &&
+		         secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_PURSUE)
 		{
 			// attacking something - see if the droid has gone too far
 			xdiff = psDroid->pos.x - psDroid->actionPos.x;
