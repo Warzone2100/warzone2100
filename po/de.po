@@ -4992,15 +4992,15 @@ msgstr "Amphibischer Hoverantrieb"
 
 #: po/custom/fromJson.txt:105
 msgid "Angel Missile"
-msgstr "Angel-Rakete"
+msgstr "Angel-Lenkrakete"
 
 #: po/custom/fromJson.txt:106
 msgid "Angel Missile Battery"
-msgstr "Angel-Raketenbatterie"
+msgstr "Angel-Lenkraketenbatterie"
 
 #: po/custom/fromJson.txt:107
 msgid "Angel Missile Emplacement"
-msgstr "Stellung mit Angel-Raketen"
+msgstr "Stellung mit Angel-Lenkraketen"
 
 #: po/custom/fromJson.txt:108
 msgid "Anti-tank missile"
