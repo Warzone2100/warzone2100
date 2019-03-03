@@ -1174,7 +1174,8 @@ void aiUpdateDroid(DROID *psDroid)
 		{
 			if (aiChooseSensorTarget(psDroid, &psTarget))
 			{
-				if (!orderState(psDroid, DORDER_HOLD))
+				if (!orderState(psDroid, DORDER_HOLD)
+					&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_PURSUE)
 				{
 					psDroid->order = DroidOrder(DORDER_OBSERVE, psTarget);
 				}
@@ -1185,7 +1186,8 @@ void aiUpdateDroid(DROID *psDroid)
 		{
 			if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true, nullptr))
 			{
-				if (!orderState(psDroid, DORDER_HOLD))
+				if (!orderState(psDroid, DORDER_HOLD)
+					&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_PURSUE)
 				{
 					psDroid->order = DroidOrder(DORDER_ATTACK, psTarget);
 				}

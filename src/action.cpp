@@ -1591,7 +1591,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (!visibleObject(psDroid, psDroid->psActionTarget[0], false)
 			    || xdiff * xdiff + ydiff * ydiff >= rangeSq)
 			{
-				if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_GUARD && (order->type == DORDER_OBSERVE || order->type == DORDER_NONE || order->type == DORDER_HOLD))
+				if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_GUARD && (order->type == DORDER_NONE || order->type == DORDER_HOLD))
 				{
 					psDroid->action = DACTION_NONE;
 				}
@@ -2097,7 +2097,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 		psDroid->actionPos.x = psDroid->pos.x;
 		psDroid->actionPos.y = psDroid->pos.y;
-		if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_GUARD && (order->type == DORDER_OBSERVE || order->type == DORDER_NONE || order->type == DORDER_HOLD))
+		if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_GUARD && (order->type == DORDER_NONE || order->type == DORDER_HOLD))
 		{
 			psDroid->action = visibleObject(psDroid, psDroid->psActionTarget[0], false) ? DACTION_OBSERVE : DACTION_NONE;
 		}
