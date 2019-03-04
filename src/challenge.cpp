@@ -101,8 +101,8 @@ void updateChallenge(bool gameWon)
 	sstrcpy(sPath, fStr);
 	sPath[strlen(sPath) - 5] = '\0';	// remove .json
 	scores.beginGroup(sPath);
-	victory = scores.value("Victory", false).toBool();
-	seconds = scores.value("Seconds", 0).toInt();
+	victory = scores.value("victory", false).toBool();
+	seconds = scores.value("seconds", 0).toInt();
 
 	// Update score if we have a victory and best recorded was a loss,
 	// or both were losses but time is higher, or both were victories
@@ -111,9 +111,9 @@ void updateChallenge(bool gameWon)
 	    || (!gameWon && !victory && newtime > seconds)
 	    || (gameWon && victory && newtime < seconds))
 	{
-		scores.setValue("Seconds", newtime);
-		scores.setValue("Victory", gameWon);
-		scores.setValue("Player", NetPlay.players[selectedPlayer].name);
+		scores.setValue("seconds", newtime);
+		scores.setValue("victory", gameWon);
+		scores.setValue("player", NetPlay.players[selectedPlayer].name);
 	}
 	scores.endGroup();
 }
