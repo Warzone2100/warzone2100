@@ -41,7 +41,6 @@ public:
 	std::vector<WzUniCodepoint> caseFolded() const;
 
 public:
-	WzUniCodepoint& operator=(const WzUniCodepoint& ch) { _codepoint = ch._codepoint; return *this; }
 	bool operator==(const WzUniCodepoint& ch) const { return _codepoint == ch._codepoint; }
 
 protected:
