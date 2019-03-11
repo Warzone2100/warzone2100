@@ -35,9 +35,8 @@ private:
 	virtual ~gl_texture();
 public:
 	virtual void bind() override;
-	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data) override;
+	virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data, bool generate_mip_levels = false) override;
 	virtual unsigned id() override;
-	virtual void generate_mip_levels() override;
 };
 
 struct gl_buffer final : public gfx_api::buffer

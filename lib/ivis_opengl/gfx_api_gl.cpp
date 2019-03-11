@@ -85,20 +85,28 @@ void gl_texture::bind()
 	glBindTexture(GL_TEXTURE_2D, _id);
 }
 
-void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data)
+void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data, bool generate_mip_levels /*= false*/)
 {
 	bind();
+	if(generate_mip_levels && !glGenerateMipmap)
+	{
+		// fallback for if glGenerateMipmap is unavailable
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	}
 	glTexSubImage2D(GL_TEXTURE_2D, mip_level, offset_x, offset_y, width, height, to_gl(buffer_format), GL_UNSIGNED_BYTE, data);
+	if(generate_mip_levels && glGenerateMipmap)
+	{
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
 }
 
 unsigned gl_texture::id()
 {
 	return _id;
-}
-
-void gl_texture::generate_mip_levels()
-{
-	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 // MARK: gl_buffer
