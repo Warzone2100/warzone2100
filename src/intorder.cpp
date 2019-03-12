@@ -415,7 +415,7 @@ static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 	std::vector<AVORDER> orders(3);
 	orders[0].OrderIndex = 0;//DSO_REPAIR_LEVEL;
 	orders[1].OrderIndex = 1;//DSO_ATTACK_LEVEL;
-	orders[2].OrderIndex = 2;//DSO_HALTTYPE;
+	orders[2].OrderIndex = 5;//DSO_HALTTYPE;
 
 	return orders;
 }
