@@ -2234,6 +2234,10 @@ void setFactorySecondaryState(DROID *psDroid, STRUCTURE *psStructure)
 		{
 			secondarySetState(psDroid, DSO_CIRCLE, (SECONDARY_STATE)(newState & DSS_CIRCLE_MASK));
 		}
+		if ((diff & DSS_HALT_MASK) != 0)
+		{
+			secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(newState & DSS_HALT_MASK));
+		}
 	}
 }
 
