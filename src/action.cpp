@@ -1014,19 +1014,30 @@ void actionUpdateDroid(DROID *psDroid)
 		if (!bHasTarget)
 		{
 			BASE_OBJECT *psTarget;
-			if (((order->type == DORDER_ATTACKTARGET
-			    || order->type == DORDER_FIRESUPPORT)
-			    && secHoldActive)
-			    || (!isVtolDroid(psDroid)
-			    && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
-			    && psTarget->type == OBJ_STRUCTURE)
-			    || order->type == DORDER_NONE
-			    || order->type == DORDER_HOLD
-			    || order->type == DORDER_RTR)
+			bool supportsSensorTower = !isVtolDroid(psDroid) && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT)) && psTarget->type == OBJ_STRUCTURE;
+
+			if (secHoldActive && (order->type == DORDER_ATTACKTARGET || order->type == DORDER_FIRESUPPORT))
+			{
+				psDroid->action = DACTION_NONE; // secondary holding, cancel the order.
+			}
+			else if (secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_PURSUE &&
+				!supportsSensorTower &&
+				!(order->type == DORDER_HOLD ||
+				order->type == DORDER_RTR))
+			{
+				//We need this so pursuing doesn't stop if a unit is ordered to move somewhere while
+				//it is still in weapon range of the target when reaching the end destination.
+				//Weird case, I know, but keeps the previous pursue order intact.
+				psDroid->action = DACTION_MOVETOATTACK;	// out of range - chase it
+			}
+			else if (supportsSensorTower ||
+				order->type == DORDER_NONE ||
+				order->type == DORDER_HOLD ||
+				order->type == DORDER_RTR)
 			{
 				// don't move if on hold or firesupport for a sensor tower
 				// also don't move if we're holding position or waiting for repair
-				psDroid->action = DACTION_NONE;				// holding, cancel the order.
+				psDroid->action = DACTION_NONE; // holding, cancel the order.
 			}
 			else
 			{
