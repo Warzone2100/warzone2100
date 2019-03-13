@@ -790,6 +790,16 @@ void droidUpdate(DROID *psDroid)
 		{
 			psBeingTargetted->flags.set(OBJECT_FLAG_TARGETED, true);
 		}
+		else if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_PURSUE &&
+		    psDroid->psActionTarget[0] != nullptr &&
+		    validTarget(psDroid, psDroid->psActionTarget[0], 0) &&
+		    (psDroid->action == DACTION_ATTACK ||
+		    psDroid->action == DACTION_OBSERVE ||
+	         orderState(psDroid, DORDER_HOLD)))
+		{
+			psBeingTargetted = psDroid->psActionTarget[0];
+			psBeingTargetted->flags.set(OBJECT_FLAG_TARGETED, true);
+		}
 	}
 	// -----------------
 
