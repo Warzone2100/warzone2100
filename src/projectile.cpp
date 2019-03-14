@@ -1432,6 +1432,11 @@ int proj_GetLongRange(const WEAPON_STATS *psStats, int player)
 	return psStats->upgrade[player].maxRange;
 }
 
+// return the short range for a weapon
+int proj_GetShortRange(const WEAPON_STATS *psStats, int player)
+{
+	return psStats->upgrade[player].shortRange;
+}
 
 /***************************************************************************/
 static ObjectShape establishTargetShape(BASE_OBJECT *psTarget)

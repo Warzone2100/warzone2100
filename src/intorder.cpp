@@ -45,6 +45,7 @@
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
 #define NUM_ORDERS 12			// Number of orders in OrderButtons list.
 
+#define IDORDER_ATTACK_RANGE				8010
 #define IDORDER_REPAIR_LEVEL				8020
 #define IDORDER_ATTACK_LEVEL				8030
 #define IDORDER_PATROL						8040
@@ -133,6 +134,9 @@ struct AVORDER
 
 enum
 {
+	STR_DORD_RANGE1,
+	STR_DORD_RANGE2,
+	STR_DORD_RANGE3,
 	STR_DORD_REPAIR1,
 	STR_DORD_REPAIR2,
 	STR_DORD_REPAIR3,
@@ -160,6 +164,9 @@ static const char *getDORDDescription(int id)
 {
 	switch (id)
 	{
+	case STR_DORD_RANGE1         : return _("Short Range");
+	case STR_DORD_RANGE2         : return _("Long Range");
+	case STR_DORD_RANGE3         : return _("Optimum Range");
 	case STR_DORD_REPAIR1        : return _("Retreat at Medium Damage");
 	case STR_DORD_REPAIR2        : return _("Retreat at Heavy Damage");
 	case STR_DORD_REPAIR3        : return _("Do or Die!");
@@ -188,6 +195,20 @@ static const char *getDORDDescription(int id)
 // Define the order button groups.
 static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 {
+	{
+		ORDBUTCLASS_NORMAL,
+		DSO_ATTACK_RANGE,
+		DSS_ARANGE_MASK,
+		ORD_BTYPE_RADIO,
+		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
+		IDORDER_ATTACK_RANGE,
+		3,0,
+		{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
+		{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
+		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
+		{STR_DORD_RANGE3,	STR_DORD_RANGE1,	STR_DORD_RANGE2},
+		{DSS_ARANGE_DEFAULT,	DSS_ARANGE_SHORT,	DSS_ARANGE_LONG}
+	},
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_REPAIR_LEVEL,
@@ -413,10 +434,11 @@ static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 	ASSERT_OR_RETURN(std::vector<AVORDER>(), StructIsFactory(psStructure), "BuildStructureOrderList: structure is not a factory");
 
 	//this can be hard-coded!
-	std::vector<AVORDER> orders(3);
-	orders[0].OrderIndex = 0;//DSO_REPAIR_LEVEL;
-	orders[1].OrderIndex = 1;//DSO_ATTACK_LEVEL;
-	orders[2].OrderIndex = 5;//DSO_HALTTYPE;
+	std::vector<AVORDER> orders(4);
+	orders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
+	orders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
+	orders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
+	orders[3].OrderIndex = 6;//DSO_HALTTYPE;
 
 	return orders;
 }

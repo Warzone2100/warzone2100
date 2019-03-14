@@ -1969,6 +1969,11 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, nullptr, 0, 0, nullptr, nullptr
 	},
 
+	{ "weaponShortHitUpgrade",	scrWeaponShortHitUpgrade,	VAL_INT,
+		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
+		0, 0, nullptr, 0, 0, nullptr, nullptr
+	},
+
 	{
 		"weaponLongHitUpgrade",	scrWeaponLongHitUpgrade,	VAL_INT,
 		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
@@ -2379,10 +2384,22 @@ VAR_SYMBOL asObjTable[] =
 
 	/* Weapon Stats */
 
+	//weapon short range
+	{
+		"shortRange",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_RANGE,	scrWeaponObjGet,	nullptr, 0, {0}, nullptr
+	},
+
 	//weapon long range
 	{
 		"longRange",	VAL_INT,	ST_OBJECT,
 		(INTERP_TYPE)ST_WEAPON,	WEAPID_LONG_RANGE,	scrWeaponObjGet,	nullptr, 0, {0}, nullptr
+	},
+
+	//weapon short hit chance
+	{
+		"shortHit",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_HIT,	scrWeaponObjGet,	nullptr, 0, {0}, nullptr
 	},
 
 	//weapon long hit chance
@@ -2595,6 +2612,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DACTION_FIRESUPPORT_RETREAT", VAL_INT,	false,	DACTION_FIRESUPPORT_RETREAT, nullptr, nullptr, 0.0f },
 
 	// secondary orders
+	{ "DSO_ATTACK_RANGE",	VAL_INT,	false,	DSO_ATTACK_RANGE,	nullptr, nullptr, 0.0f },
 	{ "DSO_REPAIR_LEVEL",	VAL_INT,	false,	DSO_REPAIR_LEVEL,	nullptr, nullptr, 0.0f },
 	{ "DSO_ATTACK_LEVEL",	VAL_INT,	false,	DSO_ATTACK_LEVEL,	nullptr, nullptr, 0.0f },
 	{ "DSO_RECYCLE",		VAL_INT,	false,	DSO_RECYCLE,		nullptr, nullptr, 0.0f },
@@ -2603,6 +2621,9 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DSO_RETURN_TO_LOC",	VAL_INT,	false,	DSO_RETURN_TO_LOC,	nullptr, nullptr, 0.0f },
 
 	// secondary order stats
+	{ "DSS_ARANGE_SHORT",	VAL_INT,	false,	DSS_ARANGE_SHORT,	nullptr, nullptr, 0.0f },
+	{ "DSS_ARANGE_LONG",	VAL_INT,	false,	DSS_ARANGE_LONG,	nullptr, nullptr, 0.0f },
+	{ "DSS_ARANGE_DEFAULT",	VAL_INT,	false,	DSS_ARANGE_DEFAULT,	nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_LOW",		VAL_INT,	false,	DSS_REPLEV_LOW,		nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_HIGH",	VAL_INT,	false,	DSS_REPLEV_HIGH,	nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_NEVER",	VAL_INT,	false,	DSS_REPLEV_NEVER,	nullptr, nullptr, 0.0f },

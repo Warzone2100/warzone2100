@@ -644,6 +644,7 @@ bool scrMoveDroidStopped();
 bool scrUpdateVisibleTiles();
 bool scrCheckVisibleTile();
 bool scrAssembleWeaponTemplate();
+bool scrWeaponShortHitUpgrade();
 bool scrWeaponLongHitUpgrade();
 bool scrWeaponDamageUpgrade();
 bool scrWeaponFirePauseUpgrade();

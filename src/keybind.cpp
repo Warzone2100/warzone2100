@@ -2206,6 +2206,24 @@ void	kf_SelectAllSameType()
 }
 
 // --------------------------------------------------------------------------
+void	kf_SetDroidRangeShort()
+{
+	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidRangeDefault()
+{
+	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_DEFAULT);
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidRangeLong()
+{
+	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_LONG);
+}
+
+// --------------------------------------------------------------------------
 void	kf_SetDroidRetreatMedium()
 {
 	kfsf_SetSelectedDroidsState(DSO_REPAIR_LEVEL, DSS_REPLEV_LOW);

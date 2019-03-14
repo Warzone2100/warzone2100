@@ -457,6 +457,10 @@ bool scrWeaponObjGet(UDWORD index)
 
 	switch (index)
 	{
+	case WEAPID_SHORT_RANGE:
+		type = VAL_INT;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.shortRange;
+		break;
 	case WEAPID_LONG_RANGE:
 		type = VAL_INT;
 		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.maxRange;
@@ -464,6 +468,10 @@ bool scrWeaponObjGet(UDWORD index)
 	case WEAPID_LONG_HIT:
 		type = VAL_INT;
 		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.hitChance;
+		break;
+	case WEAPID_SHORT_HIT:
+		type = VAL_INT;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.shortHitChance;
 		break;
 	case WEAPID_DAMAGE:
 		type = VAL_INT;
