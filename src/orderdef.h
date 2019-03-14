@@ -89,6 +89,7 @@ typedef DroidOrderType DROID_ORDER;
 enum SECONDARY_ORDER
 {
 	DSO_UNUSED,
+	DSO_ATTACK_RANGE,               /**< The attack range a given droid is allowed to fire: can be short, long or default (best chance to hit). */
 	DSO_REPAIR_LEVEL,               /**< The repair level at which the droid falls back to repair: can be low, high or never. Used with DSS_REPLEV_LOW, DSS_REPLEV_HIGH, DSS_REPLEV_NEVER. */
 	DSO_ATTACK_LEVEL,               /**< The attack level at which a droid can attack: can be always, attacked or never. Used with DSS_ALEV_ALWAYS, DSS_ALEV_ATTACKED, DSS_ALEV_NEVER. */
 	DSO_ASSIGN_PRODUCTION,          /**< Assigns a factory to a command droid - the state is given by the factory number. */
@@ -107,6 +108,9 @@ enum SECONDARY_ORDER
 enum SECONDARY_STATE
 {
 	DSS_NONE            = 0x000000,	/**< no state. */
+	DSS_ARANGE_SHORT    = 0x000001,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can only attack with short range. */
+	DSS_ARANGE_LONG     = 0x000002,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can only attack with long range. */
+	DSS_ARANGE_DEFAULT  = 0x000003,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can attacks with short or long range depending on what is the best hit chance. */
 	DSS_REPLEV_LOW      = 0x000004,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid falls back if its health decrease below 25%. */
 	DSS_REPLEV_HIGH     = 0x000008,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid falls back if its health decrease below 50%. */
 	DSS_REPLEV_NEVER    = 0x00000c,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid never falls back. */
@@ -129,6 +133,7 @@ enum SECONDARY_STATE
 };
 
 /** masks for the secondary order state. */
+#define DSS_ARANGE_MASK             0x000003
 #define DSS_REPLEV_MASK             0x00000c
 #define DSS_ALEV_MASK               0x000030
 #define DSS_HALT_MASK               0x0000c0

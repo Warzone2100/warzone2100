@@ -10239,6 +10239,25 @@ static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 }
 
 // deprecated
+bool scrWeaponShortHitUpgrade()
+{
+	SDWORD					player, weapIndex;
+
+	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.ival = 0;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+// deprecated
 bool scrWeaponLongHitUpgrade()
 {
 	SDWORD					player, weapIndex;

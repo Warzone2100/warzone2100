@@ -1838,7 +1838,7 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			psFactory->psSubject = nullptr;
 
 			// Default the secondary order - AB 22/04/99
-			psFactory->secondaryOrder = DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
+			psFactory->secondaryOrder = DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
 
 			// Create the assembly point for the factory
 			if (!createFlagPosition(&psFactory->psAssemblyPoint, psBuilding->player))
@@ -2222,6 +2222,10 @@ void setFactorySecondaryState(DROID *psDroid, STRUCTURE *psStructure)
 	{
 		uint32_t newState = psStructure->pFunctionality->factory.secondaryOrder;
 		uint32_t diff = newState ^ psDroid->secondaryOrder;
+		if ((diff & DSS_ARANGE_MASK) != 0)
+		{
+			secondarySetState(psDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(newState & DSS_ARANGE_MASK));
+		}
 		if ((diff & DSS_REPLEV_MASK) != 0)
 		{
 			secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(newState & DSS_REPLEV_MASK));

@@ -236,6 +236,9 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_SelectAllArmedVTOLs, "SelectAllArmedVTOLs"},
 	{kf_SetDroidMovePursue, "SetDroidMovePursue"},
 	{kf_SetDroidMoveGuard, "SetDroidMoveGuard"},
+	{kf_SetDroidRangeDefault, "SetDroidRangeDefault"},
+	{kf_SetDroidRangeShort, "SetDroidRangeShort"},
+	{kf_SetDroidRangeLong, "SetDroidRangeLong"},
 };
 
 KeyMapSaveEntry const *keymapEntryByFunction(void (*function)())
@@ -387,11 +390,14 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_G,      KEYMAP_PRESSED, kf_SetDroidMoveGuard,     N_("Guard Position"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  N_("Return to HQ"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidOrderHold,     N_("Hold Position"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeDefault,  N_("Optimum Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_O,      KEYMAP_PRESSED, kf_SetDroidRangeShort,    N_("Short Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_P,      KEYMAP_PRESSED, kf_SetDroidMovePursue,    N_("Pursue"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_Q,      KEYMAP_PRESSED, kf_SetDroidMovePatrol,    N_("Patrol"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_R,      KEYMAP_PRESSED, kf_SetDroidGoForRepair,   N_("Return For Repair"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_S,      KEYMAP_PRESSED, kf_SetDroidOrderStop,     N_("Stop Droid"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_T,      KEYMAP_PRESSED, kf_SetDroidGoToTransport, N_("Go to Transport"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_U,      KEYMAP_PRESSED, kf_SetDroidRangeLong,     N_("Long Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendGlobalMessage,     N_("Send Global Text Message"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_RETURN, KEYMAP_PRESSED, kf_SendTeamMessage,       N_("Send Team Text Message"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_H,      KEYMAP_PRESSED, kf_AddHelpBlip,           N_("Drop a beacon"));

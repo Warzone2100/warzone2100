@@ -379,9 +379,11 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 	struct : UPGRADE
 	{
+		unsigned shortRange = 0;
 		unsigned maxRange = 0;               ///< Max distance to target for long range shot
 		unsigned minRange = 0;               ///< Min distance to target for shot
 		unsigned hitChance = 0;              ///< Chance to hit at
+		unsigned shortHitChance = 0;
 		unsigned firePause = 0;              ///< Pause between each shot
 		uint8_t numRounds = 0;               ///< The number of rounds per salvo
 		unsigned reloadTime = 0;             ///< Time to reload the round of ammo

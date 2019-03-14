@@ -173,7 +173,32 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 
 	const int radSq = dx * dx + dy * dy;
 	const int longRange = proj_GetLongRange(psStats, psDroid->player);
-	const int rangeSq = longRange * longRange;
+	const int shortRange = proj_GetShortRange(psStats, psDroid->player);
+
+	int rangeSq = 0;
+	switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
+	{
+		case DSS_ARANGE_DEFAULT:
+			if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
+			{
+				rangeSq = shortRange * shortRange;
+			}
+			else
+			{
+				rangeSq = longRange * longRange;
+			}
+			break;
+		case DSS_ARANGE_SHORT:
+			rangeSq = shortRange * shortRange;
+			break;
+		case DSS_ARANGE_LONG:
+			rangeSq = longRange * longRange;
+			break;
+		default:
+			ASSERT(!"unknown attackrange order", "unknown attack range order");
+			rangeSq = longRange * longRange;
+			break;
+	}
 
 	/* check max range */
 	if (radSq <= rangeSq)
@@ -1720,7 +1745,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (!isVtolDroid(psDroid) && order->psObj->type != OBJ_STRUCTURE)
 		{
 			Vector2i diff = (psDroid->pos - order->psObj->pos).xy();
-			int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].maxRange / 2; // move close to sensor
+			int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].shortRange; // move close to sensor
 			rangeSq = rangeSq * rangeSq;
 			if (dot(diff, diff) < rangeSq)
 			{

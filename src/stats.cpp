@@ -355,9 +355,11 @@ bool loadWeaponStats(WzConfig &ini)
 
 		psStats->radiusLife = ini.value("radiusLife", 0).toUInt();
 
+		psStats->base.shortRange = ini.value("shortRange").toUInt();
 		psStats->base.maxRange = ini.value("longRange").toUInt();
 		psStats->base.minRange = ini.value("minRange", 0).toUInt();
 		psStats->base.hitChance = ini.value("longHit", 100).toUInt();
+		psStats->base.shortHitChance = ini.value("shortHit", 100).toUInt();
 		psStats->base.firePause = ini.value("firePause").toUInt();
 		psStats->base.numRounds = ini.value("numRounds").toUInt();
 		psStats->base.reloadTime = ini.value("reloadTime").toUInt();
@@ -1689,6 +1691,11 @@ int weaponReloadTime(const WEAPON_STATS *psStats, int player)
 int weaponLongHit(const WEAPON_STATS *psStats, int player)
 {
 	return psStats->upgrade[player].hitChance;
+}
+
+int weaponShortHit(const WEAPON_STATS *psStats, int player)
+{
+	return psStats->upgrade[player].shortHitChance;
 }
 
 int weaponDamage(const WEAPON_STATS *psStats, int player)
