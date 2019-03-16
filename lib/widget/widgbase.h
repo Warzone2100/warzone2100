@@ -66,6 +66,9 @@ typedef std::function<void (WIDGET *psWidget, unsigned int oldScreenWidth, unsig
 /* The optional "onDelete" callback function */
 typedef std::function<void (WIDGET *psWidget)> WIDGET_ONDELETE_FUNC;
 
+/* The optional hit-testing function, used for custom hit-testing within the outer bounding rectangle */
+typedef std::function<bool (WIDGET *psWidget, int x, int y)> WIDGET_HITTEST_FUNC;
+
 
 /* The different base types of widget */
 enum WIDGET_TYPE
@@ -128,6 +131,8 @@ protected:
 	virtual void run(W_CONTEXT *) {}
 	virtual void display(int, int) {}
 	virtual void geometryChanged() {}
+
+	virtual bool hitTest(int x, int y);
 
 public:
 	virtual unsigned getState();
@@ -207,6 +212,8 @@ public:
 
 	void setOnDelete(const WIDGET_ONDELETE_FUNC& onDeleteFunc);
 
+	void setCustomHitTest(const WIDGET_HITTEST_FUNC& newCustomHitTestFunc);
+
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
 	UDWORD                  style;                  ///< The style of the widget
@@ -219,6 +226,7 @@ public:
 private:
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calc layout callback
 	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
+	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional hit-testing custom function
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
 public:
 	void processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);

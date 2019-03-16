@@ -123,6 +123,7 @@ struct W_INIT
 	UDWORD                  UserData;               ///< User data (if any)
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calculate layout callback function
 	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
+	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional custom hit-testing function
 	WIDGET_INITIALIZE_PUSERDATA_FUNC initPUserDataFunc;	///< (Optional) Used to initialize the pUserData pointer per widget instance
 };
 
