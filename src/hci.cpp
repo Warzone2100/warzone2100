@@ -386,12 +386,55 @@ void setReticuleFlash(int ButId, bool flash)
 	}
 }
 
+// set up the button's size & hit-testing based on the dimensions of the "normal" image
+void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
+{
+	ImageDef *image = nullptr;
+	if (!filename.isEmpty())
+	{
+		image = iV_GetImage(filename);
+	}
+	else
+	{
+		ASSERT(IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY, "IMAGE_RETICULE_GREY isn't in IntImages?");
+		if (IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY)
+		{
+			image = &(IntImages->imageDefs[IMAGE_RETICULE_GREY]);
+		}
+	}
+
+	if (image)
+	{
+		// set the button width/height based on the "normal" image dimensions (preserving the current x, y)
+		button.setGeometry(button.x(), button.y(), image->Width, image->Height);
+
+		// add a custom hit-testing function that uses a tighter bounding ellipse
+		button.setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool {
+
+			// determine center of ellipse contained within the bounding rect
+			float centerX = ((psWidget->x()) + (psWidget->x() + psWidget->width())) / 2.f;
+			float centerY = ((psWidget->y()) + (psWidget->y() + psWidget->height())) / 2.f;
+
+			// determine semi-major axis + semi-minor axis
+			float axisX = psWidget->width() / 2.f;
+			float axisY = psWidget->height() / 2.f;
+
+			// Srivatsan (https://math.stackexchange.com/users/13425/srivatsan), Check if a point is within an ellipse, URL (version: 2011-10-27): https://math.stackexchange.com/q/76463
+			float partX = (((float)x - centerX) * ((float)x - centerX)) / (axisX * axisX); // ((x - centerX)^2) / ((axisX)^2)
+			float partY = (((float)y - centerY) * ((float)y - centerY)) / (axisY * axisY); // ((y - centerY)^2) / ((axisY)^2)
+			return partX + partY <= 1.f;
+		});
+	}
+}
+
 void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, WzString func, QScriptEngine *engine)
 {
 	if (MissionResUp)
 	{
 		return;
 	}
+
+	ASSERT_OR_RETURN(, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
 
 	retbutstats[ButId].tip = tip;
 	retbutstats[ButId].filename = WzString::fromUtf8(filename.c_str());
@@ -407,6 +450,8 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	{
 		return;
 	}
+
+	setReticuleButtonDimensions(*retbutstats[ButId].button, retbutstats[ButId].filename);
 
 	if (!retbutstats[ButId].tip.empty())
 	{
@@ -2735,6 +2780,10 @@ bool intAddReticule()
 		if (!retbutstats[i].button)
 		{
 			debug(LOG_ERROR, "Failed to add reticule button");
+		}
+		else
+		{
+			setReticuleButtonDimensions(*retbutstats[i].button, retbutstats[i].filename);
 		}
 	}
 	ReticuleUp = true;
