@@ -28,7 +28,7 @@ macro(create_all_branches)
 	# echo "travis_fold:start:git.fetch.unshallow"
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "travis_fold:start:git.fetch.unshallow")
 	# "git fetch --unshallow"
-	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --unshallow)
+	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --unshallow --progress)
 	# echo "travis_fold:end:git.fetch.unshallow"
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "travis_fold:end:git.fetch.unshallow")
 
