@@ -3679,7 +3679,7 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 		}
 		psStats = psStruct->pStructureType->psWeapStat[0];
 	}
-	const unsigned weaponRange = psStats->upgrade[psObj->player].maxRange;
+	const unsigned weaponRange = proj_GetLongRange(psStats, psObj->player);
 	const unsigned minRange = proj_GetMinRange(psStats, psObj->player);
 	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 	if (minRange > 0)

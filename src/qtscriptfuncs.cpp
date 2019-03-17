@@ -532,7 +532,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
-			range = MAX((int)psWeap->upgrade[psStruct->player].maxRange, range);
+			range = MAX(proj_GetLongRange(psWeap, psStruct->player), range);
 		}
 	}
 	QScriptValue value = convObj(psStruct, engine);
@@ -689,7 +689,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
-			range = MAX((int)psWeap->upgrade[psDroid->player].maxRange, range);
+			range = MAX(proj_GetLongRange(psWeap, psDroid->player), range);
 		}
 	}
 	DROID_TYPE type = psDroid->droidType;
