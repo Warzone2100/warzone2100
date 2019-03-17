@@ -907,7 +907,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		return;
 	}
 
-	if (currentDistance * 100u >= psStats->upgrade[psProj->player].maxRange * psStats->distanceExtensionFactor)
+	if (currentDistance * 100u >= proj_GetLongRange(psStats, psProj->player) * psStats->distanceExtensionFactor)
 	{
 		// We've travelled our maximum range.
 		psProj->state = PROJ_IMPACT;
@@ -927,14 +927,14 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			{
 			case WSC_FLAME:
 				posFlip.z -= 8;  // Why?
-				effectGiveAuxVar(PERCENT(currentDistance, psStats->upgrade[psProj->player].maxRange));
+				effectGiveAuxVar(PERCENT(currentDistance, proj_GetLongRange(psStats, psProj->player)));
 				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, nullptr, 0, effectTime);
 				break;
 			case WSC_COMMAND:
 			case WSC_ELECTRONIC:
 			case WSC_EMP:
 				posFlip.z -= 8;  // Why?
-				effectGiveAuxVar(PERCENT(currentDistance, psStats->upgrade[psProj->player].maxRange) / 2);
+				effectGiveAuxVar(PERCENT(currentDistance, proj_GetLongRange(psStats, psProj->player)) / 2);
 				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0, effectTime);
 				break;
 			case WSC_ROCKET:

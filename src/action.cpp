@@ -1203,7 +1203,8 @@ void actionUpdateDroid(DROID *psDroid)
 				else if (psWeapStats)
 				{
 					// if the vtol is far enough away head for the target again
-					if (rangeSq > psWeapStats->upgrade[psDroid->player].maxRange * psWeapStats->upgrade[psDroid->player].maxRange)
+					const int maxRange = proj_GetLongRange(psWeapStats, psDroid->player);
+					if (rangeSq > maxRange * maxRange)
 					{
 						// don't do another attack run if already heading for the target
 						const Vector2i diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy();
