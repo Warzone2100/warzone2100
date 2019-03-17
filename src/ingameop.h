@@ -68,7 +68,7 @@ extern bool isInGamePopupUp;
 // button sizes.
 #define	INTINGAMEOP_OP_W		(INTINGAMEOP_W-10)
 #define	INTINGAMEOP_SW_W		(INTINGAMEOP2_W - 15)
-#define	INTINGAMEOP_OP_H		10
+#define	INTINGAMEOP_OP_H		15
 
 enum
 {
