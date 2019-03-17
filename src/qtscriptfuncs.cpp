@@ -5134,6 +5134,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			{
 				psStats->upgrade[player].maxRange = value;
 			}
+			else if (name == "ShortRange")
+			{
+				psStats->upgrade[player].shortRange = value;
+			}
 			else if (name == "MinRange")
 			{
 				psStats->upgrade[player].minRange = value;
@@ -5141,6 +5145,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			else if (name == "HitChance")
 			{
 				psStats->upgrade[player].hitChance = value;
+			}
+			else if (name == "ShortHitChance")
+			{
+				psStats->upgrade[player].shortHitChance = value;
 			}
 			else if (name == "FirePause")
 			{
@@ -5422,6 +5430,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		{
 			return psStats->upgrade[player].maxRange;
 		}
+		else if (name == "ShortRange")
+		{
+			return psStats->upgrade[player].shortRange;
+		}
 		else if (name == "MinRange")
 		{
 			return psStats->upgrade[player].minRange;
@@ -5429,6 +5441,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		else if (name == "HitChance")
 		{
 			return psStats->upgrade[player].hitChance;
+		}
+		else if (name == "ShortHitChance")
+		{
+			return psStats->upgrade[player].shortHitChance;
 		}
 		else if (name == "FirePause")
 		{
@@ -5655,8 +5671,10 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			WEAPON_STATS *psStats = asWeaponStats + j;
 			QScriptValue weap = register_common(engine, psStats);
 			weap.setProperty("MaxRange", psStats->base.maxRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			weap.setProperty("ShortRange", psStats->base.shortRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("MinRange", psStats->base.minRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("HitChance", psStats->base.hitChance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			weap.setProperty("ShortHitChance", psStats->base.shortHitChance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("FirePause", psStats->base.firePause, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("ReloadTime", psStats->base.reloadTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("Rounds", psStats->base.numRounds, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5839,8 +5857,10 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			WEAPON_STATS *psStats = asWeaponStats + j;
 			QScriptValue weap = engine->newObject();
 			setStatsFunc(weap, engine, "MaxRange", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "ShortRange", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "MinRange", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "HitChance", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "ShortHitChance", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "FirePause", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "ReloadTime", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "Rounds", i, COMP_WEAPON, j);
