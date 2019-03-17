@@ -1432,6 +1432,12 @@ int proj_GetLongRange(const WEAPON_STATS *psStats, int player)
 	return psStats->upgrade[player].maxRange;
 }
 
+// return the minimum range for a weapon
+int proj_GetMinRange(const WEAPON_STATS *psStats, int player)
+{
+	return psStats->upgrade[player].minRange;
+}
+
 // return the short range for a weapon
 int proj_GetShortRange(const WEAPON_STATS *psStats, int player)
 {
