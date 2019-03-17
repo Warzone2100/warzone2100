@@ -161,7 +161,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	int baseHitChance = 0;
-	const int min_range = psStats->upgrade[psAttacker->player].minRange;
+	const int min_range = proj_GetMinRange(psStats, psAttacker->player);
 	if (dist <= shortRange && dist >= min_range)
 	{
 		// get weapon chance to hit in the short range
@@ -236,7 +236,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		DROID *psDroid = castDroid(psTarget);
 
 		int32_t flightTime;
-		if (proj_Direct(psStats) || dist <= psStats->upgrade[psAttacker->player].minRange)
+		if (proj_Direct(psStats) || dist <= proj_GetMinRange(psStats, psAttacker->player))
 		{
 			flightTime = dist * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 		}

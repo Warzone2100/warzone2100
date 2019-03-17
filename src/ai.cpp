@@ -169,7 +169,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 	int		longRange = proj_GetLongRange(psWStats, psObj->player);
 	int		tarDist = longRange * longRange;
 	bool		foundCB = false;
-	int		minDist = psWStats->upgrade[psObj->player].minRange * psWStats->upgrade[psObj->player].minRange;
+	int		minDist = proj_GetMinRange(psWStats, psObj->player) * proj_GetMinRange(psWStats, psObj->player);
 	BASE_OBJECT	*psTarget = nullptr;
 
 	if (targetOrigin)
@@ -341,7 +341,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	bEmpWeap = (attackerWeapon->weaponSubClass == WSC_EMP);
 
 	int dist = iHypot((psAttacker->pos - psTarget->pos).xy());
-	bool tooClose = (unsigned)dist <= attackerWeapon->upgrade[psAttacker->player].minRange;
+	bool tooClose = (unsigned)dist <= proj_GetMinRange(attackerWeapon, psAttacker->player);
 	if (tooClose)
 	{
 		dist = objSensorRange(psAttacker);  // If object is too close to fire at, consider it to be at maximum range.

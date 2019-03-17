@@ -204,7 +204,7 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	if (radSq <= rangeSq)
 	{
 		/* check min range */
-		const int minrange = psStats->upgrade[psDroid->player].minRange;
+		const int minrange = proj_GetMinRange(psStats, psDroid->player);
 		if (radSq >= minrange * minrange || !proj_Direct(psStats))
 		{
 			return true;
@@ -234,7 +234,7 @@ static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STAT
 	const int dx = psDroid->pos.x - psObj->pos.x;
 	const int dy = psDroid->pos.y - psObj->pos.y;
 	const int radSq = dx * dx + dy * dy;
-	const int minRange = psStats->upgrade[psDroid->player].minRange;
+	const int minRange = proj_GetMinRange(psStats, psDroid->player);
 	const int rangeSq = minRange * minRange;
 
 	// check min range
@@ -386,7 +386,8 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	bool onTarget = abs(angleDelta(targetRotation - (tRotation + psAttacker->rot.direction))) <= rotationTolerance;
 
 	/* Set muzzle pitch if not repairing or outside minimum range */
-	if (!bRepair && (unsigned)objPosDiffSq(psAttacker, psTarget) > psWeapStats->upgrade[psAttacker->player].minRange * psWeapStats->upgrade[psAttacker->player].minRange)
+	const int minRange = proj_GetMinRange(psWeapStats, psAttacker->player);
+	if (!bRepair && (unsigned)objPosDiffSq(psAttacker, psTarget) > minRange * minRange)
 	{
 		/* get target distance */
 		Vector3i delta = psTarget->pos - attackerMuzzlePos;
