@@ -715,10 +715,9 @@ completed designs)
 8. Select the System turrets (turret only, normal units only)
 
 9. Select the Weapon turrets (turret only, normal units only)
-
++
 image:images/design-bars.jpg[]
 
-[start=10]
 10. How fast the unit moves over roads
 
 11. How fast the unit moves off-road
