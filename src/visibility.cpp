@@ -494,7 +494,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	}
 
 	/* First see if the target is in sensor range */
-	const int dist = iHypot((psTarget->pos - psViewer->pos).xy);
+	const int dist = iHypot((psTarget->pos - psViewer->pos).xy());
 	if (dist == 0)
 	{
 		return UBYTE_MAX;	// Should never be on top of each other, but ...
@@ -753,7 +753,7 @@ void processVisibility()
 			{
 				if (psObj != psTarget && psTarget->visible[psObj->player] < UBYTE_MAX / 2
 				    && objActiveRadar(psTarget)
-				    && iHypot((psTarget->pos - psObj->pos).xy) < objSensorRange(psObj) * 10)
+				    && iHypot((psTarget->pos - psObj->pos).xy()) < objSensorRange(psObj) * 10)
 				{
 					psTarget->visible[psObj->player] = UBYTE_MAX / 2;
 				}
@@ -839,7 +839,7 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 		psStats = asWeaponStats + ((const STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat;
 	}
 	// 2d distance
-	int distance = iHypot((psTarget->pos - psViewer->pos).xy);
+	int distance = iHypot((psTarget->pos - psViewer->pos).xy());
 	int range = proj_GetLongRange(psStats, psViewer->player);
 	if (proj_Direct(psStats))
 	{
@@ -949,7 +949,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 
 	pos = muzzle;
 	dest = psTarget->pos;
-	diff = (dest - pos).xy;
+	diff = (dest - pos).xy();
 
 	distSq = dot(diff, diff);
 	if (distSq == 0)
@@ -958,7 +958,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 		return 1000;
 	}
 
-	current = pos.xy;
+	current = pos.xy();
 	start = current;
 	angletan = -1000 * 65536;
 	partSq = 0;

@@ -2179,7 +2179,7 @@ static void effectStructureUpdates()
 				*/
 				if (psStructure->sDisplay.imd->nconnectors == 1)
 				{
-					Vector3i eventPos = psStructure->pos.xzy + Vector3i(
+					Vector3i eventPos = psStructure->pos.xzy() + Vector3i(
 					                        psStructure->sDisplay.imd->connectors->x,
 					                        psStructure->sDisplay.imd->connectors->z,
 					                        -psStructure->sDisplay.imd->connectors->y
@@ -2192,7 +2192,7 @@ static void effectStructureUpdates()
 				break;
 			case REF_POWER_GEN:
 				{
-					Vector3i eventPos = psStructure->pos.xzy;
+					Vector3i eventPos = psStructure->pos.xzy();
 
 					// Add an effect over the central spire.
 

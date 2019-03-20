@@ -906,7 +906,7 @@ void destroyFXDroid(DROID *psDroid, unsigned impactTime)
 		int heightScatter = TILE_UNITS / 5;
 		Vector2i horizontalScatter = iSinCosR(rand(), rand() % maxHorizontalScatter);
 
-		Vector3i pos = (psDroid->pos + Vector3i(horizontalScatter, 16 + heightScatter)).xzy;
+		Vector3i pos = (psDroid->pos + Vector3i(horizontalScatter, 16 + heightScatter)).xzy();
 		switch (i)
 		{
 		case 0:

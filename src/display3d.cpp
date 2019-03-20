@@ -1038,7 +1038,7 @@ static void drawTiles(iView *player)
 	//actualCameraPosition -= Vector3i(-player->p.x, 0, player->p.z);
 
 	// this also determines the length of the shadows
-	const Vector3f theSun = (viewMatrix * glm::vec4(getTheSun(), 0.f)).xyz;
+	const Vector3f theSun = (viewMatrix * glm::vec4(getTheSun(), 0.f)).xyz();
 	pie_BeginLighting(theSun);
 
 	// update the fog of war... FIXME: Remove this
@@ -1625,7 +1625,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 			return;
 		}
 		stats = getModuleStat(structure);
-		pos = structure->pos.xy;
+		pos = structure->pos.xy();
 	}
 	else
 	{
@@ -1859,7 +1859,7 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 /// Get the player position
 Vector2i getPlayerPos()
 {
-	return player.p.xz;
+	return player.p.xz();
 }
 
 /// Set the player position
@@ -1900,7 +1900,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 	psFeature->sDisplay.frameNumber = currentGameFrame;
 
 	/* Daft hack to get around the oil derrick issue */
-	if (!TileHasFeature(mapTile(map_coord(psFeature->pos.xy))))
+	if (!TileHasFeature(mapTile(map_coord(psFeature->pos.xy()))))
 	{
 		return;
 	}

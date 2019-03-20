@@ -1362,7 +1362,7 @@ bool deliveryReposValid()
 		return false;
 	}
 
-	Vector2i map = map_coord(flagPos.coords.xy);
+	Vector2i map = map_coord(flagPos.coords.xy());
 
 	//make sure we are not too near map edge
 	if (map.x < scrollMinX + TOO_NEAR_EDGE || map.x + 1 > scrollMaxX - TOO_NEAR_EDGE ||
@@ -1374,7 +1374,7 @@ bool deliveryReposValid()
 	// cant place on top of a delivery point...
 	for (FLAG_POSITION const *psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
 	{
-		Vector2i flagTile = map_coord(psCurrFlag->coords.xy);
+		Vector2i flagTile = map_coord(psCurrFlag->coords.xy());
 		if (flagTile == map)
 		{
 			return false;
@@ -1846,7 +1846,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 						AddDerrickBurningMessage();
 					}
 
-					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], psFeature->pos.xy, player.r.y), ctrlShiftDown());
+					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], psFeature->pos.xy(), player.r.y), ctrlShiftDown());
 					FeedbackOrderGiven();
 				}
 			}
