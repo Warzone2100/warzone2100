@@ -116,7 +116,7 @@ static inline WZ_DECL_PURE Vector2f Vector2f_Rotate2f(Vector2f v, int angle)
  */
 static inline bool WZ_DECL_PURE Vector3i_InCircle(Vector3i v, Vector3i c, unsigned r)
 {
-	Vector2i delta = Vector3i(v - c).xy;
+	Vector2i delta = Vector3i(v - c).xy();
 	// Explictily cast to "unsigned int" because this number never can be
 	// negative, due to the fact that these numbers are squared. Still GCC
 	// warns about a comparison of a comparison between an unsigned and a

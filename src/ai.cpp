@@ -340,7 +340,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	//See if attacker is using an EMP weapon
 	bEmpWeap = (attackerWeapon->weaponSubClass == WSC_EMP);
 
-	int dist = iHypot((psAttacker->pos - psTarget->pos).xy);
+	int dist = iHypot((psAttacker->pos - psTarget->pos).xy());
 	bool tooClose = (unsigned)dist <= attackerWeapon->upgrade[psAttacker->player].minRange;
 	if (tooClose)
 	{

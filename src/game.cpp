@@ -4826,7 +4826,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	}
 	ini.setValue("lastBump", psCurr->sMove.lastBump);
 	ini.setValue("pauseTime", psCurr->sMove.pauseTime);
-	ini.setVector2i("bumpPosition", psCurr->sMove.bumpPos.xy);
+	ini.setVector2i("bumpPosition", psCurr->sMove.bumpPos.xy());
 	ini.setValue("onMission", onMission);
 	ini.endGroup();
 	return true;

@@ -613,7 +613,7 @@ in the case of location and degrees of arc in the case of rotation.
 
 static void updateCameraAcceleration(UBYTE update)
 {
-	Vector3i concern = trackingCamera.target->pos.xzy;
+	Vector3i concern = trackingCamera.target->pos.xzy();
 	Vector2i behind(0, 0); /* Irrelevant for normal radar tracking */
 	bool bFlying = false;
 

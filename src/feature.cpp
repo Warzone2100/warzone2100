@@ -531,7 +531,7 @@ SDWORD getFeatureStatFromName(const WzString &name)
 
 StructureBounds getStructureBounds(FEATURE const *object)
 {
-	return getStructureBounds(object->psStats, object->pos.xy);
+	return getStructureBounds(object->psStats, object->pos.xy());
 }
 
 StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos)

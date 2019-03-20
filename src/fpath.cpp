@@ -262,7 +262,7 @@ bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 // Returns the closest non-blocking tile to pos, or returns pos if no non-blocking tiles are present within a 2 tile distance.
 static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion, int player = 0, FPATH_MOVETYPE moveType = FMT_BLOCK)
 {
-	Vector2i centreTile = map_coord(pos.xy);
+	Vector2i centreTile = map_coord(pos.xy());
 	if (!fpathBaseBlockingTile(centreTile.x, centreTile.y, propulsion, player, moveType))
 	{
 		return pos;  // Fast case, pos is not on a blocking tile.
@@ -274,7 +274,7 @@ static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion
 		for (int x = -2; x <= 2; ++x)
 		{
 			Vector2i tile = centreTile + Vector2i(x, y);
-			Vector2i diff = world_coord(tile) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2) - pos.xy;
+			Vector2i diff = world_coord(tile) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2) - pos.xy();
 			int distSq = dot(diff, diff);
 			if (distSq < bestDistSq && !fpathBaseBlockingTile(tile.x, tile.y, propulsion, player, moveType))
 			{
@@ -426,7 +426,7 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
-	StructureBounds dstStructure = getStructureBounds(worldTile(endPos.xy)->psObject);
+	StructureBounds dstStructure = getStructureBounds(worldTile(endPos.xy())->psObject);
 	startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
 	if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
 	{
@@ -618,13 +618,13 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 	// We have to be careful with this check because it is called on
 	// load when playing campaign on droids that are on the other
 	// map during missions, and those maps are usually larger.
-	if (!worldOnMap(orig.xy) || !worldOnMap(dest.xy))
+	if (!worldOnMap(orig.xy()) || !worldOnMap(dest.xy()))
 	{
 		return false;
 	}
 
-	MAPTILE *origTile = worldTile(findNonblockingPosition(orig, propulsion).xy);
-	MAPTILE *destTile = worldTile(findNonblockingPosition(dest, propulsion).xy);
+	MAPTILE *origTile = worldTile(findNonblockingPosition(orig, propulsion).xy());
+	MAPTILE *destTile = worldTile(findNonblockingPosition(dest, propulsion).xy());
 
 	ASSERT_OR_RETURN(false, propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
 	ASSERT_OR_RETURN(false, origTile != nullptr && destTile != nullptr, "Bad tile parameter");

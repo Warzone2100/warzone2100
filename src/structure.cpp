@@ -1583,7 +1583,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				}
 				if (fp != nullptr)
 				{
-					Vector2i pos = map_coord(fp->coords.xy);
+					Vector2i pos = map_coord(fp->coords.xy());
 					if (unsigned(pos.x - bounds.map.x) < unsigned(bounds.size.x) && unsigned(pos.y - bounds.map.y) < unsigned(bounds.size.y))
 					{
 						// Delivery point fp is under the new structure. Need to move it.
@@ -1787,7 +1787,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 	// Rotate wall if needed.
 	if (blueprint->pStructureType->type == REF_WALL || blueprint->pStructureType->type == REF_GATE)
 	{
-		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(blueprint->pos.xy));
+		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(blueprint->pos.xy()));
 		unsigned type = wallType(scanType);
 		if (scanType != WallConnectNone)
 		{
@@ -2360,7 +2360,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			//if vtol droid - send it to ReArm Pad if one exists
 			if (psFlag && isVtolDroid(psNewDroid))
 			{
-				Vector2i pos = psFlag->coords.xy;
+				Vector2i pos = psFlag->coords.xy();
 				//find a suitable location near the delivery point
 				actionVTOLLandingPos(psNewDroid, &pos);
 				orderDroidLoc(psNewDroid, DORDER_MOVE, pos.x, pos.y, ModeQueue);
@@ -4002,7 +4002,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 		for (FLAG_POSITION const *psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
 		{
 			ASSERT_OR_RETURN(false, psCurrFlag->coords.x != ~0, "flag has invalid position");
-			Vector2i flagTile = map_coord(psCurrFlag->coords.xy);
+			Vector2i flagTile = map_coord(psCurrFlag->coords.xy());
 			if (flagTile.x >= b.map.x && flagTile.x < b.map.x + b.size.x && flagTile.y >= b.map.y && flagTile.y < b.map.y + b.size.y)
 			{
 				return false;
@@ -5004,7 +5004,7 @@ bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muz
 		         -psShape->connectors[weapon_slot].y);//note y and z flipped
 
 
-		*muzzle = (af * barrel).xzy;
+		*muzzle = (af * barrel).xzy();
 		muzzle->z = -muzzle->z;
 	}
 	else
@@ -5072,7 +5072,7 @@ bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle,
 			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].z, -psWeaponImd->connectors[connector_num].y);
 		}
 
-		*muzzle = (af * barrel).xzy;
+		*muzzle = (af * barrel).xzy();
 		muzzle->z = -muzzle->z;
 	}
 	else
@@ -7017,7 +7017,7 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 StructureBounds getStructureBounds(const STRUCTURE *object)
 {
 	const Vector2i size = object->size();
-	const Vector2i map = map_coord(object->pos.xy) - size / 2;
+	const Vector2i map = map_coord(object->pos.xy()) - size / 2;
 	return StructureBounds(map, size);
 }
 
