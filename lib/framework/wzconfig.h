@@ -33,8 +33,21 @@
 #  endif
 #endif
 
+#if defined(__clang__) && defined(__has_cpp_attribute)
+#  pragma clang diagnostic push
+#  if __has_cpp_attribute(nodiscard)
+#    // Work around json.hpp / Clang issue where Clang reports the nodiscard attribute is available in C++11 mode,
+#    // but then `-Wc++17-extensions` warns that it is a C++17 feature
+#    pragma clang diagnostic ignored "-Wc++1z-extensions" // -Wc++1z-extensions // -Wc++17-extensions
+#  endif
+#endif
+
 #include <3rdparty/json/json.hpp>
 using json = nlohmann::json;
+
+#if defined(__clang__) && defined(__has_cpp_attribute)
+#  pragma clang diagnostic pop
+#endif
 
 #if defined(_wz_restore_libintl_snprintf)
 #  undef _wz_restore_libintl_snprintf
