@@ -2695,9 +2695,17 @@ void addPlayerBox(bool players)
 				{
 					sButInit.pTip = _("Click to change player position");
 				}
-				else if (!NetPlay.players[i].allocated && NetPlay.isHost && !locked.ai)
+				else if (!NetPlay.players[i].allocated)
 				{
-					sButInit.pTip = _("Click to change AI");
+					if (NetPlay.isHost && !locked.ai)
+					{
+						sButInit.pTip = _("Click to change AI");
+					}
+					else if (NetPlay.players[i].ai >= 0)
+					{
+						// show AI description. Useful for challenges.
+						sButInit.pTip = aidata[NetPlay.players[i].ai].tip;
+					}
 				}
 				if (NetPlay.players[i].allocated && !getMultiStats(i).identity.empty())
 				{
