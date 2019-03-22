@@ -500,6 +500,19 @@ bool loadWeaponStats(WzConfig &ini)
 			return false;
 		}
 
+		unsigned int shortRange = psStats->upgrade[0].shortRange;
+		unsigned int longRange = psStats->upgrade[0].maxRange;
+		unsigned int shortHit = psStats->upgrade[0].shortHitChance;
+		unsigned int longHit = psStats->upgrade[0].hitChance;
+		if (shortRange > longRange)
+		{
+			debug(LOG_ERROR, "%s, Short range (%d) is greater than long range (%d)", getName(psStats), shortRange, longRange);
+		}
+		if (shortRange == longRange && (shortHit > longHit || longHit > shortHit))
+		{
+			debug(LOG_ERROR, "%s, shortHit and longHit should be equal if the ranges are the same", getName(psStats));
+		}
+
 		// set the face Player value
 		psStats->facePlayer = ini.value("facePlayer", false).toBool();
 
