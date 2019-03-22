@@ -99,7 +99,7 @@ function sendNPTransport()
 			},
 		});
 
-		queue("sendNPTransport", camChangeOnDiff(180000)); //3 min
+		queue("sendNPTransport", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	}
 }
 
@@ -131,7 +131,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
 		area: "RTLZ",
 		message: "C1-5_LZ",
-		reinforcements: 180, //3 min
+		reinforcements: camMinutesToSeconds(3),
 		annihilate: true
 	});
 
@@ -195,7 +195,7 @@ function eventStartLevel()
 			assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			templates: [ cTempl.npmrl, cTempl.npmmct, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
@@ -207,7 +207,7 @@ function eventStartLevel()
 			assembly: "NPRightAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			templates: [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
@@ -219,7 +219,7 @@ function eventStartLevel()
 			assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(35000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
 			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ],
 			data: {
 				regroup: false,
@@ -231,7 +231,7 @@ function eventStartLevel()
 			assembly: "ScavSouthWestAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
@@ -242,7 +242,7 @@ function eventStartLevel()
 			assembly: "ScavSouthEastAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
@@ -253,7 +253,7 @@ function eventStartLevel()
 			assembly: "ScavNorthAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
@@ -262,5 +262,5 @@ function eventStartLevel()
 		},
 	});
 
-	queue("enableNPFactories", camChangeOnDiff(600000)); // 10 minutes
+	queue("enableNPFactories", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }

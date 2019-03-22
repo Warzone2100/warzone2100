@@ -61,7 +61,7 @@ function randomTemplates(list)
 function vtolAttack()
 {
 	var list = [cTempl.nxmheapv, cTempl.nxlpulsev];
-	camSetVtolData(NEXUS, VTOL_POSITIONS, "vtolRemovePos", list, camChangeOnDiff(180000)); // 3 min
+	camSetVtolData(NEXUS, VTOL_POSITIONS, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 //Chose a random spawn point to send ground reinforcements.
@@ -96,7 +96,7 @@ function phantomFactorySpawn()
 		});
 	}
 
-	queue("phantomFactorySpawn", camChangeOnDiff(300000)); // 5 min
+	queue("phantomFactorySpawn", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }
 
 //Choose a target to fire the LasSat at. Automatically increases the limits
@@ -143,7 +143,7 @@ function vaporizeTarget()
 		//Droid or structure was destroyed before firing so pick a new one.
 		if (!camDef(target))
 		{
-			queue("vaporizeTarget", 100);
+			queue("vaporizeTarget", camSecondsToMilliseconds(0.1));
 			return;
 		}
 		if (Math.floor(mapLimit) < mapHeight)
@@ -155,7 +155,7 @@ function vaporizeTarget()
 			mapLimit = mapLimit + 0.33; //sector clear; move closer
 		}
 		laserSatFuzzyStrike(target);
-		queue("vaporizeTarget", 10000);
+		queue("vaporizeTarget", camSecondsToMilliseconds(10));
 	}
 }
 
@@ -241,13 +241,13 @@ function checkTime()
 	if (getMissionTime() <= 2)
 	{
 		camPlayVideos("MB3_AD2_MSG2");
-		setMissionTime(3600); //1 hr
+		setMissionTime(camHoursToSeconds(1));
 		phantomFactorySpawn();
-		queue("vaporizeTarget", 2000);
+		queue("vaporizeTarget", camSecondsToMilliseconds(2));
 	}
 	else
 	{
-		queue("checkTime", 150);
+		queue("checkTime", camSecondsToMilliseconds(0.2));
 	}
 }
 
@@ -294,7 +294,7 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setMissionTime(300); //5 min
+	setMissionTime(camMinutesToSeconds(5));
 	enableResearch("R-Sys-Resistance", CAM_HUMAN_PLAYER);
 
 	var enemyLz = getObject("NXlandingZone");
@@ -303,6 +303,6 @@ function eventStartLevel()
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camPlayVideos("MB3_AD2_MSG");
 
-	queue("checkTime", 200);
-	queue("vtolAttack", camChangeOnDiff(180000)); // 3 min
+	queue("checkTime", camSecondsToMilliseconds(0.2));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

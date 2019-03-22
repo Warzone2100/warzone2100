@@ -86,13 +86,13 @@ function sendTransport()
 	if (lastHeavy)
 	{
 		lastHeavy = false;
-		queue("sendTransport", camChangeOnDiff(90000));
+		queue("sendTransport", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 		templates = [ cTempl.nppod, cTempl.nphmg, cTempl.npmrl, cTempl.npsmc ];
 	}
 	else
 	{
 		lastHeavy = true;
-		queue("sendTransport", camChangeOnDiff(180000));
+		queue("sendTransport", camChangeOnDiff(camMinutesToMilliseconds(3)));
 		templates = [ cTempl.npsmct, cTempl.npmor, cTempl.npsmc, cTempl.npmmct, cTempl.npmrl, cTempl.nphmg, cTempl.npsbb ];
 	}
 
@@ -138,9 +138,9 @@ function eventStartLevel()
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
 	}
 
-	setMissionTime(camChangeOnDiff(1800));
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 	camPlayVideos("MB1CA_MSG");
 
 	// first transport after 10 seconds; will re-queue itself
-	queue('sendTransport', 10000);
+	queue('sendTransport', camSecondsToMilliseconds(10));
 }

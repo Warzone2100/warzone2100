@@ -263,7 +263,7 @@ function checkForPowGen()
 		}
 		else
 		{
-			queue("checkForPowGen", 150);
+			queue("checkForPowGen", camSecondsToMilliseconds(0.2));
 		}
 	}
 }
@@ -278,7 +278,7 @@ function checkResFac()
 		}
 		else
 		{
-			queue("checkResFac", 150);
+			queue("checkResFac", camSecondsToMilliseconds(0.2));
 		}
 	}
 }
@@ -300,7 +300,7 @@ function checkHelpBuild()
 			}
 		}
 
-		queue("checkHelpBuild", 150);
+		queue("checkHelpBuild", camSecondsToMilliseconds(0.2));
 	}
 }
 
@@ -333,14 +333,14 @@ function addToConsole()
 			//Check if we need to wait
 			if (camDef(tutPhase.wait) && tutPhase.wait > 0)
 			{
-				queue("addToConsole", tutPhase.wait * 1000); //wait is in seconds
+				queue("addToConsole", tutPhase.wait * camSecondsToMilliseconds(1)); //wait is in seconds
 				consoleVar[0].wait = 0;
 				return;
 			}
 
 			if (camDef(tutPhase.func))
 			{
-				queue(tutPhase.func, 200);
+				queue(tutPhase.func, camSecondsToMilliseconds(0.2));
 			}
 
 			if (camDef(tutPhase.audio))
@@ -362,7 +362,7 @@ function addToConsole()
 			consoleVar.shift();
 		}
 
-		queue("addToConsole", 600);
+		queue("addToConsole", camSecondsToMilliseconds(0.6));
 	}
 }
 
@@ -474,5 +474,5 @@ function eventStartLevel()
 	setReticuleButton(COMMAND_BUTTON, _("Commanders - manufacture commanders first"), "", "");
 	showInterface();
 
-	queue("addToConsole", 2000);
+	queue("addToConsole", camSecondsToMilliseconds(2));
 }

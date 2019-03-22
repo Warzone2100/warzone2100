@@ -47,7 +47,7 @@ camAreaEvent("rescueTrigger", function(droid)
 	phantomFactorySE();
 	setAlliance(ALPHA, NEXUS, false);
 	camAbsorbPlayer(ALPHA, CAM_HUMAN_PLAYER);
-	queue("getAlphaUnitIDs", 2000);
+	queue("getAlphaUnitIDs", camSecondsToMilliseconds(2));
 	camPlayVideos("MB3_2_MSG4");
 });
 
@@ -56,7 +56,7 @@ camAreaEvent("phantomFacTrigger", function(droid)
 {
 	vtolAttack();
 	camPlayVideos(["pcv456.ogg", "MB3_2_MSG3"]); //Warn about VTOLs.
-	queue("enableReinforcements", 5000);
+	queue("enableReinforcements", camSecondsToMilliseconds(5));
 });
 
 function setAlphaExp()
@@ -96,21 +96,21 @@ function phantomFactoryNE()
 {
 	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
 	sendEdgeMapDroids(6, "NE-PhantomFactory", list);
-	queue("phantomFactoryNE", camChangeOnDiff(120000)); //2 min
+	queue("phantomFactoryNE", camChangeOnDiff(camMinutesToMilliseconds(2)));
 }
 
 function phantomFactorySW()
 {
 	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
 	sendEdgeMapDroids(8, "SW-PhantomFactory", list);
-	queue("phantomFactorySW", camChangeOnDiff(180000)); //3 min
+	queue("phantomFactorySW", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 function phantomFactorySE()
 {
 	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh];
 	sendEdgeMapDroids(10 + camRand(6), "SE-PhantomFactory", list); //10-15 units
-	queue("phantomFactorySE", camChangeOnDiff(240000)); //4 min
+	queue("phantomFactorySE", camChangeOnDiff(camMinutesToMilliseconds(4)));
 }
 
 function sendEdgeMapDroids(droidCount, location, list)
@@ -143,7 +143,7 @@ function setupPatrolGroups()
 			camMakePos("upperMiddleWest"),
 			camMakePos("upperMiddleHill"),
 		],
-		interval: 20000,
+		interval: camSecondsToMilliseconds(20),
 		regroup: true,
 		count: -1
 	});
@@ -155,7 +155,7 @@ function setupPatrolGroups()
 			camMakePos("lowerMiddleEast"),
 			camMakePos("lowerMiddleHill"),
 		],
-		interval: 20000,
+		interval: camSecondsToMilliseconds(20),
 		regroup: true,
 		count: -1
 	});
@@ -168,7 +168,7 @@ function setupPatrolGroups()
 			camMakePos("SWCorner"),
 			camMakePos("alphaDoorway"),
 		],
-		interval: 25000,
+		interval: camSecondsToMilliseconds(25),
 		regroup: true,
 		count: -1
 	});
@@ -189,7 +189,7 @@ function setupPatrolGroups()
 			camMakePos("SW-PhantomFactory"),
 			camMakePos("SE-PhantomFactory"),
 		],
-		interval: 35000,
+		interval: camSecondsToMilliseconds(35),
 		regroup: true,
 		count: -1
 	});
@@ -204,18 +204,17 @@ function vtolAttack()
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), undefined, ext); //2 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
 }
 
 //Reinforcements not available until team Alpha brief about VTOLS.
 function enableReinforcements()
 {
-	const REINFORCEMENT_TIME = 180; //3 minute.
 	playSound("pcv440.ogg"); // Reinforcements are available.
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM3A-B", {
 		area: "RTLZ",
 		message: "C32_LZ",
-		reinforcements: REINFORCEMENT_TIME,
+		reinforcements: camMinutesToSeconds(3),
 		callback: "alphaTeamAlive",
 		retlz: true
 	});
@@ -288,6 +287,6 @@ function eventStartLevel()
 	phantomFactorySW();
 
 	hackAddMessage("C3-2_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	queue("setAlphaExp", 1500);
-	queue("setupPatrolGroups", 15000);
+	queue("setAlphaExp", camSecondsToMilliseconds(2));
+	queue("setupPatrolGroups", camSecondsToMilliseconds(15));
 }

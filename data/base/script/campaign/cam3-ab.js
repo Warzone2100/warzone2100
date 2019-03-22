@@ -57,7 +57,7 @@ function sendEdgeMapDroids()
 	);
 
 	edgeMapCounter += 1;
-	queue("sendEdgeMapDroids", camChangeOnDiff(180000)); // 3 min.
+	queue("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
@@ -69,7 +69,7 @@ function vtolAttack()
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), undefined, ext); //2 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
 }
 
 // Order any absorbed trucks to start building defenses near themselves.
@@ -133,7 +133,7 @@ function nexusManufacture()
 		}
 	}
 
-	queue("manualGrouping", 1500);
+	queue("manualGrouping", camSecondsToMilliseconds(1.5));
 }
 
 function manualGrouping()
@@ -162,7 +162,7 @@ function eventObjectTransfer(obj, from)
 		{
 			if (obj.stattype === FACTORY || obj.stattype === CYBORG_FACTORY || obj.stattype === VTOL_FACTORY)
 			{
-				queue("nexusManufacture", 100); //build immediately if possible.
+				queue("nexusManufacture", camSecondsToMilliseconds(0.1)); //build immediately if possible.
 			}
 		}
 	}
@@ -191,7 +191,7 @@ function hackPlayer()
 	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
 	if (camGetNexusState())
 	{
-		queue("hackPlayer", 5000);
+		queue("hackPlayer", camSecondsToMilliseconds(5));
 	}
 }
 
@@ -226,7 +226,7 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(3600)); //1 hour.
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
 	var enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
@@ -238,11 +238,11 @@ function eventStartLevel()
 
 	vtolAttack();
 
-	queue("powerTransfer", 800);
-	queue("synapticsSound", 2500);
-	queue("hackPlayer", 8000);
-	queue("sendEdgeMapDroids", 15000); // 15 sec
+	queue("powerTransfer", camSecondsToMilliseconds(0.8));
+	queue("synapticsSound", camSecondsToMilliseconds(2.5));
+	queue("hackPlayer", camSecondsToMilliseconds(8));
+	queue("sendEdgeMapDroids", camSecondsToMilliseconds(15));
 
-	setTimer("truckDefense", 2000);
-	setTimer("nexusManufacture", 10000);
+	setTimer("truckDefense", camSecondsToMilliseconds(2));
+	setTimer("nexusManufacture", camSecondsToMilliseconds(10));
 }

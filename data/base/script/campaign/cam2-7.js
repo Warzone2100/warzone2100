@@ -82,7 +82,7 @@ function enableFactoriesAndHovers()
 		],
 		//fallback: camMakePos("base2HeavyAssembly"),
 		//morale: 10,
-		interval: 22000,
+		interval: camSecondsToMilliseconds(22),
 		regroup: false,
 	});
 }
@@ -93,7 +93,7 @@ function eventStartLevel()
 		eliminateBases: true,
 		area: "RTLZ",
 		message: "C27_LZ",
-		reinforcements: 180 //3 min
+		reinforcements: camMinutesToSeconds(3)
 	});
 
 	var startpos = getObject("startPosition");
@@ -147,7 +147,7 @@ function eventStartLevel()
 			assembly: "base2HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -159,7 +159,7 @@ function eventStartLevel()
 			assembly: "base2CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -171,7 +171,7 @@ function eventStartLevel()
 			assembly: "base3CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -183,7 +183,7 @@ function eventStartLevel()
 			assembly: "base4HeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -195,7 +195,7 @@ function eventStartLevel()
 			assembly: "base4CybAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -207,7 +207,7 @@ function eventStartLevel()
 			assembly: "base4VTOLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				count: -1,
@@ -224,7 +224,7 @@ function eventStartLevel()
 	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("baseThreeVtolAttack", 30000);
-	queue("baseFourVtolAttack", 60000);
-	queue("enableFactoriesAndHovers", camChangeOnDiff(90000));
+	queue("baseThreeVtolAttack", camSecondsToMilliseconds(30));
+	queue("baseFourVtolAttack", camMinutesToMilliseconds(1));
+	queue("enableFactoriesAndHovers", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 }

@@ -40,7 +40,7 @@ camAreaEvent("crashSite", function(droid)
 
 	//Give the donation enough time to transfer them to the player. Otherwise
 	//the level will end too fast and will trigger asserts in the next level.
-	queue("triggerWin", 2000);
+	queue("triggerWin", camSecondsToMilliseconds(2));
 });
 
 //function that applies damage to units in the downed transport transport team.
@@ -74,7 +74,7 @@ function setupCyborgGroups()
 			camMakePos ("cybEastPatrol2"),
 			camMakePos ("cybEastPatrol3"),
 		],
-		interval: 20000,
+		interval: camSecondsToMilliseconds(20),
 		regroup: false
 	});
 }
@@ -164,5 +164,5 @@ function eventStartLevel()
 
 	setCrashedTeamExp();
 	victoryFlag = false;
-	queue("setupCyborgGroups", 5000);
+	queue("setupCyborgGroups", camSecondsToMilliseconds(5));
 }

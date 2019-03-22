@@ -37,7 +37,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 			camMakePos("hillPos2"),
 			camMakePos("hillPos3"),
 		],
-		interval: 25000,
+		interval: camSecondsToMilliseconds(25),
 		regroup: true,
 		count: -1
 		//morale: 25,
@@ -50,7 +50,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 			camMakePos("hillPos2"),
 			camMakePos("hillPos3"),
 		],
-		interval: 15000,
+		interval: camSecondsToMilliseconds(15),
 		regroup: true,
 		count: -1
 		//morale: 25,
@@ -62,7 +62,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 function vtolAttack()
 {
 	var list = [cTempl.nxlscouv, cTempl.nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
 }
 
 //These groups are active immediately.
@@ -150,7 +150,7 @@ function setupNextMission()
 		camPlayVideos(["labort.ogg", "MB3_1B_MSG", "MB3_1B_MSG2"]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
-		setMissionTime(camChangeOnDiff(1800)); // 30 min
+		setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 
 		hackRemoveMessage("CM31_TAR_UPLINK", PROX_MSG, CAM_HUMAN_PLAYER);
 		hackAddMessage("CM31_HIDE_LOC", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -159,7 +159,7 @@ function setupNextMission()
 	}
 	else
 	{
-		queue("setupNextMission", 2000);
+		queue("setupNextMission", camSecondsToMilliseconds(2));
 	}
 }
 
@@ -198,7 +198,7 @@ function getCountdown()
 		}
 	}
 
-	queue("getCountdown", 100);
+	queue("getCountdown", camSecondsToMilliseconds(0.4));
 }
 
 function enableAllFactories()
@@ -236,43 +236,44 @@ function eventStartLevel()
 	var tent = getObject("transporterEntry");
 	var text = getObject("transporterExit");
 
+	//Time is in seconds.
 	launchInfo = [
-		{sound: "60min.ogg", time: 3600},
-		{sound: "50min.ogg", time: 3000},
-		{sound: "40min.ogg", time: 2400},
-		{sound: "30min.ogg", time: 1800},
-		{sound: "20min.ogg", time: 1200},
-		{sound: "10min.ogg", time: 600},
-		{sound: "meflp.ogg", time: 310},
-		{sound: "5min.ogg", time: 300},
-		{sound: "4min.ogg", time: 240},
-		{sound: "3min.ogg", time: 180},
-		{sound: "2min.ogg", time: 120},
-		{sound: "1min.ogg", time: 60},
+		{sound: "60min.ogg", time: camMinutesToSeconds(60)},
+		{sound: "50min.ogg", time: camMinutesToSeconds(50)},
+		{sound: "40min.ogg", time: camMinutesToSeconds(40)},
+		{sound: "30min.ogg", time: camMinutesToSeconds(30)},
+		{sound: "20min.ogg", time: camMinutesToSeconds(20)},
+		{sound: "10min.ogg", time: camMinutesToSeconds(10)},
+		{sound: "meflp.ogg", time: camMinutesToSeconds(5) + 10},
+		{sound: "5min.ogg", time: camMinutesToSeconds(5)},
+		{sound: "4min.ogg", time: camMinutesToSeconds(4)},
+		{sound: "3min.ogg", time: camMinutesToSeconds(3)},
+		{sound: "2min.ogg", time: camMinutesToSeconds(2)},
+		{sound: "1min.ogg", time: camMinutesToSeconds(1)},
 		{sound: "flseq.ogg", time: 25},
 		{sound: "10to1.ogg", time: 11},
 		{sound: "mlaunch.ogg", time: 2},
 	];
 	detonateInfo = [
-		{sound: "mlaunch.ogg", time: 3591},
-		{sound: "det60min.ogg", time: 3590},
-		{sound: "det50min.ogg", time: 3000},
-		{sound: "det40min.ogg", time: 2400},
-		{sound: "det30min.ogg", time: 1800},
-		{sound: "det20min.ogg", time: 1200},
-		{sound: "det10min.ogg", time: 600},
-		{sound: "det5min.ogg", time: 300},
-		{sound: "det4min.ogg", time: 240},
-		{sound: "det3min.ogg", time: 180},
-		{sound: "det2min.ogg", time: 120},
-		{sound: "det1min.ogg", time: 60},
+		{sound: "mlaunch.ogg", time: camMinutesToSeconds(60) - 9},
+		{sound: "det60min.ogg", time: camMinutesToSeconds(60) - 10},
+		{sound: "det50min.ogg", time: camMinutesToSeconds(50)},
+		{sound: "det40min.ogg", time: camMinutesToSeconds(40)},
+		{sound: "det30min.ogg", time: camMinutesToSeconds(30)},
+		{sound: "det20min.ogg", time: camMinutesToSeconds(20)},
+		{sound: "det10min.ogg", time: camMinutesToSeconds(10)},
+		{sound: "det5min.ogg", time: camMinutesToSeconds(5)},
+		{sound: "det4min.ogg", time: camMinutesToSeconds(4)},
+		{sound: "det3min.ogg", time: camMinutesToSeconds(3)},
+		{sound: "det2min.ogg", time: camMinutesToSeconds(2)},
+		{sound: "det1min.ogg", time: camMinutesToSeconds(1)},
 		{sound: "fdetseq.ogg", time: 20},
 		{sound: "10to1.ogg", time: 10},
 	];
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
 		area: "RTLZ",
-		reinforcements: 180, //3 minutes.
+		reinforcements: camMinutesToSeconds(3),
 		callback: "unitsInValley"
 	});
 
@@ -301,7 +302,7 @@ function eventStartLevel()
 			assembly: "NXCybFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -313,7 +314,7 @@ function eventStartLevel()
 			assembly: "NXCybFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -337,7 +338,7 @@ function eventStartLevel()
 			},
 			group: camMakeGroup("baseDefenderGroup"),
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			templates: [cTempl.nxmscouh, cTempl.nxmrailh]
 		},
 	});
@@ -347,8 +348,8 @@ function eventStartLevel()
 	cyborgAttack();
 	getCountdown();
 
-	queue("setupNextMission", 8000);
-	queue("hoverAttack", camChangeOnDiff(240000)); // 4 min
-	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
-	queue("enableAllFactories", camChangeOnDiff(300000)); //5 min
+	queue("setupNextMission", camSecondsToMilliseconds(8));
+	queue("hoverAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(5)));
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }

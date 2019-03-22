@@ -40,7 +40,7 @@ function setupLandGroups()
 			camMakePos("NWTankPos2"),
 			camMakePos("NWTankPos3"),
 		],
-		interval: 25000,
+		interval: camSecondsToMilliseconds(25),
 		regroup: false,
 	});
 
@@ -60,7 +60,7 @@ function setupLandGroups()
 		],
 		//fallback: camMakePos("COHeavyFacR-b2Assembly"),
 		//morale: 90,
-		interval: 30000,
+		interval: camSecondsToMilliseconds(30),
 		regroup: false,
 	});
 }
@@ -77,7 +77,7 @@ function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
-		queue("truckDefense", 120000);
+		queue("truckDefense", camMinutesToMilliseconds(2));
 	}
 
 	var list = ["AASite-QuadBof", "WallTower04", "GuardTower-RotMg"];
@@ -88,7 +88,7 @@ function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2END", {
 		area: "RTLZ",
-		reinforcements: 180, //3 min
+		reinforcements: camMinutesToSeconds(3),
 		annihilate: true
 	});
 
@@ -137,7 +137,7 @@ function eventStartLevel()
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -149,7 +149,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -161,7 +161,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -172,7 +172,7 @@ function eventStartLevel()
 		"COVtolFac-b3": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
 			data: {
 				regroup: false,
 				count: -1,
@@ -184,7 +184,7 @@ function eventStartLevel()
 	camManageTrucks(THE_COLLECTIVE);
 	truckDefense();
 
-	queue("setupLandGroups", 50000);
-	queue("vtolAttack", 60000);
-	queue("enableFactories", camChangeOnDiff(90000)); // 90 sec
+	queue("setupLandGroups", camSecondsToMilliseconds(50));
+	queue("vtolAttack", camMinutesToMilliseconds(1));
+	queue("enableFactories", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 }
