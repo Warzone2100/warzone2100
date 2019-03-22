@@ -28,7 +28,7 @@ const COLLECTIVE_RES = [
 //by destroying the air base or crossing the base3Trigger area.
 function videoTrigger()
 {
-	setMissionTime(getMissionTime() + camChangeOnDiff(1800)); //+30 minutes
+	setMissionTime(getMissionTime() + camChangeOnDiff(camMinutesToSeconds(30)));
 	civilianOrders();
 	captureCivilians();
 
@@ -92,7 +92,7 @@ function activateGroups()
 			camMakePos("groundWayPoint3"),
 		],
 		//morale: 50,
-		interval: 70000,
+		interval: camSecondsToMilliseconds(70),
 		regroup: false,
 	});
 
@@ -102,7 +102,7 @@ function activateGroups()
 			camMakePos("centerOfPlayerBase"),
 		],
 		//morale: 50,
-		interval: 40000,
+		interval: camSecondsToMilliseconds(40),
 		regroup: false,
 	});
 
@@ -115,7 +115,7 @@ function activateGroups()
 			camMakePos("oilDerrick"),
 		],
 		//morale: 50,
-		interval: 30000,
+		interval: camSecondsToMilliseconds(30),
 		regroup: false,
 	});
 }
@@ -124,7 +124,7 @@ function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
-		queue("truckDefense", 160000);
+		queue("truckDefense", camSecondsToMilliseconds(160));
 	}
 
 	const LIST = ["WallTower06", "PillBox1", "WallTower03"];
@@ -172,10 +172,10 @@ function captureCivilians()
 
 		if (civilianPosIndex === 7)
 		{
-			queue("sendCOTransporter", 6000);
+			queue("sendCOTransporter", camSecondsToMilliseconds(6));
 		}
 		civilianPosIndex = (civilianPosIndex > 6) ? 0 : (civilianPosIndex + 1);
-		queue("captureCivilians", camChangeOnDiff(10000)); //10 sec.
+		queue("captureCivilians", camChangeOnDiff(camSecondsToMilliseconds(10)));
 	}
 }
 
@@ -204,13 +204,13 @@ function civilianOrders()
 	}
 
 	//Play the "Civilian rescued" sound and throttle it.
-	if (rescued && ((lastSoundTime + 30000) < gameTime))
+	if (rescued && ((lastSoundTime + camSecondsToMilliseconds(30)) < gameTime))
 	{
 		lastSoundTime = gameTime;
 		playSound(rescueSound);
 	}
 
-	queue("civilianOrders", 2000);
+	queue("civilianOrders", camSecondsToMilliseconds(2));
 }
 
 //Capture civilans.
@@ -298,7 +298,7 @@ function eventStartLevel()
 		"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
 	});
 
-	setMissionTime(camChangeOnDiff(7200)); //120 min
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(THE_COLLECTIVE, CIVILIAN, true);
 	setAlliance(CAM_HUMAN_PLAYER, CIVILIAN, true);
@@ -330,7 +330,7 @@ function eventStartLevel()
 			assembly: "COHeavyFac-UpgradeAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -342,7 +342,7 @@ function eventStartLevel()
 			assembly: "COHeavyFac-LeopardAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -354,7 +354,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactoryLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -366,7 +366,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactoryRAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -377,7 +377,7 @@ function eventStartLevel()
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				count: -1,
@@ -387,7 +387,7 @@ function eventStartLevel()
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				count: -1,
@@ -407,5 +407,5 @@ function eventStartLevel()
 	camPlayVideos("MB2_C_MSG");
 	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("activateGroups", camChangeOnDiff(480000)); //8 min
+	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
 }

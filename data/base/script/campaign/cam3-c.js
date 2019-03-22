@@ -31,7 +31,7 @@ function setupPatrolGroups()
 		],
 		//fallback: camMakePos("southBaseRetreat"),
 		//morale: 90,
-		interval: 35000,
+		interval: camSecondsToMilliseconds(35),
 		regroup: true,
 	});
 
@@ -44,7 +44,7 @@ function setupPatrolGroups()
 		],
 		//fallback: camMakePos("southBaseRetreat"),
 		//morale: 90,
-		interval: 35000,
+		interval: camSecondsToMilliseconds(35),
 		regroup: true,
 	});
 
@@ -73,7 +73,7 @@ function discoverGammaBase()
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(5400)); // 1.5 hr.
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
 	setPower(playerPower(CAM_HUMAN_PLAYER) + camChangeOnDiff(10000));
 
 	playSound("power-transferred.ogg");
@@ -134,7 +134,7 @@ function eventStartLevel()
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
-	setMissionTime(camChangeOnDiff(600)); //10 minutes for first part.
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
 
 	var enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
@@ -180,7 +180,7 @@ function eventStartLevel()
 			assembly: "NXHeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -192,7 +192,7 @@ function eventStartLevel()
 			assembly: "NXsouthCybFacAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -204,7 +204,7 @@ function eventStartLevel()
 			assembly: "NXcybFacArtiAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -216,7 +216,7 @@ function eventStartLevel()
 			assembly: "NXvtolAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -230,6 +230,6 @@ function eventStartLevel()
 	setScrollLimits(0, 137, 64, 192); //Show the middle section of the map.
 	changePlayerColour(GAMMA, 0);
 
-	queue("enableAllFactories", camChangeOnDiff(180000)); // 3 min.
-	queue("setupPatrolGroups", 10000); // 10 sec.
+	queue("setupPatrolGroups", camSecondsToMilliseconds(10));
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

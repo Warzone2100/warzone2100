@@ -61,7 +61,7 @@ function setupGroups()
 			camMakePos("vtolBaseEntrance"),
 			camMakePos("northMainEntrance"),
 		],
-		interval: 45000,
+		interval: camSecondsToMilliseconds(45),
 		regroup: false
 	});
 
@@ -124,7 +124,7 @@ function vaporizeTarget()
 		mapLimit = mapLimit + 0.36; //sector clear; move closer
 	}
 	laserSatFuzzyStrike(target);
-	queue("vaporizeTarget", 10000);
+	queue("vaporizeTarget", camSecondsToMilliseconds(10));
 }
 
 //A simple way to fire the LasSat with a chance of missing.
@@ -227,7 +227,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS); //LZ for cam3-4s.
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
-	setMissionTime(camChangeOnDiff(7200)); //2 hr
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	var enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
@@ -263,7 +263,7 @@ function eventStartLevel()
 			assembly: "NxVtolAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 67,
@@ -275,7 +275,7 @@ function eventStartLevel()
 			assembly: "NxHeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: true,
 				repair: 40,
@@ -287,7 +287,7 @@ function eventStartLevel()
 			assembly: "NXcyborgFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: true,
 				repair: 45,
@@ -299,7 +299,7 @@ function eventStartLevel()
 			assembly: "NXcyborgFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: true,
 				repair: 50,
@@ -314,7 +314,7 @@ function eventStartLevel()
 	camEnableFactory("NXbase1VtolFacArti");
 	camEnableFactory("NXcyborgFac1");
 
-	queue("vaporizeTarget", 2000);
-	queue("setupGroups", 5000); // 5 sec
-	queue("enableAllFactories", camChangeOnDiff(300000)); // 5 min.
+	queue("vaporizeTarget", camSecondsToMilliseconds(2));
+	queue("setupGroups", camSecondsToMilliseconds(5));
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }

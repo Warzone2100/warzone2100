@@ -174,7 +174,7 @@ function getArtifact()
 		});
 	}
 
-	queue("getArtifact", 150);
+	queue("getArtifact", camSecondsToMilliseconds(0.2));
 }
 
 //New Paradigm truck builds six lancer hardpoints around LZ
@@ -247,7 +247,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
-		reinforcements: 60, //1 min
+		reinforcements: camMinutesToSeconds(1),
 		callback: "extraVictory",
 		retlz: true,
 	});
@@ -290,7 +290,7 @@ function eventStartLevel()
 			assembly: "middleAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			data: {
 				regroup: true,
 				count: -1,
@@ -301,7 +301,7 @@ function eventStartLevel()
 			assembly: "southAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			data: {
 				regroup: true,
 				count: -1,
@@ -312,7 +312,7 @@ function eventStartLevel()
 			assembly: "northAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			rdata: {
 				regroup: true,
 				count: -1,
@@ -327,5 +327,5 @@ function eventStartLevel()
 	buildLancers();
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
-	queue("getArtifact", camChangeOnDiff(90000));
+	queue("getArtifact", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 }

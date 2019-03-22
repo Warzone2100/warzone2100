@@ -107,7 +107,7 @@ function sendTransport()
 				camMakePos( cyborgPatrolList[(3 * index) + 2] ),
 			],
 			radius: 8,
-			interval: 60000, //60 sec
+			interval: camMinutesToMilliseconds(1),
 			regroup: true,
 			count: -1,
 		}
@@ -128,7 +128,7 @@ function sendTransport()
 	}
 	else
 	{
-		queue("sendTransport", camChangeOnDiff(60000)); //1 min
+		queue("sendTransport", camChangeOnDiff(camMinutesToMilliseconds(1)));
 	}
 }
 
@@ -143,7 +143,7 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(3600)); //1 hour
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
 	// make sure player doesn't build on enemy LZs
 	for (var i = 6; i <= 10; ++i)
@@ -158,5 +158,5 @@ function eventStartLevel()
 	index = 0;
 	switchLZ = 0;
 
-	queue("sendTransport", 10000);
+	queue("sendTransport", camSecondsToMilliseconds(10));
 }

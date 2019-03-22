@@ -110,7 +110,7 @@ function sendPlayerTransporter()
 		return;
 	}
 
-	var ti = (index === (TRANSPORT_LIMIT - 1)) ? 60000 : 300000; //5 min
+	var ti = (index === (TRANSPORT_LIMIT - 1)) ? camMinutesToMilliseconds(1) : camMinutesToMilliseconds(5);
 	var droids = [];
 	var list = [cTempl.prhct, cTempl.prhct, cTempl.prhct, cTempl.prltat, cTempl.prltat, cTempl.npcybr, cTempl.prrept];
 
@@ -142,13 +142,13 @@ function mapEdgeDroids()
 	}
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos("groundUnitPos"), droids, CAM_REINFORCE_GROUND);
-	queue("mapEdgeDroids", camChangeOnDiff(420000)); //7 min
+	queue("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
 }
 
 function vtolAttack()
 {
 	var list = [cTempl.colcbv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(180000), "COCommandCenter"); //3 min
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter");
 }
 
 function groupPatrol()
@@ -181,7 +181,7 @@ function truckDefense()
 		const DEFENSES = ["WallTower06", "PillBox1", "WallTower03"];
 		camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
 
-		queue("truckDefense", 160000);
+		queue("truckDefense", camSecondsToMilliseconds(160));
 	}
 }
 
@@ -258,7 +258,7 @@ function eventTransporterLanded(transport)
 		index = index + 1;
 		if (index >= TRANSPORT_LIMIT)
 		{
-			queue("downTransporter", 60000);
+			queue("downTransporter", camMinutesToMilliseconds(1));
 		}
 	}
 }
@@ -279,7 +279,7 @@ function eventTransporterLaunch(transport)
 {
 	if (index >= TRANSPORT_LIMIT)
 	{
-		queue("downTransporter", 60000);
+		queue("downTransporter", camMinutesToMilliseconds(1));
 	}
 }
 
@@ -293,7 +293,6 @@ function eventGameLoaded()
 
 function eventStartLevel()
 {
-	const MISSION_TIME = camChangeOnDiff(3600); //60 minutes.
 	const PLAYER_POWER = (difficulty === INSANE) ? 9000 : 5000;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone"); //player lz
@@ -316,7 +315,7 @@ function eventStartLevel()
 		"COArtiCBTower": { tech: "R-Sys-Sensor-Upgrade01" },
 	});
 
-	setMissionTime(MISSION_TIME);
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	cam2Setup();
 
@@ -350,13 +349,13 @@ function eventStartLevel()
 	}
 	else
 	{
-		setReinforcementTime(300); // 5 min.
+		setReinforcementTime(camMinutesToSeconds(5)); // 5 min.
 	}
 
-	queue("secondVideo", 12000); // 12 sec
-	queue("truckDefense", 15000);// 15 sec.
-	queue("groupPatrol", camChangeOnDiff(60000)); // 60 sec
-	queue("sendCOTransporter", camChangeOnDiff(240000)); //4 min
-	queue("vtolAttack", camChangeOnDiff(180000)); //3 min
-	queue("mapEdgeDroids", camChangeOnDiff(420000)); //7 min
+	queue("secondVideo", camSecondsToMilliseconds(12));
+	queue("truckDefense", camSecondsToMilliseconds(15));
+	queue("groupPatrol", camChangeOnDiff(camMinutesToMilliseconds(1)));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	queue("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	queue("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
 }

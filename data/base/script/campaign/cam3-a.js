@@ -112,14 +112,14 @@ function sendPlayerTransporter()
 	);
 
 	index = index + 1;
-	queue("sendPlayerTransporter", 300000); //5 min
+	queue("sendPlayerTransporter", camMinutesToMilliseconds(5));
 }
 
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
 	var list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
 }
 
 //These groups are active immediately.
@@ -160,7 +160,7 @@ function truckDefense()
 {
 	if (enumDroid(NEXUS, DROID_CONSTRUCT).length > 0)
 	{
-		queue("truckDefense", 160000);
+		queue("truckDefense", camSecondsToMilliseconds(160));
 	}
 
 	const DEFENSE = ["NX-Tower-Rail1", "NX-Tower-ATMiss"];
@@ -207,16 +207,14 @@ function cam3Setup()
 
 function eventStartLevel()
 {
-	const MISSION_TIME = camChangeOnDiff(7200); //120 minutes.
 	const PLAYER_POWER = 16000;
-	const REINFORCEMENT_TIME = 300; //5 minutes.
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	var tent = getObject("transporterEntry");
 	var text = getObject("transporterExit");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_1S");
-	setMissionTime(MISSION_TIME);
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
@@ -271,7 +269,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			group: camMakeGroup("NEAttackerGroup"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -284,7 +282,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			group: camMakeGroup("cybAttackers"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -302,7 +300,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			group: camMakeGroup("cybValleyPatrol"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -320,7 +318,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			group: camMakeGroup("hoverPatrolGrp"),
 			templates: [cTempl.nxmscouh]
 		},
@@ -337,7 +335,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			group: camMakeGroup("NEDefenderGroup"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -357,10 +355,10 @@ function eventStartLevel()
 	}
 	else
 	{
-		setReinforcementTime(REINFORCEMENT_TIME);
+		setReinforcementTime(camMinutesToSeconds(5));
 	}
 
 	groupPatrolNoTrigger();
-	queue("vtolAttack", camChangeOnDiff(480000)); //8 min
-	queue("enableAllFactories", camChangeOnDiff(1200000)); //20 minutes.
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(8)));
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(20)));
 }

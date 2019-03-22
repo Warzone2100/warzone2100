@@ -17,7 +17,7 @@ camAreaEvent("launchScavAttack", function(droid)
 		morale: 50
 	});
 	// Activate mission timer, unlike the original campaign.
-	setMissionTime(camChangeOnDiff(3600));
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 });
 
 function runAway()
@@ -44,8 +44,8 @@ function doAmbush()
 camAreaEvent("scavAttack1", function(droid)
 {
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	queue("runAway", 1000);
-	queue("doAmbush", 5000);
+	queue("runAway", camSecondsToMilliseconds(1));
+	queue("doAmbush", camSecondsToMilliseconds(5));
 });
 
 // Road between first outpost and base two.
@@ -106,7 +106,7 @@ function camEnemyBaseEliminated_scavGroup1()
 
 function camEnemyBaseEliminated_scavGroup2()
 {
-	queue("camDetectEnemyBase", 2000, "scavGroup3");
+	queue("camDetectEnemyBase", camSecondsToMilliseconds(2), "scavGroup3");
 }
 
 function enableBaseStructures()
@@ -188,7 +188,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 3,
 			maxSize: 3,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
 			templates: [ cTempl.trike, cTempl.bloke ]
 		},
 		"base3Factory": {
@@ -197,7 +197,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(16000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(16)),
 			templates: [ cTempl.bloke, cTempl.buggy, cTempl.bloke ]
 		},
 		"base4Factory": {
@@ -206,7 +206,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(13000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(13)),
 			templates: [ cTempl.bjeep, cTempl.bloke, cTempl.trike, cTempl.bloke ]
 		},
 	});

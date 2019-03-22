@@ -451,6 +451,35 @@ function __camGlobalContext()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Time and Timer related functions.
+// Useful for setting the time values for queue(), setTimer(), or setMissionTime().
+////////////////////////////////////////////////////////////////////////////////
+
+const MILLISECONDS_IN_SECOND = 1000;
+const SECONDS_IN_MINUTE = 60;
+const MINUTES_IN_HOUR = 60;
+
+function camSecondsToMilliseconds(sec)
+{
+	return sec * MILLISECONDS_IN_SECOND;
+}
+
+function camMinutesToMilliseconds(min)
+{
+	return min * camSecondsToMilliseconds(SECONDS_IN_MINUTE);
+}
+
+function camMinutesToSeconds(min)
+{
+	return min * SECONDS_IN_MINUTE;
+}
+
+function camHoursToSeconds(hour)
+{
+	return hour * camMinutesToSeconds(MINUTES_IN_HOUR);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Research and structure related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1309,7 +1338,7 @@ function __camDispatchTransporterSafe(player, position, list, data)
 {
 	if (!profile("__camDispatchTransporterUnsafe"))
 	{
-		queue("__camDispatchTransporterSafe", 1000);
+		queue("__camDispatchTransporterSafe", camSecondsToMilliseconds(1));
 	}
 }
 
@@ -2122,7 +2151,7 @@ function __camTacticsTickForGroup(group)
 		{
 			if (!camDef(gi.data.interval))
 			{
-				gi.data.interval = 60000;
+				gi.data.interval = camSecondsToMilliseconds(60);
 			}
 			if (!camDef(gi.lastmove) || !camDef(gi.lastspot))
 			{
@@ -2873,7 +2902,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
 			setReinforcementTime(__camVictoryData.reinforcements);
-			queue("__camSetOffworldLimits", 100);
+			queue("__camSetOffworldLimits", camSecondsToMilliseconds(0.1));
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_TIMEOUT:
@@ -3268,7 +3297,7 @@ function __checkVtolSpawnObject()
 		}
 		else
 		{
-			queue("__checkVtolSpawnObject", 5000);
+			queue("__checkVtolSpawnObject", camSecondsToMilliseconds(5));
 		}
 	}
 }
@@ -3383,7 +3412,7 @@ function __camRetreatVtols()
 		}
 	}
 
-	queue("__camRetreatVtols", 800);
+	queue("__camRetreatVtols", camSecondsToMilliseconds(0.8));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3578,7 +3607,7 @@ function camHackIntoPlayer(player, to)
 					playSound(snd);
 				}
 
-				queue("camNexusLaugh", 1500);
+				queue("camNexusLaugh", camSecondsToMilliseconds(1.5));
 			}
 		}
 	}
@@ -3767,7 +3796,7 @@ function __camEnqueueVideos()
 	if (what.indexOf(SOUND_IDENTIFER) !== -1)
 	{
 		playSound(what);
-		queue("__camEnqueueVideos", 3200); //more than enough for most sounds.
+		queue("__camEnqueueVideos", camSecondsToMilliseconds(3.2)); //more than enough for most sounds.
 	}
 	else
 	{
@@ -3855,7 +3884,6 @@ function __camTick()
 }
 
 var __camLastHitTime = 0;
-const __CAM_EVENT_ATTACKED_INTENSITY = 5000;
 
 function cam_eventPickup(feature, droid)
 {
@@ -3986,12 +4014,12 @@ function cam_eventStartLevel()
 	__camNumTransporterExits = 0;
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	__camAiPowerReset(); //grant power to the AI
-	setTimer("__checkEnemyFactoryProductionTick", 800);
-	setTimer("__camTick", 1000); // campaign pollers
-	setTimer("__camTruckTick", 40100); // some slower campaign pollers
-	setTimer("__camAiPowerReset", 180000); //reset AI power every so often
-	queue("__camTacticsTick", 100); // would re-queue itself
-	queue("__camGrantSpecialResearch", 6000);
+	setTimer("__checkEnemyFactoryProductionTick", camSecondsToMilliseconds(0.8));
+	setTimer("__camTick", camSecondsToMilliseconds(1)); // campaign pollers
+	setTimer("__camTruckTick", camSecondsToMilliseconds(40) + camSecondsToMilliseconds(0.1)); // some slower campaign pollers
+	setTimer("__camAiPowerReset", camMinutesToMilliseconds(3)); //reset AI power every so often
+	queue("__camTacticsTick", camSecondsToMilliseconds(0.1)); // would re-queue itself
+	queue("__camGrantSpecialResearch", camSecondsToMilliseconds(6));
 }
 
 function cam_eventDroidBuilt(droid, structure)
@@ -4212,7 +4240,7 @@ function cam_eventObjectTransfer(obj, from)
 		{
 			playSound(snd);
 		}
-		queue("camNexusLaugh", 1500);
+		queue("camNexusLaugh", camSecondsToMilliseconds(1.5));
 	}
 }
 

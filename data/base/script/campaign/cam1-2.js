@@ -24,7 +24,7 @@ function camArtifactPickup_ScavLab()
 		},
 		groupSize: 5,
 		maxSize: 9,
-		throttle: camChangeOnDiff(10000),
+		throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 		templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 	});
 	camEnableFactory("WestFactory");
@@ -109,7 +109,7 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			group: camMakeGroup("NorthTankGroup"),
 			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
@@ -126,10 +126,10 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 	});
 
-	queue("enableWestFactory", 30000);
+	queue("enableWestFactory", camSecondsToMilliseconds(30));
 }

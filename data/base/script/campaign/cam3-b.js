@@ -62,7 +62,7 @@ function vtolAttack()
 		altIdx: 0
 	};
 
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), "NXCommandCenter", ext); //2 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXCommandCenter", ext);
 }
 
 function enableAllFactories()
@@ -125,7 +125,7 @@ function sendNXTransporter()
 			exit: { x: 62, y: 4 }
 		});
 
-		queue("sendNXTransporter", camChangeOnDiff(180000)); //3 min
+		queue("sendNXTransporter", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	}
 }
 
@@ -143,7 +143,7 @@ function sendNXlandReinforcements()
 		}
 	);
 
-	queue("sendNXlandReinforcements", camChangeOnDiff(240000)); //4 min
+	queue("sendNXlandReinforcements", camChangeOnDiff(camMinutesToMilliseconds(4)));
 }
 
 function transferPower()
@@ -163,7 +163,7 @@ function activateNexusGroups()
 			camMakePos("westRidge"),
 			camMakePos("eastRidge"),
 		],
-		interval: 45000,
+		interval: camSecondsToMilliseconds(45),
 		regroup: false,
 		count: -1
 		//morale: 90,
@@ -176,7 +176,7 @@ function activateNexusGroups()
 			camMakePos("eastDoorOfBase"),
 			camMakePos("playerLZ"),
 		],
-		interval: 45000,
+		interval: camSecondsToMilliseconds(45),
 		regroup: false,
 		count: -1
 		//morale: 90,
@@ -188,7 +188,7 @@ function activateNexusGroups()
 			camMakePos("gammaBase"),
 			camMakePos("northEndOfPass"),
 		],
-		interval: 30000,
+		interval: camSecondsToMilliseconds(30),
 		regroup: false,
 		count: -1
 	});
@@ -202,7 +202,7 @@ function trapSprung()
 		playSound("pcv455.ogg"); //Incoming message.
 		trapActive = true;
 		setAlliance(GAMMA, NEXUS, false);
-		queue("trapSprung", 2000); //call this a few seconds later
+		queue("trapSprung", camSecondsToMilliseconds(2)); //call this a few seconds later
 		return;
 	}
 
@@ -211,11 +211,11 @@ function trapSprung()
 	camPlayVideos("MB3_B_MSG3");
 	hackRemoveMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(5400));
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
 	camCallOnce("activateNexusGroups");
 	enableAllFactories();
 
-	queue("sendNXlandReinforcements", camChangeOnDiff(300000)); //5 min
+	queue("sendNXlandReinforcements", camChangeOnDiff(camMinutesToMilliseconds(5)));
 	sendNXTransporter();
 	changePlayerColour(GAMMA, NEXUS); // Black painting.
 	playSound(SYNAPTICS_ACTIVATED);
@@ -243,12 +243,11 @@ function eventStartLevel()
 {
 	trapActive = false;
 	gammaAttackCount = 0;
-	const MISSION_TIME = camChangeOnDiff(1800); //30 minutes. Rescue part.
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 
      camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
-	setMissionTime(MISSION_TIME);
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
@@ -298,7 +297,7 @@ function eventStartLevel()
 			assembly: "gammaFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(45000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -311,7 +310,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			group: camMakeGroup("gammaBaseCleanup"),
 			groupSize: 6,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -328,6 +327,6 @@ function eventStartLevel()
 	changePlayerColour(GAMMA, 0);
 	setAlliance(GAMMA, CAM_HUMAN_PLAYER, true);
 
-	queue("transferPower", 3000);
-	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
+	queue("transferPower", camSecondsToMilliseconds(3));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }

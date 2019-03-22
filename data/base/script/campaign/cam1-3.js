@@ -118,14 +118,14 @@ function enableReinforcements()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
 		area: "RTLZ",
 		message: "C1-3_LZ",
-		reinforcements: 120, // changes!
+		reinforcements: camMinutesToSeconds(2), // changes!
 		annihilate: true
 	});
 }
 
 function camEnemyBaseDetected_ScavBaseGroup()
 {
-	queue("camCallOnce", 1000, "enableReinforcements");
+	queue("camCallOnce", camSecondsToMilliseconds(1), "enableReinforcements");
 }
 
 function camEnemyBaseEliminated_ScavBaseGroup()
@@ -219,7 +219,7 @@ function eventStartLevel()
 			},
 			groupSize: 4,
 			maxSize: 10,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [ cTempl.rbuggy, cTempl.bloke, cTempl.rbjeep, cTempl.buggy ]
 		},
 		"NPFactory": {
@@ -231,7 +231,7 @@ function eventStartLevel()
 			},
 			groupSize: 4, // sic! scouts, at most
 			maxSize: 20,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			templates: [ cTempl.nppod, cTempl.nphmg, cTempl.npsmc, cTempl.npsmc ]
 		},
 	});
@@ -240,6 +240,6 @@ function eventStartLevel()
 	NPDefenseGroup = camMakeGroup("NPDefense");
 	NPFactory = getObject("NPFactory");
 
-	queue("playNPWarningMessage", 3000);
-	queue("sendScouts", 60000);
+	queue("playNPWarningMessage", camSecondsToMilliseconds(3));
+	queue("sendScouts", camSecondsToMilliseconds(60));
 }

@@ -29,7 +29,7 @@ function setupNexusPatrols()
 			"SWPatrolPos2",
 			"SWPatrolPos3"
 		],
-		interval: 20000,
+		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		repair: 45,
 		count: -1
@@ -40,7 +40,7 @@ function setupNexusPatrols()
 			"NEPatrolPos1",
 			"NEPatrolPos2"
 		],
-		interval: 30000,
+		interval: camSecondsToMilliseconds(30),
 		regroup: false,
 		repair: 45,
 		count: -1
@@ -51,7 +51,7 @@ function setupNexusPatrols()
 			"SEPatrolPos1",
 			"SEPatrolPos2"
 		],
-		interval: 20000,
+		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		repair: 45,
 		count: -1
@@ -63,7 +63,7 @@ function setupNexusPatrols()
 			"NWPatrolPos2",
 			"NWPatrolPos3"
 		],
-		interval: 35000,
+		interval: camSecondsToMilliseconds(35),
 		regroup: false,
 		repair: 45,
 		count: -1
@@ -105,7 +105,7 @@ function truckDefense()
 		}
 	}
 
-	queue("truckDefense", camChangeOnDiff(300000)); // 5 min
+	queue("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }
 
 function eventStartLevel()
@@ -116,7 +116,7 @@ function eventStartLevel()
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
 		area: "RTLZ",
-		reinforcements: 60, // 1 min
+		reinforcements: camMinutesToSeconds(1),
 		annihilate: true
 	});
 
@@ -184,7 +184,7 @@ function eventStartLevel()
 			assembly: "NX-NWFactory1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -196,7 +196,7 @@ function eventStartLevel()
 			assembly: "NX-NWFactory2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -208,7 +208,7 @@ function eventStartLevel()
 			assembly: "NX-NWCyborgFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -220,7 +220,7 @@ function eventStartLevel()
 			assembly: "NX-NEFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -232,7 +232,7 @@ function eventStartLevel()
 			assembly: "NX-SWFactoryAssembly",
 			order: CAM_ORDER_PATROL,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				pos: [
 					camMakePos("SWPatrolPos1"),
@@ -241,7 +241,7 @@ function eventStartLevel()
 					camMakePos("NEPatrolPos1"),
 					camMakePos("NEPatrolPos2")
 				],
-				interval: 45000,
+				interval: camSecondsToMilliseconds(45),
 				regroup: false,
 				repair: 45,
 				count: -1,
@@ -252,7 +252,7 @@ function eventStartLevel()
 			assembly: "NX-SWCyborgFactory1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(35000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -264,7 +264,7 @@ function eventStartLevel()
 			assembly: "NX-SWCyborgFactory2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(35000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -276,13 +276,13 @@ function eventStartLevel()
 			assembly: "NX-SEFactoryAssembly",
 			order: CAM_ORDER_PATROL,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				pos: [
 					camMakePos("SEPatrolPos1"),
 					camMakePos("NEPatrolPos1")
 				],
-				interval: 30000,
+				interval: camSecondsToMilliseconds(30),
 				regroup: false,
 				repair: 45,
 				count: -1,
@@ -293,7 +293,7 @@ function eventStartLevel()
 			assembly: "NX-VtolFactory1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -305,7 +305,7 @@ function eventStartLevel()
 			assembly: "NX-VtolFactory2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -328,5 +328,5 @@ function eventStartLevel()
 	hackAddMessage("MB3_4_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	queue("enableAllFactories", camChangeOnDiff(600000)); // 10 min.
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }
