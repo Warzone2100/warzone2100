@@ -129,20 +129,6 @@ endfunction()
 # to form the install .gmo file name (warzone2100.gmo) in each locale directory
 set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.pot")
 
-# Configure the xgettext options
-# NOTE: This matches what Makevars "XGETTEXT_OPTIONS" (and other values) provides
-set(_xgettext_option_list --language=C++
-	--from-code=UTF-8
-	--no-wrap
-	--width=1
-	--keyword=_
-	--keyword=N_
-	--keyword=P_:1c,2
-	--keyword=NP_:1c,2
-	--package-name=Warzone
-	--package-version=${PROJECT_VERSION}
-	--msgid-bugs-address=warzone2100-project@lists.sourceforge.net)
-
 # Read in `POTFILES.in` to build a list of dependency paths in the same order.
 set(_potfiles_in_path "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
 file(STRINGS "${_potfiles_in_path}" potfiles
@@ -153,15 +139,15 @@ foreach(potfile ${potfiles})
 		"../${potfile}")
 endforeach()
 
-# Build the .pot file
-# Note: This uses the `--files-from=` parameter instead of passing in a giant command-line of files
-#		because the latter option likes to break when building on Windows.
-ADD_CUSTOM_COMMAND(OUTPUT ${_potFile}
-	COMMAND ${XGETTEXT_CMD} ${_xgettext_option_list} -o ${_potFile} --files-from=${_potfiles_in_path}
-	DEPENDS ${source_translatable_depends}
+# Generate the warzone2100.pot file in the build directory
+ADD_CUSTOM_COMMAND(
+	OUTPUT ${_potFile}
+	COMMAND ${CMAKE_COMMAND} -DPOTFILES_IN=${_potfiles_in_path} -DOUTPUT_FILE=${_potFile} -DXGETTEXT_CMD=${XGETTEXT_CMD} -P ${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake
+	DEPENDS ${_potfiles_in_path} ${source_translatable_depends} "${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake"
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	COMMENT "Extract translatable messages to ${_potFile}"
-	VERBATIM)
+	VERBATIM
+)
 
 ADD_CUSTOM_TARGET(pot_file ALL
 	DEPENDS ${_potFile})
