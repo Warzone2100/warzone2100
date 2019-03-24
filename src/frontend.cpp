@@ -30,6 +30,10 @@
 #  include <shellapi.h> /* For ShellExecute  */
 #endif
 
+#if defined(WZ_OS_MAC)
+#  include "lib/framework/cocoa_wrapper.h" /* For cocoaOpenURL */
+#endif // WZ_OS_MAC
+
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/physfs_ext.h"
@@ -179,9 +183,7 @@ static void runLink(char const *link)
 
 	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
 #elif defined (WZ_OS_MAC)
-	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "open %s &", link);
-	system(lbuf);
+	cocoaOpenURL(link);
 #else
 	// for linux
 	char lbuf[250] = {'\0'};
