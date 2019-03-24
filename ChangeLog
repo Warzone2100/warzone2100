@@ -2,17 +2,23 @@
  * General:
    * Add:
    * Change:
-   * Fix:
+   * Fix: Saving of challenge scores (commit:e1b3eac0faeb7c39b769fee59920d066373d5c49, ticket:4868)
+   * Fix: Processing of radar input after disabling its widget (commit:39f083ed0f0c29f071f9f528c9eeef5544373fd7, ticket:4867)
+   * Fix: Crashes caused by missing support for mipmap generation (commit:a850fb5c887eb54a50f3a3f0f15ef0f1b6591a98)
    * Remove:
  * Graphics:
-   * Add:
-   * Change:
-   * Fix:
+   * Add: Hit-testing support for widgets (commit:405a59420918f903352c4a51be6822eb60d4066b, commit:9394cd5f6c5c1de666d34d56cc32a0d4dfbc83e9)
+   * Change: Increase click area for in-game options (commit:bb15fbaa10663d6ce540911d9890f733b75fd365)
+   * Fix: Flamer Bunker model (commit:400191c9c47a4e39aeb12240283f355a57e30290, ticket:4856)
+   * Fix: Objects darkening when zooming out (commit:456a74edb1fa76e66bf8e0e2c888b54c0b5c6299, ticket:4375)
+   * Fix: Layout calculation for unit orders panel (commit:67b64e6f4205b123e69d6973f2a524656a419c75)
+   * Fix: Layout calculation for mission timer (commit:d655de8573b8d781d748d5c53e7f46f39a402d82)
+   * Fix: Misplaced reticule area buttons (commit:6731c4ca5f1178e408d1cb22757793fe7ad1015f)
    * Remove:
  * Campaign:
    * Add:
    * Change:
-   * Fix:
+   * Fix: Overlapping objects in maps (commit:f3a9b4d640bbf1662b3a297554083aecdd5401a1, ticket:4865)
    * Remove:
  * Multiplayer:
    * Add:
@@ -32,7 +38,7 @@
  * Other:
    * Add:
    * Change:
-   * Fix:
+   * Fix: Truck getting stuck when picking up artifact in tutorial (commit:f4fa0a93e26103402e77e2072e3004b533029904, ticket:4866)
    * Remove:
  * Modding:
    * Add:
@@ -45,9 +51,12 @@
    * Fix:
    * Remove:
  * Translation:
-   * Add:
-   * Change:
-   * Fix:
+   * Add: Translation of structure limits screen title (commit:198215bbc09438e689db0eb2a4d0ed3de4a276f2, ticket:4871)
+   * Change: Russian (commit:2dafbc2cbc7e7ab8e173edb10b88fcd32a8e4c79)
+   * Change: German (commit:85f9a13f54406fe3dff07936b1d96d22e66e00e2, commit:30d10bfd1854700700a5aaa262eae7bac4de4b5c, ticket:4845)
+   * Change: Turkish (commit:b14f9bd574e36e0ec0db3d59ad14249c90747435)
+   * Fix: Translation of research messages not being shown (commit:f1b170db3012f4fcd99335cd814180ea8d37e0d6, ticket:4843)
+   * Fix: Mismatching format specifiers for singular and plural form of a translatable string (commit:db95329005c0e07329138c90a64a2cf43062c391, ticket:4872)
    * Remove:
  * Documentation:
    * Add:
