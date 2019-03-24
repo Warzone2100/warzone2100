@@ -105,6 +105,7 @@ Current or former contributors to the GPL version
 * (tmp500): Balancing, bug reporting
 * (tnmurphy): Memory bug fix
 * Tuomas Salomäki (hwl): Units not following commander bug fix
+* T-X: Networking patch, bug report for radar dragging deselecting units
 * (Vermithrax): Mist fog in campaign games, MacOSX fix
 * Victor Qamly (qamly): FPS counter
 * Vincent Lejeune (vlj): Shader and skybox improvement, bug fixes
@@ -260,6 +261,7 @@ Current or former contributors to the GPL version
 * Vadim S. Sabinich (sabinich): Russian translation
 * Vincent Laviron (Althalus, lthls): French translation, bug fixes
 * Vitya Andreev (vaut/andrvaut): Russian translation, bug fix for MXE
+* Volkan Gezer (vgezer): Turkish translation
 * (wakeup): Turkish translation
 
 ### Documentation
@@ -292,6 +294,7 @@ Current or former contributors to the GPL version
 * (dpblnt): Bug report for crash related to structure limits
 * (effigy): Bug reports for kicking players and mouse options screen
 * (Eugen): Campaign testing, bug reporting
+* Fedaykin/RBMW-Fedaykin: Bug reports for challenges, templates and other issues
 * Hylke van der Schaaf (TheNoid/Hylke): Bug reports
 * (icefire): Bug reports for gates
 * (jaakan): Bug reports for compiler warnings
