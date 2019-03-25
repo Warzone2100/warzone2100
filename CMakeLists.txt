@@ -128,6 +128,11 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 	set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Flags used by the linker (Release builds)" FORCE)
 endif()
 
+# Treat source files as UTF-8 (unless they have a BOM) (MSVC)
+# NOTE: For MSVC, this also sets the executable character set.
+add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 
