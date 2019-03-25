@@ -72,7 +72,7 @@ protected:
 		OnOutput("\r\nLoaded Modules:\r\n");
 	}
 
-	virtual void BeforeStackTrace()
+	virtual void BeforeShowCallstack()
 	{
 		OnOutput("\r\nCall Stack:\r\n");
 	}
