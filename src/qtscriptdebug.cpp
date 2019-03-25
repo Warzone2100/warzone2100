@@ -22,8 +22,7 @@
  * New scripting system - debug GUI
  */
 
-#include "qtscriptdebug.h"
-
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtCore/QHash>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>
@@ -40,6 +39,8 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QStandardItemModel>
+
+#include "qtscriptdebug.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -438,7 +439,7 @@ void ScriptDebugger::attachScriptClicked()
 {
 	const QString &script = aiScriptComboBox.currentText();
 	const int player = aiPlayerComboBox.currentIndex();
-	jsAutogameSpecific("multiplay/skirmish/" + script, player);
+	jsAutogameSpecific(QStringToWzString("multiplay/skirmish/" + script), player);
 	debug(LOG_INFO, "Script attached - close and reopen debug window to see its context");
 }
 

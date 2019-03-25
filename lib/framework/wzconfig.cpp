@@ -23,8 +23,8 @@
  */
 
 // Get platform defines before checking for them.
-// Qt headers MUST come before platform specific stuff!
 #include "wzconfig.h"
+#include <physfs.h>
 #include "file.h"
 #include <sstream>
 
@@ -507,10 +507,6 @@ json_variant::json_variant(const std::string & str)
 : mObj(str)
 { }
 
-json_variant::json_variant(const QString & str)
-: mObj(str.toUtf8().constData())
-{ }
-
 json_variant::json_variant(const WzString & str)
 : mObj(str.toUtf8())
 { }
@@ -555,7 +551,7 @@ int json_variant::toInt(bool *ok /*= nullptr*/) const
 	else if (mObj.is_boolean())
 	{
 		bool result = json_variant_toType<bool>(*this, ok, false);
-		return (uint)result;
+		return (int)result;
 	}
 	else if (mObj.is_string())
 	{
@@ -578,31 +574,31 @@ int json_variant::toInt(bool *ok /*= nullptr*/) const
 	}
 }
 
-uint json_variant::toUInt(bool *ok /*= nullptr*/) const
+unsigned int json_variant::toUInt(bool *ok /*= nullptr*/) const
 {
 	if (mObj.is_number())
 	{
-		return json_variant_toType<uint>(*this, ok, 0);
+		return json_variant_toType<unsigned int>(*this, ok, 0);
 	}
 	else if (mObj.is_boolean())
 	{
 		bool result = json_variant_toType<bool>(*this, ok, false);
-		return (uint)result;
+		return (unsigned int)result;
 	}
 	else if (mObj.is_string())
 	{
 		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
 		try {
 			unsigned long ulongValue = std::stoul(result);
-			if (ulongValue > std::numeric_limits<uint>::max())
+			if (ulongValue > std::numeric_limits<unsigned int>::max())
 			{
-				debug(LOG_WARNING, "Failed to convert string '%s' to uint because of error: value is > std::numeric_limits<uint>::max()", result.c_str());
+				debug(LOG_WARNING, "Failed to convert string '%s' to unsigned int because of error: value is > std::numeric_limits<unsigned int>::max()", result.c_str());
 				return 0;
 			}
-			return (uint)ulongValue;
+			return (unsigned int)ulongValue;
 		}
 		catch (const std::exception &e) {
-			debug(LOG_WARNING, "Failed to convert string '%s' to uint because of error: %s", result.c_str(), e.what());
+			debug(LOG_WARNING, "Failed to convert string '%s' to unsigned int because of error: %s", result.c_str(), e.what());
 			return 0;
 		}
 	}

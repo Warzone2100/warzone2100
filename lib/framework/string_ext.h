@@ -30,6 +30,8 @@
 #include <strings.h>
 #endif
 
+#include <string>
+#include <utility>
 
 /*!
  * On MSVC, in order to squelch tons of 'memory leaks' we set the allocator

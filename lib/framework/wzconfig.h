@@ -55,7 +55,6 @@ using json = nlohmann::json;
 #  define snprintf libintl_snprintf
 #endif
 
-#include <physfs.h>
 #include <stdbool.h>
 #include <vector>
 #include <list>
@@ -75,12 +74,11 @@ public:
 	json_variant(const char * str);
 	json_variant(const std::string & str);
 
-	json_variant(const QString & str);
 	json_variant(const WzString & str);
 public:
 	// QVariant-like conversion methods
 	int toInt(bool *ok = nullptr) const;
-	uint toUInt(bool *ok = nullptr) const;
+	unsigned int toUInt(bool *ok = nullptr) const;
 	bool toBool() const;
 	double toDouble(bool *ok = nullptr) const;
 	float toFloat(bool *ok = nullptr) const;

@@ -22,6 +22,12 @@
  * New scripting system -- script functions
  */
 
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+#include <QtScript/QScriptValue>
+#include <QtCore/QStringList>
+#include <QtCore/QJsonArray>
+#include <QtGui/QStandardItemModel>
+
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/fixedpoint.h"
@@ -30,11 +36,6 @@
 #include "lib/netplay/netplay.h"
 #include "qtscriptfuncs.h"
 #include "lib/ivis_opengl/tex.h"
-
-#include <QtScript/QScriptValue>
-#include <QtCore/QStringList>
-#include <QtCore/QJsonArray>
-#include <QtGui/QStandardItemModel>
 
 #include "action.h"
 #include "clparse.h"

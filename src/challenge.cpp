@@ -26,7 +26,7 @@
 #include <physfs.h>
 #include <time.h>
 
-#include <QtCore/QTime>
+#include <QtCore/QTime> // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"

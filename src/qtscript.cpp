@@ -51,8 +51,7 @@
 //;; function that does something with the **game object**.
 //;;
 
-#include "qtscript.h"
-
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtCore/QTextStream>
 #include <QtCore/QHash>
 #include <QtScript/QScriptEngine>
@@ -67,6 +66,8 @@
 #include <QtCore/QElapsedTimer>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QFileDialog>
+
+#include "qtscript.h"
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -957,15 +958,15 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text)
 	return true;
 }
 
-void jsAutogameSpecific(const QString &name, int player)
+void jsAutogameSpecific(const WzString &name, int player)
 {
-	QScriptEngine *engine = loadPlayerScript(WzString::fromUtf8(name.toUtf8().constData()), player, DIFFICULTY_MEDIUM);
+	QScriptEngine *engine = loadPlayerScript(name, player, DIFFICULTY_MEDIUM);
 	if (!engine)
 	{
 		console("Failed to load selected AI! Check your logs to see why.");
 		return;
 	}
-	console("Loaded the %s AI script for current player!", name.toUtf8().constData());
+	console("Loaded the %s AI script for current player!", name.toUtf8().c_str());
 	callFunction(engine, "eventGameInit", QScriptValueList());
 	callFunction(engine, "eventStartLevel", QScriptValueList());
 }
@@ -982,7 +983,7 @@ void jsAutogame()
 		console("No file specified");
 		return;
 	}
-	jsAutogameSpecific("scripts/" + basename.fileName(), selectedPlayer);
+	jsAutogameSpecific(QStringToWzString("scripts/" + basename.fileName()), selectedPlayer);
 }
 
 void jsShowDebug()

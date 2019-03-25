@@ -22,14 +22,16 @@
  * SDL backend code
  */
 
-// Get platform defines before checking for them!
-#include "lib/framework/wzapp.h"
-
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtWidgets/QApplication>
 // This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
 #if defined(QT_STATICPLUGIN)
 #include <QtCore/QtPlugin>
 #endif
+
+// Get platform defines before checking for them!
+#include "lib/framework/wzapp.h"
+
 #include "lib/framework/input.h"
 #include "lib/framework/utf.h"
 #include "lib/framework/opengl.h"
