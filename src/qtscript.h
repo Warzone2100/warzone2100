@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 
 class QScriptEngine;
+class QString;
 class WzString;
 struct BASE_OBJECT;
 struct DROID;
@@ -102,7 +103,7 @@ void jsShowDebug();
 void jsAutogame();
 
 /// Choose a specific autogame AI
-void jsAutogameSpecific(const QString &name, int player);
+void jsAutogameSpecific(const WzString &name, int player);
 
 /// Run-time code from user
 bool jsEvaluate(QScriptEngine *engine, const QString &text);
@@ -152,6 +153,6 @@ void jsDebugMessageUpdate();
 void jsDebugUpdate();
 
 #define QStringToWzString(_qstring) \
-WzString::fromUtf8(_qstring.toUtf8().constData())
+WzString::fromUtf8((_qstring).toUtf8().constData())
 
 #endif

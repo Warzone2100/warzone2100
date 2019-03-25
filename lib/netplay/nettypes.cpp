@@ -26,7 +26,6 @@
 #include "lib/framework/wzglobal.h"
 #include "lib/framework/string_ext.h"
 #include <string.h>
-#include <QtCore/QStringList>
 
 #ifndef WZ_OS_WIN
 #include <arpa/inet.h>

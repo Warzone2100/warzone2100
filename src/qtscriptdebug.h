@@ -20,6 +20,15 @@
 #ifndef __INCLUDED_QTSCRIPTDEBUG_H__
 #define __INCLUDED_QTSCRIPTDEBUG_H__
 
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+#include <QtGui/QStandardItemModel>
+#include <QtCore/QHash>
+#include <QtCore/QSignalMapper>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QComboBox>
+
 #include "lib/framework/frame.h"
 #include "basedef.h"
 #include "droiddef.h"
@@ -30,14 +39,6 @@
 class QScriptEngine;
 class QModelIndex;
 class QLineEdit;
-
-#include <QtGui/QStandardItemModel>
-#include <QtCore/QHash>
-#include <QtCore/QSignalMapper>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QTableWidget>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QComboBox>
 
 typedef QHash<QScriptEngine *, QStandardItemModel *> MODELMAP;
 typedef QHash<QScriptEngine *, QLineEdit *> EDITMAP;

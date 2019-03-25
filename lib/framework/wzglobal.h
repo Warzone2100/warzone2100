@@ -534,12 +534,6 @@
 #endif
 
 /* ---- Platform specific setup ---- */
-#if defined __cplusplus
-// This check is required for the embed .c files (miniupnp) so we don't get conflicts.
-#include <QtCore/QString>
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#endif
-
 
 #if defined(WZ_OS_WIN)
 #  if defined(WZ_CC_MINGW)

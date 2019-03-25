@@ -25,6 +25,8 @@
  * load / update / store multiplayer statistics for league tables etc...
  */
 
+#include <QtCore/QSettings> // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+
 #include "lib/framework/frame.h"
 #include "lib/framework/file.h"
 #include "lib/netplay/nettypes.h"
@@ -32,7 +34,6 @@
 #include "main.h"
 #include "mission.h" // for cheats
 #include "multistat.h"
-#include <QtCore/QSettings>
 #include <utility>
 
 
