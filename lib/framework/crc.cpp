@@ -837,9 +837,9 @@ std::vector<uint8_t> base64Decode(std::string const &str)
 			               0;
 			block |= val << (6 * (3 - i));
 		}
-		bytes[0 + n * 3] = block >> 16;
-		bytes[1 + n * 3] = block >> 8;
-		bytes[2 + n * 3] = block;
+		bytes[0 + n * 3] = static_cast<uint8_t>(block >> 16);
+		bytes[1 + n * 3] = static_cast<uint8_t>(block >> 8);
+		bytes[2 + n * 3] = static_cast<uint8_t>(block);
 	}
 	if (str.size() >= 4)
 	{

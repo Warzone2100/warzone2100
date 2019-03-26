@@ -46,8 +46,8 @@ struct Rotation
 		pitch = 0;
 		roll = 0;
 	}
-	Rotation(int direction, int pitch, int roll) : direction(direction), pitch(pitch), roll(roll) {}
-	Rotation(Vector3i xyz) : direction(xyz.x), pitch(xyz.y), roll(xyz.z) {}
+	Rotation(int direction, int pitch, int roll) : direction((uint16_t)direction), pitch((uint16_t)pitch), roll((uint16_t)roll) {}
+	Rotation(Vector3i xyz) : direction((uint16_t)xyz.x), pitch((uint16_t)xyz.y), roll((uint16_t)xyz.z) {}
 	uint16_t direction, pitch, roll;  ///< Object rotation in 0..64k range
 };
 typedef Vector3i Position;  ///< Map position in world coordinates
@@ -99,8 +99,8 @@ static inline WZ_DECL_PURE int iHypot(Vector3i const &a)
 static inline WZ_DECL_PURE Vector2f Vector2f_Rotate2f(Vector2f v, int angle)
 {
 	Vector2f result;
-	result.x = (v.x * iCos(angle) - v.y * iSin(angle)) / 65536;
-	result.y = (v.x * iSin(angle) + v.y * iCos(angle)) / 65536;
+	result.x = (v.x * iCos((uint16_t)angle) - v.y * iSin((uint16_t)angle)) / 65536;
+	result.y = (v.x * iSin((uint16_t)angle) + v.y * iCos((uint16_t)angle)) / 65536;
 
 	return result;
 }
