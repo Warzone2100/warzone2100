@@ -2974,27 +2974,32 @@ function __camGameWon()
 //in campaign at the moment.
 function __camPlayerDead()
 {
-	if (countStruct("A0LightFactory") > 0)
+	var dead = true;
+	var haveFactories = countStruct("A0LightFactory") > 0;
+	if (haveFactories)
 	{
-		return false;
+		dead = false;
 	}
+	//NOTE: Includes the construct droids in mission.apsDroidLists[selectedPlayer] and in a transporter.
 	if (countDroid(DROID_CONSTRUCT) > 0)
 	{
-		return false;
+		dead = false;
 	}
-	var transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER);
-	for (var j = 0, c = transporter.length; j < c; ++j)
+	if (__camWinLossCallback === "__camVictoryTimeout")
 	{
-		var droids = enumCargo(transporter[j]);
-		for (var i = 0, l = droids.length; i < l; ++i)
-		{
-			if (droids[i].droidType === DROID_CONSTRUCT)
+		//Because countDroid() also counts trucks not on the map, we must also
+		//make the mission fail if no units are alive on map while having no factories.
+		var droidCount = 0;
+		enumDroid(CAM_HUMAN_PLAYER).forEach(function(obj) {
+			droidCount += 1;
+			if (obj.droidType === DROID_TRANSPORTER)
 			{
-				return false;
+				droidCount += enumCargo(obj).length;
 			}
-		}
+		});
+		dead = droidCount <= 0 && !haveFactories;
 	}
-	return true;
+	return dead;
 }
 
 function __camTriggerLastAttack()
