@@ -2,7 +2,6 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var allowWin;
-var launchCount;
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-Factory-Cyborg-Upgrade06",
@@ -54,16 +53,12 @@ function playLastVideo()
 	camPlayVideos("CAM2_OUT");
 }
 
-// Allow win if the transporter was launched at least three times.
+//Allow a win if a transporter was launched.
 function eventTransporterLaunch(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
-		launchCount = launchCount + 1;
-		if (launchCount > 2)
-		{
-			allowWin = true;
-		}
+		allowWin = true;
 	}
 }
 
@@ -167,7 +162,6 @@ function eventStartLevel()
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	allowWin = false;
-	launchCount = 0;
 	camPlayVideos(["MB2_DII_MSG", "MB2_DII_MSG2"]);
 
 	//These requeue themselves every so often.
