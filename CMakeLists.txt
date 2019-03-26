@@ -233,6 +233,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4245")
 		# C4701: Potentially uninitialized local variable 'name' used
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4701")
+		# C4706: assignment within conditional expression
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4706")
 
 		# Qt headers (at least 5.6.x) necessitate disabling some warnings
 		# C4127: conditional expression is constant
