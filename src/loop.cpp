@@ -445,24 +445,7 @@ void countUpdate(bool synch)
 				break;
 			case DROID_TRANSPORTER:
 			case DROID_SUPERTRANSPORTER:
-				if ((psCurr->psGroup != nullptr))
-				{
-					DROID *psDroid = nullptr;
-
-					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
-					// and count the units inside it...
-					for (psDroid = psCurr->psGroup->psList; psDroid != nullptr && psDroid != psCurr; psDroid = psDroid->psGrpNext)
-					{
-						if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
-						{
-							numConstructorDroids[i] += 1;
-						}
-						if (psDroid->droidType == DROID_COMMAND)
-						{
-							numCommandDroids[i] += 1;
-						}
-					}
-				}
+				droidCountsInTransporter(psCurr, i);
 				break;
 			default:
 				break;
@@ -482,10 +465,7 @@ void countUpdate(bool synch)
 				break;
 			case DROID_TRANSPORTER:
 			case DROID_SUPERTRANSPORTER:
-				if ((psCurr->psGroup != nullptr))
-				{
-					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
-				}
+				droidCountsInTransporter(psCurr, i);
 				break;
 			default:
 				break;
@@ -909,6 +889,32 @@ void adjustDroidCount(DROID *droid, int delta) {
 		break;
 	default:
 		break;
+	}
+}
+
+// Increase counts of droids in a transporter
+void droidCountsInTransporter(DROID *droid, int player)
+{
+	DROID *psDroid = nullptr;
+
+	if (!isTransporter(droid) || droid->psGroup == nullptr)
+	{
+		return;
+	}
+
+	numTransporterDroids[player] += droid->psGroup->refCount - 1;
+
+	// and count the units inside it...
+	for (psDroid = droid->psGroup->psList; psDroid != nullptr && psDroid != droid; psDroid = psDroid->psGrpNext)
+	{
+		if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
+		{
+			numConstructorDroids[player] += 1;
+		}
+		if (psDroid->droidType == DROID_COMMAND)
+		{
+			numCommandDroids[player] += 1;
+		}
 	}
 }
 
