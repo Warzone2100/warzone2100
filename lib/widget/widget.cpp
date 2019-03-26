@@ -46,6 +46,8 @@
 #include "slider.h"
 #include "tip.h"
 
+#include <algorithm>
+
 static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */

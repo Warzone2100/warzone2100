@@ -22,6 +22,7 @@
 
 #include <physfs.h>
 #include <vector>
+#include <algorithm>
 
 #ifdef WZ_BINDIR
 static std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const std::string& delimiters)

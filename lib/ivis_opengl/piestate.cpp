@@ -46,6 +46,8 @@
 #define GLEW_KHR_debug false
 #endif
 
+#include <algorithm>
+
 /*
  *	Global Variables
  */
