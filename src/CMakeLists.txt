@@ -114,10 +114,11 @@ endif()
 
 target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay script sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100
+	Qt5::Core
 	Qt5::Script
 	Qt5::Gui
 	Qt5::Widgets
-	)
+)
 if(ENABLE_NLS)
 	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
 endif()
