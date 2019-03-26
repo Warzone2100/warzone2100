@@ -71,6 +71,8 @@ else()
 	message( STATUS "Not linking to SDL2Main" )
 endif()
 
+target_link_libraries(sdl-backend PRIVATE Qt5::Core Qt5::Widgets)
+
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
   if(${CMAKE_CROSSCOMPILING})
     target_compile_definitions(sdl-backend PRIVATE "QT_STATICPLUGIN")
