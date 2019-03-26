@@ -178,6 +178,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34512")
 
 		# Enable some additional MSVC warnings (that are off by default)
+		# C4005: 'identifier' : macro redefinition
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /we4005")
 		# C4191: unsafe conversion from 'type of expression' to 'type required'
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34191")
 		# C4263: 'function': member function does not override any base class virtual member function
