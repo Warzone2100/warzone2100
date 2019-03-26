@@ -21,6 +21,8 @@
 #include "lexer_input.h"
 #include "physfs_ext.h"
 
+#include <limits>
+
 int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 {
 	switch (input->type)
@@ -45,13 +47,19 @@ int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 		}
 		else
 		{
-			int result = WZ_PHYSFS_readBytes(input->input.physfsfile, buf, max_size);
+			PHYSFS_sint64 result = WZ_PHYSFS_readBytes(input->input.physfsfile, buf, max_size);
 			if (result == -1)
 			{
 				buf[0] = EOF;
 				return nullvalue;
 			}
-			return result;
+			if (result > static_cast<PHYSFS_sint64>(std::numeric_limits<int>::max()))
+			{
+				ASSERT(false, "Read more than std::numeric_limits<int>::max()?");
+				buf[0] = EOF;
+				return nullvalue;
+			}
+			return static_cast<int>(result);
 		}
 		break;
 

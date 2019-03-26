@@ -24,6 +24,10 @@
  *
  */
 
+#if defined( _MSC_VER )
+	#pragma warning( disable : 4244 ) // warning C4244: conversion from 'type1' to 'type2', possible loss of data // FIXME?
+#endif
+
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
@@ -46,7 +50,6 @@ static uint16_t trigAtanTable[0x2001];
 /* Initialise the Trig tables */
 bool trigInitialise(void)
 {
-	uint64_t test;
 	uint32_t crc;
 	uint32_t i;
 
@@ -69,19 +72,19 @@ bool trigInitialise(void)
 	ASSERT(crc == 0xD2797F85, "Bad trigAtanTable CRC = 0x%08X, atan function is broken.", crc);
 
 	// Test large and small square roots.
-	for (test = 0x0000; test != 0x10000; ++test)
+	for (uint32_t test = 0x0000; test != 0x10000; ++test)
 	{
-		uint64_t lower = test * test;
-		uint64_t upper = (test + 1) * (test + 1) - 1;
-		ASSERT((uint32_t)iSqrt(lower) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, i64Sqrt(lower), test);
-		ASSERT((uint32_t)iSqrt(upper) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, i64Sqrt(upper), test);
+		uint32_t lower = test * test;
+		uint32_t upper = (test + 1) * (test + 1) - 1;
+		ASSERT((uint32_t)iSqrt(lower) == test, "Sanity check failed, iSqrt(%" PRIu32") gave %" PRIu32" instead of %" PRIu32"!", lower, (uint32_t)iSqrt(lower), test);
+		ASSERT((uint32_t)iSqrt(upper) == test, "Sanity check failed, iSqrt(%" PRIu32") gave %" PRIu32" instead of %" PRIu32"!", upper, (uint32_t)iSqrt(upper), test);
 	}
-	for (test = 0xFFFE0000; test != 0x00020000; test = (test + 1) & 0xFFFFFFFF)
+	for (uint64_t test = 0xFFFE0000; test != 0x00020000; test = (test + 1) & 0xFFFFFFFF)
 	{
 		uint64_t lower = test * test;
 		uint64_t upper = (test + 1) * (test + 1) - 1;
-		ASSERT((uint32_t)i64Sqrt(lower) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, i64Sqrt(lower), test);
-		ASSERT((uint32_t)i64Sqrt(upper) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, i64Sqrt(upper), test);
+		ASSERT((uint32_t)i64Sqrt(lower) == test, "Sanity check failed, i64Sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, (uint32_t)i64Sqrt(lower), test);
+		ASSERT((uint32_t)i64Sqrt(upper) == test, "Sanity check failed, i64Sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, (uint32_t)i64Sqrt(upper), test);
 	}
 
 	return true;
