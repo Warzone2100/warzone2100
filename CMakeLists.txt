@@ -221,6 +221,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Disable some warnings for WZ (FIXME)
 		# C4100: unreferenced formal parameter
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
+		# C4244: 'conversion' conversion from 'type1' to 'type2', possible loss of data // FIXME!!
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244")
 		# C4456: declaration of 'identifier' hides previous local declaration
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4456")
 		# C4459: declaration of 'identifier' hides global declaration
