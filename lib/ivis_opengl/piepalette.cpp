@@ -27,30 +27,34 @@ PIELIGHT psPalette[WZCOL_MAX];
 
 void pal_Init()
 {
-	char *pFileData, *ptr;
-	UDWORD fileSize;
-	int i, lenLeft;
+	char *pFileData = nullptr;
+	UDWORD fileSize = 0;
 
 	// Read these from file so that mod-makers can change them
-	loadFile("palette.txt", &pFileData, &fileSize);
-
-	ptr = pFileData;
-	lenLeft = fileSize;
-	for (i = 0; i < WZCOL_MAX; i++)
+	if (loadFile("palette.txt", &pFileData, &fileSize))
 	{
-		unsigned int r, g, b, a;
-		int len;
+		char * ptr = pFileData;
+		int lenLeft = fileSize;
+		for (int i = 0; i < WZCOL_MAX; i++)
+		{
+			unsigned int r, g, b, a;
+			int len;
 
-		sscanf(ptr, "%x, %x, %x, %x %*[^\n]\n%n", &r, &g, &b, &a, &len);
-		psPalette[i].byte.r = r;
-		psPalette[i].byte.g = g;
-		psPalette[i].byte.b = b;
-		psPalette[i].byte.a = a;
-		ptr += len;
-		lenLeft -= len;
-		ASSERT(lenLeft >= 0, "Buffer overrun reading palette data");
+			sscanf(ptr, "%x, %x, %x, %x %*[^\n]\n%n", &r, &g, &b, &a, &len);
+			psPalette[i].byte.r = r;
+			psPalette[i].byte.g = g;
+			psPalette[i].byte.b = b;
+			psPalette[i].byte.a = a;
+			ptr += len;
+			lenLeft -= len;
+			ASSERT(lenLeft >= 0, "Buffer overrun reading palette data");
+		}
+		free(pFileData);
 	}
-	free(pFileData);
+	else
+	{
+		debug(LOG_FATAL, "Failed to load palette.txt");
+	}
 }
 
 void pal_ShutDown()
