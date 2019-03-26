@@ -100,6 +100,8 @@
 #include "levels.h"
 #include "wrappers.h"
 
+#include <algorithm>
+
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
 // ////////////////////////////////////////////////////////////////////////////

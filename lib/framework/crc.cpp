@@ -23,6 +23,7 @@
 #include <functional>
 #include <limits>
 #include <memory>
+#include <algorithm>
 
 //================================================================================
 // MARK: - CRC

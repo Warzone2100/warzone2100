@@ -29,6 +29,7 @@
 #include "scriptextern.h"
 
 #include <set>
+#include <algorithm>
 
 
 #define ORDER_X			6

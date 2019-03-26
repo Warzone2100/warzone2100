@@ -41,6 +41,8 @@
 #include "keymap.h"
 #include "keyedit.h"
 
+#include <algorithm>
+
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 static KEY_CODE getQwertyKey();
 

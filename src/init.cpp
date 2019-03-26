@@ -94,6 +94,8 @@
 #include "qtscript.h"
 #include "template.h"
 
+#include <algorithm>
+
 static void initMiscVars();
 
 static const char UserMusicPath[] = "music";

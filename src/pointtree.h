@@ -23,6 +23,7 @@
 #include "lib/framework/types.h"
 
 #include <vector>
+#include <algorithm>
 
 class PointTree
 {
