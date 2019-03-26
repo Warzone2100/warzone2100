@@ -574,7 +574,9 @@
 
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
-#    define inline __inline
+#    if !defined(inline) && !defined(__cplusplus)
+#      define inline __inline
+#    endif
 #    define alloca _alloca
 #    define fileno _fileno
 
