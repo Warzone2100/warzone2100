@@ -29,6 +29,8 @@
 
 #include "orderdef.h"
 
+extern bool idleTrucksBuilding;
+
 /** Retreat positions for the players. This is a global instance of RUN_DATA.*/
 extern RUN_DATA asRunData[MAX_PLAYERS];
 

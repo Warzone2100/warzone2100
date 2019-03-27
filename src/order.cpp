@@ -65,6 +65,9 @@
 
 #include "random.h"
 
+// If set to false, idle trucks owned by a human player will not try to help building structures.
+bool idleTrucksBuilding;
+
 /** How long a droid runs after it fails do respond due to low moral. */
 #define RUN_TIME		8000
 
@@ -303,7 +306,7 @@ static bool tryDoRepairlikeAction(DROID *psDroid)
 			{
 				actionDroid(psDroid, damaged.second, damaged.first);
 			}
-			else if (damaged.second == DACTION_BUILD)
+			else if (damaged.second == DACTION_BUILD && (idleTrucksBuilding || !isHumanPlayer(psDroid->player)))
 			{
 				psDroid->order.psStats = damaged.first->pStructureType;
 				psDroid->order.direction = damaged.first->rot.direction;

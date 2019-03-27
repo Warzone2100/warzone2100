@@ -40,6 +40,7 @@
 #include "ingameop.h"
 #include "multiint.h"
 #include "multiplay.h"
+#include "order.h" // for variable idleTrucksBuilding
 #include "radar.h"
 #include "seqdisp.h"
 #include "texture.h"
@@ -124,6 +125,7 @@ bool loadConfig()
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	radarRotationArrow = ini.value("radarRotationArrow", true).toBool();
 	hostQuitConfirmation = ini.value("hostQuitConfirmation", true).toBool();
+	idleTrucksBuilding = ini.value("idleTrucksBuilding", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
 	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
@@ -268,6 +270,7 @@ bool saveConfig()
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("radarRotationArrow", radarRotationArrow);
 	ini.setValue("hostQuitConfirmation", hostQuitConfirmation);
+	ini.setValue("idleTrucksBuilding", idleTrucksBuilding);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	ini.setValue("masterserver_name", NETgetMasterserverName());
 	ini.setValue("masterserver_port", NETgetMasterserverPort());
