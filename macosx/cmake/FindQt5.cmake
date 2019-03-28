@@ -28,7 +28,7 @@ endif()
 
 set(_qt5_failed_to_find_components)
 
-foreach(component ${Qt5_FIND_COMPONENTS})
+macro(_find_Qt5_component component)
 
 	set(_qt5_component_framework_path "${_qt5_framework_prefix}/Qt${component}.framework")
 
@@ -56,7 +56,7 @@ foreach(component ${Qt5_FIND_COMPONENTS})
 				# Add QCocoaPrinterSupportPlugin
 				add_library(Qt5::QCocoaPrinterSupportPlugin MODULE IMPORTED)
 				set_property(TARGET Qt5::QCocoaPrinterSupportPlugin APPEND PROPERTY
-					IMPORTED_LOCATION "${_qt5_framework_prefix}/printsupport/libcocoaprintersupport.dylib"
+					IMPORTED_LOCATION "${_qt5_framework_prefix}/plugins/printsupport/libcocoaprintersupport.dylib"
 				)
 			elseif (component STREQUAL "Script")
 
@@ -72,8 +72,10 @@ foreach(component ${Qt5_FIND_COMPONENTS})
 		endif()
 
 	endif()
+endmacro()
 
-
+foreach(component ${Qt5_FIND_COMPONENTS})
+	_find_Qt5_component("${component}")
 endforeach()
 
 set(_MOC_BIN "${_qt5_framework_prefix}/usr/bin/moc")
