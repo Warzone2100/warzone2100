@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# The Qt 5 Release frameworks (as of 5.9.1) contain cruft not necessary for Release builds,
+# The Qt 5 Release frameworks (as of 5.9.7) contain cruft not necessary for Release builds,
 # that also interferes with Xcode's built-in code signing.
 #
 # Specifically:
@@ -12,7 +12,7 @@
 OutDir="QT"
 DirectorY="external/${OutDir}"
 
-QtFrameworks=('QtCore' 'QtGui' 'QtNetwork' 'QtOpenGL' 'QtPrintSupport' 'QtScript' 'QtWidgets')
+QtFrameworks=('QtCore' 'QtGui' 'QtPrintSupport' 'QtScript' 'QtWidgets')
 QtPlugins=('platforms/libqcocoa.dylib' 'printsupport/libcocoaprintersupport.dylib')
 
 
