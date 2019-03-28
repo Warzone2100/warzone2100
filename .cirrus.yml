@@ -35,7 +35,7 @@ freebsd_build_task:
 #       image: mojave-xcode-10.1
 #
 #   env:
-#     MACOSX_DEPLOYMENT_TARGET: 10.9
+#     MACOSX_DEPLOYMENT_TARGET: 10.10
 #
 #   install_script:
 #     - brew install cmake

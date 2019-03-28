@@ -164,7 +164,7 @@ matrix:
       os: osx
       osx_image: xcode8.3
       env:
-        - MACOSX_DEPLOYMENT_TARGET=10.9
+        - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
         #- brew update
         - brew install gettext
@@ -187,7 +187,7 @@ matrix:
       os: osx
       osx_image: xcode9.4
       env:
-        - MACOSX_DEPLOYMENT_TARGET=10.9
+        - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
         #- brew update
         - brew install gettext
@@ -209,7 +209,7 @@ matrix:
       os: osx
       osx_image: xcode10.1
       env:
-        - MACOSX_DEPLOYMENT_TARGET=10.9
+        - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
         #- brew update
         - brew install gettext
