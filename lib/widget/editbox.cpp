@@ -626,8 +626,6 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 		displayCache.modeText.setText(tmp.toUtf8(), FontID);
 
 		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
-		displayCache.wzHyphen.setText("-", FontID);
-		cx += displayCache.wzHyphen.width();
 		int cy = fy;
 		iV_Line(cx, cy + iV_GetTextAboveBase(FontID), cx, cy - iV_GetTextBelowBase(FontID), WZCOL_FORM_CURSOR);
 	}
