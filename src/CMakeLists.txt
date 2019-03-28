@@ -361,6 +361,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	endmacro()
 
 	copy_qt5_plugin("Qt5::QCocoaIntegrationPlugin")
+	copy_qt5_plugin("Qt5::QCocoaPrinterSupportPlugin")
 
 	# Set install RPATH for WZ app bundle
 	set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
