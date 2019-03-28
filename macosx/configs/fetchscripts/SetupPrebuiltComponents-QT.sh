@@ -14,15 +14,15 @@ get_script_dir () {
 SCRIPT_DIR="$(get_script_dir)"
 
 
-VerLib="5.9.1"
+VerLib="5.9.7"
 OutDir="QT"
 DirectorY="${OutDir}-${VerLib}"
 FileName="${DirectorY}.tgz"
 BuiltDLP="https://github.com/past-due/wz2100-mac-build-tools/raw/master/${FileName}"
-SHA256Sum="d7e850a411dc394ea1f59de094a29304a56faa02b0699dbf1dcfee175155ef5d"
+SHA256Sum="46c385d424512f1d01cd1a7458b4001737a81542ac63c528a171e342aa1c323b"
 
 "${SCRIPT_DIR}/../FetchPrebuilt.sh" "${DirectorY}" "${OutDir}" "${FileName}" "${BuiltDLP}" "${SHA256Sum}"
-# tar -czf QT-5.9.1.tgz --exclude '.DS_Store' QT-5.9.1
+# tar -czf QT-5.9.7.tgz --exclude '.DS_Store' QT-5.9.7
 
 fetchResult=${?}
 if [ $fetchResult -ne 0 ]; then
