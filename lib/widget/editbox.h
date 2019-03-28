@@ -39,7 +39,6 @@
 struct EditBoxDisplayCache {
 	WzText wzDisplayedText;
 	WzText modeText;
-	WzText wzHyphen;
 };
 
 class W_EDITBOX : public WIDGET
