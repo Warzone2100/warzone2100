@@ -51,9 +51,9 @@ Generating the macOS port's build environment & configuration requires the follo
 To set the minimum deployment target used for _vcpkg_ **and** the CMake-generated Xcode project,
 execute the following command in the same Terminal session used for later commands:
 
-1. Export minimum deployment target (example: macOS 10.9):
+1. Export minimum deployment target (example: macOS 10.10):
    ```shell
-   export MACOSX_DEPLOYMENT_TARGET=10.9
+   export MACOSX_DEPLOYMENT_TARGET=10.10
    ```
 
 ### 2. Use _vcpkg_ to fetch & build dependencies
@@ -103,7 +103,7 @@ You can also simply open the project in Xcode, and build the `warzone2100` schem
 
 ## Deployment:
 
-The macOS port produces a 64-bit [self-contained application bundle](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW13) that requires **macOS 10.9+**\* to run.
+The macOS port produces a 64-bit [self-contained application bundle](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW13) that requires **macOS 10.10+**\* to run.
 
 > \* See _Setup & Configuration_ for how to set the minimum deployment target.
 
