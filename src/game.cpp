@@ -2577,6 +2577,14 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			unsynchObjID = (savedObjId + 1) / 2; // Make new object ID start at savedObjId*8.
 			synchObjID   = savedObjId * 4;      // Make new object ID start at savedObjId*8.
 		}
+
+		if (getDroidsToSafetyFlag())
+		{
+			//The droids lists are "reversed" as they are loaded in loadSaveDroid().
+			//Which later causes issues in saveCampaignData() which tries to extract
+			//the first transporter group sent off at Beta-end by reversing this very list.
+			reverseObjectList(&mission.apsDroidLists[selectedPlayer]);
+		}
 	}
 
 	//check the research button isn't flashing unnecessarily
@@ -4512,10 +4520,12 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;	// try to use fallback method
 	}
-	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadOnly);
+	WzString fName = WzString::fromUtf8(pFileName);
+	WzConfig ini(fName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
 	std::vector<std::pair<int, WzString>> sortedList;
+	bool missionList = fName.compare("mdroid");
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -4523,10 +4533,20 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		int priority = 0;
 		switch (droidType)
 		{
-		case DROID_TRANSPORTER: ++priority; // fallthrough
-		case DROID_SUPERTRANSPORTER: ++priority; // fallthrough
-		case DROID_COMMAND:     ++priority;
-		default:                break;
+		case DROID_TRANSPORTER:
+			++priority; // fallthrough
+		case DROID_SUPERTRANSPORTER:
+			++priority; // fallthrough
+		case DROID_COMMAND:
+			//Don't care about sorting commanders in the mission list for safety missions. They
+			//don't have a group to command and it messes up the order of the list sorting them
+			//which causes problems getting the first transporter group for Gamma-1.
+			if (!missionList || (missionList && !getDroidsToSafetyFlag()))
+			{
+				++priority;
+			}
+		default:
+			break;
 		}
 		sortedList.push_back(std::make_pair(-priority, list[i]));
 		ini.endGroup();
