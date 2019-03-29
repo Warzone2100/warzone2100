@@ -50,6 +50,17 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 #include <unordered_map>
 #include <memory>
 
+#if defined(HB_VERSION_ATLEAST) && HB_VERSION_ATLEAST(1,0,5)
+//	#define WZ_FT_LOAD_FLAGS (FT_LOAD_DEFAULT | FT_LOAD_TARGET_LCD) // Needs further testing on low-DPI displays
+	#define WZ_FT_LOAD_FLAGS (FT_LOAD_NO_HINTING | FT_LOAD_TARGET_LCD)
+#else
+	// Without `hb_ft_font_set_load_flags` (which requires Harfbuzz 1.0.5+),
+	// must default FreeType to the same flags that Harfbuzz internally uses
+	// (by default hb loads fonts without hinting)
+	#define WZ_FT_LOAD_FLAGS FT_LOAD_NO_HINTING
+#endif
+#define WZ_FT_RENDER_MODE FT_RENDER_MODE_LCD
+
 float _horizScaleFactor = 1.0f;
 float _vertScaleFactor = 1.0f;
 
@@ -112,6 +123,9 @@ struct FTFace
 			debug(LOG_FATAL, "Could not set character size");
 		}
 		m_font = hb_ft_font_create(m_face, nullptr);
+#if defined(HB_VERSION_ATLEAST) && HB_VERSION_ATLEAST(1,0,5)
+		hb_ft_font_set_load_flags(m_font, WZ_FT_LOAD_FLAGS);
+#endif
 	}
 
 	~FTFace()
@@ -128,7 +142,7 @@ struct FTFace
 	{
 		FT_Error error = FT_Load_Glyph(m_face,
 			codePoint, // the glyph_index in the font file
-			FT_LOAD_NO_HINTING // by default hb load fonts without hinting
+			WZ_FT_LOAD_FLAGS
 		);
 		ASSERT(error == FT_Err_Ok, "Unable to load glyph for %u", codePoint);
 		return m_face->glyph->metrics.width;
@@ -138,12 +152,12 @@ struct FTFace
 	{
 		FT_Error error = FT_Load_Glyph(m_face,
 			codePoint, // the glyph_index in the font file
-			FT_LOAD_NO_HINTING // by default hb load fonts without hinting
+			WZ_FT_LOAD_FLAGS
 		);
 		ASSERT(error == FT_Err_Ok, "Unable to load glyph %u", codePoint);
 
 		FT_GlyphSlot slot = m_face->glyph;
-		FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_LCD);
+		FT_Render_Glyph(m_face->glyph, WZ_FT_RENDER_MODE);
 		FT_Bitmap ftBitmap = slot->bitmap;
 
 		RasterizedGlyph g;
@@ -172,7 +186,7 @@ struct FTFace
 		FT_Set_Transform(m_face, nullptr, &delta);
 		FT_Error error = FT_Load_Glyph(m_face,
 		                               codePoint, // the glyph_index in the font file
-		                               FT_LOAD_NO_HINTING // by default hb load fonts without hinting
+		                               WZ_FT_LOAD_FLAGS
 		);
 		if (error != FT_Err_Ok)
 		{
