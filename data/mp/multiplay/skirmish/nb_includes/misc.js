@@ -4,6 +4,7 @@
  *
  */
 
+const gateways = enumGateways();
 var baseLocation = startPositions[me];
 
 function distanceToBase(loc) {
@@ -57,18 +58,9 @@ function goEasy() {
 
 function areThereGW() {
 	function uncached() {	//should only need to be evaluated once at the start
-		if(enumGateways().length > 0)
+		if(gateways.length > 0)
 			return true;
 		return false;
-	}
-	return cached(uncached, Infinity);
-}
-
-function whereAreTheGateways(){
-	function uncached() {	//should only need to be evaluated once at the start
-		var gateways = [];
-		gateways = enumGateways();
-		return gateways;
 	}
 	return cached(uncached, Infinity);
 }
