@@ -2362,7 +2362,8 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	}
 	else
 	{
-		pieFlag = pie_STATIC_SHADOW | ecmFlag;
+		// structures can be rotated, so use a dynamic shadow for them
+		pieFlag = pie_SHADOW | ecmFlag;
 		pieFlagData = 0;
 	}
 
