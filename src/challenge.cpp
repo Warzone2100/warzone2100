@@ -24,9 +24,8 @@
  */
 
 #include <physfs.h>
-#include <time.h>
+#include <ctime>
 
-#include <QtCore/QTime> // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
@@ -303,8 +302,16 @@ bool addChallenges()
 		seconds = scores.value("seconds", -1).toInt();
 		if (seconds > 0)
 		{
-			QTime format = QTime(0, 0, 0).addSecs(seconds);
-			highscore = WzString::fromUtf8(format.toString(Qt::TextDate).toUtf8().constData()) + " by " + name + " (" + WzString(victory ? "Victory" : "Survived") + ")";
+			char psTimeText[sizeof("HH:MM:SS")] = { 0 };
+			time_t secs = seconds;
+			struct tm tmp;
+#if defined(WZ_OS_WIN)
+			gmtime_s(&tmp, &secs);
+#else
+			gmtime_r(&secs, &tmp);
+#endif
+			strftime(psTimeText, sizeof(psTimeText), "%H:%M:%S", &tmp);
+			highscore = WzString::fromUtf8(psTimeText) + " by " + name + " (" + WzString(victory ? "Victory" : "Survived") + ")";
 		}
 		scores.endGroup();
 		ssprintf(sPath, "%s/%s", sSearchPath, *i);
