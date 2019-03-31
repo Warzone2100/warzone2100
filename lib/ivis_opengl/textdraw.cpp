@@ -426,6 +426,7 @@ public:
 
 		hb_buffer_add_utf8(m_buffer, text.text.c_str(), length, 0, length);
 		hb_buffer_guess_segment_properties(m_buffer);
+		hb_buffer_set_flags(m_buffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
 
 		// harfbuzz shaping
 		std::array<hb_feature_t, 3> features = { {HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn} };
