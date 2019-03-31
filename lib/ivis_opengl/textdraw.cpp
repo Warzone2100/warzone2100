@@ -150,6 +150,10 @@ struct FTFace
 
 	RasterizedGlyph get(uint32_t codePoint, Vector2i subpixeloffset64)
 	{
+		FT_Vector delta;
+		delta.x = subpixeloffset64.x;
+		delta.y = subpixeloffset64.y;
+		FT_Set_Transform(m_face, nullptr, &delta);
 		FT_Error error = FT_Load_Glyph(m_face,
 			codePoint, // the glyph_index in the font file
 			WZ_FT_LOAD_FLAGS
