@@ -55,6 +55,7 @@ if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 endif()
 
 target_link_libraries(sdl-backend PRIVATE framework)
+set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 message( STATUS "Linking to SDL2 library: ${_sdl2_library}" )
 target_link_libraries(sdl-backend PRIVATE ${_sdl2_library})
 target_include_directories(sdl-backend PRIVATE "${_sdl2_include_dir}")

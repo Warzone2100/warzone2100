@@ -35,6 +35,7 @@ endif()
 #								 [INSTALL_DESTINATION <destdir>]
 #								 [INSTALL_COMPONENT component]
 #								 [MSGMERGE_OPTIONS <mergeoptions>]
+#								 [TARGET_FOLDER <folder>]
 #								 POFILES file1 ...  fileN)
 #
 # Starting point: https://github.com/Kitware/CMake/blob/fb3a608f1ab4a8fda04d5c2fb5ad99e396ebd1e6/Modules/FindGettext.cmake
@@ -44,6 +45,7 @@ endif()
 #	- Specify options to msgmerge
 #	- Specify an install destination
 #	- Specify an install component
+#	- Specify a target folder (for any created targets)
 #	- Specify a list of po files as POFILES
 #	- Specify a distinct output file location for updated .po files in the build directory
 #	  (instead of updating in-place, which modifies the source folder)
@@ -51,7 +53,7 @@ endif()
 #
 function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
    set(_options ALL)
-   set(_oneValueArgs INSTALL_DESTINATION INSTALL_COMPONENT)
+   set(_oneValueArgs INSTALL_DESTINATION INSTALL_COMPONENT TARGET_FOLDER)
    set(_multiValueArgs MSGMERGE_OPTIONS POFILES)
 
    CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
@@ -102,6 +104,9 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
 
    if(NOT TARGET translations)
       add_custom_target(translations)
+      if (DEFINED _parsedArguments_TARGET_FOLDER)
+         set_property(TARGET translations PROPERTY FOLDER "${_parsedArguments_TARGET_FOLDER}")
+      endif()
    endif()
 
    _GETTEXT_GET_UNIQUE_TARGET_NAME(translations uniqueTargetName)
@@ -110,6 +115,10 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       add_custom_target(${uniqueTargetName} ALL DEPENDS ${_gmoFiles})
    else()
       add_custom_target(${uniqueTargetName} DEPENDS ${_gmoFiles})
+   endif()
+
+   if (DEFINED _parsedArguments_TARGET_FOLDER)
+      set_property(TARGET ${uniqueTargetName} PROPERTY FOLDER "${_parsedArguments_TARGET_FOLDER}")
    endif()
 
    add_dependencies(translations ${uniqueTargetName})
@@ -156,6 +165,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${_potFile}
 
 ADD_CUSTOM_TARGET(pot_file ALL
 	DEPENDS ${_potFile})
+set_property(TARGET pot_file PROPERTY FOLDER "po")
 
 set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 
@@ -169,6 +179,7 @@ GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
 	INSTALL_DESTINATION "${CMAKE_INSTALL_LOCALEDIR}"
 	INSTALL_COMPONENT Languages
 	MSGMERGE_OPTIONS --quiet --no-wrap --width=1
+	TARGET_FOLDER "po"
 	POFILES ${POFILES})
 
 set(wz2100_translations_LOCALE_FOLDER "${wz2100_translations_LOCALE_FOLDER}" PARENT_SCOPE)

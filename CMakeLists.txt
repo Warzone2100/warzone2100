@@ -33,6 +33,10 @@ else()
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Support folders (for nicer IDE organization)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMakePredefinedTargets")
+
 # Fix: Linking issues with static libraries when using certain generated project files (ex. Xcode in "Archive" build mode)
 # See: https://stackoverflow.com/questions/30318941/, https://stackoverflow.com/questions/33020245/
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "./")
@@ -648,6 +652,7 @@ else()
 	SET(UPNPC_BUILD_TESTS OFF CACHE BOOL "miniupnpc - Build tests" FORCE)
 	SET(UPNPC_BUILD_SAMPLE OFF CACHE BOOL "miniupnpc - Build samples" FORCE)
 	add_subdirectory(3rdparty/miniupnp/miniupnpc)
+	set_property(TARGET libminiupnpc-static PROPERTY FOLDER "3rdparty")
 endif()
 
 add_subdirectory(3rdparty)
@@ -705,4 +710,5 @@ if(CPACK_COMMAND)
 		COMMAND ${CPACK_COMMAND} --config ${CMAKE_CURRENT_BINARY_DIR}/CPackSourceConfig.cmake
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
+	set_property(TARGET dist PROPERTY FOLDER "_WZAliasTargets")
 endif()
