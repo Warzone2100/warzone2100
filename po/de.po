@@ -8,14 +8,14 @@
 # Martin Koller <m.koller@surfeu.at>, 2007.
 # Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2019.
 # raymond, 2011.
-# Frank Ehlers <ehlersfrank@gmail.com>, 2017-2019.
+# Frank Ehlers <highlander1599@gmail.com>, 2017-2019.
 # Forgon <forgon2100@protonmail.com>, 2018-2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-02-16 09:53+0000\n"
-"PO-Revision-Date: 2018-12-09 20:14+0100\n"
+"PO-Revision-Date: 2019-04-07 18:10+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: de\n"
@@ -634,7 +634,7 @@ msgstr "Nehmen Sie die NASDA-Zentrale ein, bevor NEXUS oder das Kollektiv sie ve
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "TRANSPORTERMISSION: Satellitenkontrollzentrum"
+msgstr "TRANSPORTERMISSION: Satellitenkommunikationsstation"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -666,16 +666,18 @@ msgstr "TRANSPORTERMISSION: Feindliche Boden-Luft-Raketenstellungen ausschalten"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Um fliehen zu können, müssen Sie die Boden-Luft-Raketenstellungen um Ihre Basis zerstören."
+msgstr "Um fliehen zu können, müssen Sie die Boden-Luft-Raketenstellungen vor Ihrer Basis zerstören."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
 msgstr "Fliegen Sie zur Landezone, rücken Sie dann vor, um die Boden-Luft-Stellungen zu zerstören."
 
+# Da weder Rückzugsbasis noch Sicherheitszone die Situation ordentlich beschreiben bin ich nun
+# für die wörtliche Übersetzung -alfred007
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr "TRANSPORTERMISSION: Sicherheitszone einrichten"
+msgstr "TRANSPORTERMISSION: Sicheren Hafen einrichten"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
@@ -683,7 +685,7 @@ msgstr "Wir können bestätigen, dass sich eine Rakete im Anflug auf die Alphaba
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr "Sie müssen eine Sicherheitszone zur Evakuierung der Betabasis einrichten."
+msgstr "Sie müssen einen sicheren Hafen zur Evakuierung der Betabasis einrichten."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
@@ -691,7 +693,7 @@ msgstr "Vernichten Sie jegliche Feinde und sichern Sie das Gebiet."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Sobald eine Sicherheitszone eingerichtet ist, kehren Sie für weitere Instruktionen zur Landezone zurück."
+msgstr "Sobald ein sicherer Hafen eingerichtet ist, kehren Sie für weitere Instruktionen zur Landezone zurück."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
@@ -2750,13 +2752,13 @@ msgstr "Hochexplosive Flak-Splittermunition"
 #: data/mp/messages/strings/resstrings.txt:318
 #: po/custom/fromJson.txt:724
 msgid "Increases AA Flak damage"
-msgstr "Erhöht Schaden von Flugabwehrgeschützen"
+msgstr "Erhöht Schaden von Flugabwehrkanonen"
 
 #: data/base/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:66
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Alle Flugabwehrgeschütze wurden automatisch aufgerüstet"
+msgstr "Alle Flugabwehrkanonen wurden automatisch aufgerüstet"
 
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:322
@@ -2768,7 +2770,7 @@ msgstr "Rückstoßbetriebener Munitionstrichter für Flugabwehrkanonen"
 #: data/mp/messages/strings/resstrings.txt:323
 #: po/custom/fromJson.txt:725
 msgid "Increases AA ROF"
-msgstr "Erhöht Feuerrate von Flugabwehrgeschützen"
+msgstr "Erhöht Feuerrate von Flugabwehrkanonen"
 
 # Gibt sicherlich einen deutschen Fachausdruck dafür, nur her damit -Kreuvf
 #: data/base/messages/strings/resstrings.txt:685
@@ -4314,7 +4316,7 @@ msgstr "Maschinengewehr"
 # Unsinniges "Flak Cannon" im Original nicht originalgetreu übersetzt -Kreuvf
 #: data/mp/messages/strings/names.txt:275
 msgid "VTOL Flak Cannon"
-msgstr "VTOL-Flugabwehrgeschütz"
+msgstr "VTOL-Flugabwehrkanone"
 
 #: data/mp/messages/strings/names.txt:293
 #: po/custom/fromJson.txt:331
@@ -4555,7 +4557,7 @@ msgstr "Tank-Killer-Supercyborg"
 #: data/mp/messages/strings/names.txt:788
 #: po/custom/fromJson.txt:1181
 msgid "Satellite Uplink Center"
-msgstr "Satellitenkontrollzentrale"
+msgstr "Satellitenkommunikationszentrum"
 
 #: data/mp/messages/strings/names.txt:799
 #: po/custom/fromJson.txt:1271
@@ -4776,22 +4778,22 @@ msgstr "Munitionsgurt für Flugabwehrwaffen Mk3"
 # Unsinniges "Flak Cannon" im Original nicht originalgetreu übersetzt -Kreuvf
 #: po/custom/fromJson.txt:17
 msgid "AA Flak Cannon"
-msgstr "Flugabwehrgeschütz"
+msgstr "Flugabwehrkanone"
 
 # Unsinniges "Flak Cannon" im Original nicht originalgetreu übersetzt -Kreuvf
 #: po/custom/fromJson.txt:18
 msgid "AA Flak Cannon Emplacement"
-msgstr "Stellung mit Flugabwehrgeschütz"
+msgstr "Stellung mit Flugabwehrkanone"
 
 # Unsinniges "Flak Cannon" im Original nicht originalgetreu übersetzt -Kreuvf
 #: po/custom/fromJson.txt:19
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Aufhängung mit Flugabwehrgeschütz"
+msgstr "Aufhängung mit Flugabwehrkanone"
 
 # Unsinniges "Flak Cannon" im Original nicht originalgetreu übersetzt -Kreuvf
 #: po/custom/fromJson.txt:20
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Flugabwehrgeschütz Python Ketten"
+msgstr "Flugabwehrkanone Python Ketten"
 
 #: po/custom/fromJson.txt:21
 msgid "AA Flak damage +25%"
@@ -5691,7 +5693,7 @@ msgstr "Kettenlademechanismus ersetzt Munitionsgurte"
 
 #: po/custom/fromJson.txt:317
 msgid "Chaingun Upgrade"
-msgstr "Verbesserung des Kettenfeuermechanismus"
+msgstr "Verbesserung des Kettenladers"
 
 #: po/custom/fromJson.txt:318
 msgid "Civilian"
@@ -7042,7 +7044,7 @@ msgstr "Verbessert Leistung der Kraftwerke"
 
 #: po/custom/fromJson.txt:705
 msgid "Improved Rocket Wire Guidance"
-msgstr "Verbessertes Raketenlenksystem"
+msgstr "Verbesserte Raketendrahtlenkung"
 
 #: po/custom/fromJson.txt:706
 msgid "Improved sensor range"
@@ -8033,7 +8035,7 @@ msgstr "NullBot"
 
 #: po/custom/fromJson.txt:1010
 msgid "Objects become difficult to locate near it"
-msgstr "Objekte in seiner seiner Nähe werden schwer zu orten"
+msgstr "Objekte in seiner Nähe werden schwer zu orten sein"
 
 #: po/custom/fromJson.txt:1011
 msgid "Oil Derrick"
@@ -8192,13 +8194,14 @@ msgstr "Energiemodul"
 msgid "Power Module Available"
 msgstr "Energiemodul verfügbar"
 
+# "Power output" zur Vereinheitlichung auch hier mit "Leistungsabgabe" übersetzt. -alfred007
 #: po/custom/fromJson.txt:1052
 msgid "Power output +25%"
-msgstr "Energieausstoß +25%"
+msgstr "Leistungsabgabe +25%"
 
 #: po/custom/fromJson.txt:1053
 msgid "Power output +30%"
-msgstr "Energieausstoß +30%"
+msgstr "Leistungsabgabe +30%"
 
 #: po/custom/fromJson.txt:1054
 msgid "Power Research Completed"
@@ -9275,9 +9278,10 @@ msgstr "Mittlerer Zwillingsflugabwehrlaser"
 msgid "Twin Multi-barrel, rapid-fire machinegun"
 msgstr "Mehrläufiges Zwillingsschnellfeuermaschinengewehr"
 
+# Vorschlag, da man in der Challenge von mehreren Seiten attackiert wird -alfred007
 #: po/custom/fromJson.txt:1360
 msgid "Two-faced"
-msgstr "Doppelseitig"
+msgstr "In der Zange"
 
 #: po/custom/fromJson.txt:1361
 msgid "Unit Research Completed"
@@ -9714,9 +9718,15 @@ msgstr "Warzone 2100"
 msgid "Warzone 2100 Map / Mod File"
 msgstr "Warzone-2100-Karten/Moddatei"
 
+#> Please explain the reasoning behind this comment. "Feldzug" is used synonymously with "Kampagne".
+# Im Englischen ist durchgehend von "campaign" die Rede. Wenn wir im Deutschen die beiden Begriffe
+# "Kampagne" und "Feldzug" benutzen wollen steht "Kampagne" für den Einzelspielermodus der aus
+# drei "Feldzügen" besteht. Da diese Datei im gesamten Einzelspielermodus wirksam ist ist das
+# somit eine "Kampagnen-Moddatei". "Eine Feldzug-Moddatei" wäre nur für einen der drei "Feldzüge"
+# wirksam. -alfred007
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr "Warzone-2100-Feldzug-Moddatei"
+msgstr "Warzone-2100-Kampagnen-Moddatei"
 
 # Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Kreuvf
 #: po/custom/mac-infoplist.txt:5
@@ -9818,6 +9828,9 @@ msgstr "Optionen anzeigen und beenden"
 msgid "Show all options and exit"
 msgstr "Alle Optionen anzeigen und beenden"
 
+#> Nope, it's female. You are mixing up "die Mod(ifikation)" with "der Mod(erator)". Translation stays as it is.
+# Nur als Anmerkung: Mod kann mit allen drei Artikeln verwendet werden. Hier haben wir nichts
+# verwechselt: https://de.wikipedia.org/wiki/Mod_(Computerspiel)
 #: src/clparse.cpp:270
 msgid "Enable a global mod"
 msgstr "Eine globale Mod aktivieren"
@@ -9828,9 +9841,10 @@ msgstr "Eine globale Mod aktivieren"
 msgid "mod"
 msgstr "Mod"
 
+# Singular, da "Kampagne" hier synonym für Einzelspielermodus steht -alfred007
 #: src/clparse.cpp:271
 msgid "Enable a campaign only mod"
-msgstr "Eine Mod nur für die Kampagnen aktivieren"
+msgstr "Eine Mod nur für die Kampagne aktivieren"
 
 #: src/clparse.cpp:272
 msgid "Enable a multiplay only mod"
@@ -9842,7 +9856,7 @@ msgstr "Asserts deaktivieren"
 
 #: src/clparse.cpp:274
 msgid "Causes a crash to test the crash handler"
-msgstr "Verursacht einen Absturz, um den Crash Handler zu testen"
+msgstr "Verursacht einen Absturz, um die Absturzbehandlung zu testen"
 
 #: src/clparse.cpp:275
 msgid "Load a saved skirmish game"
@@ -10119,12 +10133,12 @@ msgstr "Bau nicht möglich. Ölquelle brennt."
 #: src/display.cpp:1535
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Schaden %d/%d - Erfahrung %.1f, %s"
+msgstr "%s - Trefferpunkte %d/%d - Erfahrung %.1f, %s"
 
 #: src/display.cpp:1697
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Verbündet - Schaden %d/%d - Erfahrung %d, %s"
+msgstr "%s - Verbündet - Trefferpunkte %d/%d - Erfahrung %d, %s"
 
 #: src/droid.cpp:263
 msgid "Unit Lost!"
@@ -10179,9 +10193,10 @@ msgstr "Mehrspieler"
 msgid "Tutorial"
 msgstr "Tutorial"
 
+# "options" zur Vereinheitlichung konsequent mit "Einstellungen" übersetzt. -alfred007
 #: src/frontend.cpp:146
 msgid "Options"
-msgstr "Optionen"
+msgstr "Einstellungen"
 
 #: src/frontend.cpp:150
 #: src/frontend.cpp:154
@@ -10314,11 +10329,11 @@ msgstr "TCP-Port 2100 muss auf Ihrer Firewall oder Ihrem Router geöffnet sein, 
 #: src/frontend.cpp:656
 #: src/multiint.cpp:1704
 msgid "OPTIONS"
-msgstr "OPTIONEN"
+msgstr "EINSTELLUNGEN"
 
 #: src/frontend.cpp:657
 msgid "Game Options"
-msgstr "Spieloptionen"
+msgstr "Spieleinstellungen"
 
 #: src/frontend.cpp:658
 msgid "Graphics Options"
@@ -10334,7 +10349,7 @@ msgstr "Audio- und Zoomeinstellungen"
 
 #: src/frontend.cpp:661
 msgid "Mouse Options"
-msgstr "Mausoptionen"
+msgstr "Mauseinstellungen"
 
 #: src/frontend.cpp:662
 msgid "Key Mappings"
@@ -10432,7 +10447,7 @@ msgstr "Minikartensprung"
 
 #: src/frontend.cpp:789
 msgid "GRAPHICS OPTIONS"
-msgstr "GRAFIKOPTIONEN"
+msgstr "GRAFIKEINSTELLUNGEN"
 
 #: src/frontend.cpp:891
 #: src/ingameop.cpp:145
@@ -10513,13 +10528,14 @@ msgstr "Vertikale Synchr."
 msgid "Antialiasing*"
 msgstr "Antialiasing*"
 
+# Mit dem Wort Warnung überschreitet der Text die Breite der GUI -alfred007
 #: src/frontend.cpp:1143
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Warnung: Antialiasing cann Abstürze versuchen, insbesondere bei Werten > 16"
+msgstr "Warnung: Antialiasing kann Abstürze verursachen, insbesondere bei Werten > 16"
 
 #: src/frontend.cpp:1154
 msgid "VIDEO OPTIONS"
-msgstr "VIDEOOPTIONEN"
+msgstr "VIDEOEINSTELLUNGEN"
 
 #: src/frontend.cpp:1441
 msgid "Middle Mouse"
@@ -10567,7 +10583,7 @@ msgstr "Scrollwirkung"
 
 #: src/frontend.cpp:1496
 msgid "MOUSE OPTIONS"
-msgstr "MAUSOPTIONEN"
+msgstr "MAUSEINSTELLUNGEN"
 
 #: src/frontend.cpp:1571
 #: src/multiint.cpp:249
@@ -10629,7 +10645,7 @@ msgstr "Geplänkel/Mehrspieler"
 #: src/frontend.cpp:1655
 #: src/frontend.cpp:1673
 msgid "GAME OPTIONS"
-msgstr "SPIELOPTIONEN"
+msgstr "SPIELEINSTELLUNGEN"
 
 #: src/frontend.cpp:1782
 #: src/multiint.cpp:2808
@@ -10968,7 +10984,7 @@ msgstr "Die Dinge leicht nehmen!"
 
 #: src/keybind.cpp:544
 msgid "1000 big ones!!!"
-msgstr "1000 Riesenoschis!!!"
+msgstr "1000 dicke Dinger!!!"
 
 # Ursprünglich kenne ich das nur als Cheat aus StarCraft und das sollte imho nicht übersetzt werden -Kreuvf
 #: src/keybind.cpp:561
@@ -11376,7 +11392,7 @@ msgstr "Commander 9 auswählen"
 
 #: src/keymap.cpp:345
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Mehrspieleroptionen / Allianzdialog"
+msgstr "Mehrspielereinstellungen / Allianzdialog"
 
 #: src/keymap.cpp:348
 msgid "Snap View to North"
@@ -11704,7 +11720,7 @@ msgstr "God-Mode-Status umschalten"
 
 #: src/keymap.cpp:456
 msgid "Display Options Screen"
-msgstr "Zeige Darstellungsoptionen"
+msgstr "Zeige Einstellungsbildschirm"
 
 #: src/keymap.cpp:457
 msgid "Complete current research"
@@ -11969,7 +11985,7 @@ msgstr "VTOLs abgeschaltet."
 
 #: src/multiint.cpp:1665
 msgid "Satellite Uplink disabled."
-msgstr "Satellitenkontrollzentrale abgeschaltet."
+msgstr "Satellitenkommunikation abgeschaltet."
 
 #: src/multiint.cpp:1666
 msgid "Laser Satellite disabled."
@@ -12074,12 +12090,12 @@ msgstr "Klicken für Kartenansicht"
 #: src/multiint.cpp:1803
 #: src/multiint.cpp:1804
 msgid "Show Structure Limits"
-msgstr "Zeige Gebäudebeschränkungen"
+msgstr "Zeige Geb.beschränkungen"
 
 #: src/multiint.cpp:1803
 #: src/multiint.cpp:1804
 msgid "Set Structure Limits"
-msgstr "Gebäudebeschränkungen einstellen"
+msgstr "Geb.beschränkungen einstellen"
 
 #: src/multiint.cpp:1812
 #: src/multiint.cpp:1813
@@ -12747,7 +12763,7 @@ msgstr[1] "%s - %u Einheiten zugewiesen - Trefferpunkte %d/%d"
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Einheit zugewiesen - Schaden %d/%d"
+msgstr[0] "%s - %u Einheit zugewiesen - Trefferpunkte %d/%d"
 msgstr[1] "%s - %u Einheiten zugewiesen - Trefferpunkte %d/%d"
 
 #: src/structure.cpp:5452
@@ -12764,7 +12780,7 @@ msgstr "%s - Trefferpunkte %d/%d"
 #: src/structure.cpp:5485
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - %u von %u verbunden - Schaden %d/%d"
+msgstr "%s - %u von %u verbunden - Trefferpunkte %d/%d"
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5685
