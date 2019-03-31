@@ -7,6 +7,7 @@ find_package(OpenAL REQUIRED)
 find_package(OggVorbis REQUIRED)
 
 add_library(sound ${HEADERS} ${SRC})
+set_property(TARGET sound PROPERTY FOLDER "lib")
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(sound PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()

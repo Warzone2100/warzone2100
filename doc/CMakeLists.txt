@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 add_custom_target(wz2100_doc ALL)
+set_property(TARGET wz2100_doc PROPERTY FOLDER "doc")
 
 set(wz2100_doc_FILES)
 
@@ -238,6 +239,7 @@ if(UNIX)
 		set(_warzone2100_6_compressed "${_warzone2100_6_uncompressed}.gz")
 
 		add_custom_target(wz2100_manpages ALL)
+		set_property(TARGET wz2100_manpages PROPERTY FOLDER "doc")
 		add_dependencies(wz2100_manpages wz2100_doc)
 
 		add_custom_command(

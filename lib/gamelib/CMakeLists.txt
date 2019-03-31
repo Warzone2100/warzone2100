@@ -9,6 +9,7 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 add_library(gamelib STATIC ${HEADERS} ${SRC})
+set_property(TARGET gamelib PROPERTY FOLDER "lib")
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(gamelib PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
