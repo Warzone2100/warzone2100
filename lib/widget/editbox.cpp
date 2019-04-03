@@ -417,6 +417,21 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			break;
 		case INPBUF_ESC :
 			debug(LOG_INPUT, "EditBox cursor escape");
+			if (aText.length() > 0)
+			{
+				// hitting ESC while the editbox contains text clears the text
+				aText.clear();
+				insPos = 0;
+				printStart = 0;
+				fitStringStart();
+			}
+			else
+			{
+				// hitting ESC while the editbox is empty ends editing mode
+				StopTextInput();
+				screenPointer->setFocus(nullptr);
+				return;
+			}
 			break;
 
 		default:
