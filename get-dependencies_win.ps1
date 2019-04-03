@@ -68,10 +68,8 @@ If (!(Test-Path $dump_syms_path -PathType Leaf) -or !((Get-FileHash -Path "$dump
 
 	# Unfortunately, there does not currently appear to be any way to download the raw file from chromium.googlesource.com
 	# Instead, we have to download the Base64-encoded contents of the file and then decode them
-	$dump_syms_b64_path = $(Join-Path (pwd) dump_syms_exe.b64);
-	Invoke-WebRequest "https://chromium.googlesource.com/breakpad/breakpad/+/$DUMP_SYMS_EXE_COMMIT/src/tools/windows/binaries/dump_syms.exe?format=TEXT" -OutFile "$dump_syms_b64_path"
-	$base64string = Get-Content -Raw "$dump_syms_b64_path"
-	[IO.File]::WriteAllBytes("$dump_syms_path", [Convert]::FromBase64String($base64string));
+	$dump_syms_b64_response = Invoke-WebRequest "https://chromium.googlesource.com/breakpad/breakpad/+/$DUMP_SYMS_EXE_COMMIT/src/tools/windows/binaries/dump_syms.exe?format=TEXT"
+	[IO.File]::WriteAllBytes("$dump_syms_path", [Convert]::FromBase64String($dump_syms_b64_response.Content));
 	$dump_syms_hash = Get-FileHash -Path "$dump_syms_path" -Algorithm SHA512;
 	If ($dump_syms_hash.Hash -eq $DUMP_SYMS_EXE_SHA512) {
 		Write-Output "Successfully downloaded dump_syms.exe";
