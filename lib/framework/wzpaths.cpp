@@ -30,13 +30,15 @@ static std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const 
 	std::vector<std::string> v;
 
 	auto pos = s.begin();
-	auto end = pos;
-
-	while(end != s.end())
+	while(pos != s.end())
 	{
-		end = std::find_first_of(pos, s.end(), delimiters.begin(), delimiters.end());
+		auto end = std::find_first_of(pos, s.end(), delimiters.begin(), delimiters.end());
 		v.emplace_back(pos, end);
-		pos = end + 1;
+		pos = end;
+		if (pos != s.end())
+		{
+			++pos;
+		}
 	}
 
 	return v;
