@@ -323,7 +323,7 @@ bool addChallenges()
 		ASSERT(challenge.contains("map"), "Invalid challenge file %s - no map", sPath);
 		map = challenge.value("map", "BAD MAP").toWzString();
 		difficulty = challenge.value("difficulty", "BAD DIFFICULTY").toWzString();
-		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("description", "").toWzString();
+		description = map + ", " + difficulty + ", " + highscore + ".\n" + challenge.value("description", "").toWzString();
 
 		button = (W_BUTTON *)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
 
