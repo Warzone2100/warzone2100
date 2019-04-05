@@ -137,6 +137,16 @@ endif()
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
+# Set Windows-specific defines (ex. _WIN32_WINNT)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
+		message( WARNING "WindowsStore builds are not currently supported" )
+		add_definitions(-D_WIN32_WINNT=0x0A00) # Windows 10+
+	else()
+		add_definitions(-D_WIN32_WINNT=0x0501) # Windows XP+
+	endif()
+endif()
+
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
 
