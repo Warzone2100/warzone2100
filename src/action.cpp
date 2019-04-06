@@ -155,7 +155,7 @@ const char *getDroidActionName(DROID_ACTION action)
 }
 
 // check if a target is within weapon range
-bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_slot)
+bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_slot, bool useLongWithOptimum)
 {
 	CHECK_DROID(psDroid);
 
@@ -179,7 +179,7 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
 	{
 		case DSS_ARANGE_DEFAULT:
-			if (weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
+			if (!useLongWithOptimum && weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
 			{
 				rangeSq = shortRange * shortRange;
 			}
@@ -1042,7 +1042,10 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 
-				bHasTarget = true;
+				if (!bHasTarget)
+				{
+					bHasTarget = actionInRange(psDroid, psActionTarget, i, false);
+				}
 
 				if (validTarget(psDroid, psActionTarget, i) && !wallBlocked)
 				{
@@ -1263,7 +1266,6 @@ void actionUpdateDroid(DROID *psDroid)
 							chaseBloke = true;
 						}
 
-
 						if (actionInRange(psDroid, psDroid->psActionTarget[0], i) && !chaseBloke)
 						{
 							/* init vtol attack runs count if necessary */
@@ -1273,7 +1275,10 @@ void actionUpdateDroid(DROID *psDroid)
 							}
 							else
 							{
-								moveStopDroid(psDroid);
+								if (actionInRange(psDroid, psDroid->psActionTarget[0], i, false))
+								{
+									moveStopDroid(psDroid);
+								}
 
 								if (psWeapStats->rotate)
 								{
