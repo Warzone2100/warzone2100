@@ -253,13 +253,6 @@ function attackTarget(droid) {
 		}
 }
 
-function vtolCanHit(droid, obj) {
-	if (typeof(obj) === DROID && isVTOL(obj))
-		return droid.canHitAir;
-	else
-		return droid.canHitGround;
-}
-
 function pickVtolTarget(droid) {
 	function uncached() {
 		function canHit(obj) {
@@ -283,17 +276,6 @@ function pickVtolTarget(droid) {
 	return cached(uncached, 100, droid.canHitAir + 2 * droid.canHitGround);
 }
 
-function vtolArmed(obj, percent) {
-	if (obj.type != DROID)
-		return;
-	if (!isVTOL(obj))
-		return false;
-	for (var i = 0; i < obj.weapons.length; ++i)
-		if (obj.weapons[i].armed >= 99)
-			return true;
-	return false;
-}
-
 function vtolReady(droid) {
 	if (droid.order == DORDER_ATTACK)
 		return false;
@@ -303,6 +285,24 @@ function vtolReady(droid) {
 		orderDroid(droid, DORDER_REARM);
 		buildVtols() // actually pads
 	}
+	return false;
+}
+
+_global.vtolCanHit = function(droid, obj) {
+	if (droid.type === DROID && obj.type === DROID && isVTOL(obj))
+		return droid.canHitAir;
+	else
+		return droid.canHitGround;
+}
+
+_global.vtolArmed = function(obj, percent) {
+	if (obj.type != DROID)
+		return;
+	if (!isVTOL(obj))
+		return false;
+	for (var i = 0; i < obj.weapons.length; ++i)
+		if (obj.weapons[i].armed >= 99)
+			return true;
 	return false;
 }
 

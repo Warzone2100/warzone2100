@@ -56,6 +56,8 @@ function eventStructureBuilt(structure) {
 }
 
 function eventAttacked(victim, attacker) {
+	if (victim.player != me)
+		return;
 	if (attacker === null)
 		return; // no idea why it happens sometimes
 	if (isAlly(attacker.player))
@@ -65,12 +67,17 @@ function eventAttacked(victim, attacker) {
 			fallBack(victim, attacker);
 			setTarget(attacker, victim.group);
 			touchGroup(victim.group);
-		} else if (isVTOL(victim) && victim.player == me && !throttled(5000, victim.id)) {
-			orderDroidObj(victim, DORDER_ATTACK, attacker);
-			pushVtols(attacker);
+		}
+		else if (isVTOL(victim) &&
+			vtolCanHit(victim, attacker) &&
+			vtolArmed(victim, 1) &&
+			!throttled(5000, victim.id))
+		{
+				orderDroidObj(victim, DORDER_ATTACK, attacker);
+				pushVtols(attacker);
 		}
 	} else if (victim.type === STRUCTURE) {
-		if (throttled(5000) && victim.player != me)
+		if (throttled(5000))
 			return;
 		if (inPanic())
 			for (var i = 0; i < MAX_GROUPS; ++i)
