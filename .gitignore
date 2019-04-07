@@ -287,3 +287,5 @@ win32/CodeAnalyst
 !/win32/*.manifest*
 # Do not ignore NSIS plugins under the pkg/nsis/plugins/*/ folders
 !/pkg/nsis/plugins/*/*.dll
+# Do not ignore the in-repo template file used for translation integration
+!/po/warzone2100_en.pot
