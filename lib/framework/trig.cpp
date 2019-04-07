@@ -43,6 +43,7 @@
 #endif
 
 #include <math.h>
+#include <algorithm>
 
 static uint16_t trigSinTable[0x4001];
 static uint16_t trigAtanTable[0x2001];
@@ -166,15 +167,21 @@ int32_t i64Sqrt(uint64_t n)
 	uint64_t r;
 	if (sizeof(void *) > 4)
 	{
-		r = sqrt((double)n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+		r = (uint64_t) sqrt((double)n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
 	}
 	else
 	{
 		// Bad compiler workaround. On some compilers, sqrt() seems to have somehow been taking 64-bit doubles and returning 80-bit doubles, breaking expected rounding behaviour.
-		r = sqrtl(n);         // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+		r = (uint64_t) sqrtl(n);         // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
 	}
 
-	r -= (int64_t)(r * r - n) > 0; // If we rounded up, subtract 1.
+	// Correct for different rounding & precision
+	// See: https://codereview.stackexchange.com/questions/69069/computing-the-square-root-of-a-64-bit-integer
+	r = std::min(r, (uint64_t)UINT32_MAX);
+	while (r * r > n)
+		r--;
+	while (n - r * r > r * 2)
+		r++;
 
 	// Check that we got the right result.
 	ASSERT((int64_t)(r * r - n) <= 0 && (int64_t)((r + 1) * (r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%" PRIu64") = %" PRIu64".", n, r);
