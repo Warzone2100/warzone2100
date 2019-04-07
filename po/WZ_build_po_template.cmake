@@ -87,6 +87,16 @@ if(NOT EXISTS "${_xgettext_temp_output_file}")
 	message( FATAL_ERROR "xgettext returned success, but temporary output file is not present!" )
 endif()
 
+# Update the temporary output file's POT-Creation-Date with the current date/time *in UTC*
+# (By default, xgettext may use the current system's timezone)
+file(READ "${_xgettext_temp_output_file}" _strings_NEW_OUTPUT_FILE
+	ENCODING UTF-8
+)
+string(TIMESTAMP _replacement_utc_creation_date "%Y-%m-%d %H:%M+0000" UTC)
+string(REGEX REPLACE "\n\"POT-Creation-Date: [^\"]*\"\n" "\n\"POT-Creation-Date: ${_replacement_utc_creation_date}\\\\n\"\n" _strings_NEW_OUTPUT_FILE "${_strings_NEW_OUTPUT_FILE}")
+file(WRITE "${_xgettext_temp_output_file}" "${_strings_NEW_OUTPUT_FILE}")
+unset(_strings_NEW_OUTPUT_FILE)
+
 if(EXISTS "${OUTPUT_FILE}")
 	# Only copy the temporary output file over the OUTPUT_FILE if the new (temporary) output actually has different content
 	# NOTE: This ignores certain header lines that update every time xgettext is run
