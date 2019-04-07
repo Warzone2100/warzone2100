@@ -1,0 +1,3 @@
+files:
+  - source: /po/warzone2100_en.pot
+    translation: /po/%locale_with_underscore%.po
