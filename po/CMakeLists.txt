@@ -153,6 +153,28 @@ ADD_CUSTOM_TARGET(pot_file ALL
 	DEPENDS ${_potFile})
 set_property(TARGET pot_file PROPERTY FOLDER "po")
 
+# Update the in-source warzone2100_en.pot (should run every build)
+set(_potFile_inRepo "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100_en.pot")
+ADD_CUSTOM_COMMAND(
+	OUTPUT
+		${CMAKE_CURRENT_BINARY_DIR}/__in_repo_po_template__shouldnotexist.pot  # fake - ensure we run
+		${_potFile_inRepo} # actual output file
+	COMMAND ${CMAKE_COMMAND} -DPOTFILES_IN=${_potfiles_in_path} -DOUTPUT_FILE=${_potFile_inRepo} -DTEMP_DIR=${CMAKE_CURRENT_BINARY_DIR} -DXGETTEXT_CMD=${XGETTEXT_CMD} -P ${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake
+#	DEPENDS ${_potfiles_in_path} ${source_translatable_depends} "${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake"
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	COMMENT "Extract translatable messages to in-repo template file: ${_potFile_inRepo}"
+	VERBATIM
+)
+ADD_CUSTOM_TARGET(update_po_template_in_repo ALL
+	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/__in_repo_po_template__shouldnotexist.pot
+)
+set_property(TARGET update_po_template_in_repo PROPERTY FOLDER "po")
+if(NOT TARGET translations)
+	add_custom_target(translations)
+	set_property(TARGET translations PROPERTY FOLDER "po")
+endif()
+add_dependencies(translations update_po_template_in_repo)
+
 set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 
 # On CMake configure, clear the build dir "locale" folder (to ensure re-generation)
