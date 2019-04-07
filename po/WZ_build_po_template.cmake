@@ -67,7 +67,6 @@ set(_xgettext_option_list --language=C++
 	--keyword=P_:1c,2
 	--keyword=NP_:1c,2
 	--package-name=warzone2100
-	--package-version=${PROJECT_VERSION}
 	--msgid-bugs-address=warzone2100-project@lists.sourceforge.net)
 
 set(_xgettext_COPYRIGHT_HOLDER "Warzone 2100 Project")
