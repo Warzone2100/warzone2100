@@ -175,8 +175,8 @@ function regroup(gr) {
 	if (ret.maxCount === 0)
 		return [];
 	for (var i = 0; i < ret.clusters.length; ++i)
-		if (i !== ret.maxIdx) 
-			for (var j = 0; j < ret.clusters[i].length; ++j) 
+		if (i !== ret.maxIdx)
+			for (var j = 0; j < ret.clusters[i].length; ++j)
 				orderDroidLoc(ret.clusters[i][j], DORDER_MOVE, ret.xav[ret.maxIdx], ret.yav[ret.maxIdx]);
 	if (ret.maxCount < size) {
 		for (var j = 0; j < ret.clusters[ret.maxIdx].length; ++j) {
@@ -301,7 +301,7 @@ _global.vtolArmed = function(obj, percent) {
 	if (!isVTOL(obj))
 		return false;
 	for (var i = 0; i < obj.weapons.length; ++i)
-		if (obj.weapons[i].armed >= 99)
+		if (obj.weapons[i].armed >= percent)
 			return true;
 	return false;
 }
