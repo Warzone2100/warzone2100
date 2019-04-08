@@ -231,12 +231,14 @@ function attackTarget(droid) {
 	if (defined(target))
 		switch (target.type) {
 			case DROID:
-				if (droid.canHitGround === true && !isVTOL(target))
+				if (droid.droidType === DROID_SENSOR)
+					orderDroidObj(droid, DORDER_OBSERVE, target);
+				else if (droid.canHitGround === true && !isVTOL(target))
 					orderDroidObj(droid, DORDER_ATTACK, target);
 				else if(droid.canHitAir === true && isVTOL(target))
 					orderDroidObj(droid, DORDER_ATTACK, target);
 				else
-					orderDroidObj(droid, DORDER_OBSERVE, target);
+					orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
 				break;
 			case FEATURE:
 				orderDroidObj(droid, DORDER_RECOVER, target);
