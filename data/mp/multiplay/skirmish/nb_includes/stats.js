@@ -1,7 +1,7 @@
 
 /*
  * This file contain functions for manipulating stats defined by rulesets.
- * 
+ *
  */
 
 (function(_global) {

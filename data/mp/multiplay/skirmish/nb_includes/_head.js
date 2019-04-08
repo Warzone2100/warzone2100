@@ -1,17 +1,17 @@
 
 /*
  * This file defines generic things that should be defined
- * prior to defining a ruleset. 
- * 
+ * prior to defining a ruleset.
+ *
  * NOTE: This file is not included from main.js .
- * 
+ *
  */
 
 // weapon path role
 const ROLE = {
-	AT: 0, 
-	AP: 1, 
-	AS: 2, 
+	AT: 0,
+	AP: 1,
+	AS: 2,
 	AA: 3,
 	LENGTH: 4, // number of items in this enum
 }
@@ -27,7 +27,7 @@ const OBJTYPE = {
 
 // this controls body and weapon compatibility.
 // A little explanation:
-// w \ b | L | M | H  bodies can't be "ultra-", 
+// w \ b | L | M | H  bodies can't be "ultra-",
 //    UL | + | - | -  ultra-light weapons are for light bodies only,
 //     L | + | + | -  light weapons are for light or medium bodies,
 //     M | + | + | +  medium weapons are for all bodies,
@@ -35,9 +35,9 @@ const OBJTYPE = {
 //    UH | - | - | +  ultra-heavy weapons are for heavy bodies only.
 const WEIGHT = {
 	ULTRALIGHT: 0,
-	LIGHT: 1, 
-	MEDIUM: 2, 
-	HEAVY: 3, 
+	LIGHT: 1,
+	MEDIUM: 2,
+	HEAVY: 3,
 	ULTRAHEAVY: 4,
 }
 

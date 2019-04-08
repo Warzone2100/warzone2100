@@ -1,7 +1,7 @@
 
 /*
  * This file is responsible for droid production.
- * 
+ *
  */
 
 (function(_global) {
@@ -178,7 +178,7 @@ _global.checkTruckProduction = function() {
 		if (defined(f))
 			if (structureIdle(f))
 				if (produceTruck(f, sensorTurrets))
-					return true;	
+					return true;
 	}
 	return false;
 }

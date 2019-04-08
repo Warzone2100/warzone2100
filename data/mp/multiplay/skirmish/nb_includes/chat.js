@@ -1,10 +1,10 @@
 /*
  * This file is responsible for chat listening. It contains handler functions for different chat
- * messages; each such function takes message and player as a parameter and returns a reply string. 
+ * messages; each such function takes message and player as a parameter and returns a reply string.
  * All chat talking (such as calling for help) is coded in other places, not here.
- * 
- * Messages are marked as translatable when necessary. 
- * 
+ *
+ * Messages are marked as translatable when necessary.
+ *
  */
 
 (function(_global) {
@@ -22,7 +22,7 @@ var commandMap = {
     money: chatMoney, // alias for "power"
 	help: chatHelp,
 	go: chatHelp, // alias for "help"
-	tx: chatUnhelp, 
+	tx: chatUnhelp,
 }
 
 var beaconInfo = [];
@@ -123,7 +123,7 @@ function chatTruck(sender, argument) {
 	if (donateObject(droid, sender)) {
 		addBeacon(droid.x, droid.y, sender);
 		return _("You can use this one.");
-	} 
+	}
 	return _("Sorry, droid transfer failed.");
 }
 
