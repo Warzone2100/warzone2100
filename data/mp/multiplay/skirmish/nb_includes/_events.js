@@ -56,10 +56,10 @@ function eventStructureBuilt(structure) {
 }
 
 function eventAttacked(victim, attacker) {
+	if (attacker === null || victim === null)
+		return; // no idea why it happens sometimes
 	if (victim.player != me)
 		return;
-	if (attacker === null)
-		return; // no idea why it happens sometimes
 	if (isAlly(attacker.player))
 		return; // don't respond to accidental friendly fire
 	if (victim.type === DROID) {
