@@ -1,8 +1,8 @@
 
 /*
- * This file is responsible for the adaptation system. It gathers statistics about 
+ * This file is responsible for the adaptation system. It gathers statistics about
  * player choices and regulates the AI's choices accordingly.
- * 
+ *
  */
 
 (function(_global) {
@@ -26,7 +26,7 @@ function adaptVote(our, their, verbose) {
 		return rating.map(function(val) { return (val + 1) / 2; });
 	var maxRating = -Infinity;
 	var maxIdx = 0;
-	for (var i = 0; i < l; ++i) 
+	for (var i = 0; i < l; ++i)
 		if (rating[i] > maxRating) {
 			maxRating = rating[i];
 			maxIdx = i;
@@ -56,7 +56,7 @@ function addStat(to, what, weight) {
 		weight = 1;
 	for (var prop in to) {
 		if (to[prop].constructor === Array)
-			for (var i = 0; i < to[prop].length; ++i) 
+			for (var i = 0; i < to[prop].length; ++i)
 				to[prop][i] += what[prop][i] * weight;
 		else
 			to[prop] += what[prop] * weight;
@@ -143,7 +143,7 @@ function threatensBase(droid) {
 function countLandTargets(player) {
 	function uncached() {
 		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND).last();
-		if (!defined(currProp)) 
+		if (!defined(currProp))
 			return 0;
 		var list = enumStructList(targets, player);
 		return list.filter(function(struct) {
@@ -157,7 +157,7 @@ function countLandTargets(player) {
 function countSeaTargets(player) {
 	function uncached() {
 		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.HOVER)[0];
-		if (!defined(currProp)) 
+		if (!defined(currProp))
 			return 0;
         var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
 		return enumStructList(targets, player).filter(function(struct) {
@@ -171,7 +171,7 @@ function countSeaTargets(player) {
 function countAirTargets(player) {
 	function uncached() {
 		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.VTOL)[0];
-		if (!defined(currProp)) 
+		if (!defined(currProp))
 			return 0;
 		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER)[0];
 		return enumStructList(targets, player).filter(function(struct) {
@@ -234,7 +234,7 @@ function classifyObject(obj) {
 			ret.obj[OBJTYPE.VTOL] += 1;
 		else if (obj.droidType === DROID_CYBORG)
 			ret.obj[OBJTYPE.BORG] += 1;
-		else 
+		else
 			ret.obj[OBJTYPE.TANK] += 1;
 	}
 	return ret;
@@ -251,7 +251,7 @@ function summUpEnemyObject(obj, stat) {
 			addStat(stat.offense, ret, w);
 	}
 	if (obj.type === DROID) {
-		for (var scope in SCOPES) 
+		for (var scope in SCOPES)
 			if (canReachBy(scope, obj)) // if the droid can't reach your base, we count it as defense only
 				addStat(stat.defense[scope], ret, w);
 		if (threatensBase(obj)) // otherwise count them as offense as well
@@ -264,7 +264,7 @@ function summUpMyObject(obj, stat) {
 	var w = obj.cost;
 	if (obj.type === STRUCTURE) {
 		addStat(stat.defense, ret, w);
-		if (obj.range > baseScale * 2) 
+		if (obj.range > baseScale * 2)
 			for (var scope in SCOPES)
 				addStat(stat.offense[scope], ret, w);
 	}

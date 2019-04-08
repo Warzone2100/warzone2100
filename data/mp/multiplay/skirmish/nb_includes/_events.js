@@ -1,7 +1,7 @@
 
 /*
  * This file includes event definitions only.
- * 
+ *
  */
 
 function eventStartLevel() {

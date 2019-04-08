@@ -1,7 +1,7 @@
 
 /*
  * This file lists all timers used by the AI.
- * 
+ *
  */
 
 (function(_global) {

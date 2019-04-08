@@ -3,7 +3,7 @@
  * This file is responsible for incoming laser satellite strikes.
  * Relies on lassatSplash variable of the ruleset to figure out
  * the radius of lassat.
- * 
+ *
  */
 
 (function(_global) {
