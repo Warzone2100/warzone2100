@@ -1782,6 +1782,27 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	setDisplayScale(war_GetDisplayScale());
 
+	SDL_Rect bounds;
+	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++)
+	{
+		SDL_GetDisplayBounds(i, &bounds);
+		debug(LOG_WZ, "Monitor %d: pos %d x %d : res %d x %d", i, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
+	}
+	screenIndex = war_GetScreen();
+	const int currentNumDisplays = SDL_GetNumVideoDisplays();
+	if (currentNumDisplays < 1)
+	{
+		debug(LOG_FATAL, "SDL_GetNumVideoDisplays returned: %d, with error: %s", currentNumDisplays, SDL_GetError());
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+	if (screenIndex > currentNumDisplays)
+	{
+		debug(LOG_WARNING, "Invalid screen [%d] defined in configuration; there are only %d displays; falling back to display 0", screenIndex, currentNumDisplays);
+		screenIndex = 0;
+		war_SetScreen(0);
+	}
+
 	// Calculate the minimum window size given the current display scale
 	unsigned int minWindowWidth = 0, minWindowHeight = 0;
 	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
@@ -1799,6 +1820,20 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	windowWidth = std::max(windowWidth, minWindowWidth);
 	windowHeight = std::max(windowHeight, minWindowHeight);
+
+	if (!fullscreen)
+	{
+		// Determine the maximum usable windowed size for this display/screen
+		SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
+		if (SDL_GetDisplayUsableBounds(screenIndex, &displayUsableBounds) == 0)
+		{
+			if (displayUsableBounds.w > 0 && displayUsableBounds.h > 0)
+			{
+				windowWidth = std::min((unsigned int)displayUsableBounds.w, windowWidth);
+				windowHeight = std::min((unsigned int)displayUsableBounds.h, windowHeight);
+			}
+		}
+	}
 
 	//// The flags to pass to SDL_CreateWindow
 	int video_flags  = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
@@ -1822,26 +1857,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 #endif
 	}
 
-	SDL_Rect bounds;
-	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++)
-	{
-		SDL_GetDisplayBounds(i, &bounds);
-		debug(LOG_WZ, "Monitor %d: pos %d x %d : res %d x %d", i, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
-	}
-	screenIndex = war_GetScreen();
-	const int currentNumDisplays = SDL_GetNumVideoDisplays();
-	if (currentNumDisplays < 1)
-	{
-		debug(LOG_FATAL, "SDL_GetNumVideoDisplays returned: %d, with error: %s", currentNumDisplays, SDL_GetError());
-		SDL_Quit();
-		exit(EXIT_FAILURE);
-	}
-	if (screenIndex > currentNumDisplays)
-	{
-		debug(LOG_WARNING, "Invalid screen [%d] defined in configuration; there are only %d displays; falling back to display 0", screenIndex, currentNumDisplays);
-		screenIndex = 0;
-		war_SetScreen(0);
-	}
 	WZwindow = SDL_CreateWindow(PACKAGE_NAME, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), windowWidth, windowHeight, video_flags);
 
 	if (!WZwindow)
