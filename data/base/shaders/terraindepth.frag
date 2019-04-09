@@ -4,7 +4,7 @@
 uniform sampler2D lightmap_tex;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-out vec2 uv2;
+in vec2 uv2;
 out vec4 FragColor;
 #else
 varying vec2 uv2;
