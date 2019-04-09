@@ -27,7 +27,7 @@
 
 // These functions are GNU extensions; so make sure they are available on Windows also
 
-#if defined(WZ_CC_MSVC) || defined(DOXYGEN)
+#if defined(WZ_CC_MSVC)
 /**
  * This function is analogue to vsprintf, except that it allocates a string
  * large enough to hold the output including the terminating NUL character.
