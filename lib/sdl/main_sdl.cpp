@@ -1446,7 +1446,7 @@ float wzGetMaximumDisplayScaleFactorForWindowSize(unsigned int windowWidth, unsi
 	return std::min(maxHorizScaleFactor, maxVertScaleFactor);
 }
 
-// returns: the maximum display scale percentage (sourced from wzAvailableDisplayScales), or 0 if window is below the minimum required size for the minimum support display scale
+// returns: the maximum display scale percentage (sourced from wzAvailableDisplayScales), or 0 if window is below the minimum required size for the minimum supported display scale
 unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight)
 {
 	float maxDisplayScaleFactor = wzGetMaximumDisplayScaleFactorForWindowSize(windowWidth, windowHeight);
@@ -1458,10 +1458,16 @@ unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, uns
 	auto maxDisplayScale = std::lower_bound(availableDisplayScales.begin(), availableDisplayScales.end(), maxDisplayScalePercentage);
 	if (maxDisplayScale == availableDisplayScales.end())
 	{
-		return 0;
+		// return the largest available display scale
+		return availableDisplayScales.back();
 	}
 	if (*maxDisplayScale != maxDisplayScalePercentage)
 	{
+		if (maxDisplayScale == availableDisplayScales.begin())
+		{
+			// no lower display scale to return
+			return 0;
+		}
 		--maxDisplayScale;
 	}
 	return *maxDisplayScale;
