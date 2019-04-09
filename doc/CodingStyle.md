@@ -52,12 +52,6 @@ line, like this (\t for tabs):
  * Inheritance is nice, but try to avoid unnecessary levels of abstraction.
  * Make sure your patch does not add any new compiler warnings.
 
-We are implementing a doxygen documentation on the code, which can be accessed
-[here](http://buildbot.wz2100.net/files/doxygen/).
-
-We usually prefer to put doxygen function comments in the header files, rather than
-in the source files.
-
 ## Artistic Style
 
 For astyle, save the following as "astyle":

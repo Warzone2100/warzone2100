@@ -13,8 +13,6 @@
 *.gmo
 *.pyc
 *.wz
-# Doxygen files
-/doc/code/html
 # windows generated binary files:
 *.obj
 *.lib
