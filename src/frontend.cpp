@@ -1298,7 +1298,7 @@ bool runVideoOptionsMenu()
 			else
 			{
 				// when live resolution changes are unavailable, check to see if the current display scale is supported at the desired resolution
-				unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(current->width, current->height);
+				unsigned int maxDisplayScale = std::max(100u, wzGetMaximumDisplayScaleForWindowSize(current->width, current->height));
 				unsigned int current_displayScale = war_GetDisplayScale();
 				if (maxDisplayScale < current_displayScale)
 				{
