@@ -473,6 +473,7 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 
 void setDisplayScale(unsigned int displayScale)
 {
+	ASSERT(displayScale >= 100, "Invalid display scale: %u", displayScale);
 	current_displayScale = displayScale;
 	current_displayScaleFactor = (float)displayScale / 100.f;
 }
@@ -1787,16 +1788,17 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	if ((windowWidth < minWindowWidth) || (windowHeight < minWindowHeight))
 	{
-		// The current window width and/or height is lower than the required minimum for the current display scale.
-		//
-		// Reset the display scale to 100%, and recalculate the required minimum window size.
-		setDisplayScale(100);
-		war_SetDisplayScale(100); // save the new display scale configuration
+		// The desired window width and/or height is lower than the required minimum for the current display scale.
+		// Reduce the display scale to the maximum supported (for the desired window size), and recalculate the required minimum window size.
+		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(windowWidth, windowHeight);
+		maxDisplayScale = std::max(100u, maxDisplayScale); // if wzGetMaximumDisplayScaleForWindowSize fails, it returns < 100
+		setDisplayScale(maxDisplayScale);
+		war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
 		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
 	}
 
-	windowWidth = MAX(windowWidth, minWindowWidth);
-	windowHeight = MAX(windowHeight, minWindowHeight);
+	windowWidth = std::max(windowWidth, minWindowWidth);
+	windowHeight = std::max(windowHeight, minWindowHeight);
 
 	//// The flags to pass to SDL_CreateWindow
 	int video_flags  = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
