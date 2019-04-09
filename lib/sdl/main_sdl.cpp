@@ -1910,8 +1910,14 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 			// Center window on screen
 			SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
+
+			// Re-request resulting window size
+			SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
 		}
 	}
+	ASSERT(resultingWidth > 0 && resultingHeight > 0, "Invalid - SDL returned window width: %d, window height: %d", resultingWidth, resultingHeight);
+	windowWidth = (unsigned int)resultingWidth;
+	windowHeight = (unsigned int)resultingHeight;
 
 	// Calculate the game screen's logical dimensions
 	screenWidth = windowWidth;
