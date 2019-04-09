@@ -1875,17 +1875,42 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	// Check that the actual window size matches the desired window size
 	int resultingWidth, resultingHeight = 0;
 	SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
-	if (resultingWidth != windowWidth || resultingHeight != windowHeight) {
-		// Failed to create window at desired size (This can happen for a number of reasons)
-		debug(LOG_ERROR, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; Reverting to default resolution of %d x %d", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
+	if (resultingWidth < minWindowWidth || resultingHeight < minWindowHeight)
+	{
+		// The created window size (that the system returned) is less than the minimum required window size (for this display scale)
+		debug(LOG_ERROR, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; which is below the required minimum size of %d x %d for the current display scale level", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
 
-		// Default to base resolution
-		SDL_SetWindowSize(WZwindow, minWindowWidth, minWindowHeight);
-		windowWidth = minWindowWidth;
-		windowHeight = minWindowHeight;
+		// Adjust the display scale (if possible)
+		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(resultingWidth, resultingHeight);
+		if (maxDisplayScale >= 100)
+		{
+			// Reduce the display scale
+			debug(LOG_ERROR, "Reducing the display scale level to the maximum supported for this window size: %u", maxDisplayScale);
+			setDisplayScale(maxDisplayScale);
+			war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
+			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
+		}
+		else
+		{
+			// Problem: The resulting window size that the system provided is below the minimum required
+			//          for the lowest possible display scale - i.e. the window is just too small
+			debug(LOG_ERROR, "The window size created by the system is too small!");
 
-		// Center window on screen
-		SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
+			// TODO: Should probably exit with a fatal error here?
+			// For now...
+
+			// Attempt to default to base resolution at 100%
+			setDisplayScale(100);
+			war_SetDisplayScale(100); // save the new display scale configuration
+			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
+
+			SDL_SetWindowSize(WZwindow, minWindowWidth, minWindowHeight);
+			windowWidth = minWindowWidth;
+			windowHeight = minWindowHeight;
+
+			// Center window on screen
+			SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
+		}
 	}
 
 	// Calculate the game screen's logical dimensions
