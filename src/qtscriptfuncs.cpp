@@ -1682,7 +1682,8 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	QString id = (context->argumentCount() == 1) ? context->argument(0).toString() : context->argument(1).toString();
 	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(id.toUtf8().constData()));
 	SCRIPT_ASSERT(context, psComp, "No such component: %s", id.toUtf8().constData());
-	return QScriptValue(apCompLists[player][psComp->compType][psComp->index] == AVAILABLE);
+	int status = apCompLists[player][psComp->compType][psComp->index];
+	return QScriptValue(status == AVAILABLE || status == REDUNDANT);
 }
 
 //-- ## addFeature(name, x, y)
