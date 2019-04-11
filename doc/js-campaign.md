@@ -67,10 +67,9 @@ Remove duplicate items from an array.
 
 Mimics wzscript's numStructsButNotWallsInArea().
 
-## camChangeOnDiff(numeric value, [bool])
+## camChangeOnDiff(numeric value)
 
-Change a numeric value based on campaign difficulty. If the second option is defined
-then the opposite effect will occur on that value.
+Change a numeric value based on campaign difficulty.
 
 ## camIsSystemDroid(game object)
 
@@ -132,7 +131,7 @@ calls in your code for easier debugging.
 Same as ```camTrace()```, but prints each message only once
 during script lifetime.
 
-## isCheating()
+## camIsCheating()
 
 Check if the player is in cheat mode.
 
