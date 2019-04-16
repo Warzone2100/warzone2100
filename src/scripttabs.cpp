@@ -2623,7 +2623,7 @@ CONST_SYMBOL asConstantTable[] =
 	// secondary order stats
 	{ "DSS_ARANGE_SHORT",	VAL_INT,	false,	DSS_ARANGE_SHORT,	nullptr, nullptr, 0.0f },
 	{ "DSS_ARANGE_LONG",	VAL_INT,	false,	DSS_ARANGE_LONG,	nullptr, nullptr, 0.0f },
-	{ "DSS_ARANGE_DEFAULT",	VAL_INT,	false,	DSS_ARANGE_DEFAULT,	nullptr, nullptr, 0.0f },
+	{ "DSS_ARANGE_OPTIMUM",	VAL_INT,	false,	DSS_ARANGE_OPTIMUM,	nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_LOW",		VAL_INT,	false,	DSS_REPLEV_LOW,		nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_HIGH",	VAL_INT,	false,	DSS_REPLEV_HIGH,	nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_NEVER",	VAL_INT,	false,	DSS_REPLEV_NEVER,	nullptr, nullptr, 0.0f },
