@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-02-16 09:53+0000\n"
 "PO-Revision-Date: 2019-04-07 18:10+0200\n"
-"Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
+"Last-Translator: Forgon <forgon2100@protonmail.com>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -367,7 +367,7 @@ msgstr "SCAVENGER-BASIS ENTDECKT"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Vernichten Sie die Scavengers und bergen Sie alle Artefakte."
+msgstr "Vernichten Sie die Scavenger und bergen Sie alle Artefakte."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -1272,12 +1272,12 @@ msgstr "Tornado-Flak-Turm"
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:288
 msgid "Proximity Bomb Turret"
-msgstr "Näherungsbombenabwurfschacht"
+msgstr "Näherungsbombe"
 
 #: data/base/messages/strings/names.txt:248
 #: data/mp/messages/strings/names.txt:289
 msgid "Proximity Superbomb Turret"
-msgstr "Näherungssuperbombenabwurfschacht"
+msgstr "Näherungssuperbombe"
 
 #: data/base/messages/strings/names.txt:287
 #: data/mp/messages/strings/names.txt:370
@@ -1545,7 +1545,7 @@ msgstr "Störturm Mk2"
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:494
 msgid "Sensor Lock"
-msgstr "Sensorsperre"
+msgstr "Zielbestimmung für Sensoren"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:527
@@ -2762,14 +2762,13 @@ msgstr "Rückstoßbetriebener Munitionstrichter für Flugabwehrkanonen"
 msgid "Increases AA ROF"
 msgstr "Erhöht Feuerrate von Flugabwehrkanonen"
 
-# Gibt sicherlich einen deutschen Fachausdruck dafür, nur her damit -Kreuvf
 #: data/base/messages/strings/resstrings.txt:685
 #: data/base/messages/strings/resstrings.txt:691
 #: data/mp/messages/strings/resstrings.txt:326
 #: data/mp/messages/strings/resstrings.txt:331
 #: po/custom/fromJson.txt:964
 msgid "New Proximity Bomb Turret Available"
-msgstr "Neuer Näherungsbombenabwurfschacht verfügbar"
+msgstr "Neue Näherungsbombe verfügbar"
 
 #: data/base/messages/strings/resstrings.txt:686
 #: data/mp/messages/strings/resstrings.txt:327
@@ -3757,7 +3756,7 @@ msgstr "Es ist wahrscheinlich, dass er gegen Ihre Stellung gerichtet ist."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr "Beginnen Sie sofort damit die Betabasis in die Sicherheitszone zu evakuieren."
+msgstr "Beginnen Sie sofort damit die Betabasis zum sicheren Hafen zu evakuieren."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
@@ -4557,7 +4556,7 @@ msgstr "Pulslaser-Supercyborg"
 #: data/mp/messages/strings/names.txt:801
 #: po/custom/fromJson.txt:1272
 msgid "Super Rail-Gunner"
-msgstr "Supermagnetschütze"
+msgstr "Magnet-Superschütze"
 
 #: data/mp/messages/strings/names.txt:803
 #: po/custom/fromJson.txt:1273
@@ -8939,15 +8938,15 @@ msgstr "Flammenwerfergel für sehr hohe Temperaturen Mk3"
 
 #: po/custom/fromJson.txt:1265
 msgid "Superhot Plasmite gel"
-msgstr "Superheißes Plasmitflammenwerfergel"
+msgstr "Plasmitflammenwerfergel für sehr hohe Temperaturen"
 
 #: po/custom/fromJson.txt:1266
 msgid "Superhot Plasmite gel Mk2"
-msgstr "Superheißes Plasmitflammenwerfergel Mk2"
+msgstr "Plasmitflammenwerfergel für sehr hohe Temperaturen Mk2"
 
 #: po/custom/fromJson.txt:1267
 msgid "Superhot Plasmite gel Mk3"
-msgstr "Superheißes Plasmitflammenwerfergel Mk3"
+msgstr "Plasmitflammenwerfergel für sehr hohe Temperaturen Mk3"
 
 #: po/custom/fromJson.txt:1275
 #: src/design.cpp:1063
@@ -11915,7 +11914,7 @@ msgstr "Falsche Spielversion!"
 
 #: src/multiint.cpp:1204
 msgid "You have an incompatible mod."
-msgstr "Sie haben einen inkompatiblen Mod."
+msgstr "Sie haben eine inkompatible Mod."
 
 #: src/multiint.cpp:1208
 msgid "Host couldn't send file?"
@@ -12337,7 +12336,7 @@ msgstr "Dateiübertragung für %d abgebrochen."
 #: src/multijoin.cpp:455
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr "%s (%u) hat einen inkompatiblen Mod und wurde rausgeschmissen."
+msgstr "%s (%u) hat eine inkompatible Mod und wurde rausgeschmissen."
 
 #: src/multijoin.cpp:496
 #, c-format
@@ -12751,7 +12750,7 @@ msgstr[1] "%s - %u Einheiten zugewiesen - Trefferpunkte %d/%d"
 
 #: src/structure.cpp:5447
 #, c-format
-msgid "%s - %u Unit assigned - Damage %3.0f%%"
+msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Einheit zugewiesen - Trefferpunkte %d/%d"
 msgstr[1] "%s - %u Einheiten zugewiesen - Trefferpunkte %d/%d"
