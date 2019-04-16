@@ -8742,13 +8742,11 @@ msgstr "Selbstständig zielsuchende raketengetriebene Geschosse"
 msgid "Self-Replicating Manufacturing"
 msgstr "Selbstreplizierende Fertigung"
 
-#: po/custom/fromJson.txt:1211
-msgid "Semperfi"
+msgid "SemperFi"
 msgstr "SemperFi"
 
-#: po/custom/fromJson.txt:1212
-msgid "SemperFi JS"
-msgstr "SemperFi JS"
+msgid "SemperFi JavaScript"
+msgstr "SemperFi JavaScript"
 
 #: po/custom/fromJson.txt:1213
 msgid "Sensor Cobra Half-tracks"
@@ -12832,6 +12830,30 @@ msgstr " - DEBUG"
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Version: %s,%s Erstellt: %s%s"
+
+# NullBot tooltip
+msgid "Adaptive AI with multiple personalities"
+msgstr "Anpassungsfähige KI mit mehreren Persönlichkeiten"
+
+# Hover AI tooltip
+msgid "Sea map AI, based on NullBot"
+msgstr "KI für Seekarten, basierend auf NullBot"
+
+# Turtle AI tooltip
+msgid "Tower wars AI, based on NullBot"
+msgstr "KI für Befestigungen, basierend auf NullBot"
+
+# Nexus tooltip
+msgid "Initial AI, now supplanted by NullBot"
+msgstr "Ursprüngliche KI, von NullBot verdrängt"
+
+# SemperFi JavaScript tooltip
+msgid "Prototypical JavaScript AI focusing on rockets/missiles"
+msgstr "Prototyp für JavaScript-KI mit Schwerpunkt (Lenk-)Raketen"
+
+# SemperFi tooltip
+msgid "Enhanced Nexus AI"
+msgstr "Verbesserte Nexus-KI"
 
 #~ msgid "Electronic Countermeasures"
 #~ msgstr "Elektronische Gegenmaßnahmen"
