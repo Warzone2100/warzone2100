@@ -236,7 +236,7 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_SelectAllArmedVTOLs, "SelectAllArmedVTOLs"},
 	{kf_SetDroidMovePursue, "SetDroidMovePursue"},
 	{kf_SetDroidMoveGuard, "SetDroidMoveGuard"},
-	{kf_SetDroidRangeDefault, "SetDroidRangeDefault"},
+	{kf_SetDroidRangeOptimum, "SetDroidRangeOptimum"},
 	{kf_SetDroidRangeShort, "SetDroidRangeShort"},
 	{kf_SetDroidRangeLong, "SetDroidRangeLong"},
 };
@@ -390,7 +390,7 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_G,      KEYMAP_PRESSED, kf_SetDroidMoveGuard,     N_("Guard Position"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  N_("Return to HQ"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidOrderHold,     N_("Hold Position"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeDefault,  N_("Optimum Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeOptimum,  N_("Optimum Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_O,      KEYMAP_PRESSED, kf_SetDroidRangeShort,    N_("Short Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_P,      KEYMAP_PRESSED, kf_SetDroidMovePursue,    N_("Pursue"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_Q,      KEYMAP_PRESSED, kf_SetDroidMovePatrol,    N_("Patrol"));

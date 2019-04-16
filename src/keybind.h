@@ -152,7 +152,7 @@ void kf_SelectAllCombatCyborgs();
 void kf_SelectAllSameType();
 
 void kf_SetDroidRangeShort();
-void kf_SetDroidRangeDefault();
+void kf_SetDroidRangeOptimum();
 void kf_SetDroidRangeLong();
 
 void kf_SetDroidRetreatMedium();

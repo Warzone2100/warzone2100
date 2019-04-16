@@ -2212,9 +2212,9 @@ void	kf_SetDroidRangeShort()
 }
 
 // --------------------------------------------------------------------------
-void	kf_SetDroidRangeDefault()
+void	kf_SetDroidRangeOptimum()
 {
-	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_DEFAULT);
+	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_OPTIMUM);
 }
 
 // --------------------------------------------------------------------------

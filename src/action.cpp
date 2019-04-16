@@ -178,7 +178,7 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	int rangeSq = 0;
 	switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
 	{
-		case DSS_ARANGE_DEFAULT:
+		case DSS_ARANGE_OPTIMUM:
 			if (!useLongWithOptimum && weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
 			{
 				rangeSq = shortRange * shortRange;
