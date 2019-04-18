@@ -2525,7 +2525,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 			break;
 		}
 
-	if (isLimit && player == selectedPlayer && lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime)
+	if (isLimit && player == selectedPlayer && (lastMaxUnitMessage == 0 || lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE <= gameTime))
 	{
 		addConsoleMessage(limitMsg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		lastMaxUnitMessage = gameTime;
