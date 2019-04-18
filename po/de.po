@@ -12739,10 +12739,13 @@ msgstr[1] "%u Einheiten ausgewählt"
 msgid "Can't build anymore units, Unit Limit Reached — Production Halted"
 msgstr "Kann keine weiteren Einheiten mehr bauen, Einheitenlimit erreicht — Produktion angehalten"
 
-#: src/structure.cpp:2504
 #, c-format
-msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
-msgstr "Kann keine weiteren \"%s\" mehr bauen, Commandereinheit hat Kontrollgrenze erreicht — Produktion angehalten"
+msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
+msgstr "Kann keinen \"%s\" ohne Kommandorelais bauen — Produktion angehalten"
+
+#, c-format
+msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
+msgstr "Kann keinen \"%s\" bauen, Commanderlimit erreicht — Produktion angehalten"
 
 #: src/structure.cpp:2512
 #, c-format
