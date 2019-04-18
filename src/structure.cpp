@@ -2502,10 +2502,15 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 	else switch (droidTemplateType(templ))
 		{
 		case DROID_COMMAND:
-			if (!hasBuiltCommandRelay(isMission, player) || getNumCommandDroids(player) >= getMaxCommanders(player))
+			if (!hasBuiltCommandRelay(isMission, player))
 			{
 				isLimit = true;
-				ssprintf(limitMsg, _("Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
+				ssprintf(limitMsg, _("Can't build \"%s\" without a Command Relay Center — Production Halted"), templ->name.toUtf8().c_str());
+			}
+			else if (getNumCommandDroids(player) >= getMaxCommanders(player))
+			{
+				isLimit = true;
+				ssprintf(limitMsg, _("Can't build \"%s\", Commander Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			break;
 		case DROID_CONSTRUCT:
