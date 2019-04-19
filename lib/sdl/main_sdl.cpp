@@ -264,202 +264,6 @@ WzString wzGetSelection()
 	return retval;
 }
 
-// Here we handle VSYNC enable/disabling
-#if defined(WZ_WS_X11)
-
-#if defined(__clang__)
-// Some versions of the X11 headers (which are included by <GL/glx.h>)
-// trigger `named variadic macros are a GNU extension [-Wvariadic-macros]`
-// on Clang. https://lists.x.org/archives/xorg-devel/2015-January/045216.html
-#  pragma clang diagnostic push
-#  pragma clang diagnostic ignored "-Wvariadic-macros"
-#endif
-
-#include <GL/glx.h> // GLXDrawable
-
-#if defined(__clang__)
-#  pragma clang diagnostic pop
-#endif
-
-// X11 polution
-#ifdef Status
-#undef Status
-#endif // Status
-#ifdef CursorShape
-#undef CursorShape
-#endif // CursorShape
-#ifdef Bool
-#undef Bool
-#endif // Bool
-
-#ifndef GLX_SWAP_INTERVAL_EXT
-#define GLX_SWAP_INTERVAL_EXT 0x20F1
-#endif // GLX_SWAP_INTERVAL_EXT
-
-// Need this global for use case of only having glXSwapIntervalSGI
-static int swapInterval = -1;
-
-void wzSetSwapInterval(int interval)
-{
-	typedef void (* PFNGLXQUERYDRAWABLEPROC)(Display *, GLXDrawable, int, unsigned int *);
-	typedef void (* PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable, int);
-	typedef int (* PFNGLXGETSWAPINTERVALMESAPROC)(void);
-	typedef int (* PFNGLXSWAPINTERVALMESAPROC)(unsigned);
-	typedef int (* PFNGLXSWAPINTERVALSGIPROC)(int);
-	PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
-	PFNGLXQUERYDRAWABLEPROC glXQueryDrawable;
-	PFNGLXGETSWAPINTERVALMESAPROC glXGetSwapIntervalMESA;
-	PFNGLXSWAPINTERVALMESAPROC glXSwapIntervalMESA;
-	PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
-
-	if (interval < 0)
-	{
-		interval = 0;
-	}
-
-#if GLX_VERSION_1_2
-	// Hack-ish, but better than not supporting GLX_SWAP_INTERVAL_EXT?
-	GLXDrawable drawable = glXGetCurrentDrawable();
-	Display *display =  glXGetCurrentDisplay();
-	glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("glXSwapIntervalEXT");
-	glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC) SDL_GL_GetProcAddress("glXQueryDrawable");
-
-	if (glXSwapIntervalEXT && glXQueryDrawable && drawable)
-	{
-		unsigned clampedInterval;
-		glXSwapIntervalEXT(display, drawable, interval);
-		glXQueryDrawable(display, drawable, GLX_SWAP_INTERVAL_EXT, &clampedInterval);
-		swapInterval = clampedInterval;
-		return;
-	}
-#endif
-
-	glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC) SDL_GL_GetProcAddress("glXSwapIntervalMESA");
-	glXGetSwapIntervalMESA = (PFNGLXGETSWAPINTERVALMESAPROC) SDL_GL_GetProcAddress("glXGetSwapIntervalMESA");
-	if (glXSwapIntervalMESA && glXGetSwapIntervalMESA)
-	{
-		glXSwapIntervalMESA(interval);
-		swapInterval = glXGetSwapIntervalMESA();
-		return;
-	}
-
-	glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC) SDL_GL_GetProcAddress("glXSwapIntervalSGI");
-	if (glXSwapIntervalSGI)
-	{
-		if (interval < 1)
-		{
-			interval = 1;
-		}
-		if (glXSwapIntervalSGI(interval))
-		{
-			// Error, revert to default
-			swapInterval = 1;
-			glXSwapIntervalSGI(1);
-		}
-		else
-		{
-			swapInterval = interval;
-		}
-		return;
-	}
-	swapInterval = 0;
-}
-
-int wzGetSwapInterval()
-{
-	if (swapInterval >= 0)
-	{
-		return swapInterval;
-	}
-
-	typedef void (* PFNGLXQUERYDRAWABLEPROC)(Display *, GLXDrawable, int, unsigned int *);
-	typedef int (* PFNGLXGETSWAPINTERVALMESAPROC)(void);
-	typedef int (* PFNGLXSWAPINTERVALSGIPROC)(int);
-	PFNGLXQUERYDRAWABLEPROC glXQueryDrawable;
-	PFNGLXGETSWAPINTERVALMESAPROC glXGetSwapIntervalMESA;
-	PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
-
-#if GLX_VERSION_1_2
-	// Hack-ish, but better than not supporting GLX_SWAP_INTERVAL_EXT?
-	GLXDrawable drawable = glXGetCurrentDrawable();
-	Display *display =  glXGetCurrentDisplay();
-	glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC) SDL_GL_GetProcAddress("glXQueryDrawable");
-
-	if (glXQueryDrawable && drawable)
-	{
-		unsigned interval;
-		glXQueryDrawable(display, drawable, GLX_SWAP_INTERVAL_EXT, &interval);
-		swapInterval = interval;
-		return swapInterval;
-	}
-#endif
-
-	glXGetSwapIntervalMESA = (PFNGLXGETSWAPINTERVALMESAPROC) SDL_GL_GetProcAddress("glXGetSwapIntervalMESA");
-	if (glXGetSwapIntervalMESA)
-	{
-		swapInterval = glXGetSwapIntervalMESA();
-		return swapInterval;
-	}
-
-	glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC) SDL_GL_GetProcAddress("glXSwapIntervalSGI");
-	if (glXSwapIntervalSGI)
-	{
-		swapInterval = 1;
-	}
-	else
-	{
-		swapInterval = 0;
-	}
-	return swapInterval;
-}
-
-#elif defined(WZ_WS_WIN)
-
-void wzSetSwapInterval(int interval)
-{
-	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int);
-	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
-
-	if (interval < 0)
-	{
-		interval = 0;
-	}
-
-	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("wglSwapIntervalEXT");
-
-	if (wglSwapIntervalEXT)
-	{
-		wglSwapIntervalEXT(interval);
-	}
-}
-
-int wzGetSwapInterval()
-{
-	typedef int (WINAPI * PFNWGLGETSWAPINTERVALEXTPROC)(void);
-	PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
-
-	wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("wglGetSwapIntervalEXT");
-	if (wglGetSwapIntervalEXT)
-	{
-		return wglGetSwapIntervalEXT();
-	}
-	return 0;
-}
-
-#elif !defined(WZ_OS_MAC)
-// FIXME:  This can't be right?
-void wzSetSwapInterval(int)
-{
-	return;
-}
-
-int wzGetSwapInterval()
-{
-	return 0;
-}
-
-#endif
-
 std::vector<screeninfo> wzAvailableResolutions()
 {
 	return displaylist;
@@ -562,6 +366,22 @@ void wzDelay(unsigned int delay)
 {
 	SDL_Delay(delay);
 }
+
+#if !defined(WZ_OS_MAC)
+void wzSetSwapInterval(int interval)
+{
+	if (SDL_GL_SetSwapInterval(interval) != 0)
+	{
+		debug(LOG_ERROR, "Error: SDL_GL_SetSwapInterval(%d) failed (%s).", interval, SDL_GetError());
+		return;
+	}
+}
+
+int wzGetSwapInterval()
+{
+	return SDL_GL_GetSwapInterval();
+}
+#endif
 
 /**************************/
 /***    Thread support  ***/
