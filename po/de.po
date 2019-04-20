@@ -1193,7 +1193,7 @@ msgstr "Neuer Entwurf"
 #: data/base/messages/strings/names.txt:103
 #: data/mp/messages/strings/names.txt:160
 msgid "Cyborg Cannon"
-msgstr "Cyborggeschütz"
+msgstr "Cyborgkanone"
 
 #: data/base/messages/strings/names.txt:149
 #: data/base/messages/strings/names.txt:182
@@ -2020,7 +2020,7 @@ msgstr "Greift automatisch Ziele in Reichweite an"
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:181
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Gepanzerte Stellung mit Hochgeschwindigkeitsgeschütz"
+msgstr "Gepanzerte Stellung mit Hochgeschwindigkeitskanone"
 
 #: data/base/messages/strings/resstrings.txt:200
 #: data/base/messages/strings/resstrings.txt:220
@@ -2054,7 +2054,7 @@ msgstr "Gepanzerte Stellung mit Inferno-Flammenwerfer"
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:177
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Gepanzerte Stellung mit Sturmgeschütz"
+msgstr "Gepanzerte Stellung mit Sturmkanone"
 
 #: data/base/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:112
@@ -2119,7 +2119,7 @@ msgstr "Gepanzerte Aufhängung mit Sturmgewehr"
 #: data/mp/messages/strings/resstrings.txt:147
 #: po/custom/fromJson.txt:158
 msgid "Armored hardpoint with Assault Cannon"
-msgstr "Gepanzerte Aufhängung mit Sturmgeschütz"
+msgstr "Gepanzerte Aufhängung mit Sturmkanone"
 
 #: data/base/messages/strings/resstrings.txt:302
 #: data/mp/messages/strings/resstrings.txt:152
@@ -2876,7 +2876,7 @@ msgstr "Neuer Waffenturm verfügbar"
 #: data/mp/messages/strings/resstrings.txt:352
 #: po/custom/fromJson.txt:684
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Hochgeschwindigkeitsautomatikgeschütz mit 88-mm-Geschossen"
+msgstr "Hochgeschwindigkeitsautomatikkanone mit 88-mm-Geschossen"
 
 #: data/base/messages/strings/resstrings.txt:731
 #: data/base/messages/strings/resstrings.txt:737
@@ -2890,13 +2890,13 @@ msgstr "Beste Ziele: Fahrzeuge"
 #: data/mp/messages/strings/resstrings.txt:354
 #: po/custom/fromJson.txt:1125
 msgid "Replaces Medium Cannon"
-msgstr "Ersetzt Mittleres Geschütz"
+msgstr "Ersetzt Mittlere Kanone"
 
 #: data/base/messages/strings/resstrings.txt:736
 #: data/mp/messages/strings/resstrings.txt:357
 #: po/custom/fromJson.txt:8
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "Vierläufiges 76-mm-Hochgeschwindigkeitsautomatikgeschütz"
+msgstr "Vierläufige 76-mm-Hochgeschwindigkeitsautomatikkanone"
 
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/strings/resstrings.txt:359
@@ -4531,12 +4531,12 @@ msgstr "Schwerer Superschütze"
 #: data/mp/messages/strings/names.txt:777
 #: po/custom/fromJson.txt:1252
 msgid "Super Auto-Cannon Cyborg"
-msgstr "Sturmgeschütz-Supercyborg"
+msgstr "Sturmkanonensupercyborg"
 
 #: data/mp/messages/strings/names.txt:779
 #: po/custom/fromJson.txt:1268
 msgid "Super HPV Cyborg"
-msgstr "Hochgeschwindigkeitsgeschütz-Supercyborg"
+msgstr "Hochgeschwindigkeitskanonensupercyborg"
 
 #: data/mp/messages/strings/names.txt:781
 #: po/custom/fromJson.txt:1274
@@ -4734,7 +4734,7 @@ msgstr "7,62-mm-Maschinengewehr"
 
 #: po/custom/fromJson.txt:9
 msgid "76mm twin-barrel automatic-cannon"
-msgstr "Doppelläufiges 76-mm-Schnellfeuergeschütz"
+msgstr "Doppelläufige 76-mm-Schnellfeuerkanone"
 
 #: po/custom/fromJson.txt:10
 msgid "AA accuracy +10%"
@@ -4927,7 +4927,7 @@ msgstr "Aerodynamiklabor"
 
 #: po/custom/fromJson.txt:70
 msgid "All cannons upgraded automatically"
-msgstr "Alle Geschütze wurden automatisch aufgerüstet"
+msgstr "Alle Kanonen wurden automatisch aufgerüstet"
 
 #: po/custom/fromJson.txt:71
 msgid "All CB sensors upgraded automatically"
@@ -5015,15 +5015,15 @@ msgstr "Panzerbrechende Treibspiegelprojektile für Maschinengewehre Mk3"
 
 #: po/custom/fromJson.txt:113
 msgid "APFSDS Cannon Rounds"
-msgstr "Panzerbrechende flügelstabilisierte Treibspiegelgeschosse für Geschütze"
+msgstr "Panzerbrechende flügelstabilisierte Treibspiegelgeschosse für Kanonen"
 
 #: po/custom/fromJson.txt:114
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr "Panzerbrechende flügelstabilisierte Treibspiegelgeschosse für Geschütze Mk2"
+msgstr "Panzerbrechende flügelstabilisierte Treibspiegelgeschosse für Kanonen Mk2"
 
 #: po/custom/fromJson.txt:115
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Panzerbrechende flügelstabilisierte Treibspiegelgeschosse für Geschütze Mk3"
+msgstr "Panzerbrechende flügelstabilisierte Treibspiegelgeschosse für Kanonen Mk3"
 
 #: po/custom/fromJson.txt:116
 msgid "Archangel Missile"
@@ -5043,7 +5043,7 @@ msgstr "Bewaffnet mit Cyborgsturmgewehr"
 
 #: po/custom/fromJson.txt:122
 msgid "Armed with Cyborg Cannon"
-msgstr "Bewaffnet mit Cyborggeschütz"
+msgstr "Bewaffnet mit Cyborgkanone"
 
 #: po/custom/fromJson.txt:123
 msgid "Armed with Cyborg Flamer"
@@ -5059,7 +5059,7 @@ msgstr "Bewaffnet mit Pulslaser für Cyborgs"
 
 #: po/custom/fromJson.txt:126
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Bewaffnet mit Magnetgeschütz für Cyborgs"
+msgstr "Bewaffnet mit Magnetkanone für Cyborgs"
 
 #: po/custom/fromJson.txt:127
 msgid "Armed with Cyborg Scourge Missile Launcher"
@@ -5083,7 +5083,7 @@ msgstr "Bewaffnet mit Mörsergranaten"
 
 #: po/custom/fromJson.txt:132
 msgid "Armed with hyper velocity cannon"
-msgstr "Bewaffnet mit Hochgeschwindigkeitsgeschütz"
+msgstr "Bewaffnet mit Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:133
 msgid "Armed with Lance Anti-Tank rocket"
@@ -5099,11 +5099,11 @@ msgstr "Bewaffnet mit einem Maschinengewehr"
 
 #: po/custom/fromJson.txt:136
 msgid "Armed with medium cannon"
-msgstr "Bewaffnet mit Mittlerem Geschütz"
+msgstr "Bewaffnet mit Mittlerer Kanone"
 
 #: po/custom/fromJson.txt:137
 msgid "Armed with Needle Gun"
-msgstr "Bewaffnet mit Nadelgeschütz"
+msgstr "Bewaffnet mit Nadelkanone"
 
 #: po/custom/fromJson.txt:139
 msgid "Armed with Scourge anti-tank missile"
@@ -5127,7 +5127,7 @@ msgstr "Gepanzerter Bunker mit Lancer-Antipanzerrakete"
 
 #: po/custom/fromJson.txt:145
 msgid "Armored bunker with Light Cannon"
-msgstr "Gepanzerter Bunker mit Leichtem Geschütz"
+msgstr "Gepanzerter Bunker mit Leichter Kanone"
 
 #: po/custom/fromJson.txt:146
 msgid "Armored bunker with Machinegun"
@@ -5139,7 +5139,7 @@ msgstr "Gepanzerte Grube mit EMP-Mörser"
 
 #: po/custom/fromJson.txt:149
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Gepanzerter Wachturm mit EMP-Geschütz"
+msgstr "Gepanzerter Wachturm mit EMP-Kanone"
 
 #: po/custom/fromJson.txt:150
 msgid "Armored guard tower with Lancer AT rocket"
@@ -5155,7 +5155,7 @@ msgstr "Gepanzerter Wachturm mit Miniraketenhalter"
 
 #: po/custom/fromJson.txt:153
 msgid "Armored guard tower with Needle Gun"
-msgstr "Gepanzerter Wachturm mit Nadelgeschütz"
+msgstr "Gepanzerter Wachturm mit Nadelkanone"
 
 #: po/custom/fromJson.txt:154
 msgid "Armored guard tower with Nexus Link"
@@ -5183,7 +5183,7 @@ msgstr "Gepanzerte Aufhängung mit Gaußkanone"
 
 #: po/custom/fromJson.txt:162
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Gepanzerte Aufhängung mit Schwerem Geschütz"
+msgstr "Gepanzerte Aufhängung mit Schwerer Kanone"
 
 #: po/custom/fromJson.txt:163
 msgid "Armored hardpoint with Heavy Machinegun"
@@ -5191,7 +5191,7 @@ msgstr "Gepanzerte Aufhängung mit Schwerem Maschinengewehr"
 
 #: po/custom/fromJson.txt:164
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Gepanzerte Aufhängung mit Hochgeschwindigkeitsgeschütz"
+msgstr "Gepanzerte Aufhängung mit Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:166
 msgid "Armored hardpoint with Lancer AT missile"
@@ -5199,15 +5199,15 @@ msgstr "Gepanzerte Aufhängung mit Lancer-Antipanzerrakete"
 
 #: po/custom/fromJson.txt:167
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Gepanzerte Aufhängung mit Leichtem Geschütz"
+msgstr "Gepanzerte Aufhängung mit Leichter Kanone"
 
 #: po/custom/fromJson.txt:168
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Gepanzerte Aufhängung mit Mittlerem Geschütz"
+msgstr "Gepanzerte Aufhängung mit Mittlerer Kanone"
 
 #: po/custom/fromJson.txt:169
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Gepanzerte Aufhängung mit Magnetgeschütz"
+msgstr "Gepanzerte Aufhängung mit Magnetkanone"
 
 #: po/custom/fromJson.txt:170
 msgid "Armored hardpoint with Scourge AT Missile"
@@ -5243,7 +5243,7 @@ msgstr "Gepanzerte Stellung mit Pulslaser"
 
 #: po/custom/fromJson.txt:185
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Gepanzerte Stellung mit Magnetgeschütz"
+msgstr "Gepanzerte Stellung mit Magnetkanone"
 
 #: po/custom/fromJson.txt:187
 msgid "Armored Tracks"
@@ -5275,23 +5275,23 @@ msgstr "Artilleriebatterie verschießt Novastorm-Lenkraketen"
 
 #: po/custom/fromJson.txt:194
 msgid "Assault Cannon"
-msgstr "Sturmgeschütz"
+msgstr "Sturmkanone"
 
 #: po/custom/fromJson.txt:195
 msgid "Assault Cannon Emplacement"
-msgstr "Stellung mit Sturmgeschütz"
+msgstr "Stellung mit Sturmkanone"
 
 #: po/custom/fromJson.txt:196
 msgid "Assault Cannon Guard Tower"
-msgstr "Wachturm mit Sturmgeschütz"
+msgstr "Wachturm mit Sturmkanone"
 
 #: po/custom/fromJson.txt:197
 msgid "Assault Cannon Hardpoint"
-msgstr "Aufhängung mit Sturmgeschütz"
+msgstr "Aufhängung mit Sturmkanone"
 
 #: po/custom/fromJson.txt:198
 msgid "Assault Cannon Mantis Hover"
-msgstr "Sturmgeschütz Mantis Hover"
+msgstr "Sturmkanone Mantis Hover"
 
 #: po/custom/fromJson.txt:199
 msgid "Assault Gun"
@@ -5595,66 +5595,66 @@ msgstr "Verbrennt Öl effizienter"
 
 #: po/custom/fromJson.txt:296
 msgid "Cannon accuracy +10%"
-msgstr "Geschützgenauigkeit +10%"
+msgstr "Kanonengenauigkeit +10%"
 
 # auto -> selbst
 # Substantiv im Englischen absichtlich als Adjektiv im Deutschen -Kreuvf
 #: po/custom/fromJson.txt:297
 msgid "Cannon Autoloader"
-msgstr "Selbstladende Geschütze"
+msgstr "Selbstladende Kanonen"
 
 #: po/custom/fromJson.txt:298
 msgid "Cannon Autoloader Mk2"
-msgstr "Selbstladende Geschütze Mk2"
+msgstr "Selbstladende Kanonen Mk2"
 
 #: po/custom/fromJson.txt:299
 msgid "Cannon Autoloader Mk3"
-msgstr "Selbstladende Geschütze Mk3"
+msgstr "Selbstladende Kanonen Mk3"
 
 #: po/custom/fromJson.txt:300
 msgid "Cannon damage +25%"
-msgstr "Geschützschaden +25%"
+msgstr "Kanonenschaden +25%"
 
 #: po/custom/fromJson.txt:301
 msgid "Cannon Fire Truck"
-msgstr "Feuerwehrfahrzeug mit Geschütz"
+msgstr "Feuerwehrfahrzeug mit Kanone"
 
 #: po/custom/fromJson.txt:302
 msgid "Cannon Fortress"
-msgstr "Geschützfestung"
+msgstr "Kanonenfestung"
 
 #: po/custom/fromJson.txt:303
 msgid "Cannon Laser Designator"
-msgstr "Laserzielgeber für Geschütze"
+msgstr "Laserzielgeber für Kanonen"
 
 #: po/custom/fromJson.txt:304
 msgid "Cannon Laser Rangefinder"
-msgstr "Laserentfernungsmesser für Geschütze"
+msgstr "Laserentfernungsmesser für Kanonen"
 
 # Substantiv im Englischen absichtlich adjektivisch im Deutschen -Kreuvf
 #: po/custom/fromJson.txt:305
 msgid "Cannon Rapid Loader"
-msgstr "Schnell ladende Geschütze"
+msgstr "Schnell ladende Kanonen"
 
 #: po/custom/fromJson.txt:306
 msgid "Cannon Rapid Loader Mk2"
-msgstr "Schnell ladende Geschütze Mk2"
+msgstr "Schnell ladende Kanonen Mk2"
 
 #: po/custom/fromJson.txt:307
 msgid "Cannon Rapid Loader Mk3"
-msgstr "Schnell ladende Geschütze Mk3"
+msgstr "Schnell ladende Kanonen Mk3"
 
 #: po/custom/fromJson.txt:308
 msgid "Cannon reload time -10%"
-msgstr "Geschütznachladezeit -10%"
+msgstr "Kanonennachladezeit -10%"
 
 #: po/custom/fromJson.txt:309
 msgid "Cannon Tower"
-msgstr "Geschützturm"
+msgstr "Kanonenturm"
 
 #: po/custom/fromJson.txt:310
 msgid "Cannon Upgrade"
-msgstr "Geschützverbesserung"
+msgstr "Kanonenverbesserung"
 
 #: po/custom/fromJson.txt:311
 msgid "CB Radar Turret"
@@ -5706,7 +5706,7 @@ msgstr "Cobra Flammenwerfer Ketten"
 
 #: po/custom/fromJson.txt:323
 msgid "Cobra Medium Cannon Tracks"
-msgstr "Cobra Mittleres Geschütz Ketten"
+msgstr "Cobra Mittlere Kanone Ketten"
 
 #: po/custom/fromJson.txt:324
 msgid "Cobra Truck"
@@ -6054,11 +6054,11 @@ msgstr "Greift feindliche Gebäude an und stört diese elektronisch"
 
 #: po/custom/fromJson.txt:428
 msgid "EMP Cannon"
-msgstr "EMP-Geschütz"
+msgstr "EMP-Kanone"
 
 #: po/custom/fromJson.txt:429
 msgid "EMP Cannon Tower"
-msgstr "Turm mit EMP-Geschütz"
+msgstr "Turm mit EMP-Kanone"
 
 #: po/custom/fromJson.txt:430
 msgid "EMP Missile Launcher"
@@ -6512,15 +6512,15 @@ msgstr "Hochexplosive panzerbrechende Mörsergranaten Mk3"
 
 #: po/custom/fromJson.txt:552
 msgid "HEAT Cannon Shells"
-msgstr "Hochexplosive Antipanzergeschosse für Geschütze"
+msgstr "Hochexplosive Antipanzergeschosse für Kanonen"
 
 #: po/custom/fromJson.txt:553
 msgid "HEAT Cannon Shells Mk2"
-msgstr "Hochexplosive Antipanzergeschosse für Geschütze Mk2"
+msgstr "Hochexplosive Antipanzergeschosse für Kanonen Mk2"
 
 #: po/custom/fromJson.txt:554
 msgid "HEAT Cannon Shells Mk3"
-msgstr "Hochexplosive Antipanzergeschosse für Geschütze Mk3"
+msgstr "Hochexplosive Antipanzergeschosse für Kanonen Mk3"
 
 #: po/custom/fromJson.txt:557
 msgid "HEAT Rocket Warhead"
@@ -6564,43 +6564,43 @@ msgstr "Schwerer Rumpf - Wyvern"
 
 #: po/custom/fromJson.txt:567
 msgid "Heavy Cannon"
-msgstr "Schweres Geschütz"
+msgstr "Schwere Kanone"
 
 #: po/custom/fromJson.txt:568
 msgid "Heavy Cannon Cobra Hover"
-msgstr "Schweres Geschütz Cobra Hover"
+msgstr "Schwere Kanone Cobra Hover"
 
 #: po/custom/fromJson.txt:569
 msgid "Heavy Cannon Cobra Tracks"
-msgstr "Schweres Geschütz Cobra Ketten"
+msgstr "Schwere Kanone Cobra Ketten"
 
 #: po/custom/fromJson.txt:570
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr "Schweres Geschütz mit 120-mm-Geschossen"
+msgstr "Schwere Kanone mit 120-mm-Geschossen"
 
 #: po/custom/fromJson.txt:571
 msgid "Heavy Cannon Hardpoint"
-msgstr "Aufhängung mit Schwerem Geschütz"
+msgstr "Aufhängung mit Schwerer Kanone"
 
 #: po/custom/fromJson.txt:572
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Schweres Geschütz Mantis Ketten"
+msgstr "Schwere Kanone Mantis Ketten"
 
 #: po/custom/fromJson.txt:573
 msgid "Heavy Cannon Python Hover"
-msgstr "Schweres Geschütz Python Hover"
+msgstr "Schwere Kanone Python Hover"
 
 #: po/custom/fromJson.txt:574
 msgid "Heavy Cannon Python Tracks"
-msgstr "Schweres Geschütz Python Ketten"
+msgstr "Schwere Kanone Python Ketten"
 
 #: po/custom/fromJson.txt:575
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Schweres Geschütz Scorpion Ketten"
+msgstr "Schwere Kanone Scorpion Ketten"
 
 #: po/custom/fromJson.txt:576
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Schweres Geschütz Tiger Ketten"
+msgstr "Schwere Kanone Tiger Ketten"
 
 #: po/custom/fromJson.txt:577
 msgid "Heavy Flamer - Inferno"
@@ -6797,7 +6797,7 @@ msgstr "Hochverdichtete Materialien für Basisgebäude"
 
 #: po/custom/fromJson.txt:633
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "Hochexplosive Antipanzergeschosse für Geschütze"
+msgstr "Hochexplosive Antipanzergeschosse für Kanonen"
 
 #: po/custom/fromJson.txt:634
 msgid "High Explosive Anti-Tank warhead"
@@ -6917,15 +6917,15 @@ msgstr "Haubitzennachladezeit -10%"
 
 #: po/custom/fromJson.txt:674
 msgid "HPV Cannon Emplacement"
-msgstr "Stellung mit Hochgeschwindigkeitsgeschütz"
+msgstr "Stellung mit Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:675
 msgid "HPV Cannon Hardpoint"
-msgstr "Aufhängung mit Hochgeschwindigkeitsgeschütz"
+msgstr "Aufhängung mit Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:676
 msgid "HPV Cannon Python Tracks"
-msgstr "Hochgeschwindigkeitsgeschütz Python Ketten"
+msgstr "Hochgeschwindigkeitskanone Python Ketten"
 
 #: po/custom/fromJson.txt:677
 msgid "Hurricane AA Site"
@@ -6941,15 +6941,15 @@ msgstr "Hütte"
 
 #: po/custom/fromJson.txt:680
 msgid "HVAPFSDS Cannon Rounds"
-msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze"
+msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Kanonen"
 
 #: po/custom/fromJson.txt:681
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk2"
+msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Kanonen Mk2"
 
 #: po/custom/fromJson.txt:682
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk3"
+msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Kanonen Mk3"
 
 #: po/custom/fromJson.txt:683
 msgid "Hyper Fire Chaingun Upgrade"
@@ -6957,23 +6957,23 @@ msgstr "Hyperschnellfeuermechanismus für Maschinengewehre"
 
 #: po/custom/fromJson.txt:685
 msgid "Hyper Velocity Cannon"
-msgstr "Hochgeschwindigkeitsgeschütz"
+msgstr "Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:686
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Stellung mit Hochgeschwindigkeitsgeschütz"
+msgstr "Stellung mit Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:687
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Aufhängung mit Hochgeschwindigkeitsgeschütz"
+msgstr "Aufhängung mit Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:688
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
+msgstr "Hochgeschwindigkeitskanone Python Hover"
 
 #: po/custom/fromJson.txt:689
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Hochgeschwindigkeitsgeschütz Python Ketten"
+msgstr "Hochgeschwindigkeitskanone Python Ketten"
 
 #: po/custom/fromJson.txt:690
 msgid "Immense damage infliction capability"
@@ -7101,15 +7101,15 @@ msgstr "Erhöht Panzerung und Rumpfpunkte"
 
 #: po/custom/fromJson.txt:730
 msgid "Increases Cannon accuracy"
-msgstr "Erhöht Genauigkeit von Geschützen"
+msgstr "Erhöht Genauigkeit von Kanonen"
 
 #: po/custom/fromJson.txt:731
 msgid "Increases Cannon damage"
-msgstr "Erhöht Schaden von Geschützen"
+msgstr "Erhöht Schaden von Kanonen"
 
 #: po/custom/fromJson.txt:732
 msgid "Increases Cannon ROF"
-msgstr "Erhöht Feuerrate von Geschützen"
+msgstr "Erhöht Feuerrate von Kanonen"
 
 #: po/custom/fromJson.txt:733
 msgid "Increases construction speed"
@@ -7401,39 +7401,39 @@ msgstr "Anfällig gegen schwere Waffen"
 
 #: po/custom/fromJson.txt:827
 msgid "Light Cannon"
-msgstr "Leichtes Geschütz"
+msgstr "Leichte Kanone"
 
 #: po/custom/fromJson.txt:828
 msgid "Light Cannon Bunker"
-msgstr "Bunker mit Leichtem Geschütz"
+msgstr "Bunker mit Leichter Kanone"
 
 #: po/custom/fromJson.txt:829
 msgid "Light Cannon Cobra Tracks"
-msgstr "Leichtes Geschütz Cobra Ketten"
+msgstr "Leichte Kanone Cobra Ketten"
 
 #: po/custom/fromJson.txt:830
 msgid "Light Cannon firing 40mm rounds"
-msgstr "Leichtes Geschütz mit 40-mm-Geschossen"
+msgstr "Leichte Kanone mit 40-mm-Geschossen"
 
 #: po/custom/fromJson.txt:831
 msgid "Light Cannon Hardpoint"
-msgstr "Aufhängung mit Leichtem Geschütz"
+msgstr "Aufhängung mit Leichter Kanone"
 
 #: po/custom/fromJson.txt:832
 msgid "Light Cannon Python Tracks"
-msgstr "Leichtes Geschütz Python Ketten"
+msgstr "Leichte Kanone Python Ketten"
 
 #: po/custom/fromJson.txt:833
 msgid "Light Cannon Viper Half-tracks"
-msgstr "Leichtes Geschütz Viper Halbketten"
+msgstr "Leichte Kanone Viper Halbketten"
 
 #: po/custom/fromJson.txt:834
 msgid "Light Cannon Viper Tracks"
-msgstr "Leichtes Geschütz Viper Ketten"
+msgstr "Leichte Kanone Viper Ketten"
 
 #: po/custom/fromJson.txt:835
 msgid "Light Cannon Viper Wheels"
-msgstr "Leichtes Geschütz Viper Räder"
+msgstr "Leichte Kanone Viper Räder"
 
 #: po/custom/fromJson.txt:837
 msgid "Look-Out Tower"
@@ -7529,47 +7529,47 @@ msgstr "Mittlerer Rumpf - Scorpion"
 
 #: po/custom/fromJson.txt:867
 msgid "Medium Cannon"
-msgstr "Mittleres Geschütz"
+msgstr "Mittlere Kanone"
 
 #: po/custom/fromJson.txt:868
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Mittleres Geschütz Cobra Halbketten"
+msgstr "Mittlere Kanone Cobra Halbketten"
 
 #: po/custom/fromJson.txt:869
 msgid "Medium Cannon Cobra Hover"
-msgstr "Mittleres Geschütz Cobra Hover"
+msgstr "Mittlere Kanone Cobra Hover"
 
 #: po/custom/fromJson.txt:870
 msgid "Medium Cannon Cobra Tracks"
-msgstr "Mittleres Geschütz Cobra Ketten"
+msgstr "Mittlere Kanone Cobra Ketten"
 
 #: po/custom/fromJson.txt:871
 msgid "Medium Cannon firing 76mm rounds"
-msgstr "Mittleres Geschütz mit 76-mm-Geschossen"
+msgstr "Mittlere Kanone mit 76-mm-Geschossen"
 
 #: po/custom/fromJson.txt:872
 msgid "Medium Cannon Hardpoint"
-msgstr "Aufhängung mit Mittlerem Geschütz"
+msgstr "Aufhängung mit Mittlerer Kanone"
 
 #: po/custom/fromJson.txt:873
 msgid "Medium Cannon Python Hover"
-msgstr "Mittleres Geschütz Python Hover"
+msgstr "Mittlere Kanone Python Hover"
 
 #: po/custom/fromJson.txt:874
 msgid "Medium Cannon Python Tracks"
-msgstr "Mittleres Geschütz Python Ketten"
+msgstr "Mittlere Kanone Python Ketten"
 
 #: po/custom/fromJson.txt:875
 msgid "Medium Cannon Scorpion Hover"
-msgstr "Mittleres Geschütz Scorpion Hover"
+msgstr "Mittlere Kanone Scorpion Hover"
 
 #: po/custom/fromJson.txt:876
 msgid "Medium Cannon Scorpion Tracks"
-msgstr "Mittleres Geschütz Scorpion Ketten"
+msgstr "Mittlere Kanone Scorpion Ketten"
 
 #: po/custom/fromJson.txt:877
 msgid "Medium Cannon Viper Tracks"
-msgstr "Mittleres Geschütz Viper Ketten"
+msgstr "Mittlere Kanone Viper Ketten"
 
 #: po/custom/fromJson.txt:878
 msgid "Medium Super Heavy Body"
@@ -7749,7 +7749,7 @@ msgstr "Geringer Wirkungsradius"
 
 #: po/custom/fromJson.txt:927
 msgid "Needle Gun"
-msgstr "Nadelgeschütz"
+msgstr "Nadelkanone"
 
 #: po/custom/fromJson.txt:928
 msgid "Needle Gunner"
@@ -7761,19 +7761,19 @@ msgstr "Nadelschütze"
 
 #: po/custom/fromJson.txt:930
 msgid "Needle Gun Retribution Tracks"
-msgstr "Nadelgeschütz Retribution Ketten"
+msgstr "Nadelkanone Retribution Ketten"
 
 #: po/custom/fromJson.txt:931
 msgid "Needle Gun Tiger Tracks"
-msgstr "Nadelgeschütz Tiger Ketten"
+msgstr "Nadelkanone Tiger Ketten"
 
 #: po/custom/fromJson.txt:932
 msgid "Needle Gun Tower"
-msgstr "Turm mit Nadelgeschütz"
+msgstr "Turm mit Nadelkanone"
 
 #: po/custom/fromJson.txt:933
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Nadelgeschütz Vengeance Ketten"
+msgstr "Nadelkanone Vengeance Ketten"
 
 # Wenn man Brain als KI-gestütztes Forschungsorgan betrachtet, könnte die Übersetzung hinhauen -Kreuvf
 #: po/custom/fromJson.txt:934
@@ -8266,7 +8266,7 @@ msgstr "Python"
 
 #: po/custom/fromJson.txt:1075
 msgid "Python Heavy Cannon Tracks"
-msgstr "Python Schweres Geschütz Ketten"
+msgstr "Python Schwere Kanone Ketten"
 
 #: po/custom/fromJson.txt:1077
 msgid "Quad 80mm Anti-Aircraft machinegun"
@@ -8290,7 +8290,7 @@ msgstr "Radardetektorturm"
 
 #: po/custom/fromJson.txt:1083
 msgid "Rail Gun"
-msgstr "Magnetgeschütz"
+msgstr "Magnetkanone"
 
 #: po/custom/fromJson.txt:1084
 msgid "Rail Gun accuracy +10%"
@@ -8302,11 +8302,11 @@ msgstr "Magnetwaffenschaden +25%"
 
 #: po/custom/fromJson.txt:1086
 msgid "Railgun Emplacement"
-msgstr "Stellung mit Magnetgeschütz"
+msgstr "Stellung mit Magnetkanone"
 
 #: po/custom/fromJson.txt:1087
 msgid "Rail Gun Emplacement"
-msgstr "Stellung mit Magnetgeschütz"
+msgstr "Stellung mit Magnetkanone"
 
 #: po/custom/fromJson.txt:1088
 msgid "Rail gun firing armor-piercing darts"
@@ -8314,11 +8314,11 @@ msgstr "Magnetwaffe verschießt panzerbrechende Pfeile"
 
 #: po/custom/fromJson.txt:1089
 msgid "Rail Gun Hardpoint"
-msgstr "Aufhängung mit Magnetgeschütz"
+msgstr "Aufhängung mit Magnetkanone"
 
 #: po/custom/fromJson.txt:1090
 msgid "Rail Gun Mantis Tracks"
-msgstr "Magnetgeschütz Mantis Ketten"
+msgstr "Magnetkanone Mantis Ketten"
 
 #: po/custom/fromJson.txt:1091
 msgid "Rail Gun reload time -15%"
@@ -8338,7 +8338,7 @@ msgstr "Verbesserte Feuerrate von Magnetwaffen Mk3"
 
 #: po/custom/fromJson.txt:1095
 msgid "Rail Gun Tiger Hover"
-msgstr "Magnetgeschütz Tiger Hover"
+msgstr "Magnetkanone Tiger Hover"
 
 #: po/custom/fromJson.txt:1096
 msgid "Rail Gun Upgrade"
@@ -9221,11 +9221,11 @@ msgstr "7,62-mm-Zwillingsmaschinengewehr"
 
 #: po/custom/fromJson.txt:1348
 msgid "Twin Assault Cannon"
-msgstr "Zwillingssturmgeschütz"
+msgstr "Zwillingssturmkanone"
 
 #: po/custom/fromJson.txt:1349
 msgid "Twin Assault Cannon Bunker"
-msgstr "Bunker mit Zwillingssturmgeschütz"
+msgstr "Bunker mit Zwillingssturmkanone"
 
 #: po/custom/fromJson.txt:1350
 msgid "Twin Assault Gun"
@@ -9298,7 +9298,7 @@ msgstr "Verwenden Sie einen LKW, um eine Forschungseinrichtung um ein Modul zu e
 
 #: po/custom/fromJson.txt:1367
 msgid "Uses advanced cannon technology"
-msgstr "Verwendet fortschrittliche Geschütztechnologie"
+msgstr "Verwendet fortschrittliche Kanonentechnologie"
 
 #: po/custom/fromJson.txt:1368
 msgid "Uses advanced mass driver railgun technology"
@@ -9362,7 +9362,7 @@ msgstr "Vengeance Ketten Gauß Scourge-Lenkrakete"
 
 #: po/custom/fromJson.txt:1388
 msgid "Vengeance Tracks Rail Gun"
-msgstr "Vengeance Ketten Magnetgeschütz"
+msgstr "Vengeance Ketten Magnetkanone"
 
 #: po/custom/fromJson.txt:1389
 msgid "Vertical Take Off and Landing Propulsion"
@@ -9406,7 +9406,7 @@ msgstr "VTOL"
 
 #: po/custom/fromJson.txt:1399
 msgid "VTOL Assault Cannon"
-msgstr "VTOL-Sturmgeschütz"
+msgstr "VTOL-Sturmkanone"
 
 #: po/custom/fromJson.txt:1400
 msgid "VTOL Assault Gun"
@@ -9426,7 +9426,7 @@ msgstr "VTOL-Bunker Buster Scorpion VTOL"
 
 #: po/custom/fromJson.txt:1404
 msgid "VTOL Cannon"
-msgstr "VTOL-Geschütz"
+msgstr "VTOL-Kanone"
 
 #: po/custom/fromJson.txt:1406
 msgid "VTOL CB Radar Tower"
@@ -9495,19 +9495,19 @@ msgstr "Schweres VTOL-Maschinengewehr"
 
 #: po/custom/fromJson.txt:1423
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "VTOL-Hochgeschwindigkeitsgeschütz"
+msgstr "VTOL-Hochgeschwindigkeitskanone"
 
 #: po/custom/fromJson.txt:1424
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL-Hochgeschwindigkeitsgeschütz Bug VTOL"
+msgstr "VTOL-Hochgeschwindigkeitskanone Bug VTOL"
 
 #: po/custom/fromJson.txt:1425
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL-Hochgeschwindigkeitsgeschütz Mantis VTOL"
+msgstr "VTOL-Hochgeschwindigkeitskanone Mantis VTOL"
 
 #: po/custom/fromJson.txt:1426
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "VTOL-Hochgeschwindigkeitsgeschütz Scorpion VTOL"
+msgstr "VTOL-Hochgeschwindigkeitskanone Scorpion VTOL"
 
 #: po/custom/fromJson.txt:1427
 msgid "VTOL II"
@@ -9543,7 +9543,7 @@ msgstr "VTOL-Miniraketen"
 
 #: po/custom/fromJson.txt:1435
 msgid "VTOL Needle Gun"
-msgstr "VTOL-Nadelgeschütz"
+msgstr "VTOL-Nadelkanone"
 
 #: po/custom/fromJson.txt:1436
 msgid "VTOL Phosphor Bomb Bay"
@@ -9567,7 +9567,7 @@ msgstr "VTOL-Radarturm"
 
 #: po/custom/fromJson.txt:1442
 msgid "VTOL Rail Gun"
-msgstr "VTOL-Magnetgeschütz"
+msgstr "VTOL-Magnetkanone"
 
 # Diese Stationen reparieren und wiederbewaffnen VTOLs, von daher ist Servicestation sehr gut -Kreuvf
 #: po/custom/fromJson.txt:1443
