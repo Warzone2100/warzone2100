@@ -1350,7 +1350,7 @@ msgstr "NP-Hartbeton"
 #: data/mp/messages/strings/names.txt:395
 #: po/custom/fromJson.txt:587
 msgid "Heavy Machinegun Bunker"
-msgstr "Bunker mit schwerem Maschinengewehr"
+msgstr "Bunker mit Schwerem Maschinengewehr"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:397
@@ -1361,7 +1361,7 @@ msgstr "Stellung mit Flashlight"
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:592
 msgid "Heavy Machinegun Guard Tower"
-msgstr "Wachturm mit schwerem Maschinengewehr"
+msgstr "Wachturm mit Schwerem Maschinengewehr"
 
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:479
@@ -2075,7 +2075,7 @@ msgstr "Verstärkter Turm mit Sturmgewehr"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Gepanzerter Wachturm mit schwerem Maschinengewehr"
+msgstr "Gepanzerter Wachturm mit Schwerem Maschinengewehr"
 
 #: data/base/messages/strings/resstrings.txt:235
 #: data/base/messages/strings/resstrings.txt:241
@@ -2112,7 +2112,7 @@ msgstr "Gepanzerter Wachturm mit Lancer-Antipanzerrakete"
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
 msgid "Armored bunker with Heavy Machinegun"
-msgstr "Gepanzerter Bunker mit schwerem Maschinengewehr"
+msgstr "Gepanzerter Bunker mit Schwerem Maschinengewehr"
 
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
@@ -2900,7 +2900,7 @@ msgstr "Beste Ziele: Fahrzeuge"
 #: data/mp/messages/strings/resstrings.txt:354
 #: po/custom/fromJson.txt:1125
 msgid "Replaces Medium Cannon"
-msgstr "Ersetzt mittleres Geschütz"
+msgstr "Ersetzt Mittleres Geschütz"
 
 #: data/base/messages/strings/resstrings.txt:736
 #: data/mp/messages/strings/resstrings.txt:357
@@ -4433,7 +4433,7 @@ msgstr "Cyborg-Antrieb"
 #: data/mp/messages/strings/names.txt:404
 #: po/custom/fromJson.txt:596
 msgid "Heavy Machinegun Tower"
-msgstr "Turm mit schwerem Maschinengewehr"
+msgstr "Turm mit Schwerem Maschinengewehr"
 
 #: data/mp/messages/strings/names.txt:405
 msgid "Flamer Tower"
@@ -5109,7 +5109,7 @@ msgstr "Bewaffnet mit einem Maschinengewehr"
 
 #: po/custom/fromJson.txt:136
 msgid "Armed with medium cannon"
-msgstr "Bewaffnet mit mittlerem Geschütz"
+msgstr "Bewaffnet mit Mittlerem Geschütz"
 
 #: po/custom/fromJson.txt:137
 msgid "Armed with Needle Gun"
@@ -5137,7 +5137,7 @@ msgstr "Gepanzerter Bunker mit Lancer-Antipanzerrakete"
 
 #: po/custom/fromJson.txt:145
 msgid "Armored bunker with Light Cannon"
-msgstr "Gepanzerter Bunker mit leichtem Geschütz"
+msgstr "Gepanzerter Bunker mit Leichtem Geschütz"
 
 #: po/custom/fromJson.txt:146
 msgid "Armored bunker with Machinegun"
@@ -5193,11 +5193,11 @@ msgstr "Gepanzerte Aufhängung mit Gaußkanone"
 
 #: po/custom/fromJson.txt:162
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Gepanzerte Aufhängung mit schwerem Geschütz"
+msgstr "Gepanzerte Aufhängung mit Schwerem Geschütz"
 
 #: po/custom/fromJson.txt:163
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Gepanzerte Aufhängung mit schwerem Maschinengewehr"
+msgstr "Gepanzerte Aufhängung mit Schwerem Maschinengewehr"
 
 #: po/custom/fromJson.txt:164
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
@@ -5209,11 +5209,11 @@ msgstr "Gepanzerte Aufhängung mit Lancer-Antipanzerrakete"
 
 #: po/custom/fromJson.txt:167
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Gepanzerte Aufhängung mit leichtem Geschütz"
+msgstr "Gepanzerte Aufhängung mit Leichtem Geschütz"
 
 #: po/custom/fromJson.txt:168
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Gepanzerte Aufhängung mit mittlerem Geschütz"
+msgstr "Gepanzerte Aufhängung mit Mittlerem Geschütz"
 
 #: po/custom/fromJson.txt:169
 msgid "Armored hardpoint with Rail Gun"
@@ -5241,7 +5241,7 @@ msgstr "Gepanzerte Stellung mit Gaußkanone"
 
 #: po/custom/fromJson.txt:180
 msgid "Armored strongpoint with Heavy Laser"
-msgstr "Gepanzerte Stellung mit schwerem Laser"
+msgstr "Gepanzerte Stellung mit Schwerem Laser"
 
 #: po/custom/fromJson.txt:183
 msgid "Armored strongpoint with Plasmite Flamer"
@@ -6590,7 +6590,7 @@ msgstr "Schweres Geschütz mit 120-mm-Geschossen"
 
 #: po/custom/fromJson.txt:571
 msgid "Heavy Cannon Hardpoint"
-msgstr "Aufhängung mit schwerem Geschütz"
+msgstr "Aufhängung mit Schwerem Geschütz"
 
 #: po/custom/fromJson.txt:572
 msgid "Heavy Cannon Mantis Tracks"
@@ -6630,7 +6630,7 @@ msgstr "Schwerer Laser"
 
 #: po/custom/fromJson.txt:583
 msgid "Heavy Laser Emplacement"
-msgstr "Stellung mit schweren Laser"
+msgstr "Stellung mit Schwerem Laser"
 
 #: po/custom/fromJson.txt:584
 msgid "Heavy Laser Tiger Tracks"
@@ -6662,7 +6662,7 @@ msgstr "Schweres Maschinengewehr Cobra Räder"
 
 #: po/custom/fromJson.txt:593
 msgid "Heavy Machinegun Hardpoint"
-msgstr "Aufhängung mit schwerem Maschinengewehr"
+msgstr "Aufhängung mit Schwerem Maschinengewehr"
 
 #: po/custom/fromJson.txt:594
 msgid "Heavy Machinegun Scorpion Half Tracks"
@@ -7415,7 +7415,7 @@ msgstr "Leichtes Geschütz"
 
 #: po/custom/fromJson.txt:828
 msgid "Light Cannon Bunker"
-msgstr "Bunker mit leichtem Geschütz"
+msgstr "Bunker mit Leichtem Geschütz"
 
 #: po/custom/fromJson.txt:829
 msgid "Light Cannon Cobra Tracks"
@@ -7427,7 +7427,7 @@ msgstr "Leichtes Geschütz mit 40-mm-Geschossen"
 
 #: po/custom/fromJson.txt:831
 msgid "Light Cannon Hardpoint"
-msgstr "Aufhängung mit leichtem Geschütz"
+msgstr "Aufhängung mit Leichtem Geschütz"
 
 #: po/custom/fromJson.txt:832
 msgid "Light Cannon Python Tracks"
@@ -7559,7 +7559,7 @@ msgstr "Mittleres Geschütz mit 76-mm-Geschossen"
 
 #: po/custom/fromJson.txt:872
 msgid "Medium Cannon Hardpoint"
-msgstr "Aufhängung mit mittlerem Geschütz"
+msgstr "Aufhängung mit Mittlerem Geschütz"
 
 #: po/custom/fromJson.txt:873
 msgid "Medium Cannon Python Hover"
