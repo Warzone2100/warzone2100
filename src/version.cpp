@@ -53,13 +53,12 @@ std::string version_getVersionedAppDirFolderName()
 	}
 	else if (strlen(vcs_branch_cstr))
 	{
-#if defined(DEBUG) || defined(WZ_USE_MASTER_BRANCH_APP_DIR)
-		// To ease testing new branches with existing files, DEBUG builds
-		// (or when WZ_USE_MASTER_BRANCH_APP_DIR is defined)
-		// default to using "master" as the branch
+#if defined(WZ_USE_MASTER_BRANCH_APP_DIR)
+		// To ease testing new branches with existing files
+		// default to using "master" as the branch name
+		// if WZ_USE_MASTER_BRANCH_APP_DIR is defined
 		versionedWriteDirFolderName += "master";
 #else
-		// For Release builds, use the actual branch name
 		versionedWriteDirFolderName += vcs_branch_cstr;
 #endif
 	}
