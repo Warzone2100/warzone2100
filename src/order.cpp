@@ -2962,6 +2962,24 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 		{
 			supported = false;
 		}
+		// don't show the range levels if the droid doesn't have a weapon with different ranges
+		if (psDroid->numWeaps > 0)
+		{
+			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
+			{
+				const WEAPON_STATS *weaponStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+
+				if (proj_GetLongRange(weaponStats, psDroid->player) == proj_GetShortRange(weaponStats, psDroid->player))
+				{
+					supported = false;
+				}
+				else
+				{
+					supported = true;
+					break;
+				}
+			}
+		}
 		// fall-through
 
 	case DSO_ATTACK_LEVEL:
