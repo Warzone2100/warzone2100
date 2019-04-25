@@ -2958,12 +2958,22 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 		break;
 
 	case DSO_ATTACK_RANGE:
+		if (psDroid->droidType == DROID_SENSOR)
+		{
+			supported = false;
+		}
+		// fall-through
+
 	case DSO_ATTACK_LEVEL:
 		if (psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
 		{
 			supported = false;
 		}
 		if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+		{
+			supported = false;
+		}
+		if (psDroid->droidType == DROID_ECM || objRadarDetector(psDroid))
 		{
 			supported = false;
 		}
