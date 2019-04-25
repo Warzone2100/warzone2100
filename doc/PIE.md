@@ -60,19 +60,19 @@ The second gives you the filename of the texture page, which
 The third and fourth parameters give the size of the texture, and are also ignored, since we can just read that info from the texture page itself.
 You may fill them out with the correct values for backward compatibility.
 
-### NORMALMAP (PIE 3 only)
+### NORMALMAP
 
 > NORMALMAP 0 page-7-barbarians-arizona_normal.png 0 0
 
 Optional. As above, but this sets the normal map texture page for the model.
 
-### SPECULARMAP (PIE 3 only)
+### SPECULARMAP
 
 > SPECULARMAP 0 page-7-barbarians-arizona.png 0 0
 
 Optional. As above, but this sets the specular map texture page for the model.
 
-### EVENT (PIE 3 only)
+### EVENT
 
 > EVENT type filename.pie
 
@@ -96,7 +96,7 @@ This gives the number of meshes that are contained in this model. Each mesh can 
 
 This starts the model description for mesh 1. Repeat the below as necessary while incrementing the value above as needed.
 
-### MATERIALS (disabled, PIE 3 only)
+### MATERIALS (disabled)
 
 This feature was removed in commit 823cf08bb18cf24852bac8595b3899aca12d4f7b.
 
@@ -104,7 +104,7 @@ This feature was removed in commit 823cf08bb18cf24852bac8595b3899aca12d4f7b.
 
 Optional. Specifies the material properties of a mesh. The nine first values give the RGB values for ambient, diffuse and specular lighting, respectively. The last value sets shininess.
 
-### SHADERS (PIE 3 only)
+### SHADERS
 
 > SHADERS 2 vertex.vert fragment.vert
 
@@ -134,14 +134,6 @@ This starts a list of polygon faces with the number of lines *n*, which must be 
 > 	200 3 3 2 1 0.82 0.78 0.186 0.78 0.199 0.82
 
 Each polygon *must* be on a separate line and *must* be indented with a tab.
-
-Its format depends on the PIE version used:
-
-For PIE 2:
-
-> 	Flags Number\_of\_points [Optional\_animation\_block] Point\_order Texture\_coordinates
-
-For PIE 3:
 
 > 	Flags Number\_of\_points Point\_order [Optional\_animation\_block] Texture\_coordinates
 
@@ -192,7 +184,7 @@ Not every model requires them; the meaning of each connector is special and hard
 Each connector must be on a separate line and must be indented with a tab.
 It contains the x, y, and z coordinates of a connector. Note that unlike in point coordinates, the Z coordinate denotes "up".
 
-### ANIMOBJECT (PIE 3 only)
+### ANIMOBJECT
 
 > ANIMOBJECT time cycles frames
 
