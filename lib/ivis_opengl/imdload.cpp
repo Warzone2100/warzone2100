@@ -503,7 +503,6 @@ static bool _imd_load_points(const char **ppFileData, iIMDShape &s, int npoints)
 	return true;
 }
 
-
 /*!
  * Load shape level connectors
  * \param ppFileData Pointer to the data (usually read from a file)
@@ -541,16 +540,54 @@ bool _imd_load_connectors(const char **ppFileData, iIMDShape &s)
 // performance hack
 static std::vector<gfx_api::gfxFloat> vertices;
 static std::vector<gfx_api::gfxFloat> normals;
+static std::vector<Vector3f> pie_level_normals;
 static std::vector<gfx_api::gfxFloat> texcoords;
 static std::vector<gfx_api::gfxFloat> tangents;
 static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
 static uint16_t vertexCount = 0;
 
-static inline uint16_t addVertex(iIMDShape &s, int i, const iIMDPoly *p, int frameidx)
+
+static bool ReadNormals(const char **ppFileData)
+{
+	const char *pFileData = *ppFileData;
+	int dataCnt;
+
+	for (Vector3f &normal : pie_level_normals)
+	{
+		if (sscanf(pFileData, "%f %f %f%n", &normal.x, &normal.y, &normal.z, &dataCnt) != 3)
+		{
+			debug(LOG_ERROR, "File corrupt - could not read normals");
+			return false;
+		}
+		pFileData += dataCnt;
+	}
+
+	*ppFileData = pFileData;
+
+	return true;
+}
+
+static bool _imd_load_normals(const char **ppFileData, int num_normal_lines)
+{
+	// We only support triangles!
+	pie_level_normals.resize(static_cast<size_t>(num_normal_lines * 3));
+
+	if (ReadNormals(ppFileData) == false)
+	{
+		pie_level_normals.clear();
+		return false;
+	}
+
+	return true;
+}
+
+static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int frameidx, size_t polyIdx)
 {
 	// if texture animation flag is present, fetch animation coordinates for this polygon
 	// otherwise just show the first set of texel coordinates
 	int frame = (p->flags & iV_IMD_TEXANIM) ? frameidx : 0;
+
+	const Vector3f* normal(pie_level_normals.empty() ? &p->normal : &pie_level_normals[polyIdx * 3 + i]);
 
 	// See if we already have this defined, if so, return reference to it.
 	for (uint16_t j = 0; j < vertexCount; j++)
@@ -560,17 +597,17 @@ static inline uint16_t addVertex(iIMDShape &s, int i, const iIMDPoly *p, int fra
 		    && vertices[j * 3 + 0] == s.points[p->pindex[i]].x
 		    && vertices[j * 3 + 1] == s.points[p->pindex[i]].y
 		    && vertices[j * 3 + 2] == s.points[p->pindex[i]].z
-		    && normals[j * 3 + 0] == p->normal.x
-		    && normals[j * 3 + 1] == p->normal.y
-		    && normals[j * 3 + 2] == p->normal.z)
+		    && normals[j * 3 + 0] == normal->x
+		    && normals[j * 3 + 1] == normal->y
+		    && normals[j * 3 + 2] == normal->z)
 		{
 			return j;
 		}
 	}
 	// We don't have it, add it.
-	normals.emplace_back(p->normal.x);
-	normals.emplace_back(p->normal.y);
-	normals.emplace_back(p->normal.z);
+	normals.emplace_back(normal->x);
+	normals.emplace_back(normal->y);
+	normals.emplace_back(normal->z);
 	texcoords.emplace_back(p->texCoord[frame * 3 + i].x);
 	texcoords.emplace_back(p->texCoord[frame * 3 + i].y);
 	vertices.emplace_back(s.points[p->pindex[i]].x);
@@ -658,6 +695,21 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		return nullptr;
 	}
 	pFileData += cnt;
+
+	// It could be optional normals directive
+	if (strcmp(buffer, "NORMALS") == 0)
+	{
+		_imd_load_normals(&pFileData, npolys);
+
+		// Attemps to read polys again
+		if (sscanf(pFileData, "%255s %d%n", buffer, &npolys, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "_imd_load_level(3a): file corrupt");
+			return nullptr;
+		}
+		pFileData += cnt;
+	}
+
 	s.polys.resize(npolys);
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
@@ -729,12 +781,13 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	for (int k = 0; k < MAX(1, s.numFrames); k++)
 	{
 		// Go through all polygons for each frame
-		for (const iIMDPoly &p : s.polys)
+		for (size_t npol = 0; npol < s.polys.size(); ++npol)
 		{
+			const iIMDPoly& p = s.polys[npol];
 			// Do we already have the vertex data for this polygon?
-			indices.emplace_back(addVertex(s, 0, &p, k));
-			indices.emplace_back(addVertex(s, 1, &p, k));
-			indices.emplace_back(addVertex(s, 2, &p, k));
+			indices.emplace_back(addVertex(s, 0, &p, k, npol));
+			indices.emplace_back(addVertex(s, 1, &p, k, npol));
+			indices.emplace_back(addVertex(s, 2, &p, k, npol));
 		}
 	}
 
@@ -760,6 +813,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	vertices.resize(0);
 	texcoords.resize(0);
 	normals.resize(0);
+	pie_level_normals.clear();
 
 	*ppFileData = pFileData;
 
