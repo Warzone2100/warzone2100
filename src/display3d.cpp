@@ -1934,7 +1934,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 	    || psFeature->psStats->subType == FEAT_OIL_DRUM)
 	{
 		/* these cast a shadow */
-		pieFlags = pie_STATIC_SHADOW;
+		pieFlags = pie_SHADOW;
 	}
 	iIMDShape *imd = psFeature->sDisplay.imd;
 	while (imd)
