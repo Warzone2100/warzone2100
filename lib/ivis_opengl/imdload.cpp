@@ -776,6 +776,18 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		}
 	}
 
+	// Sanity check
+	if (!pie_level_normals.empty())
+	{
+		if (s.polys.size() * 3 != pie_level_normals.size())
+		{
+			debug(LOG_ERROR, "imd[_load_level] = got %d npolys, but there are only %d normals! Discarding normals...",
+			      npolys, static_cast<int>(pie_level_normals.size()));
+			// This will force usage of calculated normals
+			pie_level_normals.clear();
+		}
+	}
+
 	// FINALLY, massage the data into what can stream directly to OpenGL
 	vertexCount = 0;
 	for (int k = 0; k < MAX(1, s.numFrames); k++)
