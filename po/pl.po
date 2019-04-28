@@ -4210,7 +4210,7 @@ msgstr "Zima nuklearna"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr "Północ, 10 kwietnia, 2086"
+msgstr "Północ, 10. kwietnia, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
