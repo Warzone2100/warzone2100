@@ -122,6 +122,18 @@ This starts a list of vertex coordinates (points) with the number of lines *n*, 
 
 Each point *must* be on a separate line and *must* be indented with a tab. It *must* contain exactly 3 floating-point values in the order *x y z*. Y denotes "up".
 
+### NORMALS (optional)
+
+> NORMALS n
+
+This starts a list of vertex normals with the number of lines *n*, which *must* be equal to number of polygons below (otherwise we revert to calculating normals). This is followed by the list of normal lines.
+
+#### Normal lines
+
+> 	-1.0 0.0 0.0 0.0 -1.0 0.0 0.0 1.0 0.0
+
+Each line *must* be indented with a tab. It *must* contain exactly 3 normals (one per indexed vertex in a corresponding polygon line) and each normal *must* contain exactly 3 floating-point values in the *x y z* order.
+
 ### POLYGONS
 
 > POLYGONS n
