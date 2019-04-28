@@ -38,7 +38,6 @@
 #include "console.h"
 #include "keybind.h"
 #include "display3d.h"
-#include "keymap.h"
 #include "keyedit.h"
 
 #include <algorithm>
@@ -746,25 +745,7 @@ void	keyProcessMappings(bool bExclude)
 /* Sends a particular key mapping to the console */
 static void keyShowMapping(KEY_MAPPING *psMapping)
 {
-	char	asciiSub[20], asciiMeta[20];
-	bool	onlySub;
-
-	onlySub = true;
-	if (psMapping->metaKeyCode != KEY_IGNORE)
-	{
-		keyScanToString(psMapping->metaKeyCode, (char *)&asciiMeta, 20);
-		onlySub = false;
-	}
-
-	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
-	if (onlySub)
-	{
-		CONPRINTF("%s - %s", asciiSub, _(psMapping->name.c_str()));
-	}
-	else
-	{
-		CONPRINTF("%s and %s - %s", asciiMeta, asciiSub, _(psMapping->name.c_str()));
-	}
+	CONPRINTF("%s - %s", keyMapToString(psMapping).toStdString().c_str(), _(psMapping->name.c_str()));
 	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
 }
 

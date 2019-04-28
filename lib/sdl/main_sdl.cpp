@@ -646,51 +646,45 @@ static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 	pEndBuffer = pNext;
 }
 
-void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
+// wrapper function for SDL_GetKeyName()
+WzString getKeyName(KEY_CODE keyCode)
 {
-	if (code == KEY_LCTRL)
+	WzString keyName;
+	// shortcuts with modifier keys work with either key.
+	if (keyCode == KEY_LCTRL)
 	{
-		// shortcuts with modifier keys work with either key.
-		strcpy(ascii, "Ctrl");
-		return;
+		keyName = "Ctrl";
 	}
-	else if (code == KEY_LSHIFT)
+	else if (keyCode == KEY_LSHIFT)
 	{
-		// shortcuts with modifier keys work with either key.
-		strcpy(ascii, "Shift");
-		return;
+		keyName = "Shift";
 	}
-	else if (code == KEY_LALT)
+	else if (keyCode == KEY_LALT)
 	{
-		// shortcuts with modifier keys work with either key.
-		strcpy(ascii, "Alt");
-		return;
+		keyName = "Alt";
 	}
-	else if (code == KEY_LMETA)
+	else if (keyCode == KEY_LMETA)
 	{
-		// shortcuts with modifier keys work with either key.
 #ifdef WZ_OS_MAC
-		strcpy(ascii, "Cmd");
+		keyName = "Cmd";
 #else
-		strcpy(ascii, "Meta");
+		keyName = "Meta";
 #endif
-		return;
 	}
-
-	if (code < KEY_MAXSCAN)
+	else if (keyCode < KEY_MAXSCAN)
 	{
-		snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
-		if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
+		keyName = SDL_GetKeyName(keyCodeToSDLKey(keyCode));
+		if (keyCode >= KEY_KP_0 && keyCode <= KEY_KPENTER)
 		{
-			// capitalize
-			ascii[0] += 'A' - 'a';
-			return;
+		    keyName.remove("Keypad ");
+		    keyName.append(" (numpad)");
 		}
 	}
 	else
 	{
-		strcpy(ascii, "???");
+		keyName = "???";
 	}
+	return keyName;
 }
 
 /* Initialise the input module */
@@ -767,13 +761,13 @@ void inputNewFrame(void)
 		if (aKeyState[i].state == KEY_PRESSED)
 		{
 			aKeyState[i].state = KEY_DOWN;
-			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)i)));
+			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, getKeyName((KEY_CODE)i).toStdString().c_str());
 		}
 		else if (aKeyState[i].state == KEY_RELEASED  ||
 		         aKeyState[i].state == KEY_PRESSRELEASE)
 		{
 			aKeyState[i].state = KEY_UP;
-			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)i)));
+			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, getKeyName((KEY_CODE)i).toStdString().c_str());
 		}
 	}
 
@@ -968,7 +962,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		{
 			// Take care of 'editing' keys that were pressed
 			inputAddBuffer(vk, 0);
-			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(CurrentKey));
+			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, getKeyName((KEY_CODE)CurrentKey).toStdString().c_str());
 		}
 		else
 		{
@@ -976,7 +970,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 			inputAddBuffer(CurrentKey, 0);
 		}
 
-		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", CurrentKey, CurrentKey, (CurrentKey < 128) && (CurrentKey > 31) ? (char)CurrentKey : '?', SDL_GetKeyName(CurrentKey));
+		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", CurrentKey, CurrentKey, (CurrentKey < 128) && (CurrentKey > 31) ? (char)CurrentKey : '?', getKeyName((KEY_CODE)CurrentKey).toStdString().c_str());
 
 		code = sdlKeyToKeyCode(CurrentKey);
 		if (code >= KEY_MAXSCAN)
@@ -995,7 +989,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 
 	case SDL_KEYUP:
 		code = keyEvent->keysym.sym;
-		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, [%c] SDLkey=[%s]", code, code, (code < 128) && (code > 31) ? (char)code : '?', SDL_GetKeyName(code));
+		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, [%c] SDLkey=[%s]", code, code, (code < 128) && (code > 31) ? (char)code : '?', getKeyName((KEY_CODE)CurrentKey).toStdString().c_str());
 		code = sdlKeyToKeyCode(keyEvent->keysym.sym);
 		if (code >= KEY_MAXSCAN)
 		{

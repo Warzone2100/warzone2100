@@ -29,6 +29,7 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/sound/audio.h"
@@ -236,27 +237,26 @@ bool runKeyMapEditor()
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns key to press given a mapping.
-static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
+WzString keyMapToString(KEY_MAPPING *psMapping)
 {
 	bool	onlySub = true;
-	char	asciiSub[20], asciiMeta[20];
+	WzString metaKey, subKey;
 
 	if (psMapping->metaKeyCode != KEY_IGNORE)
 	{
-		keyScanToString(psMapping->metaKeyCode, (char *)&asciiMeta, 20);
+		metaKey = getKeyName(psMapping->metaKeyCode);
 		onlySub = false;
 	}
-	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
+	subKey = getKeyName(psMapping->subKeyCode);
 
 	if (onlySub)
 	{
-		sprintf(pStr, "%s", asciiSub);
+		return subKey;
 	}
 	else
 	{
-		sprintf(pStr, "%s %s", asciiMeta, asciiSub);
+		return metaKey.append(" " + subKey);
 	}
-	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -272,7 +272,6 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int w = psWidget->width();
 	int h = psWidget->height();
 	KEY_MAPPING *psMapping = data.psMapping;
-	char sKey[MAX_STR_LENGTH];
 
 	if (psMapping == selectedKeyMap)
 	{
@@ -292,16 +291,13 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	data.cache.wzNameText.setText(_(psMapping->name.c_str()), font_regular);
 	data.cache.wzNameText.render(x + 2, y + (psWidget->height() / 2) + 3, WZCOL_FORM_TEXT);
 
-	// draw binding
-	keyMapToString(sKey, psMapping);
 	// Check to see if key is on the numpad, if so tell user and change color
 	PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
 	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
 	{
 		bindingTextColor = WZCOL_YELLOW;
-		sstrcat(sKey, " (numpad)");
 	}
-	data.cache.wzBindingText.setText(sKey, font_regular);
+	data.cache.wzBindingText.setText(keyMapToString(psMapping).toStdString().c_str(), font_regular);
 	data.cache.wzBindingText.render(x + 364, y + (psWidget->height() / 2) + 3, bindingTextColor);
 }
 

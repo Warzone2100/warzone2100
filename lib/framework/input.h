@@ -32,6 +32,7 @@
 
 #include "types.h"
 #include "lib/framework/utf.h"
+#include "lib/framework/wzstring.h"
 #include "vector.h"
 #include <vector>
 
@@ -178,8 +179,8 @@ typedef std::vector<MousePress> MousePresses;
 /** Tell the input system that we have lost the focus. */
 void inputLoseFocus();
 void StopTextInput();
-/** Converts the key code into an ascii string. */
-WZ_DECL_NONNULL(2) void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
+/** Converts the key code into an human-readable string. */
+WzString getKeyName(KEY_CODE keyCode);
 
 /** Initialise the input module. */
 void inputInitialise();

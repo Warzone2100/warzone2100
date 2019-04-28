@@ -21,9 +21,13 @@
 #ifndef __INCLUDED_SRC_KEYEDIT_H__
 #define __INCLUDED_SRC_KEYEDIT_H__
 
+#include "keymap.h"
+#include "lib/framework/wzstring.h"
+
 bool runKeyMapEditor();
 bool startKeyMapEditor(bool first);
 bool saveKeyMap();
 bool loadKeyMap();
+WzString keyMapToString(KEY_MAPPING *psMapping);
 
 #endif // __INCLUDED_SRC_KEYEDIT_H__
