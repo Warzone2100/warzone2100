@@ -5,6 +5,7 @@ set_property(TARGET microecc PROPERTY FOLDER "3rdparty")
 
 add_subdirectory(fonts)
 
+SET(UTF8PROC_INSTALL OFF CACHE BOOL "Enable installation of utf8proc" FORCE)
 add_subdirectory(utf8proc)
 set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
 
