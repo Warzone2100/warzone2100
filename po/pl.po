@@ -4222,7 +4222,7 @@ msgstr "Bezpieczne miejsce"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr "Świt, 4. lipca, 2010"
+msgstr "Świt, 4. kwietnia, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
