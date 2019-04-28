@@ -157,7 +157,7 @@ Each polygon *must* be on a separate line and *must* be indented with a tab.
 
 ##### Number of points
 
-* The first number is the number of points for this polygon. Each entry *must* be between 3 and 6 points, however using triangles only is *strongly recommended*. At some later point, only triangles will be supported, and other polygons will be tessellated.
+* The first number is the number of points for this polygon. Only triangles are supported, so each entry *must* use 3 points.
 
 ##### Animation block
 
