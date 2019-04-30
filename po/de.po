@@ -10475,7 +10475,7 @@ msgstr "Minikartenzoom"
 
 #: src/frontend.cpp:918
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "AUDIO- UND ZOOMEINSTELLUNGEN"
+msgstr "AUDIO- UND ZOOM-\nEINSTELLUNGEN"
 
 #: src/frontend.cpp:1014
 msgid "Windowed"
