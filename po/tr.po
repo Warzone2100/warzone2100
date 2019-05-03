@@ -12326,9 +12326,9 @@ msgstr[1] "%s - %u Birim atandı - Sağlık %d/%d"
 # Gruplar! -Ayhan
 #: src/structure.cpp:5447
 #, c-format
-msgid "%s - %u Unit assigned - Damage %d/%d"
+msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Birim atandı - Hasar %d/%d"
+msgstr[0] "%s - %u Birim atandı - Hasar %3.0f%%"
 msgstr[1] "%s - %u Birim atandı - Sağlık %d/%d"
 
 #: src/structure.cpp:5452 src/structure.cpp:5462 src/structure.cpp:5469
