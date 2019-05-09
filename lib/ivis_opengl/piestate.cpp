@@ -207,6 +207,7 @@ static void getLocs(pie_internal::SHADER_PROGRAM *program)
 	program->locNormal = glGetAttribLocation(program->program, "vertexNormal");
 	program->locTexCoord = glGetAttribLocation(program->program, "vertexTexCoord");
 	program->locColor = glGetAttribLocation(program->program, "vertexColor");
+	program->locTangent = glGetAttribLocation(program->program, "vertexTangent");
 
 	// Uniforms, these never change.
 	GLint locTex0 = glGetUniformLocation(program->program, "Texture");

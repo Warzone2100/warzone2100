@@ -122,6 +122,7 @@ namespace pie_internal
 		GLint locNormal = 0;
 		GLint locTexCoord = 0;
 		GLint locColor = 0;
+		GLint locTangent = 0;
 	};
 
 	extern std::vector<SHADER_PROGRAM> shaderProgram;

@@ -240,6 +240,8 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
+	if (shape->buffers[VBO_TANGENT])
+		enableArray(shape->buffers[VBO_TANGENT], program.locTangent, 4, GL_FLOAT, false, 0, 0);
 	shape->buffers[VBO_INDEX]->bind();
 	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->polys.size() * 3 * sizeof(uint16_t)));
 	disableArrays();
