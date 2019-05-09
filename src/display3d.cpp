@@ -1304,8 +1304,8 @@ bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4& viewModelMatrix, 
 	/* get the screen coordinates */
 	const float cZ = pie_RotateProject(&origin, viewModelMatrix, &center) * 0.1;
 
-	//Watermelon:added a crash protection hack...
-	if (cZ >= 0)
+	// avoid division by zero
+	if (cZ > 0)
 	{
 		radius = wsRadius / cZ * pie_GetResScalingFactor();
 	}
@@ -3253,8 +3253,8 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	/* get the screen coordinates */
 	const float cZ = pie_RotateProject(&origin, viewMatrix, &center) * 0.1;
 
-	//Watermelon:added a crash protection hack...
-	if (cZ >= 0)
+	// avoid division by zero
+	if (cZ > 0)
 	{
 		radius = wsRadius / cZ * pie_GetResScalingFactor();
 	}
