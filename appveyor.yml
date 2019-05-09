@@ -114,6 +114,9 @@ after_build:
         $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))_$($env:WZ_OUTPUT_PLATFORMNAME)"
       }
       $env:WZ_ZIP_DESC = "$($env:APPVEYOR_REPO_BRANCH)_$($env:WZ_OUTPUT_PLATFORMNAME)"
+      # Convert special characters
+      $env:WZ_BUILD_DESC = $env:WZ_BUILD_DESC.replace('/','_')
+      $env:WZ_ZIP_DESC = $env:WZ_ZIP_DESC.replace('/','_')
   - ps: Write-Host "env:WZ_BUILD_DESC='$env:WZ_BUILD_DESC'"
 
   # Package the portable installer into a zip
