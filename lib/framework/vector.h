@@ -33,11 +33,13 @@
 #include "lib/framework/types.h"
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 using Vector3i = glm::ivec3;
 using Vector2i = glm::ivec2;
 using Vector2f = glm::vec2;
 using Vector3f = glm::vec3;
+using Vector4f = glm::vec4;
 struct Rotation
 {
 	Rotation()

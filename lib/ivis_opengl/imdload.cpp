@@ -543,6 +543,7 @@ static std::vector<gfx_api::gfxFloat> normals;
 static std::vector<Vector3f> pie_level_normals;
 static std::vector<gfx_api::gfxFloat> texcoords;
 static std::vector<gfx_api::gfxFloat> tangents;
+static std::vector<gfx_api::gfxFloat> bitangents;
 static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
 static uint16_t vertexCount = 0;
 
@@ -589,21 +590,26 @@ static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int 
 
 	const Vector3f* normal(pie_level_normals.empty() ? &p->normal : &pie_level_normals[polyIdx * 3 + i]);
 
-	// See if we already have this defined, if so, return reference to it.
-	for (uint16_t j = 0; j < vertexCount; j++)
+	// Do not weld for for models with normals, those are presumed to be correct. Otherwise, it will break tangents
+	if (pie_level_normals.empty())
 	{
-		if (texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
-		    && texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
-		    && vertices[j * 3 + 0] == s.points[p->pindex[i]].x
-		    && vertices[j * 3 + 1] == s.points[p->pindex[i]].y
-		    && vertices[j * 3 + 2] == s.points[p->pindex[i]].z
-		    && normals[j * 3 + 0] == normal->x
-		    && normals[j * 3 + 1] == normal->y
-		    && normals[j * 3 + 2] == normal->z)
+		// See if we already have this defined, if so, return reference to it.
+		for (uint16_t j = 0; j < vertexCount; j++)
 		{
-			return j;
+			if (texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
+			    && texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
+			    && vertices[j * 3 + 0] == s.points[p->pindex[i]].x
+			    && vertices[j * 3 + 1] == s.points[p->pindex[i]].y
+			    && vertices[j * 3 + 2] == s.points[p->pindex[i]].z
+			    && normals[j * 3 + 0] == normal->x
+			    && normals[j * 3 + 1] == normal->y
+			    && normals[j * 3 + 2] == normal->z)
+			{
+				return j;
+			}
 		}
 	}
+
 	// We don't have it, add it.
 	normals.emplace_back(normal->x);
 	normals.emplace_back(normal->y);
@@ -614,7 +620,81 @@ static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int 
 	vertices.emplace_back(s.points[p->pindex[i]].y);
 	vertices.emplace_back(s.points[p->pindex[i]].z);
 	vertexCount++;
+
 	return vertexCount - 1;
+}
+
+void calculateTangentsForTriangle(const uint16_t ia, const uint16_t ib, const uint16_t ic)
+{
+	// This will work as long as vecs are packed (which is default in glm)
+	const Vector3f* verticesAsVec3 = reinterpret_cast<const Vector3f*>(vertices.data());
+	const Vector2f* texcoordsAsVec2 = reinterpret_cast<const Vector2f*>(texcoords.data());
+	Vector4f* tangentsAsVec4 = reinterpret_cast<Vector4f*>(tangents.data());
+	Vector3f* bitangentsAsVec3 = reinterpret_cast<Vector3f*>(bitangents.data());
+
+	// Shortcuts for vertices
+	const Vector3f& va(verticesAsVec3[ia]);
+	const Vector3f& vb(verticesAsVec3[ib]);
+	const Vector3f& vc(verticesAsVec3[ic]);
+
+	// Shortcuts for UVs
+	const Vector2f uva(texcoordsAsVec2[ia]);
+	const Vector2f uvb(texcoordsAsVec2[ib]);
+	const Vector2f uvc(texcoordsAsVec2[ic]);
+
+	// Edges of the triangle : postion delta
+	const Vector3f deltaPos1 = vb - va;
+	const Vector3f deltaPos2 = vc - va;
+
+	// UV delta
+	const Vector2f deltaUV1 = uvb - uva;
+	const Vector2f deltaUV2 = uvc - uva;
+
+	// check for nan
+	float r = deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x;
+	if (r != 0.f)
+		r = 1.f / r;
+
+	const Vector4f tangent((deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r, 0.f);
+	const Vector3f bitangent((deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r);
+
+	tangentsAsVec4[ia] += tangent;
+	tangentsAsVec4[ib] += tangent;
+	tangentsAsVec4[ic] += tangent;
+
+	bitangentsAsVec3[ia] += bitangent;
+	bitangentsAsVec3[ib] += bitangent;
+	bitangentsAsVec3[ic] += bitangent;
+}
+
+void finishTangentsGeneration()
+{
+	// This will work as long as vecs are packed (which is default in glm)
+	const Vector3f* normalsAsVec3 = reinterpret_cast<const Vector3f*>(normals.data());
+	Vector4f* tangentsAsVec4 = reinterpret_cast<Vector4f*>(tangents.data());
+	const Vector3f* bitangentsAsVec3 = reinterpret_cast<const Vector3f*>(bitangents.data());
+
+	Vector3f t;
+
+	for (auto i = 0; i < vertexCount; ++i)
+	{
+		const Vector3f& n = normalsAsVec3[i];
+		const Vector3f& b = bitangentsAsVec3[i];
+		t = tangentsAsVec4[i].xyz();
+
+		// Gram-Schmidt orthogonalize
+		t = glm::normalize(t - n * glm::dot(n, t));
+
+		// Calculate handedness
+		if (glm::dot(glm::cross(n, t), b) < 0.f)
+		{
+			tangentsAsVec4[i] = Vector4f(t, -1.f);
+		}
+		else
+		{
+			tangentsAsVec4[i] = Vector4f(t, 1.f);
+		}
+	}
 }
 
 /*!
@@ -803,6 +883,24 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		}
 	}
 
+	// Tangents are optional, only if normals were loaded and passed sanity check above
+	if (!pie_level_normals.empty())
+	{
+		tangents.resize(vertexCount * 4);
+		bitangents.resize(vertexCount * 3);
+
+		for (size_t i = 0; i < indices.size(); i += 3)
+			calculateTangentsForTriangle(indices[i], indices[i+1], indices[i+2]);
+		finishTangentsGeneration();
+
+		if (!tangents.empty())
+		{
+			if (!s.buffers[VBO_TANGENT])
+				s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+			s.buffers[VBO_TANGENT]->upload(tangents.size() * sizeof(gfx_api::gfxFloat), tangents.data());
+		}
+	}
+
 	if (!s.buffers[VBO_VERTEX])
 		s.buffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
 	s.buffers[VBO_VERTEX]->upload(vertices.size() * sizeof(gfx_api::gfxFloat), vertices.data());
@@ -825,6 +923,8 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	vertices.resize(0);
 	texcoords.resize(0);
 	normals.resize(0);
+	tangents.resize(0);
+	bitangents.resize(0);
 	pie_level_normals.clear();
 
 	*ppFileData = pFileData;
