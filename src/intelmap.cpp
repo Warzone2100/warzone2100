@@ -908,7 +908,11 @@ void intRemoveMessageView(bool animated)
 
 	//stop the video
 	VIEW_RESEARCH *psViewResearch = (VIEW_RESEARCH *)form->pUserData;
-	seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
+
+	if (psViewResearch != nullptr)
+	{
+		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
+	}
 
 	if (animated)
 	{
