@@ -1,73 +1,74 @@
 2019-03-XX: Version 3.3.0 beta2
  * General:
-   * Add:
-   * Change:
-   * Fix: Saving of challenge scores (commit:e1b3eac0faeb7c39b769fee59920d066373d5c49, ticket:4868)
+   * Add: Reinstated secondary orders Pursue, Guard, and Hold (commit:29d3696dd62f034d02d51b9caa7d834cc84e13d3, commit:4b974e5761eecf7fc375f50d954779e4ac800786, commit:2fb172792014d8886a7411a2547b15030ead0152, commit:274fab1fe4f5a7f443f42b35211d95f949cd63cb, commit:cfa8ca695079df3d716a6eb7a2ed2f5729320bea, commit:8f611fe0f6ffb906bee0afd5de702f8b2de9f1df, commit:ff5ec8ca927c2d3353f58f7ac0ca17f965252234, #263, ticket:4303)
+   * Change: Pressing Escape clears chatbox if it contains text and closes it otherwise (commit:809dd2abdfbf97a88d74519cd4323d06ce8395d2, #294)
    * Fix: Processing of radar input after disabling its widget (commit:39f083ed0f0c29f071f9f528c9eeef5544373fd7, ticket:4867)
-   * Fix: Crashes caused by missing support for mipmap generation (commit:a850fb5c887eb54a50f3a3f0f15ef0f1b6591a98)
-   * Remove:
+   * Fix: Saving of challenge scores (commit:e1b3eac0faeb7c39b769fee59920d066373d5c49, ticket:4868)
+   * Fix: Crashes caused by missing support for mipmap generation (commit:a850fb5c887eb54a50f3a3f0f15ef0f1b6591a98, #260)
+   * Fix: Improved window resizing and display scaling (commit:aedc207367c03a105f0ec6475250cdf0b3908008, commit:39aeb5132197a87e0c4207ae36c461eca7909522, commit:e1e991ce3edf9c68f72f3572ab8357abb930f48c, commit:c89a299dcf581c9362bf2461f291a8388c70c0e3, commit:aaf79eda0356eb0be264be65c640f19c12a17327, commit:924b98272140677cfde4955af84aee930d7c4b0d, #319)
+   * Fix: Support for more graphics driver workarounds and platform compatibility (commit:d517b62e394c42a2b1e0b831a0cdc26156faca80, #331)
+   * Fix: Units shooting through walls to attack targets (commit: 4ed887ed1986840474281d8fd28fc0ea533c06aa, 5cbe6b9e93a0a9682996fc1edf3df43ee5f7096b, #271)
  * Graphics:
-   * Add: Hit-testing support for widgets (commit:405a59420918f903352c4a51be6822eb60d4066b, commit:9394cd5f6c5c1de666d34d56cc32a0d4dfbc83e9)
-   * Change: Increase click area for in-game options (commit:bb15fbaa10663d6ce540911d9890f733b75fd365)
+   * Add: Hit-testing support for widgets (commit:405a59420918f903352c4a51be6822eb60d4066b, commit:9394cd5f6c5c1de666d34d56cc32a0d4dfbc83e9, #264)
+   * Change: Increase click area for in-game options (commit:bb15fbaa10663d6ce540911d9890f733b75fd365, #266)
+   * Change: Improved text width calculation (commit:f4a8c93c9012eb5424296604bd1a0fa56fa2bc06, commit:c27ad854669ee55834fef43f4a7b6fba0dc28b88, commit:0fcad70a72b44aaaf0b01fe425946cd0193f5216, commit:35e5a8d021dfcefa9b7bce7e846a7c2432a7a064, #287)
+   * Change: Split challenge tooltips in challenge selection screen into multiple lines (commit:2cc667cbb8f3765a5b69e0c210ab5b1355db3ca6, #299)
    * Fix: Flamer Bunker model (commit:400191c9c47a4e39aeb12240283f355a57e30290, ticket:4856)
    * Fix: Objects darkening when zooming out (commit:456a74edb1fa76e66bf8e0e2c888b54c0b5c6299, ticket:4375)
-   * Fix: Layout calculation for unit orders panel (commit:67b64e6f4205b123e69d6973f2a524656a419c75)
-   * Fix: Layout calculation for mission timer (commit:d655de8573b8d781d748d5c53e7f46f39a402d82)
-   * Fix: Misplaced reticule area buttons (commit:6731c4ca5f1178e408d1cb22757793fe7ad1015f)
-   * Remove:
+   * Fix: Layout calculation for unit orders panel (commit:67b64e6f4205b123e69d6973f2a524656a419c75, #261)
+   * Fix: Layout calculation for mission timer (commit:d655de8573b8d781d748d5c53e7f46f39a402d82, #261)
+   * Fix: Misplaced reticule area buttons (commit:6731c4ca5f1178e408d1cb22757793fe7ad1015f, #262)
+   * Fix: Broken shadows with rotated structures (commit:b7e00616a5068ee0e3be03eb92df803044b2bb84, #285)
+   * Fix: Horizontal offset of chatbox cursor (commit:8944aac22bdb43abb849302f158a2704bffb4dd5, #282, ticket:4796)
+   * Fix: Alignment of right-justified small text buttons in main menu (commit:e6aa8792eac76c7c853df33ce8f5423f12cab4ff, #287)
+   * Fix: Shader warning on some systems (commit:189b18dec1fc9ffe2381eeee1d89534112309601, #318)
+   * Fix: Broken shadows with rotated features (commit:39021659101136e3cf4a26959daf7ea86335c13e, #368)
+   * Fix: Broken shadows with corner walls (commit:33963b56adc0a7cfe29110c4cb6407b6ea069b29, #368)
+   * Remove: Flickering of blue/red laser beam when building/demolishing (commit:724750e92cb9884ab81ce565f4d007af817f16ca)
  * Campaign:
-   * Add:
-   * Change:
-   * Fix: Overlapping objects in maps (commit:f3a9b4d640bbf1662b3a297554083aecdd5401a1, ticket:4865)
-   * Remove:
- * Multiplayer:
-   * Add:
-   * Change:
-   * Fix:
-   * Remove:
+   * Add: Time conversion functions, for timers (commit:bfde3e18892345a39ad2a3e62f1af66ee17ee6bc, #322)
+   * Change: Campaign scripts to automatically play the "reinforcements are available" sound (commit:33764ec247ad99ee7ea744ace0404cf16e40357c, #320)
+   * Fix: Overlapping objects on maps (commit:f3a9b4d640bbf1662b3a297554083aecdd5401a1, ticket:4865)
+   * Fix: Gamma 1 is instantly lost if first transporter drop contains no trucks (commit:e2dc5d7d50057e655c4d3e28411fd2d1b923a69a, #277)
+   * Fix: Gamma 1 transporter drops being randomized after loading a save from end of Beta campaign (commit:58ac40f0a00c521eed5bad7cc55ba01a212ce4dd, #278, #280, ticket:3009)
+   * Fix: Timeout missions not properly failing when player should be considered dead (commit:8042e44511b40b4821f4eccd993435479a4c08a3, #320)
+   * Fix: End of Beta campaign requiring more than one transporter to start, unlike the original campaign (commit:9d1fc6fe7a51b0a17a6396d5e1d92546f6431b05, #320)
+   * Fix: Laser satellite not firing at unfinished structures (commit:8b8653a82c8916783d9f8875b11f53250813cc25, #369)
+   * Fix: Calculation of player power at start of Gamma 9 (commit:30fc938ae920eff5472a1578664f8539e2e2d625, #370)
  * Scripting:
-   * Add:
-   * Change:
-   * Fix:
-   * Remove:
+   * Change: Function componentAvailable() returns true for redundant components (commit:0b535c8292ec70e113e1453ff472b79e07582be2, #321)
+   * Fix: Group label ID and game object ID collision (commit:b63648f432c27043edcbe8af84613cc1e67a6b61, #304, #355)
  * AI:
-   * Add:
-   * Change:
-   * Fix:
-   * Remove:
+   * Fix: NullBot gateway building function causing a good chunk of lag (commit:db51614e568660ef9f6704c385a98c316c4cd227, #313)
+   * Fix: NullBot owned VTOLs attacking things they cannot hit (commit:43d5ee0ef8a7935390241536b63bf1acf0d22aa6, #313)
+   * Fix: NullBot ordering non-sensors to observe objects rather than scout by driving towards them (commit:4b97f42aac1fc75b0956c6ab48d2c1212fe933a2, #313)
+   * Fix: NullBot trying to assign a label to a dead unit in eventAttacked (commit:8fab71b2d37d58e9f98c36b7fabc83add1d8a140, #313)
  * Other:
-   * Add:
-   * Change:
-   * Fix: Truck getting stuck when picking up artifact in tutorial (commit:f4fa0a93e26103402e77e2072e3004b533029904, ticket:4866)
-   * Remove:
- * Modding:
-   * Add:
-   * Change:
-   * Fix:
-   * Remove:
+   * Add: Console message for missing Command Relay Center preventing Commander production (commit:c165d8c1d233b1c3051c21b19aaba669d9cd32e2, #327, #329)
+   * Change: Time and date representation to ISO 8601 (commit:224a92afc8a1848e13344f7104408ad2fcd1cc01, #343)
+   * Change: Configuration directory of debug builds (commit:e9830ebdd1d359fa7197276ae2abb7a30f8f5c21, #335)
+   * Fix: Truck getting stuck when picking up artifact in tutorial due to a cliff (commit:f4fa0a93e26103402e77e2072e3004b533029904, ticket:4866)
+   * Fix: Throttling of production console messages (commit:3bb244b7a41237278a731bde7cc49626646a1107, #327, #329)
+   * Fix: Undefined behavior (commit:41af29c6a58431042cd2649b8aa1984c8e53ef0a, commit:43a34a886c0c62f92065c0c9646bb3027d6b09b6, commit:fa02178faa1caefbbff63d82d9262ad5ba80703f, #351, #353, #356)
+   * Remove: More Qt dependency from the source (commit:97cf508379fe7fb56ac8ecccbe3269783d3620f3, commit:ca9c1166e386f43ff76aa16d6971ca2ab2eb1303, commit:131e4f705888445aaa26643489d6a238a4fd3515, #276, #299)
  * Balance:
-   * Add:
-   * Change:
-   * Fix:
-   * Remove:
+   * Fix: Cyborg flamer and cyborg lancer not being affected by upgrades (commit:303b27f2ddf7eaf002145fdec7bc149c15ed26a3, #362, #363)
  * Translation:
    * Add: Translation of structure limits screen title (commit:198215bbc09438e689db0eb2a4d0ed3de4a276f2, ticket:4871)
-   * Change: Russian (commit:2dafbc2cbc7e7ab8e173edb10b88fcd32a8e4c79)
-   * Change: German (commit:85f9a13f54406fe3dff07936b1d96d22e66e00e2, commit:30d10bfd1854700700a5aaa262eae7bac4de4b5c, ticket:4845)
-   * Change: Turkish (commit:b14f9bd574e36e0ec0db3d59ad14249c90747435)
+   * Change: Russian (commit:2dafbc2cbc7e7ab8e173edb10b88fcd32a8e4c79, #239)
+   * Change: German (commit:85f9a13f54406fe3dff07936b1d96d22e66e00e2, commit:30d10bfd1854700700a5aaa262eae7bac4de4b5c, commit:4b2a94700dcac2699d10f9f382047d956c62f0af, #326, ticket:4845)
+   * Change: Turkish (commit:b14f9bd574e36e0ec0db3d59ad14249c90747435, #259)
+   * Change: Brazilian (commit:b00b17c5583c385a5518dcba412efab4765da888, #315)
+   * Change: Polish (commit:211574fdb0fa473a773d92969d654ae08d58c5a3, commit:40872630a98bf46253dbbc0651443f73bcca18f1, #339)
+   * Change: Slovenian (commit:cac83e9e50d2adeea5b2b02dd0a6a0da5e23034a, #357)
    * Fix: Translation of research messages not being shown (commit:f1b170db3012f4fcd99335cd814180ea8d37e0d6, ticket:4843)
    * Fix: Mismatching format specifiers for singular and plural form of a translatable string (commit:db95329005c0e07329138c90a64a2cf43062c391, ticket:4872)
-   * Remove:
+   * Fix: Version string being printed in the wrong language (commit:42368861607faf54af2acdeaea105533fd97a54b, #344)
  * Documentation:
-   * Add:
-   * Change:
-   * Fix:
-   * Remove:
+   * Fix: PIE format documentation (commit:7a4fdb16de1558a86a48e1ef77df7e7c64155c91, commit:58e78a22f48375273f258e294ea8bc061fac7f48, #295, #325, #334)
  * Build systems:
-   * Add:
-   * Change:
-   * Fix:
-   * Remove:
+   * Add: Folders to CMake builds to improve target organization in IDEs (commit:093aad3817dee2bd9b0090ec57adbbde1a56e827, #291)
+   * Change: Disable 3rd-party dependency installation in CMake builds (commit:c40ff4b15996a59343b860827f49b2038c973866, #340)
 
 2019-02-10: Version 3.3.0 beta1
  * General:
