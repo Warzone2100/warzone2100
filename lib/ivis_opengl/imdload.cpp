@@ -638,9 +638,9 @@ void calculateTangentsForTriangle(const uint16_t ia, const uint16_t ib, const ui
 	const Vector3f& vc(verticesAsVec3[ic]);
 
 	// Shortcuts for UVs
-	const Vector2f uva(texcoordsAsVec2[ia]);
-	const Vector2f uvb(texcoordsAsVec2[ib]);
-	const Vector2f uvc(texcoordsAsVec2[ic]);
+	const Vector2f& uva(texcoordsAsVec2[ia]);
+	const Vector2f& uvb(texcoordsAsVec2[ib]);
+	const Vector2f& uvc(texcoordsAsVec2[ic]);
 
 	// Edges of the triangle : postion delta
 	const Vector3f deltaPos1 = vb - va;
@@ -655,8 +655,8 @@ void calculateTangentsForTriangle(const uint16_t ia, const uint16_t ib, const ui
 	if (r != 0.f)
 		r = 1.f / r;
 
-	const Vector4f tangent((deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r, 0.f);
-	const Vector3f bitangent((deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r);
+	const Vector4f tangent(Vector3f(deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r, 0.f);
+	const Vector3f bitangent(Vector3f(deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r);
 
 	tangentsAsVec4[ia] += tangent;
 	tangentsAsVec4[ib] += tangent;
