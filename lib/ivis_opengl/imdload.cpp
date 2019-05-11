@@ -688,11 +688,11 @@ void finishTangentsGeneration()
 		// Calculate handedness
 		if (glm::dot(glm::cross(n, t), b) < 0.f)
 		{
-			tangentsAsVec4[i] = Vector4f(t, -1.f);
+			tangentsAsVec4[i] = Vector4f(-t, 1.f);
 		}
 		else
 		{
-			tangentsAsVec4[i] = Vector4f(t, 1.f);
+			tangentsAsVec4[i] = Vector4f(-t, -1.f);
 		}
 	}
 }
