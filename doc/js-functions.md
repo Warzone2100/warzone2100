@@ -783,3 +783,11 @@ Set the campaign number. (3.3+ only)
 ## getMissionType()
 
 Return the current mission type. (3.3+ only)
+
+## getRevealStatus()
+
+Return the current fog reveal status. (3.3+ only)
+
+## setRevealStatus(bool)
+
+Set the fog reveal status. (3.3+ only)

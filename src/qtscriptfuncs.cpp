@@ -82,6 +82,7 @@
 #include "component.h"
 #include "seqdisp.h"
 #include "ai.h"
+#include "advvis.h"
 
 #define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
@@ -4983,9 +4984,30 @@ static QScriptValue js_setCampaignNumber(QScriptContext *context, QScriptEngine 
 //-- ## getMissionType()
 //--
 //-- Return the current mission type. (3.3+ only)
+//--
 static QScriptValue js_getMissionType(QScriptContext *context, QScriptEngine *)
 {
 	return (int)mission.type;
+}
+
+//-- ## getRevealStatus()
+//--
+//-- Return the current fog reveal status. (3.3+ only)
+//--
+static QScriptValue js_getRevealStatus(QScriptContext *context, QScriptEngine *)
+{
+	return QScriptValue(getRevealStatus());
+}
+
+//-- ## setRevealStatus(bool)
+//--
+//-- Set the fog reveal status. (3.3+ only)
+static QScriptValue js_setRevealStatus(QScriptContext *context, QScriptEngine *)
+{
+	bool status = context->argument(0).toBool();
+	setRevealStatus(status);
+	preProcessVisibility();
+	return QScriptValue();
 }
 
 // ----------------------------------------------------------------------------------------
@@ -6057,6 +6079,8 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("getMultiTechLevel", engine->newFunction(js_getMultiTechLevel));
 	engine->globalObject().setProperty("setCampaignNumber", engine->newFunction(js_setCampaignNumber));
 	engine->globalObject().setProperty("getMissionType", engine->newFunction(js_getMissionType));
+	engine->globalObject().setProperty("getRevealStatus", engine->newFunction(js_getRevealStatus));
+	engine->globalObject().setProperty("setRevealStatus", engine->newFunction(js_setRevealStatus));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

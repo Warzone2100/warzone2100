@@ -174,6 +174,9 @@ function reticuleUpdate(obj, eventType)
 
 function setupGame()
 {
+	//Use light fog for multiplayer
+	setRevealStatus(true);
+	
 	if (tilesetType == "URBAN")
 	{
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
