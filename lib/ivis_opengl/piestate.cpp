@@ -538,6 +538,9 @@ SHADER_MODE pie_LoadShader(SHADER_VERSION vertex_version, SHADER_VERSION fragmen
 	glBindAttribLocation(program.program, 0, "vertex");
 	glBindAttribLocation(program.program, 1, "vertexTexCoord");
 	glBindAttribLocation(program.program, 2, "vertexColor");
+	glBindAttribLocation(program.program, 3, "vertexNormal");
+	glBindAttribLocation(program.program, 4, "vertexTangent");
+
 	ASSERT_OR_RETURN(SHADER_NONE, program.program, "Could not create shader program!");
 
 	char* shaderContents = nullptr;
