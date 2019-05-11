@@ -219,6 +219,9 @@ function reticuleUpdate(obj, eventType)
 
 function setupGame()
 {
+	//Use dark fog for campaign
+	setRevealStatus(false);
+
 	if (tilesetType === "ARIZONA")
 	{
 		setCampaignNumber(1);
