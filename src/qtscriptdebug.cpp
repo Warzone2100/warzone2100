@@ -192,8 +192,9 @@ static void fillMainModel(QStandardItemModel &m)
 {
 	const QStringList lev_type = { "LDS_COMPLETE", "LDS_CAMPAIGN", "LDS_CAMSTART", "LDS_CAMCHANGE",
 	                               "LDS_EXPAND", "LDS_BETWEEN", "LDS_MKEEP", "LDS_MCLEAR",
-	                               "LDS_EXPAND_LIMBO", "LDS_MKEEP_LIMBO", "LDS_NONE", "CAMPAIGN",
-	                               "SKIRMISH", "MULTI_SKIRMISH2", "MULTI_SKIRMISH3" };
+	                               "LDS_EXPAND_LIMBO", "LDS_MKEEP_LIMBO", "LDS_NONE",
+	                               "LDS_MULTI_TYPE_START", "CAMPAIGN", "", "SKIRMISH", "", "", "",
+	                               "MULTI_SKIRMISH2", "MULTI_SKIRMISH3" };
 	const QStringList difficulty_type = { "EASY", "NORMAL", "HARD", "INSANE", "TOUGH", "KILLER" };
 	int row = 0;
 	m.setRowCount(0);
