@@ -863,7 +863,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		{
 			debug(LOG_ERROR, "imd[_load_level] = got %d npolys, but there are only %d normals! Discarding normals...",
 			      npolys, static_cast<int>(pie_level_normals.size()));
-			// This will force usage of calculated normals
+			// This will force usage of calculated normals in addVertex
 			pie_level_normals.clear();
 		}
 	}

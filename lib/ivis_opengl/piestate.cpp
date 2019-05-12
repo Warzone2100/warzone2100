@@ -676,28 +676,27 @@ bool pie_LoadShaders()
 	pie_internal::shaderProgram.push_back(program);
 	int shaderEnum = 0;
 
+	static const std::vector<std::string> uniformNamesForComponent =
+		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
+		  "ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
+		  "fogEnd", "fogStart", "fogColor", "hasTangents" };
+
 	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
 	result = pie_LoadShader(version, "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-		"fogEnd", "fogStart", "fogColor" });
+		uniformNamesForComponent);
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_COMPONENT, "Failed to load component shader");
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
 	result = pie_LoadShader(version, "Button program", "shaders/button.vert", "shaders/button.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-		"fogEnd", "fogStart", "fogColor" });
+		uniformNamesForComponent);
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_BUTTON, "Failed to load button shader");
 
 	// Plain shader for no lighting
 	debug(LOG_3D, "Loading shader: SHADER_NOLIGHT");
 	result = pie_LoadShader(version, "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-		"fogEnd", "fogStart", "fogColor" });
+		uniformNamesForComponent);
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_NOLIGHT, "Failed to load no-lighting shader");
 
 	debug(LOG_3D, "Loading shader: SHADER_TERRAIN");
@@ -851,6 +850,8 @@ pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMod
 		rendStates.fogColour.vector[3] / 255.f
 	};
 	glUniform4fv(program.locations[20], 1, color);
+	// hasTangents
+	glUniform1i(program.locations[21], shape->buffers[VBO_TANGENT] != nullptr);
 
 	if (program.locations[2] >= 0)
 	{
