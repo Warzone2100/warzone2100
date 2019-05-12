@@ -749,7 +749,7 @@ void orderUpdateDroid(DROID *psDroid)
 		         && psDroid->order.psObj == psDroid->psActionTarget[0]
 		         && actionInRange(psDroid, psDroid->order.psObj, 0)
 		         && (psWall = visGetBlockingWall(psDroid, psDroid->order.psObj))
-		         && psWall->player != psDroid->player)
+		         && !aiCheckAlliances(psWall->player, psDroid->player))
 		{
 			// there is a wall in the way - attack that
 			actionDroid(psDroid, DACTION_ATTACK, psWall);

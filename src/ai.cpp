@@ -690,16 +690,18 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	if (bestTarget)
 	{
 		ASSERT(!bestTarget->died, "AI gave us a target that is already dead.");
-		targetStructure = visGetBlockingWall((BASE_OBJECT *)psDroid, bestTarget);
+		targetStructure = visGetBlockingWall(psDroid, bestTarget);
 
-		/* See if target is blocked by a wall; only affects direct weapons */
+		// See if target is blocked by a wall; only affects direct weapons
+		// Ignore friendly walls here
 		if (proj_Direct(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat)
-		    && targetStructure)
+			&& targetStructure
+			&& !aiCheckAlliances(psDroid->player, targetStructure->player))
 		{
 			//are we any good against walls?
-			if (asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] >= 100)		//can attack atleast with default strength
+			if (asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] >= 100) //can attack atleast with default strength
 			{
-				bestTarget = (BASE_OBJECT *)targetStructure;			//attack wall
+				bestTarget = (BASE_OBJECT *)targetStructure; //attack wall
 			}
 		}
 

@@ -58,4 +58,6 @@ WZ_DECL_NONNULL(1) bool setLanguage(const char *name);
 void setNextLanguage(bool prev = false);
 void initI18n();
 
+const char *getCompileDate();
+
 #endif // _i18n_h

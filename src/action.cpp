@@ -632,6 +632,8 @@ void actionUpdateDroid(DROID *psDroid)
 	bool targetVisibile[MAX_WEAPONS] = { false };
 	bool bHasTarget = false;
 	bool bDirect = false;
+	STRUCTURE *blockingWall = nullptr;
+	bool wallBlocked = false;
 
 	CHECK_DROID(psDroid);
 
@@ -819,6 +821,7 @@ void actionUpdateDroid(DROID *psDroid)
 		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 		{
 			bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
+			blockingWall = nullptr;
 			// Does this weapon have a target?
 			if (psDroid->psActionTarget[i] != nullptr)
 			{
@@ -829,6 +832,11 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 				// Is target from our team now? (Electronic Warfare)
 				else if (electronicDroid(psDroid) && psDroid->player == psDroid->psActionTarget[i]->player)
+				{
+					setDroidActionTarget(psDroid, nullptr, i);
+				}
+				// Is target blocked by a wall?
+				else if (bDirect && visGetBlockingWall(psDroid, psDroid->psActionTarget[i]))
 				{
 					setDroidActionTarget(psDroid, nullptr, i);
 				}
@@ -850,8 +858,7 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 			}
 			// If we have a target for the weapon: is it visible?
-			if (psDroid->psActionTarget[i] != nullptr
-			    && visibleObject(psDroid, psDroid->psActionTarget[i], false))
+			if (psDroid->psActionTarget[i] != nullptr && visibleObject(psDroid, psDroid->psActionTarget[i], false))
 			{
 				hasVisibleTarget = true; // droid have a visible target to shoot
 				targetVisibile[i] = true;// it is at least visible for this weapon
@@ -863,15 +870,41 @@ void actionUpdateDroid(DROID *psDroid)
 			// loop through weapons
 			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 			{
+				const unsigned compIndex = psDroid->asWeaps[i].nStat;
+				const WEAPON_STATS *psStats = asWeaponStats + compIndex;
+				wallBlocked = false;
+
 				// has weapon a target? is target valid?
 				if (psDroid->psActionTarget[i] != nullptr && validTarget(psDroid, psDroid->psActionTarget[i], i))
 				{
 					// is target visible and weapon is not a Nullweapon?
 					if (targetVisibile[i] && nonNullWeapon[i]) //to fix a AA-weapon attack ground unit exploit
 					{
-						BASE_OBJECT *psActionTarget = psDroid->psActionTarget[i];
+						BASE_OBJECT *psActionTarget = nullptr;
+						blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[i]);
+
+						if (proj_Direct(psStats) && blockingWall)
+						{
+							WEAPON_EFFECT weapEffect = psStats->weaponEffect;
+
+							if (!aiCheckAlliances(psDroid->player, blockingWall->player)
+								&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= 100)
+							{
+								psActionTarget = blockingWall;
+								setDroidActionTarget(psDroid, psActionTarget, i); // attack enemy wall
+							}
+							else
+							{
+								wallBlocked = true;
+							}
+						}
+						else
+						{
+							psActionTarget = psDroid->psActionTarget[i];
+						}
+
 						// is the turret aligned with the target?
-						if (actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[i]))
+						if (!wallBlocked && actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[i]))
 						{
 							// In range - fire !!!
 							combFire(&psDroid->asWeaps[i], psDroid, psActionTarget, i);
@@ -924,6 +957,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		bHasTarget = false;
+		wallBlocked = false;
 		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 		{
 			BASE_OBJECT *psActionTarget;
@@ -963,8 +997,28 @@ void actionUpdateDroid(DROID *psDroid)
 			    && actionInRange(psDroid, psActionTarget, i))
 			{
 				WEAPON_STATS *const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
+				WEAPON_EFFECT weapEffect = psWeapStats->weaponEffect;
+				blockingWall = visGetBlockingWall(psDroid, psActionTarget);
+
+				// if a wall is inbetween us and the target, try firing at the wall if our
+				// weapon is good enough
+				if (proj_Direct(psWeapStats) && blockingWall)
+				{
+					if (!aiCheckAlliances(psDroid->player, blockingWall->player)
+						&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= 100)
+					{
+						psActionTarget = (BASE_OBJECT *)blockingWall;
+						setDroidActionTarget(psDroid, psActionTarget, i);
+					}
+					else
+					{
+						wallBlocked = true;
+					}
+				}
+
 				bHasTarget = true;
-				if (validTarget(psDroid, psActionTarget, i))
+
+				if (validTarget(psDroid, psActionTarget, i) && !wallBlocked)
 				{
 					int dirDiff = 0;
 
@@ -1011,7 +1065,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 
-		if (!bHasTarget)
+		if (!bHasTarget || wallBlocked)
 		{
 			BASE_OBJECT *psTarget;
 			bool supportsSensorTower = !isVtolDroid(psDroid) && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT)) && psTarget->type == OBJ_STRUCTURE;
@@ -1208,7 +1262,21 @@ void actionUpdateDroid(DROID *psDroid)
 						else if (actionInRange(psDroid, psDroid->psActionTarget[0], i))
 						{
 							// fire while closing range
-							combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
+							if ((blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[0])) && proj_Direct(psWeapStats))
+							{
+								WEAPON_EFFECT weapEffect = psWeapStats->weaponEffect;
+
+								if (!aiCheckAlliances(psDroid->player, blockingWall->player)
+									&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= 100)
+								{
+									//Shoot at wall if the weapon is good enough against them
+									combFire(&psDroid->asWeaps[i], psDroid, (BASE_OBJECT *)blockingWall, i);
+								}
+							}
+							else
+							{
+								combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
+							}
 						}
 					}
 				}

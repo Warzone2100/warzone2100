@@ -504,7 +504,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
-		strftime(ourtime, 15, "%I:%M:%S", timeinfo);
+		strftime(ourtime, 15, "%H:%M:%S", timeinfo);
 
 		// Assemble the outputBuffer:
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
