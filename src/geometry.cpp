@@ -102,8 +102,8 @@ bool inQuad(const Vector2i *pt, const QUAD *quad)
 	{
 		Vector2i edge = quad->coords[j] - quad->coords[i];
 		Vector2i pos = *pt - quad->coords[i];
-		if ((0 <= pos.y && pos.y < edge.y && pos.x * edge.y < pos.y * edge.x) ||
-		    (edge.y <= pos.y && pos.y < 0      && pos.x * edge.y > pos.y * edge.x))
+		if ((0 <= pos.y && pos.y < edge.y && (int64_t)pos.x * (int64_t)edge.y < (int64_t)pos.y * (int64_t)edge.x) ||
+		    (edge.y <= pos.y && pos.y < 0 && (int64_t)pos.x * (int64_t)edge.y > (int64_t)pos.y * (int64_t)edge.x))
 		{
 			c = !c;
 		}
