@@ -1,4 +1,3 @@
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
@@ -6,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-16 09:53+0000\n"
-"PO-Revision-Date: 2019-05-13 18:46+0200\n"
+"POT-Creation-Date: 2019-06-09 09:53+0000\n"
+"PO-Revision-Date: 2019-06-11 09:43+0200\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "Language: sl\n"
@@ -16,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 "X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -12302,6 +12301,11 @@ msgstr "Sporočilo strežnika:"
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
 msgstr "Za igro obstaja posodobitev, prosimo obiščite http://wz2100.net za prenos nove verzije."
 
+#. TRANSLATORS: Sidetext of structure limits screen
+#: src/multilimit.cpp:134
+msgid "LIMITS"
+msgstr "OMEJITVE"
+
 #: src/multilimit.cpp:148
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Nastavi privzeto in se vrni na prejšnji zaslon"
@@ -12686,10 +12690,15 @@ msgstr[3] "%u enote izbrane"
 msgid "Can't build anymore units, Unit Limit Reached — Production Halted"
 msgstr "Ne moremo izdelati več enot, meja enot dosežena - izdelava ustavljena"
 
-#: src/structure.cpp:2504
+#: src/structure.cpp:2508
 #, c-format
-msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
-msgstr "Ne moremo izdelati več \"%s\", meja poveljniškega nadzora dosežena - izdelava ustavljena"
+msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
+msgstr "Ne moremo izdelati \"%s\" brez središča za prenos povelij - izdelava ustavljena"
+
+#: src/structure.cpp:2513
+#, c-format
+msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
+msgstr "Ne moremo izdelati \"%s\", poveljniška meja dosežena - izdelava ustavljena"
 
 #: src/structure.cpp:2512
 #, c-format
@@ -12960,11 +12969,11 @@ msgstr "Verzija: %s,%s Zgrajen: %s%s"
 #~ msgid "Optimum Range"
 #~ msgstr "Najugodnejši domet"
 
-#~ msgid "Pursue"
-#~ msgstr "Zasleduj"
+msgid "Pursue"
+msgstr "Zasleduj"
 
-#~ msgid "Guard Position"
-#~ msgstr "Straži položaj"
+msgid "Guard Position"
+msgstr "Straži položaj"
 
 #~ msgid "Demo mode off - Returning to normal game mode"
 #~ msgstr "Demo način izklopljen - Vračanje v navadni način igre"
