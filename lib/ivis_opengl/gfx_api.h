@@ -22,6 +22,8 @@
 #include <memory>
 #include <string>
 
+#include "screen.h"
+
 namespace gfx_api
 {
 #ifdef GL_ONLY
@@ -90,5 +92,6 @@ namespace gfx_api
 		virtual texture* create_texture(const size_t& width, const size_t& height, const pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw) = 0;
 		static context& get();
+		virtual void debugStringMarker(const char *str) = 0;
 	};
 }

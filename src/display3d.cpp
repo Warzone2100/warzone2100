@@ -793,7 +793,7 @@ void draw3DScene()
 		{
 			pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 			pie_SetFogStatus(false);
-			GL_DEBUG("Draw 3D scene - radar");
+			gfx_api::context::get().debugStringMarker("Draw 3D scene - radar");
 			drawRadar();
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 			pie_SetFogStatus(true);
@@ -1190,7 +1190,7 @@ static void drawTiles(iView *player)
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	bucketRenderCurrentList(viewMatrix);
 
-	GL_DEBUG("Draw 3D scene - blueprints");
+	gfx_api::context::get().debugStringMarker("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix);
 
 	pie_RemainingPasses(currentGameFrame); // draws shadows and transparent shapes

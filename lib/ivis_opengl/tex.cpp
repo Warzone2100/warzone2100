@@ -240,7 +240,7 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 	{
 		if (strcmp(tmpname, _TEX_PAGE[i].name) == 0)
 		{
-			GL_DEBUG("Replacing texture");
+			gfx_api::context::get().debugStringMarker("Replacing texture");
 			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %zu (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().c_str(), i, _TEX_PAGE[i].id->id());
 			sstrcpy(tmpname, newfile.toUtf8().c_str());
 			pie_MakeTexPageName(tmpname);

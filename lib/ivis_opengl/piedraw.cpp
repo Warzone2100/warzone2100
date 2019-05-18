@@ -745,13 +745,13 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 {
 	// Draw models
 	// TODO, sort list to reduce state changes
-	GL_DEBUG("Remaining passes - opaque models");
+	gfx_api::context::get().debugStringMarker("Remaining passes - opaque models");
 	for (SHAPE const &shape : shapes)
 	{
 		pie_SetShaderStretchDepth(shape.stretch);
 		pie_Draw3DShape2(shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
 	}
-	GL_DEBUG("Remaining passes - shadows");
+	gfx_api::context::get().debugStringMarker("Remaining passes - shadows");
 	// Draw shadows
 	if (shadows)
 	{
@@ -759,7 +759,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	}
 	// Draw translucent models last
 	// TODO, sort list by Z order to do translucency correctly
-	GL_DEBUG("Remaining passes - translucent models");
+	gfx_api::context::get().debugStringMarker("Remaining passes - translucent models");
 	for (SHAPE const &shape : tshapes)
 	{
 		pie_SetShaderStretchDepth(shape.stretch);
@@ -769,7 +769,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	pie_DeactivateShader();
 	tshapes.clear();
 	shapes.clear();
-	GL_DEBUG("Remaining passes - done");
+	gfx_api::context::get().debugStringMarker("Remaining passes - done");
 }
 
 void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount)

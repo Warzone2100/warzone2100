@@ -18,6 +18,7 @@
 */
 
 #include "lib/framework/frame.h"
+#include "screen.h"
 #include "gfx_api_gl.h"
 
 static GLenum to_gl(const gfx_api::pixel_format& format)
@@ -178,4 +179,12 @@ gfx_api::context& gfx_api::context::get()
 {
 	static gl_context ctx;
 	return ctx;
+}
+
+void gl_context::debugStringMarker(const char *str)
+{
+	if (GLEW_GREMEDY_string_marker)
+	{
+		glStringMarkerGREMEDY(0, str);
+	}
 }

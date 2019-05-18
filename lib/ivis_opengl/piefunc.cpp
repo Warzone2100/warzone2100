@@ -187,7 +187,7 @@ void pie_Skybox_Init()
 		uvLeft1, uvLeft0, uvBack1,
 	};
 
-	GL_DEBUG("Initializing skybox");
+	gfx_api::context::get().debugStringMarker("Initializing skybox");
 	skyboxGfx = new GFX(GFX_TEXTURE, GL_TRIANGLES, 3);
 	skyboxGfx->buffers(24, vertex.data(), texc.data());
 }
