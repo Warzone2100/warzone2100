@@ -86,9 +86,8 @@ int main(int argc, char *argv[])
 	return realmain(argc, argv);
 }
 
-// At this time, we only have 1 window and 1 GL context.
+// At this time, we only have 1 window.
 static SDL_Window *WZwindow = nullptr;
-static SDL_GLContext WZglcontext = nullptr;
 
 // The screen that the game window is on.
 int screenIndex = 0;
@@ -1604,6 +1603,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	}
 #endif
 
+// Set OpenGL attributes before creating the SDL Window
 	// Set the double buffer OpenGL attribute.
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -1623,6 +1623,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 #endif
+//
 
 	// Populated our resolution list (does all displays now)
 	SDL_DisplayMode	displaymode;
@@ -1832,65 +1833,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	// Set the minimum window size
 	SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
 
-	WZglcontext = SDL_GL_CreateContext(WZwindow);
-	if (!WZglcontext)
-	{
-		debug(LOG_ERROR, "Failed to create a openGL context! [%s]", SDL_GetError());
-		return false;
-	}
-
-	if (highDPI)
-	{
-		// When high-DPI mode is enabled, retrieve the DrawableSize in pixels
-		// for use in the glViewport function - this will be the actual
-		// pixel dimensions, not the window size (which is in points).
-		//
-		// NOTE: Do not do this if high-DPI support is disabled, or the viewport
-		// size may be set inappropriately.
-
-		SDL_GL_GetDrawableSize(WZwindow, &width, &height);
-		debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", windowWidth, windowHeight, width, height);
-	}
-
-	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
-	debug(LOG_WZ, "Bpp = %d format %s" , bpp, SDL_GetPixelFormatName(SDL_GetWindowPixelFormat(WZwindow)));
-	if (!bpp)
-	{
-		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
-		return false;
-	}
-	switch (bpp)
-	{
-	case 32:
-	case 24:		// all is good...
-		break;
-	case 16:
-		info("Using colour depth of %i instead of a 32/24 bit depth (True color).", bpp);
-		info("You will experience graphics glitches!");
-		break;
-	case 8:
-		debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
-		SDL_Quit();
-		exit(1);
-		break;
-	default:
-		debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
-		exit(1);
-		break;
-	}
-
-	// Enable/disable vsync if requested by the user
-	wzSetSwapInterval(vsync);
-
-	int value = 0;
-	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1 || value == 0)
-	{
-		debug(LOG_FATAL, "OpenGL initialization did not give double buffering!");
-		debug(LOG_FATAL, "Double buffering is required for this game!");
-		SDL_Quit();
-		exit(1);
-	}
-
 #if !defined(WZ_OS_MAC) // Do not use this method to set the window icon on macOS.
 
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -1957,10 +1899,42 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	cocoaSetupWZMenus();
 #endif
 
-	// FIXME: aspect ratio
-	glViewport(0, 0, width, height);
-	glCullFace(GL_FRONT);
-	glEnable(GL_CULL_FACE);
+	if (!gfx_api::context::get().setSwapchain(WZwindow))
+	{
+		debug(LOG_FATAL, "gfx_api::context::get().setSwapchain failed");
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+
+	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
+	debug(LOG_WZ, "Bpp = %d format %s" , bpp, SDL_GetPixelFormatName(SDL_GetWindowPixelFormat(WZwindow)));
+	if (!bpp)
+	{
+		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
+		return false;
+	}
+	switch (bpp)
+	{
+	case 32:
+	case 24:		// all is good...
+		break;
+	case 16:
+		info("Using colour depth of %i instead of a 32/24 bit depth (True color).", bpp);
+		info("You will experience graphics glitches!");
+		break;
+	case 8:
+		debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
+		SDL_Quit();
+		exit(1);
+		break;
+	default:
+		debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
+		exit(1);
+		break;
+	}
+
+	// Enable/disable vsync if requested by the user
+	wzSetSwapInterval(vsync);
 
 	return true;
 }

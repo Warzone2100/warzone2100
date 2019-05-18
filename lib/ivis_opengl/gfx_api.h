@@ -21,6 +21,9 @@
 
 #include <memory>
 #include <string>
+#include <map>
+
+struct SDL_Window; // forward-declare
 
 #include "screen.h"
 
@@ -92,6 +95,16 @@ namespace gfx_api
 		virtual texture* create_texture(const size_t& width, const size_t& height, const pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw) = 0;
 		static context& get();
+		virtual bool setSwapchain(struct SDL_Window* window) = 0;
 		virtual void debugStringMarker(const char *str) = 0;
+		virtual void debugSceneBegin(const char *descr) = 0;
+		virtual void debugSceneEnd(const char *descr) = 0;
+		virtual bool debugPerfAvailable() = 0;
+		virtual bool debugPerfStart(size_t sample) = 0;
+		virtual void debugPerfStop() = 0;
+		virtual void debugPerfBegin(PERF_POINT pp, const char *descr) = 0;
+		virtual void debugPerfEnd(PERF_POINT pp) = 0;
+		virtual uint64_t debugGetPerfValue(PERF_POINT pp) = 0;
+		virtual std::map<std::string, std::string> getBackendGameInfo() = 0;
 	};
 }
