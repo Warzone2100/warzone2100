@@ -5398,14 +5398,11 @@ bool writeGameInfo(const char *pFileName)
 	ini.setValue("debug", getDebugMappingStatus());
 	ini.setValue("level/map", getLevelName());
 	ini.setValue("mods", !getModList().empty() ? getModList().c_str() : "None");
-	ini.setValue("openGL_vendor", opengl.vendor);
-	ini.setValue("openGL_renderer", opengl.renderer);
-	ini.setValue("openGL_version", opengl.version);
-	ini.setValue("openGL_GLEW_version", opengl.GLEWversion);
-	ini.setValue("openGL_GLSL_version", opengl.GLSLversion);
-	// NOTE: deprecated for GL 3+. Needed this to check what extensions some chipsets support for the openGL hacks
-	std::string extensions = (const char *) glGetString(GL_EXTENSIONS);
-	ini.setValue("GL_EXTENSIONS", extensions.data());
+	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
+	for (auto& kv : backendInfo)
+	{
+		ini.setValue(WzString::fromUtf8(kv.first), WzString::fromUtf8(kv.second));
+	}
 	ini.endGroup();
 	return true;
 }

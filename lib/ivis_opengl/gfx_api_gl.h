@@ -56,10 +56,25 @@ struct gl_buffer final : public gfx_api::buffer
 
 struct gl_context final : public gfx_api::context
 {
+	SDL_Window* WZwindow = nullptr;
+	bool khr_debug = false;
+
 	gl_context() {}
 	~gl_context();
 
 	virtual gfx_api::texture* create_texture(const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename) override;
 	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw) override;
+	virtual bool setSwapchain(struct SDL_Window* window) override;
 	virtual void debugStringMarker(const char *str) override;
+	virtual void debugSceneBegin(const char *descr) override;
+	virtual void debugSceneEnd(const char *descr) override;
+	virtual bool debugPerfAvailable() override;
+	virtual bool debugPerfStart(size_t sample) override;
+	virtual void debugPerfStop() override;
+	virtual void debugPerfBegin(PERF_POINT pp, const char *descr) override;
+	virtual void debugPerfEnd(PERF_POINT pp) override;
+	virtual uint64_t debugGetPerfValue(PERF_POINT pp) override;
+	virtual std::map<std::string, std::string> getBackendGameInfo() override;
+private:
+	bool initGLContext();
 };
