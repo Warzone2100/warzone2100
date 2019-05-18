@@ -84,7 +84,6 @@ unsigned int wzGetCurrentDisplayScale();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
 void wzSetCursor(CURSOR index);
 void wzApplyCursor();
-void wzScreenFlip();	///< Swap the graphics buffers
 void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse();		///< Trap mouse cursor in application window
 void wzReleaseMouse();	///< Undo the wzGrabMouse operation

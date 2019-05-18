@@ -329,58 +329,6 @@ void wzDisplayDialog(DialogType type, const char *title, const char *message)
 	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
-bool wzIsMinimized()
-{
-	assert(WZwindow != nullptr);
-	Uint32 flags = SDL_GetWindowFlags(WZwindow);
-	if (flags & SDL_WINDOW_MINIMIZED)
-	{
-		return true;
-	}
-	return false;
-}
-
-void wzScreenFlip()
-{
-#if defined(WZ_OS_MAC)
-	// Workaround for OpenGL on macOS (see below)
-	const uint32_t swapStartTime = SDL_GetTicks();
-#endif
-
-	SDL_GL_SwapWindow(WZwindow);
-
-#if defined(WZ_OS_MAC)
-	// Workaround for OpenGL on macOS
-	// - If the OpenGL window is minimized (or occluded), SwapWindow may not wait for the vertical blanking interval
-	// - To workaround this, detect when we seem to be spinning without any wait, and sleep for a bit
-	static uint32_t numFramesNoVsync = 0;
-	static uint32_t lastSwapEndTime = 0;
-	const bool isMinimized = wzIsMinimized();
-	const uint32_t minFrameInterval = 1000 / ((isMinimized) ? 60 : 120);
-	const uint32_t minSwapEndTick = swapStartTime + 2;
-	uint32_t swapEndTime = SDL_GetTicks();
-	const uint32_t frameTime = swapEndTime - lastSwapEndTime;
-	if ((vsyncIsEnabled || isMinimized) && !SDL_TICKS_PASSED(swapEndTime, minSwapEndTick) && (frameTime < minFrameInterval))
-	{
-		const uint32_t leewayFramesBeforeThrottling = (isMinimized) ? 2 : 4;
-		if (leewayFramesBeforeThrottling < numFramesNoVsync)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(minFrameInterval - frameTime));
-			swapEndTime = SDL_GetTicks();
-		}
-		else
-		{
-			++numFramesNoVsync;
-		}
-	}
-	else if (0 < numFramesNoVsync)
-	{
-		--numFramesNoVsync;
-	}
-	lastSwapEndTime = swapEndTime;
-#endif
-}
-
 void wzToggleFullscreen()
 {
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);

@@ -95,7 +95,7 @@ void pie_ScreenFlip(int clearMode)
 	GLbitfield clearFlags = 0;
 
 	screenDoDumpToDiskIfRequired();
-	wzScreenFlip();
+	gfx_api::context::get().flip();
 	wzPerfFrame();
 	if (clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
 	{

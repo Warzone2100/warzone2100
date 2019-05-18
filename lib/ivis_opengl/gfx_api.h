@@ -96,6 +96,7 @@ namespace gfx_api
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw) = 0;
 		static context& get();
 		virtual bool setSwapchain(struct SDL_Window* window) = 0;
+		virtual void flip() = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
 		virtual void debugSceneEnd(const char *descr) = 0;
