@@ -22,6 +22,11 @@
 #include "lib/ivis_opengl/gfx_api_gl.h"
 #include <SDL_video.h>
 #include <SDL_opengl.h>
+#include <SDL_timer.h>
+#include <thread>
+#include <chrono>
+
+bool vsyncIsEnabled = true; // TODO: Actually set this to match the result of SDL_GL_SetSwapInterval
 
 bool gl_context::setSwapchain(struct SDL_Window* window)
 {
@@ -67,4 +72,45 @@ bool gl_context::setSwapchain(struct SDL_Window* window)
 	}
 
 	return true;
+}
+
+void gl_context::flip()
+{
+#if defined(WZ_OS_MAC)
+	// Workaround for OpenGL on macOS (see below)
+	const uint32_t swapStartTime = SDL_GetTicks();
+#endif
+
+	SDL_GL_SwapWindow(WZwindow);
+
+#if defined(WZ_OS_MAC)
+	// Workaround for OpenGL on macOS
+	// - If the OpenGL window is minimized (or occluded), SwapWindow may not wait for the vertical blanking interval
+	// - To workaround this, detect when we seem to be spinning without any wait, and sleep for a bit
+	static uint32_t numFramesNoVsync = 0;
+	static uint32_t lastSwapEndTime = 0;
+	const bool isMinimized = static_cast<bool>(SDL_GetWindowFlags(WZwindow) & SDL_WINDOW_MINIMIZED);
+	const uint32_t minFrameInterval = 1000 / ((isMinimized) ? 60 : 120);
+	const uint32_t minSwapEndTick = swapStartTime + 2;
+	uint32_t swapEndTime = SDL_GetTicks();
+	const uint32_t frameTime = swapEndTime - lastSwapEndTime;
+	if ((vsyncIsEnabled || isMinimized) && !SDL_TICKS_PASSED(swapEndTime, minSwapEndTick) && (frameTime < minFrameInterval))
+	{
+		const uint32_t leewayFramesBeforeThrottling = (isMinimized) ? 2 : 4;
+		if (leewayFramesBeforeThrottling < numFramesNoVsync)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(minFrameInterval - frameTime));
+			swapEndTime = SDL_GetTicks();
+		}
+		else
+		{
+			++numFramesNoVsync;
+		}
+	}
+	else if (0 < numFramesNoVsync)
+	{
+		--numFramesNoVsync;
+	}
+	lastSwapEndTime = swapEndTime;
+#endif
 }
