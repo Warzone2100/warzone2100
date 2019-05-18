@@ -61,4 +61,5 @@ struct gl_context final : public gfx_api::context
 
 	virtual gfx_api::texture* create_texture(const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename) override;
 	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw) override;
+	virtual void debugStringMarker(const char *str) override;
 };

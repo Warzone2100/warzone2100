@@ -354,7 +354,7 @@ void wzPerfStart()
 	{
 		char text[80];
 		ssprintf(text, "Starting performance sample %02d", perfList.size());
-		GL_DEBUG(text);
+		gfx_api::context::get().debugStringMarker(text);
 		perfStarted = true;
 	}
 }
@@ -440,7 +440,7 @@ void wzPerfFrame()
 	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1,
 	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
 	screendump_required = true;
-	GL_DEBUG("Performance sample complete");
+	gfx_api::context::get().debugStringMarker("Performance sample complete");
 }
 
 static const char *sceneActive = nullptr;
