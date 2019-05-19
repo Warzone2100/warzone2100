@@ -277,7 +277,7 @@ fi
 WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
 AX_C_CHECK_FLAG([-Werror -Wno-expansion-to-defined -Wno-error=cpp], [#warning x], , WZ_WARNINGS_GCC="${WZ_WARNINGS_GCC} -Wno-expansion-to-defined")
 WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement ${CFLAGS_IGNORE_WARNINGS}"
-WZ_WARNINGS_GCC_CXX="${WZ_Wno_}enum-compare ${WZ_WARNINGS_GCC}"
+WZ_WARNINGS_GCC_CXX="${WZ_Wno_}enum-compare ${WZ_Wno_}deprecated-copy ${WZ_WARNINGS_GCC}"
 # gcc 8.0 added some fairly obnoxious string truncation warnings
 AX_C_CHECK_FLAG([-Werror -Wno-stringop-truncation -Wno-error=cpp], [#warning x], , WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC_CXX} -Wno-stringop-truncation")
 AX_C_CHECK_FLAG([-Werror -Wno-stringop-truncation -Wno-error=cpp], [#warning x], , WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC_C} -Wno-stringop-truncation")
