@@ -7,11 +7,11 @@
 1. **macOS 10.12+**
     - While building may work on prior versions of macOS, it is only tested on macOS 10.12+.
 
-2. **Xcode 8 / 9**
+2. **Xcode 8 / 9 / 10**
     - If you do not have Xcode 8.3+ you can get it for free at the [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) or [Apple's website](http://developer.apple.com/technology/xcode.html).
 
-3. **CMake 3.11.3+** (required to generate the Xcode project)
-    - If you do not have CMake 3.11+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
+3. **CMake 3.14.1+** (required to generate the Xcode project)
+    - If you do not have CMake 3.14+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
 
 4. **Gettext** (required to compile the translations and language files)
     - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:

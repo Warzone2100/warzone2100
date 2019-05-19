@@ -369,14 +369,19 @@ std::pair<bool, int> seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BA
 	bool foundObj = false, foundGroup = false;
 	for (auto &l : labels)
 	{
-		if (l.id == seen->id && l.triggered == 0
-		    && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		if (l.triggered != 0 || !(l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		{
+			continue;
+		}
+
+		// Don't let a seen game object ID which matches a group label ID to prematurely
+		// trigger a group label.
+		if (l.type != SCRIPT_GROUP && l.id == seen->id)
 		{
 			l.triggered = viewer->id; // record who made the discovery
 			foundObj = true;
 		}
-		else if (l.type == SCRIPT_GROUP && l.id == groupId && l.triggered == 0
-		         && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		else if (l.type == SCRIPT_GROUP && l.id == groupId)
 		{
 			l.triggered = viewer->id; // record who made the discovery
 			foundGroup = true;

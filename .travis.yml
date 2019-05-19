@@ -166,7 +166,8 @@ matrix:
       env:
         - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
-        #- brew update
+        - brew update
+        - brew upgrade cmake
         - brew install gettext
         - brew install asciidoc
         - brew install docbook-xsl
@@ -175,6 +176,7 @@ matrix:
         # gcc6+ is currently required to bootstrap vcpkg on macOS
         - brew install gcc@7 || brew link --overwrite gcc@7
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
+        - cmake --version
       script:
         - source build_tools/ci/travis/export_build_output_desc.sh
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
@@ -189,13 +191,15 @@ matrix:
       env:
         - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
-        #- brew update
+        - brew update
+        - brew upgrade cmake
         - brew install gettext
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-        - gem install asciidoctor -v 2.0.6 --no-document
+        - gem install asciidoctor -v 2.0.9 --no-document
         # gcc6+ is currently required to bootstrap vcpkg on macOS
         - brew install gcc@7 || brew link --overwrite gcc@7
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
+        - cmake --version
       script:
         - source build_tools/ci/travis/export_build_output_desc.sh
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
@@ -211,13 +215,15 @@ matrix:
       env:
         - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
-        #- brew update
+        - brew update
+        - brew upgrade cmake
         - brew install gettext
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-        - gem install asciidoctor -v 2.0.6 --no-document
+        - gem install asciidoctor -v 2.0.9 --no-document
         # gcc6+ is currently required to bootstrap vcpkg on macOS
-        - brew install gcc@7 || brew link --overwrite gcc@7
+        - brew install gcc@8 || brew link --overwrite gcc@8
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
+        - cmake --version
       script:
         - source build_tools/ci/travis/export_build_output_desc.sh
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"

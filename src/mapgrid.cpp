@@ -94,7 +94,8 @@ void gridShutDown()
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 {
-	return (uint32_t)(x * x + y * y) <= radius * radius;
+	// cast to int64 to avoid integer overflow
+	return ((int64_t)x * (int64_t)x + (int64_t)y * (int64_t)y) <= ((int64_t)radius * (int64_t)radius);
 }
 
 // initialise the grid system to start iterating through units that
