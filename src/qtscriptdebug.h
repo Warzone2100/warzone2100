@@ -20,6 +20,11 @@
 #ifndef __INCLUDED_QTSCRIPTDEBUG_H__
 #define __INCLUDED_QTSCRIPTDEBUG_H__
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+// not push / pop because this is needed for the generated qtscriptdebug moc cpp file
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
 // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtGui/QStandardItemModel>
 #include <QtCore/QHash>
