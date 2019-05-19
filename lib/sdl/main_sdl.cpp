@@ -1258,7 +1258,7 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
 	glViewport(0, 0, drawableWidth, drawableHeight);
 	glCullFace(GL_FRONT);
-	glEnable(GL_CULL_FACE);
+//	glEnable(GL_CULL_FACE);
 }
 
 

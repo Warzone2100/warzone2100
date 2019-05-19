@@ -88,7 +88,7 @@ bool screenInitialise()
 	pie_Skybox_Init();
 
 	// Generate backdrop render
-	backdropGfx = new GFX(GFX_TEXTURE, GL_TRIANGLE_STRIP, 2);
+	backdropGfx = new GFX(GFX_TEXTURE, 2);
 
 	return true;
 }
@@ -290,10 +290,11 @@ bool screen_GetBackDrop()
 
 void screen_Display()
 {
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
-
 	// Draw backdrop
-	backdropGfx->draw(glm::ortho(0.f, (float)pie_GetVideoBufferWidth(), (float)pie_GetVideoBufferHeight(), 0.f));
+	const auto& modelViewProjectionMatrix = glm::ortho(0.f, (float)pie_GetVideoBufferWidth(), (float)pie_GetVideoBufferHeight(), 0.f);
+	gfx_api::BackDropPSO::get().bind();
+	gfx_api::BackDropPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec2(0.f), glm::vec2(0.f), glm::vec4(1), 0 });
+	backdropGfx->draw<gfx_api::BackDropPSO>(modelViewProjectionMatrix);
 
 	if (mappreview)
 	{
@@ -325,7 +326,6 @@ void screen_Display()
 			player_Text[i].render(x, y, WZCOL_WHITE);
 		}
 	}
-	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 //******************************************************************
@@ -384,7 +384,7 @@ void screen_Upload(const char *newBackDropBmp)
 	{
 		// Slight hack to display maps previews in background.
 		// Bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, GL_NEAREST, gfx_api::pixel_format::rgb, newBackDropBmp);
+		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, newBackDropBmp);
 		backdropIsMapPreview = true;
 	}
 

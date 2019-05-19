@@ -28,6 +28,8 @@
 
 #include "screen.h"
 
+#include <algorithm>
+
 //*************************************************************************
 
 struct iTexPage
@@ -101,48 +103,24 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 
 	if (gameTexture) // this is a game texture, use texture compression
 	{
-		gfx_api::pixel_format format{};
-		switch (iV_getPixelFormat(s))
-		{
-		case gfx_api::pixel_format::rgba:
-			format = wz_texture_compression ? gfx_api::pixel_format::compressed_rgba : gfx_api::pixel_format::rgba;
-			break;
-		case gfx_api::pixel_format::rgb:
-			format = wz_texture_compression ? gfx_api::pixel_format::compressed_rgb : gfx_api::pixel_format::rgb;
-			break;
-		default:
-			debug(LOG_FATAL, "getPixelFormat only returns rgb or rgba at the moment");
-		}
+		gfx_api::pixel_format format = iV_getPixelFormat(s);
 		if (_TEX_PAGE[page].id)
 			delete _TEX_PAGE[page].id;
-		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(s->width, s->height, format, filename);
-		pie_Texture(page).upload(0u, 0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp, true);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		size_t mip_count = floor(log(std::max(s->width, s->height))) + 1;
+		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(mip_count, s->width, s->height, format, filename);
+		pie_Texture(page).upload_and_generate_mipmaps(0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
 	}
 	else	// this is an interface texture, do not use compression
 	{
 		if (_TEX_PAGE[page].id)
 			delete _TEX_PAGE[page].id;
-		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(s->width, s->height, gfx_api::pixel_format::rgba, filename);
+		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(1, s->width, s->height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, filename);
 		pie_Texture(page).upload(0u, 0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
-	pie_SetTexturePage(page);
+
 	// it is uploaded, we do not need it anymore
 	free(s->bmp);
 	s->bmp = nullptr;
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
-	if (GLEW_EXT_texture_filter_anisotropic)
-	{
-		gfx_api::gfxFloat max;
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	/* Send back the texpage number so we can store it in the IMD */
 	return page;
@@ -287,9 +265,9 @@ gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image)
 	switch (image->depth)
 	{
 	case 3:
-		return gfx_api::pixel_format::rgb;
+		return gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
 	case 4:
-		return gfx_api::pixel_format::rgba;
+		return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	default:
 		debug(LOG_FATAL, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
 		return gfx_api::pixel_format::invalid;

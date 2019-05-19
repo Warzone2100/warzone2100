@@ -42,7 +42,6 @@
 #include "pietypes.h"
 #include "piepalette.h"
 #include "pieclip.h"
-#include "lib/framework/opengl.h"
 #include <list>
 
 /***************************************************************************/
@@ -75,33 +74,48 @@ class GFX
 {
 public:
 	/// Initialize class and allocate GPU resources
-	GFX(GFXTYPE type, GLenum drawType = GL_TRIANGLES, int coordsPerVertex = 3);
+	GFX(GFXTYPE type, int coordsPerVertex = 3);
 
 	/// Destroy GPU held resources
 	~GFX();
 
 	/// Load texture data from file, allocate space for it, and put it on the GPU
-	void loadTexture(const char *filename, GLenum filter = GL_LINEAR);
+	void loadTexture(const char *filename);
 
 	/// Allocate space on the GPU for texture of given parameters. If image is non-NULL,
 	/// then that memory buffer is uploaded to the GPU.
-	void makeTexture(int width, int height, GLenum filter = GL_LINEAR, const gfx_api::pixel_format& format = gfx_api::pixel_format::rgba, const GLvoid *image = nullptr);
+	void makeTexture(int width, int height, const gfx_api::pixel_format& format = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, const void *image = nullptr);
 
 	/// Upload given memory buffer to already allocated texture space on the GPU
-	void updateTexture(const GLvoid *image, int width = -1, int height = -1);
+	void updateTexture(const void *image, int width = -1, int height = -1);
 
 	/// Upload vertex and texture buffer data to the GPU
-	void buffers(int vertices, const GLvoid *vertBuf, const GLvoid *texBuf);
+	void buffers(int vertices, const void *vertBuf, const void *texBuf);
 
 	/// Draw everything
-	void draw(const glm::mat4 &modelViewProjectionMatrix);
+	template<typename PSO>
+	typename std::enable_if<(std::tuple_size<typename PSO::texture_tuple>::value != 0), void>::type draw(const glm::mat4 &modelViewProjectionMatrix)
+	{
+		PSO::get().bind_textures(mTexture);
+		PSO::get().bind_vertex_buffers(mBuffers[VBO_VERTEX], mBuffers[VBO_TEXCOORD]);
+		PSO::get().draw(mSize, 0);
+		PSO::get().unbind_vertex_buffers(mBuffers[VBO_VERTEX], mBuffers[VBO_TEXCOORD]);
+	}
+
+	template<typename PSO>
+	typename std::enable_if<(std::tuple_size<typename PSO::texture_tuple>::value == 0), void>::type draw(const glm::mat4 &modelViewProjectionMatrix)
+	{
+		PSO::get().bind_constants({ modelViewProjectionMatrix });
+		PSO::get().bind_vertex_buffers(mBuffers[VBO_VERTEX], mBuffers[VBO_TEXCOORD]);
+		PSO::get().draw(mSize, 0);
+		PSO::get().unbind_vertex_buffers(mBuffers[VBO_VERTEX], mBuffers[VBO_TEXCOORD]);
+	}
 
 private:
 	GFXTYPE mType;
 	gfx_api::pixel_format mFormat;
 	int mWidth;
 	int mHeight;
-	GLenum mdrawType;
 	int mCoordsPerVertex;
 	gfx_api::buffer* mBuffers[VBO_COUNT] = { nullptr };
 	gfx_api::texture* mTexture = nullptr;
@@ -122,7 +136,8 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 {
 	iV_Box2(x0, y0, x1, y1, first, first);
 }
-void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour, REND_MODE rendermode = REND_OPAQUE);
+void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour);
+void pie_BoxFill_alpha(int x0, int y0, int x1, int y1, PIELIGHT colour);
 struct PIERECT_DrawRequest
 {
 	PIERECT_DrawRequest(int x0, int y0, int x1, int y1, PIELIGHT color)
@@ -139,7 +154,7 @@ struct PIERECT_DrawRequest
 	int y1;
 	PIELIGHT color;
 };
-void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects, REND_MODE rendermode = REND_OPAQUE);
+void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects);
 struct PIERECT  ///< Screen rectangle.
 {
 	float x, y, w, h;
@@ -194,8 +209,9 @@ public:
 private:
 	std::list<PieDrawImageRequest> _imageDrawRequests;
 };
-void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour);
-void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour);
+
+void iV_DrawImageAnisotropic(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
+void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImage2(const WzString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());

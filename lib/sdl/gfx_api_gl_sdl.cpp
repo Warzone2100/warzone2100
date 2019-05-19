@@ -64,7 +64,7 @@ bool gl_context::setSwapchain(struct SDL_Window* window)
 
 	glViewport(0, 0, width, height);
 	glCullFace(GL_FRONT);
-	glEnable(GL_CULL_FACE);
+//	glEnable(GL_CULL_FACE);
 
 	if (!initGLContext())
 	{
@@ -82,6 +82,8 @@ void gl_context::flip()
 #endif
 
 	SDL_GL_SwapWindow(WZwindow);
+	glUseProgram(0);
+	current_program = nullptr;
 
 #if defined(WZ_OS_MAC)
 	// Workaround for OpenGL on macOS

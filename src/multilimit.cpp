@@ -487,9 +487,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		scale = LARGE_STRUCT_SCALE;
 	}
 
-	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	displayStructureStatButton(stat, &rotation, &position, scale);
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
 	cache.wzNameText.setText(_(getName(stat)), font_regular);

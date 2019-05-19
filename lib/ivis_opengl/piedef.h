@@ -57,7 +57,6 @@ void pie_Lighting0(LIGHTING_TYPE entry, const float value[4]);
 
 void pie_RemainingPasses(uint64_t currentGameFrame);
 
-void pie_SetUp();
 void pie_CleanUp();
 
 #endif // _piedef_h

@@ -22,7 +22,6 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piedef.h"
@@ -51,8 +50,8 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 
 	if (!radarViewGfx[0])
 	{
-		radarViewGfx[0] = new GFX(GFX_COLOUR, GL_TRIANGLE_STRIP, 2);
-		radarViewGfx[1] = new GFX(GFX_COLOUR, GL_LINE_STRIP, 2);
+		radarViewGfx[0] = new GFX(GFX_COLOUR, 2);
+		radarViewGfx[1] = new GFX(GFX_COLOUR, 2);
 	}
 
 	static_assert(VW_VERTICES == 5, "Assumption that VW_VERTICES == 5 invalid. Update the following code.");
@@ -67,7 +66,7 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 	pieVrts_insidefill[3] = v[1];
 
 	gfx_api::gfxFloat vert[VW_VERTICES * 2];
-	GLbyte cols[VW_VERTICES * 4];
+	uint8_t cols[VW_VERTICES * 4];
 
 	// Initialize the RGB values for both, and the alpha for the inside fill
 	for (int i = 0; i < VW_VERTICES * 4; i += 4)
@@ -101,27 +100,27 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 
 void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix)
 {
-	pie_SetRendMode(REND_ALPHA);
-	radarViewGfx[0]->draw(modelViewProjectionMatrix);
-	radarViewGfx[1]->draw(modelViewProjectionMatrix);
+	gfx_api::RadarViewInsideFillPSO::get().bind();
+	gfx_api::RadarViewInsideFillPSO::get().bind_constants({ modelViewProjectionMatrix });
+	radarViewGfx[0]->draw<gfx_api::RadarViewInsideFillPSO>(modelViewProjectionMatrix);
+	gfx_api::RadarViewOutlinePSO::get().bind();
+	gfx_api::RadarViewOutlinePSO::get().bind_constants({ modelViewProjectionMatrix });
+	radarViewGfx[1]->draw<gfx_api::RadarViewOutlinePSO>(modelViewProjectionMatrix);
 }
 
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix)
 {
-	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetRendMode(REND_ADDITIVE);
 	glm::vec4 color(c.byte.r / 255.f, c.byte.g / 255.f, c.byte.b / 255.f, 128.f / 255.f);
-	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() * modelViewMatrix, color);
 
 	static gfx_api::buffer* buffer = nullptr;
 	if (!buffer)
 		buffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
 	buffer->upload(3 * sizeof(Vector3f), vrt.data());
-	buffer->bind();
-	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(program.locVertex);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDisableVertexAttribArray(program.locVertex);
+	gfx_api::TransColouredTrianglePSO::get().bind();
+	gfx_api::TransColouredTrianglePSO::get().bind_constants({ pie_PerspectiveGet() * modelViewMatrix, glm::vec2(0), glm::vec2(0), color });
+	gfx_api::TransColouredTrianglePSO::get().bind_vertex_buffers(buffer);
+	gfx_api::TransColouredTrianglePSO::get().draw(3, 0);
+	gfx_api::TransColouredTrianglePSO::get().unbind_vertex_buffers(buffer);
 }
 
 void pie_Skybox_Init()
@@ -188,14 +187,13 @@ void pie_Skybox_Init()
 	};
 
 	gfx_api::context::get().debugStringMarker("Initializing skybox");
-	skyboxGfx = new GFX(GFX_TEXTURE, GL_TRIANGLES, 3);
+	skyboxGfx = new GFX(GFX_TEXTURE, 3);
 	skyboxGfx->buffers(24, vertex.data(), texc.data());
 }
 
 void pie_Skybox_Texture(const char *filename)
 {
 	skyboxGfx->loadTexture(filename);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 }
 
 void pie_Skybox_Shutdown()
@@ -205,11 +203,9 @@ void pie_Skybox_Shutdown()
 
 void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix)
 {
-	// no use in updating the depth buffer
-	glDepthMask(GL_FALSE);
-	// enable alpha
-	pie_SetRendMode(REND_ALPHA);
+	const auto& modelViewProjectionMatrix = pie_PerspectiveGet() * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale));
 
-	// Apply scale matrix
-	skyboxGfx->draw(pie_PerspectiveGet() * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale)));
+	gfx_api::SkyboxPSO::get().bind();
+	gfx_api::SkyboxPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec2(0.f), glm::vec2(0.f), glm::vec4(1.f), 0 });
+	skyboxGfx->draw<gfx_api::SkyboxPSO>(modelViewProjectionMatrix);
 }

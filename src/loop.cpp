@@ -312,7 +312,6 @@ static GAMECODE renderLoop()
 		}
 		wzPerfBegin(PERF_GUI, "User interface");
 		/* Display the in game interface */
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
 
 		if (bMultiPlayer && bDisplayMultiJoiningStatus)
@@ -325,7 +324,6 @@ static GAMECODE renderLoop()
 		{
 			intDisplayWidgets();
 		}
-		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
 		wzPerfEnd(PERF_GUI);
 	}
