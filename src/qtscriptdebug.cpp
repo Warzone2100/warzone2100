@@ -22,6 +22,11 @@
  * New scripting system - debug GUI
  */
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
 // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtCore/QHash>
 #include <QtScript/QScriptEngine>
@@ -39,6 +44,10 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QStandardItemModel>
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
 
 #include "qtscriptdebug.h"
 

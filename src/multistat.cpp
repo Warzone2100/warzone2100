@@ -25,7 +25,16 @@
  * load / update / store multiplayer statistics for league tables etc...
  */
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
 #include <QtCore/QSettings> // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
 
 #include "lib/framework/frame.h"
 #include "lib/framework/file.h"
