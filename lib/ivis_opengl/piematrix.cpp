@@ -22,7 +22,6 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
 
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -110,12 +109,12 @@ const glm::mat4& pie_PerspectiveGet()
 
 void pie_Begin3DScene()
 {
-	glDepthRange(0.1, 1);
+	gfx_api::context::get().set_depth_range(0.1f, 1.f);
 }
 
 void pie_BeginInterface()
 {
-	glDepthRange(0, 0.1);
+	gfx_api::context::get().set_depth_range(0.f, 0.1f);
 }
 
 void pie_SetGeometricOffset(int x, int y)

@@ -36,7 +36,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
-#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/gfx_api.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "piedef.h"
@@ -68,8 +67,6 @@ void rendStatesRendModeHack();  // Sets rendStates.rendMode = REND_ALPHA; (Added
  */
 /***************************************************************************/
 void pie_SetDefaultStates();//Sets all states
-void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
-void pie_SetDepthOffset(float offset);
 //fog available
 void pie_EnableFog(bool val);
 bool pie_GetFogEnabled();
@@ -80,179 +77,33 @@ void pie_SetFogColour(PIELIGHT colour);
 PIELIGHT pie_GetFogColour() WZ_DECL_PURE;
 void pie_UpdateFogDistance(float begin, float end);
 //render states
-void pie_SetTexturePage(SDWORD num);
-void pie_SetRendMode(REND_MODE rendMode);
 RENDER_STATE getCurrentRenderState();
 
 int pie_GetMaxAntialiasing();
 
-enum SHADER_VERSION
-{
-	VERSION_120,
-	VERSION_130,
-	VERSION_140,
-	VERSION_150_CORE,
-	VERSION_330_CORE,
-	VERSION_400_CORE,
-	VERSION_410_CORE,
-	VERSION_FIXED_IN_FILE,
-	VERSION_AUTODETECT_FROM_LEVEL_LOAD
-};
 bool pie_LoadShaders();
 void pie_FreeShaders();
-SHADER_MODE pie_LoadShader(SHADER_VERSION vertex_version, SHADER_VERSION fragment_version, const char *programName, const std::string &vertexPath, const std::string &fragmentPath,
-	const std::vector<std::string> &);
-inline SHADER_MODE pie_LoadShader(SHADER_VERSION version, const char *programName, const std::string &vertexPath, const std::string &fragmentPath,
-						   const std::vector<std::string> &uniformNames)
-{
-	return pie_LoadShader(version, version, programName, vertexPath, fragmentPath, uniformNames);
-}
 
 namespace pie_internal
 {
-	struct SHADER_PROGRAM
-	{
-		GLuint program = 0;
-
-		// Uniforms
-		std::vector<GLint> locations;
-
-		// Attributes
-		GLint locVertex = 0;
-		GLint locNormal = 0;
-		GLint locTexCoord = 0;
-		GLint locColor = 0;
-	};
-
-	extern std::vector<SHADER_PROGRAM> shaderProgram;
-	extern SHADER_MODE currentShaderMode;
 	extern gfx_api::buffer* rectBuffer;
-
-	/**
-	 * setUniforms is an overloaded wrapper around glUniform* functions
-	 * accepting glm structures.
-	 * Please do not use directly, use pie_ActivateShader below.
-	 */
-
-	inline void setUniforms(GLint location, const ::glm::vec4 &v)
-	{
-		glUniform4f(location, v.x, v.y, v.z, v.w);
-	}
-
-	inline void setUniforms(GLint location, const ::glm::mat4 &m)
-	{
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m));
-	}
-
-	inline void setUniforms(GLint location, const Vector2i &v)
-	{
-		glUniform2i(location, v.x, v.y);
-	}
-
-	inline void setUniforms(GLint location, const Vector2f &v)
-	{
-		glUniform2f(location, v.x, v.y);
-	}
-
-	inline void setUniforms(GLint location, const int32_t &v)
-	{
-		glUniform1i(location, v);
-	}
-
-	inline void setUniforms(GLint location, const float &v)
-	{
-		glUniform1f(location, v);
-	}
-
-	/**
-	 * uniformSetter is a variadic function object.
-	 * It's recursively expanded so that uniformSetter(array, arg0, arg1...);
-	 * will yield the following code:
-	 * {
-	 *     setUniforms(arr[0], arg0);
-	 *     setUniforms(arr[1], arg1);
-	 *     setUniforms(arr[2], arg2);
-	 *     ...
-	 *     setUniforms(arr[n], argn);
-	 * }
-	 */
-	template<typename...T>
-	struct uniformSetter
-	{
-		void operator()(const std::vector<GLint> &locations, T...) const;
-	};
-
-	template<>
-	struct uniformSetter<>
-	{
-		void operator()(const std::vector<GLint> &) const {}
-	};
-
-	template<typename T, typename...Args>
-	struct uniformSetter<T, Args...>
-	{
-		void operator()(const std::vector<GLint> &locations, const T& value, const Args&...args) const
-		{
-			constexpr int N = sizeof...(Args) + 1;
-			setUniforms(locations[locations.size() - N], value);
-			uniformSetter<Args...>()(locations, args...);
-		}
-	};
 }
 
-/**
- * Bind program and sets the uniforms Args.
- * The uniform binding mechanism works in conjonction with pie_LoadShader.
- * When shader is loaded uniform location is fetched in a certain order.
- * in pie_ActivateShader the uniforms passed as variadic Args template
- * must be given in the same order.
- *
- * For instance if a shader is loaded by :
- * pie_LoadShader(..., { vector_uniform_name, matrix_uniform_name });
- * then subsequent pie_ActivateShader must be called like :
- * pie_ActivateShader(..., some_vector, some_matrix);
- * It will be expanded as :
- * {
- *     glUseProgram(...);
- *     glUniform4f(vector_uniform_location, some_vector);
- *     glUniform4fv(matrix_uniform_location, some_matrix);
- * }
- * Note that uniform count is checked at run time.
- * Uniform type is not checked but the GL implementation will complain
- * if the uniform type doesn't match.
- */
-template<typename...T>
-pie_internal::SHADER_PROGRAM &pie_ActivateShader(SHADER_MODE shaderMode, const T&... Args)
-{
-	pie_internal::SHADER_PROGRAM &program = pie_internal::shaderProgram[shaderMode];
-	if (shaderMode != pie_internal::currentShaderMode)
-	{
-		glUseProgram(program.program);
-		pie_internal::currentShaderMode = shaderMode;
-	}
-	assert(program.locations.size() == sizeof...(T));
-	pie_internal::uniformSetter<T...>()(program.locations, Args...);
-	return program;
-}
-
-
-// Actual shaders (we do not want to export these calls)
-pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour, const glm::mat4 &ModelView, const glm::mat4 &Proj,
-	const glm::vec4 &sunPos, const glm::vec4 &sceneColor, const glm::vec4 &ambient, const glm::vec4 &diffuse, const glm::vec4 &specular);
-void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
+float pie_GetShaderTime();
 float pie_GetShaderStretchDepth();
 void pie_SetShaderTime(uint32_t shaderTime);
 void pie_SetShaderEcmEffect(bool value);
+int pie_GetShaderEcmEffect();
 
-/* Errors control routine */
-#ifdef DEBUG
-#define glErrors() \
-	_glerrors(__FUNCTION__, __FILE__, __LINE__)
-#else
-#define glErrors()
-#endif
-
-bool _glerrors(const char *, const char *, int);
+static inline glm::vec4 pal_PIELIGHTtoVec4(PIELIGHT rgba)
+{
+	return (1 / 255.0f) * glm::vec4{
+		rgba.byte.r,
+		rgba.byte.g,
+		rgba.byte.b,
+		rgba.byte.a
+	};
+}
 
 #endif // _pieState_h

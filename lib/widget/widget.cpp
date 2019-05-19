@@ -1047,7 +1047,6 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	if (debugBoundingBoxes)
 	{
 		debugBoundingBoxesOnly = true;
-		pie_SetRendMode(REND_ALPHA);
 		psScreen->psForm->displayRecursive(0, 0);
 		debugBoundingBoxesOnly = false;
 	}

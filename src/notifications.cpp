@@ -819,16 +819,12 @@ W_NOTIFICATION::~W_NOTIFICATION()
 
 #include "lib/ivis_opengl/piestate.h"
 
-gfx_api::texture* makeTexture(int width, int height, const gfx_api::pixel_format& format, const GLvoid *image)
+gfx_api::texture* makeTexture(unsigned int width, unsigned int height, const gfx_api::pixel_format& format, const void *image)
 {
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-	gfx_api::texture* mTexture = gfx_api::context::get().create_texture(width, height, format);
+	size_t mip_count = floor(log(std::max(width, height))) + 1;
+	gfx_api::texture* mTexture = gfx_api::context::get().create_texture(mip_count, width, height, format);
 	if (image != nullptr)
-		mTexture->upload(0u, 0u, 0u, width, height, format, image, true);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		mTexture->upload_and_generate_mipmaps(0u, 0u, width, height, format, image);
 
 	return mTexture;
 }
@@ -1121,7 +1117,7 @@ void W_NOTIFICATION::display(int xOffset, int yOffset)
 		int image_x0 = imageLeft;
 		int image_y0 = imageTop;
 
-		iV_DrawImage(pImageTexture->id(), Vector2i(image_x0, image_y0), Vector2f(0,0), Vector2f(WZ_NOTIFICATION_IMAGE_SIZE, WZ_NOTIFICATION_IMAGE_SIZE), 0.f, REND_ALPHA, WZCOL_WHITE);
+		iV_DrawImageAnisotropic(*pImageTexture, Vector2i(image_x0, image_y0), Vector2f(0,0), Vector2f(WZ_NOTIFICATION_IMAGE_SIZE, WZ_NOTIFICATION_IMAGE_SIZE), 0.f, WZCOL_WHITE);
 	}
 }
 

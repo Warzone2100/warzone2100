@@ -56,7 +56,7 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include "sequence.h"
 #include "timer.h"
 #include "lib/framework/math_ext.h"
@@ -384,13 +384,12 @@ static void video_write(bool update)
 		videoGfx->updateTexture(RGBAframe, video_width, video_height * height_factor);
 	}
 
-	glDisable(GL_DEPTH_TEST);
-	glDepthMask(GL_FALSE);
+	const auto& modelViewProjectionMatrix = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f) *
+	glm::translate(glm::vec3(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]));
 
-	videoGfx->draw(
-		glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f) *
-		glm::translate(glm::vec3(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]))
-	);
+	gfx_api::VideoPSO::get().bind();
+	gfx_api::VideoPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec2(0), glm::vec2(0), glm::vec4(1), 0 });
+	videoGfx->draw<gfx_api::VideoPSO>(modelViewProjectionMatrix);
 }
 
 // FIXME: perhaps we should use wz's routine for audio?
@@ -677,7 +676,7 @@ bool seq_Play(const char *filename)
 	}
 
 	/* open video */
-	videoGfx = new GFX(GFX_TEXTURE, GL_TRIANGLE_STRIP, 2);
+	videoGfx = new GFX(GFX_TEXTURE, 2);
 	if (theora_p)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
@@ -704,7 +703,7 @@ bool seq_Play(const char *filename)
 		}
 
 		Allocate_videoFrame();
-		videoGfx->makeTexture(texture_width, texture_height, GL_LINEAR, gfx_api::pixel_format::rgba, blackframe);
+		videoGfx->makeTexture(texture_width, texture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, blackframe);
 		free(blackframe);
 
 		// when using scanlines we need to double the height
@@ -960,7 +959,7 @@ void seq_Shutdown()
 	audioTime = 0;
 	sampletimeOffset = last_time = timer_expire = timer_started = 0;
 	basetime = -1;
-	pie_SetTexturePage(-1);
+
 	debug(LOG_VIDEO, " **** frames = %d dropped = %d ****", frames, dropped);
 }
 

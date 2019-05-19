@@ -97,7 +97,7 @@ static unsigned int lightmapLastUpdate;
 static int lightmapWidth;
 static int lightmapHeight;
 /// Lightmap image
-static GLubyte *lightmapPixmap;
+static gfx_api::gfxUByte *lightmapPixmap;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
 
@@ -109,7 +109,7 @@ static gfx_api::buffer *waterVBO = nullptr, *waterIndexVBO = nullptr;
 static float waterOffset;
 
 /// These are properties of your videocard and hardware
-static GLint GLmaxElementsVertices, GLmaxElementsIndices;
+static int32_t GLmaxElementsVertices, GLmaxElementsIndices;
 
 /// The sectors are stored here
 static Sector *sectors;
@@ -133,18 +133,14 @@ GLsizei dreCount;
 bool drawRangeElementsStarted = false;
 
 /// Pass all remaining triangles to OpenGL
+template<typename PSO>
 static void finishDrawRangeElements()
 {
 	if (drawRangeElementsStarted && dreCount > 0)
 	{
 		ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", (int)(dreEnd - dreStart + 1));
 		ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", (int)dreCount);
-		glDrawRangeElements(GL_TRIANGLES,
-		                    dreStart,
-		                    dreEnd,
-		                    dreCount,
-		                    GL_UNSIGNED_INT,
-		                    BUFFER_OFFSET(sizeof(GLuint)*dreOffset));
+		PSO::get().draw_elements(dreCount, sizeof(GLuint)*dreOffset);
 	}
 	drawRangeElementsStarted = false;
 }
@@ -153,15 +149,12 @@ static void finishDrawRangeElements()
  * Either draw the elements or batch them to be sent to OpenGL later
  * This improves performance by reducing the amount of OpenGL calls.
  */
-static void addDrawRangeElements(GLenum mode,
-                                 GLuint start,
+template<typename PSO>
+static void addDrawRangeElements(GLuint start,
                                  GLuint end,
                                  GLsizei count,
-                                 GLenum type,
                                  GLuint offset)
 {
-	ASSERT(mode == GL_TRIANGLES, "not supported");
-	ASSERT(type == GL_UNSIGNED_INT, "not supported");
 
 	if (end - start + 1 > GLmaxElementsVertices)
 	{
@@ -188,9 +181,9 @@ static void addDrawRangeElements(GLenum mode,
 	    dreCount + count > GLmaxElementsIndices ||
 	    end - dreStart + 1 > GLmaxElementsVertices)
 	{
-		finishDrawRangeElements();
+		finishDrawRangeElements<PSO>();
 		// start anew
-		addDrawRangeElements(mode, start, end, count, type, offset);
+		addDrawRangeElements<PSO>(start, end, count, offset);
 	}
 	else
 	{
@@ -524,11 +517,8 @@ static void updateSectorGeometry(int x, int y)
 
 	decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
 	                 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	free(decaldata);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 }
 
 /**
@@ -600,8 +590,8 @@ bool initTerrain()
 	bool decreasedSize = false;
 
 	// this information is useful to prevent crashes with buggy opengl implementations
-	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &GLmaxElementsVertices);
-	glGetIntegerv(GL_MAX_ELEMENTS_INDICES,  &GLmaxElementsIndices);
+	GLmaxElementsVertices = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ELEMENTS_VERTICES);
+	GLmaxElementsIndices = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ELEMENTS_INDICES);
 
 	// testing for crappy cards
 	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_VERTICES: %i", (int)GLmaxElementsVertices);
@@ -770,7 +760,6 @@ bool initTerrain()
 	waterIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
 	waterIndexVBO->upload(sizeof(GLuint)*waterIndexSize, waterIndex);
 	free(waterIndex);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
 	////////////////////
@@ -886,7 +875,6 @@ bool initTerrain()
 	textureIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
 	textureIndexVBO->upload(sizeof(GLuint)*textureIndexSize, textureIndex);
 	free(textureIndex);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// and finally the decals
 	decaldata = (DecalVertex *)malloc(sizeof(DecalVertex) * mapWidth * mapHeight * 12);
@@ -907,7 +895,6 @@ bool initTerrain()
 	decalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
 	decalVBO->upload(sizeof(DecalVertex)*decalSize, decaldata);
 	free(decaldata);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	lightmap_tex_num = 0;
 	lightmapLastUpdate = 0;
@@ -920,7 +907,7 @@ bool initTerrain()
 	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapWidth, lightmapHeight);
 
 	// Prepare the lightmap pixmap and texture
-	lightmapPixmap = (GLubyte *)calloc(lightmapWidth * lightmapHeight, 3 * sizeof(GLubyte));
+	lightmapPixmap = (gfx_api::gfxUByte *)calloc(lightmapWidth * lightmapHeight, 3 * sizeof(gfx_api::gfxUByte));
 	if (lightmapPixmap == nullptr)
 	{
 		debug(LOG_FATAL, "Out of memory!");
@@ -929,20 +916,11 @@ bool initTerrain()
 	}
 	if (lightmap_tex_num)
 		delete lightmap_tex_num;
-	lightmap_tex_num = gfx_api::context::get().create_texture(lightmapWidth, lightmapHeight, gfx_api::pixel_format::rgb);
+	lightmap_tex_num = gfx_api::context::get().create_texture(1, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::rgb, lightmapPixmap);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, lightmapWidth, lightmapHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+	lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap);
 
 	terrainInitialised = true;
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (in this function, at least), otherwise text rendering may mysteriously crash.
 
 	return true;
 }
@@ -1089,27 +1067,15 @@ static void cullTerrain()
 
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight)
 {
-	const auto &program = pie_ActivateShader(SHADER_TERRAIN_DEPTH, ModelViewProjection, paramsXLight, paramsYLight, 1, glm::mat4(1.f), glm::mat4(1.f));
-	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetRendMode(REND_OPAQUE);
-
-	// we only draw in the depth buffer of using fog of war, as the clear color is black then
-	if (!pie_GetFogStatus())
-	{
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	}
+	// bind the vertex buffer
+	gfx_api::TerrainDepth::get().bind();
+	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
+	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), 0, 0.f, 0.f, glm::vec4(0.f), 0, 0 });
+	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 	// draw slightly higher distance than it actually is so it will not
 	// by accident obscure the actual terrain
-	glEnable(GL_POLYGON_OFFSET_FILL);
-	glPolygonOffset(0.1f, 1.0f);
-
-	// bind the vertex buffer
-	geometryIndexVBO->bind();
-	geometryVBO->bind();
-
-	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(program.locVertex);
+	gfx_api::context::get().set_polygon_offset(0.1f, 1.f);
 
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -1117,28 +1083,18 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements(GL_TRIANGLES,
+				addDrawRangeElements<gfx_api::TerrainDepth>(
 					sectors[x * ySectors + y].geometryOffset,
 					sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
 					sectors[x * ySectors + y].geometryIndexSize,
-					GL_UNSIGNED_INT,
 					sectors[x * ySectors + y].geometryIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements();
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	if (!pie_GetFogStatus())
-	{
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	}
-
-	// disable the depth offset
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	glDisableVertexAttribArray(program.locVertex);
-	pie_DeactivateShader();
+	finishDrawRangeElements<gfx_api::TerrainDepth>();
+	gfx_api::context::get().set_polygon_offset(0.f, 0.f);
+	gfx_api::TerrainDepth::get().unbind_vertex_buffers(geometryVBO);
+	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
 static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
@@ -1150,24 +1106,11 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 		renderState.fogColour.vector[2] / 255.f,
 		renderState.fogColour.vector[3] / 255.f
 	);
-	const auto &program = pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, glm::vec4(0.f), glm::vec4(0.f), paramsXLight, paramsYLight, 0, 1,
-		glm::mat4(1.f), textureMatrix, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
-
-	// additive blending
-	pie_SetRendMode(REND_ADDITIVE);
-
-	// only draw colors
-	glDepthMask(GL_FALSE);
-
-	textureIndexVBO->bind();
 
 	// load the vertex (geometry) buffer
-	geometryVBO->bind();
-	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(program.locVertex);
-
-	textureVBO->bind();
-
+	gfx_api::TerrainLayer::get().bind();
+	gfx_api::TerrainLayer::get().bind_vertex_buffers(geometryVBO, textureVBO);
+	gfx_api::context::get().bind_index_buffer(*textureIndexVBO, gfx_api::index_type::u32);
 	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
 
 	// draw each layer separately
@@ -1175,18 +1118,15 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	{
 		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0 );
 		const glm::vec4 paramsY(1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0 );
-		pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, 0, 1, glm::mat4(1.f), textureMatrix,
-			renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
+		gfx_api::TerrainLayer::get().bind_constants({ ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, glm::mat4(1.f), textureMatrix,
+			renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor, 0, 1 });
 
 		// load the texture
 		int texPage = iV_GetTexture(psGroundTypes[layer].textureName);
-		pie_SetTexturePage(texPage);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage), lightmap_tex_num);
 
 		// load the color buffer
-		glVertexAttribPointer(program.locColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(PIELIGHT), BUFFER_OFFSET(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer));
-		glEnableVertexAttribArray(program.locColor);
+		gfx_api::context::get().bind_vertex_buffers(1, { std::make_tuple(textureVBO, static_cast<size_t>(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer)) });
 
 		for (int x = 0; x < xSectors; x++)
 		{
@@ -1194,23 +1134,18 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 			{
 				if (sectors[x * ySectors + y].draw)
 				{
-					addDrawRangeElements(GL_TRIANGLES,
+					addDrawRangeElements<gfx_api::TerrainLayer>(
 						sectors[x * ySectors + y].geometryOffset,
 						sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
 						sectors[x * ySectors + y].textureIndexSize[layer],
-						GL_UNSIGNED_INT,
 						sectors[x * ySectors + y].textureIndexOffset[layer]);
 				}
 			}
 		}
-		finishDrawRangeElements();
+		finishDrawRangeElements<gfx_api::TerrainLayer>();
 	}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	// we don't need this one anymore
-	glDisableVertexAttribArray(program.locVertex);
-	glDisableVertexAttribArray(program.locColor);
-	pie_DeactivateShader();
+	gfx_api::TerrainLayer::get().unbind_vertex_buffers(geometryVBO, textureVBO);
+	gfx_api::context::get().unbind_index_buffer(*textureIndexVBO);
 }
 
 static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
@@ -1222,22 +1157,11 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 		renderState.fogColour.vector[2] / 255.f,
 		renderState.fogColour.vector[3] / 255.f
 	);
-	const auto &program = pie_ActivateShader(SHADER_DECALS, ModelViewProjection, paramsXLight, paramsYLight, 0, 1, textureMatrix,
-		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
-	// select the terrain texture page
-	pie_SetTexturePage(terrainPage);
-
-	// use the alpha to blend
-	pie_SetRendMode(REND_ALPHA);
-
-	// and the texture coordinates buffer
-	decalVBO->bind();
-	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(DecalVertex), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(program.locVertex);
-
-	glVertexAttribPointer(program.locTexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(DecalVertex), BUFFER_OFFSET(12));
-	glEnableVertexAttribArray(program.locTexCoord);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	gfx_api::TerrainDecals::get().bind();
+	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num);
+	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
+	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, textureMatrix,
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor, 0, 1 });
 
 	int size = 0;
 	int offset = 0;
@@ -1254,7 +1178,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 			// can't append, so draw what we have and start anew
 			if (size > 0)
 			{
-				glDrawArrays(GL_TRIANGLES, offset, size);
+				gfx_api::TerrainDecals::get().draw(size, offset);
 			}
 			size = 0;
 			if (y < ySectors && sectors[x * ySectors + y].draw)
@@ -1264,11 +1188,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 			}
 		}
 	}
-
-	glDepthMask(GL_TRUE);
-	glDisableVertexAttribArray(program.locTexCoord);
-	glDisableVertexAttribArray(program.locVertex);
-	pie_DeactivateShader();
+	gfx_api::TerrainDecals::get().unbind_vertex_buffers(decalVBO);
 }
 
 
@@ -1284,9 +1204,6 @@ void drawTerrain(const glm::mat4 &mvp)
 
 	///////////////////////////////////
 	// set up the lightmap texture
-	glActiveTexture(GL_TEXTURE1);
-	// bind the texture
-	lightmap_tex_num->bind();
 
 	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
 	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
@@ -1294,15 +1211,12 @@ void drawTerrain(const glm::mat4 &mvp)
 		lightmapLastUpdate = realTime;
 		updateLightMap();
 
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::rgb, lightmapPixmap);
+		lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap);
 	}
 
 	///////////////////////////////////
 	// terrain culling
 	cullTerrain();
-
-	glActiveTexture(GL_TEXTURE0);
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f));
@@ -1318,15 +1232,6 @@ void drawTerrain(const glm::mat4 &mvp)
 	//////////////////////////////////
 	// decals
 	drawDecals(mvp, paramsXLight, paramsYLight, lightMatrix);
-
-	////////////////////////////////
-	// disable the lightmap texture
-	glActiveTexture(GL_TEXTURE1);
-	glActiveTexture(GL_TEXTURE0);
-
-	// leave everything in a sane state so it won't mess up somewhere else
-
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 }
 
 /**
@@ -1341,30 +1246,13 @@ void drawWater(const glm::mat4 &viewMatrix)
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
 	const auto &renderState = getCurrentRenderState();
 
-	const auto &program = pie_ActivateShader(SHADER_WATER, viewMatrix, paramsX, paramsY, paramsX2, paramsY2, 0, 1,
-		glm::translate(glm::vec3(waterOffset, 0.f, 0.f)), glm::mat4(1.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
-
-	glDepthMask(GL_FALSE);
-
-	// first texture unit
-	pie_SetTexturePage(iV_GetTexture("page-80-water-1.png"));
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// multiplicative blending
-	pie_SetRendMode(REND_MULTIPLICATIVE);
-
-	// second texture unit
-	glActiveTexture(GL_TEXTURE1);
-	pie_Texture(iV_GetTexture("page-81-water-2.png")).bind();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// bind the vertex buffer
-	waterIndexVBO->bind();
-	waterVBO->bind();
-	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(program.locVertex);
+	gfx_api::WaterPSO::get().bind();
+	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(iV_GetTexture("page-80-water-1.png")), &pie_Texture(iV_GetTexture("page-81-water-2.png")));
+	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
+	gfx_api::WaterPSO::get().bind_constants({ viewMatrix, paramsX, paramsY, paramsX2, paramsY2,
+		glm::translate(glm::vec3(waterOffset, 0.f, 0.f)), glm::mat4(1.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, glm::vec4(0.f), 0, 1
+	});
+	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 
 	for (x = 0; x < xSectors; x++)
 	{
@@ -1372,33 +1260,21 @@ void drawWater(const glm::mat4 &viewMatrix)
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements(GL_TRIANGLES,
+				addDrawRangeElements<gfx_api::WaterPSO>(
 				                     sectors[x * ySectors + y].geometryOffset,
 				                     sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
 				                     sectors[x * ySectors + y].waterIndexSize,
-				                     GL_UNSIGNED_INT,
 				                     sectors[x * ySectors + y].waterIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements();
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisableVertexAttribArray(program.locVertex);
+	finishDrawRangeElements<gfx_api::WaterPSO>();
+	gfx_api::WaterPSO::get().unbind_vertex_buffers(waterVBO);
+	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
 
 	// move the water
 	if (!gamePaused())
 	{
 		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
 	}
-
-	// disable second texture
-	glActiveTexture(GL_TEXTURE0);
-
-	// clean up
-	glDepthMask(GL_TRUE);
-	pie_DeactivateShader();
-
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 }
