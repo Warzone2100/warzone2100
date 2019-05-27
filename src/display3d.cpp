@@ -2478,15 +2478,8 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 		}
 		else
 		{
-			if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_GATE)
-			{
-				// walls can be rotated, so use a dynamic shadow for them
-				pieFlag = pie_SHADOW;
-			}
-			else
-			{
-				pieFlag = pie_STATIC_SHADOW;
-			}
+			// Use a dynamic shadow
+			pieFlag = pie_SHADOW;
 			pieFlagData = 0;
 		}
 		iIMDShape *imd = psStructure->sDisplay.imd;
