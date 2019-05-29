@@ -84,7 +84,7 @@ function vaporizeTarget()
 {
 	var target;
 	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID || (obj.type === STRUCTURE && obj.status === BUILT);
+		return obj.type === DROID || obj.type === STRUCTURE;
 	});
 
 	if (!targets.length)
@@ -113,7 +113,7 @@ function vaporizeTarget()
 	//Droid or structure was destroyed before firing so pick a new one.
 	if (!camDef(target))
 	{
-		queue("vaporizeTarget", 100);
+		queue("vaporizeTarget", camSecondsToMilliseconds(0.1));
 		return;
 	}
 	if (Math.floor(mapLimit) < Math.floor(mapHeight / 2))

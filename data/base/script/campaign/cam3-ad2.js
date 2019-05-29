@@ -105,7 +105,7 @@ function vaporizeTarget()
 {
 	var target;
 	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID || (obj.type === STRUCTURE && obj.status === BUILT);
+		return obj.type === DROID || obj.type === STRUCTURE;
 	});
 
 	if (!targets.length)
