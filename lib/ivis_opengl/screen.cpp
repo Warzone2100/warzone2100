@@ -419,7 +419,6 @@ void screen_disableMapPreview()
 }
 
 // Screenshot code goes below this
-static const unsigned int channelsPerPixel = 3;
 
 class ScreenshotSaveRequest {
 public:
@@ -498,20 +497,14 @@ void screenDoDumpToDiskIfRequired()
 		return;
 	}
 	debug(LOG_3D, "Saving screenshot %s", fileName);
+	screendump_required = false;
 
-	// IMPORTANT: Must get the size of the viewport directly from the viewport, to account for
-	//            high-DPI / display scaling factors (or only a sub-rect of the full viewport
-	//            will be captured, as the logical screenWidth/Height may differ from the
-	//            underlying viewport pixel dimensions).
-	GLint m_viewport[4];
-	glGetIntegerv(GL_VIEWPORT, m_viewport);
-
-	image.width = m_viewport[2];
-	image.height = m_viewport[3];
-	image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
-
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
+	if (!gfx_api::context::get().getScreenshot(image))
+	{
+		// Failed to get screenshot
+		debug(LOG_3D, "Failed to get screenshot %s", fileName);
+		return;
+	}
 
 	// Dispatch encoding and saving screenshot to a background thread (since this is fairly costly)
 	snprintf(ConsoleString, sizeof(ConsoleString), "Saving screenshot %s ...", fileName);
@@ -539,8 +532,6 @@ void screenDoDumpToDiskIfRequired()
 		wzThreadDetach(pSaveThread);
 		// the thread handles deleting pSaveRequest
 	}
-
-	screendump_required = false;
 }
 
 /** Registers the currently displayed frame for making a screen shot.

@@ -243,6 +243,7 @@ namespace gfx_api
 		virtual void debugPerfEnd(PERF_POINT pp) = 0;
 		virtual uint64_t debugGetPerfValue(PERF_POINT pp) = 0;
 		virtual std::map<std::string, std::string> getBackendGameInfo() = 0;
+		virtual bool getScreenshot(iV_Image &output) = 0;
 	};
 
 	template<std::size_t id, vertex_attribute_type type, std::size_t offset>

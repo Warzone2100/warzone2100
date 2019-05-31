@@ -1351,6 +1351,28 @@ std::map<std::string, std::string> gl_context::getBackendGameInfo()
 	return backendGameInfo;
 }
 
+static const unsigned int channelsPerPixel = 3;
+
+bool gl_context::getScreenshot(iV_Image &image)
+{
+	// IMPORTANT: Must get the size of the viewport directly from the viewport, to account for
+	//            high-DPI / display scaling factors (or only a sub-rect of the full viewport
+	//            will be captured, as the logical screenWidth/Height may differ from the
+	//            underlying viewport pixel dimensions).
+	GLint m_viewport[4];
+	glGetIntegerv(GL_VIEWPORT, m_viewport);
+
+	image.width = m_viewport[2];
+	image.height = m_viewport[3];
+	image.depth = 8;
+	image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
+
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
+
+	return true;
+}
+
 //
 
 static const char *cbsource(GLenum source)
