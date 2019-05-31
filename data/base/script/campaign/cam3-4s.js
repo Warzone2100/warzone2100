@@ -8,7 +8,7 @@ function eventStartLevel()
      setNoGoArea(7, 52, 9, 54, NEXUS);
      setScrollLimits(0, 137, 64, 256);
      setMissionTime(camMinutesToSeconds(30));
-     setPower(50000, CAM_HUMAN_PLAYER);
+     setPower(playerPower(CAM_HUMAN_PLAYER) + 50000, CAM_HUMAN_PLAYER);
      camPlayVideos(["MB3_4_MSG", "MB3_4_MSG2"]);
      camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "CAM_3_4");
 }
