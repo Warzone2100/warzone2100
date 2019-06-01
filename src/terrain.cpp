@@ -757,8 +757,15 @@ bool initTerrain()
 
 	if (waterIndexVBO)
 		delete waterIndexVBO;
-	waterIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
-	waterIndexVBO->upload(sizeof(GLuint)*waterIndexSize, waterIndex);
+	if (waterIndexSize > 0)
+	{
+		waterIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer);
+		waterIndexVBO->upload(sizeof(GLuint)*waterIndexSize, waterIndex);
+	}
+	else
+	{
+		waterIndexVBO = nullptr;
+	}
 	free(waterIndex);
 
 
@@ -1239,6 +1246,11 @@ void drawTerrain(const glm::mat4 &mvp)
  */
 void drawWater(const glm::mat4 &viewMatrix)
 {
+	if (!waterIndexVBO)
+	{
+		return; // no water
+	}
+
 	int x, y;
 	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
