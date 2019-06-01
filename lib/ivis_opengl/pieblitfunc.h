@@ -79,6 +79,9 @@ public:
 	/// Destroy GPU held resources
 	~GFX();
 
+	GFX( const GFX& other ) = delete; // non construction-copyable
+	GFX& operator=( const GFX& ) = delete; // non copyable
+
 	/// Load texture data from file, allocate space for it, and put it on the GPU
 	void loadTexture(const char *filename);
 
