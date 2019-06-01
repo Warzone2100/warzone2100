@@ -116,4 +116,21 @@ void checkProjectile(const PROJECTILE *psProjectile, const char *const location_
 #define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
 void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char ch);
 
+struct ObjectShape
+{
+	ObjectShape() : isRectangular(false), size(0, 0) {}
+	ObjectShape(int radius) : isRectangular(false), size(radius, radius) {}
+	ObjectShape(int width, int breadth) : isRectangular(true), size(width, breadth) {}
+	ObjectShape(Vector2i widthBreadth) : isRectangular(true), size(widthBreadth) {}
+	int radius() const
+	{
+		return size.x;
+	}
+
+	bool     isRectangular;  ///< True if rectangular, false if circular.
+	Vector2i size;           ///< x == y if circular.
+};
+
+ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
+
 #endif // __INCLUDED_SRC_PROJECTILE_H__
