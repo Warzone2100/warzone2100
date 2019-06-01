@@ -281,10 +281,31 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 	else /* Deal with a missed shot */
 	{
-		const int minOffset = 5;
+		// Get the shape of the target to avoid "missing" inside of it
+		const ObjectShape targetShape = establishTargetShape(psTarget);
 
-		int missDist = 2 * (100 - resultHitChance) + minOffset;
-		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(360)), missDist), 0);
+		// Worst possible shot based on distance and weapon accuracy
+		Vector3i deltaPosPredict = psAttacker->pos - predict;
+		int worstShot;
+		if (resultHitChance > 0)
+		{
+			worstShot = (iHypot(deltaPosPredict.xy()) * 100 / resultHitChance) / 5;
+ 		}
+		else
+		{
+			worstShot = iHypot(deltaPosPredict.xy()) * 2;
+		}
+
+		// Use a random seed to determine how far the miss will land from the target
+		// That (num/100)^3 allow the misses to fall much more frequently close to the target
+		int num = gameRand(100) + 1;
+		int minOffset = 2 * targetShape.radius();
+
+		int missDist = minOffset + (worstShot * num * num * num) / (100 * 100 * 100);
+
+		// Determine the angle of the miss in the 270 degrees in "front" of the target.
+		// The 90 degrees behind would most probably cause an unwanted hit when the projectile will be drawn through the hitbox.
+		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(270)) - DEG(135) + iAtan2(deltaPosPredict.xy()), missDist), 0);
 		predict += miss;
 
 		psTarget = nullptr;  // Missed the target, so don't expect to hit it.
