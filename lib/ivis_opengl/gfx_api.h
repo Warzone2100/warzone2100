@@ -59,6 +59,10 @@ namespace gfx_api
 		virtual void upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const pixel_format& buffer_format, const void* data) = 0;
 		virtual void upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const pixel_format& buffer_format, const void* data) = 0;
 		virtual unsigned id() = 0;
+
+		texture( const texture& other ) = delete; // non construction-copyable
+		texture& operator=( const texture& ) = delete; // non copyable
+		texture() {};
 	};
 
 	// An abstract base that manages a single gfx buffer
