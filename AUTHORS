@@ -74,7 +74,7 @@ Current or former contributors to the GPL version
 * Kevin Gillette (kage): Python script tools
 * (klasskill): Skewed video sequence bug fix
 * (Kosh): More reliable overwriting of old savegames
-* Linus Lüssing (T-X): Balanced tree search bug fix, bug reporting
+* Linus Lüssing (T-X): Bug fixes, patch to enable DSCP support, bug reporting
 * (LuckyLuke/Germanium): Balancing
 * Marcus Rast (charon): Segfault fix
 * Martijn Dekker (Dekker3D): Fullscreen resolution bug fix
@@ -94,6 +94,7 @@ Current or former contributors to the GPL version
 * Ryan P. Nicholl (Exaeta): Script messages bug fix
 * (Safety0ff): Bug fixes, refactoring, bug reporting
 * (Samowar): Structure completion on away missions bug fix
+* (ScorrMorr): Fixes for undefined behavior
 * Scott Balneaves (sbalneav): Bug fixes
 * (Seismo): Fixes for return values of various functions
 * (ShadowWolfTJC): Multiple HQ support
@@ -105,7 +106,6 @@ Current or former contributors to the GPL version
 * (tmp500): Balancing, bug reporting
 * (tnmurphy): Memory bug fix
 * Tuomas Salomäki (hwl): Units not following commander bug fix
-* T-X: Networking patch, bug report for radar dragging deselecting units
 * (Vermithrax): Mist fog in campaign games, MacOSX fix
 * Victor Qamly (qamly): FPS counter
 * Vincent Lejeune (vlj): Shader and skybox improvement, bug fixes
@@ -294,7 +294,7 @@ Current or former contributors to the GPL version
 * (dpblnt): Bug report for crash related to structure limits
 * (effigy): Bug reports for kicking players and mouse options screen
 * (Eugen): Campaign testing, bug reporting
-* Fedaykin/RBMW-Fedaykin: Bug reports for challenges, templates and other issues
+* (Fedaykin/RBMW-Fedaykin): Bug reports for challenges, templates and more
 * Hylke van der Schaaf (TheNoid/Hylke): Bug reports
 * (icefire): Bug reports for gates
 * (jaakan): Bug reports for compiler warnings
