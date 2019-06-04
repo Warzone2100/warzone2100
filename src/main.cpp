@@ -1575,6 +1575,22 @@ int realmain(int argc, char *argv[])
 	debug(LOG_MAIN, "Entering main loop");
 	wzMainEventLoop();
 	ActivityManager::instance().preSystemShutdown();
+
+	switch (GetGameMode())
+	{
+		case GS_NORMAL:
+			// if running a game while quitting, stop the game loop
+			// (currently required for some cleanup) (should modelShutdown() be added to systemShutdown?)
+			stopGameLoop();
+			break;
+		case GS_TITLE_SCREEN:
+			// if showing the title / menus while quitting, stop the title loop
+			// (currently required for some cleanup)
+			stopTitleLoop();
+			break;
+		default:
+			break;
+	}
 	saveConfig();
 #if defined(ENABLE_DISCORD)
 	discordRPCShutdown();

@@ -573,6 +573,7 @@ bool pie_ShutdownRadar()
 {
 	delete radarGfx;
 	radarGfx = nullptr;
+	pie_ViewingWindow_Shutdown();
 	return true;
 }
 

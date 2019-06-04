@@ -198,6 +198,7 @@ struct gl_context final : public gfx_api::context
 	virtual uint64_t debugGetPerfValue(PERF_POINT pp) override;
 	virtual std::map<std::string, std::string> getBackendGameInfo() override;
 	virtual bool getScreenshot(iV_Image &output) override;
+	virtual void shutdown() override;
 private:
 	bool initGLContext();
 	void enableVertexAttribArray(GLuint index);

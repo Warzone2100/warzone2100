@@ -1242,6 +1242,21 @@ bool init3DView()
 	return true;
 }
 
+void shutdown3DView()
+{
+	txtLevelName = WzText();
+	txtDebugStatus = WzText();
+	txtCurrentTime = WzText();
+	txtShowFPS = WzText();
+	// show Samples text
+	txtShowSamples_Que = WzText();
+	txtShowSamples_Lst = WzText();
+	txtShowSamples_Act = WzText();
+	// show Orders text
+	txtShowOrders = WzText();
+	// show Droid visible/draw counts text
+	droidText = WzText();
+}
 
 /// set the view position from save game
 void disp3d_setView(iView *newView)

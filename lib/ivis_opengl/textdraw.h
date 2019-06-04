@@ -58,7 +58,8 @@ public:
 	int lineSize(); // (in points)
 
 public:
-	WzText(const WzText& other) = delete; // TODO: Make this copyable?
+	WzText(const WzText& other) = delete; // non-copyable
+	WzText& operator=(const WzText&) = delete; // non-copyable
 	WzText& operator=(WzText&& other);
 	WzText(WzText&& other);
 

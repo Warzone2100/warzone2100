@@ -76,6 +76,11 @@ void tipInitialise(void)
 	TipColour = WZCOL_WHITE;
 }
 
+void tipShutdown()
+{
+	displayCache.wzTip.clear();
+}
+
 // Set the global toop tip text colour.
 void widgSetTipColour(PIELIGHT colour)
 {
@@ -133,6 +138,7 @@ void tipStop(WIDGET *psSource)
 	{
 		tipState = TIP_NONE;
 	}
+	displayCache.wzTip.clear();
 }
 
 /* Update and possibly display the tip */
