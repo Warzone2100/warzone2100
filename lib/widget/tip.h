@@ -51,4 +51,7 @@ void tipStop(WIDGET *psSource);
 /* Update and possibly display the tip */
 void tipDisplay();
 
+/* Shut down the tool tip module */
+void tipShutdown();
+
 #endif // __INCLUDED_LIB_WIDGET_TIP_H__

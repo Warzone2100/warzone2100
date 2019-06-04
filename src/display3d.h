@@ -94,6 +94,7 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4& viewModelMatrix, int ove
 bool clipStructureOnScreen(STRUCTURE *psStructure, const glm::mat4 &viewModelMatrix, int overdrawScreenPoints = 0);
 
 bool init3DView();
+void shutdown3DView();
 extern iView player;
 extern bool selectAttempt;
 

@@ -1620,3 +1620,9 @@ bool gl_context::initGLContext()
 	return true;
 }
 
+void gl_context::shutdown()
+{
+	// move any other cleanup here?
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
