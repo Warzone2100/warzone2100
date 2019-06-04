@@ -44,8 +44,8 @@ Latest development builds
 Reporting bugs
 --------------
 
-This game still has bugs and if you run into one, please use the bugtracker
-(http://developer.wz2100.net/) to report this bug. In order to faster fix
+This game still has bugs and if you run into one, please use the GitHub bugtracker
+(https://github.com/Warzone2100/warzone2100/issues) to report this bug. In order to faster fix
 those bugs we require that you follow these rules:
 
    1. If the game crashes you may save a memory dump. Please do so and upload it
