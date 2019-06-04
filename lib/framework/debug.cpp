@@ -528,7 +528,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
-				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
+				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
 			MessageBoxA(NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK | MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
 			int clickedIndex = \
@@ -537,10 +537,10 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			                                  2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
 			if (clickedIndex == 0)
 			{
-				if (!cocoaOpenURL("http://developer.wz2100.net/newticket"))
+				if (!cocoaOpenURL("https://github.com/Warzone2100/warzone2100/issues/new"))
                 {
                     cocoaShowAlert("Failed to open URL",
-                                   "Could not open URL: http://developer.wz2100.net/newticket\nPlease open this URL manually in your web browser.",
+                                   "Could not open URL: https://github.com/Warzone2100/warzone2100/issues/new\nPlease open this URL manually in your web browser.",
                                    2, "Continue", NULL);
                 }
                 if (strnlen(WZ_DBGFile, sizeof(WZ_DBGFile)/sizeof(WZ_DBGFile[0])) <= 0)
