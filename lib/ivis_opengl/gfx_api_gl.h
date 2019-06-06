@@ -26,6 +26,23 @@
 #include <cmath>
 #include <functional>
 
+namespace gfx_api
+{
+	class backend_OpenGL_Impl
+	{
+	public:
+		backend_OpenGL_Impl() {};
+		virtual ~backend_OpenGL_Impl() {};
+
+		// Creates an OpenGL context (double-buffered)
+		virtual bool createGLContext() = 0;
+		virtual void swapWindow() = 0;
+
+		// Use this function to get the size of a window's underlying drawable in pixels (for use with glViewport).
+		virtual void getDrawableSize(int* w, int* h) = 0;
+	};
+}
+
 struct gl_texture final : public gfx_api::texture
 {
 private:
@@ -153,8 +170,9 @@ private:
 
 struct gl_context final : public gfx_api::context
 {
+	std::unique_ptr<gfx_api::backend_OpenGL_Impl> backend_impl;
+
 	gl_pipeline_state_object* current_program = nullptr;
-	SDL_Window* WZwindow = nullptr;
 	GLuint scratchbuffer = 0;
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
@@ -185,7 +203,7 @@ struct gl_context final : public gfx_api::context
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 
-	virtual bool setSwapchain(struct SDL_Window* window) override;
+	virtual bool initialize(const gfx_api::backend_Impl_Factory& impl) override;
 	virtual void flip() override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;

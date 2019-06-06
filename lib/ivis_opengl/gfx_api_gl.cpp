@@ -1422,6 +1422,34 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	debug(LOG_ERROR, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
 }
 
+bool gl_context::initialize(const gfx_api::backend_Impl_Factory& impl)
+{
+	// obtain backend_OpenGL_Impl from impl
+	backend_impl = impl.createOpenGLBackendImpl();
+	if (!backend_impl)
+	{
+		debug(LOG_ERROR, "Failed to get OpenGL backend implementation");
+		return false;
+	}
+
+	backend_impl->createGLContext();
+
+	int width, height = 0;
+	backend_impl->getDrawableSize(&width, &height);
+	debug(LOG_WZ, "Drawable Size: %d x %d", width, height);
+
+	glViewport(0, 0, width, height);
+	glCullFace(GL_FRONT);
+	//	glEnable(GL_CULL_FACE);
+
+	if (!initGLContext())
+	{
+		return false;
+	}
+
+	return true;
+}
+
 bool gl_context::initGLContext()
 {
 	GLint glMaxTUs;
@@ -1618,6 +1646,13 @@ bool gl_context::initGLContext()
 	glGenBuffers(1, &scratchbuffer);
 
 	return true;
+}
+
+void gl_context::flip()
+{
+	backend_impl->swapWindow();
+	glUseProgram(0);
+	current_program = nullptr;
 }
 
 void gl_context::shutdown()
