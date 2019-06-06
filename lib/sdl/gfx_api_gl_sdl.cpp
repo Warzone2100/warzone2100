@@ -18,9 +18,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
-#include "lib/ivis_opengl/gfx_api_gl.h"
-#include <SDL_video.h>
+#include "gfx_api_gl_sdl.h"
 #include <SDL_opengl.h>
 #include <SDL_timer.h>
 #include <thread>
@@ -28,10 +26,14 @@
 
 bool vsyncIsEnabled = true; // TODO: Actually set this to match the result of SDL_GL_SetSwapInterval
 
-bool gl_context::setSwapchain(struct SDL_Window* window)
+sdl_OpenGL_Impl::sdl_OpenGL_Impl(SDL_Window* _window)
 {
-	WZwindow = window;
+	ASSERT(_window != nullptr, "Invalid SDL_Window*");
+	window = _window;
+}
 
+bool sdl_OpenGL_Impl::createGLContext()
+{
 	SDL_GLContext WZglcontext = SDL_GL_CreateContext(window);
 	if (!WZglcontext)
 	{
@@ -49,41 +51,19 @@ bool gl_context::setSwapchain(struct SDL_Window* window)
 
 	int windowWidth, windowHeight = 0;
 	SDL_GetWindowSize(window, &windowWidth, &windowHeight);
-
-	int width, height = 0;
-
-	// When high-DPI mode is enabled, retrieve the DrawableSize in pixels
-	// for use in the glViewport function - this will be the actual
-	// pixel dimensions, not the window size (which is in points).
-	//
-	// NOTE: Do not do this if high-DPI support is disabled, or the viewport
-	// size may be set inappropriately.
-
-	SDL_GL_GetDrawableSize(window, &width, &height);
-	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", windowWidth, windowHeight, width, height);
-
-	glViewport(0, 0, width, height);
-	glCullFace(GL_FRONT);
-//	glEnable(GL_CULL_FACE);
-
-	if (!initGLContext())
-	{
-		return false;
-	}
+	debug(LOG_WZ, "Logical Window Size: %d x %d", windowWidth, windowHeight);
 
 	return true;
 }
 
-void gl_context::flip()
+void sdl_OpenGL_Impl::swapWindow()
 {
 #if defined(WZ_OS_MAC)
 	// Workaround for OpenGL on macOS (see below)
 	const uint32_t swapStartTime = SDL_GetTicks();
 #endif
 
-	SDL_GL_SwapWindow(WZwindow);
-	glUseProgram(0);
-	current_program = nullptr;
+	SDL_GL_SwapWindow(window);
 
 #if defined(WZ_OS_MAC)
 	// Workaround for OpenGL on macOS
@@ -91,7 +71,7 @@ void gl_context::flip()
 	// - To workaround this, detect when we seem to be spinning without any wait, and sleep for a bit
 	static uint32_t numFramesNoVsync = 0;
 	static uint32_t lastSwapEndTime = 0;
-	const bool isMinimized = static_cast<bool>(SDL_GetWindowFlags(WZwindow) & SDL_WINDOW_MINIMIZED);
+	const bool isMinimized = static_cast<bool>(SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED);
 	const uint32_t minFrameInterval = 1000 / ((isMinimized) ? 60 : 120);
 	const uint32_t minSwapEndTick = swapStartTime + 2;
 	uint32_t swapEndTime = SDL_GetTicks();
@@ -115,4 +95,9 @@ void gl_context::flip()
 	}
 	lastSwapEndTime = swapEndTime;
 #endif
+}
+
+void sdl_OpenGL_Impl::getDrawableSize(int* w, int* h)
+{
+	SDL_GL_GetDrawableSize(window, w, h);
 }

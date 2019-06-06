@@ -51,6 +51,7 @@
 #include "lib/gamelib/gtime.h"
 #include "src/warzoneconfig.h"
 #include "src/game.h"
+#include "gfx_api_sdl.h"
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_clipboard.h>
@@ -1856,9 +1857,9 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	cocoaSetupWZMenus();
 #endif
 
-	if (!gfx_api::context::get().setSwapchain(WZwindow))
+	if (!gfx_api::context::get().initialize(SDL_gfx_api_Impl_Factory(WZwindow)))
 	{
-		debug(LOG_FATAL, "gfx_api::context::get().setSwapchain failed");
+		debug(LOG_FATAL, "gfx_api::context::get().initialize failed");
 		SDL_Quit();
 		exit(EXIT_FAILURE);
 	}

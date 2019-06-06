@@ -25,12 +25,24 @@
 #include <vector>
 #include <tuple>
 
-struct SDL_Window; // forward-declare
-
+#include "lib/framework/frame.h"
 #include "screen.h"
 #include "pietypes.h"
 
 #include <glm/glm.hpp>
+
+namespace gfx_api
+{
+	// Must be implemented by backend (ex. SDL)
+	class backend_OpenGL_Impl; // see: gfx_api_gl.h
+	class backend_Impl_Factory
+	{
+	public:
+		virtual ~backend_Impl_Factory() {};
+		virtual std::unique_ptr<backend_OpenGL_Impl> createOpenGLBackendImpl() const = 0;
+	};
+	//
+}
 
 namespace gfx_api
 {
@@ -235,7 +247,7 @@ namespace gfx_api
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
-		virtual bool setSwapchain(struct SDL_Window* window) = 0;
+		virtual bool initialize(const backend_Impl_Factory& impl) = 0;
 		virtual void flip() = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
