@@ -1867,8 +1867,8 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	case 24:		// all is good...
 		break;
 	case 16:
-		info("Using colour depth of %i instead of a 32/24 bit depth (True color).", bpp);
-		info("You will experience graphics glitches!");
+		wz_info("Using colour depth of %i instead of a 32/24 bit depth (True color).", bpp);
+		wz_info("You will experience graphics glitches!");
 		break;
 	case 8:
 		debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);

@@ -509,7 +509,7 @@ bool seq_Play(const char *filename)
 	fpInfile = PHYSFS_openRead(filename);
 	if (fpInfile == nullptr)
 	{
-		info("unable to open '%s' for playback", filename);
+		wz_info("unable to open '%s' for playback", filename);
 
 		fpInfile = PHYSFS_openRead("novideo.ogg");
 		if (fpInfile == nullptr)
