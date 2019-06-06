@@ -47,6 +47,7 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/gamelib/gtime.h"
 #include "src/warzoneconfig.h"
 #include "src/game.h"
@@ -1522,6 +1523,14 @@ void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *heigh
 // This stage, we handle display mode setting
 bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
+	// Output linked SDL version
+	char buf[512];
+	SDL_version linked_sdl_version;
+	SDL_GetVersion(&linked_sdl_version);
+	ssprintf(buf, "Linked SDL version: %u.%u.%u\n", (unsigned int)linked_sdl_version.major, (unsigned int)linked_sdl_version.minor, (unsigned int)linked_sdl_version.patch);
+	addDumpInfo(buf);
+	debug(LOG_WZ, "%s", buf);
+
 	// populate with the saved values (if we had any)
 	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
 	// (i.e. not taking into account the game display scale). This function later sets the display system
