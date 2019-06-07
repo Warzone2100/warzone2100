@@ -3251,13 +3251,13 @@ static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
 	// FIXME: This dual data structure for templates is just plain insane.
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		bool researched = researchedTemplate(keyvaluepair.second, selectedPlayer);
+		bool researched = researchedTemplate(keyvaluepair.second, selectedPlayer, true);
 		keyvaluepair.second->enabled = (researched || allowDesign);
 	}
 	for (auto &localTemplate : localTemplates)
 	{
 		psCurr = &localTemplate;
-		bool researched = researchedTemplate(psCurr, selectedPlayer);
+		bool researched = researchedTemplate(psCurr, selectedPlayer, true);
 		psCurr->enabled = (researched || allowDesign);
 	}
 	return QScriptValue();
