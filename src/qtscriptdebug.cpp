@@ -82,6 +82,7 @@
 typedef QList<QStandardItem *> QStandardItemList;
 
 static ScriptDebugger *globalDialog = nullptr;
+static jsDebugShutdownHandlerFunction globalDialogShutdownHandler;
 bool doUpdateModels = false;
 
 // ----------------------------------------------------------
@@ -260,7 +261,9 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 #undef KEYVAL
 }
 
-ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(nullptr, Qt::Window)
+ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel, QStandardItemModel *_labelModel)
+: QDialog(nullptr, Qt::Window)
+, labelModel(_labelModel)
 {
 	modelMap = models;
 
@@ -408,7 +411,6 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	tab.addTab(messTab, "Messages");
 
 	// Add labels
-	labelModel = createLabelModel();
 	labelModel->setParent(this); // take ownership to avoid memory leaks
 	labelView.setModel(labelModel);
 	labelView.resizeColumnToContents(0);
@@ -433,6 +435,9 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	dummyWidget->setLayout(labelLayout);
 	tab.addTab(dummyWidget, "Labels");
 
+	// Handle dialog closing
+	connect(this, SIGNAL(finished(int)), this, SLOT(debuggerClosed()));
+
 	// Set up dialog
 	QHBoxLayout *layout = new QHBoxLayout;
 	layout->addWidget(&tab);
@@ -444,6 +449,14 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	powerLineEdit->setFocusPolicy(Qt::StrongFocus);
 	powerLineEdit->setFocus();
 	activateWindow();
+}
+
+void ScriptDebugger::debuggerClosed()
+{
+	// Asynchronously trigger a jsDebugShutdown (on the main thread) outside of signal processing
+	wzAsyncExecOnMainThread([] {
+		jsDebugShutdown();
+	});
 }
 
 void ScriptDebugger::attachScriptClicked()
@@ -818,11 +831,17 @@ bool jsDebugShutdown()
 {
 	delete globalDialog;
 	globalDialog = nullptr;
+	if(globalDialogShutdownHandler)
+	{
+		globalDialogShutdownHandler();
+		globalDialogShutdownHandler = nullptr;
+	}
 	return true;
 }
 
-void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel)
+void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel, QStandardItemModel *labelModel, const jsDebugShutdownHandlerFunction& shutdownFunc)
 {
-	delete globalDialog;
-	globalDialog = new ScriptDebugger(models, triggerModel);
+	jsDebugShutdown();
+	globalDialogShutdownHandler = shutdownFunc;
+	globalDialog = new ScriptDebugger(models, triggerModel, labelModel);
 }
