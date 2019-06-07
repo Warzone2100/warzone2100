@@ -156,6 +156,7 @@ function reticuleDesignCheck()
 	{
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
 		setMiniMap(false);
+		// Will enable templates that are researched whenever the reticule buttons update.
 		setDesign(false);
 	}
 }

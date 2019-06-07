@@ -108,7 +108,6 @@ function reticuleDesignCheck()
 	{
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
 		setMiniMap(false);
-		setDesign(false);
 	}
 }
 
