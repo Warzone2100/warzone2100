@@ -34,6 +34,8 @@
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QComboBox>
 
+#include <functional>
+
 #include "lib/framework/frame.h"
 #include "basedef.h"
 #include "droiddef.h"
@@ -53,7 +55,7 @@ class ScriptDebugger : public QDialog
 	Q_OBJECT
 
 public:
-	ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel);
+	ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel, QStandardItemModel *labelModel);
 	~ScriptDebugger();
 	void selected(const BASE_OBJECT *psObj);
 	void updateMessages();
@@ -104,9 +106,11 @@ protected slots:
 	void shadowButtonClicked();
 	void fogButtonClicked();
 	void attachScriptClicked();
+	void debuggerClosed();
 };
 
-void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);
+typedef std::function<void ()> jsDebugShutdownHandlerFunction;
+void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel, QStandardItemModel *labelModel, const jsDebugShutdownHandlerFunction& shutdownFunc);
 bool jsDebugShutdown();
 
 // jsDebugSelected() and jsDebugMessageUpdate() defined in qtscript.h since it is used widely
