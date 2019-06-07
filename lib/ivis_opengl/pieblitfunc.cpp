@@ -211,6 +211,8 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 
 void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects)
 {
+	if (rects.empty()) { return; }
+
 	const auto projectionMatrix = defaultProjectionMatrix();
 	bool didEnableRect = false;
 	gfx_api::BoxFillPSO::get().bind();
@@ -360,8 +362,11 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 
 static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& requests)
 {
-	bool didEnableRect = false;
 	if (requests.empty()) { return; }
+
+	bool didEnableRect = false;
+	gfx_api::DrawImagePSO::get().bind();
+	
 	for (auto& request : requests)
 	{
 		// The following is the equivalent of:
@@ -385,7 +390,6 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 		Vector2f TextureSize = Vector2f(su, sv);
 		glm::mat4 transformMat = mvp * glm::translate(glm::vec3(offset.x, offset.y, 0.f)) * glm::scale(glm::vec3(size.x, size.y, 1.f));
 
-		gfx_api::DrawImagePSO::get().bind();
 		gfx_api::DrawImagePSO::get().bind_constants({ transformMat,
 			TextureUV,
 			TextureSize,
