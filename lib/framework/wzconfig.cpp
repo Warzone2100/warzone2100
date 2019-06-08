@@ -32,7 +32,7 @@ WzConfig::~WzConfig()
 {
 	if (mWarning == ReadAndWrite)
 	{
-		ASSERT(mObjStack.empty(), "Some json groups have not been closed, stack size %lu.", mObjStack.size());
+		ASSERT(mObjStack.empty(), "Some json groups have not been closed, stack size %zu.", mObjStack.size());
 		std::ostringstream stream;
 		stream << mRoot.dump(4) << std::endl;
 		std::string jsonString = stream.str();

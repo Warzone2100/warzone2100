@@ -830,7 +830,7 @@ bool loadScriptStates(const char *filename)
 		else if (engine && list[i].startsWith("globals_"))
 		{
 			std::vector<WzString> keys = ini.childKeys();
-			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %lu values",
+			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %zu values",
 			      player, scriptName.toUtf8().constData(), keys.size());
 			for (size_t j = 0; j < keys.size(); ++j)
 			{
