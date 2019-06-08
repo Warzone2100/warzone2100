@@ -267,6 +267,11 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 void _debug(int line, code_part part, const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 4, 5);
 #endif
 
+#include <string>
+
+#define debug_multiline(part, string) do { if (enabled_debug[part]) _debug_multiline(__LINE__, part, __FUNCTION__, string); } while(0)
+void _debug_multiline(int line, code_part part, const char *function, const std::string &multilineString);
+
 #define debugBacktrace(part, ...) do { if (enabled_debug[part]) { _debug(__LINE__, part, __FUNCTION__, __VA_ARGS__); _debugBacktrace(part); }} while(0)
 void _debugBacktrace(code_part part);
 

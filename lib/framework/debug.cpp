@@ -605,3 +605,16 @@ void debugDisableAssert()
 {
 	assertEnabled = false;
 }
+
+#include <sstream>
+
+void _debug_multiline(int line, code_part part, const char *function, const std::string &multilineString)
+{
+	std::stringstream ss(multilineString);
+	std::string to;
+
+	while(std::getline(ss,to,'\n')){
+		_debug(line, part, function, "%s", to.c_str());
+	}
+}
+
