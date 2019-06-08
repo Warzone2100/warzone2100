@@ -921,7 +921,7 @@ bool loadLabels(const char *filename)
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	labels.clear();
 	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading %lu labels...", list.size());
+	debug(LOG_SAVE, "Loading %zu labels...", list.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);

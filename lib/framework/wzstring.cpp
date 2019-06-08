@@ -48,7 +48,7 @@ std::vector<WzUniCodepoint> WzUniCodepoint::caseFolded() const
 	if (retVal < 0)
 	{
 		// case folding failed
-		ASSERT(retVal > 0, "Case folding attempt failed with error code: %ld", retVal);
+		ASSERT(retVal > 0, "Case folding attempt failed with error code: %" PRIdPTR"", retVal);
 		return std::vector<WzUniCodepoint>();
 	}
 	std::vector<WzUniCodepoint> resultCodepoints;

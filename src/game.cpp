@@ -5706,7 +5706,7 @@ bool loadSaveFeature2(const char *pFileName)
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading new style features (%lu found)", list.size());
+	debug(LOG_SAVE, "Loading new style features (%zu found)", list.size());
 
 	for (size_t i = 0; i < list.size(); ++i)
 	{
