@@ -1,6 +1,0 @@
-/build
-/debian/files
-/debian/python-module-stampdir
-/debian/trac-ticketvalidemail*
-/dist
-/TicketValidEmail.egg-info
