@@ -43,7 +43,6 @@
 
 #include "lib/framework/input.h"
 #include "lib/framework/utf.h"
-#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/screen.h"
@@ -1253,14 +1252,7 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 
 	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
 
-	// Update the viewport to use the new *drawable* size (which may be greater than the new window size
-	// if SDL's built-in high-DPI support is enabled and functioning).
-	int drawableWidth = 0, drawableHeight = 0;
-	SDL_GL_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
-	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
-	glViewport(0, 0, drawableWidth, drawableHeight);
-	glCullFace(GL_FRONT);
-//	glEnable(GL_CULL_FACE);
+	gfx_api::context::get().handleWindowSizeChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
 
