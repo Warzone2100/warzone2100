@@ -3,6 +3,7 @@ include("script/campaign/templates.js");
 var consoleVar;
 var tutState;
 var didTheyHelpBuildGen;
+var producedUnits;
 
 //Alias for button
 const CLOSE_BUTTON = 0;
@@ -85,18 +86,30 @@ function increaseTutorialState()
 function grantStartTech()
 {
 	const TECH = [
-		"R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels"
+		"R-Vehicle-Body01", "R-Vehicle-Prop-Wheels"
 	];
 
 	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
 }
 
-function eventDroidBuilt()
+function eventDroidBuilt(droid, structure)
 {
 	if (tutState === 25)
 	{
-		increaseTutorialState();
-		setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
+		if (droid.droidType === DROID_CONSTRUCT)
+		{
+			producedUnits.truck = true;
+		}
+		else
+		{
+			producedUnits.tank = true;
+		}
+
+		if (producedUnits.truck === true && producedUnits.tank === true)
+		{
+			increaseTutorialState();
+			setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
+		}
 	}
 }
 
@@ -106,6 +119,8 @@ function eventDeliveryPointMoved()
 	{
 		increaseTutorialState();
 		setReticuleButton(PRODUCTION_BUTTON, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
+		// Change: Allow player to produce the truck.
+		completeResearch("R-Sys-Spade1Mk1", CAM_HUMAN_PLAYER);
 		setReticuleFlash(PRODUCTION_BUTTON, true);
 	}
 }
@@ -445,6 +460,10 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	tutState = 0;
 	didTheyHelpBuildGen = false;
+	producedUnits = {
+		tank: false,
+		truck: false,
+	};
 	setUpConsoleAndAudioVar();
 
 	centreView(startpos.x, startpos.y);
@@ -463,7 +482,6 @@ function eventStartLevel()
 
 	setMiniMap(true);
 	setDesign(false);
-	removeTemplate("ConstructionDroid");
 	removeTemplate("ViperLtMGWheels");
 
 	setReticuleButton(CLOSE_BUTTON, _("Close"), "", "");
