@@ -2424,21 +2424,22 @@ static bool IsFactoryCommanderGroupFull(const FACTORY *psFactory)
 	return true;
 }
 
-// Check if a player has built a command relay.
-bool hasBuiltCommandRelay(bool isMission, int player)
+// Check if a player has a certain structure. Optionally, checks if there is
+// at least one that is built.
+bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission)
 {
-	bool hasRelay = false;
+	bool found = false;
 
 	for (STRUCTURE *psCurr = isMission ? mission.apsStructLists[player] : apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
-		if (psCurr->pStructureType->type == REF_COMMAND_CONTROL && psCurr->status == SS_BUILT)
+		if (psCurr->pStructureType->type == type && (!built || (built && psCurr->status == SS_BUILT)))
 		{
-			hasRelay = true;
+			found = true;
 			break;
 		}
 	}
 
-	return hasRelay;
+	return found;
 }
 
 // Disallow manufacture of units once these limits are reached,
@@ -2502,7 +2503,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 	else switch (droidTemplateType(templ))
 		{
 		case DROID_COMMAND:
-			if (!hasBuiltCommandRelay(isMission, player))
+			if (!structureExists(player, REF_COMMAND_CONTROL, true, isMission))
 			{
 				isLimit = true;
 				ssprintf(limitMsg, _("Can't build \"%s\" without a Command Relay Center — Production Halted"), templ->name.toUtf8().c_str());
