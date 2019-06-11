@@ -401,16 +401,17 @@ function eventStructureBuilt(structure, droid)
 	{
 		increaseTutorialState();
 	}
-	else if (tutState === 7 && structure.stattype === POWER_GEN)
+	else if (tutState <= 7 && structure.stattype === POWER_GEN)
 	{
 		//Maybe they did not understand instructions. Whatever the case, move on.
 		if (!didTheyHelpBuildGen)
 		{
-			for (var i = 0; i < 3; ++i)
+			const NEXT_STATE = 8;
+			while (consoleVar[0].state < NEXT_STATE)
 			{
 				consoleVar.shift(); //skip ahead
 			}
-			tutState = 8;
+			tutState = NEXT_STATE;
 		}
 		else
 		{
