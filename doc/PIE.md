@@ -104,7 +104,9 @@ This feature was removed in commit 823cf08bb18cf24852bac8595b3899aca12d4f7b.
 
 Optional. Specifies the material properties of a mesh. The nine first values give the RGB values for ambient, diffuse and specular lighting, respectively. The last value sets shininess.
 
-### SHADERS
+### SHADERS (disabled)
+
+This feature is currently unsupported.
 
 > SHADERS 2 vertex.vert fragment.vert
 
