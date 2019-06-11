@@ -631,9 +631,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 			debug(LOG_ERROR, "%s shader corrupt: %s", filename.toUtf8().c_str(), buffer);
 			return nullptr;
 		}
-		std::vector<std::string> uniform_names { "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap",
-		                                         "specularmap", "ecmEffect", "alphaTest", "graphicsCycle", "ModelViewProjectionMatrix" };
-		s.shaderProgram = pie_LoadShader(VERSION_AUTODETECT_FROM_LEVEL_LOAD, VERSION_AUTODETECT_FROM_LEVEL_LOAD, filename.toUtf8().c_str(), vertex, fragment, uniform_names);
+		debug(LOG_WARNING, "SHADERS directive no longer supported!");
 		pFileData += cnt;
 	}
 
