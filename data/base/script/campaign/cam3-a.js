@@ -232,6 +232,8 @@ function eventStartLevel()
 	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	cam3Setup();
 
+	enableTemplate("ConstructionDroid");
+
 	camSetEnemyBases({
 		"NEXUS-WBase": {
 			cleanup: "westBaseCleanup",

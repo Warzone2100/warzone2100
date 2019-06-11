@@ -28,6 +28,7 @@ extern std::map<int, DROID_TEMPLATE *> droidTemplates[MAX_PLAYERS];
 
 extern bool allowDesign;
 extern bool includeRedundantDesigns;
+extern bool playerBuiltHQ;
 
 
 bool initTemplates();

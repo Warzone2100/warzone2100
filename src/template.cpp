@@ -44,6 +44,7 @@ std::map<int, DROID_TEMPLATE *> droidTemplates[MAX_PLAYERS];
 
 bool allowDesign = true;
 bool includeRedundantDesigns = false;
+bool playerBuiltHQ = false;
 
 
 static bool researchedItem(const DROID_TEMPLATE* /*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
@@ -645,6 +646,11 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 
 	BODY_SIZE	iCapacity = (BODY_SIZE)psFactory->capacity;
 
+	if (!playerBuiltHQ)
+	{
+		playerBuiltHQ = structureExists(player, REF_HQ, true, false) || structureExists(player, REF_HQ, true, true);
+	}
+
 	/* Add the templates to the list*/
 	for (DROID_TEMPLATE &i : localTemplates)
 	{
@@ -661,8 +667,10 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 				}
 			}
 
-			if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory, false)
-			    || !researchedTemplate(psCurr, player, includeRedundantDesigns))
+			if (!psCurr->enabled
+				|| (bMultiPlayer && !playerBuiltHQ)
+				|| !validTemplateForFactory(psCurr, psFactory, false)
+				|| !researchedTemplate(psCurr, player, includeRedundantDesigns))
 			{
 				continue;
 			}
