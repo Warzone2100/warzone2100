@@ -1655,6 +1655,19 @@ void gl_context::flip()
 	current_program = nullptr;
 }
 
+void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	// Update the viewport to use the new *drawable* size (which may be greater than the new window size
+	// if SDL's built-in high-DPI support is enabled and functioning).
+	int drawableWidth = 0, drawableHeight = 0;
+	backend_impl->getDrawableSize(&drawableWidth, &drawableHeight);
+	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
+
+	glViewport(0, 0, drawableWidth, drawableHeight);
+	glCullFace(GL_FRONT);
+	//	glEnable(GL_CULL_FACE);
+}
+
 void gl_context::shutdown()
 {
 	// move any other cleanup here?
