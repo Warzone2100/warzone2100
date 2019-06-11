@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-16 09:53+0000\n"
-"PO-Revision-Date: 2019-04-08 19:07-0300\n"
+"POT-Creation-Date: 2019-06-11 14:00+0100\n"
+"PO-Revision-Date: 2019-06-20 15:29-0300\n"
 "Last-Translator: Tucalipe <tucalipe@hotmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone2100-project@lists.sourceforge.net>;\n"
 "Language: pt_BR\n"
@@ -5720,7 +5720,7 @@ msgstr "O Comandante lidera e age como ponto de entrega de fábricas"
 
 #: po/custom/fromJson.txt:337
 msgid "Command Relay Center"
-msgstr "Centro de Designação de Comandos"
+msgstr "Centro de Designação de Comando"
 
 #: po/custom/fromJson.txt:338
 msgid "Command Relay Post"
@@ -10513,7 +10513,6 @@ msgid "Colored Cursors"
 msgstr "Cursores Coloridos"
 
 #: src/frontend.cpp:1492
-#, fuzzy
 msgid "Scroll Event"
 msgstr "Evento de scroll"
 
@@ -11066,11 +11065,11 @@ msgstr "Destruindo ciborgues e estruturas selecionadas!"
 
 #: src/keybind.cpp:2305
 msgid "Reveal OFF"
-msgstr "Revelar DESL."
+msgstr "Revelar DESL"
 
 #: src/keybind.cpp:2310
 msgid "Reveal ON"
-msgstr "Revelar LIG."
+msgstr "Revelar LIG"
 
 #: src/keybind.cpp:2391
 msgid "Centered on player HQ, direction NORTH"
@@ -12244,13 +12243,13 @@ msgstr "Fechado"
 
 #: src/multiint.cpp:4359
 #, c-format
-msgid "Sending Map: %d%% "
-msgstr "Enviando mapa: %d%% "
+msgid "Sending Map: %u%% "
+msgstr "Enviando mapa: %u%% "
 
 #: src/multiint.cpp:4359
 #, c-format
-msgid "Map: %d%% downloaded"
-msgstr "Mapa: %d%% baixado"
+msgid "Map: %u%% downloaded"
+msgstr "Mapa: %u%% baixado"
 
 #: src/multiint.cpp:4407
 msgid "HOST"
@@ -12292,6 +12291,11 @@ msgstr "Mensagem do servidor:"
 #: src/multijoin.cpp:513
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
 msgstr "Há uma atualização para o jogo. Visite http://wz2100.net para atualizar."
+
+#. TRANSLATORS: Sidetext of structure limits screen
+#: src/multilimit.cpp:134
+msgid "LIMITS"
+msgstr "LIMITES"
 
 #: src/multilimit.cpp:148
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12673,10 +12677,15 @@ msgstr[1] "%u unidades selecionadas"
 msgid "Can't build anymore units, Unit Limit Reached — Production Halted"
 msgstr "Impossível construir mais unidades, Lim. de Unidades Alcançado —  Produção Interrompida"
 
-#: src/structure.cpp:2504
+#: src/structure.cpp:2508
 #, c-format
-msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
-msgstr "Impossível construir mais %s, Lim. de Controle de Comando Alcançado —  Produção Interrompida"
+msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
+msgstr "Impossível construir %s sem um Centro de Designação de Comando  —  Produção Interrompida"
+
+#: src/structure.cpp:2513
+#, c-format
+msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
+msgstr "Impossível construir %s, limite de unidades de Comando alcançado  —  Produção Interrompida"
 
 #: src/structure.cpp:2512
 #, c-format
@@ -12951,20 +12960,20 @@ msgstr "Versão: %s,%s Construído:%s%s"
 #~ msgid "Start Edit Mode"
 #~ msgstr "Modo Editar Início"
 
-#~ msgid "Short Range"
-#~ msgstr "Curto Alcance"
+msgid "Short Range"
+msgstr "Curto Alcance"
 
-#~ msgid "Long Range"
-#~ msgstr "Longo Alcance"
+msgid "Long Range"
+msgstr "Longo Alcance"
 
-#~ msgid "Optimum Range"
-#~ msgstr "Medio Alcance"
+msgid "Optimum Range"
+msgstr "Medio Alcance"
 
-#~ msgid "Pursue"
-#~ msgstr "Seguir"
+msgid "Pursue"
+msgstr "Seguir"
 
-#~ msgid "Guard Position"
-#~ msgstr "Defender Posição"
+msgid "Guard Position"
+msgstr "Defender Posição"
 
 #~ msgid "Demo mode off - Returning to normal game mode"
 #~ msgstr "Desligando modo demonstração - Voltando ao normal"
