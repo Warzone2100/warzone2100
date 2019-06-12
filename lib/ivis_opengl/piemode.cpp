@@ -91,23 +91,9 @@ void pie_ShutDown()
 
 void pie_ScreenFlip(int clearMode)
 {
-	GLbitfield clearFlags = 0;
-
 	screenDoDumpToDiskIfRequired();
-	gfx_api::context::get().flip();
+	gfx_api::context::get().flip(clearMode);
 	wzPerfFrame();
-	if (clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
-	{
-		return;
-	}
-
-	glDepthMask(GL_TRUE);
-	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-	if (clearMode & CLEAR_SHADOW)
-	{
-		clearFlags |= GL_STENCIL_BUFFER_BIT;
-	}
-	glClear(clearFlags);
 
 	if (screen_GetBackDrop())
 	{

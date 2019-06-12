@@ -22,6 +22,7 @@
 #include "gfx_api_gl.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
+#include "piemode.h"
 
 #include <vector>
 #include <string>
@@ -1648,11 +1649,25 @@ bool gl_context::initGLContext()
 	return true;
 }
 
-void gl_context::flip()
+void gl_context::flip(int clearMode)
 {
 	backend_impl->swapWindow();
 	glUseProgram(0);
 	current_program = nullptr;
+
+	if (clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
+	{
+		return;
+	}
+
+	GLbitfield clearFlags = 0;
+	glDepthMask(GL_TRUE);
+	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+	if (clearMode & CLEAR_SHADOW)
+	{
+		clearFlags |= GL_STENCIL_BUFFER_BIT;
+	}
+	glClear(clearFlags);
 }
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
