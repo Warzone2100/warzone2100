@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-16 09:53+0000\n"
+"POT-Creation-Date: 2019-06-12 12:14+0100\n"
 "PO-Revision-Date: 2019-06-12 11:40+0300\n"
 "Last-Translator: Prot EuPhobos <prot@euphobos.ru>\n"
 "Language-Team: Russian <>\n"
@@ -11985,6 +11985,11 @@ msgstr "Системное сообщение:"
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
 msgstr "Существует обновление к игре, пожалуйста, посетите http://wz2100.net, чтобы загрузить новую версию."
 
+#. TRANSLATORS: Sidetext of structure limits screen
+#: src/multilimit.cpp:134
+msgid "LIMITS"
+msgstr ""
+
 #: src/multilimit.cpp:148
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Применить настройки по умолчанию и вернуться назад"
@@ -12365,10 +12370,14 @@ msgstr "Достигнут Предел Командного Контроля - 
 
 #: src/structure.cpp:2504
 #, fuzzy, c-format
-msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
+msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
 msgstr "Невозможно строить больше \"%s\", Достигнут Предел Командного Контроля — Производство Остановлено"
 
 #: src/structure.cpp:2512
+#, fuzzy, c-format
+msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
+msgstr "Невозможно строить больше \"%s\", Достигнут Предел Командного Контроля — Производство Остановлено"
+
 #, fuzzy, c-format
 msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr "Невозможно строить больше \"%s\", Достигнут Предел Строительных Юнитов - Производство Остановлено"
@@ -12383,11 +12392,11 @@ msgstr[2] "%s - %u Юнитов назначено - Урон %3.0f%%"
 
 #: src/structure.cpp:5447
 #, fuzzy, c-format
-msgid "%s - %u Unit assigned - Damage %3.0f%%"
+msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Юнит назначен - Урон %3.0f%%"
-msgstr[1] "%s - %u Юнита назначено - Урон %3.0f%%"
-msgstr[2] "%s - %u Юнитов назначено - Урон %3.0f%%"
+msgstr[0] "%s - %u Юнит назначен - Урон %d/%d"
+msgstr[1] "%s - %u Юнита назначено - Урон %d/%d"
+msgstr[2] "%s - %u Юнитов назначено - Урон %d/%d"
 
 #: src/structure.cpp:5452 src/structure.cpp:5462 src/structure.cpp:5469
 #: src/structure.cpp:5495 src/structure.cpp:5504 src/structure.cpp:5511
@@ -12639,11 +12648,11 @@ msgstr "Версия %s-%s%s%s%s"
 #~ msgid "Optimum Range"
 #~ msgstr "Оптимальный радиус действия"
 
-#~ msgid "Pursue"
-#~ msgstr "Преследовать"
+msgid "Pursue"
+msgstr "Преследовать"
 
-#~ msgid "Guard Position"
-#~ msgstr "Охранять позиции"
+msgid "Guard Position"
+msgstr "Охранять позиции"
 
 #~ msgid "Demo mode off - Returning to normal game mode"
 #~ msgstr "Демо-режим выключен - возвращение к нормальному режиму игры"
