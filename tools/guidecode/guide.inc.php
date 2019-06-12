@@ -470,7 +470,7 @@ On most distributions of Linux, Warzone should be available in your repositories
 </p>
 <blockquote><p><code>./configure && make</code></p></blockquote>
 <p>
-For compiling tips on other platforms, or if the above fails, see the <a href="http://developer.wz2100.net/wiki/Compile_Guide">Compile Guide</a>.
+For compiling tips on other platforms, or if the above fails, see the <a href="http://developer.wz2100.net/wiki/CompileGuide">Compile Guide</a>.
 </p>
 
 <h3 id="playing">Playing Warzone</h3>
@@ -1998,7 +1998,7 @@ If you\'re new to installing from source on Linux, "the usual" refers to the pro
 </p>
 <blockquote><p><code>./configure && make</code></p></blockquote>
 <p>
-For more detailed information, or if the above fails, see the <a href="http://developer.wz2100.net/wiki/LinuxCompileGuide">Linux Compile Guide</a>.
+For more detailed information, or if the above fails, see the <a href="http://developer.wz2100.net/wiki/CompileGuideLinux">Linux Compile Guide</a>.
 </p>
 <h4 id="other">Other OSes</h4>
 <p>
@@ -3481,7 +3481,7 @@ foreach ($comments as $i => $comment)
 		'autogen' => TRUE,
 		'title' => 'Cheats',
 		'titlebar' => '<span class="arrow">&raquo;</span> <strong>Cheats</strong>',
-		'text' => '<strong style="color:red">These instructions only apply to 2.3 beta 6 and higher. For older versions, see <a href="http://developer.wz2100.net/wiki/Cheats">wiki:cheats</a></strong>
+		'text' => '<strong style="color:red">These instructions only apply to 2.3 beta 6 and higher. For older versions, see <a href="http://developer.wz2100.net/wiki/cheats">wiki:cheats</a></strong>
 <h3 id="enabling">Enabling cheats</h3>
 <p>
 Before you can use cheat codes, you must either use the cheat code "<tt>cheat on</tt>" or press Shift+Backspace. You should get a "Cheats enabled" message when you do this.

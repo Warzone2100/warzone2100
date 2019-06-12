@@ -150,8 +150,6 @@ Additionally:
 
 Then you should revert the changes you made to `configure.ac`, so that git master again becomes git master.
 
-Go to [trac](http://developer.wz2100.net/admin/ticket/versions) to add the new version to the bug tracker.
-
 Time to publish the release!
 ----------------------------
  * Add new version to the Bug Tracker, just in case people find bugs and want to report them.
@@ -165,13 +163,6 @@ Time to publish the release!
 
 And, I am sure that people will spread the word about this new release at the following sites & others.
  * [ModDb](http://www.moddb.com/games/275/warzone-2100), [Softonic](http://warzone-2100.en.softonic.com/), [Gamershell](http://www.gamershell.com/news), [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6), [Reddit](www.reddit.com/r/warzone2100)
-
-### Update version numbers in Trac
-
-Add the new release, mark previous release as "(unsupported)" and update the new release as latest version in resolution dropdown:
-
-    http://developer.wz2100.net/admin/ticket/versions
-    http://developer.wz2100.net/admin/ticket/resolution
 
 ### Updating the version numbers on the server
 
