@@ -328,7 +328,7 @@ msgstr "Нейросвязь была получена!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Первые исследования подтверждают, что это принесет большую пользу Проекту"
+msgstr "Первые исследования подтверждают, что это принесет большую пользу Проекту."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -467,7 +467,7 @@ msgstr "МИССИЯ НА БАЗЕ БЕТА: Удержать любой цен�
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Обнаружены кодированные потоковые сигналы Альянса"
+msgstr "Обнаружены кодированные потоковые сигналы Альянса."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -557,11 +557,11 @@ msgstr "Анализ полётов показал, что самолёты Ал
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "МИССИЯ БАЗЫ БЕТА: уничтожьте вражескую авиабазу и захватите ВВП технологию."
+msgstr "МИССИЯ БАЗЫ БЕТА: уничтожьте вражескую авиабазу и захватите ВВП технологию"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "Авиабаза противника находится здесь; это ваша первоочередная задача"
+msgstr "Авиабаза противника находится здесь; это ваша первоочередная задача."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -595,7 +595,7 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить реактор"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr "Коллектив разыскивает материалы по ядерным реакторам"
+msgstr "Коллектив разыскивает материалы по ядерным реакторам."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
@@ -637,7 +637,7 @@ msgstr "Мы засекли передачи с этого участка, до�
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr "НЕКСУС соединяется со спутниками NASDA. "
+msgstr "НЕКСУС соединяется со спутниками NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
@@ -653,7 +653,7 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить вражескую 
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "если вам придётся отступать - уничтожьте системы ракетных ПВО вокруг вашей базы."
+msgstr "Если вам придётся отступать - уничтожьте системы ракетных ПВО вокруг вашей базы."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
@@ -729,7 +729,7 @@ msgstr "НЕКСУС получил доступ к ядерным ракета�
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr "отправьте ваши войска в Северный сектор."
+msgstr "Отправьте ваши войска в Северный сектор"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
@@ -743,7 +743,7 @@ msgstr "Там команда Гамма свяжется с Вами."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Постройте передовую базу."
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Постройте передовую базу"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
@@ -757,7 +757,7 @@ msgstr "Защитите зону высадки и установите пер�
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: координаты пуска ракеты."
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: координаты пуска ракеты"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -912,7 +912,7 @@ msgstr "Атакуйте войска НЕКСУС и устройте заса�
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Удалённая команда."
+msgstr "ТРАНСПОРТНАЯ МИССИЯ: Удалённая команда"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
@@ -980,7 +980,7 @@ msgstr "Вторая база команды Гамма находится зд�
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr "у нас нет времени на эвакуацию этой базы и мы направляемся к базе Гамма."
+msgstr "У нас нет времени на эвакуацию этой базы и мы направляемся к базе Гамма."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
@@ -1029,7 +1029,7 @@ msgstr "НЕКСУС присутствует в наших системах."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr "Чтобы победить НЕКСУС мы должны исследовать Программу вторжения НЕКСУС"
+msgstr "Чтобы победить НЕКСУС мы должны исследовать Программу вторжения НЕКСУС."
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
@@ -1097,7 +1097,7 @@ msgstr "Мы обнаружили базу НЕКСУС в этих коорди
 
 #: data/base/messages/strings/cam3strings.txt:184
 msgid "This area contains numerous NEXUS structures."
-msgstr "В этом районе присутствуют многочисленные постройки НЕКСУС"
+msgstr "В этом районе присутствуют многочисленные постройки НЕКСУС."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
@@ -1133,7 +1133,7 @@ msgstr "Неизвестный артефакт"
 
 #: data/base/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
-msgstr "Источник Энергетических всплесков."
+msgstr "Источник Энергетических всплесков"
 
 #: data/base/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
@@ -1655,7 +1655,7 @@ msgstr "Киберматериал улучшен"
 #: data/mp/messages/strings/resstrings.txt:2
 #: data/mp/messages/strings/resstrings.txt:262 po/custom/fromJson.txt:819
 msgid "Layered dense composite alloys and energy-absorbing fibres"
-msgstr "слоистый прочный сплав и энергопоглощающие волокна"
+msgstr "Слоистый прочный сплав и энергопоглощающие волокна"
 
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:3 po/custom/fromJson.txt:744
@@ -1900,7 +1900,7 @@ msgstr "Установка с Зениткой Вихрь"
 #: data/base/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:57 po/custom/fromJson.txt:769
 msgid "Indirect fire rocket battery"
-msgstr "ракетная батарея непрямого огня"
+msgstr "Ракетная батарея непрямого огня"
 
 #: data/base/messages/strings/resstrings.txt:143
 #: data/base/messages/strings/resstrings.txt:155
@@ -2094,7 +2094,7 @@ msgstr "Роботизированная ремонтная мастерская
 #: data/base/messages/strings/resstrings.txt:335
 #: data/mp/messages/strings/resstrings.txt:168 po/custom/fromJson.txt:762
 msgid "Increases Repair Speed"
-msgstr "повышает скорость ремонта"
+msgstr "Повышает скорость ремонта"
 
 #: data/base/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:169 po/custom/fromJson.txt:88
@@ -2106,7 +2106,7 @@ msgstr "Все ремблоки улучшаются автоматически"
 #: data/mp/messages/strings/resstrings.txt:171
 #: data/mp/messages/strings/resstrings.txt:176 po/custom/fromJson.txt:380
 msgid "Cyborg Production Improved"
-msgstr "улучшает производство киборгов"
+msgstr "Улучшает производство киборгов"
 
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/strings/resstrings.txt:172 po/custom/fromJson.txt:1143
@@ -2118,14 +2118,14 @@ msgstr "Роботопроизводство киборгов"
 #: data/mp/messages/strings/resstrings.txt:173
 #: data/mp/messages/strings/resstrings.txt:178 po/custom/fromJson.txt:734
 msgid "Increases Cyborg factory output"
-msgstr "увеличивает выход киберзаводов"
+msgstr "Увеличивает выход киберзаводов"
 
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
 #: data/mp/messages/strings/resstrings.txt:174
 #: data/mp/messages/strings/resstrings.txt:179 po/custom/fromJson.txt:72
 msgid "All Cyborg factories upgraded automatically"
-msgstr "все киберзаводы улучшаются автоматически"
+msgstr "Все киборг  заводы улучшаются автоматически"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2137,7 +2137,7 @@ msgstr "Саморепликация производства киборгов"
 #: data/mp/messages/strings/resstrings.txt:181
 #: data/mp/messages/strings/resstrings.txt:186 po/custom/fromJson.txt:1378
 msgid "Vehicle Production Improved"
-msgstr "производство транспорта улучшено"
+msgstr "Производство транспорта улучшено"
 
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/strings/resstrings.txt:182 po/custom/fromJson.txt:970
@@ -2154,7 +2154,7 @@ msgstr "Увеличивает производительность заводо
 #: data/mp/messages/strings/resstrings.txt:184
 #: data/mp/messages/strings/resstrings.txt:189 po/custom/fromJson.txt:94
 msgid "All vehicle factories upgraded automatically"
-msgstr "все заводы улучшаются автоматически"
+msgstr "Все заводы улучшаются автоматически"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -2179,7 +2179,7 @@ msgstr "Углублённый анализ синаптической связ�
 #: data/base/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:193 po/custom/fromJson.txt:763
 msgid "Increases research speed"
-msgstr "повышает скорость исследований"
+msgstr "Повышает скорость исследований"
 
 #: data/base/messages/strings/resstrings.txt:392
 #: data/mp/messages/strings/resstrings.txt:194 po/custom/fromJson.txt:89
@@ -2204,7 +2204,7 @@ msgstr "Все постройки улучшаются автоматическ�
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/strings/resstrings.txt:201 po/custom/fromJson.txt:1057
 msgid "Production Improved"
-msgstr "производство улучшено"
+msgstr "Производство улучшено"
 
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/strings/resstrings.txt:202 po/custom/fromJson.txt:1155
@@ -2271,7 +2271,7 @@ msgstr "Прорыв в исследовании, повышающий скор�
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:218
 msgid "Increases repair speed"
-msgstr "повышает скорость ремонта"
+msgstr "Повышает скорость ремонта"
 
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
@@ -2346,7 +2346,7 @@ msgstr "Новая система распознавания цели"
 #: data/base/messages/strings/resstrings.txt:501
 #: data/mp/messages/strings/resstrings.txt:238 po/custom/fromJson.txt:449
 msgid "Extends VTOL Strike Range"
-msgstr "увеличивает радиус действия Боевой Башни ВВС"
+msgstr "Увеличивает радиус действия Боевой Башни ВВС"
 
 #: data/base/messages/strings/resstrings.txt:502
 #: data/mp/messages/strings/resstrings.txt:239 po/custom/fromJson.txt:98
@@ -2440,7 +2440,7 @@ msgstr "Все машины улучшаются автоматически"
 #: data/base/messages/strings/resstrings.txt:571
 #: data/mp/messages/strings/resstrings.txt:261 po/custom/fromJson.txt:1376
 msgid "Vehicle Bodies Improved"
-msgstr "корпус машин улучшены"
+msgstr "Корпус машин улучшены"
 
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:263 po/custom/fromJson.txt:743
@@ -2572,7 +2572,7 @@ msgstr "Обнаруживает и берёт на прицел, отслежи
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:313 po/custom/fromJson.txt:723
 msgid "Increases AA accuracy"
-msgstr "повышает точность ПВО"
+msgstr "Повышает точность ПВО"
 
 #: data/base/messages/strings/resstrings.txt:662
 #: data/base/messages/strings/resstrings.txt:680
@@ -2995,7 +2995,7 @@ msgstr "Исследования (F2)"
 #: data/base/script/tutorial.js:470 data/mp/multiplay/skirmish/rules.js:71
 #, fuzzy
 msgid "Research - build research facility first"
-msgstr "модуль лаборатории расширяет возможности исследования"
+msgstr "Модуль лаборатории расширяет возможности исследования"
 
 #: data/base/script/rules.js:110 data/base/script/tutorial.js:125
 #: data/base/script/tutorial.js:248 data/base/script/tutorial.js:318
@@ -3254,7 +3254,7 @@ msgstr "В полёте к Западному сектору"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr "Команда Альфа достигла своей цели."
+msgstr "Команда Альфа достигла своей цели"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -3304,7 +3304,7 @@ msgstr "Ваши нападения на нас не останутся безн
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr "Ты враг Новой Парадигмы"
+msgstr "Ты враг Новой Парадигмы."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -3601,7 +3601,7 @@ msgstr "Мы засекли передачи с этого участка, до�
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr "НЕКСУС соединяется со спутниками NASDA. "
+msgstr "НЕКСУС соединяется со спутниками NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
@@ -3613,7 +3613,7 @@ msgstr "Анализ Центральной НАСДА  не оставляет 
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr "Ядерный реактор будет использован для питания обширной сети пред-Коллапсных компьютерных систем"
+msgstr "Ядерный реактор будет использован для питания обширной сети пред-Коллапсных компьютерных систем."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
@@ -3717,7 +3717,7 @@ msgstr "Последняя встреча"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
 msgid "Briefing Commences"
-msgstr "Начало инструктажа:"
+msgstr "Начало инструктажа"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
@@ -3729,7 +3729,7 @@ msgstr "Группа Гамма в настоящее время разведа�
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
-msgstr "Время вышло, Командующий."
+msgstr "Время вышло, Командующий!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
@@ -3853,7 +3853,7 @@ msgstr "Давайте начнём с активации Нексус в ваш
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "Командир, испытываем неполадки с нашим оборудованием"
+msgstr "Командир, испытываем неполадки с нашим оборудованием."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
@@ -3865,11 +3865,11 @@ msgstr "Не спешите , Командующий. Вам некуда бол
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr "Однако, если вы покинете этот объект, то я отпущу вас , так как вы больше не представляете угрозы для меня"
+msgstr "Однако, если вы покинете этот объект, то я отпущу вас , так как вы больше не представляете угрозы для меня."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr "У вас есть пять минут, чтобы согласиться, либо это время жарки."
+msgstr "У вас есть пять минут, чтобы согласиться, либо это время жарки!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
@@ -4340,7 +4340,7 @@ msgstr ""
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 #, fuzzy
 msgid "Researching "
-msgstr "Исследования"
+msgstr "Исследования "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -4430,7 +4430,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2892
 msgid "Failed to get a lobby response!"
-msgstr "Не получилось получить ответ от лобби"
+msgstr "Не получилось получить ответ от лобби!"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -4486,11 +4486,11 @@ msgstr "Цепная подача снарядов ПВО Мk3"
 
 #: po/custom/fromJson.txt:17
 msgid "AA Flak Cannon"
-msgstr "Зенитная пушка."
+msgstr "Зенитная пушка"
 
 #: po/custom/fromJson.txt:18
 msgid "AA Flak Cannon Emplacement"
-msgstr "Установка орудия зенитной пушки."
+msgstr "Установка орудия зенитной пушки"
 
 #: po/custom/fromJson.txt:19
 msgid "AA Flak Cannon Hardpoint"
@@ -4619,7 +4619,7 @@ msgstr "Продвинутая система распознавания цел�
 
 #: po/custom/fromJson.txt:59
 msgid "Advanced Thermal Emissions detection"
-msgstr "Продвинутая система обнаружения источников тепла."
+msgstr "Продвинутая система обнаружения источников тепла"
 
 #: po/custom/fromJson.txt:60
 msgid "Advanced VTOL Production"
@@ -4649,7 +4649,7 @@ msgstr "Все пушки автоматически улучшены"
 
 #: po/custom/fromJson.txt:71
 msgid "All CB sensors upgraded automatically"
-msgstr "Все КБ Сенсоры автоматически улучшились "
+msgstr "Все КБ Сенсоры автоматически улучшились"
 
 #: po/custom/fromJson.txt:75
 msgid "All factories upgraded automatically"
@@ -4681,7 +4681,7 @@ msgstr "Все гусеницы автоматически улучшены"
 
 #: po/custom/fromJson.txt:99
 msgid "All VTOLs upgraded automatically"
-msgstr "все ВВС улучшаются автоматически"
+msgstr "Все ВВС улучшаются автоматически"
 
 #: po/custom/fromJson.txt:101
 msgid "Ally"
@@ -4810,7 +4810,7 @@ msgstr "Киборг-Лансер"
 
 #: po/custom/fromJson.txt:134
 msgid "Armed with Lancer anti-tank missile"
-msgstr "вооружён противотанковой ракетой Лансер"
+msgstr "Вооружён противотанковой ракетой Лансер"
 
 #: po/custom/fromJson.txt:135
 msgid "Armed with Machinegun"
@@ -5058,7 +5058,7 @@ msgstr "Направить самолёт на посадочную площад
 
 #: po/custom/fromJson.txt:211
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "назначенные ВВС атакуют определённые цели"
+msgstr "Назначенные ВВС атакуют определённые цели"
 
 #: po/custom/fromJson.txt:212
 msgid "Assigned VTOLs attack the enemy units"
@@ -5160,7 +5160,7 @@ msgstr "ББ Опора"
 #: po/custom/fromJson.txt:243
 #, fuzzy
 msgid "Back to Basics"
-msgstr "Вернуться в нормальное состояние!"
+msgstr "Вернуться в нормальное состояние"
 
 #: po/custom/fromJson.txt:244
 msgid "Battlefield repair unit"
@@ -5734,7 +5734,7 @@ msgstr "Плотный композитный сплав Mk3"
 
 #: po/custom/fromJson.txt:413
 msgid "Depleted uranium kinetic energy bullets"
-msgstr "снаряды с кинетической энергией обеднённого урана"
+msgstr "Снаряды с кинетической энергией обеднённого урана"
 
 #: po/custom/fromJson.txt:414
 msgid "Depleted Uranium MG Bullets"
@@ -5746,7 +5746,7 @@ msgstr "Определяет расстояние до цели"
 
 #: po/custom/fromJson.txt:418
 msgid "Directs and collates information for command turrets"
-msgstr "направляет и обрабатывает информацию для командных турелей"
+msgstr "Направляет и обрабатывает информацию для командных турелей"
 
 #: po/custom/fromJson.txt:419
 msgid "Does not offer sensor targeting"
@@ -5818,11 +5818,11 @@ msgstr "Позволяет постройкам ремонтироваться �
 
 #: po/custom/fromJson.txt:438
 msgid "Enables self-repair in all Cyborgs"
-msgstr "позволяет киборгам самовосстанавливаться"
+msgstr "Позволяет киборгам самовосстанавливаться"
 
 #: po/custom/fromJson.txt:439
 msgid "Enables self-repair in all defenses"
-msgstr "позволяет защитным сооружениям ремонтироваться автоматически"
+msgstr "Позволяет защитным сооружениям ремонтироваться автоматически"
 
 #: po/custom/fromJson.txt:440
 msgid "Enables self-repair in all vehicles"
@@ -5867,7 +5867,7 @@ msgstr "Заводской модуль"
 
 #: po/custom/fromJson.txt:452
 msgid "Factory module enables medium and large bodies"
-msgstr "модуль завода позволяет создавать юнитов со средней и тяжёлой броней"
+msgstr "Модуль завода позволяет создавать юнитов со средней и тяжёлой броней"
 
 #: po/custom/fromJson.txt:453
 #, fuzzy, c-format
@@ -6149,7 +6149,7 @@ msgstr "Пули с твёрдой оболочкой"
 
 #: po/custom/fromJson.txt:530
 msgid "Hardened MG Bullets"
-msgstr "Усиленные пули "
+msgstr "Усиленные пули"
 
 #: po/custom/fromJson.txt:531
 msgid "Hardened Rail Dart"
@@ -6774,7 +6774,7 @@ msgstr "Улучшены системы опознавания цели"
 
 #: po/custom/fromJson.txt:710
 msgid "Improved Thermal Emissions detection"
-msgstr "Улучшенная система обнаружения источников тепла."
+msgstr "Улучшенная система обнаружения источников тепла"
 
 #: po/custom/fromJson.txt:711
 msgid "Improved Titanium-reinforced concrete"
@@ -6947,7 +6947,7 @@ msgstr "Инферно Питон Ховер"
 
 #: po/custom/fromJson.txt:780
 msgid "Intruder parasite isolated"
-msgstr "паразит-захватчик изолирован"
+msgstr "Паразит-захватчик изолирован"
 
 #: po/custom/fromJson.txt:781
 msgid "Ionizing Turbine Engine"
@@ -6971,7 +6971,7 @@ msgstr "Можно исследовать Киборгов-,Прыгунов"
 
 #: po/custom/fromJson.txt:786
 msgid "Keeps map areas under constant surveillance"
-msgstr "постоянно наблюдает за областями на карте"
+msgstr "Постоянно наблюдает за областями на карте"
 
 #: po/custom/fromJson.txt:787
 msgid "Kinetic armor +30%, body points +30%"
@@ -7225,7 +7225,7 @@ msgstr "Можно привязать к радару"
 
 #: po/custom/fromJson.txt:859
 msgid "May be targeted directly or assigned to a sensor turret or tower"
-msgstr "Может использоваться непосредственно или привязанным к датчику или к башне."
+msgstr "Может использоваться непосредственно или привязанным к датчику или к башне"
 
 #: po/custom/fromJson.txt:860
 msgid "May be upgraded using factory modules"
@@ -7521,11 +7521,11 @@ msgstr "Доступно новое продвинутое оружие"
 
 #: po/custom/fromJson.txt:940
 msgid "New Artillery Missile Turret Available"
-msgstr "Доступна новая Артиллерийская ракетная батарея "
+msgstr "Доступна новая Артиллерийская ракетная батарея"
 
 #: po/custom/fromJson.txt:941
 msgid "New automated repair techniques"
-msgstr "новая автоматизированная ремонтная мастерская"
+msgstr "Новая автоматизированная ремонтная мастерская"
 
 #: po/custom/fromJson.txt:942
 msgid "New Base Structure Available"
@@ -7549,7 +7549,7 @@ msgstr "Новая электронная технология открыта"
 
 #: po/custom/fromJson.txt:954
 msgid "New Laser Weapon Available"
-msgstr "Доступно новое лазерное орудие "
+msgstr "Доступно новое лазерное орудие"
 
 #: po/custom/fromJson.txt:955
 msgid "New Missile Turret Available"
@@ -7899,7 +7899,7 @@ msgstr "Стоимость и скорость производства как �
 
 #: po/custom/fromJson.txt:1046
 msgid "Power cost and production time the same as Python"
-msgstr "стоимость и время производства как у Питона"
+msgstr "Стоимость и время производства как у Питона"
 
 #: po/custom/fromJson.txt:1047
 msgid "Powerful Electronic magnetic pulse weapon"
@@ -8204,7 +8204,7 @@ msgstr "доступен модуль лаборатории"
 
 #: po/custom/fromJson.txt:1135
 msgid "Research module expands research facilities"
-msgstr "модуль лаборатории расширяет возможности исследования"
+msgstr "Лабораторный модуль расширяет возможности исследования"
 
 #: po/custom/fromJson.txt:1136
 msgid "Research speed +30%"
@@ -8472,7 +8472,7 @@ msgstr "Ракеты Найти и уничтожить"
 
 #: po/custom/fromJson.txt:1207
 msgid "Select new targets to continue the VTOL strikes"
-msgstr "выбери новые цели для атаки ВВС"
+msgstr "Выбери новые цели для атаки ВВС"
 
 #: po/custom/fromJson.txt:1209
 msgid "Self-guided rocket-powered shells"
@@ -8688,11 +8688,11 @@ msgstr "Супергорючая смесь Плазмы Мk3"
 
 #: po/custom/fromJson.txt:1275 src/design.cpp:1063
 msgid "Super Transport"
-msgstr "Супер-Транспорт."
+msgstr "Супер-Транспорт"
 
 #: po/custom/fromJson.txt:1276
 msgid "Super Transport Available"
-msgstr "Доступен Супер-Транспорт."
+msgstr "Доступен Супер-Транспорт"
 
 #: po/custom/fromJson.txt:1277
 msgid "Super Transport Body"
@@ -9020,7 +9020,7 @@ msgstr "Датчик связи"
 
 #: po/custom/fromJson.txt:1364
 msgid "Use a truck to add modules to a factory"
-msgstr "используй строительный бульдозер чтобы достроить модули заводу"
+msgstr "Используй строительный бульдозер чтобы достроить модули заводу"
 
 #: po/custom/fromJson.txt:1365
 msgid "Use a truck to add the module to a power generator"
@@ -9429,7 +9429,7 @@ msgid ""
 "Copyright © 2005-2013 The Warzone 2100 Project"
 msgstr ""
 "Все права сохранены © 1999-2004 Eidos Interactive.\n"
-"Все права сохранены © 2005-2011 The Warzone 2100 Project"
+"Все права сохранены © 2005-2013 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2 po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
@@ -9487,7 +9487,7 @@ msgstr "Меню отладки закрыто"
 
 #: src/clparse.cpp:261
 msgid "Set configuration directory"
-msgstr "выбрать папку с настройками"
+msgstr "Выбрать папку с настройками"
 
 #: src/clparse.cpp:261
 msgid "configuration directory"
@@ -9547,7 +9547,7 @@ msgstr "Показать номер версии и выйти"
 
 #: src/clparse.cpp:270
 msgid "Enable a global mod"
-msgstr "включить глобальный мод"
+msgstr "Включить глобальный мод"
 
 #: src/clparse.cpp:270 src/clparse.cpp:271 src/clparse.cpp:272
 msgid "mod"
@@ -9555,7 +9555,7 @@ msgstr "мод"
 
 #: src/clparse.cpp:271
 msgid "Enable a campaign only mod"
-msgstr "включить мод для Кампаний "
+msgstr "Включить мод для Кампаний"
 
 #: src/clparse.cpp:272
 msgid "Enable a multiplay only mod"
@@ -9567,7 +9567,7 @@ msgstr "Отключить утверждения"
 
 #: src/clparse.cpp:274
 msgid "Causes a crash to test the crash handler"
-msgstr "вызывает крэш для тестирования программы обработки "
+msgstr "Вызывает крэш для тестирования программы обработки"
 
 #: src/clparse.cpp:275
 #, fuzzy
@@ -9618,16 +9618,16 @@ msgstr "Отключить звук"
 #: src/clparse.cpp:284
 #, fuzzy
 msgid "Connect directly to IP/hostname"
-msgstr "прямое соединение с IP/ имя сервера"
+msgstr "Прямое соединение с IP/ имя сервера"
 
 #: src/clparse.cpp:284
 msgid "host"
-msgstr "Хост"
+msgstr "хост"
 
 #: src/clparse.cpp:285
 #, fuzzy
 msgid "Go directly to host screen"
-msgstr "прямо на экран хоста"
+msgstr "Прямо на экран хоста"
 
 #: src/clparse.cpp:286
 msgid "Enable texture compression"
@@ -9729,7 +9729,7 @@ msgstr "Использование энергии"
 
 #: src/design.cpp:1085
 msgid "Hydra "
-msgstr "Гидра"
+msgstr "Гидра "
 
 #: src/design.cpp:1256 src/design.cpp:1276
 msgid "Sensor Range"
@@ -10303,11 +10303,11 @@ msgstr "НАСТРОЙКИ ИГРЫ"
 
 #: src/frontend.cpp:1782 src/multiint.cpp:2808
 msgid "Mod: "
-msgstr "Мод:"
+msgstr "Мод: "
 
 #: src/hci.cpp:1129 src/loop.cpp:251 src/loop.cpp:267
 msgid "GAME SAVED: "
-msgstr "ИГРА СОХРАНЕНА:"
+msgstr "ИГРА СОХРАНЕНА: "
 
 #: src/hci.cpp:1533
 #, c-format
@@ -10446,7 +10446,7 @@ msgstr "Ожидание энергии"
 
 #: src/intdisplay.cpp:212
 msgid "Build Progress"
-msgstr "прогресс постройки"
+msgstr "Прогресс постройки"
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
@@ -10458,7 +10458,7 @@ msgstr "Прогресс Разработки"
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
-msgstr "Нужно больше ресурсов"
+msgstr "Нужно больше ресурсов!"
 
 #: src/intelmap.cpp:242 src/keybind.cpp:1399
 msgid "PAUSED"
@@ -10558,11 +10558,11 @@ msgstr "Внимание! Этот читкод может вызвать нес
 
 #: src/keybind.cpp:218
 msgid "Ouch! Droid's health is down 20%!"
-msgstr "Ауч! Жизни дроида ниже 20%"
+msgstr "Ауч! Жизни дроида ниже 20%!"
 
 #: src/keybind.cpp:234
 msgid "Ouch! Structure's health is down 20%!"
-msgstr "Ауч! Жизнь строения ниже 20%"
+msgstr "Ауч! Жизнь строения ниже 20%!"
 
 #: src/keybind.cpp:290
 msgid "Lets us see what you see!"
@@ -10727,7 +10727,7 @@ msgstr "Открыто меню отладки"
 
 #: src/keybind.cpp:1594
 msgid "Unable to locate any oil derricks!"
-msgstr "Невозможно найти ни одной нефтяной вышки"
+msgstr "Невозможно найти ни одной нефтяной вышки!"
 
 #: src/keybind.cpp:1760
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -11119,7 +11119,7 @@ msgstr "Перекрытия"
 #: src/keymap.cpp:374
 #, fuzzy
 msgid "Toggle Console History "
-msgstr "Переключатель консоли"
+msgstr "Переключатель консоли "
 
 #: src/keymap.cpp:375
 msgid "Toggle Team Chat History"
@@ -11302,11 +11302,11 @@ msgstr "Переключение видимости"
 
 #: src/keymap.cpp:444
 msgid "Raise tile height"
-msgstr "Подняться выше."
+msgstr "Подняться выше"
 
 #: src/keymap.cpp:445
 msgid "Lower tile height"
-msgstr "Нижний рычаг выше."
+msgstr "Нижний рычаг выше"
 
 #: src/keymap.cpp:446
 msgid "End Mission"
@@ -11342,7 +11342,7 @@ msgstr "Переключить режим бога"
 
 #: src/keymap.cpp:456
 msgid "Display Options Screen"
-msgstr "Экран настройки дисплея."
+msgstr "Экран настройки дисплея"
 
 #: src/keymap.cpp:457
 msgid "Complete current research"
@@ -11540,7 +11540,7 @@ msgstr "Неверная версия игры!"
 
 #: src/multiint.cpp:1204
 msgid "You have an incompatible mod."
-msgstr "Несовместимый мод"
+msgstr "Несовместимый мод."
 
 #: src/multiint.cpp:1208
 msgid "Host couldn't send file?"
@@ -11606,7 +11606,7 @@ msgstr "Центр связи со спутником"
 
 #: src/multiint.cpp:1666
 msgid "Laser Satellite disabled."
-msgstr "Лазерный Спутник Отключён"
+msgstr "Лазерный Спутник Отключён."
 
 #: src/multiint.cpp:1709 src/multiint.cpp:4238
 #, fuzzy
@@ -11796,7 +11796,7 @@ msgstr "Нажмите, чтобы выбрать этот слот"
 
 #: src/multiint.cpp:2637
 msgid "Choose Team"
-msgstr "Выбрать команду."
+msgstr "Выбрать команду"
 
 #: src/multiint.cpp:2641
 #, fuzzy
@@ -12049,7 +12049,7 @@ msgstr "Пак: %u/%u"
 
 #: src/multimenu.cpp:1091
 msgid "Channel"
-msgstr "Канал."
+msgstr "Канал"
 
 #: src/multimenu.cpp:1105
 msgid "Toggle Alliance State"
@@ -12095,7 +12095,7 @@ msgstr "(союзники"
 
 #: src/multiplay.cpp:1260
 msgid "(private to "
-msgstr "(приват"
+msgstr "(приват "
 
 #: src/multiplay.cpp:1273
 msgid "[invalid]"
@@ -12175,7 +12175,7 @@ msgstr "Коричневый"
 
 #: src/order.cpp:788
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr "Мы не киборги, чтобы использовать Транспорт киборгов."
+msgstr "Мы не киборги, чтобы использовать Транспорт киборгов!"
 
 #: src/qtscriptfuncs.cpp:2987 src/scriptfuncs.cpp:3064
 msgid "YOU ARE VICTORIOUS!"
@@ -12431,7 +12431,7 @@ msgstr "Запустить Транспорт"
 
 #: src/transporter.cpp:985
 msgid "There is not enough room in the Transport!"
-msgstr "Недостаточно места для посадки юнитов в Транспорт."
+msgstr "Недостаточно места для посадки юнитов в Транспорт!"
 
 #: src/transporter.cpp:1164
 msgid "Reinforcements landing"
