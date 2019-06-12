@@ -36,8 +36,8 @@ function setUpConsoleAndAudioVar()
 		{"audio": "tut10.ogg", "clear": false, "message": _("To increase your build rate, select your second truck"), "state": 5, "wait": 0},
 		{"audio": "tut11.ogg", "clear": false, "message": _("Now left click the power generator site"), "state": 6, "wait": 2},
 		{"audio": "tut12.ogg", "clear": false, "message": _("The other truck will now help to build the power generator"), "state": 7, "wait": 2},
-		{"audio": "tut13.ogg", "clear": true, "message": _("During missions you need to locate and recover technologies from before the Collapse"), "state": 7, "wait": 3},
 		//==PART TWO== Power Station has been built, by whatever means
+		{"audio": "tut13.ogg", "clear": true, "message": _("During missions you need to locate and recover technologies from before the Collapse"), "state": 8, "wait": 3},
 		{"audio": "tut15.ogg", "clear": false, "message": _("Use a truck to search for the artifact indicated by the radar pulse"), "state": 8, "wait": 3, "func": "addTheArtifact"},
 		{"audio": "tut16.ogg", "clear": false, "message": _("Move the pointer over the artifact and left click to recover it"), "state": 8, "wait": 4},
 		{"audio": "tut17.ogg", "clear": false, "message": undefined, "state": 8, "wait": 3},
