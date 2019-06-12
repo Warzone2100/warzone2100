@@ -570,7 +570,7 @@ msgstr "Уничтожите все силы Альянса и захватит�
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr "ВТОРОСТЕПЕННАЯ МИССИЯ: Уничтожите или обездвижьте вражеский транспорт."
+msgstr "ВТОРОСТЕПЕННАЯ МИССИЯ: Уничтожите или остановите вражеский транспорт"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
@@ -2039,7 +2039,7 @@ msgstr "Бронированная вышка с огнемётом"
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "бронированная вышка с ракетницей Лансер"
+msgstr "Укрепленная защитная башня с установкой Лансер"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
@@ -3017,7 +3017,7 @@ msgstr "Дизайн (F4)"
 #: data/base/script/rules.js:157 data/base/script/tutorial.js:245
 #: data/base/script/tutorial.js:472 data/mp/multiplay/skirmish/rules.js:109
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "Дизайн - сначала постройте командный центр"
 
 #: data/base/script/rules.js:167 data/mp/multiplay/skirmish/rules.js:119
 #: src/scriptfuncs.cpp:1307
@@ -4344,7 +4344,7 @@ msgstr "Исследования "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "Не найдено пути исследования! Попробуйте один из них:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
@@ -4398,6 +4398,8 @@ msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
+"Вы должны вручную настроить маршрутизатор и брандмауэр для \n"
+"открытия порта 2100 прежде чем вы сможете создавать игру."
 
 #: lib/netplay/netplay.cpp:1053
 #, c-format
@@ -4405,10 +4407,14 @@ msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
+"Игровой порт настроен правильно (% s) на (% s)\n"
+"Ваш внешний IP% s"
 
 #: lib/netplay/netplay.cpp:1825
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
+"Устройство UPnP не найдено. \n"
+"Настройте свой маршрутизатор/брандмауэр, чтобы открыть порт 2100!"
 
 #: lib/netplay/netplay.cpp:2170
 #, c-format
@@ -4685,7 +4691,7 @@ msgstr "Все ВВС улучшаются автоматически"
 
 #: po/custom/fromJson.txt:101
 msgid "Ally"
-msgstr ""
+msgstr "Союзник"
 
 #: po/custom/fromJson.txt:102
 msgid "Alpha"
@@ -5022,7 +5028,7 @@ msgstr "Установка штурмового орудия"
 
 #: po/custom/fromJson.txt:201
 msgid "Assault Gun Guard Tower"
-msgstr "охранная вышка со Штурмовым орудием"
+msgstr "Укрепленная башня с Штурмовым пулеметом"
 
 #: po/custom/fromJson.txt:202
 msgid "Assault Gun Hardpoint"
@@ -5269,7 +5275,7 @@ msgstr "Багги"
 
 #: po/custom/fromJson.txt:284
 msgid "Built-in diagnostic and repair systems"
-msgstr "встраивает системы диагностики и восстановления"
+msgstr "Встраивает системы диагностики и ремонта"
 
 #: po/custom/fromJson.txt:285
 msgid "Bunker Buster"
@@ -7614,7 +7620,7 @@ msgstr "Доступна новая система"
 #: po/custom/fromJson.txt:974
 #, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Доступна новая системная башня"
+msgstr "Доступен новый сенсор"
 
 #: po/custom/fromJson.txt:975
 msgid "New Systems Structure Available"
@@ -7803,7 +7809,7 @@ msgstr "Сражение"
 
 #: po/custom/fromJson.txt:1022
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "или выбери ремонтный блок в качестве цели для юнитов"
+msgstr "Или выбери ремонтный блок в качестве цели для юнитов"
 
 #: po/custom/fromJson.txt:1023
 msgid "Panther"
@@ -9479,11 +9485,11 @@ msgstr "%s хочет отключить режим отладки. Включё
 
 #: src/cheat.cpp:175
 msgid "Debug mode now enabled!"
-msgstr "Отладочный режим включён"
+msgstr "Отладочный режим включен!"
 
 #: src/cheat.cpp:181
 msgid "Debug mode now disabled!"
-msgstr "Меню отладки закрыто"
+msgstr "Отладочный режим выключен!"
 
 #: src/clparse.cpp:261
 msgid "Set configuration directory"
@@ -9639,7 +9645,7 @@ msgstr "Отключить сжатие текстур"
 
 #: src/clparse.cpp:288
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "Запуск игр автоматически для тестирования"
 
 #: src/clparse.cpp:289
 msgid "Immediately save game and quit"
@@ -10362,6 +10368,8 @@ msgid ""
 "\n"
 "Cost: %1"
 msgstr ""
+"\n"
+"Цена: %1"
 
 #: src/hci.cpp:4936
 msgid "Chat: All"
@@ -10383,7 +10391,7 @@ msgstr "Внимание: Вы владелец этой игры. Если вы
 #: src/ingameop.cpp:125 src/ingameop.cpp:222
 #, fuzzy
 msgid "Host Quit"
-msgstr "Выход"
+msgstr "Выход хоста"
 
 #: src/ingameop.cpp:164 src/ingameop.cpp:498
 msgid "Tactical UI (Target Origin Icon): Show"
@@ -10870,7 +10878,7 @@ msgstr "Переключатель консоли"
 
 #: src/keymap.cpp:298
 msgid "Toggle Damage Bars On/Off"
-msgstr "Переключатель панелей урона вкл./выкл."
+msgstr "Переключатель индикации жизни вкл./выкл."
 
 #: src/keymap.cpp:299
 msgid "Take Screen Shot"
@@ -11350,7 +11358,7 @@ msgstr "Закончить изучаемое исследование"
 
 #: src/keymap.cpp:458
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "Показать карту в позиции мыши"
 
 #: src/keymap.cpp:459
 #, fuzzy
@@ -11844,7 +11852,7 @@ msgstr "*** пароль не требуется! ***"
 
 #: src/multiint.cpp:3199
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
+msgstr "Это мод-карта, она может изменить ваш игровой опыт!"
 
 #: src/multiint.cpp:3245
 msgid "Sorry! Failed to host the game."
@@ -11878,7 +11886,7 @@ msgstr "Обнаружение UPnP отключено пользователе�
 
 #: src/multiint.cpp:4055
 msgid "Hit the ready box to begin your challenge!"
-msgstr ""
+msgstr "Нажмите готов в квадратике, чтобы начать свое сражение!"
 
 #: src/multiint.cpp:4059
 msgid "Press the start hosting button to begin hosting a game."
@@ -12386,7 +12394,7 @@ msgstr[2] "%s - %u Юнитов назначено - Урон %3.0f%%"
 #: src/structure.cpp:5519
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Жизни %d/%d"
 
 #: src/structure.cpp:5485
 #, fuzzy, c-format
