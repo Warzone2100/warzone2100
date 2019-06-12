@@ -248,7 +248,7 @@ namespace gfx_api
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
 		virtual bool initialize(const backend_Impl_Factory& impl) = 0;
-		virtual void flip() = 0;
+		virtual void flip(int clearMode) = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
 		virtual void debugSceneEnd(const char *descr) = 0;
