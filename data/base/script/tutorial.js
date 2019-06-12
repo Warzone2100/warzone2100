@@ -4,6 +4,7 @@ var consoleVar;
 var tutState;
 var didTheyHelpBuildGen;
 var producedUnits;
+var firstTruckID;
 
 //Alias for button
 const CLOSE_BUTTON = 0;
@@ -275,6 +276,23 @@ function checkForPowGen()
 		{
 			setReticuleButton(BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
 			increaseTutorialState();
+
+			//Get the truck that is building the generator and store its ID.
+			var trucks = enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT);
+			for (var i = 0, len = trucks.length; i < len; ++i)
+			{
+				var truck = trucks[i];
+				if (truck.order === DORDER_BUILD)
+				{
+					firstTruckID = truck.id;
+					break;
+				}
+			}
+
+			if (firstTruckID === 0)
+			{
+				firstTruckID = trucks[0].id;
+			}
 		}
 		else
 		{
@@ -307,7 +325,10 @@ function checkHelpBuild()
 		for (var i = 0, l = objects.length; i < l; ++i)
 		{
 			var obj = objects[i];
-			if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT && obj.order === DORDER_HELPBUILD)
+			if (obj.type === DROID &&
+				obj.droidType === DROID_CONSTRUCT &&
+				(obj.order === DORDER_HELPBUILD || obj.order === DORDER_BUILD) &&
+				obj.id !== firstTruckID)
 			{
 				increaseTutorialState();
 				didTheyHelpBuildGen = true;
@@ -399,7 +420,7 @@ function eventSelectionChanged(objects)
 					enableStructure("A0ResourceExtractor", CAM_HUMAN_PLAYER);
 					increaseTutorialState();
 				}
-				else if (tut5 && obj.order !== DORDER_BUILD)
+				else if (tut5 && obj.id !== firstTruckID)
 				{
 					increaseTutorialState();
 					checkHelpBuild();
@@ -419,6 +440,7 @@ function eventStructureBuilt(structure, droid)
 	else if (tutState <= 7 && structure.stattype === POWER_GEN)
 	{
 		//Maybe they did not understand instructions. Whatever the case, move on.
+		firstTruckID = 0;
 		if (!didTheyHelpBuildGen)
 		{
 			const NEXT_STATE = 8;
@@ -460,6 +482,7 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	tutState = 0;
 	didTheyHelpBuildGen = false;
+	firstTruckID = 0;
 	producedUnits = {
 		tank: false,
 		truck: false,
