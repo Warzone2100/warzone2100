@@ -2118,7 +2118,7 @@ msgstr "Роботопроизводство киборгов"
 #: data/mp/messages/strings/resstrings.txt:173
 #: data/mp/messages/strings/resstrings.txt:178 po/custom/fromJson.txt:734
 msgid "Increases Cyborg factory output"
-msgstr "Увеличивает выход киберзаводов"
+msgstr "Увеличивает производительность киберзаводов"
 
 #: data/base/messages/strings/resstrings.txt:350
 #: data/base/messages/strings/resstrings.txt:358
@@ -2164,12 +2164,12 @@ msgstr "Саморепликация завода киборгов"
 #: data/base/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:188 po/custom/fromJson.txt:736
 msgid "Increases factory output"
-msgstr "повышает выход фабрики"
+msgstr "Повышает производительность фабрики"
 
 #: data/base/messages/strings/resstrings.txt:389
 #: data/mp/messages/strings/resstrings.txt:191 po/custom/fromJson.txt:1131
 msgid "Research Improved"
-msgstr "исследование завершено"
+msgstr "Исследование завершено"
 
 #: data/base/messages/strings/resstrings.txt:390
 #: data/mp/messages/strings/resstrings.txt:192 po/custom/fromJson.txt:401
@@ -2455,7 +2455,7 @@ msgstr "Термоброня улучшена"
 #: data/base/messages/strings/resstrings.txt:582
 #: data/mp/messages/strings/resstrings.txt:267 po/custom/fromJson.txt:556
 msgid "Heat-resistant armored layers"
-msgstr "высокотемпературные слои брони"
+msgstr "Жаропрочные слои брони"
 
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:268 po/custom/fromJson.txt:767
@@ -2482,7 +2482,7 @@ msgstr "Улучшен движитель машин"
 #: data/mp/messages/strings/resstrings.txt:282
 #: data/mp/messages/strings/resstrings.txt:287 po/custom/fromJson.txt:939
 msgid "New armored construction"
-msgstr "новая бронированная постройка"
+msgstr "Новая бронированная постройка"
 
 #: data/base/messages/strings/resstrings.txt:593
 #: data/base/messages/strings/resstrings.txt:603
@@ -2680,7 +2680,7 @@ msgstr "Лучшие цели: защитные сооружения"
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346 po/custom/fromJson.txt:277
 msgid "Bombsight Upgrade"
-msgstr "улучшенный бомбприцел"
+msgstr "Улучшенный бомбприцел"
 
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:347 po/custom/fromJson.txt:836
@@ -2984,7 +2984,7 @@ msgstr "Производство (F1)"
 #: data/base/script/rules.js:61 data/base/script/tutorial.js:99
 #: data/base/script/tutorial.js:469 data/mp/multiplay/skirmish/rules.js:47
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Производство - сначала постройте завод"
 
 #: data/base/script/rules.js:98 data/base/script/tutorial.js:133
 #: data/mp/multiplay/skirmish/rules.js:67 src/scriptfuncs.cpp:1316
@@ -3027,7 +3027,7 @@ msgstr "Командиры (F6)"
 #: data/base/script/rules.js:171 data/base/script/tutorial.js:474
 #: data/mp/multiplay/skirmish/rules.js:123
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Командиры - сначала произведите командиров"
 
 #: data/base/script/rules.js:177 data/base/script/tutorial.js:235
 #: data/base/script/tutorial.js:468 data/mp/multiplay/skirmish/rules.js:129
@@ -3373,7 +3373,7 @@ msgstr "Ты нанёс мне поражение, но я восстану вн
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "Я уничтожу твой никчёмный Проект так же, как я уже очистил этот мир огнём однажды."
+msgstr "Я уничтожу твой никчёмный Проект так же, как я уже очистил этот мир огнём однажды!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -3441,7 +3441,7 @@ msgstr "Вы будете уничтожены."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "НЕКСУС, нейросвязь, которую вы искали, была получена!"
+msgstr "НЕКСУС, нейросвязь, которую вы искали, была получена."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
@@ -3653,7 +3653,7 @@ msgstr "Тот, кто из Проекта не машина. Они были л
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr "Они падут перед мощью Коллектива"
+msgstr "Они падут перед мощью Коллектива."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
@@ -3905,7 +3905,7 @@ msgstr "Я теперь активирую все синаптические с�
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr "Ваши войска теперь мои! Добро пожаловать на Нексус"
+msgstr "Ваши войска теперь мои! Добро пожаловать в Нексус."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
@@ -4302,19 +4302,19 @@ msgstr "Командная IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "ЛЕГКИЙ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "СРЕДНИЙ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "ТЯЖЕЛЫЙ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "НЕВОЗМОЖНЫЙ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 #, fuzzy
@@ -4327,15 +4327,15 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "Принудительное исследование отменено, теперь я буду исследовать все, что захочу."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Исследования заблокированы, сейчас ничего не исследуем."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Исследование базовых технологий."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 #, fuzzy
@@ -4348,37 +4348,37 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Извините, у меня нет грузовиков."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "Вы можете использовать это."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "Извините, передача дроида не удалась."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 #, fuzzy
 msgid "Power transferred."
-msgstr "Генератор энергии"
+msgstr "Генератор энергии."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 #, fuzzy
 msgid "Please put a beacon!"
-msgstr "Сбросить маяк"
+msgstr "Пожалуйста, поставьте маяк!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "Иду!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "Извините, у меня нет свободных сил для помощи!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "В любое время, большой босс!"
 
 #: lib/framework/i18n.cpp:99 lib/framework/i18n.cpp:162
 msgid "System locale"
@@ -4391,7 +4391,7 @@ msgstr "Введите пароль"
 #: lib/netplay/netplay.cpp:1039
 #, fuzzy, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "Не могу получить имя основного сервера (%s)!"
+msgstr "Не удалось открыть требуемый порт (%s) на  (%s)"
 
 #: lib/netplay/netplay.cpp:1043
 msgid ""
@@ -4423,9 +4423,9 @@ msgid ""
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
 msgstr ""
-"Ошибка при подключении к лобби серверу: : %s.\n"
+"Ошибка при подключении к лобби серверу: %s.\n"
 "Убедитесь, что порт %d может принимать входящие подключения. \n"
-"Если вы используете роутер, настройте его, используя UPnP\n"
+"Если вы используете роутер, настройте его на использование UPnP\n"
 "или открыть порты к вашей системе"
 
 #: lib/netplay/netplay.cpp:2892
@@ -4689,12 +4689,12 @@ msgstr ""
 
 #: po/custom/fromJson.txt:102
 msgid "Alpha"
-msgstr ""
+msgstr "Альфа"
 
 #: po/custom/fromJson.txt:103
 #, fuzzy
 msgid "Alpha Campaign"
-msgstr "Кампания"
+msgstr "Кампания альфа"
 
 #: po/custom/fromJson.txt:104
 msgid "Amphibious hover propulsion"
@@ -5216,12 +5216,12 @@ msgstr "Лучшие цели: колёсный транспорт и амфиб
 
 #: po/custom/fromJson.txt:265
 msgid "Beta"
-msgstr ""
+msgstr "Бета"
 
 #: po/custom/fromJson.txt:266
 #, fuzzy
 msgid "Beta Campaign"
-msgstr "Новая кампания"
+msgstr "Бета кампания"
 
 #: po/custom/fromJson.txt:267
 msgid "Body Points and Speed Increased"
@@ -5608,7 +5608,7 @@ msgstr "Огнемётчик"
 #: po/custom/fromJson.txt:372
 #, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Тяжёлый корпус Проекта"
+msgstr "Тяжёлый корпус киборга"
 
 #: po/custom/fromJson.txt:373
 msgid "Cyborg High Intensity Thermal Armor"
@@ -5625,12 +5625,12 @@ msgstr "Усиленная термоброня киборгов Mk3"
 #: po/custom/fromJson.txt:376
 #, fuzzy
 msgid "Cyborg Lancer"
-msgstr "Огнемётчик"
+msgstr "Киборг Ланцер"
 
 #: po/custom/fromJson.txt:377
 #, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Лёгкий корпус Проекта"
+msgstr "Лёгкий корпус киборга"
 
 #: po/custom/fromJson.txt:379
 msgid "Cyborg Mechanic"
@@ -5818,7 +5818,7 @@ msgstr "Позволяет постройкам ремонтироваться �
 
 #: po/custom/fromJson.txt:438
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Позволяет киборгам самовосстанавливаться"
+msgstr "Позволяет киборгам ремонтироваться автоматически"
 
 #: po/custom/fromJson.txt:439
 msgid "Enables self-repair in all defenses"
@@ -5831,7 +5831,7 @@ msgstr "Позволяет Всем машинам автоматически в
 #: po/custom/fromJson.txt:441
 #, fuzzy
 msgid "Enemy"
-msgstr "Вражеская база"
+msgstr "Враг"
 
 #: po/custom/fromJson.txt:442
 msgid "Engineering"
@@ -5867,12 +5867,12 @@ msgstr "Заводской модуль"
 
 #: po/custom/fromJson.txt:452
 msgid "Factory module enables medium and large bodies"
-msgstr "Модуль завода позволяет создавать юнитов со средней и тяжёлой броней"
+msgstr "Модуль завода позволяет создавать юнитов со средним и тяжёлым корпусом"
 
 #: po/custom/fromJson.txt:453
 #, fuzzy, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "Скорость производства +100% на модуль"
+msgstr "Скорость производства +100%% на модуль"
 
 #: po/custom/fromJson.txt:454
 msgid "Factory output speed +60%"
@@ -5884,7 +5884,7 @@ msgstr "Скорость производства +60%"
 
 #: po/custom/fromJson.txt:456
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Большая дистанция по сравнению с остальными датчиками"
 
 #: po/custom/fromJson.txt:457
 msgid "Faster than Cobra"
@@ -6020,7 +6020,7 @@ msgstr "Инжекторы двигатель Mk3"
 
 #: po/custom/fromJson.txt:495
 msgid "Gamma"
-msgstr ""
+msgstr "Гамма"
 
 #: po/custom/fromJson.txt:496
 #, fuzzy
@@ -6129,7 +6129,7 @@ msgstr "Бетонная угловая стена"
 
 #: po/custom/fromJson.txt:524
 msgid "Hardcrete Gate"
-msgstr "Хардкритовая стена."
+msgstr "Бетонная стена"
 
 #: po/custom/fromJson.txt:525
 msgid "Hardcrete Wall"
@@ -6425,7 +6425,7 @@ msgstr "Тяжёлая ракета класса Земля-Воздух"
 
 #: po/custom/fromJson.txt:608
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "Лабораториятяжелогооружия"
 
 #: po/custom/fromJson.txt:609
 msgid "HE Bomb Shells"
@@ -6445,7 +6445,7 @@ msgstr "Разрывные Снаряды гаубицы Мk3"
 
 #: po/custom/fromJson.txt:613
 msgid "Helicopter"
-msgstr ""
+msgstr "Вертолет"
 
 #: po/custom/fromJson.txt:614
 msgid "Hellstorm"
@@ -6501,7 +6501,7 @@ msgstr "Усиленная ракетная боеголовка Мk3"
 
 #: po/custom/fromJson.txt:628
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Спрячься за мной"
 
 #: po/custom/fromJson.txt:629
 msgid "Hi-Energy Laser Emitter"
@@ -6529,7 +6529,7 @@ msgstr "Взрывчатая противотанковая боеголовка
 
 #: po/custom/fromJson.txt:635
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Взрывоопасные противотанковые боеголовки."
+msgstr "Бризантные противотанковые боеголовки"
 
 #: po/custom/fromJson.txt:636
 msgid "High Explosive Armor Piercing Flak"
@@ -6594,7 +6594,7 @@ msgstr "Ховер"
 #: po/custom/fromJson.txt:659
 #, fuzzy
 msgid "Hover AI"
-msgstr "Ховер II"
+msgstr "Ховер AI"
 
 #: po/custom/fromJson.txt:660
 msgid "Hover II"
@@ -7643,7 +7643,7 @@ msgstr "Новая пусковая для ВВС"
 #: po/custom/fromJson.txt:984
 #, fuzzy
 msgid "Nexus"
-msgstr "Нейросвязь НЕКСУС"
+msgstr "НЕКСУС"
 
 #: po/custom/fromJson.txt:985
 msgid "NEXUS CWall"
@@ -7680,7 +7680,7 @@ msgstr "Средний корпус НЕКСУС"
 #: po/custom/fromJson.txt:993
 #, fuzzy
 msgid "Nexus Missile Silo"
-msgstr "Ракетная шахта"
+msgstr "НЕКСУС Ракетная шахта"
 
 #: po/custom/fromJson.txt:995
 msgid "NEXUS Resistance Circuits"
@@ -7700,7 +7700,7 @@ msgstr "Стена НЕКСУС"
 
 #: po/custom/fromJson.txt:999
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Негде спрятаться"
 
 #: po/custom/fromJson.txt:1000
 #, fuzzy
@@ -7761,7 +7761,7 @@ msgstr ""
 
 #: po/custom/fromJson.txt:1010
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "Объекты становятся трудно найти рядом с ним"
 
 #: po/custom/fromJson.txt:1011
 msgid "Oil Derrick"
@@ -8200,7 +8200,7 @@ msgstr "Исследовательский модуль"
 
 #: po/custom/fromJson.txt:1134
 msgid "Research Module Available"
-msgstr "доступен модуль лаборатории"
+msgstr "Лабораторный модуль доступен"
 
 #: po/custom/fromJson.txt:1135
 msgid "Research module expands research facilities"
@@ -8868,7 +8868,7 @@ msgstr "Активизатор Мk3"
 
 #: po/custom/fromJson.txt:1321
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "самолёт возвращается на выбранную площадку для перезарядки"
+msgstr "ВВП возвращается на выбранную площадку для перезарядки"
 
 #: po/custom/fromJson.txt:1323
 msgid "Tiger"
@@ -8948,7 +8948,7 @@ msgstr "Двигатель с турбонаддувом Mk3"
 
 #: po/custom/fromJson.txt:1345
 msgid "Turtle AI"
-msgstr ""
+msgstr "Черепаха AI"
 
 #: po/custom/fromJson.txt:1346
 msgid "Twin 7.62mm machineguns"
@@ -9020,15 +9020,15 @@ msgstr "Датчик связи"
 
 #: po/custom/fromJson.txt:1364
 msgid "Use a truck to add modules to a factory"
-msgstr "Используй строительный бульдозер чтобы достроить модули заводу"
+msgstr "Используйте грузовик чтобы достроить модули заводу"
 
 #: po/custom/fromJson.txt:1365
 msgid "Use a truck to add the module to a power generator"
-msgstr "используй бульдозер чтобы добавить модуль к генератору"
+msgstr "Используй грузовик чтобы достроить модуль генератору"
 
 #: po/custom/fromJson.txt:1366
 msgid "Use a truck to add the module to a research facility"
-msgstr "используй бульдозер для добавки модуля к лаборатории"
+msgstr "Используй грузовик для добавки модуля к лаборатории"
 
 #: po/custom/fromJson.txt:1367
 msgid "Uses advanced cannon technology"
@@ -9348,11 +9348,11 @@ msgstr "Авиационный спаренный пулемёт"
 
 #: po/custom/fromJson.txt:1457
 msgid "Wall"
-msgstr ""
+msgstr "Стена"
 
 #: po/custom/fromJson.txt:1458
 msgid "Wallcorner"
-msgstr ""
+msgstr "УгловаяСтена"
 
 #: po/custom/fromJson.txt:1459
 msgid "Warehouse"
@@ -9487,7 +9487,7 @@ msgstr "Меню отладки закрыто"
 
 #: src/clparse.cpp:261
 msgid "Set configuration directory"
-msgstr "Выбрать папку с настройками"
+msgstr "Выбрать каталог с настройками"
 
 #: src/clparse.cpp:261
 msgid "configuration directory"
@@ -9496,7 +9496,7 @@ msgstr "папка с настройками"
 #: src/clparse.cpp:262
 #, fuzzy
 msgid "Add data directory"
-msgstr "папка с данными"
+msgstr "Добавить каталог с данными"
 
 #: src/clparse.cpp:262
 msgid "data directory"
@@ -9533,17 +9533,17 @@ msgstr "Загрузить особую игру"
 
 #: src/clparse.cpp:267
 msgid "level name"
-msgstr ""
+msgstr "название уровня"
 
 #: src/clparse.cpp:268
 #, fuzzy
 msgid "Show options and exit"
-msgstr "Показать номер версии и выйти"
+msgstr "Показать опции и выйти"
 
 #: src/clparse.cpp:269
 #, fuzzy
 msgid "Show all options and exit"
-msgstr "Показать номер версии и выйти"
+msgstr "Показать все опции и выйти"
 
 #: src/clparse.cpp:270
 msgid "Enable a global mod"
@@ -9572,7 +9572,7 @@ msgstr "Вызывает крэш для тестирования програм
 #: src/clparse.cpp:275
 #, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Загрузить игру"
+msgstr "Загрузить сохранение сражения"
 
 #: src/clparse.cpp:275 src/clparse.cpp:276
 msgid "savegame"
@@ -9581,7 +9581,7 @@ msgstr "сохранение"
 #: src/clparse.cpp:276
 #, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Загрузить игру"
+msgstr "Загрузить сохранение кампании"
 
 #: src/clparse.cpp:277
 msgid "Play in windowed mode"
@@ -9618,7 +9618,7 @@ msgstr "Отключить звук"
 #: src/clparse.cpp:284
 #, fuzzy
 msgid "Connect directly to IP/hostname"
-msgstr "Прямое соединение с IP/ имя сервера"
+msgstr "Прямое соединение по IP/hostname"
 
 #: src/clparse.cpp:284
 msgid "host"
@@ -9643,7 +9643,7 @@ msgstr ""
 
 #: src/clparse.cpp:289
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "Немедленно сохранить игру и выйти"
 
 #: src/clparse.cpp:289
 #, fuzzy
@@ -9652,11 +9652,11 @@ msgstr "сохранение"
 
 #: src/clparse.cpp:290
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "Запустить сражение с указанным файлом настроек"
 
 #: src/clparse.cpp:290
 msgid "test"
-msgstr ""
+msgstr "тест"
 
 #: src/cmddroid.cpp:111
 msgid "Commander needs a higher level to command more units"
@@ -9783,7 +9783,7 @@ msgstr "Системы"
 #: src/design.cpp:4320
 #, fuzzy
 msgid "Do Not Store Design"
-msgstr "Удалить проект"
+msgstr "Не сохранять дизайн"
 
 #: src/design.cpp:4325
 #, fuzzy
@@ -9809,7 +9809,7 @@ msgstr "Рассинхронизация"
 #: src/display3d.cpp:1876
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr ""
+msgstr "Установка увеличения на %.0f"
 
 #: src/display.cpp:1519
 msgid "Cannot Build. Oil Resource Burning."
@@ -9867,7 +9867,7 @@ msgstr[2] "Соединить с группой %u - %u юнитов"
 
 #: src/droid.cpp:3000
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "Передача юнитов невозможна -- превышены лимиты юнитов"
 
 #: src/frontend.cpp:143
 msgid "Single Player"
@@ -9909,28 +9909,28 @@ msgstr "Посетите наш официальный сайт: http://wz2100.n
 
 #: src/frontend.cpp:161
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Заходите на форум и все новости Warzone 2100! Нажмите на эту ссылку."
 
 #: src/frontend.cpp:162
 #, fuzzy
 msgid "Donate: http://donations.wz2100.net/"
-msgstr "Посетите наш официальный сайт: http://wz2100.net"
+msgstr "Пожертвования: http://donations.wz2100.net"
 
 #: src/frontend.cpp:163
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "Помогите поддержать проект, нажмите на эту ссылку."
 
 #: src/frontend.cpp:164
 msgid "Chat with players on #warzone2100"
-msgstr ""
+msgstr "Общайтесь с игроками в #warzone2100"
 
 #: src/frontend.cpp:165
 msgid "Connect to Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Подключитесь к Freenode через веб-чат, нажав на эту ссылку."
 
 #: src/frontend.cpp:166
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Проверить обновление игры"
 
 #: src/frontend.cpp:278
 msgid "Fast Play"
@@ -9980,7 +9980,7 @@ msgstr "Видео из кампании отсутствуют! Скачайт�
 #: src/frontend.cpp:389
 #, fuzzy
 msgid "CAMPAIGNS"
-msgstr "МИССИЯ 1"
+msgstr "КАМПАНИИ"
 
 #: src/frontend.cpp:524 src/ingameop.cpp:464
 msgid "Load Campaign Saved Game"
@@ -10004,7 +10004,7 @@ msgstr "Присоединиться"
 
 #: src/frontend.cpp:592
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP-порт 2100 должен быть открыт в брандмауэре и маршрутизаторе для создания игр!"
 
 #: src/frontend.cpp:656 src/multiint.cpp:1704
 msgid "OPTIONS"
@@ -10141,7 +10141,7 @@ msgstr "Увеличение миникарты"
 #: src/frontend.cpp:918
 #, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "Настройки аудио"
+msgstr "Настройки аудио/увеличения"
 
 #: src/frontend.cpp:1014
 msgid "Windowed"
@@ -10154,7 +10154,7 @@ msgstr "Графический режим*"
 #: src/frontend.cpp:1031
 #, fuzzy
 msgid "Graphics Mode"
-msgstr "Графический режим*"
+msgstr "Графический режим"
 
 #: src/frontend.cpp:1036
 msgid "Resolution*"
@@ -10174,7 +10174,7 @@ msgstr "Масштаб экрана"
 
 #: src/frontend.cpp:1085
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Вы можете изменить разрешение, изменив размер окна в обычном режиме. (Попробуйте перетащить угол / край.)"
 
 #: src/frontend.cpp:1117
 msgid "* Takes effect on game restart"
@@ -10194,7 +10194,7 @@ msgstr "Сглаживание*"
 
 #: src/frontend.cpp:1143
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Предупреждение: сглаживание может вызвать сбои, особенно при значениях> 16"
 
 #: src/frontend.cpp:1154
 msgid "VIDEO OPTIONS"
@@ -10339,11 +10339,11 @@ msgstr "Панель прогресса"
 
 #: src/hci.cpp:3515
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "Скрыть устаревшие технологии"
 
 #: src/hci.cpp:3517
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Отобразить устаревшее технологии"
 
 #: src/hci.cpp:3593
 msgid "Factory Delivery Point"
@@ -10365,12 +10365,12 @@ msgstr ""
 
 #: src/hci.cpp:4936
 msgid "Chat: All"
-msgstr ""
+msgstr "Чат: Всем"
 
 #: src/hci.cpp:4941
 #, fuzzy
 msgid "Chat: Team"
-msgstr "Выбрать команду."
+msgstr "Чат: Союзники"
 
 #: src/ingameop.cpp:108 src/ingameop.cpp:173 src/ingameop.cpp:230
 msgid "Resume Game"
@@ -10664,7 +10664,7 @@ msgstr "Туман выключен"
 #: src/keybind.cpp:913 src/keybind.cpp:926
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "Установлено увеличение радара  %u"
 
 #: src/keybind.cpp:1232
 #, c-format
@@ -10698,7 +10698,7 @@ msgstr "Все исследования доступны!"
 
 #: src/keybind.cpp:1478
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "Выбранные здания мгновенно перезаряжаются!"
 
 #: src/keybind.cpp:1519
 #, c-format
@@ -11147,17 +11147,17 @@ msgstr "Держать позицию"
 
 #: src/keymap.cpp:387
 msgid "Stop Droid"
-msgstr ""
+msgstr "Остановить юнитов"
 
 #: src/keymap.cpp:389
 #, fuzzy
 msgid "Send Global Text Message"
-msgstr "Отправить сообщение"
+msgstr "Отправить общее сообщение"
 
 #: src/keymap.cpp:390
 #, fuzzy
 msgid "Send Team Text Message"
-msgstr "Отправить сообщение"
+msgstr "Отправить сообщение команде"
 
 #: src/keymap.cpp:391
 msgid "Drop a beacon"
@@ -11353,6 +11353,7 @@ msgid "Reveal map at mouse position"
 msgstr ""
 
 #: src/keymap.cpp:459
+#, fuzzy
 msgid "Trace a game object"
 msgstr "Трассировка цели игры."
 
@@ -11485,7 +11486,7 @@ msgstr "IP"
 
 #: src/multiint.cpp:1054
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Ваша версия Warzone несовместима с этой игрой."
 
 #: src/multiint.cpp:1121
 msgid "[Password required]"
@@ -11515,16 +11516,16 @@ msgstr "Создатель %s —%s"
 
 #: src/multiint.cpp:1169
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Не могу найти игры для вашей версии."
 
 #: src/multiint.cpp:1186
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Похоже, доступно обновление игры!"
 
 #: src/multiint.cpp:1190
 #, fuzzy
 msgid "No games are available for your version"
-msgstr "Нет доступных игр"
+msgstr "Нет доступных игр для вашей версии"
 
 #: src/multiint.cpp:1194
 msgid "Game is full"
@@ -11560,7 +11561,7 @@ msgstr "Ошибка соединения"
 
 #: src/multiint.cpp:1315
 msgid "Refreshing..."
-msgstr ""
+msgstr "Обновление..."
 
 #: src/multiint.cpp:1355
 msgid "Searching"
@@ -11577,7 +11578,7 @@ msgstr "Обновить список игр"
 #: src/multiint.cpp:1400
 #, fuzzy
 msgid "Filter Games List"
-msgstr "Обновить список игр"
+msgstr "Фильтр списка игр"
 
 #: src/multiint.cpp:1431
 msgid "Enter Password:"
@@ -11602,7 +11603,7 @@ msgstr "Самолёты отключены."
 #: src/multiint.cpp:1665
 #, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Центр связи со спутником"
+msgstr "Центр связи со спутником отключён."
 
 #: src/multiint.cpp:1666
 msgid "Laser Satellite disabled."
@@ -11611,7 +11612,7 @@ msgstr "Лазерный Спутник Отключён."
 #: src/multiint.cpp:1709 src/multiint.cpp:4238
 #, fuzzy
 msgid "Game Name"
-msgstr "Выбрать название игры"
+msgstr "Название игры"
 
 #: src/multiint.cpp:1710
 msgid "One-Player Skirmish"
@@ -11627,7 +11628,7 @@ msgstr "Выбрать карту"
 
 #: src/multiint.cpp:1725
 msgid "Map-Mod!"
-msgstr ""
+msgstr "Карта-Мод!"
 
 #: src/multiint.cpp:1738
 msgid "Click to set Password"
@@ -11660,7 +11661,7 @@ msgstr "Позволить Союзы"
 #: src/multiint.cpp:1770
 #, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "Закрытые Команды"
+msgstr "Закрытые Команды, раздельные исследования"
 
 #: src/multiint.cpp:1771
 msgid "Locked Teams"
@@ -11700,7 +11701,7 @@ msgstr "Просмотр карты"
 
 #: src/multiint.cpp:1796
 msgid "Click to see Map"
-msgstr "щёлкни чтобы посмотреть карту"
+msgstr "Нажмите для просмотра карты"
 
 #: src/multiint.cpp:1803 src/multiint.cpp:1804
 msgid "Show Structure Limits"
@@ -11758,7 +11759,7 @@ msgstr "Сложность"
 
 #: src/multiint.cpp:2499
 msgid "Click to change difficulty"
-msgstr "Нажмите, чтобы изменить сложность "
+msgstr "Нажмите для изменения сложности."
 
 #: src/multiint.cpp:2514
 msgid "Waiting for player"
@@ -11771,7 +11772,7 @@ msgstr "Игрок готов"
 #: src/multiint.cpp:2514
 #, fuzzy
 msgid "Player is downloading"
-msgstr "Игрок готов"
+msgstr "Игрок загружает"
 
 #: src/multiint.cpp:2514
 msgid "Click when ready"
@@ -11780,7 +11781,7 @@ msgstr "Щёлкни когда будешь готов"
 #: src/multiint.cpp:2514
 #, fuzzy
 msgid "Waiting for download"
-msgstr "Ожидание энергии"
+msgstr "Ожидание загрузки"
 
 #: src/multiint.cpp:2526
 msgid "READY?"
@@ -11801,7 +11802,7 @@ msgstr "Выбрать команду"
 #: src/multiint.cpp:2641
 #, fuzzy
 msgid "Teams locked"
-msgstr "Команда Альфа спасена"
+msgstr "Закрытые команды"
 
 #: src/multiint.cpp:2667
 msgid "Click to change player colour"
@@ -11818,7 +11819,7 @@ msgstr "Нажмите, чтобы изменить ИИ"
 #: src/multiint.cpp:2703
 #, fuzzy
 msgid "Player ID: "
-msgstr "Игрок"
+msgstr "Игрок ID: "
 
 #: src/multiint.cpp:2710
 msgid "(none)"
@@ -11860,20 +11861,20 @@ msgstr "Хост стартует"
 
 #: src/multiint.cpp:4032
 msgid "UPnP has been enabled."
-msgstr ""
+msgstr "UPnP был включен."
 
 #: src/multiint.cpp:4038
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr ""
+msgstr "Обнаружение UPnP не удалось. Вы должны вручную настроить маршрутизатор самостоятельно."
 
 #: src/multiint.cpp:4042
 #, fuzzy
 msgid "UPnP detection is in progress..."
-msgstr "Идёт расшифровка..."
+msgstr "Обнаружение UPnP в процессе ..."
 
 #: src/multiint.cpp:4049
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
+msgstr "Обнаружение UPnP отключено пользователем. Автоконфигурация порта 2100 не произойдет."
 
 #: src/multiint.cpp:4055
 msgid "Hit the ready box to begin your challenge!"
@@ -11881,11 +11882,11 @@ msgstr ""
 
 #: src/multiint.cpp:4059
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "Нажмите кнопку запуска хостинга, чтобы начать хостинг игры."
 
 #: src/multiint.cpp:4121
 msgid "Can't connect to lobby server!"
-msgstr "Не могу соединиться с лобби сервером"
+msgstr "Не могу соединиться с лобби сервером!"
 
 #: src/multiint.cpp:4216
 #, c-format
@@ -11903,7 +11904,7 @@ msgstr "Версия %s"
 
 #: src/multiint.cpp:4241
 msgid "Map Name"
-msgstr ""
+msgstr "Название карты"
 
 #: src/multiint.cpp:4244
 msgid "Players"
@@ -11911,7 +11912,7 @@ msgstr "Игроки"
 
 #: src/multiint.cpp:4247
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: src/multiint.cpp:4280
 #, c-format
@@ -11929,12 +11930,12 @@ msgstr "Закрыто"
 #: src/multiint.cpp:4359
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr "Отправка карты: %d%%"
+msgstr "Отправка карты: %d%% "
 
 #: src/multiint.cpp:4359
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr "карта: %d%% загружена"
+msgstr "Карта: %d%% загружена"
 
 #: src/multiint.cpp:4407
 msgid "HOST"
@@ -11974,7 +11975,7 @@ msgstr "Системное сообщение:"
 
 #: src/multijoin.cpp:513
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
-msgstr ""
+msgstr "Существует обновление к игре, пожалуйста, посетите http://wz2100.net, чтобы загрузить новую версию."
 
 #: src/multilimit.cpp:148
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12078,16 +12079,16 @@ msgstr "Выкинули %s : %s из игр, и добавлены в бан-л
 
 #: src/multiopt.cpp:305 src/multiplay.cpp:1706
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "Внимание, это мод-карта, он может изменить нормальный игровой процесс."
 
 #: src/multiopt.cpp:306 src/multiplay.cpp:1710
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr ""
+msgstr "Внимание, HOST изменил код игры, и ему нельзя доверять!"
 
 #: src/multiplay.cpp:278
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr "Кик игрока %s за попытку обойти проверку внутренних данных"
+msgstr "Кик игрока %s за попытку обойти проверку внутренних данных!"
 
 #: src/multiplay.cpp:1252
 msgid "(allies"
@@ -12103,15 +12104,15 @@ msgstr "[неверно]"
 
 #: src/multiplay.cpp:1617
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "Карта была запрошена: ОТПРАВКА КАРТЫ!"
 
 #: src/multiplay.cpp:1632
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "МОД была запрошен: ОТПРАВКА МОДА!"
 
 #: src/multiplay.cpp:1672
 msgid "FILE SENT!"
-msgstr ""
+msgstr "ФАЙЛ ОТПРАВЛЕН!"
 
 #: src/multiplay.cpp:2024
 msgid "Green"
@@ -12357,12 +12358,12 @@ msgstr "Достигнут Предел Командного Контроля - 
 #: src/structure.cpp:2504
 #, fuzzy, c-format
 msgid "Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"
-msgstr "Достигнут Предел Командного Контроля - Производство Остановлено"
+msgstr "Невозможно строить больше \"%s\", Достигнут Предел Командного Контроля — Производство Остановлено"
 
 #: src/structure.cpp:2512
 #, fuzzy, c-format
 msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Достигнут Предел Командного Контроля - Производство Остановлено"
+msgstr "Невозможно строить больше \"%s\", Достигнут Предел Строительных Юнитов - Производство Остановлено"
 
 #: src/structure.cpp:5428
 #, fuzzy, c-format
@@ -12407,7 +12408,7 @@ msgstr "награда завода - движитель"
 
 #: src/structure.cpp:5873
 msgid "Factory Reward - Body"
-msgstr "награда завода - рама"
+msgstr "награда завода - корпус"
 
 #: src/structure.cpp:5895
 msgid "Factory Reward - Weapon"
