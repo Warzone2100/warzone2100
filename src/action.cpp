@@ -1752,7 +1752,8 @@ void actionUpdateDroid(DROID *psDroid)
 		if (!isVtolDroid(psDroid) && order->psObj->type != OBJ_STRUCTURE)
 		{
 			Vector2i diff = (psDroid->pos - order->psObj->pos).xy();
-			int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].shortRange; // move close to sensor
+			//Consider .shortRange here
+			int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].maxRange / 2; // move close to sensor
 			rangeSq = rangeSq * rangeSq;
 			if (dot(diff, diff) < rangeSq)
 			{
