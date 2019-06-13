@@ -171,18 +171,18 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats, psAttacker->player);
-
-		// adapt for height adjusted artillery shots
-		if (min_angle > DEG(PROJ_MAX_PITCH))
-		{
-			baseHitChance = baseHitChance * iCos(min_angle) / iCos(DEG(PROJ_MAX_PITCH));
-		}
 	}
 	else
 	{
 		/* Out of range */
 		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Out of range", psAttacker->id, getName(psStats), psTarget->id);
 		return false;
+	}
+
+	// adapt for height adjusted artillery shots
+	if (min_angle > DEG(PROJ_MAX_PITCH))
+	{
+		baseHitChance = baseHitChance * iCos(min_angle) / iCos(DEG(PROJ_MAX_PITCH));
 	}
 
 	// apply experience accuracy modifiers to the base
