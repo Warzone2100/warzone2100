@@ -136,7 +136,19 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
+	if (difficulty === HARD)
+	{
+		setPower(600, CAM_HUMAN_PLAYER);
+	}
+	else if (difficulty === INSANE)
+	{
+		setPower(300, CAM_HUMAN_PLAYER);
+	}
+	else
+	{
+		setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
+	}
+
 	setAlliance(6, 7, true);
 
 	enableBaseStructures();
