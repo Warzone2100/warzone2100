@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-12 12:14+0100\n"
-"PO-Revision-Date: 2019-06-13 16:12+0300\n"
+"PO-Revision-Date: 2019-06-13 17:30+0300\n"
 "Last-Translator: Prot EuPhobos <prot@euphobos.ru>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -3210,7 +3210,7 @@ msgstr "Входящая передача"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
-msgstr "Входящая передача с базы Бета."
+msgstr "Входящая передача с базы Бета"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
@@ -3553,7 +3553,7 @@ msgstr "Нексус утверждал, что он не уничтожал м�
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr "Войны Коллектива, я ищу местоположение Центральной НАСДА."
+msgstr "Воины Коллектива, я ищу местоположение Центральной НАСДА."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
@@ -3625,7 +3625,7 @@ msgstr "Мы можем только предположить, что Нексу
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr "Войны Коллектива, больше злоумышленников ступают на наши территории."
+msgstr "Воины Коллектива, больше злоумышленников ступают на наши территории."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
@@ -3633,7 +3633,7 @@ msgstr "Они не являются частью машины."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "Войны Коллектива , уничтожьте тех, кто восстал против машины."
+msgstr "Воины Коллектива , уничтожьте тех, кто восстал против машины."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -3669,11 +3669,11 @@ msgstr "Нексус просит нас теперь свернуть прое�
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
-msgstr "Найти и уничтожить!"
+msgstr "Найти и уничтожить!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
-msgstr "Войны Коллектива. Вы проявили себя."
+msgstr "Воины Коллектива. Вы проявили себя."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
@@ -3689,7 +3689,7 @@ msgstr "Вы должны остановить их!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr "Раскодирование передачи..."
+msgstr "Дешифровка передачи..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -5386,6 +5386,7 @@ msgid "CB Tower"
 msgstr "КБ Башня"
 
 #: po/custom/fromJson.txt:314
+#, fuzzy
 msgid "CB Turret"
 msgstr "КБ башня"
 
@@ -6258,6 +6259,7 @@ msgid "Heavy anti-tank rocket"
 msgstr "Тяжёлая противотанковая ракета"
 
 #: po/custom/fromJson.txt:561
+#, fuzzy
 msgid "Heavy body increases armor and body points"
 msgstr "Тяжёлая рама повышает броню"
 
@@ -7036,6 +7038,7 @@ msgid "Lancer Viper Wheels"
 msgstr "Лансер Гадюка Колёса"
 
 #: po/custom/fromJson.txt:805
+#, fuzzy
 msgid "Large Super Heavy Body"
 msgstr "Большая супертяжёлая рама"
 
@@ -7117,6 +7120,7 @@ msgid "Light Body - Viper"
 msgstr "Лёгкая броня - Гадюка"
 
 #: po/custom/fromJson.txt:826
+#, fuzzy
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Лёгкая рама уязвима против тяжёлых орудий"
 
@@ -7234,6 +7238,7 @@ msgid "Medium Body - Cobra"
 msgstr "Средняя броня - Кобра"
 
 #: po/custom/fromJson.txt:863
+#, fuzzy
 msgid "Medium body increases armor and body points"
 msgstr "Средняя рама обладает повышенной бронёй"
 
@@ -7294,6 +7299,7 @@ msgid "Medium Cannon Viper Tracks"
 msgstr "Средняя пушка Гадюка Гусеницы"
 
 #: po/custom/fromJson.txt:878
+#, fuzzy
 msgid "Medium Super Heavy Body"
 msgstr "Средняя супертяжёлая рама"
 
@@ -7933,6 +7939,7 @@ msgid "Project Light Body"
 msgstr "Лёгкий корпус Альянса"
 
 #: po/custom/fromJson.txt:1060
+#, fuzzy
 msgid "Project Medium Body"
 msgstr "Средняя рама Проекта"
 
@@ -9721,6 +9728,7 @@ msgstr "ЕМ Мощность"
 
 #: src/design.cpp:1331 src/design.cpp:1348 src/design.cpp:1367
 #: src/design.cpp:1384
+#, fuzzy
 msgid "Build Points"
 msgstr "Бронирование"
 
@@ -9936,6 +9944,7 @@ msgid "Start Skirmish Game"
 msgstr "Начать Сражение"
 
 #: src/frontend.cpp:339
+#, fuzzy
 msgid "Challenges"
 msgstr "Вызов на поединок"
 
@@ -12002,11 +12011,11 @@ msgstr "Потери сооружений"
 
 #: src/multimenu.cpp:778
 msgid "Sent/Received per sec —"
-msgstr "Отправлен/Принято в секунду -"
+msgstr "Отправлен/Принято в секунду —"
 
 #: src/multimenu.cpp:778
 msgid "Total Sent/Received —"
-msgstr "Всего отправлено/принято -"
+msgstr "Всего отправлено/принято —"
 
 #: src/multimenu.cpp:783
 #, fuzzy, c-format
