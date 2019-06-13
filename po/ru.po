@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-12 12:14+0100\n"
-"PO-Revision-Date: 2019-06-12 11:40+0300\n"
+"PO-Revision-Date: 2019-06-13 16:12+0300\n"
 "Last-Translator: Prot EuPhobos <prot@euphobos.ru>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Bookmarks: 82,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
@@ -792,7 +792,7 @@ msgstr "Все войска должны покинуть район до тог
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr "транспортировка по воздуху невозможна. Вы должны передвигаться по земле."
+msgstr "Транспортировка по воздуху невозможна. Вы должны передвигаться по земле."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
@@ -1473,15 +1473,13 @@ msgstr "Улучшение КБ Башни"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "Улучшение КБ Башни 2"
+msgstr "Улучшение КБ Башни Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "Улучшение КБ Башни 3"
+msgstr "Улучшение КБ Башни Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1490,15 +1488,13 @@ msgstr "Улучшение ВВС КБ Башни"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "Улучшение ВВС КБ Башни 2"
+msgstr "Улучшение ВВС КБ Башни Мk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "Улучшение ВВС КБ Башни 3"
+msgstr "Улучшение ВВС КБ Башни Мk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -4364,7 +4360,6 @@ msgid "Power transferred."
 msgstr "Генератор энергии."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
-#, fuzzy
 msgid "Please put a beacon!"
 msgstr "Пожалуйста, поставьте маяк!"
 
@@ -4389,7 +4384,7 @@ msgid "Enter password here"
 msgstr "Введите пароль"
 
 #: lib/netplay/netplay.cpp:1039
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr "Не удалось открыть требуемый порт (%s) на  (%s)"
 
@@ -4432,7 +4427,7 @@ msgstr ""
 "Ошибка при подключении к лобби серверу: %s.\n"
 "Убедитесь, что порт %d может принимать входящие подключения. \n"
 "Если вы используете роутер, настройте его на использование UPnP\n"
-"или открыть порты к вашей системе"
+"или открыть порты к вашей системе."
 
 #: lib/netplay/netplay.cpp:2892
 msgid "Failed to get a lobby response!"
@@ -4698,7 +4693,6 @@ msgid "Alpha"
 msgstr "Альфа"
 
 #: po/custom/fromJson.txt:103
-#, fuzzy
 msgid "Alpha Campaign"
 msgstr "Кампания альфа"
 
@@ -5131,7 +5125,6 @@ msgid "Automatic loader replaces manual feed"
 msgstr "Ручная перезарядка заменяется автоматом заряжания"
 
 #: po/custom/fromJson.txt:235
-#, fuzzy
 msgid "Auto Repair"
 msgstr "Автопочинка"
 
@@ -5225,7 +5218,6 @@ msgid "Beta"
 msgstr "Бета"
 
 #: po/custom/fromJson.txt:266
-#, fuzzy
 msgid "Beta Campaign"
 msgstr "Бета кампания"
 
@@ -5563,9 +5555,8 @@ msgid "Construction Unit"
 msgstr "Строительный юнит"
 
 #: po/custom/fromJson.txt:360
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "вмещает до пяти командиров"
+msgstr "Вмещает до десяти командиров"
 
 #: po/custom/fromJson.txt:361
 msgid "Counter-battery fire continues until enemy battery is suppressed"
@@ -5612,7 +5603,6 @@ msgid "Cyborg Flamer"
 msgstr "Огнемётчик"
 
 #: po/custom/fromJson.txt:372
-#, fuzzy
 msgid "Cyborg Heavy Body"
 msgstr "Тяжёлый корпус киборга"
 
@@ -5629,12 +5619,10 @@ msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "Усиленная термоброня киборгов Mk3"
 
 #: po/custom/fromJson.txt:376
-#, fuzzy
 msgid "Cyborg Lancer"
 msgstr "Киборг Ланцер"
 
 #: po/custom/fromJson.txt:377
-#, fuzzy
 msgid "Cyborg Light Body"
 msgstr "Лёгкий корпус киборга"
 
@@ -5876,7 +5864,7 @@ msgid "Factory module enables medium and large bodies"
 msgstr "Модуль завода позволяет создавать юнитов со средним и тяжёлым корпусом"
 
 #: po/custom/fromJson.txt:453
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
 msgstr "Скорость производства +100%% на модуль"
 
@@ -7647,7 +7635,6 @@ msgid "New VTOL Missile Launcher"
 msgstr "Новая пусковая для ВВС"
 
 #: po/custom/fromJson.txt:984
-#, fuzzy
 msgid "Nexus"
 msgstr "НЕКСУС"
 
@@ -7684,7 +7671,6 @@ msgid "NEXUS Medium Body"
 msgstr "Средний корпус НЕКСУС"
 
 #: po/custom/fromJson.txt:993
-#, fuzzy
 msgid "Nexus Missile Silo"
 msgstr "НЕКСУС Ракетная шахта"
 
@@ -7709,7 +7695,6 @@ msgid "No Place To Hide"
 msgstr "Негде спрятаться"
 
 #: po/custom/fromJson.txt:1000
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
 msgstr "Элита"
@@ -7720,43 +7705,36 @@ msgid "Green"
 msgstr "Молодой"
 
 #: po/custom/fromJson.txt:1002
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
 msgstr "Герой"
 
 #: po/custom/fromJson.txt:1003
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
 msgstr "Профессионал"
 
 #: po/custom/fromJson.txt:1004
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
 msgstr "Опытный"
 
 #: po/custom/fromJson.txt:1005
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
 msgstr "Новобранец"
 
 #: po/custom/fromJson.txt:1006
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
 msgstr "Специалист"
 
 #: po/custom/fromJson.txt:1007
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
 msgstr "Тренированный"
 
 #: po/custom/fromJson.txt:1008
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
 msgstr "Ветеран"
@@ -8718,7 +8696,7 @@ msgstr "Нейросвязь обеспечивает людям прямой д
 
 #: po/custom/fromJson.txt:1281
 msgid "Synaptic link data analysis"
-msgstr "анализ синаптической связи"
+msgstr "Анализ синаптической связи"
 
 #: po/custom/fromJson.txt:1282
 msgid "Synaptic Link Data Analysis"
@@ -9158,7 +9136,7 @@ msgstr "ВВС Антибункер"
 
 #: po/custom/fromJson.txt:1402
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "ВВС Антибункер Жук "
+msgstr "ВВС Антибункер Жук"
 
 #: po/custom/fromJson.txt:1403
 msgid "VTOL Bunker Buster Scorpion VTOL"
@@ -9429,7 +9407,6 @@ msgid "Wyvern"
 msgstr "Виверна"
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2013 The Warzone 2100 Project"
@@ -9542,12 +9519,10 @@ msgid "level name"
 msgstr "название уровня"
 
 #: src/clparse.cpp:268
-#, fuzzy
 msgid "Show options and exit"
 msgstr "Показать опции и выйти"
 
 #: src/clparse.cpp:269
-#, fuzzy
 msgid "Show all options and exit"
 msgstr "Показать все опции и выйти"
 
@@ -9622,7 +9597,6 @@ msgid "Disable sound"
 msgstr "Отключить звук"
 
 #: src/clparse.cpp:284
-#, fuzzy
 msgid "Connect directly to IP/hostname"
 msgstr "Прямое соединение по IP/hostname"
 
@@ -9896,7 +9870,6 @@ msgid "View Intro"
 msgstr "Показать Вступление"
 
 #: src/frontend.cpp:155
-#, fuzzy
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr "Видео из кампании отсутствуют! Скачайте их на http://wz2100.net"
 
@@ -9909,9 +9882,8 @@ msgid "MAIN MENU"
 msgstr "ГЛАВНОЕ МЕНЮ"
 
 #: src/frontend.cpp:160
-#, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Посетите наш официальный сайт: http://wz2100.net"
+msgstr "Посетите наш официальный сайт: http://wz2100.net/"
 
 #: src/frontend.cpp:161
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
@@ -9984,7 +9956,6 @@ msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Видео из кампании отсутствуют! Скачайте их на http://wz2100.net"
 
 #: src/frontend.cpp:389
-#, fuzzy
 msgid "CAMPAIGNS"
 msgstr "КАМПАНИИ"
 
@@ -10158,7 +10129,6 @@ msgid "Graphics Mode*"
 msgstr "Графический режим*"
 
 #: src/frontend.cpp:1031
-#, fuzzy
 msgid "Graphics Mode"
 msgstr "Графический режим"
 
@@ -10376,7 +10346,6 @@ msgid "Chat: All"
 msgstr "Чат: Всем"
 
 #: src/hci.cpp:4941
-#, fuzzy
 msgid "Chat: Team"
 msgstr "Чат: Союзники"
 
@@ -11158,12 +11127,10 @@ msgid "Stop Droid"
 msgstr "Остановить юнитов"
 
 #: src/keymap.cpp:389
-#, fuzzy
 msgid "Send Global Text Message"
 msgstr "Отправить общее сообщение"
 
 #: src/keymap.cpp:390
-#, fuzzy
 msgid "Send Team Text Message"
 msgstr "Отправить сообщение команде"
 
@@ -11531,7 +11498,6 @@ msgid "There appears to be a game update available!"
 msgstr "Похоже, доступно обновление игры!"
 
 #: src/multiint.cpp:1190
-#, fuzzy
 msgid "No games are available for your version"
 msgstr "Нет доступных игр для вашей версии"
 
@@ -11584,7 +11550,6 @@ msgid "Refresh Games List"
 msgstr "Обновить список игр"
 
 #: src/multiint.cpp:1400
-#, fuzzy
 msgid "Filter Games List"
 msgstr "Фильтр списка игр"
 
@@ -11609,7 +11574,6 @@ msgid "VTOLs disabled."
 msgstr "Самолёты отключены."
 
 #: src/multiint.cpp:1665
-#, fuzzy
 msgid "Satellite Uplink disabled."
 msgstr "Центр связи со спутником отключён."
 
@@ -11618,7 +11582,6 @@ msgid "Laser Satellite disabled."
 msgstr "Лазерный Спутник Отключён."
 
 #: src/multiint.cpp:1709 src/multiint.cpp:4238
-#, fuzzy
 msgid "Game Name"
 msgstr "Название игры"
 
@@ -11767,7 +11730,7 @@ msgstr "Сложность"
 
 #: src/multiint.cpp:2499
 msgid "Click to change difficulty"
-msgstr "Нажмите для изменения сложности."
+msgstr "Нажмите для изменения сложности"
 
 #: src/multiint.cpp:2514
 msgid "Waiting for player"
@@ -11810,7 +11773,7 @@ msgstr "Выбрать команду"
 #: src/multiint.cpp:2641
 #, fuzzy
 msgid "Teams locked"
-msgstr "Закрытые команды"
+msgstr "Фиксированные команды"
 
 #: src/multiint.cpp:2667
 msgid "Click to change player colour"
@@ -11839,7 +11802,7 @@ msgstr "ЧАТ"
 
 #: src/multiint.cpp:2846
 msgid "Connecting to the lobby server..."
-msgstr "Соединяемся с лобби сервером"
+msgstr "Соединяемся с лобби сервером..."
 
 #: src/multiint.cpp:3179
 #, c-format
@@ -11876,7 +11839,6 @@ msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "Обнаружение UPnP не удалось. Вы должны вручную настроить маршрутизатор самостоятельно."
 
 #: src/multiint.cpp:4042
-#, fuzzy
 msgid "UPnP detection is in progress..."
 msgstr "Обнаружение UPnP в процессе ..."
 
@@ -12416,22 +12378,27 @@ msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
 #: src/structure.cpp:5812
+#, fuzzy
 msgid "Electronic Reward - Visibility Report"
 msgstr "награда - доклад о местоположении"
 
 #: src/structure.cpp:5851
+#, fuzzy
 msgid "Factory Reward - Propulsion"
 msgstr "награда завода - движитель"
 
 #: src/structure.cpp:5873
+#, fuzzy
 msgid "Factory Reward - Body"
 msgstr "награда завода - корпус"
 
 #: src/structure.cpp:5895
+#, fuzzy
 msgid "Factory Reward - Weapon"
 msgstr "награда завода - оружие"
 
 #: src/structure.cpp:5903
+#, fuzzy
 msgid "Factory Reward - Nothing"
 msgstr "награда завода - ничего"
 
@@ -12457,7 +12424,7 @@ msgstr "Высадка подкрепления"
 
 #: src/version.cpp:115
 msgid " (modified locally)"
-msgstr "(модифицировано локально)"
+msgstr " (модифицировано локально)"
 
 #: src/version.cpp:121
 msgid " - DEBUG"
@@ -12469,6 +12436,12 @@ msgstr " - ОТЛАДКА"
 #, fuzzy, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Версия %s-%s%s%s%s"
+
+msgid "Pursue"
+msgstr "Преследовать"
+
+msgid "Guard Position"
+msgstr "Охранять позиции"
 
 #~ msgid "Electronic Countermeasures"
 #~ msgstr "Электронные контрмеры"
@@ -12647,12 +12620,6 @@ msgstr "Версия %s-%s%s%s%s"
 
 #~ msgid "Optimum Range"
 #~ msgstr "Оптимальный радиус действия"
-
-msgid "Pursue"
-msgstr "Преследовать"
-
-msgid "Guard Position"
-msgstr "Охранять позиции"
 
 #~ msgid "Demo mode off - Returning to normal game mode"
 #~ msgstr "Демо-режим выключен - возвращение к нормальному режиму игры"
