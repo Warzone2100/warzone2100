@@ -508,7 +508,7 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			debug(LOG_ERROR, "%s, Short range (%d) is greater than long range (%d)", getName(psStats), shortRange, longRange);
 		}
-		if (shortRange == longRange && (shortHit > longHit || longHit > shortHit))
+		if (shortRange == longRange && shortHit != longHit)
 		{
 			debug(LOG_ERROR, "%s, shortHit and longHit should be equal if the ranges are the same", getName(psStats));
 		}
