@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-12 12:14+0100\n"
-"PO-Revision-Date: 2019-06-13 17:30+0300\n"
-"Last-Translator: Prot EuPhobos <prot@euphobos.ru>\n"
+"PO-Revision-Date: 2019-06-15 01:26+0300\n"
+"Last-Translator: MaX <q3.max.2011@ya.ru>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Bookmarks: 82,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
@@ -2989,9 +2989,8 @@ msgstr "Исследования (F2)"
 
 #: data/base/script/rules.js:102 data/base/script/tutorial.js:201
 #: data/base/script/tutorial.js:470 data/mp/multiplay/skirmish/rules.js:71
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "Модуль лаборатории расширяет возможности исследования"
+msgstr "Исследования - сначала постройте лабораторию"
 
 #: data/base/script/rules.js:110 data/base/script/tutorial.js:125
 #: data/base/script/tutorial.js:248 data/base/script/tutorial.js:318
@@ -3003,7 +3002,7 @@ msgstr "Строить (F3)"
 #: data/base/script/tutorial.js:277 data/base/script/tutorial.js:427
 #: data/base/script/tutorial.js:471 data/mp/multiplay/skirmish/rules.js:83
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Строительство - сначала произведите строительных юнитов"
 
 #: data/base/script/rules.js:151 data/base/script/tutorial.js:191
 #: data/mp/multiplay/skirmish/rules.js:103 src/scriptfuncs.cpp:1322
@@ -3060,7 +3059,6 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "Нефтяная вышка не работает. Постройте генератор энергии, чтобы преобразовать нефть в энергию"
 
 #: data/base/script/tutorial.js:32
-#, fuzzy
 msgid "Left click the flashing build icon"
 msgstr "Нажмите левой кнопкой по мигающей кнопке СТРОИТЬ"
 
@@ -4313,13 +4311,12 @@ msgid "INSANE"
 msgstr "НЕВОЗМОЖНЫЙ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
-#, fuzzy
 msgid "Personality change successful."
-msgstr "Передача управления завершена."
+msgstr "Профиль сменен успешно."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "Такого профиля нет! Попробуйте один из этих:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
@@ -4334,7 +4331,6 @@ msgid "Researching fundamental technology."
 msgstr "Исследование базовых технологий."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
 msgstr "Исследования "
 
@@ -4355,9 +4351,8 @@ msgid "Sorry, droid transfer failed."
 msgstr "Извините, передача дроида не удалась."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "Генератор энергии."
+msgstr "Передана энергия."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
@@ -5386,7 +5381,6 @@ msgid "CB Tower"
 msgstr "КБ Башня"
 
 #: po/custom/fromJson.txt:314
-#, fuzzy
 msgid "CB Turret"
 msgstr "КБ башня"
 
@@ -5495,9 +5489,8 @@ msgid "Command Turret Scorpion Tracks"
 msgstr "Командная Скорпион Гусеницы"
 
 #: po/custom/fromJson.txt:345
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Командная турель"
+msgstr "Улучшение командной турели"
 
 #: po/custom/fromJson.txt:346
 msgid "Command Turret Viper Tracks"
@@ -5824,7 +5817,6 @@ msgid "Enables self-repair in all vehicles"
 msgstr "Позволяет Всем машинам автоматически восстанавливаться"
 
 #: po/custom/fromJson.txt:441
-#, fuzzy
 msgid "Enemy"
 msgstr "Враг"
 
@@ -6018,9 +6010,8 @@ msgid "Gamma"
 msgstr "Гамма"
 
 #: po/custom/fromJson.txt:496
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Кампания"
+msgstr "Кампания Гамма"
 
 #: po/custom/fromJson.txt:497
 msgid "Gas turbine boosts power output"
@@ -6259,9 +6250,8 @@ msgid "Heavy anti-tank rocket"
 msgstr "Тяжёлая противотанковая ракета"
 
 #: po/custom/fromJson.txt:561
-#, fuzzy
 msgid "Heavy body increases armor and body points"
-msgstr "Тяжёлая рама повышает броню"
+msgstr "Тяжёлый корпус повышает броню"
 
 #: po/custom/fromJson.txt:562
 msgid "Heavy Body - Mantis"
@@ -6588,7 +6578,6 @@ msgid "Hover"
 msgstr "Ховер"
 
 #: po/custom/fromJson.txt:659
-#, fuzzy
 msgid "Hover AI"
 msgstr "Ховер AI"
 
@@ -7038,9 +7027,8 @@ msgid "Lancer Viper Wheels"
 msgstr "Лансер Гадюка Колёса"
 
 #: po/custom/fromJson.txt:805
-#, fuzzy
 msgid "Large Super Heavy Body"
-msgstr "Большая супертяжёлая рама"
+msgstr "Большой супертяжёлый корпус"
 
 #: po/custom/fromJson.txt:806
 msgid "Laser AA Gun Available"
@@ -9769,14 +9757,12 @@ msgid "Systems"
 msgstr "Системы"
 
 #: src/design.cpp:4320
-#, fuzzy
 msgid "Do Not Store Design"
 msgstr "Не сохранять дизайн"
 
 #: src/design.cpp:4325
-#, fuzzy
 msgid "Store Design"
-msgstr "Новый дизайн"
+msgstr "Сохранить дизайн"
 
 #: src/display3d.cpp:663
 msgid "Player left"
@@ -9898,7 +9884,6 @@ msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr "Заходите на форум и все новости Warzone 2100! Нажмите на эту ссылку."
 
 #: src/frontend.cpp:162
-#, fuzzy
 msgid "Donate: http://donations.wz2100.net/"
 msgstr "Пожертвования: http://donations.wz2100.net"
 
@@ -11337,9 +11322,8 @@ msgid "Reveal map at mouse position"
 msgstr "Показать карту в позиции мыши"
 
 #: src/keymap.cpp:459
-#, fuzzy
 msgid "Trace a game object"
-msgstr "Трассировка цели игры."
+msgstr "Отследить игровой объект"
 
 #: src/loop.cpp:258 src/loop.cpp:274
 msgid "Could not save game!"
@@ -11733,9 +11717,8 @@ msgid "Team"
 msgstr "Команда"
 
 #: src/multiint.cpp:2499
-#, fuzzy
 msgid "Difficulty locked"
-msgstr "Сложность"
+msgstr "Сложность заблокирована"
 
 #: src/multiint.cpp:2499
 msgid "Click to change difficulty"
@@ -11750,7 +11733,6 @@ msgid "Player is ready"
 msgstr "Игрок готов"
 
 #: src/multiint.cpp:2514
-#, fuzzy
 msgid "Player is downloading"
 msgstr "Игрок загружает"
 
@@ -11759,7 +11741,6 @@ msgid "Click when ready"
 msgstr "Щёлкни когда будешь готов"
 
 #: src/multiint.cpp:2514
-#, fuzzy
 msgid "Waiting for download"
 msgstr "Ожидание загрузки"
 
@@ -11780,7 +11761,6 @@ msgid "Choose Team"
 msgstr "Выбрать команду"
 
 #: src/multiint.cpp:2641
-#, fuzzy
 msgid "Teams locked"
 msgstr "Фиксированные команды"
 
@@ -11797,7 +11777,6 @@ msgid "Click to change AI"
 msgstr "Нажмите, чтобы изменить ИИ"
 
 #: src/multiint.cpp:2703
-#, fuzzy
 msgid "Player ID: "
 msgstr "Игрок ID: "
 
@@ -11959,7 +11938,7 @@ msgstr "Существует обновление к игре, пожалуйс�
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:134
 msgid "LIMITS"
-msgstr ""
+msgstr "ПРЕДЕЛЫ"
 
 #: src/multilimit.cpp:148
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12018,9 +11997,9 @@ msgid "Total Sent/Received —"
 msgstr "Всего отправлено/принято —"
 
 #: src/multimenu.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Тренированных: %u"
+msgstr "Тренированных: %u/%u"
 
 #: src/multimenu.cpp:787
 #, c-format
@@ -12354,12 +12333,12 @@ msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Productio
 msgstr "Невозможно строить больше \"%s\", Достигнут Предел Строительных Юнитов - Производство Остановлено"
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Юнит назначен - Урон %3.0f%%"
-msgstr[1] "%s - %u Юнита назначено - Урон %3.0f%%"
-msgstr[2] "%s - %u Юнитов назначено - Урон %3.0f%%"
+msgstr[0] "%s - %u Юнит назначен - Здоровье %d/%d"
+msgstr[1] "%s - %u Юнита назначено - Здоровье %d/%d"
+msgstr[2] "%s - %u Юнитов назначено - Здоровье %d/%d"
 
 #: src/structure.cpp:5447
 #, fuzzy, c-format
@@ -12377,9 +12356,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr "%s - Жизни %d/%d"
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - Подключено %u из %u - Урон %3.0f%%"
+msgstr "%s - Подключено %u из %u - Здоровье %d/%d"
 
 #: src/structure.cpp:5640 src/structure.cpp:5685
 #, c-format
@@ -12387,29 +12366,24 @@ msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
 #: src/structure.cpp:5812
-#, fuzzy
 msgid "Electronic Reward - Visibility Report"
-msgstr "награда - доклад о местоположении"
+msgstr "Награда - доклад о местоположении"
 
 #: src/structure.cpp:5851
-#, fuzzy
 msgid "Factory Reward - Propulsion"
-msgstr "награда завода - движитель"
+msgstr "Награда завода - движитель"
 
 #: src/structure.cpp:5873
-#, fuzzy
 msgid "Factory Reward - Body"
-msgstr "награда завода - корпус"
+msgstr "Награда завода - корпус"
 
 #: src/structure.cpp:5895
-#, fuzzy
 msgid "Factory Reward - Weapon"
-msgstr "награда завода - оружие"
+msgstr "Награда завода - оружие"
 
 #: src/structure.cpp:5903
-#, fuzzy
 msgid "Factory Reward - Nothing"
-msgstr "награда завода - ничего"
+msgstr "Награда завода - ничего"
 
 #: src/structure.cpp:5930
 msgid "Repair Facility Award - Repair"
