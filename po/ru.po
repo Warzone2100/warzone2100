@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-12 12:14+0100\n"
-"PO-Revision-Date: 2019-06-15 01:26+0300\n"
+"PO-Revision-Date: 2019-06-15 01:43+0300\n"
 "Last-Translator: MaX <q3.max.2011@ya.ru>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -9885,7 +9885,7 @@ msgstr "Заходите на форум и все новости Warzone 2100! 
 
 #: src/frontend.cpp:162
 msgid "Donate: http://donations.wz2100.net/"
-msgstr "Пожертвования: http://donations.wz2100.net"
+msgstr "Пожертвования: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:163
 msgid "Help support the project with our server costs, Click this link."
@@ -12370,18 +12370,22 @@ msgid "Electronic Reward - Visibility Report"
 msgstr "Награда - доклад о местоположении"
 
 #: src/structure.cpp:5851
+#, fuzzy
 msgid "Factory Reward - Propulsion"
 msgstr "Награда завода - движитель"
 
 #: src/structure.cpp:5873
+#, fuzzy
 msgid "Factory Reward - Body"
 msgstr "Награда завода - корпус"
 
 #: src/structure.cpp:5895
+#, fuzzy
 msgid "Factory Reward - Weapon"
 msgstr "Награда завода - оружие"
 
 #: src/structure.cpp:5903
+#, fuzzy
 msgid "Factory Reward - Nothing"
 msgstr "Награда завода - ничего"
 
