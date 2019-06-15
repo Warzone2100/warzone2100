@@ -5,21 +5,36 @@ cmake_minimum_required(VERSION 3.5)
 
 get_filename_component(_qt5_framework_prefix "${CMAKE_BINARY_DIR}/macosx/external/QT" ABSOLUTE)
 
-set(_download_script_path "${CMAKE_CURRENT_LIST_DIR}/../configs/fetchscripts/SetupPrebuiltComponents-QT.sh")
+set(_download_script_path "${CMAKE_CURRENT_LIST_DIR}/../configs/FetchPrebuilt.cmake")
 if(NOT EXISTS "${_qt5_framework_prefix}")
 	# Download the Qt5 minimal bundle for macOS to the build dir
+
+	set(_qt5_dl_filename "QT-5.9.7.tgz")
+	set(_qt5_dl_url "https://github.com/past-due/wz2100-mac-build-tools/raw/master/QT-5.9.7.tgz")
+	set(_qt5_dl_sha256 "46c385d424512f1d01cd1a7458b4001737a81542ac63c528a171e342aa1c323b")
+
 	if(NOT EXISTS "${_download_script_path}")
 		message( FATAL_ERROR "Missing required download script: \"${_download_script_path}\"" )
 	endif()
+
 	message( STATUS "Downloading missing Qt5 minimal bundle to: \"${_qt5_framework_prefix}\"" )
 	execute_process(
 		COMMAND ${CMAKE_COMMAND} -E make_directory macosx
 		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 	)
 	execute_process(
-		COMMAND bash ${_download_script_path}
-		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/macosx"
+		COMMAND ${CMAKE_COMMAND}
+				-DFILENAME=${_qt5_dl_filename}
+				-DURL=${_qt5_dl_url}
+				-DEXPECTED_SHA256=${_qt5_dl_sha256}
+				-DOUT_DIR=QT
+				-P ${_download_script_path}
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+		RESULT_VARIABLE _exstatus
 	)
+	if(NOT _exstatus EQUAL 0)
+		message(FATAL_ERROR "Failed to download Qt5 minimal bundle")
+	endif()
 endif()
 
 if(NOT IS_DIRECTORY "${_qt5_framework_prefix}")
