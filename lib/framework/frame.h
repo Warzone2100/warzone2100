@@ -50,11 +50,9 @@
 #include "trig.h"
 #include "cursors.h"
 
-#if __clang__
+#if defined(__clang__)
 // workaround LLVM bug https://bugs.llvm.org//show_bug.cgi?id=21629
 #pragma clang diagnostic ignored "-Wmissing-braces"
-// workaround bad implementations in our code
-#pragma clang diagnostic ignored "-Wcast-align"
 #endif
 
 #define REALCONCAT(x, y) x ## y
