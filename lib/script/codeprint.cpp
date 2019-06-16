@@ -214,7 +214,14 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 	}
 
 	ip = psProg->pCode;
+#if defined(__clang__)
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Wcast-align"
+#endif
 	end = (INTERP_VAL *)((UBYTE *)ip + psProg->size);
+#if defined(__clang__)
+	#pragma clang diagnostic pop
+#endif
 	triggerCode = (psProg->numTriggers > 0);
 
 	opcode = (OPCODE)(ip->v.ival >> OPCODE_SHIFT);

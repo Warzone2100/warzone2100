@@ -67,6 +67,10 @@
 #include "multiplay.h"
 #include "qtscript.h"
 
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
+#endif
+
 
 #define MAX_DESIGN_COMPONENTS 40		// Max number of stats the design screen can cope with.
 #define MAX_SYSTEM_COMPONENTS 65535

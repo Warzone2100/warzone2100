@@ -95,6 +95,10 @@
 #include "multimenu.h"
 #include "console.h"
 
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
+#endif
+
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
