@@ -220,7 +220,6 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 	case AF_INET6:
 		{
 
-			const uint16_t *address = (const uint16_t *) & (reinterpret_cast<const sockaddr_in6 *>(addr))->sin6_addr.s6_addr;
 			// Check to see if this is really a IPv6 address
 			const struct sockaddr_in6 *mappedIP = reinterpret_cast<const sockaddr_in6 *>(addr);
 			if (IN6_IS_ADDR_V4MAPPED(&mappedIP->sin6_addr))
@@ -234,6 +233,10 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 			}
 			else
 			{
+				static_assert(sizeof(in6_addr::s6_addr) == 16, "Standard expects in6_addr structure that contains member s6_addr[16], a 16-element array of uint8_t");
+				const uint8_t *address_u8 = &((reinterpret_cast<const sockaddr_in6 *>(addr))->sin6_addr.s6_addr[0]);
+				uint16_t address[8] = {0};
+				memcpy(&address, address_u8, sizeof(uint8_t) * 16);
 				return snprintf(buf, size,
 								"%hx:%hx:%hx:%hx:%hx:%hx:%hx:%hx",
 								ntohs(address[0]),
