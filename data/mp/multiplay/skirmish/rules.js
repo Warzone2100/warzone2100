@@ -378,9 +378,6 @@ function eventGameInit()
 		grantTech(TECH_THREE);
 	}
 
-	// This is the only template that should be enabled before design is allowed
-	enableTemplate("ConstructionDroid");
-
 	hackNetOn();
 	setTimer("checkEndConditions", 3000);
 	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
