@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2019  Warzone 2100 Project
+	Copyright (C) 2017-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,19 +17,27 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "lib/ivis_opengl/gfx_api.h"
-#include <SDL_video.h>
+#include "gfx_api_vk.h"
+#include "gfx_api_gl.h"
 
-class SDL_gfx_api_Impl_Factory final : public gfx_api::backend_Impl_Factory
+bool uses_vulkan = false;
+bool uses_gfx_debug = false;
+
+gfx_api::context& gfx_api::context::get()
 {
-public:
-	SDL_gfx_api_Impl_Factory(SDL_Window* window);
-
-	virtual std::unique_ptr<gfx_api::backend_OpenGL_Impl> createOpenGLBackendImpl() const override;
+	if (uses_vulkan)
+	{
 #if defined(WZ_VULKAN_ENABLED)
-	virtual std::unique_ptr<gfx_api::backend_Vulkan_Impl> createVulkanBackendImpl() const override;
+		static VkRoot ctx(uses_gfx_debug);
+		return ctx;
+#else
+		debug(LOG_FATAL, "Warzone was not compiled with the Vulkan backend enabled. Aborting.");
+		abort();
 #endif
-
-private:
-	SDL_Window* window;
-};
+	}
+	else
+	{
+		static gl_context ctx(uses_gfx_debug);
+		return ctx;
+	}
+}

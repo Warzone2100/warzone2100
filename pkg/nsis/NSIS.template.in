@@ -162,7 +162,7 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
   !define MUI_PAGE_CUSTOMFUNCTION_PRE WelcomePageSetupLinkPre
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW WelcomePageSetupLinkShow
   !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE "${TOP_SRCDIR}\COPYING"
+  !insertmacro MUI_PAGE_LICENSE "@CPACK_RESOURCE_FILE_LICENSE@"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
 !ifndef PORTABLE

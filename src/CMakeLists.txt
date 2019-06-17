@@ -220,6 +220,27 @@ set(WZ_APP_INSTALL_DEST "${CMAKE_INSTALL_BINDIR}")
 # - A *build-time*-generated Info.plist is used, instead of CMake's default configure-time-generated Info.plist setup
 #   (ensuring that the Info.plist reflects the latest autorevision info)
 
+function(CopyVulkanLayerJSON _input_file _output_file _new_library_path)
+
+	configure_file("${_input_file}" "${_output_file}" COPYONLY)
+
+	file(READ "${_output_file}" _strings_NEW_OUTPUT_FILE
+		ENCODING UTF-8
+	)
+	string(REGEX MATCH "(\"library_path\":[^\"]*)\"([^\"]*)\"" _library_path_match "${_strings_NEW_OUTPUT_FILE}")
+	if(_library_path_match)
+		set(_full_match "${CMAKE_MATCH_0}")
+		set(_library_path_key "${CMAKE_MATCH_1}")
+		if(CMAKE_MATCH_2)
+			get_filename_component(_library_name "${CMAKE_MATCH_2}" NAME)
+			string(REGEX REPLACE "${_full_match}" "${_library_path_key}\"${_new_library_path}${_library_name}\"" _strings_NEW_OUTPUT_FILE "${_strings_NEW_OUTPUT_FILE}")
+		endif()
+		file(WRITE "${_output_file}" "${_strings_NEW_OUTPUT_FILE}")
+	endif()
+	unset(_strings_NEW_OUTPUT_FILE)
+
+endfunction()
+
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE TRUE)
@@ -436,6 +457,93 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	copy_qt5_plugin("Qt5::QCocoaIntegrationPlugin")
 	copy_qt5_plugin("Qt5::QCocoaPrinterSupportPlugin")
+
+	if(WZ_ENABLE_BACKEND_VULKAN)
+		# Vulkan / MoltenVK
+		find_package(Vulkan)
+		if (Vulkan_FOUND)
+			message( STATUS "Vulkan_LIBRARY=${Vulkan_LIBRARY}" )
+			set(_vulkan_dylibs "${Vulkan_LIBRARY}")
+
+			# Use path to Vulkan_LIBRARY to find other dylibs in the Vulkan SDK
+			get_filename_component(VulkanSDK_LIB_DIR "${Vulkan_LIBRARY}" DIRECTORY)
+
+			# Vulkan_LIBRARY realpath (Vulkan_LIBRARY is often a symlink)
+			get_filename_component(_vulkan_library_realpath "${Vulkan_LIBRARY}" REALPATH)
+			if (NOT _vulkan_library_realpath STREQUAL Vulkan_LIBRARY)
+				list(APPEND _vulkan_dylibs "${_vulkan_library_realpath}")
+			endif()
+
+			# For SDL's automatic libvulkan detection, libvulkan.1.dylib is required
+			# NOTE: Should not be needed once SDL 2.0.10 is released
+			# See: https://hg.libsdl.org/SDL/rev/4a089aa4ff81
+			get_filename_component(_vulkan_library_name "${Vulkan_LIBRARY}" NAME)
+			get_filename_component(_vulkan_library_realpath_name "${_vulkan_library_realpath}" NAME)
+			if ((NOT _vulkan_library_name STREQUAL "libvulkan.1.dylib") AND (NOT _vulkan_library_realpath_name STREQUAL "libvulkan.1.dylib"))
+				if(NOT EXISTS "${VulkanSDK_LIB_DIR}/libvulkan.1.dylib")
+					message(FATAL_ERROR "Missing expected libvulkan.1.dylib at: ${VulkanSDK_LIB_DIR}/libvulkan.1.dylib")
+				endif()
+				list(APPEND _vulkan_dylibs "${VulkanSDK_LIB_DIR}/libvulkan.1.dylib")
+			endif()
+
+			# MoltenVK dylib
+			if(EXISTS "${VulkanSDK_LIB_DIR}/libMoltenVK.dylib")
+				list(APPEND _vulkan_dylibs "${VulkanSDK_LIB_DIR}/libMoltenVK.dylib")
+			else()
+				message( FATAL_ERROR "Missing expected libMoltenVK.dylib at: ${VulkanSDK_LIB_DIR}/libMoltenVK.dylib" )
+			endif()
+
+			# Vulkan layers
+			file(GLOB _vulkan_layers LIST_DIRECTORIES false "${VulkanSDK_LIB_DIR}/libVkLayer_*.dylib")
+			list(APPEND _vulkan_dylibs ${_vulkan_layers})
+
+			# Copy _vulkan_dylibs to Frameworks folder now (don't wait for CMake install)
+			foreach(_dylib ${_vulkan_dylibs})
+				set_source_files_properties(
+					"${_dylib}" PROPERTIES
+					MACOSX_PACKAGE_LOCATION "Frameworks"
+					XCODE_LAST_KNOWN_FILE_TYPE "compiled.mach-o.dylib"
+					XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
+				)
+				if(NOT CMAKE_GENERATOR STREQUAL "Xcode")
+					# Other generators will need a custom-command equivalent of setting the "Code Sign on Copy" Xcode attribute to ON
+					message( WARNING "The generator \"${CMAKE_GENERATOR}\" does not currently handle code-signing: \"${_dylib}\"" )
+				endif()
+				target_sources(warzone2100 PRIVATE "${_dylib}")
+			endforeach()
+
+			set(_vulkan_resources "")
+			get_filename_component(_VulkanSDK_parent "${VulkanSDK_LIB_DIR}" DIRECTORY)
+			set(VulkanSDK_ETC_VULKAN_DIR "${_VulkanSDK_parent}/etc/vulkan")
+			if (NOT IS_DIRECTORY "${VulkanSDK_ETC_VULKAN_DIR}")
+				message( FATAL_ERROR "Unable to find /etc/vulkan at: ${VulkanSDK_ETC_VULKAN_DIR}" )
+			endif()
+
+			# Vulkan JSON files (explicit_layer.d, icd.d)
+			file(GLOB _vulkan_json LIST_DIRECTORIES false "${VulkanSDK_ETC_VULKAN_DIR}/explicit_layer.d/*.json" "${VulkanSDK_ETC_VULKAN_DIR}/icd.d/*.json")
+
+			# Fix up each Vulkan JSON file
+			foreach(_jsonFile ${_vulkan_json})
+				get_filename_component(_jsonFile_Name "${_jsonFile}" NAME)
+				string(REGEX REPLACE "^${VulkanSDK_ETC_VULKAN_DIR}/" "" _jsonFile_SubPath "${_jsonFile}")
+				get_filename_component(_jsonFile_SubPath "${_jsonFile_SubPath}" DIRECTORY)
+				CopyVulkanLayerJSON("${_jsonFile}" "${CMAKE_CURRENT_BINARY_DIR}/generated_resources/vulkan/${_jsonFile_SubPath}/${_jsonFile_Name}" "../../../Frameworks/")
+			endforeach()
+
+			# Copy Vulkan configuration JSON files to Resources folder of bundle
+			set_source_files_properties(
+				"${CMAKE_CURRENT_BINARY_DIR}/generated_resources/vulkan"
+				PROPERTIES
+				MACOSX_PACKAGE_LOCATION "Resources"
+				GENERATED TRUE
+				XCODE_LAST_KNOWN_FILE_TYPE "folder"
+			)
+			target_sources(warzone2100 PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated_resources/vulkan")
+
+		else(Vulkan_FOUND)
+			message(WARNING "Vulkan backend is enabled, but the Vulkan SDK cannot be found. The macOS app bundle will lack required support libraries.")
+		endif(Vulkan_FOUND)
+	endif(WZ_ENABLE_BACKEND_VULKAN)
 
 	# Set install RPATH for WZ app bundle
 	set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")

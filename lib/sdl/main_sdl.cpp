@@ -54,6 +54,10 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_clipboard.h>
+#if defined(HAVE_SDL_VULKAN_H)
+#include <SDL_vulkan.h>
+#endif
+#include <SDL_version.h>
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
 #include <algorithm>
@@ -89,6 +93,7 @@ int main(int argc, char *argv[])
 
 // At this time, we only have 1 window.
 static SDL_Window *WZwindow = nullptr;
+static video_backend WZbackend = video_backend::opengl;
 
 // The screen that the game window is on.
 int screenIndex = 0;
@@ -290,6 +295,28 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
 }
 
+void SDL_WZBackend_GetDrawableSize(SDL_Window* window,
+								   int*        w,
+								   int*        h)
+{
+	switch (WZbackend)
+	{
+		case video_backend::opengl:
+			return SDL_GL_GetDrawableSize(window, w, h);
+		case video_backend::vulkan:
+#if defined(HAVE_SDL_VULKAN_H)
+			return SDL_Vulkan_GetDrawableSize(window, w, h);
+#else
+			SDL_version compiled_version;
+			SDL_VERSION(&compiled_version);
+			debug(LOG_FATAL, "The version of SDL used for compilation (%u.%u.%u) did not have the SDL_vulkan.h header", (unsigned int)compiled_version.major, (unsigned int)compiled_version.minor, (unsigned int)compiled_version.patch);
+			if (w) { w = 0; }
+			if (h) { h = 0; }
+			return;
+#endif
+	}
+}
+
 void setDisplayScale(unsigned int displayScale)
 {
 	ASSERT(displayScale >= 100, "Invalid display scale: %u", displayScale);
@@ -330,17 +357,22 @@ void wzDisplayDialog(DialogType type, const char *title, const char *message)
 	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
+SDL_WindowFlags getSDLFullscreenMode()
+{
+	return WZ_SDL_FULLSCREEN_MODE;
+}
+
 void wzToggleFullscreen()
 {
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
-	if (flags & WZ_SDL_FULLSCREEN_MODE)
+	if (flags & getSDLFullscreenMode())
 	{
 		SDL_SetWindowFullscreen(WZwindow, 0);
 		wzSetWindowIsResizable(true);
 	}
 	else
 	{
-		SDL_SetWindowFullscreen(WZwindow, WZ_SDL_FULLSCREEN_MODE);
+		SDL_SetWindowFullscreen(WZwindow, getSDLFullscreenMode());
 		wzSetWindowIsResizable(false);
 	}
 }
@@ -392,17 +424,33 @@ void wzDelay(unsigned int delay)
 
 void wzSetSwapInterval(int interval)
 {
-	if (SDL_GL_SetSwapInterval(interval) != 0)
+	switch (WZbackend)
 	{
-		debug(LOG_ERROR, "Error: SDL_GL_SetSwapInterval(%d) failed (%s).", interval, SDL_GetError());
-		return;
+		case video_backend::opengl:
+			if (SDL_GL_SetSwapInterval(interval) != 0)
+			{
+				debug(LOG_ERROR, "Error: SDL_GL_SetSwapInterval(%d) failed (%s).", interval, SDL_GetError());
+				return;
+			}
+			vsyncIsEnabled = interval != 0;
+			return;
+		case video_backend::vulkan:
+			// Not currently implemented
+			return;
 	}
-	vsyncIsEnabled = interval != 0;
 }
 
 int wzGetSwapInterval()
 {
-	return SDL_GL_GetSwapInterval();
+	switch (WZbackend)
+	{
+		case video_backend::opengl:
+			return SDL_GL_GetSwapInterval();
+		case video_backend::vulkan:
+			// Not currently implemented
+			return 0;
+	}
+	return 0; // avoid GCC warning
 }
 
 /**************************/
@@ -1513,8 +1561,25 @@ void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *heigh
 	}
 }
 
+static SDL_WindowFlags SDL_backend(const video_backend& backend)
+{
+	switch (backend)
+	{
+		case video_backend::opengl:
+			return SDL_WINDOW_OPENGL;
+		case video_backend::vulkan:
+#if SDL_VERSION_ATLEAST(2, 0, 6)
+			return SDL_WINDOW_VULKAN;
+#else
+			debug(LOG_FATAL, "The version of SDL used for compilation does not support SDL_WINDOW_VULKAN");
+			break;
+#endif
+	}
+	return SDL_WindowFlags{};
+}
+
 // This stage, we handle display mode setting
-bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highDPI)
+bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
 	// Output linked SDL version
 	char buf[512];
@@ -1553,27 +1618,32 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	}
 #endif
 
-// Set OpenGL attributes before creating the SDL Window
-	// Set the double buffer OpenGL attribute.
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	WZbackend = backend;
 
-	// Enable stencil buffer, needed for shadows to work.
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-	if (antialiasing)
+	if(backend == video_backend::opengl)
 	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
-	}
+		// Set OpenGL attributes before creating the SDL Window
+
+		// Set the double buffer OpenGL attribute.
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+		// Enable stencil buffer, needed for shadows to work.
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+		if (antialiasing)
+		{
+			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
+		}
 
 #if defined(WZ_USE_OPENGL_3_2_CORE_PROFILE)
-	// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+		// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 #endif
-//
+	}
 
 	// Populated our resolution list (does all displays now)
 	SDL_DisplayMode	displaymode;
@@ -1693,11 +1763,11 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	}
 
 	//// The flags to pass to SDL_CreateWindow
-	int video_flags  = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+	int video_flags  = SDL_backend(backend) | SDL_WINDOW_SHOWN;
 
 	if (fullscreen)
 	{
-		video_flags |= WZ_SDL_FULLSCREEN_MODE;
+		video_flags |= getSDLFullscreenMode();
 	}
 	else
 	{
@@ -1906,7 +1976,7 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 
 	// Obtain the window context's drawable size in pixels
 	int drawableWidth, drawableHeight = 0;
-	SDL_GL_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
+	SDL_WZBackend_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
 
 	// Obtain the logical window size (in points)
 	int windowWidth, windowHeight = 0;

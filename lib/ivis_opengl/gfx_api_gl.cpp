@@ -181,6 +181,7 @@ void gl_texture::unbind()
 
 void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data)
 {
+	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 	bind();
 	glTexSubImage2D(GL_TEXTURE_2D, mip_level, offset_x, offset_y, width, height, std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
 	unbind();
@@ -1140,6 +1141,7 @@ void gl_context::disable_all_vertex_buffers()
 
 void gl_context::bind_streamed_vertex_buffers(const void* data, const std::size_t size)
 {
+	ASSERT(size > 0, "bind_streamed_vertex_buffers called with size 0");
 	glBindBuffer(GL_ARRAY_BUFFER, scratchbuffer);
 	if (scratchbuffer_size > 0)
 	{
@@ -1158,6 +1160,7 @@ void gl_context::bind_streamed_vertex_buffers(const void* data, const std::size_
 void gl_context::bind_index_buffer(gfx_api::buffer& _buffer, const gfx_api::index_type&)
 {
 	auto& buffer = static_cast<gl_buffer&>(_buffer);
+	ASSERT(buffer.usage == gfx_api::buffer::usage::index_buffer, "Passed gfx_api::buffer is not an index buffer");
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.buffer);
 }
 
@@ -1257,12 +1260,6 @@ int32_t gl_context::get_context_value(const context_value property)
 	GLint value;
 	glGetIntegerv(to_gl(property), &value);
 	return value;
-}
-
-gfx_api::context& gfx_api::context::get()
-{
-	static gl_context ctx;
-	return ctx;
 }
 
 // MARK: gl_context - debug
