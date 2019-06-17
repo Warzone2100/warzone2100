@@ -179,7 +179,7 @@ struct gl_context final : public gfx_api::context
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
 
-	gl_context() {}
+	gl_context(bool _debug) : khr_debug(_debug) {}
 	~gl_context();
 
 	virtual gfx_api::texture* create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename) override;

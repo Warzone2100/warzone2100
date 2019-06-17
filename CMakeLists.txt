@@ -6,6 +6,7 @@ OPTION(ENABLE_NLS "Native Language Support" ON)
 OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
+OPTION(WZ_ENABLE_BACKEND_VULKAN "Enable Vulkan backend" ON)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
 	# Only supported on Windows, macOS, and Linux
@@ -694,12 +695,22 @@ endif()
 
 add_subdirectory(3rdparty)
 
-set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
+# Determine distribution license
+set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")
+if(WZ_ENABLE_BACKEND_VULKAN)
+	# If Vulkan is enabled, use the GPL3 license for distribution
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pkg/licenses/COPYING.gpl3" "${WZ_DIST_LICENSE}" COPYONLY)
+else()
+	# GPLv2
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/COPYING" "${WZ_DIST_LICENSE}" COPYONLY)
+endif()
+
+set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL "${WZ_DIST_LICENSE}" COPYING.README README.md)
 
 CONFIGURE_WZ_COMPILER_WARNINGS()
 add_subdirectory(build_tools)
-add_subdirectory(lib)
 add_subdirectory(data)
+add_subdirectory(lib)
 add_subdirectory(doc)
 add_subdirectory(icons)
 add_subdirectory(po)

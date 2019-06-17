@@ -10,9 +10,70 @@ endif()
 
 find_package(ZIP REQUIRED)
 
-COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/base.wz"
+find_program( GLSLC "glslc"
+			  PATHS "$ENV{VULKAN_SDK}/bin"
+)
+
+file(GLOB VK_SHADERS
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/generic.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/gfx_text.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/gfx_color.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/line.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_water.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/decals.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/button.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/texturedrect.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/gfx.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/text.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terraindepth.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/water.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/decals.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/button.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.frag"
+)
+
+set(SHADER_LIST "")
+if(GLSLC)
+	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/shaders/vk")
+	file(MAKE_DIRECTORY "${_output_dir}")
+	foreach(SHADER ${VK_SHADERS})
+		get_filename_component(SHADER_FILE_PATH ${SHADER} DIRECTORY)
+		get_filename_component(SHADER_FILE ${SHADER} NAME)
+		set(_output_name "${SHADER_FILE}.spv")
+		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
+			COMMAND "${GLSLC}"
+			ARGS "-c" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
+			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
+			DEPENDS "${SHADER}"
+			VERBATIM
+		)
+		list(APPEND SHADER_LIST "${_output_dir}/${_output_name}")
+	endforeach()
+	add_custom_target(glsl_compilation DEPENDS ${SHADER_LIST})
+	set_property(TARGET glsl_compilation PROPERTY FOLDER "data")
+else()
+	message(WARNING "Unable to find glslc")
+endif()
+
+set(_glsl_generatedfiles_PATHS)
+if(TARGET glsl_compilation)
+	set(_glsl_generatedfiles_PATHS
+		PATHS
+			"shaders"
+		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/base"
+	)
+endif()
+
+COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 	COMPRESSION_LEVEL 0
-	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base"
 	PATHS
 		"palette.txt"
 		"audio"
@@ -34,13 +95,14 @@ COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 		"texpages"
 		"tileset"
 		"wrf"
+	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base"
+	${_glsl_generatedfiles_PATHS}
 	IGNORE_GIT
 	QUIET
 )
 
-COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
+COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 	COMPRESSION_LEVEL 0
-	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/mp"
 	PATHS
 		"addon.lev"
 		"ruleset.json"
@@ -54,6 +116,7 @@ COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 		"stats"
 		"structs"
 		"wrf"
+	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/mp"
 	IGNORE_GIT
 	QUIET
 )
@@ -89,6 +152,9 @@ endif()
 
 ADD_CUSTOM_TARGET(data ALL
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/base.wz" "${CMAKE_CURRENT_BINARY_DIR}/mp.wz")
+if(TARGET glsl_compilation)
+	add_dependencies(data glsl_compilation)
+endif()
 
 set(DATA_FILES
 	"${CMAKE_CURRENT_BINARY_DIR}/base.wz"

@@ -17,19 +17,25 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/gfx_api_vk.h"
 #include <SDL_video.h>
 
-class SDL_gfx_api_Impl_Factory final : public gfx_api::backend_Impl_Factory
+#if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+
+class sdl_Vulkan_Impl final : public gfx_api::backend_Vulkan_Impl
 {
 public:
-	SDL_gfx_api_Impl_Factory(SDL_Window* window);
+	sdl_Vulkan_Impl(SDL_Window* window);
 
-	virtual std::unique_ptr<gfx_api::backend_OpenGL_Impl> createOpenGLBackendImpl() const override;
-#if defined(WZ_VULKAN_ENABLED)
-	virtual std::unique_ptr<gfx_api::backend_Vulkan_Impl> createVulkanBackendImpl() const override;
-#endif
+	virtual PFN_vkGetInstanceProcAddr getVkGetInstanceProcAddr() override;
+	virtual bool getRequiredInstanceExtensions(std::vector<const char*> &output) override;
+	virtual bool createWindowSurface(VkInstance instance, VkSurfaceKHR* surface) override;
+
+	// Use this function to get the size of the window's underlying drawable dimensions in pixels. This is used for setting viewport sizes, scissor rectangles, and other places where a VkExtent might show up in relation to the window.
+	virtual void getDrawableSize(int* w, int* h) override;
 
 private:
 	SDL_Window* window;
 };
+
+#endif // defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
