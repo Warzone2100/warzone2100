@@ -198,9 +198,6 @@ function eventStartLevel()
 	camPlayVideos("MBDEMO_MSG");
 	hackAddMessage("FAST_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
-	enableTemplate("ConstructionDroid");
-	enableTemplate("ViperLtMGWheels");
-
 	queue("sendAttackGroup1", camSecondsToMilliseconds(10));
 	queue("sendAttackGroup2", camSecondsToMilliseconds(20));
 	queue("activateDefenders", camSecondsToMilliseconds(30));
