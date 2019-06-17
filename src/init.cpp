@@ -1243,6 +1243,8 @@ bool stageThreeInitialise()
 
 	// Re-inititialise some static variables.
 
+	playerBuiltHQ = false;
+
 	resizeRadar();
 
 	setAllPauseStates(false);
