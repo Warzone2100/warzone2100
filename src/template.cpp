@@ -648,7 +648,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 
 	if (!playerBuiltHQ)
 	{
-		playerBuiltHQ = structureExists(player, REF_HQ, true, false) || structureExists(player, REF_HQ, true, true);
+		playerBuiltHQ = structureExists(player, REF_HQ, true, false);
 	}
 
 	/* Add the templates to the list*/
