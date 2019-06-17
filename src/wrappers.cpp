@@ -234,6 +234,8 @@ void loadingScreenCallback()
 
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// don't clear.
 	audio_Update();
+
+	wzPumpEventsWhileLoading();
 }
 
 // fill buffers with the static screen
