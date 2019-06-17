@@ -99,6 +99,7 @@ public:
 	template<typename PSO>
 	typename std::enable_if<(std::tuple_size<typename PSO::texture_tuple>::value != 0), void>::type draw(const glm::mat4 &modelViewProjectionMatrix)
 	{
+		if(!mTexture) return;
 		PSO::get().bind_textures(mTexture);
 		PSO::get().bind_vertex_buffers(mBuffers[VBO_VERTEX], mBuffers[VBO_TEXCOORD]);
 		PSO::get().draw(mSize, 0);

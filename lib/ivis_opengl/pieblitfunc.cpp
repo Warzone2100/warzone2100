@@ -95,9 +95,12 @@ void GFX::makeTexture(int width, int height, const gfx_api::pixel_format& format
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	if (mTexture)
 		delete mTexture;
-	mTexture = gfx_api::context::get().create_texture(1, width, height, format);
-	if (image != nullptr)
-		mTexture->upload(0u, 0u, 0u, width, height, format, image);
+	if (width > 0 && height > 0)
+	{
+		mTexture = gfx_api::context::get().create_texture(1, width, height, format);
+		if (image != nullptr)
+			mTexture->upload(0u, 0u, 0u, width, height, format, image);
+	}
 	mWidth = width;
 	mHeight = height;
 	mFormat = format;
