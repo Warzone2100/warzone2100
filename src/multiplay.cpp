@@ -26,6 +26,7 @@
  */
 #include <string.h>
 #include <algorithm>
+#include <chrono>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -1661,12 +1662,35 @@ bool recvMapFileRequested(NETQUEUE queue)
 // Continue sending maps and mods.
 void sendMap()
 {
+	// maximum "budget" in time per call to sendMap
+	// (at 60fps, total frame budget is ~16ms - allocate 4ms max for each call to sendMap)
+	const uint64_t maxMicroSecondsPerSendMapCall = (4 * 1000);
+
+	// calculate the time budget per file
+	uint64_t totalFilesToSend = 0;
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		totalFilesToSend += NetPlay.players[i].wzFiles.size();
+	}
+	const uint64_t maxMicroSecondsPerFile = maxMicroSecondsPerSendMapCall / std::max((uint64_t)1, totalFilesToSend);
+
+	using microDuration = std::chrono::duration<uint64_t, std::micro>;
+	auto file_startTime = std::chrono::high_resolution_clock::now();
+	microDuration file_currentDuration;
+
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		auto &files = NetPlay.players[i].wzFiles;
 		for (auto &file : files)
 		{
-			int done = NETsendFile(file, i);
+			int done = 0;
+			file_startTime = std::chrono::high_resolution_clock::now();
+			do
+			{
+				done = NETsendFile(file, i);
+				file_currentDuration = std::chrono::duration_cast<microDuration>(std::chrono::high_resolution_clock::now() - file_startTime);
+			}
+			while (done < 100 && (file_currentDuration.count() < maxMicroSecondsPerFile));
 			if (done == 100)
 			{
 				netPlayersUpdated = true;  // Remove download icon from player.
