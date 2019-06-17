@@ -37,6 +37,64 @@ configuration:
 install:
   # Initialize Git submodules
   - git submodule update --init --recursive
+  # Download & install Vulkan SDK
+  - ps: |
+      Function Req {
+          Param(
+              [Parameter(Mandatory=$True)]
+              [hashtable]$Params,
+              [int]$Retries = 1,
+              [int]$SecondsDelay = 2
+          )
+
+          $method = $Params['Method']
+          $url = $Params['Uri']
+
+          $cmd = { Write-Host "$method $url..." -NoNewline; Invoke-WebRequest @Params }
+
+          $retryCount = 0
+          $completed = $false
+          $response = $null
+
+          while (-not $completed) {
+              try {
+                  $response = Invoke-Command $cmd -ArgumentList $Params
+                  #if ($response.StatusCode -ne 200) {
+                  #    throw "Expecting reponse code 200, was: $($response.StatusCode)"
+                  #}
+                  $completed = $true
+              } catch {
+                  Write-Host $_.Exception.GetType().FullName
+                  Write-Host $_.Exception.Message
+                  if ($retrycount -ge $Retries) {
+                      Write-Warning "Request to $url failed the maximum number of $retryCount times."
+                      throw
+                  } else {
+                      Write-Warning "Request to $url failed. Retrying in $SecondsDelay seconds."
+                      Start-Sleep $SecondsDelay
+                      $retrycount++
+                  }
+              }
+          }
+
+          Write-Host "OK ($($response.StatusCode))"
+          return $response
+      }
+      
+      $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.1.108.0/windows/VulkanSDK-1.1.108.0-Installer.exe?Human=true"
+      $VULKAN_DL_SHA256 = "c2fb846328d6056f92f91a92d4b3710bc51956280a163365be2cb2fa7eb41a9b"
+      
+      $req = Req -Params @{ 'Method'='GET';'Uri'="$VULKAN_DL_URL";'OutFile'='vulkan.exe' } -Retries 3 -SecondsDelay 10
+      $vulkan_exe_hash = Get-FileHash -Path "vulkan.exe" -Algorithm SHA256
+      If ($vulkan_exe_hash.Hash -eq $VULKAN_DL_SHA256) {
+        Write-Output "Successfully downloaded VulkanSDK installer"
+      } Else {
+        Write-Error "The downloaded VulkanSDK installer hash '$($vulkan_exe_hash.Hash)' does not match the expected hash: '$VULKAN_DL_SHA256'"
+      }
+  - cmd: |
+      .\vulkan.exe /S
+      refreshenv
+      echo %VULKAN_SDK%
   # Setup Ruby path (for Asciidoctor gem install)
   - set PATH=C:\Ruby26-x64\bin;%PATH%
   # Install Asciidoctor (for documentation generation)
@@ -48,6 +106,7 @@ before_build:
   # NOTE: These are set here, instead of in the build matrix above, to maintain consistent job identifiers for release builds
   #       (as the job is identified based on the environment configuration in the matrix)
   - ps: |
+      Write-Host "env:WZ_JOB_ID='$env:WZ_JOB_ID'"
       if ($env:WZ_JOB_ID -eq "release_x86_xp") {
         # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
         # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
