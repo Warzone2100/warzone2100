@@ -367,7 +367,7 @@
         "construct": "Spade1Mk1",
         "id": "BabaPickUp",
         "name": "Pick-Up Truck",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "BabaRKJeep": {
         "body": "B2RKJeepBody",
@@ -495,7 +495,7 @@
         "id": "CobraHoverTruck",
         "name": "Truck Cobra Hover",
         "propulsion": "hover01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "CobraHvyCnTrks": {
         "body": "Body5REC",
@@ -641,7 +641,7 @@
         "id": "CobraSpadeTracks",
         "name": "Cobra Truck",
         "propulsion": "tracked01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "CobraTrkLancer": {
         "body": "Body5REC",
@@ -660,7 +660,7 @@
         "id": "ConstructionDroid",
         "name": "Truck",
         "propulsion": "wheeled01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "ConstructorDroid": {
         "body": "Body1REC",
@@ -668,7 +668,7 @@
         "id": "ConstructorDroid",
         "name": "Truck",
         "propulsion": "wheeled01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "Cyb-Atmiss-GROUND": {
         "available": true,
@@ -1053,7 +1053,7 @@
         "id": "MantisHoverTruck",
         "name": "Truck Mantis Hover",
         "propulsion": "hover01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "MantisScourgeTracks": {
         "body": "Body12SUP",
@@ -1139,7 +1139,7 @@
         "id": "P0CobraSpadeTracks",
         "name": "Cobra Truck",
         "propulsion": "tracked01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "P0PythonComTracks": {
         "body": "Body11ABT",
@@ -1168,7 +1168,7 @@
         "id": "P0cam3CobCONTrk",
         "name": "Truck",
         "propulsion": "tracked01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "P0cam3PyAsltGnTrk": {
         "body": "Body11ABT",
@@ -2262,7 +2262,7 @@
         "id": "ScorpHoverTruck",
         "name": "Truck Scorpion Hover",
         "propulsion": "hover01",
-        "type": "DROID"
+        "type": "CONSTRUCT"
     },
     "ScorpRepairTrk": {
         "body": "Body8MBT",
