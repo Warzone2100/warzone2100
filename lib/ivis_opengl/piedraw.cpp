@@ -673,10 +673,6 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 {
-	// Use several buffers and a round-robin algorithm to attempt to avoid implicit synchronization
-	static std::vector<gfx_api::buffer*> buffers(10, nullptr);
-	static size_t currBuffer = 0;
-
 	size_t cachedShadowDraws = 0;
 	size_t uncachedShadowDraws = 0;
 	for (unsigned i = 0; i < scshapes.size(); i++)
@@ -692,34 +688,30 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 		}
 	}
 
-	if (!buffers[currBuffer])
-		buffers[currBuffer] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
-
-	// Draw the shadow volume
-	gfx_api::DrawStencilShadow::get().bind();
 	const auto &premultipliedVertexes = shadowCache.getPremultipliedVertexes();
-	// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
-	// Thus we only need to include the perspective matrix
-	gfx_api::DrawStencilShadow::get().bind_constants({ pie_PerspectiveGet(), glm::vec2(0.f), glm::vec2(0.f), glm::vec4(0.f) });
-	buffers[currBuffer]->upload(sizeof(Vector3f) * premultipliedVertexes.size(), premultipliedVertexes.data());
-	buffers[currBuffer]->bind();
-//	gfx_api::context::get().bind_streamed_vertex_buffers(premultipliedVertexes.data(), sizeof(Vector3f) * premultipliedVertexes.size()); // FIXME: This uses a single scratch buffer - this is no good
-	gfx_api::DrawStencilShadow::get().bind_vertex_buffers(buffers[currBuffer]);
-
-	// Batch into glDrawArrays calls of <= SHADOW_BATCH_MAX
-	static const size_t SHADOW_BATCH_MAX = 8192 * 3; // must be divisible by 3
-	size_t vertex_count = premultipliedVertexes.size();
-	for (size_t startingIndex = 0; startingIndex < vertex_count; startingIndex += SHADOW_BATCH_MAX)
+	if (premultipliedVertexes.size() > 0)
 	{
-		gfx_api::DrawStencilShadow::get().draw(std::min(vertex_count - startingIndex, SHADOW_BATCH_MAX), startingIndex);
+		// Draw the shadow volume
+		gfx_api::DrawStencilShadow::get().bind();
+		// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
+		// Thus we only need to include the perspective matrix
+		gfx_api::DrawStencilShadow::get().bind_constants({ pie_PerspectiveGet(), glm::vec2(0.f), glm::vec2(0.f), glm::vec4(0.f) });
+		gfx_api::context::get().bind_streamed_vertex_buffers(premultipliedVertexes.data(), sizeof(Vector3f) * premultipliedVertexes.size());
+
+		// Batch into glDrawArrays calls of <= SHADOW_BATCH_MAX
+		static const size_t SHADOW_BATCH_MAX = 8192 * 3; // must be divisible by 3
+		size_t vertex_count = premultipliedVertexes.size();
+		for (size_t startingIndex = 0; startingIndex < vertex_count; startingIndex += SHADOW_BATCH_MAX)
+		{
+			gfx_api::DrawStencilShadow::get().draw(std::min(vertex_count - startingIndex, SHADOW_BATCH_MAX), startingIndex);
+		}
+
+		gfx_api::context::get().disable_all_vertex_buffers();
 	}
 
 	shadowCache.clearPremultipliedVertexes();
-	gfx_api::DrawStencilShadow::get().unbind_vertex_buffers(buffers[currBuffer]);
 
 //	debug(LOG_INFO, "Cached shadow draws: %lu, uncached shadow draws: %lu", cachedShadowDraws, uncachedShadowDraws);
-	++currBuffer;
-	if (currBuffer >= buffers.size()) { currBuffer = 0; }
 }
 
 static ShadowCache shadowCache;
