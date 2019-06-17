@@ -668,7 +668,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 			}
 
 			if (!psCurr->enabled
-				|| (bMultiPlayer && !playerBuiltHQ)
+				|| (bMultiPlayer && !playerBuiltHQ && (psCurr->droidType != DROID_CONSTRUCT && psCurr->droidType != DROID_CYBORG_CONSTRUCT))
 				|| !validTemplateForFactory(psCurr, psFactory, false)
 				|| !researchedTemplate(psCurr, player, includeRedundantDesigns))
 			{
