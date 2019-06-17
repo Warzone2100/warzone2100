@@ -4356,13 +4356,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	const int nameX = 32;
 
-	int downloadProgress = NETgetDownloadProgress(j);
+	unsigned downloadProgress = NETgetDownloadProgress(j);
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if (downloadProgress != 100)
 	{
 		char progressString[MAX_STR_LENGTH];
-		ssprintf(progressString, j != selectedPlayer ? _("Sending Map: %d%% ") : _("Map: %d%% downloaded"), downloadProgress);
+		ssprintf(progressString, j != selectedPlayer ? _("Sending Map: %u%% ") : _("Map: %u%% downloaded"), downloadProgress);
 		cache.wzMainText.setText(progressString, font_regular);
 		cache.wzMainText.render(x + 5, y + 22, WZCOL_FORM_TEXT);
 		return;

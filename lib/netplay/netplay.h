@@ -281,7 +281,7 @@ void NETflush();                                                              //
 
 int NETsendFile(WZFile &file, unsigned player);  ///< Send file chunk. Returns 100 when done.
 int NETrecvFile(NETQUEUE queue);                 ///< Receive file chunk. Returns 100 when done.
-int NETgetDownloadProgress(unsigned player);     ///< Returns 100 when done.
+unsigned NETgetDownloadProgress(unsigned player);     ///< Returns 100 when done.
 
 int NETclose();					// close current game
 int NETshutdown();					// leave the game in play.

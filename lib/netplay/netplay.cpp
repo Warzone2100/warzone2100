@@ -2040,18 +2040,18 @@ int NETrecvFile(NETQUEUE queue)
 	return 100;		// file is nullbyte, so we are done.
 }
 
-int NETgetDownloadProgress(unsigned player)
+unsigned NETgetDownloadProgress(unsigned player)
 {
 	std::vector<WZFile> const &files = player == selectedPlayer ?
 		NetPlay.wzFiles :  // Check our own download progress.
 		NetPlay.players[player].wzFiles;  // Check their download progress (currently only works if we are the host).
 
-	int progress = 100;
+	uint32_t progress = 100;
 	for (WZFile const &file : files)
 	{
-		progress = std::min<unsigned>(progress, file.pos * 100 / std::max<unsigned>(file.size, 1));
+		progress = std::min<uint32_t>(progress, (uint32_t)((uint64_t)file.pos * 100 / (uint64_t)std::max<uint32_t>(file.size, 1)));
 	}
-	return progress;
+	return static_cast<unsigned>(progress);
 }
 
 static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
