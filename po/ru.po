@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-12 12:14+0100\n"
-"PO-Revision-Date: 2019-06-18 12:15+0300\n"
+"PO-Revision-Date: 2019-06-18 19:46+0300\n"
 "Last-Translator: MaX <q3.max.2011@ya.ru>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -1655,6 +1655,7 @@ msgstr "Слоистый прочный сплав и энергопоглоща
 
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:3 po/custom/fromJson.txt:744
+#, fuzzy
 msgid "Increases Kinetic Armor and Body Points"
 msgstr "Увеличивает Кинетическую броню и общую бронебойность юнита"
 
@@ -1714,6 +1715,7 @@ msgstr "Вооружён ракетой Антибункер"
 #: data/mp/messages/strings/resstrings.txt:309
 #: data/mp/messages/strings/resstrings.txt:329
 #: data/mp/messages/strings/resstrings.txt:334 po/custom/fromJson.txt:270
+#, fuzzy
 msgid "Body Points: Medium"
 msgstr "Бронирование: среднее"
 
@@ -2376,6 +2378,7 @@ msgstr "Лёгкий корпус Альянса"
 
 #: data/base/messages/strings/resstrings.txt:528
 #: data/mp/messages/strings/resstrings.txt:247 po/custom/fromJson.txt:1270
+#, fuzzy
 msgid "Superior armor and body points to Viper"
 msgstr "Броня лучше, чем у Гадюки"
 
@@ -2396,6 +2399,7 @@ msgstr "Средний корпус Альянса"
 
 #: data/base/messages/strings/resstrings.txt:540
 #: data/mp/messages/strings/resstrings.txt:252 po/custom/fromJson.txt:1269
+#, fuzzy
 msgid "Superior armor and body points to Cobra"
 msgstr "Броня лучше, чем у Кобры"
 
@@ -2488,6 +2492,7 @@ msgstr "Новая бронированная постройка"
 #: data/mp/messages/strings/resstrings.txt:278
 #: data/mp/messages/strings/resstrings.txt:283
 #: data/mp/messages/strings/resstrings.txt:288 po/custom/fromJson.txt:728
+#, fuzzy
 msgid "Increases Body Points"
 msgstr "Увеличение бронирования"
 
@@ -2660,6 +2665,7 @@ msgstr "Лучшие цели: Постройки"
 #: data/mp/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:379
 #: data/mp/messages/strings/resstrings.txt:384 po/custom/fromJson.txt:269
+#, fuzzy
 msgid "Body Points: Low"
 msgstr "Бронирование: низкое"
 
@@ -2726,6 +2732,7 @@ msgstr "76мм гиперскоростная счетверённая авто�
 
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/strings/resstrings.txt:359 po/custom/fromJson.txt:268
+#, fuzzy
 msgid "Body Points: High"
 msgstr "Броня: высокая"
 
@@ -2891,6 +2898,7 @@ msgstr "Лучшие цели: постройки, пехота, колёсны�
 
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414 po/custom/fromJson.txt:272
+#, fuzzy
 msgid "Body Points: Very Low"
 msgstr "Бронирование: очень низкое"
 
@@ -4828,6 +4836,7 @@ msgid "Armed with tank killer rockets"
 msgstr "Вооружён противотанковыми ракетами"
 
 #: po/custom/fromJson.txt:141
+#, fuzzy
 msgid "Armor +35%, Body Points +30%"
 msgstr "Броня +35% корпус +30%"
 
@@ -4972,6 +4981,7 @@ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Бронебойные снаряды со стабилизирующим отбрасываемым поддоном"
 
 #: po/custom/fromJson.txt:190
+#, fuzzy
 msgid "Armour +35%, Body Points +30%"
 msgstr "Броня +35% корпус +30%"
 
@@ -5217,10 +5227,12 @@ msgid "Beta Campaign"
 msgstr "Бета кампания"
 
 #: po/custom/fromJson.txt:267
+#, fuzzy
 msgid "Body Points and Speed Increased"
 msgstr "Увеличены бронирование и скорость"
 
 #: po/custom/fromJson.txt:271
+#, fuzzy
 msgid "Body Points: Very low"
 msgstr "Броня: очень низкое"
 
@@ -6250,24 +6262,25 @@ msgid "Heavy anti-tank rocket"
 msgstr "Тяжёлая противотанковая ракета"
 
 #: po/custom/fromJson.txt:561
+#, fuzzy
 msgid "Heavy body increases armor and body points"
 msgstr "Тяжёлый корпус повышает броню"
 
 #: po/custom/fromJson.txt:562
 msgid "Heavy Body - Mantis"
-msgstr "Тяжёлая броня - Богомол"
+msgstr "Тяжёлый корпус - Богомол"
 
 #: po/custom/fromJson.txt:563
 msgid "Heavy Body - Python"
-msgstr "Тяжёлая броня - Питон"
+msgstr "Тяжёлый корпус - Питон"
 
 #: po/custom/fromJson.txt:564
 msgid "Heavy Body - Tiger"
-msgstr "Тяжёлая броня - Тигр"
+msgstr "Тяжёлый корпус - Тигр"
 
 #: po/custom/fromJson.txt:565
 msgid "Heavy Body - Vengeance"
-msgstr "Тяжёлая броня - Месть"
+msgstr "Тяжёлый корпус - Месть"
 
 #: po/custom/fromJson.txt:566
 msgid "Heavy Body - Wyvern"
@@ -6806,6 +6819,7 @@ msgid "Increased gauss output speeds up reload time"
 msgstr "Увеличенный заряд Гаусса ускоряет перезарядку"
 
 #: po/custom/fromJson.txt:727
+#, fuzzy
 msgid "Increases Armour and Body Points"
 msgstr "Увеличивает броню и общую бронебойность"
 
@@ -6895,10 +6909,12 @@ msgid "Indirectweaponslab"
 msgstr "Доступно новое артиллерийское орудие"
 
 #: po/custom/fromJson.txt:771
+#, fuzzy
 msgid "Inferior armor and body points to Cobra"
 msgstr "Броня меньше чем у кобры"
 
 #: po/custom/fromJson.txt:772
+#, fuzzy
 msgid "Inferior armor and body points to Viper"
 msgstr "Броня меньше чем у Гадюки"
 
@@ -6959,14 +6975,17 @@ msgid "Keeps map areas under constant surveillance"
 msgstr "Постоянно наблюдает за областями на карте"
 
 #: po/custom/fromJson.txt:787
+#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
 msgstr "Кинетическая броня +30% корпус +30%"
 
 #: po/custom/fromJson.txt:788
+#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
 msgstr "Кинетическая броня +35% корпус +35%"
 
 #: po/custom/fromJson.txt:789
+#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
 msgstr "Кинетическая броня +35% корпус +30%"
 
@@ -7088,29 +7107,29 @@ msgid "Leopard"
 msgstr "Леопард"
 
 #: po/custom/fromJson.txt:821
+#, fuzzy
 msgid "Less armor and body points than Python"
 msgstr "Менее бронированный и чем Питон"
 
 #: po/custom/fromJson.txt:822
 msgid "Light Body - Bug"
-msgstr "Лёгкая броня - Жук"
+msgstr "Лёгкий корпус - Жук"
 
 #: po/custom/fromJson.txt:823
 msgid "Light Body - Leopard"
-msgstr "Лёгкая броня - Леопард"
+msgstr "Лёгкий корпус - Леопард"
 
 #: po/custom/fromJson.txt:824
 msgid "Light Body - Retaliation"
-msgstr "Лёгкая броня - Возмездие"
+msgstr "Лёгкий корпус - Возмездие"
 
 #: po/custom/fromJson.txt:825
 msgid "Light Body - Viper"
-msgstr "Лёгкая броня - Гадюка"
+msgstr "Лёгкий корпус - Гадюка"
 
 #: po/custom/fromJson.txt:826
-#, fuzzy
 msgid "Light body vulnerable to heavy weapons"
-msgstr "Лёгкая рама уязвима против тяжёлых орудий"
+msgstr "Лёгкий корпус уязвим против тяжёлых орудий"
 
 #: po/custom/fromJson.txt:827
 msgid "Light Cannon"
@@ -7223,24 +7242,24 @@ msgstr "Механик-реставратор"
 
 #: po/custom/fromJson.txt:862
 msgid "Medium Body - Cobra"
-msgstr "Средняя броня - Кобра"
+msgstr "Средний корпус - Кобра"
 
 #: po/custom/fromJson.txt:863
 #, fuzzy
 msgid "Medium body increases armor and body points"
-msgstr "Средняя рама обладает повышенной бронёй"
+msgstr "Средний корпус обладает повышенной бронёй"
 
 #: po/custom/fromJson.txt:864
 msgid "Medium Body - Panther"
-msgstr "Средняя броня - Пантера"
+msgstr "Средний корпус - Пантера"
 
 #: po/custom/fromJson.txt:865
 msgid "Medium Body - Retribution"
-msgstr "Средняя броня - Кара"
+msgstr "Средний корпус - Кара"
 
 #: po/custom/fromJson.txt:866
 msgid "Medium Body - Scorpion"
-msgstr "Средняя броня - Скорпион"
+msgstr "Средний корпус - Скорпион"
 
 #: po/custom/fromJson.txt:867
 msgid "Medium Cannon"
@@ -7392,6 +7411,7 @@ msgid "Mobile Repair Turret"
 msgstr "Мобильная ремонтная башня"
 
 #: po/custom/fromJson.txt:907
+#, fuzzy
 msgid "More armor and body points than Python"
 msgstr "Более бронированный чем Питон"
 
@@ -7453,7 +7473,7 @@ msgstr "Многоствольный скорострельный пулемёт
 
 #: po/custom/fromJson.txt:923
 msgid "Multi Turret Body - Dragon"
-msgstr "Многоствольный корпус - Дракон"
+msgstr "Многобашенный корпус - Дракон"
 
 #: po/custom/fromJson.txt:924
 msgid "Nanolab"
@@ -7927,9 +7947,8 @@ msgid "Project Light Body"
 msgstr "Лёгкий корпус Альянса"
 
 #: po/custom/fromJson.txt:1060
-#, fuzzy
 msgid "Project Medium Body"
-msgstr "Средняя рама Проекта"
+msgstr "Средний корпус Проекта"
 
 #: po/custom/fromJson.txt:1061
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
@@ -8530,6 +8549,7 @@ msgid "Slower than Python"
 msgstr "Медленнее Питона"
 
 #: po/custom/fromJson.txt:1231
+#, fuzzy
 msgid "Slow moving Body"
 msgstr "Очень малый выход двигателя"
 
@@ -9090,6 +9110,7 @@ msgid "Very high power costs and very slow to produce"
 msgstr "Дорого и долго производить"
 
 #: po/custom/fromJson.txt:1392
+#, fuzzy
 msgid "Very slow moving Body"
 msgstr "Самый малый выход двигателя"
 
@@ -9695,6 +9716,7 @@ msgid "Total Power Required"
 msgstr "Всего требуется энергии"
 
 #: src/design.cpp:720 src/design.cpp:742
+#, fuzzy
 msgid "Total Body Points"
 msgstr "Общее бронирование корпуса"
 
