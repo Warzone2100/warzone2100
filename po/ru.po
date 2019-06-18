@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-12 12:14+0100\n"
-"PO-Revision-Date: 2019-06-15 01:43+0300\n"
+"PO-Revision-Date: 2019-06-18 12:15+0300\n"
 "Last-Translator: MaX <q3.max.2011@ya.ru>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Bookmarks: 82,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
@@ -439,7 +439,7 @@ msgstr "Наш транспорт, несущий подразделения с 
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr "Они находятся под атакой Коллектива в этой местности."
+msgstr "Они находятся под атакой Альянса в этой местности."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
@@ -537,7 +537,7 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Спасите гражданских и
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Коллектив обрабатывает и уничтожает гражданских в этой базе."
+msgstr "Альянс обрабатывает и уничтожает гражданских в этой базе."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
@@ -595,7 +595,7 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить реактор"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr "Коллектив разыскивает материалы по ядерным реакторам."
+msgstr "Альянс разыскивает материалы по ядерным реакторам."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
@@ -3551,7 +3551,7 @@ msgstr "Нексус утверждал, что он не уничтожал м�
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr "Воины Коллектива, я ищу местоположение Центральной НАСДА."
+msgstr "Воины Альянса, я ищу местоположение Центральной НАСДА."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
@@ -3603,7 +3603,7 @@ msgstr "Это создаёт серьёзную угрозу для проек�
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr "Анализ Центральной НАСДА  не оставляет сомнений, что Коллектив внедрил вирус."
+msgstr "Анализ Центральной НАСДА  не оставляет сомнений, что Альянс внедрил вирус."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
@@ -3623,7 +3623,7 @@ msgstr "Мы можем только предположить, что Нексу
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr "Воины Коллектива, больше злоумышленников ступают на наши территории."
+msgstr "Воины Альянса, больше злоумышленников ступают на наши территории."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
@@ -3631,7 +3631,7 @@ msgstr "Они не являются частью машины."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "Воины Коллектива , уничтожьте тех, кто восстал против машины."
+msgstr "Воины Альянса , уничтожьте тех, кто восстал против машины."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -3639,7 +3639,7 @@ msgstr "В атаку! Стереть их с лица этого района!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr "Воины Коллектива, мы готовы уничтожить злоумышленников, которые загрязняют наши земли."
+msgstr "Воины Альянса, мы готовы уничтожить злоумышленников, которые загрязняют наши земли."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
@@ -3647,7 +3647,7 @@ msgstr "Тот, кто из Проекта не машина. Они были л
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr "Они падут перед мощью Коллектива."
+msgstr "Они падут перед мощью Альянса."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
@@ -3659,7 +3659,7 @@ msgstr "В атаку!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr "Воины Коллектива, Нексус дал нам силу машин так, что мы можем уничтожить всех, кто против нас."
+msgstr "Воины Альянса, Нексус дал нам силу машин так, что мы можем уничтожить всех, кто против нас."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
@@ -3671,7 +3671,7 @@ msgstr "Найти и уничтожить!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
-msgstr "Воины Коллектива. Вы проявили себя."
+msgstr "Воины Альянса. Вы проявили себя."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
@@ -3891,7 +3891,7 @@ msgstr "Спасибо вам за все используемые технол�
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr "Вы и не те дураки в Новой Парадигме и Коллектив ."
+msgstr "Вы и не те дураки в Новой Парадигме и Альянсе."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
