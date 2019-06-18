@@ -505,7 +505,6 @@ function eventStartLevel()
 
 	setMiniMap(true);
 	setDesign(false);
-	removeTemplate("ViperLtMGWheels");
 
 	setReticuleButton(CLOSE_BUTTON, _("Close"), "", "");
 	setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
