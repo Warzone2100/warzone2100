@@ -575,6 +575,12 @@ set_target_properties(warzone2100 PROPERTIES
 	VS_DEBUGGER_COMMAND_ARGUMENTS "--gfxdebug"
 )
 
+# For Xcode project generator
+set_target_properties(warzone2100 PROPERTIES
+	XCODE_GENERATE_SCHEME TRUE
+	XCODE_SCHEME_ARGUMENTS "--gfxdebug"
+)
+
 #######################
 # Hardening / Security
 

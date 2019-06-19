@@ -275,6 +275,11 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 	elseif(CMAKE_GENERATOR STREQUAL "Xcode")
 		# Set Xcode generator project-level configuration + warning flags
 
+		# Generate Xcode Schemes (on CMake 3.14+)
+		if((CMAKE_MAJOR_VERSION GREATER 3) OR (CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER 13))
+			set(CMAKE_XCODE_GENERATE_SCHEME TRUE)
+		endif()
+
 		# Enable Objective-C ARC
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES)
 
