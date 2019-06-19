@@ -25,6 +25,39 @@ $DUMP_SYMS_EXE_SHA512 = "AA88547EC486077623A9026EFBC39D7B51912781FDB2C7C6AF5A381
 
 ############################
 
+function Get-ScriptDirectory
+{
+	$ScriptRoot = ""
+
+	Try
+	{
+		$commandPath = Get-Variable -Name PSCommandPath -ValueOnly -ErrorAction Stop
+		$ScriptRoot = Split-Path -Parent $commandPath
+	}
+	Catch
+	{
+		$scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
+		$ScriptRoot = Split-Path $scriptInvocation.MyCommand.Path
+	}
+
+	return $ScriptRoot
+}
+
+$ScriptRoot = Get-ScriptDirectory;
+Write-Output "ScriptRoot=$($ScriptRoot)"
+
+# Copy Visual Studio-specific config file templates from "win32" directory to the repo root
+If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "CMakeSettings.json") ) )
+{
+	Write-Output "Copying template: CMakeSettings.json"
+	Copy-Item (Join-Path "$($ScriptRoot)" "win32\CMakeSettings.json") -Destination "$($ScriptRoot)"
+}
+If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "launch.vs.json") ) )
+{
+	Write-Output "Copying template: launch.vs.json"
+	Copy-Item (Join-Path "$($ScriptRoot)" "win32\launch.vs.json") -Destination "$($ScriptRoot)"
+}
+
 # Download & build vcpkg (+ dependencies)
 If ( -not (Test-Path (Join-Path (pwd) vcpkg\.git) -PathType Container) )
 {

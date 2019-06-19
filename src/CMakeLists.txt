@@ -201,6 +201,15 @@ if(ENABLE_DISCORD)
 	endif()
 endif()
 
+# Dependencies
+add_dependencies(warzone2100 data)
+if(TARGET wz2100_doc)
+	add_dependencies(warzone2100 wz2100_doc)
+endif()
+if(TARGET translations)
+	add_dependencies(warzone2100 translations)
+endif()
+
 ############################
 # Main App install location
 
@@ -555,6 +564,16 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(WZ_APP_INSTALL_DEST ".")
 
 endif()
+
+##############################
+# IDE Debug/Run Configuration
+
+# For Visual Studio project generator
+set_target_properties(warzone2100 PROPERTIES
+	VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:warzone2100>"
+	VS_DEBUGGER_COMMAND           "$<TARGET_FILE:warzone2100>"
+	VS_DEBUGGER_COMMAND_ARGUMENTS "--gfxdebug"
+)
 
 #######################
 # Hardening / Security
