@@ -1706,7 +1706,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					psDroid->action = DACTION_NONE;
 				}
-				else if (!secHoldActive && order->type != DORDER_HOLD)
+				else if ((!secHoldActive && order->type != DORDER_HOLD) || (secHoldActive && order->type == DORDER_OBSERVE))
 				{
 					psDroid->action = DACTION_MOVETOOBSERVE;
 					moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
@@ -1853,7 +1853,7 @@ void actionUpdateDroid(DROID *psDroid)
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
 			if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE * REPAIR_RANGE)
 			{
-				if (order->type == DORDER_REPAIR)
+				if (order->type == DORDER_DROIDREPAIR)
 				{
 					// damaged droid has moved off - follow if we're not holding position!
 					psDroid->actionPos = psDroid->psActionTarget[0]->pos.xy();
@@ -2198,7 +2198,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			psDroid->action = DACTION_REPAIR;
 		}
-		else if (!secHoldActive && order->type != DORDER_HOLD)
+		else if ((!secHoldActive && order->type != DORDER_HOLD) || (secHoldActive && order->type == DORDER_REPAIR))
 		{
 			psDroid->action = DACTION_MOVETOREPAIR;
 			moveDroidTo(psDroid, psAction->x, psAction->y);
@@ -2213,7 +2213,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			psDroid->action = visibleObject(psDroid, psDroid->psActionTarget[0], false) ? DACTION_OBSERVE : DACTION_NONE;
 		}
-		else if (!secHoldActive && order->type != DORDER_HOLD && !cbSensorDroid(psDroid))
+		else if (!cbSensorDroid(psDroid) && ((!secHoldActive && order->type != DORDER_HOLD) || (secHoldActive && order->type == DORDER_OBSERVE)))
 		{
 			psDroid->action = DACTION_MOVETOOBSERVE;
 			moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
@@ -2271,7 +2271,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		{
 			psDroid->action = DACTION_DROIDREPAIR;
 		}
-		else if (!secHoldActive && order->type != DORDER_HOLD)
+		else if ((!secHoldActive && order->type != DORDER_HOLD) || (secHoldActive && order->type == DORDER_DROIDREPAIR))
 		{
 			psDroid->action = DACTION_MOVETODROIDREPAIR;
 			moveDroidTo(psDroid, psAction->x, psAction->y);
