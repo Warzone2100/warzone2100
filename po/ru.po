@@ -6,12 +6,13 @@
 # Alexandr Ivanov <wz2100@mail.ru>, 2008.
 # Stanislav Pererva <stas_ap@inbox.ru>, 2008.
 # Azamat H. Hackimov <azamat.hackimov@gmail.com>, 2008.
+# Andreev Viktor (vaut) <andrvaut@ya.ru>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-06-12 12:14+0100\n"
-"PO-Revision-Date: 2019-06-18 19:46+0300\n"
+"PO-Revision-Date: 2019-06-20 19:03+0300\n"
 "Last-Translator: MaX <q3.max.2011@ya.ru>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -1655,9 +1656,8 @@ msgstr "Слоистый прочный сплав и энергопоглоща
 
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:3 po/custom/fromJson.txt:744
-#, fuzzy
 msgid "Increases Kinetic Armor and Body Points"
-msgstr "Увеличивает Кинетическую броню и общую бронебойность юнита"
+msgstr "Увеличивает Кинетическую броню и прочность корпуса"
 
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
@@ -1715,9 +1715,8 @@ msgstr "Вооружён ракетой Антибункер"
 #: data/mp/messages/strings/resstrings.txt:309
 #: data/mp/messages/strings/resstrings.txt:329
 #: data/mp/messages/strings/resstrings.txt:334 po/custom/fromJson.txt:270
-#, fuzzy
 msgid "Body Points: Medium"
-msgstr "Бронирование: среднее"
+msgstr "Прочность корпуса: Среднея"
 
 #: data/base/messages/strings/resstrings.txt:52
 #: data/base/messages/strings/resstrings.txt:68
@@ -1762,7 +1761,7 @@ msgstr "Высокоэластичный бетон, укреплённый Бо
 #: data/mp/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:198 po/custom/fromJson.txt:726
 msgid "Increases Armor and Body Points"
-msgstr "Увеличивает броню и общее здоровье"
+msgstr "Увеличивает броню и прочность корпуса"
 
 #: data/base/messages/strings/resstrings.txt:106
 #: data/mp/messages/strings/resstrings.txt:34 po/custom/fromJson.txt:74
@@ -2378,9 +2377,8 @@ msgstr "Лёгкий корпус Альянса"
 
 #: data/base/messages/strings/resstrings.txt:528
 #: data/mp/messages/strings/resstrings.txt:247 po/custom/fromJson.txt:1270
-#, fuzzy
 msgid "Superior armor and body points to Viper"
-msgstr "Броня лучше, чем у Гадюки"
+msgstr "Бронированней и прочнее Гадюки"
 
 #: data/base/messages/strings/resstrings.txt:529
 #: data/mp/messages/strings/resstrings.txt:248 po/custom/fromJson.txt:1230
@@ -2399,9 +2397,8 @@ msgstr "Средний корпус Альянса"
 
 #: data/base/messages/strings/resstrings.txt:540
 #: data/mp/messages/strings/resstrings.txt:252 po/custom/fromJson.txt:1269
-#, fuzzy
 msgid "Superior armor and body points to Cobra"
-msgstr "Броня лучше, чем у Кобры"
+msgstr "Бронированней и прочнее Кобры"
 
 #: data/base/messages/strings/resstrings.txt:541
 #: data/mp/messages/strings/resstrings.txt:253 po/custom/fromJson.txt:1228
@@ -2445,7 +2442,7 @@ msgstr "Корпус машин улучшены"
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:263 po/custom/fromJson.txt:743
 msgid "Increases kinetic armor and body points"
-msgstr "Повышает кинетическую броню и здоровье"
+msgstr "Повышает кинетическую броню и прочность корпуса"
 
 #: data/base/messages/strings/resstrings.txt:581
 #: data/mp/messages/strings/resstrings.txt:266 po/custom/fromJson.txt:1384
@@ -2492,9 +2489,8 @@ msgstr "Новая бронированная постройка"
 #: data/mp/messages/strings/resstrings.txt:278
 #: data/mp/messages/strings/resstrings.txt:283
 #: data/mp/messages/strings/resstrings.txt:288 po/custom/fromJson.txt:728
-#, fuzzy
 msgid "Increases Body Points"
-msgstr "Увеличение бронирования"
+msgstr "Увеличение прочности корпуса"
 
 #: data/base/messages/strings/resstrings.txt:594
 #: data/mp/messages/strings/resstrings.txt:274 po/custom/fromJson.txt:77
@@ -2665,9 +2661,8 @@ msgstr "Лучшие цели: Постройки"
 #: data/mp/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:379
 #: data/mp/messages/strings/resstrings.txt:384 po/custom/fromJson.txt:269
-#, fuzzy
 msgid "Body Points: Low"
-msgstr "Бронирование: низкое"
+msgstr "Прочность корпуса: Низкая"
 
 #: data/base/messages/strings/resstrings.txt:704
 #: data/mp/messages/strings/resstrings.txt:342 po/custom/fromJson.txt:422
@@ -2732,9 +2727,8 @@ msgstr "76мм гиперскоростная счетверённая авто�
 
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/strings/resstrings.txt:359 po/custom/fromJson.txt:268
-#, fuzzy
 msgid "Body Points: High"
-msgstr "Броня: высокая"
+msgstr "Прочность корпуса: Высокая"
 
 #: data/base/messages/strings/resstrings.txt:758
 #: data/mp/messages/strings/resstrings.txt:362 po/custom/fromJson.txt:578
@@ -2898,9 +2892,8 @@ msgstr "Лучшие цели: постройки, пехота, колёсны�
 
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414 po/custom/fromJson.txt:272
-#, fuzzy
 msgid "Body Points: Very Low"
-msgstr "Бронирование: очень низкое"
+msgstr "Прочность корпуса: Очень низкая"
 
 #: data/base/messages/strings/resstrings.txt:905
 #: data/mp/messages/strings/resstrings.txt:416 po/custom/fromJson.txt:920
@@ -4836,9 +4829,8 @@ msgid "Armed with tank killer rockets"
 msgstr "Вооружён противотанковыми ракетами"
 
 #: po/custom/fromJson.txt:141
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Броня +35% корпус +30%"
+msgstr "Броня +35% прочность корпуса +30%"
 
 #: po/custom/fromJson.txt:143
 msgid "Armored bunker with Flamer"
@@ -4981,9 +4973,8 @@ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Бронебойные снаряды со стабилизирующим отбрасываемым поддоном"
 
 #: po/custom/fromJson.txt:190
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Броня +35% корпус +30%"
+msgstr "Броня +35% прочность корпуса +30%"
 
 #: po/custom/fromJson.txt:191
 msgid "Artifact"
@@ -5227,14 +5218,12 @@ msgid "Beta Campaign"
 msgstr "Бета кампания"
 
 #: po/custom/fromJson.txt:267
-#, fuzzy
 msgid "Body Points and Speed Increased"
-msgstr "Увеличены бронирование и скорость"
+msgstr "Увеличены прочность корпуса и скорость"
 
 #: po/custom/fromJson.txt:271
-#, fuzzy
 msgid "Body Points: Very low"
-msgstr "Броня: очень низкое"
+msgstr "Прочность корпуса: Очень низкая"
 
 #: po/custom/fromJson.txt:273
 msgid "Bombard"
@@ -6262,9 +6251,8 @@ msgid "Heavy anti-tank rocket"
 msgstr "Тяжёлая противотанковая ракета"
 
 #: po/custom/fromJson.txt:561
-#, fuzzy
 msgid "Heavy body increases armor and body points"
-msgstr "Тяжёлый корпус повышает броню"
+msgstr "Тяжёлый корпус повышает броню и прочность корпуса"
 
 #: po/custom/fromJson.txt:562
 msgid "Heavy Body - Mantis"
@@ -6819,9 +6807,8 @@ msgid "Increased gauss output speeds up reload time"
 msgstr "Увеличенный заряд Гаусса ускоряет перезарядку"
 
 #: po/custom/fromJson.txt:727
-#, fuzzy
 msgid "Increases Armour and Body Points"
-msgstr "Увеличивает броню и общую бронебойность"
+msgstr "Увеличивает броню и прочность корпуса"
 
 #: po/custom/fromJson.txt:730
 msgid "Increases Cannon accuracy"
@@ -6909,14 +6896,12 @@ msgid "Indirectweaponslab"
 msgstr "Доступно новое артиллерийское орудие"
 
 #: po/custom/fromJson.txt:771
-#, fuzzy
 msgid "Inferior armor and body points to Cobra"
-msgstr "Броня меньше чем у кобры"
+msgstr "Броня и прочность корпуса меньше чем у Кобры"
 
 #: po/custom/fromJson.txt:772
-#, fuzzy
 msgid "Inferior armor and body points to Viper"
-msgstr "Броня меньше чем у Гадюки"
+msgstr "Броня и прочность корпуса меньше чем у Гадюки"
 
 #: po/custom/fromJson.txt:773
 msgid "Inferno"
@@ -6975,19 +6960,16 @@ msgid "Keeps map areas under constant surveillance"
 msgstr "Постоянно наблюдает за областями на карте"
 
 #: po/custom/fromJson.txt:787
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Кинетическая броня +30% корпус +30%"
+msgstr "Кинетическая броня +30%, прочность корпуса +30%"
 
 #: po/custom/fromJson.txt:788
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Кинетическая броня +35% корпус +35%"
+msgstr "Кинетическая броня +35%, прочность корпуса +35%"
 
 #: po/custom/fromJson.txt:789
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Кинетическая броня +35% корпус +30%"
+msgstr "Кинетическая броня +35%, прочность корпуса +30%"
 
 #: po/custom/fromJson.txt:790
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
@@ -7109,7 +7091,7 @@ msgstr "Леопард"
 #: po/custom/fromJson.txt:821
 #, fuzzy
 msgid "Less armor and body points than Python"
-msgstr "Менее бронированный и чем Питон"
+msgstr "Менее бронированный чем Питон"
 
 #: po/custom/fromJson.txt:822
 msgid "Light Body - Bug"
@@ -7221,7 +7203,7 @@ msgstr "Крепость тяжёлого рельсового орудия"
 
 #: po/custom/fromJson.txt:855
 msgid "Maximum armor and body points"
-msgstr "Максимум здоровья и брони"
+msgstr "Максимум брони и прочтности корпуса"
 
 #: po/custom/fromJson.txt:858
 #, fuzzy
@@ -7245,9 +7227,8 @@ msgid "Medium Body - Cobra"
 msgstr "Средний корпус - Кобра"
 
 #: po/custom/fromJson.txt:863
-#, fuzzy
 msgid "Medium body increases armor and body points"
-msgstr "Средний корпус обладает повышенной бронёй"
+msgstr "Средний корпус обладает повышенной прочностью корпуса"
 
 #: po/custom/fromJson.txt:864
 msgid "Medium Body - Panther"
@@ -7411,13 +7392,12 @@ msgid "Mobile Repair Turret"
 msgstr "Мобильная ремонтная башня"
 
 #: po/custom/fromJson.txt:907
-#, fuzzy
 msgid "More armor and body points than Python"
-msgstr "Более бронированный чем Питон"
+msgstr "Бронированней и прочнее Питона"
 
 #: po/custom/fromJson.txt:908
 msgid "More armor and body points than Vengeance"
-msgstr "Прочнее, чем месть"
+msgstr "Бронированние и прочнее Мести"
 
 #: po/custom/fromJson.txt:909
 msgid "Mortar"
@@ -7937,14 +7917,12 @@ msgid "Produces Cyborgs"
 msgstr "Производит киборгов"
 
 #: po/custom/fromJson.txt:1058
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Тяжёлый корпус Альянса"
+msgstr "Тяжёлый корпус Проекта"
 
 #: po/custom/fromJson.txt:1059
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Лёгкий корпус Альянса"
+msgstr "Лёгкий корпус Проекта"
 
 #: po/custom/fromJson.txt:1060
 msgid "Project Medium Body"
@@ -9716,9 +9694,8 @@ msgid "Total Power Required"
 msgstr "Всего требуется энергии"
 
 #: src/design.cpp:720 src/design.cpp:742
-#, fuzzy
 msgid "Total Body Points"
-msgstr "Общее бронирование корпуса"
+msgstr "Общея прочность корпуса"
 
 #: src/design.cpp:841 src/design.cpp:859
 msgid "Power Usage"
@@ -11937,7 +11914,7 @@ msgstr "%s покинул игру"
 #: src/multijoin.cpp:325
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr "Передача файла была прервана на %d%%"
+msgstr "Передача файла была прервана на %d."
 
 #: src/multijoin.cpp:455
 #, c-format
@@ -12060,7 +12037,7 @@ msgstr "Передать энергию  игроку"
 #: src/multimenu.cpp:1311
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr "Выкинули %s : %s из игр, и добавлены в бан-лист."
+msgstr "Выкинули %s : %s из игр, и добавлены в бан-лист!"
 
 #: src/multiopt.cpp:305 src/multiplay.cpp:1706
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
@@ -12442,9 +12419,9 @@ msgstr " - ОТЛАДКА"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Версия %s-%s%s%s%s"
+msgstr "Version: %s,%s Built: %s%s"
 
 msgid "Pursue"
 msgstr "Преследовать"
