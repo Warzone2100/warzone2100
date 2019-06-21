@@ -53,7 +53,7 @@ function activateBase1Defenders()
 			camMakePos("leftSideAmbushPos2"),
 			camMakePos("leftSideAmbushPos3"),
 		],
-		interval: 60000,
+		interval: camSecondsToMilliseconds(60),
 		regroup: false,
 	});
 }
