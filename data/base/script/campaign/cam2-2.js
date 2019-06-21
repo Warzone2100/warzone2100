@@ -104,7 +104,7 @@ camAreaEvent("failZone", function(droid)
 function vtolAttack()
 {
 	var list = [cTempl.colatv, cTempl.colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(300000), "COCommandCenter"); // 5 min
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter");
 }
 
 //Order the truck to build some defenses.

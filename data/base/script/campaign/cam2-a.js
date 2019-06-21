@@ -91,7 +91,7 @@ function sendCOTransporter()
 			}
 		);
 
-		queue("sendCOTransporter", camChangeOnDiff(240000)); //4 min
+		queue("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	}
 }
 

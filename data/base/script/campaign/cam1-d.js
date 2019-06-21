@@ -47,7 +47,7 @@ camAreaEvent("westWayTrigger", function(droid)
 function transportBaseSetup()
 {
 	camDetectEnemyBase("NPLZGroup");
-	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
+	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(camMinutesToMilliseconds(10)), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 2, y: 2 },
 		exit: { x: 2, y: 2 },
 		data: {
