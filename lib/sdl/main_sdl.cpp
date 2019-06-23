@@ -1173,7 +1173,6 @@ void wzMain(int &argc, char **argv)
 {
 	initKeycodes();
 
-#if defined(WZ_OS_MAC)
 	// Create copies of argc and arv (for later use initializing QApplication for the script engine)
 	copied_argv = new char*[argc+1];
 	for(int i=0; i < argc; i++) {
@@ -1183,12 +1182,6 @@ void wzMain(int &argc, char **argv)
 	}
 	copied_argv[argc] = NULL;
 	copied_argc = argc;
-#else
-	// For now, just initialize QApplication here
-	// We currently rely on side-effects of QApplication's initialization on Windows (such as how DPI-awareness is enabled)
-	// TODO: Implement proper Win32 API calls to replicate Qt's preparation for DPI awareness (or set in the manifest?)
-	appPtr = new QApplication(argc, argv);
-#endif
 }
 
 #define MIN_WZ_GAMESCREEN_WIDTH 640
@@ -1870,7 +1863,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		sdlInitCursors();
 	}
 
-#if defined(WZ_OS_MAC)
 	// For the script engine, let Qt know we're alive
 	//
 	// IMPORTANT: This must come *after* SDL has had a chance to initialize,
@@ -1883,7 +1875,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	//			  we *must* immediately call setlocale(LC_NUMERIC,"C") after initializing
 	//			  or things like loading (parsing) levels / resources can fail
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
-#endif
 
 #if defined(WZ_OS_MAC)
 	cocoaSetupWZMenus();
