@@ -82,6 +82,7 @@ struct MULTIPLAYERINGAME
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
+#define MPFLAGS_FORCELIMITS 0x20  		///< Flag to force structure limits
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 	char		phrases[5][255];					// 5 favourite text messages.
 };

@@ -1729,19 +1729,21 @@ static const LimitIcon limitIcons[] =
 	{"A0VTolFactory1",  N_("VTOLs disabled."),   IMAGE_NO_VTOL},
 	{"A0Sat-linkCentre", N_("Satellite Uplink disabled."), IMAGE_NO_UPLINK},
 	{"A0LasSatCommand",  N_("Laser Satellite disabled."),  IMAGE_NO_LASSAT},
+	{nullptr,  N_("Structure Limits Enforced."),  IMAGE_DARK_LOCKED},
 };
 
 void updateLimitFlags()
 {
 	unsigned i;
-	unsigned flags = 0;
+	unsigned flags = ingame.flags & MPFLAGS_FORCELIMITS;
 
 	if (!ingame.bHostSetup)
 	{
 		return;  // The host works out the flags.
 	}
 
-	for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+	assert(MPFLAGS_FORCELIMITS == (1 << (ARRAY_SIZE(limitIcons) - 1)));
+	for (i = 0; i < ARRAY_SIZE(limitIcons) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
 	{
 		int stat = getStructStatFromName(limitIcons[i].stat);
 		bool disabled = stat >= 0 && asStructureStats[stat].upgrade[0].limit == 0;
