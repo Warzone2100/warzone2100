@@ -51,13 +51,16 @@
 #include "multilimit.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "challenge.h"
+#include "objmem.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 #define	IDLIMITS				22000
 #define IDLIMITS_RETURN			(IDLIMITS+1)
 #define IDLIMITS_OK				(IDLIMITS+2)
-#define IDLIMITS_ENTRIES_START	(IDLIMITS+4)
+#define IDLIMITS_FORCE				(IDLIMITS+3)
+#define IDLIMITS_FORCEOFF			(IDLIMITS+4)
+#define IDLIMITS_ENTRIES_START	(IDLIMITS+5)
 #define IDLIMITS_ENTRIES_END	(IDLIMITS+99)
 
 #define LIMITSX					25
@@ -67,6 +70,9 @@
 
 #define LIMITS_OKX				(LIMITSW-90)
 #define LIMITS_OKY				(LIMITSH-42)
+
+#define LIMITS_FORCEOFFX			(LIMITSX+25)
+#define LIMITS_FORCEX				(LIMITSX+65)
 
 #define BARWIDTH				480
 #define BARHEIGHT				40
@@ -90,6 +96,7 @@ static inline void freeLimitSet()
 		free(ingame.pStructureLimits);
 		ingame.numStructureLimits = 0;
 		ingame.pStructureLimits = nullptr;
+		ingame.flags &= MPFLAGS_FORCELIMITS;
 	}
 }
 
@@ -139,6 +146,34 @@ bool startLimitScreen()
 	limitsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
 	}));
+
+	// force limits off button
+	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_FORCEOFF,
+	            LIMITS_FORCEOFFX, LIMITS_OKY,
+	            iV_GetImageWidth(FrontImages, IMAGE_DARK_UNLOCKED),
+	            iV_GetImageHeight(FrontImages, IMAGE_DARK_UNLOCKED),
+	            _("Map Can Exceed Limits"), IMAGE_DARK_UNLOCKED, IMAGE_DARK_UNLOCKED, true);
+	// force limits button
+	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_FORCE,
+	            LIMITS_FORCEX, LIMITS_OKY,
+	            iV_GetImageWidth(FrontImages, IMAGE_DARK_LOCKED),
+	            iV_GetImageHeight(FrontImages, IMAGE_DARK_LOCKED),
+	            _("Force Limits at Start"), IMAGE_DARK_LOCKED, IMAGE_DARK_LOCKED, true);
+	if (challengeActive)
+	{
+		widgSetButtonState(psWScreen, IDLIMITS_FORCE, WBUT_DISABLE);
+		widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, WBUT_DISABLE);
+	}
+	else if (ingame.flags & MPFLAGS_FORCELIMITS)
+	{
+		widgSetButtonState(psWScreen, IDLIMITS_FORCE, WBUT_DISABLE);
+		widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, 0);
+	}
+	else
+	{
+		widgSetButtonState(psWScreen, IDLIMITS_FORCE, 0);
+		widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, WBUT_DISABLE);
+	}
 
 	// return button.
 	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_RETURN,
@@ -217,6 +252,14 @@ void runLimitScreen()
 		// icons that are always about.
 		switch (id)
 		{
+		case IDLIMITS_FORCE:
+			widgSetButtonState(psWScreen, IDLIMITS_FORCE, WBUT_DISABLE);
+			widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, 0);
+			break;
+		case IDLIMITS_FORCEOFF:
+			widgSetButtonState(psWScreen, IDLIMITS_FORCE, 0);
+			widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, WBUT_DISABLE);
+			break;
 		case IDLIMITS_RETURN:
 			// reset the sliders..
 			for (unsigned i = 0; i < numStructureStats; ++i)
@@ -245,6 +288,14 @@ void runLimitScreen()
 
 			break;
 		case IDLIMITS_OK:
+			if (!challengeActive && widgGetButtonState(psWScreen, IDLIMITS_FORCE))
+			{
+				ingame.flags |= MPFLAGS_FORCELIMITS;
+			}
+			else
+			{
+				ingame.flags &= ~MPFLAGS_FORCELIMITS;
+			}
 			resetReadyStatus(false);
 			createLimitSet();
 			changeTitleMode(MULTIOPTION);
@@ -332,6 +383,22 @@ void applyLimitSet()
 			for (int player = 0; player < MAX_PLAYERS; player++)
 			{
 				asStructureStats[id].upgrade[player].limit = pEntry[i].limit;
+
+				if (ingame.flags & MPFLAGS_FORCELIMITS)
+				{
+					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
+					{
+						for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+						{
+							if (psStruct->pStructureType->type == asStructureStats[id].type)
+							{
+								removeStruct(psStruct, true);
+								break;
+							}
+						}
+
+					}
+				}
 			}
 		}
 	}
