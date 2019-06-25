@@ -48,6 +48,8 @@ enum LOADSAVE_MODE
 extern bool		bLoadSaveUp;							// true when interface is up and should be run.
 //the name of the save game to load from the front end
 extern char saveGameName[256];
+extern char lastSavePath[PATH_MAX];
+extern bool lastSaveMP;
 extern char	sRequestResult[PATH_MAX];
 extern bool		bRequestLoad;
 
@@ -75,5 +77,7 @@ bool saveMidMission();
 void deleteSaveGame(char *saveGameName);
 
 void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+
+bool findLastSave();
 
 #endif // __INCLUDED_SRC_LOADSAVE_H__

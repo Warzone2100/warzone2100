@@ -55,6 +55,9 @@ work anymore.
 *--savegame*='NAME'::
       Load a saved game 'NAME' (needs to include the .gam extension).
 
+*--continue*::
+      Continue playing the last saved game, if it exists.
+
 *--window*::
       Play in windowed mode.
 
