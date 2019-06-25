@@ -63,6 +63,7 @@
 #include "keyedit.h"
 #include "loadsave.h"
 #include "main.h"
+#include "mission.h"
 #include "modding.h"
 #include "multiint.h"
 #include "multilimit.h"
@@ -158,16 +159,21 @@ static bool startTitleMenu()
 		addTextButton(FRONTEND_PLAYINTRO, FRONTEND_POS6X, FRONTEND_POS6Y, _("View Intro"), WBUT_TXTCENTRE | WBUT_DISABLE);
 		widgSetTip(psWScreen, FRONTEND_PLAYINTRO, _("Videos are missing, download them from http://wz2100.net"));
 	}
-	addTextButton(FRONTEND_QUIT, FRONTEND_POS7X, FRONTEND_POS7Y, _("Quit Game"), WBUT_TXTCENTRE);
+
+	if (findLastSave())
+	{
+		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE);
+	}
+	addTextButton(FRONTEND_QUIT, FRONTEND_POS8X, FRONTEND_POS8Y, _("Quit Game"), WBUT_TXTCENTRE);
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Official site: http://wz2100.net/"), 0);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
 	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
-	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS8X + 360, FRONTEND_POS8Y, _("Donate: http://donations.wz2100.net/"), 0);
+	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS9X + 360, FRONTEND_POS9Y, _("Donate: http://donations.wz2100.net/"), 0);
 	// fix-up right-aligned link's positioning (based on size of text)
 	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 1), pRightAlignedButton->y());
 	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
-	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS8X + 360, 0, _("Chat with players on #warzone2100"), 0);
+	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on #warzone2100"), 0);
 	// fix-up right-aligned link's positioning (based on size of text)
 	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 6), pRightAlignedButton->y());
 	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Freenode through webchat by clicking this link."));
@@ -221,6 +227,23 @@ static void runchatlink()
 	runLink("http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4");
 }
 
+void runContinue()
+{
+	SPinit();
+	sstrcpy(saveGameName, lastSavePath);
+	bMultiPlayer = lastSaveMP;
+	if (bMultiPlayer)
+	{
+		game.type = SKIRMISH;
+	}
+	else
+	{
+		game.type = CAMPAIGN;
+		int campaign = getCampaign(lastSavePath);
+		setCampaignNumber(campaign);
+	}
+}
+
 bool runTitleMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
@@ -257,6 +280,10 @@ bool runTitleMenu()
 		break;
 	case FRONTEND_CHATLINK:
 		runchatlink();
+		break;
+	case FRONTEND_CONTINUE:
+		runContinue();
+		changeTitleMode(LOADSAVEGAME);
 		break;
 
 	default:
@@ -349,7 +376,7 @@ static void startSinglePlayerMenu()
 	// show this only when the video sequences are not installed
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
-		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
 	}
 }
 
@@ -388,14 +415,14 @@ static void startCampaignSelector()
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
 	for (size_t i = 0; i < list.size(); i++)
 	{
-		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, gettext(list[i].name.toUtf8().c_str()), WBUT_TXTCENTRE);
+		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + FRONTEND_BUTHEIGHT * i, gettext(list[i].name.toUtf8().c_str()), WBUT_TXTCENTRE);
 	}
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	// show this only when the video sequences are not installed
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
 	{
-		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
 	}
 }
 
@@ -593,7 +620,7 @@ static bool startMultiPlayerMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// This isn't really a hyperlink for now... perhaps link to the wiki ?
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("TCP port 2100 must be opened in your firewall or router to host games!"), 0);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("TCP port 2100 must be opened in your firewall or router to host games!"), 0);
 
 	return true;
 }

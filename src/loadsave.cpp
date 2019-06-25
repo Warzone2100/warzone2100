@@ -407,6 +407,59 @@ void deleteSaveGame(char *saveGameName)
 	return;
 }
 
+char lastSavePath[PATH_MAX];
+bool lastSaveMP;
+static time_t lastSaveTime;
+
+static bool findLastSaveFrom(const char *path)
+{
+	char **i, **files;
+	bool found = false;
+
+	files = PHYSFS_enumerateFiles(path);
+	for (i = files; *i != nullptr; ++i)
+	{
+		char savefile[PATH_MAX];
+		time_t savetime;
+
+		// See if this filename contains the extension we're looking for
+		if (!strstr(*i, sExt))
+		{
+			// If it doesn't, move on to the next filename
+			continue;
+		}
+		/* Figure save-time */
+		snprintf(savefile, sizeof(savefile), "%s/%s", path, *i);
+		savetime = WZ_PHYSFS_getLastModTime(savefile);
+		if (difftime(savetime, lastSaveTime) > 0.0)
+		{
+			lastSaveTime = savetime;
+			strcpy(lastSavePath, savefile);
+			found = true;
+		}
+	}
+	PHYSFS_freeList(files);
+	return found;
+}
+
+bool findLastSave()
+{
+	char NewSaveGamePath[PATH_MAX] = {'\0'};
+	bool foundMP, foundCAM;
+
+	lastSaveTime = 0;
+	lastSaveMP = false;
+	lastSavePath[0] = '\0';
+	ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+	foundCAM = findLastSaveFrom(NewSaveGamePath);
+	ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+	foundMP = findLastSaveFrom(NewSaveGamePath);
+	if (foundMP)
+	{
+		lastSaveMP = true;
+	}
+	return foundMP | foundCAM;
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Returns true if cancel pressed or a valid game slot was selected.

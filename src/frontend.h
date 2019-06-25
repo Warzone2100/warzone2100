@@ -72,6 +72,7 @@ bool runAudioAndZoomOptionsMenu();
 bool runVideoOptionsMenu();
 bool runMouseOptionsMenu();
 bool runTutorialMenu();
+void runContinue();
 
 void addTopForm();
 void addBottomForm();
@@ -111,42 +112,46 @@ struct DisplayTextOptionCache
 #define FRONTEND_BOTFORMX		FRONTEND_TOPFORMX
 #define FRONTEND_BOTFORMY		170
 #define FRONTEND_BOTFORMW		FRONTEND_TOPFORMW
-#define FRONTEND_BOTFORMH		300
+#define FRONTEND_BOTFORMH		300				// keep Y+H < 480 (minimum display height)
 
 
 #define FRONTEND_BUTWIDTH		FRONTEND_BOTFORMW-40 // text button sizes.
-#define FRONTEND_BUTHEIGHT		30
+#define FRONTEND_BUTHEIGHT		33
 
 #define FRONTEND_POS1X			20				// button positions
-#define FRONTEND_POS1Y			10
+#define FRONTEND_POS1Y			(0*FRONTEND_BUTHEIGHT)
 #define FRONTEND_POS1M			340
 
 #define FRONTEND_POS2X			20
-#define FRONTEND_POS2Y			50
+#define FRONTEND_POS2Y			(1*FRONTEND_BUTHEIGHT)
 #define FRONTEND_POS2M			340
 
 #define FRONTEND_POS3X			20
-#define FRONTEND_POS3Y			90
+#define FRONTEND_POS3Y			(2*FRONTEND_BUTHEIGHT)
 #define FRONTEND_POS3M			340
 
 #define FRONTEND_POS4X			20
-#define FRONTEND_POS4Y			130
+#define FRONTEND_POS4Y			(3*FRONTEND_BUTHEIGHT)
 #define FRONTEND_POS4M			340
 
 #define FRONTEND_POS5X			20
-#define FRONTEND_POS5Y			170
+#define FRONTEND_POS5Y			(4*FRONTEND_BUTHEIGHT)
 #define FRONTEND_POS5M			340
 
 #define FRONTEND_POS6X			20
-#define FRONTEND_POS6Y			210
+#define FRONTEND_POS6Y			(5*FRONTEND_BUTHEIGHT)
 #define FRONTEND_POS6M			340
 
 #define FRONTEND_POS7X			20
-#define FRONTEND_POS7Y			250
+#define FRONTEND_POS7Y			(6*FRONTEND_BUTHEIGHT)
 #define FRONTEND_POS7M			340
 
-#define FRONTEND_POS8X			-30				// special case for our hyperlink
-#define FRONTEND_POS8Y			278
+#define FRONTEND_POS8X			20
+#define FRONTEND_POS8Y			(7*FRONTEND_BUTHEIGHT)
+#define FRONTEND_POS8M			340
+
+#define FRONTEND_POS9X			-30				// special case for our hyperlink
+#define FRONTEND_POS9Y			(8*FRONTEND_BUTHEIGHT)
 
 
 #define FRONTEND_SIDEX			24
@@ -177,6 +182,7 @@ enum
 	FRONTEND_OPTIONS,
 	FRONTEND_QUIT,
 	FRONTEND_FASTPLAY,					//tutorial menu option
+	FRONTEND_CONTINUE,
 	FRONTEND_NEWGAME		= 20200,	// single player (menu)
 	FRONTEND_LOADGAME_MISSION,
 	FRONTEND_LOADGAME_SKIRMISH,
