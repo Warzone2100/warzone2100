@@ -91,13 +91,34 @@ namespace gfx_api
 		// The new data store is created with the specified `size` in bytes.
 		// If `data` is not NULL, the data store is initialized with `size` bytes of data from the pointer.
 		// - If data is NULL, a data store of the specified `size` is still created, but its contents may be uninitialized (and thus undefined).
+		//
+		// NOTE: A single buffer instance should only be uploaded / updated *once per frame*.
+		//       Buffer uploads / updates may be re-ordered to occur before the processing of *any* draw calls in a frame,
+		//       hence re-using a single buffer instance for different data may lead to anything using that buffer (in that frame)
+		//       seeing only the last-written data in the buffer.
+		//       (i.e. Don't re-use a buffer instance for different data in the same frame - use separate buffer instances.)
 		virtual void upload(const size_t& size, const void* data) = 0;
+
+		enum class update_flag {
+			// Default behavior
+			none,
+
+			// This flag disables asserts caused by multiple updates to a single buffer instance in a single frame
+			// *ONLY* use if you are certain the updates are non-overlapping
+			non_overlapping_updates_promise
+		};
 
 		// Update `size` bytes in the existing data store, from the `start` offset, using the data at `data`.
 		// - The `start` offset must be within the range of the existing data store (0 to buffer_size - 1, inclusive).
 		// - The `size` of the data specified (+ the offset) must not attempt to write past the end of the existing data store.
 		// - A data store must be allocated before it can be updated - call `upload` on a `buffer` instance before `update`.
-		virtual void update(const size_t& start, const size_t& size, const void* data) = 0;
+		//
+		// NOTE: A single buffer instance should only be uploaded / updated *once per frame*.
+		//       Buffer uploads / updates may be re-ordered to occur before the processing of *any* draw calls in a frame,
+		//       hence re-using a single buffer instance for different data may lead to anything using that buffer (in that frame)
+		//       seeing only the last-written data in the buffer.
+		//       (i.e. Don't re-use a buffer instance for different data in the same frame - use separate buffer instances.)
+		virtual void update(const size_t& start, const size_t& size, const void* data, const update_flag flag = update_flag::none) = 0;
 
 		virtual void bind() = 0;
 
@@ -262,6 +283,7 @@ namespace gfx_api
 		virtual bool getScreenshot(iV_Image &output) = 0;
 		virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) = 0;
 		virtual void shutdown() = 0;
+		virtual const size_t& current_FrameNum() const = 0;
 	};
 
 	template<std::size_t id, vertex_attribute_type type, std::size_t offset>
