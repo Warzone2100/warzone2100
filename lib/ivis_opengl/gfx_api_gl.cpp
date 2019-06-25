@@ -237,14 +237,23 @@ void gl_buffer::unbind()
 
 void gl_buffer::upload(const size_t & size, const void * data)
 {
+	size_t current_FrameNum = gfx_api::context::get().current_FrameNum();
+	ASSERT(lastUploaded_FrameNum != current_FrameNum, "Attempt to upload to buffer more than once per frame");
+	lastUploaded_FrameNum = current_FrameNum;
+
+	ASSERT(size > 0, "Attempt to upload buffer of size 0");
 	glBindBuffer(to_gl(usage), buffer);
 	glBufferData(to_gl(usage), size, data, to_gl(hint));
 	buffer_size = size;
 	glBindBuffer(to_gl(usage), 0);
 }
 
-void gl_buffer::update(const size_t & start, const size_t & size, const void * data)
+void gl_buffer::update(const size_t & start, const size_t & size, const void * data, const update_flag flag)
 {
+	size_t current_FrameNum = gfx_api::context::get().current_FrameNum();
+	ASSERT(flag == update_flag::non_overlapping_updates_promise || (lastUploaded_FrameNum != current_FrameNum), "Attempt to upload to buffer more than once per frame");
+	lastUploaded_FrameNum = current_FrameNum;
+
 	ASSERT(start < buffer_size, "Starting offset (%zu) is past end of buffer (length: %zu)", start, buffer_size);
 	ASSERT(start + size <= buffer_size, "Attempt to write past end of buffer");
 	if (size == 0)
@@ -1453,6 +1462,8 @@ bool gl_context::initialize(const gfx_api::backend_Impl_Factory& impl)
 
 bool gl_context::initGLContext()
 {
+	frameNum = 1;
+
 	GLint glMaxTUs;
 	GLenum err;
 
@@ -1651,6 +1662,7 @@ bool gl_context::initGLContext()
 
 void gl_context::flip(int clearMode)
 {
+	frameNum = std::max<size_t>(frameNum + 1, 1);
 	backend_impl->swapWindow();
 	glUseProgram(0);
 	current_program = nullptr;
@@ -1687,5 +1699,10 @@ void gl_context::shutdown()
 {
 	// move any other cleanup here?
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
+const size_t& gl_context::current_FrameNum() const
+{
+	return frameNum;
 }
 

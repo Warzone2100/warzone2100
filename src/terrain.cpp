@@ -498,9 +498,11 @@ static void updateSectorGeometry(int x, int y)
 	ASSERT(waterSize    == sectors[x * ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
 
 	geometryVBO->update(sizeof(RenderVertex)*sectors[x * ySectors + y].geometryOffset,
-	                    sizeof(RenderVertex)*sectors[x * ySectors + y].geometrySize, geometry);
+	                    sizeof(RenderVertex)*sectors[x * ySectors + y].geometrySize, geometry,
+						gfx_api::buffer::update_flag::non_overlapping_updates_promise);
 	waterVBO->update(sizeof(RenderVertex)*sectors[x * ySectors + y].waterOffset,
-	                 sizeof(RenderVertex)*sectors[x * ySectors + y].waterSize, water);
+	                 sizeof(RenderVertex)*sectors[x * ySectors + y].waterSize, water,
+					 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
 
 	free(geometry);
 	free(water);
@@ -516,7 +518,8 @@ static void updateSectorGeometry(int x, int y)
 	ASSERT(decalSize == sectors[x * ySectors + y].decalSize   , "the amount of decals has changed");
 
 	decalVBO->update(sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
-	                 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata);
+	                 sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata,
+					 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
 
 	free(decaldata);
 }

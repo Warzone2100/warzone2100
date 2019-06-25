@@ -66,14 +66,16 @@ struct gl_buffer final : public gfx_api::buffer
 	gfx_api::context::buffer_storage_hint hint;
 	GLuint buffer = 0;
 	size_t buffer_size = 0;
+	size_t lastUploaded_FrameNum = 0;
 
+public:
 	gl_buffer(const gfx_api::buffer::usage& usage, const gfx_api::context::buffer_storage_hint& hint);
 	virtual ~gl_buffer() override;
 
 	void bind() override;
 	void unbind();
 	virtual void upload(const size_t & size, const void * data) override;
-	virtual void update(const size_t & start, const size_t & size, const void * data) override;
+	virtual void update(const size_t & start, const size_t & size, const void * data, const update_flag flag = update_flag::none) override;
 };
 
 struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
@@ -218,10 +220,12 @@ struct gl_context final : public gfx_api::context
 	virtual bool getScreenshot(iV_Image &output) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
+	virtual const size_t& current_FrameNum() const override;
 private:
 	bool initGLContext();
 	void enableVertexAttribArray(GLuint index);
 	void disableVertexAttribArray(GLuint index);
 
 	std::vector<bool> enabledVertexAttribIndexes;
+	size_t frameNum = 0;
 };
