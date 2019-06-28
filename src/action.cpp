@@ -46,6 +46,7 @@
 #include "order.h"
 #include "objmem.h"
 #include "move.h"
+#include "cmddroid.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
@@ -1122,6 +1123,22 @@ void actionUpdateDroid(DROID *psDroid)
 				// also don't move if we're holding position or waiting for repair
 				psDroid->action = DACTION_NONE; // holding, cancel the order.
 			}
+			//Units attached to commanders are always guarding the commander
+			else if (secHoldActive && order->type == DORDER_GUARD && hasCommander(psDroid))
+			{
+				DROID *commander = psDroid->psGroup->psCommander;
+
+				if (commander->order.type == DORDER_ATTACKTARGET ||
+					commander->order.type == DORDER_FIRESUPPORT ||
+					commander->order.type == DORDER_ATTACK)
+				{
+					psDroid->action = DACTION_MOVETOATTACK;
+				}
+				else
+				{
+					psDroid->action = DACTION_NONE;
+				}
+			}
 			else
 			{
 				psDroid->action = DACTION_MOVETOATTACK;	// out of range - chase it
@@ -2075,6 +2092,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (((order->type == DORDER_ATTACKTARGET
 		   || order->type == DORDER_NONE
 		   || order->type == DORDER_HOLD
+		   || (order->type == DORDER_GUARD && hasCommander(psDroid))
 		   || order->type == DORDER_FIRESUPPORT)
 		   && secHoldActive)
 		   || (!isVtolDroid(psDroid) && (orderStateObj(psDroid, DORDER_FIRESUPPORT) != nullptr)))
