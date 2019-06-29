@@ -12416,7 +12416,7 @@ msgstr "Es gibt eine Aktualisierung für das Spiel, bitte besuchen Sie http://wz
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:134
 msgid "LIMITS"
-msgstr ""
+msgstr "BESCHRÄNKUNGEN"
 
 #: src/multilimit.cpp:149
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12424,7 +12424,7 @@ msgstr "Standardwerte nehmen und zum vorherigen Bildschirm zurückkehren"
 
 #: src/multilimit.cpp:241
 msgid "Limits reset to default values"
-msgstr "Begrenzungen auf Standardwerte zurückgesetzt"
+msgstr "Beschränkungen auf Standardwerte zurückgesetzt"
 
 #: src/multimenu.cpp:562
 msgid "Technology level 1"
