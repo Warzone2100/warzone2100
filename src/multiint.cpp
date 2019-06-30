@@ -2520,7 +2520,7 @@ static void drawReadyButton(UDWORD player)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            locked.difficulty ? _(difficultyList[NetPlay.players[player].difficulty]) : (NetPlay.isHost ? _("Click to change difficulty") : nullptr), icon, icon, icon);
+		            (NetPlay.isHost && !locked.difficulty) ? _("Click to change difficulty") : _(difficultyList[NetPlay.players[player].difficulty]), icon, icon, icon);
 		return;
 	}
 	else if (!NetPlay.players[player].allocated)
