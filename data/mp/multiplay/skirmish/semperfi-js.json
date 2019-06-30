@@ -4,6 +4,9 @@
         "name": "SemperFi JavaScript",
         "tip": "Prototypical JavaScript AI focusing on rockets/missiles",
         "easy_tip": "Gets ~ 25% less power from each oil derrick",
-        "insane_tip": "Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks"
+        "insane_tip": "Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks",
+        "wins": 1806,
+        "losses": 2355,
+        "draws": 23
     }
 }
