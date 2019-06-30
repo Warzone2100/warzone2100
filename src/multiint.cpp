@@ -275,7 +275,7 @@ struct AIDATA
 	char slo[MAX_LEN_AI_NAME];
 	char vlo[MAX_LEN_AI_NAME];
 	char js[MAX_LEN_AI_NAME];
-	char tip[255];
+	char tip[255 + 128]; // may contain optional AI tournament data
 	char difficultyTips[4][255]; // optional difficulty level info
 	int assigned;	///< How many AIs have we assigned of this type
 };
@@ -809,6 +809,21 @@ void readAIs()
 		else
 		{
 			sstrcpy(ai.tip, _("MISSING AI DESCRIPTION"));
+		}
+
+		int wins = aiconf.value("wins", 0).toInt();
+		int losses = aiconf.value("losses", 0).toInt();
+		int draws = aiconf.value("draws", 0).toInt();
+		int total = wins + losses + draws;
+		if (total)
+		{
+			float win_percentage = static_cast<float>(wins) / total * 100;
+			float loss_percentage = static_cast<float>(losses) / total * 100;
+			float draw_percentage = static_cast<float>(draws) / total * 100;
+			sstrcat(ai.tip, "\n");
+			char statistics[127];
+			ssprintf(statistics, _("AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"), win_percentage, loss_percentage, draw_percentage);
+			sstrcat(ai.tip, statistics);
 		}
 
 		if (strcmp(*i, "nb_generic.json") == 0)
