@@ -1697,6 +1697,9 @@ bool runGameOptionsMenu()
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
 		widgSetString(psWScreen, FRONTEND_CAMERASPEED, _("Camera Speed"));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
+
+		// hack to update translations of AI names and tooltips
+		readAIs();
 		break;
 
 	case FRONTEND_DIFFICULTY:
