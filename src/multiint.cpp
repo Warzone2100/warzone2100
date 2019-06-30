@@ -773,11 +773,28 @@ void readAIs()
 		WzConfig aiconf(path, WzConfig::ReadOnly);
 		AIDATA ai;
 		aiconf.beginGroup("AI");
-		sstrcpy(ai.name, aiconf.value("name", "error").toWzString().toUtf8().c_str());
+
+		if (aiconf.contains("name"))
+		{
+			sstrcpy(ai.name, _(aiconf.value("name", "").toWzString().toUtf8().c_str()));
+		}
+		else
+		{
+			sstrcpy(ai.name, _("MISSING AI NAME"));
+		}
+
 		sstrcpy(ai.slo, aiconf.value("slo", "").toWzString().toUtf8().c_str());
 		sstrcpy(ai.vlo, aiconf.value("vlo", "").toWzString().toUtf8().c_str());
 		sstrcpy(ai.js, aiconf.value("js", "").toWzString().toUtf8().c_str());
-		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toWzString().toUtf8().c_str());
+
+		if (aiconf.contains("tip"))
+		{
+			sstrcpy(ai.tip, _(aiconf.value("tip", "").toWzString().toUtf8().c_str()));
+		}
+		else
+		{
+			sstrcpy(ai.tip, _("MISSING AI DESCRIPTION"));
+		}
 
 		if (strcmp(*i, "nb_generic.json") == 0)
 		{
