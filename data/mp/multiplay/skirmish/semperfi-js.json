@@ -2,6 +2,8 @@
     "AI": {
         "js": "semperfi.js",
         "name": "SemperFi JavaScript",
-        "tip": "Prototypical JavaScript AI focusing on rockets/missiles"
+        "tip": "Prototypical JavaScript AI focusing on rockets/missiles",
+        "easy_tip": "Gets ~ 25% less power from each oil derrick",
+        "insane_tip": "Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks"
     }
 }

@@ -276,6 +276,7 @@ struct AIDATA
 	char vlo[MAX_LEN_AI_NAME];
 	char js[MAX_LEN_AI_NAME];
 	char tip[255];
+	char difficultyTips[4][255]; // optional difficulty level info
 	int assigned;	///< How many AIs have we assigned of this type
 };
 static std::vector<AIDATA> aidata;
@@ -786,6 +787,20 @@ void readAIs()
 		sstrcpy(ai.slo, aiconf.value("slo", "").toWzString().toUtf8().c_str());
 		sstrcpy(ai.vlo, aiconf.value("vlo", "").toWzString().toUtf8().c_str());
 		sstrcpy(ai.js, aiconf.value("js", "").toWzString().toUtf8().c_str());
+
+		const char *difficultyKeys[] = { "easy_tip", "medium_tip", "hard_tip", "insane_tip" };
+		for (int i = 0; i < ARRAY_SIZE(difficultyKeys); i++)
+		{
+			if (aiconf.contains(difficultyKeys[i]))
+			{
+				sstrcpy(ai.difficultyTips[i], _(aiconf.value(difficultyKeys[i], "").toWzString().toUtf8().c_str()));
+			}
+			else
+			{
+				// note that the empty string "" must never be translated
+				sstrcpy(ai.difficultyTips[i], "");
+			}
+		}
 
 		if (aiconf.contains("tip"))
 		{
@@ -1932,6 +1947,12 @@ static void addDifficultyChooser(int player)
 		case 2: sButInit.pTip = _("No holds barred"); break;
 		case 3: sButInit.pTip = _("Starts with advantages"); break;
 		}
+		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[i];
+		if (strcmp(difficultyTip, "") != 0)
+		{
+			sButInit.pTip += "\n";
+			sButInit.pTip += difficultyTip;
+		}
 		sButInit.pDisplay = displayDifficulty;
 		sButInit.UserData = i;
 		sButInit.pUserData = new DisplayDifficultyCache();
@@ -2519,8 +2540,17 @@ static void drawReadyButton(UDWORD player)
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
+		int playerDifficulty = NetPlay.players[player].difficulty;
+		char tooltip[128 + 255];
+		sstrcpy(tooltip, _(difficultyList[playerDifficulty]));
+		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[playerDifficulty];
+		if (strcmp(difficultyTip, "") != 0)
+		{
+			sstrcat(tooltip, "\n");
+			sstrcat(tooltip, difficultyTip);
+		}
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            (NetPlay.isHost && !locked.difficulty) ? _("Click to change difficulty") : _(difficultyList[NetPlay.players[player].difficulty]), icon, icon, icon);
+		            (NetPlay.isHost && !locked.difficulty) ? _("Click to change difficulty") : tooltip, icon, icon, icon);
 		return;
 	}
 	else if (!NetPlay.players[player].allocated)

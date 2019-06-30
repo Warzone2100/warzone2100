@@ -8,7 +8,7 @@ def parse(obj):
 	if isinstance(obj, dict):
 		for k, v in obj.items():
 			parse(v)
-			if k in ['name', 'tip'] and isinstance(v, str):
+			if k in ['name', 'tip', 'easy_tip', 'medium_tip', 'hard_tip', 'insane_tip'] and isinstance(v, str):
 				printString(v, '_(', '\n')
 			elif k in ['text', 'ranks'] and isinstance(v, list):
 				for s in v:
