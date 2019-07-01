@@ -116,7 +116,10 @@ function missileSilosDestroyed()
 //Nuclear missile destroys everything not in safe zone.
 function nukeAndCountSurvivors()
 {
-	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false);
+	//Avoid destroying the one base if the player opted not to destroy it themselves.
+	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter(function(obj) {
+		return obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null);
+	});
 	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
 	var foundUnit = false;
 
