@@ -495,14 +495,11 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 
 	int range = objSensorRange(psViewer);
 
-	// transporter in campaign ignores normal rules, can eg be off map
-	if (game.type == CAMPAIGN && psTarget->type == OBJ_DROID && isTransporter(castDroid(psTarget)))
+	if (!worldOnMap(psViewer->pos.x, psViewer->pos.y) || !worldOnMap(psTarget->pos.x, psTarget->pos.y))
 	{
-		// the player should see an ally/enemy transporter
-		if (psViewer->player != selectedPlayer || psTarget->player == selectedPlayer)
-		{
-			return 0;
-		}
+		//Most likely a VTOL or transporter
+		debug(LOG_WARNING, "Trying to view something off map!");
+		return 0;
 	}
 
 	/* Get the sensor range */
