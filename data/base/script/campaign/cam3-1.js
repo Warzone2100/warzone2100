@@ -118,28 +118,38 @@ function nukeAndCountSurvivors()
 {
 	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false);
 	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
-	var safeLen = safeZone.length;
+	var foundUnit = false;
 
 	//Make em' explode!
-	for (var i = 0, t = nuked.length; i < t; ++i)
+	for (var i = 0, len = nuked.length; i < len; ++i)
 	{
 		var nukeIt = true;
-		for (var s = 0; s < safeLen; ++s)
+		var obj1 = nuked[i];
+
+		//Check if it's in the safe area.
+		for (var j = 0, len2 = safeZone.length; j < len2; ++j)
 		{
-			if (nuked[i].id === safeZone[s].id)
+			var obj2 = safeZone[j];
+
+			if (obj1.id === obj2.id)
 			{
+				if (obj1.type === DROID && obj1.player === CAM_HUMAN_PLAYER)
+				{
+					foundUnit = true;
+				}
+
 				nukeIt = false;
 				break;
 			}
 		}
 
-		if (nukeIt && camDef(nuked[i]) && (nuked[i].id !== 0))
+		if (nukeIt && obj1 !== null && obj1.id !== 0)
 		{
-			camSafeRemoveObject(nuked[i], true);
+			camSafeRemoveObject(obj1, true);
 		}
 	}
 
-	return safeLen; //Must be at least 1 to win.
+	return foundUnit; //Must have saved at least one unit to win.
 }
 
 //Expand the map and play video and prevent transporter reentry.
@@ -211,9 +221,11 @@ function enableAllFactories()
 //For now just make sure we have all the droids in the canyon.
 function unitsInValley()
 {
-	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
+	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter(function(obj) {
+		return obj.type === DROID;
+	});
 	var allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return (obj.type === DROID);
+		return obj.type === DROID;
 	});
 
 	if (safeZone.length === allDroids.length)
