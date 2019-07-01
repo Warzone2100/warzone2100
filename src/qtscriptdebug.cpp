@@ -258,7 +258,6 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(nullptr, Qt::Window)
 {
 	modelMap = models;
-	QSignalMapper *signalMapper = new QSignalMapper(this);
 
 	// Add main page
 	QWidget *mainWidget = new QWidget(this);
@@ -352,9 +351,8 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		QHBoxLayout *layout2 = new QHBoxLayout;
 		QPushButton *updateButton = new QPushButton("Update", this);
 		QPushButton *button = new QPushButton("Run", this);
-		connect(button, SIGNAL(pressed()), signalMapper, SLOT(map()));
+		connect(button, &QPushButton::pressed, [=] { runClicked(engine); });
 		connect(updateButton, SIGNAL(pressed()), this, SLOT(updateModels()));
-		signalMapper->setMapping(button, engine);
 		editMap.insert(engine, lineEdit); // store this for slot
 		layout->addWidget(view);
 		layout2->addWidget(updateButton);
@@ -364,7 +362,6 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		dummyWidget->setLayout(layout);
 		contextsTab->addTab(dummyWidget, scriptName + ":" + QString::number(player));
 	}
-	connect(signalMapper, SIGNAL(mapped(QObject *)), this, SLOT(runClicked(QObject *)));
 	tab.addTab(contextsTab, "Contexts");
 
 	QTabWidget *playersTab = new QTabWidget(this);
