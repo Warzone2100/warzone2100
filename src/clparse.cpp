@@ -60,7 +60,6 @@ struct poptOption
 	int enumeration;
 	const char *descrip;
 	const char *argDescrip;
-	bool hidden;
 };
 
 typedef struct _poptContext
@@ -83,18 +82,13 @@ static bool wz_autogame = false;
 static std::string wz_saveandquit;
 static std::string wz_test;
 
-static void poptPrintHelp(poptContext ctx, FILE *output, bool show_all)
+static void poptPrintHelp(poptContext ctx, FILE *output)
 {
 	// TRANSLATORS: Summary of commandline option syntax
 	fprintf(output, _("Usage: %s [OPTION...]\n"), ctx->argv[0]);
 	for (int i = 0; i < ctx->size; i++)
 	{
 		char txt[128];
-
-		if (ctx->table[i].hidden && !show_all)
-		{
-			continue;
-		}
 
 		if (ctx->table[i].short_form != '\0')
 		{
@@ -244,7 +238,6 @@ typedef enum
 	CLI_FULLSCREEN,
 	CLI_GAME,
 	CLI_HELP,
-	CLI_HELP_ALL,
 	CLI_MOD_GLOB,
 	CLI_MOD_CA,
 	CLI_MOD_MP,
@@ -272,38 +265,37 @@ static const struct poptOption *getOptionsTable()
 {
 	static const struct poptOption optionsTable[] =
 	{
-		{ "configdir",  '\0', POPT_ARG_STRING, nullptr, CLI_CONFIGDIR,  N_("Set configuration directory"),       N_("configuration directory"), false },
-		{ "datadir",    '\0', POPT_ARG_STRING, nullptr, CLI_DATADIR,    N_("Add data directory"),                N_("data directory"), false },
-		{ "debug",      '\0', POPT_ARG_STRING, nullptr, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level"), false },
-		{ "debugfile",  '\0', POPT_ARG_STRING, nullptr, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file"), false },
-		{ "flush-debug-stderr", '\0', POPT_ARG_NONE, nullptr, CLI_FLUSHDEBUGSTDERR, N_("Flush all debug output written to stderr"), nullptr, true },
-		{ "fullscreen", '\0', POPT_ARG_NONE,   nullptr, CLI_FULLSCREEN, N_("Play in fullscreen mode"),           nullptr, false },
-		{ "game",       '\0', POPT_ARG_STRING, nullptr, CLI_GAME,       N_("Load a specific game mode"),         N_("level name"), true },
-		{ "help",       'h',  POPT_ARG_NONE,   nullptr, CLI_HELP,       N_("Show options and exit"),             nullptr, false },
-		{ "help-all",   '\0', POPT_ARG_NONE,   nullptr, CLI_HELP_ALL,   N_("Show all options and exit"),         nullptr, false },
-		{ "mod",        '\0', POPT_ARG_STRING, nullptr, CLI_MOD_GLOB,   N_("Enable a global mod"),               N_("mod"), false },
-		{ "mod_ca",     '\0', POPT_ARG_STRING, nullptr, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod"), false },
-		{ "mod_mp",     '\0', POPT_ARG_STRING, nullptr, CLI_MOD_MP,     N_("Enable a multiplay only mod"),       N_("mod"), false },
-		{ "noassert",	'\0', POPT_ARG_NONE,   nullptr, CLI_NOASSERT,   N_("Disable asserts"),                   nullptr, false },
-		{ "crash",		'\0', POPT_ARG_NONE,   nullptr, CLI_CRASH,      N_("Causes a crash to test the crash handler"), nullptr, true },
-		{ "loadskirmish",'\0', POPT_ARG_STRING, nullptr, CLI_LOADSKIRMISH, N_("Load a saved skirmish game"),     N_("savegame"), true },
-		{ "loadcampaign",'\0', POPT_ARG_STRING, nullptr, CLI_LOADCAMPAIGN, N_("Load a saved campaign game"),     N_("savegame"), true },
-		{ "window",     '\0', POPT_ARG_NONE,   nullptr, CLI_WINDOW,     N_("Play in windowed mode"),             nullptr, false },
-		{ "version",    '\0', POPT_ARG_NONE,   nullptr, CLI_VERSION,    N_("Show version information and exit"), nullptr, false },
-		{ "resolution", '\0', POPT_ARG_STRING, nullptr, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT"), false },
-		{ "shadows",    '\0', POPT_ARG_NONE,   nullptr, CLI_SHADOWS,    N_("Enable shadows"),                    nullptr, false },
-		{ "noshadows",  '\0', POPT_ARG_NONE,   nullptr, CLI_NOSHADOWS,  N_("Disable shadows"),                   nullptr, false },
-		{ "sound",      '\0', POPT_ARG_NONE,   nullptr, CLI_SOUND,      N_("Enable sound"),                      nullptr, false },
-		{ "nosound",    '\0', POPT_ARG_NONE,   nullptr, CLI_NOSOUND,    N_("Disable sound"),                     nullptr, false },
-		{ "join",       '\0', POPT_ARG_STRING, nullptr, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),  N_("host"), true },
-		{ "host",       '\0', POPT_ARG_NONE,   nullptr, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr, true },
-		{ "texturecompression", '\0', POPT_ARG_NONE, nullptr, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr, false },
-		{ "notexturecompression", '\0', POPT_ARG_NONE, nullptr, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr, false },
-		{ "autogame",   '\0', POPT_ARG_NONE,   nullptr, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr, true },
-		{ "saveandquit", '\0', POPT_ARG_STRING, nullptr, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name"), true },
-		{ "skirmish",   '\0', POPT_ARG_STRING, nullptr, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test"), true },
+		{ "configdir",  '\0', POPT_ARG_STRING, nullptr, CLI_CONFIGDIR,  N_("Set configuration directory"),       N_("configuration directory") },
+		{ "datadir",    '\0', POPT_ARG_STRING, nullptr, CLI_DATADIR,    N_("Add data directory"),                N_("data directory") },
+		{ "debug",      '\0', POPT_ARG_STRING, nullptr, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
+		{ "debugfile",  '\0', POPT_ARG_STRING, nullptr, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
+		{ "flush-debug-stderr", '\0', POPT_ARG_NONE, nullptr, CLI_FLUSHDEBUGSTDERR, N_("Flush all debug output written to stderr"), nullptr },
+		{ "fullscreen", '\0', POPT_ARG_NONE,   nullptr, CLI_FULLSCREEN, N_("Play in fullscreen mode"),           nullptr },
+		{ "game",       '\0', POPT_ARG_STRING, nullptr, CLI_GAME,       N_("Load a specific game mode"),         N_("level name") },
+		{ "help",       'h',  POPT_ARG_NONE,   nullptr, CLI_HELP,       N_("Show options and exit"),             nullptr },
+		{ "mod",        '\0', POPT_ARG_STRING, nullptr, CLI_MOD_GLOB,   N_("Enable a global mod"),               N_("mod") },
+		{ "mod_ca",     '\0', POPT_ARG_STRING, nullptr, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod") },
+		{ "mod_mp",     '\0', POPT_ARG_STRING, nullptr, CLI_MOD_MP,     N_("Enable a multiplay only mod"),       N_("mod") },
+		{ "noassert",	'\0', POPT_ARG_NONE,   nullptr, CLI_NOASSERT,   N_("Disable asserts"),                   nullptr },
+		{ "crash",		'\0', POPT_ARG_NONE,   nullptr, CLI_CRASH,      N_("Causes a crash to test the crash handler"), nullptr },
+		{ "loadskirmish",'\0', POPT_ARG_STRING, nullptr, CLI_LOADSKIRMISH, N_("Load a saved skirmish game"),     N_("savegame") },
+		{ "loadcampaign",'\0', POPT_ARG_STRING, nullptr, CLI_LOADCAMPAIGN, N_("Load a saved campaign game"),     N_("savegame") },
+		{ "window",     '\0', POPT_ARG_NONE,   nullptr, CLI_WINDOW,     N_("Play in windowed mode"),             nullptr },
+		{ "version",    '\0', POPT_ARG_NONE,   nullptr, CLI_VERSION,    N_("Show version information and exit"), nullptr },
+		{ "resolution", '\0', POPT_ARG_STRING, nullptr, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
+		{ "shadows",    '\0', POPT_ARG_NONE,   nullptr, CLI_SHADOWS,    N_("Enable shadows"),                    nullptr },
+		{ "noshadows",  '\0', POPT_ARG_NONE,   nullptr, CLI_NOSHADOWS,  N_("Disable shadows"),                   nullptr },
+		{ "sound",      '\0', POPT_ARG_NONE,   nullptr, CLI_SOUND,      N_("Enable sound"),                      nullptr },
+		{ "nosound",    '\0', POPT_ARG_NONE,   nullptr, CLI_NOSOUND,    N_("Disable sound"),                     nullptr },
+		{ "join",       '\0', POPT_ARG_STRING, nullptr, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),  N_("host") },
+		{ "host",       '\0', POPT_ARG_NONE,   nullptr, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr },
+		{ "texturecompression", '\0', POPT_ARG_NONE, nullptr, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr },
+		{ "notexturecompression", '\0', POPT_ARG_NONE, nullptr, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
+		{ "autogame",   '\0', POPT_ARG_NONE,   nullptr, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr },
+		{ "saveandquit", '\0', POPT_ARG_STRING, nullptr, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name") },
+		{ "skirmish",   '\0', POPT_ARG_STRING, nullptr, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		// Terminating entry
-		{ nullptr,         '\0', 0,               nullptr, 0,              nullptr,                                    nullptr, true },
+		{ nullptr,         '\0', 0,               nullptr, 0,              nullptr,                                    nullptr },
 	};
 
 	static struct poptOption TranslatedOptionsTable[sizeof(optionsTable) / sizeof(struct poptOption)];
@@ -416,8 +408,7 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 			break;
 
 		case CLI_HELP:
-		case CLI_HELP_ALL:
-			poptPrintHelp(poptCon, stdout, option == CLI_HELP_ALL);
+			poptPrintHelp(poptCon, stdout);
 			return false;
 
 		case CLI_VERSION:
@@ -457,7 +448,6 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_FLUSHDEBUGSTDERR:
 		case CLI_CONFIGDIR:
 		case CLI_HELP:
-		case CLI_HELP_ALL:
 		case CLI_VERSION:
 			// These options are parsed in ParseCommandLineEarly() already, so ignore them
 			break;
