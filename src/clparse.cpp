@@ -85,7 +85,8 @@ static std::string wz_test;
 
 static void poptPrintHelp(poptContext ctx, FILE *output, bool show_all)
 {
-	fprintf(output, "Usage: %s [OPTION...]\n", ctx->argv[0]);
+	// TRANSLATORS: Summary of commandline option syntax
+	fprintf(output, _("Usage: %s [OPTION...]\n"), ctx->argv[0]);
 	for (int i = 0; i < ctx->size; i++)
 	{
 		char txt[128];
