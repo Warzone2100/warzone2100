@@ -2678,7 +2678,9 @@ void addPlayerBox(bool players)
 
 			if (ingame.localOptionsReceived)
 			{
-				if (!allOnSameTeam)
+				// do not draw "Ready" button if all players are on the same team,
+				// but always draw the difficulty buttons for AI players
+				if (!allOnSameTeam || (!NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0))
 				{
 					drawReadyButton(i);
 				}
