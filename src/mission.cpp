@@ -2312,19 +2312,11 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	if (result || bMultiPlayer)
 	{
 		//continue
-		sButInit.x			= MISSION_2_X;
-		// Won the game, so display "Quit to main menu"
-		if (testPlayerHasWon() && !bMultiPlayer)
-		{
-			sButInit.id			= IDMISSIONRES_QUIT;
-			sButInit.y			= MISSION_2_Y - 8;
-			sButInit.pText		= _("Quit To Main Menu");
-			widgAddButton(psWScreen, &sButInit);
-		}
-		else
+		if (!testPlayerHasWon() || bMultiPlayer)
 		{
 			// Finished the mission, so display "Continue Game"
-			sButInit.y			= MISSION_2_Y;
+			sButInit.x			= MISSION_1_X;
+			sButInit.y			= MISSION_1_Y;
 			sButInit.id			= IDMISSIONRES_CONTINUE;
 			sButInit.pText		= _("Continue Game");//"Continue Game";
 			widgAddButton(psWScreen, &sButInit);
@@ -2358,7 +2350,11 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		sButInit.y			= MISSION_1_Y;
 		sButInit.pText		= _("Load Saved Game");//"Load Saved Game";
 		widgAddButton(psWScreen, &sButInit);
-		//quit
+	}
+
+	if (bMultiPlayer || (testPlayerHasWon() && !bMultiPlayer))
+	{
+		// don't show quit for campaign games in case a poor sap accidentally presses quit without ever saving
 		sButInit.id			= IDMISSIONRES_QUIT;
 		sButInit.x			= MISSION_2_X;
 		sButInit.y			= MISSION_2_Y;
