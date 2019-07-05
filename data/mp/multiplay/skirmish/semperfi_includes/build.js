@@ -496,7 +496,7 @@ function buildResearchLabs()
 		{
 			amount = 5;
 		}
-		else if (amount >= 7)
+		else if (derrCount >= 7)
 		{
 			amount = 4;
 		}
