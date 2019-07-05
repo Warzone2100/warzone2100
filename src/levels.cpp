@@ -1049,14 +1049,26 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	return true;
 }
 
+char *mapNameWithoutTechlevel(const char *mapName)
+{
+	size_t len = strlen(mapName);
+	char *r = strdup(mapName);
+	if (len > 2 && mapName[len - 3] == '-' && mapName[len - 2] == 'T' && isdigit(mapName[len - 1]))
+	{
+		r[len - 3] = '\0';
+	}
+	return r;
+}
+
 /// returns maps of the right 'type'
 LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 {
 	LEVEL_LIST list;
 
-	for (auto lev : psLevels)
+	if (game.type == SKIRMISH)
 	{
-		if (game.type == SKIRMISH)
+		// Add maps with exact match to type
+		for (auto lev : psLevels)
 		{
 			int cam = 1;
 			if (lev->type == MULTI_SKIRMISH2)
@@ -1073,6 +1085,38 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 			    && cam == camToUse)
 			{
 				list.push_back(lev);
+			}
+		}
+		// Also add maps where only the tech level is different, if a more specific map has not been added
+		for (auto lev : psLevels)
+		{
+			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
+			    && (numPlayers == 0 || numPlayers == lev->players)
+			    && lev->pName)
+			{
+				bool already_added = false;
+				for (auto map : list)
+				{
+					if (!map->pName)
+					{
+						continue;
+					}
+					char *levelBaseName = mapNameWithoutTechlevel(lev->pName);
+					char *mapBaseName = mapNameWithoutTechlevel(map->pName);
+					if (strcmp(levelBaseName, mapBaseName) == 0)
+					{
+						already_added = true;
+						free(levelBaseName);
+						free(mapBaseName);
+						break;
+					}
+					free(levelBaseName);
+					free(mapBaseName);
+				}
+				if (!already_added)
+				{
+					list.push_back(lev);
+				}
 			}
 		}
 	}
