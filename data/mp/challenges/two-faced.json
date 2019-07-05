@@ -3,7 +3,7 @@
         "bases": 3,
         "description": "Surprise your enemy by exploiting geography and his bad habits.",
         "difficulty": "Medium",
-        "map": "Sk-LittleEgypt-T1",
+        "map": "Sk-LittleEgypt",
         "maxPlayers": 4,
         "name": "Two-faced",
         "powerLevel": 2,

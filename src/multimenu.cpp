@@ -491,12 +491,14 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 		char *withoutExtension = strdup(*currFile);
 		withoutExtension[fileNameLength - extensionLength] = '\0';
+		char *withoutTechlevel = mapNameWithoutTechlevel(withoutExtension);
+		free(withoutExtension);
 
 		// Set the tip and add the button
 		W_BUTTON *button = new W_BUTTON(requestList);
 		button->id = nextButtonId;
-		button->setTip(withoutExtension);
-		button->setString(withoutExtension);
+		button->setTip(withoutTechlevel);
+		button->setString(withoutTechlevel);
 		button->displayFunction = displayRequestOption;
 		button->pUserData = new DisplayRequestOptionData();
 		button->setOnDelete([](WIDGET *psWidget) {
@@ -506,7 +508,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		});
 		requestList->addWidgetToLayout(button);
 
-		free(withoutExtension);
+		free(withoutTechlevel);
 
 		/* Update the init struct for the next button */
 		++nextButtonId;
@@ -526,11 +528,12 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 		for (auto mapData : levels)
 		{
+			char *withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
 			// add number of players to string.
 			W_BUTTON *button = new W_BUTTON(requestList);
 			button->id = nextButtonId;
-			button->setTip(mapData->pName);
-			button->setString(mapData->pName);
+			button->setTip(withoutTechlevel);
+			button->setString(withoutTechlevel);
 			button->displayFunction = displayRequestOption;
 			button->pUserData = new DisplayRequestOptionData(mapData);
 			button->setOnDelete([](WIDGET *psWidget) {
@@ -539,6 +542,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 				psWidget->pUserData = nullptr;
 			});
 			buttons.push_back({stringRelevance(mapData->pName, searchString), button});
+			free(withoutTechlevel);
 
 			++nextButtonId;
 		}

@@ -1785,7 +1785,9 @@ static void addGameOptions()
 
 	// map chooser
 
-	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, game.map, MCOL0, MROW3, MULTIOP_BLUEFORMW, 29);
+	char *withoutTechlevel = mapNameWithoutTechlevel(game.map);
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, withoutTechlevel, MCOL0, MROW3, MULTIOP_BLUEFORMW, 29);
+	free(withoutTechlevel);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MCOL4, 2, 20, MULTIOP_BUTH, _("Select Map"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MCOL3 + 11, 10, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
 	if (!game.isMapMod)
@@ -3945,6 +3947,7 @@ void runMultiOptions()
 					oldMaxPlayers = game.maxPlayers;
 
 					sstrcpy(game.map, mapData->pName);
+					char *withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
 					game.hash = levGetFileHash(mapData);
 					game.maxPlayers = mapData->players;
 					game.isMapMod = CheckForMod(mapData->realFileName);
@@ -3953,6 +3956,8 @@ void runMultiOptions()
 					if (isHoverPreview)
 					{
 						sstrcpy(game.map, oldGameMap);
+						char *withoutTechlevel = mapNameWithoutTechlevel(oldGameMap);
+						free(withoutTechlevel);
 						game.hash = oldGameHash;
 						game.maxPlayers = oldMaxPlayers;
 					}
@@ -3961,7 +3966,8 @@ void runMultiOptions()
 						loadMapSettings1();
 					}
 
-					widgSetString(psWScreen, MULTIOP_MAP + 1, mapData->pName); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
+					widgSetString(psWScreen, MULTIOP_MAP + 1, withoutTechlevel); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
+					free(withoutTechlevel);
 					addGameOptions();
 					break;
 				}

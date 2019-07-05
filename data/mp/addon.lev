@@ -177,13 +177,13 @@ type		14
 dataset		MULTI_CAM_3
 game		"multiplay/maps/4c-fishnet.gam"
 
-level 		Sk-GreatRift-T1
+level 		Sk-GreatRift
 players		4
 type		14
 dataset		MULTI_CAM_1
 game		"multiplay/maps/4c-greatrift.gam"
 
-level 		Sk-ThePit-T1
+level 		Sk-ThePit
 players		8
 type		14
 dataset		MULTI_CAM_3
@@ -215,617 +215,135 @@ data		"wrf/audio.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires.wrf"
 
-// Tech 2
-
-level 		Sk-Rush-T2
-players		4
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/4c-rush.gam"
-
-level 		Sk-Rush2-T2
-players		4
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/4c-rush2.gam"
-
-level 		Sk-StartUp-T2
-players		2
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/2c-startup.gam"
-
-level 		Sk-MizaMaze-T2
-players		8
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/8c-mizamaze.gam"
-
-level 		Sk-Clover-T2
-players		8
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/8c-clover.gam"
-
-level 		Sk-UrbanChasm-T2
-players		2
-type		18
-dataset		MULTI_T2_C2
-game		"multiplay/maps/2c-urbanchasm.gam"
-
-level		Sk-UrbanDuel-T2
-players		4
-type		18
-dataset		MULTI_T2_C2
-game		"multiplay/maps/4c-urbanduel.gam"
-
-level		Sk-Manhattan-T2
-players		8
-type		18
-dataset		MULTI_T2_C2
-game		"multiplay/maps/8c-manhattan.gam"
-
-level 		Sk-HighGround-T2
-players		2
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/2c-highground.gam"
-
-level 		Sk-Mountain-T2
-players		4
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/4c-mountain.gam"
-
-level 		Sk-Bananas-T2
-players		8
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/8c-bananas.gam"
-
-level 		Sk-Wheel-T2
-players		8
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/8c-wheeloffortune.gam"
-
-level 		Sk-Ziggurat-T2
-players		8
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/8c-ziggurat.gam"
-
-level 		Sk-Valley-T2
-players		4
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/4c-valleyofdeath.gam"
-
-level 		Sk-Concrete-T2
-players		8
-type		18
-dataset		MULTI_T2_C2
-game		"multiplay/maps/8c-concreteplayground.gam"
-
-level 		Sk-FishNets-T2
-players		4
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/4c-fishnet.gam"
-
-level 		Sk-GreatRift-T2
-players		4
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/4c-greatrift.gam"
-
-level 		Sk-ThePit-T2
-players		8
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/8c-thepit.gam"
-
-// Tech 3
-
-level 		Sk-Rush-T3
-players		4
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/4c-rush.gam"
-
-level 		Sk-Rush2-T3
-players		4
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/4c-rush2.gam"
-
-level 		Sk-StartUp-T3
-players		2
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/2c-startup.gam"
-
-level 		Sk-MizaMaze-T3
-players		8
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/8c-mizamaze.gam"
-
-level 		Sk-Clover-T3
-players		8
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/8c-clover.gam"
-
-level 		Sk-UrbanChasm-T3
-players		2
-type		19
-dataset		MULTI_T3_C2
-game		"multiplay/maps/2c-urbanchasm.gam"
-
-level		Sk-UrbanDuel-T3
-players		4
-type		19
-dataset		MULTI_T3_C2
-game		"multiplay/maps/4c-urbanduel.gam"
-
-level		Sk-Manhattan-T3
-players		8
-type		19
-dataset		MULTI_T3_C2
-game		"multiplay/maps/8c-manhattan.gam"
-
-level 		Sk-Mountain-T3
-players		4
-type		19
-dataset		MULTI_T3_C3
-game		"multiplay/maps/4c-mountain.gam"
-
-level 		Sk-HighGround-T3
-players		2
-type		19
-dataset		MULTI_T3_C3
-game		"multiplay/maps/2c-highground.gam"
-
-level 		Sk-Bananas-T3
-players		8
-type		19
-dataset		MULTI_T3_C3
-game		"multiplay/maps/8c-bananas.gam"
-
-level 		Sk-Wheel-T3
-players		8
-type		19
-dataset		MULTI_T3_C3
-game		"multiplay/maps/8c-wheeloffortune.gam"
-
-level 		Sk-Ziggurat-T3
-players		8
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/8c-ziggurat.gam"
-
-level 		Sk-Valley-T3
-players		4
-type		19
-dataset		MULTI_T3_C3
-game		"multiplay/maps/4c-valleyofdeath.gam"
-
-level 		Sk-Concrete-T3
-players		8
-type		19
-dataset		MULTI_T3_C2
-game		"multiplay/maps/8c-concreteplayground.gam"
-
-level 		Sk-FishNets-T3
-players		4
-type		19
-dataset		MULTI_T3_C3
-game		"multiplay/maps/4c-fishnet.gam"
-
-level 		Sk-GreatRift-T3
-players		4
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/4c-greatrift.gam"
-
-level 		Sk-ThePit-T3
-players		8
-type		19
-dataset		MULTI_T2_C3
-game		"multiplay/maps/8c-thepit.gam"
-
 // hidensneak
-level 		Sk-HideNSneak-T1
+level 		Sk-HideNSneak
 players		8
 type		14
 dataset		MULTI_CAM_2
 game		"multiplay/maps/8c-hidensneak.gam"
 
-level 		Sk-HideNSneak-T2
-players		8
-type		18
-dataset		MULTI_T2_C2
-game		"multiplay/maps/8c-hidensneak.gam"
-
-level 		Sk-HideNSneak-T3
-players		8
-type		19
-dataset		MULTI_T3_C2
-game		"multiplay/maps/8c-hidensneak.gam"
 
 // RollingHills
-level 		Sk-RollingHills-T1
+level 		Sk-RollingHills
 players		4
 type		14
 dataset		MULTI_CAM_1
 game		"multiplay/maps/4c-rollinghills.gam"
 
-level 		Sk-RollingHills-T2
-players		4
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/4c-rollinghills.gam"
-
-level 		Sk-RollingHills-T3
-players		4
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/4c-rollinghills.gam"
-
 // YinYang
-level 		Sk-YinYang-T1
+level 		Sk-YinYang
 players		8
 type		14
 dataset		MULTI_CAM_3
 game		"multiplay/maps/8c-yinyang.gam"
 
-level 		Sk-YinYang-T2
-players		8
-type		18
-dataset		MULTI_T2_C3
-game		"multiplay/maps/8c-yinyang.gam"
-
-level 		Sk-YinYang-T3
-players		8
-type		19
-dataset		MULTI_T3_C3
-game		"multiplay/maps/8c-yinyang.gam"
-
 // SandCastles
-level 		Sk-SandCastles-T1
+level 		Sk-SandCastles
 players		8
 type		14
 dataset		MULTI_CAM_2
-game		"multiplay/maps/8c-sandcastles.gam"
-
-level 		Sk-SandCastles-T2
-players		8
-type		18
-dataset		MULTI_T2_C2
-game		"multiplay/maps/8c-sandcastles.gam"
-
-level 		Sk-SandCastles-T3
-players		8
-type		19
-dataset		MULTI_T3_C2
 game		"multiplay/maps/8c-sandcastles.gam"
 
 // Basingstoke
-level 		Sk-Basingstoke-T1
+level 		Sk-Basingstoke
 players		4
 type		14
 dataset		MULTI_CAM_1
 game		"multiplay/maps/4c-basingstoke.gam"
 
-level 		Sk-Basingstoke-T2
-players		4
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/4c-basingstoke.gam"
-
-level 		Sk-Basingstoke-T3
-players		4
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/4c-basingstoke.gam"
 
 // LittleEgypt
-level 		Sk-LittleEgypt-T1
+level 		Sk-LittleEgypt
 players		4
 type		14
 dataset		MULTI_CAM_1
 game		"multiplay/maps/4c-littleegypt.gam"
 
-level 		Sk-LittleEgypt-T2
-players		4
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/4c-littleegypt.gam"
-
-level 		Sk-LittleEgypt-T3
-players		4
-type		19
-dataset		MULTI_T3_C1
-game		"multiplay/maps/4c-littleegypt.gam"
 
 // BeggarsKanyon - 8 player desert
-level 		Sk-BeggarsKanyon-T1
+level 		Sk-BeggarsKanyon
 players		8
 type		14
 dataset		MULTI_CAM_1
-game		"multiplay/maps/8c-beggarskanyon.gam"
-
-level 		Sk-BeggarsKanyon-T2
-players		8
-type		18
-dataset		MULTI_T2_C1
-game		"multiplay/maps/8c-beggarskanyon.gam"
-
-level 		Sk-BeggarsKanyon-T3
-players		8
-type		19
-dataset		MULTI_T3_C1
 game		"multiplay/maps/8c-beggarskanyon.gam"
 
 // Gridlock
-level 		Sk-Gridlock-T1
+level 		Sk-Gridlock
 players		8
 type		14
 dataset		MULTI_CAM_2
 game		"multiplay/maps/8c-gridlock.gam"
 
-level 		Sk-Gridlock-T2
-players		8
-type		18
-dataset		MULTI_T2_C2
-game		"multiplay/maps/8c-gridlock.gam"
-
-level 		Sk-Gridlock-T3
-players		8
-type		19
-dataset		MULTI_T3_C2
-game		"multiplay/maps/8c-gridlock.gam"
-
-
 /// New maps added by Warzone2100 Resurrection Team
 
-// Skirmish Tech Level 1
-
-level	Sk-cockate-T1
+level	Sk-cockate
 players	8
 type	14
 dataset	MULTI_CAM_1
 game	"multiplay/maps/8c-cockate.gam"
 
-// Skirmish Tech Level 2
-
-level	Sk-cockate-T2
-players	8
-type	18
-dataset	MULTI_T2_C1
-game	"multiplay/maps/8c-cockate.gam"
-
-// Skirmish Tech Level 3
-
-level	Sk-cockate-T3
-players	8
-type	19
-dataset	MULTI_T3_C1
-game	"multiplay/maps/8c-cockate.gam"
-
-// Skirmish Tech Level 1
-
-level	Sk-cockpit-T1
+level	Sk-cockpit
 players	4
 type	14
 dataset	MULTI_CAM_1
 game	"multiplay/maps/4c-cockpit.gam"
 
-// Skirmish Tech Level 2
-
-level	Sk-cockpit-T2
-players	4
-type	18
-dataset	MULTI_T2_C1
-game	"multiplay/maps/4c-cockpit.gam"
-
-// Skirmish Tech Level 3
-
-level	Sk-cockpit-T3
-players	4
-type	19
-dataset	MULTI_T3_C1
-game	"multiplay/maps/4c-cockpit.gam"
-
-// Skirmish Tech Level 1
-
-level	Sk-Urban-Chaos-T1
+level	Sk-Urban-Chaos
 players	4
 type	14
 dataset	MULTI_CAM_2
 game	"multiplay/maps/4c-urban-chaos.gam"
 
-// Skirmish Tech Level 2
-
-level	Sk-Urban-Chaos-T2
-players	4
-type	18
-dataset	MULTI_T2_C2
-game	"multiplay/maps/4c-urban-chaos.gam"
-
-// Skirmish Tech Level 3
-
-level	Sk-Urban-Chaos-T3
-players	4
-type	19
-dataset	MULTI_T3_C2
-game	"multiplay/maps/4c-urban-chaos.gam"
-
-// Skirmish Tech Level 1
-
-level	Sk-Pyramidal-T1
+level	Sk-Pyramidal
 players	4
 type	14
 dataset	MULTI_CAM_1
 game	"multiplay/maps/4c-pyramidal.gam"
 
-// Skirmish Tech Level 2
-
-level	Sk-Pyramidal-T2
-players	4
-type	18
-dataset	MULTI_T2_C1
-game	"multiplay/maps/4c-pyramidal.gam"
-
-// Skirmish Tech Level 3
-
-level	Sk-Pyramidal-T3
-players	4
-type	19
-dataset	MULTI_T3_C1
-game	"multiplay/maps/4c-pyramidal.gam"
-
-level   Roughness-T1
+level   Roughness
 players 2
 type    14
 dataset MULTI_CAM_3
 game    "multiplay/maps/2c-Roughness.gam"
 
-level   Roughness-T2
-players 2
-type    18
-dataset MULTI_T2_C3
-game    "multiplay/maps/2c-Roughness.gam"
-
-level   Roughness-T3
-players 2
-type    19
-dataset MULTI_T3_C3
-game    "multiplay/maps/2c-Roughness.gam"
-
-level   Vision-T1
+level   Vision
 players 2
 type    14
 dataset MULTI_CAM_3
 game    "multiplay/maps/2c-Vision.gam"
 
-level   Vision-T2
-players 2
-type    18
-dataset MULTI_T2_C3
-game    "multiplay/maps/2c-Vision.gam"
-
-level   Vision-T3
-players 2
-type    19
-dataset MULTI_T3_C3
-game    "multiplay/maps/2c-Vision.gam"
-
-level   Emergence-T1
+level   Emergence
 players 10
 type    14
 dataset MULTI_CAM_3
 game    "multiplay/maps/10c-Emergence.gam"
 
-level   Emergence-T2
-players 10
-type    18
-dataset MULTI_T2_C3
-game    "multiplay/maps/10c-Emergence.gam"
-
-level   Emergence-T3
-players 10
-type    19
-dataset MULTI_T3_C3
-game    "multiplay/maps/10c-Emergence.gam"
-
-level   Monocot-T1
+level   Monocot
 players 3
 type    14
 dataset MULTI_CAM_2
 game    "multiplay/maps/3c-Monocot_i.gam"
 
-level   Monocot-T2
-players 3
-type    18
-dataset MULTI_T2_C2
-game    "multiplay/maps/3c-Monocot_i.gam"
-
-level   Monocot-T3
-players 3
-type    19
-dataset MULTI_T3_C2
-game    "multiplay/maps/3c-Monocot_i.gam"
-
-level   Bloat-T1
+level   Bloat
 players 5
 type    14
 dataset MULTI_CAM_2
 game    "multiplay/maps/5c-bloat.gam"
 
-level   Bloat-T2
-players 5
-type    18
-dataset MULTI_T2_C2
-game    "multiplay/maps/5c-bloat.gam"
-
-level   Bloat-T3
-players 5
-type    19
-dataset MULTI_T3_C2
-game    "multiplay/maps/5c-bloat.gam"
-
-level   WindFury-T1
+level   WindFury
 players 9
 type    14
 dataset MULTI_CAM_3
 game    "multiplay/maps/9c-WindFury.gam"
 
-level   WindFury-T2
-players 9
-type    18
-dataset MULTI_T2_C3
-game    "multiplay/maps/9c-WindFury.gam"
-
-level   WindFury-T3
-players 9
-type    19
-dataset MULTI_T3_C3
-game    "multiplay/maps/9c-WindFury.gam"
-
-level   Gamma-T1
+level   Gamma
 players 3
 type    14
 dataset MULTI_CAM_1
 game    "multiplay/maps/3c-Gamma.gam"
 
-level   Gamma-T2
-players 3
-type    18
-dataset MULTI_T2_C1
-game    "multiplay/maps/3c-Gamma.gam"
-
-level   Gamma-T3
-players 3
-type    19
-dataset MULTI_T3_C1
-game    "multiplay/maps/3c-Gamma.gam"
-
-level   Melting-T1
+level   Melting
 players 6
 type    14
 dataset MULTI_CAM_3
-game    "multiplay/maps/6c-Melting.gam"
-
-level   Melting-T2
-players 6
-type    18
-dataset MULTI_T2_C3
-game    "multiplay/maps/6c-Melting.gam"
-
-level   Melting-T3
-players 6
-type    19
-dataset MULTI_T3_C3
 game    "multiplay/maps/6c-Melting.gam"
