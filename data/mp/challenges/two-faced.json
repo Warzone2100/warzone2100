@@ -9,6 +9,7 @@
         "powerLevel": 2,
         "scavengers": "false",
         "version": 0,
+        "techLevel": 1,
 	"allowPositionChange": "true"
     },
     "locked": {

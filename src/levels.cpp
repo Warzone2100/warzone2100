@@ -1079,8 +1079,12 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 			{
 				cam = 3;
 			}
+			else if (lev->type == MULTI_SKIRMISH4)
+			{
+				cam = 4;
+			}
 
-			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
+			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3 || lev->type == MULTI_SKIRMISH4)
 			    && (numPlayers == 0 || numPlayers == lev->players)
 			    && cam == camToUse)
 			{
@@ -1090,7 +1094,7 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 		// Also add maps where only the tech level is different, if a more specific map has not been added
 		for (auto lev : psLevels)
 		{
-			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
+			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3 || lev->type == MULTI_SKIRMISH4)
 			    && (numPlayers == 0 || numPlayers == lev->players)
 			    && lev->pName)
 			{

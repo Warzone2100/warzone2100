@@ -3201,6 +3201,41 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 	return QScriptValue();
 }
 
+//-- ## completeAllResearch([player])
+//--
+//-- Finish all researches for the given player.
+//--
+static QScriptValue js_completeAllResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	int player;
+	if (context->argumentCount() > 0)
+	{
+		player = context->argument(0).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	for (int i = 0; i < asResearch.size(); i++)
+	{
+		RESEARCH *psResearch = &asResearch[i];
+		PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psResearch->index];
+		if (!IsResearchCompleted(plrRes))
+		{
+			if (bMultiMessages && (gameTime > 2))
+			{
+				SendResearch(player, psResearch->index, false);
+				// Wait for our message before doing anything.
+			}
+			else
+			{
+				researchResult(psResearch->index, player, false, nullptr, false);
+			}
+		}
+	}
+	return QScriptValue();
+}
+
 //-- ## enableResearch(research[, player])
 //--
 //-- Enable a research for the given player, allowing it to be researched.
@@ -6165,6 +6200,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("getMissionTime", engine->newFunction(js_getMissionTime));
 	engine->globalObject().setProperty("setReinforcementTime", engine->newFunction(js_setReinforcementTime));
 	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch));
+	engine->globalObject().setProperty("completeAllResearch", engine->newFunction(js_completeAllResearch));
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("setPowerModifier", engine->newFunction(js_setPowerModifier));

@@ -112,6 +112,7 @@ static std::string current_searchString;
 #define M_REQUEST_C1	(MULTIMENU+61)
 #define M_REQUEST_C2	(MULTIMENU+62)
 #define M_REQUEST_C3	(MULTIMENU+63)
+#define M_REQUEST_C4	(MULTIMENU+64)
 
 #define M_REQUEST_AP	(MULTIMENU+70)
 #define M_REQUEST_2P	(MULTIMENU+71)
@@ -586,6 +587,12 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		sButInit.pTip		= _("Technology level 3");
 		widgAddButton(psRScreen, &sButInit);
 
+		sButInit.id		= M_REQUEST_C4;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 4;
+		sButInit.pTip		= _("Max technology level");
+		widgAddButton(psRScreen, &sButInit);
+
 		sButInit.id		= M_REQUEST_AP;
 		sButInit.y		= 17;
 		sButInit.UserData	= 0;
@@ -686,6 +693,10 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 	case M_REQUEST_C3:
 		closeMultiRequester();
 		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 3, current_numplayers, current_searchString);
+		break;
+	case M_REQUEST_C4:
+		closeMultiRequester();
+		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 4, current_numplayers, current_searchString);
 		break;
 	case M_REQUEST_AP:
 		closeMultiRequester();

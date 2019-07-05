@@ -8,6 +8,7 @@
         "name": "Hide Behind Me",
         "powerLevel": 1,
         "scavengers": "false",
+        "techLevel": 1,
         "version": 2
     },
     "locked": {

@@ -392,6 +392,10 @@ End game in victory or defeat.
 Finish a research for the given player.
 forceResearch will allow a research topic to be researched again. 3.3+
 
+## completeAllResearch([player])
+
+Finish all researches for the given player.
+
 ## enableResearch(research[, player])
 
 Enable a research for the given player, allowing it to be researched.
