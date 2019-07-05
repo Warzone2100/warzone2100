@@ -413,7 +413,7 @@ function camMakeGroup(what, filter)
 				camDebug("Trying to add", o);
 				continue;
 			}
-			if (o.type === DROID && camPlayerMatchesFilter(o.player, filter))
+			if (o.type === DROID && o.droidType !== DROID_CONSTRUCT && camPlayerMatchesFilter(o.player, filter))
 			{
 				groupAdd(group, o);
 			}
@@ -1965,41 +1965,43 @@ function __camTacticsTickForGroup(group)
 	{
 		return;
 	}
-	var healthyDroids = [];
-	var hasRepairFacility = (countStruct("A0RepairCentre3", rawDroids[0].player) > 0);
-	var hasRTB = __camCountHQ(rawDroids[0].player);
-	var hasRepairPos = camDef(gi.data.repairPos);
-	var repairPercent = (camDef(gi.data.repair) ? gi.data.repair : 66);
-	//define these here to avoid linter warnings with the for loops.
-	var i = 0;
-	var j = 0;
-	var len = 0;
-	var len2 = 0;
-	var droid;
-	var droids;
 
-	// Handle the case when we need to repair
-	if (rawDroids.length > 0 && (hasRepairFacility || hasRepairPos))
+	const CLOSE_Z = 1;
+	var healthyDroids = [];
+	var repair = {
+		hasFacility: countStruct("A0RepairCentre3", rawDroids[0].player) > 0,
+		pos: camDef(gi.data.repairPos) ? gi.data.repairPos : undefined,
+		percent: camDef(gi.data.repair) ? gi.data.repair : 66,
+	};
+
+	//repair
+	if (repair.hasFacility || camDef(repair.pos))
 	{
-		for (i = 0, len = rawDroids.length; i < len; ++i)
+		for (var i = 0, len = rawDroids.length; i < len; ++i)
 		{
-			droid = rawDroids[i];
+			var droid = rawDroids[i];
 			var repairLikeAction = false;
-			//has a repair facility so use it
-			if (hasRepairFacility && camDef(gi.data.repair) && droid.order !== DORDER_RTR)
+
+			if (droid.order === DORDER_RTR)
 			{
-				if (droid.health < gi.data.repair)
+				continue;
+			}
+
+			//has a repair facility so use it
+			if (repair.hasFacility && camDef(gi.data.repair))
+			{
+				if (droid.health < repair.percent)
 				{
 					orderDroid(droid, DORDER_RTR);
 					repairLikeAction = true;
 				}
 			}
 			//Or they have auto-repair and run to some position for a while
-			else if (!hasRepairFacility && hasRepairPos && droid.order !== DORDER_RTR)
+			else if (!repair.hasFacility && repair.pos)
 			{
-				if (droid.health < repairPercent)
+				if (droid.health < repair.percent)
 				{
-					var loc = camMakePos(gi.data.repairPos);
+					var loc = camMakePos(repair.pos);
 					orderDroidLoc(droid, DORDER_MOVE, loc.x, loc.y);
 					repairLikeAction = true;
 				}
@@ -2016,65 +2018,66 @@ function __camTacticsTickForGroup(group)
 		healthyDroids = rawDroids;
 	}
 
-
 	if (camDef(gi.data.regroup) && gi.data.regroup && healthyDroids.length > 0)
 	{
 		var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
 		var groupX = ret.xav[ret.maxIdx];
 		var groupY = ret.yav[ret.maxIdx];
-		droids = ret.clusters[ret.maxIdx].filter(function(obj) {
-			return (obj.type === DROID && obj.droidType !== DROID_CONSTRUCT);
-		});
-		for (i = 0, len = ret.clusters.length; i < len; ++i)
+		var droids = ret.clusters[ret.maxIdx];
+
+		for (var i = 0, len = ret.clusters.length; i < len; ++i)
 		{
 			if (i !== ret.maxIdx) // move other droids towards main cluster
 			{
-				for (j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
+				for (var j = 0, len2 = ret.clusters[i].length; j < len2; ++j)
 				{
-					droid = ret.clusters[i][j];
-					if (droid.type === DROID && droid.order !== DORDER_RTR)
+					var droid = ret.clusters[i][j];
+					if (droid.order !== DORDER_RTR)
 					{
 						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
 					}
 				}
 			}
 		}
+
 		var hitRecently = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
 		// not enough droids grouped?
 		if (gi.count < 0 ? (ret.maxCount < groupSize(group) * 0.66) : (ret.maxCount < gi.count))
 		{
-			for (i = 0, len = droids.length; i < len; ++i)
+			for (var i = 0, len = droids.length; i < len; ++i)
 			{
-				droid = droids[i];
-				if (droid.order !== DORDER_RTR)
+				var droid = droids[i];
+				if (droid.order === DORDER_RTR)
 				{
-					if (hitRecently && hasRTB)
+					continue;
+				}
+
+				if (hitRecently && __camCountHQ(droid.player) > 0)
+				{
+					if (droid.order !== DORDER_RTB)
 					{
 						orderDroid(droid, DORDER_RTB);
 					}
-					else if (droid.order !== DORDER_HOLD)
-					{
-						orderDroid(droid, DORDER_HOLD);
-					}
+				}
+				else if (droid.order !== DORDER_HOLD)
+				{
+					orderDroid(droid, DORDER_HOLD);
 				}
 			}
 			return;
 		}
 	}
 
-	droids = healthyDroids.filter(function(dr) {
-		return (dr.type === DROID && dr.droidType !== DROID_CONSTRUCT && dr.order !== DORDER_RTR);
-	});
-
-	//target is only used for attack/defend/compromise
+	//Target choosing
 	var target;
 	var patrolPos;
+
 	switch (gi.order)
 	{
 		case CAM_ORDER_ATTACK:
 		case CAM_ORDER_DEFEND:
 		case CAM_ORDER_COMPROMISE:
-			target = profile("__camPickTarget", group);
+			target = __camPickTarget(group);
 			if (!camDef(target))
 			{
 				return;
@@ -2089,20 +2092,26 @@ function __camTacticsTickForGroup(group)
 			return;
 	}
 
-	for (i = 0, len = droids.length; i < len; ++i)
+	var defending = (gi.order === CAM_ORDER_DEFEND);
+	var track = (gi.order === CAM_ORDER_COMPROMISE);
+
+	for (var i = 0, len = healthyDroids.length; i < len; ++i)
 	{
-		droid = droids[i];
+		var droid = healthyDroids[i];
+		var vtolUnit = (droid.type === DROID && isVTOL(droid));
+
 		if (droid.player === CAM_HUMAN_PLAYER)
 		{
 			camDebug("Controlling a human player's droid");
 		}
+
 		//Rearm vtols.
-		if (droid.type === DROID && isVTOL(droid))
+		if (vtolUnit)
 		{
-			var arm = Math.floor(droid.weapons[0].armed);
+			var arm = droid.weapons[0].armed;
 			var isRearming = droid.order === DORDER_REARM;
-			var health = Math.floor(droid.health);
-			if ((arm < 1) || (isRearming && (arm < 100 || health < 100)))
+
+			if ((arm < 1) || (isRearming && (arm < 100 || droid.health < 100)))
 			{
 				var havePads = (countStruct("A0VtolPad", droid.player) > 0);
 				if (havePads && !isRearming)
@@ -2132,7 +2141,8 @@ function __camTacticsTickForGroup(group)
 		if (gi.order === CAM_ORDER_DEFEND)
 		{
 			// fall back to defense position
-			var dist = camDist(droid, gi.data.pos[0]);
+			var dPos = gi.data.pos[0];
+			var dist = camDist(droid.x, droid.y, dPos.x, dPos.y);
 			var radius = gi.data.radius;
 			if (!camDef(radius))
 			{
@@ -2145,8 +2155,6 @@ function __camTacticsTickForGroup(group)
 			}
 		}
 
-		//As of this refactor patrol groups can react to stuff within the
-		//tile scan limits in the attack code while waiting
 		if (gi.order === CAM_ORDER_PATROL)
 		{
 			if (!camDef(gi.data.interval))
@@ -2164,7 +2172,7 @@ function __camTacticsTickForGroup(group)
 				{
 					// find random new position to visit
 					var list = [];
-					for (j = 0, len2 = gi.data.pos.length; j < len2; ++j)
+					for (var j = 0, len2 = gi.data.pos.length; j < len2; ++j)
 					{
 						if (j !== gi.lastspot)
 						{
@@ -2184,44 +2192,42 @@ function __camTacticsTickForGroup(group)
 			}
 		}
 
-		if (camDef(target) && camDist(droid, target) >= __CAM_CLOSE_RADIUS)
+		if (camDef(target) && camDist(droid.x, droid.y, target.x, target.y) >= __CAM_CLOSE_RADIUS)
 		{
-			const SCAN_RANGE = __camScanRange(gi.order, droid.droidType);
-			const CLOSE_Z = 1;
+			var closeByObj;
 			var artilleryLike = (droid.isCB || droid.hasIndirect || droid.isSensor);
-			var defending = (gi.order === CAM_ORDER_DEFEND);
-			var closeBy = enumRange(droid.x, droid.y, SCAN_RANGE, CAM_HUMAN_PLAYER, false);
-			var closeByZ = [];
+			var closeBy = enumRange(droid.x, droid.y, __camScanRange(gi.order, droid.droidType), CAM_HUMAN_PLAYER, track);
+
+			if (closeBy.length > 0)
+			{
+				closeByObj = closeBy[0];
+			}
 
 			//We only care about explicit observe/attack if the object is close
 			//on the z coordinate. We should not chase things up or down hills
 			//that may be far away, at least path-wise.
-			if (!isVTOL(droid) && !artilleryLike)
+			if (closeByObj && !vtolUnit && !artilleryLike)
 			{
-				for (j = 0, len2 = closeBy.length; j < len2; ++j)
+				if (Math.abs(droid.z - closeByObj.z) > CLOSE_Z)
 				{
-					if (Math.abs(Math.floor(droid.z - closeBy[j].z)) <= CLOSE_Z)
-					{
-						closeByZ.push(closeBy[j]);
-					}
+					closeByObj = undefined;
 				}
-				closeBy = closeByZ.reverse();
 			}
 
-			if (!defending && closeBy.length > 0 && closeBy[0])
+			if (!defending && closeByObj)
 			{
 				if (droid.droidType === DROID_SENSOR)
 				{
-					orderDroidObj(droid, DORDER_OBSERVE, closeBy[0]);
+					orderDroidObj(droid, DORDER_OBSERVE, closeByObj);
 				}
 				else
 				{
-					orderDroidObj(droid, DORDER_ATTACK, closeBy[0]);
+					orderDroidObj(droid, DORDER_ATTACK, closeByObj);
 				}
 			}
 			else
 			{
-				if (defending || !(artilleryLike || isVTOL(droid)))
+				if (defending || !(artilleryLike || vtolUnit))
 				{
 					orderDroidLoc(droid, DORDER_MOVE, target.x, target.y);
 				}
