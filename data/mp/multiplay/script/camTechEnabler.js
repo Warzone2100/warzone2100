@@ -348,6 +348,15 @@ function grantTech(tech)
      }
 }
 
+//Automatically research all items for the player.
+function grantAllTech()
+{
+     for (var c = 0; c < maxPlayers; ++c)
+     {
+          completeAllResearch(c);
+     }
+}
+
 //Makes these items available for research.
 function enableTech(tech)
 {
