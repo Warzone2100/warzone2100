@@ -1,7 +1,6 @@
 
 const TECH_TWO = [
      "R-Comp-CommandTurret01",
-     "R-Comp-SynapticLink",
      "R-Cyborg-Metals01",
      "R-Cyborg-Metals02",
      "R-Cyborg-Metals03",
@@ -116,7 +115,6 @@ const TECH_THREE = [
      "R-Wpn-Rocket-Accuracy02",
      "R-Wpn-Rocket-ROF03",
      "R-Comp-CommandTurret01",
-     "R-Comp-SynapticLink",
      "R-Cyborg-Metals01",
      "R-Cyborg-Metals02",
      "R-Defense-Pillbox01",
