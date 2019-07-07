@@ -293,7 +293,7 @@ function eventGameLoaded()
 
 function eventStartLevel()
 {
-	const PLAYER_POWER = (difficulty === INSANE) ? 9000 : 5000;
+	const PLAYER_POWER = 5000;
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone"); //player lz
 	var enemyLz = getObject("COLandingZone");
