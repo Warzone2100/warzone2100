@@ -126,6 +126,8 @@ void addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
 void multiOptionsScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+void mpSetServerName(const char *hostname);
+const char *mpGetServerName();
 
 
 // ////////////////////////////////////////////////////////////////

@@ -165,6 +165,7 @@ static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static char tooltipbuffer[MaxGames][256] = {{'\0'}};
 static bool toggleFilter = true;	// Used to show all games or only games that are of the same version
+static char serverName[128];
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -854,6 +855,23 @@ void multiOptionsScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeig
 	psConScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
+/*!
+ * Set the server name
+ * \param hostname The hostname or IP address of the server to connect to
+ */
+void mpSetServerName(const char *hostname)
+{
+	sstrcpy(serverName, hostname);
+}
+
+/**
+ * @return The hostname or IP address of the server we will connect to.
+ */
+const char *mpGetServerName()
+{
+	return serverName;
+}
+
 static bool OptionsInet()			//internet options
 {
 	psConScreen = new W_SCREEN;
@@ -893,7 +911,7 @@ static bool OptionsInet()			//internet options
 	sEdInit.y = CON_IPY;
 	sEdInit.width = CON_NAMEBOXWIDTH;
 	sEdInit.height = CON_NAMEBOXHEIGHT;
-	sEdInit.pText = "";									//_("IP Address or Machine Name");
+	sEdInit.pText = serverName;
 	sEdInit.pBoxDisplay = intDisplayEditBox;
 	if (!widgAddEditBox(psConScreen, &sEdInit))
 	{
@@ -903,7 +921,7 @@ static bool OptionsInet()			//internet options
 	W_CONTEXT sContext;
 	sContext.xOffset	= 0;
 	sContext.yOffset	= 0;
-	sContext.mx			= 0;
+	sContext.mx			= CON_NAMEBOXWIDTH;
 	sContext.my			= 0;
 	widgGetFromID(psConScreen, CON_IP)->clicked(&sContext);
 
@@ -939,8 +957,6 @@ bool startConnectionScreen()
 
 void runConnectionScreen()
 {
-	static char addr[128];
-
 	W_SCREEN *curScreen = SettingsUp ? psConScreen : psWScreen;
 	WidgetTriggers const &triggers = widgRunScreen(curScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -963,10 +979,10 @@ void runConnectionScreen()
 		OptionsInet();
 		break;
 	case CON_OK:
-		sstrcpy(addr, widgGetString(psConScreen, CON_IP));
-		if (addr[0] == '\0')
+		sstrcpy(serverName, widgGetString(psConScreen, CON_IP));
+		if (serverName[0] == '\0')
 		{
-			sstrcpy(addr, "127.0.0.1");  // Default to localhost.
+			sstrcpy(serverName, "127.0.0.1");  // Default to localhost.
 		}
 
 		if (SettingsUp == true)
@@ -976,7 +992,7 @@ void runConnectionScreen()
 			SettingsUp = false;
 		}
 
-		joinGame(addr, 0);
+		joinGame(serverName, 0);
 		break;
 	case CON_IP_CANCEL:
 		if (SettingsUp == true)
