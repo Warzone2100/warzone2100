@@ -913,6 +913,11 @@ void intRemoveMessageView(bool animated)
 	{
 		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
 	}
+	else
+	{
+		const WzString dummy = "";
+		seq_RenderVideoToBuffer(dummy, SEQUENCE_KILL);
+	}
 
 	if (animated)
 	{
