@@ -1048,8 +1048,14 @@ CURSOR scroll()
 
 		// Scroll down or up
 		scrollDirUpDown += keyDown(KEY_UPARROW) - keyDown(KEY_DOWNARROW);
-
 	}
+
+//	Allow WSDA camera movment
+    // Scroll left or right
+    scrollDirLeftRight += keyDown(KEY_D) - keyDown(KEY_A);
+    // Scroll down or up
+    scrollDirUpDown += keyDown(KEY_W) - keyDown(KEY_S);
+
 	CLIP(scrollDirLeftRight, -1, 1);
 	CLIP(scrollDirUpDown,    -1, 1);
 
