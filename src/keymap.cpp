@@ -469,6 +469,13 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_X, KEYMAP_PRESSED, kf_FinishResearch,    N_("Complete current research"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_RevealMapAtPos,    N_("Reveal map at mouse position"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       N_("Trace a game object"));
+
+    // WASD Camera Movement
+    keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_W, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Move Camera Up"));
+    keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_S, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Move Camera Down"));
+    keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_A, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Move Camera Left"));
+    keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_D, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Move Camera Right"));
+
 	saveKeyMap();	// save out the default key mappings.
 }
 
