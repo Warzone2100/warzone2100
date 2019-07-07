@@ -136,6 +136,7 @@ bool loadConfig()
 	hostQuitConfirmation = ini.value("hostQuitConfirmation", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
 	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
+	mpSetServerName(ini.value("server_name").toString().toUtf8().constData());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
@@ -281,6 +282,7 @@ bool saveConfig()
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	ini.setValue("masterserver_name", NETgetMasterserverName());
 	ini.setValue("masterserver_port", NETgetMasterserverPort());
+	ini.setValue("server_name", mpGetServerName());
 	ini.setValue("gameserver_port", NETgetGameserverPort());
 	if (!bMultiPlayer)
 	{
