@@ -247,11 +247,7 @@ bool saveConfig()
 	ini.setValue("bpp", pie_GetVideoBufferDepth());
 	ini.setValue("fullscreen", war_getFullscreen());
 	ini.setValue("language", getLanguage());
-	// don't save out the cheat mode.
-	if (getDifficultyLevel() != DL_KILLER && getDifficultyLevel() != DL_TOUGH)
-	{
-		ini.setValue("difficulty", getDifficultyLevel());		// level
-	}
+	ini.setValue("difficulty", getDifficultyLevel());		// level
 	ini.setValue("cameraSpeed", war_GetCameraSpeed());	// camera speed
 	ini.setValue("radarJump", war_GetRadarJump());		// radar jump
 	ini.setValue("scrollEvent", war_GetScrollEvent());	// scroll event

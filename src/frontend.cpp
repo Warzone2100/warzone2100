@@ -173,8 +173,6 @@ static bool startTitleMenu()
 	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 
-	revertToNonCheatDifficulty();
-
 	return true;
 }
 
@@ -1590,8 +1588,6 @@ static char const *gameOptionsDifficultyString()
 	case DL_NORMAL: return _("Normal");
 	case DL_HARD: return _("Hard");
 	case DL_INSANE: return _("Insane");
-	case DL_TOUGH: return _("Tough");
-	case DL_KILLER: return _("Killer");
 	}
 	return _("Unsupported");
 }

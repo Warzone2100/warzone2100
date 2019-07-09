@@ -52,6 +52,7 @@
 #include "configuration.h"
 #include "console.h"
 #include "data.h"
+#include "difficulty.h" // for "double up" and "biffer baker" cheats
 #include "display.h"
 #include "display3d.h"
 #include "edit3d.h"
@@ -1044,6 +1045,9 @@ bool stageTwoInitialise()
 	int i;
 
 	debug(LOG_WZ, "== stageTwoInitialise ==");
+
+	// prevent "double up" and "biffer baker" cheats from messing up damage modifiers
+	resetDamageModifiers();
 
 	// make sure we clear on loading; this a bad hack to fix a bug when
 	// loading a savegame where we are building a lassat
