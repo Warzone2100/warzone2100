@@ -498,7 +498,7 @@ void kf_ToggleTeamChat()
 	}
 }
 // --------------------------------------------------------------------------
-void	kf_SetKillerLevel()
+void	kf_BifferBaker()
 {
 	char *cmsg;
 
@@ -509,7 +509,8 @@ void	kf_SetKillerLevel()
 		return;
 	}
 
-	setDifficultyLevel(DL_KILLER);
+	// player deals far more damage, and the enemy far less
+	setDamageModifiers(999, 1);
 	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Hard as nails!!!"));
 	sendTextMessage(cmsg, true);
@@ -589,7 +590,7 @@ void	kf_SetHardLevel()
 	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
-void	kf_SetToughUnitsLevel()
+void	kf_DoubleUp()
 {
 	char *cmsg;
 
@@ -599,8 +600,7 @@ void	kf_SetToughUnitsLevel()
 		noMPCheatMsg();
 		return;
 	}
-
-	setDifficultyLevel(DL_TOUGH);
+	setDamageModifiers(100, 50); // enemy damage halved
 	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Twice as nice!"));
 	sendTextMessage(cmsg, true);

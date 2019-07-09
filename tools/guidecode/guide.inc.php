@@ -3527,8 +3527,8 @@ Cheats marked with "&#10003;" can crash the game. Try to avoid using them.
 </td></tr><tr><td> <tt>work harder</tt> </td><td> Finishes all active research </td><td> 
 </td></tr><tr><td colspan="3"> 
 </td></tr><tr><td colspan="3"> <strong>Strength &amp; Damage</strong> 
-</td></tr><tr><td> <tt>biffer baker</tt> </td><td> Your units are stronger &amp; deal more damage (replaces previous difficulty) </td><td> 
-</td></tr><tr><td> <tt>double up</tt> </td><td> Your units are twice as strong (replaces previous difficulty) </td><td> 
+</td></tr><tr><td> <tt>biffer baker</tt> </td><td> Your units are stronger &amp; deal more damage </td><td>
+</td></tr><tr><td> <tt>double up</tt> </td><td> Your units are twice as strong </td><td>
 </td></tr><tr><td> <tt>get off my land</tt> </td><td> Kills all visible enemy units &amp; structures on the map </td><td> 
 </td></tr><tr><td> <tt>kill</tt> </td><td> Kills the selected units </td><td> 
 </td></tr><tr><td colspan="3"> 

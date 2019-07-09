@@ -26,16 +26,13 @@ enum DIFFICULTY_LEVEL
 	DL_EASY,
 	DL_NORMAL,
 	DL_HARD,
-	DL_INSANE,
-	DL_TOUGH,
-	DL_KILLER
+	DL_INSANE
 };
 
+void setDamageModifiers(int playerModifier, int enemyModifier);
 void setDifficultyLevel(DIFFICULTY_LEVEL lev);
 DIFFICULTY_LEVEL getDifficultyLevel();
-DIFFICULTY_LEVEL getLastNonCheatDifficultyLevel();
-bool isCheatDifficulty(DIFFICULTY_LEVEL lev);
-void revertToNonCheatDifficulty();
 int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
+void resetDamageModifiers();
 
 #endif // __INCLUDED_SRC_DIFFICULTY_H__
