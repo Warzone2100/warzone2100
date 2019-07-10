@@ -581,6 +581,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Unrecognised skirmish savegame name");
 			}
 			snprintf(saveGameName, sizeof(saveGameName), "%s/skirmish/%s.gam", SaveGamePath, token);
+			sstrcpy(sRequestResult, saveGameName); // hack to avoid crashes
 			SPinit();
 			bMultiPlayer = true;
 			game.type = SKIRMISH; // tutorial is skirmish for some reason
