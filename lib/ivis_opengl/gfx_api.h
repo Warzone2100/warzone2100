@@ -274,7 +274,7 @@ namespace gfx_api
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
-		virtual bool initialize(const backend_Impl_Factory& impl) = 0;
+		virtual bool initialize(const backend_Impl_Factory& impl, int32_t antialiasing) = 0;
 		virtual void flip(int clearMode) = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;

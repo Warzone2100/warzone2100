@@ -1919,7 +1919,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	cocoaSetupWZMenus();
 #endif
 
-	if (!gfx_api::context::get().initialize(SDL_gfx_api_Impl_Factory(WZwindow)))
+	if (!gfx_api::context::get().initialize(SDL_gfx_api_Impl_Factory(WZwindow), antialiasing))
 	{
 		debug(LOG_FATAL, "gfx_api::context::get().initialize failed");
 		SDL_Quit();
