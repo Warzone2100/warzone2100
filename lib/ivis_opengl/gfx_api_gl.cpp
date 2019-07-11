@@ -1429,7 +1429,7 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	debug(LOG_ERROR, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
 }
 
-bool gl_context::initialize(const gfx_api::backend_Impl_Factory& impl)
+bool gl_context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing)
 {
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();

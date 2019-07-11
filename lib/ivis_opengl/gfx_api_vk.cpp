@@ -245,21 +245,21 @@ static bool getInstanceLayerProperties(std::vector<VkLayerProperties> &output, P
 	return true;
 }
 
-VkSampleCountFlagBits getMaxUsableSampleCount(const vk::PhysicalDeviceProperties &physicalDeviceProperties)
+vk::SampleCountFlagBits getMaxUsableSampleCount(const vk::PhysicalDeviceProperties &physicalDeviceProperties)
 {
 	VkSampleCountFlags counts = std::min({
 		static_cast<VkSampleCountFlags>(physicalDeviceProperties.limits.framebufferColorSampleCounts),
 		static_cast<VkSampleCountFlags>(physicalDeviceProperties.limits.framebufferDepthSampleCounts),
 		static_cast<VkSampleCountFlags>(physicalDeviceProperties.limits.framebufferStencilSampleCounts)
 	});
-	if (counts & VK_SAMPLE_COUNT_64_BIT) { return VK_SAMPLE_COUNT_64_BIT; }
-	if (counts & VK_SAMPLE_COUNT_32_BIT) { return VK_SAMPLE_COUNT_32_BIT; }
-	if (counts & VK_SAMPLE_COUNT_16_BIT) { return VK_SAMPLE_COUNT_16_BIT; }
-	if (counts & VK_SAMPLE_COUNT_8_BIT) { return VK_SAMPLE_COUNT_8_BIT; }
-	if (counts & VK_SAMPLE_COUNT_4_BIT) { return VK_SAMPLE_COUNT_4_BIT; }
-	if (counts & VK_SAMPLE_COUNT_2_BIT) { return VK_SAMPLE_COUNT_2_BIT; }
+	if (counts & VK_SAMPLE_COUNT_64_BIT) { return vk::SampleCountFlagBits::e64; }
+	if (counts & VK_SAMPLE_COUNT_32_BIT) { return vk::SampleCountFlagBits::e32; }
+	if (counts & VK_SAMPLE_COUNT_16_BIT) { return vk::SampleCountFlagBits::e16; }
+	if (counts & VK_SAMPLE_COUNT_8_BIT) { return vk::SampleCountFlagBits::e8; }
+	if (counts & VK_SAMPLE_COUNT_4_BIT) { return vk::SampleCountFlagBits::e4; }
+	if (counts & VK_SAMPLE_COUNT_2_BIT) { return vk::SampleCountFlagBits::e2; }
 
-	return VK_SAMPLE_COUNT_1_BIT;
+	return vk::SampleCountFlagBits::e1;
 }
 
 vk::Format findDepthFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
@@ -1547,7 +1547,7 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(const gfx_api::state_des
 {
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
 	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, texture_desc, attribute_descriptions);
-	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, vk::SampleCountFlagBits::e1, vkDynLoader);
+	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader);
 	createdPipelines.emplace_back(createInfo, pipeline);
 	return new VkPSOId(createdPipelines.size() - 1);
 }
@@ -1562,25 +1562,29 @@ void VkRoot::rebuildPipelinesIfNecessary()
 		if (!rp_compat_info->isCompatibleWith(*pipeline.second->renderpass_compat))
 		{
 			delete pipeline.second;
-			pipeline.second = new VkPSO(dev, physDeviceProps.limits, pipeline.first, rp, rp_compat_info, vk::SampleCountFlagBits::e1, vkDynLoader);
+			pipeline.second = new VkPSO(dev, physDeviceProps.limits, pipeline.first, rp, rp_compat_info, msaaSamples, vkDynLoader);
 		}
 	}
 }
 
 void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat)
 {
-	const auto attachments =
-		std::array<vk::AttachmentDescription, 2>{
+	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
+
+	auto attachments =
+		std::vector<vk::AttachmentDescription>{
 		vk::AttachmentDescription{} // colorAttachment
 			.setFormat(swapchainFormat)
+			.setSamples(msaaSamples)
 			.setInitialLayout(vk::ImageLayout::eUndefined)
-			.setFinalLayout(vk::ImageLayout::ePresentSrcKHR)
+			.setFinalLayout((msaaEnabled) ? vk::ImageLayout::eColorAttachmentOptimal : vk::ImageLayout::ePresentSrcKHR)
 			.setLoadOp(vk::AttachmentLoadOp::eClear)
 			.setStoreOp(vk::AttachmentStoreOp::eStore)
 //			.setStencilLoadOp(vk::AttachmentLoadOp::eClear) // ?
 			.setStencilStoreOp(vk::AttachmentStoreOp::eStore),
 		vk::AttachmentDescription{} // depthAttachment
 			.setFormat(depthFormat)
+			.setSamples(msaaSamples)
 			.setInitialLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
 			.setFinalLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
 			.setLoadOp(vk::AttachmentLoadOp::eClear)
@@ -1588,6 +1592,20 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 			.setStencilLoadOp(vk::AttachmentLoadOp::eClear)
 			.setStencilStoreOp(vk::AttachmentStoreOp::eDontCare)
 	};
+	if (msaaEnabled)
+	{
+		attachments.push_back(
+			  vk::AttachmentDescription{} // colorAttachmentResolve
+			  .setFormat(swapchainFormat)
+			  .setSamples(vk::SampleCountFlagBits::e1)
+			  .setInitialLayout(vk::ImageLayout::eUndefined)
+			  .setFinalLayout(vk::ImageLayout::ePresentSrcKHR)
+			  .setLoadOp(vk::AttachmentLoadOp::eDontCare)
+			  .setStoreOp(vk::AttachmentStoreOp::eStore)
+			  .setStencilLoadOp(vk::AttachmentLoadOp::eDontCare)
+			  .setStencilStoreOp(vk::AttachmentStoreOp::eDontCare)
+		);
+	}
 	const size_t numColorAttachmentRef = 1;
 	const auto colorAttachmentRef =
 		std::array<vk::AttachmentReference, numColorAttachmentRef>{
@@ -1600,6 +1618,10 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 		vk::AttachmentReference{}
 		.setAttachment(1)
 		.setLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal);
+	const auto colorAttachmentResolveRef =
+		vk::AttachmentReference{}
+		.setAttachment(2)
+		.setLayout(vk::ImageLayout::eColorAttachmentOptimal);
 
 	const auto subpasses =
 		std::array<vk::SubpassDescription, 1> {
@@ -1608,6 +1630,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 			.setColorAttachmentCount(colorAttachmentRef.size())
 			.setPColorAttachments(colorAttachmentRef.data())
 			.setPDepthStencilAttachment(&depthStencilAttachmentRef)
+			.setPResolveAttachments((msaaEnabled) ? &colorAttachmentResolveRef : nullptr)
 	};
 
 	VkSubpassDependency dependency = {};
@@ -1928,6 +1951,13 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 	dev.destroyImage(depthStencilImage, nullptr, vkDynLoader);
 	depthStencilImage = vk::Image();
 
+	dev.destroyImageView(colorImageView, nullptr, vkDynLoader);
+	colorImageView = vk::ImageView();
+	dev.freeMemory(colorImageMemory, nullptr, vkDynLoader);
+	colorImageMemory = vk::DeviceMemory();
+	dev.destroyImage(colorImage, nullptr, vkDynLoader);
+	colorImage = vk::Image();
+
 	if (rp)
 	{
 		dev.destroyRenderPass(rp, nullptr, vkDynLoader);
@@ -2206,6 +2236,43 @@ bool VkRoot::createSwapchain()
 
 	buffering_mechanism::init(dev, allocator, MAX_FRAMES_IN_FLIGHT, queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
 
+	// createColorResources
+	vk::Format colorFormat = surfaceFormat.format;
+
+	colorImage = dev.createImage(
+		vk::ImageCreateInfo{}
+			.setFormat(colorFormat)
+			.setArrayLayers(1)
+			.setExtent(vk::Extent3D(swapchainSize.width, swapchainSize.height, 1))
+			.setImageType(vk::ImageType::e2D)
+			.setMipLevels(1)
+			.setSamples(msaaSamples)
+			.setTiling(vk::ImageTiling::eOptimal)
+			.setUsage(vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eColorAttachment)
+			.setSharingMode(vk::SharingMode::eExclusive)
+		, nullptr, vkDynLoader
+	);
+
+	const auto& colorImage_memreq = dev.getImageMemoryRequirements(colorImage, vkDynLoader);
+	colorImageMemory = dev.allocateMemory(
+		vk::MemoryAllocateInfo{}
+			.setAllocationSize(colorImage_memreq.size)
+			.setMemoryTypeIndex(findProperties(memprops, colorImage_memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal))
+		, nullptr, vkDynLoader
+	);
+
+	dev.bindImageMemory(colorImage, colorImageMemory, 0, vkDynLoader);
+
+	colorImageView = dev.createImageView(
+	   vk::ImageViewCreateInfo{}
+		   .setFormat(colorFormat)
+		   .setImage(colorImage)
+		   .setViewType(vk::ImageViewType::e2D)
+		   .setComponents(vk::ComponentMapping())
+		   .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1))
+		, nullptr, vkDynLoader
+	);
+
 	// createDepthStencilImage
 	vk::Format depthFormat = findDepthFormat(physicalDevice, vkDynLoader);
 
@@ -2216,7 +2283,7 @@ bool VkRoot::createSwapchain()
 										.setExtent(vk::Extent3D(swapchainSize.width, swapchainSize.height, 1))
 										.setImageType(vk::ImageType::e2D)
 										.setMipLevels(1)
-										.setSamples(vk::SampleCountFlagBits::e1)
+										.setSamples(msaaSamples)
 										.setTiling(vk::ImageTiling::eOptimal)
 										.setUsage(vk::ImageUsageFlagBits::eDepthStencilAttachment)
 										, nullptr, vkDynLoader);
@@ -2244,9 +2311,11 @@ bool VkRoot::createSwapchain()
 	createDefaultRenderpass(surfaceFormat.format, depthFormat);
 
 	// createFramebuffers()
+	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
 	std::transform(swapchainImageView.begin(), swapchainImageView.end(), std::back_inserter(fbo),
 				   [&](const vk::ImageView& imageView) {
-					   const auto &attachments = std::array<vk::ImageView, 2>{imageView, depthStencilView};
+					   const auto attachments = (msaaEnabled) ? std::vector<vk::ImageView>{colorImageView, depthStencilView, imageView}
+					   											: std::vector<vk::ImageView>{imageView, depthStencilView};
 					   return dev.createFramebuffer(
 													vk::FramebufferCreateInfo{}
 													.setAttachmentCount(attachments.size())
@@ -2289,7 +2358,7 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
-bool VkRoot::initialize(const gfx_api::backend_Impl_Factory& impl)
+bool VkRoot::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 
@@ -2390,6 +2459,42 @@ bool VkRoot::initialize(const gfx_api::backend_Impl_Factory& impl)
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
 	const auto& formatSupport = physicalDevice.getFormatProperties(vk::Format::eR8G8B8Unorm, vkDynLoader);
 	supports_rgb = bool(formatSupport.optimalTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage);
+
+	// convert antialiasing to vk::SampleCountFlagBits
+	if (antialiasing >= 64)
+	{
+		msaaSamples = vk::SampleCountFlagBits::e64;
+	}
+	else if (antialiasing >= 32)
+	{
+		msaaSamples = vk::SampleCountFlagBits::e32;
+	}
+	else if (antialiasing >= 16)
+	{
+		msaaSamples = vk::SampleCountFlagBits::e16;
+	}
+	else if (antialiasing >= 8)
+	{
+		msaaSamples = vk::SampleCountFlagBits::e8;
+	}
+	else if (antialiasing >= 4)
+	{
+		msaaSamples = vk::SampleCountFlagBits::e4;
+	}
+	else if (antialiasing >= 2)
+	{
+		msaaSamples = vk::SampleCountFlagBits::e2;
+	}
+	else
+	{
+		msaaSamples = vk::SampleCountFlagBits::e1;
+	}
+	vk::SampleCountFlagBits maxUsableSampleCount = getMaxUsableSampleCount(physDeviceProps);
+	if (static_cast<std::underlying_type<vk::SampleCountFlagBits>::type>(maxUsableSampleCount) < static_cast<std::underlying_type<vk::SampleCountFlagBits>::type>(msaaSamples))
+	{
+		msaaSamples = maxUsableSampleCount;
+	}
+	debug(LOG_3D, "Using sample count: %s", to_string(msaaSamples).c_str());
 
 	debugInfo.Output_SurfaceInformation(physicalDevice, surface, vkDynLoader);
 
@@ -2628,6 +2733,20 @@ void VkRoot::setupSwapchainImages()
 		.setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit)
 		, vkDynLoader
 	);
+
+	//
+	const auto imageMemoryBarriers_ColorImage = std::array<vk::ImageMemoryBarrier, 1> {
+		vk::ImageMemoryBarrier{}
+			.setOldLayout(vk::ImageLayout::eUndefined)
+			.setNewLayout(vk::ImageLayout::eColorAttachmentOptimal)
+			.setImage(colorImage)
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1))
+			.setDstAccessMask(vk::AccessFlagBits::eColorAttachmentRead | vk::AccessFlagBits::eColorAttachmentWrite)
+	};
+	internalCommandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eAllCommands, vk::PipelineStageFlagBits::eAllCommands,
+		vk::DependencyFlagBits{}, nullptr, nullptr, imageMemoryBarriers_ColorImage, vkDynLoader);
+
+	//
 	const auto imageMemoryBarriers_DepthStencilImage = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier{}
 			.setOldLayout(vk::ImageLayout::eUndefined)
@@ -2991,9 +3110,8 @@ int32_t VkRoot::get_context_value(const context_value property)
 		case MAX_TEXTURE_SIZE:
 			return physDeviceProps.limits.maxImageDimension2D;
 		case MAX_SAMPLES:
-			// TODO: support MSAA?: https://vulkan-tutorial.com/Multisampling
-			// return getMaxUsableSampleCount(physDeviceProps);
-			return 0;
+			// support MSAA: https://vulkan-tutorial.com/Multisampling
+			return static_cast<std::underlying_type<vk::SampleCountFlagBits>::type>(getMaxUsableSampleCount(physDeviceProps));
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
