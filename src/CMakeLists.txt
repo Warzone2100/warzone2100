@@ -699,6 +699,78 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			else()
 				message( WARNING "Unable to find windeployqt; installation may not included all required Qt libraries" )
 			endif()
+
+			if(WZ_ENABLE_BACKEND_VULKAN)
+				# Vulkan
+				if (DEFINED ENV{VULKAN_SDK} AND IS_DIRECTORY "$ENV{VULKAN_SDK}")
+					message( STATUS "VULKAN_SDK=$ENV{VULKAN_SDK}" )
+					file(TO_CMAKE_PATH "$ENV{VULKAN_SDK}" _VULKAN_SDK_PATH)
+
+					# Find the expected RunTimeInstaller folder
+					if(IS_DIRECTORY "${_VULKAN_SDK_PATH}/RunTimeInstaller")
+						# Copy and install the Vulkan loader as an app-local library
+
+						include(TargetArch)
+						target_architecture(CURRENT_TARGET_ARCHITECTURES)
+						list(LENGTH CURRENT_TARGET_ARCHITECTURES cmake_target_arch_len)
+
+						if(NOT "${cmake_target_arch_len}" STREQUAL "1")
+							message( WARNING "Detected more than one target architecture. This is not expected behavior when targeting Windows." )
+						endif()
+
+						set(_vulkan_loader_license "${_VULKAN_SDK_PATH}/RunTimeInstaller/VulkanRT-License.txt")
+
+						# Find the appropriate Vulkan loader (vulkan-1.dll) / PDB
+						set(_vulkan_loader_dll)
+						set(_vulkan_loader_dll_pdb)
+						if(CURRENT_TARGET_ARCHITECTURES MATCHES "x86_64")
+							set(_vulkan_loader_dll "${_VULKAN_SDK_PATH}/RunTimeInstaller/x64/vulkan-1.dll")
+							set(_vulkan_loader_dll_pdb "${_VULKAN_SDK_PATH}/Lib/vulkan-1.pdb")
+						elseif(CURRENT_TARGET_ARCHITECTURES MATCHES "i386")
+							set(_vulkan_loader_dll "${_VULKAN_SDK_PATH}/RunTimeInstaller/x86/vulkan-1.dll")
+							set(_vulkan_loader_dll_pdb "${_VULKAN_SDK_PATH}/Lib32/vulkan-1.pdb")
+						else()
+							message( WARNING "Currently-unsupported target architecture for vulkan-1.dll: \"${CURRENT_TARGET_ARCHITECTURES}\"; expecting x86_64 or i386" )
+						endif()
+
+						# Install the Vulkan loader (vulkan-1.dll)
+						if(_vulkan_loader_dll AND EXISTS "${_vulkan_loader_dll}")
+							message( STATUS "Vulkan loader (DLL): ${_vulkan_loader_dll}" )
+							install(FILES
+								"${_vulkan_loader_dll}"
+								COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+							)
+						else()
+							message( WARNING "vulkan-1.dll does not exist: \"${_vulkan_loader_dll}\"" )
+						endif()
+
+						# Install the associated PDB for the Vulkan loader (vulkan-1.pdb)
+						if(_vulkan_loader_dll_pdb AND EXISTS "${_vulkan_loader_dll_pdb}")
+							message( STATUS "Vulkan loader (PDB): ${_vulkan_loader_dll_pdb}" )
+							install(FILES
+								"${_vulkan_loader_dll_pdb}"
+								COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+							)
+						else()
+							message( WARNING "vulkan-1.pdb does not exist: \"${_vulkan_loader_dll_pdb}\"" )
+						endif()
+
+						# Install VulkanRT-License.txt
+						if(_vulkan_loader_license AND EXISTS "${_vulkan_loader_license}")
+							install(FILES
+								"${_vulkan_loader_license}"
+								COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+							)
+						else()
+							message( WARNING "VulkanRT license does not exist: \"${_vulkan_loader_license}\"" )
+						endif()
+					else()
+						message(WARNING "Failed to find expected \"RunTimeInstaller\" folder inside the VULKAN_SDK (\"$ENV{VULKAN_SDK}\"). The Windows installer will lack the Vulkan loader library.")
+					endif()
+				else()
+					message(WARNING "Vulkan backend is enabled, but the Vulkan SDK cannot be found (VULKAN_SDK=\"$ENV{VULKAN_SDK}\"). The Windows installer will lack the Vulkan loader library.")
+				endif()
+			endif()
 		else()
 			message( STATUS "CMAKE_CROSSCOMPILING is defined - skipping BundleUtilities" )
 		endif()
