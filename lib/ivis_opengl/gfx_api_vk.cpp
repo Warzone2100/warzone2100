@@ -2035,25 +2035,49 @@ bool VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reaso
 
 vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
 {
+	const auto desiredFormats = std::array<vk::SurfaceFormatKHR, 2> {
+		vk::SurfaceFormatKHR{ vk::Format::eB8G8R8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
+		vk::SurfaceFormatKHR{ vk::Format::eR8G8B8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear }
+	};
+
 	if(availableFormats.size() == 1
 	   && availableFormats[0].format == vk::Format::eUndefined)
 	{
 		// don't appear to be any preferred formats, so create one
 		vk::SurfaceFormatKHR format;
 		format.colorSpace = vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear;
-		format.format = vk::Format::eR8G8B8A8Unorm;
+		format.format = vk::Format::eB8G8R8A8Unorm;
 		return format;
 	}
 	else
 	{
-		for (const auto& availableFormat : availableFormats)
+
+		for (const auto& desiredFormat : desiredFormats)
 		{
-			if(availableFormat.format == vk::Format::eR8G8B8A8Unorm) // && availableFormat.colorSpace == vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear)
+			for (const auto& availableFormat : availableFormats)
 			{
-				return availableFormat;
+				if(availableFormat.format == desiredFormat.format && availableFormat.colorSpace == desiredFormat.colorSpace)
+				{
+					return availableFormat;
+				}
+			}
+		}
+
+
+		for (const auto& desiredFormat : desiredFormats)
+		{
+			for (const auto& availableFormat : availableFormats)
+			{
+				if(availableFormat.format == desiredFormat.format)
+				{
+					debug(LOG_3D, "Desired format + colorSpace is not supported. Selecting desired format (%s) with colorSpace: %s", to_string(desiredFormat.format).c_str(), to_string(availableFormat.colorSpace).c_str());
+					return availableFormat;
+				}
 			}
 		}
 	}
+
+	debug(LOG_3D, "Desired format is not supported. Selecting format: %s - %s", to_string(availableFormats[0].format).c_str(), to_string(availableFormats[0].colorSpace).c_str());
 	return availableFormats[0];
 }
 
