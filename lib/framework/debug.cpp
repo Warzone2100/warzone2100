@@ -531,9 +531,11 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
 			MessageBoxA(NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK | MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
+			char wbuf[1024];
+			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
 			int clickedIndex = \
 			                   cocoaShowAlert("Warzone has quit unexpectedly.",
-			                                  "Please check your logs and attach them along with a bug report. Thanks!",
+			                                  wbuf,
 			                                  2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
 			if (clickedIndex == 0)
 			{
