@@ -1578,6 +1578,18 @@ static SDL_WindowFlags SDL_backend(const video_backend& backend)
 	return SDL_WindowFlags{};
 }
 
+std::string to_string(const video_backend& backend)
+{
+	switch (backend)
+	{
+		case video_backend::opengl:
+			return "OpenGL";
+		case video_backend::vulkan:
+			return "Vulkan";
+	}
+	return "n/a";
+}
+
 // This stage, we handle display mode setting
 bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
@@ -1921,7 +1933,8 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 
 	if (!gfx_api::context::get().initialize(SDL_gfx_api_Impl_Factory(WZwindow), antialiasing))
 	{
-		debug(LOG_FATAL, "gfx_api::context::get().initialize failed");
+		debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend).c_str());
+
 		SDL_Quit();
 		exit(EXIT_FAILURE);
 	}
