@@ -962,7 +962,8 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		case KEY_TAB:
 			vk = INPBUF_TAB;
 			break;
-		case	KEY_RETURN:
+		case KEY_RETURN:
+		case SDLK_KP_ENTER:
 			vk = INPBUF_CR;
 			break;
 		case 	KEY_ESC:
