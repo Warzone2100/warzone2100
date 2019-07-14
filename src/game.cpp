@@ -6707,6 +6707,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 	bool HQ = false;
 
 	psLevel = levFindDataSet(game.map, &game.hash);
+	ASSERT_OR_RETURN(false, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/struct.bjo");
@@ -6907,6 +6908,7 @@ static void plotFeature(char *backDropSprite)
 	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
 
 	psLevel = levFindDataSet(game.map, &game.hash);
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/feat.bjo");

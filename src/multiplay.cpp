@@ -1619,6 +1619,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 		addConsoleMessage(_("Map was requested: SENDING MAP!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
+		ASSERT_OR_RETURN(false, mapData, "levFindDataSet failed for game.map: %s", game.map);
 		filename = mapData->realFileName;
 		debug(LOG_INFO, "Map was requested. Looking for %s", filename.c_str());
 	}
