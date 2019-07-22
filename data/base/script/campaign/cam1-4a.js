@@ -117,7 +117,6 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	const SCAVS = 7;
 	var startpos = getObject("StartPosition");
 	var lz = getObject("LandingZone1"); // will override later
 	var tent = getObject("TransporterEntry");
@@ -129,8 +128,8 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
-	setAlliance(NEW_PARADIGM, SCAVS, true);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
 	camSetEnemyBases({
 		"SouthScavBaseGroup": {

@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SCAVS = 7; //Scav player number
 const NEW_PARADIGM_RESEARCH = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade03",
 	"R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
@@ -253,7 +252,7 @@ function eventStartLevel()
 	});
 
 	//Make sure the New Paradigm and Scavs are allies
-	setAlliance(NEW_PARADIGM, SCAVS, true);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
 	//Get rid of the already existing crate and replace with another
 	camSafeRemoveObject("artifact1", false);
@@ -262,7 +261,7 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RESEARCH, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 
 	camSetEnemyBases({
 		"ScavMiddleGroup": {

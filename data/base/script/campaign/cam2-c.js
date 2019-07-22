@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const CIVILIAN = 7; //Civilian player number.
 var capturedCivCount; //How many civilians have been captured. 59 for defeat.
 var civilianPosIndex; //Current location of civilian groups.
 var shepardGroup; //Enemy group that protects civilians.
@@ -150,12 +149,12 @@ function captureCivilians()
 		var num = 1 + camRand(3);
 		for (i = 0; i < num; ++i)
 		{
-			addDroid(CIVILIAN, currPos.x, currPos.y, "Civilian",
+			addDroid(SCAV_7, currPos.x, currPos.y, "Civilian",
 					"B1BaBaPerson01", "BaBaLegs", "", "", "BabaMG");
 		}
 
 		//Only count civilians that are not in the the transporter base.
-		var civs = enumArea(0, 0, 35, mapHeight, CIVILIAN, false);
+		var civs = enumArea(0, 0, 35, mapHeight, SCAV_7, false);
 		//Move them
 		for (i = 0; i < civs.length; ++i)
 		{
@@ -185,7 +184,7 @@ function civilianOrders()
 {
 	var lz = getObject("startPosition");
 	var rescueSound = "pcv612.ogg";	//"Civilian Rescued".
-	var civs = enumDroid(CIVILIAN);
+	var civs = enumDroid(SCAV_7);
 	var rescued = false;
 
 	//Check if a civilian is close to a player droid.
@@ -218,7 +217,7 @@ function eventTransporterLanded(transport)
 {
 	var escaping = "pcv632.ogg"; //"Enemy escaping".
 	var position = getObject("COTransportPos");
-	var civs = enumRange(position.x, position.y, 15, CIVILIAN, false);
+	var civs = enumRange(position.x, position.y, 15, SCAV_7, false);
 
 	if (civs.length)
 	{
@@ -262,7 +261,7 @@ function extraVictoryCondition()
 	else
 	{
 		var lz = getObject("startPosition");
-		var civs = enumRange(lz.x, lz.y, 30, CIVILIAN, false);
+		var civs = enumRange(lz.x, lz.y, 30, SCAV_7, false);
 
 		for (var i = 0; i < civs.length; ++i)
 		{
@@ -300,8 +299,8 @@ function eventStartLevel()
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
-	setAlliance(THE_COLLECTIVE, CIVILIAN, true);
-	setAlliance(CAM_HUMAN_PLAYER, CIVILIAN, true);
+	setAlliance(THE_COLLECTIVE, SCAV_7, true);
+	setAlliance(CAM_HUMAN_PLAYER, SCAV_7, true);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	camSetEnemyBases({
