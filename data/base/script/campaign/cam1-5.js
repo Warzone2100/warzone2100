@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SCAVS = 7; // Scav player number
 const NEW_PARADIGM_RES = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
 	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
@@ -119,9 +118,9 @@ function camEnemyBaseEliminated_NPBaseGroup()
 	camEnableFactory("ScavSouthWestFactory");
 	camEnableFactory("ScavSouthEastFactory");
 
-	//All SCAVS on map attack
+	//Make all scavengers on map attack
 	camManageGroup(
-		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, SCAVS, false)),
+		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, SCAV_7, false)),
 		CAM_ORDER_ATTACK
 	);
 }
@@ -149,10 +148,10 @@ function eventStartLevel()
 	cameraTrack(transporter[0]);
 
 	//Make sure the New Paradigm and Scavs are allies
-	setAlliance(NEW_PARADIGM, SCAVS, true);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 
 
 	camSetEnemyBases({

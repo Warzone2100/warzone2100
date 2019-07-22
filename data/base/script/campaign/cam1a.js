@@ -26,7 +26,7 @@ camAreaEvent("launchScavAttack", function(droid)
 function runAway()
 {
 	var oilPatch = getObject("oilPatch");
-	var droids = enumRange(oilPatch.x, oilPatch.y, 7, 7, false);
+	var droids = enumRange(oilPatch.x, oilPatch.y, 7, SCAV_7, false);
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		pos: camMakePos("scavAttack1"),
 		fallback: camMakePos("retreat1"),
@@ -149,7 +149,7 @@ function eventStartLevel()
 		setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	}
 
-	setAlliance(6, 7, true);
+	setAlliance(SCAV_6, SCAV_7, true);
 
 	enableBaseStructures();
 	camCompleteRequiredResearch(PLAYER_RES, CAM_HUMAN_PLAYER);

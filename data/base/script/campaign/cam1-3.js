@@ -132,7 +132,7 @@ function camEnemyBaseEliminated_ScavBaseGroup()
 {
 	//make enemy easier to find if all his buildings destroyed
 	camManageGroup(
-		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, 7, false)),
+		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, SCAV_7, false)),
 		CAM_ORDER_ATTACK
 	);
 }
@@ -182,8 +182,8 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, 7);
-	setAlliance(1, 7, true);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
 	camSetEnemyBases({
 		"ScavBaseGroup": {

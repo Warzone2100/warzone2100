@@ -181,9 +181,9 @@ function eventStartLevel()
 
 	setReinforcementTime(-1);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
-	setAlliance(NEW_PARADIGM, 7, true);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, 7);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {
@@ -215,7 +215,7 @@ function eventStartLevel()
 			detectMsg: "C1C_BASE5",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv391.ogg",
-			player: 7 // hence discriminate by player filter
+			player: SCAV_7 // hence discriminate by player filter
 		},
 		"NPEastBaseGroup": {
 			cleanup: "NPEastBase",

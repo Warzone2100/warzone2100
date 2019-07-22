@@ -7,7 +7,7 @@ var NPScout; // Sensor scout
 camAreaEvent("AttackArea1", function(droid)
 {
 	queue("camCallOnce", camSecondsToMilliseconds(2), "doNPRetreat");
-	camManageGroup(camMakeGroup("enemy1Force1", 6), CAM_ORDER_ATTACK, {
+	camManageGroup(camMakeGroup("enemy1Force1", SCAV_6), CAM_ORDER_ATTACK, {
 		pos: camMakePos("enemy1Force1Pos"),
 		fallback: camMakePos("enemy1Force1Fallback"),
 		morale: 50
@@ -76,9 +76,9 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
-	setAlliance(NEW_PARADIGM, 6, true);
-	setAlliance(NEW_PARADIGM, 7, true);
-	setAlliance(6, 7, true);
+	setAlliance(NEW_PARADIGM, SCAV_6, true);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
+	setAlliance(SCAV_6, SCAV_7, true);
 
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
