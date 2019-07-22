@@ -156,6 +156,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Running CMake configure (to
 execute_process(
 	COMMAND ${CMAKE_COMMAND}
 		"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+		-DGLEW_USE_STATIC_LIBS=ON
 		${_additional_configure_arguments}
 		-G Xcode
 		"${_repoBase}"
