@@ -176,7 +176,6 @@ function __camPickTarget(group)
 	var targets = [];
 	var gi = __camGroupInfo[group];
 	var droids = enumGroup(group);
-	var radius = 0;
 	switch(gi.order)
 	{
 		case CAM_ORDER_ATTACK:
@@ -196,7 +195,7 @@ function __camPickTarget(group)
 					{
 						break;
 					}
-					radius = gi.data.radius;
+					var radius = gi.data.radius;
 					if (!camDef(radius))
 					{
 						radius = __CAM_PLAYER_BASE_RADIUS;
@@ -242,7 +241,8 @@ function __camPickTarget(group)
 				camDebug("'pos' is required for DEFEND order");
 				return undefined;
 			}
-			radius = gi.data.radius;
+			var defendPos = gi.data.pos[0];
+			var radius = gi.data.radius;
 			if (!camDef(radius))
 			{
 				radius = __CAM_DEFENSE_RADIUS;
@@ -646,7 +646,6 @@ function __camCheckGroupMorale(group)
 	// morale is %.
 	var msize = Math.floor((100 - gi.data.morale) * gi.count / 100);
 	var gsize = groupSize(group);
-	var temp;
 	switch (gi.order)
 	{
 		case CAM_ORDER_ATTACK:
@@ -657,7 +656,7 @@ function __camCheckGroupMorale(group)
 			camTrace("Group", group, "falls back");
 			gi.order = CAM_ORDER_DEFEND;
 			// swap pos and fallback
-			temp = gi.data.pos;
+			var temp = gi.data.pos;
 			gi.data.pos = [ camMakePos(gi.data.fallback) ];
 			gi.data.fallback = temp;
 			// apply orders instantly
@@ -671,7 +670,7 @@ function __camCheckGroupMorale(group)
 			camTrace("Group", group, "restores");
 			gi.order = CAM_ORDER_ATTACK;
 			// swap pos and fallback
-			temp = gi.data.pos;
+			var temp = gi.data.pos;
 			gi.data.pos = gi.data.fallback;
 			gi.data.fallback = temp[0];
 			// apply orders instantly

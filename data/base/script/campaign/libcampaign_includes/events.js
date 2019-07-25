@@ -44,7 +44,6 @@ function cam_eventCheatMode(entered)
 
 function cam_eventChat(from, to, message)
 {
-	var i = 0;
 	if (!__camCheatMode)
 	{
 		return;
@@ -84,9 +83,10 @@ function cam_eventChat(from, to, message)
 			{
 				break;
 			}
-			for (i = 0; i < research.length; ++i)
+			for (var i = 0, len = research.length; i < len; ++i)
 			{
-				completeResearch(research[i].name, CAM_HUMAN_PLAYER);
+				var researchName = research[i].name;
+				completeResearch(researchName, CAM_HUMAN_PLAYER);
 			}
 		}
 	}
