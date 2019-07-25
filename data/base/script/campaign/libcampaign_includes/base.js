@@ -47,10 +47,6 @@ function camSetEnemyBases(bases)
 	{
 		var bi = __camEnemyBases[blabel];
 		var obj = getObject(blabel);
-		//define these here to avoid linter warnings
-		var idx = 0;
-		var len = 0;
-		var s;
 		if (camDef(obj) && obj) // group already defined
 		{
 			if (!camDef(bi.group))
@@ -61,9 +57,9 @@ function camSetEnemyBases(bases)
 			{
 				var structures = enumGroup(bi.group);
 				addLabel({ type: GROUP, id: bi.group }, blabel);
-				for (idx = 0, len = structures.length; idx < len; ++idx)
+				for (var idx = 0, len = structures.length; idx < len; ++idx)
 				{
-					s = structures[idx];
+					var s = structures[idx];
 					if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 					{
 						continue;
@@ -86,7 +82,7 @@ function camSetEnemyBases(bases)
 						x2: 0, y2: 0
 					};
 					// smallest rectangle to contain all objects
-					for (idx = 0, len = objs.length; idx < len; ++idx)
+					for (var idx = 0, len = objs.length; idx < len; ++idx)
 					{
 						var o = objs[idx];
 						if (o.x < a.x) a.x = o.x;
@@ -112,9 +108,9 @@ function camSetEnemyBases(bases)
 			bi.group = camNewGroup();
 			addLabel({ type: GROUP, id: bi.group }, blabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
-			for (idx = 0, len = structs.length; idx < len; ++idx)
+			for (var idx = 0, len = structs.length; idx < len; ++idx)
 			{
-				s = structs[idx];
+				var s = structs[idx];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 				{
 					continue;
@@ -258,9 +254,6 @@ function __camCheckBaseEliminated(group)
 	{
 		var bi = __camEnemyBases[blabel];
 		var leftovers = [];
-		var objInfo = {};
-		var i = 0;
-		var j = 0;
 		if (bi.eliminated || (bi.group !== group))
 		{
 			continue;
@@ -272,22 +265,24 @@ function __camCheckBaseEliminated(group)
 		if (camDef(bi.cleanup))
 		{
 			var objects = enumArea(bi.cleanup, ENEMIES, false);
-			for (i = 0, j = objects.length; i < j; ++i)
+			for (var i = 0, len = objects.length; i < len; ++i)
 			{
-				objInfo = {
-					type: objects[i].type,
-					player: objects[i].player,
-					id: objects[i].id
+				var object = objects[i];
+				var objInfo = {
+					type: object.type,
+					player: object.player,
+					id: object.id
 				};
 				if (__camShouldDestroyLeftover(objInfo, bi.player))
 				{
-					leftovers.push(objects[i]);
+					leftovers.push(object);
 				}
 			}
-			for (i = 0, j = leftovers.length; i < j; i++)
+			for (var i = 0, len = leftovers.length; i < len; i++)
 			{
 				// remove with special effect
-				camSafeRemoveObject(leftovers[i], true);
+				var leftover = leftovers[i];
+				camSafeRemoveObject(leftover, true);
 			}
 			if (camDef(bi.eliminateSnd))
 			{

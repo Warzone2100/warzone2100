@@ -295,7 +295,6 @@ function __camVictoryOffworld()
 	var forceLZ = camDef(__camVictoryData.retlz) ? __camVictoryData.retlz : false;
 	var destroyAll = camDef(__camVictoryData.annihilate) ? __camVictoryData.annihilate : false;
 	var elimBases = camDef(__camVictoryData.eliminateBases) ? __camVictoryData.eliminateBases : false;
-	var pos;
 
 	if (camCheckExtraObjective() && camAllArtifactsPickedUp())
 	{
@@ -356,7 +355,7 @@ function __camVictoryOffworld()
 				}
 				if (__camRTLZTicker % 30 === 0) // every 30 seconds
 				{
-					pos = camMakePos(lz);
+					var pos = camMakePos(lz);
 					playSound("pcv427.ogg", pos.x, pos.y, 0);
 					console(_("Return to LZ"));
 				}
@@ -372,7 +371,7 @@ function __camVictoryOffworld()
 		}
 		if (__camLZCompromisedTicker % 30 === 1) // every 30 seconds
 		{
-			pos = camMakePos(lz);
+			var pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);
 			setReinforcementTime(LZ_COMPROMISED_TIME);
 		}
@@ -385,7 +384,7 @@ function __camVictoryOffworld()
 	else if (__camLZCompromisedTicker > 0)
 	{
 		camTrace("LZ clear");
-		pos = camMakePos(lz);
+		var pos = camMakePos(lz);
 		playSound("lz-clear.ogg", pos.x, pos.y, 0);
 		setReinforcementTime(__camVictoryData.reinforcements);
 		__camLZCompromisedTicker = 0;
