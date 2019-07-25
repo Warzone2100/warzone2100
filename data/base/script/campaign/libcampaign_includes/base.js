@@ -76,6 +76,7 @@ function camSetEnemyBases(bases)
 				var objs = enumGroup(bi.group);
 				if (objs.length > 0)
 				{
+					const OFFSET = 2; // increases size of the auto-detected base area a bit
 					var a = {
 						type: AREA,
 						x: mapWidth, y: mapHeight,
@@ -90,8 +91,7 @@ function camSetEnemyBases(bases)
 						if (o.x > a.x2) a.x2 = o.x;
 						if (o.y > a.y2) a.y2 = o.y;
 					}
-					// but a bit wider
-					a.x -= 2; a.y -= 2; a.x2 += 2; a.y2 += 2;
+					a.x -= OFFSET; a.y -= OFFSET; a.x2 += OFFSET; a.y2 += OFFSET;
 					camTrace("Auto-detected cleanup area for", blabel, ":", a.x, a.y, a.x2, a.y2);
 					bi.cleanup = "__cam_enemy_base_cleanup__" + blabel;
 					addLabel(a, bi.cleanup);
@@ -170,7 +170,7 @@ function camDetectEnemyBase(blabel)
 	}
 	if (camDef(bi.detectMsg))
 	{
-		hackAddMessage(bi.detectMsg, PROX_MSG, 0, false);
+		hackAddMessage(bi.detectMsg, PROX_MSG, CAM_HUMAN_PLAYER, false);
 	}
 	var callback = __camGlobalContext()["camEnemyBaseDetected_" + blabel];
 	if (camDef(callback))

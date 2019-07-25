@@ -344,6 +344,7 @@ function __camVictoryOffworld()
 
 			if (!destroyAll || (forceLZ && !enemyLen))
 			{
+				const REMIND_RETURN = 30; // every X seconds
 				if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
 				{
 					camTrace("Return to LZ message displayed");
@@ -353,7 +354,7 @@ function __camVictoryOffworld()
 						hackAddMessage(__camVictoryData.message, PROX_MSG, CAM_HUMAN_PLAYER, false);
 					}
 				}
-				if (__camRTLZTicker % 30 === 0) // every 30 seconds
+				if (__camRTLZTicker % REMIND_RETURN === 0)
 				{
 					var pos = camMakePos(lz);
 					playSound("pcv427.ogg", pos.x, pos.y, 0);
@@ -365,11 +366,12 @@ function __camVictoryOffworld()
 	}
 	if (enumArea(lz, ENEMIES, false).length > 0)
 	{
+		const REMIND_COMPROMISED = 30; // every X seconds
 		if (__camLZCompromisedTicker === 0)
 		{
 			camTrace("LZ compromised");
 		}
-		if (__camLZCompromisedTicker % 30 === 1) // every 30 seconds
+		if (__camLZCompromisedTicker % REMIND_COMPROMISED === 1)
 		{
 			var pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);

@@ -6,25 +6,11 @@
 //Play a random laugh.
 function camNexusLaugh()
 {
-	if (camRand(101) < 45)
+	const LAUGH_CHANCE = 45;
+	if (camRand(100) < LAUGH_CHANCE)
 	{
-		var rnd = camRand(3) + 1;
-		var snd;
-
-		if (rnd === 0)
-		{
-			snd = LAUGH1;
-		}
-		else if (rnd === 1)
-		{
-			snd = LAUGH2;
-		}
-		else
-		{
-			snd = LAUGH3;
-		}
-
-		playSound(snd);
+		const LAUGHS = [LAUGH1, LAUGH2, LAUGH3];
+		playSound(LAUGHS[camRand(LAUGHS.length)]);
 	}
 }
 
@@ -85,8 +71,11 @@ function camHackIntoPlayer(player, to)
 		__camLastNexusAttack = 0;
 	}
 
+	const HACK_CHANCE = 25;
+	const TARGET_UNIT_CHANCE = 40;
+	const HACK_DELAY_TIME = camSecondsToMilliseconds(5); //Allows another hack attempt after X seconds.
 	var tmp = [];
-	if (camRand(100) < 40)
+	if (camRand(100) < TARGET_UNIT_CHANCE)
 	{
 		tmp = enumDroid(player).filter(function(d) {
 			return !camIsTransporter(d);
@@ -97,10 +86,10 @@ function camHackIntoPlayer(player, to)
 		//Has explicit chances to target factories or research labs.
 		switch (camRand(8))
 		{
-			case 0: tmp = enumStruct(player, "A0LightFactory").filter(function(s) { return (s.status === BUILT); }); break;
-			case 1: tmp = enumStruct(player, "A0CyborgFactory").filter(function(s) { return (s.status === BUILT); }); break;
-			case 2: tmp = enumStruct(player, "A0VTolFactory1").filter(function(s) { return (s.status === BUILT); }); break;
-			case 3: tmp = enumStruct(player, "A0ResearchFacility").filter(function(r) { return (r.status === BUILT); }); break;
+			case 0: tmp = enumStruct(player, FACTORY).filter(function(s) { return (s.status === BUILT); }); break;
+			case 1: tmp = enumStruct(player, CYBORG_FACTORY).filter(function(s) { return (s.status === BUILT); }); break;
+			case 2: tmp = enumStruct(player, VTOL_FACTORY).filter(function(s) { return (s.status === BUILT); }); break;
+			case 3: tmp = enumStruct(player, RESEARCH_LAB).filter(function(r) { return (r.status === BUILT); }); break;
 			default: //do nothing
 		}
 		if (tmp.length === 0)
@@ -113,10 +102,10 @@ function camHackIntoPlayer(player, to)
 		return;
 	}
 
-	if (__camLastNexusAttack === 0 || (gameTime > (__camLastNexusAttack + 5000)) && (camRand(100) < 25))
+	if (__camLastNexusAttack === 0 || (gameTime > (__camLastNexusAttack + HACK_DELAY_TIME)) && (camRand(100) < HACK_CHANCE))
 	{
+		const GIFT_CHANCE = 70; //Else neutralized
 		var obj;
-		var steal = true;
 		var objects;
 
 		//Try stealing the HQ first.
@@ -126,7 +115,6 @@ function camHackIntoPlayer(player, to)
 		}
 		else
 		{
-			steal = (camRand(100) < 70) ? true : false;
 			objects = tmp;
 		}
 
@@ -138,7 +126,7 @@ function camHackIntoPlayer(player, to)
 
 		obj = objects[camRand(objects.length)];
 
-		if (steal === true)
+		if (camRand(100) < GIFT_CHANCE)
 		{
 			camTrace("Hacking " + obj.name + " at (x,y): " + obj.x + " " + obj.y);
 			if (!donateObject(obj, to))

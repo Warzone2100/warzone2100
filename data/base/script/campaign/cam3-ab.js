@@ -112,9 +112,9 @@ function nexusManufacture()
 		return;
 	}
 	var factoryType = [
-		{structure: "A0LightFactory", temps: [cTempl.nxmrailh, cTempl.nxmlinkh, cTempl.nxmscouh, cTempl.nxlflash,]},
-		{structure: "A0CyborgFactory", temps: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,]},
-		{structure: "A0VTolFactory1", temps: [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxmheapv,]},
+		{structure: FACTORY, temps: [cTempl.nxmrailh, cTempl.nxmlinkh, cTempl.nxmscouh, cTempl.nxlflash,]},
+		{structure: CYBORG_FACTORY, temps: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,]},
+		{structure: VTOL_FACTORY, temps: [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxmheapv,]},
 	];
 
 	for (var i = 0; i < factoryType.length; ++i)
