@@ -203,7 +203,8 @@ function camCountStructuresInArea(lab, player)
 	var ret = 0;
 	for (var i = 0, l = list.length; i < l; ++i)
 	{
-		if (list[i].type === STRUCTURE && list[i].stattype !== WALL && list[i].status === BUILT)
+		var object = list[i];
+		if (object.type === STRUCTURE && object.stattype !== WALL && object.status === BUILT)
 		{
 			++ret;
 		}

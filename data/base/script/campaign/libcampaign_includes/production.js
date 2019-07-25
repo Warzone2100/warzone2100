@@ -91,7 +91,8 @@ function camSetFactoryData(flabel, fdata)
 	}
 	for (var i = 0, l = droids.length; i < l; ++i)
 	{
-		groupAdd(fi.group, droids[i]);
+		var droid = droids[i];
+		groupAdd(fi.group, droid);
 	}
 	if (!camDef(fi.data.count))
 	{

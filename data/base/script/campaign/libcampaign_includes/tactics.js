@@ -191,6 +191,7 @@ function __camPickTarget(group)
 			{
 				for (var i = 0; i < gi.data.pos.length; ++i)
 				{
+					var compromisePos = gi.data.pos[i];
 					if (targets.length > 0)
 					{
 						break;
@@ -200,8 +201,8 @@ function __camPickTarget(group)
 					{
 						radius = __CAM_PLAYER_BASE_RADIUS;
 					}
-					targets = enumRange(gi.data.pos[i].x,
-					                    gi.data.pos[i].y,
+					targets = enumRange(compromisePos.x,
+					                    compromisePos.y,
 					                    radius,
 					                    CAM_HUMAN_PLAYER, false);
 				}
@@ -247,7 +248,7 @@ function __camPickTarget(group)
 			{
 				radius = __CAM_DEFENSE_RADIUS;
 			}
-			if (camDef(gi.target) && camDist(gi.target, gi.data.pos[0]) < radius)
+			if (camDef(gi.target) && camDist(gi.target, defendPos) < radius)
 			{
 				targets = enumRange(gi.target.x, gi.target.y,
 				                    __CAM_TARGET_TRACKING_RADIUS,
@@ -255,12 +256,11 @@ function __camPickTarget(group)
 			}
 			if (targets.length === 0)
 			{
-				targets = enumRange(gi.data.pos[0].x, gi.data.pos[0].y,
-				                    radius, CAM_HUMAN_PLAYER, false);
+				targets = enumRange(defendPos.x, defendPos.y, radius, CAM_HUMAN_PLAYER, false);
 			}
 			if (targets.length === 0)
 			{
-				targets = [ gi.data.pos[0] ];
+				targets = [ defendPos ];
 			}
 			break;
 		default:
@@ -289,12 +289,13 @@ function __camTacticsTick()
 		if (groupSize(group) === 0)
 		{
 			var remove = true;
+			var removable = __camGroupInfo[group].data.removable;
 			//Useful if the group has manual management (seen in cam1-3 script).
-			if (camDef(__camGroupInfo[group].data.removable) && __camGroupInfo[group].data.removable === false)
+			if (camDef(removable) && !removable)
 			{
 				remove = false;
 			}
-			if (remove === true)
+			if (remove)
 			{
 				camStopManagingGroup(group);
 				break;
@@ -343,7 +344,8 @@ function __camCountHQ(player)
 	];
 	for (var i = 0, l = HQ_TYPE.length; i < l; ++i)
 	{
-		count = count + countStruct(HQ_TYPE[i], player);
+		var hq = HQ_TYPE[i];
+		count = count + countStruct(hq, player);
 	}
 
 	return count;
@@ -572,7 +574,7 @@ function __camTacticsTickForGroup(group)
 					{
 						if (j !== gi.lastspot)
 						{
-							list[list.length] = j;
+							list.push(j);
 						}
 					}
 					gi.lastspot = list[camRand(list.length)];

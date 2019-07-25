@@ -43,22 +43,21 @@ function camSendReinforcement(player, position, list, kind, data)
 			var droids = [];
 			for (var i = 0, l = list.length; i < l; ++i)
 			{
-				var prop = __camChangePropulsionOnDiff(list[i].prop);
-				droids[droids.length] = addDroid(player, pos.x, pos.y,
-				                        "Reinforcement", list[i].body,
-				                        prop, "", "", list[i].weap);
+				var template = list[i];
+				var prop = __camChangePropulsionOnDiff(template.prop);
+				droids.push(addDroid(player, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap));
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
 		case CAM_REINFORCE_TRANSPORT:
-			__camTransporterQueue[__camTransporterQueue.length] = {
+			__camTransporterQueue.push({
 				player: player,
 				position: position,
 				list: list,
 				data: data,
 				order: order,
 				order_data: order_data
-			};
+			});
 			__camDispatchTransporterSafe();
 			break;
 		default:
