@@ -27,7 +27,7 @@ function camManageTrucks(player)
 function camQueueBuilding(player, stat, pos)
 {
 	var ti = __camTruckInfo[player];
-	ti.queue[ti.queue.length] = { stat: stat, pos: camMakePos(pos) };
+	ti.queue.push({ stat: stat, pos: camMakePos(pos) });
 }
 
 

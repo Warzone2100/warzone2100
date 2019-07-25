@@ -84,10 +84,9 @@ function __camDispatchTransporterUnsafe()
 	var droids = [];
 	for (var i = 0, l = list.length; i < l; ++i)
 	{
-		var prop = __camChangePropulsionOnDiff(list[i].prop);
-		var droid = addDroid(player, -1, -1,
-		                     "Reinforcement", list[i].body,
-		                     prop, "", "", list[i].weap);
+		var template = list[i];
+		var prop = __camChangePropulsionOnDiff(template.prop);
+		var droid = addDroid(player, -1, -1, "Reinforcement", template.body, prop, "", "", template.weap);
 		droids.push(droid);
 		addDroidToTransporter(trans, droid);
 	}

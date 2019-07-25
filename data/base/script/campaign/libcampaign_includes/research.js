@@ -11,8 +11,9 @@ function camEnableRes(list, player)
 {
 	for (var i = 0, l = list.length; i < l; ++i)
 	{
-		enableResearch(list[i], player);
-		completeResearch(list[i], player);
+		var research = list[i];
+		enableResearch(research, player);
+		completeResearch(research, player);
 	}
 }
 
@@ -27,15 +28,16 @@ function camCompleteRequiredResearch(items, player)
 
 	for (var i = 0, l = items.length; i < l; ++i)
 	{
-		dump("Searching for required research of item: " + items[i]);
-		var reqRes = findResearch(items[i], player).reverse();
+		var research = items[i];
+		dump("Searching for required research of item: " + research);
+		var reqRes = findResearch(research, player).reverse();
 
 		if (reqRes.length === 0)
 		{
 			//HACK: autorepair like upgrades don't work after mission transition.
-			if (items[i] === "R-Sys-NEXUSrepair")
+			if (research === "R-Sys-NEXUSrepair")
 			{
-				completeResearch("R-Sys-NEXUSrepair", player, true);
+				completeResearch(research, player, true);
 			}
 			continue;
 		}
@@ -43,9 +45,10 @@ function camCompleteRequiredResearch(items, player)
 		reqRes = camRemoveDuplicates(reqRes);
 		for (var s = 0, r = reqRes.length; s < r; ++s)
 		{
-			dump("	Found: " + reqRes[s].name);
-			enableResearch(reqRes[s].name, player);
-			completeResearch(reqRes[s].name, player);
+			var researchReq = reqRes[s].name;
+			dump("	Found: " + researchReq);
+			enableResearch(researchReq, player);
+			completeResearch(researchReq, player);
 		}
 	}
 }

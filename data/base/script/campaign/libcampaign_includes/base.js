@@ -159,7 +159,8 @@ function camDetectEnemyBase(blabel)
 			var objs = enumGroup(bi.group);
 			if (objs.length > 0)
 			{
-				pos = camMakePos(objs[0]);
+				var firstObject = objs[0];
+				pos = camMakePos(firstObject);
 			}
 		}
 		if (camDef(pos))

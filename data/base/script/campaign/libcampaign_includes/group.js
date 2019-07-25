@@ -30,7 +30,8 @@ function camInNeverGroup(droid)
 	}
 	for (var i = 0, l = __camNeverGroupDroids.length; i < l; ++i)
 	{
-		if (droid.id === __camNeverGroupDroids[i])
+		var neverDroidID = __camNeverGroupDroids[i];
+		if (droid.id === neverDroidID)
 		{
 			return true;
 		}

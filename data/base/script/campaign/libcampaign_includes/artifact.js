@@ -63,7 +63,8 @@ function camGetArtifacts()
 	var camArti = [];
 	for (var alabel in __camArtifacts)
 	{
-		if (camDef(__camArtifacts[alabel]))
+		var artifact = __camArtifacts[alabel];
+		if (camDef(artifact))
 		{
 			if (getObject(__camGetArtifactLabel(alabel)))
 			{
@@ -114,7 +115,8 @@ function __camCheckPlaceArtifact(obj)
 		camTrace("Placing multi-tech granting artifact");
 		for (var i = 0; i < ai.tech.length; ++i)
 		{
-			camTrace(i, ":", ai.tech[i]);
+			var techString = ai.tech[i];
+			camTrace(i, ":", techString);
 		}
 	}
 	else
@@ -150,7 +152,8 @@ function __camPickupArtifact(artifact)
 	{
 		for (var i = 0; i < ai.tech.length; ++i)
 		{
-			enableResearch(ai.tech[i]);
+			var techString = ai.tech[i];
+			enableResearch(techString);
 		}
 	}
 	else
@@ -188,7 +191,8 @@ function __camLetMeWinArtifacts()
 			{
 				for (var i = 0; i < ai.tech.length; ++i)
 				{
-					enableResearch(ai.tech[i]);
+					var techString = ai.tech[i];
+					enableResearch(techString);
 				}
 			}
 			else

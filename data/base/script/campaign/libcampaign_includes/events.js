@@ -299,7 +299,8 @@ function cam_eventGameLoaded()
 	//missions or else it reverts to the original texture.
 	for (var i = 0, l = SCAV_KEVLAR_MISSIONS.length; i < l; ++i)
 	{
-		if (__camNextLevel === SCAV_KEVLAR_MISSIONS[i])
+		var mission = SCAV_KEVLAR_MISSIONS[i];
+		if (__camNextLevel === mission)
 		{
 			if (tilesetType === "ARIZONA")
 			{
