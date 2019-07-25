@@ -52,7 +52,10 @@ function __camSpawnVtols()
 		return;
 	}
 
-	var amount = 5 + camRand(2);
+	const MIN_VTOL_AMOUNT = 5;
+	const MAX_RANDOM_VTOL_ADDITIONS = 2;
+
+	var amount = MIN_VTOL_AMOUNT + camRand(MAX_RANDOM_VTOL_ADDITIONS + 1);
 	var droids = [];
 	var pos;
 
@@ -136,6 +139,8 @@ function __camRetreatVtols()
 		camDef(__camVtolExitPosition.y) &&
 		countStruct("A0VtolPad", __camVtolPlayer) <= 0)
 	{
+		const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
+		const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
 		var vtols = enumDroid(__camVtolPlayer).filter(function(obj) {
 			return isVTOL(obj);
 		});
@@ -145,7 +150,7 @@ function __camRetreatVtols()
 			var vt = vtols[i];
 			for (var c = 0, len2 = vt.weapons.length; c < len2; ++c)
 			{
-				if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < 1) || (vt.health < 40))
+				if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
 				{
 					orderDroidLoc(vt, DORDER_MOVE, __camVtolExitPosition.x, __camVtolExitPosition.y);
 					break;
