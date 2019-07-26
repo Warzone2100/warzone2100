@@ -192,7 +192,7 @@ function __camGameWon()
 function __camPlayerDead()
 {
 	var dead = true;
-	var haveFactories = countStruct("A0LightFactory") > 0;
+	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).length > 0;
 	if (haveFactories)
 	{
 		dead = false;
