@@ -336,21 +336,6 @@ function __camScanRange(order, drType)
 	return rng;
 }
 
-function __camCountHQ(player)
-{
-	var count = 0;
-	const HQ_TYPE = [
-		"A0CommandCentre", "A0CommandCentreNP", "A0CommandCentreCO", "A0CommandCentreNE",
-	];
-	for (var i = 0, l = HQ_TYPE.length; i < l; ++i)
-	{
-		var hq = HQ_TYPE[i];
-		count = count + countStruct(hq, player);
-	}
-
-	return count;
-}
-
 function __camTacticsTickForGroup(group)
 {
 	var gi = __camGroupInfo[group];
@@ -367,7 +352,7 @@ function __camTacticsTickForGroup(group)
 	const CLOSE_Z = 1;
 	var healthyDroids = [];
 	var repair = {
-		hasFacility: countStruct("A0RepairCentre3", rawDroids[0].player) > 0,
+		hasFacility: enumStruct(rawDroids[0].player, REPAIR_FACILITY).length > 0,
 		pos: camDef(gi.data.repairPos) ? gi.data.repairPos : undefined,
 		percent: camDef(gi.data.repair) ? gi.data.repair : 66,
 	};
@@ -450,7 +435,7 @@ function __camTacticsTickForGroup(group)
 					continue;
 				}
 
-				if (hitRecently && __camCountHQ(droid.player) > 0)
+				if (hitRecently && enumStruct(droid.player, HQ).length > 0)
 				{
 					if (droid.order !== DORDER_RTB)
 					{
@@ -511,7 +496,7 @@ function __camTacticsTickForGroup(group)
 
 			if ((arm < 1) || (isRearming && (arm < 100 || droid.health < 100)))
 			{
-				var havePads = (countStruct("A0VtolPad", droid.player) > 0);
+				var havePads = enumStruct(droid.player, REARM_PAD).length > 0;
 				if (havePads && !isRearming)
 				{
 					orderDroid(droid, DORDER_REARM);

@@ -137,7 +137,7 @@ function __camRetreatVtols()
 {
 	if (camDef(__camVtolExitPosition.x) &&
 		camDef(__camVtolExitPosition.y) &&
-		countStruct("A0VtolPad", __camVtolPlayer) <= 0)
+		enumStruct(__camVtolPlayer, REARM_PAD).length === 0)
 	{
 		const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
 		const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
