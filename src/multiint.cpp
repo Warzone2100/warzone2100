@@ -154,9 +154,6 @@ static int					teamChooserUp = -1;
 static int					aiChooserUp = -1;
 static int					difficultyChooserUp = -1;
 static int					positionChooserUp = -1;
-static bool				SettingsUp		= false;
-static UBYTE				InitialProto	= 0;
-static W_SCREEN				*psConScreen;
 static SDWORD				dwSelectedGame	= 0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
 static bool					safeSearch		= false;				// allow auto game finding.
@@ -177,7 +174,6 @@ static void drawReadyButton(UDWORD player);
 
 // Drawing Functions
 static void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -855,162 +851,6 @@ static void decideWRF()
 	}
 }
 
-
-// ////////////////////////////////////////////////////////////////////////////
-// Connection Options Screen.
-
-void multiOptionsScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
-{
-	if (psConScreen == nullptr) return;
-	psConScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
-}
-
-static bool OptionsInet()			//internet options
-{
-	psConScreen = new W_SCREEN;
-
-	W_FORMINIT sFormInit;           //Connection Settings
-	sFormInit.formID = 0;
-	sFormInit.id = CON_SETTINGS;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(CON_SETTINGSX, CON_SETTINGSY, CON_SETTINGSWIDTH, CON_SETTINGSHEIGHT);
-	});
-	sFormInit.pDisplay = intDisplayFeBox;
-	widgAddForm(psConScreen, &sFormInit);
-
-	addMultiBut(psConScreen, CON_SETTINGS, CON_OK, CON_OKX, CON_OKY, MULTIOP_OKW, MULTIOP_OKH,
-	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
-	addMultiBut(psConScreen, CON_SETTINGS, CON_IP_CANCEL, CON_OKX + MULTIOP_OKW + 10, CON_OKY, MULTIOP_OKW, MULTIOP_OKH,
-	            _("Cancel"), IMAGE_NO, IMAGE_NO, true);
-
-	//label.
-	W_LABINIT sLabInit;
-	sLabInit.formID = CON_SETTINGS;
-	sLabInit.id		= CON_SETTINGS_LABEL;
-	sLabInit.style	= WLAB_ALIGNCENTRE;
-	sLabInit.x		= 0;
-	sLabInit.y		= 10;
-	sLabInit.width	= CON_SETTINGSWIDTH;
-	sLabInit.height = 20;
-	sLabInit.pText	= WzString::fromUtf8(_("IP Address or Machine Name"));
-	widgAddLabel(psConScreen, &sLabInit);
-
-
-	W_EDBINIT sEdInit;             // address
-	sEdInit.formID = CON_SETTINGS;
-	sEdInit.id = CON_IP;
-	sEdInit.x = CON_IPX;
-	sEdInit.y = CON_IPY;
-	sEdInit.width = CON_NAMEBOXWIDTH;
-	sEdInit.height = CON_NAMEBOXHEIGHT;
-	sEdInit.pText = "";									//_("IP Address or Machine Name");
-	sEdInit.pBoxDisplay = intDisplayEditBox;
-	if (!widgAddEditBox(psConScreen, &sEdInit))
-	{
-		return false;
-	}
-	// auto click in the text box
-	W_CONTEXT sContext;
-	sContext.xOffset	= 0;
-	sContext.yOffset	= 0;
-	sContext.mx			= 0;
-	sContext.my			= 0;
-	widgGetFromID(psConScreen, CON_IP)->clicked(&sContext);
-
-	SettingsUp = true;
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// Draw the connections screen.
-bool startConnectionScreen()
-{
-	addBackdrop();										//background
-	addTopForm();										// logo
-	addBottomForm();
-
-	SettingsUp		= false;
-	InitialProto	= 0;
-	safeSearch		= false;
-
-	// don't pretend we are running a network game. Really do it!
-	NetPlay.bComms = true; // use network = true
-
-	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY, _("CONNECTION"));
-
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, CON_CANCEL, 10, 10, MULTIOP_OKW, MULTIOP_OKH,
-	            _("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
-
-	addTextButton(CON_TYPESID_START + 0, FRONTEND_POS2X, FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
-	addTextButton(CON_TYPESID_START + 1, FRONTEND_POS3X, FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
-
-	return true;
-}
-
-void runConnectionScreen()
-{
-	static char addr[128];
-
-	W_SCREEN *curScreen = SettingsUp ? psConScreen : psWScreen;
-	WidgetTriggers const &triggers = widgRunScreen(curScreen);
-	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
-
-	switch (id)
-	{
-	case CON_CANCEL: //cancel
-		changeTitleMode(MULTI);
-		bMultiPlayer = false;
-		bMultiMessages = false;
-		break;
-	case CON_TYPESID_START+0: // Lobby button
-		if (LobbyError != ERROR_INVALID)
-		{
-			setLobbyError(ERROR_NOERROR);
-		}
-		changeTitleMode(GAMEFIND);
-		break;
-	case CON_TYPESID_START+1: // IP button
-		OptionsInet();
-		break;
-	case CON_OK:
-		sstrcpy(addr, widgGetString(psConScreen, CON_IP));
-		if (addr[0] == '\0')
-		{
-			sstrcpy(addr, "127.0.0.1");  // Default to localhost.
-		}
-
-		if (SettingsUp == true)
-		{
-			delete psConScreen;
-			psConScreen = nullptr;
-			SettingsUp = false;
-		}
-
-		joinGame(addr, 0);
-		break;
-	case CON_IP_CANCEL:
-		if (SettingsUp == true)
-		{
-			delete psConScreen;
-			psConScreen = nullptr;
-			SettingsUp = false;
-		}
-		break;
-	}
-
-	widgDisplayScreen(psWScreen);							// show the widgets currently running
-	if (SettingsUp == true)
-	{
-		widgDisplayScreen(psConScreen);						// show the widgets currently running
-	}
-
-	if (CancelPressed())
-	{
-		changeTitleMode(MULTI);
-	}
-}
-
 // ////////////////////////////////////////////////////////////////////////
 // Lobby error reading
 LOBBY_ERROR_TYPES getLobbyError()
@@ -1089,7 +929,7 @@ bool joinGame(const char *host, uint32_t port)
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
-	changeTitleMode(MULTIOPTION);
+	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
 
 	if (war_getMPcolour() >= 0)
 	{
@@ -2964,8 +2804,7 @@ static void stopJoining()
 		sendLeavingMsg();								// say goodbye
 		NETclose();										// quit running game.
 		bHosted = false;								// stop host mode.
-		widgDelete(psWScreen, FRONTEND_BACKDROP);		// refresh options screen.
-		startMultiOptions(false);
+		changeTitleUI(wzTitleUICurrent);				// refresh options screen.
 		ingame.localJoiningInProgress = false;
 		return;
 	}
@@ -3280,7 +3119,7 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_STRUCTLIMITS:
-		changeTitleMode(MULTILIMIT);
+		changeTitleUI(std::make_shared<WzMultiLimitTitleUI>(std::dynamic_pointer_cast<WzMultiOptionTitleUI>(wzTitleUICurrent)));
 		break;
 
 	case MULTIOP_PNAME:
@@ -3644,7 +3483,7 @@ void frontendMultiMessages()
 			recvOptions(queue);
 			ingame.localOptionsReceived = true;
 
-			if (titleMode == MULTIOPTION)
+			if (std::dynamic_pointer_cast<WzMultiOptionTitleUI>(wzTitleUICurrent))
 			{
 				addGameOptions();
 				disableMultiButs();
@@ -3831,7 +3670,182 @@ void frontendMultiMessages()
 	}
 }
 
-void runMultiOptions()
+static bool loadSettings(const WzString &filename)
+{
+	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+	ini.beginGroup("challenge");
+	sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
+	game.hash = levGetMapNameHash(game.map);
+	game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
+	game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
+	game.power = ini.value("powerLevel", game.power).toInt();
+	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
+	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
+	ini.endGroup();
+	return true;
+}
+
+WzMultiOptionTitleUI::WzMultiOptionTitleUI()
+{
+}
+
+void WzMultiOptionTitleUI::start()
+{
+	bool bReenter = performedFirstStart;
+
+	PLAYERSTATS		nullStats;
+	UBYTE i;
+
+	performedFirstStart = true;
+
+	netPlayersUpdated = true;
+
+	addBackdrop();
+	loadMapPreview(false);
+	addTopForm(true);
+
+	if (getLobbyError() != ERROR_INVALID)
+	{
+		setLobbyError(ERROR_NOERROR);
+	}
+
+	// free limiter structure
+	if (!bReenter || challengeActive)
+	{
+		if (ingame.numStructureLimits)
+		{
+			ingame.numStructureLimits = 0;
+			free(ingame.pStructureLimits);
+			ingame.pStructureLimits = nullptr;
+		}
+	}
+
+	if (!bReenter)
+	{
+		memset(&locked, 0, sizeof(locked)); // nothing is locked by default
+
+		teamChooserUp = -1;
+		aiChooserUp = -1;
+		difficultyChooserUp = -1;
+		positionChooserUp = -1;
+		colourChooserUp = -1;
+		for (i = 0; i < MAX_PLAYERS; i++)
+		{
+			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
+			setPlayerColour(i, i);						//reset all colors as well
+		}
+		game.isMapMod = false;			// reset map-mod status
+		game.mapHasScavengers = true; // FIXME, should default to false
+		if (!NetPlay.bComms)			// force skirmish if no comms.
+		{
+			game.type = SKIRMISH;
+			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
+			game.hash = levGetMapNameHash(game.map);
+			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
+		}
+
+		ingame.localOptionsReceived = false;
+
+		loadMultiStats((char *)sPlayer, &nullStats);
+	}
+	if (!bReenter && challengeActive)
+	{
+		resetReadyStatus(false);
+		removeWildcards((char *)sPlayer);
+		if (!hostCampaign((char *)game.name, (char *)sPlayer))
+		{
+			debug(LOG_ERROR, "Failed to host the challenge.");
+			return;
+		}
+		bHosted = true;
+
+		loadMapSettings1();
+		loadMapSettings2();
+
+		loadSettings(sRequestResult);
+		netPlayersUpdated = true;
+
+		ingame.localOptionsReceived = true;
+		addGameOptions();									// update game options box.
+		addChatBox();
+		disableMultiButs();
+		addPlayerBox(true);
+	}
+	else
+	{
+		addPlayerBox(false);								// Players
+		addGameOptions();
+		addChatBox(bReenter);
+
+		if (ingame.bHostSetup)
+		{
+			char buf[512] = {'\0'};
+			if (NetPlay.bComms)
+			{
+				if (NetPlay.isUPNP)
+				{
+					if (NetPlay.isUPNP_CONFIGURED)
+					{
+						ssprintf(buf, "%s", _("UPnP has been enabled."));
+					}
+					else
+					{
+						if (NetPlay.isUPNP_ERROR)
+						{
+							ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
+						}
+						else
+						{
+							ssprintf(buf, "%s", _("UPnP detection is in progress..."));
+						}
+					}
+					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+				}
+				else
+				{
+					ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
+					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+				}
+			}
+			if (challengeActive)
+			{
+				ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
+			}
+			else if (!bHosted)
+			{
+				ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
+			}
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		}
+	}
+	// going back to multiop after setting limits up..
+	if (bReenter && bHosted)
+	{
+		disableMultiButs();
+	}
+
+	loadMapPreview(false);
+
+	if (autogame_enabled())
+	{
+		if (!ingame.localJoiningInProgress)
+		{
+			processMultiopWidgets(MULTIOP_HOST);
+		}
+		SendReadyRequest(selectedPlayer, true);
+		if (hostlaunch == 2)
+		{
+			loadSettings("tests/" + WzString::fromUtf8(wz_skirmish_test()));
+			startMultiplayerGame();
+			// reset flag in case people dropped/quit on join screen
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
+		}
+	}
+}
+
+TITLECODE WzMultiOptionTitleUI::run()
 {
 	static UDWORD	lastrefresh = 0;
 	char                    oldGameMap[128];
@@ -3963,7 +3977,7 @@ void runMultiOptions()
 			// we abort the 'hidetime' on press of a mouse button.
 			if (gameTime - hideTime < MAP_PREVIEW_DISPLAY_TIME && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
 			{
-				return;
+				return TITLECODE_CONTINUE;
 			}
 			inputLoseFocus();	// remove the mousepress from the input stream.
 			hideTime = 0;
@@ -3996,175 +4010,7 @@ void runMultiOptions()
 		changeTitleMode(GAMEFIND);
 		screen_RestartBackDrop();
 	}
-}
-
-static bool loadSettings(const WzString &filename)
-{
-	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-	ini.beginGroup("challenge");
-	sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
-	game.hash = levGetMapNameHash(game.map);
-	game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
-	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
-	game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
-	game.power = ini.value("powerLevel", game.power).toInt();
-	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
-	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
-	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
-	ini.endGroup();
-	return true;
-}
-
-bool startMultiOptions(bool bReenter)
-{
-	PLAYERSTATS		nullStats;
-	UBYTE i;
-
-	netPlayersUpdated = true;
-
-	addBackdrop();
-	loadMapPreview(false);
-	addTopForm();
-
-	if (getLobbyError() != ERROR_INVALID)
-	{
-		setLobbyError(ERROR_NOERROR);
-	}
-
-	// free limiter structure
-	if (!bReenter || challengeActive)
-	{
-		if (ingame.numStructureLimits)
-		{
-			ingame.numStructureLimits = 0;
-			free(ingame.pStructureLimits);
-			ingame.pStructureLimits = nullptr;
-		}
-	}
-
-	if (!bReenter)
-	{
-		memset(&locked, 0, sizeof(locked)); // nothing is locked by default
-
-		teamChooserUp = -1;
-		aiChooserUp = -1;
-		difficultyChooserUp = -1;
-		positionChooserUp = -1;
-		colourChooserUp = -1;
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
-			setPlayerColour(i, i);						//reset all colors as well
-		}
-		game.isMapMod = false;			// reset map-mod status
-		game.mapHasScavengers = true; // FIXME, should default to false
-		if (!NetPlay.bComms)			// force skirmish if no comms.
-		{
-			game.type = SKIRMISH;
-			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
-			game.hash = levGetMapNameHash(game.map);
-			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
-		}
-
-		ingame.localOptionsReceived = false;
-
-		loadMultiStats((char *)sPlayer, &nullStats);
-	}
-	if (!bReenter && challengeActive)
-	{
-		resetReadyStatus(false);
-		removeWildcards((char *)sPlayer);
-		if (!hostCampaign((char *)game.name, (char *)sPlayer))
-		{
-			debug(LOG_ERROR, "Failed to host the challenge.");
-			return false;
-		}
-		bHosted = true;
-
-		loadMapSettings1();
-		loadMapSettings2();
-
-		loadSettings(sRequestResult);
-		netPlayersUpdated = true;
-
-		ingame.localOptionsReceived = true;
-		addGameOptions();									// update game options box.
-		addChatBox();
-		disableMultiButs();
-		addPlayerBox(true);
-	}
-	else
-	{
-		addPlayerBox(false);								// Players
-		addGameOptions();
-		addChatBox(bReenter);
-
-		if (ingame.bHostSetup)
-		{
-			char buf[512] = {'\0'};
-			if (NetPlay.bComms)
-			{
-				if (NetPlay.isUPNP)
-				{
-					if (NetPlay.isUPNP_CONFIGURED)
-					{
-						ssprintf(buf, "%s", _("UPnP has been enabled."));
-					}
-					else
-					{
-						if (NetPlay.isUPNP_ERROR)
-						{
-							ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
-						}
-						else
-						{
-							ssprintf(buf, "%s", _("UPnP detection is in progress..."));
-						}
-					}
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-				}
-				else
-				{
-					ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-				}
-			}
-			if (challengeActive)
-			{
-				ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
-			}
-			else if (!bHosted)
-			{
-				ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
-			}
-			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		}
-	}
-	// going back to multiop after setting limits up..
-	if (bReenter && bHosted)
-	{
-		disableMultiButs();
-	}
-
-	loadMapPreview(false);
-
-	if (autogame_enabled())
-	{
-		if (!ingame.localJoiningInProgress)
-		{
-			processMultiopWidgets(MULTIOP_HOST);
-		}
-		SendReadyRequest(selectedPlayer, true);
-		if (hostlaunch == 2)
-		{
-			loadSettings("tests/" + WzString::fromUtf8(wz_skirmish_test()));
-			startMultiplayerGame();
-			// reset flag in case people dropped/quit on join screen
-			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
-		}
-	}
-
-	return true;
+	return TITLECODE_CONTINUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

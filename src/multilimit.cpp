@@ -95,7 +95,93 @@ static inline void freeLimitSet()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool startLimitScreen()
+void createLimitSet()
+{
+	UDWORD			numchanges = 0, bufSize, idx = 0;
+	MULTISTRUCTLIMITS	*pEntry = nullptr;
+
+	debug(LOG_NET, "LimitSet created");
+	// free old limiter structure
+	freeLimitSet();
+
+	// don't bother creating if a challenge mode is active
+	if (challengeActive)
+	{
+		return;
+	}
+
+	// Count the number of changes
+	for (unsigned i = 0; i < numStructureStats; i++)
+	{
+		// If the limit differs from the default
+		if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
+		{
+			numchanges++;
+		}
+	}
+
+	if (numchanges > 0)
+	{
+		// Allocate some memory for the changes
+		bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
+		pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
+		memset(pEntry, 255, bufSize);
+
+		// Prepare chunk
+		for (unsigned i = 0; i < numStructureStats; i++)
+		{
+			if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
+			{
+				ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
+				pEntry[idx].id		= i;
+				pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
+				idx++;
+			}
+		}
+	}
+
+	ingame.numStructureLimits	= numchanges;
+	ingame.pStructureLimits		= pEntry;
+
+	if (bHosted)
+	{
+		sendOptions();
+	}
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+void applyLimitSet()
+{
+	if (ingame.numStructureLimits == 0)
+	{
+		return;
+	}
+
+	// Get the limits and decode
+	const MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
+	for (int i = 0; i < ingame.numStructureLimits; ++i)
+	{
+		int id = pEntry[i].id;
+
+		// So long as the ID is valid
+		if (id < numStructureStats)
+		{
+			for (int player = 0; player < MAX_PLAYERS; player++)
+			{
+				asStructureStats[id].upgrade[player].limit = pEntry[i].limit;
+			}
+		}
+	}
+
+	freeLimitSet();
+}
+
+WzMultiLimitTitleUI::WzMultiLimitTitleUI(std::shared_ptr<WzMultiOptionTitleUI> parent) : parent(parent)
+{
+	
+}
+
+void WzMultiLimitTitleUI::start()
 {
 	addBackdrop();//background
 
@@ -106,7 +192,10 @@ bool startLimitScreen()
 
 		if (!resLoad("wrf/limiter_data.wrf", 503))
 		{
-			return false;
+			debug(LOG_INFO, "Unable to load limiter_data during WzMultiLimitTitleUI start; returning...");
+			changeTitleUI(parent);
+			closeLoadingScreen();
+			return;
 		}
 
 		bLimiterLoaded = true;
@@ -191,13 +280,9 @@ bool startLimitScreen()
 			++limitsButtonId;
 		}
 	}
-
-	return true;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-
-void runLimitScreen()
+TITLECODE WzMultiLimitTitleUI::run()
 {
 	frontendMultiMessages();							// network stuff.
 
@@ -233,7 +318,7 @@ void runLimitScreen()
 			}
 
 			eventReset();
-			changeTitleMode(MULTIOPTION);
+			changeTitleUI(parent);
 
 			// make some noize.
 			if (!ingame.localOptionsReceived)
@@ -249,7 +334,7 @@ void runLimitScreen()
 		case IDLIMITS_OK:
 			resetReadyStatus(false);
 			createLimitSet();
-			changeTitleMode(MULTIOPTION);
+			changeTitleUI(parent);
 			break;
 		default:
 			break;
@@ -257,91 +342,8 @@ void runLimitScreen()
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
+	return TITLECODE_CONTINUE;
 }
-
-// ////////////////////////////////////////////////////////////////////////////
-void createLimitSet()
-{
-	UDWORD			numchanges = 0, bufSize, idx = 0;
-	MULTISTRUCTLIMITS	*pEntry = nullptr;
-
-	debug(LOG_NET, "LimitSet created");
-	// free old limiter structure
-	freeLimitSet();
-
-	// don't bother creating if a challenge mode is active
-	if (challengeActive)
-	{
-		return;
-	}
-
-	// Count the number of changes
-	for (unsigned i = 0; i < numStructureStats; i++)
-	{
-		// If the limit differs from the default
-		if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
-		{
-			numchanges++;
-		}
-	}
-
-	if (numchanges > 0)
-	{
-		// Allocate some memory for the changes
-		bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
-		pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
-		memset(pEntry, 255, bufSize);
-
-		// Prepare chunk
-		for (unsigned i = 0; i < numStructureStats; i++)
-		{
-			if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
-			{
-				ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
-				pEntry[idx].id		= i;
-				pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
-				idx++;
-			}
-		}
-	}
-
-	ingame.numStructureLimits	= numchanges;
-	ingame.pStructureLimits		= pEntry;
-
-	if (bHosted)
-	{
-		sendOptions();
-	}
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-void applyLimitSet()
-{
-	if (ingame.numStructureLimits == 0)
-	{
-		return;
-	}
-
-	// Get the limits and decode
-	const MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
-	for (int i = 0; i < ingame.numStructureLimits; ++i)
-	{
-		int id = pEntry[i].id;
-
-		// So long as the ID is valid
-		if (id < numStructureStats)
-		{
-			for (int player = 0; player < MAX_PLAYERS; player++)
-			{
-				asStructureStats[id].upgrade[player].limit = pEntry[i].limit;
-			}
-		}
-	}
-
-	freeLimitSet();
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 
 static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {

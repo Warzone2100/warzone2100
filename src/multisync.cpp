@@ -34,7 +34,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
-#include "frontend.h"								// for titlemode
+#include "main.h"								// for gamemode
 #include "multistat.h"
 #include "multirecv.h"
 
@@ -58,7 +58,8 @@ static uint8_t pingChallenge[8];                                // Random data s
 bool sendScoreCheck()
 {
 	// Broadcast any changes in other players, but not in FRONTEND!!!
-	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
+	// Detection for this no longer uses title mode, but instead game mode, because that makes more sense
+	if (GetGameMode() == GS_NORMAL)
 	{
 		uint8_t			i;
 

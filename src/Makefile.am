@@ -155,6 +155,7 @@ noinst_HEADERS = \
 	terrain.h \
 	text.h \
 	texture.h \
+	titleui/titleui.h \
 	transporter.h \
 	visibility.h \
 	version.h \
@@ -268,6 +269,8 @@ COMMONSOURCES = \
 	terrain.cpp \
 	text.cpp \
 	texture.cpp \
+	titleui/old.cpp \
+	titleui/titleui.cpp \
 	transporter.cpp \
 	version.cpp \
 	visibility.cpp \

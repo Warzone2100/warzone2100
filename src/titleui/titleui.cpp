@@ -18,26 +18,30 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * multilimit.h
+ * titleui/titleui.cpp
+ *
+ * WzTitleUI common stuff
  */
 
-#ifndef __INCLUDED_MULTILIMIT_H__
-#define __INCLUDED_MULTILIMIT_H__
+#include "titleui.h"
+#include "../intdisplay.h"
+#include "../hci.h"
 
-#include "titleui/titleui.h"
+std::shared_ptr<WzTitleUI> wzTitleUICurrent;
 
-class WzMultiLimitTitleUI: public WzTitleUI
+WzTitleUI::~WzTitleUI()
 {
-public:
-	WzMultiLimitTitleUI(std::shared_ptr<WzMultiOptionTitleUI> parent);
-	virtual void start() override;
-	virtual TITLECODE run() override;
-private:
-	// The parent WzMultiOptionTitleUI to return to.
-	std::shared_ptr<WzMultiOptionTitleUI> parent;
-};
+}
 
-void applyLimitSet();
-void createLimitSet();
+void WzTitleUI::screenSizeDidChange()
+{
+}
 
-#endif //__cplusplus //__INCLUDED_MULTILIMIT_H__
+void changeTitleUI(std::shared_ptr<WzTitleUI> target)
+{
+	wzTitleUICurrent = target;
+	// Deletes the backdrop, which in turn deletes the rest of the UI from whatever was on screen before this UI
+	widgDelete(psWScreen, FRONTEND_BACKDROP);
+	target->start();
+}
+
