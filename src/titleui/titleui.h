@@ -24,12 +24,12 @@
 #ifndef __INCLUDED_SRC_TITLEUI_TITLEUI_H__
 #define __INCLUDED_SRC_TITLEUI_TITLEUI_H__
 
-#include <memory>
-
 // tMode
 #include "../frontend.h"
 // TITLECODE
 #include "../wrappers.h"
+
+#include <memory>
 
 // Regarding construction vs. start():
 // This allows a reference to the parent to be held for a stack-like effect.
@@ -40,7 +40,7 @@ public:
 	virtual void start() = 0;
 	// NOTE! When porting, add screen_disableMapPreview(); if relevant!
 	virtual TITLECODE run() = 0;
-	virtual void screenSizeDidChange();
+	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 };
 
 // Pointer to the current UI. Dynamic allocation helps with the encapsulation.
@@ -57,22 +57,73 @@ public:
 	WzOldTitleUI(tMode mode);
 	virtual void start() override;
 	virtual TITLECODE run() override;
-	virtual void screenSizeDidChange() override;
+	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 private:
 	tMode mode;
+};
+
+// - protocol.cpp -
+class WzProtocolTitleUI: public WzTitleUI
+{
+public:
+	WzProtocolTitleUI();
+	virtual ~WzProtocolTitleUI() override;
+	virtual void start() override;
+	virtual TITLECODE run() override;
+	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
+private:
+	void openIPDialog();
+	void closeIPDialog();
+	// Not-null: the settings screen is up
+	W_SCREEN * psSettingsScreen = nullptr;
+	// If true, there's an IP address waiting to be used.
+	bool hasWaitingIP = false;
+	// Saves the content of the IP prompt.
+	std::string ipPrompt = "";
 };
 
 // - multiint.cpp -
 class WzMultiOptionTitleUI: public WzTitleUI
 {
 public:
-	WzMultiOptionTitleUI();
+	WzMultiOptionTitleUI(std::shared_ptr<WzTitleUI> parent);
 	virtual void start() override;
 	virtual TITLECODE run() override;
+	void frontendMultiMessages(bool running);
 private:
+	void processMultiopWidgets(UDWORD button);
+	std::shared_ptr<WzTitleUI> parent;
 	bool performedFirstStart = false;
 };
 
-// WzMultiLimitTitleUI: multilimit.cpp/h
+// - multilimit.cpp -
+class WzMultiLimitTitleUI: public WzTitleUI
+{
+public:
+	WzMultiLimitTitleUI(std::shared_ptr<WzMultiOptionTitleUI> parent);
+	virtual void start() override;
+	virtual TITLECODE run() override;
+private:
+	// The parent WzMultiOptionTitleUI to return to.
+	std::shared_ptr<WzMultiOptionTitleUI> parent;
+};
+
+// - msgbox.cpp -
+class WzMsgBoxTitleUI: public WzTitleUI
+{
+public:
+	WzMsgBoxTitleUI(WzString text, std::shared_ptr<WzTitleUI> next);
+	virtual void start() override;
+	virtual TITLECODE run() override;
+private:
+	WzString text;
+	// Where to go after the user has acknowledged.
+	std::shared_ptr<WzTitleUI> next;
+};
+
+#define WZ_MSGBOX_TUI_LEAVE 4597000
+
+void mpSetServerName(const char *hostname);
+const char *mpGetServerName();
 
 #endif

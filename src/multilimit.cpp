@@ -52,6 +52,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "challenge.h"
 #include "objmem.h"
+#include "titleui/titleui.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -237,7 +238,7 @@ void WzMultiLimitTitleUI::start()
 
 TITLECODE WzMultiLimitTitleUI::run()
 {
-	frontendMultiMessages();							// network stuff.
+	parent->frontendMultiMessages(false);							// network stuff.
 
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.

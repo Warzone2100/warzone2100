@@ -252,7 +252,9 @@ COMMONSOURCES = \
 	terrain.cpp \
 	text.cpp \
 	texture.cpp \
+	titleui/msgbox.cpp \
 	titleui/old.cpp \
+	titleui/protocol.cpp \
 	titleui/titleui.cpp \
 	transporter.cpp \
 	version.cpp \
