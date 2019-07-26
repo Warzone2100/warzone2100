@@ -32,7 +32,6 @@
 #include <vector>
 #include "lib/framework/wzstring.h"
 
-
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
 #define AI_OPEN           -2
@@ -90,6 +89,7 @@ public:
 	MultichoiceWidget(WIDGET *parent, int value = -1);
 };
 
+// WzMultiOptionTitleUI is in titleui.h to prevent dependency explosions
 
 void readAIs();	///< step 1, load AI definition files
 void setupChallengeAIs();	///< dirty hack to allow correct display of names from challenges
@@ -102,8 +102,6 @@ int getNextAIAssignment(const char *name);
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
-void runConnectionScreen();
-bool startConnectionScreen();
 void intProcessConnection(UDWORD id);
 
 void runGameFind();
@@ -114,6 +112,8 @@ void updateLimitFlags();
 void runMultiOptions();
 bool startMultiOptions(bool bReenter);
 void frontendMultiMessages();
+
+void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
 bool changeColour(unsigned player, int col, bool isHost);

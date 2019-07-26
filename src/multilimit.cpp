@@ -101,7 +101,12 @@ static inline void freeLimitSet()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool startLimitScreen()
+WzMultiLimitTitleUI::WzMultiLimitTitleUI(std::shared_ptr<WzMultiOptionTitleUI> parent) : parent(parent)
+{
+
+}
+
+void WzMultiLimitTitleUI::start()
 {
 	addBackdrop();//background
 
@@ -112,7 +117,10 @@ bool startLimitScreen()
 
 		if (!resLoad("wrf/limiter_data.wrf", 503))
 		{
-			return false;
+			debug(LOG_INFO, "Unable to load limiter_data during WzMultiLimitTitleUI start; returning...");
+			changeTitleUI(parent);
+			closeLoadingScreen();
+			return;
 		}
 
 		bLimiterLoaded = true;
@@ -225,13 +233,9 @@ bool startLimitScreen()
 			++limitsButtonId;
 		}
 	}
-
-	return true;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-
-void runLimitScreen()
+TITLECODE WzMultiLimitTitleUI::run()
 {
 	frontendMultiMessages();							// network stuff.
 
@@ -274,7 +278,7 @@ void runLimitScreen()
 				sendOptions();
 			}
 
-			changeTitleMode(MULTIOPTION);
+			changeTitleUI(parent);
 
 			// make some noize.
 			if (!ingame.localOptionsReceived)
@@ -298,7 +302,7 @@ void runLimitScreen()
 			}
 			resetReadyStatus(false);
 			createLimitSet();
-			changeTitleMode(MULTIOPTION);
+			changeTitleUI(parent);
 			break;
 		default:
 			break;
@@ -306,6 +310,7 @@ void runLimitScreen()
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
+	return TITLECODE_CONTINUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

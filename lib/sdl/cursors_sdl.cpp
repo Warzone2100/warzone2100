@@ -25,7 +25,6 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/tex.h"
 #include "src/warzoneconfig.h"
-#include "src/frontend.h"
 #include "cursors_sdl.h"
 #include <SDL.h>
 
@@ -1361,8 +1360,8 @@ SDL_Cursor *init_system_cursor32(CURSOR cur)
 void wzSetCursor(CURSOR cur)
 {
 	ASSERT(cur < CURSOR_MAX, "Specified cursor(%d) is over our limit of (%d)!", (int)cur, (int)CURSOR_MAX);
-	// we reset mouse cursors on the fly...(only in the mouse options screen!)
-	if ((!(war_GetColouredCursor() ^ monoCursor)) && (titleMode == MOUSE_OPTIONS))
+	// If mouse cursor options change, change cursors (used to only work on mouse options screen for some reason)
+	if (!(war_GetColouredCursor() ^ monoCursor))
 	{
 		sdlFreeCursors();
 		war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();

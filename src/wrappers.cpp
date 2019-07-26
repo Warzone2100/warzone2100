@@ -43,6 +43,7 @@
 #include "multistat.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
+#include "titleui/titleui.h"
 
 struct STAR
 {
@@ -148,7 +149,7 @@ TITLECODE titleLoop()
 			bMultiPlayer = true;
 			ingame.bHostSetup = true;
 			game.type = SKIRMISH;
-			changeTitleMode(MULTIOPTION);
+			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
 		}
 		else if (strlen(iptoconnect))
 		{
@@ -164,99 +165,15 @@ TITLECODE titleLoop()
 		wzSetCursor(CURSOR_DEFAULT);
 	}
 
-	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT && titleMode != STARTGAME)
 	{
-		screen_disableMapPreview();
+		// Creates a pointer, so if... when, the UI changes during a run, this does not disappear
+		std::shared_ptr<WzTitleUI> current = wzTitleUICurrent;
+		RetCode = current->run();
 	}
 
-	switch (titleMode) // run relevant title screen code.
+	if ((RetCode == TITLECODE_SAVEGAMELOAD) || (RetCode == TITLECODE_STARTGAME))
 	{
-	// MULTIPLAYER screens
-	case PROTOCOL:
-		runConnectionScreen(); // multiplayer connection screen.
-		break;
-	case MULTIOPTION:
-		runMultiOptions();
-		break;
-	case GAMEFIND:
-		runGameFind();
-		break;
-	case MULTI:
-		runMultiPlayerMenu();
-		break;
-	case MULTILIMIT:
-		runLimitScreen();
-		break;
-	case KEYMAP:
-		runKeyMapEditor();
-		break;
-
-	case TITLE:
-		runTitleMenu();
-		break;
-
-	case CAMPAIGNS:
-		runCampaignSelector();
-		break;
-
-	case SINGLE:
-		runSinglePlayerMenu();
-		break;
-
-	case TUTORIAL:
-		runTutorialMenu();
-		break;
-
-	case OPTIONS:
-		runOptionsMenu();
-		break;
-
-	case GAME:
-		runGameOptionsMenu();
-		break;
-
-	case GRAPHICS_OPTIONS:
-		runGraphicsOptionsMenu();
-		break;
-
-	case AUDIO_AND_ZOOM_OPTIONS:
-		runAudioAndZoomOptionsMenu();
-		break;
-
-	case VIDEO_OPTIONS:
-		runVideoOptionsMenu();
-		break;
-
-	case MOUSE_OPTIONS:
-		runMouseOptionsMenu();
-		break;
-
-	case QUIT:
-		RetCode = TITLECODE_QUITGAME;
-		break;
-
-	case STARTGAME:
-	case LOADSAVEGAME:
-		if (titleMode == LOADSAVEGAME)
-		{
-			RetCode = TITLECODE_SAVEGAMELOAD;
-		}
-		else
-		{
-			RetCode = TITLECODE_STARTGAME;
-		}
-		return RetCode;			// don't flip!
-
-	case SHOWINTRO:
-		pie_SetFogStatus(false);
-		pie_ScreenFlip(CLEAR_BLACK);
-		changeTitleMode(TITLE);
-		RetCode = TITLECODE_SHOWINTRO;
-		break;
-
-	default:
-		debug(LOG_FATAL, "unknown title screen mode");
-		abort();
+		return RetCode; // don't flip
 	}
 	NETflush();  // Send any pending network data.
 
