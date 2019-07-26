@@ -115,6 +115,7 @@ bool startMultiOptions(bool bReenter);
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
+Image mpwidgetGetFrontHighlightImage(Image image);
 bool changeColour(unsigned player, int col, bool isHost);
 
 extern char sPlayer[128];

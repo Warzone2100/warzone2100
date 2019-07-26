@@ -30,6 +30,7 @@
 #include "../wrappers.h"
 
 #include <memory>
+#include <functional>
 
 // Regarding construction vs. start():
 // This allows a reference to the parent to be held for a stack-like effect.
@@ -117,6 +118,20 @@ private:
 	WzString text;
 	// Where to go after the user has acknowledged.
 	std::shared_ptr<WzTitleUI> next;
+};
+
+// - passbox.cpp -
+class WzPassBoxTitleUI: public WzTitleUI
+{
+public:
+	// The callback receives nullptr for cancellation, or a widgGetString result otherwise.
+	// The callback is expected to change current UI.
+	WzPassBoxTitleUI(std::function<void(const char *)> next);
+	virtual void start() override;
+	virtual TITLECODE run() override;
+private:
+	// Where to go after the user has acknowledged.
+	std::function<void(const char *)> next;
 };
 
 #define WZ_MSGBOX_TUI_LEAVE 4597000

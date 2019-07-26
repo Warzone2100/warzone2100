@@ -271,6 +271,7 @@ COMMONSOURCES = \
 	texture.cpp \
 	titleui/msgbox.cpp \
 	titleui/old.cpp \
+	titleui/passbox.cpp \
 	titleui/protocol.cpp \
 	titleui/titleui.cpp \
 	transporter.cpp \

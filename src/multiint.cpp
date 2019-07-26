@@ -161,7 +161,6 @@ static UDWORD				gameNumber;								// index to games icons
 static bool					safeSearch		= false;				// allow auto game finding.
 static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
 static UDWORD hideTime = 0;
-static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static char tooltipbuffer[MaxGames][256] = {{'\0'}};
 static bool toggleFilter = true;	// Used to show all games or only games that are of the same version
@@ -184,7 +183,6 @@ static void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static Image getFrontHighlightImage(Image image);
 
 // pUserData structures used by drawing functions
 struct DisplayPlayerCache {
@@ -222,11 +220,6 @@ static DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 
 // find games
 static void addGames();
-static void removeGames();
-
-// password form functions
-static void hidePasswordForm();
-static void showPasswordForm();
 
 // Game option functions
 static	void	addGameOptions();
@@ -872,13 +865,21 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 	}
 }
 
+static bool joinGameInternal(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI);
+
+bool joinGame(const char *host, uint32_t port) {
+	return joinGameInternal(host, port, wzTitleUICurrent);
+}
+
 /**
- * Try connecting to the given host, show
- * the multiplayer screen or a error.
+ * Try connecting to the given host, show a password screen, the multiplayer screen or an error.
+ * The reason for this having a third parameter is so that the password dialog
+ *  doesn't turn into the parent of the next connection attempt.
+ * Any other barriers/auth methods/whatever would presumably benefit in the same way.
  */
-bool joinGame(const char *host, uint32_t port)
+static bool joinGameInternal(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI)
 {
-	std::shared_ptr<WzTitleUI> oldUI = wzTitleUICurrent;
+	// oldUI may get captured for use in the password dialog, among other things.
 	PLAYERSTATS	playerStats;
 
 	if (ingame.localJoiningInProgress)
@@ -895,25 +896,20 @@ bool joinGame(const char *host, uint32_t port)
 			break;
 		case ERROR_WRONGPASSWORD:
 			{
-				// Change to GAMEFIND, screen with a password dialog.
-				changeTitleMode(GAMEFIND);
-				showPasswordForm();
-				WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-				unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
-
-				if (id != CON_PASSWORD) // Run the current set of widgets
-				{
-					return false;
-				}
-				NETsetGamePassword(widgGetString(psWScreen, CON_PASSWORD));
-				break;
+				std::string capturedHost = host;
+				changeTitleUI(std::make_shared<WzPassBoxTitleUI>([=](const char * pass) {
+					if (!pass) {
+						changeTitleUI(oldUI);
+					} else {
+						NETsetGamePassword(pass);
+						joinGameInternal(capturedHost.c_str(), port, oldUI);
+					}
+				}));
+				return false;
 			}
 		default:
 			break;
 		}
-
-		// Hide a (maybe shown) password form.
-		hidePasswordForm();
 
 		// Change to an error display.
 		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Error while joining.")), oldUI));
@@ -1144,26 +1140,15 @@ static void addGames()
 	displayConsoleMessages();
 }
 
-static void removeGames()
-{
-	int i;
-	for (i = 0; i < MaxGames; i++)
-	{
-		widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old widget
-	}
-	widgDelete(psWScreen, FRONTEND_NOGAMESAVAILABLE);
-}
-
 void runGameFind()
 {
 	static UDWORD lastupdate = 0;
-	static char game_password[StringSize];
 
 	if (lastupdate > gameTime)
 	{
 		lastupdate = 0;
 	}
-	if (gameTime - lastupdate > 6000 && !EnablePasswordPrompt)
+	if (gameTime - lastupdate > 6000)
 	{
 		lastupdate = gameTime;
 		addConsoleBox();
@@ -1205,11 +1190,6 @@ void runGameFind()
 		addConsoleMessage(_("Refreshing..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		addGames();									//redraw list.
 	}
-	if (id == CON_PASSWORD)
-	{
-		sstrcpy(game_password, widgGetString(psWScreen, CON_PASSWORD));
-		NETsetGamePassword(game_password);
-	}
 
 	// below is when they hit a game box to connect to--ideally this would be where
 	// we would want a modal password entry box.
@@ -1217,26 +1197,11 @@ void runGameFind()
 	{
 		gameNumber = id - GAMES_GAMESTART;
 
-		if (NetPlay.games[gameNumber].privateGame)
-		{
-			showPasswordForm();
-		}
-		else
-		{
-			ingame.localOptionsReceived = false;					// note, we are awaiting options
-			sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-			joinGame(NetPlay.games[gameNumber].desc.host, 0);
-		}
-	}
-	else if (id == CON_PASSWORDYES)
-	{
+		// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 		ingame.localOptionsReceived = false;					// note, we are awaiting options
 		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
 		joinGame(NetPlay.games[gameNumber].desc.host, 0);
-	}
-	else if (id == CON_PASSWORDNO)
-	{
-		hidePasswordForm();
+		return;
 	}
 
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
@@ -1303,95 +1268,7 @@ void startGameFind()
 
 	addGames();	// now add games.
 	displayConsoleMessages();
-
-	// Password stuff. Hidden by default.
-
-	// draws the background of the password box
-	IntFormAnimated *passwordForm = new IntFormAnimated(parent);
-	passwordForm->id = FRONTEND_PASSWORDFORM;
-	passwordForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(FRONTEND_BOTFORMX, 160, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH - 40);
-	}));
-
-	// password label.
-	W_LABEL *enterPasswordLabel = new W_LABEL(passwordForm);
-	enterPasswordLabel->setTextAlignment(WLAB_ALIGNCENTRE);
-	enterPasswordLabel->setGeometry(130, 0, 280, 40);
-	enterPasswordLabel->setFont(font_large, WZCOL_FORM_TEXT);
-	enterPasswordLabel->setString(_("Enter Password:"));
-
-	// and finally draw the password entry box
-	W_EDITBOX *passwordBox = new W_EDITBOX(passwordForm);
-	passwordBox->id = CON_PASSWORD;
-	passwordBox->setGeometry(130, 40, 280, 20);
-	passwordBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
-
-	W_BUTTON *buttonYes = new W_BUTTON(passwordForm);
-	buttonYes->id = CON_PASSWORDYES;
-	buttonYes->setImages(Image(FrontImages, IMAGE_OK), Image(FrontImages, IMAGE_OK), getFrontHighlightImage(Image(FrontImages, IMAGE_OK)));
-	buttonYes->move(180, 65);
-	buttonYes->setTip(_("OK"));
-	W_BUTTON *buttonNo = new W_BUTTON(passwordForm);
-	buttonNo->id = CON_PASSWORDNO;
-	buttonNo->setImages(Image(FrontImages, IMAGE_NO), Image(FrontImages, IMAGE_NO), getFrontHighlightImage(Image(FrontImages, IMAGE_NO)));
-	buttonNo->move(230, 65);
-	buttonNo->setTip(_("Cancel"));
-
-	passwordForm->hide();
-
-	EnablePasswordPrompt = false;
 }
-
-static void hidePasswordForm()
-{
-	EnablePasswordPrompt = false;
-
-	if (widgGetFromID(psWScreen, FRONTEND_PASSWORDFORM))
-	{
-		widgHide(psWScreen, FRONTEND_PASSWORDFORM);
-	}
-
-	widgReveal(psWScreen, FRONTEND_SIDETEXT);
-	widgReveal(psWScreen, FRONTEND_BOTFORM);
-	widgReveal(psWScreen, CON_CANCEL);
-	if (!safeSearch && (!disableLobbyRefresh))
-	{
-		if (widgGetFromID(psWScreen, MULTIOP_REFRESH))
-		{
-			widgReveal(psWScreen, MULTIOP_REFRESH);
-		}
-		if (widgGetFromID(psWScreen, MULTIOP_FILTER_TOGGLE))
-		{
-			widgReveal(psWScreen, MULTIOP_FILTER_TOGGLE);
-		}
-	}
-	addConsoleBox();
-	addGames();
-}
-
-static void showPasswordForm()
-{
-	W_CONTEXT sContext;
-	EnablePasswordPrompt = true;
-
-	widgHide(psWScreen, FRONTEND_SIDETEXT);
-	widgHide(psWScreen, FRONTEND_BOTFORM);
-	widgHide(psWScreen, CON_CANCEL);
-	widgHide(psWScreen, MULTIOP_REFRESH);
-	widgHide(psWScreen, MULTIOP_FILTER_TOGGLE);
-
-	removeGames();
-
-	widgReveal(psWScreen, FRONTEND_PASSWORDFORM);
-
-	// auto click in the password box
-	sContext.xOffset	= 0;
-	sContext.yOffset	= 0;
-	sContext.mx			= 0;
-	sContext.my			= 0;
-	widgGetFromID(psWScreen, CON_PASSWORD)->clicked(&sContext);
-}
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Screen.
@@ -1439,7 +1316,7 @@ void MultibuttonWidget::setLabel(char const *text)
 void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char const *tip)
 {
 	W_BUTTON *button = new W_BUTTON(this);
-	button->setImages(image, imageDown, getFrontHighlightImage(image));
+	button->setImages(image, imageDown, mpwidgetGetFrontHighlightImage(image));
 	button->setTip(tip);
 	button->setState(value == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
 	buttons.push_back(std::make_pair(button, value));
@@ -4501,7 +4378,7 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-static Image getFrontHighlightImage(Image image)
+Image mpwidgetGetFrontHighlightImage(Image image)
 {
 	if (image.isNull())
 	{
@@ -4541,7 +4418,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 	// evaluate auto-frame
 	if (doHighlight == 1 && highlight)
 	{
-		hiToUse = getFrontHighlightImage(imNormal);
+		hiToUse = mpwidgetGetFrontHighlightImage(imNormal);
 	}
 
 	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
