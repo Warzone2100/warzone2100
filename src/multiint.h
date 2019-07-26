@@ -111,7 +111,6 @@ void updateLimitFlags();
 
 void runMultiOptions();
 bool startMultiOptions(bool bReenter);
-void frontendMultiMessages();
 
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
@@ -124,8 +123,6 @@ extern bool bHosted;
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 void addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
-
-void multiOptionsScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 
 
 // ////////////////////////////////////////////////////////////////

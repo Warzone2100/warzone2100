@@ -417,7 +417,7 @@ success:
 	closeChallenges();
 	challengeActive = true;
 	ingame.bHostSetup = true;
-	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
+	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 	return true;
 }
 

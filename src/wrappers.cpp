@@ -150,12 +150,16 @@ TITLECODE titleLoop()
 			bMultiPlayer = true;
 			ingame.bHostSetup = true;
 			game.type = SKIRMISH;
-			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
+			// Ensure the game has a place to return to
+			changeTitleMode(TITLE);
+			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 		}
 		else if (strlen(iptoconnect))
 		{
 			NetPlay.bComms = true; // use network = true
 			NETinit(true);
+			// Ensure the joinGame has a place to return to
+			changeTitleMode(TITLE);
 			joinGame(iptoconnect, 0);
 		}
 		else
@@ -166,6 +170,7 @@ TITLECODE titleLoop()
 		wzSetCursor(CURSOR_DEFAULT);
 	}
 
+	if (wzTitleUICurrent)
 	{
 		// Creates a pointer, so if... when, the UI changes during a run, this does not disappear
 		std::shared_ptr<WzTitleUI> current = wzTitleUICurrent;

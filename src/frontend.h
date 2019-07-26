@@ -33,24 +33,19 @@ enum tMode
 	GAME,			// 4
 	TUTORIAL,		// 5  tutorial/fastplay
 	CREDITS,		// 6  credits
-	PROTOCOL,		// 7  MULTIPLAYER, select proto
-	OBS_MULTI_OPT,	// 8 MULTIPLAYER, select game options - DO NOT USE, now a WzTitleUI thing, see src/titleui/titleui.h -- 20kdc
-	FORCESELECT,	// 9 MULTIPLAYER, Force design screen
-	GAMEFIND,		// 10 MULTIPLAYER, gamefinder.
-	OBS_MULLIM,		// 11 MULTIPLAYER, Limit the multistuff - DO NOT USE, now a WzTitleUI thing, see src/titleui/titleui.h -- 20kdc
-	STARTGAME,		// 12 Fire up the game
-	SHOWINTRO,		// 13 reshow the intro
-	QUIT,			// 14 leaving game
-	LOADSAVEGAME,	// 15 loading a save game
-	KEYMAP,			// 16 keymap editor
-	GRAPHICS_OPTIONS,       // 17 graphics options menu
-	AUDIO_AND_ZOOM_OPTIONS, // 18 audio and zoom options menu
-	VIDEO_OPTIONS,          // 19 video options menu
-	MOUSE_OPTIONS,          // 20 mouse options menu
-	CAMPAIGNS,              // 21 campaign selector
+	FORCESELECT,	// 7 MULTIPLAYER, Force design screen
+	GAMEFIND,		// 8 MULTIPLAYER, gamefinder.
+	STARTGAME,		// 9 Fire up the game
+	SHOWINTRO,		// 10 reshow the intro
+	QUIT,			// 11 leaving game
+	LOADSAVEGAME,	// 12 loading a save game
+	KEYMAP,			// 13 keymap editor
+	GRAPHICS_OPTIONS,       // 14 graphics options menu
+	AUDIO_AND_ZOOM_OPTIONS, // 15 audio and zoom options menu
+	VIDEO_OPTIONS,          // 16 video options menu
+	MOUSE_OPTIONS,          // 17 mouse options menu
+	CAMPAIGNS,              // 18 campaign selector
 };
-
-extern tMode lastTitleMode;
 
 #define MAX_LEVEL_NAME_SIZE	(256)
 

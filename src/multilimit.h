@@ -24,18 +24,7 @@
 #ifndef __INCLUDED_MULTILIMIT_H__
 #define __INCLUDED_MULTILIMIT_H__
 
-#include "titleui/titleui.h"
-
-class WzMultiLimitTitleUI: public WzTitleUI
-{
-public:
-	WzMultiLimitTitleUI(std::shared_ptr<WzMultiOptionTitleUI> parent);
-	virtual void start() override;
-	virtual TITLECODE run() override;
-private:
-	// The parent WzMultiOptionTitleUI to return to.
-	std::shared_ptr<WzMultiOptionTitleUI> parent;
-};
+// See titleui.h for the actual class; dependency reduction measure
 
 void applyLimitSet();
 void createLimitSet();

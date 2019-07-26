@@ -105,7 +105,6 @@ void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsi
 	intScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	loadSaveScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	challengesScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
-	multiOptionsScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	multiMenuScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	display3dScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	consoleScreenDidChangeSize(oldWidth, oldHeight, newWidth, newHeight);

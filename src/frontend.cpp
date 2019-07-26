@@ -88,8 +88,6 @@ struct CAMPAIGN_FILE
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
-tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functions, we use this to go back to the corresponding menu.
-
 char			aLevelName[MAX_LEVEL_NAME_SIZE + 1];	//256];			// vital! the wrf file to use.
 
 bool			bLimiterLoaded = false;
@@ -532,8 +530,7 @@ bool runSinglePlayerMenu()
 		case FRONTEND_SKIRMISH:
 			SPinit();
 			ingame.bHostSetup = true;
-			lastTitleMode = SINGLE;
-			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
+			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 			break;
 
 		case FRONTEND_QUIT:
@@ -609,8 +606,7 @@ bool runMultiPlayerMenu()
 		NETinit(true);
 		NETdiscoverUPnPDevices();
 		game.type = SKIRMISH;		// needed?
-		lastTitleMode = MULTI;
-		changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
+		changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 		break;
 	case FRONTEND_JOIN:
 		NETinit(true);
@@ -619,7 +615,7 @@ bool runMultiPlayerMenu()
 		{
 			setLobbyError(ERROR_NOERROR);
 		}
-		changeTitleMode(PROTOCOL);
+		changeTitleUI(std::make_shared<WzProtocolTitleUI>());
 		break;
 
 	case FRONTEND_QUIT:
@@ -2162,6 +2158,6 @@ void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 	if (wzTitleUICurrent)
 	{
 		std::shared_ptr<WzTitleUI> current = wzTitleUICurrent;
-		current->screenSizeDidChange();
+		current->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	}
 }
