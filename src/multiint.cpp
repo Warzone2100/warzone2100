@@ -102,6 +102,8 @@
 #include "multilimit.h"
 #include "multigifts.h"
 
+#include "titleui/titleui.h"
+
 #include "warzoneconfig.h"
 
 #include "init.h"
@@ -231,7 +233,6 @@ static	void	addGameOptions();
 static void addChatBox(bool preserveOldChat = false);
 static void		addConsoleBox();
 static	void	disableMultiButs();
-static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp();
 
 static	void	decideWRF();
@@ -245,7 +246,7 @@ static bool		SendColourRequest(UBYTE player, UBYTE col);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 static bool		safeToUseColour(UDWORD player, UDWORD col);
 static bool		changeReadyStatus(UBYTE player, bool bReady);
-static	void stopJoining();
+static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -873,6 +874,7 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
  */
 bool joinGame(const char *host, uint32_t port)
 {
+	std::shared_ptr<WzTitleUI> oldUI = wzTitleUICurrent;
 	PLAYERSTATS	playerStats;
 
 	if (ingame.localJoiningInProgress)
@@ -909,14 +911,8 @@ bool joinGame(const char *host, uint32_t port)
 		// Hide a (maybe shown) password form.
 		hidePasswordForm();
 
-		// Change to GAMEFIND, screen.
-		changeTitleMode(GAMEFIND);
-
-		// Shows the lobby error.
-		addConsoleBox();
-		addGames();
-		updateConsoleMessages();
-		displayConsoleMessages();
+		// Change to an error display.
+		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Error while joining.")), oldUI));
 		return false;
 	}
 	ingame.localJoiningInProgress	= true;
@@ -925,7 +921,7 @@ bool joinGame(const char *host, uint32_t port)
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
-	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
+	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(oldUI));
 
 	if (war_getMPcolour() >= 0)
 	{
@@ -1182,7 +1178,7 @@ void runGameFind()
 
 	if (id == CON_CANCEL)								// ok
 	{
-		changeTitleMode(PROTOCOL);
+		changeTitleUI(std::make_shared<WzProtocolTitleUI>());
 	}
 
 	if (id == MULTIOP_REFRESH || id == MULTIOP_FILTER_TOGGLE)
@@ -1247,7 +1243,7 @@ void runGameFind()
 
 	if (CancelPressed())
 	{
-		changeTitleMode(PROTOCOL);
+		changeTitleUI(std::make_shared<WzProtocolTitleUI>());
 	}
 
 	// console box handling
@@ -1612,11 +1608,15 @@ static void addGameOptions()
 
 	// map chooser
 
+	// This is a bit complicated, but basically, see addMultiEditBox,
+	//  and then consider that the two buttons are relative to MCOL0, MROW3.
+	// MCOL for N >= 1 is basically useless because that's not the actual rule followed by addMultiEditBox.
+	// And that's what this panel is meant to align to.
 	char *withoutTechlevel = mapNameWithoutTechlevel(game.map);
-	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, withoutTechlevel, MCOL0, MROW3, MULTIOP_BLUEFORMW, 29);
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, withoutTechlevel, MCOL0, MROW3, MULTIOP_EDITBOXW + MULTIOP_EDITBOXH, MULTIOP_EDITBOXH);
 	free(withoutTechlevel);
-	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MCOL4, 2, 20, MULTIOP_BUTH, _("Select Map"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
-	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MCOL3 + 11, 10, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
+	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MULTIOP_EDITBOXW + 2, 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, _("Select Map"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
+	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MULTIOP_EDITBOXW - 14, 1, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
 	if (!game.isMapMod)
 	{
 		widgHide(psWScreen, MULTIOP_MAP_MOD);
@@ -2788,7 +2788,7 @@ static void disableMultiButs()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-static void stopJoining()
+static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 {
 	dwSelectedGame	 = 0;
 	reloadMPConfig(); // reload own settings
@@ -2835,14 +2835,11 @@ static void stopJoining()
 		return;
 	}
 	debug(LOG_NET, "We have stopped joining.");
-	changeTitleMode(lastTitleMode);
+	changeTitleUI(parent);
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
 
-	if (ingame.bHostSetup)
-	{
-		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-	}
+	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 }
 
 static void loadMapSettings1()
@@ -2990,7 +2987,7 @@ static void loadMapSettings2()
  * Process click events on the multiplayer/skirmish options screen
  * 'id' is id of the button that was pressed
  */
-static void processMultiopWidgets(UDWORD id)
+void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 {
 	PLAYERSTATS playerStats;
 
@@ -3209,7 +3206,7 @@ static void processMultiopWidgets(UDWORD id)
 		if (!challengeActive)
 		{
 			NETGameLocked(false);		// reset status on a cancel
-			stopJoining();
+			stopJoining(parent);
 		}
 		else
 		{
@@ -3449,7 +3446,7 @@ void startMultiplayerGame()
 // ////////////////////////////////////////////////////////////////////////////
 // Net message handling
 
-void frontendMultiMessages()
+void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 {
 	NETQUEUE queue;
 	uint8_t type;
@@ -3466,7 +3463,10 @@ void frontendMultiMessages()
 		case NET_FILE_PAYLOAD:
 			{
 				bool done = recvMapFileData(queue);
-				((MultibuttonWidget *)widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW))->enable(done);  // turn preview button on or off
+				if (running)
+				{
+					((MultibuttonWidget *)widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW))->enable(done);  // turn preview button on or off
+				}
 				break;
 			}
 
@@ -3564,7 +3564,7 @@ void frontendMultiMessages()
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 				if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 				{
-					stopJoining();
+					stopJoining(parent);
 				}
 				break;
 			}
@@ -3645,10 +3645,7 @@ void frontendMultiMessages()
 				if (selectedPlayer == player_id)	// we've been told to leave.
 				{
 					setLobbyError(KICK_TYPE);
-					stopJoining();
-					//screen_RestartBackDrop();
-					changeTitleMode(GAMEFIND);
-					pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+					stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")) + reason, parent));
 					debug(LOG_ERROR, "You have been kicked, because %s ", reason);
 				}
 				else
@@ -3660,10 +3657,9 @@ void frontendMultiMessages()
 		case NET_HOST_DROPPED:
 			NETbeginDecode(queue, NET_HOST_DROPPED);
 			NETend();
-			stopJoining();
+			stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("No connection to host.")), parent));
 			debug(LOG_NET, "The host has quit!");
 			setLobbyError(ERROR_HOSTDROPPED);
-			changeTitleMode(GAMEFIND);
 			break;
 
 		case NET_TEXTMSG:					// Chat message
@@ -3690,7 +3686,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
 
-	frontendMultiMessages();
+	frontendMultiMessages(true);
 	if (NetPlay.isHost)
 	{
 		// send it for each player that needs it
@@ -3848,8 +3844,8 @@ TITLECODE WzMultiOptionTitleUI::run()
 	}
 	if (!NetPlay.isHostAlive && !ingame.bHostSetup)
 	{
-		changeTitleMode(GAMEFIND);
-		screen_RestartBackDrop();
+		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("The host has quit.")), parent));
+		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
 
 	return TITLECODE_CONTINUE;
@@ -3872,7 +3868,7 @@ static bool loadSettings(const WzString &filename)
 	return true;
 }
 
-WzMultiOptionTitleUI::WzMultiOptionTitleUI()
+WzMultiOptionTitleUI::WzMultiOptionTitleUI(std::shared_ptr<WzTitleUI> parent) : parent(parent)
 {
 }
 
