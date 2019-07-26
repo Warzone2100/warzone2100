@@ -54,6 +54,7 @@
 #include "seqdisp.h"
 #include "texture.h"
 #include "warzoneconfig.h"
+#include "titleui/titleui.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 

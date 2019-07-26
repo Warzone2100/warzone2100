@@ -71,6 +71,7 @@
 #include "multiint.h"
 #include "keymap.h"
 #include "cheat.h"
+#include "main.h"								// for gamemode
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1483,7 +1484,7 @@ bool recvTextMessage(NETQUEUE queue)
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex, team);
 
 	// make some noise!
-	if (titleMode == MULTIOPTION || titleMode == MULTILIMIT)
+	if (GetGameMode() != GS_NORMAL)
 	{
 		audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 	}

@@ -74,7 +74,7 @@
 #include "version.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
-
+#include "titleui/titleui.h"
 
 struct CAMPAIGN_FILE
 {
@@ -89,7 +89,6 @@ struct CAMPAIGN_FILE
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
-tMode titleMode; // the global case
 tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functions, we use this to go back to the corresponding menu.
 
 char			aLevelName[MAX_LEVEL_NAME_SIZE + 1];	//256];			// vital! the wrf file to use.
@@ -137,12 +136,12 @@ template <typename T> static T pow2Cycle(T value, T min, T max)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-static bool startTitleMenu()
+void startTitleMenu()
 {
 	intRemoveReticule();
 
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player"), WBUT_TXTCENTRE);
@@ -178,8 +177,6 @@ static bool startTitleMenu()
 	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 6), pRightAlignedButton->y());
 	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
-
-	return true;
 }
 
 static void runLink(char const *link)
@@ -298,10 +295,10 @@ bool runTitleMenu()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Tutorial Menu
-static bool startTutorialMenu()
+void startTutorialMenu()
 {
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 
@@ -310,8 +307,6 @@ static bool startTutorialMenu()
 	addSideText(FRONTEND_SIDETEXT , FRONTEND_SIDEX, FRONTEND_SIDEY, _("TUTORIALS"));
 	// TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-
-	return true;
 }
 
 bool runTutorialMenu()
@@ -358,11 +353,11 @@ bool runTutorialMenu()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Single Player Menu
-static void startSinglePlayerMenu()
+void startSinglePlayerMenu()
 {
 	challengeActive = false;
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	addTextButton(FRONTEND_NEWGAME,  FRONTEND_POS2X, FRONTEND_POS2Y, _("New Campaign") , WBUT_TXTCENTRE);
@@ -406,10 +401,10 @@ static std::vector<CAMPAIGN_FILE> readCampaignFiles()
 	return result;
 }
 
-static void startCampaignSelector()
+void startCampaignSelector()
 {
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
@@ -565,7 +560,7 @@ bool runSinglePlayerMenu()
 			SPinit();
 			ingame.bHostSetup = true;
 			lastTitleMode = SINGLE;
-			changeTitleMode(MULTIOPTION);
+			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
 			break;
 
 		case FRONTEND_QUIT:
@@ -606,10 +601,10 @@ bool runSinglePlayerMenu()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Multi Player Menu
-static bool startMultiPlayerMenu()
+void startMultiPlayerMenu()
 {
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	addSideText(FRONTEND_SIDETEXT ,	FRONTEND_SIDEX, FRONTEND_SIDEY, _("MULTI PLAYER"));
@@ -621,8 +616,6 @@ static bool startMultiPlayerMenu()
 
 	// This isn't really a hyperlink for now... perhaps link to the wiki ?
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("TCP port 2100 must be opened in your firewall or router to host games!"), 0);
-
-	return true;
 }
 
 bool runMultiPlayerMenu()
@@ -644,7 +637,7 @@ bool runMultiPlayerMenu()
 		NETdiscoverUPnPDevices();
 		game.type = SKIRMISH;		// needed?
 		lastTitleMode = MULTI;
-		changeTitleMode(MULTIOPTION);
+		changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
 		break;
 	case FRONTEND_JOIN:
 		NETinit(true);
@@ -676,12 +669,12 @@ bool runMultiPlayerMenu()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Options Menu
-static bool startOptionsMenu()
+void startOptionsMenu()
 {
 	sliderEnableDrag(true);
 
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("OPTIONS"));
@@ -692,8 +685,6 @@ static bool startOptionsMenu()
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-
-	return true;
 }
 
 bool runOptionsMenu()
@@ -783,10 +774,10 @@ char const *graphicsOptionsRadarJumpString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
-static bool startGraphicsOptionsMenu()
+void startGraphicsOptionsMenu()
 {
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	////////////
@@ -822,8 +813,6 @@ static bool startGraphicsOptionsMenu()
 	////////////
 	// quit.
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-
-	return true;
 }
 
 void seqFMVmode()
@@ -922,10 +911,10 @@ static std::string audioAndZoomOptionsRadarZoomString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Audio and Zoom Options Menu
-static bool startAudioAndZoomOptionsMenu()
+void startAudioAndZoomOptionsMenu()
 {
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	// 2d audio
@@ -970,8 +959,6 @@ static bool startAudioAndZoomOptionsMenu()
 		addSideText(FRONTEND_MULTILINE_SIDETEXT, FRONTEND_SIDEX + 22, \
 		FRONTEND_SIDEY, messageString.toUtf8().c_str());
 	}
-
-	return true;
 }
 
 bool runAudioAndZoomOptionsMenu()
@@ -1155,10 +1142,10 @@ static void refreshCurrentVideoOptionsValues()
 	}
 }
 
-static bool startVideoOptionsMenu()
+void startVideoOptionsMenu()
 {
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	// Add a note about changes taking effect on restart for certain options
@@ -1210,8 +1197,6 @@ static bool startVideoOptionsMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	refreshCurrentVideoOptionsValues();
-
-	return true;
 }
 
 // Get available resolutions list, sorted, with duplicates removed.
@@ -1514,10 +1499,10 @@ char const *mouseOptionsScrollEventString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
-static bool startMouseOptionsMenu()
+void startMouseOptionsMenu()
 {
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	////////////
@@ -1552,8 +1537,6 @@ static bool startMouseOptionsMenu()
 
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-
-	return true;
 }
 
 void seqScrollEvent()
@@ -1650,13 +1633,13 @@ static std::string gameOptionsCameraSpeedString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
-static bool startGameOptionsMenu()
+void startGameOptionsMenu()
 {
 	UDWORD	w, h;
 	int playercolor;
 
 	addBackdrop();
-	addTopForm();
+	addTopForm(false);
 	addBottomForm();
 
 	// language
@@ -1709,8 +1692,6 @@ static bool startGameOptionsMenu()
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GAME OPTIONS"));
-
-	return true;
 }
 
 bool runGameOptionsMenu()
@@ -1996,22 +1977,24 @@ void addBackdrop()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTopForm()
+void addTopForm(bool wide)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
 	IntFormAnimated *topForm = new IntFormAnimated(parent, false);
 	topForm->id = FRONTEND_TOPFORM;
-	topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		if (titleMode == MULTIOPTION)
-		{
+	if (wide)
+	{
+		topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
-		}
-		else
-		{
+		}));
+	}
+	else
+	{
+		topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
-		}
-	}));
+		}));
+	}
 
 	W_FORMINIT sFormInit;
 	sFormInit.formID = FRONTEND_TOPFORM;
@@ -2206,76 +2189,7 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDW
 // Change Mode
 void changeTitleMode(tMode mode)
 {
-	tMode oldMode;
-
-	widgDelete(psWScreen, FRONTEND_BACKDROP);		// delete backdrop.
-
-	oldMode = titleMode;							// store old mode
-	titleMode = mode;								// set new mode
-
-	switch (mode)
-	{
-	case CAMPAIGNS:
-		startCampaignSelector();
-		break;
-	case SINGLE:
-		startSinglePlayerMenu();
-		break;
-	case GAME:
-		startGameOptionsMenu();
-		break;
-	case GRAPHICS_OPTIONS:
-		startGraphicsOptionsMenu();
-		break;
-	case AUDIO_AND_ZOOM_OPTIONS:
-		startAudioAndZoomOptionsMenu();
-		break;
-	case VIDEO_OPTIONS:
-		startVideoOptionsMenu();
-		break;
-	case MOUSE_OPTIONS:
-		startMouseOptionsMenu();
-		break;
-	case TUTORIAL:
-		startTutorialMenu();
-		break;
-	case OPTIONS:
-		startOptionsMenu();
-		break;
-	case TITLE:
-		startTitleMenu();
-		break;
-	case MULTI:
-		startMultiPlayerMenu();		// goto multiplayer menu
-		break;
-	case PROTOCOL:
-		startConnectionScreen();
-		break;
-	case MULTIOPTION:
-		startMultiOptions(oldMode == MULTILIMIT);
-		break;
-	case GAMEFIND:
-		startGameFind();
-		break;
-	case MULTILIMIT:
-		startLimitScreen();
-		break;
-	case KEYMAP:
-		startKeyMapEditor(true);
-		break;
-	case STARTGAME:
-	case QUIT:
-	case LOADSAVEGAME:
-		bLimiterLoaded = false;
-	case SHOWINTRO:
-		break;
-	default:
-		debug(LOG_FATAL, "Unknown title mode requested");
-		abort();
-		break;
-	}
-
-	return;
+	changeTitleUI(std::make_shared<WzOldTitleUI>(mode));
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2287,11 +2201,9 @@ void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 	// NOTE:
 	// By setting the appropriate calcLayout functions on all interface elements,
 	// they should automatically recalculate their layout on screen resize.
-
-	// If the Video Options screen is up, the current resolution text (and other values) should be refreshed
-	if (titleMode == VIDEO_OPTIONS)
+	if (wzTitleUICurrent)
 	{
-		ASSERT(widgGetFromID(psWScreen, FRONTEND_WINDOWMODE_R) != nullptr, "Expected the Video options menu to be open.");
-		refreshCurrentVideoOptionsValues();
+		std::shared_ptr<WzTitleUI> current = wzTitleUICurrent;
+		current->screenSizeDidChange();
 	}
 }

@@ -34,10 +34,10 @@ enum tMode
 	TUTORIAL,		// 5  tutorial/fastplay
 	TITLE_UNUSED,	// 6
 	PROTOCOL,		// 7  MULTIPLAYER, select proto
-	MULTIOPTION,	// 8 MULTIPLAYER, select game options
+	OBS_MULTI_OPT,	// 8 MULTIPLAYER, select game options - DO NOT USE, now a WzTitleUI thing, see src/titleui/titleui.h -- 20kdc
 	FORCESELECT,	// 9 MULTIPLAYER, Force design screen
 	GAMEFIND,		// 10 MULTIPLAYER, gamefinder.
-	MULTILIMIT,		// 11 MULTIPLAYER, Limit the multistuff.
+	OBS_MULLIM,		// 11 MULTIPLAYER, Limit the multistuff - DO NOT USE, now a WzTitleUI thing, see src/titleui/titleui.h -- 20kdc
 	STARTGAME,		// 12 Fire up the game
 	SHOWINTRO,		// 13 reshow the intro
 	QUIT,			// 14 leaving game
@@ -50,7 +50,6 @@ enum tMode
 	CAMPAIGNS,              // 21 campaign selector
 };
 
-extern tMode titleMode;					// the global case
 extern tMode lastTitleMode;
 
 #define MAX_LEVEL_NAME_SIZE	(256)
@@ -74,7 +73,7 @@ bool runMouseOptionsMenu();
 bool runTutorialMenu();
 void runContinue();
 
-void addTopForm();
+void addTopForm(bool wide);
 void addBottomForm();
 void addBackdrop();
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);

@@ -41,6 +41,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "mission.h"
+#include "titleui/titleui.h"
 
 #define totalslots 36			// challenge slots
 #define slotsInColumn 12		// # of slots in a column
@@ -417,7 +418,7 @@ success:
 	closeChallenges();
 	challengeActive = true;
 	ingame.bHostSetup = true;
-	changeTitleMode(MULTIOPTION);
+	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>());
 	return true;
 }
 
