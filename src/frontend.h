@@ -34,17 +34,16 @@ enum tMode
 	TUTORIAL,		// 5  tutorial/fastplay
 	TITLE_UNUSED,	// 6
 	FORCESELECT,	// 7 MULTIPLAYER, Force design screen
-	GAMEFIND,		// 8 MULTIPLAYER, gamefinder.
-	STARTGAME,		// 9 Fire up the game
-	SHOWINTRO,		// 10 reshow the intro
-	QUIT,			// 11 leaving game
-	LOADSAVEGAME,	// 12 loading a save game
-	KEYMAP,			// 13 keymap editor
-	GRAPHICS_OPTIONS,       // 14 graphics options menu
-	AUDIO_AND_ZOOM_OPTIONS, // 15 audio and zoom options menu
-	VIDEO_OPTIONS,          // 16 video options menu
-	MOUSE_OPTIONS,          // 17 mouse options menu
-	CAMPAIGNS,              // 18 campaign selector
+	STARTGAME,		// 8 Fire up the game
+	SHOWINTRO,		// 9 reshow the intro
+	QUIT,			// 10 leaving game
+	LOADSAVEGAME,	// 11 loading a save game
+	KEYMAP,			// 12 keymap editor
+	GRAPHICS_OPTIONS,       // 13 graphics options menu
+	AUDIO_AND_ZOOM_OPTIONS, // 14 audio and zoom options menu
+	VIDEO_OPTIONS,          // 15 video options menu
+	MOUSE_OPTIONS,          // 16 mouse options menu
+	CAMPAIGNS,              // 17 campaign selector
 };
 
 #define MAX_LEVEL_NAME_SIZE	(256)
