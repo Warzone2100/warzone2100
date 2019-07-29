@@ -366,12 +366,13 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 	}
 	if (strImd->objanimframes)
 	{
-		const int elapsed = graphicsTime - psObj->timeAnimationStarted;
+		int elapsed = graphicsTime - psObj->timeAnimationStarted;
 		if (elapsed < 0)
 		{
-			return false;  // Animation hasn't started yet.
+			elapsed = 0; // Animation hasn't started yet.
 		}
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
+		ASSERT(frame < strImd->objanimframes, "Bad index %d >= %d", frame, strImd->objanimframes);
 		const ANIMFRAME &state = strImd->objanimdata.at(frame);
 		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
