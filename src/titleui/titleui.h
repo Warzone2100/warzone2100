@@ -136,6 +136,18 @@ private:
 	std::function<void(const char *)> next;
 };
 
+// - gamefind.cpp -
+class WzGameFindTitleUI: public WzTitleUI
+{
+public:
+	WzGameFindTitleUI();
+	virtual void start() override;
+	virtual TITLECODE run() override;
+private:
+	bool safeSearch = false; // allow auto game finding.
+	bool toggleFilter = true; // Used to show all games or only games that are of the same version
+};
+
 #define WZ_MSGBOX_TUI_LEAVE 4597000
 
 void mpSetServerName(const char *hostname);

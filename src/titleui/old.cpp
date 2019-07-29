@@ -97,9 +97,6 @@ void WzOldTitleUI::start()
 	case MULTI:
 		startMultiPlayerMenu();		// goto multiplayer menu
 		break;
-	case GAMEFIND:
-		startGameFind();
-		break;
 	case KEYMAP:
 		startKeyMapEditor(true);
 		break;
@@ -128,9 +125,6 @@ TITLECODE WzOldTitleUI::run()
 	switch (mode) // run relevant title screen code.
 	{
 	// MULTIPLAYER screens
-	case GAMEFIND:
-		runGameFind();
-		break;
 	case MULTI:
 		runMultiPlayerMenu();
 		break;

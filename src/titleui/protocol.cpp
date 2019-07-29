@@ -115,7 +115,7 @@ TITLECODE WzProtocolTitleUI::run()
 		{
 			setLobbyError(ERROR_NOERROR);
 		}
-		changeTitleMode(GAMEFIND);
+		changeTitleUI(std::make_shared<WzGameFindTitleUI>());
 		break;
 	case CON_TYPESID_START+1: // IP button
 		openIPDialog();

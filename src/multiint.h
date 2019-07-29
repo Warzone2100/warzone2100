@@ -104,9 +104,6 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
 void intProcessConnection(UDWORD id);
 
-void runGameFind();
-void startGameFind();
-
 void updateLimitFlags();
 
 void runMultiOptions();
@@ -120,6 +117,7 @@ bool changeColour(unsigned player, int col, bool isHost);
 
 extern char sPlayer[128];
 extern bool bHosted;
+extern bool multiintDisableLobbyRefresh; // gamefind
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 void addPlayerBox(bool);			// players (mid) box

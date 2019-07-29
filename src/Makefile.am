@@ -252,6 +252,7 @@ COMMONSOURCES = \
 	terrain.cpp \
 	text.cpp \
 	texture.cpp \
+	titleui/gamefind.cpp \
 	titleui/msgbox.cpp \
 	titleui/old.cpp \
 	titleui/passbox.cpp \
