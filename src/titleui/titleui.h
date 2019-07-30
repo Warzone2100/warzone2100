@@ -144,6 +144,8 @@ public:
 	virtual void start() override;
 	virtual TITLECODE run() override;
 private:
+	void addGames();
+	void addConsoleBox();
 	bool safeSearch = false; // allow auto game finding.
 	bool toggleFilter = true; // Used to show all games or only games that are of the same version
 };
