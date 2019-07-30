@@ -60,8 +60,6 @@ struct DisplayRemoteGameCache
 static DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 
 // find games
-static void addGames();
-static void addConsoleBox();
 static void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 WzGameFindTitleUI::WzGameFindTitleUI() {
@@ -202,7 +200,7 @@ TITLECODE WzGameFindTitleUI::run()
 
 // --- Various statics ---
 
-static void addConsoleBox()
+void WzGameFindTitleUI::addConsoleBox()
 {
 	if (widgGetFromID(psWScreen, FRONTEND_TOPFORM))
 	{
@@ -240,7 +238,7 @@ static void addConsoleBox()
 // ////////////////////////////////////////////////////////////////////////////
 // Game Chooser Screen.
 
-static void addGames()
+void WzGameFindTitleUI::addGames()
 {
 	int i, gcount = 0, added = 0;
 	static const char *wrongVersionTip = _("Your version of Warzone is incompatible with this game.");
