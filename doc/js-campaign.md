@@ -22,119 +22,6 @@ your handler will be called, if any.
 All of this happens automagically and does not normally require
 your attention.
 
-## camDef(something)
-
-Returns false if something is JavaScript-undefined, true otherwise.
-
-## camIsString(something)
-
-Returns true if something is a string, false otherwise.
-
-## camRand(max)
-
-A non-synchronous random integer in range [0, max - 1].
-
-## camCallOnce(function name)
-
-Call a function by name, but only if it has not been called yet.
-
-## camSafeRemoveObject(obj[, special effects?])
-
-Remove a game object (by value or label) if it exists, do nothing otherwise.
-
-## camMakePos(x, y | label | object)
-
-Make a POSITION-like object, unless already done. Often useful
-for making functions that would accept positions in both xx,yy and {x:xx,y:yy} forms.
-Also accepts labels. If label of AREA is given, returns the center of the area.
-If an existing object or label of such is given, returns a safe JavaScript
-object containing its x, y and id.
-
-## camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)
-
-A wrapper for ```distBetweenTwoPoints()```.
-
-## camPlayerMatchesFilter(player, filter)
-
-A function to handle player filters in a way similar to
-how JS API functions (eg. ```enumDroid(filter, ...)```) handle them.
-
-## camRemoveDuplicates(array)
-
-Remove duplicate items from an array.
-
-## camCountStructuresInArea(label, [player])
-
-Mimics wzscript's numStructsButNotWallsInArea().
-
-## camChangeOnDiff(numeric value)
-
-Change a numeric value based on campaign difficulty.
-
-## camIsSystemDroid(game object)
-
-Determine if the passed in object is a non-weapon based droid.
-
-## camMakeGroup(what, filter)
-
-Make a new group out of array of droids, single game object,
-or label string, with fuzzy auto-detection of argument type.
-Only droids would be added to the group. ```filter``` can be one of
-a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```;
-defaults to ```ENEMIES```.
-
-## camBreakAlliances()
-
-Break alliances between all players.
-
-## camEnableRes(list, player)
-
-Grants research from the given list to player
-
-## camCompleteRequiredResearch(items, player)
-
-Grants research from the given list to player and also researches
-the required research for that item.
-
-## camMarkTiles(label | array of labels)
-
-Mark area on the map by label(s), but only if debug mode is enabled.
-Otherwise, remember what to mark in case it is going to be.
-
-## camUnmarkTiles(label | array of labels)
-
-No longer mark area(s) with given label(s) in debug mode.
-
-## camDebug(string...)
-
-Pretty debug prints - a wrapper around ```debug()```.
-Prints a function call stack and the argument message,
-prefixed with "DEBUG". Only use this function to indicate
-actual bugs in the scenario script, because game shouldn't
-print things when nothing is broken. If you want to keep
-some prints around to make debugging easier without distracting
-the user, use ```camTrace()```.
-
-## camDebugOnce(string...)
-
-Same as ```camDebug()```, but prints each message only once
-during script lifetime.
-
-## camTrace(string...)
-
-Same as ```camDebug()```, but only warns in cheat mode.
-Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
-calls in your code for easier debugging.
-
-## camTraceOnce(string...)
-
-Same as ```camTrace()```, but prints each message only once
-during script lifetime.
-
-## camIsCheating()
-
-Check if the player is in cheat mode.
-
 ## camSetArtifacts(artifacts)
 
 Tell ```libcampaign.js``` to manage a certain set of artifacts.
@@ -202,6 +89,191 @@ was actually found by the player.
 Returns true if all enemy bases managed by ```libcampaign.js```
 are destroyed.
 
+## camMarkTiles(label | array of labels)
+
+Mark area on the map by label(s), but only if debug mode is enabled.
+Otherwise, remember what to mark in case it is going to be.
+
+## camUnmarkTiles(label | array of labels)
+
+No longer mark area(s) with given label(s) in debug mode.
+
+## camDebug(string...)
+
+Pretty debug prints - a wrapper around ```debug()```.
+Prints a function call stack and the argument message,
+prefixed with "DEBUG". Only use this function to indicate
+actual bugs in the scenario script, because game shouldn't
+print things when nothing is broken. If you want to keep
+some prints around to make debugging easier without distracting
+the user, use ```camTrace()```.
+
+## camDebugOnce(string...)
+
+Same as ```camDebug()```, but prints each message only once
+during script lifetime.
+
+## camTrace(string...)
+
+Same as ```camDebug()```, but only warns in cheat mode.
+Prefixed with "TRACE". It's safe and natural to keep ```camTrace()```
+calls in your code for easier debugging.
+
+## camTraceOnce(string...)
+
+Same as ```camTrace()```, but prints each message only once
+during script lifetime.
+
+## camIsCheating()
+
+Check if the player is in cheat mode.
+
+## camNewGroup()
+
+A saveload safe version of newGroup() so as not to create group ID clashes.
+
+## camInNeverGroup(droid)
+
+check if this droid is forced to never group.
+
+## camNeverGroupDroid(what, [filter])
+
+A means to not auto group some droids.
+
+## camAreaEvent(label, function(droid))
+
+Implement eventArea<label> in a debugging-friendly way. The function
+marks the area until the event is triggered, and traces entering the area
+in the TRACE log.
+
+## camDef(something)
+
+Returns false if something is JavaScript-undefined, true otherwise.
+
+## camIsString(something)
+
+Returns true if something is a string, false otherwise.
+
+## camRand(max)
+
+A non-synchronous random integer in range [0, max - 1].
+
+## camCallOnce(function name)
+
+Call a function by name, but only if it has not been called yet.
+
+## camSafeRemoveObject(obj[, special effects?])
+
+Remove a game object (by value or label) if it exists, do nothing otherwise.
+
+## camMakePos(x, y | label | object)
+
+Make a POSITION-like object, unless already done. Often useful
+for making functions that would accept positions in both xx,yy and {x:xx,y:yy} forms.
+Also accepts labels. If label of AREA is given, returns the center of the area.
+If an existing object or label of such is given, returns a safe JavaScript
+object containing its x, y and id.
+
+## camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)
+
+A wrapper for ```distBetweenTwoPoints()```.
+
+## camPlayerMatchesFilter(player, filter)
+
+A function to handle player filters in a way similar to
+how JS API functions (eg. ```enumDroid(filter, ...)```) handle them.
+
+## camRemoveDuplicates(array)
+
+Remove duplicate items from an array.
+
+## camCountStructuresInArea(label, [player])
+
+Mimics wzscript's numStructsButNotWallsInArea().
+
+## camChangeOnDiff(numeric value)
+
+Change a numeric value based on campaign difficulty.
+
+## camIsSystemDroid(game object)
+
+Determine if the passed in object is a non-weapon based droid.
+
+## camMakeGroup(what, filter)
+
+Make a new group out of array of droids, single game object,
+or label string, with fuzzy auto-detection of argument type.
+Only droids would be added to the group. ```filter``` can be one of
+a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```;
+defaults to ```ENEMIES```.
+
+## camBreakAlliances()
+
+Break alliances between all players.
+
+## camSetFactories(factories)
+
+Tell ```libcampaign.js``` to manage a certain set of enemy factories.
+Management assumes producing droids, packing them into groups and
+executing orders once the group becomes large-enough.
+The argument is a JavaScript map from group labels to factory descriptions.
+Each label points to a factory object. Factory description
+
+is a JavaScript object with the following fields:
+* ```assembly``` A rally point position label, where the group would
+	gather.
+* ```order``` An order to execute for every group produced in the
+	factory. Same as the order parameter for ```camManageGroup()```.
+* ```data``` Order data. Same as the data parameter for
+	```camManageGroup()```.
+* ```groupSize``` Number of droids to produce before executing the order.
+	Also, if order is ```CAM_ORDER_ATTACK```, data.count defaults to this value.
+* ```maxSize``` Halt production when reaching that many droids in the
+	factory group. Resume when some droids die. Unlimited if unspecified.
+* ```throttle``` If defined, produce droids only every that many
+	milliseconds, and keep the factory idle between ticks.
+* ```group``` If defined, make the factory manage this group,
+	otherwise create a new empty group to manage.
+	Droids produced in the factory would automatically be
+	added to the group, and order and data parameters
+	would be applied to this group.
+* ```templates``` List of droid templates to produce in the factory.
+	Each template is a JavaScript object with the following fields:
+  * ```body``` Body stat name.
+  * ```prop``` Propulsion stat name.
+  * ```weap``` Weapon stat name. Only single-turret droids are
+		currently supported.
+	Note that all template components are automatically made available
+	to the factory owner.
+Factories won't start production immediately; call
+```camEnableFactory()``` to turn them on when necessary.
+
+## camSetFactoryData(factory label, factory description)
+
+Similar to ```camSetFactories()```, but one factory at a time.
+If the factory was already managing a group of droids, it keeps
+managing it. If a new group is specified in the description,
+the old group is merged into it. NOTE: This function disables the
+factory. You would need to call ```camEnableFactory()``` again.
+
+## camEnableFactory(factory label)
+
+Enable a managed factory by the given label. Once the factory is enabled,
+it starts producing units and executing orders as given.
+
+## camQueueDroidProduction(player, template)
+
+Queues up an extra droid template for production. It would be produced
+in the first factory that is capable of producing it, at the end of
+its production loop, first queued first served.
+
+## camSetPropulsionTypeLimit(number)
+
+On hard and insane the propulsion type can be limited with this. For type II
+pass in 2, and for type III pass in 3. Hard defaults to type II and
+insane defaults to type III. If nothing is passed in then the type
+limit will match what is in templates.json.
+
 ## camSendReinforcement(player, position, droids, kind, data)
 
 Give a single bunch of droids (template list) for a player at
@@ -232,9 +304,14 @@ which may be different every time. Kind and data work similarly to
 ```camSendReinforcement()```.
 Use CAM_REINFORCE_NONE as kind to disable previously set reinforcements.
 
-## camRemoveEnemyTransporterBlip()
+## camEnableRes(list, player)
 
-Removes the last blip that an enemy transporter left behind, if any.
+Grants research from the given list to player
+
+## camCompleteRequiredResearch(items, player)
+
+Grants research from the given list to player and also researches
+the required research for that item.
 
 ## camManageGroup(group, order, data)
 
@@ -320,6 +397,24 @@ different aspects of behavior. The order parameter is one of:
 
 Tell ```libcampaign.js``` to stop managing a certain group.
 
+## camOrderToString(order)
+
+Print campaign order as string, useful for debugging.
+
+## camIsTransporter(game object)
+
+Determine if the object is a transporter.
+
+## camSetupTransport(place x, place y, exit x, exit y)
+
+A convenient function for placing the standard campaign transport
+for loading in pre-away missions. The exit point for the transport
+is set up as well.
+
+## camRemoveEnemyTransporterBlip()
+
+Removes the last blip that an enemy transporter left behind, if any.
+
 ## camManageTrucks(player)
 
 Manage trucks for an AI player. This assumes recapturing oils and
@@ -335,73 +430,6 @@ not be re-issued in case the truck is destroyed before the building
 is finished. If position is unspecified, the building would be built
 near the first available truck. Otherwise, position may be a label
 or a POSITION-like object.
-
-## camOrderToString(order)
-
-Print campaign order as string, useful for debugging.
-
-## camSetFactories(factories)
-
-Tell ```libcampaign.js``` to manage a certain set of enemy factories.
-Management assumes producing droids, packing them into groups and
-executing orders once the group becomes large-enough.
-The argument is a JavaScript map from group labels to factory descriptions.
-Each label points to a factory object. Factory description
-
-is a JavaScript object with the following fields:
-* ```assembly``` A rally point position label, where the group would
-	gather.
-* ```order``` An order to execute for every group produced in the
-	factory. Same as the order parameter for ```camManageGroup()```.
-* ```data``` Order data. Same as the data parameter for
-	```camManageGroup()```.
-* ```groupSize``` Number of droids to produce before executing the order.
-	Also, if order is ```CAM_ORDER_ATTACK```, data.count defaults to this value.
-* ```maxSize``` Halt production when reaching that many droids in the
-	factory group. Resume when some droids die. Unlimited if unspecified.
-* ```throttle``` If defined, produce droids only every that many
-	milliseconds, and keep the factory idle between ticks.
-* ```group``` If defined, make the factory manage this group,
-	otherwise create a new empty group to manage.
-	Droids produced in the factory would automatically be
-	added to the group, and order and data parameters
-	would be applied to this group.
-* ```templates``` List of droid templates to produce in the factory.
-	Each template is a JavaScript object with the following fields:
-  * ```body``` Body stat name.
-  * ```prop``` Propulsion stat name.
-  * ```weap``` Weapon stat name. Only single-turret droids are
-		currently supported.
-	Note that all template components are automatically made available
-	to the factory owner.
-Factories won't start production immediately; call
-```camEnableFactory()``` to turn them on when necessary.
-
-## camSetFactoryData(factory label, factory description)
-
-Similar to ```camSetFactories()```, but one factory at a time.
-If the factory was already managing a group of droids, it keeps
-managing it. If a new group is specified in the description,
-the old group is merged into it. NOTE: This function disables the
-factory. You would need to call ```camEnableFactory()``` again.
-
-## camEnableFactory(factory label)
-
-Enable a managed factory by the given label. Once the factory is enabled,
-it starts producing units and executing orders as given.
-
-## camQueueDroidProduction(player, template)
-
-Queues up an extra droid template for production. It would be produced
-in the first factory that is capable of producing it, at the end of
-its production loop, first queued first served.
-
-## camSetPropulsionTypeLimit(number)
-
-On hard and insane the propulsion type can be limited with this. For type II
-pass in 2, and for type III pass in 3. Hard defaults to type II and
-insane defaults to type III. If nothing is passed in then the type
-limit will match what is in templates.json.
 
 ## camNextLevel(next level)
 
@@ -451,28 +479,6 @@ For offworld victory, some more extra data parameters can be defined:
   * __false__ does not require all bases to be destroyed,
   * __true__ requires all bases destroyed.
 
-## camIsTransporter(game object)
-
-Determine if the object is a transporter.
-
-## camSetupTransport(place x, place y, exit x, exit y)
-
-A convenient function for placing the standard campaign transport
-for loading in pre-away missions. The exit point for the transport
-is set up as well.
-
-## camNewGroup()
-
-A saveload safe version of newGroup() so as not to create group ID clashes.
-
-## camInNeverGroup(droid)
-
-check if this droid is forced to never group.
-
-## camNeverGroupDroid(what, [filter])
-
-A means to not auto group some droids.
-
 ## camPlayVideos(videos)
 
 If videos is an array, queue up all of them for immediate playing. This
@@ -480,10 +486,4 @@ function will play one video sequence should one be provided. Also,
 should a sound file be in a string (pcvX.ogg)  __camEnqueueVideos() will recognize it
 as a sound to play before a video. Of which is only supported when passed as
 an array.
-
-## camAreaEvent(label, function(droid))
-
-Implement eventArea<label> in a debugging-friendly way. The function
-marks the area until the event is triggered, and traces entering the area
-in the TRACE log.
 

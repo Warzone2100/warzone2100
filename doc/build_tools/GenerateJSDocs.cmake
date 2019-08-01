@@ -134,4 +134,96 @@ PROCESS_LINES("data/base/script/campaign/libcampaign.js"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md")
 
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/artifact.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/base.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/debug.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/events.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/group.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/hook.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/misc.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/nexus.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/production.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/reinforcements.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/research.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/tactics.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/time.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/transport.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/truck.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/victory.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/video.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/vtol.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
 message( STATUS "Finished generating JS docs" )
