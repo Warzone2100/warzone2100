@@ -422,7 +422,7 @@ bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 	{
 		return true;
 	}
-	return (orderState(psDroid, DORDER_FIRESUPPORT)	|| visibleObject(psDroid, psTarget, false))
+	return (orderState(psDroid, DORDER_FIRESUPPORT)	|| visibleObject(psDroid, psTarget, false) > UBYTE_MAX / 2)
 	       && lineOfFire(psDroid, psTarget, weapon_slot, true);
 }
 
@@ -885,7 +885,7 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 			}
 			// If we have a target for the weapon: is it visible?
-			if (psDroid->psActionTarget[i] != nullptr && visibleObject(psDroid, psDroid->psActionTarget[i], false))
+			if (psDroid->psActionTarget[i] != nullptr && visibleObject(psDroid, psDroid->psActionTarget[i], false) > UBYTE_MAX / 2)
 			{
 				hasVisibleTarget = true; // droid have a visible target to shoot
 				targetVisibile[i] = true;// it is at least visible for this weapon

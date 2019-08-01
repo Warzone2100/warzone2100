@@ -597,18 +597,24 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	int top = psTarget->pos.z + map_Height(psViewer->pos.x, psViewer->pos.y) - help.startHeight;
 	int targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
+	bool tileWatched = psTile->watchers[psViewer->player] > 0;
+	bool tileWatchedSensor = psTile->sensors[psViewer->player] > 0;
+
 	// Show objects hidden by ECM jamming with radar blips
-	if (psTile->watchers[psViewer->player] == 0 && psTile->sensors[psViewer->player] > 0 && jammed)
+	if (jammed)
 	{
-		return UBYTE_MAX / 2;
+		if (!tileWatched && tileWatchedSensor)
+		{
+			return UBYTE_MAX / 2;
+		}
 	}
-	// Show objects that are seen directly or with unjammed sensors
-	else if ((psTile->watchers[psViewer->player] > 0 && targetGrad >= help.currGrad) || (psTile->sensors[psViewer->player] > 0 && !jammed))
+	// Show objects that are seen directly
+	if ((tileWatched && targetGrad >= help.currGrad) || (!jammed && tileWatchedSensor))
 	{
 		return UBYTE_MAX;
 	}
 	// Show detected sensors as radar blips
-	else if (objRadarDetector(psViewer) && objActiveRadar(psTarget) && dist < range * 10)
+	if (objRadarDetector(psViewer) && objActiveRadar(psTarget) && dist < range * 10)
 	{
 		return UBYTE_MAX / 2;
 	}
