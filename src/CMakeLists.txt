@@ -86,7 +86,7 @@ if(ENABLE_NLS)
 endif()
 
 file(GLOB HEADERS "*.h")
-file(GLOB SRC "*.cpp")
+file(GLOB SRC "*.cpp" "*/*.cpp")
 qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
 
 set(_additionalSourceFiles)
