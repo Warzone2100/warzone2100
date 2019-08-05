@@ -272,4 +272,7 @@ void kf_AutoGame();
 
 void kf_PerformanceSample();
 
+void kf_QuickSave();
+void kf_QuickLoad();
+
 #endif // __INCLUDED_SRC_KEYBIND_H__

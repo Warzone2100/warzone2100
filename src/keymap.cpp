@@ -237,6 +237,8 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_SetDroidRangeOptimum, "SetDroidRangeOptimum"},
 	{kf_SetDroidRangeShort, "SetDroidRangeShort"},
 	{kf_SetDroidRangeLong, "SetDroidRangeLong"},
+	{kf_QuickSave, "QuickSave"},
+	{kf_QuickLoad, "QuickLoad"},
 };
 
 KeyMapSaveEntry const *keymapEntryByFunction(void (*function)())
@@ -298,8 +300,10 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F4,  KEYMAP_PRESSED, kf_ChooseDesign,                 N_("Design"));
 	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F5,  KEYMAP_PRESSED, kf_ChooseIntelligence,           N_("Intelligence Display"));
 	keyAddMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F6,  KEYMAP_PRESSED, kf_ChooseCommand,                N_("Commanders"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F7,  KEYMAP_PRESSED, kf_ToggleRadar,                  N_("Toggle Radar"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F8,  KEYMAP_PRESSED, kf_ToggleConsole,                N_("Toggle Console Display"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F7,  KEYMAP_PRESSED, kf_QuickSave,                    N_("QuickSave"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_LSHIFT, KEY_F7,  KEYMAP_PRESSED, kf_ToggleRadar,                  N_("Toggle Radar"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F8,  KEYMAP_PRESSED, kf_QuickLoad,                    N_("QuickLoad"));
+	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_LSHIFT, KEY_F8,  KEYMAP_PRESSED, kf_ToggleConsole,                N_("Toggle Console Display"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F9,  KEYMAP_PRESSED, kf_ToggleEnergyBars,             N_("Toggle Damage Bars On/Off"));
 	keyAddMapping(KEYMAP_ALWAYS,         KEY_IGNORE, KEY_F10, KEYMAP_PRESSED, kf_ScreenDump,                   N_("Take Screen Shot"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F11, KEYMAP_PRESSED, kf_ToggleFormationSpeedLimiting, N_("Toggle Formation Speed Limiting"));

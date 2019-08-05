@@ -78,6 +78,7 @@
 #include "template.h"
 #include "qtscript.h"
 #include "multigifts.h"
+#include "loadsave.h"
 
 /*
 	KeyBind.c
@@ -95,6 +96,9 @@ char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each p
 
 static STRUCTURE	*psOldRE = nullptr;
 static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
+
+#define QUICKSAVE_CAM_FILENAME "savegames/campaign/QuickSave.gam"
+#define QUICKSAVE_SKI_FILENAME "savegames/skirmish/QuickSave.gam"
 
 /* Support functions to minimise code size */
 static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE State);
@@ -2726,4 +2730,61 @@ void kf_BuildNextPage()
 	}
 
 	audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
+}
+
+void kf_QuickSave()
+{
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
+	if (runningMultiplayer() || bInTutorial)
+	{
+		console("QuickSave not allowed for multiplayer or tutorial games");
+		return;
+	}
+
+	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
+	if (PHYSFS_exists(filename))
+	{
+		char *oldsave = strdup(filename);
+		deleteSaveGame(oldsave);
+		free(oldsave);
+	}
+	if (saveGame(filename, GTYPE_SAVE_MIDMISSION))
+	{
+		console("QuickSave");
+	}
+	else
+	{
+		console("QuickSave failed");
+	}
+}
+
+void kf_QuickLoad()
+{
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
+	if (runningMultiplayer() || bInTutorial)
+	{
+		console("QuickLoad not allowed for multiplayer or tutorial games");
+		return;
+	}
+
+	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
+	if (PHYSFS_exists(filename))
+	{
+		console("QuickLoad");
+		audio_StopAll();
+		//clear out any mission widgets - timers etc that may be on the screen
+		clearMissionWidgets();
+		setWidgetsStatus(true);
+		intResetScreen(false);
+		wzSetCursor(CURSOR_DEFAULT);
+		int campaign = getCampaign(filename);
+		setCampaignNumber(campaign);
+
+		loopMissionState = LMS_LOADGAME;
+		sstrcpy(saveGameName, filename);
+	}
+	else
+	{
+		console("QuickSave file does not exist yet");
+	}
 }
