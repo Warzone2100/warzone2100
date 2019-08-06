@@ -223,9 +223,7 @@ void WzMultiLimitTitleUI::start()
 	// TRANSLATORS: Sidetext of structure limits screen
 	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, _("LIMITS"));
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *limitsForm = new IntFormAnimated(parent, false);
+	IntFormAnimated *limitsForm = new IntFormAnimated(widgGetFromID(psWScreen, FRONTEND_BACKDROP), false);
 	limitsForm->id = IDLIMITS;
 	limitsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
