@@ -209,18 +209,6 @@ function checkRepaired(droid) {
 	return true;
 }
 
-function droidFree(droid) {
-	if (droid.order === DORDER_SCOUT)
-		return false;
-	if (droid.order === DORDER_ATTACK)
-		return false;
-	if (droid.order === DORDER_RTR)
-		return false;
-	if (!checkRepaired(droid))
-		return false;
-	return true;
-}
-
 function attackTarget(droid) {
 	var target = findTarget(droid.group);
 	if (droid.group !== miscGroup)

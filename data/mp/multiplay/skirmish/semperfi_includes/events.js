@@ -129,33 +129,7 @@ function eventStartLevel()
 		}
 	});
 
-	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
-	{
-		if (l < MIN_BASE_TRUCKS)
-		{
-			if (countStruct(FACTORY_STAT) === 0)
-			{
-				groupAdd(baseBuilders, cons[i]);
-			}
-			else
-			{
-				groupAdd(oilBuilders, cons[i]);
-			}
-		}
-		else
-		{
-			if (i < Math.floor(l / 2))
-			{
-				groupAdd(baseBuilders, cons[i]);
-			}
-			else
-			{
-				groupAdd(oilBuilders, cons[i]);
-			}
-		}
-	}
-
+	setupTruckGroups();
 	recycleDroidsForHover();
 	buildFundamentals();
 	isSeaMap = isHoverMap();
