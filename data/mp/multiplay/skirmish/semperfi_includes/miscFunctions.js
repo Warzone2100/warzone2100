@@ -58,3 +58,34 @@ function isDerrick(obj)
 {
 	return (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR);
 }
+
+function setupTruckGroups()
+{
+	var cons = enumDroid(me, DROID_CONSTRUCT);
+	for (var i = 0, l = cons.length; i < l; ++i)
+	{
+		var droid = cons[i];
+		if (l < MIN_BASE_TRUCKS)
+		{
+			if (countStruct(FACTORY_STAT) === 0)
+			{
+				groupAdd(baseBuilders, droid);
+			}
+			else
+			{
+				groupAdd(oilBuilders, droid);
+			}
+		}
+		else
+		{
+			if (i < Math.floor(l / 2))
+			{
+				groupAdd(baseBuilders, droid);
+			}
+			else
+			{
+				groupAdd(oilBuilders, droid);
+			}
+		}
+	}
+}

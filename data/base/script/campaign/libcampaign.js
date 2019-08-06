@@ -218,7 +218,7 @@ include(INCLUDE_PATH + "time.js");
 include(INCLUDE_PATH + "research.js");
 include(INCLUDE_PATH + "artifact.js");
 include(INCLUDE_PATH + "base.js");
-include(INCLUDE_PATH + "reinforcements.js")
+include(INCLUDE_PATH + "reinforcements.js");
 include(INCLUDE_PATH + "tactics.js");
 include(INCLUDE_PATH + "production.js");
 include(INCLUDE_PATH + "truck.js");
