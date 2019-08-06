@@ -12,10 +12,8 @@ const TRANSFER_LIKE_EVENT = 2;
 
 function reticuleManufactureCheck()
 {
-	var j = 0;
-	var len2 = 0;
 	var structureComplete = false;
-	var facs = ["A0LightFactory", "A0CyborgFactory", "A0VTolFactory1"];
+	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (var i = 0, len = facs.length; i < len; ++i)
 	{
@@ -25,7 +23,7 @@ function reticuleManufactureCheck()
 
 		if (offWorldFacs !== null)
 		{
-			for (j = 0, len2 = offWorldFacs.length; j < len2; ++j)
+			for (var j = 0, len2 = offWorldFacs.length; j < len2; ++j)
 			{
 				if (offWorldFacs[j].status === BUILT)
 				{
@@ -36,7 +34,7 @@ function reticuleManufactureCheck()
 		}
 		if (!structureComplete)
 		{
-			for (j = 0, len2 = onMapFacs.length; j < len2; ++j)
+			for (var j = 0, len2 = onMapFacs.length; j < len2; ++j)
 			{
 				if (onMapFacs[j].status === BUILT)
 				{
@@ -64,32 +62,41 @@ function reticuleManufactureCheck()
 
 function reticuleResearchCheck()
 {
-	var i = 0;
-	var len = 0;
 	var structureComplete = false;
-	var offRes = enumStructOffWorld(selectedPlayer, "A0ResearchFacility");
-	var onMapResLabs = enumStruct(selectedPlayer, "A0ResearchFacility");
+	var labs = [RESEARCH_LAB,];
 
-	if (offRes !== null)
+	for (var i = 0, len = labs.length; i < len; ++i)
 	{
-		for (i = 0, len = offRes.length; i < len; ++i)
+		var resType = labs[i];
+		var offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
+		var onMapLabs = enumStruct(selectedPlayer, resType);
+
+		if (offWorldLabs !== null)
 		{
-			if (offRes[i].status === BUILT)
+			for (var j = 0, len2 = offWorldLabs.length; j < len2; ++j)
 			{
-				structureComplete = true;
-				break;
+				if (offWorldLabs[j].status === BUILT)
+				{
+					structureComplete = true;
+					break;
+				}
 			}
 		}
-	}
-	if (!structureComplete)
-	{
-		for (i = 0, len = onMapResLabs.length; i < len; ++i)
+		if (!structureComplete)
 		{
-			if (onMapResLabs[i].status === BUILT)
+			for (var j = 0, len2 = onMapLabs.length; j < len2; ++j)
 			{
-				structureComplete = true;
-				break;
+				if (onMapLabs[j].status === BUILT)
+				{
+					structureComplete = true;
+					break;
+				}
 			}
+		}
+
+		if (structureComplete === true)
+		{
+			break;
 		}
 	}
 
@@ -117,32 +124,41 @@ function reticuleBuildCheck()
 
 function reticuleDesignCheck()
 {
-	var i = 0;
-	var len = 0;
 	var structureComplete = false;
-	var offHQ = enumStructOffWorld(selectedPlayer, "A0CommandCentre");
-	var onMapHQ = enumStruct(selectedPlayer, "A0CommandCentre");
+	var hqs = [HQ,];
 
-	if (offHQ !== null)
+	for (var i = 0, len = hqs.length; i < len; ++i)
 	{
-		for (i = 0, len = offHQ.length; i < len; ++i)
+		var hqType = hqs[i];
+		var offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
+		var onMapHq = enumStruct(selectedPlayer, hqType);
+
+		if (offWorldHq !== null)
 		{
-			if (offHQ[i].status === BUILT)
+			for (var j = 0, len2 = offWorldHq.length; j < len2; ++j)
 			{
-				structureComplete = true;
-				break;
+				if (offWorldHq[j].status === BUILT)
+				{
+					structureComplete = true;
+					break;
+				}
 			}
 		}
-	}
-	if (!structureComplete)
-	{
-		for (i = 0, len = onMapHQ.length; i < len; ++i)
+		if (!structureComplete)
 		{
-			if (onMapHQ[i].status === BUILT)
+			for (var j = 0, len2 = onMapHq.length; j < len2; ++j)
 			{
-				structureComplete = true;
-				break;
+				if (onMapHq[j].status === BUILT)
+				{
+					structureComplete = true;
+					break;
+				}
 			}
+		}
+
+		if (structureComplete === true)
+		{
+			break;
 		}
 	}
 
