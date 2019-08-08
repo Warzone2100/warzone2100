@@ -29,6 +29,7 @@
 #include <physfs.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/sound/audio.h"
@@ -40,11 +41,13 @@
 #include "hci.h"
 #include "init.h"
 #include "intdisplay.h"
+#include "keybind.h"
 #include "keyedit.h"
 #include "keymap.h"
 #include "loadsave.h"
 #include "main.h"
 #include "multiint.h"
+#include "multiplay.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -192,6 +195,39 @@ static KEY_CODE scanKeyBoardForBinding()
 	return (KEY_CODE)0;
 }
 
+bool runInGameKeyMapEditor(unsigned id)
+{
+	if (id == KM_RETURN)			// return
+	{
+		saveKeyMap();
+		widgDelete(psWScreen, KM_FORM);
+		inputLoseFocus();
+		bAllowOtherKeyPresses = true;
+		return true;
+	}
+	if (id == KM_DEFAULT)
+	{
+		// reinitialise key mappings
+		keyInitMappings(true);
+		widgDelete(psWScreen, KM_FORM); // readd the widgets
+		startInGameKeyMapEditor(false);
+	}
+	else if (id >= KM_START && id <= KM_END)
+	{
+		pushedKeyMap(id);
+	}
+
+	if (selectedKeyMap)
+	{
+		KEY_CODE kc = scanKeyBoardForBinding();
+		if (kc)
+		{
+			pushedKeyCombo(kc);
+		}
+	}
+	return false;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 bool runKeyMapEditor()
 {
@@ -306,36 +342,72 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool startKeyMapEditor(bool first)
+static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 {
-	addBackdrop();
-	addSideText(FRONTEND_SIDETEXT, KM_SX, KM_Y, _("KEY MAPPING"));
-
 	if (first)
 	{
 		loadKeyMap();									// get the current mappings.
 	}
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
 	IntFormAnimated *kmForm = new IntFormAnimated(parent, false);
 	kmForm->id = KM_FORM;
-	kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);
-	}));
+	if (!ingame)
+	{
+		kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);
+				}));
 
-	addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
-	            8, 5,
-	            iV_GetImageWidth(FrontImages, IMAGE_RETURN),
-	            iV_GetImageHeight(FrontImages, IMAGE_RETURN),
-	            _("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+		addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
+			    8, 5,
+			    iV_GetImageWidth(FrontImages, IMAGE_RETURN),
+			    iV_GetImageHeight(FrontImages, IMAGE_RETURN),
+			    _("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
-	addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
-	            11, 45,
-	            iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
-		    iV_GetImageHeight(FrontImages, IMAGE_KEYMAP_DEFAULT),
-	            _("Select Default"),
-	            IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
+		addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
+			    11, 45,
+			    iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
+			    iV_GetImageHeight(FrontImages, IMAGE_KEYMAP_DEFAULT),
+			    _("Select Default"),
+			    IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
+	}
+	else
+	{
+		// Text versions for in-game where image resources are not available
+		kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H);
+				}));
+
+		W_BUTINIT sButInit;
+
+		sButInit.formID		= KM_FORM;
+		sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
+		sButInit.width		= 600;
+		sButInit.FontID		= font_regular;
+		sButInit.x		= 0;
+		sButInit.height		= 10;
+		sButInit.pDisplay	= displayTextOption;
+		sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
+		sButInit.onDelete = [](WIDGET *psWidget) {
+					    assert(psWidget->pUserData != nullptr);
+					    delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+					    psWidget->pUserData = nullptr;
+				    };
+
+		sButInit.id			= KM_RETURN;
+		sButInit.y			= KM_H - 32;
+		sButInit.pText		= _("Resume Game");
+
+		widgAddButton(psWScreen, &sButInit);
+
+		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
+		{
+			sButInit.id			= KM_DEFAULT;
+			sButInit.y			= KM_H - 16;
+			sButInit.pText		= _("Select Default");
+
+			widgAddButton(psWScreen, &sButInit);
+		}
+	}
 
 	// add tab form..
 	IntListTabWidget *kmList = new IntListTabWidget(kmForm);
@@ -376,7 +448,20 @@ bool startKeyMapEditor(bool first)
 	return true;
 }
 
+bool startInGameKeyMapEditor(bool first)
+{
+	WIDGET *parent = psWScreen->psForm;
+	bAllowOtherKeyPresses = false;
+	return keyMapEditor(first, parent, true);
+}
 
+bool startKeyMapEditor(bool first)
+{
+	addBackdrop();
+	addSideText(FRONTEND_SIDETEXT, KM_SX, KM_Y, _("KEY MAPPING"));
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	return keyMapEditor(first, parent, false);
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // save current keymaps to registry
