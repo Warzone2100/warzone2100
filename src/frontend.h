@@ -88,6 +88,32 @@ bool CancelPressed();
 /* Tell the frontend when the screen has been resized */
 void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
+// Graphics options, shared for in-game options menu use
+char const *graphicsOptionsFmvmodeString();
+char const *graphicsOptionsScanlinesString();
+char const *graphicsOptionsSubtitlesString();
+char const *graphicsOptionsShadowsString();
+char const *graphicsOptionsRadarString();
+char const *graphicsOptionsRadarJumpString();
+void seqFMVmode();
+void seqScanlineMode();
+
+// Video options, shared for in-game options menu use
+char const *videoOptionsDisplayScaleLabel();
+char const *videoOptionsVsyncString();
+std::string videoOptionsDisplayScaleString();
+std::vector<unsigned int> availableDisplayScalesSorted();
+void seqDisplayScale();
+
+// Mouse options, shared for in-game options menu use
+char const *mouseOptionsMflipString();
+char const *mouseOptionsTrapString();
+char const *mouseOptionsMbuttonsString();
+char const *mouseOptionsMmrotateString();
+char const *mouseOptionsCursorModeString();
+char const *mouseOptionsScrollEventString();
+void seqScrollEvent();
+
 struct DisplayTextOptionCache
 {
 	WzText wzText;

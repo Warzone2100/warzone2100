@@ -22,7 +22,9 @@
 #define __INCLUDED_SRC_KEYEDIT_H__
 
 bool runKeyMapEditor();
+bool runInGameKeyMapEditor(unsigned id);
 bool startKeyMapEditor(bool first);
+bool startInGameKeyMapEditor(bool first);
 bool saveKeyMap();
 bool loadKeyMap();
 

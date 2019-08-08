@@ -739,7 +739,7 @@ bool runOptionsMenu()
 	return true;
 }
 
-static char const *graphicsOptionsFmvmodeString()
+char const *graphicsOptionsFmvmodeString()
 {
 	switch (war_GetFMVmode())
 	{
@@ -750,7 +750,7 @@ static char const *graphicsOptionsFmvmodeString()
 	}
 }
 
-static char const *graphicsOptionsScanlinesString()
+char const *graphicsOptionsScanlinesString()
 {
 	switch (war_getScanlineMode())
 	{
@@ -761,22 +761,22 @@ static char const *graphicsOptionsScanlinesString()
 	}
 }
 
-static char const *graphicsOptionsSubtitlesString()
+char const *graphicsOptionsSubtitlesString()
 {
 	return seq_GetSubtitles() ? _("On") : _("Off");
 }
 
-static char const *graphicsOptionsShadowsString()
+char const *graphicsOptionsShadowsString()
 {
 	return getDrawShadows() ? _("On") : _("Off");
 }
 
-static char const *graphicsOptionsRadarString()
+char const *graphicsOptionsRadarString()
 {
 	return rotateRadar ? _("Rotating") : _("Fixed");
 }
 
-static char const *graphicsOptionsRadarJumpString()
+char const *graphicsOptionsRadarJumpString()
 {
 	return war_GetRadarJump() ? _("Instant") : _("Tracked");
 }
@@ -826,6 +826,16 @@ static bool startGraphicsOptionsMenu()
 	return true;
 }
 
+void seqFMVmode()
+{
+	war_SetFMVmode(seqCycle(war_GetFMVmode(), FMV_FULLSCREEN, 1, FMV_MODE(FMV_MAX - 1)));
+}
+
+void seqScanlineMode()
+{
+	war_setScanlineMode(seqCycle(war_getScanlineMode(), SCANLINES_OFF, 1, SCANLINES_BLACK));
+}
+
 bool runGraphicsOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
@@ -851,13 +861,13 @@ bool runGraphicsOptionsMenu()
 
 	case FRONTEND_FMVMODE:
 	case FRONTEND_FMVMODE_R:
-		war_SetFMVmode(seqCycle(war_GetFMVmode(), FMV_FULLSCREEN, 1, FMV_MODE(FMV_MAX - 1)));
+		seqFMVmode();
 		widgSetString(psWScreen, FRONTEND_FMVMODE_R, graphicsOptionsFmvmodeString());
 		break;
 
 	case FRONTEND_SCANLINES:
 	case FRONTEND_SCANLINES_R:
-		war_setScanlineMode(seqCycle(war_getScanlineMode(), SCANLINES_OFF, 1, SCANLINES_BLACK));
+		seqScanlineMode();
 		widgSetString(psWScreen, FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString());
 		break;
 
@@ -1031,12 +1041,12 @@ bool runAudioAndZoomOptionsMenu()
 	return true;
 }
 
-bool canChangeResolutionLive()
+static bool canChangeResolutionLive()
 {
 	return wzSupportsLiveResolutionChanges();
 }
 
-void videoOptionsDisableResolutionButtons(std::string toolTip)
+static void videoOptionsDisableResolutionButtons(std::string toolTip)
 {
 	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, WBUT_DISABLE);
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION, toolTip);
@@ -1044,7 +1054,7 @@ void videoOptionsDisableResolutionButtons(std::string toolTip)
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION_R, toolTip);
 }
 
-void videoOptionsEnableResolutionButtons()
+static void videoOptionsEnableResolutionButtons()
 {
 	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, 0);
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION, "");
@@ -1069,7 +1079,7 @@ static std::string videoOptionsAntialiasingString()
 	}
 }
 
-static char const *videoOptionsWindowModeLabel()
+char const *videoOptionsWindowModeLabel()
 {
 	return (!canChangeResolutionLive())? _("Graphics Mode*") : _("Graphics Mode");
 }
@@ -1079,7 +1089,7 @@ static char const *videoOptionsResolutionLabel()
 	return (!canChangeResolutionLive())? _("Resolution*") : _("Resolution");
 }
 
-static char const *videoOptionsDisplayScaleLabel()
+char const *videoOptionsDisplayScaleLabel()
 {
 	return (!canChangeResolutionLive())? _("Display Scale*") : _("Display Scale");
 }
@@ -1098,12 +1108,12 @@ static std::string videoOptionsTextureSizeString()
 	return textureSize;
 }
 
-static char const *videoOptionsVsyncString()
+char const *videoOptionsVsyncString()
 {
 	return war_GetVsync()? _("On") : _("Off");
 }
 
-static std::string videoOptionsDisplayScaleString()
+std::string videoOptionsDisplayScaleString()
 {
 	char resolution[100];
 	ssprintf(resolution, "%d%%", war_GetDisplayScale());
@@ -1112,7 +1122,7 @@ static std::string videoOptionsDisplayScaleString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
-void refreshCurrentVideoOptionsValues()
+static void refreshCurrentVideoOptionsValues()
 {
 	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
 	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
@@ -1224,6 +1234,71 @@ std::vector<unsigned int> availableDisplayScalesSorted()
 	std::vector<unsigned int> displayScales = wzAvailableDisplayScales();
 	std::sort(displayScales.begin(), displayScales.end());
 	return displayScales;
+}
+
+void seqDisplayScale()
+{
+	std::vector<unsigned int> displayScales = availableDisplayScalesSorted();
+	assert(!displayScales.empty());
+
+	// Get currently-configured display scale.
+	unsigned int current_displayScale = war_GetDisplayScale();
+
+	// Find current display scale in list.
+	auto current = std::lower_bound(displayScales.begin(), displayScales.end(), current_displayScale);
+	if (current == displayScales.end() || *current != current_displayScale)
+	{
+		--current;  // If current display scale doesn't exist, round down to next-highest one.
+	}
+
+	// Increment/decrement and loop if required.
+	auto startingDisplayScale = current;
+	bool successfulDisplayScaleChange = false;
+	current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
+
+	unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(war_GetWidth(), war_GetHeight());
+
+	while (current != startingDisplayScale)
+	{
+		if (canChangeResolutionLive())
+		{
+			// Attempt to change the display scale
+			if (!wzChangeDisplayScale(*current))
+			{
+				debug(LOG_WARNING, "Failed to change display scale from: %d to: %d", current_displayScale, *current);
+
+				// try the next display scale factor, and loop
+				current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
+				continue;
+			}
+			else
+			{
+				successfulDisplayScaleChange = true;
+				break;
+			}
+		}
+		else
+		{
+			// when live resolution changes are unavailable, check to see if the display scale is supported at the desired resolution
+			if (maxDisplayScale < *current)
+			{
+				// try the next display scale factor, and loop
+				current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
+				continue;
+			}
+			else
+			{
+				successfulDisplayScaleChange = true;
+				break;
+			}
+		}
+	}
+
+	if (!successfulDisplayScaleChange)
+		return;
+
+	// Store the new display scale
+	war_SetDisplayScale(*current);
 }
 
 bool runVideoOptionsMenu()
@@ -1377,72 +1452,10 @@ bool runVideoOptionsMenu()
 
 	case FRONTEND_DISPLAYSCALE:
 	case FRONTEND_DISPLAYSCALE_R:
-		{
-			std::vector<unsigned int> displayScales = availableDisplayScalesSorted();
-			assert(!displayScales.empty());
+		seqDisplayScale();
 
-			// Get currently-configured display scale.
-			unsigned int current_displayScale = war_GetDisplayScale();
-
-			// Find current display scale in list.
-			auto current = std::lower_bound(displayScales.begin(), displayScales.end(), current_displayScale);
-			if (current == displayScales.end() || *current != current_displayScale)
-			{
-				--current;  // If current display scale doesn't exist, round down to next-highest one.
-			}
-
-			// Increment/decrement and loop if required.
-			auto startingDisplayScale = current;
-			bool successfulDisplayScaleChange = false;
-			current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
-
-			unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(war_GetWidth(), war_GetHeight());
-
-			while (current != startingDisplayScale)
-			{
-				if (canChangeResolutionLive())
-				{
-					// Attempt to change the display scale
-					if (!wzChangeDisplayScale(*current))
-					{
-						debug(LOG_WARNING, "Failed to change display scale from: %d to: %d", current_displayScale, *current);
-
-						// try the next display scale factor, and loop
-						current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
-						continue;
-					}
-					else
-					{
-						successfulDisplayScaleChange = true;
-						break;
-					}
-				}
-				else
-				{
-					// when live resolution changes are unavailable, check to see if the display scale is supported at the desired resolution
-					if (maxDisplayScale < *current)
-					{
-						// try the next display scale factor, and loop
-						current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
-						continue;
-					}
-					else
-					{
-						successfulDisplayScaleChange = true;
-						break;
-					}
-				}
-			}
-
-			if (!successfulDisplayScaleChange) break;
-
-			// Store the new display scale
-			war_SetDisplayScale(*current);
-
-			// Update the widget(s)
-			refreshCurrentVideoOptionsValues();
-
-		}
+		// Update the widget(s)
+		refreshCurrentVideoOptionsValues();
 		break;
 
 	case FRONTEND_QUIT:
@@ -1463,33 +1476,32 @@ bool runVideoOptionsMenu()
 	return true;
 }
 
-
-static char const *mouseOptionsMflipString()
+char const *mouseOptionsMflipString()
 {
 	return getInvertMouseStatus() ? _("On") : _("Off");
 }
 
-static char const *mouseOptionsTrapString()
+char const *mouseOptionsTrapString()
 {
 	return war_GetTrapCursor() ? _("On") : _("Off");
 }
 
-static char const *mouseOptionsMbuttonsString()
+char const *mouseOptionsMbuttonsString()
 {
 	return getRightClickOrders() ? _("On") : _("Off");
 }
 
-static char const *mouseOptionsMmrotateString()
+char const *mouseOptionsMmrotateString()
 {
 	return getMiddleClickRotate() ? _("Middle Mouse") : _("Right Mouse");
 }
 
-static char const *mouseOptionsCursorModeString()
+char const *mouseOptionsCursorModeString()
 {
 	return war_GetColouredCursor() ? _("On") : _("Off");
 }
 
-static char const *mouseOptionsScrollEventString()
+char const *mouseOptionsScrollEventString()
 {
 	switch(war_GetScrollEvent())
 	{
@@ -1544,6 +1556,11 @@ static bool startMouseOptionsMenu()
 	return true;
 }
 
+void seqScrollEvent()
+{
+	war_SetScrollEvent(seqCycle(war_GetScrollEvent(), 0, 1, 2));
+}
+
 bool runMouseOptionsMenu()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
@@ -1583,11 +1600,9 @@ bool runMouseOptionsMenu()
 
 	case FRONTEND_SCROLLEVENT:
 	case FRONTEND_SCROLLEVENT_R:
-		{
-		    war_SetScrollEvent(seqCycle(war_GetScrollEvent(), 0, 1, 2));
-		    widgSetString(psWScreen, FRONTEND_SCROLLEVENT_R, mouseOptionsScrollEventString());
-		    break;
-		}
+		seqScrollEvent();
+		widgSetString(psWScreen, FRONTEND_SCROLLEVENT_R, mouseOptionsScrollEventString());
+		break;
 
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);
