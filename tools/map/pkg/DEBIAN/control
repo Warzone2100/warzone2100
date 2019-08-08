@@ -1,0 +1,9 @@
+Package: warzone2100-maptool
+Version: 1.7-1
+Section: utils
+Priority: optional
+Depends: libstdc++6, libgcc1, libc6
+Architecture: amd64
+Maintainer: Maxim Zhuchkov <q3.max.2011@ya.ru>
+Description: Warzone map tool
+ Library for parsing Warzone2100 map format.

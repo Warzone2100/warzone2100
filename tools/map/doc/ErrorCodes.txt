@@ -1,0 +1,10 @@
+WMT error codes detailed description:
+
+ 0   - All ok.
+-1   - Bad zip file (check that this map works in game) WMT cannot open this file.
+-2   - Memory allocation fail. Check that you have enought RAM to handle this.
+-3   - Error reading file contents. Consult fread error codes.
+-4   - Error opening map file (inside zip) from memory. IDK how it can be but you can try)
+-5   - Cannot find needed file in archive. Maybe its too old or too new to deal with it
+-6   - Error reading from opened in memory archive. Consult zip_entry_read from zip.h .
+-7   - File contents logic/limits/concepts readed literally broken/in impossible case to exist.

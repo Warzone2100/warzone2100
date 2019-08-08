@@ -16,7 +16,6 @@ SUBDIRS = \
 	lib/netplay \
 	lib/widget \
 	$(backend_subdir) \
-	tools/map \
 	src \
 	data \
 	po \
