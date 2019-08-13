@@ -46,6 +46,7 @@ using nonstd::optional;
 #if defined( _MSC_VER )
 #pragma warning( push )
 #pragma warning( disable : 4191 ) // warning C4191: '<function-style-cast>': unsafe conversion from 'PFN_vkVoidFunction' to 'PFN_vk<...>'
+#pragma warning( disable : 4324 ) // warning C4324: 'struct_name' : structure was padded due to alignment specifier
 #endif
 #include "3rdparty/vkh_renderpasscompat.hpp"
 #include "3rdparty/vkh_info.hpp"

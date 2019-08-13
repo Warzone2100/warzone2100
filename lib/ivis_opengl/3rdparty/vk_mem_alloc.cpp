@@ -22,6 +22,9 @@
 # pragma clang diagnostic ignored "-Wunused-variable"
 # pragma clang diagnostic ignored "-Wmissing-field-initializers"
 # pragma clang diagnostic ignored "-Wunused-private-field"
+#  if defined(__APPLE__)
+#    pragma clang diagnostic ignored "-Wcast-align" // Warning triggered on Xcode 8.x
+#  endif
 #elif defined(__GNUC__)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wtype-limits"
@@ -30,6 +33,7 @@
 #elif defined(_MSC_VER)
 # pragma warning( push )
 # pragma warning( disable : 4189 ) // warning C4189: 'identifier' : local variable is initialized but not referenced
+# pragma warning( disable : 4324 ) // warning C4324: 'struct_name' : structure was padded due to alignment specifier
 #endif
 
 #define VMA_IMPLEMENTATION
