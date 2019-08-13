@@ -4097,6 +4097,11 @@ public:
     {
     }
     
+    // This version of the constructor is here for compatibility with pre-C++14 std::vector.
+    // value is unused.
+    VmaVector(size_t count, const T& value, const AllocatorT& allocator)
+        : VmaVector(count, allocator) {}
+    
     VmaVector(const VmaVector<T, AllocatorT>& src) :
         m_Allocator(src.m_Allocator),
         m_pArray(src.m_Count ? (T*)VmaAllocateArray<T>(src.m_Allocator.m_pCallbacks, src.m_Count) : VMA_NULL),
@@ -4337,7 +4342,6 @@ class VmaPoolAllocator
 public:
     VmaPoolAllocator(const VkAllocationCallbacks* pAllocationCallbacks, uint32_t firstBlockCapacity);
     ~VmaPoolAllocator();
-    void Clear();
     T* Alloc();
     void Free(T* ptr);
 
@@ -4345,7 +4349,7 @@ private:
     union Item
     {
         uint32_t NextFreeIndex;
-        T Value;
+        alignas(T) char Value[sizeof(T)];
     };
 
     struct ItemBlock
@@ -4374,12 +4378,6 @@ VmaPoolAllocator<T>::VmaPoolAllocator(const VkAllocationCallbacks* pAllocationCa
 template<typename T>
 VmaPoolAllocator<T>::~VmaPoolAllocator()
 {
-    Clear();
-}
-
-template<typename T>
-void VmaPoolAllocator<T>::Clear()
-{
     for(size_t i = m_ItemBlocks.size(); i--; )
         vma_delete_array(m_pAllocationCallbacks, m_ItemBlocks[i].pItems, m_ItemBlocks[i].Capacity);
     m_ItemBlocks.clear();
@@ -4396,7 +4394,9 @@ T* VmaPoolAllocator<T>::Alloc()
         {
             Item* const pItem = &block.pItems[block.FirstFreeIndex];
             block.FirstFreeIndex = pItem->NextFreeIndex;
-            return &pItem->Value;
+            T* result = (T*)&pItem->Value;
+            new(result)T(); // Explicit constructor call.
+            return result;
         }
     }
 
@@ -4404,7 +4404,9 @@ T* VmaPoolAllocator<T>::Alloc()
     ItemBlock& newBlock = CreateNewBlock();
     Item* const pItem = &newBlock.pItems[0];
     newBlock.FirstFreeIndex = pItem->NextFreeIndex;
-    return &pItem->Value;
+    T* result = (T*)&pItem->Value;
+    new(result)T(); // Explicit constructor call.
+    return result;
 }
 
 template<typename T>
@@ -4422,6 +4424,7 @@ void VmaPoolAllocator<T>::Free(T* ptr)
         // Check if pItemPtr is in address range of this block.
         if((pItemPtr >= block.pItems) && (pItemPtr < block.pItems + block.Capacity))
         {
+            ptr->~T(); // Explicit destructor call.
             const uint32_t index = static_cast<uint32_t>(pItemPtr - block.pItems);
             pItemPtr->NextFreeIndex = block.FirstFreeIndex;
             block.FirstFreeIndex = index;
@@ -5050,8 +5053,7 @@ public:
     };
 
     /*
-    This struct cannot have constructor or destructor. It must be POD because it is
-    allocated using VmaPoolAllocator.
+    This struct is allocated using VmaPoolAllocator.
     */
 
     void Ctor(uint32_t currentFrameIndex, bool userDataString)
@@ -12130,7 +12132,7 @@ void VmaBlockVector::ApplyDefragmentationMovesCpu(
         void* pMappedData;
     };
     VmaVector< BlockInfo, VmaStlAllocator<BlockInfo> >
-        blockInfo(blockCount, VmaStlAllocator<BlockInfo>(m_hAllocator->GetAllocationCallbacks()));
+        blockInfo(blockCount, BlockInfo(), VmaStlAllocator<BlockInfo>(m_hAllocator->GetAllocationCallbacks()));
     memset(blockInfo.data(), 0, blockCount * sizeof(BlockInfo));
 
     // Go over all moves. Mark blocks that are used with BLOCK_FLAG_USED.
@@ -14168,6 +14170,7 @@ VmaAllocator_T::VmaAllocator_T(const VmaAllocatorCreateInfo* pCreateInfo) :
         
     memset(&m_pBlockVectors, 0, sizeof(m_pBlockVectors));
     memset(&m_pDedicatedAllocations, 0, sizeof(m_pDedicatedAllocations));
+    memset(&m_VulkanFunctions, 0, sizeof(m_VulkanFunctions));
 
     for(uint32_t i = 0; i < VK_MAX_MEMORY_HEAPS; ++i)
     {
