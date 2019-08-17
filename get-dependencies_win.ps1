@@ -5,7 +5,7 @@ param([string]$VCPKG_BUILD_TYPE = "")
 ############################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-$VCPKG_COMMIT_SHA = "c477e87ede1cd099c24b004624c88933644d7abd";
+$VCPKG_COMMIT_SHA = "300e21d59ebfe42e118cf4e97887f0680fbcfa2f";
 
 # To ensure the proper dump_syms.exe is downloaded, specify the commit + hash
 $DUMP_SYMS_EXE_COMMIT = "aebee55695eeb40d788f5421bf32eaaa7227aba0";
