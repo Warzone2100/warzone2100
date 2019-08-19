@@ -2658,6 +2658,11 @@ static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
 	SCRIPT_ASSERT(context, order == DORDER_HOLD || order == DORDER_RTR || order == DORDER_STOP
 	              || order == DORDER_RTB || order == DORDER_REARM || order == DORDER_RECYCLE,
 	              "Invalid order: %s", getDroidOrderName(order));
+	DROID_ORDER_DATA *droidOrder = &psDroid->order;
+	if (droidOrder->type == order)
+	{
+		return QScriptValue(true);
+	}
 	if (order == DORDER_REARM)
 	{
 		if (STRUCTURE *psStruct = findNearestReArmPad(psDroid, psDroid->psBaseStruct, false))
@@ -2695,6 +2700,11 @@ static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *)
 	BASE_OBJECT *psObj = IdToObject(otype, oid, oplayer);
 	SCRIPT_ASSERT(context, psObj, "Object id %d not found belonging to player %d", oid, oplayer);
 	SCRIPT_ASSERT(context, validOrderForObj(order), "Invalid order: %s", getDroidOrderName(order));
+	DROID_ORDER_DATA *droidOrder = &psDroid->order;
+	if (droidOrder->type == order && psDroid->order.psObj == psObj)
+	{
+		return QScriptValue(true);
+	}
 	orderDroidObj(psDroid, order, psObj, ModeQueue);
 	return QScriptValue(true);
 }
@@ -2724,6 +2734,11 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	{
 		direction = DEG(context->argument(5).toNumber());
 	}
+	DROID_ORDER_DATA *droidOrder = &psDroid->order;
+	if (droidOrder->type == order && psDroid->actionPos.x == world_coord(x) && psDroid->actionPos.y == world_coord(y))
+	{
+		return QScriptValue(true);
+	}
 	orderDroidStatsLocDir(psDroid, order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, direction, ModeQueue);
 	return QScriptValue(true);
 }
@@ -2745,6 +2760,11 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 	DROID *psDroid = IdToDroid(id, player);
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
 	SCRIPT_ASSERT(context, tileOnMap(x, y), "Outside map bounds (%d, %d)", x, y);
+	DROID_ORDER_DATA *droidOrder = &psDroid->order;
+	if (droidOrder->type == order && psDroid->actionPos.x == world_coord(x) && psDroid->actionPos.y == world_coord(y))
+	{
+		return QScriptValue();
+	}
 	orderDroidLoc(psDroid, order, world_coord(x), world_coord(y), ModeQueue);
 	return QScriptValue();
 }
