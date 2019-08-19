@@ -89,6 +89,17 @@ static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PH
 MSVC_PRAGMA(warning( push )) // see matching "pop" below
 MSVC_PRAGMA(warning( disable : 4611 ))
 
+void PNGCBAPI iv_png_user_error_fn (png_structp png_ptr, png_const_charp error_msg)
+{
+	debug(LOG_FATAL, "libpng error: %s", error_msg);
+	abort(); // "The error handling routine must NOT return to the calling routine."
+}
+
+void PNGCBAPI iv_png_user_warn_fn (png_structp png_ptr, png_const_charp warning_msg)
+{
+	debug(LOG_ERROR, "libpng warning: %s", warning_msg);
+}
+
 bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 {
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
@@ -118,7 +129,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 		return false;
 	}
 
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, iv_png_user_error_fn, iv_png_user_warn_fn);
 	if (png_ptr == nullptr)
 	{
 		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png struct");
