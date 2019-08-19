@@ -51,6 +51,11 @@ static void wzpng_flush_data(png_structp png_ptr)
 
 	PHYSFS_flush(fileHandle);
 }
+
+static void PNGCBAPI iv_png_user_warn_fn(png_structp png_ptr, png_const_charp warning_msg)
+{
+	debug(LOG_ERROR, "libpng warning: %s", warning_msg);
+}
 // End of PNG callbacks
 
 static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file *fileHandle)
@@ -88,11 +93,6 @@ static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PH
 // FIXME?: disable MSVC warning C4611: interaction between '_setjmp' and C++ object destruction is non-portable
 MSVC_PRAGMA(warning( push )) // see matching "pop" below
 MSVC_PRAGMA(warning( disable : 4611 ))
-
-static void PNGCBAPI iv_png_user_warn_fn (png_structp png_ptr, png_const_charp warning_msg)
-{
-	debug(LOG_ERROR, "libpng warning: %s", warning_msg);
-}
 
 bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 {
