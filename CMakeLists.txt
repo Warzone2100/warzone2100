@@ -94,6 +94,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	# Enable macOS-specific find scripts
 	list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/macosx/cmake")
+
+	# Workaround for framework header conflicts with find_package
+	# - Common issue when Mono.framework is installed, since it contains headers for libpng (etc)
+	#   and the default CMake setting finds the headers in Mono, but the library in the vcpkg
+	#   install location (leading to a version mismatch)
+	# - See: https://github.com/torch/image/issues/16
+	set(CMAKE_FIND_FRAMEWORK LAST)
 endif()
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
