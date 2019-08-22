@@ -25,6 +25,7 @@ class sdl_OpenGL_Impl final : public gfx_api::backend_OpenGL_Impl
 public:
 	sdl_OpenGL_Impl(SDL_Window* window);
 
+	virtual GLADloadproc getGLGetProcAddress() override;
 	virtual bool createGLContext() override;
 	virtual void swapWindow() override;
 	virtual void getDrawableSize(int* w, int* h) override;

@@ -30,22 +30,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-// for compatibility with older versions of GLEW
-#ifndef GLEW_VERSION_4_3
-#define GLEW_VERSION_4_3 false
-#endif
-#ifndef GLEW_ARB_timer_query
-#define GLEW_ARB_timer_query false
-#endif
-#ifndef GLEW_KHR_debug
-#define GLEW_KHR_debug false
-#define GL_DEBUG_SOURCE_APPLICATION 0x824A
-static void glPopDebugGroup() {}
-static void glPushDebugGroup(int, unsigned, unsigned, const char *) {}
-#else
-#ifndef glPopDebugGroup // hack to workaround a glew 1.9 bug
-static void glPopDebugGroup() {}
-#endif
+#ifndef GL_GENERATE_MIPMAP
+#define GL_GENERATE_MIPMAP 0x8191
 #endif
 
 struct OPENGL_DATA
@@ -53,7 +39,6 @@ struct OPENGL_DATA
 	char vendor[256];
 	char renderer[256];
 	char version[256];
-	char GLEWversion[256];
 	char GLSLversion[256];
 };
 OPENGL_DATA opengl;
@@ -570,14 +555,14 @@ void gl_pipeline_state_object::bind()
 			break;
 		case gfx_api::stencil_mode::stencil_shadow_silhouette:
 			glEnable(GL_STENCIL_TEST);
-			if (GLEW_VERSION_2_0)
+			if (GLAD_GL_VERSION_2_0)
 			{
 				glStencilMask(~0);
 				glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
 				glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_DECR_WRAP);
 				glStencilFunc(GL_ALWAYS, 0, ~0);
 			}
-			else if (GLEW_EXT_stencil_two_side)
+			else if (GLAD_GL_EXT_stencil_two_side)
 			{
 				glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 				glStencilMask(~0);
@@ -588,7 +573,7 @@ void gl_pipeline_state_object::bind()
 				glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP);
 				glStencilFunc(GL_ALWAYS, 0, ~0);
 			}
-			else if (GLEW_ATI_separate_stencil)
+			else if (GLAD_GL_ATI_separate_stencil)
 			{
 				glStencilMask(~0);
 				glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
@@ -728,7 +713,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 				glAttachShader(program, shader);
 				success = true;
 			}
-			if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+			if (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug)
 			{
 				glObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 			}
@@ -764,7 +749,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 				glAttachShader(program, shader);
 				success = true;
 			}
-			if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+			if (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug)
 			{
 				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 			}
@@ -789,7 +774,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 		{
 			printProgramInfoLog(LOG_3D, program);
 		}
-		if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+		if (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug)
 		{
 			glObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 		}
@@ -1045,7 +1030,7 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipmap_count - 1);
-	if (!filename.empty() && (GLEW_VERSION_4_3 || GLEW_KHR_debug))
+	if (!filename.empty() && (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug))
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
@@ -1207,7 +1192,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				if (GLEW_EXT_texture_filter_anisotropic)
+				if (GLAD_GL_EXT_texture_filter_anisotropic)
 				{
 					GLfloat max;
 					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
@@ -1219,7 +1204,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				if (GLEW_EXT_texture_filter_anisotropic)
+				if (GLAD_GL_EXT_texture_filter_anisotropic)
 				{
 					GLfloat max;
 					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
@@ -1266,7 +1251,7 @@ int32_t gl_context::get_context_value(const context_value property)
 
 void gl_context::debugStringMarker(const char *str)
 {
-	if (GLEW_GREMEDY_string_marker)
+	if (GLAD_GL_GREMEDY_string_marker)
 	{
 		glStringMarkerGREMEDY(0, str);
 	}
@@ -1290,12 +1275,12 @@ void gl_context::debugSceneEnd(const char *descr)
 
 bool gl_context::debugPerfAvailable()
 {
-	return GLEW_ARB_timer_query;
+	return GLAD_GL_ARB_timer_query;
 }
 
 bool gl_context::debugPerfStart(size_t sample)
 {
-	if (GLEW_ARB_timer_query)
+	if (GLAD_GL_ARB_timer_query)
 	{
 		char text[80];
 		ssprintf(text, "Starting performance sample %02d", sample);
@@ -1350,7 +1335,6 @@ std::map<std::string, std::string> gl_context::getBackendGameInfo()
 	backendGameInfo["openGL_vendor"] = opengl.vendor;
 	backendGameInfo["openGL_renderer"] = opengl.renderer;
 	backendGameInfo["openGL_version"] = opengl.version;
-	backendGameInfo["openGL_GLEW_version"] = opengl.GLEWversion;
 	backendGameInfo["openGL_GLSL_version"] = opengl.GLSLversion;
 	// NOTE: deprecated for GL 3+. Needed this to check what extensions some chipsets support for the openGL hacks
 	std::string extensions = (const char *) glGetString(GL_EXTENSIONS);
@@ -1441,6 +1425,11 @@ bool gl_context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t a
 
 	backend_impl->createGLContext();
 
+	if (!initGLContext())
+	{
+		return false;
+	}
+
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
 	debug(LOG_WZ, "Drawable Size: %d x %d", width, height);
@@ -1449,11 +1438,6 @@ bool gl_context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t a
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
 
-	if (!initGLContext())
-	{
-		return false;
-	}
-
 	return true;
 }
 
@@ -1461,39 +1445,17 @@ bool gl_context::initGLContext()
 {
 	frameNum = 1;
 
-	GLint glMaxTUs;
-	GLenum err;
-
-#if defined(WZ_USE_OPENGL_3_2_CORE_PROFILE)
-	const char * _glewMajorVersionString = (const char*)glewGetString(GLEW_VERSION_MAJOR);
-	const char * _glewMinorVersionString = (const char*)glewGetString(GLEW_VERSION_MINOR);
-	int _glewMajorVersion = std::stoi(_glewMajorVersionString);
-	int _glewMinorVersion = std::stoi(_glewMinorVersionString);
-
-	if ((_glewMajorVersion < 1) || (_glewMajorVersion == 1 && _glewMinorVersion <= 13))
+	GLADloadproc func_GLGetProcAddress = backend_impl->getGLGetProcAddress();
+	if (!func_GLGetProcAddress)
 	{
-		// GLEW <= 1.13 has a problem with OpenGL Core Contexts
-		// It calls glGetString(GL_EXTENSIONS), which causes GL_INVALID_ENUM as soon as glewInit() is called.
-		// It also doesn't fetch the function pointers.
-		// (GLEW 2.0.0+ properly uses glGetStringi() instead.)
-		// The only fix for GLEW <= 1.13 is to use glewExperimental
-		glewExperimental = GL_TRUE;
-	}
-#endif
-	err = glewInit();
-	if (GLEW_OK != err)
-	{
-		debug(LOG_FATAL, "Error: %s", glewGetErrorString(err));
+		debug(LOG_FATAL, "backend_impl->getGLGetProcAddress() returned NULL");
 		exit(1);
 	}
-#if defined(WZ_USE_OPENGL_3_2_CORE_PROFILE)
-	if ((_glewMajorVersion < 1) || (_glewMajorVersion == 1 && _glewMinorVersion <= 13))
+	if (!gladLoadGLLoader(func_GLGetProcAddress))
 	{
-		// Swallow the gl error generated by glewInit() on GLEW <= 1.13 when using a Core Context
-		err = glGetError();
-		err = GLEW_OK;
+		debug(LOG_FATAL, "gladLoadGLLoader failed");
+		exit(1);
 	}
-#endif
 
 	/* Dump general information about OpenGL implementation to the console and the dump file */
 	ssprintf(opengl.vendor, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
@@ -1505,18 +1467,8 @@ bool gl_context::initGLContext()
 	ssprintf(opengl.version, "OpenGL Version: %s", glGetString(GL_VERSION));
 	addDumpInfo(opengl.version);
 	debug(LOG_3D, "%s", opengl.version);
-	ssprintf(opengl.GLEWversion, "GLEW Version: %s", glewGetString(GLEW_VERSION));
-	if (strncmp(opengl.GLEWversion, "1.9.", 4) == 0) // work around known bug with KHR_debug extension support in this release
-	{
-		debug(LOG_WARNING, "Your version of GLEW is old and buggy, please upgrade to at least version 1.10.");
-		khr_debug = false;
-	}
-	else
-	{
-		khr_debug = GLEW_KHR_debug;
-	}
-	addDumpInfo(opengl.GLEWversion);
-	debug(LOG_3D, "%s", opengl.GLEWversion);
+
+	khr_debug = GLAD_GL_KHR_debug;
 
 	GLubyte const *extensionsBegin = glGetString(GL_EXTENSIONS);
 	if (extensionsBegin == nullptr)
@@ -1553,45 +1505,43 @@ bool gl_context::initGLContext()
 	}
 	debug(LOG_3D, "OpenGL Extensions:%s", line.c_str());
 	debug(LOG_3D, "Notable OpenGL features:");
-	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEW_VERSION_1_2 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEW_VERSION_1_3 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEW_VERSION_1_4 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEW_VERSION_1_5 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEW_VERSION_2_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEW_VERSION_2_1 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEW_VERSION_3_0 ? "is" : "is NOT");
-#ifdef GLEW_VERSION_3_1
-	debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLEW_VERSION_3_1 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLAD_GL_VERSION_1_2 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLAD_GL_VERSION_1_3 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLAD_GL_VERSION_1_4 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLAD_GL_VERSION_1_5 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
+#ifdef GLAD_GL_VERSION_3_1
+	debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLAD_GL_VERSION_3_1 ? "is" : "is NOT");
 #endif
-#ifdef GLEW_VERSION_3_2
-	debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLEW_VERSION_3_2 ? "is" : "is NOT");
+#ifdef GLAD_GL_VERSION_3_2
+	debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLAD_GL_VERSION_3_2 ? "is" : "is NOT");
 #endif
-#ifdef GLEW_VERSION_3_3
-	debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLEW_VERSION_3_3 ? "is" : "is NOT");
+#ifdef GLAD_GL_VERSION_3_3
+	debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
 #endif
-#ifdef GLEW_VERSION_4_0
-	debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLEW_VERSION_4_0 ? "is" : "is NOT");
+#ifdef GLAD_GL_VERSION_4_0
+	debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
 #endif
-#ifdef GLEW_VERSION_4_1
-	debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLEW_VERSION_4_1 ? "is" : "is NOT");
+#ifdef GLAD_GL_VERSION_4_1
+	debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
 #endif
-	debug(LOG_3D, "  * Texture compression %s supported.", GLEW_ARB_texture_compression ? "is" : "is NOT");
-	debug(LOG_3D, "  * Two side stencil %s supported.", GLEW_EXT_stencil_two_side ? "is" : "is NOT");
-	debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLEW_ATI_separate_stencil ? "" : " NOT");
-	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEW_EXT_stencil_wrap ? "is" : "is NOT");
-	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEW_EXT_texture_filter_anisotropic ? "is" : "is NOT");
-	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEW_ARB_texture_rectangle ? "is" : "is NOT");
-	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEW_EXT_framebuffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * ARB Vertex Buffer Object (VBO) %s supported.", GLEW_ARB_vertex_buffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * NPOT %s supported.", GLEW_ARB_texture_non_power_of_two ? "is" : "is NOT");
-	debug(LOG_3D, "  * texture cube_map %s supported.", GLEW_ARB_texture_cube_map ? "is" : "is NOT");
-	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
-	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
-	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLEW_ARB_timer_query ? "is" : "is NOT");
+	debug(LOG_3D, "  * Texture compression %s supported.", GLAD_GL_ARB_texture_compression ? "is" : "is NOT");
+	debug(LOG_3D, "  * Two side stencil %s supported.", GLAD_GL_EXT_stencil_two_side ? "is" : "is NOT");
+	debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLAD_GL_ATI_separate_stencil ? "" : " NOT");
+	debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
+	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLAD_GL_EXT_texture_filter_anisotropic ? "is" : "is NOT");
+	debug(LOG_3D, "  * Rectangular texture %s supported.", GLAD_GL_ARB_texture_rectangle ? "is" : "is NOT");
+	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLAD_GL_EXT_framebuffer_object ? "is" : "is NOT");
+	debug(LOG_3D, "  * ARB Vertex Buffer Object (VBO) %s supported.", GLAD_GL_ARB_vertex_buffer_object ? "is" : "is NOT");
+	debug(LOG_3D, "  * NPOT %s supported.", GLAD_GL_ARB_texture_non_power_of_two ? "is" : "is NOT");
+	debug(LOG_3D, "  * texture cube_map %s supported.", GLAD_GL_ARB_texture_cube_map ? "is" : "is NOT");
+	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLAD_GL_ARB_timer_query ? "is" : "is NOT");
 	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
 	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
-	if (!GLEW_VERSION_2_0)
+	if (!GLAD_GL_VERSION_2_0)
 	{
 		debug(LOG_FATAL, "OpenGL 2.0 not supported! Please upgrade your drivers.");
 		return false;
@@ -1601,7 +1551,7 @@ bool gl_context::initGLContext()
 	sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
 
 	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
-	GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf, glmaxVertexAttribs;
+	GLint glMaxTIUs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf, glmaxVertexAttribs;
 
 	debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -1609,9 +1559,7 @@ bool gl_context::initGLContext()
 
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
 	debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
-	glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
-	debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
-	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &glMaxTIUAs);
+	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &glMaxTIUAs);
 	debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
 	glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
 	debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
@@ -1638,7 +1586,7 @@ bool gl_context::initGLContext()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	if (GLEW_ARB_timer_query)
+	if (GLAD_GL_ARB_timer_query)
 	{
 		glGenQueries(PERF_COUNT, perfpos);
 	}

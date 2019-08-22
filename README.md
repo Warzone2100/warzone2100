@@ -276,7 +276,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
       * [libvorbis](https://xiph.org/vorbis)
-      * [GLEW](https://glew.sourceforge.net/) ≥ 1.5.2
       * [Freetype](https://www.freetype.org/)
       * [Harfbuzz](https://github.com/harfbuzz/harfbuzz) ≥ 1.0
       * [OpenAL-Soft](https://openal-soft.org)
@@ -290,13 +289,13 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    ```
    sudo apt-get -u update
    sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
-   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libglew-dev libxrandr-dev qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev
+   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev
    ```
    * Fedora:
    ```
    sudo dnf -y update && dnf clean all
    sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
-   sudo dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel glew-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel
+   sudo dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel
    ```
 * **Building from the command-line:**
    1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
