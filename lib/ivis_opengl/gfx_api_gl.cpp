@@ -1571,18 +1571,19 @@ bool gl_context::initGLContext()
 	// IMPORTANT: Reserve enough slots in enabledVertexAttribIndexes based on glmaxVertexAttribs
 	enabledVertexAttribIndexes.resize(static_cast<size_t>(glmaxVertexAttribs), false);
 
-#if defined(WZ_USE_OPENGL_3_2_CORE_PROFILE)
-	// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
-	static GLuint vaoId = 0;
-	if (glGenVertexArrays == nullptr)
+	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
 	{
-		debug(LOG_FATAL, "glGenVertexArray is not available, but core profile was specified");
-		exit(1);
-		return false;
+		// Very simple VAO code - just bind a single global VAO (this gets things working, but is not optimal)
+		static GLuint vaoId = 0;
+		if (glGenVertexArrays == nullptr)
+		{
+			debug(LOG_FATAL, "glGenVertexArrays is not available, but context is OpenGL 3.0+");
+			exit(1);
+			return false;
+		}
+		glGenVertexArrays(1, &vaoId);
+		glBindVertexArray(vaoId);
 	}
-	glGenVertexArrays(1, &vaoId);
-	glBindVertexArray(vaoId);
-#endif
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
