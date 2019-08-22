@@ -1026,7 +1026,10 @@ GLboolean get_normalisation(const gfx_api::vertex_attribute_type& type)
 
 gl_context::~gl_context()
 {
-	glDeleteBuffers(1, &scratchbuffer);
+	if (glDeleteBuffers) // glDeleteBuffers might be NULL (if initializing the OpenGL loader library fails)
+	{
+		glDeleteBuffers(1, &scratchbuffer);
+	}
 }
 
 gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename)
