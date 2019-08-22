@@ -32,6 +32,11 @@ sdl_OpenGL_Impl::sdl_OpenGL_Impl(SDL_Window* _window)
 	window = _window;
 }
 
+GLADloadproc sdl_OpenGL_Impl::getGLGetProcAddress()
+{
+	return SDL_GL_GetProcAddress;
+}
+
 bool sdl_OpenGL_Impl::createGLContext()
 {
 	SDL_GLContext WZglcontext = SDL_GL_CreateContext(window);

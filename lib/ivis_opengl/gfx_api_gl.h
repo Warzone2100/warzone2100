@@ -21,7 +21,7 @@
 
 #include "gfx_api.h"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -33,6 +33,8 @@ namespace gfx_api
 	public:
 		backend_OpenGL_Impl() {};
 		virtual ~backend_OpenGL_Impl() {};
+
+		virtual GLADloadproc getGLGetProcAddress() = 0;
 
 		// Creates an OpenGL context (double-buffered)
 		virtual bool createGLContext() = 0;

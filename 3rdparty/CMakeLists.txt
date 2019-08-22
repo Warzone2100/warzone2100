@@ -28,3 +28,19 @@ if(ENABLE_DISCORD)
 	add_subdirectory(discord-rpc EXCLUDE_FROM_ALL)
 	set_property(TARGET discord-rpc PROPERTY FOLDER "3rdparty")
 endif()
+
+# glad library
+
+set(GLAD_HEADERS
+	glad/include/glad/glad.h
+	glad/include/KHR/khrplatform.h
+)
+
+set(GLAD_SOURCES
+	glad/src/glad.c
+)
+
+add_library(glad STATIC ${GLAD_HEADERS} ${GLAD_SOURCES})
+set_property(TARGET glad PROPERTY FOLDER "3rdparty")
+target_link_libraries(glad PRIVATE ${CMAKE_DL_LIBS})
+target_include_directories(glad PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/glad/include")
