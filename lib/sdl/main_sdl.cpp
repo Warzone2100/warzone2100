@@ -1648,13 +1648,22 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
 		}
 
-#if defined(WZ_USE_OPENGL_3_2_CORE_PROFILE)
+		// Request an OpenGL 3.0+ Core Profile context
+		// - On macOS, must request at least OpenGL 3.2 Core Profile (with FORWARD_COMPATIBLE_FLAG)
+		//   to get the highest version OpenGL Core Profile context that's supported
+		// - Mesa allegedly requires a request for OpenGL 3.1+ Core Profile to get the highest version
+		//   OpenGL Core Profile context that's supported, so use that as the default otherwise
+		// (Note: There is fallback handling inside sdl_OpenGL_Impl::createGLContext())
+
 		// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+#  if defined(WZ_OS_MAC)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#endif
+#  else
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#  endif
 	}
 
 	// Populated our resolution list (does all displays now)
