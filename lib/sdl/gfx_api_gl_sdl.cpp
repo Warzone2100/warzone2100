@@ -42,8 +42,22 @@ bool sdl_OpenGL_Impl::createGLContext()
 	SDL_GLContext WZglcontext = SDL_GL_CreateContext(window);
 	if (!WZglcontext)
 	{
-		debug(LOG_ERROR, "Failed to create a openGL context! [%s]", SDL_GetError());
-		return false;
+		// Failed to create the default (Core Profile) context
+		std::string originalGLContextError(SDL_GetError());
+		debug(LOG_3D, "Cannot create an OpenGL Core context [%s]; falling back to compatibility context", originalGLContextError.c_str());
+
+		// Fall back to forward-compatible OpenGL 2.1
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+		WZglcontext = SDL_GL_CreateContext(window);
+		if (!WZglcontext)
+		{
+			debug(LOG_ERROR, "First attempt - Failed to create an OpenGL Core context! [%s]", originalGLContextError.c_str());
+			debug(LOG_ERROR, "Second attempt - Failed to create an OpenGL 2.1 Compatibility context! [%s]", SDL_GetError());
+			return false;
+		}
 	}
 
 	int value = 0;

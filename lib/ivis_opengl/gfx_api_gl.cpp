@@ -371,8 +371,10 @@ SHADER_VERSION getMinimumShaderVersionForCurrentGLContext()
 	return version;
 }
 
-SHADER_VERSION getMaximumShaderVersionForCurrentGLContext()
+SHADER_VERSION getMaximumShaderVersionForCurrentGLContext(SHADER_VERSION minSupportedShaderVersion = VERSION_120, SHADER_VERSION maxSupportedShaderVersion = VERSION_410_CORE)
 {
+	ASSERT(minSupportedShaderVersion <= maxSupportedShaderVersion, "minSupportedShaderVersion > maxSupportedShaderVersion");
+
 	// Instead of querying the GL_SHADING_LANGUAGE_VERSION string and trying to parse it,
 	// which is rife with difficulties because drivers can report very different strings (and formats),
 	// use the known (and explicit) mapping table between OpenGL version and supported GLSL version.
@@ -426,6 +428,10 @@ SHADER_VERSION getMaximumShaderVersionForCurrentGLContext()
 		// Return the OpenGL 4.1 value (for now)
 		version = VERSION_410_CORE;
 	}
+
+	version = std::max(version, minSupportedShaderVersion);
+	version = std::min(version, maxSupportedShaderVersion);
+
 	return version;
 }
 
@@ -440,7 +446,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 {
 	// Determine the shader version directive we should use by examining the current OpenGL context
 	// (The built-in shaders support (and have been tested with) VERSION_120 and VERSION_150_CORE)
-	SHADER_VERSION shader_version = getMinimumShaderVersionForCurrentGLContext();
+	SHADER_VERSION shader_version = getMaximumShaderVersionForCurrentGLContext(VERSION_120, VERSION_150_CORE);
 
 	build_program(
 				  shader_to_file_table.at(shader).friendly_name,

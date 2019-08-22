@@ -590,7 +590,6 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 endmacro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 add_definitions("-DHAVE_CONFIG_H")
-#add_definitions("-DWZ_USE_OPENGL_3_2_CORE_PROFILE")
 
 # CMAKE_CURRENT_BINARY_DIR should come before the current source directory
 # so that any build products are preferentially included over in-source build
