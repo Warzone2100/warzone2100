@@ -1432,7 +1432,11 @@ bool gl_context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t a
 		return false;
 	}
 
-	backend_impl->createGLContext();
+	if (!backend_impl->createGLContext())
+	{
+		debug(LOG_ERROR, "Failed to create OpenGL context");
+		return false;
+	}
 
 	if (!initGLContext())
 	{
