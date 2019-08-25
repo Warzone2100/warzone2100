@@ -51,7 +51,7 @@ for (var i = 0; i < droidlist.length; i++)
 The above code gets a list of all your construction droids, and iterates over them one by one.
 
 The droid object that you receive here has multiple properties that can be accessed to learn more about it.
-These propertie are read-only, and cannot be changed. In fact, objects that you get are just a copies of
+These properties are read-only, and cannot be changed. In fact, objects that you get are just copies of
 game state, and do not give any access to changing the game state itself.
 
 Any value written in ALL_CAPS_WITH_UNDERSCORES are enums, special read-only constants defined by the
