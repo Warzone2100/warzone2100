@@ -217,10 +217,15 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 #if defined(__clang__)
 	#pragma clang diagnostic push
 	#pragma clang diagnostic ignored "-Wcast-align"
+#elif defined(__GNUC__)
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wcast-align"
 #endif
 	end = (INTERP_VAL *)((UBYTE *)ip + psProg->size);
 #if defined(__clang__)
 	#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+	#pragma GCC diagnostic pop
 #endif
 	triggerCode = (psProg->numTriggers > 0);
 

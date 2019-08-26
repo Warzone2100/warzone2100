@@ -215,13 +215,27 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 	{
 	case AF_INET:
 		{
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
 			return handleIpv4((reinterpret_cast<const sockaddr_in *>(addr))->sin_addr.s_addr);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 		}
 	case AF_INET6:
 		{
 
 			// Check to see if this is really a IPv6 address
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
 			const struct sockaddr_in6 *mappedIP = reinterpret_cast<const sockaddr_in6 *>(addr);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 			if (IN6_IS_ADDR_V4MAPPED(&mappedIP->sin6_addr))
 			{
 				// looks like it is ::ffff:(...) so lets set up a IPv4 socket address structure
@@ -234,7 +248,14 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 			else
 			{
 				static_assert(sizeof(in6_addr::s6_addr) == 16, "Standard expects in6_addr structure that contains member s6_addr[16], a 16-element array of uint8_t");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
 				const uint8_t *address_u8 = &((reinterpret_cast<const sockaddr_in6 *>(addr))->sin6_addr.s6_addr[0]);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 				uint16_t address[8] = {0};
 				memcpy(&address, address_u8, sizeof(uint8_t) * 16);
 				return snprintf(buf, size,
@@ -1136,7 +1157,14 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	ASSERT(addr != nullptr, "NULL Socket provided");
 
 	addressToText(addr->ai_addr, conn->textAddress, sizeof(conn->textAddress));
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
 	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs((reinterpret_cast<const sockaddr_in *>(addr->ai_addr))->sin_port));
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 
 	// Mark all unused socket handles as invalid
 	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
