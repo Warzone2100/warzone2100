@@ -42,6 +42,8 @@ namespace gfx_api
 
 		// Use this function to get the size of a window's underlying drawable in pixels (for use with glViewport).
 		virtual void getDrawableSize(int* w, int* h) = 0;
+
+		virtual bool isOpenGLES() = 0;
 	};
 }
 
@@ -92,7 +94,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<SHADER_MODE shader>
 	typename std::pair<SHADER_MODE, std::function<void(const void*)>> uniform_binding_entry();
 
-	gl_pipeline_state_object(const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc);
+	gl_pipeline_state_object(bool gles, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc);
 	void set_constants(const void* buffer);
 
 	void bind();
@@ -110,8 +112,8 @@ private:
 	void getLocs();
 
 	void build_program(const std::string& programName,
-					   const char * vertex_version, const std::string& vertexPath,
-					   const char * fragment_version, const std::string& fragmentPath,
+					   const char * vertex_header, const std::string& vertexPath,
+					   const char * fragment_header, const std::string& fragmentPath,
 					   const std::vector<std::string> &uniformNames);
 
 	void fetch_uniforms(const std::vector<std::string>& uniformNames);
@@ -180,6 +182,7 @@ struct gl_context final : public gfx_api::context
 	GLuint scratchbuffer = 0;
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
+	bool gles = false;
 
 	gl_context(bool _debug) : khr_debug(_debug) {}
 	~gl_context();
