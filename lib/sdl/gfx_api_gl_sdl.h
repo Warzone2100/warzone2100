@@ -23,13 +23,33 @@
 class sdl_OpenGL_Impl final : public gfx_api::backend_OpenGL_Impl
 {
 public:
-	sdl_OpenGL_Impl(SDL_Window* window);
+	sdl_OpenGL_Impl(SDL_Window* window, bool useOpenGLES);
 
 	virtual GLADloadproc getGLGetProcAddress() override;
 	virtual bool createGLContext() override;
 	virtual void swapWindow() override;
 	virtual void getDrawableSize(int* w, int* h) override;
 
+	virtual bool isOpenGLES() override;
+
 private:
 	SDL_Window* window;
+	bool useOpenglES = false;
+
+	enum GLContextRequests {
+		// Desktop OpenGL Context Requests
+		OpenGLCore_HighestAvailable,
+		OpenGL21Compat,
+		// OpenGL ES Context Requests
+		OpenGLES30,
+		OpenGLES20,
+		//
+		MAX_CONTEXT_REQUESTS
+	};
+
+	GLContextRequests contextRequest = OpenGLCore_HighestAvailable;
+
+private:
+	bool configureNextOpenGLContextRequest();
+	std::string to_string(const GLContextRequests& request) const;
 };

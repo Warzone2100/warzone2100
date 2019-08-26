@@ -314,6 +314,12 @@ enum SHADER_VERSION
 	VERSION_AUTODETECT_FROM_LEVEL_LOAD
 };
 
+enum SHADER_VERSION_ES
+{
+	VERSION_ES_100,
+	VERSION_ES_300
+};
+
 const char * shaderVersionString(SHADER_VERSION version)
 {
 	switch(version)
@@ -339,6 +345,19 @@ const char * shaderVersionString(SHADER_VERSION version)
 			// Deliberately omit "default:" case to trigger a compiler warning if the SHADER_VERSION enum is expanded but the new cases aren't handled here
 	}
 	return ""; // Should not not reach here - silence a GCC warning
+}
+
+const char * shaderVersionString(SHADER_VERSION_ES version)
+{
+	switch(version)
+	{
+		case VERSION_ES_100:
+			return "#version 100\n";
+		case VERSION_ES_300:
+			return "#version 300 es\n";
+			// Deliberately omit "default:" case to trigger a compiler warning if the SHADER_VERSION_ES enum is expanded but the new cases aren't handled here
+	}
+	return ""; // Should not reach here - silence a GCC warning
 }
 
 GLint wz_GetGLIntegerv(GLenum pname, GLint defaultValue = 0)
@@ -435,24 +454,78 @@ SHADER_VERSION getMaximumShaderVersionForCurrentGLContext(SHADER_VERSION minSupp
 	return version;
 }
 
+SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES minSupportedShaderVersion = VERSION_ES_100, SHADER_VERSION_ES maxSupportedShaderVersion = VERSION_ES_300)
+{
+	ASSERT(minSupportedShaderVersion <= maxSupportedShaderVersion, "minSupportedShaderVersion > maxSupportedShaderVersion");
+
+	// Instead of querying the GL_SHADING_LANGUAGE_VERSION string and trying to parse it,
+	// which is rife with difficulties because drivers can report very different strings (and formats),
+	// use the known (and explicit) mapping table between OpenGL version and supported GLSL version.
+
+	GLint gl_majorversion = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+	//GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+
+	// For OpenGL ES < 3.0, default to VERSION_ES_100 shaders
+	SHADER_VERSION_ES version = VERSION_ES_100;
+	if(gl_majorversion == 3)
+	{
+		return VERSION_ES_300;
+	}
+	else if (gl_majorversion > 3)
+	{
+		// Return the OpenGL ES 3.0 value (for now)
+		version = VERSION_ES_300;
+	}
+
+	version = std::max(version, minSupportedShaderVersion);
+	version = std::min(version, maxSupportedShaderVersion);
+
+	return version;
+}
+
 template<SHADER_MODE shader>
 typename std::pair<SHADER_MODE, std::function<void(const void*)>> gl_pipeline_state_object::uniform_binding_entry()
 {
 	return std::make_pair(shader, [this](const void* buffer) { this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer)); });
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
 desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 {
-	// Determine the shader version directive we should use by examining the current OpenGL context
-	// (The built-in shaders support (and have been tested with) VERSION_120 and VERSION_150_CORE)
-	SHADER_VERSION shader_version = getMaximumShaderVersionForCurrentGLContext(VERSION_120, VERSION_150_CORE);
+	std::string vertexShaderHeader;
+	std::string fragmentShaderHeader;
+
+	if (!gles)
+	{
+		// Determine the shader version directive we should use by examining the current OpenGL context
+		// (The built-in shaders support (and have been tested with) VERSION_120 and VERSION_150_CORE)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_120, VERSION_150_CORE));
+
+		vertexShaderHeader = shaderVersionStr;
+		fragmentShaderHeader = shaderVersionStr;
+	}
+	else
+	{
+		// Determine the shader version directive we should use by examining the current OpenGL ES context
+		// (The built-in shaders support (and have been tested with) VERSION_ES_100 and VERSION_ES_300)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_100, VERSION_ES_300));
+
+		vertexShaderHeader = shaderVersionStr;
+		// OpenGL ES Shading Language - 4. Variables and Types - pp. 35-36
+		// https://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf?#page=41
+		// 
+		// > The fragment language has no default precision qualifier for floating point types.
+		// > Hence for float, floating point vector and matrix variable declarations, either the
+		// > declaration must include a precision qualifier or the default float precision must
+		// > have been previously declared.
+		fragmentShaderHeader = std::string(shaderVersionStr) + "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n";
+	}
 
 	build_program(
 				  shader_to_file_table.at(shader).friendly_name,
-				  shaderVersionString(shader_version),
+				  vertexShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).vertex_file,
-				  shaderVersionString(shader_version),
+				  fragmentShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).fragment_file,
 				  shader_to_file_table.at(shader).uniform_names);
 
@@ -561,7 +634,7 @@ void gl_pipeline_state_object::bind()
 			break;
 		case gfx_api::stencil_mode::stencil_shadow_silhouette:
 			glEnable(GL_STENCIL_TEST);
-			if (GLAD_GL_VERSION_2_0)
+			if (GLAD_GL_VERSION_2_0 || GLAD_GL_ES_VERSION_2_0)
 			{
 				glStencilMask(~0);
 				glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
@@ -677,8 +750,8 @@ void gl_pipeline_state_object::getLocs()
 }
 
 void gl_pipeline_state_object::build_program(const std::string& programName,
-											 const char * vertex_version, const std::string& vertexPath,
-											 const char * fragment_version, const std::string& fragmentPath,
+											 const char * vertex_header, const std::string& vertexPath,
+											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames)
 {
 	GLint status;
@@ -701,7 +774,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 
-			const char* ShaderStrings[2] = { vertex_version, shaderContents };
+			const char* ShaderStrings[2] = { vertex_header, shaderContents };
 
 			glShaderSource(shader, 2, ShaderStrings, nullptr);
 			glCompileShader(shader);
@@ -737,7 +810,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-			const char* ShaderStrings[2] = { fragment_version, shaderContents };
+			const char* ShaderStrings[2] = { fragment_header, shaderContents };
 
 			glShaderSource(shader, 2, ShaderStrings, nullptr);
 			glCompileShader(shader);
@@ -1061,7 +1134,7 @@ gfx_api::pipeline_state_object * gl_context::build_pipeline(const gfx_api::state
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
-	return new gl_pipeline_state_object(state_desc, shader_mode, attribute_descriptions);
+	return new gl_pipeline_state_object(gles, state_desc, shader_mode, attribute_descriptions);
 }
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
@@ -1246,7 +1319,14 @@ void gl_context::set_polygon_offset(const float& offset, const float& slope)
 
 void gl_context::set_depth_range(const float& min, const float& max)
 {
-	glDepthRange(min, max);
+	if (!gles)
+	{
+		glDepthRange(min, max);
+	}
+	else
+	{
+		glDepthRangef(min, max);
+	}
 }
 
 int32_t gl_context::get_context_value(const context_value property)
@@ -1464,10 +1544,22 @@ bool gl_context::initGLContext()
 		debug(LOG_FATAL, "backend_impl->getGLGetProcAddress() returned NULL");
 		exit(1);
 	}
-	if (!gladLoadGLLoader(func_GLGetProcAddress))
+	gles = backend_impl->isOpenGLES();
+	if (!gles)
 	{
-		debug(LOG_FATAL, "gladLoadGLLoader failed");
-		exit(1);
+		if (!gladLoadGLLoader(func_GLGetProcAddress))
+		{
+			debug(LOG_FATAL, "gladLoadGLLoader failed");
+			exit(1);
+		}
+	}
+	else
+	{
+		if (!gladLoadGLES2Loader(func_GLGetProcAddress))
+		{
+			debug(LOG_FATAL, "gladLoadGLLoader failed");
+			exit(1);
+		}
 	}
 
 	/* Dump general information about OpenGL implementation to the console and the dump file */
@@ -1517,47 +1609,68 @@ bool gl_context::initGLContext()
 		line += word;
 	}
 	debug(LOG_3D, "OpenGL Extensions:%s", line.c_str());
-	debug(LOG_3D, "Notable OpenGL features:");
-	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLAD_GL_VERSION_1_2 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLAD_GL_VERSION_1_3 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLAD_GL_VERSION_1_4 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLAD_GL_VERSION_1_5 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
-#ifdef GLAD_GL_VERSION_3_1
-	debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLAD_GL_VERSION_3_1 ? "is" : "is NOT");
-#endif
-#ifdef GLAD_GL_VERSION_3_2
-	debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLAD_GL_VERSION_3_2 ? "is" : "is NOT");
-#endif
-#ifdef GLAD_GL_VERSION_3_3
-	debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
-#endif
-#ifdef GLAD_GL_VERSION_4_0
-	debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
-#endif
-#ifdef GLAD_GL_VERSION_4_1
-	debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
-#endif
-	debug(LOG_3D, "  * Texture compression %s supported.", GLAD_GL_ARB_texture_compression ? "is" : "is NOT");
-	debug(LOG_3D, "  * Two side stencil %s supported.", GLAD_GL_EXT_stencil_two_side ? "is" : "is NOT");
-	debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLAD_GL_ATI_separate_stencil ? "" : " NOT");
-	debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
+	if (!gles)
+	{
+		debug(LOG_3D, "Notable OpenGL features:");
+		debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLAD_GL_VERSION_1_2 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLAD_GL_VERSION_1_3 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLAD_GL_VERSION_1_4 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLAD_GL_VERSION_1_5 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
+	#ifdef GLAD_GL_VERSION_3_1
+		debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLAD_GL_VERSION_3_1 ? "is" : "is NOT");
+	#endif
+	#ifdef GLAD_GL_VERSION_3_2
+		debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLAD_GL_VERSION_3_2 ? "is" : "is NOT");
+	#endif
+	#ifdef GLAD_GL_VERSION_3_3
+		debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
+	#endif
+	#ifdef GLAD_GL_VERSION_4_0
+		debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
+	#endif
+	#ifdef GLAD_GL_VERSION_4_1
+		debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
+	#endif
+
+		debug(LOG_3D, "  * Texture compression %s supported.", GLAD_GL_ARB_texture_compression ? "is" : "is NOT");
+		debug(LOG_3D, "  * Two side stencil %s supported.", GLAD_GL_EXT_stencil_two_side ? "is" : "is NOT");
+		debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLAD_GL_ATI_separate_stencil ? "" : " NOT");
+		debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
+		debug(LOG_3D, "  * Rectangular texture %s supported.", GLAD_GL_ARB_texture_rectangle ? "is" : "is NOT");
+		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLAD_GL_EXT_framebuffer_object ? "is" : "is NOT");
+		debug(LOG_3D, "  * ARB Vertex Buffer Object (VBO) %s supported.", GLAD_GL_ARB_vertex_buffer_object ? "is" : "is NOT");
+		debug(LOG_3D, "  * NPOT %s supported.", GLAD_GL_ARB_texture_non_power_of_two ? "is" : "is NOT");
+		debug(LOG_3D, "  * texture cube_map %s supported.", GLAD_GL_ARB_texture_cube_map ? "is" : "is NOT");
+		debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLAD_GL_ARB_timer_query ? "is" : "is NOT");
+	}
+	else
+	{
+		debug(LOG_3D, "  * OpenGL ES 2.0 %s supported!", GLAD_GL_ES_VERSION_2_0 ? "is" : "is NOT");
+	#ifdef GLAD_GL_ES_VERSION_3_0
+		debug(LOG_3D, "  * OpenGL ES 3.0 %s supported!", GLAD_GL_ES_VERSION_3_0 ? "is" : "is NOT");
+	#endif
+	}
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLAD_GL_EXT_texture_filter_anisotropic ? "is" : "is NOT");
-	debug(LOG_3D, "  * Rectangular texture %s supported.", GLAD_GL_ARB_texture_rectangle ? "is" : "is NOT");
-	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLAD_GL_EXT_framebuffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * ARB Vertex Buffer Object (VBO) %s supported.", GLAD_GL_ARB_vertex_buffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * NPOT %s supported.", GLAD_GL_ARB_texture_non_power_of_two ? "is" : "is NOT");
-	debug(LOG_3D, "  * texture cube_map %s supported.", GLAD_GL_ARB_texture_cube_map ? "is" : "is NOT");
-	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLAD_GL_ARB_timer_query ? "is" : "is NOT");
 	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
 	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
-	if (!GLAD_GL_VERSION_2_0)
+	if (!GLAD_GL_VERSION_2_0 && !GLAD_GL_ES_VERSION_2_0)
 	{
-		debug(LOG_FATAL, "OpenGL 2.0 not supported! Please upgrade your drivers.");
+		debug(LOG_FATAL, "OpenGL 2.0 / OpenGL ES 2.0 not supported! Please upgrade your drivers.");
 		return false;
+	}
+	if (gles)
+	{
+		GLboolean bShaderCompilerSupported = GL_FALSE;
+		glGetBooleanv(GL_SHADER_COMPILER, &bShaderCompilerSupported);
+		if (bShaderCompilerSupported != GL_TRUE)
+		{
+			debug(LOG_FATAL, "Shader compiler is not supported! (GL_SHADER_COMPILER == GL_FALSE)");
+			return false;
+		}
 	}
 
 	std::pair<int, int> glslVersion(0, 0);
