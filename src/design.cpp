@@ -69,6 +69,8 @@
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
+#elif defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wcast-align"	// TODO: FIXME!
 #endif
 
 
