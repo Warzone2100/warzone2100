@@ -17,6 +17,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#pragma once
+
+#ifndef __INCLUDED_GFX_API_VK_SDL_H__
+#define __INCLUDED_GFX_API_VK_SDL_H__
+
 #include "lib/ivis_opengl/gfx_api_vk.h"
 #include <SDL_video.h>
 
@@ -39,3 +44,5 @@ private:
 };
 
 #endif // defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+
+#endif // __INCLUDED_GFX_API_VK_SDL_H__
