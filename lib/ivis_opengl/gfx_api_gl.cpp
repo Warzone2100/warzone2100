@@ -1445,7 +1445,7 @@ bool gl_context::getScreenshot(iV_Image &image)
 	image.width = m_viewport[2];
 	image.height = m_viewport[3];
 	image.depth = 8;
-	image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
+	image.bmp = (unsigned char *)malloc((size_t)channelsPerPixel * (size_t)image.width * (size_t)image.height);
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
