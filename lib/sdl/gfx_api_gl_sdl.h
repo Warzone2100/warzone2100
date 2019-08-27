@@ -17,6 +17,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#pragma once
+
+#ifndef __INCLUDED_GFX_API_GL_SDL_H__
+#define __INCLUDED_GFX_API_GL_SDL_H__
+
 #include "lib/ivis_opengl/gfx_api_gl.h"
 #include <SDL_video.h>
 
@@ -53,3 +58,5 @@ private:
 	bool configureNextOpenGLContextRequest();
 	std::string to_string(const GLContextRequests& request) const;
 };
+
+#endif // __INCLUDED_GFX_API_GL_SDL_H__
