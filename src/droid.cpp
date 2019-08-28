@@ -1738,6 +1738,7 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 void initDroidMovement(DROID *psDroid)
 {
 	psDroid->sMove.asPath.clear();
+	psDroid->sMove.pathIndex = 0;
 }
 
 // Set the asBits in a DROID structure given it's template.
