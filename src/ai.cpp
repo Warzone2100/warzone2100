@@ -699,7 +699,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 			&& !aiCheckAlliances(psDroid->player, targetStructure->player))
 		{
 			//are we any good against walls?
-			if (asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] >= 100) //can attack atleast with default strength
+			if (asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
 			{
 				bestTarget = (BASE_OBJECT *)targetStructure; //attack wall
 			}

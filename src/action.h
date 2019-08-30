@@ -49,6 +49,9 @@ const char *getDroidActionName(DROID_ACTION action);
 /// The maximum distance a repair droid will automatically go in guard mode.
 #define REPAIR_MAXDIST  (5 * TILE_UNITS)
 
+// The minimum structure strength modifier needed to automatically target blocking walls.
+#define MIN_STRUCTURE_BLOCK_STRENGTH 50
+
 /**
  * Update the action state for a droid.
  *
