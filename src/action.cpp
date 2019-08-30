@@ -915,7 +915,7 @@ void actionUpdateDroid(DROID *psDroid)
 							WEAPON_EFFECT weapEffect = psStats->weaponEffect;
 
 							if (!aiCheckAlliances(psDroid->player, blockingWall->player)
-								&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= 100)
+								&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
 							{
 								psActionTarget = blockingWall;
 								setDroidActionTarget(psDroid, psActionTarget, i); // attack enemy wall
@@ -1032,7 +1032,7 @@ void actionUpdateDroid(DROID *psDroid)
 				if (proj_Direct(psWeapStats) && blockingWall)
 				{
 					if (!aiCheckAlliances(psDroid->player, blockingWall->player)
-						&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= 100)
+						&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
 					{
 						psActionTarget = (BASE_OBJECT *)blockingWall;
 						setDroidActionTarget(psDroid, psActionTarget, i);
@@ -1316,7 +1316,7 @@ void actionUpdateDroid(DROID *psDroid)
 								WEAPON_EFFECT weapEffect = psWeapStats->weaponEffect;
 
 								if (!aiCheckAlliances(psDroid->player, blockingWall->player)
-									&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= 100)
+									&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
 								{
 									//Shoot at wall if the weapon is good enough against them
 									combFire(&psDroid->asWeaps[i], psDroid, (BASE_OBJECT *)blockingWall, i);
