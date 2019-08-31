@@ -1,4 +1,4 @@
-2019-07-XX: Version 3.3.0 beta2
+2019-08-31: Version 3.3.0
  * General:
    * Add: Reinstated secondary orders Pursue, Guard, and Hold (commit:29d3696dd62f034d02d51b9caa7d834cc84e13d3, commit:4b974e5761eecf7fc375f50d954779e4ac800786, commit:2fb172792014d8886a7411a2547b15030ead0152, commit:274fab1fe4f5a7f443f42b35211d95f949cd63cb, commit:cfa8ca695079df3d716a6eb7a2ed2f5729320bea, commit:8f611fe0f6ffb906bee0afd5de702f8b2de9f1df, commit:ff5ec8ca927c2d3353f58f7ac0ca17f965252234, #263, ticket:4303)
    * Add: Reinstated range orders Optimum, Short, and Long range (too many commits, #314)
@@ -10,11 +10,13 @@
    * Fix: Support for more graphics driver workarounds and platform compatibility (commit:d517b62e394c42a2b1e0b831a0cdc26156faca80, #331)
    * Fix: Units shooting through walls to attack targets (commit: 4ed887ed1986840474281d8fd28fc0ea533c06aa, 5cbe6b9e93a0a9682996fc1edf3df43ee5f7096b, #271)
    * Fix: Very slow map/mod transfer when vertical sync is enabled (commit:1d1050f034e7c226d98e371598d2c2a105d24353, #392)
+   * Fix: Do not try to attack jammed units before being in range (commit:b9cd1cd49eae103d4e95b3f14e84aed4492391b3)
  * Graphics:
    * Add: Hit-testing support for widgets (commit:405a59420918f903352c4a51be6822eb60d4066b, commit:9394cd5f6c5c1de666d34d56cc32a0d4dfbc83e9, #264)
    * Change: Increase click area for in-game options (commit:bb15fbaa10663d6ce540911d9890f733b75fd365, #266)
    * Change: Improved text width calculation (commit:f4a8c93c9012eb5424296604bd1a0fa56fa2bc06, commit:c27ad854669ee55834fef43f4a7b6fba0dc28b88, commit:0fcad70a72b44aaaf0b01fe425946cd0193f5216, commit:35e5a8d021dfcefa9b7bce7e846a7c2432a7a064, #287)
    * Change: Split challenge tooltips in challenge selection screen into multiple lines (commit:2cc667cbb8f3765a5b69e0c210ab5b1355db3ca6, #299)
+   * Fix: Issue loading OpenGL on older Intel chipsets on Windows 10 (commit:8a755a5e6e4f0eb8c62cc51db121cc61c65da80b)
    * Fix: Flamer Bunker model (commit:400191c9c47a4e39aeb12240283f355a57e30290, ticket:4856)
    * Fix: Objects darkening when zooming out (commit:456a74edb1fa76e66bf8e0e2c888b54c0b5c6299, ticket:4375)
    * Fix: Layout calculation for unit orders panel (commit:67b64e6f4205b123e69d6973f2a524656a419c75, #261)
@@ -27,6 +29,7 @@
    * Fix: Broken shadows with rotated features (commit:39021659101136e3cf4a26959daf7ea86335c13e, #368)
    * Fix: Broken shadows with corner walls (commit:33963b56adc0a7cfe29110c4cb6407b6ea069b29, #368)
    * Fix: Color cursor offset (commit:66322c966eb22c4ac65bfecf4e829e46a4cb4a17, #426)
+   * Fix: Fix cyborg and scavenger leg animation bug (commit:123ded59aedc53dc2344be9807c321774613946f)
    * Remove: Flickering of blue/red laser beam when building/demolishing (commit:724750e92cb9884ab81ce565f4d007af817f16ca)
    * Remove: Disable PIE SHADERS directive support (commit:ca536c35fda80d23c3467e5d59f0fdb7debc3525, #380)
  * Campaign:
