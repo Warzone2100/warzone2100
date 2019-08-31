@@ -152,9 +152,8 @@ Then you should revert the changes you made to `configure.ac`, so that git maste
 
 Time to publish the release!
 ----------------------------
- * Add new version to the Bug Tracker, just in case people find bugs and want to report them.
- * Upload the tarball and both windows builds to our host.
- * (See below for details) Update the lobby server for the new release. See ~lobby/wzlobbyserver-ng/wzlobby/protocol/protocol3.py and ~lobby/wzlobbyserver-ng/wzlobby/settings.py and ~lobby/wzlobbyserver-ng/wzlobby/gamedb.py and then restart the lobby via  Monit.
+ * Add a new milestone to https://github.com/Warzone2100/warzone2100/milestones
+ * (See below for details) Update the lobby server for the new release. See ~lobby/wzlobbyserver-ng/wzlobby/protocol/protocol3.py and ~lobby/wzlobbyserver-ng/wzlobby/settings.py and ~lobby/wzlobbyserver-ng/wzlobby/gamedb.py and then restart the lobby via Monit.
  * (See below for details) Update /home/lobby/gamecheck.wz2100.net/gamechecker/bottle/app.py -- the game version checker -- to include the version you have just created. Restart it with «uwsgi --reload /var/run/gamecheck.wz2100.net-master.pid».
  * Tell everyone about it in the forums. You can use the build_tools/changelog2bbcode.sh script to massage the changelog into BBCode.
  * Send mail about it on the developer mailing list.
