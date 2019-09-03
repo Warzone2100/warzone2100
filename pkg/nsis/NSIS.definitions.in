@@ -9,21 +9,23 @@
 !define WZ_DATADIR_APPEND "@NSIS_WZ_DATADIR_APPEND@"
 !if "@NSIS_MSVCRUNTIME@" == "ON"
   !define MSVCRUNTIME "ON"
-  !define MSVCRT14_BLD_MINIMUM 26706 ; (14.15.26706)
+  !define MSVCRT14_BLD_MINIMUM 27821 ; (14.22.27821.00)
 
   !if "@CMAKE_VS_PLATFORM_NAME@" == "Win32"
-    !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.0.2/applocalconfig-vc2017-x86.zip"
-    !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x86.zip"
-    !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x86.zip"
-    !define MSVCRT_PORTABLE_DL_SHA512 "1f679a3ed4f4af6a565111970446f1e0cf2911205178f7e1c26a1f245e85908f0c30585eab6fa37313c3375ee5bcdcb0cde9b0a3bc0c555688a28565e5073217"
-    !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2017-x86.zip"
+    ; AppLocal (for portable version)
+    !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.1.0/applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.1.0/applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.1.0/applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_SHA512 "3e9ea57ad8656ddb375862a2bdd301266c08dbcb465352544996d228c091e407ddd52b40081ae1d28f56235c72f62a2ee0c7bff6b1bcb2093bd9594de5e6ca3e"
+    !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2019-x86.zip"
   !else
     !if "@CMAKE_VS_PLATFORM_NAME@" == "x64"
-      !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.0.2/applocalconfig-vc2017-x64.zip"
-      !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x64.zip"
-      !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.0.2/applocalconfig-vc2017-x64.zip"
-      !define MSVCRT_PORTABLE_DL_SHA512 "1311c6b21c10cb8b0c5dafcc3c8c2de3266064fcdb9ce4317fb75d40507a411115858af9a8f9679d4c70280721d624e5dc0f08dbd22f9542ccaeba6cfad666ac"
-      !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2017-x64.zip"
+      ; AppLocal (for portable version)
+      !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.1.0/applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.1.0/applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.1.0/applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_SHA512 "ee2132ac99d05fd5e5a9ddee39bb745a26a3146c2c7e9ba6ed4b1669b8f583ffc46361755422acd2d4b24b6bede6f81c0f75a122a869f18039f18a868f898fc5"
+      !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2019-x64.zip"
     !else
       !warning "Missing defines for platform: (@CMAKE_VS_PLATFORM_NAME@) in NSIS.definitions.in"
     !endif
