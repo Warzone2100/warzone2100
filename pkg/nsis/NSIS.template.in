@@ -272,7 +272,7 @@ inetc::get /CAPTION "${Caption}" "${URL}" "${OutputFile}"
 Pop $R0 # return value = exit code, "OK" if OK
 ${If} $R0 == "OK"
   ; Download succeeded - check file
-  filecheck::verifyFileSignature "${OutputFile}" /ROOT "microsoft" /CERTNAME "Microsoft Corporation" /CERTISSUERNAME "Microsoft Code Signing PCA"
+  filecheck::verifyFileSignature "${OutputFile}" /ROOT "microsoft" /CERTNAME "Microsoft Corporation"
   Pop $R0 ; Get the return value
   ${If} $R0 == "OK"
 	filecheck::getFileVersionInfoString "${OutputFile}" "FileDescription" /LANGUAGE 1033 /CODEPAGE 1252
@@ -286,7 +286,7 @@ ${If} $R0 == "OK"
       StrCpy ${Result} "FILE_INFO"
 	${EndIf}
   ${Else}
-	; Failed to verify file code signature
+    ; Failed to verify file code signature
     ; MessageBox MB_OK|MB_ICONSTOP "Download of system library failed: CODE_SIGNATURE"
     StrCpy ${Result} "CODE_SIGNATURE"
   ${EndIf}
@@ -365,8 +365,9 @@ ${EndIf}
 !macroend
 
 !ifdef MSVCRUNTIME
-  Var MSVCRT15_x86_NotPresent
-  Var MSVCRT15_x64_NotPresent
+  Var MSVCRT16_x86_NotPresent
+  Var MSVCRT16_x64_NotPresent
+  Var MSVCRT16_ARM64_NotPresent
   Var Result_MSVCDownload
 
   !ifndef PORTABLE
@@ -374,8 +375,8 @@ ${EndIf}
     Section "" SecMSSysLibraries
       SetOutPath "$INSTDIR"
 
-      ${If} $MSVCRT15_x86_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/15/release/vc_redist.x86.exe" "Downloading vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2017 Redistributable" $Result_MSVCDownload
+      ${If} $MSVCRT16_x86_NotPresent == 1
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x86.exe" "Downloading vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x86.exe ..."
@@ -384,15 +385,26 @@ ${EndIf}
           MessageBox MB_OK|MB_ICONSTOP "Download of system library (x86) failed: $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
-	  ${If} ${RunningX64}
-      ${AndIf} $MSVCRT15_x64_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/15/release/vc_redist.x64.exe" "Downloading vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2017 Redistributable" $Result_MSVCDownload
+      ${If} ${RunningX64}
+      ${AndIf} $MSVCRT16_x64_NotPresent == 1
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x64.exe" "Downloading vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x64.exe ..."
           ExecWait '"$PLUGINSDIR\vc_redist.x64.exe" /q'
         ${Else}
           MessageBox MB_OK|MB_ICONSTOP "Download of system library (x64) failed: $Result_MSVCDownload"
+        ${EndIf}
+      ${EndIf}
+      ${If} ${IsNativeARM64}
+      ${AndIf} $MSVCRT16_ARM64_NotPresent == 1
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/VC_redist.arm64.exe" "Downloading VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2019 Redistributable" $Result_MSVCDownload
+        ${If} $Result_MSVCDownload == "OK"
+          ; Download succeeded
+          DetailPrint "VC_redist.arm64.exe ..."
+          ExecWait '"$PLUGINSDIR\VC_redist.arm64.exe" /q'
+        ${Else}
+          MessageBox MB_OK|MB_ICONSTOP "Download of system library (ARM64) failed: $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
     SectionEnd
@@ -504,13 +516,14 @@ Function .onInit
 
   ; Determine whether Microsoft system libraries are installed
   !ifdef MSVCRUNTIME
-    StrCpy $MSVCRT15_x86_NotPresent 0
-    StrCpy $MSVCRT15_x64_NotPresent 0
+    StrCpy $MSVCRT16_x86_NotPresent 0
+    StrCpy $MSVCRT16_x64_NotPresent 0
+    StrCpy $MSVCRT16_ARM64_NotPresent 0
 
     !ifndef PORTABLE
 
-      ; Check for presence of MSVC++ 14 System Runtime (VC2017, works with 2015)
-      ; NOTE: Because VC 15 is ABI compatible with VC 14, the version # used is still 14.
+      ; Check for presence of MSVC++ 14 System Runtime (VC2019, works with 2015/2017)
+      ; NOTE: Because VC 15/16 is ABI compatible with VC 14, the version # used is still 14.
       ; The VCRuntime includes the Universal C Runtime system component (the UCRT does not have to be detected / handled separately)
       !ifndef MSVCRT14_BLD_MINIMUM
         !error "MSVCRT14_BLD_MINIMUM is not defined"
@@ -522,8 +535,18 @@ Function .onInit
         SetRegView lastused
         ;MessageBox MB_OK|MB_ICONSTOP "x64 VC14 Runtime Bld: $R1"
         ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
-          StrCpy $MSVCRT15_x64_NotPresent 1
+          StrCpy $MSVCRT16_x64_NotPresent 1
         ${EndIf}
+      ${EndIf}
+      StrCpy $R1 ""
+      ${If} ${IsNativeARM64}
+        SetRegView 64
+        ;ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\ARM64" "Bld" ; is this the right registry key to check for ARM64?
+        SetRegView lastused
+        ;MessageBox MB_OK|MB_ICONSTOP "ARM64 VC14 Runtime Bld: $R1"
+        ;${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
+          StrCpy $MSVCRT16_ARM64_NotPresent 1
+        ;${EndIf}
       ${EndIf}
       StrCpy $R1 ""
       SetRegView 32
@@ -531,11 +554,12 @@ Function .onInit
       ; MessageBox MB_OK|MB_ICONSTOP "x86 VC14 Runtime Bld: $R1"
       SetRegView lastused
       ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
-        StrCpy $MSVCRT15_x86_NotPresent 1
+        StrCpy $MSVCRT16_x86_NotPresent 1
       ${EndIf}
 
-      ${If} $MSVCRT15_x64_NotPresent = 1
-      ${OrIf} $MSVCRT15_x86_NotPresent = 1
+      ${If} $MSVCRT16_x64_NotPresent = 1
+      ${OrIf} $MSVCRT16_x86_NotPresent = 1
+      ${OrIf} $MSVCRT16_ARM64_NotPresent = 1
         SectionSetText ${SecMSSysLibraries} "$(TEXT_SecMSSysLibraries)"
         ; very rough estimate - we can't know exactly how much space will be taken up, but it's better to signify *something*
         SectionSetSize ${SecMSSysLibraries} 10000
