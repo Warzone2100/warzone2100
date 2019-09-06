@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -57,5 +57,7 @@ WZ_DECL_PURE const char *getLanguageName();
 WZ_DECL_NONNULL(1) bool setLanguage(const char *name);
 void setNextLanguage(bool prev = false);
 void initI18n();
+
+const char *getCompileDate();
 
 #endif // _i18n_h

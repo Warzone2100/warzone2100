@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013-2017  Warzone 2100 Project
+	Copyright (C) 2011-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 
 class QScriptEngine;
+class QString;
 class WzString;
 struct BASE_OBJECT;
 struct DROID;
@@ -102,7 +103,7 @@ void jsShowDebug();
 void jsAutogame();
 
 /// Choose a specific autogame AI
-void jsAutogameSpecific(const QString &name, int player);
+void jsAutogameSpecific(const WzString &name, int player);
 
 /// Run-time code from user
 bool jsEvaluate(QScriptEngine *engine, const QString &text);
@@ -121,6 +122,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
 bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit);
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player);
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid);
+bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 bool triggerEventStructureReady(STRUCTURE *psStruct);
@@ -149,5 +151,8 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to);
 void jsDebugSelected(const BASE_OBJECT *psObj);
 void jsDebugMessageUpdate();
 void jsDebugUpdate();
+
+#define QStringToWzString(_qstring) \
+WzString::fromUtf8((_qstring).toUtf8().constData())
 
 #endif

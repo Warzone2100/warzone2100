@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2018  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -181,7 +181,19 @@ Vector2i mousePos(0, 0);
 
 /// Do we want the radar to be rendered
 bool radarOnScreen = true;
-bool	radarPermitted = true;
+bool radarPermitted = true;
+
+bool radarVisible()
+{
+	if (radarOnScreen && radarPermitted && getWidgetsStatus())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 /// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
@@ -354,12 +366,13 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 	}
 	if (strImd->objanimframes)
 	{
-		const int elapsed = graphicsTime - psObj->timeAnimationStarted;
+		int elapsed = graphicsTime - psObj->timeAnimationStarted;
 		if (elapsed < 0)
 		{
-			return false;  // Animation hasn't started yet.
+			elapsed = 0; // Animation hasn't started yet.
 		}
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
+		ASSERT(frame < strImd->objanimframes, "Bad index %d >= %d", frame, strImd->objanimframes);
 		const ANIMFRAME &state = strImd->objanimdata.at(frame);
 		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
@@ -740,24 +753,22 @@ void draw3DScene()
 
 	drawStructureSelections();
 
-	if (radarOnScreen && radarPermitted)
-	{
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-		pie_SetFogStatus(false);
-		if (getWidgetsStatus())
-		{
-			GL_DEBUG("Draw 3D scene - radar");
-			drawRadar();
-		}
-		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-		pie_SetFogStatus(true);
-	}
-
 	if (!bRender3DOnly)
 	{
+		if (radarVisible())
+		{
+			pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+			pie_SetFogStatus(false);
+			GL_DEBUG("Draw 3D scene - radar");
+			drawRadar();
+			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
+			pie_SetFogStatus(true);
+		}
+
 		/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(false);
 		displayConsoleMessages();
+		bRender3DOnly = true;
 	}
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
@@ -884,7 +895,14 @@ void draw3DScene()
 		writeGameInfo("WZdebuginfo.txt");		//also test writing out this file.
 		debug(LOG_FATAL, "Forcing a segfault! (crash handler test)");
 		// and here comes the crash
-		*crash = 0x3;
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+		*crash = 0x3; // deliberate null-dereference
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 		exit(-1);	// will never reach this, but just in case...
 	}
 	//visualize radius if needed
@@ -1021,7 +1039,7 @@ static void drawTiles(iView *player)
 	//actualCameraPosition -= Vector3i(-player->p.x, 0, player->p.z);
 
 	// this also determines the length of the shadows
-	const Vector3f theSun = (viewMatrix * glm::vec4(getTheSun(), 0.f)).xyz;
+	const Vector3f theSun = (viewMatrix * glm::vec4(getTheSun(), 0.f)).xyz();
 	pie_BeginLighting(theSun);
 
 	// update the fog of war... FIXME: Remove this
@@ -1167,8 +1185,6 @@ bool init3DView()
 	// Set the initial fog distance
 	UpdateFogDistance(distance);
 
-	bRender3DOnly = false;
-
 	// default skybox, will override in script if not satisfactory
 	setSkyBox("texpages/page-25-sky-arizona.png", 0.0f, 10000.0f);
 
@@ -1289,8 +1305,8 @@ bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4& viewModelMatrix, 
 	/* get the screen coordinates */
 	const float cZ = pie_RotateProject(&origin, viewModelMatrix, &center) * 0.1;
 
-	//Watermelon:added a crash protection hack...
-	if (cZ >= 0)
+	// avoid division by zero
+	if (cZ > 0)
 	{
 		radius = wsRadius / cZ * pie_GetResScalingFactor();
 	}
@@ -1610,7 +1626,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 			return;
 		}
 		stats = getModuleStat(structure);
-		pos = structure->pos.xy;
+		pos = structure->pos.xy();
 	}
 	else
 	{
@@ -1810,12 +1826,12 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 
 		for (; list != nullptr; list = list->psNext)
 		{
-			if (list->type != OBJ_DROID || (list->died != 0 && list->died < graphicsTime)
+			DROID *psDroid = castDroid(list);
+			if (!psDroid || (list->died != 0 && list->died < graphicsTime)
 			    || !quickClipXYToMaximumTilesFromCurrentPosition(list->pos.x, list->pos.y))
 			{
 				continue;
 			}
-			DROID *psDroid = castDroid(list);
 
 			/* No point in adding it if you can't see it? */
 			if (psDroid->visible[selectedPlayer])
@@ -1844,7 +1860,7 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 /// Get the player position
 Vector2i getPlayerPos()
 {
-	return player.p.xz;
+	return player.p.xz();
 }
 
 /// Set the player position
@@ -1866,7 +1882,7 @@ float getViewDistance()
 void setViewDistance(float dist)
 {
 	distance = dist;
-	CONPRINTF(ConsoleString, (ConsoleString, _("Setting zoom to %.0f"), distance));
+	CONPRINTF(_("Setting zoom to %.0f"), distance);
 }
 
 /// Draw a feature (tree/rock/etc.)
@@ -1885,7 +1901,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 	psFeature->sDisplay.frameNumber = currentGameFrame;
 
 	/* Daft hack to get around the oil derrick issue */
-	if (!TileHasFeature(mapTile(map_coord(psFeature->pos.xy))))
+	if (!TileHasFeature(mapTile(map_coord(psFeature->pos.xy()))))
 	{
 		return;
 	}
@@ -1919,7 +1935,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 	    || psFeature->psStats->subType == FEAT_OIL_DRUM)
 	{
 		/* these cast a shadow */
-		pieFlags = pie_STATIC_SHADOW;
+		pieFlags = pie_SHADOW;
 	}
 	iIMDShape *imd = psFeature->sDisplay.imd;
 	while (imd)
@@ -2347,7 +2363,8 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	}
 	else
 	{
-		pieFlag = pie_STATIC_SHADOW | ecmFlag;
+		// structures can be rotated, so use a dynamic shadow for them
+		pieFlag = pie_SHADOW | ecmFlag;
 		pieFlagData = 0;
 	}
 
@@ -2462,15 +2479,8 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 		}
 		else
 		{
-			if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_GATE)
-			{
-				// walls can be rotated, so use a dynamic shadow for them
-				pieFlag = pie_SHADOW;
-			}
-			else
-			{
-				pieFlag = pie_STATIC_SHADOW;
-			}
+			// Use a dynamic shadow
+			pieFlag = pie_SHADOW;
 			pieFlagData = 0;
 		}
 		iIMDShape *imd = psStructure->sDisplay.imd;
@@ -3237,8 +3247,8 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	/* get the screen coordinates */
 	const float cZ = pie_RotateProject(&origin, viewMatrix, &center) * 0.1;
 
-	//Watermelon:added a crash protection hack...
-	if (cZ >= 0)
+	// avoid division by zero
+	if (cZ > 0)
 	{
 		radius = wsRadius / cZ * pie_GetResScalingFactor();
 	}
@@ -3565,7 +3575,6 @@ static void structureEffectsPlayer(UDWORD player)
 				if (!psDroid->died && psDroid->action == DACTION_WAITDURINGREARM)
 				{
 					bFXSize = 30;
-
 				}
 				/* Then it's repairing...? */
 				radius = psStructure->sDisplay.imd->radius;
@@ -3664,8 +3673,8 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 		}
 		psStats = psStruct->pStructureType->psWeapStat[0];
 	}
-	const unsigned weaponRange = psStats->upgrade[psObj->player].maxRange;
-	const unsigned minRange = psStats->upgrade[psObj->player].minRange;
+	const unsigned weaponRange = proj_GetLongRange(psStats, psObj->player);
+	const unsigned minRange = proj_GetMinRange(psStats, psObj->player);
 	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 	if (minRange > 0)
 	{
@@ -3776,7 +3785,7 @@ static void	drawDroidSensorLock(DROID *psDroid)
 }
 
 /// Draw the construction lines for all construction droids
-static	void	doConstructionLines(const glm::mat4 &viewMatrix)
+static void doConstructionLines(const glm::mat4 &viewMatrix)
 {
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -3811,41 +3820,66 @@ static	void	doConstructionLines(const glm::mat4 &viewMatrix)
 	}
 }
 
+static uint32_t randHash(std::initializer_list<uint32_t> data) {
+	uint32_t v = 0x12345678;
+	auto shuffle = [&v](uint32_t d, uint32_t x){
+		v += d;
+		v *= x;
+		v ^= v>>15;
+		v *= 0x987decaf;
+		v ^= v>>17;
+	};
+	for (int i : data) {
+		shuffle(i, 0x7ea99999);
+	}
+	for (int i : data) {
+		shuffle(i, 0xc0ffee77);
+	}
+	return v;
+}
+
 /// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
-	Vector3f *point;
-	Vector3f pts[3];
-	int pointIndex;
+	auto deltaPlayer = Vector3f(-player.p.x, 0, player.p.z);
+	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;
+
+	int constructPoints = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psDroid->player);
+	int amount = 800 * constructPoints * (graphicsTime - psDroid->actionStarted) / GAME_TICKS_PER_SEC;
+
 	Vector3i each;
-	PIELIGHT colour;
+	auto getPoint = [&](uint32_t c) {
+		uint32_t t = (amount + c)/1000;
+		float s = (amount + c)%1000*.001f;
+		unsigned pointIndexA = randHash({psDroid->id, psStructure->id, psDroid->actionStarted, t, c}) % psStructure->sDisplay.imd->points.size();
+		unsigned pointIndexB = randHash({psDroid->id, psStructure->id, psDroid->actionStarted, t + 1, c}) % psStructure->sDisplay.imd->points.size();
+		auto &pointA = psStructure->sDisplay.imd->points[pointIndexA];
+		auto &pointB = psStructure->sDisplay.imd->points[pointIndexB];
+		auto point = mix(pointA, pointB, s);
 
-	pts[0] = Vector3f(psDroid->pos.x - player.p.x, psDroid->pos.z + 24, -(psDroid->pos.y - player.p.z));
+		each = Vector3f(psStructure->pos.x, psStructure->pos.z, psStructure->pos.y)
+			+ Vector3f(point.x, structHeightScale(psStructure) * point.y, -point.z);
+		return Vector3f(each.x, each.y, -each.z) + deltaPlayer;
+	};
 
-	pointIndex = rand() % (psStructure->sDisplay.imd->points.size() - 1);
-	point = &(psStructure->sDisplay.imd->points.at(pointIndex));
+	auto pt1 = getPoint(250);
+	auto pt2 = getPoint(750);
 
-	each.x = psStructure->pos.x + point->x;
-	each.y = psStructure->pos.z + (structHeightScale(psStructure) * point->y);
-	each.z = psStructure->pos.y - point->z;
+	if (psStructure->currentBuildPts < 10) {
+		auto pointC = Vector3f(psStructure->pos.x, psStructure->pos.z + 10, -psStructure->pos.y) + deltaPlayer;
+		auto cross = Vector3f(psStructure->pos.y - psDroid->pos.y, 0, psStructure->pos.x - psDroid->pos.x);
+		auto shift = 40.f*normalize(cross);
+		pt1 = mix(pointC - shift, pt1, psStructure->currentBuildPts*.1f);
+		pt2 = mix(pointC + shift, pt1, psStructure->currentBuildPts*.1f);
+	}
 
-	if (rand() % 250 < deltaGraphicsTime)
+	if (rand() % 250u < deltaGraphicsTime)
 	{
 		effectSetSize(30);
 		addEffect(&each, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0);
 	}
 
-	pts[1] = Vector3f(each.x - player.p.x, each.y, -(each.z - player.p.z));
-
-	pointIndex = rand() % (psStructure->sDisplay.imd->points.size() - 1);
-	point = &(psStructure->sDisplay.imd->points.at(pointIndex));
-
-	each.x = psStructure->pos.x + point->x;
-	each.y = psStructure->pos.z + (structHeightScale(psStructure) * point->y);
-	each.z = psStructure->pos.y - point->z;
-
-	pts[2] = Vector3f(each.x - player.p.x, each.y, -(each.z - player.p.z));
-
-	colour = (psDroid->action == DACTION_DEMOLISH) ? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;
-	pie_TransColouredTriangle({ pts[0], pts[1], pts[2] }, colour, viewMatrix);
+	PIELIGHT colour = psDroid->action == DACTION_DEMOLISH? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;
+	pie_TransColouredTriangle({pt0, pt1, pt2}, colour, viewMatrix);
+	pie_TransColouredTriangle({pt0, pt2, pt1}, colour, viewMatrix);
 }

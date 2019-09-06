@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -151,6 +151,10 @@ void kf_SelectAllLandCombatUnits();
 void kf_SelectAllCombatCyborgs();
 void kf_SelectAllSameType();
 
+void kf_SetDroidRangeShort();
+void kf_SetDroidRangeOptimum();
+void kf_SetDroidRangeLong();
+
 void kf_SetDroidRetreatMedium();
 void kf_SetDroidRetreatHeavy();
 void kf_SetDroidRetreatNever();
@@ -201,10 +205,10 @@ void kf_SelectNextPowerStation();
 void kf_SelectNextResearch();
 void kf_ToggleConsoleDrop();
 void kf_ToggleMouseInvert();
-void kf_SetKillerLevel();
+void kf_BifferBaker();
 void kf_SetEasyLevel();
 void kf_SetNormalLevel();
-void kf_SetToughUnitsLevel();
+void kf_DoubleUp();
 void kf_UpThePower();
 void kf_MaxPower();
 void kf_KillEnemy();

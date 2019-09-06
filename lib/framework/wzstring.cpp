@@ -1,10 +1,29 @@
+/*
+ *	This file is part of Warzone 2100.
+ *	Copyright (C) 2018-2019  Warzone 2100 Project
+ *
+ *	Warzone 2100 is free software; you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation; either version 2 of the License, or
+ *	(at your option) any later version.
+ *
+ *	Warzone 2100 is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with Warzone 2100; if not, write to the Free Software
+ *	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+#include "frame.h"
 #include "wzstring.h"
 #include <algorithm>
 #include <cctype>
 #include <sstream>
 #include <iomanip>
-#include <utfcpp/utf8.h>
-#include "frame.h"
+#include <utfcpp/source/utf8.h>
 #include <utf8proc/utf8proc.h>
 
 WzUniCodepoint WzUniCodepoint::fromASCII(unsigned char charLiteral)
@@ -29,7 +48,7 @@ std::vector<WzUniCodepoint> WzUniCodepoint::caseFolded() const
 	if (retVal < 0)
 	{
 		// case folding failed
-		ASSERT(retVal > 0, "Case folding attempt failed with error code: %ld", retVal);
+		ASSERT(retVal > 0, "Case folding attempt failed with error code: %" PRIdPTR"", retVal);
 		return std::vector<WzUniCodepoint>();
 	}
 	std::vector<WzUniCodepoint> resultCodepoints;

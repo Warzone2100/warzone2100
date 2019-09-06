@@ -32,7 +32,7 @@ function camEnemyBaseDetected_COMainBase()
 			camMakePos("grp2Pos2"),
 			camMakePos("uplinkBaseCorner"),
 		],
-		interval: 40000,
+		interval: camSecondsToMilliseconds(40),
 		//fallback: camMakePos("heavyFacAssembly"),
 		repair: 40,
 		regroup: false,
@@ -91,23 +91,12 @@ function enableTimeBasedFactories()
 	camEnableFactory("COHeavyFactory-b2L");
 }
 
-
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_7S", {
-		area: "RTLZ",
-		message: "C26_LZ",
-		reinforcements: 180 //3 min
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_7S", {
 		area: "RTLZ",
 		message: "C26_LZ",
-		reinforcements: -1
+		reinforcements: camMinutesToSeconds(3)
 	});
 
 	var startpos = getObject("startPosition");
@@ -156,7 +145,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactory-ArtiAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -168,7 +157,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactory-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -180,7 +169,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactory-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -192,7 +181,7 @@ function eventStartLevel()
 			assembly: "COHeavyFactory-b2LAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(80)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -204,7 +193,7 @@ function eventStartLevel()
 			assembly: "COHeavyFactory-b2RAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -216,7 +205,7 @@ function eventStartLevel()
 			assembly: "COMediumFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(45000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -228,8 +217,7 @@ function eventStartLevel()
 
 	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 27000);
-	queue("northWestAttack", 120000);
-	queue("mainBaseAttackGroup", 180000);
-	queue("enableTimeBasedFactories", camChangeOnDiff(600000)); // 10 min
+	queue("northWestAttack", camMinutesToMilliseconds(2));
+	queue("mainBaseAttackGroup", camMinutesToMilliseconds(3));
+	queue("enableTimeBasedFactories", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }

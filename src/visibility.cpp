@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,6 +48,9 @@
 #include "qtscript.h"
 #include "wavecast.h"
 
+// accuracy for the height gradient
+#define GRAD_MUL 10000
+
 // rate to change visibility level
 static const int VIS_LEVEL_INC = 255 * 2;
 static const int VIS_LEVEL_DEC = 50;
@@ -80,6 +83,21 @@ static std::vector<SPOTTER *> apsInvisibleViewers;
 #define MAX_SEEN_TILES (29*29 * 355/113)  // Increased hack to support 28 tile sensor radius. - Cyp
 
 #define MIN_VIS_HEIGHT 80
+
+struct VisibleObjectHelp_t
+{
+	bool rayStart; // Whether this is the first point on the ray
+	const bool wallsBlock; // Whether walls block line of sight
+	const int startHeight; // The height at the view point
+	const Vector2i final; // The final tile of the ray cast
+	int lastHeight, lastDist; // The last height and distance
+	int currGrad; // The current obscuring gradient
+	int numWalls; // Whether the LOS has hit a wall
+	Vector2i wall; // The position of a wall if it is on the LOS
+};
+
+static int *gNumWalls = nullptr;
+static Vector2i *gWall = nullptr;
 
 // forward declarations
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val);
@@ -320,6 +338,51 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 	}
 }
 
+/* The los ray callback */
+static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
+{
+	VisibleObjectHelp_t *help = (VisibleObjectHelp_t *)data;
+
+	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth) && pos.y >= 0 && pos.y < world_coord(mapHeight), "rayLOSCallback: coords off map");
+
+	if (help->rayStart)
+	{
+		help->rayStart = false;
+	}
+	else
+	{
+		// Calculate the current LOS gradient
+		int newGrad = (help->lastHeight - help->startHeight) * GRAD_MUL / MAX(1, help->lastDist);
+		if (newGrad >= help->currGrad)
+		{
+			help->currGrad = newGrad;
+		}
+	}
+
+	help->lastDist = dist;
+	help->lastHeight = map_Height(pos.x, pos.y);
+
+	if (help->wallsBlock)
+	{
+		// Store the height at this tile for next time round
+		Vector2i tile = map_coord(pos.xy());
+
+		if (tile != help->final)
+		{
+			MAPTILE *psTile = mapTile(tile);
+			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
+			{
+				help->lastHeight = 2 * UBYTE_MAX * ELEVATION_SCALE;
+				help->wall = pos.xy();
+				help->numWalls++;
+			}
+		}
+	}
+
+	return true;
+}
+
+
 /* Remove tile visibility from object */
 void visRemoveVisibility(BASE_OBJECT *psObj)
 {
@@ -425,21 +488,18 @@ void revealAll(UBYTE player)
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  * struckBlock controls whether structures block LOS
  */
-int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool /*wallsBlock*/)
+int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock)
 {
 	ASSERT_OR_RETURN(0, psViewer != nullptr, "Invalid viewer pointer!");
 	ASSERT_OR_RETURN(0, psTarget != nullptr, "Invalid viewed pointer!");
 
 	int range = objSensorRange(psViewer);
 
-	// transporter in campaign ignores normal rules, can eg be off map
-	if (game.type == CAMPAIGN && psTarget->type == OBJ_DROID && isTransporter(castDroid(psTarget)))
+	if (!worldOnMap(psViewer->pos.x, psViewer->pos.y) || !worldOnMap(psTarget->pos.x, psTarget->pos.y))
 	{
-		// the player should see an ally/enemy transporter
-		if (psViewer->player != selectedPlayer || psTarget->player == selectedPlayer)
-		{
-			return 0;
-		}
+		//Most likely a VTOL or transporter
+		debug(LOG_WARNING, "Trying to view something off map!");
+		return 0;
 	}
 
 	/* Get the sensor range */
@@ -494,7 +554,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	}
 
 	/* First see if the target is in sensor range */
-	const int dist = iHypot((psTarget->pos - psViewer->pos).xy);
+	const int dist = iHypot((psTarget->pos - psViewer->pos).xy());
 	if (dist == 0)
 	{
 		return UBYTE_MAX;	// Should never be on top of each other, but ...
@@ -510,18 +570,51 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	{
 		return UBYTE_MAX;
 	}
-	// Show objects hidden by ECM jamming with radar blips
-	else if (psTile->watchers[psViewer->player] == 0 && psTile->sensors[psViewer->player] > 0 && jammed)
+
+	// initialise the callback variables
+	VisibleObjectHelp_t help = {
+		true,
+		wallsBlock,
+		psViewer->pos.z + map_Height(psViewer->pos.x, psViewer->pos.y),
+		map_coord(psTarget->pos.xy()),
+		0,
+		0,
+		-UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE,
+		0,
+		Vector2i(0, 0)
+	};
+
+	// Cast a ray from the viewer to the target
+	rayCast(psViewer->pos.xy(), psTarget->pos.xy(), rayLOSCallback, &help);
+
+	if (gWall != nullptr && gNumWalls != nullptr) // Out globals are set
 	{
-		return UBYTE_MAX / 2;
+		*gWall = help.wall;
+		*gNumWalls = help.numWalls;
 	}
-	// Show objects that are seen directly or with unjammed sensors
-	else if (psTile->watchers[psViewer->player] > 0 || (psTile->sensors[psViewer->player] > 0 && !jammed))
+
+	// See if the target can be seen
+	int top = psTarget->pos.z + map_Height(psViewer->pos.x, psViewer->pos.y) - help.startHeight;
+	int targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
+
+	bool tileWatched = psTile->watchers[psViewer->player] > 0;
+	bool tileWatchedSensor = psTile->sensors[psViewer->player] > 0;
+
+	// Show objects hidden by ECM jamming with radar blips
+	if (jammed)
+	{
+		if (!tileWatched && tileWatchedSensor)
+		{
+			return UBYTE_MAX / 2;
+		}
+	}
+	// Show objects that are seen directly
+	if ((tileWatched && targetGrad >= help.currGrad) || (!jammed && tileWatchedSensor))
 	{
 		return UBYTE_MAX;
 	}
 	// Show detected sensors as radar blips
-	else if (objRadarDetector(psViewer) && objActiveRadar(psTarget) && dist < range * 10)
+	if (objRadarDetector(psViewer) && objActiveRadar(psTarget) && dist < range * 10)
 	{
 		return UBYTE_MAX / 2;
 	}
@@ -532,10 +625,37 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 // Find the wall that is blocking LOS to a target (if any)
 STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget)
 {
-	// TBD - reimplement this function; the previous implementation ended up
-	// doing nothing due to changes in other code. The perils of doing magic
-	// by globals - all dependencies are sometimes quite hard to see. Broken
-	// in commit 55a6259b121515b2d0ca9b2c580361dca970171d
+	int numWalls = 0;
+	Vector2i wall;
+
+	// HACK Using globals to not clutter visibleObject() interface too much
+	gNumWalls = &numWalls;
+	gWall = &wall;
+
+	visibleObject(psViewer, psTarget, true);
+
+	gNumWalls = nullptr;
+	gWall = nullptr;
+
+	// see if there was a wall in the way
+	if (numWalls > 0)
+	{
+		Vector2i tile = map_coord(wall);
+		unsigned int player;
+
+		for (player = 0; player < MAX_PLAYERS; player++)
+		{
+			STRUCTURE *psWall;
+
+			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
+			{
+				if (map_coord(psWall->pos) == tile)
+				{
+					return psWall;
+				}
+			}
+		}
+	}
 	return nullptr;
 }
 
@@ -543,11 +663,6 @@ bool hasSharedVision(unsigned viewer, unsigned ally)
 {
 	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
 
-	//Do not share vision with the human player if not in multiplayer.
-	if (!bMultiPlayer && (viewer == 0 || ally == 0) && !aiCheckAlliances(viewer, ally))
-	{
-		return false;
-	}
 	return viewer == ally || (bMultiPlayer && alliancesSharedVision(game.alliance) && aiCheckAlliances(viewer, ally));
 }
 
@@ -758,7 +873,7 @@ void processVisibility()
 			{
 				if (psObj != psTarget && psTarget->visible[psObj->player] < UBYTE_MAX / 2
 				    && objActiveRadar(psTarget)
-				    && iHypot((psTarget->pos - psObj->pos).xy) < objSensorRange(psObj) * 10)
+				    && iHypot((psTarget->pos - psObj->pos).xy()) < objSensorRange(psObj) * 10)
 				{
 					psTarget->visible[psObj->player] = UBYTE_MAX / 2;
 				}
@@ -844,7 +959,7 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 		psStats = asWeaponStats + ((const STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat;
 	}
 	// 2d distance
-	int distance = iHypot((psTarget->pos - psViewer->pos).xy);
+	int distance = iHypot((psTarget->pos - psViewer->pos).xy());
 	int range = proj_GetLongRange(psStats, psViewer->player);
 	if (proj_Direct(psStats))
 	{
@@ -954,7 +1069,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 
 	pos = muzzle;
 	dest = psTarget->pos;
-	diff = (dest - pos).xy;
+	diff = (dest - pos).xy();
 
 	distSq = dot(diff, diff);
 	if (distSq == 0)
@@ -963,7 +1078,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 		return 1000;
 	}
 
-	current = pos.xy;
+	current = pos.xy();
 	start = current;
 	angletan = -1000 * 65536;
 	partSq = 0;

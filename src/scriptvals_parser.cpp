@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,6 +19,13 @@
 
 #if defined( _MSC_VER )
 	#pragma warning( disable : 4065 ) // warning C4065: switch statement contains 'default' but no 'case' labels
+#endif
+#if defined(__clang__)
+	//
+#elif defined(__GNUC__)
+	#if 7 <= __GNUC__
+		#pragma GCC diagnostic ignored "-Walloca-larger-than=" // warning: unbounded use of 'alloca' [-Walloca-larger-than=] (in function 'void scrv_error(const char*, ...)') // FIXME
+	#endif
 #endif
 
 /* All symbols defined below should begin with yy or YY, to avoid

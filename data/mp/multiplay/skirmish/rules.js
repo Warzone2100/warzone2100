@@ -23,7 +23,7 @@ const TRANSFER_LIKE_EVENT = 2;
 function reticuleManufactureCheck()
 {
 	var structureComplete = false;
-	var facs = ["A0LightFactory", "A0CyborgFactory", "A0VTolFactory1"];
+	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (var i = 0, len = facs.length; i < len; ++i)
 	{
@@ -51,17 +51,20 @@ function reticuleManufactureCheck()
 function reticuleResearchCheck()
 {
 	var structureComplete = false;
-	var onMapResLabs = enumStruct(selectedPlayer, "A0ResearchFacility");
+	var labs = [RESEARCH_LAB,];
 
-	for (var i = 0, len = onMapResLabs.length; i < len; ++i)
+	for (var i = 0, len = labs.length; i < len; ++i)
 	{
-		if (onMapResLabs[i].status === BUILT)
+		var onMapResLabs = enumStruct(selectedPlayer, labs[i]);
+		for (var j = 0, len2 = onMapResLabs.length; j < len2; ++j)
 		{
-			structureComplete = true;
-			break;
+			if (onMapResLabs[j].status === BUILT)
+			{
+				structureComplete = true;
+				break;
+			}
 		}
 	}
-
 	if (structureComplete === true)
 	{
 		setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
@@ -87,17 +90,20 @@ function reticuleBuildCheck()
 function reticuleDesignCheck()
 {
 	var structureComplete = false;
-	var onMapHQ = enumStruct(selectedPlayer, "A0CommandCentre");
+	var HQS = [HQ,];
 
-	for (var i = 0, len = onMapHQ.length; i < len; ++i)
+	for (var i = 0, len = HQS.length; i < len; ++i)
 	{
-		if (onMapHQ[i].status === BUILT)
+		var onMapHQ = enumStruct(selectedPlayer, HQS[i]);
+		for (var j = 0, len2 = onMapHQ.length; j < len2; ++j)
 		{
-			structureComplete = true;
-			break;
+			if (onMapHQ[j].status === BUILT)
+			{
+				structureComplete = true;
+				break;
+			}
 		}
 	}
-
 	if (structureComplete === true)
 	{
 		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
@@ -108,7 +114,6 @@ function reticuleDesignCheck()
 	{
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
 		setMiniMap(false);
-		setDesign(false);
 	}
 }
 
@@ -379,9 +384,6 @@ function eventGameInit()
 		grantTech(TECH_THREE);
 	}
 
-	// This is the only template that should be enabled before design is allowed
-	enableTemplate("ConstructionDroid");
-
 	hackNetOn();
 	setTimer("checkEndConditions", 3000);
 	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
@@ -480,11 +482,19 @@ function eventDroidBuilt(droid, structure)
 	}
 }
 
-function eventStructureBuilt(struct)
+function eventStructureBuilt(struct, droid)
 {
 	if (struct.player === selectedPlayer)
 	{
 		reticuleUpdate(struct, CREATE_LIKE_EVENT);
+	}
+}
+
+function eventStructureDemolish(struct, droid)
+{
+	if (struct.player === selectedPlayer)
+	{
+		reticuleUpdate(struct, DESTROY_LIKE_EVENT);
 	}
 }
 

@@ -99,7 +99,7 @@ if(CPACK_GENERATOR STREQUAL "DEB")
 	setDefault(CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}")
 	setDefault(CPACK_DEB_COMPONENT_INSTALL ON)
 
-	set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages)
+	set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages Manpages)
 
 	############################################
 	# Support component DEB install
@@ -109,6 +109,7 @@ if(CPACK_GENERATOR STREQUAL "DEB")
 	# - members
 	set(CPACK_COMPONENT_CORE_GROUP "CoreGroup")
 	set(CPACK_COMPONENT_INFO_GROUP "CoreGroup")
+	set(CPACK_COMPONENT_MANPAGES_GROUP "CoreGroup")
 	# - package settings
 	set(CPACK_DEBIAN_COREGROUP_PACKAGE_NAME "warzone2100")
 	set(CPACK_DEBIAN_COREGROUP_FILE_NAME DEB-DEFAULT)
@@ -134,7 +135,7 @@ if(CPACK_GENERATOR STREQUAL "RPM")
 	setDefault(CPACK_RPM_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}")
 	setDefault(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
 
-	set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages)
+	set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages Manpages)
 
 	############################################
 	# Support component RPM install
@@ -145,6 +146,7 @@ if(CPACK_GENERATOR STREQUAL "RPM")
 	# - members
 	set(CPACK_COMPONENT_CORE_GROUP "CoreGroup")
 	set(CPACK_COMPONENT_INFO_GROUP "CoreGroup")
+	set(CPACK_COMPONENT_MANPAGES_GROUP "CoreGroup")
 	# - package settings
 	set(CPACK_RPM_COREGROUP_PACKAGE_NAME "warzone2100")
 	set(CPACK_RPM_COREGROUP_FILE_NAME "warzone2100-${CPACK_RPM_PACKAGE_VERSION}-${CPACK_SYSTEM_NAME}.rpm")

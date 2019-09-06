@@ -53,7 +53,7 @@ function activateBase1Defenders()
 			camMakePos("leftSideAmbushPos2"),
 			camMakePos("leftSideAmbushPos3"),
 		],
-		interval: 60000,
+		interval: camSecondsToMilliseconds(60),
 		regroup: false,
 	});
 }
@@ -68,7 +68,7 @@ function activateBase1Defenders2()
 			camMakePos("grp2Pos4"),
 			camMakePos("grp2Pos5"),
 		],
-		interval: 60000,
+		interval: camSecondsToMilliseconds(60),
 		regroup: false,
 	});
 }
@@ -90,14 +90,14 @@ function vtolAttack()
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(300000), "COCommandCenter", ext); //5 min
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
 }
 
 function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
-		queue("truckDefense", 160000);
+		queue("truckDefense", camSecondsToMilliseconds(160));
 	}
 
 	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-Tower-MdCan", "CO-Tower-LtATRkt"];
@@ -123,7 +123,7 @@ function eventStartLevel()
 	var enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
-	setMissionTime(camChangeOnDiff(7200)); // 2 hr.
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	camPlayVideos(["MB2_B_MSG", "MB2_B_MSG2"]);
 
 	camSetArtifacts({
@@ -161,7 +161,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacL-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -173,7 +173,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacR-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -185,7 +185,7 @@ function eventStartLevel()
 			assembly: "COCybFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -197,7 +197,7 @@ function eventStartLevel()
 			assembly: "COCybFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -209,7 +209,7 @@ function eventStartLevel()
 			assembly: "COHeavyFac-b4Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -221,7 +221,7 @@ function eventStartLevel()
 			assembly: "COCybFac-b4Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -238,9 +238,9 @@ function eventStartLevel()
 	camEnableFactory("COHeavyFac-b4");
 	camEnableFactory("COCybFac-b4");
 
-	queue("transferPower", 2000);
-	queue("ambushPlayer", 3000); // 3 sec
-	queue("vtolAttack", camChangeOnDiff(240000)); //4 min
-	queue("activateBase1Defenders2", camChangeOnDiff(1200000)); //20 min.
-	queue("activateBase1Defenders", camChangeOnDiff(1800000)); //30 min.
+	queue("transferPower", camSecondsToMilliseconds(2));
+	queue("ambushPlayer", camSecondsToMilliseconds(3));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	queue("activateBase1Defenders2", camChangeOnDiff(camMinutesToMilliseconds(20)));
+	queue("activateBase1Defenders", camChangeOnDiff(camMinutesToMilliseconds(30)));
 }

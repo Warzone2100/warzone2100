@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -94,7 +94,8 @@ void gridShutDown()
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 {
-	return (uint32_t)(x * x + y * y) <= radius * radius;
+	// cast to int64 to avoid integer overflow
+	return ((int64_t)x * (int64_t)x + (int64_t)y * (int64_t)y) <= ((int64_t)radius * (int64_t)radius);
 }
 
 // initialise the grid system to start iterating through units that

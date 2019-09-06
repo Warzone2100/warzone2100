@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -317,7 +317,7 @@ static bool intAddMessageForm(bool playCurrent)
 			psResearch = getResearchForMsg(psMessage->pViewData);
 			if (psResearch)
 			{
-				button->setTip(psResearch->name.toUtf8().c_str());
+				button->setTip(_(psResearch->name.toUtf8().c_str()));
 			}
 			else
 			{
@@ -453,7 +453,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	ASSERT_OR_RETURN(false, psResearch != nullptr, "Research not found");
 	//sLabInit.pText=psResearch->pName;
-	sLabInit.pText = WzString::fromUtf8(psResearch->name.toUtf8().c_str());
+	sLabInit.pText = WzString::fromUtf8(_(psResearch->name.toUtf8().c_str()));
 
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -908,7 +908,16 @@ void intRemoveMessageView(bool animated)
 
 	//stop the video
 	VIEW_RESEARCH *psViewResearch = (VIEW_RESEARCH *)form->pUserData;
-	seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
+
+	if (psViewResearch != nullptr)
+	{
+		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
+	}
+	else
+	{
+		const WzString dummy = "";
+		seq_RenderVideoToBuffer(dummy, SEQUENCE_KILL);
+	}
 
 	if (animated)
 	{

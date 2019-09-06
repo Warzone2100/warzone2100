@@ -3,7 +3,7 @@
  * This file is responsible for incoming laser satellite strikes.
  * Relies on lassatSplash variable of the ruleset to figure out
  * the radius of lassat.
- * 
+ *
  */
 
 (function(_global) {
@@ -11,7 +11,7 @@
 
 // pick a target and fire
 _global.fireLassat = function(structure) {
-	list = [];
+	var list = [];
 	enumLivingPlayers().filter(isEnemy).forEach(function(i) {
 		list = list.concat(enumStruct(i), enumDroid(i));
 	});

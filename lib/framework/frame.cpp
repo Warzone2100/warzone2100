@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ int frameRate()
 
 UDWORD	frameGetFrameNumber()
 {
-	return curFrames;
+	return (UDWORD)curFrames;
 }
 
 /*
@@ -111,7 +111,7 @@ void frameUpdate()
 	// Update the framerate only once per second
 	if (curTicks >= lastTicks + 1000)
 	{
-		frameCount = curFrames - lastFrames;
+		frameCount = static_cast<int>(curFrames - lastFrames);
 		lastTicks = curTicks;
 		lastFrames = curFrames;
 	}
@@ -183,11 +183,13 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	{
 		return false;  // File size could not be determined. Is a directory?
 	}
+	ASSERT_OR_RETURN(false, filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<PHYSFS_sint32>::max()), "\"%s\" filesize >= std::numeric_limits<PHYSFS_sint32>::max()", pFileName);
+	ASSERT_OR_RETURN(false, static_cast<PHYSFS_uint64>(filesize) < static_cast<PHYSFS_uint64>(std::numeric_limits<size_t>::max()), "\"%s\" filesize >= std::numeric_limits<size_t>::max()", pFileName);
 
 	if (AllocateMem)
 	{
 		// Allocate a buffer to store the data and a terminating zero
-		*ppFileData = (char *)malloc(filesize + 1);
+		*ppFileData = (char *)malloc(static_cast<size_t>(filesize + 1));
 	}
 	else
 	{
@@ -201,7 +203,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	}
 
 	/* Load the file data */
-	PHYSFS_sint64 length_read = WZ_PHYSFS_readBytes(pfile, *ppFileData, filesize);
+	PHYSFS_sint64 length_read = WZ_PHYSFS_readBytes(pfile, *ppFileData, static_cast<PHYSFS_uint32>(filesize));
 	if (length_read != filesize)
 	{
 		if (AllocateMem)
@@ -232,7 +234,8 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	*((*ppFileData) + filesize) = 0;
 
 	// always set to correct size
-	*pFileSize = filesize;
+	ASSERT(static_cast<PHYSFS_uint64>(filesize) <= static_cast<PHYSFS_uint64>(std::numeric_limits<UDWORD>::max()), "filesize exceeds std::numeric_limits<UDWORD>::max()");
+	*pFileSize = static_cast<UDWORD>(filesize);
 
 	return true;
 }

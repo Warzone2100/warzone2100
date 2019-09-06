@@ -17,13 +17,16 @@ camAreaEvent("launchScavAttack", function(droid)
 		morale: 50
 	});
 	// Activate mission timer, unlike the original campaign.
-	setMissionTime(camChangeOnDiff(3600));
+	if (difficulty !== HARD && difficulty !== INSANE)
+	{
+		setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+	}
 });
 
 function runAway()
 {
 	var oilPatch = getObject("oilPatch");
-	var droids = enumRange(oilPatch.x, oilPatch.y, 7, 7, false);
+	var droids = enumRange(oilPatch.x, oilPatch.y, 7, SCAV_7, false);
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		pos: camMakePos("scavAttack1"),
 		fallback: camMakePos("retreat1"),
@@ -44,8 +47,8 @@ function doAmbush()
 camAreaEvent("scavAttack1", function(droid)
 {
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	queue("runAway", 1000);
-	queue("doAmbush", 5000);
+	queue("runAway", camSecondsToMilliseconds(1));
+	queue("doAmbush", camSecondsToMilliseconds(5));
 });
 
 // Road between first outpost and base two.
@@ -106,7 +109,7 @@ function camEnemyBaseEliminated_scavGroup1()
 
 function camEnemyBaseEliminated_scavGroup2()
 {
-	queue("camDetectEnemyBase", 2000, "scavGroup3");
+	queue("camDetectEnemyBase", camSecondsToMilliseconds(2), "scavGroup3");
 }
 
 function enableBaseStructures()
@@ -133,18 +136,38 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
-	setAlliance(6, 7, true);
+	if (difficulty === HARD)
+	{
+		setPower(600, CAM_HUMAN_PLAYER);
+	}
+	else if (difficulty === INSANE)
+	{
+		setPower(300, CAM_HUMAN_PLAYER);
+	}
+	else
+	{
+		setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
+	}
+
+	setAlliance(SCAV_6, SCAV_7, true);
 
 	enableBaseStructures();
 	camCompleteRequiredResearch(PLAYER_RES, CAM_HUMAN_PLAYER);
-	// These are available without needing to build a HQ.
-	enableTemplate("ConstructionDroid");
-	enableTemplate("ViperLtMGWheels");
 
 	// Give player briefing.
 	hackAddMessage("CMB1_MSG", CAMP_MSG, CAM_HUMAN_PLAYER, false);
-	setMissionTime(-1);
+	if (difficulty === HARD)
+	{
+		setMissionTime(camMinutesToSeconds(40));
+	}
+	else if (difficulty === INSANE)
+	{
+		setMissionTime(camMinutesToSeconds(30));
+	}
+	else
+	{
+		setMissionTime(-1); // will start mission timer later
+	}
 
 	// Feed libcampaign.js with data to do the rest.
 	camSetEnemyBases({
@@ -188,7 +211,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 3,
 			maxSize: 3,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
 			templates: [ cTempl.trike, cTempl.bloke ]
 		},
 		"base3Factory": {
@@ -197,7 +220,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(16000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(16)),
 			templates: [ cTempl.bloke, cTempl.buggy, cTempl.bloke ]
 		},
 		"base4Factory": {
@@ -206,7 +229,7 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 4,
 			maxSize: 4,
-			throttle: camChangeOnDiff(13000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(13)),
 			templates: [ cTempl.bjeep, cTempl.bloke, cTempl.trike, cTempl.bloke ]
 		},
 	});

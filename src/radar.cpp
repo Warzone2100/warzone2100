@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -112,6 +112,7 @@ static PIELIGHT flashColours[] =
 
 static SDWORD radarWidth, radarHeight, radarCenterX, radarCenterY, radarTexWidth, radarTexHeight;
 static uint8_t RadarZoom;
+static float RadarZoomMultiplier = 1.0f;
 static UDWORD radarBufferSize = 0;
 static int frameSkip = 0;
 
@@ -123,11 +124,19 @@ static void setViewingWindow();
 
 static void radarSize(int ZoomLevel)
 {
-	float zoom = (float)ZoomLevel / 16.0;
+	float zoom = (float)ZoomLevel * RadarZoomMultiplier / 16.0;
 	radarWidth = radarTexWidth * zoom;
 	radarHeight = radarTexHeight * zoom;
-	radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - radarWidth / 2;
-	radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - radarHeight / 2;
+	if (rotateRadar)
+	{
+		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - MAX(radarHeight, radarWidth) / 2;
+		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - MAX(radarWidth, radarHeight) / 2;
+	}
+	else
+	{
+		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - radarWidth / 2;
+		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - radarHeight / 2;
+	}
 	debug(LOG_WZ, "radar=(%u,%u) tex=(%u,%u) size=(%u,%u)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
 }
 
@@ -163,6 +172,14 @@ bool resizeRadar()
 	radarBuffer = (uint32_t *)malloc(radarBufferSize);
 	memset(radarBuffer, 0, radarBufferSize);
 	frameSkip = 0;
+	if (rotateRadar)
+	{
+		RadarZoomMultiplier = (float)std::max(RADWIDTH, RADHEIGHT) / std::max({radarTexWidth, radarTexHeight, 1});
+	}
+	else
+	{
+		RadarZoomMultiplier = 1.0f;
+	}
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 	pie_SetRadar(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, radarWidth, radarHeight, radarTexWidth, radarTexHeight);
@@ -236,8 +253,8 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 #endif
 
 	// old safety code -- still necessary?
-	sPosX = clip(sPosX, scrollMinX, scrollMaxX);
-	sPosY = clip(sPosY, scrollMinY, scrollMaxY);
+	sPosX = clip(sPosX, scrollMinX, scrollMaxX -1);
+	sPosY = clip(sPosY, scrollMinY, scrollMaxY -1);
 
 	*PosX = sPosX;
 	*PosY = sPosY;
@@ -449,7 +466,7 @@ static void DrawRadarObjects()
 				size_t	pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
 
 				ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
-				if (clan == selectedPlayer && gameTime - psDroid->timeLastHit < HIT_NOTIFICATION)
+				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psDroid->timeLastHit < HIT_NOTIFICATION)
 				{
 					radarBuffer[pos] = flashCol.rgba;
 				}
@@ -501,7 +518,7 @@ static void DrawRadarObjects()
 			    || (bMultiPlayer && alliancesSharedVision(game.alliance)
 			        && aiCheckAlliances(selectedPlayer, psStruct->player)))
 			{
-				if (clan == selectedPlayer && gameTime - psStruct->timeLastHit < HIT_NOTIFICATION)
+				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psStruct->timeLastHit < HIT_NOTIFICATION)
 				{
 					radarBuffer[pos] = flashCol.rgba;
 				}

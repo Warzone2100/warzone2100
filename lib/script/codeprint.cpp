@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -214,7 +214,19 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 	}
 
 	ip = psProg->pCode;
+#if defined(__clang__)
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Wcast-align"
+#elif defined(__GNUC__)
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wcast-align"
+#endif
 	end = (INTERP_VAL *)((UBYTE *)ip + psProg->size);
+#if defined(__clang__)
+	#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+	#pragma GCC diagnostic pop
+#endif
 	triggerCode = (psProg->numTriggers > 0);
 
 	opcode = (OPCODE)(ip->v.ival >> OPCODE_SHIFT);

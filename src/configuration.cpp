@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,17 @@
  *
  */
 
-#include <QtCore/QSettings>
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
+#include <QtCore/QSettings> // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/input.h"
 #include "lib/netplay/netplay.h"
@@ -123,7 +133,7 @@ bool loadConfig()
 	}
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	radarRotationArrow = ini.value("radarRotationArrow", true).toBool();
-	quitConfirmation = ini.value("quitConfirmation", true).toBool();
+	hostQuitConfirmation = ini.value("hostQuitConfirmation", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
 	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
@@ -141,9 +151,9 @@ bool loadConfig()
 	sstrcpy(sPlayer, ini.value("playerName", _("Player")).toString().toUtf8().constData());
 
 	// Set a default map to prevent hosting games without a map.
-	sstrcpy(game.map, "Sk-Rush");
+	sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 	game.hash.setZero();
-	game.maxPlayers = 4;
+	game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
 	game.techLevel = 1;
 
@@ -237,11 +247,7 @@ bool saveConfig()
 	ini.setValue("bpp", pie_GetVideoBufferDepth());
 	ini.setValue("fullscreen", war_getFullscreen());
 	ini.setValue("language", getLanguage());
-	// don't save out the cheat mode.
-	if (getDifficultyLevel() != DL_KILLER && getDifficultyLevel() != DL_TOUGH)
-	{
-		ini.setValue("difficulty", getDifficultyLevel());		// level
-	}
+	ini.setValue("difficulty", getDifficultyLevel());		// level
 	ini.setValue("cameraSpeed", war_GetCameraSpeed());	// camera speed
 	ini.setValue("radarJump", war_GetRadarJump());		// radar jump
 	ini.setValue("scrollEvent", war_GetScrollEvent());	// scroll event
@@ -267,7 +273,7 @@ bool saveConfig()
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("radarRotationArrow", radarRotationArrow);
-	ini.setValue("quitConfirmation", quitConfirmation);
+	ini.setValue("hostQuitConfirmation", hostQuitConfirmation);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	ini.setValue("masterserver_name", NETgetMasterserverName());
 	ini.setValue("masterserver_port", NETgetMasterserverPort());
@@ -344,9 +350,9 @@ bool reloadMPConfig()
 		}
 
 		// Set a default map to prevent hosting games without a map.
-		sstrcpy(game.map, "Sk-Rush");
+		sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 		game.hash.setZero();
-		game.maxPlayers = 4;
+		game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
 		ini.setValue("powerLevel", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
@@ -363,9 +369,9 @@ bool reloadMPConfig()
 	}
 
 	// Set a default map to prevent hosting games without a map.
-	sstrcpy(game.map, "Sk-Rush");
+	sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 	game.hash.setZero();
-	game.maxPlayers = 4;
+	game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
 	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();

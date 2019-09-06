@@ -12,10 +12,8 @@ const NEXUS_RES = [
 	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
 	"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
 ];
-var launchTimes;
-var detTimes;
-var launchSounds;
-var detSounds;
+var launchInfo;
+var detonateInfo;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -39,7 +37,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 			camMakePos("hillPos2"),
 			camMakePos("hillPos3"),
 		],
-		interval: 25000,
+		interval: camSecondsToMilliseconds(25),
 		regroup: true,
 		count: -1
 		//morale: 25,
@@ -52,7 +50,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 			camMakePos("hillPos2"),
 			camMakePos("hillPos3"),
 		],
-		interval: 15000,
+		interval: camSecondsToMilliseconds(15),
 		regroup: true,
 		count: -1
 		//morale: 25,
@@ -64,7 +62,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 function vtolAttack()
 {
 	var list = [cTempl.nxlscouv, cTempl.nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(300000), "NXCommandCenter"); //5 min
+	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
 }
 
 //These groups are active immediately.
@@ -118,30 +116,43 @@ function missileSilosDestroyed()
 //Nuclear missile destroys everything not in safe zone.
 function nukeAndCountSurvivors()
 {
-	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false);
+	//Avoid destroying the one base if the player opted not to destroy it themselves.
+	var nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter(function(obj) {
+		return obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null);
+	});
 	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
-	var safeLen = safeZone.length;
+	var foundUnit = false;
 
 	//Make em' explode!
-	for (var i = 0, t = nuked.length; i < t; ++i)
+	for (var i = 0, len = nuked.length; i < len; ++i)
 	{
 		var nukeIt = true;
-		for (var s = 0; s < safeLen; ++s)
+		var obj1 = nuked[i];
+
+		//Check if it's in the safe area.
+		for (var j = 0, len2 = safeZone.length; j < len2; ++j)
 		{
-			if (nuked[i].id === safeZone[s].id)
+			var obj2 = safeZone[j];
+
+			if (obj1.id === obj2.id)
 			{
+				if (obj1.type === DROID && obj1.player === CAM_HUMAN_PLAYER)
+				{
+					foundUnit = true;
+				}
+
 				nukeIt = false;
 				break;
 			}
 		}
 
-		if (nukeIt && camDef(nuked[i]) && (nuked[i].id !== 0))
+		if (nukeIt && obj1 !== null && obj1.id !== 0)
 		{
-			camSafeRemoveObject(nuked[i], true);
+			camSafeRemoveObject(obj1, true);
 		}
 	}
 
-	return safeLen; //Must be at least 1 to win.
+	return foundUnit; //Must have saved at least one unit to win.
 }
 
 //Expand the map and play video and prevent transporter reentry.
@@ -152,7 +163,7 @@ function setupNextMission()
 		camPlayVideos(["labort.ogg", "MB3_1B_MSG", "MB3_1B_MSG2"]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
-		setMissionTime(camChangeOnDiff(1800)); // 30 min
+		setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 
 		hackRemoveMessage("CM31_TAR_UPLINK", PROX_MSG, CAM_HUMAN_PLAYER);
 		hackAddMessage("CM31_HIDE_LOC", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -161,50 +172,46 @@ function setupNextMission()
 	}
 	else
 	{
-		queue("setupNextMission", 2000);
+		queue("setupNextMission", camSecondsToMilliseconds(2));
 	}
 }
 
 
-//Play countdown sounds. Elements are shifted out of the sound arrays as they play.
+//Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {
-	var missilesDead = missileSilosDestroyed();
-	var times = missilesDead ? detTimes : launchTimes;
-	var sounds = missilesDead ? detSounds : launchSounds;
+	var silosDestroyed = missileSilosDestroyed();
+	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
 	var skip = false;
 
-	for (var i = 0, t = times.length; i < t; ++i)
+	for (var i = 0, len = countdownObject.length; i < len; ++i)
 	{
 		var currentTime = getMissionTime();
-		if (currentTime <= times[0])
+		if (currentTime <= countdownObject[0].time)
 		{
-			if (camDef(times[1]) && (currentTime <= times[1]))
+			if (len > 1 && (currentTime <= countdownObject[1].time))
 			{
 				skip = true; //Huge time jump?
 			}
-
 			if (!skip)
 			{
-				playSound(sounds[0], CAM_HUMAN_PLAYER);
+				playSound(countdownObject[0].sound, CAM_HUMAN_PLAYER);
 			}
 
-			if (missilesDead)
+			if (silosDestroyed)
 			{
-				detTimes.shift();
-				detSounds.shift();
+				detonateInfo.shift();
 			}
 			else
 			{
-				launchSounds.shift();
-				launchTimes.shift();
+				launchInfo.shift();
 			}
 
 			break;
 		}
 	}
 
-	queue("getCountdown", 120);
+	queue("getCountdown", camSecondsToMilliseconds(0.4));
 }
 
 function enableAllFactories()
@@ -217,9 +224,11 @@ function enableAllFactories()
 //For now just make sure we have all the droids in the canyon.
 function unitsInValley()
 {
-	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
+	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter(function(obj) {
+		return obj.type === DROID;
+	});
 	var allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return (obj.type === DROID);
+		return obj.type === DROID;
 	});
 
 	if (safeZone.length === allDroids.length)
@@ -235,17 +244,6 @@ function unitsInValley()
 	}
 }
 
-function enableReinforcements()
-{
-	const REINFORCEMENT_TIME = 180; //3 minutes.
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
-		area: "RTLZ",
-		reinforcements: REINFORCEMENT_TIME,
-		callback: "unitsInValley"
-	});
-}
-
 function eventStartLevel()
 {
 	var startpos = getObject("startPosition");
@@ -253,29 +251,44 @@ function eventStartLevel()
 	var tent = getObject("transporterEntry");
 	var text = getObject("transporterExit");
 
-	launchTimes = [
-		3600, 3000, 2400, 1800, 1200, 600, 310, 300,
-		240, 180, 120, 60, 25, 11, 2,
+	//Time is in seconds.
+	launchInfo = [
+		{sound: "60min.ogg", time: camMinutesToSeconds(60)},
+		{sound: "50min.ogg", time: camMinutesToSeconds(50)},
+		{sound: "40min.ogg", time: camMinutesToSeconds(40)},
+		{sound: "30min.ogg", time: camMinutesToSeconds(30)},
+		{sound: "20min.ogg", time: camMinutesToSeconds(20)},
+		{sound: "10min.ogg", time: camMinutesToSeconds(10)},
+		{sound: "meflp.ogg", time: camMinutesToSeconds(5) + 10},
+		{sound: "5min.ogg", time: camMinutesToSeconds(5)},
+		{sound: "4min.ogg", time: camMinutesToSeconds(4)},
+		{sound: "3min.ogg", time: camMinutesToSeconds(3)},
+		{sound: "2min.ogg", time: camMinutesToSeconds(2)},
+		{sound: "1min.ogg", time: camMinutesToSeconds(1)},
+		{sound: "flseq.ogg", time: 25},
+		{sound: "10to1.ogg", time: 11},
+		{sound: "mlaunch.ogg", time: 2},
 	];
-	detTimes = [
-		3591, 3590, 3000, 2400, 1800, 1200, 600, 300,
-		240, 180, 120, 60, 20, 10,
-	];
-	launchSounds = [
-		"60min.ogg", "50min.ogg", "40min.ogg", "30min.ogg", "20min.ogg",
-		"10min.ogg", "meflp.ogg", "5min.ogg", "4min.ogg", "3min.ogg",
-		"2min.ogg", "1min.ogg", "flseq.ogg", "10to1.ogg", "mlaunch.ogg",
-	];
-	detSounds = [
-		"mlaunch.ogg", "det60min.ogg", "det50min.ogg", "det40min.ogg",
-		"det30min.ogg", "det20min.ogg", "det10min.ogg", "det5min.ogg",
-		"det4min.ogg", "det3min.ogg", "det2min.ogg", "det1min.ogg",
-		"fdetseq.ogg", "10to1.ogg",
+	detonateInfo = [
+		{sound: "mlaunch.ogg", time: camMinutesToSeconds(60) - 9},
+		{sound: "det60min.ogg", time: camMinutesToSeconds(60) - 10},
+		{sound: "det50min.ogg", time: camMinutesToSeconds(50)},
+		{sound: "det40min.ogg", time: camMinutesToSeconds(40)},
+		{sound: "det30min.ogg", time: camMinutesToSeconds(30)},
+		{sound: "det20min.ogg", time: camMinutesToSeconds(20)},
+		{sound: "det10min.ogg", time: camMinutesToSeconds(10)},
+		{sound: "det5min.ogg", time: camMinutesToSeconds(5)},
+		{sound: "det4min.ogg", time: camMinutesToSeconds(4)},
+		{sound: "det3min.ogg", time: camMinutesToSeconds(3)},
+		{sound: "det2min.ogg", time: camMinutesToSeconds(2)},
+		{sound: "det1min.ogg", time: camMinutesToSeconds(1)},
+		{sound: "fdetseq.ogg", time: 20},
+		{sound: "10to1.ogg", time: 10},
 	];
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
 		area: "RTLZ",
-		reinforcements: -1,
+		reinforcements: camMinutesToSeconds(3),
 		callback: "unitsInValley"
 	});
 
@@ -304,7 +317,7 @@ function eventStartLevel()
 			assembly: "NXCybFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -316,7 +329,7 @@ function eventStartLevel()
 			assembly: "NXCybFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -340,7 +353,7 @@ function eventStartLevel()
 			},
 			group: camMakeGroup("baseDefenderGroup"),
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			templates: [cTempl.nxmscouh, cTempl.nxmrailh]
 		},
 	});
@@ -350,9 +363,8 @@ function eventStartLevel()
 	cyborgAttack();
 	getCountdown();
 
-	queue("setupNextMission", 8000);
-	queue("enableReinforcements", 15000);
-	queue("hoverAttack", camChangeOnDiff(240000)); // 4 min
-	queue("vtolAttack", camChangeOnDiff(300000)); //5 min
-	queue("enableAllFactories", camChangeOnDiff(300000)); //5 min
+	queue("setupNextMission", camSecondsToMilliseconds(8));
+	queue("hoverAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(5)));
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }

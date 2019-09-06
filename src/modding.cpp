@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace {
 	struct LoadedMod
@@ -88,16 +89,30 @@ static inline std::string join(std::vector<std::string> const &strs, std::string
 	return str;
 }
 
+static WzString convertToPlatformDependentPath(const char *platformIndependentPath)
+{
+	WzString path(platformIndependentPath);
+
+	// platform-independent notation uses "/" as the path separator
+	if (WzString(PHYSFS_getDirSeparator()) != WzString("/"))
+	{
+		// replace all "/" with PHYSFS_getDirSeparator()
+		path.replace("/", PHYSFS_getDirSeparator());
+	}
+
+	return path;
+}
 
 /*!
  * Tries to mount a list of directories, found in /basedir/subdir/<list>.
- * \param basedir Base directory
- * \param subdir A subdirectory of basedir
+ * \param basedir Base directory (in platform-dependent notation)
+ * \param subdir A subdirectory of basedir (in platform-independent notation - i.e. with "/" as the path separator)
  * \param appendToPath Whether to append or prepend
  * \param checkList List of directories to check. NULL means any.
  */
 void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, std::vector<std::string> const *checkList, bool addToModList)
 {
+	const WzString subdir_platformDependent = convertToPlatformDependentPath(subdir);
 	char **subdirlist = PHYSFS_enumerateFiles(subdir);
 	char **i = subdirlist;
 	while (*i != nullptr)
@@ -108,19 +123,19 @@ void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath
 		if (*i[0] != '.' && (!checkList || std::find(checkList->begin(), checkList->end(), *i) != checkList->end()))
 		{
 			char tmpstr[PATH_MAX];
-			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
+			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir_platformDependent.toUtf8().c_str(), PHYSFS_getDirSeparator(), *i);
 #ifdef DEBUG
 			debug(LOG_NEVER, "Adding [%s] to search path", tmpstr);
 #endif // DEBUG
 			if (addToModList)
 			{
-				std::string filename = astringf("%s%s%s", subdir, PHYSFS_getDirSeparator(), *i);
+				std::string filename = astringf("%s/%s", subdir, *i); // platform-independent notation
 				addLoadedMod(*i, std::move(filename));
 				char buf[256];
 				snprintf(buf, sizeof(buf), "mod: %s", *i);
 				addDumpInfo(buf);
 			}
-			PHYSFS_mount(tmpstr, NULL, appendToPath);
+			PHYSFS_mount(tmpstr, NULL, appendToPath); // platform-dependent notation
 		}
 		i++;
 	}
@@ -129,6 +144,7 @@ void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath
 
 void removeSubdirs(const char *basedir, const char *subdir)
 {
+	const WzString subdir_platformDependent = convertToPlatformDependentPath(subdir);
 	char tmpstr[PATH_MAX];
 	char **subdirlist = PHYSFS_enumerateFiles(subdir);
 	char **i = subdirlist;
@@ -137,11 +153,11 @@ void removeSubdirs(const char *basedir, const char *subdir)
 #ifdef DEBUG
 		debug(LOG_NEVER, "Examining subdir: [%s]", *i);
 #endif // DEBUG
-		snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
+		snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir_platformDependent.toUtf8().c_str(), PHYSFS_getDirSeparator(), *i);
 #ifdef DEBUG
 		debug(LOG_NEVER, "Removing [%s] from search path", tmpstr);
 #endif // DEBUG
-		if (!WZ_PHYSFS_unmount(tmpstr))
+		if (!WZ_PHYSFS_unmount(tmpstr)) // platform-dependent notation
 		{
 #ifdef DEBUG	// spams a ton!
 			debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, WZ_PHYSFS_getLastError());

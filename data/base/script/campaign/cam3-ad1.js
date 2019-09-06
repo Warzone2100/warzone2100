@@ -61,7 +61,7 @@ function setupGroups()
 			camMakePos("vtolBaseEntrance"),
 			camMakePos("northMainEntrance"),
 		],
-		interval: 45000,
+		interval: camSecondsToMilliseconds(45),
 		regroup: false
 	});
 
@@ -84,7 +84,7 @@ function vaporizeTarget()
 {
 	var target;
 	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
-		return obj.type === DROID || (obj.type === STRUCTURE && obj.status === BUILT);
+		return obj.type === DROID || obj.type === STRUCTURE;
 	});
 
 	if (!targets.length)
@@ -97,24 +97,23 @@ function vaporizeTarget()
 	}
 	else
 	{
-		// prefer droids over structures
 		var dr = targets.filter(function(obj) { return obj.type === DROID; });
 		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
 
 		if (dr.length)
 		{
-			target = camMakePos(dr[0]);
+			target = dr[0];
 		}
-		else if (st.length)
+		if (st.length && !camRand(2)) //chance to focus on a structure
 		{
-			target = camMakePos(st[0]);
+			target = st[0];
 		}
 	}
 
 	//Droid or structure was destroyed before firing so pick a new one.
 	if (!camDef(target))
 	{
-		queue("vaporizeTarget", 100);
+		queue("vaporizeTarget", camSecondsToMilliseconds(0.1));
 		return;
 	}
 	if (Math.floor(mapLimit) < Math.floor(mapHeight / 2))
@@ -125,19 +124,25 @@ function vaporizeTarget()
 		mapLimit = mapLimit + 0.36; //sector clear; move closer
 	}
 	laserSatFuzzyStrike(target);
-	queue("vaporizeTarget", 10000);
+	queue("vaporizeTarget", camSecondsToMilliseconds(10));
 }
 
 //A simple way to fire the LasSat with a chance of missing.
 function laserSatFuzzyStrike(obj)
 {
 	const LOC = camMakePos(obj);
+	//Initially lock onto target
+	var xCoord = LOC.x;
+	var yCoord = LOC.y;
 
 	//Introduce some randomness
-	var xRand = camRand(2);
-	var yRand = camRand(2);
-	var xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
-	var yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
+	if (camRand(101) < 67)
+	{
+		var xRand = camRand(3);
+		var yRand = camRand(3);
+		xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
+		yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
+	}
 
 	if (xCoord < 0)
 	{
@@ -161,7 +166,17 @@ function laserSatFuzzyStrike(obj)
 	{
 		playSound(LASSAT_FIRING, xCoord, yCoord);
 	}
-	fireWeaponAtLoc(xCoord, yCoord, "LasSat");
+
+	//Missed it so hit close to target.
+	if (LOC.x !== xCoord || LOC.y !== yCoord || !camDef(obj.id))
+	{
+		fireWeaponAtLoc("LasSat", xCoord, yCoord, CAM_HUMAN_PLAYER);
+	}
+	else
+	{
+		//Hit it directly
+		fireWeaponAtObj("LasSat", obj, CAM_HUMAN_PLAYER);
+	}
 }
 
 //Donate the silos to the player. Allow capturedSilos victory flag to be true.
@@ -212,7 +227,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS); //LZ for cam3-4s.
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
-	setMissionTime(camChangeOnDiff(7200)); //2 hr
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	var enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
@@ -248,7 +263,7 @@ function eventStartLevel()
 			assembly: "NxVtolAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 67,
@@ -260,7 +275,7 @@ function eventStartLevel()
 			assembly: "NxHeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: true,
 				repair: 40,
@@ -272,7 +287,7 @@ function eventStartLevel()
 			assembly: "NXcyborgFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: true,
 				repair: 45,
@@ -284,7 +299,7 @@ function eventStartLevel()
 			assembly: "NXcyborgFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: true,
 				repair: 50,
@@ -299,7 +314,7 @@ function eventStartLevel()
 	camEnableFactory("NXbase1VtolFacArti");
 	camEnableFactory("NXcyborgFac1");
 
-	queue("vaporizeTarget", 2000);
-	queue("setupGroups", 5000); // 5 sec
-	queue("enableAllFactories", camChangeOnDiff(300000)); // 5 min.
+	queue("vaporizeTarget", camSecondsToMilliseconds(2));
+	queue("setupGroups", camSecondsToMilliseconds(5));
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }

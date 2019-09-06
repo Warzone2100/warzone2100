@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ bool intRunInGameOptions();
 void intProcessInGameOptions(UDWORD);
 void intAddInGamePopup();
 
-extern bool quitConfirmation;
+extern bool hostQuitConfirmation;
 
 // status bools.
 extern bool	InGameOpUp;
@@ -68,14 +68,14 @@ extern bool isInGamePopupUp;
 // button sizes.
 #define	INTINGAMEOP_OP_W		(INTINGAMEOP_W-10)
 #define	INTINGAMEOP_SW_W		(INTINGAMEOP2_W - 15)
-#define	INTINGAMEOP_OP_H		10
+#define	INTINGAMEOP_OP_H		15
 
 enum
 {
 	INTINGAMEOP = 10500,
 	INTINGAMEPOPUP,
-	INTINGAMEOP_QUIT,
-	INTINGAMEOP_QUIT_CONFIRM,               ///< The all important quit button
+	INTINGAMEOP_HOSTQUIT,
+	INTINGAMEOP_QUIT,               ///< The all important quit button
 	INTINGAMEOP_RESUME,
 	INTINGAMEOP_LOAD_MISSION,
 	INTINGAMEOP_LOAD_SKIRMISH,

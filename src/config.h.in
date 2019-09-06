@@ -7,14 +7,6 @@
 /* Define to 1 if you have the <alloca.h> header file. */
 #cmakedefine HAVE_ALLOCA_H @HAVE_ALLOCA_H@
 
-/* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
-   CoreFoundation framework. */
-#cmakedefine HAVE_CFLOCALECOPYCURRENT
-
-/* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
-   the CoreFoundation framework. */
-#cmakedefine HAVE_CFPREFERENCESCOPYAPPVALUE
-
 /* Define if the GNU dcgettext() function is already present or preinstalled.
    */
 #cmakedefine HAVE_DCGETTEXT
@@ -102,23 +94,27 @@
 
 /* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
-//# cmakedefine _ALL_SOURCE
+#cmakedefine _ALL_SOURCE 1
 #endif
 /* Enable GNU extensions on systems that have them.  */
 #ifndef _GNU_SOURCE
-#cmakedefine _GNU_SOURCE
+#cmakedefine _GNU_SOURCE 1
 #endif
 /* Enable threading extensions on Solaris.  */
 #ifndef _POSIX_PTHREAD_SEMANTICS
-//# cmakedefine _POSIX_PTHREAD_SEMANTICS
+#cmakedefine _POSIX_PTHREAD_SEMANTICS 1
 #endif
 /* Enable extensions on HP NonStop.  */
 #ifndef _TANDEM_SOURCE
-//# cmakedefine _TANDEM_SOURCE
+#cmakedefine _TANDEM_SOURCE 1
 #endif
 /* Enable general extensions on Solaris.  */
 #ifndef __EXTENSIONS__
-//# cmakedefine __EXTENSIONS__
+#cmakedefine __EXTENSIONS__ 1
+#endif
+/* Enable general extensions on macOS. */
+#ifndef _DARWIN_C_SOURCE
+#cmakedefine _DARWIN_C_SOURCE 1
 #endif
 
 
@@ -136,7 +132,7 @@
 #cmakedefine _POSIX_SOURCE
 
 /* Enable POSIX extensions if present */
-#cmakedefine _XOPEN_SOURCE
+#cmakedefine _XOPEN_SOURCE @_XOPEN_SOURCE@
 
 /* Explicitly-configured data dir search path
  - It will be treated as a relative path, and appended to the install PREFIX,

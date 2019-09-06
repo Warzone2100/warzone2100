@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -8996,8 +8996,8 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 		if (selectedPlayer == forPlayer)
 		{
 			// show console message
-			CONPRINTF(ConsoleString, (ConsoleString, _("Beacon received from %s!"),
-			                          getPlayerName(sender)));
+			CONPRINTF(_("Beacon received from %s!"),
+			                          getPlayerName(sender));
 
 			// play audio
 			audio_QueueTrackPos(ID_SOUND_BEACON, locX, locY, 0);
@@ -9657,7 +9657,7 @@ bool scrASSERT()
 {
 	int32_t			bExpression;	// was BOOL (int) ** see warning about conversion
 	SDWORD			player;
-	char			sTmp[255];
+	char			sTmp[11+2+MAXSTRLEN]; // room for SDWORD (11) + ") " (2) + string (MAXSTRLEN)
 
 	if (!stackPopParams(3, VAL_BOOL, &bExpression, VAL_STRING, &strParam1, VAL_INT, &player))
 	{
@@ -9674,7 +9674,7 @@ bool scrASSERT()
 	{
 		if (!bExpression)
 		{
-			sprintf(sTmp, "%d) %s", player, strParam1);
+			snprintf(sTmp, sizeof(sTmp), "%d) %s", player, strParam1);
 			addConsoleMessage(sTmp, RIGHT_JUSTIFY, player);
 		}
 	}
@@ -10236,6 +10236,25 @@ static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 	}
 
 	return nullptr;
+}
+
+// deprecated
+bool scrWeaponShortHitUpgrade()
+{
+	SDWORD					player, weapIndex;
+
+	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
+	{
+		return false;
+	}
+
+	scrFunctionResult.v.ival = 0;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
 }
 
 // deprecated

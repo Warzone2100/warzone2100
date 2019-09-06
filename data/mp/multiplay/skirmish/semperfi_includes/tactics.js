@@ -48,7 +48,9 @@ function droidNeedsRepair(droidID, percent)
 		return true;
 	}
 
-	if (dr.order !== DORDER_RTR && countStruct(REPAIR_FACILITY_STAT) > 0 && dr.health < percent)
+	if (dr.order !== DORDER_RTR &&
+		countStruct(REPAIR_FACILITY_STAT) > 0 &&
+		dr.health < percent)
 	{
 		orderDroid(dr, DORDER_RTR);
 		return true;
@@ -63,7 +65,10 @@ function getAliveEnemyPlayers(player)
 {
 	if (defined(player))
 	{
-		if (countStruct(FACTORY_STAT, player) + countStruct(CYBORG_FACTORY_STAT, player) + countDroid(DROID_CONSTRUCT, player) > 0)
+		if (countStruct(FACTORY_STAT, player) +
+			countStruct(CYBORG_FACTORY_STAT, player) +
+			countStruct(VTOL_FACTORY_STAT, player) +
+			countDroid(DROID_ANY, player) > 0)
 		{
 			return true;
 		}
@@ -78,14 +83,20 @@ function getAliveEnemyPlayers(player)
 		{
 			//Are they alive (have factories and constructs)
 			//Even if they still have attack droids, eventAttacked() will find them anyway if they do attack.
-			if ((countStruct(FACTORY_STAT, i) + countStruct(CYBORG_FACTORY_STAT, i) + countDroid(DROID_CONSTRUCT, i)) > 0)
+			if ((countStruct(FACTORY_STAT, i) +
+				countStruct(CYBORG_FACTORY_STAT, i) +
+				countStruct(VTOL_FACTORY_STAT, i) +
+				countDroid(DROID_ANY, i)) > 0)
 			{
 				numEnemies.push(i); // count 'em, then kill 'em :)
 			}
 		}
 	}
 
-	if (defined(scavengerPlayer) && (countStruct("A0BaBaFactory", scavengerPlayer) + countStruct(DERRICK_STAT, scavengerPlayer) + countDroid(DROID_CONSTRUCT, i)) > 0)
+	if (defined(scavengerPlayer) &&
+		(countStruct("A0BaBaFactory", scavengerPlayer) +
+		countStruct(DERRICK_STAT, scavengerPlayer) +
+		countDroid(DROID_ANY, scavengerPlayer)) > 0)
 	{
 		numEnemies.push(scavengerPlayer);
 	}
@@ -98,6 +109,7 @@ function findNearestFactoryID(player)
 {
 	var facs = enumStruct(player, FACTORY_STAT).sort(sortByDistToBase);
 	var cybFacs = enumStruct(player, CYBORG_FACTORY_STAT).sort(sortByDistToBase);
+	var vtolFacs = enumStruct(player, VTOL_FACTORY_STAT).sort(sortByDistToBase);
 	var target;
 
 	if (facs.length > 0)
@@ -107,6 +119,10 @@ function findNearestFactoryID(player)
 	else if (cybFacs.length > 0)
 	{
 		target = cybFacs[0].id;
+	}
+	else if (vtolFacs.length > 0)
+	{
+		target = vtolFacs[0].id;
 	}
 
 	return target;
@@ -184,28 +200,34 @@ function attackEnemy()
 			return; //No enemy players remain
 		}
 
-		var target = findNearestDerrickID(selectedEnemy);
-		if (!target)
+		var targetID = findNearestDerrickID(selectedEnemy);
+		if (!targetID)
 		{
-			target = findNearestFactoryID(selectedEnemy);
-			if (!target)
+			targetID = findNearestFactoryID(selectedEnemy);
+			if (!targetID)
 			{
-				target = findNearestConstructID(selectedEnemy);
+				var droids = enumDroid(selectedEnemy);
 				isDroid = true;
+				targetID = findNearestConstructID(selectedEnemy);
+				if (!targetID && droids.length > 0)
+				{
+					//Now just start picking off any droids that remain.
+					targetID = droids[0].id;
+				}
 			}
 		}
 
 		var loc;
 		var realObject;
-		if (target)
+		if (targetID)
 		{
 			if (!isDroid)
 			{
-				realObject = getObject(STRUCTURE, selectedEnemy, target);
+				realObject = getObject(STRUCTURE, selectedEnemy, targetID);
 			}
 			else
 			{
-				realObject = getObject(DROID, selectedEnemy, target);
+				realObject = getObject(DROID, selectedEnemy, targetID);
 			}
 
 			if (realObject === null)
@@ -334,7 +356,9 @@ function recycleDroidsForHover()
 
 		if (isSeaMap)
 		{
-			var tanks = enumGroup(attackGroup).filter(function(dr) { return (dr.droidType == DROID_WEAPON && dr.propulsion !== "hover01"); });
+			var tanks = enumGroup(attackGroup).filter(function(dr) {
+				return (dr.droidType == DROID_WEAPON && dr.propulsion !== "hover01");
+			});
 			const NON_HOVER_TANKS = tanks.length;
 
 			for (var j = 0; j < NON_HOVER_TANKS; ++j)

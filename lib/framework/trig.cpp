@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,10 @@
  *
  */
 
+#if defined( _MSC_VER )
+	#pragma warning( disable : 4244 ) // warning C4244: conversion from 'type1' to 'type2', possible loss of data // FIXME?
+#endif
+
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
@@ -39,6 +43,7 @@
 #endif
 
 #include <math.h>
+#include <algorithm>
 
 static uint16_t trigSinTable[0x4001];
 static uint16_t trigAtanTable[0x2001];
@@ -46,7 +51,6 @@ static uint16_t trigAtanTable[0x2001];
 /* Initialise the Trig tables */
 bool trigInitialise(void)
 {
-	uint64_t test;
 	uint32_t crc;
 	uint32_t i;
 
@@ -69,19 +73,19 @@ bool trigInitialise(void)
 	ASSERT(crc == 0xD2797F85, "Bad trigAtanTable CRC = 0x%08X, atan function is broken.", crc);
 
 	// Test large and small square roots.
-	for (test = 0x0000; test != 0x10000; ++test)
+	for (uint32_t test = 0x0000; test != 0x10000; ++test)
 	{
-		uint64_t lower = test * test;
-		uint64_t upper = (test + 1) * (test + 1) - 1;
-		ASSERT((uint32_t)iSqrt(lower) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, i64Sqrt(lower), test);
-		ASSERT((uint32_t)iSqrt(upper) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, i64Sqrt(upper), test);
+		uint32_t lower = test * test;
+		uint32_t upper = (test + 1) * (test + 1) - 1;
+		ASSERT((uint32_t)iSqrt(lower) == test, "Sanity check failed, iSqrt(%" PRIu32") gave %" PRIu32" instead of %" PRIu32"!", lower, (uint32_t)iSqrt(lower), test);
+		ASSERT((uint32_t)iSqrt(upper) == test, "Sanity check failed, iSqrt(%" PRIu32") gave %" PRIu32" instead of %" PRIu32"!", upper, (uint32_t)iSqrt(upper), test);
 	}
-	for (test = 0xFFFE0000; test != 0x00020000; test = (test + 1) & 0xFFFFFFFF)
+	for (uint64_t test = 0xFFFE0000; test != 0x00020000; test = (test + 1) & 0xFFFFFFFF)
 	{
 		uint64_t lower = test * test;
 		uint64_t upper = (test + 1) * (test + 1) - 1;
-		ASSERT((uint32_t)i64Sqrt(lower) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, i64Sqrt(lower), test);
-		ASSERT((uint32_t)i64Sqrt(upper) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, i64Sqrt(upper), test);
+		ASSERT((uint32_t)i64Sqrt(lower) == test, "Sanity check failed, i64Sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, (uint32_t)i64Sqrt(lower), test);
+		ASSERT((uint32_t)i64Sqrt(upper) == test, "Sanity check failed, i64Sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, (uint32_t)i64Sqrt(upper), test);
 	}
 
 	return true;
@@ -163,15 +167,21 @@ int32_t i64Sqrt(uint64_t n)
 	uint64_t r;
 	if (sizeof(void *) > 4)
 	{
-		r = sqrt((double)n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+		r = (uint64_t) sqrt((double)n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
 	}
 	else
 	{
 		// Bad compiler workaround. On some compilers, sqrt() seems to have somehow been taking 64-bit doubles and returning 80-bit doubles, breaking expected rounding behaviour.
-		r = sqrtl(n);         // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+		r = (uint64_t) sqrtl(n);         // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
 	}
 
-	r -= (int64_t)(r * r - n) > 0; // If we rounded up, subtract 1.
+	// Correct for different rounding & precision
+	// See: https://codereview.stackexchange.com/questions/69069/computing-the-square-root-of-a-64-bit-integer
+	r = std::min(r, (uint64_t)UINT32_MAX);
+	while (r * r > n)
+		r--;
+	while (n - r * r > r * 2)
+		r++;
 
 	// Check that we got the right result.
 	ASSERT((int64_t)(r * r - n) <= 0 && (int64_t)((r + 1) * (r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%" PRIu64") = %" PRIu64".", n, r);

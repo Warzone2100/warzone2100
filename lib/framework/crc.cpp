@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <functional>
 #include <limits>
 #include <memory>
+#include <algorithm>
 
 //================================================================================
 // MARK: - CRC
@@ -78,7 +79,7 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 // MARK: - SHA256
 //================================================================================
 
-#include <sha2/sha2.h>
+#include <sha/sha2.h>
 Sha256 sha256Sum(void const *data, size_t dataLen)
 {
 	static_assert(Sha256::Bytes == SHA256_DIGEST_SIZE, "Size mismatch.");
@@ -836,9 +837,9 @@ std::vector<uint8_t> base64Decode(std::string const &str)
 			               0;
 			block |= val << (6 * (3 - i));
 		}
-		bytes[0 + n * 3] = block >> 16;
-		bytes[1 + n * 3] = block >> 8;
-		bytes[2 + n * 3] = block;
+		bytes[0 + n * 3] = static_cast<uint8_t>(block >> 16);
+		bytes[1 + n * 3] = static_cast<uint8_t>(block >> 8);
+		bytes[2 + n * 3] = static_cast<uint8_t>(block);
 	}
 	if (str.size() >= 4)
 	{

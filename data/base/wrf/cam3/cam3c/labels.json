@@ -86,7 +86,8 @@
 	"area_7": {
 		"label": "gammaBaseTrigger",
 		"pos1": [192, 22208],
-		"pos2": [2368, 24256]
+		"pos2": [2368, 24256],
+		"subscriber": 0
 	},
 	"area_8": {
 		"label": "northBaseCleanup",

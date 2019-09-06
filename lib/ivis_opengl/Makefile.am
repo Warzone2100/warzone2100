@@ -6,6 +6,7 @@ noinst_LIBRARIES = libivis_opengl.a
 noinst_HEADERS = \
 	piematrix.h \
 	gfx_api.h \
+	gfx_api_gl.h \
 	screen.h \
 	bitimage.h \
 	imd.h \

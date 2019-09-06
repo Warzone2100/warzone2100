@@ -10,51 +10,61 @@ add_custom_target(autorevision ALL
     DEPENDS
         "${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"
 )
+set_property(TARGET autorevision PROPERTY FOLDER "_WZBuildProcessTargets")
 
 # Autorevision command that will run *every* build
+set(_autorevision_cache_tarball_src_input "${CMAKE_CURRENT_SOURCE_DIR}/autorevision.cache")
+set(_autorevision_cache_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache")
+set(_autorevision_h_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h")
 add_custom_command(
     OUTPUT
 		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"  # fake - ensure we run
-		"${CMAKE_CURRENT_BINARY_DIR}/autorevision.h"
-		"${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
+		"${_autorevision_h_file}"
+		"${_autorevision_cache_file}"
 	# Copy autorevision.cache from the src directory (if present)
 	# This supports proper versioning from distribution source archives
-	COMMAND ${CMAKE_COMMAND} -DINPUT_FILE="${CMAKE_CURRENT_SOURCE_DIR}/autorevision.cache" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DSKIP_IF_INPUT_MISSING="ON" -DSKIP_IF_OUTPUT_EXISTS="ON" -P "${CMAKE_SOURCE_DIR}/cmake/CopyFileHelper.cmake"
+	COMMAND ${CMAKE_COMMAND} -DINPUT_FILE=${_autorevision_cache_tarball_src_input} -DOUTPUT_FILE=${_autorevision_cache_file} -DSKIP_IF_INPUT_MISSING=ON -DSKIP_IF_OUTPUT_EXISTS=ON -P ${CMAKE_SOURCE_DIR}/cmake/CopyFileHelper.cmake
 	# Autorevision.cmake
 	# this command must generate: ${CMAKE_CURRENT_BINARY_DIR}/autorevision.h
-	COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DOUTPUT_TYPE=h -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" -P "${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake"
+	COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DOUTPUT_TYPE=h -DOUTPUT_FILE=${_autorevision_h_file} -P ${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+	VERBATIM
 )
 
 # On Windows, configure warzone2100.rc and the .manifest with updated version info
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# warzone2100.manifest
 	set(_manifest_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.manifest.in")
+	set(_manifest_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest")
 	add_custom_command(
-		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_manifest_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
+		OUTPUT "${_manifest_output_file}"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_manifest_template_file} -DOUTPUT_FILE=${_manifest_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_manifest_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache"
+		DEPENDS "${_manifest_template_file}" "${_autorevision_cache_file}"
+		VERBATIM
 	)
 
 	# warzone2100.rc
 	set(_rc_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc.in")
+	set(_rc_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 	add_custom_command(
-		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE="${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" -DPROJECT_ROOT="${PROJECT_SOURCE_DIR}" -DTEMPLATE_FILE="${_rc_template_file}" -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc" -P "${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake"
+		OUTPUT "${_rc_output_file}"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_rc_template_file} -DOUTPUT_FILE=${_rc_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_rc_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest"
+		DEPENDS "${_rc_template_file}" "${_autorevision_cache_file}" "${_manifest_output_file}"
+		VERBATIM
 	)
 endif()
 
 # On macOS, generate the Info.plist file with updated version info at *build-time*
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(_info_plist_template_file "${PROJECT_SOURCE_DIR}/macosx/Resources/Warzone-Info.plist.in")
+	set(_info_plist_output_file "${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist")
 	add_custom_command(
-		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist -P ${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake
+		OUTPUT "${_info_plist_output_file}"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_info_plist_template_file}" "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache" "${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake"
+		DEPENDS "${_info_plist_template_file}" "${_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake"
 		VERBATIM
 	)
 
@@ -62,6 +72,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		DEPENDS
 			"${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist"
 	)
+	set_property(TARGET autorevision_infoplist PROPERTY FOLDER "_WZBuildProcessTargets")
 
 	add_dependencies(autorevision_infoplist autorevision) # Ensure ordering and non-concurrency
 
@@ -105,10 +116,11 @@ endif()
 
 target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay script sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100
+	Qt5::Core
 	Qt5::Script
 	Qt5::Gui
 	Qt5::Widgets
-	)
+)
 if(ENABLE_NLS)
 	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
 endif()
@@ -153,6 +165,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "net.wz2100.Warzone2100")
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "net.wz2100.Warzone2100")
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Warzone 2100")
+
+	# Workaround: Empty "Archive" build of warzone2100 target
+	# See: https://cmake.org/pipermail/cmake/2012-December/053017.html; https://gitlab.kitware.com/cmake/cmake/issues/15183
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_SKIP_INSTALL "No")
 
 	# Unset some target properties (these seem to be for Windows only?)
 	set_property(TARGET warzone2100 PROPERTY RUNTIME_OUTPUT_DIRECTORY_RELEASE)
@@ -346,6 +363,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	endmacro()
 
 	copy_qt5_plugin("Qt5::QCocoaIntegrationPlugin")
+	copy_qt5_plugin("Qt5::QCocoaPrinterSupportPlugin")
 
 	# Set install RPATH for WZ app bundle
 	set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
@@ -355,41 +373,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	# Install the app bundle directly in the destination root
 	set(WZ_APP_INSTALL_DEST ".")
-
-endif()
-
-#######################
-# Additional Components
-
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-
-	# Note: We cannot use CMAKE_SYSTEM_PROCESSOR to detect the target architecture because it isn't always set properly.
-
-	include(TargetArch)
-	target_architecture(CURRENT_TARGET_ARCHITECTURES)
-	list(LENGTH CURRENT_TARGET_ARCHITECTURES cmake_target_arch_len)
-
-	if(NOT "${cmake_target_arch_len}" STREQUAL "1")
-		message( WARNING "Detected more than one target architecture. This is not expected behavior when targeting Windows." )
-	endif()
-
-	# Install dbghelp.dll
-	if(CURRENT_TARGET_ARCHITECTURES MATCHES "x86_64")
-		install(FILES
-				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll"
-				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x64/dbghelp.dll.license.txt"
-				COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
-		)
-	elseif(CURRENT_TARGET_ARCHITECTURES MATCHES "i386")
-		install(FILES
-				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll"
-				"${PROJECT_SOURCE_DIR}/win32/dbghelp/6.12/x86/dbghelp.dll.license.txt"
-				COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
-		)
-	else()
-		# We do not currently have the dbghelp.dll for this processor architecture in the repo
-		message( WARNING "Currently-unsupported target architecture for dbghelp.dll: \"${CURRENT_TARGET_ARCHITECTURES}\"; expecting x86_64 or i386" )
-	endif()
 
 endif()
 

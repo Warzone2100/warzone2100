@@ -27,10 +27,15 @@ Latest development builds
 
 [![Build Status](https://travis-ci.org/Warzone2100/warzone2100.svg?branch=master)](https://travis-ci.org/Warzone2100/warzone2100)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/1s4547mjbkprt4qr/branch/master?svg=true)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
+[![FreeBSD Build Status](https://api.cirrus-ci.com/github/Warzone2100/warzone2100.svg?branch=master)](https://cirrus-ci.com/github/Warzone2100/warzone2100)
 
-- **Windows** (x86): [**Portable**](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_portable.zip?branch=master&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) | 
-[Installer](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_installer.zip?branch=master&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) | 
-[Debug Symbols](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86.DEBUGSYMBOLS.7z?branch=master&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86)
+- **Windows** (x86): [**Portable**](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_portable.zip?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
+[Installer](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_installer.zip?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
+[Debug Symbols](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86.DEBUGSYMBOLS.7z?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86)
+
+- **macOS** (64-bit Intel): [**Latest builds**](http://buildbot.wz2100.net/files/CI/master/macOS/)
+
+- **Linux** (Source Archive): [**Latest source**](http://buildbot.wz2100.net/files/CI/master/src/) (See: [How to Build](#how-to-build))
 
 > Development builds are a snapshot of the current state of development, from the 
 > latest (successfully-built) commit. Help testing these builds is always welcomed,
@@ -39,8 +44,8 @@ Latest development builds
 Reporting bugs
 --------------
 
-This game still has bugs and if you run into one, please use the bugtracker
-(http://developer.wz2100.net/) to report this bug. In order to faster fix
+This game still has bugs and if you run into one, please use the GitHub bugtracker
+(https://github.com/Warzone2100/warzone2100/issues) to report this bug. In order to faster fix
 those bugs we require that you follow these rules:
 
    1. If the game crashes you may save a memory dump. Please do so and upload it
@@ -242,7 +247,7 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
    * **7-Zip** (http://www.7-zip.org)
 * **Preparing to build:**
    Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
-   * Run the `get-dependencies.ps1` script from powershell in order to download and build the dependencies.
+   * Run the `get-dependencies_win.ps1` script from powershell in order to download and build the dependencies.
 * **Building from the command-line:**
    * Change directory to the warzone2100 repo directory
    * Configure

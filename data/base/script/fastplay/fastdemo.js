@@ -75,7 +75,7 @@ function sendAttackGroup2()
 			camMakePos("valleyPlayerBasePos"),
 			camMakePos("valleyReinforcePos")
 		],
-		interval: 20000,
+		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		count: -1
 	});
@@ -85,7 +85,7 @@ function sendAttackGroup2()
 			camMakePos("valleyPlayerBasePos"),
 			camMakePos("valleyReinforcePos")
 		],
-		interval: 20000,
+		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		count: -1
 	});
@@ -176,21 +176,21 @@ function eventStartLevel()
 			assembly: "base1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [cTempl.bloke, cTempl.trike, cTempl.buggy]
 		},
 		"base2Factory": {
 			assembly: "base2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [cTempl.bloke, cTempl.trike, cTempl.buggy, cTempl.bjeep]
 		},
 		"base3Factory": {
 			assembly: "base3Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [cTempl.rbjeep, cTempl.trike, cTempl.buggy, cTempl.rbjeep]
 		}
 	});
@@ -198,7 +198,7 @@ function eventStartLevel()
 	camPlayVideos("MBDEMO_MSG");
 	hackAddMessage("FAST_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
-	queue("sendAttackGroup1", 10000);
-	queue("sendAttackGroup2", 20000);
-	queue("activateDefenders", 30000);
+	queue("sendAttackGroup1", camSecondsToMilliseconds(10));
+	queue("sendAttackGroup2", camSecondsToMilliseconds(20));
+	queue("activateDefenders", camSecondsToMilliseconds(30));
 }

@@ -4,12 +4,26 @@ AM_CPPFLAGS = $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS) $(WZ_C99FLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
+# sha2
+
+sha_libsha2_a_CFLAGS = $(WZ_CFLAGS) -Wno-cast-align
+
+noinst_LIBRARIES = sha/libsha2.a
+noinst_HEADERS = \
+	sha/brg_endian.h \
+	sha/brg_types.h \
+	sha/sha2.h
+
+sha_libsha2_a_SOURCES = \
+	sha/sha2.c
+
+
 # utf8proc
 
 utf8proc_libutf8proc_a_CFLAGS = $(WZ_CFLAGS) -fPIC -std=c99 -Wall -pedantic -I$(srcdir)/utf8proc -DUTF8PROC_EXPORTS $(UTF8PROC_DEFINES)
 
-noinst_LIBRARIES = utf8proc/libutf8proc.a
-noinst_HEADERS = \
+noinst_LIBRARIES += utf8proc/libutf8proc.a
+noinst_HEADERS += \
 	utf8proc/utf8proc.h
 
 utf8proc_libutf8proc_a_SOURCES = \
@@ -18,7 +32,7 @@ utf8proc_libutf8proc_a_SOURCES = \
 
 # miniupnpc
 
-miniupnp_libminiupnpc_a_CFLAGS = $(WZ_CFLAGS) -DSTATICLIB -DMINIUPNP_STATICLIB -Wall -W -Wstrict-prototypes -fno-common -DMINIUPNPC_SET_SOCKET_TIMEOUT -DMINIUPNPC_GET_SRC_ADDR -D_BSD_SOURCE -D_DEFAULT_SOURCE -std=c99 -I$(srcdir)/miniupnp/miniupnpc -I$(builddir)/miniupnp/miniupnpc
+miniupnp_libminiupnpc_a_CFLAGS = $(WZ_CFLAGS) -DSTATICLIB -DMINIUPNP_STATICLIB -Wall -W -Wstrict-prototypes -fno-common -DMINIUPNPC_SET_SOCKET_TIMEOUT -DMINIUPNPC_GET_SRC_ADDR -D_BSD_SOURCE -D_DEFAULT_SOURCE -std=c99 -I$(srcdir)/miniupnp/miniupnpc -I$(builddir)/miniupnp/miniupnpc -Wno-cast-align
 
 MINIUPNPC_SH = /bin/sh
 MINIUPNPC_VERSION = $(shell cat miniupnp/miniupnpc/VERSION)

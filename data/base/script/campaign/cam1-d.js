@@ -47,9 +47,9 @@ camAreaEvent("westWayTrigger", function(droid)
 function transportBaseSetup()
 {
 	camDetectEnemyBase("NPLZGroup");
-	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(600000), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
-		entry: { x: 0, y: 0 },
-		exit: { x: 0, y: 0 },
+	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(camMinutesToMilliseconds(10)), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
+		entry: { x: 2, y: 2 },
+		exit: { x: 2, y: 2 },
 		data: {
 			regroup: false,
 			count: -1,
@@ -86,7 +86,7 @@ function HoverGroupPatrol()
 			camMakePos("hoverDefense3"),
 			camMakePos("hoverDefense4")
 		],
-		interval: 90000, //90 sec
+		interval: camMinutesToMilliseconds(1.5),
 		repair: 70
 	});
 }
@@ -139,23 +139,12 @@ function setupPatrols()
 	cyborgGroupPatrol();
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
-		area: "RTLZ",
-		message: "C1D_LZ",
-		reinforcements: 120, //2 min
-		eliminateBases: true
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
 		area: "RTLZ",
 		message: "C1D_LZ",
-		reinforcements: -1,
+		reinforcements: camMinutesToSeconds(2),
 		eliminateBases: true
 	});
 
@@ -210,7 +199,7 @@ function eventStartLevel()
 			assembly: "NPFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(55000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(55)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -222,7 +211,7 @@ function eventStartLevel()
 			assembly: "NPFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(65000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(65)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -234,7 +223,7 @@ function eventStartLevel()
 			assembly: "NPFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(90000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(90)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -246,7 +235,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(35000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -258,7 +247,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -270,7 +259,7 @@ function eventStartLevel()
 			assembly: "NPCybFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -282,6 +271,5 @@ function eventStartLevel()
 
 	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 12000);
-	queue("setupPatrols", 160000); // 2.5 min.
+	queue("setupPatrols", camMinutesToMilliseconds(2.5));
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,7 +41,12 @@
 extern UDWORD selectedPlayer;
 
 /** This global instance is responsible for dealing with the each player's target designator.*/
-DROID	*apsCmdDesignator[MAX_PLAYERS];
+DROID *apsCmdDesignator[MAX_PLAYERS];
+
+// Last time the max commander limit message was displayed
+static UDWORD lastMaxCmdLimitMsgTime = 0;
+
+#define MAX_COMMAND_LIMIT_MESSAGE_PAUSE 10000
 
 
 /** This function allocs the global instance apsCmdDesignator.*/
@@ -65,6 +70,7 @@ void cmdDroidUpdate()
 	{
 		if (i && i->died)
 		{
+			ASSERT(i->type == OBJ_DROID, "Bad droid pointer! type=%u", i->type);
 			i = nullptr;
 		}
 	}
@@ -91,15 +97,22 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		psDroid->group = UBYTE_MAX;
 
 		// set the secondary states for the unit
+		secondarySetState(psDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ARANGE_MASK), ModeImmediate);
 		secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_REPLEV_MASK), ModeImmediate);
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK), ModeImmediate);
+		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK), ModeImmediate);
 
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 	}
 	else
 	{
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		//Do not potentially spam the console with this message
+		if (psCommander->player == selectedPlayer && lastMaxCmdLimitMsgTime + MAX_COMMAND_LIMIT_MESSAGE_PAUSE < gameTime)
+		{
+			addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+			lastMaxCmdLimitMsgTime = gameTime;
+		}
 	}
 }
 

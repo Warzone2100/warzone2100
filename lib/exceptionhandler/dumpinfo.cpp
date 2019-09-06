@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008-2017  Warzone 2100 Project
+	Copyright (C) 2008-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/wzapp.h"
+#include "lib/framework/i18n.h" // required to print build date in ISO 8601
 
 #if defined(WZ_OS_UNIX)
 # include <sys/utsname.h>
@@ -53,7 +54,7 @@ static const std::size_t max_debug_messages = 20;
 
 static char *dbgHeader = nullptr;
 static WZ_MUTEX *dbgMessagesMutex = wzMutexCreate();  // Protects dbgMessages.
-static std::deque<std::vector<char> > dbgMessages;
+static std::deque<std::vector<char>> dbgMessages;
 
 // used to add custom info to the crash log
 static std::vector<char> miscData;
@@ -486,10 +487,9 @@ static void createHeader(int const argc, const char * const *argv, const char *p
 	}
 
 	os << endl;
-
 	os << "Version: "     << packageVersion << endl
 	   << "Distributor: " PACKAGE_DISTRIBUTOR << endl
-	   << "Compiled on: " __DATE__ " " __TIME__ << endl
+	   << "Compiled on: " << getCompileDate() << " " << __TIME__ << endl
 	   << "Compiled by: "
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG)
 	   << "GCC " __VERSION__ << endl

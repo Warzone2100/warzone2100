@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -94,6 +94,12 @@
 #include <ctime>
 #include "multimenu.h"
 #include "console.h"
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
+#elif defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wcast-align"	// TODO: FIXME!
+#endif
 
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
@@ -1898,6 +1904,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		// Stuff added after level load to avoid being reset or initialised during load
 		// always !keepObjects
 
+		if (saveGameVersion >= VERSION_33)
+		{
+			bMultiPlayer = saveGameData.multiPlayer;
+		}
+
 		if (saveGameVersion >= VERSION_12)
 		{
 			mission.startTime = saveGameData.missionTime;
@@ -1955,7 +1966,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 					{
 						alliances[i][j] = ALLIANCE_FORMED;    // hack to fix old savegames
 					}
-					if (alliancesSharedVision(game.alliance) && alliances[i][j] == ALLIANCE_FORMED)
+					if (bMultiPlayer && alliancesSharedVision(game.alliance) && alliances[i][j] == ALLIANCE_FORMED)
 					{
 						alliancebits[i] |= 1 << j;
 					}
@@ -2027,7 +2038,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			game			= saveGameData.sGame;
 			game.scavengers = scav;	// ok, so this is butt ugly. but i'm just getting inspiration from the rest of the code around here. ok? - per
 			productionPlayer = selectedPlayer;
-			bMultiPlayer	= saveGameData.multiPlayer;
 			bMultiMessages	= bMultiPlayer;
 
 			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
@@ -2572,6 +2582,14 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			unsynchObjID = (savedObjId + 1) / 2; // Make new object ID start at savedObjId*8.
 			synchObjID   = savedObjId * 4;      // Make new object ID start at savedObjId*8.
+		}
+
+		if (getDroidsToSafetyFlag())
+		{
+			//The droids lists are "reversed" as they are loaded in loadSaveDroid().
+			//Which later causes issues in saveCampaignData() which tries to extract
+			//the first transporter group sent off at Beta-end by reversing this very list.
+			reverseObjectList(&mission.apsDroidLists[selectedPlayer]);
 		}
 	}
 
@@ -4508,10 +4526,12 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;	// try to use fallback method
 	}
-	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadOnly);
+	WzString fName = WzString::fromUtf8(pFileName);
+	WzConfig ini(fName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
-	std::vector<std::pair<int, WzString> > sortedList;
+	std::vector<std::pair<int, WzString>> sortedList;
+	bool missionList = fName.compare("mdroid");
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -4519,10 +4539,20 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		int priority = 0;
 		switch (droidType)
 		{
-		case DROID_TRANSPORTER: ++priority; // fallthrough
-		case DROID_SUPERTRANSPORTER: ++priority; // fallthrough
-		case DROID_COMMAND:     ++priority;
-		default:                break;
+		case DROID_TRANSPORTER:
+			++priority; // fallthrough
+		case DROID_SUPERTRANSPORTER:
+			++priority; // fallthrough
+		case DROID_COMMAND:
+			//Don't care about sorting commanders in the mission list for safety missions. They
+			//don't have a group to command and it messes up the order of the list sorting them
+			//which causes problems getting the first transporter group for Gamma-1.
+			if (!missionList || (missionList && !getDroidsToSafetyFlag()))
+			{
+				++priority;
+			}
+		default:
+			break;
 		}
 		sortedList.push_back(std::make_pair(-priority, list[i]));
 		ini.endGroup();
@@ -4822,7 +4852,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	}
 	ini.setValue("lastBump", psCurr->sMove.lastBump);
 	ini.setValue("pauseTime", psCurr->sMove.pauseTime);
-	ini.setVector2i("bumpPosition", psCurr->sMove.bumpPos.xy);
+	ini.setVector2i("bumpPosition", psCurr->sMove.bumpPos.xy());
 	ini.setValue("onMission", onMission);
 	ini.endGroup();
 	return true;
@@ -5354,7 +5384,7 @@ bool writeStructFile(const char *pFileName)
 				ini.setValue("status", psCurr->status);
 			}
 			ini.setValue("weapons", psCurr->numWeaps);
-			for (int j = 0; j < psCurr->numWeaps; j++)
+			for (unsigned j = 0; j < psCurr->numWeaps; j++)
 			{
 				ini.setValue("parts/weapon/" + WzString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->id);
 				if (psCurr->asWeaps[j].nStat > 0)
@@ -5365,7 +5395,7 @@ bool writeStructFile(const char *pFileName)
 					ini.setVector3i("rotation/" + WzString::number(j), toVector(psCurr->asWeaps[j].rot));
 				}
 			}
-			for (int i = 0; i < psCurr->numWeaps; i++)
+			for (unsigned i = 0; i < psCurr->numWeaps; i++)
 			{
 				if (psCurr->psTarget[i] && !psCurr->psTarget[i]->died)
 				{
@@ -5682,7 +5712,7 @@ bool loadSaveFeature2(const char *pFileName)
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading new style features (%lu found)", list.size());
+	debug(LOG_SAVE, "Loading new style features (%zu found)", list.size());
 
 	for (size_t i = 0; i < list.size(); ++i)
 	{
@@ -6151,8 +6181,7 @@ bool loadSaveResearch(const char *pFileName)
 	{
 		ini.beginGroup(list[i]);
 		bool found = false;
-		char name[MAX_SAVE_NAME_SIZE];
-		sstrcpy(name, ini.value("name").toString().toUtf8().constData());
+		WzString name = ini.value("name").toWzString();
 		int statInc;
 		for (statInc = 0; statInc < asResearch.size(); statInc++)
 		{
@@ -6173,12 +6202,12 @@ bool loadSaveResearch(const char *pFileName)
 		auto researchedList = ini.value("researched").jsonValue();
 		auto possiblesList = ini.value("possible").jsonValue();
 		auto pointsList = ini.value("currentPoints").jsonValue();
-		ASSERT(researchedList.is_array(), "Bad (non-array) researched list for %s", name);
-		ASSERT(possiblesList.is_array(), "Bad (non-array) possible list for %s", name);
-		ASSERT(pointsList.is_array(), "Bad (non-array) points list for %s", name);
-		ASSERT(researchedList.size() == players, "Bad researched list for %s", name);
-		ASSERT(possiblesList.size() == players, "Bad possible list for %s", name);
-		ASSERT(pointsList.size() == players, "Bad points list for %s", name);
+		ASSERT(researchedList.is_array(), "Bad (non-array) researched list for %s", name.toUtf8().c_str());
+		ASSERT(possiblesList.is_array(), "Bad (non-array) possible list for %s", name.toUtf8().c_str());
+		ASSERT(pointsList.is_array(), "Bad (non-array) points list for %s", name.toUtf8().c_str());
+		ASSERT(researchedList.size() == players, "Bad researched list for %s", name.toUtf8().c_str());
+		ASSERT(possiblesList.size() == players, "Bad possible list for %s", name.toUtf8().c_str());
+		ASSERT(pointsList.size() == players, "Bad points list for %s", name.toUtf8().c_str());
 		for (int plr = 0; plr < players; plr++)
 		{
 			PLAYER_RESEARCH *psPlRes;
@@ -6468,7 +6497,7 @@ bool loadSaveStructLimits(const char *pFileName)
 			}
 			else
 			{
-				int statInc;
+				unsigned statInc;
 				for (statInc = 0; statInc < numStructureStats; ++statInc)
 				{
 					STRUCTURE_STATS *psStats = asStructureStats + statInc;
@@ -6680,6 +6709,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 	bool HQ = false;
 
 	psLevel = levFindDataSet(game.map, &game.hash);
+	ASSERT_OR_RETURN(false, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/struct.bjo");
@@ -6880,6 +6910,7 @@ static void plotFeature(char *backDropSprite)
 	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
 
 	psLevel = levFindDataSet(game.map, &game.hash);
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/feat.bjo");

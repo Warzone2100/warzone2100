@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -66,6 +66,12 @@
 #include "template.h"
 #include "multiplay.h"
 #include "qtscript.h"
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
+#elif defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wcast-align"	// TODO: FIXME!
+#endif
 
 
 #define MAX_DESIGN_COMPONENTS 40		// Max number of stats the design screen can cope with.
@@ -332,9 +338,6 @@ static DROID_TEMPLATE sCurrDesign;
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-extern bool bRender3DOnly;
-
-
 /* Add the design widgets to the widget screen */
 bool intAddDesign(bool bShowCentreScreen)
 {
@@ -351,13 +354,8 @@ bool intAddDesign(bool bShowCentreScreen)
 
 	if (GetGameMode() == GS_NORMAL && !bMultiPlayer)
 	{
-		bool radOnScreen = radarOnScreen;
-		bRender3DOnly = true;
-		radarOnScreen = false;
 		// Just display the 3d, no interface
 		displayWorld();
-		radarOnScreen = radOnScreen;
-		bRender3DOnly = false;
 	}
 
 	WIDGET *parent = psWScreen->psForm;
@@ -3689,6 +3687,7 @@ void intProcessDesign(UDWORD id)
 
 					/* get previous template and set as current */
 					psTempl = templateFromButtonId(droidTemplID - 1, true);  // droidTemplID - 1 always valid (might be the first template), since droidTemplID is not the first template.
+					ASSERT_OR_RETURN(, psTempl != nullptr, "template not found! - unexpected!"); // see above comment
 
 					/* update local list */
 					desSetupDesignTemplates();
@@ -3827,8 +3826,8 @@ void intProcessDesign(UDWORD id)
 			break;
 		case IDSTAT_OBSOLETE_BUTTON:
 			includeRedundantDesigns = !includeRedundantDesigns;
-			StateButton *obsoleteButton = (StateButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
-			obsoleteButton->setState(includeRedundantDesigns);
+			auto obsoleteButton = (MultipleChoiceButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
+			obsoleteButton->setChoice(includeRedundantDesigns);
 			// Refresh lists.
 			if (droidTemplID != IDDES_TEMPLSTART)
 			{

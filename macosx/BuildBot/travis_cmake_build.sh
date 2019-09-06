@@ -10,7 +10,7 @@
 #
 # Example:
 #  source build_tools/ci/travis/export_build_output_desc.sh
-#  cd build && macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}" "tmp/build_output"
+#  cd build && macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/build_output"
 #
 # Output:
 # - "warzone2100-${BUILD_OUTPUT_DESCRIPTION_PREFIX}-*_macOS.zip" containing:
@@ -80,32 +80,31 @@ create_all_branches
 echo "Finished preparing cloned repo."
 echo "travis_fold:end:travis.repo.prep"
 
-# Get dependencies
-echo "travis_fold:start:wz.get.dependencies.mac"
-echo "./get-dependencies_mac.sh release -autofix"
-./get-dependencies_mac.sh release -autofix
-result=${?}
-echo "travis_fold:end:wz.get.dependencies.mac"
-if [ $result -ne 0 ]; then
-	echo "ERROR: get-dependencies_mac.sh failed"
-	exit ${result}
-fi
-
 # Future TODO: Retrieve the signing certificate from Travis secure data, and configure code-signing
 
-# Delete any prior build dir
+# Delete any prior build dir, create a fresh one
 rm -rf build
+if [ ! -d "build" ]; then
+	mkdir build
+fi
 
-# CMake configure
-echo "travis_fold:start:wz.cmake.configure"
-echo "cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -G\"Xcode\""
-cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -G"Xcode"
+# configure_mac.cmake (gets dependencies, configures CMake)
+cd build
+echo "travis_fold:start:wz.configure.mac"
+WZ_DISTRIBUTOR="UNKNOWN"
+if [ "${TRAVIS_REPO_SLUG}" == "Warzone2100/warzone2100" ]; then
+	# Building from main repo - set distributor
+	WZ_DISTRIBUTOR="wz2100.net"
+fi
+echo "cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -P ../configure_mac.cmake"
+cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -P ../configure_mac.cmake
 result=${?}
-echo "travis_fold:end:wz.cmake.configure"
+echo "travis_fold:end:wz.configure.mac"
 if [ $result -ne 0 ]; then
-	echo "ERROR: CMake configure failed"
+	echo "ERROR: configure_mac.cmake failed"
 	exit ${result}
 fi
+cd - > /dev/null
 
 # Include Xcode helpers
 . macosx/BuildBot/_xcodebuild_helpers.sh

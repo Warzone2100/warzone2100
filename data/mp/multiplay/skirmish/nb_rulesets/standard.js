@@ -154,7 +154,7 @@ const classResearch = {
 			"R-Vehicle-Armor-Heat09",
 		],
 	],
-}
+};
 
 // NOTE: Please don't put hover propulsion into the ground list, etc.!
 // NOTE: Hover propulsion should be placed AFTER ground propulsion!
@@ -300,7 +300,6 @@ const weaponStats = {
 		],
 		extras: [
 			"R-Wpn-Cannon-ROF06",
-			"R-Vehicle-Engine09", // cannons are heavy
 			"R-Wpn-Rail-Damage03", // sure it's required by gauss, but what if our AI uses only cyborgs and vtols?
 			"R-Wpn-Rail-ROF03",
 		],

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -928,17 +928,14 @@ failure:
 /* Save the map data */
 bool mapSave(char **ppFileData, UDWORD *pFileSize)
 {
-	MAP_SAVEHEADER	*psHeader = nullptr;
-	MAP_SAVETILE	*psTileData = nullptr;
-	MAPTILE	*psTile = nullptr;
-	GATEWAY_SAVEHEADER *psGateHeader = nullptr;
-	GATEWAY_SAVE *psGate = nullptr;
-	SDWORD	numGateways = gwNumGateways();
+	UDWORD	numGateways = gwNumGateways();
 
 	/* Allocate the data buffer */
+	static_assert(SAVE_HEADER_SIZE == (sizeof(char) * 4) + (sizeof(UDWORD) * 3), "SAVE_HEADER_SIZE doesn't match?");
+	static_assert(SAVE_TILE_SIZE == sizeof(UWORD) + sizeof(UBYTE), "SAVE_TILE_SIZE doesn't match?");
 	*pFileSize = SAVE_HEADER_SIZE + mapWidth * mapHeight * SAVE_TILE_SIZE;
 	// Add on the size of the gateway data.
-	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE) * numGateways;
+	*pFileSize += (sizeof(UDWORD) * 2) + ((sizeof(UBYTE) * 4) * numGateways);
 
 	*ppFileData = (char *)malloc(*pFileSize);
 	if (*ppFileData == nullptr)
@@ -947,67 +944,78 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		abort();
 		return false;
 	}
+	char *pCurrFileData = *ppFileData;
+
+	auto push_uword = [&](UWORD value) {
+		endian_uword(&value);
+		memcpy(pCurrFileData, &value, sizeof(value));
+		pCurrFileData += sizeof(value);
+		ASSERT(pCurrFileData - *ppFileData <= *pFileSize, "Buffer overrun (buffer size: %" PRIu32") (writing to: %" PRIu32")", *pFileSize, static_cast<uint32_t>(pCurrFileData - *ppFileData));
+	};
+	auto push_udword = [&](UDWORD value) {
+		endian_udword(&value);
+		memcpy(pCurrFileData, &value, sizeof(value));
+		pCurrFileData += sizeof(value);
+		ASSERT(pCurrFileData - *ppFileData <= *pFileSize, "Buffer overrun (buffer size: %" PRIu32") (writing to: %" PRIu32")", *pFileSize, static_cast<uint32_t>(pCurrFileData - *ppFileData));
+	};
 
 	/* Put the file header on the file */
-	psHeader = (MAP_SAVEHEADER *)*ppFileData;
-	psHeader->aFileType[0] = 'm';
-	psHeader->aFileType[1] = 'a';
-	psHeader->aFileType[2] = 'p';
-	psHeader->aFileType[3] = ' ';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->width = mapWidth;
-	psHeader->height = mapHeight;
+	char aFileType[4];
+	aFileType[0] = 'm';
+	aFileType[1] = 'a';
+	aFileType[2] = 'p';
+	aFileType[3] = ' ';
+	memcpy(pCurrFileData, aFileType, sizeof(aFileType));
+	pCurrFileData += sizeof(aFileType);
 
-	/* MAP_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->width);
-	endian_udword(&psHeader->height);
+	push_udword(CURRENT_VERSION_NUM);
+	push_udword(mapWidth);
+	push_udword(mapHeight);
 
 	/* Put the map data into the buffer */
-	psTileData = (MAP_SAVETILE *)(*ppFileData + SAVE_HEADER_SIZE);
-	psTile = psMapTiles;
+	MAPTILE	*psTile = psMapTiles;
 	for (int i = 0; i < mapWidth * mapHeight; i++)
 	{
-		psTileData->texture = psTile->texture;
+		UWORD	texture;
+		UBYTE	height;
+
+		texture = psTile->texture;
 		if (terrainType(psTile) == TER_WATER)
 		{
-			psTileData->height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
+			height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
 		}
 		else
 		{
-			psTileData->height = psTile->height / ELEVATION_SCALE;
+			height = psTile->height / ELEVATION_SCALE;
 		}
 
-		/* MAP_SAVETILE */
-		endian_uword(&psTileData->texture);
+		push_uword(texture);
+		memcpy(pCurrFileData, &height, sizeof(height)); pCurrFileData += sizeof(height);
 
-		psTileData = (MAP_SAVETILE *)((UBYTE *)psTileData + SAVE_TILE_SIZE);
 		psTile++;
 	}
 
 	// Put the gateway header.
-	psGateHeader = (GATEWAY_SAVEHEADER *)psTileData;
-	psGateHeader->version = 1;
-	psGateHeader->numGateways = numGateways;
-
-	/* GATEWAY_SAVEHEADER */
-	endian_udword(&psGateHeader->version);
-	endian_udword(&psGateHeader->numGateways);
-
-	psGate = (GATEWAY_SAVE *)(psGateHeader + 1);
+	UDWORD version = 1;
+	push_udword(version);
+	push_udword(numGateways);
 
 	// Put the gateway data.
+	UBYTE	x0, y0, x1, y1;
 	for (auto psCurrGate : gwGetGateways())
 	{
-		psGate->x0 = psCurrGate->x1;
-		psGate->y0 = psCurrGate->y1;
-		psGate->x1 = psCurrGate->x2;
-		psGate->y1 = psCurrGate->y2;
-		ASSERT(psGate->x0 == psGate->x1 || psGate->y0 == psGate->y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
-		       psGate->x0, psGate->y0, psGate->x1, psGate->y1);
-		ASSERT(psGate->x0 < mapWidth && psGate->y0 < mapHeight && psGate->x1 < mapWidth && psGate->y1 < mapHeight,
+		x0 = psCurrGate->x1;
+		y0 = psCurrGate->y1;
+		x1 = psCurrGate->x2;
+		y1 = psCurrGate->y2;
+		ASSERT(x0 == x1 || y0 == y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
+		       x0, y0, x1, y1);
+		ASSERT(x0 < mapWidth && y0 < mapHeight && x1 < mapWidth && y1 < mapHeight,
 		       "Bad gateway dimensions for savegame");
-		psGate++;
+		memcpy(pCurrFileData, &x0, sizeof(x0)); pCurrFileData += sizeof(x0);
+		memcpy(pCurrFileData, &y0, sizeof(y0)); pCurrFileData += sizeof(y0);
+		memcpy(pCurrFileData, &x1, sizeof(x1)); pCurrFileData += sizeof(x1);
+		memcpy(pCurrFileData, &y1, sizeof(y1)); pCurrFileData += sizeof(y1);
 	}
 
 	return true;
@@ -1283,7 +1291,7 @@ unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
 {
 	// Transform src and dst to a coordinate system such that the tile quadrant containing src has
 	// corners at (0, 0), (TILE_UNITS, 0), (TILE_UNITS/2, TILE_UNITS/2).
-	Vector2i tile = map_coord(src.xy);
+	Vector2i tile = map_coord(src.xy());
 	src -= Vector3i(world_coord(tile), 0);
 	dst -= Vector3i(world_coord(tile), 0);
 	//            +0+

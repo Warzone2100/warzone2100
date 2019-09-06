@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1891,6 +1891,9 @@ bool intAddMissionTimer()
 	sFormInit.height = iV_GetImageHeight(IntImages, IMAGE_MISSION_CLOCK); //TIMER_HEIGHT;
 	sFormInit.x = (SWORD)(RADTLX + RADWIDTH - sFormInit.width);
 	sFormInit.y = (SWORD)TIMER_Y;
+	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move((SWORD)(RADTLX + RADWIDTH - psWidget->width()), TIMER_Y);
+	});
 	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_MISSION_CLOCK, IMAGE_MISSION_CLOCK_UP);
 	sFormInit.pDisplay = intDisplayMissionClock;
 
@@ -2004,8 +2007,13 @@ static void fillTimeDisplay(WzString &text, UDWORD time, bool bHours)
 	else
 	{
 		time_t secs = time / GAME_TICKS_PER_SEC;
-		struct tm *tmp = gmtime(&secs);
-		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", tmp);
+		struct tm tmp;
+#if defined(WZ_OS_WIN)
+		gmtime_s(&tmp, &secs);
+#else
+		gmtime_r(&secs, &tmp);
+#endif
+		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", &tmp);
 	}
 	text = WzString::fromUtf8(psText);
 }
@@ -2517,8 +2525,7 @@ void intProcessMissionResult(UDWORD id)
 
 /*builds a droid back at the home base whilst on a mission - stored in a list made
 available to the transporter interface*/
-DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
-                         UDWORD player)
+DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y, UDWORD player)
 {
 	DROID		*psNewDroid;
 

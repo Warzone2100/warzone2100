@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -66,6 +66,9 @@ typedef std::function<void (WIDGET *psWidget, unsigned int oldScreenWidth, unsig
 /* The optional "onDelete" callback function */
 typedef std::function<void (WIDGET *psWidget)> WIDGET_ONDELETE_FUNC;
 
+/* The optional hit-testing function, used for custom hit-testing within the outer bounding rectangle */
+typedef std::function<bool (WIDGET *psWidget, int x, int y)> WIDGET_HITTEST_FUNC;
+
 
 /* The different base types of widget */
 enum WIDGET_TYPE
@@ -90,6 +93,17 @@ enum WIDGET_KEY
 enum
 {
 	WIDG_HIDDEN = 0x8000,  ///< The widget is initially hidden
+};
+
+// Possible states for a button or clickform.
+enum ButtonState
+{
+	WBUT_DISABLE   = 0x01,  ///< Disable (grey out) a button.
+	WBUT_LOCK      = 0x02,  ///< Fix a button down.
+	WBUT_CLICKLOCK = 0x04,  ///< Fix a button down but it is still clickable.
+	WBUT_FLASH     = 0x08,  ///< Make a button flash.
+	WBUT_DOWN      = 0x10,  ///< Button is down.
+	WBUT_HIGHLIGHT = 0x20,  ///< Button is highlighted.
 };
 
 /* The base widget data type */
@@ -117,6 +131,8 @@ protected:
 	virtual void run(W_CONTEXT *) {}
 	virtual void display(int, int) {}
 	virtual void geometryChanged() {}
+
+	virtual bool hitTest(int x, int y);
 
 public:
 	virtual unsigned getState();
@@ -196,6 +212,8 @@ public:
 
 	void setOnDelete(const WIDGET_ONDELETE_FUNC& onDeleteFunc);
 
+	void setCustomHitTest(const WIDGET_HITTEST_FUNC& newCustomHitTestFunc);
+
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
 	UDWORD                  style;                  ///< The style of the widget
@@ -208,6 +226,7 @@ public:
 private:
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calc layout callback
 	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
+	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional hit-testing custom function
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
 public:
 	void processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);

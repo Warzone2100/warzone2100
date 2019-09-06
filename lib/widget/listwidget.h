@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 
 #include "widget.h"
 #include <functional>
+#include <algorithm>
 
 
 struct TabSelectionStyle
@@ -91,7 +92,7 @@ public:
 
 	ListWidget(WIDGET *parent);
 
-	virtual void widgetLost(WIDGET *widget);
+	void widgetLost(WIDGET *widget) override;
 
 	void setChildSize(int width, int height);  ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
 	void setChildSpacing(int width, int height);  ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
@@ -161,7 +162,7 @@ public:
 
 	ListTabWidget(WIDGET *parent);
 
-	virtual void geometryChanged();
+	void geometryChanged() override;
 
 	void setChildSize(int width, int height)
 	{

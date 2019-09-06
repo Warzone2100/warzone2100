@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #include "frame.h"
 #include "lexer_input.h"
 #include "physfs_ext.h"
+
+#include <limits>
 
 int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 {
@@ -45,13 +47,19 @@ int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 		}
 		else
 		{
-			int result = WZ_PHYSFS_readBytes(input->input.physfsfile, buf, max_size);
+			PHYSFS_sint64 result = WZ_PHYSFS_readBytes(input->input.physfsfile, buf, max_size);
 			if (result == -1)
 			{
 				buf[0] = EOF;
 				return nullvalue;
 			}
-			return result;
+			if (result > static_cast<PHYSFS_sint64>(std::numeric_limits<int>::max()))
+			{
+				ASSERT(false, "Read more than std::numeric_limits<int>::max()?");
+				buf[0] = EOF;
+				return nullvalue;
+			}
+			return static_cast<int>(result);
 		}
 		break;
 

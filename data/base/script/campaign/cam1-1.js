@@ -2,12 +2,10 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SCAVS = 7; //Scav player number
-
 //Ambush player from scav base - triggered from middle path
 camAreaEvent("scavBaseTrigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("eastScavs", SCAVS, false));
+	var ambushGroup = camMakeGroup(enumArea("eastScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("artifactLocation")
 	});
@@ -16,7 +14,7 @@ camAreaEvent("scavBaseTrigger", function()
 //Moves west scavs units closer to the base - triggered from right path
 camAreaEvent("ambush1Trigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("westScavs", SCAVS, false));
+	var ambushGroup = camMakeGroup(enumArea("westScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush1")
 	});
@@ -25,7 +23,7 @@ camAreaEvent("ambush1Trigger", function()
 //Sends some units towards player LZ - triggered from left path
 camAreaEvent("ambush2Trigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAVS, false));
+	var ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush2")
 	});

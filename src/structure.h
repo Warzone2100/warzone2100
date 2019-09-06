@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -78,8 +78,9 @@ void setMaxDroids(int player, int value);
 void setMaxCommanders(int player, int value);
 void setMaxConstructors(int player, int value);
 
+bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission);
+
 bool IsPlayerDroidLimitReached(int player);
-bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 
 bool loadStructureStats(WzConfig &ini);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
@@ -166,6 +167,9 @@ STRUCTURE_STATS *structGetDemolishStat();
 
 /*find a location near to the factory to start the droid of*/
 bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
+
+//Set the factory secondary orders to a droid
+void setFactorySecondaryState(DROID *psDroid, STRUCTURE *psStructure);
 
 /* is this a lassat structure? */
 static inline bool isLasSat(STRUCTURE_STATS *pStructureType)

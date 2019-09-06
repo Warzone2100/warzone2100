@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2017  Warzone 2100 Project
+	Copyright (C) 2007-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #pragma warning( disable : 4201)
 #endif
 #define GLM_FORCE_SWIZZLE
+#define GLM_FORCE_SILENT_WARNINGS
 
 #include <stdint.h>
 
@@ -45,8 +46,8 @@ struct Rotation
 		pitch = 0;
 		roll = 0;
 	}
-	Rotation(int direction, int pitch, int roll) : direction(direction), pitch(pitch), roll(roll) {}
-	Rotation(Vector3i xyz) : direction(xyz.x), pitch(xyz.y), roll(xyz.z) {}
+	Rotation(int direction, int pitch, int roll) : direction((uint16_t)direction), pitch((uint16_t)pitch), roll((uint16_t)roll) {}
+	Rotation(Vector3i xyz) : direction((uint16_t)xyz.x), pitch((uint16_t)xyz.y), roll((uint16_t)xyz.z) {}
 	uint16_t direction, pitch, roll;  ///< Object rotation in 0..64k range
 };
 typedef Vector3i Position;  ///< Map position in world coordinates
@@ -98,8 +99,8 @@ static inline WZ_DECL_PURE int iHypot(Vector3i const &a)
 static inline WZ_DECL_PURE Vector2f Vector2f_Rotate2f(Vector2f v, int angle)
 {
 	Vector2f result;
-	result.x = (v.x * iCos(angle) - v.y * iSin(angle)) / 65536;
-	result.y = (v.x * iSin(angle) + v.y * iCos(angle)) / 65536;
+	result.x = (v.x * iCos((uint16_t)angle) - v.y * iSin((uint16_t)angle)) / 65536;
+	result.y = (v.x * iSin((uint16_t)angle) + v.y * iCos((uint16_t)angle)) / 65536;
 
 	return result;
 }
@@ -115,7 +116,7 @@ static inline WZ_DECL_PURE Vector2f Vector2f_Rotate2f(Vector2f v, int angle)
  */
 static inline bool WZ_DECL_PURE Vector3i_InCircle(Vector3i v, Vector3i c, unsigned r)
 {
-	Vector2i delta = Vector3i(v - c).xy;
+	Vector2i delta = Vector3i(v - c).xy();
 	// Explictily cast to "unsigned int" because this number never can be
 	// negative, due to the fact that these numbers are squared. Still GCC
 	// warns about a comparison of a comparison between an unsigned and a

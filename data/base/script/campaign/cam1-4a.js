@@ -57,11 +57,11 @@ camAreaEvent("LandingZoneTrigger", function()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// Give extra 30 minutes.
-	setMissionTime(camChangeOnDiff(1800) + getMissionTime());
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)) + getMissionTime());
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
 		area: "RTLZ",
 		message: "C1-4_LZ",
-		reinforcements: 90, // changes!
+		reinforcements: camMinutesToSeconds(1.5), // changes!
 		retlz: true
 	});
 	// enables all factories
@@ -69,6 +69,7 @@ camAreaEvent("LandingZoneTrigger", function()
 	camEnableFactory("NorthScavFactory");
 	camEnableFactory("HeavyNPFactory");
 	camEnableFactory("MediumNPFactory");
+	buildDefenses();
 });
 
 function NPBaseDetect()
@@ -116,7 +117,6 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	const SCAVS = 7;
 	var startpos = getObject("StartPosition");
 	var lz = getObject("LandingZone1"); // will override later
 	var tent = getObject("TransporterEntry");
@@ -128,8 +128,8 @@ function eventStartLevel()
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
-	setAlliance(NEW_PARADIGM, SCAVS, true);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
 	camSetEnemyBases({
 		"SouthScavBaseGroup": {
@@ -166,7 +166,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
 			templates: [ cTempl.rbuggy, cTempl.bjeep, cTempl.buscan, cTempl.trike ]
 		},
 		"NorthScavFactory": {
@@ -178,7 +178,7 @@ function eventStartLevel()
 			},
 			groupSize: 4,
 			maxSize: 6,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
 			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.bloke, cTempl.buggy ]
 		},
 		"HeavyNPFactory": {
@@ -186,7 +186,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,         // this one was exclusively producing trucks
-			throttle: camChangeOnDiff(40000),    // but we simplify this out
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),    // but we simplify this out
 			templates: [ cTempl.npmmct, cTempl.npsmct, cTempl.npsmc ]
 		},
 		"MediumNPFactory": {
@@ -194,7 +194,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			templates: [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
 		},
 	});
@@ -203,6 +203,5 @@ function eventStartLevel()
 	// and also to rebuild dead trucks.
 	camManageTrucks(NEW_PARADIGM);
 
-	queue("buildDefenses", 2000);
-	queue("enableSouthScavFactory", camChangeOnDiff(10000));
+	queue("enableSouthScavFactory", camChangeOnDiff(camSecondsToMilliseconds(10)));
 }

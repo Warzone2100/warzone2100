@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -192,7 +192,7 @@ void	setDesiredPitch(SDWORD pitch);
 #define MAX_PLAYER_X_ANGLE	(-1)
 #define MIN_PLAYER_X_ANGLE	(-60)
 
-#define MAXDISTANCE	(10000)
+#define MAXDISTANCE	(5000)
 #define MINDISTANCE	(0)
 #define STARTDISTANCE	(2500)
 #define OLD_START_HEIGHT (1500) // only used in savegames <= 10

@@ -22,12 +22,7 @@ framework_linktest_LDADD = $(top_builddir)/lib/framework/libframework.a $(PHYSFS
 
 ivis_linktest_SOURCES = ivis_linktest.cpp
 ivis_linktest_LDADD =
-if BACKEND_SDL
 ivis_linktest_LDADD += $(top_builddir)/lib/sdl/libsdl.a
-endif
-if BACKEND_QT
-ivis_linktest_LDADD += $(top_builddir)/lib/qtgame/libqtgame.a
-endif
 ivis_linktest_LDADD += $(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(QT5_LIBS) $(SDL_LIBS) $(OPENGL_LIBS) $(OPENGLC_LIBS) $(GLEW_LIBS) \

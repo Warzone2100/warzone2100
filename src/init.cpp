@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@
 #include "configuration.h"
 #include "console.h"
 #include "data.h"
+#include "difficulty.h" // for "double up" and "biffer baker" cheats
 #include "display.h"
 #include "display3d.h"
 #include "edit3d.h"
@@ -93,6 +94,8 @@
 #include "ingameop.h"
 #include "qtscript.h"
 #include "template.h"
+
+#include <algorithm>
 
 static void initMiscVars();
 
@@ -395,7 +398,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add global and multiplay mods
 				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
-				if (NetPlay.isHost || !NetPlay.bComms)
+				if (NetPlay.isHost || !NetPlay.bComms || ingame.bHostSetup)
 				{
 					addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
 					addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
@@ -1043,6 +1046,9 @@ bool stageTwoInitialise()
 
 	debug(LOG_WZ, "== stageTwoInitialise ==");
 
+	// prevent "double up" and "biffer baker" cheats from messing up damage modifiers
+	resetDamageModifiers();
+
 	// make sure we clear on loading; this a bad hack to fix a bug when
 	// loading a savegame where we are building a lassat
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -1113,6 +1119,15 @@ bool stageTwoInitialise()
 		}
 	}
 
+	// NOTE:
+	// - Loading savegames calls `fPathDroidRoute` (from `loadSaveDroid`) before `stageThreeInitialise`
+	//   is called, hence removing this call to `fpathInitialise` will currently break loading certain
+	//   savegames (if they interact with the fPath system).
+	if (!fpathInitialise())
+	{
+		return false;
+	}
+
 	debug(LOG_MAIN, "stageTwoInitialise: done");
 
 	return true;
@@ -1125,6 +1140,8 @@ bool stageTwoInitialise()
 bool stageTwoShutDown()
 {
 	debug(LOG_WZ, "== stageTwoShutDown ==");
+
+	fpathShutdown();
 
 	cdAudio_Stop();
 
@@ -1230,6 +1247,8 @@ bool stageThreeInitialise()
 
 	// Re-inititialise some static variables.
 
+	playerBuiltHQ = false;
+
 	resizeRadar();
 
 	setAllPauseStates(false);
@@ -1332,8 +1351,6 @@ bool stageThreeShutDown()
 	resetVTOLLandingPos();
 
 	setScriptWinLoseVideo(PLAY_NONE);
-
-	fpathShutdown();
 
 	return true;
 }

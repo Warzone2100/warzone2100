@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -130,7 +130,8 @@ bool startLimitScreen()
 		sliderEnableDrag(true);
 	}
 
-	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, "LIMITS");	// draw sidetext...
+	// TRANSLATORS: Sidetext of structure limits screen
+	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, _("LIMITS"));
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
@@ -262,7 +263,7 @@ void runLimitScreen()
 void createLimitSet()
 {
 	UDWORD			numchanges = 0, bufSize, idx = 0;
-	MULTISTRUCTLIMITS	*pEntry;
+	MULTISTRUCTLIMITS	*pEntry = nullptr;
 
 	debug(LOG_NET, "LimitSet created");
 	// free old limiter structure
@@ -284,20 +285,23 @@ void createLimitSet()
 		}
 	}
 
-	// Allocate some memory for the changes
-	bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
-	pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
-	memset(pEntry, 255, bufSize);
-
-	// Prepare chunk
-	for (unsigned i = 0; i < numStructureStats; i++)
+	if (numchanges > 0)
 	{
-		if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
+		// Allocate some memory for the changes
+		bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
+		pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
+		memset(pEntry, 255, bufSize);
+
+		// Prepare chunk
+		for (unsigned i = 0; i < numStructureStats; i++)
 		{
-			ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
-			pEntry[idx].id		= i;
-			pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
-			idx++;
+			if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
+			{
+				ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
+				pEntry[idx].id		= i;
+				pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
+				idx++;
+			}
 		}
 	}
 

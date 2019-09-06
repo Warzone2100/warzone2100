@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2011-2019  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "geometry.h"
 
 #include <algorithm>
@@ -10,16 +29,16 @@ Affine3F &Affine3F::RotX(uint16_t x)
 		int32_t tmp;
 		const int64_t cra = iCos(x), sra = iSin(x);
 
-		tmp = (cra * m[0][1] + sra * m[0][2]) >> 16;
-		m[0][2] = (cra * m[0][2] - sra * m[0][1]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[0][1] + sra * m[0][2]) >> 16);
+		m[0][2] = static_cast<int32_t>((cra * m[0][2] - sra * m[0][1]) >> 16);
 		m[0][1] = tmp;
 
-		tmp = (cra * m[1][1] + sra * m[1][2]) >> 16;
-		m[1][2] = (cra * m[1][2] - sra * m[1][1]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[1][1] + sra * m[1][2]) >> 16);
+		m[1][2] = static_cast<int32_t>((cra * m[1][2] - sra * m[1][1]) >> 16);
 		m[1][1] = tmp;
 
-		tmp = (cra * m[2][1] + sra * m[2][2]) >> 16;
-		m[2][2] = (cra * m[2][2] - sra * m[2][1]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[2][1] + sra * m[2][2]) >> 16);
+		m[2][2] = static_cast<int32_t>((cra * m[2][2] - sra * m[2][1]) >> 16);
 		m[2][1] = tmp;
 	}
 	return *this;
@@ -32,16 +51,16 @@ Affine3F &Affine3F::RotY(uint16_t y)
 		int32_t tmp;
 		int64_t cra = iCos(y), sra = iSin(y);
 
-		tmp = (cra * m[0][0] - sra * m[0][2]) >> 16;
-		m[0][2] = (sra * m[0][0] + cra * m[0][2]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[0][0] - sra * m[0][2]) >> 16);
+		m[0][2] = static_cast<int32_t>((sra * m[0][0] + cra * m[0][2]) >> 16);
 		m[0][0] = tmp;
 
-		tmp = (cra * m[1][0] - sra * m[1][2]) >> 16;
-		m[1][2] = (sra * m[1][0] + cra * m[1][2]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[1][0] - sra * m[1][2]) >> 16);
+		m[1][2] = static_cast<int32_t>((sra * m[1][0] + cra * m[1][2]) >> 16);
 		m[1][0] = tmp;
 
-		tmp = (cra * m[2][0] - sra * m[2][2]) >> 16;
-		m[2][2] = (sra * m[2][0] + cra * m[2][2]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[2][0] - sra * m[2][2]) >> 16);
+		m[2][2] = static_cast<int32_t>((sra * m[2][0] + cra * m[2][2]) >> 16);
 		m[2][0] = tmp;
 
 	}
@@ -55,16 +74,16 @@ Affine3F &Affine3F::RotZ(uint16_t z)
 		int32_t tmp;
 		int64_t cra = iCos(z), sra = iSin(z);
 
-		tmp = (cra * m[0][0] + sra * m[0][1]) >> 16;
-		m[0][1] = (cra * m[0][1] - sra * m[0][0]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[0][0] + sra * m[0][1]) >> 16);
+		m[0][1] = static_cast<int32_t>((cra * m[0][1] - sra * m[0][0]) >> 16);
 		m[0][0] = tmp;
 
-		tmp = (cra * m[1][0] + sra * m[1][1]) >> 16;
-		m[1][1] = (cra * m[1][1] - sra * m[1][0]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[1][0] + sra * m[1][1]) >> 16);
+		m[1][1] = static_cast<int32_t>((cra * m[1][1] - sra * m[1][0]) >> 16);
 		m[1][0] = tmp;
 
-		tmp = (cra * m[2][0] + sra * m[2][1]) >> 16;
-		m[2][1] = (cra * m[2][1] - sra * m[2][0]) >> 16;
+		tmp = static_cast<int32_t>((cra * m[2][0] + sra * m[2][1]) >> 16);
+		m[2][1] = static_cast<int32_t>((cra * m[2][1] - sra * m[2][0]) >> 16);
 		m[2][0] = tmp;
 	}
 	return *this;

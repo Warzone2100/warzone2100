@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -275,6 +275,7 @@ bool screenInitialise()
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
 	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLEW_ARB_timer_query ? "is" : "is NOT");
 	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
+	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
 	if (!GLEW_VERSION_2_0)
 	{
@@ -600,8 +601,8 @@ void screen_GenerateCoordinatesAndVBOs()
 {
 	assert(backdropGfx != nullptr);
 
-	GLfloat x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight;
-	GLfloat tx = 1, ty = 1;
+	gfx_api::gfxFloat x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight;
+	gfx_api::gfxFloat tx = 1, ty = 1;
 	int scale = 0, w = 0, h = 0;
 	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
 
@@ -636,8 +637,8 @@ void screen_GenerateCoordinatesAndVBOs()
 	}
 
 	// Generate coordinates and put them into VBOs
-	GLfloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
-	GLfloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
+	gfx_api::gfxFloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
+	gfx_api::gfxFloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
 	backdropGfx->buffers(4, vertices, texcoords);
 }
 

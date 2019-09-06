@@ -6,6 +6,8 @@ OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 
+set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")
+
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Handle options
@@ -13,6 +15,9 @@ if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
 	message( WARNING "Portable build is only supported on Windows; Ignoring WZ_PORTABLE option" )
 	unset(WZ_PORTABLE CACHE)
 endif()
+
+# Disallow in-source builds
+include(DisallowInSourceBuilds)
 
 if(WZ_ENABLE_WARNINGS)
 	set(WZ_Wno_ "-Wno-error=")
@@ -27,6 +32,14 @@ else()
 	set(CMAKE_CXX_STANDARD 11)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Support folders (for nicer IDE organization)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMakePredefinedTargets")
+
+# Fix: Linking issues with static libraries when using certain generated project files (ex. Xcode in "Archive" build mode)
+# See: https://stackoverflow.com/questions/30318941/, https://stackoverflow.com/questions/33020245/
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "./")
 
 # Handle install paths
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -81,6 +94,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	# Enable macOS-specific find scripts
 	list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/macosx/cmake")
+
+	# Workaround for framework header conflicts with find_package
+	# - Common issue when Mono.framework is installed, since it contains headers for libpng (etc)
+	#   and the default CMake setting finds the headers in Mono, but the library in the vcpkg
+	#   install location (leading to a version mismatch)
+	# - See: https://github.com/torch/image/issues/16
+	set(CMAKE_FIND_FRAMEWORK LAST)
 endif()
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
@@ -103,16 +123,6 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
   endif()
 endif()
 
-# Attempt to find Miniupnpc (minimum supported API version = 9)
-# NOTE: This is not available on every platform / distro
-find_package(Miniupnpc 9)
-if(MINIUPNPC_FOUND)
-	set(WZ_USE_IMPORTED_MINIUPNPC ON)
-else()
-	message(STATUS "Using in-tree Miniupnpc")
-	set(WZ_USE_IMPORTED_MINIUPNPC OFF)
-endif()
-
 # Use "-fPIC" / "-fPIE" for all targets by default, including static libs
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -127,6 +137,21 @@ endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
 	set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Flags used by the linker (Release builds)" FORCE)
+endif()
+
+# Treat source files as UTF-8 (unless they have a BOM) (MSVC)
+# NOTE: For MSVC, this also sets the executable character set.
+add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+# Set Windows-specific defines (ex. _WIN32_WINNT)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+	if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
+		message( WARNING "WindowsStore builds are not currently supported" )
+		add_definitions(-D_WIN32_WINNT=0x0A00) # Windows 10+
+	else()
+		add_definitions(-D_WIN32_WINNT=0x0501) # Windows XP+
+	endif()
 endif()
 
 include(CheckCCompilerFlag)
@@ -174,6 +199,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34512")
 
 		# Enable some additional MSVC warnings (that are off by default)
+		# C4005: 'identifier' : macro redefinition
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /we4005")
 		# C4191: unsafe conversion from 'type of expression' to 'type required'
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34191")
 		# C4263: 'function': member function does not override any base class virtual member function
@@ -215,6 +242,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Disable some warnings for WZ (FIXME)
 		# C4100: unreferenced formal parameter
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
+		# C4244: 'conversion' conversion from 'type1' to 'type2', possible loss of data // FIXME!!
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244")
 		# C4456: declaration of 'identifier' hides previous local declaration
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4456")
 		# C4459: declaration of 'identifier' hides global declaration
@@ -225,6 +254,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4245")
 		# C4701: Potentially uninitialized local variable 'name' used
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4701")
+		# C4706: assignment within conditional expression
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4706")
 
 		# Qt headers (at least 5.6.x) necessitate disabling some warnings
 		# C4127: conditional expression is constant
@@ -265,6 +296,9 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 		# Linking
 		set(CMAKE_XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING YES)
+
+		# Apple LLVM - Code Generation
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_NO_COMMON_BLOCKS YES)							# -fno-common
 
 		# Apple Clang - Custom Compiler Flags
 		# Custom Warning Flags (for which an Xcode attribute is not available)
@@ -379,6 +413,14 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror -Wextra -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wextra" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wextra -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wextra" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
+		# Enable -fno-common (if supported)
+		check_compiler_flags_output("-Werror -fno-common -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-fno-common" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -fno-common -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-fno-common" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# Enable -fno-math-errno (if supported)
+		check_compiler_flags_output("-Werror -fno-math-errno -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-fno-math-errno" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -fno-math-errno -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-fno-math-errno" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
 		# -Wcast-align				(GCC 3.4+, Clang 3.2+)
 		check_compiler_flags_output("-Werror -Wcast-align -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wcast-align" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wcast-align -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wcast-align" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
@@ -387,10 +429,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror -Wcast-qual -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wcast-qual" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wcast-qual -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wcast-qual" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
-#		# NOTE: Currently conflicts with json.hpp
-#		# -Wctor-dtor-privacy		(GCC 3.4+, Clang 3.2+ (no-op through at least 6.0))
-#		check_compiler_flags_output("-Werror -Wctor-dtor-privacy -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wctor-dtor-privacy" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-#		check_compiler_flags_output("-Werror -Wctor-dtor-privacy -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wctor-dtor-privacy" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		# -Wctor-dtor-privacy		(GCC 3.4+, Clang 3.2+ (no-op through at least 6.0)) [C++-only]
+		check_compiler_flags_output("-Werror -Wctor-dtor-privacy -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wctor-dtor-privacy" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# -Winit-self				(GCC 3.4+, Clang 3.2+ (no-op through at least 6.0))
 		check_compiler_flags_output("-Werror -Winit-self -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Winit-self" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
@@ -406,8 +446,9 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 #		check_compiler_flags_output("-Werror -Wmissing-include-dirs -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wmissing-include-dirs" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 #		check_compiler_flags_output("-Werror -Wmissing-include-dirs -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wmissing-include-dirs" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
-		# -Wnoexcept				(GCC 4.6+) [C++-only]
-		check_compiler_flags_output("-Werror -Wnoexcept -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wnoexcept" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+#		# NOTE: Currently disabled because of GLM
+#		# -Wnoexcept				(GCC 4.6+) [C++-only]
+#		check_compiler_flags_output("-Werror -Wnoexcept -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wnoexcept" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# -Woverloaded-virtual		(GCC 3.4+, Clang 3.2+) [C++-only]
 		check_compiler_flags_output("-Werror -Woverloaded-virtual -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Woverloaded-virtual" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
@@ -487,6 +528,14 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror -Wfloat-conversion -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wfloat-conversion" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wfloat-conversion -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wfloat-conversion" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
+		# -Wformat-security
+		check_compiler_flags_output("-Werror -Wformat-security -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wformat-security" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -Wformat-security -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wformat-security" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# -Wstringop-truncation (GCC 8.0+)
+		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wstringop-truncation" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wstringop-truncation" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
 		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
 			# Enable -Werror (if supported)
 			check_compiler_flags_output("-Werror" COMPILER_TYPE C   OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
@@ -507,17 +556,9 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}sign-compare -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}sign-compare" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}sign-compare -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}sign-compare" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
-		# Handle "format-security" (warning-only for now)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}format-security -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}format-security" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}format-security -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}format-security" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
-
 		# Disable -Wunused-parameter (FIXME)
 		check_compiler_flags_output("-Werror -Wno-unused-parameter -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-unused-parameter" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wno-unused-parameter -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-unused-parameter" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
-
-		# Disable -Wstringop-truncation (FIXME?) (Test with GCC 8.0+)
-		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-stringop-truncation" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-stringop-truncation" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# Disable -Wformat-truncation (FIXME?) (Test with GCC 8.0+)
 		check_compiler_flags_output("-Werror -Wformat-truncation -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-format-truncation" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
@@ -540,23 +581,29 @@ add_definitions("-DHAVE_CONFIG_H")
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories(".")
 include_directories("3rdparty")
-include_directories("3rdparty/glm")
-if(NOT WZ_USE_IMPORTED_MINIUPNPC)
-	include_directories("3rdparty/miniupnp")
-endif()
+include_directories(SYSTEM "3rdparty/glm")
 
 SET(STDC_HEADERS ON)
-SET(HAVE_CFPREFERENCESCOPYAPPVALUE OFF)
-SET(_MINIX OFF)
-SET(_POSIX_1_SOURCE OFF)
-SET(_POSIX_SOURCE OFF)
-SET(_XOPEN_SOURCE)
+
 SET(PACKAGE "warzone2100")
 SET(PACKAGE_BUGREPORT "http://wz2100.net/")
 SET(PACKAGE_NAME "Warzone 2100")
 SET(PACKAGE_TARNAME "warzone2100")
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-  SET(_GNU_SOURCE ON)
+SET(PACKAGE_DISTRIBUTOR "${WZ_DISTRIBUTOR}")
+
+SET(_ALL_SOURCE 1)
+SET(_GNU_SOURCE 1)
+SET(_POSIX_PTHREAD_SEMANTICS 1)
+SET(_TANDEM_SOURCE 1)
+if(CMAKE_SYSTEM_NAME MATCHES "SunOS") # Solaris / SunOS
+	SET(__EXTENSIONS__ 1)
+endif()
+SET(_DARWIN_C_SOURCE 1)
+SET(_MINIX OFF)
+SET(_POSIX_1_SOURCE OFF)
+SET(_POSIX_SOURCE OFF)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "BSD") # Do not set _XOPEN_SOURCE on FreeBSD (etc)
+	SET(_XOPEN_SOURCE 700) # Enable POSIX extensions if present
 endif()
 
 INCLUDE (CheckIncludeFiles)
@@ -573,14 +620,31 @@ CHECK_INCLUDE_FILES("sys/ucontext.h" HAVE_SYS_UCONTEXT_H)
 CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD_H)
 
 INCLUDE (CheckFunctionExists)
+INCLUDE (CMakePushCheckState)
+INCLUDE (CheckCXXSymbolExists)
+cmake_reset_check_state()
+list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_ALL_SOURCE=${_ALL_SOURCE}")
+list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE=${_GNU_SOURCE}")
+list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_POSIX_PTHREAD_SEMANTICS=${_POSIX_PTHREAD_SEMANTICS}")
+list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_TANDEM_SOURCE=${_TANDEM_SOURCE}")
+if(__EXTENSIONS__)
+	list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D__EXTENSIONS__=${__EXTENSIONS__}")
+endif()
+list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_DARWIN_C_SOURCE=${_DARWIN_C_SOURCE}")
+if(_XOPEN_SOURCE)
+	list(APPEND CMAKE_REQUIRED_DEFINITIONS "-D_XOPEN_SOURCE=${_XOPEN_SOURCE}")
+endif()
+message(STATUS "CMAKE_REQUIRED_DEFINITIONS=${CMAKE_REQUIRED_DEFINITIONS}")
 CHECK_FUNCTION_EXISTS(gettext HAVE_GETTEXT)
 CHECK_FUNCTION_EXISTS(iconv HAVE_ICONV)
-CHECK_FUNCTION_EXISTS(strlcat HAVE_SYSTEM_STRLCAT)
-CHECK_FUNCTION_EXISTS(strlcpy HAVE_SYSTEM_STRLCPY)
-CHECK_FUNCTION_EXISTS(strlcat HAVE_VALID_STRLCAT)
-CHECK_FUNCTION_EXISTS(strlcpy HAVE_VALID_STRLCPY)
-CHECK_FUNCTION_EXISTS(putenv HAVE_PUTENV)
-CHECK_FUNCTION_EXISTS(setenv HAVE_SETENV)
+CHECK_CXX_SYMBOL_EXISTS(strlcat "string.h" HAVE_SYSTEM_STRLCAT)
+CHECK_CXX_SYMBOL_EXISTS(strlcpy "string.h" HAVE_SYSTEM_STRLCPY)
+CHECK_CXX_SYMBOL_EXISTS(strlcat "string.h" HAVE_VALID_STRLCAT)
+CHECK_CXX_SYMBOL_EXISTS(strlcpy "string.h" HAVE_VALID_STRLCPY)
+CHECK_CXX_SYMBOL_EXISTS(putenv "stdlib.h" HAVE_PUTENV)
+CHECK_CXX_SYMBOL_EXISTS(setenv "stdlib.h" HAVE_SETENV)
+cmake_reset_check_state()
+
 set(WZ_BINDIR "${CMAKE_INSTALL_BINDIR}")
 set(WZ_LOCALEDIR "${CMAKE_INSTALL_LOCALEDIR}")
 message(STATUS "WZ_BINDIR=\"${WZ_BINDIR}\"")
@@ -596,17 +660,24 @@ CHECK_IS_ABSOLUTE_PATH(WZ_DATADIR WZ_DATADIR_ISABSOLUTE)
 CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-if(NOT WZ_USE_IMPORTED_MINIUPNPC)
+# Attempt to find Miniupnpc (minimum supported API version = 9)
+# NOTE: This is not available on every platform / distro
+find_package(Miniupnpc 9)
+if(MINIUPNPC_FOUND)
+	set(WZ_USE_IMPORTED_MINIUPNPC ON)
+else()
+	message(STATUS "Using in-tree Miniupnpc")
+	set(WZ_USE_IMPORTED_MINIUPNPC OFF)
 	SET(UPNPC_BUILD_STATIC ON CACHE BOOL "miniupnpc - Build static library" FORCE)
 	SET(UPNPC_BUILD_SHARED OFF CACHE BOOL "miniupnpc - Build shared library" FORCE)
 	SET(UPNPC_BUILD_TESTS OFF CACHE BOOL "miniupnpc - Build tests" FORCE)
 	SET(UPNPC_BUILD_SAMPLE OFF CACHE BOOL "miniupnpc - Build samples" FORCE)
+	SET(UPNPC_NO_INSTALL TRUE CACHE BOOL "miniupnpc - Disable installation" FORCE)
 	add_subdirectory(3rdparty/miniupnp/miniupnpc)
+	set_property(TARGET libminiupnpc-static PROPERTY FOLDER "3rdparty")
 endif()
-add_subdirectory(3rdparty/micro-ecc)
-add_subdirectory(3rdparty/sha2)
-add_subdirectory(3rdparty/fonts)
-add_subdirectory(3rdparty/utf8proc)
+
+add_subdirectory(3rdparty)
 
 set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
 
@@ -661,4 +732,5 @@ if(CPACK_COMMAND)
 		COMMAND ${CPACK_COMMAND} --config ${CMAKE_CURRENT_BINARY_DIR}/CPackSourceConfig.cmake
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
+	set_property(TARGET dist PROPERTY FOLDER "_WZAliasTargets")
 endif()

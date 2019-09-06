@@ -10,7 +10,7 @@
 # 3.) Specify an output directory for the copied (and automatically-named) file REQUIRED
 #
 # Example:
-#  build_tools/ci/travis/packaged_source_deploy_prepare.sh "/build/warzone2100.tar.xz" "${WZ_BUILD_DESC_PREFIX}" "tmp/wz_upload"
+#  build_tools/ci/travis/packaged_source_deploy_prepare.sh "/build/warzone2100.tar.xz" "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
 #
 #
 # Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors

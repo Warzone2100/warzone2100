@@ -1,8 +1,4 @@
-if BACKEND_QT
-backend_subdir=lib/qtgame
-else
 backend_subdir=lib/sdl
-endif
 
 UTF8PROC_DEFINES = -DUTF8PROC_STATIC
 AM_MAKEFLAGS = UTF8PROC_DEFINES=$(UTF8PROC_DEFINES)
@@ -10,7 +6,6 @@ AM_MAKEFLAGS = UTF8PROC_DEFINES=$(UTF8PROC_DEFINES)
 SUBDIRS = \
 	win32 \
 	3rdparty/micro-ecc \
-	3rdparty/sha2 \
 	3rdparty \
 	lib/framework \
 	lib/exceptionhandler \
@@ -82,5 +77,23 @@ doc/js-globals.md:
 	grep $(top_srcdir)/src/qtscript.cpp -e '//;;' | sed 's:.*//;; \?::' > $(top_srcdir)/doc/js-objects.md
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's:.*//;; \?::' >> $(top_srcdir)/doc/js-objects.md
 	grep $(top_srcdir)/data/base/script/campaign/libcampaign.js -e '.*//;;' | sed 's://;; \?::' > $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/artifact.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/base.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/debug.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/events.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/group.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/hook.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/misc.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/nexus.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/production.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/reinforcements.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/research.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/tactics.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/time.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/transport.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/truck.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/victory.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/video.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign_includes/vtol.js -e '.*//;;' | sed 's://;; \?::' >> $(top_srcdir)/doc/js-campaign.md
 	test $(abs_top_srcdir) = $(abs_top_builddir) || cp $(top_srcdir)/doc/*.md doc/
 .PHONY: doc/js-globals.md

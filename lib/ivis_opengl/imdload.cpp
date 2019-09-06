@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -631,9 +631,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 			debug(LOG_ERROR, "%s shader corrupt: %s", filename.toUtf8().c_str(), buffer);
 			return nullptr;
 		}
-		std::vector<std::string> uniform_names { "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap",
-		                                         "specularmap", "ecmEffect", "alphaTest", "graphicsCycle", "ModelViewProjectionMatrix" };
-		s.shaderProgram = pie_LoadShader(VERSION_AUTODETECT_FROM_LEVEL_LOAD, VERSION_AUTODETECT_FROM_LEVEL_LOAD, filename.toUtf8().c_str(), vertex, fragment, uniform_names);
+		debug(LOG_WARNING, "SHADERS directive no longer supported!");
 		pFileData += cnt;
 	}
 

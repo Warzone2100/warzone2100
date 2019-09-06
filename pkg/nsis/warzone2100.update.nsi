@@ -142,9 +142,9 @@ Section $(TEXT_SecBase) SecBase
 ;  File "..\..\src\warzone2100.exe"
   !insertmacro VPatchFile "warzone2100.exe.vpatch" "$INSTDIR\warzone2100.exe" "$INSTDIR\warzone2100.exe.tmp"
 
-  ; Windows dbghelp library
-  File "${EXTDIR}\bin\dbghelp.dll.license.txt"
-  File "${EXTDIR}\bin\dbghelp.dll"
+;  ; Windows dbghelp library
+;  File "${EXTDIR}\bin\dbghelp.dll.license.txt"
+;  File "${EXTDIR}\bin\dbghelp.dll"
 ;  !insertmacro VPatchFile "dbghelp.dll.license.txt.vpatch" "$INSTDIR\dbghelp.dll.license.txt" "$INSTDIR\dbghelp.dll.license.txt.tmp"
 ;  !insertmacro VPatchFile "dbghelp.dll.vpatch" "$INSTDIR\dbghelp.dll" "$INSTDIR\dbghelp.dll.tmp"
 

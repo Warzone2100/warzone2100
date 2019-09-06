@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -454,7 +454,7 @@ bool recvDroid(NETQUEUE queue)
 		debug(LOG_ERROR, "Packet from %d cannot create droid for p%d (%s)!", queue.index,
 		      player, isHumanPlayer(player) ? "Human" : "AI");
 #ifdef DEBUG
-		CONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
+		CONPRINTF("MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync");
 #endif
 		return false;
 	}

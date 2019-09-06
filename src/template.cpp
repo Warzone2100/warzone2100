@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ std::map<int, DROID_TEMPLATE *> droidTemplates[MAX_PLAYERS];
 
 bool allowDesign = true;
 bool includeRedundantDesigns = false;
+bool playerBuiltHQ = false;
 
 
 static bool researchedItem(const DROID_TEMPLATE* /*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
@@ -208,7 +209,7 @@ bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 	if (!droidTemplate_LoadPartByName(COMP_CONSTRUCT, ini.value("construct", WzString("ZNULLCONSTRUCT")).toWzString(), design)) return false;
 
 	std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
-	ASSERT(weapons.size() <= MAX_WEAPONS, "Number of weapons (%lu) exceeds MAX_WEAPONS (%d)", weapons.size(), MAX_WEAPONS);
+	ASSERT(weapons.size() <= MAX_WEAPONS, "Number of weapons (%zu) exceeds MAX_WEAPONS (%d)", weapons.size(), MAX_WEAPONS);
 	design.numWeaps = (weapons.size() <= MAX_WEAPONS) ? (int8_t)weapons.size() : MAX_WEAPONS;
 	if (!droidTemplate_LoadWeapByName(0, (weapons.size() >= 1) ? weapons[0] : "ZNULLWEAPON", design)) return false;
 	if (!droidTemplate_LoadWeapByName(1, (weapons.size() >= 2) ? weapons[1] : "ZNULLWEAPON", design)) return false;
@@ -645,6 +646,11 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 
 	BODY_SIZE	iCapacity = (BODY_SIZE)psFactory->capacity;
 
+	if (!playerBuiltHQ)
+	{
+		playerBuiltHQ = structureExists(player, REF_HQ, true, false);
+	}
+
 	/* Add the templates to the list*/
 	for (DROID_TEMPLATE &i : localTemplates)
 	{
@@ -661,8 +667,10 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 				}
 			}
 
-			if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory, false)
-			    || !researchedTemplate(psCurr, player, includeRedundantDesigns))
+			if (!psCurr->enabled
+				|| (bMultiPlayer && !playerBuiltHQ && (psCurr->droidType != DROID_CONSTRUCT && psCurr->droidType != DROID_CYBORG_CONSTRUCT))
+				|| !validTemplateForFactory(psCurr, psFactory, false)
+				|| !researchedTemplate(psCurr, player, includeRedundantDesigns))
 			{
 				continue;
 			}

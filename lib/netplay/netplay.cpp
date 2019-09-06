@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 **/
 static char const *versionString = version_getVersionString();
 static int NETCODE_VERSION_MAJOR = 0x1000;
-static int NETCODE_VERSION_MINOR = 0;
+static int NETCODE_VERSION_MINOR = 1;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -845,6 +845,14 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 	unsigned int i;
 	ssize_t result = 0;
 
+	auto pop32 = [&]() -> uint32_t {
+		uint32_t value = 0;
+		memcpy(&value, buffer, sizeof(value));
+		value = ntohl(value);
+		buffer += sizeof(value);
+		return value;
+	};
+
 	// Read a GAMESTRUCT from the connection
 	result = readAll(tcp_socket, buf, sizeof(buf), NET_TIMEOUT_DELAY);
 	bool failed = false;
@@ -867,31 +875,25 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 
 	// Now dump the data into the game struct
 	// Copy 32bit large big endian numbers
-	ourgamestruct->GAMESTRUCT_VERSION = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
+	ourgamestruct->GAMESTRUCT_VERSION = pop32();
 	// Copy a string
 	sstrcpy(ourgamestruct->name, buffer);
 	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	ourgamestruct->desc.dwSize = ntohl(*(int32_t *)buffer);
-	buffer += sizeof(int32_t);
-	ourgamestruct->desc.dwFlags = ntohl(*(int32_t *)buffer);
-	buffer += sizeof(int32_t);
+	ourgamestruct->desc.dwSize = pop32();
+	ourgamestruct->desc.dwFlags = pop32();
 
 	// Copy yet another string
 	sstrcpy(ourgamestruct->desc.host, buffer);
 	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	ourgamestruct->desc.dwMaxPlayers = ntohl(*(int32_t *)buffer);
-	buffer += sizeof(int32_t);
-	ourgamestruct->desc.dwCurrentPlayers = ntohl(*(int32_t *)buffer);
-	buffer += sizeof(int32_t);
+	ourgamestruct->desc.dwMaxPlayers = pop32();
+	ourgamestruct->desc.dwCurrentPlayers = pop32();
 	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		ourgamestruct->desc.dwUserFlags[i] = ntohl(*(int32_t *)buffer);
-		buffer += sizeof(int32_t);
+		ourgamestruct->desc.dwUserFlags[i] = pop32();
 	}
 
 	// Copy a string
@@ -922,24 +924,15 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	ourgamestruct->game_version_major = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->game_version_minor = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->privateGame = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->pureMap = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->Mods = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->gameId = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->limits = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->future3 = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
-	ourgamestruct->future4 = ntohl(*(uint32_t *)buffer);
-	buffer += sizeof(uint32_t);
+	ourgamestruct->game_version_major = pop32();
+	ourgamestruct->game_version_minor = pop32();
+	ourgamestruct->privateGame = pop32();
+	ourgamestruct->pureMap = pop32();
+	ourgamestruct->Mods = pop32();
+	ourgamestruct->gameId = pop32();
+	ourgamestruct->limits = pop32();
+	ourgamestruct->future3 = pop32();
+	ourgamestruct->future4 = pop32();
 
 	debug(LOG_NET, "received GAMESTRUCT");
 
@@ -2047,18 +2040,18 @@ int NETrecvFile(NETQUEUE queue)
 	return 100;		// file is nullbyte, so we are done.
 }
 
-int NETgetDownloadProgress(unsigned player)
+unsigned NETgetDownloadProgress(unsigned player)
 {
 	std::vector<WZFile> const &files = player == selectedPlayer ?
 		NetPlay.wzFiles :  // Check our own download progress.
 		NetPlay.players[player].wzFiles;  // Check their download progress (currently only works if we are the host).
 
-	int progress = 100;
+	uint32_t progress = 100;
 	for (WZFile const &file : files)
 	{
-		progress = std::min<unsigned>(progress, file.pos * 100 / std::max<unsigned>(file.size, 1));
+		progress = std::min<uint32_t>(progress, (uint32_t)((uint64_t)file.pos * 100 / (uint64_t)std::max<uint32_t>(file.size, 1)));
 	}
-	return progress;
+	return static_cast<unsigned>(progress);
 }
 
 static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
@@ -2957,9 +2950,13 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 
 	// Send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
 	p_buffer = buffer;
-	*(int32_t *)p_buffer = htonl(NETCODE_VERSION_MAJOR);
-	p_buffer += sizeof(uint32_t);
-	*(int32_t *)p_buffer = htonl(NETCODE_VERSION_MINOR);
+	auto pushi32 = [&](int32_t value) {
+		int32_t swapped = htonl(value);
+		memcpy(p_buffer, &swapped, sizeof(swapped));
+		p_buffer += sizeof(swapped);
+	};
+	pushi32(NETCODE_VERSION_MAJOR);
+	pushi32(NETCODE_VERSION_MINOR);
 
 	if (writeAll(tcp_socket, buffer, sizeof(buffer)) == SOCKET_ERROR
 	    || readAll(tcp_socket, &result, sizeof(result), 1500) != sizeof(result))

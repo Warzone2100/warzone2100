@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -332,7 +332,8 @@ bool startKeyMapEditor(bool first)
 
 	addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
 	            11, 45,
-	            iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT), iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
+	            iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
+		    iV_GetImageHeight(FrontImages, IMAGE_KEYMAP_DEFAULT),
 	            _("Select Default"),
 	            IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
 

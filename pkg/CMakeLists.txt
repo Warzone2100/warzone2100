@@ -19,6 +19,9 @@ set(CPACK_PACKAGE_CHECKSUM		SHA256)
 # Default components that are added to package
 
 set(CPACK_COMPONENTS_ALL Core Data Docs Info Languages Fonts)
+if(UNIX AND NOT APPLE)
+	list(APPEND CPACK_COMPONENTS_ALL Manpages)
+endif()
 set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
 
 #########################
@@ -49,6 +52,8 @@ set(CPACK_COMPONENT_FONTS_DISPLAY_NAME "Fonts")
 set(CPACK_COMPONENT_FONTS_REQUIRED ON)
 set(CPACK_COMPONENT_FONTS_DESCRIPTION "Fonts")
 set(CPACK_COMPONENT_FONTS_GROUP "CoreGroup")
+
+set(CPACK_COMPONENT_MANPAGES_GROUP "CoreGroup")
 
 set(CPACK_COMPONENT_GROUP_COREGROUP_DISPLAY_NAME "Core files")
 set(CPACK_COMPONENT_GROUP_COREGROUP_REQUIRED ON)
@@ -88,6 +93,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(PACKAGE "${_warzone_target_output_name}")
 	if(WZ_PORTABLE)
 		set(PACKAGE_NAME "Warzone 2100 Portable")
+
+		# For the portable build, install `launch_warzone.bat` in the base folder
+		install(FILES
+			"${CMAKE_CURRENT_SOURCE_DIR}/nsis/launch_warzone.bat"
+			COMPONENT Core DESTINATION "."
+		)
 	else()
 		set(PACKAGE_NAME "Warzone 2100")
 	endif()
@@ -96,6 +107,17 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
 	set(SOURCE_DIR "${CMAKE_SOURCE_DIR}")
 	set(BUILD_DIR "${CMAKE_BINARY_DIR}")
+
+	if(NOT DEFINED WZ_DATADIR)
+		message(FATAL_ERROR "This file should be included in the project's root CMakeLists.txt, after WZ_DATADIR is defined.")
+	endif()
+	if(NOT WZ_DATADIR_ISABSOLUTE)
+		set(NSIS_WZ_DATADIR_APPEND "${WZ_DATADIR}")
+		# NSIS expects backslashes
+		string(REGEX REPLACE "/" "\\\\" NSIS_WZ_DATADIR_APPEND "${NSIS_WZ_DATADIR_APPEND}")
+	else()
+		message(FATAL_ERROR "NSIS installer does not support absolute WZ_DATADIR")
+	endif()
 
 	# Localize component names & descriptions
 	set(CPACK_COMPONENT_GROUP_COREGROUP_DISPLAY_NAME "$(TEXT_SecBase)")
@@ -136,10 +158,11 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	# Only install the "Core" component (the application), as the macOS app bundle contains all of the data & supporting files & languages
 	set(CPACK_COMPONENTS_ALL Core)
+	unset(CPACK_COMPONENT_CORE_DEPENDS)
 	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 
 	# Default package generators on macOS
-	set(CPACK_GENERATOR "ZIP;DragNDrop")
+	set(CPACK_GENERATOR "ZIP")
 
 	# Support Archive generator
 	set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)

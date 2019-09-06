@@ -34,7 +34,7 @@ function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
-		queue("truckDefense", 160000);
+		queue("truckDefense", camSecondsToMilliseconds(160));
 	}
 
 	var list = ["AASite-QuadBof", "WallTower04", "GuardTower-RotMg", "WallTower-Projector"];
@@ -45,7 +45,7 @@ function truckDefense()
 function vtolAttack()
 {
 	var list = [cTempl.colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(120000), "COCommandCenter");
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "COCommandCenter");
 }
 
 //The project captured the uplink.
@@ -71,25 +71,13 @@ function checkNASDACentral()
 	}
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
-		area: "RTLZ",
-		message: "C2D_LZ",
-		reinforcements: 300, //5 min
-		callback: "checkNASDACentral",
-		annihilate: true,
-		retlz: true
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
 		area: "RTLZ",
 		message: "C2D_LZ",
-		reinforcements: -1,
+		reinforcements: camMinutesToSeconds(5),
+		callback: "checkNASDACentral",
 		annihilate: true,
 		retlz: true
 	});
@@ -132,7 +120,7 @@ function eventStartLevel()
 			assembly: "COHeavyFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -144,7 +132,7 @@ function eventStartLevel()
 			assembly: "COSouthCyborgFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -161,6 +149,5 @@ function eventStartLevel()
 	camEnableFactory("COHeavyFactory");
 	camEnableFactory("COSouthCyborgFactory");
 
-	queue("enableReinforcements", 22000);
-	queue("vtolAttack", 120000); // 2 min
+	queue("vtolAttack", camMinutesToMilliseconds(2));
 }

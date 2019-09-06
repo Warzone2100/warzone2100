@@ -1,6 +1,0 @@
-// Png settings for Release configuration
-
-#include "Png-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO

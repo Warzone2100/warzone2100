@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1969,6 +1969,11 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, nullptr, 0, 0, nullptr, nullptr
 	},
 
+	{ "weaponShortHitUpgrade",	scrWeaponShortHitUpgrade,	VAL_INT,
+		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
+		0, 0, nullptr, 0, 0, nullptr, nullptr
+	},
+
 	{
 		"weaponLongHitUpgrade",	scrWeaponLongHitUpgrade,	VAL_INT,
 		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
@@ -2379,10 +2384,22 @@ VAR_SYMBOL asObjTable[] =
 
 	/* Weapon Stats */
 
+	//weapon short range
+	{
+		"shortRange",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_RANGE,	scrWeaponObjGet,	nullptr, 0, {0}, nullptr
+	},
+
 	//weapon long range
 	{
 		"longRange",	VAL_INT,	ST_OBJECT,
 		(INTERP_TYPE)ST_WEAPON,	WEAPID_LONG_RANGE,	scrWeaponObjGet,	nullptr, 0, {0}, nullptr
+	},
+
+	//weapon short hit chance
+	{
+		"shortHit",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_HIT,	scrWeaponObjGet,	nullptr, 0, {0}, nullptr
 	},
 
 	//weapon long hit chance
@@ -2595,19 +2612,27 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DACTION_FIRESUPPORT_RETREAT", VAL_INT,	false,	DACTION_FIRESUPPORT_RETREAT, nullptr, nullptr, 0.0f },
 
 	// secondary orders
+	{ "DSO_ATTACK_RANGE",	VAL_INT,	false,	DSO_ATTACK_RANGE,	nullptr, nullptr, 0.0f },
 	{ "DSO_REPAIR_LEVEL",	VAL_INT,	false,	DSO_REPAIR_LEVEL,	nullptr, nullptr, 0.0f },
 	{ "DSO_ATTACK_LEVEL",	VAL_INT,	false,	DSO_ATTACK_LEVEL,	nullptr, nullptr, 0.0f },
 	{ "DSO_RECYCLE",		VAL_INT,	false,	DSO_RECYCLE,		nullptr, nullptr, 0.0f },
 	{ "DSO_PATROL",			VAL_INT,	false,	DSO_PATROL,			nullptr, nullptr, 0.0f },
+	{ "DSO_HALTTYPE",		VAL_INT,	false,	DSO_HALTTYPE,		NULL, NULL, 0.0f },
 	{ "DSO_RETURN_TO_LOC",	VAL_INT,	false,	DSO_RETURN_TO_LOC,	nullptr, nullptr, 0.0f },
 
 	// secondary order stats
+	{ "DSS_ARANGE_SHORT",	VAL_INT,	false,	DSS_ARANGE_SHORT,	nullptr, nullptr, 0.0f },
+	{ "DSS_ARANGE_LONG",	VAL_INT,	false,	DSS_ARANGE_LONG,	nullptr, nullptr, 0.0f },
+	{ "DSS_ARANGE_OPTIMUM",	VAL_INT,	false,	DSS_ARANGE_OPTIMUM,	nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_LOW",		VAL_INT,	false,	DSS_REPLEV_LOW,		nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_HIGH",	VAL_INT,	false,	DSS_REPLEV_HIGH,	nullptr, nullptr, 0.0f },
 	{ "DSS_REPLEV_NEVER",	VAL_INT,	false,	DSS_REPLEV_NEVER,	nullptr, nullptr, 0.0f },
 	{ "DSS_ALEV_ALWAYS",	VAL_INT,	false,	DSS_ALEV_ALWAYS,	nullptr, nullptr, 0.0f },
 	{ "DSS_ALEV_ATTACKED",	VAL_INT,	false,	DSS_ALEV_ATTACKED,	nullptr, nullptr, 0.0f },
 	{ "DSS_ALEV_NEVER",		VAL_INT,	false,	DSS_ALEV_NEVER,		nullptr, nullptr, 0.0f },
+	{ "DSS_HALT_HOLD",		VAL_INT,	false,	DSS_HALT_HOLD,		NULL, NULL, 0.0f },
+	{ "DSS_HALT_GUARD",		VAL_INT,	false,	DSS_HALT_GUARD,		NULL, NULL, 0.0f },
+	{ "DSS_HALT_PERSUE",	VAL_INT,	false,	DSS_HALT_PURSUE,	NULL, NULL, 0.0f },
 	{ "DSS_RECYCLE_SET",	VAL_INT,	false,	DSS_RECYCLE_SET,	nullptr, nullptr, 0.0f },
 	{ "DSS_ASSPROD_START",	VAL_INT,	false,	DSS_ASSPROD_START,	nullptr, nullptr, 0.0f },
 	{ "DSS_ASSPROD_END ",	VAL_INT,	false,	DSS_ASSPROD_END ,	nullptr, nullptr, 0.0f },

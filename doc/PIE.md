@@ -26,13 +26,21 @@ The first line specifies the version number -- either 2 or 3.
 
 ### TYPE
 
-> TYPE X
+> TYPE 211
 
-This indicates the type of the file through a hexadecimal combination of flags. The following values can be used:
+This indicates the type of the file through a hexadecimal combination of the flags 0x200, 0x10 and 0x1.
+The following flags are available:
 
- * 0x00200 -- Reserved for backward compatibility.
- * 0x01000 -- Specifies that the model should not be stretched to fit terrain. For defensive buildings that have a deep foundation.
- * 0x10000 -- Specifies the usage of the TCMask feature, for which a texture named 'page-N_tcmask.png' (*N* being a number) should be used together with the model's ordinary texture. This flag replaced old team coloration methods (read ticket #851).
+* 0x00001 -- Disables additive rendering
+* 0x00002 -- Enables additive rendering
+* 0x00004 -- Enables premultiplied rendering
+
+* 0x00010 -- Rolls object to face the camera. Used for projectiles shaped like a cylinder.
+* 0x00020 -- Pitches object to completely face the camera. Used for projectiles shaped like a sphere.
+
+* 0x00200 -- Reserved for backward compatibility.
+* 0x01000 -- Specifies that the model should not be stretched to fit terrain. For defensive buildings that have a deep foundation.
+* 0x10000 -- Specifies the usage of the TCMask feature, for which a texture named 'page-N_tcmask.png' (*N* being a number) should be used together with the model's ordinary texture. This flag replaced old team coloration methods (read ticket #851).
 
 ### TEXTURE
 
@@ -52,29 +60,29 @@ The second gives you the filename of the texture page, which
 The third and fourth parameters give the size of the texture, and are also ignored, since we can just read that info from the texture page itself.
 You may fill them out with the correct values for backward compatibility.
 
-### NORMALMAP (PIE 3 only)
+### NORMALMAP
 
 > NORMALMAP 0 page-7-barbarians-arizona_normal.png 0 0
 
 Optional. As above, but this sets the normal map texture page for the model.
 
-### SPECULARMAP (PIE 3 only)
+### SPECULARMAP
 
 > SPECULARMAP 0 page-7-barbarians-arizona.png 0 0
 
 Optional. As above, but this sets the specular map texture page for the model.
 
-### EVENT (PIE 3 only)
+### EVENT
 
 > EVENT type filename.pie
 
 An animation event associated with this model. If the event type is triggered, the model is
 replaced with the specified model for the duration of the event. The following event types are defined:
 
-  * 1 -- Active event. What this means depends on the type of model. For droids this means movement,
+* 1 -- Active event. What this means depends on the type of model. For droids this means movement,
     while for power generators it means they are linked to a power source.
-  * 2 -- Firing. The model is firing at some enemy.
-  * 3 -- Dying. The model is dying. You (almost) always want to make sure animation cycles for this model is set to 1 for the specified model -- if it is zero, it will never die!
+* 2 -- Firing. The model is firing at some enemy.
+* 3 -- Dying. The model is dying. You (almost) always want to make sure animation cycles for this model is set to 1 for the specified model -- if it is zero, it will never die!
 
 ### LEVELS
 
@@ -88,7 +96,17 @@ This gives the number of meshes that are contained in this model. Each mesh can 
 
 This starts the model description for mesh 1. Repeat the below as necessary while incrementing the value above as needed.
 
-### SHADERS (PIE 3 only)
+### MATERIALS (disabled)
+
+This feature was removed in commit 823cf08bb18cf24852bac8595b3899aca12d4f7b.
+
+> MATERIALS 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 20
+
+Optional. Specifies the material properties of a mesh. The nine first values give the RGB values for ambient, diffuse and specular lighting, respectively. The last value sets shininess.
+
+### SHADERS (disabled)
+
+This feature is currently unsupported.
 
 > SHADERS 2 vertex.vert fragment.vert
 
@@ -118,14 +136,6 @@ This starts a list of polygon faces with the number of lines *n*, which must be 
 > 	200 3 3 2 1 0.82 0.78 0.186 0.78 0.199 0.82
 
 Each polygon *must* be on a separate line and *must* be indented with a tab.
-
-Its format depends on the PIE version used:
-
-For PIE 2:
-
-> 	Flags Number\_of\_points [Optional\_animation\_block] Point\_order Texture\_coordinates
-
-For PIE 3:
 
 > 	Flags Number\_of\_points Point\_order [Optional\_animation\_block] Texture\_coordinates
 
@@ -176,13 +186,7 @@ Not every model requires them; the meaning of each connector is special and hard
 Each connector must be on a separate line and must be indented with a tab.
 It contains the x, y, and z coordinates of a connector. Note that unlike in point coordinates, the Z coordinate denotes "up".
 
-### MATERIALS (PIE 3 only)
-
-> MATERIALS 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 20
-
-Optional. Specifies the material properties of a mesh. The nine first values give the RGB values for ambient, diffuse and specular lighting, respectively. The last value sets shininess.
-
-### ANIMOBJECT (PIE 3 only)
+### ANIMOBJECT
 
 > ANIMOBJECT time cycles frames
 

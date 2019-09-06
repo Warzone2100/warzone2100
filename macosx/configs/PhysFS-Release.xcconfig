@@ -1,6 +1,0 @@
-// PhysFS settings for Release configuration
-
-#include "PhysFS-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO

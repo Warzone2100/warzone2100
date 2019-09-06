@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -118,13 +118,13 @@ struct PAUSE_STATE
 	bool scrollPause;
 	bool consolePause;
 };
+static PAUSE_STATE pauseState;
 
-static PAUSE_STATE	pauseState;
-static	UDWORD	numDroids[MAX_PLAYERS];
-static	UDWORD	numMissionDroids[MAX_PLAYERS];
-static	UDWORD	numTransporterDroids[MAX_PLAYERS];
-static	UDWORD	numCommandDroids[MAX_PLAYERS];
-static	UDWORD	numConstructorDroids[MAX_PLAYERS];
+static unsigned numDroids[MAX_PLAYERS];
+static unsigned numMissionDroids[MAX_PLAYERS];
+static unsigned numTransporterDroids[MAX_PLAYERS];
+static unsigned numCommandDroids[MAX_PLAYERS];
+static unsigned numConstructorDroids[MAX_PLAYERS];
 
 static SDWORD videoMode = 0;
 
@@ -160,8 +160,7 @@ static GAMECODE renderLoop()
 		if (!gameUpdatePaused() && intRetVal != INT_QUIT)
 		{
 			if (dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING
-			    && (intRetVal == INT_INTERCEPT
-			        || (radarOnScreen && CoordInRadar(mouseX(), mouseY()) && radarPermitted)))
+			    && (intRetVal == INT_INTERCEPT || isMouseOverRadar()))
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 				wzSetCursor(CURSOR_DEFAULT);
@@ -221,7 +220,7 @@ static GAMECODE renderLoop()
 			unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
 			intProcessInGameOptions(widgval);
-			if (widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
+			if (widgval == INTINGAMEOP_QUIT || widgval == INTINGAMEOP_POPUP_QUIT)
 			{
 				if (gamePaused())
 				{
@@ -315,6 +314,7 @@ static GAMECODE renderLoop()
 				CURSOR cursor2 = processMouseClickInput();
 				cursor = cursor2 == CURSOR_DEFAULT? cursor : cursor2;
 			}
+			bRender3DOnly = false;
 			displayWorld();
 		}
 		wzPerfBegin(PERF_GUI, "User interface");
@@ -445,24 +445,7 @@ void countUpdate(bool synch)
 				break;
 			case DROID_TRANSPORTER:
 			case DROID_SUPERTRANSPORTER:
-				if ((psCurr->psGroup != nullptr))
-				{
-					DROID *psDroid = nullptr;
-
-					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
-					// and count the units inside it...
-					for (psDroid = psCurr->psGroup->psList; psDroid != nullptr && psDroid != psCurr; psDroid = psDroid->psGrpNext)
-					{
-						if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
-						{
-							numConstructorDroids[i] += 1;
-						}
-						if (psDroid->droidType == DROID_COMMAND)
-						{
-							numCommandDroids[i] += 1;
-						}
-					}
-				}
+				droidCountsInTransporter(psCurr, i);
 				break;
 			default:
 				break;
@@ -482,10 +465,7 @@ void countUpdate(bool synch)
 				break;
 			case DROID_TRANSPORTER:
 			case DROID_SUPERTRANSPORTER:
-				if ((psCurr->psGroup != nullptr))
-				{
-					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
-				}
+				droidCountsInTransporter(psCurr, i);
 				break;
 			default:
 				break;
@@ -656,7 +636,7 @@ static void gameStateUpdate()
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
 
-	// Must be at the beginning or end of each tick, since countUpdate is also called randomly (unsynchronised) between ticks.
+	// Must be at the end of gameStateUpdate, since countUpdate is also called randomly (unsynchronised) between gameStateUpdate calls, but should have no effect if we already called it, and recvMessage requires consistent counts on all clients.
 	countUpdate(true);
 
 	static int i = 0;
@@ -676,6 +656,7 @@ GAMECODE gameLoop()
 	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
 	const Rational updateFraction = Rational(1) - renderFraction;
 
+	// Shouldn't this be when initialising the game, rather than randomly called between ticks?
 	countUpdate(false); // kick off with correct counts
 
 	while (true)
@@ -869,17 +850,17 @@ void setAllPauseStates(bool state)
 
 UDWORD	getNumDroids(UDWORD player)
 {
-	return (numDroids[player]);
+	return numDroids[player];
 }
 
 UDWORD	getNumTransporterDroids(UDWORD player)
 {
-	return (numTransporterDroids[player]);
+	return numTransporterDroids[player];
 }
 
 UDWORD	getNumMissionDroids(UDWORD player)
 {
-	return (numMissionDroids[player]);
+	return numMissionDroids[player];
 }
 
 UDWORD	getNumCommandDroids(UDWORD player)
@@ -892,19 +873,49 @@ UDWORD	getNumConstructorDroids(UDWORD player)
 	return numConstructorDroids[player];
 }
 
-
 // increase the droid counts - used by update factory to keep the counts in sync
-void incNumDroids(UDWORD player)
-{
-	numDroids[player] += 1;
+void adjustDroidCount(DROID *droid, int delta) {
+	int player = droid->player;
+	syncDebug("numDroids[%d]:%d=%d→%d", player, droid->droidType, numDroids[player], numDroids[player] + delta);
+	numDroids[player] += delta;
+	switch (droid->droidType)
+	{
+	case DROID_COMMAND:
+		numCommandDroids[player] += delta;
+		break;
+	case DROID_CONSTRUCT:
+	case DROID_CYBORG_CONSTRUCT:
+		numConstructorDroids[player] += delta;
+		break;
+	default:
+		break;
+	}
 }
-void incNumCommandDroids(UDWORD player)
+
+// Increase counts of droids in a transporter
+void droidCountsInTransporter(DROID *droid, int player)
 {
-	numCommandDroids[player] += 1;
-}
-void incNumConstructorDroids(UDWORD player)
-{
-	numConstructorDroids[player] += 1;
+	DROID *psDroid = nullptr;
+
+	if (!isTransporter(droid) || droid->psGroup == nullptr)
+	{
+		return;
+	}
+
+	numTransporterDroids[player] += droid->psGroup->refCount - 1;
+
+	// and count the units inside it...
+	for (psDroid = droid->psGroup->psList; psDroid != nullptr && psDroid != droid; psDroid = psDroid->psGrpNext)
+	{
+		if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
+		{
+			numConstructorDroids[player] += 1;
+		}
+		if (psDroid->droidType == DROID_COMMAND)
+		{
+			numCommandDroids[player] += 1;
+		}
+	}
 }
 
 /* Fire waiting beacon messages which we couldn't run before */

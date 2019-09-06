@@ -1,6 +1,6 @@
 /*
  *	This file is part of Warzone 2100.
- *	Copyright (C) 2018  Warzone 2100 Project
+ *	Copyright (C) 2018-2019  Warzone 2100 Project
  *
  *	Warzone 2100 is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -17,11 +17,12 @@
  *	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include "frame.h"
 #include "wzpaths.h"
 
-#include "frame.h"
 #include <physfs.h>
 #include <vector>
+#include <algorithm>
 
 #ifdef WZ_BINDIR
 static std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const std::string& delimiters)
@@ -29,13 +30,15 @@ static std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const 
 	std::vector<std::string> v;
 
 	auto pos = s.begin();
-	auto end = pos;
-
-	while(end != s.end())
+	while(pos != s.end())
 	{
-		end = std::find_first_of(pos, s.end(), delimiters.begin(), delimiters.end());
+		auto end = std::find_first_of(pos, s.end(), delimiters.begin(), delimiters.end());
 		v.emplace_back(pos, end);
-		pos = end + 1;
+		pos = end;
+		if (pos != s.end())
+		{
+			++pos;
+		}
 	}
 
 	return v;
@@ -72,5 +75,3 @@ std::string getWZInstallPrefix()
 
 	return prefixDir;
 }
-
-

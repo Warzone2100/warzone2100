@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -2179,7 +2179,7 @@ static void effectStructureUpdates()
 				*/
 				if (psStructure->sDisplay.imd->nconnectors == 1)
 				{
-					Vector3i eventPos = psStructure->pos.xzy + Vector3i(
+					Vector3i eventPos = psStructure->pos.xzy() + Vector3i(
 					                        psStructure->sDisplay.imd->connectors->x,
 					                        psStructure->sDisplay.imd->connectors->z,
 					                        -psStructure->sDisplay.imd->connectors->y
@@ -2192,7 +2192,7 @@ static void effectStructureUpdates()
 				break;
 			case REF_POWER_GEN:
 				{
-					Vector3i eventPos = psStructure->pos.xzy;
+					Vector3i eventPos = psStructure->pos.xzy();
 
 					// Add an effect over the central spire.
 

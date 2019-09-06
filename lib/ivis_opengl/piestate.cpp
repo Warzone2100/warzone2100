@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -46,17 +46,19 @@
 #define GLEW_KHR_debug false
 #endif
 
+#include <algorithm>
+
 /*
  *	Global Variables
  */
 
 std::vector<pie_internal::SHADER_PROGRAM> pie_internal::shaderProgram;
-static GLfloat shaderStretch = 0;
+static gfx_api::gfxFloat shaderStretch = 0;
 SHADER_MODE pie_internal::currentShaderMode = SHADER_NONE;
 gfx_api::buffer* pie_internal::rectBuffer = nullptr;
 static RENDER_STATE rendStates;
 static GLint ecmState = 0;
-static GLfloat timeState = 0.0f;
+static gfx_api::gfxFloat timeState = 0.0f;
 
 void rendStatesRendModeHack()
 {
@@ -782,7 +784,7 @@ void pie_SetShaderTime(uint32_t shaderTime)
 	{
 		base = 1000 - base;	// cycle
 	}
-	timeState = (GLfloat)base / 1000.0f;
+	timeState = (gfx_api::gfxFloat)base / 1000.0f;
 }
 
 void pie_SetShaderEcmEffect(bool value)

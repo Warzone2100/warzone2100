@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ struct WARCAM
 	Vector3f rotVel = Vector3f(0.f, 0.f, 0.f);
 	Vector3f rotAccel = Vector3f(0.f, 0.f, 0.f);
 
-	UDWORD oldDistance;
+	float oldDistance;
 	BASE_OBJECT *target;
 };
 
@@ -359,7 +359,7 @@ bool	processWarCam()
 			{
 				if (getWarCamStatus())
 				{
-					CONPRINTF(ConsoleString, (ConsoleString, "WZ/CAM  - %s", droidGetName((DROID *)foundTarget)));
+					CONPRINTF("WZ/CAM  - %s", droidGetName((DROID *)foundTarget));
 				}
 			}
 		}
@@ -613,7 +613,7 @@ in the case of location and degrees of arc in the case of rotation.
 
 static void updateCameraAcceleration(UBYTE update)
 {
-	Vector3i concern = trackingCamera.target->pos.xzy;
+	Vector3i concern = trackingCamera.target->pos.xzy();
 	Vector2i behind(0, 0); /* Irrelevant for normal radar tracking */
 	bool bFlying = false;
 

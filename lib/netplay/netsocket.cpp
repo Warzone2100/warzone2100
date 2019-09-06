@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ static WZ_MUTEX *socketThreadMutex;
 static WZ_SEMAPHORE *socketThreadSemaphore;
 static WZ_THREAD *socketThread = nullptr;
 static bool socketThreadQuit;
-typedef std::map<Socket *, std::vector<uint8_t> > SocketThreadWriteMap;
+typedef std::map<Socket *, std::vector<uint8_t>> SocketThreadWriteMap;
 static SocketThreadWriteMap socketThreadWrites;
 
 
@@ -122,13 +122,25 @@ typedef int (WINAPI *GETADDRINFO_DLL_FUNC)(const char *node, const char *service
 typedef int (WINAPI *FREEADDRINFO_DLL_FUNC)(struct addrinfo *res);
 
 static HMODULE winsock2_dll = nullptr;
-static unsigned int major_windows_version = 0;
 
 static GETADDRINFO_DLL_FUNC getaddrinfo_dll_func = nullptr;
 static FREEADDRINFO_DLL_FUNC freeaddrinfo_dll_func = nullptr;
 
 # define getaddrinfo  getaddrinfo_dll_dispatcher
 # define freeaddrinfo freeaddrinfo_dll_dispatcher
+
+# include <ntverp.h>				// Windows SDK - include for access to VER_PRODUCTBUILD
+# if VER_PRODUCTBUILD >= 9600
+	// 9600 is the Windows SDK 8.1
+	# include <VersionHelpers.h>	// For IsWindowsVistaOrGreater()
+# else
+	// Earlier SDKs may not have VersionHelpers.h - use simple fallback
+	inline bool IsWindowsVistaOrGreater()
+	{
+		DWORD dwMajorVersion = (DWORD)(LOBYTE(LOWORD(GetVersion())));
+		return dwMajorVersion >= 6;
+	}
+# endif
 
 static int getaddrinfo(const char *node, const char *service,
                        const struct addrinfo *hints,
@@ -140,77 +152,55 @@ static int getaddrinfo(const char *node, const char *service,
 		memcpy(&hint, hints, sizeof(hint));
 	}
 
-	switch (major_windows_version)
-	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	// Windows 95, 98 and ME
-	case 4:
-		debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
-		return EAI_FAIL;
+//	// Windows 95, 98 and ME
+//		debug(LOG_ERROR, "Name resolution isn't supported on this version of Windows");
+//		return EAI_FAIL;
 
-	// Windows 2000, XP and Server 2003
-	case 5:
+	if (!IsWindowsVistaOrGreater())
+	{
+		// Windows 2000, XP and Server 2003
 		if (hints)
 		{
-			// These flags are only supported from version 6 and onward
+			// These flags are only supported from Windows Vista+
 			hint.ai_flags &= ~(AI_V4MAPPED | AI_ADDRCONFIG);
 		}
-	// Windows Vista and Server 2008
-	case 6:
-	// Onward (aka: in the future)
-	default:
-		if (!winsock2_dll)
-		{
-			debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-			return EAI_FAIL;
-		}
-
-		if (!getaddrinfo_dll_func)
-		{
-			debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-			return EAI_FAIL;
-		}
-
-		return getaddrinfo_dll_func(node, service, hints ? &hint : NULL, res);
 	}
+
+	if (!winsock2_dll)
+	{
+		debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
+		return EAI_FAIL;
+	}
+
+	if (!getaddrinfo_dll_func)
+	{
+		debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+		return EAI_FAIL;
+	}
+
+	return getaddrinfo_dll_func(node, service, hints ? &hint : NULL, res);
 }
 
 static void freeaddrinfo(struct addrinfo *res)
 {
-	switch (major_windows_version)
+
+//	// Windows 95, 98 and ME
+//		debug(LOG_ERROR, "Name resolution isn't supported on this version of Windows");
+//		return;
+
+	if (!winsock2_dll)
 	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	// Windows 95, 98 and ME
-	case 4:
-		debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+		debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
 		return;
-
-	// Windows 2000, XP and Server 2003
-	case 5:
-	// Windows Vista and Server 2008
-	case 6:
-	// Onward (aka: in the future)
-	default:
-		if (!winsock2_dll)
-		{
-			debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-			return;
-		}
-
-		if (!freeaddrinfo_dll_func)
-		{
-			debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-			return;
-		}
-
-		freeaddrinfo_dll_func(res);
 	}
+
+	if (!freeaddrinfo_dll_func)
+	{
+		debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+		return;
+	}
+
+	freeaddrinfo_dll_func(res);
 }
 #endif
 
@@ -225,14 +215,27 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 	{
 	case AF_INET:
 		{
-			return handleIpv4(((const struct sockaddr_in *)addr)->sin_addr.s_addr);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+			return handleIpv4((reinterpret_cast<const sockaddr_in *>(addr))->sin_addr.s_addr);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 		}
 	case AF_INET6:
 		{
 
-			const uint16_t *address = (const uint16_t *) & ((const struct sockaddr_in6 *)addr)->sin6_addr.s6_addr;
 			// Check to see if this is really a IPv6 address
-			const struct sockaddr_in6 *mappedIP = (const struct sockaddr_in6 *)addr;
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+			const struct sockaddr_in6 *mappedIP = reinterpret_cast<const sockaddr_in6 *>(addr);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 			if (IN6_IS_ADDR_V4MAPPED(&mappedIP->sin6_addr))
 			{
 				// looks like it is ::ffff:(...) so lets set up a IPv4 socket address structure
@@ -244,6 +247,17 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 			}
 			else
 			{
+				static_assert(sizeof(in6_addr::s6_addr) == 16, "Standard expects in6_addr structure that contains member s6_addr[16], a 16-element array of uint8_t");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+				const uint8_t *address_u8 = &((reinterpret_cast<const sockaddr_in6 *>(addr))->sin6_addr.s6_addr[0]);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
+				uint16_t address[8] = {0};
+				memcpy(&address, address_u8, sizeof(uint8_t) * 16);
 				return snprintf(buf, size,
 								"%hx:%hx:%hx:%hx:%hx:%hx:%hx:%hx",
 								ntohs(address[0]),
@@ -1143,7 +1157,14 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	ASSERT(addr != nullptr, "NULL Socket provided");
 
 	addressToText(addr->ai_addr, conn->textAddress, sizeof(conn->textAddress));
-	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs(((const struct sockaddr_in *)addr->ai_addr)->sin_port));
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs((reinterpret_cast<const sockaddr_in *>(addr->ai_addr))->sin_port));
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 
 	// Mark all unused socket handles as invalid
 	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
@@ -1489,9 +1510,6 @@ void SOCKETinit()
 			getaddrinfo_dll_func = reinterpret_cast<GETADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "getaddrinfo")));
 			freeaddrinfo_dll_func = reinterpret_cast<FREEADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "freeaddrinfo")));
 		}
-
-		// Determine major Windows version
-		major_windows_version = LOBYTE(LOWORD(GetVersion()));
 	}
 #endif
 

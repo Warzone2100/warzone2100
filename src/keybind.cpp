@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ void kf_AutoGame()
 #endif
 	if (game.type == CAMPAIGN)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "Not possible with the campaign!"));
+		CONPRINTF("%s", "Not possible with the campaign!");
 		return;
 	}
 	// Notify all human players that we are trying to enable autogame
@@ -148,7 +148,7 @@ void kf_AutoGame()
 		}
 	}
 
-	CONPRINTF(ConsoleString, (ConsoleString, "autogame request has been sent to all players. AI script *must* support this command!"));
+	CONPRINTF("%s", "autogame request has been sent to all players. AI script *must* support this command!");
 }
 
 void	kf_ToggleMissionTimer()
@@ -252,7 +252,7 @@ void	kf_TraceObject()
 		if (psCDroid->selected)
 		{
 			objTraceEnable(psCDroid->id);
-			CONPRINTF(ConsoleString, (ConsoleString, "Tracing droid %d", (int)psCDroid->id));
+			CONPRINTF("Tracing droid %d", (int)psCDroid->id);
 			return;
 		}
 	}
@@ -262,12 +262,12 @@ void	kf_TraceObject()
 		if (psCStruct->selected)
 		{
 			objTraceEnable(psCStruct->id);
-			CONPRINTF(ConsoleString, (ConsoleString, "Tracing structure %d", (int)psCStruct->id));
+			CONPRINTF("Tracing structure %d", (int)psCStruct->id);
 			return;
 		}
 	}
 	objTraceDisable();
-	CONPRINTF(ConsoleString, (ConsoleString, "No longer tracing anything."));
+	CONPRINTF("%s", "No longer tracing anything.");
 }
 
 //===================================================
@@ -323,7 +323,7 @@ void	kf_FaceSouth()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to South")));
+	CONPRINTF("%s", _("View Aligned to South"));
 }
 // --------------------------------------------------------------------------
 void	kf_FaceEast()
@@ -333,7 +333,7 @@ void	kf_FaceEast()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to East")));
+	CONPRINTF("%s", _("View Aligned to East"));
 }
 // --------------------------------------------------------------------------
 void	kf_FaceWest()
@@ -343,7 +343,7 @@ void	kf_FaceWest()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to West")));
+	CONPRINTF("%s", _("View Aligned to West"));
 }
 // --------------------------------------------------------------------------
 
@@ -396,7 +396,7 @@ void kf_CloneSelected(int limit)
 			// create a new droid army
 			for (int i = 0; i < limit; i++)
 			{
-				Vector2i pos = psDroid->pos.xy + iSinCosR(40503 * i, iSqrt(50 * 50 * i));  // 40503 = 65536/φ
+				Vector2i pos = psDroid->pos.xy() + iSinCosR(40503 * i, iSqrt(50 * 50 * i));  // 40503 = 65536/φ
 				DROID *psNewDroid = buildDroid(sTemplate, pos.x, pos.y, psDroid->player, false, nullptr);
 				if (psNewDroid)
 				{
@@ -476,7 +476,7 @@ void kf_Unselectable()
 ///* Prints out the date and time of the build of the game */
 void	kf_BuildInfo()
 {
-	CONPRINTF(ConsoleString, (ConsoleString, "Built at %s on %s", __TIME__, __DATE__));
+	CONPRINTF("Built: %s %s", getCompileDate(), __TIME__);
 }
 
 // --------------------------------------------------------------------------
@@ -498,7 +498,7 @@ void kf_ToggleTeamChat()
 	}
 }
 // --------------------------------------------------------------------------
-void	kf_SetKillerLevel()
+void	kf_BifferBaker()
 {
 	char *cmsg;
 
@@ -509,7 +509,8 @@ void	kf_SetKillerLevel()
 		return;
 	}
 
-	setDifficultyLevel(DL_KILLER);
+	// player deals far more damage, and the enemy far less
+	setDamageModifiers(999, 1);
 	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Hard as nails!!!"));
 	sendTextMessage(cmsg, true);
@@ -589,7 +590,7 @@ void	kf_SetHardLevel()
 	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
-void	kf_SetToughUnitsLevel()
+void	kf_DoubleUp()
 {
 	char *cmsg;
 
@@ -599,8 +600,7 @@ void	kf_SetToughUnitsLevel()
 		noMPCheatMsg();
 		return;
 	}
-
-	setDifficultyLevel(DL_TOUGH);
+	setDamageModifiers(100, 50); // enemy damage halved
 	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Twice as nice!"));
 	sendTextMessage(cmsg, true);
@@ -613,11 +613,11 @@ void kf_ToggleFPS() //This shows *just FPS* and is always visible (when active) 
 
 	if (showFPS)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("FPS display is enabled.")));
+		CONPRINTF("%s", _("FPS display is enabled."));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("FPS display is disabled.")));
+		CONPRINTF("%s", _("FPS display is disabled."));
 	}
 }
 void kf_ToggleSamples() //Displays number of sound sample in the sound queues & lists.
@@ -625,33 +625,33 @@ void kf_ToggleSamples() //Displays number of sound sample in the sound queues & 
 	// Toggle the boolean value of showSAMPLES
 	showSAMPLES = !showSAMPLES;
 
-	CONPRINTF(ConsoleString, (ConsoleString, "Sound Samples displayed is %s", showSAMPLES ? "Enabled" : "Disabled"));
+	CONPRINTF("Sound Samples displayed is %s", showSAMPLES ? "Enabled" : "Disabled");
 }
 
 void kf_ToggleOrders()	// Displays orders & action of currently selected unit.
 {
 	// Toggle the boolean value of showORDERS
 	showORDERS = !showORDERS;
-	CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
+	CONPRINTF("Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled");
 }
 
 /* Writes out the frame rate */
 void	kf_FrameRate()
 {
-	CONPRINTF(ConsoleString, (ConsoleString, "FPS %d; PIEs %d; polys %d",
-	                          frameRate(), loopPieCount, loopPolyCount));
+	CONPRINTF("FPS %d; PIEs %d; polys %d",
+	                          frameRate(), loopPieCount, loopPolyCount);
 	if (runningMultiplayer())
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "NETWORK:  Bytes: s-%d r-%d  Uncompressed Bytes: s-%d r-%d  Packets: s-%d r-%d",
+		CONPRINTF("NETWORK:  Bytes: s-%d r-%d  Uncompressed Bytes: s-%d r-%d  Packets: s-%d r-%d",
 		                          NETgetStatistic(NetStatisticRawBytes, true),
 		                          NETgetStatistic(NetStatisticRawBytes, false),
 		                          NETgetStatistic(NetStatisticUncompressedBytes, true),
 		                          NETgetStatistic(NetStatisticUncompressedBytes, false),
 		                          NETgetStatistic(NetStatisticPackets, true),
-		                          NETgetStatistic(NetStatisticPackets, false)));
+		                          NETgetStatistic(NetStatisticPackets, false));
 	}
 	gameStats = !gameStats;
-	CONPRINTF(ConsoleString, (ConsoleString, "Built at %s on %s", __TIME__, __DATE__));
+	CONPRINTF("Built: %s %s", getCompileDate(), __TIME__);
 }
 
 // --------------------------------------------------------------------------
@@ -910,7 +910,7 @@ void	kf_RadarZoomIn()
 	if (RadarZoomLevel < MAX_RADARZOOM)
 	{
 		RadarZoomLevel += RADARZOOM_STEP;
-		CONPRINTF(ConsoleString, (ConsoleString, _("Setting radar zoom to %u"), RadarZoomLevel));
+		CONPRINTF(_("Setting radar zoom to %u"), RadarZoomLevel);
 		SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 	}
@@ -923,7 +923,7 @@ void	kf_RadarZoomOut()
 	if (RadarZoomLevel > MIN_RADARZOOM)
 	{
 		RadarZoomLevel -= RADARZOOM_STEP;
-		CONPRINTF(ConsoleString, (ConsoleString, _("Setting radar zoom to %u"), RadarZoomLevel));
+		CONPRINTF(_("Setting radar zoom to %u"), RadarZoomLevel);
 		SetRadarZoom(RadarZoomLevel);
 		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 	}
@@ -1265,7 +1265,7 @@ void	kf_JumpToMapMarker()
 	if (!getRadarTrackingStatus())
 	{
 		entry = getLastSubKey();
-//		CONPRINTF(ConsoleString,(ConsoleString,"Restoring map position %d:%d",getMarkerX(entry),getMarkerY(entry)));
+//		CONPRINTF("Restoring map position %d:%d",getMarkerX(entry),getMarkerY(entry));
 		player.p.x = getMarkerX(entry);
 		player.p.z = getMarkerY(entry);
 		player.r.y = getMarkerSpin(entry);
@@ -1356,7 +1356,7 @@ void	kf_SeekNorth()
 	{
 		camToggleStatus();
 	}
-	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("View Aligned to North")));
+	CONPRINTF("%s", _("View Aligned to North"));
 }
 
 void kf_toggleTrapCursor()
@@ -1475,7 +1475,7 @@ void kf_Reload()
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psCurr->asWeaps[0].nStat], psCurr->player);
 
 			psCurr->asWeaps[0].lastFired -= firePause;
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Selected buildings instantly recharged!")));
+			CONPRINTF("%s", _("Selected buildings instantly recharged!"));
 		}
 	}
 }
@@ -1716,13 +1716,11 @@ void	kf_MovePause()
 			/* And stop the clock */
 			gameTimeStop();
 			setWidgetsStatus(false);
-			radarOnScreen = false;
 			bMovePause = true;
 		}
 		else
 		{
 			setWidgetsStatus(true);
-			radarOnScreen = true;
 			/* Else get it going again */
 			setGamePauseStatus(false);
 			setConsolePause(false);
@@ -1861,8 +1859,7 @@ void	kf_KillEnemy()
 #endif
 
 	debug(LOG_DEATH, "Destroying enemy droids and structures");
-	CONPRINTF(ConsoleString, (ConsoleString,
-	                          "%s", _("Warning! This can have drastic consequences if used incorrectly in missions.")));
+	CONPRINTF("%s", _("Warning! This can have drastic consequences if used incorrectly in missions."));
 	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All enemies destroyed by cheating!"));
 	sendTextMessage(cmsg, true);
@@ -2209,6 +2206,24 @@ void	kf_SelectAllSameType()
 }
 
 // --------------------------------------------------------------------------
+void	kf_SetDroidRangeShort()
+{
+	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidRangeOptimum()
+{
+	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_OPTIMUM);
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidRangeLong()
+{
+	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_LONG);
+}
+
+// --------------------------------------------------------------------------
 void	kf_SetDroidRetreatMedium()
 {
 	kfsf_SetSelectedDroidsState(DSO_REPAIR_LEVEL, DSS_REPLEV_LOW);
@@ -2269,6 +2284,18 @@ void	kf_SetDroidOrderStop()
 }
 
 // --------------------------------------------------------------------------
+void	kf_SetDroidMoveGuard()
+{
+	kfsf_SetSelectedDroidsState(DSO_HALTTYPE, DSS_HALT_GUARD);
+}
+
+// --------------------------------------------------------------------------
+void	kf_SetDroidMovePursue()
+{
+	kfsf_SetSelectedDroidsState(DSO_HALTTYPE, DSS_HALT_PURSUE);	// ASK?
+}
+
+// --------------------------------------------------------------------------
 void	kf_SetDroidMovePatrol()
 {
 	kfsf_SetSelectedDroidsState(DSO_PATROL, DSS_PATROL_SET);	// ASK
@@ -2303,12 +2330,12 @@ void	kf_ToggleVisibility()
 {
 	if (getRevealStatus())
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Reveal OFF")));
+		CONPRINTF("%s", _("Reveal OFF"));
 		setRevealStatus(false);
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Reveal ON")));
+		CONPRINTF("%s", _("Reveal ON"));
 		setRevealStatus(true);
 	}
 }
@@ -2457,12 +2484,12 @@ void	kf_ToggleMouseInvert()
 	if (getInvertMouseStatus())
 	{
 		setInvertMouseStatus(false);
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Vertical rotation direction: Normal")));
+		CONPRINTF("%s", _("Vertical rotation direction: Normal"));
 	}
 	else
 	{
 		setInvertMouseStatus(true);
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Vertical rotation direction: Flipped")));
+		CONPRINTF("%s", _("Vertical rotation direction: Flipped"));
 	}
 }
 
@@ -2549,15 +2576,15 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 
 	if (newMod == 1)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Game Speed Reset")));
+		CONPRINTF("%s", _("Game Speed Reset"));
 	}
 	else if (newMod > oldMod)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Increased to %s"), modString));
+		CONPRINTF(_("Game Speed Increased to %s"), modString);
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("Game Speed Reduced to %s"), modString));
+		CONPRINTF(_("Game Speed Reduced to %s"), modString);
 	}
 	gameTimeSetMod(newMod);
 }
@@ -2603,7 +2630,7 @@ void kf_NormalSpeed()
 		return;
 	}
 
-	CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Game Speed Reset")));
+	CONPRINTF("%s", _("Game Speed Reset"));
 	gameTimeResetMod();
 }
 
@@ -2615,11 +2642,11 @@ void kf_ToggleRadarAllyEnemy()
 
 	if (bEnemyAllyRadarColor)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing friend-foe colors")));
+		CONPRINTF("%s", _("Radar showing friend-foe colors"));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing player colors")));
+		CONPRINTF("%s", _("Radar showing player colors"));
 	}
 	resizeRadar();
 }
@@ -2634,16 +2661,16 @@ void kf_ToggleRadarTerrain()
 	switch (radarDrawMode)
 	{
 	case RADAR_MODE_NO_TERRAIN:
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing only objects")));
+		CONPRINTF("%s", _("Radar showing only objects"));
 		break;
 	case RADAR_MODE_COMBINED:
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar blending terrain and height")));
+		CONPRINTF("%s", _("Radar blending terrain and height"));
 		break;
 	case RADAR_MODE_TERRAIN:
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing terrain")));
+		CONPRINTF("%s", _("Radar showing terrain"));
 		break;
 	case RADAR_MODE_HEIGHT_MAP:
-		CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Radar showing height")));
+		CONPRINTF("%s", _("Radar showing height"));
 		break;
 	case NUM_RADAR_MODES:
 		assert(false);
@@ -2658,7 +2685,6 @@ void	kf_AddHelpBlip()
 	UDWORD	i;
 	char	tempStr[255];
 	SDWORD	x, y;
-	bool	mOverR = false;
 
 	/* not needed in campaign */
 	if (!bMultiPlayer)
@@ -2671,22 +2697,14 @@ void	kf_AddHelpBlip()
 	/* check if clicked on radar */
 	x = mouseX();
 	y = mouseY();
-	if (radarOnScreen && radarPermitted)
+	if (isMouseOverRadar())
 	{
-		if (CoordInRadar(x, y))
-		{
-			mOverR = true;
-			CalcRadarPosition(x, y, &worldX, &worldY);
-
-			CLIP(worldX, 0, mapWidth - 1);	// temporary hack until CalcRadarPosition is fixed
-			CLIP(worldY, 0, mapHeight - 1);
-			worldX = worldX * TILE_UNITS + TILE_UNITS / 2;
-			worldY = worldY * TILE_UNITS + TILE_UNITS / 2;
-		}
+		CalcRadarPosition(x, y, &worldX, &worldY);
+		worldX = worldX * TILE_UNITS + TILE_UNITS / 2;
+		worldY = worldY * TILE_UNITS + TILE_UNITS / 2;
 	}
-
 	/* convert screen to world */
-	if (!mOverR)
+	else
 	{
 		worldX = mouseTileX * TILE_UNITS + TILE_UNITS / 2;
 		worldY = mouseTileY * TILE_UNITS + TILE_UNITS / 2;

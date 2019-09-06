@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@
 struct EditBoxDisplayCache {
 	WzText wzDisplayedText;
 	WzText modeText;
-	WzText wzHyphen;
 };
 
 class W_EDITBOX : public WIDGET
@@ -49,16 +48,16 @@ public:
 	W_EDITBOX(W_EDBINIT const *init);
 	W_EDITBOX(WIDGET *parent);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY);
-	void highlight(W_CONTEXT *psContext);
-	void highlightLost();
-	void focusLost();
-	void run(W_CONTEXT *psContext);
-	void display(int xOffset, int yOffset);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
+	void highlight(W_CONTEXT *psContext) override;
+	void highlightLost() override;
+	void focusLost() override;
+	void run(W_CONTEXT *psContext) override;
+	void display(int xOffset, int yOffset) override;
 
-	void setState(unsigned state);
-	WzString getString() const;
-	void setString(WzString string);
+	void setState(unsigned state) override;
+	WzString getString() const override;
+	void setString(WzString string) override;
 	void setMaxStringSize(int size);
 
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);

@@ -1,14 +1,14 @@
 
 /*
  * This file includes routines and algorithms completely unrelated to Warzone 2100.
- * 
+ *
  */
 
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // return random true or false in certain chance
-// 0 will return true with chance 0% 
+// 0 will return true with chance 0%
 // 50 will return true with chance 50%
 // 100 will return true with chance 100%
 _global.withChance = function distance(chancePercent) {
@@ -138,7 +138,7 @@ _global.naiveFindClusters = function(list, size) {
 			ret.yav[n] = y;
 			if (1 > ret.maxCount) {
 				ret.maxIdx = n;
-				ret.maxCount = 1
+				ret.maxCount = 1;
 			}
 		}
 	}

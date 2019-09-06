@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -173,15 +173,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 			gameTimeStop();
 			if (GetGameMode() == GS_NORMAL)
 			{
-				bool radOnScreen = radarOnScreen;				// Only do this in main game.
-
-				bRender3DOnly = true;
-				radarOnScreen = false;
-
-				displayWorld();									// Just display the 3d, no interface
-
-				radarOnScreen = radOnScreen;
-				bRender3DOnly = false;
+				// just display the 3d, no interface
+				displayWorld();
 			}
 
 			setGamePauseStatus(true);
@@ -317,7 +310,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 		timeinfo = localtime(&savetime);
-		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%x %X", timeinfo);
+		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", timeinfo);
 
 		/* Set the button-text */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension

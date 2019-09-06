@@ -44,7 +44,8 @@
 	"area_1": {
 		"label": "roadblockArea",
 		"pos1": [4500, 3600],
-		"pos2": [5500, 4700]
+		"pos2": [5500, 4700],
+		"subscriber": 0
 	},
 	"area_2": {
 		"label": "landingZone",
@@ -54,7 +55,8 @@
 	"area_3": {
 		"label": "launchScavAttack",
 		"pos1": [2496, 6080],
-		"pos2": [4928, 7232]
+		"pos2": [4928, 7232],
+		"subscriber": 0
 	},
 	"area_4": {
 		"label": "scavBase1Cleanup",
@@ -69,7 +71,8 @@
 	"area_6": {
 		"label": "scavBase3Cleanup",
 		"pos1": [1088, 1216],
-		"pos2": [2240, 2240]
+		"pos2": [2240, 2240],
+		"subscriber": 0
 	},
 	"area_7": {
 		"label": "scavBase4Cleanup",

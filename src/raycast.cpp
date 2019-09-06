@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -194,7 +194,7 @@ void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *
 
 	Vector3i src(x, y, 0);
 	Vector3i delta(iSinCosR(direction, 5430), 0);
-	rayCast(src.xy, (src + delta).xy, getTileHeightCallback, &help); // FIXME Magic value
+	rayCast(src.xy(), (src + delta).xy(), getTileHeightCallback, &help); // FIXME Magic value
 
 	*pitch = help.pitch;
 }

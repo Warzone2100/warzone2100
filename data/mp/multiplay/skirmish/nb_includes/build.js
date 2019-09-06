@@ -59,7 +59,7 @@ function getFreeTruckAround(x, y) {
 }
 
 function buildModule(struct) {
-	trucks = getTwoFreeTrucks();
+	var trucks = getTwoFreeTrucks();
 	if (trucks.length <= 0)
 		return BUILDRET.FAILURE;
 	var moduleInfo = modules.filter(function(item) { return isAvailable(item.module) && item.base === struct.stattype; }).last();
@@ -80,7 +80,7 @@ function buildBasicStructure(statlist, importance) {
 	// by default, don't try building things in dangerous locations
 	if (!defined(importance))
 		importance = IMPORTANCE.MANDATORY;
-	trucks = getTwoFreeTrucks();
+	var trucks = getTwoFreeTrucks();
 	if (trucks.length <= 0)
 		return BUILDRET.FAILURE;
 	// choose structure type (out of the statlist),
@@ -195,10 +195,9 @@ function buildGateways() {
 		if (oils <= 0)
 			return BUILDRET.FAILURE;
 		// lets not cycle through all gateways on the map
-		var gates = whereAreTheGateways();
-		if (gates.length === 0)
+		if (!areThereGW())
 			return BUILDRET.FAILURE;
-		var gates = gates.filter(function(gate) {
+		var gates = gateways.filter(function(gate) {
 			var l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
 			if (l < 0)
 				l = -l;

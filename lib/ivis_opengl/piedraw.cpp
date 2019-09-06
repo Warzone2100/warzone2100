@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ static GLenum ss_op_depth_pass_back = GL_DECR;
 static unsigned int pieCount = 0;
 static unsigned int polyCount = 0;
 static bool shadows = false;
-static GLfloat lighting0[LIGHT_MAX][4];
+static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 
 static std::vector<GLint> enabledAttribArrays;
 
@@ -99,7 +99,9 @@ void disableArrays()
 
 void pie_InitLighting()
 {
-	const GLfloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
+	// set scene color, ambient, diffuse and specular light intensities of sun
+	// diffuse lighting is turned off because players dislike it
+	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f},  {0.0f, 0.0f, 0.0f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
 }
 

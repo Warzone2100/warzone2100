@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -326,7 +326,7 @@ void iV_FreeImageFile(IMAGEFILE *imageFile)
 Image IMAGEFILE::find(std::string const &name)
 {
 	std::pair<std::string, int> val(name, 0);
-	std::vector<std::pair<std::string, int> >::const_iterator i = std::lower_bound(imageNames.begin(), imageNames.end(), val);
+	std::vector<std::pair<std::string, int>>::const_iterator i = std::lower_bound(imageNames.begin(), imageNames.end(), val);
 	if (i != imageNames.end() && i->first == name)
 	{
 		return Image(this, i->second);

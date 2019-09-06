@@ -104,7 +104,7 @@ camAreaEvent("failZone", function(droid)
 function vtolAttack()
 {
 	var list = [cTempl.colatv, cTempl.colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(300000), "COCommandCenter"); // 5 min
+	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter");
 }
 
 //Order the truck to build some defenses.
@@ -112,7 +112,7 @@ function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
-		queue("truckDefense", 160000);
+		queue("truckDefense", camSecondsToMilliseconds(160));
 	}
 
 	const list = ["WallTower06", "PillBox1", "WallTower03"];
@@ -128,7 +128,7 @@ function showGameOver()
 
 function failSequence()
 {
-	queue("showGameOver", 300);
+	queue("showGameOver", camSecondsToMilliseconds(0.3));
 }
 
 function retreatCommander()
@@ -153,22 +153,12 @@ function eventAttacked(victim, attacker)
 	}
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C", {
-		area: "RTLZ",
-		message: "C22_LZ",
-		reinforcements: 180 //3 min
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C",{
 		area: "RTLZ",
 		message: "C22_LZ",
-		reinforcements: -1
+		reinforcements: camMinutesToSeconds(3)
 	});
 
 	var startpos = getObject("startPosition");
@@ -209,7 +199,7 @@ function eventStartLevel()
 			assembly: camMakePos("eastAssembly"),
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(70000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -221,7 +211,7 @@ function eventStartLevel()
 			assembly: camMakePos("westAssembly"),
 			order: CAM_ORDER_DEFEND,
 			groupSize: 5,
-			throttle: camChangeOnDiff(80000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(80)),
 			data: {
 				pos: camMakePos("westAssembly"),
 				regroup: false,
@@ -240,6 +230,5 @@ function eventStartLevel()
 
 	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 20000);
-	queue("vtolAttack", 120000);
+	queue("vtolAttack", camMinutesToMilliseconds(2));
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -123,6 +123,7 @@ struct W_INIT
 	UDWORD                  UserData;               ///< User data (if any)
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calculate layout callback function
 	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
+	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional custom hit-testing function
 	WIDGET_INITIALIZE_PUSERDATA_FUNC initPUserDataFunc;	///< (Optional) Used to initialize the pUserData pointer per widget instance
 };
 
@@ -320,18 +321,6 @@ enum _w_colour
 
 /** Set the global toop tip text colour. */
 void widgSetTipColour(PIELIGHT colour);
-
-// Possible states for a button or clickform.
-enum ButtonState
-{
-	WBUT_DISABLE   = 0x01,  ///< Disable (grey out) a button.
-	WBUT_LOCK      = 0x02,  ///< Fix a button down.
-	WBUT_CLICKLOCK = 0x04,  ///< Fix a button down but it is still clickable.
-	WBUT_FLASH     = 0x08,  ///< Make a button flash.
-	WBUT_DOWN      = 0x10,  ///< Button is down.
-	WBUT_HIGHLIGHT = 0x20,  ///< Button is highlighted.
-};
-
 
 WZ_DECL_NONNULL(1) void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id);
 WZ_DECL_NONNULL(1) void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id);

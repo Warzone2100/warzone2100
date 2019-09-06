@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013-2017  Warzone 2100 Project
+	Copyright (C) 2011-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -51,8 +51,12 @@
 //;; function that does something with the **game object**.
 //;;
 
-#include "qtscript.h"
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
 
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtCore/QTextStream>
 #include <QtCore/QHash>
 #include <QtScript/QScriptEngine>
@@ -67,6 +71,12 @@
 #include <QtCore/QElapsedTimer>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QFileDialog>
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
+#include "qtscript.h"
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -752,7 +762,7 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup("groups_" + WzString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", engine->globalObject().property("me").toInt32());
-		ini.setValue("scriptName", engine->globalObject().property("scriptName").toString());
+		ini.setValue("scriptName", QStringToWzString(engine->globalObject().property("scriptName").toString()));
 		saveGroups(ini, engine);
 		ini.endGroup();
 	}
@@ -762,8 +772,8 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup("triggers_" + WzString::number(i));
 		// we have to save 'scriptName' and 'me' explicitly
 		ini.setValue("me", node.player);
-		ini.setValue("scriptName", node.engine->globalObject().property("scriptName").toString());
-		ini.setValue("function", node.function);
+		ini.setValue("scriptName", QStringToWzString(node.engine->globalObject().property("scriptName").toString()));
+		ini.setValue("function", QStringToWzString(node.function));
 		if (node.baseobj >= 0)
 		{
 			ini.setValue("object", node.baseobj);
@@ -801,7 +811,7 @@ bool loadScriptStates(const char *filename)
 	{
 		ini.beginGroup(list[i]);
 		int player = ini.value("me").toInt();
-		QString scriptName = ini.value("scriptName").toString();
+		QString scriptName = QString::fromUtf8(ini.value("scriptName").toWzString().toUtf8().c_str());
 		QScriptEngine *engine = findEngineForPlayer(player, scriptName);
 		if (engine && list[i].startsWith("triggers_"))
 		{
@@ -812,7 +822,7 @@ bool loadScriptStates(const char *filename)
 			node.engine = engine;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
 			      i, node.player, scriptName.toUtf8().constData());
-			node.function = ini.value("function").toString();
+			node.function = QString::fromUtf8(ini.value("function").toWzString().toUtf8().c_str());
 			node.baseobj = ini.value("baseobj", -1).toInt();
 			node.type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
 			timers.push_back(node);
@@ -820,7 +830,7 @@ bool loadScriptStates(const char *filename)
 		else if (engine && list[i].startsWith("globals_"))
 		{
 			std::vector<WzString> keys = ini.childKeys();
-			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %lu values",
+			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %zu values",
 			      player, scriptName.toUtf8().constData(), keys.size());
 			for (size_t j = 0; j < keys.size(); ++j)
 			{
@@ -957,15 +967,15 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text)
 	return true;
 }
 
-void jsAutogameSpecific(const QString &name, int player)
+void jsAutogameSpecific(const WzString &name, int player)
 {
-	QScriptEngine *engine = loadPlayerScript(WzString::fromUtf8(name.toUtf8().constData()), player, DIFFICULTY_MEDIUM);
+	QScriptEngine *engine = loadPlayerScript(name, player, DIFFICULTY_MEDIUM);
 	if (!engine)
 	{
 		console("Failed to load selected AI! Check your logs to see why.");
 		return;
 	}
-	console("Loaded the %s AI script for current player!", name.toUtf8().constData());
+	console("Loaded the %s AI script for current player!", name.toUtf8().c_str());
 	callFunction(engine, "eventGameInit", QScriptValueList());
 	callFunction(engine, "eventStartLevel", QScriptValueList());
 }
@@ -982,7 +992,7 @@ void jsAutogame()
 		console("No file specified");
 		return;
 	}
-	jsAutogameSpecific("scripts/" + basename.fileName(), selectedPlayer);
+	jsAutogameSpecific(QStringToWzString("scripts/" + basename.fileName()), selectedPlayer);
 }
 
 void jsShowDebug()
@@ -1333,6 +1343,32 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 				args += convDroid(psDroid, engine);
 			}
 			callFunction(engine, "eventStructureBuilt", args);
+		}
+	}
+	return true;
+}
+
+//__ ## eventStructureDemolish(structure[, droid])
+//__
+//__ An event that is run every time a structure begins to be demolished. This does
+//__ not trigger again if the structure is partially demolished.
+//__
+bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *engine : scripts)
+	{
+		int player = engine->globalObject().property("me").toInt32();
+		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		if (player == psStruct->player || receiveAll)
+		{
+			QScriptValueList args;
+			args += convStructure(psStruct, engine);
+			if (psDroid)
+			{
+				args += convDroid(psDroid, engine);
+			}
+			callFunction(engine, "eventStructureDemolish", args);
 		}
 	}
 	return true;
@@ -1841,8 +1877,11 @@ void to_json(nlohmann::json& j, const QVariant& value) {
 			j = value.toDouble();
 			break;
 		case QMetaType::QString:
-			j = value.toString();
+		{
+			QString qstring = value.toString();
+			j = json(qstring.toUtf8().constData());
 			break;
+		}
 		case QMetaType::QStringList:
 		case QMetaType::QVariantList:
 		{
@@ -1893,4 +1932,3 @@ void to_json(nlohmann::json& j, const QVariant& value) {
 			}
 	}
 }
-

@@ -3166,88 +3166,6 @@
         ],
         "statID": "Sys-CBTurret01"
     },
-    "R-Sys-ECM01": {
-        "iconID": "IMAGE_RES_SYSTEMTECH",
-        "id": "R-Sys-ECM01",
-        "imdName": "gnmecm1.pie",
-        "keyTopic": 1,
-        "msgName": "RES_SY_SUE1",
-        "name": "Electronic Countermeasures",
-        "requiredResearch": [
-            "R-Sys-Sensor-Upgrade01"
-        ],
-        "researchPoints": 9000,
-        "researchPower": 281,
-        "resultComponents": [
-            "ECM1TurretMk1"
-        ],
-        "resultStructures": [
-            "ECM1PylonMk1"
-        ],
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
-    "R-Sys-ECM-Upgrade01": {
-        "iconID": "IMAGE_RES_SYSTEMTECH",
-        "id": "R-Sys-ECM-Upgrade01",
-        "imdName": "gnmecm1.pie",
-        "keyTopic": 1,
-        "msgName": "RES_SY_SU1",
-        "name": "Electronic Countermeasures",
-        "requiredResearch": [
-            "R-Sys-ECM01"
-        ],
-        "researchPoints": 9200,
-        "researchPower": 295,
-        "results": [
-            {
-                "class": "ECM",
-                "parameter": "Range",
-                "value": 25
-            }
-        ],
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
-    "R-Sys-ECM-Upgrade02": {
-        "iconID": "IMAGE_RES_SYSTEMTECH",
-        "id": "R-Sys-ECM-Upgrade02",
-        "imdName": "gnmecm1.pie",
-        "msgName": "RES_SY_SU2",
-        "name": "Electronic Countermeasures Mk2",
-        "requiredResearch": [
-            "R-Sys-ECM-Upgrade01",
-            "R-Sys-Sensor-Upgrade03"
-        ],
-        "researchPoints": 9800,
-        "researchPower": 305,
-        "results": [
-            {
-                "class": "ECM",
-                "parameter": "Range",
-                "value": 15
-            }
-        ],
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
-    "R-Sys-ECM-Upgrade03": {
-        "iconID": "IMAGE_RES_SYSTEMTECH",
-        "id": "R-Sys-ECM-Upgrade03",
-        "imdName": "gnmecm1.pie",
-        "msgName": "RES_SY_SU3",
-        "name": "Electronic Countermeasures Mk3",
-        "requiredResearch": [
-            "R-Sys-ECM-Upgrade02"
-        ],
-        "researchPoints": 10400,
-        "researchPower": 315,
-        "results": [
-            {
-                "class": "ECM",
-                "parameter": "Range",
-                "value": 10
-            }
-        ],
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
     "R-Sys-Engineering01": {
         "iconID": "IMAGE_RES_SYSTEMTECH",
         "id": "R-Sys-Engineering01",
@@ -4688,6 +4606,13 @@
                 "filterValue": "A-A GUN",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "A-A GUN",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "QuadMg1AAGun",
@@ -4711,6 +4636,13 @@
                 "filterValue": "A-A GUN",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "A-A GUN",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "QuadMg1AAGun",
@@ -4733,6 +4665,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "A-A GUN",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "A-A GUN",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -5382,6 +5321,13 @@
                 "filterValue": "CANNON",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "CANNON",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "Cannon1Mk1",
@@ -5405,6 +5351,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "CANNON",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "CANNON",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -5987,6 +5940,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "ENERGY",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ENERGY",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -6576,6 +6536,13 @@
                 "filterValue": "HOWITZERS",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "HOWITZERS",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "Howitzer105Mk1",
@@ -6597,6 +6564,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "HOWITZERS",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "HOWITZERS",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -6620,6 +6594,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "HOWITZERS",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "HOWITZERS",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -7525,6 +7506,13 @@
                 "filterValue": "MISSILE",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MISSILE",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "Missile-A-T",
@@ -7546,6 +7534,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "MISSILE",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MISSILE",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -7802,6 +7797,13 @@
                 "filterValue": "MORTARS",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MORTARS",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "Mortar1Mk1",
@@ -7824,6 +7826,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "MORTARS",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MORTARS",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -7848,6 +7857,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "MORTARS",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MORTARS",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -8328,6 +8344,13 @@
                 "filterValue": "GAUSS",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "GAUSS",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "RailGun1Mk1",
@@ -8585,6 +8608,13 @@
                 "filterValue": "ROCKET",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "Rocket-Pod",
@@ -8606,6 +8636,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "ROCKET",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],
@@ -9083,6 +9120,13 @@
                 "filterValue": "ROCKET",
                 "parameter": "HitChance",
                 "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ShortHitChance",
+                "value": 10
             }
         ],
         "statID": "Rocket-LtA-T",
@@ -9105,6 +9149,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "ROCKET",
                 "parameter": "HitChance",
+                "value": 10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ShortHitChance",
                 "value": 10
             }
         ],

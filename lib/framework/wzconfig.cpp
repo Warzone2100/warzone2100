@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,15 +23,16 @@
  */
 
 // Get platform defines before checking for them.
-// Qt headers MUST come before platform specific stuff!
 #include "wzconfig.h"
+#include <physfs.h>
 #include "file.h"
+#include <sstream>
 
 WzConfig::~WzConfig()
 {
 	if (mWarning == ReadAndWrite)
 	{
-		ASSERT(mObjStack.empty(), "Some json groups have not been closed, stack size %lu.", mObjStack.size());
+		ASSERT(mObjStack.empty(), "Some json groups have not been closed, stack size %zu.", mObjStack.size());
 		std::ostringstream stream;
 		stream << mRoot.dump(4) << std::endl;
 		std::string jsonString = stream.str();
@@ -506,10 +507,6 @@ json_variant::json_variant(const std::string & str)
 : mObj(str)
 { }
 
-json_variant::json_variant(const QString & str)
-: mObj(str.toUtf8().constData())
-{ }
-
 json_variant::json_variant(const WzString & str)
 : mObj(str.toUtf8())
 { }
@@ -554,7 +551,7 @@ int json_variant::toInt(bool *ok /*= nullptr*/) const
 	else if (mObj.is_boolean())
 	{
 		bool result = json_variant_toType<bool>(*this, ok, false);
-		return (uint)result;
+		return (int)result;
 	}
 	else if (mObj.is_string())
 	{
@@ -577,31 +574,31 @@ int json_variant::toInt(bool *ok /*= nullptr*/) const
 	}
 }
 
-uint json_variant::toUInt(bool *ok /*= nullptr*/) const
+unsigned int json_variant::toUInt(bool *ok /*= nullptr*/) const
 {
 	if (mObj.is_number())
 	{
-		return json_variant_toType<uint>(*this, ok, 0);
+		return json_variant_toType<unsigned int>(*this, ok, 0);
 	}
 	else if (mObj.is_boolean())
 	{
 		bool result = json_variant_toType<bool>(*this, ok, false);
-		return (uint)result;
+		return (unsigned int)result;
 	}
 	else if (mObj.is_string())
 	{
 		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
 		try {
 			unsigned long ulongValue = std::stoul(result);
-			if (ulongValue > std::numeric_limits<uint>::max())
+			if (ulongValue > std::numeric_limits<unsigned int>::max())
 			{
-				debug(LOG_WARNING, "Failed to convert string '%s' to uint because of error: value is > std::numeric_limits<uint>::max()", result.c_str());
+				debug(LOG_WARNING, "Failed to convert string '%s' to unsigned int because of error: value is > std::numeric_limits<unsigned int>::max()", result.c_str());
 				return 0;
 			}
-			return (uint)ulongValue;
+			return (unsigned int)ulongValue;
 		}
 		catch (const std::exception &e) {
-			debug(LOG_WARNING, "Failed to convert string '%s' to uint because of error: %s", result.c_str(), e.what());
+			debug(LOG_WARNING, "Failed to convert string '%s' to unsigned int because of error: %s", result.c_str(), e.what());
 			return 0;
 		}
 	}
@@ -790,76 +787,6 @@ std::vector<WzString> json_variant::toWzStringList() const
 			break;
 		}
 		result.push_back(str);
-	}
-	return result;
-}
-
-QString json_variant::toString() const
-{
-	if (mObj.is_string())
-	{
-		return QString::fromUtf8(json_variant_toType<std::string>(*this, nullptr, std::string()).c_str());
-	}
-	else if (mObj.is_boolean())
-	{
-		bool result = json_variant_toType<bool>(*this, nullptr, false);
-		return (result) ? "true" : "false";
-	}
-	else if (mObj.is_number_unsigned())
-	{
-		json::number_unsigned_t intValue = json_variant_toType<json::number_unsigned_t>(*this, nullptr, 0);
-		return QString::number(intValue);
-	}
-	else if (mObj.is_number_integer())
-	{
-		json::number_integer_t intValue = json_variant_toType<json::number_integer_t>(*this, nullptr, 0);
-		return QString::number(intValue);
-	}
-	else if (mObj.is_number_float())
-	{
-		json::number_float_t floatValue = json_variant_toType<json::number_float_t>(*this, nullptr, 0);
-		return QString::number(floatValue);
-	}
-	else if (mObj.is_null())
-	{
-		return QString();
-	}
-	else
-	{
-		return QString();
-	}
-}
-
-QStringList json_variant::toStringList() const
-{
-	QStringList result;
-
-	if (!mObj.is_array())
-	{
-		// attempt to convert the non-array to a string, and return as a vector of 1 entry (if the string is non-empty)
-		QString selfAsString = toString();
-		if (!selfAsString.isEmpty())
-		{
-			result.append(selfAsString);
-		}
-		return result;
-	}
-
-	std::string str;
-	for (const auto& v : mObj)
-	{
-		try {
-			str = v.get<std::string>();
-		}
-		catch (const std::exception &e) {
-			debug(LOG_WARNING, "Encountered a JSON value in the array that cannot be converted to a string; error: %s", e.what());
-			break;
-		}
-		catch (...) {
-			debug(LOG_FATAL, "Encountered an unexpected exception in json_variant::toStringList()");
-			break;
-		}
-		result.append(QString::fromUtf8(str.c_str()));
 	}
 	return result;
 }

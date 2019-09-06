@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static std::unordered_map<WzString, BASE_STATS *> lookupStatPtr;
 
-static bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model);
+static bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model);
 static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString &szWavName, int *piWavID);
 
 //Access functions for the max values to be used in the Design Screen
@@ -355,9 +355,11 @@ bool loadWeaponStats(WzConfig &ini)
 
 		psStats->radiusLife = ini.value("radiusLife", 0).toUInt();
 
+		psStats->base.shortRange = ini.value("shortRange").toUInt();
 		psStats->base.maxRange = ini.value("longRange").toUInt();
 		psStats->base.minRange = ini.value("minRange", 0).toUInt();
 		psStats->base.hitChance = ini.value("longHit", 100).toUInt();
+		psStats->base.shortHitChance = ini.value("shortHit", 100).toUInt();
 		psStats->base.firePause = ini.value("firePause").toUInt();
 		psStats->base.numRounds = ini.value("numRounds").toUInt();
 		psStats->base.reloadTime = ini.value("reloadTime").toUInt();
@@ -447,7 +449,7 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 
 		//set the weapon effect
-		if (!getWeaponEffect(ini.value("weaponEffect").toString().toUtf8().constData(), &psStats->weaponEffect))
+		if (!getWeaponEffect(ini.value("weaponEffect").toWzString(), &psStats->weaponEffect))
 		{
 			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getName(psStats));
 			return false;
@@ -493,9 +495,22 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 
 		//set the movement model
-		if (!getMovementModel(ini.value("movement").toString().toUtf8().constData(), &psStats->movementModel))
+		if (!getMovementModel(ini.value("movement").toWzString(), &psStats->movementModel))
 		{
 			return false;
+		}
+
+		unsigned int shortRange = psStats->upgrade[0].shortRange;
+		unsigned int longRange = psStats->upgrade[0].maxRange;
+		unsigned int shortHit = psStats->upgrade[0].shortHitChance;
+		unsigned int longHit = psStats->upgrade[0].hitChance;
+		if (shortRange > longRange)
+		{
+			debug(LOG_ERROR, "%s, Short range (%d) is greater than long range (%d)", getName(psStats), shortRange, longRange);
+		}
+		if (shortRange == longRange && shortHit != longHit)
+		{
+			debug(LOG_ERROR, "%s, shortHit and longHit should be equal if the ranges are the same", getName(psStats));
 		}
 
 		// set the face Player value
@@ -580,7 +595,7 @@ bool loadBodyStats(WzConfig &ini)
 			psStats->upgrade[j] = psStats->base;
 		}
 		psStats->ref = REF_BODY_START + i;
-		if (!getBodySize(ini.value("size").toString().toUtf8().constData(), &psStats->size))
+		if (!getBodySize(ini.value("size").toWzString(), &psStats->size))
 		{
 			ASSERT(false, "Unknown body size for %s", getName(psStats));
 			return false;
@@ -1206,7 +1221,7 @@ bool loadWeaponModifiers(WzConfig &ini)
 
 		ini.beginGroup(list[i]);
 		//get the weapon effect inc
-		if (!getWeaponEffect(list[i].toUtf8().c_str(), &effectInc))
+		if (!getWeaponEffect(list[i], &effectInc))
 		{
 			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().c_str());
 			continue;
@@ -1219,7 +1234,7 @@ bool loadWeaponModifiers(WzConfig &ini)
 			{
 				// If not propulsion, must be body
 				BODY_SIZE body = SIZE_NUM;
-				if (!getBodySize(keys.at(j).toUtf8().data(), &body))
+				if (!getBodySize(keys.at(j), &body))
 				{
 					debug(LOG_FATAL, "Invalid Propulsion or Body type - %s", keys.at(j).toUtf8().c_str());
 					continue;
@@ -1445,30 +1460,30 @@ COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
-bool getBodySize(const char *pSize, BODY_SIZE *pStore)
+bool getBodySize(const WzString &size, BODY_SIZE *pStore)
 {
-	if (!strcmp(pSize, "LIGHT"))
+	if (!strcmp(size.toUtf8().c_str(), "LIGHT"))
 	{
 		*pStore = SIZE_LIGHT;
 		return true;
 	}
-	else if (!strcmp(pSize, "MEDIUM"))
+	else if (!strcmp(size.toUtf8().c_str(), "MEDIUM"))
 	{
 		*pStore = SIZE_MEDIUM;
 		return true;
 	}
-	else if (!strcmp(pSize, "HEAVY"))
+	else if (!strcmp(size.toUtf8().c_str(), "HEAVY"))
 	{
 		*pStore = SIZE_HEAVY;
 		return true;
 	}
-	else if (!strcmp(pSize, "SUPER HEAVY"))
+	else if (!strcmp(size.toUtf8().c_str(), "SUPER HEAVY"))
 	{
 		*pStore = SIZE_SUPER_HEAVY;
 		return true;
 	}
 
-	ASSERT(false, "Invalid size - %s", pSize);
+	ASSERT(false, "Invalid size - %s", size.toUtf8().c_str());
 	return false;
 }
 
@@ -1581,28 +1596,28 @@ const char *getWeaponSubClass(WEAPON_SUBCLASS wclass)
 }
 
 /*returns the movement model based on the string name passed in */
-bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model)
+bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model)
 {
-	if (strcmp(movementModel, "DIRECT") == 0)
+	if (strcmp(movementModel.toUtf8().c_str(), "DIRECT") == 0)
 	{
 		*model = MM_DIRECT;
 	}
-	else if (strcmp(movementModel, "INDIRECT") == 0)
+	else if (strcmp(movementModel.toUtf8().c_str(), "INDIRECT") == 0)
 	{
 		*model = MM_INDIRECT;
 	}
-	else if (strcmp(movementModel, "HOMING-DIRECT") == 0)
+	else if (strcmp(movementModel.toUtf8().c_str(), "HOMING-DIRECT") == 0)
 	{
 		*model = MM_HOMINGDIRECT;
 	}
-	else if (strcmp(movementModel, "HOMING-INDIRECT") == 0)
+	else if (strcmp(movementModel.toUtf8().c_str(), "HOMING-INDIRECT") == 0)
 	{
 		*model = MM_HOMINGINDIRECT;
 	}
 	else
 	{
 		// We've got problem if we got here
-		ASSERT(!"Invalid movement model", "Invalid movement model: %s", movementModel);
+		ASSERT(!"Invalid movement model", "Invalid movement model: %s", movementModel.toUtf8().c_str());
 		return false;
 	}
 
@@ -1621,35 +1636,35 @@ const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 };
 const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFECT;
 
-bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect)
+bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect)
 {
-	if (strcmp(weaponEffect, "ANTI PERSONNEL") == 0)
+	if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI PERSONNEL") == 0)
 	{
 		*effect = WE_ANTI_PERSONNEL;
 	}
-	else if (strcmp(weaponEffect, "ANTI TANK") == 0)
+	else if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI TANK") == 0)
 	{
 		*effect = WE_ANTI_TANK;
 	}
-	else if (strcmp(weaponEffect, "BUNKER BUSTER") == 0)
+	else if (strcmp(weaponEffect.toUtf8().c_str(), "BUNKER BUSTER") == 0)
 	{
 		*effect = WE_BUNKER_BUSTER;
 	}
-	else if (strcmp(weaponEffect, "ARTILLERY ROUND") == 0)
+	else if (strcmp(weaponEffect.toUtf8().c_str(), "ARTILLERY ROUND") == 0)
 	{
 		*effect = WE_ARTILLERY_ROUND;
 	}
-	else if (strcmp(weaponEffect, "FLAMER") == 0)
+	else if (strcmp(weaponEffect.toUtf8().c_str(), "FLAMER") == 0)
 	{
 		*effect = WE_FLAMER;
 	}
-	else if (strcmp(weaponEffect, "ANTI AIRCRAFT") == 0 || strcmp(weaponEffect, "ALL ROUNDER") == 0)
+	else if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI AIRCRAFT") == 0 || strcmp(weaponEffect.toUtf8().c_str(), "ALL ROUNDER") == 0)
 	{
 		*effect = WE_ANTI_AIRCRAFT;
 	}
 	else
 	{
-		ASSERT(!"Invalid weapon effect", "Invalid weapon effect: %s", weaponEffect);
+		ASSERT(!"Invalid weapon effect", "Invalid weapon effect: %s", weaponEffect.toUtf8().c_str());
 		return false;
 	}
 
@@ -1689,6 +1704,11 @@ int weaponReloadTime(const WEAPON_STATS *psStats, int player)
 int weaponLongHit(const WEAPON_STATS *psStats, int player)
 {
 	return psStats->upgrade[player].hitChance;
+}
+
+int weaponShortHit(const WEAPON_STATS *psStats, int player)
+{
+	return psStats->upgrade[player].shortHitChance;
 }
 
 int weaponDamage(const WEAPON_STATS *psStats, int player)

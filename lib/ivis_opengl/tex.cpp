@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -116,8 +116,7 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 		if (_TEX_PAGE[page].id)
 			delete _TEX_PAGE[page].id;
 		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(s->width, s->height, format, filename);
-		pie_Texture(page).upload(0u, 0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
-		pie_Texture(page).generate_mip_levels();
+		pie_Texture(page).upload(0u, 0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp, true);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
 	else	// this is an interface texture, do not use compression
@@ -138,7 +137,7 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
 	if (GLEW_EXT_texture_filter_anisotropic)
 	{
-		GLfloat max;
+		gfx_api::gfxFloat max;
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
 	}

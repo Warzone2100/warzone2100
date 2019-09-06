@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,13 +40,13 @@ public:
 	W_LABEL(W_LABINIT const *init);
 	W_LABEL(WIDGET *parent);
 
-	void highlight(W_CONTEXT *psContext);
-	void highlightLost();
-	void display(int xOffset, int yOffset);
+	void highlight(W_CONTEXT *psContext) override;
+	void highlightLost() override;
+	void display(int xOffset, int yOffset) override;
 
-	WzString getString() const;
-	void setString(WzString string);
-	void setTip(std::string string);
+	WzString getString() const override;
+	void setString(WzString string) override;
+	void setTip(std::string string) override;
 
 	void setFont(iV_fonts font)
 	{

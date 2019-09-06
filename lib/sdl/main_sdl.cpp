@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013-2017  Warzone 2100 Project
+	Copyright (C) 2011-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,14 +22,25 @@
  * SDL backend code
  */
 
-// Get platform defines before checking for them!
-#include "lib/framework/wzapp.h"
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
 
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtWidgets/QApplication>
 // This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
 #if defined(QT_STATICPLUGIN)
 #include <QtCore/QtPlugin>
 #endif
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
+// Get platform defines before checking for them!
+#include "lib/framework/wzapp.h"
+
 #include "lib/framework/input.h"
 #include "lib/framework/utf.h"
 #include "lib/framework/opengl.h"
@@ -262,202 +273,6 @@ WzString wzGetSelection()
 	return retval;
 }
 
-// Here we handle VSYNC enable/disabling
-#if defined(WZ_WS_X11)
-
-#if defined(__clang__)
-// Some versions of the X11 headers (which are included by <GL/glx.h>)
-// trigger `named variadic macros are a GNU extension [-Wvariadic-macros]`
-// on Clang. https://lists.x.org/archives/xorg-devel/2015-January/045216.html
-#  pragma clang diagnostic push
-#  pragma clang diagnostic ignored "-Wvariadic-macros"
-#endif
-
-#include <GL/glx.h> // GLXDrawable
-
-#if defined(__clang__)
-#  pragma clang diagnostic pop
-#endif
-
-// X11 polution
-#ifdef Status
-#undef Status
-#endif // Status
-#ifdef CursorShape
-#undef CursorShape
-#endif // CursorShape
-#ifdef Bool
-#undef Bool
-#endif // Bool
-
-#ifndef GLX_SWAP_INTERVAL_EXT
-#define GLX_SWAP_INTERVAL_EXT 0x20F1
-#endif // GLX_SWAP_INTERVAL_EXT
-
-// Need this global for use case of only having glXSwapIntervalSGI
-static int swapInterval = -1;
-
-void wzSetSwapInterval(int interval)
-{
-	typedef void (* PFNGLXQUERYDRAWABLEPROC)(Display *, GLXDrawable, int, unsigned int *);
-	typedef void (* PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable, int);
-	typedef int (* PFNGLXGETSWAPINTERVALMESAPROC)(void);
-	typedef int (* PFNGLXSWAPINTERVALMESAPROC)(unsigned);
-	typedef int (* PFNGLXSWAPINTERVALSGIPROC)(int);
-	PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
-	PFNGLXQUERYDRAWABLEPROC glXQueryDrawable;
-	PFNGLXGETSWAPINTERVALMESAPROC glXGetSwapIntervalMESA;
-	PFNGLXSWAPINTERVALMESAPROC glXSwapIntervalMESA;
-	PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
-
-	if (interval < 0)
-	{
-		interval = 0;
-	}
-
-#if GLX_VERSION_1_2
-	// Hack-ish, but better than not supporting GLX_SWAP_INTERVAL_EXT?
-	GLXDrawable drawable = glXGetCurrentDrawable();
-	Display *display =  glXGetCurrentDisplay();
-	glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("glXSwapIntervalEXT");
-	glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC) SDL_GL_GetProcAddress("glXQueryDrawable");
-
-	if (glXSwapIntervalEXT && glXQueryDrawable && drawable)
-	{
-		unsigned clampedInterval;
-		glXSwapIntervalEXT(display, drawable, interval);
-		glXQueryDrawable(display, drawable, GLX_SWAP_INTERVAL_EXT, &clampedInterval);
-		swapInterval = clampedInterval;
-		return;
-	}
-#endif
-
-	glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC) SDL_GL_GetProcAddress("glXSwapIntervalMESA");
-	glXGetSwapIntervalMESA = (PFNGLXGETSWAPINTERVALMESAPROC) SDL_GL_GetProcAddress("glXGetSwapIntervalMESA");
-	if (glXSwapIntervalMESA && glXGetSwapIntervalMESA)
-	{
-		glXSwapIntervalMESA(interval);
-		swapInterval = glXGetSwapIntervalMESA();
-		return;
-	}
-
-	glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC) SDL_GL_GetProcAddress("glXSwapIntervalSGI");
-	if (glXSwapIntervalSGI)
-	{
-		if (interval < 1)
-		{
-			interval = 1;
-		}
-		if (glXSwapIntervalSGI(interval))
-		{
-			// Error, revert to default
-			swapInterval = 1;
-			glXSwapIntervalSGI(1);
-		}
-		else
-		{
-			swapInterval = interval;
-		}
-		return;
-	}
-	swapInterval = 0;
-}
-
-int wzGetSwapInterval()
-{
-	if (swapInterval >= 0)
-	{
-		return swapInterval;
-	}
-
-	typedef void (* PFNGLXQUERYDRAWABLEPROC)(Display *, GLXDrawable, int, unsigned int *);
-	typedef int (* PFNGLXGETSWAPINTERVALMESAPROC)(void);
-	typedef int (* PFNGLXSWAPINTERVALSGIPROC)(int);
-	PFNGLXQUERYDRAWABLEPROC glXQueryDrawable;
-	PFNGLXGETSWAPINTERVALMESAPROC glXGetSwapIntervalMESA;
-	PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
-
-#if GLX_VERSION_1_2
-	// Hack-ish, but better than not supporting GLX_SWAP_INTERVAL_EXT?
-	GLXDrawable drawable = glXGetCurrentDrawable();
-	Display *display =  glXGetCurrentDisplay();
-	glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC) SDL_GL_GetProcAddress("glXQueryDrawable");
-
-	if (glXQueryDrawable && drawable)
-	{
-		unsigned interval;
-		glXQueryDrawable(display, drawable, GLX_SWAP_INTERVAL_EXT, &interval);
-		swapInterval = interval;
-		return swapInterval;
-	}
-#endif
-
-	glXGetSwapIntervalMESA = (PFNGLXGETSWAPINTERVALMESAPROC) SDL_GL_GetProcAddress("glXGetSwapIntervalMESA");
-	if (glXGetSwapIntervalMESA)
-	{
-		swapInterval = glXGetSwapIntervalMESA();
-		return swapInterval;
-	}
-
-	glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC) SDL_GL_GetProcAddress("glXSwapIntervalSGI");
-	if (glXSwapIntervalSGI)
-	{
-		swapInterval = 1;
-	}
-	else
-	{
-		swapInterval = 0;
-	}
-	return swapInterval;
-}
-
-#elif defined(WZ_WS_WIN)
-
-void wzSetSwapInterval(int interval)
-{
-	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int);
-	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
-
-	if (interval < 0)
-	{
-		interval = 0;
-	}
-
-	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("wglSwapIntervalEXT");
-
-	if (wglSwapIntervalEXT)
-	{
-		wglSwapIntervalEXT(interval);
-	}
-}
-
-int wzGetSwapInterval()
-{
-	typedef int (WINAPI * PFNWGLGETSWAPINTERVALEXTPROC)(void);
-	PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
-
-	wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("wglGetSwapIntervalEXT");
-	if (wglGetSwapIntervalEXT)
-	{
-		return wglGetSwapIntervalEXT();
-	}
-	return 0;
-}
-
-#elif !defined(WZ_OS_MAC)
-// FIXME:  This can't be right?
-void wzSetSwapInterval(int)
-{
-	return;
-}
-
-int wzGetSwapInterval()
-{
-	return 0;
-}
-
-#endif
-
 std::vector<screeninfo> wzAvailableResolutions()
 {
 	return displaylist;
@@ -471,6 +286,7 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 
 void setDisplayScale(unsigned int displayScale)
 {
+	ASSERT(displayScale >= 100, "Invalid display scale: %u", displayScale);
 	current_displayScale = displayScale;
 	current_displayScaleFactor = (float)displayScale / 100.f;
 }
@@ -560,6 +376,22 @@ void wzDelay(unsigned int delay)
 	SDL_Delay(delay);
 }
 
+#if !defined(WZ_OS_MAC)
+void wzSetSwapInterval(int interval)
+{
+	if (SDL_GL_SetSwapInterval(interval) != 0)
+	{
+		debug(LOG_ERROR, "Error: SDL_GL_SetSwapInterval(%d) failed (%s).", interval, SDL_GetError());
+		return;
+	}
+}
+
+int wzGetSwapInterval()
+{
+	return SDL_GL_GetSwapInterval();
+}
+#endif
+
 /**************************/
 /***    Thread support  ***/
 /**************************/
@@ -642,7 +474,6 @@ void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 // execFunc()'s execution on the main thread.
 void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
 {
-	assert(exec != nullptr);
 	Uint32 _wzSDLAppEvent = wzSDLAppEvent.load();
 	assert(_wzSDLAppEvent != ((Uint32)-1));
 	if (_wzSDLAppEvent == ((Uint32)-1)) {
@@ -654,6 +485,7 @@ void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
 	event.type = _wzSDLAppEvent;
 	event.user.code = wzSDLAppEventCodes::MAINTHREADEXEC;
 	event.user.data1 = exec;
+	assert(event.user.data1 != nullptr);
 	event.user.data2 = 0;
 	SDL_PushEvent(&event);
 	// receiver handles deleting `exec` on the main thread after doExecOnMainThread() has been called
@@ -1341,7 +1173,6 @@ void wzMain(int &argc, char **argv)
 {
 	initKeycodes();
 
-#if defined(WZ_OS_MAC)
 	// Create copies of argc and arv (for later use initializing QApplication for the script engine)
 	copied_argv = new char*[argc+1];
 	for(int i=0; i < argc; i++) {
@@ -1351,12 +1182,6 @@ void wzMain(int &argc, char **argv)
 	}
 	copied_argv[argc] = NULL;
 	copied_argc = argc;
-#else
-	// For now, just initialize QApplication here
-	// We currently rely on side-effects of QApplication's initialization on Windows (such as how DPI-awareness is enabled)
-	// TODO: Implement proper Win32 API calls to replicate Qt's preparation for DPI awareness (or set in the manifest?)
-	appPtr = new QApplication(copied_argc, copied_argv);
-#endif
 }
 
 #define MIN_WZ_GAMESCREEN_WIDTH 640
@@ -1443,7 +1268,7 @@ float wzGetMaximumDisplayScaleFactorForWindowSize(unsigned int windowWidth, unsi
 	return std::min(maxHorizScaleFactor, maxVertScaleFactor);
 }
 
-// returns: the maximum display scale percentage (sourced from wzAvailableDisplayScales), or 0 if window is below the minimum required size for the minimum support display scale
+// returns: the maximum display scale percentage (sourced from wzAvailableDisplayScales), or 0 if window is below the minimum required size for the minimum supported display scale
 unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight)
 {
 	float maxDisplayScaleFactor = wzGetMaximumDisplayScaleFactorForWindowSize(windowWidth, windowHeight);
@@ -1455,10 +1280,16 @@ unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, uns
 	auto maxDisplayScale = std::lower_bound(availableDisplayScales.begin(), availableDisplayScales.end(), maxDisplayScalePercentage);
 	if (maxDisplayScale == availableDisplayScales.end())
 	{
-		return 0;
+		// return the largest available display scale
+		return availableDisplayScales.back();
 	}
 	if (*maxDisplayScale != maxDisplayScalePercentage)
 	{
+		if (maxDisplayScale == availableDisplayScales.begin())
+		{
+			// no lower display scale to return
+			return 0;
+		}
 		--maxDisplayScale;
 	}
 	return *maxDisplayScale;
@@ -1779,22 +1610,58 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	setDisplayScale(war_GetDisplayScale());
 
+	SDL_Rect bounds;
+	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++)
+	{
+		SDL_GetDisplayBounds(i, &bounds);
+		debug(LOG_WZ, "Monitor %d: pos %d x %d : res %d x %d", i, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
+	}
+	screenIndex = war_GetScreen();
+	const int currentNumDisplays = SDL_GetNumVideoDisplays();
+	if (currentNumDisplays < 1)
+	{
+		debug(LOG_FATAL, "SDL_GetNumVideoDisplays returned: %d, with error: %s", currentNumDisplays, SDL_GetError());
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+	if (screenIndex > currentNumDisplays)
+	{
+		debug(LOG_WARNING, "Invalid screen [%d] defined in configuration; there are only %d displays; falling back to display 0", screenIndex, currentNumDisplays);
+		screenIndex = 0;
+		war_SetScreen(0);
+	}
+
 	// Calculate the minimum window size given the current display scale
 	unsigned int minWindowWidth = 0, minWindowHeight = 0;
 	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
 
 	if ((windowWidth < minWindowWidth) || (windowHeight < minWindowHeight))
 	{
-		// The current window width and/or height is lower than the required minimum for the current display scale.
-		//
-		// Reset the display scale to 100%, and recalculate the required minimum window size.
-		setDisplayScale(100);
-		war_SetDisplayScale(100); // save the new display scale configuration
+		// The desired window width and/or height is lower than the required minimum for the current display scale.
+		// Reduce the display scale to the maximum supported (for the desired window size), and recalculate the required minimum window size.
+		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(windowWidth, windowHeight);
+		maxDisplayScale = std::max(100u, maxDisplayScale); // if wzGetMaximumDisplayScaleForWindowSize fails, it returns < 100
+		setDisplayScale(maxDisplayScale);
+		war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
 		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
 	}
 
-	windowWidth = MAX(windowWidth, minWindowWidth);
-	windowHeight = MAX(windowHeight, minWindowHeight);
+	windowWidth = std::max(windowWidth, minWindowWidth);
+	windowHeight = std::max(windowHeight, minWindowHeight);
+
+	if (!fullscreen)
+	{
+		// Determine the maximum usable windowed size for this display/screen
+		SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
+		if (SDL_GetDisplayUsableBounds(screenIndex, &displayUsableBounds) == 0)
+		{
+			if (displayUsableBounds.w > 0 && displayUsableBounds.h > 0)
+			{
+				windowWidth = std::min((unsigned int)displayUsableBounds.w, windowWidth);
+				windowHeight = std::min((unsigned int)displayUsableBounds.h, windowHeight);
+			}
+		}
+	}
 
 	//// The flags to pass to SDL_CreateWindow
 	int video_flags  = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
@@ -1818,26 +1685,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 #endif
 	}
 
-	SDL_Rect bounds;
-	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++)
-	{
-		SDL_GetDisplayBounds(i, &bounds);
-		debug(LOG_WZ, "Monitor %d: pos %d x %d : res %d x %d", i, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
-	}
-	screenIndex = war_GetScreen();
-	const int currentNumDisplays = SDL_GetNumVideoDisplays();
-	if (currentNumDisplays < 1)
-	{
-		debug(LOG_FATAL, "SDL_GetNumVideoDisplays returned: %d, with error: %s", currentNumDisplays, SDL_GetError());
-		SDL_Quit();
-		exit(EXIT_FAILURE);
-	}
-	if (screenIndex > currentNumDisplays)
-	{
-		debug(LOG_WARNING, "Invalid screen [%d] defined in configuration; there are only %d displays; falling back to display 0", screenIndex, currentNumDisplays);
-		screenIndex = 0;
-		war_SetScreen(0);
-	}
 	WZwindow = SDL_CreateWindow(PACKAGE_NAME, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), windowWidth, windowHeight, video_flags);
 
 	if (!WZwindow)
@@ -1850,18 +1697,49 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	// Check that the actual window size matches the desired window size
 	int resultingWidth, resultingHeight = 0;
 	SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
-	if (resultingWidth != windowWidth || resultingHeight != windowHeight) {
-		// Failed to create window at desired size (This can happen for a number of reasons)
-		debug(LOG_ERROR, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; Reverting to default resolution of %d x %d", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
+	if (resultingWidth < minWindowWidth || resultingHeight < minWindowHeight)
+	{
+		// The created window size (that the system returned) is less than the minimum required window size (for this display scale)
+		debug(LOG_ERROR, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; which is below the required minimum size of %d x %d for the current display scale level", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
 
-		// Default to base resolution
-		SDL_SetWindowSize(WZwindow, minWindowWidth, minWindowHeight);
-		windowWidth = minWindowWidth;
-		windowHeight = minWindowHeight;
+		// Adjust the display scale (if possible)
+		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(resultingWidth, resultingHeight);
+		if (maxDisplayScale >= 100)
+		{
+			// Reduce the display scale
+			debug(LOG_ERROR, "Reducing the display scale level to the maximum supported for this window size: %u", maxDisplayScale);
+			setDisplayScale(maxDisplayScale);
+			war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
+			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
+		}
+		else
+		{
+			// Problem: The resulting window size that the system provided is below the minimum required
+			//          for the lowest possible display scale - i.e. the window is just too small
+			debug(LOG_ERROR, "The window size created by the system is too small!");
 
-		// Center window on screen
-		SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
+			// TODO: Should probably exit with a fatal error here?
+			// For now...
+
+			// Attempt to default to base resolution at 100%
+			setDisplayScale(100);
+			war_SetDisplayScale(100); // save the new display scale configuration
+			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
+
+			SDL_SetWindowSize(WZwindow, minWindowWidth, minWindowHeight);
+			windowWidth = minWindowWidth;
+			windowHeight = minWindowHeight;
+
+			// Center window on screen
+			SDL_SetWindowPosition(WZwindow, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
+
+			// Re-request resulting window size
+			SDL_GetWindowSize(WZwindow, &resultingWidth, &resultingHeight);
+		}
 	}
+	ASSERT(resultingWidth > 0 && resultingHeight > 0, "Invalid - SDL returned window width: %d, window height: %d", resultingWidth, resultingHeight);
+	windowWidth = (unsigned int)resultingWidth;
+	windowHeight = (unsigned int)resultingHeight;
 
 	// Calculate the game screen's logical dimensions
 	screenWidth = windowWidth;
@@ -1985,7 +1863,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 		sdlInitCursors();
 	}
 
-#if defined(WZ_OS_MAC)
 	// For the script engine, let Qt know we're alive
 	//
 	// IMPORTANT: This must come *after* SDL has had a chance to initialize,
@@ -1998,7 +1875,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	//			  we *must* immediately call setlocale(LC_NUMERIC,"C") after initializing
 	//			  or things like loading (parsing) levels / resources can fail
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
-#endif
 
 #if defined(WZ_OS_MAC)
 	cocoaSetupWZMenus();
@@ -2047,19 +1923,21 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 	}
 
 	int displayIndex = SDL_GetWindowDisplayIndex(WZwindow);
-	if (displayIndex < 0)
+	if (displayIndex >= 0)
 	{
-		debug(LOG_ERROR, "Failed to get the display index for the window because : %s", SDL_GetError());
-	}
-
-	float hdpi, vdpi;
-	if (SDL_GetDisplayDPI(displayIndex, nullptr, &hdpi, &vdpi) < 0)
-	{
-		debug(LOG_ERROR, "Failed to get the display DPI because : %s", SDL_GetError());
+		float hdpi, vdpi;
+		if (SDL_GetDisplayDPI(displayIndex, nullptr, &hdpi, &vdpi) < 0)
+		{
+			debug(LOG_WARNING, "Failed to get the display (%d) DPI because : %s", displayIndex, SDL_GetError());
+		}
+		else
+		{
+			debug(LOG_WZ, "Display (%d) DPI: %f, %f", displayIndex, hdpi, vdpi);
+		}
 	}
 	else
 	{
-		debug(LOG_WZ, "Display DPI: %f, %f", hdpi, vdpi);
+		debug(LOG_WARNING, "Failed to get the display index for the window because : %s", SDL_GetError());
 	}
 }
 

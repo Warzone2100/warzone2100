@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,11 +65,11 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"kill", kf_KillSelected},	//kill selected
 	{"john kettley", kf_ToggleWeather},	//john kettley
 	{"mouseflip", kf_ToggleMouseInvert},	//mouseflip
-	{"biffer baker", kf_SetKillerLevel},	//indestructive units
+	{"biffer baker", kf_BifferBaker},	// almost invincible units
 	{"easy", kf_SetEasyLevel},	//easy
 	{"normal", kf_SetNormalLevel},	//normal
 	{"hard", kf_SetHardLevel},	//hard
-	{"double up", kf_SetToughUnitsLevel},	// your units take half the damage
+	{"double up", kf_DoubleUp},	// your units take half the damage
 	{"whale fin", kf_TogglePower},	// turns on/off infinte power
 	{"get off my land", kf_KillEnemy},	// kills all enemy units and structures
 	{"build info", kf_BuildInfo},	// tells you when the game was built

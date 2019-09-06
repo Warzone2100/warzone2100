@@ -90,22 +90,12 @@ function enableFactories()
 	camEnableFactory("COCyborgFactoryR");
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2DS", {
-		area: "RTLZ",
-		message: "C25_LZ",
-		reinforcements: 180 //3 min
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2DS",{
 		area: "RTLZ",
 		message: "C25_LZ",
-		reinforcements: -1
+		reinforcements: camMinutesToSeconds(3)
 	});
 
 	var startpos = getObject("startPosition");
@@ -149,7 +139,7 @@ function eventStartLevel()
 			assembly: "COMediumFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -161,7 +151,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactoryLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -173,7 +163,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactoryRAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -185,9 +175,8 @@ function eventStartLevel()
 
 	hackAddMessage("C25_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("enableReinforcements", 15000);
-	queue("setupDamHovers", 3000);
-	queue("setupCyborgsEast", camChangeOnDiff(180000));//3 min
-	queue("enableFactories", camChangeOnDiff(480000));//8 min
-	queue("setupCyborgsNorth", camChangeOnDiff(600000));//10 min
+	queue("setupDamHovers", camSecondsToMilliseconds(3));
+	queue("setupCyborgsEast", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	queue("enableFactories", camChangeOnDiff(camMinutesToMilliseconds(8)));
+	queue("setupCyborgsNorth", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }

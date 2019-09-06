@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ bool loadResearch(WzConfig &ini)
 	std::vector<WzString> list = ini.childGroups();
 	PLAYER_RESEARCH dummy;
 	memset(&dummy, 0, sizeof(dummy));
-	std::vector< std::vector<WzString> > preResearch;
+	std::vector<std::vector<WzString>> preResearch;
 	preResearch.resize(list.size());
 	for (size_t inc = 0; inc < list.size(); ++inc)
 	{
@@ -1167,9 +1167,9 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward
-			CONPRINTF(ConsoleString, (ConsoleString, "%s :- %s",
+			CONPRINTF("%s :- %s",
 			                          _("Research Award"),
-			                          getName(&asResearch[rewardID])));
+			                          getName(&asResearch[rewardID]));
 		}
 	}
 }
@@ -1341,7 +1341,7 @@ static inline bool allyResearchSortFunction(AllyResearch const &a, AllyResearch 
 std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 {
 	static uint32_t lastGameTime = ~0;
-	static std::map<unsigned, std::vector<AllyResearch> > researches;
+	static std::map<unsigned, std::vector<AllyResearch>> researches;
 	static const std::vector<AllyResearch> noAllyResearch;
 
 	if (gameTime != lastGameTime)
@@ -1388,7 +1388,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 		}
 	}
 
-	std::map<unsigned, std::vector<AllyResearch> >::const_iterator i = researches.find(ref);
+	std::map<unsigned, std::vector<AllyResearch>>::const_iterator i = researches.find(ref);
 	if (i == researches.end())
 	{
 		return noAllyResearch;

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -103,6 +103,8 @@
 //start y position of the available droids buttons
 #define AVAIL_STARTY			0
 
+#define MAX_TRANSPORT_FULL_MESSAGE_PAUSE 20000
+
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
@@ -115,6 +117,8 @@ static	UDWORD			g_iLaunchTime = 0;
 static  bool            bFirstTransporter;
 //the tab positions of the DroidsAvail window
 static  UWORD           objMajor = 0;
+// Last time the transporter is full message was displayed
+static UDWORD lastTransportIsFullMsgTime = 0;
 
 /*functions */
 static bool intAddTransporterContents();
@@ -876,7 +880,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 		if (bMultiPlayer)
 		{
 			//set the units next to the transporter's current location
-			droidPos = map_coord(psTransport->pos.xy);
+			droidPos = map_coord(psTransport->pos.xy());
 		}
 		else
 		{
@@ -976,7 +980,11 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		if (psTransporter->player == selectedPlayer)
 		{
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-			addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+			if (lastTransportIsFullMsgTime + MAX_TRANSPORT_FULL_MESSAGE_PAUSE < gameTime)
+			{
+				addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+				lastTransportIsFullMsgTime = gameTime;
+			}
 		}
 		return;
 	}
@@ -1157,6 +1165,12 @@ bool updateTransporter(DROID *psTransporter)
 			//reset the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)nullptr);
 			return true;
+		}
+
+		//Remove visibility so tiles are not bright around where the transporter left the map
+		if (psTransporter->action != DACTION_TRANSPORTIN)
+		{
+			visRemoveVisibility((BASE_OBJECT *) psTransporter);
 		}
 
 		// Got to destination

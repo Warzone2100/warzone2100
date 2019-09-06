@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,6 +45,8 @@
 #include "bar.h"
 #include "slider.h"
 #include "tip.h"
+
+#include <algorithm>
 
 static	bool	bWidgetsActive = true;
 
@@ -111,6 +113,7 @@ W_INIT::W_INIT()
 	, UserData(0)
 	, calcLayout(nullptr)
 	, onDelete(nullptr)
+	, customHitTest(nullptr)
 	, initPUserDataFunc(nullptr)
 {}
 
@@ -125,6 +128,7 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, screenPointer(nullptr)
 	, calcLayout(init->calcLayout)
 	, onDelete(init->onDelete)
+	, customHitTest(init->customHitTest)
 	, parentWidget(nullptr)
 	, dim(init->x, init->y, init->width, init->height)
 	, dirty(true)
@@ -151,6 +155,7 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	, screenPointer(nullptr)
 	, calcLayout(nullptr)
 	, onDelete(nullptr)
+	, customHitTest(nullptr)
 	, parentWidget(nullptr)
 	, dim(0, 0, 1, 1)
 	, dirty(true)
@@ -235,6 +240,11 @@ void WIDGET::callCalcLayout()
 void WIDGET::setOnDelete(const WIDGET_ONDELETE_FUNC& onDeleteFunc)
 {
 	onDelete = onDeleteFunc;
+}
+
+void WIDGET::setCustomHitTest(const WIDGET_HITTEST_FUNC& newCustomHitTestFunc)
+{
+	customHitTest = newCustomHitTestFunc;
 }
 
 void WIDGET::attach(WIDGET *widget)
@@ -739,6 +749,20 @@ void WIDGET::runRecursive(W_CONTEXT *psContext)
 	}
 }
 
+bool WIDGET::hitTest(int x, int y)
+{
+	// default hit-testing bounding rect (based on the widget's x, y, width, height)
+	bool hitTestResult = dim.contains(x, y);
+
+	if(customHitTest)
+	{
+		// if the default bounding-rect hit-test succeeded, use the custom hit-testing func
+		hitTestResult = hitTestResult && customHitTest(this, x, y);
+	}
+
+	return hitTestResult;
+}
+
 void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	W_CONTEXT shiftedContext;
@@ -752,7 +776,7 @@ void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 	{
 		WIDGET *psCurr = *i;
 
-		if (!psCurr->visible() || !psCurr->dim.contains(shiftedContext.mx, shiftedContext.my))
+		if (!psCurr->visible() || !psCurr->hitTest(shiftedContext.mx, shiftedContext.my))
 		{
 			continue;  // Skip any hidden widgets, or widgets the click missed.
 		}

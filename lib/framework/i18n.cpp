@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "frame.h"
+
+#include <sstream>
 
 #include <locale.h>
 #include <physfs.h>
@@ -209,6 +211,7 @@ static const struct
 
 static unsigned int selectedLanguage = 0;
 
+static char *compileDate = nullptr;
 
 /*!
  * Return the language part of the selected locale
@@ -469,4 +472,32 @@ void initI18n()
 
 	(void)bind_textdomain_codeset(PACKAGE, "UTF-8");
 	(void)textdomain(PACKAGE);
+}
+
+// convert macro __DATE__ to ISO 8601 format
+const char *getCompileDate()
+{
+	if (compileDate == nullptr)
+	{
+		std::istringstream date(__DATE__);
+		std::string monthName;
+		int day = 0, month = 0, year = 0;
+		date >> monthName >> day >> year;
+
+		std::string monthNames[] = {
+						"Jan", "Feb", "Mar", "Apr",
+						"May", "Jun", "Jul", "Aug",
+						"Sep", "Oct", "Nov", "Dec"
+		                           };
+		for (int i = 0; i < 12; i++)
+		{
+			if (monthNames[i] == monthName)
+			{
+				month = i + 1;
+				break;
+			}
+		}
+		asprintfNull(&compileDate, "%04d-%02d-%02d", year, month, day);
+	}
+	return compileDate;
 }

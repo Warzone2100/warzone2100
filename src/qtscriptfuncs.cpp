@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013-2017  Warzone 2100 Project
+	Copyright (C) 2011-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,6 +22,21 @@
  * New scripting system -- script functions
  */
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+#include <QtScript/QScriptValue>
+#include <QtCore/QStringList>
+#include <QtCore/QJsonArray>
+#include <QtGui/QStandardItemModel>
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/fixedpoint.h"
@@ -30,11 +45,6 @@
 #include "lib/netplay/netplay.h"
 #include "qtscriptfuncs.h"
 #include "lib/ivis_opengl/tex.h"
-
-#include <QtScript/QScriptValue>
-#include <QtCore/QStringList>
-#include <QtCore/QJsonArray>
-#include <QtGui/QStandardItemModel>
 
 #include "action.h"
 #include "clparse.h"
@@ -133,9 +143,6 @@ static QStandardItemModel *labelModel = nullptr;
 #define WzStringToQScriptValue(_engine, _wzstring) \
 	QScriptValue(_engine, QString::fromUtf8(_wzstring.toUtf8().c_str()))
 
-#define QStringToWzString(_qstring) \
-	WzString::fromUtf8(_qstring.toUtf8().constData())
-
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
 
@@ -173,7 +180,7 @@ QScriptValue mapJsonToQScriptValue(QScriptEngine *engine, const nlohmann::json &
 		case json::value_t::number_integer: return engine->toScriptValue(instance.get<int>());
 		case json::value_t::number_unsigned: return engine->toScriptValue(instance.get<unsigned>());
 		case json::value_t::number_float: return engine->toScriptValue(instance.get<double>());
-		case json::value_t::string	: return engine->toScriptValue(instance.get<QString>());
+		case json::value_t::string	: return engine->toScriptValue(QString::fromUtf8(instance.get<WzString>().toUtf8().c_str()));
 		case json::value_t::array : return mapJsonArrayToQScriptValue(engine, instance, flags);
 		case json::value_t::object : return mapJsonObjectToQScriptValue(engine, instance, flags);
 		case json::value_t::discarded : return QScriptValue::UndefinedValue;
@@ -366,18 +373,24 @@ void showLabel(const QString &key, bool clear_old, bool jump_to)
 std::pair<bool, int> seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BASE_OBJECT *viewer)
 {
 	GROUPMAP *psMap = groups.value(engine);
+	ASSERT_OR_RETURN(std::make_pair(false, 0), psMap != nullptr, "Non-existent groupmap for engine");
 	int groupId = psMap->value(seen);
 	bool foundObj = false, foundGroup = false;
 	for (auto &l : labels)
 	{
-		if (l.id == seen->id && l.triggered == 0
-		    && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		if (l.triggered != 0 || !(l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		{
+			continue;
+		}
+
+		// Don't let a seen game object ID which matches a group label ID to prematurely
+		// trigger a group label.
+		if (l.type != SCRIPT_GROUP && l.id == seen->id)
 		{
 			l.triggered = viewer->id; // record who made the discovery
 			foundObj = true;
 		}
-		else if (l.type == SCRIPT_GROUP && l.id == groupId && l.triggered == 0
-		         && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		else if (l.type == SCRIPT_GROUP && l.id == groupId)
 		{
 			l.triggered = viewer->id; // record who made the discovery
 			foundGroup = true;
@@ -400,7 +413,7 @@ bool areaLabelCheck(DROID *psDroid)
 		LABEL &l = i.value();
 		if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
 		    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
-		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - psDroid->pos.xy) < l.p2.x)))
+		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - psDroid->pos.xy()) < l.p2.x)))
 		{
 			// We're inside an untriggered area
 			activated = true;
@@ -519,7 +532,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
-			range = MAX((int)psWeap->upgrade[psStruct->player].maxRange, range);
+			range = MAX(proj_GetLongRange(psWeap, psStruct->player), range);
 		}
 	}
 	QScriptValue value = convObj(psStruct, engine);
@@ -676,7 +689,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
-			range = MAX((int)psWeap->upgrade[psDroid->player].maxRange, range);
+			range = MAX(proj_GetLongRange(psWeap, psDroid->player), range);
 		}
 	}
 	DROID_TYPE type = psDroid->droidType;
@@ -779,7 +792,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("name", objInfo(psObj), QScriptValue::ReadOnly);
 	value.setProperty("born", psObj->born, QScriptValue::ReadOnly);
 	GROUPMAP *psMap = groups.value(engine);
-	if (psMap->contains(psObj))
+	if (psMap != nullptr && psMap->contains(psObj))
 	{
 		int group = psMap->value(psObj);
 		value.setProperty("group", group, QScriptValue::ReadOnly);
@@ -875,6 +888,7 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 {
 	// Save group info as a list of group memberships for each droid
 	GROUPMAP *psMap = groups.value(engine);
+	ASSERT_OR_RETURN(false, psMap, "Non-existent groupmap for engine");
 	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
 	{
 		std::vector<WzString> value;
@@ -907,12 +921,12 @@ bool loadLabels(const char *filename)
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	labels.clear();
 	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading %lu labels...", list.size());
+	debug(LOG_SAVE, "Loading %zu labels...", list.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		LABEL p;
-		QString label(ini.value("label").toString());
+		QString label(QString::fromUtf8(ini.value("label").toWzString().toUtf8().c_str()));
 		if (labels.contains(label))
 		{
 			debug(LOG_ERROR, "Duplicate label found");
@@ -1000,7 +1014,7 @@ bool writeLabels(const char *filename)
 		{
 			ini.beginGroup("position_" + WzString::number(c[0]++));
 			ini.setVector2i("pos", l.p1);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("triggered", l.triggered);
 			ini.endGroup();
 		}
@@ -1009,7 +1023,7 @@ bool writeLabels(const char *filename)
 			ini.beginGroup("area_" + WzString::number(c[1]++));
 			ini.setVector2i("pos1", l.p1);
 			ini.setVector2i("pos2", l.p2);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("player", l.player);
 			ini.setValue("triggered", l.triggered);
 			ini.setValue("subscriber", l.subscriber);
@@ -1020,7 +1034,7 @@ bool writeLabels(const char *filename)
 			ini.beginGroup("radius_" + WzString::number(c[2]++));
 			ini.setVector2i("pos", l.p1);
 			ini.setValue("radius", l.p2.x);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("player", l.player);
 			ini.setValue("triggered", l.triggered);
 			ini.setValue("subscriber", l.subscriber);
@@ -1036,8 +1050,11 @@ bool writeLabels(const char *filename)
 			{
 				list += QString::number(i);
 			}
-			ini.setValue("members", list);
-			ini.setValue("label", key);
+			std::list<WzString> wzlist;
+			std::transform(list.constBegin(), list.constEnd(), std::back_inserter(wzlist),
+						   [](const QString& qs) -> WzString { return QStringToWzString(qs); });
+			ini.setValue("members", wzlist);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("subscriber", l.subscriber);
 			ini.endGroup();
 		}
@@ -1047,7 +1064,7 @@ bool writeLabels(const char *filename)
 			ini.setValue("id", l.id);
 			ini.setValue("player", l.player);
 			ini.setValue("type", l.type);
-			ini.setValue("label", key);
+			ini.setValue("label", QStringToWzString(key));
 			ini.setValue("triggered", l.triggered);
 			ini.endGroup();
 		}
@@ -1405,11 +1422,14 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 	QList<BASE_OBJECT *> matches;
 	GROUPMAP *psMap = groups.value(engine);
 
-	for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
+	if (psMap != nullptr)
 	{
-		if (i.value() == groupId)
+		for (GROUPMAP::const_iterator i = psMap->constBegin(); i != psMap->constEnd(); ++i)
 		{
-			matches.push_back(i.key());
+			if (i.value() == groupId)
+			{
+				matches.push_back(i.key());
+			}
 		}
 	}
 	QScriptValue result = engine->newArray(matches.size());
@@ -1676,7 +1696,8 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	QString id = (context->argumentCount() == 1) ? context->argument(0).toString() : context->argument(1).toString();
 	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(id.toUtf8().constData()));
 	SCRIPT_ASSERT(context, psComp, "No such component: %s", id.toUtf8().constData());
-	return QScriptValue(apCompLists[player][psComp->compType][psComp->index] == AVAILABLE);
+	int status = apCompLists[player][psComp->compType][psComp->index];
+	return QScriptValue(status == AVAILABLE || status == REDUNDANT);
 }
 
 //-- ## addFeature(name, x, y)
@@ -3230,13 +3251,13 @@ static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
 	// FIXME: This dual data structure for templates is just plain insane.
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		bool researched = researchedTemplate(keyvaluepair.second, selectedPlayer);
+		bool researched = researchedTemplate(keyvaluepair.second, selectedPlayer, true);
 		keyvaluepair.second->enabled = (researched || allowDesign);
 	}
 	for (auto &localTemplate : localTemplates)
 	{
 		psCurr = &localTemplate;
-		bool researched = researchedTemplate(psCurr, selectedPlayer);
+		bool researched = researchedTemplate(psCurr, selectedPlayer, true);
 		psCurr->enabled = (researched || allowDesign);
 	}
 	return QScriptValue();
@@ -4707,8 +4728,8 @@ static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 		int oid = objVal.property("id").toInt32();
 		int oplayer = objVal.property("player").toInt32();
 		OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
-		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
 		psObj = IdToObject(otype, oid, oplayer);
+		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
 	}
 	if (context->argumentCount() > 4)
 	{
@@ -4716,8 +4737,8 @@ static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 		int oid = objVal.property("id").toInt32();
 		int oplayer = objVal.property("player").toInt32();
 		OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
-		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
 		psObj2 = IdToObject(otype, oid, oplayer);
+		SCRIPT_ASSERT(context, psObj2, "No such object id %d belonging to player %d", oid, oplayer);
 	}
 	sendSyncRequest(req_id, x, y, psObj, psObj2);
 	return QScriptValue();
@@ -4736,18 +4757,30 @@ static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- ## fireWeaponAtLoc(x, y, weapon_name)
+//-- ## fireWeaponAtLoc(weapon, x, y[, player])
 //--
-//-- Fires a weapon at the given coordinates (3.3+ only).
+//-- Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+//-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
+//-- may have different friendly fire logic for a few weapons (like the lassat).
 //--
-static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
+static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *engine)
 {
-	int xLocation = context->argument(0).toInt32();
-	int yLocation = context->argument(1).toInt32();
-
-	QScriptValue weaponValue = context->argument(2);
+	QScriptValue weaponValue = context->argument(0);
 	int weapon = getCompFromName(COMP_WEAPON, QStringToWzString(weaponValue.toString()));
 	SCRIPT_ASSERT(context, weapon > 0, "No such weapon: %s", weaponValue.toString().toUtf8().constData());
+
+	int xLocation = context->argument(1).toInt32();
+	int yLocation = context->argument(2).toInt32();
+
+	int player;
+	if (context->argumentCount() > 3)
+	{
+		player = context->argument(3).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
 
 	Vector3i target;
 	target.x = world_coord(xLocation);
@@ -4756,9 +4789,45 @@ static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *)
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weapon;
-	// Send the projectile using the selectedPlayer so that it can always be seen.
-	// A player other than selectedPlayer is needed for the campaign lassat to damage player droids.
-	proj_SendProjectile(&sWeapon, nullptr, bMultiPlayer ? selectedPlayer : 8, target, nullptr, true, 0);
+
+	proj_SendProjectile(&sWeapon, nullptr, player, target, nullptr, true, 0);
+	return QScriptValue();
+}
+
+//-- ## fireWeaponAtObj(weapon, game object[, player])
+//--
+//-- Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
+//--
+static QScriptValue js_fireWeaponAtObj(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue weaponValue = context->argument(0);
+	int weapon = getCompFromName(COMP_WEAPON, QStringToWzString(weaponValue.toString()));
+	SCRIPT_ASSERT(context, weapon > 0, "No such weapon: %s", weaponValue.toString().toUtf8().constData());
+
+	BASE_OBJECT *psObj = nullptr;
+	QScriptValue objVal = context->argument(1);
+	int oid = objVal.property("id").toInt32();
+	int oplayer = objVal.property("player").toInt32();
+	OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
+	psObj = IdToObject(otype, oid, oplayer);
+	SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
+
+	int player;
+	if (context->argumentCount() > 3)
+	{
+		player = context->argument(3).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+
+	Vector3i target = psObj->pos;
+
+	WEAPON sWeapon;
+	sWeapon.nStat = weapon;
+
+	proj_SendProjectile(&sWeapon, nullptr, player, target, psObj, true, 0);
 	return QScriptValue();
 }
 
@@ -5065,6 +5134,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			{
 				psStats->upgrade[player].maxRange = value;
 			}
+			else if (name == "ShortRange")
+			{
+				psStats->upgrade[player].shortRange = value;
+			}
 			else if (name == "MinRange")
 			{
 				psStats->upgrade[player].minRange = value;
@@ -5072,6 +5145,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			else if (name == "HitChance")
 			{
 				psStats->upgrade[player].hitChance = value;
+			}
+			else if (name == "ShortHitChance")
+			{
+				psStats->upgrade[player].shortHitChance = value;
 			}
 			else if (name == "FirePause")
 			{
@@ -5353,6 +5430,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		{
 			return psStats->upgrade[player].maxRange;
 		}
+		else if (name == "ShortRange")
+		{
+			return psStats->upgrade[player].shortRange;
+		}
 		else if (name == "MinRange")
 		{
 			return psStats->upgrade[player].minRange;
@@ -5360,6 +5441,10 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		else if (name == "HitChance")
 		{
 			return psStats->upgrade[player].hitChance;
+		}
+		else if (name == "ShortHitChance")
+		{
+			return psStats->upgrade[player].shortHitChance;
 		}
 		else if (name == "FirePause")
 		{
@@ -5586,8 +5671,10 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			WEAPON_STATS *psStats = asWeaponStats + j;
 			QScriptValue weap = register_common(engine, psStats);
 			weap.setProperty("MaxRange", psStats->base.maxRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			weap.setProperty("ShortRange", psStats->base.shortRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("MinRange", psStats->base.minRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("HitChance", psStats->base.hitChance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			weap.setProperty("ShortHitChance", psStats->base.shortHitChance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("FirePause", psStats->base.firePause, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("ReloadTime", psStats->base.reloadTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("Rounds", psStats->base.numRounds, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -5770,8 +5857,10 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 			WEAPON_STATS *psStats = asWeaponStats + j;
 			QScriptValue weap = engine->newObject();
 			setStatsFunc(weap, engine, "MaxRange", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "ShortRange", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "MinRange", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "HitChance", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "ShortHitChance", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "FirePause", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "ReloadTime", i, COMP_WEAPON, j);
 			setStatsFunc(weap, engine, "Rounds", i, COMP_WEAPON, j);
@@ -5975,6 +6064,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("setTransporterExit", engine->newFunction(js_setTransporterExit));
 	engine->globalObject().setProperty("setObjectFlag", engine->newFunction(js_setObjectFlag));
 	engine->globalObject().setProperty("fireWeaponAtLoc", engine->newFunction(js_fireWeaponAtLoc));
+	engine->globalObject().setProperty("fireWeaponAtObj", engine->newFunction(js_fireWeaponAtObj));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("TER_WATER", TER_WATER, QScriptValue::ReadOnly | QScriptValue::Undeletable);

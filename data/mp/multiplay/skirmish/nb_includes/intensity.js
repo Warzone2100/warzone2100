@@ -2,13 +2,13 @@
 /*
  * This file includes generic functions for improving CPU intensity,
  * like caching and throttling mechanisms.
- * 
+ *
  */
 
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-// to make sure some function is not called more often than every 2 seconds, 
+// to make sure some function is not called more often than every 2 seconds,
 // put something like that at start the of its body:
 //		if (throttled(2000)) return;
 // if your function requires several throttling cases, you can use the optional

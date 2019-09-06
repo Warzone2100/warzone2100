@@ -2,7 +2,6 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var allowWin;
-var launchCount;
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-Factory-Cyborg-Upgrade06",
@@ -37,7 +36,7 @@ function checkEnemyVtolArea()
 		}
 	}
 
-	queue("checkEnemyVtolArea", 1000);
+	queue("checkEnemyVtolArea", camSecondsToMilliseconds(1));
 }
 
 //Play last video sequence and destroy all droids on map.
@@ -54,16 +53,12 @@ function playLastVideo()
 	camPlayVideos("CAM2_OUT");
 }
 
-// Allow win if the transporter was launched at least three times.
+//Allow a win if a transporter was launched.
 function eventTransporterLaunch(transport)
 {
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
-		launchCount = launchCount + 1;
-		if (launchCount > 2)
-		{
-			allowWin = true;
-		}
+		allowWin = true;
 	}
 }
 
@@ -94,7 +89,7 @@ function vtolAttack()
 	var vtolRemovePos = {"x": 127, "y": 64};
 
 	var list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat];
-	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(30000));
+	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(camSecondsToMilliseconds(30)));
 }
 
 //SouthEast attackers which are mostly cyborgs.
@@ -107,7 +102,7 @@ function cyborgAttack()
 		data: { regroup: false, count: -1 }
 	});
 
-	queue("cyborgAttack", camChangeOnDiff(240000));
+	queue("cyborgAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 }
 
 //North road attacker consisting of powerful weaponry.
@@ -123,7 +118,7 @@ function tankAttack()
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
 	});
-	queue("tankAttack", camChangeOnDiff(180000));
+	queue("tankAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 //NOTE: this is only called once from the library's eventMissionTimeout().
@@ -153,7 +148,7 @@ function eventStartLevel()
 	var tCoords = {"xStart": 87, "yStart": 100, "xOut": 0, "yOut": 55};
 
 	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, "CAM_3A", {
-		reinforcements: 420, //Duration the transport "leaves" map.
+		reinforcements: camMinutesToSeconds(7), //Duration the transport "leaves" map.
 		callback: "checkIfLaunched"
 	});
 	centreView(startpos.x, startpos.y);
@@ -163,11 +158,10 @@ function eventStartLevel()
 	var enemyLz = {"x": 49, "y": 83, "x2": 51, "y2": 85};
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
-	setMissionTime(1800); // 30 min.
+	setMissionTime(camMinutesToSeconds(30));
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
 
 	allowWin = false;
-	launchCount = 0;
 	camPlayVideos(["MB2_DII_MSG", "MB2_DII_MSG2"]);
 
 	//These requeue themselves every so often.

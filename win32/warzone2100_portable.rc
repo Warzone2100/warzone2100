@@ -35,7 +35,7 @@ BEGIN
 			VALUE "FileDescription", "Warzone 2100 portable"
 			VALUE "FileVersion", "bugfixes"
 			VALUE "InternalName", "Warzone 2100"
-			VALUE "LegalCopyright", "Copyright (C) 2005-2017 Warzone 2100 Project"
+			VALUE "LegalCopyright", "Copyright (C) 2005-2019 Warzone 2100 Project"
 			VALUE "OriginalFilename", "warzone2100_portable.exe"
 			VALUE "ProductName", "Warzone 2100 portable"
 			VALUE "ProductVersion", "bugfixes"

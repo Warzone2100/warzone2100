@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1992-2007  Trolltech ASA.
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,9 +37,7 @@
 #if defined(HAVE_CONFIG_H)
 #  undef _XOPEN_SOURCE
 #  include "config.h"
-#elif defined(__MACOSX__)
-#  include "config-macosx.h"
-#elif !defined(__MACOSX__) && !defined(HAVE_CONFIG_H)
+#elif !defined(HAVE_CONFIG_H)
 #  define PACKAGE "warzone2100"
 #  define PACKAGE_BUGREPORT "http://wz2100.net/"
 #  define PACKAGE_NAME "Warzone 2100"
@@ -536,12 +534,6 @@
 #endif
 
 /* ---- Platform specific setup ---- */
-#if defined __cplusplus
-// This check is required for the embed .c files (miniupnp) so we don't get conflicts.
-#include <QtCore/QString>
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#endif
-
 
 #if defined(WZ_OS_WIN)
 #  if defined(WZ_CC_MINGW)
@@ -582,7 +574,9 @@
 
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
-#    define inline __inline
+#    if !defined(inline) && !defined(__cplusplus)
+#      define inline __inline
+#    endif
 #    define alloca _alloca
 #    define fileno _fileno
 

@@ -1,7 +1,7 @@
 
 /*
  * This file controls the AI's research choices.
- * 
+ *
  */
 
 (function(_global) {
@@ -35,7 +35,7 @@ function doResearch(lab) {
 		if (pursueResearch(lab, [
 			propulsionStatsToResList(PROPULSIONUSAGE.VTOL),
 			fastestResearch,
-		].random())) 
+		].random()))
 			return true;
 	if (fastest === PROPULSIONUSAGE.HOVER)
 		if (pursueResearch(lab, [
@@ -76,7 +76,7 @@ function doResearch(lab) {
 	if (pursueResearch(lab, fundamentalResearch))
 		return true;
 	return false;
-	
+
 }
 
 _global.checkResearch = function() {

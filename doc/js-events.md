@@ -126,6 +126,11 @@ An event that is run every time a structure is produced. The droid parameter is 
 if the structure was built by a droid. It is not triggered for building theft
 (check ```eventObjectTransfer``` for that).
 
+## eventStructureDemolish(structure[, droid])
+
+An event that is run every time a structure begins to be demolished. This does
+not trigger again if the structure is partially demolished.
+
 ## eventStructureReady(structure)
 
 An event that is run every time a structure is ready to perform some

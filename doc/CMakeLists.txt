@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 add_custom_target(wz2100_doc ALL)
+set_property(TARGET wz2100_doc PROPERTY FOLDER "doc")
 
 set(wz2100_doc_FILES)
 
@@ -9,7 +10,7 @@ set(wz2100_doc_FILES)
 
 add_custom_command(
 	TARGET wz2100_doc
-	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR} -P "${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake"
+	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	VERBATIM
 )
@@ -31,7 +32,7 @@ list(APPEND wz2100_doc_FILES
 # Main documentation
 
 set(SKIPPED_DOC_GENERATION FALSE)
-find_package(Asciidoctor)
+find_package(Asciidoctor 1.5.3) # 1.5.3 adds built-in manpage backend; 1.5.1 adds "-S flag in cli recognizes safe mode name as lowercase string"
 if(NOT Asciidoctor_FOUND)
 	find_package(A2X)
 	if(NOT A2X_FOUND)
@@ -91,41 +92,58 @@ set(doc_IMAGES
 if(Asciidoctor_FOUND)
 	# Prefer Asciidoctor if it's available
 
+	set(_asciidoctor_option_failurelevel)
+	if((Asciidoctor_VERSION VERSION_GREATER "1.5.7") OR (Asciidoctor_VERSION VERSION_EQUAL "1.5.7"))
+		# Asciidoctor 1.5.7+ supports the "--failure-level" CLI option
+		set(_asciidoctor_option_failurelevel "--failure-level=ERROR")
+	endif()
+
 	configure_file("quickstartguide.asciidoc" "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc" COPYONLY)
 
+	# Quickstart Guide - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
-		ARGS
-			"-S"
-			"server"
-			"--failure-level=ERROR"
-			"-B"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"-b"
-			"html5"
-			"-D"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc"
-		)
+			-S server
+			${_asciidoctor_option_failurelevel}
+			-B ${CMAKE_CURRENT_BINARY_DIR}
+			-b html5
+			-D ${CMAKE_CURRENT_BINARY_DIR}
+			-a toc
+			${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc
+		VERBATIM
+	)
 
 	configure_file("warzone2100.6.asciidoc" "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc" COPYONLY)
 
+	# warzone2100.6 - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
 		COMMAND ${Asciidoctor_COMMAND}
-		ARGS
-			"-S"
-			"server"
-			"--failure-level=ERROR"
-			"-B"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"-b"
-			"html5"
-			"-D"
-			"${CMAKE_CURRENT_BINARY_DIR}"
-			"${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc"
-		)
+			-S server
+			${_asciidoctor_option_failurelevel}
+			-B ${CMAKE_CURRENT_BINARY_DIR}
+			-b html5
+			-D ${CMAKE_CURRENT_BINARY_DIR}
+			${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc
+		VERBATIM
+	)
+
+	# warzone2100.6 - man-page format
+	add_custom_command(
+		TARGET wz2100_doc
+		COMMAND ${Asciidoctor_COMMAND}
+			-S server
+			${_asciidoctor_option_failurelevel}
+			-B ${CMAKE_CURRENT_BINARY_DIR}
+			-b manpage
+			-D ${CMAKE_CURRENT_BINARY_DIR}
+			-o warzone2100.6
+			${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc
+		VERBATIM
+	)
+
+	unset(_asciidoctor_option_failurelevel)
 
 elseif(A2X_FOUND)
 
@@ -157,6 +175,7 @@ elseif(A2X_FOUND)
 	endif()
 
 	set(_quickstart_asciidoc "${CMAKE_CURRENT_SOURCE_DIR}/quickstartguide.asciidoc")
+	# Quickstart Guide - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f xhtml -D ${CMAKE_CURRENT_BINARY_DIR} ${_quickstart_asciidoc}
@@ -164,9 +183,16 @@ elseif(A2X_FOUND)
 	)
 
 	set(_warzone2100_6_asciidoc "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.6.asciidoc")
+	# warzone2100.6 - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f xhtml -D ${CMAKE_CURRENT_BINARY_DIR} ${_warzone2100_6_asciidoc}
+		VERBATIM
+	)
+	# warzone2100.6 - man-page format
+	add_custom_command(
+		TARGET wz2100_doc
+		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f manpage -D ${CMAKE_CURRENT_BINARY_DIR} ${_warzone2100_6_asciidoc}
 		VERBATIM
 	)
 
@@ -203,6 +229,30 @@ if(wz2100_doc_IMAGES_FILES)
 	install(FILES ${wz2100_doc_IMAGES_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}/images" COMPONENT Docs)
 endif()
 install(FILES ${wz2100_doc_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}" COMPONENT Docs)
+
+if(UNIX)
+	# Man-page gzip and installation
+
+	find_program(GZIP_BIN NAMES gzip PATHS /bin /usr/bin /usr/local/bin)
+	if (GZIP_BIN)
+		set(_warzone2100_6_uncompressed "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6")
+		set(_warzone2100_6_compressed "${_warzone2100_6_uncompressed}.gz")
+
+		add_custom_target(wz2100_manpages ALL)
+		set_property(TARGET wz2100_manpages PROPERTY FOLDER "doc")
+		add_dependencies(wz2100_manpages wz2100_doc)
+
+		add_custom_command(
+			TARGET wz2100_manpages
+			COMMAND ${GZIP_BIN} -n -c ${_warzone2100_6_uncompressed} > ${_warzone2100_6_compressed}
+			VERBATIM
+		)
+
+		install(FILES "${_warzone2100_6_compressed}" DESTINATION "${CMAKE_INSTALL_MANDIR}/man6" COMPONENT Manpages)
+	else()
+		message( WARNING "Unable to find gzip tool; skipping Unix man page generation" )
+	endif()
+endif()
 
 set(wz2100_doc_IMAGES_FILES ${wz2100_doc_IMAGES_FILES} PARENT_SCOPE)
 set(wz2100_doc_FILES ${wz2100_doc_FILES} PARENT_SCOPE)

@@ -1,0 +1,9 @@
+path_classifiers:
+  library: "3rdparty"
+extraction:
+  cpp:
+    index:
+      build_command:
+      - "cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -DWZ_ENABLE_WARNINGS:BOOL=OFF\
+        \ -G\"Ninja\""
+      - "cmake --build build --target warzone2100"

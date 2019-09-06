@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -75,6 +75,12 @@ bool proj_Direct(const WEAPON_STATS *psStats);
 /** Return the maximum range for a weapon. */
 int proj_GetLongRange(const WEAPON_STATS *psStats, int player);
 
+/** Return the minimum range for a weapon. */
+int proj_GetMinRange(const WEAPON_STATS *psStats, int player);
+
+/** Return the short range for a weapon. */
+int proj_GetShortRange(const WEAPON_STATS *psStats, int player);
+
 UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
 bool gfxVisible(PROJECTILE *psObj);
 
@@ -115,5 +121,22 @@ void checkProjectile(const PROJECTILE *psProjectile, const char *const location_
 
 #define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
 void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char ch);
+
+struct ObjectShape
+{
+	ObjectShape() : isRectangular(false), size(0, 0) {}
+	ObjectShape(int radius) : isRectangular(false), size(radius, radius) {}
+	ObjectShape(int width, int breadth) : isRectangular(true), size(width, breadth) {}
+	ObjectShape(Vector2i widthBreadth) : isRectangular(true), size(widthBreadth) {}
+	int radius() const
+	{
+		return size.x;
+	}
+
+	bool     isRectangular;  ///< True if rectangular, false if circular.
+	Vector2i size;           ///< x == y if circular.
+};
+
+ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

@@ -1,8 +1,11 @@
 {
     "AI": {
-        "name": "Semperfi",
         "slo": "semperfi.slo",
-        "tip": "Experimental AI",
-        "vlo": "semperfi.vlo"
+        "vlo": "semperfi.vlo",
+        "name": "SemperFi",
+        "tip": "Enhanced Nexus AI",
+        "easy_tip": "Gets ~ 25% less power from each oil derrick\nDoes not build defenses next to enemy oil derricks\nNever tries a truck rush",
+        "medium_tip": "Never tries a truck rush",
+        "insane_tip": "Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks"
     }
 }

@@ -141,7 +141,7 @@ camAreaEvent("NPLZ1Trigger", function()
 	camPlayVideos("MB1C4_MSG");
 	camDetectEnemyBase("NPLZ1Group");
 
-	camSetBaseReinforcements("NPLZ1Group", camChangeOnDiff(300000), "getDroidsForNPLZ",
+	camSetBaseReinforcements("NPLZ1Group", camChangeOnDiff(camMinutesToMilliseconds(5)), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
 			exit: { x: 126, y: 36 }
@@ -154,7 +154,7 @@ camAreaEvent("NPLZ2Trigger", function()
 	camPlayVideos("MB1C3_MSG");
 	camDetectEnemyBase("NPLZ2Group");
 
-	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(300000), "getDroidsForNPLZ",
+	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(camMinutesToMilliseconds(5)), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
 			exit: { x: 126, y: 36 }
@@ -180,10 +180,10 @@ function eventStartLevel()
 	}
 
 	setReinforcementTime(-1);
-	setMissionTime(camChangeOnDiff(7200));
-	setAlliance(NEW_PARADIGM, 7, true);
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, 7);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {
@@ -215,7 +215,7 @@ function eventStartLevel()
 			detectMsg: "C1C_BASE5",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv391.ogg",
-			player: 7 // hence discriminate by player filter
+			player: SCAV_7 // hence discriminate by player filter
 		},
 		"NPEastBaseGroup": {
 			cleanup: "NPEastBase",
@@ -271,28 +271,28 @@ function eventStartLevel()
 			assembly: "ScavSouthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
 			templates: [ cTempl.buscan, cTempl.rbjeep, cTempl.trike, cTempl.buggy ]
 		},
 		"ScavCentralFactory": {
 			assembly: "ScavCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
 			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeep, cTempl.bloke ]
 		},
 		"ScavNorthFactory": {
 			assembly: "ScavNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(20000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
 			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trike ]
 		},
 		"NPCentralFactory": {
 			assembly: "NPCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(60000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -304,7 +304,7 @@ function eventStartLevel()
 			assembly: "NPNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(30000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -322,8 +322,8 @@ function eventStartLevel()
 		regroup: true,
 		count: -1,
 	});
-	queue("sendRocketForce", 25000);
-	queue("sendTankScoutForce", 30000);
-	queue("sendTankForce", 100000); // in wzcam it moves back and then forward
-	queue("enableNPFactory", 300000);
+	queue("sendRocketForce", camSecondsToMilliseconds(25));
+	queue("sendTankScoutForce", camSecondsToMilliseconds(30));
+	queue("sendTankForce", camSecondsToMilliseconds(100)); // in wzcam it moves back and then forward
+	queue("enableNPFactory", camMinutesToMilliseconds(5));
 }

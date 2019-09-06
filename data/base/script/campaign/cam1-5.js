@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SCAVS = 7; // Scav player number
 const NEW_PARADIGM_RES = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
 	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
@@ -88,8 +87,8 @@ function sendNPTransport()
 	{
 		var list = getDroidsForNPLZ();
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 1, y: 42 },
-			exit: { x: 1, y: 42 },
+			entry: { x: 2, y: 42 },
+			exit: { x: 2, y: 42 },
 			order: CAM_ORDER_ATTACK,
 			data: {
 				regroup: true,
@@ -99,20 +98,8 @@ function sendNPTransport()
 			},
 		});
 
-		queue("sendNPTransport", camChangeOnDiff(180000)); //3 min
+		queue("sendNPTransport", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	}
-}
-
-//Enable transport reinforcements
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
-		area: "RTLZ",
-		message: "C1-5_LZ",
-		reinforcements: 180, //3 min
-		annihilate: true
-	});
 }
 
 function enableNPFactories()
@@ -131,9 +118,9 @@ function camEnemyBaseEliminated_NPBaseGroup()
 	camEnableFactory("ScavSouthWestFactory");
 	camEnableFactory("ScavSouthEastFactory");
 
-	//All SCAVS on map attack
+	//Make all scavengers on map attack
 	camManageGroup(
-		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, SCAVS, false)),
+		camMakeGroup(enumArea(0, 0, mapWidth, mapHeight, SCAV_7, false)),
 		CAM_ORDER_ATTACK
 	);
 }
@@ -143,7 +130,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
 		area: "RTLZ",
 		message: "C1-5_LZ",
-		reinforcements: -1,
+		reinforcements: camMinutesToSeconds(3),
 		annihilate: true
 	});
 
@@ -161,10 +148,10 @@ function eventStartLevel()
 	cameraTrack(transporter[0]);
 
 	//Make sure the New Paradigm and Scavs are allies
-	setAlliance(NEW_PARADIGM, SCAVS, true);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 
 
 	camSetEnemyBases({
@@ -207,7 +194,7 @@ function eventStartLevel()
 			assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(40000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			templates: [ cTempl.npmrl, cTempl.npmmct, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
@@ -219,7 +206,7 @@ function eventStartLevel()
 			assembly: "NPRightAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(50000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			templates: [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
@@ -231,7 +218,7 @@ function eventStartLevel()
 			assembly: "NPCyborgAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(35000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
 			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ],
 			data: {
 				regroup: false,
@@ -243,7 +230,7 @@ function eventStartLevel()
 			assembly: "ScavSouthWestAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
@@ -254,7 +241,7 @@ function eventStartLevel()
 			assembly: "ScavSouthEastAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
@@ -265,7 +252,7 @@ function eventStartLevel()
 			assembly: "ScavNorthAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
@@ -274,6 +261,5 @@ function eventStartLevel()
 		},
 	});
 
-	queue("enableReinforcements", 30000);
-	queue("enableNPFactories", camChangeOnDiff(600000)); // 10 minutes
+	queue("enableNPFactories", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }

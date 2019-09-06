@@ -181,10 +181,6 @@ Section $(TEXT_SecBase) SecBase
     File "/oname=.portable" "${TOP_SRCDIR}\pkg\portable.in"
   !endif
 
-  ; Windows dbghelp library
-  File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll.license.txt"
-  File "${TOP_SRCDIR}\win32\dbghelp\6.12\x86\dbghelp.dll"
-
 !ifdef INSTALLVIDS
 ; sequences.wz
   File "${EXTDIR}\opt\sequences.wz"
@@ -561,9 +557,6 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\${PACKAGE}.exe"
-
-  Delete "$INSTDIR\dbghelp.dll.license.txt"
-  Delete "$INSTDIR\dbghelp.dll"
 
   Delete "$INSTDIR\base.wz"
   Delete "$INSTDIR\mp.wz"

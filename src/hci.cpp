@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -94,8 +94,6 @@ static bool SecondaryWindowUp = false;
 // Chat dialog
 static bool ChatDialogUp = false;
 
-#define RETXOFFSET (0)// Reticule button offset
-#define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
 
 struct BUTSTATE
@@ -113,13 +111,13 @@ struct BUTOFFSET
 
 static BUTOFFSET ReticuleOffsets[NUMRETBUTS] =  	// Reticule button form relative positions.
 {
-	{48, 47},	// RETBUT_CANCEL,
-	{53, 15},	// RETBUT_FACTORY,
-	{87, 33},	// RETBUT_RESEARCH,
-	{87, 68},	// RETBUT_BUILD,
-	{53, 86},	// RETBUT_DESIGN,
-	{19, 68},	// RETBUT_INTELMAP,
-	{19, 33},	// RETBUT_COMMAND,
+	{43, 47},	// RETBUT_CANCEL,
+	{48, 16},	// RETBUT_FACTORY,
+	{82, 34},	// RETBUT_RESEARCH,
+	{82, 69},	// RETBUT_BUILD,
+	{48, 87},	// RETBUT_DESIGN,
+	{14, 69},	// RETBUT_INTELMAP,
+	{14, 34},	// RETBUT_COMMAND,
 };
 
 static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states.
@@ -388,12 +386,55 @@ void setReticuleFlash(int ButId, bool flash)
 	}
 }
 
+// set up the button's size & hit-testing based on the dimensions of the "normal" image
+void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
+{
+	ImageDef *image = nullptr;
+	if (!filename.isEmpty())
+	{
+		image = iV_GetImage(filename);
+	}
+	else
+	{
+		ASSERT(IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY, "IMAGE_RETICULE_GREY isn't in IntImages?");
+		if (IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY)
+		{
+			image = &(IntImages->imageDefs[IMAGE_RETICULE_GREY]);
+		}
+	}
+
+	if (image)
+	{
+		// set the button width/height based on the "normal" image dimensions (preserving the current x, y)
+		button.setGeometry(button.x(), button.y(), image->Width, image->Height);
+
+		// add a custom hit-testing function that uses a tighter bounding ellipse
+		button.setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool {
+
+			// determine center of ellipse contained within the bounding rect
+			float centerX = ((psWidget->x()) + (psWidget->x() + psWidget->width())) / 2.f;
+			float centerY = ((psWidget->y()) + (psWidget->y() + psWidget->height())) / 2.f;
+
+			// determine semi-major axis + semi-minor axis
+			float axisX = psWidget->width() / 2.f;
+			float axisY = psWidget->height() / 2.f;
+
+			// Srivatsan (https://math.stackexchange.com/users/13425/srivatsan), Check if a point is within an ellipse, URL (version: 2011-10-27): https://math.stackexchange.com/q/76463
+			float partX = (((float)x - centerX) * ((float)x - centerX)) / (axisX * axisX); // ((x - centerX)^2) / ((axisX)^2)
+			float partY = (((float)y - centerY) * ((float)y - centerY)) / (axisY * axisY); // ((y - centerY)^2) / ((axisY)^2)
+			return partX + partY <= 1.f;
+		});
+	}
+}
+
 void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, WzString func, QScriptEngine *engine)
 {
 	if (MissionResUp)
 	{
 		return;
 	}
+
+	ASSERT_OR_RETURN(, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
 
 	retbutstats[ButId].tip = tip;
 	retbutstats[ButId].filename = WzString::fromUtf8(filename.c_str());
@@ -409,6 +450,8 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	{
 		return;
 	}
+
+	setReticuleButtonDimensions(*retbutstats[ButId].button, retbutstats[ButId].filename);
 
 	if (!retbutstats[ButId].tip.empty())
 	{
@@ -441,7 +484,14 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 
 	if (butDisabled)
 	{
-		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
+		if (psWidget->UserData != RETBUT_CANCEL)
+		{
+			iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
+		}
+		else
+		{
+			iV_DrawImage(IntImages, IMAGE_CANCEL_DOWN, x, y);
+		}
 		return;
 	}
 
@@ -496,32 +546,6 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	retbutstats[psWidget->UserData].flashTime = flashTime;
 	retbutstats[psWidget->UserData].flashing = flashing;
 	retbutstats[psWidget->UserData].downTime = DownTime;
-}
-
-// Set the x,y members of a button widget initialiser given a reticule button index.
-//
-static void setReticuleBut(int ButId)
-{
-	/* Default button data */
-	W_BUTINIT sButInit;
-	sButInit.formID = IDRET_FORM;
-	sButInit.id = ReticuleEnabled[ButId].id;
-	sButInit.width = RET_BUTWIDTH;
-	sButInit.height = RET_BUTHEIGHT;
-	sButInit.pDisplay = intDisplayReticuleButton;
-	sButInit.x = ReticuleOffsets[ButId].x + RETXOFFSET;
-	sButInit.y = ReticuleOffsets[ButId].y + RETYOFFSET;
-	sButInit.pTip = retbutstats[ButId].tip;
-	sButInit.style = WBUT_SECONDARY;
-	sButInit.UserData = ButId;
-	retbutstats[ButId].downTime = 0;
-	retbutstats[ButId].flashing = false;
-	retbutstats[ButId].flashTime = 0;
-	retbutstats[ButId].button = widgAddButton(psWScreen, &sButInit);
-	if (!retbutstats[ButId].button)
-	{
-		debug(LOG_ERROR, "Failed to add reticule button");
-	}
 }
 
 /* Initialise the in game interface */
@@ -1053,6 +1077,7 @@ void hciUpdate()
 		{
 			if (apsObjectList[i] && apsObjectList[i]->died)
 			{
+				ASSERT(apsObjectList[i]->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", apsObjectList[i]->type);
 				intObjectDied(i + IDOBJ_OBJSTART);
 				apsObjectList[i] = nullptr;
 			}
@@ -1064,6 +1089,7 @@ void hciUpdate()
 	{
 		if (i && i->died)
 		{
+			ASSERT(i->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", i->type);
 			i = nullptr;
 		}
 	}
@@ -1071,6 +1097,7 @@ void hciUpdate()
 	if (psObjSelected && psObjSelected->died)
 	{
 		// refresh when unit dies
+		ASSERT(psObjSelected->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psObjSelected->type);
 		psObjSelected = nullptr;
 	}
 }
@@ -1309,7 +1336,7 @@ INT_RETVAL intRunWidgets()
 		/* Catch the quit button here */
 		case INTINGAMEOP_POPUP_QUIT:
 		case IDMISSIONRES_QUIT:			// mission quit
-		case INTINGAMEOP_QUIT_CONFIRM:			// esc quit confirm
+		case INTINGAMEOP_QUIT:			// esc quit confirm
 		case IDOPT_QUIT:						// options screen quit
 			intResetScreen(false);
 			quitting = true;
@@ -2295,8 +2322,8 @@ static void intProcessStats(UDWORD id)
 	else if (id == IDSTAT_OBSOLETE_BUTTON)
 	{
 		includeRedundantDesigns = !includeRedundantDesigns;
-		StateButton *obsoleteButton = (StateButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
-		obsoleteButton->setState(includeRedundantDesigns);
+		auto obsoleteButton = (MultipleChoiceButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
+		obsoleteButton->setChoice(includeRedundantDesigns);
 		intRefreshScreen();
 	}
 }
@@ -2732,7 +2759,32 @@ bool intAddReticule()
 	}));
 	for (int i = 0; i < NUMRETBUTS; i++)
 	{
-		setReticuleBut(i);
+		// Set the x,y members of a button widget initialiser
+		//
+		/* Default button data */
+		W_BUTINIT sButInit;
+		sButInit.formID = IDRET_FORM;
+		sButInit.id = ReticuleEnabled[i].id;
+		sButInit.width = RET_BUTWIDTH;
+		sButInit.height = RET_BUTHEIGHT;
+		sButInit.pDisplay = intDisplayReticuleButton;
+		sButInit.x = ReticuleOffsets[i].x;
+		sButInit.y = ReticuleOffsets[i].y;
+		sButInit.pTip = retbutstats[i].tip;
+		sButInit.style = WBUT_SECONDARY;
+		sButInit.UserData = i;
+		retbutstats[i].downTime = 0;
+		retbutstats[i].flashing = false;
+		retbutstats[i].flashTime = 0;
+		retbutstats[i].button = widgAddButton(psWScreen, &sButInit);
+		if (!retbutstats[i].button)
+		{
+			debug(LOG_ERROR, "Failed to add reticule button");
+		}
+		else
+		{
+			setReticuleButtonDimensions(*retbutstats[i].button, retbutstats[i].filename);
+		}
 	}
 	ReticuleUp = true;
 	return true;
@@ -3332,18 +3384,12 @@ static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, boo
 {
 	intAddObjectWindow(psObjects, psSelected, bForceStats);
 
-	// if the stats screen is up and..
-	if (StatsUp)
+	// if the stats screen is up and it's owner is dead then..
+	if (StatsUp && psStatsScreenOwner != nullptr && psStatsScreenOwner->died != 0)
 	{
-		if (psStatsScreenOwner != nullptr)
-		{
-			// it's owner is dead then..
-			if (psStatsScreenOwner->died != 0)
-			{
-				// remove it.
-				intRemoveStatsNoAnim();
-			}
-		}
+		// remove it.
+		ASSERT(psStatsScreenOwner->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psStatsScreenOwner->type);
+		intRemoveStatsNoAnim();
 	}
 
 	return true;
@@ -3508,15 +3554,15 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	}
 }
 
-StateButton *makeObsoleteButton(WIDGET *parent)
+MultipleChoiceButton *makeObsoleteButton(WIDGET *parent)
 {
-	StateButton *obsoleteButton = new StateButton(parent);
+	auto obsoleteButton = new MultipleChoiceButton(parent);
 	obsoleteButton->id = IDSTAT_OBSOLETE_BUTTON;
 	obsoleteButton->style |= WBUT_SECONDARY;
-	obsoleteButton->setState(includeRedundantDesigns);
-	obsoleteButton->setImages(false, StateButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
+	obsoleteButton->setChoice(includeRedundantDesigns);
+	obsoleteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
 	obsoleteButton->setTip(false, _("Hiding Obsolete Tech"));
-	obsoleteButton->setImages(true,  StateButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
+	obsoleteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
 	obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
 	obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 	return obsoleteButton;
@@ -3552,6 +3598,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if (psOwner->died)
 		{
 			debug(LOG_GUI, "intAddStats: Owner is dead");
+			ASSERT(psOwner->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psOwner->type);
 			return false;
 		}
 	}
@@ -3900,18 +3947,11 @@ static bool setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BA
 /* Select a construction droid */
 static bool selectConstruction(BASE_OBJECT *psObj)
 {
-	DROID	*psDroid;
-
 	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_DROID, "Invalid droid pointer");
-	psDroid = (DROID *)psObj;
+	auto psDroid = (DROID *)psObj;
 
 	//check the droid type
-	if ((psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT) && (psDroid->died == 0))
-	{
-		return true;
-	}
-
-	return false;
+	return (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT) && psDroid->died == 0;
 }
 
 /* Return the stats for a construction droid */
@@ -3987,20 +4027,12 @@ static bool setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 /* Select a research facility */
 static bool selectResearch(BASE_OBJECT *psObj)
 {
-	STRUCTURE	*psResFacility;
-
 	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
 
-	psResFacility = (STRUCTURE *)psObj;
+	auto psResFacility = (STRUCTURE *)psObj;
 
-	/* A Structure is a research facility if its type = REF_RESEARCH and is
-	   completely built*/
-	if (psResFacility->pStructureType->type == REF_RESEARCH && (psResFacility->
-	        status == SS_BUILT) && (psResFacility->died == 0))
-	{
-		return true;
-	}
-	return false;
+	// A Structure is a research facility if its type = REF_RESEARCH and is completely built
+	return psResFacility->pStructureType->type == REF_RESEARCH && psResFacility->status == SS_BUILT && psResFacility->died == 0;
 }
 
 /* Return the stats for a research facility */
@@ -4080,15 +4112,10 @@ static bool selectManufacture(BASE_OBJECT *psObj)
 
 	/* A Structure is a Factory if its type = REF_FACTORY or REF_CYBORG_FACTORY or
 	REF_VTOL_FACTORY and it is completely built*/
-	if ((psBuilding->pStructureType->type == REF_FACTORY ||
+	return (psBuilding->pStructureType->type == REF_FACTORY ||
 	     psBuilding->pStructureType->type == REF_CYBORG_FACTORY ||
 	     psBuilding->pStructureType->type == REF_VTOL_FACTORY) &&
-	    (psBuilding->status == SS_BUILT) && (psBuilding->died == 0))
-	{
-		return true;
-	}
-
-	return false;
+	    psBuilding->status == SS_BUILT && psBuilding->died == 0;
 }
 
 /* Return the stats for a Factory */
@@ -4344,8 +4371,6 @@ static void intObjStatRMBPressed(UDWORD id)
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen()
 {
-	bool	radOnScreen;
-
 	intResetScreen(false);
 
 	//lock the reticule button
@@ -4357,16 +4382,8 @@ void addIntelScreen()
 	// Only do this in main game.
 	if ((GetGameMode() == GS_NORMAL) && !bMultiPlayer)
 	{
-		radOnScreen = radarOnScreen;
-
-		bRender3DOnly = true;
-		radarOnScreen = false;
-
 		// Just display the 3d, no interface
 		displayWorld();
-
-		radarOnScreen = radOnScreen;
-		bRender3DOnly = false;
 	}
 
 	//add all the intelligence screen interface

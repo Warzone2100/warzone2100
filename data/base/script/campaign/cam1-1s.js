@@ -4,7 +4,7 @@ var cheat;
 
 function eventChat(from, to, message)
 {
-	if (isCheating() && message === "let me win")
+	if (camIsCheating() && message === "let me win")
 	{
 		cheat = true;
 	}
@@ -25,7 +25,7 @@ function secondVideo()
 //Has player built the power module?
 function powerModuleBuilt()
 {
-	var gens = enumStruct(CAM_HUMAN_PLAYER, "A0PowerGenerator", false);
+	var gens = enumStruct(CAM_HUMAN_PLAYER, POWER_GEN, false);
 	for (var x = 0, l = gens.length; x < l; ++x)
 	{
 		if ((gens[x].modules > 0) && (gens[x].status === BUILT))
@@ -42,12 +42,12 @@ function checkForPowerModule()
 	if (cheat || powerModuleBuilt())
 	{
 		camSetupTransporter(11, 52, 1, 32);
-		setMissionTime(camChangeOnDiff(900)); // 15 min for offworld
+		setMissionTime(camChangeOnDiff(camMinutesToSeconds(15))); // 15 min for offworld
 		secondVideo();
 	}
 	else
 	{
-		queue("checkForPowerModule", 3000);
+		queue("checkForPowerModule", camSecondsToMilliseconds(3));
 	}
 }
 
@@ -55,7 +55,7 @@ function eventStartLevel()
 {
 	centreView(13, 52);
 	setNoGoArea(10, 51, 12, 53, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(600)); // 10 min for building module.
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10))); // 10 min for building module.
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
 	cheat = false;
 

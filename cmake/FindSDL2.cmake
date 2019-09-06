@@ -48,11 +48,10 @@ endif()
 # Set by select_library_configurations(), but we want the one from
 # find_package_handle_standard_args() below.
 unset(SDL2_FOUND)
-unset(SDL2MAIN_FOUND)
 
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2 REQUIRED_VARS SDL2_INCLUDE_DIR SDL2_LIBRARY VERSION_VAR SDL2_VERSION_STRING)
 
 set(SDL2MAIN_LIBRARY "${SDL2MAIN_LIBRARY}" CACHE STRING "Where the SDL2main Library can be found")
 
-mark_as_advanced(SDL2_INCLUDE_DIR SDL2_LIBRARY SDL2MAIN_LIBRARY)
+mark_as_advanced(SDL2_INCLUDE_DIR SDL2_LIBRARY SDL2MAIN_FOUND SDL2MAIN_LIBRARY)

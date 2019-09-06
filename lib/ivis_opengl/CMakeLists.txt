@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.5)
 file(GLOB HEADERS
 	"bitimage.h"
 	"gfx_api.h"
+	"gfx_api_gl.h"
 	"imd.h"
 	"ivisdef.h"
 	"jpeg_encoder.h"
@@ -48,6 +49,7 @@ find_package(Freetype REQUIRED)
 find_package(Harfbuzz 1.0 REQUIRED)
 
 add_library(ivis-opengl ${HEADERS} ${SRC})
+set_property(TARGET ivis-opengl PROPERTY FOLDER "lib")
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(ivis-opengl PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()

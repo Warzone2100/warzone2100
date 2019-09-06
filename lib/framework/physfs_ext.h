@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 #else
 # include <physfs.h>
 #endif
-#include <QtCore/QString>
 #include "wzstring.h"
 
 #include "wzglobal.h"
@@ -109,11 +108,6 @@ static inline bool PHYSFS_exists(const WzString &filename)
 }
 
 // Older wrappers
-
-static inline bool PHYSFS_exists(const QString &filename)
-{
-	return PHYSFS_exists(filename.toUtf8().constData());
-}
 
 static inline bool PHYSFS_writeSLE8(PHYSFS_file *file, int8_t val)
 {

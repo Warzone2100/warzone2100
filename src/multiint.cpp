@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,18 @@
  * Functions to display and handle the multiplayer interface screens,
  * along with connection and game options.
  */
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+#include <QtCore/QFileInfo> // used to strip path of challenge AI values
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -97,11 +109,7 @@
 #include "levels.h"
 #include "wrappers.h"
 
-#ifndef WZ_OS_MAC
-	#include <QFileInfo> // used to strip path of challenge AI values
-#else // WZ_OS_MAC
-	#include <QtCore/QFileInfo> // used to strip path of challenge AI values
-#endif
+#include <algorithm>
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
@@ -267,7 +275,8 @@ struct AIDATA
 	char slo[MAX_LEN_AI_NAME];
 	char vlo[MAX_LEN_AI_NAME];
 	char js[MAX_LEN_AI_NAME];
-	char tip[255];
+	char tip[255 + 128]; // may contain optional AI tournament data
+	char difficultyTips[4][255]; // optional difficulty level info
 	int assigned;	///< How many AIs have we assigned of this type
 };
 static std::vector<AIDATA> aidata;
@@ -770,16 +779,61 @@ void readAIs()
 		WzConfig aiconf(path, WzConfig::ReadOnly);
 		AIDATA ai;
 		aiconf.beginGroup("AI");
-		sstrcpy(ai.name, aiconf.value("name", "error").toWzString().toUtf8().c_str());
+
+		if (aiconf.contains("name"))
+		{
+			sstrcpy(ai.name, _(aiconf.value("name", "").toWzString().toUtf8().c_str()));
+		}
+		else
+		{
+			sstrcpy(ai.name, _("MISSING AI NAME"));
+		}
+
 		sstrcpy(ai.slo, aiconf.value("slo", "").toWzString().toUtf8().c_str());
 		sstrcpy(ai.vlo, aiconf.value("vlo", "").toWzString().toUtf8().c_str());
 		sstrcpy(ai.js, aiconf.value("js", "").toWzString().toUtf8().c_str());
-		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toWzString().toUtf8().c_str());
-		if (strcmp(ai.name, "Nullbot") == 0)
+
+		const char *difficultyKeys[] = { "easy_tip", "medium_tip", "hard_tip", "insane_tip" };
+		for (int i = 0; i < ARRAY_SIZE(difficultyKeys); i++)
 		{
-			std::vector<AIDATA>::iterator it;
-			it = aidata.begin();
-			aidata.insert(it, ai);
+			if (aiconf.contains(difficultyKeys[i]))
+			{
+				sstrcpy(ai.difficultyTips[i], _(aiconf.value(difficultyKeys[i], "").toWzString().toUtf8().c_str()));
+			}
+			else
+			{
+				// note that the empty string "" must never be translated
+				sstrcpy(ai.difficultyTips[i], "");
+			}
+		}
+
+		if (aiconf.contains("tip"))
+		{
+			sstrcpy(ai.tip, _(aiconf.value("tip", "").toWzString().toUtf8().c_str()));
+		}
+		else
+		{
+			sstrcpy(ai.tip, _("MISSING AI DESCRIPTION"));
+		}
+
+		int wins = aiconf.value("wins", 0).toInt();
+		int losses = aiconf.value("losses", 0).toInt();
+		int draws = aiconf.value("draws", 0).toInt();
+		int total = wins + losses + draws;
+		if (total)
+		{
+			float win_percentage = static_cast<float>(wins) / total * 100;
+			float loss_percentage = static_cast<float>(losses) / total * 100;
+			float draw_percentage = static_cast<float>(draws) / total * 100;
+			sstrcat(ai.tip, "\n");
+			char statistics[127];
+			ssprintf(statistics, _("AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"), win_percentage, loss_percentage, draw_percentage);
+			sstrcat(ai.tip, statistics);
+		}
+
+		if (strcmp(*i, "nb_generic.json") == 0)
+		{
+			aidata.insert(aidata.begin(), ai);
 		}
 		else
 		{
@@ -1531,7 +1585,7 @@ void MultibuttonWidget::display(int xOffset, int yOffset)
 void MultibuttonWidget::geometryChanged()
 {
 	int s = width() - gap_;
-	for (std::vector<std::pair<W_BUTTON *, int> >::const_reverse_iterator i = buttons.rbegin(); i != buttons.rend(); ++i)
+	for (auto i = buttons.crbegin(); i != buttons.crend(); ++i)
 	{
 		i->first->move(s - i->first->width(), (height() - i->first->height()) / 2);
 		s -= i->first->width() + gap_;
@@ -1615,7 +1669,7 @@ void MultibuttonWidget::choose(int value)
 
 void MultibuttonWidget::stateChanged()
 {
-	for (std::vector<std::pair<W_BUTTON *, int> >::const_iterator i = buttons.begin(); i != buttons.end(); ++i)
+	for (auto i = buttons.cbegin(); i != buttons.cend(); ++i)
 	{
 		i->first->setState(i->second == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
 	}
@@ -1912,6 +1966,12 @@ static void addDifficultyChooser(int player)
 		case 1: sButInit.pTip = _("Plays nice"); break;
 		case 2: sButInit.pTip = _("No holds barred"); break;
 		case 3: sButInit.pTip = _("Starts with advantages"); break;
+		}
+		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[i];
+		if (strcmp(difficultyTip, "") != 0)
+		{
+			sButInit.pTip += "\n";
+			sButInit.pTip += difficultyTip;
 		}
 		sButInit.pDisplay = displayDifficulty;
 		sButInit.UserData = i;
@@ -2500,8 +2560,17 @@ static void drawReadyButton(UDWORD player)
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
+		int playerDifficulty = NetPlay.players[player].difficulty;
+		char tooltip[128 + 255];
+		sstrcpy(tooltip, _(difficultyList[playerDifficulty]));
+		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[playerDifficulty];
+		if (strcmp(difficultyTip, "") != 0)
+		{
+			sstrcat(tooltip, "\n");
+			sstrcat(tooltip, difficultyTip);
+		}
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            locked.difficulty ? _("Difficulty locked") : (NetPlay.isHost ? _("Click to change difficulty") : nullptr), icon, icon, icon);
+		            (NetPlay.isHost && !locked.difficulty) ? _("Click to change difficulty") : tooltip, icon, icon, icon);
 		return;
 	}
 	else if (!NetPlay.players[player].allocated)
@@ -2677,7 +2746,9 @@ void addPlayerBox(bool players)
 
 			if (ingame.localOptionsReceived)
 			{
-				if (!allOnSameTeam)
+				// do not draw "Ready" button if all players are on the same team,
+				// but always draw the difficulty buttons for AI players
+				if (!allOnSameTeam || (!NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0))
 				{
 					drawReadyButton(i);
 				}
@@ -2694,9 +2765,17 @@ void addPlayerBox(bool players)
 				{
 					sButInit.pTip = _("Click to change player position");
 				}
-				else if (!NetPlay.players[i].allocated && NetPlay.isHost && !locked.ai)
+				else if (!NetPlay.players[i].allocated)
 				{
-					sButInit.pTip = _("Click to change AI");
+					if (NetPlay.isHost && !locked.ai)
+					{
+						sButInit.pTip = _("Click to change AI");
+					}
+					else if (NetPlay.players[i].ai >= 0)
+					{
+						// show AI description. Useful for challenges.
+						sButInit.pTip = aidata[NetPlay.players[i].ai].tip;
+					}
 				}
 				if (NetPlay.players[i].allocated && !getMultiStats(i).identity.empty())
 				{
@@ -3938,14 +4017,14 @@ static bool loadSettings(const WzString &filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 	ini.beginGroup("challenge");
-	sstrcpy(game.map, ini.value("map", game.map).toString().toUtf8().constData());
+	sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
 	game.hash = levGetMapNameHash(game.map);
 	game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
 	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 	game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
 	game.power = ini.value("powerLevel", game.power).toInt();
 	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
-	sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
+	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
 	ini.endGroup();
 	return true;
@@ -3999,7 +4078,7 @@ bool startMultiOptions(bool bReenter)
 			game.type = SKIRMISH;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			game.hash = levGetMapNameHash(game.map);
-			game.maxPlayers = 4;
+			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 		}
 
 		ingame.localOptionsReceived = false;
@@ -4251,7 +4330,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	cache.wzText_ModNames.render(x + GAMES_MODNAME_START, y + 24, textColor);
 
 	// draw version string
-	sprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
+	ssprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
 	cache.wzText_VersionString.setTruncatableText(name, font_small, (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4));
 	cache.wzText_VersionString.render(x + GAMES_GAMENAME_START + 6, y + 24, textColor);
 
@@ -4376,13 +4455,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	const int nameX = 32;
 
-	int downloadProgress = NETgetDownloadProgress(j);
+	unsigned downloadProgress = NETgetDownloadProgress(j);
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if (downloadProgress != 100)
 	{
 		char progressString[MAX_STR_LENGTH];
-		ssprintf(progressString, j != selectedPlayer ? _("Sending Map: %d%% ") : _("Map: %d%% downloaded"), downloadProgress);
+		ssprintf(progressString, j != selectedPlayer ? _("Sending Map: %u%% ") : _("Map: %u%% downloaded"), downloadProgress);
 		cache.wzMainText.setText(progressString, font_regular);
 		cache.wzMainText.render(x + 5, y + 22, WZCOL_FORM_TEXT);
 		return;

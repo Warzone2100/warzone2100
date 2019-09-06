@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,12 +18,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
+
 #include <string.h>
 #include <physfs.h>
 #include "lib/framework/physfs_ext.h"
-
-#include "lib/framework/frame.h"
-#include "lib/framework/math_ext.h"
 
 #include "audio.h"
 #include "track.h"

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	WEAPON_STATS	*psStats;
 	UDWORD			firePause;
 	SDWORD			longRange;
+	SDWORD			shortRange;
 	int				compIndex;
 
 	CHECK_OBJECT(psAttacker);
@@ -126,7 +127,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// if the turret doesn't turn, check if the attacker is in alignment with the target
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
-		uint16_t targetDir = iAtan2(deltaPos.xy);
+		uint16_t targetDir = iAtan2(deltaPos.xy());
 		int dirDiff = abs(angleDelta(targetDir - psAttacker->rot.direction));
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
@@ -135,8 +136,9 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Now see if the target is in range  - also check not too near */
-	int dist = iHypot(deltaPos.xy);
+	int dist = iHypot(deltaPos.xy());
 	longRange = proj_GetLongRange(psStats, psAttacker->player);
+	shortRange = proj_GetShortRange(psStats, psAttacker->player);
 
 	int min_angle = 0;
 	// Calculate angle for indirect shots
@@ -159,22 +161,28 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	int baseHitChance = 0;
-	if (dist <= longRange && dist >= psStats->upgrade[psAttacker->player].minRange)
+	const int min_range = proj_GetMinRange(psStats, psAttacker->player);
+	if (dist <= shortRange && dist >= min_range)
+	{
+		// get weapon chance to hit in the short range
+		baseHitChance = weaponShortHit(psStats, psAttacker->player);
+	}
+	else if (dist <= longRange && dist >= min_range)
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats, psAttacker->player);
-
-		// adapt for height adjusted artillery shots
-		if (min_angle > DEG(PROJ_MAX_PITCH))
-		{
-			baseHitChance = baseHitChance * iCos(min_angle) / iCos(DEG(PROJ_MAX_PITCH));
-		}
 	}
 	else
 	{
 		/* Out of range */
 		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Out of range", psAttacker->id, getName(psStats), psTarget->id);
 		return false;
+	}
+
+	// adapt for height adjusted artillery shots
+	if (min_angle > DEG(PROJ_MAX_PITCH))
+	{
+		baseHitChance = baseHitChance * iCos(min_angle) / iCos(DEG(PROJ_MAX_PITCH));
 	}
 
 	// apply experience accuracy modifiers to the base
@@ -228,7 +236,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		DROID *psDroid = castDroid(psTarget);
 
 		int32_t flightTime;
-		if (proj_Direct(psStats) || dist <= psStats->upgrade[psAttacker->player].minRange)
+		if (proj_Direct(psStats) || dist <= proj_GetMinRange(psStats, psAttacker->player))
 		{
 			flightTime = dist * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 		}
@@ -255,7 +263,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * flightTime / GAME_TICKS_PER_SEC), 0);
 		if (!isFlying(psDroid))
 		{
-			predict.z = map_Height(predict.xy);  // Predict that the object will be on the ground.
+			predict.z = map_Height(predict.xy());  // Predict that the object will be on the ground.
 		}
 	}
 
@@ -273,10 +281,31 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 	else /* Deal with a missed shot */
 	{
-		const int minOffset = 5;
+		// Get the shape of the target to avoid "missing" inside of it
+		const ObjectShape targetShape = establishTargetShape(psTarget);
 
-		int missDist = 2 * (100 - resultHitChance) + minOffset;
-		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(360)), missDist), 0);
+		// Worst possible shot based on distance and weapon accuracy
+		Vector3i deltaPosPredict = psAttacker->pos - predict;
+		int worstShot;
+		if (resultHitChance > 0)
+		{
+			worstShot = (iHypot(deltaPosPredict.xy()) * 100 / resultHitChance) / 5;
+ 		}
+		else
+		{
+			worstShot = iHypot(deltaPosPredict.xy()) * 2;
+		}
+
+		// Use a random seed to determine how far the miss will land from the target
+		// That (num/100)^3 allow the misses to fall much more frequently close to the target
+		int num = gameRand(100) + 1;
+		int minOffset = 2 * targetShape.radius();
+
+		int missDist = minOffset + (worstShot * num * num * num) / (100 * 100 * 100);
+
+		// Determine the angle of the miss in the 270 degrees in "front" of the target.
+		// The 90 degrees behind would most probably cause an unwanted hit when the projectile will be drawn through the hitbox.
+		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(270)) - DEG(135) + iAtan2(deltaPosPredict.xy()), missDist), 0);
 		predict += miss;
 
 		psTarget = nullptr;  // Missed the target, so don't expect to hit it.

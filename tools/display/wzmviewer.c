@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2015  Warzone 2100 Project
+	Copyright (C) 2007-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 #endif
 
 // The WZM format is a proposed successor to the PIE format used by Warzone.
-// For an explanation of the WZM format, see http://wiki.wz2100.net/WZM_format
+// For an explanation of the WZM format, see http://developer.wz2100.net/wiki/WZM_format
 
 // To compile: gcc -o wzmviewer wzmviewer.c wzmutils.c -Wall -g -O0 -Wshadow -lpng `sdl-config --libs --cflags` -lGL -lGLU
 
@@ -216,6 +216,6 @@ int main(int argc, char **argv)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	freeModel(psModel);
-	
+
 	return 0;
 }

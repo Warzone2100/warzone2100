@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
 	if (GLEW_EXT_texture_filter_anisotropic)
 	{
-		GLfloat max;
+		gfx_api::gfxFloat max;
 
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));

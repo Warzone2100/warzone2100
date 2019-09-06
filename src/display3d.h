@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -61,6 +61,8 @@ float getViewDistance();
 void setViewDistance(float dist);
 extern bool	radarOnScreen;
 extern bool	radarPermitted;
+bool radarVisible();
+
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
 void setViewPos(UDWORD x, UDWORD y, bool Pan);
 Vector2i    getPlayerPos();

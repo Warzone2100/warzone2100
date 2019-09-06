@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,9 +24,8 @@
  */
 
 #include <physfs.h>
-#include <time.h>
+#include <ctime>
 
-#include <QtCore/QTime>
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
@@ -101,8 +100,8 @@ void updateChallenge(bool gameWon)
 	sstrcpy(sPath, fStr);
 	sPath[strlen(sPath) - 5] = '\0';	// remove .json
 	scores.beginGroup(sPath);
-	victory = scores.value("Victory", false).toBool();
-	seconds = scores.value("Seconds", 0).toInt();
+	victory = scores.value("victory", false).toBool();
+	seconds = scores.value("seconds", 0).toInt();
 
 	// Update score if we have a victory and best recorded was a loss,
 	// or both were losses but time is higher, or both were victories
@@ -111,9 +110,9 @@ void updateChallenge(bool gameWon)
 	    || (!gameWon && !victory && newtime > seconds)
 	    || (gameWon && victory && newtime < seconds))
 	{
-		scores.setValue("Seconds", newtime);
-		scores.setValue("Victory", gameWon);
-		scores.setValue("Player", NetPlay.players[selectedPlayer].name);
+		scores.setValue("seconds", newtime);
+		scores.setValue("victory", gameWon);
+		scores.setValue("player", NetPlay.players[selectedPlayer].name);
 	}
 	scores.endGroup();
 }
@@ -281,7 +280,7 @@ bool addChallenges()
 	for (i = files; *i != nullptr; ++i)
 	{
 		W_BUTTON *button;
-		QString name, map, difficulty, highscore, description;
+		WzString name, map, difficulty, highscore, description;
 		bool victory;
 		int seconds;
 
@@ -298,13 +297,21 @@ bool addChallenges()
 		highscore = "no score";
 		WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadOnly);
 		scores.beginGroup(sPath);
-		name = scores.value("player", "NO NAME").toString();
+		name = scores.value("player", "NO NAME").toWzString();
 		victory = scores.value("victory", false).toBool();
 		seconds = scores.value("seconds", -1).toInt();
 		if (seconds > 0)
 		{
-			QTime format = QTime(0, 0, 0).addSecs(seconds);
-			highscore = format.toString(Qt::TextDate) + " by " + name + " (" + QString(victory ? "Victory" : "Survived") + ")";
+			char psTimeText[sizeof("HH:MM:SS")] = { 0 };
+			time_t secs = seconds;
+			struct tm tmp;
+#if defined(WZ_OS_WIN)
+			gmtime_s(&tmp, &secs);
+#else
+			gmtime_r(&secs, &tmp);
+#endif
+			strftime(psTimeText, sizeof(psTimeText), "%H:%M:%S", &tmp);
+			highscore = WzString::fromUtf8(psTimeText) + " by " + name + " (" + WzString(victory ? "Victory" : "Survived") + ")";
 		}
 		scores.endGroup();
 		ssprintf(sPath, "%s/%s", sSearchPath, *i);
@@ -312,19 +319,19 @@ bool addChallenges()
 		ASSERT(challenge.contains("challenge"), "Invalid challenge file %s - no challenge section!", sPath);
 		challenge.beginGroup("challenge");
 		ASSERT(challenge.contains("name"), "Invalid challenge file %s - no name", sPath);
-		name = challenge.value("name", "BAD NAME").toString();
+		name = challenge.value("name", "BAD NAME").toWzString();
 		ASSERT(challenge.contains("map"), "Invalid challenge file %s - no map", sPath);
-		map = challenge.value("map", "BAD MAP").toString();
-		difficulty = challenge.value("difficulty", "BAD DIFFICULTY").toString();
-		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("description", "").toString();
+		map = challenge.value("map", "BAD MAP").toWzString();
+		difficulty = challenge.value("difficulty", "BAD DIFFICULTY").toWzString();
+		description = map + ", " + difficulty + ", " + highscore + ".\n" + challenge.value("description", "").toWzString();
 
 		button = (W_BUTTON *)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
 
 		debug(LOG_SAVE, "We found [%s]", *i);
 
 		/* Set the button-text */
-		sstrcpy(sSlotCaps[slotCount], name.toUtf8().constData());		// store it!
-		sstrcpy(sSlotTips[slotCount], description.toUtf8().constData());	// store it, too!
+		sstrcpy(sSlotCaps[slotCount], name.toUtf8().c_str());		// store it!
+		sstrcpy(sSlotTips[slotCount], description.toUtf8().c_str());	// store it, too!
 		sstrcpy(sSlotFile[slotCount], sPath);					// store filename
 
 		/* Add button */

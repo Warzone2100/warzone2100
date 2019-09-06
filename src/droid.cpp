@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -260,7 +260,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Deal with score increase/decrease and messages to the player
 		if (psDroid->player == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Unit Lost!")));
+			CONPRINTF("%s", _("Unit Lost!"));
 			scoreUpdateVar(WD_UNITS_LOST);
 			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED, UNIT_LOST_DELAY,
 			                            psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
@@ -273,17 +273,29 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Do we have a dying animation?
 		if (psDroid->sDisplay.imd->objanimpie[ANIM_EVENT_DYING] && psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
-			debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
-			psDroid->timeAnimationStarted = gameTime;
-			psDroid->animationEvent = ANIM_EVENT_DYING;
+			bool useDeathAnimation = true;
+			//Babas should not burst into flames from non-heat weapons
 			if (psDroid->droidType == DROID_PERSON)
 			{
-				// NOTE: 3 types of screams are available ID_SOUND_BARB_SCREAM - ID_SOUND_BARB_SCREAM3
-				audio_PlayObjDynamicTrack(psDroid, ID_SOUND_BARB_SCREAM + (rand() % 3), nullptr);
+				if (weaponClass == WC_HEAT)
+				{
+					// NOTE: 3 types of screams are available ID_SOUND_BARB_SCREAM - ID_SOUND_BARB_SCREAM3
+					audio_PlayObjDynamicTrack(psDroid, ID_SOUND_BARB_SCREAM + (rand() % 3), nullptr);
+				}
+				else
+				{
+					useDeathAnimation = false;
+				}
+			}
+			if (useDeathAnimation)
+			{
+				debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
+				psDroid->timeAnimationStarted = gameTime;
+				psDroid->animationEvent = ANIM_EVENT_DYING;
 			}
 		}
 		// Otherwise use the default destruction animation
-		else if (psDroid->animationEvent != ANIM_EVENT_DYING)
+		if (psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
 			debug(LOG_DEATH, "%s droid %d (%p) is toast", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
 			// This should be sent even if multi messages are turned off, as the group message that was
@@ -309,8 +321,8 @@ DROID::DROID(uint32_t id, unsigned player)
 	, droidType(DROID_ANY)
 	, psGroup(nullptr)
 	, psGrpNext(nullptr)
-	, secondaryOrder(DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS)
-	, secondaryOrderPending(DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS)
+	, secondaryOrder(DSS_ARANGE_LONG | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
+	, secondaryOrderPending(DSS_ARANGE_LONG | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
 	, secondaryOrderPendingCount(0)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
@@ -419,7 +431,7 @@ void recycleDroid(DROID *psDroid)
 	triggerEvent(TRIGGER_OBJECT_RECYCLED, psDroid);
 	vanishDroid(psDroid);
 
-	Vector3i position = psDroid->pos.xzy;
+	Vector3i position = psDroid->pos.xzy();
 	addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
 
 	CHECK_DROID(psDroid);
@@ -428,14 +440,12 @@ void recycleDroid(DROID *psDroid)
 
 bool removeDroidBase(DROID *psDel)
 {
-	DROID	*psCurr, *psNext;
-	STRUCTURE	*psStruct;
-
 	CHECK_DROID(psDel);
 
-	if (isDead((BASE_OBJECT *)psDel))
+	if (isDead(psDel))
 	{
 		// droid has already been killed, quit
+		syncDebug("droid already dead");
 		return true;
 	}
 
@@ -447,7 +457,8 @@ bool removeDroidBase(DROID *psDel)
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDel->psGroup->psList; psCurr != nullptr && psCurr != psDel; psCurr = psNext)
+			DROID *psNext;
+			for (auto psCurr = psDel->psGroup->psList; psCurr != nullptr && psCurr != psDel; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
 
@@ -484,7 +495,7 @@ bool removeDroidBase(DROID *psDel)
 	/* Put Deliv. Pts back into world when a command droid dies */
 	if (psDel->droidType == DROID_COMMAND)
 	{
-		for (psStruct = apsStructLists[psDel->player]; psStruct; psStruct = psStruct->psNext)
+		for (auto psStruct = apsStructLists[psDel->player]; psStruct; psStruct = psStruct->psNext)
 		{
 			// alexl's stab at a right answer.
 			if (StructIsFactory(psStruct)
@@ -540,12 +551,12 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 	}
 
 	/* if baba then squish */
-	if (psDel->droidType == DROID_PERSON && psDel->visible[selectedPlayer])
+	if (psDel->droidType == DROID_PERSON)
 	{
 		// The barbarian has been run over ...
 		audio_PlayStaticTrack(psDel->pos.x, psDel->pos.y, ID_SOUND_BARB_SQUISH);
 	}
-	else if (psDel->visible[selectedPlayer])
+	else
 	{
 		destroyFXDroid(psDel, impactTime);
 		pos.x = psDel->pos.x;
@@ -593,7 +604,7 @@ bool destroyDroid(DROID *psDel, unsigned impactTime)
 	return true;
 }
 
-void	vanishDroid(DROID *psDel)
+void vanishDroid(DROID *psDel)
 {
 	removeDroidBase(psDel);
 }
@@ -605,7 +616,7 @@ bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
 	CHECK_DROID(psDroid);
 
-	if (isDead((BASE_OBJECT *) psDroid))
+	if (isDead(psDroid))
 	{
 		// droid has already been killed, quit
 		return false;
@@ -633,6 +644,10 @@ bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 {
+	if (psDroid->type != OBJ_DROID) {
+		ASSERT(false, "%c Broken psDroid->type %u!", ch, psDroid->type);
+		syncDebug("Broken psDroid->type %u!", psDroid->type);
+	}
 	int list[] =
 	{
 		ch,
@@ -775,6 +790,16 @@ void droidUpdate(DROID *psDroid)
 		{
 			psBeingTargetted->flags.set(OBJECT_FLAG_TARGETED, true);
 		}
+		else if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_PURSUE &&
+		    psDroid->psActionTarget[0] != nullptr &&
+		    validTarget(psDroid, psDroid->psActionTarget[0], 0) &&
+		    (psDroid->action == DACTION_ATTACK ||
+		    psDroid->action == DACTION_OBSERVE ||
+	         orderState(psDroid, DORDER_HOLD)))
+		{
+			psBeingTargetted = psDroid->psActionTarget[0];
+			psBeingTargetted->flags.set(OBJECT_FLAG_TARGETED, true);
+		}
 	}
 	// -----------------
 
@@ -802,7 +827,7 @@ void droidUpdate(DROID *psDroid)
 	}
 
 	// At this point, the droid may be dead due to periodical damage or hardcoded burn damage.
-	if (isDead((BASE_OBJECT *)psDroid))
+	if (isDead(psDroid))
 	{
 		return;
 	}
@@ -868,35 +893,22 @@ static bool droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 	return false;
 }
 
-static bool
-droidCheckBuildStillInProgress(void *psObj)
+static bool droidCheckBuildStillInProgress(void *psObj)
 {
-	DROID	*psDroid;
-
 	if (psObj == nullptr)
 	{
 		return false;
 	}
 
-	psDroid = (DROID *)psObj;
+	auto psDroid = (DROID *)psObj;
 	CHECK_DROID(psDroid);
 
-	if (!psDroid->died && psDroid->action == DACTION_BUILD)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return !psDroid->died && psDroid->action == DACTION_BUILD;
 }
 
-static bool
-droidBuildStartAudioCallback(void *psObj)
+static bool droidBuildStartAudioCallback(void *psObj)
 {
-	DROID	*psDroid;
-
-	psDroid = (DROID *)psObj;
+	auto psDroid = (DROID *)psObj;
 
 	if (psDroid == nullptr)
 	{
@@ -1232,7 +1244,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 	/* add plasma repair effect whilst being repaired */
 	if ((ONEINFIVE) && (psDroidToRepair->visible[selectedPlayer]))
 	{
-		Vector3i iVecEffect = (psDroidToRepair->pos + Vector3i(DROID_REPAIR_SPREAD, DROID_REPAIR_SPREAD, rand() % 8)).xzy;
+		Vector3i iVecEffect = (psDroidToRepair->pos + Vector3i(DROID_REPAIR_SPREAD, DROID_REPAIR_SPREAD, rand() % 8)).xzy();
 		effectGiveAuxVar(90 + rand() % 20);
 		addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0, gameTime - deltaGameTime + 1 + rand() % deltaGameTime);
 		droidAddWeldSound(iVecEffect);
@@ -1692,6 +1704,9 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 
 		//set droid height to be above the terrain
 		psDroid->pos.z += TRANSPORTER_HOVER_HEIGHT;
+
+		/* reset halt secondary order from guard to hold */
+		secondarySetState( psDroid, DSO_HALTTYPE, DSS_HALT_HOLD );
 	}
 
 	if (player == selectedPlayer)
@@ -1723,6 +1738,7 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 void initDroidMovement(DROID *psDroid)
 {
 	psDroid->sMove.asPath.clear();
+	psDroid->sMove.pathIndex = 0;
 }
 
 // Set the asBits in a DROID structure given it's template.
@@ -1935,7 +1951,7 @@ void	groupConsoleInformOfSelection(UDWORD groupNumber)
 {
 	unsigned int num_selected = selNumSelected(selectedPlayer);
 
-	CONPRINTF(ConsoleString, (ConsoleString, ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected));
+	CONPRINTF(ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected);
 }
 
 void	groupConsoleInformOfCreation(UDWORD groupNumber)
@@ -1944,7 +1960,7 @@ void	groupConsoleInformOfCreation(UDWORD groupNumber)
 	{
 		unsigned int num_selected = selNumSelected(selectedPlayer);
 
-		CONPRINTF(ConsoleString, (ConsoleString, ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber));
+		CONPRINTF(ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber);
 	}
 
 }
@@ -1955,11 +1971,11 @@ void	groupConsoleInformOfCentering(UDWORD groupNumber)
 
 	if (!getWarCamStatus())
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected));
+		CONPRINTF(ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected));
+		CONPRINTF(ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected);
 	}
 }
 
@@ -1987,7 +2003,7 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
 		af.Trans(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
 		         -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
 
-		*muzzle = (af * barrel).xzy;
+		*muzzle = (af * barrel).xzy();
 		muzzle->z = -muzzle->z;
 	}
 	else
@@ -2065,7 +2081,7 @@ bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_
 			debugLen += sprintf(debugStr + debugLen, ",barrel[%u]=(%d,%d,%d)", connector_num, psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].y, -psWeaponImd->connectors[connector_num].z);
 		}
 
-		*muzzle = (af * barrel).xzy;
+		*muzzle = (af * barrel).xzy();
 		muzzle->z = -muzzle->z;
 		sprintf(debugStr + debugLen, ",muzzle=(%d,%d,%d)", muzzle->x, muzzle->y, muzzle->z);
 
@@ -2986,15 +3002,16 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 	ASSERT_OR_RETURN(psD, psD->player != to, "Cannot gift to self");
 
 	// Check unit limits (multiplayer only)
+	syncDebug("Limits: %u/%d %u/%d %u/%d", getNumDroids(to), getMaxDroids(to), getNumConstructorDroids(to), getMaxConstructors(to), getNumCommandDroids(to), getMaxCommanders(to));
 	if (bMultiPlayer
-	    && (getNumDroids(to) + 1 > getMaxDroids(to)
+	    && ((int)getNumDroids(to) >= getMaxDroids(to)
 	        || ((psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
-	            && getNumConstructorDroids(to) + 1 > getMaxConstructors(to))
-	        || (psD->droidType == DROID_COMMAND && getNumCommandDroids(to) + 1 > getMaxCommanders(to))))
+	            && (int)getNumConstructorDroids(to) >= getMaxConstructors(to))
+	        || (psD->droidType == DROID_COMMAND && (int)getNumCommandDroids(to) >= getMaxCommanders(to))))
 	{
 		if (to == selectedPlayer || psD->player == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", _("Unit transfer failed -- unit limits exceeded")));
+			CONPRINTF("%s", _("Unit transfer failed -- unit limits exceeded"));
 		}
 		return nullptr;
 	}
@@ -3006,11 +3023,13 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 		scoreUpdateVar(WD_UNITS_LOST);
 	}
 	// make the old droid vanish (but is not deleted until next tick)
+	adjustDroidCount(psD, -1);
 	vanishDroid(psD);
 	// create a new droid
 	psNewDroid = reallyBuildDroid(&sTemplate, Position(psD->pos.x, psD->pos.y, 0), to, false, psD->rot);
 	ASSERT_OR_RETURN(nullptr, psNewDroid, "Unable to build unit");
 	addDroid(psNewDroid, apsDroidLists);
+	adjustDroidCount(psNewDroid, 1);
 	psNewDroid->body = clip((psD->body*psNewDroid->originalBody + psD->originalBody/2)/std::max(psD->originalBody, 1u), 1u, psNewDroid->originalBody);
 	psNewDroid->experience = psD->experience;
 	if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || isTransporter(psNewDroid)))

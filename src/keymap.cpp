@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@
 #include "display3d.h"
 #include "keymap.h"
 #include "keyedit.h"
+
+#include <algorithm>
 
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 static KEY_CODE getQwertyKey();
@@ -232,6 +234,11 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_SelectAllTrucks, "SelectAllTrucks"},
 	{kf_SetDroidOrderStop, "SetDroidOrderStop"},
 	{kf_SelectAllArmedVTOLs, "SelectAllArmedVTOLs"},
+	{kf_SetDroidMovePursue, "SetDroidMovePursue"},
+	{kf_SetDroidMoveGuard, "SetDroidMoveGuard"},
+	{kf_SetDroidRangeOptimum, "SetDroidRangeOptimum"},
+	{kf_SetDroidRangeShort, "SetDroidRangeShort"},
+	{kf_SetDroidRangeLong, "SetDroidRangeLong"},
 };
 
 KeyMapSaveEntry const *keymapEntryByFunction(void (*function)())
@@ -380,12 +387,17 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_D,      KEYMAP_PRESSED, kf_JumpToUnassignedUnits, N_("View Unassigned Units"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_E,      KEYMAP_PRESSED, kf_SetDroidAttackReturn,  N_("Return Fire"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_F,      KEYMAP_PRESSED, kf_SetDroidAttackAtWill,  N_("Fire at Will"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_G,      KEYMAP_PRESSED, kf_SetDroidMoveGuard,     N_("Guard Position"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  N_("Return to HQ"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidOrderHold,     N_("Hold Position"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeOptimum,  N_("Optimum Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_O,      KEYMAP_PRESSED, kf_SetDroidRangeShort,    N_("Short Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_P,      KEYMAP_PRESSED, kf_SetDroidMovePursue,    N_("Pursue"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_Q,      KEYMAP_PRESSED, kf_SetDroidMovePatrol,    N_("Patrol"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_R,      KEYMAP_PRESSED, kf_SetDroidGoForRepair,   N_("Return For Repair"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_S,      KEYMAP_PRESSED, kf_SetDroidOrderStop,     N_("Stop Droid"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_T,      KEYMAP_PRESSED, kf_SetDroidGoToTransport, N_("Go to Transport"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_U,      KEYMAP_PRESSED, kf_SetDroidRangeLong,     N_("Long Range"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendGlobalMessage,     N_("Send Global Text Message"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_RETURN, KEYMAP_PRESSED, kf_SendTeamMessage,       N_("Send Team Text Message"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_H,      KEYMAP_PRESSED, kf_AddHelpBlip,           N_("Drop a beacon"));
@@ -753,11 +765,11 @@ static void keyShowMapping(KEY_MAPPING *psMapping)
 	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
 	if (onlySub)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s - %s", asciiSub, _(psMapping->name.c_str())));
+		CONPRINTF("%s - %s", asciiSub, _(psMapping->name.c_str()));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "%s and %s - %s", asciiMeta, asciiSub, _(psMapping->name.c_str())));
+		CONPRINTF("%s and %s - %s", asciiMeta, asciiSub, _(psMapping->name.c_str()));
 	}
 	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
 }

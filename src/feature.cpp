@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -314,6 +314,10 @@ FEATURE::~FEATURE()
 
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {
+	if (psFeature->type != OBJ_FEATURE) {
+		ASSERT(false, "%c Broken psFeature->type %u!", ch, psFeature->type);
+		syncDebug("Broken psFeature->type %u!", psFeature->type);
+	}
 	int list[] =
 	{
 		ch,
@@ -514,7 +518,7 @@ SDWORD getFeatureStatFromName(const WzString &name)
 {
 	FEATURE_STATS *psStat;
 
-	for (int inc = 0; inc < numFeatureStats; inc++)
+	for (unsigned inc = 0; inc < numFeatureStats; inc++)
 	{
 		psStat = &asFeatureStats[inc];
 		if (psStat->id.compare(name) == 0)
@@ -527,7 +531,7 @@ SDWORD getFeatureStatFromName(const WzString &name)
 
 StructureBounds getStructureBounds(FEATURE const *object)
 {
-	return getStructureBounds(object->psStats, object->pos.xy);
+	return getStructureBounds(object->psStats, object->pos.xy());
 }
 
 StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos)

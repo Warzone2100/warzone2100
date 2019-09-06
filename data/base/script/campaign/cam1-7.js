@@ -2,7 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SCAVS = 7; //Scav player number
 const NEW_PARADIGM_RESEARCH = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade03",
 	"R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
@@ -53,8 +52,8 @@ camAreaEvent("NPTransportTrigger", function(droid)
 	{
 		var list = [cTempl.npmrl, cTempl.npmrl];
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
-			entry: { x: 39, y: 0 },
-			exit: { x: 32, y: 62 }
+			entry: { x: 39, y: 2 },
+			exit: { x: 32, y: 60 }
 		});
 		playSound("pcv632.ogg"); //enemy transport escaping warning sound
 	}
@@ -110,6 +109,11 @@ function eventGroupLoss(obj, group, newsize)
 	}
 }
 
+function enemyCanTakeArtifact(label)
+{
+	return label.indexOf("newArtiLabel") !== -1 || label.indexOf("artifactLocation") !== -1;
+}
+
 //Moves some New Paradigm forces to the artifact
 function getArtifact()
 {
@@ -119,13 +123,16 @@ function getArtifact()
 	}
 
 	const GRAB_RADIUS = 2;
-	var artifact = camGetArtifacts();
+	var artifact = camGetArtifacts().filter(function(label) {
+		return enemyCanTakeArtifact(label) && getObject(label) !== null;
+	});
 	var artiLoc = artiMovePos;
 
 	if (!enemyHasArtifact && !enemyStoleArtifact && artifact.length > 0)
 	{
 		//Go to the artifact instead.
-		artiLoc = camMakePos(artifact[0]);
+		var realCrate = artifact[0];
+		artiLoc = camMakePos(realCrate);
 		if (!camDef(artiLoc))
 		{
 			return; //player must have snatched it
@@ -153,7 +160,7 @@ function getArtifact()
 			hackAddMessage("C1-7_LZ2", PROX_MSG, CAM_HUMAN_PLAYER, true); //NPLZ blip
 			droidWithArtiID = artiMembers[idx].id;
 			enemyHasArtifact = true;
-			camSafeRemoveObject(artifact[0], false);
+			camSafeRemoveObject(realCrate, false);
 		}
 	}
 
@@ -166,7 +173,7 @@ function getArtifact()
 		});
 	}
 
-	queue("getArtifact", 150);
+	queue("getArtifact", camSecondsToMilliseconds(0.2));
 }
 
 //New Paradigm truck builds six lancer hardpoints around LZ
@@ -199,19 +206,6 @@ function extraVictory()
 	{
 		return true;
 	}
-}
-
-//Enable transport reinforcements
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
-		area: "RTLZ",
-		message: "C1-7_LZ",
-		reinforcements: 60, //1 min
-		callback: "extraVictory",
-		retlz: true,
-	});
 }
 
 function removeCanyonBlip()
@@ -252,13 +246,13 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
 		area: "RTLZ",
 		message: "C1-7_LZ",
-		reinforcements: -1,
+		reinforcements: camMinutesToSeconds(1),
 		callback: "extraVictory",
 		retlz: true,
 	});
 
 	//Make sure the New Paradigm and Scavs are allies
-	setAlliance(NEW_PARADIGM, SCAVS, true);
+	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
 	//Get rid of the already existing crate and replace with another
 	camSafeRemoveObject("artifact1", false);
@@ -267,7 +261,7 @@ function eventStartLevel()
 	});
 
 	camCompleteRequiredResearch(NEW_PARADIGM_RESEARCH, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAVS);
+	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 
 	camSetEnemyBases({
 		"ScavMiddleGroup": {
@@ -295,7 +289,7 @@ function eventStartLevel()
 			assembly: "middleAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			data: {
 				regroup: true,
 				count: -1,
@@ -306,7 +300,7 @@ function eventStartLevel()
 			assembly: "southAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			data: {
 				regroup: true,
 				count: -1,
@@ -317,7 +311,7 @@ function eventStartLevel()
 			assembly: "northAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			rdata: {
 				regroup: true,
 				count: -1,
@@ -332,6 +326,5 @@ function eventStartLevel()
 	buildLancers();
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true); //Canyon
-	queue("enableReinforcements", 15000);
-	queue("getArtifact", camChangeOnDiff(90000));
+	queue("getArtifact", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 }

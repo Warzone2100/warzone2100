@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -417,6 +417,21 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			break;
 		case INPBUF_ESC :
 			debug(LOG_INPUT, "EditBox cursor escape");
+			if (aText.length() > 0)
+			{
+				// hitting ESC while the editbox contains text clears the text
+				aText.clear();
+				insPos = 0;
+				printStart = 0;
+				fitStringStart();
+			}
+			else
+			{
+				// hitting ESC while the editbox is empty ends editing mode
+				StopTextInput();
+				screenPointer->setFocus(nullptr);
+				return;
+			}
 			break;
 
 		default:
@@ -626,8 +641,6 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 		displayCache.modeText.setText(tmp.toUtf8(), FontID);
 
 		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
-		displayCache.wzHyphen.setText("-", FontID);
-		cx += displayCache.wzHyphen.width();
 		int cy = fy;
 		iV_Line(cx, cy + iV_GetTextAboveBase(FontID), cx, cy - iV_GetTextBelowBase(FontID), WZCOL_FORM_CURSOR);
 	}

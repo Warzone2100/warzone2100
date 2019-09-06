@@ -125,13 +125,13 @@
 		"label": "rescueTrigger",
 		"subscriber": 0,
 		"pos1": [3776, 9536],
-		"pos2": [5568, 11712]
+		"pos2": [5504, 11648]
 	},
 	"area_10": {
 		"label": "phantomFacTrigger",
 		"subscriber": 0,
 		"pos1": [64, 4544],
-		"pos2": [5568, 5568]
+		"pos2": [5504, 5568]
 	},
 	"area_11": {
 		"label": "NXlandingZone",

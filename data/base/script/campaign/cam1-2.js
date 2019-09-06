@@ -24,7 +24,7 @@ function camArtifactPickup_ScavLab()
 		},
 		groupSize: 5,
 		maxSize: 9,
-		throttle: camChangeOnDiff(10000),
+		throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 		templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 	});
 	camEnableFactory("WestFactory");
@@ -51,23 +51,12 @@ function enableWestFactory()
 	});
 }
 
-function enableReinforcements()
-{
-	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
-		area: "RTLZ",
-		message: "C1-2_LZ",
-		reinforcements: 60,
-		retlz: true
-	});
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
 		area: "RTLZ",
 		message: "C1-2_LZ",
-		reinforcements: -1,
+		reinforcements: 60,
 		retlz: true
 	});
 
@@ -120,7 +109,7 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: camChangeOnDiff(15000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
 			group: camMakeGroup("NorthTankGroup"),
 			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
@@ -137,11 +126,10 @@ function eventStartLevel()
 			},
 			groupSize: 5,
 			maxSize: 9,
-			throttle: camChangeOnDiff(10000),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(10)),
 			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 	});
 
-	queue("enableReinforcements", 20000);
-	queue("enableWestFactory", 30000);
+	queue("enableWestFactory", camSecondsToMilliseconds(30));
 }

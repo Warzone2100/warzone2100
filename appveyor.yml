@@ -6,7 +6,7 @@ environment:
   global:
     APPVEYOR_CACHE_ENTRY_ZIP_ARGS: -t7z -m0=lzma -mx=4
   matrix:
-  # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
+  # 32-bit (x86) builds
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     WZ_JOB_ID: release_x86
     # NOTE: Additional environment variables are set later to maintain consistent job identifiers
@@ -24,8 +24,8 @@ environment:
 cache:
   # 1. The vcpkg directory
   #    - Cache built dependencies to reduce frequent build time by 20+ minutes.
-  #    - The vcpkg cache is invalidated if get-dependencies.ps1 changes (and get-dependencies.ps1 is what contains the pinned vcpkg commit).
-  - vcpkg/ -> get-dependencies.ps1
+  #    - The vcpkg cache is invalidated if get-dependencies_win.ps1 changes (and get-dependencies_win.ps1 is what contains the pinned vcpkg commit).
+  - vcpkg/ -> get-dependencies_win.ps1
 
 platform:
   - x64
@@ -37,17 +37,17 @@ install:
   # Initialize Git submodules
   - git submodule update --init --recursive
   # Setup Ruby path (for Asciidoctor gem install)
-  - set PATH=C:\Ruby25-x64\bin;%PATH%
+  - set PATH=C:\Ruby26-x64\bin;%PATH%
   # Install Asciidoctor (for documentation generation)
   # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-  - gem install asciidoctor -v 1.5.7.1 --no-rdoc --no-ri --no-document
+  - gem install asciidoctor -v 2.0.9 --no-document
 
 before_build:
   # Set expanded environment variables for release build jobs
   # NOTE: These are set here, instead of in the build matrix above, to maintain consistent job identifiers for release builds
   #       (as the job is identified based on the environment configuration in the matrix)
   - ps: |
-      if ($env:WZ_JOB_ID -eq "release_x86") {
+      if ($env:WZ_JOB_ID -eq "release_x86_xp") {
         # 32-bit (x86) builds maintain Windows XP compatibility by using Qt 5.6.x and the "*_xp" VC toolchain
         # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
         # TODO: Change VCPKG_DEFAULT_TRIPLET to one that supports XP once https://github.com/Microsoft/vcpkg/pull/1732 is finalized & merged.
@@ -55,6 +55,16 @@ before_build:
         $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
         $env:QT5DIR = "C:\Qt\5.6\msvc2015"
         $env:WZ_VC_TOOLCHAIN = "v141_xp"
+        $env:WZ_VC_TARGET_PLATFORMNAME = "Win32"
+        $env:WZ_OUTPUT_PLATFORMNAME = "x86"
+      }
+      elseif ($env:WZ_JOB_ID -eq "release_x86") {
+        # 32-bit (x86) builds use more recent Qt and the latest VC toolchain (and support Windows 7+)
+        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
+        $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
+        $env:QT5DIR = "C:\Qt\5.9\msvc2015"
+        $env:WZ_VC_TOOLCHAIN = "v141"
         $env:WZ_VC_TARGET_PLATFORMNAME = "Win32"
         $env:WZ_OUTPUT_PLATFORMNAME = "x86"
       }
@@ -68,17 +78,23 @@ before_build:
         $env:WZ_VC_TARGET_PLATFORMNAME = "x64"
         $env:WZ_OUTPUT_PLATFORMNAME = "x64"
       }
+  # Set distributor (if building from the main repo)
+  - ps: |
+      $env:WZ_DISTRIBUTOR = "UNKNOWN"
+      if ($env:APPVEYOR_ACCOUNT_NAME -eq "Warzone2100") {
+        $env:WZ_DISTRIBUTOR = "wz2100.net"
+      }
   # Add the QT5 \bin dir to PATH
   - set PATH=%PATH%;%QT5DIR%\bin;
   # If a future version of vcpkg breaks the "VCPKG_BUILD_TYPE=release" setting for the dependencies we need, use the following line instead:
-  # - ps: .\get-dependencies.ps1
-  - ps: .\get-dependencies.ps1 -VCPKG_BUILD_TYPE "release"
+  # - ps: .\get-dependencies_win.ps1
+  - ps: .\get-dependencies_win.ps1 -VCPKG_BUILD_TYPE "release"
   # Remove the vcpkg\buildtrees folder. (Once all dependencies are installed, it isn't needed, and it takes up a lot of space in the cache.)
   - ps: if (Test-Path .\vcpkg\buildtrees) { Remove-Item .\vcpkg\buildtrees -Force -Recurse -ErrorAction SilentlyContinue; }
   # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
   - msbuild .\vcpkg\toolsrc\vcpkg.sln /t:Clean /p:Configuration=Release /p:Platform=x86
   # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform (portable build)
-  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
+  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
 
 build:
   parallel: true
@@ -98,6 +114,9 @@ after_build:
         $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))_$($env:WZ_OUTPUT_PLATFORMNAME)"
       }
       $env:WZ_ZIP_DESC = "$($env:APPVEYOR_REPO_BRANCH)_$($env:WZ_OUTPUT_PLATFORMNAME)"
+      # Convert special characters
+      $env:WZ_BUILD_DESC = $env:WZ_BUILD_DESC.replace('/','_')
+      $env:WZ_ZIP_DESC = $env:WZ_ZIP_DESC.replace('/','_')
   - ps: Write-Host "env:WZ_BUILD_DESC='$env:WZ_BUILD_DESC'"
 
   # Package the portable installer into a zip
@@ -108,7 +127,7 @@ after_build:
   - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
   
   # Re-run CMake configure for non-portable (regular) installer
-  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
+  - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
   # Build the regular installer package (this should only rebuild the installer itself)
   - msbuild build/PACKAGE.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   

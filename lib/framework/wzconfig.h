@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@
 #ifndef WZCONFIG_H
 #define WZCONFIG_H
 
+#include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
+#include "lib/framework/wzstring.h"
+
 #if (defined(WZ_OS_WIN) && defined(WZ_CC_MINGW))
 #  if (defined(snprintf) && !defined(_GL_STDIO_H) && defined(_LIBINTL_H))
 // On mingw / MXE builds, libintl's define of snprintf breaks json.hpp
@@ -29,8 +33,21 @@
 #  endif
 #endif
 
+#if defined(__clang__) && defined(__has_cpp_attribute)
+#  pragma clang diagnostic push
+#  if __has_cpp_attribute(nodiscard)
+#    // Work around json.hpp / Clang issue where Clang reports the nodiscard attribute is available in C++11 mode,
+#    // but then `-Wc++17-extensions` warns that it is a C++17 feature
+#    pragma clang diagnostic ignored "-Wc++1z-extensions" // -Wc++1z-extensions // -Wc++17-extensions
+#  endif
+#endif
+
 #include <3rdparty/json/json.hpp>
 using json = nlohmann::json;
+
+#if defined(__clang__) && defined(__has_cpp_attribute)
+#  pragma clang diagnostic pop
+#endif
 
 #if defined(_wz_restore_libintl_snprintf)
 #  undef _wz_restore_libintl_snprintf
@@ -38,17 +55,9 @@ using json = nlohmann::json;
 #  define snprintf libintl_snprintf
 #endif
 
-#include <QtCore/QStringList>
-#include <physfs.h>
 #include <stdbool.h>
 #include <vector>
-
-// Get platform defines before checking for them.
-// Qt headers MUST come before platform specific stuff!
-#include "lib/framework/frame.h"
-#include "lib/framework/vector.h"
-#include "lib/framework/wzstring.h"
-
+#include <list>
 
 class json_variant {
 	// Wraps a json object and provides conversion methods that conform to older (QVariant) syntax and behavior
@@ -65,19 +74,16 @@ public:
 	json_variant(const char * str);
 	json_variant(const std::string & str);
 
-	json_variant(const QString & str);
 	json_variant(const WzString & str);
 public:
 	// QVariant-like conversion methods
 	int toInt(bool *ok = nullptr) const;
-	uint toUInt(bool *ok = nullptr) const;
+	unsigned int toUInt(bool *ok = nullptr) const;
 	bool toBool() const;
 	double toDouble(bool *ok = nullptr) const;
 	float toFloat(bool *ok = nullptr) const;
 	WzString toWzString(bool *ok = nullptr) const;
 	std::vector<WzString> toWzStringList() const;
-	QString toString() const;
-	QStringList toStringList() const;
 
 public:
 	const nlohmann::json& jsonValue() const;
@@ -158,16 +164,6 @@ public:
 };
 
 // Enable JSON support for custom types
-
-// QString
-inline void to_json(json& j, const QString& p) {
-	j = json(p.toUtf8().constData());
-}
-
-inline void from_json(const json& j, QString& p) {
-	std::string str = j.get<std::string>();
-	p = QString::fromUtf8(str.c_str());
-}
 
 // WzString
 inline void to_json(json& j, const WzString& p) {

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,38 +35,32 @@
 
 // ------------------------------------------------------------------------------------
 
-static DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
-static int              fDifPlayerModifier;
-static int              fDifEnemyModifier;
+static DIFFICULTY_LEVEL presDifLevel = DL_NORMAL;
 
+static int fDifPlayerModifier;
+static int fDifEnemyModifier;
+
+void setDamageModifiers(int playerModifier, int enemyModifier)
+{
+	fDifPlayerModifier = playerModifier;
+	fDifEnemyModifier = enemyModifier;
+}
 
 // ------------------------------------------------------------------------------------
 /* Sets the game difficulty level */
 void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 {
-
 	switch (lev)
 	{
 	case	DL_EASY:
-		fDifPlayerModifier = 120;
-		fDifEnemyModifier = 100;
+		setDamageModifiers(120, 100);
 		break;
 	case	DL_NORMAL:
-		fDifPlayerModifier = 100;
-		fDifEnemyModifier = 100;
+		setDamageModifiers(100, 100);
 		break;
 	case	DL_HARD:
 	case	DL_INSANE:
-		fDifPlayerModifier = 80;
-		fDifEnemyModifier = 100;
-		break;
-	case	DL_TOUGH:
-		fDifPlayerModifier = 100;
-		fDifEnemyModifier = 50;    // they do less damage!
-		break;
-	case	DL_KILLER:
-		fDifPlayerModifier = 999;  // 10 times
-		fDifEnemyModifier = 1;     // almost nothing
+		setDamageModifiers(80, 100);
 		break;
 	}
 	presDifLevel = lev;
@@ -74,18 +68,13 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 
 // ------------------------------------------------------------------------------------
 /* Returns the difficulty level */
-DIFFICULTY_LEVEL	getDifficultyLevel()
+DIFFICULTY_LEVEL getDifficultyLevel()
 {
-	return (presDifLevel);
+	return presDifLevel;
 }
 
-// ------------------------------------------------------------------------------------
 int modifyForDifficultyLevel(int basicVal, bool IsPlayer)
 {
-	if (bMultiPlayer && presDifLevel != DL_KILLER && presDifLevel != DL_TOUGH)  // ignore multiplayer or skirmish (unless using biffer baker) games
-	{
-		return basicVal;
-	}
 	if (IsPlayer)
 	{
 		return basicVal * fDifPlayerModifier / 100;
@@ -95,4 +84,17 @@ int modifyForDifficultyLevel(int basicVal, bool IsPlayer)
 		return basicVal * fDifEnemyModifier / 100;
 	}
 }
-// ------------------------------------------------------------------------------------
+
+// reset damage modifiers changed by "double up" or "biffer baker" cheat and
+// prevent campaign difficulty from influencing skirmish and multiplayer games
+void resetDamageModifiers()
+{
+	if (bMultiPlayer)
+	{
+		setDamageModifiers(100, 100);
+	}
+	else
+	{
+		setDifficultyLevel(getDifficultyLevel());
+	}
+}

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -89,6 +89,7 @@ typedef DroidOrderType DROID_ORDER;
 enum SECONDARY_ORDER
 {
 	DSO_UNUSED,
+	DSO_ATTACK_RANGE,               /**< The attack range a given droid is allowed to fire: can be short, long or optimum (best chance to hit). Used with DSS_ARANGE_SHORT, DSS_ARANGE_LONG, DSS_ARANGE_OPTIMUM. */
 	DSO_REPAIR_LEVEL,               /**< The repair level at which the droid falls back to repair: can be low, high or never. Used with DSS_REPLEV_LOW, DSS_REPLEV_HIGH, DSS_REPLEV_NEVER. */
 	DSO_ATTACK_LEVEL,               /**< The attack level at which a droid can attack: can be always, attacked or never. Used with DSS_ALEV_ALWAYS, DSS_ALEV_ATTACKED, DSS_ALEV_NEVER. */
 	DSO_ASSIGN_PRODUCTION,          /**< Assigns a factory to a command droid - the state is given by the factory number. */
@@ -96,7 +97,7 @@ enum SECONDARY_ORDER
 	DSO_CLEAR_PRODUCTION,           /**< Removes the production from a command droid. */
 	DSO_RECYCLE,                    /**< If can be recycled or not. */
 	DSO_PATROL,                     /**< If it is assigned to patrol between current pos and next move target. */
-	DSO_UNUSED2,                    /**< The type of halt. It can be hold, guard or pursue. Used with DSS_HALT_HOLD, DSS_HALT_GUARD,  DSS_HALT_PURSUE. */
+	DSO_HALTTYPE,                    /**< The type of halt. It can be hold, guard or pursue. Used with DSS_HALT_HOLD, DSS_HALT_GUARD,  DSS_HALT_PURSUE. */
 	DSO_RETURN_TO_LOC,              /**< Generic secondary order to return to a location. Will depend on the secondary state DSS_RTL* to be specific. */
 	DSO_FIRE_DESIGNATOR,            /**< Assigns a droid to be a target designator. */
 	DSO_ASSIGN_VTOL_PRODUCTION,     /**< Assigns a vtol factory to a command droid - the state is given by the factory number. */
@@ -107,12 +108,18 @@ enum SECONDARY_ORDER
 enum SECONDARY_STATE
 {
 	DSS_NONE            = 0x000000,	/**< no state. */
+	DSS_ARANGE_SHORT    = 0x000001,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can only attack with short range. */
+	DSS_ARANGE_LONG     = 0x000002,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can only attack with long range. */
+	DSS_ARANGE_OPTIMUM  = 0x000003,	/**< state referred to secondary order DSO_ATTACK_RANGE. Droid can attacks with short or long range depending on what is the best hit chance. */
 	DSS_REPLEV_LOW      = 0x000004,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid falls back if its health decrease below 25%. */
 	DSS_REPLEV_HIGH     = 0x000008,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid falls back if its health decrease below 50%. */
 	DSS_REPLEV_NEVER    = 0x00000c,	/**< state referred to secondary order DSO_REPAIR_LEVEL. Droid never falls back. */
 	DSS_ALEV_ALWAYS     = 0x000010,	/**< state referred to secondary order DSO_ATTACK_LEVEL. Droid attacks by its free will everytime. */
 	DSS_ALEV_ATTACKED   = 0x000020,	/**< state referred to secondary order DSO_ATTACK_LEVEL. Droid attacks if it is attacked. */
 	DSS_ALEV_NEVER      = 0x000030,	/**< state referred to secondary order DSO_ATTACK_LEVEL. Droid never attacks. */
+	DSS_HALT_HOLD       = 0x000040,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid never moves by its free will. */
+	DSS_HALT_GUARD      = 0x000080,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid moves on a given region by its free will. */
+	DSS_HALT_PURSUE     = 0x0000c0,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid pursues the target by its free will. */
 	DSS_RECYCLE_SET     = 0x000100,	/**< state referred to secondary order DSO_RECYCLE. If set, the droid can be recycled. */
 	DSS_ASSPROD_START   = 0x000200,	/**< @todo this state is not called on the code. Consider removing it. */
 	DSS_ASSPROD_MID     = 0x002000,	/**< @todo this state is not called on the code. Consider removing it. */
@@ -126,8 +133,10 @@ enum SECONDARY_STATE
 };
 
 /** masks for the secondary order state. */
+#define DSS_ARANGE_MASK             0x000003
 #define DSS_REPLEV_MASK             0x00000c
 #define DSS_ALEV_MASK               0x000030
+#define DSS_HALT_MASK               0x0000c0
 #define DSS_RECYCLE_MASK            0x000100
 #define DSS_ASSPROD_MASK            0x1f07fe00
 #define DSS_ASSPROD_FACT_MASK       0x003e00

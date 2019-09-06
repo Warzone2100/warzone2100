@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013-2017  Warzone 2100 Project
+	Copyright (C) 2013-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,8 +22,12 @@
  * New scripting system - debug GUI
  */
 
-#include "qtscriptdebug.h"
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
 
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtCore/QHash>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>
@@ -40,6 +44,12 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QStandardItemModel>
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
+# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
+#endif
+
+#include "qtscriptdebug.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -182,8 +192,9 @@ static void fillMainModel(QStandardItemModel &m)
 {
 	const QStringList lev_type = { "LDS_COMPLETE", "LDS_CAMPAIGN", "LDS_CAMSTART", "LDS_CAMCHANGE",
 	                               "LDS_EXPAND", "LDS_BETWEEN", "LDS_MKEEP", "LDS_MCLEAR",
-	                               "LDS_EXPAND_LIMBO", "LDS_MKEEP_LIMBO", "LDS_NONE", "CAMPAIGN",
-	                               "SKIRMISH", "MULTI_SKIRMISH2", "MULTI_SKIRMISH3" };
+	                               "LDS_EXPAND_LIMBO", "LDS_MKEEP_LIMBO", "LDS_NONE",
+	                               "LDS_MULTI_TYPE_START", "CAMPAIGN", "", "SKIRMISH", "", "", "",
+	                               "MULTI_SKIRMISH2", "MULTI_SKIRMISH3" };
 	const QStringList difficulty_type = { "EASY", "NORMAL", "HARD", "INSANE", "TOUGH", "KILLER" };
 	int row = 0;
 	m.setRowCount(0);
@@ -248,7 +259,6 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(nullptr, Qt::Window)
 {
 	modelMap = models;
-	QSignalMapper *signalMapper = new QSignalMapper(this);
 
 	// Add main page
 	QWidget *mainWidget = new QWidget(this);
@@ -342,9 +352,8 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		QHBoxLayout *layout2 = new QHBoxLayout;
 		QPushButton *updateButton = new QPushButton("Update", this);
 		QPushButton *button = new QPushButton("Run", this);
-		connect(button, SIGNAL(pressed()), signalMapper, SLOT(map()));
+		connect(button, &QPushButton::pressed, [=] { runClicked(engine); });
 		connect(updateButton, SIGNAL(pressed()), this, SLOT(updateModels()));
-		signalMapper->setMapping(button, engine);
 		editMap.insert(engine, lineEdit); // store this for slot
 		layout->addWidget(view);
 		layout2->addWidget(updateButton);
@@ -354,7 +363,6 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		dummyWidget->setLayout(layout);
 		contextsTab->addTab(dummyWidget, scriptName + ":" + QString::number(player));
 	}
-	connect(signalMapper, SIGNAL(mapped(QObject *)), this, SLOT(runClicked(QObject *)));
 	tab.addTab(contextsTab, "Contexts");
 
 	QTabWidget *playersTab = new QTabWidget(this);
@@ -438,7 +446,7 @@ void ScriptDebugger::attachScriptClicked()
 {
 	const QString &script = aiScriptComboBox.currentText();
 	const int player = aiPlayerComboBox.currentIndex();
-	jsAutogameSpecific("multiplay/skirmish/" + script, player);
+	jsAutogameSpecific(QStringToWzString("multiplay/skirmish/" + script), player);
 	debug(LOG_INFO, "Script attached - close and reopen debug window to see its context");
 }
 

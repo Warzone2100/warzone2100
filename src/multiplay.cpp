@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
  * Contains the day to day networking stuff, and received message handler.
  */
 #include <string.h>
+#include <algorithm>
+#include <chrono>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -1297,6 +1299,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 		{
 			if (i == selectedPlayer && from != i)
 			{
+				sstrcat(display, curStr);
 				printchatmsg(display, from); // also display it
 			}
 			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
@@ -1616,6 +1619,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 		addConsoleMessage(_("Map was requested: SENDING MAP!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
+		ASSERT_OR_RETURN(false, mapData, "levFindDataSet failed for game.map: %s", game.map);
 		filename = mapData->realFileName;
 		debug(LOG_INFO, "Map was requested. Looking for %s", filename.c_str());
 	}
@@ -1659,12 +1663,35 @@ bool recvMapFileRequested(NETQUEUE queue)
 // Continue sending maps and mods.
 void sendMap()
 {
+	// maximum "budget" in time per call to sendMap
+	// (at 60fps, total frame budget is ~16ms - allocate 4ms max for each call to sendMap)
+	const uint64_t maxMicroSecondsPerSendMapCall = (4 * 1000);
+
+	// calculate the time budget per file
+	uint64_t totalFilesToSend = 0;
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		totalFilesToSend += NetPlay.players[i].wzFiles.size();
+	}
+	const uint64_t maxMicroSecondsPerFile = maxMicroSecondsPerSendMapCall / std::max((uint64_t)1, totalFilesToSend);
+
+	using microDuration = std::chrono::duration<uint64_t, std::micro>;
+	auto file_startTime = std::chrono::high_resolution_clock::now();
+	microDuration file_currentDuration;
+
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		auto &files = NetPlay.players[i].wzFiles;
 		for (auto &file : files)
 		{
-			int done = NETsendFile(file, i);
+			int done = 0;
+			file_startTime = std::chrono::high_resolution_clock::now();
+			do
+			{
+				done = NETsendFile(file, i);
+				file_currentDuration = std::chrono::duration_cast<microDuration>(std::chrono::high_resolution_clock::now() - file_startTime);
+			}
+			while (done < 100 && (file_currentDuration.count() < maxMicroSecondsPerFile));
 			if (done == 100)
 			{
 				netPlayersUpdated = true;  // Remove download icon from player.

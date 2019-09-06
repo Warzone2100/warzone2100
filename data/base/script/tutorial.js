@@ -3,6 +3,8 @@ include("script/campaign/templates.js");
 var consoleVar;
 var tutState;
 var didTheyHelpBuildGen;
+var producedUnits;
+var firstTruckID;
 
 //Alias for button
 const CLOSE_BUTTON = 0;
@@ -35,8 +37,8 @@ function setUpConsoleAndAudioVar()
 		{"audio": "tut10.ogg", "clear": false, "message": _("To increase your build rate, select your second truck"), "state": 5, "wait": 0},
 		{"audio": "tut11.ogg", "clear": false, "message": _("Now left click the power generator site"), "state": 6, "wait": 2},
 		{"audio": "tut12.ogg", "clear": false, "message": _("The other truck will now help to build the power generator"), "state": 7, "wait": 2},
-		{"audio": "tut13.ogg", "clear": true, "message": _("During missions you need to locate and recover technologies from before the Collapse"), "state": 7, "wait": 3},
 		//==PART TWO== Power Station has been built, by whatever means
+		{"audio": "tut13.ogg", "clear": true, "message": _("During missions you need to locate and recover technologies from before the Collapse"), "state": 8, "wait": 3},
 		{"audio": "tut15.ogg", "clear": false, "message": _("Use a truck to search for the artifact indicated by the radar pulse"), "state": 8, "wait": 3, "func": "addTheArtifact"},
 		{"audio": "tut16.ogg", "clear": false, "message": _("Move the pointer over the artifact and left click to recover it"), "state": 8, "wait": 4},
 		{"audio": "tut17.ogg", "clear": false, "message": undefined, "state": 8, "wait": 3},
@@ -85,22 +87,30 @@ function increaseTutorialState()
 function grantStartTech()
 {
 	const TECH = [
-		"R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels"
-	];
-	const STRUCTS = [
-		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
-		"A0ResearchFacility", "A0LightFactory"
+		"R-Vehicle-Body01", "R-Vehicle-Prop-Wheels"
 	];
 
 	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
 }
 
-function eventDroidBuilt()
+function eventDroidBuilt(droid, structure)
 {
 	if (tutState === 25)
 	{
-		increaseTutorialState();
-		setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
+		if (droid.droidType === DROID_CONSTRUCT)
+		{
+			producedUnits.truck = true;
+		}
+		else
+		{
+			producedUnits.tank = true;
+		}
+
+		if (producedUnits.truck === true && producedUnits.tank === true)
+		{
+			increaseTutorialState();
+			setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
+		}
 	}
 }
 
@@ -109,7 +119,9 @@ function eventDeliveryPointMoved()
 	if (tutState === 23)
 	{
 		increaseTutorialState();
-		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
+		setReticuleButton(PRODUCTION_BUTTON, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
+		// Change: Allow player to produce the truck.
+		completeResearch("R-Sys-Spade1Mk1", CAM_HUMAN_PLAYER);
 		setReticuleFlash(PRODUCTION_BUTTON, true);
 	}
 }
@@ -134,7 +146,7 @@ function enableBuild()
 //show the research button
 function enableRes()
 {
-	setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
+	setReticuleButton(RESEARCH_BUTTON, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	setReticuleFlash(RESEARCH_BUTTON, true);
 	enableStructure("A0ResearchFacility", CAM_HUMAN_PLAYER);
 }
@@ -264,10 +276,27 @@ function checkForPowGen()
 		{
 			setReticuleButton(BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
 			increaseTutorialState();
+
+			//Get the truck that is building the generator and store its ID.
+			var trucks = enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT);
+			for (var i = 0, len = trucks.length; i < len; ++i)
+			{
+				var truck = trucks[i];
+				if (truck.order === DORDER_BUILD)
+				{
+					firstTruckID = truck.id;
+					break;
+				}
+			}
+
+			if (firstTruckID === 0)
+			{
+				firstTruckID = trucks[0].id;
+			}
 		}
 		else
 		{
-			queue("checkForPowGen", 150);
+			queue("checkForPowGen", camSecondsToMilliseconds(0.2));
 		}
 	}
 }
@@ -282,7 +311,7 @@ function checkResFac()
 		}
 		else
 		{
-			queue("checkResFac", 150);
+			queue("checkResFac", camSecondsToMilliseconds(0.2));
 		}
 	}
 }
@@ -296,7 +325,10 @@ function checkHelpBuild()
 		for (var i = 0, l = objects.length; i < l; ++i)
 		{
 			var obj = objects[i];
-			if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT && obj.order === DORDER_HELPBUILD)
+			if (obj.type === DROID &&
+				obj.droidType === DROID_CONSTRUCT &&
+				(obj.order === DORDER_HELPBUILD || obj.order === DORDER_BUILD) &&
+				obj.id !== firstTruckID)
 			{
 				increaseTutorialState();
 				didTheyHelpBuildGen = true;
@@ -304,7 +336,7 @@ function checkHelpBuild()
 			}
 		}
 
-		queue("checkHelpBuild", 150);
+		queue("checkHelpBuild", camSecondsToMilliseconds(0.2));
 	}
 }
 
@@ -337,14 +369,14 @@ function addToConsole()
 			//Check if we need to wait
 			if (camDef(tutPhase.wait) && tutPhase.wait > 0)
 			{
-				queue("addToConsole", tutPhase.wait * 1000); //wait is in seconds
+				queue("addToConsole", tutPhase.wait * camSecondsToMilliseconds(1)); //wait is in seconds
 				consoleVar[0].wait = 0;
 				return;
 			}
 
 			if (camDef(tutPhase.func))
 			{
-				queue(tutPhase.func, 200);
+				queue(tutPhase.func, camSecondsToMilliseconds(0.2));
 			}
 
 			if (camDef(tutPhase.audio))
@@ -366,7 +398,7 @@ function addToConsole()
 			consoleVar.shift();
 		}
 
-		queue("addToConsole", 600);
+		queue("addToConsole", camSecondsToMilliseconds(0.6));
 	}
 }
 
@@ -388,7 +420,7 @@ function eventSelectionChanged(objects)
 					enableStructure("A0ResourceExtractor", CAM_HUMAN_PLAYER);
 					increaseTutorialState();
 				}
-				else if (tut5 && obj.order !== DORDER_BUILD)
+				else if (tut5 && obj.id !== firstTruckID)
 				{
 					increaseTutorialState();
 					checkHelpBuild();
@@ -405,16 +437,18 @@ function eventStructureBuilt(structure, droid)
 	{
 		increaseTutorialState();
 	}
-	else if (tutState === 7 && structure.stattype === POWER_GEN)
+	else if (tutState <= 7 && structure.stattype === POWER_GEN)
 	{
 		//Maybe they did not understand instructions. Whatever the case, move on.
+		firstTruckID = 0;
 		if (!didTheyHelpBuildGen)
 		{
-			for (var i = 0; i < 3; ++i)
+			const NEXT_STATE = 8;
+			while (consoleVar[0].state < NEXT_STATE)
 			{
 				consoleVar.shift(); //skip ahead
 			}
-			tutState = 8;
+			tutState = NEXT_STATE;
 		}
 		else
 		{
@@ -448,6 +482,11 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	tutState = 0;
 	didTheyHelpBuildGen = false;
+	firstTruckID = 0;
+	producedUnits = {
+		tank: false,
+		truck: false,
+	};
 	setUpConsoleAndAudioVar();
 
 	centreView(startpos.x, startpos.y);
@@ -466,8 +505,6 @@ function eventStartLevel()
 
 	setMiniMap(true);
 	setDesign(false);
-	removeTemplate("ConstructionDroid");
-	removeTemplate("ViperLtMGWheels");
 
 	setReticuleButton(CLOSE_BUTTON, _("Close"), "", "");
 	setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
@@ -478,5 +515,5 @@ function eventStartLevel()
 	setReticuleButton(COMMAND_BUTTON, _("Commanders - manufacture commanders first"), "", "");
 	showInterface();
 
-	queue("addToConsole", 2000);
+	queue("addToConsole", camSecondsToMilliseconds(2));
 }

@@ -284,8 +284,6 @@ win32/CodeAnalyst
 /vcpkg/
 
 # Exclusions
-# Do not ignore .dll files under the /win32/dbghelp folder
-!/win32/dbghelp/*/*/*.dll
 # Do not ignore the *.manifest* files that are used under the /win32 folder
 !/win32/*.manifest*
 # Do not ignore NSIS plugins under the pkg/nsis/plugins/*/ folders

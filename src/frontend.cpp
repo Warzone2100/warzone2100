@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,10 @@
 #if defined(WZ_OS_WIN)
 #  include <shellapi.h> /* For ShellExecute  */
 #endif
+
+#if defined(WZ_OS_MAC)
+#  include "lib/framework/cocoa_wrapper.h" /* For cocoaOpenURL */
+#endif // WZ_OS_MAC
 
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
@@ -96,7 +100,7 @@ bool			bLimiterLoaded = false;
 // ////////////////////////////////////////////////////////////////////////////
 // Forward definitions
 
-static void addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
+static W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Helper functions
@@ -159,9 +163,13 @@ static bool startTitleMenu()
 
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Official site: http://wz2100.net/"), 0);
 	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
-	addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS8X + 360, FRONTEND_POS8Y, _("Donate: http://donations.wz2100.net/"), 0);
+	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS8X + 360, FRONTEND_POS8Y, _("Donate: http://donations.wz2100.net/"), 0);
+	// fix-up right-aligned link's positioning (based on size of text)
+	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 1), pRightAlignedButton->y());
 	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
-	addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS8X + 360, 0, _("Chat with players on #warzone2100"), 0);
+	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS8X + 360, 0, _("Chat with players on #warzone2100"), 0);
+	// fix-up right-aligned link's positioning (based on size of text)
+	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 6), pRightAlignedButton->y());
 	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 
@@ -177,9 +185,7 @@ static void runLink(char const *link)
 
 	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
 #elif defined (WZ_OS_MAC)
-	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "open %s &", link);
-	system(lbuf);
+	cocoaOpenURL(link);
 #else
 	// for linux
 	char lbuf[250] = {'\0'};
@@ -913,8 +919,20 @@ static bool startAudioAndZoomOptionsMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	//add some text down the side of the form
-	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("AUDIO / ZOOM OPTIONS"));
-
+	// TRANSLATORS: "AUDIO" options determine the volume of game sounds.
+	// "OPTIONS" means "SETTINGS".
+	// To break this message into two lines, you can use the delimiter "\n",
+	// e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
+	WzString messageString = WzString::fromUtf8(_("AUDIO / ZOOM OPTIONS"));
+	std::vector<WzString> messageStringLines = messageString.split("\n");
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, messageStringLines[0].toUtf8().c_str());
+	// show a second sidetext line if the translation requires it
+	if (messageStringLines.size() > 1)
+	{
+		messageString.remove(0, messageStringLines[0].length() + 1);
+		addSideText(FRONTEND_MULTILINE_SIDETEXT, FRONTEND_SIDEX + 22, \
+		FRONTEND_SIDEY, messageString.toUtf8().c_str());
+	}
 
 	return true;
 }
@@ -1155,7 +1173,7 @@ static bool startVideoOptionsMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	refreshCurrentVideoOptionsValues();
-	
+
 	return true;
 }
 
@@ -1290,7 +1308,7 @@ bool runVideoOptionsMenu()
 			else
 			{
 				// when live resolution changes are unavailable, check to see if the current display scale is supported at the desired resolution
-				unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(current->width, current->height);
+				unsigned int maxDisplayScale = std::max(100u, wzGetMaximumDisplayScaleForWindowSize(current->width, current->height));
 				unsigned int current_displayScale = war_GetDisplayScale();
 				if (maxDisplayScale < current_displayScale)
 				{
@@ -1570,8 +1588,6 @@ static char const *gameOptionsDifficultyString()
 	case DL_NORMAL: return _("Normal");
 	case DL_HARD: return _("Hard");
 	case DL_INSANE: return _("Insane");
-	case DL_TOUGH: return _("Tough");
-	case DL_KILLER: return _("Killer");
 	}
 	return _("Unsupported");
 }
@@ -1677,6 +1693,9 @@ bool runGameOptionsMenu()
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
 		widgSetString(psWScreen, FRONTEND_CAMERASPEED, _("Camera Speed"));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
+
+		// hack to update translations of AI names and tooltips
+		readAIs();
 		break;
 
 	case FRONTEND_DIFFICULTY:
@@ -2074,7 +2093,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 	}
 }
 
-void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
+W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
 {
 	W_BUTINIT sButInit;
 
@@ -2086,7 +2105,7 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 	// Align
 	if (!(style & WBUT_TXTCENTRE))
 	{
-		sButInit.width = (short)(iV_GetTextWidth(txt, font_small) + 10);
+		sButInit.width = (uint16_t)(iV_GetTextWidth(txt, font_small)) + 4;
 		sButInit.x += 35;
 	}
 	else
@@ -2113,13 +2132,14 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 	sButInit.pDisplay = displayTextOption;
 	sButInit.FontID = font_small;
 	sButInit.pText = txt;
-	widgAddButton(psWScreen, &sButInit);
+	W_BUTTON * pButton = widgAddButton(psWScreen, &sButInit);
 
 	// Disable button
 	if (style & WBUT_DISABLE)
 	{
 		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
 	}
+	return pButton;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

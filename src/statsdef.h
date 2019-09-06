@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2017  Warzone 2100 Project
+	Copyright (C) 2005-2019  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -71,9 +71,9 @@ struct StringToEnum
 };
 
 template <typename Enum>
-struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
+struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned>>
 {
-	typedef std::vector<std::pair<char const *, unsigned> > V;
+	typedef std::vector<std::pair<char const *, unsigned>> V;
 
 	template <int N>
 	static StringToEnumMap<Enum> const &FromArray(StringToEnum<Enum> const(&map)[N])
@@ -379,9 +379,11 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 	struct : UPGRADE
 	{
+		unsigned shortRange = 0;
 		unsigned maxRange = 0;               ///< Max distance to target for long range shot
 		unsigned minRange = 0;               ///< Min distance to target for shot
 		unsigned hitChance = 0;              ///< Chance to hit at
+		unsigned shortHitChance = 0;
 		unsigned firePause = 0;              ///< Pause between each shot
 		uint8_t numRounds = 0;               ///< The number of rounds per salvo
 		unsigned reloadTime = 0;             ///< Time to reload the round of ammo
