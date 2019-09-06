@@ -1145,6 +1145,8 @@ int realmain(int argc, char *argv[])
 
 	/*** Initialize directory structure ***/
 
+	PHYSFS_mkdir("autohost");	// autohost games launched with --autohost=game
+
 	PHYSFS_mkdir("challenges");	// custom challenges
 
 	PHYSFS_mkdir("logs");		// netplay, mingw crash reports & WZ logs
