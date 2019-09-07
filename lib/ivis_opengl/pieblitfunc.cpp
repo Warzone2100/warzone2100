@@ -685,9 +685,6 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 	case SCREEN_MISSIONEND:
 		screen_SetRandomBackdrop("texpages/bdrops/", "missionend");
 		break;
-	case SCREEN_CREDITS:
-		screen_SetRandomBackdrop("texpages/bdrops/", "credits");
-		break;
 	}
 }
 

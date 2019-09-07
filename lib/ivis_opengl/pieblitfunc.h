@@ -223,7 +223,6 @@ void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat wi
 enum SCREENTYPE
 {
 	SCREEN_RANDOMBDROP,
-	SCREEN_CREDITS,
 	SCREEN_MISSIONEND,
 };
 
