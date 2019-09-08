@@ -375,6 +375,10 @@ namespace gfx_api
 
 		void bind_constants(const constant_buffer_type<shader>& data)
 		{
+			// Vulkan: Many platforms have a maxUniformBufferRange of 64k
+			// - see: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxUniformBufferRange
+			static_assert(sizeof(constant_buffer_type<shader>) <= 65536, "Constant buffer size exceeds 64k");
+
 			gfx_api::context::get().set_constants(static_cast<const void*>(&data), sizeof(constant_buffer_type<shader>));
 		}
 
