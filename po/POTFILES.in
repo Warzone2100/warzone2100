@@ -159,7 +159,6 @@ data/mp/multiplay/skirmish/nb_includes/tactics.js
 data/mp/multiplay/skirmish/nb_includes/timers.js
 data/mp/multiplay/skirmish/nb_rulesets/standard.js
 data/mp/multiplay/skirmish/nb_turtle.js
-data/mp/multiplay/skirmish/nexus.slo
 data/mp/multiplay/skirmish/rules.js
 data/mp/multiplay/skirmish/semperfi_includes/build.js
 data/mp/multiplay/skirmish/semperfi_includes/chat.js
