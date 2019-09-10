@@ -169,7 +169,6 @@ data/mp/multiplay/skirmish/semperfi_includes/production.js
 data/mp/multiplay/skirmish/semperfi_includes/research.js
 data/mp/multiplay/skirmish/semperfi_includes/tactics.js
 data/mp/multiplay/skirmish/semperfi.js
-data/mp/multiplay/skirmish/semperfi.slo
 lib/exceptionhandler/3rdparty/StackWalker.cpp
 lib/exceptionhandler/dumpinfo.cpp
 lib/exceptionhandler/exceptionhandler.cpp
