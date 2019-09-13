@@ -36,7 +36,6 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
@@ -60,7 +59,6 @@
 #include "warzoneconfig.h"
 
 #include "multiplay.h" //ajl
-#include "scripttabs.h"
 #include "levels.h"
 #include "visibility.h"
 #include "multimenu.h"
@@ -78,7 +76,6 @@
 #include "mapgrid.h"
 #include "edit3d.h"
 #include "fpath.h"
-#include "scriptextern.h"
 #include "cmddroid.h"
 #include "keybind.h"
 #include "wrappers.h"
@@ -94,8 +91,6 @@
 
 #include <numeric>
 
-
-static void fireWaitingCallbacks();
 
 /*
  * Global variables
@@ -374,7 +369,6 @@ static GAMECODE renderLoop()
 		// just wait for this to be changed when the new mission starts
 		break;
 	case LMS_NEWLEVEL:
-		//nextMissionType = MISSION_NONE;
 		nextMissionType = LDS_NONE;
 		return GAMECODE_NEWLEVEL;
 		break;
@@ -544,15 +538,6 @@ static void gameStateUpdate()
 
 	if (!paused && !scriptPaused())
 	{
-		/* Update the event system */
-		if (!bInTutorial)
-		{
-			eventProcessTriggers(gameTime / SCR_TICKRATE);
-		}
-		else
-		{
-			eventProcessTriggers(realTime / SCR_TICKRATE);
-		}
 		updateScripts();
 	}
 
@@ -576,8 +561,6 @@ static void gameStateUpdate()
 
 	// update the command droids
 	cmdDroidUpdate();
-
-	fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -734,12 +717,7 @@ void videoLoop()
 				intResetScreen(true);
 				setMessageImmediate(false);
 			}
-			//don't do the callback if we're playing the win/lose video
-			if (!getScriptWinLoseVideo())
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-			}
-			else if (!bMultiPlayer)
+			if (!bMultiPlayer && getScriptWinLoseVideo())
 			{
 				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN, false);
 			}
@@ -914,21 +892,6 @@ void droidCountsInTransporter(DROID *droid, int player)
 		if (psDroid->droidType == DROID_COMMAND)
 		{
 			numCommandDroids[player] += 1;
-		}
-	}
-}
-
-/* Fire waiting beacon messages which we couldn't run before */
-static void fireWaitingCallbacks()
-{
-	bool bOK = true;
-
-	while (!isMsgStackEmpty() && bOK)
-	{
-		bOK = msgStackFireTop();
-		if (!bOK)
-		{
-			ASSERT(false, "fireWaitingCallbacks: msgStackFireTop() failed (stack count: %d)", msgStackGetCount());
 		}
 	}
 }

@@ -58,7 +58,6 @@
 
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
-#include "lib/script/script.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/button.h"
 #include "lib/widget/widget.h"
@@ -272,8 +271,6 @@ struct AIDATA
 {
 	AIDATA() : assigned(0) {}
 	char name[MAX_LEN_AI_NAME];
-	char slo[MAX_LEN_AI_NAME];
-	char vlo[MAX_LEN_AI_NAME];
 	char js[MAX_LEN_AI_NAME];
 	char tip[255 + 128]; // may contain optional AI tournament data
 	char difficultyTips[4][255]; // optional difficulty level info
@@ -363,7 +360,7 @@ void setupChallengeAIs()
 				// look up AI value in vector of known skirmish AIs
 				for (int ai = 0; ai < aidata.size(); ++ai)
 				{
-					if (filename == aidata[ai].js || filename == aidata[ai].slo || filename == aidata[ai].vlo)
+					if (filename == aidata[ai].js)
 					{
 						NetPlay.players[i].ai = ai;
 						break;
@@ -470,12 +467,6 @@ void loadMultiScripts()
 					continue;
 				}
 				ini.endGroup();
-			}
-			if (aidata[NetPlay.players[i].ai].slo[0] != '\0')
-			{
-				debug(LOG_SAVE, "Loading wzscript AI for player %d", i);
-				resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
-				resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
 			}
 			// autogames are to be implemented differently for qtscript, do not start for human players yet
 			if (!NetPlay.players[i].allocated && aidata[NetPlay.players[i].ai].js[0] != '\0')
@@ -784,8 +775,6 @@ void readAIs()
 			sstrcpy(ai.name, _("MISSING AI NAME"));
 		}
 
-		sstrcpy(ai.slo, aiconf.value("slo", "").toWzString().toUtf8().c_str());
-		sstrcpy(ai.vlo, aiconf.value("vlo", "").toWzString().toUtf8().c_str());
 		sstrcpy(ai.js, aiconf.value("js", "").toWzString().toUtf8().c_str());
 
 		const char *difficultyKeys[] = { "easy_tip", "medium_tip", "hard_tip", "insane_tip" };

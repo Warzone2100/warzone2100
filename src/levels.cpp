@@ -45,8 +45,6 @@
 #include "game.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "data.h"
-#include "lib/script/script.h"
-#include "scripttabs.h"
 #include "research.h"
 #include "lib/framework/lexer_input.h"
 #include "effects.h"
@@ -1020,13 +1018,6 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	dataClearSaveFlag();
-
-	//this enables us to to start cam2/cam3 without going via a save game and get the extra droids
-	//in from the script-controlled Transporters
-	if (!pSaveName && psNewLevel->type == LDS_CAMSTART)
-	{
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
-	}
 
 	//restore the level name for comparisons on next mission load up
 	if (psChangeLevel == nullptr)

@@ -34,7 +34,6 @@
 #include "lib/gamelib/parser.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/png_util.h"
-#include "lib/script/script.h"
 #include "lib/sound/audio.h"
 
 #include "qtscript.h"
@@ -45,7 +44,6 @@
 #include "message.h"
 #include "multiplay.h"
 #include "research.h"
-#include "scriptvals.h"
 #include "stats.h"
 #include "template.h"
 #include "text.h"
@@ -641,120 +639,11 @@ static void dataStrResRelease(WZ_DECL_UNUSED void *pData)
 	}
 }
 
-
-/* Load a script file */
-// All scripts, binary or otherwise are now passed through this routine
-static bool dataScriptLoad(const char *fileName, void **ppData)
-{
-	static const bool printHack = false;
-	SCRIPT_CODE **psProg = (SCRIPT_CODE **)ppData;
-	PHYSFS_file *fileHandle;
-	uint8_t *pBuffer;
-	PHYSFS_sint64 fileSize = 0;
-
-	debug(LOG_WZ, "COMPILING SCRIPT ...%s", GetLastResourceFilename());
-
-	fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-	if (fileHandle == nullptr)
-	{
-		return false;
-	}
-
-	// due to the changes in r2531 we must do this routine a bit different.
-	fileSize = PHYSFS_fileLength(fileHandle);
-
-	pBuffer = (uint8_t *)malloc(fileSize * sizeof(uint8_t));
-	ASSERT_OR_RETURN(false, pBuffer, "Out of memory");
-
-	WZ_PHYSFS_readBytes(fileHandle, pBuffer, fileSize);
-
-	calcDataHash(pBuffer, fileSize, DATA_SCRIPT);
-
-	free(pBuffer);
-
-	PHYSFS_seek(fileHandle, 0);		//reset position
-
-	*psProg = scriptCompile(fileHandle, SCRIPTTYPE);
-
-	PHYSFS_close(fileHandle);
-
-	if (!*psProg)		// see script.h
-	{
-		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
-		return false;
-	}
-
-	if (printHack)
-	{
-		cpPrintProgram(*psProg);
-	}
-
-	return true;
-}
-
-
-static void dataScriptRelease(void *pData)
-{
-	SCRIPT_CODE *psCode = (SCRIPT_CODE *)pData;
-	scriptFreeCode(psCode);
-}
-
 static bool jsLoad(const char *fileName, void **ppData)
 {
 	debug(LOG_WZ, "jsload: %s", fileName);
 	*ppData = nullptr;
 	return loadGlobalScript(fileName);
-}
-
-// Load a script variable values file
-static bool dataScriptLoadVals(const char *fileName, void **ppData)
-{
-	bool success;
-	PHYSFS_file *fileHandle;
-	uint8_t *pBuffer;
-	PHYSFS_sint64 fileSize = 0;
-
-	*ppData = nullptr;
-
-	// don't load anything if a saved game is being loaded
-	if (saveFlag)
-	{
-		return true;
-	}
-
-	debug(LOG_WZ, "Loading script data %s", GetLastResourceFilename());
-
-	fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-	if (fileHandle == nullptr)
-	{
-		return false;
-	}
-	// due to the changes in r2532 we must do this routine a bit different.
-	fileSize = PHYSFS_fileLength(fileHandle);
-
-	pBuffer = (uint8_t *)malloc(fileSize * sizeof(uint8_t));
-	ASSERT_OR_RETURN(false, pBuffer, "Out of memory");
-
-	WZ_PHYSFS_readBytes(fileHandle, pBuffer, fileSize);
-
-	calcDataHash(pBuffer, fileSize, DATA_SCRIPTVAL);
-
-	free(pBuffer);
-
-	PHYSFS_seek(fileHandle, 0);		//reset position
-
-	success = scrvLoad(fileHandle);
-
-	if (!success)
-	{
-		debug(LOG_FATAL, "Script %s did not compile", GetLastResourceFilename());
-	}
-
-	PHYSFS_close(fileHandle);
-
-	return success;
 }
 
 // New reduced resource type ... specially for PSX
@@ -805,8 +694,6 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", nullptr, nullptr}, // ignored
 	{"TCMASK", nullptr, nullptr}, // ignored
-	{"SCRIPT", dataScriptLoad, dataScriptRelease},
-	{"SCRIPTVAL", dataScriptLoadVals, nullptr},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{"RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 	{"SSTRMOD", bufferSSTRMODLoad, nullptr},

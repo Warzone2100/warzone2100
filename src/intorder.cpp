@@ -26,7 +26,6 @@
 #include "intorder.h"
 #include "objects.h"
 #include "order.h"
-#include "scriptextern.h"
 
 #include <set>
 #include <algorithm>
@@ -506,12 +505,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	bool  bLastCombine, bHidden;
 	DROID *Droid;
 	STRUCTURE *psStructure;
-
-	if (bInTutorial)
-	{
-		// No RMB orders in tutorial!!
-		return (false);
-	}
 
 	// Is the form already up?
 	if (widgGetFromID(psWScreen, IDORDER_FORM) != nullptr)

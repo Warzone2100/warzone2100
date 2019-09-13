@@ -43,8 +43,6 @@
 #include "objects.h"
 #include "display.h"
 #include "qtscript.h"
-#include "lib/script/script.h"
-#include "scripttabs.h"
 #include "order.h"
 #include "action.h"
 #include "lib/gamelib/gtime.h"
@@ -57,7 +55,6 @@
 #include "mapgrid.h"
 #include "visibility.h"
 #include "multiplay.h"
-#include "qtscript.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CLOSE			9002	//The close button icon
@@ -1219,7 +1216,6 @@ void processLaunchTransporter()
 			//set the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)psCurrTransporter);
 
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER);
 			triggerEvent(TRIGGER_TRANSPORTER_LAUNCH, psCurrTransporter);
 		}
 	}

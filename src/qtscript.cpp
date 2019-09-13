@@ -76,10 +76,11 @@
 # pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
 #endif
 
-#include "qtscript.h"
-
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
+
+#include "qtscript.h"
+
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
@@ -185,6 +186,8 @@ static bool globalDialog = false;
 static void updateGlobalModels();
 
 void to_json(nlohmann::json& j, const QVariant& value); // forward-declare
+
+bool bInTutorial = false;
 
 // ----------------------------------------------------------
 

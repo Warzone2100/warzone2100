@@ -33,7 +33,6 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/cdaudio.h"
@@ -61,7 +60,6 @@
 #include "main.h"
 #include "display.h"
 #include "loadsave.h"
-#include "scripttabs.h"
 #include "cmddroid.h"
 #include "warcam.h"
 #include "wrappers.h"
@@ -1777,7 +1775,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 
 		/* trigger script callback detailing group about to disembark */
 		transporterSetScriptCurrent(psTransporter);
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_LANDED);
 		triggerEvent(TRIGGER_TRANSPORTER_LANDED, psTransporter);
 		transporterSetScriptCurrent(nullptr);
 
@@ -1819,7 +1816,6 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 	{
 		/* trigger script callback */
 		transporterSetScriptCurrent(psTransporter);
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_OFFMAP);
 		triggerEvent(TRIGGER_TRANSPORTER_EXIT, psTransporter);
 		transporterSetScriptCurrent(nullptr);
 
@@ -1859,7 +1855,6 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 			}
 			if (psDroid == nullptr)
 			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
 				triggerEvent(TRIGGER_TRANSPORTER_DONE, psTransporter);
 			}
 		}
@@ -2148,7 +2143,6 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 					if (psTransporter->action == DACTION_TRANSPORTWAITTOFLYIN)
 					{
 						missionFlyTransportersIn(selectedPlayer, false);
-						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_TRANSPORTER_REINFORCE);
 						triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
 					}
 				}
@@ -2883,7 +2877,6 @@ void missionTimerUpdate()
 			if ((SDWORD)(gameTime - mission.startTime) > mission.time)
 			{
 				//the script can call the end game cos have failed!
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_TIME);
 				triggerEvent(TRIGGER_MISSION_TIMEOUT);
 			}
 		}

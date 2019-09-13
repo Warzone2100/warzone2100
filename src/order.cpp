@@ -45,8 +45,6 @@
 #include "qtscript.h"
 #include "group.h"
 #include "cmddroid.h"
-#include "lib/script/script.h"
-#include "scriptcb.h"
 #include "move.h"
 #include "multiplay.h"  //ajl
 
@@ -413,7 +411,6 @@ void orderUpdateDroid(DROID *psDroid)
 				else
 				{
 					//the script can call startMission for this callback for offworld missions
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
 					triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
 					/* clear order */
 					psDroid->order = DroidOrder(DORDER_NONE);
@@ -715,13 +712,6 @@ void orderUpdateDroid(DROID *psDroid)
 				{
 					psDroid->order = DroidOrder(DORDER_NONE);
 					moveToRearm(psDroid);
-					if (!vtolEmpty(psDroid))
-					{
-						// VTOL droid can do more work, let scripts handle it
-						psScrVtolRetarget = psDroid;
-						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VTOL_RETARGET);
-						psScrVtolRetarget = nullptr;
-					}
 				}
 			}
 			else
@@ -871,8 +861,6 @@ void orderUpdateDroid(DROID *psDroid)
 		    (psDroid->action == DACTION_NONE))
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			psScrCBVtolOffMap = psDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VTOL_OFF_MAP);
 		}
 		break;
 	case DORDER_RTR:

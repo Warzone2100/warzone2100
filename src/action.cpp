@@ -27,7 +27,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/fixedpoint.h"
-#include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
@@ -39,7 +38,6 @@
 #include "projectile.h"
 #include "qtscript.h"
 #include "random.h"
-#include "scriptcb.h"
 #include "transporter.h"
 #include "mapgrid.h"
 #include "hci.h"
@@ -791,11 +789,6 @@ void actionUpdateDroid(DROID *psDroid)
 				/* notify scripts we have reached the destination
 				*  also triggers when patrolling and reached a waypoint
 				*/
-				psScrCBOrder = order->type;
-				psScrCBOrderDroid = psDroid;
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
-				psScrCBOrderDroid = nullptr;
-				psScrCBOrder = DORDER_NONE;
 
 				triggerEventDroidIdle(psDroid);
 			}

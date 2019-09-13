@@ -50,7 +50,6 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "lib/ivis_opengl/piemode.h"
-#include "lib/script/script.h"
 #include "challenge.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -232,7 +231,6 @@ void runLimitScreen()
 				sendOptions();
 			}
 
-			eventReset();
 			changeTitleMode(MULTIOPTION);
 
 			// make some noize.

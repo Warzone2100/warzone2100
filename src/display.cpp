@@ -69,10 +69,6 @@
 #include "projectile.h"
 #include "message.h"
 #include "effects.h"
-#include "lib/script/script.h"
-#include "scripttabs.h"
-#include "scriptextern.h"
-#include "scriptcb.h"
 #include "cmddroid.h"
 #include "selection.h"
 #include "transporter.h"
@@ -1316,10 +1312,6 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 	flagReposVarsValid = true;
 	flagReposFinished = false;
 
-	if (bInTutorial)
-	{
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DELIVPOINTMOVED);
-	}
 	triggerEvent(TRIGGER_DELIVERY_POINT_MOVING, psStruct);
 }
 
@@ -1489,9 +1481,6 @@ void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 		{
 			SelectDroid(psDroid);
 		}
-		psCBSelectedDroid = psDroid;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
-		psCBSelectedDroid = nullptr;
 	}
 }
 

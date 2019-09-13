@@ -205,14 +205,12 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_SelectGrouping_0, "SelectGrouping_0"},
 	{kf_SelectCommander_0, "SelectCommander_0"},
 	{kf_TraceObject, "TraceObject"},
-	{kf_AddMissionOffWorld, "AddMissionOffWorld"},
 	{kf_KillSelected, "KillSelected"},
 	{kf_ShowMappings, "ShowMappings"},
 	{kf_ToggleVisibility, "ToggleVisibility"},
 	{kf_FinishResearch, "FinishResearch"},
 	{kf_LowerTile, "LowerTile"},
 	{kf_ToggleGodMode, "ToggleGodMode"},
-	{kf_EndMissionOffWorld, "EndMissionOffWorld"},
 	{kf_SystemClose, "SystemClose"},
 	{kf_ToggleShadows, "ToggleShadows"},
 	{kf_RaiseTile, "RaiseTile"},
@@ -455,7 +453,6 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    N_("Toggle visibility"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           N_("Raise tile height"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           N_("Lower tile height"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_B,         KEYMAP_PRESSED, kf_EndMissionOffWorld,  N_("End Mission"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           N_("Toggles All fog"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       N_("Trigger some weather"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             N_("Flip terrain triangle"));

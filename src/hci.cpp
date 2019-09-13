@@ -40,7 +40,6 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/script/script.h"
 #include "lib/netplay/netplay.h"
 
 #include "action.h"
@@ -74,8 +73,6 @@
 #include "multigifts.h"
 #include "radar.h"
 #include "research.h"
-#include "scriptcb.h"
-#include "scriptextern.h"
 #include "transporter.h"
 #include "warcam.h"
 #include "main.h"
@@ -612,7 +609,6 @@ bool intInitialise()
 	// reset the jump positions
 	asJumpPos.clear();
 
-	/* make demolish stat always available */
 	if (!bInTutorial)
 	{
 		for (int comp = 0; comp < numStructureStats; comp++)
@@ -941,10 +937,6 @@ void intResetScreen(bool NoAnim)
 	case INT_DESIGN:
 		intRemoveDesign();
 		intHidePowerBar();
-		if (bInTutorial)
-		{
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_QUIT);
-		}
 		triggerEvent(TRIGGER_DESIGN_QUIT);
 		break;
 	case INT_INTELMAP:
@@ -1215,10 +1207,6 @@ INT_RETVAL intRunWidgets()
 	}
 
 	intLastWidget = retIDs.empty() ? 0 : retIDs.back();
-	if (bInTutorial && !retIDs.empty())
-	{
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUTTON_PRESSED);
-	}
 
 	/* Extra code for the power bars to deal with the shadow */
 	if (powerBarUp)
@@ -1349,9 +1337,6 @@ INT_RETVAL intRunWidgets()
 				int mode = (int) widgGetUserData2(psWScreen, CHAT_EDITBOX);
 				if (strlen(msg2))
 				{
-					sstrcpy(ConsoleMsg, msg2);
-					ConsolePlayer = selectedPlayer;
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
 					attemptCheatCode(msg2);		// parse the message
 					if (mode == CHAT_TEAM)
 					{
@@ -1609,11 +1594,6 @@ INT_RETVAL intRunWidgets()
 							// Send a text message to all players, notifying them of
 							// the fact that we're cheating ourselves a new droid.
 							sasprintf(&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
-
-							psScrCBNewDroid = psDroid;
-							psScrCBNewDroidFact = nullptr;
-							eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
-							psScrCBNewDroid = nullptr;
 
 							triggerEventDroidBuilt(psDroid, nullptr);
 						}
@@ -2197,11 +2177,6 @@ static void intProcessStats(UDWORD id)
 						}
 					}
 
-					// call the tutorial callback if necessary
-					if (bInTutorial && objMode == IOBJ_BUILD)
-					{
-						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUILDGRID);
-					}
 					if (objMode == IOBJ_BUILD)
 					{
 						triggerEvent(TRIGGER_MENU_BUILD_SELECTED);
@@ -3370,12 +3345,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		intShowPowerBar();
 	}
 
-	if (bInTutorial)
-	{
-		debug(LOG_NEVER, "Go with object open callback!");
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJECTOPEN);
-	}
-
 	return true;
 }
 
@@ -3409,12 +3378,6 @@ void intRemoveObject()
 	}
 
 	intHidePowerBar();
-
-	if (bInTutorial)
-	{
-		debug(LOG_NEVER, "Go with object close callback!");
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJECTCLOSE);
-	}
 }
 
 
@@ -3881,25 +3844,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 
 	StatsUp = true;
-
-	// call the tutorial callbacks if necessary
-	if (bInTutorial)
-	{
-		switch (objMode)
-		{
-		case IOBJ_BUILD:
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BUILDLIST);
-			break;
-		case IOBJ_RESEARCH:
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHLIST);
-			break;
-		case IOBJ_MANUFACTURE:
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MANULIST);
-			break;
-		default:
-			break;
-		}
-	}
 
 	switch (objMode)
 	{
@@ -4894,10 +4838,6 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 
 	if (Found == true)
 	{
-		psCBSelectedDroid = CurrentDroid;
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
-		psCBSelectedDroid = nullptr;
-
 		// Center it on screen.
 		if (CurrentDroid)
 		{

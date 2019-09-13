@@ -114,7 +114,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/MANIFEST:NO" CACHED_RESULT_NAME LINK_FLAG_SLASH_MANFIEST_NO_SUPPORTED)
 endif()
 
-target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay script sdl-backend framework sequence sound widget)
+target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100
 	Qt5::Core
 	Qt5::Script

@@ -38,7 +38,6 @@
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/netplay/netplay.h"
-#include "lib/script/script.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
@@ -81,10 +80,6 @@
 #include "radar.h"
 #include "research.h"
 #include "lib/framework/cursors.h"
-#include "scriptextern.h"
-#include "scriptfuncs.h"
-#include "scripttabs.h"
-#include "scriptvals.h"
 #include "text.h"
 #include "transporter.h"
 #include "warzoneconfig.h"
@@ -791,11 +786,6 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	if (!scrTabInitialise())				// Initialise the script system
-	{
-		return false;
-	}
-
 	if (!stringsInitialise())				// Initialise the string system
 	{
 		return false;
@@ -863,7 +853,6 @@ bool frontendShutdown()
 	}
 
 	interfaceShutDown();
-	scrShutDown();
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
@@ -949,11 +938,6 @@ bool stageOneInitialise()
 		return false;
 	}
 
-	if (!scrTabInitialise())	// Initialise the old wzscript system
-	{
-		return false;
-	}
-
 	if (!gridInitialise())
 	{
 		return false;
@@ -967,7 +951,6 @@ bool stageOneInitialise()
 	initRunData();
 
 	gameTimeInit();
-	eventTimeReset(gameTime / SCR_TICKRATE);
 
 	return true;
 }
@@ -1018,7 +1001,6 @@ bool stageOneShutDown()
 		return false;
 	}
 
-	scrShutDown();
 	gridShutDown();
 
 	debug(LOG_TEXTURE, "== stageOneShutDown ==");
@@ -1291,7 +1273,6 @@ bool stageThreeInitialise()
 		{
 			triggerEventCheatMode(true);
 		}
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 		triggerEvent(TRIGGER_GAME_INIT);
 	}
 
@@ -1332,18 +1313,11 @@ bool stageThreeShutDown()
 		multiGameShutdown();
 	}
 
-	eventReset();
-
-	// reset the script values system
-	scrvReset();
-
 	//call this here before mission data is released
 	if (!missionShutDown())
 	{
 		return false;
 	}
-
-	scrExternReset();
 
 	// reset the run data so that doesn't need to be initialised in the scripts
 	initRunData();

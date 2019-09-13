@@ -214,12 +214,6 @@ lib/netplay/netplay.cpp
 lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
-lib/script/codeprint.cpp
-lib/script/event.cpp
-lib/script/eventsave.cpp
-lib/script/interpreter.cpp
-lib/script/script.cpp
-lib/script/stack.cpp
 lib/sdl/cursors_sdl.cpp
 lib/sdl/main_sdl.cpp
 lib/sequence/sequence.cpp
@@ -325,13 +319,6 @@ src/random.cpp
 src/raycast.cpp
 src/research.cpp
 src/scores.cpp
-src/scriptai.cpp
-src/scriptcb.cpp
-src/scriptextern.cpp
-src/scriptfuncs.cpp
-src/scriptobj.cpp
-src/scripttabs.cpp
-src/scriptvals.cpp
 src/selection.cpp
 src/seqdisp.cpp
 src/stats.cpp

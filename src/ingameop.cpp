@@ -44,7 +44,6 @@
 #include "frontend.h"		// for textdisplay function
 #include "loadsave.h"		// for textdisplay function
 #include "console.h"		// to add console message
-#include "scriptextern.h"	// for tutorial
 #include "keybind.h"
 #include "multiplay.h"
 #include "ingameop.h"
@@ -52,6 +51,7 @@
 #include "transporter.h"
 #include "main.h"
 #include "warzoneconfig.h"
+#include "qtscript.h"		// for bInTutorial
 
 bool hostQuitConfirmation;
 

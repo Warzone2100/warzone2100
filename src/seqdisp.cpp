@@ -37,14 +37,12 @@
 #include "lib/sequence/sequence.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
-#include "lib/script/script.h"
 
 #include "seqdisp.h"
 
 #include "warzoneconfig.h"
 #include "hci.h"//for font
 #include "loop.h"
-#include "scripttabs.h"
 #include "design.h"
 #include "wrappers.h"
 #include "init.h" // For fileLoadBuffer
@@ -623,17 +621,7 @@ void seq_StartNextFullScreenVideo()
 	if (bPlayedOK == false)
 	{
 		//don't do the callback if we're playing the win/lose video
-		if (!getScriptWinLoseVideo())
-		{
-			debug(LOG_SCRIPT, "*** Called video quit trigger!");
-			// Not sure this is correct... CHECK, since the callback should ONLY
-			// be called when a video is playing (always?)
-			if (seq_Playing())
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-			}
-		}
-		else
+		if (getScriptWinLoseVideo())
 		{
 			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN, false);
 		}
