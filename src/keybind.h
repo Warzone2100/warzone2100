@@ -93,8 +93,6 @@ void kf_AssignGrouping_9();
 void kf_SelectMoveGrouping();
 void kf_ToggleDroidInfo();
 void kf_addInGameOptions();
-void kf_AddMissionOffWorld();
-void kf_EndMissionOffWorld();
 void kf_NewPlayerPower();
 void kf_addMultiMenu();
 void kf_multiAudioStart();

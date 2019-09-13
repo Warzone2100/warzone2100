@@ -68,15 +68,11 @@
 
 #include "keymap.h"
 #include "loop.h"
-#include "lib/script/script.h"
-#include "scriptextern.h"
 #include "mission.h"
 #include "mapgrid.h"
 #include "order.h"
 #include "selection.h"
 #include "difficulty.h"
-#include "scriptcb.h"		/* for console callback */
-#include "scriptfuncs.h"
 #include "clparse.h"
 #include "research.h"
 #include "template.h"
@@ -401,10 +397,6 @@ void kf_CloneSelected(int limit)
 				if (psNewDroid)
 				{
 					addDroid(psNewDroid, apsDroidLists);
-					psScrCBNewDroid = psNewDroid;
-					psScrCBNewDroidFact = nullptr;
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
-					psScrCBNewDroid = nullptr;
 					triggerEventDroidBuilt(psNewDroid, nullptr);
 				}
 				else if (!bMultiMessages)
@@ -1196,43 +1188,6 @@ void	kf_addInGameOptions()
 	{
 		intAddInGameOptions();
 	}
-}
-
-// --------------------------------------------------------------------------
-/* Tell the scripts to start a mission*/
-void	kf_AddMissionOffWorld()
-{
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_START);
-}
-
-// --------------------------------------------------------------------------
-/* Tell the scripts to end a mission*/
-void	kf_EndMissionOffWorld()
-{
-	char *cmsg;
-
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
-	sasprintf(&cmsg, _("Warning!  This cheat can cause dire problems later on! [%s]"), _("Ending Mission."));
-	sendTextMessage(cmsg, true);
-
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_END);
 }
 
 // --------------------------------------------------------------------------

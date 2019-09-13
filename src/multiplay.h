@@ -30,6 +30,7 @@
 #include "lib/framework/crc.h"
 #include "orderdef.h"
 #include "stringdef.h"
+#include "messagedef.h"
 
 class DROID_GROUP;
 struct BASE_OBJECT;
@@ -204,19 +205,7 @@ bool sendResearchStatus(STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool 
 void displayAIMessage(char *pStr, SDWORD from, SDWORD to);  //make AI process a message
 
 
-/* for multiplayer message stack */
-UDWORD	msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y, DROID *psDroid);
-bool	isMsgStackEmpty();
-bool	msgStackGetFrom(SDWORD  *psVal);
-bool	msgStackGetTo(SDWORD  *psVal);
-bool	msgStackGetMsg(char  *psVal);
-bool	msgStackPop();
-SDWORD	msgStackGetCount();
-void	msgStackReset();
-bool msgStackGetDroid(DROID **ppsDroid);
-
 bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
-bool msgStackFireTop();
 
 bool multiplayPlayersReady(bool bNotifyStatus);
 void startMultiplayerGame();
@@ -225,5 +214,10 @@ void resetReadyStatus(bool bSendOptions);
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
 
 void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
+
+
+bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);
+MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
+VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

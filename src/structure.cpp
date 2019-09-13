@@ -54,8 +54,6 @@
 #include "lib/framework/fixedpoint.h"
 #include "order.h"
 #include "droid.h"
-#include "lib/script/script.h"
-#include "scriptcb.h"
 #include "action.h"
 #include "group.h"
 #include "transporter.h"
@@ -70,7 +68,6 @@
 #include "intdisplay.h"
 #include "display.h"
 #include "difficulty.h"
-#include "scriptextern.h"
 #include "keymap.h"
 #include "game.h"
 #include "qtscript.h"
@@ -140,7 +137,6 @@ static void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player);
 static void removeStructFromMap(STRUCTURE *psStruct);
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(const STRUCTURE *psStruct);
-static void structureCompletedCallback(STRUCTURE_STATS *psStructType);
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -823,17 +819,9 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 				}
 			}
 
-			/* Notify scripts we just finished building a structure, pass builder and what was built */
-			psScrCBNewStruct	= psStruct;
-			psScrCBNewStructTruck	= psDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
-
 			audio_StopObjTrack(psDroid, ID_SOUND_CONSTRUCTION_LOOP);
 		}
 		triggerEventStructBuilt(psStruct, psDroid);
-
-		/* Not needed, but left for backward compatibility */
-		structureCompletedCallback(psStruct->pStructureType);
 	}
 	else
 	{
@@ -2377,10 +2365,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		if (assignCommander)
 		{
 			assignFactoryCommandDroid(psStructure, psNewDroid);
-		}
-		if (psNewDroid->player == selectedPlayer)
-		{
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDBUILT);
 		}
 		return true;
 	}
@@ -4922,32 +4906,6 @@ void setFlagPositionInc(FUNCTIONALITY *pFunctionality, UDWORD player, UBYTE fact
 	}
 }
 
-/*called when a structure has been built - checks through the list of callbacks
-for the scripts*/
-static void structureCompletedCallback(STRUCTURE_STATS *psStructType)
-{
-
-	if (psStructType->type == REF_POWER_GEN)
-	{
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_POWERGEN_BUILT);
-	}
-	if (psStructType->type == REF_RESOURCE_EXTRACTOR)
-	{
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEX_BUILT);
-	}
-	if (psStructType->type == REF_RESEARCH)
-	{
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCH_BUILT);
-	}
-	if (psStructType->type == REF_FACTORY ||
-	    psStructType->type == REF_CYBORG_FACTORY ||
-	    psStructType->type == REF_VTOL_FACTORY)
-	{
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FACTORY_BUILT);
-	}
-}
-
-
 STRUCTURE_STATS *structGetDemolishStat()
 {
 	ASSERT_OR_RETURN(nullptr, g_psStatDestroyStruct != nullptr , "Demolish stat not initialised");
@@ -5653,8 +5611,6 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				{
 					console(_("%s - Electronically Damaged"),
 					        getName(psStructure->pStructureType));
-					//tell the scripts if selectedPlayer has lost a structure
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
 				bCompleted = true;
 				//give the structure to the attacking player
@@ -5697,8 +5653,6 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				if (psDroid->player == selectedPlayer)
 				{
 					console(_("%s - Electronically Damaged"), "Unit");
-					//tell the scripts if selectedPlayer has lost a droid
-					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
 				bCompleted = true;
 
@@ -6699,8 +6653,7 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 	psTotallyClear = nullptr;
 	for (STRUCTURE *psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
 	{
-		if (psStruct->pStructureType->type == REF_REARM_PAD
-		    && (!bClear || clearRearmPad(psStruct)))
+		if (psStruct->pStructureType->type == REF_REARM_PAD && (!bClear || clearRearmPad(psStruct)))
 		{
 			xdiff = (SDWORD)psStruct->pos.x - cx;
 			ydiff = (SDWORD)psStruct->pos.y - cy;
@@ -7014,13 +6967,6 @@ bool lasSatStructSelected(STRUCTURE *psStruct)
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 {
 	ASSERT_OR_RETURN(, psDroid != nullptr, "no droid assigned for CALL_NEWDROID callback");
-
-	psScrCBNewDroid = psDroid;
-	psScrCBNewDroidFact = psFactory;
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);
-	psScrCBNewDroid = nullptr;
-	psScrCBNewDroidFact = nullptr;
-
 	triggerEventDroidBuilt(psDroid, psFactory);
 }
 

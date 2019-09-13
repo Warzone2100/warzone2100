@@ -40,7 +40,6 @@
 #include "hci.h"
 #include "mapgrid.h"
 #include "research.h"
-#include "scriptextern.h"
 #include "structure.h"
 #include "projectile.h"
 #include "display.h"

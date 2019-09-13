@@ -59,7 +59,6 @@
 #include "multigifts.h"
 #include "multiint.h"
 #include "multirecv.h"
-#include "scriptfuncs.h"
 #include "template.h"
 
 // send complete game info set!
@@ -465,7 +464,6 @@ bool multiGameInit()
 	}
 
 	gameInit();
-	msgStackReset();	//for multiplayer msgs, reset message stack
 
 	return true;
 }

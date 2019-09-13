@@ -39,7 +39,6 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include "lib/netplay/netplay.h"
-#include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "modding.h"
@@ -78,13 +77,9 @@
 #include "mission.h"
 #include "geometry.h"
 #include "gateway.h"
-#include "scripttabs.h"
-#include "scriptvals.h"
-#include "scriptextern.h"
 #include "multistat.h"
 #include "multiint.h"
 #include "wrappers.h"
-#include "scriptfuncs.h"
 #include "challenge.h"
 #include "combat.h"
 #include "template.h"
@@ -1717,7 +1712,6 @@ bool loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 
 static void sanityUpdate()
 {
-	scrvUpdateBasePointers();	// update the script object pointers
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
 		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
@@ -1849,8 +1843,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	    (gameType == GTYPE_SAVE_MIDMISSION))
 	{
 		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
-		//need to reset the event timer too - AB 14/01/99
-		eventTimeReset(savedGameTime / SCR_TICKRATE);
 	}
 
 	/* Clear all the objects off the map and free up the map memory */
@@ -2012,14 +2004,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			{
 				setPlayerHasLost(saveGameData.bPlayerHasLost);
 			}
-		}
-
-		if (saveGameVersion >= VERSION_30)
-		{
-			scrGameLevel = saveGameData.scrGameLevel;
-			bExtraVictoryFlag = saveGameData.bExtraVictoryFlag;
-			bExtraFailFlag = saveGameData.bExtraFailFlag;
-			bTrackTransporter = saveGameData.bTrackTransporter;
 		}
 
 		//extra code added for the first patch (v1.1) to save out if mission time is not being counted
@@ -2568,14 +2552,12 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	strcat(aFileName, "labels.json");
 	loadLabels(aFileName);
 
-	//if user save game then reset the time - THIS SETS BOTH TIMERS - BEWARE IF YOU USE IT
+	//if user save game then reset the time - BEWARE IF YOU USE IT
 	if ((gameType == GTYPE_SAVE_START) ||
 	    (gameType == GTYPE_SAVE_MIDMISSION))
 	{
 		ASSERT(gameTime == savedGameTime, "loadGame; game time modified during load");
 		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
-		//need to reset the event timer too - AB 14/01/99
-		eventTimeReset(savedGameTime / SCR_TICKRATE);
 
 		//reset the objId for new objects
 		if (saveGameVersion >= VERSION_17)
@@ -3748,14 +3730,6 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		mission.scrollMaxY = saveGameData.missionScrollMaxY;
 	}
 
-	if (saveGameVersion >= VERSION_30)
-	{
-		scrGameLevel = saveGameData.scrGameLevel;
-		bExtraVictoryFlag = saveGameData.bExtraVictoryFlag;
-		bExtraFailFlag = saveGameData.bExtraFailFlag;
-		bTrackTransporter = saveGameData.bTrackTransporter;
-	}
-
 	if (saveGameVersion >= VERSION_31)
 	{
 		mission.cheatTime = saveGameData.missionCheatTime;
@@ -3963,9 +3937,9 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 
 	save.setValue("playerHasWon", testPlayerHasWon());
 	save.setValue("playerHasLost", testPlayerHasLost());
-	save.setValue("gameLevel", scrGameLevel);
-	save.setValue("failFlag", bExtraFailFlag);
-	save.setValue("trackTransporter", bTrackTransporter);
+	save.setValue("gameLevel", 0);
+	save.setValue("failFlag", 0);
+	save.setValue("trackTransporter", 0);
 	save.setValue("gameType", game.type);
 	save.setValue("scavengers", game.scavengers);
 	save.setValue("mapName", game.map);
@@ -4136,10 +4110,10 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	saveGame.bPlayerHasLost = (UBYTE)testPlayerHasLost();
 
 	//version 30
-	saveGame.scrGameLevel = scrGameLevel;
-	saveGame.bExtraFailFlag = (UBYTE)bExtraFailFlag;
-	saveGame.bExtraVictoryFlag = (UBYTE)bExtraVictoryFlag;
-	saveGame.bTrackTransporter = (UBYTE)bTrackTransporter;
+	saveGame.scrGameLevel = 0;
+	saveGame.bExtraFailFlag = 0;
+	saveGame.bExtraVictoryFlag = 0;
+	saveGame.bTrackTransporter = 0;
 
 	// version 33
 	saveGame.sGame		= game;
@@ -6591,11 +6565,6 @@ static bool	writeScriptState(const char *pFileName)
 {
 	char	jsFilename[PATH_MAX], *ext;
 
-	if (!eventSaveState(pFileName))
-	{
-		return false;
-	}
-
 	// The below belongs to the new javascript stuff
 	sstrcpy(jsFilename, pFileName);
 	ext = strrchr(jsFilename, '/');
@@ -6621,11 +6590,6 @@ bool loadScriptState(char *pFileName)
 
 	// change the file extension
 	strcat(pFileName, "/scriptstate.es");
-
-	if (!eventLoadState(pFileName))
-	{
-		return false;
-	}
 
 	return true;
 }

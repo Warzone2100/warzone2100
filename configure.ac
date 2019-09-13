@@ -502,7 +502,6 @@ AC_CONFIG_FILES([Makefile
 		lib/ivis_opengl/Makefile
 		lib/netplay/Makefile
 		lib/sdl/Makefile
-		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile

@@ -60,10 +60,6 @@
 #include "qtscript.h"
 #include "design.h"
 
-#include "lib/script/script.h"				//Because of "ScriptTabs.h"
-#include "scripttabs.h"			//because of CALL_AI_MSG
-#include "scriptcb.h"			//for console callback
-#include "scriptfuncs.h"
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "modding.h"
@@ -89,20 +85,6 @@ MULTIPLAYERINGAME			ingame;
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
-
-/////////////////////////////////////
-/* multiplayer message stack stuff */
-/////////////////////////////////////
-#define MAX_MSG_STACK	100				// must be *at least* 64
-
-static char msgStr[MAX_MSG_STACK][MAX_STR_LENGTH];
-static SDWORD msgPlFrom[MAX_MSG_STACK];
-static SDWORD msgPlTo[MAX_MSG_STACK];
-static SDWORD callbackType[MAX_MSG_STACK];
-static SDWORD locx[MAX_MSG_STACK];
-static SDWORD locy[MAX_MSG_STACK];
-static DROID *msgDroid[MAX_MSG_STACK];
-static SDWORD msgStackPos = -1;				//top element pointer
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
@@ -1193,7 +1175,6 @@ void sendTeamMessage(const char *pStr, uint32_t from)
 			}
 			else if (myResponsibility(i))
 			{
-				msgStackPush(CALL_AI_MSG, from, i, display, -1, -1, nullptr);
 				triggerEventChat(from, i, display);
 			}
 			else	//also send to AIs now (non-humans), needed for AI
@@ -1304,7 +1285,6 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 			}
 			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
 			{
-				msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, nullptr);
 				triggerEventChat(from, i, msg);
 			}
 			else if (i != from && !isHumanPlayer(i) && !myResponsibility(i))
@@ -1333,7 +1313,6 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 				}
 				else if (myResponsibility(i))
 				{
-					msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, nullptr);
 					triggerEventChat(from, i, msg);
 				}
 				else	// send to AIs on different host
@@ -1363,7 +1342,6 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 				}
 				else if (myResponsibility(i))
 				{
-					msgStackPush(CALL_AI_MSG, from, i, curStr, -1, -1, nullptr);
 					triggerEventChat(from, i, curStr);
 				}
 				else	//also send to AIs now (non-humans), needed for AI
@@ -1493,14 +1471,6 @@ bool recvTextMessage(NETQUEUE queue)
 
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex, team);
 
-	// Multiplayer message callback
-	// Received a console message from a player, save
-	MultiMsgPlayerFrom = playerIndex;
-	MultiMsgPlayerTo = selectedPlayer;
-
-	sstrcpy(MultiplayMsg, newmsg);
-	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
-
 	// make some noise!
 	if (titleMode == MULTIOPTION || titleMode == MULTILIMIT)
 	{
@@ -1534,15 +1504,6 @@ bool recvTextMessageAI(NETQUEUE queue)
 
 	sstrcpy(msg, newmsg);
 	triggerEventChat(sender, receiver, newmsg);
-
-	//Received a console message from a player callback
-	//store and call later
-	//-------------------------------------------------
-	if (!msgStackPush(CALL_AI_MSG, sender, receiver, msg, -1, -1, nullptr))
-	{
-		debug(LOG_ERROR, "recvTextMessageAI() - msgStackPush - stack failed");
-		return false;
-	}
 
 	return true;
 }
@@ -1748,278 +1709,148 @@ bool recvMapFileData(NETQUEUE queue)
 }
 
 
-//------------------------------------------------------------------------------------------------//
-
-/* multiplayer message stack */
-void msgStackReset()
+//prepare viewdata for help blip
+VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 {
-	msgStackPos = -1;		//Beginning of the stack
+	UDWORD height;
+	VIEWDATA *psViewData = nullptr;
+	SDWORD audioID;
+	char name[255];
+
+	//allocate message space
+	psViewData = new VIEWDATA;
+
+	//store name
+	sprintf(name, _("Beacon %d"), sender);
+	psViewData->name = name;
+
+	//store text message, hardcoded for now
+	psViewData->textMsg.push_back(WzString::fromUtf8(getPlayerName(sender)));
+
+	//store message type
+	psViewData->type = VIEW_BEACON;
+
+	//allocate memory for blip location etc
+	psViewData->pData = new VIEW_PROXIMITY;
+
+	//store audio
+	audioID = NO_SOUND;
+	((VIEW_PROXIMITY *)psViewData->pData)->audioID = audioID;
+
+	//store blip location
+	((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
+	((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
+
+	//check the z value is at least the height of the terrain
+	height = map_Height(LocX, LocY);
+
+	((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+
+	//store prox message type
+	((VIEW_PROXIMITY *)psViewData->pData)->proxType = PROX_ENEMY; //PROX_ENEMY for now
+
+	//remember who sent this msg, so we could remove this one, when same player sends a new help-blip msg
+	((VIEW_PROXIMITY *)psViewData->pData)->sender = sender;
+
+	//remember when the message was created so can remove it after some time
+	((VIEW_PROXIMITY *)psViewData->pData)->timeAdded = gameTime;
+	debug(LOG_MSG, "Added message");
+
+	return psViewData;
 }
 
-UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr, SDWORD x, SDWORD y, DROID *psDroid)
+/* Looks through the players list of messages to find VIEW_BEACON (one per player!) pointer */
+MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 {
-	debug(LOG_WZ, "msgStackPush: pushing message type %d to pos %d", CBtype, msgStackPos + 1);
-
-	if (msgStackPos + 1 >= MAX_MSG_STACK)
+	for (MESSAGE *psCurr = apsMessages[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
-		debug(LOG_ERROR, "msgStackPush() - stack full");
-		return false;
-	}
-
-	//make point to the last valid element
-	msgStackPos++;
-
-	//remember values
-	msgPlFrom[msgStackPos] = plFrom;
-	msgPlTo[msgStackPos] = plTo;
-
-	callbackType[msgStackPos] = CBtype;
-	locx[msgStackPos] = x;
-	locy[msgStackPos] = y;
-
-	sstrcpy(msgStr[msgStackPos], tStr);
-
-	msgDroid[msgStackPos] = psDroid;
-
-	return true;
-}
-
-bool isMsgStackEmpty()
-{
-	if (msgStackPos <= (-1))
-	{
-		return true;
-	}
-	return false;
-}
-
-bool msgStackGetFrom(SDWORD  *psVal)
-{
-	if (msgStackPos < 0)
-	{
-		debug(LOG_ERROR, "msgStackGetFrom: msgStackPos < 0");
-		return false;
-	}
-
-	*psVal = msgPlFrom[0];
-
-	return true;
-}
-
-bool msgStackGetTo(SDWORD  *psVal)
-{
-	if (msgStackPos < 0)
-	{
-		debug(LOG_ERROR, "msgStackGetTo: msgStackPos < 0");
-		return false;
-	}
-
-	*psVal = msgPlTo[0];
-
-	return true;
-}
-
-static bool msgStackGetCallbackType(SDWORD  *psVal)
-{
-	if (msgStackPos < 0)
-	{
-		debug(LOG_ERROR, "msgStackGetCallbackType: msgStackPos < 0");
-		return false;
-	}
-
-	*psVal = callbackType[0];
-
-	return true;
-}
-
-static bool msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
-{
-	if (msgStackPos < 0)
-	{
-		debug(LOG_ERROR, "msgStackGetXY: msgStackPos < 0");
-		return false;
-	}
-
-	*psValx = locx[0];
-	*psValy = locy[0];
-
-	return true;
-}
-
-
-bool msgStackGetMsg(char  *psVal)
-{
-	if (msgStackPos < 0)
-	{
-		debug(LOG_ERROR, "msgStackGetMsg: msgStackPos < 0");
-		return false;
-	}
-
-	strcpy(psVal, msgStr[0]);
-	//*psVal = msgPlTo[msgStackPos];
-
-	return true;
-}
-
-static bool msgStackSort()
-{
-	SDWORD i;
-
-	//go through all-1 elements (bottom-top)
-	for (i = 0; i < msgStackPos; i++)
-	{
-		msgPlFrom[i] = msgPlFrom[i + 1];
-		msgPlTo[i] = msgPlTo[i + 1];
-
-		callbackType[i] = callbackType[i + 1];
-		locx[i] = locx[i + 1];
-		locy[i] = locy[i + 1];
-
-		sstrcpy(msgStr[i], msgStr[i + 1]);
-	}
-
-	//erase top element
-	msgPlFrom[msgStackPos] = -2;
-	msgPlTo[msgStackPos] = -2;
-
-	callbackType[msgStackPos] = -2;
-	locx[msgStackPos] = -2;
-	locy[msgStackPos] = -2;
-
-	sstrcpy(msgStr[msgStackPos], "ERROR char!!!!!!!!");
-
-	msgStackPos--;		//since removed the top element
-
-	return true;
-}
-
-bool msgStackPop()
-{
-	debug(LOG_WZ, "msgStackPop: stack size %d", msgStackPos);
-
-	if (msgStackPos < 0 || msgStackPos > MAX_MSG_STACK)
-	{
-		debug(LOG_ERROR, "msgStackPop: wrong msgStackPos index: %d", msgStackPos);
-		return false;
-	}
-
-	return msgStackSort();		//move all elements 1 pos lower
-}
-
-bool msgStackGetDroid(DROID **ppsDroid)
-{
-	if (msgStackPos < 0)
-	{
-		debug(LOG_ERROR, "msgStackGetDroid: msgStackPos < 0");
-		return false;
-	}
-
-	*ppsDroid = msgDroid[0];
-
-	return true;
-}
-
-SDWORD msgStackGetCount()
-{
-	return msgStackPos + 1;
-}
-
-bool msgStackFireTop()
-{
-	SDWORD		_callbackType;
-	char		msg[255];
-
-	if (msgStackPos < 0)
-	{
-		debug(LOG_ERROR, "msgStackFireTop: msgStackPos < 0");
-		return false;
-	}
-
-	if (!msgStackGetCallbackType(&_callbackType))
-	{
-		return false;
-	}
-
-	switch (_callbackType)
-	{
-	case CALL_VIDEO_QUIT:
-		debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-		break;
-
-	case CALL_DORDER_STOP:
-		ASSERT(false, "CALL_DORDER_STOP is currently disabled");
-
-		debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_DORDER_STOP");
-
-		if (!msgStackGetDroid(&psScrCBOrderDroid))
+		//look for VIEW_BEACON, should only be 1 per player
+		if (psCurr->dataType == MSG_DATA_BEACON)
 		{
-			return false;
+			if (psCurr->pViewData->type == VIEW_BEACON)
+			{
+				debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED", player);
+				if (((VIEW_PROXIMITY *)psCurr->pViewData->pData)->sender == sender)
+				{
+					debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED from %d", player, sender);
+					return psCurr;
+				}
+			}
 		}
-
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DORDER_STOP);
-		break;
-
-	case CALL_BEACON:
-
-		if (!msgStackGetXY(&beaconX, &beaconY))
-		{
-			return false;
-		}
-
-		if (!msgStackGetFrom(&MultiMsgPlayerFrom))
-		{
-			return false;
-		}
-
-		if (!msgStackGetTo(&MultiMsgPlayerTo))
-		{
-			return false;
-		}
-
-		if (!msgStackGetMsg(msg))
-		{
-			return false;
-		}
-
-		sstrcpy(MultiplayMsg, msg);
-
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BEACON);
-		break;
-
-	case CALL_AI_MSG:
-		if (!msgStackGetFrom(&MultiMsgPlayerFrom))
-		{
-			return false;
-		}
-
-		if (!msgStackGetTo(&MultiMsgPlayerTo))
-		{
-			return false;
-		}
-
-		if (!msgStackGetMsg(msg))
-		{
-			return false;
-		}
-
-		sstrcpy(MultiplayMsg, msg);
-
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
-		break;
-
-	default:
-		debug(LOG_ERROR, "msgStackFireTop: unknown callback type");
-		return false;
-		break;
 	}
 
-	if (!msgStackPop())
+	//not found the message so return NULL
+	return nullptr;
+}
+
+/* Add a beacon (blip) */
+bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *textMsg)
+{
+	MESSAGE *psMessage;
+
+	if (forPlayer >= MAX_PLAYERS)
 	{
+		debug(LOG_ERROR, "addBeaconBlip: player number is too high");
 		return false;
+	}
+
+	//find the message if was already added previously
+	psMessage = findBeaconMsg(forPlayer, sender);
+	if (psMessage)
+	{
+		//remove it
+		removeMessage(psMessage, forPlayer);
+	}
+
+	//create new message
+	psMessage = addBeaconMessage(MSG_PROXIMITY, false, forPlayer);
+	if (psMessage)
+	{
+		VIEWDATA *pTempData = CreateBeaconViewData(sender, locX, locY);
+		ASSERT_OR_RETURN(false, pTempData != nullptr, "Empty help data for radar beacon");
+		psMessage->pViewData = pTempData;
+		debug(LOG_MSG, "blip added, pViewData=%p", static_cast<void *>(psMessage->pViewData));
+	}
+	else
+	{
+		debug(LOG_WARNING, "call failed");
+	}
+
+	//Received a blip message from a player callback
+	//store and call later
+	//-------------------------------------------------
+	//call beacon callback only if not adding for ourselves
+	if (forPlayer != sender)
+	{
+		triggerEventBeacon(sender, forPlayer, textMsg, locX, locY);
+
+		if (selectedPlayer == forPlayer)
+		{
+			// show console message
+			CONPRINTF(_("Beacon received from %s!"), getPlayerName(sender));
+			// play audio
+			audio_QueueTrackPos(ID_SOUND_BEACON, locX, locY, 0);
+		}
 	}
 
 	return true;
+}
+
+bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg)
+{
+	bool retval;
+	if (sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
+	{
+		debug(LOG_WZ, "sending beacon to player %d (local player) from %d", forPlayer, sender);
+		retval = addBeaconBlip(locX, locY, forPlayer, sender, beaconMsg);
+	}
+	else
+	{
+		debug(LOG_WZ, "sending beacon to player %d (remote player) from %d", forPlayer, sender);
+		retval = sendBeacon(locX, locY, forPlayer, sender, beaconMsg);
+	}
+	jsDebugMessageUpdate();
+	return retval;
 }
 
 static bool recvBeacon(NETQUEUE queue)

@@ -57,11 +57,9 @@
 #include "intdisplay.h"
 #include "design.h"
 #include "component.h"
-#include "lib/script/script.h"
 #include "main.h"
 #include "display.h"
 #include "cmddroid.h"
-#include "scriptextern.h"
 #include "mission.h"
 #include "template.h"
 #include "multiplay.h"
@@ -3290,11 +3288,7 @@ void intProcessDesign(UDWORD id)
 			intSetSystemForm(apsComponentList[id - IDDES_COMPSTART]);
 			// Stop the button flashing
 			intSetButtonFlash(IDDES_SYSTEMBUTTON, false);
-			// do the callback if in the tutorial
-			if (bInTutorial)
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
-			}
+
 			triggerEvent(TRIGGER_DESIGN_WEAPON);
 			break;
 		//Added cases for 2nd/3rd turret
@@ -3324,11 +3318,7 @@ void intProcessDesign(UDWORD id)
 			intSetSystemForm(apsComponentList[id - IDDES_COMPSTART]);
 			// Stop the button flashing
 			intSetButtonFlash(IDDES_WPABUTTON,   false);
-			// do the callback if in the tutorial
-			if (bInTutorial)
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
-			}
+
 			triggerEvent(TRIGGER_DESIGN_WEAPON);
 			break;
 		case IDES_TURRET_B:
@@ -3348,11 +3338,7 @@ void intProcessDesign(UDWORD id)
 			intSetSystemForm(apsComponentList[id - IDDES_COMPSTART]);
 			// Stop the button flashing
 			intSetButtonFlash(IDDES_WPBBUTTON,   false);
-			// do the callback if in the tutorial
-			if (bInTutorial)
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
-			}
+
 			triggerEvent(TRIGGER_DESIGN_WEAPON);
 			break;
 		case IDES_BODY:
@@ -3411,11 +3397,7 @@ void intProcessDesign(UDWORD id)
 			}
 			// Stop the button flashing
 			intSetButtonFlash(IDDES_BODYBUTTON,   false);
-			// do the callback if in the tutorial
-			if (bInTutorial)
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_BODY);
-			}
+
 			triggerEvent(TRIGGER_DESIGN_BODY);
 			break;
 		case IDES_PROPULSION:
@@ -3449,11 +3431,7 @@ void intProcessDesign(UDWORD id)
 
 			// Stop the button flashing
 			intSetButtonFlash(IDDES_PROPBUTTON,   false);
-			// do the callback if in the tutorial
-			if (bInTutorial)
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_PROPULSION);
-			}
+
 			triggerEvent(TRIGGER_DESIGN_PROPULSION);
 			break;
 		default:
@@ -3613,18 +3591,6 @@ void intProcessDesign(UDWORD id)
 		/* Update the name in the edit box */
 		intSetEditBoxTextFromTemplate(&sCurrDesign);
 
-		// do the callback if in the tutorial
-		if (bInTutorial)
-		{
-			if (apsExtraSysList[id - IDDES_EXTRASYSSTART]->compType == COMP_BRAIN)
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_COMMAND);
-			}
-			else
-			{
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_SYSTEM);
-			}
-		}
 		if (apsExtraSysList[id - IDDES_EXTRASYSSTART]->compType == COMP_BRAIN)
 		{
 			triggerEvent(TRIGGER_DESIGN_COMMAND);
@@ -3858,7 +3824,6 @@ void intProcessDesign(UDWORD id)
 		/* save template if valid */
 		if (saveTemplate())
 		{
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDDESIGNED);
 			triggerEventDesignCreated(&sCurrDesign);
 		}
 

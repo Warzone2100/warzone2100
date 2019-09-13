@@ -53,8 +53,6 @@
 #include "research.h"
 #include "lib/gamelib/gtime.h"
 #include "loop.h"
-#include "lib/script/script.h"
-#include "scripttabs.h"
 #include "warzoneconfig.h"
 #include "seqdisp.h"
 #include "mission.h"
@@ -63,9 +61,8 @@
 #include "lib/sequence/sequence.h"
 #include "lib/sound/track.h"
 
-#include "scriptextern.h"
-
 #include "multimenu.h"
+#include "qtscript.h"
 
 /* Intelligence Map screen IDs */
 #define IDINTMAP_MSGFORM		6001	//The intelligence map tabbed form
@@ -827,21 +824,6 @@ static void intCleanUpIntelMap()
 	}
 	resetIntelligencePauseState();
 	immediateMessage = false;
-
-	if (interpProcessorActive())
-	{
-		debug(LOG_SCRIPT, "intCleanUpIntelMap: interpreter running, storing CALL_VIDEO_QUIT");
-		if (!msgStackPush(CALL_VIDEO_QUIT, -1, -1, "\0", -1, -1, nullptr))
-		{
-			debug(LOG_ERROR, "intCleanUpIntelMap() - msgStackPush - stack failed");
-			return;
-		}
-	}
-	else
-	{
-		debug(LOG_SCRIPT, "intCleanUpIntelMap: not running");
-		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-	}
 }
 
 

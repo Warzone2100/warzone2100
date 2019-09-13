@@ -73,7 +73,6 @@
 #include "random.h"
 #include "frontend.h"
 #include "loop.h"
-#include "scriptextern.h"
 #include "gateway.h"
 #include "mapgrid.h"
 #include "lighting.h"
@@ -107,11 +106,115 @@ enum Scrcb {
 	SCRCB_LAST = SCRCB_LIMIT
 };
 
-// TODO, move this stuff into a script common subsystem
-#include "scriptfuncs.h"
-extern bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlockingTiles);
-extern Vector2i positions[MAX_PLAYERS];
-extern std::vector<Vector2i> derricks;
+Vector2i positions[MAX_PLAYERS];
+std::vector<Vector2i> derricks;
+
+void scriptSetStartPos(int position, int x, int y)
+{
+	positions[position].x = x;
+	positions[position].y = y;
+	debug(LOG_SCRIPT, "Setting start position %d to (%d, %d)", position, x, y);
+}
+
+void scriptSetDerrickPos(int x, int y)
+{
+	Vector2i pos(x, y);
+	derricks.push_back(pos);
+}
+
+bool scriptInit()
+{
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		scriptSetStartPos(i, 0, 0);
+	}
+	derricks.clear();
+	derricks.reserve(8 * MAX_PLAYERS);
+	return true;
+}
+
+Vector2i getPlayerStartPosition(int player)
+{
+	return positions[player];
+}
+
+// additional structure check
+static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlockingTiles)
+{
+	UDWORD		x, y, xTL, yTL, xBR, yBR;
+	UBYTE		count = 0;
+	STRUCTURE_STATS	*psBuilding = (STRUCTURE_STATS *)psStat;
+
+	xTL = xx - 1;
+	yTL = yy - 1;
+	xBR = (xx + psBuilding->baseWidth);
+	yBR = (yy + psBuilding->baseBreadth);
+
+	// check against building in a gateway, as this can seriously block AI passages
+	for (auto psGate : gwGetGateways())
+	{
+		for (x = xx; x <= xBR; x++)
+		{
+			for (y = yy; y <= yBR; y++)
+			{
+				if ((x >= psGate->x1 && x <= psGate->x2) && (y >= psGate->y1 && y <= psGate->y2))
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	// can you get past it?
+	y = yTL;	// top
+	for (x = xTL; x != xBR + 1; x++)
+	{
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		{
+			count++;
+			break;
+		}
+	}
+
+	y = yBR;	// bottom
+	for (x = xTL; x != xBR + 1; x++)
+	{
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		{
+			count++;
+			break;
+		}
+	}
+
+	x = xTL;	// left
+	for (y = yTL + 1; y != yBR; y++)
+	{
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		{
+			count++;
+			break;
+		}
+	}
+
+	x = xBR;	// right
+	for (y = yTL + 1; y != yBR; y++)
+	{
+		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+		{
+			count++;
+			break;
+		}
+	}
+
+	//make sure this location is not blocked from too many sides
+	if ((count <= maxBlockingTiles) || (maxBlockingTiles == -1))
+	{
+		return true;
+	}
+	return false;
+}
 
 // private qtscript bureaucracy
 typedef QMap<BASE_OBJECT *, int> GROUPMAP;
@@ -2986,12 +3089,6 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	else
 	{
 		audio_QueueTrack(soundID);
-		/*  -- FIXME properly (from original script func)
-		if(bInTutorial)
-		{
-			audio_QueueTrack(ID_SOUND_OF_SILENCE);
-		}
-		*/
 	}
 	return QScriptValue();
 }

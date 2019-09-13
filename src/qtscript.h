@@ -63,8 +63,15 @@ enum SCRIPT_TRIGGER_TYPE
 	TRIGGER_OBJECT_RECYCLED
 };
 
+extern bool bInTutorial;
+
 // ----------------------------------------------
 // State functions
+
+bool scriptInit();
+void scriptSetStartPos(int position, int x, int  y);
+void scriptSetDerrickPos(int x, int y);
+Vector2i getPlayerStartPosition(int player);
 
 /// Initialize script system
 bool initScripts();
