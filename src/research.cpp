@@ -164,6 +164,11 @@ bool loadResearch(WzConfig &ini)
 			research.techCode = TC_MINOR;
 		}
 
+		//get flags when to disable tech
+		UBYTE disabledWhen = ini.value("disabledWhen", 0).toUInt();
+		ASSERT(disabledWhen <= MPFLAGS_MAX, "Invalid disabled tech flag for research topic - '%s' ", getName(&research));
+		research.disabledWhen = disabledWhen;
+
 		//set the iconID
 		WzString iconID = ini.value("iconID", "").toWzString();
 		if (iconID.compare("") != 0)
@@ -366,6 +371,11 @@ bool researchAvailable(int inc, int playerID, QUEUE_MODE mode)
 	if (IsResearchCancelledFunc(&asPlayerResList[playerID][inc]))
 	{
 		return true;
+	}
+	// Ignore disabled
+	if (IsResearchDisabled(&asPlayerResList[playerID][inc]))
+	{
+		return false;
 	}
 	// if the topic is possible and has not already been researched - add to list
 	if ((IsResearchPossible(&asPlayerResList[playerID][inc])))
@@ -1383,4 +1393,40 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 		return noAllyResearch;
 	}
 	return i->second;
+}
+
+/* Recursively disable research for all players */
+static void RecursivelyDisableResearchByID(size_t index)
+{
+	if (IsResearchDisabled(&asPlayerResList[0][index]))
+	{
+		return;
+	}
+
+	for (int player = 0; player < MAX_PLAYERS; ++player)
+	{
+		DisableResearch(&asPlayerResList[player][index]);
+	}
+
+	for (size_t inc = 0; inc < asResearch.size(); inc++)
+	{
+		for (size_t prereq = 0; prereq < asResearch[inc].pPRList.size(); prereq++)
+		{
+			if (asResearch[inc].pPRList[prereq] == index)
+			{
+				RecursivelyDisableResearchByID(inc);
+			}
+		}
+	}
+}
+
+void RecursivelyDisableResearchByFlags(UBYTE flags)
+{
+	for (size_t inc = 0; inc < asResearch.size(); inc++)
+	{
+		if (asResearch[inc].disabledWhen & flags)
+		{
+			RecursivelyDisableResearchByID(inc);
+		}
+	}
 }

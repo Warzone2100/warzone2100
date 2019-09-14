@@ -373,6 +373,7 @@ void applyLimitSet()
 
 	// Get the limits and decode
 	const MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
+	UBYTE flags = ingame.flags & MPFLAGS_FORCELIMITS;
 	for (int i = 0; i < ingame.numStructureLimits; ++i)
 	{
 		int id = pEntry[i].id;
@@ -400,9 +401,57 @@ void applyLimitSet()
 					}
 				}
 			}
+			if (asStructureStats[id].type == REF_VTOL_FACTORY && pEntry[i].limit == 0)
+			{
+				flags |= MPFLAGS_NO_VTOLS;
+			}
+			if (asStructureStats[id].type == REF_CYBORG_FACTORY && pEntry[i].limit == 0)
+			{
+				flags |= MPFLAGS_NO_CYBORGS;
+			}
+			if (asStructureStats[id].type == REF_GENERIC && asStructureStats[id].id == "A0LasSatCommand" && pEntry[i].limit == 0)
+			{
+				flags |= MPFLAGS_NO_LASSAT;
+			}
+			if (asStructureStats[id].type == REF_SAT_UPLINK && pEntry[i].limit == 0)
+			{
+				flags |= MPFLAGS_NO_UPLINK;
+			}
 		}
 	}
 
+	// If structure limits are enforced and VTOLs are disabled, disable also AA structures
+	if ((flags & (MPFLAGS_FORCELIMITS | MPFLAGS_NO_VTOLS)) == (MPFLAGS_FORCELIMITS | MPFLAGS_NO_VTOLS))
+	{
+		for (int i = 0; i < numStructureStats; i++)
+		{
+			if (asStructureStats[i].numWeaps > 0 && asStructureStats[i].psWeapStat[0]->surfaceToAir == SHOOT_IN_AIR)
+			{
+				for (int player = 0; player < MAX_PLAYERS; player++)
+				{
+					asStructureStats[i].upgrade[player].limit = 0;
+				}
+			}
+		}
+	}
+	// Disable related research according to disabledWhen in research.json
+	if (flags & MPFLAGS_FORCELIMITS)
+	{
+		RecursivelyDisableResearchByFlags(flags & ~(MPFLAGS_FORCELIMITS | MPFLAGS_NO_UPLINK));
+	}
+	/*
+	  Special rules for LasSat and Uplink which do not produce units and have no upgrades:
+	  - research can be disabled even if limits are not enforced
+	  - because of the research path, only disable Uplink if also LasSat is disabled
+	*/
+	if (flags & MPFLAGS_NO_LASSAT)
+	{
+		RecursivelyDisableResearchByFlags(MPFLAGS_NO_LASSAT);
+	}
+	if ((flags & (MPFLAGS_NO_LASSAT | MPFLAGS_NO_UPLINK)) == (MPFLAGS_NO_LASSAT | MPFLAGS_NO_UPLINK))
+	{
+		RecursivelyDisableResearchByFlags(MPFLAGS_NO_UPLINK);
+	}
 	freeLimitSet();
 }
 
