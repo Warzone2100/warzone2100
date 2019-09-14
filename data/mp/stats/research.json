@@ -337,6 +337,7 @@
         "statID": "Cannon2A-TMk1"
     },
     "R-Cyborg-Hvywpn-PulseLsr": {
+	"disabledWhen": 2,
         "iconID": "IMAGE_RES_CYBORGTECH",
         "id": "R-Cyborg-Hvywpn-PulseLsr",
         "msgName": "RES_CYW_H_PLAS",
@@ -383,6 +384,7 @@
         "statID": "Rocket-VTOL-HvyA-T"
     },
     "R-Cyborg-Metals01": {
+	"disabledWhen": 2,
         "iconID": "IMAGE_RES_CYBORGTECH",
         "id": "R-Cyborg-Metals01",
         "imdName": "icmolql.pie",
@@ -649,6 +651,7 @@
         "techCode": 1
     },
     "R-Cyborg-Transport": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_CYBORGTECH",
         "id": "R-Cyborg-Transport",
         "keyTopic": 1,
@@ -666,6 +669,7 @@
         "statID": "TransporterBody"
     },
     "R-Defense-AA-Laser": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-AA-Laser",
         "msgName": "RES_DEF_AALAS",
@@ -2997,6 +3001,7 @@
         "subgroupIconID": "IMAGE_RES_GRPUPG"
     },
     "R-Struc-VTOLPad-Upgrade02": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_STRUCTURETECH",
         "id": "R-Struc-VTOLPad-Upgrade02",
         "name": "Automated VTOL Rearming Mk2",
@@ -3098,6 +3103,7 @@
         "techCode": 1
     },
     "R-SuperTransport": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_CYBORGTECH",
         "id": "R-SuperTransport",
         "keyTopic": 1,
@@ -3360,6 +3366,7 @@
         "statID": "SensorTurret1Mk1"
     },
     "R-Sys-Sensor-UpLink": {
+	"disabledWhen": 8,
         "iconID": "IMAGE_RES_SYSTEMTECH",
         "id": "R-Sys-Sensor-UpLink",
         "keyTopic": 1,
@@ -4679,6 +4686,7 @@
         "subgroupIconID": "IMAGE_RES_GRPACC"
     },
     "R-Wpn-AAGun-Damage01": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-AAGun-Damage01",
         "msgName": "RES_W_AAD1",
@@ -5031,6 +5039,7 @@
         "techCode": 1
     },
     "R-Wpn-AAGun02": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-AAGun02",
         "keyTopic": 1,
@@ -5047,6 +5056,7 @@
         "statID": "AAGun2Mk1"
     },
     "R-Wpn-AAGun03": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-AAGun03",
         "keyTopic": 1,
@@ -5207,6 +5217,7 @@
         "subgroupIconID": "IMAGE_RES_GRPDAM"
     },
     "R-Wpn-Bomb01": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Bomb01",
         "imdName": "trlvtlhe.PIE",
@@ -7048,6 +7059,7 @@
         "statID": "HeavyLaser"
     },
     "R-Wpn-LasSat": {
+	"disabledWhen": 16,
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-LasSat",
         "keyTopic": 1,
@@ -7654,6 +7666,7 @@
         "statID": "Missile-HvySAM"
     },
     "R-Wpn-Missile-LtSAM": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Missile-LtSAM",
         "keyTopic": 1,
@@ -9163,6 +9176,7 @@
         "subgroupIconID": "IMAGE_RES_GRPACC"
     },
     "R-Wpn-Sunburst": {
+	"disabledWhen": 4,
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Sunburst",
         "name": "Sunburst AA Rocket Array",

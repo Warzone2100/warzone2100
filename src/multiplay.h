@@ -82,7 +82,13 @@ struct MULTIPLAYERINGAME
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
-#define MPFLAGS_FORCELIMITS 0x20  		///< Flag to force structure limits
+#define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
+#define MPFLAGS_NO_CYBORGS	0x02  		///< Flag for cyborgs disabled
+#define MPFLAGS_NO_VTOLS	0x04  		///< Flag for VTOLs disabled
+#define MPFLAGS_NO_UPLINK	0x08  		///< Flag for Satellite Uplink disabled
+#define MPFLAGS_NO_LASSAT	0x10  		///< Flag for Laser Satellite Command Post disabled
+#define MPFLAGS_FORCELIMITS	0x20  		///< Flag to force structure limits
+#define MPFLAGS_MAX		0x3f
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 	char		phrases[5][255];					// 5 favourite text messages.
 };

@@ -6149,10 +6149,7 @@ bool loadSaveResearch(const char *pFileName)
 			psPlRes = &asPlayerResList[plr][statInc];
 			// Copy the research status
 			psPlRes->ResearchStatus = (researched & RESBITS);
-			if (possible != 0)
-			{
-				MakeResearchPossible(psPlRes);
-			}
+			SetResearchPossible(psPlRes, possible);
 			psPlRes->currentPoints = points;
 			//for any research that has been completed - perform so that upgrade values are set up
 			if (researched == RESEARCHED)
@@ -6178,7 +6175,7 @@ static bool writeResearchFile(char *pFileName)
 		std::vector<WzString> possibles, researched, points;
 		for (int player = 0; player < game.maxPlayers; player++)
 		{
-			possibles.push_back(WzString::number(IsResearchPossible(&asPlayerResList[player][i])));
+			possibles.push_back(WzString::number(GetResearchPossible(&asPlayerResList[player][i])));
 			researched.push_back(WzString::number(asPlayerResList[player][i].ResearchStatus & RESBITS));
 			points.push_back(WzString::number(asPlayerResList[player][i].currentPoints));
 			if (IsResearchPossible(&asPlayerResList[player][i]) || (asPlayerResList[player][i].ResearchStatus & RESBITS) || asPlayerResList[player][i].currentPoints)
