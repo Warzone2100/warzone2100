@@ -61,15 +61,11 @@ function shuffleWeaponList(weaps)
 //Either fastFire or normal.
 function chooseWeaponType(weaps)
 {
-	var weaponType = weaps;
+	var weaponType = weaps.weapons;
 
 	if (isDefined(weaps.fastFire) && (random(100) < 50))
 	{
 		weaponType = weaps.fastFire;
-	}
-	else
-	{
-		weaponType = weaps.weapons;
 	}
 
 	return weaponType;

@@ -265,28 +265,30 @@ function lookForOil()
 {
 	var droids = enumGroup(oilGrabberGroup);
 	var oils = enumFeature(-1, OIL_RES).sort(distanceToBase);
-	var bestDroid = null;
-	var bestDist = 99999;
 
 	for (var i = 0, oilLen = oils.length; i < oilLen; i++)
 	{
+		var bestDroid;
+		var bestDist = Infinity;
+		var oil = oils[i];
+
 		for (var j = 0, drLen = droids.length; j < drLen; j++)
 		{
-			var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
-			var unsafe = enumRange(oils[i].x, oils[i].y, 6, ENEMIES, false).filter(isUnsafeEnemyObject);
-			if (unsafe.length === 0 && bestDist > dist && conCanHelp(droids[j].id, oils[i].x, oils[i].y))
+			var droid = droids[j];
+			var dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
+			var unsafe = enumRange(oil.x, oil.y, 6, ENEMIES, false).filter(isUnsafeEnemyObject);
+
+			if (unsafe.length === 0 && bestDist > dist && conCanHelp(droid.id, oil.x, oil.y))
 			{
-				bestDroid = droids[j];
+				bestDroid = droid;
 				bestDist = dist;
 			}
 		}
 
-		if (bestDroid && !stopExecution("oil" + oils[i].y * mapWidth * oils[i].x, 50000))
+		if (bestDroid && !stopExecution("oil" + oil.y * mapWidth * oil.x, 50000))
 		{
 			bestDroid.busy = true;
-			orderDroidBuild(bestDroid, DORDER_BUILD, structures.derricks, oils[i].x, oils[i].y);
-			bestDist = 99999;
-			bestDroid = null;
+			orderDroidBuild(bestDroid, DORDER_BUILD, structures.derricks, oil.x, oil.y);
 			return true;
 		}
 	}
@@ -545,33 +547,35 @@ function factoryBuildOrder()
 
 		var derrNum = countStruct(structures.derricks);
 		var facNum = countStruct(fac);
+		var allowedAmount = 0;
+
 		if (derrNum >= 18)
 		{
-			num = 5;
+			allowedAmount = 5;
 		}
 		else if (derrNum >= 14)
 		{
-			num = 4;
+			allowedAmount = 4;
 		}
 		else if (derrNum >= 9)
 		{
-			num = 3;
+			allowedAmount = 3;
 		}
 		else if (derrNum >= 6)
 		{
-			num = 2;
+			allowedAmount = 2;
 		}
 		else
 		{
-			num = MIN_FACTORY_COUNT;
+			allowedAmount = MIN_FACTORY_COUNT;
 		}
 
-		if (num >= 3 && getRealPower() < MIN_POWER)
+		if (allowedAmount >= 3 && getRealPower() < MIN_POWER)
 		{
-			num = 2;
+			allowedAmount = 2;
 		}
 
-		if (facNum < num && facNum < MAX_FACTORY_COUNT && countAndBuild(fac, num))
+		if (facNum < allowedAmount && facNum < MAX_FACTORY_COUNT && countAndBuild(fac, allowedAmount))
 		{
 			return true;
 		}

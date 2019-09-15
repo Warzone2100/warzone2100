@@ -124,7 +124,7 @@ function conCanHelp(droidID, x, y, help)
 
 	return (droid.order !== DORDER_BUILD &&
 		droid.order !== DORDER_LINEBUILD &&
-		(!help || (help && droid.order !== DORDER_HELPBUILD)) &&
+		(!help || (droid.order !== DORDER_HELPBUILD)) &&
 		droid.order !== DORDER_RTR &&
 		droid.order !== DORDER_DEMOLISH &&
 		droidCanReach(droid, x, y)
@@ -1023,7 +1023,6 @@ function rebuildStructures(threatRange)
 //xy coordinates. This is stored in the rebuildQueue variable.
 function buildAANearLoc(x, y)
 {
-	const MAX_BUILDERS = 2;
 	var structure = bestStructureIn(STANDARD_ANTI_AIR_DEFENSES);
 
 	if (!defined(structure))
