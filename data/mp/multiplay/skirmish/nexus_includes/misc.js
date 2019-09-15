@@ -306,10 +306,6 @@ function setTechBranch()
 	{
 		chance = 90;
 	}
-	else if (mapWidth >= LARGE_SIDE_LENGTH || mapHeight >= LARGE_SIDE_LENGTH)
-	{
-		chance = 75;
-	}
 	else if (mapWidth >= MEDIUM_SIDE_LENGTH || mapHeight >= MEDIUM_SIDE_LENGTH)
 	{
 		chance = 45;

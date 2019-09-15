@@ -253,72 +253,6 @@ function findNearestEnemyStructure(enemy)
 	return cacheThis(uncached, [enemy], enemy, 16000);
 }
 
-//Attack something.
-function attackWithGroup(enemy, targets)
-{
-	if (shouldCobraAttack())
-	{
-		var target;
-		var droids = chooseGroup();
-		if (!isDefined(enemy))
-		{
-			enemy = getMostHarmfulPlayer();
-		}
-
-		if (isDefined(targets) && targets.length > 0)
-		{
-			targets = targets.sort(distanceToBase);
-			target = objectInformation(targets[0]);
-		}
-		else
-		{
-			target = rangeStep();
-			if (!isDefined(target))
-			{
-				return;
-			}
-		}
-
-		for (var j = 0, l = droids.length; j < l; j++)
-		{
-			attackThisObject(droids[j].id, target);
-		}
-	}
-}
-
-//Mark a target for death.
-function chatTactic(enemy)
-{
-	if (!isDefined(enemy))
-	{
-		enemy = getMostHarmfulPlayer();
-	}
-
-	const MSG = lastMsg.slice(0, -1);
-	if ((MSG !== "target") && (playerAlliance(true).length))
-	{
-		sendChatMessage("target" + enemy, ALLIES);
-	}
-}
-
-//attacker is a player number. Attack a specific player.
-function attackStuff(attacker)
-{
-	if (!shouldCobraAttack() || stopExecution("attackStuff", 5000))
-	{
-		return;
-	}
-
-	var selectedEnemy = getMostHarmfulPlayer();
-	if (isDefined(attacker) && !allianceExistsBetween(attacker, me) && (attacker !== me))
-	{
-		selectedEnemy = attacker;
-	}
-
-	chatTactic(selectedEnemy);
-	attackWithGroup(selectedEnemy);
-}
-
 //Sensors know all your secrets. They will observe what is closest to Cobra base.
 function artilleryTactics()
 {
@@ -503,8 +437,13 @@ function attackThisObject(droidID, target)
 	}
 
 	var t = getObject(target.typeInfo, target.playerInfo, target.idInfo);
+	if (t === null)
+	{
+		return;
+	}
+
 	var isScav = isDefined(scavengerPlayer) && t.player === scavengerPlayer;
-	if ((d !== null) && droidReady(droidID) && (t !== null) && droidCanReach(d, t.x, t.y))
+	if (droidReady(droidID) && droidCanReach(d, t.x, t.y))
 	{
 		if (isScav && getMostHarmfulPlayer() !== scavengerPlayer)
 		{

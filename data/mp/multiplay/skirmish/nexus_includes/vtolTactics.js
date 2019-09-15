@@ -92,8 +92,8 @@ function tryChangingVtolGroupTarget(groupIdx)
 	}
 	else
 	{
+		var currentTargetWeight = getVtolTargetWeight(currentTarget);
 		newTargetWeight = getVtolTargetWeight(newTarget);
-		currentTargetWeight = getVtolTargetWeight(currentTarget);
 
 		//Or a much better one.
 		if (newTargetWeight >= (currentTargetWeight + 20))
@@ -138,8 +138,6 @@ function tryAttackingVtolTarget(group, targetData)
 
 function vtolAttack()
 {
-	var currentTargetWeight = 0;
-
 	for (var i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
 	{
 		var currGroup = groups.vtolAttackers[i];
@@ -215,7 +213,7 @@ function chooseVtolTarget(exclusive)
 {
 	var bestTarget;
 	var bestScore = 0;
-	var currScore = Infinity;
+	var currScore;
 
 	for (var i = 0; i < maxPlayers; ++i)
 	{

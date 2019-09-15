@@ -134,8 +134,6 @@ function tryBreakingAlliance()
 
 function tryFormingAlliances()
 {
-	var allies = getAllyPlayers();
-
 	if (!validAllianceTimeReached() || tooManyAlliances())
 	{
 		return;
