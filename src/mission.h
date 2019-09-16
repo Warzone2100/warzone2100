@@ -41,8 +41,6 @@ extern MISSION		mission;
 extern bool			offWorldKeepLists;
 extern DROID       *apsLimboDroids[MAX_PLAYERS];
 
-/** Return positions for vtols. */
-extern Vector2i asVTOLReturnPos[MAX_PLAYERS];
 extern bool Cheated;
 
 void initMission();
@@ -193,8 +191,6 @@ UDWORD	getCampaignNumber();
 void	setCampaignNumber(UDWORD number);
 bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop);
 
-/** Reset the vtol landing pos. */
-void resetVTOLLandingPos();
 
 /** This is called via a script function to place the Limbo droids once the mission has started. */
 void placeLimboDroids();

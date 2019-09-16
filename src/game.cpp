@@ -138,6 +138,9 @@ struct RUN_DATA
 	uint8_t leadership = 0;  ///< basic value that will be used on calculations of the flee probability.
 };
 
+// return positions for vtols, at one time.
+Vector2i asVTOLReturnPos[MAX_PLAYERS];
+
 struct GAME_SAVEHEADER
 {
 	char        aFileType[4];
@@ -1983,10 +1986,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		if (saveGameVersion >= VERSION_20)//V21
 		{
 			setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
-			for (inc = 0; inc < MAX_PLAYERS; inc++)
-			{
-				asVTOLReturnPos[inc] = saveGameData.asVTOLReturnPos[inc];
-			}
 		}
 
 		if (saveGameVersion >= VERSION_24)//V24
@@ -3099,15 +3098,6 @@ static void endian_SaveGameV(SAVE_GAME *psSaveGame, UDWORD version)
 	{
 		endian_udword(&psSaveGame->reinforceTime);
 	}
-	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
-	if (version >= VERSION_20)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
-			endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
-		}
-	}
 	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
 	if (version >= VERSION_19)
 	{
@@ -3681,10 +3671,6 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	if (version >= VERSION_20)//version 20
 	{
 		setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
-		for (i = 0; i < MAX_PLAYERS; ++i)
-		{
-			asVTOLReturnPos[i] = saveGameData.asVTOLReturnPos[i];
-		}
 	}
 
 	if (saveGameVersion >= VERSION_24)//V24
@@ -3869,7 +3855,6 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("aDefaultECM", aDefaultECM[i]);
 		save.setValue("aDefaultRepair", aDefaultRepair[i]);
 		save.setValue("colour", getPlayerColour(i));
-		save.setVector2i("VTOL_return_position", asVTOLReturnPos[i]);
 
 		std::priority_queue<int> experience = copy_experience_queue(i);
 		nlohmann::json recycled_droids = nlohmann::json::array();
@@ -3887,8 +3872,6 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		}
 		save.set("alliances", allies);
 		save.setValue("difficulty", game.skDiff[i]);
-
-		// RUN_DATA not saved -- is it still used?
 
 		save.setValue("position", NetPlay.players[i].position);
 		save.setValue("colour", NetPlay.players[i].colour);
@@ -4076,10 +4059,6 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 
 	//version 20
 	saveGame.bDroidsToSafetyFlag = (UBYTE)getDroidsToSafetyFlag();
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		saveGame.asVTOLReturnPos[i] = asVTOLReturnPos[i];
-	}
 
 	//version 24
 	saveGame.reinforceTime = missionGetReinforcementTime();

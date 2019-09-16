@@ -137,9 +137,6 @@ static LANDING_ZONE		sLandingZone[MAX_NOGO_AREAS];
 //flag to indicate when the droids in a Transporter are flown to safety and not the next mission
 static bool             bDroidsToSafety;
 
-// return positions for vtols
-Vector2i asVTOLReturnPos[MAX_PLAYERS];
-
 static UBYTE   missionCountDown;
 //flag to indicate whether the coded mission countdown is played
 static UBYTE   bPlayCountDown;
@@ -268,26 +265,11 @@ void initMission()
 		inc.x1 = inc.y1 = inc.x2 = inc.y2 = 0;
 	}
 
-	// init the vtol return pos
-	for (size_t i = 0; i < MAX_PLAYERS; ++i)
-	{
-		asVTOLReturnPos[i] = Vector2i(0, 0);
-	}
-
 	bDroidsToSafety = false;
 	setPlayCountDown(true);
 
 	//start as not cheating!
 	mission.cheatTime = 0;
-}
-
-// reset the vtol landing pos
-void resetVTOLLandingPos()
-{
-	for (size_t i = 0; i < MAX_PLAYERS; ++i)
-	{
-		asVTOLReturnPos[i] = Vector2i(0, 0);
-	}
 }
 
 //this is called everytime the game is quit
