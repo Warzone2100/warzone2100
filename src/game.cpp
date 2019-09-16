@@ -129,6 +129,15 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 static void plotFeature(char *backDropSprite);
 bool writeGameInfo(const char *pFileName);
 
+/** struct used to store the data for retreating. */
+struct RUN_DATA
+{
+	Vector2i sPos = Vector2i(0, 0); ///< position to where units should flee to.
+	uint8_t forceLevel = 0;  ///< number of units below which others might flee.
+	uint8_t healthLevel = 0; ///< health percentage value below which it might flee. This value is used for groups only.
+	uint8_t leadership = 0;  ///< basic value that will be used on calculations of the flee probability.
+};
+
 struct GAME_SAVEHEADER
 {
 	char        aFileType[4];
@@ -1980,14 +1989,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			}
 		}
 
-		if (saveGameVersion >= VERSION_22)//V22
-		{
-			for (inc = 0; inc < MAX_PLAYERS; inc++)
-			{
-				asRunData[inc] = saveGameData.asRunData[inc];
-			}
-		}
-
 		if (saveGameVersion >= VERSION_24)//V24
 		{
 			missionSetReinforcementTime(saveGameData.reinforceTime);
@@ -3098,15 +3099,6 @@ static void endian_SaveGameV(SAVE_GAME *psSaveGame, UDWORD version)
 	{
 		endian_udword(&psSaveGame->reinforceTime);
 	}
-	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
-	if (version >= VERSION_22)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			endian_sdword(&psSaveGame->asRunData[i].sPos.x);
-			endian_sdword(&psSaveGame->asRunData[i].sPos.y);
-		}
-	}
 	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
 	if (version >= VERSION_20)
 	{
@@ -3695,14 +3687,6 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		}
 	}
 
-	if (version >= VERSION_22)//version 22
-	{
-		for (i = 0; i < MAX_PLAYERS; ++i)
-		{
-			asRunData[i] = saveGameData.asRunData[i];
-		}
-	}
-
 	if (saveGameVersion >= VERSION_24)//V24
 	{
 		missionSetReinforcementTime(saveGameData.reinforceTime);
@@ -4095,12 +4079,6 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		saveGame.asVTOLReturnPos[i] = asVTOLReturnPos[i];
-	}
-
-	//version 22
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		saveGame.asRunData[i] = asRunData[i];
 	}
 
 	//version 24
