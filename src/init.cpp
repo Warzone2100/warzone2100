@@ -1316,8 +1316,6 @@ bool stageThreeShutDown()
 		return false;
 	}
 
-	resetVTOLLandingPos();
-
 	setScriptWinLoseVideo(PLAY_NONE);
 
 	return true;

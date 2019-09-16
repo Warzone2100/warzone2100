@@ -839,16 +839,6 @@ void orderUpdateDroid(DROID *psDroid)
 			secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 		}
 		break;
-	case DORDER_LEAVEMAP:
-		if ((psDroid->pos.x < TILE_UNITS * 2) ||
-		    (psDroid->pos.x > (mapWidth - 2)*TILE_UNITS) ||
-		    (psDroid->pos.y < TILE_UNITS * 2) ||
-		    (psDroid->pos.y > (mapHeight - 2)*TILE_UNITS) ||
-		    (psDroid->action == DACTION_NONE))
-		{
-			psDroid->order = DroidOrder(DORDER_NONE);
-		}
-		break;
 	case DORDER_RTR:
 	case DORDER_RTR_SPECIFIED:
 		if (psDroid->order.psObj == nullptr)
@@ -1510,20 +1500,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
 		break;
 	case DORDER_RTB:
-		// send vtols back to their return pos
-		if (isVtolDroid(psDroid) && !bMultiPlayer && psDroid->player != selectedPlayer)
-		{
-			int iDX = asVTOLReturnPos[psDroid->player].x;
-			int iDY = asVTOLReturnPos[psDroid->player].y;
-
-			if (iDX && iDY)
-			{
-				psDroid->order = DroidOrder(DORDER_LEAVEMAP);
-				actionDroid(psDroid, DACTION_MOVE, iDX, iDY);
-				break;
-			}
-		}
-
 		for (psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
@@ -3837,7 +3813,7 @@ const char *getDroidOrderName(DROID_ORDER order)
 	case DORDER_PATROL:                   return "DORDER_PATROL";
 	case DORDER_REARM:                    return "DORDER_REARM";
 	case DORDER_RECOVER:                  return "DORDER_RECOVER";
-	case DORDER_LEAVEMAP:                 return "DORDER_LEAVEMAP";
+	case DORDER_UNUSED_6:                 return "DORDER_UNUSED_6";
 	case DORDER_RTR_SPECIFIED:            return "DORDER_RTR_SPECIFIED";
 	case DORDER_CIRCLE:                   return "DORDER_CIRCLE";
 	case DORDER_HOLD:                     return "DORDER_HOLD";
@@ -3886,7 +3862,7 @@ const char *getDroidOrderKey(DROID_ORDER order)
 	case DORDER_PATROL:                   return "P";
 	case DORDER_REARM:                    return "RE";
 	case DORDER_RECOVER:                  return "RCV";
-	case DORDER_LEAVEMAP:                 return "L";
+	case DORDER_UNUSED_6:                 return "Err";
 	case DORDER_RTR_SPECIFIED:            return "RTR";
 	case DORDER_CIRCLE:                   return "C";
 	case DORDER_HOLD:                     return "H";

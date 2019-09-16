@@ -78,7 +78,7 @@ enum DroidOrderType
 	DORDER_PATROL,          /**< move between two way points. */
 	DORDER_REARM,           /**< 32 - order a vtol to rearming pad. */
 	DORDER_RECOVER,         /**< pick up an artifact. */
-	DORDER_LEAVEMAP,        /**< 34 - vtol flying off the map. */
+	DORDER_UNUSED_6,
 	DORDER_RTR_SPECIFIED,   /**< return to repair at a specified repair center. */
 	DORDER_CIRCLE = 40,     /**< circles target location and engage. */
 	DORDER_HOLD,            /**< hold position until given next order. */
