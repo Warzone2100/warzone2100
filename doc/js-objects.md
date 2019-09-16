@@ -60,7 +60,6 @@ In addition, the following properties are defined:
   * ```DORDER_HELPBUILD``` Order a droid to help build something.
   * ```DORDER_LINEBUILD``` Order a droid to build something repeatedly in a line.
   * ```DORDER_REPAIR``` Order a droid to repair something.
-  * ```DORDER_RETREAT``` Order a droid to retreat back to HQ.
   * ```DORDER_PATROL``` Order a droid to patrol.
   * ```DORDER_DEMOLISH``` Order a droid to demolish something.
   * ```DORDER_EMBARK``` Order a droid to embark on a transport.

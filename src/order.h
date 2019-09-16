@@ -29,14 +29,8 @@
 
 #include "orderdef.h"
 
-/** Retreat positions for the players. This is a global instance of RUN_DATA.*/
-extern RUN_DATA asRunData[MAX_PLAYERS];
-
 /** \brief Gives the droid an order. */
 void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
-
-/** \brief Initializes the global instance of RUN_DATA. */
-void initRunData();
 
 /** \brief Checks targets of droid's order list. */
 void orderCheckList(DROID *psDroid);
@@ -120,21 +114,12 @@ void secondaryCheckDamageLevel(DROID *psDroid);
 /** \brief Makes all the members of a numeric group to have the same secondary states. */
 void secondarySetAverageGroupState(UDWORD player, UDWORD group);
 
-/** \brief Does a moral check for a player. */
-void orderMoralCheck(UDWORD player);
-
-/** \brief Does a moral check for a group. */
-void orderGroupMoralCheck(DROID_GROUP *psGroup);
-
 /** \brief Gets the name of an order. */
 const char *getDroidOrderName(DROID_ORDER order);
 const char *getDroidOrderKey(DROID_ORDER order);
 
 /** \brief Gets a player's transporter. */
 DROID *FindATransporter(DROID const *embarkee);
-
-/** \brief Does a health check on a droid. */
-void orderHealthCheck(DROID *psDroid);
 
 /** \brief Sets the state of a secondary order for a factory. */
 bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State);
