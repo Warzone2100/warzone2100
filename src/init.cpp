@@ -1227,6 +1227,7 @@ bool stageThreeInitialise()
 	// Re-inititialise some static variables.
 
 	playerBuiltHQ = false;
+	bInTutorial = false;
 
 	resizeRadar();
 
