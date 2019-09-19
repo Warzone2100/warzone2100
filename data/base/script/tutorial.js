@@ -468,6 +468,7 @@ function eventStructureBuilt(structure, droid)
 
 function eventGameInit()
 {
+	setRevealStatus(true); // light tiles.
 	setTutorialMode(true);
 }
 
