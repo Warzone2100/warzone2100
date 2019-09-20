@@ -1137,6 +1137,17 @@ static void printchatmsg(const char *text, int from, bool team = false)
 	char msg[MAX_CONSOLE_STRING_LENGTH];
 
 	sstrcpy(msg, getPlayerName(from));
+	if (from == selectedPlayer)
+	{
+		if (team)
+		{
+			sstrcat(msg, _(" (Ally)"));
+		}
+		else
+		{
+			sstrcat(msg, _(" (Global)"));
+		}
+	}
 	sstrcat(msg, ": ");					// separator
 	sstrcat(msg, text);					// add message
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);	// display

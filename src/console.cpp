@@ -305,6 +305,10 @@ static PIELIGHT getConsoleTextColor(int player)
 		{
 			if (aiCheckAlliances(player, selectedPlayer))
 			{
+				if (selectedPlayer == player)
+				{
+					return WZCOL_TEXT_BRIGHT;
+				}
 				return WZCOL_CONS_TEXT_USER_ALLY;
 			}
 			else
@@ -312,7 +316,7 @@ static PIELIGHT getConsoleTextColor(int player)
 				return WZCOL_CONS_TEXT_USER_ENEMY;
 			}
 		}
-		// Friend-foe is off
+
 		return WZCOL_TEXT_BRIGHT;
 	}
 }
@@ -333,7 +337,7 @@ static void console_drawtext(WzText &display, PIELIGHT colour, int x, int y, CON
 	display.render(x, y, colour);
 }
 
-// Show global (mode=true) or team (mode=false) history messages
+// Show global (mode=false) or team (mode=true) history messages
 void displayOldMessages(bool mode)
 {
 	int startpos = 0;
