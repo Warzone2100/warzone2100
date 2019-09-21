@@ -130,16 +130,19 @@ function choosePersonalityWeapon(type)
 
 	if (type === "TANK")
 	{
-		const PLASMA_LAUNCHER = "PlasmaHeavy";
 		weaps = chooseRandomWeapon();
 		weaponList = shuffleWeaponList(chooseWeaponType(weaps));
 
-		//on hard difficulty and above.
-		if (componentAvailable("tracked01") && (random(100) <= 1))
+		//randomly choose an unbalanced and overpowered weapon if on hard or insane difficulty.
+		if (difficulty >= HARD && componentAvailable("tracked01") && (random(100) <= 2))
 		{
-			if((difficulty === HARD) || (difficulty === INSANE))
+			if (difficulty >= INSANE && random(100) <= 50)
 			{
-				weaponList.push(PLASMA_LAUNCHER);
+				weaponList.push("MortarEMP");
+			}
+			else
+			{
+				weaponList.push("PlasmaHeavy");
 			}
 		}
 
