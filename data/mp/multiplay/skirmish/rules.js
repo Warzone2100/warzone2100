@@ -176,7 +176,7 @@ function setupGame()
 {
 	//Use light fog for multiplayer
 	setRevealStatus(true);
-	
+
 	if (tilesetType == "URBAN")
 	{
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
@@ -327,6 +327,13 @@ function eventGameInit()
 
 		// enable cyborgs components that can't be enabled with research
 		makeComponentAvailable("CyborgSpade", playnum);
+
+		// give bots the ability to produce some unused weapons
+		if (playerData[playnum].isAI)
+		{
+			makeComponentAvailable("PlasmaHeavy", playnum);
+			makeComponentAvailable("MortarEMP", playnum);
+		}
 
 		if (baseType == CAMP_CLEAN)
 		{

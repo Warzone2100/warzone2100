@@ -141,25 +141,6 @@ function playerAlliance(ally)
 	return cacheThis(uncached, [ally], undefined, 5000);
 }
 
-//Change stuff depending on difficulty.
-function diffPerks()
-{
-	switch (difficulty)
-	{
-		case EASY:
-		case MEDIUM:
-			//Do nothing
-			break;
-		case INSANE: //Fall through
-		case HARD:
-			makeComponentAvailable("PlasmaHeavy", me);
-			makeComponentAvailable("MortarEMP", me);
-			break;
-		default:
-			break;
-	}
-}
-
 //return real power levels.
 function getRealPower(player)
 {
