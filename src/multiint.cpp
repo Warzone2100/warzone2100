@@ -2045,7 +2045,7 @@ static void addAiChooser(int player)
 
 	// button height * how many AI + possible buttons (openclosed)
 	int gap = MULTIOP_PLAYERSH - ((sButInit.height) * (capAIs + 1 + mpbutton));
-	int gapDiv = capAIs - 1;
+	int gapDiv = (capAIs > 1) ? capAIs - 1 : 1; //avoid zero division with only 1 AI
 	gap = std::min(gap, 5 * gapDiv);
 
 	// Open button
