@@ -43,7 +43,6 @@ function eventGameInit()
 
 	researchComplete = false;
 	initializeGrudgeCounter();
-	diffPerks();
 	forceHover = checkIfSeaMap();
 	turnOffCyborgs = forceHover;
 	choosePersonality();
