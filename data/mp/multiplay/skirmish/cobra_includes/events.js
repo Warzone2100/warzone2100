@@ -64,11 +64,14 @@ function eventStartLevel()
 	//That (me * 100) part is to help reduce multiple Cobra AI's from coinciding stuff on the same frame. Of course,
 	//higher "me"s may impact the bot in some, hopefully, minimal manner.
 	var delay = me * 100;
-	setTimer("buildOrders", 300 + delay);
-	setTimer("produce", 400 + delay);
-	setTimer("checkAllForRepair", 600 + delay);
-	setTimer("research", 800 + delay);
-	setTimer("lookForOil", 1000 + delay);
+	//Make Cobra think "slower" on easy difficulty for some of its basic functions
+	var easyTimeDelay = (difficulty === EASY) ? 5000 : 0;
+
+	setTimer("buildOrders", 300 + delay + (2 * easyTimeDelay));
+	setTimer("produce", 400 + delay + easyTimeDelay);
+	setTimer("checkAllForRepair", 600 + delay + (4 * easyTimeDelay));
+	setTimer("research", 800 + delay + (3 * easyTimeDelay));
+	setTimer("lookForOil", 1000 + delay + (2 * easyTimeDelay));
 	setTimer("repairDroidTactics", 1200 + delay);
 	setTimer("artilleryTactics", 1400 + delay);
 	setTimer("vtolTactics", 1600 + delay);
