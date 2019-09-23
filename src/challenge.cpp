@@ -49,7 +49,7 @@
 #define CHALLENGE_X				D_W + 16
 #define CHALLENGE_Y				D_H + 5
 #define CHALLENGE_W				610
-#define CHALLENGE_H				220
+#define CHALLENGE_H				215
 
 #define CHALLENGE_HGAP			9
 #define CHALLENGE_VGAP			9
@@ -206,10 +206,11 @@ bool addChallenges()
 	// Add Banner Label
 	W_LABINIT sLabInit;
 	sLabInit.formID		= CHALLENGE_BANNER;
+	sLabInit.FontID		= font_large;
 	sLabInit.id		= CHALLENGE_LABEL;
 	sLabInit.style		= WLAB_ALIGNCENTRE;
 	sLabInit.x		= 0;
-	sLabInit.y		= 3;
+	sLabInit.y		= 0;
 	sLabInit.width		= CHALLENGE_W - (2 * CHALLENGE_HGAP);	//CHALLENGE_W;
 	sLabInit.height		= CHALLENGE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText		= WzString::fromUtf8("Challenge");

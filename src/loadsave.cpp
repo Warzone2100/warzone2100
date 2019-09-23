@@ -62,7 +62,7 @@
 #define LOADSAVE_X				D_W + 16
 #define LOADSAVE_Y				D_H + 5
 #define LOADSAVE_W				610
-#define LOADSAVE_H				220
+#define LOADSAVE_H				215
 
 #define MAX_SAVE_NAME			60
 
