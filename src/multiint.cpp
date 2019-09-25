@@ -3130,25 +3130,6 @@ static void loadMapSettings2()
 		ini.endGroup();
 	}
 
-	if (!challengeActive)
-	{
-		switch (psLevel->type)
-		{
-		case MULTI_SKIRMISH2:
-			game.techLevel = 2;
-			break;
-		case MULTI_SKIRMISH3:
-			game.techLevel = 3;
-			break;
-		case MULTI_SKIRMISH4:
-			game.techLevel = 4;
-			break;
-		default:
-			game.techLevel = 1;
-			break;
-		}
-	}
-
 	// Fix duplicate or unset player positions.
 	PlayerMask havePosition = 0;
 	for (int i = 0; i < MAX_PLAYERS; ++i)
