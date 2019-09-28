@@ -309,7 +309,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 	// draw radar on/off feature
 	if (!getRevealStatus() && !TEST_TILE_VISIBLE(selectedPlayer, WTile))
 	{
-		return WZCOL_RADAR_BACKGROUND;
+		return WZCOL_TRANSPARENT_BOX;
 	}
 
 	switch (radarDrawMode)
