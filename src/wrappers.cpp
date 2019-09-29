@@ -56,6 +56,9 @@ static bool		bPlayerHasLost = false;
 static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
+void	runCreditsScreen();
+
+static	UDWORD	lastChange = 0;
 int hostlaunch = 0;				// used to detect if we are hosting a game via command line option.
 
 static uint32_t lastTick = 0;
@@ -207,6 +210,10 @@ TITLECODE titleLoop()
 		runTutorialMenu();
 		break;
 
+	case CREDITS:
+		runCreditsScreen();
+		break;
+
 	case OPTIONS:
 		runOptionsMenu();
 		break;
@@ -341,6 +348,33 @@ void initLoadingScreen(bool drawbdrop)
 	// Start with two cleared buffers as the hacky loading screen code re-uses old buffers to create its effect.
 	pie_ScreenFlip(CLEAR_BLACK);
 	pie_ScreenFlip(CLEAR_BLACK);
+}
+
+
+// fill buffers with the static screen
+void startCreditsScreen()
+{
+	lastChange = gameTime;
+
+	pie_LoadBackDrop(SCREEN_CREDITS);
+
+	pie_SetFogStatus(false);
+	pie_ScreenFlip(CLEAR_BLACK);//init loading
+}
+
+/* This function does nothing - since it's already been drawn */
+void runCreditsScreen()
+{
+	// Check for key presses now.
+	if (keyReleased(KEY_ESC)
+	    || keyReleased(KEY_SPACE)
+	    || mouseReleased(MOUSE_LMB)
+	    || gameTime - lastChange > 4000)
+	{
+		lastChange = gameTime;
+		changeTitleMode(QUIT);
+	}
+	return;
 }
 
 // shut down the loading screen

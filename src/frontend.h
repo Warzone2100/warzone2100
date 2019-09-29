@@ -32,7 +32,7 @@ enum tMode
 	OPTIONS,		// 3 options menu
 	GAME,			// 4
 	TUTORIAL,		// 5  tutorial/fastplay
-	TITLE_UNUSED,	// 6
+	CREDITS,		// 6  credits
 	PROTOCOL,		// 7  MULTIPLAYER, select proto
 	MULTIOPTION,	// 8 MULTIPLAYER, select game options
 	FORCESELECT,	// 9 MULTIPLAYER, Force design screen

@@ -2230,6 +2230,9 @@ void changeTitleMode(tMode mode)
 	case TITLE:
 		startTitleMenu();
 		break;
+	case CREDITS:
+		startCreditsScreen();
+		break;
 	case MULTI:
 		startMultiPlayerMenu();		// goto multiplayer menu
 		break;
