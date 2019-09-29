@@ -12,6 +12,7 @@
 *.la
 *.gmo
 *.pyc
+*.wz
 # windows generated binary files:
 *.obj
 *.lib
