@@ -252,7 +252,7 @@ bool runTitleMenu()
 	switch (id)
 	{
 	case FRONTEND_QUIT:
-		changeTitleMode(QUIT);
+		changeTitleMode(CREDITS);
 		break;
 	case FRONTEND_MULTIPLAYER:
 		changeTitleMode(MULTI);
