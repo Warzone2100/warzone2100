@@ -1,4 +1,4 @@
-SUBDIRS = mods music
+SUBDIRS = music
 
 stamp:
 	touch stamp
