@@ -7,6 +7,16 @@ const release	= true;
 
 ///////\\\\\\\
 
+/* ---=== For buildIn AI ===---
+
+Clean code
++ Remove nastyFeatures algorythms
+- Remove most useless comments
++ Remove "if version"
+
+*/
+
+
 // после релиза:
 //		Не нарываться на тюрельки за забором.
 //		3.2+ Поработать над чатом
@@ -39,11 +49,10 @@ const release	= true;
 
 ///////\\\\\\\
 //v1.00 (Встроенная версия)
+//		Remove old game version dependency (if version)
+//		Remove old nfAlgorythm for game v3.1
+//		Slightly improve performance, set order limits
 
-
-
-//(BuildIn Version)
-//(Встроенная версия)
 //v2.5
 //		Вновь работает в 3.1.5
 //		Работает в 3.3.0-beta1
@@ -85,19 +94,6 @@ const release	= true;
 //		Улучшен модуль строителей
 //		улучшено строительство базы на островных картах
 //		Теперь верно строит базу на нестандартных картах, где стартовые рабочии разделены и разнесены по карте, таких как Jungle
-
-
-// Странная ошибка (вроде исправил):
-/*
-error   |05:26:57: [js_pickStructLocation:2218] Bad position (-1, 0)
-error   |05:26:57: [callFunction:195] 0 : rigDefence(obj = [object Object]) at multiplay/skirmish/bc-master/builders.js:300
-error   |05:26:57: [callFunction:195] 1 : buildersOrder() at multiplay/skirmish/bc-master/builders.js:252
-error   |05:26:57: [callFunction:195] 2 : <global>() at -1
-info    |05:26:57: [callFunction:198] Uncaught exception calling function "buildersOrder" at line 300: ReferenceError: startX >= 0 && startX < mapWidth && startY >= 0 && startY < mapHeight failed in js_pickStructLocation at line 2218
-info    |05:26:57: [callFunction:198] Assert in Warzone: qtscript.cpp:198 (false), last script event: 'N/A'
-
- * */
-
 
 //v2.2 Changes
 //		При нехватке денег, строит 3-й модуль на завод (нашёл и исправил косяк)
@@ -210,8 +206,6 @@ include("multiplay/skirmish/bonecrusher/weapons.js");
 
 
 //Hard CPU-load algorythms
-//Алгоритм "nastyFeatures" - очистки деревьев, домов и прочего мусора рядом с ресурсами и базой (тяжёлый, не совсем корректный, но пусть будет, т.к. самоотключающийся)
-var nfAlgorithm = false;
 var weakCPU = true;
 
 
@@ -362,11 +356,6 @@ const research_synapse = ["R-Struc-Research-Upgrade09"];
 const research_power = ["R-Struc-Power-Upgrade03a"];
 const research_armor = ["R-Vehicle-Metals09"];
 const research_sensor = ["R-Sys-Sensor-UpLink"];
-
-//Переменная мусора
-//Всмысле мерзкие домики мешаются рядом с нефтяными вышками или бочками!
-var nastyFeatures=[];
-var nastyFeaturesLen;
 
 //Переназначаются в функции prepeareProduce() что бы не читерить.
 var light_bodies=["Body3MBT","Body2SUP","Body4ABT","Body1REC"];
@@ -747,23 +736,6 @@ function init(){
 	
 	if(!release) for ( var p = 0; p < maxPlayers; ++p ) {debugMsg("startPositions["+p+"] "+startPositions[p].x+"x"+startPositions[p].y, 'temp');}
 	
-	var _trash = enumFeature(ALL_PLAYERS, "").filter(function(e){if(e.damageable)return true;return false;});
-	nastyFeatures = nastyFeatures.concat(_trash.filter(function(e){
-		if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2))return true;
-													   return false;
-	}));
-	allResources.forEach(function(r){
-		nastyFeatures = nastyFeatures.concat(_trash.filter(function(e){
-			if(distBetweenTwoPoints_p(r.x,r.y,e.x,e.y) < 7)return true;
-														   return false;
-		}));
-	});
-	nastyFeatures = removeDuplicates(nastyFeatures, 'id');
-	if (nastyFeatures.length != 0 )debugMsg("Желательно уничтожить мусор на карте: "+nastyFeatures.length,'init');
-	nastyFeaturesLen = nastyFeatures.length;
-	nastyFeatures = []; // Сброс, потому что без проверки по propulsionCanReach, переинициализируется в nastyFeaturesClean();
-	//nastyFeatures.forEach(function(e){debugMsg(e.id+" "+e.x+"x"+e.y+" "+e.name+" "+e.damageable+" "+e.player, 'init');});
-	
 	//Просто дебаг информация
 	var oilDrums = enumFeature(ALL_PLAYERS, "OilDrum");
 	debugMsg("На карте "+oilDrums.length+" бочек с нефтью", 'init');
@@ -816,7 +788,6 @@ function letsRockThisFxxxingWorld(init){
 			else setTimer("buildersOrder", 120000+me*100);
 			setTimer("checkEventIdle", 30000+me*100);	//т.к. eventDroidIdle глючит, будем дополнительно отслежвать.
 			setTimer("doResearch", 30000+me*100);
-			if(nfAlgorithm)setTimer("nastyFeaturesClean", 35000+me*100);
 			setTimer("defenceQueue", 60000+me*100);
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
 			setTimer("targetRegular", 65000+me*100);
@@ -836,7 +807,6 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("defenceQueue", 60000+me*100);
 			setTimer("targetRegular", 32000+me*100);
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
-			if(nfAlgorithm)setTimer("nastyFeaturesClean", 35000+me*100);
 		
 		} else if(difficulty == INSANE){
 		
@@ -854,8 +824,6 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("doResearch", 12000+me*100);
 			setTimer("defenceQueue", 30000+me*100);
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
-			if(nfAlgorithm)setTimer("nastyFeaturesClean", 35000+me*100);
-		
 		}
 	
 		if(!release){

@@ -273,47 +273,7 @@ function targetCyborgs(){
 	if(enemy.length == 0 && ally.length != 0)enemy = getEnemyNearAlly();
 	
 	if(enemy.length != 0) target = enemy; //Заменяем
-	
-	if(target.length != 0 || nastyFeatures.length != 0){
-		if(nastyFeatures.length == 0) target = sortByDistance(target, _cyborgs[0], 1);
-		_cyborgs.forEach(function(e){
-			if(nastyFeatures.length != 0 && enemy.length == 0){ //Так сразу тут не понять, вообщем так:
-				var _target = target; //Копируем общую переменную целей
-				nastyFeatures = sortByDistance(nastyFeatures, e); //Сортируем глобальный мусор в отношении данного киборга
-				target = target.concat(nastyFeatures); //Примешиваем к общим целям
-				target = sortByDistance(target, e, 1); //Пересортировываем ещё раз быстро с одним выводом в отношении данного киборга
-				var _deleted = nastyFeatures.shift(); // удаляем из глобальной переменной мусора (даже если атака будет неуспешной - не страшно, у нас есть nastyFeaturesClean();)
-			}
-			
-			var feature = false;
-			var err = true;
-			try {if(target[0].type == FEATURE){feature = true;}err = false;}
-			catch(e) {if(!release)debugMsg("!! "+e.message+' !!', 'error'); feature = false;}
-			
-			if(err){
-				if(nastyFeatures.length != 0 && enemy.length == 0){
-					target = _target; //Вернуть обратно
-				}
-				return;
-			}
-			
-			if(feature == true){ //Если всё таки мусор ближе, атакуем
-//				debugMsg("Cyborgs purge trash #"+target[0].id+" "+target[0].name+" at "+target[0].x+"x"+target[0].y, 'targeting');
-				try {orderDroidObj(e, DORDER_ATTACK, target[0]);}
-				catch(e) {if(!release)debugMsg("!!! "+e.message+' !!!', 'error');}
-//				debugMsg(nastyFeatures.length+"/"+nastyFeaturesLen+' Delete trash '+_deleted.name+' at '+_deleted.x+'x'+_deleted.y, 'targeting');
-				target = _target; // и возвращаем переменную целей
-				return;
-			}
-			if(feature == false){
-//				debugMsg("Cyborgs attack "+target[0].name+" at "+target[0].x+"x"+target[0].y, 'targeting');
-				orderDroidLoc_p(e, DORDER_SCOUT, target[0].x, target[0].y);
-				if(nastyFeatures.length != 0 && enemy.length == 0) target = _target;
-			}
-		});
-		return;
-	}
-	
+
 	_cyborgs.forEach(function(e){
 		groupAddDroid(armyRegular, e);
 //		debugMsg("Cyborg --> Regular +1", 'group');
