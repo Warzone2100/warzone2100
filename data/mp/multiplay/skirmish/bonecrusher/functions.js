@@ -327,7 +327,7 @@ function stats(){
 	debugMsg("Weapons: "+guns.length+"; known="+avail_guns.length+"; cyborgs="+avail_cyborgs.length+"; vtol="+avail_vtols.length, 'stats');
 	debugMsg("Base: "+base.x+"x"+base.y+", r="+base_range+", safe="+getInfoNear(base.x,base.y,'safe',base_range).value+"; defense="+enumStruct(me, DEFENSE).length+"; labs="+enumStruct(me, RESEARCH_LAB).length+"; factory="+enumStruct(me, FACTORY).length+"; cyb_factory="+enumStruct(me, CYBORG_FACTORY).length+"; vtol="+enumStruct(me, VTOL_FACTORY).length+", full="+isFullBase(me), 'stats');
 	debugMsg("Bodies: light="+light_bodies.length+"; medium="+medium_bodies.length+"; heavy="+heavy_bodies.length, 'stats');
-	debugMsg("Misc: enemyDist="+enemyDist+"; nasty features="+nastyFeatures.length+"/"+nastyFeaturesLen+"; barrels="+enumFeature(ALL_PLAYERS, "").filter(function(e){if(e.player == 99)return true;return false;}).length
+	debugMsg("Misc: enemyDist="+enemyDist+"; barrels="+enumFeature(ALL_PLAYERS, "").filter(function(e){if(e.player == 99)return true;return false;}).length
 		+"; known defence="+defence.length+"; known AA="+AA_defence.length+"; AA_queue="+AA_queue.length, 'stats');
 	debugMsg("Ally="+ally.length+"; enemy="+enemy.length, 'stats');
 	debugMsg("Produce: "+produceTrigger.length, 'stats');
@@ -363,41 +363,6 @@ function stats(){
 //		debugMsg(e.name+' '+e.x+'x'+e.y+'; type='+e.type+'; id='+e.id+'; player='+e.player+'; selected='+e.selected+'; health='+e.health+'; armour='+e.armour+'; thermal='+e.thermal+'; damageable='+e.damageable, 'stats');
 //	});
 }
-
-
-function nastyFeaturesClean(){
-	if(!running)return;
-	if(nfAlgorithm == false){
-		removeTimer("nastyFeaturesClean");
-		debugMsg("nastyFeaturesClean stop", "end");
-		return;
-	}
-	if(nastyFeatures.length != 0) return;
-	var _cyborgs = enumGroup(armyCyborgs);
-	if(_cyborgs.length == 0) return;
-	
-	nastyFeatures=[];
-	var _trash = enumFeature(ALL_PLAYERS, "").filter(function(e){if(e.damageable)return true;return false;});
-	nastyFeatures = nastyFeatures.concat(_trash.filter(function(e){
-		if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2))return true;
-		return false;
-	}));
-	allResources.forEach(function(r){
-		nastyFeatures = nastyFeatures.concat(_trash.filter(function(e){
-			if(distBetweenTwoPoints_p(r.x,r.y,e.x,e.y) < 7)return true;
-			return false;
-		}));
-	});
-	if(nastyFeatures.length != 0){
-		nastyFeatures = removeDuplicates(nastyFeatures, 'id').filter(function(e){if(droidCanReach(_cyborgs[0], e.x, e.y))return true;return false;});
-		nastyFeaturesLen = nastyFeatures.length;
-	}else{
-		// теперь чисто, выход от сюда навсегда
-		nfAlgorithm = false;
-	}
-}
-
-
 
 //Функция определяет подвергается ли ремонту наша цель
 //Если да, возвращяем объект, кто ремонтирует нашу цель
@@ -440,7 +405,7 @@ function isBeingRepaired(who){
 
 		}
 	}
-	return false;
+
 }
 
 //Какой-то бардак в функциях движка
@@ -691,63 +656,6 @@ function gameStop(condition){
 		}
 	}
 		running = false;
-	
-		/* Пока есть баг: http://developer.wz2100.net/ticket/4663
-		if(difficulty == EASY){
-			removeTimer("produceDroids");
-			removeTimer("produceVTOL");
-			removeTimer("checkEventIdle");
-			removeTimer("doResearch");
-			removeTimer("defenceQueue");
-			removeTimer("produceCyborgs");
-			removeTimer("buildersOrder");
-			removeTimer("targetVTOL");
-		} else if(difficulty == MEDIUM){
-			removeTimer("produceDroids");
-			removeTimer("produceVTOL");
-			removeTimer("produceCyborgs");
-			removeTimer("buildersOrder");
-			removeTimer("checkEventIdle");
-			removeTimer("doResearch");
-			removeTimer("defenceQueue");
-			removeTimer("targetVTOL");
-			if(nfAlgorithm)removeTimer("nastyFeaturesClean");
-		} else if(difficulty == HARD){
-			removeTimer("targetPartisan");
-			removeTimer("buildersOrder");
-			removeTimer("targetJammers");
-			removeTimer("targetCyborgs");
-			removeTimer("produceDroids");
-			removeTimer("produceVTOL");
-			removeTimer("targetFixers");
-			removeTimer("produceCyborgs");
-			removeTimer("doResearch");
-			removeTimer("defenceQueue");
-			removeTimer("targetRegular");
-			removeTimer("targetVTOL");
-			if(nfAlgorithm)removeTimer("nastyFeaturesClean");
-		} else if(difficulty == INSANE){
-			removeTimer("targetPartisan");
-			removeTimer("buildersOrder");
-			removeTimer("targetJammers");
-			removeTimer("targetCyborgs");
-			removeTimer("produceDroids");
-			removeTimer("produceVTOL");
-			removeTimer("targetFixers");
-			removeTimer("produceCyborgs");
-			removeTimer("doResearch");
-			removeTimer("defenceQueue");
-			removeTimer("targetRegular");
-			removeTimer("targetVTOL");
-			if(nfAlgorithm)removeTimer("nastyFeaturesClean");
-		}
-			
-
-		if(!release)removeTimer("stats");
-		removeTimer("perfMonitor");
-		removeTimer("checkProcess");
-		*/
-	
 }
 
 function playerLoose(player){
