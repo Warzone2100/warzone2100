@@ -61,7 +61,7 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 			return _globalInfoNear[x+'_'+y+'_'+command];
 		}else if(command == 'defended'){
 			
-			defenses = enumStruct(me, DEFENSE).filter(function(e){if(e.status == BUILT) return true; return false;});
+			var defenses = enumStruct(me, DEFENSE).filter(function(e){if(e.status == BUILT) return true; return false;});
 			for ( var d in defenses ) {
 				if ( distBetweenTwoPoints_p(x,y,defenses[d].x,defenses[d].y) < range ) { 
 					_globalInfoNear[x+'_'+y+'_'+command].value = true;
@@ -73,7 +73,7 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 			
 		}else if(command == 'buildDef'){
 
-			_builder = enumGroup(buildersHunters);
+			var _builder = enumGroup(buildersHunters);
 			if(_builder.length == 0) _builder = enumDroid(me,DROID_CONSTRUCT);
 			if(_builder.length == 0){ //Невозможно в данный момент проверить, запоминаем на 10 секунд
 				_globalInfoNear[x+'_'+y+'_'+command].updateIn = 10000;
@@ -163,7 +163,7 @@ function _getInfoNear(x,y,command,range,time,obj,cheat,inc){
 			return _globalInfoNear[x][y][command];
 		}else if(command == 'defended'){
 			
-			defenses = enumStruct(me, DEFENSE).filter(function(e){if(e.status == BUILT) return true; return false;});
+			var defenses = enumStruct(me, DEFENSE).filter(function(e){if(e.status == BUILT) return true; return false;});
 			for ( var d in defenses ) {
 				if ( distBetweenTwoPoints_p(x,y,defenses[d].x,defenses[d].y) < range ) { 
 					_globalInfoNear[x][y][command].value = true;
@@ -177,7 +177,7 @@ function _getInfoNear(x,y,command,range,time,obj,cheat,inc){
 			
 		}else if(command == 'buildDef'){
 			
-			_builder = enumGroup(buildersHunters);
+			var _builder = enumGroup(buildersHunters);
 			if(_builder.length == 0) _builder = enumDroid(me,DROID_CONSTRUCT);
 			if(_builder.length == 0){ //Невозможно в данный момент проверить, запоминаем на 10 секунд
 				_globalInfoNear[x][y][command].updateIn = 10000;
@@ -387,7 +387,7 @@ function isBeingRepaired(who){
 		}
 		case STRUCTURE: {
 //			debugMsg("Нас атакует вражесая башня ["+who.player+"]",5);
-			droids = enumDroid(who.player,DROID_CONSTRUCT,me);
+			var droids = enumDroid(who.player,DROID_CONSTRUCT,me);
 			if ( droids.length != 0 ) {
 				for ( var i in droids ) {
 					if ( distBetweenTwoPoints_p(who.x,who.y,droids[i].x,droids[i].y) <= 3 ) {
@@ -418,7 +418,7 @@ function isBeingRepaired(who){
 //В голову не идёт как это исправить своими силами, забил пока..
 function _doResearch(){
 	debugMsg("doResearch()", 'research');
-	avail_research = enumResearch().filter(function(e){if(e.started)return false;return true;});
+	var avail_research = enumResearch().filter(function(e){if(e.started)return false;return true;});
 	var labs = enumStruct(me,RESEARCH_LAB).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});;
 	var way = false;
 	
@@ -463,7 +463,7 @@ function doResearch(){
 	if(!getInfoNear(base.x,base.y,'safe',base_range).value && playerPower(me) < 300 && avail_guns.length != 0) return;
 
 	
-	avail_research = enumResearch().filter(function(e){
+	var avail_research = enumResearch().filter(function(e){
 		//		debugMsg(e.name+' - '+e.started+' - '+e.done, 'research_advance');
 		if(e.started)return false;return true;
 	});
@@ -544,17 +544,17 @@ function doResearch(){
 //если num не передан, возвращает полный сортированный массив
 //если num равен 1, то всё равно возвращается массив но с единственным объектом
 function sortByDistance(arr, obj, num, reach){
-	if ( typeof reach === "underfined" ) reach = false;
+	if ( typeof reach === "undefined" ) reach = false;
 	if ( typeof num === "undefined" || num == null || num == false) num = 0;
 	else if ( arr.length == 1 ) num = 1;
 
 	if ( num == 1 ) {
 
-		b = Infinity;
-		c = new Array();
+		var b = Infinity;
+		var c = new Array();
 		for ( var i in arr ) {
 			if(reach)if(!droidCanReach(obj, arr[i].x, arr[i].y))continue;
-			a = distBetweenTwoPoints_p( obj.x, obj.y, arr[i].x, arr[i].y );
+			var a = distBetweenTwoPoints_p( obj.x, obj.y, arr[i].x, arr[i].y );
 			if ( a < b ) {
 				b = a;
 				c[0] = arr[i];
@@ -602,7 +602,7 @@ function checkProcess(){
 		gameStop("loose");
 	}
 	
-	for ( plally in bc_ally ){
+	for ( var plally in bc_ally ){
 		if(bc_ally[plally] == me) continue;
 
 		if(getInfoNear(base.x,base.y,'safe',base_range).value){
@@ -740,8 +740,8 @@ function getEnemyNearAlly(){
 //Функция возвращяет вышки, о которых в данный момент не известно ничего
 //Просто сравниваем два массива объектов и фильтруем в третий
 function getUnknownResources(){
-	notSee = new Array();
-	iSee = getSeeResources();
+	var notSee = new Array();
+	var iSee = getSeeResources();
 	if ( iSee.length == 0 ) return allResources;
 	notSee = allResources.filter(function (value) {
 		for ( var i in iSee ) {
@@ -755,7 +755,7 @@ function getUnknownResources(){
 
 //Функция возвращает все видимые ресурсы, свободные, свои и занятые кем либо
 function getSeeResources(){
-	iSee = new Array();
+	var iSee = new Array();
 	iSee = iSee.concat(enumFeature(me, "OilResource"));
 	for ( var e = 0; e < maxPlayers; ++e ){
 //		if ( !allianceExistsBetween(me,e) ) continue; //Выкидываем вражеские
@@ -836,7 +836,7 @@ function getEnemyCloseBase(){
 
 function getOurDefences(){
 	var targ = [];
-	for ( a in ally ){
+	for ( var a in ally ){
 		targ = targ.concat(enumStruct(a[i], DEFENSE).filter(function(e){if(e.status == 1)return true; return false;}));
 	}
 	targ = targ.concat(enumStruct(me, DEFENSE).filter(function(e){if(e.status == 1)return true; return false;}));
@@ -999,7 +999,7 @@ function fixResearchWay(way){
 //	debugMsg('Check tech '+way.length, 'research');
 	var _out = [];
 	
-	for(i in way){
+	for(var i in way){
 //		debugMsg('Check: '+way[i], 'research');
 		var _res = getResearch(way[i]);
 		if(_res == null){
@@ -1018,7 +1018,7 @@ function addPrimaryWay(){
 	if(!(research_primary instanceof Array)) return false;
 	if(researchStrategy == "Smudged"){
 		research_primary.reverse();
-		for(i in research_primary){
+		for(var i in research_primary){
 			research_way.unshift([research_primary[i]]);
 		}
 		debugMsg("research_primary smudged", 'research');
@@ -1096,7 +1096,7 @@ function attackObjects(targets, warriors, num, scouting){
 
 	targets = targets.slice(0,num);
 
-	for ( i in targets ) {
+	for ( var i in targets ) {
 		var target = isBeingRepaired(targets[i]);
 		if ( target != false) {
 			targets[i] = target;
@@ -1104,7 +1104,7 @@ function attackObjects(targets, warriors, num, scouting){
 	}
 
 	if ( targets.length >= warriors.length ) {
-		for ( i = 0, len = warriors.length; i<len; ++i ) {
+		for ( var i = 0, len = warriors.length; i<len; ++i ) {
 			if(scouting) orderDroidLoc_p(warriors[i], DORDER_SCOUT, targets[i].x, targets[i].y);
 			else orderDroidObj_p( warriors[i], DORDER_ATTACK, targets[i] );
 		}
@@ -1171,10 +1171,10 @@ function checkEventIdle(){
 
 //для 3.2
 function recycleBuilders(){
-	factory = enumStruct(me, FACTORY);
-	factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
+	var factory = enumStruct(me, FACTORY);
+	var factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
 	if(factory_ready.length != 0){
-		_builders = enumDroid(me,DROID_CONSTRUCT);
+		var _builders = enumDroid(me,DROID_CONSTRUCT);
 		_builders.forEach(function(e){
 			orderDroid(e, DORDER_RECYCLE);
 		});

@@ -521,7 +521,7 @@ const research_black = [
 function chooseResearch(){
 //	var _research = debugName;
 	if(typeof forceResearch !== 'undefined'){
-		_research = forceResearch;
+		var _research = forceResearch;
 		setResearchWay(_research);
 	}else{
 		var _w=["None","Black","Green","Red","Yellow","Orange","Blue","Rich"];

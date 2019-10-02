@@ -255,6 +255,7 @@ function targetPartisan(){
 	}
 }
 
+
 function targetCyborgs(){
 //	debugMsg("targetCyborgs():", 'targeting');
 	
@@ -274,6 +275,16 @@ function targetCyborgs(){
 	
 	if(enemy.length != 0) target = enemy; //Заменяем
 
+	if(target.length != 0){
+		target = sortByDistance(target, _cyborgs[0], 1);
+		_cyborgs.forEach(function(e){
+//			debugMsg("Cyborgs attack "+target[0].name+" at "+target[0].x+"x"+target[0].y, 'targeting');
+			orderDroidLoc_p(e, DORDER_SCOUT, target[0].x, target[0].y);
+		});
+		return;
+	}
+	
+	//Если киборгам нечем заняться, добавляем их к общей армии
 	_cyborgs.forEach(function(e){
 		groupAddDroid(armyRegular, e);
 //		debugMsg("Cyborg --> Regular +1", 'group');

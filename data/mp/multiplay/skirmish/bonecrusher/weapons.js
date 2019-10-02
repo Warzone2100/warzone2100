@@ -12,7 +12,7 @@ function _weaponsGetGuns(num){
 	var _weapon, _points, _dbg;
 	
 	//Цикл по всем типам стволов
-	for ( t in guns_type ) {
+	for ( var t in guns_type ) {
 		
 		_weapon = false;
 		_points = 0;
@@ -21,13 +21,13 @@ function _weaponsGetGuns(num){
 //		debugMsg("Check typ: "+t, 'weap');
 		
 		//Цикл по стволам одного типа
-		for ( g in guns_type[t] ) {
+		for ( var g in guns_type[t] ) {
 //			debugMsg("Check wpn: "+guns_type[t][g][0]+" - "+getResearch(guns_type[t][g][0]), 'weap');
 			if (getResearch(guns_type[t][g][0]).done){ _weapon = guns_type[t][g][1]; _dbg = research_name[guns_type[t][g][0]]; break; }
 		}
 		
 		//Цикл по исследованиям одного типа
-		for ( r in guns_pts[t] ) {
+		for ( var r in guns_pts[t] ) {
 //			debugMsg("Check pts: "+guns_pts[t][r]+" - "+getResearch(guns_pts[t][r]), 'weap');
 			if(getResearch(guns_pts[t][r]).done) _points++;
 		}
@@ -49,7 +49,7 @@ function _weaponsGetGuns(num){
 		
 		var _out = [];
 		
-		for ( w in _weapons ){
+		for ( var w in _weapons ){
 			debugMsg(_weapons[w][0]+", "+_weapons[w][1], 'weap');
 			for(var i=0;i<_weapons[w][1];i++) _out.push(_weapons[w][0]);
 		}
@@ -178,7 +178,7 @@ guns_type['ls'] = [
 ["R-Wpn-HvyLaser", "HeavyLaser"],					//Heavy Laser
 ["R-Wpn-Laser02", "Laser2PULSEMk1"],				//Pulse Laser
 ["R-Wpn-Laser01", "Laser3BEAMMk1"],					//Laser - Flashlight
-]
+];
 
 //Рельсы
 guns_type['rl'] = [
