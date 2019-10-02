@@ -160,7 +160,6 @@ function eventStructureBuilt(structure, droid){
 	*/
 	buildersOrder();
 	
-	
 	switch (structure.stattype) {
 		case RESEARCH_LAB:
 			queue("doResearch", 1000);
@@ -287,6 +286,8 @@ function eventAttacked(victim, attacker) {
 	//Если атака с самолёта рядом с базой, строим ПВО
 	if(isFixVTOL(attacker) && distBetweenTwoPoints_p(victim.x,victim.y,base.x,base.y) < base_range) AA_queue.push({x:victim.x,y:victim.y});
 	
+	var lastImpact;
+	
 	//Если атака по стратегическим точкам, направляем основную армию
 	if(((victim.type == DROID && victim.droidType == DROID_CONSTRUCT) || (victim.type == STRUCTURE)) && gameTime > eventsRun['targetRegular']){
 		eventsRun['targetRegular'] = gameTime + 5000;
@@ -350,7 +351,7 @@ function eventDestroyed(obj){
 }
 
 function eventChat(sender, to, message) {
-	debugMsg('from: '+sender+', to: '+to+', msg: '+message, 'chat')
+//	debugMsg('from: '+sender+', to: '+to+', msg: '+message, 'chat')
 	if(sender != me)
 	if(allianceExistsBetween(me, sender))
 	if(message.substr(0,3) == "bc ")

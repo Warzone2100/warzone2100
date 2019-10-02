@@ -241,7 +241,7 @@ function buildersOrder(order,target) {
 				queue("buildersOrder", 1000);
 			}
 		}else{
-			_hunters = enumGroup(buildersHunters);
+			var _hunters = enumGroup(buildersHunters);
 			if(_hunters.length > 2){
 				_hunters = sortByDistance(_hunters, base, 1);
 				groupAddDroid(buildersMain, _hunters[0]);
