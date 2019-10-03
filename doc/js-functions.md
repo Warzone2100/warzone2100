@@ -585,6 +585,10 @@ Get the limits of the scrollable area of the map as an area object. (3.2+ only)
 
 Load the level with the given name.
 
+## autoSave()
+
+Perform automatic save
+
 ## enumRange(x, y, range[, filter[, seen]])
 
 Returns an array of game objects seen within range of given position that passes the optional filter
