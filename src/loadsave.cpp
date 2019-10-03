@@ -28,7 +28,7 @@
 #include <ctype.h>
 #include <physfs.h>
 #include "lib/framework/physfs_ext.h"
-#include <time.h>
+#include <ctime>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -54,6 +54,10 @@
 #include "intdisplay.h"
 #include "mission.h"
 #include "lib/gamelib/gtime.h"
+#include "console.h"
+#include "keybind.h"
+#include "keymap.h"
+#include "qtscript.h"
 
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
@@ -83,6 +87,8 @@
 #define LOADENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
+#define AUTOSAVE_CAM_DIR "savegames/campaign/auto"
+#define AUTOSAVE_SKI_DIR "savegames/skirmish/auto"
 
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -102,7 +108,7 @@ char				saveGameName[256];          //the name of the save game to load from the
 char				sRequestResult[PATH_MAX];   // filename returned;
 bool				bRequestLoad = false;
 LOADSAVE_MODE		bLoadSaveMode;
-
+static const char *savedTitle;
 static const char *sExt = ".gam";
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -131,6 +137,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	bool bLoad = true;
 	char NewSaveGamePath[PATH_MAX] = {'\0'};
 	bLoadSaveMode = savemode;
+	savedTitle = title;
 	UDWORD			slotCount;
 	static char	sSlotCaps[totalslots][totalslotspace];
 	static char	sSlotTips[totalslots][totalslotspace];
@@ -146,6 +153,15 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	case LOAD_FRONTEND_SKIRMISH:
 	case LOAD_INGAME_SKIRMISH:
 		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+		break;
+	case LOAD_FRONTEND_MISSION_AUTO:
+	case LOAD_INGAME_MISSION_AUTO:
+	case LOAD_MISSIONEND_AUTO:
+		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign/auto");
+		break;
+	case LOAD_FRONTEND_SKIRMISH_AUTO:
+	case LOAD_INGAME_SKIRMISH_AUTO:
+		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish/auto");
 		break;
 	case SAVE_MISSIONEND:
 	case SAVE_INGAME_MISSION:
@@ -166,7 +182,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	debug(LOG_SAVE, "called (%d, %s)", bLoad, title);
 
 	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
-	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH))
+	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
+	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
 	{
 		if (!bMultiPlayer || (NetPlay.bComms == 0))
 		{
@@ -284,6 +301,24 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	// fill slots.
 	slotCount = 0;
 
+	// The first slot is for [auto] or [..]
+	{
+		W_BUTTON *button;
+
+		button = (W_BUTTON *)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
+		if (bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO)
+		{
+			button->pTip = _("Parent directory");
+			button->pText = "[..]";
+		}
+		else
+		{
+			button->pTip = mode? _("Autosave directory") : _("Autosave directory (not allowed for saving)");
+			button->pText = "[auto]";
+		}
+		slotCount++;
+	}
+
 	debug(LOG_SAVE, "Searching \"%s\" for savegames", NewSaveGamePath);
 
 	// add savegame filenames minus extensions to buttons
@@ -337,7 +372,8 @@ bool closeLoadSave()
 	bLoadSaveUp = false;
 
 	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
-	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH))
+	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
+	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
 	{
 
 		if (!bMultiPlayer || (NetPlay.bComms == 0))
@@ -450,10 +486,14 @@ bool findLastSave()
 	lastSaveTime = 0;
 	lastSaveMP = false;
 	lastSavePath[0] = '\0';
-	ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+	ssprintf(NewSaveGamePath, "%scampaign/", SaveGamePath);
 	foundCAM = findLastSaveFrom(NewSaveGamePath);
-	ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+	ssprintf(NewSaveGamePath, "%scampaign/auto/", SaveGamePath);
+	foundCAM |= findLastSaveFrom(NewSaveGamePath);
+	ssprintf(NewSaveGamePath, "%sskirmish/", SaveGamePath);
 	foundMP = findLastSaveFrom(NewSaveGamePath);
+	ssprintf(NewSaveGamePath, "%sskirmish/auto/", SaveGamePath);
+	foundMP |= findLastSaveFrom(NewSaveGamePath);
 	if (foundMP)
 	{
 		lastSaveMP = true;
@@ -484,14 +524,36 @@ bool runLoadSave(bool bResetMissionWidgets)
 	}
 	if (bMultiPlayer)
 	{
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+		if (bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO)
+		{
+			ssprintf(NewSaveGamePath, "%s%s/auto/", SaveGamePath, "skirmish");
+		}
+		else
+		{
+			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
+		}
 	}
 	else
 	{
-		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+		if (bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO)
+		{
+			ssprintf(NewSaveGamePath, "%s%s/auto/", SaveGamePath, "campaign");
+		}
+		else
+		{
+			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
+		}
+	}
+	if (id == LOADENTRY_START && mode) // [auto] or [..], ignore click for saves
+	{
+		int iLoadSaveMode = (int)bLoadSaveMode; // for evil integer arithmetics
+		bLoadSaveMode = (enum LOADSAVE_MODE)(iLoadSaveMode ^ 16); // toggle _AUTO bit
+		closeLoadSave(); // decrement game time / pause counters
+		addLoadSave(bLoadSaveMode, savedTitle); // restart in other directory
+		return false;
 	}
 	// clicked a load entry
-	if (id >= LOADENTRY_START  &&  id <= LOADENTRY_END)
+	else if (id > LOADENTRY_START  &&  id <= LOADENTRY_END)
 	{
 		W_BUTTON *slotButton = (W_BUTTON *)widgGetFromID(psRequestScreen, id);
 
@@ -744,4 +806,79 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 {
 	pie_BoxFill(x - 1, y - 1, x + w + 1, y + h + 1, WZCOL_MENU_BORDER);
 	pie_BoxFill(x, y , x + w, y + h, WZCOL_MENU_BACKGROUND);
+}
+
+static void freeAutoSaveSlot(const char *path)
+{
+	char **i, **files;
+	files = PHYSFS_enumerateFiles(path);
+	int nfiles = 0;
+	for (i = files; *i != nullptr; ++i)
+	{
+		// See if this filename contains the extension we're looking for
+		if (!strstr(*i, sExt))
+		{
+			// If it doesn't, move on to the next filename
+			continue;
+		}
+		nfiles++;
+	}
+	if (nfiles < totalslots)
+	{
+		PHYSFS_freeList(files);
+		return;
+	}
+
+	// too many autosaves, let's delete the oldest
+	char oldestSavePath[PATH_MAX];
+	time_t oldestSaveTime = time(nullptr);
+	for (i = files; *i != nullptr; ++i)
+	{
+		char savefile[PATH_MAX];
+
+		// See if this filename contains the extension we're looking for
+		if (!strstr(*i, sExt))
+		{
+			// If it doesn't, move on to the next filename
+			continue;
+		}
+		/* Figure save-time */
+		snprintf(savefile, sizeof(savefile), "%s/%s", path, *i);
+		time_t savetime = WZ_PHYSFS_getLastModTime(savefile);
+		if (difftime(savetime, oldestSaveTime) < 0.0)
+		{
+			oldestSaveTime = savetime;
+			strcpy(oldestSavePath, savefile);
+		}
+	}
+	PHYSFS_freeList(files);
+	deleteSaveGame(oldestSavePath);
+}
+
+void autoSave()
+{
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating
+	if (runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated)
+	{
+		return;
+	}
+	const char *dir = bMultiPlayer? AUTOSAVE_SKI_DIR : AUTOSAVE_CAM_DIR;
+	freeAutoSaveSlot(dir);
+
+	time_t now = time(nullptr);
+	struct tm *timeinfo = localtime(&now);
+	char savedate[PATH_MAX];
+	strftime(savedate, sizeof(savedate), "%F_%H%M%S", timeinfo);
+
+	char *withoutTechlevel = mapNameWithoutTechlevel(getLevelName());
+	char savefile[PATH_MAX];
+	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, withoutTechlevel, savedate);
+	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
+	{
+		console("AutoSave %s", savefile);
+	}
+	else
+	{
+		console("AutoSave %s failed", savefile);
+	}
 }

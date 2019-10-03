@@ -83,6 +83,7 @@
 #include "seqdisp.h"
 #include "ai.h"
 #include "advvis.h"
+#include "loadsave.h"
 
 #define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
@@ -4100,6 +4101,16 @@ static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- ## autoSave()
+//--
+//-- Perform automatic save
+//--
+static QScriptValue js_autoSave(QScriptContext *, QScriptEngine *engine)
+{
+	autoSave();
+	return QScriptValue();
+}
+
 //-- ## enumRange(x, y, range[, filter[, seen]])
 //--
 //-- Returns an array of game objects seen within range of given position that passes the optional filter
@@ -6116,6 +6127,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("getMissionType", engine->newFunction(js_getMissionType));
 	engine->globalObject().setProperty("getRevealStatus", engine->newFunction(js_getRevealStatus));
 	engine->globalObject().setProperty("setRevealStatus", engine->newFunction(js_setRevealStatus));
+	engine->globalObject().setProperty("autoSave", engine->newFunction(js_autoSave));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

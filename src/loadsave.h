@@ -36,7 +36,12 @@ enum LOADSAVE_MODE
 	LOAD_INGAME_SKIRMISH,
 	SAVE_MISSIONEND,
 	SAVE_INGAME_MISSION,
-	SAVE_INGAME_SKIRMISH
+	SAVE_INGAME_SKIRMISH,
+	LOAD_FRONTEND_MISSION_AUTO = 16,// internal use only
+	LOAD_MISSIONEND_AUTO,		// internal use only
+	LOAD_INGAME_MISSION_AUTO,	// internal use only
+	LOAD_FRONTEND_SKIRMISH_AUTO,	// internal use only
+	LOAD_INGAME_SKIRMISH_AUTO	// internal use only
 };
 
 /***************************************************************************/
@@ -79,5 +84,7 @@ void deleteSaveGame(char *saveGameName);
 void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 
 bool findLastSave();
+
+void autoSave();
 
 #endif // __INCLUDED_SRC_LOADSAVE_H__

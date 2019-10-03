@@ -281,6 +281,7 @@ function eventGameLoaded()
 function eventGameInit()
 {
 	setupGame();
+	setTimer("autoSave", 10*60*1000);
 }
 
 function setLimits()

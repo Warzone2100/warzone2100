@@ -1166,7 +1166,9 @@ int realmain(int argc, char *argv[])
 
 	make_dir(SaveGamePath, "savegames", nullptr); 	// save games
 	PHYSFS_mkdir("savegames/campaign");		// campaign save games
+	PHYSFS_mkdir("savegames/campaign/auto");	// campaign autosave games
 	PHYSFS_mkdir("savegames/skirmish");		// skirmish save games
+	PHYSFS_mkdir("savegames/skirmish/auto");	// skirmish autosave games
 
 	make_dir(ScreenDumpPath, "screenshots", nullptr);	// for screenshots
 

@@ -408,6 +408,7 @@ function eventGameInit()
 	{
 		setTimer("weatherCycle", 45000);
 	}
+	setTimer("autoSave", 10*60*1000);
 }
 
 // /////////////////////////////////////////////////////////////////
