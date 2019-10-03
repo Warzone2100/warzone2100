@@ -70,7 +70,7 @@ function prepeareProduce(){
 //		for(i in avail_guns) debugMsg(avail_guns[i], 'weap');
 		
 		//Сайборги заполонили!
-		var avail_cyborgs=[];
+		avail_cyborgs=[];
 		var _cyb=cyborgs.filter(function(e){if(getResearch(e[0]).done)return true;return false;}).sort(function (a,b){
 			if(getResearch(a[0]).points < getResearch(b[0]).points ) return -1;
 			if(getResearch(a[0]).points > getResearch(b[0]).points ) return 1;
@@ -82,7 +82,7 @@ function prepeareProduce(){
 		avail_cyborgs.reverse();
 		
 		//В.В.иП.
-		var avail_vtols=[];
+		avail_vtols=[];
 		var _vtols=vtols.filter(function(e){if(getResearch(e[0]).done)return true;return false;}).sort(function (a,b){
 			if(getResearch(a[0]).points < getResearch(b[0]).points ) return -1;
 			if(getResearch(a[0]).points > getResearch(b[0]).points ) return 1;

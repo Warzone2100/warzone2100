@@ -408,48 +408,6 @@ function isBeingRepaired(who){
 
 }
 
-//Какой-то бардак в функциях движка
-//enumResearch() - возвращает список ТОЛЬКО тех, которые можем стартануть
-//getResearch() - возвращет объект любой запрошенной технологии
-//объект содержит .done и .started которые отвечают за завершённую или запущенную технологию
-//почему бы не сделать что бы enumResearch() возвращал объект ВСЕХ технологий
-//в котором бы содержалась значения .done .started и конежно же .available
-//вместо того что сделано сейчас, можно было бы легко использовать filter()
-//В голову не идёт как это исправить своими силами, забил пока..
-function _doResearch(){
-	debugMsg("doResearch()", 'research');
-	var avail_research = enumResearch().filter(function(e){if(e.started)return false;return true;});
-	var labs = enumStruct(me,RESEARCH_LAB).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});;
-	var way = false;
-	
-	if(labs.length == 0 ){
-		debugMsg("Нет свободных лабораторий", 'research');
-		return;
-	}
-	
-	if ( avail_research.length == 0 ){
-		debugMsg("Nothing research, "+labs.length+" labs idle..", 'research');
-		return;
-	}
-	
-	if ( research_way.length != 0 ) {
-		way = research_way[0].filter(function(e){if(e.done||e.started)return false;return true;});
-		if (way.length == 0){
-			research_way.shift();
-			debugMsg("Another way is complete, restart", 'research');
-			queue("doResearch", 1000);
-			return;
-		}
-	}
-	
-	if ( research_way.length == 0 ) {
-		debugMsg("Empty research ways, going random..", 'research');
-		//TODO random research here..
-	}
-	
-	
-}
-
 //Функция предерживается приоритетов исследований
 //и ровномерно распределяет по свободным лабораториям
 //и должна вызыватся в 3-х случаях (не в цикле)
@@ -740,10 +698,9 @@ function getEnemyNearAlly(){
 //Функция возвращяет вышки, о которых в данный момент не известно ничего
 //Просто сравниваем два массива объектов и фильтруем в третий
 function getUnknownResources(){
-	var notSee = new Array();
 	var iSee = getSeeResources();
 	if ( iSee.length == 0 ) return allResources;
-	notSee = allResources.filter(function (value) {
+	var notSee = allResources.filter(function (value) {
 		for ( var i in iSee ) {
 			if ( value.x == iSee[i].x && value.y == iSee[i].y ) return false;
 		}
