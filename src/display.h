@@ -194,6 +194,7 @@ void	setDesiredPitch(SDWORD pitch);
 
 #define MAXDISTANCE	(5000)
 #define MINDISTANCE	(0)
+#define MINDISTANCE_CONFIG (1600)
 #define STARTDISTANCE	(2500)
 #define OLD_START_HEIGHT (1500) // only used in savegames <= 10
 
