@@ -46,6 +46,7 @@ include("multiplay/skirmish/bonecrusher/performance.js");
 include("multiplay/skirmish/bonecrusher/chatting.js");
 include("multiplay/skirmish/bonecrusher/tech.js");
 include("multiplay/skirmish/bonecrusher/weapons.js");
+include("multiplay/skirmish/bonecrusher/build-normal.js");
 
 /*
  * 
@@ -147,14 +148,12 @@ var bc_ally=[]; //Союзные ИИ BoneCrusher-ы
 
 var avail_research = [];	//Массив возможных исследований, заполняется в функции doResearch();
 
-
 var scavengerPlayer = -1;
 
 var buildersMain = newGroup();
 var buildersHunters = newGroup();
 
 var policy = [];
-policy['build'] = 'standart';
 
 //Фитчи, не совместимые с 3.1.5
 var nf = [];
@@ -247,7 +246,6 @@ var cyborgs=[
 ["R-Cyborg-Hvywpn-Acannon", "Cyb-Hvybod-Acannon", "Cyb-Hvywpn-Acannon"],	//Super autocannon
 ["R-Cyborg-Hvywpn-PulseLsr", "Cyb-Hvybod-PulseLsr","Cyb-Hvywpn-PulseLsr"],	//super pulse laser
 ];
-
 
 var bodies=[
 //	===== Средняя броня (металическая)
@@ -424,17 +422,14 @@ function init(){
 		if(alliancesType == 3) debugMsg("Исследования раздельные", 'init');
 	}
 	if(nearResources.length >= 24){
-		//TODO
-		//		debugMsg("Играем по тактике богатых карт.", 'init');
-		//include("multiplay/skirmish/bonecrusher/build-rich.js");
-		include("multiplay/skirmish/bonecrusher/build-normal.js");
 		policy['build'] = 'rich';
 		initBase();
 	}else{
-		include("multiplay/skirmish/bonecrusher/build-normal.js");
+		policy['build'] = 'standart';
 	}
 	
 	debugMsg("Policy build order = "+policy['build'], 'init');
+	debugMsg("nf Policy = "+nf['policy'], 'init');
 
 	
 	//Research way
@@ -604,6 +599,8 @@ function welcome(){
 function letsRockThisFxxxingWorld(init){
 	debugMsg("Старт/Run", 'init');
 	
+	include("multiplay/skirmish/bonecrusher/weap-init.js");
+	
 	//Первых военных в группу
 	enumDroid(me,DROID_CYBORG).forEach(function(e){groupAddDroid(armyCyborgs, e);});
 	enumDroid(me,DROID_WEAPON).forEach(function(e){groupAddDroid(armyCyborgs, e);}); // <-- Это не ошибка, первых бесплатных определяем как киборгов (работа у них будет киборгская)
@@ -714,6 +711,21 @@ function debugMsg(msg,level){
 	debug("bc["+timeMsg+"]{"+debugName+"}("+level+"): "+msg);
 }
 
-function eventStartLevel() {
+/*function eventStartLevel() {
 	queue("init", 1000);
+}*/
+
+function eventGameLoaded(){
+	queue("init", 1000);
+}
+
+function eventGameSaving(){
+	running = false;
+}
+
+function eventGameSaved(){
+	running = true;
+	playerData.forEach( function(data, player) {
+		chat(player, ' from '+debugName+': '+chatting('saved'));
+	});
 }

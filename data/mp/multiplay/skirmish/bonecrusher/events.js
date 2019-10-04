@@ -1,6 +1,6 @@
 function eventResearched(research, structure, player) {
 	
-	if (gameTime < 1000) return;
+	if (!running) return;
 	
 	debugMsg("Новая технология \""+research_name[research.name]+"\" ["+research.name+"]", 'research');
 	prepeareProduce();

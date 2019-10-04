@@ -8,8 +8,6 @@ function prepeareProduce(){
 	//Если есть HQ
 	var hq = enumStruct(me, HQ).filter(function (e){if(e.status == BUILT)return true;return false;});
 	if (hq.length != 0){
-		
-		
 		//Составляем корпуса
 		light_bodies=[];
 		medium_bodies=[];
@@ -116,7 +114,6 @@ function produceDroids(){
 	//	debugMsg("Have builders: "+builders.length+"; limits: "+builders_limit, 'production');
 	//	debugMsg("Have warriors="+groupSize(armyRegular)+" partisan="+groupSize(armyPartisans), 'production');
 	if(droid_factories.length != 0){
-		
 		var _body=light_bodies;
 		if(droid_factories[0].modules >= 1 && playerPower(me)>500 && medium_bodies.length != 0) _body = medium_bodies;
 		if(droid_factories[0].modules == 2 && playerPower(me)>1500 && heavy_bodies.length != 0) _body = heavy_bodies;
@@ -169,7 +166,6 @@ function produceDroids(){
 		if(light_bodies.length != 0 && avail_guns.length != 0){
 //			if( ( (groupSize(armyPartisans) < 7 || playerPower(me) > 250) && groupSize(armyPartisans) < maxPartisans) || !getInfoNear(base.x,base.y,'safe',base_range).value){
 			if( (groupSize(armyPartisans) < minPartisans || playerPower(me) > (groupSize(armyPartisans)*50) ) || !getInfoNear(base.x,base.y,'safe',base_range).value){
-
 //				var _weapon = avail_guns[Math.floor(Math.random()*Math.min(avail_guns.length, 5))]; //Случайная из 5 последних крутых пушек
 				var _weapon = avail_guns[Math.floor(Math.random()*avail_guns.length)];
 				debugMsg(_body+" "+_prop+" "+_weapon, 'template');

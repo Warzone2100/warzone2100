@@ -28,6 +28,16 @@ chatting['kick'] = [
 	"Loosers, you're just afraid of me."
 ];
 
+chatting['saved'] = [
+	"Yeah, better to be saved ;)",
+	"Oh, what, decided to take a break?",
+	"Save, save, save.. How long.",
+	"Now you just put my brains in a box.",
+	"Save me, save me againg!",
+	"Save your self, save your life!",
+	"Oh, don't be scared.. Saved, nice :)"
+];
+
 chatting['tutorial'] = [
 	"By the way, i can ask me for money, just say \"bc give money\"",
 	"If you die, just say \"bc give truck\", and i resurrect u ;)",
