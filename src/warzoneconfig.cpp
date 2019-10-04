@@ -247,9 +247,9 @@ int war_GetMapZoom()
 
 void war_SetMapZoom(int mapZoom)
 {
-        if (mapZoom % MAP_ZOOM_RATE_MIN == 0 && ! (mapZoom < MINDISTANCE || mapZoom > MAXDISTANCE))
+	if (mapZoom % MAP_ZOOM_RATE_MIN == 0 && ! (mapZoom < MINDISTANCE_CONFIG || mapZoom > MAXDISTANCE))
 	{
-	    warGlobs.mapZoom = mapZoom;
+		warGlobs.mapZoom = mapZoom;
 	}
 }
 
@@ -260,9 +260,9 @@ int war_GetMapZoomRate()
 
 void war_SetMapZoomRate(int mapZoomRate)
 {
-        if (mapZoomRate % MAP_ZOOM_RATE_STEP == 0 && ! (mapZoomRate < MAP_ZOOM_RATE_MIN || mapZoomRate > MAP_ZOOM_RATE_MAX))
+	if (mapZoomRate % MAP_ZOOM_RATE_STEP == 0 && ! (mapZoomRate < MAP_ZOOM_RATE_MIN || mapZoomRate > MAP_ZOOM_RATE_MAX))
 	{
-	    warGlobs.mapZoomRate = mapZoomRate;
+		warGlobs.mapZoomRate = mapZoomRate;
 	}
 }
 
@@ -273,9 +273,9 @@ int war_GetRadarZoom()
 
 void war_SetRadarZoom(int radarZoom)
 {
-        if (radarZoom % RADARZOOM_STEP == 0 && ! (radarZoom < MIN_RADARZOOM || radarZoom > MAX_RADARZOOM))
+	if (radarZoom % RADARZOOM_STEP == 0 && ! (radarZoom < MIN_RADARZOOM || radarZoom > MAX_RADARZOOM))
 	{
-	    warGlobs.radarZoom = radarZoom;
+		warGlobs.radarZoom = radarZoom;
 	}
 }
 
@@ -286,9 +286,9 @@ int war_GetCameraSpeed()
 
 void war_SetCameraSpeed(int cameraSpeed)
 {
-        if (cameraSpeed % CAMERASPEED_STEP == 0 && ! (cameraSpeed < CAMERASPEED_MIN || cameraSpeed > CAMERASPEED_MAX))
+	if (cameraSpeed % CAMERASPEED_STEP == 0 && ! (cameraSpeed < CAMERASPEED_MIN || cameraSpeed > CAMERASPEED_MAX))
 	{
-	    warGlobs.cameraSpeed = cameraSpeed;
+		warGlobs.cameraSpeed = cameraSpeed;
 	}
 }
 

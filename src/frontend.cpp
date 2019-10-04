@@ -991,7 +991,7 @@ bool runAudioAndZoomOptionsMenu()
 	case FRONTEND_MAP_ZOOM:
 	case FRONTEND_MAP_ZOOM_R:
 		{
-		    war_SetMapZoom(seqCycle(war_GetMapZoom(), MINDISTANCE, war_GetMapZoomRate(), MAXDISTANCE));
+		    war_SetMapZoom(seqCycle(war_GetMapZoom(), MINDISTANCE_CONFIG, war_GetMapZoomRate(), MAXDISTANCE));
 		    widgSetString(psWScreen, FRONTEND_MAP_ZOOM_R, audioAndZoomOptionsMapZoomString().c_str());
 		    break;
 		}
