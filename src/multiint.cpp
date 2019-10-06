@@ -165,7 +165,7 @@ LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 
 // widget functions
 static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
-static void addBlueForm(UDWORD parent, UDWORD id, const char *txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
+static void addBlueForm(UDWORD parent, UDWORD id, WzString txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 static void drawReadyButton(UDWORD player);
 
 // Drawing Functions
@@ -1019,7 +1019,7 @@ MultichoiceWidget::MultichoiceWidget(WIDGET *parent, int value)
 	lockCurrent = true;
 }
 
-static void addBlueForm(UDWORD parent, UDWORD id, const char *txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h)
+static void addBlueForm(UDWORD parent, UDWORD id, WzString txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 {
 	W_FORMINIT sFormInit;                  // draw options box.
 	sFormInit.formID = parent;
@@ -1032,7 +1032,7 @@ static void addBlueForm(UDWORD parent, UDWORD id, const char *txt, UDWORD x, UDW
 	sFormInit.pDisplay =  intDisplayFeBox;
 	widgAddForm(psWScreen, &sFormInit);
 
-	if (strlen(txt) > 0)
+	if (txt.length() > 0)
 	{
 		W_LABINIT sLabInit;
 		sLabInit.formID = id;
@@ -1041,7 +1041,7 @@ static void addBlueForm(UDWORD parent, UDWORD id, const char *txt, UDWORD x, UDW
 		sLabInit.y		= 4;
 		sLabInit.width	= 80;
 		sLabInit.height = 20;
-		sLabInit.pText	= WzString::fromUtf8(txt);
+		sLabInit.pText	= txt;
 		widgAddLabel(psWScreen, &sLabInit);
 	}
 	return;
@@ -1083,6 +1083,30 @@ void updateLimitFlags()
 	}
 
 	ingame.flags = flags;
+}
+
+static void updateLimitIcons()
+{
+	widgDelete(psWScreen, MULTIOP_NO_SOMETHING);
+	int y = 2;
+	bool skip = false;
+	for (int i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+	{
+		if ((ingame.flags & 1 << i) != 0)
+		{
+			if (!skip)
+			{
+				// only add this once.
+				addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, 41, 152);
+			}
+
+			addMultiBut(psWScreen, MULTIOP_NO_SOMETHING, MULTIOP_NO_SOMETHINGY + i, MULTIOP_NO_SOMETHINGX, y,
+			            35, 28, _(limitIcons[i].desc),
+			            limitIcons[i].icon, limitIcons[i].icon, limitIcons[i].icon);
+			y += 28 + 3;
+			skip = true;
+		}
+	}
 }
 
 // need to check for side effects.
@@ -1209,6 +1233,14 @@ static void addGameOptions()
 		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
 		optionsList->addWidgetToLayout(structLimitsButton);
 	}
+	if (ingame.bHostSetup && !challengeActive)
+	{
+		MultibuttonWidget *randomButton = new MultibuttonWidget(optionsList);
+		randomButton->id = MULTIOP_RANDOM;
+		randomButton->setLabel(_("Random Game Options"));
+		randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options"));
+		optionsList->addWidgetToLayout(randomButton);
+	}
 
 	if (ingame.bHostSetup && !bHosted && !challengeActive)
 	{
@@ -1228,26 +1260,7 @@ static void addGameOptions()
 
 	// Add any relevant factory disabled icons.
 	updateLimitFlags();
-
-	int y = 2;
-	bool skip = false;
-	for (int i = 0; i < ARRAY_SIZE(limitIcons); ++i)
-	{
-		if ((ingame.flags & 1 << i) != 0)
-		{
-			if (!skip)
-			{
-				// only add this once.
-				addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, 41, 152);
-			}
-
-			addMultiBut(psWScreen, MULTIOP_NO_SOMETHING, MULTIOP_NO_SOMETHINGY + i, MULTIOP_NO_SOMETHINGX, y,
-			            35, 28, _(limitIcons[i].desc),
-			            limitIcons[i].icon, limitIcons[i].icon, limitIcons[i].icon);
-			y += 28 + 3;
-			skip = true;
-		}
-	}
+	updateLimitIcons();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2459,6 +2472,74 @@ static void loadMapSettings2()
 	}
 }
 
+static void randomizeLimit(const char *name)
+{
+	int stat = getStructStatFromName(name);
+	if (rand() % 2 == 0)
+	{
+		asStructureStats[stat].upgrade[0].limit = asStructureStats[stat].base.limit;
+	}
+	else
+	{
+		asStructureStats[stat].upgrade[0].limit = 0;
+	}
+}
+
+/* Generate random options */
+static void randomizeOptions()
+{
+	if (ingame.bHostSetup)
+	{
+		if (!locked.scavengers)
+		{
+			game.scavengers = rand() % 2;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->choose(game.scavengers);
+		}
+		if (!locked.alliances)
+		{
+			game.alliance = rand() % 4;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->choose(game.alliance);
+		}
+		if (!locked.power)
+		{
+			game.power = rand() % 3;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->choose(game.power);
+		}
+		if (!locked.bases)
+		{
+			game.base = rand() % 3;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->choose(game.base);
+		}
+
+		// Structure limits are simply 0 or max, only for NO_TANK, NO_CYBORG, NO_VTOL, NO_UPLINK, NO_LASSAT.
+		if (!bLimiterLoaded || !asStructureStats)
+		{
+			initLoadingScreen(true);
+			if (resLoad("wrf/limiter_data.wrf", 503))
+			{
+				bLimiterLoaded = true;
+			}
+			closeLoadingScreen();
+		}
+		for (int i = 0; i < ARRAY_SIZE(limitIcons) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
+		{
+			randomizeLimit(limitIcons[i].stat);
+		}
+		if (rand() % 2 == 0)
+		{
+			ingame.flags |= MPFLAGS_FORCELIMITS;
+		}
+		else
+		{
+			ingame.flags &= ~MPFLAGS_FORCELIMITS;
+		}
+		createLimitSet();
+		applyLimitSet();
+		updateLimitFlags();
+		updateLimitIcons();
+	}
+}
+
 /*
  * Process click events on the multiplayer/skirmish options screen
  * 'id' is id of the button that was pressed
@@ -2663,6 +2744,10 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		disableMultiButs();
 
 		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
+		break;
+
+	case MULTIOP_RANDOM:
+		randomizeOptions();
 		break;
 
 	case MULTIOP_CHATEDIT:
