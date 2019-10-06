@@ -97,7 +97,6 @@ static inline void freeLimitSet()
 		free(ingame.pStructureLimits);
 		ingame.numStructureLimits = 0;
 		ingame.pStructureLimits = nullptr;
-		ingame.flags &= MPFLAGS_FORCELIMITS;
 	}
 }
 
@@ -271,6 +270,7 @@ TITLECODE WzMultiLimitTitleUI::run()
 			}
 			// free limiter structure
 			freeLimitSet();
+			ingame.flags &= MPFLAGS_FORCELIMITS;
 			//inform others
 			if (bHosted)
 			{

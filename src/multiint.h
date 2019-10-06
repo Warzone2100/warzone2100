@@ -181,7 +181,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_PLAYER_START		10232		//list of players
 #define MULTIOP_PLAYER_END		10249
 #define MULTIOP_PLAYERSW		263
-#define MULTIOP_PLAYERSH		364
+#define MULTIOP_PLAYERSH		380
 
 #define MULTIOP_ROW_WIDTH		246
 
@@ -210,7 +210,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_OPTIONSX		40
 #define MULTIOP_OPTIONSY		1
 #define MULTIOP_OPTIONSW		284
-#define MULTIOP_OPTIONSH		364
+#define MULTIOP_OPTIONSH		380
 
 #define MULTIOP_EDITBOXW		196
 #define	MULTIOP_EDITBOXH		30
@@ -252,9 +252,9 @@ void loadMapPreview(bool hideInterface);
 
 #define MULTIOP_CHATBOX			10278
 #define MULTIOP_CHATBOXX		MULTIOP_OPTIONSX
-#define MULTIOP_CHATBOXY		364
+#define MULTIOP_CHATBOXY		380
 #define MULTIOP_CHATBOXW		((MULTIOP_PLAYERSX+MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
-#define MULTIOP_CHATBOXH		115
+#define MULTIOP_CHATBOXH		100
 
 #define MULTIOP_CONSOLEBOX		0x1A001		// TODO: these should be enums!
 #define MULTIOP_CONSOLEBOXX		MULTIOP_OPTIONSX
@@ -276,6 +276,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_GAMETYPE		10294
 #define MULTIOP_POWER			10296
 #define MULTIOP_ALLIANCES		10298
+#define MULTIOP_RANDOM			10299
 #define MULTIOP_BASETYPE		10300
 
 #define MULTIOP_SKSLIDE			102842 //10313
