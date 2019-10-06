@@ -79,8 +79,6 @@ private:
 	W_SCREEN * psSettingsScreen = nullptr;
 	// If true, there's an IP address waiting to be used.
 	bool hasWaitingIP = false;
-	// Saves the content of the IP prompt.
-	std::string ipPrompt = "";
 };
 
 // - multiint.cpp -

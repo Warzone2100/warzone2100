@@ -126,7 +126,6 @@ TITLECODE WzProtocolTitleUI::run()
 		{
 			sstrcpy(serverName, "127.0.0.1");  // Default to localhost.
 		}
-		ipPrompt = serverName;
 		hasWaitingIP = true;
 		closeIPDialog();
 		joinGame(serverName, 0);
@@ -197,14 +196,14 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 	sEdInit.y = CON_IPY;
 	sEdInit.width = CON_NAMEBOXWIDTH;
 	sEdInit.height = CON_NAMEBOXHEIGHT;
-	sEdInit.pText = serverName;
+	sEdInit.pText = mpGetServerName();
 	sEdInit.pBoxDisplay = intDisplayEditBox;
 	if (!widgAddEditBox(psSettingsScreen, &sEdInit))
 	{
 		closeIPDialog();
 		return;
 	}
-	widgSetString(psSettingsScreen, CON_IP, ipPrompt.c_str());
+	widgSetString(psSettingsScreen, CON_IP, sEdInit.pText);
 	// auto click in the text box
 	W_CONTEXT sContext;
 	sContext.xOffset	= 0;
