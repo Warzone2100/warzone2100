@@ -376,7 +376,11 @@ src/template.cpp
 src/terrain.cpp
 src/text.cpp
 src/texture.cpp
+src/titleui/gamefind.cpp
+src/titleui/msgbox.cpp
 src/titleui/old.cpp
+src/titleui/passbox.cpp
+src/titleui/protocol.cpp
 src/titleui/titleui.cpp
 src/transporter.cpp
 src/version.cpp
