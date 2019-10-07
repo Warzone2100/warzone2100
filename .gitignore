@@ -84,6 +84,7 @@ win32/packages
 /src/autorevision.cache
 *moc.h
 *moc.cpp
+/src/titleui/.dirstamp
 
 /doc/quickstartguide.html
 /doc/quickstartguide.pdf
