@@ -3575,6 +3575,20 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 			psBuilding->timeAnimationStarted = gameTime;  // so start animation
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 		}
+
+		if (psBuilding->player == selectedPlayer)
+		{
+			if (psBuilding->visible[selectedPlayer]
+				&& psBuilding->pFunctionality->resourceExtractor.psPowerGen
+				&& psBuilding->animationEvent == ANIM_EVENT_ACTIVE)
+			{
+				audio_PlayObjStaticTrack(psBuilding, ID_SOUND_OIL_PUMP_2);
+			}
+			else
+			{
+				audio_StopObjTrack(psBuilding, ID_SOUND_OIL_PUMP_2);
+			}
+		}
 	}
 
 	// Remove invalid targets. This must be done each frame.
