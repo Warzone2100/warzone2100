@@ -141,6 +141,7 @@ matrix:
 
     # Build for Fedora :LATEST (CMake) (GCC)
     - name: "Fedora :LATEST (CMake) [GCC]"
+      dist: bionic
       language: cpp
       compiler: gcc
       sudo: required
@@ -160,6 +161,7 @@ matrix:
 
     # Build for Fedora :LATEST (CMake) (GCC) (32-bit -m32 cross-compile)
     - name: "Fedora :LATEST (CMake) [GCC -m32]"
+      dist: bionic
       language: cpp
       compiler: gcc
       sudo: required
