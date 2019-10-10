@@ -524,7 +524,7 @@ function chooseResearch(){
 		var _research = forceResearch;
 		setResearchWay(_research);
 	}else{
-		var _w=["None","Black","Green","Red","Yellow","Orange","Blue","Rich"];
+		var _w=["Black","Green","Red","Yellow","Orange","Blue","Rich"];
 	//	if(difficulty == HARD || difficulty == INSANE) _w=["Green","Orange"];
 		if(difficulty == HARD || difficulty == INSANE) _w=["Green","Orange","Yellow","Rich","Orange","Green","Green"];
 		if(bc_ally.length == 1 && policy['build'] == 'rich' && difficulty == MEDIUM) _w = ['Rich'];

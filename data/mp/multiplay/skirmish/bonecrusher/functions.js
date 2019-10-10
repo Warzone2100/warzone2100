@@ -425,18 +425,20 @@ function doResearch(){
 		//		debugMsg(e.name+' - '+e.started+' - '+e.done, 'research_advance');
 		if(e.started)return false;return true;
 	});
-	
+		
+	if ( research_way.length == 0 || avail_research.length == 0 ) {
+//		debugMsg("doResearch: Исследовательские пути завершены!!! Останов.", 'research_advance');
+		return;
+	}
+
 	if ( research_way.length < 5 ){
-		var _research = avail_research[Math.floor(Math.random()*avail_research.length)].name;
+		var rnd = Math.floor(Math.random()*avail_research.length);
+		var _research = avail_research[rnd].name;
 //		debugMsg(_research, 'temp');
 		research_way.push([_research]);
 //		debugMsg("doResearch: Исследовательские пути ("+research_way.length+") подходят к концу! Добавляем рандом. \""+research_name[_research]+"\" ["+_research+"]", 'research_advance');
 	}
-	
-	if ( research_way.length == 0 ) {
-//		debugMsg("doResearch: Исследовательские пути завершены!!! Останов.", 'research_advance');
-		return;
-	}
+
 
 	var labs = enumStruct(me,RESEARCH_LAB);
 	if ( typeof _r === "undefined" ) _r = 0;
@@ -642,6 +644,15 @@ function filterNearAlly(obj){
 		if ( !allianceExistsBetween(me,p) ) continue; //Выкидываем вражеские
 //		if ( playerLoose(p) ) continue; //Пропускаем проигравших
 		if ( playerSpectator(p) ) continue;
+		
+		//Если союзнику доступно 40 вышек, не уступаем ему свободную.
+		if(policy['build'] == 'rich' && difficulty > 1){
+			var allyRes = enumFeature(ALL_PLAYERS, "OilResource");
+			allyRes = allyRes.filter(function(e){if(distBetweenTwoPoints_p(startPositions[p].x,startPositions[p].y,e.x,e.y) < base_range) return true; return false;});
+			allyRes = allyRes.concat(enumStruct(p, "A0ResourceExtractor").filter(function(e){if(distBetweenTwoPoints_p(startPositions[p].x,startPositions[p].y,e.x,e.y) < base_range) return true; return false;}));
+			if(allyRes.length >= 40) continue;
+		}
+		
 		if ( distBetweenTwoPoints_p(base.x,base.y,startPositions[p].x,startPositions[p].y) < base_range ) continue; //Если союзник внутри радиуса нашей базы, вышки забираем
 		obj = obj.filter(function(e){if(distBetweenTwoPoints_p(e.x,e.y,startPositions[p].x,startPositions[p].y) < base_range )return false; return true;})
 	}
