@@ -5646,7 +5646,6 @@
     "structure_603": {
         "modules": 0,
         "name": "A0ResourceExtractor",
-        "player": 0,
         "position": [
             576,
             6336,
@@ -5656,7 +5655,8 @@
             0,
             0,
             0
-        ]
+        ],
+        "startpos": 0
     },
     "structure_604": {
         "modules": 0,
