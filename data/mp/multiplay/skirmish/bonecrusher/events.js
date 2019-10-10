@@ -179,7 +179,6 @@ function eventStructureBuilt(structure, droid){
 				else if( ( ( factory_ready.length == 1 && research_lab_ready.length == 3) || research_lab_ready.length == 4 ) && policy['build'] == 'rich'){
 					var e = enumGroup(buildersMain)[0];
 					groupAddDroid(buildersHunters, e);
-					debugMsg("Res Rich FORCE "+i+" Builder --> Hunter +1", 'group');
 				}
 			}
 			
@@ -192,7 +191,6 @@ function eventStructureBuilt(structure, droid){
 				if( ( (factory_ready.length == 1 && research_lab_ready.length == 1) || factory_ready.length == 2 || factory_ready.length == 3) && policy['build'] == 'rich'){
 					var e = enumGroup(buildersMain)[0];
 					groupAddDroid(buildersHunters, e);
-					debugMsg("Fact Rich FORCE "+i+" Builder --> Hunter +1", 'group');
 				}
 				
 	//			if(policy['build'] != 'rich'){

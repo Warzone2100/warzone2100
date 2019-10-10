@@ -1,5 +1,5 @@
 const vernum    = "1.00";
-const verdate   = "27.09.2019";
+const verdate   = "10.10.2019";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
 const release	= true;
@@ -446,7 +446,7 @@ function init(){
 		//fixResearchWay(research_mortar_flamer);
 		var _primary = fixResearchWay(research_primary);
 		if(_primary == false){
-			debugMsg('Внимание, не удалось проверить путь исследований!', 'error');
+			debugMsg('Cannot check research way', 'error');
 			debugMsg("initializing standart research_primary", 'init');
 			include("multiplay/skirmish/bonecrusher/research-normal.js");
 			researchCustom = false;
