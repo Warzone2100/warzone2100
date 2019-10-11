@@ -1035,8 +1035,6 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
 	addDumpInfo(buf);
 
-	triggerEvent(TRIGGER_GAME_LOADED);
-
 	if (autogame_enabled())
 	{
 		gameTimeSetMod(Rational(500));
