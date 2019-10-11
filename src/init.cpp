@@ -1265,7 +1265,12 @@ bool stageThreeInitialise()
 	}
 
 	countUpdate();
-	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
+
+	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START)
+	{
+		triggerEvent(TRIGGER_GAME_LOADED);
+	}
+	else
 	{
 		if (getDebugMappingStatus())
 		{

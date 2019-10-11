@@ -399,6 +399,10 @@ function eventGameInit()
 	}
 
 	hackNetOn();
+
+	//Structures might have been removed so we need to update the reticule button states again
+	setMainReticule();
+
 	setTimer("checkEndConditions", 3000);
 	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
 	{
