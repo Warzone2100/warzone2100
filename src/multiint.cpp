@@ -2115,7 +2115,8 @@ void addPlayerBox(bool players)
 				{
 					if (NetPlay.isHost && !locked.ai)
 					{
-						sButInit.pTip = _("Click to change AI");
+						sButInit.style |= WBUT_SECONDARY;
+						sButInit.pTip = _("Click to change AI, right click to distribute choice");
 					}
 					else if (NetPlay.players[i].ai >= 0)
 					{
@@ -2833,7 +2834,27 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		else if (!NetPlay.players[player].allocated && !locked.ai && NetPlay.isHost
 		         && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 		{
-			addAiChooser(player);
+			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
+			{
+				// Right clicking distributes selected AI's type and difficulty to all other AIs
+				for (int i = 0; i < MAX_PLAYERS; ++i)
+				{
+					// Don't change open/closed slots or humans
+					if (NetPlay.players[i].ai >= 0 && i != player && !isHumanPlayer(i))
+					{
+						NetPlay.players[i].ai = NetPlay.players[player].ai;
+						NetPlay.players[i].difficulty = NetPlay.players[player].difficulty;
+						sstrcpy(NetPlay.players[i].name, getAIName(player));
+						game.skDiff[i] = game.skDiff[player];
+						NETBroadcastPlayerInfo(i);
+					}
+				}
+				addPlayerBox(!ingame.bHostSetup || bHosted);
+			}
+			else
+			{
+				addAiChooser(player);
+			}
 		}
 	}
 
