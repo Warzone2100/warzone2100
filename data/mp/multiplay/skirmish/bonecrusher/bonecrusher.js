@@ -711,9 +711,9 @@ function debugMsg(msg,level){
 	debug("bc["+timeMsg+"]{"+debugName+"}("+level+"): "+msg);
 }
 
-/*function eventStartLevel() {
+function eventStartLevel() {
 	queue("init", 1000);
-}*/
+}
 
 function eventGameLoaded(){
 	queue("init", 1000);
