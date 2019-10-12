@@ -1105,7 +1105,7 @@ std::string videoOptionsDisplayScaleString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
-static void refreshCurrentVideoOptionsValues()
+void refreshCurrentVideoOptionsValues()
 {
 	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
 	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
