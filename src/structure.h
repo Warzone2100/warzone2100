@@ -118,7 +118,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
 bool removeStruct(STRUCTURE *psDel, bool bDestroy);
 
 //fills the list with Structures that can be built
-UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD limit);
+UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD limit, bool showFavorites);
 
 /// Checks if the two structures would be too close to build together.
 bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t dir1, STRUCTURE_STATS const *stats2, Vector2i pos2, uint16_t dir2);
@@ -508,5 +508,8 @@ static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
 {
 	return psStruct->pStructureType->upgrade[psStruct->player].rearm;
 }
+
+WzString getFavoriteStructs();
+void setFavoriteStructs(WzString list);
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

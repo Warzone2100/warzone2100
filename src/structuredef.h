@@ -142,6 +142,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 		unsigned resistance;	// resist enemy takeover; 0 = immune
 		unsigned limit;		// current max limit for this type, LOTS_OF = no limit
 	} upgrade[MAX_PLAYERS], base;
+	bool isFavorite;		///< on Favorites list
 
 	inline Vector2i size(uint16_t direction) const
 	{

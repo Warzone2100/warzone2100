@@ -131,6 +131,7 @@ static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states
 static UDWORD	keyButtonMapping = 0;
 static bool ReticuleUp = false;
 static bool Refreshing = false;
+static bool showFavorites = false;
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -622,6 +623,8 @@ bool intInitialise()
 			}
 		}
 	}
+
+	showFavorites = false;
 
 	return true;
 }
@@ -1749,7 +1752,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	if (objMode == IOBJ_BUILD)
 	{
 		numStatsListEntries = fillStructureList(apsStructStatsList,
-		                                        selectedPlayer, MAXSTRUCTURES - 1);
+		                                        selectedPlayer, MAXSTRUCTURES - 1, showFavorites);
 
 		ppsStatsList = (BASE_STATS **)apsStructStatsList;
 	}
@@ -2299,6 +2302,13 @@ static void intProcessStats(UDWORD id)
 		includeRedundantDesigns = !includeRedundantDesigns;
 		auto obsoleteButton = (MultipleChoiceButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
 		obsoleteButton->setChoice(includeRedundantDesigns);
+		intRefreshScreen();
+	}
+	else if (id == IDSTAT_FAVORITE_BUTTON)
+	{
+		showFavorites = !showFavorites;
+		auto favoriteButton = (MultipleChoiceButton *)widgGetFromID(psWScreen, IDSTAT_FAVORITE_BUTTON);
+		favoriteButton->setChoice(showFavorites);
 		intRefreshScreen();
 	}
 }
@@ -3531,6 +3541,19 @@ MultipleChoiceButton *makeObsoleteButton(WIDGET *parent)
 	return obsoleteButton;
 }
 
+static void makeFavoriteButton(WIDGET *parent)
+{
+	auto favoriteButton = new MultipleChoiceButton(parent);
+	favoriteButton->id = IDSTAT_FAVORITE_BUTTON;
+	favoriteButton->style |= WBUT_SECONDARY;
+	favoriteButton->setChoice(showFavorites);
+	favoriteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH)));
+	favoriteButton->setTip(false, _("Showing All Tech\nRight-click to add to Favorites"));
+	favoriteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC)));
+	favoriteButton->setTip(true, _("Showing Only Favorite Tech\nRight-click to remove from Favorites"));
+	favoriteButton->move(4*2 + Image(IntImages, IMAGE_FDP_UP).width()*2 + 4*2, STAT_SLDY);
+}
+
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
@@ -3581,6 +3604,11 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	{
 		// Add the obsolete items button.
 		makeObsoleteButton(statForm);
+	}
+	if (objMode == IOBJ_BUILD)
+	{
+		// Add the favorite items button.
+		makeFavoriteButton(statForm);
 	}
 
 	W_LABINIT sLabInit;
@@ -4220,6 +4248,17 @@ static void intStatsRMBPressed(UDWORD id)
 			// Reset the button on the object form
 			intSetStats(objStatID, (BASE_STATS *)psNext);
 		}
+	}
+	else if (objMode == IOBJ_BUILD)
+	{
+		BASE_STATS *psStats = ppsStatsList[id - IDSTAT_START];
+
+		// Add/remove item to/from Favorites list
+
+		ASSERT_OR_RETURN(, psObjSelected != nullptr, "Invalid structure pointer");
+		ASSERT_OR_RETURN(, psStats != nullptr, "Invalid template pointer");
+		asStructureStats[psStats->index].isFavorite = !showFavorites;
+		intRefreshScreen();
 	}
 }
 

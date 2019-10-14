@@ -219,6 +219,7 @@ bool loadConfig()
 	{
 		pie_SetVideoBufferDepth(ini.value("bpp").toInt());
 	}
+	setFavoriteStructs(ini.value("favoriteStructs").toString().toUtf8().constData());
 	return true;
 }
 
@@ -303,6 +304,7 @@ bool saveConfig()
 		ini.setValue("playerName", (char *)sPlayer);		// player name
 	}
 	ini.setValue("colourMP", war_getMPcolour());
+	ini.setValue("favoriteStructs", getFavoriteStructs().toUtf8().c_str());
 	ini.sync();
 	return true;
 }

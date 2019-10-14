@@ -111,6 +111,7 @@ enum  				  // Reticule button indecies.
 #define IDSTAT_LOOP_LABEL		4404
 #define IDSTAT_DP_BUTTON		4405
 #define IDSTAT_OBSOLETE_BUTTON          4406
+#define IDSTAT_FAVORITE_BUTTON          4407
 #define IDSTAT_RESICONSTART		4500
 #define IDSTAT_RESICONEND		4599
 #define IDSTAT_PRODSTART		4600
