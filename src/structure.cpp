@@ -137,6 +137,8 @@ static void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player);
 static void removeStructFromMap(STRUCTURE *psStruct);
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(const STRUCTURE *psStruct);
+static void parseFavoriteStructs();
+static void packFavoriteStructs();
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -147,6 +149,8 @@ static int droidLimit[MAX_PLAYERS];
 static int commanderLimit[MAX_PLAYERS];
 // max number of constructors
 static int constructorLimit[MAX_PLAYERS];
+
+static WzString favoriteStructs;
 
 #define MAX_UNIT_MESSAGE_PAUSE 40000
 
@@ -565,6 +569,7 @@ bool loadStructureStats(WzConfig &ini)
 
 		ini.endGroup();
 	}
+	parseFavoriteStructs();
 
 	/* get global dummy stat pointer - GJ */
 	g_psStatDestroyStruct = nullptr;
@@ -661,6 +666,7 @@ bool loadStructureStrengthModifiers(WzConfig &ini)
 
 bool structureStatsShutDown()
 {
+	packFavoriteStructs();
 	delete[] asStructureStats;
 	asStructureStats = nullptr;
 	numStructureStats = 0;
@@ -3783,7 +3789,7 @@ fills the list with Structure that can be built. There is a limit on how many ca
 be built at any one time. Pass back the number available.
 There is now a limit of how many of each type of structure are allowed per mission
 */
-UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD limit)
+UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD limit, bool showFavorites)
 {
 	UDWORD			inc, count;
 	bool			researchModule, factoryModule, powerModule;
@@ -3878,6 +3884,11 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 					{
 						continue;
 					}
+				}
+				// show only favorites?
+				if (showFavorites && !asStructureStats[inc].isFavorite)
+				{
+					continue;
 				}
 
 				debug(LOG_NEVER, "adding %s (%x)", getName(psBuilding), apStructTypeLists[selectedPlayer][inc]);
@@ -7019,4 +7030,51 @@ void checkStructure(const STRUCTURE *psStructure, const char *const location_des
 			checkObject(psStructure->psTarget[i], location_description, function, recurse - 1);
 		}
 	}
+}
+
+static void parseFavoriteStructs()
+{
+	for (unsigned i = 0; i < numStructureStats; ++i)
+	{
+		if (favoriteStructs.contains(asStructureStats[i].id))
+		{
+			asStructureStats[i].isFavorite = true;
+		}
+		else
+		{
+			asStructureStats[i].isFavorite = false;
+		}
+	}
+}
+
+static void packFavoriteStructs()
+{
+	favoriteStructs = "";
+	bool first = true;
+
+	for (unsigned i = 0; i < numStructureStats; ++i)
+	{
+		if (asStructureStats[i].isFavorite)
+		{
+			if (first)
+			{
+				first = false;
+			}
+			else
+			{
+				favoriteStructs += ",";
+			}
+			favoriteStructs += asStructureStats[i].id;
+		}
+	}
+}
+
+WzString getFavoriteStructs()
+{
+	return favoriteStructs;
+}
+
+void setFavoriteStructs(WzString list)
+{
+	favoriteStructs = list;
 }
