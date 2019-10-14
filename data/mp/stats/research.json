@@ -157,7 +157,7 @@
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
                 "parameter": "Thermal",
-                "value": 35
+                "value": 45
             }
         ],
         "subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -615,7 +615,7 @@
                 "filterParameter": "BodyClass",
                 "filterValue": "Cyborgs",
                 "parameter": "HitPointPct",
-                "value": 25
+                "value": 35
             }
         ],
         "subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -1931,7 +1931,7 @@
                 "filterParameter": "Type",
                 "filterValue": "Wall",
                 "parameter": "Armour",
-                "value": 30
+                "value": 35
             },
             {
                 "class": "Building",
@@ -2019,7 +2019,7 @@
                 "filterParameter": "Type",
                 "filterValue": "Wall",
                 "parameter": "Armour",
-                "value": 30
+                "value": 35
             },
             {
                 "class": "Building",
@@ -2477,7 +2477,7 @@
                 "filterParameter": "Type",
                 "filterValue": "Structure",
                 "parameter": "Armour",
-                "value": 25
+                "value": 35
             },
             {
                 "class": "Building",
