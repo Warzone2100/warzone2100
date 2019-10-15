@@ -1654,7 +1654,7 @@
         "height": 1,
         "hitpoints": 700,
         "id": "PillBox3",
-        "name": "Heavy Machinegun Bunker",
+        "name": "HMG Bunker",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
         "strength": "BUNKER",
