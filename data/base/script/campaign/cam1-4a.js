@@ -95,8 +95,8 @@ function buildDefenses()
 {
 	// First wave of trucks
 	camQueueBuilding(NEW_PARADIGM, "GuardTower6", "BuildTower0");
-	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower3");
-	camQueueBuilding(NEW_PARADIGM, "PillBox3",    "BuildTower6");
+	camQueueBuilding(NEW_PARADIGM, "PillBox1",    "BuildTower3");
+	camQueueBuilding(NEW_PARADIGM, "PillBox1",    "BuildTower6");
 
 	// Second wave of trucks
 	camQueueBuilding(NEW_PARADIGM, "GuardTower3", "BuildTower1");
