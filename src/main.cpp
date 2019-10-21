@@ -81,6 +81,7 @@
 #include "version.h"
 #include "map.h"
 #include "keybind.h"
+#include "random.h"
 #include <time.h>
 
 #if defined(WZ_OS_MAC)
@@ -1198,6 +1199,10 @@ int realmain(int argc, char *argv[])
 
 		debug(LOG_WZ, "Using %s debug file", buf);
 	}
+
+	// Initialize random number generators
+	srand((unsigned int)time(NULL));
+	gameSRand((uint32_t)rand());
 
 	// NOTE: it is now safe to use debug() calls to make sure output gets captured.
 	check_Physfs();
