@@ -683,7 +683,7 @@ static bool startIGMouseOptionsMenu()
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		bool s = bMultiPlayer && NetPlay.bComms != 0;
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(s? 5 : 6), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(s? 5 : 6));
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(s ? 6 : 7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(s ? 6 : 7));
 	}));
 
 	int row = 1;
@@ -710,7 +710,10 @@ static bool startIGMouseOptionsMenu()
 	addIGTextButton(INTINGAMEOP_MMROTATE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsMmrotateString(), WBUT_PLAIN);
 	row++;
 
-	// Hardware / software cursor toggle can't be changed during game
+	// Hardware / software cursor toggle
+	addIGTextButton(INTINGAMEOP_CURSORMODE,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Colored Cursors"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_CURSORMODE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsCursorModeString(), WBUT_PLAIN);
+	row++;
 
 	// Function of the scroll wheel
 	addIGTextButton(INTINGAMEOP_SCROLLEVENT,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Scroll Event"), WBUT_PLAIN);
@@ -749,6 +752,13 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 	case INTINGAMEOP_MMROTATE_R:
 		setMiddleClickRotate(!getMiddleClickRotate());
 		widgSetString(psWScreen, INTINGAMEOP_MMROTATE_R, mouseOptionsMmrotateString());
+		break;
+
+	case INTINGAMEOP_CURSORMODE:
+	case INTINGAMEOP_CURSORMODE_R:
+		war_SetColouredCursor(!war_GetColouredCursor());
+		widgSetString(psWScreen, INTINGAMEOP_CURSORMODE_R, mouseOptionsCursorModeString());
+		wzSetCursor(CURSOR_DEFAULT);
 		break;
 
 	case INTINGAMEOP_SCROLLEVENT:
