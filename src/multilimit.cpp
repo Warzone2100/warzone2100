@@ -289,6 +289,8 @@ TITLECODE WzMultiLimitTitleUI::run()
 				sendTextMessage("Limits Reset To Default Values", true);
 			}
 
+			resetReadyStatus(false);
+
 			break;
 		case IDLIMITS_OK:
 			if (!challengeActive && widgGetButtonState(psWScreen, IDLIMITS_FORCE))

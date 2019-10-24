@@ -72,6 +72,7 @@
 #include "keymap.h"
 #include "cheat.h"
 #include "main.h"								// for gamemode
+#include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1928,4 +1929,16 @@ void resetReadyStatus(bool bSendOptions)
 		sendOptions();
 	}
 	netPlayersUpdated = true;
+
+	//Really reset ready status
+	if (NetPlay.isHost)
+	{
+		for (unsigned int i = 0; i < game.maxPlayers; ++i)
+		{
+			if (isHumanPlayer(i) && ingame.JoiningInProgress[i])
+			{
+				changeReadyStatus(i, false);
+			}
+		}
+	}
 }
