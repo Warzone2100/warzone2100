@@ -84,6 +84,7 @@
 #include "cmddroid.h"
 #include "terrain.h"
 #include "warzoneconfig.h"
+#include "multistat.h"
 
 /********************  Prototypes  ********************/
 
@@ -129,6 +130,7 @@ static WzText txtLevelName;
 static WzText txtDebugStatus;
 static WzText txtCurrentTime;
 static WzText txtShowFPS;
+static WzText txtUnits;
 // show Samples text
 static WzText txtShowSamples_Que;
 static WzText txtShowSamples_Lst;
@@ -228,6 +230,10 @@ static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
 bool showFPS = false;       //
 /** Show how many samples we are rendering per second
  * default OFF, turn ON via console command 'showsamples'
+ */
+bool showUNITCOUNT = false;
+/** Show how many kills/deaths (produced units) made
+ * default OFF, turn ON via console command 'showunits'
  */
 bool showSAMPLES = false;
 /**  Show the current selected units order / action
@@ -841,8 +847,16 @@ void draw3DScene()
 		std::string fps = astringf("FPS: %d", frameRate());
 		txtShowFPS.setText(fps, font_regular);
 		const unsigned width = txtShowFPS.width() + 10;
-		const unsigned height = txtShowFPS.height();
+		const unsigned height = 9; //txtShowFPS.height();
 		txtShowFPS.render(pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
+	}
+	if (showUNITCOUNT)
+	{
+		std::string killdiff = astringf("Units: %u lost / %u built / %u killed", missionData.unitsLost, missionData.unitsBuilt, getSelectedPlayerUnitsKilled());
+		txtUnits.setText(killdiff, font_regular);
+		const unsigned width = txtUnits.width() + 10;
+		const unsigned height = 9; //txtUnits.height();
+		txtUnits.render(pie_GetVideoBufferWidth() - width - ((showFPS) ? txtShowFPS.width() + 10 : 0), pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
 	}
 	if (showORDERS)
 	{
