@@ -346,6 +346,17 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 	ingame.JoiningInProgress[i] = false;
 }
 
+uint8_t NET_numHumanPlayers(void)
+{
+	uint8_t RetVal = 0;
+	for (uint8_t Inc = 0; Inc < MAX_PLAYERS; ++Inc)
+	{
+		if (NetPlay.players[Inc].allocated) ++RetVal;
+	}
+
+	return RetVal;
+}
+
 void NET_InitPlayers(bool initTeams)
 {
 	unsigned int i;
