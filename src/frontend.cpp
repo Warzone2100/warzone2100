@@ -51,6 +51,7 @@
 #include "configuration.h"
 #include "difficulty.h"
 #include "display.h"
+#include "display3d.h"
 #include "droid.h"
 #include "frend.h"
 #include "frontend.h"
@@ -665,6 +666,7 @@ static bool startOptionsMenu()
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 60, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("All enemies destroyed by cheating!"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 
 	return true;
 }
@@ -694,6 +696,9 @@ bool runOptionsMenu()
 	case FRONTEND_KEYMAP:
 		changeTitleMode(KEYMAP);
 		break;
+	case FRONTEND_UPGRDLINK:
+		changeTitleMode(GUI_OPTIONS);
+		break;
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
 		break;
@@ -711,6 +716,63 @@ bool runOptionsMenu()
 
 	return true;
 }
+
+// ////////////////////////////////////////////////////////////////////////////
+// GUI options
+
+static char const *guiIsKillcountEnabledString() {
+	return (showKILLCOUNT ? "Shown" : "Hidden");
+}
+
+static bool startGUIOptionsMenu()
+{
+	sliderEnableDrag(true);
+
+	addBackdrop();
+	addTopForm();
+	addBottomForm();
+
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GUI OPTIONS"));
+	
+	addTextButton(FRONTEND_GUI_KILLCOUNT,   FRONTEND_POS2X - 35, FRONTEND_POS2Y, "Show kills", WBUT_SECONDARY);
+	addTextButton(FRONTEND_GUI_KILLCOUNT_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, guiIsKillcountEnabledString(), WBUT_SECONDARY);
+	
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+
+	return true;
+}
+
+bool runGUIOptionsMenu()
+{
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
+
+	switch (id)
+	{
+	case FRONTEND_GUI_KILLCOUNT:
+	case FRONTEND_GUI_KILLCOUNT_R:
+		showKILLCOUNT = !showKILLCOUNT;
+		widgSetString(psWScreen, FRONTEND_GUI_KILLCOUNT_R, guiIsKillcountEnabledString());
+		break;
+	case FRONTEND_QUIT:
+		changeTitleMode(OPTIONS);
+		break;
+	default:
+		break;
+	}
+
+	// If close button pressed then return from this menu.
+	if (CancelPressed())
+	{
+		changeTitleMode(TITLE);
+	}
+
+	widgDisplayScreen(psWScreen);						// show the widgets currently running
+
+	return true;
+}
+
+///////////////////////////
 
 static char const *graphicsOptionsFmvmodeString()
 {
@@ -2193,6 +2255,9 @@ void changeTitleMode(tMode mode)
 		break;
 	case MOUSE_OPTIONS:
 		startMouseOptionsMenu();
+		break;
+	case GUI_OPTIONS:
+		startGUIOptionsMenu();
 		break;
 	case TUTORIAL:
 		startTutorialMenu();

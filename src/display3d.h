@@ -54,6 +54,7 @@ struct iView
 };
 
 extern bool showFPS;
+extern bool showKILLCOUNT;
 extern bool showSAMPLES;
 extern bool showORDERS;
 

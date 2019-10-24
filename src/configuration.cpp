@@ -113,6 +113,7 @@ bool loadConfig()
 		wz_texture_compression = false;
 	}
 	showFPS = ini.value("showFPS", false).toBool();
+	showKILLCOUNT = ini.value("showKILLCOUNT", false).toBool();
 	if (ini.contains("cameraSpeed"))
 	{
 		war_SetCameraSpeed(ini.value("cameraSpeed").toInt());
@@ -258,6 +259,7 @@ bool saveConfig()
 	ini.setValue("RightClickOrders", (SDWORD)(getRightClickOrders()));
 	ini.setValue("MiddleClickRotate", (SDWORD)(getMiddleClickRotate()));
 	ini.setValue("showFPS", (SDWORD)showFPS);
+	ini.setValue("showKILLCOUNT", (SDWORD)showKILLCOUNT);
 	ini.setValue("shadows", (SDWORD)(getDrawShadows()));	// shadows
 	ini.setValue("sound", (SDWORD)war_getSoundEnabled());
 	ini.setValue("FMVmode", (SDWORD)(war_GetFMVmode()));		// sequences

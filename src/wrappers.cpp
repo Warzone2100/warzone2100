@@ -218,6 +218,10 @@ TITLECODE titleLoop()
 		runOptionsMenu();
 		break;
 
+	case GUI_OPTIONS:
+		runGUIOptionsMenu();
+		break;
+
 	case GAME:
 		runGameOptionsMenu();
 		break;

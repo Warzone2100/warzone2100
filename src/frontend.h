@@ -48,6 +48,7 @@ enum tMode
 	VIDEO_OPTIONS,          // 19 video options menu
 	MOUSE_OPTIONS,          // 20 mouse options menu
 	CAMPAIGNS,              // 21 campaign selector
+	GUI_OPTIONS,            // 22 GUI editor
 };
 
 extern tMode titleMode;					// the global case
@@ -67,6 +68,7 @@ bool runCampaignSelector();
 bool runMultiPlayerMenu();
 bool runGameOptionsMenu();
 bool runOptionsMenu();
+bool runGUIOptionsMenu();
 bool runGraphicsOptionsMenu();
 bool runAudioAndZoomOptionsMenu();
 bool runVideoOptionsMenu();
@@ -270,6 +272,11 @@ enum
 	FRONTEND_SCROLLEVENT_R,
 
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
+	
+	FRONTEND_GUI            = 27000,    // GUI options menu
+	FRONTEND_GUI_KILLCOUNT,
+	FRONTEND_GUI_KILLCOUNT_R,
+	
 	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 
 };
