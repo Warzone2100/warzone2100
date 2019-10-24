@@ -607,6 +607,20 @@ void kf_ToggleFPS() //This shows *just FPS* and is always visible (when active) 
 		CONPRINTF("%s", _("FPS display is disabled."));
 	}
 }
+void kf_ToggleUnitCount()		// Display units built / lost / produced counter
+{
+	// Toggle the boolean value of showUNITCOUNT
+	showUNITCOUNT = !showUNITCOUNT;
+
+	if (showUNITCOUNT)
+	{
+		CONPRINTF("%s", _("Unit count display is enabled."));
+	}
+	else
+	{
+		CONPRINTF("%s", _("Unit count display is disabled."));
+	}
+}
 void kf_ToggleSamples() //Displays number of sound sample in the sound queues & lists.
 {
 	// Toggle the boolean value of showSAMPLES
