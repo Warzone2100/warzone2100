@@ -211,7 +211,7 @@ static void		closeDifficultyChooser();
 static bool		SendColourRequest(UBYTE player, UBYTE col);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 static bool		safeToUseColour(UDWORD player, UDWORD col);
-static bool		changeReadyStatus(UBYTE player, bool bReady);
+bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
 // ////////////////////////////////////////////////////////////////////////////
@@ -1634,7 +1634,7 @@ bool recvReadyRequest(NETQUEUE queue)
 	return changeReadyStatus((UBYTE)player, bReady);
 }
 
-static bool changeReadyStatus(UBYTE player, bool bReady)
+bool changeReadyStatus(UBYTE player, bool bReady)
 {
 	NetPlay.players[player].ready = bReady;
 	NETBroadcastPlayerInfo(player);

@@ -123,6 +123,7 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
 void addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
+bool changeReadyStatus(UBYTE player, bool bReady);
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
