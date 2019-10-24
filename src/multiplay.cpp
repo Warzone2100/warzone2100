@@ -1138,7 +1138,7 @@ static void printchatmsg(const char *text, int from, bool team = false)
 	char msg[MAX_CONSOLE_STRING_LENGTH];
 
 	sstrcpy(msg, getPlayerName(from));
-	if (from == selectedPlayer)
+	if (from == selectedPlayer && GetGameMode() == GS_NORMAL)
 	{
 		if (team)
 		{
