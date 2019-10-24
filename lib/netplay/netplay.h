@@ -326,6 +326,8 @@ int NETGetMinorVersion();
 void NET_InitPlayer(int i, bool initPosition, bool initTeams = false);
 void NET_InitPlayers(bool initTeams = false);
 
+uint8_t NET_numHumanPlayers(void);
+
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
 

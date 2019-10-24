@@ -1109,6 +1109,12 @@ static void updateLimitIcons()
 	}
 }
 
+static WzString formatGameName(WzString name)
+{
+	WzString withoutTechlevel = mapNameWithoutTechlevel(name.toUtf8().c_str());
+	return withoutTechlevel + " (T" + WzString::number(game.techLevel) + " " + WzString::number(game.maxPlayers) + "P)";
+}
+
 // need to check for side effects.
 static void addGameOptions()
 {
@@ -1147,9 +1153,7 @@ static void addGameOptions()
 	//  and then consider that the two buttons are relative to MCOL0, MROW3.
 	// MCOL for N >= 1 is basically useless because that's not the actual rule followed by addMultiEditBox.
 	// And that's what this panel is meant to align to.
-	char *withoutTechlevel = mapNameWithoutTechlevel(game.map);
-	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, withoutTechlevel, MCOL0, MROW3, MULTIOP_EDITBOXW + MULTIOP_EDITBOXH, MULTIOP_EDITBOXH);
-	free(withoutTechlevel);
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, formatGameName(game.map), MCOL0, MROW3, MULTIOP_EDITBOXW + MULTIOP_EDITBOXH, MULTIOP_EDITBOXH);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MULTIOP_EDITBOXW + 2, 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, _("Select Map"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MULTIOP_EDITBOXW - 14, 1, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
 	if (!game.isMapMod)
@@ -2331,6 +2335,25 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 }
 
+static void loadMapSettings0(LEVEL_DATASET *mapData)
+{
+	sstrcpy(game.map, mapData->pName);
+	game.hash = levGetFileHash(mapData);
+	game.maxPlayers = mapData->players;
+	game.isMapMod = CheckForMod(mapData->realFileName);
+	if (game.isMapMod)
+	{
+		widgReveal(psWScreen, MULTIOP_MAP_MOD);
+	}
+	else
+	{
+		widgHide(psWScreen, MULTIOP_MAP_MOD);
+	}
+
+	WzString name = formatGameName(mapData->pName);
+	widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
+}
+
 static void loadMapSettings1()
 {
 	char aFileName[256];
@@ -2490,25 +2513,86 @@ static void randomizeOptions()
 {
 	if (ingame.bHostSetup)
 	{
-		if (!locked.scavengers)
+		// Reset players' positions or bad things could happen to scavenger slot
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			game.scavengers = rand() % 2;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->choose(game.scavengers);
+			NetPlay.players[i].position = i;
+			NetPlay.players[i].team = i;
+			NETBroadcastPlayerInfo(i);
 		}
-		if (!locked.alliances)
+		// Pick a map for a number of players and tech level
+		game.techLevel = current_tech = (rand() % 4) + 1;
+		LEVEL_LIST levels;
+		do
 		{
-			game.alliance = rand() % 4;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->choose(game.alliance);
+			// don't kick out already joined players because of randomize
+			int players = NET_numHumanPlayers();
+			int minimumPlayers = std::max(players, 2);
+			current_numplayers = minimumPlayers;
+			if (minimumPlayers < MAX_PLAYERS_IN_GUI)
+			{
+				current_numplayers += (rand() % (MAX_PLAYERS_IN_GUI - minimumPlayers));
+			}
+			levels = enumerateMultiMaps(game.techLevel, current_numplayers);
 		}
-		if (!locked.power)
+		while (levels.empty()); // restart when there are no maps for a random number of players
+
+		int pickedLevel = rand() % levels.size();
+		LEVEL_DATASET *mapData = nullptr;
+		for (LEVEL_LIST::iterator it = levels.begin(); it != levels.end(); ++it, --pickedLevel)
 		{
-			game.power = rand() % 3;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->choose(game.power);
+			if (pickedLevel <= 0)
+			{
+				mapData = *it;
+				break;
+			}
 		}
-		if (!locked.bases)
+		loadMapSettings0(mapData);
+		loadMapSettings1();
+		loadMapPreview(false);
+		loadMapSettings2();
+
+		// Reset and randomize player positions, also to guard
+		// against case where in the previous map some players
+		// took slots, which aren't available anymore
+
+		// First, put human players at the top
+		int pos = 0;
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			game.base = rand() % 3;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->choose(game.base);
+			if (isHumanPlayer(i))
+			{
+				// Skip the scavenger slot
+				if (game.mapHasScavengers && pos == scavengerSlot())
+				{
+					pos++;
+				}
+				NetPlay.players[i].position = pos;
+				NETBroadcastPlayerInfo(i);
+				pos++;
+			}
+		}
+
+		// Fill with AIs if places remain
+		for (int i = 0; i < current_numplayers; i++)
+		{
+			if (!isHumanPlayer(i) && !(game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot()))
+			{
+				// Skip the scavenger slot
+				if (game.mapHasScavengers && pos == scavengerSlot())
+				{
+					pos++;
+				}
+				NetPlay.players[i].position = pos;
+				NETBroadcastPlayerInfo(i);
+				pos++;
+			}
+		}
+
+		// Randomize positions
+		for (int i = 0; i < current_numplayers; i++)
+		{
+			SendPositionRequest(i, NetPlay.players[rand() % current_numplayers].position);
 		}
 
 		// Structure limits are simply 0 or max, only for NO_TANK, NO_CYBORG, NO_VTOL, NO_UPLINK, NO_LASSAT.
@@ -2537,6 +2621,35 @@ static void randomizeOptions()
 		applyLimitSet();
 		updateLimitFlags();
 		updateLimitIcons();
+
+		// Game options
+		if (!locked.scavengers && game.mapHasScavengers)
+		{
+			game.scavengers = rand() % 2;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->choose(game.scavengers);
+		}
+
+		if (!locked.alliances)
+		{
+			game.alliance = rand() % 4;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->choose(game.alliance);
+		}
+		if (!locked.power)
+		{
+			game.power = rand() % 3;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->choose(game.power);
+		}
+		if (!locked.bases)
+		{
+			game.base = rand() % 3;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->choose(game.base);
+		}
+
+		if (bHosted)
+		{
+			disableMultiButs();
+			resetReadyStatus(true);
+		}
 	}
 }
 
@@ -3354,7 +3467,6 @@ TITLECODE WzMultiOptionTitleUI::run()
 					oldMaxPlayers = game.maxPlayers;
 
 					sstrcpy(game.map, mapData->pName);
-					char *withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
 					game.hash = levGetFileHash(mapData);
 					game.maxPlayers = mapData->players;
 					game.isMapMod = CheckForMod(mapData->realFileName);
@@ -3363,8 +3475,6 @@ TITLECODE WzMultiOptionTitleUI::run()
 					if (isHoverPreview)
 					{
 						sstrcpy(game.map, oldGameMap);
-						char *withoutTechlevel = mapNameWithoutTechlevel(oldGameMap);
-						free(withoutTechlevel);
 						game.hash = oldGameHash;
 						game.maxPlayers = oldMaxPlayers;
 					}
@@ -3373,8 +3483,8 @@ TITLECODE WzMultiOptionTitleUI::run()
 						loadMapSettings1();
 					}
 
-					widgSetString(psWScreen, MULTIOP_MAP + 1, withoutTechlevel); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
-					free(withoutTechlevel);
+					WzString name = formatGameName(game.map);
+					widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 					addGameOptions();
 					break;
 				}
