@@ -321,8 +321,7 @@ function __camVictoryOffworld()
 
 			//Missions that are not won based on artifact count (see missions 2-1 and 3-2).
 			//If either forceLZ or destroyAll is true then ignore this.
-			var arti = camGetArtifacts();
-			if (arti.length === 0 && !forceLZ && !destroyAll)
+			if (__camNumArtifacts === 0 && !forceLZ && !destroyAll)
 			{
 				__camGameWon();
 				return;

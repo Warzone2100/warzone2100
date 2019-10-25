@@ -57,23 +57,25 @@ function camAllArtifactsPickedUp()
 	return __camNumArtifacts === Object.keys(__camArtifacts).length;
 }
 
-//Returns the label of all existing artifacts
+//Returns the labels of all existing artifacts.
 function camGetArtifacts()
 {
 	var camArti = [];
 	for (var alabel in __camArtifacts)
 	{
 		var artifact = __camArtifacts[alabel];
-		if (camDef(artifact))
+		var libLabel = __camGetArtifactLabel(alabel);
+		//libcampaign managed artifact that was placed on the map.
+		if (artifact.placed && getObject(libLabel) !== null)
 		{
-			if (getObject(__camGetArtifactLabel(alabel)))
-			{
-				camArti.push(__camGetArtifactLabel(alabel));
-			}
-			else
-			{
-				camArti.push(alabel);
-			}
+			camArti.push(libLabel);
+		}
+		//Label for artifacts that will drop after an object gets destroyed. Or is manually managed.
+		//NOTE: Must check for ID since "alabel" could be a AREA/POSITION label.
+		var obj = getObject(alabel);
+		if (obj !== null && camDef(obj.id))
+		{
+			camArti.push(alabel);
 		}
 	}
 	return camArti;
