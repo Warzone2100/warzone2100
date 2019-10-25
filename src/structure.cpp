@@ -2492,7 +2492,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 	if (IsPlayerDroidLimitReached(player))
 	{
 		isLimit = true;
-		sstrcpy(limitMsg, _("Can't build anymore units, Unit Limit Reached — Production Halted"));
+		sstrcpy(limitMsg, _("Can't build any more units, Unit Limit Reached — Production Halted"));
 	}
 	else switch (droidTemplateType(templ))
 		{
@@ -2513,7 +2513,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 			if (getNumConstructorDroids(player) >= getMaxConstructors(player))
 			{
 				isLimit = true;
-				ssprintf(limitMsg, _("Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
+				ssprintf(limitMsg, _("Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			break;
 		default:
