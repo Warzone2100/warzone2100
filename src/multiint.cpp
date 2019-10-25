@@ -2797,6 +2797,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
+		resetReadyStatus(false);
 	}
 
 	if (id >= MULTIOP_DIFFICULTY_CHOOSE_START && id <= MULTIOP_DIFFICULTY_CHOOSE_END && difficultyChooserUp != -1)
@@ -2807,6 +2808,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		NETBroadcastPlayerInfo(difficultyChooserUp);
 		closeDifficultyChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
+		resetReadyStatus(false);
 	}
 
 	if (id >= MULTIOP_AI_START && id <= MULTIOP_AI_END && aiChooserUp != -1)
@@ -2818,6 +2820,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
+		resetReadyStatus(false);
 	}
 
 	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
@@ -2935,6 +2938,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 					}
 				}
 				addPlayerBox(!ingame.bHostSetup || bHosted);
+				resetReadyStatus(false);
 			}
 			else
 			{
