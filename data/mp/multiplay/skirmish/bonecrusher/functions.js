@@ -805,7 +805,7 @@ function getEnemyCloseBase(){
 function getOurDefences(){
 	var targ = [];
 	for ( var a in ally ){
-		targ = targ.concat(enumStruct(a[i], DEFENSE).filter(function(e){if(e.status == 1)return true; return false;}));
+		targ = targ.concat(enumStruct(a, DEFENSE).filter(function(e){if(e.status == 1)return true; return false;}));
 	}
 	targ = targ.concat(enumStruct(me, DEFENSE).filter(function(e){if(e.status == 1)return true; return false;}));
 	return targ;
