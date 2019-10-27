@@ -592,10 +592,6 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 		*gNumWalls = help.numWalls;
 	}
 
-	// See if the target can be seen
-	int top = psTarget->pos.z + map_Height(psViewer->pos.x, psViewer->pos.y) - help.startHeight;
-	int targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
-
 	bool tileWatched = psTile->watchers[psViewer->player] > 0;
 	bool tileWatchedSensor = psTile->sensors[psViewer->player] > 0;
 
@@ -608,7 +604,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 		}
 	}
 	// Show objects that are seen directly
-	if ((tileWatched && targetGrad >= help.currGrad) || (!jammed && tileWatchedSensor))
+	if (tileWatched || (!jammed && tileWatchedSensor))
 	{
 		return UBYTE_MAX;
 	}
