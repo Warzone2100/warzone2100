@@ -105,7 +105,7 @@ TITLECODE WzPassBoxTitleUI::run()
 	screen_disableMapPreview();
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id;
-	if (id == CON_PASSWORDYES) {
+	if (id == CON_PASSWORDYES || (keyPressed(KEY_RETURN) || keyPressed(KEY_KPENTER))) {
 		next(widgGetString(psWScreen, CON_PASSWORD));
 	} else if ((id == CON_PASSWORDNO) || CancelPressed()) {
 		next(nullptr);
@@ -113,4 +113,3 @@ TITLECODE WzPassBoxTitleUI::run()
 	widgDisplayScreen(psWScreen);
 	return TITLECODE_CONTINUE;
 }
-
