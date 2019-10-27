@@ -131,11 +131,11 @@ struct DisplayTextOptionCache
 #define FRONTEND_BOTFORMX		FRONTEND_TOPFORMX
 #define FRONTEND_BOTFORMY		170
 #define FRONTEND_BOTFORMW		FRONTEND_TOPFORMW
-#define FRONTEND_BOTFORMH		300				// keep Y+H < 480 (minimum display height)
+#define FRONTEND_BOTFORMH		305				// keep Y+H < 480 (minimum display height)
 
 
 #define FRONTEND_BUTWIDTH		FRONTEND_BOTFORMW-40 // text button sizes.
-#define FRONTEND_BUTHEIGHT		33
+#define FRONTEND_BUTHEIGHT		35
 
 #define FRONTEND_POS1X			20				// button positions
 #define FRONTEND_POS1Y			(0*FRONTEND_BUTHEIGHT)
