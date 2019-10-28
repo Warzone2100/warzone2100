@@ -159,6 +159,7 @@ static gfx_api::gfxFloat vertices[NUM_VERTICES][2];
 static gfx_api::gfxFloat Scrnvidpos[3];
 
 static SCANLINE_MODE use_scanlines;
+static bool scanlinesDisabled = false;
 
 // Helper; just grab some more compressed bitstream and sync it for page extraction
 static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
@@ -270,7 +271,7 @@ const gfx_api::gfxFloat texture_height = 1024.0f;
 static void Allocate_videoFrame(void)
 {
 	int size = videodata.ti.frame_width * videodata.ti.frame_height * 4;
-	if (use_scanlines)
+	if (!seq_getScanlinesDisabled() && seq_getScanlineMode())
 	{
 		size *= 2;
 	}
@@ -310,8 +311,9 @@ static void video_write(bool update)
 	unsigned int x = 0, y = 0;
 	const int video_width = videodata.ti.frame_width;
 	const int video_height = videodata.ti.frame_height;
+	SCANLINE_MODE scanMode = seq_getScanlinesDisabled() ? SCANLINES_OFF : seq_getScanlineMode();
 	// when using scanlines we need to double the height
-	const int height_factor = (use_scanlines ? 2 : 1);
+	const int height_factor = (scanMode ? 2 : 1);
 	yuv_buffer yuv;
 
 	if (update)
@@ -345,12 +347,12 @@ static void video_write(bool update)
 				uint32_t rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 
 				RGBAframe[rgb_offset] = rgba;
-				if (use_scanlines == SCANLINES_50)
+				if (scanMode == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
 					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
 				}
-				else if (use_scanlines == SCANLINES_BLACK)
+				else if (scanMode == SCANLINES_BLACK)
 				{
 					RGBAframe[rgb_offset + video_width] = Amask;
 				}
@@ -366,18 +368,18 @@ static void video_write(bool update)
 
 				rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 				RGBAframe[rgb_offset] = rgba;
-				if (use_scanlines == SCANLINES_50)
+				if (scanMode == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
 					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
 				}
-				else if (use_scanlines == SCANLINES_BLACK)
+				else if (scanMode == SCANLINES_BLACK)
 				{
 					RGBAframe[rgb_offset + video_width] = Amask;
 				}
 				rgb_offset++;
 			}
-			if (use_scanlines)
+			if (scanMode)
 			{
 				rgb_offset += video_width;
 			}
@@ -461,6 +463,7 @@ static void seq_InitOgg(void)
 	vorbis_p = 0;
 
 	videoplaying = false;
+	seq_setScanlinesDisabled(false);
 
 	/* single frame video buffering */
 	videobuf_ready = false;
@@ -698,10 +701,10 @@ bool seq_Play(const char *filename)
 		}
 		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
 
-		// disable scanlines if the video is too large for the texture or shown too small
+		// disable scanlines temporarily if the video is too large for the texture or shown too small
 		if (videodata.ti.frame_height * 2 > texture_height || vertices[3][1] < videodata.ti.frame_height * 2)
 		{
-			use_scanlines = SCANLINES_OFF;
+			seq_setScanlinesDisabled(true);
 		}
 
 		Allocate_videoFrame();
@@ -709,7 +712,7 @@ bool seq_Play(const char *filename)
 		free(blackframe);
 
 		// when using scanlines we need to double the height
-		const int height_factor = (use_scanlines ? 2 : 1);
+		const int height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
 		const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / texture_width;
 		const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
 		gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
@@ -955,6 +958,7 @@ void seq_Shutdown()
 	}
 
 	videoplaying = false;
+	seq_setScanlinesDisabled(false);
 	Timer_stop();
 
 	audioTime = 0;
@@ -1011,6 +1015,16 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 	Scrnvidpos[0] = posX;
 	Scrnvidpos[1] = posY;
 	Scrnvidpos[2] = 0.0f;
+}
+
+void seq_setScanlinesDisabled(bool flag)
+{
+	scanlinesDisabled = flag;
+}
+
+bool seq_getScanlinesDisabled()
+{
+	return scanlinesDisabled;
 }
 
 void seq_setScanlineMode(SCANLINE_MODE mode)

@@ -35,6 +35,8 @@ bool seq_Update();
 void seq_Shutdown();
 int seq_GetFrameNumber();
 void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY);
+void seq_setScanlinesDisabled(bool flag);
+bool seq_getScanlinesDisabled();
 void seq_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE seq_getScanlineMode();
 double seq_GetFrameTime();
