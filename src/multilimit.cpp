@@ -270,7 +270,10 @@ TITLECODE WzMultiLimitTitleUI::run()
 			}
 			// free limiter structure
 			freeLimitSet();
-			ingame.flags &= MPFLAGS_FORCELIMITS;
+			if (widgGetButtonState(psWScreen, IDLIMITS_FORCE))
+			{
+				ingame.flags &= ~MPFLAGS_FORCELIMITS;
+			}
 			//inform others
 			if (bHosted)
 			{
