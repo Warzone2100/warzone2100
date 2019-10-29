@@ -2394,10 +2394,6 @@ static void loadMapSettings1()
 	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 	game.base = ini.value("bases", game.base).toInt();
 	game.alliance = ini.value("alliances", game.alliance).toInt();
-	if (challengeActive)
-	{
-		game.techLevel = ini.value("techLevel").toInt();
-	}
 	if (ini.contains("powerLevel"))
 	{
 		game.power = ini.value("powerLevel", game.power).toInt();
@@ -3559,6 +3555,7 @@ static bool loadSettings(const WzString &filename)
 	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
+	game.techLevel = current_tech = ini.value("techLevel", game.techLevel).toInt();
 	ini.endGroup();
 	return true;
 }
