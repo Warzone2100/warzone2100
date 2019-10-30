@@ -41,7 +41,7 @@ freebsd_build_task:
 #     - brew install cmake
 #     - brew install gettext
 #     # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-#     - sudo gem install asciidoctor -v 2.0.9 --no-document
+#     - sudo gem install asciidoctor -v 2.0.10 --no-document
 #     # gcc6+ is currently required to bootstrap vcpkg on macOS
 #     - brew install gcc@7
 #     - sudo bundle install --gemfile="macosx/BuildBot/Gemfile"
