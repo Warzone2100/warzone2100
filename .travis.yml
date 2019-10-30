@@ -187,11 +187,11 @@ matrix:
       env:
         - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
-        - brew update
-        - brew upgrade cmake
+        #- brew update
+        #- brew upgrade cmake
         - brew install gettext
-        - brew install asciidoc
-        - brew install docbook-xsl
+        # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
+        - gem install asciidoctor -v 2.0.9 --no-document
         # Try to workaround issues with brew downloading gcc
         - brew fetch --retry gcc@7
         # gcc6+ is currently required to bootstrap vcpkg on macOS
