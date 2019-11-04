@@ -3510,11 +3510,13 @@ TITLECODE WzMultiOptionTitleUI::run()
 			inputLoseFocus();	// remove the mousepress from the input stream.
 			hideTime = 0;
 		}
+		else
+		{
+			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+			unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
-		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-		unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
-
-		processMultiopWidgets(id);
+			processMultiopWidgets(id);
+		}
 	}
 
 	widgDisplayScreen(psWScreen);									// show the widgets currently running
