@@ -124,6 +124,7 @@ void addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
 bool changeReadyStatus(UBYTE player, bool bReady);
+WzString formatGameName(WzString name);
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN

@@ -1109,7 +1109,7 @@ static void updateLimitIcons()
 	}
 }
 
-static WzString formatGameName(WzString name)
+WzString formatGameName(WzString name)
 {
 	WzString withoutTechlevel = mapNameWithoutTechlevel(name.toUtf8().c_str());
 	return withoutTechlevel + " (T" + WzString::number(game.techLevel) + " " + WzString::number(game.maxPlayers) + "P)";
