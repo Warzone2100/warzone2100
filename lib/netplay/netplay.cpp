@@ -222,7 +222,7 @@ void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field)
 			sstrcpy(gamestruct.name, Value);
 			break;
 		case NET_LOBBY_OPT_FIELD::MAPNAME:
-			sstrcpy(gamestruct.mapname, Value);
+			sstrcpy(gamestruct.mapname, formatGameName(Value).toUtf8().c_str());
 			break;
 		case NET_LOBBY_OPT_FIELD::HOSTNAME:
 			sstrcpy(gamestruct.hostname, Value);
