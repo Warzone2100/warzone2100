@@ -3443,6 +3443,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 		if (runMultiRequester(id, &id, &sTemp, &mapData, &isHoverPreview))
 		{
 			Sha256 oldGameHash;
+			bool oldGameIsMapMod;
 
 			switch (id)
 			{
@@ -3465,6 +3466,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 					sstrcpy(oldGameMap, game.map);
 					oldGameHash = game.hash;
 					oldMaxPlayers = game.maxPlayers;
+					oldGameIsMapMod = game.isMapMod;
 
 					sstrcpy(game.map, mapData->pName);
 					game.hash = levGetFileHash(mapData);
@@ -3477,6 +3479,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 						sstrcpy(game.map, oldGameMap);
 						game.hash = oldGameHash;
 						game.maxPlayers = oldMaxPlayers;
+						game.isMapMod = oldGameIsMapMod;
 					}
 					else
 					{
