@@ -3715,6 +3715,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_FILE_CANCELLED:            return "NET_FILE_CANCELLED";
 	case NET_FILE_PAYLOAD:              return "NET_FILE_PAYLOAD";
 	case NET_DEBUG_SYNC:                return "NET_DEBUG_SYNC";
+	case NET_VOTE:                      return "NET_VOTE";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

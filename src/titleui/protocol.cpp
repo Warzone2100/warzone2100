@@ -111,6 +111,7 @@ TITLECODE WzProtocolTitleUI::run()
 		bMultiMessages = false;
 		break;
 	case CON_TYPESID_START+0: // Lobby button
+		resetVoteData();
 		if (getLobbyError() != ERROR_INVALID)
 		{
 			setLobbyError(ERROR_NOERROR);
@@ -118,9 +119,11 @@ TITLECODE WzProtocolTitleUI::run()
 		changeTitleUI(std::make_shared<WzGameFindTitleUI>());
 		break;
 	case CON_TYPESID_START+1: // IP button
+		resetVoteData();
 		openIPDialog();
 		break;
 	case CON_OK:
+		resetVoteData();
 		sstrcpy(serverName, widgGetString(curScreen, CON_IP));
 		if (serverName[0] == '\0')
 		{

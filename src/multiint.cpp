@@ -158,6 +158,9 @@ static int					aiChooserUp = -1;
 static int					difficultyChooserUp = -1;
 static int					positionChooserUp = -1;
 static UDWORD hideTime = 0;
+static uint8_t playerVotes[MAX_PLAYERS];
+static uint8_t currentVote = 0;
+static bool votedOnJoin = false;
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
@@ -1115,6 +1118,93 @@ WzString formatGameName(WzString name)
 	return withoutTechlevel + " (T" + WzString::number(game.techLevel) + " " + WzString::number(game.maxPlayers) + "P)";
 }
 
+void resetVoteData()
+{
+	votedOnJoin = false;
+	currentVote = 0;
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		playerVotes[i] = 0;
+	}
+}
+
+static void sendVoteData(bool cancelEvent)
+{
+	if (cancelEvent)
+	{
+		resetVoteData();
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_VOTE))->choose(0);
+	}
+	else
+	{
+		currentVote = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_VOTE))->currentValue();
+	}
+
+	NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
+	NETuint32_t(&selectedPlayer);
+	NETuint8_t(&currentVote);
+	NETend();
+}
+
+static uint8_t getVoteTotal()
+{
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return true;
+	}
+
+	uint8_t total = 0;
+
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (isHumanPlayer(i))
+		{
+			if (selectedPlayer == i)
+			{
+				// always count the host as a "yes" vote.
+				playerVotes[i] = 1;
+			}
+			total += playerVotes[i];
+		}
+		else
+		{
+			playerVotes[i] = 0;
+		}
+	}
+
+	return total;
+}
+
+static bool recvVote(NETQUEUE queue)
+{
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return true;
+	}
+
+	uint8_t newVote;
+	uint32_t player;
+
+	NETbeginDecode(queue, NET_VOTE);
+	NETuint32_t(&player);
+	NETuint8_t(&newVote);
+	NETend();
+
+	if (player >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid NET_VOTE from player %d: player id = %d", queue.index, static_cast<int>(player));
+		return false;
+	}
+
+	playerVotes[player] = (newVote == 1) ? 1 : 0;
+
+	debug(LOG_NET, "total votes: %d/%d", static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
+
+	return true;
+}
+
 // need to check for side effects.
 static void addGameOptions()
 {
@@ -1253,6 +1343,25 @@ static void addGameOptions()
 		hostButton->setLabel(_("Start Hosting Game"));
 		hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
 		optionsList->addWidgetToLayout(hostButton);
+	}
+	else if (!challengeActive && !NetPlay.isHost)
+	{
+		MultichoiceWidget *voteChoice = new MultichoiceWidget(optionsList, currentVote);
+		voteChoice->id = MULTIOP_VOTE;
+		voteChoice->setLabel(_("Vote"));
+		voteChoice->addButton(MULTIOP_VOTE_NO, Image(FrontImages, IMAGE_CHECK_OFF), Image(FrontImages, IMAGE_CHECK_OFF_HI), _("No"));
+		voteChoice->addButton(MULTIOP_VOTE_YES, Image(FrontImages, IMAGE_CHECK_ON), Image(FrontImages, IMAGE_CHECK_ON_HI), _("Yes"));
+		voteChoice->enable(true);
+		optionsList->addWidgetToLayout(voteChoice);
+
+		//Big hack here
+		if (!votedOnJoin)
+		{
+			currentVote = 0;
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_VOTE))->choose(0);
+			sendVoteData(false);
+			votedOnJoin = true;
+		}
 	}
 
 	// cancel
@@ -2284,6 +2393,7 @@ static void disableMultiButs()
 static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 {
 	reloadMPConfig(); // reload own settings
+	resetVoteData();
 
 	debug(LOG_NET, "player %u (Host is %s) stopping.", selectedPlayer, NetPlay.isHost ? "true" : "false");
 
@@ -2506,6 +2616,13 @@ static void randomizeLimit(const char *name)
 /* Generate random options */
 static void randomizeOptions()
 {
+	uint8_t numHumans = NET_numHumanPlayers();
+	if (NetPlay.bComms && bHosted && numHumans > 1 && (static_cast<float>(getVoteTotal()) / static_cast<float>(numHumans)) <= 0.5f)
+	{
+		addConsoleMessage(_("Not enough votes to randomize or change the map."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		return;
+	}
+
 	if (ingame.bHostSetup)
 	{
 		// Reset players' positions or bad things could happen to scavenger slot
@@ -2859,6 +2976,8 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
 
+		resetVoteData();
+
 		resetReadyStatus(false);
 		resetDataHash();
 		removeWildcards((char *)sPlayer);
@@ -2901,10 +3020,21 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");										// clear box
 		break;
 
+	case MULTIOP_VOTE:
+		if (!NetPlay.isHost)
+		{
+			sendVoteData(false);
+		}
+		break;
+
 	case CON_CANCEL:
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		if (!challengeActive)
 		{
+			if (NetPlay.bComms && !NetPlay.isHost && !bHosted && !ingame.bHostSetup)
+			{
+				sendVoteData(true);
+			}
 			NETGameLocked(false);		// reset status on a cancel
 			stopJoining(parent);
 		}
@@ -3286,6 +3416,7 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 				MultiPlayerLeave(player_id);		// get rid of their stuff
 				NET_InitPlayer(player_id, false);           // sets index player's array to false
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
+				playerVotes[player_id] = 0;
 				if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 				{
 					stopJoining(parent);
@@ -3352,6 +3483,8 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 				NETenum(&KICK_TYPE);
 				NETend();
 
+				playerVotes[player_id] = 0;
+
 				if (player_id == NET_HOST_ONLY)
 				{
 					char buf[250] = {'\0'};
@@ -3390,6 +3523,13 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 			if (ingame.localOptionsReceived)
 			{
 				recvTextMessage(queue);
+			}
+			break;
+
+		case NET_VOTE:
+			if (NetPlay.isHost && ingame.localOptionsReceived)
+			{
+				recvVote(queue);
 			}
 			break;
 
@@ -3499,10 +3639,19 @@ TITLECODE WzMultiOptionTitleUI::run()
 				break;
 			case MULTIOP_MAP:
 				{
-					if (NetPlay.bComms && bHosted && !isHoverPreview && NET_numHumanPlayers() > mapData->players)
+					if (NetPlay.bComms && bHosted && !isHoverPreview)
 					{
-						addConsoleMessage(_("Cannot change to a map with too few slots for all players."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-						break;
+						uint8_t numHumans = NET_numHumanPlayers();
+						if (numHumans > mapData->players)
+						{
+							addConsoleMessage(_("Cannot change to a map with too few slots for all players."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							break;
+						}
+						if (numHumans > 1 && (static_cast<float>(getVoteTotal()) / static_cast<float>(NET_numHumanPlayers())) <= 0.5f)
+						{
+							addConsoleMessage(_("Not enough votes to randomize or change the map."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							break;
+						}
 					}
 					sstrcpy(oldGameMap, game.map);
 					oldGameHash = game.hash;

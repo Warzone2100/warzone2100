@@ -632,12 +632,14 @@ bool runMultiPlayerMenu()
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
 		bMultiMessages = true;
+		resetVoteData();
 		NETinit(true);
 		NETdiscoverUPnPDevices();
 		game.type = SKIRMISH;		// needed?
 		changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 		break;
 	case FRONTEND_JOIN:
+		resetVoteData();
 		NETinit(true);
 		ingame.bHostSetup = false;
 		if (getLobbyError() != ERROR_INVALID)
