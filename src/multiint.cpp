@@ -2601,6 +2601,7 @@ static void randomizeOptions()
 			}
 			closeLoadingScreen();
 		}
+		resetLimits();
 		for (int i = 0; i < ARRAY_SIZE(limitIcons) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
 		{
 			randomizeLimit(limitIcons[i].stat);

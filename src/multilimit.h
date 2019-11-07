@@ -28,5 +28,6 @@
 
 void applyLimitSet();
 void createLimitSet();
+void resetLimits(void);
 
 #endif //__cplusplus //__INCLUDED_MULTILIMIT_H__
