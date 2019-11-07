@@ -130,11 +130,7 @@ void WzMultiLimitTitleUI::start()
 
 	if (challengeActive)
 	{
-		for (unsigned i = 0; i < numStructureStats; ++i)
-		{
-			asStructureStats[i].upgrade[0].limit = asStructureStats[i].base.limit;
-		}
-
+		resetLimits();
 		// turn off the sliders
 		sliderEnableDrag(false);
 	}
@@ -264,10 +260,7 @@ TITLECODE WzMultiLimitTitleUI::run()
 			break;
 		case IDLIMITS_RETURN:
 			// reset the sliders..
-			for (unsigned i = 0; i < numStructureStats; ++i)
-			{
-				asStructureStats[i].upgrade[0].limit = asStructureStats[i].base.limit;
-			}
+			resetLimits();
 			// free limiter structure
 			freeLimitSet();
 			if (widgGetButtonState(psWScreen, IDLIMITS_FORCE))
@@ -522,4 +515,12 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	cache.wzLimitText.render(x + 270, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	return;
+}
+
+void resetLimits(void)
+{
+	for (unsigned i = 0; i < numStructureStats; ++i)
+	{
+		asStructureStats[i].upgrade[0].limit = asStructureStats[i].base.limit;
+	}
 }
