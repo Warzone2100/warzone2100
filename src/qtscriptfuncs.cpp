@@ -1835,10 +1835,14 @@ static int get_first_available_component(int player, int capacity, const QScript
 		{
 			QString compName = list.property(k).toString();
 			int result = getCompFromName(type, QStringToWzString(compName));
-			if (result >= 0 && (apCompLists[player][type][result] == AVAILABLE || !strict)
-			    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
+			if (result >= 0)
 			{
-				return result; // found one!
+				int status = apCompLists[player][type][result];
+				if (((status == AVAILABLE || status == REDUNDANT) || !strict)
+					&& (type != COMP_BODY || asBodyStats[result].size <= capacity))
+				{
+					return result; // found one!
+				}
 			}
 			if (result < 0)
 			{
@@ -1849,10 +1853,14 @@ static int get_first_available_component(int player, int capacity, const QScript
 	else if (list.isString())
 	{
 		int result = getCompFromName(type, QStringToWzString(list.toString()));
-		if (result >= 0 && (apCompLists[player][type][result] == AVAILABLE || !strict)
-		    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
+		if (result >= 0)
 		{
-			return result; // found it!
+			int status = apCompLists[player][type][result];
+			if (((status == AVAILABLE || status == REDUNDANT) || !strict)
+				&& (type != COMP_BODY || asBodyStats[result].size <= capacity))
+			{
+				return result; // found it!
+			}
 		}
 		if (result < 0)
 		{
@@ -3678,7 +3686,8 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 	{
 		player = engine->globalObject().property("me").toInt32();
 	}
-	return QScriptValue(apStructTypeLists[player][index] == AVAILABLE
+	int status = apStructTypeLists[player][index];
+	return QScriptValue((status == AVAILABLE || status == REDUNDANT)
 	                    && asStructureStats[index].curCount[player] < asStructureStats[index].upgrade[player].limit);
 }
 
