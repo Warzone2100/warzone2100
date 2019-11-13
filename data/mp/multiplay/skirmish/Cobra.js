@@ -5,7 +5,6 @@ const COBRA_RULESETS = "/multiplay/skirmish/cobra_rulesets/";
 //Rulesets here.
 include(COBRA_RULESETS + "CobraStandard.js");
 
-const DEBUG_LOG_ON = false; //NOTE: slow!
 const MAX_GRUDGE = 50000;
 const MIN_ATTACK_DROIDS = 4;
 const FACTORY = "A0LightFactory";
@@ -14,7 +13,7 @@ const VTOL_FACTORY = "A0VTolFactory1";
 const MY_BASE = startPositions[me];
 const OIL_RES = "OilResource";
 const MIN_POWER = 150;
-const SUPER_LOW_POWER = 80;
+const SUPER_LOW_POWER = 70;
 const MIN_BUILD_POWER = 220;
 const PRODUCTION_POWER = SUPER_LOW_POWER;
 const ELECTRONIC_DEFENSES = [
@@ -55,7 +54,7 @@ const ESSENTIALS_3 = [
 	"R-Struc-Power-Upgrade03a",
 	"R-Struc-Research-Upgrade09",
 	"R-Sys-Autorepair-General",
-]
+];
 const SYSTEM_UPGRADES = [
 	"R-Sys-MobileRepairTurretHvy",
 	"R-Vehicle-Prop-Tracks",
@@ -86,7 +85,12 @@ const BODY_RESEARCH_1 = [
 ];
 const BODY_RESEARCH_2 = [
 	"R-Vehicle-Body10",
+	"R-Vehicle-Engine09",
 	"R-Vehicle-Body14",
+];
+const VTOL_ESSENTIALS = [
+	"R-Struc-VTOLPad-Upgrade01",
+	"R-Wpn-Bomb01",
 ];
 const VTOL_RES = [
 	"R-Struc-VTOLPad-Upgrade06",
@@ -102,7 +106,7 @@ const TANK_BODY = [
 	"Body13SUP", // Wyvern
 	"Body10MBT", // Vengeance
 	"Body7ABT",  // Retribution
-	"Body9REC",
+	"Body9REC",  // Tiger
 	"Body12SUP", // Mantis
 	"Body6SUPP", // Panther
 	"Body11ABT", // Python
@@ -145,7 +149,8 @@ var subPersonalities =
 		"defensePriority": 30,
 		"vtolPriority": 20,
 		"alloyPriority": 20,
-		"useLasers": false,
+		"useLasers": true,
+		"cyborgThreatPercentage": 0.20,
 		"resPath": "generic",
 		"res": [
 			"R-Wpn-Cannon-Damage02",
@@ -162,7 +167,8 @@ var subPersonalities =
 		"defensePriority": 20,
 		"vtolPriority": 40,
 		"alloyPriority": 25,
-		"useLasers": false,
+		"useLasers": true,
+		"cyborgThreatPercentage": 0.40,
 		"resPath": "generic",
 		"res": [
 			"R-Wpn-Flamer-Damage03",
@@ -179,8 +185,9 @@ var subPersonalities =
 		"defensePriority": 10,
 		"vtolPriority": 50,
 		"alloyPriority": 10,
-		"useLasers": false,
+		"useLasers": true,
 		"resPath": "offensive",
+		"cyborgThreatPercentage": 0.10,
 		"res": [
 			"R-Wpn-Rocket02-MRL",
 		],
@@ -195,8 +202,9 @@ var subPersonalities =
 		"defensePriority": 50,
 		"vtolPriority": 40,
 		"alloyPriority": 15,
-		"useLasers": false,
+		"useLasers": true,
 		"resPath": "generic",
+		"cyborgThreatPercentage": 100,
 		"res": [
 			"R-Wpn-MG2Mk1",
 		],
@@ -211,8 +219,9 @@ var subPersonalities =
 		"defensePriority": 70,
 		"vtolPriority": 15,
 		"alloyPriority": 15,
-		"useLasers": false,
+		"useLasers": true,
 		"resPath": "offensive",
+		"cyborgThreatPercentage": 0.30,
 		"res": [
 			"R-Wpn-Mortar02Hvy",
 			"R-Wpn-Mortar-ROF02",
@@ -231,10 +240,11 @@ var subPersonalities =
 		"vtolPriority": 100,
 		"alloyPriority": 10,
 		"useLasers": true,
+		"cyborgThreatPercentage": 0.10,
 		"resPath": "air",
 		"res": [
-			"R-Wpn-Mortar-Incenediary",
 			"R-Wpn-Laser01",
+			"R-Wpn-Mortar-Incenediary",
 		],
 	},
 };
@@ -260,8 +270,8 @@ var turnOffMG; //This is only used for when the personalities don't have their w
 var useArti;
 var useVtol;
 var lastAttackedByScavs;
-var startedWithTech;
-var prevResPath; // previous personality research path. volatile.
+var prevResPath; // Previous personality research path. Volatile.
+var currently_dead; // Used to detect if Cobra is, basically, dead. If true, the script is put in a very low perf impact state.
 
 // -- Weapon research list (initializeResearchLists).
 var techlist;
@@ -279,12 +289,12 @@ var secondaryWeaponTech;
 var secondaryWeaponExtra;
 var defenseTech;
 var standardDefenseTech;
+var machinegunWeaponTech;
+var machinegunWeaponExtra;
+var empWeapons;
 
-// -- Debug var stuff
-var resHistory;
 
 //Now include everthing else.
-include(COBRA_INCLUDES + "debug.js");
 include(COBRA_INCLUDES + "performance.js");
 include(COBRA_INCLUDES + "miscFunctions.js");
 include(COBRA_INCLUDES + "build.js");
@@ -296,4 +306,4 @@ include(COBRA_INCLUDES + "events.js");
 include(COBRA_INCLUDES + "chat.js");
 include(COBRA_INCLUDES + "adaption.js");
 
-const MIN_TRUCKS = mapOilLevel() !== "NTW" ? 6 : 8;
+const MIN_TRUCKS = mapOilLevel() !== "NTW" ? 6 : 10;

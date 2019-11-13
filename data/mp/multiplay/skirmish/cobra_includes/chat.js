@@ -44,10 +44,6 @@ function eventChat(from, to, message)
 	{
 		sendChatMessage(MostHarmfulPlayer(), to);
 	}
-	else if (message === "FFA")
-	{
-		freeForAll();
-	}
 	else if (message === "toggle hover")
 	{
 		forceHover = !forceHover;
@@ -137,47 +133,4 @@ function eventChat(from, to, message)
 			targetPlayer(num);
 		}
 	}
-}
-
-//If played on the team that won, then break alliance with everybody and try to conquer them.
-//Completely pointless feature, but makes everything a bit more fun.
-//chat: 'FFA'.
-function freeForAll()
-{
-	var won = true;
-	var enemies = findLivingEnemies();
-	for (var p = 0, l = enemies.length; p < l; ++p)
-	{
-		var e = enemies[p];
-		var factories = countStruct("A0LightFactory", e) + countStruct("A0CyborgFactory", e);
-		var droids = countDroid(DROID_CONSTRUCT, e);
-		if (droids + factories)
-		{
-			won = false;
-			break;
-		}
-	}
-
-	if (won)
-	{
-		const FRIENDS = playerAlliance(true);
-		const CACHE_FRIENDS = FRIENDS.length;
-
-		if (CACHE_FRIENDS)
-		{
-			if (isDefined(scavengerPlayer) && allianceExistsBetween(scavengerPlayer, me))
-			{
-				setAlliance(scavengerPlayer, me, false);
-			}
-
-			for (var i = 0; i < CACHE_FRIENDS; ++i)
-			{
-				var idx = FRIENDS[i];
-				chat(idx, "FREE FOR ALL!");
-				setAlliance(idx, me, false);
-			}
-		}
-	}
-
-	return won;
 }

@@ -2,7 +2,7 @@
     "AI": {
         "js": "Cobra.js",
         "name": "Cobra",
-        "tip": "Designed for team battles",
+        "tip": "Designed for shared research team battles",
         "easy_tip": "Gets ~ 25% less power from each oil derrick\nBasic decision making is slower",
         "hard_tip": "Uses the Heavy Plasma Launcher",
         "insane_tip": "Gets ~ 100% more power from each oil derrick\nUses the Heavy Plasma Launcher and EMP Mortar\nStarts with defensive structures and oil derricks"

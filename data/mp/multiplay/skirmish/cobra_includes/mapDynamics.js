@@ -41,7 +41,7 @@ function checkIfSeaMap()
 			if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
 			{
 				//Check to see if it is a closed player slot
-				if (countDroid(DROID_ANY, i).length)
+				if (countDroid(DROID_ANY, i) > 0)
 				{
 					seaMapWithLandEnemy = true;
 					break;
@@ -55,30 +55,6 @@ function checkIfSeaMap()
 	}
 
 	return hoverMap;
-}
-
-//Turn off Machine-guns on T2 and T3
-//Very cheap analysis done here.
-function CheckStartingBases()
-{
-	if (personality === "AL")
-	{
-		return true;
-	}
-
-	if (getMultiTechLevel() > 1)
-	{
-		const CACHE_WEAPONS = subPersonalities[personality].primaryWeapon.weapons.length;
-		for (var i = 0; i < CACHE_WEAPONS; ++i)
-		{
-			if (isDesignable(subPersonalities[personality].primaryWeapon.weapons[i].stat))
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
 }
 
 //All derricks and all oil resources to find the map total.
@@ -125,11 +101,11 @@ function mapOilLevel()
 		{
 			str = "LOW";
 		}
-		else if ((perPlayer > 8) && (perPlayer <= 16))
+		else if ((perPlayer > 8) && (perPlayer < 16))
 		{
 			str = "MEDIUM";
 		}
-		else if ((perPlayer > 16) && (perPlayer < 34))
+		else if ((perPlayer >= 16) && (perPlayer < 24))
 		{
 			str = "HIGH";
 		}
@@ -144,48 +120,80 @@ function mapOilLevel()
 	return cacheThis(uncached, [], undefined, Infinity);
 }
 
-//Determine the base area that Cobra claims. Pass an object to see if it is in it.
-function initialTerritory(object)
+//Determine the base area that Cobra claims.
+function cobraBaseArea()
 {
-	const X_AVERAGE = 2 * Math.ceil(mapWidth / maxPlayers);
-	const Y_AVERAGE = 2 * Math.ceil(mapHeight / maxPlayers);
+	function uncached()
+	{
+		const EXTRA_TILES = 20;
+		var firstRun = true;
+		var area = {"x1": 0, "y1": 0, "x2": 0, "y2": 0,};
+		var baseStructures = structures.factories
+			.concat(structures.templateFactories)
+			.concat(structures.vtolFactories)
+			.concat(structures.labs)
+			.concat(structures.gens)
+			.concat(structures.hqs)
+			.concat(structures.vtolPads)
+			.concat(structures.extras);
 
-	var area =
-	{
-		"x1": MY_BASE.x - X_AVERAGE, "y1": MY_BASE.y - Y_AVERAGE,
-		"x2": MY_BASE.x + X_AVERAGE, "y2": MY_BASE.y + Y_AVERAGE,
-	};
-
-	if (area.x1 < 0)
-	{
-		area.x1 = 0;
-	}
-	if (area.y1 < 0)
-	{
-		area.y1 = 0;
-	}
-	if (area.x2 > mapWidth)
-	{
-		area.x2 = mapWidth;
-	}
-	if (area.y2 > mapHeight)
-	{
-		area.y2 = mapHeight;
-	}
-
-	if (isDefined(object))
-	{
-		var stuff = enumArea(area.x1, area.y1, area.x2, area.y2);
-		for(var i = 0, l = stuff.length; i < l; ++i)
+		for (var i = 0, len = baseStructures.length; i < len; ++i)
 		{
-			if(object.id === stuff[i].id)
+			var structureType = baseStructures[i];
+			var objects = enumStruct(me, structureType);
+
+			for (var j = 0, len2 = objects.length; j < len2; ++j)
 			{
-				return true;
+				var structure = objects[j];
+
+				if (firstRun || (structure.x < area.x1))
+				{
+					area.x1 = structure.x;
+				}
+				if (firstRun || (structure.x > area.x2))
+				{
+					area.x2 = structure.x;
+				}
+				if (firstRun || (structure.y < area.y1))
+				{
+					area.y1 = structure.y;
+				}
+				if (firstRun || (structure.y > area.y2))
+				{
+					area.y2 = structure.y;
+				}
+
+				if (firstRun)
+				{
+					firstRun = false;
+				}
 			}
 		}
 
-		return false;
+		area.x1 = area.x1 - EXTRA_TILES;
+		area.y1 = area.y1 - EXTRA_TILES;
+		area.x2 = area.x2 + EXTRA_TILES;
+		area.y2 = area.y2 + EXTRA_TILES;
+
+		if (area.x1 < 0)
+		{
+			area.x1 = 0;
+		}
+		if (area.y1 < 0)
+		{
+			area.y1 = 0;
+		}
+		if (area.x2 > mapWidth)
+		{
+			area.x2 = mapWidth;
+		}
+		if (area.y2 > mapHeight)
+		{
+			area.y2 = mapHeight;
+		}
+
+		return area;
 	}
 
-	return area;
+	return cacheThis(uncached, [], undefined, 20000);
 }
