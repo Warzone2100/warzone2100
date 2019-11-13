@@ -26,13 +26,14 @@ function chooseRandomWeapon()
 {
 	var weaps;
 
-	switch (random(5))
+	switch (random(6))
 	{
 		case 0: weaps = subPersonalities[personality].primaryWeapon; break;
 		case 1: if (useArti) { weaps = subPersonalities[personality].artillery; } break;
 		case 2: if (subPersonalities[personality].useLasers === true) { weaps = weaponStats.lasers; } break;
 		case 3: weaps = subPersonalities[personality].secondaryWeapon; break;
 		case 4: weaps = weaponStats.AS; break;
+		case 5: weaps = weaponStats.nexusTech; break;
 		default: weaps = subPersonalities[personality].primaryWeapon; break;
 	}
 
@@ -58,7 +59,7 @@ function shuffleWeaponList(weaps)
 	return weaponList;
 }
 
-//Either fastFire or normal.
+//Either fastFire, normal, or emp-like.
 function chooseWeaponType(weaps)
 {
 	var weaponType = weaps.weapons;
@@ -130,12 +131,15 @@ function choosePersonalityWeapon(type)
 
 	if (type === "TANK")
 	{
+		var skip = false;
 		weaps = chooseRandomWeapon();
 		weaponList = shuffleWeaponList(chooseWeaponType(weaps));
 
 		//randomly choose an unbalanced and overpowered weapon if on hard or insane difficulty.
 		if (difficulty >= HARD && componentAvailable("tracked01") && (random(100) <= 2))
 		{
+			weaponList = [];
+			skip = true;
 			if (difficulty >= INSANE && random(100) <= 50)
 			{
 				weaponList.push("MortarEMP");
@@ -146,12 +150,41 @@ function choosePersonalityWeapon(type)
 			}
 		}
 
-		if (!turnOffMG && !isDesignable(weaponList))
+		// Choose an anti-air weapon instead... checks target player and then total player vtols.
+		if (!skip && ((playerVtolRatio(getMostHarmfulPlayer()) >= 0.12) || (countEnemyVTOL() > 20)) && random(100) < 20)
 		{
 			weaponList = [];
- 			for (var i = weaponStats.machineguns.weapons.length - 1; i >= 0; --i)
+			skip = true;
+
+			// The lasers are the most powerful...
+			if (componentAvailable(weaponStats.lasers_AA.weapons[0].stat) && (random(100) <= 50))
 			{
- 				weaponList.push(weaponStats.machineguns.weapons[i].stat);
+				var lasers = weaponStats.lasers_AA.weapons;
+				for (var i = lasers.length - 1; i >= 0; --i)
+				{
+					var weapObj = lasers[i];
+	 				weaponList.push(weapObj.stat);
+	 			}
+			}
+
+			var aa = subPersonalities[personality].antiAir.weapons;
+ 			for (var i = aa.length - 1; i >= 0; --i)
+			{
+				var weapObj = aa[i];
+ 				weaponList.push(weapObj.stat);
+ 			}
+		}
+
+		if (!skip && ((!turnOffMG && (random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
+			!componentAvailable(subPersonalities[personality].primaryWeapon.weapons[0].stat)))
+		{
+			weaponList = [];
+			var generalAntiCyborgWeapons = weaponStats.machineguns.weapons;
+
+ 			for (var i = generalAntiCyborgWeapons.length - 1; i >= 0; --i)
+			{
+				var weapObj = generalAntiCyborgWeapons[i];
+ 				weaponList.push(weapObj.stat);
  			}
 		}
 	}
@@ -302,6 +335,14 @@ function buildCyborg(id, useEngineer)
 	}
 
 	var weaponLine = choosePersonalityWeapon("CYBORG");
+
+	//Choose MG instead if enemy has enough cyborgs.
+	if ((!turnOffMG && (random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
+		!componentAvailable(subPersonalities[personality].primaryWeapon.weapons[0].stat))
+	{
+		weaponLine = weaponStats.machineguns;
+	}
+
 	if (isDefined(weaponLine))
 	{
 		for (var x = weaponLine.templates.length - 1; x >= 0; --x)
@@ -320,12 +361,26 @@ function buildCyborg(id, useEngineer)
 	return false;
 }
 
-//Create a vtol fighter with a medium body.
+//Create a vtol fighter with a medium/large body.
 function buildVTOL(id)
 {
+	if (getRealPower() < PRODUCTION_POWER)
+	{
+		return false;
+	}
+
 	var weap = choosePersonalityWeapon("VTOL");
+	var weap2 = choosePersonalityWeapon("VTOL");
 	var fac = getObject(STRUCTURE, me, id);
-	return (getRealPower() > PRODUCTION_POWER && fac !== null && isDefined(weap) && buildDroid(fac, "VTOL unit", VTOL_BODY, "V-Tol", "", "", weap, weap));
+
+	if (fac !== null && isDefined(weap) && isDefined(weap2))
+	{
+		var body = (random(100) < 60) ? VTOL_BODY : TANK_BODY;
+
+		return buildDroid(fac, "VTOL unit", body, "V-Tol", "", "", weap, weap2);
+	}
+
+	return false;
 }
 
 //Check what system units are queued in a regular factory. Returns an object
@@ -366,7 +421,7 @@ function analyzeQueuedSystems()
 //Produce a unit when factories allow it.
 function produce()
 {
-	if (countDroid(DROID_ANY) >= 150)
+	if ((countDroid(DROID_ANY) >= 150) || currently_dead)
 	{
 		return; //Stop spamming about having the droid limit reached.
 	}
@@ -375,8 +430,8 @@ function produce()
 	var useCybEngineer = !countStruct(structures.factories); //use them if we have no factory
 	var systems = analyzeQueuedSystems();
 
-	var attackers = groupSizes[attackGroup];
-	var allowSpecialSystems = attackers > 10;
+	var attackers = groupSize(attackGroup);
+	var allowSpecialSystems = isDefined(attackers) ? attackers > 10 : false;
 	var buildSensors = ((enumGroup(sensorGroup).length + systems.sensor) < MIN_SENSORS);
 	var buildRepairs = ((enumGroup(repairGroup).length + systems.repair) < MIN_REPAIRS);
 	var buildTrucks = ((enumGroup(constructGroup).length + enumGroup(oilGrabberGroup).length + systems.truck) < MIN_TRUCKS);
@@ -399,25 +454,45 @@ function produce()
 				{
 					if (facType === FACTORY)
 					{
-						if (buildTrucks)
+						var highTechCrazyCase = getMultiTechLevel() > 1 && baseType === CAMP_CLEAN;
+						var amountOfAttackers = 0; //beware NaN potential
+						var arti = groupSize(artilleryGroup);
+						var vtol = groupSize(vtolGroup);
+
+						if (isDefined(attackers))
+						{
+							amountOfAttackers += attackers;
+						}
+						if (isDefined(arti))
+						{
+							amountOfAttackers += arti;
+						}
+						if (isDefined(vtol))
+						{
+							amountOfAttackers += vtol;
+						}
+
+						if (buildTrucks && ((amountOfAttackers >= MIN_ATTACK_DROIDS) ||
+							(gameTime < 240000 && mapOilLevel() === "NTW") ||
+							!componentAvailable(subPersonalities[personality].primaryWeapon.weapons[0].stat) ||
+							highTechCrazyCase))
 						{
 							buildSys(FC.id, "Spade1Mk1");
 						}
 						else if (buildSensors &&
-							enumGroup(artilleryGroup).length &&
+							(enumGroup(artilleryGroup).length > 0) &&
 							componentAvailable("SensorTurret1Mk1"))
 						{
 							buildSys(FC.id);
 						}
 						else if (allowSpecialSystems &&
 							buildRepairs &&
-							isDesignable("LightRepair1"))
+							componentAvailable("LightRepair1"))
 						{
 							buildSys(FC.id, REPAIR_TURRETS);
 						}
 						else
 						{
-							//Do not produce weak body units if we can give this factory a module.
 							if (!countStruct(structures.gens))
 							{
 								continue;

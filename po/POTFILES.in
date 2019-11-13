@@ -159,7 +159,6 @@ data/mp/multiplay/skirmish/bonecrusher/weapons.js
 data/mp/multiplay/skirmish/cobra_includes/adaption.js
 data/mp/multiplay/skirmish/cobra_includes/build.js
 data/mp/multiplay/skirmish/cobra_includes/chat.js
-data/mp/multiplay/skirmish/cobra_includes/debug.js
 data/mp/multiplay/skirmish/cobra_includes/events.js
 data/mp/multiplay/skirmish/cobra_includes/mapDynamics.js
 data/mp/multiplay/skirmish/cobra_includes/miscFunctions.js

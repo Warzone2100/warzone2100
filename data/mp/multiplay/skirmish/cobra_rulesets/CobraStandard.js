@@ -556,7 +556,7 @@ const weaponStats =
 	{
 		alias: "nex",
 		weapons: [
-			//{ res: "R-Wpn-EMPCannon", stat: "EMP-Cannon" },
+			{ res: "R-Wpn-EMPCannon", stat: "EMP-Cannon" },
 			//{ res: "R-Wpn-MortarEMP", stat: "MortarEMP" },
 			{ res: "R-Sys-SpyTurret", stat: "SpyTurret01" },
 		],

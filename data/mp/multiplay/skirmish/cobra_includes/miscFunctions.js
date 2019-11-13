@@ -149,7 +149,7 @@ function getRealPower(player)
 		player = me;
 	}
 	const POWER = playerPower(player) - queuedPower(player);
-	if (playerAlliance(true).length && player === me && POWER < 50)
+	if (playerAlliance(true).length > 0 && player === me && POWER < 50)
 	{
 		sendChatMessage("need Power", ALLIES);
 	}
@@ -165,7 +165,7 @@ function findLivingEnemies()
 		var alive = [];
 		for (var x = 0; x < maxPlayers; ++x)
 		{
-	 		if ((x !== me) && !allianceExistsBetween(x, me) && (countDroid(DROID_ANY, x).length || enumStruct(x).length))
+	 		if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
 			{
 				alive.push(x);
 			}
@@ -200,8 +200,15 @@ function getMostHarmfulPlayer()
 	{
 		var mostHarmful = 0;
 		var enemies = findLivingEnemies();
-		if (!enemies.length)
+		var allEnemies = playerAlliance(false);
+
+		if (enemies.length === 0)
 		{
+			if (allEnemies.length > 0)
+			{
+				return allEnemies[0]; //just focus on a dead enemy then.
+			}
+			// shouldn't really happen unless someone is doing something really strange.
 			return 0; //If nothing to attack, then attack player 0 (happens only after winning).
 		}
 
@@ -213,10 +220,17 @@ function getMostHarmfulPlayer()
 			}
 	 	}
 
+		// Don't have an enemy yet, so pick one randomly (likely start of the game or the counters are all the same).
+		if (((me === mostHarmful) || allianceExistsBetween(me, mostHarmful)) && enemies.length > 0)
+		{
+			mostHarmful = enemies[random(enemies.length)];
+			grudgeCount[mostHarmful] += 1;
+		}
+
 		return mostHarmful;
 	}
 
-	return cacheThis(uncached, [], undefined, 12000);
+	return cacheThis(uncached, [], undefined, 7000);
 }
 
 //Set the initial grudge counter to target a random enemy.
@@ -284,31 +298,94 @@ function removeThisTimer(timer)
 	}
 }
 
-//Stop the non auto-remove timers if Cobra died.
-function stopTimers()
+//Check if Cobra is "alive". If not, the script is put in a very low perf impact state.
+function checkIfDead()
 {
 	if (!(countDroid(DROID_ANY) || countStruct(FACTORY) || countStruct(CYBORG_FACTORY)))
 	{
-		var timers = [
-			"buildOrders", "repairDroidTactics", "produce", "groundTactics",
-			"artilleryTactics", "stopTimers", "research", "lookForOil",
-			"vtolTactics",
-		];
+		currently_dead = true;
 
-		removeThisTimer(timers);
-		donateAllPower();
+		// Remind players to help me... (other Cobra allies will respond)
+		if (playerAlliance(true).length > 0)
+		{
+			const GOOD_POWER_SUPPLY = 1200;
+
+			if (playerPower(me) < GOOD_POWER_SUPPLY)
+			{
+				sendChatMessage("need power", ALLIES);
+			}
+			else
+			{
+				sendChatMessage("need truck", ALLIES);
+			}
+		}
+	}
+	else
+	{
+		currently_dead = false;
 	}
 }
 
-//Give a player all of Cobra's power. one use is if it dies, then it gives
-//all of its power to an ally.
-function donateAllPower()
+function initCobraGroups()
 {
-	const ALLY_PLAYERS = playerAlliance(true);
-	const LEN = ALLY_PLAYERS.length;
+	attackGroup = newGroup();
+	vtolGroup = newGroup();
+	sensorGroup = newGroup();
+	repairGroup = newGroup();
+	artilleryGroup = newGroup();
+	constructGroup = newGroup();
+	oilGrabberGroup = newGroup();
+	retreatGroup = newGroup();
 
-	if (LEN && playerPower(me) > 0)
+	addDroidsToGroup(attackGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return !obj.isCB; }));
+	addDroidsToGroup(attackGroup, enumDroid(me, DROID_CYBORG));
+	addDroidsToGroup(vtolGroup, enumDroid(me).filter(function(obj) { return isVTOL(obj); }));
+	addDroidsToGroup(sensorGroup, enumDroid(me, DROID_SENSOR));
+	addDroidsToGroup(repairGroup, enumDroid(me, DROID_REPAIR));
+	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return obj.isCB; }));
+
+	var cons = enumDroid(me, DROID_CONSTRUCT);
+	for (var i = 0, l = cons.length; i < l; ++i)
 	{
-		donatePower(playerPower(me), ALLY_PLAYERS[random(LEN)]);
+		var con = cons[i];
+		if (l < MIN_TRUCKS)
+		{
+			if (!countStruct(FACTORY))
+			{
+				groupAdd(constructGroup, con);
+			}
+			else
+			{
+				groupAdd(oilGrabberGroup, con);
+			}
+		}
+		else
+		{
+			if (i < Math.floor(l / 2))
+			{
+				groupAdd(constructGroup, con);
+			}
+			else
+			{
+				groupAdd(oilGrabberGroup, con);
+			}
+		}
 	}
+}
+
+function initCobraVars()
+{
+	var isHoverMap = checkIfSeaMap();
+
+	lastMsg = "eventStartLevel";
+	currently_dead = false;
+	researchComplete = false;
+	initializeGrudgeCounter();
+	forceHover = isHoverMap;
+	turnOffCyborgs = isHoverMap;
+	choosePersonality();
+	turnOffMG = false;
+	useArti = true;
+	useVtol = true;
+	lastAttackedByScavs = 0;
 }

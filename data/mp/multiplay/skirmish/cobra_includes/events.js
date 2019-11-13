@@ -1,62 +1,15 @@
 //This file contains generic events. Chat and research events are split into
 //their own seperate files.
 
-//init vars
 function eventGameInit()
 {
-	attackGroup = newGroup();
-	vtolGroup = newGroup();
-	sensorGroup = newGroup();
-	repairGroup = newGroup();
-	artilleryGroup = newGroup();
-	constructGroup = newGroup();
-	oilGrabberGroup = newGroup();
-	retreatGroup = newGroup();
-	lastMsg = "eventGameInit";
-
-	addDroidsToGroup(attackGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return !obj.isCB; }));
-	addDroidsToGroup(attackGroup, enumDroid(me, DROID_CYBORG));
-	addDroidsToGroup(vtolGroup, enumDroid(me).filter(function(obj) { return isVTOL(obj); }));
-	addDroidsToGroup(sensorGroup, enumDroid(me, DROID_SENSOR));
-	addDroidsToGroup(repairGroup, enumDroid(me, DROID_REPAIR));
-	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return obj.isCB; }));
-
-	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
-	{
-		if (l < MIN_TRUCKS)
-		{
-			!countStruct(FACTORY) ? groupAdd(constructGroup, cons[i]) : groupAdd(oilGrabberGroup, cons[i]);
-		}
-		else
-		{
-			if (i < Math.floor(l / 2))
-			{
-				groupAdd(constructGroup, cons[i]);
-			}
-			else
-			{
-				groupAdd(oilGrabberGroup, cons[i]);
-			}
-		}
-	}
-
-	researchComplete = false;
-	initializeGrudgeCounter();
-	forceHover = checkIfSeaMap();
-	turnOffCyborgs = forceHover;
-	choosePersonality();
-	turnOffMG = CheckStartingBases();
-	startedWithTech = CheckStartingBases();
-	useArti = true;
-	useVtol = true;
-	lastAttackedByScavs = 0;
-	resHistory = [];
+	initCobraGroups();
 }
 
 //Setup timers mostly
 function eventStartLevel()
 {
+	initCobraVars();
 	recycleForHover();
 	buildOrders(); //Start building right away.
 
@@ -78,18 +31,16 @@ function eventStartLevel()
 	setTimer("groundTactics", 2000 + delay);
 	setTimer("switchOffMG", 5000 + delay);
 	setTimer("recycleForHover", 8000 + delay);
-	setTimer("stopTimers", 9000 + delay);
-	if (DEBUG_LOG_ON)
-	{
-		setTimer("debugLogAtEnd", 100000 + delay);
-	}
+	setTimer("checkIfDead", 9000 + delay);
 }
 
 //This is meant to check for nearby oil resources next to the construct. also
 //defend our derrick if possible.
 function eventStructureBuilt(structure, droid)
 {
-	if (structure.stattype === RESOURCE_EXTRACTOR) {
+	if (structure.stattype === RESOURCE_EXTRACTOR && droid)
+	{
+		var oilCount = mapOilLevel();
 		var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false);
 		nearbyOils = nearbyOils.filter(function(obj) {
 			return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
@@ -101,16 +52,15 @@ function eventStructureBuilt(structure, droid)
 		{
 			orderDroidBuild(droid, DORDER_BUILD, structures.derricks, nearbyOils[0].x, nearbyOils[0].y);
 		}
-		else
+		else if (oilCount !== "HIGH" && oilCount !== "NTW")
 		{
-			var numDefenses = enumRange(droid.x, droid.y, 8, me, false);
-			numDefenses = numDefenses.filter(function(obj) {
-				return ((obj.type === STRUCTURE) && (obj.stattype === DEFENSE));
+			var numDefenses = enumRange(droid.x, droid.y, 3, me, false).filter(function(obj) {
+				return (allianceExistsBetween(me, obj.player) && (obj.type === STRUCTURE) && (obj.stattype === DEFENSE));
 			});
 
 			if (numDefenses === 0)
 			{
-				buildDefenses(droid);
+				buildDefenses(droid, true);
 			}
 		}
 	}
@@ -128,10 +78,6 @@ function eventDroidIdle(droid)
 			attackThisObject(droid.id, objectInformation(enemyObjects[0]));
 		}
 	}
-	else if (droid.droidType === DROID_CONSTRUCT)
-	{
-		checkUnfinishedStructures(droid.id);
-	}
 }
 
 //Groups droid types.
@@ -139,8 +85,17 @@ function eventDroidBuilt(droid, struct)
 {
 	if (isConstruct(droid.id))
 	{
+		var baseBuilderLen = enumGroup(constructGroup).length;
+		var halfOfMin = Math.floor(MIN_TRUCKS  / 2);
+
+		if (droid.body !== "CyborgLightBody" && baseType === CAMP_CLEAN && getMultiTechLevel() > 1 && enumGroup(oilGrabberGroup).length === 0)
+		{
+			groupAdd(oilGrabberGroup, droid); //Fix for crazy T2/T3/T4 no-bases config
+		}
 		//Combat engineers are always base builders.
-		if (droid.body === "CyborgLightBody" || enumGroup(constructGroup).length < Math.floor(MIN_TRUCKS  / 2))
+		else if ((droid.body === "CyborgLightBody") ||
+			((baseBuilderLen < halfOfMin) ||
+			((mapOilLevel() === "NTW") && (gameTime > 180000) && (baseBuilderLen < halfOfMin + 2))))
 		{
 			groupAdd(constructGroup, droid);
 		}
