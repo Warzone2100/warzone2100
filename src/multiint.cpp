@@ -2516,37 +2516,42 @@ static void randomizeOptions()
 			NetPlay.players[i].team = i;
 			NETBroadcastPlayerInfo(i);
 		}
-		// Pick a map for a number of players and tech level
-		game.techLevel = current_tech = (rand() % 4) + 1;
-		LEVEL_LIST levels;
-		do
-		{
-			// don't kick out already joined players because of randomize
-			int players = NET_numHumanPlayers();
-			int minimumPlayers = std::max(players, 2);
-			current_numplayers = minimumPlayers;
-			if (minimumPlayers < MAX_PLAYERS_IN_GUI)
-			{
-				current_numplayers += (rand() % (MAX_PLAYERS_IN_GUI - minimumPlayers));
-			}
-			levels = enumerateMultiMaps(game.techLevel, current_numplayers);
-		}
-		while (levels.empty()); // restart when there are no maps for a random number of players
 
-		int pickedLevel = rand() % levels.size();
-		LEVEL_DATASET *mapData = nullptr;
-		for (LEVEL_LIST::iterator it = levels.begin(); it != levels.end(); ++it, --pickedLevel)
+		// Don't randomize the map once hosting for true multiplayer has started
+		if (!bHosted || !(bMultiPlayer && NetPlay.bComms != 0))
 		{
-			if (pickedLevel <= 0)
+			// Pick a map for a number of players and tech level
+			game.techLevel = current_tech = (rand() % 4) + 1;
+			LEVEL_LIST levels;
+			do
 			{
-				mapData = *it;
-				break;
+				// don't kick out already joined players because of randomize
+				int players = NET_numHumanPlayers();
+				int minimumPlayers = std::max(players, 2);
+				current_numplayers = minimumPlayers;
+				if (minimumPlayers < MAX_PLAYERS_IN_GUI)
+				{
+					current_numplayers += (rand() % (MAX_PLAYERS_IN_GUI - minimumPlayers));
+				}
+				levels = enumerateMultiMaps(game.techLevel, current_numplayers);
 			}
+			while (levels.empty()); // restart when there are no maps for a random number of players
+
+			int pickedLevel = rand() % levels.size();
+			LEVEL_DATASET *mapData = nullptr;
+			for (LEVEL_LIST::iterator it = levels.begin(); it != levels.end(); ++it, --pickedLevel)
+			{
+				if (pickedLevel <= 0)
+				{
+					mapData = *it;
+					break;
+				}
+			}
+			loadMapSettings0(mapData);
+			loadMapSettings1();
+			loadMapPreview(false);
+			loadMapSettings2();
 		}
-		loadMapSettings0(mapData);
-		loadMapSettings1();
-		loadMapPreview(false);
-		loadMapSettings2();
 
 		// Reset and randomize player positions, also to guard
 		// against case where in the previous map some players
