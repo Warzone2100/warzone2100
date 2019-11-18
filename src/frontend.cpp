@@ -320,16 +320,13 @@ bool runTutorialMenu()
 	switch (id)
 	{
 	case FRONTEND_TUTORIAL:
-		NetPlay.players[0].allocated = true;
-		game.skDiff[0] = UBYTE_MAX;
+		SPinit();
 		sstrcpy(aLevelName, TUTORIAL_LEVEL);
 		changeTitleMode(STARTGAME);
 		break;
 
 	case FRONTEND_FASTPLAY:
-		NETinit(true);
-		NetPlay.players[0].allocated = true;
-		game.skDiff[0] = UBYTE_MAX;
+		SPinit();
 		sstrcpy(aLevelName, "FASTPLAY");
 		changeTitleMode(STARTGAME);
 		break;
