@@ -135,9 +135,10 @@ void ScriptDebugger::fogButtonClicked()
 	kf_ToggleFog();
 }
 
+static const QStringList view_type = { "RES", "RPL", "PROX", "RPLX", "BEACON" };
+
 static void fillViewdataModel(QStandardItemModel &m)
 {
-	const QStringList view_type = { "RES", "PPL", "PROX", "RPLX", "BEACON" };
 	int row = 0;
 	m.setRowCount(0);
 	m.setHorizontalHeaderLabels({"Name", "Type", "Source"});
@@ -145,6 +146,7 @@ static void fillViewdataModel(QStandardItemModel &m)
 	for (const WzString& key : keys)
 	{
 		VIEWDATA *ptr = getViewData(key);
+		ASSERT(ptr->type < view_type.size(), "Bad viewdata type");
 		m.setItem(row, 0, new QStandardItem(QString::fromUtf8(key.toUtf8().c_str())));
 		m.setItem(row, 1, new QStandardItem(view_type.at(ptr->type)));
 		m.setItem(row, 2, new QStandardItem(QString::fromUtf8(ptr->fileName.toUtf8().c_str())));
@@ -155,8 +157,7 @@ static void fillViewdataModel(QStandardItemModel &m)
 static void fillMessageModel(QStandardItemModel &m)
 {
 	const QStringList msg_type = { "RESEARCH", "CAMPAIGN", "MISSION", "PROXIMITY" };
-	const QStringList view_type = { "RES", "PPL", "PROX", "RPLX", "BEACON" };
-	const QStringList msg_data_type = { "OBJ", "VIEW" };
+	const QStringList msg_data_type = { "DEFAULT", "BEACON" };
 	const QStringList obj_type = { "DROID", "STRUCTURE", "FEATURE", "PROJECTILE", "TARGET" };
 	int row = 0;
 	m.setRowCount(0);
@@ -194,8 +195,8 @@ static void fillMainModel(QStandardItemModel &m)
 	                               "LDS_EXPAND", "LDS_BETWEEN", "LDS_MKEEP", "LDS_MCLEAR",
 	                               "LDS_EXPAND_LIMBO", "LDS_MKEEP_LIMBO", "LDS_NONE",
 	                               "LDS_MULTI_TYPE_START", "CAMPAIGN", "", "SKIRMISH", "", "", "",
-	                               "MULTI_SKIRMISH2", "MULTI_SKIRMISH3" };
-	const QStringList difficulty_type = { "EASY", "NORMAL", "HARD", "INSANE", "TOUGH", "KILLER" };
+	                               "MULTI_SKIRMISH2", "MULTI_SKIRMISH3", "MULTI_SKIRMISH4" };
+	const QStringList difficulty_type = { "EASY", "NORMAL", "HARD", "INSANE" };
 	int row = 0;
 	m.setRowCount(0);
 	m.setHorizontalHeaderLabels({"Key", "Value"});
@@ -203,6 +204,7 @@ static void fillMainModel(QStandardItemModel &m)
 #define B2Q(_b) (_b ? QString("true") : QString("false"))
 #define KEYVAL(_key, _val) m.setItem(row, 0, new QStandardItem(_key)); m.setItem(row, 1, new QStandardItem(_val)); row++;
 
+	ASSERT(game.type < lev_type.size() && (int)game.type != 13 && (int)game.type != 15 && (int)game.type != 16 && (int)game.type != 17, "Bad LEVEL_TYPE for game.type");
 	KEYVAL("game.type", lev_type.at(game.type));
 	KEYVAL("game.scavengers", B2Q(game.scavengers));
 	KEYVAL("game.map", QString(game.map));
@@ -211,11 +213,13 @@ static void fillMainModel(QStandardItemModel &m)
 	KEYVAL("missionIsOffworld", B2Q(missionIsOffworld()));
 	KEYVAL("missionCanReEnforce", B2Q(missionCanReEnforce()));
 	KEYVAL("missionForReInforcements", B2Q(missionForReInforcements()));
+	ASSERT(mission.type < lev_type.size() && (int)mission.type != 13 && (int)mission.type != 15 && (int)mission.type != 16 && (int)mission.type != 17, "Bad LEVEL_TYPE for mission.type");
 	KEYVAL("mission.type", lev_type.at(mission.type));
 	KEYVAL("getDroidsToSafetyFlag", B2Q(getDroidsToSafetyFlag()));
 	KEYVAL("scavengerSlot", QString::number(scavengerSlot()));
 	KEYVAL("scavengerPlayer", QString::number(scavengerPlayer()));
 	KEYVAL("bMultiPlayer", B2Q(bMultiPlayer));
+	ASSERT(getDifficultyLevel() < difficulty_type.size(), "Bad DIFFICULTY_LEVEL");
 	KEYVAL("difficultyLevel", difficulty_type.at(getDifficultyLevel()));
 	KEYVAL("loopPieCount", QString::number(loopPieCount));
 	KEYVAL("loopPolyCount", QString::number(loopPolyCount));
@@ -575,6 +579,7 @@ static const char *getObjType(const BASE_OBJECT *psObj)
 	case OBJ_DROID: return "Droid";
 	case OBJ_STRUCTURE: return "Structure";
 	case OBJ_FEATURE: return "Feature";
+	case OBJ_PROJECTILE: return "Projectile";
 	case OBJ_TARGET: return "Target";
 	default: break;
 	}
