@@ -1303,6 +1303,7 @@ bool stageThreeShutDown()
 	challengesUp = false;
 	challengeActive = false;
 	isInGamePopupUp = false;
+	bInTutorial = false;
 
 	shutdownTemplates();
 
