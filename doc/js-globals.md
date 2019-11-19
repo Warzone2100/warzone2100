@@ -13,7 +13,7 @@ they are read-only.
 * ```mapName``` The name of the current map.
 * ```tilesetType``` The area name of the map.
 * ```baseType``` The type of base that the game starts with. It will be one of ```CAMP_CLEAN```, ```CAMP_BASE``` or ```CAMP_WALLS```.
-* ```alliancesType``` The type of alliances permitted in this game. It will be one of ```NO_ALLIANCES```, ```ALLIANCES``` or ```ALLIANCES_TEAMS```.
+* ```alliancesType``` The type of alliances permitted in this game. It will be one of ```NO_ALLIANCES```, ```ALLIANCES```, ```ALLIANCES_UNSHARED``` or ```ALLIANCES_TEAMS```.
 * ```powerType``` The power level set for this game.
 * ```maxPlayers``` The number of active players in this game.
 * ```scavengers``` Whether or not scavengers are activated in this game.
