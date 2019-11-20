@@ -2444,6 +2444,41 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 }
 
+static void resetPlayerPositions()
+{
+	// Reset players' positions or bad things could happen to scavenger slot
+
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		NetPlay.players[i].position = i;
+		NetPlay.players[i].team = i;
+		NETBroadcastPlayerInfo(i);
+	}
+}
+
+static unsigned int repositionHumanSlots()
+{
+	unsigned int pos = 0;
+
+	// First, put human players at the top
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (isHumanPlayer(i))
+		{
+			// Skip the scavenger slot
+			if (game.mapHasScavengers && pos == scavengerSlot())
+			{
+				++pos;
+			}
+			NetPlay.players[i].position = pos;
+			NETBroadcastPlayerInfo(i);
+			++pos;
+		}
+	}
+
+	return pos;
+}
+
 static void loadMapSettings0(LEVEL_DATASET *mapData)
 {
 	sstrcpy(game.map, mapData->pName);
@@ -2625,13 +2660,7 @@ static void randomizeOptions()
 
 	if (ingame.bHostSetup)
 	{
-		// Reset players' positions or bad things could happen to scavenger slot
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			NetPlay.players[i].position = i;
-			NetPlay.players[i].team = i;
-			NETBroadcastPlayerInfo(i);
-		}
+		resetPlayerPositions();
 
 		// Don't randomize the map once hosting for true multiplayer has started
 		if (!bHosted || !(bMultiPlayer && NetPlay.bComms != 0))
@@ -2673,22 +2702,7 @@ static void randomizeOptions()
 		// against case where in the previous map some players
 		// took slots, which aren't available anymore
 
-		// First, put human players at the top
-		int pos = 0;
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (isHumanPlayer(i))
-			{
-				// Skip the scavenger slot
-				if (game.mapHasScavengers && pos == scavengerSlot())
-				{
-					pos++;
-				}
-				NetPlay.players[i].position = pos;
-				NETBroadcastPlayerInfo(i);
-				pos++;
-			}
-		}
+		unsigned int pos = repositionHumanSlots();
 
 		// Fill with AIs if places remain
 		for (int i = 0; i < current_numplayers; i++)
@@ -3679,14 +3693,16 @@ TITLECODE WzMultiOptionTitleUI::run()
 					//Reset player slots if it's a smaller map.
 					if (NetPlay.isHost && NetPlay.bComms && bHosted && !isHoverPreview && oldMaxPlayers > game.maxPlayers)
 					{
-						const std::vector<uint8_t> &Humans = NET_getHumanPlayers();
+						resetPlayerPositions();
+						repositionHumanSlots();
 
-						//This is pretty ugly tbh, but seems like the easiest way to achieve the goal to my tired mind.
-						size_t PlayerInc = 0;
-						for (uint8_t SlotInc = 0; SlotInc < game.maxPlayers && PlayerInc < Humans.size(); ++SlotInc)
+						const std::vector<uint8_t> &humans = NET_getHumanPlayers();
+						size_t playerInc = 0;
+
+						for (uint8_t slotInc = 0; slotInc < game.maxPlayers && playerInc < humans.size(); ++slotInc)
 						{
-							changePosition(Humans[PlayerInc], SlotInc);
-							++PlayerInc;
+							changePosition(humans[playerInc], slotInc);
+							++playerInc;
 						}
 					}
 
