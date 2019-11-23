@@ -1244,7 +1244,7 @@ static void addGameOptions()
 	// MCOL for N >= 1 is basically useless because that's not the actual rule followed by addMultiEditBox.
 	// And that's what this panel is meant to align to.
 	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, formatGameName(game.map), MCOL0, MROW3, MULTIOP_EDITBOXW + MULTIOP_EDITBOXH, MULTIOP_EDITBOXH);
-	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MULTIOP_EDITBOXW + 2, 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, _("Select Map"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
+	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MULTIOP_EDITBOXW + 2, 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, _("Select Map\nCan be blocked by players' votes"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MULTIOP_EDITBOXW - 14, 1, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
 	if (!game.isMapMod)
 	{
@@ -1332,7 +1332,7 @@ static void addGameOptions()
 		MultibuttonWidget *randomButton = new MultibuttonWidget(optionsList);
 		randomButton->id = MULTIOP_RANDOM;
 		randomButton->setLabel(_("Random Game Options"));
-		randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options"));
+		randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
 		optionsList->addWidgetToLayout(randomButton);
 	}
 
@@ -1349,8 +1349,8 @@ static void addGameOptions()
 		MultichoiceWidget *voteChoice = new MultichoiceWidget(optionsList, currentVote);
 		voteChoice->id = MULTIOP_VOTE;
 		voteChoice->setLabel(_("Vote"));
-		voteChoice->addButton(MULTIOP_VOTE_NO, Image(FrontImages, IMAGE_CHECK_OFF), Image(FrontImages, IMAGE_CHECK_OFF_HI), _("No"));
-		voteChoice->addButton(MULTIOP_VOTE_YES, Image(FrontImages, IMAGE_CHECK_ON), Image(FrontImages, IMAGE_CHECK_ON_HI), _("Yes"));
+		voteChoice->addButton(MULTIOP_VOTE_NO, Image(FrontImages, IMAGE_CHECK_OFF), Image(FrontImages, IMAGE_CHECK_OFF_HI), _("No. Do not allow host to randomize or change map"));
+		voteChoice->addButton(MULTIOP_VOTE_YES, Image(FrontImages, IMAGE_CHECK_ON), Image(FrontImages, IMAGE_CHECK_ON_HI), _("Yes. Allow host to randomize or change map"));
 		voteChoice->enable(true);
 		optionsList->addWidgetToLayout(voteChoice);
 
