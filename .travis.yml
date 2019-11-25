@@ -213,7 +213,7 @@ matrix:
         - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
         - brew update
-        - brew upgrade cmake
+        - if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
         - brew install gettext
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
         - gem install asciidoctor -v 2.0.10 --no-document
@@ -237,7 +237,7 @@ matrix:
         - MACOSX_DEPLOYMENT_TARGET=10.10
       before_install:
         - brew update
-        - brew upgrade cmake
+        - if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
         - brew install gettext
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
         - gem install asciidoctor -v 2.0.10 --no-document
