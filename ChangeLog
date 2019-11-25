@@ -1,3 +1,71 @@
+20XX-YY-ZZ: Version 3.3.1
+ * General:
+   * Add: Frontend "continue last save" option (commit:54536b3bb2f919de5250698ea00317c0b174c797, #408)
+   * Add: Shortcut to quit to main-menu after victory (commit:9beabb55a7444c5cb02ab9992f22dd51ded7fe43, #518)
+   * Add: T4 technology level where all research is completed and addon.lev change (commit:c0f8f1ddef9e38948a9fed5aa300f9a4b5698a1d, commit:e50fac0423492ca8180e42507fe0db6c51c9a282, commit:1cfb90a05efc7f7135d5b659b434a6381aee71a8, #396)
+   * Add: Option to enforce structure limits on maps and disable most research related to limited structures (commit:ba06ee18c99b04f3cd46a81e2eed1a251f2d05f3, commit:55d627faf623ec07663701165ab4efe3d8044408, #409)
+   * Add: Quicksave feature (commit: d130d5cf8f510dbcf6a3680d5ef436b18d761669, #464)
+   * Add: Way to change most game settings with the in-game pause menu (commit:905cc6ff2f659d6118ce13285f2ddd341a17c6cf, commit:e821f2ed15765f0f0a7fe64df335f646bf61e93b, #469, #565)
+   * Add: Autosave feature where the save rate is moddable in rules.js (commit:bff9eb56db0b0883156eb14bcd8add2327bc0f7a, #536)
+   * Add: Favorite build items menu shown as a heart icon (commit:8241df0042cfaac75b2e1b192ffb8c31b220ec4e, #556)
+   * Add: Right-click AI slot to quickly copy it to all other AI slots (commit:e7ff1e1d5fb956aeaa1dc721f3950dd0f2f4de2b, #551)
+   * Add: Randomization of game options button in skirmish/multiplayer games (commit:f49ff2b8bbbf9b43bf80dbb2402507cf770cef89, #539)
+   * Add: Randomization of map and positions. Not available when hosting games (commit:e821f2ed15765f0f0a7fe64df335f646bf61e93b, commit:c4fb21e2dfd02b48c353e0b2491d87728770569b, #568, #596)
+   * Add: Allow pressing enter/return key when connecting to password protected games (commit:81a1a3790662ba3508b888d47929bf0011a6bc4b, #579)
+   * Add: Add support for changing map, game name, and hosting player's name after already hosting (too many commits, #526)
+   * Change: Challenge layout updates (commit:93db639e1f83ea1819139bf6b85f70b1287a094e, #524)
+   * Fix: Not initializing the random number generators at application start (commit:925cb7ca4614930ad40d0932c6d957e7986090ac, #539)
+   * Fix: Enemy hover units turning invisible when over certain depths of water tiles trying to be seen by other hover units (commit:8242c25a2436b817fdf0662bf295ac467ecde59f, #576)
+   * Fix: Fast-play should not create net logs (commit:e2f3dc9e40247cf0065fb20fd080a00a0dbd9946, #599)
+ * Graphics:
+   * Add: Allow shadows with these feature objects: artifact, boulder, and vehicle (commit:0e502341f099f78f2a0d81b158e0c0d225a54cdf, #635)
+ * Campaign:
+   * Add: Make campaign use dark unexplored tiles like before 3.1.1 (commit:15a032e9de9179f678dd3063151a040bd9e362c3, commit:5dd63b5fcd8dbffaea5087b5c89f88551b655937, #447, #529)
+   * Fix: Alpha 11 (cam1-7) failing to allow the player to win if getting the artifact too fast (commit:cd6d345eef01abf6343d7dc762ba6dfd4ee5ac05, #574)
+   * Fix: Gamma missions 3, 4s (pre-away mission), and 5 did not game-over because of trucks stored at the end of the Gamma 2 scenario (commit:e0fb35b5a9ee445e5555482d58b37a97e95ce6c8, #588)
+ * Multiplayer:
+   * Add: Remembers the last server in the IP-connect box (commit: feb25267030a0bf079a848f3cc232db8255087bf, #433)
+   * Change: Consistent upgrade values for some research (commit:112122b92f0370b60a0e379ca4e93187540eff5b, #557)
+   * Fix: Melting map player 4 owning a player 0 derrick (commit:07c4fdc24cfe85c5649048a2247a8ccdec796dd3, #546)
+   * Fix: resetReadyStatus() now actually resets ready status buttons as it implies when host changes settings (commit:ce1b60c3e9e5c17faa8f45d80fcc9fea2d5870eb, commit:31295dfcbbbb4aae3c67095980fc6ba2ae56f02f, #572)
+   * Fix: Do not allow the exit-click for Map Preview go to the invisible widgets (commit:91194316acc451e3f1e4cbbaa38849a7d57aae17, #585)
+   * Fix: Protect the status of map-mods when previewing maps so a warning about hosts altering the code doesn't happen, or, the red icon showing when it should not (commit:8d4a8c243e74b7ab8323fb0ceeba56147a53ee76, #586)
+   * Fix: Fix saved template availability when loading skirmish saves without a HQ built or when immediately removing the HQ on (advanced) bases (commit:78f312d3ed33163639ee867837496cceeba2127b, commit:23497d673c9905e01d2d34f73755127fe8af21fc, #630)
+ * Scripting:
+   * Add: Prints some game settings on skirmish/multiplayer game start (commit:a087c51b467ebffe7cb0edaca14e8ebe9d4411e7, #615)
+   * Change: Ignores repeated orders issued from scripts (commit:b2eb7f4ef4087b20c9dde1e4156e390e17485be6, #487)
+   * Fix: eventGameLoaded only fires when loading saves, as it was intended (commit:6bcd12ccdf9f8a739348ed2406274a0351025720, #550)
+   * Fix: Functions isStructureAvailable(), addDroid(), makeTemplate(), and buildDroid() no longer return false if they encounter redundant components/structures (commit:eee8025fc1f4484327a4bf5c2bfe0aa25169f74e, #590)
+   * Fix: Script debugger impacting performance after closing it (commit:aaaf3ae796106a40cb005ace87de7369179fb766, #611)
+   * Fix: LASSAT stattype could not be used with function enumStruct() (commit:442b0b00c76b3044dfc1e8340dda007c69f25d46, #613)
+   * Remove: WzScript (commit:05d7814e4d15e5c46311ab91410a52546e83a49c, #512)
+ * AI:
+   * Add: BoneCrusher! AI (commit:60a369044b6d5f5e306a1969dbc81ac4782f1ceb, #532)
+   * Add: Cobra AI (commit: 42adc8de34c018c3fc809bfddb59f288059c94d3, #513)
+   * Add: Nexus AI ported from original (commit: 5aa27ef4cbcfd62cb97454b60580323663300ec1, #513)
+   * Change: Rename SemperFi-JS to SemperFi (commit:ed9f4d0c59a7689d9d26c9eb3538a84b596aa973, #513)
+   * Fix: Division by zero if one AI is available to choose from in the AI chooser menu (commit:020586f6bb15a97949f7a8986889862639ca7db1, #523)
+   * Remove: Classic Nexus AI (commit:3fbe32bb8257c3cba27d8244769ebe8420b6936b, #511)
+   * Remove: Classic SemperFi AI (commit:2612c2bce9470ac6c0a8e51f44b55382842e0226, #511)
+ * Other:
+   * Add: Autohost from JSON settings file similar to automated challenges (commit:aa1ba903c99ffe5dc41b2da6e57fcc072c7e592a, #502)
+   * Change: Upgrade GLM version to 0.9.9.6 (commit:3187db10859122bb1e3685bc60717faeea99aa8f, #505)
+   * Change: Huge titleUI refactor (too many commits, #540)
+   * Change: Display "global" or "ally" on chat messages for the sending player (commit: ea97d3202c0f342c5287fffb5bdd8724d9e4daca, commit:e065469b1e8f667222eb5548e685a159a8815403, #519)
+   * Fix: Map zoom config limits are now higher to prevent the camera starting too far zoomed in (commit:098d2eb74640cf87f54736967102681a02330bea, #537)
+   * Fix: Derricks now emit sound again (commit:e307e88e97ff05ef7a54139922b2247aa9763143, #543, ticket:4766)
+   * Fix: Scanlines config option is no longer switched off if a video can not by played with scanlines (commit:4d4f955f35776d27f997ea90fe2d00125969c145, #581)
+   * Fix: Display of debug menu items (commit:c91d6e7715a09c7e0474ed8e75dcc1396ac27582, #598)
+   * Fix: Better crash log handling on Windows (commit:16b420cfbec50b1fcb9f552eb084c72c8f326e36, commit:d52958a62926a67d595fdd527b22040dd60f98a4, commit:2edb62ed9a457ed06a3a8ee0f107c3b3fe32f2a3, #619)
+   * Fix: Enable HiDPI support on all platforms supported by SDL (commit:5e3387a1f5850fa3a60d3ac6c92722c01c484495, #627)
+   * Remove:
+ * Balance:
+   * Change: Increase multiplayer Bunker-Buster weapon ROFs to hopefully increase their usefulness, according to mp community players (commit:58449ecb36f0283e9c31a68c6d35b0aafc31caff, #531, ticket:4861)
+   * Fix: HMG bunker not being affected by upgrades due to sharing same name with another structure (commit:f27ae30a370266e1a09ce1d088b5906cbf7eaf90, #508)
+ * Documentation:
+   * Add: Alliance type ALLIANCES_UNSHARED now documented for script global variable 'allianceType' (commit:e030c3d0b2894343912a489167ecfd2a27b66495, #601)
+   * Remove: Doxygen support (commit:540ce1948e055e9937383c052616a5e4dd5fb0c9, #316)
+
 2019-08-31: Version 3.3.0
  * General:
    * Add: Reinstated secondary orders Pursue, Guard, and Hold (commit:29d3696dd62f034d02d51b9caa7d834cc84e13d3, commit:4b974e5761eecf7fc375f50d954779e4ac800786, commit:2fb172792014d8886a7411a2547b15030ead0152, commit:274fab1fe4f5a7f443f42b35211d95f949cd63cb, commit:cfa8ca695079df3d716a6eb7a2ed2f5729320bea, commit:8f611fe0f6ffb906bee0afd5de702f8b2de9f1df, commit:ff5ec8ca927c2d3353f58f7ac0ca17f965252234, #263, ticket:4303)
