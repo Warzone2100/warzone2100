@@ -21,13 +21,13 @@ function eventStartLevel()
 
 	setTimer("buildOrders", 300 + delay + (2 * easyTimeDelay));
 	setTimer("produce", 400 + delay + easyTimeDelay);
+	setTimer("retreatTactics", 500 + delay);
 	setTimer("checkAllForRepair", 600 + delay + (4 * easyTimeDelay));
 	setTimer("research", 800 + delay + (3 * easyTimeDelay));
 	setTimer("lookForOil", 1000 + delay + (2 * easyTimeDelay));
 	setTimer("repairDroidTactics", 1200 + delay);
 	setTimer("artilleryTactics", 1400 + delay);
 	setTimer("vtolTactics", 1600 + delay);
-	setTimer("retreatTactics", 1800 + delay);
 	setTimer("groundTactics", 2000 + delay);
 	setTimer("switchOffMG", 5000 + delay);
 	setTimer("recycleForHover", 8000 + delay);
@@ -40,7 +40,6 @@ function eventStructureBuilt(structure, droid)
 {
 	if (structure.stattype === RESOURCE_EXTRACTOR && droid)
 	{
-		var oilCount = mapOilLevel();
 		var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false);
 		nearbyOils = nearbyOils.filter(function(obj) {
 			return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
@@ -52,7 +51,7 @@ function eventStructureBuilt(structure, droid)
 		{
 			orderDroidBuild(droid, DORDER_BUILD, structures.derricks, nearbyOils[0].x, nearbyOils[0].y);
 		}
-		else if (oilCount !== "HIGH" && oilCount !== "NTW")
+		else if (!highOilMap())
 		{
 			var numDefenses = enumRange(droid.x, droid.y, 3, me, false).filter(function(obj) {
 				return (allianceExistsBetween(me, obj.player) && (obj.type === STRUCTURE) && (obj.stattype === DEFENSE));
@@ -85,23 +84,27 @@ function eventDroidBuilt(droid, struct)
 {
 	if (isConstruct(droid.id))
 	{
-		var baseBuilderLen = enumGroup(constructGroup).length;
-		var halfOfMin = Math.floor(MIN_TRUCKS  / 2);
+		var isEngineer = droid.body === "CyborgLightBody";
 
-		if (droid.body !== "CyborgLightBody" && baseType === CAMP_CLEAN && getMultiTechLevel() > 1 && enumGroup(oilGrabberGroup).length === 0)
+		if (!isEngineer && baseType === CAMP_CLEAN && getMultiTechLevel() > 1 && enumGroup(oilGrabberGroup).length === 0)
 		{
 			groupAdd(oilGrabberGroup, droid); //Fix for crazy T2/T3/T4 no-bases config
 		}
-		//Combat engineers are always base builders.
-		else if ((droid.body === "CyborgLightBody") ||
-			((baseBuilderLen < halfOfMin) ||
-			((mapOilLevel() === "NTW") && (gameTime > 180000) && (baseBuilderLen < halfOfMin + 2))))
+		else if (enumGroup(constructGroup).length < MIN_TRUCKS_PER_GROUP)
 		{
 			groupAdd(constructGroup, droid);
 		}
-		else
+		else if (!isEngineer && (enumGroup(oilGrabberGroup).length < MIN_TRUCKS_PER_GROUP))
 		{
 			groupAdd(oilGrabberGroup, droid);
+		}
+		else if (highOilMap() && (enumGroup(constructGroupNTWExtra).length < MIN_TRUCKS_PER_GROUP))
+		{
+			groupAdd(constructGroupNTWExtra, droid);
+		}
+		else
+		{
+			groupAdd(constructGroup, droid);
 		}
 	}
 	else if (droid.droidType === DROID_SENSOR)
@@ -137,8 +140,8 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	const GROUP_SCAN_RADIUS = 7;
-	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, me, false).filter(function(obj) {
+	const GROUP_SCAN_RADIUS = 8;
+	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter(function(obj) {
 		return obj.type === DROID;
 	});
 
@@ -175,24 +178,7 @@ function eventAttacked(victim, attacker)
 		//Check if a droid needs repair.
 		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(structures.extras[0]))
 		{
-			//System units are timid.
-			if ((victim.droidType === DROID_SENSOR) || isConstruct(victim.id) || (victim.droidType === DROID_REPAIR))
-			{
-				orderDroid(victim, DORDER_RTR);
-			}
-			else
-			{
-				if (Math.floor(victim.health) < 42)
-				{
-					//Try to repair by force.
-					orderDroid(victim, DORDER_RTR);
-				}
-				else
-				{
-					//Fuzzy repair algorithm.
-					repairDroid(victim.id);
-				}
-			}
+			repairDroid(victim.id);
 		}
 
 		if (stopExecution("throttleEventAttacked1", 1000))
@@ -208,16 +194,15 @@ function eventAttacked(victim, attacker)
 			);
 		});
 
-		const CACHE_UNITS = units.length;
+		const UNIT_LEN = units.length;
 
-		if (CACHE_UNITS >= MIN_ATTACK_DROIDS && shouldCobraAttack())
+		if (UNIT_LEN >= MIN_ATTACK_DROIDS && shouldCobraAttack())
 		{
-			var defend = (distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, attacker.x, attacker.y) < 18);
-			for (var i = 0; i < CACHE_UNITS; i++)
+			for (var i = 0; i < UNIT_LEN; i++)
 			{
-				if (random(3) || defend)
+				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
 				{
-					if (defend)
+					if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < (GROUP_SCAN_RADIUS + 4))
 					{
 						orderDroidObj(units[i], DORDER_ATTACK, attacker);
 					}
