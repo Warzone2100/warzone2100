@@ -97,16 +97,28 @@ function repairDroid(droidID, force)
 		return true; //pretend it is busy
 	}
 
-	const FORCE_REPAIR_PERCENT = 66;
+	const SAFE_EXTREME_OIL_IGNORE_NUM = 100;
+	var highOil = highOilMap();
+
+	var forceRepairPercent = highOil ? 50 : 66; //Be more brave on super high oil maps.
 	const EXPERIENCE_DIVISOR = 26;
-	const HEALTH_TO_REPAIR = 67 + Math.floor(droid.experience / EXPERIENCE_DIVISOR);
+	const HEALTH_TO_REPAIR = forceRepairPercent + Math.floor(droid.experience / EXPERIENCE_DIVISOR);
+
+	//Ignore repairing combat units if one super high oil map if we have X amount of units.
+	if (countDroid(DROID_ANY, me) >= SAFE_EXTREME_OIL_IGNORE_NUM && highOilMap)
+	{
+		if ((droid.droidType === DROID_WEAPON || droid.droidType == DROID_CYBORG) && droid.health <= forceRepairPercent)
+		{
+			return false;
+		}
+	}
 
 	if (!isDefined(force))
 	{
-		force = droid.health < FORCE_REPAIR_PERCENT;
+		force = droid.health < forceRepairPercent;
 	}
 
-	if (Math.floor(droid.health) <= FORCE_REPAIR_PERCENT)
+	if (Math.floor(droid.health) <= forceRepairPercent)
 	{
 		force = true;
 	}
@@ -138,12 +150,6 @@ function checkAllForRepair()
 	{
 		repairDroid(droids[i].id);
 	}
-}
-
-//choose land attackers.
-function chooseGroup()
-{
-	return enumGroup(attackGroup).filter(function(dr) { return droidReady(dr.id); });
 }
 
 //Find information about the closest enemy droid. Returns undefined otherwise. Do not target VTOLs
@@ -248,14 +254,17 @@ function groundTactics()
 		var target = rangeStep();
 		if (isDefined(target))
 		{
-			const WHO = chooseGroup();
-			if (WHO.length < MIN_ATTACK_DROIDS)
+			const UNITS = enumGroup(attackGroup).filter(function(dr) {
+				return droidReady(dr.id);
+			});
+
+			if (UNITS.length < MIN_ATTACK_DROIDS)
 			{
 				return;
 			}
-			for (var i = 0, l = WHO.length; i < l; ++i)
+			for (var i = 0, l = UNITS.length; i < l; ++i)
 			{
-				attackThisObject(WHO[i].id, target);
+				attackThisObject(UNITS[i].id, target);
 			}
 		}
 	}
@@ -264,7 +273,7 @@ function groundTactics()
 //Recycle units when certain conditions are met.
 function recycleForHover()
 {
-	if (currently_dead)
+	if (currently_dead || !attackerCountsGood(true))
 	{
 		return;
 	}
@@ -456,6 +465,10 @@ function donateSomePower()
 	{
 		return;
 	}
+	if (!countStruct(structures.gens) || !countStruct(structures.derricks))
+	{
+		return;
+	}
 
 	const ALLY_PLAYERS = playerAlliance(true);
 	const LEN = ALLY_PLAYERS.length;
@@ -474,7 +487,7 @@ function donateSomePower()
 //Does Cobra believe it is winning or could win?
 function confidenceThreshold()
 {
-	if (gameTime < 1200000)
+	if (gameTime < 480000)
 	{
 		return true;
 	}
@@ -530,7 +543,7 @@ function shouldCobraAttack()
 //Controls how long localized group retreat happens. See also eventAttacked.
 function retreatTactics()
 {
-	const SCAN_RADIUS = 7;
+	const SCAN_RADIUS = 8;
 	var droids = enumGroup(retreatGroup);
 
 	//Flee!

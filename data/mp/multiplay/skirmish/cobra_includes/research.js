@@ -10,7 +10,15 @@ function updateResearchList(stat, len)
 	var list = [];
 	for (var x = 0, d = stat.length - len; x < d; ++x)
 	{
-		isDefined(stat[x].res) ? list.push(stat[x].res) : list.push(stat[x]);
+		var st = stat[x];
+		if (isDefined(st.res))
+		{
+			list.push(st.res);
+		}
+		else
+		{
+			list.push(st);
+		}
 	}
 
 	return list;
@@ -123,8 +131,17 @@ function research()
 			found = evalResearch(lab, ESSENTIALS_2);
 		if (!found && random(100) < 10)
 			found = evalResearch(lab, ESSENTIALS_3);
+
 		if (!found && componentAvailable("V-Tol"))
+		{
 			found = evalResearch(lab, VTOL_ESSENTIALS);
+
+			// Prepare the most basic AA defense.
+			if (!found && antiAirTech.length > 0)
+			{
+				found = pursueResearch(lab, antiAirTech[0]);
+			}
+		}
 
 		if (!found && getRealPower() > ((gameTime < 180000) ? MIN_POWER : SUPER_LOW_POWER))
 		{
@@ -481,7 +498,7 @@ function research()
 					foundLaser = evalResearch(lab, laserExtra);
 				//Rocket/missile AA does not need this. Still uses it if researched.
 				if (!foundLaser && (aa !== "rkta" && aa !== "missa"))
-					foundLaser = pursueResearch(lab, "R-Defense-AA-Laser");
+					pursueResearch(lab, "R-Defense-AA-Laser");
 			}
 
 			//Very likely going to be done with research by now.

@@ -296,23 +296,53 @@ function buildAttacker(id)
 				secondary = "EMP-Cannon";
 			}
 
-			return getRealPower() > PRODUCTION_POWER && buildDroid(fac, "Droid", TANK_BODY, pickPropulsion(weap), "", "", weap, secondary);
+			var body;
+			if ((gameTime < 600000 && getMultiTechLevel() === 1) || (!highOilMap() && gameTime < 1200000 && random(100) < 33 && getMultiTechLevel() <= 2))
+			{
+				body = VTOL_BODY;
+			}
+			else
+			{
+				body = TANK_BODY;
+			}
+
+			return getRealPower() > PRODUCTION_POWER && buildDroid(fac, "Droid", body, pickPropulsion(weap), "", "", weap, secondary);
 		}
 	}
 
 	return false;
 }
 
-//Create trucks or sensors with a light/medium body. Default to a sensor.
+//Create trucks or sensors. Default to a sensor.
 function buildSys(id, weap)
 {
 	var fac = getObject(STRUCTURE, me, id);
-	if (!isDefined(weap))
+	if (fac === null)
 	{
-		weap = ["Sensor-WideSpec", "SensorTurret1Mk1"];
+		return false;
 	}
 
-	return (fac !== null && buildDroid(fac, "System unit", random(2) ? SYSTEM_BODY : VTOL_BODY, SYSTEM_PROPULSION, "", "", weap));
+	if (!isDefined(weap))
+	{
+		weap = ARTILLERY_SENSORS;
+	}
+
+	var body;
+	if (gameTime > 600000)
+	{
+		body = (random(100) < 80) ? VTOL_BODY : TANK_BODY;
+	}
+	else
+	{
+		body = (random(100) < 60) ? SYSTEM_BODY : VTOL_BODY;
+	}
+
+	if (buildDroid(fac, "System unit", body, SYSTEM_PROPULSION, "", "", weap))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 //Create a cyborg with available research. Expects a boolean for useEngineer or can undefined.
@@ -417,6 +447,26 @@ function analyzeQueuedSystems()
 	return { "truck": trucks, "sensor": sens, "repair": reps };
 }
 
+function attackerCountsGood(recycle)
+{
+	if (checkIfSeaMap())
+	{
+		return true;
+	}
+
+	if (!isDefined(recycle))
+	{
+		recycle = false;
+	}
+
+	var highOilExtras = highOilMap() ? 10 : 0;
+	var recycleExtras = recycle ? 8 : 0;
+
+	var amountOfAttackers = groupSize(attackGroup) + groupSize(artilleryGroup) + groupSize(vtolGroup);
+
+	return amountOfAttackers >= (MIN_ATTACK_DROIDS + recycleExtras + highOilExtras);
+}
+
 
 //Produce a unit when factories allow it.
 function produce()
@@ -434,7 +484,10 @@ function produce()
 	var allowSpecialSystems = isDefined(attackers) ? attackers > 10 : false;
 	var buildSensors = ((enumGroup(sensorGroup).length + systems.sensor) < MIN_SENSORS);
 	var buildRepairs = ((enumGroup(repairGroup).length + systems.repair) < MIN_REPAIRS);
-	var buildTrucks = ((enumGroup(constructGroup).length + enumGroup(oilGrabberGroup).length + systems.truck) < MIN_TRUCKS);
+	var buildTrucks = ((enumGroup(constructGroup).length +
+		enumGroup(oilGrabberGroup).length +
+		enumGroup(constructGroupNTWExtra).length +
+		systems.truck) < minTruckCount());
 
 	//Loop through factories in the order the personality likes.
 	for (var i = 0; i < 3; ++i)
@@ -443,7 +496,7 @@ function produce()
 		var fac = enumStruct(me, facType);
 		if (!((facType === CYBORG_FACTORY) && !forceHover && turnOffCyborgs))
 		{
-			if (facType !== FACTORY && !countDroid(DROID_CONSTRUCT))
+			if (facType === VTOL_FACTORY && !countDroid(DROID_CONSTRUCT))
 			{
 				continue;
 			}
@@ -455,25 +508,10 @@ function produce()
 					if (facType === FACTORY)
 					{
 						var highTechCrazyCase = getMultiTechLevel() > 1 && baseType === CAMP_CLEAN;
-						var amountOfAttackers = 0; //beware NaN potential
-						var arti = groupSize(artilleryGroup);
-						var vtol = groupSize(vtolGroup);
 
-						if (isDefined(attackers))
-						{
-							amountOfAttackers += attackers;
-						}
-						if (isDefined(arti))
-						{
-							amountOfAttackers += arti;
-						}
-						if (isDefined(vtol))
-						{
-							amountOfAttackers += vtol;
-						}
-
-						if (buildTrucks && ((amountOfAttackers >= MIN_ATTACK_DROIDS) ||
-							(gameTime < 240000 && mapOilLevel() === "NTW") ||
+						if (buildTrucks &&
+							(attackerCountsGood(false) ||
+							(gameTime < 240000 && highOilMap()) ||
 							!componentAvailable(subPersonalities[personality].primaryWeapon.weapons[0].stat) ||
 							highTechCrazyCase))
 						{

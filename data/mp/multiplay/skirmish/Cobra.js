@@ -116,6 +116,7 @@ const TANK_BODY = [
 ];
 const SYSTEM_BODY = [
 	"Body3MBT",  // Retaliation
+	"Body2SUP",  // Leopard
 	"Body4ABT",  // Bug
 	"Body1REC",  // Viper
 ];
@@ -133,6 +134,10 @@ const VTOL_BODY = [
 const REPAIR_TURRETS = [
 	"HeavyRepair",
 	"LightRepair1",
+];
+const ARTILLERY_SENSORS = [
+	"Sensor-WideSpec",
+	"SensorTurret1Mk1",
 ];
 
 
@@ -169,7 +174,7 @@ var subPersonalities =
 		"alloyPriority": 25,
 		"useLasers": true,
 		"cyborgThreatPercentage": 0.40,
-		"resPath": "generic",
+		"resPath": "offensive",
 		"res": [
 			"R-Wpn-Flamer-Damage03",
 			"R-Wpn-Flamer-ROF01",
@@ -256,6 +261,7 @@ var sensorGroup;
 var repairGroup;
 var artilleryGroup;
 var constructGroup;
+var constructGroupNTWExtra;
 var oilGrabberGroup;
 var retreatGroup;
 
@@ -306,4 +312,4 @@ include(COBRA_INCLUDES + "events.js");
 include(COBRA_INCLUDES + "chat.js");
 include(COBRA_INCLUDES + "adaption.js");
 
-const MIN_TRUCKS = mapOilLevel() !== "NTW" ? 6 : 10;
+const MIN_TRUCKS_PER_GROUP = !highOilMap() ? 3 : 5;

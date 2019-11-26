@@ -6,55 +6,60 @@
 //unit production depending on the case until it reaches hover propulsion.
 function checkIfSeaMap()
 {
-	var hoverMap = false;
-	seaMapWithLandEnemy = false;
-
-	for (var i = 0; i < maxPlayers; ++i)
+	function uncached()
 	{
-		if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
-		{
+		var hoverMap = false;
+		seaMapWithLandEnemy = false;
 
-			//Check if it is a map 'spotter' pit
-			//Cyborgs will turn off in divided maps with a physical barrier still
-			var temp = 0;
-			for (var t = 0; t < maxPlayers; ++t)
-			{
-				if (!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
-				{
-					temp = temp + 1;
-				}
-			}
-
-			if (temp !== maxPlayers - 1)
-			{
-				hoverMap = true; //And thus forceHover = true
-				break;
-			}
-		}
-	}
-
-	//Determine if we are sharing land on a hover map with an enemy that can reach us via non-hover propulsion.
-	if (hoverMap === true)
-	{
 		for (var i = 0; i < maxPlayers; ++i)
 		{
-			if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
+			if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
 			{
-				//Check to see if it is a closed player slot
-				if (countDroid(DROID_ANY, i) > 0)
+
+				//Check if it is a map 'spotter' pit
+				//Cyborgs will turn off in divided maps with a physical barrier still
+				var temp = 0;
+				for (var t = 0; t < maxPlayers; ++t)
 				{
-					seaMapWithLandEnemy = true;
+					if (!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
+					{
+						temp = temp + 1;
+					}
+				}
+
+				if (temp !== maxPlayers - 1)
+				{
+					hoverMap = true; //And thus forceHover = true
 					break;
 				}
 			}
-			if (seaMapWithLandEnemy === true)
+		}
+
+		//Determine if we are sharing land on a hover map with an enemy that can reach us via non-hover propulsion.
+		if (hoverMap === true)
+		{
+			for (var i = 0; i < maxPlayers; ++i)
 			{
-				break;
+				if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
+				{
+					//Check to see if it is a closed player slot
+					if (countDroid(DROID_ANY, i) > 0)
+					{
+						seaMapWithLandEnemy = true;
+						break;
+					}
+				}
+				if (seaMapWithLandEnemy === true)
+				{
+					break;
+				}
 			}
 		}
+
+		return hoverMap;
 	}
 
-	return hoverMap;
+	return cacheThis(uncached, [], undefined, Infinity);
 }
 
 //All derricks and all oil resources to find the map total.
@@ -97,15 +102,15 @@ function mapOilLevel()
 	{
 		var str;
 		var perPlayer = averageOilPerPlayer();
-		if (perPlayer <= 8)
+		if (perPlayer <= 10)
 		{
 			str = "LOW";
 		}
-		else if ((perPlayer > 8) && (perPlayer < 16))
+		else if ((perPlayer > 10) && (perPlayer < 20))
 		{
 			str = "MEDIUM";
 		}
-		else if ((perPlayer >= 16) && (perPlayer < 24))
+		else if ((perPlayer >= 20) && (perPlayer < 30))
 		{
 			str = "HIGH";
 		}
@@ -115,6 +120,23 @@ function mapOilLevel()
 		}
 
 		return str;
+	}
+
+	return cacheThis(uncached, [], undefined, Infinity);
+}
+
+function highOilMap()
+{
+	function uncached()
+	{
+		var oil = mapOilLevel();
+
+		if (oil === "HIGH" || oil === "NTW")
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	return cacheThis(uncached, [], undefined, Infinity);
