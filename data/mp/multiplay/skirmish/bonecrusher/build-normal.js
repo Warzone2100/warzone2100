@@ -203,6 +203,8 @@ function mainBuilders(rotation){
 		
 		
 		debugMsg('uplink build', 'builders');
+		
+		// Мега-Радар
 		if(isStructureAvailable("A0Sat-linkCentre") && uplink_center.length == 0) { if(builderBuild(obj, "A0Sat-linkCentre", rotation)){build++; continue;}  }
 		
 //		debugMsg(isStructureAvailable("A0VTolFactory1")+' '+vtol_factory_ready.length, "temp");
@@ -246,6 +248,8 @@ function mainBuilders(rotation){
 				|| ( (policy['build'] == 'island' && getResearch("R-Vehicle-Prop-Hover").done) || groupSize(buildersHunters) == 0) ) ){
 			groupAddDroid(buildersHunters, obj);
 //			debugMsg('Builder --> Hunter +1', 'group');
+		}else if(policy['build'] == 'rich' && groupSize(buildersHunters) == 0){
+			groupAddDroid(buildersHunters, obj);
 		}else if(policy['build'] != 'rich' &&  distBetweenTwoPoints_p(base.x,base.y,obj.x,obj.y) > 2 && unitIdle(obj)){
 			orderDroidLoc_p(obj,DORDER_MOVE,base.x,base.y);
 			continue;

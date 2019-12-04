@@ -138,11 +138,21 @@ function produceDroids(){
 		//ТО заказуаэм!
 //		debugMsg("buildersTrigger="+buildersTrigger+"; fixersTrigger="+fixersTrigger+"; gameTime="+gameTime, 'production');
 		
-		debugMsg('('+builders.length+'<'+(maxConstructors-3)+' && '+getInfoNear(base.x,base.y,'safe',base_range).value+') && ( ('+playerPower(me)+'>'+builderPts+' && '+builder_targets.length+'>7) || ( ('+groupSize(buildersMain)+'==1 || '+groupSize(buildersHunters)+'==0) && '+playerPower(me)+'>150) || '+builders.length+'==0) && '+buildersTrigger+'<'+gameTime, 'production');
+		debugMsg('('+builders.length+'<'+(maxConstructors-3)+' && ('+getInfoNear(base.x,base.y,'safe',base_range).value+' || '+policy['build']+' == rich) ) && ( ('+playerPower(me)+'>'+builderPts+' && '+builder_targets.length+'>7) || ( ('+groupSize(buildersMain)+'==1 || '+groupSize(buildersHunters)+'==0) && '+playerPower(me)+'>150) || '+builders.length+'==0) && '+buildersTrigger+'<'+gameTime+' && ( '+policy['build']+' != rich || !'+isFullBase(me)+' || ('+builders.length+' == 0 && '+(groupSize(armyPartisans)+groupSize(armyRegular)+groupSize(armyCyborgs))+' > 10 ) ) )', 'production');
 		
-		if( (builders.length < (maxConstructors-3) && (getInfoNear(base.x,base.y,'safe',base_range).value || policy['build'] == 'rich'))
-			&& ( (playerPower(me) > builderPts && builder_targets.length > 7) || ( (groupSize(buildersMain) == 1 || groupSize(buildersHunters) == 0) && playerPower(me) > 150) || builders.length == 0 )
-			&& buildersTrigger < gameTime && (policy['build'] != 'rich' || !isFullBase(me))){
+		
+		if( 
+			(
+				builders.length < (maxConstructors-3) 
+				&& ( getInfoNear(base.x,base.y,'safe',base_range).value || policy['build'] == 'rich' ) 
+			) && ( 
+				( playerPower(me) > builderPts && builder_targets.length > 7 )
+				|| ( (groupSize(buildersMain) == 1 || groupSize(buildersHunters) == 0) && playerPower(me) > 150 )
+				|| builders.length == 0 
+			)
+			&& buildersTrigger < gameTime
+			&& ( policy['build'] != 'rich' || !isFullBase(me) || (builders.length == 0 && (groupSize(armyPartisans)+groupSize(armyRegular)+groupSize(armyCyborgs))>10 ) )
+		){
 			buildersTrigger = gameTime + buildersTimer;
 			debugMsg("buildersTrigger="+buildersTrigger+", gameTime="+gameTime+", buildersTimer="+buildersTimer, 'production');
 			buildDroid(droid_factories[0], "Truck", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','wheeled01'], "", DROID_CONSTRUCT, "Spade1Mk1");

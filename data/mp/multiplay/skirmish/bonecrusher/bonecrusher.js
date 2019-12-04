@@ -24,7 +24,7 @@ Clean code
 
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error', 'init');
+var debugLevels = new Array('error', 'init', 'production');
 
 //var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
 
@@ -732,7 +732,7 @@ function debugMsg(msg,level){
 //	if (debugName == "Grey" ) return; //Временно
 	if(debugLevels.indexOf(level) == -1) return;
 	var timeMsg = Math.floor(gameTime / 1000);
-	debug("bc["+timeMsg+"]{"+debugName+"}("+level+"): "+msg);
+	debug(shortname+"["+timeMsg+"]{"+debugName+"}("+level+"): "+msg);
 }
 
 function eventStartLevel() {
