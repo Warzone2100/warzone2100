@@ -67,13 +67,16 @@ function prepeareProduce(){
 		
 //		for(i in avail_guns) debugMsg(avail_guns[i], 'weap');
 		
+		var technology = enumResearch().length;
+		
 		//Сайборги заполонили!
 		avail_cyborgs=[];
-		var _cyb=cyborgs.filter(function(e){if(getResearch(e[0]).done)return true;return false;}).sort(function (a,b){
+		var _cyb=cyborgs.filter(function(e){if( ( getResearch(e[0]).done && technology) || (!technology && e[1] == 'CyborgHeavyBody') )return true;return false;});
+		/*.sort(function (a,b){
 			if(getResearch(a[0]).points < getResearch(b[0]).points ) return -1;
 			if(getResearch(a[0]).points > getResearch(b[0]).points ) return 1;
 			return 0;
-		});
+		});*/
 		for (var i in _cyb){
 			avail_cyborgs.push([_cyb[i][1],_cyb[i][2]]);
 		}
@@ -182,9 +185,10 @@ function produceCyborgs(){
 	var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
 //	debugMsg("Cyborg: fact="+cyborg_factories.length+"; cyb="+avail_cyborgs.length, 'production');
 	if( cyborg_factories.length != 0 && avail_cyborgs.length != 0 && (groupSize(armyCyborgs) < maxCyborgs || !getInfoNear(base.x,base.y,'safe',base_range).value) ){
-		var _cyb = avail_cyborgs[Math.floor(Math.random()*Math.min(avail_cyborgs.length, 3))]; //Случайный киборг из 3 полседних крутых
-//		var _body = _cyb[0];
-		var _body = 'CyborgLightBody';
+//		var _cyb = avail_cyborgs[Math.floor(Math.random()*Math.min(avail_cyborgs.length, 5))]; //Случайный киборг из 5 полседних
+		var _cyb = avail_cyborgs[Math.floor(Math.random()*avail_cyborgs.length)]; //Случайный киборг из доступных
+		var _body = _cyb[0];
+//		var _body = 'CyborgLightBody';
 		var _weapon = _cyb[1];
 		debugMsg("Cyborg: body="+_body+"; weapon="+_weapon ,'production');
 		buildDroid(cyborg_factories[0], "Terminator", _body, "CyborgLegs", "", DROID_CYBORG, _weapon);

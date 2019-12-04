@@ -232,8 +232,27 @@ var heavy_bodies=[
 */
 var avail_cyborgs=[];
 
+
+// Research, Body, Weapon
 var cyborgs=[
-//	["R-Wpn-MG1Mk1", "CyborgChain1Ground", "CyborgChaingun"],			// легкий пулемёт
+//	["R-Wpn-MG1Mk1",			"CyborgLightBody",		"CyborgChaingun"],			// легкий пулемёт
+["R-Wpn-Flamer01Mk1",			"CyborgLightBody",		"CyborgFlamer01"],			// лёгкий огнемёт
+["R-Wpn-MG4",					"CyborgLightBody",		"CyborgRotMG"],				// тяжёлый пулемёт
+["R-Wpn-Flame2",				"CyborgLightBody",		"Cyb-Wpn-Thermite"],		// горячий напалм
+["R-Wpn-Cannon1Mk1",			"CyborgLightBody",		"CyborgCannon"],			// лёгкая пушка
+["R-Wpn-Mortar01Lt",			"CyborgLightBody",		"Cyb-Wpn-Grenade"],			// гранатамёт
+["R-Wpn-Rocket01-LtAT",			"CyborgLightBody",		"CyborgRocket"],			// Lancer
+["R-Wpn-Missile2A-T",			"CyborgLightBody",		"Cyb-Wpn-Atmiss"],			// scourge
+["R-Cyborg-Hvywpn-A-T",			"CyborgHeavyBody",		"Cyb-Hvywpn-A-T"],			//Super scourge
+["R-Cyborg-Hvywpn-Mcannon",		"CyborgHeavyBody",		"Cyb-Hvywpn-Mcannon"],		//Super Heavy Gunner
+["R-Cyborg-Hvywpn-HPV",			"CyborgHeavyBody",		"Cyb-Hvywpn-HPV"],			//Super Hyper velocity
+["R-Cyborg-Hvywpn-Acannon",		"CyborgHeavyBody",		"Cyb-Hvywpn-Acannon"],		//Super autocannon
+["R-Cyborg-Hvywpn-PulseLsr",	"CyborgHeavyBody",		"Cyb-Hvywpn-PulseLsr"],		//Super pulse laser
+["R-Cyborg-Hvywpn-TK",			"CyborgHeavyBody",		"Cyb-Hvywpn-TK"],			//Super tank killer
+
+];
+/*var cyborgs=[
+["R-Wpn-MG1Mk1", "CyborgChain1Ground", "CyborgChaingun"],			// легкий пулемёт
 ["R-Wpn-Flamer01Mk1", "CyborgFlamerGrd", "CyborgFlamer01"],			// лёгкий огнемёт
 ["R-Wpn-MG4", "CybRotMgGrd","CyborgRotMG"],							// тяжёлый пулемёт
 ["R-Wpn-Flame2", "Cyb-Bod-Thermite", "Cyb-Wpn-Thermite"],			// горячий напалм
@@ -245,7 +264,8 @@ var cyborgs=[
 ["R-Cyborg-Hvywpn-HPV", "Cyb-Hvybod-HPV", "Cyb-Hvywpn-HPV"],			//Super Hyper velocity
 ["R-Cyborg-Hvywpn-Acannon", "Cyb-Hvybod-Acannon", "Cyb-Hvywpn-Acannon"],	//Super autocannon
 ["R-Cyborg-Hvywpn-PulseLsr", "Cyb-Hvybod-PulseLsr","Cyb-Hvywpn-PulseLsr"],	//super pulse laser
-];
+];*/
+
 
 var bodies=[
 //	===== Средняя броня (металическая)
@@ -487,7 +507,7 @@ function init(){
 //			["R-Vehicle-Prop-Tracks"]
 		);
 		
-		cyborgs.unshift(["R-Wpn-MG1Mk1", "CyborgChain1Ground", "CyborgChaingun"]);
+		if(technology.length)cyborgs.unshift(["R-Wpn-MG1Mk1", "CyborgLightBody", "CyborgChaingun"]);
 		
 		buildersTimer = 7000;
 		minBuilders = 10;
