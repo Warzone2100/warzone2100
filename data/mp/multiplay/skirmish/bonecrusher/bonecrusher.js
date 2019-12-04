@@ -1,5 +1,5 @@
-const vernum    = "1.00";
-const verdate   = "10.10.2019";
+const vernum    = "1.01";
+const verdate   = "04.12.2019";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
 const release	= true;
@@ -24,7 +24,7 @@ Clean code
 
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error');
+var debugLevels = new Array('error', 'init');
 
 //var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
 
@@ -342,6 +342,10 @@ function init(){
 //	base = startPositions[me];
 	initBase();
 	startPos = base;
+	
+	var technology = enumResearch();
+	if(technology.length) debugMsg("Доступных исследований: "+technology.length, "init");
+	else debugMsg("ВНИМАНИЕ: Нет доступных исследований", "init");
 	
 	//Получаем координаты всех ресурсов и занятых и свободных
 	allResources = enumFeature(ALL_PLAYERS, "OilResource");
