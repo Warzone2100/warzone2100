@@ -458,12 +458,20 @@ function oilHunt(obj, nearbase){
 	if((difficulty == HARD || difficulty == INSANE) && policy['build'] == 'rich') builder_targets = sortByDistance(builder_targets, obj);
 	
 	//Если строитель рядом с целью
+	
+	var target_range = 7;
+	var feature_try = 3;
+	if(policy['build'] == 'rich'){
+		target_range = 20;
+		feature_try = 10;
+	}
+	
 	for(var i in builder_targets){
 		if (getInfoNear(builder_targets[i].x,builder_targets[i].y,'safe').value){
-			if(distBetweenTwoPoints_p(builder_targets[i].x,builder_targets[i].y,obj.x,obj.y) <= 7){
+			if(distBetweenTwoPoints_p(builder_targets[i].x,builder_targets[i].y,obj.x,obj.y) <= target_range){
 				if ( typeof builder_targets[i] === "undefined" ) { debugMsg("ERROR in oilHunt(): Выход за пределы массива, исправить!", 'error'); break;}
 //				debugMsg(getInfoNear(builder_targets[i].x,builder_targets[i].y,'buildRig',0,300000,obj,false,true).value, 'temp');
-				if(builder_targets[i].type == FEATURE && getInfoNear(builder_targets[i].x,builder_targets[i].y,'buildRig',0,300000,false,false,true).value < 3){
+				if(builder_targets[i].type == FEATURE && getInfoNear(builder_targets[i].x,builder_targets[i].y,'buildRig',0,300000,false,false,true).value < feature_try){
 					
 					if(builder_targets[i].stattype == OIL_DRUM){
 						orderDroidObj_p(obj, DORDER_RECOVER, builder_targets[i]);
