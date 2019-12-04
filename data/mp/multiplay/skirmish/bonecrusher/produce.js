@@ -168,8 +168,9 @@ function produceDroids(){
 			if( (groupSize(armyPartisans) < minPartisans || playerPower(me) > (groupSize(armyPartisans)*50) ) || !getInfoNear(base.x,base.y,'safe',base_range).value){
 //				var _weapon = avail_guns[Math.floor(Math.random()*Math.min(avail_guns.length, 5))]; //Случайная из 5 последних крутых пушек
 				var _weapon = avail_guns[Math.floor(Math.random()*avail_guns.length)];
+				var _second = avail_guns[Math.floor(Math.random()*avail_guns.length)];
 				debugMsg(_body+" "+_prop+" "+_weapon, 'template');
-				buildDroid(droid_factories[0], "Army", _body, _prop, "", DROID_WEAPON, _weapon);
+				buildDroid(droid_factories[0], "Army", _body, _prop, "", DROID_WEAPON, _weapon, _second);
 			}
 		}
 	}
