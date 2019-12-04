@@ -12,7 +12,9 @@ function mainBuilders(rotation){
 	var len_research_lab_ready = research_lab_ready.length;
 	var len_research_lab = research_lab.length;
 
-	if(!enumResearch().length) { len_research_lab_ready = Infinity; len_research_lab = Infinity;}
+	var technology = enumResearch().length;
+	
+	if(!technology) { len_research_lab_ready = Infinity; len_research_lab = Infinity;}
 	
 	//enumGroup(buildersMain).forEach( function(obj, iter){
 	var rnd = Math.round(Math.random());
@@ -109,6 +111,15 @@ function mainBuilders(rotation){
 		}else if(policy['build'] == 'rich'){
 			
 			if(gameTime > 500000 && factory.length < 5) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
+			
+			if(technology > 10){
+				if(factory.length < 2) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
+				if(power_gen.length < 4) { if(builderBuild(obj, "A0PowerGenerator", rotation)){build++; continue;} }
+				if(hq.length == 0) { if(builderBuild(obj, "A0CommandCentre", rotation)){build++; continue;} }
+				if(isStructureAvailable("A0CyborgFactory") && cyborg_factory.length < 2) { if(builderBuild(obj, "A0CyborgFactory", rotation)){build++; continue;} }
+				if(factory.length < 3) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
+			}
+			
 			if(len_research_lab < 1) { if(builderBuild(obj, "A0ResearchFacility", rotation)){build++; continue;} }
 			if(ally.length >= 1 && alliancesType == 2 && factory.length < 1) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
 			if(ally.length >= 2 && alliancesType == 2 && factory.length < 2 && Math.round(Math.random()*2) == 0) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
