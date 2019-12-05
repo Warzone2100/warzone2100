@@ -201,7 +201,8 @@ function produceCyborgs(){
 //		var _body = 'CyborgLightBody';
 		var _weapon = _cyb[1];
 		debugMsg("Cyborg: body="+_body+"; weapon="+_weapon ,'production');
-		buildDroid(cyborg_factories[0], "Terminator", _body, "CyborgLegs", "", DROID_CYBORG, _weapon);
+		//buildDroid(cyborg_factories[0], "Terminator", _body, "CyborgLegs", "", DROID_CYBORG, _weapon);
+		buildDroid(cyborg_factories[0], _weapon, _body, "CyborgLegs", "", DROID_CYBORG, _weapon);
 	}
 }
 

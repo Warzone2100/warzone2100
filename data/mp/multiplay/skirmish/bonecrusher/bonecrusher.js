@@ -24,7 +24,7 @@ Clean code
 
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error', 'init', 'production');
+var debugLevels = new Array('error');
 
 //var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
 
@@ -243,12 +243,15 @@ var cyborgs=[
 ["R-Wpn-Mortar01Lt",			"CyborgLightBody",		"Cyb-Wpn-Grenade"],			// гранатамёт
 ["R-Wpn-Rocket01-LtAT",			"CyborgLightBody",		"CyborgRocket"],			// Lancer
 ["R-Wpn-Missile2A-T",			"CyborgLightBody",		"Cyb-Wpn-Atmiss"],			// scourge
+["R-Wpn-Laser01",				"CyborgLightBody",		"Cyb-Wpn-Laser"],			// Flashlight Gunner
+["R-Wpn-RailGun01",				"CyborgLightBody",		"Cyb-Wpn-Rail1"],			// Needle Gunner
 ["R-Cyborg-Hvywpn-A-T",			"CyborgHeavyBody",		"Cyb-Hvywpn-A-T"],			//Super scourge
 ["R-Cyborg-Hvywpn-Mcannon",		"CyborgHeavyBody",		"Cyb-Hvywpn-Mcannon"],		//Super Heavy Gunner
 ["R-Cyborg-Hvywpn-HPV",			"CyborgHeavyBody",		"Cyb-Hvywpn-HPV"],			//Super Hyper velocity
 ["R-Cyborg-Hvywpn-Acannon",		"CyborgHeavyBody",		"Cyb-Hvywpn-Acannon"],		//Super autocannon
 ["R-Cyborg-Hvywpn-PulseLsr",	"CyborgHeavyBody",		"Cyb-Hvywpn-PulseLsr"],		//Super pulse laser
 ["R-Cyborg-Hvywpn-TK",			"CyborgHeavyBody",		"Cyb-Hvywpn-TK"],			//Super tank killer
+["R-Cyborg-Hvywpn-RailGunner",	"CyborgHeavyBody",		"Cyb-Hvywpn-RailGunner"],	//Super Rail-Gunner
 
 ];
 /*var cyborgs=[
