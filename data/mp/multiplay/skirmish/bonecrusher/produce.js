@@ -160,7 +160,7 @@ function produceDroids(){
 		}
 
 		
-		if(policy['build'] == 'rich' && groupSize(armyScanners) == 0 && !isFullBase(me) && getInfoNear(base.x,base.y,'safe',base_range).value && scannersTrigger < gameTime){
+		if(policy['build'] == 'rich' && groupSize(armyScanners) == 0 && getInfoNear(base.x,base.y,'safe',base_range).value && scannersTrigger < gameTime){
 			var hq = enumStruct(me, HQ).filter(function (e){if(e.status == BUILT)return true;return false;});
 			if (hq.length != 0){
 				buildDroid(droid_factories[0], "Scanner", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','HalfTrack','wheeled01'], "", DROID_SENSOR, "SensorTurret1Mk1");

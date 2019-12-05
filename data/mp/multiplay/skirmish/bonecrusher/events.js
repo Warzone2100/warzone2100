@@ -78,7 +78,18 @@ function eventDroidIdle(droid) {
 	}
 }
 
+//Я так понял, данный триггер больше не работает так как был задуман.
 function eventObjectSeen(sensor, gameObject) {
+	
+	debug(sensor.name+': '.gameObject.name, 'eventSeen');
+/*	
+	if(sensor.type == DROID && sensor.droidType == DROID_SENSOR && !allianceExistsBetween(me, gameObject.player)){
+		var sensors = enumGroup(armyScanners);
+		pointRegular = armyScanners[0];
+		debug(pointRegular.x+'x'+pointRegular.y);
+	}
+*/
+	
 	switch (gameObject.type) {
 		case STRUCTURE:
 		if (!allianceExistsBetween(me,gameObject.player)) {
@@ -252,6 +263,7 @@ function eventDroidBuilt(droid, structure) {
 			if(droid.droidType == DROID_WEAPON){
 				if(checkDonate(droid)){return;}
 				else groupArmy(droid);
+				if(policy['build'] == 'rich') targetRegular();
 			}
 			if(droid.droidType == DROID_REPAIR){
 				groupArmy(droid);
@@ -322,7 +334,7 @@ function eventAttacked(victim, attacker) {
 		//Отходим к союзникам, если союзная армия ближе
 		point = point.concat(getAllyArmy());
 		
-		if(army.length != 0){
+		if(point.length != 0){
 			point = sortByDistance(point, victim, 1);
 		} else point = base;
 		

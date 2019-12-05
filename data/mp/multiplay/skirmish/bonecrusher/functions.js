@@ -706,6 +706,26 @@ function getEnemyNearAlly(){
 	return enemy;
 }
 
+function getEnemyNearPos(x,y,r){
+	if(typeof r === 'undefined') r = 7;
+	var targ = [];
+	var enemy = [];
+	for ( var e = 0; e < maxPlayers; ++e ) {
+		if ( allianceExistsBetween(me,e) ) continue;
+		if ( playerSpectator(e) ) continue;
+		if ( e == me ) continue;
+		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
+	}
+	if(scavengers == true) {
+		targ = targ.concat(enumDroid(scavengerPlayer, DROID_WEAPON, me));
+	}
+	
+	enemy = enemy.concat(targ.filter(function(e){if(distBetweenTwoPoints_p(e.x,e.y,x,y) < r )return true;return false;}));
+	
+	return enemy;
+	
+}
+
 function getAllyArmy(){
 	var army = [];
 	
@@ -917,6 +937,32 @@ function getEnemyDefences(){
 	for ( var e = 0; e < maxPlayers; ++e ) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, DEFENSE, me));
+	}
+	if(scavengers == true) {
+		targ = targ.concat(enumStruct(scavengerPlayer, DEFENSE, me));
+		targ = targ.concat(enumStruct(scavengerPlayer, WALL, me));
+	}
+	return targ;
+}
+
+function getEnemyStructures(){
+	var targ = [];
+	for ( var e = 0; e < maxPlayers; ++e ) {
+		if ( e == me ) continue;
+		if ( allianceExistsBetween(me,e) ) continue;
+		if ( playerSpectator(e) ) continue;
+		targ = targ.concat(enumStruct(e, DEFENSE, me));
+		targ = targ.concat(enumStruct(e, RESOURCE_EXTRACTOR, me));
+		targ = targ.concat(enumStruct(e, FACTORY, me));
+		targ = targ.concat(enumStruct(e, CYBORG_FACTORY, me));
+		targ = targ.concat(enumStruct(e, HQ, me));
+		targ = targ.concat(enumStruct(e, LASSAT, me));
+		targ = targ.concat(enumStruct(e, POWER_GEN, me));
+		targ = targ.concat(enumStruct(e, REARM_PAD, me));
+		targ = targ.concat(enumStruct(e, REPAIR_FACILITY, me));
+		targ = targ.concat(enumStruct(e, RESEARCH_LAB, me));
+		targ = targ.concat(enumStruct(e, SAT_UPLINK, me));
+		targ = targ.concat(enumStruct(e, VTOL_FACTORY, me));
 	}
 	if(scavengers == true) {
 		targ = targ.concat(enumStruct(scavengerPlayer, DEFENSE, me));
@@ -1195,5 +1241,11 @@ function posRnd(pos, axis){
 }
 
 function secondTick(){
-	if(earlyGame && gameTime/1000 > 130) earlyGame = false;
+	if(earlyGame && gameTime/1000 > 130){
+		earlyGame = false;
+		if(policy['build'] == 'rich'){
+			maxPartisans = 1;
+			scannersTimer = 300000;
+		}
+	}
 }

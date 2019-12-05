@@ -1,5 +1,5 @@
 const vernum    = "1.01";
-const verdate   = "04.12.2019";
+const verdate   = "05.12.2019";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
 const release	= true;
@@ -24,7 +24,7 @@ Clean code
 
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error','init', 'events');
+var debugLevels = new Array('error');
 
 //var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
 
@@ -519,7 +519,7 @@ function init(){
 		buildersTimer = 7000;
 		minBuilders = 10;
 		minPartisans = 1;
-		maxPartisans = 2;
+		maxPartisans = 4;
 		builderPts = 150;
 		maxRegular = 100;
 	}
@@ -684,6 +684,10 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("defenceQueue", 60000+me*100);
 			setTimer("targetRegular", 32000+me*100);
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
+			
+			reactRegularArmyTimer = 5000;
+			checkRegularArmyTimer = 5000;
+			reactWarriorsTimer = 2000;
 		
 		} else if(difficulty == INSANE){
 		
@@ -701,6 +705,11 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("doResearch", 12000+me*100);
 			setTimer("defenceQueue", 30000+me*100);
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
+			
+			reactRegularArmyTimer = 5000;
+			checkRegularArmyTimer = 5000;
+			reactWarriorsTimer = 2000;
+			
 		}
 	
 		if(!release){
