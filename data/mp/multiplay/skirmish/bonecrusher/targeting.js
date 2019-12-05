@@ -69,7 +69,7 @@ function targetJammers(){
 	
 	var jammers = enumGroup(armyJammers);
 	
-	if(policy['build'] == 'rich')var partisans = enumGroup(armyRegular);
+	if(policy['build'] == 'rich') var partisans = enumGroup(armyRegular);
 	else var partisans = enumGroup(armyPartisans);
 	
 	
@@ -93,6 +93,21 @@ function targetJammers(){
 //		var target = partisans;
 		orderDroidLoc_p(f, DORDER_MOVE, partisans[Math.round(partisans.length/2)].x, partisans[Math.round(partisans.length/2)].y);
 	});
+}
+
+function targetSensors(){
+	var sensors = enumGroup(armyScanners);
+	var target = sortByDistance(getEnemyStartPos(), base, 1);
+	
+	debug(target.length);
+	
+	if(target.length != 0){
+		sensors.forEach(function(e){
+			debug(target[0].x+'x'+target[0].y);
+			orderDroidLoc_p(e, DORDER_SCOUT, target[0].x, target[0].y);
+		});
+	}
+	
 }
 
 function targetFixers(){

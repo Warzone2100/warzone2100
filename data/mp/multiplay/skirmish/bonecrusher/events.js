@@ -20,6 +20,7 @@ function eventPlayerLeft(player) {
 	enemy = enemy.filter(function(p){if(p==player) return false; return true;});
 	if(player == me) gameStop('kick');
 }
+
 // Обязательно использовать
 function eventDroidIdle(droid) {
 	
@@ -54,6 +55,11 @@ function eventDroidIdle(droid) {
 		break;
 		case DROID_SENSOR:
 			// Ищем чего бы подсветить/разведать
+			if(gameTime > eventsRun['targetSensors']){
+				debugMsg("targetSensors", 'events');
+				eventsRun['targetSensors'] = gameTime + 5000;
+				targetSensors();
+			}
 		break;
 		case DROID_ECM:
 			if(gameTime > eventsRun['targetJammers']){
@@ -128,6 +134,10 @@ function eventObjectTransfer(gameObject, from) {
 						queue("letsRockThisFxxxingWorld", 1000);
 					}
 					
+					break;
+				case DROID_SENSOR:
+					groupAddDroid(armyScanners, droid);
+					targetSensors();
 					break;
 				case DROID_CYBORG:
 					groupArmy(gameObject);
@@ -246,6 +256,10 @@ function eventDroidBuilt(droid, structure) {
 			if(droid.droidType == DROID_REPAIR){
 				groupArmy(droid);
 			}
+			if(droid.droidType == DROID_SENSOR){
+				groupAddDroid(armyScanners, droid);
+				targetSensors();
+			}
 //			if(droid.droidType == DROID_ECM) groupArmy(droid);
 			produceDroids();
 //			targetRegular();
@@ -300,6 +314,20 @@ function eventAttacked(victim, attacker) {
 	if(policy['build'] == 'rich' && victim.type == DROID && victim.droidType == DROID_CONSTRUCT){
 		lastImpact = {x:victim.x,y:victim.y};
 		orderDroidLoc_p(victim, DORDER_MOVE, base.x, base.y);
+	}
+	
+	if(victim.type == DROID && victim.droidType == DROID_SENSOR){
+		var point = enumDroid(me, DROID_WEAPON);
+		
+		//Отходим к союзникам, если союзная армия ближе
+		point = point.concat(getAllyArmy());
+		
+		if(army.length != 0){
+			point = sortByDistance(point, victim, 1);
+		} else point = base;
+		
+		orderDroidLoc_p(victim, DORDER_MOVE, point.x, point.y);
+		
 	}
 	
 	//Если атака по армии, отводим атакованного
