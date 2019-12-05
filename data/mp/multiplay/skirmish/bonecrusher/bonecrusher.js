@@ -24,7 +24,7 @@ Clean code
 
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error');
+var debugLevels = new Array('error','init', 'events');
 
 //var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
 
@@ -70,6 +70,7 @@ var base_range = 20; // В каких пределах работают осно
 
 var buildersTimer = 25000;		//Триггер для заказа строителей (что бы не выходили пачкой сразу)
 var fixersTimer = 50000;		//Триггер для заказа рем.инженеров
+var scannersTimer = 120000;		//Триггер для заказа сенсоров
 var checkRegularArmyTimer = 10000;
 var reactRegularArmyTimer = 10000;
 var reactWarriorsTimer = 5000;
@@ -171,6 +172,7 @@ var armySupport = newGroup();
 var armyCyborgs = newGroup();
 var armyFixers = newGroup();
 var armyJammers = newGroup();
+var armyScanners = newGroup();
 var armyScouts = newGroup();
 var partJammers = newGroup();
 var VTOLAttacker = newGroup();
@@ -180,6 +182,7 @@ var maxFactories, maxFactoriesCyb, maxFactoriesVTOL, maxLabs, maxPads;
 //Triggers
 var buildersTrigger = 0;
 var fixersTrigger = 0;
+var scannersTrigger = 0;
 var checkRegularArmyTrigger = 0;
 var reactRegularArmyTrigger = 0;
 var reactWarriorsTrigger = 0;
@@ -193,6 +196,7 @@ eventsRun['targetJammers'] = 0;
 eventsRun['targetFixers'] = 0;
 eventsRun['buildersOrder'] = 0;
 eventsRun['victimCyborgs'] = 0;
+eventsRun['targetSensors'] = 0;
 
 
 //Предустановки на исследование

@@ -706,6 +706,22 @@ function getEnemyNearAlly(){
 	return enemy;
 }
 
+function getAllyArmy(){
+	var army = [];
+	
+	for ( var p = 0; p < maxPlayers; ++p ) {
+		if ( p == me ) continue;
+		if ( !allianceExistsBetween(me,p) ) continue;
+		if ( playerSpectator(p) ) continue;
+		
+		army = army.concat(enumDroid(p, DROID_WEAPON));
+		
+	}
+	
+	return army;
+}
+
+
 //Функция возвращяет вышки, о которых в данный момент не известно ничего
 //Просто сравниваем два массива объектов и фильтруем в третий
 function getUnknownResources(){
