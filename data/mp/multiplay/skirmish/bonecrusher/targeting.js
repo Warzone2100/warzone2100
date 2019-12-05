@@ -99,11 +99,11 @@ function targetSensors(){
 	var sensors = enumGroup(armyScanners);
 	var target = sortByDistance(getEnemyStartPos(), base, 1);
 	
-	debug(target.length);
+//	debug(target.length);
 	
 	if(target.length != 0){
 		sensors.forEach(function(e){
-			debug(target[0].x+'x'+target[0].y);
+//			debug(target[0].x+'x'+target[0].y);
 			orderDroidLoc_p(e, DORDER_SCOUT, target[0].x, target[0].y);
 		});
 	}
@@ -314,6 +314,14 @@ var brave = 3;
 function pointRegularArmy(army){
 
 	
+	if(earlyGame){
+		var _target = [];
+		var _enemy=0;
+		_target = sortByDistance(getEnemyStructures(),base,1);
+		if(_target.length != 0) _enemy = getEnemyNearPos(_target[0].x, _target[0].y).length;
+		if(_target.length != 0 && _enemy <= 3) return _target[0];
+	}
+	
 	//Если заварушка на базе, ничего не делаем, пусть воюют
 	if(distBetweenTwoPoints_p(army[0].x, army[0].y, base.x, base.y) < base_range) return false;
 	
@@ -383,9 +391,12 @@ function pointRegularArmy(army){
 		return pointRegular;
 	}
 	
+//	var target = sortByDistance(getEnemyStructures(),base,1);
+//	var enemy = getEnemyNearPos(target[0].x, target[0].y);
 	//Если процент передовой армии меньше 65% или видимые враги привышают передовую армию и вся армия не достигла предела, то ждём хвосты
 //	if((percent < 65 || lastEnemiesSeen > near.length ) && army.length < maxRegular){
-	if(percent < 65 && army.length < maxRegular){
+//	if(percent < 65 && army.length < maxRegular && army.length < enemy.length){
+		if(percent < 65 && army.length < maxRegular){
 //		debugMsg('Ждать хвосты', 'army');
 //		return army[Math.floor(army.length/4)];
 		return army[0];
@@ -402,9 +413,10 @@ function targetRegularRich(target, victim){
 	
 	
 	var regular = enumGroup(armyRegular);
+	//Если армии нет - выход из функции
 	if(regular.length == 0) return false;
 
-	//Если из армии атакован огненный боец, берём всех огненных рядом и в партизаны
+	//Если из армии атакован огненный боец, берём всех огненных рядом и в партизаны/камикадзе
 	if(victim != false && victim.droidType == DROID_WEAPON){
 //		debugMsg("Check weapon for "+victim.name, "army");
 		var w = victim.weapons[0].name;
@@ -421,11 +433,13 @@ function targetRegularRich(target, victim){
 	//Сначало самые дальние юниты
 	regular.reverse();
 
+	//Если указана цель, но отсутствует точка сбора
 	if(target && !pointRegular){
+		//Если до цели непроходимая местность, сбрасываем цель
 		if(!droidCanReach(regular[0],target.x,target.y)){
 //			debugMsg("regular: event не достежим", 'targeting');
 			target = false;
-		}else{
+		}else if(victim){
 //			debugMsg("regular: event от армии "+distBetweenTwoPoints_p(target.x,target.y,regular[0].x,regular[0].y), 'targeting');
 			
 			//Если атакованный дроид дальше от базы, чем армия, идём туда.
@@ -439,6 +453,8 @@ function targetRegularRich(target, victim){
 			}else{
 				if( (victim.type == DROID && victim.droidType == DROID_CONSTRUCT) || victim.type == STRUCTURE) targRegular = target;
 			}
+		}else{
+			targRegular = target;
 		}
 	}
 	
@@ -449,6 +465,7 @@ function targetRegularRich(target, victim){
 	reactRegularArmyTrigger = gameTime + reactRegularArmyTimer;
 	
 	var help = [];
+	var stopPoint;
 	if(ally.length != 0) help = getEnemyNearAlly();
 	if(help.length == 0){
 		help = getEnemyCloseBase();
@@ -457,7 +474,7 @@ function targetRegularRich(target, victim){
 		targRegular = {x:help[0].x,y:help[0].y};
 		pointRegular = false;
 	}else{
-		var stopPoint = pointRegularArmy(regular);
+		stopPoint = pointRegularArmy(regular);
 	}
 /*
 	if(targRegular.x == 0 && targRegular.y == 0 && !target){
@@ -490,8 +507,15 @@ function targetRegularRich(target, victim){
 		}
 	}
 	
-
-	if(regular.length > minRegular){
+//	var _target = [];
+//	var _enemy=0;
+//	_target = sortByDistance(getEnemyStructures(),base,1);
+//	if(_target.length != 0) _enemy = getEnemyNearPos(_target[0].x, _target[0].y).length;
+	
+//	if(_target.length !=0 && _enemy < regular.length) targRegular = {x:_target[0].x,y:_target[0].y};
+	
+//	if(regular.length > minRegular || regular.length > _enemy){
+	if(regular.length > minRegular || earlyGame){
 		if(stopPoint){
 //			debugMsg("regular: Регрупировка "+distBetweenTwoPoints_p(endPoint.x,endPoint.y,base.x,base.y), 'targeting');
 			regular.forEach(function(e){orderDroidLoc_p(e, DORDER_MOVE, endPoint.x, endPoint.y);});
