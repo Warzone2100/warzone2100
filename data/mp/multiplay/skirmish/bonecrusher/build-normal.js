@@ -256,6 +256,12 @@ function mainBuilders(rotation){
 		}
 		
 		debugMsg('===', 'builders');
+		
+		//Если строителям нечего делать, уменьшаем кол-во исполнений функции buildersOrder
+		func_buildersOrder_timer+=1000;
+		debugMsg('func_buildersOrder_timer+1000','controller');
+		//Если данному строителю нечего делать, выходим из цикла и по остальным.
+		break; 
 
 	}
 }

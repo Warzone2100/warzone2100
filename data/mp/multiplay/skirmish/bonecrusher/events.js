@@ -386,10 +386,31 @@ function eventDestroyed(obj){
 			debugMsg('DESTROYED: removed from '+obj.id+' '+rem, 'triggers');
 		}
 	}
+	
+	if(isFullBase(me) && obj.type == STRUCTURE && (obj.player == me || obj.stattype == RESOURCE_EXTRACTOR) ){
+		
+		//Возвращаем частоту функции
+		func_buildersOrder_timer = 5000+me*100;
+		
+		buildersOrder();
+	}
+	
 }
 
 function eventChat(sender, to, message) {
 //	debugMsg('from: '+sender+', to: '+to+', msg: '+message, 'chat')
+	if(!release)
+	switch (message){
+		case "disable buildersOrder":
+			func_buildersOrder = false;
+			chat(sender, "buildersOrder() disabled");
+			break;
+		case "enable buildersOrder":
+			func_buildersOrder = true;
+			chat(sender, "buildersOrder() enabled");
+			break;
+	}
+	
 	if(sender != me)
 	if(allianceExistsBetween(me, sender))
 	if(message.substr(0,3) == "bc ")

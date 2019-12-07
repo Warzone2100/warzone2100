@@ -2,7 +2,7 @@ const vernum    = "1.01";
 const verdate   = "05.12.2019";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
-const release	= true;
+const release	= false;
 
 
 ///////\\\\\\\
@@ -24,7 +24,7 @@ Clean code
 
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error');
+var debugLevels = new Array('error', 'init', 'controller');
 
 //var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
 
@@ -98,6 +98,10 @@ var maxGenerators = 10;
 //Performance limits
 var ordersLimit = 100;
 
+//functions controller for performance purpose
+var func_buildersOrder = true;
+var func_buildersOrder_timer = 120000+me*100;
+var func_buildersOrder_trigger = 0;
 
 /*
  * 
@@ -652,7 +656,7 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("doResearch", 60000+me*100);
 			setTimer("defenceQueue", 60000+me*100);
 			setTimer("produceCyborgs", 25000+me*100);
-			setTimer("buildersOrder", 120000+me*100);
+//			setTimer("buildersOrder", 120000+me*100);
 			setTimer("targetVTOL", 120000+me*100); //Не раньше 30 сек.
 		
 	
@@ -661,20 +665,21 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("produceDroids", 7000+me*100);
 			setTimer("produceVTOL", 8000+me*100);
 			setTimer("produceCyborgs", 9000+me*100);
-			if(policy['build'] == 'rich') setTimer("buildersOrder", 5000+me*100);
-			else setTimer("buildersOrder", 120000+me*100);
+//			if(policy['build'] == 'rich') setTimer("buildersOrder", 5000+me*100);
+//			else setTimer("buildersOrder", 120000+me*100);
 			setTimer("checkEventIdle", 30000+me*100);	//т.к. eventDroidIdle глючит, будем дополнительно отслежвать.
 			setTimer("doResearch", 30000+me*100);
 			setTimer("defenceQueue", 60000+me*100);
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
 			setTimer("targetRegular", 65000+me*100);
 
+			if(policy['build'] == 'rich') func_buildersOrder_timer = 5000+me*100;
 			
 		} else if(difficulty == HARD){
 		
 			setTimer("targetPartisan", 5000+me*100);
-			setTimer("buildersOrder", 5000+me*100);
-			setTimer("targetJammers", 5500+me*100);
+//			setTimer("buildersOrder", 5000+me*100);
+//			setTimer("targetJammers", 5500+me*100);
 			setTimer("targetCyborgs", 7000+me*100);
 			setTimer("produceDroids", 7000+me*100);
 			setTimer("produceVTOL", 8000+me*100);
@@ -688,14 +693,15 @@ function letsRockThisFxxxingWorld(init){
 			reactRegularArmyTimer = 5000;
 			checkRegularArmyTimer = 5000;
 			reactWarriorsTimer = 2000;
+			func_buildersOrder_timer = 5000+me*100;
 		
 		} else if(difficulty == INSANE){
 		
 //			research_way.unshift(["R-Defense-MortarPit-Incenediary"]);
 			
 			setTimer("targetPartisan", 5000+me*100);
-			setTimer("buildersOrder", 5000+me*100);
-			setTimer("targetJammers", 5500+me*100);
+//			setTimer("buildersOrder", 5000+me*100);
+//			setTimer("targetJammers", 5500+me*100);
 			setTimer("produceDroids", 6000+me*100);
 			setTimer("produceVTOL", 6500+me*100);
 			setTimer("produceCyborgs", 7000+me*100);
@@ -709,6 +715,7 @@ function letsRockThisFxxxingWorld(init){
 			reactRegularArmyTimer = 5000;
 			checkRegularArmyTimer = 5000;
 			reactWarriorsTimer = 2000;
+			func_buildersOrder_timer = 5000+me*100;
 			
 		}
 	
