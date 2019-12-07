@@ -1246,6 +1246,7 @@ function secondTick(){
 		if(policy['build'] == 'rich'){
 			maxPartisans = 1;
 			scannersTimer = 300000;
+			removeTimer("buildersOrder");
 		}
 	}
 }

@@ -154,7 +154,16 @@ const mr_lab			= "R-Struc-Research-Module";
 //Главная функция строителей
 var builder_targets;
 function buildersOrder(order,target) {
-	if(!running)return;
+	if(!running)return false;
+	if(!func_buildersOrder)return false;
+	
+	//function controller
+	if(func_buildersOrder_trigger <= gameTime) func_buildersOrder_trigger = gameTime + func_buildersOrder_timer
+	else return false;
+	queue("buildersOrder", func_buildersOrder_timer);
+	debugMsg("func_buildersOrder_timer: "+func_buildersOrder_timer, 'controller');
+	
+	
 //	debugMsg('buildersOrder()', 'builders_advanced');
 
 //	if ( typeof order === "undefined" ) order = false;
