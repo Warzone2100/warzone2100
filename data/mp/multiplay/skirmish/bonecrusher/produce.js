@@ -71,7 +71,7 @@ function prepeareProduce(){
 		
 		//Сайборги заполонили!
 		avail_cyborgs=[];
-		var _cyb=cyborgs.filter(function(e){if( ( getResearch(e[0]).done && technology) || (!technology && e[1] == 'CyborgHeavyBody') )return true;return false;});
+		var _cyb=cyborgs.filter(function(e){if( (getResearch(e[0]).done && technology) || (!technology && e[1] == 'CyborgHeavyBody'))return true;return false;});
 		/*.sort(function (a,b){
 			if(getResearch(a[0]).points < getResearch(b[0]).points ) return -1;
 			if(getResearch(a[0]).points > getResearch(b[0]).points ) return 1;

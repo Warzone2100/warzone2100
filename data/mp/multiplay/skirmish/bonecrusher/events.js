@@ -391,6 +391,7 @@ function eventDestroyed(obj){
 		
 		//Возвращаем частоту функции
 		func_buildersOrder_timer = 5000+me*100;
+		func_buildersOrder_trigger = 0;
 		
 		buildersOrder();
 	}
