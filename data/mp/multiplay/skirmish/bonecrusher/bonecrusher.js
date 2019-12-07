@@ -1,8 +1,8 @@
 const vernum    = "1.01";
-const verdate   = "05.12.2019";
+const verdate   = "07.12.2019";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
-const release	= false;
+const release	= true;
 
 
 ///////\\\\\\\
@@ -24,7 +24,7 @@ Clean code
 
 
 //DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = new Array('error', 'init', 'controller');
+var debugLevels = new Array('error');
 
 //var debugLevels = new Array('init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting');
 
@@ -635,6 +635,9 @@ function letsRockThisFxxxingWorld(init){
 	debugMsg("Старт/Run", 'init');
 	
 	include("multiplay/skirmish/bonecrusher/weap-init.js");
+	
+	//Remove chaingun and flamer cyborgs if better available
+	cyborgs = cyborgs.filter(function(e){if( (e[2] == 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] == 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done) )return false;return true;});
 	
 	//Первых военных в группу
 	enumDroid(me,DROID_CYBORG).forEach(function(e){groupAddDroid(armyCyborgs, e);});
