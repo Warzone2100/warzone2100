@@ -70,7 +70,7 @@ var base_range = 20; // В каких пределах работают осно
 
 var buildersTimer = 25000;		//Триггер для заказа строителей (что бы не выходили пачкой сразу)
 var fixersTimer = 50000;		//Триггер для заказа рем.инженеров
-var scannersTimer = 120000;		//Триггер для заказа сенсоров
+var scannersTimer = 300000;		//Триггер для заказа сенсоров
 var checkRegularArmyTimer = 10000;
 var reactRegularArmyTimer = 10000;
 var reactWarriorsTimer = 5000;
@@ -191,6 +191,10 @@ var checkRegularArmyTrigger = 0;
 var reactRegularArmyTrigger = 0;
 var reactWarriorsTrigger = 0;
 var fullBaseTrigger = 0;
+
+
+var lassat_charged = false;
+
 
 var eventsRun=[];
 eventsRun['targetCyborgs'] = 0;
@@ -526,6 +530,7 @@ function init(){
 		maxPartisans = 4;
 		builderPts = 150;
 		maxRegular = 100;
+		scannersTimer = 120000
 	}
 	
 //	if(policy['build'] == 'cyborgs') cyborgs.unshift(["R-Wpn-MG1Mk1", "CyborgChain1Ground", "CyborgChaingun"]);

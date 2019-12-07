@@ -12,6 +12,20 @@ chatting['army'] = [
 	"I can sometimes give you my warriors, just say \"yes\""
 ];
 
+chatting['lassat_fire'] = [
+	"Bada-Boom!",
+	"Boom!",
+	"Boo-Boom!",
+	";)"
+];
+
+chatting['lassat_charged'] = [
+	"Scare me",
+	"Laser ready, now get ready",
+	"He-heh",
+	":)"
+];
+
 chatting['confirm'] = [
 	"Ok then! Let's kill them all together!!",
 	"Yeah! That's my boy! >:)",
@@ -19,7 +33,7 @@ chatting['confirm'] = [
 	"Well, ok then ;)",
 	"Ok, got it",
 	"Ok"
-]
+];
 
 chatting['kick'] = [
 	"I was kicked out, for what?",
@@ -102,4 +116,4 @@ chatting['loose'] = [
 
 ];
 
-chatting['dev'] = ['This is dev version, dont use it! Данная версия бота не является релизом и может содержать баги! Не используйте её!']
+chatting['dev'] = ['This is dev version, dont use it! Данная версия бота не является релизом и может содержать баги! Не используйте её!'];

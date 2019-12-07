@@ -19,6 +19,9 @@ function targetVTOL(){
 		scout = sortByDistance(scout, base, 1);
 	}
 	
+	if(target.length == 0){target = getEnemyWarriors();}
+	if(target.length == 0){target = getEnemyStructures();}
+	
 	var ready = enumGroup(VTOLAttacker).filter(function(e){
 //		debugMsg(e.id+"-"+e.action, 'vtol');
 		if( e.action == 32 || e.action == 33 || e.action == 34 || e.action == 35 || e.action == 36 || e.action == 37 || e.action == 41 || e.action == 1 )return false;
@@ -30,6 +33,29 @@ function targetVTOL(){
 	if(group.length >= 3 && (target.length != 0 || scout.length != 0) ) {
 //		debugMsg("Attack!", "vtol");
 		if(target.length != 0){
+
+			//lassat fire
+			if(lassat_charged){
+				debugMsg('lassat init','lassat');
+				var laser_sat = enumStruct(me, "A0LasSatCommand");
+				debugMsg('lassat buildings: '+laser_sat.length,'lassat');
+				laser_sat = laser_sat.filter(function(e){if(structureIdle(e))return true; return false;});
+				debugMsg('lassat ready: '+laser_sat.length,'lassat');
+				if(laser_sat.length != 0) {
+					activateStructure(laser_sat[0], target[0]);
+					debugMsg('lassat fire on '+target[0].x+'x'+target[0].y,'lassat');
+					lassat_charged = false;
+					playerData.forEach( function(data, player) {
+						chat(player, ' from '+debugName+': '+chatting('lassat_fire'));
+					});
+				}/*else{
+					laser_sat.forEach(function (e){
+						debugMsg('debug lassat:'+structureIdle(e), 'lassat');
+					});
+				}*/
+			}
+			
+			
 			if(group.length <= 8){
 				
 				if(policy['build'] != 'rich'){

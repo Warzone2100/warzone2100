@@ -24,8 +24,8 @@ function groupBuilders(droid){
 
 
 //Подсчитываем постройки на базе
-var factory, power_gen, resource_extractor, research_lab, hq, cyborg_factory, vtol_factory, rearm_pad, uplink_center;
-var factory_ready, power_gen_ready, resource_extractor_ready, research_lab_ready, hq_ready, cyborg_factory_ready, vtol_factory_ready, rearm_pad_ready, uplink_center_ready;
+var factory, power_gen, resource_extractor, research_lab, hq, cyborg_factory, vtol_factory, rearm_pad, uplink_center, lassat;
+var factory_ready, power_gen_ready, resource_extractor_ready, research_lab_ready, hq_ready, cyborg_factory_ready, vtol_factory_ready, rearm_pad_ready, uplink_center_ready, lassat_ready;
 
 function checkBase(){
 	factory = enumStruct(me, FACTORY);
@@ -37,6 +37,7 @@ function checkBase(){
 	vtol_factory = enumStruct(me, VTOL_FACTORY);
 	rearm_pad = enumStruct(me, REARM_PAD);
 	uplink_center = enumStruct(me, SAT_UPLINK);
+	lassat = enumStruct(me, "A0LasSatCommand"); // LASSAT don't work
 	
 	factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
 	power_gen_ready = power_gen.filter(function(e){if(e.status == 1)return true; return false;});
@@ -47,6 +48,7 @@ function checkBase(){
 	vtol_factory_ready = vtol_factory.filter(function(e){if(e.status == 1)return true; return false;});
 	rearm_pad_ready = rearm_pad.filter(function(e){if(e.status == 1)return true; return false;});
 	uplink_center_ready = uplink_center.filter(function(e){if(e.status == 1)return true; return false;});
+	lassat_ready = lassat.filter(function(e){if(e.status == 1)return true; return false;});
 
 	/*
 	debugMsg("checkBase(): factory="+factory_ready.length+"/"+factory.length
@@ -75,6 +77,7 @@ function builderBuild(droid, structure, rotation, position){
 		case "A0PowerGenerator":if(enumStruct(me,POWER_GEN).length >= maxGenerators)return false;struct = power_gen; break;
 		case "A0CommandCentre":struct = hq; break;
 		case "A0Sat-linkCentre":struct = uplink_center; break;
+		case "A0LasSatCommand":struct = lassat; break;
 		case "A0CyborgFactory":if(enumStruct(me,CYBORG_FACTORY).length >= maxFactoriesCyb)return false;struct = cyborg_factory; break;
 		case "A0VTolFactory1":if(enumStruct(me,VTOL_FACTORY).length >= maxFactoriesVTOL)return false;struct = vtol_factory; break;
 		case "A0VtolPad":if(enumStruct(me,REARM_PAD).length >= maxPads)return false;struct = rearm_pad; break;
