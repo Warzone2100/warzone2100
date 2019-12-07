@@ -1,3 +1,16 @@
+function eventStructureReady(structure) {
+	if(structure.player == me){
+		switch (structure.stattype) {
+			case LASSAT:
+				lassat_charged = true;
+				debugMsg('lassat charged','lassat');
+				playerData.forEach( function(data, player) {
+					chat(player, ' from '+debugName+': '+chatting('lassat_charged'));
+				});
+			break;
+		}
+	}
+} 
 function eventResearched(research, structure, player) {
 	
 	if (!running) return;
@@ -11,6 +24,10 @@ function eventResearched(research, structure, player) {
 		buildersTimer = 5000;
 		recycleBuilders();
 	}
+
+	//Remove chaingun and flamer cyborgs if better available
+	if(research.name == 'R-Wpn-MG4'){cyborgs = cyborgs.filter(function(e){if(e[2] == 'CyborgChaingun')return false;return true;});}
+	if(research.name == 'R-Wpn-Flame2'){cyborgs = cyborgs.filter(function(e){if(e[2] == 'CyborgFlamer01')return false;return true;});}
 }
 
 //3.2+
@@ -179,6 +196,7 @@ function eventStructureBuilt(structure, droid){
 		}
 	}
 	*/
+	func_buildersOrder_trigger = 0;
 	buildersOrder();
 	
 	switch (structure.stattype) {
@@ -254,7 +272,8 @@ function eventDroidBuilt(droid, structure) {
 			break;
 		case DROID_CONSTRUCT:
 			groupBuilders(droid);
-			queue("buildersOrder", 5000);
+			func_buildersOrder_trigger = 0;
+			queue("buildersOrder", 1000);
 			break;
 	}
 	
