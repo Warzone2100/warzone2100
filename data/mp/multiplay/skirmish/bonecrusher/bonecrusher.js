@@ -100,7 +100,7 @@ var ordersLimit = 100;
 
 //functions controller for performance purpose
 var func_buildersOrder = true;
-var func_buildersOrder_timer = 120000+me*100;
+var func_buildersOrder_timer = 5000+me*100;
 var func_buildersOrder_trigger = 0;
 
 /*
