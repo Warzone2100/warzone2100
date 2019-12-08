@@ -87,6 +87,7 @@ var maxPartisans = 15;
 var minRegular = 10;
 var maxRegular = 50;
 var maxVTOL = 40;
+var minCyborgs = 20;
 var maxCyborgs = 30;
 var maxFixers = 5;
 var maxJammers = 2;
@@ -192,6 +193,9 @@ var reactRegularArmyTrigger = 0;
 var reactWarriorsTrigger = 0;
 var fullBaseTrigger = 0;
 
+var berserk = false;
+var seer = false;
+var credit = 0;
 
 var lassat_charged = false;
 
@@ -381,6 +385,10 @@ function init(){
 	var technology = enumResearch();
 	if(technology.length) debugMsg("Доступных исследований: "+technology.length, "init");
 	else debugMsg("ВНИМАНИЕ: Нет доступных исследований", "init");
+	
+	debugMsg('Is Multiplayer: '+isMultiplayer(), 'init');
+	debugMsg('Is Human in Ally: '+isHumanAlly(), 'init');
+	debugMsg('Num Enemies: '+getNumEnemies(), 'init');
 	
 	//Получаем координаты всех ресурсов и занятых и свободных
 	allResources = enumFeature(ALL_PLAYERS, "OilResource");
@@ -724,6 +732,24 @@ function letsRockThisFxxxingWorld(init){
 			checkRegularArmyTimer = 5000;
 			reactWarriorsTimer = 2000;
 			func_buildersOrder_timer = 5000+me*100;
+			
+			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
+				berserk = true;
+				debugMsg('Berserk activated', 'init');
+				if(getNumEnemies() > 1){
+					debugMsg('Big army activated', 'init');
+					minPartisans = 20;
+					maxPartisans = 25;
+					minRegular = 30;
+					maxRegular = 70;
+					minCyborgs = 40;
+					maxCyborgs = 50;
+				}
+				if(getNumEnemies() > 2){
+					debugMsg('Seer activated', 'init');
+					seer = true;
+				}
+			}
 			
 		}
 	
