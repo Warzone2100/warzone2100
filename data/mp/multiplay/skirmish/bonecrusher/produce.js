@@ -200,7 +200,19 @@ function produceDroids(){
 	}
 }
 function produceCyborgs(){
-	if(!running || nf['policy'] == 'island')return;
+	if(!running) return;
+	
+	
+	if(enumStruct(me, FACTORY).length == 0){
+		var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
+		if(cyborg_factories.length != 0){
+			buildDroid(cyborg_factories[0], 'Emergency Builder', 'CyborgLightBody', "CyborgLegs", "", 10, 'CyborgSpade');
+		}
+		return;
+	}
+	
+	
+	if(nf['policy'] == 'island')return;
 	if(groupSize(armyCyborgs) >= maxCyborgs) return;
 	if(playerPower(me) < 200 && groupSize(armyCyborgs) > 2) return;
 	var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});

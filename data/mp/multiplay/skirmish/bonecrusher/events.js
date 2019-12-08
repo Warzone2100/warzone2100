@@ -144,6 +144,7 @@ function eventObjectTransfer(gameObject, from) {
 					groupArmy(gameObject);
 					break;
 				case DROID_CONSTRUCT:
+				case 10:
 					
 					if(groupSize(buildersMain) >= 2) groupAddDroid(buildersHunters, gameObject);
 					else { groupBuilders(gameObject); }
@@ -272,6 +273,11 @@ function eventDroidBuilt(droid, structure) {
 			break;
 		case DROID_CONSTRUCT:
 			groupBuilders(droid);
+			func_buildersOrder_trigger = 0;
+			queue("buildersOrder", 1000);
+			break;
+		case 10:
+			groupAddDroid(buildersMain, droid);
 			func_buildersOrder_trigger = 0;
 			queue("buildersOrder", 1000);
 			break;
