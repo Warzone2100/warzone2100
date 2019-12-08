@@ -1,5 +1,5 @@
 const vernum    = "1.01";
-const verdate   = "07.12.2019";
+const verdate   = "08.12.2019";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
 const release	= true;
