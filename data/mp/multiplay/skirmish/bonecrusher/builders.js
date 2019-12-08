@@ -423,7 +423,7 @@ function AA_build(obj, nearbase){
 //		debugMsg("Строим ПВО "+_def+" "+target.x+"x"+target.y, 'builders');
 		var pos = pickStructLocation(obj,_def,target.x,target.y);
 		
-		if(!!pos){
+		if(pos){
 			if(builderBusy(obj) == true) return;
 			orderDroidBuild_p(obj, DORDER_BUILD, _def, pos.x, pos.y, 0);
 			return true;
