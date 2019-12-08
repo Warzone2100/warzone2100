@@ -225,8 +225,8 @@ function buildersOrder(order,target) {
 	builder_targets = builder_targets.concat(oil_unknown);
 	if(earlyGame && enemyDist > 100 && policy['build'] != 'rich' && nf['policy'] != 'island') builder_targets = filterNearBase(builder_targets);
 
-	var oil_barrels = enumFeature(me, "OilDrum");
-	builder_targets = builder_targets.concat(oil_barrels);
+	builder_targets = builder_targets.concat(enumFeature(me, "OilDrum"));
+	builder_targets = builder_targets.concat(enumFeature(me, "Crate"));
 
 	var oil_enemy = getEnemyResources();
 
@@ -485,7 +485,7 @@ function oilHunt(obj, nearbase){
 //				debugMsg(getInfoNear(builder_targets[i].x,builder_targets[i].y,'buildRig',0,300000,obj,false,true).value, 'temp');
 				if(builder_targets[i].type == FEATURE && getInfoNear(builder_targets[i].x,builder_targets[i].y,'buildRig',0,300000,false,false,true).value < feature_try){
 					
-					if(builder_targets[i].stattype == OIL_DRUM){
+					if(builder_targets[i].stattype == OIL_DRUM || builder_targets[i].stattype == ARTIFACT){
 						orderDroidObj_p(obj, DORDER_RECOVER, builder_targets[i]);
 						builder_targets.splice(i,1);
 						return true;
