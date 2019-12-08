@@ -412,7 +412,7 @@ function eventDestroyed(obj){
 		}
 	}
 	
-	if(isFullBase(me) && obj.type == STRUCTURE && (obj.player == me || obj.stattype == RESOURCE_EXTRACTOR) ){
+	if(obj.type == STRUCTURE && (obj.player == me || obj.stattype == RESOURCE_EXTRACTOR) && isFullBase(me) ){
 		
 		//Возвращаем частоту функции
 		func_buildersOrder_timer = 5000+me*100;

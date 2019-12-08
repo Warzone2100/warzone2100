@@ -310,7 +310,7 @@ function buildersOrder(order,target) {
 function rigDefence(obj, nearbase){
 	if ( typeof nearbase === "undefined" ) nearbase = false;
 
-	if( (playerPower(me) < 700 && nf['policy'] != 'island' ) || playerPower(me) < 1300){
+	if( ( (playerPower(me) < 700 && nf['policy'] != 'island' ) || playerPower(me) < 1300) && !berserk){
 //		debugMsg('exit low power not rich', 'defence');
 		return false;
 	}
@@ -400,7 +400,7 @@ function defenceQueue(){
 				for (var i in myDefence){
 					if (distBetweenTwoPoints_p(e.x,e.y,myDefence[i].x,myDefence[i].y) < 7) defNum++; //Если к качалке есть близко на 7 тайлов защита, считаем
 					if (difficulty == EASY && defNum != 0) return false;
-					if (difficulty == MEDIUM && defNum >= 1) return false; //если к качалке близко 2 башни, пропускаем
+					if ((difficulty == MEDIUM || berserk) && defNum >= 1) return false; //если к качалке близко есть башня, пропускаем
 					if ( ( difficulty == HARD || difficulty == INSANE ) && defNum >= 2) return false;
 				}
 				return true; //Добавляем координаты к очереди
@@ -515,7 +515,7 @@ function oilHunt(obj, nearbase){
 					
 					var toBuild = defence[Math.floor(Math.random()*Math.min(defence.length, 3))];
 					var pos = pickStructLocation(obj,toBuild,builder_targets[i].x+Math.round(Math.random()*2-1), builder_targets[i].y+Math.round(Math.random()*2-1));
-					if(!!pos && !builderBusy(obj) && (!getInfoNear(builder_targets[i].x,builder_targets[i].y,'defended').value || playerPower(me) > 500)){
+					if(!!pos && !builderBusy(obj) && (!getInfoNear(builder_targets[i].x,builder_targets[i].y,'defended').value || (playerPower(me) > 500 || berserk))){
 						orderDroidBuild_p(obj, DORDER_BUILD, toBuild, pos.x, pos.y, 0);
 //						debugMsg("oilHunt(): Строим вышку у вражеского ресурса");
 						return true;

@@ -418,7 +418,7 @@ function doResearch(){
 	if(!running)return;
 //	debugMsg("doResearch()", 'research_advance');
 	//	debugMsg(getInfoNear(base.x,base.y,'safe',base_range).value+" && "+playerPower(me)+"<300 && "+avail_guns.length+"!=0", 'research_advance');
-	if(!getInfoNear(base.x,base.y,'safe',base_range).value && playerPower(me) < 300 && avail_guns.length != 0) return;
+	if(!getInfoNear(base.x,base.y,'safe',base_range).value && !(playerPower(me) > 300 || berserk) && avail_guns.length != 0) return;
 
 	
 	var avail_research = enumResearch().filter(function(e){
@@ -467,9 +467,9 @@ function doResearch(){
 	for ( var l in labs ){
 		
 		if(policy['build'] != 'rich'){
-			if(countStruct('A0ResourceExtractor', me) < 8 && playerPower(me) < 700 && _busy >= 3) break;
-			if(countStruct('A0ResourceExtractor', me) < 5 && playerPower(me) < 500 && _busy >= 2) break;
-			if(countStruct('A0ResourceExtractor', me) < 3 && playerPower(me) < 300 && _busy >= 1) break;
+			if(countStruct('A0ResourceExtractor', me) < 8 && !(playerPower(me) > 700 || berserk) && _busy >= 3) break;
+			if(countStruct('A0ResourceExtractor', me) < 5 && !(playerPower(me) > 500 || berserk) && _busy >= 2) break;
+			if(countStruct('A0ResourceExtractor', me) < 3 && !(playerPower(me) > 300 || berserk) && _busy >= 1) break;
 		}
 		if( (labs[l].status == BUILT) && structureIdle(labs[l]) ){
 //			debugMsg("Лаборатория("+labs[l].id+")["+l+"] исследует путь "+_r, 'research_advance');
@@ -849,6 +849,34 @@ function getOurDefences(){
 
 function getNearFreeResources(pos){
 	return enumFeature(ALL_PLAYERS, "OilResource").filter(function(e){if(distBetweenTwoPoints_p(pos.x,pos.y,e.x,e.y) < base_range) return true; return false;});
+}
+
+function getNumEnemies(){
+	var enemies = 0;
+	for ( var e = 0; e < maxPlayers; ++e ) {
+		if ( allianceExistsBetween(me,e) ) continue;
+		if ( playerSpectator(e) ) continue;
+		if ( playerLoose(e) ) continue;
+		if ( e == me ) continue;
+		enemies++;
+	}
+	return enemies;
+}
+
+function isMultiplayer(){
+	var humans = 0;
+	for ( var e = 0; e < maxPlayers; ++e ) {
+		if(playerData[e].isHuman) humans++;
+	}
+	if(humans > 1) return true;
+	return false;
+}
+
+function isHumanAlly(){
+	for ( var e = 0; e < maxPlayers; ++e ) {
+		if(playerData[e].isHuman && allianceExistsBetween(me, e)) return true;
+	}
+	return false;
 }
 
 //Возвращает булево, если база игрока имеет:
@@ -1249,4 +1277,18 @@ function secondTick(){
 			removeTimer("buildersOrder");
 		}
 	}
+	
+	//CHEAT
+	if(berserk){
+		var qp=queuedPower(me);
+//		debugMsg('qp: '+qp, 'berserk');
+		if(qp > 0){
+			setPower(qp+1, me);
+			credit += (qp+1);
+			debugMsg('+'+(qp+1), 'berserk');
+			debugMsg('credit: '+credit, 'berserk');
+		}
+	}
+	
+	debugMsg('power: '+playerPower(me), 'power');
 }
