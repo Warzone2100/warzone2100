@@ -305,8 +305,8 @@ function produceVTOL(){
 		}
 	}
 	
-	if(groupSize(VTOLAttacker) >= maxVTOL && !berserk) return;
-	if(playerPower(me) < 300 && groupSize(VTOLAttacker) > 3 && !berserk) return;
+	if(groupSize(VTOLAttacker) >= maxVTOL && !forceproduce) return;
+	if(playerPower(me) < 300 && groupSize(VTOLAttacker) > 3 && !forceproduce) return;
 	/*
 	 * Missile-VTOL-AT			_("VTOL Scourge Missile")
 	 * Rocket-VTOL-BB			_("VTOL Bunker Buster")
@@ -353,11 +353,11 @@ function produceVTOL(){
 	 * 
 	 * */
 	
-	if(groupSize(VTOLAttacker) > 20 && !berserk) return;
+	if(groupSize(VTOLAttacker) > 20 && !forceproduce) return;
 
 	var _body=light_bodies;
-	if(((playerPower(me)>300 && playerPower(me)<500) || berserk) && medium_bodies.length != 0) _body = medium_bodies;
-	if((playerPower(me)>800 || berserk) && heavy_bodies.length != 0) _body = heavy_bodies;
+	if(((playerPower(me)>300 && playerPower(me)<500) || forceproduce) && medium_bodies.length != 0) _body = medium_bodies;
+	if((playerPower(me)>800 || forceproduce) && heavy_bodies.length != 0) _body = heavy_bodies;
 	var _weapon = avail_vtols[Math.floor(Math.random()*Math.min(avail_vtols.length, 5))]; //Случайная из 5 последних крутых пушек
 	buildDroid(vtol_factories[0], "Bomber", _body, "V-Tol", "", DROID_WEAPON, _weapon);
 
