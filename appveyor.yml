@@ -173,17 +173,17 @@ after_build:
   - ps: Move-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Destination "warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
   # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
   - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
-  
+
   # Re-run CMake configure for non-portable (regular) installer
   - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
   # Build the regular installer package (this should only rebuild the installer itself)
   - msbuild build/PACKAGE.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-  
+
   # Rename the regular installer
   - ps: Move-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Destination "warzone2100_$($env:WZ_BUILD_DESC)_installer.exe"
   # Package the regular installer .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
   - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100_$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
-  
+
   # Compare the two DEBUGSYMBOLS.7z files
   # If they are equal (as they should be if only the installer was rebuilt), keep only one and remove the "PORTABLE/INSTALLER" suffix
   # If they are not equal, we have to keep both (but output a notice, as the CMake build should probably be tweaked to avoid this)
@@ -197,7 +197,7 @@ after_build:
       else {
         Write-Warning "The DEBUGSYMBOLS.7z files for the portable + regular builds do not match. This may mean that the executable was rebuilt when switching portable / non-portable mode. (Check the CMake scripts to fix.)"
       }
-  
+
   # Log hashes of the setup EXEs
   - ps: |
       Write-Host "SHA512 Hashes:"
