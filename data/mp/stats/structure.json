@@ -421,7 +421,7 @@
             "milasbas.pie"
         ],
         "thermal": 16,
-        "type": "GENERIC",
+        "type": "LASSAT",
         "userLimits": [ 0, 1, 1 ],
         "weapons": [
             "LasSat"

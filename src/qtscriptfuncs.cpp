@@ -86,7 +86,6 @@
 #include "advvis.h"
 #include "loadsave.h"
 
-#define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
 #define ALLIES -2
 #define ENEMIES -3
@@ -661,11 +660,6 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 		break;
 	case REF_GENERIC:
 	case REF_DEFENSE:
-		if (isLasSat(psStruct->pStructureType))
-		{
-			value.setProperty("stattype", (int)FAKE_REF_LASSAT, QScriptValue::ReadOnly);
-			break;
-		}
 		value.setProperty("stattype", (int)REF_DEFENSE, QScriptValue::ReadOnly);
 		break;
 	default:
@@ -6327,7 +6321,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESOURCE_EXTRACTOR", REF_RESOURCE_EXTRACTOR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DEFENSE", REF_DEFENSE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("LASSAT", FAKE_REF_LASSAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("LASSAT", REF_LASSAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("WALL", REF_WALL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH_LAB", REF_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("REPAIR_FACILITY", REF_REPAIR_FACILITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
