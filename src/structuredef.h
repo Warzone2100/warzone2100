@@ -61,6 +61,7 @@ enum STRUCTURE_TYPE
 	REF_MISSILE_SILO,
 	REF_SAT_UPLINK,         //added for updates - AB 8/6/99
 	REF_GATE,
+	REF_LASSAT,
 	NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 };
 

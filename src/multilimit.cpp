@@ -411,7 +411,7 @@ void applyLimitSet()
 			{
 				flags |= MPFLAGS_NO_CYBORGS;
 			}
-			if (asStructureStats[id].type == REF_GENERIC && asStructureStats[id].id == "A0LasSatCommand" && pEntry[i].limit == 0)
+			if (asStructureStats[id].type == REF_LASSAT && pEntry[i].limit == 0)
 			{
 				flags |= MPFLAGS_NO_LASSAT;
 			}
