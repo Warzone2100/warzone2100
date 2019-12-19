@@ -37,9 +37,7 @@ public:
 
 	virtual bool isOpenGLES() override;
 
-private:
-	SDL_Window* window;
-	bool useOpenglES = false;
+public:
 
 	enum GLContextRequests {
 		// Desktop OpenGL Context Requests
@@ -51,6 +49,13 @@ private:
 		//
 		MAX_CONTEXT_REQUESTS
 	};
+
+	static bool configureOpenGLContextRequest(GLContextRequests request);
+	static GLContextRequests getInitialContextRequest(bool useOpenglES = false);
+
+private:
+	SDL_Window* window;
+	bool useOpenglES = false;
 
 	GLContextRequests contextRequest = OpenGLCore_HighestAvailable;
 

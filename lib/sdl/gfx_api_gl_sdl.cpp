@@ -21,6 +21,7 @@
 #include "gfx_api_gl_sdl.h"
 #include <SDL_opengl.h>
 #include <SDL_timer.h>
+#include <SDL_hints.h>
 #include <thread>
 #include <chrono>
 
@@ -31,10 +32,7 @@ sdl_OpenGL_Impl::sdl_OpenGL_Impl(SDL_Window* _window, bool _useOpenGLES)
 	ASSERT(_window != nullptr, "Invalid SDL_Window*");
 	window = _window;
 	useOpenglES = _useOpenGLES;
-	if (useOpenglES)
-	{
-		contextRequest = OpenGLES30;
-	}
+	contextRequest = getInitialContextRequest(useOpenglES);
 }
 
 GLADloadproc sdl_OpenGL_Impl::getGLGetProcAddress()
@@ -42,12 +40,65 @@ GLADloadproc sdl_OpenGL_Impl::getGLGetProcAddress()
 	return SDL_GL_GetProcAddress;
 }
 
+bool useOpenGLESLibrary()
+{
+#if defined(WZ_OS_WIN)
+	return true;
+#else
+	return false;
+#endif
+}
+
+void setOpenGLESDriver()
+{
+	if (useOpenGLESLibrary())
+	{
+#if defined(SDL_HINT_OPENGL_ES_DRIVER)
+		SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
+#endif
+	}
+}
+
 bool sdl_OpenGL_Impl::configureNextOpenGLContextRequest()
 {
 	contextRequest = GLContextRequests(contextRequest + 1);
-	switch (contextRequest)
+	return configureOpenGLContextRequest(contextRequest);
+}
+
+sdl_OpenGL_Impl::GLContextRequests sdl_OpenGL_Impl::getInitialContextRequest(bool useOpenglES /*= false*/)
+{
+	if (useOpenglES)
+	{
+		return OpenGLES30;
+	}
+	else
+	{
+		return OpenGLCore_HighestAvailable;
+	}
+}
+
+bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request)
+{
+	switch (request)
 	{
 		case OpenGLCore_HighestAvailable:
+			// Request an OpenGL 3.0+ Core Profile context
+			// - On macOS, must request at least OpenGL 3.2 Core Profile (with FORWARD_COMPATIBLE_FLAG)
+			//   to get the highest version OpenGL Core Profile context that's supported
+			// - Mesa allegedly requires a request for OpenGL 3.1+ Core Profile to get the highest version
+			//   OpenGL Core Profile context that's supported, so use that as the default otherwise
+			// (Note: There is fallback handling inside sdl_OpenGL_Impl::createGLContext())
+
+			// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+#  if defined(WZ_OS_MAC)
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#  else
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#  endif
+			return true;
 		case OpenGL21Compat:
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
@@ -55,12 +106,14 @@ bool sdl_OpenGL_Impl::configureNextOpenGLContextRequest()
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 			return true;
 		case OpenGLES30:
+			setOpenGLESDriver();
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			return true;
 		case OpenGLES20:
+			setOpenGLESDriver();
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);

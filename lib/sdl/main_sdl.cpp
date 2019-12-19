@@ -51,6 +51,7 @@
 #include "src/warzoneconfig.h"
 #include "src/game.h"
 #include "gfx_api_sdl.h"
+#include "gfx_api_gl_sdl.h"
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_clipboard.h>
@@ -1593,6 +1594,8 @@ std::string to_string(const video_backend& backend)
 // This stage, we handle display mode setting
 bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
+	bool useOpenGLES = false;
+
 	// Output linked SDL version
 	char buf[512];
 	SDL_version linked_sdl_version;
@@ -1648,22 +1651,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
 		}
 
-		// Request an OpenGL 3.0+ Core Profile context
-		// - On macOS, must request at least OpenGL 3.2 Core Profile (with FORWARD_COMPATIBLE_FLAG)
-		//   to get the highest version OpenGL Core Profile context that's supported
-		// - Mesa allegedly requires a request for OpenGL 3.1+ Core Profile to get the highest version
-		//   OpenGL Core Profile context that's supported, so use that as the default otherwise
-		// (Note: There is fallback handling inside sdl_OpenGL_Impl::createGLContext())
-
-		// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-#  if defined(WZ_OS_MAC)
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#  else
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-#  endif
+		sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES));
 	}
 
 	// Populated our resolution list (does all displays now)
@@ -1940,7 +1928,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	cocoaSetupWZMenus();
 #endif
 
-	if (!gfx_api::context::get().initialize(SDL_gfx_api_Impl_Factory(WZwindow), antialiasing))
+	if (!gfx_api::context::get().initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES), antialiasing))
 	{
 		debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend).c_str());
 

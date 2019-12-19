@@ -23,15 +23,16 @@
 #include <SDL_version.h>
 #include <SDL_messagebox.h>
 
-SDL_gfx_api_Impl_Factory::SDL_gfx_api_Impl_Factory(SDL_Window* _window)
+SDL_gfx_api_Impl_Factory::SDL_gfx_api_Impl_Factory(SDL_Window* _window, bool _useOpenGLES)
 {
 	ASSERT(_window != nullptr, "Invalid SDL_Window*");
 	window = _window;
+	useOpenGLES = _useOpenGLES;
 }
 
 std::unique_ptr<gfx_api::backend_OpenGL_Impl> SDL_gfx_api_Impl_Factory::createOpenGLBackendImpl() const
 {
-	return std::unique_ptr<gfx_api::backend_OpenGL_Impl>(new sdl_OpenGL_Impl(window, false));
+	return std::unique_ptr<gfx_api::backend_OpenGL_Impl>(new sdl_OpenGL_Impl(window, useOpenGLES));
 }
 
 #if defined(WZ_VULKAN_ENABLED)
