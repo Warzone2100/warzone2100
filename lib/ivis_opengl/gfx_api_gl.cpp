@@ -792,7 +792,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 				glAttachShader(program, shader);
 				success = true;
 			}
-			if (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug)
+			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
 			{
 				glObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 			}
@@ -828,7 +828,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 				glAttachShader(program, shader);
 				success = true;
 			}
-			if (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug)
+			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
 			{
 				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 			}
@@ -853,7 +853,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 		{
 			printProgramInfoLog(LOG_3D, program);
 		}
-		if (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug)
+		if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
 		{
 			glObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 		}
@@ -1112,7 +1112,7 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipmap_count - 1);
-	if (!filename.empty() && (/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug))
+	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
@@ -1348,7 +1348,7 @@ void gl_context::debugStringMarker(const char *str)
 
 void gl_context::debugSceneBegin(const char *descr)
 {
-	if (khr_debug)
+	if (khr_debug && glPushDebugGroup)
 	{
 		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
 	}
@@ -1356,7 +1356,7 @@ void gl_context::debugSceneBegin(const char *descr)
 
 void gl_context::debugSceneEnd(const char *descr)
 {
-	if (khr_debug)
+	if (khr_debug && glPopDebugGroup)
 	{
 		glPopDebugGroup();
 	}
@@ -1387,7 +1387,7 @@ void gl_context::debugPerfStop()
 
 void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 {
-	if (khr_debug)
+	if (khr_debug && glPushDebugGroup)
 	{
 		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
 	}
@@ -1400,7 +1400,7 @@ void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 
 void gl_context::debugPerfEnd(PERF_POINT pp)
 {
-	if (khr_debug)
+	if (khr_debug && glPopDebugGroup)
 	{
 		glPopDebugGroup();
 	}
@@ -1720,11 +1720,18 @@ bool gl_context::initGLContext()
 
 	if (khr_debug)
 	{
-		glDebugMessageCallback(khr_callback, nullptr);
-		glEnable(GL_DEBUG_OUTPUT);
-		// Do not want to output notifications. Some drivers spam them too much.
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-		debug(LOG_3D, "Enabling KHR_debug message callback");
+		if (glDebugMessageCallback && glDebugMessageControl)
+		{
+			glDebugMessageCallback(khr_callback, nullptr);
+			glEnable(GL_DEBUG_OUTPUT);
+			// Do not want to output notifications. Some drivers spam them too much.
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+			debug(LOG_3D, "Enabling KHR_debug message callback");
+		}
+		else
+		{
+			debug(LOG_3D, "Failed to enable KHR_debug message callback");
+		}
 	}
 
 	glGenBuffers(1, &scratchbuffer);
