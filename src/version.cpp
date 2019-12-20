@@ -67,7 +67,7 @@ std::string version_getVersionedAppDirFolderName()
 		// not a branch or a tag, so we are detached most likely.
 		std::string vcs_extra_str = VCS_EXTRA;
 		// remove any spaces from VCS_EXTRA
-		std::remove(vcs_extra_str.begin(), vcs_extra_str.end(), ' ');
+		vcs_extra_str.erase(std::remove(vcs_extra_str.begin(), vcs_extra_str.end(), ' '), vcs_extra_str.end());
 		versionedWriteDirFolderName += vcs_extra_str;
 	}
 	return versionedWriteDirFolderName;
