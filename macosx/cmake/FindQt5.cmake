@@ -35,6 +35,14 @@ if(NOT EXISTS "${_qt5_framework_prefix}")
 	if(NOT _exstatus EQUAL 0)
 		message(FATAL_ERROR "Failed to download Qt5 minimal bundle")
 	endif()
+
+	# Clean up Qt frameworks
+	execute_process(
+		COMMAND bash
+				${CMAKE_CURRENT_LIST_DIR}/../configs/patchscripts/QT-FixFrameworkVersions.sh
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/macosx"
+		RESULT_VARIABLE _exstatus
+	)
 endif()
 
 if(NOT IS_DIRECTORY "${_qt5_framework_prefix}")
