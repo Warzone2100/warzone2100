@@ -69,6 +69,7 @@ struct screeninfo
 enum class video_backend
 {
 	opengl,
+	opengles,
 	vulkan
 };
 
