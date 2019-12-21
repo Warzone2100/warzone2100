@@ -19,7 +19,7 @@ var mainReticule = false;
 
 function printGameSettings()
 {
-//add human readble method
+//add human readable method
 var human = {
 	scavengers : function () {
 		if ( scavengers == true) {return _("Scavengers");}
@@ -28,7 +28,7 @@ var human = {
 
 	alliancesType : function () {
 		switch (alliancesType) {
-			case NO_ALLIANCES: return _("No Alliances")
+			case NO_ALLIANCES: return _("No Alliances");
 			case ALLIANCES: return _("Allow Alliances");
 			case ALLIANCES_TEAMS: return _("Locked Teams");
 			case ALLIANCES_UNSHARED: return _("Locked Teams, No Shared Research");
