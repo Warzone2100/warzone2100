@@ -37,8 +37,20 @@ else()
 	set(ENV{MACOSX_DEPLOYMENT_TARGET} "${MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET}")
 endif()
 
+# Detect host OS version
+if(DEFINED CMAKE_HOST_SYSTEM_VERSION)
+	set(DARWIN_VERSION "${CMAKE_HOST_SYSTEM_VERSION}")
+else()
+	execute_process(COMMAND uname -r OUTPUT_VARIABLE DARWIN_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ CMAKE_HOST_SYSTEM_NAME (${CMAKE_HOST_SYSTEM_NAME}), DARWIN_VERSION (${DARWIN_VERSION})")
+
 ########################################################
 # 1.) Download & build vcpkg, install dependencies
+
+
+########################################################
+## 1-a.) Download vcpkg, pin to commit
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Download vcpkg...")
@@ -76,16 +88,90 @@ if(NOT _exstatus EQUAL 0)
 	message(FATAL_ERROR "Failed to pin vcpkg to specific commit: ${VCPKG_COMMIT_SHA}")
 endif()
 
+########################################################
+## 1-b.) Detect which version of AppleClang will be used (if --allowAppleClang is specified)
+
+# Make a new temp directory
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E make_directory temp_compiler_detection
+    WORKING_DIRECTORY .
+)
+
+# Generate a basic CMake project file that just outputs the desired variables
+file(WRITE "temp_compiler_detection/CMakeLists.txt" "\
+cmake_minimum_required(VERSION 3.5)
+project(detect_compiler CXX)
+cmake_policy(SET CMP0025 NEW)
+
+message(STATUS \"CMAKE_CXX_COMPILER_ID=\${CMAKE_CXX_COMPILER_ID}\")
+message(STATUS \"CMAKE_CXX_COMPILER_VERSION=\${CMAKE_CXX_COMPILER_VERSION}\")
+")
+
+set(_old_env_CXX "$ENV{CXX}")
+set(ENV{CXX} "clang++") # matching behavior of --allowAppleClang in vcpkg's scripts/bootstrap.sh
+
+# Run a simple CMake configure, which will output according to the script above
+execute_process(
+    COMMAND ${CMAKE_COMMAND} .
+    OUTPUT_VARIABLE _detection_output
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    WORKING_DIRECTORY temp_compiler_detection
+)
+
+set(ENV{CXX} "${_old_env_CXX}")
+unset(_old_env_CXX)
+
+# Remove the temp directory
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E remove_directory temp_compiler_detection
+    WORKING_DIRECTORY .
+)
+
+if(_detection_output MATCHES "CMAKE_CXX_COMPILER_ID=([^\n]*)\n")
+	set(_detected_cxx_compiler_id "${CMAKE_MATCH_1}")
+endif()
+
+if(_detection_output MATCHES "CMAKE_CXX_COMPILER_VERSION=([^\n]*)\n")
+	set(_detected_cxx_compiler_version "${CMAKE_MATCH_1}")
+endif()
+
+unset(_detection_output)
+
+########################################################
+## 1-c.) Determine if --allowAppleClang can be specified
+
+set(_vcpkg_useAppleClang FALSE)
+if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREATER_EQUAL "19.0"))
+	# macOS 10.15+ (Darwin 19.0.0+) supports the --allowAppleClang flag on bootstrap-vcpkg.sh
+	# if AppleClang >= 11.0 (Xcode 11.0+) is detected
+	if((_detected_cxx_compiler_id MATCHES "^AppleClang") AND (_detected_cxx_compiler_version VERSION_GREATER_EQUAL "11.0"))
+		set(_vcpkg_useAppleClang TRUE)
+	endif()
+endif()
+
+set(_vcpkg_bootstrap_additional_params "")
+if(_vcpkg_useAppleClang)
+	set(_vcpkg_bootstrap_additional_params "--allowAppleClang")
+endif()
+
+########################################################
+## 1-d.) Build vcpkg
+
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Build vcpkg...")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "./bootstrap-vcpkg.sh ${_vcpkg_bootstrap_additional_params}")
 
 execute_process(
-	COMMAND ./bootstrap-vcpkg.sh
+	COMMAND ./bootstrap-vcpkg.sh ${_vcpkg_bootstrap_additional_params}
 	WORKING_DIRECTORY "vcpkg"
 	RESULT_VARIABLE _exstatus
 )
 if(NOT _exstatus EQUAL 0)
-	# vcpkg currently requires modern gcc to compile itself on macOS
-	message(FATAL_ERROR "vcpkg bootstrap failed - please see error output above for resolution (suggestion: brew install gcc)")
+	if(_vcpkg_useAppleClang)
+		message(FATAL_ERROR "vcpkg bootstrap failed - please see error output above for resolution")
+	else()
+		# vcpkg requires modern gcc to compile itself on macOS < 10.15 (or Xcode < 11.0)
+		message(FATAL_ERROR "vcpkg bootstrap failed - please see error output above for resolution (suggestion: brew install gcc)")
+	endif()
 endif()
 
 if(DEFINED VCPKG_BUILD_TYPE)
@@ -111,7 +197,9 @@ if(DEFINED VCPKG_BUILD_TYPE)
 	unset(triplet)
 endif()
 
-# Download & build WZ macOS dependencies
+########################################################
+## 1-e.) Download & build WZ macOS dependencies
+
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ vcpkg install dependencies...")
 set(_vcpkgInstallResult -1)
