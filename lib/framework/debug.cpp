@@ -572,15 +572,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		// This is a popup dialog used for times when the error isn't fatal, but we still need to notify user what is going on.
 		if (part == LOG_POPUP)
 		{
-#if defined(WZ_OS_WIN)
-			char wbuf[512];
-			ssprintf(wbuf, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			MessageBoxA(NULL,
-			            wbuf,
-			            "Warzone has detected a problem.", MB_OK | MB_ICONINFORMATION);
-#elif defined(WZ_OS_MAC)
-			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0, "OK", NULL);
-#endif
+			wzDisplayDialog(Dialog_Information, "Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0]);
 		}
 
 	}
