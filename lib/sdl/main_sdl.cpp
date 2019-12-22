@@ -306,9 +306,22 @@ int wzGetTicks()
 	return SDL_GetTicks();
 }
 
-void wzFatalDialog(const char *msg)
+void wzDisplayDialog(DialogType type, const char *title, const char *message)
 {
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "We have a problem!", msg, nullptr);
+	Uint32 sdl_messagebox_flags = 0;
+	switch (type)
+	{
+		case Dialog_Error:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_ERROR;
+			break;
+		case Dialog_Warning:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_WARNING;
+			break;
+		case Dialog_Information:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_INFORMATION;
+			break;
+	}
+	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
 void wzScreenFlip()

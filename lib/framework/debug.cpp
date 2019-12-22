@@ -564,7 +564,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			}
 #else
 			const char *popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
-			wzFatalDialog(popupBuf);
+			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", popupBuf);
 #endif
 		}
 
