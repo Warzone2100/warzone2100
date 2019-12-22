@@ -4,10 +4,18 @@
 
 > For convenience, you will probably want either [Homebrew](https://brew.sh) or [Macports](https://www.macports.org/install.php) installed for setting up certain prerequisites. If you don't have either yet, **Homebrew** is recommended.
 
+| Building on macOS 10.12-10.14  | Building on macOS 10.15+  |
+| -------------------------------| ------------------------- |
+| Xcode 8 / 9 / 10               | Xcode 11+                 |
+| CMake 3.14.1+                  | CMake 3.15+               |
+| Gettext                        | Gettext                   |
+| Asciidoctor                    | Asciidoctor               |
+| GCC 7+*                        |                           |
+
 1. **macOS 10.12+**
     - While building may work on prior versions of macOS, it is only tested on macOS 10.12+.
 
-2. **Xcode 8 / 9 / 10**
+2. **Xcode 8+** (tested w/: Xcode 8.3 - Xcode 11.x)
     - If you do not have Xcode 8.3+ you can get it for free at the [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) or [Apple's website](http://developer.apple.com/technology/xcode.html).
 
 3. **CMake 3.14.1+** (required to generate the Xcode project)
@@ -35,13 +43,11 @@
         ```
     - Or, via `gem install`:
         ```shell
-        gem install asciidoctor --no-rdoc --no-ri --no-document
+        gem install asciidoctor --no-document
         ```
         > Depending on system configuration, `sudo gem install` may be required.
 
-    > Alternatively, you can install + use AsciiDoc via `brew install asciidoc docbook-xsl`.
-
-6. **GCC** (currently required to bootstrap vcpkg, by the `configure_mac.cmake` script)
+6. **GCC** (\*currently required to build vcpkg on macOS < 10.15, and with Xcode < 11)
     - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
         ```shell
         brew install gcc
