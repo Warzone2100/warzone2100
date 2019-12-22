@@ -526,10 +526,10 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 				wzToggleFullscreen();
 			}
 #if defined(WZ_OS_WIN)
-			char wbuf[512];
+			char wbuf[1024];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
 				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
-			MessageBoxA(NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK | MB_ICONERROR);
+			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
 #elif defined(WZ_OS_MAC)
 			char wbuf[1024];
 			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
