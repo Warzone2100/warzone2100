@@ -252,7 +252,7 @@ function eventGameLoaded()
 function eventGameInit()
 {
 	setupGame();
-	printGameSettings()
+	printGameSettings();
 
 	// always at least one oil drum, and one more for every 64x64 tiles of map area
 	maxOilDrums = (mapWidth * mapHeight) >> 12; // replace float division with shift for sync-safety
