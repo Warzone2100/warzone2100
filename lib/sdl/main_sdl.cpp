@@ -2082,6 +2082,7 @@ static void handleActiveEvent(SDL_Event *event)
 			break;
 		case SDL_WINDOWEVENT_CLOSE:
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
+			WZwindow = nullptr;
 			break;
 		default:
 			debug(LOG_WZ, "Window %d got unknown event %d", event->window.windowID, event->window.event);
@@ -2168,7 +2169,11 @@ void wzShutdown()
 {
 	// order is important!
 	sdlFreeCursors();
-	SDL_DestroyWindow(WZwindow);
+	if (WZwindow != nullptr)
+	{
+		SDL_DestroyWindow(WZwindow);
+		WZwindow = nullptr;
+	}
 	SDL_Quit();
 	appPtr->quit();
 	delete appPtr;
