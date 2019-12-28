@@ -127,4 +127,20 @@ static inline WZ_DECL_CONST const char *bool2string(bool var)
 	return (var ? "true" : "false");
 }
 
+// video_backend - begin
+enum class video_backend
+{
+	opengl,
+	opengles,
+	vulkan,
+#if defined(WZ_BACKEND_DIRECTX)
+	directx,
+#endif
+	num_backends // Must be last!
+};
+
+bool video_backend_from_str(const char *str, video_backend &output_backend);
+std::string to_string(video_backend backend);
+// video_backend - end
+
 #endif

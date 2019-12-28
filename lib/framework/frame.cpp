@@ -346,3 +346,34 @@ bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...)
 
 	return WZ_PHYSFS_writeBytes(file, vaBuffer, strlen(vaBuffer));
 }
+
+std::string video_backend_names[] =
+{
+	"opengl",
+	"opengles",
+	"vulkan",
+#if defined(WZ_BACKEND_DIRECTX)
+	"directx",
+#endif
+	"invalid" // Must be last!
+};
+
+static_assert((size_t)video_backend::num_backends == (sizeof(video_backend_names) / sizeof(std::string)) - 1, "video_backend_names must match video_backend enum");
+
+bool video_backend_from_str(const char *str, video_backend &output_backend)
+{
+	for (size_t i = 0; i < (size_t)video_backend::num_backends; i++)
+	{
+		if (strcasecmp(video_backend_names[i].c_str(), str) == 0)
+		{
+			output_backend = (video_backend)i;
+			return true;
+		}
+	}
+	return false;
+}
+
+std::string to_string(video_backend backend)
+{
+	return video_backend_names[(size_t)backend];
+}

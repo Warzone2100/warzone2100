@@ -456,7 +456,6 @@ public:
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
 
-	virtual bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing) override;
 	virtual void draw(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&) override;
 	virtual void draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&) override;
 	virtual void bind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset) override;
@@ -537,6 +536,8 @@ public:
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
+private:
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing) override;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED)

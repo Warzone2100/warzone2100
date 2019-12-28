@@ -1484,7 +1484,7 @@ int realmain(int argc, char *argv[])
 
 	ActivityManager::instance().initialize();
 
-	if (!wzMainScreenSetup(uses_vulkan ? video_backend::vulkan : video_backend::opengl, war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
+	if (!wzMainScreenSetup(war_getGfxBackend(), war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
 	{
 		return EXIT_FAILURE;
 	}

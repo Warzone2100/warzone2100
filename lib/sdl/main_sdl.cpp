@@ -296,12 +296,28 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
 }
 
+video_backend wzGetDefaultGfxBackendForCurrentSystem()
+{
+	// SDL backend supports: OpenGL, OpenGLES, Vulkan (if compiled with support), DirectX (on Windows, via LibANGLE)
+
+	// Future TODO examples:
+	//	- Default to Vulkan backend on macOS versions > 10.??, to use Metal via MoltenVK (needs testing - and may require exclusions depending on hardware?)
+	//	- Default to DirectX (via LibANGLE) backend on Windows, depending on Windows version (and possibly hardware? / DirectX-level support?)
+	//	- Check if Vulkan appears to be properly supported on a Windows / Linux system, and default to Vulkan backend?
+
+	// For now, default to OpenGL (which automatically falls back to OpenGL ES if needed) on all platforms
+	return video_backend::opengl;
+}
+
 void SDL_WZBackend_GetDrawableSize(SDL_Window* window,
 								   int*        w,
 								   int*        h)
 {
 	switch (WZbackend)
 	{
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx: // because DirectX is supported via OpenGLES (LibANGLE)
+#endif
 		case video_backend::opengl:
 		case video_backend::opengles:
 			return SDL_GL_GetDrawableSize(window, w, h);
@@ -316,6 +332,9 @@ void SDL_WZBackend_GetDrawableSize(SDL_Window* window,
 			if (h) { h = 0; }
 			return;
 #endif
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
+			return;
 	}
 }
 
@@ -428,6 +447,9 @@ void wzSetSwapInterval(int interval)
 {
 	switch (WZbackend)
 	{
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx: // because DirectX is supported via OpenGLES (LibANGLE)
+#endif
 		case video_backend::opengl:
 		case video_backend::opengles:
 			if (SDL_GL_SetSwapInterval(interval) != 0)
@@ -440,6 +462,9 @@ void wzSetSwapInterval(int interval)
 		case video_backend::vulkan:
 			// Not currently implemented
 			return;
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
+			return;
 	}
 }
 
@@ -447,11 +472,17 @@ int wzGetSwapInterval()
 {
 	switch (WZbackend)
 	{
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx: // because DirectX is supported via OpenGLES (LibANGLE)
+#endif
 		case video_backend::opengl:
 		case video_backend::opengles:
 			return SDL_GL_GetSwapInterval();
 		case video_backend::vulkan:
 			// Not currently implemented
+			return 0;
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
 			return 0;
 	}
 	return 0; // avoid GCC warning
@@ -1569,6 +1600,9 @@ static SDL_WindowFlags SDL_backend(const video_backend& backend)
 {
 	switch (backend)
 	{
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx: // because DirectX is supported via OpenGLES (LibANGLE)
+#endif
 		case video_backend::opengl:
 		case video_backend::opengles:
 			return SDL_WINDOW_OPENGL;
@@ -1579,11 +1613,14 @@ static SDL_WindowFlags SDL_backend(const video_backend& backend)
 			debug(LOG_FATAL, "The version of SDL used for compilation does not support SDL_WINDOW_VULKAN");
 			break;
 #endif
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
+			break;
 	}
 	return SDL_WindowFlags{};
 }
 
-std::string to_string(const video_backend& backend)
+std::string to_pretty_string(const video_backend& backend)
 {
 	switch (backend)
 	{
@@ -1593,6 +1630,13 @@ std::string to_string(const video_backend& backend)
 			return "OpenGL ES";
 		case video_backend::vulkan:
 			return "Vulkan";
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx:
+			return "DirectX (via LibANGLE)";
+#endif
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
+			break;
 	}
 	return "n/a";
 }
@@ -1600,7 +1644,13 @@ std::string to_string(const video_backend& backend)
 // This stage, we handle display mode setting
 bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
-	const bool useOpenGLES = (backend == video_backend::opengles);
+	const bool useOpenGLES = (backend == video_backend::opengles)
+#if defined(WZ_BACKEND_DIRECTX)
+						  || (backend == video_backend::directx)
+#endif
+	;
+	const bool usesSDLBackend_OpenGL = useOpenGLES || (backend == video_backend::opengl);
+	const bool usesSDLBackend_Vulkan = (backend == video_backend::vulkan);
 
 	// Output linked SDL version
 	char buf[512];
@@ -1641,7 +1691,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 
 	WZbackend = backend;
 
-	if(backend == video_backend::opengl || backend == video_backend::opengles)
+	if(usesSDLBackend_OpenGL)
 	{
 		// Set OpenGL attributes before creating the SDL Window
 
@@ -1934,7 +1984,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	cocoaSetupWZMenus();
 #endif
 
-	if (!gfx_api::context::get().initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES), antialiasing))
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES), antialiasing, usesSDLBackend_Vulkan))
 	{
 		debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend).c_str());
 

@@ -210,7 +210,6 @@ struct gl_context final : public gfx_api::context
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 
-	virtual bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing) override;
 	virtual void flip(int clearMode) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
@@ -226,6 +225,8 @@ struct gl_context final : public gfx_api::context
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
+private:
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing) override;
 private:
 	bool initGLContext();
 	void enableVertexAttribArray(GLuint index);

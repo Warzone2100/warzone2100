@@ -695,4 +695,9 @@ static inline char *_WZ_ASSERT_ARRAY_EXPR_FUNCTION(T *&)
 	#define MSVC_PRAGMA(x)
 #endif
 
+// Gfx backend option support
+#if defined(WZ_OS_WIN)
+# define WZ_BACKEND_DIRECTX
+#endif
+
 #endif /* WZGLOBAL_H */

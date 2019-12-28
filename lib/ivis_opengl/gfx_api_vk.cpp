@@ -2360,7 +2360,7 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
-bool VkRoot::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing)
+bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 

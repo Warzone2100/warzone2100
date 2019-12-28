@@ -247,7 +247,7 @@ typedef enum
 	CLI_CRASH,
 	CLI_TEXTURECOMPRESSION,
 	CLI_NOTEXTURECOMPRESSION,
-	CLI_VULKAN,
+	CLI_GFXBACKEND,
 	CLI_GFXDEBUG,
 	CLI_AUTOGAME,
 	CLI_SAVEANDQUIT,
@@ -286,7 +286,16 @@ static const struct poptOption *getOptionsTable()
 		{ "host", POPT_ARG_NONE, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr },
 		{ "texturecompression", POPT_ARG_NONE, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr },
 		{ "notexturecompression", POPT_ARG_NONE, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
-		{ "vulkan", POPT_ARG_NONE, CLI_VULKAN, N_("Use Vulkan backend"), nullptr },
+		{ "gfxbackend", POPT_ARG_STRING, CLI_GFXBACKEND, N_("Set gfx backend"),
+			"(opengl, opengles"
+#if defined(WZ_VULKAN_ENABLED)
+			", vulkan"
+#endif
+#if defined(WZ_BACKEND_DIRECTX)
+			", directx"
+#endif
+			")"
+		},
 		{ "gfxdebug", POPT_ARG_NONE, CLI_GFXDEBUG, N_("Use gfx backend debug"), nullptr },
 		{ "autogame", POPT_ARG_NONE, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr },
 		{ "saveandquit", POPT_ARG_STRING, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name") },
@@ -644,9 +653,25 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			wz_texture_compression = false;
 			break;
 
-		case CLI_VULKAN:
-			uses_vulkan = true;
-			break;
+		case CLI_GFXBACKEND:
+			{
+				// retrieve the backend
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Unrecognised backend");
+				}
+				video_backend gfxBackend;
+				if (video_backend_from_str(token, gfxBackend))
+				{
+					war_setGfxBackend(gfxBackend);
+				}
+				else
+				{
+					qFatal("Unsupported / invalid gfxbackend value");
+				}
+				break;
+			}
 
 		case CLI_GFXDEBUG:
 			uses_gfx_debug = true;

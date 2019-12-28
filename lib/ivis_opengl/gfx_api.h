@@ -274,7 +274,7 @@ namespace gfx_api
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
-		virtual bool initialize(const backend_Impl_Factory& impl, int32_t antialiasing) = 0;
+		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, bool useVulkan);
 		virtual void flip(int clearMode) = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
@@ -290,6 +290,8 @@ namespace gfx_api
 		virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
+	private:
+		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing) = 0;
 	};
 
 	template<std::size_t id, vertex_attribute_type type, std::size_t offset>
