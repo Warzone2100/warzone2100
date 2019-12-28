@@ -23,6 +23,12 @@
 bool uses_vulkan = false;
 bool uses_gfx_debug = false;
 
+bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, bool useVulkan)
+{
+	uses_vulkan = useVulkan;
+	return gfx_api::context::get()._initialize(impl, antialiasing);
+}
+
 gfx_api::context& gfx_api::context::get()
 {
 	if (uses_vulkan)

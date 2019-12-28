@@ -66,15 +66,9 @@ struct screeninfo
 	int screen;
 };
 
-enum class video_backend
-{
-	opengl,
-	opengles,
-	vulkan
-};
-
 void wzMain(int &argc, char **argv);
 bool wzMainScreenSetup(const video_backend& backend, int antialiasing = 0, bool fullscreen = false, bool vsync = true, bool highDPI = true);
+video_backend wzGetDefaultGfxBackendForCurrentSystem();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzMainEventLoop();
 void wzPumpEventsWhileLoading();

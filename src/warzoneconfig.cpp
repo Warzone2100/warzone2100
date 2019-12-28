@@ -61,6 +61,7 @@ struct WARZONE_GLOBALS
 	int cameraSpeed = CAMERASPEED_DEFAULT;
 	int scrollEvent = 0; // map/radar zoom
 	bool radarJump = false;
+	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -338,4 +339,14 @@ void war_SetRadarJump(bool radarJump)
 {
 	warGlobs.radarJump = radarJump;
 	ActivityManager::instance().changedSetting("radarJump", std::to_string(radarJump));
+}
+
+video_backend war_getGfxBackend()
+{
+	return warGlobs.gfxBackend;
+}
+
+void war_setGfxBackend(video_backend backend)
+{
+	warGlobs.gfxBackend = backend;
 }

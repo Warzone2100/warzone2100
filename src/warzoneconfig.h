@@ -98,6 +98,8 @@ void war_setMPcolour(int colour);
 int war_getMPcolour();
 void war_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE war_getScanlineMode();
+video_backend war_getGfxBackend();
+void war_setGfxBackend(video_backend backend);
 
 /**
  * Enable or disable sound initialization
