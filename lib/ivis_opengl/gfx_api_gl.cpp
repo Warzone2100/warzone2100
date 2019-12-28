@@ -1431,6 +1431,75 @@ std::map<std::string, std::string> gl_context::getBackendGameInfo()
 	return backendGameInfo;
 }
 
+const std::string& gl_context::getFormattedRendererInfoString() const
+{
+	return formattedRendererInfoString;
+}
+
+std::string gl_context::calculateFormattedRendererInfoString() const
+{
+	std::string openGLVersionStr;
+	GLint gl_majorversion = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+	GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+	if (gl_majorversion > 0)
+	{
+		openGLVersionStr = std::to_string(gl_majorversion) + "." + std::to_string(gl_minorversion);
+	}
+	else
+	{
+		// Failed to retrieve OpenGL version from GL_MAJOR_VERSION / GL_MINOR_VERSION
+		// Likely < OpenGL 3.0
+		// Extract version from GL_VERSION
+
+		int major = 0, minor = 0;
+
+		const char* version = nullptr;
+		const char* prefixes[] = {
+			"OpenGL ES-CM ",
+			"OpenGL ES-CL ",
+			"OpenGL ES ",
+			NULL
+		};
+
+		version = (const char*) glGetString(GL_VERSION);
+		if (version)
+		{
+			for (size_t i = 0;  prefixes[i];  i++) {
+				const size_t length = strlen(prefixes[i]);
+				if (strncmp(version, prefixes[i], length) == 0) {
+					version += length;
+					break;
+				}
+			}
+
+			#ifdef _MSC_VER
+				sscanf_s(version, "%d.%d", &major, &minor);
+			#else
+				sscanf(version, "%d.%d", &major, &minor);
+			#endif
+
+			openGLVersionStr = std::to_string(major) + "." + std::to_string(minor);
+		}
+		else
+		{
+			openGLVersionStr = "<unknown version>";
+		}
+	}
+	std::string formattedStr = std::string("OpenGL ");
+	if (gles)
+	{
+		formattedStr += "ES ";
+	}
+	formattedStr += openGLVersionStr;
+	const char * pRendererStr = (const char*) glGetString(GL_RENDERER);
+	if (pRendererStr)
+	{
+		formattedStr += std::string(" (") + pRendererStr + ")";
+	}
+
+	return formattedStr;
+}
+
 static const unsigned int channelsPerPixel = 3;
 
 bool gl_context::getScreenshot(iV_Image &image)
@@ -1572,6 +1641,8 @@ bool gl_context::initGLContext()
 	ssprintf(opengl.version, "OpenGL Version: %s", glGetString(GL_VERSION));
 	addDumpInfo(opengl.version);
 	debug(LOG_3D, "%s", opengl.version);
+
+	formattedRendererInfoString = calculateFormattedRendererInfoString();
 
 	khr_debug = GLAD_GL_KHR_debug;
 
