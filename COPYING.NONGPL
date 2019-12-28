@@ -59,3 +59,5 @@ lib/ivis_opengl/3rdparty/vk_mem_alloc.h
 	- MIT License, Copyright (c) 2017-2019 Advanced Micro Devices, Inc. (https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator)
 lib/ivis_opengl/3rdparty/vkh_*.*
 	- MIT License, Copyright (c) 2019 past-due (https://github.com/past-due/vulkan-helpers)
+ANGLE (libGLESv2, libEGL)
+	- BSD 3-Clause License, Copyright 2018 The ANGLE Project Authors. (https://chromium.googlesource.com/angle/angle)
