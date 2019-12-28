@@ -221,6 +221,7 @@ struct gl_context final : public gfx_api::context
 	virtual void debugPerfEnd(PERF_POINT pp) override;
 	virtual uint64_t debugGetPerfValue(PERF_POINT pp) override;
 	virtual std::map<std::string, std::string> getBackendGameInfo() override;
+	virtual const std::string& getFormattedRendererInfoString() const override;
 	virtual bool getScreenshot(iV_Image &output) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
@@ -231,7 +232,9 @@ private:
 	bool initGLContext();
 	void enableVertexAttribArray(GLuint index);
 	void disableVertexAttribArray(GLuint index);
+	std::string calculateFormattedRendererInfoString() const;
 
 	std::vector<bool> enabledVertexAttribIndexes;
 	size_t frameNum = 0;
+	std::string formattedRendererInfoString;
 };

@@ -1816,6 +1816,7 @@ bool runGameOptionsMenu()
 struct TitleBitmapCache {
 	WzText formattedVersionString;
 	WzText modListText;
+	WzText gfxBackend;
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1837,6 +1838,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 	cache.formattedVersionString.setText(version_getFormattedVersionString(), font_regular);
 	cache.modListText.setText(modListText, font_regular);
+	cache.gfxBackend.setText(gfx_api::context::get().getFormattedRendererInfoString(), font_small);
 
 	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, WZCOL_GREY, 270.f);
 
@@ -1845,13 +1847,16 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 		cache.modListText.render(9, 14, WZCOL_GREY);
 	}
 
-	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, WZCOL_TEXT_BRIGHT, 270.f);
+	cache.gfxBackend.render(9, pie_GetVideoBufferHeight() - 10, WZCOL_GREY);
 
+	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, WZCOL_TEXT_BRIGHT, 270.f);
 
 	if (!getModList().empty())
 	{
 		cache.modListText.render(10, 15, WZCOL_TEXT_BRIGHT);
 	}
+
+	cache.gfxBackend.render(10, pie_GetVideoBufferHeight() - 11, WZCOL_TEXT_BRIGHT);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

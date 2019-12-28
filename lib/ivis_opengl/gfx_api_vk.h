@@ -532,12 +532,16 @@ public:
 	virtual void debugPerfEnd(PERF_POINT pp) override;
 	virtual uint64_t debugGetPerfValue(PERF_POINT pp) override;
 	virtual std::map<std::string, std::string> getBackendGameInfo() override;
+	virtual const std::string& getFormattedRendererInfoString() const override;
 	virtual bool getScreenshot(iV_Image &output) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing) override;
+	std::string calculateFormattedRendererInfoString() const;
+private:
+	std::string formattedRendererInfoString;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED)

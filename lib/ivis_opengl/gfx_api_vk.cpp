@@ -2457,6 +2457,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	// pick physical device (and get properties)
 	physicalDevice = pickPhysicalDevice();
 	physDeviceProps = physicalDevice.getProperties(vkDynLoader);
+	formattedRendererInfoString = calculateFormattedRendererInfoString(); // must be called after physDeviceProps is populated
 	physDeviceFeatures = physicalDevice.getFeatures(vkDynLoader);
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
 	const auto& formatSupport = physicalDevice.getFormatProperties(vk::Format::eR8G8B8Unorm, vkDynLoader);
@@ -3192,6 +3193,16 @@ std::map<std::string, std::string> VkRoot::getBackendGameInfo()
 	backendGameInfo["vulkan_apiversion"] = VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion);
 	backendGameInfo["vulkan_driverversion"] = std::to_string(physDeviceProps.driverVersion);
 	return backendGameInfo;
+}
+
+const std::string& VkRoot::getFormattedRendererInfoString() const
+{
+	return formattedRendererInfoString;
+}
+
+std::string VkRoot::calculateFormattedRendererInfoString() const
+{
+	return std::string("Vulkan ") + VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion) + " (" + physDeviceProps.deviceName + ")";
 }
 
 bool VkRoot::getScreenshot(iV_Image &output)
