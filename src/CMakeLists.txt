@@ -700,6 +700,43 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 				message( WARNING "Unable to find windeployqt; installation may not included all required Qt libraries" )
 			endif()
 
+			# Install LibANGLE DLLs (if available, from vcpkg)
+			find_package(unofficial-angle CONFIG)
+			if(unofficial-angle_FOUND)
+				if(TARGET unofficial::angle::libEGL)
+					get_target_property(_libEGL_dll unofficial::angle::libEGL IMPORTED_LOCATION_RELEASE)
+				endif()
+
+				if(TARGET unofficial::angle::libGLESv2)
+					get_target_property(_libGLESv2_dll unofficial::angle::libGLESv2 IMPORTED_LOCATION_RELEASE)
+				endif()
+
+				if(_libEGL_dll AND _libGLESv2_dll)
+					if(EXISTS "${_libEGL_dll}")
+						message( STATUS "LibANGLE (libEGL): ${_libEGL_dll}" )
+						install(FILES
+							"${_libEGL_dll}"
+							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+						)
+					else()
+						message( WARNING "Missing expected libEGL DLL at: ${_libEGL_dll}" )
+					endif()
+					if(EXISTS "${_libGLESv2_dll}")
+						message( STATUS "LibANGLE (libGLESv2): ${_libGLESv2_dll}" )
+						install(FILES
+							"${_libGLESv2_dll}"
+							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+						)
+					else()
+						message( WARNING "Missing expected libGLESv2 DLL at: ${_libGLESv2_dll}" )
+					endif()
+				else()
+					message( WARNING "Found LibANGLE, but could not find the built DLLs - LibANGLE will *not* be installed." )
+				endif()
+			else()
+				message( WARNING "Could not find LibANGLE - LibANGLE will *not* be installed. (DirectX via LibANGLE will not be supported)" )
+			endif()
+
 			if(WZ_ENABLE_BACKEND_VULKAN)
 				# Vulkan
 				if (DEFINED ENV{VULKAN_SDK} AND IS_DIRECTORY "$ENV{VULKAN_SDK}")
