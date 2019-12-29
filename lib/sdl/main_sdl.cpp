@@ -1641,6 +1641,53 @@ std::string to_pretty_string(const video_backend& backend)
 	return "n/a";
 }
 
+bool shouldResetGfxBackendPrompt(video_backend currentBackend, video_backend newBackend, std::string failedToInitializeObject = "graphics", std::string additionalErrorDetails = "")
+{
+	// Offer to reset to the specified gfx backend
+	std::string resetString = std::string("Reset to ") + to_pretty_string(newBackend) + "";
+	const SDL_MessageBoxButtonData buttons[] = {
+	   { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, resetString.c_str() },
+	   { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Not Now" },
+	};
+	std::string titleString = std::string("Failed to initialize ") + failedToInitializeObject;
+	std::string messageString = std::string("Failed to initialize ") + failedToInitializeObject + " for backend: " + to_pretty_string(currentBackend) + ".\n\n";
+	if (!additionalErrorDetails.empty())
+	{
+		messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
+	}
+	messageString += "Do you want to reset the graphics backend to: " + to_pretty_string(newBackend) + "?";
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_ERROR, /* .flags */
+		WZwindow, /* .window */
+		titleString.c_str(), /* .title */
+		messageString.c_str(), /* .message */
+		SDL_arraysize(buttons), /* .numbuttons */
+		buttons, /* .buttons */
+		nullptr /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		// error displaying message box
+		debug(LOG_FATAL, "Failed to display message box");
+		return false;
+	}
+	if (buttonid == 1)
+	{
+		return true;
+	}
+	return false;
+}
+
+void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true)
+{
+	war_setGfxBackend(newBackend);
+	if (displayRestartMessage)
+	{
+		std::string title = std::string("Backend reset to: ") + to_pretty_string(newBackend);
+		wzDisplayDialog(Dialog_Information, title.c_str(), "(Note: Do not specify a --gfxbackend option, or it will override this new setting.)\n\nPlease restart Warzone 2100 to use the new graphics setting.");
+	}
+}
+
 // This stage, we handle display mode setting
 bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
@@ -1852,7 +1899,17 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 
 	if (!WZwindow)
 	{
-		debug(LOG_FATAL, "Can't create a window, because: %s", SDL_GetError());
+		std::string createWindowErrorStr = SDL_GetError();
+		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
+		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend, "window", createWindowErrorStr))
+		{
+			resetGfxBackend(defaultBackend);
+			return false; // must return so new configuration will be saved
+		}
+		else
+		{
+			debug(LOG_FATAL, "Can't create a window, because: %s", createWindowErrorStr.c_str());
+		}
 		SDL_Quit();
 		exit(EXIT_FAILURE);
 	}
@@ -1986,7 +2043,17 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 
 	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES), antialiasing, usesSDLBackend_Vulkan))
 	{
-		debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend).c_str());
+		// Failed to initialize desired backend / renderer settings
+		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
+		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend))
+		{
+			resetGfxBackend(defaultBackend);
+			return false; // must return so new configuration will be saved
+		}
+		else
+		{
+			debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend).c_str());
+		}
 
 		SDL_Quit();
 		exit(EXIT_FAILURE);

@@ -1486,6 +1486,7 @@ int realmain(int argc, char *argv[])
 
 	if (!wzMainScreenSetup(war_getGfxBackend(), war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
 	{
+		saveConfig(); // ensure any setting changes are persisted on failure
 		return EXIT_FAILURE;
 	}
 
