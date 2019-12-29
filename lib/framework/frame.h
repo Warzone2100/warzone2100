@@ -141,6 +141,7 @@ enum class video_backend
 
 bool video_backend_from_str(const char *str, video_backend &output_backend);
 std::string to_string(video_backend backend);
+std::string to_display_string(const video_backend& backend);
 // video_backend - end
 
 #endif

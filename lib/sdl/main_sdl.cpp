@@ -1620,42 +1620,21 @@ static SDL_WindowFlags SDL_backend(const video_backend& backend)
 	return SDL_WindowFlags{};
 }
 
-std::string to_pretty_string(const video_backend& backend)
-{
-	switch (backend)
-	{
-		case video_backend::opengl:
-			return "OpenGL";
-		case video_backend::opengles:
-			return "OpenGL ES";
-		case video_backend::vulkan:
-			return "Vulkan";
-#if defined(WZ_BACKEND_DIRECTX)
-		case video_backend::directx:
-			return "DirectX (via LibANGLE)";
-#endif
-		case video_backend::num_backends:
-			debug(LOG_FATAL, "Should never happen");
-			break;
-	}
-	return "n/a";
-}
-
 bool shouldResetGfxBackendPrompt(video_backend currentBackend, video_backend newBackend, std::string failedToInitializeObject = "graphics", std::string additionalErrorDetails = "")
 {
 	// Offer to reset to the specified gfx backend
-	std::string resetString = std::string("Reset to ") + to_pretty_string(newBackend) + "";
+	std::string resetString = std::string("Reset to ") + to_display_string(newBackend) + "";
 	const SDL_MessageBoxButtonData buttons[] = {
 	   { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, resetString.c_str() },
 	   { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Not Now" },
 	};
-	std::string titleString = std::string("Failed to initialize ") + failedToInitializeObject;
-	std::string messageString = std::string("Failed to initialize ") + failedToInitializeObject + " for backend: " + to_pretty_string(currentBackend) + ".\n\n";
+	std::string titleString = std::string("Warzone: Failed to initialize ") + failedToInitializeObject;
+	std::string messageString = std::string("Failed to initialize ") + failedToInitializeObject + " for backend: " + to_display_string(currentBackend) + ".\n\n";
 	if (!additionalErrorDetails.empty())
 	{
 		messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
 	}
-	messageString += "Do you want to reset the graphics backend to: " + to_pretty_string(newBackend) + "?";
+	messageString += "Do you want to reset the graphics backend to: " + to_display_string(newBackend) + "?";
 	const SDL_MessageBoxData messageboxdata = {
 		SDL_MESSAGEBOX_ERROR, /* .flags */
 		WZwindow, /* .window */
@@ -1683,7 +1662,7 @@ void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true
 	war_setGfxBackend(newBackend);
 	if (displayRestartMessage)
 	{
-		std::string title = std::string("Backend reset to: ") + to_pretty_string(newBackend);
+		std::string title = std::string("Backend reset to: ") + to_display_string(newBackend);
 		wzDisplayDialog(Dialog_Information, title.c_str(), "(Note: Do not specify a --gfxbackend option, or it will override this new setting.)\n\nPlease restart Warzone 2100 to use the new graphics setting.");
 	}
 }
