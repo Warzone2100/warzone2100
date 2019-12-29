@@ -28,7 +28,7 @@
 class SDL_gfx_api_Impl_Factory final : public gfx_api::backend_Impl_Factory
 {
 public:
-	SDL_gfx_api_Impl_Factory(SDL_Window* window, bool useOpenGLES);
+	SDL_gfx_api_Impl_Factory(SDL_Window* window, bool useOpenGLES, bool useOpenGLESLibrary);
 
 	virtual std::unique_ptr<gfx_api::backend_OpenGL_Impl> createOpenGLBackendImpl() const override;
 #if defined(WZ_VULKAN_ENABLED)
@@ -38,6 +38,7 @@ public:
 private:
 	SDL_Window* window;
 	bool useOpenGLES;
+	bool useOpenGLESLibrary;
 };
 
 #endif // __INCLUDED_GFX_API_SDL_H__

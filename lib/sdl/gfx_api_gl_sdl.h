@@ -28,7 +28,7 @@
 class sdl_OpenGL_Impl final : public gfx_api::backend_OpenGL_Impl
 {
 public:
-	sdl_OpenGL_Impl(SDL_Window* window, bool useOpenGLES);
+	sdl_OpenGL_Impl(SDL_Window* window, bool useOpenGLES, bool useOpenGLESLibrary);
 
 	virtual GLADloadproc getGLGetProcAddress() override;
 	virtual bool createGLContext() override;
@@ -50,18 +50,20 @@ public:
 		MAX_CONTEXT_REQUESTS
 	};
 
-	static bool configureOpenGLContextRequest(GLContextRequests request);
+	static bool configureOpenGLContextRequest(GLContextRequests request, bool useOpenGLESLibrary);
 	static GLContextRequests getInitialContextRequest(bool useOpenglES = false);
 
 private:
 	SDL_Window* window;
 	bool useOpenglES = false;
+	bool useOpenGLESLibrary = false;
 
 	GLContextRequests contextRequest = OpenGLCore_HighestAvailable;
 
 private:
 	bool configureNextOpenGLContextRequest();
 	std::string to_string(const GLContextRequests& request) const;
+	static void setOpenGLESDriver(bool useOpenGLESLibrary);
 };
 
 #endif // __INCLUDED_GFX_API_GL_SDL_H__
