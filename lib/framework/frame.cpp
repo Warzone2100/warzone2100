@@ -377,3 +377,24 @@ std::string to_string(video_backend backend)
 {
 	return video_backend_names[(size_t)backend];
 }
+
+std::string to_display_string(const video_backend& backend)
+{
+	switch (backend)
+	{
+		case video_backend::opengl:
+			return "OpenGL";
+		case video_backend::opengles:
+			return "OpenGL ES";
+		case video_backend::vulkan:
+			return "Vulkan";
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx:
+			return "DirectX (ANGLE)";
+#endif
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
+			break;
+	}
+	return "n/a";
+}
