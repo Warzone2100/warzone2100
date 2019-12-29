@@ -1688,7 +1688,12 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 {
 	const bool useOpenGLES = (backend == video_backend::opengles)
 #if defined(WZ_BACKEND_DIRECTX)
-						  || (backend == video_backend::directx)
+		|| (backend == video_backend::directx)
+#endif
+	;
+	const bool useOpenGLESLibrary = false
+#if defined(WZ_BACKEND_DIRECTX)
+		|| (backend == video_backend::directx)
 #endif
 	;
 	const bool usesSDLBackend_OpenGL = useOpenGLES || (backend == video_backend::opengl);
@@ -1749,7 +1754,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
 		}
 
-		sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES));
+		sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary);
 	}
 
 	// Populated our resolution list (does all displays now)
@@ -2036,7 +2041,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	cocoaSetupWZMenus();
 #endif
 
-	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES), antialiasing, usesSDLBackend_Vulkan))
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES, useOpenGLESLibrary), antialiasing, usesSDLBackend_Vulkan))
 	{
 		// Failed to initialize desired backend / renderer settings
 		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();

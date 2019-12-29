@@ -27,12 +27,13 @@
 
 bool vsyncIsEnabled = true; // TODO: Actually set this to match the result of SDL_GL_SetSwapInterval
 
-sdl_OpenGL_Impl::sdl_OpenGL_Impl(SDL_Window* _window, bool _useOpenGLES)
+sdl_OpenGL_Impl::sdl_OpenGL_Impl(SDL_Window* _window, bool _useOpenGLES, bool _useOpenGLESLibrary)
 {
 	ASSERT(_window != nullptr, "Invalid SDL_Window*");
 	window = _window;
 	useOpenglES = _useOpenGLES;
 	contextRequest = getInitialContextRequest(useOpenglES);
+	useOpenGLESLibrary = _useOpenGLESLibrary;
 }
 
 GLADloadproc sdl_OpenGL_Impl::getGLGetProcAddress()
@@ -40,21 +41,20 @@ GLADloadproc sdl_OpenGL_Impl::getGLGetProcAddress()
 	return SDL_GL_GetProcAddress;
 }
 
-bool useOpenGLESLibrary()
+void sdl_OpenGL_Impl::setOpenGLESDriver(bool useOpenGLESLibrary)
 {
-#if defined(WZ_OS_WIN)
-	return true;
-#else
-	return false;
-#endif
-}
-
-void setOpenGLESDriver()
-{
-	if (useOpenGLESLibrary())
+	if (useOpenGLESLibrary)
 	{
 #if defined(SDL_HINT_OPENGL_ES_DRIVER)
 		SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
+#else
+		debug(LOG_WARNING, "SDL_HINT_OPENGL_ES_DRIVER is not available - may not use the OpenGL ES library");
+#endif
+	}
+	else
+	{
+#if defined(SDL_HINT_OPENGL_ES_DRIVER)
+		SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "0");
 #endif
 	}
 }
@@ -62,7 +62,7 @@ void setOpenGLESDriver()
 bool sdl_OpenGL_Impl::configureNextOpenGLContextRequest()
 {
 	contextRequest = GLContextRequests(contextRequest + 1);
-	return configureOpenGLContextRequest(contextRequest);
+	return configureOpenGLContextRequest(contextRequest, useOpenGLESLibrary);
 }
 
 sdl_OpenGL_Impl::GLContextRequests sdl_OpenGL_Impl::getInitialContextRequest(bool useOpenglES /*= false*/)
@@ -77,7 +77,7 @@ sdl_OpenGL_Impl::GLContextRequests sdl_OpenGL_Impl::getInitialContextRequest(boo
 	}
 }
 
-bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request)
+bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, bool useOpenGLESLibrary)
 {
 	switch (request)
 	{
@@ -106,14 +106,14 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request)
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 			return true;
 		case OpenGLES30:
-			setOpenGLESDriver();
+			setOpenGLESDriver(useOpenGLESLibrary);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			return true;
 		case OpenGLES20:
-			setOpenGLESDriver();
+			setOpenGLESDriver(useOpenGLESLibrary);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
