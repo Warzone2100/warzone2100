@@ -1109,6 +1109,11 @@ std::string videoOptionsDisplayScaleString()
 	return resolution;
 }
 
+std::string videoOptionsGfxBackendString()
+{
+	return to_display_string(war_getGfxBackend());
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
 void refreshCurrentVideoOptionsValues()
@@ -1186,11 +1191,16 @@ void startVideoOptionsMenu()
 	antialiasing_label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Display Scale
-	if (wzAvailableDisplayScales().size() > 1)
+	const bool showDisplayScale = wzAvailableDisplayScales().size() > 1;
+	if (showDisplayScale)
 	{
-		addTextButton(FRONTEND_DISPLAYSCALE, FRONTEND_POS6X - 35, FRONTEND_POS7Y, videoOptionsDisplayScaleLabel(), WBUT_SECONDARY);
-		addTextButton(FRONTEND_DISPLAYSCALE_R, FRONTEND_POS6M - 55, FRONTEND_POS7Y, videoOptionsDisplayScaleString(), WBUT_SECONDARY);
+		addTextButton(FRONTEND_DISPLAYSCALE, FRONTEND_POS7X - 35, FRONTEND_POS7Y, videoOptionsDisplayScaleLabel(), WBUT_SECONDARY);
+		addTextButton(FRONTEND_DISPLAYSCALE_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, videoOptionsDisplayScaleString(), WBUT_SECONDARY);
 	}
+
+	// Gfx Backend
+	addTextButton(FRONTEND_GFXBACKEND, ((showDisplayScale) ? FRONTEND_POS8X : FRONTEND_POS7X) - 35, ((showDisplayScale) ? FRONTEND_POS8Y : FRONTEND_POS7Y), _("Graphics Backend*"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_GFXBACKEND_R, ((showDisplayScale) ? FRONTEND_POS8M : FRONTEND_POS7M) - 55, ((showDisplayScale) ? FRONTEND_POS8Y : FRONTEND_POS7Y), videoOptionsGfxBackendString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -1436,6 +1446,28 @@ bool runVideoOptionsMenu()
 		war_SetVsync(!war_GetVsync());
 		widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
 		break;
+
+	case FRONTEND_GFXBACKEND:
+	case FRONTEND_GFXBACKEND_R:
+		{
+			const std::vector<video_backend> availableBackends = wzAvailableGfxBackends();
+			if (availableBackends.size() >= 1)
+			{
+				auto current = std::find(availableBackends.begin(), availableBackends.end(), war_getGfxBackend());
+				if (current == availableBackends.end())
+				{
+					current = availableBackends.begin();
+				}
+				current = seqCycle(current, availableBackends.begin(), 1, availableBackends.end() - 1);
+				war_setGfxBackend(*current);
+				widgSetString(psWScreen, FRONTEND_GFXBACKEND_R, videoOptionsGfxBackendString().c_str());
+			}
+			else
+			{
+				debug(LOG_ERROR, "There must be at least one valid backend");
+			}
+			break;
+		}
 
 	case FRONTEND_DISPLAYSCALE:
 	case FRONTEND_DISPLAYSCALE_R:

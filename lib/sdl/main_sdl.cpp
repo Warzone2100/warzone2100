@@ -296,6 +296,22 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
 }
 
+std::vector<video_backend> wzAvailableGfxBackends()
+{
+	std::vector<video_backend> availableBackends;
+	availableBackends.push_back(video_backend::opengl);
+#if !defined(WZ_OS_MAC) // OpenGL ES is not supported on macOS, and WZ doesn't currently ship with an OpenGL ES library on macOS
+	availableBackends.push_back(video_backend::opengles);
+#endif
+#if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#endif
+#if defined(WZ_BACKEND_DIRECTX)
+	availableBackends.push_back(video_backend::directx);
+#endif
+	return availableBackends;
+}
+
 video_backend wzGetDefaultGfxBackendForCurrentSystem()
 {
 	// SDL backend supports: OpenGL, OpenGLES, Vulkan (if compiled with support), DirectX (on Windows, via LibANGLE)
