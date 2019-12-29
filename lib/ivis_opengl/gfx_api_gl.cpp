@@ -1099,10 +1099,7 @@ GLboolean get_normalisation(const gfx_api::vertex_attribute_type& type)
 
 gl_context::~gl_context()
 {
-	if (glDeleteBuffers) // glDeleteBuffers might be NULL (if initializing the OpenGL loader library fails)
-	{
-		glDeleteBuffers(1, &scratchbuffer);
-	}
+	// nothing - all cleanup should occur in gl_context::shutdown()
 }
 
 gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename)
@@ -1847,8 +1844,13 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 
 void gl_context::shutdown()
 {
-	// move any other cleanup here?
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	if(glClear) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	if (glDeleteBuffers) // glDeleteBuffers might be NULL (if initializing the OpenGL loader library fails)
+	{
+		glDeleteBuffers(1, &scratchbuffer);
+		scratchbuffer = 0;
+	}
 }
 
 const size_t& gl_context::current_FrameNum() const
