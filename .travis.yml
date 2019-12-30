@@ -240,7 +240,7 @@ matrix:
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
         - gem install asciidoctor -v 2.0.10 --no-document
         # gcc6+ is currently required to bootstrap vcpkg on macOS
-        - brew install gcc@7 || brew link --overwrite gcc@7
+        - brew install gcc || brew link --overwrite gcc
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
         - cmake --version
       script:
@@ -264,7 +264,7 @@ matrix:
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
         - gem install asciidoctor -v 2.0.10 --no-document
         # gcc6+ is currently required to bootstrap vcpkg on macOS
-        - brew install gcc@8 || brew link --overwrite gcc@8
+        - brew install gcc || brew link --overwrite gcc
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
         - cmake --version
       script:
