@@ -699,13 +699,15 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		get_filename_component(_rfile_filename ${rfile} NAME)
 		# Read in the file
 		file(READ ${rfile} _contents)
-		# Strip all CRs
-		string(REPLACE "\r" "" _contents ${_contents})
-		# Convert all LFs to CRLFs
-		string(REPLACE "\n" "\r\n" _contents ${_contents})
+		if(NOT CMAKE_HOST_SYSTEM_NAME MATCHES "Windows") # On Windows, CMake's text-based I/O converts newlines to CRLF on file(WRITE)
+			# Strip all CRs
+			string(REPLACE "\r" "" _contents "${_contents}")
+			# Convert all LFs to CRLFs
+			string(REPLACE "\n" "\r\n" _contents "${_contents}")
+		endif()
 		# Write out the converted file
 		set(_rfile_newfilename "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}.txt")
-		file(WRITE "${_rfile_newfilename}" ${_contents})
+		file(WRITE "${_rfile_newfilename}" "${_contents}")
 		list(APPEND _new_wz2100_ROOT_FILES "${_rfile_newfilename}")
 	endforeach()
 	set(wz2100_ROOT_FILES ${_new_wz2100_ROOT_FILES})
