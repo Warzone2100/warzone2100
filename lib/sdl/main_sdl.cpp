@@ -1683,6 +1683,32 @@ void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true
 	}
 }
 
+bool wzSDLOneTimeInit()
+{
+	const Uint32 sdl_init_flags = SDL_INIT_VIDEO | SDL_INIT_TIMER;
+	if (!(SDL_WasInit(sdl_init_flags) == sdl_init_flags))
+	{
+		if (SDL_Init(sdl_init_flags) != 0)
+		{
+			debug(LOG_ERROR, "Error: Could not initialise SDL (%s).", SDL_GetError());
+			return false;
+		}
+	}
+
+	if (wzSDLAppEvent == ((Uint32)-1))
+	{
+		wzSDLAppEvent = SDL_RegisterEvents(1);
+		if (wzSDLAppEvent == ((Uint32)-1))
+		{
+			// Failed to register app-defined event with SDL
+			debug(LOG_ERROR, "Error: Failed to register app-defined SDL event (%s).", SDL_GetError());
+			return false;
+		}
+	}
+
+	return true;
+}
+
 // This stage, we handle display mode setting
 bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, bool vsync, bool highDPI)
 {
@@ -1715,16 +1741,9 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	int height = pie_GetVideoBufferHeight();
 	int bitDepth = pie_GetVideoBufferDepth();
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
+	if (!wzSDLOneTimeInit())
 	{
-		debug(LOG_ERROR, "Error: Could not initialise SDL (%s).", SDL_GetError());
-		return false;
-	}
-
-	wzSDLAppEvent = SDL_RegisterEvents(1);
-	if (wzSDLAppEvent == ((Uint32)-1)) {
-		// Failed to register app-defined event with SDL
-		debug(LOG_ERROR, "Error: Failed to register app-defined SDL event (%s).", SDL_GetError());
+		// wzSDLOneTimeInit already logged an error on failure
 		return false;
 	}
 
