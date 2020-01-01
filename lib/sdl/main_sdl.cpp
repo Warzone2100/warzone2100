@@ -1691,11 +1691,10 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	if (highDPI)
 	{
-#if defined(WZ_OS_MAC)
 		// Allow SDL to enable its built-in High-DPI display support.
-		// As of SDL 2.0.5, this only works on macOS. (But SDL 2.1.x+ may enable Windows support via a different interface.)
+		// This flag is ignored on some platforms (ex. Windows is not supported as of SDL 2.0.10),
+		// but does support: macOS, Wayland [SDL 2.0.10+].
 		video_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
-#endif
 	}
 
 	WZwindow = SDL_CreateWindow(PACKAGE_NAME, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex), windowWidth, windowHeight, video_flags);
