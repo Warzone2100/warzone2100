@@ -74,6 +74,8 @@ void war_SetScreen(int screen);
 int war_GetScreen();
 void war_SetHeight(UDWORD height);
 UDWORD war_GetHeight();
+void war_SetVideoBufferDepth(UDWORD videoBufferDepth);
+UDWORD war_GetVideoBufferDepth();
 void war_SetPauseOnFocusLoss(bool enabled);
 bool war_GetPauseOnFocusLoss();
 bool war_GetMusicEnabled();
