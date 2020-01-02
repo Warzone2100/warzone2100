@@ -2294,6 +2294,9 @@ static void handleActiveEvent(SDL_Event *event)
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
 			WZwindow = nullptr;
 			break;
+		case SDL_WINDOWEVENT_TAKE_FOCUS:
+			debug(LOG_WZ, "Window %d is being offered focus", event->window.windowID);
+			break;
 		default:
 			debug(LOG_WZ, "Window %d got unknown event %d", event->window.windowID, event->window.event);
 			break;
