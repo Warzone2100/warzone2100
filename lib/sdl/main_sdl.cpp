@@ -1733,13 +1733,13 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	addDumpInfo(buf);
 	debug(LOG_WZ, "%s", buf);
 
-	// populate with the saved values (if we had any)
+	// populate with the saved configuration values (if we had any)
+	int width = war_GetWidth();
+	int height = war_GetHeight();
+	int bitDepth = war_GetVideoBufferDepth();
 	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
 	// (i.e. not taking into account the game display scale). This function later sets the display system
 	// to the *game screen* width and height (taking into account the display scale).
-	int width = pie_GetVideoBufferWidth();
-	int height = pie_GetVideoBufferHeight();
-	int bitDepth = pie_GetVideoBufferDepth();
 
 	if (!wzSDLOneTimeInit())
 	{

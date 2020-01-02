@@ -42,6 +42,7 @@ struct WARZONE_GLOBALS
 	FMV_MODE FMVmode = FMV_FULLSCREEN;
 	UDWORD width = 1024;
 	UDWORD height = 768;
+	UDWORD videoBufferDepth = 32;
 	int displayScale = 100;
 	int screen = 0;
 	int8_t SPcolor = 0;
@@ -175,6 +176,16 @@ void war_SetHeight(UDWORD height)
 UDWORD war_GetHeight()
 {
 	return warGlobs.height;
+}
+
+void war_SetVideoBufferDepth(UDWORD videoBufferDepth)
+{
+	warGlobs.videoBufferDepth = videoBufferDepth;
+}
+
+UDWORD war_GetVideoBufferDepth()
+{
+	return warGlobs.videoBufferDepth;
 }
 
 void war_SetScreen(int screen)

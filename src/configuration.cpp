@@ -238,7 +238,7 @@ bool loadConfig()
 
 	if (ini.contains("bpp"))
 	{
-		pie_SetVideoBufferDepth(ini.value("bpp").toInt());
+		war_SetVideoBufferDepth(ini.value("bpp").toInt());
 	}
 	setFavoriteStructs(ini.value("favoriteStructs").toString().toUtf8().constData());
 
@@ -285,7 +285,7 @@ bool saveConfig()
 	ini.setValue("width", war_GetWidth());
 	ini.setValue("height", war_GetHeight());
 	ini.setValue("screen", war_GetScreen());
-	ini.setValue("bpp", pie_GetVideoBufferDepth());
+	ini.setValue("bpp", war_GetVideoBufferDepth());
 	ini.setValue("fullscreen", war_getFullscreen());
 	ini.setValue("language", getLanguage());
 	ini.setValue("difficulty", getDifficultyLevel());		// level
