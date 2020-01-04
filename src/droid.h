@@ -88,7 +88,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate, DROID *psDroid);
 UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate);
 
 /* Calculate the power points required to build/maintain a droid */
-UDWORD calcDroidPower(DROID *psDroid);
+UDWORD calcDroidPower(const DROID *psDroid);
 
 // Calculate the number of points required to build a droid
 UDWORD calcDroidPoints(DROID *psDroid);
@@ -103,10 +103,10 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UDWORD level);
 
 /* Calculate the points required to build the template */
-UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate);
+UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 
 /* Calculate the power points required to build/maintain the droid */
-UDWORD calcTemplatePower(DROID_TEMPLATE *psTemplate);
+UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
 // return whether a droid is IDF
 bool idfDroid(DROID *psDroid);
@@ -310,7 +310,7 @@ bool droidOnMap(const DROID *psDroid);
 void droidSetPosition(DROID *psDroid, int x, int y);
 
 /// Return a percentage of how fully armed the object is, or -1 if N/A.
-int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot);
+int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_slot);
 
 static inline int droidSensorRange(const DROID *psDroid)
 {

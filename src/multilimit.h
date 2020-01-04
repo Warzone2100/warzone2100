@@ -26,7 +26,7 @@
 
 // See titleui.h for the actual class; dependency reduction measure
 
-void applyLimitSet();
+bool applyLimitSet();
 void createLimitSet();
 void resetLimits(void);
 

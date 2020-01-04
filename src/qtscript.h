@@ -144,7 +144,7 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 bool triggerEventCheatMode(bool entered);
 bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine);
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
-bool triggerEventArea(const QString& label, DROID *psDroid);
+bool triggerEventArea(const std::string& label, DROID *psDroid);
 bool triggerEventSelected();
 bool triggerEventPlayerLeft(int id);
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate);

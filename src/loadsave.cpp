@@ -902,12 +902,12 @@ static void freeAutoSaveSlot(const char *path)
 	deleteSaveGame(oldestSavePath);
 }
 
-void autoSave()
+bool autoSave()
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
 	if (runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated || autogame_enabled())
 	{
-		return;
+		return false;
 	}
 	const char *dir = bMultiPlayer? AUTOSAVE_SKI_DIR : AUTOSAVE_CAM_DIR;
 	freeAutoSaveSlot(dir);
@@ -923,9 +923,11 @@ void autoSave()
 	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
 	{
 		console("AutoSave %s", savefile);
+		return true;
 	}
 	else
 	{
 		console("AutoSave %s failed", savefile);
+		return false;
 	}
 }

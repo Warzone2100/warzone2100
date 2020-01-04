@@ -364,11 +364,10 @@ struct RETBUTSTATS
 	WzString filename;
 	WzString filenameDown;
 	std::string tip;
-	WzString func;
 	bool flashing = false;
 	int flashTime = 0;
 	W_BUTTON *button = nullptr;
-	QScriptEngine *engine = nullptr;
+	playerCallbackFunc callbackFunc = nullptr;
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
 
@@ -426,7 +425,7 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 	}
 }
 
-void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, WzString func, QScriptEngine *engine)
+void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc)
 {
 	if (MissionResUp)
 	{
@@ -441,8 +440,7 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	retbutstats[ButId].downTime = 0;
 	retbutstats[ButId].flashing = false;
 	retbutstats[ButId].flashTime = 0;
-	retbutstats[ButId].func = func;
-	retbutstats[ButId].engine = engine;
+	retbutstats[ButId].callbackFunc = callbackFunc;
 	ReticuleEnabled[ButId].Enabled = false;
 
 	if (!retbutstats[ButId].button) // not quite set up yet
@@ -1090,9 +1088,9 @@ void hciUpdate()
 
 static void reticuleCallback(int retbut)
 {
-	if (!retbutstats[retbut].func.isEmpty())
+	if (retbutstats[retbut].callbackFunc)
 	{
-		namedScriptCallback(retbutstats[retbut].engine, retbutstats[retbut].func, selectedPlayer);
+		retbutstats[retbut].callbackFunc(selectedPlayer);
 	}
 }
 

@@ -153,7 +153,7 @@ bool droidInit()
 	return true;
 }
 
-int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
+int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_slot)
 {
 	WEAPON_STATS *psStats;
 	bool bSalvo;
@@ -169,15 +169,15 @@ int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 	bSalvo = (psStats->upgrade[psObj->player].numRounds > 1);
 	if ((bSalvo && psStats->upgrade[psObj->player].reloadTime > GAME_TICKS_PER_SEC)
 	    || psStats->upgrade[psObj->player].firePause > GAME_TICKS_PER_SEC
-	    || (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj)))
+	    || (psObj->type == OBJ_DROID && isVtolDroid((const DROID *)psObj)))
 	{
-		if (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj))
+		if (psObj->type == OBJ_DROID && isVtolDroid((const DROID *)psObj))
 		{
 			//deal with VTOLs
-			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->asWeaps[weapon_slot].usedAmmo;
+			firingStage = getNumAttackRuns((const DROID *)psObj, weapon_slot) - ((const DROID *)psObj)->asWeaps[weapon_slot].usedAmmo;
 
 			//compare with max value
-			interval = getNumAttackRuns((DROID *)psObj, weapon_slot);
+			interval = getNumAttackRuns((const DROID *)psObj, weapon_slot);
 		}
 		else
 		{
@@ -1281,7 +1281,7 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 }
 
 template <typename F, typename G>
-static unsigned calcSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, uint32_t (&asWeaps)[MAX_WEAPONS], F func, G propulsionFunc)
+static unsigned calcSum(const uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, const uint32_t (&asWeaps)[MAX_WEAPONS], F func, G propulsionFunc)
 {
 	unsigned sum =
 		func(asBrainStats    [asParts[COMP_BRAIN]]) +
@@ -1298,7 +1298,7 @@ static unsigned calcSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, uint32_
 }
 
 template <typename F, typename G>
-static unsigned calcUpgradeSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, uint32_t (&asWeaps)[MAX_WEAPONS], int player, F func, G propulsionFunc)
+static unsigned calcUpgradeSum(const uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, const uint32_t (&asWeaps)[MAX_WEAPONS], int player, F func, G propulsionFunc)
 {
 	unsigned sum =
 		func(asBrainStats    [asParts[COMP_BRAIN]].upgrade[player]) +
@@ -1320,9 +1320,9 @@ static unsigned calcUpgradeSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, 
 
 struct FilterDroidWeaps
 {
-	FilterDroidWeaps(unsigned numWeaps, WEAPON (&asWeaps)[MAX_WEAPONS])
+	FilterDroidWeaps(unsigned numWeaps, const WEAPON (&asWeaps)[MAX_WEAPONS])
 	{
-		std::transform(asWeaps, asWeaps + numWeaps, this->asWeaps, [](WEAPON &weap) {
+		std::transform(asWeaps, asWeaps + numWeaps, this->asWeaps, [](const WEAPON &weap) {
 			return weap.nStat;
 		});
 		this->numWeaps = std::remove_if(this->asWeaps, this->asWeaps + numWeaps, [](uint32_t stat) {
@@ -1335,26 +1335,26 @@ struct FilterDroidWeaps
 };
 
 template <typename F, typename G>
-static unsigned calcSum(DROID_TEMPLATE *psTemplate, F func, G propulsionFunc)
+static unsigned calcSum(const DROID_TEMPLATE *psTemplate, F func, G propulsionFunc)
 {
 	return calcSum(psTemplate->asParts, psTemplate->numWeaps, psTemplate->asWeaps, func, propulsionFunc);
 }
 
 template <typename F, typename G>
-static unsigned calcSum(DROID *psDroid, F func, G propulsionFunc)
+static unsigned calcSum(const DROID *psDroid, F func, G propulsionFunc)
 {
 	FilterDroidWeaps f = {psDroid->numWeaps, psDroid->asWeaps};
 	return calcSum(psDroid->asBits, f.numWeaps, f.asWeaps, func, propulsionFunc);
 }
 
 template <typename F, typename G>
-static unsigned calcUpgradeSum(DROID_TEMPLATE *psTemplate, int player, F func, G propulsionFunc)
+static unsigned calcUpgradeSum(const DROID_TEMPLATE *psTemplate, int player, F func, G propulsionFunc)
 {
 	return calcUpgradeSum(psTemplate->asParts, psTemplate->numWeaps, psTemplate->asWeaps, player, func, propulsionFunc);
 }
 
 template <typename F, typename G>
-static unsigned calcUpgradeSum(DROID *psDroid, int player, F func, G propulsionFunc)
+static unsigned calcUpgradeSum(const DROID *psDroid, int player, F func, G propulsionFunc)
 {
 	FilterDroidWeaps f = {psDroid->numWeaps, psDroid->asWeaps};
 	return calcUpgradeSum(psDroid->asBits, f.numWeaps, f.asWeaps, player, func, propulsionFunc);
@@ -1469,7 +1469,7 @@ static uint32_t calcBuild(T *obj)
 }
 
 /* Calculate the points required to build the template - used to calculate time*/
-UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
+UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate)
 {
 	return calcBuild(psTemplate);
 }
@@ -1480,7 +1480,7 @@ UDWORD calcDroidPoints(DROID *psDroid)
 }
 
 template <typename T>
-static uint32_t calcPower(T *obj)
+static uint32_t calcPower(const T *obj)
 {
 	return calcSum(obj, [](COMPONENT_STATS const &stat) {
 		return stat.buildPower;
@@ -1491,14 +1491,14 @@ static uint32_t calcPower(T *obj)
 }
 
 /* Calculate the power points required to build/maintain a template */
-UDWORD calcTemplatePower(DROID_TEMPLATE *psTemplate)
+UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate)
 {
 	return calcPower(psTemplate);
 }
 
 
 /* Calculate the power points required to build/maintain a droid */
-UDWORD calcDroidPower(DROID *psDroid)
+UDWORD calcDroidPower(const DROID *psDroid)
 {
 	return calcPower(psDroid);
 }
