@@ -26,6 +26,9 @@
 
 #include <list>
 
+#include <functional>
+typedef std::function<void (const int)> playerCallbackFunc; // callback function (that receives the player)
+
 #include "lib/framework/types.h"
 #include "lib/ivis_opengl/pieclip.h"
 
@@ -297,7 +300,7 @@ void intDisplayWidgets();
 bool intAddReticule();
 bool intAddPower();
 void intRemoveReticule();
-void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), WzString func = WzString(), QScriptEngine *engine = nullptr);
+void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), const playerCallbackFunc& callbackFunc = nullptr);
 void setReticuleFlash(int ButId, bool flash);
 
 /* Set the map view point to the world coordinates x,y */

@@ -152,7 +152,7 @@ void setCurrentStructQuantity(bool displayError);
 /* get a stat inc based on the name */
 int32_t getStructStatFromName(const WzString &name);
 /*check to see if the structure is 'doing' anything  - return true if idle*/
-bool  structureIdle(STRUCTURE *psBuilding);
+bool  structureIdle(const STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */
 bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
 /*sets the point new droids go to - x/y in world coords for a Factory*/
@@ -362,7 +362,7 @@ bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 
 /*checks the structure passed in is a Las Sat structure which is currently
 selected - returns true if valid*/
-bool lasSatStructSelected(STRUCTURE *psStruct);
+bool lasSatStructSelected(const STRUCTURE *psStruct);
 
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 

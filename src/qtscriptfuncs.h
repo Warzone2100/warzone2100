@@ -69,13 +69,13 @@ bool areaLabelCheck(DROID *psDroid);
 QScriptValue mapJsonToQScriptValue(QScriptEngine *engine, const nlohmann::json &instance, QScriptValue::PropertyFlags flags);
 
 // Utility conversion functions
-QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);
-QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine);
-QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine);
-QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine);
-QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine);
-QScriptValue convTemplate(DROID_TEMPLATE *psTemplate, QScriptEngine *engine);
-QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player);
+QScriptValue convDroid(const DROID *psDroid, QScriptEngine *engine);
+QScriptValue convStructure(const STRUCTURE *psStruct, QScriptEngine *engine);
+QScriptValue convObj(const BASE_OBJECT *psObj, QScriptEngine *engine);
+QScriptValue convFeature(const FEATURE *psFeature, QScriptEngine *engine);
+QScriptValue convMax(const BASE_OBJECT *psObj, QScriptEngine *engine);
+QScriptValue convTemplate(const DROID_TEMPLATE *psTemplate, QScriptEngine *engine);
+QScriptValue convResearch(const RESEARCH *psResearch, QScriptEngine *engine, int player);
 BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
 
 /// Dump script-relevant log info to separate file
@@ -88,7 +88,7 @@ QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine);
 QStandardItemModel *createLabelModel();
 
 /// Mark and show label
-void showLabel(const QString &key, bool clear_old = true, bool jump_to = true);
+void showLabel(const std::string &key, bool clear_old = true, bool jump_to = true);
 
 /// Show all labels or all currently active labels
 void markAllLabels(bool only_active);

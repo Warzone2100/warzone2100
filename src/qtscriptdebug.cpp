@@ -525,7 +525,7 @@ void ScriptDebugger::labelClicked()
 		QStandardItem *item = labelModel->itemFromIndex(labelModel->index(idx.row(), 0));
 		if (item)
 		{
-			showLabel(item->text());
+			showLabel(item->text().toStdString());
 		}
 	}
 }
@@ -569,7 +569,7 @@ void ScriptDebugger::labelClickedIdx(const QModelIndex &idx)
 	QStandardItem *item = labelModel->itemFromIndex(labelModel->index(idx.row(), 0));
 	if (item)
 	{
-		showLabel(item->text());
+		showLabel(item->text().toStdString());
 	}
 }
 

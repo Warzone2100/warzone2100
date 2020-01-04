@@ -86,6 +86,6 @@ void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, 
 
 bool findLastSave();
 
-void autoSave();
+bool autoSave();
 
 #endif // __INCLUDED_SRC_LOADSAVE_H__

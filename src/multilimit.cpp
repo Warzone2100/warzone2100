@@ -353,11 +353,11 @@ void createLimitSet()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void applyLimitSet()
+bool applyLimitSet()
 {
 	if (ingame.structureLimits.empty())
 	{
-		return;
+		return false;
 	}
 
 	// Get the limits and decode
@@ -441,6 +441,7 @@ void applyLimitSet()
 		RecursivelyDisableResearchByFlags(MPFLAGS_NO_UPLINK);
 	}
 	freeLimitSet();
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -1863,14 +1863,14 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 //__ deactived. Call resetArea() to reactivate it. The name of the event is
 //__ eventArea + the name of the label.
 //__
-bool triggerEventArea(const QString& label, DROID *psDroid)
+bool triggerEventArea(const std::string& label, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (auto *engine : scripts)
 	{
 		QScriptValueList args;
 		args += convDroid(psDroid, engine);
-		QString funcname = QString("eventArea" + label);
+		QString funcname = QString("eventArea" + QString::fromStdString(label));
 		debug(LOG_SCRIPT, "Triggering %s for %s", funcname.toUtf8().constData(),
 		      engine->globalObject().property("scriptName").toString().toUtf8().constData());
 		callFunction(engine, funcname, args);
