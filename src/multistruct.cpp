@@ -151,6 +151,7 @@ bool recvBuildFinished(NETQUEUE queue)
 		NETlogEntry("had to plonk down a building", SYNC_FLAG, player);
 #endif
 		triggerEventStructBuilt(psStruct, nullptr);
+		checkPlayerBuiltHQ(psStruct);
 	}
 	else
 	{

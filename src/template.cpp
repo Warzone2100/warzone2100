@@ -646,11 +646,6 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 
 	BODY_SIZE	iCapacity = (BODY_SIZE)psFactory->capacity;
 
-	if (!playerBuiltHQ)
-	{
-		playerBuiltHQ = structureExists(player, REF_HQ, true, false);
-	}
-
 	/* Add the templates to the list*/
 	for (DROID_TEMPLATE &i : localTemplates)
 	{
@@ -689,5 +684,13 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 				pList.push_back(psCurr);
 			}
 		}
+	}
+}
+
+void checkPlayerBuiltHQ(const STRUCTURE *psStruct)
+{
+	if (selectedPlayer == psStruct->player && psStruct->pStructureType->type == REF_HQ)
+	{
+		playerBuiltHQ = true;
 	}
 }

@@ -829,6 +829,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 			audio_StopObjTrack(psDroid, ID_SOUND_CONSTRUCTION_LOOP);
 		}
 		triggerEventStructBuilt(psStruct, psDroid);
+		checkPlayerBuiltHQ(psStruct);
 	}
 	else
 	{
@@ -6910,6 +6911,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			psNewStruct->status = SS_BUILT;
 			buildingComplete(psNewStruct);
 			triggerEventStructBuilt(psNewStruct, nullptr);
+			checkPlayerBuiltHQ(psNewStruct);
 		}
 
 		if (!bMultiPlayer)

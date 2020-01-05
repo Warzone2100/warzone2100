@@ -3781,6 +3781,11 @@ static bool loadMainFile(const std::string &fileName)
 {
 	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
 
+	if (save.contains("playerBuiltHQ"))
+	{
+		playerBuiltHQ = save.value("playerBuiltHQ").toBool();
+	}
+
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
 	{
@@ -3922,6 +3927,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("hostPlayer", NetPlay.hostPlayer);
 	save.setValue("bComms", NetPlay.bComms);
 	save.setValue("modList", getModList().c_str());
+	save.setValue("playerBuiltHQ", playerBuiltHQ);
 
 	return true;
 }

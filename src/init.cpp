@@ -1226,7 +1226,6 @@ bool stageThreeInitialise()
 
 	// Re-inititialise some static variables.
 
-	playerBuiltHQ = false;
 	bInTutorial = false;
 
 	resizeRadar();
@@ -1277,6 +1276,7 @@ bool stageThreeInitialise()
 			triggerEventCheatMode(true);
 		}
 		triggerEvent(TRIGGER_GAME_INIT);
+		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
 	}
 
 	return true;
