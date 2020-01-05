@@ -65,4 +65,6 @@ void listTemplates();
 void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr);
 bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate);
 
+void checkPlayerBuiltHQ(const STRUCTURE *psStruct);
+
 #endif // TEMPLATE_H
