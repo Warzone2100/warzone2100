@@ -12,6 +12,8 @@ uniform vec4 teamcolour; // the team colour of the model
 uniform int tcmask; // whether a tcmask texture exists for the model
 uniform int normalmap; // whether a normal map exists for the model
 uniform int specularmap; // whether a specular map exists for the model
+uniform int hasTangents; // whether tangents were calculated for model
+uniform mat4 NormalMatrix;
 uniform bool ecmEffect; // whether ECM special effect is enabled
 uniform bool alphaTest;
 uniform float graphicsCycle; // a periodically cycling value for special effects
@@ -28,11 +30,11 @@ uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in float vertexDistance;
-in vec3 normal, lightDir, eyeVec;
+in vec3 normal, lightDir, halfVec;
 in vec2 texCoord;
 #else
 varying float vertexDistance;
-varying vec3 normal, lightDir, eyeVec;
+varying vec3 normal, lightDir, halfVec;
 varying vec2 texCoord;
 #endif
 
@@ -44,42 +46,94 @@ out vec4 FragColor;
 
 void main()
 {
-	vec4 light = sceneColor * vec4(.2, .2, .2, 1.) + ambient;
-	vec3 N = normalize(normal);
-	vec3 L = normalize(lightDir);
-	float lambertTerm = dot(N, L);
-	if (lambertTerm > 0.0)
-	{
-		light += diffuse * lambertTerm;
-		vec3 E = normalize(eyeVec);
-		vec3 R = reflect(-L, N);
-		float s = pow(max(dot(R, E), 0.0), 10.0); // 10 is an arbitrary value for now
-		light += specular * s;
-	}
-
-	// Get color from texture unit 0, merge with lighting
 	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-	vec4 texColour = texture(Texture, texCoord) * light;
+	vec4 diffuseMap = texture(Texture, texCoord);
 	#else
-	vec4 texColour = texture2D(Texture, texCoord) * light;
+	vec4 diffuseMap = texture2D(Texture, texCoord);
 	#endif
 
-	vec4 fragColour;
-	if (tcmask == 1)
+	// Temporary replace strenght of light
+	vec4 ambientLight = ambient * vec4(0.5, 0.5, 0.5, 1.0);
+	vec4 diffuseLight = diffuse + vec4(1.0, 1.0, 1.0, 1.0);
+	vec4 specularLight = specular;
+
+	// Normal map implementations
+	vec3 N = normal;
+	if (normalmap != 0)
 	{
-		// Get tcmask information from texture unit 1
+		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+		vec3 normalFromMap = texture(TextureNormal, texCoord).xyz;
+		#else
+		vec3 normalFromMap = texture2D(TextureNormal, texCoord).xyz;
+		#endif
+
+		// Complete replace normal with new value
+		N = normalFromMap.xzy * 2.0 - 1.0;
+		
+		// To match wz's light
+		N.y = -N.y;
+
+		// For object-space normal map
+		if (hasTangents == 0)
+		{
+			N = (NormalMatrix * vec4(N, 0.0)).xyz;
+		}
+	}
+	N = normalize(N);
+
+	// Сalculate and combine final lightning
+	vec4 light = sceneColor;
+	vec3 L = normalize(lightDir);
+	float lambertTerm = max(dot(N, L), 0.0);
+
+	if (lambertTerm > 0.0)
+	{		
+		// Vanilla models shouldn't use diffuse light
+		float vanillaFactor = 0.0;
+
+		if (specularmap != 0)
+		{
+			#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+			vec4 specularFromMap = texture(TextureSpecular, texCoord);
+			#else
+			vec4 specularFromMap = texture2D(TextureSpecular, texCoord);
+			#endif
+
+			// Gaussian specular term computation
+			vec3 H = normalize(halfVec);
+			float angle = acos(dot(H, N));
+			float exponent = angle / 0.2;
+			exponent = -(exponent * exponent);
+			float gaussianTerm = exp(exponent);
+
+			light += specularLight * gaussianTerm * lambertTerm * specularFromMap;
+
+			// Neutralize factor for spec map
+			vanillaFactor = 1.0;
+		}
+
+		light += diffuseLight * lambertTerm * diffuseMap * vanillaFactor;
+	}
+	// NOTE: this doubled for non-spec map case to keep results similar to old shader
+	// We rely on specularmap to be either 1 or 0 to avoid adding another if
+	light += ambientLight * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+
+	vec4 fragColour;
+	if (tcmask != 0)
+	{
+		// Get mask for team colors from texture
 		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 		vec4 mask = texture(TextureTcmask, texCoord);
 		#else
 		vec4 mask = texture2D(TextureTcmask, texCoord);
 		#endif
-
+		
 		// Apply color using grain merge with tcmask
-		fragColour = (texColour + (teamcolour - 0.5) * mask.a) * colour;
+		fragColour = (light + (teamcolour - 0.5) * mask.a) * colour;
 	}
 	else
 	{
-		fragColour = texColour * colour;
+		fragColour = light * colour;
 	}
 
 	if (ecmEffect)

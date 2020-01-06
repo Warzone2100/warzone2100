@@ -29,51 +29,96 @@ layout(std140, set = 0, binding = 0) uniform cbuffer
 	float fogEnd;
 	float fogStart;
 	vec4 fogColor;
+	int hasTangents;
 };
 
 layout(location  = 0) in float vertexDistance;
 layout(location = 1) in vec3 normal;
 layout(location = 2) in vec3 lightDir;
-layout(location = 3) in vec3 eyeVec;
+layout(location = 3) in vec3 halfVec;
 layout(location = 4) in vec2 texCoord;
 
 layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	vec4 light = sceneColor * vec4(.2, .2, .2, 1.) + ambient;
-	vec3 N = normalize(normal);
+	vec4 diffuseMap = texture(Texture, texCoord);
+
+	// Temporary replace strenght of light
+	vec4 ambientLight = ambient * vec4(0.5, 0.5, 0.5, 1.0);
+	vec4 diffuseLight = diffuse + vec4(1.0, 1.0, 1.0, 1.0);
+	vec4 specularLight = specular;
+
+	// Normal map implementations
+	vec3 N = normal;
+	if (normalmap != 0)
+	{
+		vec3 normalFromMap = texture(TextureNormal, texCoord).xyz;
+
+		// Complete replace normal with new value
+		N = normalFromMap.xzy * 2.0 - 1.0;
+
+		// To match wz's light
+		N.y = -N.y;
+
+		// For object-space normal map
+		if (hasTangents == 0)
+		{
+			N = (NormalMatrix * vec4(N, 0.0)).xyz;
+		}
+	}
+	N = normalize(N);
+
+	// Сalculate and combine final lightning
+	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
-	float lambertTerm = dot(N, L);
+	float lambertTerm = max(dot(N, L), 0.0);
+
 	if (lambertTerm > 0.0)
 	{
-		light += diffuse * lambertTerm;
-		vec3 E = normalize(eyeVec);
-		vec3 R = reflect(-L, N);
-		float s = pow(max(dot(R, E), 0.0), 10.0); // 10 is an arbitrary value for now
-		light += specular * s;
-	}
+		// Vanilla models shouldn't use diffuse light
+		float vanillaFactor = 0.0;
 
-	// Get color from texture unit 0, merge with lighting
-	vec4 texColour = texture(Texture, texCoord) * light;
+		if (specularmap != 0)
+		{
+			vec4 specularFromMap = texture(TextureSpecular, texCoord);
+
+			// Gaussian specular term computation
+			vec3 H = normalize(halfVec);
+			float angle = acos(dot(H, N));
+			float exponent = angle / 0.2;
+			exponent = -(exponent * exponent);
+			float gaussianTerm = exp(exponent);
+
+			light += specularLight * gaussianTerm * lambertTerm * specularFromMap;
+
+			// Neutralize factor for spec map
+			vanillaFactor = 1.0;
+		}
+
+		light += diffuseLight * lambertTerm * diffuseMap * vanillaFactor;
+	}
+	// NOTE: this doubled for non-spec map case to keep results similar to old shader
+	// We rely on specularmap to be either 1 or 0 to avoid adding another if
+	light += ambientLight * diffuseMap * (1.0 + (1.0 - float(specularmap)));
 
 	vec4 fragColour;
-	if (tcmask == 1)
+	if (tcmask != 0)
 	{
-		// Get tcmask information from texture unit 1
+		// Get mask for team colors from texture
 		vec4 mask = texture(TextureTcmask, texCoord);
 
 		// Apply color using grain merge with tcmask
-		fragColour = (texColour + (teamcolour - 0.5) * mask.a) * colour;
+		fragColour = (light + (teamcolour - 0.5) * mask.a) * colour;
 	}
 	else
 	{
-		fragColour = texColour * colour;
+		fragColour = light * colour;
 	}
 
 	if (ecmEffect)
 	{
-		fragColour.a = 0.45 + 0.225 * graphicsCycle;
+		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
 
 	if (fogEnabled > 0)

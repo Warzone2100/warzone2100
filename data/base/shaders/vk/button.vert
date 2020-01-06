@@ -24,6 +24,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer
 	float fogEnd;
 	float fogStart;
 	vec4 fogColor;
+	int hasTangents;
 };
 
 layout(location = 0) in vec4 vertex;

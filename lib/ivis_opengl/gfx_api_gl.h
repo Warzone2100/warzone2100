@@ -156,6 +156,7 @@ private:
 		setUniforms(locations[18], cbuf.fogEnd);
 		setUniforms(locations[19], cbuf.fogBegin);
 		setUniforms(locations[20], cbuf.fogColour);
+		setUniforms(locations[21], cbuf.hasTangents);
 	}
 
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_BUTTON>& cbuf);
