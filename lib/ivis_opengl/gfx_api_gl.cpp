@@ -267,15 +267,15 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT, program_data{ "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogEnd", "fogStart", "fogColor" } }),
+			"fogEnd", "fogStart", "fogColor", "hasTangents" } }),
 	std::make_pair(SHADER_BUTTON, program_data{ "Button program", "shaders/button.vert", "shaders/button.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogEnd", "fogStart", "fogColor" } }),
+			"fogEnd", "fogStart", "fogColor", "hasTangents" } }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogEnd", "fogStart", "fogColor" } }),
+			"fogEnd", "fogStart", "fogColor", "hasTangents" } }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
 			"fogEnabled", "fogEnd", "fogStart", "fogColor" } }),
@@ -762,6 +762,7 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 	glBindAttribLocation(program, 1, "vertexTexCoord");
 	glBindAttribLocation(program, 2, "vertexColor");
 	glBindAttribLocation(program, 3, "vertexNormal");
+	glBindAttribLocation(program, 4, "vertexTangent");
 	ASSERT_OR_RETURN(, program, "Could not create shader program!");
 
 	char* shaderContents = nullptr;
@@ -1168,6 +1169,10 @@ void gl_context::bind_vertex_buffers(const std::size_t& first, const std::vector
 	{
 		const auto& buffer_desc = current_program->vertex_buffer_desc[first + i];
 		auto* buffer = static_cast<gl_buffer*>(std::get<0>(vertex_buffers_offset[i]));
+		if (buffer == nullptr)
+		{
+			continue;
+		}
 		ASSERT(buffer->usage == gfx_api::buffer::usage::vertex_buffer, "bind_vertex_buffers called with non-vertex-buffer");
 		buffer->bind();
 		for (const auto& attribute : buffer_desc.attributes)

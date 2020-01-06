@@ -120,6 +120,24 @@ struct SHAPE
 static std::vector<ShadowcastingShape> scshapes;
 static std::vector<SHAPE> tshapes;
 static std::vector<SHAPE> shapes;
+static gfx_api::buffer* pZeroedVertexBuffer = nullptr;
+
+static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
+{
+	static size_t currentSize = 0;
+	if (!pZeroedVertexBuffer || (currentSize < size))
+	{
+		if (pZeroedVertexBuffer)
+		{
+			delete pZeroedVertexBuffer;
+		}
+		pZeroedVertexBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		std::vector<UBYTE> tempZeroes(size, 0);
+		pZeroedVertexBuffer->upload(size, tempZeroes.data());
+		currentSize = size;
+	}
+	return pZeroedVertexBuffer;
+}
 
 static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix)
 {
@@ -127,19 +145,21 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
 	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
 
+	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
+
 	const PIELIGHT colour = WZCOL_WHITE;
 	gfx_api::Draw3DButtonPSO::get().bind();
 	gfx_api::constant_buffer_type<SHADER_BUTTON> cbuf{
-		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), 0.f, tcmask ? 1 : 0, 0, 2, 3, 0, 0, 0.f, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
-		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), 0.f, 0.f, glm::vec4(0.f) };
+		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), 0.f, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, 0, 0, 0.f, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
+		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), 0.f, 0.f, glm::vec4(0.f), shape->buffers[VBO_TANGENT] != nullptr };
 	gfx_api::Draw3DButtonPSO::get().bind_constants(cbuf);
 
 	gfx_api::Draw3DButtonPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
-	gfx_api::Draw3DButtonPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+	gfx_api::Draw3DButtonPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 	gfx_api::Draw3DButtonPSO::get().draw_elements(shape->polys.size() * 3, 0);
 	polyCount += shape->polys.size();
-	gfx_api::Draw3DButtonPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+	gfx_api::Draw3DButtonPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().unbind_index_buffer(*shape->buffers[VBO_INDEX]);
 }
 
@@ -179,9 +199,10 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
 
 	gfx_api::constant_buffer_type<shader> cbuf{
-		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), stretch, tcmask ? 1 : 0, 0, 2, 3, ecmState, !(pieFlag & pie_PREMULTIPLIED), timestate, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
-		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, 0.f, 0.f, glm::vec4(0.f) };
+		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), stretch, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, ecmState, !(pieFlag & pie_PREMULTIPLIED), timestate, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
+		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, 0.f, 0.f, glm::vec4(0.f), shape->buffers[VBO_TANGENT] != nullptr };
 
+	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
@@ -190,7 +211,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 		AdditivePSO::get().bind_constants(cbuf);
 		if (currentState != lastState)
 		{
-			AdditivePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+			AdditivePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			AdditivePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 		}
 		AdditivePSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
@@ -202,7 +223,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 		AlphaPSO::get().bind_constants(cbuf);
 		if (currentState != lastState)
 		{
-			AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+			AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			AlphaPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 		}
 		AlphaPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
@@ -214,7 +235,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 		PremultipliedPSO::get().bind_constants(cbuf);
 		if (currentState != lastState)
 		{
-			PremultipliedPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+			PremultipliedPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			PremultipliedPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 		}
 		PremultipliedPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
@@ -226,7 +247,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 		OpaquePSO::get().bind_constants(cbuf);
 		if (currentState != lastState)
 		{
-			OpaquePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+			OpaquePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			OpaquePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 		}
 		OpaquePSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
@@ -597,6 +618,11 @@ void pie_CleanUp()
 	tshapes.clear();
 	shapes.clear();
 	scshapes.clear();
+	if (pZeroedVertexBuffer)
+	{
+		delete pZeroedVertexBuffer;
+		pZeroedVertexBuffer = nullptr;
+	}
 }
 
 bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)

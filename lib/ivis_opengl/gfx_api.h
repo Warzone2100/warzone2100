@@ -427,6 +427,7 @@ namespace gfx_api
 	constexpr std::size_t texcoord = 1;
 	constexpr std::size_t color = 2;
 	constexpr std::size_t normal = 3;
+	constexpr std::size_t tangent = 4;
 
 	using notexture = std::tuple<>;
 
@@ -454,6 +455,7 @@ namespace gfx_api
 		float fogEnd;
 		float fogBegin;
 		glm::vec4 fogColour;
+		int hasTangents;
 	};
 
 	template<>
@@ -480,6 +482,7 @@ namespace gfx_api
 		float fogEnd;
 		float fogBegin;
 		glm::vec4 fogColour;
+		int hasTangents;
 	};
 
 	template<>
@@ -506,6 +509,7 @@ namespace gfx_api
 		float fogEnd;
 		float fogBegin;
 		glm::vec4 fogColour;
+		int hasTangents;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>
@@ -513,7 +517,8 @@ namespace gfx_api
 	std::tuple<
 	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
 	vertex_buffer_description<12, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,
-	vertex_buffer_description<8, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, 0>>
+	vertex_buffer_description<8, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, 0>>,
+	vertex_buffer_description<16, vertex_attribute_description<tangent, gfx_api::vertex_attribute_type::float4, 0>>
 	>,
 	std::tuple<
 	texture_description<0, sampler_type::anisotropic>, // diffuse
