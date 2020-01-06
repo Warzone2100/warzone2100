@@ -166,14 +166,11 @@ function reticuleDesignCheck()
 	{
 		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
 		setMiniMap(true);
-		setDesign(true);
 	}
 	else
 	{
 		setReticuleButton(4, _("Design - construct HQ first"), "", "");
 		setMiniMap(false);
-		// Will enable templates that are researched whenever the reticule buttons update.
-		setDesign(false);
 	}
 }
 
@@ -264,7 +261,8 @@ function setupGame()
 
 	// Disable by default
 	setMiniMap(false);
-	setDesign(false);
+	// Enable all templates
+	setDesign(true);
 
 	setMainReticule();
 	showInterface();
