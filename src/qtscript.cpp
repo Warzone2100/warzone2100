@@ -68,7 +68,6 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
-#include <QtCore/QElapsedTimer>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QFileDialog>
 
@@ -98,6 +97,10 @@
 #include <set>
 #include <memory>
 #include <utility>
+#include <unordered_map>
+#include <sstream>
+#include <iomanip>
+#include <chrono>
 
 #include "qtscriptdebug.h"
 #include "qtscriptfuncs.h"
@@ -177,9 +180,9 @@ typedef struct monitor_bin
 	uint64_t time;
 	monitor_bin() : worst(0),  worstGameTime(0), calls(0), overMaxTimeCalls(0), overHalfMaxTimeCalls(0), time(0) {}
 } MONITOR_BIN;
-typedef QHash<QString, MONITOR_BIN> MONITOR;
-static QHash<QScriptEngine *, MONITOR *> monitors;
-static QHash<QScriptEngine *, QStringList> eventNamespaces; // separate event namespaces for libraries
+typedef std::unordered_map<std::string, MONITOR_BIN> MONITOR;
+static std::unordered_map<QScriptEngine *, MONITOR *> monitors;
+static std::unordered_map<QScriptEngine *, QStringList> eventNamespaces; // separate event namespaces for libraries
 
 static MODELMAP models;
 static QStandardItemModel *triggerModel;
@@ -196,6 +199,41 @@ bool bInTutorial = false;
 void doNotSaveGlobal(const QString &global)
 {
 	internalNamespace.insert(global);
+}
+
+template<typename Func>
+void executeWithPerformanceMonitoring(QScriptEngine *engine, const std::string &function, Func f)
+{
+	using microDuration = std::chrono::duration<uint64_t, std::micro>;
+	auto time_begin = std::chrono::steady_clock::now();
+	f(); // execute provided Func f
+	auto duration_microsec = std::chrono::duration_cast<microDuration>(std::chrono::steady_clock::now() - time_begin);
+	int ticks = duration_microsec.count();
+	MONITOR *monitor = monitors.at(engine); // pick right one for this engine
+	MONITOR_BIN m;
+	MONITOR::iterator it = monitor->find(function);
+	if (it != monitor->end())
+	{
+		m = it->second;
+	}
+	if (ticks > MAX_US)
+	{
+		debug(LOG_SCRIPT, "%s took %dus at time %d", function.c_str(), ticks, wzGetTicks());
+		m.overMaxTimeCalls++;
+	}
+	else if (ticks > HALF_MAX_US)
+	{
+		m.overHalfMaxTimeCalls++;
+	}
+	m.calls++;
+	if (ticks > m.worst)
+	{
+		m.worst = ticks;
+		m.worstGameTime = gameTime;
+	}
+	m.time += ticks;
+	monitor->insert(MONITOR::value_type(function, m));
+
 }
 
 // Call a function by name
@@ -222,33 +260,12 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 		debug(level, "called function (%s) not defined", function.toUtf8().constData());
 		return false;
 	}
-	QElapsedTimer timer;
-	timer.start();
-	QScriptValue result = value.call(QScriptValue(), args);
-	int ticks = timer.nsecsElapsed() / 1000;
-	MONITOR *monitor = monitors.value(engine); // pick right one for this engine
-	MONITOR_BIN m;
-	if (monitor->contains(function))
-	{
-		m = monitor->value(function);
-	}
-	if (ticks > MAX_US)
-	{
-		debug(LOG_SCRIPT, "%s took %dus at time %d", function.toUtf8().constData(), ticks, wzGetTicks());
-		m.overMaxTimeCalls++;
-	}
-	else if (ticks > HALF_MAX_US)
-	{
-		m.overHalfMaxTimeCalls++;
-	}
-	m.calls++;
-	if (ticks > m.worst)
-	{
-		m.worst = ticks;
-		m.worstGameTime = gameTime;
-	}
-	m.time += ticks;
-	monitor->insert(function, m);
+
+	QScriptValue result;
+	executeWithPerformanceMonitoring(engine, function.toStdString(), [&result, &value, &args](){
+		result = value.call(QScriptValue(), args);
+	});
+
 	if (engine->hasUncaughtException())
 	{
 		int line = engine->uncaughtExceptionLineNumber();
@@ -515,20 +532,24 @@ bool shutdownScripts()
 	triggerModel = nullptr;
 	for (auto *engine : scripts)
 	{
-		MONITOR *monitor = monitors.value(engine);
-		QString scriptName = engine->globalObject().property("scriptName").toString();
+		MONITOR *monitor = monitors.at(engine);
+		WzString scriptName = QStringToWzString(engine->globalObject().property("scriptName").toString());
 		int me = engine->globalObject().property("me").toInt32();
 		dumpScriptLog(scriptName, me, "=== PERFORMANCE DATA ===\n");
 		dumpScriptLog(scriptName, me, "    calls | avg (usec) | worst (usec) | worst call at | >=limit | >=limit/2 | function\n");
-		for (MONITOR::const_iterator iter = monitor->constBegin(); iter != monitor->constEnd(); ++iter)
+		for (MONITOR::const_iterator iter = monitor->begin(); iter != monitor->end(); ++iter)
 		{
-			const QString& function = iter.key();
-			MONITOR_BIN m = iter.value();
-			QString info = QString("%1 | %2 | %3 | %4 | %5 | %6 | %7\n")
-			               .arg(m.calls, 9).arg(m.time / m.calls, 10).arg(m.worst, 12)
-			               .arg(m.worstGameTime, 13).arg(m.overMaxTimeCalls, 7)
-			               .arg(m.overHalfMaxTimeCalls, 9).arg(function);
-			dumpScriptLog(scriptName, me, info);
+			const std::string &function = iter->first;
+			MONITOR_BIN m = iter->second;
+			std::ostringstream info;
+			info << std::right << std::setw(9) << m.calls << " | ";
+			info << std::right << std::setw(10) << (m.time / m.calls) << " | ";
+			info << std::right << std::setw(12) << m.worst << " | ";
+			info << std::right << std::setw(13) << m.worstGameTime << " | ";
+			info << std::right << std::setw(7) << m.overMaxTimeCalls << " | ";
+			info << std::right << std::setw(9) << m.overHalfMaxTimeCalls << " | ";
+			info << function << "\n";
+			dumpScriptLog(scriptName, me, info.str());
 		}
 		monitor->clear();
 		delete monitor;
@@ -537,6 +558,7 @@ bool shutdownScripts()
 	timers.clear();
 	internalNamespace.clear();
 	monitors.clear();
+	eventNamespaces.clear();
 	while (!scripts.isEmpty())
 	{
 		delete scripts.takeFirst();
@@ -891,7 +913,7 @@ QScriptEngine *loadPlayerScript(WzString const &path, int player, AIDifficulty d
 	scripts.push_back(engine);
 
 	MONITOR *monitor = new MONITOR;
-	monitors.insert(engine, monitor);
+	monitors[engine] = monitor;
 
 	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().c_str());
 	return engine;

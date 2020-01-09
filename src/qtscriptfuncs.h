@@ -79,7 +79,7 @@ QScriptValue convResearch(const RESEARCH *psResearch, QScriptEngine *engine, int
 BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
 
 /// Dump script-relevant log info to separate file
-void dumpScriptLog(const QString &scriptName, int me, const QString &info);
+void dumpScriptLog(const WzString &scriptName, int me, const std::string &info);
 
 // Script functions useful also in qtscript.cpp
 QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine);
