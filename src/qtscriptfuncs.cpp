@@ -2182,14 +2182,14 @@ static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
 	return wrap_(wzapi::enumDroid, context, engine);
 }
 
-void dumpScriptLog(const QString &scriptName, int me, const QString &info)
+void dumpScriptLog(const WzString &scriptName, int me, const std::string &info)
 {
-	QString path = PHYSFS_getWriteDir();
-	path += "/logs/" + scriptName + "." + QString::number(me) + ".log";
-	FILE *fp = fopen(path.toUtf8().constData(), "a");
+	WzString path = PHYSFS_getWriteDir();
+	path += WzString("/logs/") + scriptName + "." + WzString::number(me) + ".log";
+	FILE *fp = fopen(path.toUtf8().c_str(), "a"); // TODO: This will fail for unicode paths on Windows. Should use PHYSFS to open / write files
 	if (fp)
 	{
-		fputs(info.toUtf8().constData(), fp);
+		fputs(info.c_str(), fp);
 		fclose(fp);
 	}
 }
@@ -2200,23 +2200,23 @@ void dumpScriptLog(const QString &scriptName, int me, const QString &info)
 //--
 static QScriptValue js_dump(QScriptContext *context, QScriptEngine *engine)
 {
-	QString result;
+	std::string result;
 	for (int i = 0; i < context->argumentCount(); ++i)
 	{
 		if (i != 0)
 		{
-			result.append(QLatin1String(" "));
+			result.append(" ");
 		}
-		QString s = context->argument(i).toString();
+		QString qStr = context->argument(i).toString();
 		if (context->state() == QScriptContext::ExceptionState)
 		{
 			break;
 		}
-		result.append(s);
+		result.append(qStr.toStdString());
 	}
 	result += "\n";
 
-	QString scriptName = engine->globalObject().property("scriptName").toString();
+	WzString scriptName = QStringToWzString(engine->globalObject().property("scriptName").toString());
 	int me = engine->globalObject().property("me").toInt32();
 	dumpScriptLog(scriptName, me, result);
 	return QScriptValue();
