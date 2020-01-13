@@ -60,7 +60,7 @@ void groupRemoveObject(BASE_OBJECT *psObj);
 bool registerFunctions(QScriptEngine *engine, const QString& scriptName);
 bool unregisterFunctions(QScriptEngine *engine);
 
-bool saveGroups(WzConfig &ini, QScriptEngine *engine);
+bool saveGroups(nlohmann::json &result, QScriptEngine *engine);
 bool loadGroup(QScriptEngine *engine, int groupId, int objId);
 void prepareLabels();
 
