@@ -1934,6 +1934,9 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 
 	if (psFeature->psStats->subType == FEAT_BUILDING
 	    || psFeature->psStats->subType == FEAT_SKYSCRAPER
+	    || psFeature->psStats->subType == FEAT_GEN_ARTE
+	    || psFeature->psStats->subType == FEAT_BOULDER
+	    || psFeature->psStats->subType == FEAT_VEHICLE
 	    || psFeature->psStats->subType == FEAT_OIL_DRUM)
 	{
 		/* these cast a shadow */
