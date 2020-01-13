@@ -927,22 +927,18 @@ bool loadGroup(QScriptEngine *engine, int groupId, int objId)
 	return groupAddObject(psObj, groupId, engine);
 }
 
-bool saveGroups(WzConfig &ini, QScriptEngine *engine)
+bool saveGroups(nlohmann::json &result, QScriptEngine *engine)
 {
 	// Save group info as a list of group memberships for each droid
 	GROUPMAP *psMap = getGroupMap(engine);
 	ASSERT_OR_RETURN(false, psMap, "Non-existent groupmap for engine");
 	for (GROUPMAP::const_iterator i = psMap->begin(); i != psMap->end(); ++i)
 	{
-		std::vector<WzString> value;
 		BASE_OBJECT *psObj = i->first;
 		ASSERT(!isDead(psObj), "Wanted to save dead %s to savegame!", objInfo(psObj));
-		if (ini.contains(WzString::number(psObj->id)))
-		{
-			value.push_back(ini.value(WzString::number(psObj->id)).toWzString());
-		}
+		std::vector<WzString> value = json_getValue(result, WzString::number(psObj->id)).toWzStringList();
 		value.push_back(WzString::number(i->second));
-		ini.setValue(WzString::number(psObj->id), value);
+		result[WzString::number(psObj->id).toUtf8()] = value;
 	}
 	return true;
 }

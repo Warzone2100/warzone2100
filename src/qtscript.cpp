@@ -114,6 +114,17 @@ typedef QList<QStandardItem *> QStandardItemList;
 static bool selectionChanged = false;
 extern bool doUpdateModels; // ugh-ly hack; fix with signal when moc-ing this file
 
+typedef uint64_t uniqueTimerID;
+class timerAdditionalData
+{
+public:
+	virtual ~timerAdditionalData() { }
+public:
+	virtual void onTimerDelete(uniqueTimerID, BASE_OBJECT*) { };
+};
+
+typedef std::function<void (uniqueTimerID, BASE_OBJECT*, timerAdditionalData *)> TimerFunc;
+
 enum timerType
 {
 	TIMER_REPEAT, TIMER_ONESHOT_READY, TIMER_ONESHOT_DONE
@@ -121,24 +132,61 @@ enum timerType
 
 struct timerNode
 {
-	QString function;
+	uniqueTimerID timerID;
+	TimerFunc function;
+	std::string timerName;
 	QScriptEngine *engine;
 	int baseobj;
 	OBJECT_TYPE baseobjtype;
-	QString stringarg;
+	timerAdditionalData* additionalTimerFuncParam;
 	int frameTime;
 	int ms;
 	int player;
 	int calls;
 	timerType type;
-	timerNode() : engine(nullptr), baseobjtype(OBJ_NUM_TYPES) {}
-	timerNode(QScriptEngine *caller, QString val, int plr, int frame)
-		: function(std::move(val)), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
+	timerNode() : engine(nullptr), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(nullptr) {}
+	timerNode(QScriptEngine *caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, timerAdditionalData* additionalParam = nullptr)
+		: function(func), timerName(timerName), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(additionalParam),
+			frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
+	~timerNode()
+	{
+		if (additionalTimerFuncParam)
+		{
+			additionalTimerFuncParam->onTimerDelete(timerID, IdToObject(baseobjtype, baseobj, player));
+		}
+	}
 	bool operator== (const timerNode &t)
 	{
-		return function == t.function && player == t.player;
+		return (timerID == t.timerID) && (timerName == t.timerName) && (player == t.player);
 	}
 	// implement operator less TODO
+
+	timerNode(timerNode&& rhs)           // move constructor
+	: timerNode()
+    {
+		swap(rhs);
+    }
+
+private:
+	// non-copyable
+	timerNode(const timerNode&) = delete;
+	timerNode& operator=(const timerNode&) = delete;
+
+	void swap(timerNode& _rhs)
+	{
+		std::swap(timerID, _rhs.timerID);
+		std::swap(function, _rhs.function);
+		std::swap(timerName, _rhs.timerName);
+		std::swap(engine, _rhs.engine);
+		std::swap(baseobj, _rhs.baseobj);
+		std::swap(baseobjtype, _rhs.baseobjtype);
+		std::swap(additionalTimerFuncParam, _rhs.additionalTimerFuncParam);
+		std::swap(frameTime, _rhs.frameTime);
+		std::swap(ms, _rhs.ms);
+		std::swap(player, _rhs.player);
+		std::swap(calls, _rhs.calls);
+		std::swap(type, _rhs.type);
+	}
 };
 
 #define MAX_US 20000
@@ -147,7 +195,41 @@ struct timerNode
 /// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 /// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
 /// host, we do not need to worry about each peer simulating the world differently.
-static QList<timerNode> timers;
+static std::list<timerNode> timers;
+static uniqueTimerID lastTimerID = 0;
+static std::unordered_map<uniqueTimerID, std::list<timerNode>::iterator> timerIDMap; // a map from uniqueTimerID -> entry in the timers list
+
+uniqueTimerID getNextAvailableTimerID()
+{
+	do {
+		++lastTimerID;
+	} while (timerIDMap.count(lastTimerID) > 0);
+	return lastTimerID;
+}
+
+uniqueTimerID setTimer(QScriptEngine *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName = "", const BASE_OBJECT * obj = nullptr, timerType type = TIMER_REPEAT, timerAdditionalData* additionalParam = nullptr)
+{
+	uniqueTimerID newTimerID = getNextAvailableTimerID();
+	timerNode node(caller, timerFunc, timerName, player, milliseconds, additionalParam);
+	if (obj != nullptr)
+	{
+		node.baseobj = obj->id;
+		node.baseobjtype = obj->type;
+	}
+	node.type = type;
+	node.timerID = newTimerID;
+	auto inserted_iter = timers.emplace(timers.end(), std::move(node));
+	timerIDMap[newTimerID] = inserted_iter;
+	return newTimerID;
+}
+
+// internal-only function that adds a Timer node (used for restoring saved games)
+void addTimerNode(timerNode&& node)
+{
+	ASSERT(timerIDMap.count(node.timerID) == 0, "Duplicate timerID found: %s", WzString::number(node.timerID).toUtf8().c_str());
+	auto inserted_iter = timers.emplace(timers.end(), std::move(node));
+	timerIDMap[inserted_iter->timerID] = inserted_iter;
+}
 
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
 static QList<QScriptEngine *> scripts;
@@ -300,32 +382,94 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 //--   setTimer("conDroids", 4000);
 //-- ```
 //--
+class qtscript_timer_additionaldata : public timerAdditionalData
+{
+public:
+	QString stringArg;
+	qtscript_timer_additionaldata(const QString& _stringArg)
+	: stringArg(_stringArg)
+	{ }
+};
 static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
 	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
 	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, funcName, player, ms.toInt32());
+
 	QScriptValue value = engine->globalObject().property(funcName); // check existence
 	SCRIPT_ASSERT(context, value.isValid() && value.isFunction(), "No such function: %s",
 	              funcName.toUtf8().constData());
+
+	QString stringArg;
+	BASE_OBJECT *psObj = nullptr;
 	if (context->argumentCount() == 3)
 	{
 		QScriptValue obj = context->argument(2);
 		if (obj.isString())
 		{
-			node.stringarg = obj.toString();
+			stringArg = obj.toString();
 		}
 		else // is game object
 		{
-			node.baseobj = obj.property("id").toInt32();
-			node.baseobjtype = (OBJECT_TYPE)obj.property("type").toInt32();
+			int baseobj = obj.property("id").toInt32();
+			OBJECT_TYPE baseobjtype = (OBJECT_TYPE)obj.property("type").toInt32();
+			psObj = IdToObject(baseobjtype, baseobj, player);
 		}
 	}
-	node.type = TIMER_REPEAT;
-	timers.push_back(node);
+
+	setTimer(engine
+	  // timerFunc
+	, [engine, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
+		qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParams);
+		QScriptValueList args;
+		if (baseObject != nullptr)
+		{
+			args += convMax(baseObject, engine);
+		}
+		else if (pData && !(pData->stringArg.isEmpty()))
+		{
+			args += pData->stringArg;
+		}
+		callFunction(engine, funcName, args, true);
+	}
+	, player, ms.toInt32(), funcName.toStdString(), psObj, TIMER_REPEAT
+	// additionalParams
+	, new qtscript_timer_additionaldata(stringArg));
+
 	return QScriptValue();
+}
+
+// removes any timer(s) that satisfy _pred
+template< class UnaryPredicate >
+std::vector<uniqueTimerID> removeTimersIf(UnaryPredicate _pred)
+{
+	std::vector<uniqueTimerID> removedTimerIDs;
+	timers.remove_if([_pred, &removedTimerIDs](const timerNode& node) {
+		if (_pred(node))
+		{
+			removedTimerIDs.push_back(node.timerID);
+			return true;
+		}
+		return false;
+	});
+	for (const auto &timerID : removedTimerIDs)
+	{
+		timerIDMap.erase(timerID);
+	}
+	return removedTimerIDs;
+}
+
+bool removeTimer(uniqueTimerID timerID)
+{
+	auto it = timerIDMap.find(timerID);
+	if (it != timerIDMap.end())
+	{
+		timers.erase(it->second);
+		timerIDMap.erase(it);
+		return true;
+	}
+	return false;
 }
 
 //-- ## removeTimer(function)
@@ -336,22 +480,17 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
-	QString function = context->argument(0).toString();
+	std::string function = context->argument(0).toString().toStdString();
 	int player = engine->globalObject().property("me").toInt32();
-	int i, size = timers.size();
-	for (i = 0; i < size; ++i)
+	std::vector<uniqueTimerID> removedTimerIDs = removeTimersIf(
+		[engine, function, player](const timerNode& node)
 	{
-		timerNode node = timers.at(i);
-		if (node.function == function && node.player == player)
-		{
-			timers.removeAt(i);
-			break;
-		}
-	}
-	if (i == size)
+		return (node.engine == engine) && (node.timerName == function) && (node.player == player);
+	});
+	if (removedTimerIDs.empty())
 	{
 		// Friendly warning
-		QString warnName = function.left(15) + "...";
+		QString warnName = QString::fromStdString(function).left(15) + "...";
 		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.toUtf8().constData());
 	}
 	return QScriptValue();
@@ -383,22 +522,42 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 		ms = context->argument(1).toInt32();
 	}
 	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, funcName, player, ms);
+
+	QString stringArg;
+	BASE_OBJECT *psObj = nullptr;
 	if (context->argumentCount() == 3)
 	{
 		QScriptValue obj = context->argument(2);
 		if (obj.isString())
 		{
-			node.stringarg = obj.toString();
+			stringArg = obj.toString();
 		}
 		else // is game object
 		{
-			node.baseobj = obj.property("id").toInt32();
-			node.baseobjtype = (OBJECT_TYPE)obj.property("type").toInt32();
+			int baseobj = obj.property("id").toInt32();
+			OBJECT_TYPE baseobjtype = (OBJECT_TYPE)obj.property("type").toInt32();
+			psObj = IdToObject(baseobjtype, baseobj, player);
 		}
 	}
-	node.type = TIMER_ONESHOT_READY;
-	timers.push_back(node);
+
+	setTimer(engine
+	  // timerFunc
+	, [engine, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
+		qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParams);
+		QScriptValueList args;
+		if (baseObject != nullptr)
+		{
+			args += convMax(baseObject, engine);
+		}
+		else if (pData && !(pData->stringArg.isEmpty()))
+		{
+			args += pData->stringArg;
+		}
+		callFunction(engine, funcName, args, true);
+	}
+	, player, ms, funcName.toStdString(), psObj, TIMER_ONESHOT_READY
+	// additionalParams
+	, new qtscript_timer_additionaldata(stringArg));
 	return QScriptValue();
 }
 
@@ -423,18 +582,10 @@ static QScriptValue js_profile(QScriptContext *context, QScriptEngine *engine)
 void scriptRemoveObject(BASE_OBJECT *psObj)
 {
 	// Weed out timers with dead objects
-	for (int i = 0; i < timers.count();)
+	removeTimersIf([psObj](const timerNode& node)
 	{
-		const timerNode node = timers.at(i);
-		if (node.baseobj == psObj->id)
-		{
-			timers.removeAt(i);
-		}
-		else
-		{
-			i++;
-		}
-	}
+		return (node.baseobj == psObj->id);
+	});
 	groupRemoveObject(psObj);
 }
 
@@ -556,6 +707,8 @@ bool shutdownScripts()
 		unregisterFunctions(engine);
 	}
 	timers.clear();
+	lastTimerID = 0;
+	timerIDMap.clear();
 	internalNamespace.clear();
 	monitors.clear();
 	eventNamespaces.clear();
@@ -586,47 +739,29 @@ bool updateScripts()
 		engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	// Weed out dead timers
-	for (int i = 0; i < timers.count();)
+	removeTimersIf([](const timerNode& node)
 	{
-		const timerNode node = timers.at(i);
-		if (node.type == TIMER_ONESHOT_DONE)
-		{
-			timers.removeAt(i);
-		}
-		else
-		{
-			i++;
-		}
-	}
+		return (node.type == TIMER_ONESHOT_DONE);
+	});
 	// Check for timers, and run them if applicable.
 	// TODO - load balancing
-	QList<timerNode> runlist; // make a new list here, since we might trample all over the timer list during execution
-	QList<timerNode>::iterator iter;
-	for (iter = timers.begin(); iter != timers.end(); iter++)
+	std::vector<timerNode*> runlist; // make a new list here, since we might trample all over the timer list during execution
+	for (auto &node : timers)
 	{
-		if (iter->frameTime <= gameTime)
+		if (node.frameTime <= gameTime)
 		{
-			iter->frameTime = iter->ms + gameTime;	// update for next invokation
-			if (iter->type == TIMER_ONESHOT_READY)
+			node.frameTime = node.ms + gameTime;	// update for next invokation
+			if (node.type == TIMER_ONESHOT_READY)
 			{
-				iter->type = TIMER_ONESHOT_DONE; // unless there is none
+				node.type = TIMER_ONESHOT_DONE; // unless there is none
 			}
-			iter->calls++;
-			runlist.append(*iter);
+			node.calls++;
+			runlist.push_back(&node);
 		}
 	}
-	for (iter = runlist.begin(); iter != runlist.end(); iter++)
+	for (auto &node : runlist)
 	{
-		QScriptValueList args;
-		if (iter->baseobj > 0)
-		{
-			args += convMax(IdToObject(iter->baseobjtype, iter->baseobj, iter->player), iter->engine);
-		}
-		else if (!iter->stringarg.isEmpty())
-		{
-			args += iter->stringarg;
-		}
-		callFunction(iter->engine, iter->function, args, true);
+		node->function(node->timerID, IdToObject(node->baseobjtype, node->baseobj, node->player), node->additionalTimerFuncParam);
 	}
 
 	if (globalDialog && doUpdateModels)
@@ -795,6 +930,24 @@ ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview)
 	return data;
 }
 
+void setGlobalVariables(QScriptEngine *engine, const nlohmann::json& variables)
+{
+	if (!variables.is_object())
+	{
+		ASSERT(false, "setGlobalVariables expects a JSON object");
+		return;
+	}
+	for (auto it : variables.items())
+	{
+		ASSERT(!it.key().empty(), "Empty key");
+		engine->globalObject().setProperty(
+			QString::fromStdString(it.key()),
+			mapJsonToQScriptValue(engine, it.value(), QScriptValue::ReadOnly | QScriptValue::Undeletable),
+			QScriptValue::ReadOnly | QScriptValue::Undeletable
+		);
+	}
+}
+
 QScriptEngine *loadPlayerScript(WzString const &path, int player, AIDifficulty difficulty)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
@@ -822,31 +975,32 @@ QScriptEngine *loadPlayerScript(WzString const &path, int player, AIDifficulty d
 	engine->globalObject().setProperty("include", engine->newFunction(js_include));
 	engine->globalObject().setProperty("namespace", engine->newFunction(js_namespace));
 
+	json globalVars;
 	// Special global variables
 	//== * ```version``` Current version of the game, set in *major.minor* format.
-	engine->globalObject().setProperty("version", QString(version_getVersionString()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["version"] = version_getVersionString();
 	//== * ```selectedPlayer``` The player controlled by the client on which the script runs.
-	engine->globalObject().setProperty("selectedPlayer", selectedPlayer, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["selectedPlayer"] = selectedPlayer;
 	//== * ```gameTime``` The current game time. Updated before every invokation of a script.
-	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["gameTime"] = gameTime;
 	//== * ```modList``` The current loaded mods.
-	engine->globalObject().setProperty("modList", QString(getModList().c_str()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["modList"] = getModList();
 
 
 	//== * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
 	//== ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
 	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
-		engine->globalObject().setProperty("difficulty", static_cast<int8_t>(difficulty), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		globalVars["difficulty"] = static_cast<int8_t>(difficulty);
 	}
 	else // campaign
 	{
-		engine->globalObject().setProperty("difficulty", (int)getDifficultyLevel(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		globalVars["difficulty"] = (int)getDifficultyLevel();
 	}
 	//== * ```mapName``` The name of the current map.
-	engine->globalObject().setProperty("mapName", QString(game.map), QScriptValue::ReadOnly | QScriptValue::Undeletable);  // QString cast to work around bug in Qt5 QScriptValue(char *) constructor.
+	globalVars["mapName"] = game.map;
 	//== * ```tilesetType``` The area name of the map.
-	QString tilesetType("CUSTOM");
+	std::string tilesetType("CUSTOM");
 	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
 		tilesetType = "ARIZONA";
@@ -859,27 +1013,29 @@ QScriptEngine *loadPlayerScript(WzString const &path, int player, AIDifficulty d
 	{
 		tilesetType = "ROCKIES";
 	}
-	engine->globalObject().setProperty("tilesetType", tilesetType, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["tilesetType"] = tilesetType;
 	//== * ```baseType``` The type of base that the game starts with. It will be one of ```CAMP_CLEAN```, ```CAMP_BASE``` or ```CAMP_WALLS```.
-	engine->globalObject().setProperty("baseType", game.base, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["baseType"] = game.base;
 	//== * ```alliancesType``` The type of alliances permitted in this game. It will be one of ```NO_ALLIANCES```, ```ALLIANCES```, ```ALLIANCES_UNSHARED``` or ```ALLIANCES_TEAMS```.
-	engine->globalObject().setProperty("alliancesType", game.alliance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["alliancesType"] = game.alliance;
 	//== * ```powerType``` The power level set for this game.
-	engine->globalObject().setProperty("powerType", game.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["powerType"] = game.power;
 	//== * ```maxPlayers``` The number of active players in this game.
-	engine->globalObject().setProperty("maxPlayers", game.maxPlayers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["maxPlayers"] = game.maxPlayers;
 	//== * ```scavengers``` Whether or not scavengers are activated in this game.
-	engine->globalObject().setProperty("scavengers", game.scavengers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["scavengers"] = game.scavengers;
 	//== * ```mapWidth``` Width of map in tiles.
-	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["mapWidth"] = mapWidth;
 	//== * ```mapHeight``` Height of map in tiles.
-	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["mapHeight"] = mapHeight;
 	//== * ```scavengerPlayer``` Index of scavenger player. (3.2+ only)
-	engine->globalObject().setProperty("scavengerPlayer", scavengerSlot(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["scavengerPlayer"] = scavengerSlot();
 	//== * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
-	engine->globalObject().setProperty("isMultiplayer", NetPlay.bComms, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["isMultiplayer"] = NetPlay.bComms;
 	// un-documented placeholder variable
-	engine->globalObject().setProperty("isReceivingAllEvents", false, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVars["isReceivingAllEvents"] = false;
+
+	setGlobalVariables(engine, globalVars);
 
 	// Regular functions
 	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
@@ -924,48 +1080,74 @@ bool loadGlobalScript(WzString path)
 	return loadPlayerScript(std::move(path), selectedPlayer, AIDifficulty::DISABLED);
 }
 
+bool saveScriptGlobals(nlohmann::json &result, QScriptEngine *engine)
+{
+	QScriptValueIterator it(engine->globalObject());
+	// we save 'scriptName' and 'me' implicitly
+	while (it.hasNext())
+	{
+		it.next();
+		if (internalNamespace.count(it.name()) == 0 && !it.value().isFunction()
+			&& !it.value().equals(engine->globalObject()))
+		{
+			result[it.name().toStdString()] = it.value().toVariant();
+		}
+	}
+	return true;
+}
+
+nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam)
+{
+	nlohmann::json result = nlohmann::json::object();
+	result["function"] = timerName;
+	qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParam);
+	if (pData)
+	{
+		result["stringArg"] = (pData->stringArg).toStdString();
+	}
+	return result;
+}
+
 bool saveScriptStates(const char *filename)
 {
 	WzConfig ini(filename, WzConfig::ReadAndWrite);
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
-		QScriptValueIterator it(engine->globalObject());
-		ini.beginGroup("globals_" + WzString::number(i));
-		// we save 'scriptName' and 'me' implicitly
-		while (it.hasNext())
-		{
-			it.next();
-			if (internalNamespace.count(it.name()) == 0 && !it.value().isFunction()
-			    && !it.value().equals(engine->globalObject()))
-			{
-				ini.setValue(WzString::fromUtf8(it.name().toUtf8().constData()), it.value().toVariant());
-			}
-		}
-		ini.endGroup();
-		ini.beginGroup("groups_" + WzString::number(i));
+
+		nlohmann::json globalsResult = nlohmann::json::object();
+		saveScriptGlobals(globalsResult, engine); // we save 'scriptName' and 'me' implicitly
+		ini.setValue("globals_" + WzString::number(i), globalsResult);
+
 		// we have to save 'scriptName' and 'me' explicitly
-		ini.setValue("me", engine->globalObject().property("me").toInt32());
-		ini.setValue("scriptName", QStringToWzString(engine->globalObject().property("scriptName").toString()));
-		saveGroups(ini, engine);
-		ini.endGroup();
+		nlohmann::json groupsResult = nlohmann::json::object();
+		saveGroups(groupsResult, engine);
+		groupsResult["me"] = engine->globalObject().property("me").toInt32();
+		groupsResult["scriptName"] = QStringToWzString(engine->globalObject().property("scriptName").toString());
+		ini.setValue("groups_" + WzString::number(i), groupsResult);
 	}
-	for (int i = 0; i < timers.size(); ++i)
+	size_t timerIdx = 0;
+	for (const auto& node : timers)
 	{
-		timerNode node = timers.at(i);
-		ini.beginGroup("triggers_" + WzString::number(i));
+		nlohmann::json nodeInfo = nlohmann::json::object();
+		nodeInfo["timerID"] = node.timerID;
+		nodeInfo["timerName"] = node.timerName;
 		// we have to save 'scriptName' and 'me' explicitly
-		ini.setValue("me", node.player);
-		ini.setValue("scriptName", QStringToWzString(node.engine->globalObject().property("scriptName").toString()));
-		ini.setValue("function", QStringToWzString(node.function));
+		nodeInfo["me"] = node.player;
+		nodeInfo["scriptName"] = QStringToWzString(node.engine->globalObject().property("scriptName").toString());
+		nodeInfo["functionRestoreInfo"] = saveTimerFunction(node.timerID, node.timerName, node.additionalTimerFuncParam);
 		if (node.baseobj >= 0)
 		{
-			ini.setValue("object", node.baseobj);
+			nodeInfo["object"] = node.baseobj;
+			nodeInfo["objectType"] = (int)node.baseobjtype;
 		}
-		ini.setValue("frame", node.frameTime);
-		ini.setValue("type", (int)node.type);
-		ini.setValue("ms", node.ms);
-		ini.endGroup();
+		nodeInfo["frame"] = node.frameTime;
+		nodeInfo["ms"] = node.ms;
+		nodeInfo["calls"] = node.calls;
+		nodeInfo["type"] = (int)node.type;
+
+		ini.setValue("triggers_" + WzString::number(timerIdx), nodeInfo);
+		++timerIdx;
 	}
 	return true;
 }
@@ -986,8 +1168,39 @@ static QScriptEngine *findEngineForPlayer(int match, const QString& scriptName)
 	return nullptr;
 }
 
+// recreates timer functions (and additional userdata) based on the information saved by the saveTimer() method
+std::tuple<TimerFunc, timerAdditionalData *> restoreTimerFunction(QScriptEngine *engine, const nlohmann::json& savedTimerFuncData)
+{
+	QString funcName = QString::fromStdString(json_getValue(savedTimerFuncData, WzString::fromUtf8("function")).toWzString().toStdString());
+	if (funcName.isEmpty())
+	{
+		throw std::runtime_error("Invalid timer restore data");
+	}
+	QString stringArg = QString::fromStdString(json_getValue(savedTimerFuncData, WzString::fromUtf8("stringArg")).toWzString().toStdString());
+
+	return {
+		// timerFunc
+		[engine, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
+			qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParams);
+			QScriptValueList args;
+			if (baseObject != nullptr)
+			{
+				args += convMax(baseObject, engine);
+			}
+			else if (pData && !(pData->stringArg.isEmpty()))
+			{
+				args += pData->stringArg;
+			}
+			callFunction(engine, funcName, args, true);
+		}
+		// additionalParams
+		, new qtscript_timer_additionaldata(stringArg)
+	};
+}
+
 bool loadScriptStates(const char *filename)
 {
+	uniqueTimerID maxRestoredTimerID = 0;
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
 	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
@@ -1000,16 +1213,36 @@ bool loadScriptStates(const char *filename)
 		if (engine && list[i].startsWith("triggers_"))
 		{
 			timerNode node;
-			node.player = player;
-			node.ms = ini.value("ms").toInt();
-			node.frameTime = ini.value("frame").toInt();
+			node.timerID = ini.value("timerID").toInt();
+			node.timerName = ini.value("timerName").toWzString().toStdString();
 			node.engine = engine;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
-			      i, node.player, scriptName.toUtf8().constData());
-			node.function = QString::fromUtf8(ini.value("function").toWzString().toUtf8().c_str());
+			      i, player, scriptName.toUtf8().constData());
 			node.baseobj = ini.value("baseobj", -1).toInt();
+			node.baseobjtype = (OBJECT_TYPE)ini.value("objectType", (int)OBJ_NUM_TYPES).toInt();
+			node.frameTime = ini.value("frame").toInt();
+			node.ms = ini.value("ms").toInt();
+			node.player = player;
+			node.calls = ini.value("calls").toInt();
 			node.type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
-			timers.push_back(node);
+
+			std::tuple<TimerFunc, timerAdditionalData *> restoredTimerInfo;
+			try
+			{
+				restoredTimerInfo = restoreTimerFunction(engine, ini.value("functionRestoreInfo").jsonValue());
+			}
+			catch (const std::exception& e)
+			{
+				ASSERT(false, "Failed to restore saved timer function info: %s", e.what());
+				continue;
+			}
+
+			node.function = std::get<0>(restoredTimerInfo);
+			node.additionalTimerFuncParam = std::get<1>(restoredTimerInfo);
+
+			maxRestoredTimerID = std::max(maxRestoredTimerID, node.timerID);
+
+			addTimerNode(std::move(node));
 		}
 		else if (engine && list[i].startsWith("globals_"))
 		{
@@ -1048,6 +1281,7 @@ bool loadScriptStates(const char *filename)
 		}
 		ini.endGroup();
 	}
+	lastTimerID = maxRestoredTimerID;
 	return true;
 }
 
@@ -1102,32 +1336,33 @@ static void updateGlobalModels()
 	{
 		int nextRow = m->rowCount();
 		m->setRowCount(nextRow);
-		m->setItem(nextRow, 0, new QStandardItem(node.function));
+		m->setItem(nextRow, 0, new QStandardItem(QString::number(node.timerID)));
+		m->setItem(nextRow, 1, new QStandardItem(QString::fromStdString(node.timerName)));
 		QString scriptName = node.engine->globalObject().property("scriptName").toString();
-		m->setItem(nextRow, 1, new QStandardItem(scriptName + ":" + QString::number(node.player)));
+		m->setItem(nextRow, 2, new QStandardItem(scriptName + ":" + QString::number(node.player)));
 		if (node.baseobj >= 0)
 		{
-			m->setItem(nextRow, 2, new QStandardItem(QString::number(node.baseobj)));
+			m->setItem(nextRow, 3, new QStandardItem(QString::number(node.baseobj)));
 		}
 		else
 		{
-			m->setItem(nextRow, 2, new QStandardItem("-"));
+			m->setItem(nextRow, 3, new QStandardItem("-"));
 		}
-		m->setItem(nextRow, 3, new QStandardItem(QString::number(node.frameTime)));
-		m->setItem(nextRow, 4, new QStandardItem(QString::number(node.ms)));
+		m->setItem(nextRow, 4, new QStandardItem(QString::number(node.frameTime)));
+		m->setItem(nextRow, 5, new QStandardItem(QString::number(node.ms)));
 		if (node.type == TIMER_ONESHOT_READY)
 		{
-			m->setItem(nextRow, 5, new QStandardItem("Oneshot"));
+			m->setItem(nextRow, 6, new QStandardItem("Oneshot"));
 		}
 		else if (node.type == TIMER_ONESHOT_DONE)
 		{
-			m->setItem(nextRow, 5, new QStandardItem("Done"));
+			m->setItem(nextRow, 6, new QStandardItem("Done"));
 		}
 		else
 		{
-			m->setItem(nextRow, 5, new QStandardItem("Repeat"));
+			m->setItem(nextRow, 6, new QStandardItem("Repeat"));
 		}
-		m->setItem(nextRow, 6, new QStandardItem(QString::number(node.calls)));
+		m->setItem(nextRow, 7, new QStandardItem(QString::number(node.calls)));
 	}
 }
 
@@ -1195,14 +1430,15 @@ void jsShowDebug()
 		models.insert(engine, m);
 	}
 	// Add triggers
-	triggerModel = new QStandardItemModel(0, 7);
-	triggerModel->setHeaderData(0, Qt::Horizontal, QString("Function"));
-	triggerModel->setHeaderData(1, Qt::Horizontal, QString("Script"));
-	triggerModel->setHeaderData(2, Qt::Horizontal, QString("Object"));
-	triggerModel->setHeaderData(3, Qt::Horizontal, QString("Time"));
-	triggerModel->setHeaderData(4, Qt::Horizontal, QString("Interval"));
-	triggerModel->setHeaderData(5, Qt::Horizontal, QString("Type"));
-	triggerModel->setHeaderData(6, Qt::Horizontal, QString("Calls"));
+	triggerModel = new QStandardItemModel(0, 8);
+	triggerModel->setHeaderData(0, Qt::Horizontal, QString("timerID"));
+	triggerModel->setHeaderData(1, Qt::Horizontal, QString("Function"));
+	triggerModel->setHeaderData(2, Qt::Horizontal, QString("Script"));
+	triggerModel->setHeaderData(3, Qt::Horizontal, QString("Object"));
+	triggerModel->setHeaderData(4, Qt::Horizontal, QString("Time"));
+	triggerModel->setHeaderData(5, Qt::Horizontal, QString("Interval"));
+	triggerModel->setHeaderData(6, Qt::Horizontal, QString("Type"));
+	triggerModel->setHeaderData(7, Qt::Horizontal, QString("Calls"));
 
 	globalDialog = true;
 	updateGlobalModels();
