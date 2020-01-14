@@ -778,21 +778,26 @@ void droidUpdate(DROID *psDroid)
 	}
 
 	/* Update the fire damage data */
+	syncDebugDroid(psDroid, '<');
 	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
 	{
 		// The periodicalDamageStart has been set, but is not from the previous tick, so we must be out of the fire.
 		psDroid->periodicalDamage = 0;  // Reset periodical damage done this tick.
 		if (psDroid->periodicalDamageStart + BURN_TIME < gameTime)
 		{
+			syncDebugDroid(psDroid, 'A');
 			// Finished periodical damaging.
 			psDroid->periodicalDamageStart = 0;
 		}
 		else
 		{
+			syncDebugDroid(psDroid, 'B');
 			// do hardcoded burn damage (this damage automatically applied after periodical damage finished)
 			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime / 2 + 1, true, BURN_MIN_DAMAGE);
+			syncDebugDroid(psDroid, 'C');
 		}
 	}
+	syncDebugDroid(psDroid, '>');
 
 	// At this point, the droid may be dead due to periodical damage or hardcoded burn damage.
 	if (isDead(psDroid))

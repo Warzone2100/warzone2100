@@ -1118,12 +1118,13 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 				updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
 			}
 
-			debug(LOG_NEVER, "Damage to object %d, player %d\n",
-			      psObj->psDest->id, psObj->psDest->player);
+			debug(LOG_NEVER, "Damage to object %d, player %d\n", psObj->psDest->id, psObj->psDest->player);
 
 			// Damage the object
 			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass, psStats->weaponSubClass,
 			                              psObj->time, false, psStats->upgrade[psObj->player].minimumDamage);
+
+			syncDebug("1. object %d, player %d, damage %d, relativeDamage %d", psObj->psDest->id, psObj->psDest->player, damage, relativeDamage);
 
 			proj_UpdateKills(psObj, relativeDamage);
 
@@ -1215,6 +1216,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			}
 			int relativeDamage = objectDamage(psCurr, damage, psStats->weaponClass, psStats->weaponSubClass,
 			                                  psObj->time, false, psStats->upgrade[psObj->player].minimumDamage);
+			syncDebug("2. object %d, player %d, damage %d, relativeDamage %d", psCurr->id, psCurr->player, damage, relativeDamage);
 			proj_UpdateKills(psObj, relativeDamage);
 		}
 	}
@@ -1384,6 +1386,7 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 		int relativeDamage = objectDamage(psCurr, damageRate, psStats->periodicalDamageWeaponClass,
 		                                  psStats->periodicalDamageWeaponSubClass, gameTime - deltaGameTime / 2 + 1, true,
 		                                  psStats->upgrade[psProj->player].minimumDamage);
+		syncDebug("3. object %d, player %d, damage rate %d, relativeDamage %d", psCurr->id, psCurr->player, damageRate, relativeDamage);
 		proj_UpdateKills(psProj, relativeDamage);
 	}
 }
