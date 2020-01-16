@@ -74,7 +74,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 template <typename T, typename U>
 static unsigned selSelectUnitsIf(unsigned player, T condition, U value, bool onlyOnScreen)
 {
-	return selSelectUnitsIf(player, std::bind2nd(std::ptr_fun(condition), value), onlyOnScreen);
+	return selSelectUnitsIf(player, [condition, value](DROID *psDroid) { return condition(psDroid, value); }, onlyOnScreen);
 }
 
 static bool selTransporter(DROID *droid)

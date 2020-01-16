@@ -1283,7 +1283,7 @@ void PROJECTILE::update()
 		setProjectileDestination(psObj, nullptr);
 	}
 	// Remove dead objects from psDamaged.
-	psDamaged.erase(std::remove_if(psDamaged.begin(), psDamaged.end(), std::ptr_fun(&::isDead)), psDamaged.end());
+	psDamaged.erase(std::remove_if(psDamaged.begin(), psDamaged.end(), [](const BASE_OBJECT *psObj) { return ::isDead(psObj); }), psDamaged.end());
 
 	// This extra check fixes a crash in cam2, mission1
 	if (worldOnMap(psObj->pos.x, psObj->pos.y) == false)
@@ -1328,10 +1328,10 @@ void proj_UpdateAll()
 	std::vector<PROJECTILE *> psProjectileListOld = psProjectileList;
 
 	// Update all projectiles. Penetrating projectiles may add to psProjectileList.
-	std::for_each(psProjectileListOld.begin(), psProjectileListOld.end(), std::mem_fun(&PROJECTILE::update));
+	std::for_each(psProjectileListOld.begin(), psProjectileListOld.end(), std::mem_fn(&PROJECTILE::update));
 
 	// Remove and free dead projectiles.
-	psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), std::mem_fun(&PROJECTILE::deleteIfDead)), psProjectileList.end());
+	psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), std::mem_fn(&PROJECTILE::deleteIfDead)), psProjectileList.end());
 }
 
 /***************************************************************************/

@@ -6246,7 +6246,7 @@ DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemp
 		}
 
 		//need to reset the quantity built for each entry in the production list
-		std::for_each(productionRun.begin(), productionRun.end(), std::mem_fun_ref(&ProductionRunEntry::restart));
+		std::for_each(productionRun.begin(), productionRun.end(), std::mem_fn(&ProductionRunEntry::restart));
 
 		//get the first to build again
 		return productionRun[0].psTemplate;
