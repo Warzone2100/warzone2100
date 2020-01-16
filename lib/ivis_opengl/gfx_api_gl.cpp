@@ -1423,8 +1423,11 @@ std::map<std::string, std::string> gl_context::getBackendGameInfo()
 	backendGameInfo["openGL_version"] = opengl.version;
 	backendGameInfo["openGL_GLSL_version"] = opengl.GLSLversion;
 	// NOTE: deprecated for GL 3+. Needed this to check what extensions some chipsets support for the openGL hacks
-	std::string extensions = (const char *) glGetString(GL_EXTENSIONS);
-	backendGameInfo["GL_EXTENSIONS"] = extensions;
+	const char *pExtensionsStr = (const char *) glGetString(GL_EXTENSIONS);
+	if (pExtensionsStr != nullptr)
+	{
+		backendGameInfo["GL_EXTENSIONS"] = std::string(pExtensionsStr);
+	}
 	return backendGameInfo;
 }
 
