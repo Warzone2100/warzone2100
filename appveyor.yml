@@ -81,8 +81,8 @@ install:
           return $response
       }
       
-      $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.1.108.0/windows/VulkanSDK-1.1.108.0-Installer.exe?Human=true"
-      $VULKAN_DL_SHA256 = "c2fb846328d6056f92f91a92d4b3710bc51956280a163365be2cb2fa7eb41a9b"
+      $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.1.130.0/windows/VulkanSDK-1.1.130.0-Installer.exe?Human=true"
+      $VULKAN_DL_SHA256 = "92ce6080dc2aebfb0a63dba705b8d50a04cfafa1710acbb3b4fa413b388ff2cd"
       
       $req = Req -Params @{ 'Method'='GET';'Uri'="$VULKAN_DL_URL";'OutFile'='vulkan.exe' } -Retries 3 -SecondsDelay 10
       $vulkan_exe_hash = Get-FileHash -Path "vulkan.exe" -Algorithm SHA256
