@@ -2568,6 +2568,7 @@ bool VkRoot::createLogicalDevice()
 
 	// create logical device
 	std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
+	debug(LOG_3D, "Using queue family indicies: <graphics: %" PRIu32">, <presentation: %" PRIu32">", queueFamilyIndices.graphicsFamily.value(), queueFamilyIndices.presentFamily.value());
 	std::set<uint32_t> uniqueQueueFamilies = {queueFamilyIndices.graphicsFamily.value(), queueFamilyIndices.presentFamily.value()};
 	float queuePriority = 1.0f;
 	for (uint32_t queueFamily : uniqueQueueFamilies)
@@ -2584,6 +2585,18 @@ bool VkRoot::createLogicalDevice()
 	const auto enabledFeatures = vk::PhysicalDeviceFeatures{}
 								.setSamplerAnisotropy(true)
 								.setDepthBiasClamp(physDeviceFeatures.depthBiasClamp);
+	debug(LOG_3D, "With features config: samplerAnisotropy(%d), depthBiasClamp(%d)", (int)enabledFeatures.samplerAnisotropy, (int)enabledFeatures.depthBiasClamp);
+
+	std::string layersAsString;
+	std::for_each(layers.begin(), layers.end(), [&layersAsString](const char *layer) {
+		layersAsString += std::string(layer) + ",";
+	});
+	debug(LOG_3D, "Using layers: %s", layersAsString.c_str());
+	std::string deviceExtensionsAsString;
+	std::for_each(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), [&deviceExtensionsAsString](const char *extension) {
+		deviceExtensionsAsString += std::string(extension) + ",";
+	});
+	debug(LOG_3D, "Using device extensions: %s", deviceExtensionsAsString.c_str());
 
 	dev = physicalDevice.createDevice(
 		vk::DeviceCreateInfo{}
