@@ -1,8 +1,8 @@
 //
 // VkhInfo
-// Version: 1.1
+// Version: 1.2
 //
-// Copyright (c) 2019 past-due
+// Copyright (c) 2019-2020 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
@@ -17,6 +17,9 @@
 #pragma warning( disable : 4191 ) // warning C4191: '<function-style-cast>': unsafe conversion from 'PFN_vkVoidFunction' to 'PFN_vk<...>'
 #endif
 #define VULKAN_HPP_TYPESAFE_CONVERSION 1
+#ifndef NOMINMAX
+    #define NOMINMAX // For windows.h
+#endif
 #include <vulkan/vulkan.hpp>
 #if defined( _MSC_VER )
 #pragma warning( pop )
