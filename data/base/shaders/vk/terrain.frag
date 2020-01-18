@@ -11,10 +11,10 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 paramy2;
 	mat4 textureMatrix1;
 	mat4 textureMatrix2;
+	vec4 fogColor;
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
-	vec4 fogColor;
 };
 
 layout(location = 0) in vec4 color;

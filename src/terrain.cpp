@@ -1080,7 +1080,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	// bind the vertex buffer
 	gfx_api::TerrainDepth::get().bind();
 	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), 0, 0.f, 0.f, glm::vec4(0.f), 0, 0 });
+	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), glm::vec4(0.f), 0, 0.f, 0.f, 0, 0 });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 	// draw slightly higher distance than it actually is so it will not
@@ -1129,7 +1129,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0 );
 		const glm::vec4 paramsY(1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0 );
 		gfx_api::TerrainLayer::get().bind_constants({ ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, glm::mat4(1.f), textureMatrix,
-			renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor, 0, 1 });
+			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 		// load the texture
 		int texPage = iV_GetTexture(psGroundTypes[layer].textureName);
@@ -1171,7 +1171,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num);
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
 	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, textureMatrix,
-		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor, 0, 1 });
+		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 	int size = 0;
 	int offset = 0;
@@ -1265,7 +1265,7 @@ void drawWater(const glm::mat4 &viewMatrix)
 	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(iV_GetTexture("page-80-water-1.png")), &pie_Texture(iV_GetTexture("page-81-water-2.png")));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({ viewMatrix, paramsX, paramsY, paramsX2, paramsY2,
-		glm::translate(glm::vec3(waterOffset, 0.f, 0.f)), glm::mat4(1.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, glm::vec4(0.f), 0, 1
+		glm::translate(glm::vec3(waterOffset, 0.f, 0.f)), glm::mat4(1.f), glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1
 	});
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 

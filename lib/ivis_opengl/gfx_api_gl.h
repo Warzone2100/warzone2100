@@ -153,9 +153,9 @@ private:
 		setUniforms(locations[15], cbuf.ambient);
 		setUniforms(locations[16], cbuf.diffuse);
 		setUniforms(locations[17], cbuf.specular);
-		setUniforms(locations[18], cbuf.fogEnd);
-		setUniforms(locations[19], cbuf.fogBegin);
-		setUniforms(locations[20], cbuf.fogColour);
+		setUniforms(locations[18], cbuf.fogColour);
+		setUniforms(locations[19], cbuf.fogEnd);
+		setUniforms(locations[20], cbuf.fogBegin);
 		setUniforms(locations[21], cbuf.hasTangents);
 	}
 

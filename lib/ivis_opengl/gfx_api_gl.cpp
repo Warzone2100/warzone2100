@@ -267,26 +267,26 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT, program_data{ "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogEnd", "fogStart", "fogColor", "hasTangents" } }),
+			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
 	std::make_pair(SHADER_BUTTON, program_data{ "Button program", "shaders/button.vert", "shaders/button.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogEnd", "fogStart", "fogColor", "hasTangents" } }),
+			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
 			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogEnd", "fogStart", "fogColor", "hasTangents" } }),
+			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
-			"fogEnabled", "fogEnd", "fogStart", "fogColor" } }),
+			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "paramxlight", "paramylight", "lightTextureMatrix",
-			"fogEnabled", "fogEnd", "fogStart", "fogColor", "tex", "lightmap_tex" } }),
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1", "textureMatrix2",
-			"fogEnabled", "fogEnd", "fogStart" } }),
+			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" } }),
 	std::make_pair(SHADER_TEXRECT, program_data{ "Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
@@ -954,10 +954,10 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(locations[6], cbuf.texture1);
 	setUniforms(locations[7], cbuf.unused);
 	setUniforms(locations[8], cbuf.texture_matrix);
-	setUniforms(locations[9], cbuf.fog_enabled);
-	setUniforms(locations[10], cbuf.fog_begin);
-	setUniforms(locations[11], cbuf.fog_end);
-	setUniforms(locations[12], cbuf.fog_colour);
+	setUniforms(locations[9], cbuf.fog_colour);
+	setUniforms(locations[10], cbuf.fog_enabled);
+	setUniforms(locations[11], cbuf.fog_begin);
+	setUniforms(locations[12], cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
@@ -976,10 +976,10 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(locations[1], cbuf.param1);
 	setUniforms(locations[2], cbuf.param2);
 	setUniforms(locations[3], cbuf.texture_matrix);
-	setUniforms(locations[4], cbuf.fog_enabled);
-	setUniforms(locations[5], cbuf.fog_begin);
-	setUniforms(locations[6], cbuf.fog_end);
-	setUniforms(locations[7], cbuf.fog_colour);
+	setUniforms(locations[4], cbuf.fog_colour);
+	setUniforms(locations[5], cbuf.fog_enabled);
+	setUniforms(locations[6], cbuf.fog_begin);
+	setUniforms(locations[7], cbuf.fog_end);
 	setUniforms(locations[8], cbuf.texture0);
 	setUniforms(locations[9], cbuf.texture1);
 }
@@ -995,9 +995,10 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(locations[6], cbuf.texture1);
 	setUniforms(locations[7], cbuf.translation);
 	setUniforms(locations[8], cbuf.texture_matrix);
-	setUniforms(locations[9], cbuf.fog_enabled);
-	setUniforms(locations[10], cbuf.fog_begin);
-	setUniforms(locations[11], cbuf.fog_end);
+	setUniforms(locations[9], cbuf.fog_colour);
+	setUniforms(locations[10], cbuf.fog_enabled);
+	setUniforms(locations[11], cbuf.fog_begin);
+	setUniforms(locations[12], cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)
