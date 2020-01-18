@@ -431,6 +431,8 @@ namespace gfx_api
 
 	using notexture = std::tuple<>;
 
+	// NOTE: Be very careful changing these constant_buffer_type structs;
+	//		 they must match std140 layout rules (see: the Vulkan shaders)
 	template<>
 	struct constant_buffer_type<SHADER_BUTTON>
 	{
@@ -452,9 +454,9 @@ namespace gfx_api
 		glm::vec4 ambient;
 		glm::vec4 diffuse;
 		glm::vec4 specular;
+		glm::vec4 fogColour;
 		float fogEnd;
 		float fogBegin;
-		glm::vec4 fogColour;
 		int hasTangents;
 	};
 
@@ -479,9 +481,9 @@ namespace gfx_api
 		glm::vec4 ambient;
 		glm::vec4 diffuse;
 		glm::vec4 specular;
+		glm::vec4 fogColour;
 		float fogEnd;
 		float fogBegin;
-		glm::vec4 fogColour;
 		int hasTangents;
 	};
 
@@ -506,9 +508,9 @@ namespace gfx_api
 		glm::vec4 ambient;
 		glm::vec4 diffuse;
 		glm::vec4 specular;
+		glm::vec4 fogColour;
 		float fogEnd;
 		float fogBegin;
-		glm::vec4 fogColour;
 		int hasTangents;
 	};
 
@@ -565,10 +567,10 @@ namespace gfx_api
 		glm::vec4 paramYLight;
 		glm::mat4 unused;
 		glm::mat4 texture_matrix;
+		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		glm::vec4 fog_colour;
 		int texture0;
 		int texture1;
 	};
@@ -588,10 +590,10 @@ namespace gfx_api
 		glm::vec4 paramYLight;
 		glm::mat4 unused;
 		glm::mat4 texture_matrix;
+		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		glm::vec4 fog_colour;
 		int texture0;
 		int texture1;
 	};
@@ -609,10 +611,10 @@ namespace gfx_api
 		glm::vec4 param1;
 		glm::vec4 param2;
 		glm::mat4 texture_matrix;
+		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		glm::vec4 fog_colour;
 		int texture0;
 		int texture1;
 	};
@@ -635,10 +637,10 @@ namespace gfx_api
 		glm::vec4 param4;
 		glm::mat4 translation;
 		glm::mat4 texture_matrix;
+		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		glm::vec4 fog_colour;
 		int texture0;
 		int texture1;
 	};

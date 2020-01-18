@@ -151,7 +151,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	gfx_api::Draw3DButtonPSO::get().bind();
 	gfx_api::constant_buffer_type<SHADER_BUTTON> cbuf{
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), 0.f, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, 0, 0, 0.f, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
-		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), 0.f, 0.f, glm::vec4(0.f), shape->buffers[VBO_TANGENT] != nullptr };
+		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), 0.f, 0.f, shape->buffers[VBO_TANGENT] != nullptr };
 	gfx_api::Draw3DButtonPSO::get().bind_constants(cbuf);
 
 	gfx_api::Draw3DButtonPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
@@ -200,7 +200,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 
 	gfx_api::constant_buffer_type<shader> cbuf{
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), stretch, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, ecmState, !(pieFlag & pie_PREMULTIPLIED), timestate, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
-		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, 0.f, 0.f, glm::vec4(0.f), shape->buffers[VBO_TANGENT] != nullptr };
+		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, glm::vec4(0.f), 0.f, 0.f, shape->buffers[VBO_TANGENT] != nullptr };
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
