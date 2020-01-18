@@ -49,7 +49,7 @@ void main()
 	// Lighting -- we pass these to the fragment shader
 	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
 	vec3 eyeVec = -vVertex;
-	lightDir = lightPosition.xyz - vVertex;
+	lightDir = normalize(lightPosition.xyz - vVertex);
 
 	if (hasTangents != 0)
 	{
@@ -67,7 +67,7 @@ void main()
 	}
 
 	normal = n;
-	halfVec = lightDir + eyeVec;
+	halfVec = normalize(lightDir - eyeVec);
 
 	// Implement building stretching to accommodate terrain
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
