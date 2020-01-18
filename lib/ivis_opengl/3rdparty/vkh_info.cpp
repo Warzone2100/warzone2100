@@ -1,8 +1,8 @@
 //
 // VkhInfo
-// Version: 1.1
+// Version: 1.2
 //
-// Copyright (c) 2019 past-due
+// Copyright (c) 2019-2020 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
@@ -447,6 +447,22 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 		buf << "- sparseResidencyAliased = " << deviceFeatures.sparseResidencyAliased << "\n";
 		buf << "- variableMultisampleRate = " << deviceFeatures.variableMultisampleRate << "\n";
 		buf << "- inheritedQueries = " << deviceFeatures.inheritedQueries << "\n";
+
+		buf << "\n";
+
+		// VkQueueFamilyProperties
+		const auto queueFamilies = physicalDevice.getQueueFamilyProperties(vkDynLoader);
+		buf << "VkQueueFamilyProperties:\n";
+		buf << "------------------------\n";
+		for (size_t idx = 0; idx < queueFamilies.size(); ++idx)
+		{
+			const auto & queueFamily = queueFamilies[idx];
+			buf << "[Queue Family " << idx << "]\n";
+			buf << "- queueFlags = " << to_string(queueFamily.queueFlags) << "\n";
+			buf << "- queueCount = " << queueFamily.queueCount << "\n";
+			buf << "- timestampValidBits = " << queueFamily.timestampValidBits << "\n";
+			buf << "- minImageTransferGranularity = " << queueFamily.minImageTransferGranularity.width << " x " << queueFamily.minImageTransferGranularity.height << " x " << queueFamily.minImageTransferGranularity.depth << "\n";
+		}
 
 		buf << "\n";
 	}
