@@ -675,19 +675,23 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_TERRAIN>
 	{
-		glm::mat4 transform_matrix;
+		glm::mat4 textureMatrix1;
+		glm::mat4 textureMatrix2;
+		glm::mat4 ModelViewMatrix;
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::vec4 sunPosition;
 		glm::vec4 paramX;
 		glm::vec4 paramY;
 		glm::vec4 paramXLight;
 		glm::vec4 paramYLight;
-		glm::mat4 unused;
-		glm::mat4 texture_matrix;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
 		int texture0;
 		int texture1;
+		int hasNormalmap;
+		int hasSpecularmap;
 	};
 
 	using TerrainLayer = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ADDITIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -695,7 +699,12 @@ namespace gfx_api
 	std::tuple<
 	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
 	vertex_buffer_description<4, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic_repeat>, texture_description<1, sampler_type::bilinear>>, SHADER_TERRAIN>;
+	>, std::tuple<
+	texture_description<0, sampler_type::anisotropic_repeat>,
+	texture_description<1, sampler_type::bilinear>,
+	texture_description<2, sampler_type::anisotropic>, // normal map
+	texture_description<3, sampler_type::anisotropic> // specular map
+	>, SHADER_TERRAIN>;
 
 	template<>
 	struct constant_buffer_type<SHADER_DECALS>

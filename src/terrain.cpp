@@ -591,17 +591,18 @@ void markTileDirty(int i, int j)
 
 void loadTerrainTextures()
 {
-	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
+	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
 	// for each terrain layer
-	for (int layer = 0; layer < numGroundTypes; layer++)
+	for (int layer = 0; layer < getNumGroundTypes(); layer++)
 	{
 		// pre-load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
-		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", psGroundTypes[layer].textureName);
+		const auto groundType = getGroundType(layer);
+		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
+		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", groundType.textureName.c_str());
 	}
 }
 
@@ -811,6 +812,7 @@ bool initTerrain()
 
 	////////////////////
 	// fill the texture part of the sectors
+	const size_t numGroundTypes = getNumGroundTypes();
 	texture = (PIELIGHT *)malloc(sizeof(PIELIGHT) * xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes);
 	textureIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12 * numGroundTypes);
 	textureSize = 0;
@@ -1118,12 +1120,12 @@ static void cullTerrain()
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight)
 {
 	const auto &renderState = getCurrentRenderState();
-	
+
 	// bind the vertex buffer
 	gfx_api::TerrainDepth::get().bind();
 	gfx_api::TerrainDepth::get().bind_textures(lightmap_texture);
 	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), 
+	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
 	glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 0 });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
@@ -1151,7 +1153,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
-static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
+static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
 {
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
@@ -1165,7 +1167,8 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	gfx_api::TerrainLayer::get().bind();
 	gfx_api::TerrainLayer::get().bind_vertex_buffers(geometryVBO, textureVBO);
 	gfx_api::context::get().bind_index_buffer(*textureIndexVBO, gfx_api::index_type::u32);
-	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
+	const size_t numGroundTypes = getNumGroundTypes();
+	ASSERT_OR_RETURN(, numGroundTypes, "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -1173,15 +1176,24 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	// draw each layer separately
 	for (int layer = 0; layer < numGroundTypes; layer++)
 	{
-		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0 );
-		const glm::vec4 paramsY(1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0 );
-		gfx_api::TerrainLayer::get().bind_constants({ ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, glm::mat4(1.f), textureMatrix,
-			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
+		const auto& groundType = getGroundType(layer);
+		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(groundType.textureSize), 0 );
+		const glm::vec4 paramsY(1.0f / world_coord(groundType.textureSize), 0, 0, 0 );
 
 		// load the texture
-		optional<size_t> texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
-		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", psGroundTypes[layer].textureName);
-		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_texture);
+		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
+		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", groundType.textureName.c_str());
+		optional<size_t> texPage_normalmap = !groundType.normalMapTextureName.empty() ? iV_GetTexture(groundType.normalMapTextureName.c_str()) : nullopt;
+		optional<size_t> texPage_specularmap = !groundType.specularMapTextureName.empty() ? iV_GetTexture(groundType.specularMapTextureName.c_str()) : nullopt;
+		gfx_api::texture* pNormalMapTexture = texPage_normalmap.has_value() ? &pie_Texture(texPage_normalmap.value()) : nullptr;
+		gfx_api::texture* pSpecularMapTexture = texPage_specularmap.has_value() ? &pie_Texture(texPage_specularmap.value()) : nullptr;
+
+		gfx_api::TerrainLayer::get().bind_constants({ glm::mat4(1.f), textureMatrix,
+			ModelView, ModelViewProjection, glm::vec4(currentSunPos, 0.f), paramsX, paramsY, paramsXLight, paramsYLight,
+			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
+
+		// load the textures
+		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_texture, pNormalMapTexture, pSpecularMapTexture);
 
 		// load the color buffer
 		gfx_api::context::get().bind_vertex_buffers(1, { std::make_tuple(textureVBO, static_cast<size_t>(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer)) });
@@ -1260,8 +1272,9 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
  * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
  * on it one by one. Finally the decals are drawn.
  */
-void drawTerrain(const glm::mat4 &mvp)
+void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Protection, const Vector3f &currentSunPos)
 {
+	const glm::mat4 mvp = Protection * ModelView;
 	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
 	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
 
@@ -1290,7 +1303,7 @@ void drawTerrain(const glm::mat4 &mvp)
 
 	///////////////////////////////////
 	// terrain
-	drawTerrainLayers(mvp, paramsXLight, paramsYLight, lightMatrix);
+	drawTerrainLayers(ModelView, mvp, currentSunPos, paramsXLight, paramsYLight, lightMatrix);
 
 	//////////////////////////////////
 	// decals
