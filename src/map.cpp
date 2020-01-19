@@ -122,8 +122,7 @@ static void SetDecals(const char *filename, const char *decal_type);
 static void init_tileNames(int type);
 
 /// The different ground types
-GROUND_TYPE *psGroundTypes;
-int numGroundTypes;
+static std::vector<GROUND_TYPE> groundTypes;
 char *tilesetDir = nullptr;
 static int numTile_names;
 static char *Tile_names = nullptr;
@@ -134,6 +133,16 @@ static bool *mapDecals;           // array that tells us what tile is a decal
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
+
+const GROUND_TYPE& getGroundType(size_t idx)
+{
+	return groundTypes[idx];
+}
+
+size_t getNumGroundTypes()
+{
+	return groundTypes.size();
+}
 
 static void init_tileNames(int type)
 {
@@ -228,6 +237,34 @@ static void init_tileNames(int type)
 	}
 }
 
+static std::string appendToFileName(const std::string &origFilename, const char *appendStr)
+{
+	std::string newFilename = origFilename;
+	std::string fileExtension = "";
+	// right-most "." index
+	size_t extensionSeparatorPos = origFilename.rfind('.');
+	if (extensionSeparatorPos != std::string::npos)
+	{
+		// separate the file extension
+		fileExtension = origFilename.substr(extensionSeparatorPos);
+		newFilename = origFilename.substr(0, extensionSeparatorPos);
+	}
+	newFilename += appendStr;
+	newFilename += fileExtension;
+	return newFilename;
+}
+
+static std::string getTextureVariant(const std::string &origTextureFilename, const char *variantStr)
+{
+	std::string variantFileName = appendToFileName(origTextureFilename, variantStr);
+	std::string variantPath = std::string("texpages/") + variantFileName;
+	if (PHYSFS_exists(variantPath.c_str()) != 0)
+	{
+		return variantFileName;
+	}
+	return "";
+}
+
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
@@ -273,8 +310,7 @@ fallback:
 		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
-		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		groundTypes.resize(numlines);
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -283,8 +319,11 @@ fallback:
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData, '\n') + 1;
 
-			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
+			int textureTypeIdx = getTextureType(textureType);
+			groundTypes[textureTypeIdx].textureName = textureName;
+			groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
+			groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
+			groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
 		}
 
 		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
@@ -317,8 +356,7 @@ fallback:
 		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
-		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		groundTypes.resize(numlines);
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -327,8 +365,11 @@ fallback:
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData, '\n') + 1;
 
-			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
+			int textureTypeIdx = getTextureType(textureType);
+			groundTypes[textureTypeIdx].textureName = textureName;
+			groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
+			groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
+			groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
 		}
 
 		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
@@ -361,8 +402,7 @@ fallback:
 		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
-		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		groundTypes.resize(numlines);
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -371,8 +411,11 @@ fallback:
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData, '\n') + 1;
 
-			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
+			int textureTypeIdx = getTextureType(textureType);
+			groundTypes[textureTypeIdx].textureName = textureName;
+			groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
+			groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
+			groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
 		}
 
 		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
@@ -1096,7 +1139,7 @@ bool mapShutdown()
 
 	free(psMapTiles);
 	delete[] mapDecals;
-	free(psGroundTypes);
+	groundTypes.clear();
 	free(map);
 	free(Tile_names);
 	free(psBlockMap[AUX_MAP]);
@@ -1114,7 +1157,6 @@ bool mapShutdown()
 
 	map = nullptr;
 	floodbucket = nullptr;
-	psGroundTypes = nullptr;
 	mapDecals = nullptr;
 	psMapTiles = nullptr;
 	mapWidth = mapHeight = 0;

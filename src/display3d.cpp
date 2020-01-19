@@ -1187,7 +1187,7 @@ static void drawTiles(iView *player)
 
 	// draw it
 	// and draw it
-	drawTerrain(pie_PerspectiveGet() * viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
+	drawTerrain(viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)), pie_PerspectiveGet(), theSun);
 
 	wzPerfEnd(PERF_TERRAIN);
 

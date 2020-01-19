@@ -3,11 +3,15 @@
 
 uniform sampler2D tex;
 uniform sampler2D lightmap_tex;
+uniform sampler2D TextureNormal; // normal map
+uniform sampler2D TextureSpecular; // specular map
 
 uniform int fogEnabled; // whether fog is enabled
 uniform float fogEnd;
 uniform float fogStart;
 uniform vec4 fogColor;
+uniform int hasNormalmap; // whether a normal map exists for the model
+uniform int hasSpecularmap; // whether a specular map exists for the model
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 color;
