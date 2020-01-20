@@ -224,7 +224,9 @@ void gl_buffer::unbind()
 void gl_buffer::upload(const size_t & size, const void * data)
 {
 	size_t current_FrameNum = gfx_api::context::get().current_FrameNum();
+#if defined(DEBUG)
 	ASSERT(lastUploaded_FrameNum != current_FrameNum, "Attempt to upload to buffer more than once per frame");
+#endif
 	lastUploaded_FrameNum = current_FrameNum;
 
 	ASSERT(size > 0, "Attempt to upload buffer of size 0");
@@ -237,7 +239,9 @@ void gl_buffer::upload(const size_t & size, const void * data)
 void gl_buffer::update(const size_t & start, const size_t & size, const void * data, const update_flag flag)
 {
 	size_t current_FrameNum = gfx_api::context::get().current_FrameNum();
+#if defined(DEBUG)
 	ASSERT(flag == update_flag::non_overlapping_updates_promise || (lastUploaded_FrameNum != current_FrameNum), "Attempt to upload to buffer more than once per frame");
+#endif
 	lastUploaded_FrameNum = current_FrameNum;
 
 	ASSERT(start < buffer_size, "Starting offset (%zu) is past end of buffer (length: %zu)", start, buffer_size);
