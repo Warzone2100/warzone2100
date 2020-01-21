@@ -209,7 +209,7 @@ bool loadConfig()
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
 	war_SetColouredCursor(ini.value("coloredCursor", true).toBool());
 	// this should be enabled on all systems by default
-	war_SetVsync(ini.value("vsync", true).toBool());
+	war_SetVsync(ini.value("vsync", 1).toInt());
 	// the default (and minimum) display scale is 100 (%)
 	unsigned int displayScale = ini.value("displayScale", war_GetDisplayScale()).toUInt();
 	if (displayScale < 100)

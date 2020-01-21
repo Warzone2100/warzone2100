@@ -98,6 +98,7 @@ char const *videoOptionsVsyncString();
 std::string videoOptionsDisplayScaleString();
 std::vector<unsigned int> availableDisplayScalesSorted();
 void seqDisplayScale();
+void seqVsyncMode();
 
 // Mouse options, shared for in-game options menu use
 char const *mouseOptionsMflipString();

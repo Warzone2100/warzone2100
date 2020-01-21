@@ -253,9 +253,12 @@ namespace gfx_api
 
 		enum class swap_interval_mode
 		{
-			immediate,
-			vsync,
+			adaptive_vsync = -1,
+			immediate = 0,
+			vsync = 1,
 		};
+		static const swap_interval_mode min_swap_interval_mode = swap_interval_mode::adaptive_vsync;
+		static const swap_interval_mode max_swap_interval_mode = swap_interval_mode::vsync;
 
 		virtual ~context() {};
 		virtual texture* create_texture(const size_t& mipmap_count, const size_t& width, const size_t& height, const pixel_format& internal_format, const std::string& filename = "") = 0;
@@ -768,4 +771,24 @@ namespace gfx_api
 	std::tuple<
 	vertex_buffer_description<4, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
 	>, notexture, SHADER_LINE>;
+}
+
+static inline int to_int(gfx_api::context::swap_interval_mode mode)
+{
+	return static_cast<int>(mode);
+}
+
+static inline gfx_api::context::swap_interval_mode to_swap_mode(int value)
+{
+	switch (value) {
+		case static_cast<int>(gfx_api::context::swap_interval_mode::immediate):
+			return gfx_api::context::swap_interval_mode::immediate;
+		case static_cast<int>(gfx_api::context::swap_interval_mode::vsync):
+			return gfx_api::context::swap_interval_mode::vsync;
+		case static_cast<int>(gfx_api::context::swap_interval_mode::adaptive_vsync):
+			return gfx_api::context::swap_interval_mode::adaptive_vsync;
+		default:
+			debug(LOG_WARNING, "Invalid vsync value (%d); defaulting to vsync ON", value);
+	}
+	return gfx_api::context::swap_interval_mode::vsync;
 }

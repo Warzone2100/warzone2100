@@ -51,7 +51,7 @@ struct WARZONE_GLOBALS
 	bool Fullscreen = false;
 	bool soundEnabled = true;
 	bool trapCursor = false;
-	bool vsync = true;
+	int vsync = 1;
 	bool pauseOnFocusLoss = true;
 	bool ColouredCursor = true;
 	bool MusicEnabled = true;
@@ -137,12 +137,12 @@ bool war_GetTrapCursor()
 	return warGlobs.trapCursor;
 }
 
-void war_SetVsync(bool b)
+void war_SetVsync(int value)
 {
-	warGlobs.vsync = b;
+	warGlobs.vsync = value;
 }
 
-bool war_GetVsync()
+int war_GetVsync()
 {
 	return warGlobs.vsync;
 }

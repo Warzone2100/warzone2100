@@ -655,12 +655,10 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 	{
 	case INTINGAMEOP_VSYNC:
 	case INTINGAMEOP_VSYNC_R:
-		if (gfx_api::context::get().setSwapInterval((!war_GetVsync()) ? gfx_api::context::swap_interval_mode::vsync : gfx_api::context::swap_interval_mode::immediate))
-		{
-			// succeeded changing vsync mode
-			war_SetVsync(!war_GetVsync());
-			widgSetString(psWScreen, INTINGAMEOP_VSYNC_R, videoOptionsVsyncString());
-		}
+		seqVsyncMode();
+
+		// Update the widget(s)
+		refreshCurrentIGVideoOptionsValues();
 		break;
 
 	case INTINGAMEOP_DISPLAYSCALE:
