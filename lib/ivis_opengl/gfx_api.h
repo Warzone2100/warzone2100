@@ -251,6 +251,12 @@ namespace gfx_api
 			MAX_SAMPLES, // max antialiasing
 		};
 
+		enum class swap_interval_mode
+		{
+			immediate,
+			vsync,
+		};
+
 		virtual ~context() {};
 		virtual texture* create_texture(const size_t& mipmap_count, const size_t& width, const size_t& height, const pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw) = 0;
@@ -274,7 +280,7 @@ namespace gfx_api
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
-		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, bool useVulkan);
+		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, bool useVulkan);
 		virtual void flip(int clearMode) = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
@@ -291,8 +297,10 @@ namespace gfx_api
 		virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
+		virtual bool setSwapInterval(swap_interval_mode mode) = 0;
+		virtual swap_interval_mode getSwapInterval() const = 0;
 	private:
-		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing) = 0;
+		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) = 0;
 	};
 
 	template<std::size_t id, vertex_attribute_type type, std::size_t offset>

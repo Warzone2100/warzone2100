@@ -102,8 +102,6 @@ WzString wzGetPlatform();
 std::vector<screeninfo> wzAvailableResolutions();
 std::vector<unsigned int> wzAvailableDisplayScales();
 std::vector<video_backend> wzAvailableGfxBackends();
-void wzSetSwapInterval(int swap);
-int wzGetSwapInterval();
 WzString wzGetSelection();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms

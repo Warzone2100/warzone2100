@@ -1442,9 +1442,12 @@ bool runVideoOptionsMenu()
 
 	case FRONTEND_VSYNC:
 	case FRONTEND_VSYNC_R:
-		wzSetSwapInterval(!war_GetVsync());
-		war_SetVsync(!war_GetVsync());
-		widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+		if (gfx_api::context::get().setSwapInterval((!war_GetVsync()) ? gfx_api::context::swap_interval_mode::vsync : gfx_api::context::swap_interval_mode::immediate))
+		{
+			// succeeded changing vsync mode
+			war_SetVsync(!war_GetVsync());
+			widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+		}
 		break;
 
 	case FRONTEND_GFXBACKEND:

@@ -386,6 +386,7 @@ struct VkRoot final : gfx_api::context
 {
 	std::unique_ptr<gfx_api::backend_Vulkan_Impl> backend_impl;
 	VkhInfo debugInfo;
+	gfx_api::context::swap_interval_mode swapMode;
 
 	vk::Instance inst;
 	std::vector<const char*> layers;
@@ -410,6 +411,7 @@ struct VkRoot final : gfx_api::context
 	VmaAllocator allocator = VK_NULL_HANDLE;
 
 	// swapchain
+	vk::PresentModeKHR presentMode;
 	vk::Extent2D swapchainSize;
 	vk::SurfaceFormatKHR surfaceFormat;
 	vk::SwapchainKHR swapchain;
@@ -537,8 +539,10 @@ public:
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
 	std::string calculateFormattedRendererInfoString() const;
 private:
 	std::string formattedRendererInfoString;

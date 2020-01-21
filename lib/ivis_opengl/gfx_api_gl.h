@@ -43,7 +43,10 @@ namespace gfx_api
 		// Use this function to get the size of a window's underlying drawable in pixels (for use with glViewport).
 		virtual void getDrawableSize(int* w, int* h) = 0;
 
-		virtual bool isOpenGLES() = 0;
+		virtual bool isOpenGLES() const = 0;
+
+		virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) = 0;
+		virtual gfx_api::context::swap_interval_mode getSwapInterval() const = 0;
 	};
 }
 
@@ -227,8 +230,10 @@ struct gl_context final : public gfx_api::context
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
 private:
 	bool initGLContext();
 	void enableVertexAttribArray(GLuint index);
