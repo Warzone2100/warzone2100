@@ -2123,19 +2123,101 @@ vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormat
 	return availableFormats[0];
 }
 
-vk::PresentModeKHR chooseSwapPresentMode(const std::vector<vk::PresentModeKHR>& availablePresentModes)
+std::string to_string(gfx_api::context::swap_interval_mode swapMode)
 {
-	vk::PresentModeKHR presentMode = vk::PresentModeKHR::eFifo;
+	switch (swapMode)
+	{
+		case gfx_api::context::swap_interval_mode::immediate:
+			return "immediate";
+		case gfx_api::context::swap_interval_mode::vsync:
+			return "vsync";
+	}
+	return "n/a";
+}
 
-	// For now, just support VK_PRESENT_MODE_FIFO_KHR
-	if(std::find(availablePresentModes.begin(), availablePresentModes.end(), presentMode) == availablePresentModes.end())
+bool findBestAvailablePresentModeForSwapMode(const std::vector<vk::PresentModeKHR>& availablePresentModes, gfx_api::context::swap_interval_mode swapMode, vk::PresentModeKHR& outputPresentMode)
+{
+	std::vector<vk::PresentModeKHR> presentModes;
+	switch (swapMode)
+	{
+		case gfx_api::context::swap_interval_mode::immediate:
+			presentModes = { vk::PresentModeKHR::eImmediate };
+			break;
+		case gfx_api::context::swap_interval_mode::vsync:
+			presentModes = { vk::PresentModeKHR::eFifo };
+			break;
+	}
+
+	for (const auto& presentMode : presentModes)
+	{
+		if(std::find(availablePresentModes.begin(), availablePresentModes.end(), presentMode) != availablePresentModes.end())
+		{
+			// presentMode was found - return it
+			outputPresentMode = presentMode;
+			return true;
+		}
+	}
+
+	// VK_PRESENT_MODE_FIFO_KHR is *required* to be supported, so fall back to it
+	if(std::find(availablePresentModes.begin(), availablePresentModes.end(), vk::PresentModeKHR::eFifo) == availablePresentModes.end())
 	{
 		// vk::PresentModeKHR::eFifo is unsupported??
 		debug(LOG_FATAL, "vk::PresentModeKHR::eFifo does not appear to be supported?? Aborting.");
 		abort();
 	}
+	outputPresentMode = vk::PresentModeKHR::eFifo;
+	return false;
+}
 
-	return presentMode;
+gfx_api::context::swap_interval_mode from_vk_presentmode(vk::PresentModeKHR presentMode)
+{
+	switch (presentMode)
+	{
+		case vk::PresentModeKHR::eImmediate:
+			return gfx_api::context::swap_interval_mode::immediate;
+		case vk::PresentModeKHR::eFifo:
+			return gfx_api::context::swap_interval_mode::vsync;
+		default:
+			debug(LOG_ERROR, "Unhandled vk::PresentModeKHR value: %s", to_string(presentMode).c_str());
+	}
+	return gfx_api::context::swap_interval_mode::vsync; // prevent warning
+}
+
+bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode)
+{
+	ASSERT(physicalDevice, "Physical device is null");
+	ASSERT(surface, "Surface is null");
+
+	SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice, surface, vkDynLoader);
+	vk::PresentModeKHR desiredPresentMode = vk::PresentModeKHR::eFifo;
+	if (!findBestAvailablePresentModeForSwapMode(swapChainSupport.presentModes, newSwapMode, desiredPresentMode))
+	{
+		// unable to find a best available presentation mode for the desired swap mode, so return false
+		debug(LOG_ERROR, "Unable to find best available presentation mode for swapmode: %s", to_string(newSwapMode).c_str());
+		return false;
+	}
+
+	// set swapMode
+	swapMode = newSwapMode;
+
+	// Destroy + recreate swapchain
+	destroySwapchainAndSwapchainSpecificStuff(false);
+	if (createSwapchain())
+	{
+		rebuildPipelinesIfNecessary();
+		return true;
+	}
+	else
+	{
+		debug(LOG_ERROR, "createSwapchain() failed");
+		return false;
+	}
+	return false;
+}
+
+gfx_api::context::swap_interval_mode VkRoot::getSwapInterval() const
+{
+	return from_vk_presentmode(presentMode);
 }
 
 template <typename T>
@@ -2159,7 +2241,20 @@ bool VkRoot::createSwapchain()
 	currentSwapchainIndex = 0;
 	SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice, surface, vkDynLoader);
 
-	vk::PresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
+	if (!findBestAvailablePresentModeForSwapMode(swapChainSupport.presentModes, swapMode, presentMode))
+	{
+		debug(LOG_ERROR, "Unable to find best available presentation mode for swapmode: %s", to_string(swapMode).c_str());
+
+		// VK_PRESENT_MODE_FIFO_KHR is *required* to be supported, so fall back to it
+		if(std::find(swapChainSupport.presentModes.begin(), swapChainSupport.presentModes.end(), vk::PresentModeKHR::eFifo) == swapChainSupport.presentModes.end())
+		{
+			// vk::PresentModeKHR::eFifo is unsupported??
+			debug(LOG_FATAL, "vk::PresentModeKHR::eFifo does not appear to be supported?? Aborting.");
+			return false;
+		}
+		presentMode = vk::PresentModeKHR::eFifo;
+		swapMode = from_vk_presentmode(presentMode);
+	}
 	debug(LOG_3D, "Using present mode: %s", to_string(presentMode).c_str());
 
 	int w, h;
@@ -2372,11 +2467,12 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
-bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing)
+bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 
 	frameNum = 1;
+	swapMode = requestedSwapMode;
 
 	// obtain backend_Vulkan_Impl from impl
 	backend_impl = impl.createVulkanBackendImpl();

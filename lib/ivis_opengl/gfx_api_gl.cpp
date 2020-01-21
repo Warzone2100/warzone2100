@@ -1581,7 +1581,7 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	debug(LOG_ERROR, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
 }
 
-bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing)
+bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode)
 {
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();
@@ -1609,6 +1609,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	glViewport(0, 0, width, height);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
+
+	setSwapInterval(mode);
 
 	return true;
 }
@@ -1869,5 +1871,15 @@ void gl_context::shutdown()
 const size_t& gl_context::current_FrameNum() const
 {
 	return frameNum;
+}
+
+bool gl_context::setSwapInterval(gfx_api::context::swap_interval_mode mode)
+{
+	return backend_impl->setSwapInterval(mode);
+}
+
+gfx_api::context::swap_interval_mode gl_context::getSwapInterval() const
+{
+	return backend_impl->getSwapInterval();
 }
 

@@ -35,7 +35,10 @@ public:
 	virtual void swapWindow() override;
 	virtual void getDrawableSize(int* w, int* h) override;
 
-	virtual bool isOpenGLES() override;
+	virtual bool isOpenGLES() const override;
+
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 
 public:
 
