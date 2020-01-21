@@ -67,7 +67,7 @@ struct screeninfo
 };
 
 void wzMain(int &argc, char **argv);
-bool wzMainScreenSetup(const video_backend& backend, int antialiasing = 0, bool fullscreen = false, bool vsync = true, bool highDPI = true);
+bool wzMainScreenSetup(const video_backend& backend, int antialiasing = 0, bool fullscreen = false, int vsync = 1, bool highDPI = true);
 video_backend wzGetDefaultGfxBackendForCurrentSystem();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzMainEventLoop();

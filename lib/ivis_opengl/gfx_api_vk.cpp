@@ -2131,6 +2131,8 @@ std::string to_string(gfx_api::context::swap_interval_mode swapMode)
 			return "immediate";
 		case gfx_api::context::swap_interval_mode::vsync:
 			return "vsync";
+		case gfx_api::context::swap_interval_mode::adaptive_vsync:
+			return "adaptive vsync";
 	}
 	return "n/a";
 }
@@ -2145,6 +2147,9 @@ bool findBestAvailablePresentModeForSwapMode(const std::vector<vk::PresentModeKH
 			break;
 		case gfx_api::context::swap_interval_mode::vsync:
 			presentModes = { vk::PresentModeKHR::eFifo };
+			break;
+		case gfx_api::context::swap_interval_mode::adaptive_vsync:
+			presentModes = { vk::PresentModeKHR::eFifoRelaxed };
 			break;
 	}
 
@@ -2177,6 +2182,8 @@ gfx_api::context::swap_interval_mode from_vk_presentmode(vk::PresentModeKHR pres
 			return gfx_api::context::swap_interval_mode::immediate;
 		case vk::PresentModeKHR::eFifo:
 			return gfx_api::context::swap_interval_mode::vsync;
+		case vk::PresentModeKHR::eFifoRelaxed:
+			return gfx_api::context::swap_interval_mode::adaptive_vsync;
 		default:
 			debug(LOG_ERROR, "Unhandled vk::PresentModeKHR value: %s", to_string(presentMode).c_str());
 	}
@@ -2193,8 +2200,15 @@ bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode)
 	if (!findBestAvailablePresentModeForSwapMode(swapChainSupport.presentModes, newSwapMode, desiredPresentMode))
 	{
 		// unable to find a best available presentation mode for the desired swap mode, so return false
-		debug(LOG_ERROR, "Unable to find best available presentation mode for swapmode: %s", to_string(newSwapMode).c_str());
+		debug(LOG_WARNING, "Unable to find best available presentation mode for swapmode: %s", to_string(newSwapMode).c_str());
 		return false;
+	}
+
+	if (swapchain && (desiredPresentMode == presentMode))
+	{
+		// nothing to do - already in this mode
+		debug(LOG_3D, "Ignoring request to set presentation mode to current presentation mode: %s", to_string(desiredPresentMode).c_str());
+		return true;
 	}
 
 	// set swapMode
@@ -2243,7 +2257,7 @@ bool VkRoot::createSwapchain()
 
 	if (!findBestAvailablePresentModeForSwapMode(swapChainSupport.presentModes, swapMode, presentMode))
 	{
-		debug(LOG_ERROR, "Unable to find best available presentation mode for swapmode: %s", to_string(swapMode).c_str());
+		debug(LOG_WARNING, "Unable to find best available presentation mode for swapmode: %s", to_string(swapMode).c_str());
 
 		// VK_PRESENT_MODE_FIFO_KHR is *required* to be supported, so fall back to it
 		if(std::find(swapChainSupport.presentModes.begin(), swapChainSupport.presentModes.end(), vk::PresentModeKHR::eFifo) == swapChainSupport.presentModes.end())

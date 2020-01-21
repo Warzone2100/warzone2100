@@ -1663,7 +1663,7 @@ bool wzSDLOneTimeInit()
 }
 
 // This stage, we handle display mode setting
-bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, bool vsync, bool highDPI)
+bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, int vsync, bool highDPI)
 {
 	const bool useOpenGLES = (backend == video_backend::opengles)
 #if defined(WZ_BACKEND_DIRECTX)
@@ -1677,6 +1677,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	;
 	const bool usesSDLBackend_OpenGL = useOpenGLES || (backend == video_backend::opengl);
 	const bool usesSDLBackend_Vulkan = (backend == video_backend::vulkan);
+	const auto vsyncMode = to_swap_mode(vsync);
 
 	// Output linked SDL version
 	char buf[512];
@@ -2013,7 +2014,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	cocoaSetupWZMenus();
 #endif
 
-	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES, useOpenGLESLibrary), antialiasing, (vsync) ? gfx_api::context::swap_interval_mode::vsync : gfx_api::context::swap_interval_mode::immediate, usesSDLBackend_Vulkan))
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES, useOpenGLESLibrary), antialiasing, vsyncMode, usesSDLBackend_Vulkan))
 	{
 		// Failed to initialize desired backend / renderer settings
 		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();

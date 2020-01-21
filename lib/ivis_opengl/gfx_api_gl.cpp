@@ -1610,7 +1610,12 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
 
-	setSwapInterval(mode);
+	if (!setSwapInterval(mode))
+	{
+		// default to vsync on
+		debug(LOG_3D, "Failed to set swap interval: %d; defaulting to vsync on", to_int(mode));
+		setSwapInterval(gfx_api::context::swap_interval_mode::vsync);
+	}
 
 	return true;
 }

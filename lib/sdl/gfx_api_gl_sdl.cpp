@@ -263,16 +263,24 @@ void sdl_OpenGL_Impl::getDrawableSize(int* w, int* h)
 	SDL_GL_GetDrawableSize(window, w, h);
 }
 
-int to_sdl_swap_interval(gfx_api::context::swap_interval_mode mode)
+bool to_sdl_swap_interval(gfx_api::context::swap_interval_mode mode, int &output_value)
 {
 	switch (mode)
 	{
 		case gfx_api::context::swap_interval_mode::immediate:
-			return 0;
+			output_value = 0;
+			return true;
 		case gfx_api::context::swap_interval_mode::vsync:
-			return 1;
+			output_value = 1;
+			return true;
+		case gfx_api::context::swap_interval_mode::adaptive_vsync:
+			output_value = -1;
+			return true;
+		default:
+			// unsupported swap_interval_mode
+			return false;
 	}
-	return 1;
+	return false;
 }
 
 gfx_api::context::swap_interval_mode from_sdl_swap_interval(int swapInterval)
@@ -283,16 +291,23 @@ gfx_api::context::swap_interval_mode from_sdl_swap_interval(int swapInterval)
 			return gfx_api::context::swap_interval_mode::immediate;
 		case 1:
 			return gfx_api::context::swap_interval_mode::vsync;
+		case -1:
+			return gfx_api::context::swap_interval_mode::adaptive_vsync;
 	}
 	return gfx_api::context::swap_interval_mode::vsync;
 }
 
 bool sdl_OpenGL_Impl::setSwapInterval(gfx_api::context::swap_interval_mode mode)
 {
-	int interval = to_sdl_swap_interval(mode);
+	int interval = 1;
+	if (!to_sdl_swap_interval(mode, interval))
+	{
+		debug(LOG_3D, "Unsupported swap_interval_mode for SDL OpenGL backend: %d", to_int(mode));
+		return false;
+	}
 	if (SDL_GL_SetSwapInterval(interval) != 0)
 	{
-		debug(LOG_ERROR, "Error: SDL_GL_SetSwapInterval(%d) failed (%s).", interval, SDL_GetError());
+		debug(LOG_WARNING, "SDL_GL_SetSwapInterval(%d) failed with error (%s)", interval, SDL_GetError());
 		return false;
 	}
 	vsyncIsEnabled = interval != 0;

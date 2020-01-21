@@ -1097,9 +1097,27 @@ static std::string videoOptionsTextureSizeString()
 	return textureSize;
 }
 
+gfx_api::context::swap_interval_mode getCurrentSwapMode()
+{
+	return to_swap_mode(war_GetVsync());
+}
+
+void saveCurrentSwapMode(gfx_api::context::swap_interval_mode mode)
+{
+	war_SetVsync(to_int(mode));
+}
+
 char const *videoOptionsVsyncString()
 {
-	return war_GetVsync()? _("On") : _("Off");
+	switch (getCurrentSwapMode()) {
+		case gfx_api::context::swap_interval_mode::immediate:
+			return _("Off");
+		case gfx_api::context::swap_interval_mode::vsync:
+			return _("On");
+		case gfx_api::context::swap_interval_mode::adaptive_vsync:
+			return _("Adaptive");
+	}
+	return "n/a";
 }
 
 std::string videoOptionsDisplayScaleString()
@@ -1231,6 +1249,32 @@ std::vector<unsigned int> availableDisplayScalesSorted()
 	std::vector<unsigned int> displayScales = wzAvailableDisplayScales();
 	std::sort(displayScales.begin(), displayScales.end());
 	return displayScales;
+}
+
+void seqVsyncMode()
+{
+	gfx_api::context::swap_interval_mode currentVsyncMode = getCurrentSwapMode();
+	auto startingVsyncMode = currentVsyncMode;
+	bool success = false;
+
+	do
+	{
+		currentVsyncMode = static_cast<gfx_api::context::swap_interval_mode>(seqCycle(static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(currentVsyncMode), static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(gfx_api::context::min_swap_interval_mode), 1, static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(gfx_api::context::max_swap_interval_mode)));
+
+		success = gfx_api::context::get().setSwapInterval(currentVsyncMode);
+
+	} while ((!success) && (currentVsyncMode != startingVsyncMode));
+
+	if (currentVsyncMode == startingVsyncMode)
+	{
+		// Failed to change vsync mode - display messagebox
+		wzDisplayDialog(Dialog_Warning, _("Unable to change Vertical Sync"), _("Warzone failed to change the Vertical Sync mode.\nYour system / drivers may not support other modes."));
+	}
+	else if (success)
+	{
+		// succeeded changing vsync mode
+		saveCurrentSwapMode(currentVsyncMode);
+	}
 }
 
 void seqDisplayScale()
@@ -1442,12 +1486,10 @@ bool runVideoOptionsMenu()
 
 	case FRONTEND_VSYNC:
 	case FRONTEND_VSYNC_R:
-		if (gfx_api::context::get().setSwapInterval((!war_GetVsync()) ? gfx_api::context::swap_interval_mode::vsync : gfx_api::context::swap_interval_mode::immediate))
-		{
-			// succeeded changing vsync mode
-			war_SetVsync(!war_GetVsync());
-			widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
-		}
+		seqVsyncMode();
+
+		// Update the widget(s)
+		refreshCurrentVideoOptionsValues();
 		break;
 
 	case FRONTEND_GFXBACKEND:
