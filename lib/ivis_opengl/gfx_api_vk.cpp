@@ -1910,19 +1910,29 @@ void VkRoot::shutdown()
 		surface = vk::SurfaceKHR();
 	}
 
-	// destroy debug callback
-	if(msgCallback)
-	{
-		DestroyDebugReportCallback(static_cast<VkInstance>(inst), msgCallback, nullptr);
-	}
-
 	// destroy instance
-	inst.destroy(nullptr, vkDynLoader);
-	inst = vk::Instance();
+	if (inst)
+	{
+		// destroy debug callback
+		if (msgCallback)
+		{
+			DestroyDebugReportCallback(static_cast<VkInstance>(inst), msgCallback, nullptr);
+			msgCallback = 0;
+		}
+
+		inst.destroy(nullptr, vkDynLoader);
+		inst = vk::Instance();
+	}
 }
 
 void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 {
+	if (!dev)
+	{
+		// Logical device is null - return
+		return;
+	}
+
 	if (graphicsQueue)
 	{
 		graphicsQueue.waitIdle(vkDynLoader);
@@ -2457,7 +2467,16 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 
 	// pick physical device (and get properties)
-	physicalDevice = pickPhysicalDevice();
+	try
+	{
+		physicalDevice = pickPhysicalDevice();
+	}
+	catch (const std::exception& e)
+	{
+		// failed to find a physical device that supports Vulkan
+		debug(LOG_ERROR, "pickPhysicalDevice failed: %s", e.what());
+		return false;
+	}
 	physDeviceProps = physicalDevice.getProperties(vkDynLoader);
 	formattedRendererInfoString = calculateFormattedRendererInfoString(); // must be called after physDeviceProps is populated
 	physDeviceFeatures = physicalDevice.getFeatures(vkDynLoader);
