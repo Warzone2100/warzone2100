@@ -2143,7 +2143,8 @@ bool findBestAvailablePresentModeForSwapMode(const std::vector<vk::PresentModeKH
 	switch (swapMode)
 	{
 		case gfx_api::context::swap_interval_mode::immediate:
-			presentModes = { vk::PresentModeKHR::eImmediate };
+			// If vsync is disabled, prefer VK_PRESENT_MODE_IMMEDIATE_KHR; fallback to VK_PRESENT_MODE_MAILBOX_KHR
+			presentModes = { vk::PresentModeKHR::eImmediate, vk::PresentModeKHR::eMailbox };
 			break;
 		case gfx_api::context::swap_interval_mode::vsync:
 			presentModes = { vk::PresentModeKHR::eFifo };
@@ -2179,6 +2180,7 @@ gfx_api::context::swap_interval_mode from_vk_presentmode(vk::PresentModeKHR pres
 	switch (presentMode)
 	{
 		case vk::PresentModeKHR::eImmediate:
+		case vk::PresentModeKHR::eMailbox:
 			return gfx_api::context::swap_interval_mode::immediate;
 		case vk::PresentModeKHR::eFifo:
 			return gfx_api::context::swap_interval_mode::vsync;
