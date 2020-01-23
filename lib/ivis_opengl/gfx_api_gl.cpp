@@ -522,7 +522,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		// > Hence for float, floating point vector and matrix variable declarations, either the
 		// > declaration must include a precision qualifier or the default float precision must
 		// > have been previously declared.
-		fragmentShaderHeader = std::string(shaderVersionStr) + "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n";
+		fragmentShaderHeader = std::string(shaderVersionStr) + "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\nprecision highp int;\n#else\nprecision mediump float;\n#endif\n";
 	}
 
 	build_program(
@@ -1757,6 +1757,23 @@ bool gl_context::initGLContext()
 		if (bShaderCompilerSupported != GL_TRUE)
 		{
 			debug(LOG_FATAL, "Shader compiler is not supported! (GL_SHADER_COMPILER == GL_FALSE)");
+			return false;
+		}
+
+		int highpFloatRange[2] = {0}, highpFloatPrecision = 0;
+		glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, highpFloatRange, &highpFloatPrecision);
+		fragmentHighpFloatAvailable = highpFloatPrecision != 0;
+
+		int highpIntRange[2] = {0}, highpIntPrecision = 0;
+		glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_INT, highpIntRange, &highpIntPrecision);
+		fragmentHighpIntAvailable = highpFloatRange[1] != 0;
+
+		if (!fragmentHighpFloatAvailable || !fragmentHighpIntAvailable)
+		{
+			// This can lead to a uniform precision mismatch between the vertex and fragment shaders
+			// (if there are duplicate uniform names).
+			// TODO: Handle this; for now, error out
+			debug(LOG_FATAL, "Fragment shaders do not support required precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
 			return false;
 		}
 	}

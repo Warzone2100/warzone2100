@@ -186,7 +186,10 @@ struct gl_context final : public gfx_api::context
 	GLuint scratchbuffer = 0;
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
+
 	bool gles = false;
+	bool fragmentHighpFloatAvailable = true;
+	bool fragmentHighpIntAvailable = true;
 
 	gl_context(bool _debug) : khr_debug(_debug) {}
 	~gl_context();
