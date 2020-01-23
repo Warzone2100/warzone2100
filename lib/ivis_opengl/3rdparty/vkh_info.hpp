@@ -41,7 +41,7 @@ public:
 
 public:
 
-	void Output_InstanceExtensions(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	void Output_InstanceLayerProperties(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 
 	void Output_SurfaceInformation(const vk::PhysicalDevice& physicalDevice, const vk::SurfaceKHR& surface, const vk::DispatchLoaderDynamic& vkDynLoader);
 
@@ -54,8 +54,9 @@ public:
 	{
 		return std::to_string(VK_VERSION_MAJOR(apiVersion)) + "." + std::to_string(VK_VERSION_MINOR(apiVersion)) + "." + std::to_string(VK_VERSION_PATCH(apiVersion));
 	}
-	static bool getInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
-	static bool supportsInstanceExtension(const char * extensionName, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	static bool getInstanceLayerProperties(std::vector<VkLayerProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	static bool getInstanceExtensions(const char * layerName, std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	static bool supportsInstanceExtension(const char * layerName, const char * extensionName, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 
 private:
 	outputHandlerFuncType outputHandler;

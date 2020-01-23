@@ -15,6 +15,34 @@
 
 #include <sstream>
 
+template <typename VKType, typename F, typename... Args>
+std::vector<VKType> GetVectorFromVKFuncWithExplicitInit(F &&func, VKType init, Args &&... args)
+{
+	std::vector<VKType> results;
+	uint32_t count = 0;
+	VkResult status;
+	do {
+		status = func(args..., &count, nullptr);
+		if ((status == VK_SUCCESS) && (count > 0))
+		{
+			results.resize(count, init);
+			status = func(args..., &count, results.data());
+		}
+	} while (status == VK_INCOMPLETE);
+	if (status == VK_SUCCESS)
+	{
+		// ASSERT(count <= results.size(), "Unexpected result: count (%" PRIu32"); results.size (%zu)", count, results.size());
+		results.resize(count);
+	}
+	return results;
+}
+
+template <typename VKType, typename F, typename... Args>
+std::vector<VKType> GetVectorFromVKFunc(F &&func, Args &&... args)
+{
+	return GetVectorFromVKFuncWithExplicitInit(func, VKType(), args...);
+}
+
 VkhInfo::VkhInfo(const outputHandlerFuncType& _outputHandler)
 : outputHandler(_outputHandler)
 { }
@@ -24,7 +52,22 @@ void VkhInfo::setOutputHandler(const outputHandlerFuncType& _outputHandler)
 	outputHandler = _outputHandler;
 }
 
-bool VkhInfo::getInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+bool VkhInfo::getInstanceLayerProperties(std::vector<VkLayerProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+{
+	if (!_vkGetInstanceProcAddr) return false;
+
+	PFN_vkEnumerateInstanceLayerProperties _vkEnumerateInstanceLayerProperties = reinterpret_cast<PFN_vkEnumerateInstanceLayerProperties>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceLayerProperties")));
+	if (!_vkEnumerateInstanceLayerProperties)
+	{
+		// Could not find symbol: vkEnumerateInstanceLayerProperties
+		return false;
+	}
+
+	output = GetVectorFromVKFunc<VkLayerProperties>(_vkEnumerateInstanceLayerProperties);
+	return true;
+}
+
+bool VkhInfo::getInstanceExtensions(const char * layerName, std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	if (!_vkGetInstanceProcAddr) return false;
 
@@ -34,20 +77,15 @@ bool VkhInfo::getInstanceExtensions(std::vector<VkExtensionProperties> &output, 
 		// Could not find symbol: vkEnumerateInstanceExtensionProperties
 		return false;
 	}
-	uint32_t extensionCount;
-	_vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr); // get number of extensions
 
-	std::vector<VkExtensionProperties> _extensions(extensionCount);
-	_vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, _extensions.data()); // populate buffer
-
-	output = _extensions;
+	output = GetVectorFromVKFunc<VkExtensionProperties>(_vkEnumerateInstanceExtensionProperties, layerName);
 	return true;
 }
 
-bool VkhInfo::supportsInstanceExtension(const char * extensionName, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+bool VkhInfo::supportsInstanceExtension(const char * layerName, const char * extensionName, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	std::vector<VkExtensionProperties> extensions;
-	if (!VkhInfo::getInstanceExtensions(extensions, _vkGetInstanceProcAddr))
+	if (!VkhInfo::getInstanceExtensions(layerName, extensions, _vkGetInstanceProcAddr))
 	{
 		return false;
 	}
@@ -58,20 +96,20 @@ bool VkhInfo::supportsInstanceExtension(const char * extensionName, PFN_vkGetIns
 						}) != extensions.end();
 }
 
-void VkhInfo::Output_InstanceExtensions(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+void VkhInfo::Output_InstanceLayerProperties(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	std::stringstream buf;
 
-	// Supported instance extensions
-	std::vector<VkExtensionProperties> supportedInstanceExtensions;
-	if (VkhInfo::getInstanceExtensions(supportedInstanceExtensions, _vkGetInstanceProcAddr))
+	// Supported (global) instance extensions
+	std::vector<VkExtensionProperties> supportedGlobalInstanceExtensions;
+	if (VkhInfo::getInstanceExtensions(nullptr, supportedGlobalInstanceExtensions, _vkGetInstanceProcAddr))
 	{
-		buf << "Instance Extensions:\n";
-		buf << "====================\n";
-		buf << "Count: " << supportedInstanceExtensions.size() << "\n";
-		for (auto & extension : supportedInstanceExtensions)
+		buf << "Global Instance Extensions:\n";
+		buf << "===========================\n";
+		buf << "Count: " << supportedGlobalInstanceExtensions.size() << "\n";
+		for (auto & extension : supportedGlobalInstanceExtensions)
 		{
-			buf << "- " << extension.extensionName << " (version: " << extension.specVersion << ")\n";
+			buf << "  - " << extension.extensionName << " (version: " << extension.specVersion << ")\n";
 		}
 		buf << "\n";
 	}
@@ -79,6 +117,50 @@ void VkhInfo::Output_InstanceExtensions(PFN_vkGetInstanceProcAddr _vkGetInstance
 	{
 		// Failure to request supported extensions
 		buf << "Failed to retrieve supported instance extensions\n";
+	}
+
+	// Instance layer properties
+	std::vector<VkLayerProperties> layerProperties;
+	if (VkhInfo::getInstanceLayerProperties(layerProperties, _vkGetInstanceProcAddr))
+	{
+		// Layer properties
+		buf << "Instance Layers:\n";
+		buf << "====================\n";
+		buf << "Count: " << layerProperties.size() << "\n";
+
+		for (size_t idx = 0; idx < layerProperties.size(); ++idx)
+		{
+			auto & layer = layerProperties[idx];
+
+			buf << "[Layer " << idx << "]\n";
+			buf << "- layerName: " << layer.layerName << "\n";
+			buf << "- description: " << layer.description << "\n";
+			buf << "- specVersion: " << VkhInfo::vulkan_apiversion_to_string(layer.specVersion) << "\n";
+			buf << "- implementationVersion: " << layer.implementationVersion << "\n";
+
+			// Supported instance extensions
+			std::vector<VkExtensionProperties> supportedInstanceExtensions;
+			if (VkhInfo::getInstanceExtensions(layer.layerName, supportedInstanceExtensions, _vkGetInstanceProcAddr))
+			{
+				buf << "- Instance Extensions:\n";
+				buf << "  --------------------\n";
+				buf << "  Count: " << supportedInstanceExtensions.size() << "\n";
+				for (auto & extension : supportedInstanceExtensions)
+				{
+					buf << "  - " << extension.extensionName << " (version: " << extension.specVersion << ")\n";
+				}
+				buf << "\n";
+			}
+			else
+			{
+				// Failure to request supported extensions
+				buf << "  Failed to retrieve supported layer instance extensions\n";
+			}
+		}
+	}
+	else
+	{
+		buf << "Failed to retrieve instance layer properties\n";
 	}
 
 	if (outputHandler)
@@ -341,7 +423,7 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 		}
 		buf << "\n";
 
-		bool instance_Supports_physical_device_properties2_extension = supportsInstanceExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, vkDynLoader.vkGetInstanceProcAddr);
+		bool instance_Supports_physical_device_properties2_extension = supportsInstanceExtension(nullptr, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, vkDynLoader.vkGetInstanceProcAddr);
 		bool physicalDevice_Supports_physical_device_properties2_extension =
 		std::find_if(deviceExtensionProperties.begin(), deviceExtensionProperties.end(),
 					 [](const vk::ExtensionProperties& props) {
