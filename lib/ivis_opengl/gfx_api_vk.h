@@ -167,7 +167,7 @@ struct perFrameResources_t
 	vk::Device dev;
 	VmaAllocator allocator;
 	vk::DescriptorPool descriptorPool;
-	uint32_t numalloc;
+	uint32_t numalloc = 0;
 	vk::CommandPool pool;
 	vk::CommandBuffer cmdDraw;
 	vk::CommandBuffer cmdCopy;
@@ -295,7 +295,6 @@ public:
 
 	~VkPSO();
 
-	VkPSO(vk::Pipeline&& p);
 	VkPSO(const VkPSO&) = default;
 	VkPSO(VkPSO&&) = default;
 	VkPSO& operator=(VkPSO&&) = default;
@@ -386,8 +385,12 @@ struct VkRoot final : gfx_api::context
 {
 	std::unique_ptr<gfx_api::backend_Vulkan_Impl> backend_impl;
 	VkhInfo debugInfo;
-	gfx_api::context::swap_interval_mode swapMode;
+	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
 
+	std::vector<VkExtensionProperties> supportedInstanceExtensionProperties;
+	std::vector<const char*> instanceExtensions;
+	vk::ApplicationInfo appInfo;
+	vk::InstanceCreateInfo instanceCreateInfo;
 	vk::Instance inst;
 	std::vector<const char*> layers;
 	vk::DispatchLoaderDynamic vkDynLoader;
@@ -411,7 +414,7 @@ struct VkRoot final : gfx_api::context
 	VmaAllocator allocator = VK_NULL_HANDLE;
 
 	// swapchain
-	vk::PresentModeKHR presentMode;
+	vk::PresentModeKHR presentMode = vk::PresentModeKHR::eFifo;
 	vk::Extent2D swapchainSize;
 	vk::SurfaceFormatKHR surfaceFormat;
 	vk::SwapchainKHR swapchain;
@@ -473,7 +476,8 @@ private:
 
 	std::vector<vk::DescriptorSet> allocateDescriptorSets(vk::DescriptorSetLayout arg);
 
-	bool createVulkanInstance(std::vector<const char*> extensions, std::vector<const char*> layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	bool findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr) const;
+	bool createVulkanInstance(const std::vector<const char*>& extensions, const std::vector<const char*>& layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	vk::PhysicalDevice pickPhysicalDevice();
 
 	bool createSurface();
@@ -523,7 +527,7 @@ private:
 	bool createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason);
 
 public:
-	virtual int32_t get_context_value(const context_value property) override;
+	virtual int32_t get_context_value(const gfx_api::context::context_value property) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;

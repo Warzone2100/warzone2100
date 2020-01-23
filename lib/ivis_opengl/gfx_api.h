@@ -243,7 +243,7 @@ namespace gfx_api
 				dynamic_draw,
 		};
 
-		enum context_value
+		enum class context_value
 		{
 			MAX_ELEMENTS_VERTICES,
 			MAX_ELEMENTS_INDICES,
