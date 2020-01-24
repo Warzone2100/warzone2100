@@ -7,7 +7,7 @@ environment:
     APPVEYOR_CACHE_ENTRY_ZIP_ARGS: -t7z -m0=lzma -mx=4
   matrix:
   # 32-bit (x86) builds
-  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     WZ_JOB_ID: release_x86
     wz_deploy_build: true
     # NOTE: Additional environment variables are set later to maintain consistent job identifiers
@@ -120,21 +120,21 @@ before_build:
       }
       elseif ($env:WZ_JOB_ID -eq "release_x86") {
         # 32-bit (x86) builds use more recent Qt and the latest VC toolchain (and support Windows 7+)
-        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
         $env:VCPKG_DEFAULT_TRIPLET = "x86-windows"
-        $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
+        $env:WZ_VC_GENERATOR = "Visual Studio 16 2019"
         $env:QT5DIR = "C:\Qt\5.9\msvc2015"
-        $env:WZ_VC_TOOLCHAIN = "v141"
+        $env:WZ_VC_TOOLCHAIN = "v142"
         $env:WZ_VC_TARGET_PLATFORMNAME = "Win32"
         $env:WZ_OUTPUT_PLATFORMNAME = "x86"
       }
       elseif ($env:WZ_JOB_ID -eq "release_x64") {
         # 64-bit (x64) builds use the latest Qt and VC toolchain (and support Windows 7+)
-        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        # APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows"
-        $env:WZ_VC_GENERATOR = "Visual Studio 15 2017"
+        $env:WZ_VC_GENERATOR = "Visual Studio 16 2019"
         $env:QT5DIR = "C:\Qt\5.9\msvc2017_64"
-        $env:WZ_VC_TOOLCHAIN = "v141"
+        $env:WZ_VC_TOOLCHAIN = "v142"
         $env:WZ_VC_TARGET_PLATFORMNAME = "x64"
         $env:WZ_OUTPUT_PLATFORMNAME = "x64"
       }
@@ -156,9 +156,8 @@ before_build:
   # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform (portable build)
   - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
 
-build:
-  parallel: true
-  project: build/PACKAGE.vcxproj
+build_script:
+  - msbuild build/PACKAGE.vcxproj -m /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /nowarn:MSB8065,MSB8064
 
 after_build:
   # Determine the build output description
@@ -177,7 +176,7 @@ after_build:
   # Re-run CMake configure for non-portable (regular) installer
   - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
   # Build the regular installer package (this should only rebuild the installer itself)
-  - msbuild build/PACKAGE.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+  - msbuild build/PACKAGE.vcxproj -m /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /nowarn:MSB8065,MSB8064
 
   # Rename the regular installer
   - ps: Move-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Destination "warzone2100_$($env:WZ_BUILD_DESC)_installer.exe"
