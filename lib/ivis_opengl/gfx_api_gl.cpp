@@ -27,6 +27,9 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <unordered_set>
+#include <unordered_map>
+#include <regex>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -493,7 +496,7 @@ typename std::pair<SHADER_MODE, std::function<void(const void*)>> gl_pipeline_st
 	return std::make_pair(shader, [this](const void* buffer) { this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer)); });
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
 desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 {
 	std::string vertexShaderHeader;
@@ -525,7 +528,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		fragmentShaderHeader = std::string(shaderVersionStr) + "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\nprecision highp int;\n#else\nprecision mediump float;\n#endif\n";
 	}
 
-	build_program(
+	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable,
 				  shader_to_file_table.at(shader).friendly_name,
 				  vertexShaderHeader.c_str(),
 				  shader_to_file_table.at(shader).vertex_file,
@@ -753,7 +756,71 @@ void gl_pipeline_state_object::getLocs()
 	glUniform1i(locTex3, 3);
 }
 
-void gl_pipeline_state_object::build_program(const std::string& programName,
+static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
+{
+	std::unordered_set<std::string> uniformNames;
+
+	// White space: the space character, horizontal tab, vertical tab, form feed, carriage-return, and line-feed.
+	const char glsl_whitespace_chars[] = " \t\v\f\r\n";
+
+	const auto re = std::regex("uniform.*(?![^\\{]*\\})(?=[=\\[;])", std::regex_constants::ECMAScript);
+
+	std::cregex_iterator next(shaderContents, shaderContents + strlen(shaderContents), re);
+	std::cregex_iterator end;
+	while (next != end)
+	{
+		std::cmatch uniformLineMatch = *next;
+		std::string uniformLineStr = uniformLineMatch.str();
+
+		// trim glsl whitespace chars from beginning / end
+		uniformLineStr = uniformLineStr.substr(uniformLineStr.find_first_not_of(glsl_whitespace_chars));
+		uniformLineStr.erase(uniformLineStr.find_last_not_of(glsl_whitespace_chars)+1);
+
+		size_t lastWhitespaceIdx = uniformLineStr.find_last_of(glsl_whitespace_chars);
+		if (lastWhitespaceIdx != std::string::npos)
+		{
+			std::string uniformName = uniformLineMatch.str().substr(lastWhitespaceIdx + 1);
+			if (!uniformName.empty())
+			{
+				uniformNames.insert(uniformName);
+			}
+		}
+		next++;
+	}
+
+	return uniformNames;
+}
+
+static std::tuple<std::string, std::unordered_map<std::string, std::string>> renameDuplicateFragmentShaderUniforms(const char * vertexShaderContents, const std::string& fragmentShaderContents)
+{
+	std::unordered_map<std::string, std::string> duplicateFragmentUniformNameMap;
+
+	const auto vertexUniformNames = getUniformNamesFromSource(vertexShaderContents);
+	const auto fragmentUniformNames = getUniformNamesFromSource(fragmentShaderContents.c_str());
+
+	std::string modifiedFragmentShaderSource = fragmentShaderContents;
+	for (const auto& fragmentUniform : fragmentUniformNames)
+	{
+		if (vertexUniformNames.count(fragmentUniform) > 0)
+		{
+			// duplicate uniform name found - rename it!
+			const std::string replacementUniformName = std::string("wzfix_frag_") + fragmentUniform;
+			duplicateFragmentUniformNameMap[fragmentUniform] = replacementUniformName;
+
+			// and replace it in the fragment shader source
+			modifiedFragmentShaderSource = std::regex_replace(
+				modifiedFragmentShaderSource,
+				std::regex(std::string("\\b") + fragmentUniform + "\\b", std::regex_constants::ECMAScript),
+				replacementUniformName
+			);
+		}
+	}
+
+	return std::tuple<std::string, std::unordered_map<std::string, std::string>>(modifiedFragmentShaderSource, duplicateFragmentUniformNameMap);
+}
+
+void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
 											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames)
@@ -769,17 +836,17 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 	glBindAttribLocation(program, 4, "vertexTangent");
 	ASSERT_OR_RETURN(, program, "Could not create shader program!");
 
-	char* shaderContents = nullptr;
+	char* vertexShaderContents = nullptr;
 
 	if (!vertexPath.empty())
 	{
 		success = false; // Assume failure before reading shader file
 
-		if ((shaderContents = readShaderBuf(vertexPath)))
+		if ((vertexShaderContents = readShaderBuf(vertexPath)))
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 
-			const char* ShaderStrings[2] = { vertex_header, shaderContents };
+			const char* ShaderStrings[2] = { vertex_header, vertexShaderContents };
 
 			glShaderSource(shader, 2, ShaderStrings, nullptr);
 			glCompileShader(shader);
@@ -801,21 +868,52 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 			{
 				glObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 			}
-			free(shaderContents);
-			shaderContents = nullptr;
 		}
 	}
 
+	std::vector<std::string> duplicateFragmentUniformNames;
 
 	if (success && !fragmentPath.empty())
 	{
 		success = false; // Assume failure before reading shader file
 
-		if ((shaderContents = readShaderBuf(fragmentPath)))
+		char* fragmentShaderContents = nullptr;
+		if ((fragmentShaderContents = readShaderBuf(fragmentPath)))
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-			const char* ShaderStrings[2] = { fragment_header, shaderContents };
+			std::string fragmentShaderStr = fragmentShaderContents;
+			free(fragmentShaderContents);
+			fragmentShaderContents = nullptr;
+
+			if (!fragmentHighpFloatAvailable || !fragmentHighpIntAvailable)
+			{
+				// rename duplicate uniforms
+				// to avoid conflicting uniform precision issues
+				std::unordered_map<std::string, std::string> fragmentUniformNameChanges;
+				std::tie(fragmentShaderStr, fragmentUniformNameChanges) = renameDuplicateFragmentShaderUniforms(vertexShaderContents, fragmentShaderStr);
+
+				duplicateFragmentUniformNames.resize(uniformNames.size());
+				for (const auto& it : fragmentUniformNameChanges)
+				{
+					const auto& originalUniformName = it.first;
+					const auto& replacementUniformName = it.second;
+
+					debug(LOG_3D, " - Found duplicate uniform name in fragment shader: %s", originalUniformName.c_str());
+
+					// find uniform index in global uniforms array
+					const auto itr = std::find(uniformNames.begin(), uniformNames.end(), originalUniformName);
+					if (itr != uniformNames.end())
+					{
+						size_t uniformIdx = std::distance(uniformNames.begin(), itr);
+						duplicateFragmentUniformNames[uniformIdx] = replacementUniformName;
+
+						debug(LOG_3D, "  - Renaming \"%s\" -> \"%s\" in fragment shader", originalUniformName.c_str(), replacementUniformName.c_str());
+					}
+				}
+			}
+
+			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
 			glShaderSource(shader, 2, ShaderStrings, nullptr);
 			glCompileShader(shader);
@@ -837,9 +935,13 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 			{
 				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 			}
-			free(shaderContents);
-			shaderContents = nullptr;
 		}
+	}
+
+	if (vertexShaderContents != nullptr)
+	{
+		free(vertexShaderContents);
+		vertexShaderContents = nullptr;
 	}
 
 	if (success)
@@ -863,45 +965,85 @@ void gl_pipeline_state_object::build_program(const std::string& programName,
 			glObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 		}
 	}
-	fetch_uniforms(uniformNames);
+	fetch_uniforms(uniformNames, duplicateFragmentUniformNames);
 	getLocs();
 }
 
-void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& uniformNames)
+void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniformNames)
 {
 	std::transform(uniformNames.begin(), uniformNames.end(),
 				   std::back_inserter(locations),
 				   [&](const std::string& name) { return glGetUniformLocation(program, name.data()); });
+	if (!duplicateFragmentUniformNames.empty())
+	{
+		std::transform(duplicateFragmentUniformNames.begin(), duplicateFragmentUniformNames.end(),
+					   std::back_inserter(duplicateFragmentUniformLocations),
+					   [&](const std::string& name) {
+			if (name.empty())
+			{
+				return -1;
+			}
+			return glGetUniformLocation(program, name.data());
+		});
+	}
+	else
+	{
+		duplicateFragmentUniformLocations.resize(uniformNames.size(), -1);
+	}
 }
 
-void gl_pipeline_state_object::setUniforms(GLint location, const ::glm::vec4 &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec4 &v)
 {
-	glUniform4f(location, v.x, v.y, v.z, v.w);
+	glUniform4f(locations[uniformIdx], v.x, v.y, v.z, v.w);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform4f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z, v.w);
+	}
 }
 
-void gl_pipeline_state_object::setUniforms(GLint location, const ::glm::mat4 &m)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 &m)
 {
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m));
+	glUniformMatrix4fv(locations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniformMatrix4fv(duplicateFragmentUniformLocations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
+	}
 }
 
-void gl_pipeline_state_object::setUniforms(GLint location, const Vector2i &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2i &v)
 {
-	glUniform2i(location, v.x, v.y);
+	glUniform2i(locations[uniformIdx], v.x, v.y);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform2i(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y);
+	}
 }
 
-void gl_pipeline_state_object::setUniforms(GLint location, const Vector2f &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const Vector2f &v)
 {
-	glUniform2f(location, v.x, v.y);
+	glUniform2f(locations[uniformIdx], v.x, v.y);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform2f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y);
+	}
 }
 
-void gl_pipeline_state_object::setUniforms(GLint location, const int32_t &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const int32_t &v)
 {
-	glUniform1i(location, v);
+	glUniform1i(locations[uniformIdx], v);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform1i(duplicateFragmentUniformLocations[uniformIdx], v);
+	}
 }
 
-void gl_pipeline_state_object::setUniforms(GLint location, const float &v)
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
 {
-	glUniform1f(location, v);
+	glUniform1f(locations[uniformIdx], v);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform1f(duplicateFragmentUniformLocations[uniformIdx], v);
+	}
 }
 
 // MARK: -
@@ -949,110 +1091,110 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.paramX);
-	setUniforms(locations[2], cbuf.paramY);
-	setUniforms(locations[3], cbuf.paramXLight);
-	setUniforms(locations[4], cbuf.paramYLight);
-	setUniforms(locations[5], cbuf.texture0);
-	setUniforms(locations[6], cbuf.texture1);
-	setUniforms(locations[7], cbuf.unused);
-	setUniforms(locations[8], cbuf.texture_matrix);
-	setUniforms(locations[9], cbuf.fog_colour);
-	setUniforms(locations[10], cbuf.fog_enabled);
-	setUniforms(locations[11], cbuf.fog_begin);
-	setUniforms(locations[12], cbuf.fog_end);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.paramX);
+	setUniforms(2, cbuf.paramY);
+	setUniforms(3, cbuf.paramXLight);
+	setUniforms(4, cbuf.paramYLight);
+	setUniforms(5, cbuf.texture0);
+	setUniforms(6, cbuf.texture1);
+	setUniforms(7, cbuf.unused);
+	setUniforms(8, cbuf.texture_matrix);
+	setUniforms(9, cbuf.fog_colour);
+	setUniforms(10, cbuf.fog_enabled);
+	setUniforms(11, cbuf.fog_begin);
+	setUniforms(12, cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.paramX);
-	setUniforms(locations[2], cbuf.paramY);
-	setUniforms(locations[3], cbuf.texture0);
-	setUniforms(locations[4], cbuf.paramXLight);
-	setUniforms(locations[5], cbuf.paramYLight);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.paramX);
+	setUniforms(2, cbuf.paramY);
+	setUniforms(3, cbuf.texture0);
+	setUniforms(4, cbuf.paramXLight);
+	setUniforms(5, cbuf.paramYLight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.param1);
-	setUniforms(locations[2], cbuf.param2);
-	setUniforms(locations[3], cbuf.texture_matrix);
-	setUniforms(locations[4], cbuf.fog_colour);
-	setUniforms(locations[5], cbuf.fog_enabled);
-	setUniforms(locations[6], cbuf.fog_begin);
-	setUniforms(locations[7], cbuf.fog_end);
-	setUniforms(locations[8], cbuf.texture0);
-	setUniforms(locations[9], cbuf.texture1);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.param1);
+	setUniforms(2, cbuf.param2);
+	setUniforms(3, cbuf.texture_matrix);
+	setUniforms(4, cbuf.fog_colour);
+	setUniforms(5, cbuf.fog_enabled);
+	setUniforms(6, cbuf.fog_begin);
+	setUniforms(7, cbuf.fog_end);
+	setUniforms(8, cbuf.texture0);
+	setUniforms(9, cbuf.texture1);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.param1);
-	setUniforms(locations[2], cbuf.param2);
-	setUniforms(locations[3], cbuf.param3);
-	setUniforms(locations[4], cbuf.param4);
-	setUniforms(locations[5], cbuf.texture0);
-	setUniforms(locations[6], cbuf.texture1);
-	setUniforms(locations[7], cbuf.translation);
-	setUniforms(locations[8], cbuf.texture_matrix);
-	setUniforms(locations[9], cbuf.fog_colour);
-	setUniforms(locations[10], cbuf.fog_enabled);
-	setUniforms(locations[11], cbuf.fog_begin);
-	setUniforms(locations[12], cbuf.fog_end);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.param1);
+	setUniforms(2, cbuf.param2);
+	setUniforms(3, cbuf.param3);
+	setUniforms(4, cbuf.param4);
+	setUniforms(5, cbuf.texture0);
+	setUniforms(6, cbuf.texture1);
+	setUniforms(7, cbuf.translation);
+	setUniforms(8, cbuf.texture_matrix);
+	setUniforms(9, cbuf.fog_colour);
+	setUniforms(10, cbuf.fog_enabled);
+	setUniforms(11, cbuf.fog_begin);
+	setUniforms(12, cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.colour);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.colour);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.offset);
-	setUniforms(locations[2], cbuf.size);
-	setUniforms(locations[3], cbuf.color);
-	setUniforms(locations[4], cbuf.texture);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.offset);
+	setUniforms(2, cbuf.size);
+	setUniforms(3, cbuf.color);
+	setUniforms(4, cbuf.texture);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_COLOUR>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
+	setUniforms(0, cbuf.transform_matrix);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_TEXT>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.color);
-	setUniforms(locations[2], cbuf.texture);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.color);
+	setUniforms(2, cbuf.texture);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.colour);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.colour);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf)
 {
-	setUniforms(locations[0], cbuf.p0);
-	setUniforms(locations[1], cbuf.p1);
-	setUniforms(locations[2], cbuf.colour);
-	setUniforms(locations[3], cbuf.mat);
+	setUniforms(0, cbuf.p0);
+	setUniforms(1, cbuf.p1);
+	setUniforms(2, cbuf.colour);
+	setUniforms(3, cbuf.mat);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf)
 {
-	setUniforms(locations[0], cbuf.transform_matrix);
-	setUniforms(locations[1], cbuf.offset);
-	setUniforms(locations[2], cbuf.size);
-	setUniforms(locations[3], cbuf.color);
-	setUniforms(locations[4], cbuf.texture);
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.offset);
+	setUniforms(2, cbuf.size);
+	setUniforms(3, cbuf.color);
+	setUniforms(4, cbuf.texture);
 }
 
 size_t get_size(const gfx_api::vertex_attribute_type& type)
@@ -1137,7 +1279,7 @@ gfx_api::pipeline_state_object * gl_context::build_pipeline(const gfx_api::state
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
-	return new gl_pipeline_state_object(gles, state_desc, shader_mode, attribute_descriptions);
+	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, state_desc, shader_mode, attribute_descriptions);
 }
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
@@ -1750,6 +1892,9 @@ bool gl_context::initGLContext()
 		debug(LOG_FATAL, "OpenGL 2.0 / OpenGL ES 2.0 not supported! Please upgrade your drivers.");
 		return false;
 	}
+
+	fragmentHighpFloatAvailable = true;
+	fragmentHighpIntAvailable = true;
 	if (gles)
 	{
 		GLboolean bShaderCompilerSupported = GL_FALSE;
@@ -1772,9 +1917,9 @@ bool gl_context::initGLContext()
 		{
 			// This can lead to a uniform precision mismatch between the vertex and fragment shaders
 			// (if there are duplicate uniform names).
-			// TODO: Handle this; for now, error out
-			debug(LOG_FATAL, "Fragment shaders do not support required precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
-			return false;
+			//
+			// This is now handled with a workaround when processing shaders, so just log it.
+			debug(LOG_3D, "Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
 		}
 	}
 

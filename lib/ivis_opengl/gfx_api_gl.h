@@ -91,13 +91,14 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	GLuint program;
 	std::vector<gfx_api::vertex_buffer> vertex_buffer_desc;
 	std::vector<GLint> locations;
+	std::vector<GLint> duplicateFragmentUniformLocations;
 
 	std::function<void(const void*)> uniform_bind_function;
 
 	template<SHADER_MODE shader>
 	typename std::pair<SHADER_MODE, std::function<void(const void*)>> uniform_binding_entry();
 
-	gl_pipeline_state_object(bool gles, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc);
+	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc);
 	void set_constants(const void* buffer);
 
 	void bind();
@@ -114,52 +115,53 @@ private:
 
 	void getLocs();
 
-	void build_program(const std::string& programName,
+	void build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
 					   const char * fragment_header, const std::string& fragmentPath,
 					   const std::vector<std::string> &uniformNames);
 
-	void fetch_uniforms(const std::vector<std::string>& uniformNames);
+	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms);
 
 	/**
 	 * setUniforms is an overloaded wrapper around glUniform* functions
 	 * accepting glm structures.
 	 * Please do not use directly, use pie_ActivateShader below.
 	 */
-	void setUniforms(GLint location, const ::glm::vec4 &v);
-	void setUniforms(GLint location, const ::glm::mat4 &m);
-	void setUniforms(GLint location, const Vector2i &v);
-	void setUniforms(GLint location, const Vector2f &v);
-	void setUniforms(GLint location, const int32_t &v);
-	void setUniforms(GLint location, const float &v);
+	void setUniforms(size_t uniformIdx, const ::glm::vec4 &v);
+	void setUniforms(size_t uniformIdx, const ::glm::mat4 &m);
+	void setUniforms(size_t uniformIdx, const Vector2i &v);
+	void setUniforms(size_t uniformIdx, const Vector2f &v);
+	void setUniforms(size_t uniformIdx, const int32_t &v);
+	void setUniforms(size_t uniformIdx, const float &v);
 
 
 	// Wish there was static reflection in C++...
 	template<typename T>
 	void set_constants_for_component(const T& cbuf)
 	{
-		setUniforms(locations[0], cbuf.colour);
-		setUniforms(locations[1], cbuf.teamcolour);
-		setUniforms(locations[2], cbuf.shaderStretch);
-		setUniforms(locations[3], cbuf.tcmask);
-		setUniforms(locations[4], cbuf.fogEnabled);
-		setUniforms(locations[5], cbuf.normalMap);
-		setUniforms(locations[6], cbuf.specularMap);
-		setUniforms(locations[7], cbuf.ecmState);
-		setUniforms(locations[8], cbuf.alphaTest);
-		setUniforms(locations[9], cbuf.timeState);
-		setUniforms(locations[10], cbuf.ModelViewMatrix);
-		setUniforms(locations[11], cbuf.ModelViewProjectionMatrix);
-		setUniforms(locations[12], cbuf.NormalMatrix);
-		setUniforms(locations[13], cbuf.sunPos);
-		setUniforms(locations[14], cbuf.sceneColor);
-		setUniforms(locations[15], cbuf.ambient);
-		setUniforms(locations[16], cbuf.diffuse);
-		setUniforms(locations[17], cbuf.specular);
-		setUniforms(locations[18], cbuf.fogColour);
-		setUniforms(locations[19], cbuf.fogEnd);
-		setUniforms(locations[20], cbuf.fogBegin);
-		setUniforms(locations[21], cbuf.hasTangents);
+		setUniforms(0, cbuf.colour);
+		setUniforms(1, cbuf.teamcolour);
+		setUniforms(2, cbuf.shaderStretch);
+		setUniforms(3, cbuf.tcmask);
+		setUniforms(4, cbuf.fogEnabled);
+		setUniforms(5, cbuf.normalMap);
+		setUniforms(6, cbuf.specularMap);
+		setUniforms(7, cbuf.ecmState);
+		setUniforms(8, cbuf.alphaTest);
+		setUniforms(9, cbuf.timeState);
+		setUniforms(10, cbuf.ModelViewMatrix);
+		setUniforms(11, cbuf.ModelViewProjectionMatrix);
+		setUniforms(12, cbuf.NormalMatrix);
+		setUniforms(13, cbuf.sunPos);
+		setUniforms(14, cbuf.sceneColor);
+		setUniforms(15, cbuf.ambient);
+		setUniforms(16, cbuf.diffuse);
+		setUniforms(17, cbuf.specular);
+		setUniforms(18, cbuf.fogColour);
+		setUniforms(19, cbuf.fogEnd);
+		setUniforms(20, cbuf.fogBegin);
+		setUniforms(21, cbuf.hasTangents);
 	}
 
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_BUTTON>& cbuf);
