@@ -476,11 +476,15 @@ private:
 
 	std::vector<vk::DescriptorSet> allocateDescriptorSets(vk::DescriptorSetLayout arg);
 
-	bool findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr) const;
-	bool createVulkanInstance(const std::vector<const char*>& extensions, const std::vector<const char*>& layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	bool getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	bool findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+	bool createVulkanInstance(uint32_t apiVersion, const std::vector<const char*>& extensions, const std::vector<const char*>& layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	vk::PhysicalDevice pickPhysicalDevice();
 
 	bool createSurface();
+	bool canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion);
+	bool canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion);
+
 	// pickPhysicalDevice();
 	void getQueueFamiliesInfo();
 	bool createLogicalDevice();
