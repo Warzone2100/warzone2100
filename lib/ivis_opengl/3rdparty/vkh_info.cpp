@@ -1,6 +1,6 @@
 //
 // VkhInfo
-// Version: 1.2
+// Version: 1.3
 //
 // Copyright (c) 2019-2020 past-due
 //
@@ -96,7 +96,7 @@ bool VkhInfo::supportsInstanceExtension(const char * layerName, const char * ext
 						}) != extensions.end();
 }
 
-void VkhInfo::Output_InstanceLayerProperties(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+void VkhInfo::Output_GlobalInstanceExtensions(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	std::stringstream buf;
 
@@ -118,6 +118,16 @@ void VkhInfo::Output_InstanceLayerProperties(PFN_vkGetInstanceProcAddr _vkGetIns
 		// Failure to request supported extensions
 		buf << "Failed to retrieve supported instance extensions\n";
 	}
+
+	if (outputHandler)
+	{
+		outputHandler(buf.str());
+	}
+}
+
+void VkhInfo::Output_InstanceLayerProperties(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+{
+	std::stringstream buf;
 
 	// Instance layer properties
 	std::vector<VkLayerProperties> layerProperties;
@@ -226,9 +236,15 @@ void VkhInfo::Output_SurfaceInformation(const vk::PhysicalDevice& physicalDevice
 }
 
 // If `getProperties2` is true, the instance `inst` *must* have been created with the "VK_KHR_get_physical_device_properties2" extension enabled
-void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getProperties2, const vk::DispatchLoaderDynamic& vkDynLoader)
+void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, const vk::ApplicationInfo& appInfo, std::vector<const char*> instanceExtensions, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	std::stringstream buf;
+
+	bool instanceExtension_getPhysicalDeviceProperties2KHR_enabled = std::find_if(instanceExtensions.begin(), instanceExtensions.end(),
+		[](const char *extensionName)
+	{
+			return (strcmp(extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) == 0);
+	}) != instanceExtensions.end();
 
 	// - Physical Devices
 
@@ -423,18 +439,12 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 		}
 		buf << "\n";
 
-		bool instance_Supports_physical_device_properties2_extension = supportsInstanceExtension(nullptr, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, vkDynLoader.vkGetInstanceProcAddr);
-		bool physicalDevice_Supports_physical_device_properties2_extension =
-		std::find_if(deviceExtensionProperties.begin(), deviceExtensionProperties.end(),
-					 [](const vk::ExtensionProperties& props) {
-						 return (strcmp(props.extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) == 0);
-					 }) != deviceExtensionProperties.end();
-
-		if (getProperties2 && instance_Supports_physical_device_properties2_extension && physicalDevice_Supports_physical_device_properties2_extension)
+		bool bGotProperties2 = false;
+		vk::PhysicalDevicePushDescriptorPropertiesKHR pushDescriptorProps;
+		vk::PhysicalDeviceMaintenance3Properties maintenance3Properties;
+		if ((appInfo.apiVersion >= VK_MAKE_VERSION(1, 1, 0)) && (deviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0)))
 		{
-			vk::PhysicalDevicePushDescriptorPropertiesKHR pushDescriptorProps;
-			vk::PhysicalDeviceMaintenance3Properties maintenance3Properties;
-			if (deviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0))
+			if (vkDynLoader.vkGetPhysicalDeviceProperties2 != nullptr)
 			{
 				auto properties2Chain = physicalDevice.getProperties2<
 				vk::PhysicalDeviceProperties2,
@@ -443,8 +453,12 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 				>(vkDynLoader);
 				pushDescriptorProps = properties2Chain.template get<vk::PhysicalDevicePushDescriptorPropertiesKHR>();
 				maintenance3Properties = properties2Chain.template get<vk::PhysicalDeviceMaintenance3Properties>();
+				bGotProperties2 = true;
 			}
-			else
+		}
+		else if (instanceExtension_getPhysicalDeviceProperties2KHR_enabled)
+		{
+			if (vkDynLoader.vkGetPhysicalDeviceProperties2KHR != nullptr)
 			{
 				auto properties2Chain = physicalDevice.getProperties2KHR<
 				vk::PhysicalDeviceProperties2KHR,
@@ -453,8 +467,12 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, bool getPropertie
 				>(vkDynLoader);
 				pushDescriptorProps = properties2Chain.template get<vk::PhysicalDevicePushDescriptorPropertiesKHR>();
 				maintenance3Properties = properties2Chain.template get<vk::PhysicalDeviceMaintenance3Properties>();
+				bGotProperties2 = true;
 			}
+		}
 
+		if (bGotProperties2)
+		{
 			// VkPhysicalDevicePushDescriptorProperties
 			buf << "VkPhysicalDevicePushDescriptorProperties:\n";
 			buf << "-----------------------------------------\n";

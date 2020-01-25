@@ -48,10 +48,20 @@
 #include <unordered_set>
 #include <map>
 
+#if defined(DEBUG)
+// For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
+const uint32_t maxRequestableInstanceVulkanVersion = VK_API_VERSION_1_0;
+#else
+// For regular builds, currently limit to: Vulkan 1.1
+const uint32_t maxRequestableInstanceVulkanVersion = (uint32_t)VK_MAKE_VERSION(1, 1, 0);
+#endif
+
 const size_t MAX_FRAMES_IN_FLIGHT = 2;
 
-const std::vector<const char*> optionalInstanceExtensions = {
-	VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME	// used for Vulkan info output
+// Vulkan version where extension is promoted to core; extension name
+#define VK_NOT_PROMOTED_TO_CORE_YET 0
+const std::vector<std::tuple<uint32_t, const char*>> optionalInstanceExtensions = {
+	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME }	// used for Vulkan info output
 };
 
 const std::vector<const char*> deviceExtensions = {
@@ -235,9 +245,16 @@ bool checkDeviceExtensionSupport(const vk::PhysicalDevice &device, const std::ve
 	return requiredExtensions.empty();
 }
 
-static bool getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+bool VkRoot::getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
-	ASSERT(_vkGetInstanceProcAddr, "_vkGetInstanceProcAddr must be valid");
+	if (!supportedInstanceExtensionProperties.empty())
+	{
+		// use cached info
+		output = supportedInstanceExtensionProperties;
+		return true;
+	}
+
+	ASSERT_OR_RETURN(false, _vkGetInstanceProcAddr, "_vkGetInstanceProcAddr must be valid");
 	PFN_vkEnumerateInstanceExtensionProperties _vkEnumerateInstanceExtensionProperties = reinterpret_cast<PFN_vkEnumerateInstanceExtensionProperties>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceExtensionProperties")));
 	if (!_vkEnumerateInstanceExtensionProperties)
 	{
@@ -245,13 +262,16 @@ static bool getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &o
 		return false;
 	}
 
-	output = GetVectorFromVKFunc<VkExtensionProperties>(_vkEnumerateInstanceExtensionProperties, nullptr);
+	// cache the result in VkRoot instance, to minimize calls to vkEnumerateInstanceExtensionProperties
+	supportedInstanceExtensionProperties = GetVectorFromVKFunc<VkExtensionProperties>(_vkEnumerateInstanceExtensionProperties, nullptr);
+
+	output = supportedInstanceExtensionProperties;
 	return true;
 }
 
 static bool getInstanceLayerProperties(std::vector<VkLayerProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
-	ASSERT(_vkGetInstanceProcAddr, "_vkGetInstanceProcAddr must be valid");
+	ASSERT_OR_RETURN(false, _vkGetInstanceProcAddr, "_vkGetInstanceProcAddr must be valid");
 	PFN_vkEnumerateInstanceLayerProperties _vkEnumerateInstanceLayerProperties = reinterpret_cast<PFN_vkEnumerateInstanceLayerProperties>(reinterpret_cast<void*>(_vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceLayerProperties")));
 	if (!_vkEnumerateInstanceLayerProperties)
 	{
@@ -322,9 +342,14 @@ bool checkValidationLayerSupport(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAdd
 	return true;
 }
 
-bool VkRoot::findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr) const
+bool VkRoot::findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
-	std::vector<VkExtensionProperties> supportedExtensions = supportedInstanceExtensionProperties;
+	std::vector<VkExtensionProperties> supportedExtensions;
+	if (!getSupportedInstanceExtensions(supportedExtensions, _vkGetInstanceProcAddr))
+	{
+		// Failed to get supported extensions
+		return false;
+	}
 
 	std::unordered_set<std::string> supportedExtensionNames;
 	for (auto & extension : supportedExtensions)
@@ -1671,14 +1696,14 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 // Attempts to create a Vulkan instance (vk::Instance) with the specified extensions and layers
 // If successful, sets the following variable in VkRoot:
 //	- inst (vk::Instance)
-bool VkRoot::createVulkanInstance(const std::vector<const char*>& extensions, const std::vector<const char*>& _layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
+bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const char*>& extensions, const std::vector<const char*>& _layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	appInfo = vk::ApplicationInfo()
 	.setPApplicationName("Warzone2100")
 	.setApplicationVersion(1)
 	.setPEngineName("Warzone2100")
 	.setEngineVersion(1)
-	.setApiVersion(VK_API_VERSION_1_0);
+	.setApiVersion(apiVersion);
 
 	// Now we can make the Vulkan instance
 	instanceCreateInfo = vk::InstanceCreateInfo()
@@ -2527,6 +2552,22 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
+// See: https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#fundamentals-validusage-versions
+#define VK_VERSION_GREATER_THAN_OR_EQUAL(a, b) \
+	( ( VK_VERSION_MAJOR(a) > VK_VERSION_MAJOR(b) ) || ( ( VK_VERSION_MAJOR(a) == VK_VERSION_MAJOR(b) ) && ( VK_VERSION_MINOR(a) >= VK_VERSION_MINOR(b) ) ) )
+
+bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion)
+{
+	ASSERT(inst, "Instance is null");
+	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion);
+}
+
+bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion)
+{
+	ASSERT(physicalDevice, "Physical device is null");
+	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion) && VK_VERSION_GREATER_THAN_OR_EQUAL(physDeviceProps.apiVersion, minVulkanAPICoreVersion);
+}
+
 bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
@@ -2554,7 +2595,11 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	if (_vkEnumerateInstanceVersion)
 	{
 		const VkResult enumResult = _vkEnumerateInstanceVersion(&instanceVersion);
-		if (enumResult != VK_SUCCESS)
+		if (enumResult == VK_SUCCESS)
+		{
+			debug(LOG_3D, "vkEnumerateInstanceVersion: %s", VkhInfo::vulkan_apiversion_to_string(instanceVersion).c_str());
+		}
+		else
 		{
 			debug(LOG_3D, "vkEnumerateInstanceVersion failed with error: %s\n", to_string(vk::Result(enumResult)).c_str());
 			instanceVersion = VK_API_VERSION_1_0;
@@ -2565,8 +2610,12 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		debug(LOG_3D, "Could not find symbol: vkEnumerateInstanceVersion\n");
 		instanceVersion = VK_API_VERSION_1_0;
 	}
-	debug(LOG_3D, "vkEnumerateInstanceVersion: %s", VkhInfo::vulkan_apiversion_to_string(instanceVersion).c_str());
+	uint32_t requestedInstanceApiVersion = std::min(
+			(uint32_t)VK_MAKE_VERSION(VK_VERSION_MAJOR(instanceVersion), VK_VERSION_MINOR(instanceVersion), 0),
+			maxRequestableInstanceVulkanVersion
+	); // cap requestedInstanceApiVersion to maxRequestableInstanceVulkanVersion
 
+	debugInfo.Output_GlobalInstanceExtensions(_vkGetInstanceProcAddr);
 	debugInfo.Output_InstanceLayerProperties(_vkGetInstanceProcAddr);
 
 	instanceExtensions.clear();
@@ -2579,14 +2628,6 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 
 	layers.clear();
-
-	// load supported instance extensions
-	if (!getSupportedInstanceExtensions(supportedInstanceExtensionProperties, _vkGetInstanceProcAddr))
-	{
-		// Failed to get supported extensions
-		debug(LOG_ERROR, "Failed to enumerate instance extension properties");
-		return false;
-	}
 
 // debugLayer handling
 	if (debugLayer)
@@ -2618,15 +2659,40 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 // end debugLayer handling
 
 	// add other optional instance extensions
-	std::vector<const char*> supportedOptionalInstanceExtensions;
-	if (!findSupportedInstanceExtensions(optionalInstanceExtensions, supportedOptionalInstanceExtensions, _vkGetInstanceProcAddr))
+	std::vector<const char *> optionalInstanceExtensionsToCheck;
+	for (const auto& optionalInstanceExtensionPair : optionalInstanceExtensions)
 	{
-		debug(LOG_ERROR, "Failed to retrieve supported optional instance extensions");
-		return false;
+		uint32_t minInstanceExtensionCoreVersion = std::get<0>(optionalInstanceExtensionPair);
+		if (minInstanceExtensionCoreVersion != 0 && requestedInstanceApiVersion >= minInstanceExtensionCoreVersion)
+		{
+			// Vulkan instance version is sufficient for this extension to be promoted to core, so ignore
+			// (the rest of the code should check and use the core version; see: canUseVulkanInstanceAPI / canUseVulkanDeviceAPI)
+			const char * extensionName = std::get<1>(optionalInstanceExtensionPair);
+			debug(LOG_3D, "Vulkan instance version is sufficient for this extension to be promoted to core: %s", extensionName);
+		}
+		else
+		{
+			// must check for extension availability
+			optionalInstanceExtensionsToCheck.push_back(std::get<1>(optionalInstanceExtensionPair));
+		}
 	}
-	instanceExtensions.insert(std::end(instanceExtensions), supportedOptionalInstanceExtensions.begin(), supportedOptionalInstanceExtensions.end());
+	if (!optionalInstanceExtensionsToCheck.empty())
+	{
+		std::string checkInstanceExtensionsAsString;
+		std::for_each(optionalInstanceExtensionsToCheck.begin(), optionalInstanceExtensionsToCheck.end(), [&checkInstanceExtensionsAsString](const char* extension) {
+			checkInstanceExtensionsAsString += std::string(extension) + ",";
+			});
+		debug(LOG_3D, "Checking for optional instance extensions: %s", checkInstanceExtensionsAsString.c_str());
+		std::vector<const char*> supportedOptionalInstanceExtensions;
+		if (!findSupportedInstanceExtensions(optionalInstanceExtensionsToCheck, supportedOptionalInstanceExtensions, _vkGetInstanceProcAddr))
+		{
+			debug(LOG_ERROR, "Failed to retrieve supported optional instance extensions");
+			return false;
+		}
+		instanceExtensions.insert(std::end(instanceExtensions), supportedOptionalInstanceExtensions.begin(), supportedOptionalInstanceExtensions.end());
+	}
 
-	if (!createVulkanInstance(instanceExtensions, layers, _vkGetInstanceProcAddr))
+	if (!createVulkanInstance(requestedInstanceApiVersion, instanceExtensions, layers, _vkGetInstanceProcAddr))
 	{
 		debug(LOG_ERROR, "createVulkanInstance failed");
 		return false;
@@ -2638,9 +2704,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	// NOTE: From this point on, vkDynLoader *must* be initialized!
 	ASSERT(vkDynLoader.vkGetInstanceProcAddr != nullptr, "vkDynLoader does not appear to be initialized");
 
-	bool getProperties2Available = std::find_if(instanceExtensions.begin(), instanceExtensions.end(),
-												[](const char *extensionName) { return (strcmp(extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) == 0);}) != instanceExtensions.end();
-	debugInfo.Output_PhysicalDevices(inst, getProperties2Available, vkDynLoader);
+	debugInfo.Output_PhysicalDevices(inst, appInfo, instanceExtensions, vkDynLoader);
 
 	if (!createSurface())
 	{
