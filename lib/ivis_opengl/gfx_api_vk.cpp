@@ -1721,6 +1721,19 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 		debug(LOG_ERROR, "Could not find symbol: vkCreateInstance\n");
 		return false;
 	}
+
+	debug(LOG_3D, "Using instance apiVersion: %s", VkhInfo::vulkan_apiversion_to_string(instanceCreateInfo.pApplicationInfo->apiVersion).c_str());
+	std::string layersAsString;
+	std::for_each(_layers.begin(), _layers.end(), [&layersAsString](const char *layer) {
+		layersAsString += std::string(layer) + ",";
+	});
+	debug(LOG_3D, "Using layers: %s", layersAsString.c_str());
+	std::string instanceExtensionsAsString;
+	std::for_each(extensions.begin(), extensions.end(), [&instanceExtensionsAsString](const char *extension) {
+		instanceExtensionsAsString += std::string(extension) + ",";
+	});
+	debug(LOG_3D, "Using instance extensions: %s", instanceExtensionsAsString.c_str());
+
 	VkResult result = _vkCreateInstance(reinterpret_cast<const VkInstanceCreateInfo*>(&instanceCreateInfo), nullptr, reinterpret_cast<VkInstance*>(&inst));
 	if (result != VK_SUCCESS)
 	{
