@@ -2315,6 +2315,17 @@ bool VkRoot::createSwapchain()
 	swapchainSize.width = clamp(drawableSize.width, swapChainSupport.capabilities.minImageExtent.width, swapChainSupport.capabilities.maxImageExtent.width);
 	swapchainSize.height = clamp(drawableSize.height, swapChainSupport.capabilities.minImageExtent.height, swapChainSupport.capabilities.maxImageExtent.height);
 	ASSERT(swapchainSize.width > 0 && swapchainSize.height > 0, "swapchain dimensions: %" PRIu32" x %" PRIu32"", swapchainSize.width, swapchainSize.height);
+	// Some drivers may return 0 for swapchain min/maxImageExtent height/width in certain circumstances
+	// (ex. some Nvidia drivers on Windows when minimizing the window)
+	// but attempting to create a swapchain with extents of 0 is invalid
+	if (swapchainSize.width == 0)
+	{
+		swapchainSize.width = std::max(drawableSize.width, static_cast<uint32_t>(1)); // ensure there's never a 0 swapchain width
+	}
+	if (swapchainSize.height == 0)
+	{
+		swapchainSize.height = std::max(drawableSize.height, static_cast<uint32_t>(1)); // ensure there's never a 0 swapchain height
+	}
 	if (drawableSize != swapchainSize)
 	{
 		debug(LOG_3D, "Clamped drawableSize (%" PRIu32" x %" PRIu32") to minImageExtent (%" PRIu32" x %" PRIu32") & maxImageExtent (%" PRIu32" x %" PRIu32"): swapchainSize (%" PRIu32" x %" PRIu32")",
@@ -2410,6 +2421,7 @@ bool VkRoot::createSwapchain()
 	);
 
 	const auto colorImage_memreq = dev.getImageMemoryRequirements(colorImage, vkDynLoader);
+	ASSERT(colorImage_memreq.size > 0, "Attempting to allocate memory of size 0 will fail");
 	colorImageMemory = dev.allocateMemory(
 		vk::MemoryAllocateInfo()
 			.setAllocationSize(colorImage_memreq.size)
