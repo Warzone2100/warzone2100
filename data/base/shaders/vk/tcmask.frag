@@ -44,11 +44,6 @@ void main()
 {
 	vec4 diffuseMap = texture(Texture, texCoord);
 
-	// Temporary replace strenght of light
-	vec4 ambientLight = ambient * vec4(0.5, 0.5, 0.5, 1.0);
-	vec4 diffuseLight = diffuse + vec4(1.0, 1.0, 1.0, 1.0);
-	vec4 specularLight = specular;
-
 	// Normal map implementations
 	vec3 N = normal;
 	if (normalmap != 0)
@@ -90,17 +85,17 @@ void main()
 			exponent = -(exponent * exponent);
 			float gaussianTerm = exp(exponent);
 
-			light += specularLight * gaussianTerm * lambertTerm * specularFromMap;
+			light += specular * gaussianTerm * lambertTerm * specularFromMap;
 
 			// Neutralize factor for spec map
 			vanillaFactor = 1.0;
 		}
 
-		light += diffuseLight * lambertTerm * diffuseMap * vanillaFactor;
+		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
 	}
 	// NOTE: this doubled for non-spec map case to keep results similar to old shader
 	// We rely on specularmap to be either 1 or 0 to avoid adding another if
-	light += ambientLight * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+	light += ambient * diffuseMap * (1.0 + (1.0 - float(specularmap)));
 
 	vec4 fragColour;
 	if (tcmask != 0)
@@ -131,7 +126,7 @@ void main()
 		fragColour = mix(fogColor, fragColour, fogFactor);
 	}
 
-	if (alphaTest > 0 && (fragColour.a <= 0.001))
+	if ((alphaTest == 0) && (diffuseMap.a <= 0.5))
 	{
 		discard;
 	}

@@ -64,7 +64,12 @@ void pie_InitLighting()
 {
 	// set scene color, ambient, diffuse and specular light intensities of sun
 	// diffuse lighting is turned off because players dislike it
-	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f},  {0.0f, 0.0f, 0.0f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
+	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {
+		{0.0f, 0.0f, 0.0f, 1.0f}, // LIGHT_EMISSIVE
+		{0.5f, 0.5f, 0.5f, 1.0f}, // LIGHT_AMBIENT
+		{1.0f, 1.0f, 1.0f, 1.0f}, // LIGHT_DIFFUSE
+		{1.0f, 1.0f, 1.0f, 1.0f}  // LIGHT_SPECULAR
+	};
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
 }
 
