@@ -52,11 +52,6 @@ void main()
 	vec4 diffuseMap = texture2D(Texture, texCoord);
 	#endif
 
-	// Temporary replace strenght of light
-	vec4 ambientLight = ambient * vec4(0.5, 0.5, 0.5, 1.0);
-	vec4 diffuseLight = diffuse + vec4(1.0, 1.0, 1.0, 1.0);
-	vec4 specularLight = specular;
-
 	// Normal map implementations
 	vec3 N = normal;
 	if (normalmap != 0)
@@ -69,7 +64,7 @@ void main()
 
 		// Complete replace normal with new value
 		N = normalFromMap.xzy * 2.0 - 1.0;
-		
+
 		// To match wz's light
 		N.y = -N.y;
 
@@ -87,7 +82,7 @@ void main()
 	float lambertTerm = max(dot(N, L), 0.0);
 
 	if (lambertTerm > 0.0)
-	{		
+	{
 		// Vanilla models shouldn't use diffuse light
 		float vanillaFactor = 0.0;
 
@@ -106,17 +101,17 @@ void main()
 			exponent = -(exponent * exponent);
 			float gaussianTerm = exp(exponent);
 
-			light += specularLight * gaussianTerm * lambertTerm * specularFromMap;
+			light += specular * gaussianTerm * lambertTerm * specularFromMap;
 
 			// Neutralize factor for spec map
 			vanillaFactor = 1.0;
 		}
 
-		light += diffuseLight * lambertTerm * diffuseMap * vanillaFactor;
+		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
 	}
 	// NOTE: this doubled for non-spec map case to keep results similar to old shader
 	// We rely on specularmap to be either 1 or 0 to avoid adding another if
-	light += ambientLight * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+	light += ambient * diffuseMap * (1.0 + (1.0 - float(specularmap)));
 
 	vec4 fragColour;
 	if (tcmask != 0)
@@ -127,7 +122,7 @@ void main()
 		#else
 		vec4 mask = texture2D(TextureTcmask, texCoord);
 		#endif
-		
+
 		// Apply color using grain merge with tcmask
 		fragColour = (light + (teamcolour - 0.5) * mask.a) * colour;
 	}
@@ -151,7 +146,7 @@ void main()
 		fragColour = mix(fogColor, fragColour, fogFactor);
 	}
 
-	if (alphaTest && (fragColour.a <= 0.001))
+	if (!alphaTest && (diffuseMap.a <= 0.5))
 	{
 		discard;
 	}
