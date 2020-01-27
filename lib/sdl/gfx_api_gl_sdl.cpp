@@ -187,8 +187,11 @@ bool sdl_OpenGL_Impl::createGLContext()
 		code_part log_type = LOG_FATAL;
 		if (isOpenGLES())
 		{
-			// For OpenGL ES (EGL?), log this as an error and let execution continue
-			log_type = LOG_ERROR;
+			// For OpenGL ES (EGL?), log this + let execution continue
+			//
+			// If SDL is compiled with Desktop OpenGL support, it may not properly
+			// query double buffering status for OpenGL ES contexts (as of: SDL 2.0.10)
+			log_type = LOG_3D;
 		}
 		debug(log_type, "SDL_GL_GetAttribute failed to get value for SDL_GL_DOUBLEBUFFER (%s)", SDL_GetError());
 		debug(log_type, "Double buffering is required for this game - if it isn't actually enabled, things will fail!");
