@@ -1723,6 +1723,9 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 		// Set the double buffer OpenGL attribute.
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
+		// Request a 24-bit depth buffer.
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
 		// Enable stencil buffer, needed for shadows to work.
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
