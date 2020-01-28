@@ -201,6 +201,13 @@ bool sdl_OpenGL_Impl::createGLContext()
 		}
 	}
 
+	int r, g, b, a;
+	SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &r);
+	SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &g);
+	SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &b);
+	SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &a);
+	debug(LOG_3D, "Current values for: SDL_GL_RED_SIZE (%d), SDL_GL_GREEN_SIZE (%d), SDL_GL_BLUE_SIZE (%d), SDL_GL_ALPHA_SIZE (%d)", r, g, b, a);
+
 	if (SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &value) != 0)
 	{
 		debug(LOG_3D, "Failed to get value for SDL_GL_DEPTH_SIZE (%s)", SDL_GetError());
