@@ -1719,6 +1719,15 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
 		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
 		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+#if defined(WZ_OS_WIN)
+		if (useOpenGLES)
+		{
+			// Always force minimum 8-bit color channels when using OpenGL ES on Windows
+			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		}
+#endif
 
 		// Set the double buffer OpenGL attribute.
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
