@@ -1715,6 +1715,11 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	{
 		// Set OpenGL attributes before creating the SDL Window
 
+		// Set minimum number of bits for the RGB channels of the color buffer
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+
 		// Set the double buffer OpenGL attribute.
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
