@@ -12,6 +12,7 @@ noinst_HEADERS = \
 	playlist.h \
 	oggvorbis.h \
 	openal_error.h \
+	openal_info.h \
 	track.h \
 	tracklib.h
 
@@ -21,6 +22,7 @@ libsound_a_SOURCES = \
 	cdaudio.cpp \
 	oggvorbis.cpp \
 	openal_error.cpp \
+	openal_info.cpp \
 	openal_track.cpp \
 	playlist.cpp \
 	track.cpp
