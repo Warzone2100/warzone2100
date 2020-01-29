@@ -46,6 +46,7 @@
 #include "oggvorbis.h"
 #include "openal_error.h"
 #include "mixer.h"
+#include "openal_info.h"
 
 static ALuint current_queue_sample = -1;
 
@@ -137,6 +138,17 @@ bool sound_InitLibrary(void)
 	}
 #endif
 
+	if (enabled_debug[LOG_SOUND])
+	{
+		OpenALInfo::Output_PlaybackDevices([](const std::string &output) {
+			addDumpInfo(output.c_str());
+			if (enabled_debug[LOG_SOUND])
+			{
+				_debug_multiline(0, LOG_SOUND, "sound", output);
+			}
+		});
+	}
+
 #ifdef WZ_OS_WIN
 	/* HACK: Select the "software" OpenAL device on Windows because it
 	 *       provides 256 sound sources (unlike most Creative's default
@@ -157,6 +169,17 @@ bool sound_InitLibrary(void)
 	{
 		debug(LOG_ERROR, "Couldn't open audio device.");
 		return false;
+	}
+
+	if (enabled_debug[LOG_SOUND])
+	{
+		OpenALInfo::Output_ALCInfo(device, [](const std::string &output) {
+			// addDumpInfo(output.c_str());
+			//if (enabled_debug[LOG_SOUND])
+			//{
+				_debug_multiline(0, LOG_SOUND, "sound", output);
+			//}
+		});
 	}
 
 	// Print current device name and add it to dump info
