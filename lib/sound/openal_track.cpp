@@ -149,21 +149,8 @@ bool sound_InitLibrary(void)
 		});
 	}
 
-#ifdef WZ_OS_WIN
-	/* HACK: Select the "software" OpenAL device on Windows because it
-	 *       provides 256 sound sources (unlike most Creative's default
-	 *       which provides only 16), causing our lack of source-management
-	 *       to be significantly less noticeable.
-	 */
-	device = alcOpenDevice("Generic Software");
-
-	// If the software device isn't available, fall back to default
-	if (!device)
-#endif
-	{
-		// Open default device
-		device = alcOpenDevice(nullptr);
-	}
+	// Open default device
+	device = alcOpenDevice(nullptr);
 
 	if (!device)
 	{
