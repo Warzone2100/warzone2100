@@ -253,30 +253,24 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 // update players damage stats.
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
-	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-	if (attacker < MAX_PLAYERS)
+	// damaging features like skyscrapers does not count
+	if (defender != PLAYER_FEATURE)
 	{
 		if (NetPlay.bComms)
 		{
-			playerStats[attacker].totalScore  += 2 * inflicted;
-			playerStats[attacker].recentScore += 2 * inflicted;
+			// killing and getting killed by scavengers does not influence scores in MP games
+			if (attacker != scavengerSlot() && defender != scavengerSlot())
+			{
+				// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+				playerStats[attacker].totalScore  += 2 * inflicted;
+				playerStats[attacker].recentScore += 2 * inflicted;
+				playerStats[defender].totalScore  -= inflicted;
+				playerStats[defender].recentScore -= inflicted;
+			}
 		}
 		else
 		{
 			ingame.skScores[attacker][0] += 2 * inflicted;  // increment skirmish players rough score.
-		}
-	}
-
-	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-	if (defender < MAX_PLAYERS)
-	{
-		if (NetPlay.bComms)
-		{
-			playerStats[defender].totalScore  -= inflicted;
-			playerStats[defender].recentScore -= inflicted;
-		}
-		else
-		{
 			ingame.skScores[defender][0] -= inflicted;  // increment skirmish players rough score.
 		}
 	}
@@ -315,19 +309,22 @@ void updateMultiStatsLoses()
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 {
-	if (player >= MAX_PLAYERS)
+	if (player < MAX_PLAYERS)
 	{
-		return;
-	}
-	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-	if (NetPlay.bComms)
-	{
-		++playerStats[player].totalKills;
-		++playerStats[player].recentKills;
-	}
-	else
-	{
-		ingame.skScores[player][1]++;
+		if (NetPlay.bComms)
+		{
+			// killing scavengers does not count in MP games
+			if (psKilled != nullptr && psKilled->player != scavengerSlot())
+			{
+				// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+				++playerStats[player].totalKills;
+				++playerStats[player].recentKills;
+			}
+		}
+		else
+		{
+			ingame.skScores[player][1]++;
+		}
 	}
 }
 
