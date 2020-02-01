@@ -3142,20 +3142,34 @@ bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	return true;
 }
 
+// Check if a droid can be selected.
+bool isSelectable(DROID const *psDroid)
+{
+	if (psDroid->flags.test(OBJECT_FLAG_UNSELECTABLE))
+	{
+		return false;
+	}
+
+	// we shouldn't ever control the transporter in SP games
+	if (isTransporter(psDroid) && !bMultiPlayer)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 // Select a droid and do any necessary housekeeping.
 //
 void SelectDroid(DROID *psDroid)
 {
-	if (psDroid->flags.test(OBJECT_FLAG_UNSELECTABLE))
+	if (!isSelectable(psDroid))
 	{
 		return;
 	}
-	// we shouldn't ever control the transporter in SP games
-	if (!isTransporter(psDroid) || bMultiPlayer)
-	{
-		psDroid->selected = true;
-		intRefreshScreen();
-	}
+
+	psDroid->selected = true;
+	intRefreshScreen();
 	triggerEventSelected();
 	jsDebugSelected(psDroid);
 }

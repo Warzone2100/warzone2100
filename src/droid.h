@@ -286,6 +286,9 @@ const char *getDroidNameForRank(UDWORD rank);
 /*called when a Template is deleted in the Design screen*/
 void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, QUEUE_MODE mode);  // ModeQueue deletes from production queues, which are not yet synchronised. ModeImmediate deletes from current production which is synchronised.
 
+// Check if a droid can be selected.
+bool isSelectable(DROID const *psDroid);
+
 // Select a droid and do any necessary housekeeping.
 void SelectDroid(DROID *psDroid);
 
