@@ -2517,7 +2517,7 @@ DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y, UDWORD pla
 	psNewDroid->pos.y = INVALID_XY;
 
 	//set all the droids to selected from when return
-	psNewDroid->selected = true;
+	psNewDroid->selected = isSelectable(psNewDroid);
 
 	// Set died parameter correctly
 	psNewDroid->died = NOT_CURRENT_LIST;
