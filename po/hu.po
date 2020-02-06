@@ -9711,10 +9711,10 @@ msgstr "Wyvern"
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2013 The Warzone 2100 Project"
+"Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interaktív.\n"
-"Copyright © 2005-2011 A Warzone 2100 Projekt"
+"Copyright © 2005-2020 A Warzone 2100 Projekt"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2

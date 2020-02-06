@@ -9824,7 +9824,7 @@ msgstr "Wyvern"
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2013 The Warzone 2100 Project"
+"Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:2

@@ -27,7 +27,7 @@
 # - DEPLOY_KNOWN_HOSTS_BASE64: The base64-encoded data to be added to the SSH known_hosts file.
 # - DEPLOY_UPLOAD_PATH: The path into which to upload the files. Example: "public_html/"
 #
-# To get the latest SSH public keys for the server in the DEPLOY_UURL (to be added to known_hosts), 
+# To get the latest SSH public keys for the server in the DEPLOY_UURL (to be added to known_hosts),
 # execute:
 # 	ssh-keyscan -H <server>
 # (Note: Always verify the information that ssh-keyscan produces with a trusted source.)
