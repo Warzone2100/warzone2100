@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2018  Warzone 2100 Project
+;  Copyright (C) 2006-2020  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify

@@ -54,4 +54,3 @@ echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/warzone2100-${WZ_BUILD_DESC}_src.t
 echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/warzone2100-${WZ_BUILD_DESC}_src.tar.xz")"
 
 exit 0
-
