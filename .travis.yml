@@ -15,7 +15,7 @@ matrix:
         - docker
       install:
         - cd docker/ubuntu-18.04/
-        - docker build -t ubuntu -f Dockerfile.arm64 .
+        - travis_wait 50 docker build -t ubuntu -f Dockerfile.arm64 .
         - cd ../..
       script:
         - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
