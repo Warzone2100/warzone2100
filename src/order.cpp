@@ -1304,6 +1304,19 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 	}
 
+	// A selected campaign transporter shouldn't be given orders by the player.
+	// Campaign transporter selection is required for it to be tracked by the camera, and
+	// should be the only case when it does get selected.
+	if (isTransporter(psDroid) &&
+		!bMultiPlayer &&
+		psDroid->selected &&
+		(psOrder->type != DORDER_TRANSPORTOUT &&
+		psOrder->type != DORDER_TRANSPORTIN &&
+		psOrder->type != DORDER_TRANSPORTRETURN))
+	{
+		return;
+	}
+
 	switch (psOrder->type)
 	{
 	case DORDER_NONE:
