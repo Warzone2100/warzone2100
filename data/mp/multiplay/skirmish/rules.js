@@ -690,7 +690,7 @@ function placeOilDrum()
 	var unreachable = true;
 	for (var i = 0; i < maxPlayers; ++i)
 	{
-		if (propulsionCanReach("wheeled01", x, y, startPositions[i].x, startPositions[i].y))
+		if (propulsionCanReach("hover01", x, y, startPositions[i].x, startPositions[i].y))
 		{
 			unreachable = false;
 			break;
