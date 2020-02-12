@@ -5314,6 +5314,29 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
 			}
 		}
+		else if (type == COMP_REPAIRUNIT)
+		{
+			SCRIPT_ASSERT(context, index < numRepairStats, "Bad index");
+			REPAIR_STATS *psStats = asRepairStats + index;
+			if (name == "RepairPoints")
+			{
+				psStats->upgrade[player].repairPoints = value;
+			}
+			else if (name == "HitPoints")
+			{
+				psStats->upgrade[player].hitpoints = value;
+				dirtyAllDroids(player);
+			}
+			else if (name == "HitPointPct")
+			{
+				psStats->upgrade[player].hitpointPct = value;
+				dirtyAllDroids(player);
+			}
+			else
+			{
+				SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+			}
+		}
 		else if (type == COMP_WEAPON)
 		{
 			SCRIPT_ASSERT(context, index < numWeaponStats, "Bad index");
@@ -5596,6 +5619,27 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		if (name == "ConstructorPoints")
 		{
 			return psStats->upgrade[player].constructPoints;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(context, false, "Upgrade component %s not found", name.toUtf8().constData());
+		}
+	}
+	else if (type == COMP_REPAIRUNIT)
+	{
+		SCRIPT_ASSERT(context, index < numRepairStats, "Bad index");
+		const REPAIR_STATS *psStats = asRepairStats + index;
+		if (name == "RepairPoints")
+		{
+			return psStats->upgrade[player].repairPoints;
 		}
 		else if (name == "HitPoints")
 		{
