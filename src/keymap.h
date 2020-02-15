@@ -80,6 +80,5 @@ KeyMapSaveEntry const *keymapEntryByFunction(void (*function)());
 KeyMapSaveEntry const *keymapEntryByName(std::string const &name);
 extern std::list<KEY_MAPPING> keyMappings;
 
-void	keyShowMappings();
 
 #endif // __INCLUDED_SRC_KEYMAP_H__

@@ -1058,10 +1058,15 @@ void	kf_ResetPitch()
 }
 
 // --------------------------------------------------------------------------
-/* Dumps all the keyboard mappings to the console display */
+/* Quickly access the in-game keymap */
 void	kf_ShowMappings()
 {
-	keyShowMappings();
+	if (!InGameOpUp && !isInGamePopupUp)
+	{
+		kf_addInGameOptions();
+		intProcessInGameOptions(INTINGAMEOP_OPTIONS);
+		intProcessInGameOptions(INTINGAMEOP_KEYMAP);
+	}
 }
 
 // --------------------------------------------------------------------------

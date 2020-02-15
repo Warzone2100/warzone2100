@@ -408,6 +408,7 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_T,   KEYMAP_PRESSED,  kf_toggleTrapCursor,     N_("Trap cursor"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarTerrain,   N_("Toggle radar terrain"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarAllyEnemy, N_("Toggle ally-enemy radar view"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_M,   KEYMAP_PRESSED,  kf_ShowMappings,         N_("Show all keyboard mappings"));
 
 	// Some extra non QWERTY mappings but functioning in same way
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_COMMA,        KEYMAP_PRESSED, kf_SetDroidRetreatMedium, N_("Retreat at Medium Damage"));
@@ -453,7 +454,6 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, N_("Toggle Debug Mappings"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_M,         KEYMAP_PRESSED, kf_ToggleShowPath,      N_("Toggle display of droid path"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_E,         KEYMAP_PRESSED, kf_ToggleShowGateways,  N_("Toggle display of gateways"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_M,         KEYMAP_PRESSED, kf_ShowMappings,        N_("Show all keyboard mappings - use pause!"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    N_("Toggle visibility"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           N_("Raise tile height"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           N_("Lower tile height"));
@@ -746,42 +746,6 @@ void	keyProcessMappings(bool bExclude)
 		{
 			triggerEventKeyPressed(pressedMetaKey, i);
 		}
-	}
-}
-
-// ----------------------------------------------------------------------------------
-/* Sends a particular key mapping to the console */
-static void keyShowMapping(KEY_MAPPING *psMapping)
-{
-	char	asciiSub[20], asciiMeta[20];
-	bool	onlySub;
-
-	onlySub = true;
-	if (psMapping->metaKeyCode != KEY_IGNORE)
-	{
-		keyScanToString(psMapping->metaKeyCode, (char *)&asciiMeta, 20);
-		onlySub = false;
-	}
-
-	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
-	if (onlySub)
-	{
-		CONPRINTF("%s - %s", asciiSub, _(psMapping->name.c_str()));
-	}
-	else
-	{
-		CONPRINTF("%s and %s - %s", asciiMeta, asciiSub, _(psMapping->name.c_str()));
-	}
-	debug(LOG_INPUT, "Received %s from Console", ConsoleString);
-}
-
-// ----------------------------------------------------------------------------------
-// this function isn't really module static - should be removed - debug only
-void keyShowMappings()
-{
-	for (auto &mapping : keyMappings)
-	{
-		keyShowMapping(&mapping);
 	}
 }
 
