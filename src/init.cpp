@@ -1199,10 +1199,7 @@ bool stageThreeInitialise()
 
 	if (bMultiPlayer)
 	{
-		if (!fromSave)
-		{
-			multiGameInit();
-		}
+		multiGameInit();
 		initTemplates();
 	}
 
