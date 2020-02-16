@@ -244,7 +244,8 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		// Deal with score increase/decrease and messages to the player
 		if (psDroid->player == selectedPlayer)
 		{
-			CONPRINTF("%s", _("Unit Lost!"));
+			// TRANSLATORS:	Refers to the loss of a single unit, known by its name
+			CONPRINTF(_("%s Lost!"), objInfo(psDroid));
 			scoreUpdateVar(WD_UNITS_LOST);
 			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED, UNIT_LOST_DELAY,
 			                            psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
