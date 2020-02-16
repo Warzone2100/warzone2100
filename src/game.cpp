@@ -5104,7 +5104,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		case REF_CYBORG_FACTORY:
 			//if factory save the current build info
 			psFactory = ((FACTORY *)psStructure->pFunctionality);
-			psFactory->productionLoops = ini.value("Factory/productionLoops", psFactory->productionLoops).toInt();
+			psFactory->productionLoops = ini.value("Factory/productionLoops", psFactory->productionLoops).toUInt();
 			psFactory->timeStarted = ini.value("Factory/timeStarted", psFactory->timeStarted).toInt();
 			psFactory->buildPointsRemaining = ini.value("Factory/buildPointsRemaining", psFactory->buildPointsRemaining).toInt();
 			psFactory->timeStartHold = ini.value("Factory/timeStartHold", psFactory->timeStartHold).toInt();
@@ -5136,23 +5136,26 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			{
 				psFactory->psAssemblyPoint->factoryInc = ini.value("Factory/assemblyPoint/number", 42).toInt();
 			}
-			for (int runNum = 0; runNum < ini.value("Factory/productionRuns", 0).toInt(); runNum++)
+			if (player == productionPlayer)
 			{
-				ProductionRunEntry currentProd;
-				currentProd.quantity = ini.value("Factory/Run/" + WzString::number(runNum) + "/quantity").toInt();
-				currentProd.built = ini.value("Factory/Run/" + WzString::number(runNum) + "/built").toInt();
-				if (ini.contains("Factory/Run/" + WzString::number(runNum) + "/template"))
+				for (int runNum = 0; runNum < ini.value("Factory/productionRuns", 0).toInt(); runNum++)
 				{
-					int tid = ini.value("Factory/Run/" + WzString::number(runNum) + "/template").toInt();
-					DROID_TEMPLATE *psTempl = getTemplateFromMultiPlayerID(tid);
-					currentProd.psTemplate = psTempl;
-					ASSERT(psTempl, "No template found for template ID %d for %s (%d)", tid, objInfo(psStructure), id);
+					ProductionRunEntry currentProd;
+					currentProd.quantity = ini.value("Factory/Run/" + WzString::number(runNum) + "/quantity").toInt();
+					currentProd.built = ini.value("Factory/Run/" + WzString::number(runNum) + "/built").toInt();
+					if (ini.contains("Factory/Run/" + WzString::number(runNum) + "/template"))
+					{
+						int tid = ini.value("Factory/Run/" + WzString::number(runNum) + "/template").toInt();
+						DROID_TEMPLATE *psTempl = getTemplateFromMultiPlayerID(tid);
+						currentProd.psTemplate = psTempl;
+						ASSERT(psTempl, "No template found for template ID %d for %s (%d)", tid, objInfo(psStructure), id);
+					}
+					if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+					{
+						asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);
+					}
+					asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].push_back(currentProd);
 				}
-				if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
-				{
-					asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);
-				}
-				asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].push_back(currentProd);
 			}
 			break;
 		case REF_RESEARCH:
@@ -5380,17 +5383,24 @@ bool writeStructFile(const char *pFileName)
 						ini.setValue("Factory/commander/player", psFactory->psCommander->player);
 					}
 					ini.setValue("Factory/secondaryOrder", psFactory->secondaryOrder);
-					ProductionRun emptyRun;
-					bool haveRun = psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size();
-					ProductionRun const &productionRun = haveRun ? asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc] : emptyRun;
-					ini.setValue("Factory/productionRuns", (int)productionRun.size());
-					for (size_t runNum = 0; runNum < productionRun.size(); runNum++)
+					if (player == productionPlayer)
 					{
-						ProductionRunEntry psCurrentProd = productionRun.at(runNum);
-						ini.setValue("Factory/Run/" + WzString::number(runNum) + "/quantity", psCurrentProd.quantity);
-						ini.setValue("Factory/Run/" + WzString::number(runNum) + "/built", psCurrentProd.built);
-						if (psCurrentProd.psTemplate) ini.setValue("Factory/Run/" + WzString::number(runNum) + "/template",
-							        psCurrentProd.psTemplate->multiPlayerID);
+						ProductionRun emptyRun;
+						bool haveRun = psFactory->psAssemblyPoint->factoryInc < asProductionRun[psFactory->psAssemblyPoint->factoryType].size();
+						ProductionRun const &productionRun = haveRun ? asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc] : emptyRun;
+						ini.setValue("Factory/productionRuns", (int)productionRun.size());
+						for (size_t runNum = 0; runNum < productionRun.size(); runNum++)
+						{
+							ProductionRunEntry psCurrentProd = productionRun.at(runNum);
+							ini.setValue("Factory/Run/" + WzString::number(runNum) + "/quantity", psCurrentProd.quantity);
+							ini.setValue("Factory/Run/" + WzString::number(runNum) + "/built", psCurrentProd.built);
+							if (psCurrentProd.psTemplate) ini.setValue("Factory/Run/" + WzString::number(runNum) + "/template",
+										psCurrentProd.psTemplate->multiPlayerID);
+						}
+					}
+					else
+					{
+						ini.setValue("Factory/productionRuns", 0);
 					}
 				}
 				else if (psCurr->pStructureType->type == REF_RESEARCH)
