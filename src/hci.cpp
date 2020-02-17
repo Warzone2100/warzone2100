@@ -2391,14 +2391,6 @@ void intConstructorSelected(DROID *psDroid)
 	widgHide(psWScreen, IDOBJ_FORM);
 }
 
-// add the construction interface if a constructor droid is selected
-void intCommanderSelected(DROID *psDroid)
-{
-	setWidgetsStatus(true);
-	intAddCommand(psDroid);
-	widgHide(psWScreen, IDOBJ_FORM);
-}
-
 /* Start looking for a structure location */
 static void intStartStructPosition(BASE_STATS *psStats)
 {
