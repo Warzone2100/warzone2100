@@ -43,7 +43,12 @@
 #include "warcam.h"
 #include "display.h"
 #include "qtscript.h"
+#include <algorithm>
 #include <functional>
+#include <vector>
+
+// stores combinations of unit components
+static std::vector<std::vector<uint32_t> > combinations;
 
 template <typename T>
 static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen)
@@ -155,38 +160,104 @@ unsigned int selNumSelected(unsigned int player)
 	return count;
 }
 
-// ---------------------------------------------------------------------
-// sub-function - selects all units with same name as one passed in
-static void selNameSelect(char *droidName, unsigned int player, bool bOnScreen)
+// Helper function to check whether the component stats of a unit can be found
+// in the combinations vector and, optionally, to add them to it if not
+static bool componentsInCombinations(DROID *psDroid, bool add)
 {
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	std::vector<uint32_t> components;
+	uint32_t stat = 0;
+
+	// stats are sorted by their estimated usefulness to distinguish units:
+	// * the first weapon turret is the most common difference between them
+	//   followed by propulsions and bodies
+	// * the second weapon turret is least important because Hydras are rare
+	for (int c = 0; c < DROID_MAXCOMP + 2; c++)
 	{
-		if (!psDroid->selected)
+		switch(c)
 		{
-			if (!bOnScreen || droidOnScreen(psDroid, 0))
-			{
-				if (!strcmp(droidName, psDroid->aName))
-				{
-					SelectDroid(psDroid);
-				}
-			}
+			case 0: stat = psDroid->asWeaps[1].nStat; break;
+			case 1: stat = psDroid->asBits[COMP_ECM]; break;
+			case 2: stat = psDroid->asBits[COMP_BRAIN]; break;
+			case 3: stat = psDroid->asBits[COMP_SENSOR]; break;
+			case 4: stat = psDroid->asBits[COMP_REPAIRUNIT]; break;
+			case 5: stat = psDroid->asBits[COMP_CONSTRUCT]; break;
+			case 6: stat = psDroid->asBits[COMP_BODY]; break;
+			case 7: stat = psDroid->asBits[COMP_PROPULSION]; break;
+			case 8: stat = psDroid->asWeaps[0].nStat; break;
 		}
+
+		// keep the list of components short by not adding stats with
+		// the value 0 to its end, since they are redundant
+		if (!(stat == 0 && components.empty()))
+		{
+			components.push_back(stat);
+		}
+	}
+	auto it = std::find(combinations.begin(), combinations.end(), components);
+	if (it != combinations.end())
+	{
+		return true;
+	}
+	else
+	{
+		// add the list of components to the list of combinations unless
+		// this would result in a duplicate entry
+		if (add)
+		{
+			combinations.push_back(components);
+		}
+		return false;
 	}
 }
 
-// ---------------------------------------------------------------------
-// Selects all units the same as the one(s) selected
+// Selects all units with the same propulsion, body and turret(s) as the one(s) selected
 static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 {
+	unsigned int i = 0, selected = 0;
+	std::vector<unsigned int> excluded;
+
+	combinations.clear();
+
+	// find out which units will need to be compared to which component combinations
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (psDroid->selected)
+		if (bOnScreen && !droidOnScreen(psDroid, 0))
 		{
-			selNameSelect(psDroid->aName, player, bOnScreen);
+			excluded.push_back(i);
 		}
+		else if (psDroid->selected)
+		{
+			excluded.push_back(i);
+			selected++;
+
+			componentsInCombinations(psDroid, true);
+		}
+		i++;
 	}
 
-	return selNumSelected(player);
+	// if all or no units are selected, no more units can be chosen
+	if (!excluded.empty() && i != selected)
+	{
+		// reset unit counter
+		i = 0;
+		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		{
+			if (excluded.empty() || *excluded.begin() != i)
+			{
+				if (componentsInCombinations(psDroid, false))
+				{
+					SelectDroid(psDroid);
+					selected++;
+				}
+			}
+			else
+			{
+				excluded.erase(excluded.begin());
+			}
+			i++;
+		}
+	}
+	return selected;
 }
 
 // ffs am

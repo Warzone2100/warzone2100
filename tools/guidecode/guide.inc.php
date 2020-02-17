@@ -1270,8 +1270,8 @@ These are the default keyboard shortcuts. If you have customized your key mappin
 <h4 id="type">By type</h4>
 <table class="list">
 <tr><th><kbd class="lkey">Ctrl</kbd>+<kbd>U</kbd></th><td>Select all <u>u</u>nits</td></tr>
-<tr><th><kbd class="lkey">Ctrl</kbd>+<kbd>Z</kbd></th><td>Select all similar units</tr>
-<tr><th><span class="dblclick"><span class="click">double-click</span></span></th><td>Select all similar units</tr>
+<tr><th><kbd class="lkey">Ctrl</kbd>+<kbd>Z</kbd></th><td>Select all units with the same components</tr>
+<tr><th><span class="dblclick"><span class="click">double-click</span></span></th><td>Select all units with the same components</tr>
 <tr><th><kbd class="lkey">Ctrl</kbd>+<kbd>S</kbd></th><td>Select all units on <u>s</u>creen</td></tr>
 <tr><th><kbd class="lkey">Ctrl</kbd>+<kbd>D</kbd></th><td>Select all heavily <u>d</u>amaged units</td></tr>
 <tr><th><kbd class="lkey">Ctrl</kbd>+<kbd>A</kbd></th><td>Select all <u>a</u>ttack units (units with weapons)</td></tr>
