@@ -1109,8 +1109,8 @@ Unit selection by type
 ~~~~~~~~~~~~~~~~~~~~~~
 |====
 |Ctrl+U       |Select all units
-|Ctrl+Z       |Select all similar units
-|double-click |Select all similar units
+|Ctrl+Z       |Select all units with the same components
+|double-click |Select all units with the same components
 |Ctrl+S       |Select all units on screen
 |Ctrl+D       |Select all heavily damaged units
 |Ctrl+A       |Select all attack units (units with weapons)
