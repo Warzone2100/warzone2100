@@ -2015,17 +2015,8 @@ static void dealWithLMBDClick()
 			psDroid = (DROID *) psClickedOn;
 			if (psDroid->player == selectedPlayer)
 			{
-				/* If we've double clicked on a constructor droid, activate build menu */
-				if (psDroid->droidType == DROID_COMMAND)
-				{
-					intResetScreen(true);
-					intCommanderSelected(psDroid);
-				}
-				else
-				{
-					// Now selects all of same type on screen
-					selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_SAME, true);
-				}
+				// Now selects all of same type on screen
+				selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_SAME, true);
 			}
 		}
 		else if (psClickedOn->type == OBJ_STRUCTURE)

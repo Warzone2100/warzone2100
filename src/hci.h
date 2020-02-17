@@ -331,9 +331,6 @@ bool intBuildSelectMode();
 bool intDemolishSelectMode();
 bool intBuildMode();
 
-/* add the construction interface if a constructor droid is selected */
-void intCommanderSelected(DROID *psDroid);
-
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen();
 
