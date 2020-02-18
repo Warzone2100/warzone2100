@@ -23,6 +23,7 @@
 #include "lib/framework/string_ext.h"
 #include "exceptionhandler.h"
 #include "dumpinfo.h"
+#include <LaunchInfo.h>
 
 #if defined(WZ_OS_WIN)
 #include <tchar.h>
@@ -770,6 +771,7 @@ void setupExceptionHandler(int argc, const char * const *argv, const char *packa
 	const char *programCommand;
 	time_t currentTime;
 #endif
+	LaunchInfo::initialize(argc, argv);
 #if !defined(WZ_OS_MAC)
 	// Initialize info required for the debug dumper
 	dbgDumpInit(argc, argv, packageVersion);

@@ -84,6 +84,7 @@
 #include "keybind.h"
 #include "random.h"
 #include <time.h>
+#include <LaunchInfo.h>
 
 #if defined(WZ_OS_MAC)
 // NOTE: Moving these defines is likely to (and has in the past) break the mac builds
@@ -1126,6 +1127,7 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	LaunchInfo::initialize(argc, argv);
 	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(), version_getVersionedAppDirFolderName(), isPortableMode());
 
 	/*** Initialize PhysicsFS ***/

@@ -13,3 +13,6 @@
 [submodule "3rdparty/utfcpp"]
 	path = 3rdparty/utfcpp
 	url = https://github.com/nemtrif/utfcpp.git
+[submodule "3rdparty/launchinfo"]
+	path = 3rdparty/launchinfo
+	url = https://github.com/past-due/launchinfo.git

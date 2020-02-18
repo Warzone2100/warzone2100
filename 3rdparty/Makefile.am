@@ -30,6 +30,18 @@ utf8proc_libutf8proc_a_SOURCES = \
 	utf8proc/utf8proc.c
 
 
+# launchinfo
+
+launchinfo_liblaunchinfo_a_CXXFLAGS = $(WZ_CXXFLAGS) -Wno-cast-align
+
+noinst_LIBRARIES += launchinfo/liblaunchinfo.a
+noinst_HEADERS += \
+	launchinfo/include/LaunchInfo.h
+
+launchinfo_liblaunchinfo_a_SOURCES = \
+	launchinfo/src/LaunchInfo.cpp
+
+
 # miniupnpc
 
 miniupnp_libminiupnpc_a_CFLAGS = $(WZ_CFLAGS) -DSTATICLIB -DMINIUPNP_STATICLIB -Wall -W -Wstrict-prototypes -fno-common -DMINIUPNPC_SET_SOCKET_TIMEOUT -DMINIUPNPC_GET_SRC_ADDR -D_BSD_SOURCE -D_DEFAULT_SOURCE -std=c99 -I$(srcdir)/miniupnp/miniupnpc -I$(builddir)/miniupnp/miniupnpc -Wno-cast-align
