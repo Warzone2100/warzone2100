@@ -19,6 +19,7 @@
 */
 
 #include "dumpinfo.h"
+#include <LaunchInfo.h>
 #include <cerrno>
 #include <climits>
 #include <ctime>
@@ -487,6 +488,12 @@ static void createHeader(int const argc, const char * const *argv, const char *p
 	}
 
 	os << endl;
+	const auto& parentProcesses = LaunchInfo::getAncestorProcesses();
+	os << "Ancestors: " << endl;
+	for (const auto& parent : parentProcesses)
+	{
+		os << "- (" << parent.pid << ") " << parent.imageFileName << endl;
+	}
 	os << "Version: "     << packageVersion << endl
 	   << "Distributor: " PACKAGE_DISTRIBUTOR << endl
 	   << "Compiled on: " << getCompileDate() << " " << __TIME__ << endl
