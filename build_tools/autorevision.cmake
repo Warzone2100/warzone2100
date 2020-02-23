@@ -9,7 +9,7 @@ cmake_policy(SET CMP0054 NEW)
 # COPYING.md for licence terms.
 #
 # autorevision.CMake:
-# Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2020 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
 #
@@ -413,6 +413,47 @@ macro(_appVeyorBuild)
 
 endmacro()
 
+macro(_azureCIBuild)
+	# Extract most symbols from the Git repo first
+	_gitRepo()
+
+	# Get remaining symbols from the Azure DevOps environment variables
+
+	# Determine VCS_BRANCH
+	if (DEFINED ENV{SYSTEM_PULLREQUEST_SOURCEBRANCH} AND NOT "$ENV{SYSTEM_PULLREQUEST_SOURCEBRANCH}" STREQUAL "")
+		# On a PR build, BUILD_SOURCEBRANCHNAME is set to "merge"
+		# Use SYSTEM_PULLREQUEST_SOURCEBRANCH to get the source branch
+		set(VCS_BRANCH "$ENV{SYSTEM_PULLREQUEST_SOURCEBRANCH}")
+	else()
+		# In the normal case, use BUILD_SOURCEBRANCHNAME
+		if (DEFINED ENV{BUILD_SOURCEBRANCHNAME} AND NOT "$ENV{BUILD_SOURCEBRANCHNAME}" STREQUAL "")
+			set(VCS_BRANCH "$ENV{BUILD_SOURCEBRANCHNAME}")
+		else()
+			if(NOT LOGGING_QUIET)
+				message( WARNING "BUILD_SOURCEBRANCHNAME is empty; VCS_BRANCH may be empty" )
+			endif()
+		endif()
+	endif()
+
+	# BUILD_SOURCEBRANCH
+	# Examples:
+	# - Pull request (PR): refs/pull/1/merge
+	# - When merging a pull request, or manually building on a branch: refs/heads/master
+	# - Tag: refs/tags/v0.1.0
+
+	# Determine VCS_TAG
+	if (DEFINED ENV{BUILD_SOURCEBRANCH} AND "$ENV{BUILD_SOURCEBRANCH}" MATCHES "^refs/tags/(.*)")
+		set(_extracted_tag_name "${CMAKE_MATCH_1}")
+		if(DEFINED VCS_TAG AND NOT "${VCS_TAG}" STREQUAL "")
+			if(NOT LOGGING_QUIET)
+				message( STATUS "VCS_TAG is already set to '${VCS_TAG}'; overwriting it with ('${_extracted_tag_name}'), extracted from: ENV:BUILD_SOURCEBRANCH ('$ENV{BUILD_SOURCEBRANCH}')" )
+			endif()
+		endif()
+		set(VCS_TAG "${_extracted_tag_name}")
+	endif()
+
+endmacro()
+
 if(LOGGING_QUIET)
 	find_package(Git QUIET)
 else()
@@ -452,6 +493,12 @@ elseif(Git_FOUND AND _currentDirectoryIsInGitRepo)
 		_travisCIBuild()
 		if(NOT LOGGING_QUIET)
 			message( STATUS "Gathered revision data from Git + Travis-CI environment" )
+		endif()
+	elseif(DEFINED ENV{TF_BUILD} AND "$ENV{TF_BUILD}" STREQUAL "True")
+		# On Azure DevOps
+		_azureCIBuild()
+		if(NOT LOGGING_QUIET)
+			message( STATUS "Gathered revision data from Git + Azure DevOps environment" )
 		endif()
 	else()
 		_gitRepo()
