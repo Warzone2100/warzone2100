@@ -52,10 +52,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-#define KM_FORM				10200
-#define KM_RETURN			10202
-#define KM_DEFAULT			10203
-
 #define	KM_START			10204
 #define	KM_END				10399
 

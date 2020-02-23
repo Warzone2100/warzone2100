@@ -399,9 +399,15 @@ void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets)
 // ////////////////////////////////////////////////////////////////////////////
 bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 {
+	bool keymapWasUp = isKeyMapEditorUp;
+
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
 	isMouseOptionsUp = false;
+	if (isKeyMapEditorUp)
+	{
+		runInGameKeyMapEditor(KM_RETURN);
+	}
 	isKeyMapEditorUp = false;
 
 	if (NetPlay.isHost)
@@ -409,7 +415,7 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 		widgDelete(psWScreen, INTINGAMEPOPUP);
 	}
 
-	if (bPutUpLoadSave)
+	if (bPutUpLoadSave || keymapWasUp)
 	{
 		WIDGET *widg = widgGetFromID(psWScreen, INTINGAMEOP);
 		if (widg)
@@ -419,7 +425,7 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 		InGameOpUp = false;
 	}
-	else
+	if (!bPutUpLoadSave || keymapWasUp)
 	{
 		// close the form.
 		// Start the window close animation.
