@@ -21,6 +21,10 @@
 #ifndef __INCLUDED_SRC_KEYEDIT_H__
 #define __INCLUDED_SRC_KEYEDIT_H__
 
+#define KM_FORM			10200
+#define KM_RETURN			10202
+#define KM_DEFAULT			10203
+
 bool runKeyMapEditor();
 bool runInGameKeyMapEditor(unsigned id);
 bool startKeyMapEditor(bool first);
