@@ -162,7 +162,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Build vcpkg...")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "./bootstrap-vcpkg.sh ${_vcpkg_bootstrap_additional_params}")
 
 execute_process(
-	COMMAND ./bootstrap-vcpkg.sh ${_vcpkg_bootstrap_additional_params}
+	COMMAND ${CMAKE_COMMAND} -E env --unset=MACOSX_DEPLOYMENT_TARGET ./bootstrap-vcpkg.sh ${_vcpkg_bootstrap_additional_params}
 	WORKING_DIRECTORY "vcpkg"
 	RESULT_VARIABLE _exstatus
 )
