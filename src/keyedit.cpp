@@ -370,7 +370,7 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 	{
 		// Text versions for in-game where image resources are not available
 		kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H);
+			psWidget->setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H + 10);
 				}));
 
 		W_BUTINIT sButInit;
@@ -398,7 +398,7 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
 		{
 			sButInit.id			= KM_DEFAULT;
-			sButInit.y			= KM_H - 16;
+			sButInit.y			= KM_H - 8;
 			sButInit.pText		= _("Select Default");
 
 			widgAddButton(psWScreen, &sButInit);
