@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 # Optional input defines:
 #  - VCPKG_BUILD_TYPE : This will be used to modify the current triplet (once vcpkg is downloaded)
 #  - WZ_DISTRIBUTOR : Passed to the main WZ CMake configure command
+#  - ADDITIONAL_CMAKE_ARGUMENTS : Additional arguments to be passed to CMake configure
 
 ########################################################
 
@@ -237,6 +238,9 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ vcpkg install finished")
 set(_additional_configure_arguments "")
 if(DEFINED WZ_DISTRIBUTOR)
 	set(_additional_configure_arguments "\"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\"")
+endif()
+if(DEFINED ADDITIONAL_CMAKE_ARGUMENTS)
+	list(APPEND _additional_configure_arguments ${ADDITIONAL_CMAKE_ARGUMENTS})
 endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
