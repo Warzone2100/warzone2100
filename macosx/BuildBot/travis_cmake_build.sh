@@ -96,8 +96,8 @@ if [ "${TRAVIS_REPO_SLUG}" == "Warzone2100/warzone2100" ]; then
 	# Building from main repo - set distributor
 	WZ_DISTRIBUTOR="wz2100.net"
 fi
-echo "cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -P ../configure_mac.cmake"
-cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -P ../configure_mac.cmake
+echo "cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -DADDITIONAL_CMAKE_ARGUMENTS=\"-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=\\\"\\\";-DCODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO\" -P ../configure_mac.cmake"
+cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=\"\";-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO" -P ../configure_mac.cmake
 result=${?}
 echo "travis_fold:end:wz.configure.mac"
 if [ $result -ne 0 ]; then
