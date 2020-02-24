@@ -409,6 +409,9 @@ macro(_appVeyorBuild)
 			endif()
 		endif()
 		set(VCS_TAG "$ENV{APPVEYOR_REPO_TAG_NAME}")
+
+		# When on a tag, clear VCS_BRANCH
+		set(VCS_BRANCH "")
 	endif()
 
 endmacro()
@@ -450,6 +453,9 @@ macro(_azureCIBuild)
 			endif()
 		endif()
 		set(VCS_TAG "${_extracted_tag_name}")
+
+		# When on a tag, clear VCS_BRANCH
+		set(VCS_BRANCH "")
 	endif()
 
 endmacro()
