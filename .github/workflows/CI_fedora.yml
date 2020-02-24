@@ -7,7 +7,11 @@ jobs:
     name: :LATEST (CMake) [GCC]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P build_tools/ci/githubactions/prepare_git_repo.cmake
     - name: Init Git Submodules
       run: git submodule update --init --recursive
     - name: Build the Docker image
@@ -24,7 +28,11 @@ jobs:
     name: :LATEST (CMake) [GCC -m32]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P build_tools/ci/githubactions/prepare_git_repo.cmake
     - name: Init Git Submodules
       run: git submodule update --init --recursive
     - name: Build the Docker image
