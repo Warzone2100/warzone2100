@@ -7,7 +7,11 @@ jobs:
     name: Ubuntu 16.04 (CMake) [GCC]
     runs-on: ubuntu-16.04
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P build_tools/ci/githubactions/prepare_git_repo.cmake
     - name: Init Git Submodules
       run: git submodule update --init --recursive
     - name: Debug Output
@@ -28,7 +32,11 @@ jobs:
     name: Ubuntu 18.04 (CMake) [GCC]
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P build_tools/ci/githubactions/prepare_git_repo.cmake
     - name: Init Git Submodules
       run: git submodule update --init --recursive
     - name: Build the Docker image
@@ -45,7 +53,11 @@ jobs:
     name: Ubuntu 18.04 (CMake) [Clang]
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P build_tools/ci/githubactions/prepare_git_repo.cmake
     - name: Init Git Submodules
       run: git submodule update --init --recursive
     - name: Build the Docker image
