@@ -112,3 +112,22 @@ jobs:
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
     - name: CMake Build
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
+
+  upload_release_artifacts:
+    if: startsWith(github.ref, 'refs/tags/')
+    name: Upload Release Artifacts
+    needs: package-source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source tarball
+        uses: actions/download-artifact@v1
+        with:
+          name: warzone2100_src
+      - name: Upload source tarball to release
+        uses: past-due/action-gh-release@v1
+        with:
+          # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
+          files: ./warzone2100_src/warzone2100_src.tar.xz
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
