@@ -1,0 +1,30 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - '*'
+
+name: Draft Tag Release
+
+jobs:
+  create_draft_release:
+    if: startsWith(github.ref, 'refs/tags/') # sanity-check
+    name: Create Draft Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo (to obtain template files)
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          lfs: false
+      - name: Create Draft Release
+        uses: past-due/action-gh-release@v1
+        with:
+          # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
+          body_path: .github/wz/templates/draft_release_body_template.md
+          draft: true
+          prerelease: false
+        env:
+          # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
