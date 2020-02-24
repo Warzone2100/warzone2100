@@ -203,8 +203,8 @@ gitRepo() {
 	fi
 
 	# get the most recent commit date
-	VCS_MOST_RECENT_COMMIT_DATE="$(git log -1 --format=%cI)"
-	VCS_MOST_RECENT_COMMIT_YEAR="$(git log -1 --format=%cI | cut -d "-" -f1)"
+	VCS_MOST_RECENT_COMMIT_DATE="$(git log -1 --format=%cd --date=short)"
+	VCS_MOST_RECENT_COMMIT_YEAR="$(echo "${VCS_MOST_RECENT_COMMIT_DATE}" | cut -d "-" -f1)"
 }
 
 # For Travis-CI builds
