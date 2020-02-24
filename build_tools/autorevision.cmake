@@ -327,12 +327,12 @@ macro(_gitRepo)
 	endif()
 
 	# get the most recent commit date
-	# VCS_MOST_RECENT_COMMIT_DATE="$(git log -1 --format=%cI)"
-	execute_process( COMMAND ${GIT_EXECUTABLE} log -1 --format=%cI
+	# VCS_MOST_RECENT_COMMIT_DATE="$(git log -1 --format=%cd --date=short)"
+	execute_process( COMMAND ${GIT_EXECUTABLE} log -1 --format=%cd --date=short
 						 WORKING_DIRECTORY "${_repo_top_directory}"
 						 OUTPUT_VARIABLE VCS_MOST_RECENT_COMMIT_DATE
 						 OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
-	# VCS_MOST_RECENT_COMMIT_YEAR="$(git log -1 --format=%cI | cut -d "-" -f1)"
+	# VCS_MOST_RECENT_COMMIT_YEAR="$(git log -1 --format=%cd --date=short | cut -d "-" -f1)"
 	STRING(REGEX MATCH "^[^-]+" VCS_MOST_RECENT_COMMIT_YEAR "${VCS_MOST_RECENT_COMMIT_DATE}")
 
 	# cleanup
