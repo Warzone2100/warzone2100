@@ -20,9 +20,9 @@ jobs:
         docker build -t fedora .
         cd ../..
     - name: CMake Configure
-      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTION -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
+      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
     - name: CMake Build
-      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTION -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake --build build
+      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake --build build
 
   fedora-latest-gcc-m32:
     name: :LATEST (CMake) [GCC -m32]
@@ -41,6 +41,6 @@ jobs:
         docker build -t fedora .
         cd ../..
     - name: CMake Configure
-      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTION -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=build_tools/ci/cmake/Toolchain-Linux-cross-m32.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
+      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=build_tools/ci/cmake/Toolchain-Linux-cross-m32.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
     - name: CMake Build
-      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTION -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake --build build
+      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake --build build
