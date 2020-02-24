@@ -479,12 +479,15 @@ macro(_azureCIBuild)
 		# Use SYSTEM_PULLREQUEST_SOURCEBRANCH to get the source branch
 		set(VCS_BRANCH "$ENV{SYSTEM_PULLREQUEST_SOURCEBRANCH}")
 	else()
-		# In the normal case, use BUILD_SOURCEBRANCHNAME
-		if (DEFINED ENV{BUILD_SOURCEBRANCHNAME} AND NOT "$ENV{BUILD_SOURCEBRANCHNAME}" STREQUAL "")
-			set(VCS_BRANCH "$ENV{BUILD_SOURCEBRANCHNAME}")
+		# In the normal case, we _would_ use BUILD_SOURCEBRANCHNAME... but:
+		# "Build.SourceBranchName does not include full name, if name includes forward slash"
+		# - Link: https://github.com/microsoft/azure-pipelines-agent/issues/838
+		# So, parse the BUILD_SOURCEBRANCH to get the full branch name
+		if (DEFINED ENV{BUILD_SOURCEBRANCH} AND "$ENV{BUILD_SOURCEBRANCH}" MATCHES "^refs/[^/]*/(.*)")
+			set(VCS_BRANCH "${CMAKE_MATCH_1}")
 		else()
 			if(NOT LOGGING_QUIET)
-				message( WARNING "BUILD_SOURCEBRANCHNAME is empty; VCS_BRANCH may be empty" )
+				message( WARNING "BUILD_SOURCEBRANCH is ('${BUILD_SOURCEBRANCH}'); did not parse as expected; VCS_BRANCH may be empty" )
 			endif()
 		endif()
 	endif()
