@@ -29,8 +29,8 @@ Latest development builds
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/1s4547mjbkprt4qr/branch/master?svg=true)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
 [![FreeBSD Build Status](https://api.cirrus-ci.com/github/Warzone2100/warzone2100.svg?branch=master)](https://cirrus-ci.com/github/Warzone2100/warzone2100)
 
-- **Windows** (x86): [**Portable**](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_portable.zip?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
-[Installer](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86_installer.zip?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
+- **Windows** (x86): [**Portable**](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100_win_x86_portable.exe?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
+[Installer](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100_win_x86_installer.exe?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
 [Debug Symbols](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86.DEBUGSYMBOLS.7z?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86)
 
 - **macOS** (64-bit Intel): [**Latest builds**](http://buildbot.wz2100.net/files/CI/master/macOS/)

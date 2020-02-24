@@ -101,67 +101,54 @@ build:
   project: build/PACKAGE.vcxproj
 
 after_build:
-  # Determine the build output description (nightly vs tag/release builds)
-  # For nightly builds, base on the autorevision info: warzone2100-<BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>_<PLATFORM: x86, x64>_<PORTABLE/INSTALLER>.zip
-  # For tags/releases, base on the tag name: warzone2100-<TAG_NAME>_<PLATFORM>_<PORTABLE/INSTALLER>.zip (so it can go right to GitHub releases)
+  # Determine the build output description
+  # Base on the platform name: warzone2100_win_<PLATFORM: x86, x64>_<PORTABLE/INSTALLER>.exe (so it can go right to GitHub releases)
   - ps: |
-      if (Test-Path 'env:APPVEYOR_REPO_TAG_NAME') {
-        # For tag builds, simply use <TAG_NAME>_<PLATFORM>
-        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_TAG_NAME)_$($env:WZ_OUTPUT_PLATFORMNAME)"
-      }
-      else {
-        # For normal builds, use <BRANCH>-<DATE>-<TIME>-<COMMIT_FIRST_7>-<PLATFORM: x86, x64>
-        $env:WZ_BUILD_DESC = "$($env:APPVEYOR_REPO_BRANCH)-$(get-date -f yyyyMMdd-HHmmss)-$($env:APPVEYOR_REPO_COMMIT.SubString(0,7))_$($env:WZ_OUTPUT_PLATFORMNAME)"
-      }
-      $env:WZ_ZIP_DESC = "$($env:APPVEYOR_REPO_BRANCH)_$($env:WZ_OUTPUT_PLATFORMNAME)"
+      $env:WZ_BUILD_DESC = "win_$($env:WZ_OUTPUT_PLATFORMNAME)"
       # Convert special characters
       $env:WZ_BUILD_DESC = $env:WZ_BUILD_DESC.replace('/','_')
-      $env:WZ_ZIP_DESC = $env:WZ_ZIP_DESC.replace('/','_')
   - ps: Write-Host "env:WZ_BUILD_DESC='$env:WZ_BUILD_DESC'"
 
-  # Package the portable installer into a zip
-  - ps: cmd /c 7z a "warzone2100-$($env:WZ_ZIP_DESC)_portable.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe"
-  # Rename the portable installer inside the zip using the WZ_BUILD_DESC (to preserve the commit + other info)
-  - ps: cmd /c 7z rn "warzone2100-$($env:WZ_ZIP_DESC)_portable.zip" "warzone2100_portable.exe" "warzone2100-$($env:WZ_BUILD_DESC)_portable.exe"
+  # Rename the portable installer
+  - ps: Move-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Destination "warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
   # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
-  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
   
   # Re-run CMake configure for non-portable (regular) installer
   - cmake -H. -Bbuild  -DCMAKE_TOOLCHAIN_FILE="%APPVEYOR_BUILD_FOLDER%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -DWZ_DISTRIBUTOR:STRING="%WZ_DISTRIBUTOR%" -G "%WZ_VC_GENERATOR%" -T "%WZ_VC_TOOLCHAIN%" -A "%WZ_VC_TARGET_PLATFORMNAME%"
   # Build the regular installer package (this should only rebuild the installer itself)
   - msbuild build/PACKAGE.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   
-  # Package the regular installer into a zip
-  - ps: cmd /c 7z a "warzone2100-$($env:WZ_ZIP_DESC)_installer.zip" "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe"
-  # Rename the regular installer inside the zip using the WZ_BUILD_DESC (to preserve the commit + other info)
-  - ps: cmd /c 7z rn "warzone2100-$($env:WZ_ZIP_DESC)_installer.zip" "warzone2100_installer.exe" "warzone2100-$($env:WZ_BUILD_DESC)_installer.exe"
+  # Rename the regular installer
+  - ps: Move-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Destination "warzone2100_$($env:WZ_BUILD_DESC)_installer.exe"
   # Package the regular installer .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
-  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100-$($env:WZ_ZIP_DESC)_installer.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
+  - ps: cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "warzone2100_$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.pdb" "$($env:APPVEYOR_BUILD_FOLDER)\build\src\*.sym"
   
   # Compare the two DEBUGSYMBOLS.7z files
   # If they are equal (as they should be if only the installer was rebuilt), keep only one and remove the "PORTABLE/INSTALLER" suffix
   # If they are not equal, we have to keep both (but output a notice, as the CMake build should probably be tweaked to avoid this)
   - ps: |
-      if ((Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash -eq (Get-FileHash -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_installer.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash) {
+      if ((Get-FileHash -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash -eq (Get-FileHash -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash) {
         # The two archives' hashes match - delete one, and rename the other
-        Remove-Item -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_installer.DEBUGSYMBOLS.7z" -Force -ErrorAction SilentlyContinue
-        Rename-Item -LiteralPath "warzone2100-$($env:WZ_ZIP_DESC)_portable.DEBUGSYMBOLS.7z" -NewName "warzone2100-$($env:WZ_ZIP_DESC).DEBUGSYMBOLS.7z"
+        Write-Host "DEBUGSYMBOLS.7z files match"
+        Remove-Item -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Force -ErrorAction SilentlyContinue
+        Rename-Item -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -NewName "warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
       }
       else {
         Write-Warning "The DEBUGSYMBOLS.7z files for the portable + regular builds do not match. This may mean that the executable was rebuilt when switching portable / non-portable mode. (Check the CMake scripts to fix.)"
       }
   
-  # Log hashes of the setup EXEs (stored inside the ZIP files)
+  # Log hashes of the setup EXEs
   - ps: |
       Write-Host "SHA512 Hashes:"
-      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe" -Algorithm SHA512).Hash)`n  -> Size (bytes): $((Get-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_portable.exe").Length)"
-      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe" -Algorithm SHA512).Hash)`n  -> Size (bytes): $((Get-Item -LiteralPath "$($env:APPVEYOR_BUILD_FOLDER)\build\warzone2100_installer.exe").Length)"
+      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n  -> Size (bytes): $((Get-Item -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
+      Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n  -> SHA512: $((Get-FileHash -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n  -> Size (bytes): $((Get-Item -LiteralPath "warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
       Write-Host ""
 
 artifacts:
-  - path: warzone2100-*_portable.zip
+  - path: warzone2100_*_portable.exe
     name: Warzone2100 Portable
-  - path: warzone2100-*_installer.zip
+  - path: warzone2100_*_installer.exe
     name: Warzone2100 Installer
-  - path: warzone2100-*.DEBUGSYMBOLS.7z
+  - path: warzone2100_*.DEBUGSYMBOLS.7z
     name: Debug Symbols (7z)
