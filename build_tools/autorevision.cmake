@@ -416,6 +416,57 @@ macro(_appVeyorBuild)
 
 endmacro()
 
+macro(_githubActionsCIBuild)
+	# Extract most symbols from the Git repo first
+	_gitRepo()
+
+	# Get remaining symbols from the GitHub Actions environment variables
+	# See: https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
+
+	# GITHUB_REF
+	# Examples:
+	# - Pull request (PR): refs/pull/1/merge
+	# - When merging a pull request, or manually building on a branch: refs/heads/master
+	# - Tag: refs/tags/v0.1.0
+
+	# Determine VCS_BRANCH
+	if (DEFINED ENV{GITHUB_HEAD_REF} AND NOT "$ENV{GITHUB_HEAD_REF}" STREQUAL "")
+		# On a PR build, GITHUB_REF is set to "refs/pull/<number>/merge"
+		# Use GITHUB_HEAD_REF to get the source branch
+		if("$ENV{GITHUB_HEAD_REF}" MATCHES "^refs/heads/(.*)")
+			set(VCS_BRANCH "${CMAKE_MATCH_1}")
+		else()
+			message( WARNING "GITHUB_HEAD_REF is set ('${GITHUB_HEAD_REF}'), but not parsed as expected; VCS_BRANCH may be empty" )
+		endif()
+	else()
+		# In the normal case, parse GITHUB_REF
+		if (DEFINED ENV{GITHUB_REF} AND NOT "$ENV{GITHUB_REF}" STREQUAL "")
+			if("$ENV{GITHUB_REF}" MATCHES "^refs/heads/(.*)")
+				set(VCS_BRANCH "${CMAKE_MATCH_1}")
+			endif()
+		else()
+			if(NOT LOGGING_QUIET)
+				message( WARNING "GITHUB_REF is empty; VCS_BRANCH may be empty" )
+			endif()
+		endif()
+	endif()
+
+	# Determine VCS_TAG
+	if (DEFINED ENV{GITHUB_REF} AND "$ENV{GITHUB_REF}" MATCHES "^refs/tags/(.*)")
+		set(_extracted_tag_name "${CMAKE_MATCH_1}")
+		if(DEFINED VCS_TAG AND NOT "${VCS_TAG}" STREQUAL "")
+			if(NOT LOGGING_QUIET)
+				message( STATUS "VCS_TAG is already set to '${VCS_TAG}'; overwriting it with ('${_extracted_tag_name}'), extracted from: ENV:GITHUB_REF ('$ENV{GITHUB_REF}')" )
+			endif()
+		endif()
+		set(VCS_TAG "${_extracted_tag_name}")
+
+		# When on a tag, clear VCS_BRANCH
+		set(VCS_BRANCH "")
+	endif()
+
+endmacro()
+
 macro(_azureCIBuild)
 	# Extract most symbols from the Git repo first
 	_gitRepo()
@@ -499,6 +550,12 @@ elseif(Git_FOUND AND _currentDirectoryIsInGitRepo)
 		_travisCIBuild()
 		if(NOT LOGGING_QUIET)
 			message( STATUS "Gathered revision data from Git + Travis-CI environment" )
+		endif()
+	elseif(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
+		# On GitHub Actions
+		_githubActionsCIBuild()
+		if(NOT LOGGING_QUIET)
+			message( STATUS "Gathered revision data from Git + GitHub Actions environment" )
 		endif()
 	elseif(DEFINED ENV{TF_BUILD} AND "$ENV{TF_BUILD}" STREQUAL "True")
 		# On Azure DevOps
