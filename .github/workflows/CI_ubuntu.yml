@@ -49,6 +49,49 @@ jobs:
     - name: CMake Build
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
 
+  package-source:
+    name: Package Source (Ubuntu 18.04, CMake) [GCC]
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P build_tools/ci/githubactions/prepare_git_repo.cmake
+    - name: Init Git Submodules
+      run: git submodule update --init --recursive
+    - name: Build the Docker image
+      run: |
+        cd docker/ubuntu-18.04/
+        docker build -t ubuntu .
+        cd ../..
+    - name: CMake Configure
+      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
+    - name: CMake Package Source
+      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build --target package_source
+    - name: Extract & Build Packaged Source
+      run: |
+        # Extract the .tar.xz into a new location
+        mkdir extracted && tar -xf build/warzone2100.tar.xz -C extracted
+        # Attempt a build from the tarball source (using CMake)
+        docker run --rm -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
+        docker run --rm -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake --build build
+    - name: Rename Tarball & Output Info
+      run: |
+        OUTPUT_DIR="${HOME}/output"
+        echo "OUTPUT_DIR=${OUTPUT_DIR}"
+        echo "::set-env name=OUTPUT_DIR::${OUTPUT_DIR}"
+        mkdir -p "${OUTPUT_DIR}"
+        cp "build/warzone2100.tar.xz" "${OUTPUT_DIR}/warzone2100_src.tar.xz"
+        echo "Generated warzone2100 tarball: \"warzone2100_src.tar.xz\""
+        echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
+        echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
+    - uses: actions/upload-artifact@v1
+      if: success()
+      with:
+        name: warzone2100_src
+        path: ${{ env.OUTPUT_DIR }}
+
   ubuntu-18-04-clang:
     name: Ubuntu 18.04 (CMake) [Clang]
     runs-on: ubuntu-18.04
