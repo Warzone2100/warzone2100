@@ -19,6 +19,11 @@ parameters:
   default: false
 - name: artifact
   default: 'warzone2100_macOS'
+- name: uploadArtifactToGitHubReleases
+  type: boolean
+  default: false
+- name: gitHubConnection
+  default: ''
 
 jobs:
 - job: ${{ parameters.name }}
@@ -166,3 +171,19 @@ jobs:
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)'
       artifact: ${{ parameters.artifact }}
+  - task: GithubRelease@1
+    displayName: 'Upload to GitHub Release'
+    condition: and(eq('${{ parameters.uploadArtifactToGitHubReleases }}', true), ne('${{ parameters.gitHubConnection }}', ''), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+    inputs:
+      gitHubConnection: ${{ parameters.gitHubConnection }}
+      action: edit
+      tagSource: userSpecifiedTag
+      # We can't use Build.SourceBranchName because:
+      # - "Build.SourceBranchName does not include full name, if name includes forward slash"
+      # - Link: https://github.com/microsoft/azure-pipelines-agent/issues/838
+      tag: $(FULL_SOURCE_BRANCH_NAME)
+      assets: |
+        $(Build.ArtifactStagingDirectory)/*.zip
+      assetUploadMode: 'replace'
+      isDraft: true
+      addChangeLog: false
