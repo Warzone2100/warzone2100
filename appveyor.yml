@@ -9,6 +9,7 @@ environment:
   # 32-bit (x86) builds
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     WZ_JOB_ID: release_x86
+    wz_deploy_build: true
     # NOTE: Additional environment variables are set later to maintain consistent job identifiers
   ## NOTE: Unfortunately, 64-bit Windows builds are currently broken because of QScript (see: http://developer.wz2100.net/ticket/4763)
   ## Whenever that ticket is resolved, the following will build 64-bit:
@@ -152,3 +153,16 @@ artifacts:
     name: Warzone2100 Installer
   - path: warzone2100_*.DEBUGSYMBOLS.7z
     name: Debug Symbols (7z)
+
+deploy:
+  # description: ''
+  provider: GitHub
+  auth_token:
+    secure: udWZCPk8pkXCIS0eL88yQ+95q9BkAHaCCQLA/W2zd9XsHYS7wMbLYOATnbuRRD0S
+  artifact: /warzone2100_.*\..*/
+  draft: true
+  prerelease: false
+  force_update: true
+  on:
+    APPVEYOR_REPO_TAG: true        # deploy on tag push only
+    wz_deploy_build: true
