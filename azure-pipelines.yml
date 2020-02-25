@@ -25,6 +25,10 @@ jobs:
     xcodeDeveloperDir: '/Applications/Xcode_10.3.app' # Set default Xcode to Xcode 10.3 on macOS 10.14
     publishArtifact: true
     artifact: 'warzone2100_macOS'
+    # Upload this macOS job's output to GitHub Releases
+    uploadArtifactToGitHubReleases: true
+    gitHubConnection: 'githubReleases'
+    #
 - template: .ci/azure/templates/macos-build-pipeline-template.yml
   parameters:
     name: macOS_Xcode_11
