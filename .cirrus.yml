@@ -49,5 +49,5 @@ freebsd_build_task:
 #   init_git_submodules_script: git submodule update --init --recursive
 #
 #   build_script:
-#     - source build_tools/ci/travis/export_build_output_desc.sh
+#     - source .ci/travis/export_build_output_desc.sh
 #     - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
