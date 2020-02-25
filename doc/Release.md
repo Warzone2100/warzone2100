@@ -3,15 +3,17 @@ Release Checklist
 
 Preliminary Testing
 -------------------
-While the CI builds on GitHub (via `Travis-CI` and `AppVeyor`) can be used to check that it compiles fine on Linux, macOS & Windows, it can't actually tell you if it works.
+While the CI builds on GitHub (via `GitHub Actions`, `AppVeyor`, `Azure Pipelines`, etc) can be used to check that it compiles fine on Linux, macOS & Windows, it can't actually tell you if it works.
 You should locally test whether the latest commit's build actually runs, in both single & skirmish and multiplayer!
 Of course, it is always nice to gather up enough volunteers to test before you actually make releases.
+
 
 Starting off
 ------------
 We currently do releases off git master.
 
     git pull origin master
+
 
 Bump version numbers
 --------------------
@@ -57,31 +59,54 @@ It is very important that this number is in sequential order from the last relea
  * releases based off branch 3.1 will be `0x20A0`
  * new branches will be `+0x1000` higher than the original value.
 
-    static int NETCODE_VERSION_MAJOR = 6;                // major netcode version, used for compatibility check
-    static int NETCODE_VERSION_MINOR = 0x22;             // minor netcode version, used for compatibility check
+```c
+static int NETCODE_VERSION_MAJOR = 6;                // major netcode version, used for compatibility check
+static int NETCODE_VERSION_MINOR = 0x22;             // minor netcode version, used for compatibility check
+```
 
 Commit the (above) changes to master
 
-    git commit -p
+```
+git commit -p
+```
 
 This will trigger CI builds for all OSes.
+
 
 Verify the builds all complete
 ------------------------------
 
-Wait for the Travis-CI and AppVeyor CI builds to complete, and verify they have completed successfully.
+Wait for all CI builds to complete, and verify they have completed successfully.
+
+> The following images may not update immediately - even if refreshing the page.
+> To find the latest status, click on each image, or **view the Checks / Status for the commit on GitHub**.
+
+![Ubuntu](https://github.com/Warzone2100/warzone2100/workflows/Ubuntu/badge.svg?branch=master&event=push)
+![Fedora](https://github.com/Warzone2100/warzone2100/workflows/Fedora/badge.svg?branch=master&event=push)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/1s4547mjbkprt4qr/branch/master?svg=true)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
+[![Azure Build Status](https://dev.azure.com/wz2100/warzone2100/_apis/build/status/Build?branchName=master)](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
+[![Travis CI Build Status](https://travis-ci.org/Warzone2100/warzone2100.svg?branch=master)](https://travis-ci.org/Warzone2100/warzone2100)
+
+Can be flakey:
+- FreeBSD builds: [![FreeBSD Build Status](https://api.cirrus-ci.com/github/Warzone2100/warzone2100.svg?branch=master)](https://cirrus-ci.com/github/Warzone2100/warzone2100)
+
 
 Testing
 -------
 You should locally test whether the master branch of the game actually runs, in both single & skirmish and multiplayer.
-The CI (master branch) builds may be downloaded from:
-* [Windows (AppVeyor)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
-* [MacOS Build](http://buildbot.wz2100.net/files/CI/master/macOS/)
-* [Source Tarball](http://buildbot.wz2100.net/files/CI/master/src/)
+The latest CI (master branch) builds may be downloaded from:
+* [Windows (AppVeyor)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master/artifacts)
+   * Test both the portable and regular installers!
+* [MacOS Build](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
+   * Under "Artifacts:", click the "\<N\> published" link, then select the "warzone2100\_macOS" artifact.
+   * (Note: This may be a .zip _of_ a .zip. Only the inner .zip gets automatically uploaded on release.)
+* [Source Tarball](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster)
+   * Select the latest "Ubuntu" workflow, download the "warzone2100_src" artifact.
+   * (Note: This will be a .zip _of_ the .tar.xz. Only the .tar.xz gets automatically uploaded on release.)
 
 ### Test building with the source tarball on Linux
 
-Use the Linux build instructions to build via the source tarball you downloaded from the buildbot.
+Use the Linux build instructions to build via the source tarball you downloaded above.
 Verify that the build succeeds (and that no files are missing from the tarball).
 Then proceed with normal game testing.
 
@@ -104,6 +129,10 @@ TBD
 
 ### Done with the builds!
 
+
+Create the tag for the new release
+----------------------------------
+
 Since everything works (since you tested it), it is time to make the tag. Verify you are on the appropriate branch + commit, then tag it:
 
     git tag -a 3.3.0
@@ -112,46 +141,73 @@ Since everything works (since you tested it), it is time to make the tag. Verify
 
 Where `3.3.0` is the name of the tag.
 
-GitHub will then automatically trigger the CI builds via Travis-CI and AppVeyor. Wait for the CI builds to complete for the new tag.
+GitHub will then **automatically**:
+- create a Draft release in **[GitHub Releases](https://github.com/Warzone2100/warzone2100/releases)** for the new tag
+   - (may take a minute or so to complete)
+- trigger the CI builds
 
-Download, verify, & upload the builds
--------------------------------------
 
-* Download the tag's Windows build results from [AppVeyor](https://ci.appveyor.com/project/Warzone2100/warzone2100/) (see the build artifacts). **(Note: Make sure you are viewing the build for the _tag_ you just made)**
-   * `warzone2100-<TAG>_x86.DEBUGSYMBOLS.7z`
-   * `warzone2100-<TAG>_x86_installer.zip`
-   * `warzone2100-<TAG>_x86_portable.zip`
-* Extract the installer `.exe`s from the `.zip` files you downloaded.
-* Verify the SHA512 hashes in the AppVeyor Console (build log) match those of the installer `.exe`s you extracted.
-* Upload the installer `.exe`s (plus the `*.DEBUGSYMBOLS.7z`) to [SourceForge](https://sourceforge.net/projects/warzone2100/files/releases/)
-* Download the tag's macOS build from buildbot:
-   * Start here: http://buildbot.wz2100.net/files/CI/
-   * Browse to the folder for the **tag** you just made. (Note: **_Not_** the `master` branch folder.)
-   * Browse to the **`macOS`** folder.
-   * Grab the latest `warzone2100-<TAG>_macOS.zip` file.
-* Verify the SHA512 hash towards the end of the Travis-CI build's ("macOS" job) log matches the file you downloaded. **(Note: Make sure you are viewing the build for the _tag_ you just made)**
-* Upload the macOS `.zip` to [sourceforge](https://sourceforge.net/projects/warzone2100/files/releases/)
-* Download the tag's source tarball from buildbot:
-   * Start here: http://buildbot.wz2100.net/files/CI/
-   * Browse to the folder for the **tag** you just made. (Note: **_Not_** the `master` branch folder.)
-   * Browse to the **`src`** folder.
-   * Grab the latest `warzone2100-<TAG>_src.tar.xz` file.
-* Verify the SHA512 hash towards the end of the Travis-CI build's ("Package Source" job) log matches the file you downloaded. **(Note: Make sure you are viewing the build for the _tag_ you just made)**
-* Upload the source tarball to [sourceforge](https://sourceforge.net/projects/warzone2100/files/releases/)
+Download & verify the tag / release builds
+------------------------------------------
 
-Additionally:
-* Go to [GitHub releases](https://github.com/Warzone2100/warzone2100/releases)
-* Click the "Draft a new release" button
-* Select the '''existing''' tag (the tag that you created above)
-* Enter the version # as the release title.
-* Upload the same files that you uploaded to SourceForge.
+- [x] **Wait for the CI builds to complete for the new tag.**
+   - Once the CI builds are complete, they will be automatically uploaded to the draft GitHub Release.
+
+<blockquote>
+<sub>
+- If something goes wrong with the automatic artifact uploading, it should be possible to manually
+download the appropriate artifact(s) following the same instructions you used to download the master
+branch artifacts above.
+<br />
+- Just make sure you download artifacts from the CI runs for the <b>tag</b> you created.
+<br />
+<b>You should <i>NOT</i> have to manually upload artifacts to the GitHub Release</b> (unless
+the CI -> GitHub integration breaks).
+</sub>
+</blockquote>
+<br />
+
+- [x] Verify all release assets have been uploaded by CI to the draft GitHub Release.
+- [x] Download each release asset and verify:
+   - [x] Download the Windows builds from the draft release:
+      - [x] `warzone2100_win_x86.DEBUGSYMBOLS.7z`
+      - [x] `warzone2100_win_x86_installer.exe`
+      - [x] `warzone2100_win_x86_portable.exe`
+   - [x] Verify the SHA512 hashes in the [AppVeyor Console (build log)](https://ci.appveyor.com/project/Warzone2100/warzone2100/) **(make sure you are viewing the build for the _tag_ you just made)**  match those of the installer `.exe`s you downloaded from GitHub.
+   - [x] Download the macOS build from the draft release:
+      - [x] `warzone2100_macOS.zip`
+   - [x] Verify the SHA512 hash in the [Azure Pipelines](https://dev.azure.com/wz2100/warzone2100/_build?definitionId=1&_a=summary) build log matches the file you downloaded.
+      - [x] **Make sure you are viewing the build for the _tag_ you just made**
+      - [x] Select the `macOS [Xcode 10.3, macOS 10.14 SDK]` job
+      - [x] Scroll down to the `Output build info` step, which outputs the SHA512 at the bottom of its output.
+   - [x] Download the tag's source tarball from the draft release:
+      - [x] `warzone2100_src.tar.xz`
+   - [x] Verify the SHA512 hash towards the end of the [Ubuntu workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+event%3Apush+) ("Package Source" job) log matches the file you downloaded.
+      - [x] **Make sure you are viewing the build for the _tag_ you just made**
+      - [x] Select the "Package Source" job
+      - [x] Expand the "Rename Tarball & Output Info" step, which outputs the SHA512 at the bottom of its output.
+- [x] Test each release asset to make sure they work, and show the proper version # (which should match the tag).
+
+
+Edit & Publish the Release
+--------------------------
+
+Once you have verified all the release assets:
+- [x] Click the "Edit" button next to the draft GitHub Release.
+- [x] Remove the top text block from the release notes / description (as it instructs).
+- [x] Click the green "Publish Release" button.
+
+This will automatically:
+* Make the new release available on GitHub
+* Trigger automatic mirroring of the new release to SourceForge
 
 ### Revert the changes to configure.ac
 
-Then you should revert the changes you made to `configure.ac`, so that git master again becomes git master.
+Then you should revert the changes you made to `configure.ac` and `lib/netplay/netplay.cpp`, so that git master again becomes git master.
 
-Time to publish the release!
-----------------------------
+
+Post-Release checklist
+----------------------
  * Add a new milestone to https://github.com/Warzone2100/warzone2100/milestones
  * (See below for details) Update the lobby server for the new release. See ~lobby/wzlobbyserver-ng/wzlobby/protocol/protocol3.py and ~lobby/wzlobbyserver-ng/wzlobby/settings.py and ~lobby/wzlobbyserver-ng/wzlobby/gamedb.py and then restart the lobby via Monit.
  * (See below for details) Update /home/lobby/gamecheck.wz2100.net/gamechecker/bottle/app.py -- the game version checker -- to include the version you have just created. Restart it with «uwsgi --reload /var/run/gamecheck.wz2100.net-master.pid».
