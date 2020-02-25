@@ -11,4 +11,4 @@ steps:
   displayName: Prepare Git repo for autorevision
   inputs:
     script: |
-      cmake -P build_tools/ci/azure/prepare_git_repo.cmake
+      cmake -P .ci/azure/prepare_git_repo.cmake

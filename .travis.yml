@@ -138,13 +138,13 @@ matrix:
         - docker build -t ubuntu .
         - cd ../..
       before_script:
-        - source build_tools/ci/travis/export_build_output_desc.sh
+        - source .ci/travis/export_build_output_desc.sh
         # Package the source tarball
         - export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
         # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
         # To do this, append the following to the pertinent lines after —rm:
         # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
-        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake -P "/code/build_tools/ci/travis/prepare_git_repo.cmake"
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake -P "/code/.ci/travis/prepare_git_repo.cmake"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build --target package_source
         # Extract the .tar.xz into a new location
@@ -154,12 +154,12 @@ matrix:
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd)/extracted/warzone2100:/code ubuntu cmake --build build
         # Prepare the source tarball for deployment
-        - build_tools/ci/travis/packaged_source_deploy_prepare.sh "build/warzone2100.tar.xz" "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
+        - .ci/travis/packaged_source_deploy_prepare.sh "build/warzone2100.tar.xz" "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
       after_success:
         # Deploy the generated .tar.xz to the buildbot
         - eval "$(ssh-agent -s)" #start the ssh agent
         - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/src/"
-        - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_src.tar.xz" --cleanold
+        - .ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_src.tar.xz" --cleanold
 
     # Build for Fedora :LATEST (CMake) (GCC)
     - name: "Fedora :LATEST (CMake) [GCC]"
@@ -198,7 +198,7 @@ matrix:
         # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
         # To do this, append the following to the pertinent lines after —rm:
         # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
-        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=build_tools/ci/cmake/Toolchain-Linux-cross-m32.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=.ci/cmake/Toolchain-Linux-cross-m32.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code fedora cmake --build build
 
     # Build for macOS (CMake)
@@ -221,7 +221,7 @@ matrix:
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
         - cmake --version
       script:
-        - source build_tools/ci/travis/export_build_output_desc.sh
+        - source .ci/travis/export_build_output_desc.sh
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
       # do not deploy
 
@@ -244,11 +244,11 @@ matrix:
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
         - cmake --version
       script:
-        - source build_tools/ci/travis/export_build_output_desc.sh
+        - source .ci/travis/export_build_output_desc.sh
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
       after_success:
         - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/macOS/"
-        - build_tools/ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
+        - .ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
 
     # Build for macOS (CMake)
     - name: "macOS (CMake) [Xcode 10.3, macOS 10.14 SDK]"
@@ -268,7 +268,7 @@ matrix:
         - bundle install --gemfile="macosx/BuildBot/Gemfile"
         - cmake --version
       script:
-        - source build_tools/ci/travis/export_build_output_desc.sh
+        - source .ci/travis/export_build_output_desc.sh
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
       # do not deploy
 

@@ -9,7 +9,7 @@
 # 2.) Specify an output path for the created warzone2100-${BUILD_OUTPUT_DESCRIPTION_PREFIX}-*_macOS.zip files (optional, default: macosx/build/wz_output)
 #
 # Example:
-#  source build_tools/ci/travis/export_build_output_desc.sh
+#  source .ci/travis/export_build_output_desc.sh
 #  cd build && macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/build_output"
 #
 # Output:
