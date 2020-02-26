@@ -658,7 +658,7 @@ bool transporterIsEmpty(const DROID *psTransporter)
 	        || psTransporter->psGroup->psList == psTransporter);
 }
 
-static void intSetTransCapacityLabel(WzString &text)
+static void intSetTransCapacityLabel(W_LABEL &Label)
 {
 	if (psCurrTransporter)
 	{
@@ -669,7 +669,7 @@ static void intSetTransCapacityLabel(WzString &text)
 
 		char tmp[40];
 		ssprintf(tmp, "%02d/10", capacity);
-		text = WzString::fromUtf8(tmp);
+		Label.setString(WzString::fromUtf8(tmp));
 	}
 }
 
@@ -678,7 +678,7 @@ void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
 
-	intSetTransCapacityLabel(Label->aText);
+	intSetTransCapacityLabel(*Label);
 }
 
 /* Process return codes from the Transporter Screen*/
