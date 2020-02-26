@@ -636,22 +636,14 @@ void iV_SetTextColour(PIELIGHT colour)
 	font_colour[3] = colour.byte.a / 255.0f;
 }
 
-/** Draws formatted text with word wrap, long word splitting, embedded newlines
- *  (uses '@' rather than '\n') and colour toggle mode ('#') which enables or
- *  disables font colouring.
- *
- *  @param String   the string to display.
- *  @param x,y      X and Y coordinates of top left of formatted text.
- *  @param width    the maximum width of the formatted text (beyond which line
- *                  wrapping is used).
- *  @param justify  The alignment style to use, which is one of the following:
- *                  FTEXT_LEFTJUSTIFY, FTEXT_CENTRE or FTEXT_RIGHTJUSTIFY.
- *  @return the Y coordinate for the next text line.
- */
-int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, iV_fonts fontID)
+std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines /*= false*/)
 {
+	std::vector<TextLine> lineDrawResults;
+
 	std::string FString;
 	std::string FWord;
+	const int x = 0;
+	const int y = 0;
 	int i;
 	int jx = x;		// Default to left justify.
 	int jy = y;
@@ -670,7 +662,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 		WWidth = 0;
 
 		// Parse through the string, adding words until width is achieved.
-		while (*curChar != 0 && WWidth < Width && !NewLine)
+		while (*curChar != 0 && WWidth < MaxWidth && !NewLine)
 		{
 			const char *startOfWord = curChar;
 			const unsigned int FStringWidth = iV_GetTextWidth(FString.c_str(), fontID);
@@ -697,7 +689,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 				WWidth = FStringWidth + iV_GetTextWidth(FWord.c_str(), fontID);
 
 				// If this word doesn't fit on the current line then break out
-				if (WWidth > Width)
+				if (WWidth > MaxWidth)
 				{
 					break;
 				}
@@ -710,7 +702,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 			if (*curChar == ASCII_SPACE)
 			{
 				WWidth += iV_GetCharWidth(' ', fontID);
-				if (WWidth <= Width)
+				if (WWidth <= MaxWidth)
 				{
 					FWord.push_back(' ');
 					++i;
@@ -722,7 +714,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 			else if (*curChar == ASCII_NEWLINE
 			         || *curChar == '\n')
 			{
-				if (!bMultiPlayer)
+				if (!ignoreNewlines)
 				{
 					NewLine = true;
 				}
@@ -734,7 +726,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 			// rewind to the start of this word and finish this line.
 			if (GotSpace
 			    && i != 0
-			    && WWidth > Width
+			    && WWidth > MaxWidth
 			    && FWord[i - 1] != ' ')
 			{
 				// Skip back to the beginning of this
@@ -760,11 +752,11 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 		switch (Justify)
 		{
 		case FTEXT_CENTRE:
-			jx = x + (Width - TWidth) / 2;
+			jx = x + (MaxWidth - TWidth) / 2;
 			break;
 
 		case FTEXT_RIGHTJUSTIFY:
-			jx = x + Width - TWidth;
+			jx = x + MaxWidth - TWidth;
 			break;
 
 		case FTEXT_LEFTJUSTIFY:
@@ -772,11 +764,45 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 			break;
 		}
 
-		// draw the text.
-		iV_DrawText(FString.c_str(), jx, jy, fontID);
+		// Store the line of text and its position in the bounding rect
+		lineDrawResults.push_back({FString, Vector2i(TWidth, iV_GetTextLineSize(fontID)), Vector2i(jx, jy)});
 
 		// and move down a line.
 		jy += iV_GetTextLineSize(fontID);
+	}
+
+	return lineDrawResults;
+}
+
+/** Draws formatted text with word wrap, long word splitting, embedded newlines
+ *  (uses '@' rather than '\n') and colour toggle mode ('#') which enables or
+ *  disables font colouring.
+ *
+ *  @param String   the string to display.
+ *  @param x,y      X and Y coordinates of top left of formatted text.
+ *  @param width    the maximum width of the formatted text (beyond which line
+ *                  wrapping is used).
+ *  @param justify  The alignment style to use, which is one of the following:
+ *                  FTEXT_LEFTJUSTIFY, FTEXT_CENTRE or FTEXT_RIGHTJUSTIFY.
+ *  @return the Y coordinate for the next text line.
+ */
+int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, iV_fonts fontID)
+{
+	auto formattedTextLines = iV_FormatText(String, Width, Justify, fontID, bMultiPlayer);
+
+	int jy = y;
+	for (const auto& lineDetails : formattedTextLines)
+	{
+		const auto& lineString = lineDetails.text;
+		const auto& lineDrawOffset = lineDetails.offset;
+
+		// draw the text.
+		iV_DrawText(lineString.c_str(), x + lineDrawOffset.x, y + lineDrawOffset.y, fontID);
+	}
+
+	if (!formattedTextLines.empty())
+	{
+		jy = y + formattedTextLines.back().offset.y + iV_GetTextLineSize(fontID);
 	}
 
 	return jy;
