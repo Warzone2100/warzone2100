@@ -225,7 +225,7 @@ private:
 	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional hit-testing custom function
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
 public:
-	void processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
+	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
 	void runRecursive(W_CONTEXT *psContext);
 	void processCallbacksRecursive(W_CONTEXT *psContext);
 	void displayRecursive(int xOffset, int yOffset);  ///< Display this widget, and all visible children.
@@ -241,6 +241,8 @@ private:
 
 public:
 	bool dirty; ///< Whether widget is changed and needs to be redrawn
+public:
+	friend bool isMouseOverScreenOverlayChild(int mx, int my);
 };
 
 

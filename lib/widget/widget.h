@@ -227,6 +227,11 @@ void widgReset();
 /** Shut down the widget module */
 void widgShutDown();
 
+/** Used by the notifications system to register forms that are "over the top", and may consume click / mouse-over events */
+void widgRegisterOverlayScreen(W_SCREEN* psScreen, uint16_t zOrder);
+void widgRemoveOverlayScreen(W_SCREEN* psScreen);
+bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
+
 /** Add a form to the widget screen */
 WZ_DECL_NONNULL(1, 2) W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
 

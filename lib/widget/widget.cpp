@@ -64,12 +64,18 @@ static std::vector<WIDGET *> widgetDeletionQueue;
 
 static bool debugBoundingBoxesOnly = false;
 
+struct OverlayScreen
+{
+	W_SCREEN* psScreen;
+	uint16_t zOrder;
+};
+static std::vector<OverlayScreen> overlays;
+
 
 /* Initialise the widget module */
 bool widgInitialise()
 {
 	tipInitialise();
-
 	return true;
 }
 
@@ -85,6 +91,46 @@ void widgReset(void)
 /* Shut down the widget module */
 void widgShutDown(void)
 {
+}
+
+void widgRegisterOverlayScreen(W_SCREEN* psScreen, uint16_t zOrder)
+{
+	OverlayScreen newOverlay {psScreen, zOrder};
+	overlays.insert(std::upper_bound(overlays.begin(), overlays.end(), newOverlay, [](const OverlayScreen& a, const OverlayScreen& b){ return a.zOrder > b.zOrder; }), newOverlay);
+}
+
+void widgRemoveOverlayScreen(W_SCREEN* psScreen)
+{
+	overlays.erase(
+		std::remove_if(
+			overlays.begin(), overlays.end(),
+			[psScreen](const OverlayScreen& a) { return a.psScreen == psScreen; }
+		)
+	);
+}
+
+bool isMouseOverScreenOverlayChild(int mx, int my)
+{
+	for (const auto& overlay : overlays)
+	{
+		W_FORM* psRoot = overlay.psScreen->psForm;
+
+		// Hit-test all children of root form
+		for (WIDGET::Children::const_iterator i = psRoot->children().begin(); i != psRoot->children().end(); ++i)
+		{
+			WIDGET *psCurr = *i;
+
+			if (!psCurr->visible() || !psCurr->hitTest(mx, my))
+			{
+				continue;  // Skip any hidden widgets, or widgets the click missed.
+			}
+
+			// hit test succeeded for child widget
+			return true;
+		}
+	}
+
+	return false;
 }
 
 static void deleteOldWidgets()
@@ -763,8 +809,10 @@ bool WIDGET::hitTest(int x, int y)
 	return hitTestResult;
 }
 
-void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
+	bool didProcessClick = false;
+
 	W_CONTEXT shiftedContext;
 	shiftedContext.mx = psContext->mx - x();
 	shiftedContext.my = psContext->my - y();
@@ -782,14 +830,22 @@ void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		}
 
 		// Process it (recursively).
-		psCurr->processClickRecursive(&shiftedContext, key, wasPressed);
+		didProcessClick = psCurr->processClickRecursive(&shiftedContext, key, wasPressed) || didProcessClick;
+	}
+
+	if (!visible())
+	{
+		// special case for root form
+		// since the processClickRecursive of children is only called if they are visible
+		// this should only trigger for the root form of a screen that's been set to invisible
+		return false;
 	}
 
 	if (psMouseOverWidget == nullptr)
 	{
 		psMouseOverWidget = this;  // Mark that the mouse is over a widget (if we haven't already).
 	}
-	if (screenPointer->lastHighlight != this && psMouseOverWidget == this)
+	if (screenPointer && screenPointer->lastHighlight != this && psMouseOverWidget == this)
 	{
 		if (screenPointer->lastHighlight != nullptr)
 		{
@@ -801,17 +857,23 @@ void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 
 	if (key == WKEY_NONE)
 	{
-		return;  // Just checking mouse position, not a click.
+		return false;  // Just checking mouse position, not a click.
 	}
 
-	if (wasPressed)
+	if (psMouseOverWidget == this)
 	{
-		clicked(psContext, key);
+		if (wasPressed)
+		{
+			clicked(psContext, key);
+		}
+		else
+		{
+			released(psContext, key);
+		}
+		didProcessClick = true;
 	}
-	else
-	{
-		released(psContext, key);
-	}
+
+	return didProcessClick;
 }
 
 
@@ -851,6 +913,10 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 			}
 			sContext.mx = c->pos.x;
 			sContext.my = c->pos.y;
+			for (const auto& overlay : overlays)
+			{
+				overlay.psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
+			}
 			psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
 
 			lastReleasedKey_DEPRECATED = wkey;
@@ -859,9 +925,17 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 
 	sContext.mx = mouseX();
 	sContext.my = mouseY();
+	for (const auto& overlay : overlays)
+	{
+		overlay.psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
+	}
 	psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
 
 	/* Process the screen's widgets */
+	for (const auto& overlay : overlays)
+	{
+		overlay.psScreen->psForm->runRecursive(&sContext);
+	}
 	psScreen->psForm->runRecursive(&sContext);
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
@@ -957,6 +1031,13 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 
 	// Display the widgets.
 	psScreen->psForm->displayRecursive(0, 0);
+
+	// Always overlays on-top (i.e. draw them last)
+	for (const auto& overlay : overlays)
+	{
+		overlay.psScreen->psForm->processCallbacksRecursive(&sContext);
+		overlay.psScreen->psForm->displayRecursive(0, 0);
+	}
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being displayed.
 
