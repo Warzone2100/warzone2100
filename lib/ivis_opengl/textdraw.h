@@ -22,6 +22,7 @@
 #define _INCLUDED_TEXTDRAW_
 
 #include <string>
+#include <vector>
 
 #include "lib/framework/vector.h"
 #include "gfx_api.h"
@@ -60,9 +61,9 @@ public:
 	WzText& operator=(WzText&& other);
 	WzText(WzText&& other);
 
-protected:
-	const std::string& getText() { return mText; }
-	iV_fonts getFontID() { return mFontID; }
+public:
+	const std::string& getText() const { return mText; }
+	iV_fonts getFontID() const { return mFontID; }
 
 private:
 	void drawAndCacheText(const std::string &text, iV_fonts fontID);
@@ -142,6 +143,13 @@ enum
 	FTEXT_RIGHTJUSTIFY,			// Right justify.
 };
 
+struct TextLine
+{
+	std::string text;
+	Vector2i dimensions;
+	Vector2i offset;
+};
+std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines = false);
 int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, iV_fonts fontID);
 void iV_DrawTextRotated(const char *string, float x, float y, float rotation, iV_fonts fontID);
 
