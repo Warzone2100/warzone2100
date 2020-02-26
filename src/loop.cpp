@@ -82,6 +82,7 @@
 #include "random.h"
 #include "qtscript.h"
 #include "version.h"
+#include "notifications.h"
 
 #include "warzoneconfig.h"
 
@@ -304,7 +305,7 @@ static GAMECODE renderLoop()
 			processInput();
 
 			//no key clicks or in Intelligence Screen
-			if (!isMouseOverRadar() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
+			if (!isMouseOverRadar() && !isDraggingInGameNotification() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
 				CURSOR cursor2 = processMouseClickInput();
 				cursor = cursor2 == CURSOR_DEFAULT? cursor : cursor2;

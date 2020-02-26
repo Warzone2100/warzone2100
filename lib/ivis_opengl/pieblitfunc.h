@@ -194,7 +194,7 @@ public:
 private:
 	std::list<PieDrawImageRequest> _imageDrawRequests;
 };
-void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2f offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
+void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour);
 void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, REND_MODE mode, PIELIGHT colour);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImage2(const WzString &filename, float x, float y, float width = -0.0f, float height = -0.0f);

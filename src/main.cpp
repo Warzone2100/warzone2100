@@ -72,6 +72,7 @@
 #include "mission.h"
 #include "modding.h"
 #include "multiplay.h"
+#include "notifications.h"
 #include "qtscript.h"
 #include "research.h"
 #include "seqdisp.h"
@@ -1052,6 +1053,8 @@ void mainLoop()
 			}
 		realTimeUpdate(); // Update realTime.
 	}
+
+	runNotifications();
 }
 
 bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ_DECL_UNUSED) // explicitely pass by reference

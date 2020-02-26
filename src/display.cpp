@@ -611,6 +611,12 @@ CURSOR processMouseClickInput()
 
 	CheckFinishedDrag();
 
+	if (isMouseOverScreenOverlayChild(mouseX(), mouseY()))
+	{
+		// ignore clicks
+		return cursor;
+	}
+
 	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
 	{
 		if (bRightClickOrders)

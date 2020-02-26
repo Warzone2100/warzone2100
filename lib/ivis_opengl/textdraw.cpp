@@ -498,6 +498,7 @@ inline float iV_GetVertScaleFactor()
 #define DEFAULT_DPI 72.0f
 
 static FTFace *regular = nullptr;
+static FTFace *regularBold = nullptr;
 static FTFace *bold = nullptr;
 static FTFace *medium = nullptr;
 static FTFace *small = nullptr;
@@ -510,6 +511,8 @@ static FTFace &getFTFace(iV_fonts FontID)
 	default:
 	case font_regular:
 		return *regular;
+	case font_regular_bold:
+		return *regularBold;
 	case font_large:
 		return *bold;
 	case font_medium:
@@ -538,6 +541,7 @@ void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 	debug(LOG_WZ, "Text-Rendering Scaling Factor: %f x %f; Internal Font DPI: %f x %f", _horizScaleFactor, _vertScaleFactor, horizDPI, vertDPI);
 
 	regular = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI);
+	regularBold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI);
 	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI);
 	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI);
 	small = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI);

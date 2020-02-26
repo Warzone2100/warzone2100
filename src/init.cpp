@@ -75,6 +75,7 @@
 #include "multiint.h"
 #include "multigifts.h"
 #include "multiplay.h"
+#include "notifications.h"
 #include "projectile.h"
 #include "order.h"
 #include "radar.h"
@@ -685,6 +686,11 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 		return false;
 	}
 
+	if (!notificationsInitialize())
+	{
+		return false;
+	}
+
 	buildMapList();
 
 	// Initialize render engine
@@ -758,6 +764,7 @@ void systemShutdown()
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
 	levShutDown();
+	notificationsShutDown();
 	widgShutDown();
 	fpathShutdown();
 	mapShutdown();

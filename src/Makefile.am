@@ -117,6 +117,7 @@ noinst_HEADERS = \
 	multiplay.h \
 	multirecv.h \
 	multistat.h \
+	notifications.h \
 	objectdef.h \
 	objects.h \
 	objmem.h \
@@ -229,6 +230,7 @@ COMMONSOURCES = \
 	multistat.cpp \
 	multistruct.cpp \
 	multisync.cpp \
+	notifications.cpp \
 	objects.cpp \
 	objmem.cpp \
 	oprint.cpp \
