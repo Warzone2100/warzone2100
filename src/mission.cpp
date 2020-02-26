@@ -1973,7 +1973,7 @@ UDWORD  missionGetReinforcementTime()
 }
 
 //fills in a hours(if bHours = true), minutes and seconds display for a given time in 1000th sec
-static void fillTimeDisplay(WzString &text, UDWORD time, bool bHours)
+static void fillTimeDisplay(W_LABEL &Label, UDWORD time, bool bHours)
 {
 	char psText[100];
 	//this is only for the transporter timer - never have hours!
@@ -1992,7 +1992,7 @@ static void fillTimeDisplay(WzString &text, UDWORD time, bool bHours)
 #endif
 		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", &tmp);
 	}
-	text = WzString::fromUtf8(psText);
+	Label.setString(WzString::fromUtf8(psText));
 }
 
 
@@ -2026,7 +2026,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 		timeRemaining = timeElapsed;
 	}
 
-	fillTimeDisplay(Label->aText, timeRemaining, true);
+	fillTimeDisplay(*Label, timeRemaining, true);
 	Label->show();  // Make sure its visible
 
 	if (challengeActive)
@@ -2129,23 +2129,23 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 					}
 				}
 			}
-			fillTimeDisplay(Label->aText, timeRemaining, false);
+			fillTimeDisplay(*Label, timeRemaining, false);
 		}
 		else
 		{
-			fillTimeDisplay(Label->aText, ETA, false);
+			fillTimeDisplay(*Label, ETA, false);
 		}
 	}
 	else
 	{
 		if (missionCanReEnforce())  // ((mission.type == LDS_MKEEP) || (mission.type == LDS_MCLEAR)) & (mission.ETA >= 0) ) {
 		{
-			fillTimeDisplay(Label->aText, ETA, false);
+			fillTimeDisplay(*Label, ETA, false);
 		}
 		else
 		{
 
-			fillTimeDisplay(Label->aText, 0, false);
+			fillTimeDisplay(*Label, 0, false);
 
 		}
 	}

@@ -1946,7 +1946,8 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
 
-	cache.wzText.setText(psLab->aText.toUtf8(), font_large);
+	// TODO: Only works for single-line (not "formatted text") labels
+	cache.wzText.setText(psLab->getString().toUtf8(), font_large);
 
 	fx = xOffset + psWidget->x();
 	fy = yOffset + psWidget->y() + cache.wzText.width();

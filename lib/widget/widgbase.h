@@ -157,10 +157,6 @@ public:
 		return (style & WIDG_HIDDEN) == 0;
 	}
 
-	void setString(char const *stringUtf8)
-	{
-		setString(WzString::fromUtf8(stringUtf8));
-	}
 	void setTip(char const *stringUtf8)
 	{
 		setTip((stringUtf8 != nullptr) ? std::string(stringUtf8) : std::string());

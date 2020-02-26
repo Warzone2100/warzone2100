@@ -340,7 +340,7 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	{
 		char tmp[20];
 		ssprintf(tmp, "%d", remaining);
-		Label->aText = WzString::fromUtf8(tmp);
+		Label->setString(WzString::fromUtf8(tmp));
 		Label->show();
 	}
 	else
@@ -364,12 +364,12 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 			FACTORY		*Factory = &Structure->pFunctionality->factory;
 			char tmp[20];
 			ssprintf(tmp, "%u", Factory->psAssemblyPoint->factoryInc + 1);
-			Label->aText = WzString::fromUtf8(tmp);
+			Label->setString(WzString::fromUtf8(tmp));
 			Label->show();
 			return;
 		}
 	}
-	Label->aText.clear();
+	Label->setString("");
 	Label->hide();
 }
 
@@ -408,12 +408,12 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 			{
 				ssprintf(tmp, "%u", entry.numRemaining());
 			}
-			Label->aText = WzString::fromUtf8(tmp);
+			Label->setString(WzString::fromUtf8(tmp));
 			Label->show();
 		}
 		else
 		{
-			Label->aText.clear();
+			Label->setString("");
 			Label->hide();
 		}
 	}
@@ -432,24 +432,24 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		if (psFactory->productionLoops == INFINITE_PRODUCTION)
 		{
-			Label->aText = WzString::fromUtf8("∞");
+			Label->setString(WzString::fromUtf8("∞"));
 		}
 		else if (psFactory->productionLoops != 0)
 		{
 			char tmp[20];
 			ssprintf(tmp, "%u", psFactory->productionLoops + DEFAULT_LOOP);
-			Label->aText = WzString::fromUtf8(tmp);
+			Label->setString(WzString::fromUtf8(tmp));
 		}
 		else
 		{
-			Label->aText.clear();  // Don't show "1" loop.
+			Label->setString("");  // Don't show "1" loop.
 		}
 		Label->show();
 	}
 	else
 	{
 		//hide the label if no factory
-		Label->aText.clear();
+		Label->setString("");
 		Label->hide();
 	}
 }
@@ -470,12 +470,12 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		char tmp[40];
 		ssprintf(tmp, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
-		Label->aText = WzString::fromUtf8(tmp);
+		Label->setString(WzString::fromUtf8(tmp));
 		Label->show();
 	}
 	else
 	{
-		Label->aText.clear();
+		Label->setString("");
 		Label->hide();
 	}
 }
@@ -495,12 +495,12 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
 		int numStars = std::max((int)getDroidLevel(psDroid) - 1, 0);
-		Label->aText = WzString(numStars, WzUniCodepoint::fromASCII('*'));
+		Label->setString(WzString(numStars, WzUniCodepoint::fromASCII('*')));
 		Label->show();
 	}
 	else
 	{
-		Label->aText.clear();
+		Label->setString("");
 		Label->hide();
 	}
 }
@@ -534,19 +534,19 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 			start = DSS_ASSPROD_VTOL_SHIFT;
 		}
 
-		Label->aText.clear();
+		Label->setString("");
 		for (i = 0; i < 5; ++i)  // TODO Support up to MAX_FACTORY (which won't fit in the ugly secondaryOrder bitmask hack).
 		{
 			if (psDroid->secondaryOrder & (1 << (i + start)))
 			{
-				Label->aText.append(WzUniCodepoint::fromASCII((char)('0' + i + 1)));
+				Label->setString(Label->getString().append(WzUniCodepoint::fromASCII((char)('0' + i + 1))));
 			}
 		}
 		Label->show();
 	}
 	else
 	{
-		Label->aText.clear();
+		Label->setString("");
 		Label->hide();
 	}
 }
