@@ -160,6 +160,10 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 	}
 }
 
+bool W_BUTTON::isHighlighted() const
+{
+	return (state & WBUT_HIGHLIGHT);
+}
 
 /* Respond to a mouse moving over a button */
 void W_BUTTON::highlight(W_CONTEXT *psContext)

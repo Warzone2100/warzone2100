@@ -78,6 +78,9 @@ public:
 	void addOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc);
 
 public:
+	bool isHighlighted() const;
+
+public:
 	unsigned        state;                          // The current button state
 	WzString        pText;                          // The text for the button
 	Images          images;                         ///< The images for the button.
