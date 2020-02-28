@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.5)
 ########################################################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "85bf9d9d792e379e973d66c8af9f39d65d1d6d42")
+set(VCPKG_COMMIT_SHA "81965f6b3f7e99c3018f914cb8a15c2c02adcd4c")
 
 # WZ macOS dependencies (for vcpkg install)
 set(VCPKG_INSTALL_DEPENDENCIES physfs harfbuzz libogg libtheora libvorbis libpng sdl2 glew freetype gettext zlib)
