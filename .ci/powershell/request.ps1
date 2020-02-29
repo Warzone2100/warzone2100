@@ -50,7 +50,7 @@ Function Req {
    $method = $Params['Method']
    $url = $Params['Uri']
 
-   $cmd = { Write-Verbose "$method $url..." -NoNewline; Invoke-WebRequest @Params }
+   $cmd = { Write-Verbose "$method $url..."; Invoke-WebRequest @Params }
 
    $retryCount = 0
    $completed = $false
