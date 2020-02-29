@@ -295,6 +295,59 @@ jobs:
         Write-Host "Qt version:"
         & "qmake" -version
     #####################################################
+    - name: 'Download & Install Vulkan SDK'
+      run: |
+        Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+
+        $VerbosePreference = "Continue"
+        . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
+
+        Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
+
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.1.130.0/windows/VulkanSDK-1.1.130.0-Installer.exe?Human=true"
+        $VULKAN_DL_SHA256 = "92ce6080dc2aebfb0a63dba705b8d50a04cfafa1710acbb3b4fa413b388ff2cd"
+
+        $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
+        $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
+        New-Item -ItemType Directory -Force -Path "$VK_DL_BASEDIR"
+
+        $req = Req -Params @{ 'Method'='GET';'Uri'="$VULKAN_DL_URL";'OutFile'="${VK_DL_PATH}" } -Retries 3 -SecondsDelay 10
+
+        $vulkan_exe_hash = Get-FileHash -LiteralPath "${VK_DL_PATH}" -Algorithm SHA256
+        if ($vulkan_exe_hash.Hash -eq $VULKAN_DL_SHA256) {
+          Write-Host "Successfully downloaded VulkanSDK installer"
+        } Else {
+          Write-Error "The downloaded VulkanSDK installer hash '$($vulkan_exe_hash.Hash)' does not match the expected hash: '$VULKAN_DL_SHA256'"
+        }
+
+        Write-Host "Running Vulkan SDK installer..."
+        Start-Process "${VK_DL_PATH}" -ArgumentList "/S" -Wait
+        Write-Host "Vulkan SDK installer completed"
+
+        $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
+        if (-not ($machineEnvironment.Contains("VULKAN_SDK")))
+        {
+          Write-Error "Failed to find updated VULKAN_SDK system environment variable"
+        }
+        Write-Host "New system VULKAN_SDK environment variable: $($machineEnvironment["VULKAN_SDK"])"
+
+        # Ensure future steps pick up the new VULKAN_SDK environment variable
+        echo "::set-env name=VULKAN_SDK::$($machineEnvironment["VULKAN_SDK"])"
+    - name: 'Check environment'
+      run: |
+        if ([string]::IsNullOrWhitespace(${env:VULKAN_SDK}))
+        {
+          Write-Error "Missing env:VULKAN_SDK in next step: ${env:VULKAN_SDK}"
+        }
+        else
+        {
+          # Verify the VULKAN_SDK path exists
+          if (-not (Test-Path "${env:VULKAN_SDK}"))
+          {
+            Write-Error "env:VULKAN_SDK path does not exist: `"${env:VULKAN_SDK}`""
+          }
+        }
+        Write-Output "env:VULKAN_SDK configured for the following steps: `"${env:VULKAN_SDK}`""
     - name: Create directories
       run: |
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\build"
