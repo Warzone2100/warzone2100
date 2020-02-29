@@ -401,7 +401,7 @@ endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
 	# Find dump_syms.exe
-	find_program(DUMP_SYMS dump_syms HINTS ${PROJECT_SOURCE_DIR})
+	find_program(DUMP_SYMS dump_syms HINTS "${CMAKE_BINARY_DIR}" "${PROJECT_SOURCE_DIR}")
 	if(DUMP_SYMS)
 		# Generate the .sym file from the .pdb
 		get_target_property(_mainexename warzone2100 OUTPUT_NAME)
