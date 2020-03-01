@@ -25,17 +25,34 @@ that Warzone 2100 is working on BSD, too.
 Latest development builds
 -------------------------
 
-[![Build Status](https://travis-ci.org/Warzone2100/warzone2100.svg?branch=master)](https://travis-ci.org/Warzone2100/warzone2100)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/1s4547mjbkprt4qr/branch/master?svg=true)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
-[![FreeBSD Build Status](https://api.cirrus-ci.com/github/Warzone2100/warzone2100.svg?branch=master)](https://cirrus-ci.com/github/Warzone2100/warzone2100)
+[![Windows Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/Windows/master?label=Windows&logo=windows)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
+ [![macOS Build Status](https://img.shields.io/azure-devops/build/wz2100/27126038-ce95-47c8-8726-aaba57651f31/1/master?label=macOS&logo=apple&logoColor=FFFFFF)](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
+ [![Ubuntu Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/Ubuntu/master?label=Ubuntu&logo=ubuntu&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
+ [![Fedora Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/Fedora/master?label=Fedora&logo=fedora&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
+ [![FreeBSD Build Status](https://img.shields.io/cirrus/github/Warzone2100/warzone2100/master?label=FreeBSD&logo=FreeBSD)](https://cirrus-ci.com/github/Warzone2100/warzone2100/master)
+ [![Travis CI Build Status](https://img.shields.io/travis/Warzone2100/warzone2100/master?label=ARM64%20%2F%20Misc)](https://travis-ci.org/Warzone2100/warzone2100)
 
-- **Windows** (x86): [**Portable**](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100_win_x86_portable.exe?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
-[Installer](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100_win_x86_installer.exe?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86) |
-[Debug Symbols](https://ci.appveyor.com/api/projects/Warzone2100/warzone2100/artifacts/warzone2100-master_x86.DEBUGSYMBOLS.7z?branch=master&pr=false&job=Environment%3A%20APPVEYOR_BUILD_WORKER_IMAGE%3DVisual%20Studio%202017%2C%20WZ_JOB_ID%3Drelease_x86)
+### Windows
 
-- **macOS** (64-bit Intel): [**Latest builds**](http://buildbot.wz2100.net/files/CI/master/macOS/)
+How to get the latest Windows development builds:
+1. View the **[latest successful Windows builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush+is%3Asuccess)**.
+2. Select the latest workflow run in the table / list.
+   This should display a list of **Artifacts** from the run.
+3. Download the `warzone2100_win_x86_portable` or `warzone2100_win_x86_installer` artifact (depending on whether you want the portable build or the full / regular installer).
+> Note: A free GitHub account is currently required to download the artifacts.
 
-- **Linux** (Source Archive): [**Latest source**](http://buildbot.wz2100.net/files/CI/master/src/) (See: [How to Build](#how-to-build))
+### macOS
+
+How to get the latest macOS development builds:
+1. View the **[latest macOS build](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)**.
+2. Under the **`Artifacts:`** column there should be a link titled `<#> published`.
+   Click it to view the build artifacts.
+3. Download the `warzone2100_macOS` artifact (a download icon will appear to the right side of the row when you mouse-over).
+
+### Linux
+
+Clone this Git repo and build, following the instructions under:
+[How to Build](#how-to-build)
 
 > Development builds are a snapshot of the current state of development, from the 
 > latest (successfully-built) commit. Help testing these builds is always welcomed,
