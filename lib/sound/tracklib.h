@@ -27,9 +27,13 @@
 
 #include "track.h"
 #include "lib/framework/vector.h"
+#include "sounddefs.h"
 
-bool	sound_InitLibrary();
+bool	sound_InitLibrary(HRTFMode hrtf);
 void	sound_ShutdownLibrary();
+
+HRTFMode	sound_GetHRTFMode();
+bool	sound_SetHRTFMode(HRTFMode mode);
 
 void	sound_FreeTrack(TRACK *psTrack);
 

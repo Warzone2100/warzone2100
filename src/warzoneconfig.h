@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/sequence/sequence.h"
+#include "lib/sound/sounddefs.h"
 
 #define	CAMERASPEED_MAX		(5000)
 #define	CAMERASPEED_MIN		(100)
@@ -77,6 +78,8 @@ void war_SetPauseOnFocusLoss(bool enabled);
 bool war_GetPauseOnFocusLoss();
 bool war_GetMusicEnabled();
 void war_SetMusicEnabled(bool enabled);
+HRTFMode war_GetHRTFMode();
+void war_SetHRTFMode(HRTFMode mode);
 int war_GetMapZoom();
 void war_SetMapZoom(int mapZoom);
 int war_GetMapZoomRate();

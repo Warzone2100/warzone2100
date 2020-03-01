@@ -22,8 +22,9 @@
 #define __INCLUDED_LIB_SOUND_AUDIO_H__
 
 #include "track.h"
+#include "sounddefs.h"
 
-bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, bool really_init);
+bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, HRTFMode hrtf, bool really_init);
 void audio_Update();
 bool audio_Shutdown();
 bool audio_Disabled();

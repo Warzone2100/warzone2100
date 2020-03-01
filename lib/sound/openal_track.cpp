@@ -114,11 +114,31 @@ static void sound_RemoveSample(SAMPLE_LIST *previous, SAMPLE_LIST *to_remove)
 	}
 }
 
+ALCint HRTFModeToALCint(HRTFMode mode)
+{
+#if defined(ALC_SOFT_HRTF)
+	switch (mode)
+	{
+	case HRTFMode::Unsupported:
+		// should never be called with unsupported, log it and fall through to disabled
+		debug(LOG_ERROR, "HRTFModeToALCint called with HRTFMode::Unsupported");
+		// fallthrough
+	case HRTFMode::Disabled:
+		return ALC_FALSE;
+	case HRTFMode::Enabled:
+		return ALC_TRUE;
+	case HRTFMode::Auto:
+		return ALC_DONT_CARE_SOFT;
+	}
+#endif
+	return ALC_FALSE;
+}
+
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_InitLibrary(void)
+bool sound_InitLibrary(HRTFMode hrtf)
 {
 	int err;
 	const ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
@@ -223,7 +243,10 @@ bool sound_InitLibrary(void)
 
 #if defined(ALC_SOFT_HRTF)
 	if(alcIsExtensionPresent(device, "ALC_SOFT_HRTF"))
-    {
+	{
+		// Set desired HRTF mode
+		sound_SetHRTFMode(hrtf);
+
 		// Get current HRTF status
 		ALCint hrtfStatus;
 		alcGetIntegerv(device, ALC_HRTF_STATUS_SOFT, 1, &hrtfStatus);
@@ -288,6 +311,57 @@ bool sound_InitLibrary(void)
 	return true;
 }
 
+HRTFMode sound_GetHRTFMode()
+{
+#if defined(ALC_SOFT_HRTF)
+	if(alcIsExtensionPresent(device, "ALC_SOFT_HRTF"))
+	{
+		ALCint hrtfStatus;
+		alcGetIntegerv(device, ALC_HRTF_SOFT, 1, &hrtfStatus);
+		switch (hrtfStatus)
+		{
+		case ALC_TRUE:
+			return HRTFMode::Enabled;
+		case ALC_FALSE:
+			return HRTFMode::Disabled;
+		default:
+			debug(LOG_SOUND, "OpenAL-Soft returned an unexpected ALC_HRTF_SOFT result: %d", hrtfStatus);
+		}
+	}
+#endif
+	return HRTFMode::Unsupported;
+}
+
+bool sound_SetHRTFMode(HRTFMode mode)
+{
+#if defined(ALC_SOFT_HRTF)
+	if(alcIsExtensionPresent(device, "ALC_SOFT_HRTF"))
+	{
+		ALCint hrtfSetting = HRTFModeToALCint(mode);
+
+		ALCint attrs[] = {
+			ALC_HRTF_SOFT, hrtfSetting, /* configure HRTF */
+			0 /* end of list */
+		};
+		if (alcResetDeviceSOFT)
+		{
+			ASSERT(device, "device is null");
+			if (!alcResetDeviceSOFT(device, attrs))
+			{
+				debug(LOG_ERROR, "Failed to reset device: %s\n", alcGetString(device, alcGetError(device)));
+				return false;
+			}
+			return true;
+		}
+		else
+		{
+			debug(LOG_ERROR, "ALC_SOFT_HRTF extension is available, but alcResetDeviceSOFT is null");
+		}
+	}
+#endif
+	return false;
+}
+
 static void sound_UpdateStreams(void);
 
 void sound_ShutdownLibrary(void)
@@ -324,6 +398,7 @@ void sound_ShutdownLibrary(void)
 	{
 		debug(LOG_SOUND, "OpenAl could not close the audio device.");
 	}
+	device = nullptr;
 
 	while (aSample)
 	{

@@ -23,6 +23,7 @@
 
 #include "lib/framework/frame.h"
 #include <physfs.h>
+#include "sounddefs.h"
 
 #include <AL/al.h>
 
@@ -77,7 +78,7 @@ struct TRACK
 /* functions
  */
 
-bool	sound_Init();
+bool	sound_Init(HRTFMode hrtf);
 bool	sound_Shutdown();
 
 TRACK 	*sound_LoadTrackFromFile(const char *fileName);
