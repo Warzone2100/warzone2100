@@ -206,6 +206,13 @@ void OpenALInfo::Output_ALCInfo(ALCdevice *device, const outputHandlerFuncType& 
 	{
 		buf << "ALC extensions:" << printList(alcGetString(device, ALC_EXTENSIONS), ' ') << "\n";
 		checkALCErrors(buf, device);
+
+		ALCint srate;
+		alcGetIntegerv(device, ALC_FREQUENCY, 1, &srate);
+		buf << "Output frequency: " << srate << " Hz \n";
+
+		alcGetIntegerv(device, ALC_REFRESH, 1, &srate);
+		buf << "Update rate: " << srate << " Hz \n";
 	}
 
 	if (outputHandler)
