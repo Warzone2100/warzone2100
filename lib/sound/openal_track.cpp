@@ -33,6 +33,9 @@
 #else
 #include <AL/al.h>
 #include <AL/alc.h>
+# if defined(HAVE_OPENAL_ALEXT_H)
+#  include <AL/alext.h>
+# endif
 #endif
 
 #include <physfs.h>
@@ -84,6 +87,11 @@ static ALfloat		sfx3d_volume = 1.0;
 
 static ALCdevice *device = nullptr;
 static ALCcontext *context = nullptr;
+
+#if defined(ALC_SOFT_HRTF)
+static LPALCGETSTRINGISOFT alcGetStringiSOFT = nullptr;
+static LPALCRESETDEVICESOFT alcResetDeviceSOFT = nullptr;
+#endif
 
 
 /** Removes the given sample from the "active_samples" linked list
@@ -169,6 +177,13 @@ bool sound_InitLibrary(void)
 		});
 	}
 
+#if defined(ALC_SOFT_HRTF)
+	// Load some extensions from OpenAL-Soft (if available)
+	alcGetStringiSOFT = (LPALCGETSTRINGISOFT)alcGetProcAddress(device, "alcGetStringiSOFT");
+	alcResetDeviceSOFT = (LPALCRESETDEVICESOFT)alcGetProcAddress(device, "alcResetDeviceSOFT");
+#endif
+
+
 	// Print current device name and add it to dump info
 	deviceName = alcGetString(device, ALC_DEVICE_SPECIFIER);
 	debug(LOG_SOUND, "Current audio device: %s", deviceName);
@@ -210,6 +225,60 @@ bool sound_InitLibrary(void)
 	debug(LOG_SOUND, "%s", buf);
 
 	openal_initialized = true;
+
+#if defined(ALC_SOFT_HRTF)
+	if(alcIsExtensionPresent(device, "ALC_SOFT_HRTF"))
+    {
+		// Get current HRTF status
+		ALCint hrtfStatus;
+		alcGetIntegerv(device, ALC_HRTF_STATUS_SOFT, 1, &hrtfStatus);
+
+		const char *hrtfStatusString = nullptr;
+		switch (hrtfStatus)
+		{
+		case ALC_HRTF_DISABLED_SOFT:
+			hrtfStatusString = "ALC_HRTF_DISABLED_SOFT: HRTF is disabled";
+			break;
+		case ALC_HRTF_ENABLED_SOFT:
+			hrtfStatusString = "ALC_HRTF_ENABLED_SOFT: HRTF is enabled";
+			break;
+		case ALC_HRTF_DENIED_SOFT:
+			// This may be caused by invalid resource permissions, or other user configuration that disallows HRTF.
+			hrtfStatusString = "ALC_HRTF_DENIED_SOFT: HRTF is disabled because it's not allowed on the device.";
+			break;
+		case ALC_HRTF_REQUIRED_SOFT:
+			// This may be caused by a device that can only use HRTF, or other user configuration that forces HRTF to be used.
+			hrtfStatusString = "ALC_HRTF_REQUIRED_SOFT: HRTF is enabled because it must be used on the device.";
+			break;
+		case ALC_HRTF_HEADPHONES_DETECTED_SOFT:
+			hrtfStatusString = "ALC_HRTF_HEADPHONES_DETECTED_SOFT: HRTF is enabled automatically because the device reported itself as headphones.";
+			break;
+		case ALC_HRTF_UNSUPPORTED_FORMAT_SOFT:
+			// HRTF is disabled because the device does not support it with the current format.
+			// Typically this is caused by non-stereo output or an incompatible output frequency.
+			hrtfStatusString = "ALC_HRTF_UNSUPPORTED_FORMAT_SOFT: HRTF is disabled because the device does not support it with the current format.";
+			break;
+		default:
+			hrtfStatusString = nullptr;
+			break;
+		}
+
+		if (hrtfStatusString)
+		{
+			debug(LOG_SOUND, "%s", hrtfStatusString);
+		}
+		else
+		{
+			debug(LOG_SOUND, "OpenAL-Soft returned an unknown ALC_HRTF_STATUS_SOFT result: %d", hrtfStatus);
+		}
+	}
+	else
+	{
+		debug(LOG_SOUND, "alcIsExtensionPresent(..., \"ALC_SOFT_HRTF\") returned false");
+	}
+#else
+	debug(LOG_SOUND, "ALC_SOFT_HRTF not defined");
+#endif
 
 	// Clear Error Codes
 	alGetError();

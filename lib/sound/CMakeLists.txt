@@ -4,7 +4,24 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 find_package(OpenAL REQUIRED)
+# Since FindOpenAL.cmake may not define an imported target, do it here
+if (NOT TARGET OpenAL::OpenAL)
+	add_library(OpenAL::OpenAL UNKNOWN IMPORTED)
+	set_target_properties(OpenAL::OpenAL PROPERTIES
+	  INTERFACE_INCLUDE_DIRECTORIES ${OPENAL_INCLUDE_DIR}
+	  IMPORTED_LOCATION ${OPENAL_LIBRARY}
+	)
+endif()
 find_package(OggVorbis REQUIRED)
+
+INCLUDE(CMakePushCheckState)
+INCLUDE(CheckIncludeFileCXX)
+get_target_property(_openal_includes OpenAL::OpenAL INTERFACE_INCLUDE_DIRECTORIES)
+cmake_push_check_state(RESET)
+set(CMAKE_REQUIRED_INCLUDES ${_openal_includes})
+message(STATUS "OpenAL INTERFACE_INCLUDE_DIRECTORIES = \"${_openal_includes}\"")
+CHECK_INCLUDE_FILE_CXX("AL/alext.h" HAVE_OPENAL_ALEXT_H)
+cmake_pop_check_state()
 
 add_library(sound ${HEADERS} ${SRC})
 set_property(TARGET sound PROPERTY FOLDER "lib")
@@ -12,5 +29,8 @@ if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(sound PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
 target_compile_definitions(sound PRIVATE "-DAL_LIBTYPE_STATIC")
-target_include_directories(sound PRIVATE "${OPENAL_INCLUDE_DIR}" "${OGGVORBIS_INCLUDE_DIR}")
-target_link_libraries(sound PRIVATE framework ${OPENAL_LIBRARY} ${OGGVORBIS_LIBRARIES})
+if (HAVE_OPENAL_ALEXT_H)
+	target_compile_definitions(sound PRIVATE "-DHAVE_OPENAL_ALEXT_H")
+endif()
+target_include_directories(sound PRIVATE "${OGGVORBIS_INCLUDE_DIR}")
+target_link_libraries(sound PRIVATE framework OpenAL::OpenAL ${OGGVORBIS_LIBRARIES})
