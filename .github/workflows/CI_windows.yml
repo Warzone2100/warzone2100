@@ -3,7 +3,7 @@ name: Windows
 on: [push, pull_request]
 
 jobs:
-  windows-latest-x86:
+  windows-build:
     strategy:
       matrix:
         compiler: ["MSVC_2019"]
@@ -118,6 +118,16 @@ jobs:
         }
 
         # ----------------
+        # Determine which matrix combinations to deploy
+
+        $WZ_DEPLOY_RELEASE = 'false'
+        if ($env:WZ_MSVC_VER -eq "MSVC_2019") {
+          if ($env:WZ_TARGET_ARCH -eq "x86") {
+            $WZ_DEPLOY_RELEASE = 'true'
+          }
+        }
+
+        # ----------------
         # Export Variables
 
         # Export everything important to environment variables (for future steps)
@@ -136,6 +146,7 @@ jobs:
         echo "::set-env name=WZ_VISUAL_STUDIO_INSTALL_PATH::${WZ_VISUAL_STUDIO_INSTALL_PATH}"
         echo "::set-env name=VCPKG_VISUAL_STUDIO_PATH::${VCPKG_VISUAL_STUDIO_PATH}"
         echo "::set-env name=WZ_DISTRIBUTOR::${WZ_DISTRIBUTOR}"
+        echo "::set-output name=WZ_DEPLOY_RELEASE::${WZ_DEPLOY_RELEASE}"
     - name: Check Environment for Qt Install
       env:
         QT_CI_LOGIN: ${{ secrets.QT_CI_LOGIN }}
@@ -338,9 +349,12 @@ jobs:
 
         # Log hashes of the setup EXEs
         Write-Host "SHA512 Hashes:"
-        Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_portable.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
-        Write-Host "`nwarzone2100-$($env:WZ_BUILD_DESC)_installer.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
+        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_portable.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
+        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_installer.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
         Write-Host ""
+    #####################################################
+    # Upload build artifacts
+    #####################################################
     - name: 'Upload Artifact - (Portable Build)'
       uses: actions/upload-artifact@v1
       if: success() && (github.repository == 'Warzone2100/warzone2100')
@@ -359,3 +373,18 @@ jobs:
       with:
         name: warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
+    #####################################################
+    # Upload Release assets (if a release tag)
+    #####################################################
+    - name: Upload Release Assets
+      if: startsWith(github.ref, 'refs/tags/') && (steps.settings.outputs.WZ_DEPLOY_RELEASE == 'true') && (github.repository == 'Warzone2100/warzone2100')
+      uses: past-due/action-gh-release@v1
+      with:
+        # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
+        files: |
+          ${{ github.workspace }}\output\portable\*.exe
+          ${{ github.workspace }}\output\installer\*.exe
+          ${{ github.workspace }}\output\debugsymbols\*.7z
+        draft: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
