@@ -23,13 +23,8 @@
 
 #include "lib/framework/stdio_ext.h"
 
-#ifdef WZ_OS_MAC
-# include <OpenAL/al.h>
-# include <OpenAL/alc.h>
-#else
-# include <AL/al.h>
-# include <AL/alc.h>
-#endif
+#include <AL/al.h>
+#include <AL/alc.h>
 
 ALenum __sound_GetError(const char *location_description)
 {

@@ -76,11 +76,7 @@
 #include <physfs.h>
 
 #include <vorbis/codec.h>
-#if defined(WZ_OS_MAC)
-#include <OpenAL/al.h>
-#else
 #include <AL/al.h>
-#endif
 
 #include "lib/framework/physfs_ext.h"
 

@@ -3,14 +3,22 @@ cmake_minimum_required (VERSION 3.5)
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
-find_package(OpenAL REQUIRED)
-# Since FindOpenAL.cmake may not define an imported target, do it here
+set(_openal_config_required)
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	# CONFIG mode should be REQUIRED (to avoid the deprecated OpenAL.framework)
+	set(_openal_config_required REQUIRED)
+endif()
+find_package(OpenAL CONFIG ${_openal_config_required}) # explicitly try via CONFIG mode first
 if (NOT TARGET OpenAL::OpenAL)
-	add_library(OpenAL::OpenAL UNKNOWN IMPORTED)
-	set_target_properties(OpenAL::OpenAL PROPERTIES
-	  INTERFACE_INCLUDE_DIRECTORIES ${OPENAL_INCLUDE_DIR}
-	  IMPORTED_LOCATION ${OPENAL_LIBRARY}
-	)
+	find_package(OpenAL MODULE REQUIRED)
+	# Since FindOpenAL.cmake may not define an imported target, do it here
+	if (NOT TARGET OpenAL::OpenAL)
+		add_library(OpenAL::OpenAL UNKNOWN IMPORTED)
+		set_target_properties(OpenAL::OpenAL PROPERTIES
+		  INTERFACE_INCLUDE_DIRECTORIES ${OPENAL_INCLUDE_DIR}
+		  IMPORTED_LOCATION ${OPENAL_LIBRARY}
+		)
+	endif()
 endif()
 find_package(OggVorbis REQUIRED)
 
