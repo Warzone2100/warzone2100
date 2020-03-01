@@ -27,15 +27,10 @@
 #include "lib/framework/frameresource.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
-#ifdef WZ_OS_MAC
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#else
 #include <AL/al.h>
 #include <AL/alc.h>
-# if defined(HAVE_OPENAL_ALEXT_H)
-#  include <AL/alext.h>
-# endif
+#if defined(HAVE_OPENAL_ALEXT_H)
+# include <AL/alext.h>
 #endif
 
 #include <physfs.h>

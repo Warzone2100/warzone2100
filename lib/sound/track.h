@@ -24,11 +24,7 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
-#ifdef WZ_OS_MAC
-#include <OpenAL/al.h>
-#else
 #include <AL/al.h>
-#endif
 
 #define ATTENUATION_FACTOR	0.0003f
 
