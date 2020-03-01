@@ -3,7 +3,7 @@ Release Checklist
 
 Preliminary Testing
 -------------------
-While the CI builds on GitHub (via `GitHub Actions`, `AppVeyor`, `Azure Pipelines`, etc) can be used to check that it compiles fine on Linux, macOS & Windows, it can't actually tell you if it works.
+While the CI builds on GitHub (via `GitHub Actions`, `Azure Pipelines`, etc) can be used to check that it compiles fine on Linux, macOS & Windows, it can't actually tell you if it works.
 You should locally test whether the latest commit's build actually runs, in both single & skirmish and multiplayer!
 Of course, it is always nice to gather up enough volunteers to test before you actually make releases.
 
@@ -81,9 +81,9 @@ Wait for all CI builds to complete, and verify they have completed successfully.
 > The following images may not update immediately - even if refreshing the page.
 > To find the latest status, click on each image, or **view the Checks / Status for the commit on GitHub**.
 
-![Ubuntu](https://github.com/Warzone2100/warzone2100/workflows/Ubuntu/badge.svg?branch=master&event=push)
-![Fedora](https://github.com/Warzone2100/warzone2100/workflows/Fedora/badge.svg?branch=master&event=push)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/1s4547mjbkprt4qr/branch/master?svg=true)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master)
+[![Ubuntu](https://github.com/Warzone2100/warzone2100/workflows/Ubuntu/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
+[![Fedora](https://github.com/Warzone2100/warzone2100/workflows/Fedora/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
+[![Windows](https://github.com/Warzone2100/warzone2100/workflows/Windows/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
 [![Azure Build Status](https://dev.azure.com/wz2100/warzone2100/_apis/build/status/Build?branchName=master)](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
 [![Travis CI Build Status](https://travis-ci.org/Warzone2100/warzone2100.svg?branch=master)](https://travis-ci.org/Warzone2100/warzone2100)
 
@@ -95,13 +95,15 @@ Testing
 -------
 You should locally test whether the master branch of the game actually runs, in both single & skirmish and multiplayer.
 The latest CI (master branch) builds may be downloaded from:
-* [Windows (AppVeyor)](https://ci.appveyor.com/project/Warzone2100/warzone2100/branch/master/artifacts)
+* [Windows Builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
+   * Select the latest "Windows" workflow run, download the `warzone2100_win_*_portable` and `warzone2100_win_*_installer` artifacts.
+   * (Note: These will be a .zip _of_ the .exe. Only the .exe gets automatically uploaded on release.)
    * Test both the portable and regular installers!
 * [MacOS Build](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
-   * Under "Artifacts:", click the "\<N\> published" link, then select the "warzone2100\_macOS" artifact.
+   * Under "Artifacts:", click the "\<N\> published" link, then select the `warzone2100_macOS` artifact.
    * (Note: This may be a .zip _of_ a .zip. Only the inner .zip gets automatically uploaded on release.)
-* [Source Tarball](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster)
-   * Select the latest "Ubuntu" workflow, download the "warzone2100_src" artifact.
+* [Source Tarball](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
+   * Select the latest "Ubuntu" workflow run, download the `warzone2100_src` artifact.
    * (Note: This will be a .zip _of_ the .tar.xz. Only the .tar.xz gets automatically uploaded on release.)
 
 ### Test building with the source tarball on Linux
@@ -141,6 +143,10 @@ Since everything works (since you tested it), it is time to make the tag. Verify
 
 Where `3.3.0` is the name of the tag.
 
+> ### Always forwards
+> _Do **NOT** re-use an existing tag / tag that was previously used!_
+> If you make a mistake, or a bug is found, (etc), increment the version _again_.
+
 GitHub will then **automatically**:
 - create a Draft release in **[GitHub Releases](https://github.com/Warzone2100/warzone2100/releases)** for the new tag
    - (may take a minute or so to complete)
@@ -173,7 +179,10 @@ the CI -> GitHub integration breaks).
       - [x] `warzone2100_win_x86.DEBUGSYMBOLS.7z`
       - [x] `warzone2100_win_x86_installer.exe`
       - [x] `warzone2100_win_x86_portable.exe`
-   - [x] Verify the SHA512 hashes in the [AppVeyor Console (build log)](https://ci.appveyor.com/project/Warzone2100/warzone2100/) **(make sure you are viewing the build for the _tag_ you just made)**  match those of the installer `.exe`s you downloaded from GitHub.
+   - [x] Verify the SHA512 hashes towards the end of the [Windows workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+event%3Apush) log match the files you downloaded.
+      - [x] **Make sure you are viewing the build for the _tag_ you just made**
+      - [x] Select the appropriate job (x86, etc).
+      - [x] Expand the "Compare Build Outputs" step, which outputs the SHA512 hashes at the bottom of its output.
    - [x] Download the macOS build from the draft release:
       - [x] `warzone2100_macOS.zip`
    - [x] Verify the SHA512 hash in the [Azure Pipelines](https://dev.azure.com/wz2100/warzone2100/_build?definitionId=1&_a=summary) build log matches the file you downloaded.
