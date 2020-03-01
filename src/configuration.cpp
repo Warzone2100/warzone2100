@@ -38,6 +38,7 @@
 #include "lib/framework/input.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
+#include "lib/sound/sounddefs.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -55,6 +56,8 @@
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "titleui/titleui.h"
+
+#include <type_traits>
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -88,6 +91,14 @@ bool loadConfig()
 	if (ini.contains("music_enabled"))
 	{
 		war_SetMusicEnabled(ini.value("music_enabled").toBool());
+	}
+	if (ini.contains("hrtf"))
+	{
+		int hrtfmode_int = ini.value("hrtf").toInt();
+		if (hrtfmode_int >= static_cast<int>(MIN_VALID_HRTFMode) && hrtfmode_int <= static_cast<int>(MAX_VALID_HRTFMode))
+		{
+			war_SetHRTFMode(static_cast<HRTFMode>(hrtfmode_int));
+		}
 	}
 	if (ini.contains("mapZoom"))
 	{
@@ -241,6 +252,7 @@ bool saveConfig()
 	ini.setValue("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
 	ini.setValue("cdvol", (int)(sound_GetMusicVolume() * 100.0));
 	ini.setValue("music_enabled", war_GetMusicEnabled());
+	ini.setValue("hrtf", static_cast<typename std::underlying_type<HRTFMode>::type>(war_GetHRTFMode()));
 	ini.setValue("mapZoom", war_GetMapZoom());
 	ini.setValue("mapZoomRate", war_GetMapZoomRate());
 	ini.setValue("radarZoom", war_GetRadarZoom());

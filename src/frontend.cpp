@@ -41,6 +41,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/sound/mixer.h"
+#include "lib/sound/tracklib.h"
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/slider.h"
@@ -888,6 +889,38 @@ bool runGraphicsOptionsMenu()
 	return true;
 }
 
+static std::string audioAndZoomOptionsSoundHRTFMode()
+{
+	// retrieve whether the current "setting" is Auto or not
+	// as sound_GetHRTFMode() returns the current actual status (and never auto, even if the request was "auto")
+	bool isAutoSetting = war_GetHRTFMode() == HRTFMode::Auto;
+
+	std::string currentMode;
+	auto mode = sound_GetHRTFMode();
+	switch (mode)
+	{
+	case HRTFMode::Unsupported:
+		currentMode = _("Unsupported");
+		return currentMode;
+	case HRTFMode::Disabled:
+		currentMode = _("Disabled");
+		break;
+	case HRTFMode::Enabled:
+		currentMode = _("Enabled");
+		break;
+	case HRTFMode::Auto:
+		// should not happen, but if it does, just return
+		currentMode = _("Auto");
+		return currentMode;
+	}
+
+	if (isAutoSetting)
+	{
+		return std::string(_("Auto")) + " (" + currentMode + ")";
+	}
+	return currentMode;
+}
+
 static std::string audioAndZoomOptionsMapZoomString()
 {
 	char mapZoom[20];
@@ -929,17 +962,28 @@ void startAudioAndZoomOptionsMenu()
 	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Music Volume"), 0);
 	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M -20, FRONTEND_POS4Y + 5, AUDIO_VOL_MAX, sound_GetMusicVolume() * 100.0);
 
+	// HRTF
+	addTextButton(FRONTEND_SOUND_HRTF, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("HRTF"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SOUND_HRTF_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, audioAndZoomOptionsSoundHRTFMode(), WBUT_SECONDARY);
+	if (sound_GetHRTFMode() == HRTFMode::Unsupported)
+	{
+		widgSetButtonState(psWScreen, FRONTEND_SOUND_HRTF, WBUT_DISABLE);
+		widgSetTip(psWScreen, FRONTEND_SOUND_HRTF, _("HRTF is not supported on your device / system / OpenAL library"));
+		widgSetButtonState(psWScreen, FRONTEND_SOUND_HRTF_R, WBUT_DISABLE);
+		widgSetTip(psWScreen, FRONTEND_SOUND_HRTF_R, _("HRTF is not supported on your device / system / OpenAL library"));
+	}
+
 	// map zoom
-	addTextButton(FRONTEND_MAP_ZOOM, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Map Zoom"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_MAP_ZOOM_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, audioAndZoomOptionsMapZoomString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MAP_ZOOM, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Map Zoom"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MAP_ZOOM_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, audioAndZoomOptionsMapZoomString(), WBUT_SECONDARY);
 
 	// map zoom rate
-	addTextButton(FRONTEND_MAP_ZOOM_RATE, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Map Zoom Rate"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_MAP_ZOOM_RATE_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, audioAndZoomOptionsMapZoomRateString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MAP_ZOOM_RATE, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Map Zoom Rate"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MAP_ZOOM_RATE_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, audioAndZoomOptionsMapZoomRateString(), WBUT_SECONDARY);
 
 	// radar zoom
-	addTextButton(FRONTEND_RADAR_ZOOM, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar Zoom"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RADAR_ZOOM_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, audioAndZoomOptionsRadarZoomString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR_ZOOM, FRONTEND_POS8X - 35, FRONTEND_POS8Y, _("Radar Zoom"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR_ZOOM_R, FRONTEND_POS8M - 55, FRONTEND_POS8Y, audioAndZoomOptionsRadarZoomString(), WBUT_SECONDARY);
 
 	// quit.
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -984,6 +1028,28 @@ bool runAudioAndZoomOptionsMenu()
 	case FRONTEND_MUSIC_SL:
 		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, FRONTEND_MUSIC_SL) / 100.0);
 		break;
+
+	case FRONTEND_SOUND_HRTF:
+	case FRONTEND_SOUND_HRTF_R:
+		{
+			std::vector<HRTFMode> modesToCycle = { HRTFMode::Disabled, HRTFMode::Enabled, HRTFMode::Auto };
+			auto current = std::find(modesToCycle.begin(), modesToCycle.end(), war_GetHRTFMode());
+			if (current == modesToCycle.end())
+			{
+				current = modesToCycle.begin();
+			}
+			auto startingPoint = current;
+			bool successfulChange = false;
+			do {
+				current = seqCycle(current, modesToCycle.begin(), 1, modesToCycle.end() - 1);
+			} while ( (current != startingPoint) && ((successfulChange = sound_SetHRTFMode(*current)) == false) );
+			if (successfulChange)
+			{
+				war_SetHRTFMode(*current);
+				widgSetString(psWScreen, FRONTEND_SOUND_HRTF_R, audioAndZoomOptionsSoundHRTFMode().c_str());
+			}
+			break;
+		}
 
 	case FRONTEND_MAP_ZOOM:
 	case FRONTEND_MAP_ZOOM_R:

@@ -27,6 +27,7 @@
 #include "warzoneconfig.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
+#include "lib/sound/sounddefs.h"
 #include "advvis.h"
 #include "component.h"
 #include "display.h"
@@ -52,6 +53,7 @@ struct WARZONE_GLOBALS
 	bool pauseOnFocusLoss = true;
 	bool ColouredCursor = true;
 	bool MusicEnabled = true;
+	HRTFMode hrtfMode = HRTFMode::Auto;
 	int mapZoom = STARTDISTANCE;
 	int mapZoomRate = MAP_ZOOM_RATE_DEFAULT;
 	int radarZoom = DEFAULT_RADARZOOM;
@@ -238,6 +240,16 @@ bool war_GetMusicEnabled()
 void war_SetMusicEnabled(bool enabled)
 {
 	warGlobs.MusicEnabled = enabled;
+}
+
+HRTFMode war_GetHRTFMode()
+{
+	return warGlobs.hrtfMode;
+}
+
+void war_SetHRTFMode(HRTFMode mode)
+{
+	warGlobs.hrtfMode = mode;
 }
 
 int war_GetMapZoom()

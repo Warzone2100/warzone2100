@@ -96,7 +96,7 @@ bool audio_Disabled(void)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, bool really_enable)
+bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, HRTFMode hrtf, bool really_enable)
 {
 	// init audio system
 	g_sPreviousSample.iTrack = NO_SAMPLE;
@@ -106,7 +106,7 @@ bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, bool really_enable)
 	g_bAudioEnabled = really_enable;
 	if (g_bAudioEnabled)
 	{
-		g_bAudioEnabled = sound_Init();
+		g_bAudioEnabled = sound_Init(hrtf);
 	}
 	if (g_bAudioEnabled)
 	{

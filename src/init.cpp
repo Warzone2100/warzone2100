@@ -694,7 +694,7 @@ bool systemInitialise(float horizScaleFactor, float vertScaleFactor)
 		return false;
 	}
 
-	if (!audio_Init(droidAudioTrackStopped, war_getSoundEnabled()))
+	if (!audio_Init(droidAudioTrackStopped, war_GetHRTFMode(), war_getSoundEnabled()))
 	{
 		debug(LOG_SOUND, "Continuing without audio");
 	}

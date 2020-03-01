@@ -46,10 +46,10 @@ static AUDIO_CALLBACK	g_pStopTrackCallback = nullptr;
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_Init()
+bool sound_Init(HRTFMode hrtf)
 {
 	g_iCurTracks = 0;
-	if (!sound_InitLibrary())
+	if (!sound_InitLibrary(hrtf))
 	{
 		debug(LOG_ERROR, "Cannot init sound library");
 		return false;

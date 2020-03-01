@@ -256,12 +256,14 @@ enum
 	FRONTEND_3D_FX,						// 3d sound volume
 	FRONTEND_FX,						// 2d (voice) sound volume
 	FRONTEND_MUSIC,						// music volume
+	FRONTEND_SOUND_HRTF,				// HRTF mode
 	FRONTEND_MAP_ZOOM,					// map zoom
 	FRONTEND_MAP_ZOOM_RATE,					// map zoom rate
 	FRONTEND_RADAR_ZOOM,					// radar zoom rate
 	FRONTEND_3D_FX_SL,
 	FRONTEND_FX_SL,
 	FRONTEND_MUSIC_SL,
+	FRONTEND_SOUND_HRTF_R,
 	FRONTEND_MAP_ZOOM_R,
 	FRONTEND_MAP_ZOOM_RATE_R,
 	FRONTEND_RADAR_ZOOM_R,
