@@ -199,7 +199,7 @@ function eventStartLevel()
 			assembly: "NPFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(55)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(65)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -211,10 +211,10 @@ function eventStartLevel()
 			assembly: "NPFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(65)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(75)),
 			data: {
 				regroup: false,
-				repair: 66,
+				repair: 33,
 				count: -1,
 			},
 			templates: [ cTempl.npltat, cTempl.npmsens, cTempl.npmorb, cTempl.npsmct, cTempl.nphct ] //variety
@@ -226,7 +226,7 @@ function eventStartLevel()
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(90)),
 			data: {
 				regroup: false,
-				repair: 66,
+				repair: 33,
 				count: -1,
 			},
 			templates: [ cTempl.nphct, cTempl.npsbb, cTempl.npmorb ] //tough units
@@ -235,10 +235,10 @@ function eventStartLevel()
 			assembly: "NPCybFactoryWAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(55)),
 			data: {
 				regroup: false,
-				repair: 66,
+				repair: 33,
 				count: -1,
 			},
 			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybr ]
@@ -247,10 +247,10 @@ function eventStartLevel()
 			assembly: "NPCybFactoryEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
-				repair: 66,
+				repair: 33,
 				count: -1,
 			},
 			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybr ]
@@ -259,10 +259,10 @@ function eventStartLevel()
 			assembly: "NPCybFactoryNEAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
 			data: {
 				regroup: false,
-				repair: 66,
+				repair: 33,
 				count: -1,
 			},
 			templates: [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybr ]
