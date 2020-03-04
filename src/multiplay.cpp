@@ -1138,7 +1138,19 @@ static void printchatmsg(const char *text, int from, bool team = false)
 {
 	char msg[MAX_CONSOLE_STRING_LENGTH];
 
-	sstrcpy(msg, getPlayerName(from));
+	time_t current_time;
+	time(&current_time);
+	struct tm time_info;
+#if defined(WZ_OS_WIN)
+	gmtime_s(&time_info, &current_time);
+#else
+	gmtime_r(&current_time, &time_info);
+#endif
+	char time_str[9];
+	ssprintf(time_str, "[%d:%d] ", time_info.tm_hour, time_info.tm_min);
+
+	sstrcpy(msg, time_str);
+	sstrcat(msg, getPlayerName(from));
 	if (from == selectedPlayer && GetGameMode() == GS_NORMAL)
 	{
 		if (team)
