@@ -37,17 +37,31 @@ void pal_Init()
 		int lenLeft = fileSize;
 		for (int i = 0; i < WZCOL_MAX; i++)
 		{
+			if (lenLeft <= 0)
+			{
+				// No more data to read - palette.txt is likely for an older version of WZ
+				debug(LOG_FATAL, "palette.txt is missing required value(s); (missing lines %d - %d)", i, (WZCOL_MAX-1));
+				return;
+			}
+
 			unsigned int r, g, b, a;
 			int len;
 
-			sscanf(ptr, "%x, %x, %x, %x %*[^\n]\n%n", &r, &g, &b, &a, &len);
+			int result = sscanf(ptr, "%x, %x, %x, %x %*[^\n]\n%n", &r, &g, &b, &a, &len);
+
+			ptr += len;
+			lenLeft -= len;
+			ASSERT(lenLeft >= 0, "Buffer overrun reading palette data");
+
+			if (result != 4)
+			{
+				debug(LOG_ERROR, "Truncated / invalid line (%d) in palette.txt only has %d valid values", (i + 1), result);
+				continue;
+			}
 			psPalette[i].byte.r = r;
 			psPalette[i].byte.g = g;
 			psPalette[i].byte.b = b;
 			psPalette[i].byte.a = a;
-			ptr += len;
-			lenLeft -= len;
-			ASSERT(lenLeft >= 0, "Buffer overrun reading palette data");
 		}
 		free(pFileData);
 	}
