@@ -1948,7 +1948,7 @@ bool intAddTransporterTimer()
 	sLabInit = W_LABINIT();
 	sLabInit.formID = IDTRANTIMER_BUTTON;
 	sLabInit.id = IDTRANS_CAPACITY;
-	sLabInit.x = 65;
+	sLabInit.x = 70;
 	sLabInit.y = 1;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
