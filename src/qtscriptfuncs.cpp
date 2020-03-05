@@ -3884,7 +3884,7 @@ static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
 //-- ## addStructure(structure id, player, x, y)
 //--
 //-- Create a structure on the given position. Returns the structure on success, null otherwise.
-//-- Position uses absolute coordinates, if you want use position based on Map Tiles, then
+//-- Position uses world coordinates, if you want use position based on Map Tiles, then
 //-- use as addStructure(structure id, players, x*128, y*128)
 //--
 static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *engine)
