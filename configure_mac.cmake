@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.5)
 #  - VCPKG_BUILD_TYPE : This will be used to modify the current triplet (once vcpkg is downloaded)
 #  - WZ_DISTRIBUTOR : Passed to the main WZ CMake configure command
 #  - ADDITIONAL_CMAKE_ARGUMENTS : Additional arguments to be passed to CMake configure
+#  - ONLY_BUILD_VCPKG : Only proceed through the steps to build vcpkg
+#  - SKIP_VCPKG_BUILD : Skip building vcpkg itself, proceed with remaining steps
 
 ########################################################
 
@@ -49,6 +51,8 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ CMAKE_HOST_SYSTEM_NAME (${C
 ########################################################
 # 1.) Download & build vcpkg, install dependencies
 
+
+if((NOT DEFINED SKIP_VCPKG_BUILD) OR NOT SKIP_VCPKG_BUILD)
 
 ########################################################
 ## 1-a.) Download vcpkg, pin to commit
@@ -196,6 +200,13 @@ if(DEFINED VCPKG_BUILD_TYPE)
 	unset(tripletCommand)
 	unset(tripletFile)
 	unset(triplet)
+endif()
+
+endif((NOT DEFINED SKIP_VCPKG_BUILD) OR NOT SKIP_VCPKG_BUILD)
+
+if(DEFINED ONLY_BUILD_VCPKG AND ONLY_BUILD_VCPKG)
+	message(STATUS "ONLY_BUILD_VCPKG: Stopping configure script after vcpkg build")
+	return()
 endif()
 
 ########################################################

@@ -57,13 +57,6 @@ jobs:
         gem install asciidoctor -v 2.0.10 --no-document
         cmake --version
   - task: CmdLine@2
-    displayName: Set Xcode toolchain / version
-    condition: ne('${{ parameters.xcodeDeveloperDir }}', 'default')
-    inputs:
-      script: |
-        # Set default Xcode for all following commands (configure script, build, etc)
-        sudo xcode-select -switch ${DESIRED_XCODE_DEV_DIR}
-  - task: CmdLine@2
     displayName: configure_mac.cmake
     inputs:
       script: |
@@ -72,13 +65,13 @@ jobs:
         echo "AGENT_BUILDDIRECTORY=${AGENT_BUILDDIRECTORY}"
 
         cd "${AGENT_BUILDDIRECTORY}"
-      
+
         # Delete any prior build dir, create a fresh one
         rm -rf build
         if [ ! -d "build" ]; then
         	mkdir build
         fi
-      
+
         # configure_mac.cmake (gets dependencies, configures CMake)
         cd build
         WZ_DISTRIBUTOR="UNKNOWN"
@@ -86,9 +79,23 @@ jobs:
         	# Building from main repo - set distributor
         	WZ_DISTRIBUTOR="wz2100.net"
         fi
-        echo "cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -DADDITIONAL_CMAKE_ARGUMENTS=\"-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO\" -P ../configure_mac.cmake"
+
         echo "Current directory: $(pwd)"
-        cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO" -P ../src/configure_mac.cmake
+        ADDITIONAL_CONFIGURE_ARGS=""
+        if [ "${DESIRED_XCODE_DEV_DIR}" != "default" ]; then
+          # Need to run configure_mac script twice
+
+          echo "Run configure_mac to just build vcpkg (with system default Xcode)"
+          ADDITIONAL_CONFIGURE_ARGS="-DONLY_BUILD_VCPKG=true"
+          echo "cmake ${ADDITIONAL_CONFIGURE_ARGS} -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -DADDITIONAL_CMAKE_ARGUMENTS=\"-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO\" -P ../configure_mac.cmake"
+          cmake ${ADDITIONAL_CONFIGURE_ARGS} -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO" -P ../src/configure_mac.cmake
+
+          echo "Switching Xcode: ${DESIRED_XCODE_DEV_DIR}"
+          sudo xcode-select -switch "${DESIRED_XCODE_DEV_DIR}"
+          ADDITIONAL_CONFIGURE_ARGS="-DSKIP_VCPKG_BUILD=true"
+        fi
+        echo "cmake ${ADDITIONAL_CONFIGURE_ARGS} -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -DADDITIONAL_CMAKE_ARGUMENTS=\"-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO\" -P ../configure_mac.cmake"
+        cmake ${ADDITIONAL_CONFIGURE_ARGS} -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO" -P ../src/configure_mac.cmake
         result=${?}
         if [ $result -ne 0 ]; then
         	echo "ERROR: configure_mac.cmake failed"
@@ -112,9 +119,9 @@ jobs:
         cd "${AGENT_BUILDDIRECTORY}"
         echo "BUILD_ARTIFACTSTAGINGDIRECTORY=${BUILD_ARTIFACTSTAGINGDIRECTORY}"
         OUTPUT_DIR="${BUILD_ARTIFACTSTAGINGDIRECTORY}"
-      
+
         cat "build/src/autorevision.h"
-      
+
         # Verify "warzone2100.zip" was created
         BUILT_WARZONE_ZIP="build/warzone2100.zip"
         if [ ! -f "${BUILT_WARZONE_ZIP}" ]; then
@@ -152,7 +159,7 @@ jobs:
           echo "     (No output?)"
         fi
         cd - > /dev/null
-      
+
         # Move warzone2100.zip to the output directory, renaming it
         DESIRED_ZIP_NAME="warzone2100_macOS.zip"
         mv "$BUILT_WARZONE_ZIP" "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}"
