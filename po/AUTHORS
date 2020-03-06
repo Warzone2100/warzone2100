@@ -1,0 +1,214 @@
+Old headers / comments / translators listed in .po files:
+
+ca_ES.po
+  # Copyright (C) YEAR Warzone Resurrection Project
+  # This file is distributed under the same license as the PACKAGE package.
+  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+  # Àngel Mompó <mecatxis@gmail.com>, 2010, 2011, 2012.
+cs.po
+  # Czech translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Lubos <alvinx12@centrum.cz>, 2008.
+da.po
+  # Dansk translation of warzone2100
+  # Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Christian Vest Hansen <karmazilla@gmail.com>, 2007.
+  # carson <Unknown>, 2008.
+de.po
+  # German translation of warzone2100
+  # Copyright (c) 2007-2012 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Dennis Schridde <devurandom@gna.org>, 2007.
+  # Martin Koller <koller@etm.at>, 2007.
+  # Martin Koller <m.koller@surfeu.at>, 2007.
+  # Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2019.
+  # raymond, 2011.
+  # Frank Ehlers <highlander1599@gmail.com>, 2017-2019.
+  # Forgon <forgon2100@protonmail.com>, 2018-2019.
+el.po
+  # Greek Translation of Warzone2100.
+  # Copyright (C) YEAR Warzone Resurrection Project
+  # This file is distributed under the same license as the Warzone2100 package.
+  # Translators:
+  #
+  # nikos papadopoulos <nikos769@yahoo.gr>, 2012, 2017, 2018.
+en_GB.po
+  # English (United Kingdom) translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Jen Ockwell <jenfraggleubuntu@googlemail.com>, 2008.
+eo.po
+  # Warzone Esperanto translation.
+  # Copyright (C) 2007-2016 Warzone Resurrection Project
+  # This file is distributed under the same license as the PACKAGE package.
+  # Charles Dem <warchd@gmail.com>, 2016.
+es.po
+  # Spanish translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Samuel G. I. <amuchamu@gmail.com>, 2008.
+et_EE.po
+  # Estonian translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # erlando <erlando112@hotmail.com>, 2009.
+fi.po
+  # Finnish translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Lartza <lartza@wippies.com>, 2008.
+fr.po
+  Translators: AmiralJCDG
+fy.po
+  # Frisian translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Wander Nauta <wnauta@gmail.com>, 2008.
+ga.po
+  # Irish translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Seanan <Unknown>, 2008.
+hr.po
+  Translators: metalwarrior95 <metalwarrioroften@gmail.com>
+hu.po
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Jen Ockwell <jenfraggleubuntu@googlemail.com>, 2008.
+  # Kálmán „KAMI” Szalai <kami911@gmail.com>
+  # Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>
+id.po
+  # SOME DESCRIPTIVE TITLE.
+  # Copyright (C) YEAR Warzone Resurrection Project
+  # This file is distributed under the same license as the PACKAGE package.
+  # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+  #
+  # Khadis <refinemyself@gmail.com>
+it.po
+  # Italian translations for warzone2100
+  # Copyright (C) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Federico Aromolo <miracleblade@hotmail.it>, 2008.
+  # Matteo Ferrabone <Unknown>, 2008.
+  # Alberto <Unknown>, 2008.
+  # DjLaurenz <djlaurenz@libero.it>, 2008.
+  # Cristian Odorico <generalchris@hotmail.it>
+ko.po
+  Translators: Joshua Shin <urgood2@gmail.com>
+la.po
+  # Latin translations for warzone2100
+  # Copyright (C) 2007 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Giel van Schijndel <me@mortis.eu>, 2007.
+lt.po
+  # Lithuanian translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Roman <rms200x@gmail.com>, 2008.
+nb.po
+  # English translations for warzone2100
+  # Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Per I. Mathisen <per@gna.org>, 2007.
+  # Olav Andreas Lindekleiv <Unknown>, 2008.
+pl.po
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # , 2010.
+  # Michał D. aka Emdek <emdeck@gmail.com>
+pt_BR.po
+  Translators: Tucalipe <tucalipe@hotmail.com>
+pt.po
+  # Portuguese translations for Warzone 2100 package.
+  # Copyright (C) 2008 Warzone Resurrection Project
+  # This file is distributed under the same license as the Warzone 2100 package.
+  # Automatically generated, 2008.
+  # Tradução feita por António Castelo <ogame_holydragoon@hotmail.com>
+  # e Pedro Caetano <pedro.m.caetano@netcabo.pt>
+ro.po
+  # Romanian translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Bogdan Ivanov <bogdan.i.ivanov@gmail.com>, 2008.
+  # Adrian Mos <adimosh@live.com>
+ru.po
+  # Russian translations for warzone2100
+  # Copyright (C) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Alexandr Ivanov <wz2100@mail.ru>, 2008.
+  # Stanislav Pererva <stas_ap@inbox.ru>, 2008.
+  # Azamat H. Hackimov <azamat.hackimov@gmail.com>, 2008.
+  # Andreev Viktor (vaut) <andrvaut@ya.ru>, 2019.
+sk.po
+  # Czech translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Lubos <alvinx12@centrum.cz>, 2008.
+  # Marian Zsemlye <koapa@inmail.sk>
+sl.po
+  # This file is distributed under the same license as the warzone2100 package.
+  # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+  #
+  # Tomaž Povšin <tomaz.povsin@gmail.com>
+tr.po
+  # Turkish translation of warzone2100
+  # Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>, 2010.
+  # Volkan Gezer <volkangezer@gmail.com>, 2013.
+uk_UA.po
+  Translators: Меденцій Олександр <olexandr1986@i.ua>
+zh_CN.po
+  # Simplified Chinese translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Converted from zh_TW Version which originally made by Chi Hsin Tsau<chtsau@gmail.com>, 2008.
+  # Converted and Updated by Shinyu Wu<shinyuwu@gnu.hk> , 2016.
+zh_TW.po
+  # Traditional Chinese translation for warzone2100
+  # Copyright (c) 2008 Warzone 2100 Resurrection Project
+  # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+  # This file is distributed under the same license as the warzone2100 package.
+  #
+  # Chi Hsin Tsau<chtsau@gmail.com>, 2008.
