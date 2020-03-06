@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Slovak\n"
@@ -10406,6 +10406,7 @@ msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Skupina %u vybraná - %u jednotka"
 msgstr[1] "Skupina %u vybraná - %u jednotky"
 msgstr[2] "Skupina %u vybraná - %u jednotiek"
+msgstr[3] "Skupina %u vybraná - %u jednotiek"
 
 #: src/droid.cpp:1932
 #, c-format
@@ -10414,6 +10415,7 @@ msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u jednotka pripojená ku skupine %u"
 msgstr[1] "%u jednotky pripojené ku skupine %u"
 msgstr[2] "%u jednotiek pripojených ku skupine %u"
+msgstr[3] "%u jednotiek pripojených ku skupine %u"
 
 #: src/droid.cpp:1943
 #, c-format
@@ -10422,6 +10424,7 @@ msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Zamerané na skupinu %u - %u jednotka"
 msgstr[1] "Zamerané na skupinu %u - %u jednotky"
 msgstr[2] "Zamerané na skupinu %u - %u jednotiek"
+msgstr[3] "Zamerané na skupinu %u - %u jednotiek"
 
 #: src/droid.cpp:1947
 #, c-format
@@ -10430,6 +10433,7 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Vyrovananý so skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnané so skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnaných so skupinou %u - %u jednotiek"
+msgstr[3] "Vyrovnaných so skupinou %u - %u jednotiek"
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -12685,12 +12689,13 @@ msgid "Any number of players"
 msgstr "Ľubovolný počet hráčov"
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 hráči"
-msgstr[1] "2 hráči"
-msgstr[2] "2 hráči"
+msgstr[0] "%d hráč"
+msgstr[1] "%d hráči"
+msgstr[2] "%d hráčov"
+msgstr[3] "%d hráčov"
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -13043,6 +13048,7 @@ msgid_plural "%u units selected"
 msgstr[0] "%u vybraná jednotka"
 msgstr[1] "%u jednotky vybrány"
 msgstr[2] "%u jednotek vybráno"
+msgstr[3] "%u jednotek vybráno"
 
 #: src/structure.cpp:2497
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -13070,6 +13076,7 @@ msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - Poškodenie %3.0f%%"
 msgstr[1] "%s - Poškodenie %3.0f%%"
 msgstr[2] "%s - Poškodenie %3.0f%%"
+msgstr[3] "%s - Poškodenie %3.0f%%"
 
 #: src/structure.cpp:5447
 #, fuzzy, c-format
@@ -13078,6 +13085,7 @@ msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - Poškodenie %3.0f%%"
 msgstr[1] "%s - Poškodenie %3.0f%%"
 msgstr[2] "%s - Poškodenie %3.0f%%"
+msgstr[3] "%s - Poškodenie %3.0f%%"
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
