@@ -1,16 +1,19 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WZ2100\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-06 20:05+0000\n"
-"PO-Revision-Date: \n"
-"Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
-"Language-Team: \n"
-"Language: hr\n"
+"PO-Revision-Date: 2020-03-06 22:33\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Croatian\n"
+"Language: hr_HR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Croatian\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: hr\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100_en.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1473,15 +1476,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "Senzor Nadogradnja Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "Senzor Nadogradnja Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1490,15 +1491,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "Senzor Nadogradnja Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "Senzor Nadogradnja Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -3168,9 +3167,8 @@ msgid "All rockets upgraded automatically"
 msgstr "Sve su rakete automatski nadograđene"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:394
-#, fuzzy
 msgid "Return to LZ"
-msgstr "Vrati se do sjedišta"
+msgstr ""
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -3195,9 +3193,8 @@ msgstr "Istražuj (F2)"
 #: data/base/script/tutorial.js:217
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "Modul za istraživanje povećava objekt za istraživanje"
+msgstr ""
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -3430,9 +3427,8 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
-#, fuzzy
 msgid "Incoming Transmission"
-msgstr "Završetak misije..."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
@@ -3459,9 +3455,8 @@ msgid "Dawn, July 4th, 2100"
 msgstr "Zora, 4. srpnja 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "Ciljevi PROJEKTA"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
@@ -3915,9 +3910,8 @@ msgid "You must stop them!"
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
-#, fuzzy
 msgid "Decoding Transmission..."
-msgstr "Završetak misije..."
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -3952,9 +3946,8 @@ msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
-#, fuzzy
 msgid "Time's up commander!!"
-msgstr "Pokaži sljedečeg kapetana"
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
@@ -4182,9 +4175,8 @@ msgid "North America"
 msgstr "Sjeverna Amerika"
 
 #: data/base/sequenceaudio/devastation.txa:10
-#, fuzzy
 msgid "Nuclear Winter"
-msgstr "Nuklearni reaktor"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
@@ -4192,7 +4184,7 @@ msgstr "Ponoć, 10. travnja 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr "Rocky Mountains"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
@@ -4286,9 +4278,8 @@ msgid "Machinegun"
 msgstr "Strojnica"
 
 #: data/mp/messages/strings/names.txt:275
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL Top"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:293
 #: po/custom/fromJson.txt:332
@@ -4598,9 +4589,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Istraživanje"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -4619,9 +4609,8 @@ msgid "Sorry, droid transfer failed."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "Generator"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
@@ -4667,9 +4656,8 @@ msgstr "Timovi"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "Model saveza: Timovi"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
@@ -4712,20 +4700,18 @@ msgid "Enter password here"
 msgstr "Upišite sišfru ovdje"
 
 #: lib/netplay/netplay.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "Igra se ne može spremiti"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -4734,14 +4720,13 @@ msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:2201
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "Igra se ne može spremiti"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -4804,24 +4789,20 @@ msgid "AA Chainfeed Loader Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:17
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Plasma Top"
+msgstr ""
 
 #: po/custom/fromJson.txt:18
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Plasma Top Uporište"
+msgstr ""
 
 #: po/custom/fromJson.txt:19
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Jurišni Top Teško Uporište"
+msgstr ""
 
 #: po/custom/fromJson.txt:20
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:21
 msgid "AA Flak damage +25%"
@@ -4892,14 +4873,12 @@ msgid "Advanced Engineering"
 msgstr ""
 
 #: po/custom/fromJson.txt:45
-#, fuzzy
 msgid "Advanced Engineering Techniques"
-msgstr "Poboljšano graditeljstvo"
+msgstr ""
 
 #: po/custom/fromJson.txt:47
-#, fuzzy
 msgid "Advanced fire detection systems"
-msgstr "Novi sustav za detektiranje pucnjave"
+msgstr ""
 
 #: po/custom/fromJson.txt:48
 msgid "Advanced Manufacturing"
@@ -4942,9 +4921,8 @@ msgid "Advanced repair techniques"
 msgstr "Napredne tehnike popravljanja"
 
 #: po/custom/fromJson.txt:59
-#, fuzzy
 msgid "Advanced target recognition systems"
-msgstr "Novi sistem prepoznavanja mete"
+msgstr ""
 
 #: po/custom/fromJson.txt:60
 msgid "Advanced Thermal Emissions detection"
@@ -4963,14 +4941,12 @@ msgid "Advanced VTOL Production Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:65
-#, fuzzy
 msgid "Aerodynamic Jump Pack"
-msgstr "Aerodinamičkog Skoči Pack"
+msgstr ""
 
 #: po/custom/fromJson.txt:66
-#, fuzzy
 msgid "Aerodynamicslab"
-msgstr "Aerodinamičkog Skoči Pack"
+msgstr ""
 
 #: po/custom/fromJson.txt:71
 msgid "All cannons upgraded automatically"
@@ -4997,9 +4973,8 @@ msgid "All power generators upgraded automatically"
 msgstr "Svi generatori energije su automatski nadograđeni"
 
 #: po/custom/fromJson.txt:87
-#, fuzzy
 msgid "All rail guns upgraded automatically"
-msgstr "Sve su strojnice automatski nadograđene"
+msgstr ""
 
 #: po/custom/fromJson.txt:92
 msgid "All sensors upgraded automatically"
@@ -5022,9 +4997,8 @@ msgid "Alpha"
 msgstr ""
 
 #: po/custom/fromJson.txt:104
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Nova Kampanja"
+msgstr ""
 
 #: po/custom/fromJson.txt:105
 msgid "Amphibious hover propulsion"
@@ -5047,9 +5021,8 @@ msgid "Anti-tank missile"
 msgstr "ProtuTenkovski Projektil"
 
 #: po/custom/fromJson.txt:110
-#, fuzzy
 msgid "Anti-tank rocket"
-msgstr "Teška anti-tenkovska raketa"
+msgstr ""
 
 #: po/custom/fromJson.txt:111
 msgid "APDSB MG Bullets"
@@ -5088,9 +5061,8 @@ msgid "Archangel Missile Emplacement"
 msgstr ""
 
 #: po/custom/fromJson.txt:121
-#, fuzzy
 msgid "Armed with Cyborg assault gun"
-msgstr "Naoružan sa Kiborg Jurišnom Puškom"
+msgstr ""
 
 #: po/custom/fromJson.txt:123
 msgid "Armed with Cyborg Cannon"
@@ -5109,37 +5081,32 @@ msgid "Armed with Cyborg Pulse Laser"
 msgstr "Naoružan sa Kiborg Pulsirani Laser"
 
 #: po/custom/fromJson.txt:127
-#, fuzzy
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Naoružan sa Kiborg Jurišnom Puškom"
+msgstr ""
 
 #: po/custom/fromJson.txt:128
 msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "Naoružan sa Kiborg Bič Projektil Lanser"
 
 #: po/custom/fromJson.txt:129
-#, fuzzy
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Naoružan sa Kiborg bacačem plamena"
+msgstr ""
 
 #: po/custom/fromJson.txt:130
-#, fuzzy
 msgid "Armed with flashlight laser"
-msgstr "Naoružan sa Kiborg bacačem plamena"
+msgstr ""
 
 #: po/custom/fromJson.txt:131
-#, fuzzy
 msgid "Armed with Flashlight Laser"
-msgstr "Naoružan sa Kiborg Pulsirani Laser"
+msgstr ""
 
 #: po/custom/fromJson.txt:132
 msgid "Armed with grenades"
 msgstr "Naoružan sa granatama"
 
 #: po/custom/fromJson.txt:133
-#, fuzzy
 msgid "Armed with hyper velocity cannon"
-msgstr "Oklopno Teško Uporište sa Hiper-Brzim Topom"
+msgstr ""
 
 #: po/custom/fromJson.txt:134
 msgid "Armed with Lance Anti-Tank rocket"
@@ -5158,14 +5125,12 @@ msgid "Armed with medium cannon"
 msgstr "Naoružani sa srednjim laserom"
 
 #: po/custom/fromJson.txt:138
-#, fuzzy
 msgid "Armed with Needle Gun"
-msgstr "Naoružan sa granatama"
+msgstr ""
 
 #: po/custom/fromJson.txt:140
-#, fuzzy
 msgid "Armed with Scourge anti-tank missile"
-msgstr "Naoružan sa Lancer ProtuTenkovskim projektilom"
+msgstr ""
 
 #: po/custom/fromJson.txt:141
 msgid "Armed with tank killer rockets"
@@ -5208,14 +5173,12 @@ msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "Oklopni stražarski toranj sa mini raketnom ljuskom"
 
 #: po/custom/fromJson.txt:153
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Oklopni stražarski toranj sa mini raketnom ljuskom"
+msgstr ""
 
 #: po/custom/fromJson.txt:154
-#, fuzzy
 msgid "Armored guard tower with Needle Gun"
-msgstr "Oklopni stražarski toranj sa Nexus Vezom"
+msgstr ""
 
 #: po/custom/fromJson.txt:155
 msgid "Armored guard tower with Nexus Link"
@@ -5226,23 +5189,20 @@ msgid "Armored guard tower with Pulse Laser"
 msgstr "Oklopni stražarski toranj sa Pulsirani Laserom"
 
 #: po/custom/fromJson.txt:157
-#, fuzzy
 msgid "Armored guard tower with Scourge Missile"
-msgstr "Oklopni stražarski toranj sa Pulsirani Laserom"
+msgstr ""
 
 #: po/custom/fromJson.txt:158
 msgid "Armored Half-tracks"
 msgstr "Oklopljena gusjenica"
 
 #: po/custom/fromJson.txt:161
-#, fuzzy
 msgid "Armored hardpoint with Flashlight laser"
-msgstr "Oklopno Teško Uporište sa Bacačem Plamena"
+msgstr ""
 
 #: po/custom/fromJson.txt:162
-#, fuzzy
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Oklopno teško uporište sa teškim topom"
+msgstr ""
 
 #: po/custom/fromJson.txt:163
 msgid "Armored hardpoint with Heavy Cannon"
@@ -5269,14 +5229,12 @@ msgid "Armored hardpoint with Medium Cannon"
 msgstr "Oklopno teško uporište sa srednjim topom"
 
 #: po/custom/fromJson.txt:170
-#, fuzzy
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Oklopno Teško Uporište sa Bacačem Plamena"
+msgstr ""
 
 #: po/custom/fromJson.txt:171
-#, fuzzy
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Teško oklopno uporište sa Lancer AT projektilom"
+msgstr ""
 
 #: po/custom/fromJson.txt:175
 msgid "Armored Incendiary Mortar battery pit"
@@ -5287,14 +5245,12 @@ msgid "Armored Mortar battery pit"
 msgstr "Oklopnjeni Minobacačka baterijska jama"
 
 #: po/custom/fromJson.txt:179
-#, fuzzy
 msgid "Armored strongpoint with Flashlight laser"
-msgstr "Oklopno Teško Uporište sa Plasma bacačem"
+msgstr ""
 
 #: po/custom/fromJson.txt:180
-#, fuzzy
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Oklopno uporište sa Pulsiranim laserom"
+msgstr ""
 
 #: po/custom/fromJson.txt:181
 msgid "Armored strongpoint with Heavy Laser"
@@ -5309,9 +5265,8 @@ msgid "Armored strongpoint with Pulse Laser"
 msgstr "Oklopno uporište sa Pulsiranim laserom"
 
 #: po/custom/fromJson.txt:186
-#, fuzzy
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Oklopno uporište sa Pulsiranim laserom"
+msgstr ""
 
 #: po/custom/fromJson.txt:188
 msgid "Armored Tracks"
@@ -5358,9 +5313,8 @@ msgid "Assault Cannon Hardpoint"
 msgstr "Jurišni Top Teško Uporište"
 
 #: po/custom/fromJson.txt:199
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:200
 msgid "Assault Gun"
@@ -5387,14 +5341,12 @@ msgid "Assault Gunner Cyborg"
 msgstr ""
 
 #: po/custom/fromJson.txt:206
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:207
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Strojničar"
+msgstr ""
 
 #: po/custom/fromJson.txt:208
 msgid "Assault Gun Python Tracks"
@@ -5405,9 +5357,8 @@ msgid "Assault Gun Tower"
 msgstr "Jurišni Top"
 
 #: po/custom/fromJson.txt:210
-#, fuzzy
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr "Ili odaberi objekt za popravak kao metu"
+msgstr ""
 
 #: po/custom/fromJson.txt:212
 msgid "Assigned VTOLs attack the designated targets"
@@ -5478,9 +5429,8 @@ msgid "Automatic loader replaces manual feed"
 msgstr "Automatski punjač zamjenjuje ručno punjenje"
 
 #: po/custom/fromJson.txt:236
-#, fuzzy
 msgid "Auto Repair"
-msgstr "Automatski Popravak"
+msgstr ""
 
 #: po/custom/fromJson.txt:237
 msgid "Auto-Repair"
@@ -5511,9 +5461,8 @@ msgid "BaBaProp"
 msgstr "Kotačići"
 
 #: po/custom/fromJson.txt:244
-#, fuzzy
 msgid "Back to Basics"
-msgstr "Nazad na standarde!"
+msgstr ""
 
 #: po/custom/fromJson.txt:245
 msgid "Battlefield repair unit"
@@ -5572,9 +5521,8 @@ msgid "Beta"
 msgstr ""
 
 #: po/custom/fromJson.txt:267
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Nova Kampanja"
+msgstr ""
 
 #: po/custom/fromJson.txt:268
 msgid "Body Points and Speed Increased"
@@ -5601,9 +5549,8 @@ msgid "Bomb damage +25%"
 msgstr "Šteta Bombe +25%"
 
 #: po/custom/fromJson.txt:279
-#, fuzzy
 msgid "Bombs lock on and guide themselves to the target"
-msgstr "Laserski pokazivač boje i vode bombe cilja"
+msgstr ""
 
 #: po/custom/fromJson.txt:281
 msgid "Bomb Upgrade"
@@ -5690,9 +5637,8 @@ msgid "Cannon damage +25%"
 msgstr "Šteta Topa +25%"
 
 #: po/custom/fromJson.txt:302
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Scavenger"
+msgstr ""
 
 #: po/custom/fromJson.txt:303
 msgid "Cannon Fortress"
@@ -5851,9 +5797,8 @@ msgid "Command Turret Scorpion Tracks"
 msgstr "AI unit"
 
 #: po/custom/fromJson.txt:346
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Zapovijedna Kupola 2"
+msgstr ""
 
 #: po/custom/fromJson.txt:347
 msgid "Command Turret Viper Tracks"
@@ -5880,9 +5825,8 @@ msgid "Computer guided shells"
 msgstr "Računalno vođena čahura"
 
 #: po/custom/fromJson.txt:353
-#, fuzzy
 msgid "Computer plots and guides shell to target's position"
-msgstr "Računalo predviđa i kompenzira ciljani pokret"
+msgstr ""
 
 #: po/custom/fromJson.txt:354
 msgid "Computer predicts and compensates for target's movement"
@@ -5913,18 +5857,16 @@ msgid "Construction Unit"
 msgstr "Građevinska Jedinica"
 
 #: po/custom/fromJson.txt:361
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "Kontrola do pet zapovjednika"
+msgstr ""
 
 #: po/custom/fromJson.txt:362
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "Ofenzivna baterija  nastavlja pucati dok je neprijateljska baterija potisnuta"
 
 #: po/custom/fromJson.txt:363
-#, fuzzy
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Ofenzivna-baterijska kupola detektira neprijateljsku neizravnu baterijsku vatru"
+msgstr ""
 
 #: po/custom/fromJson.txt:364
 msgid "Counter-battery turret detects enemy indirect fire batteries"
@@ -5963,9 +5905,8 @@ msgid "Cyborg Flamer"
 msgstr "Bacač Plamena"
 
 #: po/custom/fromJson.txt:373
-#, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Projekt Teško TIjelo"
+msgstr ""
 
 #: po/custom/fromJson.txt:374
 msgid "Cyborg High Intensity Thermal Armor"
@@ -5980,14 +5921,12 @@ msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:377
-#, fuzzy
 msgid "Cyborg Lancer"
-msgstr "Bacač Plamena"
+msgstr ""
 
 #: po/custom/fromJson.txt:378
-#, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Projekt Lagano tijelo"
+msgstr ""
 
 #: po/custom/fromJson.txt:380
 msgid "Cyborg Mechanic"
@@ -6170,29 +6109,24 @@ msgid "Enables self-repair"
 msgstr "Omogučava Samo-Popravljanje"
 
 #: po/custom/fromJson.txt:438
-#, fuzzy
 msgid "Enables self-repair in all base structures"
-msgstr "Omogučava Samo-Popravljanje"
+msgstr ""
 
 #: po/custom/fromJson.txt:439
-#, fuzzy
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Omogučava Samo-Popravljanje"
+msgstr ""
 
 #: po/custom/fromJson.txt:440
-#, fuzzy
 msgid "Enables self-repair in all defenses"
-msgstr "Omogučava Samo-Popravljanje"
+msgstr ""
 
 #: po/custom/fromJson.txt:441
-#, fuzzy
 msgid "Enables self-repair in all vehicles"
-msgstr "Omogučava Samo-Popravljanje"
+msgstr ""
 
 #: po/custom/fromJson.txt:442
-#, fuzzy
 msgid "Enemy"
-msgstr "Neprijateljska Baza"
+msgstr ""
 
 #: po/custom/fromJson.txt:443
 msgid "Engineering"
@@ -6211,9 +6145,8 @@ msgid "Expensive to produce"
 msgstr ""
 
 #: po/custom/fromJson.txt:447
-#, fuzzy
 msgid "Extended sensor range"
-msgstr "Produženi Senzorski Radijus"
+msgstr ""
 
 #: po/custom/fromJson.txt:448
 msgid "Extends CB Range"
@@ -6236,9 +6169,9 @@ msgid "Factory module enables medium and large bodies"
 msgstr "Tvornički moduli dopuštaju srednja i velika tijela"
 
 #: po/custom/fromJson.txt:455
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "Brzina proizvodnje tvornice +100% po modulu"
+msgstr ""
 
 #: po/custom/fromJson.txt:456
 msgid "Factory output speed +60%"
@@ -6297,9 +6230,8 @@ msgid "Fires heavy pulses of laser light"
 msgstr "Puca Tešske Pulsirane Lasersko Svijetlo"
 
 #: po/custom/fromJson.txt:470
-#, fuzzy
 msgid "Fires pulses of laser light"
-msgstr "Puca Tešske Pulsirane Lasersko Svijetlo"
+msgstr ""
 
 #: po/custom/fromJson.txt:471
 msgid "Fires salvoes of mini-rockets"
@@ -6390,9 +6322,8 @@ msgid "Gamma"
 msgstr ""
 
 #: po/custom/fromJson.txt:498
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Nova Kampanja"
+msgstr ""
 
 #: po/custom/fromJson.txt:499
 msgid "Gas turbine boosts power output"
@@ -6447,16 +6378,14 @@ msgid "Generates and concentrates bursts of laser energy"
 msgstr ""
 
 #: po/custom/fromJson.txt:512
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Research speed +80% (per minute)\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
 #: po/custom/fromJson.txt:513
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -6467,16 +6396,14 @@ msgstr ""
 
 #: po/custom/fromJson.txt:515
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Does not build defenses next to enemy oil derricks\n"
 "Never tries a truck rush"
 msgstr ""
 
 #: po/custom/fromJson.txt:516
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -6545,9 +6472,8 @@ msgid "Hardened Base Structure Materials Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:536
-#, fuzzy
 msgid "Hardened case machinegun bullets"
-msgstr "Čvršći MG meci"
+msgstr ""
 
 #: po/custom/fromJson.txt:537
 msgid "Hardened MG Bullets"
@@ -6578,9 +6504,8 @@ msgid "Hardpoint Cyclone AA Gun Available"
 msgstr "Teško Uporište Ciklon AA Oružje je Dostupno"
 
 #: po/custom/fromJson.txt:544
-#, fuzzy
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Teško Uporište  Vihor AA Top Dostupan"
+msgstr ""
 
 #: po/custom/fromJson.txt:545
 msgid "Hardpoint Vindicator SAM Site Available"
@@ -6599,9 +6524,8 @@ msgid "Heap Bomb Bay Mantis VTOL"
 msgstr ""
 
 #: po/custom/fromJson.txt:549
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:550
 msgid "HEAP Howitzer Shells"
@@ -6784,9 +6708,8 @@ msgid "Heavy Machinegun Hardpoint"
 msgstr "Teška Strojnica Teško Uporište"
 
 #: po/custom/fromJson.txt:601
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:602
 msgid "Heavy Machinegun Scorpion Tracks"
@@ -6881,19 +6804,16 @@ msgid "HE Mortar Shells Mk3"
 msgstr "HE Minobacački Čahure Mk3"
 
 #: po/custom/fromJson.txt:629
-#, fuzzy
 msgid "HE Rockets"
-msgstr "HE Mini Rockets"
+msgstr ""
 
 #: po/custom/fromJson.txt:630
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "HE Mini Rockets Mk2"
+msgstr ""
 
 #: po/custom/fromJson.txt:631
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "HE Mini Rockets Mk3"
+msgstr ""
 
 #: po/custom/fromJson.txt:632
 msgid "HESH Rocket Warhead"
@@ -6924,9 +6844,8 @@ msgid "Hi-Energy Laser Emitter Mk3"
 msgstr "Visoka Energetska Laserski Emiter Mk3"
 
 #: po/custom/fromJson.txt:639
-#, fuzzy
 msgid "High Density Base Structure Materials"
-msgstr "Pojačani materijal baznih građevina"
+msgstr ""
 
 #: po/custom/fromJson.txt:640
 msgid "High Explosive Anti-Tank Cannon Shells"
@@ -6937,34 +6856,28 @@ msgid "High Explosive Anti-Tank warhead"
 msgstr "Visoko Explozivne ProtuTenkovske bojne glave"
 
 #: po/custom/fromJson.txt:642
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Visoko Explozivne ProtuTenkovske bojne glave"
+msgstr ""
 
 #: po/custom/fromJson.txt:643
-#, fuzzy
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Visoko Eksplozivne Čahure"
+msgstr ""
 
 #: po/custom/fromJson.txt:644
-#, fuzzy
 msgid "High Explosive Armor Piercing Shells"
-msgstr "Visoko Eksplozivne Čahure"
+msgstr ""
 
 #: po/custom/fromJson.txt:647
-#, fuzzy
 msgid "High explosive artillery missile"
-msgstr "Visoko Eksplozivne Čahure"
+msgstr ""
 
 #: po/custom/fromJson.txt:649
-#, fuzzy
 msgid "High explosive heavy artillery missile"
-msgstr "Visoko Eksplozivne Čahure"
+msgstr ""
 
 #: po/custom/fromJson.txt:650
-#, fuzzy
 msgid "High explosive shaped charge missile"
-msgstr "Visoko Eksplozivne Čahure"
+msgstr ""
 
 #: po/custom/fromJson.txt:653
 msgid "High Intensity Thermal Armor"
@@ -7007,9 +6920,8 @@ msgid "Hover"
 msgstr "Lebdač"
 
 #: po/custom/fromJson.txt:666
-#, fuzzy
 msgid "Hover AI"
-msgstr "Lebdač 2"
+msgstr ""
 
 #: po/custom/fromJson.txt:667
 msgid "Hover II"
@@ -7196,14 +7108,12 @@ msgid "Improved Titanium-reinforced concrete"
 msgstr "Poboljšan Titaniumski-Beton"
 
 #: po/custom/fromJson.txt:719
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Poboljšane visoko explozivne čahure"
+msgstr ""
 
 #: po/custom/fromJson.txt:720
-#, fuzzy
 msgid "Improvement in laser emission density"
-msgstr "Poboljšana Toplinsko Emisijska Detektcija"
+msgstr ""
 
 #: po/custom/fromJson.txt:721
 msgid "Improvement in laser optics reduces light dispersal"
@@ -7302,19 +7212,16 @@ msgid "Increases Mortar ROF"
 msgstr "Povećava ROF minobacača"
 
 #: po/custom/fromJson.txt:766
-#, fuzzy
 msgid "Increases Rail Gun accuracy"
-msgstr "Povećava preciznost topa"
+msgstr ""
 
 #: po/custom/fromJson.txt:767
-#, fuzzy
 msgid "Increases Rail Gun damage"
-msgstr "Povećava štetu strojnica"
+msgstr ""
 
 #: po/custom/fromJson.txt:768
-#, fuzzy
 msgid "Increases Rail Gun ROF"
-msgstr "Povećava ROF strojnice"
+msgstr ""
 
 #: po/custom/fromJson.txt:771
 msgid "Increases Rocket accuracy"
@@ -7325,18 +7232,16 @@ msgid "Increases Rocket ROF"
 msgstr "Povećava ROF raketa"
 
 #: po/custom/fromJson.txt:777
-#, fuzzy
 msgid "Indirectweaponslab"
-msgstr "Novo oružje je dostupno"
+msgstr ""
 
 #: po/custom/fromJson.txt:778
 msgid "Inferior armor and body points to Cobra"
 msgstr "Inferiorni oklop i bodovi tijela neko kod Kobre"
 
 #: po/custom/fromJson.txt:779
-#, fuzzy
 msgid "Inferior armor and body points to Viper"
-msgstr "Inferiorni oklop i bodovi tijela neko kod Kobre"
+msgstr ""
 
 #: po/custom/fromJson.txt:780
 msgid "Inferno"
@@ -7351,9 +7256,8 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "AI unit"
 
 #: po/custom/fromJson.txt:783
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:784
 msgid "Inferno Emplacement"
@@ -7364,9 +7268,8 @@ msgid "Inferno Hardpoint"
 msgstr "Pakao Teško Uporište"
 
 #: po/custom/fromJson.txt:786
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:787
 msgid "Initial AI, now supplanted by NullBot"
@@ -7381,14 +7284,12 @@ msgid "Ionizing Turbine Engine"
 msgstr "ionizirajući turbinski motor"
 
 #: po/custom/fromJson.txt:790
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Bacač Plamena Toranj"
+msgstr ""
 
 #: po/custom/fromJson.txt:791
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Senzor Kupola"
+msgstr ""
 
 #: po/custom/fromJson.txt:792
 msgid "Jeep"
@@ -7428,7 +7329,7 @@ msgstr "Lancer AT raketa"
 
 #: po/custom/fromJson.txt:801
 msgid "Lancer Bunker"
-msgstr "Lancer Bunker"
+msgstr ""
 
 #: po/custom/fromJson.txt:802
 msgid "Lancer Cobra Half-tracks"
@@ -7491,9 +7392,8 @@ msgid "Laser designator paints and guides bombs to the target"
 msgstr "Laserski pokazivač boje i vode bombe cilja"
 
 #: po/custom/fromJson.txt:818
-#, fuzzy
 msgid "Laser designator paints and guides rounds to the target"
-msgstr "Laserski pokazivač boje i vode bombe cilja"
+msgstr ""
 
 #: po/custom/fromJson.txt:819
 msgid "Laser - Flashlight"
@@ -7504,9 +7404,8 @@ msgid "Laser Guided Bombsight"
 msgstr ""
 
 #: po/custom/fromJson.txt:821
-#, fuzzy
 msgid "Laseropticslab"
-msgstr "Laserska Optika Laboratiorij"
+msgstr ""
 
 #: po/custom/fromJson.txt:822
 msgid "Laser reload time -15%"
@@ -7530,7 +7429,7 @@ msgstr "Slojevi kompozitnih slitina i energetsko upijanje vlakana"
 
 #: po/custom/fromJson.txt:828
 msgid "Leopard"
-msgstr "Leopard"
+msgstr ""
 
 #: po/custom/fromJson.txt:829
 msgid "Less armor and body points than Python"
@@ -7649,9 +7548,8 @@ msgid "Maximum armor and body points"
 msgstr "Maksimalni oklop i bodova tijela"
 
 #: po/custom/fromJson.txt:866
-#, fuzzy
 msgid "May be assigned to follow units"
-msgstr "Može biti zadan senzorima"
+msgstr ""
 
 #: po/custom/fromJson.txt:867
 msgid "May be targeted directly or assigned to a sensor turret or tower"
@@ -7690,9 +7588,8 @@ msgid "Medium Cannon"
 msgstr "Srednji Top"
 
 #: po/custom/fromJson.txt:876
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:877
 msgid "Medium Cannon Cobra Hover"
@@ -7751,9 +7648,8 @@ msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "AI unit"
 
 #: po/custom/fromJson.txt:891
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:892
 msgid "Mini-Rocket Array Viper Wheels"
@@ -7796,9 +7692,8 @@ msgid "Mini-Rocket Tower"
 msgstr "Mini Raketni Toranj"
 
 #: po/custom/fromJson.txt:903
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:904
 msgid "Mini-Rocket Viper Wheels"
@@ -7837,14 +7732,12 @@ msgid "Mobile Repair Turret"
 msgstr ""
 
 #: po/custom/fromJson.txt:915
-#, fuzzy
 msgid "More armor and body points than Python"
-msgstr "Manje oklopa i bodova tijela nego Piton"
+msgstr ""
 
 #: po/custom/fromJson.txt:916
-#, fuzzy
 msgid "More armor and body points than Vengeance"
-msgstr "Manje oklopa i bodova tijela nego Piton"
+msgstr ""
 
 #: po/custom/fromJson.txt:917
 msgid "Mortar"
@@ -7959,9 +7852,8 @@ msgid "New Advanced Weapon Available"
 msgstr "Novo Napredno Oružje je Dostupno"
 
 #: po/custom/fromJson.txt:949
-#, fuzzy
 msgid "New Artillery Missile Turret Available"
-msgstr "Nova Kupola Projektila je Dostupna"
+msgstr ""
 
 #: po/custom/fromJson.txt:950
 msgid "New automated repair techniques"
@@ -7976,9 +7868,8 @@ msgid "New battlefield computer system"
 msgstr "Novi bojni računalni sustav"
 
 #: po/custom/fromJson.txt:954
-#, fuzzy
 msgid "New Construction Options Available"
-msgstr "Nova opcija istraživanja je dostupna"
+msgstr ""
 
 #: po/custom/fromJson.txt:957
 msgid "New Cyborg Research Available"
@@ -8021,23 +7912,20 @@ msgid "New Propulsion Available"
 msgstr "Novi Pogon je Dostupan"
 
 #: po/custom/fromJson.txt:972
-#, fuzzy
 msgid "New Propulsion Available for Design"
-msgstr "Novi Pogon je Dostupan"
+msgstr ""
 
 #: po/custom/fromJson.txt:974
-#, fuzzy
 msgid "New Rail Gun Available"
-msgstr "Laser AA Top Dostupan"
+msgstr ""
 
 #: po/custom/fromJson.txt:975
 msgid "New Repair Facility Repairs Damaged Units"
 msgstr "Novi objekt za popravak ostečenih jedinica"
 
 #: po/custom/fromJson.txt:976
-#, fuzzy
 msgid "New Repair Technology Discovered"
-msgstr "Nova Elektronska Tehnologija je Otkrivena"
+msgstr ""
 
 #: po/custom/fromJson.txt:977
 msgid "New research options available"
@@ -8056,9 +7944,8 @@ msgid "New System Available"
 msgstr "Novi Sistem Dostupan"
 
 #: po/custom/fromJson.txt:983
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "novi sustavi toranja je dostupno"
+msgstr ""
 
 #: po/custom/fromJson.txt:984
 msgid "New Systems Structure Available"
@@ -8073,23 +7960,20 @@ msgid "New Systems Turret Available for Design"
 msgstr "Novi infrastrukturni alat dostupan"
 
 #: po/custom/fromJson.txt:988
-#, fuzzy
 msgid "New Systems Turret Available For Design"
-msgstr "Novi infrastrukturni alat dostupan"
+msgstr ""
 
 #: po/custom/fromJson.txt:990
-#, fuzzy
 msgid "New Thermal Emissions detection"
-msgstr "Poboljšana Toplinsko Emisijska Detektcija"
+msgstr ""
 
 #: po/custom/fromJson.txt:991
 msgid "New VTOL Missile Launcher"
 msgstr "Novi VTOL Projektil Lanser"
 
 #: po/custom/fromJson.txt:993
-#, fuzzy
 msgid "Nexus"
-msgstr "Nexus Veza"
+msgstr ""
 
 #: po/custom/fromJson.txt:994
 msgid "NEXUS CWall"
@@ -8124,9 +8008,8 @@ msgid "NEXUS Medium Body"
 msgstr "NEXUS Osrednje Tijelo"
 
 #: po/custom/fromJson.txt:1002
-#, fuzzy
 msgid "Nexus Missile Silo"
-msgstr "Raketni Silo"
+msgstr ""
 
 #: po/custom/fromJson.txt:1004
 msgid "NEXUS Resistance Circuits"
@@ -8149,10 +8032,9 @@ msgid "No Place To Hide"
 msgstr ""
 
 #: po/custom/fromJson.txt:1009
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "Elita"
+msgstr ""
 
 #: po/custom/fromJson.txt:1010
 msgctxt "rank"
@@ -8160,46 +8042,39 @@ msgid "Green"
 msgstr ""
 
 #: po/custom/fromJson.txt:1011
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Junak"
+msgstr ""
 
 #: po/custom/fromJson.txt:1012
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "Profesionalac"
+msgstr ""
 
 #: po/custom/fromJson.txt:1013
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "Normalan"
+msgstr ""
 
 #: po/custom/fromJson.txt:1014
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "Novak"
+msgstr ""
 
 #: po/custom/fromJson.txt:1015
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "Specijal"
+msgstr ""
 
 #: po/custom/fromJson.txt:1016
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "Treniran"
+msgstr ""
 
 #: po/custom/fromJson.txt:1017
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Veteran"
+msgstr ""
 
 #: po/custom/fromJson.txt:1018
 msgid "NullBot"
@@ -8226,28 +8101,24 @@ msgid "On-board computer predicts target movement"
 msgstr "On-board računala predviđa ciljani pokret"
 
 #: po/custom/fromJson.txt:1024
-#, fuzzy
 msgid "On-board diagnostic and repair systems"
-msgstr "Poboljšana NEXUS otpora strujnih krugova"
+msgstr ""
 
 #: po/custom/fromJson.txt:1025
-#, fuzzy
 msgid "On-board resistance circuit systems"
-msgstr "Poboljšana NEXUS otpora strujnih krugova"
+msgstr ""
 
 #: po/custom/fromJson.txt:1027
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr ""
 
 #: po/custom/fromJson.txt:1029
-#, fuzzy
 msgid "Original Campaign"
-msgstr "Nova Kampanja"
+msgstr ""
 
 #: po/custom/fromJson.txt:1030
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Okršaj za 1 igrača"
+msgstr ""
 
 #: po/custom/fromJson.txt:1031
 msgid "Or select the Repair Facility as a unit's target"
@@ -8302,9 +8173,8 @@ msgid "Plasma Cannon firing plasma"
 msgstr "Plasma Top puca plazmu"
 
 #: po/custom/fromJson.txt:1044
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:1045
 msgid "Plasmite Bomb"
@@ -8319,14 +8189,12 @@ msgid "Plasmite Flamer Bunker"
 msgstr "Plasma Bacač Bunker"
 
 #: po/custom/fromJson.txt:1048
-#, fuzzy
 msgid "Plasmite Flame-thrower"
-msgstr "Plasma Bacač"
+msgstr ""
 
 #: po/custom/fromJson.txt:1049
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:1050
 msgid "Plasteel"
@@ -8361,9 +8229,8 @@ msgid "Power Generator"
 msgstr "Generator"
 
 #: po/custom/fromJson.txt:1058
-#, fuzzy
 msgid "Powerlab"
-msgstr "Resursi"
+msgstr ""
 
 #: po/custom/fromJson.txt:1059
 msgid "Power Module"
@@ -8390,14 +8257,12 @@ msgid "Produces Cyborgs"
 msgstr "Proizvodi Kiborge"
 
 #: po/custom/fromJson.txt:1067
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Kolektiv Teško Tijelo"
+msgstr ""
 
 #: po/custom/fromJson.txt:1068
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Kolektvi Lagano Tijelo"
+msgstr ""
 
 #: po/custom/fromJson.txt:1069
 msgid "Project Medium Body"
@@ -8424,27 +8289,24 @@ msgid "Pulse Laser Hardpoint"
 msgstr "Teški Pulsirani Laser Uporište"
 
 #: po/custom/fromJson.txt:1076
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:1077
 msgid "Pulse Laser Mantis Tracks"
 msgstr "AI unit"
 
 #: po/custom/fromJson.txt:1078
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:1079
 msgid "Pulse Laser Python Tracks"
 msgstr "AI unit"
 
 #: po/custom/fromJson.txt:1080
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:1081
 msgid "Pulse Laser Tiger Tracks"
@@ -8479,9 +8341,8 @@ msgid "Radar Detector"
 msgstr "Radar Detektor"
 
 #: po/custom/fromJson.txt:1091
-#, fuzzy
 msgid "Radar detector detects enemy sensors"
-msgstr "Radarski detektorski toranj detektira neprijateljske senzore"
+msgstr ""
 
 #: po/custom/fromJson.txt:1092
 msgid "Radar Detector Tower"
@@ -8492,14 +8353,12 @@ msgid "Rail Gun"
 msgstr ""
 
 #: po/custom/fromJson.txt:1094
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Preciznost Topa +10%"
+msgstr ""
 
 #: po/custom/fromJson.txt:1095
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Šteta Strojnice +25%"
+msgstr ""
 
 #: po/custom/fromJson.txt:1096
 msgid "Railgun Emplacement"
@@ -8522,9 +8381,8 @@ msgid "Rail Gun Mantis Tracks"
 msgstr "AI unit"
 
 #: po/custom/fromJson.txt:1101
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Vrijeme punjenja Strojnice -15%"
+msgstr ""
 
 #: po/custom/fromJson.txt:1102
 msgid "Rail Gun ROF"
@@ -8539,14 +8397,12 @@ msgid "Rail Gun ROF Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:1105
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:1106
-#, fuzzy
 msgid "Rail Gun Upgrade"
-msgstr "Nadogradnja Strojnice"
+msgstr ""
 
 #: po/custom/fromJson.txt:1107
 msgid "Rail Target Prediction Computer"
@@ -8589,9 +8445,8 @@ msgid "Reinforced Base Structure Materials Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:1121
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Objetk za Popravak"
+msgstr ""
 
 #: po/custom/fromJson.txt:1122
 msgid "Repair Cobra Tracks"
@@ -8638,9 +8493,8 @@ msgid "Replaces all machineguns"
 msgstr "Zamjenjuje sve strojnice"
 
 #: po/custom/fromJson.txt:1136
-#, fuzzy
 msgid "Requires cyborg factory to produce"
-msgstr "Treba Kiborg tvornica za proizvodnju"
+msgstr ""
 
 #: po/custom/fromJson.txt:1138
 msgid "Requires heavy VTOL factory to produce"
@@ -8675,14 +8529,12 @@ msgid "Research speed +30%"
 msgstr "Brzina istraživanja +30%"
 
 #: po/custom/fromJson.txt:1147
-#, fuzzy
 msgid "Research speed +40% (per minute)"
-msgstr "Brzina istraživanja +30%"
+msgstr ""
 
 #: po/custom/fromJson.txt:1148
-#, fuzzy
 msgid "Research speed +60% (per minute)"
-msgstr "Brzina istraživanja +30%"
+msgstr ""
 
 #: po/custom/fromJson.txt:1149
 msgid "Research speed +85%"
@@ -8841,9 +8693,8 @@ msgid "Ruined Factory"
 msgstr ""
 
 #: po/custom/fromJson.txt:1191
-#, fuzzy
 msgid "SAM site with Avenger missiles"
-msgstr "Teško oklopno uporište sa Lancer AT projektilom"
+msgstr ""
 
 #: po/custom/fromJson.txt:1192
 msgid "SAM site with Vindicator missiles"
@@ -8851,7 +8702,7 @@ msgstr ""
 
 #: po/custom/fromJson.txt:1194
 msgid "Scavenger"
-msgstr "Scavenger"
+msgstr ""
 
 #: po/custom/fromJson.txt:1195
 msgid "Scavenger AT-Rocket Pit"
@@ -8926,18 +8777,16 @@ msgid "Scourge Missile Tower"
 msgstr ""
 
 #: po/custom/fromJson.txt:1213
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "AI unit"
+msgstr ""
 
 #: po/custom/fromJson.txt:1214
 msgid "Scourge Python Tracks"
 msgstr "AI unit"
 
 #: po/custom/fromJson.txt:1215
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Plačenik"
+msgstr ""
 
 #: po/custom/fromJson.txt:1216
 msgid "Scrambler Turret"
@@ -8956,9 +8805,8 @@ msgid "Select new targets to continue the VTOL strikes"
 msgstr ""
 
 #: po/custom/fromJson.txt:1222
-#, fuzzy
 msgid "Self-guided rocket-powered shells"
-msgstr "Samo-Navođeni Raketni Pogon Čahure"
+msgstr ""
 
 #: po/custom/fromJson.txt:1223
 msgid "Self-Replicating Manufacturing"
@@ -9069,14 +8917,12 @@ msgid "Stabilized Mini-Rockets Mk2"
 msgstr "Stabilizirana Mini Rakete Mk2"
 
 #: po/custom/fromJson.txt:1253
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "Stabilizirana Mini Rakete"
+msgstr ""
 
 #: po/custom/fromJson.txt:1254
-#, fuzzy
 msgid "Steals technology from enemies"
-msgstr "Šalji tehnološke podatke"
+msgstr ""
 
 #: po/custom/fromJson.txt:1255
 msgid "Steals technology from structures and takes control of weapons"
@@ -9111,9 +8957,8 @@ msgid "Sunburst AA"
 msgstr ""
 
 #: po/custom/fromJson.txt:1263
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Mini Raketna Mreža"
+msgstr ""
 
 #: po/custom/fromJson.txt:1264
 msgid "Sunburst AA Site"
@@ -9136,9 +8981,8 @@ msgid "Superdense Composite Alloys"
 msgstr ""
 
 #: po/custom/fromJson.txt:1271
-#, fuzzy
 msgid "Superdense composite alloys and energy-absorbing fibres"
-msgstr "Slojevi kompozitnih slitina i energetsko upijanje vlakana"
+msgstr ""
 
 #: po/custom/fromJson.txt:1272
 msgid "Superdense Composite Alloys Mk2"
@@ -9174,19 +9018,16 @@ msgstr "SuperPogodak Plasma gel Mk3"
 
 #: po/custom/fromJson.txt:1288
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transport"
+msgstr ""
 
 #: po/custom/fromJson.txt:1289
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Kiborg Transport je Dostupan"
+msgstr ""
 
 #: po/custom/fromJson.txt:1290
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Transport"
+msgstr ""
 
 #: po/custom/fromJson.txt:1291
 msgid "Surface-to-air missile"
@@ -9221,9 +9062,8 @@ msgid "Synaptic Link Scrambler technology"
 msgstr ""
 
 #: po/custom/fromJson.txt:1299
-#, fuzzy
 msgid "Synaptic Link technology breakthrough"
-msgstr "Proboj Kompjuterske Tehnologije"
+msgstr ""
 
 #: po/custom/fromJson.txt:1300
 msgid "Systems Research Completed"
@@ -9366,9 +9206,8 @@ msgid "Tiger"
 msgstr "Tigar"
 
 #: po/custom/fromJson.txt:1337
-#, fuzzy
 msgid "Titanium-reinforced concrete"
-msgstr "Poboljšan Titaniumski-Beton"
+msgstr ""
 
 #: po/custom/fromJson.txt:1338
 msgid "Tower wars AI, based on NullBot"
@@ -9397,7 +9236,7 @@ msgstr "Gusjenice 3"
 #: po/custom/fromJson.txt:1345
 #: src/design.cpp:1054
 msgid "Transport"
-msgstr "Transport"
+msgstr ""
 
 #: po/custom/fromJson.txt:1346
 msgid "Transport Body"
@@ -9496,9 +9335,8 @@ msgid "Twin Medium Anti-Aircraft Laser"
 msgstr "Srednji Anti-Avionski Laserski Blizanci"
 
 #: po/custom/fromJson.txt:1373
-#, fuzzy
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Više cijevna, rapidna strojnica"
+msgstr ""
 
 #: po/custom/fromJson.txt:1374
 msgid "Two-faced"
@@ -9533,9 +9371,8 @@ msgid "Uses advanced cannon technology"
 msgstr "Koristi napredno tehnološko topovsko oružje"
 
 #: po/custom/fromJson.txt:1382
-#, fuzzy
 msgid "Uses advanced mass driver railgun technology"
-msgstr "Koristi napredno tehnološko projektilno oružje"
+msgstr ""
 
 #: po/custom/fromJson.txt:1383
 msgid "Uses advanced missile gun technology"
@@ -9550,9 +9387,8 @@ msgid "Use the Command Console to send units back for repair"
 msgstr "Koristi komandu konzolu za slanje jedinica na popravak"
 
 #: po/custom/fromJson.txt:1386
-#, fuzzy
 msgid "Vapor Turbine boosts power output"
-msgstr "Plinske turbine pojačava izlaznu snagu"
+msgstr ""
 
 #: po/custom/fromJson.txt:1387
 msgid "Vapor Turbine Generator"
@@ -9675,9 +9511,8 @@ msgid "VTOL CB Tower"
 msgstr "VTOL CB Toranj"
 
 #: po/custom/fromJson.txt:1423
-#, fuzzy
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "Ofenzivna-baterijska kupola detektira neprijateljsku neizravnu baterijsku vatru"
+msgstr ""
 
 #: po/custom/fromJson.txt:1424
 msgid "VTOL CB Turret"
@@ -9708,9 +9543,8 @@ msgid "VTOL Factory"
 msgstr "VTOL Tvornica"
 
 #: po/custom/fromJson.txt:1432
-#, fuzzy
 msgid "VTOL factory enables VTOL production"
-msgstr "Dodijeli proizvodnju Avionske Tvornice"
+msgstr ""
 
 #: po/custom/fromJson.txt:1433
 msgid "VTOL Flashlight"
@@ -9922,11 +9756,10 @@ msgstr ""
 
 #: po/custom/fromJson.txt:1490
 msgid "Wyvern"
-msgstr "Wyvern"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -9964,9 +9797,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Spermi igru"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -9983,9 +9815,8 @@ msgid "Debug mode now enabled!"
 msgstr ""
 
 #: src/cheat.cpp:180
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Meni za varanje je otvoren."
+msgstr ""
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:86
@@ -10034,18 +9865,16 @@ msgid "Play in fullscreen mode"
 msgstr "Igraj u punom ekranu"
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Učitaj specifičnu igru"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
 msgstr ""
 
 #: src/clparse.cpp:265
-#, fuzzy
 msgid "Show options and exit"
-msgstr "Pokaži verziju i izađi"
+msgstr ""
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -10055,7 +9884,7 @@ msgstr ""
 #: src/clparse.cpp:267
 #: src/clparse.cpp:268
 msgid "mod"
-msgstr "mod"
+msgstr ""
 
 #: src/clparse.cpp:267
 msgid "Enable a campaign only mod"
@@ -10074,9 +9903,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Učitaj sačuvanu igru"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -10084,9 +9912,8 @@ msgid "savegame"
 msgstr "sačuvaj igru"
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Učitaj sačuvanu igru"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -10126,7 +9953,7 @@ msgstr ""
 
 #: src/clparse.cpp:280
 msgid "host"
-msgstr "host"
+msgstr ""
 
 #: src/clparse.cpp:281
 msgid "Go directly to host screen"
@@ -10149,9 +9976,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "sačuvaj igru"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -10162,27 +9988,24 @@ msgid "test"
 msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "Igra se ne može spremiti"
+msgstr ""
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
 msgstr ""
 
 #: src/clparse.cpp:288
-#, fuzzy
 msgid "autohost"
-msgstr "host"
+msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Izaći iz Igre"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -10330,14 +10153,12 @@ msgid "Systems"
 msgstr "Sistemi"
 
 #: src/design.cpp:4283
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "Izbriši dizajn"
+msgstr ""
 
 #: src/design.cpp:4288
-#, fuzzy
 msgid "Store Design"
-msgstr "Novi dizajn"
+msgstr ""
 
 #: src/display3d.cpp:676
 msgid "Player left"
@@ -10377,9 +10198,9 @@ msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Jedinica Izgubljena!"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -10391,6 +10212,7 @@ msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:1932
 #, c-format
@@ -10398,6 +10220,7 @@ msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:1943
 #, c-format
@@ -10405,6 +10228,7 @@ msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:1947
 #, c-format
@@ -10412,6 +10236,7 @@ msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -10446,14 +10271,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Nastavi igru"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Novi Sistem Dostupan"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -10528,14 +10351,12 @@ msgid "Challenges"
 msgstr "Izazovi"
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Učitaj Igru"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Početi Trening Igru"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -10547,21 +10368,18 @@ msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
 #: src/frontend.cpp:416
-#, fuzzy
 msgid "CAMPAIGNS"
-msgstr "KAMPANJA JEDAN"
+msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Učitaj Sačuvanu Igru"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Učitaj Sačuvanu Igru"
+msgstr ""
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -10599,9 +10417,8 @@ msgid "Video Options"
 msgstr "Video opcije"
 
 #: src/frontend.cpp:685
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "Audio opcije"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
@@ -10630,9 +10447,8 @@ msgstr "Puni Ekran"
 #: src/frontend.cpp:752
 #: src/frontend.cpp:903
 #: src/frontend.cpp:1683
-#, fuzzy
 msgid "Unsupported"
-msgstr "Transport"
+msgstr ""
 
 #: src/frontend.cpp:749
 #: src/frontend.cpp:758
@@ -10666,9 +10482,8 @@ msgid "On"
 msgstr "Uključeno"
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Rotating"
-msgstr "Zakreni u desno"
+msgstr ""
 
 #: src/frontend.cpp:768
 msgid "Fixed"
@@ -10679,9 +10494,8 @@ msgid "Instant"
 msgstr ""
 
 #: src/frontend.cpp:773
-#, fuzzy
 msgid "Tracked"
-msgstr "Gusjenice"
+msgstr ""
 
 #: src/frontend.cpp:786
 #: src/ingameop.cpp:517
@@ -10718,14 +10532,12 @@ msgid "GRAPHICS OPTIONS"
 msgstr "OPCIJE SLIKE"
 
 #: src/frontend.cpp:906
-#, fuzzy
 msgid "Disabled"
-msgstr "Iskljući zvuk"
+msgstr ""
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Enabled"
-msgstr "Ukljući zvuk"
+msgstr ""
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
@@ -10773,9 +10585,8 @@ msgstr ""
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "OPCIJE ZVUKA"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -10786,28 +10597,24 @@ msgid "Graphics Mode*"
 msgstr "Grafički način"
 
 #: src/frontend.cpp:1137
-#, fuzzy
 msgid "Graphics Mode"
-msgstr "Grafički način"
+msgstr ""
 
 #: src/frontend.cpp:1142
 msgid "Resolution*"
 msgstr "Rezolucija*"
 
 #: src/frontend.cpp:1142
-#, fuzzy
 msgid "Resolution"
-msgstr "Rezolucija*"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale*"
-msgstr "Pokaži opcije"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale"
-msgstr "Pokaži opcije"
+msgstr ""
 
 #: src/frontend.cpp:1191
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -10823,14 +10630,12 @@ msgstr "Veličina tekstura*"
 
 #: src/frontend.cpp:1239
 #: src/ingameop.cpp:630
-#, fuzzy
 msgid "Vertical sync"
-msgstr "Verikarno osvježivanje*"
+msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "Talijanski"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
@@ -10853,14 +10658,12 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Brzina igre resetirana"
+msgstr ""
 
 #: src/frontend.cpp:1561
-#, fuzzy
 msgid "Camera Pitch"
-msgstr "Resetiraj nagib"
+msgstr ""
 
 #: src/frontend.cpp:1576
 #: src/ingameop.cpp:697
@@ -10879,21 +10682,18 @@ msgstr "Zamjeni Tipke Miša"
 
 #: src/frontend.cpp:1590
 #: src/ingameop.cpp:715
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Zakreni u lijevo"
+msgstr ""
 
 #: src/frontend.cpp:1594
 #: src/ingameop.cpp:720
-#, fuzzy
 msgid "Colored Cursors"
-msgstr "Obojeni Kursori*"
+msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Tablica zakreni lijevo"
+msgstr ""
 
 #: src/frontend.cpp:1602
 msgid "MOUSE OPTIONS"
@@ -10925,33 +10725,28 @@ msgstr "Jezik"
 
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Težina"
+msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
-#, fuzzy
 msgid "Camera Speed"
-msgstr "Brzina na Vodi"
+msgstr ""
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "Boja"
+msgstr ""
 
 #: src/frontend.cpp:1744
 #: src/frontend.cpp:1780
-#, fuzzy
 msgid "Campaign"
-msgstr "Nova Kampanja"
+msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Više Igrača"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -10966,9 +10761,8 @@ msgstr "Modifikacija:"
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "Igra spremljena:"
+msgstr ""
 
 #: src/hci.cpp:1566
 #, c-format
@@ -10986,9 +10780,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Igrač %u vara, postavio si je : %s"
 
 #: src/hci.cpp:1607
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Igrač %u vara, postavio si je : %s"
+msgstr ""
 
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
@@ -11009,14 +10803,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -11029,13 +10821,11 @@ msgid "Loop Production"
 msgstr "Ponovi proizvodnju"
 
 #: src/hci.cpp:3840
-#, fuzzy
 msgid "Ally progress"
-msgstr "Bodovi za Gradnju"
+msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -11044,9 +10834,8 @@ msgid "Chat: All"
 msgstr ""
 
 #: src/hci.cpp:4959
-#, fuzzy
 msgid "Chat: Team"
-msgstr "Timovi"
+msgstr ""
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -11065,9 +10854,8 @@ msgstr "UPOZORENJE: Ti si host. Ako izađeš, igra završava za sve!"
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Izađi"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -11115,41 +10903,34 @@ msgid "View Key Mappings"
 msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Nova Kampanja"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Početi Trening Igru"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
 #: src/intdisplay.cpp:164
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Čekanje na ostale igrače"
+msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "Bodovi za Gradnju"
+msgstr ""
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
 msgstr "Proces gradnje"
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Poboljšano Istraživanje"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -11308,24 +11089,21 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Dobro, dometi se više neće prikazivati..."
 
 #: src/keybind.cpp:326
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "Pogled na sjever"
+msgstr ""
 
 #: src/keybind.cpp:336
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "Pogled na sjever"
+msgstr ""
 
 #: src/keybind.cpp:346
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "Pogled na sjever"
+msgstr ""
 
 #: src/keybind.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Igrač %u vara, postavio si je : %s"
+msgstr ""
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -11461,9 +11239,8 @@ msgid "Debug menu is Open"
 msgstr "Meni za varanje je otvoren."
 
 #: src/keybind.cpp:1558
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Nemaš ni jedan kamion."
+msgstr ""
 
 #: src/keybind.cpp:1722
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -11527,14 +11304,14 @@ msgid "Game Speed Reset"
 msgstr "Brzina igre resetirana"
 
 #: src/keybind.cpp:2547
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Brzin povečana na %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2551
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Brzina smanjena na %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2609
 msgid "Radar showing friend-foe colors"
@@ -11601,18 +11378,16 @@ msgid "Commanders"
 msgstr "Kapetani"
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Spermi igru"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr "Karta"
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "Učitaj Igru"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -11635,9 +11410,8 @@ msgid "View Location of Previous Message"
 msgstr "Pokaži izvor prošle poruke"
 
 #: src/keymap.cpp:311
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Konzola"
+msgstr ""
 
 #: src/keymap.cpp:315
 msgid "Assign Group 0"
@@ -11868,9 +11642,8 @@ msgid "Toggle Overlays"
 msgstr "Namjesti slojeve"
 
 #: src/keymap.cpp:383
-#, fuzzy
 msgid "Toggle Console History "
-msgstr "Konzola"
+msgstr ""
 
 #: src/keymap.cpp:384
 msgid "Toggle Team Chat History"
@@ -11897,33 +11670,28 @@ msgid "Stop Droid"
 msgstr ""
 
 #: src/keymap.cpp:403
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "Pošalji poruku"
+msgstr ""
 
 #: src/keymap.cpp:404
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "Pošalji poruku"
+msgstr ""
 
 #: src/keymap.cpp:405
 msgid "Drop a beacon"
 msgstr ""
 
 #: src/keymap.cpp:407
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "Ukljući sjene"
+msgstr ""
 
 #: src/keymap.cpp:408
-#, fuzzy
 msgid "Trap cursor"
-msgstr "Zarobi Kursor"
+msgstr ""
 
 #: src/keymap.cpp:409
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Karta"
+msgstr ""
 
 #: src/keymap.cpp:410
 msgid "Toggle ally-enemy radar view"
@@ -11938,9 +11706,8 @@ msgid "Select all Combat Units"
 msgstr "Odaberi sve borbene jedinice"
 
 #: src/keymap.cpp:421
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Odaberi sve Lebdeće"
+msgstr ""
 
 #: src/keymap.cpp:422
 msgid "Select all Heavily Damaged Units"
@@ -11971,9 +11738,8 @@ msgid "Select all VTOLs"
 msgstr "Odaberi sve Avione"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "Odaberi sve Avione"
+msgstr ""
 
 #: src/keymap.cpp:431
 msgid "Select all Wheels"
@@ -11988,44 +11754,36 @@ msgid "Select all Similar Units"
 msgstr "Odaberi sve slične jedinice"
 
 #: src/keymap.cpp:437
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Odaberi sve borbene jedinice"
+msgstr ""
 
 #: src/keymap.cpp:438
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Odaberi sve Lebdeće"
+msgstr ""
 
 #: src/keymap.cpp:439
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Odaberi sve borbene jedinice"
+msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Odaberi sve Gusjeničare"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Odaberi sve Gusjeničare"
+msgstr ""
 
 #: src/keymap.cpp:442
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Odaberi sve Gusjeničare"
+msgstr ""
 
 #: src/keymap.cpp:443
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Odaberi sve slične jedinice"
+msgstr ""
 
 #: src/keymap.cpp:444
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Odaberi sve Gusjeničare"
+msgstr ""
 
 #: src/keymap.cpp:448
 msgid "Select next Factory"
@@ -12056,23 +11814,20 @@ msgid "Toggle display of gateways"
 msgstr ""
 
 #: src/keymap.cpp:457
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "Namjesti slojeve"
+msgstr ""
 
 #: src/keymap.cpp:458
-#, fuzzy
 msgid "Raise tile height"
-msgstr "Zakreni u desno"
+msgstr ""
 
 #: src/keymap.cpp:459
 msgid "Lower tile height"
 msgstr ""
 
 #: src/keymap.cpp:460
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "Promjeni stanje(prijatelj/neprijatelj)"
+msgstr ""
 
 #: src/keymap.cpp:461
 msgid "Trigger some weather"
@@ -12087,29 +11842,24 @@ msgid "Make a performance measurement sample"
 msgstr ""
 
 #: src/keymap.cpp:466
-#, fuzzy
 msgid "Make all items available"
-msgstr "Sada je sve (baš SVE) dostupno"
+msgstr ""
 
 #: src/keymap.cpp:467
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "Predaj jedinice"
+msgstr ""
 
 #: src/keymap.cpp:468
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "Promjeni stanje(prijatelj/neprijatelj)"
+msgstr ""
 
 #: src/keymap.cpp:469
-#, fuzzy
 msgid "Display Options Screen"
-msgstr "Pokaži opcije"
+msgstr ""
 
 #: src/keymap.cpp:470
-#, fuzzy
 msgid "Complete current research"
-msgstr "Dopušta istraživanje zapovjedne kupole"
+msgstr ""
 
 #: src/keymap.cpp:471
 msgid "Reveal map at mouse position"
@@ -12120,9 +11870,8 @@ msgid "Trace a game object"
 msgstr ""
 
 #: src/loadsave.cpp:311
-#, fuzzy
 msgid "Parent directory"
-msgstr "Radar Detektor"
+msgstr ""
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory"
@@ -12203,9 +11952,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s ti daje tehnološke informacije"
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s ti daje %u resursa"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -12233,15 +11982,13 @@ msgid "You Discover Blueprints For %s"
 msgstr "Našao si nacrte za %s"
 
 #: src/multiint.cpp:223
-#, fuzzy
 msgid "Medium"
-msgstr "Brzina: Srednje"
+msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Kapetani"
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -12265,34 +12012,29 @@ msgid "Tanks disabled!!"
 msgstr ""
 
 #: src/multiint.cpp:1063
-#, fuzzy
 msgid "Cyborgs disabled."
-msgstr "Novi Kiborgi su dostupni"
+msgstr ""
 
 #: src/multiint.cpp:1064
 msgid "VTOLs disabled."
 msgstr ""
 
 #: src/multiint.cpp:1065
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Satelistki Uplink Centar"
+msgstr ""
 
 #: src/multiint.cpp:1066
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Laserski Satelitski Zapovijedni postaja"
+msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Postavi limite"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Odaberi naziv igre"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -12303,8 +12045,7 @@ msgid "Select Game Name"
 msgstr "Odaberi naziv igre"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -12348,13 +12089,11 @@ msgid "Set Structure Limits"
 msgstr "Postavi limite"
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "Opcije Igre"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -12380,23 +12119,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Započni sa naprednim bazama"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Igrač"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Započni sa naprednim bazama"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -12415,33 +12151,28 @@ msgid "Team"
 msgstr "Savez"
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Odaberi lozinku"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for player"
-msgstr "Čekanje na ostale igrače"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Igrač Pao"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Igrač Pao"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
 msgstr "Označi kada si spreman"
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for download"
-msgstr "Čekanje na ostale igrače"
+msgstr ""
 
 #: src/multiint.cpp:2072
 msgid "READY?"
@@ -12452,37 +12183,32 @@ msgid "PLAYERS"
 msgstr "Igrači"
 
 #: src/multiint.cpp:2149
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Odaberi lozinku"
+msgstr ""
 
 #: src/multiint.cpp:2183
-#, fuzzy
 msgid "Choose Team"
-msgstr "Timovi"
+msgstr ""
 
 #: src/multiint.cpp:2187
 msgid "Teams locked"
 msgstr ""
 
 #: src/multiint.cpp:2213
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Karta prikazuje boje igrača"
+msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Obrambeni položaj"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Igrač"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -12498,14 +12224,13 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Odaberi naziv igre"
+msgstr ""
 
 #: src/multiint.cpp:2925
-#, fuzzy, c-format
+#, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "Lozinka je potrebna."
+msgstr ""
 
 #: src/multiint.cpp:2931
 msgid "*** password is NOT required! ***"
@@ -12531,14 +12256,12 @@ msgid "Host is Starting Game"
 msgstr "Host započinje igru"
 
 #: src/multiint.cpp:3519
-#, fuzzy
 msgid "You have been kicked: "
-msgstr "Izbačen si!"
+msgstr ""
 
 #: src/multiint.cpp:3531
-#, fuzzy
 msgid "No connection to host."
-msgstr "Ništa za prijavit."
+msgstr ""
 
 #: src/multiint.cpp:3661
 msgid "Cannot change to a map with too few slots for all players."
@@ -12573,9 +12296,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Karta prikazuje boje igrača"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -12584,9 +12307,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Zatvori"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -12600,12 +12322,12 @@ msgstr "Karta: %u%% downloadana"
 
 #: src/multiint.cpp:4132
 msgid "HOST"
-msgstr "HOST"
+msgstr ""
 
 #: src/multiint.cpp:4139
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -12627,14 +12349,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ima nedopušten mod  i izbačen je."
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "%s se pridužio igri."
+msgstr ""
 
 #: src/multijoin.cpp:503
-#, fuzzy
 msgid "Server message:"
-msgstr "Poruka servera:"
+msgstr ""
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
@@ -12679,20 +12400,20 @@ msgid "Technology level 3"
 msgstr "Tehnološki razvoj razina 3"
 
 #: src/multimenu.cpp:593
-#, fuzzy
 msgid "Max technology level"
-msgstr "Tehnološki razvoj razina 1"
+msgstr ""
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
 msgstr "Bilo koji broj igrača"
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 igrača"
-msgstr[1] "2 igrača"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -12719,9 +12440,9 @@ msgid "Total Sent/Received —"
 msgstr ""
 
 #: src/multimenu.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Treniran: %u"
+msgstr ""
 
 #: src/multimenu.cpp:802
 #, c-format
@@ -12973,7 +12694,7 @@ msgstr "Profesionalac: %u"
 #: src/scores.cpp:111
 #, c-format
 msgid "Veteran: %u"
-msgstr "Veteran: %u"
+msgstr ""
 
 #: src/scores.cpp:112
 #, c-format
@@ -13039,45 +12760,47 @@ msgid "Unable to locate any Commanders!"
 msgstr "Nemaš ni jednog kapetana."
 
 #: src/selection.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%u jedinica odabrana"
-msgstr[1] "%u jedinica odabrana"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "Limit prijeđen - Proizvodnja prekinuta"
+msgstr ""
 
 #: src/structure.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "Limit prijeđen - Proizvodnja prekinuta"
+msgstr ""
 
 #: src/structure.cpp:2510
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "Limit prijeđen - Proizvodnja prekinuta"
+msgstr ""
 
 #: src/structure.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Limit prijeđen - Proizvodnja prekinuta"
+msgstr ""
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u jedinica dodjeljena"
-msgstr[1] "%s - %u jedinica dodjeljena"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u jedinica dodjeljena"
-msgstr[1] "%s - %u jedinica dodjeljena"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -13091,9 +12814,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - Povezan s %u od %u"
+msgstr ""
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -13138,9 +12861,8 @@ msgid "Refresh Games List"
 msgstr "Osvježi popis igara"
 
 #: src/titleui/gamefind.cpp:93
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Osvježi popis igara"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
@@ -13159,18 +12881,16 @@ msgid "Your version of Warzone is incompatible with this game."
 msgstr ""
 
 #: src/titleui/gamefind.cpp:311
-#, fuzzy
 msgid "[Password required]"
-msgstr "Lozinka nije potrebna."
+msgstr ""
 
 #: src/titleui/gamefind.cpp:315
 msgid "[No Tanks]"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:319
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Proizvodi Kiborge"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:323
 msgid "[No VTOLs]"
@@ -13195,9 +12915,8 @@ msgid "There appears to be a game update available!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:382
-#, fuzzy
 msgid "No games are available for your version"
-msgstr "Nema dostupnih igara."
+msgstr ""
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -13245,9 +12964,9 @@ msgid "Mods: None!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Verzija %s%s%s%s"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -13262,9 +12981,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Nastavi igru"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -13272,7 +12990,7 @@ msgstr "Unesi lozinku:"
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
@@ -13289,7 +13007,7 @@ msgstr "Predvorje"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -13316,612 +13034,13 @@ msgstr " (lokalno promjenjena)"
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:122
 msgid " - DEBUG"
-msgstr " - DEBUG"
+msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Verzija %s%s%s%s"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Show all options and exit"
-#~ msgstr "Pokaži verziju i izađi"
-
-#, fuzzy
-#~ msgid "Killer"
-#~ msgstr "Uništenja"
-
-#~ msgid "Warning!  This cheat can cause dire problems later on! [%s]"
-#~ msgstr "Upozorenje! Ova šifra može kasnije uzrokovati probleme! [%s]"
-
-#~ msgid "Ending Mission."
-#~ msgstr "Završetak misije..."
-
-#, fuzzy
-#~ msgid "End Mission"
-#~ msgstr "Završetak misije..."
-
-#~ msgid "Select Map"
-#~ msgstr "Odaberi kartu"
-
-#, fuzzy
-#~ msgid "Difficulty locked"
-#~ msgstr "Težina"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Odaberi lozinku"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures"
-#~ msgstr "Elektronski Laboratorij"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk2"
-#~ msgstr "Elektronski Laboratorij"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk3"
-#~ msgstr "Elektronski Laboratorij"
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "Ofenzivna-baterija nastavlja pucati dok je neprijateljski senzor potisnut"
-
-#~ msgid "Nexus Link"
-#~ msgstr "Nexus Veza"
-
-#~ msgid "NEXUS Link"
-#~ msgstr "NEXUS Veza"
-
-#~ msgid "Scroll Speed"
-#~ msgstr "Brzina "
-
-#~ msgid "Objective Destroyed"
-#~ msgstr "Cilj je Uništen"
-
-#~ msgid "Objective Captured"
-#~ msgstr "Cilj je Zarobljen"
-
-#~ msgid "Enemy Escaping"
-#~ msgstr "Neprijatelj Bježi"
-
-#~ msgid "Reinforcements are now available"
-#~ msgstr "Pojačanje je sada dostupno"
-
-#~ msgid "Sensor Power"
-#~ msgstr "Senzor Snaga"
-
-#~ msgid "game-name"
-#~ msgstr "ime-igre"
-
-#~ msgid "Unit"
-#~ msgstr "Jedinica"
-
-#~ msgid "Place Unit on map"
-#~ msgstr "Postavi jedinice na kartu"
-
-#~ msgid "Struct"
-#~ msgstr "Građevina"
-
-#~ msgid "Place Structures on map"
-#~ msgstr "Postavi građevine na kartu"
-
-#~ msgid "Feat"
-#~ msgstr "Pogodnosti"
-
-#~ msgid "Place Features on map"
-#~ msgstr "Postavi pogodnost na kartu"
-
-#~ msgid "Exit Game"
-#~ msgstr "Izađi iz igre"
-
-#, fuzzy
-#~ msgid "Current Player:"
-#~ msgstr "Više Igrača"
-
-#~ msgid "Machinegun Guard Tower"
-#~ msgstr "Strojnica Stražarski Toranj"
-
-#~ msgid "Screen Shake"
-#~ msgstr "Drmati Zaslon"
-
-#~ msgid "Screen shake when things die: Off"
-#~ msgstr "Potres kada se objekti unište: NE"
-
-#~ msgid "Screen shake when things die: On"
-#~ msgstr "Potres kada se objekti unište: DA"
-
-#, fuzzy
-#~ msgid "Toggle Driving Mode"
-#~ msgstr "Pračenje"
-
-#~ msgid "All players need to have the same mods to join your game."
-#~ msgstr "Svi igrači moraju imati iste modove."
-
-#, fuzzy
-#~ msgid "Shaders"
-#~ msgstr "Sjene"
-
-#~ msgid "MAP SAVED!"
-#~ msgstr "KARTA SPREMLJENA!"
-
-#, fuzzy
-#~ msgid "Load Map File"
-#~ msgstr "Učitaj Igru"
-
-#, fuzzy
-#~ msgid "Save Map File"
-#~ msgstr "Spermi igru"
-
-#~ msgid "Tile"
-#~ msgstr "Kvadratić"
-
-#~ msgid "Place tiles on map"
-#~ msgstr "Postavi teksture na kartu"
-
-#~ msgid "Pause or unpause the game"
-#~ msgstr "Pauziraj igru"
-
-#~ msgid "Align height of all map objects"
-#~ msgstr "Podesi visinu svih objekata na karti"
-
-#, fuzzy
-#~ msgid "Start Edit Mode"
-#~ msgstr "Započni bez baza"
-
-#~ msgid "Demo mode off - Returning to normal game mode"
-#~ msgstr "Nazad u normalan način igre"
-
-#~ msgid "Console On/Off"
-#~ msgstr "Konzola"
-
-#, fuzzy
-#~ msgid "Sensor display On"
-#~ msgstr "Senzorov Doseg"
-
-#, fuzzy
-#~ msgid "Realign height of all objects on the map"
-#~ msgstr "Podesi visinu svih objekata na karti"
-
-#, fuzzy
-#~ msgid "Toggle watch window"
-#~ msgstr "Ukljući sjene"
-
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - Oštečen %3.0f%%"
-
-#~ msgid " - Built %s"
-#~ msgstr " - Kompajlirano %s"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Igrač Pao"
-
-#, fuzzy
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "Boja"
-
-#, fuzzy
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "Boja"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "AI unit"
-
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "AI unit"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "AI unit"
-
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "AI unit"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "VARANJE JE MOGUČE"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "VARANJE NIJE MOGUČE"
-
-#~ msgid "Failed to create building"
-#~ msgstr "Nije moguće napraviti građevinu"
-
-#, fuzzy
-#~ msgid "Connect IP"
-#~ msgstr "Greška u povezivanju"
-
-#, fuzzy
-#~ msgid "Password:"
-#~ msgstr "Unesi lozinku:"
-
-#, fuzzy
-#~ msgid "3 players"
-#~ msgstr "2 igrača"
-
-#~ msgid "4 players"
-#~ msgstr "4 igrača"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "2 igrača"
-
-#~ msgid "8 players"
-#~ msgstr "8 igrača"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "4 igrača"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "2 igrača"
-
-#, fuzzy
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "Dobiveni resursi"
-
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Karta prikazuje otkrivena područja"
-
-#~ msgid "Fog"
-#~ msgstr "Magla"
-
-#~ msgid "Mist"
-#~ msgstr "Misterija"
-
-#~ msgid "Fog Of War"
-#~ msgstr "Magla Rata"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Magla udaljenosti"
-
-#~ msgid "* May negatively affect performance"
-#~ msgstr "* Može negativno utjecati na performanse"
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "Pokreni u modu varanja"
-
-#~ msgid "Player colour"
-#~ msgstr "Boja igrača"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Kamionu naređeno da sagradi pumpu za naftu"
-
-#, fuzzy
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "Kamionu naređeno da sagradi pumpu za naftu"
-
-#, fuzzy
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "Kamionu naređeno da sagradi pumpu za naftu"
-
-#~ msgid "Kick player"
-#~ msgstr "Izbaci igrača"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (lokalno promjenjena)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (lokalno promjenjena)"
-
-#, fuzzy
-#~ msgid "Infinite Production"
-#~ msgstr "Ponovi proizvodnju"
-
-#~ msgid "Player number"
-#~ msgstr "Broj igrača"
-
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Preicznost Mini Raketa +10%"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Šteta Mini Raketa +25%"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Vrijeme punjenja Mini Rakete -15%"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "Ciklon AA Položaj"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Automatska Proizvodnja Mk2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Automatska Proizvodnja Mk3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Robotska Proizvodnja Mk2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Robotska Proizvodnja Mk3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Napredna Proizvodnja Mk2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Automatski Objekt za Popravak Mk2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Automatski Objekt za Popravak Mk3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Objekt sa Robotičkim Popravkom Mk2"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "HESH Mini Raketa"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "HESH Mini Raketa Mk2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "HESH Mini Raketa Mk3"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "Grenadir Kiborg"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "Ciklon Teško Uporište"
-
-#~ msgid "Fire Cannon"
-#~ msgstr "Scavenger"
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "AI unit"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "AI unit"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "AI unit"
-
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "mantis Command Turret Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Repair Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "AI unit"
-
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Tracks Mini-Rocket Artillery"
-#~ msgstr "AI unit"
-
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "AI unit"
-
-#~ msgid "Python HVC Hover"
-#~ msgstr "AI unit"
-
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "AI unit"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "AI unit"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "AI unit"
-
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "Nemaš ni jednu pumpu!"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "Meni za gradnju će se ponovo otvoriti"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "Meni za gradnju se neće ponovo otvoriti"
-
-#~ msgid "Toggle reopening the build menu"
-#~ msgstr "Ponovno otvaranje menija za gradnju"
-
-#~ msgid "Czech"
-#~ msgstr "Češki"
-
-#~ msgid "Danish"
-#~ msgstr "Danski"
-
-#~ msgid "German"
-#~ msgstr "Njemački"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "Engleski"
-
-#~ msgid "Spanish"
-#~ msgstr "Španjolski"
-
-#~ msgid "Estonian"
-#~ msgstr "Estonijski"
-
-#~ msgid "Finnish"
-#~ msgstr "Finski"
-
-#~ msgid "French"
-#~ msgstr "Francuski"
-
-#~ msgid "Frisian"
-#~ msgstr "Frizijski"
-
-#~ msgid "Irish"
-#~ msgstr "Irski"
-
-#~ msgid "Croatian"
-#~ msgstr "Hrvatski"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Litvanski"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norveški"
-
-#~ msgid "Dutch"
-#~ msgstr "Nizozemski"
-
-#~ msgid "Polish"
-#~ msgstr "Poljski"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Brazilsko Portugalski"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portugalski"
-
-#~ msgid "Romanian"
-#~ msgstr "Rumunjski"
-
-#~ msgid "Russian"
-#~ msgstr "Ruski"
-
-#~ msgid "Slovenian"
-#~ msgstr "Slovenski"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Ukrajinski"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Pojednostavljeni Kineski"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Tradicionalni Kineski"
-
-#~ msgid "Latin"
-#~ msgstr "Latinski"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "Našao si %u resursa u bačvi."
-
-#, fuzzy
-#~ msgid ", mod: "
-#~ msgstr "mod"
-
-#~ msgid "Active mods: "
-#~ msgstr "Aktivni modovi:"
