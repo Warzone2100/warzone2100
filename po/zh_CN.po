@@ -1,26 +1,19 @@
-# Simplified Chinese translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Converted from zh_TW Version which originally made by Chi Hsin Tsau<chtsau@gmail.com>, 2008.
-# Converted and Updated by Shinyu Wu<shinyuwu@gnu.hk> , 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-06 20:05+0000\n"
-"PO-Revision-Date: 2013-05-20 01:25+1000\n"
-"Last-Translator: Shinyu <shinyuwu@gnu.hk>\n"
-"Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2020-03-06 22:33\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
-"X-Generator: Poedit 1.5.5\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100_en.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1483,15 +1476,13 @@ msgstr "反炮兵雷达升级"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "反炮兵雷达升级二型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "反炮兵雷达升级三型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1500,15 +1491,13 @@ msgstr "VTOL反炮兵雷达"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "VTOL反炮兵雷达二型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "VTOL反炮兵雷达三型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -3204,9 +3193,8 @@ msgstr "研发新科技（F2）"
 #: data/base/script/tutorial.js:217
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "研发模组用以扩展研发中心"
+msgstr ""
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -3294,9 +3282,8 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "要让钻油井开始运作，必须先建造一座发电厂，将石油转换成能源"
 
 #: data/base/script/tutorial.js:34
-#, fuzzy
 msgid "Left click the flashing build icon"
-msgstr "点选正在闪动中的「建造」图示"
+msgstr ""
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -4582,9 +4569,8 @@ msgid "INSANE"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
-#, fuzzy
 msgid "Personality change successful."
-msgstr "控制权成功移转"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
@@ -4603,9 +4589,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "研发新科技"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -4624,14 +4609,12 @@ msgid "Sorry, droid transfer failed."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "发电厂"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
-#, fuzzy
 msgid "Please put a beacon!"
-msgstr "终止一个塔"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
@@ -4673,9 +4656,8 @@ msgstr "锁定同盟模式"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "锁定同盟模式"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
@@ -4718,33 +4700,26 @@ msgid "Enter password here"
 msgstr "在这里输入密码"
 
 #: lib/netplay/netplay.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "不能打开需要的端口(%s) 在IP (%s)上"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
-msgstr ""
-"你必须手动设置路由器和防火墙\n"
+msgstr "你必须手动设置路由器和防火墙\n"
 " 举行游戏前端口2100必须打开"
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr ""
-"游戏配置端口 (%s) 正常 (%s)\n"
+msgstr "游戏配置端口 (%s) 正常 (%s)\n"
 "你的外部 IP 是 %s"
 
 #: lib/netplay/netplay.cpp:1856
-#, fuzzy
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
-"没有找到热插热拔网络设备，你必须手动设置你的路由器和防火墙\n"
-"在举行游戏前必须打开2100端口"
 
 #: lib/netplay/netplay.cpp:2201
 #, c-format
@@ -4753,13 +4728,11 @@ msgstr "不能解析游戏主机名(%s)!"
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr ""
-"不能连接到游戏主机: %s.\n"
+msgstr "不能连接到游戏主机: %s.\n"
 "确认端口 %d 可以收到传入连接\n"
 "如果你正在使用路由器，设置它支持UPNP\n"
 " 或者映射端口到你的系统"
@@ -4917,9 +4890,8 @@ msgid "Advanced Manufacturing"
 msgstr "先进制造"
 
 #: po/custom/fromJson.txt:49
-#, fuzzy
 msgid "Advancedmaterialslab"
-msgstr "高级战争"
+msgstr ""
 
 #: po/custom/fromJson.txt:50
 msgid "Advanced Missile Allocation System"
@@ -4974,14 +4946,12 @@ msgid "Advanced VTOL Production Mk3"
 msgstr "高级自动化VTOL生产三型"
 
 #: po/custom/fromJson.txt:65
-#, fuzzy
 msgid "Aerodynamic Jump Pack"
-msgstr "空气动力跳跃背包"
+msgstr ""
 
 #: po/custom/fromJson.txt:66
-#, fuzzy
 msgid "Aerodynamicslab"
-msgstr "空气动力跳跃背包"
+msgstr ""
 
 #: po/custom/fromJson.txt:71
 msgid "All cannons upgraded automatically"
@@ -5032,9 +5002,8 @@ msgid "Alpha"
 msgstr ""
 
 #: po/custom/fromJson.txt:104
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "情节"
+msgstr ""
 
 #: po/custom/fromJson.txt:105
 msgid "Amphibious hover propulsion"
@@ -5465,9 +5434,8 @@ msgid "Automatic loader replaces manual feed"
 msgstr "自动化装载机构取代人工装载弹药"
 
 #: po/custom/fromJson.txt:236
-#, fuzzy
 msgid "Auto Repair"
-msgstr "自动修理技术"
+msgstr ""
 
 #: po/custom/fromJson.txt:237
 msgid "Auto-Repair"
@@ -5498,9 +5466,8 @@ msgid "BaBaProp"
 msgstr "野蛮人推进动力"
 
 #: po/custom/fromJson.txt:244
-#, fuzzy
 msgid "Back to Basics"
-msgstr "回到正常状态"
+msgstr ""
 
 #: po/custom/fromJson.txt:245
 msgid "Battlefield repair unit"
@@ -5559,9 +5526,8 @@ msgid "Beta"
 msgstr ""
 
 #: po/custom/fromJson.txt:267
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "新的任务"
+msgstr ""
 
 #: po/custom/fromJson.txt:268
 msgid "Body Points and Speed Increased"
@@ -5836,9 +5802,8 @@ msgid "Command Turret Scorpion Tracks"
 msgstr "毒蝎指挥车"
 
 #: po/custom/fromJson.txt:346
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "指挥官"
+msgstr ""
 
 #: po/custom/fromJson.txt:347
 msgid "Command Turret Viper Tracks"
@@ -5897,9 +5862,8 @@ msgid "Construction Unit"
 msgstr "建筑单位"
 
 #: po/custom/fromJson.txt:361
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "最多可控制五辆指挥官车"
+msgstr ""
 
 #: po/custom/fromJson.txt:362
 msgid "Counter-battery fire continues until enemy battery is suppressed"
@@ -5946,9 +5910,8 @@ msgid "Cyborg Flamer"
 msgstr "生化人步兵（火焰喷射）"
 
 #: po/custom/fromJson.txt:373
-#, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Project的重量级车身"
+msgstr ""
 
 #: po/custom/fromJson.txt:374
 msgid "Cyborg High Intensity Thermal Armor"
@@ -5963,14 +5926,12 @@ msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "生化人高强度热能装甲三型"
 
 #: po/custom/fromJson.txt:377
-#, fuzzy
 msgid "Cyborg Lancer"
-msgstr "生化人步兵（火焰喷射）"
+msgstr ""
 
 #: po/custom/fromJson.txt:378
-#, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Project的轻量级车身"
+msgstr ""
 
 #: po/custom/fromJson.txt:380
 msgid "Cyborg Mechanic"
@@ -6169,9 +6130,8 @@ msgid "Enables self-repair in all vehicles"
 msgstr "给予所有车辆自我修复能力"
 
 #: po/custom/fromJson.txt:442
-#, fuzzy
 msgid "Enemy"
-msgstr "敌方基地"
+msgstr ""
 
 #: po/custom/fromJson.txt:443
 msgid "Engineering"
@@ -6367,9 +6327,8 @@ msgid "Gamma"
 msgstr ""
 
 #: po/custom/fromJson.txt:498
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "情节"
+msgstr ""
 
 #: po/custom/fromJson.txt:499
 msgid "Gas turbine boosts power output"
@@ -6424,16 +6383,14 @@ msgid "Generates and concentrates bursts of laser energy"
 msgstr "产生并集中激光的能量"
 
 #: po/custom/fromJson.txt:512
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Research speed +80% (per minute)\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
 #: po/custom/fromJson.txt:513
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -6444,16 +6401,14 @@ msgstr ""
 
 #: po/custom/fromJson.txt:515
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Does not build defenses next to enemy oil derricks\n"
 "Never tries a truck rush"
 msgstr ""
 
 #: po/custom/fromJson.txt:516
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -6970,9 +6925,8 @@ msgid "Hover"
 msgstr "气垫船"
 
 #: po/custom/fromJson.txt:666
-#, fuzzy
 msgid "Hover AI"
-msgstr "气垫船二型"
+msgstr ""
 
 #: po/custom/fromJson.txt:667
 msgid "Hover II"
@@ -7283,9 +7237,8 @@ msgid "Increases Rocket ROF"
 msgstr "增加火箭系武器射速"
 
 #: po/custom/fromJson.txt:777
-#, fuzzy
 msgid "Indirectweaponslab"
-msgstr "可使用新的非直射型武器"
+msgstr ""
 
 #: po/custom/fromJson.txt:778
 msgid "Inferior armor and body points to Cobra"
@@ -7456,9 +7409,8 @@ msgid "Laser Guided Bombsight"
 msgstr "激光导引投弹瞄准器"
 
 #: po/custom/fromJson.txt:821
-#, fuzzy
 msgid "Laseropticslab"
-msgstr "激光学实验室"
+msgstr ""
 
 #: po/custom/fromJson.txt:822
 msgid "Laser reload time -15%"
@@ -7601,9 +7553,8 @@ msgid "Maximum armor and body points"
 msgstr "拥有最强大的防御能力及HP"
 
 #: po/custom/fromJson.txt:866
-#, fuzzy
 msgid "May be assigned to follow units"
-msgstr "可指派给雷达导引"
+msgstr ""
 
 #: po/custom/fromJson.txt:867
 msgid "May be targeted directly or assigned to a sensor turret or tower"
@@ -7998,9 +7949,8 @@ msgid "New System Available"
 msgstr "可使用新系统"
 
 #: po/custom/fromJson.txt:983
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "可建造新的系统防御工事"
+msgstr ""
 
 #: po/custom/fromJson.txt:984
 msgid "New Systems Structure Available"
@@ -8027,9 +7977,8 @@ msgid "New VTOL Missile Launcher"
 msgstr "可搭载新的VTOL导弹"
 
 #: po/custom/fromJson.txt:993
-#, fuzzy
 msgid "Nexus"
-msgstr "Nexus Link（可搭载新的武器）"
+msgstr ""
 
 #: po/custom/fromJson.txt:994
 msgid "NEXUS CWall"
@@ -8064,9 +8013,8 @@ msgid "NEXUS Medium Body"
 msgstr "NEXUS的中量级车身"
 
 #: po/custom/fromJson.txt:1002
-#, fuzzy
 msgid "Nexus Missile Silo"
-msgstr "导弹发射井"
+msgstr ""
 
 #: po/custom/fromJson.txt:1004
 msgid "NEXUS Resistance Circuits"
@@ -8089,10 +8037,9 @@ msgid "No Place To Hide"
 msgstr ""
 
 #: po/custom/fromJson.txt:1009
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "菁英"
+msgstr ""
 
 #: po/custom/fromJson.txt:1010
 msgctxt "rank"
@@ -8100,46 +8047,39 @@ msgid "Green"
 msgstr "青涩"
 
 #: po/custom/fromJson.txt:1011
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "英雄"
+msgstr ""
 
 #: po/custom/fromJson.txt:1012
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "专家"
+msgstr ""
 
 #: po/custom/fromJson.txt:1013
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "好样的"
+msgstr ""
 
 #: po/custom/fromJson.txt:1014
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "菜鸟"
+msgstr ""
 
 #: po/custom/fromJson.txt:1015
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "特务"
+msgstr ""
 
 #: po/custom/fromJson.txt:1016
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "训练有素的"
+msgstr ""
 
 #: po/custom/fromJson.txt:1017
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "老手"
+msgstr ""
 
 #: po/custom/fromJson.txt:1018
 msgid "NullBot"
@@ -8178,14 +8118,12 @@ msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "命令指定的非直射武装部队攻击敌军的炮兵部队"
 
 #: po/custom/fromJson.txt:1029
-#, fuzzy
 msgid "Original Campaign"
-msgstr "情节"
+msgstr ""
 
 #: po/custom/fromJson.txt:1030
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "单人战役模式 "
+msgstr ""
 
 #: po/custom/fromJson.txt:1031
 msgid "Or select the Repair Facility as a unit's target"
@@ -8296,9 +8234,8 @@ msgid "Power Generator"
 msgstr "发电厂"
 
 #: po/custom/fromJson.txt:1058
-#, fuzzy
 msgid "Powerlab"
-msgstr "能源"
+msgstr ""
 
 #: po/custom/fromJson.txt:1059
 msgid "Power Module"
@@ -8325,14 +8262,12 @@ msgid "Produces Cyborgs"
 msgstr "生产生化人步兵"
 
 #: po/custom/fromJson.txt:1067
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Collective的重量级车身"
+msgstr ""
 
 #: po/custom/fromJson.txt:1068
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Collective的轻量级车身"
+msgstr ""
 
 #: po/custom/fromJson.txt:1069
 msgid "Project Medium Body"
@@ -8411,9 +8346,8 @@ msgid "Radar Detector"
 msgstr "雷达检测器"
 
 #: po/custom/fromJson.txt:1091
-#, fuzzy
 msgid "Radar detector detects enemy sensors"
-msgstr "我方雷达检测到敌军监控"
+msgstr ""
 
 #: po/custom/fromJson.txt:1092
 msgid "Radar Detector Tower"
@@ -8516,9 +8450,8 @@ msgid "Reinforced Base Structure Materials Mk3"
 msgstr "初级强化建材三型"
 
 #: po/custom/fromJson.txt:1121
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "修理厂"
+msgstr ""
 
 #: po/custom/fromJson.txt:1122
 msgid "Repair Cobra Tracks"
@@ -8601,14 +8534,12 @@ msgid "Research speed +30%"
 msgstr "研发速度 +30% "
 
 #: po/custom/fromJson.txt:1147
-#, fuzzy
 msgid "Research speed +40% (per minute)"
-msgstr "研发速度 +30% "
+msgstr ""
 
 #: po/custom/fromJson.txt:1148
-#, fuzzy
 msgid "Research speed +60% (per minute)"
-msgstr "研发速度 +30% "
+msgstr ""
 
 #: po/custom/fromJson.txt:1149
 msgid "Research speed +85%"
@@ -9546,7 +9477,7 @@ msgstr "响尾蛇"
 
 #: po/custom/fromJson.txt:1412
 msgid "VTOL"
-msgstr "VTOL"
+msgstr ""
 
 #: po/custom/fromJson.txt:1413
 msgid "VTOL Assault Cannon"
@@ -9833,11 +9764,9 @@ msgid "Wyvern"
 msgstr "中国龙"
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
-"版权© 1999-2004 Eidos Interactive.\n"
+msgstr "版权© 1999-2004 Eidos Interactive.\n"
 "版权© 2005-2020 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
@@ -9910,9 +9839,8 @@ msgid "configuration directory"
 msgstr "设定资料夹"
 
 #: src/clparse.cpp:259
-#, fuzzy
 msgid "Add data directory"
-msgstr "资料夹"
+msgstr ""
 
 #: src/clparse.cpp:259
 msgid "data directory"
@@ -9920,11 +9848,11 @@ msgstr "资料夹"
 
 #: src/clparse.cpp:260
 msgid "Show debug for given level"
-msgstr "Show debug for given level"
+msgstr ""
 
 #: src/clparse.cpp:260
 msgid "debug level"
-msgstr "debug level"
+msgstr ""
 
 #: src/clparse.cpp:261
 msgid "Log debug output to file"
@@ -9936,25 +9864,23 @@ msgstr "档案"
 
 #: src/clparse.cpp:262
 msgid "Flush all debug output written to stderr"
-msgstr "Flush all debug output written to stderr"
+msgstr ""
 
 #: src/clparse.cpp:263
 msgid "Play in fullscreen mode"
 msgstr "以全萤幕模式运行"
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "载入特定游戏"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
 msgstr ""
 
 #: src/clparse.cpp:265
-#, fuzzy
 msgid "Show options and exit"
-msgstr "显示版本资讯及离开"
+msgstr ""
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -9964,7 +9890,7 @@ msgstr "开启global mod"
 #: src/clparse.cpp:267
 #: src/clparse.cpp:268
 msgid "mod"
-msgstr "mod"
+msgstr ""
 
 #: src/clparse.cpp:267
 msgid "Enable a campaign only mod"
@@ -9983,9 +9909,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr "引发一个事故去进行一个事故处理程序测试"
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "载入已储存的游戏"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -9993,9 +9918,8 @@ msgid "savegame"
 msgstr "储存游戏"
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "载入已储存的游戏"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -10030,18 +9954,16 @@ msgid "Disable sound"
 msgstr "关闭声音"
 
 #: src/clparse.cpp:280
-#, fuzzy
 msgid "Connect directly to IP/hostname"
-msgstr "直接连结到IP/hostname"
+msgstr ""
 
 #: src/clparse.cpp:280
 msgid "host"
-msgstr "host"
+msgstr ""
 
 #: src/clparse.cpp:281
-#, fuzzy
 msgid "Go directly to host screen"
-msgstr "go directly to host screen"
+msgstr ""
 
 #: src/clparse.cpp:282
 msgid "Enable texture compression"
@@ -10060,9 +9982,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "储存游戏"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -10073,18 +9994,16 @@ msgid "test"
 msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "游戏储存失败！"
+msgstr ""
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
 msgstr ""
 
 #: src/clparse.cpp:288
-#, fuzzy
 msgid "autohost"
-msgstr "host"
+msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -10177,7 +10096,7 @@ msgstr "需要能源"
 
 #: src/design.cpp:1081
 msgid "Hydra "
-msgstr "Hydra "
+msgstr ""
 
 #: src/design.cpp:1252
 #: src/design.cpp:1272
@@ -10187,7 +10106,7 @@ msgstr "雷达可视距离"
 #: src/design.cpp:1292
 #: src/design.cpp:1308
 msgid "ECM Power"
-msgstr "ECM Power"
+msgstr ""
 
 #: src/design.cpp:1327
 #: src/design.cpp:1344
@@ -10240,14 +10159,12 @@ msgid "Systems"
 msgstr "系统装备"
 
 #: src/design.cpp:4283
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "删除设计"
+msgstr ""
 
 #: src/design.cpp:4288
-#, fuzzy
 msgid "Store Design"
-msgstr "新的设计"
+msgstr ""
 
 #: src/display3d.cpp:676
 msgid "Player left"
@@ -10276,20 +10193,20 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃烧中，无法建筑钻油井"
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - 损伤 %d%% - 经验值 %.1f, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - 同盟 - 伤害 %d%% - 经验 %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "损失单位！"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -10352,14 +10269,12 @@ msgstr "战役视频丢失！从 http://wz2100.net 获取"
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "继续游戏"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "可使用新系统"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -10451,9 +10366,8 @@ msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "战役视频丢失！从 http://wz2100.net 获取"
 
 #: src/frontend.cpp:416
-#, fuzzy
 msgid "CAMPAIGNS"
-msgstr "战役一"
+msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
@@ -10501,9 +10415,8 @@ msgid "Video Options"
 msgstr "显示选项"
 
 #: src/frontend.cpp:685
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "音效选项"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
@@ -10549,7 +10462,7 @@ msgstr "关闭"
 
 #: src/frontend.cpp:750
 msgid "50%"
-msgstr "50%"
+msgstr ""
 
 #: src/frontend.cpp:751
 #: src/multiplay.cpp:1897
@@ -10579,9 +10492,8 @@ msgid "Instant"
 msgstr ""
 
 #: src/frontend.cpp:773
-#, fuzzy
 msgid "Tracked"
-msgstr "履带式"
+msgstr ""
 
 #: src/frontend.cpp:786
 #: src/ingameop.cpp:517
@@ -10610,23 +10522,20 @@ msgstr "雷达"
 
 #: src/frontend.cpp:808
 #: src/ingameop.cpp:542
-#, fuzzy
 msgid "Radar Jump"
-msgstr "雷达"
+msgstr ""
 
 #: src/frontend.cpp:812
 msgid "GRAPHICS OPTIONS"
 msgstr "图形选项"
 
 #: src/frontend.cpp:906
-#, fuzzy
 msgid "Disabled"
-msgstr "关闭声音"
+msgstr ""
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Enabled"
-msgstr "开启声音"
+msgstr ""
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
@@ -10666,18 +10575,16 @@ msgid "Map Zoom Rate"
 msgstr ""
 
 #: src/frontend.cpp:985
-#, fuzzy
 msgid "Radar Zoom"
-msgstr "雷达"
+msgstr ""
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "音效选项"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -10688,28 +10595,24 @@ msgid "Graphics Mode*"
 msgstr "图形模式*"
 
 #: src/frontend.cpp:1137
-#, fuzzy
 msgid "Graphics Mode"
-msgstr "图形模式*"
+msgstr ""
 
 #: src/frontend.cpp:1142
 msgid "Resolution*"
 msgstr "解析度*"
 
 #: src/frontend.cpp:1142
-#, fuzzy
 msgid "Resolution"
-msgstr "解析度*"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale*"
-msgstr "显示游戏中选项"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale"
-msgstr "显示游戏中选项"
+msgstr ""
 
 #: src/frontend.cpp:1191
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -10729,9 +10632,8 @@ msgid "Vertical sync"
 msgstr "垂直同步*"
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "义大利语"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
@@ -10754,14 +10656,12 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "游戏速度复位"
+msgstr ""
 
 #: src/frontend.cpp:1561
-#, fuzzy
 msgid "Camera Pitch"
-msgstr "重设视角"
+msgstr ""
 
 #: src/frontend.cpp:1576
 #: src/ingameop.cpp:697
@@ -10785,15 +10685,13 @@ msgstr "旋转屏幕"
 
 #: src/frontend.cpp:1594
 #: src/ingameop.cpp:720
-#, fuzzy
 msgid "Colored Cursors"
-msgstr "彩色指针"
+msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "页签向左卷动"
+msgstr ""
 
 #: src/frontend.cpp:1602
 msgid "MOUSE OPTIONS"
@@ -10825,15 +10723,13 @@ msgstr "语言"
 
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "难度"
+msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
-#, fuzzy
 msgid "Camera Speed"
-msgstr "水面速度"
+msgstr ""
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
@@ -10905,14 +10801,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -10929,8 +10823,7 @@ msgid "Ally progress"
 msgstr "盟友进程"
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -10939,9 +10832,8 @@ msgid "Chat: All"
 msgstr ""
 
 #: src/hci.cpp:4959
-#, fuzzy
 msgid "Chat: Team"
-msgstr "选择队伍"
+msgstr ""
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -10960,9 +10852,8 @@ msgstr "警告：你是主玩家。如果那你退出，所有玩家将不得不
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "退出"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -11006,9 +10897,8 @@ msgid "Audio Options"
 msgstr "音效选项"
 
 #: src/ingameop.cpp:494
-#, fuzzy
 msgid "View Key Mappings"
-msgstr "键盘配置"
+msgstr ""
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
@@ -11020,13 +10910,9 @@ msgstr "保存练习游戏"
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
-msgstr ""
-"这个模块不能加载 %s\n"
-"\n"
+msgstr "这个模块不能加载 %s\n\n"
 "Warzone将尝试孤立它并继续运行 "
 
 #: src/intdisplay.cpp:164
@@ -11202,24 +11088,21 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "关闭细节、武器及雷达显示"
 
 #: src/keybind.cpp:326
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:336
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:346
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "玩家%u 利用作弊（除错）模式建立了一个新droid: %s. "
+msgstr ""
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -11247,7 +11130,7 @@ msgstr "让事情变简单！"
 
 #: src/keybind.cpp:541
 msgid "1000 big ones!!!"
-msgstr "1000 big ones!!!"
+msgstr ""
 
 #: src/keybind.cpp:558
 msgid "Power overwhelming"
@@ -11314,7 +11197,7 @@ msgstr "上帝模式关闭"
 
 #: src/keybind.cpp:1323
 msgid "View Aligned to North"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:1332
 #, c-format
@@ -11494,18 +11377,16 @@ msgid "Commanders"
 msgstr "指挥官"
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "储存"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr "开启或关闭雷达"
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "载入"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -11657,7 +11538,7 @@ msgstr "多人游戏选项/联盟对话框"
 
 #: src/keymap.cpp:357
 msgid "Snap View to North"
-msgstr "Snap View to North"
+msgstr ""
 
 #: src/keymap.cpp:358
 msgid "Toggle Tracking Camera"
@@ -11760,9 +11641,8 @@ msgid "Toggle Overlays"
 msgstr "开启或关闭叠层显示"
 
 #: src/keymap.cpp:383
-#, fuzzy
 msgid "Toggle Console History "
-msgstr "开启或关闭主控台"
+msgstr ""
 
 #: src/keymap.cpp:384
 msgid "Toggle Team Chat History"
@@ -11789,14 +11669,12 @@ msgid "Stop Droid"
 msgstr ""
 
 #: src/keymap.cpp:403
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "送出文字讯息"
+msgstr ""
 
 #: src/keymap.cpp:404
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "送出文字讯息"
+msgstr ""
 
 #: src/keymap.cpp:405
 msgid "Drop a beacon"
@@ -11819,9 +11697,8 @@ msgid "Toggle ally-enemy radar view"
 msgstr "切换 盟友-敌人 雷达视图"
 
 #: src/keymap.cpp:411
-#, fuzzy
 msgid "Show all keyboard mappings"
-msgstr "显示所有的键盘映射——使用暂停!"
+msgstr ""
 
 #: src/keymap.cpp:420
 msgid "Select all Combat Units"
@@ -11860,9 +11737,8 @@ msgid "Select all VTOLs"
 msgstr "选择所有VTOL 单位"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "选择所有VTOL 单位"
+msgstr ""
 
 #: src/keymap.cpp:431
 msgid "Select all Wheels"
@@ -11993,14 +11869,12 @@ msgid "Trace a game object"
 msgstr "跟踪一个游戏中的物体"
 
 #: src/loadsave.cpp:311
-#, fuzzy
 msgid "Parent directory"
-msgstr "资料夹"
+msgstr ""
 
 #: src/loadsave.cpp:316
-#, fuzzy
 msgid "Autosave directory"
-msgstr "资料夹"
+msgstr ""
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory (not allowed for saving)"
@@ -12077,9 +11951,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s 给​​你一个技术文件"
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s 给你%u力量"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -12153,15 +12027,13 @@ msgid "Laser Satellite disabled."
 msgstr "激光卫星损坏"
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "设定建筑物数量限制"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "选择游戏名称"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -12172,8 +12044,7 @@ msgid "Select Game Name"
 msgstr "选择游戏名称"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -12217,13 +12088,11 @@ msgid "Set Structure Limits"
 msgstr "设定建筑物数量限制"
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "游戏选项"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -12249,9 +12118,8 @@ msgid "DIFFICULTY"
 msgstr "难度"
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "开始时具规模基地"
+msgstr ""
 
 #: src/multiint.cpp:1438
 msgid "Plays nice"
@@ -12294,18 +12162,16 @@ msgid "Player is ready"
 msgstr "玩家已准备"
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "玩家已准备"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
 msgstr "按一下开始"
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for download"
-msgstr "等待能源"
+msgstr ""
 
 #: src/multiint.cpp:2072
 msgid "READY?"
@@ -12324,9 +12190,8 @@ msgid "Choose Team"
 msgstr "选择队伍"
 
 #: src/multiint.cpp:2187
-#, fuzzy
 msgid "Teams locked"
-msgstr "Alpha 中队援救成功"
+msgstr ""
 
 #: src/multiint.cpp:2213
 msgid "Click to change player colour"
@@ -12341,9 +12206,8 @@ msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "玩家"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -12359,9 +12223,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "选择游戏名称"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -12392,14 +12255,12 @@ msgid "Host is Starting Game"
 msgstr "/Incoming Message/:Morning,force B,you should get out there,or you will be destroyed/Message Ends/"
 
 #: src/multiint.cpp:3519
-#, fuzzy
 msgid "You have been kicked: "
-msgstr "你被踢了！"
+msgstr ""
 
 #: src/multiint.cpp:3531
-#, fuzzy
 msgid "No connection to host."
-msgstr "无报告"
+msgstr ""
 
 #: src/multiint.cpp:3661
 msgid "Cannot change to a map with too few slots for all players."
@@ -12414,9 +12275,8 @@ msgid "UPnP has been enabled."
 msgstr "热插热拔网络设备被启用"
 
 #: src/multiint.cpp:3903
-#, fuzzy
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr "热插热拔网络设备检测失败，你必须手动配置路由器"
+msgstr ""
 
 #: src/multiint.cpp:3907
 msgid "UPnP detection is in progress..."
@@ -12466,7 +12326,7 @@ msgstr "主玩家"
 #: src/multiint.cpp:4139
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -12539,9 +12399,8 @@ msgid "Technology level 3"
 msgstr "第三阶科技"
 
 #: src/multimenu.cpp:593
-#, fuzzy
 msgid "Max technology level"
-msgstr "第一阶科技"
+msgstr ""
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
@@ -12904,36 +12763,35 @@ msgid_plural "%u units selected"
 msgstr[0] "已选取 %u 单位"
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "不能生产新的单位，已达到指挥官可控制单位总数上限，停止生产新单位"
+msgstr ""
 
 #: src/structure.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "不能生产新的单位，已达到指挥官可控制单位总数上限，停止生产新单位"
+msgstr ""
 
 #: src/structure.cpp:2510
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "不能生产新的单位，已达到指挥官可控制单位总数上限，停止生产新单位"
+msgstr ""
 
 #: src/structure.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "不能生产新的单位，已达到指挥官可控制单位总数上限，停止生产新单位"
+msgstr ""
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s -%u 已指派 -伤害%3.0f%%"
+msgstr[0] ""
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s -%u 已指派 -伤害%3.0f%%"
+msgstr[0] ""
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -12947,9 +12805,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - 连接 %u of %u - 伤害%3.0f%%"
+msgstr ""
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -13114,9 +12972,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "继续游戏"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -13141,7 +12998,7 @@ msgstr "游戏大厅"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -13163,1143 +13020,18 @@ msgstr "援军已降落"
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:115
 msgid " (modified locally)"
-msgstr " (modified locally)"
+msgstr ""
 
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:122
 msgid " - DEBUG"
-msgstr " - DEBUG"
+msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "版本: %s,%s 编译:%s%s"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Show all options and exit"
-#~ msgstr "显示版本资讯及离开"
-
-#, fuzzy
-#~ msgid "Killer"
-#~ msgstr "杀敌数"
-
-#~ msgid "Warning!  This cheat can cause dire problems later on! [%s]"
-#~ msgstr "警告！此欺诈行为会导致严重的后果！[%s]"
-
-#~ msgid "Ending Mission."
-#~ msgstr "任务结束中。"
-
-#~ msgid "End Mission"
-#~ msgstr "任务结束"
-
-#~ msgid "Select Map"
-#~ msgstr "选择地图"
-
-#, fuzzy
-#~ msgid "Difficulty locked"
-#~ msgstr "难度"
-
-#~ msgid "Click to change AI"
-#~ msgstr "点击这里更改AI"
-
-#~ msgid "Electronic Countermeasures"
-#~ msgstr "电子干扰"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk2"
-#~ msgstr "电子干扰"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk3"
-#~ msgstr "电子干扰"
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "直到敌军的炮火被压制住为止"
-
-#~ msgid "Nexus Link"
-#~ msgstr "Nexus Link（可搭载新的武器）"
-
-#~ msgid "NEXUS Link"
-#~ msgstr "NEXUS Link"
-
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "命令指定的非直射武装部队攻击敌军的传感部队"
-
-#~ msgid "Scroll Speed"
-#~ msgstr "卷动速度"
-
-#~ msgid "Objective Destroyed"
-#~ msgstr "目标摧毁"
-
-#~ msgid "Objective Captured"
-#~ msgstr "捕获目标"
-
-#~ msgid "Enemy Escaping"
-#~ msgstr "敌方逃逸"
-
-#~ msgid "Reinforcements are now available"
-#~ msgstr "可要求增援"
-
-#~ msgid "Sensor Power"
-#~ msgstr "雷达能源"
-
-#~ msgid ""
-#~ "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
-#~ "open port 2100 before you can host a game."
-#~ msgstr ""
-#~ "你的路由器不支持热插热拔，你必须手动设置你的路由器和防火墙\n"
-#~ "在举行游戏前必须打开2100端口"
-
-#~ msgid "Set default data directory"
-#~ msgstr "设定预设资料夹"
-
-#~ msgid "game-name"
-#~ msgstr "选择游戏名称"
-
-#~ msgid "Show this help message and exit"
-#~ msgstr "显示帮助讯息及离开"
-
-#~ msgid "Unit"
-#~ msgstr "单位"
-
-#~ msgid "Place Unit on map"
-#~ msgstr "在地图上加入单位"
-
-#~ msgid "Struct"
-#~ msgstr "建筑"
-
-#~ msgid "Place Structures on map"
-#~ msgstr "在地图上加入建筑物"
-
-#~ msgid "Feat"
-#~ msgstr "特征"
-
-#~ msgid "Place Features on map"
-#~ msgstr "在地图上加入特征"
-
-#~ msgid "Exit Game"
-#~ msgstr "离开游戏"
-
-#~ msgid "Current Player:"
-#~ msgstr "当前玩家："
-
-#~ msgid "Machinegun Guard Tower"
-#~ msgstr "机枪防卫塔"
-
-#~ msgid "Screen Shake"
-#~ msgstr "震动萤幕"
-
-#~ msgid "Screen shake when things die: Off"
-#~ msgstr "物体死亡后屏幕抖动：关"
-
-#~ msgid "Screen shake when things die: On"
-#~ msgstr "物体死亡后屏幕抖动：开"
-
-#~ msgid "Toggle Driving Mode"
-#~ msgstr "切换追踪视角"
-
-#~ msgid "All players need to have the same mods to join your game."
-#~ msgstr "所有玩家需要使用相同的mod以便进入游戏"
-
-#~ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "你的系统不支持OpenGL GLSL着色器1.20版。游戏物体会显示错误。如有必要，请升级您的显卡驱动或者硬件。"
-
-#~ msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-#~ msgstr "你的系统不支持游戏所需的OpenGL1.2+VBO+TEC，如有必要，请升级您的显卡驱动或者硬件。"
-
-#~ msgid "Disable the use of OpenGL shaders"
-#~ msgstr "禁用OPENGL纹理压缩"
-
-#~ msgid "Disable the use of OpenGL Vertex Buffer Objects"
-#~ msgstr "禁用OPENGL VERTEX纹理压缩"
-
-#~ msgid "Delete Template"
-#~ msgstr "删除模板"
-
-#~ msgid "%s wanted to give you a %s but you have too many!"
-#~ msgstr "%sa 想给你一个 %s 但你已经有很多了！"
-
-#~ msgid "You wanted to give %s a %s but they have too many!"
-#~ msgstr "你想要给 %s 一个 %s 但是他已经有很多了！"
-
-#~ msgid "1X"
-#~ msgstr "1倍大小"
-
-#~ msgid "2X"
-#~ msgstr "2倍大小"
-
-#~ msgid "Shaders"
-#~ msgstr "遮罩"
-
-#~ msgid "MAP SAVED!"
-#~ msgstr "地图已储存"
-
-#~ msgid "Map:"
-#~ msgstr "Map："
-
-#~ msgid "Load Map File"
-#~ msgstr "载入地图文件"
-
-#~ msgid "Save Map File"
-#~ msgstr "储存地图文件"
-
-#~ msgid "New"
-#~ msgstr "新的"
-
-#~ msgid "New Blank Map"
-#~ msgstr "新空地图"
-
-#~ msgid "Tile"
-#~ msgstr "贴图"
-
-#~ msgid "Place tiles on map"
-#~ msgstr "在地图上加入贴图"
-
-#~ msgid "Pause"
-#~ msgstr "暂停"
-
-#~ msgid "Pause or unpause the game"
-#~ msgstr "暂停（或继续）游戏"
-
-#~ msgid "Align height of all map objects"
-#~ msgstr "使地图上所有物件等高"
-
-#~ msgid "Edit"
-#~ msgstr "编辑"
-
-#~ msgid "Start Edit Mode"
-#~ msgstr "开始编辑模式"
-
-#~ msgid "Demo mode off - Returning to normal game mode"
-#~ msgstr "关闭展示模式—回到正常游戏模式"
-
-#~ msgid "Console On/Off"
-#~ msgstr "开启或关闭主控台"
-
-#~ msgid "Sensor display On"
-#~ msgstr "多传感显示器 打开"
-
-#~ msgid "Sensor display Off"
-#~ msgstr "多传感显示器 关"
-
-#~ msgid "Toggles on/off DEMO Mode"
-#~ msgstr "开关演示模式"
-
-#~ msgid "Realign height of all objects on the map"
-#~ msgstr "重新排列地图上的所有高点"
-
-#~ msgid "Toggle watch window"
-#~ msgstr "开启或关闭查看窗口"
-
-#~ msgid "Less aggressive"
-#~ msgstr "更少侵略性"
-
-#~ msgid "You cannot change difficulty in a challenge"
-#~ msgstr "在挑战中不能更换难度"
-
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - 损伤 %3.0f%%"
-
-#~ msgid "Only use OpenGL 1.5"
-#~ msgstr "仅使用 仅使用 OpenGL 1.5"
-
-#~ msgid " - Built %s"
-#~ msgstr " - Built %s"
-
-#~ msgid "Password is already set!"
-#~ msgstr "密码已经设置"
-
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "敌友颜色"
-
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "势力颜色"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "毒虫VTOL（高速加农炮）"
-
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "毒蝎VTOL（高速加农炮）"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "螳螂VTOL（高速加农炮）"
-
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "履带式眼镜蛇坦克（迷你火箭阵列）"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "履带式蟒蛇坦克（高速加农炮）"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "现在允许作弊！"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "现在不允许作弊！"
-
-#~ msgid "Activate self-test"
-#~ msgstr "启动自我测试（self-test）"
-
-#~ msgid "Failed to create building"
-#~ msgstr "建筑物建造失败"
-
-#~ msgid "Create a game first!"
-#~ msgstr "先创建游戏"
-
-#~ msgid "Connect IP"
-#~ msgstr "连接IP"
-
-#~ msgid "Password:"
-#~ msgstr "密码"
-
-#~ msgid "3 players"
-#~ msgstr "3 玩家"
-
-#~ msgid "4 players"
-#~ msgstr "4 玩家"
-
-#~ msgid "5 players"
-#~ msgstr "5 玩家"
-
-#~ msgid "6 players"
-#~ msgstr "6 玩家"
-
-#~ msgid "7 players"
-#~ msgstr "7 玩家"
-
-#~ msgid "8 players"
-#~ msgstr "8 玩家"
-
-#~ msgid "9 players"
-#~ msgstr "9 玩家"
-
-#~ msgid "10 players"
-#~ msgstr "10 玩家"
-
-#~ msgid "11 players"
-#~ msgstr "11 玩家"
-
-#~ msgid "12 players"
-#~ msgstr "12 玩家"
-
-#~ msgid "13 players"
-#~ msgstr "13 玩家"
-
-#~ msgid "14 players"
-#~ msgstr "14 玩家"
-
-#~ msgid "15 players"
-#~ msgstr "15 玩家"
-
-#~ msgid "16 players"
-#~ msgstr "16 玩家"
-
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS限制: %d; PIEs %d; polys %d; Terr. polys %d; 状态%d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "能量增加"
-
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "雷达显示地形"
-
-#~ msgid "Fog"
-#~ msgstr "迷雾"
-
-#~ msgid "Mist"
-#~ msgstr "迷雾"
-
-#~ msgid "Fog Of War"
-#~ msgstr "完全迷雾"
-
-#~ msgid "Distance Fog"
-#~ msgstr "迷雾（看得见地形）"
-
-#~ msgid "* May negatively affect performance"
-#~ msgstr "可能对性能造成负面影响"
-
-#~ msgid "All tr​​ucks upgraded automatically"
-#~ msgstr "自动升级所有工程车"
-
-#~ msgid "Increases Repair Speed​​"
-#~ msgstr "加快修理速度"
-
-#~ msgid "All tr​​acks upgraded automatically"
-#~ msgstr "自动升级所有履带式坦克"
-
-#~ msgid "VTOL Rad​​ar Tower"
-#~ msgstr "VTOL雷达"
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "眼镜蛇重型修理气垫船"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "轮式响尾蛇坦克（重机枪）"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "螳螂气垫船（坦克杀手）"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "履带式眼镜蛇坦克（重机枪）"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "眼镜蛇气垫船（重型加农炮）"
-
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "履带式毒蝎坦克（枪骑兵火箭）"
-
-#~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "履带式毒蝎坦克（重型加农炮）"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "毒蝎VTOL（枪骑兵火箭）"
-
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "毒蝎 BB VTOL"
-
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "响尾蛇指挥车"
-
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "眼镜蛇指挥车"
-
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "毒蝎指挥车"
-
-#, fuzzy
-#~ msgid "Mantis Command Turret Tracks"
-#~ msgstr "螳螂指挥车"
-
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "履带式眼镜蛇坦克（枪骑兵火箭）"
-
-#~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "履带式螳螂坦克（重型加农炮）"
-
-#~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "履带式螳螂坦克（坦克杀手）"
-
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "履带式螳螂坦克（天谴导弹）"
-
-#~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "履带式毒蝎坦克（重机枪）"
-
-#~ msgid "Scorpion Repair Tracks"
-#~ msgstr "毒蝎修理车"
-
-#~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "毒蝎重型修理车"
-
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "眼镜蛇工程气垫船"
-
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "毒蝎工程气垫船"
-
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "螳螂工程气垫船"
-
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "履带式眼镜蛇坦克（碉堡终结者）"
-
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "履带式毒蝎坦克（碉堡终结者）"
-
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "履带式螳螂坦克（碉堡终结者）"
-
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "履带式响尾蛇坦克（枪骑兵火箭）"
-
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "半履带式眼镜蛇坦克（迷你火箭）"
-
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "履带式眼镜蛇坦克（迷你火箭）"
-
-#~ msgid "Cobra Tracks Mini-Rocket Artillery"
-#~ msgstr "履带式眼镜蛇坦克（迷你火箭阵列）"
-
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "半履带式眼镜蛇坦克（火焰喷射）"
-
-#~ msgid "Python HVC Hover"
-#~ msgstr "蟒蛇气垫船（高速加农炮）"
-
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "履带式蟒蛇坦克（天谴导弹）"
-
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "履带式蟒蛇坦克（高斯加农炮）"
-
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "履带式蟒蛇坦克（脉冲激光）"
-
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "履带式虎式坦克（脉冲激光）"
-
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "履带式虎式坦克（高能激光）"
-
-#~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "履带式中国龙坦克（高斯加农炮）"
-
-#~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "履带式中国龙坦克（脉冲激光）"
-
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "履带式中国龙坦克（重机枪）"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "半履带式响尾蛇坦克（双管机枪）"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "半履带式响尾蛇坦克（火焰喷射）"
-
-#~ msgid "Disconnected from lobby server. Failed to register game."
-#~ msgstr "注册游戏失败，从Lobby服务器断开连接"
-
-#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "不能与Lobby服务器建立连接。请检查TCP端口是否开放。"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr "未知作弊码"
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "以作弊模式运行"
-
-#~ msgid "Infinite Production"
-#~ msgstr "循环生产"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "你在钻油井发现了 %u 电力"
-
-#~ msgid "Player colour"
-#~ msgstr "玩家颜色"
-
-#~ msgid "Kick player"
-#~ msgstr "K掉 玩家"
-
-#~ msgid "Player number"
-#~ msgstr "玩家代码"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (modified and switched locally)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (switched locally)"
-
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "恭喜你！成功的疏散了BETA基地"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "命令工程车建造钻油井"
-
-#~ msgid "Plascrete MK3"
-#~ msgstr "超合金钢筋墙三型"
-
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "增加迷你火箭准确率 10%"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "增加迷你火箭攻击力 +25%"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "迷你火箭补给时间 -15%"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "暴风级高射炮"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "初阶自动化VTOL补给二型MK2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "初阶自动化VTOL补给三型MK3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "机器人VTOL补给二型MK2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "机器人VTOL补给三型MK3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "高级生产工厂二型MK2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "自动修理工厂MK2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "自动修理工厂MK3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "机器人修理工厂二型MK2"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "HESH迷你火箭"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "HESH迷你火箭二型MK2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "HESH迷你火箭三型MK3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "生化人步兵（铝热反应火焰）"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "生化人步兵（手榴弹）"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "暴风级高射炮要塞"
-
-#~ msgid "Fire Cannon"
-#~ msgstr "火炮"
-
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "无法找到任何资源（resource extractors）"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "建筑选单将重新开启"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "建造选单将不会开启"
-
-#~ msgid "Toggle reopening the build menu"
-#~ msgstr "开启或关闭建筑选单"
-
-#~ msgid "Czech"
-#~ msgstr "捷克语"
-
-#~ msgid "Danish"
-#~ msgstr "丹麦语"
-
-#~ msgid "German"
-#~ msgstr "德语"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "英语（UK）"
-
-#~ msgid "Spanish"
-#~ msgstr "西班牙语"
-
-#, fuzzy
-#~ msgid "Estonian"
-#~ msgstr "罗马尼亚语"
-
-#~ msgid "Finnish"
-#~ msgstr "芬兰语"
-
-#~ msgid "French"
-#~ msgstr "法语"
-
-#~ msgid "Frisian"
-#~ msgstr "弗里西语"
-
-#~ msgid "Irish"
-#~ msgstr "爱尔兰语"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "拉托维亚语"
-
-#~ msgid "Lithuanian"
-#~ msgstr "立陶宛语"
-
-#~ msgid "Norwegian"
-#~ msgstr "挪威语"
-
-#~ msgid "Dutch"
-#~ msgstr "荷兰语"
-
-#~ msgid "Polish"
-#~ msgstr "波兰语"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "巴西葡萄牙语"
-
-#~ msgid "Portuguese"
-#~ msgstr "葡萄牙语"
-
-#~ msgid "Romanian"
-#~ msgstr "罗马尼亚语"
-
-#~ msgid "Russian"
-#~ msgstr "俄语"
-
-#~ msgid "Slovenian"
-#~ msgstr "斯洛凡尼亚语"
-
-#, fuzzy
-#~ msgid "Ukrainian"
-#~ msgstr "弗里西语"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "简体中文"
-
-#~ msgid "Latin"
-#~ msgstr "拉丁​​语"
-
-#~ msgid ", mod: "
-#~ msgstr "，模式"
-
-#~ msgid "Increases Bombing damage"
-#~ msgstr "增加爆炸武器伤害"
-
-#~ msgid "The ultimate in sensor technology"
-#~ msgstr "最高等级的雷达科技"
-
-#~ msgid "Formation speed limiting OFF"
-#~ msgstr "成型速度限制关闭"
-
-#~ msgid "Formation speed limiting ON"
-#~ msgstr "成型速度限制开启"
-
-#~ msgid "Stop Multiplayer Audio"
-#~ msgstr "停止多人游戏音效"
-
-#~ msgid "Mayhem"
-#~ msgstr "混乱模式"
-
-#~ msgid "Skirmish"
-#~ msgstr "战役模式"
-
-#~ msgid "English"
-#~ msgstr "英语"
-
-#~ msgid "Basque"
-#~ msgstr "巴斯克语"
-
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "挪威语"
-
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "瑞典语"
-
-#~ msgid "Swedish"
-#~ msgstr "瑞典语"
-
-#~ msgid "Turkish"
-#~ msgstr "土耳其语"
-
-#~ msgid "Uzbek (Cyrillic)"
-#~ msgstr "乌兹别克（古斯拉夫）语"
-
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "半履带式眼镜蛇坦克（重机枪）"
-
-#~ msgid "Peperpot Emplacement"
-#~ msgstr "旋转迫击炮炮台"
-
-#~ msgid "Command turret MkII"
-#~ msgstr "指挥官车二型"
-
-#~ msgid "Command turret MkIV"
-#~ msgstr "指挥官车四型"
-
-#~ msgid "Cursor Mode"
-#~ msgstr "滑鼠模式"
-
-#~ msgid "Software (colored)"
-#~ msgstr "软体 (colored)"
-
-#~ msgid "Hardware"
-#~ msgstr "硬体"
-
-#~ msgid "Software (coloured)"
-#~ msgstr "软体 (coloured)"
-
-#~ msgid "Viper Light Cannon Wheels"
-#~ msgstr "轮式响尾蛇坦克（轻型加农炮）"
-
-#~ msgid "Viper Flamer Wheels"
-#~ msgstr "轮式响尾蛇坦克（火焰喷射）"
-
-#~ msgid "Viper Sensor Wheels"
-#~ msgstr "轮式响尾蛇雷达车"
-
-#~ msgid "Viper Light Cannon Tracks"
-#~ msgstr "履带式响尾蛇坦克（轻型加农炮）"
-
-#~ msgid "Cobra Heavy Machinegun Half-track"
-#~ msgstr "半履带式眼镜蛇坦克（重机枪）"
-
-#~ msgid "Cobra Mortar Half-track"
-#~ msgstr "半履带式眼镜蛇坦克（迫击炮）"
-
-#~ msgid "Cobra Light Cannon Tracks"
-#~ msgstr "履带式眼镜蛇坦克（轻型加农炮）"
-
-#~ msgid "Viper Medium Cannon Tracks"
-#~ msgstr "履带式响尾蛇坦克（中型加农炮）"
-
-#~ msgid "Viper Repair Wheels"
-#~ msgstr "轮式响尾蛇修理车"
-
-#~ msgid "Viper Repair Half-track"
-#~ msgstr "半履带式响尾蛇修理车"
-
-#~ msgid "Viper Machine Gun Wheels"
-#~ msgstr "轮式响尾蛇坦克（机枪）"
-
-#~ msgid "Viper Twin Machinegun Wheels"
-#~ msgstr "轮式响尾蛇坦克（双管机枪）"
-
-#~ msgid "Viper Twin Machinegun Half-track"
-#~ msgstr "半履带式响尾蛇坦克（双管机枪）"
-
-#~ msgid "Viper Heavy Machinegun Half-track"
-#~ msgstr "半履带式响尾蛇坦克（重机枪）"
-
-#~ msgid "Viper Heavy Machinegun Tracks"
-#~ msgstr "履带式响尾蛇坦克（重机枪）"
-
-#~ msgid "Viper Lancer Wheels"
-#~ msgstr "轮式响尾蛇坦克（枪骑兵火箭）"
-
-#~ msgid "Viper Mini-Pod Rockets Wheels"
-#~ msgstr "轮式响尾蛇坦克（迷你火箭）"
-
-#~ msgid "Viper Mini-Rocket Artillery Wheels"
-#~ msgstr "轮式响尾蛇坦克（迷你火箭阵列）"
-
-#~ msgid "Viper Bunker Buster Rockets Wheels"
-#~ msgstr "轮式响尾蛇坦克（碉堡终结者）"
-
-#~ msgid "Cobra Heavy Cannon Tracks"
-#~ msgstr "履带式眼镜蛇坦克（重型加农炮）"
-
-#~ msgid "Cobra Sensor Half-track"
-#~ msgstr "半履带式眼镜蛇雷达车"
-
-#~ msgid "Cobra Bombard Half-track"
-#~ msgstr "半履带式眼镜蛇坦克（重装迫击炮）"
-
-#~ msgid "Cobra Command Turret Half-track"
-#~ msgstr "半履带式眼镜蛇指挥官车"
-
-#~ msgid "Cobra Lancer Half-track"
-#~ msgstr "半履带式眼镜蛇坦克（枪骑兵火箭）"
-
-#~ msgid "Cobra Mini-Rocket Artillery Half-track"
-#~ msgstr "半履带式眼镜蛇坦克（迷你火箭阵列）"
-
-#~ msgid "Python Light Cannon Tracks"
-#~ msgstr "履带式蟒蛇坦克（轻型加农炮）"
-
-#~ msgid "Python Medium Cannon Tracks"
-#~ msgstr "履带式蟒蛇坦克（中型加农炮）"
-
-#~ msgid "Python Commander Tracks"
-#~ msgstr "履带式蟒蛇指挥车"
-
-#~ msgid "Mini-Pod"
-#~ msgstr "迷你火箭"
-
-#~ msgid "VTOL Mini-Pod"
-#~ msgstr "VTOL（迷你火箭）"
-
-#~ msgid "Machine Gunner"
-#~ msgstr "生化人步兵（机枪）"
-
-#~ msgid "Mini-Pod Rockets"
-#~ msgstr "迷你火箭"
-
-#~ msgid "Machine Gun Artifact"
-#~ msgstr "机枪科技"
-
-#~ msgid "HMG Cobra Half-tracks"
-#~ msgstr "半履带眼镜蛇坦克（重机枪）"
-
-#~ msgid "Commander Python Tracks"
-#~ msgstr "履带式蟒蛇坦克（指挥车）"
-
-#~ msgid "Mini-Pod Artillery"
-#~ msgstr "迷你火箭阵列"
-
-#~ msgid "Mini-Pod Battery"
-#~ msgstr "迷你火箭阵列"
-
-#~ msgid "Stabilized Mini-Pods"
-#~ msgstr "安定型迷你火箭一型"
-
-#~ msgid "Stabilized Mini-Pods Mk2"
-#~ msgstr "安定型迷你火箭二型"
-
-#~ msgid "HE Mini-Pods"
-#~ msgstr "HE迷你火箭一型"
-
-#~ msgid "HE Mini-Pods Mk2"
-#~ msgstr "HE迷你火箭二型"
-
-#~ msgid "HE Mini-Pods Mk3"
-#~ msgstr "HE迷你火箭三型"
-
-#~ msgid "HEAP Mini-Pods"
-#~ msgstr "HEAP迷你火箭一型"
-
-#~ msgid "HEAP Mini-Pods Mk2"
-#~ msgstr "HEAP迷你火箭二型"
-
-#~ msgid "HEAP Mini-Pods Mk3"
-#~ msgstr "HEAP迷你火箭三型"
-
-#~ msgid "Fast Fire Mini-Pods"
-#~ msgstr "快速射击迷你火箭一型"
-
-#~ msgid "Fast Fire Mini-Pods Mk2"
-#~ msgstr "快速射击迷你火箭二型"
-
-#~ msgid "Fast Fire Mini-Pods Mk3"
-#~ msgstr "快速射击迷你火箭三型"
-
-#~ msgid "Rapid Fire Mini-Pods"
-#~ msgstr "##快速射击迷你火箭一型"
-
-#~ msgid "Rapid Fire Mini-Pods Mk2"
-#~ msgstr "##快速射击迷你火箭二型"
-
-#~ msgid "Rapid Fire Mini-Pods Mk3"
-#~ msgstr "##快速射击迷你火箭三型"
-
-#~ msgid "Cluster Bombs Bug VTOL"
-#~ msgstr "毒虫VTOL（集束炸弹舱）"
-
-#~ msgid "Energy bars display toggled"
-#~ msgstr "开启或关闭能量条"
-
-#~ msgid "NO GAMES ARE AVAILABLE"
-#~ msgstr "没有游戏可加入"
-
-#~ msgid "R-Wpn-MG-Damage11"
-#~ msgstr "R-Wpn-MG-Damage11"
-
-#~ msgid "R-Struc-Power-Cam2"
-#~ msgstr "R-Struc-Power-Cam2"
-
-#~ msgid "NEXUS Link Tower"
-#~ msgstr "NEXUS Link 防卫塔"
-
-#~ msgid "Whirlwind AATurret"
-#~ msgstr "旋风级高射炮"
-
-#~ msgid "Power Upgrade"
-#~ msgstr "能源升级"
-
-#~ msgid "Viper Wheels Machinegun"
-#~ msgstr "轮式响尾蛇坦克（机枪）"
-
-#~ msgid "Viper Wheels Twin Machinegun"
-#~ msgstr "轮式响尾蛇坦克（双管机枪）"
-
-#~ msgid "Viper Wheels Heavy Machinegun"
-#~ msgstr "轮式响尾蛇坦克（重机枪）"
-
-#~ msgid "Cobra Wheels Heavy Machinegun"
-#~ msgstr "轮式眼镜蛇坦克（重机枪）"
-
-#~ msgid "Cobra Hover Heavy Machinegun"
-#~ msgstr "眼镜蛇气垫船（重机枪）"
-
-#~ msgid "Viper Tracks Machinegun"
-#~ msgstr "履带式响尾蛇坦克（机枪）"
-
-#~ msgid "Viper Tracks Twin Machinegun"
-#~ msgstr "履带式响尾蛇坦克（双管机枪）"
-
-#~ msgid "Viper Tracks Heavy Machinegun"
-#~ msgstr "履带式响尾蛇坦克（重机枪）"
-
-#~ msgid "Cobra Tracks Heavy Machinegun"
-#~ msgstr "履带式眼镜蛇坦克（重机枪）"
-
-#~ msgid "Cobra Hover Medium Cannon"
-#~ msgstr "眼镜蛇气垫船（中型加农炮）"
-
-#~ msgid "Scorpion Hover Medium Cannon"
-#~ msgstr "毒蝎气垫船（中型加农炮）"
-
-#~ msgid "Scorpion Tracks Medium Cannon"
-#~ msgstr "履带式毒蝎坦克（中型加农炮）"
-
-#~ msgid "Python Hover Medium Cannon"
-#~ msgstr "蟒蛇气垫船（中型加农炮）"
-
-#~ msgid "Python Hover Heavy Cannon"
-#~ msgstr "蟒蛇气垫船（重型加农炮）"
-
-#~ msgid "Python Tracks Heavy Cannon"
-#~ msgstr "履带式蟒蛇坦克（重型加农炮）"
-
-#~ msgid "Mantis Tracks Railgun"
-#~ msgstr "履带式螳螂坦克（轨道炮）"
-
-#~ msgid "Mantis Tracks Pulse Laser"
-#~ msgstr "履带式螳螂坦克（脉冲激光）"
-
-#~ msgid "Python Tracks Lancer"
-#~ msgstr "履带式蟒蛇坦克（轻骑兵火箭）"
-
-#~ msgid "Mantis Tracks Lancer"
-#~ msgstr "履带式螳螂坦克（枪骑兵火箭）"
-
-#~ msgid "Vengeance Tracks Tank Killer"
-#~ msgstr "履带式复仇者坦克（坦克杀手）"
-
-#~ msgid "Tiger Tracks Heavy Cannon"
-#~ msgstr "履带式虎式坦克（重型加农炮）"
-
-#~ msgid "Tiger Tracks Needle Gun"
-#~ msgstr "履带式虎式坦克（针刺炮）"
-
-#~ msgid "Vengeance Tracks Needle Gun"
-#~ msgstr "履带式复仇者坦克（针刺炮）"
-
-#~ msgid "Scorpion Cluster Bomb VTOL"
-#~ msgstr "毒蝎VTOL （集束炸弹舱）"
-
-#~ msgid "Scorpion Bunker Buster VTOL"
-#~ msgstr "毒蝎VTOL（碉堡终结者）"
-
-#~ msgid "Bug Lancer VTOL"
-#~ msgstr "毒虫VTOL（枪骑兵火箭）"
-
-#~ msgid "Bug HPV VTOL"
-#~ msgstr "毒虫VTOL（高速加农炮）"
-
-#~ msgid "Scorpion HPV VTOL"
-#~ msgstr "毒蝎VTOL（高速加农炮）"
-
-#~ msgid "Mantis Lancer VTOL"
-#~ msgstr "螳螂VTOL（枪骑兵火箭）"
-
-#~ msgid "Mantis HPV VTOL"
-#~ msgstr "螳螂VTOL（高速加农炮）"
-
-#~ msgid "Cobra Repair Tracks"
-#~ msgstr "眼镜蛇修理车"
-
-#~ msgid "Mantis Repair Tracks"
-#~ msgstr "螳螂修理车"
-
-#~ msgid "Python Tank Killer Tracks"
-#~ msgstr "履带式螳螂坦克（坦克杀手）"
-
-#~ msgid "Full"
-#~ msgstr "全萤幕"
-
-#~ msgid "New Paradigm Transmission"
-#~ msgstr "New Paradigm 运输*"
-
-#~ msgid "The New Paradigm have been driven from this zone."
-#~ msgstr "The New Paradigm 的势力已经被赶出这一个地区了"
-
-#~ msgid "Establish a forward base near the site of the Research Centre."
-#~ msgstr "在研究中心的附近建立一个前进基地"
-
-#~ msgid "This sector is now secure."
-#~ msgstr "这个地区现在安全了"
-
-#~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
-#~ msgstr "小心NEXUS 对你的系统的渗透及控制"
-
-#~ msgid "End Of Briefing."
-#~ msgstr "简报结束"
-
-#~ msgid "Armed Scavengers Approaching"
-#~ msgstr "武装拾荒者正在接近中"
-
-#~ msgid "Unit Rescued"
-#~ msgstr "单位捕获"
-
-#~ msgid "Units Rescued"
-#~ msgstr "单位捕获"
-
-#~ msgid "Group Rescued"
-#~ msgstr "战队捕获"
-
-#~ msgid "Unit Captured"
-#~ msgstr "捕获单位"
-
-#~ msgid "Group Captured"
-#~ msgstr "已捕捉战队"
-
-#~ msgid "Structure Captured"
-#~ msgstr "建筑物捕获"
-
-#~ msgid "Structure Destroyed"
-#~ msgstr "建筑物破坏"
-
-#~ msgid "Structure Infected"
-#~ msgstr "建筑物扩散"
-
-#~ msgid "Unit Infected"
-#~ msgstr "单位扩散！"
-
-#~ msgid "Group Infected"
-#~ msgstr "战队扩散"
-
-#~ msgid "Primary Objective Completed"
-#~ msgstr "主要目标完成"
-
-#~ msgid "Secondary Objective Completed"
-#~ msgstr "次要目标完成"
-
-#~ msgid "Time Limit Exceeded"
-#~ msgstr "超过时间限制"
-
-#~ msgid "Out Of Time"
-#~ msgstr "没有时间了"
-
-#~ msgid "Enemy Escaped"
-#~ msgstr "敌军逃离"
-
-#~ msgid "Enemy Transport Landing"
-#~ msgstr "敌军运输舰降落"
-
-#~ msgid "Incoming Airstrike"
-#~ msgstr "空袭警报"
-
-#~ msgid "Team Beta Eradicated"
-#~ msgstr "Beta 中队被消灭了"
-
-#~ msgid "Team Gamma Eradicated"
-#~ msgstr "Gamma 中队被消灭了"
-
-#~ msgid "Team Beta Rescued"
-#~ msgstr "Beat 中队援救成功"
-
-#~ msgid "Team Gamma Rescued"
-#~ msgstr "Gamma 中队援救成功"
-
-#~ msgid "Enemy Eradicated"
-#~ msgstr "敌方已经被铲除"
-
-#~ msgid "LasSat firing"
-#~ msgstr "激光激光卫星发射"
-
-#~ msgid "LasSats firing"
-#~ msgstr "激光激光卫星发射"
-
-#~ msgid "SAM Site"
-#~ msgstr "地对空飞弹"
-
-#~ msgid "Now left click the Viper Body"
-#~ msgstr "首先点选「车身」图示"
-
-#~ msgid "Select the Vehicle Propulsion icon"
-#~ msgstr "选择「车辆推进系统」图示"
-
-#~ msgid "Presently unused"
-#~ msgstr "目前未使用"
-
-#~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
-#~ msgstr "运输任务：拯救集中营的贫民"
-
-#~ msgid "Single Player Campaign"
-#~ msgstr "单人战役模式"
-
-#~ msgid "Multi Player Game"
-#~ msgstr "多人游戏模式"
