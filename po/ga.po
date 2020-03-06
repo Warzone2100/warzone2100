@@ -1,24 +1,19 @@
-# Irish translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Seanan <Unknown>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-06 20:05+0000\n"
-"PO-Revision-Date: 2008-05-08 17:14+0000\n"
-"Last-Translator: Seanan <Unknown>\n"
-"Language-Team: Irish <ga@li.org>\n"
-"Language: ga\n"
+"PO-Revision-Date: 2020-03-06 22:34\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Irish\n"
+"Language: ga_IE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n==2) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Plural-Forms: nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: ga-IE\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100_en.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -4544,9 +4539,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Ceannasaithe (F6)"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -4555,9 +4549,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Ceannasaithe (F6)"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -4596,9 +4589,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Á Chuardach"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -4713,15 +4705,13 @@ msgid "Could not open required port (%s) on  (%s)"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -4736,8 +4726,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -5808,9 +5797,8 @@ msgid "Command Turret Scorpion Tracks"
 msgstr ""
 
 #: po/custom/fromJson.txt:346
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Ceannasaithe (F6)"
+msgstr ""
 
 #: po/custom/fromJson.txt:347
 msgid "Command Turret Viper Tracks"
@@ -5857,14 +5845,12 @@ msgid "Computer Technology Breakthrough"
 msgstr ""
 
 #: po/custom/fromJson.txt:358
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:359
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:360
 msgid "Construction Unit"
@@ -6392,16 +6378,14 @@ msgid "Generates and concentrates bursts of laser energy"
 msgstr ""
 
 #: po/custom/fromJson.txt:512
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Research speed +80% (per minute)\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
 #: po/custom/fromJson.txt:513
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -6412,16 +6396,14 @@ msgstr ""
 
 #: po/custom/fromJson.txt:515
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Does not build defenses next to enemy oil derricks\n"
 "Never tries a truck rush"
 msgstr ""
 
 #: po/custom/fromJson.txt:516
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -7182,9 +7164,8 @@ msgid "Increases Cannon ROF"
 msgstr ""
 
 #: po/custom/fromJson.txt:740
-#, fuzzy
 msgid "Increases construction speed"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:746
 msgid "Increases Flamer ROF"
@@ -7307,9 +7288,8 @@ msgid "Jammer Tower"
 msgstr ""
 
 #: po/custom/fromJson.txt:791
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Ceannasaithe (F6)"
+msgstr ""
 
 #: po/custom/fromJson.txt:792
 msgid "Jeep"
@@ -8052,10 +8032,9 @@ msgid "No Place To Hide"
 msgstr ""
 
 #: po/custom/fromJson.txt:1009
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "Tofa"
+msgstr ""
 
 #: po/custom/fromJson.txt:1010
 msgctxt "rank"
@@ -8063,46 +8042,39 @@ msgid "Green"
 msgstr "Glasearcach"
 
 #: po/custom/fromJson.txt:1011
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Laoch"
+msgstr ""
 
 #: po/custom/fromJson.txt:1012
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "Gairmiúil"
+msgstr ""
 
 #: po/custom/fromJson.txt:1013
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "Gnáth"
+msgstr ""
 
 #: po/custom/fromJson.txt:1014
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "Glasearcach"
+msgstr ""
 
 #: po/custom/fromJson.txt:1015
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "Sain"
+msgstr ""
 
 #: po/custom/fromJson.txt:1016
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "Oilte"
+msgstr ""
 
 #: po/custom/fromJson.txt:1017
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Seansaighdiúir"
+msgstr ""
 
 #: po/custom/fromJson.txt:1018
 msgid "NullBot"
@@ -8145,9 +8117,8 @@ msgid "Original Campaign"
 msgstr ""
 
 #: po/custom/fromJson.txt:1030
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Imruagadh"
+msgstr ""
 
 #: po/custom/fromJson.txt:1031
 msgid "Or select the Repair Facility as a unit's target"
@@ -8258,9 +8229,8 @@ msgid "Power Generator"
 msgstr ""
 
 #: po/custom/fromJson.txt:1058
-#, fuzzy
 msgid "Powerlab"
-msgstr "Cumhacht"
+msgstr ""
 
 #: po/custom/fromJson.txt:1059
 msgid "Power Module"
@@ -8279,9 +8249,8 @@ msgid "Power output +30%"
 msgstr ""
 
 #: po/custom/fromJson.txt:1063
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1065
 msgid "Produces Cyborgs"
@@ -8452,9 +8421,8 @@ msgid "Rapid fire rail gun firing needle darts"
 msgstr ""
 
 #: po/custom/fromJson.txt:1111
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1113
 msgid "Reduced chance of NEXUS take-over"
@@ -8477,9 +8445,8 @@ msgid "Reinforced Base Structure Materials Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:1121
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Ceannasaithe (F6)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1122
 msgid "Repair Cobra Tracks"
@@ -8494,9 +8461,8 @@ msgid "Repair Scorpion Tracks"
 msgstr ""
 
 #: po/custom/fromJson.txt:1126
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1127
 msgid "Repair Turret"
@@ -8559,24 +8525,20 @@ msgid "Research module expands research facilities"
 msgstr ""
 
 #: po/custom/fromJson.txt:1146
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1147
-#, fuzzy
 msgid "Research speed +40% (per minute)"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1148
-#, fuzzy
 msgid "Research speed +60% (per minute)"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1149
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1150
 msgid "Retaliation"
@@ -9381,9 +9343,8 @@ msgid "Two-faced"
 msgstr ""
 
 #: po/custom/fromJson.txt:1375
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1376
 msgid "Upgraded battlefield computer system"
@@ -9442,9 +9403,8 @@ msgid "Vapor Turbine Generator Mk3"
 msgstr ""
 
 #: po/custom/fromJson.txt:1394
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: po/custom/fromJson.txt:1395
 msgid "Vehicle Superdense Thermal Armor"
@@ -9799,8 +9759,7 @@ msgid "Wyvern"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -9838,9 +9797,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Scoir ón Cluiche"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -9907,9 +9865,8 @@ msgid "Play in fullscreen mode"
 msgstr ""
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
@@ -9946,9 +9903,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -10048,9 +10004,8 @@ msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Scoir ón Cluiche"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -10206,14 +10161,12 @@ msgid "Store Design"
 msgstr ""
 
 #: src/display3d.cpp:676
-#, fuzzy
 msgid "Player left"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/display3d.cpp:680
-#, fuzzy
 msgid "Player dropped"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/display3d.cpp:684
 #: src/multiint.cpp:2060
@@ -10234,20 +10187,20 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Dochar %d%% - Taithí %d, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Dochar %d%% - Taithí %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Chaill an t-Aonad!"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -10259,6 +10212,9 @@ msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/droid.cpp:1932
 #, c-format
@@ -10266,6 +10222,9 @@ msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/droid.cpp:1943
 #, c-format
@@ -10273,6 +10232,9 @@ msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/droid.cpp:1947
 #, c-format
@@ -10280,20 +10242,21 @@ msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
 #: src/frontend.cpp:146
-#, fuzzy
 msgid "Single Player"
-msgstr "Roghnaigh Ainm Imreora"
+msgstr ""
 
 #: src/frontend.cpp:147
-#, fuzzy
 msgid "Multi Player"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/frontend.cpp:148
 #: src/frontend.cpp:309
@@ -10316,9 +10279,8 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Lean Leis an Cluiche"
+msgstr ""
 
 #: src/frontend.cpp:168
 msgid "No last save available"
@@ -10389,9 +10351,8 @@ msgid "New Campaign"
 msgstr ""
 
 #: src/frontend.cpp:365
-#, fuzzy
 msgid "Start Skirmish Game"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/frontend.cpp:366
 msgid "Challenges"
@@ -10402,9 +10363,8 @@ msgid "Load Campaign Game"
 msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -10426,23 +10386,20 @@ msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/frontend.cpp:610
-#, fuzzy
 msgid "MULTI PLAYER"
-msgstr "IMREOIRÍ"
+msgstr ""
 
 #: src/frontend.cpp:612
 msgid "Host Game"
 msgstr ""
 
 #: src/frontend.cpp:613
-#, fuzzy
 msgid "Join Game"
-msgstr "Lean Leis an Cluiche"
+msgstr ""
 
 #: src/frontend.cpp:618
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -10533,9 +10490,8 @@ msgid "On"
 msgstr ""
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Rotating"
-msgstr "Laidin"
+msgstr ""
 
 #: src/frontend.cpp:768
 msgid "Fixed"
@@ -10580,9 +10536,8 @@ msgid "Radar Jump"
 msgstr ""
 
 #: src/frontend.cpp:812
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "ROGHANNA"
+msgstr ""
 
 #: src/frontend.cpp:906
 msgid "Disabled"
@@ -10638,9 +10593,8 @@ msgstr ""
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "ROGHANNA"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -10688,18 +10642,16 @@ msgid "Vertical sync"
 msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "Iodáilis"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
 #: src/frontend.cpp:1260
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "ROGHANNA"
+msgstr ""
 
 #: src/frontend.cpp:1547
 msgid "Middle Mouse"
@@ -10714,9 +10666,8 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Roghnaigh Ainm don Cluiche"
+msgstr ""
 
 #: src/frontend.cpp:1561
 msgid "Camera Pitch"
@@ -10753,9 +10704,8 @@ msgid "Scroll Event"
 msgstr ""
 
 #: src/frontend.cpp:1602
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "ROGHANNA"
+msgstr ""
 
 #: src/frontend.cpp:1678
 #: src/multiint.cpp:223
@@ -10803,9 +10753,8 @@ msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -10862,14 +10811,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -10882,13 +10829,11 @@ msgid "Loop Production"
 msgstr ""
 
 #: src/hci.cpp:3840
-#, fuzzy
 msgid "Ally progress"
-msgstr "Barra Dul Chun Cinn"
+msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -10917,9 +10862,8 @@ msgstr ""
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Scoir"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -10947,9 +10891,8 @@ msgid "Quit"
 msgstr "Scoir"
 
 #: src/ingameop.cpp:342
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "D'fhág an tíosach an cluiche!"
+msgstr ""
 
 #: src/ingameop.cpp:348
 msgid "The game can't continue without the host."
@@ -10972,15 +10915,12 @@ msgid "Save Campaign Game"
 msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
@@ -10989,18 +10929,16 @@ msgid "Waiting for Power"
 msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "Barra Dul Chun Cinn"
+msgstr ""
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -11289,9 +11227,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1483
-#, fuzzy
 msgid "Researched"
-msgstr "Taighde (F2)"
+msgstr ""
 
 #: src/keybind.cpp:1504
 msgid "Only displaying energy bars when selected"
@@ -11310,9 +11247,8 @@ msgid "Debug menu is Open"
 msgstr ""
 
 #: src/keybind.cpp:1558
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Ní féidir an suíochán a aimsiú!"
+msgstr ""
 
 #: src/keybind.cpp:1722
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -11838,9 +11774,8 @@ msgid "Select all Land Combat Units"
 msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Roghnaigh Léarscáil"
+msgstr ""
 
 #: src/keymap.cpp:441
 msgid "Select all Transporters"
@@ -12025,9 +11960,9 @@ msgid "%s Gives You Technology Documents"
 msgstr ""
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "Tugan %s Cumhacht Duit"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -12060,9 +11995,8 @@ msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Ceannasaithe (F6)"
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -12107,9 +12041,8 @@ msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Roghnaigh Ainm don Cluiche"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -12120,8 +12053,7 @@ msgid "Select Game Name"
 msgstr "Roghnaigh Ainm don Cluiche"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -12169,8 +12101,7 @@ msgid "Random Game Options"
 msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -12196,23 +12127,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Tosaigh le Bunáiteanna"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -12231,23 +12159,20 @@ msgid "Team"
 msgstr ""
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Waiting for player"
 msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
@@ -12282,18 +12207,16 @@ msgid "Click to change player colour"
 msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Imreoir"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -12309,9 +12232,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Roghnaigh Ainm don Cluiche"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -12382,9 +12304,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Imreoir"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -12393,9 +12315,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Dún"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -12436,9 +12357,9 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "D'fhág an tíosach an cluiche!"
+msgstr ""
 
 #: src/multijoin.cpp:503
 msgid "Server message:"
@@ -12462,9 +12383,8 @@ msgid "Force Limits at Start"
 msgstr ""
 
 #: src/multilimit.cpp:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Fill Chuig An Scáileán Roimhe"
+msgstr ""
 
 #: src/multilimit.cpp:192
 #: src/titleui/protocol.cpp:178
@@ -12496,12 +12416,14 @@ msgid "Any number of players"
 msgstr ""
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "Imreoirí"
-msgstr[1] "Imreoirí"
-msgstr[2] "Imreoirí"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -12512,9 +12434,8 @@ msgid "Kills"
 msgstr ""
 
 #: src/multimenu.cpp:765
-#, fuzzy
 msgid "Units"
-msgstr "Aonad"
+msgstr ""
 
 #: src/multimenu.cpp:781
 msgid "Structs"
@@ -12596,9 +12517,8 @@ msgid " (Global)"
 msgstr ""
 
 #: src/multiplay.cpp:1248
-#, fuzzy
 msgid "(allies"
-msgstr "Comhbhánna"
+msgstr ""
 
 #: src/multiplay.cpp:1256
 msgid "(private to "
@@ -12761,10 +12681,10 @@ msgid "Rookie: %u"
 msgstr ""
 
 #: src/scores.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Uaine"
+msgstr ""
 
 #: src/scores.cpp:108
 #, c-format
@@ -12855,6 +12775,9 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/structure.cpp:2497
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -12882,6 +12805,8 @@ msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/structure.cpp:5447
 #, c-format
@@ -12890,6 +12815,8 @@ msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -13070,9 +12997,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Lean Leis an Cluiche"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -13084,9 +13010,8 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
-#, fuzzy
 msgid "Cancel"
-msgstr "Cian"
+msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -13098,7 +13023,7 @@ msgstr "Brústocaireacht"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -13135,164 +13060,3 @@ msgstr ""
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""
 
-#~ msgid "Select Map"
-#~ msgstr "Roghnaigh Léarscáil"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Imreoir"
-
-#~ msgid "Unit"
-#~ msgstr "Aonad"
-
-#~ msgid "Feat"
-#~ msgstr "Éacht"
-
-#~ msgid "Exit Game"
-#~ msgstr "Scoir ón Cluiche"
-
-#, fuzzy
-#~ msgid "Current Player:"
-#~ msgstr "Imreoir"
-
-#, fuzzy
-#~ msgid "Pause or unpause the game"
-#~ msgstr "D'fhág an tíosach an cluiche!"
-
-#, fuzzy
-#~ msgid "Start Edit Mode"
-#~ msgstr "Tosaigh Gan Bunáiteanna"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Imreoir"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "Imreoirí"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "Imreoirí"
-
-#~ msgid "Fog"
-#~ msgstr "Ceo"
-
-#, fuzzy
-#~ msgid "Player colour"
-#~ msgstr "Imreoir"
-
-#, fuzzy
-#~ msgid "Kick player"
-#~ msgstr "Imreoir"
-
-#, fuzzy
-#~ msgid "Player number"
-#~ msgstr "Imreoir"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "Cluiche"
-
-#~ msgid "Danish"
-#~ msgstr "Danmhairgis"
-
-#~ msgid "German"
-#~ msgstr "Gearmáinis"
-
-#, fuzzy
-#~ msgid "Spanish"
-#~ msgstr "Danmhairgis"
-
-#, fuzzy
-#~ msgid "Finnish"
-#~ msgstr "Danmhairgis"
-
-#~ msgid "French"
-#~ msgstr "Fraincis"
-
-#, fuzzy
-#~ msgid "Irish"
-#~ msgstr "Imruagadh"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "Laidin"
-
-#~ msgid "Norwegian"
-#~ msgstr "Ioruais"
-
-#~ msgid "Dutch"
-#~ msgstr "Ollainis"
-
-#, fuzzy
-#~ msgid "Polish"
-#~ msgstr "Sacs-Bhéarla"
-
-#, fuzzy
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portaingéilis"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "Portaingéilis"
-
-#~ msgid "Russian"
-#~ msgstr "Rúisis"
-
-#~ msgid "English"
-#~ msgstr "Sacs-Bhéarla"
-
-#, fuzzy
-#~ msgid "Basque"
-#~ msgstr "Bunáit"
-
-#, fuzzy
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Ioruais"
-
-#, fuzzy
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "Sualainnis"
-
-#~ msgid "Swedish"
-#~ msgstr "Sualainnis"
-
-#~ msgid "Mayhem"
-#~ msgstr "Caismirt"
