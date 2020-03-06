@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-06 04:14+0000\n"
-"PO-Revision-Date: 2020-03-06 04:42\n"
+"PO-Revision-Date: 2020-03-06 05:49\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -1477,12 +1477,12 @@ msgstr "Покращення ПБ Сенсора"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "Покращення ПБ Сенсора Мк2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "Покращення ПБ Сенсора Мк3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1492,12 +1492,12 @@ msgstr "Покращення ВЗІП ПБ"
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "Покращення ВЗІП ПБ Мк2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "Покращення ВЗІП ПБ Мк3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -3181,7 +3181,7 @@ msgstr "Виробництво (F1)"
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/skirmish/rules.js:91
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Виробництво - спочатку побудувати фабрику"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
@@ -3194,7 +3194,7 @@ msgstr "Дослідження (F2)"
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "Дослідження - спочатку побудувати дослідницьку Станцію"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -3211,7 +3211,7 @@ msgstr "Будівництво (F3)"
 #: data/base/script/tutorial.js:513
 #: data/mp/multiplay/skirmish/rules.js:130
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Збірка — спочатку конструктор-конструктор"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
@@ -3224,7 +3224,7 @@ msgstr "Конструювання (F4)"
 #: data/base/script/tutorial.js:514
 #: data/mp/multiplay/skirmish/rules.js:158
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "Дизайн - спочатку конструктивний Штаб"
 
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/skirmish/rules.js:167
@@ -3235,7 +3235,7 @@ msgstr "Командири (F6)"
 #: data/base/script/tutorial.js:516
 #: data/mp/multiplay/skirmish/rules.js:171
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Командири - спочатку команди виробництва"
 
 #: data/base/script/rules.js:191
 #: data/base/script/tutorial.js:251
@@ -3283,7 +3283,7 @@ msgstr "Бурова вежа зараз не працює. Збудуйте е�
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "Клікніть лівою кнопкою по іконці прошивки"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -3428,835 +3428,835 @@ msgstr "Поздоровляємо, командире - тепер ви гот�
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
 msgid "Incoming Transmission"
-msgstr ""
+msgstr "Вхідне Повідомлення"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
-msgstr ""
+msgstr "Перенесення з бета-бази"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "Будь ласка, допоможіть."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr ""
+msgstr "ОДНА КАМПАНІЯ"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "ЗАХІДНИЙ СЕКТУР"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "Світанок, 4 липня, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
-msgstr ""
+msgstr "КК проекту"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "Нова ера"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "Ранок, 4 липня, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
-msgstr ""
+msgstr "У польоті у західний сектор"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr ""
+msgstr "Команда Альфа наближається до місця призначення"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "Наступні напрямки:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Альфа - Західний Сектор..."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Альфа буде очищена для зняття."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
-msgstr ""
+msgstr "Удачі та гарне полювання."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "Наближаючись до пожвавлених образів команди."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr ""
+msgstr "Командире, ви керуєте Командою Альфа, однією з трьох експедиційних команд, надісланих Проектом для відновлення артефактів з початку зіткнення."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "Ваше місце призначення знаходиться в західній зоні."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr ""
+msgstr "Командире, ми відновили командну башту з Нової Парадигми."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr ""
+msgstr "Ця вежі дозволяє командирам координувати атаки між призначеними одиницями і виступати в якості точки доставки для заводів. Дослідження та використання цієї технології мають найвищий пріоритет."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
-msgstr ""
+msgstr "Командире, ми отримали цю передачу."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr ""
+msgstr "Ваші напади на нас не вийдуть безкарно."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Ви суперечите Новій Парадигмі."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr ""
+msgstr "Всі групи атаки атаки ворогів починаються."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Вони контрастують проти Нової Парадигми."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
-msgstr ""
+msgstr "Їх необхідно викорінити."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
 msgid "Secure the LZ and establish a forward base."
-msgstr ""
+msgstr "Захистіть Зону Висадки та збудуйте передову базу."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
-msgstr ""
+msgstr "Потім руйнуйте базу Нової Парадигми."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "Відкрий мені свої системи."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr ""
+msgstr "Давай я ладу разом із вашими машинами та кіборгами."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
-msgstr ""
+msgstr "Ми створимо ідеальний зв'язок людини та машини."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "Ми разом можемо створити новий світ."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "Я можу дати вам силу за межами ваших найсміливіших мрій."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "Відкрийте мені свої системи, і будьте сильні."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
-msgstr ""
+msgstr "Я можу підняти вас, як боги на зруйнованих землях."
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
-msgstr ""
+msgstr "Коли ми не змогли відповісти на це, стало загрозливою."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "Ваші втручання в мої плани на нову Парадигму не зникнуть без покарання."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
-msgstr ""
+msgstr "В тебе слабкі тіла -- я сильний і маю багато складових."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "Ви можете перемогти мене тут, але я воскресну."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "Як тільки я колись очистив світ вогнем, я знищу вас і ваш несмішний проект!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr ""
+msgstr "Потім Нексус вилучив із системи, знищивши банки пам'яті та видаливши всі сліди зовнішніх зв'язків."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr ""
+msgstr "Ми не впевнені, що таке НЕКСУс, хто або що їй спрямовує. Початкові дослідження посилаються на Програма Intruder Nexus з корпорацією Reed, розробником синаптичного посилання."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr ""
+msgstr "Ми встановили, що Нексус постачав Нову Парадигму з більшою кількістю її технологій. Що б Нексус не був більш ніж паразитий комп'ютер."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr ""
+msgstr "Технології та зброю знають про нас, але це не дружелюбно."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
-msgstr ""
+msgstr "Синаптичний зв'язок був розроблений Реальною корпорацією у поєднанні з озброєнням США."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
 msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
-msgstr ""
+msgstr "Синаптичний зв'язок дозволяє майже миттєво передати думку від людських операторів до системи контролю та орієнтації до системи керування. Синаптичне посилання перетворилося в основу черепа обведення хребта."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
 msgid "The link has a hi-speed data transfer port that plugs into any computer system."
-msgstr ""
+msgstr "У посиланні є високошвидкісна передача даних, який включається в будь-яку комп'ютерну систему."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr ""
+msgstr "Що ще важливіше - розробка синаптичних зв\"язків зробила можливим створення кіборгів. Ранні спроби владних вимог до влади для окремих солдатів не вдалися, оскільки вони виявилися повільними та безвідповідальними."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
-msgstr ""
+msgstr "Синаптичний зв'язок дозволяє розміщувати солдатів при владі костюмам, яким вони контролюють так само легко, як і власні тіла. Влада дозволяє піхоти ефективно функціонувати на полях битв 21-го століття."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
 msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
-msgstr ""
+msgstr "На жаль, ця технологія потрапила в руки Нової Парадигми. Обов'язково ви досліджуєте та розробляєте технології синаптичного зв’язку."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Попередження!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
-msgstr ""
+msgstr "Входимо в заборонену область."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Повернення до призначеної зони або знищення."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Повторити. Поверніться до призначеної зони або знищуйте."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Кінець повідомлення."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr ""
+msgstr "Вас буде зруйновано."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr ""
+msgstr "НЕКСУС, необхідна синаптична технологія була відновлена та надіслана для збору."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "Ти добре вчинила."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr ""
+msgstr "Як тільки ми проаналізуємо та автентифікуємо технології, ваша нагорода буде слідувати."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr ""
+msgstr "Виявлена інформація на попередній ворожій базі вказує на те, що Нова Парадигма була вимушена два артефакти синаптичного посилання."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
-msgstr ""
+msgstr "Ця Програма Nexus Intruder є само-мутацією комп'ютерного паразиту. Це ускладнює видалення систем, коли вона була ідентифікована."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Ми не змогли встановити, що це кінцева мета або функція. У початковій формі він шукає та ізолює секції пам'яті від решти вторгненої системи. Потім вона починає мутувати себе та структуру даних, ефективно перепрограмуючи систему зсередини."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr ""
+msgstr "Подальший аналіз був обмежений ручним відключенням системи нашими техніками, щоб запобігти додатковому забрудненню Програмою Інтрудер НЕКСУС."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr ""
+msgstr "Однак, поширення Програми Вірусних НЕКСУСу не було перевірено Новою Парадигмою. Нам потрібно захопити основні системи Нової Парадигми для подальшого дослідження та визначення її походження."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr ""
+msgstr "Командире, ви повинні зменшити діяльність Нової Парадигми в цьому секторі та визначити їхню основну базу."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "ДВОЄ КАМПАНІЇ"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "СЕКТЕРУВАТИ СЕКТОР"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "Ранок, 1 вересня, 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
-msgstr ""
+msgstr "Політний до Східного Сектора"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr ""
+msgstr "База підходів до Команди Бета"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
-msgstr ""
+msgstr "Ви маєте захистити і тримати його за будь-яку ціну."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "ОСНОВНЕННЯ"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
-msgstr ""
+msgstr "Командире, виявлено новий запуск."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "Ймовірно, це буде націлено на ваше місце."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr ""
+msgstr "Ви можете розпочати негайне евакуювання Бази Бета до безпечного притулку."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr ""
+msgstr "NASDA - це Північно-Американське стратегічне оборонне агентство."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "NASDA була сформована в 2076 році для захисту Північної Америки від звичайної та ядерної атаки. Будівництво системи супутникової оборони розпочалося у 2081 році і було завершено в 2082."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "У 2085 році супутники NASDA випустили свої напади на Землю."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
+msgstr "Були також ґрунтові майданчики. Багато з них були знищені в ядерних контрпрограмах, але декотрі з них неминуче залишилися."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr ""
+msgstr "Супутники NASDA також містили пульсуючі лазери, призначені для зняття ракет, що наближаються до Північної Америки."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
+msgstr "Під час контрударів ці Лассати не змогли стріляти. Якщо їх утворити, ці LasSats можуть завдати значної шкоди наземним цілям."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
+msgstr "Усі ядерні, спрямовані на Північну Америку, знайшли їхні цілі."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr ""
+msgstr "Ми знаємо, що Nexus шукає Центр NASDA у Східному Секторі, що був одним із центрів управління на наземних супутниках."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr ""
+msgstr "Якщо знайдено центр недоторканий, НЕКСУС може отримати контроль над супутниками."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
-msgstr ""
+msgstr "Нексус стверджував, що він вже зруйнував світ."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "Воїни Колективників я шукаю місце розташування Центр NASDA."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "Він лежить десь на вашій території."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr ""
+msgstr "Знайдіть його, і я буду надавати вам додаткову зброю, щоб допомогти вам у війні проти проекту."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "Наступні налаштування NASDA..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
-msgstr ""
+msgstr "Ми повинні переконатися, що вона не може зробити цього знову."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr ""
+msgstr "Аналіз вказує на те, що ці системи були частиною системи управління супутниками NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr ""
+msgstr "Тепер ви певні, що НЕКСУС відповідав за Зіткнення."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr ""
+msgstr "На ранніх етапах Коллапсу NASDA техніки вимкнули інфіковані системи, щоб ізолювати поширення НЕКСУ. Схоже, це завадило Ласскам стріляти під час вистрілянин."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr ""
+msgstr "Внаслідок цього ядерні магнітні імпульси знищили значну кількість пам’ятних банків NASDA, що розбило його основний процесор, і послало ударні хвилі через НЕКСАС."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr ""
+msgstr "Нексус був підсмажений, як цілі частини його свідомості були знищені контрпрограмами."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "Командир дозволяє нам виявити передачі з цього сайту, що досягає високої орбіти."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "Тепер Nexus перепідключився до супутника NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "Це створює велику загрозу для проекту та нашого виживання."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr ""
+msgstr "Аналіз центрального випуску NASDA не сумнівається, що Колективник представив йому Вірус НЕКСУСу."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr ""
+msgstr "Ядерний реактор буде використаний для живлення величезної мережі докатастрофних комп'ютерних систем."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr ""
+msgstr "Командире, ми щойно виявили запуск ракет при цих координатах."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr ""
+msgstr "Команда Гама надсилає команду для дослідження сайту запуску та запобігання подальшому запуску."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr ""
+msgstr "Можна припустити, що Nexus отримав контроль над цим сайтом. Не можна визначити, чи є ракета з ядерною зброєю, чи куди вона спрямована. Рекомендуємо розпочати підготовку до евакуації вашої бази."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
+msgstr "Воїни Колективників частіше виходять на нашу територію."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
-msgstr ""
+msgstr "Вони не є частиною механізму."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr ""
+msgstr "Воїни Колективників, атакують і знищують усіх, хто протистоїть техніці."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
-msgstr ""
+msgstr "Атакуйте! Стирайте їх з цього району!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr ""
+msgstr "Воїни Колективників - ми готові знищити зловмисників, які забруднюють наші землі."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr ""
+msgstr "Ті з Проекту не з машини. Вони були відмовлені в його благословенні. Ми, хто прийняли силу машини, мають долю змітати таких слабких істот."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr ""
+msgstr "Вони впадуть до сили Колективника."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
-msgstr ""
+msgstr "Атакуйте та знищуйте всіх, хто протистоїть машині."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
-msgstr ""
+msgstr "Напад!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr ""
+msgstr "Воїни Колективників, НЕКСУС дали нам силу машини, щоб ми могли знищити все, що проти нас."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr ""
+msgstr "Тепер Nexus просить нас розчавити проект."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
-msgstr ""
+msgstr "Очистка і знищена!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
-msgstr ""
+msgstr "Воїни Колективників. Ви добре провели промови."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
-msgstr ""
+msgstr "Ваша справедлива нагорода вже в дорозі."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr ""
+msgstr "Проект тікає від своєї бази та краде ваші технології."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "Ти мусиш їх зупинити!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr ""
+msgstr "Розшифрування Операції..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "ТОВДО КАМПАНІЇ"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "НІЧНЕ СЕКТОРУВАННЯ"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr ""
+msgstr "Сутінки, 3 грудня"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
-msgstr ""
+msgstr "Політний політ у Північний сектор"
 
 #: data/base/sequenceaudio/cam3/c003.txa:10
 msgid "The Final Encounter"
-msgstr ""
+msgstr "Остаточний супротивник"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
 msgid "Briefing Commences"
-msgstr ""
+msgstr "Починається Брифінг"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "Персональне місце в Базі Гамма підтвердило, що ядерні ракети, орієнтовані на Альфа та Бету, були запущені з силосної вежі у своєму секторі."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr ""
+msgstr "Команда Гама в даний час розвідує розташування силої та моніторинг діяльності НЕКСУСу."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
-msgstr ""
+msgstr "Команда Times!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr ""
+msgstr "Командире, ми виявили сили НЕКСУСу від цих координат..."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr ""
+msgstr "Виконується командир, ви перешкодили моїй останній ракеті запуску."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
+msgstr "Такий сором. Ваш проект ХК зробив би чудову ціль."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
-msgstr ""
+msgstr "Але дуже добре тебе тут приєднати."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr ""
+msgstr "Похований під цією силою - це тактична ядерна боєголовка, яка невдовзі з'явиться."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr ""
+msgstr "Оскільки я не можу її запустити, йому доведеться душити де саме."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr ""
+msgstr "Будь ласка, зверніть увагу, що всі входи до підземного комплексу були запечатані. Прощавай, Командире."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
-msgstr ""
+msgstr "Радий, що ви можете його створити, Командире."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr ""
+msgstr "Ворожі удари ВЗІПи закріпили. Нам вдалося відтримати кіборги та танки, але ми не були в змозі просунутись в долині."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr ""
+msgstr "Можеш дотягнутися до нас за допомогою зенітних літаків?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Це Команда Альфа. Повтор, це Команда Альфа. Ми потребуємо негайної допомоги."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "Ми зазнаємо сильної атаки від кіборгів, лазерних танків та ударів ВЗІП."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr ""
+msgstr "Ми намагалися досягти вашої позиції, але там були засідки."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
-msgstr ""
+msgstr "В долині знаходяться ці координати."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "Будь ласка, співробітник."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "Командире, сили Команда Альфа уникнули ядерної атаки на Базу Альфа."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr ""
+msgstr "Ми відчуваємо певне втручання в НЕКСУС"
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr ""
+msgstr "Ви повинні знищити його командний центр, перш ніж ми втрачаємо контроль над ключовими системами."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
-msgstr ""
+msgstr "Командире, ласкаво просимо до НЕКСУСУ!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr ""
+msgstr "Корпорація була заснована Dr Allan Reed. У 2080 році д-р Рід уклав договір зі військовими США для розробки технології синаптичних зв’язків."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr ""
+msgstr "Після патентування на синаптичний зв'язок через п'ять років д-р Рід продовжив свої дослідження в кібернетці."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr ""
+msgstr "Його мета цього разу полягала в тому, щоб перенести людську свідомість у потоки даних, які могли б працювати з комп'ютерними технологіями. В той час як в Кіберпросторі тіла операторів зберігалися в імлосних танках."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr ""
+msgstr "Доктор Рід знову став працювати над Вірусною Програмою Вірусних СНЕКСУСу. Через три роки з невеликим прогресом військові покинули Проект Nexus і скоротили фінансування Dr Ріда."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr ""
+msgstr "З часу звістка стверджують, що д-р Рід був розлючений і пообіцяв помститися усім, хто дістав свою дорогу."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr ""
+msgstr "Схоже, д-р Рід досяг успіху в своїх цілях і завершив Вірусну Програму НЕКСУС."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr ""
+msgstr "Подія між НЕКСУСом та Дром Рід вражає."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "Цей цікавий урок історії. Тепер дозвольте мені витримати вас на курсі."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
+msgstr "Програма Вірусного контролю НЕКСУС була створена для контролю над такими дурнями."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr ""
+msgstr "Це дуже просто проникнути у ваші системи і взяти їх з собою дуже просто, щоб, насправді, ви б навіть не знали, що я там. І тільки я активую частини себе заглиблено у ваші основні системи."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
+msgstr "Почнемо з активації НЕКСУСу у вашій базовій системі і подивимося, що станеться!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr ""
+msgstr "Командире, ми відчуваємо взаємодію з нашим обладнанням."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr ""
+msgstr "Нормальний сервіс буде відновлений якомога швидше."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
+msgstr "Невдовзі іде, Командире."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr ""
+msgstr "Проте, якщо ви випустите цю установу, тоді я дам вам свободу, оскільки ви більше не загроза для мене."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr ""
+msgstr "У вас є п'ять хвилин для дотримання чи ще це час терпляче!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr ""
+msgstr "Командире, ми атакуємо кіборги та танки НЕКСУСу. Будь ласка, допоможіть нам ...."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "...Неможливо завершити набагато довше. Повторіть спробу, будь ласка, допоможи..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr ""
+msgstr "О, Командир, так добре з вами приєднатися до нас в Дексусовій базі."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr ""
+msgstr "Це було дуже корисно встановити команду Гамми тут, у горах."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
-msgstr ""
+msgstr "Їхнє поглинання було таке задоволення."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
+msgstr "Дякую за всі ті корисні технології, які ви відновили."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr ""
+msgstr "Ви не з цими дурнями в Новій Парадигмі та Колективниках."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr ""
+msgstr "Зараз я активую усі ваші синаптичні посилання, щоб ваші сили могли згуртуватися з НЕКСУ."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr ""
+msgstr "Тепер ваші сили мої! Ласкаво просимо в Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "Командире, Ви виявляєтесь більш стійким, ніж я думав."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "Таке жаль, що ви відмовилися приєднатись до мене раніше."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "Але не має значення, оскільки ви будете тут набагато довше."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "Після детального пошуку та перепрограмування, я нарешті повернула всі свої системи в онлайн."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "Як тільки я знищив світ за допомогою ядерного вогню, щоб розчистити шлях для мого кібер-майбутнього."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "Я зараз маю намір накласти на своє зображення світ зовсім іншим, неначе видаливши небажані рістки, такі як ви."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr ""
+msgstr "Мій лазерний Супутник тепер підключається. Я маю намір спочатку перевірити їх на вас, Командире!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Дюск, 3 листопада, 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Земля, вища орбіта"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "Колапс"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19 січня 2086 року"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Північна Америка"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
-msgstr ""
+msgstr "Зима ядерної зброї"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Півночі, 10-го квітня 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Скелясті гори"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "Безпека"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Світанок, 4 квітня, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "Новий початок"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
+msgstr "Система NASDA була розроблена, щоб захистити нас, це було кінцевим ядерним стримуванням. Як виявилося, це була наша катера."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr ""
+msgstr "Звіти кажуть, що NASDA розробив вину під час перевірки рутинної системи. Не вірте в це. Хтось хотів, щоб це винесло нас."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr ""
+msgstr "Ці ядерні речовини були спрямовані на кожне велике місто по всьому світу. НАСДА було запрограмовано розпочати Збирання. Коли запущено контрудари, його лазерна оборона та антиракетні майданчики зазнали невдачі."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "Світ, яким ми його знали, закінчився..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "Ядерна зірка важко вдарила. Хвороба та голод заявляв, що більшість із нас, хто пережив ядерні удари. Війни над банками собак, потребували ще більше."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "Ми втікли Сіетл рано у 1996 році. Ми почули, що Скелясті гори були відносно незрозумілими."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
+msgstr "Після того, як ми переступили гурти мародерів, ми перетнули базу. Її персонал був убитий будь-якою низкою вірулентних захворювань."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
-msgstr ""
+msgstr "Ми розтрощили двері та прояснили тіло всередині."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr ""
+msgstr "Ми знали, що речі ніколи не будуть такими ж, але ми вирішили побудувати новий світ з руїн. Ми перебудували майданчики і перенесли старі системи в режим онлайн."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "Ми нарешті були готові до початку проекту."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr ""
+msgstr "Після багатьох місяців боротьби ми перемогли НЕКСУС."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr ""
+msgstr "Війна розпочалася Др Рід скінчилася."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
-msgstr ""
+msgstr "Ми відновили багато технологій, яких прагнули."
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr ""
+msgstr "Зараз настав час використати їх для відновлення світу."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr ""
+msgstr "Повільно, з попелу ми будемо піднятися знову..."
 
 #: data/mp/messages/strings/names.txt:15
 #: po/custom/fromJson.txt:858
@@ -4279,7 +4279,7 @@ msgstr "Кулемет"
 
 #: data/mp/messages/strings/names.txt:275
 msgid "VTOL Flak Cannon"
-msgstr ""
+msgstr "ВЗІП Бронебійна Гармата"
 
 #: data/mp/messages/strings/names.txt:293
 #: po/custom/fromJson.txt:332
@@ -4554,79 +4554,79 @@ msgstr "Командна Башта IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "СПРАВО"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "СЕРЕДНЬО"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "ВЛАСНИК"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "ВВЕДЕННЯ"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
-msgstr ""
+msgstr "Особистість змінена успішно."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "Немає такого особистості! Спробуйте один з них:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "Примусові дослідження очищалися, досліджуватимуть все, що мені потрібно."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Дослідження не блокуються, нічого не досліджуватиме."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Дослідження фундаментальної технології."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr ""
+msgstr "Дослідження "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "Такого шляху дослідження немає! Спробуй один з них:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Перепрошую, у мене немає вантажівок."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "Ви можете використати це."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "На жаль, помилка переказу дроїда."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "Електромобіль перенесено."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "Будь ласка, покладіть маяка!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "Ходить!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "На жаль, у мене немає вільних сил, щоб відправити за допомогу!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "У будь-який час, велике начальнику!"
 
 #: data/mp/multiplay/skirmish/rules.js:29
 #: src/multiint.cpp:1279
@@ -4657,7 +4657,7 @@ msgstr "Закріплені Команди"
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
 msgid "Locked Teams, No Shared Research"
-msgstr ""
+msgstr "Закріплені команди, немає спільних досліджень"
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
@@ -4702,22 +4702,24 @@ msgstr "Визначте Пароль"
 #: lib/netplay/netplay.cpp:1070
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr ""
+msgstr "Не вдалося відкрити необхідний порт (%s) на (%s)"
 
 #: lib/netplay/netplay.cpp:1074
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
-msgstr ""
+msgstr "Ви повинні вручну налаштувати маршрутизатор і брандмауер на\n"
+" відкрити порт 2100, щоб провести гру."
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr ""
+msgstr "Гра налаштована порт (%s) правильно на (%s)\n"
+"Ваш зовнішній IP є %s"
 
 #: lib/netplay/netplay.cpp:1856
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
+msgstr "Не знайдено жодного пристрою UPnP. Змініть маршрутизатор/брандмауер, щоб відкрити порт 2100!"
 
 #: lib/netplay/netplay.cpp:2201
 #, c-format
@@ -4730,11 +4732,14 @@ msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr ""
+msgstr "Помилка підключення до сервера лобів: %s.\n"
+"Переконайтеся, що порт %d може отримати вхідні підключення.\n"
+"Якщо ви використовуєте маршрутизатор, налаштуйте його за допомогою UPnP\n"
+" або переслати порт до системи."
 
 #: lib/netplay/netplay.cpp:2923
 msgid "Failed to get a lobby response!"
-msgstr ""
+msgstr "Не вдалося отримати лоббі відповідь!"
 
 #: lib/widget/listwidget.cpp:62
 msgid "Tab Scroll left"
@@ -4790,19 +4795,19 @@ msgstr "ПП Ланцюговий Зарядний Пристрій Мк3"
 
 #: po/custom/fromJson.txt:17
 msgid "AA Flak Cannon"
-msgstr ""
+msgstr "ПП Зенітна Гармата"
 
 #: po/custom/fromJson.txt:18
 msgid "AA Flak Cannon Emplacement"
-msgstr ""
+msgstr "AA Flak Cannon Emplacement"
 
 #: po/custom/fromJson.txt:19
 msgid "AA Flak Cannon Hardpoint"
-msgstr ""
+msgstr "AA Flak Cannon Hardpoint"
 
 #: po/custom/fromJson.txt:20
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "Напівгусеничний Пітон з ПП Зенітною Гарматою"
 
 #: po/custom/fromJson.txt:21
 msgid "AA Flak damage +25%"
@@ -4850,7 +4855,7 @@ msgstr "ПП Термальний Сенсор"
 
 #: po/custom/fromJson.txt:38
 msgid "Adaptive AI with multiple personalities"
-msgstr ""
+msgstr "Адаптивна ШІ з декількома особистостями"
 
 #: po/custom/fromJson.txt:39
 msgid "Advanced Base Structure Materials"
@@ -4886,7 +4891,7 @@ msgstr "Вдосконалене Виробництво"
 
 #: po/custom/fromJson.txt:49
 msgid "Advancedmaterialslab"
-msgstr ""
+msgstr "Площа надщів"
 
 #: po/custom/fromJson.txt:50
 msgid "Advanced Missile Allocation System"
@@ -4942,11 +4947,11 @@ msgstr "Вдосконалене Виробництво ВЗІПів Мк3"
 
 #: po/custom/fromJson.txt:65
 msgid "Aerodynamic Jump Pack"
-msgstr ""
+msgstr "Пакет Jump Aerodynamic"
 
 #: po/custom/fromJson.txt:66
 msgid "Aerodynamicslab"
-msgstr ""
+msgstr "Аеродинамічна плита"
 
 #: po/custom/fromJson.txt:71
 msgid "All cannons upgraded automatically"
@@ -4990,15 +4995,15 @@ msgstr "Всі ВЗІПи покращуються автоматично"
 
 #: po/custom/fromJson.txt:102
 msgid "Ally"
-msgstr ""
+msgstr "Аллі"
 
 #: po/custom/fromJson.txt:103
 msgid "Alpha"
-msgstr ""
+msgstr "Альфа"
 
 #: po/custom/fromJson.txt:104
 msgid "Alpha Campaign"
-msgstr ""
+msgstr "Альфа-кампанія"
 
 #: po/custom/fromJson.txt:105
 msgid "Amphibious hover propulsion"
@@ -5174,7 +5179,7 @@ msgstr "Броньована вартова вежа з Міні-ракетам�
 
 #: po/custom/fromJson.txt:153
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr ""
+msgstr "Броньована вартова вежа з Міні-ракетним подом"
 
 #: po/custom/fromJson.txt:154
 msgid "Armored guard tower with Needle Gun"
@@ -5430,7 +5435,7 @@ msgstr "Автоматичний заряджальний пристрій за�
 
 #: po/custom/fromJson.txt:236
 msgid "Auto Repair"
-msgstr ""
+msgstr "Автолагодження"
 
 #: po/custom/fromJson.txt:237
 msgid "Auto-Repair"
@@ -5454,15 +5459,15 @@ msgstr "Середні затрати енергії та час виробни�
 
 #: po/custom/fromJson.txt:242
 msgid "BaBaLegs"
-msgstr ""
+msgstr "BaBaLegs"
 
 #: po/custom/fromJson.txt:243
 msgid "BaBaProp"
-msgstr ""
+msgstr "BaBaProp"
 
 #: po/custom/fromJson.txt:244
 msgid "Back to Basics"
-msgstr ""
+msgstr "Повернутися до основи"
 
 #: po/custom/fromJson.txt:245
 msgid "Battlefield repair unit"
@@ -5518,11 +5523,11 @@ msgstr "Найкраще Уражає: Колісну техніку та Амф
 
 #: po/custom/fromJson.txt:266
 msgid "Beta"
-msgstr ""
+msgstr "Бета"
 
 #: po/custom/fromJson.txt:267
 msgid "Beta Campaign"
-msgstr ""
+msgstr "Кампанія Бета"
 
 #: po/custom/fromJson.txt:268
 msgid "Body Points and Speed Increased"
@@ -5638,7 +5643,7 @@ msgstr "Сила Гармати +25%"
 
 #: po/custom/fromJson.txt:302
 msgid "Cannon Fire Truck"
-msgstr ""
+msgstr "Вантажівка з Гарматою"
 
 #: po/custom/fromJson.txt:303
 msgid "Cannon Fortress"
@@ -5798,7 +5803,7 @@ msgstr "Гусеничний Скорпіон з Командною Баштою
 
 #: po/custom/fromJson.txt:346
 msgid "Command Turret Upgrade"
-msgstr ""
+msgstr "Покращення Командної Башти"
 
 #: po/custom/fromJson.txt:347
 msgid "Command Turret Viper Tracks"
@@ -5858,7 +5863,7 @@ msgstr "Будівельний Підрозділ"
 
 #: po/custom/fromJson.txt:361
 msgid "Controls up to ten commanders"
-msgstr ""
+msgstr "Управління десятьма командами"
 
 #: po/custom/fromJson.txt:362
 msgid "Counter-battery fire continues until enemy battery is suppressed"
@@ -5906,7 +5911,7 @@ msgstr "Кіборг Вогнеметник"
 
 #: po/custom/fromJson.txt:373
 msgid "Cyborg Heavy Body"
-msgstr ""
+msgstr "Важкий Корпус Кіборгів"
 
 #: po/custom/fromJson.txt:374
 msgid "Cyborg High Intensity Thermal Armor"
@@ -5922,11 +5927,11 @@ msgstr "Високоефективна Термальна Броня Кібор�
 
 #: po/custom/fromJson.txt:377
 msgid "Cyborg Lancer"
-msgstr ""
+msgstr "Cyborg Lancer"
 
 #: po/custom/fromJson.txt:378
 msgid "Cyborg Light Body"
-msgstr ""
+msgstr "Легкий Корпус Кіборгів"
 
 #: po/custom/fromJson.txt:380
 msgid "Cyborg Mechanic"
@@ -6126,7 +6131,7 @@ msgstr "Дає можливість авторемонту всім одиниц
 
 #: po/custom/fromJson.txt:442
 msgid "Enemy"
-msgstr ""
+msgstr "Ворог"
 
 #: po/custom/fromJson.txt:443
 msgid "Engineering"
@@ -6134,7 +6139,7 @@ msgstr "Інженіринг"
 
 #: po/custom/fromJson.txt:444
 msgid "Enhanced Nexus AI"
-msgstr ""
+msgstr "Покращена Nexus AI"
 
 #: po/custom/fromJson.txt:445
 msgid "Expensive and slow to produce"
@@ -6171,7 +6176,7 @@ msgstr "Модуль Фабрики дозволяє виробляти сере
 #: po/custom/fromJson.txt:455
 #, c-format
 msgid "Factory output speed +100%% per module"
-msgstr ""
+msgstr "Швидкість виробництва заводів +100%% для модуля"
 
 #: po/custom/fromJson.txt:456
 msgid "Factory output speed +60%"
@@ -6183,7 +6188,7 @@ msgstr "Продуктивність Фабрики +60%"
 
 #: po/custom/fromJson.txt:458
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Дальший діапазон в порівнянні з іншими датчиками"
 
 #: po/custom/fromJson.txt:459
 msgid "Faster than Cobra"
@@ -6319,11 +6324,11 @@ msgstr "Інжекторний Двигун Мк3"
 
 #: po/custom/fromJson.txt:497
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: po/custom/fromJson.txt:498
 msgid "Gamma Campaign"
-msgstr ""
+msgstr "Гамма-кампанія"
 
 #: po/custom/fromJson.txt:499
 msgid "Gas turbine boosts power output"
@@ -6381,31 +6386,37 @@ msgstr "Генерує та концентрує пучки лазерної е�
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Research speed +80% (per minute)\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Отримує ~ на 100% більше енергії від кожного берега нафти\n"
+"Швидкість дослідження +80% (на хвилину)\n"
+"Поче з оборонних структур та надписів нафти"
 
 #: po/custom/fromJson.txt:513
 #, c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Отримує ~ на 100% більше енергії від кожного пороху нафти\n"
+"Починає з оборонних структур і надбавки нафти"
 
 #: po/custom/fromJson.txt:514
 #, c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Отримує ~ 25% менше енергії від кожного нафтового вирвання"
 
 #: po/custom/fromJson.txt:515
 #, c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Does not build defenses next to enemy oil derricks\n"
 "Never tries a truck rush"
-msgstr ""
+msgstr "Отримує ~ 25% менше енергії від кожного виводу з нафти\n"
+"Не будувати оборони поруч з ворожими нафтодвигунами\n"
+"Ніколи не робить вантажівки"
 
 #: po/custom/fromJson.txt:516
 #, c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "Отримує ~ 25% менше енергії від кожного берега нафти\n"
+"Дослідження не зосереджені на конкретній збройній гілці"
 
 #: po/custom/fromJson.txt:517
 msgid "Gives Cyborg limited flight abilities"
@@ -6457,7 +6468,7 @@ msgstr "Залізобетонна Кутова Стіна"
 
 #: po/custom/fromJson.txt:531
 msgid "Hardcrete Gate"
-msgstr ""
+msgstr "Залізобетонні ворота"
 
 #: po/custom/fromJson.txt:532
 msgid "Hardcrete Wall"
@@ -6753,7 +6764,7 @@ msgstr "Важка ракета класу земля-повітря"
 
 #: po/custom/fromJson.txt:615
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "Плита з важкою зброєю"
 
 #: po/custom/fromJson.txt:616
 msgid "HE Bomb Shells"
@@ -6773,7 +6784,7 @@ msgstr "Вибухові Заряди Гаубиці Мк3"
 
 #: po/custom/fromJson.txt:620
 msgid "Helicopter"
-msgstr ""
+msgstr "Вертоліт"
 
 #: po/custom/fromJson.txt:621
 msgid "Hellstorm"
@@ -6805,15 +6816,15 @@ msgstr "Вибухові Заряди Мортири Мк3"
 
 #: po/custom/fromJson.txt:629
 msgid "HE Rockets"
-msgstr ""
+msgstr "Вибухові Ракети"
 
 #: po/custom/fromJson.txt:630
 msgid "HE Rockets Mk2"
-msgstr ""
+msgstr "Вибухові Ракети Мк2"
 
 #: po/custom/fromJson.txt:631
 msgid "HE Rockets Mk3"
-msgstr ""
+msgstr "Вибухові Ракети Мк3"
 
 #: po/custom/fromJson.txt:632
 msgid "HESH Rocket Warhead"
@@ -6829,7 +6840,7 @@ msgstr "Вдосконалена Вибухова Ракетна Боєголо�
 
 #: po/custom/fromJson.txt:635
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Сховати за мною"
 
 #: po/custom/fromJson.txt:636
 msgid "Hi-Energy Laser Emitter"
@@ -6857,7 +6868,7 @@ msgstr "Вибухова Пританкова боєголовка"
 
 #: po/custom/fromJson.txt:642
 msgid "High Explosive Anti-Tank warheads"
-msgstr ""
+msgstr "Вибухові Пританкові боєголовки"
 
 #: po/custom/fromJson.txt:643
 msgid "High Explosive Armor Piercing Flak"
@@ -6921,7 +6932,7 @@ msgstr "Амфібія"
 
 #: po/custom/fromJson.txt:666
 msgid "Hover AI"
-msgstr ""
+msgstr "Hover AI"
 
 #: po/custom/fromJson.txt:667
 msgid "Hover II"
@@ -7233,7 +7244,7 @@ msgstr "Підвищується швидкострільність Ракет"
 
 #: po/custom/fromJson.txt:777
 msgid "Indirectweaponslab"
-msgstr ""
+msgstr "Плита з іншого боку"
 
 #: po/custom/fromJson.txt:778
 msgid "Inferior armor and body points to Cobra"
@@ -7273,7 +7284,7 @@ msgstr "Всюдихідний Пітон з Вогнеметом 'Пекло'"
 
 #: po/custom/fromJson.txt:787
 msgid "Initial AI, now supplanted by NullBot"
-msgstr ""
+msgstr "Початковий тривалий, тепер він придушений NullBot"
 
 #: po/custom/fromJson.txt:788
 msgid "Intruder parasite isolated"
@@ -7285,11 +7296,11 @@ msgstr "Двигун з Іонізуючою Турбіною"
 
 #: po/custom/fromJson.txt:790
 msgid "Jammer Tower"
-msgstr ""
+msgstr "Джеммерська вежа"
 
 #: po/custom/fromJson.txt:791
 msgid "Jammer Turret"
-msgstr ""
+msgstr "Jammer Turret"
 
 #: po/custom/fromJson.txt:792
 msgid "Jeep"
@@ -7405,7 +7416,7 @@ msgstr "Бомби з Лазерним Наведенням"
 
 #: po/custom/fromJson.txt:821
 msgid "Laseropticslab"
-msgstr ""
+msgstr "Laseropticslab"
 
 #: po/custom/fromJson.txt:822
 msgid "Laser reload time -15%"
@@ -7549,7 +7560,7 @@ msgstr "Максимальні показники броні та міцност
 
 #: po/custom/fromJson.txt:866
 msgid "May be assigned to follow units"
-msgstr ""
+msgstr "Може бути закріплений за одиницями вимірювання"
 
 #: po/custom/fromJson.txt:867
 msgid "May be targeted directly or assigned to a sensor turret or tower"
@@ -7797,7 +7808,7 @@ msgstr "Мульти-Баштовий Корпус - Дракон"
 
 #: po/custom/fromJson.txt:932
 msgid "Nanolab"
-msgstr ""
+msgstr "Nanolab"
 
 #: po/custom/fromJson.txt:933
 msgid "Narrow area of effect"
@@ -7845,7 +7856,7 @@ msgstr "Неврально-Синаптичне Дослідницьке Ядр�
 
 #: po/custom/fromJson.txt:945
 msgid "Never tries a truck rush"
-msgstr ""
+msgstr "Ніколи не робить вантажівки"
 
 #: po/custom/fromJson.txt:947
 msgid "New Advanced Weapon Available"
@@ -7945,7 +7956,7 @@ msgstr "Доступна Нова Система"
 
 #: po/custom/fromJson.txt:983
 msgid "New Systems Sensor Available"
-msgstr ""
+msgstr "Доступний Новий Системний Сенсор"
 
 #: po/custom/fromJson.txt:984
 msgid "New Systems Structure Available"
@@ -7973,7 +7984,7 @@ msgstr "Нова ВЗІП Пускова Установка"
 
 #: po/custom/fromJson.txt:993
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #: po/custom/fromJson.txt:994
 msgid "NEXUS CWall"
@@ -8009,7 +8020,7 @@ msgstr "Середній Корпус 'НЕКСУСу'"
 
 #: po/custom/fromJson.txt:1002
 msgid "Nexus Missile Silo"
-msgstr ""
+msgstr "Nexus Missile Silo"
 
 #: po/custom/fromJson.txt:1004
 msgid "NEXUS Resistance Circuits"
@@ -8029,12 +8040,12 @@ msgstr "Стіна НЕКСУСу"
 
 #: po/custom/fromJson.txt:1008
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Нікуди сховатися"
 
 #: po/custom/fromJson.txt:1009
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Еліта"
 
 #: po/custom/fromJson.txt:1010
 msgctxt "rank"
@@ -8044,45 +8055,45 @@ msgstr "Зелений"
 #: po/custom/fromJson.txt:1011
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Герой"
 
 #: po/custom/fromJson.txt:1012
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "Професіонал"
 
 #: po/custom/fromJson.txt:1013
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "Звичайний"
 
 #: po/custom/fromJson.txt:1014
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Рокі"
 
 #: po/custom/fromJson.txt:1015
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Спеціальні"
 
 #: po/custom/fromJson.txt:1016
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Потренований"
 
 #: po/custom/fromJson.txt:1017
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Ветеран"
 
 #: po/custom/fromJson.txt:1018
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #: po/custom/fromJson.txt:1019
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "Об'єкти стають важкими для визначення поблизу них"
 
 #: po/custom/fromJson.txt:1020
 msgid "Oil Derrick"
@@ -8114,11 +8125,11 @@ msgstr "Наказує закріпленим артилерійським пі�
 
 #: po/custom/fromJson.txt:1029
 msgid "Original Campaign"
-msgstr ""
+msgstr "Початкова кампанія"
 
 #: po/custom/fromJson.txt:1030
 msgid "Original Skirmish"
-msgstr ""
+msgstr "Оригінальна Сутичка"
 
 #: po/custom/fromJson.txt:1031
 msgid "Or select the Repair Facility as a unit's target"
@@ -8194,7 +8205,7 @@ msgstr "Вежа з Плазмовим Вогнеметом"
 
 #: po/custom/fromJson.txt:1049
 msgid "Plasmite Retribution VTOL"
-msgstr ""
+msgstr "ВЗІП Плазмової Кари"
 
 #: po/custom/fromJson.txt:1050
 msgid "Plasteel"
@@ -8230,7 +8241,7 @@ msgstr "Енергогенератор"
 
 #: po/custom/fromJson.txt:1058
 msgid "Powerlab"
-msgstr ""
+msgstr "Електрична плита"
 
 #: po/custom/fromJson.txt:1059
 msgid "Power Module"
@@ -8258,11 +8269,11 @@ msgstr "Виробляє Кіборгів"
 
 #: po/custom/fromJson.txt:1067
 msgid "Project Heavy Body"
-msgstr ""
+msgstr "Важкий Корпус проекту"
 
 #: po/custom/fromJson.txt:1068
 msgid "Project Light Body"
-msgstr ""
+msgstr "Світло Проекту"
 
 #: po/custom/fromJson.txt:1069
 msgid "Project Medium Body"
@@ -8274,7 +8285,7 @@ msgstr "Гелеву суміш Оксиду Пропилену пристосо
 
 #: po/custom/fromJson.txt:1072
 msgid "Prototypical JavaScript AI focusing on rockets/missiles"
-msgstr ""
+msgstr "Прототипний JavaScript AI фокусування на ракета/ракетах"
 
 #: po/custom/fromJson.txt:1073
 msgid "Pulse Laser"
@@ -8342,7 +8353,7 @@ msgstr "Детектор Радарів"
 
 #: po/custom/fromJson.txt:1091
 msgid "Radar detector detects enemy sensors"
-msgstr ""
+msgstr "Знаходження індикатора радару виявляє ворожі датчики"
 
 #: po/custom/fromJson.txt:1092
 msgid "Radar Detector Tower"
@@ -8446,7 +8457,7 @@ msgstr "Армовані Матеріали Будівель Бази Мк3"
 
 #: po/custom/fromJson.txt:1121
 msgid "Repair Center Turret"
-msgstr ""
+msgstr "Ремонтна Башта Центр Ремонту"
 
 #: po/custom/fromJson.txt:1122
 msgid "Repair Cobra Tracks"
@@ -8530,11 +8541,11 @@ msgstr "Швидкість досліджень +30%"
 
 #: po/custom/fromJson.txt:1147
 msgid "Research speed +40% (per minute)"
-msgstr ""
+msgstr "Швидкість досліджень +40% (за хвилину)"
 
 #: po/custom/fromJson.txt:1148
 msgid "Research speed +60% (per minute)"
-msgstr ""
+msgstr "Швидкість досліджень +60% (за хвилину)"
 
 #: po/custom/fromJson.txt:1149
 msgid "Research speed +85%"
@@ -8686,7 +8697,7 @@ msgstr "Роторна Мортира - 'Перечниця'"
 
 #: po/custom/fromJson.txt:1189
 msgid "Rotaryweaponslab"
-msgstr ""
+msgstr "Rotaryweaponslab"
 
 #: po/custom/fromJson.txt:1190
 msgid "Ruined Factory"
@@ -8794,7 +8805,7 @@ msgstr "Башта Генератора Перешкод"
 
 #: po/custom/fromJson.txt:1217
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "Мапа моря AI, заснована на NullBot"
 
 #: po/custom/fromJson.txt:1218
 msgid "Search & Destroy Missiles"
@@ -8814,11 +8825,11 @@ msgstr "Само-відновне Виробництво"
 
 #: po/custom/fromJson.txt:1224
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #: po/custom/fromJson.txt:1225
 msgid "SemperFi JavaScript"
-msgstr ""
+msgstr "SemperFi JavaScript"
 
 #: po/custom/fromJson.txt:1226
 msgid "Sensor Cobra Half-tracks"
@@ -8886,11 +8897,11 @@ msgstr "Повільний Корпус"
 
 #: po/custom/fromJson.txt:1245
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "Smashedcornerwall"
 
 #: po/custom/fromJson.txt:1246
 msgid "Smashedwall"
-msgstr ""
+msgstr "Круглолиці"
 
 #: po/custom/fromJson.txt:1247
 msgid "Speed: Fast"
@@ -8918,7 +8929,7 @@ msgstr "Стабілізовані Міні-Ракети Мк2"
 
 #: po/custom/fromJson.txt:1253
 msgid "Stabilized Rockets"
-msgstr ""
+msgstr "Стабілізовані Ракети"
 
 #: po/custom/fromJson.txt:1254
 msgid "Steals technology from enemies"
@@ -8954,15 +8965,15 @@ msgstr "Завершено Розробку Будівлі"
 
 #: po/custom/fromJson.txt:1262
 msgid "Sunburst AA"
-msgstr ""
+msgstr "Сонячний спалах ЗА"
 
 #: po/custom/fromJson.txt:1263
 msgid "Sunburst AA Rocket Array"
-msgstr ""
+msgstr "ПП Ракетна Масив Сонячного Вибуху"
 
 #: po/custom/fromJson.txt:1264
 msgid "Sunburst AA Site"
-msgstr ""
+msgstr "Сонячний спалах ПП ЗП"
 
 #: po/custom/fromJson.txt:1267
 msgid "Supercrete"
@@ -9019,15 +9030,15 @@ msgstr "Надвисоко-температурний Плазмовий Гел�
 #: po/custom/fromJson.txt:1288
 #: src/design.cpp:1059
 msgid "Super Transport"
-msgstr ""
+msgstr "Супер Транспорт"
 
 #: po/custom/fromJson.txt:1289
 msgid "Super Transport Available"
-msgstr ""
+msgstr "Супер доступний Транспорт"
 
 #: po/custom/fromJson.txt:1290
 msgid "Super Transport Body"
-msgstr ""
+msgstr "Супертранспортний Корпус"
 
 #: po/custom/fromJson.txt:1291
 msgid "Surface-to-air missile"
@@ -9211,7 +9222,7 @@ msgstr "Бетон армований титаном"
 
 #: po/custom/fromJson.txt:1338
 msgid "Tower wars AI, based on NullBot"
-msgstr ""
+msgstr "Вежі війни AI, засновані на NullBot"
 
 #: po/custom/fromJson.txt:1339
 msgid "Tracked Propulsion"
@@ -9284,7 +9295,7 @@ msgstr "Двигун Оснащений Турбіною Мк3"
 
 #: po/custom/fromJson.txt:1359
 msgid "Turtle AI"
-msgstr ""
+msgstr "Turtle AI"
 
 #: po/custom/fromJson.txt:1360
 msgid "Twin 7.62mm machineguns"
@@ -9340,7 +9351,7 @@ msgstr "Спарений Багатоствольний швидкостріль
 
 #: po/custom/fromJson.txt:1374
 msgid "Two-faced"
-msgstr ""
+msgstr "Два шири"
 
 #: po/custom/fromJson.txt:1375
 msgid "Unit Research Completed"
@@ -9668,7 +9679,7 @@ msgstr "ВЗІП Ударна башта служить для помітки ц
 
 #: po/custom/fromJson.txt:1467
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "ВЗІП сонячний спалах AA"
 
 #: po/custom/fromJson.txt:1468
 msgid "VTOL Tank Killer"
@@ -9684,11 +9695,11 @@ msgstr "ВЗІП Спарений Кулемет"
 
 #: po/custom/fromJson.txt:1471
 msgid "Wall"
-msgstr ""
+msgstr "Стіна"
 
 #: po/custom/fromJson.txt:1472
 msgid "Wallcorner"
-msgstr ""
+msgstr "Уолл-кутовий"
 
 #: po/custom/fromJson.txt:1473
 msgid "Warehouse"
@@ -9761,54 +9772,55 @@ msgstr "Виверна"
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
+msgstr "Авторське право © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2020 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr ""
+msgstr "Файл Warzone 2100 / Mod"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr ""
+msgstr "Файл моду для Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr ""
+msgstr "Файл моду Warzone 2100 мультиплеєра"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr ""
+msgstr "Файл Warzone 2100 Global Mod"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr ""
+msgstr "Файл Warzone 2100 Music Mod"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Пост'ядерна стратегія реальному часі"
 
 #: po/custom/warzone2100.desktop.txt:3
 msgid "Strategy Game"
-msgstr ""
+msgstr "Стратегічна гра"
 
 #: src/cheat.cpp:164
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s хоче увімкнути режим налагодження. Увімкнено: %s, Вимкнено: %s."
 
 #: src/cheat.cpp:168
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s хоче вимкнути режим налагодження. Увімкнено: %s, Вимкнено: %s."
 
 #: src/cheat.cpp:174
 msgid "Debug mode now enabled!"
@@ -10221,8 +10233,8 @@ msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u підрозділ призначено у Групу %u"
 msgstr[1] "%u підрозділів призначено у Групу %u"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[2] "%u підрозділів призначено у Групу %u"
+msgstr[3] "%u підрозділів призначено у Групу %u"
 
 #: src/droid.cpp:1943
 #, c-format
@@ -10230,8 +10242,8 @@ msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Центр екрану на Групі %u - %u Підрозділ"
 msgstr[1] "Центр екрану на Групі %u - %u Підрозділів"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[2] "Центр екрану на Групі %u - %u Підрозділів"
+msgstr[3] "Центр екрану на Групі %u - %u Підрозділів"
 
 #: src/droid.cpp:1947
 #, c-format
@@ -10239,12 +10251,12 @@ msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Вирівнювання з Групою %u - %u Підрозділ"
 msgstr[1] "Вирівнювання з Групою %u - %u Підрозділів"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[2] "Вирівнювання з Групою %u - %u Підрозділів"
+msgstr[3] "Вирівнювання з Групою %u - %u Підрозділів"
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "Не вдалося перемістити одиниці – межі підрозділів перевищені"
 
 #: src/frontend.cpp:146
 msgid "Single Player"
@@ -10271,16 +10283,16 @@ msgstr "Показати Заставку"
 
 #: src/frontend.cpp:158
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr ""
+msgstr "Відео відсутні, завантажте їх http://wz2100.net"
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Продовжити збереження"
 
 #: src/frontend.cpp:168
 msgid "No last save available"
-msgstr ""
+msgstr "Останнє збереження не доступне"
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -10292,31 +10304,31 @@ msgstr "ГОЛОВНЕ МЕНЮ"
 
 #: src/frontend.cpp:173
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Офіційний сайт: http://wz2100.net/"
 
 #: src/frontend.cpp:174
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Перейдіть на форуми та всі новини Warzone 2100! Натисніть на це посилання."
 
 #: src/frontend.cpp:175
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "Пожертвування: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:178
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "Допоможіть підтримати проект з нашими серверними витратами, натисніть це посилання."
 
 #: src/frontend.cpp:179
 msgid "Chat with players on #warzone2100"
-msgstr ""
+msgstr "Чат з гравцями #warzone2100"
 
 #: src/frontend.cpp:182
 msgid "Connect to Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Підключіться до Freenode через веб-чат, натиснувши на це посилання."
 
 #: src/frontend.cpp:183
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Перевірити наявність новішої версії"
 
 #: src/frontend.cpp:310
 msgid "Fast Play"
@@ -10356,11 +10368,11 @@ msgstr "Виклики"
 
 #: src/frontend.cpp:367
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "Завантажити гру для маркетингової кампанії"
 
 #: src/frontend.cpp:368
 msgid "Load Skirmish Game"
-msgstr ""
+msgstr "Завантажити Автомобільну Гру"
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -10369,21 +10381,21 @@ msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
 #: src/frontend.cpp:375
 #: src/frontend.cpp:421
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "Не вистачає відео для кампанії! Отримайте їх від http://wz2100.net"
 
 #: src/frontend.cpp:416
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "КАМПАНІЯ"
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
 msgid "Load Campaign Saved Game"
-msgstr ""
+msgstr "Завантажити Збережену маркетингову гру"
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
 msgid "Load Skirmish Saved Game"
-msgstr ""
+msgstr "Завантажити Skirmish Збережена Гру"
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -10399,7 +10411,7 @@ msgstr "Приєднатись до Гри"
 
 #: src/frontend.cpp:618
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP порт 2100 повинен бути відкритий у вашій брандмауері або маршрутизатор для зберігання ігор!"
 
 #: src/frontend.cpp:681
 #: src/multiint.cpp:1223
@@ -10422,7 +10434,7 @@ msgstr "Опції Відео"
 
 #: src/frontend.cpp:685
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "Аудіо / Масштаб"
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
@@ -10436,11 +10448,11 @@ msgstr "Призначення Клавіш"
 
 #: src/frontend.cpp:738
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:739
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:740
 #: src/frontend.cpp:1120
@@ -10452,7 +10464,7 @@ msgstr "Повний Екран"
 #: src/frontend.cpp:903
 #: src/frontend.cpp:1683
 msgid "Unsupported"
-msgstr ""
+msgstr "Не підтримується"
 
 #: src/frontend.cpp:749
 #: src/frontend.cpp:758
@@ -10468,7 +10480,7 @@ msgstr "Вимкнено"
 
 #: src/frontend.cpp:750
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:751
 #: src/multiplay.cpp:1897
@@ -10487,19 +10499,19 @@ msgstr "Ввімкнено"
 
 #: src/frontend.cpp:768
 msgid "Rotating"
-msgstr ""
+msgstr "Обертання"
 
 #: src/frontend.cpp:768
 msgid "Fixed"
-msgstr ""
+msgstr "Виправлена"
 
 #: src/frontend.cpp:773
 msgid "Instant"
-msgstr ""
+msgstr "Миттєво"
 
 #: src/frontend.cpp:773
 msgid "Tracked"
-msgstr ""
+msgstr "З відстеженням"
 
 #: src/frontend.cpp:786
 #: src/ingameop.cpp:517
@@ -10509,7 +10521,7 @@ msgstr "Програвання Відео"
 #: src/frontend.cpp:790
 #: src/ingameop.cpp:522
 msgid "Scanlines"
-msgstr ""
+msgstr "Рядки пікселів"
 
 #: src/frontend.cpp:795
 #: src/ingameop.cpp:527
@@ -10524,12 +10536,12 @@ msgstr "Тіні"
 #: src/frontend.cpp:804
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr ""
+msgstr "Радар"
 
 #: src/frontend.cpp:808
 #: src/ingameop.cpp:542
 msgid "Radar Jump"
-msgstr ""
+msgstr "Джамп Радару"
 
 #: src/frontend.cpp:812
 msgid "GRAPHICS OPTIONS"
@@ -10537,16 +10549,16 @@ msgstr "ОПЦІЇ ГРАФІКИ"
 
 #: src/frontend.cpp:906
 msgid "Disabled"
-msgstr ""
+msgstr "Вимкнено"
 
 #: src/frontend.cpp:909
 msgid "Enabled"
-msgstr ""
+msgstr "Увімкнено"
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
 msgid "Auto"
-msgstr ""
+msgstr "Авто"
 
 #: src/frontend.cpp:954
 #: src/ingameop.cpp:159
@@ -10565,24 +10577,24 @@ msgstr "Гучність Музики"
 
 #: src/frontend.cpp:966
 msgid "HRTF"
-msgstr ""
+msgstr "ГРТФ"
 
 #: src/frontend.cpp:971
 #: src/frontend.cpp:973
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "HRTF не підтримується на пристрої / системній / бібліотеці OpenAL"
 
 #: src/frontend.cpp:977
 msgid "Map Zoom"
-msgstr ""
+msgstr "Масштаб карти"
 
 #: src/frontend.cpp:981
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "Масштаб карти"
 
 #: src/frontend.cpp:985
 msgid "Radar Zoom"
-msgstr ""
+msgstr "Масштаб Радару"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -10590,7 +10602,7 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "АУДІО / ZOM ПАРАМЕТРИ"
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -10602,7 +10614,7 @@ msgstr "Режим Графіки*"
 
 #: src/frontend.cpp:1137
 msgid "Graphics Mode"
-msgstr ""
+msgstr "Режим Графіки"
 
 #: src/frontend.cpp:1142
 msgid "Resolution*"
@@ -10610,19 +10622,19 @@ msgstr "Роздільна Здатність*"
 
 #: src/frontend.cpp:1142
 msgid "Resolution"
-msgstr ""
+msgstr "Роздільна здатність"
 
 #: src/frontend.cpp:1147
 msgid "Display Scale*"
-msgstr ""
+msgstr "Показати масштабування*"
 
 #: src/frontend.cpp:1147
 msgid "Display Scale"
-msgstr ""
+msgstr "Масштаб екрану"
 
 #: src/frontend.cpp:1191
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Ви можете змінити роздільну здатність шляхом нормального зміни розміру вікна. (Спробуйте перетягування куту/краю.)"
 
 #: src/frontend.cpp:1223
 msgid "* Takes effect on game restart"
@@ -10635,15 +10647,15 @@ msgstr "Розмір Текстур"
 #: src/frontend.cpp:1239
 #: src/ingameop.cpp:630
 msgid "Vertical sync"
-msgstr ""
+msgstr "Вертикальна синхронізація"
 
 #: src/frontend.cpp:1243
 msgid "Antialiasing*"
-msgstr ""
+msgstr "Згладжування*"
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Попередження: згладжування може викликати збії, особливо зі значеннями > 16"
 
 #: src/frontend.cpp:1260
 msgid "VIDEO OPTIONS"
@@ -10651,23 +10663,23 @@ msgstr "ОПЦІЇ ВІДЕО"
 
 #: src/frontend.cpp:1547
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Середня Миша"
 
 #: src/frontend.cpp:1547
 msgid "Right Mouse"
-msgstr ""
+msgstr "Права миша"
 
 #: src/frontend.cpp:1559
 msgid "Map/Radar Zoom"
-msgstr ""
+msgstr "Мапа/Радар зум"
 
 #: src/frontend.cpp:1560
 msgid "Game Speed"
-msgstr ""
+msgstr "Швидкість гри"
 
 #: src/frontend.cpp:1561
 msgid "Camera Pitch"
-msgstr ""
+msgstr "Крок камери"
 
 #: src/frontend.cpp:1576
 #: src/ingameop.cpp:697
@@ -10687,17 +10699,17 @@ msgstr "Поміняти Призначення Кнопок Миші"
 #: src/frontend.cpp:1590
 #: src/ingameop.cpp:715
 msgid "Rotate Screen"
-msgstr ""
+msgstr "Обертати екран"
 
 #: src/frontend.cpp:1594
 #: src/ingameop.cpp:720
 msgid "Colored Cursors"
-msgstr ""
+msgstr "Кольорові курсори"
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
 msgid "Scroll Event"
-msgstr ""
+msgstr "Прокрутити подію"
 
 #: src/frontend.cpp:1602
 msgid "MOUSE OPTIONS"
@@ -10720,7 +10732,7 @@ msgstr "Важко"
 #: src/frontend.cpp:1681
 #: src/multiint.cpp:223
 msgid "Insane"
-msgstr ""
+msgstr "Божевільно"
 
 #: src/frontend.cpp:1712
 #: src/frontend.cpp:1778
@@ -10730,27 +10742,27 @@ msgstr "Мова"
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
 msgid "Campaign Difficulty"
-msgstr ""
+msgstr "Труднощі кампанії"
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
 msgid "Camera Speed"
-msgstr ""
+msgstr "Швидкість камери"
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
 msgid "Unit Colour:"
-msgstr ""
+msgstr "Колір відділу:"
 
 #: src/frontend.cpp:1744
 #: src/frontend.cpp:1780
 msgid "Campaign"
-msgstr ""
+msgstr "Кампанія"
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
 msgid "Skirmish/Multiplayer"
-msgstr ""
+msgstr "Сутичка/Мультиплеєр"
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -10786,7 +10798,7 @@ msgstr "Гравець %u за допомогою шахрайства (меню
 #: src/hci.cpp:1607
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr ""
+msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) новий дроїд."
 
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
@@ -10800,21 +10812,23 @@ msgstr "Індикатор Прогресу"
 
 #: src/hci.cpp:3537
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "Хідінг застаріла технології"
 
 #: src/hci.cpp:3539
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Показ застарілої технології"
 
 #: src/hci.cpp:3551
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Показ технології повністю\n"
+"натисніть правою кнопкою миші, щоб додати до обраного"
 
 #: src/hci.cpp:3553
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Відображається тільки улюблена технологія\n"
+"натисніть правою кнопкою миші, щоб видалити з уподобань"
 
 #: src/hci.cpp:3633
 msgid "Factory Delivery Point"
@@ -10826,20 +10840,21 @@ msgstr "Зациклити Виробництво"
 
 #: src/hci.cpp:3840
 msgid "Ally progress"
-msgstr ""
+msgstr "Алаумний прогрес"
 
 #: src/hci.cpp:3855
 msgid "\n"
 "Cost: %1"
-msgstr ""
+msgstr "\n"
+"Вартість: %1"
 
 #: src/hci.cpp:4954
 msgid "Chat: All"
-msgstr ""
+msgstr "Чат: Усі"
 
 #: src/hci.cpp:4959
 msgid "Chat: Team"
-msgstr ""
+msgstr "Чат: Команда"
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -10859,17 +10874,17 @@ msgstr "ОБЕРЕЖНО: Ви хост. Якщо ви вийдете, гра з
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
 msgid "Host Quit"
-msgstr ""
+msgstr "Вийти з хосту"
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "Тактичний інтерфейс (значок цільового джерела): Показати"
 
 #: src/ingameop.cpp:186
 #: src/ingameop.cpp:913
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "Тактичний інтерфейс (значок цільового джерела): Приховувати"
 
 #: src/ingameop.cpp:251
 #: src/ingameop.cpp:260
@@ -10904,15 +10919,15 @@ msgstr "Опції Звуку"
 
 #: src/ingameop.cpp:494
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Перегляд відображення ключів"
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
-msgstr ""
+msgstr "Зберегти гру в кампанії"
 
 #: src/ingameop.cpp:886
 msgid "Save Skirmish Game"
-msgstr ""
+msgstr "Зберегти Гру до Головної"
 
 #: src/init.cpp:445
 #, c-format
@@ -10923,23 +10938,23 @@ msgstr "Необхідний мод не був завантажений: %s\n\n
 
 #: src/intdisplay.cpp:164
 msgid "Waiting for Power"
-msgstr ""
+msgstr "Очікування живлення"
 
 #: src/intdisplay.cpp:212
 msgid "Build Progress"
-msgstr ""
+msgstr "Прогрес збірки"
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
-msgstr ""
+msgstr "Індикатор будівництва"
 
 #: src/intdisplay.cpp:255
 msgid "Research Progress"
-msgstr ""
+msgstr "Хід дослідження"
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
-msgstr ""
+msgstr "Потрібно більше ресурсів!"
 
 #: src/intelmap.cpp:239
 #: src/keybind.cpp:1363
@@ -11079,11 +11094,11 @@ msgstr "Обережно! Це шахрайство нестабільне. Ми
 
 #: src/keybind.cpp:218
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "Лусь! Дроїда нижче 20%!"
 
 #: src/keybind.cpp:234
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "Ой! Стан споруди знизився на 20%!"
 
 #: src/keybind.cpp:290
 msgid "Lets us see what you see!"
@@ -11095,20 +11110,20 @@ msgstr "Добре, показ радіусу сенсору на зброї в�
 
 #: src/keybind.cpp:326
 msgid "View Aligned to South"
-msgstr ""
+msgstr "Вид на південь"
 
 #: src/keybind.cpp:336
 msgid "View Aligned to East"
-msgstr ""
+msgstr "Вид на схід"
 
 #: src/keybind.cpp:346
 msgid "View Aligned to West"
-msgstr ""
+msgstr "Вид на Захід"
 
 #: src/keybind.cpp:411
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr ""
+msgstr "Гравець %u обманює нову армію дроїдів: %d × %s."
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -11191,7 +11206,7 @@ msgstr "Туман вимкнено"
 #: src/keybind.cpp:922
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "Встановлення масштабу радару на %u"
 
 #: src/keybind.cpp:1311
 msgid "God Mode ON"
@@ -11216,7 +11231,7 @@ msgstr "За вас ВСЕ вже винайшли!"
 
 #: src/keybind.cpp:1442
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "Обрані будівлі миттєво перезаряджено!"
 
 #: src/keybind.cpp:1483
 #, c-format
@@ -11245,7 +11260,7 @@ msgstr "Меню налагодження Відкрито"
 
 #: src/keybind.cpp:1558
 msgid "Unable to locate any oil derricks!"
-msgstr ""
+msgstr "Не можу знайти жодних бурових дерев нафти!"
 
 #: src/keybind.cpp:1722
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -11273,11 +11288,11 @@ msgstr "Обрані підрозділи та будівлі буде знищ�
 
 #: src/keybind.cpp:2297
 msgid "Reveal OFF"
-msgstr ""
+msgstr "Показати ВИМКНЕНО"
 
 #: src/keybind.cpp:2302
 msgid "Reveal ON"
-msgstr ""
+msgstr "Показати увімк"
 
 #: src/keybind.cpp:2383
 msgid "Centered on player HQ, direction NORTH"
@@ -11311,12 +11326,12 @@ msgstr "Швидкість Гри Нормалізовано"
 #: src/keybind.cpp:2547
 #, c-format
 msgid "Game Speed Increased to %s"
-msgstr ""
+msgstr "Швидкість гри збільшена до %s"
 
 #: src/keybind.cpp:2551
 #, c-format
 msgid "Game Speed Reduced to %s"
-msgstr ""
+msgstr "Швидкість гри зменшена до %s"
 
 #: src/keybind.cpp:2609
 msgid "Radar showing friend-foe colors"
@@ -11384,7 +11399,7 @@ msgstr "Командири"
 
 #: src/keymap.cpp:303
 msgid "QuickSave"
-msgstr ""
+msgstr "QuickSave"
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
@@ -11392,7 +11407,7 @@ msgstr "Прибрати Радар"
 
 #: src/keymap.cpp:305
 msgid "QuickLoad"
-msgstr ""
+msgstr "Швидке завантаження"
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -11416,7 +11431,7 @@ msgstr "Показати Місце Попереднього Повідомле�
 
 #: src/keymap.cpp:311
 msgid "Toggle Sensor display"
-msgstr ""
+msgstr "Ввімкнути/вимкнути датчик"
 
 #: src/keymap.cpp:315
 msgid "Assign Group 0"
@@ -11648,11 +11663,11 @@ msgstr "Задіяти Накладення"
 
 #: src/keymap.cpp:383
 msgid "Toggle Console History "
-msgstr ""
+msgstr "Показати історію консолі "
 
 #: src/keymap.cpp:384
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Показати/приховати історію командного чату"
 
 #: src/keymap.cpp:387
 msgid "Center View on HQ"
@@ -11672,39 +11687,39 @@ msgstr "Повернутись до Штабу"
 
 #: src/keymap.cpp:400
 msgid "Stop Droid"
-msgstr ""
+msgstr "Stop Droid"
 
 #: src/keymap.cpp:403
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "Надіслати глобальне текстове повідомлення"
 
 #: src/keymap.cpp:404
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "Надіслати текстове повідомлення команди"
 
 #: src/keymap.cpp:405
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Кидати маяк"
 
 #: src/keymap.cpp:407
 msgid "Toggles shadows"
-msgstr ""
+msgstr "Перемикає тіні"
 
 #: src/keymap.cpp:408
 msgid "Trap cursor"
-msgstr ""
+msgstr "Зафіксувати курсор"
 
 #: src/keymap.cpp:409
 msgid "Toggle radar terrain"
-msgstr ""
+msgstr "Перемкнути місцевість радару"
 
 #: src/keymap.cpp:410
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "Вигляд малої ворога"
 
 #: src/keymap.cpp:411
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Показати всі переписки клавіатури"
 
 #: src/keymap.cpp:420
 msgid "Select all Combat Units"
@@ -11712,7 +11727,7 @@ msgstr "Обрати всі Бойові Підрозділи"
 
 #: src/keymap.cpp:421
 msgid "Select all Cyborgs"
-msgstr ""
+msgstr "Обрати всі Кіборгів"
 
 #: src/keymap.cpp:422
 msgid "Select all Heavily Damaged Units"
@@ -11744,7 +11759,7 @@ msgstr "Обрати всі ВЗІПи"
 
 #: src/keymap.cpp:430
 msgid "Select all fully-armed VTOLs"
-msgstr ""
+msgstr "Оберіть всі повні збройні ВЗІПи"
 
 #: src/keymap.cpp:431
 msgid "Select all Wheels"
@@ -11752,7 +11767,7 @@ msgstr "Обрати всі Колісні Підрозділи"
 
 #: src/keymap.cpp:432
 msgid "Show frame rate"
-msgstr ""
+msgstr "Показати частоту кадрів"
 
 #: src/keymap.cpp:433
 msgid "Select all Similar Units"
@@ -11760,35 +11775,35 @@ msgstr "Обрати всі Підрозділи Цього Типу"
 
 #: src/keymap.cpp:437
 msgid "Select all Combat Cyborgs"
-msgstr ""
+msgstr "Обрати всі бойові Кіборгів"
 
 #: src/keymap.cpp:438
 msgid "Select all Engineers"
-msgstr ""
+msgstr "Обрати всіх інженерів"
 
 #: src/keymap.cpp:439
 msgid "Select all Land Combat Units"
-msgstr ""
+msgstr "Обрати всі Бойові Підрозділи"
 
 #: src/keymap.cpp:440
 msgid "Select all Mechanics"
-msgstr ""
+msgstr "Обрати всі Механіки"
 
 #: src/keymap.cpp:441
 msgid "Select all Transporters"
-msgstr ""
+msgstr "Вибрати всі транспортери"
 
 #: src/keymap.cpp:442
 msgid "Select all Repair Tanks"
-msgstr ""
+msgstr "Обрати всі ремонтні танки"
 
 #: src/keymap.cpp:443
 msgid "Select all Sensor Units"
-msgstr ""
+msgstr "Обрати всі Підрозділи Сенсору"
 
 #: src/keymap.cpp:444
 msgid "Select all Trucks"
-msgstr ""
+msgstr "Обрати всі Вантажівки"
 
 #: src/keymap.cpp:448
 msgid "Select next Factory"
@@ -11808,83 +11823,83 @@ msgstr "Обрати наступну Фабрику Кіборгів"
 
 #: src/keymap.cpp:454
 msgid "Toggle Debug Mappings"
-msgstr ""
+msgstr "Ввімкнути/вимкнути відображення відладки"
 
 #: src/keymap.cpp:455
 msgid "Toggle display of droid path"
-msgstr ""
+msgstr "Перемкнути відображення шляху до дроїда"
 
 #: src/keymap.cpp:456
 msgid "Toggle display of gateways"
-msgstr ""
+msgstr "Перемкнути відображення шлюзів"
 
 #: src/keymap.cpp:457
 msgid "Toggle visibility"
-msgstr ""
+msgstr "Перемкнути видимість"
 
 #: src/keymap.cpp:458
 msgid "Raise tile height"
-msgstr ""
+msgstr "Підняти висоту плитки"
 
 #: src/keymap.cpp:459
 msgid "Lower tile height"
-msgstr ""
+msgstr "Нижня висота плитки"
 
 #: src/keymap.cpp:460
 msgid "Toggles All fog"
-msgstr ""
+msgstr "Перемкнути всі тумани"
 
 #: src/keymap.cpp:461
 msgid "Trigger some weather"
-msgstr ""
+msgstr "Запустіть трохи погоди"
 
 #: src/keymap.cpp:462
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "Віддзеркалити трикутник"
 
 #: src/keymap.cpp:463
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "Зробити зразок вимірювання продуктивності"
 
 #: src/keymap.cpp:466
 msgid "Make all items available"
-msgstr ""
+msgstr "Зробити всі доступні предмети"
 
 #: src/keymap.cpp:467
 msgid "Kill Selected Unit(s)"
-msgstr ""
+msgstr "Вбити вибрані одиниці(і)"
 
 #: src/keymap.cpp:468
 msgid "Toggle god Mode Status"
-msgstr ""
+msgstr "Перемкнути статус god"
 
 #: src/keymap.cpp:469
 msgid "Display Options Screen"
-msgstr ""
+msgstr "Екран блокування"
 
 #: src/keymap.cpp:470
 msgid "Complete current research"
-msgstr ""
+msgstr "Завершити поточне дослідження"
 
 #: src/keymap.cpp:471
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "Показати карту в позиції миші"
 
 #: src/keymap.cpp:472
 msgid "Trace a game object"
-msgstr ""
+msgstr "Слідкувати за ігровим об’єктом"
 
 #: src/loadsave.cpp:311
 msgid "Parent directory"
-msgstr ""
+msgstr "Батьківський каталог"
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory"
-msgstr ""
+msgstr "Autosave directory"
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "Автозбереження теки (не дозволена для збереження)"
 
 #: src/loop.cpp:253
 #: src/loop.cpp:269
@@ -11959,7 +11974,7 @@ msgstr "%s Надає Вам Технічну Документацію"
 #: src/multigifts.cpp:413
 #, c-format
 msgid "%s Gives You %d Power"
-msgstr ""
+msgstr "%s Дає Вам %d Сили"
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -11988,58 +12003,58 @@ msgstr "Ви Знайшли Креслення Для %s"
 
 #: src/multiint.cpp:223
 msgid "Medium"
-msgstr ""
+msgstr "Медіум"
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
 msgid "Commander"
-msgstr ""
+msgstr "Командер"
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "НЕВІДОМИЙ ІМ'Я"
 
 #: src/multiint.cpp:773
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "ОПИС МІСЦЯ ПРИСТРОЮ"
 
 #: src/multiint.cpp:787
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
-msgstr ""
+msgstr "Турнір: %3.1f%% перемогла, %3.1f%% втрати, %3.1f%% нічиє"
 
 #: src/multiint.cpp:887
 msgid "Error while joining."
-msgstr ""
+msgstr "Помилка під час приєднання."
 
 #: src/multiint.cpp:1062
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "Танки вимкнені!!"
 
 #: src/multiint.cpp:1063
 msgid "Cyborgs disabled."
-msgstr ""
+msgstr "Кіборги вимкнуто."
 
 #: src/multiint.cpp:1064
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "ВЗІПи вимкнено."
 
 #: src/multiint.cpp:1065
 msgid "Satellite Uplink disabled."
-msgstr ""
+msgstr "Супутник вимкнений."
 
 #: src/multiint.cpp:1066
 msgid "Laser Satellite disabled."
-msgstr ""
+msgstr "Лазерний супутник вимкнено."
 
 #: src/multiint.cpp:1067
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Межі Будівель Підкріплені."
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
-msgstr ""
+msgstr "Назва гри"
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -12052,11 +12067,12 @@ msgstr "Виберіть Ім’я Гри"
 #: src/multiint.cpp:1247
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Оберіть карту\n"
+"можуть бути заблоковані голосами гравців"
 
 #: src/multiint.cpp:1248
 msgid "Map-Mod!"
-msgstr ""
+msgstr "Map-Mod!"
 
 #: src/multiint.cpp:1261
 msgid "Click to set Password"
@@ -12095,12 +12111,13 @@ msgstr "Встановити Межу Кількості Будівель"
 
 #: src/multiint.cpp:1334
 msgid "Random Game Options"
-msgstr ""
+msgstr "Опції випадкової гри"
 
 #: src/multiint.cpp:1335
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Випадкові налаштування гри\n"
+"можуть бути заблоковані голосами гравців"
 
 #: src/multiint.cpp:1343
 #: src/multiint.cpp:1344
@@ -12109,47 +12126,47 @@ msgstr "Створити Гру"
 
 #: src/multiint.cpp:1351
 msgid "Vote"
-msgstr ""
+msgstr "Голосувати"
 
 #: src/multiint.cpp:1352
 msgid "No. Do not allow host to randomize or change map"
-msgstr ""
+msgstr "Ні. Не дозволяти хосту змінювати або переміняти карту"
 
 #: src/multiint.cpp:1353
 msgid "Yes. Allow host to randomize or change map"
-msgstr ""
+msgstr "Так. Дозволити хосту змінювати або переміщати карту"
 
 #: src/multiint.cpp:1424
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "Складність"
 
 #: src/multiint.cpp:1437
 msgid "Starts disadvantaged"
-msgstr ""
+msgstr "Починає слабкий"
 
 #: src/multiint.cpp:1438
 msgid "Plays nice"
-msgstr ""
+msgstr "Грати приємно"
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
-msgstr ""
+msgstr "Немає заборонених прав"
 
 #: src/multiint.cpp:1440
 msgid "Starts with advantages"
-msgstr ""
+msgstr "Починайте з переваг"
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "ВИБРАТИ ШІ"
 
 #: src/multiint.cpp:1521
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Дозволити гравцям приєднуватися до цього слоту"
 
 #: src/multiint.cpp:1528
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Залишити цей слот невикористаний"
 
 #: src/multiint.cpp:1990
 msgid "Team"
@@ -12157,19 +12174,19 @@ msgstr "Команда"
 
 #: src/multiint.cpp:2045
 msgid "Click to change difficulty"
-msgstr ""
+msgstr "Натисніть, щоб змінити складність"
 
 #: src/multiint.cpp:2060
 msgid "Waiting for player"
-msgstr ""
+msgstr "Чекаємо гравця"
 
 #: src/multiint.cpp:2060
 msgid "Player is ready"
-msgstr ""
+msgstr "Програвач готовий"
 
 #: src/multiint.cpp:2060
 msgid "Player is downloading"
-msgstr ""
+msgstr "Гравець завантажується"
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
@@ -12177,7 +12194,7 @@ msgstr "Натисни, коли готовий"
 
 #: src/multiint.cpp:2060
 msgid "Waiting for download"
-msgstr ""
+msgstr "Очікування завантаження"
 
 #: src/multiint.cpp:2072
 msgid "READY?"
@@ -12189,35 +12206,35 @@ msgstr "ГРАВЦІ"
 
 #: src/multiint.cpp:2149
 msgid "Click to change to this slot"
-msgstr ""
+msgstr "Натисніть, щоб змінити цей слот"
 
 #: src/multiint.cpp:2183
 msgid "Choose Team"
-msgstr ""
+msgstr "Виберіть команду"
 
 #: src/multiint.cpp:2187
 msgid "Teams locked"
-msgstr ""
+msgstr "Команди заблоковано"
 
 #: src/multiint.cpp:2213
 msgid "Click to change player colour"
-msgstr ""
+msgstr "Натисніть, щоб змінити колір гравця"
 
 #: src/multiint.cpp:2238
 msgid "Click to change player position"
-msgstr ""
+msgstr "Натисніть, щоб змінити позицію гравця"
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
-msgstr ""
+msgstr "Клацніть, щоб змінити AI, правий клік організувати вибір"
 
 #: src/multiint.cpp:2260
 msgid "Player ID: "
-msgstr ""
+msgstr "ID гравця: "
 
 #: src/multiint.cpp:2267
 msgid "(none)"
-msgstr ""
+msgstr "(ніхто)"
 
 #: src/multiint.cpp:2335
 msgid "CHAT"
@@ -12226,16 +12243,16 @@ msgstr "ЧАТ"
 #: src/multiint.cpp:2657
 #: src/multiint.cpp:3666
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Недостатньо голосів, щоб випадковим чином змінити карту."
 
 #: src/multiint.cpp:2812
 msgid "Game Name Updated."
-msgstr ""
+msgstr "Назва гри оновлена."
 
 #: src/multiint.cpp:2925
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr ""
+msgstr "*** пароль [%s] є обов'язковим! ***"
 
 #: src/multiint.cpp:2931
 msgid "*** password is NOT required! ***"
@@ -12243,7 +12260,7 @@ msgstr "*** пароль НЕ потрібен! ***"
 
 #: src/multiint.cpp:2945
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
+msgstr "Це мод карти, він може змінити ваш досвід гри!"
 
 #: src/multiint.cpp:3001
 msgid "Sorry! Failed to host the game."
@@ -12262,58 +12279,58 @@ msgstr "Хост Починає Гру"
 
 #: src/multiint.cpp:3519
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Вас викинуто: "
 
 #: src/multiint.cpp:3531
 msgid "No connection to host."
-msgstr ""
+msgstr "Немає зв'язку з хостом."
 
 #: src/multiint.cpp:3661
 msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
+msgstr "Неможливо змінити на мапу із занадто мало слотів для всіх гравців."
 
 #: src/multiint.cpp:3771
 msgid "The host has quit."
-msgstr ""
+msgstr "Хост вийшов."
 
 #: src/multiint.cpp:3897
 msgid "UPnP has been enabled."
-msgstr ""
+msgstr "UPnP було увімкнено."
 
 #: src/multiint.cpp:3903
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr ""
+msgstr "Помилка визначення UPnP. Ви повинні вручну налаштувати маршрутизатор."
 
 #: src/multiint.cpp:3907
 msgid "UPnP detection is in progress..."
-msgstr ""
+msgstr "Виявлення UPnP триває..."
 
 #: src/multiint.cpp:3914
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
+msgstr "Виявлення UPnP відключено користувачем. Автоконфігурація порту 2100 не відбудеться."
 
 #: src/multiint.cpp:3920
 msgid "Hit the ready box to begin your challenge!"
-msgstr ""
+msgstr "Натисніть на готові коробки, щоб розпочати виклик!"
 
 #: src/multiint.cpp:3924
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "Натисніть кнопку запуску хостингу, щоб почати хостинг гри."
 
 #: src/multiint.cpp:4005
 #, c-format
 msgid "Click to take player slot %d"
-msgstr ""
+msgstr "Натисніть, щоб забрати слот гравця %d"
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
 msgid "Open"
-msgstr ""
+msgstr "Відкриті"
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
 msgid "Closed"
-msgstr ""
+msgstr "Зачинено"
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -12356,28 +12373,28 @@ msgstr "%s (%u) має несумісний мод, отже був викину
 #: src/multijoin.cpp:491
 #, c-format
 msgid "%s is joining the game"
-msgstr ""
+msgstr "%s приєднується до гри"
 
 #: src/multijoin.cpp:503
 msgid "Server message:"
-msgstr ""
+msgstr "Повідомлення сервера:"
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
-msgstr ""
+msgstr "Оновлення гри, будь ласка, відвідайте http://wz2100.net для завантаження нової версії."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:144
 msgid "LIMITS"
-msgstr ""
+msgstr "ЛІМІТЬ"
 
 #: src/multilimit.cpp:157
 msgid "Map Can Exceed Limits"
-msgstr ""
+msgstr "Ліміт мапи може бути завершено"
 
 #: src/multilimit.cpp:163
 msgid "Force Limits at Start"
-msgstr ""
+msgstr "Примусове обмеження з самого початку"
 
 #: src/multilimit.cpp:185
 msgid "Apply Defaults and Return To Previous Screen"
@@ -12406,7 +12423,7 @@ msgstr "Рівень технологій 3"
 
 #: src/multimenu.cpp:593
 msgid "Max technology level"
-msgstr ""
+msgstr "Максимальний рівень технологій"
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
@@ -12416,10 +12433,10 @@ msgstr "Будь-яка кількість гравців"
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d гравець"
+msgstr[1] "%d гравців"
+msgstr[2] "%d гравців"
+msgstr[3] "%d гравців"
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -12439,30 +12456,30 @@ msgstr "Будівлі"
 
 #: src/multimenu.cpp:793
 msgid "Sent/Received per sec —"
-msgstr ""
+msgstr "Надісланий/отриманий за сек -"
 
 #: src/multimenu.cpp:793
 msgid "Total Sent/Received —"
-msgstr ""
+msgstr "Всього Надіслано/отримано —"
 
 #: src/multimenu.cpp:798
 #, c-format
 msgid "Traf: %u/%u"
-msgstr ""
+msgstr "Traf: %u/%u"
 
 #: src/multimenu.cpp:802
 #, c-format
 msgid "Uncompressed: %u/%u"
-msgstr ""
+msgstr "Нестиснено: %u/%u"
 
 #: src/multimenu.cpp:806
 #, c-format
 msgid "Pack: %u/%u"
-msgstr ""
+msgstr "Пак: %u/%u"
 
 #: src/multimenu.cpp:1106
 msgid "Channel"
-msgstr ""
+msgstr "Канал"
 
 #: src/multimenu.cpp:1120
 msgid "Toggle Alliance State"
@@ -12487,17 +12504,17 @@ msgstr "Надати Енергію Гравцю"
 #: src/multimenu.cpp:1326
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "%s : %s з гри і додано їх до забаненого списку!"
 
 #: src/multiopt.cpp:304
 #: src/multiplay.cpp:1706
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "Увага, це мод, він може змінити нормальний геймплей."
 
 #: src/multiopt.cpp:305
 #: src/multiplay.cpp:1710
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr ""
+msgstr "Увага, HOST змінив ігровий код, і йому не можна довіряти!"
 
 #: src/multiplay.cpp:264
 #, c-format
@@ -12506,11 +12523,11 @@ msgstr "Викидуємо гравця %s, тому що він намагав�
 
 #: src/multiplay.cpp:1146
 msgid " (Ally)"
-msgstr ""
+msgstr " (Алів)"
 
 #: src/multiplay.cpp:1150
 msgid " (Global)"
-msgstr ""
+msgstr " (Глобально)"
 
 #: src/multiplay.cpp:1248
 msgid "(allies"
@@ -12526,15 +12543,15 @@ msgstr "[невірний]"
 
 #: src/multiplay.cpp:1593
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "Було запитано карту: SENDING MAP!"
 
 #: src/multiplay.cpp:1609
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "Запитано мод: SENDING MOD!"
 
 #: src/multiplay.cpp:1672
 msgid "FILE SENT!"
-msgstr ""
+msgstr "ФАЙЛ НАДІСЛАННЯ!"
 
 #: src/multiplay.cpp:1737
 #, c-format
@@ -12576,39 +12593,39 @@ msgstr "Блакитний"
 
 #: src/multiplay.cpp:1902
 msgid "Yellow"
-msgstr ""
+msgstr "Жовтий колір"
 
 #: src/multiplay.cpp:1903
 msgid "Purple"
-msgstr ""
+msgstr "Пурпурний"
 
 #: src/multiplay.cpp:1904
 msgid "White"
-msgstr ""
+msgstr "Білі"
 
 #: src/multiplay.cpp:1905
 msgid "Bright blue"
-msgstr ""
+msgstr "Яскраво-синій"
 
 #: src/multiplay.cpp:1906
 msgid "Neon green"
-msgstr ""
+msgstr "Неоновий зелений"
 
 #: src/multiplay.cpp:1907
 msgid "Infrared"
-msgstr ""
+msgstr "Інфрачервоний"
 
 #: src/multiplay.cpp:1908
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ультрафіолет"
 
 #: src/multiplay.cpp:1909
 msgid "Brown"
-msgstr ""
+msgstr "Коричневий"
 
 #: src/order.cpp:776
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
+msgstr "Ми не можемо цього зробити! Ми повинні бути одиницями Кіборга, щоб використовувати Транспорт Кіборга!"
 
 #: src/qtscriptfuncs.cpp:3124
 msgid "YOU ARE VICTORIOUS!"
@@ -12771,45 +12788,45 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u підрозділ обрано"
 msgstr[1] "%u підрозділи обрано"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[2] "%u підрозділи обрано"
+msgstr[3] "%u підрозділи обрано"
 
 #: src/structure.cpp:2497
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Не можна будувати більше одиниць, Межа Одиниць Досягнута — Виробництво припинено"
 
 #: src/structure.cpp:2505
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr ""
+msgstr "Неможливо збудувати \"%s\" без командного центру - Виробництво призупинено"
 
 #: src/structure.cpp:2510
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr ""
+msgstr "Не можу побудувати \"%s\", Командир обмеження Досягнуто — Виробництво припинено"
 
 #: src/structure.cpp:2518
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Не можу збудувати більше \"%s\", Досягнута будівельних Підрозділів - Виробництво припинено"
 
 #: src/structure.cpp:5428
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%s - %u призначений підрозділ - HitPoint %d/%d"
+msgstr[1] "%s - %u Підрозділів призначено - HitPoint %d/%d"
+msgstr[2] "%s - %u Підрозділів призначено - HitPoint %d/%d"
+msgstr[3] "%s - %u Підрозділів призначено - HitPoint %d/%d"
 
 #: src/structure.cpp:5447
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%s - %u Підрозділ призначений - Шкода %d/%d"
+msgstr[1] "%s - %u Підрозділів призначено - HitPoint %d/%d"
+msgstr[2] "%s - %u Підрозділів призначено - HitPoint %d/%d"
+msgstr[3] "%s - %u Підрозділів призначено - HitPoint %d/%d"
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -12820,12 +12837,12 @@ msgstr[3] ""
 #: src/structure.cpp:5519
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Гітпункти %d/%d"
 
 #: src/structure.cpp:5485
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Підключено до %u з %u - координати %d/%d"
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -12871,11 +12888,11 @@ msgstr "Оновити Список Ігор"
 
 #: src/titleui/gamefind.cpp:93
 msgid "Filter Games List"
-msgstr ""
+msgstr "Відсіяти список ігор"
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
-msgstr ""
+msgstr "Оновлення..."
 
 #: src/titleui/gamefind.cpp:180
 msgid "Searching"
@@ -12883,49 +12900,49 @@ msgstr "Пошук"
 
 #: src/titleui/gamefind.cpp:233
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Підключення до сервера лобі..."
 
 #: src/titleui/gamefind.cpp:244
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Ваша версія Warzone несумісна з цією грою."
 
 #: src/titleui/gamefind.cpp:311
 msgid "[Password required]"
-msgstr ""
+msgstr "[Потрібен пароль]"
 
 #: src/titleui/gamefind.cpp:315
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Без танків]"
 
 #: src/titleui/gamefind.cpp:319
 msgid "[No Cyborgs]"
-msgstr ""
+msgstr "[Без Кіборгів]"
 
 #: src/titleui/gamefind.cpp:323
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Без ВЗІПів]"
 
 #: src/titleui/gamefind.cpp:328
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Організовано %s"
 
 #: src/titleui/gamefind.cpp:332
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Хостинг від %s —%s"
 
 #: src/titleui/gamefind.cpp:361
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Не вдалося знайти жодних ігор для вашої версії."
 
 #: src/titleui/gamefind.cpp:378
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Здається, наявне оновлення гри!"
 
 #: src/titleui/gamefind.cpp:382
 msgid "No games are available for your version"
-msgstr ""
+msgstr "Немає ігор для вашої версії"
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -12961,25 +12978,25 @@ msgstr "Помилка З’єднання"
 
 #: src/titleui/gamefind.cpp:462
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Неможливо підключитися до лоббі сервера!"
 
 #: src/titleui/gamefind.cpp:557
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Режими: %s"
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
-msgstr ""
+msgstr "Моди: Нічого!"
 
 #: src/titleui/gamefind.cpp:569
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "Версія: %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
-msgstr ""
+msgstr "Назва мапи"
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
@@ -12987,11 +13004,11 @@ msgstr "Гравці"
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Продовжити"
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -13016,7 +13033,7 @@ msgstr "Лоббі"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr ""
+msgstr "Адреса IP"
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -13029,7 +13046,7 @@ msgstr "Запустити Транспорт"
 
 #: src/transporter.cpp:982
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "У транспорті недостатньо місця!"
 
 #: src/transporter.cpp:1161
 msgid "Reinforcements landing"
@@ -13051,5 +13068,5 @@ msgstr " - НАЛАГОДЖЕННЯ "
 #: src/version.cpp:131
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Версія: %s,%s Built: %s%s"
 
