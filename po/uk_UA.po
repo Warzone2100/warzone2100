@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "X-Poedit-Language: Ukrainian\n"
 "X-Poedit-Country: UKRAINE\n"
 
@@ -10328,6 +10328,8 @@ msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Групу %u обрано - %u Підрозділ"
 msgstr[1] "Групу %u обрано - %u Підрозділів"
+msgstr[2] "Групу %u обрано - %u Підрозділів"
+msgstr[3] "Групу %u обрано - %u Підрозділів"
 
 #: src/droid.cpp:1932
 #, c-format
@@ -10335,6 +10337,8 @@ msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u підрозділ призначено у Групу %u"
 msgstr[1] "%u підрозділів призначено у Групу %u"
+msgstr[2] "%u підрозділів призначено у Групу %u"
+msgstr[3] "%u підрозділів призначено у Групу %u"
 
 #: src/droid.cpp:1943
 #, c-format
@@ -10342,6 +10346,8 @@ msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Центр екрану на Групі %u - %u Підрозділ"
 msgstr[1] "Центр екрану на Групі %u - %u Підрозділів"
+msgstr[2] "Центр екрану на Групі %u - %u Підрозділів"
+msgstr[3] "Центр екрану на Групі %u - %u Підрозділів"
 
 #: src/droid.cpp:1947
 #, c-format
@@ -10349,6 +10355,8 @@ msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Вирівнювання з Групою %u - %u Підрозділ"
 msgstr[1] "Вирівнювання з Групою %u - %u Підрозділів"
+msgstr[2] "Вирівнювання з Групою %u - %u Підрозділів"
+msgstr[3] "Вирівнювання з Групою %u - %u Підрозділів"
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -12633,11 +12641,13 @@ msgid "Any number of players"
 msgstr "Будь-яка кількість гравців"
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 гравці"
-msgstr[1] "2 гравці"
+msgstr[0] "%d гравці"
+msgstr[1] "%d гравці"
+msgstr[2] "%d гравці"
+msgstr[3] "%d гравці"
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -12989,6 +12999,8 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "%u підрозділ обрано"
 msgstr[1] "%u підрозділи обрано"
+msgstr[2] "%u підрозділи обрано"
+msgstr[3] "%u підрозділи обрано"
 
 #: src/structure.cpp:2497
 #, fuzzy
@@ -13011,18 +13023,22 @@ msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Producti
 msgstr "Досягнуто Межі Контролю - Виробництво Призупинене"
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Підрозділ закріплено"
-msgstr[1] "%s - %u Підрозділи закріплено"
+msgstr[0] "%s - %u Підрозділ закріплено - Пошкоджень %d/%d"
+msgstr[1] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
+msgstr[2] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
+msgstr[3] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Підрозділ закріплено"
-msgstr[1] "%s - %u Підрозділи закріплено"
+msgstr[0] "%s - %u Підрозділ закріплено - Пошкоджень %d/%d"
+msgstr[1] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
+msgstr[2] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
+msgstr[3] "%s - %u Підрозділи закріплено - Пошкоджень %d/%d"
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -13033,7 +13049,7 @@ msgstr[1] "%s - %u Підрозділи закріплено"
 #: src/structure.cpp:5519
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Пошкоджень %d/%d"
 
 #: src/structure.cpp:5485
 #, fuzzy, c-format
