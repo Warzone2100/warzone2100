@@ -17,6 +17,7 @@ jobs:
       WZ_TARGET_ARCH: ${{ matrix.architecture }}
     name: '${{ matrix.architecture }} [${{ matrix.compiler }}]'
     runs-on: windows-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v2
       with:
