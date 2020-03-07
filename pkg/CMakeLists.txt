@@ -137,12 +137,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		${CMAKE_BINARY_DIR}/NSIS.definitions.nsh
 	)
 
-	# Copy Installer Language files
-	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-English.nsh" "${CMAKE_BINARY_DIR}")
-	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-Dutch.nsh" "${CMAKE_BINARY_DIR}")
-	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-German.nsh" "${CMAKE_BINARY_DIR}")
-	copyFileToDir("${CMAKE_CURRENT_SOURCE_DIR}/nsis/Lang-Russian.nsh" "${CMAKE_BINARY_DIR}")
-
 	# IMPORTANT: To generate the NSIS script, CPack must use `nsis/NSIS.template.in`
 	list(INSERT CPACK_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/nsis")
 
