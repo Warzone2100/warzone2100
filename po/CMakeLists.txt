@@ -153,8 +153,8 @@ ADD_CUSTOM_TARGET(pot_file ALL
 	DEPENDS ${_potFile})
 set_property(TARGET pot_file PROPERTY FOLDER "po")
 
-# Update the in-source warzone2100_en.pot (should run every build)
-set(_potFile_inRepo "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100_en.pot")
+# Update the in-source warzone2100.pot (should run every build)
+set(_potFile_inRepo "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.pot")
 ADD_CUSTOM_COMMAND(
 	OUTPUT
 		${CMAKE_CURRENT_BINARY_DIR}/__in_repo_po_template__shouldnotexist.pot  # fake - ensure we run
