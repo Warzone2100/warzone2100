@@ -1,5 +1,7 @@
 ${LangFileString} WZWelcomeText "Этот помощник установки поможет вам установить Warzone2100.\r\n\r\nПеред началом рекомендуем закрыть все другие приложения. Это позволит обновить соответствующие системные файлы без перезагрузки системы.\r\n\r\nWarzone2100 100% бесплатный, если вы за него заплатили сообщите нам!\r\n\r\nНажмите Далее для продолжения."
 
+${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+
 ${LangFileString} WZ_GPL_NEXT "Согласен"
 
 ${LangFileString} TEXT_SecBase "Базовые файлы"
@@ -24,3 +26,6 @@ ${LangFileString} DESC_SecNLS "Поддержка Русского и други
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinШрифты"
 ${LangFileString} DESC_SecNLS_WinFonts "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
+
+${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
+${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
