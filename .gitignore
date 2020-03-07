@@ -123,7 +123,6 @@ Makefile.in
 /po/remove-potcdate.sed
 /po/stamp-po
 /po/update-po
-/po/warzone2100.pot
 /compile
 /test-driver
 
@@ -289,3 +288,4 @@ win32/CodeAnalyst
 !/pkg/nsis/plugins/*/*.dll
 # Do not ignore the in-repo template file used for translation integration
 !/po/warzone2100_en.pot
+!/po/warzone2100.pot
