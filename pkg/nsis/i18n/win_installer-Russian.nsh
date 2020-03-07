@@ -11,6 +11,7 @@ ${LangFileString} TEXT_SecFMVs "Видео"
 ${LangFileString} DESC_SecFMVs "Скачать и установить внутриигровые ролики."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "Английские (HQ)"
+${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_Eng "Английские"
 ${LangFileString} DESC_SecFMVs_Eng "Скачать и установить внутриигровые ролики на английском языке."
