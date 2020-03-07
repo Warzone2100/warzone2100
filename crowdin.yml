@@ -1,3 +1,4 @@
+commit_message: '[ci skip]'
 files:
   - source: /po/warzone2100.pot
     translation: /po/%locale_with_underscore%.po
