@@ -1,27 +1,19 @@
-# Turkish translation of warzone2100
-# Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>, 2010.
-# Volkan Gezer <volkangezer@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-07 03:38+0000\n"
-"PO-Revision-Date: 2019-03-03 22:11+0100\n"
-"Last-Translator: Volkan <volkangezer@gmail.com>\n"
-"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
-"Language: tr\n"
+"POT-Creation-Date: 2020-03-07 02:42+0000\n"
+"PO-Revision-Date: 2020-03-07 23:20\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Turkish\n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Poedit 2.2\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-Basepath: ..\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: tr\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100_en.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1302,7 +1294,6 @@ msgstr "Zıplayan Sığınak Yokedici Sayborg"
 msgid "Jump Heavy Gunner"
 msgstr "Zıplayan Ağır Topçu Sayborg"
 
-# Sesinden dolayı eklendi -Ayhan
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
 msgstr "Zıplayan Mızrak Roketli Sayborg"
@@ -1315,7 +1306,6 @@ msgstr "Zıplayan Hücum Silahlı Sayborg"
 msgid "Jump Needle Gunner"
 msgstr "Zıplayan İğne Topçu Sayborg"
 
-# Sesinden dolayı eklendi
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
 msgstr "Zıplayan Felaket Füzeli Sayborg"
@@ -1324,7 +1314,6 @@ msgstr "Zıplayan Felaket Füzeli Sayborg"
 msgid "Jump Flashlight Gunner"
 msgstr "Zıplayan Flaşışık Lazerli Sayborg"
 
-# Paket ekipman olarak çevirildi-Ayhan
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
 msgstr "Sayborg Zıplama Paketi"
@@ -2760,7 +2749,6 @@ msgstr "Menzilindeki düşmanları otomatik olarak hedef alır"
 msgid "Armored guard tower with Flamer"
 msgstr "Zırhlandırılmış Alev Atıcı koruma kulesi"
 
-# TS: Tank Savar -Ayhan
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
@@ -6433,7 +6421,6 @@ msgstr "İttifak Yok"
 msgid "Allow Alliances"
 msgstr "İttifak Kurulabilir"
 
-# eşit başla -Ayhan
 #: data/mp/multiplay/skirmish/rules.js:37
 #: src/multiint.cpp:1294
 msgid "Locked Teams"
@@ -6490,26 +6477,21 @@ msgid "Could not open required port (%s) on  (%s)"
 msgstr "Gerekli bağlantı noktası (%s), (%s) üzerinde açılamadı"
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
-msgstr ""
-"Bir oyunu kurabilmeniz için yönlendirici ve güvenlik duvarınızı\n"
+msgstr "Bir oyunu kurabilmeniz için yönlendirici ve güvenlik duvarınızı\n"
 "2100 no'lu iletişim noktasını açmak için el ile yapılandırmalısınız."
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr ""
-"Oyun bağlantı noktasını (%s), (%s) üzerinde düzgün olarak yapılandırdı\n"
+msgstr "Oyun bağlantı noktasını (%s), (%s) üzerinde düzgün olarak yapılandırdı\n"
 "Dış IP adresiniz %s"
 
 #: lib/netplay/netplay.cpp:1856
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
-"UPnP aygıtı bulunamadı. Yönlendirici veya güvenlik duvarınızın\n"
+msgstr "UPnP aygıtı bulunamadı. Yönlendirici veya güvenlik duvarınızın\n"
 "2100 no'lu bağlantı noktasını yapılandırın!"
 
 #: lib/netplay/netplay.cpp:2201
@@ -6519,13 +6501,11 @@ msgstr "Ana sunucu (%s) ismi çözülemiyor!"
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr ""
-"Bekleme odası sunucusuna ulaşmaya çalışırken hata %s.\n"
+msgstr "Bekleme odası sunucusuna ulaşmaya çalışırken hata %s.\n"
 "İletişim noktasının (%d) gelen bağlantılara erişebilir olduğuna emin olun.\n"
 "Eğer bir yönlendirici kullanıyorsanız, UPnP'yi veya sisteminizin \n"
 "bağlantı noktasını kullanabilir hale getirin."
@@ -6879,7 +6859,6 @@ msgstr "Gelişmiş DİvK Üretimi"
 msgid "Advancedmaterialslab"
 msgstr "GelişmişmaddeLab"
 
-# Paket ekipman olarak çevirildi -Ayhan
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text
@@ -6887,7 +6866,6 @@ msgstr "GelişmişmaddeLab"
 msgid "Aerodynamic Jump Pack"
 msgstr "Aerodinamik Zıplama Ekipmanı"
 
-# Paket ekipman olarak çevirildi -Ayhan
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Aerodynamicslab.name
 #: po/custom/fromJson.txt:273
@@ -7959,7 +7937,7 @@ msgstr "Beta Seferberliği"
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1418
 msgid "Beta"
-msgstr "Beta"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text
@@ -8949,7 +8927,6 @@ msgstr "Yüksek yoğunlukta termik bombaları bırakır"
 msgid "Drops incendiary bombs"
 msgstr "Kundakçı bombaları bırakır"
 
-# Gerçekten olması gerektiği gibi saldırıyor [...] elektronik olarak, ama sesi iğrenç -Ayhan
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_ST1.text
@@ -9508,8 +9485,7 @@ msgstr "Lazer enerjisi üretir ve düşmana atar"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2724
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -9517,8 +9493,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2727
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -9537,8 +9512,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2736
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -9547,12 +9521,10 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2740
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
-# Aslında uçamazlar
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text
@@ -9822,7 +9794,6 @@ msgstr "YP Roketler Kdm3"
 msgid "HE Rockets"
 msgstr "YP Roketler"
 
-# YPZD = yüksek patlayıcılı, zırh delici -Ayhan
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
 #: po/custom/fromJson.txt:2907
@@ -10270,7 +10241,6 @@ msgstr "YPBM Roket Savaş başlığı Kdm2"
 msgid "HESH Rocket Warhead Mk3"
 msgstr "YPBM Roket Savaş başlığı Kdm3"
 
-# http://tr.wikipedia.org/wiki/Y%C3%BCksek_patlay%C4%B1c%C4%B1_ba%C5%9Fl%C4%B1kl%C4%B1_mermi -Ayhan
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage07.name
@@ -10434,9 +10404,8 @@ msgstr "Yüksek Hızda Zırh Delici Fin Stabilize Sabotaj Mermileri"
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:3336
-#, fuzzy
 msgid "HMG Bunker"
-msgstr "Dönüşlü MT Sığınağı"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
@@ -10448,13 +10417,13 @@ msgstr "Hover YZ"
 #. data/base/stats/propulsion.json: $.hover02.name
 #: po/custom/fromJson.txt:3342
 msgid "Hover II"
-msgstr "Hover II"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
 #: po/custom/fromJson.txt:3345
 msgid "Hover III"
-msgstr "Hover III"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
@@ -10468,7 +10437,7 @@ msgstr "Hover Yürütücü"
 #. data/mp/stats/propulsion.json: $.hover01.name
 #: po/custom/fromJson.txt:3356
 msgid "Hover"
-msgstr "Hover"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text
@@ -11075,7 +11044,6 @@ msgstr "İyonlaştırıcı Motor Türbini"
 msgid "Jammer Tower"
 msgstr "Sinyal Bozucu Kule"
 
-# Oyunda sinya bozucu falan göremedim -Ayhan
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3891
@@ -12062,7 +12030,6 @@ msgstr "Sinirsel Sinapse Araştırma Yapay Zekası Kdm2"
 msgid "Neural Synapse Research Brain Mk3"
 msgstr "Sinirsel Sinapse Araştırma Yapay Zekası Kdm3"
 
-# Eğer beyin Yapay Zekalı bir beyin olarak çevirilirse daha iyi bir çeviri olabilir -Ayhan
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RU7.text
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade07.name
@@ -12185,7 +12152,6 @@ msgstr "Yeni Paradigma Orta Gövde"
 msgid "New power efficient propulsion"
 msgstr "Yeni enerji tasarruflu yürütücü"
 
-# Enerji üretim hızı arttırırıldı
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text
@@ -12429,7 +12395,7 @@ msgstr "NEXUS Duvarı"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:5078
 msgid "Nexus"
-msgstr "Nexus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -12582,7 +12548,6 @@ msgstr "Plasduvar Kdm2"
 msgid "Plascrete Mk3"
 msgstr "Plasduvar Kdm3"
 
-# Plastik ve beton birleşimi duvar -Ayhan
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade07.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade07.name
@@ -13660,7 +13625,6 @@ msgstr "Felaket Füzesi Piton Paletler"
 msgid "Scourge Retaliation VTOL"
 msgstr "Felaket F. İsyan DİvK"
 
-# Bu sayborg sesinden dolayı eklendi -Ayhan
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Cyb-Atmiss-GROUND.name
 #. data/mp/stats/templates.json: $.Cyb-Atmiss-GROUND.name
@@ -13713,7 +13677,7 @@ msgstr "Kopya Üretim"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5966
 msgid "SemperFi"
-msgstr "SemperFi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13745,7 +13709,6 @@ msgstr "Algılayıcı Görüş Mesafesi +%25"
 msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Algılayıcı Tareti Kobra Yarım Paletler"
 
-# Hem Kulesi hemde Tareti ikiside -Ayhan
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperSensorWheels.name
 #. data/mp/stats/templates.json: $.ViperSensorWheels.name
@@ -14068,8 +14031,6 @@ msgstr "Süper Isıda Plazmit Alevi Atar Jeli Kdm3"
 msgid "Superhot Plasmite gel"
 msgstr "Süper Isıda Plazmit Alevi Atar Jeli"
 
-# Surface to Air Missile - S.A.M
-# Yer Hava Füzesi - Y.H.F
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text
@@ -14113,7 +14074,6 @@ msgstr "Sinaptik bağlantı veri analizi"
 msgid "Synaptic Link Data Analysis"
 msgstr "Sinaptik Bağlantı Veri Analizi"
 
-# Asıl sorun sinyal bozucunun kime karşı kullanılacağı -Ayhan
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_ST1.text
@@ -14764,7 +14724,6 @@ msgstr "Araç Süper Termal Zırhı"
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "İntikam Paletler Gaus Topu"
 
-# Orijinal bozuldu ~.~
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Scourge.name
 #: po/custom/fromJson.txt:6703
@@ -14981,7 +14940,6 @@ msgstr "DİvK Fabrikası"
 msgid "VTOL Flashlight"
 msgstr "DİvK Flaşışığı"
 
-# HEAP = high explosive, armor piercing -Kreuvf
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
 #. data/mp/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
@@ -15127,7 +15085,6 @@ msgstr "DİvK Radar Kulesi"
 msgid "VTOL Rail Gun"
 msgstr "DİvK Demir Topu"
 
-# Bu istasyonlar DİvKları tamir eder yani servis çok iyi -Ayhan
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad.name
 #. data/base/stats/structure.json: $.A0VtolPad.name
@@ -15341,7 +15298,7 @@ msgstr "Araç Enkazı"
 #. data/mp/stats/body.json: $.Body13SUP.name
 #: po/custom/fromJson.txt:7062
 msgid "Wyvern"
-msgstr "Wyvern"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
@@ -15416,17 +15373,15 @@ msgid "Veteran"
 msgstr "Albay"
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
-"Telif Hakkı © 1999-2004 Eidos Interactive.\n"
+msgstr "Telif Hakkı © 1999-2004 Eidos Interactive.\n"
 "Telif Hakkı © 2005-2020 Warzone 2100 Projesi"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr "Warzone 2100"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -15446,7 +15401,7 @@ msgstr "Warzone 2100 Küresel Mod Dosyası"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr "Warzone"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -15500,7 +15455,6 @@ msgstr "Veri dizini ekle"
 msgid "data directory"
 msgstr "veri dizini"
 
-# Kaynakta seviye olarak gösteriliyor. En iyi çeviride bile -Ayhan
 #: src/clparse.cpp:260
 msgid "Show debug for given level"
 msgstr "Verilen seviyede hata ayıklama seyivesini göster"
@@ -15545,7 +15499,7 @@ msgstr "Bir küresel modu etkinleştir"
 #: src/clparse.cpp:267
 #: src/clparse.cpp:268
 msgid "mod"
-msgstr "mod"
+msgstr ""
 
 #: src/clparse.cpp:267
 msgid "Enable a campaign only mod"
@@ -15646,22 +15600,19 @@ msgstr "Belirtilen ayar dosyası ile çatışma oyunu başlat"
 
 #: src/clparse.cpp:286
 msgid "test"
-msgstr "test"
+msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "Oyun Kaydedilemedi!"
+msgstr ""
 
 #: src/clparse.cpp:288
-#, fuzzy
 msgid "Start host game with given settings file"
-msgstr "Belirtilen ayar dosyası ile çatışma oyunu başlat"
+msgstr ""
 
 #: src/clparse.cpp:288
-#, fuzzy
 msgid "autohost"
-msgstr "kurucu"
+msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15862,9 +15813,9 @@ msgstr "%s - Müttefik - Hasar %d/%d - Tecrübe %d, %s"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Birim Kaybı!"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -15931,14 +15882,12 @@ msgstr "Videolar eksik! Videoları http://wz2100.net'den indirin"
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Oyuna Devam"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Yeni Sistem Kullanılabilir"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -16094,11 +16043,11 @@ msgstr "Klavye Kısayolları"
 
 #: src/frontend.cpp:738
 msgid "1×"
-msgstr "1×"
+msgstr ""
 
 #: src/frontend.cpp:739
 msgid "2×"
-msgstr "2×"
+msgstr ""
 
 #: src/frontend.cpp:740
 #: src/frontend.cpp:1120
@@ -16182,7 +16131,7 @@ msgstr "Gölgeler"
 #: src/frontend.cpp:804
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr "Radar"
+msgstr ""
 
 #: src/frontend.cpp:808
 #: src/ingameop.cpp:542
@@ -16194,14 +16143,12 @@ msgid "GRAPHICS OPTIONS"
 msgstr "GRAFİK AYARLARI"
 
 #: src/frontend.cpp:906
-#, fuzzy
 msgid "Disabled"
-msgstr "Ses devre dışı"
+msgstr ""
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Enabled"
-msgstr "Ses devrede"
+msgstr ""
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
@@ -16370,7 +16317,7 @@ msgstr "Kolay"
 
 #: src/frontend.cpp:1679
 msgid "Normal"
-msgstr "Normal"
+msgstr ""
 
 #: src/frontend.cpp:1680
 #: src/multiint.cpp:223
@@ -16420,7 +16367,7 @@ msgstr "OYUN AYARLARI"
 #: src/frontend.cpp:1888
 #: src/multiint.cpp:2365
 msgid "Mod: "
-msgstr "Mod: "
+msgstr ""
 
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
@@ -16467,14 +16414,12 @@ msgid "Showing Obsolete Tech"
 msgstr "Eski Teknoloji Gösteriliyor"
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -16491,11 +16436,9 @@ msgid "Ally progress"
 msgstr "Müttefik ilerlemesi"
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
-msgstr ""
-"\n"
+msgstr "\n"
 "Masraf: %1"
 
 #: src/hci.cpp:4954
@@ -16568,9 +16511,8 @@ msgid "Audio Options"
 msgstr "Ses Ayarları"
 
 #: src/ingameop.cpp:494
-#, fuzzy
 msgid "View Key Mappings"
-msgstr "Klavye Kısayolları"
+msgstr ""
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
@@ -16582,13 +16524,9 @@ msgstr "Çatışma Oyunu Kaydet"
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
-msgstr ""
-"Gerekli kip yüklenemedi: %s\n"
-"\n"
+msgstr "Gerekli kip yüklenemedi: %s\n\n"
 "Warzone, kip olmaksızın yüklemeye çalışacak."
 
 #: src/intdisplay.cpp:164
@@ -16808,7 +16746,6 @@ msgstr "Her şeyi kolaya al!"
 msgid "1000 big ones!!!"
 msgstr "1000 büyük güç!!!"
 
-# Aslında StarCrafttan bir hile biliyorum bu çevirilmemelidir -Ayhan
 #: src/keybind.cpp:558
 msgid "Power overwhelming"
 msgstr "Sonsuz güç"
@@ -16918,13 +16855,10 @@ msgstr "Hata ayıklama menüsü Açıldı"
 msgid "Unable to locate any oil derricks!"
 msgstr "Herhangi bir petrol kuyusu bulmak mümkün değil!"
 
-# Let it snow, let it snow, let it snow..
-# şarkı sözüdür bu yüzden çevirilmemelidir -Ayhan
 #: src/keybind.cpp:1722
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Vay canına, dışarda hava korkunç.. KAR"
 
-# Das Lied ist im Original Englisch --> bleibt unübersetzt -Kreuvf
 #: src/keybind.cpp:1728
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Beraber yürüdük biz bu yollarda, beraber ıslandık yağan yağmurda... YAĞMUR"
@@ -17057,18 +16991,16 @@ msgid "Commanders"
 msgstr "Komutanlar"
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Kaydet"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr "Radar Anahtarı"
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "Yükle"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -17379,9 +17311,8 @@ msgid "Toggle ally-enemy radar view"
 msgstr "Dost düşman radarı anahtarı"
 
 #: src/keymap.cpp:411
-#, fuzzy
 msgid "Show all keyboard mappings"
-msgstr "Tüm klavye kısayollarını göster - Durdurmayı kullan!"
+msgstr ""
 
 #: src/keymap.cpp:420
 msgid "Select all Combat Units"
@@ -17552,14 +17483,12 @@ msgid "Trace a game object"
 msgstr "Bir oyun nesnesini izle"
 
 #: src/loadsave.cpp:311
-#, fuzzy
 msgid "Parent directory"
-msgstr "veri dizini"
+msgstr ""
 
 #: src/loadsave.cpp:316
-#, fuzzy
 msgid "Autosave directory"
-msgstr "veri dizini"
+msgstr ""
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory (not allowed for saving)"
@@ -17712,9 +17641,8 @@ msgid "Laser Satellite disabled."
 msgstr "Lazer Uydusu devred dışı."
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Bina Limitlerini Ayarla"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
@@ -17730,8 +17658,7 @@ msgid "Select Game Name"
 msgstr "Oyun İsmi Seç"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17775,13 +17702,11 @@ msgid "Set Structure Limits"
 msgstr "Bina Limitlerini Ayarla"
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "Oyun Ayarları"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17912,9 +17837,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Oyun İsmi"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -17945,14 +17869,12 @@ msgid "Host is Starting Game"
 msgstr "Kurucu Oyunu Başlatıyor"
 
 #: src/multiint.cpp:3519
-#, fuzzy
 msgid "You have been kicked: "
-msgstr "Oyundan atıldın!"
+msgstr ""
 
 #: src/multiint.cpp:3531
-#, fuzzy
 msgid "No connection to host."
-msgstr "Raporlanacak bir şey yok."
+msgstr ""
 
 #: src/multiint.cpp:3661
 msgid "Cannot change to a map with too few slots for all players."
@@ -18018,7 +17940,7 @@ msgstr "KURUCU"
 #: src/multiint.cpp:4139
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -18091,9 +18013,8 @@ msgid "Technology level 3"
 msgstr "Teknoloji seviyesi 3"
 
 #: src/multimenu.cpp:593
-#, fuzzy
 msgid "Max technology level"
-msgstr "Teknoloji seviyesi 1"
+msgstr ""
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
@@ -18190,9 +18111,8 @@ msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Oyuncu atılıyor %s veri bütünlüğünü korumak için!"
 
 #: src/multiplay.cpp:1146
-#, fuzzy
 msgid " (Ally)"
-msgstr "İttifak"
+msgstr ""
 
 #: src/multiplay.cpp:1150
 msgid " (Global)"
@@ -18459,26 +18379,24 @@ msgstr[0] "%u birim seçildi"
 msgstr[1] "%u birim seçildi"
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "Daha fazla birim inşa edilemiyor, Birim Limitine Ulaştın — Üretim Durduruldu"
+msgstr ""
 
 #: src/structure.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "Daha fazla \"%s\" inşa edilemiyor, Komut Kontrolü Sınırına Ulaştın — Üretim Durduruldu"
+msgstr ""
 
 #: src/structure.cpp:2510
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "Daha fazla \"%s\" inşa edilemiyor, Komut Kontrolü Sınırına Ulaştın — Üretim Durduruldu"
+msgstr ""
 
 #: src/structure.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Daha fazla \"%s\" inşa edilemiyor, İnşa Birimi Sınırına Ulaştın — Üretim Durduruldu"
+msgstr ""
 
-# Gruplar! -Ayhan
 #: src/structure.cpp:5428
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
@@ -18486,7 +18404,6 @@ msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Birim atandı - Sağlık %d/%d"
 msgstr[1] "%s - %u Birim atandı - Sağlık %d/%d"
 
-# Gruplar! -Ayhan
 #: src/structure.cpp:5447
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
@@ -18516,7 +18433,6 @@ msgstr "%s - Bağlı %u/%u - Sağlık %d/%d"
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
-# Ödül av olmasada, savaş ganimetleri -Kreuvf
 #: src/structure.cpp:5808
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Ödül - Görünebilirlik Raporu"
@@ -18674,9 +18590,8 @@ msgid "Status"
 msgstr "Durum"
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Oyuna Devam"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -18701,7 +18616,7 @@ msgstr "Bekleme Odası"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -18738,1320 +18653,3 @@ msgstr " - HATA AYIKLAMA"
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Sürüm: %s, %s Yapı: %s %s"
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Araştırma hızı +%30"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Araştırma hızı +%30"
-
-#~ msgid "SemperFi JavaScript"
-#~ msgstr "SemperFi JavaScript"
-
-#~ msgid "Show all options and exit"
-#~ msgstr "Tüm seçenekleri göster ve çık"
-
-#~ msgid "Tough"
-#~ msgstr "Zorlu"
-
-#~ msgid "Killer"
-#~ msgstr "Katil"
-
-#~ msgid "Warning!  This cheat can cause dire problems later on! [%s]"
-#~ msgstr "Dikkat! Bu hile daha kötü sorunlara sebep olabilir! [%s]"
-
-#~ msgid "Ending Mission."
-#~ msgstr "Görev Sonlandırılıyor."
-
-#~ msgid "End Mission"
-#~ msgstr "Görev Sonu"
-
-#~ msgid "Select Map"
-#~ msgstr "Harita Seç"
-
-#~ msgid "Difficulty locked"
-#~ msgstr "Zorluk kilitli"
-
-#~ msgid "Click to change AI"
-#~ msgstr "Yapay zekayı ayarlamak için tıkla"
-
-#~ msgid "Electronic Countermeasures"
-#~ msgstr "Elektronik Önlemler"
-
-#~ msgid "Electronic Countermeasures Mk2"
-#~ msgstr "Elektronik Önlemler Kdm2"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk3"
-#~ msgstr "Elektronik Önlemler Kdm2"
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "KB kulesi düşman bataryaları susturulana kadar ateşe devam eder."
-
-#~ msgid "Nexus Link"
-#~ msgstr "NEXUS Bağlantı"
-
-#~ msgid "NEXUS Link"
-#~ msgstr "NEXUS Link"
-
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "Bağlanmış endirek ateş birimlerini düşman algılayıcılarına saldır emri verir"
-
-#~ msgid "Scroll Speed"
-#~ msgstr "Kaydırma hızı"
-
-#~ msgid "Objective Destroyed"
-#~ msgstr "Hedef Yok Edildi"
-
-#~ msgid "Objective Captured"
-#~ msgstr "Hedef Ele Geçirildi"
-
-#~ msgid "Enemy Escaping"
-#~ msgstr "Düşman Kaçıyor"
-
-#~ msgid "Reinforcements are now available"
-#~ msgstr "Destek kuvvetler şu anda kullanılabilir"
-
-#~ msgid "Sensor Power"
-#~ msgstr "Algılayıcı Gücü"
-
-#~ msgid ""
-#~ "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
-#~ "open port 2100 before you can host a game."
-#~ msgstr ""
-#~ "Yönlendiriciniz UPnP'yi desteklemediğinden, bir oyuna ev sahipliği yapabilmek için yönlendirici\n"
-#~ "ve güvenlik duvarınızı 2100 no'lu iletişim noktasını açmak için el ile yapılandırmalısınız."
-
-#~ msgid "Set default data directory"
-#~ msgstr "Varsayılan veri dizini ayarla"
-
-#~ msgid "game-name"
-#~ msgstr "oyun-ismi"
-
-#~ msgid "Show this help message and exit"
-#~ msgstr "Bu yardımı görüntüle ve çık"
-
-#~ msgid "Unit"
-#~ msgstr "Birim"
-
-#~ msgid "Place Unit on map"
-#~ msgstr "Haritaya yeni birimler yerleştir"
-
-#~ msgid "Struct"
-#~ msgstr "Bina"
-
-#~ msgid "Place Structures on map"
-#~ msgstr "Haritaya Yapı yerleştir"
-
-#~ msgid "Feat"
-#~ msgstr "Özellik"
-
-#~ msgid "Place Features on map"
-#~ msgstr "Haritaya Özel Ögeler ekle"
-
-#~ msgid "Exit Game"
-#~ msgstr "Oyundan Çık"
-
-#~ msgid "Current Player:"
-#~ msgstr "Geçerli Oyuncu:"
-
-#~ msgid "Machinegun Guard Tower"
-#~ msgstr "Makineli Koruma Kulesi"
-
-#~ msgid "Screen Shake"
-#~ msgstr "Ekran Sarsıntısı"
-
-#~ msgid "Screen shake when things die: Off"
-#~ msgstr "Bir şeyler öldüğünde ekran sarsıntısı: Kapalı"
-
-#~ msgid "Screen shake when things die: On"
-#~ msgstr "Bir şeyler öldüğünde ekran sarsıntısı: Açık"
-
-#~ msgid "Toggle Driving Mode"
-#~ msgstr "Sürüş Kipini Aç/Kapat"
-
-#~ msgid "All players need to have the same mods to join your game."
-#~ msgstr "Tüm oyuncular oyununa girebilmek için aynı kipe ihtiyaç duyar."
-
-#~ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "OpenGL GLSL shader sürüm 1.20 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen mümkünse, grafik sürücünüzü/donanımınızı yükseltin."
-
-#, fuzzy
-#~ msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-#~ msgstr "OpenGL1.2 + VBO + TEC sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen mümkünse, grafik sürücünüzü/donanımınızı yükseltin."
-
-#~ msgid "Only use OpenGL 1.5"
-#~ msgstr "Sadece OpenGL 1.5'i kullan"
-
-#~ msgid "Delete Template"
-#~ msgstr "Kalıbı Sil"
-
-#~ msgid "%s wanted to give you a %s but you have too many!"
-#~ msgstr "%s, %s vermek istedi ancak sende daha çok var!"
-
-#~ msgid "You wanted to give %s a %s but they have too many!"
-#~ msgstr "Sen %s kullanıcısına %s vermek istedin ama, onda daha çok var!"
-
-#~ msgid "1X"
-#~ msgstr "1X"
-
-#~ msgid "2X"
-#~ msgstr "2X"
-
-#~ msgid "Shaders"
-#~ msgstr "Shader"
-
-#~ msgid "MAP SAVED!"
-#~ msgstr "HARİTA KAYDEDİLDİ!"
-
-#~ msgid "Map:"
-#~ msgstr "Harita:"
-
-#~ msgid "Load Map File"
-#~ msgstr "Harita Dosyası Yükle"
-
-#~ msgid "Save Map File"
-#~ msgstr "Harita Dosyası Kaydet"
-
-#~ msgid "New"
-#~ msgstr "Yeni"
-
-#~ msgid "New Blank Map"
-#~ msgstr "Yeni Boş Harita"
-
-#~ msgid "Tile"
-#~ msgstr "Döşe"
-
-#~ msgid "Place tiles on map"
-#~ msgstr "Haritaya yeni döşemeler yerleştir"
-
-#~ msgid "Pause"
-#~ msgstr "Duraklat"
-
-#~ msgid "Pause or unpause the game"
-#~ msgstr "Oyunu duraklat veya devam ettir"
-
-#~ msgid "Align height of all map objects"
-#~ msgstr "Tüm harita yüksekliğini nesnelere uygun hale getir"
-
-#~ msgid "Edit"
-#~ msgstr "Düzenle"
-
-#~ msgid "Start Edit Mode"
-#~ msgstr "Düzenleme Kipini Başlat"
-
-#~ msgid "Demo mode off - Returning to normal game mode"
-#~ msgstr "Demo kipi devre dışı - Normal oyun kipine dönülüyor"
-
-#~ msgid "Console On/Off"
-#~ msgstr "Konsol Açık/Kapalı"
-
-#~ msgid "Sensor display On"
-#~ msgstr "Algılayıcı görüşü Açık"
-
-#~ msgid "Sensor display Off"
-#~ msgstr "Algılayıcı görüşü Kapalı"
-
-#~ msgid "Toggles on/off DEMO Mode"
-#~ msgstr "DEMO Kipini aç/kapat"
-
-#~ msgid "Realign height of all objects on the map"
-#~ msgstr "Haritadaki tüm nesnelerin yüksekliğini düzenle"
-
-#~ msgid "Toggle watch window"
-#~ msgstr "Gözlem penceresi"
-
-#~ msgid "Less aggressive"
-#~ msgstr "Daha az saldırgan"
-
-#~ msgid "You cannot change difficulty in a challenge"
-#~ msgstr "Mücadele modunda zorluğu değiştiremezsin"
-
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - Hasar %%%3.0f"
-
-#, fuzzy
-#~ msgid "Disable the use of OpenGL shaders"
-#~ msgstr "Doku sıkıştırma devre dışı"
-
-#~ msgid " - Built %s"
-#~ msgstr " - %s İnşa"
-
-#~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-#~ msgstr "Warzone 2100 tamamen ücretsiz ve açık kaynaklıdır. Resmi site: http://wz2100.net/"
-
-#~ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-#~ msgstr "TCP PORT 2100 GÜVENLİK DUVARINIZDA İZİN VERİLMİŞ OLMALI / OYUN YÖNETİCİSİ OLMAK İÇİN!"
-
-#~ msgid "Password is already set!"
-#~ msgstr "Şifre zaten ayarlanmış!"
-
-#~ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "OpenGL 2.0 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen grafik sürücünüzü/donanımınızı yükseltin, mümkünse."
-
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "Birim Rengi (T.O)"
-
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "Birim Rengi (Ç.O)"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "DİvK -Y.H.T Böcek DİvK "
-
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "DİvK Y.H.T Akrep DİvK "
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "DİvK Y.H.T  P. Devesi DİvK "
-
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "Mini Roket Bataryası Kobra Paletler"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Y.H. Topu Piton Hovercraft"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "HİLELER DEVREDE!"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "HİLELER DEVRE DIŞI!"
-
-#~ msgid "Activate self-test"
-#~ msgstr "Öz-Test aktif"
-
-#~ msgid "Failed to create building"
-#~ msgstr "Bina inşası başarısız"
-
-#~ msgid "You cannot change AI in a challenge"
-#~ msgstr "Mücadele modunda Y.Z değiştiremezsin"
-
-#~ msgid "Received invalid addGame data."
-#~ msgstr "Geçersiz Oyun kurma verisi alındı"
-
-#~ msgid "Create a game first!"
-#~ msgstr "İlk olarak bir oyun kur!"
-
-#~ msgid "Received invalid login data."
-#~ msgstr "Geçersiz giriş verisi alındı"
-
-#~ msgid "Failed to communicate with the lobby."
-#~ msgstr "Bekleme Odasıyla iletişim kesildi"
-
-#~ msgid "Got server error: %s"
-#~ msgstr "Sunucu hatası var: %s"
-
-#~ msgid "Game not in the lobby, please login first!"
-#~ msgstr "Oyun bekleme odasında değil, lütfen giriş yapın!"
-
-#~ msgid "Authentication failed or not Authenticated"
-#~ msgstr "Kimlik doğrulama başarısız veya geçersiz kimlik"
-
-#~ msgid "The lobby rejected you!"
-#~ msgstr "Bekleme odası seni reddetti"
-
-#~ msgid "Connect IP"
-#~ msgstr "Bağlantı IP'si"
-
-#~ msgid "Login"
-#~ msgstr "Giriş"
-
-#~ msgid "Logout"
-#~ msgstr "Çıkış"
-
-#~ msgid "LOBBY LOGIN"
-#~ msgstr "BEKLEME ODASINA GİRİŞ"
-
-#~ msgid "Username:"
-#~ msgstr "Kullanıcı adı:"
-
-#~ msgid "Password:"
-#~ msgstr "Şifreyi gir:"
-
-#~ msgid "Use your wz2100.net credentials here."
-#~ msgstr "Burada wz2100.net kimlik bilgilerini giriş yapmak için kullan"
-
-#~ msgid "3 players"
-#~ msgstr "2 Oyuncu"
-
-#~ msgid "4 players"
-#~ msgstr "4 Oyuncu"
-
-#~ msgid "5 players"
-#~ msgstr "2 Oyuncu"
-
-#~ msgid "6 players"
-#~ msgstr "2 Oyuncu"
-
-#~ msgid "7 players"
-#~ msgstr "2 Oyuncu"
-
-#~ msgid "8 players"
-#~ msgstr "8 Oyuncu"
-
-#~ msgid "9 players"
-#~ msgstr "9 Oyuncu"
-
-#~ msgid "10 players"
-#~ msgstr "10 Oyuncu"
-
-#~ msgid "11 players"
-#~ msgstr "11 Oyuncu"
-
-#~ msgid "12 players"
-#~ msgstr "12 Oyuncu"
-
-#~ msgid "13 players"
-#~ msgstr "13 Oyuncu"
-
-#~ msgid "14 players"
-#~ msgstr "14 Oyuncu"
-
-#~ msgid "15 players"
-#~ msgstr "15 Oyuncu"
-
-#~ msgid "16 players"
-#~ msgstr "16 Oyuncu"
-
-#~ msgid "Less aggressive and starts with less units"
-#~ msgstr "Daha agresif ve daha az birim"
-
-#~ msgid "Starts with advantages and gets twice as much oil from derricks"
-#~ msgstr "Avantajlar ile başlarsın ve Petrol pompalarından iki kaz daha fazla petrol alırsın"
-
-#, fuzzy
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; PIEs %d; özgü sohbet mesaj renkleri %d; Terr. özgü sohbet mesaj renkleri %d; Derece %d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "Güç Birikmiş"
-
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Radar keşfedilen alanı gösterecek"
-
-#~ msgid "Fog"
-#~ msgstr "Sis"
-
-#~ msgid "Mist"
-#~ msgstr "Duman"
-
-#~ msgid "Fog Of War"
-#~ msgstr "Siste Savaş"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Yoğun Sis"
-
-#~ msgid "* May negatively affect performance"
-#~ msgstr "* Performansı kötü etkileyebilir"
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "Kobra Hovercraft Ağır tamir Tareti"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "Engerek Ağır Makinalı Tekerlekler"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "Tank Öldürücü P. Devesi Hovercraft"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "Kobra Ağır Makinalı Paletler"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "Kobra Hovercraft Ağır Topçu"
-
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "Akrep Roketatar Paletler"
-
-#~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "Akrep Ağır Topçu Paletler"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "Akrep Roketatar VTOL"
-
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "Akrep BB VTOL"
-
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "Engerek Komuta Tareti Paletler"
-
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "Kobra Komuta Tareti Paletler"
-
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "Akrep Komuta Tareti Paletler"
-
-#~ msgid "Mantis Command Turret Tracks"
-#~ msgstr "P. Devesi Komuta Tareti Paletler"
-
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "Kobra Roketatar PAletler"
-
-#~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "P. Devesi Ağır Topçu Paletler"
-
-#~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "P. Devesi Tank Öldürücü Paletler"
-
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "P. Devesi Felaket F. Paletler"
-
-#~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "Akrep Ağır Makinalı Paletler"
-
-#~ msgid "Scorpion Repair Tracks"
-#~ msgstr "Akrep Tamir Tareti Paletler"
-
-#~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "Akrep Ağır Tamir Tareti Hovercraft"
-
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "Kobra Havercraft Kamyon"
-
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "Akrep Hovercraft Kamyon"
-
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "P. Devesi Hovercraft Kamyon"
-
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "Kobra Sığınak Yokedici Paletler"
-
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "Akrep Sığınak Yokedici Paletler"
-
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "P. Devesi Sığınak Yokedici Paletler"
-
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "Engerek Paletler Roketatar"
-
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "Kobra Yarım Paletler Mini Roket"
-
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "Kobra Paletler Mini Roket"
-
-#~ msgid "Cobra Tracks Mini-Rocket Artillery"
-#~ msgstr "Kobra Paletler Mini Roket Bataryası"
-
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "Kobra Cehennem Alevi Atıcı Yarım Paletler"
-
-#~ msgid "Python HVC Hover"
-#~ msgstr "Piton Yüksek Hız Topu Hovercraft"
-
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "Piton Felaket F. Paletler"
-
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "Piton Manyetik Top Paletler"
-
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "Piton Darbeli Lazer Paletler"
-
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "Kaplan Darbeli Lazer Paletler"
-
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "Kaplan Ağır Lazer Paletler"
-
-#~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "Wyvern Manyetik Top Paletler"
-
-#~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "Wyvern Darbeli Lazer Paletler"
-
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "Wyvern Ağır Lazer Paletler"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Engerek Makinalı Yarım Paletler"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Engerek Alev Atıcı Yarım Paletler"
-
-#~ msgid "Disconnected from lobby server. Failed to register game."
-#~ msgstr "Bekleme Odası sunucu bağlantısı kesildi. Oyun kaydedilemedi"
-
-#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": Bilinmeyen Hile Kodu."
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "Sohbet modunda devam ettir"
-
-#~ msgctxt "right mouse button"
-#~ msgid "Right Button"
-#~ msgstr "Sağ Tuş"
-
-#~ msgid "Infinite Production"
-#~ msgstr "Sınırsız Üretim"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "Sen %u güç varili buldun."
-
-#~ msgid "Player colour"
-#~ msgstr "Oyuncu rengi"
-
-#~ msgid "Kick player"
-#~ msgstr "Oyundan at"
-
-#~ msgid "Player number"
-#~ msgstr "Oyuncu numarası"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (duzenlenmis ve anahtarlanmis yerel dil dosyasi)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (yerel anahtarli)"
-
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "Player position"
-#~ msgstr "Oyuncu pozisyonu"
-
-#~ msgid "Plascrete MK3"
-#~ msgstr "Plas Girit Kdm3"
-
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Mini Roket Hedef Tutturması +10%"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Mini Roket Hasarı +25%"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Mini Roket Yeniden Yükleme Süresi -15%"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "Girdap AA Sitesi"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Otomatik Üretim Kdm2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Otomatik Üretim Kdm3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Robotik Üretim Kdm2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Robotik Üretim Kdm3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Modern Üretim Kdm2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Otomatik Tamir Tesisi Kdm2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Robotik Tamir Tesisi Kdm3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Robotik Tamir Tesisi Kdm2"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "P.A.S.H Mini Roketler"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "P.A.S.H Mini Roketler Kdm2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "P.A.S.H Mini Roketler Kdm3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Termik Alev Atıcı Cyborg"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "El Bombacısı"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "Girdap Bağlama Noktası"
-
-#~ msgid "Fire Cannon"
-#~ msgstr "Ateş Topu"
-
-#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-#~ msgstr "(Oyuncu %u) borg-\"legs\"-Bugu tespit etti! Lütfen legs'i konsoluna gir ve bize yolla!"
-
-# Kaynak Çıkarıcı dinlemek kendini kötü tumturaklı ve de kendini beğenmiş -Ayhan
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "Yerel kaynak çıkarıcılar devre dışı!"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "İnşa menüsü açılacak"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "İnşa menüsü yeniden açılmayacak"
-
-#~ msgid "Toggle reopening the build menu"
-#~ msgstr "Yeniden açıldığında inşa menüsünü göster"
-
-#~ msgid "Z NULL BRAIN"
-#~ msgstr "Z NULL BRAIN"
-
-#~ msgid "Z NULL PROGRAM"
-#~ msgstr "Z NULL PROGRAM"
-
-#~ msgid "Z NULL CONSTRUCT"
-#~ msgstr "Z NULL CONSTRUCT"
-
-#~ msgid "Z NULL PROP"
-#~ msgstr "Z NULL PROP"
-
-#~ msgid "Z NULL REPAIR"
-#~ msgstr "Z NULL REPAIR"
-
-#~ msgid "Z NULL ECM"
-#~ msgstr "Z NULL ECM"
-
-#~ msgid "Z NULL SENSOR"
-#~ msgstr "Z NULL SENSOR"
-
-#~ msgid "Czech"
-#~ msgstr "Çekce"
-
-#~ msgid "Danish"
-#~ msgstr "Danimarka Dili"
-
-#~ msgid "German"
-#~ msgstr "Almanca"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "İngilizce (Büyük Britanya)"
-
-#~ msgid "Spanish"
-#~ msgstr "İspanyolca"
-
-#~ msgid "Estonian"
-#~ msgstr "Estonyaca"
-
-#~ msgid "Finnish"
-#~ msgstr "Fince"
-
-#~ msgid "French"
-#~ msgstr "Fransızca"
-
-#~ msgid "Frisian"
-#~ msgstr "Frizte Dili"
-
-#~ msgid "Irish"
-#~ msgstr "İrlandaca"
-
-#~ msgid "Croatian"
-#~ msgstr "Hırvatça"
-
-#~ msgid "Lithuanian"
-#~ msgstr "Litvanyaca"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norveççe"
-
-#~ msgid "Dutch"
-#~ msgstr "Hollandaca"
-
-#~ msgid "Polish"
-#~ msgstr "Lehçe"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Brazilya Portekizcesi"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portekizce"
-
-#~ msgid "Romanian"
-#~ msgstr "Romanca"
-
-#~ msgid "Russian"
-#~ msgstr "Rusça"
-
-#~ msgid "Slovenian"
-#~ msgstr "Slovakça"
-
-#~ msgid "Ukrainian"
-#~ msgstr "Akraynaca"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "Basitleştirilmiş Çince"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "Geleneksel Çince"
-
-#~ msgid "Latin"
-#~ msgstr "Latin"
-
-#, fuzzy
-#~ msgid ", mod: "
-#~ msgstr ", Modlar: "
-
-#~ msgid "Active mods: "
-#~ msgstr "Aktif Modlar: "
-
-#~ msgid "Warning: Player %s did not send a data check, and may be cheating."
-#~ msgstr "Dikkat: Oyuncu %s bir veri detimi gönderemez, ve hileli olabilir."
-
-#~ msgid "Player %u has the wrong game version. Auto kicking."
-#~ msgstr "Spieler %u hat die falsche Spielversion. Automatischer Rauswurf."
-
-#~ msgid "Player %u has the wrong game version.  Auto kicking."
-#~ msgstr "Oyuncu %u Yanlış oyun sürümüne sahip. Otomatik olara atılıyor."
-
-#~ msgid "Player %u has the wrong password. Auto kicking."
-#~ msgstr "Oyuncu %u yanlış parolaya sahip. Otomatik olarak atılıyor"
-
-#~ msgid "Increases Bombing damage"
-#~ msgstr "Bombalama Hasarı Arttırıldı"
-
-#~ msgid "The ultimate in sensor technology"
-#~ msgstr "En üstün sensör teknolojisi"
-
-# Formasyın hızı durumu AÇIK -Ayhan
-#~ msgid "Formation speed limiting OFF"
-#~ msgstr "Formasyon Hız limiti KAPALI"
-
-#~ msgid "Formation speed limiting ON"
-#~ msgstr "Formasyon Hız limiti AÇIK"
-
-#~ msgid "Wrong data/mod detected by Host."
-#~ msgstr "Yanlış veri/mod host tarafından tespit edildi."
-
-#~ msgid "Kicking player %s, game data doesn't match!"
-#~ msgstr "Oyuncu atılıyor %s , oyun verisi eşleşmiyor!"
-
-#~ msgid "you are unwanted by the host"
-#~ msgstr "sen kurucu tarafından istenmiyorsun"
-
-#~ msgid "Data doesn't match!"
-#~ msgstr "Veri eşleşmiyor!"
-
-#~ msgid "It is not nice to cheat!"
-#~ msgstr "O sohbet için iyi değil!"
-
-#~ msgid "Player %u found %u power in an oil drum"
-#~ msgstr "Oyuncu %u , %u varil enerji buldu"
-
-#~ msgid "Stop Multiplayer Audio"
-#~ msgstr "Çok Oyunculu Sesi Durdur"
-
-#~ msgid "Mayhem"
-#~ msgstr "Kaos"
-
-#~ msgid "Skirmish"
-#~ msgstr "Çarpışma"
-
-#~ msgid "The game is full!"
-#~ msgstr "Oyun Dolu!"
-
-#~ msgid "English"
-#~ msgstr "İngiliz"
-
-#~ msgid "Basque"
-#~ msgstr "Basra"
-
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Norveçce (Norveç)"
-
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "İsveç (İsviçre)"
-
-#~ msgid "Swedish"
-#~ msgstr "İsveçce"
-
-#~ msgid "Turkish"
-#~ msgstr "Türkçe"
-
-#~ msgid "Uzbek (Cyrillic)"
-#~ msgstr "Özbekce (Kiril)"
-
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Ağır Makinalı Kobra Yarım Paletler"
-
-#~ msgid "Peperpot Emplacement"
-#~ msgstr "Sabitlenmiş BiberPot"
-
-#~ msgid "Command turret MkII"
-#~ msgstr "Komuta Tareti KdmII"
-
-#~ msgid "Command turret MkIV"
-#~ msgstr "Komuta Tareti KdmIV"
-
-#~ msgid "Cursor Mode"
-#~ msgstr "İmleç Modu"
-
-#~ msgid "Software (colored)"
-#~ msgstr "Software (renklendirilmiş)"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardware"
-
-#~ msgid "Right-click Orders"
-#~ msgstr "Emirlere Sağ Tıkla"
-
-#~ msgid "Software (coloured)"
-#~ msgstr "Software (renklendirilmiş)"
-
-#~ msgid "Viper Light Cannon Wheels"
-#~ msgstr "Engerek Hafif Topçu Tekerlekler"
-
-#~ msgid "Viper Flamer Wheels"
-#~ msgstr "Engerek Alev Atıcı Tekerlekler"
-
-#~ msgid "Viper Sensor Wheels"
-#~ msgstr "Engerek Sensör Tekerlekler"
-
-#~ msgid "Viper Light Cannon Tracks"
-#~ msgstr "Engerek Hafif Topçu Paletler"
-
-#~ msgid "Cobra Heavy Machinegun Half-track"
-#~ msgstr "Kobra Ağır Makinalı Yarım Paletler"
-
-#~ msgid "Cobra Mortar Half-track"
-#~ msgstr "Kobra Havan T. Yarım Paletler"
-
-#~ msgid "Cobra Light Cannon Tracks"
-#~ msgstr "Kobra Hafif Topçu Paletler"
-
-#~ msgid "Viper Medium Cannon Tracks"
-#~ msgstr "Engerek Orta Topçu Paletler"
-
-#~ msgid "Viper Repair Wheels"
-#~ msgstr "Engerek Tamir Tareti Tekerlekler"
-
-#~ msgid "Viper Repair Half-track"
-#~ msgstr "Engerek Tamir Tareti Yarım Paletler"
-
-#~ msgid "Viper Machine Gun Wheels"
-#~ msgstr "Engerek Makinalı Tekerlekler"
-
-#~ msgid "Viper Twin Machinegun Wheels"
-#~ msgstr "Engerek Çift Makinalı Tekerlekler"
-
-#~ msgid "Viper Twin Machinegun Half-track"
-#~ msgstr "Engerek Çift Makinalı Yarım Paletler"
-
-#~ msgid "Viper Heavy Machinegun Half-track"
-#~ msgstr "Engerek Ağır Makinalı Yarım Paletler"
-
-#~ msgid "Viper Heavy Machinegun Tracks"
-#~ msgstr "Engerek Ağır Makinalı Paletler"
-
-#~ msgid "Viper Lancer Wheels"
-#~ msgstr "Engerek Roketatar Tekerlekler"
-
-#~ msgid "Viper Mini-Pod Rockets Wheels"
-#~ msgstr "Engerek Mini Roketler Tekerlekler"
-
-#~ msgid "Viper Mini-Rocket Artillery Wheels"
-#~ msgstr "Engerek Mini Roket Artieli Tekerlekler"
-
-#~ msgid "Viper Bunker Buster Rockets Wheels"
-#~ msgstr "Engerek Sığınak Yokedici Roketler Tekerlekler"
-
-#~ msgid "Cobra Heavy Cannon Tracks"
-#~ msgstr "Kobra Ağır Topçu Paletler"
-
-#~ msgid "Cobra Sensor Half-track"
-#~ msgstr "Kobra Sensör Yarım Paletler"
-
-#~ msgid "Cobra Bombard Half-track"
-#~ msgstr "Kobra Bombardıman Yarım Paletler"
-
-#~ msgid "Cobra Command Turret Half-track"
-#~ msgstr "Kobra Komuta Tareti Yarım Paletler"
-
-#~ msgid "Cobra Lancer Half-track"
-#~ msgstr "Kobra Roketatar Yarım Paletler"
-
-#~ msgid "Cobra Mini-Rocket Artillery Half-track"
-#~ msgstr "Kobra Mini Roket Artieli Yarım Paletler"
-
-#~ msgid "Python Light Cannon Tracks"
-#~ msgstr "Piton Hafif Topçu Paletler"
-
-#~ msgid "Python Medium Cannon Tracks"
-#~ msgstr "Piton Orta Topçu Paletler"
-
-#~ msgid "Python Commander Tracks"
-#~ msgstr "Piton Komuta Tareti Paletler"
-
-#~ msgid "Mini-Pod"
-#~ msgstr "Mini Roketler"
-
-#~ msgid "VTOL Mini-Pod"
-#~ msgstr "VTOL Mini Roketler"
-
-#~ msgid "Machine Gunner"
-#~ msgstr "Makinalı Silahlı"
-
-#~ msgid "Mini-Pod Rockets"
-#~ msgstr "Mini Roketler"
-
-#~ msgid "Machine Gun Artifact"
-#~ msgstr "Makinalı Tüfek Kalıntıi"
-
-#~ msgid "HMG Cobra Half-tracks"
-#~ msgstr "Ağır Makinalı Kobra Yarım Paletler"
-
-#~ msgid "Commander Python Tracks"
-#~ msgstr "Komuta Tareti Piton Paletler"
-
-#, fuzzy
-#~ msgid "Mini-Pod Artillery"
-#~ msgstr "Mini Roket Artiyeli"
-
-#, fuzzy
-#~ msgid "Mini-Pod Battery"
-#~ msgstr "Mini Roket Batayası"
-
-#, fuzzy
-#~ msgid "Stabilized Mini-Pods"
-#~ msgstr "Stabilize Mini Roketler"
-
-#, fuzzy
-#~ msgid "Stabilized Mini-Pods Mk2"
-#~ msgstr "Stabilize Mini Roketler Kdm2"
-
-#, fuzzy
-#~ msgid "HE Mini-Pods"
-#~ msgstr "P.A Mini Roketler"
-
-#, fuzzy
-#~ msgid "HE Mini-Pods Mk2"
-#~ msgstr "P.A Mini Roketler Kdm2"
-
-#, fuzzy
-#~ msgid "HE Mini-Pods Mk3"
-#~ msgstr "P.A Mini Roketler Kdm3"
-
-#, fuzzy
-#~ msgid "HEAP Mini-Pods"
-#~ msgstr "P.A.Z.D Mini Roketler"
-
-#, fuzzy
-#~ msgid "HEAP Mini-Pods Mk2"
-#~ msgstr "P.A.Z.D Mini Roketler Kdm2"
-
-#, fuzzy
-#~ msgid "HEAP Mini-Pods Mk3"
-#~ msgstr "P.A.Z.D Mini Roketler Kdm3"
-
-#, fuzzy
-#~ msgid "Fast Fire Mini-Pods"
-#~ msgstr "Çabuk Ateşlenen Mini Roketler"
-
-#, fuzzy
-#~ msgid "Fast Fire Mini-Pods Mk2"
-#~ msgstr "Çabuk Ateşlenen Mini Roketler Kdm2"
-
-#, fuzzy
-#~ msgid "Fast Fire Mini-Pods Mk3"
-#~ msgstr "Çabuk Ateşlenen Mini Roketler Kdm3"
-
-#, fuzzy
-#~ msgid "Rapid Fire Mini-Pods"
-#~ msgstr "Hızlı Ateşlenen Mini Roketler"
-
-#, fuzzy
-#~ msgid "Rapid Fire Mini-Pods Mk2"
-#~ msgstr "Hızlı Ateşlenen Mini Roketler Kdm2"
-
-#, fuzzy
-#~ msgid "Rapid Fire Mini-Pods Mk3"
-#~ msgstr "Hızlı Ateşlenen Mini Roketler Kdm3"
-
-#, fuzzy
-#~ msgid "Cluster Bombs Bug VTOL"
-#~ msgstr "Demet Bombaları Böcek VTOL"
-
-#~ msgid "Energy bars display toggled"
-#~ msgstr "Enerji çubuklarını görüntüde göster"
-
-#~ msgid "NEXUS Link Tower"
-#~ msgstr "NEXUS Bağlantı Kulesi"
-
-#~ msgid "Whirlwind AATurret"
-#~ msgstr "Fırtına AA Tareti"
-
-#~ msgid "Power Upgrade"
-#~ msgstr "Güç Yükseltmesi"
-
-#~ msgid "Viper Wheels Machinegun"
-#~ msgstr "Engerek Tekerlekler Makinalı"
-
-#~ msgid "Viper Wheels Twin Machinegun"
-#~ msgstr "Engerek Tekerlekler Çift Makinalı"
-
-#~ msgid "Viper Wheels Heavy Machinegun"
-#~ msgstr "Engerek Tekerlekler Ağır Makinalı"
-
-#~ msgid "Cobra Wheels Heavy Machinegun"
-#~ msgstr "Kobra Tekerlekler Ağır Makinalı"
-
-#~ msgid "Cobra Hover Heavy Machinegun"
-#~ msgstr "Kobra Hovercraft Ağır Makinalı"
-
-#~ msgid "Viper Tracks Machinegun"
-#~ msgstr "Engerek Paletler Makinalı"
-
-#~ msgid "Viper Tracks Twin Machinegun"
-#~ msgstr "Engerek Paletler Çift Makinalı"
-
-#~ msgid "Viper Tracks Heavy Machinegun"
-#~ msgstr "Engerek Paletler Ağır Makinalı"
-
-#~ msgid "Cobra Tracks Heavy Machinegun"
-#~ msgstr "Kobra Paletler Ağır Makinalı"
-
-#~ msgid "Cobra Hover Medium Cannon"
-#~ msgstr "Kobra Hovercraft Orta Topçu"
-
-#~ msgid "Scorpion Hover Medium Cannon"
-#~ msgstr "Akrep Hovercraft Orta Topçu"
-
-#~ msgid "Scorpion Tracks Medium Cannon"
-#~ msgstr "Akrep Paletler Orta Topçu"
-
-#~ msgid "Python Hover Medium Cannon"
-#~ msgstr "Piton Hovercraft Orta Topçu"
-
-#~ msgid "Python Hover Heavy Cannon"
-#~ msgstr "Piton Hovercraft Ağır Topçu"
-
-#~ msgid "Python Tracks Heavy Cannon"
-#~ msgstr "Piton Paletler Ağır Topçu"
-
-#~ msgid "Mantis Tracks Railgun"
-#~ msgstr "P. Devesi Paletler Demir Silahı"
-
-#~ msgid "Mantis Tracks Pulse Laser"
-#~ msgstr "P. Devesi Paletler Darbeli Lazer"
-
-#~ msgid "Python Tracks Lancer"
-#~ msgstr "Piton Paletler Roketatar"
-
-#~ msgid "Mantis Tracks Lancer"
-#~ msgstr "P. Devesi Paletler Roketatar"
-
-#~ msgid "Vengeance Tracks Tank Killer"
-#~ msgstr "İntikam Paletler Tank Öldürücü"
-
-#~ msgid "Tiger Tracks Heavy Cannon"
-#~ msgstr "Kaplan Paletler Ağır Topçu"
-
-#~ msgid "Tiger Tracks Needle Gun"
-#~ msgstr "Kaplan Paletler İğne Silahı"
-
-#~ msgid "Vengeance Tracks Needle Gun"
-#~ msgstr "İntikam Paletler İğne Silahı"
-
-#~ msgid "Scorpion Cluster Bomb VTOL"
-#~ msgstr "Akrep Demet Bombaları VTOL"
-
-#~ msgid "Scorpion Bunker Buster VTOL"
-#~ msgstr "Akrep Sığınak Yokedici VTOL"
-
-#~ msgid "Bug Lancer VTOL"
-#~ msgstr "Böcek Roketatar VTOL"
-
-#~ msgid "Bug HPV VTOL"
-#~ msgstr "Böcek Y.H Topu VTOL"
-
-#~ msgid "Scorpion HPV VTOL"
-#~ msgstr "Akrep Y.H Topu VTOL"
-
-#~ msgid "Mantis Lancer VTOL"
-#~ msgstr "P. Devesi Roketatar VTOL"
-
-#~ msgid "Mantis HPV VTOL"
-#~ msgstr "P. Devesi Y.H Topu VTOL"
-
-#~ msgid "Cobra Repair Tracks"
-#~ msgstr "Kobra Tamir Tareti Paletler"
-
-#~ msgid "Mantis Repair Tracks"
-#~ msgstr "P. Devesi Tamir Tareti Paletler"
-
-#~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Piton Tank Öldürücü Paletler"
-
-#~ msgid "Full"
-#~ msgstr "Dolu"
-
-#~ msgid "Minimal"
-#~ msgstr "En Düşük"
-
-#~ msgid "Played"
-#~ msgstr "Oynandı"
-
-#~ msgid "Campaign One Full Version Test Message"
-#~ msgstr "Bölüm Bir Tam Sürüm Mesajı"
-
-#~ msgid "New Paradigm Transmission"
-#~ msgstr "Yeni Paradigma Mesajı"
-
-#~ msgid "The New Paradigm have been driven from this zone."
-#~ msgstr "Yeni Paradigma bu bölgeden kovuldu."
-
-#~ msgid "Establish a forward base near the site of the Research Centre."
-#~ msgstr "Araştırma merkezinin yanında bir üs kur."
-
-#~ msgid "This sector is now secure."
-#~ msgstr "Bu bölge şu anda güvenli."
-
-#~ msgid "Nexus removed itself leaving no trace"
-#~ msgstr "Nexus kendisini hiçbir iz bırakmadan kaldırabilir."
-
-#~ msgid "The Nexus Intruder Program has links with the Reed corporation."
-#~ msgstr "Nexus Davetsiz Misafir Programı Reed Şirketi ile bağlantılara sahip."
-
-#~ msgid "Analysis of the reactor site indicates The Collective"
-#~ msgstr "Reaktör alanı incelemeleri Kollektif'i gösteriyor"
-
-#~ msgid "were preparing to route its power to this location."
-#~ msgstr "bu konuma gücünü göndermek için hazırlanıyordu."
-
-#~ msgid "Argle Bargle - Please Remove when some text here!"
-#~ msgstr "Argle Bargle - Lütfen bazı yazıları buradan kaldırın"
-
-#~ msgid "Proceed with caution. Scout and confirm Gamma are not contaminated."
-#~ msgstr "Uyarıyı dikkate alın. İzci ve onaylayıcı Gama kirlenmiş değildir."
-
-#~ msgid "A relief force will be sent as soon as the zone is cleared of all enemy."
-#~ msgstr "Bölge düşmandan temizlendikten sonra bir destek ekibi gönderilecek."
-
-#~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
-#~ msgstr "Nexus'un sisteminize sızma ve kontrol etme girişimine karşı dikkatli olun."
-
-#~ msgid "End Of Briefing."
-#~ msgstr "Sunum Sonu."
-
-#~ msgid "Armed Scavengers Approaching"
-#~ msgstr "Silahlı Çöpçüler Yaklaşıyor"
-
-#~ msgid "Civilian Rescued"
-#~ msgstr "Siviller Kurtarıldı"
-
-#~ msgid "Civilians Rescued"
-#~ msgstr "Siviller Kurtarıldı"
-
-#~ msgid "Unit Rescued"
-#~ msgstr "Birim Kurtarıldı"
-
-#~ msgid "Units Rescued"
-#~ msgstr "Birimler Kurtarıldı"
-
-#~ msgid "Group Rescued"
-#~ msgstr "Grup Kurtarıldı"
-
-#~ msgid "Unit Captured"
-#~ msgstr "Birim Ele Geçirildi"
-
-#~ msgid "Group Captured"
-#~ msgstr "Grup Ele Geçirildi"
-
-#~ msgid "Structure Captured"
-#~ msgstr "Bina Ele Geçirildi"
-
-#~ msgid "Structure Destroyed"
-#~ msgstr "Bina Yok edildi"
-
-#~ msgid "Structure Infected"
-#~ msgstr "Bina Enfekte Edildi"
-
-#~ msgid "Unit Infected"
-#~ msgstr "Birim Enfekte Edildi"
-
-#~ msgid "Group Infected"
-#~ msgstr "Grup Enfekte Edildi"
-
-#~ msgid "Primary Objective Completed"
-#~ msgstr "Birincil Görev Tamamlandı"
-
-#~ msgid "Secondary Objective Completed"
-#~ msgstr "İkincil Görev Tamamlandı"
-
-#~ msgid "Time Limit Exceeded"
-#~ msgstr "Süre Sınırı Aşıldı"
-
-#~ msgid "Out Of Time"
-#~ msgstr "Zaman Dışı"
-
-#~ msgid "Enemy Escaped"
-#~ msgstr "Düşman Kaçtı"
-
-#~ msgid "Enemy Transport Landing"
-#~ msgstr "Düşman Taşıma Gemisi İniyor"
-
-#~ msgid "Incoming Airstrike"
-#~ msgstr "Hava Saldırısı Geliyor"
-
-#~ msgid "Team Beta Eradicated"
-#~ msgstr "Takım Beta Yok edildi"
-
-#~ msgid "Team Gamma Eradicated"
-#~ msgstr "Takım Gama Yok edildi"
-
-#~ msgid "Team Beta Rescued"
-#~ msgstr "Takım Beta Kurtarıldı"
-
-#~ msgid "Team Gamma Rescued"
-#~ msgstr "Takım Gama Kurtarıldı"
-
-#~ msgid "Team Alpha Liberated"
-#~ msgstr "Takım Alfa Kurtuldu"
-
-#~ msgid "Team Beta Liberated"
-#~ msgstr "Takım Beta Kurtuldu"
-
-#~ msgid "Team Gamma Liberated"
-#~ msgstr "Takım Gama Kurtuldu"
-
-#~ msgid "Civilians Eradicated"
-#~ msgstr "Siviller Yok edildi"
-
-#~ msgid "Civilians Liberated"
-#~ msgstr "Siviller Kurtuldu"
-
-#~ msgid "Enemy Eradicated"
-#~ msgstr "Düşman Yok edildi"
-
-#~ msgid "New Paradigm base eradicated"
-#~ msgstr "Yeni Paradigma üssü yok edildi"
-
-#~ msgid "Collective base eradicated"
-#~ msgstr "Kollektif üssü yok edildi"
-
-#~ msgid "Nexus base eradicated"
-#~ msgstr "Nexus üssü yok edildi"
-
-#~ msgid "LasSat firing"
-#~ msgstr "Lazer uydusu ateşleniyor"
-
-#~ msgid "LasSats firing"
-#~ msgstr "Lazer uyduları ateşleniyor"
-
-#~ msgid "NASDA Central"
-#~ msgstr "NASDA Merkezi"
-
-#~ msgid "SAM Site"
-#~ msgstr "SAM Sitesi"
-
-#~ msgid "Now left click the Viper Body"
-#~ msgstr "Şimdi Engerek bedene sol tıkla"
-
-#~ msgid "Select the Vehicle Propulsion icon"
-#~ msgstr "Araç yürütücüsü ikonunu seç"
-
-#~ msgid "Presently unused"
-#~ msgstr "Şu anda kullanılmayan"
