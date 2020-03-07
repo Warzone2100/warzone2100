@@ -139,11 +139,11 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE "English" "win_installer_base.nsh"
 
   !insertmacro MUI_LANGUAGE "Dutch"
-  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Dutch" "win_installer-Dutch.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Dutch" "win_installer-nl.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "German"
-  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "German" "win_installer-German.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "German" "win_installer-de.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Russian"
-  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Russian" "win_installer-Russian.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Russian" "win_installer-ru.nsh" ${WZ_LANGFILE_FALLBACK}
 
 ;--------------------------------
 ;Reserve Files
