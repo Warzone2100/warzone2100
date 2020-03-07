@@ -1,24 +1,19 @@
-# Czech translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Lubos <alvinx12@centrum.cz>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-07 03:38+0000\n"
-"PO-Revision-Date: 2008-05-09 16:05+0000\n"
-"Last-Translator: Lubos <alvinx12@centrum.cz>\n"
-"Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
+"POT-Creation-Date: 2020-03-07 02:42+0000\n"
+"PO-Revision-Date: 2020-03-07 18:25\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Czech\n"
+"Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: cs\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100_en.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1530,15 +1525,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1547,15 +1540,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -4849,9 +4840,8 @@ msgid "All rockets upgraded automatically"
 msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:394
-#, fuzzy
 msgid "Return to LZ"
-msgstr "Zpět na HQ"
+msgstr ""
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -4876,9 +4866,8 @@ msgstr "Výzkum (F2)"
 #: data/base/script/tutorial.js:217
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "Pomoz svým dalším náklaďákem se stavbou výzkumné laboratoře"
+msgstr ""
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4966,9 +4955,8 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "Ropný vrt je v současnosti nevyužitý. Postav generátor energie, který přemění ropu na energii"
 
 #: data/base/script/tutorial.js:34
-#, fuzzy
 msgid "Left click the flashing build icon"
-msgstr "Levým tlačítkem klikni na blikající ikonu STAVBA"
+msgstr ""
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -5140,9 +5128,8 @@ msgid "Dawn, July 4th, 2100"
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "Cíle projektu"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
@@ -5861,9 +5848,8 @@ msgid "North America"
 msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:10
-#, fuzzy
 msgid "Nuclear Winter"
-msgstr "Jaderný Reaktor"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
@@ -6325,9 +6311,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Velitelé (F6)"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -6336,9 +6321,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Velitelé (F6)"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -6377,9 +6361,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Výzkum"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -6445,27 +6428,23 @@ msgstr "Pevné Týmy"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "Pevné Týmy"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
-#, fuzzy
 msgid "Low Power Levels"
-msgstr "Nízkoenergetické úrovně"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:45
 #: src/multiint.cpp:1302
-#, fuzzy
 msgid "Medium Power Levels"
-msgstr "Středně energetické úrovně"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:46
 #: src/multiint.cpp:1303
-#, fuzzy
 msgid "High Power Levels"
-msgstr "Vysokoenergetické úrovně"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:52
 #: src/multiint.cpp:1310
@@ -6493,20 +6472,18 @@ msgid "Enter password here"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "Nahrát uloženou hru"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -6515,14 +6492,13 @@ msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:2201
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "Nahrát uloženou hru"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -6572,9 +6548,8 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_AAAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAAC3.text
 #: po/custom/fromJson.txt:40
-#, fuzzy
 msgid "AA accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
@@ -6635,9 +6610,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:75
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Plazmový kanón střílející plazmu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
@@ -6650,9 +6624,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text
 #: po/custom/fromJson.txt:83
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
@@ -6700,9 +6673,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text
 #: po/custom/fromJson.txt:117
-#, fuzzy
 msgid "AA reload time -15%"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6832,17 +6804,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:225
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "Vybrat další Výzkumné Zařízení"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RFU7.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text
 #: po/custom/fromJson.txt:229
-#, fuzzy
 msgid "Advanced repair techniques"
-msgstr "Vybrat další Výzkumné Zařízení"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_VS3.text
@@ -7020,9 +6990,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:612
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Nová kampaň"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -7378,9 +7347,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_HALFT1.text
 #. data/mp/messages/resmessages1.json: $.RES_HALFT1.text
 #: po/custom/fromJson.txt:833
-#, fuzzy
 msgid "Armored Half-tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT14_PLS.text
@@ -7508,9 +7476,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text
 #. data/mp/messages/resmessages1.json: $.RES_TRACK1.text
 #: po/custom/fromJson.txt:951
-#, fuzzy
 msgid "Armored Tracks"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_DF_WU1.text
@@ -7829,9 +7796,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1265
-#, fuzzy
 msgid "Back to Basics"
-msgstr "Zpátky do normálu!"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -7865,9 +7831,8 @@ msgstr "Nejlepší cíle : Vozidla"
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text
 #: po/custom/fromJson.txt:1288
-#, fuzzy
 msgid "Best Targets: Aerial targets only"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text
@@ -7875,17 +7840,15 @@ msgstr "Nejlepší cíle : Vozidla"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text
 #: po/custom/fromJson.txt:1294
-#, fuzzy
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text
 #: po/custom/fromJson.txt:1308
-#, fuzzy
 msgid "Best Targets: Base structures"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text
@@ -7896,17 +7859,15 @@ msgstr "Nejlepší cíle : Vozidla"
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text
 #: po/custom/fromJson.txt:1339
-#, fuzzy
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text
 #: po/custom/fromJson.txt:1343
-#, fuzzy
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text
@@ -7914,16 +7875,14 @@ msgstr "Nejlepší cíle : Vozidla"
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS2.text
 #: po/custom/fromJson.txt:1356
-#, fuzzy
 msgid "Best Targets: Cyborgs"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text
 #: po/custom/fromJson.txt:1363
-#, fuzzy
 msgid "Best Targets: Heavy cyborgs"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text
@@ -7944,33 +7903,29 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text
 #: po/custom/fromJson.txt:1379
-#, fuzzy
 msgid "Best Targets: Vehicles and Emplacements"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text
 #. data/mp/messages/resmessages1.json: $.RES_CN3MK1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text
 #: po/custom/fromJson.txt:1408
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text
 #: po/custom/fromJson.txt:1412
-#, fuzzy
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr "Nejlepší cíle : Vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1415
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Nová kampaň"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -8000,18 +7955,16 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_BAC3.text
 #: po/custom/fromJson.txt:1596
-#, fuzzy
 msgid "Bomb damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BAC1.text
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_BAC3.text
 #: po/custom/fromJson.txt:1605
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHvyMortarHalftrack.name
@@ -8152,9 +8105,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #: po/custom/fromJson.txt:1689
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
@@ -8182,9 +8134,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text
 #: po/custom/fromJson.txt:1706
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireCan.name
@@ -8240,9 +8191,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_ROF4.text
 #: po/custom/fromJson.txt:1739
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CannonTower.name
@@ -8267,9 +8217,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_ROF4.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #: po/custom/fromJson.txt:1759
-#, fuzzy
 msgid "Cannon Upgrade"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-CBTurret01.name
@@ -8471,9 +8420,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1889
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Velitelé (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -8552,9 +8500,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG3.text
 #: po/custom/fromJson.txt:1936
-#, fuzzy
 msgid "Computer Research Completed"
-msgstr "Výzkum Dokončen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text
@@ -8577,17 +8524,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text
 #: po/custom/fromJson.txt:1951
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Výzkum dokončen: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:1955
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Výzkum dokončen: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -8600,9 +8545,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text
 #: po/custom/fromJson.txt:1963
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "Nemohu nalézt žádného velitele!"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text
@@ -8809,9 +8753,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text
 #: po/custom/fromJson.txt:2119
-#, fuzzy
 msgid "Cyborg Transport Available"
-msgstr "Spustit transport"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Transport.name
@@ -8874,9 +8817,8 @@ msgstr "Síla obrany : Vysoká"
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text
 #. data/mp/messages/resmessages1.json: $.RES_TOWER1.text
 #: po/custom/fromJson.txt:2222
-#, fuzzy
 msgid "Defensive Strength: Low"
-msgstr "Síla obrany : Vysoká"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ADemolishStructure.name
@@ -9087,9 +9029,8 @@ msgstr ""
 #. data/mp/tests/miza.json: $.player_6.name
 #. data/mp/tests/miza.json: $.player_7.name
 #: po/custom/fromJson.txt:2420
-#, fuzzy
 msgid "Enemy"
-msgstr "Nepřátelská Základna"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -9116,9 +9057,8 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_SY_STW1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_STW1.text
 #: po/custom/fromJson.txt:2436
-#, fuzzy
 msgid "Extended sensor range"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text
@@ -9128,16 +9068,14 @@ msgstr "Dosah snímačů"
 #. data/mp/messages/resmessages23.json: $.RES_SY_CBSU2.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_CBSU3.text
 #: po/custom/fromJson.txt:2444
-#, fuzzy
 msgid "Extends CB Range"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
 #: po/custom/fromJson.txt:2447
-#, fuzzy
 msgid "Extends Sensor Range"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text
@@ -9328,32 +9266,28 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraFlameTracks.name
 #. data/mp/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:2573
-#, fuzzy
 msgid "Flamer Cobra Tracks"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_FL_D4.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_FL_D7.text
 #: po/custom/fromJson.txt:2581
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text
 #: po/custom/fromJson.txt:2592
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
 #: po/custom/fromJson.txt:2604
-#, fuzzy
 msgid "Flamer Viper Half-Tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperFlameWheels.name
@@ -9432,9 +9366,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2657
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Nová kampaň"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -9546,8 +9479,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2724
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -9555,8 +9487,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2727
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -9575,8 +9506,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2736
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -9585,8 +9515,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2740
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -9844,23 +9773,20 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2898
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2901
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2904
-#, fuzzy
 msgid "HE Rockets"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
@@ -10194,16 +10120,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
 #: po/custom/fromJson.txt:3129
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpTrkHMG.name
 #: po/custom/fromJson.txt:3132
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGHalftrack.name
@@ -10513,9 +10437,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text
 #: po/custom/fromJson.txt:3360
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
@@ -10542,9 +10465,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text
 #: po/custom/fromJson.txt:3376
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
@@ -10556,9 +10478,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text
 #: po/custom/fromJson.txt:3389
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HowitzerMk1.name
@@ -10795,9 +10716,8 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WS.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text
 #: po/custom/fromJson.txt:3553
-#, fuzzy
 msgid "Improved sensor range"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text
@@ -10903,18 +10823,16 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #: po/custom/fromJson.txt:3671
-#, fuzzy
 msgid "Increases Cannon accuracy"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text
 #. data/base/messages/resmessages12.json: $.RES_W_CN_D4.text
 #. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text
 #: po/custom/fromJson.txt:3676
-#, fuzzy
 msgid "Increases Cannon damage"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text
@@ -10928,44 +10846,38 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_ENGIN2.text
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:3685
-#, fuzzy
 msgid "Increases construction speed"
-msgstr "Výzkum dokončen: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text
 #: po/custom/fromJson.txt:3716
-#, fuzzy
 msgid "Increases Flamer ROF"
-msgstr "Zvýšit rychlost hry"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text
 #: po/custom/fromJson.txt:3743
-#, fuzzy
 msgid "Increases Laser accuracy"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text
 #: po/custom/fromJson.txt:3746
-#, fuzzy
 msgid "Increases Laser damage"
-msgstr "Zvýšit rychlost hry"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text
 #: po/custom/fromJson.txt:3749
-#, fuzzy
 msgid "Increases Laser ROF"
-msgstr "Zvýšit rychlost hry"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text
 #: po/custom/fromJson.txt:3764
-#, fuzzy
 msgid "Increases Mini-Rocket accuracy"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_ROF1.text
@@ -10977,16 +10889,14 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text
 #: po/custom/fromJson.txt:3775
-#, fuzzy
 msgid "Increases Missile accuracy"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_D1.text
 #: po/custom/fromJson.txt:3778
-#, fuzzy
 msgid "Increases Missile damage"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_ROF1.text
@@ -11000,9 +10910,8 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_W_M_AC2.text
 #. data/base/messages/resmessages3.json: $.RES_W_M_AC3.text
 #: po/custom/fromJson.txt:3787
-#, fuzzy
 msgid "Increases Mortar accuracy"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text
@@ -11014,16 +10923,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:3798
-#, fuzzy
 msgid "Increases Rail Gun accuracy"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:3801
-#, fuzzy
 msgid "Increases Rail Gun damage"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
@@ -11036,9 +10943,8 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
 #: po/custom/fromJson.txt:3820
-#, fuzzy
 msgid "Increases Rocket accuracy"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_ROF1.text
@@ -11135,9 +11041,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3891
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Věž vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -11310,16 +11215,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text
 #: po/custom/fromJson.txt:3998
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text
 #: po/custom/fromJson.txt:4001
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BAC2.text
@@ -11343,9 +11246,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASROF1.text
 #: po/custom/fromJson.txt:4014
-#, fuzzy
 msgid "Laser reload time -15%"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-LasSat.name
@@ -11363,9 +11265,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text
 #. data/mp/messages/resmessages3.json: $.RES_LASROF1.text
 #: po/custom/fromJson.txt:4027
-#, fuzzy
 msgid "Laser Upgrade"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Laseropticslab.name
@@ -11541,18 +11442,16 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MG_D10.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MG_D8.text
 #: po/custom/fromJson.txt:4144
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_MG_ROF2.text
 #. data/mp/messages/resmessages23.json: $.RES_W_MG_ROF3.text
 #: po/custom/fromJson.txt:4149
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtMGHalfTracks.name
@@ -11634,9 +11533,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text
 #: po/custom/fromJson.txt:4243
-#, fuzzy
 msgid "Mechanic with repair ability"
-msgstr "Vybrat další Výzkumné Zařízení"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body05.name
@@ -11676,9 +11574,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
 #: po/custom/fromJson.txt:4266
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-MC.name
@@ -11768,52 +11665,45 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:4318
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLTracks.name
 #: po/custom/fromJson.txt:4321
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLHalfTracks.name
 #: po/custom/fromJson.txt:4324
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:4327
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket02-MRL.name
 #. data/mp/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:4331
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:4334
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:4337
-#, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket02-MRL.name
@@ -11833,16 +11723,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODHTracks.name
 #: po/custom/fromJson.txt:4349
-#, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODTracks.name
 #: po/custom/fromJson.txt:4352
-#, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower06.name
@@ -11870,9 +11758,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
 #: po/custom/fromJson.txt:4375
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperPODWheels.name
@@ -11885,9 +11772,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC2.text
 #: po/custom/fromJson.txt:4383
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text
@@ -11899,9 +11785,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text
 #: po/custom/fromJson.txt:4390
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Missile.name
@@ -11915,9 +11800,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_SMS_ROF1.text
 #: po/custom/fromJson.txt:4399
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text
@@ -11931,9 +11815,8 @@ msgstr "Čas Mise - %s"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_SMS_ROF1.text
 #: po/custom/fromJson.txt:4417
-#, fuzzy
 msgid "Missile Upgrade"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_ROF1.text
@@ -11969,9 +11852,8 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_M_AC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_M_AC3.text
 #: po/custom/fromJson.txt:4439
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
@@ -11998,17 +11880,15 @@ msgstr ""
 #. data/base/stats/templates.json: $.CobraMortarHalfTrack.name
 #. data/mp/stats/templates.json: $.CobraMortarHalfTrack.name
 #: po/custom/fromJson.txt:4455
-#, fuzzy
 msgid "Mortar Cobra Half-tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_M_D4.text
 #: po/custom/fromJson.txt:4459
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
@@ -12030,9 +11910,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_M_ROF4.text
 #: po/custom/fromJson.txt:4473
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
@@ -12157,9 +12036,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text
 #: po/custom/fromJson.txt:4574
-#, fuzzy
 msgid "New Advanced Weapon Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text
@@ -12167,9 +12045,8 @@ msgstr "Systémové místo"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text
 #: po/custom/fromJson.txt:4602
-#, fuzzy
 msgid "New Artillery Missile Turret Available"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text
@@ -12190,9 +12067,8 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VP.text
 #: po/custom/fromJson.txt:4618
-#, fuzzy
 msgid "New Base Structure Available"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text
@@ -12205,17 +12081,15 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text
 #: po/custom/fromJson.txt:4637
-#, fuzzy
 msgid "New Construction Options Available"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text
 #: po/custom/fromJson.txt:4678
-#, fuzzy
 msgid "New Cyborg Research Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text
@@ -12230,9 +12104,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS2.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text
 #: po/custom/fromJson.txt:4836
-#, fuzzy
 msgid "New Laser Weapon Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text
@@ -12240,9 +12113,8 @@ msgstr "Systémové místo"
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text
 #: po/custom/fromJson.txt:4842
-#, fuzzy
 msgid "New Missile Turret Available"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text
@@ -12298,9 +12170,8 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_P_H1.text
 #. data/mp/messages/resmessages1.json: $.RES_V_P_W1.text
 #: po/custom/fromJson.txt:4881
-#, fuzzy
 msgid "New Propulsion Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text
@@ -12310,17 +12181,15 @@ msgstr "Systémové místo"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL3.text
 #: po/custom/fromJson.txt:4895
-#, fuzzy
 msgid "New Rail Gun Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text
 #. data/mp/messages/resmessages1.json: $.RES_REPAI1.text
 #: po/custom/fromJson.txt:4899
-#, fuzzy
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "Vybrat všechny Těžce Poškozené Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text
@@ -12340,9 +12209,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text
 #: po/custom/fromJson.txt:4914
-#, fuzzy
 msgid "New research options available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text
@@ -12358,9 +12226,8 @@ msgstr "Systémové místo"
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_LTAT1.text
 #: po/custom/fromJson.txt:4936
-#, fuzzy
 msgid "New Rocket Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text
@@ -12368,31 +12235,27 @@ msgstr "Systémové místo"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text
 #: po/custom/fromJson.txt:4942
-#, fuzzy
 msgid "New SAM Turret Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text
 #: po/custom/fromJson.txt:4945
-#, fuzzy
 msgid "New System Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4948
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WS.text
 #: po/custom/fromJson.txt:4952
-#, fuzzy
 msgid "New Systems Structure Available"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VCBSTW1.text
@@ -12405,9 +12268,8 @@ msgstr "Posily jsou k dispozici."
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_STW1.text
 #: po/custom/fromJson.txt:4963
-#, fuzzy
 msgid "New Systems Tower Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text
@@ -12415,17 +12277,15 @@ msgstr "Systémové místo"
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text
 #: po/custom/fromJson.txt:4969
-#, fuzzy
 msgid "New Systems Turret Available for Design"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text
 #: po/custom/fromJson.txt:4973
-#, fuzzy
 msgid "New Systems Turret Available For Design"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
@@ -12616,16 +12476,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:5138
-#, fuzzy
 msgid "Original Campaign"
-msgstr "Nová kampaň"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:5141
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Šarvátka"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -12708,9 +12566,8 @@ msgstr "Plazmový kanón střílející plazmu"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
 #: po/custom/fromJson.txt:5189
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Plazmový kanón střílející plazmu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-PlasmaCannon.name
@@ -12801,9 +12658,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text
 #: po/custom/fromJson.txt:5239
-#, fuzzy
 msgid "Power Module Available"
-msgstr "Systémové místo"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-PowerModuleMk1.name
@@ -12829,9 +12685,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text
 #: po/custom/fromJson.txt:5254
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Výzkum Dokončen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text
@@ -12842,9 +12697,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:5260
-#, fuzzy
 msgid "Powerlab"
-msgstr "Energie"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text
@@ -12857,9 +12711,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text
 #: po/custom/fromJson.txt:5282
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Cíle projektu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text
@@ -13009,16 +12862,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:5378
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:5381
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail2.name
@@ -13052,9 +12903,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:5401
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
@@ -13091,9 +12941,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:5424
-#, fuzzy
 msgid "Rail Gun Upgrade"
-msgstr "Čas Mise - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun02.name
@@ -13140,9 +12989,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text
 #: po/custom/fromJson.txt:5451
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Výzkum dokončen: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
@@ -13186,9 +13034,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:5494
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Věž vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -13216,24 +13063,21 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RFU4.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text
 #: po/custom/fromJson.txt:5519
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Výzkum dokončen: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
 #. data/mp/stats/templates.json: $.A-Rep-Cobra-Trk.name
 #: po/custom/fromJson.txt:5523
-#, fuzzy
 msgid "Repair Turret Cobra Tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Rep-Mantis-Trk.name
 #: po/custom/fromJson.txt:5526
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperRepairHalftrack.name
@@ -13244,9 +13088,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:5532
-#, fuzzy
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairWheels.name
@@ -13259,9 +13102,8 @@ msgstr ""
 #. data/base/stats/repair.json: $.LightRepair1.name
 #. data/mp/stats/repair.json: $.LightRepair1.name
 #: po/custom/fromJson.txt:5540
-#, fuzzy
 msgid "Repair Turret"
-msgstr "Věž vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text
@@ -13315,9 +13157,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text
 #: po/custom/fromJson.txt:5631
-#, fuzzy
 msgid "Research Module Available"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text
@@ -13340,16 +13181,14 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RU4.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RU7.text
 #: po/custom/fromJson.txt:5646
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Výzkum dokončen: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text
 #: po/custom/fromJson.txt:5649
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Výzkum dokončen: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -13502,9 +13341,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
 #: po/custom/fromJson.txt:5747
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text
@@ -13547,9 +13385,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text
 #. data/mp/messages/resmessages2.json: $.RES_W_SRK_D4.text
 #: po/custom/fromJson.txt:5773
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
@@ -13576,9 +13413,8 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text
 #: po/custom/fromJson.txt:5789
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text
@@ -13840,37 +13676,32 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5969
-#, fuzzy
 msgid "Sensor Cobra Half-tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text
 #: po/custom/fromJson.txt:5972
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text
 #: po/custom/fromJson.txt:5975
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text
 #: po/custom/fromJson.txt:5978
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5988
-#, fuzzy
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Vybrat všechny Kolopásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperSensorWheels.name
@@ -13891,16 +13722,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
 #: po/custom/fromJson.txt:6001
-#, fuzzy
 msgid "Sensor Upgrade Mk2"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade03.name
 #: po/custom/fromJson.txt:6004
-#, fuzzy
 msgid "Sensor Upgrade Mk3"
-msgstr "Dosah snímačů"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
@@ -14064,16 +13893,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG1.text
 #: po/custom/fromJson.txt:6105
-#, fuzzy
 msgid "Structure Research Completed"
-msgstr "Výzkum Dokončen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
 #: po/custom/fromJson.txt:6108
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Sunburst.name
@@ -14091,25 +13918,22 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text
 #: po/custom/fromJson.txt:6153
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Spustit transport"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:6156
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Spustit transport"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
 #. data/mp/stats/templates.json: $.SuperTransport.name
 #: po/custom/fromJson.txt:6160
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "Spustit transport"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -14277,9 +14101,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG5.text
 #: po/custom/fromJson.txt:6276
-#, fuzzy
 msgid "Systems Research Completed"
-msgstr "Výzkum Dokončen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyA-Trocket.name
@@ -14414,31 +14237,27 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_CY_AH4.text
 #: po/custom/fromJson.txt:6355
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Tepelné brnění"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text
 #: po/custom/fromJson.txt:6358
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Tepelné brnění"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text
 #. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text
 #: po/custom/fromJson.txt:6362
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Tepelné brnění"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text
 #: po/custom/fromJson.txt:6365
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Tepelné brnění"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
@@ -14764,9 +14583,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text
 #: po/custom/fromJson.txt:6574
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Výzkum Dokončen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text
@@ -14794,17 +14612,15 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text
 #: po/custom/fromJson.txt:6591
-#, fuzzy
 msgid "Use a truck to add the module to a power generator"
-msgstr "Další náklaďák bude nyní pomáhat se stavbou generátoru energie"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text
 #: po/custom/fromJson.txt:6595
-#, fuzzy
 msgid "Use a truck to add the module to a research facility"
-msgstr "Pomoz svým dalším náklaďákem se stavbou výzkumné laboratoře"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text
@@ -14822,23 +14638,20 @@ msgstr "Použivá pokročilou technologii kanónu"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text
 #: po/custom/fromJson.txt:6605
-#, fuzzy
 msgid "Uses advanced mass driver railgun technology"
-msgstr "Použivá pokročilou technologii kanónu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MSL.text
 #: po/custom/fromJson.txt:6608
-#, fuzzy
 msgid "Uses advanced missile gun technology"
-msgstr "Použivá pokročilou technologii kanónu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_RKT.text
 #: po/custom/fromJson.txt:6611
-#, fuzzy
 msgid "Uses advanced rocket gun technology"
-msgstr "Použivá pokročilou technologii kanónu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
@@ -14878,9 +14691,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_EN10.text
 #. data/mp/messages/resmessages3.json: $.RES_V_EN7.text
 #: po/custom/fromJson.txt:6681
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Tělo vozidla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -15376,9 +15188,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG6.text
 #: po/custom/fromJson.txt:7001
-#, fuzzy
 msgid "Weapon Research Completed"
-msgstr "Výzkum Dokončen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_W1.text
@@ -15487,10 +15298,9 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7066
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "Elita"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
@@ -15504,68 +15314,60 @@ msgstr "Zelenáč"
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7074
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Hrdina"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7078
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "Profesionální"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7082
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "Běžný"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7086
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "Nováček"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7090
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "Speciální"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7094
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "Trénovaný"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7098
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Veterán"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -15603,9 +15405,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Uložit hru"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -15640,9 +15441,8 @@ msgid "configuration directory"
 msgstr "adresář s konfigurací"
 
 #: src/clparse.cpp:259
-#, fuzzy
 msgid "Add data directory"
-msgstr "datový adresář"
+msgstr ""
 
 #: src/clparse.cpp:259
 msgid "data directory"
@@ -15673,18 +15473,16 @@ msgid "Play in fullscreen mode"
 msgstr "Spustit hru v celoobrazovkovém režimu"
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Nahrát určitou hru"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
 msgstr ""
 
 #: src/clparse.cpp:265
-#, fuzzy
 msgid "Show options and exit"
-msgstr "Ukázat tuto nápovědu a skončit"
+msgstr ""
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -15705,18 +15503,16 @@ msgid "Enable a multiplay only mod"
 msgstr ""
 
 #: src/clparse.cpp:269
-#, fuzzy
 msgid "Disable asserts"
-msgstr "Zakázat stíny"
+msgstr ""
 
 #: src/clparse.cpp:270
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Nahrát uloženou hru"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -15724,9 +15520,8 @@ msgid "savegame"
 msgstr "uložená hra"
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Nahrát uloženou hru"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -15789,9 +15584,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "uložená hra"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -15802,9 +15596,8 @@ msgid "test"
 msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "Nahrát uloženou hru"
+msgstr ""
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -15819,9 +15612,8 @@ msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Ukončit Hru"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -15867,9 +15659,8 @@ msgstr "Tepelné brnění"
 
 #: src/design.cpp:604
 #: src/design.cpp:645
-#, fuzzy
 msgid "Engine Output"
-msgstr "Výfuk"
+msgstr ""
 
 #: src/design.cpp:612
 #: src/design.cpp:654
@@ -15970,24 +15761,20 @@ msgid "Systems"
 msgstr ""
 
 #: src/design.cpp:4283
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "Smazat náčrtek"
+msgstr ""
 
 #: src/design.cpp:4288
-#, fuzzy
 msgid "Store Design"
-msgstr "Smazat náčrtek"
+msgstr ""
 
 #: src/display3d.cpp:676
-#, fuzzy
 msgid "Player left"
-msgstr "Hráč"
+msgstr ""
 
 #: src/display3d.cpp:680
-#, fuzzy
 msgid "Player dropped"
-msgstr "Hráč"
+msgstr ""
 
 #: src/display3d.cpp:684
 #: src/multiint.cpp:2060
@@ -16008,25 +15795,24 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nemohu stavět. Ropný vrt hoří."
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Jednotka ztracena!"
+msgstr ""
 
 #: src/droid.cpp:1143
-#, fuzzy
 msgid "Structure Restored"
-msgstr "Budova obnovena"
+msgstr ""
 
 #: src/droid.cpp:1923
 #, c-format
@@ -16069,14 +15855,12 @@ msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
 #: src/frontend.cpp:146
-#, fuzzy
 msgid "Single Player"
-msgstr "Kampaň pro Jednoho Hráče"
+msgstr ""
 
 #: src/frontend.cpp:147
-#, fuzzy
 msgid "Multi Player"
-msgstr "Hra pro Více Hráčů"
+msgstr ""
 
 #: src/frontend.cpp:148
 #: src/frontend.cpp:309
@@ -16090,9 +15874,8 @@ msgstr "Nastavení"
 
 #: src/frontend.cpp:153
 #: src/frontend.cpp:157
-#, fuzzy
 msgid "View Intro"
-msgstr "Pohled na východ"
+msgstr ""
 
 #: src/frontend.cpp:158
 msgid "Videos are missing, download them from http://wz2100.net"
@@ -16100,14 +15883,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Pokračovat ve hře"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Systémové místo"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -16174,23 +15955,20 @@ msgid "New Campaign"
 msgstr "Nová kampaň"
 
 #: src/frontend.cpp:365
-#, fuzzy
 msgid "Start Skirmish Game"
-msgstr "Začni hostovat hru"
+msgstr ""
 
 #: src/frontend.cpp:366
 msgid "Challenges"
 msgstr ""
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Nahrát kampaň"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Začni hostovat hru"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -16207,15 +15985,13 @@ msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Načti Uloženou Hru"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Načti Uloženou Hru"
+msgstr ""
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -16249,20 +16025,17 @@ msgstr "Grafická nastavení"
 
 #: src/frontend.cpp:684
 #: src/ingameop.cpp:482
-#, fuzzy
 msgid "Video Options"
-msgstr "Zvuková nastavení"
+msgstr ""
 
 #: src/frontend.cpp:685
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "Zvuková nastavení"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
-#, fuzzy
 msgid "Mouse Options"
-msgstr "Herní nastavení"
+msgstr ""
 
 #: src/frontend.cpp:687
 #: src/ingameop.cpp:494
@@ -16286,9 +16059,8 @@ msgstr "Celá obrazovka"
 #: src/frontend.cpp:752
 #: src/frontend.cpp:903
 #: src/frontend.cpp:1683
-#, fuzzy
 msgid "Unsupported"
-msgstr "Transportér"
+msgstr ""
 
 #: src/frontend.cpp:749
 #: src/frontend.cpp:758
@@ -16322,9 +16094,8 @@ msgid "On"
 msgstr "Zapnuto"
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Rotating"
-msgstr "Otočit doprava"
+msgstr ""
 
 #: src/frontend.cpp:768
 msgid "Fixed"
@@ -16369,19 +16140,16 @@ msgid "Radar Jump"
 msgstr ""
 
 #: src/frontend.cpp:812
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "HERNÍ NASTAVENÍ"
+msgstr ""
 
 #: src/frontend.cpp:906
-#, fuzzy
 msgid "Disabled"
-msgstr "Zakázat zvuk"
+msgstr ""
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Enabled"
-msgstr "Povolit zvuk"
+msgstr ""
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
@@ -16429,9 +16197,8 @@ msgstr ""
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "HERNÍ NASTAVENÍ"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -16442,18 +16209,16 @@ msgid "Graphics Mode*"
 msgstr "Grafický mód*"
 
 #: src/frontend.cpp:1137
-#, fuzzy
 msgid "Graphics Mode"
-msgstr "Grafický mód*"
+msgstr ""
 
 #: src/frontend.cpp:1142
 msgid "Resolution*"
 msgstr "Rozlišení*"
 
 #: src/frontend.cpp:1142
-#, fuzzy
 msgid "Resolution"
-msgstr "Rozlišení*"
+msgstr ""
 
 #: src/frontend.cpp:1147
 msgid "Display Scale*"
@@ -16481,18 +16246,16 @@ msgid "Vertical sync"
 msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "Italsky"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
 #: src/frontend.cpp:1260
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "HERNÍ NASTAVENÍ"
+msgstr ""
 
 #: src/frontend.cpp:1547
 msgid "Middle Mouse"
@@ -16507,9 +16270,8 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Restartování herní rychlosti"
+msgstr ""
 
 #: src/frontend.cpp:1561
 msgid "Camera Pitch"
@@ -16517,9 +16279,8 @@ msgstr ""
 
 #: src/frontend.cpp:1576
 #: src/ingameop.cpp:697
-#, fuzzy
 msgid "Reverse Rotation"
-msgstr "Obrať myš"
+msgstr ""
 
 #: src/frontend.cpp:1580
 #: src/ingameop.cpp:704
@@ -16528,15 +16289,13 @@ msgstr ""
 
 #: src/frontend.cpp:1585
 #: src/ingameop.cpp:710
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Herní nastavení"
+msgstr ""
 
 #: src/frontend.cpp:1590
 #: src/ingameop.cpp:715
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Otočit doleva"
+msgstr ""
 
 #: src/frontend.cpp:1594
 #: src/ingameop.cpp:720
@@ -16545,14 +16304,12 @@ msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Rychlost rolování"
+msgstr ""
 
 #: src/frontend.cpp:1602
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "HERNÍ NASTAVENÍ"
+msgstr ""
 
 #: src/frontend.cpp:1678
 #: src/multiint.cpp:223
@@ -16580,33 +16337,28 @@ msgstr "Jazyk"
 
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Obtížnost"
+msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
-#, fuzzy
 msgid "Camera Speed"
-msgstr "Rychlost po vodě"
+msgstr ""
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "Barva jednotky"
+msgstr ""
 
 #: src/frontend.cpp:1744
 #: src/frontend.cpp:1780
-#, fuzzy
 msgid "Campaign"
-msgstr "Nová kampaň"
+msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Hra pro Více Hráčů"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -16621,14 +16373,13 @@ msgstr ""
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "HRA ULOŽENA!"
+msgstr ""
 
 #: src/hci.cpp:1566
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
+msgstr ""
 
 #: src/hci.cpp:1577
 #, c-format
@@ -16641,9 +16392,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
 #: src/hci.cpp:1607
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
+msgstr ""
 
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
@@ -16664,14 +16415,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -16684,13 +16433,11 @@ msgid "Loop Production"
 msgstr "Opakovat výrobu"
 
 #: src/hci.cpp:3840
-#, fuzzy
 msgid "Ally progress"
-msgstr "Panel průběhu"
+msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -16699,9 +16446,8 @@ msgid "Chat: All"
 msgstr ""
 
 #: src/hci.cpp:4959
-#, fuzzy
 msgid "Chat: Team"
-msgstr "Pevné Týmy"
+msgstr ""
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -16720,9 +16466,8 @@ msgstr ""
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Ukončit"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -16750,9 +16495,8 @@ msgid "Quit"
 msgstr "Ukončit"
 
 #: src/ingameop.cpp:342
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "Hostitel opustil hru!"
+msgstr ""
 
 #: src/ingameop.cpp:348
 msgid "The game can't continue without the host."
@@ -16767,25 +16511,20 @@ msgid "Audio Options"
 msgstr "Zvuková nastavení"
 
 #: src/ingameop.cpp:494
-#, fuzzy
 msgid "View Key Mappings"
-msgstr "Mapování kláves"
+msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Nová kampaň"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Začni hostovat hru"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
@@ -16794,18 +16533,16 @@ msgid "Waiting for Power"
 msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "Panel průběhu"
+msgstr ""
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Výzkum"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -16834,9 +16571,8 @@ msgstr ""
 
 #: src/intorder.cpp:166
 #: src/keymap.cpp:396
-#, fuzzy
 msgid "Short Range"
-msgstr "Krátký dostřel"
+msgstr ""
 
 #: src/intorder.cpp:167
 #: src/keymap.cpp:402
@@ -16937,9 +16673,8 @@ msgid "Assign VTOL Factory Production"
 msgstr ""
 
 #: src/intorder.cpp:188
-#, fuzzy
 msgid "Circle"
-msgstr "soubor"
+msgstr ""
 
 #: src/keybind.cpp:123
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -16962,29 +16697,25 @@ msgid "Lets us see what you see!"
 msgstr "Ukaž nám co vidíš!"
 
 #: src/keybind.cpp:294
-#, fuzzy
 msgid "Fine, weapon & sensor display is off!"
-msgstr "Fine, snímač displeje je vypnutý!"
+msgstr ""
 
 #: src/keybind.cpp:326
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "Pohled na jih"
+msgstr ""
 
 #: src/keybind.cpp:336
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "Pohled na východ"
+msgstr ""
 
 #: src/keybind.cpp:346
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "Pohled na západ"
+msgstr ""
 
 #: src/keybind.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
+msgstr ""
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -17003,14 +16734,12 @@ msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
 #: src/keybind.cpp:511
-#, fuzzy
 msgid "Hard as nails!!!"
-msgstr "jako ocel"
+msgstr ""
 
 #: src/keybind.cpp:525
-#, fuzzy
 msgid "Takings thing easy!"
-msgstr "Věci jdou lehce!"
+msgstr ""
 
 #: src/keybind.cpp:541
 msgid "1000 big ones!!!"
@@ -17062,9 +16791,8 @@ msgid "Fog on"
 msgstr "Zapnutá mlha"
 
 #: src/keybind.cpp:800
-#, fuzzy
 msgid "Fog off"
-msgstr "Vypnutá mlha"
+msgstr ""
 
 #: src/keybind.cpp:909
 #: src/keybind.cpp:922
@@ -17103,9 +16831,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1483
-#, fuzzy
 msgid "Researched"
-msgstr "Výzkum"
+msgstr ""
 
 #: src/keybind.cpp:1504
 msgid "Only displaying energy bars when selected"
@@ -17124,9 +16851,8 @@ msgid "Debug menu is Open"
 msgstr ""
 
 #: src/keybind.cpp:1558
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Nemohu nalézt žádný náklaďák!"
+msgstr ""
 
 #: src/keybind.cpp:1722
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -17145,9 +16871,8 @@ msgid "Warning! This can have drastic consequences if used incorrectly in missio
 msgstr ""
 
 #: src/keybind.cpp:1828
-#, fuzzy
 msgid "All enemies destroyed by cheating!"
-msgstr "Nepřítel zničen podváděním!"
+msgstr ""
 
 #: src/keybind.cpp:1869
 msgid "Destroying selected droids and structures!"
@@ -17182,25 +16907,23 @@ msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
 #: src/keybind.cpp:2508
-#, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
+msgstr ""
 
 #: src/keybind.cpp:2543
 #: src/keybind.cpp:2597
-#, fuzzy
 msgid "Game Speed Reset"
-msgstr "Restartování herní rychlosti"
+msgstr ""
 
 #: src/keybind.cpp:2547
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Rychlost Hry Zvýšena na %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2551
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Rychlost Hry Snížena na %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2609
 msgid "Radar showing friend-foe colors"
@@ -17267,18 +16990,16 @@ msgid "Commanders"
 msgstr ""
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Uložit hru"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr ""
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "Nahraj Hru"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -17305,53 +17026,44 @@ msgid "Toggle Sensor display"
 msgstr ""
 
 #: src/keymap.cpp:315
-#, fuzzy
 msgid "Assign Group 0"
-msgstr "Přiřadit skupině 0"
+msgstr ""
 
 #: src/keymap.cpp:316
-#, fuzzy
 msgid "Assign Group 1"
-msgstr "Přiřadit skupině 1"
+msgstr ""
 
 #: src/keymap.cpp:317
 msgid "Assign Group 2"
 msgstr "Přiřadit skupině 2"
 
 #: src/keymap.cpp:318
-#, fuzzy
 msgid "Assign Group 3"
-msgstr "Přiřadit skupině 3"
+msgstr ""
 
 #: src/keymap.cpp:319
-#, fuzzy
 msgid "Assign Group 4"
-msgstr "Přiřadit skupině 4"
+msgstr ""
 
 #: src/keymap.cpp:320
-#, fuzzy
 msgid "Assign Group 5"
-msgstr "Přiřadit skupině 5"
+msgstr ""
 
 #: src/keymap.cpp:321
-#, fuzzy
 msgid "Assign Group 6"
-msgstr "Přiřadit skupině 6"
+msgstr ""
 
 #: src/keymap.cpp:322
-#, fuzzy
 msgid "Assign Group 7"
-msgstr "Přiřadit skupině 7"
+msgstr ""
 
 #: src/keymap.cpp:323
-#, fuzzy
 msgid "Assign Group 8"
-msgstr "Přiřadit skupině 8"
+msgstr ""
 
 #: src/keymap.cpp:324
-#, fuzzy
 msgid "Assign Group 9"
-msgstr "Přiřadit skupině 9"
+msgstr ""
 
 #: src/keymap.cpp:328
 msgid "Select Group 0"
@@ -17518,9 +17230,8 @@ msgid "View West"
 msgstr "Pohled na západ"
 
 #: src/keymap.cpp:377
-#, fuzzy
 msgid "View next Oil Derrick"
-msgstr "Zobrazit další ropnou věž"
+msgstr ""
 
 #: src/keymap.cpp:378
 msgid "View next Repair Unit"
@@ -17571,23 +17282,20 @@ msgid "Stop Droid"
 msgstr ""
 
 #: src/keymap.cpp:403
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "Poslat textovou zprávu"
+msgstr ""
 
 #: src/keymap.cpp:404
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "Poslat textovou zprávu"
+msgstr ""
 
 #: src/keymap.cpp:405
 msgid "Drop a beacon"
 msgstr ""
 
 #: src/keymap.cpp:407
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "Povolit stíny"
+msgstr ""
 
 #: src/keymap.cpp:408
 msgid "Trap cursor"
@@ -17610,9 +17318,8 @@ msgid "Select all Combat Units"
 msgstr "Vybrat všechny Bojové Jednotky"
 
 #: src/keymap.cpp:421
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Vybrat všechna Vznášedla"
+msgstr ""
 
 #: src/keymap.cpp:422
 msgid "Select all Heavily Damaged Units"
@@ -17643,9 +17350,8 @@ msgid "Select all VTOLs"
 msgstr ""
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "Vybrat všechny Těžce Poškozené Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:431
 msgid "Select all Wheels"
@@ -17656,49 +17362,40 @@ msgid "Show frame rate"
 msgstr ""
 
 #: src/keymap.cpp:433
-#, fuzzy
 msgid "Select all Similar Units"
-msgstr "Vybet všechny Podobné Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:437
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Vybrat všechny Bojové Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:438
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Vybrat všechna Vznášedla"
+msgstr ""
 
 #: src/keymap.cpp:439
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Vybrat všechny Bojové Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:442
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:443
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Vybet všechny Podobné Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:444
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Vybrat všechny Pásové Jednotky"
+msgstr ""
 
 #: src/keymap.cpp:448
 msgid "Select next Factory"
@@ -17717,9 +17414,8 @@ msgid "Select next Cyborg Factory"
 msgstr ""
 
 #: src/keymap.cpp:454
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Mapování kláves"
+msgstr ""
 
 #: src/keymap.cpp:455
 msgid "Toggle display of droid path"
@@ -17734,18 +17430,16 @@ msgid "Toggle visibility"
 msgstr ""
 
 #: src/keymap.cpp:458
-#, fuzzy
 msgid "Raise tile height"
-msgstr "Otočit doprava"
+msgstr ""
 
 #: src/keymap.cpp:459
 msgid "Lower tile height"
 msgstr ""
 
 #: src/keymap.cpp:460
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "Povolit stíny"
+msgstr ""
 
 #: src/keymap.cpp:461
 msgid "Trigger some weather"
@@ -17760,9 +17454,8 @@ msgid "Make a performance measurement sample"
 msgstr ""
 
 #: src/keymap.cpp:466
-#, fuzzy
 msgid "Make all items available"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #: src/keymap.cpp:467
 msgid "Kill Selected Unit(s)"
@@ -17789,14 +17482,12 @@ msgid "Trace a game object"
 msgstr ""
 
 #: src/loadsave.cpp:311
-#, fuzzy
 msgid "Parent directory"
-msgstr "datový adresář"
+msgstr ""
 
 #: src/loadsave.cpp:316
-#, fuzzy
 msgid "Autosave directory"
-msgstr "datový adresář"
+msgstr ""
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory (not allowed for saving)"
@@ -17804,27 +17495,24 @@ msgstr ""
 
 #: src/loop.cpp:253
 #: src/loop.cpp:269
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Nahrát uloženou hru"
+msgstr ""
 
 #: src/mission.cpp:1923
 msgid "Load Transport"
 msgstr "Naložit transport"
 
 #: src/mission.cpp:2285
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "CÍL SPLNĚN"
+msgstr ""
 
 #: src/mission.cpp:2285
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CÍL SPLNĚN"
 
 #: src/mission.cpp:2291
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "SELHÁNÍ"
+msgstr ""
 
 #: src/mission.cpp:2291
 msgid "OBJECTIVE FAILED"
@@ -17846,9 +17534,8 @@ msgid "Load Saved Game"
 msgstr "Načti Uloženou Hru"
 
 #: src/mission.cpp:2425
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "HRA ULOŽENA!"
+msgstr ""
 
 #: src/move.cpp:1981
 #, c-format
@@ -17856,40 +17543,40 @@ msgid "You found %u power in an oil drum."
 msgstr ""
 
 #: src/multigifts.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s dá ti viditelnou zprávu"
+msgstr ""
 
 #: src/multigifts.cpp:237
 #: src/multigifts.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives you a %s"
-msgstr "%s ti dá %s"
+msgstr ""
 
 #: src/multigifts.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "Zkouší dát pryč %s - ale to není umožněno"
+msgstr ""
 
 #: src/multigifts.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You Technology Documents"
-msgstr "%s ti á technickou dokumentaci"
+msgstr ""
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s dá ti sílu"
+msgstr ""
 
 #: src/multigifts.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "%s požaduje s tebou spolčení"
+msgstr ""
 
 #: src/multigifts.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr "Jsi pozván %s ze spolku"
+msgstr ""
 
 #: src/multigifts.cpp:469
 #, c-format
@@ -17912,9 +17599,8 @@ msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Velitelé (F6)"
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -17946,25 +17632,21 @@ msgid "VTOLs disabled."
 msgstr ""
 
 #: src/multiint.cpp:1065
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Zobrazení FPS je vypnuté."
+msgstr ""
 
 #: src/multiint.cpp:1066
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Nastavení limitu budov"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Vyber jméno hry"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -17975,8 +17657,7 @@ msgid "Select Game Name"
 msgstr "Vyber jméno hry"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -18011,9 +17692,8 @@ msgstr ""
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "Nastavení limitu budov"
+msgstr ""
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
@@ -18021,21 +17701,18 @@ msgid "Set Structure Limits"
 msgstr "Nastavení limitu budov"
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "Herní nastavení"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
 #: src/multiint.cpp:1343
 #: src/multiint.cpp:1344
-#, fuzzy
 msgid "Start Hosting Game"
-msgstr "Začni hostovat hru"
+msgstr ""
 
 #: src/multiint.cpp:1351
 msgid "Vote"
@@ -18054,23 +17731,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Začni s Rozvinutými Základnami"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Hráč"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Začni s Rozvinutými Základnami"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -18089,23 +17763,20 @@ msgid "Team"
 msgstr ""
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Radar ukazuje barvy hráčů"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Waiting for player"
 msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Hráč"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Hráč"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
@@ -18128,32 +17799,28 @@ msgid "Click to change to this slot"
 msgstr ""
 
 #: src/multiint.cpp:2183
-#, fuzzy
 msgid "Choose Team"
-msgstr "Pevné Týmy"
+msgstr ""
 
 #: src/multiint.cpp:2187
 msgid "Teams locked"
 msgstr ""
 
 #: src/multiint.cpp:2213
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Radar ukazuje barvy hráčů"
+msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Braň pozici"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Hráč"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -18161,7 +17828,7 @@ msgstr ""
 
 #: src/multiint.cpp:2335
 msgid "CHAT"
-msgstr "CHAT"
+msgstr ""
 
 #: src/multiint.cpp:2657
 #: src/multiint.cpp:3666
@@ -18169,9 +17836,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Vyber jméno hry"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -18242,9 +17908,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Radar ukazuje barvy hráčů"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -18253,9 +17919,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Zavřít"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -18296,14 +17961,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "Hostitel opustil hru!"
+msgstr ""
 
 #: src/multijoin.cpp:503
-#, fuzzy
 msgid "Server message:"
-msgstr "Systémové místo"
+msgstr ""
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
@@ -18323,9 +17987,8 @@ msgid "Force Limits at Start"
 msgstr ""
 
 #: src/multilimit.cpp:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Zpět na Předchozí Obrazovku"
+msgstr ""
 
 #: src/multilimit.cpp:192
 #: src/titleui/protocol.cpp:178
@@ -18349,9 +18012,8 @@ msgid "Technology level 3"
 msgstr "Technologická úroveň 3"
 
 #: src/multimenu.cpp:593
-#, fuzzy
 msgid "Max technology level"
-msgstr "Technologická úroveň 1"
+msgstr ""
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
@@ -18375,14 +18037,12 @@ msgid "Kills"
 msgstr ""
 
 #: src/multimenu.cpp:765
-#, fuzzy
 msgid "Units"
-msgstr "Jednotka"
+msgstr ""
 
 #: src/multimenu.cpp:781
-#, fuzzy
 msgid "Structs"
-msgstr "Stavba"
+msgstr ""
 
 #: src/multimenu.cpp:793
 msgid "Sent/Received per sec —"
@@ -18393,9 +18053,9 @@ msgid "Total Sent/Received —"
 msgstr ""
 
 #: src/multimenu.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Trénovaný: %u"
+msgstr ""
 
 #: src/multimenu.cpp:802
 #, c-format
@@ -18460,9 +18120,8 @@ msgid " (Global)"
 msgstr ""
 
 #: src/multiplay.cpp:1248
-#, fuzzy
 msgid "(allies"
-msgstr "Spojenectví"
+msgstr ""
 
 #: src/multiplay.cpp:1256
 msgid "(private to "
@@ -18625,10 +18284,10 @@ msgid "Rookie: %u"
 msgstr "Bažant: %u"
 
 #: src/scores.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Zelená"
+msgstr ""
 
 #: src/scores.cpp:108
 #, c-format
@@ -18636,9 +18295,9 @@ msgid "Trained: %u"
 msgstr "Trénovaný: %u"
 
 #: src/scores.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Regular: %u"
-msgstr "Obvyklý: %u"
+msgstr ""
 
 #: src/scores.cpp:110
 #, c-format
@@ -18742,20 +18401,20 @@ msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Producti
 msgstr ""
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "Jednotka přiřazena"
-msgstr[1] "Jednotky přiřazeny"
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "Jednotka přiřazena"
-msgstr[1] "Jednotky přiřazeny"
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
@@ -18771,9 +18430,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - Připojeno %u z %u"
+msgstr ""
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -18818,9 +18477,8 @@ msgid "Refresh Games List"
 msgstr "Aktualizuj Seznam Her"
 
 #: src/titleui/gamefind.cpp:93
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Aktualizuj Seznam Her"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
@@ -18873,9 +18531,8 @@ msgid "There appears to be a game update available!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:382
-#, fuzzy
 msgid "No games are available for your version"
-msgstr "Posily jsou k dispozici."
+msgstr ""
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -18923,9 +18580,9 @@ msgid "Mods: None!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Veterán: %u"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -18940,9 +18597,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Pokračovat ve hře"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -18954,9 +18610,8 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
-#, fuzzy
 msgid "Cancel"
-msgstr "Azurová"
+msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -18964,11 +18619,11 @@ msgstr "SPOJENÍ"
 
 #: src/titleui/protocol.cpp:89
 msgid "Lobby"
-msgstr "Lobby"
+msgstr ""
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -19001,316 +18656,7 @@ msgstr ""
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Veterán: %u"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Výzkum dokončen: %s"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Výzkum dokončen: %s"
-
-#, fuzzy
-#~ msgid "Show all options and exit"
-#~ msgstr "Ukázat tuto nápovědu a skončit"
-
-#~ msgid "Select Map"
-#~ msgstr "Vyber Mapu"
-
-#, fuzzy
-#~ msgid "Difficulty locked"
-#~ msgstr "Obtížnost"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Radar ukazuje barvy hráčů"
-
-#~ msgid "Set default data directory"
-#~ msgstr "Nastavit výchozí datový adresář"
-
-#, fuzzy
-#~ msgid "game-name"
-#~ msgstr "Jméno-hry"
-
-#~ msgid "Unit"
-#~ msgstr "Jednotka"
-
-#, fuzzy
-#~ msgid "Place Unit on map"
-#~ msgstr "Nastavení limitu budov"
-
-#~ msgid "Struct"
-#~ msgstr "Stavba"
-
-#, fuzzy
-#~ msgid "Place Structures on map"
-#~ msgstr "Nastavení limitu budov"
-
-#, fuzzy
-#~ msgid "Place Features on map"
-#~ msgstr "Nastavení limitu budov"
-
-#~ msgid "Exit Game"
-#~ msgstr "Ukončit hru"
-
-#, fuzzy
-#~ msgid "Current Player:"
-#~ msgstr "Hra pro Více Hráčů"
-
-#, fuzzy
-#~ msgid "Shaders"
-#~ msgstr "Stíny"
-
-#, fuzzy
-#~ msgid "MAP SAVED!"
-#~ msgstr "HRA ULOŽENA!"
-
-#, fuzzy
-#~ msgid "Load Map File"
-#~ msgstr "Nahraj Hru"
-
-#, fuzzy
-#~ msgid "Save Map File"
-#~ msgstr "Uložit hru"
-
-#, fuzzy
-#~ msgid "Tile"
-#~ msgstr "soubor"
-
-#, fuzzy
-#~ msgid "Place tiles on map"
-#~ msgstr "Nastavení limitu budov"
-
-#, fuzzy
-#~ msgid "Pause or unpause the game"
-#~ msgstr "Hostitel opustil hru!"
-
-#, fuzzy
-#~ msgid "Start Edit Mode"
-#~ msgstr "Začni bez Základen"
-
-#, fuzzy
-#~ msgid "Sensor display On"
-#~ msgstr "Dosah snímačů"
-
-#, fuzzy
-#~ msgid "Toggle watch window"
-#~ msgstr "Povolit stíny"
-
-#, fuzzy
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - Poškození %3.0f%%"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Hráč"
-
-#, fuzzy
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "Barva jednotky"
-
-#, fuzzy
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "Barva jednotky"
-
-#, fuzzy
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "Vybrat všechny Pásové Jednotky"
-
-#, fuzzy
-#~ msgid "3 players"
-#~ msgstr "2 hráči"
-
-#~ msgid "4 players"
-#~ msgstr "4 hráči"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "2 hráči"
-
-#~ msgid "8 players"
-#~ msgstr "8 hráčů"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "4 hráči"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Radar ukazuje terén"
-
-#~ msgid "Fog"
-#~ msgstr "Mlha"
-
-#~ msgid "Mist"
-#~ msgstr "Mlha"
-
-#~ msgid "Fog Of War"
-#~ msgstr "Válečná mlha"
-
-#, fuzzy
-#~ msgid "Distance Fog"
-#~ msgstr "vzdálená mlha"
-
-#, fuzzy
-#~ msgid "Player colour"
-#~ msgstr "Hráč"
-
-#, fuzzy
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Nákladní auto dostalo rozkaz postavit ropnou věž"
-
-#, fuzzy
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "Nákladní auto dostalo rozkaz postavit ropnou věž"
-
-#, fuzzy
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "Nákladní auto dostalo rozkaz postavit ropnou věž"
-
-#, fuzzy
-#~ msgid "Kick player"
-#~ msgstr "2 hráči"
-
-#, fuzzy
-#~ msgid "Infinite Production"
-#~ msgstr "Opakovat výrobu"
-
-#, fuzzy
-#~ msgid "Player number"
-#~ msgstr "Hráč"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "Hra"
-
-#, fuzzy
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "Nelze lokalizovat žádný sběrač surovin!"
-
-#~ msgid "Danish"
-#~ msgstr "Dánsky"
-
-#~ msgid "German"
-#~ msgstr "Německy"
-
-#, fuzzy
-#~ msgid "Spanish"
-#~ msgstr "Dánsky"
-
-#, fuzzy
-#~ msgid "Finnish"
-#~ msgstr "Dánsky"
-
-#~ msgid "French"
-#~ msgstr "Francouzsky"
-
-#, fuzzy
-#~ msgid "Irish"
-#~ msgstr "Šarvátka"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "Latinsky"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norsky"
-
-#~ msgid "Dutch"
-#~ msgstr "Holandsky"
-
-#, fuzzy
-#~ msgid "Polish"
-#~ msgstr "Anglicky"
-
-#, fuzzy
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugalsky"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "Portugalsky"
-
-#~ msgid "Russian"
-#~ msgstr "Rusky"
-
-#~ msgid "Latin"
-#~ msgstr "Latinsky"
-
-#, fuzzy
-#~ msgid "Hardware"
-#~ msgstr "Těžká"
-
-#~ msgid "English"
-#~ msgstr "Anglicky"
-
-#, fuzzy
-#~ msgid "Basque"
-#~ msgstr "Základna"
-
-#, fuzzy
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Norsky"
-
-#, fuzzy
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "Švédsky"
-
-#~ msgid "Swedish"
-#~ msgstr "Švédsky"
-
-#, fuzzy
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Vybrat všechny Kolopásové Jednotky"
-
-#~ msgid "Mayhem"
-#~ msgstr "Mayhem"
-
-#~ msgid "Full"
-#~ msgstr "Plný"
-
-#~ msgid "Minimal"
-#~ msgstr "Minimální"
-
-#, fuzzy
-#~ msgid "Establish a forward base near the site of the Research Centre."
-#~ msgstr "Vybuduj předsunutou základnu na náhorní plošině."
