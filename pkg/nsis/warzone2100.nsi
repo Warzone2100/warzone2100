@@ -27,6 +27,8 @@
   !include "FileFunc.nsh"
   !include "LogicLib.nsh"
 
+  !include "scripts\LangFileSpecific.nsh"
+
 ;--------------------------------
 ;General
   CRCCheck on  ;make sure this isn't corrupted
@@ -129,10 +131,19 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
 ;--------------------------------
 ;Languages
 
+  !addincludedir "i18n"
+
+  !define WZ_LANGFILE_FALLBACK "win_installer_base.nsh"
+
   !insertmacro MUI_LANGUAGE "English" # first language is the default language
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE "English" "win_installer_base.nsh"
+
   !insertmacro MUI_LANGUAGE "Dutch"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Dutch" "win_installer-Dutch.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "German"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "German" "win_installer-German.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Russian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Russian" "win_installer-Russian.nsh" ${WZ_LANGFILE_FALLBACK}
 
 ;--------------------------------
 ;Reserve Files
@@ -529,20 +540,15 @@ FunctionEnd
 ;--------------------------------
 ;Descriptions
 
-  !include "Lang-English.nsh"
-  !include "Lang-Dutch.nsh"
-  !include "Lang-German.nsh"
-  !include "Lang-Russian.nsh"
-
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} $(DESC_SecFMVs_Eng)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} $(DESC_SecFMVs_EngHi)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} $(DESC_SecFMVs_EngLo)
-;  !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} $(DESC_SecFMVs_Ger)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Eng} "$(DESC_SecFMVs_Eng) (545 MB)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngHi} "$(DESC_SecFMVs_EngHi) (920 MB)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_EngLo} "$(DESC_SecFMVs_EngLo) (162 MB)"
+;    !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs_Ger} "$(DESC_SecFMVs_Ger) (460 MB)"
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS_WinFonts} $(DESC_SecNLS_WinFonts)
