@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-07 02:42+0000\n"
-"PO-Revision-Date: 2020-03-07 15:24\n"
+"PO-Revision-Date: 2020-03-07 15:53\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -15800,12 +15800,12 @@ msgstr "Nie można budować. Płonie ropa."
 #: src/display.cpp:1530
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr ""
+msgstr "%s - Punktów obrażeń %d/%d - Doświadczenie %.1f, %s"
 
 #: src/display.cpp:1692
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr ""
+msgstr "%s - Sojusznik - Punktów obrażeń %d/%d - Doświadczenie %d, %s"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
@@ -15824,7 +15824,7 @@ msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Wybrana grupa %u - %u jednostka"
 msgstr[1] "Wybrana grupa %u - %u jednostki"
 msgstr[2] "Wybrana grupa %u - %u jednostek"
-msgstr[3] ""
+msgstr[3] "Wybrana grupa %u - %u jednostek"
 
 #: src/droid.cpp:1932
 #, c-format
@@ -15833,7 +15833,7 @@ msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
-msgstr[3] ""
+msgstr[3] "%u jednostek przypisano do Grupy %u"
 
 #: src/droid.cpp:1943
 #, c-format
@@ -15842,7 +15842,7 @@ msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
-msgstr[3] ""
+msgstr[3] "Wyśrodkowano na grupie %u - %u jednostek"
 
 #: src/droid.cpp:1947
 #, c-format
@@ -15851,7 +15851,7 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Wyrównanie z grupą %u - %u jednostka"
 msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
-msgstr[3] ""
+msgstr[3] "Wyrównanie z grupą %u - %u jednostek"
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -18030,7 +18030,7 @@ msgid_plural "%d players"
 msgstr[0] "%d gracz"
 msgstr[1] "%d graczy"
 msgstr[2] "%d graczy"
-msgstr[3] ""
+msgstr[3] "%d graczy"
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -18383,11 +18383,11 @@ msgid_plural "%u units selected"
 msgstr[0] "%u zaznaczona jednostka"
 msgstr[1] "%u zaznaczone jednostki"
 msgstr[2] "%u zaznaczonych jednostek"
-msgstr[3] ""
+msgstr[3] "%u zaznaczonych jednostek"
 
 #: src/structure.cpp:2497
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Nie można budować nowych jednostek, limit kontrolny osiągnięty - produkcja wstrzymana"
 
 #: src/structure.cpp:2505
 #, c-format
@@ -18408,19 +18408,19 @@ msgstr ""
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%s - %u Jednostka przydzielona - Punktów obrażeń %d/%d"
+msgstr[1] "%s - %u Jednostki przydzielone - Punktów obrażeń %d/%d"
+msgstr[2] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
+msgstr[3] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5447
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%s - %u Jednostka przydzielona - Punktów obrażeń %d/%d"
+msgstr[1] "%s - %u Jednostki przydzielone - Punktów obrażeń %d/%d"
+msgstr[2] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
+msgstr[3] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -18431,12 +18431,12 @@ msgstr[3] ""
 #: src/structure.cpp:5519
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5485
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Połączono %u z %u - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
