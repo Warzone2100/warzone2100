@@ -1,8 +1,8 @@
-${LangFileString} WZWelcomeText "Deze installatiewizard leidt u door het installatieproces van Warzone 2100.\r\n\r\nHet is aangeraden om alle andere applicaties te sluiten alvorens verder te gaan met deze installatie. Dit maakt het mogelijk om de betreffende systeembestanden te vervangen zonder uw computer opnieuw op te starten"
+${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
 
 ${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
 
-${LangFileString} WZ_GPL_NEXT "volgende"
+${LangFileString} WZ_GPL_NEXT "Next"
 
 ${LangFileString} TEXT_SecBase "Core files"
 ${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
@@ -23,7 +23,7 @@ ${LangFileString} TEXT_SecFMVs_Ger "German"
 ${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
 
 ${LangFileString} TEXT_SecNLS "Language files"
-${LangFileString} DESC_SecNLS "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
+${LangFileString} DESC_SecNLS "Support for languages other than English."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
 ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
