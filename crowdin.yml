@@ -28,3 +28,5 @@ files:
         eo: eo # Esperanto
         la-LA: la # Latin
         nb: nb # Norwegian Bokmal
+  - source: /pkg/nsis/i18n/win_installer_base.nsh
+    translation: /pkg/nsis/i18n/win_installer-%language%.nsh
