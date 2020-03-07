@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n%10>=2) && (n%10<=4) && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Lokalize 1.0\n"
 "X-Poedit-Language: Polish\n"
@@ -10285,14 +10285,14 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nie można budować. Płonie ropa."
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Obrażenia %d%% - Doświadczenie %.1f, %s"
+msgstr "%s - Punktów obrażeń %d/%d - Doświadczenie %.1f, %s"
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
+msgstr "%s - Sojusznik - Punktów obrażeń %d/%d - Doświadczenie %d, %s"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
@@ -10311,6 +10311,7 @@ msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Wybrana grupa %u - %u jednostka"
 msgstr[1] "Wybrana grupa %u - %u jednostki"
 msgstr[2] "Wybrana grupa %u - %u jednostek"
+msgstr[3] "Wybrana grupa %u - %u jednostek"
 
 #: src/droid.cpp:1932
 #, c-format
@@ -10319,6 +10320,7 @@ msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u jednostka przypisana do Grupy %u"
 msgstr[1] "%u jednostki przypisane do Grupy %u"
 msgstr[2] "%u jednostek przypisano do Grupy %u"
+msgstr[3] "%u jednostek przypisano do Grupy %u"
 
 #: src/droid.cpp:1943
 #, c-format
@@ -10327,6 +10329,7 @@ msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Wyśrodkowano na grupie %u - %u jednostka"
 msgstr[1] "Wyśrodkowano na grupie %u - %u jednostki"
 msgstr[2] "Wyśrodkowano na grupie %u - %u jednostek"
+msgstr[3] "Wyśrodkowano na grupie %u - %u jednostek"
 
 #: src/droid.cpp:1947
 #, c-format
@@ -10335,6 +10338,7 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Wyrównanie z grupą %u - %u jednostka"
 msgstr[1] "Wyrównanie z grupą %u - %u jednostki"
 msgstr[2] "Wyrównanie z grupą %u - %u jednostek"
+msgstr[3] "Wyrównanie z grupą %u - %u jednostek"
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -12572,6 +12576,7 @@ msgid_plural "%d players"
 msgstr[0] "%d gracz"
 msgstr[1] "%d graczy"
 msgstr[2] "%d graczy"
+msgstr[3] "%d graczy"
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -12924,9 +12929,9 @@ msgid_plural "%u units selected"
 msgstr[0] "%u zaznaczona jednostka"
 msgstr[1] "%u zaznaczone jednostki"
 msgstr[2] "%u zaznaczonych jednostek"
+msgstr[3] "%u zaznaczonych jednostek"
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr "Nie można budować nowych jednostek, limit kontrolny osiągnięty - produkcja wstrzymana"
 
@@ -12946,20 +12951,22 @@ msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Producti
 msgstr "Nie można budować nowych jednostek, limit kontrolny osiągnięty - produkcja wstrzymana"
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Jednostka przydzielona - Obrażenia %3.0f%%"
-msgstr[1] "%s - %u Jednostki przydzielone - Obrażenia %3.0f%%"
-msgstr[2] "%s - %u Jednostek przydzielonych - Obrażenia %3.0f%%"
+msgstr[0] "%s - %u Jednostka przydzielona - Punktów obrażeń %d/%d"
+msgstr[1] "%s - %u Jednostki przydzielone - Punktów obrażeń %d/%d"
+msgstr[2] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
+msgstr[3] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Jednostka przydzielona - Obrażenia %3.0f%%"
-msgstr[1] "%s - %u Jednostki przydzielone - Obrażenia %3.0f%%"
-msgstr[2] "%s - %u Jednostek przydzielonych - Obrażenia %3.0f%%"
+msgstr[0] "%s - %u Jednostka przydzielona - Punktów obrażeń %d/%d"
+msgstr[1] "%s - %u Jednostki przydzielone - Punktów obrażeń %d/%d"
+msgstr[2] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
+msgstr[3] "%s - %u Jednostek przydzielonych - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -12970,12 +12977,12 @@ msgstr[2] "%s - %u Jednostek przydzielonych - Obrażenia %3.0f%%"
 #: src/structure.cpp:5519
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - Połączono %u z %u - Obrażenia %3.0f%%"
+msgstr "%s - Połączono %u z %u - Punktów obrażeń %d/%d"
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
