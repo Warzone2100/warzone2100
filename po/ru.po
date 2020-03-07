@@ -19,7 +19,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11) ? 0 : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -4667,7 +4667,6 @@ msgstr "Закрытые Команды"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
 msgstr "Закрытые Команды, раздельные исследования"
 
@@ -4967,7 +4966,6 @@ msgid "Advanced VTOL Production Mk3"
 msgstr "Продвинутое производство ВВС Мk3"
 
 #: po/custom/fromJson.txt:65
-#, fuzzy
 msgid "Aerodynamic Jump Pack"
 msgstr "Аэродинамический пакет скачка"
 
@@ -10274,6 +10272,7 @@ msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Выбрана группа %u - %u юнит"
 msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
+msgstr[3] "Выбрана группа %u - %u юнитов"
 
 #: src/droid.cpp:1932
 #, c-format
@@ -10282,6 +10281,7 @@ msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u юнит назначен группе %u"
 msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
+msgstr[3] "%u юнитов назначено группе %u"
 
 #: src/droid.cpp:1943
 #, c-format
@@ -10290,6 +10290,7 @@ msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Фокус на группе %u - %u юнит"
 msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
+msgstr[3] "Фокус на группе %u - %u юнитов"
 
 #: src/droid.cpp:1947
 #, c-format
@@ -10298,6 +10299,7 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Соединить с группой %u - %u юнит"
 msgstr[1] "Соединить с группой %u - %u юнита"
 msgstr[2] "Соединить с группой %u - %u юнитов"
+msgstr[3] "Соединить с группой %u - %u юнитов"
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -12512,6 +12514,7 @@ msgid_plural "%d players"
 msgstr[0] "%d игрок"
 msgstr[1] "%d игрока"
 msgstr[2] "%d игроков"
+msgstr[3] "%d игроков"
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -12865,6 +12868,7 @@ msgid_plural "%u units selected"
 msgstr[0] "выбран %u юнит"
 msgstr[1] "выбрано %u юнита"
 msgstr[2] "выбрано %u юнитов"
+msgstr[3] "выбрано %u юнитов"
 
 #: src/structure.cpp:2497
 #, fuzzy
@@ -12893,6 +12897,7 @@ msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Юнит назначен - Здоровье %d/%d"
 msgstr[1] "%s - %u Юнита назначено - Здоровье %d/%d"
 msgstr[2] "%s - %u Юнитов назначено - Здоровье %d/%d"
+msgstr[3] "%s - %u Юнитов назначено - Здоровье %d/%d"
 
 #: src/structure.cpp:5447
 #, fuzzy, c-format
@@ -12901,6 +12906,7 @@ msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Юнит назначен - Урон %d/%d"
 msgstr[1] "%s - %u Юнита назначено - Урон %d/%d"
 msgstr[2] "%s - %u Юнитов назначено - Урон %d/%d"
+msgstr[3] "%s - %u Юнитов назначено - Урон %d/%d"
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
