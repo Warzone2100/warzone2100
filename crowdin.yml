@@ -1,0 +1,32 @@
+files:
+  - source: /po/warzone2100.pot
+    translation: /po/%locale_with_underscore%.po
+    languages_mapping:
+      locale_with_underscore:
+        ro: ro # Romanian
+        fr: fr # French
+        es-ES: es # Spanish
+        cs: cs # Czech
+        da: da # Danish
+        de: de # German
+        el: el # Greek
+        fy-NL: fy # Frisian
+        fi: fi # Finnish
+        ga-IE: ga # Irish
+        hu: hu # Hungarian
+        it: it # Italian
+        ko: ko # Korean
+        lt: lt # Lithuanian
+        nl: nl # Dutch
+        pl: pl # Polish
+        pt-PT: pt # Portuguese
+        ru: ru # Russian
+        sk: sk # Slovak
+        sl: sl # Slovenian
+        tr: tr # Turkish
+        hr: hr # Croatian
+        eo: eo # Esperanto
+        la-LA: la # Latin
+        nb: nb # Norwegian Bokmal
+  - source: /pkg/nsis/i18n/win_installer_base.nsh
+    translation: /pkg/nsis/i18n/win_installer-%locale_with_underscore%.nsh
