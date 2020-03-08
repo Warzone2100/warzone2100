@@ -1,21 +1,19 @@
-# Warzone Esperanto translation.
-# Copyright (C) 2007-2016 Warzone Resurrection Project
-# This file is distributed under the same license as the PACKAGE package.
-# Charles Dem <warchd@gmail.com>, 2016.
 msgid ""
 msgstr ""
-"Project-Id-Version: warzone2100 3.1git\n"
+"Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-07 03:38+0000\n"
-"PO-Revision-Date: 2016-11-30 20:18+0100\n"
-"Last-Translator: Charles Dem <warchd@gmail.c>\n"
-"Language-Team: Esperanto <LL@li.org>\n"
-"Language: eo\n"
+"POT-Creation-Date: 2020-03-07 02:42+0000\n"
+"PO-Revision-Date: 2020-03-08 14:28\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Esperanto\n"
+"Language: eo_UY\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: eo\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -6479,15 +6477,13 @@ msgid "Could not open required port (%s) on  (%s)"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -6502,8 +6498,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -9484,8 +9479,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2724
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -9493,8 +9487,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2727
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -9513,8 +9506,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2736
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -9523,8 +9515,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2740
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -12256,9 +12247,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4948
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Nova Defenda Strukturo Disponebla"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text
@@ -15377,8 +15367,7 @@ msgid "Veteran"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -15890,9 +15879,8 @@ msgid "Continue Last Save"
 msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Nova Defenda Strukturo Disponebla"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -16419,14 +16407,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -16443,8 +16429,7 @@ msgid "Ally progress"
 msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -16531,9 +16516,7 @@ msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
@@ -17666,8 +17649,7 @@ msgid "Select Game Name"
 msgstr ""
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17715,8 +17697,7 @@ msgid "Random Game Options"
 msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -18662,3 +18643,4 @@ msgstr ""
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""
+
