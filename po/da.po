@@ -1,25 +1,19 @@
-# Dansk translation of warzone2100
-# Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Christian Vest Hansen <karmazilla@gmail.com>, 2007.
-# carson <Unknown>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-08 16:41+0000\n"
-"PO-Revision-Date: 2011-09-11 13:13+0100\n"
-"Last-Translator: Cyp <Cyp>\n"
-"Language-Team: Dansk <da@li.org>\n"
-"Language: da\n"
+"POT-Creation-Date: 2020-03-08 16:36+0000\n"
+"PO-Revision-Date: 2020-03-08 17:30\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Danish\n"
+"Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: da\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1116,14 +1110,12 @@ msgid "Briefing Commences:"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:7
-#, fuzzy
 msgid "Scavenger Outpost"
-msgstr "Hestekrafter"
+msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:8
-#, fuzzy
 msgid "Power Resource"
-msgstr "Produktionsomkostninger"
+msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
@@ -1345,9 +1337,8 @@ msgstr "Cyborgfremdrift III"
 
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:385
-#, fuzzy
 msgid "NP-Hardcrete"
-msgstr "Nondeterministisk polynomialtid hård \"crete\""
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox01.name
@@ -1527,21 +1518,18 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:474
-#, fuzzy
 msgid "CB Sensor Upgrade"
-msgstr "Rækkevide"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "Sensoropgradering Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "Sensoropgradering Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1550,15 +1538,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "Sensoropgradering Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "Sensoropgradering Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -1585,7 +1571,6 @@ msgstr ""
 msgid "Scrambler Turret Mk2"
 msgstr ""
 
-# This is always 1000 ingame... any reason to have this at all? is it ever used?
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:494
 msgid "Sensor Lock"
@@ -1861,9 +1846,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
 #: po/custom/fromJson.txt:547
-#, fuzzy
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text
@@ -2465,9 +2449,8 @@ msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
-#, fuzzy
 msgid "Self-Replicating Cyborg Production"
-msgstr "Find næste cyborg fabrik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text
@@ -2630,9 +2613,8 @@ msgstr "Robotisk VTOL-produktion"
 #: data/base/messages/strings/resstrings.txt:413
 #: data/mp/messages/strings/resstrings.txt:203
 #: po/custom/fromJson.txt:3245
-#, fuzzy
 msgid "Increases VTOL factory output"
-msgstr "Forøger VTOL-fabriksudkast"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text
@@ -2910,9 +2892,8 @@ msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
-#, fuzzy
 msgid "Increases scrambler rate"
-msgstr "Forøg spillehastighed"
+msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
@@ -3631,9 +3612,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:368
 #: po/custom/fromJson.txt:3122
-#, fuzzy
 msgid "Increases Flamer damage"
-msgstr "Forøg spillehastighed"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text
@@ -4059,9 +4039,8 @@ msgstr "Forskning (F2)"
 #: data/base/script/tutorial.js:217
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "Forskningsmodul udvider forskningscentre"
+msgstr ""
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4084,7 +4063,7 @@ msgstr ""
 #: data/base/script/tutorial.js:207
 #: data/mp/multiplay/skirmish/rules.js:153
 msgid "Design (F4)"
-msgstr "Design (F4)"
+msgstr ""
 
 #: data/base/script/rules.js:172
 #: data/base/script/tutorial.js:261
@@ -4125,9 +4104,8 @@ msgstr "Luk"
 #: data/base/script/rules.js:196
 #: data/base/script/tutorial.js:515
 #: data/mp/multiplay/skirmish/rules.js:182
-#, fuzzy
 msgid "Intelligence Display (F5)"
-msgstr "Kommando Pult"
+msgstr ""
 
 #: data/base/script/tutorial.js:28
 msgid "In this training session you'll learn how to build an effective base"
@@ -4138,9 +4116,8 @@ msgid "Oil resources are key to your success"
 msgstr "Oliebrønde er nøglen til din success"
 
 #: data/base/script/tutorial.js:30
-#, fuzzy
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "For at bygge en oliedims, vælg en af dine lastbile"
+msgstr ""
 
 #: data/base/script/tutorial.js:31
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
@@ -4459,9 +4436,8 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
-#, fuzzy
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "Efter at jeg har renset verdenen med ild, vil jeg ødelægge dig og din trivielle projekt!!"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -5138,7 +5114,6 @@ msgstr ""
 msgid "Machinegun Viper Wheels"
 msgstr ""
 
-# This is always 1000 ingame... any reason to have this at all? is it ever used?
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Tower01.name
 #. data/base/stats/sensor.json: $.SensorTower1Mk1.name
@@ -5146,9 +5121,8 @@ msgstr ""
 #. ... + 2 refs
 #: data/mp/messages/strings/names.txt:213
 #: po/custom/fromJson.txt:5055
-#, fuzzy
 msgid "Sensor Tower"
-msgstr "Watt"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:226
 msgid "Tornado AA Site"
@@ -5165,9 +5139,8 @@ msgid "Machinegun"
 msgstr "Maskingevær"
 
 #: data/mp/messages/strings/names.txt:275
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveWall.name
@@ -5177,9 +5150,8 @@ msgid "Collective Wall"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:294
-#, fuzzy
 msgid "Collective Corner Wall"
-msgstr "Vælg kommandør 1"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:316
 msgid "Nexus Wall"
@@ -5284,9 +5256,8 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Flamer.name
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:2035
-#, fuzzy
 msgid "Flamer Cyborg"
-msgstr "Spillere"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-MG.name
@@ -5301,9 +5272,8 @@ msgstr "Maskingeværcyborg"
 #. data/mp/stats/propulsion.json: $.CyborgLegs.name
 #: data/mp/messages/strings/names.txt:380
 #: po/custom/fromJson.txt:1651
-#, fuzzy
 msgid "Cyborg Propulsion"
-msgstr "Fremdrift"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3.name
@@ -5314,20 +5284,17 @@ msgid "Heavy Machinegun Tower"
 msgstr "Tung maskingeværtårn"
 
 #: data/mp/messages/strings/names.txt:405
-#, fuzzy
 msgid "Flamer Tower"
-msgstr "Spillere"
+msgstr ""
 
-# This is always 1000 ingame... any reason to have this at all? is it ever used?
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower5.name
 #. data/mp/stats/research.json: $.R-Defense-Pillbox06.name
 #. data/mp/stats/structure.json: $.GuardTower5.name
 #: data/mp/messages/strings/names.txt:406
 #: po/custom/fromJson.txt:3377
-#, fuzzy
 msgid "Lancer Tower"
-msgstr "Watt"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:428
 msgid "Advanced Manufacturing Mk3"
@@ -5418,9 +5385,8 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-TUTMG.name
 #: data/mp/messages/strings/names.txt:566
 #: po/custom/fromJson.txt:3536
-#, fuzzy
 msgid "Machinegun Artifact"
-msgstr "Søger"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CommandCentreNP.name
@@ -5433,9 +5399,8 @@ msgstr ""
 #. data/base/stats/structure.json: $.A0CommandCentreCO.name
 #: data/mp/messages/strings/names.txt:570
 #: po/custom/fromJson.txt:1413
-#, fuzzy
 msgid "Collective Command Center"
-msgstr "Vælg kommandør 1"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NX-CruiseSite.name
@@ -5568,9 +5533,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Forskning"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5589,9 +5553,8 @@ msgid "Sorry, droid transfer failed."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "Kraftværk"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
@@ -5612,15 +5575,13 @@ msgstr ""
 #: data/mp/multiplay/skirmish/rules.js:29
 #: src/multiint.cpp:1279
 #: src/multiint.cpp:1282
-#, fuzzy
 msgid "Scavengers"
-msgstr "Hestekrafter"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:30
 #: src/multiint.cpp:1284
-#, fuzzy
 msgid "No Scavengers"
-msgstr "Hestekrafter"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:35
 #: src/multiint.cpp:1291
@@ -5639,9 +5600,8 @@ msgstr "Låste hold"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "'Låste hold' slået til"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
@@ -5675,9 +5635,8 @@ msgstr "Start med advancerede baser"
 
 #: lib/framework/i18n.cpp:101
 #: lib/framework/i18n.cpp:164
-#, fuzzy
 msgid "System locale"
-msgstr "Elektronik"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:246
 #: lib/netplay/netplay.cpp:1168
@@ -5685,20 +5644,18 @@ msgid "Enter password here"
 msgstr "Indtast kodeord her"
 
 #: lib/netplay/netplay.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "Kunne ikke gemme spillet!"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -5707,14 +5664,13 @@ msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:2201
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "Kunne ikke gemme spillet!"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -5764,9 +5720,8 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_AAAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAAC3.text
 #: po/custom/fromJson.txt:40
-#, fuzzy
 msgid "AA accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
@@ -5821,16 +5776,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:72
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:75
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
@@ -5843,9 +5796,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text
 #: po/custom/fromJson.txt:83
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Forøg spillehastighed"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
@@ -5893,9 +5845,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text
 #: po/custom/fromJson.txt:117
-#, fuzzy
 msgid "AA reload time -15%"
-msgstr "Missilgenopladningstid -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -5957,9 +5908,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:178
-#, fuzzy
 msgid "Advanced Engineering Techniques"
-msgstr "Forbedrede ingenørteknikker"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering03.name
@@ -5972,9 +5922,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_VCBSU3.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_VCBSU3.text
 #: po/custom/fromJson.txt:189
-#, fuzzy
 msgid "Advanced fire detection systems"
-msgstr "Nye branddetekteringssystemer"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade07.name
@@ -6041,9 +5990,8 @@ msgstr "Advanceret reperationsteknikker"
 #. data/base/messages/resmessages3.json: $.RES_SY_VS3.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_VS3.text
 #: po/custom/fromJson.txt:230
-#, fuzzy
 msgid "Advanced target recognition systems"
-msgstr "Nye branddetekteringssystemer"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text
@@ -6105,17 +6053,15 @@ msgstr "Alle kanoner automatisk opgraderede"
 #. data/base/messages/resmessages3.json: $.RES_SY_CBSU3.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:296
-#, fuzzy
 msgid "All CB sensors upgraded automatically"
-msgstr "Alle laser automatisk opgraderede"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text
 #: po/custom/fromJson.txt:318
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "Alle lastbiler automatisk opgraderede"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text
@@ -6150,9 +6096,8 @@ msgstr "Alle kraftværk automatisk opgraderede"
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:384
-#, fuzzy
 msgid "All rail guns upgraded automatically"
-msgstr "Alle maskingevær automatisk opgraderede"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
@@ -6160,9 +6105,8 @@ msgstr "Alle maskingevær automatisk opgraderede"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text
 #: po/custom/fromJson.txt:414
-#, fuzzy
 msgid "All sensors upgraded automatically"
-msgstr "Alle laser automatisk opgraderede"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text
@@ -6179,9 +6123,8 @@ msgstr "Alle lastbiler automatisk opgraderede"
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V2.text
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text
 #: po/custom/fromJson.txt:461
-#, fuzzy
 msgid "All VTOLs upgraded automatically"
-msgstr "Alle svævere automatisk opgraderede"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_1.name
@@ -6195,9 +6138,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:476
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Ny kampange"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -6209,9 +6151,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text
 #. data/mp/messages/resmessages1.json: $.RES_V_P_H1.text
 #: po/custom/fromJson.txt:483
-#, fuzzy
 msgid "Amphibious hover propulsion"
-msgstr "Svævefremdrift"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-MdArtMissile.name
@@ -6236,17 +6177,15 @@ msgstr "Engel missil"
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text
 #: po/custom/fromJson.txt:497
-#, fuzzy
 msgid "Anti-tank missile"
-msgstr "Engel missil"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_LTAT1.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_LTAT1.text
 #: po/custom/fromJson.txt:501
-#, fuzzy
 msgid "Anti-tank rocket"
-msgstr "Tung antikampvognsraket"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage03.name
@@ -6317,9 +6256,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text
 #: po/custom/fromJson.txt:551
-#, fuzzy
 msgid "Armed with Cyborg assault gun"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text
@@ -6332,9 +6270,8 @@ msgstr "Bevæbnet med cyborgkanon"
 #. data/base/messages/resmessages1.json: $.RES_CYW_FL1.text
 #. data/mp/messages/resmessages1.json: $.RES_CYW_FL1.text
 #: po/custom/fromJson.txt:559
-#, fuzzy
 msgid "Armed with Cyborg Flamer"
-msgstr "Bevæbnet med cyborgmaskingevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_MG1.text
@@ -6346,46 +6283,40 @@ msgstr "Bevæbnet med cyborgmaskingevær"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_PLAS.text
 #: po/custom/fromJson.txt:566
-#, fuzzy
 msgid "Armed with Cyborg Pulse Laser"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_RG.text
 #: po/custom/fromJson.txt:569
-#, fuzzy
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AT.text
 #: po/custom/fromJson.txt:572
-#, fuzzy
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text
 #: po/custom/fromJson.txt:575
-#, fuzzy
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Bevæbnet med cyborgmaskingevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_LS1.text
 #: po/custom/fromJson.txt:579
-#, fuzzy
 msgid "Armed with Flashlight Laser"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYW_LS1.text
 #. data/mp/messages/resmessages3.json: $.RES_CYW_LS1.text
 #: po/custom/fromJson.txt:583
-#, fuzzy
 msgid "Armed with flashlight laser"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_GRN.text
@@ -6404,9 +6335,8 @@ msgstr "Bevæbnet med hyperhastighedskanon"
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text
 #. data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text
 #: po/custom/fromJson.txt:594
-#, fuzzy
 msgid "Armed with Lance Anti-Tank rocket"
-msgstr "Bevæbnet med kampvognsdræberraketter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text
@@ -6443,9 +6373,8 @@ msgstr "Bevæbnet med nålgevær"
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_ATM.text
 #. data/mp/messages/resmessages3.json: $.RES_CYW_ATM.text
 #: po/custom/fromJson.txt:621
-#, fuzzy
 msgid "Armed with Scourge anti-tank missile"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_TK.text
@@ -6459,9 +6388,8 @@ msgstr "Bevæbnet med kampvognsdræberraketter"
 #. data/mp/messages/resmessages2.json: $.RES_ST_MAT4.text
 #. ... + 4 refs
 #: po/custom/fromJson.txt:630
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Forøger panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D2.text
@@ -6481,32 +6409,28 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_PB_FL.text
 #. data/mp/messages/resmessages1.json: $.RES_PB_FL.text
 #: po/custom/fromJson.txt:646
-#, fuzzy
 msgid "Armored bunker with Flamer"
-msgstr "Bevæbnet med cyborgmaskingevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_ATR.text
 #: po/custom/fromJson.txt:649
-#, fuzzy
 msgid "Armored bunker with Lancer AT rocket"
-msgstr "Bevæbnet med kampvognsdræberraketter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_LC.text
 #. data/mp/messages/resmessages1.json: $.RES_PB_LC.text
 #: po/custom/fromJson.txt:653
-#, fuzzy
 msgid "Armored bunker with Light Cannon"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text
 #. data/mp/messages/resmessages1.json: $.RES_DF_P1.text
 #: po/custom/fromJson.txt:657
-#, fuzzy
 msgid "Armored bunker with Machinegun"
-msgstr "Bevæbnet med maskingevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text
@@ -6517,60 +6441,52 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text
 #: po/custom/fromJson.txt:667
-#, fuzzy
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text
 #: po/custom/fromJson.txt:670
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Bevæbnet med kampvognsdræberraketter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text
 #: po/custom/fromJson.txt:673
-#, fuzzy
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Bevæbnet med kampvognsdræberraketter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_EMP_PODTOW.text
 #: po/custom/fromJson.txt:676
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Bevæbnet med kampvognsdræberraketter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_RL1TOW.text
 #. data/mp/messages/resmessages3.json: $.RES_EMP_RL1TOW.text
 #: po/custom/fromJson.txt:680
-#, fuzzy
 msgid "Armored guard tower with Needle Gun"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPYT.text
 #: po/custom/fromJson.txt:683
-#, fuzzy
 msgid "Armored guard tower with Nexus Link"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PulseLas.text
 #: po/custom/fromJson.txt:686
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_ATMTOW.text
 #. data/mp/messages/resmessages3.json: $.RES_EMP_ATMTOW.text
 #: po/custom/fromJson.txt:690
-#, fuzzy
 msgid "Armored guard tower with Scourge Missile"
-msgstr "Bevæbnet med kampvognsdræberraketter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_HALFT1.text
@@ -6590,73 +6506,64 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL3.text
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL3.text
 #: po/custom/fromJson.txt:710
-#, fuzzy
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT4_HC.text
 #. data/mp/messages/resmessages1.json: $.RES_WT4_HC.text
 #: po/custom/fromJson.txt:714
-#, fuzzy
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_DF_WT1.text
 #. data/mp/messages/resmessages12.json: $.RES_DF_WT1.text
 #: po/custom/fromJson.txt:718
-#, fuzzy
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Bevæbnet med maskingevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_WT13_HPV.text
 #. data/mp/messages/resmessages23.json: $.RES_WT13_HPV.text
 #: po/custom/fromJson.txt:722
-#, fuzzy
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Bevæbnet med hyperhastighedskanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_WT6_ATR.text
 #. data/mp/messages/resmessages12.json: $.RES_WT6_ATR.text
 #: po/custom/fromJson.txt:730
-#, fuzzy
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Bevæbnet med kampvognsdræberraketter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT2_LC.text
 #. data/mp/messages/resmessages1.json: $.RES_WT2_LC.text
 #: po/custom/fromJson.txt:734
-#, fuzzy
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT3_MC.text
 #. data/mp/messages/resmessages1.json: $.RES_WT3_MC.text
 #: po/custom/fromJson.txt:738
-#, fuzzy
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Bevæbnet med mellem kanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL2.text
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL2.text
 #: po/custom/fromJson.txt:742
-#, fuzzy
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT9_ATM.text
 #. data/mp/messages/resmessages3.json: $.RES_WT9_ATM.text
 #: po/custom/fromJson.txt:746
-#, fuzzy
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text
@@ -6682,9 +6589,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail3.text
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail3.text
 #: po/custom/fromJson.txt:783
-#, fuzzy
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Bevæbnet med cyborgkanon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_HEAVYLAS.text
@@ -6695,24 +6601,21 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PFL.text
 #: po/custom/fromJson.txt:797
-#, fuzzy
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Bevæbnet med cyborgmaskingevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PulseLas.text
 #: po/custom/fromJson.txt:800
-#, fuzzy
 msgid "Armored strongpoint with Pulse Laser"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail2.text
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail2.text
 #: po/custom/fromJson.txt:804
-#, fuzzy
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Bevæbnet med cyborgoverfaldsgevær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text
@@ -6724,9 +6627,8 @@ msgstr "Panseret bælter"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_DF_WU1.text
 #: po/custom/fromJson.txt:815
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Forøger panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Crate.name
@@ -6773,9 +6675,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
 #: po/custom/fromJson.txt:842
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon5.name
@@ -6812,16 +6713,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
 #: po/custom/fromJson.txt:865
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHoverAssGun.name
 #: po/custom/fromJson.txt:868
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyAsltGnTrk.name
@@ -6883,9 +6782,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.AutoRepair.name
 #: po/custom/fromJson.txt:910
-#, fuzzy
 msgid "Auto Repair"
-msgstr "Autoreperation"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Autorepair-General.name
@@ -6951,9 +6849,8 @@ msgstr "Automatiseret produktion"
 #. data/base/messages/resmessages1.json: $.RES_W_RK_ROF1.text
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text
 #: po/custom/fromJson.txt:947
-#, fuzzy
 msgid "Automated reload system"
-msgstr "Automatiseret genopladningssystem"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade02.name
@@ -7057,9 +6954,8 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text
 #. data/mp/messages/resmessagesall.json: $.RES_REPTU1.text
 #: po/custom/fromJson.txt:1046
-#, fuzzy
 msgid "Battlefield repair unit"
-msgstr "Tung reperationsenhed"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text
@@ -7076,9 +6972,8 @@ msgstr "Bedste mål: Køretøj"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1058
-#, fuzzy
 msgid "Best Targets: Aerial targets only"
-msgstr "Bedste mål: Køretøj"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text
@@ -7086,9 +6981,8 @@ msgstr "Bedste mål: Køretøj"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text
 #: po/custom/fromJson.txt:1064
-#, fuzzy
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Best Targets: Basebygninger"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text
@@ -7103,17 +6997,15 @@ msgstr "Best Targets: Basebygninger"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text
 #. ... + 4 refs
 #: po/custom/fromJson.txt:1100
-#, fuzzy
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Bedste mål: Køretøj"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text
 #: po/custom/fromJson.txt:1104
-#, fuzzy
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Bedste mål: Køretøj"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text
@@ -7127,9 +7019,8 @@ msgstr "Bedste mål: Cyborger"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text
 #: po/custom/fromJson.txt:1123
-#, fuzzy
 msgid "Best Targets: Heavy cyborgs"
-msgstr "Bedste mål: Cyborger"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text
@@ -7137,26 +7028,23 @@ msgstr "Bedste mål: Cyborger"
 #. data/base/messages/resmessages12.json: $.RES_MG3MK1.text
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1129
-#, fuzzy
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr "Bedste mål: Basebygninger og forsvar"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text
 #: po/custom/fromJson.txt:1133
-#, fuzzy
 msgid "Best Targets: Vehicles and Emplacements"
-msgstr "Bedste mål: Køretøj"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text
 #. data/mp/messages/resmessages1.json: $.RES_CN3MK1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text
 #: po/custom/fromJson.txt:1144
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Bedste mål: Køretøj"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text
@@ -7168,9 +7056,8 @@ msgstr "Bedste mål: Hjulet og svævekøretøj"
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1151
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Ny kampange"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7215,9 +7102,8 @@ msgstr "Bombeopgradering"
 #. data/base/stats/templates.json: $.CobraHvyMortarHalftrack.name
 #. data/mp/stats/templates.json: $.CobraHvyMortarHalftrack.name
 #: po/custom/fromJson.txt:1207
-#, fuzzy
 msgid "Bombard Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyMor.name
@@ -7280,31 +7166,27 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Sk-CobraBBHover.name
 #: po/custom/fromJson.txt:1249
-#, fuzzy
 msgid "Bunker Buster Cobra Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraBBTracks.name
 #: po/custom/fromJson.txt:1252
-#, fuzzy
 msgid "Bunker Buster Cobra Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisBBTracks.name
 #: po/custom/fromJson.txt:1255
-#, fuzzy
 msgid "Bunker Buster Mantis Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text
 #: po/custom/fromJson.txt:1259
-#, fuzzy
 msgid "Bunker buster missile"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket03-HvAT.name
@@ -7322,23 +7204,20 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpBBTracks.name
 #: po/custom/fromJson.txt:1269
-#, fuzzy
 msgid "Bunker Buster Scorpion Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-BB.name
 #: po/custom/fromJson.txt:1272
-#, fuzzy
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperBBWheels.name
 #: po/custom/fromJson.txt:1275
-#, fuzzy
 msgid "Bunker Buster Viper Wheels"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-BB.name
@@ -7358,9 +7237,8 @@ msgstr "Brænder olie mere effektivt"
 #. data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #: po/custom/fromJson.txt:1287
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
@@ -7388,9 +7266,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text
 #: po/custom/fromJson.txt:1304
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Bombeskade +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireCan.name
@@ -7446,9 +7323,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_ROF4.text
 #: po/custom/fromJson.txt:1337
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Maskingeværgenopladningstid -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CannonTower.name
@@ -7470,20 +7346,17 @@ msgstr "Kanonopgradering"
 #. data/base/stats/sensor.json: $.Sys-CBTurret01.name
 #. data/mp/stats/sensor.json: $.Sys-CBTurret01.name
 #: po/custom/fromJson.txt:1351
-#, fuzzy
 msgid "CB Radar Turret"
-msgstr "Kommandotårn"
+msgstr ""
 
-# This is always 1000 ingame... any reason to have this at all? is it ever used?
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text
 #. data/base/messages/resmessages23.json: $.RES_SY_CBSU2.text
 #. data/base/messages/resmessages3.json: $.RES_SY_CBSU3.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1357
-#, fuzzy
 msgid "CB Sensor Improved"
-msgstr "Watt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Tower01.name
@@ -7491,17 +7364,15 @@ msgstr "Watt"
 #. data/mp/stats/research.json: $.R-Sys-CBSensor-Tower01.name
 #. data/mp/stats/structure.json: $.Sys-CB-Tower01.name
 #: po/custom/fromJson.txt:1363
-#, fuzzy
 msgid "CB Tower"
-msgstr "ECM Effekt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Turret01.name
 #. data/mp/stats/research.json: $.R-Sys-CBSensor-Turret01.name
 #: po/custom/fromJson.txt:1367
-#, fuzzy
 msgid "CB Turret"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAROF4.text
@@ -7534,9 +7405,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1386
-#, fuzzy
 msgid "Cluster Bomb Bay"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb01.name
@@ -7590,9 +7460,8 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_V_B09.text
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text
 #: po/custom/fromJson.txt:1420
-#, fuzzy
 msgid "Collective Heavy Body"
-msgstr "Stor supertung krop"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text
@@ -7638,23 +7507,20 @@ msgstr "Kommandovideresendingsstation"
 #. data/base/stats/templates.json: $.CobraComHalftrack.name
 #. data/mp/stats/templates.json: $.CobraComHalftrack.name
 #: po/custom/fromJson.txt:1457
-#, fuzzy
 msgid "Command Turret Cobra Half-tracks"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cobra-Trk-Com.name
 #: po/custom/fromJson.txt:1460
-#, fuzzy
 msgid "Command Turret Cobra Tracks"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Mantis-Trk-Com.name
 #: po/custom/fromJson.txt:1463
-#, fuzzy
 msgid "Command Turret Mantis Tracks"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0PythonComTracks.name
@@ -7662,30 +7528,26 @@ msgstr "Kommandotårn"
 #. data/mp/stats/templates.json: $.P0PythonComTracks.name
 #. data/mp/stats/templates.json: $.PythonComTracks.name
 #: po/custom/fromJson.txt:1469
-#, fuzzy
 msgid "Command Turret Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scorp-Trk-Com.name
 #: po/custom/fromJson.txt:1472
-#, fuzzy
 msgid "Command Turret Scorpion Tracks"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1475
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
 #: po/custom/fromJson.txt:1478
-#, fuzzy
 msgid "Command Turret Viper Tracks"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.name
@@ -7778,17 +7640,15 @@ msgstr "Computerteknologigennembrud"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text
 #: po/custom/fromJson.txt:1533
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Forøger konstruktionshastigheden"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:1537
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Forøger konstruktionshastigheden"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -7801,9 +7661,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text
 #: po/custom/fromJson.txt:1545
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "Styrer op til fem kommandøre"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text
@@ -7891,9 +7750,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
 #: po/custom/fromJson.txt:1598
-#, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Stor supertung krop"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat05.name
@@ -7920,24 +7778,21 @@ msgstr "Cyborg højintensitet termisk panser"
 #. data/base/stats/weapons.json: $.CyborgRocket.name
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:1614
-#, fuzzy
 msgid "Cyborg Lancer"
-msgstr "Cyborgfabrik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
 #. data/mp/stats/body.json: $.CyborgLightBody.name
 #: po/custom/fromJson.txt:1618
-#, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Cyborgfabrik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:1627
-#, fuzzy
 msgid "Cyborg Mechanic"
-msgstr "Cyborg mekanik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_CY_LG2.text
@@ -8045,9 +7900,8 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/base/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:1712
-#, fuzzy
 msgid "Cyclone Flak Turret"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade05.name
@@ -8170,9 +8024,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text
 #. data/mp/messages/resmessages3.json: $.RES_W_BMB4.text
 #: po/custom/fromJson.txt:1821
-#, fuzzy
 msgid "Drops high intensity thermite bombs"
-msgstr "Højintensitet termisk panser"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text
@@ -8227,9 +8080,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text
 #: po/custom/fromJson.txt:1853
-#, fuzzy
 msgid "Enables command turret research"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text
@@ -8248,40 +8100,35 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_ASTRUC.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_ASTRUC.text
 #: po/custom/fromJson.txt:1864
-#, fuzzy
 msgid "Enables self-repair in all base structures"
-msgstr "Køretøjselvreperation"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_ACYB.text
 #: po/custom/fromJson.txt:1868
-#, fuzzy
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Køretøjselvreperation"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_ADEF.text
 #: po/custom/fromJson.txt:1872
-#, fuzzy
 msgid "Enables self-repair in all defenses"
-msgstr "Køretøjselvreperation"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_AVEH.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_AVEH.text
 #: po/custom/fromJson.txt:1876
-#, fuzzy
 msgid "Enables self-repair in all vehicles"
-msgstr "Køretøjselvreperation"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_AR.text
 #: po/custom/fromJson.txt:1879
-#, fuzzy
 msgid "Enables self-repair"
-msgstr "Køretøjselvreperation"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_3.name
@@ -8326,9 +8173,8 @@ msgstr "Udvidet sensorrækkevide"
 #. data/base/messages/resmessages3.json: $.RES_SY_CBSU3.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1907
-#, fuzzy
 msgid "Extends CB Range"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
@@ -8355,17 +8201,16 @@ msgstr "Fabriksmodul"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text
 #: po/custom/fromJson.txt:1935
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "Fabriksproduktionshastighed +60%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FU1.text
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text
 #: po/custom/fromJson.txt:1939
-#, fuzzy
 msgid "Factory output speed +60%"
-msgstr "Fabriksproduktionshastighed +60%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text
@@ -8414,9 +8259,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 #: po/custom/fromJson.txt:1965
-#, fuzzy
 msgid "Fast Loader"
-msgstr "Hurtgigt spil"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text
@@ -8527,32 +8371,28 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraFlameTracks.name
 #. data/mp/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:2032
-#, fuzzy
 msgid "Flamer Cobra Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_FL_D4.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_FL_D7.text
 #: po/custom/fromJson.txt:2040
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Forøg spillehastighed"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text
 #: po/custom/fromJson.txt:2051
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Missilgenopladningstid -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
 #: po/custom/fromJson.txt:2060
-#, fuzzy
 msgid "Flamer Viper Half-Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperFlameWheels.name
@@ -8567,9 +8407,8 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer01Mk1.name
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2070
-#, fuzzy
 msgid "Flamer"
-msgstr "Spillere"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
@@ -8631,9 +8470,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2112
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Ny kampange"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -8711,16 +8549,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
 #: po/custom/fromJson.txt:2158
-#, fuzzy
 msgid "Gauss Cannon Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernGaussTracks.name
 #: po/custom/fromJson.txt:2161
-#, fuzzy
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun03.name
@@ -8745,8 +8581,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2177
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -8754,8 +8589,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2180
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -8774,8 +8608,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2189
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -8784,8 +8617,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2193
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -8827,9 +8659,8 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
 #. data/mp/stats/weapons.json: $.Howitzer150Mk1.name
 #: po/custom/fromJson.txt:2222
-#, fuzzy
 msgid "Ground Shaker"
-msgstr "Ryst skærm"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
@@ -8841,9 +8672,8 @@ msgstr "Halvbæltefremdrift"
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.HalfTrack02.name
 #: po/custom/fromJson.txt:2232
-#, fuzzy
 msgid "Half-tracks II"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.HalfTrack03.name
@@ -8855,9 +8685,8 @@ msgstr "Halv-bælter III"
 #. data/base/stats/propulsion.json: $.HalfTrack.name
 #. data/mp/stats/propulsion.json: $.HalfTrack.name
 #: po/custom/fromJson.txt:2239
-#, fuzzy
 msgid "Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1CWall.name
@@ -8870,9 +8699,8 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-HardcreteGate.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Gate.name
 #: po/custom/fromJson.txt:2247
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "Svær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
@@ -8885,9 +8713,8 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Defense-HardcreteWall.name
 #. data/mp/stats/research.json: $.R-Defense-HardcreteWall.name
 #: po/custom/fromJson.txt:2255
-#, fuzzy
 msgid "Hardcrete"
-msgstr "Svær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials05.name
@@ -8907,9 +8734,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D1.text
 #: po/custom/fromJson.txt:2273
-#, fuzzy
 msgid "Hardened case machinegun bullets"
-msgstr "Hærdet MG-kugler"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -8939,16 +8765,14 @@ msgstr ""
 msgid "Hardened Rail Dart"
 msgstr ""
 
-# This is always 1000 ingame... any reason to have this at all? is it ever used?
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Tower02.name
 #. data/base/stats/sensor.json: $.SensorTower2Mk1.name
 #. data/base/stats/structure.json: $.Sys-SensoTower02.name
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2295
-#, fuzzy
 msgid "Hardened Sensor Tower"
-msgstr "Watt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text
@@ -8959,16 +8783,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text
 #: po/custom/fromJson.txt:2301
-#, fuzzy
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Forskningsmodul tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text
 #: po/custom/fromJson.txt:2304
-#, fuzzy
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Forskningsmodul tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text
@@ -8979,9 +8801,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text
 #: po/custom/fromJson.txt:2310
-#, fuzzy
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr "Forskningsmodul tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy01.name
@@ -9052,37 +8873,32 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2349
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2352
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2355
-#, fuzzy
 msgid "HE Rockets"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
 #: po/custom/fromJson.txt:2358
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-HBB.name
 #: po/custom/fromJson.txt:2361
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb02.name
@@ -9238,9 +9054,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text
 #: po/custom/fromJson.txt:2461
-#, fuzzy
 msgid "Heavy body increases armor and body points"
-msgstr "Forøger panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cobra-Hover-HC.name
@@ -9252,17 +9067,15 @@ msgstr ""
 #. data/base/stats/templates.json: $.CobraHvyCnTrks.name
 #. data/mp/stats/templates.json: $.CobraHvyCnTrks.name
 #: po/custom/fromJson.txt:2468
-#, fuzzy
 msgid "Heavy Cannon Cobra Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN3MK1.text
 #. data/mp/messages/resmessages1.json: $.RES_CN3MK1.text
 #: po/custom/fromJson.txt:2472
-#, fuzzy
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower04.name
@@ -9276,9 +9089,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
 #: po/custom/fromJson.txt:2481
-#, fuzzy
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-HC.name
@@ -9292,23 +9104,20 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0PythonHvyCnTrks.name
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2490
-#, fuzzy
 msgid "Heavy Cannon Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-HC.name
 #: po/custom/fromJson.txt:2493
-#, fuzzy
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-HC.name
 #: po/custom/fromJson.txt:2496
-#, fuzzy
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon3Mk1.name
@@ -9352,16 +9161,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHvLaserTracks.name
 #: po/custom/fromJson.txt:2530
-#, fuzzy
 msgid "Heavy Laser Tiger Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernHvLaserTracks.name
 #: po/custom/fromJson.txt:2533
-#, fuzzy
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HvyLaser.name
@@ -9376,9 +9183,8 @@ msgstr "Tung laser"
 #. data/mp/stats/templates.json: $.CobraHMGHalfTrack.name
 #. data/mp/stats/templates.json: $.P0CobraHvyMGHtrack.name
 #: po/custom/fromJson.txt:2549
-#, fuzzy
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-HMG.name
@@ -9390,9 +9196,8 @@ msgstr ""
 #. data/mp/stats/templates.json: $.A-Cobra-Trk-HMG.name
 #. data/mp/stats/templates.json: $.CobraHMGTracks.name
 #: po/custom/fromJson.txt:2556
-#, fuzzy
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Wheels-HMG.name
@@ -9412,33 +9217,29 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
 #: po/custom/fromJson.txt:2574
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpTrkHMG.name
 #: po/custom/fromJson.txt:2577
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGHalftrack.name
 #. data/mp/stats/templates.json: $.ViperHMGHalftrack.name
 #: po/custom/fromJson.txt:2585
-#, fuzzy
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGTracks.name
 #. data/mp/stats/templates.json: $.A-Viper-Trk-HMG.name
 #. data/mp/stats/templates.json: $.ViperHMGTracks.name
 #: po/custom/fromJson.txt:2590
-#, fuzzy
 msgid "Heavy Machinegun Viper Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Wheels-HMG.name
@@ -9569,9 +9370,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT10.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_MAT10.text
 #: po/custom/fromJson.txt:2678
-#, fuzzy
 msgid "High Density Base Structure Materials"
-msgstr "Ny basebygning tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text
@@ -9653,9 +9453,8 @@ msgstr "Højintensitet termisk panser"
 #. data/base/messages/resmessagesall.json: $.RES_V_B09.text
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text
 #: po/custom/fromJson.txt:2745
-#, fuzzy
 msgid "High power costs and slow to produce"
-msgstr "Dyr og langsom at fremstille"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage02.name
@@ -9702,9 +9501,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2784
-#, fuzzy
 msgid "Hover AI"
-msgstr "Svæve II"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
@@ -9736,9 +9534,8 @@ msgstr "Svæve"
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text
 #: po/custom/fromJson.txt:2805
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
@@ -9765,24 +9562,21 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text
 #: po/custom/fromJson.txt:2821
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Hurtgigt spil"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 #: po/custom/fromJson.txt:2830
-#, fuzzy
 msgid "Howitzer Fast Loader"
-msgstr "Hurtgigt spil"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text
 #: po/custom/fromJson.txt:2834
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Missilgenopladningstid -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HowitzerMk1.name
@@ -9790,9 +9584,8 @@ msgstr "Missilgenopladningstid -15%"
 #. data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 #: po/custom/fromJson.txt:2846
-#, fuzzy
 msgid "Howitzer"
-msgstr "Energi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
@@ -9829,9 +9622,8 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-AAGun03.name
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
 #: po/custom/fromJson.txt:2869
-#, fuzzy
 msgid "Hurricane AA Turret"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
@@ -9884,16 +9676,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
 #: po/custom/fromJson.txt:2899
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2902
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -9920,9 +9710,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy02.name
 #: po/custom/fromJson.txt:2922
-#, fuzzy
 msgid "Improved Bomb Warhead"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text
@@ -9953,9 +9742,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_CBSU3.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2946
-#, fuzzy
 msgid "Improved fire detection systems"
-msgstr "Nye branddetekteringssystemer"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade02.name
@@ -10005,9 +9793,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2976
-#, fuzzy
 msgid "Improved Power Generator Performance"
-msgstr "Forbedret sensorrækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
@@ -10029,24 +9816,21 @@ msgstr "Forbedret sensorrækkevide"
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_D1.text
 #: po/custom/fromJson.txt:2994
-#, fuzzy
 msgid "Improved shaped charge warhead"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VS2.text
 #. data/mp/messages/resmessages23.json: $.RES_SY_VS2.text
 #: po/custom/fromJson.txt:2998
-#, fuzzy
 msgid "Improved target recognition systems"
-msgstr "Nye branddetekteringssystemer"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text
 #: po/custom/fromJson.txt:3001
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "Advanceret termisk emmisionsdetektion"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text
@@ -10072,9 +9856,8 @@ msgstr "Forbedring i laseremissionsdensitet"
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text
 #: po/custom/fromJson.txt:3016
-#, fuzzy
 msgid "Improvement in laser optics reduces light dispersal"
-msgstr "Forbedring i laseremissionsdensitet"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text
@@ -10162,9 +9945,8 @@ msgstr "Forøger konstruktionshastigheden"
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text
 #: po/custom/fromJson.txt:3125
-#, fuzzy
 msgid "Increases Flamer ROF"
-msgstr "Forøg spillehastighed"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text
@@ -10221,38 +10003,33 @@ msgstr "Forøger missilkadance"
 #. data/base/messages/resmessages23.json: $.RES_W_M_AC2.text
 #. data/base/messages/resmessages3.json: $.RES_W_M_AC3.text
 #: po/custom/fromJson.txt:3195
-#, fuzzy
 msgid "Increases Mortar accuracy"
-msgstr "Forøger lasernøjagtigheden"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text
 #. data/base/messages/resmessages3.json: $.RES_W_M_ROF4.text
 #: po/custom/fromJson.txt:3203
-#, fuzzy
 msgid "Increases Mortar ROF"
-msgstr "Forøger laserkadance"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:3206
-#, fuzzy
 msgid "Increases Rail Gun accuracy"
-msgstr "Forbedrer kanonnøjagtigheden"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:3209
-#, fuzzy
 msgid "Increases Rail Gun damage"
-msgstr "Forøger maskingeværskade"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:3212
-#, fuzzy
 msgid "Increases Rail Gun ROF"
-msgstr "Forøger maskingeværkadancen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text
@@ -10278,39 +10055,34 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B08.text
 #: po/custom/fromJson.txt:3256
-#, fuzzy
 msgid "Inferior armor and body points to Cobra"
-msgstr "Maksimum panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B04.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B04.text
 #: po/custom/fromJson.txt:3260
-#, fuzzy
 msgid "Inferior armor and body points to Viper"
-msgstr "Maksimum panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HvyFlamer.name
 #. data/mp/stats/structure.json: $.Tower-Projector.name
 #: po/custom/fromJson.txt:3264
-#, fuzzy
 msgid "Inferno Bunker"
-msgstr "Internet"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHTracks.name
 #: po/custom/fromJson.txt:3267
-#, fuzzy
 msgid "Inferno Cobra Half-Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHover.name
 #: po/custom/fromJson.txt:3270
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyFlamer.name
@@ -10329,17 +10101,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
 #: po/custom/fromJson.txt:3281
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Flame2.name
 #. data/mp/stats/weapons.json: $.Flame2.name
 #: po/custom/fromJson.txt:3285
-#, fuzzy
 msgid "Inferno"
-msgstr "Internet"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
@@ -10358,16 +10128,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.ECM1PylonMk1.name
 #: po/custom/fromJson.txt:3296
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Spillere"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3299
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -10380,9 +10148,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text
 #: po/custom/fromJson.txt:3307
-#, fuzzy
 msgid "Jump Cyborgs can now be researched"
-msgstr "Cyborger kan nu forskes"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_STW1.text
@@ -10399,25 +10166,22 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_MET10.text
 #. data/mp/messages/resmessages3.json: $.RES_V_MET7.text
 #: po/custom/fromJson.txt:3319
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Maksimum panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CYMET4.text
 #: po/custom/fromJson.txt:3322
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Forøger panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYMET1.text
 #. data/mp/messages/resmessages3.json: $.RES_CYMET10.text
 #. data/mp/messages/resmessages3.json: $.RES_CYMET7.text
 #: po/custom/fromJson.txt:3327
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Forøger panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYMET10.text
@@ -10449,16 +10213,14 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraLtA-Thalftrack.name
 #. data/mp/stats/templates.json: $.P0CobraLtATRktHtrack.name
 #: po/custom/fromJson.txt:3348
-#, fuzzy
 msgid "Lancer Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraTrkLancer.name
 #: po/custom/fromJson.txt:3351
-#, fuzzy
 msgid "Lancer Cobra Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Rocket.name
@@ -10478,37 +10240,32 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
 #: po/custom/fromJson.txt:3363
-#, fuzzy
 msgid "Lancer Mantis Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Trk-Lancer.name
 #: po/custom/fromJson.txt:3366
-#, fuzzy
 msgid "Lancer Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-Lancer.name
 #: po/custom/fromJson.txt:3369
-#, fuzzy
 msgid "Lancer Scorpion Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-Lancer.name
 #: po/custom/fromJson.txt:3372
-#, fuzzy
 msgid "Lancer Scorpion VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperTrkLancer.name
 #: po/custom/fromJson.txt:3380
-#, fuzzy
 msgid "Lancer Viper Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtA-Twheels.name
@@ -10529,9 +10286,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text
 #: po/custom/fromJson.txt:3393
-#, fuzzy
 msgid "Large Super Heavy Body"
-msgstr "Mellem supertung krop"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Laser01.name
@@ -10543,16 +10299,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text
 #: po/custom/fromJson.txt:3400
-#, fuzzy
 msgid "Laser AA Gun Available"
-msgstr "Forskningsmodul tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text
 #: po/custom/fromJson.txt:3403
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text
@@ -10582,9 +10336,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASROF1.text
 #: po/custom/fromJson.txt:3419
-#, fuzzy
 msgid "Laser reload time -15%"
-msgstr "Missilgenopladningstid -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-LasSat.name
@@ -10600,9 +10353,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:3430
-#, fuzzy
 msgid "Laser Upgrade"
-msgstr "Sensoropgradering"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Laseropticslab.name
@@ -10636,9 +10388,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text
 #: po/custom/fromJson.txt:3456
-#, fuzzy
 msgid "Less armor and body points than Python"
-msgstr "Maksimum panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body04.name
@@ -10688,17 +10439,15 @@ msgstr ""
 #. data/base/stats/templates.json: $.CobraLtCnTrks.name
 #. data/mp/stats/templates.json: $.CobraLtCnTrks.name
 #: po/custom/fromJson.txt:3486
-#, fuzzy
 msgid "Light Cannon Cobra Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text
 #. data/mp/messages/resmessages1.json: $.RES_CN1MK1.text
 #: po/custom/fromJson.txt:3490
-#, fuzzy
 msgid "Light Cannon firing 40mm rounds"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower02.name
@@ -10713,24 +10462,21 @@ msgstr ""
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
 #. data/mp/stats/templates.json: $.PythonLtCnTrks.name
 #: po/custom/fromJson.txt:3500
-#, fuzzy
 msgid "Light Cannon Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtCannonHTracks.name
 #: po/custom/fromJson.txt:3503
-#, fuzzy
 msgid "Light Cannon Viper Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonTracks.name
 #. data/mp/stats/templates.json: $.ViperLtCannonTracks.name
 #: po/custom/fromJson.txt:3507
-#, fuzzy
 msgid "Light Cannon Viper Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonWheels.name
@@ -10797,16 +10543,14 @@ msgstr "Maskingeværgenopladningstid -15%"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtMGHalfTracks.name
 #: po/custom/fromJson.txt:3560
-#, fuzzy
 msgid "Machinegun Viper Half-Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Trk-MG.name
 #: po/custom/fromJson.txt:3563
-#, fuzzy
 msgid "Machinegun Viper Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Cyb-Chain-GROUND.name
@@ -10828,9 +10572,8 @@ msgstr ""
 #. data/base/stats/body.json: $.Body12SUP.name
 #. data/mp/stats/body.json: $.Body12SUP.name
 #: po/custom/fromJson.txt:3592
-#, fuzzy
 msgid "Mantis"
-msgstr "Afstandståge"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MassDriver.name
@@ -10875,9 +10618,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text
 #: po/custom/fromJson.txt:3629
-#, fuzzy
 msgid "Mechanic with repair ability"
-msgstr "Advanceret reperationsfacilitet"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body05.name
@@ -10911,16 +10653,14 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text
 #: po/custom/fromJson.txt:3649
-#, fuzzy
 msgid "Medium body increases armor and body points"
-msgstr "Forøger panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
 #: po/custom/fromJson.txt:3652
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-MC.name
@@ -10940,9 +10680,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_CN2MK1.text
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text
 #: po/custom/fromJson.txt:3664
-#, fuzzy
 msgid "Medium Cannon firing 76mm rounds"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower03.name
@@ -10964,9 +10703,8 @@ msgstr ""
 #. data/mp/stats/templates.json: $.PythonMedCanTracks.name
 #. data/mp/stats/templates.json: $.PythonMedCnTrks.name
 #: po/custom/fromJson.txt:3678
-#, fuzzy
 msgid "Medium Cannon Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Scorp-Hover-MC.name
@@ -10977,9 +10715,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Scorp-Trk-MC.name
 #: po/custom/fromJson.txt:3684
-#, fuzzy
 msgid "Medium Cannon Scorpion Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMedCnTrks.name
@@ -11013,52 +10750,45 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3704
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLTracks.name
 #: po/custom/fromJson.txt:3707
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLHalfTracks.name
 #: po/custom/fromJson.txt:3710
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3713
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket02-MRL.name
 #. data/mp/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3717
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3720
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3723
-#, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket02-MRL.name
@@ -11078,23 +10808,20 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODHTracks.name
 #: po/custom/fromJson.txt:3735
-#, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODTracks.name
 #: po/custom/fromJson.txt:3738
-#, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower06.name
 #: po/custom/fromJson.txt:3741
-#, fuzzy
 msgid "Mini-Rocket Guard Tower"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -11102,9 +10829,8 @@ msgstr "Vælg alle halv-bælter"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
 #. data/mp/stats/weapons.json: $.Rocket-Pod.name
 #: po/custom/fromJson.txt:3747
-#, fuzzy
 msgid "Mini-Rocket Pod"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower6.name
@@ -11117,25 +10843,22 @@ msgstr "Minirakettårn"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
 #: po/custom/fromJson.txt:3761
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperPODWheels.name
 #. data/mp/stats/templates.json: $.ViperPODWheels.name
 #: po/custom/fromJson.txt:3765
-#, fuzzy
 msgid "Mini-Rocket Viper Wheels"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC2.text
 #: po/custom/fromJson.txt:3769
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text
@@ -11147,9 +10870,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text
 #: po/custom/fromJson.txt:3776
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Laserskade +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Missile.name
@@ -11195,25 +10917,22 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_B10.text
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text
 #: po/custom/fromJson.txt:3811
-#, fuzzy
 msgid "More armor and body points than Python"
-msgstr "Maksimum panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text
 #: po/custom/fromJson.txt:3814
-#, fuzzy
 msgid "More armor and body points than Vengeance"
-msgstr "Maksimum panser og skrogpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text
 #. data/mp/messages/resmessages23.json: $.RES_W_M_AC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_M_AC3.text
 #: po/custom/fromJson.txt:3819
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
@@ -11240,17 +10959,15 @@ msgstr ""
 #. data/base/stats/templates.json: $.CobraMortarHalfTrack.name
 #. data/mp/stats/templates.json: $.CobraMortarHalfTrack.name
 #: po/custom/fromJson.txt:3835
-#, fuzzy
 msgid "Mortar Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_M_D4.text
 #: po/custom/fromJson.txt:3839
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Laserskade +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
@@ -11272,9 +10989,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_M_ROF4.text
 #: po/custom/fromJson.txt:3853
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
@@ -11408,9 +11124,8 @@ msgstr "Nyt avanceret våben tilgængelig"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text
 #: po/custom/fromJson.txt:3952
-#, fuzzy
 msgid "New Artillery Missile Turret Available"
-msgstr "Nyt forsvarsbygning tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text
@@ -11439,17 +11154,15 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text
 #: po/custom/fromJson.txt:3976
-#, fuzzy
 msgid "New Construction Options Available"
-msgstr "Nye forskningsvalg tilgængelige"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text
 #: po/custom/fromJson.txt:3990
-#, fuzzy
 msgid "New Cyborg Research Available"
-msgstr "Ny cyborg tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text
@@ -11463,9 +11176,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS1.text
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4023
-#, fuzzy
 msgid "New Laser Weapon Available"
-msgstr "Nyt avanceret våben tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text
@@ -11473,25 +11185,22 @@ msgstr "Nyt avanceret våben tilgængelig"
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text
 #: po/custom/fromJson.txt:4029
-#, fuzzy
 msgid "New Missile Turret Available"
-msgstr "Ny basebygning tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text
 #: po/custom/fromJson.txt:4036
-#, fuzzy
 msgid "New Paradigm Heavy Body"
-msgstr "Mellem supertung krop"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B04.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B04.text
 #: po/custom/fromJson.txt:4040
-#, fuzzy
 msgid "New Paradigm Light Body"
-msgstr "Cyborgfabrik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text
@@ -11513,9 +11222,8 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text
 #: po/custom/fromJson.txt:4054
-#, fuzzy
 msgid "New Power Generation Technology"
-msgstr "Kraftværk"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text
@@ -11530,9 +11238,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text
 #. ... + 5 refs
 #: po/custom/fromJson.txt:4064
-#, fuzzy
 msgid "New Propulsion Available"
-msgstr "Nye forskningsvalg tilgængelige"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text
@@ -11540,9 +11247,8 @@ msgstr "Nye forskningsvalg tilgængelige"
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4076
-#, fuzzy
 msgid "New Rail Gun Available"
-msgstr "Forskningsmodul tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text
@@ -11582,31 +11288,27 @@ msgstr "Nyt raket tilgængelig"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text
 #: po/custom/fromJson.txt:4110
-#, fuzzy
 msgid "New SAM Turret Available"
-msgstr "Nyt raket tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text
 #: po/custom/fromJson.txt:4113
-#, fuzzy
 msgid "New System Available"
-msgstr "Nyt raket tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4116
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Nyt raket tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WS.text
 #: po/custom/fromJson.txt:4120
-#, fuzzy
 msgid "New Systems Structure Available"
-msgstr "Ny basebygning tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VCBSTW1.text
@@ -11614,9 +11316,8 @@ msgstr "Ny basebygning tilgængelig"
 #. data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text
 #. ... + 6 refs
 #: po/custom/fromJson.txt:4126
-#, fuzzy
 msgid "New Systems Tower Available"
-msgstr "Nyt raket tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text
@@ -11624,26 +11325,23 @@ msgstr "Nyt raket tilgængelig"
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text
 #: po/custom/fromJson.txt:4132
-#, fuzzy
 msgid "New Systems Turret Available for Design"
-msgstr "Ny basebygning tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text
 #: po/custom/fromJson.txt:4136
-#, fuzzy
 msgid "New Systems Turret Available For Design"
-msgstr "Ny basebygning tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4151
-#, fuzzy
 msgid "New Thermal Emissions detection"
-msgstr "Advanceret termisk emmisionsdetektion"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text
@@ -11661,9 +11359,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_V_B10.text
 #. data/mp/messages/resmessages3.json: $.RES_V_B10.text
 #: po/custom/fromJson.txt:4167
-#, fuzzy
 msgid "NEXUS Heavy Body"
-msgstr "Stor supertung krop"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
@@ -11682,9 +11379,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_V_B03.text
 #. data/mp/messages/resmessages3.json: $.RES_V_B03.text
 #: po/custom/fromJson.txt:4178
-#, fuzzy
 msgid "NEXUS Light Body"
-msgstr "Cyborgfabrik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTower.name
@@ -11812,9 +11508,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text
 #. data/mp/messages/resmessages1.json: $.RES_REPAI1.text
 #: po/custom/fromJson.txt:4255
-#, fuzzy
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "Nyt reperationsfacilitet reparerer beskadigede enheder"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text
@@ -11828,24 +11523,21 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4270
-#, fuzzy
 msgid "Original Campaign"
-msgstr "Ny kampange"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4273
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Spil mod computeren"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4277
-#, fuzzy
 msgid "Panther"
-msgstr "Patrolje"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -11860,16 +11552,14 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4287
-#, fuzzy
 msgid "Pepperpot"
-msgstr "Peberkværn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
 #: po/custom/fromJson.txt:4290
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb03.name
@@ -11923,9 +11613,8 @@ msgstr "Plasmakanon skyder plasma"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
 #: po/custom/fromJson.txt:4321
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-PlasmaCannon.name
@@ -11943,9 +11632,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text
 #: po/custom/fromJson.txt:4331
-#, fuzzy
 msgid "Plasmite Flame-thrower"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-PlasmiteFlamer.name
@@ -11964,9 +11652,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-Plasmite.name
 #: po/custom/fromJson.txt:4342
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade11.name
@@ -12018,9 +11705,8 @@ msgstr "Kraftværk"
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text
 #: po/custom/fromJson.txt:4371
-#, fuzzy
 msgid "Power Module Available"
-msgstr "Forskningsmodul tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-PowerModuleMk1.name
@@ -12040,9 +11726,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text
 #: po/custom/fromJson.txt:4383
-#, fuzzy
 msgid "Power output +30%"
-msgstr "Fabriksproduktionshastighed +60%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text
@@ -12059,9 +11744,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4392
-#, fuzzy
 msgid "Powerlab"
-msgstr "Kraft"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text
@@ -12074,17 +11758,15 @@ msgstr "Fremstiller cyborger"
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text
 #: po/custom/fromJson.txt:4410
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Stor supertung krop"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text
 #: po/custom/fromJson.txt:4414
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Cyborgfabrik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text
@@ -12118,66 +11800,57 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallTower-PulseLas.name
 #. data/mp/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:4439
-#, fuzzy
 msgid "Pulse Laser Hardpoint"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
 #: po/custom/fromJson.txt:4442
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Pulse.name
 #: po/custom/fromJson.txt:4445
-#, fuzzy
 msgid "Pulse Laser Mantis Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PantherHoverPulseLas.name
 #: po/custom/fromJson.txt:4448
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonPulseTracks.name
 #: po/custom/fromJson.txt:4451
-#, fuzzy
 msgid "Pulse Laser Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverPulseLas.name
 #: po/custom/fromJson.txt:4454
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerPulseTracks.name
 #: po/custom/fromJson.txt:4457
-#, fuzzy
 msgid "Pulse Laser Tiger Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-PulseLas.name
 #. data/mp/stats/structure.json: $.GuardTower-BeamLas.name
 #: po/custom/fromJson.txt:4461
-#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPulseTracks.name
 #: po/custom/fromJson.txt:4464
-#, fuzzy
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Laser02.name
@@ -12236,16 +11909,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:4506
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:4509
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Maskingeværskade +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail2.name
@@ -12273,16 +11944,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
 #: po/custom/fromJson.txt:4526
-#, fuzzy
 msgid "Rail Gun Mantis Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:4529
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Maskingeværgenopladningstid -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
@@ -12317,9 +11986,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4550
-#, fuzzy
 msgid "Rail Gun Upgrade"
-msgstr "Maskingeværopgradering"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun02.name
@@ -12366,9 +12034,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text
 #: po/custom/fromJson.txt:4577
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Forskningshastighed +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
@@ -12412,9 +12079,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4620
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Reperationscenter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12434,9 +12100,8 @@ msgstr "Reperationsfacilitet"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
 #: po/custom/fromJson.txt:4638
-#, fuzzy
 msgid "Repair Scorpion Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RFU1.text
@@ -12450,30 +12115,26 @@ msgstr "Reperationshastighed +100%"
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
 #. data/mp/stats/templates.json: $.A-Rep-Cobra-Trk.name
 #: po/custom/fromJson.txt:4647
-#, fuzzy
 msgid "Repair Turret Cobra Tracks"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Rep-Mantis-Trk.name
 #: po/custom/fromJson.txt:4650
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4653
-#, fuzzy
 msgid "Repair Turret Viper Half-track"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4656
-#, fuzzy
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairWheels.name
@@ -12486,9 +12147,8 @@ msgstr ""
 #. data/base/stats/repair.json: $.LightRepair1.name
 #. data/mp/stats/repair.json: $.LightRepair1.name
 #: po/custom/fromJson.txt:4664
-#, fuzzy
 msgid "Repair Turret"
-msgstr "Kommandotårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text
@@ -12503,17 +12163,15 @@ msgstr "Erstatter alle maskingevær"
 #. data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_LS1.text
 #: po/custom/fromJson.txt:4688
-#, fuzzy
 msgid "Requires cyborg factory to produce"
-msgstr "Forøger VTOL-fabriksudkast"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text
 #: po/custom/fromJson.txt:4692
-#, fuzzy
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Forøger VTOL-fabriksudkast"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text
@@ -12535,9 +12193,8 @@ msgstr "Forskningscenter"
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_FCY1.text
 #: po/custom/fromJson.txt:4712
-#, fuzzy
 msgid "Research makes additional Cyborgs available"
-msgstr "Nye forskningsvalg tilgængelige"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text
@@ -12725,9 +12382,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
 #: po/custom/fromJson.txt:4830
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text
@@ -12770,9 +12426,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text
 #. data/mp/messages/resmessages2.json: $.RES_W_SRK_D4.text
 #: po/custom/fromJson.txt:4856
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
@@ -12799,9 +12454,8 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text
 #: po/custom/fromJson.txt:4872
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text
@@ -12884,9 +12538,8 @@ msgstr ""
 #. data/base/stats/structure.json: $.A0BaBaFactory.name
 #. data/mp/stats/structure.json: $.A0BaBaFactory.name
 #: po/custom/fromJson.txt:4930
-#, fuzzy
 msgid "Scavenger Factory"
-msgstr "Find næste fabrik"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaFlameTower.name
@@ -12913,9 +12566,8 @@ msgstr ""
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
 #. data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 #: po/custom/fromJson.txt:4946
-#, fuzzy
 msgid "Scavenger Power Generator"
-msgstr "Find næste kraftværk"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12942,16 +12594,14 @@ msgstr ""
 #. data/base/stats/body.json: $.Body8MBT.name
 #. data/mp/stats/body.json: $.Body8MBT.name
 #: po/custom/fromJson.txt:4962
-#, fuzzy
 msgid "Scorpion"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
 #: po/custom/fromJson.txt:4965
-#, fuzzy
 msgid "Scourge Cyborg"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scourge-Mantis-H.name
@@ -12962,9 +12612,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisScourgeTracks.name
 #: po/custom/fromJson.txt:4971
-#, fuzzy
 msgid "Scourge Mantis Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-A-Tmiss.name
@@ -12987,9 +12636,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernScourgeTracks.name
 #: po/custom/fromJson.txt:4986
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile2A-T.name
@@ -13003,33 +12651,29 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonScourgeTracks.name
 #: po/custom/fromJson.txt:4995
-#, fuzzy
 msgid "Scourge Python Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retal-VTOL-Scourge.name
 #: po/custom/fromJson.txt:4998
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Cyb-Atmiss-GROUND.name
 #. data/mp/stats/templates.json: $.Cyb-Atmiss-GROUND.name
 #. data/mp/stats/templates.json: $.MP-Cyb-ATmiss-GRD.name
 #: po/custom/fromJson.txt:5003
-#, fuzzy
 msgid "Scourge"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-SpyTurret.name
 #. data/base/stats/weapons.json: $.SpyTurret01.name
 #: po/custom/fromJson.txt:5007
-#, fuzzy
 msgid "Scrambler Turret"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
@@ -13073,9 +12717,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5040
-#, fuzzy
 msgid "Sensor Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text
@@ -13098,17 +12741,15 @@ msgstr "Sensorrækkevide +25%"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5058
-#, fuzzy
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperSensorWheels.name
 #. data/mp/stats/templates.json: $.ViperSensorWheels.name
 #: po/custom/fromJson.txt:5062
-#, fuzzy
 msgid "Sensor Turret Viper Wheels"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Turret01.name
@@ -13116,9 +12757,8 @@ msgstr "Rækkevide"
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Turret01.name
 #. data/mp/stats/sensor.json: $.SensorTurret1Mk1.name
 #: po/custom/fromJson.txt:5068
-#, fuzzy
 msgid "Sensor Turret"
-msgstr "Rækkevide"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
@@ -13139,7 +12779,6 @@ msgstr "Sensoropgradering Mk3"
 msgid "Sensor Upgrade"
 msgstr "Sensoropgradering"
 
-# This is always 1000 ingame... any reason to have this at all? is it ever used?
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text
@@ -13253,9 +12892,8 @@ msgstr "Stjæler forskning fra fjender"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text
 #: po/custom/fromJson.txt:5151
-#, fuzzy
 msgid "Steals technology from structures and takes control of weapons"
-msgstr "Stjæler forskning fra fjender"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text
@@ -13302,9 +12940,8 @@ msgstr "Bygningsforskning fuldendt"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
 #: po/custom/fromJson.txt:5178
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Solsprænging AA raketgitter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Sunburst.name
@@ -13322,25 +12959,22 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text
 #: po/custom/fromJson.txt:5223
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Cyborgtransport tilgængelig"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:5226
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Transportskib"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
 #. data/mp/stats/templates.json: $.SuperTransport.name
 #: po/custom/fromJson.txt:5230
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transport"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -13489,9 +13123,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_ASTRUC.text
 #. ... + 7 refs
 #: po/custom/fromJson.txt:5333
-#, fuzzy
 msgid "Synaptic Link technology breakthrough"
-msgstr "Computerteknologigennembrud"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Comp-SynapticLink.name
@@ -13533,9 +13166,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTKTracks.name
 #: po/custom/fromJson.txt:5358
-#, fuzzy
 msgid "Tank Killer Mantis Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHvyATTrk.name
@@ -13555,9 +13187,8 @@ msgstr "Kampvognsdræberraket"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-TK.name
 #: po/custom/fromJson.txt:5370
-#, fuzzy
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-HvyA-T.name
@@ -13801,36 +13432,32 @@ msgstr "Transportskrog"
 #: po/custom/fromJson.txt:5515
 #: src/design.cpp:1054
 msgid "Transport"
-msgstr "Transport"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianTrike.name
 #. data/mp/stats/templates.json: $.BarbarianTrike.name
 #: po/custom/fromJson.txt:5519
-#, fuzzy
 msgid "Trike"
-msgstr "Sasjant"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
 #: po/custom/fromJson.txt:5522
-#, fuzzy
 msgid "Truck Cobra Hover"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverTruck.name
 #: po/custom/fromJson.txt:5525
-#, fuzzy
 msgid "Truck Mantis Hover"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHoverTruck.name
 #: po/custom/fromJson.txt:5528
-#, fuzzy
 msgid "Truck Scorpion Hover"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/construction.json: $.Spade1Mk1.name
@@ -13937,16 +13564,14 @@ msgstr ""
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
 #. data/mp/stats/templates.json: $.ViperMG02Halftrack.name
 #: po/custom/fromJson.txt:5605
-#, fuzzy
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Trk-TMG.name
 #: po/custom/fromJson.txt:5608
-#, fuzzy
 msgid "Twin Machinegun Viper Tracks"
-msgstr "Vælg alle halv-bælter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Wheels.name
@@ -14009,9 +13634,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text
 #: po/custom/fromJson.txt:5645
-#, fuzzy
 msgid "Use a truck to add modules to a factory"
-msgstr "Brug en lastbil for at tilføje modulet til et forskingscenter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text
@@ -14139,9 +13763,8 @@ msgstr ""
 #. data/base/stats/body.json: $.Body10MBT.name
 #. data/mp/stats/body.json: $.Body10MBT.name
 #: po/custom/fromJson.txt:5743
-#, fuzzy
 msgid "Vengeance"
-msgstr "Kaptajn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text
@@ -14163,9 +13786,8 @@ msgstr "Meget dyr at fremstille"
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text
 #: po/custom/fromJson.txt:5757
-#, fuzzy
 msgid "Very high power costs and very slow to produce"
-msgstr "Dyr og langsom at fremstille"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text
@@ -14228,16 +13850,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
 #: po/custom/fromJson.txt:5794
-#, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "Kommandører"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-BB.name
 #: po/custom/fromJson.txt:5797
-#, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-BB.name
@@ -14293,16 +13913,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-ClusterBomb.name
 #: po/custom/fromJson.txt:5840
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-ClusterBomb.name
 #: po/custom/fromJson.txt:5843
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
@@ -14326,9 +13944,8 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text
 #: po/custom/fromJson.txt:5856
-#, fuzzy
 msgid "VTOL factory enables VTOL production"
-msgstr "Advanceret VTOL-produktion"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory.name
@@ -14369,9 +13986,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-HPV.name
 #: po/custom/fromJson.txt:5880
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Mantis-HPV.name
@@ -14382,9 +13998,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-HPV.name
 #: po/custom/fromJson.txt:5886
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon4AUTO-VTOL.name
@@ -14397,13 +14012,13 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.V-Tol02.name
 #: po/custom/fromJson.txt:5893
 msgid "VTOL II"
-msgstr "VTOL II"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:5896
 msgid "VTOL III"
-msgstr "VTOL III"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14420,9 +14035,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-Lancer.name
 #: po/custom/fromJson.txt:5905
-#, fuzzy
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "Score"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
@@ -14545,9 +14159,8 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Sys-VTOLStrike-Turret01.name
 #. data/mp/stats/sensor.json: $.Sys-VstrikeTurret01.name
 #: po/custom/fromJson.txt:5993
-#, fuzzy
 msgid "VTOL Strike Turret"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Sunburst.name
@@ -14581,7 +14194,7 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6012
 msgid "VTOL"
-msgstr "VTOL"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -14650,17 +14263,15 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-AAGun04.name
 #. data/mp/stats/weapons.json: $.QuadRotAAGun.name
 #: po/custom/fromJson.txt:6061
-#, fuzzy
 msgid "Whirlwind AA Turret"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-QuadRotAA.name
 #. data/mp/stats/structure.json: $.WallTower-QuadRotAAGun.name
 #: po/custom/fromJson.txt:6065
-#, fuzzy
 msgid "Whirlwind Hardpoint"
-msgstr "Tårn"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-WSTower.name
@@ -14716,10 +14327,9 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6095
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "Elite"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
@@ -14733,68 +14343,60 @@ msgstr "Grøn"
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6103
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Helt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6107
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "Professionel"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6111
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "Regulær"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6115
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "Utrænet"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6119
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "Speciel"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6123
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "Trænet"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6127
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Veteran"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -14812,9 +14414,8 @@ msgid "Warzone 2100 Campaign Mod File"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:5
-#, fuzzy
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Start flerbruger lyd"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
@@ -14833,9 +14434,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Gem spil"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -14852,9 +14452,8 @@ msgid "Debug mode now enabled!"
 msgstr ""
 
 #: src/cheat.cpp:180
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Konstruktionsmenuen vil genåbne"
+msgstr ""
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:86
@@ -14871,9 +14470,8 @@ msgid "configuration directory"
 msgstr "konfigurationskatalog"
 
 #: src/clparse.cpp:259
-#, fuzzy
 msgid "Add data directory"
-msgstr "datakatalog"
+msgstr ""
 
 #: src/clparse.cpp:259
 msgid "data directory"
@@ -14904,18 +14502,16 @@ msgid "Play in fullscreen mode"
 msgstr ""
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Indlæs et bestemt spil"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
 msgstr ""
 
 #: src/clparse.cpp:265
-#, fuzzy
 msgid "Show options and exit"
-msgstr "Vis versionsoplysninger og afslut"
+msgstr ""
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -14944,9 +14540,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Hent et gemt spil"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -14954,9 +14549,8 @@ msgid "savegame"
 msgstr "Gem spil"
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Hent et gemt spil"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -14991,18 +14585,16 @@ msgid "Disable sound"
 msgstr "Slå lyd fra"
 
 #: src/clparse.cpp:280
-#, fuzzy
 msgid "Connect directly to IP/hostname"
-msgstr "forbind direkte til IP/hostname"
+msgstr ""
 
 #: src/clparse.cpp:280
 msgid "host"
 msgstr ""
 
 #: src/clparse.cpp:281
-#, fuzzy
 msgid "Go directly to host screen"
-msgstr "forbind direkte til IP/hostname"
+msgstr ""
 
 #: src/clparse.cpp:282
 msgid "Enable texture compression"
@@ -15021,9 +14613,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "Gem spil"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -15034,9 +14625,8 @@ msgid "test"
 msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "Kunne ikke gemme spillet!"
+msgstr ""
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -15051,9 +14641,8 @@ msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Spil"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -15123,9 +14712,8 @@ msgstr "Vægt"
 
 #: src/design.cpp:682
 #: src/design.cpp:703
-#, fuzzy
 msgid "Total Power Required"
-msgstr "Produktionsomkostninger"
+msgstr ""
 
 #: src/design.cpp:716
 #: src/design.cpp:738
@@ -15202,14 +14790,12 @@ msgid "Systems"
 msgstr "Systemer"
 
 #: src/design.cpp:4283
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "Slet design"
+msgstr ""
 
 #: src/design.cpp:4288
-#, fuzzy
 msgid "Store Design"
-msgstr "Nyt design"
+msgstr ""
 
 #: src/display3d.cpp:676
 msgid "Player left"
@@ -15238,20 +14824,20 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge på brændende oilebrønd."
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Skade %d%% - Oplevelse %.1f, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Allierede - Skade %d%% - Oplevelse %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Enhed tabt!"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -15318,14 +14904,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Fortsæt spil"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Nyt raket tilgængelig"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -15336,18 +14920,16 @@ msgid "MAIN MENU"
 msgstr "HOVED MENU"
 
 #: src/frontend.cpp:173
-#, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Besøg vores officielle side: http://wz2100.net"
+msgstr ""
 
 #: src/frontend.cpp:174
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr ""
 
 #: src/frontend.cpp:175
-#, fuzzy
 msgid "Donate: http://donations.wz2100.net/"
-msgstr "Besøg vores officielle side: http://wz2100.net"
+msgstr ""
 
 #: src/frontend.cpp:178
 msgid "Help support the project with our server costs, Click this link."
@@ -15371,7 +14953,7 @@ msgstr "Hurtgigt spil"
 
 #: src/frontend.cpp:311
 msgid "TUTORIALS"
-msgstr "TUTORIALS"
+msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:313
@@ -15394,23 +14976,20 @@ msgid "New Campaign"
 msgstr "Ny kampange"
 
 #: src/frontend.cpp:365
-#, fuzzy
 msgid "Start Skirmish Game"
-msgstr "Værten starter spillet"
+msgstr ""
 
 #: src/frontend.cpp:366
 msgid "Challenges"
 msgstr "Udfordringer"
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Indlæs kampange"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Værten starter spillet"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -15427,15 +15006,13 @@ msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Indlæs gemt spil"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Indlæs gemt spil"
+msgstr ""
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -15473,9 +15050,8 @@ msgid "Video Options"
 msgstr "Videoindstillinger"
 
 #: src/frontend.cpp:685
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "Lyd indstillinger"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
@@ -15504,9 +15080,8 @@ msgstr "Fuldskærm"
 #: src/frontend.cpp:752
 #: src/frontend.cpp:903
 #: src/frontend.cpp:1683
-#, fuzzy
 msgid "Unsupported"
-msgstr "Transportskib"
+msgstr ""
 
 #: src/frontend.cpp:749
 #: src/frontend.cpp:758
@@ -15522,7 +15097,7 @@ msgstr "Fra"
 
 #: src/frontend.cpp:750
 msgid "50%"
-msgstr "50%"
+msgstr ""
 
 #: src/frontend.cpp:751
 #: src/multiplay.cpp:1897
@@ -15552,9 +15127,8 @@ msgid "Instant"
 msgstr ""
 
 #: src/frontend.cpp:773
-#, fuzzy
 msgid "Tracked"
-msgstr "Bælter"
+msgstr ""
 
 #: src/frontend.cpp:786
 #: src/ingameop.cpp:517
@@ -15579,27 +15153,24 @@ msgstr "Skygger"
 #: src/frontend.cpp:804
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr "Radar"
+msgstr ""
 
 #: src/frontend.cpp:808
 #: src/ingameop.cpp:542
-#, fuzzy
 msgid "Radar Jump"
-msgstr "Radar"
+msgstr ""
 
 #: src/frontend.cpp:812
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKINDSTILLINGER"
 
 #: src/frontend.cpp:906
-#, fuzzy
 msgid "Disabled"
-msgstr "Slå lyd fra"
+msgstr ""
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Enabled"
-msgstr "Aktivér lyd"
+msgstr ""
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
@@ -15639,18 +15210,16 @@ msgid "Map Zoom Rate"
 msgstr ""
 
 #: src/frontend.cpp:985
-#, fuzzy
 msgid "Radar Zoom"
-msgstr "Radar"
+msgstr ""
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "AUDIOINDSTILLINGER"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -15661,28 +15230,24 @@ msgid "Graphics Mode*"
 msgstr "Grafik indstillinger"
 
 #: src/frontend.cpp:1137
-#, fuzzy
 msgid "Graphics Mode"
-msgstr "Grafik indstillinger"
+msgstr ""
 
 #: src/frontend.cpp:1142
 msgid "Resolution*"
 msgstr "Opløsning*"
 
 #: src/frontend.cpp:1142
-#, fuzzy
 msgid "Resolution"
-msgstr "Opløsning*"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale*"
-msgstr "Vis spillemenu"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale"
-msgstr "Vis spillemenu"
+msgstr ""
 
 #: src/frontend.cpp:1191
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15714,28 +15279,24 @@ msgid "VIDEO OPTIONS"
 msgstr "VIDEOINDSTILLINGER"
 
 #: src/frontend.cpp:1547
-#, fuzzy
 msgid "Middle Mouse"
-msgstr "Mellemknap"
+msgstr ""
 
 #: src/frontend.cpp:1547
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Højreknap"
+msgstr ""
 
 #: src/frontend.cpp:1559
 msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Nulstillet spilhastighed"
+msgstr ""
 
 #: src/frontend.cpp:1561
-#, fuzzy
 msgid "Camera Pitch"
-msgstr "Nulstil hældning"
+msgstr ""
 
 #: src/frontend.cpp:1576
 #: src/ingameop.cpp:697
@@ -15759,15 +15320,13 @@ msgstr "Drej skærm"
 
 #: src/frontend.cpp:1594
 #: src/ingameop.cpp:720
-#, fuzzy
 msgid "Colored Cursors"
-msgstr "Fang musepointer"
+msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Kamera hastighed"
+msgstr ""
 
 #: src/frontend.cpp:1602
 msgid "MOUSE OPTIONS"
@@ -15799,33 +15358,28 @@ msgstr "Sprog"
 
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Sværhedsgræd"
+msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
-#, fuzzy
 msgid "Camera Speed"
-msgstr "Vandhastighed"
+msgstr ""
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "Holdfarve"
+msgstr ""
 
 #: src/frontend.cpp:1744
 #: src/frontend.cpp:1780
-#, fuzzy
 msgid "Campaign"
-msgstr "Ny kampange"
+msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Flerspiller"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -15840,9 +15394,8 @@ msgstr ""
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "SPIL GEMT :"
+msgstr ""
 
 #: src/hci.cpp:1566
 #, c-format
@@ -15850,19 +15403,19 @@ msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Spiller %u snyder (debugmenu) sig selv til en ny bygning: %s."
 
 #: src/hci.cpp:1577
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "Spiller %u snyder (debugmenu) sig selv til en ny feature: %s."
+msgstr ""
 
 #: src/hci.cpp:1599
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Spiller %u snyder (debugmenu) sig selv til en ny droid: %s."
+msgstr ""
 
 #: src/hci.cpp:1607
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Spiller %u snyder (debugmenu) sig selv til en ny droid: %s."
+msgstr ""
 
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
@@ -15883,14 +15436,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -15907,8 +15458,7 @@ msgid "Ally progress"
 msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -15917,9 +15467,8 @@ msgid "Chat: All"
 msgstr ""
 
 #: src/hci.cpp:4959
-#, fuzzy
 msgid "Chat: Team"
-msgstr "Vælg hold"
+msgstr ""
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -15938,9 +15487,8 @@ msgstr "ADVARSEL: Du er værten. Hvis du går ud, slutte spillet for allesamen!"
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Afslut"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -15984,47 +15532,38 @@ msgid "Audio Options"
 msgstr "Lyd indstillinger"
 
 #: src/ingameop.cpp:494
-#, fuzzy
 msgid "View Key Mappings"
-msgstr "Tastatur indstillinger"
+msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Ny kampange"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Værten starter spillet"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
 #: src/intdisplay.cpp:164
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Venter på andre spillere"
+msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "Effektivitet"
+msgstr ""
 
 #: src/intdisplay.cpp:234
-#, fuzzy
 msgid "Construction Progress"
-msgstr "Forbindelsesfejl"
+msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Forskning forbedret"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -16048,9 +15587,8 @@ msgid "Current Objective"
 msgstr "Denne mission"
 
 #: src/intelmap.cpp:1230
-#, fuzzy
 msgid "New Intelligence Report"
-msgstr "Kommando Pult"
+msgstr ""
 
 #: src/intorder.cpp:166
 #: src/keymap.cpp:396
@@ -16083,9 +15621,8 @@ msgid "Do or Die!"
 msgstr "Kæmp til døden!"
 
 #: src/intorder.cpp:172
-#, fuzzy
 msgid "Fire-At-Will"
-msgstr "Angrib alt"
+msgstr ""
 
 #: src/intorder.cpp:173
 #: src/keymap.cpp:390
@@ -16141,18 +15678,16 @@ msgid "Recycle"
 msgstr "Genbrug"
 
 #: src/intorder.cpp:184
-#, fuzzy
 msgid "Assign Factory Production"
-msgstr "Gentag produktion"
+msgstr ""
 
 #: src/intorder.cpp:185
 msgid "Assign Cyborg Factory Production"
 msgstr ""
 
 #: src/intorder.cpp:186
-#, fuzzy
 msgid "Assign Fire Support"
-msgstr "Tildel gruppe 1"
+msgstr ""
 
 #: src/intorder.cpp:187
 msgid "Assign VTOL Factory Production"
@@ -16187,24 +15722,21 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
 #: src/keybind.cpp:326
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "Indret kamera til nordlig retning"
+msgstr ""
 
 #: src/keybind.cpp:336
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "Indret kamera til nordlig retning"
+msgstr ""
 
 #: src/keybind.cpp:346
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "Indret kamera til nordlig retning"
+msgstr ""
 
 #: src/keybind.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Spiller %u snyder (debugmenu) sig selv til en ny droid: %s."
+msgstr ""
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -16336,9 +15868,8 @@ msgid "Always displaying energy bars for units and structures"
 msgstr "Viser altid energibar for enheder og bygninger"
 
 #: src/keybind.cpp:1523
-#, fuzzy
 msgid "Debug menu is Open"
-msgstr "Konstruktionsmenuen vil genåbne"
+msgstr ""
 
 #: src/keybind.cpp:1558
 msgid "Unable to locate any oil derricks!"
@@ -16406,14 +15937,14 @@ msgid "Game Speed Reset"
 msgstr "Nulstillet spilhastighed"
 
 #: src/keybind.cpp:2547
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Spillehastighed forøget til %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2551
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Spillehastighed reduceret til %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2609
 msgid "Radar showing friend-foe colors"
@@ -16469,7 +16000,7 @@ msgstr "Konstruktion"
 
 #: src/keymap.cpp:300
 msgid "Design"
-msgstr "Design"
+msgstr ""
 
 #: src/keymap.cpp:301
 msgid "Intelligence Display"
@@ -16480,18 +16011,16 @@ msgid "Commanders"
 msgstr "Kommandører"
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Gem"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr "Slå radar til/fra"
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "Indlæs"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -16514,9 +16043,8 @@ msgid "View Location of Previous Message"
 msgstr "Find lokation for sidste besked"
 
 #: src/keymap.cpp:311
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Slå konsol display til/fra"
+msgstr ""
 
 #: src/keymap.cpp:315
 msgid "Assign Group 0"
@@ -16639,9 +16167,8 @@ msgid "Select Commander 9"
 msgstr "Vælg kommandør 9"
 
 #: src/keymap.cpp:354
-#, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Flerbruger indstillinger"
+msgstr ""
 
 #: src/keymap.cpp:357
 msgid "Snap View to North"
@@ -16748,9 +16275,8 @@ msgid "Toggle Overlays"
 msgstr "Slå interface til/fra"
 
 #: src/keymap.cpp:383
-#, fuzzy
 msgid "Toggle Console History "
-msgstr "Slå konsol display til/fra"
+msgstr ""
 
 #: src/keymap.cpp:384
 msgid "Toggle Team Chat History"
@@ -16777,14 +16303,12 @@ msgid "Stop Droid"
 msgstr ""
 
 #: src/keymap.cpp:403
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "Send tekstbesked"
+msgstr ""
 
 #: src/keymap.cpp:404
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "Send tekstbesked"
+msgstr ""
 
 #: src/keymap.cpp:405
 msgid "Drop a beacon"
@@ -16799,9 +16323,8 @@ msgid "Trap cursor"
 msgstr "Fang musepointer"
 
 #: src/keymap.cpp:409
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Slå radar til/fra"
+msgstr ""
 
 #: src/keymap.cpp:410
 msgid "Toggle ally-enemy radar view"
@@ -16816,9 +16339,8 @@ msgid "Select all Combat Units"
 msgstr "Vælg alle kommando enheder"
 
 #: src/keymap.cpp:421
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Vælg alle amfibre"
+msgstr ""
 
 #: src/keymap.cpp:422
 msgid "Select all Heavily Damaged Units"
@@ -16849,9 +16371,8 @@ msgid "Select all VTOLs"
 msgstr "Vælg alle VTOL"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "Vælg alle VTOL"
+msgstr ""
 
 #: src/keymap.cpp:431
 msgid "Select all Wheels"
@@ -16866,44 +16387,36 @@ msgid "Select all Similar Units"
 msgstr "Vælg alle lignende enheder"
 
 #: src/keymap.cpp:437
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Vælg alle kommando enheder"
+msgstr ""
 
 #: src/keymap.cpp:438
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Vælg alle amfibre"
+msgstr ""
 
 #: src/keymap.cpp:439
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Vælg alle kommando enheder"
+msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Vælg alle bæltekøretøjer"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Vælg alle bæltekøretøjer"
+msgstr ""
 
 #: src/keymap.cpp:442
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Vælg alle bæltekøretøjer"
+msgstr ""
 
 #: src/keymap.cpp:443
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Vælg alle lignende enheder"
+msgstr ""
 
 #: src/keymap.cpp:444
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Vælg alle bæltekøretøjer"
+msgstr ""
 
 #: src/keymap.cpp:448
 msgid "Select next Factory"
@@ -16922,9 +16435,8 @@ msgid "Select next Cyborg Factory"
 msgstr "Find næste cyborg fabrik"
 
 #: src/keymap.cpp:454
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Tastatur indstillinger"
+msgstr ""
 
 #: src/keymap.cpp:455
 msgid "Toggle display of droid path"
@@ -16939,9 +16451,8 @@ msgid "Toggle visibility"
 msgstr "Slå synlighed til/fra"
 
 #: src/keymap.cpp:458
-#, fuzzy
 msgid "Raise tile height"
-msgstr "Drej til højre"
+msgstr ""
 
 #: src/keymap.cpp:459
 msgid "Lower tile height"
@@ -16972,14 +16483,12 @@ msgid "Kill Selected Unit(s)"
 msgstr "Dræb valgte enhed(er)"
 
 #: src/keymap.cpp:468
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "Slå aliance status til/fra"
+msgstr ""
 
 #: src/keymap.cpp:469
-#, fuzzy
 msgid "Display Options Screen"
-msgstr "Vis spillemenu"
+msgstr ""
 
 #: src/keymap.cpp:470
 msgid "Complete current research"
@@ -16994,14 +16503,12 @@ msgid "Trace a game object"
 msgstr ""
 
 #: src/loadsave.cpp:311
-#, fuzzy
 msgid "Parent directory"
-msgstr "datakatalog"
+msgstr ""
 
 #: src/loadsave.cpp:316
-#, fuzzy
 msgid "Autosave directory"
-msgstr "datakatalog"
+msgstr ""
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory (not allowed for saving)"
@@ -17078,9 +16585,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s Giver dig teknologi"
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s giver dig %u energi"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -17108,15 +16615,13 @@ msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
 
 #: src/multiint.cpp:223
-#, fuzzy
 msgid "Medium"
-msgstr "Hastighed: Mellem"
+msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Kommandører"
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -17152,33 +16657,28 @@ msgid "Satellite Uplink disabled."
 msgstr ""
 
 #: src/multiint.cpp:1066
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Gør alt tilgængeligt"
+msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Vælg bygningsbegrænsinger"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Vælg spilnavn"
+msgstr ""
 
 #: src/multiint.cpp:1229
-#, fuzzy
 msgid "One-Player Skirmish"
-msgstr "Spil mod computeren"
+msgstr ""
 
 #: src/multiint.cpp:1236
 msgid "Select Game Name"
 msgstr "Vælg spilnavn"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17201,12 +16701,11 @@ msgstr "Aliancer"
 
 #: src/multiint.cpp:1309
 msgid "Base"
-msgstr "Base"
+msgstr ""
 
 #: src/multiint.cpp:1318
-#, fuzzy
 msgid "Map Preview"
-msgstr "Preview af kort"
+msgstr ""
 
 #: src/multiint.cpp:1319
 msgid "Click to see Map"
@@ -17223,21 +16722,18 @@ msgid "Set Structure Limits"
 msgstr "Vælg bygningsbegrænsinger"
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "Spil indstillinger"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
 #: src/multiint.cpp:1343
 #: src/multiint.cpp:1344
-#, fuzzy
 msgid "Start Hosting Game"
-msgstr "Værten starter spillet"
+msgstr ""
 
 #: src/multiint.cpp:1351
 msgid "Vote"
@@ -17256,23 +16752,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Start med advancerede baser"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Spiller"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Start med advancerede baser"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -17291,33 +16784,28 @@ msgid "Team"
 msgstr "Hold"
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Klik for at justere AI-sværhedsgraden"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for player"
-msgstr "Venter på andre spillere"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Spiller mistet"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Spiller mistet"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
 msgstr "Klik når klar"
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for download"
-msgstr "Venter på andre spillere"
+msgstr ""
 
 #: src/multiint.cpp:2072
 msgid "READY?"
@@ -17328,9 +16816,8 @@ msgid "PLAYERS"
 msgstr "SPILLERE"
 
 #: src/multiint.cpp:2149
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Klik for at ændre spiller-settings."
+msgstr ""
 
 #: src/multiint.cpp:2183
 msgid "Choose Team"
@@ -17341,23 +16828,20 @@ msgid "Teams locked"
 msgstr ""
 
 #: src/multiint.cpp:2213
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Klik for at ændre spiller-settings."
+msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Klik for at ændre spiller-settings."
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Spiller"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -17373,9 +16857,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Vælg spilnavn"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -17406,9 +16889,8 @@ msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
 #: src/multiint.cpp:3519
-#, fuzzy
 msgid "You have been kicked: "
-msgstr "Du er blevet smidt ud!"
+msgstr ""
 
 #: src/multiint.cpp:3531
 msgid "No connection to host."
@@ -17447,9 +16929,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Klik for at ændre spiller-settings."
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -17458,9 +16940,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Luk"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -17479,7 +16960,7 @@ msgstr "VÆRT"
 #: src/multiint.cpp:4139
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -17501,14 +16982,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "%s kom med i spillet"
+msgstr ""
 
 #: src/multijoin.cpp:503
-#, fuzzy
 msgid "Server message:"
-msgstr "Systembesked:"
+msgstr ""
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
@@ -17528,9 +17008,8 @@ msgid "Force Limits at Start"
 msgstr ""
 
 #: src/multilimit.cpp:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Tilbage"
+msgstr ""
 
 #: src/multilimit.cpp:192
 #: src/titleui/protocol.cpp:178
@@ -17554,24 +17033,23 @@ msgid "Technology level 3"
 msgstr "Teknologi niveau 3"
 
 #: src/multimenu.cpp:593
-#, fuzzy
 msgid "Max technology level"
-msgstr "Teknologi niveau 1"
+msgstr ""
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
 msgstr "Arbitrær antal spillere"
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 spillere"
-msgstr[1] "2 spillere"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/multimenu.cpp:761
 msgid "Score"
-msgstr "Score"
+msgstr ""
 
 #: src/multimenu.cpp:763
 msgid "Kills"
@@ -17594,9 +17072,9 @@ msgid "Total Sent/Received —"
 msgstr ""
 
 #: src/multimenu.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Trænet: %u"
+msgstr ""
 
 #: src/multimenu.cpp:802
 #, c-format
@@ -17700,7 +17178,7 @@ msgstr "Grøn"
 
 #: src/multiplay.cpp:1895
 msgid "Orange"
-msgstr "Orange"
+msgstr ""
 
 #: src/multiplay.cpp:1896
 msgid "Grey"
@@ -17848,12 +17326,12 @@ msgstr "Professionel: %u"
 #: src/scores.cpp:111
 #, c-format
 msgid "Veteran: %u"
-msgstr "Veteran: %u"
+msgstr ""
 
 #: src/scores.cpp:112
 #, c-format
 msgid "Elite: %u"
-msgstr "Elite: %u"
+msgstr ""
 
 #: src/scores.cpp:113
 #, c-format
@@ -17921,38 +17399,37 @@ msgstr[0] "%u Enheder valgt"
 msgstr[1] "%u Enheder valgt"
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "Kommandobegrænsning nået - indstiller produktion"
+msgstr ""
 
 #: src/structure.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "Kommandobegrænsning nået - indstiller produktion"
+msgstr ""
 
 #: src/structure.cpp:2510
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "Kommandobegrænsning nået - indstiller produktion"
+msgstr ""
 
 #: src/structure.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Kommandobegrænsning nået - indstiller produktion"
+msgstr ""
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Enhed tildelt - Skade %3.0f%%"
-msgstr[1] "%s - %u Enheder tildelt - Skade %3.0f%%"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Enhed tildelt - Skade %3.0f%%"
-msgstr[1] "%s - %u Enheder tildelt - Skade %3.0f%%"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -17966,9 +17443,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - Forbundet %u af %u - Skade %3.0f%%"
+msgstr ""
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -18013,9 +17490,8 @@ msgid "Refresh Games List"
 msgstr "Opdatér spilliste"
 
 #: src/titleui/gamefind.cpp:93
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Opdatér spilliste"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
@@ -18034,18 +17510,16 @@ msgid "Your version of Warzone is incompatible with this game."
 msgstr ""
 
 #: src/titleui/gamefind.cpp:311
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** kodeord er Unødvendig! ***"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:315
 msgid "[No Tanks]"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:319
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Fremstiller cyborger"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:323
 msgid "[No VTOLs]"
@@ -18070,9 +17544,8 @@ msgid "There appears to be a game update available!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:382
-#, fuzzy
 msgid "No games are available for your version"
-msgstr "Ingen spil er tilgængelige"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -18120,9 +17593,9 @@ msgid "Mods: None!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Version %s%s%s%s"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -18137,9 +17610,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Fortsæt spil"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -18147,7 +17619,7 @@ msgstr "Indtast kodeord:"
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
@@ -18164,7 +17636,7 @@ msgstr ""
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -18191,584 +17663,13 @@ msgstr " (lokalt modificeret)"
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:122
 msgid " - DEBUG"
-msgstr " - DEBUG"
+msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Version %s%s%s%s"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Forskningshastighed +30%"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Forskningshastighed +30%"
-
-#, fuzzy
-#~ msgid "Show all options and exit"
-#~ msgstr "Vis versionsoplysninger og afslut"
-
-#, fuzzy
-#~ msgid "Killer"
-#~ msgstr "Drabte"
-
-#~ msgid "Ending Mission."
-#~ msgstr "Afslutter mission."
-
-#~ msgid "End Mission"
-#~ msgstr "Afslut mission"
-
-#~ msgid "Select Map"
-#~ msgstr "Vælg kort"
-
-#, fuzzy
-#~ msgid "Difficulty locked"
-#~ msgstr "Sværhedsgræd"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Klik for at ændre spiller-settings."
-
-#, fuzzy
-#~ msgid "NEXUS Link"
-#~ msgstr "Cyborgfabrik"
-
-#~ msgid "Objective Destroyed"
-#~ msgstr "Objektiv ødelagt"
-
-#~ msgid "Objective Captured"
-#~ msgstr "Objektiv fanget"
-
-#~ msgid "Enemy Escaping"
-#~ msgstr "Fjenden flygter"
-
-#~ msgid "Reinforcements are now available"
-#~ msgstr "Forstærkninger er nu tilgængelige"
-
-# This is always 1000 ingame... any reason to have this at all? is it ever used?
-#~ msgid "Sensor Power"
-#~ msgstr "Sensoreffekt"
-
-#~ msgid "game-name"
-#~ msgstr "spilnavn"
-
-#~ msgid "Show this help message and exit"
-#~ msgstr "Vis denne hjælpebesked og gå ud"
-
-#~ msgid "Unit"
-#~ msgstr "Enhed"
-
-#~ msgid "Place Unit on map"
-#~ msgstr "Placer enhed på kortet"
-
-#~ msgid "Place Structures on map"
-#~ msgstr "Placer bygninger på kortet"
-
-#, fuzzy
-#~ msgid "Place Features on map"
-#~ msgstr "Placer Features på kortet"
-
-#~ msgid "Exit Game"
-#~ msgstr "Forlad spil"
-
-#~ msgid "Current Player:"
-#~ msgstr "Nuværende spiller:"
-
-#~ msgid "Screen Shake"
-#~ msgstr "Ryst skærm"
-
-#, fuzzy
-#~ msgid "Toggle Driving Mode"
-#~ msgstr "Forfølgelseskamera"
-
-#~ msgid "All players need to have the same mods to join your game."
-#~ msgstr "Alle spillere skal have samme mods for at gå ind i dit spil."
-
-#~ msgid "%s wanted to give you a %s but you have too many!"
-#~ msgstr "%s ville give dig en %s, men du har for mange!"
-
-#~ msgid "You wanted to give %s a %s but they have too many!"
-#~ msgstr "Du ville give %s en %s, men de har for mange!"
-
-#~ msgid "1X"
-#~ msgstr "1X"
-
-#~ msgid "2X"
-#~ msgstr "2X"
-
-#, fuzzy
-#~ msgid "Shaders"
-#~ msgstr "Skygger"
-
-#~ msgid "MAP SAVED!"
-#~ msgstr "KORT GEMT!"
-
-#~ msgid "Map:"
-#~ msgstr "Kort:"
-
-#~ msgid "Load Map File"
-#~ msgstr "Indlæs kortfil"
-
-#~ msgid "Save Map File"
-#~ msgstr "Gem kortfil"
-
-#~ msgid "New"
-#~ msgstr "Nyt"
-
-#~ msgid "New Blank Map"
-#~ msgstr "Nyt tomt kort"
-
-#~ msgid "Tile"
-#~ msgstr "Klinke"
-
-#~ msgid "Place tiles on map"
-#~ msgstr "Placer klinker på kortet"
-
-#~ msgid "Pause"
-#~ msgstr "Pause"
-
-#~ msgid "Pause or unpause the game"
-#~ msgstr "Pause eller fortsætte spillet"
-
-#, fuzzy
-#~ msgid "Start Edit Mode"
-#~ msgstr "Start uden baser"
-
-#~ msgid "Console On/Off"
-#~ msgstr "Slå konsol til/fra"
-
-#, fuzzy
-#~ msgid "Sensor display On"
-#~ msgstr "Rækkevide"
-
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - Skade %3.0f%%"
-
-#~ msgid " - Built %s"
-#~ msgstr " - Bygget %s"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Spiller mistet"
-
-#, fuzzy
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "Holdfarve"
-
-#, fuzzy
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "Holdfarve"
-
-#, fuzzy
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "Score"
-
-#, fuzzy
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "Score"
-
-#, fuzzy
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "Score"
-
-#, fuzzy
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Kommandører"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "SNYD ER NU SLÅET TIL!"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "SNYD ER NU SLÅET FRA!"
-
-#~ msgid "Activate self-test"
-#~ msgstr "Aktiver selvtest"
-
-#, fuzzy
-#~ msgid "Connect IP"
-#~ msgstr "Forbindelsesfejl"
-
-#, fuzzy
-#~ msgid "Password:"
-#~ msgstr "Indtast kodeord:"
-
-#, fuzzy
-#~ msgid "3 players"
-#~ msgstr "2 spillere"
-
-#~ msgid "4 players"
-#~ msgstr "4 spillere"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "2 spillere"
-
-#~ msgid "8 players"
-#~ msgstr "8 spillere"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "4 spillere"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "2 spillere"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "2 spillere"
-
-#~ msgid "Power Accrued"
-#~ msgstr "Indsalmet energi"
-
-#~ msgid "Fog"
-#~ msgstr "Tåge"
-
-#~ msgid "Mist"
-#~ msgstr "Afstandståge"
-
-#~ msgid "Fog Of War"
-#~ msgstr "Krigståge"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Afstandståge"
-
-#, fuzzy
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "Score"
-
-#, fuzzy
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "Kommandotårn"
-
-#, fuzzy
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "Kommandotårn"
-
-#, fuzzy
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "Kommandotårn"
-
-#, fuzzy
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "Søger"
-
-#, fuzzy
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Vælg alle halv-bælter"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": Ukendt snydekode."
-
-#~ msgid "Infinite Production"
-#~ msgstr "Uendelig produktion"
-
-#~ msgid "Player colour"
-#~ msgstr "Spillerens farve"
-
-#~ msgid "Kick player"
-#~ msgstr "Smid spiller ud"
-
-#~ msgid "Player number"
-#~ msgstr "Spillernummer"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (lokalt byttet og modificeret)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (lokalt byttet)"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Truck beordret til at bygge oliebrøn."
-
-#, fuzzy
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Gentag produktion"
-
-#, fuzzy
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Gentag produktion"
-
-#, fuzzy
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Reperationsgevinst - Reperation"
-
-#, fuzzy
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Reperationsgevinst - Reperation"
-
-#, fuzzy
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Reperationsgevinst - Reperation"
-
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "Kan ikke lokalisere resourcer"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "Konstruktionsmenuen vil genåbne"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "Konstruktionsmenuen vil ikke genåbne"
-
-#~ msgid "Toggle reopening the build menu"
-#~ msgstr "Slå genåbning af konstruktionsmenuen til/fra"
-
-#~ msgid "Danish"
-#~ msgstr "Dansk"
-
-#~ msgid "German"
-#~ msgstr "Tysk"
-
-#, fuzzy
-#~ msgid "Spanish"
-#~ msgstr "Dansk"
-
-#, fuzzy
-#~ msgid "Finnish"
-#~ msgstr "Dansk"
-
-#, fuzzy
-#~ msgid "Irish"
-#~ msgstr "Mod computeren"
-
-#, fuzzy
-#~ msgid "Increases Bombing damage"
-#~ msgstr "IP adressse eller computernavn"
-
-#~ msgid "Formation speed limiting OFF"
-#~ msgstr "Formation FRA"
-
-#~ msgid "Formation speed limiting ON"
-#~ msgstr "Formation TIL"
-
-#~ msgid "Stop Multiplayer Audio"
-#~ msgstr "Stop flerbruger lyd"
-
-#~ msgid "Skirmish"
-#~ msgstr "Mod computeren"
-
-#, fuzzy
-#~ msgid "Basque"
-#~ msgstr "Base"
-
-#, fuzzy
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Command turret MkII"
-#~ msgstr "Kommandotårn"
-
-#, fuzzy
-#~ msgid "Command turret MkIV"
-#~ msgstr "Kommandotårn"
-
-#, fuzzy
-#~ msgid "Cursor Mode"
-#~ msgstr "Indsalmet energi"
-
-#, fuzzy
-#~ msgid "Hardware"
-#~ msgstr "Svær"
-
-#, fuzzy
-#~ msgid "Viper Repair Half-track"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Cobra Command Turret Half-track"
-#~ msgstr "Kommandotårn"
-
-#, fuzzy
-#~ msgid "Python Commander Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "HMG Cobra Half-tracks"
-#~ msgstr "Vælg alle halv-bælter"
-
-#, fuzzy
-#~ msgid "Commander Python Tracks"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Fast Fire Mini-Pods"
-#~ msgstr "Vælg alle halv-bælter"
-
-#~ msgid "Energy bars display toggled"
-#~ msgstr "Energibar slået til/fra"
-
-#, fuzzy
-#~ msgid "Whirlwind AATurret"
-#~ msgstr "Tårn"
-
-#, fuzzy
-#~ msgid "Viper Wheels Machinegun"
-#~ msgstr "Søger"
-
-#, fuzzy
-#~ msgid "Viper Tracks Machinegun"
-#~ msgstr "Søger"
-
-#, fuzzy
-#~ msgid "Python Tracks Lancer"
-#~ msgstr "Kommandører"
-
-#, fuzzy
-#~ msgid "Scorpion HPV VTOL"
-#~ msgstr "Score"
-
-#~ msgid "Full"
-#~ msgstr "Fuldskærm"
-
-#~ msgid "Minimal"
-#~ msgstr "Minimal"
-
-#~ msgid "Played"
-#~ msgstr "Antal spil"
-
-#~ msgid "Unit Rescued"
-#~ msgstr "Enhed reddet"
-
-#~ msgid "Units Rescued"
-#~ msgstr "Enheder reddet"
-
-#~ msgid "Unit Captured"
-#~ msgstr "Enhed fanget"
-
-#, fuzzy
-#~ msgid "Structure Captured"
-#~ msgstr "Bygning restoreret"
-
-#, fuzzy
-#~ msgid "Structure Destroyed"
-#~ msgstr "Bygning restoreret"
-
-#, fuzzy
-#~ msgid "Structure Infected"
-#~ msgstr "Bygning restoreret"
-
-#, fuzzy
-#~ msgid "Unit Infected"
-#~ msgstr "%d Enheder valgt"
-
-#, fuzzy
-#~ msgid "Select the Vehicle Propulsion icon"
-#~ msgstr "Fremdrift"
