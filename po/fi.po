@@ -1,24 +1,19 @@
-# Finnish translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Lartza <lartza@wippies.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-08 16:41+0000\n"
-"PO-Revision-Date: 2008-05-09 10:33+0000\n"
-"Last-Translator: Lartza <lartza@wippies.com>\n"
-"Language-Team: Finnish <fi@li.org>\n"
-"Language: fi\n"
+"POT-Creation-Date: 2020-03-08 16:36+0000\n"
+"PO-Revision-Date: 2020-03-08 17:30\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Finnish\n"
+"Language: fi_FI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: fi\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -4018,9 +4013,8 @@ msgid "All rockets upgraded automatically"
 msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:394
-#, fuzzy
 msgid "Return to LZ"
-msgstr "Palaa tukikohtaan"
+msgstr ""
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -5489,9 +5483,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Komentajat (F6)"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -5500,9 +5493,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Komentajat (F6)"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5541,9 +5533,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Etsitään"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5653,20 +5644,18 @@ msgid "Enter password here"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -5675,14 +5664,13 @@ msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:2201
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -6150,9 +6138,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:476
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Uusi kampanja"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -6795,9 +6782,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.AutoRepair.name
 #: po/custom/fromJson.txt:910
-#, fuzzy
 msgid "Auto Repair"
-msgstr "Palaa korjaukseen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Autorepair-General.name
@@ -7070,9 +7056,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1151
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Uusi kampanja"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7555,9 +7540,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1475
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Komentajat (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7656,17 +7640,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text
 #: po/custom/fromJson.txt:1533
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:1537
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -7884,9 +7866,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text
 #: po/custom/fromJson.txt:1693
-#, fuzzy
 msgid "Cyborg Transport Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Transport.name
@@ -8489,9 +8470,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2112
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Uusi kampanja"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -8601,8 +8581,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2177
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -8610,8 +8589,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2180
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -8630,8 +8608,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2189
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -8640,8 +8617,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2193
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -9963,9 +9939,8 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_ENGIN2.text
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:3099
-#, fuzzy
 msgid "Increases construction speed"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text
@@ -10159,9 +10134,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3299
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Komentajat (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -11166,9 +11140,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text
 #. ... + 7 refs
 #: po/custom/fromJson.txt:3962
-#, fuzzy
 msgid "New Base Structure Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text
@@ -11203,9 +11176,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS1.text
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4023
-#, fuzzy
 msgid "New Laser Weapon Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text
@@ -11213,9 +11185,8 @@ msgstr "Laukaise kuljetus"
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text
 #: po/custom/fromJson.txt:4029
-#, fuzzy
 msgid "New Missile Turret Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text
@@ -11267,9 +11238,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text
 #. ... + 5 refs
 #: po/custom/fromJson.txt:4064
-#, fuzzy
 msgid "New Propulsion Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text
@@ -11309,9 +11279,8 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text
 #. ... + 9 refs
 #: po/custom/fromJson.txt:4104
-#, fuzzy
 msgid "New Rocket Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text
@@ -11319,23 +11288,20 @@ msgstr "Laukaise kuljetus"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text
 #: po/custom/fromJson.txt:4110
-#, fuzzy
 msgid "New SAM Turret Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text
 #: po/custom/fromJson.txt:4113
-#, fuzzy
 msgid "New System Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4116
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text
@@ -11350,9 +11316,8 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text
 #. ... + 6 refs
 #: po/custom/fromJson.txt:4126
-#, fuzzy
 msgid "New Systems Tower Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text
@@ -11558,9 +11523,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4270
-#, fuzzy
 msgid "Original Campaign"
-msgstr "Uusi kampanja"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
@@ -11768,9 +11732,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text
 #: po/custom/fromJson.txt:4386
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text
@@ -12071,9 +12034,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text
 #: po/custom/fromJson.txt:4577
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
@@ -12117,9 +12079,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4620
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Komentajat (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12147,9 +12108,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RFU4.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text
 #: po/custom/fromJson.txt:4643
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12264,16 +12224,14 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RU4.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RU7.text
 #: po/custom/fromJson.txt:4731
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text
 #: po/custom/fromJson.txt:4734
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -13001,25 +12959,22 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text
 #: po/custom/fromJson.txt:5223
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:5226
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
 #. data/mp/stats/templates.json: $.SuperTransport.name
 #: po/custom/fromJson.txt:5230
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -13315,31 +13270,27 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_CY_AH4.text
 #: po/custom/fromJson.txt:5417
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Lämpöpanssari"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text
 #: po/custom/fromJson.txt:5420
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Lämpöpanssari"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text
 #. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text
 #: po/custom/fromJson.txt:5424
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Lämpöpanssari"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text
 #: po/custom/fromJson.txt:5427
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Lämpöpanssari"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
@@ -13661,9 +13612,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text
 #: po/custom/fromJson.txt:5632
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text
@@ -13770,9 +13720,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_EN10.text
 #. data/mp/messages/resmessages3.json: $.RES_V_EN7.text
 #: po/custom/fromJson.txt:5715
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -14378,10 +14327,9 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6095
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "Eliitti"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
@@ -14395,19 +14343,17 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6103
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Sankari"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6107
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "Ammattilainen"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
@@ -14445,14 +14391,12 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6127
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Veteraani"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -14490,9 +14434,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Tallenna peli"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -14559,9 +14502,8 @@ msgid "Play in fullscreen mode"
 msgstr "Pelaa kokoruudussa"
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
@@ -14598,9 +14540,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -14608,9 +14549,8 @@ msgid "savegame"
 msgstr ""
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -14673,9 +14613,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "Tallenna peli"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -14686,9 +14625,8 @@ msgid "test"
 msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -14703,9 +14641,8 @@ msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Poistu pelistä"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -14741,15 +14678,13 @@ msgstr ""
 
 #: src/design.cpp:586
 #: src/design.cpp:626
-#, fuzzy
 msgid "Kinetic Armour"
-msgstr "Kineettinen panssari"
+msgstr ""
 
 #: src/design.cpp:595
 #: src/design.cpp:636
-#, fuzzy
 msgid "Thermal Armour"
-msgstr "Lämpöpanssari"
+msgstr ""
 
 #: src/design.cpp:604
 #: src/design.cpp:645
@@ -14863,14 +14798,12 @@ msgid "Store Design"
 msgstr ""
 
 #: src/display3d.cpp:676
-#, fuzzy
 msgid "Player left"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/display3d.cpp:680
-#, fuzzy
 msgid "Player dropped"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/display3d.cpp:684
 #: src/multiint.cpp:2060
@@ -14891,14 +14824,14 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
@@ -14943,14 +14876,12 @@ msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
 #: src/frontend.cpp:146
-#, fuzzy
 msgid "Single Player"
-msgstr "Yksinpelikampanja"
+msgstr ""
 
 #: src/frontend.cpp:147
-#, fuzzy
 msgid "Multi Player"
-msgstr "Moninpelikampanja"
+msgstr ""
 
 #: src/frontend.cpp:148
 #: src/frontend.cpp:309
@@ -14973,14 +14904,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Jatka peliä"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -15055,14 +14984,12 @@ msgid "Challenges"
 msgstr ""
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Lataa kampanja"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -15079,15 +15006,13 @@ msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -15121,20 +15046,17 @@ msgstr ""
 
 #: src/frontend.cpp:684
 #: src/ingameop.cpp:482
-#, fuzzy
 msgid "Video Options"
-msgstr "Peliasetukset"
+msgstr ""
 
 #: src/frontend.cpp:685
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "Peliasetukset"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
-#, fuzzy
 msgid "Mouse Options"
-msgstr "Peliasetukset"
+msgstr ""
 
 #: src/frontend.cpp:687
 #: src/ingameop.cpp:494
@@ -15193,9 +15115,8 @@ msgid "On"
 msgstr "Päällä"
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Rotating"
-msgstr "latina"
+msgstr ""
 
 #: src/frontend.cpp:768
 msgid "Fixed"
@@ -15240,9 +15161,8 @@ msgid "Radar Jump"
 msgstr ""
 
 #: src/frontend.cpp:812
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr ""
 
 #: src/frontend.cpp:906
 msgid "Disabled"
@@ -15298,9 +15218,8 @@ msgstr ""
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -15319,9 +15238,8 @@ msgid "Resolution*"
 msgstr "Resoluutio*"
 
 #: src/frontend.cpp:1142
-#, fuzzy
 msgid "Resolution"
-msgstr "Resoluutio*"
+msgstr ""
 
 #: src/frontend.cpp:1147
 msgid "Display Scale*"
@@ -15349,18 +15267,16 @@ msgid "Vertical sync"
 msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "italia"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
 #: src/frontend.cpp:1260
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr ""
 
 #: src/frontend.cpp:1547
 msgid "Middle Mouse"
@@ -15375,9 +15291,8 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Tallenna peli"
+msgstr ""
 
 #: src/frontend.cpp:1561
 msgid "Camera Pitch"
@@ -15395,9 +15310,8 @@ msgstr ""
 
 #: src/frontend.cpp:1585
 #: src/ingameop.cpp:710
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "Peliasetukset"
+msgstr ""
 
 #: src/frontend.cpp:1590
 #: src/ingameop.cpp:715
@@ -15411,14 +15325,12 @@ msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Vieritysnopeus"
+msgstr ""
 
 #: src/frontend.cpp:1602
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "PELIASETUKSET"
+msgstr ""
 
 #: src/frontend.cpp:1678
 #: src/multiint.cpp:223
@@ -15446,9 +15358,8 @@ msgstr "Kieli"
 
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Vaikeustaso"
+msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
@@ -15462,15 +15373,13 @@ msgstr ""
 
 #: src/frontend.cpp:1744
 #: src/frontend.cpp:1780
-#, fuzzy
 msgid "Campaign"
-msgstr "Uusi kampanja"
+msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Moninpelikampanja"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -15485,9 +15394,8 @@ msgstr ""
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "Peli tallennettu"
+msgstr ""
 
 #: src/hci.cpp:1566
 #, c-format
@@ -15528,14 +15436,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -15548,13 +15454,11 @@ msgid "Loop Production"
 msgstr "Jatkuva tuotanto"
 
 #: src/hci.cpp:3840
-#, fuzzy
 msgid "Ally progress"
-msgstr "Edistymispalkki"
+msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -15583,9 +15487,8 @@ msgstr ""
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Lopeta"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -15633,20 +15536,16 @@ msgid "View Key Mappings"
 msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Uusi kampanja"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Tallenna peli"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
@@ -15655,18 +15554,16 @@ msgid "Waiting for Power"
 msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "Edistymispalkki"
+msgstr ""
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -15955,9 +15852,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1483
-#, fuzzy
 msgid "Researched"
-msgstr "Tutki (F2)"
+msgstr ""
 
 #: src/keybind.cpp:1504
 msgid "Only displaying energy bars when selected"
@@ -16115,18 +16011,16 @@ msgid "Commanders"
 msgstr ""
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Tallenna peli"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr ""
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "Lataa peli"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -16505,14 +16399,12 @@ msgid "Select all Land Combat Units"
 msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Valitse kartta"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Laukaise kuljetus"
+msgstr ""
 
 #: src/keymap.cpp:442
 msgid "Select all Repair Tanks"
@@ -16624,9 +16516,8 @@ msgstr ""
 
 #: src/loop.cpp:253
 #: src/loop.cpp:269
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Lataa tallennettu peli"
+msgstr ""
 
 #: src/mission.cpp:1923
 msgid "Load Transport"
@@ -16664,9 +16555,8 @@ msgid "Load Saved Game"
 msgstr "Lataa tallennettu peli"
 
 #: src/mission.cpp:2425
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "Peli tallennettu"
+msgstr ""
 
 #: src/move.cpp:1981
 #, c-format
@@ -16730,9 +16620,8 @@ msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Komentajat (F6)"
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -16772,15 +16661,13 @@ msgid "Laser Satellite disabled."
 msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Omat rakennukset: %u"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Tallenna peli"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -16791,8 +16678,7 @@ msgid "Select Game Name"
 msgstr ""
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -16805,9 +16691,8 @@ msgid "Click to set Password"
 msgstr ""
 
 #: src/multiint.cpp:1270
-#, fuzzy
 msgid "Select Player Name"
-msgstr "Valitse pelaajan nimi"
+msgstr ""
 
 #: src/multiint.cpp:1290
 #: src/multimenu.cpp:759
@@ -16828,9 +16713,8 @@ msgstr ""
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "Omat rakennukset: %u"
+msgstr ""
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
@@ -16838,13 +16722,11 @@ msgid "Set Structure Limits"
 msgstr ""
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "Peliasetukset"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -16870,23 +16752,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Aloita ilman tukikohtaa"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Aloita ilman tukikohtaa"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -16905,23 +16784,20 @@ msgid "Team"
 msgstr ""
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Waiting for player"
 msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
@@ -16956,18 +16832,16 @@ msgid "Click to change player colour"
 msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -16983,9 +16857,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Tallenna peli"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -17056,9 +16929,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Pelaaja"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -17067,9 +16940,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Sulje"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -17169,11 +17041,11 @@ msgid "Any number of players"
 msgstr ""
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "Pelaajat"
-msgstr[1] "Pelaajat"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -17184,9 +17056,8 @@ msgid "Kills"
 msgstr ""
 
 #: src/multimenu.cpp:765
-#, fuzzy
 msgid "Units"
-msgstr "Yksikkö"
+msgstr ""
 
 #: src/multimenu.cpp:781
 msgid "Structs"
@@ -17268,9 +17139,8 @@ msgid " (Global)"
 msgstr ""
 
 #: src/multiplay.cpp:1248
-#, fuzzy
 msgid "(allies"
-msgstr "Liittoumat"
+msgstr ""
 
 #: src/multiplay.cpp:1256
 msgid "(private to "
@@ -17433,10 +17303,10 @@ msgid "Rookie: %u"
 msgstr ""
 
 #: src/scores.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Vihreä"
+msgstr ""
 
 #: src/scores.cpp:108
 #, c-format
@@ -17740,9 +17610,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Jatka peliä"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -17754,9 +17623,8 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
-#, fuzzy
 msgid "Cancel"
-msgstr "Syaani"
+msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -17805,194 +17673,3 @@ msgstr ""
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Tutki (F2)"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Tutki (F2)"
-
-#~ msgid "Select Map"
-#~ msgstr "Valitse kartta"
-
-#, fuzzy
-#~ msgid "Difficulty locked"
-#~ msgstr "Vaikeustaso"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Pelaaja"
-
-#, fuzzy
-#~ msgid "Unit"
-#~ msgstr "Yksikkö"
-
-#, fuzzy
-#~ msgid "Place Structures on map"
-#~ msgstr "Vihollisrakennukset: %u"
-
-#~ msgid "Exit Game"
-#~ msgstr "Poistu pelistä"
-
-#, fuzzy
-#~ msgid "Current Player:"
-#~ msgstr "Moninpelikampanja"
-
-#~ msgid "Screen Shake"
-#~ msgstr "Ruudn tärinä"
-
-#, fuzzy
-#~ msgid "Shaders"
-#~ msgstr "Varjot"
-
-#, fuzzy
-#~ msgid "MAP SAVED!"
-#~ msgstr "Peli tallennettu"
-
-#, fuzzy
-#~ msgid "Load Map File"
-#~ msgstr "Lataa peli"
-
-#, fuzzy
-#~ msgid "Save Map File"
-#~ msgstr "Tallenna peli"
-
-#, fuzzy
-#~ msgid "Start Edit Mode"
-#~ msgstr "Aloita ilman tukikohtaa"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Pelaaja"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "Pelaajat"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "Pelaajat"
-
-#~ msgid "Fog"
-#~ msgstr "Sumu"
-
-#, fuzzy
-#~ msgid "Player colour"
-#~ msgstr "Pelaaja"
-
-#, fuzzy
-#~ msgid "Kick player"
-#~ msgstr "Moninpelikampanja"
-
-#, fuzzy
-#~ msgid "Infinite Production"
-#~ msgstr "Jatkuva tuotanto"
-
-#, fuzzy
-#~ msgid "Player number"
-#~ msgstr "Pelaaja"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "Peli"
-
-#~ msgid "Danish"
-#~ msgstr "tanska"
-
-#~ msgid "German"
-#~ msgstr "saksa"
-
-#, fuzzy
-#~ msgid "Spanish"
-#~ msgstr "tanska"
-
-#, fuzzy
-#~ msgid "Finnish"
-#~ msgstr "tanska"
-
-#~ msgid "French"
-#~ msgstr "ranska"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "latina"
-
-#~ msgid "Norwegian"
-#~ msgstr "norja"
-
-#~ msgid "Dutch"
-#~ msgstr "hollanti"
-
-#, fuzzy
-#~ msgid "Polish"
-#~ msgstr "englanti"
-
-#, fuzzy
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "portugali"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "portugali"
-
-#~ msgid "Russian"
-#~ msgstr "venäjä"
-
-#, fuzzy
-#~ msgid "Hardware"
-#~ msgstr "Vaikea"
-
-#~ msgid "English"
-#~ msgstr "englanti"
-
-#, fuzzy
-#~ msgid "Basque"
-#~ msgstr "Tukikohta"
-
-#, fuzzy
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "norja"
-
-#, fuzzy
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "ruotsi"
-
-#~ msgid "Swedish"
-#~ msgstr "ruotsi"
