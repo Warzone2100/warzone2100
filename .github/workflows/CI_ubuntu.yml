@@ -1,6 +1,11 @@
 name: Ubuntu
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+  pull_request:
+    # Match all pull requests
 
 jobs:
   ubuntu-16-04-gcc:
