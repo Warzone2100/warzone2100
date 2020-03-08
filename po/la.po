@@ -1,24 +1,19 @@
-# Latin translations for warzone2100
-# Copyright (C) 2007 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Giel van Schijndel <me@mortis.eu>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-08 16:41+0000\n"
-"PO-Revision-Date: 2008-05-09 16:39+0000\n"
-"Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
+"POT-Creation-Date: 2020-03-08 16:36+0000\n"
+"PO-Revision-Date: 2020-03-08 17:29\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Latin\n"
-"Language: la\n"
+"Language: la_LA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: la-LA\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1528,15 +1523,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1545,15 +1538,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -2524,9 +2515,8 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:389
 #: data/mp/messages/strings/resstrings.txt:191
 #: po/custom/fromJson.txt:4708
-#, fuzzy
 msgid "Research Improved"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RU4.text
@@ -4042,9 +4032,8 @@ msgstr ""
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
 #: data/mp/multiplay/skirmish/rules.js:114
-#, fuzzy
 msgid "Research (F2)"
-msgstr "Invenio"
+msgstr ""
 
 #: data/base/script/rules.js:109
 #: data/base/script/tutorial.js:217
@@ -4058,9 +4047,8 @@ msgstr ""
 #: data/base/script/tutorial.js:264
 #: data/base/script/tutorial.js:354
 #: data/mp/multiplay/skirmish/rules.js:126
-#, fuzzy
 msgid "Build (F3)"
-msgstr "Construo"
+msgstr ""
 
 #: data/base/script/rules.js:121
 #: data/base/script/tutorial.js:277
@@ -5296,9 +5284,8 @@ msgid "Heavy Machinegun Tower"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:405
-#, fuzzy
 msgid "Flamer Tower"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower5.name
@@ -5306,9 +5293,8 @@ msgstr "Vigor"
 #. data/mp/stats/structure.json: $.GuardTower5.name
 #: data/mp/messages/strings/names.txt:406
 #: po/custom/fromJson.txt:3377
-#, fuzzy
 msgid "Lancer Tower"
-msgstr "Vigor"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:428
 msgid "Advanced Manufacturing Mk3"
@@ -5547,9 +5533,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Invenio"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5664,15 +5649,13 @@ msgid "Could not open required port (%s) on  (%s)"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -5687,8 +5670,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -5738,9 +5720,8 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_AAAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAAC3.text
 #: po/custom/fromJson.txt:40
-#, fuzzy
 msgid "AA accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
@@ -5815,9 +5796,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text
 #: po/custom/fromJson.txt:83
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
@@ -5865,9 +5845,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text
 #: po/custom/fromJson.txt:117
-#, fuzzy
 msgid "AA reload time -15%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -5997,17 +5976,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:219
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RFU7.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text
 #: po/custom/fromJson.txt:223
-#, fuzzy
 msgid "Advanced repair techniques"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_VS3.text
@@ -7110,18 +7087,16 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_BAC3.text
 #: po/custom/fromJson.txt:1194
-#, fuzzy
 msgid "Bomb damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BAC1.text
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_BAC3.text
 #: po/custom/fromJson.txt:1203
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHvyMortarHalftrack.name
@@ -7262,9 +7237,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #: po/custom/fromJson.txt:1287
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
@@ -7292,9 +7266,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text
 #: po/custom/fromJson.txt:1304
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireCan.name
@@ -7350,9 +7323,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_ROF4.text
 #: po/custom/fromJson.txt:1337
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CannonTower.name
@@ -7367,9 +7339,8 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text
 #. ... + 11 refs
 #: po/custom/fromJson.txt:1347
-#, fuzzy
 msgid "Cannon Upgrade"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-CBTurret01.name
@@ -7384,9 +7355,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_SY_CBSU3.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1357
-#, fuzzy
 msgid "CB Sensor Improved"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Tower01.name
@@ -7394,9 +7364,8 @@ msgstr "Invenio"
 #. data/mp/stats/research.json: $.R-Sys-CBSensor-Tower01.name
 #. data/mp/stats/structure.json: $.Sys-CB-Tower01.name
 #: po/custom/fromJson.txt:1363
-#, fuzzy
 msgid "CB Tower"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Turret01.name
@@ -7571,9 +7540,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1475
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7672,17 +7640,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text
 #: po/custom/fromJson.txt:1533
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:1537
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -8213,9 +8179,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
 #: po/custom/fromJson.txt:1910
-#, fuzzy
 msgid "Extends Sensor Range"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text
@@ -8414,16 +8379,14 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_FL_D4.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_FL_D7.text
 #: po/custom/fromJson.txt:2040
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text
 #: po/custom/fromJson.txt:2051
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
@@ -8618,8 +8581,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2177
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -8627,8 +8589,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2180
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -8647,8 +8608,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2189
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -8657,8 +8617,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2193
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -8914,23 +8873,20 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2349
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2352
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2355
-#, fuzzy
 msgid "HE Rockets"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
@@ -9545,9 +9501,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2784
-#, fuzzy
 msgid "Hover AI"
-msgstr "Heros"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
@@ -9572,17 +9527,15 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.hover01.name
 #. data/mp/stats/propulsion.json: $.hover01.name
 #: po/custom/fromJson.txt:2801
-#, fuzzy
 msgid "Hover"
-msgstr "Heros"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text
 #: po/custom/fromJson.txt:2805
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
@@ -9609,9 +9562,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text
 #: po/custom/fromJson.txt:2821
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
@@ -9623,9 +9575,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text
 #: po/custom/fromJson.txt:2834
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HowitzerMk1.name
@@ -9633,9 +9584,8 @@ msgstr "Vigor"
 #. data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 #: po/custom/fromJson.txt:2846
-#, fuzzy
 msgid "Howitzer"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
@@ -9966,18 +9916,16 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #: po/custom/fromJson.txt:3085
-#, fuzzy
 msgid "Increases Cannon accuracy"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text
 #. data/base/messages/resmessages12.json: $.RES_W_CN_D4.text
 #. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text
 #: po/custom/fromJson.txt:3090
-#, fuzzy
 msgid "Increases Cannon damage"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text
@@ -9991,9 +9939,8 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_ENGIN2.text
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text
 #: po/custom/fromJson.txt:3099
-#, fuzzy
 msgid "Increases construction speed"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text
@@ -10004,16 +9951,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text
 #: po/custom/fromJson.txt:3152
-#, fuzzy
 msgid "Increases Laser accuracy"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text
 #: po/custom/fromJson.txt:3155
-#, fuzzy
 msgid "Increases Laser damage"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text
@@ -10024,9 +9969,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text
 #: po/custom/fromJson.txt:3172
-#, fuzzy
 msgid "Increases Mini-Rocket accuracy"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_ROF1.text
@@ -10038,16 +9982,14 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text
 #: po/custom/fromJson.txt:3183
-#, fuzzy
 msgid "Increases Missile accuracy"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_D1.text
 #: po/custom/fromJson.txt:3186
-#, fuzzy
 msgid "Increases Missile damage"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_ROF1.text
@@ -10061,9 +10003,8 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_W_M_AC2.text
 #. data/base/messages/resmessages3.json: $.RES_W_M_AC3.text
 #: po/custom/fromJson.txt:3195
-#, fuzzy
 msgid "Increases Mortar accuracy"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text
@@ -10075,16 +10016,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:3206
-#, fuzzy
 msgid "Increases Rail Gun accuracy"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:3209
-#, fuzzy
 msgid "Increases Rail Gun damage"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
@@ -10097,9 +10036,8 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
 #: po/custom/fromJson.txt:3228
-#, fuzzy
 msgid "Increases Rocket accuracy"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_ROF1.text
@@ -10190,9 +10128,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.ECM1PylonMk1.name
 #: po/custom/fromJson.txt:3296
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
@@ -10368,16 +10305,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text
 #: po/custom/fromJson.txt:3403
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text
 #: po/custom/fromJson.txt:3406
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BAC2.text
@@ -10401,9 +10336,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASROF1.text
 #: po/custom/fromJson.txt:3419
-#, fuzzy
 msgid "Laser reload time -15%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-LasSat.name
@@ -10419,9 +10353,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:3430
-#, fuzzy
 msgid "Laser Upgrade"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Laseropticslab.name
@@ -10596,18 +10529,16 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_MG_D5.text
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3546
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_MG_ROF2.text
 #. data/mp/messages/resmessages23.json: $.RES_W_MG_ROF3.text
 #: po/custom/fromJson.txt:3551
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtMGHalfTracks.name
@@ -10687,9 +10618,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text
 #: po/custom/fromJson.txt:3629
-#, fuzzy
 msgid "Mechanic with repair ability"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body05.name
@@ -10832,9 +10762,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLHalfTracks.name
 #: po/custom/fromJson.txt:3710
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLWheels.name
@@ -10846,9 +10775,8 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Rocket02-MRL.name
 #. data/mp/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3717
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
@@ -10909,16 +10837,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-Tower06.name
 #. data/mp/stats/structure.json: $.GuardTower6.name
 #: po/custom/fromJson.txt:3752
-#, fuzzy
 msgid "Mini-Rocket Tower"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
 #: po/custom/fromJson.txt:3761
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperPODWheels.name
@@ -10931,9 +10857,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC2.text
 #: po/custom/fromJson.txt:3769
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text
@@ -10945,9 +10870,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text
 #: po/custom/fromJson.txt:3776
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Missile.name
@@ -10961,9 +10885,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_SMS_ROF1.text
 #: po/custom/fromJson.txt:3785
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text
@@ -10971,9 +10894,8 @@ msgstr "Vigor"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_D1.text
 #. ... + 7 refs
 #: po/custom/fromJson.txt:3797
-#, fuzzy
 msgid "Missile Upgrade"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_ROF1.text
@@ -11009,9 +10931,8 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_M_AC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_M_AC3.text
 #: po/custom/fromJson.txt:3819
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
@@ -11045,9 +10966,8 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text
 #. data/mp/messages/resmessages2.json: $.RES_W_M_D4.text
 #: po/custom/fromJson.txt:3839
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
@@ -11069,9 +10989,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_M_ROF4.text
 #: po/custom/fromJson.txt:3853
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
@@ -11713,9 +11632,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text
 #: po/custom/fromJson.txt:4331
-#, fuzzy
 msgid "Plasmite Flame-thrower"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-PlasmiteFlamer.name
@@ -11787,9 +11705,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text
 #: po/custom/fromJson.txt:4371
-#, fuzzy
 msgid "Power Module Available"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-PowerModuleMk1.name
@@ -11797,9 +11714,8 @@ msgstr "Vigor Adquirāvi"
 #. data/mp/stats/research.json: $.R-Struc-PowerModuleMk1.name
 #. data/mp/stats/structure.json: $.A0PowMod1.name
 #: po/custom/fromJson.txt:4377
-#, fuzzy
 msgid "Power Module"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text
@@ -11816,9 +11732,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text
 #: po/custom/fromJson.txt:4386
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text
@@ -11829,9 +11744,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4392
-#, fuzzy
 msgid "Powerlab"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text
@@ -11892,9 +11806,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
 #: po/custom/fromJson.txt:4442
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Pulse.name
@@ -11905,9 +11818,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PantherHoverPulseLas.name
 #: po/custom/fromJson.txt:4448
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonPulseTracks.name
@@ -11918,9 +11830,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverPulseLas.name
 #: po/custom/fromJson.txt:4454
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerPulseTracks.name
@@ -11932,9 +11843,8 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-PulseLas.name
 #. data/mp/stats/structure.json: $.GuardTower-BeamLas.name
 #: po/custom/fromJson.txt:4461
-#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPulseTracks.name
@@ -11999,16 +11909,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:4506
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:4509
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail2.name
@@ -12042,9 +11950,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:4529
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
@@ -12079,9 +11986,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4550
-#, fuzzy
 msgid "Rail Gun Upgrade"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun02.name
@@ -12128,9 +12034,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text
 #: po/custom/fromJson.txt:4577
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
@@ -12203,9 +12108,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RFU4.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text
 #: po/custom/fromJson.txt:4643
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12282,9 +12186,8 @@ msgstr ""
 #. data/base/stats/structure.json: $.A0ResearchFacility.name
 #. data/mp/stats/structure.json: $.A0ResearchFacility.name
 #: po/custom/fromJson.txt:4702
-#, fuzzy
 msgid "Research Facility"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text
@@ -12297,9 +12200,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text
 #: po/custom/fromJson.txt:4716
-#, fuzzy
 msgid "Research Module Available"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text
@@ -12314,25 +12216,22 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Research-Module.name
 #. data/mp/stats/structure.json: $.A0ResearchModule1.name
 #: po/custom/fromJson.txt:4726
-#, fuzzy
 msgid "Research Module"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text
 #. data/mp/messages/resmessages2.json: $.RES_ST_RU4.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_RU7.text
 #: po/custom/fromJson.txt:4731
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text
 #: po/custom/fromJson.txt:4734
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -12439,9 +12338,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 #: po/custom/fromJson.txt:4799
-#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade02.name
@@ -12484,9 +12382,8 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
 #: po/custom/fromJson.txt:4830
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text
@@ -12529,9 +12426,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text
 #. data/mp/messages/resmessages2.json: $.RES_W_SRK_D4.text
 #: po/custom/fromJson.txt:4856
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
@@ -12558,9 +12454,8 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text
 #: po/custom/fromJson.txt:4872
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text
@@ -12828,23 +12723,20 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text
 #: po/custom/fromJson.txt:5043
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text
 #: po/custom/fromJson.txt:5046
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text
 #: po/custom/fromJson.txt:5049
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
@@ -12871,16 +12763,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
 #: po/custom/fromJson.txt:5071
-#, fuzzy
 msgid "Sensor Upgrade Mk2"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade03.name
 #: po/custom/fromJson.txt:5074
-#, fuzzy
 msgid "Sensor Upgrade Mk3"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
@@ -12895,9 +12785,8 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text
 #: po/custom/fromJson.txt:5084
-#, fuzzy
 msgid "Sensors Improved"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MdArtMissile.name
@@ -13051,9 +12940,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
 #: po/custom/fromJson.txt:5178
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Vigor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Sunburst.name
@@ -13248,9 +13136,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG5.text
 #: po/custom/fromJson.txt:5340
-#, fuzzy
 msgid "Systems Research Completed"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyA-Trocket.name
@@ -13551,9 +13438,8 @@ msgstr ""
 #. data/base/stats/templates.json: $.BarbarianTrike.name
 #. data/mp/stats/templates.json: $.BarbarianTrike.name
 #: po/custom/fromJson.txt:5519
-#, fuzzy
 msgid "Trike"
-msgstr "Exercitum"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
@@ -13726,9 +13612,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text
 #: po/custom/fromJson.txt:5632
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text
@@ -13835,9 +13720,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_EN10.text
 #. data/mp/messages/resmessages3.json: $.RES_V_EN7.text
 #: po/custom/fromJson.txt:5715
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -13879,9 +13763,8 @@ msgstr ""
 #. data/base/stats/body.json: $.Body10MBT.name
 #. data/mp/stats/body.json: $.Body10MBT.name
 #: po/custom/fromJson.txt:5743
-#, fuzzy
 msgid "Vengeance"
-msgstr "Veteranum"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text
@@ -14334,9 +14217,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG6.text
 #: po/custom/fromJson.txt:6030
-#, fuzzy
 msgid "Weapon Research Completed"
-msgstr "Invenio"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_W1.text
@@ -14461,10 +14343,9 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6103
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Heros"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
@@ -14502,23 +14383,20 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6123
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "Exercitum"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:6127
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Veteranum"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -15542,9 +15420,8 @@ msgstr ""
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
 #: src/multimenu.cpp:770
-#, fuzzy
 msgid "Power"
-msgstr "Vigor"
+msgstr ""
 
 #: src/hci.cpp:3007
 msgid "Progress Bar"
@@ -15559,14 +15436,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -15583,8 +15458,7 @@ msgid "Ally progress"
 msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -15671,9 +15545,7 @@ msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
@@ -15690,9 +15562,8 @@ msgid "Construction Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Invenio"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -15721,9 +15592,8 @@ msgstr ""
 
 #: src/intorder.cpp:166
 #: src/keymap.cpp:396
-#, fuzzy
 msgid "Short Range"
-msgstr "Vigor Adquirāvi"
+msgstr ""
 
 #: src/intorder.cpp:167
 #: src/keymap.cpp:402
@@ -15824,9 +15694,8 @@ msgid "Assign VTOL Factory Production"
 msgstr ""
 
 #: src/intorder.cpp:188
-#, fuzzy
 msgid "Circle"
-msgstr "Exercitum"
+msgstr ""
 
 #: src/keybind.cpp:123
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -15983,9 +15852,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1483
-#, fuzzy
 msgid "Researched"
-msgstr "Invenio"
+msgstr ""
 
 #: src/keybind.cpp:1504
 msgid "Only displaying energy bars when selected"
@@ -16123,14 +15991,12 @@ msgid "Manufacture"
 msgstr ""
 
 #: src/keymap.cpp:298
-#, fuzzy
 msgid "Research"
-msgstr "Invenio"
+msgstr ""
 
 #: src/keymap.cpp:299
-#, fuzzy
 msgid "Build"
-msgstr "Construo"
+msgstr ""
 
 #: src/keymap.cpp:300
 msgid "Design"
@@ -16719,9 +16585,9 @@ msgid "%s Gives You Technology Documents"
 msgstr ""
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s tibi visibilitatem relatum dāt"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -16812,8 +16678,7 @@ msgid "Select Game Name"
 msgstr ""
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -16861,8 +16726,7 @@ msgid "Random Game Options"
 msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17309,9 +17173,8 @@ msgid "Beacon received from %s!"
 msgstr ""
 
 #: src/multiplay.cpp:1894
-#, fuzzy
 msgid "Green"
-msgstr "Viridum"
+msgstr ""
 
 #: src/multiplay.cpp:1895
 msgid "Orange"
@@ -17322,9 +17185,8 @@ msgid "Grey"
 msgstr "Canum"
 
 #: src/multiplay.cpp:1898
-#, fuzzy
 msgid "Red"
-msgstr "Rubrum"
+msgstr ""
 
 #: src/multiplay.cpp:1899
 msgid "Blue"
@@ -17441,10 +17303,10 @@ msgid "Rookie: %u"
 msgstr ""
 
 #: src/scores.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Viridum"
+msgstr ""
 
 #: src/scores.cpp:108
 #, c-format
@@ -17811,30 +17673,3 @@ msgstr ""
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Invenio"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Invenio"
-
-#, fuzzy
-#~ msgid "Tile"
-#~ msgstr "Exercitum"
-
-#, fuzzy
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "Vigor"
-
-#, fuzzy
-#~ msgid "Power Accrued"
-#~ msgstr "Vigor Adquirāvi"
-
-#, fuzzy
-#~ msgid "German"
-#~ msgstr "Veteranum"
-
-#, fuzzy
-#~ msgid "Cursor Mode"
-#~ msgstr "Vigor Adquirāvi"
