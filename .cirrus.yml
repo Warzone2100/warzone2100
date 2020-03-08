@@ -2,6 +2,7 @@
 # See: https://cirrus-ci.org; https://cirrus-ci.org/guide/FreeBSD/
 
 freebsd_build_task:
+  only_if: $CIRRUS_PR != '' || ! $CIRRUS_BRANCH =~ 'l10n_.*'
 
   freebsd_instance:
     # See the list of available FreeBSD image families here: https://cirrus-ci.org/guide/FreeBSD/
