@@ -18,6 +18,12 @@ CXXFLAGS="${CXXFLAGS} -std=c++11"
 # Make cross compilation options available in --help
 AC_CANONICAL_HOST
 
+# This build toolchain is deprecated - please switch to CMake
+AC_ARG_ENABLE([promise-to-use-cmake],
+	AS_HELP_STRING([--enable-promise-to-use-cmake], [Bypass deprecation notice (for now)]),
+	[ AC_MSG_WARN([*** This build toolchain is deprecated (and will be removed) - please move to the CMake build toolchain. (Ignoring deprecation, for now.) ***]) ],
+	[ AC_MSG_ERROR([*** This build toolchain is deprecated (and will be removed) - please use the CMake build toolchain. (If you really want to ignore this for now, specify: --enable-promise-to-use-cmake) ***]) ])
+
 # Checks for programs.
 AC_PROG_CC_STDC
 AC_CHECK_PROG(CCOMPILER, ${CC}, ccompiler)
