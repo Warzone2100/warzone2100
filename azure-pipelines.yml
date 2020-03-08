@@ -8,6 +8,8 @@ trigger:
     include:
     - '*'
     - refs/tags/*
+    exclude:
+    - l10n_*
 
 jobs:
 - template: .ci/azure/templates/macos-build-pipeline-template.yml

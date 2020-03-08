@@ -1,3 +1,6 @@
+branches:
+  except:
+  - /^l10n_.*$/
 matrix:
   include:
     # Build for Ubuntu 16.04 (Makefile) (GCC)
