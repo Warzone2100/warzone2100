@@ -1,24 +1,19 @@
-# Romanian translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Bogdan Ivanov <bogdan.i.ivanov@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-07 03:38+0000\n"
-"PO-Revision-Date: 2011-10-06 11:22+0200\n"
-"Last-Translator: Adrian Mos <adimosh@live.com>\n"
-"Language-Team: Romanian <ro@li.org>\n"
-"Language: ro\n"
+"POT-Creation-Date: 2020-03-07 02:42+0000\n"
+"PO-Revision-Date: 2020-03-08 14:46\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Romanian\n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n == 1 ? 0: (((n % 100 > 19) || ((n % 100 == 0) && (n != 0))) ? 2: 1));\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: ro\n"
+"X-Crowdin-File: /translation_integration/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1197,7 +1192,7 @@ msgstr "Demolează"
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:4518
 msgid "Naval"
-msgstr "Naval"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -1530,15 +1525,13 @@ msgstr "Îmbunătățire a senzorilor AB"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "Îmbunătățire a senzorilor AB 2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "Îmbunătățire a senzorilor AB 3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1547,15 +1540,13 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "Îmbunătățire a senzorilor AB 2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "Îmbunătățire a senzorilor AB 3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -4875,9 +4866,8 @@ msgstr "Cercetare (F2)"
 #: data/base/script/tutorial.js:217
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "Modulul de cercetare extinde centrele de cercetare"
+msgstr ""
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4965,9 +4955,8 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "Această pompă este deocamdată inactivă. Construiește o centrală electrică pentru a transforma petrolul în energie"
 
 #: data/base/script/tutorial.js:34
-#, fuzzy
 msgid "Left click the flashing build icon"
-msgstr "Click pe pictograma CONSTRUCȚIE care pâlpâie"
+msgstr ""
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -6352,9 +6341,8 @@ msgid "INSANE"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
-#, fuzzy
 msgid "Personality change successful."
-msgstr "Transferul de control a avut succes."
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
@@ -6373,9 +6361,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Cercetare"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -6394,14 +6381,12 @@ msgid "Sorry, droid transfer failed."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "Centrală electrică"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
-#, fuzzy
 msgid "Please put a beacon!"
-msgstr "Lasă o baliză"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
@@ -6443,9 +6428,8 @@ msgstr "Echipe blocate"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "Modul „Echipe Blocate” activat"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
@@ -6488,20 +6472,18 @@ msgid "Enter password here"
 msgstr "Introdu parola aici"
 
 #: lib/netplay/netplay.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "Nu s-a putut găsi numele server-ului (%s)!"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -6515,13 +6497,12 @@ msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nu s-a putut găsi numele server-ului (%s)!"
 
 #: lib/netplay/netplay.cpp:2225
-#, fuzzy, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+#, c-format
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Eroare la conexiunea la server: %s. Asigurați-vă că portul %d poate prini conexiuni. Dacă folosiți un router, configurați-l să folosească UPnP, sau să redirecționeze portul spre sistemul dvs."
+msgstr ""
 
 #: lib/netplay/netplay.cpp:2923
 msgid "Failed to get a lobby response!"
@@ -6643,9 +6624,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text
 #: po/custom/fromJson.txt:83
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Puterea aruncătoarelor de flăcări +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
@@ -6693,9 +6673,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text
 #: po/custom/fromJson.txt:117
-#, fuzzy
 msgid "AA reload time -15%"
-msgstr "Timp de încărcare laser -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6845,9 +6824,8 @@ msgstr "Sisteme de recunoaștere a țintei avansate"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text
 #: po/custom/fromJson.txt:239
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "Producție DAV avansată"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade05.name
@@ -6872,9 +6850,8 @@ msgstr "Producție DAV avansată"
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Advmaterialslab.name
 #: po/custom/fromJson.txt:253
-#, fuzzy
 msgid "Advancedmaterialslab"
-msgstr "Materiale de construcție avansate"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
@@ -6923,9 +6900,8 @@ msgstr "Toți senzorii AB îmbunătățiți instantaneu"
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text
 #: po/custom/fromJson.txt:372
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "Toate fabricile DAV îmbunătățite automat"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text
@@ -6970,9 +6946,8 @@ msgstr "Toate generatoarele îmbunătățite instantaneu"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:481
-#, fuzzy
 msgid "All rail guns upgraded automatically"
-msgstr "Toate mitralierele îmbunătățite instantaneu."
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text
@@ -7015,9 +6990,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:612
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Campanie nouă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -7134,9 +7108,8 @@ msgstr "Rachetă Arhanghel"
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text
 #: po/custom/fromJson.txt:687
-#, fuzzy
 msgid "Armed with Cyborg assault gun"
-msgstr "Înarmat cu Mitralieră de Asalt pentru Cyborgi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text
@@ -7162,30 +7135,26 @@ msgstr "Înarmat cu mitralieră pentru cyborgi"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_PLAS.text
 #: po/custom/fromJson.txt:702
-#, fuzzy
 msgid "Armed with Cyborg Pulse Laser"
-msgstr "Înarmat cu aruncător de flăcări pentru cyborgi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_RG.text
 #: po/custom/fromJson.txt:705
-#, fuzzy
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Înarmat cu Mitralieră de Asalt pentru Cyborgi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AT.text
 #: po/custom/fromJson.txt:708
-#, fuzzy
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Înarmat cu Mitralieră de Asalt pentru Cyborgi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text
 #: po/custom/fromJson.txt:711
-#, fuzzy
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Înarmat cu aruncător de flăcări pentru cyborgi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text
@@ -7211,9 +7180,8 @@ msgstr "Înarmat cu grenade"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_HPV.text
 #: po/custom/fromJson.txt:726
-#, fuzzy
 msgid "Armed with hyper velocity cannon"
-msgstr "Bloc ranforsat cu tun cu hiper-velocitate"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text
@@ -7248,9 +7216,8 @@ msgstr "Înarmat cu tun mediu"
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_RL1.text
 #. data/mp/messages/resmessages3.json: $.RES_CYW_RL1.text
 #: po/custom/fromJson.txt:747
-#, fuzzy
 msgid "Armed with Needle Gun"
-msgstr "Înarmat cu grenade"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text
@@ -7264,9 +7231,8 @@ msgstr "Înarmat cu rachetă anti-tanc Scourge"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_TK.text
 #: po/custom/fromJson.txt:760
-#, fuzzy
 msgid "Armed with tank killer rockets"
-msgstr "Înarmat cu rachetă Bunker Buster"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_MAT1.text
@@ -7277,9 +7243,8 @@ msgstr "Înarmat cu rachetă Bunker Buster"
 #. data/mp/messages/resmessages3.json: $.RES_ST_MAT10.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_MAT7.text
 #: po/custom/fromJson.txt:769
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Armură cinetică +30%, rezistență la avarii +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D2.text
@@ -7325,16 +7290,14 @@ msgstr "Buncăr ranforsat cu mitralieră"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text
 #: po/custom/fromJson.txt:799
-#, fuzzy
 msgid "Armored EMP Mortar battery pit"
-msgstr "Baterie ranforsată de mortiere"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text
 #: po/custom/fromJson.txt:806
-#, fuzzy
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Turn armat, dotat cu aruncător de flăcări"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text
@@ -7358,23 +7321,20 @@ msgstr "Turn ranforsat cu mini-rachete"
 #. data/base/messages/resmessages3.json: $.RES_EMP_RL1TOW.text
 #. data/mp/messages/resmessages3.json: $.RES_EMP_RL1TOW.text
 #: po/custom/fromJson.txt:819
-#, fuzzy
 msgid "Armored guard tower with Needle Gun"
-msgstr "Turn armat, dotat cu aruncător de flăcări"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPYT.text
 #: po/custom/fromJson.txt:822
-#, fuzzy
 msgid "Armored guard tower with Nexus Link"
-msgstr "Turn armat, dotat cu aruncător de flăcări"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PulseLas.text
 #: po/custom/fromJson.txt:825
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Turn armat, dotat cu aruncător de flăcări"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_ATMTOW.text
@@ -7401,9 +7361,8 @@ msgstr "Bloc ranforsat cu laser Lanternă"
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL3.text
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL3.text
 #: po/custom/fromJson.txt:849
-#, fuzzy
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Bloc ranforsat cu tun de asalt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT4_HC.text
@@ -7451,9 +7410,8 @@ msgstr "Bloc ranforsat cu tun mediu"
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL2.text
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL2.text
 #: po/custom/fromJson.txt:881
-#, fuzzy
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Bloc ranforsat cu mitralieră de asalt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT9_ATM.text
@@ -7465,9 +7423,8 @@ msgstr "Bloc ranforsat cu rachete Năpastă"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text
 #: po/custom/fromJson.txt:902
-#, fuzzy
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Baterie ranforsată de mortiere"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text
@@ -7487,23 +7444,20 @@ msgstr "Montură ranforsată cu laser Lanternă"
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail3.text
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail3.text
 #: po/custom/fromJson.txt:922
-#, fuzzy
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Montură ranforsată cu tun de asalt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_HEAVYLAS.text
 #: po/custom/fromJson.txt:925
-#, fuzzy
 msgid "Armored strongpoint with Heavy Laser"
-msgstr "Montură ranforsată cu laser pulsatoriu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PFL.text
 #: po/custom/fromJson.txt:936
-#, fuzzy
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Montură ranforsată cu laser pulsatoriu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PulseLas.text
@@ -7515,9 +7469,8 @@ msgstr "Montură ranforsată cu laser pulsatoriu"
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail2.text
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail2.text
 #: po/custom/fromJson.txt:943
-#, fuzzy
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Montură ranforsată cu tun de asalt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text
@@ -7529,9 +7482,8 @@ msgstr "Șenile ranforsate"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_DF_WU1.text
 #: po/custom/fromJson.txt:954
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Armură cinetică +30%, rezistență la avarii +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Crate.name
@@ -7672,9 +7624,8 @@ msgstr "Asociază un DAV prin selectarea stației ca țintă a acestuia"
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTU1.text
 #: po/custom/fromJson.txt:1063
-#, fuzzy
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "DAV-urile asociate atacă unitățile inamice"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTW1.text
@@ -7686,9 +7637,8 @@ msgstr "DAV-urile asociate atacă unitățile inamice"
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.AutoRepair.name
 #: po/custom/fromJson.txt:1070
-#, fuzzy
 msgid "Auto Repair"
-msgstr "Reparații automate"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Autorepair-General.name
@@ -7909,9 +7859,8 @@ msgstr "Ținta ideală: Clădiri"
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text
 #: po/custom/fromJson.txt:1339
-#, fuzzy
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Ținta ideală: buncăre și blocuri"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text
@@ -7975,9 +7924,8 @@ msgstr "Ținta ideală: Vehicule cu roți sau pe pernă de aer"
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1415
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Campanie nouă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -8007,9 +7955,8 @@ msgstr "Rezistență șasiu: Foarte Mică"
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_BAC3.text
 #: po/custom/fromJson.txt:1596
-#, fuzzy
 msgid "Bomb damage +25%"
-msgstr "Puterea tunurilor +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BAC1.text
@@ -8040,14 +7987,13 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Mortar2Mk1.name
 #: po/custom/fromJson.txt:1619
 msgid "Bombard"
-msgstr "Bombard"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BAC3.text
 #: po/custom/fromJson.txt:1622
-#, fuzzy
 msgid "Bombs lock on and guide themselves to the target"
-msgstr "Marcajul laser indică și ghidează bombele spre țintă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_DF_WU10.text
@@ -8146,7 +8092,7 @@ msgstr "Rachetă Bunker Buster Viperă Roți"
 #. data/mp/stats/weapons.json: $.Rocket-BB.name
 #: po/custom/fromJson.txt:1681
 msgid "Bunker Buster"
-msgstr "Bunker Buster"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text
@@ -8474,9 +8420,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1889
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Turelă de comandă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -8542,9 +8487,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_AAAC3.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAAC3.text
 #: po/custom/fromJson.txt:1929
-#, fuzzy
 msgid "Computer plots and guides shell to target's position"
-msgstr "Computer-ul prezice mișcarea țintei și compensează"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
@@ -8601,9 +8545,8 @@ msgstr "Unitate de construcție"
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text
 #: po/custom/fromJson.txt:1963
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "Controlează până la cinci comandanți"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text
@@ -8618,9 +8561,8 @@ msgstr "Focul anti-baterie continuă până când bateria inamică e eliminată"
 #. data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text
 #: po/custom/fromJson.txt:1973
-#, fuzzy
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Turelă anti-baterie detectează bateriile de foc indirect inamice"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text
@@ -8695,9 +8637,8 @@ msgstr "Cyborg aruncător de flăcări"
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
 #: po/custom/fromJson.txt:2019
-#, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Șasiu greu al Proiectului"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat05.name
@@ -8724,17 +8665,15 @@ msgstr "Armură termală de mare intensitate pentru cyborgi"
 #. data/base/stats/weapons.json: $.CyborgRocket.name
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:2035
-#, fuzzy
 msgid "Cyborg Lancer"
-msgstr "Cyborg aruncător de flăcări"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
 #. data/mp/stats/body.json: $.CyborgLightBody.name
 #: po/custom/fromJson.txt:2039
-#, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Șasiu ușor al Proiectului"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
@@ -8871,9 +8810,8 @@ msgstr "Analiza datelor prin legătura sinaptică dedicată Mk3"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MSL.text
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_RKT.text
 #: po/custom/fromJson.txt:2168
-#, fuzzy
 msgid "Defensive Strength : High"
-msgstr "Forța defensivă: Mare"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text
@@ -8961,22 +8899,20 @@ msgstr "Transportor prăbușit"
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:2335
 msgid "Dragon"
-msgstr "Dragon"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text
 #: po/custom/fromJson.txt:2346
-#, fuzzy
 msgid "Drops high intensity Plasmite bombs"
-msgstr "Lansează bombe incendiare"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text
 #. data/mp/messages/resmessages3.json: $.RES_W_BMB4.text
 #: po/custom/fromJson.txt:2350
-#, fuzzy
 msgid "Drops high intensity thermite bombs"
-msgstr "Lansează bombe incendiare"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text
@@ -9093,9 +9029,8 @@ msgstr "Permite reparațiile automate"
 #. data/mp/tests/miza.json: $.player_6.name
 #. data/mp/tests/miza.json: $.player_7.name
 #: po/custom/fromJson.txt:2420
-#, fuzzy
 msgid "Enemy"
-msgstr "Bază inamică"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -9161,9 +9096,9 @@ msgstr "Modul de fabrică"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text
 #: po/custom/fromJson.txt:2476
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "Viteza de producție în fabrici +100% pentru fiecare modul"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FU1.text
@@ -9175,9 +9110,8 @@ msgstr "Viteza de producție în fabrici +60%"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text
 #: po/custom/fromJson.txt:2483
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "Mărește productivitatea fabricilor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0LightFactory.name
@@ -9273,9 +9207,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text
 #: po/custom/fromJson.txt:2538
-#, fuzzy
 msgid "Fires heavy pulses of laser light"
-msgstr "Lansează pulsații de lumină laser"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS2.text
@@ -9433,9 +9366,8 @@ msgstr "Motor cu injecție"
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2657
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Campanie nouă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -9547,8 +9479,7 @@ msgstr "Genrează și concentrează pulsații de energie laser"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2724
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -9556,8 +9487,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2727
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -9576,8 +9506,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2736
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -9586,8 +9515,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2740
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -9623,7 +9551,7 @@ msgstr "Bun vehicul pentru spionaj"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2759
 msgid "Grenadier"
-msgstr "Grenadier"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -9749,37 +9677,32 @@ msgstr "Turn cu senzor ranforsat"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text
 #: po/custom/fromJson.txt:2847
-#, fuzzy
 msgid "Hardpoint Avenger SAM Site Available"
-msgstr "Amplasament RSA Avenger"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text
 #: po/custom/fromJson.txt:2850
-#, fuzzy
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Bloc ranforsat cu mitralieră de asalt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text
 #: po/custom/fromJson.txt:2853
-#, fuzzy
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Bloc ranforsat cu mitralieră de asalt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text
 #: po/custom/fromJson.txt:2856
-#, fuzzy
 msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Amplasament RSA Vindicator"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text
 #: po/custom/fromJson.txt:2859
-#, fuzzy
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr "Bloc ranforsat cu mitralieră de asalt"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy01.name
@@ -10295,9 +10218,8 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Howitzer03-Rot.name
 #. data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 #: po/custom/fromJson.txt:3202
-#, fuzzy
 msgid "Hellstorm"
-msgstr "Hellstorm"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -10371,25 +10293,22 @@ msgstr "Rachetă anti-tanc puternic explozivă"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text
 #: po/custom/fromJson.txt:3244
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Rachetă anti-tanc puternic explozivă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAD4.text
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text
 #: po/custom/fromJson.txt:3248
-#, fuzzy
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Muniție super-explozivă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_HOWD4.text
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text
 #: po/custom/fromJson.txt:3252
-#, fuzzy
 msgid "High Explosive Armor Piercing Shells"
-msgstr "Muniție super-explozivă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text
@@ -10409,9 +10328,8 @@ msgstr "Rachetă de artilerie grea super-explozivă"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text
 #: po/custom/fromJson.txt:3275
-#, fuzzy
 msgid "High explosive shaped charge missile"
-msgstr "Rachetă de artilerie grea super-explozivă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat05.name
@@ -10480,16 +10398,14 @@ msgstr ""
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:3336
-#, fuzzy
 msgid "HMG Bunker"
-msgstr "Buncăr cu mitralieră rotativă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:3339
-#, fuzzy
 msgid "Hover AI"
-msgstr "Pernă de aer II"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
@@ -10572,7 +10488,7 @@ msgstr "Timp de încărcare howitzer -10%"
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 #: po/custom/fromJson.txt:3409
 msgid "Howitzer"
-msgstr "Howitzer"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
@@ -10691,9 +10607,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:3482
-#, fuzzy
 msgid "Improved armor-piercing dart"
-msgstr "Focalizare îmbunătățită a laserelor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy02.name
@@ -10821,9 +10736,8 @@ msgstr "Sisteme îmbunătățite de recunoaștere a țintei"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text
 #: po/custom/fromJson.txt:3568
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "Producție DAV avansată"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text
@@ -10835,9 +10749,8 @@ msgstr "Beton îmbunătățit, ranforsat cu titan"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text
 #: po/custom/fromJson.txt:3575
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Proiectile puternic explozive îmbunătățite"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text
@@ -11010,23 +10923,20 @@ msgstr "Mărește rata de foc a mortierelor"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:3798
-#, fuzzy
 msgid "Increases Rail Gun accuracy"
-msgstr "Mărește precizia tunurilor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:3801
-#, fuzzy
 msgid "Increases Rail Gun damage"
-msgstr "Mărește puterea mitralierelor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:3804
-#, fuzzy
 msgid "Increases Rail Gun ROF"
-msgstr "Mărește rata de foc a mitralierei"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text
@@ -11045,9 +10955,8 @@ msgstr "Morește rata de foc a rachetelor"
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Indirectlab.name
 #: po/custom/fromJson.txt:3844
-#, fuzzy
 msgid "Indirectweaponslab"
-msgstr "Nouă Armă pentru Țintire Indirectă Disponibilă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text
@@ -11126,31 +11035,28 @@ msgstr "Motor cu turbină ionică"
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.ECM1PylonMk1.name
 #: po/custom/fromJson.txt:3888
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Turn cu aruncător de flăcări"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3891
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Turelă de reparații"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3895
 msgid "Jeep"
-msgstr "Jeep"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text
 #: po/custom/fromJson.txt:3899
-#, fuzzy
 msgid "Jump Cyborgs can now be researched"
-msgstr "Cyborgii pot fi acum cercetață"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_STW1.text
@@ -11174,18 +11080,16 @@ msgstr "Armură cinetică +30%, rezistență la avarii +30%"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CYMET4.text
 #: po/custom/fromJson.txt:3915
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Armură cinetică +30%, rezistență la avarii +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYMET1.text
 #. data/mp/messages/resmessages3.json: $.RES_CYMET10.text
 #. data/mp/messages/resmessages3.json: $.RES_CYMET7.text
 #: po/custom/fromJson.txt:3920
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Armură cinetică +30%, rezistență la avarii +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYMET10.text
@@ -11305,9 +11209,8 @@ msgstr "Laser - Lanternă"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text
 #: po/custom/fromJson.txt:3995
-#, fuzzy
 msgid "Laser AA Gun Available"
-msgstr "Nouă turelă AA disponibilă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text
@@ -11331,9 +11234,8 @@ msgstr "Marcajul laser indică și ghidează bombele spre țintă"
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text
 #: po/custom/fromJson.txt:4008
-#, fuzzy
 msgid "Laser designator paints and guides rounds to the target"
-msgstr "Marcajul laser indică și ghidează bombele spre țintă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb-Accuracy02.name
@@ -11369,9 +11271,8 @@ msgstr "Îmbunătățire a laserelor"
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Laseropticslab.name
 #: po/custom/fromJson.txt:4030
-#, fuzzy
 msgid "Laseropticslab"
-msgstr "Laborator de optică laser"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.LasSat.name
@@ -11393,7 +11294,7 @@ msgstr "Aliaje compozite stratificate și fibre absorbante de energie"
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:4049
 msgid "Leopard"
-msgstr "Leopard"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text
@@ -11611,9 +11512,8 @@ msgstr "Armură și rezistență la averii maxime"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4231
-#, fuzzy
 msgid "May be assigned to follow units"
-msgstr "Poate fi asociat unui senzor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text
@@ -12136,9 +12036,8 @@ msgstr "Creier de cercetare în sinapse neuronale"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text
 #: po/custom/fromJson.txt:4574
-#, fuzzy
 msgid "New Advanced Weapon Available"
-msgstr "Mouă armă cu laser disponibilă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text
@@ -12189,16 +12088,14 @@ msgstr "Noi opțiuni de construcție disponibile"
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text
 #: po/custom/fromJson.txt:4678
-#, fuzzy
 msgid "New Cyborg Research Available"
-msgstr "Nou cyborg disponibil"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text
 #: po/custom/fromJson.txt:4793
-#, fuzzy
 msgid "New Electronic Technology Discovered"
-msgstr "Nouă tehnologie de reparații descoperită"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text
@@ -12284,9 +12181,8 @@ msgstr "Nou sistem de propulsie disponibil"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL2.text
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL3.text
 #: po/custom/fromJson.txt:4895
-#, fuzzy
 msgid "New Rail Gun Available"
-msgstr "Nouă turelă AA disponibilă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text
@@ -12351,9 +12247,8 @@ msgstr "Sisteme noi disponibile"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4948
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Nou turn de sisteme disponibil"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text
@@ -12397,16 +12292,14 @@ msgstr "O nouă turelă de sisteme este disponibilă pentru scheme"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text
 #: po/custom/fromJson.txt:4995
-#, fuzzy
 msgid "New Thermal Emissions detection"
-msgstr "Producție DAV avansată"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text
 #: po/custom/fromJson.txt:4998
-#, fuzzy
 msgid "New VTOL Missile Launcher"
-msgstr "Lansator de rachete DAV"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NEXUSCWall.name
@@ -12425,9 +12318,8 @@ msgstr "Șasiu greu NEXUS"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text
 #: po/custom/fromJson.txt:5038
-#, fuzzy
 msgid "NEXUS Intruder Program analyzed"
-msgstr "Program intrus NEXUS"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance.name
@@ -12466,9 +12358,8 @@ msgstr "Șasiu mediu NEXUS"
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NX-ANTI-SATSite.name
 #: po/custom/fromJson.txt:5060
-#, fuzzy
 msgid "Nexus Missile Silo"
-msgstr "Siloz de rachete nucleare"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
@@ -12497,9 +12388,8 @@ msgstr "Zid NEXUS"
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:5078
-#, fuzzy
 msgid "Nexus"
-msgstr "Legătură Nexus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -12564,9 +12454,8 @@ msgstr "Sistem integrat de diagnosticare și reparații"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text
 #: po/custom/fromJson.txt:5114
-#, fuzzy
 msgid "On-board resistance circuit systems"
-msgstr "Sistem integrat de diagnosticare și reparații"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text
@@ -12587,16 +12476,14 @@ msgstr "Ordonează unităților de artilerie să deschidă focuol asupra baterii
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:5138
-#, fuzzy
 msgid "Original Campaign"
-msgstr "Campanie nouă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:5141
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Luptă individuală"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -12673,9 +12560,8 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASCAN.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASCAN.text
 #: po/custom/fromJson.txt:5186
-#, fuzzy
 msgid "Plasma Cannon firing plasma"
-msgstr "Tun cu plasmă Balaur Șenile"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
@@ -12787,9 +12673,8 @@ msgstr "Modul pentru centrală electrică"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text
 #: po/custom/fromJson.txt:5248
-#, fuzzy
 msgid "Power output +25%"
-msgstr "Generare de energie +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text
@@ -12812,9 +12697,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:5260
-#, fuzzy
 msgid "Powerlab"
-msgstr "Energie"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text
@@ -12827,17 +12711,15 @@ msgstr "Produce cyborgi"
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text
 #: po/custom/fromJson.txt:5282
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Șasiu greu al Colectivului"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text
 #: po/custom/fromJson.txt:5286
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Șasiu ușor al Colectivului"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text
@@ -12948,9 +12830,8 @@ msgstr "Piton"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text
 #: po/custom/fromJson.txt:5357
-#, fuzzy
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Mitralieră anti-aerianp de 30mm quadruplă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text
@@ -12981,16 +12862,14 @@ msgstr "Detector radar"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text
 #: po/custom/fromJson.txt:5378
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Precizia tunurilor +10%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #: po/custom/fromJson.txt:5381
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Puterea mitralierelor +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail2.name
@@ -13024,9 +12903,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:5401
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Timpul de reîncărcare a mitralierelor +15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
@@ -13063,9 +12941,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text
 #: po/custom/fromJson.txt:5424
-#, fuzzy
 msgid "Rail Gun Upgrade"
-msgstr "Îmbunătățire a mitralierei"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun02.name
@@ -13112,9 +12989,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text
 #: po/custom/fromJson.txt:5451
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Viteză de cercetare +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text
@@ -13158,9 +13034,8 @@ msgstr "Materiale ranforsate de construcție"
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:5494
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Centru de reparații"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -13517,9 +13392,8 @@ msgstr "Puterea rachetelor +25%"
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
 #. data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text
 #: po/custom/fromJson.txt:5777
-#, fuzzy
 msgid "Rocket detects and locks on to engine emissions"
-msgstr "Detectează și urmărește emisiile motoarelor DAV"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaRKJeep.name
@@ -13680,7 +13554,7 @@ msgstr "Autobuz"
 #. data/mp/stats/body.json: $.Body8MBT.name
 #: po/custom/fromJson.txt:5891
 msgid "Scorpion"
-msgstr "Scorpion"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
@@ -13977,9 +13851,8 @@ msgstr "Fură tehnologie de la inamici"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text
 #: po/custom/fromJson.txt:6081
-#, fuzzy
 msgid "Steals technology from structures and takes control of weapons"
-msgstr "Fură tehnologie de la inamici"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text
@@ -14014,9 +13887,8 @@ msgstr "Misiunea de atac continuă până când inamicul e distrus sau în retra
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT3.text
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT4.text
 #: po/custom/fromJson.txt:6102
-#, fuzzy
 msgid "Stronger Commander Turret Available for Design"
-msgstr "Nouă turelă de sisteme disponibilă pentru scheme"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG1.text
@@ -14046,25 +13918,22 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text
 #: po/custom/fromJson.txt:6153
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Transportor pentru cyborgi disponibil"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:6156
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Șasiu de transportor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
 #. data/mp/stats/templates.json: $.SuperTransport.name
 #: po/custom/fromJson.txt:6160
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transportor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -14093,9 +13962,8 @@ msgstr "Superbeton"
 #. data/mp/messages/resmessages3.json: $.RES_CYMET7.text
 #. data/mp/messages/resmessages3.json: $.RES_V_MET7.text
 #: po/custom/fromJson.txt:6182
-#, fuzzy
 msgid "Superdense composite alloys and energy-absorbing fibres"
-msgstr "Aliaje compozite stratificate și fibre absorbante de energie"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Metals08.name
@@ -14205,9 +14073,8 @@ msgstr "Analiza datelor prin legătura sinaptică"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ST1.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text
 #: po/custom/fromJson.txt:6257
-#, fuzzy
 msgid "Synaptic Link Scrambler technology"
-msgstr "Analiza datelor prin legătura sinaptică"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text
@@ -14221,9 +14088,8 @@ msgstr "Analiza datelor prin legătura sinaptică"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_AR.text
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text
 #: po/custom/fromJson.txt:6269
-#, fuzzy
 msgid "Synaptic Link technology breakthrough"
-msgstr "Descoperire în tehnologia calculatoarelor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Comp-SynapticLink.name
@@ -14377,9 +14243,8 @@ msgstr "Armură termală +35%"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text
 #: po/custom/fromJson.txt:6358
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Armură termală +40%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text
@@ -14391,9 +14256,8 @@ msgstr "Armură termală +40%"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text
 #: po/custom/fromJson.txt:6365
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Armură termală +40%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
@@ -14707,9 +14571,8 @@ msgstr "Laser anti-aerian mediu dublu"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGUN.text
 #: po/custom/fromJson.txt:6568
-#, fuzzy
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Mitralieră cu țevi multiple și rată mare de foc"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.challenge.name
@@ -14728,9 +14591,8 @@ msgstr "Cercetare de unități completă"
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT3.text
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT4.text
 #: po/custom/fromJson.txt:6579
-#, fuzzy
 msgid "Upgraded battlefield computer system"
-msgstr "Nou computer pentru câmpul de luptă"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.UplinkSensor.name
@@ -14801,9 +14663,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text
 #: po/custom/fromJson.txt:6618
-#, fuzzy
 msgid "Vapor Turbine boosts power output"
-msgstr "Turbina de gaz mărește puterea generatoarelor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade03.name
@@ -15437,10 +15298,9 @@ msgstr "Balaur"
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7066
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "Elită"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
@@ -15454,68 +15314,60 @@ msgstr "Soldat"
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7074
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Erou"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7078
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "Profesionist"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7082
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "Armată regulată"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7086
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "Recrut"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7090
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "Special"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7094
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "Antrenat"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks
 #: po/custom/fromJson.txt:7098
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Veteran"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -15553,9 +15405,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Începe găzduirea jocului"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -15572,9 +15423,8 @@ msgid "Debug mode now enabled!"
 msgstr ""
 
 #: src/cheat.cpp:180
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Meniul de depanare deschis"
+msgstr ""
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:86
@@ -15623,18 +15473,16 @@ msgid "Play in fullscreen mode"
 msgstr "Joacă pe tot ecranul"
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Încarcă un anume joc"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
 msgstr ""
 
 #: src/clparse.cpp:265
-#, fuzzy
 msgid "Show options and exit"
-msgstr "Arată versiunea și ieși"
+msgstr ""
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -15663,9 +15511,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Încarcă un joc salvat"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -15673,9 +15520,8 @@ msgid "savegame"
 msgstr "salvare"
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Încarcă un joc salvat"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -15738,9 +15584,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "salvare"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -15751,27 +15596,24 @@ msgid "test"
 msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "Nu s-a putut salva jocul!"
+msgstr ""
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
 msgstr ""
 
 #: src/clparse.cpp:288
-#, fuzzy
 msgid "autohost"
-msgstr "gazdă"
+msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Ieșire din joc"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -15919,14 +15761,12 @@ msgid "Systems"
 msgstr "Sisteme"
 
 #: src/design.cpp:4283
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "Șterge schema"
+msgstr ""
 
 #: src/design.cpp:4288
-#, fuzzy
 msgid "Store Design"
-msgstr "Schemă nouă"
+msgstr ""
 
 #: src/display3d.cpp:676
 msgid "Player left"
@@ -15955,20 +15795,20 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nu se poate construi. Puțul de petrol e în flăcări."
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Avarii %d%% - Experiență %.1f, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Aliat - Avarii %d%% - Experiență %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Unitate pierdută!"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -15980,6 +15820,7 @@ msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:1932
 #, c-format
@@ -15987,6 +15828,7 @@ msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:1943
 #, c-format
@@ -15994,6 +15836,7 @@ msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:1947
 #, c-format
@@ -16001,6 +15844,7 @@ msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: src/droid.cpp:3056
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -16017,7 +15861,7 @@ msgstr "Joc în Rețea"
 #: src/frontend.cpp:148
 #: src/frontend.cpp:309
 msgid "Tutorial"
-msgstr "Tutorial"
+msgstr ""
 
 #: src/frontend.cpp:149
 #: src/ingameop.cpp:243
@@ -16035,14 +15879,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Continuă Jocul"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Sisteme noi disponibile"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -16117,14 +15959,12 @@ msgid "Challenges"
 msgstr ""
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Încarcă joc"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Începe joc individual"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -16136,21 +15976,18 @@ msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
 #: src/frontend.cpp:416
-#, fuzzy
 msgid "CAMPAIGNS"
-msgstr "PRIMA CAMPANIE"
+msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Încarcă joc salvat"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Încarcă joc salvat"
+msgstr ""
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -16188,9 +16025,8 @@ msgid "Video Options"
 msgstr "Opțiuni video"
 
 #: src/frontend.cpp:685
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "Opțiuni audio"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
@@ -16219,9 +16055,8 @@ msgstr "Tot ecranul"
 #: src/frontend.cpp:752
 #: src/frontend.cpp:903
 #: src/frontend.cpp:1683
-#, fuzzy
 msgid "Unsupported"
-msgstr "Transportor"
+msgstr ""
 
 #: src/frontend.cpp:749
 #: src/frontend.cpp:758
@@ -16267,9 +16102,8 @@ msgid "Instant"
 msgstr ""
 
 #: src/frontend.cpp:773
-#, fuzzy
 msgid "Tracked"
-msgstr "Șenile"
+msgstr ""
 
 #: src/frontend.cpp:786
 #: src/ingameop.cpp:517
@@ -16294,27 +16128,24 @@ msgstr "Umbre"
 #: src/frontend.cpp:804
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr "Radar"
+msgstr ""
 
 #: src/frontend.cpp:808
 #: src/ingameop.cpp:542
-#, fuzzy
 msgid "Radar Jump"
-msgstr "Radar"
+msgstr ""
 
 #: src/frontend.cpp:812
 msgid "GRAPHICS OPTIONS"
 msgstr "OPȚIUNI DE GRAFICĂ"
 
 #: src/frontend.cpp:906
-#, fuzzy
 msgid "Disabled"
-msgstr "Dezactivează sunete"
+msgstr ""
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Enabled"
-msgstr "Activează sunete"
+msgstr ""
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
@@ -16354,18 +16185,16 @@ msgid "Map Zoom Rate"
 msgstr ""
 
 #: src/frontend.cpp:985
-#, fuzzy
 msgid "Radar Zoom"
-msgstr "Radar"
+msgstr ""
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "OPȚIUNI AUDIO"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -16376,28 +16205,24 @@ msgid "Graphics Mode*"
 msgstr "Modul de grafică*"
 
 #: src/frontend.cpp:1137
-#, fuzzy
 msgid "Graphics Mode"
-msgstr "Modul de grafică*"
+msgstr ""
 
 #: src/frontend.cpp:1142
 msgid "Resolution*"
 msgstr "Rezoluție*"
 
 #: src/frontend.cpp:1142
-#, fuzzy
 msgid "Resolution"
-msgstr "Rezoluție*"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale*"
-msgstr "Afișază ecranul de opțiuni"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale"
-msgstr "Afișază ecranul de opțiuni"
+msgstr ""
 
 #: src/frontend.cpp:1191
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -16413,14 +16238,12 @@ msgstr "Mărimea texturilor"
 
 #: src/frontend.cpp:1239
 #: src/ingameop.cpp:630
-#, fuzzy
 msgid "Vertical sync"
-msgstr "Sincronizare verticală*"
+msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "Italiană"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
@@ -16431,23 +16254,20 @@ msgid "VIDEO OPTIONS"
 msgstr "OPȚIUNI VIDEO"
 
 #: src/frontend.cpp:1547
-#, fuzzy
 msgid "Middle Mouse"
-msgstr "Butonul de mijloc"
+msgstr ""
 
 #: src/frontend.cpp:1547
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Butonul din dreapta"
+msgstr ""
 
 #: src/frontend.cpp:1559
 msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Viteza pe apă"
+msgstr ""
 
 #: src/frontend.cpp:1561
 msgid "Camera Pitch"
@@ -16475,15 +16295,13 @@ msgstr "Rotește ecranul"
 
 #: src/frontend.cpp:1594
 #: src/ingameop.cpp:720
-#, fuzzy
 msgid "Colored Cursors"
-msgstr "Cursoare colorate*"
+msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Viteza de glisare"
+msgstr ""
 
 #: src/frontend.cpp:1602
 msgid "MOUSE OPTIONS"
@@ -16496,7 +16314,7 @@ msgstr "Ușor"
 
 #: src/frontend.cpp:1679
 msgid "Normal"
-msgstr "Normal"
+msgstr ""
 
 #: src/frontend.cpp:1680
 #: src/multiint.cpp:223
@@ -16515,33 +16333,28 @@ msgstr "Limbă"
 
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Dificultate"
+msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
-#, fuzzy
 msgid "Camera Speed"
-msgstr "Viteza pe apă"
+msgstr ""
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "Culoarea unităților"
+msgstr ""
 
 #: src/frontend.cpp:1744
 #: src/frontend.cpp:1780
-#, fuzzy
 msgid "Campaign"
-msgstr "Campanie nouă"
+msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Joc în Rețea"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -16556,9 +16369,8 @@ msgstr "Modificare:"
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "JOC SALVAT :"
+msgstr ""
 
 #: src/hci.cpp:1566
 #, c-format
@@ -16599,14 +16411,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -16623,8 +16433,7 @@ msgid "Ally progress"
 msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -16633,9 +16442,8 @@ msgid "Chat: All"
 msgstr ""
 
 #: src/hci.cpp:4959
-#, fuzzy
 msgid "Chat: Team"
-msgstr "Alege Echipa"
+msgstr ""
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -16654,9 +16462,8 @@ msgstr ""
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Ieșire"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -16700,49 +16507,39 @@ msgid "Audio Options"
 msgstr "Opțiuni audio"
 
 #: src/ingameop.cpp:494
-#, fuzzy
 msgid "View Key Mappings"
-msgstr "Taste funcționale"
+msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Campanie nouă"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Începe joc individual"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
-msgstr ""
-"Modulul necesar nu poate fi încărcat: %s\n"
-"\n"
+msgstr "Modulul necesar nu poate fi încărcat: %s\n\n"
 "Warzone va încerca să încarce jocul fără el."
 
 #: src/intdisplay.cpp:164
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "Așteptare pentru alți jucători"
+msgstr ""
 
 #: src/intdisplay.cpp:212
 msgid "Build Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:234
-#, fuzzy
 msgid "Construction Progress"
-msgstr "Unitate de construcție"
+msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Cercetarea îmbunătățită"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -16901,19 +16698,16 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
 #: src/keybind.cpp:326
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "Vezi către sud"
+msgstr ""
 
 #: src/keybind.cpp:336
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "Vezi unitățile neasociate"
+msgstr ""
 
 #: src/keybind.cpp:346
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "Vezi unitățile neasociate"
+msgstr ""
 
 #: src/keybind.cpp:411
 #, c-format
@@ -17193,18 +16987,16 @@ msgid "Commanders"
 msgstr "Comandanți"
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Salvează"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr "Comută radarul"
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "Încarcă"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -17459,9 +17251,8 @@ msgid "Toggle Overlays"
 msgstr ""
 
 #: src/keymap.cpp:383
-#, fuzzy
 msgid "Toggle Console History "
-msgstr "Comută afișarea consolei"
+msgstr ""
 
 #: src/keymap.cpp:384
 msgid "Toggle Team Chat History"
@@ -17488,14 +17279,12 @@ msgid "Stop Droid"
 msgstr ""
 
 #: src/keymap.cpp:403
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "Trimite mesaj text"
+msgstr ""
 
 #: src/keymap.cpp:404
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "Trimite mesaj text"
+msgstr ""
 
 #: src/keymap.cpp:405
 msgid "Drop a beacon"
@@ -17526,9 +17315,8 @@ msgid "Select all Combat Units"
 msgstr "Selectează toate unitățile de luptă"
 
 #: src/keymap.cpp:421
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Selectează toate unitățile plutitoare"
+msgstr ""
 
 #: src/keymap.cpp:422
 msgid "Select all Heavily Damaged Units"
@@ -17559,9 +17347,8 @@ msgid "Select all VTOLs"
 msgstr "Selectează toate DAV-urile"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "Selectează toate DAV-urile"
+msgstr ""
 
 #: src/keymap.cpp:431
 msgid "Select all Wheels"
@@ -17576,44 +17363,36 @@ msgid "Select all Similar Units"
 msgstr "Selectează toate unitățile similare"
 
 #: src/keymap.cpp:437
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Selectează toate unitățile de luptă"
+msgstr ""
 
 #: src/keymap.cpp:438
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Selectează toate unitățile plutitoare"
+msgstr ""
 
 #: src/keymap.cpp:439
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Selectează toate unitățile de luptă"
+msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Selectează toate unitățile cu șenile"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Selectează toate unitățile cu șenile"
+msgstr ""
 
 #: src/keymap.cpp:442
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Selectează toate unitățile cu șenile"
+msgstr ""
 
 #: src/keymap.cpp:443
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Selectează toate unitățile similare"
+msgstr ""
 
 #: src/keymap.cpp:444
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Selectează toate unitățile cu șenile"
+msgstr ""
 
 #: src/keymap.cpp:448
 msgid "Select next Factory"
@@ -17700,9 +17479,8 @@ msgid "Trace a game object"
 msgstr ""
 
 #: src/loadsave.cpp:311
-#, fuzzy
 msgid "Parent directory"
-msgstr "Detector radar"
+msgstr ""
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory"
@@ -17783,9 +17561,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s îți oferă documente tehnologice"
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s îți oferă %u energie"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -17813,15 +17591,13 @@ msgid "You Discover Blueprints For %s"
 msgstr "Ai descoperit scheme pentru %s"
 
 #: src/multiint.cpp:223
-#, fuzzy
 msgid "Medium"
-msgstr "Viteză: Medie"
+msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Comandante."
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -17857,20 +17633,17 @@ msgid "Satellite Uplink disabled."
 msgstr ""
 
 #: src/multiint.cpp:1066
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Fă toate entitățile disponibile"
+msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Setează limitele pentru clădiri"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Selectează numele jocului"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -17881,8 +17654,7 @@ msgid "Select Game Name"
 msgstr "Selectează numele jocului"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17926,13 +17698,11 @@ msgid "Set Structure Limits"
 msgstr "Setează limitele pentru clădiri"
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "Opțiuni de joc"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17958,23 +17728,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Pornire cu baze avansate"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Jucător"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Pornire cu baze avansate"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -17993,33 +17760,28 @@ msgid "Team"
 msgstr "Echipă"
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Click pentru a ajusta dificultatea IA"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for player"
-msgstr "Așteptare pentru alți jucători"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Jucătorul s-a deconectat"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Jucătorul s-a deconectat"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
 msgstr "Click când ești pregătit"
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for download"
-msgstr "Așteptare pentru alți jucători"
+msgstr ""
 
 #: src/multiint.cpp:2072
 msgid "READY?"
@@ -18030,9 +17792,8 @@ msgid "PLAYERS"
 msgstr "JUCĂTORI"
 
 #: src/multiint.cpp:2149
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Click pentru a schimba setările jucătorului"
+msgstr ""
 
 #: src/multiint.cpp:2183
 msgid "Choose Team"
@@ -18043,23 +17804,20 @@ msgid "Teams locked"
 msgstr ""
 
 #: src/multiint.cpp:2213
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Click pentru a schimba setările jucătorului"
+msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Click pentru a schimba setările jucătorului"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Jucător"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -18075,9 +17833,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Selectează numele jocului"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -18108,14 +17865,12 @@ msgid "Host is Starting Game"
 msgstr "Gazda Începe Jocul"
 
 #: src/multiint.cpp:3519
-#, fuzzy
 msgid "You have been kicked: "
-msgstr "Ai fost eliminat!"
+msgstr ""
 
 #: src/multiint.cpp:3531
-#, fuzzy
 msgid "No connection to host."
-msgstr "Nimic de raportat."
+msgstr ""
 
 #: src/multiint.cpp:3661
 msgid "Cannot change to a map with too few slots for all players."
@@ -18134,9 +17889,8 @@ msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr ""
 
 #: src/multiint.cpp:3907
-#, fuzzy
 msgid "UPnP detection is in progress..."
-msgstr "Începe decodificarea....."
+msgstr ""
 
 #: src/multiint.cpp:3914
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
@@ -18151,9 +17905,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Click pentru a schimba setările jucătorului"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -18162,9 +17916,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Închide"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -18183,7 +17936,7 @@ msgstr "GAZDĂ"
 #: src/multiint.cpp:4139
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -18205,14 +17958,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) are o modificare incompatibilă și a fost eliminat."
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "%s se alătură jocului"
+msgstr ""
 
 #: src/multijoin.cpp:503
-#, fuzzy
 msgid "Server message:"
-msgstr "Mesaj de sistem:"
+msgstr ""
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
@@ -18257,21 +18009,20 @@ msgid "Technology level 3"
 msgstr "Tehnologie nivel 3"
 
 #: src/multimenu.cpp:593
-#, fuzzy
 msgid "Max technology level"
-msgstr "Tehnologie nivel 1"
+msgstr ""
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
 msgstr "Oricâți jucători"
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 jucători"
-msgstr[1] "2 jucători"
-msgstr[2] "2 jucători"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -18298,9 +18049,9 @@ msgid "Total Sent/Received —"
 msgstr ""
 
 #: src/multimenu.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Antrenat: %u"
+msgstr ""
 
 #: src/multimenu.cpp:802
 #, c-format
@@ -18374,7 +18125,7 @@ msgstr "(privat către "
 
 #: src/multiplay.cpp:1269
 msgid "[invalid]"
-msgstr "[invalid]"
+msgstr ""
 
 #: src/multiplay.cpp:1593
 msgid "Map was requested: SENDING MAP!"
@@ -18552,7 +18303,7 @@ msgstr "Profesionist: %u"
 #: src/scores.cpp:111
 #, c-format
 msgid "Veteran: %u"
-msgstr "Veteran: %u"
+msgstr ""
 
 #: src/scores.cpp:112
 #, c-format
@@ -18562,7 +18313,7 @@ msgstr "Elită: %u"
 #: src/scores.cpp:113
 #, c-format
 msgid "Special: %u"
-msgstr "Special: %u"
+msgstr ""
 
 #: src/scores.cpp:114
 #, c-format
@@ -18626,40 +18377,39 @@ msgstr[1] "%u unități selectate"
 msgstr[2] "%u unități selectate"
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "Limita de control atinsă - Producția oprită"
+msgstr ""
 
 #: src/structure.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "Limita de control atinsă - Producția oprită"
+msgstr ""
 
 #: src/structure.cpp:2510
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "Limita de control atinsă - Producția oprită"
+msgstr ""
 
 #: src/structure.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Limita de control atinsă - Producția oprită"
+msgstr ""
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Unități asociate - Avarii %3.0f%%"
-msgstr[1] "%s - %u Unități asociate - Avarii %3.0f%%"
-msgstr[2] "%s - %u Unități asociate - Avarii %3.0f%%"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Unități asociate - Avarii %3.0f%%"
-msgstr[1] "%s - %u Unități asociate - Avarii %3.0f%%"
-msgstr[2] "%s - %u Unități asociate - Avarii %3.0f%%"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -18673,9 +18423,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - Connectate %u din %u - Avarii %3.0f%%"
+msgstr ""
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -18720,9 +18470,8 @@ msgid "Refresh Games List"
 msgstr "Reîmprospătează lista de jocuri"
 
 #: src/titleui/gamefind.cpp:93
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Reîmprospătează lista de jocuri"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
@@ -18741,18 +18490,16 @@ msgid "Your version of Warzone is incompatible with this game."
 msgstr ""
 
 #: src/titleui/gamefind.cpp:311
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** parola NU este necesară! ***"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:315
 msgid "[No Tanks]"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:319
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Produce cyborgi"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:323
 msgid "[No VTOLs]"
@@ -18777,9 +18524,8 @@ msgid "There appears to be a game update available!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:382
-#, fuzzy
 msgid "No games are available for your version"
-msgstr "Nici un joc disponibil"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -18827,9 +18573,9 @@ msgid "Mods: None!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Versiunea %s%s%s%s"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -18844,9 +18590,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Continuă Jocul"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -18871,7 +18616,7 @@ msgstr "Arenă"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -18904,351 +18649,7 @@ msgstr " - TESTARE"
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Versiunea %s%s%s%s"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Viteză de cercetare +30%"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Viteză de cercetare +30%"
-
-#, fuzzy
-#~ msgid "Show all options and exit"
-#~ msgstr "Arată versiunea și ieși"
-
-#, fuzzy
-#~ msgid "Killer"
-#~ msgstr "Victime"
-
-#~ msgid "End Mission"
-#~ msgstr "Încheie misiunea"
-
-#~ msgid "Select Map"
-#~ msgstr "Alege harta"
-
-#, fuzzy
-#~ msgid "Difficulty locked"
-#~ msgstr "Dificultate"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Click pentru a schimba setările jucătorului"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures"
-#~ msgstr "Laborator de electronică"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk2"
-#~ msgstr "Laborator de electronică"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk3"
-#~ msgstr "Laborator de electronică"
-
-#, fuzzy
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "Focul anti-baterie continuă până când bateria inamică e eliminată"
-
-#~ msgid "Nexus Link"
-#~ msgstr "Legătură Nexus"
-
-#~ msgid "NEXUS Link"
-#~ msgstr "Legătură NEXUS"
-
-#, fuzzy
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "Ordonează unităților de artilerie să deschidă focuol asupra bateriilor inamice"
-
-#~ msgid "Objective Destroyed"
-#~ msgstr "Obiectiv distrus"
-
-#~ msgid "Objective Captured"
-#~ msgstr "Obiectiv capturat"
-
-#~ msgid "Enemy Escaping"
-#~ msgstr "Inamicul evadează"
-
-#~ msgid "Reinforcements are now available"
-#~ msgstr "Întăriri sunt acum disponibile"
-
-#~ msgid "Sensor Power"
-#~ msgstr "Puterea senzorului"
-
-#~ msgid "Exit Game"
-#~ msgstr "Ieșire din joc"
-
-#~ msgid "Current Player:"
-#~ msgstr "Jucătorul Curent:"
-
-#~ msgid "Machinegun Guard Tower"
-#~ msgstr "Turn de pază cu mitralieră"
-
-#~ msgid "Screen Shake"
-#~ msgstr "Tremur al ecranului"
-
-#~ msgid "Toggle Driving Mode"
-#~ msgstr "Comută modul de conducere"
-
-#~ msgid "All players need to have the same mods to join your game."
-#~ msgstr "Toți jucătorii trebuie să aibă aceleași modificări pentru a putea juca."
-
-#~ msgid "1X"
-#~ msgstr "1X"
-
-#~ msgid "2X"
-#~ msgstr "2X"
-
-#, fuzzy
-#~ msgid "Shaders"
-#~ msgstr "Umbre"
-
-#~ msgid "MAP SAVED!"
-#~ msgstr "HARTĂ SALVATĂ!"
-
-#~ msgid "Map:"
-#~ msgstr "Hartă:"
-
-#~ msgid "Load Map File"
-#~ msgstr "Încarcă fișierul hărții"
-
-#~ msgid "Save Map File"
-#~ msgstr "Salvează fișierul hărții"
-
-#~ msgid "New"
-#~ msgstr "Nou"
-
-#~ msgid "New Blank Map"
-#~ msgstr "Nouă hartă goală"
-
-#~ msgid "Tile"
-#~ msgstr "Titlu"
-
-#~ msgid "Pause"
-#~ msgstr "Pauză"
-
-#~ msgid "Pause or unpause the game"
-#~ msgstr "Pauză sau Continuare a Jocului"
-
-#~ msgid "Console On/Off"
-#~ msgstr "Consolă activă/inactivă"
-
-#~ msgid "Sensor display On"
-#~ msgstr "Afișaj senzor activat"
-
-#~ msgid "Sensor display Off"
-#~ msgstr "Afișaj senzor dezactivat"
-
-#~ msgid "Toggle watch window"
-#~ msgstr "Comută fereastra de vizualizare"
-
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - Avarii %3.0f%%"
-
-#~ msgid " - Built %s"
-#~ msgstr " - Compilare %s"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Jucătorul s-a deconectat"
-
-#, fuzzy
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "Culoarea unităților"
-
-#, fuzzy
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "Culoarea unităților"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "TRIȘATUL ESTE ACUM PERMIS!"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "TRIȘATUL ESTE ACUM INTERZIS!"
-
-#~ msgid "Activate self-test"
-#~ msgstr "Activare auto-testare"
-
-#, fuzzy
-#~ msgid "Connect IP"
-#~ msgstr "Eroare de conexiune"
-
-#, fuzzy
-#~ msgid "Password:"
-#~ msgstr "Introdu parola:"
-
-#, fuzzy
-#~ msgid "3 players"
-#~ msgstr "2 jucători"
-
-#~ msgid "4 players"
-#~ msgstr "4 jucători"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "2 jucători"
-
-#~ msgid "8 players"
-#~ msgstr "8 jucători"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "4 jucători"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "2 jucători"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "2 jucători"
-
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Radarul arată terenul descoperit"
-
-#~ msgid "Fog"
-#~ msgstr "Ceață"
-
-#~ msgid "Mist"
-#~ msgstr "Negură"
-
-#~ msgid "Fog Of War"
-#~ msgstr "Ceața bătăliei"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Ceață la distanță"
-
-#~ msgid "Disconnected from lobby server. Failed to register game."
-#~ msgstr "Deconectat de la server. Imposibil de înregistrat jocul."
-
-#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "Nu s-a putut comunica spre server! Este portul TCP %u deschis pentru trafic de ieșire?"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr "Ș Cod de trișare nerecunoscut."
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "Rulează în modul de trișare"
-
-#~ msgid "* May negatively affect performance"
-#~ msgstr "* Poate afecta negativ performanța"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "Ai găsit %u într-un butoi de petrol."
-
-#~ msgid "Player colour"
-#~ msgstr "Culoarea jucătorului"
-
-#~ msgid "Kick player"
-#~ msgstr "Eliminare jucător"
-
-#~ msgid "Player number"
-#~ msgstr "Numărul jucătorului"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr "(modificat și comutat local)"
-
-#~ msgid " (switched locally)"
-#~ msgstr "(comutat local)"
-
-#, fuzzy
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "Felicitări pentru evacuarea cu succes a bazei Beta."
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Dat ordin constructorului să construiască o pompă de petrol"
-
-#~ msgid "Plascrete MK3"
-#~ msgstr "Plasbeton MK3"
-
-#~ msgid "Danish"
-#~ msgstr "Daneză"
-
-#~ msgid "German"
-#~ msgstr "Germană"
-
-#, fuzzy
-#~ msgid "Spanish"
-#~ msgstr "Daneză"
-
-#, fuzzy
-#~ msgid "Finnish"
-#~ msgstr "Daneză"
-
-#~ msgid "French"
-#~ msgstr "Franceză"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "Latină"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norvegiană"
-
-#~ msgid "Dutch"
-#~ msgstr "Olandeză"
-
-#, fuzzy
-#~ msgid "Polish"
-#~ msgstr "Engleză"
-
-#, fuzzy
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugheză"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "Portugheză"
-
-#~ msgid "Russian"
-#~ msgstr "Rusă"
-
-#~ msgid "English"
-#~ msgstr "Engleză"
-
-#, fuzzy
-#~ msgid "Basque"
-#~ msgstr "Albastru"
-
-#, fuzzy
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Norvegiană"
-
-#, fuzzy
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "Suedeză"
-
-#~ msgid "Swedish"
-#~ msgstr "Suedeză"
