@@ -1,27 +1,19 @@
-# Traditional Chinese translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Chi Hsin Tsau<chtsau@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-09 03:23+0000\n"
-"PO-Revision-Date: 2009-05-11 00:21+0800\n"
-"Last-Translator: \n"
-"Language-Team: zh_TW\n"
+"PO-Revision-Date: 2020-03-09 20:26\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
-"X-Poedit-Bookmarks: 2146,2204,348,420,-1,-1,-1,-1,-1,-1\n"
-"X-Poedit-Language: Chinese\n"
-"X-Poedit-Country: TAIWAN\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: zh-TW\n"
+"X-Crowdin-File: /master/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1531,15 +1523,13 @@ msgstr "反砲兵雷達升級"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
-#, fuzzy
 msgid "CB Sensor Upgrade Mk2"
-msgstr "反砲兵雷達升級二型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
-#, fuzzy
 msgid "CB Sensor Upgrade Mk3"
-msgstr "反砲兵雷達升級三型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1548,15 +1538,13 @@ msgstr "VTOL反砲兵雷達"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
-#, fuzzy
 msgid "VTOL CB Upgrade Mk2"
-msgstr "VTOL反砲兵雷達二型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
-#, fuzzy
 msgid "VTOL CB Upgrade Mk3"
-msgstr "VTOL反砲兵雷達三型"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -4051,9 +4039,8 @@ msgstr "研發新科技（F2）"
 #: data/base/script/tutorial.js:217
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
-#, fuzzy
 msgid "Research - build research facility first"
-msgstr "研發模組用以擴展研發中心"
+msgstr ""
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4141,9 +4128,8 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "要讓鑽油井開始運作，必須先建造一座發電廠，將石油轉換成能源"
 
 #: data/base/script/tutorial.js:34
-#, fuzzy
 msgid "Left click the flashing build icon"
-msgstr "點選正在閃動中的「建造」圖示"
+msgstr ""
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -4287,14 +4273,12 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜你指揮官！！你已經完成了你的第一個任務！"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
-#, fuzzy
 msgid "Incoming Transmission"
-msgstr "傳入訊息"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
-#, fuzzy
 msgid "Transmission from Beta Base"
-msgstr "由特遣隊傳來了訊息"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
@@ -4317,9 +4301,8 @@ msgid "Dawn, July 4th, 2100"
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "計畫目標"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
@@ -4334,9 +4317,8 @@ msgid "In-flight to Western Sector"
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
-#, fuzzy
 msgid "Team Alpha nears its destination"
-msgstr "Alpha 中隊被消滅了"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4367,18 +4349,16 @@ msgid "Your destination lies in the western zone."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
-#, fuzzy
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "我們剛解碼出了傳出自New Paradigm的訊息"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
-#, fuzzy
 msgid "Commander, we are receiving this transmission."
-msgstr "我們剛剛接收到這個訊息"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
@@ -4387,33 +4367,28 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
-#, fuzzy
 msgid "You are in contravention of the New Paradigm."
-msgstr "恭喜你打敗了The New Paradigm"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
-#, fuzzy
 msgid "They are in contravention of the New Paradigm."
-msgstr "恭喜你打敗了The New Paradigm"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
-#, fuzzy
 msgid "They must be eradicated."
-msgstr "必須阻止他們！"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
-#, fuzzy
 msgid "Secure the LZ and establish a forward base."
-msgstr "確保降落點的安全，並建立一個前進基地"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
-#, fuzzy
 msgid "Then destroy the New Paradigm's base."
-msgstr "然後摧毀這個營區"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
@@ -4477,9 +4452,8 @@ msgid "We have ascertained that Nexus supplied the New Paradigm with most of its
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
-#, fuzzy
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr "NEXUS 擁有先進的科技與武器—而且他們並不友善"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
@@ -4530,9 +4504,8 @@ msgid "You will be destroyed."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-#, fuzzy
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "尋獲突觸連結科技！"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
@@ -4583,32 +4556,28 @@ msgid "In-flight to Eastern Sector"
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
-#, fuzzy
 msgid "Team Alpha approaches Beta Base"
-msgstr "Alpha 中隊被消滅了"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
-#, fuzzy
 msgid "You must defend and hold it at all costs."
-msgstr "你必須防禦所有的攻擊並保住這個基地"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
-#, fuzzy
 msgid "Commander, a new launch has been detected."
-msgstr "「指揮官，我們必須打敗NEXUS」"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
-#, fuzzy
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr "你必須建立一個撤退安全的避難所以供撤退"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
@@ -4691,14 +4660,12 @@ msgid "Nexus was fried as whole sections of its consciousness were obliterated i
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-#, fuzzy
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr "我們偵測到了有資料從這座建築物中傳送到高空衛星上"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
-#, fuzzy
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr "NEXUS已經與NASDA的衛星重新取得連結了"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
@@ -4713,9 +4680,8 @@ msgid "The nuclear reactor was going to be used to power a vast network of pre-C
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
-#, fuzzy
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr "指揮官，我們在發射井內發現了導彈"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
@@ -4734,9 +4700,8 @@ msgid "They are not part of the machine."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-#, fuzzy
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "打敗並殺掉所有跟「機器」抵抗的人"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -4755,9 +4720,8 @@ msgid "They shall fall before the might of The Collective."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
-#, fuzzy
 msgid "Attack and destroy all who resist the machine."
-msgstr "打敗並殺掉所有跟「機器」抵抗的人"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
@@ -4772,14 +4736,12 @@ msgid "Nexus now asks us to crush the Project."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
-#, fuzzy
 msgid "Cleanse and destroy!!"
-msgstr "搜尋以及摧毀"
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
-#, fuzzy
 msgid "Warriors of the Collective. You have performed well."
-msgstr "the Collective 的戰士們..."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
@@ -4794,9 +4756,8 @@ msgid "You must stop them!"
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
-#, fuzzy
 msgid "Decoding Transmission..."
-msgstr "傳來訊息..."
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -4819,9 +4780,8 @@ msgid "The Final Encounter"
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
-#, fuzzy
 msgid "Briefing Commences"
-msgstr "簡報開始："
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
@@ -4832,14 +4792,12 @@ msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
-#, fuzzy
 msgid "Time's up commander!!"
-msgstr "檢視下一部指揮車"
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
-#, fuzzy
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr "我們在這個區域偵測到了敵軍"
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
@@ -4866,9 +4824,8 @@ msgid "Please note that all entrances to the underground complex have been seale
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
-#, fuzzy
 msgid "Glad you could make it, Commander."
-msgstr "祝你好運，指揮官。"
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
@@ -4911,9 +4868,8 @@ msgid "You must destroy his command centre before we lose control of key systems
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
-#, fuzzy
 msgid "Commander, welcome to NEXUS!"
-msgstr "「指揮官，我們必須打敗NEXUS」"
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -4960,9 +4916,8 @@ msgid "Let's start by activating NEXUS in your core systems and see what happens
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
-#, fuzzy
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "指揮官，我們正試圖著要返回基地"
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
@@ -5066,9 +5021,8 @@ msgid "North America"
 msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:10
-#, fuzzy
 msgid "Nuclear Winter"
-msgstr "核子反應爐"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
@@ -5185,9 +5139,8 @@ msgid "Machinegun"
 msgstr "機槍"
 
 #: data/mp/messages/strings/names.txt:275
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL（輕型加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveWall.name
@@ -5344,24 +5297,20 @@ msgid "Lancer Tower"
 msgstr "槍騎兵火箭防衛塔"
 
 #: data/mp/messages/strings/names.txt:428
-#, fuzzy
 msgid "Advanced Manufacturing Mk3"
-msgstr "高階自動化生產工廠三型"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:436
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
-msgstr "中階自動修理工廠三型"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:437
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
-msgstr "高階自動修理工廠二型"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:438
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
-msgstr "高階自動修理工廠三型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.HeavyRepair.name
@@ -5534,21 +5483,18 @@ msgstr "超級生化人步兵（天譴飛彈）"
 
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
-#, fuzzy
 msgid "Command Turret II"
-msgstr "指揮官"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
-#, fuzzy
 msgid "Command Turret III"
-msgstr "指揮官車三型"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "指揮官"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5567,9 +5513,8 @@ msgid "INSANE"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
-#, fuzzy
 msgid "Personality change successful."
-msgstr "控制權成功移轉"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
@@ -5588,9 +5533,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "研發新科技"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5609,9 +5553,8 @@ msgid "Sorry, droid transfer failed."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
-#, fuzzy
 msgid "Power transferred."
-msgstr "發電廠"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
@@ -5632,15 +5575,13 @@ msgstr ""
 #: data/mp/multiplay/skirmish/rules.js:29
 #: src/multiint.cpp:1279
 #: src/multiint.cpp:1282
-#, fuzzy
 msgid "Scavengers"
-msgstr "拾荒者"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:30
 #: src/multiint.cpp:1284
-#, fuzzy
 msgid "No Scavengers"
-msgstr "拾荒者"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:35
 #: src/multiint.cpp:1291
@@ -5659,9 +5600,8 @@ msgstr "鎖定同盟模式"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "鎖定同盟模式"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
@@ -5704,20 +5644,18 @@ msgid "Enter password here"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1070
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -5726,14 +5664,13 @@ msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:2201
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -5783,9 +5720,8 @@ msgstr "口徑76釐米、雙管自動加農砲"
 #. data/mp/messages/resmessages23.json: $.RES_W_AAAC2.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_AAAC3.text[2]
 #: po/custom/fromJson.txt:40
-#, fuzzy
 msgid "AA accuracy +10%"
-msgstr "增加雷射系武器準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
@@ -5833,40 +5769,35 @@ msgstr "防空火砲連鎖裝彈系統一型"
 #. data/mp/stats/research.json: $.R-Defense-AASite-QuadBof.name
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:68
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "離子加農砲砲台"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:72
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "突擊加農砲要塞"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:75
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "履帶式蟒蛇坦克（高速加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:79
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "離子加農砲"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text[2]
 #: po/custom/fromJson.txt:83
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "增加防空高射砲攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
@@ -5914,9 +5845,8 @@ msgstr "HEAP防空砲彈一型"
 #. data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text[2]
 #: po/custom/fromJson.txt:117
-#, fuzzy
 msgid "AA reload time -15%"
-msgstr "自動裝填噴射一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -5971,9 +5901,8 @@ msgstr "高階強化建材一型"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy03.name
 #: po/custom/fromJson.txt:171
-#, fuzzy
 msgid "Advanced Bomb Warhead"
-msgstr "高階飛彈彈頭一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text[1]
@@ -5999,9 +5928,8 @@ msgstr "高階火焰偵測系統"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade07.name
 #: po/custom/fromJson.txt:192
-#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr "高階戰爭"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-ROF02.name
@@ -6048,9 +5976,8 @@ msgstr "高階飛彈彈頭一型"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:219
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "高階自動修理工廠 "
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RFU7.text[1]
@@ -6069,9 +5996,8 @@ msgstr "高階目標確認系統"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[1]
 #: po/custom/fromJson.txt:233
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "可偵測熱能放射"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade05.name
@@ -6096,24 +6022,21 @@ msgstr "高階自動化VTOL 生產"
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Advmaterialslab.name
 #: po/custom/fromJson.txt:247
-#, fuzzy
 msgid "Advancedmaterialslab"
-msgstr "高階戰爭"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #: po/custom/fromJson.txt:257
-#, fuzzy
 msgid "Aerodynamic Jump Pack"
-msgstr "空氣動力跳躍背包"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Aerodynamicslab.name
 #: po/custom/fromJson.txt:260
-#, fuzzy
 msgid "Aerodynamicslab"
-msgstr "空氣動力跳躍背包"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[3]
@@ -6137,9 +6060,8 @@ msgstr "所有反砲兵雷達自動升級"
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[3]
 #: po/custom/fromJson.txt:318
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "自動升級所有VTOL工廠"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[3]
@@ -6216,9 +6138,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:476
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "新的任務"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -6467,9 +6388,8 @@ msgstr "裝備有火箭（坦克殺手）的生化人步兵"
 #. data/mp/messages/resmessages2.json: $.RES_ST_MAT4.text[2]
 #. ... + 4 refs
 #: po/custom/fromJson.txt:630
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "增加防禦力及HP"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D2.text[1]
@@ -6527,9 +6447,8 @@ msgstr "裝備有電磁脈衝加農砲的防衛塔"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:670
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "裝備有槍騎兵反坦克火箭的防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
@@ -6540,9 +6459,8 @@ msgstr "裝備有迷你火箭的防衛塔"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:676
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "裝備有迷你火箭的防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
@@ -6560,9 +6478,8 @@ msgstr "裝備有NEXUS Link的防衛塔"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
 #: po/custom/fromJson.txt:686
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "裝備有火焰噴射的防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_ATMTOW.text[1]
@@ -6710,9 +6627,8 @@ msgstr "裝備履帶推進系統"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_DF_WU1.text[2]
 #: po/custom/fromJson.txt:815
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "增加物理防禦及HP"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Crate.name
@@ -6759,9 +6675,8 @@ msgstr "突擊加農砲要塞"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
 #: po/custom/fromJson.txt:842
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "突擊加農砲防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon5.name
@@ -6798,16 +6713,14 @@ msgstr "突擊槍要塞"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
 #: po/custom/fromJson.txt:865
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "履帶式蟒蛇坦克（突擊槍）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHoverAssGun.name
 #: po/custom/fromJson.txt:868
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "履帶式蟒蛇坦克（突擊槍）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyAsltGnTrk.name
@@ -6869,9 +6782,8 @@ msgstr "被指定的VTOL 會自動升空攻擊敵軍"
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.AutoRepair.name
 #: po/custom/fromJson.txt:910
-#, fuzzy
 msgid "Auto Repair"
-msgstr "自動修理技術"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Autorepair-General.name
@@ -6930,9 +6842,8 @@ msgstr "初階自動化生產工廠"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade01.name
 #: po/custom/fromJson.txt:943
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "初階自動化VTOL補給一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_ROF1.text[1]
@@ -7030,9 +6941,8 @@ msgstr "野蠻人推進動力"
 #. TRANSLATORS:
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1039
-#, fuzzy
 msgid "Back to Basics"
-msgstr "回到正常狀態"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -7133,9 +7043,8 @@ msgstr "最佳目標：坦克與砲台"
 #. data/mp/messages/resmessages1.json: $.RES_CN3MK1.text[2]
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[2]
 #: po/custom/fromJson.txt:1144
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "最佳目標：坦克與砲台"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
@@ -7147,9 +7056,8 @@ msgstr "最佳目標：輪式坦克與氣墊船"
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1151
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "新的任務"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7179,18 +7087,16 @@ msgstr "HP：非常低"
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_BAC3.text[2]
 #: po/custom/fromJson.txt:1194
-#, fuzzy
 msgid "Bomb damage +25%"
-msgstr "增加加農砲系武器傷害"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BAC1.text[0]
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_W_BAC3.text[0]
 #: po/custom/fromJson.txt:1203
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "投彈瞄準器升級"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHvyMortarHalftrack.name
@@ -7310,9 +7216,8 @@ msgstr "毒蠍VTOL（碉堡終結者）"
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperBBWheels.name
 #: po/custom/fromJson.txt:1275
-#, fuzzy
 msgid "Bunker Buster Viper Wheels"
-msgstr "輪式響尾蛇坦克（碉堡終結者）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-BB.name
@@ -7332,9 +7237,8 @@ msgstr "更有效率的燃燒石油"
 #. data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text[2]
 #: po/custom/fromJson.txt:1287
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "增加加農砲系武器準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
@@ -7362,17 +7266,15 @@ msgstr "加農砲自動裝填系統一型"
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[2]
 #: po/custom/fromJson.txt:1304
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "增加加農砲系武器傷害"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireCan.name
 #. data/mp/stats/templates.json: $.BabaFireCan.name
 #: po/custom/fromJson.txt:1308
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "消防車"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Cannon.name
@@ -7421,9 +7323,8 @@ msgstr "加農砲高速裝填系統一型"
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_ROF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_ROF4.text[2]
 #: po/custom/fromJson.txt:1337
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "加農砲自動裝填系統一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CannonTower.name
@@ -7504,9 +7405,8 @@ msgstr "平民"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1386
-#, fuzzy
 msgid "Cluster Bomb Bay"
-msgstr "集束炸彈艙"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb01.name
@@ -7640,9 +7540,8 @@ msgstr "毒蠍指揮車"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1475
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "指揮官"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7741,17 +7640,15 @@ msgstr "電腦系統科技上有所突破"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text[2]
 #: po/custom/fromJson.txt:1533
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "增加建築速度"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text[2]
 #: po/custom/fromJson.txt:1537
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "增加建築速度"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -7764,9 +7661,8 @@ msgstr "建築單位"
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #: po/custom/fromJson.txt:1545
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "最多可控制五輛指揮官車"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -7854,9 +7750,8 @@ msgstr "生化人步兵（火焰噴射）"
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
 #: po/custom/fromJson.txt:1598
-#, fuzzy
 msgid "Cyborg Heavy Body"
-msgstr "Project的重量級車身"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat05.name
@@ -7883,17 +7778,15 @@ msgstr "生化人高強度熱能裝甲一型"
 #. data/base/stats/weapons.json: $.CyborgRocket.name
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:1614
-#, fuzzy
 msgid "Cyborg Lancer"
-msgstr "生化人步兵（火焰噴射）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
 #. data/mp/stats/body.json: $.CyborgLightBody.name
 #: po/custom/fromJson.txt:1618
-#, fuzzy
 msgid "Cyborg Light Body"
-msgstr "Project的輕量級車身"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
@@ -8243,9 +8136,8 @@ msgstr "可使單位進行自行修理"
 #. data/mp/challenges/hidebehind.json: $.player_5.name
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1885
-#, fuzzy
 msgid "Enemy"
-msgstr "敵方基地"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -8309,24 +8201,22 @@ msgstr "工廠模組"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
 #: po/custom/fromJson.txt:1935
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "工廠生產速率增加"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FU1.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[2]
 #: po/custom/fromJson.txt:1939
-#, fuzzy
 msgid "Factory output speed +60%"
-msgstr "工廠生產速率增加"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text[2]
 #: po/custom/fromJson.txt:1942
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "工廠生產速率增加"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0LightFactory.name
@@ -8489,16 +8379,14 @@ msgstr "履帶式眼鏡蛇坦克（火焰噴射）"
 #. data/mp/messages/resmessages2.json: $.RES_W_FL_D4.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_W_FL_D7.text[2]
 #: po/custom/fromJson.txt:2040
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "增加火焰噴射傷害"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:2051
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "自動裝填噴射一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
@@ -8546,9 +8434,8 @@ msgstr "激光雷射要塞"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
 #: po/custom/fromJson.txt:2091
-#, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "激光雷射"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAMMk1.name
@@ -8583,9 +8470,8 @@ msgstr "燃油噴射引擎一型"
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2112
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "新的任務"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -8695,8 +8581,7 @@ msgstr "產生並集中雷射的能量"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2177
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -8704,8 +8589,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2180
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -8724,8 +8608,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2189
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -8734,8 +8617,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2193
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -8817,9 +8699,8 @@ msgstr "鈦鋼筋角牆"
 #. data/mp/stats/research.json: $.R-Defense-HardcreteGate.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Gate.name
 #: po/custom/fromJson.txt:2247
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "鈦鋼筋牆"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
@@ -8926,9 +8807,8 @@ msgstr "可建造裝備有旋風級高射砲之要塞"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy01.name
 #: po/custom/fromJson.txt:2313
-#, fuzzy
 msgid "HE Bomb Shells"
-msgstr "HE迫擊砲彈一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage02.name
@@ -8993,37 +8873,32 @@ msgstr "HE迫擊砲彈一型"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2349
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "HE迷你火箭二型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2352
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "HE迷你火箭三型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2355
-#, fuzzy
 msgid "HE Rockets"
-msgstr "HE迷你火箭一型（"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
 #: po/custom/fromJson.txt:2358
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "VTOL（高爆性穿甲炸彈艙）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-HBB.name
 #: po/custom/fromJson.txt:2361
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "中量級車身：懲罰者"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb02.name
@@ -9172,9 +9047,8 @@ msgstr "重量級車身：復仇者"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body13.name
 #: po/custom/fromJson.txt:2457
-#, fuzzy
 msgid "Heavy Body - Wyvern"
-msgstr "超重量級車身：雙足飛龍"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[1]
@@ -9343,16 +9217,14 @@ msgstr "重機槍要塞"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
 #: po/custom/fromJson.txt:2574
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "履帶式毒蠍坦克（重機槍）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpTrkHMG.name
 #: po/custom/fromJson.txt:2577
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "履帶式毒蠍坦克（重機槍）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGHalftrack.name
@@ -9518,9 +9390,8 @@ msgstr "高爆性反坦克彈頭"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text[1]
 #: po/custom/fromJson.txt:2689
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "高爆性反坦克彈頭"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAD4.text[1]
@@ -9624,16 +9495,14 @@ msgstr "高速尾翼穩定脫殼穿甲彈(HVAPFSDS)"
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2781
-#, fuzzy
 msgid "HMG Bunker"
-msgstr "旋轉機槍碉堡"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2784
-#, fuzzy
 msgid "Hover AI"
-msgstr "氣墊船二型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
@@ -9665,9 +9534,8 @@ msgstr "氣墊船"
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[2]
 #: po/custom/fromJson.txt:2805
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "增加榴彈砲系武器準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
@@ -9694,9 +9562,8 @@ msgstr "榴彈砲自動裝填器一型"
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[2]
 #: po/custom/fromJson.txt:2821
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "增加榴彈砲攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
@@ -9708,9 +9575,8 @@ msgstr "迫擊砲快速裝載系統"
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text[2]
 #: po/custom/fromJson.txt:2834
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "榴彈砲自動裝填器一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HowitzerMk1.name
@@ -9797,31 +9663,27 @@ msgstr "高階高速型鍊槍升級"
 #. data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2892
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "高速加農砲"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2896
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "高速加農砲"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
 #: po/custom/fromJson.txt:2899
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "蟒蛇氣墊船（重型加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2902
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "履帶式蟒蛇坦克（高速加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -9848,9 +9710,8 @@ msgstr "改進的穿甲彈頭"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy02.name
 #: po/custom/fromJson.txt:2922
-#, fuzzy
 msgid "Improved Bomb Warhead"
-msgstr "改善彈頭外型及裝填效能"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text[1]
@@ -9968,9 +9829,8 @@ msgstr "改善的目標辨識系統"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[1]
 #: po/custom/fromJson.txt:3001
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "可偵測熱能放射"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[1]
@@ -9982,9 +9842,8 @@ msgstr "改良後的鈦鋼筋強化混凝土牆"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[1]
 #: po/custom/fromJson.txt:3008
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "改善高爆性彈頭"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text[1]
@@ -10010,9 +9869,8 @@ msgstr "燃燒榴彈砲砲台"
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3029
-#, fuzzy
 msgid "Incendiary Howitzer Emplacement"
-msgstr "燃燒榴彈砲砲台"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -10024,25 +9882,22 @@ msgstr "燃燒榴彈砲可以指派給一座雷達"
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Incenediary.name
 #. data/mp/stats/weapons.json: $.Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3036
-#, fuzzy
 msgid "Incendiary Howitzer"
-msgstr "燃燒榴彈砲"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incenediary.name
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3040
-#, fuzzy
 msgid "Incendiary Mortar Pit"
-msgstr "燃燒迫擊砲"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Incenediary.name
 #. data/mp/stats/weapons.json: $.Mortar-Incenediary.name
 #: po/custom/fromJson.txt:3044
-#, fuzzy
 msgid "Incendiary Mortar"
-msgstr "燃燒迫擊砲"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[1]
@@ -10193,9 +10048,8 @@ msgstr "增加火箭系武器射速"
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Indirectlab.name
 #: po/custom/fromJson.txt:3252
-#, fuzzy
 msgid "Indirectweaponslab"
-msgstr "可使用新的非直射型武器"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[1]
@@ -10215,9 +10069,8 @@ msgstr "防禦能力及HP較響尾蛇差"
 #. data/mp/stats/research.json: $.R-Defense-HvyFlamer.name
 #. data/mp/stats/structure.json: $.Tower-Projector.name
 #: po/custom/fromJson.txt:3264
-#, fuzzy
 msgid "Inferno Bunker"
-msgstr "槍騎兵火箭碉堡"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHTracks.name
@@ -10228,9 +10081,8 @@ msgstr "半履帶式眼鏡蛇坦克（地獄火）"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHover.name
 #: po/custom/fromJson.txt:3270
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "半履帶式眼鏡蛇坦克（地獄火）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyFlamer.name
@@ -10249,9 +10101,8 @@ msgstr "地獄火要塞"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
 #: po/custom/fromJson.txt:3281
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "履帶式蟒蛇坦克（高速加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Flame2.name
@@ -10277,16 +10128,14 @@ msgstr "離子化渦輪引擎"
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.ECM1PylonMk1.name
 #: po/custom/fromJson.txt:3296
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "火焰噴射防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3299
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "擾頻器"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -10317,25 +10166,22 @@ msgstr "不斷監控地圖上的區域"
 #. data/mp/messages/resmessages3.json: $.RES_V_MET10.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_V_MET7.text[2]
 #: po/custom/fromJson.txt:3319
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "增加物理防禦及HP"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CYMET4.text[2]
 #: po/custom/fromJson.txt:3322
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "增加熱能防禦及HP"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYMET1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_CYMET10.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_CYMET7.text[2]
 #: po/custom/fromJson.txt:3327
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "增加熱能防禦及HP"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYMET10.text[1]
@@ -10459,16 +10305,14 @@ msgstr "可使用防空雷射武器"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text[2]
 #: po/custom/fromJson.txt:3403
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "增加雷射系武器準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text[2]
 #: po/custom/fromJson.txt:3406
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "增加雷射攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BAC2.text[1]
@@ -10492,9 +10336,8 @@ msgstr "雷射導引投彈瞄準器"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASROF1.text[2]
 #: po/custom/fromJson.txt:3419
-#, fuzzy
 msgid "Laser reload time -15%"
-msgstr "自動裝填噴射一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-LasSat.name
@@ -10516,9 +10359,8 @@ msgstr "雷射升級"
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Laseropticslab.name
 #: po/custom/fromJson.txt:3433
-#, fuzzy
 msgid "Laseropticslab"
-msgstr "雷射光學實驗室"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.LasSat.name
@@ -10687,18 +10529,16 @@ msgstr "機槍碉堡"
 #. data/mp/messages/resmessages2.json: $.RES_W_MG_D5.text[2]
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3546
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "增加機槍系武器攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
 #. data/mp/messages/resmessages2.json: $.RES_W_MG_ROF2.text[2]
 #. data/mp/messages/resmessages23.json: $.RES_W_MG_ROF3.text[2]
 #: po/custom/fromJson.txt:3551
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "機槍系武器升級"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtMGHalfTracks.name
@@ -10757,9 +10597,8 @@ msgstr "擁有最強大的防禦能力及HP"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
 #: po/custom/fromJson.txt:3617
-#, fuzzy
 msgid "May be assigned to follow units"
-msgstr "可指派給雷達導引"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[1]
@@ -10820,9 +10659,8 @@ msgstr "中量級的車身增加了防禦能力及HP"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
 #: po/custom/fromJson.txt:3652
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "履帶式眼鏡蛇坦克（中型加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-MC.name
@@ -10912,52 +10750,45 @@ msgstr "裝備有迷你火箭砲之據點"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3704
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLTracks.name
 #: po/custom/fromJson.txt:3707
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLHalfTracks.name
 #: po/custom/fromJson.txt:3710
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3713
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "輪式響尾蛇坦克（迷你火箭炮）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket02-MRL.name
 #. data/mp/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3717
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "迷你火箭炮"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3720
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3723
-#, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr "輪式響尾蛇坦克（迷你火箭炮）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket02-MRL.name
@@ -10977,23 +10808,20 @@ msgstr "迷你火箭炮"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODHTracks.name
 #: po/custom/fromJson.txt:3735
-#, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODTracks.name
 #: po/custom/fromJson.txt:3738
-#, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "履帶式眼鏡蛇坦克（迷你火箭）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower06.name
 #: po/custom/fromJson.txt:3741
-#, fuzzy
 msgid "Mini-Rocket Guard Tower"
-msgstr "迷你火箭防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -11001,41 +10829,36 @@ msgstr "迷你火箭防衛塔"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
 #. data/mp/stats/weapons.json: $.Rocket-Pod.name
 #: po/custom/fromJson.txt:3747
-#, fuzzy
 msgid "Mini-Rocket Pod"
-msgstr "迷你火箭升級"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower6.name
 #. data/mp/stats/research.json: $.R-Defense-Tower06.name
 #. data/mp/stats/structure.json: $.GuardTower6.name
 #: po/custom/fromJson.txt:3752
-#, fuzzy
 msgid "Mini-Rocket Tower"
-msgstr "迷你火箭炮防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
 #: po/custom/fromJson.txt:3761
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperPODWheels.name
 #. data/mp/stats/templates.json: $.ViperPODWheels.name
 #: po/custom/fromJson.txt:3765
-#, fuzzy
 msgid "Mini-Rocket Viper Wheels"
-msgstr "輪式響尾蛇坦克（迷你火箭）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC2.text[2]
 #: po/custom/fromJson.txt:3769
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "增加飛彈準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text[1]
@@ -11047,9 +10870,8 @@ msgstr "飛彈主動搜索並導向目標"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text[2]
 #: po/custom/fromJson.txt:3776
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "增加飛彈攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Missile.name
@@ -11063,9 +10885,8 @@ msgstr "飛彈堡壘"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_ROF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[2]
 #: po/custom/fromJson.txt:3785
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "任務進行時間 - %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[0]
@@ -11102,18 +10923,16 @@ msgstr "比蟒蛇強的防禦力及HP"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[1]
 #: po/custom/fromJson.txt:3814
-#, fuzzy
 msgid "More armor and body points than Vengeance"
-msgstr "比復仇者更強的防禦與HP"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
 #. data/mp/messages/resmessages23.json: $.RES_W_M_AC2.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_M_AC3.text[2]
 #: po/custom/fromJson.txt:3819
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "增加迫擊砲準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
@@ -11147,9 +10966,8 @@ msgstr "半履帶式眼鏡蛇坦克（迫擊砲）"
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text[2]
 #. data/mp/messages/resmessages2.json: $.RES_W_M_D4.text[2]
 #: po/custom/fromJson.txt:3839
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "增加迫擊砲攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
@@ -11171,9 +10989,8 @@ msgstr "迫擊砲砲坑"
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_M_ROF4.text[2]
 #: po/custom/fromJson.txt:3853
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "迫擊砲自動裝載系統一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
@@ -11200,9 +11017,8 @@ msgstr "迷你火箭砲台"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
 #: po/custom/fromJson.txt:3875
-#, fuzzy
 msgid "Multi Turret Body - Dragon"
-msgstr "超重量級車身：龍"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[1]
@@ -11220,9 +11036,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
 #: po/custom/fromJson.txt:3885
-#, fuzzy
 msgid "Narrow area of effect"
-msgstr "但攻擊範圍狹小"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Retrib-Trk-Needle.name
@@ -11485,9 +11300,8 @@ msgstr "可使用新系統"
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4116
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "可建造新的系統防禦工事"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
@@ -11592,9 +11406,8 @@ msgstr "NEXUS的中量級車身"
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NX-ANTI-SATSite.name
 #: po/custom/fromJson.txt:4193
-#, fuzzy
 msgid "Nexus Missile Silo"
-msgstr "飛彈發射井"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
@@ -11623,9 +11436,8 @@ msgstr "NEXUS鈦鋼筋牆"
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4211
-#, fuzzy
 msgid "Nexus"
-msgstr "Nexus Link（可搭載新的武器）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11711,16 +11523,14 @@ msgstr "命令指定的非直射武裝部隊攻擊敵軍的砲兵部隊"
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4270
-#, fuzzy
 msgid "Original Campaign"
-msgstr "新的任務"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4273
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "單人戰役模式"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -11748,9 +11558,8 @@ msgstr "旋轉迫擊砲"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
 #: po/custom/fromJson.txt:4290
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "燐光炸彈艙"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb03.name
@@ -11804,9 +11613,8 @@ msgstr "發射離子砲"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
 #: po/custom/fromJson.txt:4321
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "履帶式雙足飛龍坦克（高斯加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-PlasmaCannon.name
@@ -11844,9 +11652,8 @@ msgstr "等離子火焰噴射"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-Plasmite.name
 #: po/custom/fromJson.txt:4342
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "中量級車身：懲罰者"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade11.name
@@ -11919,9 +11726,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[2]
 #: po/custom/fromJson.txt:4383
-#, fuzzy
 msgid "Power output +30%"
-msgstr "工廠生產速率增加"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text[0]
@@ -11938,9 +11744,8 @@ msgstr "強力的電磁脈衝武器"
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4392
-#, fuzzy
 msgid "Powerlab"
-msgstr "能源"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -11953,17 +11758,15 @@ msgstr "生產生化人步兵"
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 #: po/custom/fromJson.txt:4410
-#, fuzzy
 msgid "Project Heavy Body"
-msgstr "Collective的重量級車身"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[0]
 #: po/custom/fromJson.txt:4414
-#, fuzzy
 msgid "Project Light Body"
-msgstr "Collective的輕量級車身"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[0]
@@ -11997,16 +11800,14 @@ msgstr "脈衝雷射砲台"
 #. data/mp/stats/research.json: $.R-Defense-WallTower-PulseLas.name
 #. data/mp/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:4439
-#, fuzzy
 msgid "Pulse Laser Hardpoint"
-msgstr "火焰噴射要塞"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
 #: po/custom/fromJson.txt:4442
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "脈衝雷射"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Pulse.name
@@ -12017,9 +11818,8 @@ msgstr "履帶式螳螂坦克（脈衝雷射）"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PantherHoverPulseLas.name
 #: po/custom/fromJson.txt:4448
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "脈衝雷射"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonPulseTracks.name
@@ -12030,9 +11830,8 @@ msgstr "履帶式蟒蛇坦克（脈衝雷射）"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverPulseLas.name
 #: po/custom/fromJson.txt:4454
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "履帶式虎式坦克（脈衝雷射）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerPulseTracks.name
@@ -12044,9 +11843,8 @@ msgstr "履帶式虎式坦克（脈衝雷射）"
 #. data/mp/stats/research.json: $.R-Defense-PulseLas.name
 #. data/mp/stats/structure.json: $.GuardTower-BeamLas.name
 #: po/custom/fromJson.txt:4461
-#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "脈衝雷射"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPulseTracks.name
@@ -12098,9 +11896,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
 #: po/custom/fromJson.txt:4499
-#, fuzzy
 msgid "Radar Detector Tower"
-msgstr "VTOL雷達"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-RadarDetector01.name
@@ -12112,16 +11909,14 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
 #: po/custom/fromJson.txt:4506
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "增加軌道砲系武器準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text[2]
 #: po/custom/fromJson.txt:4509
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "增加軌道砲系武器攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail2.name
@@ -12155,9 +11950,8 @@ msgstr "履帶式螳螂坦克（軌道砲）"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[2]
 #: po/custom/fromJson.txt:4529
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "軌道砲系武器升級"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
@@ -12183,9 +11977,8 @@ msgstr "軌道砲射速一型"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverRailGun.name
 #: po/custom/fromJson.txt:4544
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "軌道砲系武器升級"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[0]
@@ -12241,9 +12034,8 @@ msgstr "快速擊發的軌道砲"
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text[2]
 #: po/custom/fromJson.txt:4577
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "已研發完成： %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -12287,9 +12079,8 @@ msgstr "初階強化建材一型"
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4620
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "修理廠"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12317,24 +12108,21 @@ msgstr "毒蠍修理車"
 #. data/mp/messages/resmessages2.json: $.RES_ST_RFU4.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text[2]
 #: po/custom/fromJson.txt:4643
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "加快修理速度"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
 #. data/mp/stats/templates.json: $.A-Rep-Cobra-Trk.name
 #: po/custom/fromJson.txt:4647
-#, fuzzy
 msgid "Repair Turret Cobra Tracks"
-msgstr "履帶式眼鏡蛇修理車"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Rep-Mantis-Trk.name
 #: po/custom/fromJson.txt:4650
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "螳螂修理車"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperRepairHalftrack.name
@@ -12345,9 +12133,8 @@ msgstr "半履帶式響尾蛇修理車"
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4656
-#, fuzzy
 msgid "Repair Turret Viper Half-tracks"
-msgstr "半履帶式響尾蛇修理車"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairWheels.name
@@ -12437,16 +12224,14 @@ msgstr "研發模組"
 #. data/mp/messages/resmessages2.json: $.RES_ST_RU4.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_RU7.text[2]
 #: po/custom/fromJson.txt:4731
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "已研發完成： %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
 #: po/custom/fromJson.txt:4734
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "已研發完成： %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -12529,9 +12314,8 @@ msgstr "自動裝載彈藥系統將彈藥自動上膛"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 #: po/custom/fromJson.txt:4787
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "生產新單位"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade05.name
@@ -12554,9 +12338,8 @@ msgstr "中階自動修理工廠"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 #: po/custom/fromJson.txt:4799
-#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr "中階自動修理工廠"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade02.name
@@ -12599,9 +12382,8 @@ msgstr "中階自動化VTOL補給一型"
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[2]
 #: po/custom/fromJson.txt:4830
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "增加火箭系武器準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
@@ -12644,9 +12426,8 @@ msgstr "火箭四輪馬車"
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text[2]
 #. data/mp/messages/resmessages2.json: $.RES_W_SRK_D4.text[2]
 #: po/custom/fromJson.txt:4856
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "增加火箭系武器攻擊力"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
@@ -12673,9 +12454,8 @@ msgstr "雷射火箭導引系統"
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[2]
 #: po/custom/fromJson.txt:4872
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "火箭自動裝載系統一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[1]
@@ -12856,9 +12636,8 @@ msgstr "天譴飛彈防衛塔"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernScourgeTracks.name
 #: po/custom/fromJson.txt:4986
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "天譴飛彈防衛塔"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile2A-T.name
@@ -12878,9 +12657,8 @@ msgstr "履帶式蟒蛇坦克（天譴飛彈）"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retal-VTOL-Scourge.name
 #: po/custom/fromJson.txt:4998
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "報復者"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Cyb-Atmiss-GROUND.name
@@ -12927,9 +12705,8 @@ msgstr "利用自動導向火箭所推動的彈殼"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade09.name
 #: po/custom/fromJson.txt:5034
-#, fuzzy
 msgid "Self-Replicating Manufacturing"
-msgstr "自我複製工廠製造"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
@@ -12940,30 +12717,26 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5040
-#, fuzzy
 msgid "Sensor Cobra Half-tracks"
-msgstr "半履帶式眼鏡蛇雷達車"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[2]
 #: po/custom/fromJson.txt:5043
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "雷達可視距離"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[2]
 #: po/custom/fromJson.txt:5046
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "雷達可視距離"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
 #: po/custom/fromJson.txt:5049
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "雷達可視距離"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13019,17 +12792,15 @@ msgstr "改善雷達"
 #. data/mp/stats/research.json: $.R-Wpn-MdArtMissile.name
 #. data/mp/stats/weapons.json: $.Missile-MdArt.name
 #: po/custom/fromJson.txt:5088
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "增加飛彈準確率"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MdArtMissile.name
 #. data/mp/stats/structure.json: $.Emplacement-MdART-pit.name
 #: po/custom/fromJson.txt:5092
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "天使飛彈砲台"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_M_AC2.text[1]
@@ -13108,9 +12879,8 @@ msgstr "安定迷你火箭一型"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
 #: po/custom/fromJson.txt:5144
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "安定迷你火箭一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[3]
@@ -13170,17 +12940,15 @@ msgstr "建築科技研發完成"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
 #: po/custom/fromJson.txt:5178
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "迷你火箭炮"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Sunburst.name
 #. data/mp/stats/structure.json: $.P0-AASite-Sunburst.name
 #: po/custom/fromJson.txt:5182
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "颶風級高射砲"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-Sunburst.name
@@ -13191,25 +12959,22 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
 #: po/custom/fromJson.txt:5223
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "可使用生化人步兵運輸艦"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:5226
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "運輸車身"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
 #. data/mp/stats/templates.json: $.SuperTransport.name
 #: po/custom/fromJson.txt:5230
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "運輸艦"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -13505,31 +13270,27 @@ msgstr "VTOL會回到指定的補給點進行補給及維修"
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_CY_AH4.text[2]
 #: po/custom/fromJson.txt:5417
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "熱能裝甲三型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5420
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "熱能裝甲一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 #: po/custom/fromJson.txt:5424
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "熱能裝甲一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 #: po/custom/fromJson.txt:5427
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "熱能裝甲一型"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
@@ -13959,9 +13720,8 @@ msgstr "蒸氣渦輪發電機一型"
 #. data/mp/messages/resmessages3.json: $.RES_V_EN10.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_V_EN7.text[2]
 #: po/custom/fromJson.txt:5715
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "車身"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -13984,16 +13744,14 @@ msgstr "超緊密熱能裝甲一型"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Guass.name
 #: po/custom/fromJson.txt:5733
-#, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
-msgstr "履帶式復仇者坦克（高斯加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Scourge.name
 #: po/custom/fromJson.txt:5736
-#, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr "履帶式復仇者坦克（ 天譴飛彈）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Rail.name
@@ -14092,16 +13850,14 @@ msgstr "VTOL（突擊槍）"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
 #: po/custom/fromJson.txt:5794
-#, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "毒蟲VTOL（碉堡終結者）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-BB.name
 #: po/custom/fromJson.txt:5797
-#, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "毒蠍VTOL（碉堡終結者）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-BB.name
@@ -14157,23 +13913,20 @@ msgstr "VTOL反砲兵雷達"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-ClusterBomb.name
 #: po/custom/fromJson.txt:5840
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL（集束炸彈艙）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-ClusterBomb.name
 #: po/custom/fromJson.txt:5843
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "毒蠍VTOL（集束炸彈艙）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
 #: po/custom/fromJson.txt:5846
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay"
-msgstr "VTOL（集束炸彈艙）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
@@ -14233,23 +13986,20 @@ msgstr "VTOL（重機槍）"
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-HPV.name
 #: po/custom/fromJson.txt:5880
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL（高速加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Mantis-HPV.name
 #: po/custom/fromJson.txt:5883
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL（高速加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-HPV.name
 #: po/custom/fromJson.txt:5886
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "毒蠍VTOL（高速加農砲）"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon4AUTO-VTOL.name
@@ -14306,9 +14056,8 @@ msgstr "VTOL（機槍）"
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod.name
 #: po/custom/fromJson.txt:5917
-#, fuzzy
 msgid "VTOL Mini-Rocket"
-msgstr "HE迷你火箭一型（"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.RailGun1-VTOL.name
@@ -14445,7 +14194,7 @@ msgstr "VTOL（雙管機槍）"
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6012
 msgid "VTOL"
-msgstr "VTOL"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -14578,10 +14327,9 @@ msgstr "雙足飛龍"
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[6]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[6]
 #: po/custom/fromJson.txt:6095
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "菁英"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14595,68 +14343,60 @@ msgstr "青澀"
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[8]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[8]
 #: po/custom/fromJson.txt:6103
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "英雄"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[4]
 #: po/custom/fromJson.txt:6107
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "專家"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[3]
 #: po/custom/fromJson.txt:6111
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "好樣的"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[0]
 #: po/custom/fromJson.txt:6115
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "菜鳥"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[7]
 #: po/custom/fromJson.txt:6119
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "特務"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[2]
 #: po/custom/fromJson.txt:6123
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "訓練有素的"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[5]
 #: po/custom/fromJson.txt:6127
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "老手"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -14674,9 +14414,8 @@ msgid "Warzone 2100 Campaign Mod File"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:5
-#, fuzzy
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "開啟多人玩家音效"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
@@ -14695,9 +14434,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "儲存遊戲"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -14714,9 +14452,8 @@ msgid "Debug mode now enabled!"
 msgstr ""
 
 #: src/cheat.cpp:180
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "建築選單將重新開啟"
+msgstr ""
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:86
@@ -14733,9 +14470,8 @@ msgid "configuration directory"
 msgstr "設定資料夾"
 
 #: src/clparse.cpp:259
-#, fuzzy
 msgid "Add data directory"
-msgstr "資料夾"
+msgstr ""
 
 #: src/clparse.cpp:259
 msgid "data directory"
@@ -14743,11 +14479,11 @@ msgstr "資料夾"
 
 #: src/clparse.cpp:260
 msgid "Show debug for given level"
-msgstr "Show debug for given level"
+msgstr ""
 
 #: src/clparse.cpp:260
 msgid "debug level"
-msgstr "debug level"
+msgstr ""
 
 #: src/clparse.cpp:261
 msgid "Log debug output to file"
@@ -14759,25 +14495,23 @@ msgstr "檔案"
 
 #: src/clparse.cpp:262
 msgid "Flush all debug output written to stderr"
-msgstr "Flush all debug output written to stderr"
+msgstr ""
 
 #: src/clparse.cpp:263
 msgid "Play in fullscreen mode"
 msgstr "以全螢幕模式運行"
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "載入特定遊戲"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
 msgstr ""
 
 #: src/clparse.cpp:265
-#, fuzzy
 msgid "Show options and exit"
-msgstr "顯示版本資訊及離開"
+msgstr ""
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -14787,7 +14521,7 @@ msgstr "開啟global mod"
 #: src/clparse.cpp:267
 #: src/clparse.cpp:268
 msgid "mod"
-msgstr "mod"
+msgstr ""
 
 #: src/clparse.cpp:267
 msgid "Enable a campaign only mod"
@@ -14806,9 +14540,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -14816,9 +14549,8 @@ msgid "savegame"
 msgstr "儲存遊戲"
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -14853,18 +14585,16 @@ msgid "Disable sound"
 msgstr "關閉聲音"
 
 #: src/clparse.cpp:280
-#, fuzzy
 msgid "Connect directly to IP/hostname"
-msgstr "直接連結到IP/hostname"
+msgstr ""
 
 #: src/clparse.cpp:280
 msgid "host"
-msgstr "host"
+msgstr ""
 
 #: src/clparse.cpp:281
-#, fuzzy
 msgid "Go directly to host screen"
-msgstr "go directly to host screen"
+msgstr ""
 
 #: src/clparse.cpp:282
 msgid "Enable texture compression"
@@ -14883,9 +14613,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "儲存遊戲"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -14896,27 +14625,24 @@ msgid "test"
 msgstr ""
 
 #: src/clparse.cpp:287
-#, fuzzy
 msgid "Continue the last saved game"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
 msgstr ""
 
 #: src/clparse.cpp:288
-#, fuzzy
 msgid "autohost"
-msgstr "host"
+msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "離開遊戲"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -15011,7 +14737,7 @@ msgstr "雷達可視距離"
 #: src/design.cpp:1292
 #: src/design.cpp:1308
 msgid "ECM Power"
-msgstr "ECM Power"
+msgstr ""
 
 #: src/design.cpp:1327
 #: src/design.cpp:1344
@@ -15064,24 +14790,20 @@ msgid "Systems"
 msgstr "系統裝備"
 
 #: src/design.cpp:4283
-#, fuzzy
 msgid "Do Not Store Design"
-msgstr "刪除設計"
+msgstr ""
 
 #: src/design.cpp:4288
-#, fuzzy
 msgid "Store Design"
-msgstr "新的設計"
+msgstr ""
 
 #: src/display3d.cpp:676
-#, fuzzy
 msgid "Player left"
-msgstr "玩家"
+msgstr ""
 
 #: src/display3d.cpp:680
-#, fuzzy
 msgid "Player dropped"
-msgstr "玩家"
+msgstr ""
 
 #: src/display3d.cpp:684
 #: src/multiint.cpp:2060
@@ -15102,20 +14824,20 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "損失單位！"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -15178,14 +14900,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "繼續遊戲"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "可使用新系統"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -15256,23 +14976,20 @@ msgid "Start Skirmish Game"
 msgstr "單人戰役模式"
 
 #: src/frontend.cpp:366
-#, fuzzy
 msgid "Challenges"
-msgstr "拾荒者"
+msgstr ""
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "載入任務"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "單人戰役模式"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
-msgstr "SINGLE PLAYER"
+msgstr ""
 
 #: src/frontend.cpp:375
 #: src/frontend.cpp:421
@@ -15285,15 +15002,13 @@ msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -15331,9 +15046,8 @@ msgid "Video Options"
 msgstr "顯示選項"
 
 #: src/frontend.cpp:685
-#, fuzzy
 msgid "Audio / Zoom Options"
-msgstr "音效選項"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:489
@@ -15362,9 +15076,8 @@ msgstr "全螢幕"
 #: src/frontend.cpp:752
 #: src/frontend.cpp:903
 #: src/frontend.cpp:1683
-#, fuzzy
 msgid "Unsupported"
-msgstr "運輸機"
+msgstr ""
 
 #: src/frontend.cpp:749
 #: src/frontend.cpp:758
@@ -15398,9 +15111,8 @@ msgid "On"
 msgstr "開啟"
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Rotating"
-msgstr "向右旋轉"
+msgstr ""
 
 #: src/frontend.cpp:768
 msgid "Fixed"
@@ -15411,9 +15123,8 @@ msgid "Instant"
 msgstr ""
 
 #: src/frontend.cpp:773
-#, fuzzy
 msgid "Tracked"
-msgstr "履帶式"
+msgstr ""
 
 #: src/frontend.cpp:786
 #: src/ingameop.cpp:517
@@ -15446,19 +15157,16 @@ msgid "Radar Jump"
 msgstr ""
 
 #: src/frontend.cpp:812
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "遊戲選項"
+msgstr ""
 
 #: src/frontend.cpp:906
-#, fuzzy
 msgid "Disabled"
-msgstr "關閉聲音"
+msgstr ""
 
 #: src/frontend.cpp:909
-#, fuzzy
 msgid "Enabled"
-msgstr "開啟聲音"
+msgstr ""
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
@@ -15506,9 +15214,8 @@ msgstr ""
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "遊戲選項"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -15519,28 +15226,24 @@ msgid "Graphics Mode*"
 msgstr "圖形模式*"
 
 #: src/frontend.cpp:1137
-#, fuzzy
 msgid "Graphics Mode"
-msgstr "圖形模式*"
+msgstr ""
 
 #: src/frontend.cpp:1142
 msgid "Resolution*"
 msgstr "解析度*"
 
 #: src/frontend.cpp:1142
-#, fuzzy
 msgid "Resolution"
-msgstr "解析度*"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale*"
-msgstr "顯示遊戲中選項"
+msgstr ""
 
 #: src/frontend.cpp:1147
-#, fuzzy
 msgid "Display Scale"
-msgstr "顯示遊戲中選項"
+msgstr ""
 
 #: src/frontend.cpp:1191
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15556,23 +15259,20 @@ msgstr "貼圖精細度"
 
 #: src/frontend.cpp:1239
 #: src/ingameop.cpp:630
-#, fuzzy
 msgid "Vertical sync"
-msgstr "垂直同步*"
+msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "義大利語"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
 #: src/frontend.cpp:1260
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "遊戲選項"
+msgstr ""
 
 #: src/frontend.cpp:1547
 msgid "Middle Mouse"
@@ -15587,20 +15287,17 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "重設遊戲速度"
+msgstr ""
 
 #: src/frontend.cpp:1561
-#, fuzzy
 msgid "Camera Pitch"
-msgstr "重設視角"
+msgstr ""
 
 #: src/frontend.cpp:1576
 #: src/ingameop.cpp:697
-#, fuzzy
 msgid "Reverse Rotation"
-msgstr "反向滑鼠"
+msgstr ""
 
 #: src/frontend.cpp:1580
 #: src/ingameop.cpp:704
@@ -15609,32 +15306,27 @@ msgstr "捕捉滑鼠"
 
 #: src/frontend.cpp:1585
 #: src/ingameop.cpp:710
-#, fuzzy
 msgid "Switch Mouse Buttons"
-msgstr "滑鼠選項"
+msgstr ""
 
 #: src/frontend.cpp:1590
 #: src/ingameop.cpp:715
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "向左旋轉"
+msgstr ""
 
 #: src/frontend.cpp:1594
 #: src/ingameop.cpp:720
-#, fuzzy
 msgid "Colored Cursors"
-msgstr "捕捉滑鼠"
+msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "頁簽向左捲動"
+msgstr ""
 
 #: src/frontend.cpp:1602
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "遊戲選項"
+msgstr ""
 
 #: src/frontend.cpp:1678
 #: src/multiint.cpp:223
@@ -15662,33 +15354,28 @@ msgstr "語言"
 
 #: src/frontend.cpp:1716
 #: src/frontend.cpp:1782
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "難度"
+msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
-#, fuzzy
 msgid "Camera Speed"
-msgstr "水面移動速度"
+msgstr ""
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "單位顏色"
+msgstr ""
 
 #: src/frontend.cpp:1744
 #: src/frontend.cpp:1780
-#, fuzzy
 msgid "Campaign"
-msgstr "新的任務"
+msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "多人遊戲"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -15703,9 +15390,8 @@ msgstr ""
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "遊戲已儲存"
+msgstr ""
 
 #: src/hci.cpp:1566
 #, c-format
@@ -15723,9 +15409,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 
 #: src/hci.cpp:1607
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
+msgstr ""
 
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
@@ -15746,14 +15432,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -15766,13 +15450,11 @@ msgid "Loop Production"
 msgstr "循環生產"
 
 #: src/hci.cpp:3840
-#, fuzzy
 msgid "Ally progress"
-msgstr "建築物HP（Build Points）"
+msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -15781,9 +15463,8 @@ msgid "Chat: All"
 msgstr ""
 
 #: src/hci.cpp:4959
-#, fuzzy
 msgid "Chat: Team"
-msgstr "鎖定同盟模式"
+msgstr ""
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -15802,9 +15483,8 @@ msgstr ""
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "退出"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -15832,9 +15512,8 @@ msgid "Quit"
 msgstr "退出"
 
 #: src/ingameop.cpp:342
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "主玩家已離開遊戲"
+msgstr ""
 
 #: src/ingameop.cpp:348
 msgid "The game can't continue without the host."
@@ -15849,47 +15528,38 @@ msgid "Audio Options"
 msgstr "音效選項"
 
 #: src/ingameop.cpp:494
-#, fuzzy
 msgid "View Key Mappings"
-msgstr "鍵盤配置"
+msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "新的任務"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "單人戰役模式"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
 #: src/intdisplay.cpp:164
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "等待其他玩家"
+msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "建築物HP（Build Points）"
+msgstr ""
 
 #: src/intdisplay.cpp:234
-#, fuzzy
 msgid "Construction Progress"
-msgstr "建築單位"
+msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "改善研發科技能力"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -16048,24 +15718,21 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "關閉細節、武器及雷達顯示"
 
 #: src/keybind.cpp:326
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:336
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:346
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
+msgstr ""
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -16093,7 +15760,7 @@ msgstr "讓事情變簡單！"
 
 #: src/keybind.cpp:541
 msgid "1000 big ones!!!"
-msgstr "1000 big ones!!!"
+msgstr ""
 
 #: src/keybind.cpp:558
 msgid "Power overwhelming"
@@ -16160,12 +15827,12 @@ msgstr ""
 
 #: src/keybind.cpp:1323
 msgid "View Aligned to North"
-msgstr "View Aligned to North"
+msgstr ""
 
 #: src/keybind.cpp:1332
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "捕捉滑鼠"
+msgstr ""
 
 #: src/keybind.cpp:1418
 msgid "Researched EVERYTHING for you!"
@@ -16181,9 +15848,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1483
-#, fuzzy
 msgid "Researched"
-msgstr "研發新科技"
+msgstr ""
 
 #: src/keybind.cpp:1504
 msgid "Only displaying energy bars when selected"
@@ -16198,14 +15864,12 @@ msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
 #: src/keybind.cpp:1523
-#, fuzzy
 msgid "Debug menu is Open"
-msgstr "建築選單將重新開啟"
+msgstr ""
 
 #: src/keybind.cpp:1558
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "找不到任何工程車單位！"
+msgstr ""
 
 #: src/keybind.cpp:1722
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -16224,9 +15888,8 @@ msgid "Warning! This can have drastic consequences if used incorrectly in missio
 msgstr ""
 
 #: src/keybind.cpp:1828
-#, fuzzy
 msgid "All enemies destroyed by cheating!"
-msgstr "敵軍已經死了...由於你作弊的關係.."
+msgstr ""
 
 #: src/keybind.cpp:1869
 msgid "Destroying selected droids and structures!"
@@ -16261,9 +15924,8 @@ msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
 #: src/keybind.cpp:2508
-#, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "抱歉，多人遊戲中無法使用此作弊碼"
+msgstr ""
 
 #: src/keybind.cpp:2543
 #: src/keybind.cpp:2597
@@ -16271,14 +15933,14 @@ msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
 #: src/keybind.cpp:2547
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "遊戲速度增加至 %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2551
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "遊戲速度減少至 %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2609
 msgid "Radar showing friend-foe colors"
@@ -16345,18 +16007,16 @@ msgid "Commanders"
 msgstr "指揮官"
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "儲存遊戲"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
 msgstr "開啟或關閉雷達"
 
 #: src/keymap.cpp:305
-#, fuzzy
 msgid "QuickLoad"
-msgstr "載入遊戲"
+msgstr ""
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -16379,9 +16039,8 @@ msgid "View Location of Previous Message"
 msgstr "檢視前一訊息發生位置"
 
 #: src/keymap.cpp:311
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "開啟或關閉主控台"
+msgstr ""
 
 #: src/keymap.cpp:315
 msgid "Assign Group 0"
@@ -16504,13 +16163,12 @@ msgid "Select Commander 9"
 msgstr "選擇命令9"
 
 #: src/keymap.cpp:354
-#, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "多人遊戲選項"
+msgstr ""
 
 #: src/keymap.cpp:357
 msgid "Snap View to North"
-msgstr "Snap View to North"
+msgstr ""
 
 #: src/keymap.cpp:358
 msgid "Toggle Tracking Camera"
@@ -16613,9 +16271,8 @@ msgid "Toggle Overlays"
 msgstr "開啟或關閉疊層顯示"
 
 #: src/keymap.cpp:383
-#, fuzzy
 msgid "Toggle Console History "
-msgstr "開啟或關閉主控台"
+msgstr ""
 
 #: src/keymap.cpp:384
 msgid "Toggle Team Chat History"
@@ -16642,33 +16299,28 @@ msgid "Stop Droid"
 msgstr ""
 
 #: src/keymap.cpp:403
-#, fuzzy
 msgid "Send Global Text Message"
-msgstr "送出文字訊息"
+msgstr ""
 
 #: src/keymap.cpp:404
-#, fuzzy
 msgid "Send Team Text Message"
-msgstr "送出文字訊息"
+msgstr ""
 
 #: src/keymap.cpp:405
 msgid "Drop a beacon"
 msgstr ""
 
 #: src/keymap.cpp:407
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "開啟影子"
+msgstr ""
 
 #: src/keymap.cpp:408
-#, fuzzy
 msgid "Trap cursor"
-msgstr "捕捉滑鼠"
+msgstr ""
 
 #: src/keymap.cpp:409
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "開啟或關閉雷達"
+msgstr ""
 
 #: src/keymap.cpp:410
 msgid "Toggle ally-enemy radar view"
@@ -16683,9 +16335,8 @@ msgid "Select all Combat Units"
 msgstr "選擇所有戰鬥單位"
 
 #: src/keymap.cpp:421
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "選擇所有氣墊船單位"
+msgstr ""
 
 #: src/keymap.cpp:422
 msgid "Select all Heavily Damaged Units"
@@ -16716,9 +16367,8 @@ msgid "Select all VTOLs"
 msgstr "選擇所有VTOL 單位"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all fully-armed VTOLs"
-msgstr "選擇所有VTOL 單位"
+msgstr ""
 
 #: src/keymap.cpp:431
 msgid "Select all Wheels"
@@ -16729,49 +16379,40 @@ msgid "Show frame rate"
 msgstr ""
 
 #: src/keymap.cpp:433
-#, fuzzy
 msgid "Select all Similar Units"
-msgstr "選擇所有類似單位"
+msgstr ""
 
 #: src/keymap.cpp:437
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "選擇所有戰鬥單位"
+msgstr ""
 
 #: src/keymap.cpp:438
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "選擇所有氣墊船單位"
+msgstr ""
 
 #: src/keymap.cpp:439
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "選擇所有戰鬥單位"
+msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "選擇所有履帶單位"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "選擇所有履帶單位"
+msgstr ""
 
 #: src/keymap.cpp:442
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "選擇所有履帶單位"
+msgstr ""
 
 #: src/keymap.cpp:443
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "選擇所有類似單位"
+msgstr ""
 
 #: src/keymap.cpp:444
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "選擇所有履帶單位"
+msgstr ""
 
 #: src/keymap.cpp:448
 msgid "Select next Factory"
@@ -16790,9 +16431,8 @@ msgid "Select next Cyborg Factory"
 msgstr "選擇下一個生化人工廠"
 
 #: src/keymap.cpp:454
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "鍵盤配置"
+msgstr ""
 
 #: src/keymap.cpp:455
 msgid "Toggle display of droid path"
@@ -16803,23 +16443,20 @@ msgid "Toggle display of gateways"
 msgstr ""
 
 #: src/keymap.cpp:457
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "開啟或關閉疊層顯示"
+msgstr ""
 
 #: src/keymap.cpp:458
-#, fuzzy
 msgid "Raise tile height"
-msgstr "向右旋轉"
+msgstr ""
 
 #: src/keymap.cpp:459
 msgid "Lower tile height"
 msgstr ""
 
 #: src/keymap.cpp:460
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "開啟或關閉同盟狀態"
+msgstr ""
 
 #: src/keymap.cpp:461
 msgid "Trigger some weather"
@@ -16834,29 +16471,24 @@ msgid "Make a performance measurement sample"
 msgstr ""
 
 #: src/keymap.cpp:466
-#, fuzzy
 msgid "Make all items available"
-msgstr "可使用所有的項目"
+msgstr ""
 
 #: src/keymap.cpp:467
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "交出選擇的單位"
+msgstr ""
 
 #: src/keymap.cpp:468
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "開啟或關閉同盟狀態"
+msgstr ""
 
 #: src/keymap.cpp:469
-#, fuzzy
 msgid "Display Options Screen"
-msgstr "顯示遊戲中選項"
+msgstr ""
 
 #: src/keymap.cpp:470
-#, fuzzy
 msgid "Complete current research"
-msgstr "可開始研發指揮官系統"
+msgstr ""
 
 #: src/keymap.cpp:471
 msgid "Reveal map at mouse position"
@@ -16867,14 +16499,12 @@ msgid "Trace a game object"
 msgstr ""
 
 #: src/loadsave.cpp:311
-#, fuzzy
 msgid "Parent directory"
-msgstr "資料夾"
+msgstr ""
 
 #: src/loadsave.cpp:316
-#, fuzzy
 msgid "Autosave directory"
-msgstr "資料夾"
+msgstr ""
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory (not allowed for saving)"
@@ -16882,27 +16512,24 @@ msgstr ""
 
 #: src/loop.cpp:253
 #: src/loop.cpp:269
-#, fuzzy
 msgid "Could not save game!"
-msgstr "載入已儲存的遊戲"
+msgstr ""
 
 #: src/mission.cpp:1923
 msgid "Load Transport"
 msgstr "送上運輸艦"
 
 #: src/mission.cpp:2285
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "任務完成"
+msgstr ""
 
 #: src/mission.cpp:2285
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任務完成"
 
 #: src/mission.cpp:2291
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "任務失敗"
+msgstr ""
 
 #: src/mission.cpp:2291
 msgid "OBJECTIVE FAILED"
@@ -16924,9 +16551,8 @@ msgid "Load Saved Game"
 msgstr "載入已儲存的遊戲"
 
 #: src/mission.cpp:2425
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "遊戲已儲存"
+msgstr ""
 
 #: src/move.cpp:1981
 #, c-format
@@ -16955,9 +16581,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s 給你一個技術文件"
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s 給你能源"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -16985,9 +16611,8 @@ msgid "You Discover Blueprints For %s"
 msgstr "你發現一個用作於 %s 的藍圖"
 
 #: src/multiint.cpp:223
-#, fuzzy
 msgid "Medium"
-msgstr "移動速度：中"
+msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
@@ -17016,47 +16641,40 @@ msgid "Tanks disabled!!"
 msgstr ""
 
 #: src/multiint.cpp:1063
-#, fuzzy
 msgid "Cyborgs disabled."
-msgstr "可生產新的生化人步兵"
+msgstr ""
 
 #: src/multiint.cpp:1064
 msgid "VTOLs disabled."
 msgstr ""
 
 #: src/multiint.cpp:1065
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "衛星上傳"
+msgstr ""
 
 #: src/multiint.cpp:1066
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "激光衛星指揮中心"
+msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "設定建築物數量限制"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "選擇遊戲名稱"
+msgstr ""
 
 #: src/multiint.cpp:1229
-#, fuzzy
 msgid "One-Player Skirmish"
-msgstr "單人戰役模式"
+msgstr ""
 
 #: src/multiint.cpp:1236
 msgid "Select Game Name"
 msgstr "選擇遊戲名稱"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17065,9 +16683,8 @@ msgid "Map-Mod!"
 msgstr ""
 
 #: src/multiint.cpp:1261
-#, fuzzy
 msgid "Click to set Password"
-msgstr "按一下看地圖"
+msgstr ""
 
 #: src/multiint.cpp:1270
 msgid "Select Player Name"
@@ -17092,9 +16709,8 @@ msgstr "按一下看地圖"
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "設定建築物數量限制"
+msgstr ""
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
@@ -17102,13 +16718,11 @@ msgid "Set Structure Limits"
 msgstr "設定建築物數量限制"
 
 #: src/multiint.cpp:1334
-#, fuzzy
 msgid "Random Game Options"
-msgstr "遊戲選項"
+msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -17134,23 +16748,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "開始時具規模基地"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "玩家"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "開始時具規模基地"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -17169,33 +16780,28 @@ msgid "Team"
 msgstr "隊伍"
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "按一下看地圖"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for player"
-msgstr "等待其他玩家"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "玩家"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "玩家"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
 msgstr "按一下開始"
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Waiting for download"
-msgstr "等待其他玩家"
+msgstr ""
 
 #: src/multiint.cpp:2072
 msgid "READY?"
@@ -17206,38 +16812,32 @@ msgid "PLAYERS"
 msgstr "玩家"
 
 #: src/multiint.cpp:2149
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "按一下看地圖"
+msgstr ""
 
 #: src/multiint.cpp:2183
-#, fuzzy
 msgid "Choose Team"
-msgstr "鎖定同盟模式"
+msgstr ""
 
 #: src/multiint.cpp:2187
-#, fuzzy
 msgid "Teams locked"
-msgstr "Alpha 中隊援救成功"
+msgstr ""
 
 #: src/multiint.cpp:2213
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "雷達顯示玩家顏色"
+msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "保持戒備"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "玩家"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -17253,9 +16853,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "選擇遊戲名稱"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -17290,9 +16889,8 @@ msgid "You have been kicked: "
 msgstr ""
 
 #: src/multiint.cpp:3531
-#, fuzzy
 msgid "No connection to host."
-msgstr "無報告"
+msgstr ""
 
 #: src/multiint.cpp:3661
 msgid "Cannot change to a map with too few slots for all players."
@@ -17311,9 +16909,8 @@ msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr ""
 
 #: src/multiint.cpp:3907
-#, fuzzy
 msgid "UPnP detection is in progress..."
-msgstr "解碼中......"
+msgstr ""
 
 #: src/multiint.cpp:3914
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
@@ -17328,9 +16925,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "雷達顯示玩家顏色"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -17339,9 +16936,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "關閉"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -17360,7 +16956,7 @@ msgstr ""
 #: src/multiint.cpp:4139
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -17382,14 +16978,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "%s 加入遊戲"
+msgstr ""
 
 #: src/multijoin.cpp:503
-#, fuzzy
 msgid "Server message:"
-msgstr "系統語系"
+msgstr ""
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
@@ -17409,9 +17004,8 @@ msgid "Force Limits at Start"
 msgstr ""
 
 #: src/multilimit.cpp:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "回到前一個畫面"
+msgstr ""
 
 #: src/multilimit.cpp:192
 #: src/titleui/protocol.cpp:178
@@ -17435,19 +17029,18 @@ msgid "Technology level 3"
 msgstr "第三階科技"
 
 #: src/multimenu.cpp:593
-#, fuzzy
 msgid "Max technology level"
-msgstr "第一階科技"
+msgstr ""
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
 msgstr "任何數量的玩家"
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 玩家"
+msgstr[0] ""
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -17474,9 +17067,9 @@ msgid "Total Sent/Received —"
 msgstr ""
 
 #: src/multimenu.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "訓練有素： %u"
+msgstr ""
 
 #: src/multimenu.cpp:802
 #, c-format
@@ -17541,9 +17134,8 @@ msgid " (Global)"
 msgstr ""
 
 #: src/multiplay.cpp:1248
-#, fuzzy
 msgid "(allies"
-msgstr "同盟"
+msgstr ""
 
 #: src/multiplay.cpp:1256
 msgid "(private to "
@@ -17801,36 +17393,35 @@ msgid_plural "%u units selected"
 msgstr[0] "已選取 %u 單位"
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "已達到可控制單位總數上限，停止生產新單位"
+msgstr ""
 
 #: src/structure.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "已達到可控制單位總數上限，停止生產新單位"
+msgstr ""
 
 #: src/structure.cpp:2510
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "已達到可控制單位總數上限，停止生產新單位"
+msgstr ""
 
 #: src/structure.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "已達到可控制單位總數上限，停止生產新單位"
+msgstr ""
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - 已指派 %u  單位"
+msgstr[0] ""
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - 已指派 %u  單位"
+msgstr[0] ""
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -17844,9 +17435,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - 連接鑽油井數量 %u of %u"
+msgstr ""
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -17891,9 +17482,8 @@ msgid "Refresh Games List"
 msgstr "重新整理遊戲清單"
 
 #: src/titleui/gamefind.cpp:93
-#, fuzzy
 msgid "Filter Games List"
-msgstr "重新整理遊戲清單"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
@@ -17920,9 +17510,8 @@ msgid "[No Tanks]"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:319
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "生產生化人步兵"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:323
 msgid "[No VTOLs]"
@@ -17947,9 +17536,8 @@ msgid "There appears to be a game update available!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:382
-#, fuzzy
 msgid "No games are available for your version"
-msgstr "可使用新的科技"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -17997,9 +17585,9 @@ msgid "Mods: None!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "版本 %s%s%s%s"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -18014,14 +17602,12 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "繼續遊戲"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
-#, fuzzy
 msgid "Enter Password:"
-msgstr "按一下看地圖"
+msgstr ""
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
@@ -18029,9 +17615,8 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
-#, fuzzy
 msgid "Cancel"
-msgstr "槍騎兵火箭"
+msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -18043,7 +17628,7 @@ msgstr "遊戲大廳"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -18065,1139 +17650,18 @@ msgstr "援軍已降落"
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:115
 msgid " (modified locally)"
-msgstr " (modified locally)"
+msgstr ""
 
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:122
 msgid " - DEBUG"
-msgstr " - DEBUG"
+msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "版本 %s%s%s%s"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "已研發完成： %s"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "已研發完成： %s"
-
-#, fuzzy
-#~ msgid "Show all options and exit"
-#~ msgstr "顯示版本資訊及離開"
-
-#, fuzzy
-#~ msgid "Killer"
-#~ msgstr "殺敵數"
-
-#, fuzzy
-#~ msgid "Ending Mission."
-#~ msgstr "傳來訊息..."
-
-#, fuzzy
-#~ msgid "End Mission"
-#~ msgstr "傳來訊息..."
-
-#~ msgid "Select Map"
-#~ msgstr "選擇地圖"
-
-#, fuzzy
-#~ msgid "Difficulty locked"
-#~ msgstr "難度"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "按一下看地圖"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures"
-#~ msgstr "電子科技實驗室"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk2"
-#~ msgstr "電子科技實驗室"
-
-#, fuzzy
-#~ msgid "Electronic Countermeasures Mk3"
-#~ msgstr "電子科技實驗室"
-
-#, fuzzy
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "直到敵軍的砲火被壓制住為止"
-
-#~ msgid "Nexus Link"
-#~ msgstr "Nexus Link（可搭載新的武器）"
-
-#~ msgid "NEXUS Link"
-#~ msgstr "NEXUS Link"
-
-#, fuzzy
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "命令指定的非直射武裝部隊攻擊敵軍的砲兵部隊"
-
-#~ msgid "Scroll Speed"
-#~ msgstr "捲動速度"
-
-#~ msgid "Objective Destroyed"
-#~ msgstr "目標摧毀"
-
-#~ msgid "Objective Captured"
-#~ msgstr "捕獲目標"
-
-#~ msgid "Enemy Escaping"
-#~ msgstr "敵方逃逸"
-
-#~ msgid "Reinforcements are now available"
-#~ msgstr "可要求增援"
-
-#~ msgid "Sensor Power"
-#~ msgstr "雷達能源"
-
-#~ msgid "Set default data directory"
-#~ msgstr "設定預設資料夾"
-
-#~ msgid "game-name"
-#~ msgstr "選擇遊戲名稱"
-
-#~ msgid "Show this help message and exit"
-#~ msgstr "顯示幫助訊息及離開"
-
-#~ msgid "Unit"
-#~ msgstr "單位"
-
-#~ msgid "Place Unit on map"
-#~ msgstr "在地圖上加入單位"
-
-#~ msgid "Struct"
-#~ msgstr "建築"
-
-#~ msgid "Place Structures on map"
-#~ msgstr "在地圖上加入建築物"
-
-#~ msgid "Feat"
-#~ msgstr "特徵"
-
-#~ msgid "Place Features on map"
-#~ msgstr "在地圖上加入特徵"
-
-#~ msgid "Exit Game"
-#~ msgstr "離開遊戲"
-
-#, fuzzy
-#~ msgid "Current Player:"
-#~ msgstr "多人遊戲"
-
-#~ msgid "Machinegun Guard Tower"
-#~ msgstr "機槍防衛塔"
-
-#~ msgid "Screen Shake"
-#~ msgstr "震動螢幕"
-
-#, fuzzy
-#~ msgid "Toggle Driving Mode"
-#~ msgstr "開啟或關閉追蹤視角"
-
-#~ msgid "1X"
-#~ msgstr "1倍大小"
-
-#~ msgid "2X"
-#~ msgstr "2倍大小"
-
-#, fuzzy
-#~ msgid "Shaders"
-#~ msgstr "影子"
-
-#, fuzzy
-#~ msgid "MAP SAVED!"
-#~ msgstr "遊戲已儲存"
-
-#, fuzzy
-#~ msgid "Load Map File"
-#~ msgstr "載入遊戲"
-
-#, fuzzy
-#~ msgid "Save Map File"
-#~ msgstr "儲存遊戲"
-
-#~ msgid "Tile"
-#~ msgstr "貼圖"
-
-#~ msgid "Place tiles on map"
-#~ msgstr "在地圖上加入貼圖"
-
-#~ msgid "Pause or unpause the game"
-#~ msgstr "暫停（或繼續）遊戲"
-
-#~ msgid "Align height of all map objects"
-#~ msgstr "使地圖上所有物件等高"
-
-#, fuzzy
-#~ msgid "Start Edit Mode"
-#~ msgstr "開始時無基地"
-
-#~ msgid "Demo mode off - Returning to normal game mode"
-#~ msgstr "關閉展示模式—回到正常遊戲模式"
-
-#~ msgid "Console On/Off"
-#~ msgstr "開啟或關閉主控台"
-
-#, fuzzy
-#~ msgid "Sensor display On"
-#~ msgstr "雷達可視距離"
-
-#, fuzzy
-#~ msgid "Realign height of all objects on the map"
-#~ msgstr "使地圖上所有物件等高"
-
-#, fuzzy
-#~ msgid "Toggle watch window"
-#~ msgstr "開啟影子"
-
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - 損傷 %3.0f%%"
-
-#~ msgid " - Built %s"
-#~ msgstr " - Built %s"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "玩家"
-
-#, fuzzy
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "單位顏色"
-
-#, fuzzy
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "單位顏色"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "毒蟲VTOL（高速加農砲）"
-
-#, fuzzy
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "毒蠍VTOL（高速加農砲）"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "螳螂VTOL（高速加農砲）"
-
-#, fuzzy
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "履帶式蟒蛇坦克（高速加農砲）"
-
-#~ msgid "Activate self-test"
-#~ msgstr "啟動自我測試（self-test）"
-
-#~ msgid "Failed to create building"
-#~ msgstr "建築物建造失敗"
-
-#, fuzzy
-#~ msgid "Password:"
-#~ msgstr "按一下看地圖"
-
-#, fuzzy
-#~ msgid "3 players"
-#~ msgstr "2 玩家"
-
-#~ msgid "4 players"
-#~ msgstr "4 玩家"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "2 玩家"
-
-#~ msgid "8 players"
-#~ msgstr "8 玩家"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "4 玩家"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "2 玩家"
-
-#, fuzzy
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS限制: %d; PIEs %d; polys %d; Terr. polys %d; 狀態 %d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "能量增加"
-
-#, fuzzy
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "雷達顯示地形"
-
-#~ msgid "Fog"
-#~ msgstr "迷霧"
-
-#~ msgid "Mist"
-#~ msgstr "迷霧"
-
-#~ msgid "Fog Of War"
-#~ msgstr "完全迷霧"
-
-#~ msgid "Distance Fog"
-#~ msgstr "迷霧（看得見地形）"
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "以作弊模式運行"
-
-#, fuzzy
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "恭喜你！成功的疏散了BETA基地"
-
-#, fuzzy
-#~ msgid "Player colour"
-#~ msgstr "玩家"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "命令工程車建造鑽油井"
-
-#, fuzzy
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "命令工程車建造鑽油井"
-
-#, fuzzy
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "命令工程車建造鑽油井"
-
-#, fuzzy
-#~ msgid "Kick player"
-#~ msgstr "2 玩家"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (modified and switched locally)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (switched locally)"
-
-#, fuzzy
-#~ msgid "Infinite Production"
-#~ msgstr "循環生產"
-
-#~ msgid "Plascrete MK3"
-#~ msgstr "超合金鋼筋牆三型"
-
-#, fuzzy
-#~ msgid "Player number"
-#~ msgstr "玩家"
-
-#, fuzzy
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "增加迷你火箭準確率"
-
-#, fuzzy
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "增加迷你火箭攻擊力"
-
-#, fuzzy
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "迷你火箭升級"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "暴風級高射砲"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "遊戲"
-
-#, fuzzy
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "初階自動化VTOL補給二型"
-
-#, fuzzy
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "初階自動化VTOL補給三型"
-
-#, fuzzy
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "中階自動化VTOL補給二型"
-
-#, fuzzy
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "中階自動化VTOL補給三型"
-
-#, fuzzy
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "高階自動化生產工廠二型"
-
-#, fuzzy
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "初階自動修理工廠"
-
-#, fuzzy
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "初階自動修理工廠"
-
-#, fuzzy
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "中階自動修理工廠二型"
-
-#, fuzzy
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "HE迷你火箭一型（"
-
-#, fuzzy
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "HE迷你火箭二型"
-
-#, fuzzy
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "HE迷你火箭三型"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "生化人步兵（鋁熱反應火焰）"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "生化人步兵（手榴彈）"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "暴風級高射砲要塞"
-
-#~ msgid "Fire Cannon"
-#~ msgstr "火砲"
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "眼鏡蛇重型修理氣墊船"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "輪式響尾蛇坦克（重機槍）"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "螳螂氣墊船（坦克殺手）"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "履帶式眼鏡蛇坦克（重機槍）"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "眼鏡蛇氣墊船（重型加農砲）"
-
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "履帶式毒蠍坦克（槍騎兵火箭）"
-
-#~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "履帶式毒蠍坦克（重型加農砲）"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "毒蠍VTOL（槍騎兵火箭）"
-
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "毒蠍 BB VTOL"
-
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "響尾蛇指揮車"
-
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "眼鏡蛇指揮車"
-
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "毒蠍指揮車"
-
-#~ msgid "mantis Command Turret Tracks"
-#~ msgstr "螳螂指揮車"
-
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "履帶式眼鏡蛇坦克（槍騎兵火箭）"
-
-#~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "履帶式螳螂坦克（重型加農砲）"
-
-#~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "履帶式螳螂坦克（坦克殺手）"
-
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "履帶式螳螂坦克（天譴飛彈）"
-
-#~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "履帶式毒蠍坦克（重機槍）"
-
-#~ msgid "Scorpion Repair Tracks"
-#~ msgstr "毒蠍修理車"
-
-#~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "毒蠍重型修理車"
-
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "眼鏡蛇工程氣墊船"
-
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "毒蠍工程氣墊船"
-
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "螳螂工程氣墊船"
-
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "履帶式眼鏡蛇坦克（碉堡終結者）"
-
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "履帶式毒蠍坦克（碉堡終結者）"
-
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "履帶式螳螂坦克（碉堡終結者）"
-
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "履帶式響尾蛇坦克（槍騎兵火箭）"
-
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "半履帶式眼鏡蛇坦克（迷你火箭）"
-
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "履帶式眼鏡蛇坦克（迷你火箭）"
-
-#~ msgid "Cobra Tracks Mini-Rocket Artillery"
-#~ msgstr "履帶式眼鏡蛇坦克（迷你火箭砲）"
-
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "半履帶式眼鏡蛇坦克（火焰噴射）"
-
-#~ msgid "Python HVC Hover"
-#~ msgstr "蟒蛇氣墊船（高速加農砲）"
-
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "履帶式蟒蛇坦克（天譴飛彈）"
-
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "履帶式蟒蛇坦克（高斯加農砲）"
-
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "履帶式蟒蛇坦克（脈衝雷射）"
-
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "履帶式虎式坦克（脈衝雷射）"
-
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "履帶式虎式坦克（高能雷射）"
-
-#~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "履帶式雙足飛龍坦克（高斯加農砲）"
-
-#~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "履帶式雙足飛龍坦克（脈衝雷射）"
-
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "履帶式雙足飛龍坦克（重機槍）"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "半履帶式響尾蛇坦克（雙管機槍）"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "半履帶式響尾蛇坦克（火焰噴射）"
-
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "無法找到任何資源（resource extractors）"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "建築選單將重新開啟"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "建造選單將不會開啟"
-
-#~ msgid "Toggle reopening the build menu"
-#~ msgstr "開啟或關閉建築選單"
-
-#~ msgid "Czech"
-#~ msgstr "捷克語"
-
-#~ msgid "Danish"
-#~ msgstr "丹麥語"
-
-#~ msgid "German"
-#~ msgstr "德語"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "英語（UK）"
-
-#~ msgid "Spanish"
-#~ msgstr "西班牙語"
-
-#, fuzzy
-#~ msgid "Estonian"
-#~ msgstr "羅馬尼亞語"
-
-#~ msgid "Finnish"
-#~ msgstr "芬蘭語"
-
-#~ msgid "French"
-#~ msgstr "法語"
-
-#~ msgid "Frisian"
-#~ msgstr "弗里西語"
-
-#~ msgid "Irish"
-#~ msgstr "愛爾蘭語"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "拉托維亞語"
-
-#~ msgid "Lithuanian"
-#~ msgstr "立陶宛語"
-
-#~ msgid "Norwegian"
-#~ msgstr "挪威語"
-
-#~ msgid "Dutch"
-#~ msgstr "荷蘭語"
-
-#~ msgid "Polish"
-#~ msgstr "波蘭語"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "巴西葡萄牙語"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "葡萄牙語"
-
-#~ msgid "Romanian"
-#~ msgstr "羅馬尼亞語"
-
-#~ msgid "Russian"
-#~ msgstr "俄語"
-
-#~ msgid "Slovenian"
-#~ msgstr "斯洛凡尼亞語"
-
-#, fuzzy
-#~ msgid "Ukrainian"
-#~ msgstr "弗里西語"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "簡體中文"
-
-#~ msgid "Latin"
-#~ msgstr "拉丁語"
-
-#, fuzzy
-#~ msgid "Phosphor Bomb Bay Manits VTOL"
-#~ msgstr "燐光炸彈艙"
-
-#, fuzzy
-#~ msgid "Heap Bomb Bay Manits VTOL"
-#~ msgstr "VTOL（高爆性穿甲炸彈艙）"
-
-#, fuzzy
-#~ msgid ", mod: "
-#~ msgstr "mod"
-
-#, fuzzy
-#~ msgid "Increases Bombing damage"
-#~ msgstr "增加加農砲系武器傷害"
-
-#~ msgid "The ultimate in sensor technology"
-#~ msgstr "最高等級的雷達科技"
-
-#~ msgid "Formation speed limiting OFF"
-#~ msgstr "成型速度限制關閉"
-
-#~ msgid "Formation speed limiting ON"
-#~ msgstr "成型速度限制開啟"
-
-#, fuzzy
-#~ msgid ": Unknown cheat code."
-#~ msgstr "以作弊模式運行"
-
-#~ msgid "Stop Multiplayer Audio"
-#~ msgstr "停止多人遊戲音效"
-
-#~ msgid "Hardware"
-#~ msgstr "硬體"
-
-#~ msgid "Software (coloured)"
-#~ msgstr "軟體 (coloured)"
-
-#~ msgid "English"
-#~ msgstr "英語"
-
-#~ msgid "Basque"
-#~ msgstr "巴斯克語"
-
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "挪威語"
-
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "瑞典語"
-
-#~ msgid "Swedish"
-#~ msgstr "瑞典語"
-
-#~ msgid "Turkish"
-#~ msgstr "土耳其語"
-
-#~ msgid "Uzbek (Cyrillic)"
-#~ msgstr "烏茲別克（古斯拉夫）語"
-
-#, fuzzy
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "半履帶式眼鏡蛇坦克（重機槍）"
-
-#~ msgid "Peperpot Emplacement"
-#~ msgstr "旋轉迫擊砲砲台"
-
-#~ msgid "Command turret MkII"
-#~ msgstr "指揮官車二型"
-
-#~ msgid "Command turret MkIV"
-#~ msgstr "指揮官車四型"
-
-#~ msgid "Cursor Mode"
-#~ msgstr "滑鼠模式"
-
-#~ msgid "Software (colored)"
-#~ msgstr "軟體 (colored)"
-
-#~ msgid "Mayhem"
-#~ msgstr "混亂模式"
-
-#~ msgid "Skirmish"
-#~ msgstr "戰役模式"
-
-#~ msgid "Viper Light Cannon Wheels"
-#~ msgstr "輪式響尾蛇坦克（輕型加農砲）"
-
-#~ msgid "Viper Flamer Wheels"
-#~ msgstr "輪式響尾蛇坦克（火焰噴射）"
-
-#~ msgid "Viper Sensor Wheels"
-#~ msgstr "輪式響尾蛇雷達車"
-
-#~ msgid "Viper Light Cannon Tracks"
-#~ msgstr "履帶式響尾蛇坦克（輕型加農砲）"
-
-#~ msgid "Cobra Heavy Machinegun Half-track"
-#~ msgstr "半履帶式眼鏡蛇坦克（重機槍）"
-
-#~ msgid "Cobra Mortar Half-track"
-#~ msgstr "半履帶式眼鏡蛇坦克（迫擊砲）"
-
-#~ msgid "Cobra Light Cannon Tracks"
-#~ msgstr "履帶式眼鏡蛇坦克（輕型加農砲）"
-
-#~ msgid "Viper Medium Cannon Tracks"
-#~ msgstr "履帶式響尾蛇坦克（中型加農砲）"
-
-#~ msgid "Viper Repair Wheels"
-#~ msgstr "輪式響尾蛇修理車"
-
-#~ msgid "Viper Repair Half-track"
-#~ msgstr "半履帶式響尾蛇修理車"
-
-#~ msgid "Viper Machine Gun Wheels"
-#~ msgstr "輪式響尾蛇坦克（機槍）"
-
-#~ msgid "Viper Twin Machinegun Wheels"
-#~ msgstr "輪式響尾蛇坦克（雙管機槍）"
-
-#~ msgid "Viper Twin Machinegun Half-track"
-#~ msgstr "半履帶式響尾蛇坦克（雙管機槍）"
-
-#~ msgid "Viper Heavy Machinegun Half-track"
-#~ msgstr "半履帶式響尾蛇坦克（重機槍）"
-
-#~ msgid "Viper Heavy Machinegun Tracks"
-#~ msgstr "履帶式響尾蛇坦克（重機槍）"
-
-#~ msgid "Viper Lancer Wheels"
-#~ msgstr "輪式響尾蛇坦克（槍騎兵火箭）"
-
-#~ msgid "Viper Mini-Pod Rockets Wheels"
-#~ msgstr "輪式響尾蛇坦克（迷你火箭）"
-
-#~ msgid "Viper Mini-Rocket Artillery Wheels"
-#~ msgstr "輪式響尾蛇坦克（迷你火箭炮）"
-
-#~ msgid "Viper Bunker Buster Rockets Wheels"
-#~ msgstr "輪式響尾蛇坦克（碉堡終結者）"
-
-#~ msgid "Cobra Heavy Cannon Tracks"
-#~ msgstr "履帶式眼鏡蛇坦克（重型加農砲）"
-
-#~ msgid "Cobra Sensor Half-track"
-#~ msgstr "半履帶式眼鏡蛇雷達車"
-
-#~ msgid "Cobra Bombard Half-track"
-#~ msgstr "半履帶式眼鏡蛇坦克（重裝迫擊砲）"
-
-#~ msgid "Cobra Command Turret Half-track"
-#~ msgstr "半履帶式眼鏡蛇指揮官車"
-
-#~ msgid "Cobra Lancer Half-track"
-#~ msgstr "半履帶式眼鏡蛇坦克（槍騎兵火箭）"
-
-#~ msgid "Cobra Mini-Rocket Artillery Half-track"
-#~ msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
-
-#~ msgid "Python Light Cannon Tracks"
-#~ msgstr "履帶式蟒蛇坦克（輕型加農砲）"
-
-#~ msgid "Python Medium Cannon Tracks"
-#~ msgstr "履帶式蟒蛇坦克（中型加農砲）"
-
-#~ msgid "Python Commander Tracks"
-#~ msgstr "履帶式蟒蛇指揮車"
-
-#~ msgid "Mini-Pod"
-#~ msgstr "迷你火箭"
-
-#~ msgid "VTOL Mini-Pod"
-#~ msgstr "VTOL（迷你火箭）"
-
-#~ msgid "Machine Gunner"
-#~ msgstr "生化人步兵（機槍）"
-
-#~ msgid "Mini-Pod Rockets"
-#~ msgstr "迷你火箭"
-
-#~ msgid "Machine Gun Artifact"
-#~ msgstr "機槍科技"
-
-#~ msgid "HMG Cobra Half-tracks"
-#~ msgstr "半履帶眼鏡蛇坦克（重機槍）"
-
-#~ msgid "Commander Python Tracks"
-#~ msgstr "履帶式蟒蛇坦克（指揮車）"
-
-#~ msgid "Mini-Pod Artillery"
-#~ msgstr "迷你火箭炮"
-
-#~ msgid "Mini-Pod Battery"
-#~ msgstr "迷你火箭炮"
-
-#~ msgid "Stabilized Mini-Pods"
-#~ msgstr "安定型迷你火箭一型"
-
-#~ msgid "Stabilized Mini-Pods Mk2"
-#~ msgstr "安定型迷你火箭二型"
-
-#~ msgid "HE Mini-Pods"
-#~ msgstr "HE迷你火箭一型"
-
-#~ msgid "HE Mini-Pods Mk2"
-#~ msgstr "HE迷你火箭二型"
-
-#~ msgid "HE Mini-Pods Mk3"
-#~ msgstr "HE迷你火箭三型"
-
-#~ msgid "HEAP Mini-Pods"
-#~ msgstr "HEAP迷你火箭一型"
-
-#~ msgid "HEAP Mini-Pods Mk2"
-#~ msgstr "HEAP迷你火箭二型"
-
-#~ msgid "HEAP Mini-Pods Mk3"
-#~ msgstr "HEAP迷你火箭三型"
-
-#~ msgid "Fast Fire Mini-Pods"
-#~ msgstr "快速射擊迷你火箭一型"
-
-#~ msgid "Fast Fire Mini-Pods Mk2"
-#~ msgstr "快速射擊迷你火箭二型"
-
-#~ msgid "Fast Fire Mini-Pods Mk3"
-#~ msgstr "快速射擊迷你火箭三型"
-
-#~ msgid "Rapid Fire Mini-Pods"
-#~ msgstr "##快速射擊迷你火箭一型"
-
-#~ msgid "Rapid Fire Mini-Pods Mk2"
-#~ msgstr "##快速射擊迷你火箭二型"
-
-#~ msgid "Rapid Fire Mini-Pods Mk3"
-#~ msgstr "##快速射擊迷你火箭三型"
-
-#~ msgid "Cluster Bombs Bug VTOL"
-#~ msgstr "毒蟲VTOL（集束炸彈艙）"
-
-#~ msgid "Energy bars display toggled"
-#~ msgstr "開啟或關閉能量條"
-
-#~ msgid "NO GAMES ARE AVAILABLE"
-#~ msgstr "沒有遊戲可加入"
-
-#~ msgid "R-Wpn-MG-Damage11"
-#~ msgstr "R-Wpn-MG-Damage11"
-
-#~ msgid "R-Struc-Power-Cam2"
-#~ msgstr "R-Struc-Power-Cam2"
-
-#~ msgid "NEXUS Link Tower"
-#~ msgstr "NEXUS Link 防衛塔"
-
-#~ msgid "Whirlwind AATurret"
-#~ msgstr "旋風級高射砲"
-
-#, fuzzy
-#~ msgid "Power Upgrade"
-#~ msgstr "發電廠"
-
-#~ msgid "Viper Wheels Machinegun"
-#~ msgstr "輪式響尾蛇坦克（機槍）"
-
-#~ msgid "Viper Wheels Twin Machinegun"
-#~ msgstr "輪式響尾蛇坦克（雙管機槍）"
-
-#~ msgid "Viper Wheels Heavy Machinegun"
-#~ msgstr "輪式響尾蛇坦克（重機槍）"
-
-#~ msgid "Cobra Wheels Heavy Machinegun"
-#~ msgstr "輪式眼鏡蛇坦克（重機槍）"
-
-#~ msgid "Cobra Hover Heavy Machinegun"
-#~ msgstr "眼鏡蛇氣墊船（重機槍）"
-
-#~ msgid "Viper Tracks Machinegun"
-#~ msgstr "履帶式響尾蛇坦克（機槍）"
-
-#~ msgid "Viper Tracks Twin Machinegun"
-#~ msgstr "履帶式響尾蛇坦克（雙管機槍）"
-
-#~ msgid "Viper Tracks Heavy Machinegun"
-#~ msgstr "履帶式響尾蛇坦克（重機槍）"
-
-#~ msgid "Cobra Tracks Heavy Machinegun"
-#~ msgstr "履帶式眼鏡蛇坦克（重機槍）"
-
-#~ msgid "Cobra Hover Medium Cannon"
-#~ msgstr "眼鏡蛇氣墊船（中型加農砲）"
-
-#~ msgid "Scorpion Hover Medium Cannon"
-#~ msgstr "毒蠍氣墊船（中型加農砲）"
-
-#~ msgid "Scorpion Tracks Medium Cannon"
-#~ msgstr "履帶式毒蠍坦克（中型加農砲）"
-
-#~ msgid "Python Hover Medium Cannon"
-#~ msgstr "蟒蛇氣墊船（中型加農砲）"
-
-#~ msgid "Python Hover Heavy Cannon"
-#~ msgstr "蟒蛇氣墊船（重型加農砲）"
-
-#~ msgid "Python Tracks Heavy Cannon"
-#~ msgstr "履帶式蟒蛇坦克（重型加農砲）"
-
-#~ msgid "Mantis Tracks Railgun"
-#~ msgstr "履帶式螳螂坦克（軌道砲）"
-
-#~ msgid "Mantis Tracks Pulse Laser"
-#~ msgstr "履帶式螳螂坦克（脈衝雷射）"
-
-#~ msgid "Python Tracks Lancer"
-#~ msgstr "履帶式蟒蛇坦克（輕騎兵火箭）"
-
-#~ msgid "Mantis Tracks Lancer"
-#~ msgstr "履帶式螳螂坦克（槍騎兵火箭）"
-
-#~ msgid "Vengeance Tracks Tank Killer"
-#~ msgstr "履帶式復仇者坦克（坦克殺手）"
-
-#~ msgid "Tiger Tracks Heavy Cannon"
-#~ msgstr "履帶式虎式坦克（重型加農砲）"
-
-#~ msgid "Tiger Tracks Needle Gun"
-#~ msgstr "履帶式虎式坦克（針刺砲）"
-
-#~ msgid "Vengeance Tracks Needle Gun"
-#~ msgstr "履帶式復仇者坦克（針刺砲）"
-
-#~ msgid "Scorpion Cluster Bomb VTOL"
-#~ msgstr "毒蠍VTOL （集束炸彈艙）"
-
-#~ msgid "Scorpion Bunker Buster VTOL"
-#~ msgstr "毒蠍VTOL（碉堡終結者）"
-
-#~ msgid "Bug Lancer VTOL"
-#~ msgstr "毒蟲VTOL（槍騎兵火箭）"
-
-#~ msgid "Bug HPV VTOL"
-#~ msgstr "毒蟲VTOL（高速加農砲）"
-
-#~ msgid "Scorpion HPV VTOL"
-#~ msgstr "毒蠍VTOL（高速加農砲）"
-
-#~ msgid "Mantis Lancer VTOL"
-#~ msgstr "螳螂VTOL（槍騎兵火箭）"
-
-#~ msgid "Mantis HPV VTOL"
-#~ msgstr "螳螂VTOL（高速加農砲）"
-
-#~ msgid "Cobra Repair Tracks"
-#~ msgstr "眼鏡蛇修理車"
-
-#~ msgid "Mantis Repair Tracks"
-#~ msgstr "螳螂修理車"
-
-#, fuzzy
-#~ msgid "Python Tank Killer Tracks"
-#~ msgstr "履帶式螳螂坦克（坦克殺手）"
-
-#, fuzzy
-#~ msgid "Full"
-#~ msgstr "全螢幕模式"
-
-#~ msgid "New Paradigm Transmission"
-#~ msgstr "New Paradigm 運輸*"
-
-#~ msgid "The New Paradigm have been driven from this zone."
-#~ msgstr "The New Paradigm 的勢力已經被趕出這一個地區了"
-
-#~ msgid "Establish a forward base near the site of the Research Centre."
-#~ msgstr "在研究中心的附近建立一個前進基地"
-
-#~ msgid "This sector is now secure."
-#~ msgstr "這個地區現在安全了"
-
-#~ msgid "Be wary of attempts by NEXUS to control and infiltrate your systems."
-#~ msgstr "小心NEXUS 對你的系統的滲透及控制"
-
-#~ msgid "End Of Briefing."
-#~ msgstr "簡報結束"
-
-#~ msgid "Armed Scavengers Approaching"
-#~ msgstr "武裝拾荒者正在接近中"
-
-#, fuzzy
-#~ msgid "Unit Rescued"
-#~ msgstr "損失單位！"
-
-#, fuzzy
-#~ msgid "Units Rescued"
-#~ msgstr "我方單位"
-
-#, fuzzy
-#~ msgid "Group Rescued"
-#~ msgstr "指定為Group 0"
-
-#~ msgid "Unit Captured"
-#~ msgstr "捕獲單位"
-
-#, fuzzy
-#~ msgid "Group Captured"
-#~ msgstr "指定為Group 0"
-
-#, fuzzy
-#~ msgid "Structure Captured"
-#~ msgstr "設定建築物數量限制"
-
-#, fuzzy
-#~ msgid "Structure Destroyed"
-#~ msgstr "設定建築物數量限制"
-
-#, fuzzy
-#~ msgid "Structure Infected"
-#~ msgstr "設定建築物數量限制"
-
-#, fuzzy
-#~ msgid "Unit Infected"
-#~ msgstr "損失單位！"
-
-#, fuzzy
-#~ msgid "Group Infected"
-#~ msgstr "指定為Group 0"
-
-#~ msgid "Primary Objective Completed"
-#~ msgstr "主要目標完成"
-
-#~ msgid "Secondary Objective Completed"
-#~ msgstr "次要目標完成"
-
-#~ msgid "Time Limit Exceeded"
-#~ msgstr "超過時間限制"
-
-#~ msgid "Out Of Time"
-#~ msgstr "沒有時間了"
-
-#, fuzzy
-#~ msgid "Enemy Escaped"
-#~ msgstr "敵方單位"
-
-#~ msgid "Enemy Transport Landing"
-#~ msgstr "敵軍運輸艦降落"
-
-#~ msgid "Incoming Airstrike"
-#~ msgstr "空襲警報"
-
-#~ msgid "Team Beta Eradicated"
-#~ msgstr "Beta 中隊被消滅了"
-
-#~ msgid "Team Gamma Eradicated"
-#~ msgstr "Gamma 中隊被消滅了"
-
-#~ msgid "Team Beta Rescued"
-#~ msgstr "Beat 中隊援救成功"
-
-#~ msgid "Team Gamma Rescued"
-#~ msgstr "Gamma 中隊援救成功"
-
-#, fuzzy
-#~ msgid "Enemy Eradicated"
-#~ msgstr "敵方單位"
-
-#~ msgid "LasSat firing"
-#~ msgstr "激光雷射衛星發射"
-
-#~ msgid "LasSats firing"
-#~ msgstr "激光雷射衛星發射"
-
-#~ msgid "SAM Site"
-#~ msgstr "地對空飛彈"
-
-#~ msgid "Now left click the Viper Body"
-#~ msgstr "首先點選「車身」圖示"
-
-#~ msgid "Select the Vehicle Propulsion icon"
-#~ msgstr "選擇「車輛推進系統」圖示"
-
-#~ msgid "Presently unused"
-#~ msgstr "目前未使用"
-
-#, fuzzy
-#~ msgid "TRANSPORT MISSION: Rescue Civilians from Containment Camp "
-#~ msgstr "運輸任務：正在建造的敵軍基地"
-
-#~ msgid "Single Player Campaign"
-#~ msgstr "單人戰役模式"
-
-#~ msgid "Multi Player Game"
-#~ msgstr "多人遊戲模式"
