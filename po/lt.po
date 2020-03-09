@@ -1,24 +1,19 @@
-# Lithuanian translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Roman <rms200x@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-09 03:23+0000\n"
-"PO-Revision-Date: 2008-05-09 16:42+0000\n"
-"Last-Translator: Roman <rms200x@gmail.com>\n"
-"Language-Team: Lithuanian <lt@li.org>\n"
-"Language: lt\n"
+"PO-Revision-Date: 2020-03-09 20:30\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Lithuanian\n"
+"Language: lt_LT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
-"X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: lt\n"
+"X-Crowdin-File: /master/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -5488,9 +5483,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Kapitonas (F6)"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -5499,9 +5493,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Kapitonas (F6)"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5540,9 +5533,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5657,15 +5649,13 @@ msgid "Could not open required port (%s) on  (%s)"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -5680,8 +5670,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -6149,9 +6138,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:476
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -7068,9 +7056,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1151
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7553,9 +7540,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1475
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Kapitonas (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7654,17 +7640,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text[2]
 #: po/custom/fromJson.txt:1533
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text[2]
 #: po/custom/fromJson.txt:1537
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -7882,9 +7866,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[0]
 #: po/custom/fromJson.txt:1693
-#, fuzzy
 msgid "Cyborg Transport Available"
-msgstr "Išleisti transportą"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Transport.name
@@ -8487,9 +8470,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2112
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -8599,8 +8581,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2177
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -8608,8 +8589,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2180
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -8628,8 +8608,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2189
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -8638,8 +8617,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2193
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -9961,9 +9939,8 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_ENGIN2.text[2]
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text[2]
 #: po/custom/fromJson.txt:3099
-#, fuzzy
 msgid "Increases construction speed"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10157,9 +10134,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3299
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Kapitonas (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -11139,9 +11115,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[0]
 #: po/custom/fromJson.txt:3940
-#, fuzzy
 msgid "New Advanced Weapon Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[0]
@@ -11165,9 +11140,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[0]
 #. ... + 7 refs
 #: po/custom/fromJson.txt:3962
-#, fuzzy
 msgid "New Base Structure Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[1]
@@ -11187,9 +11161,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[0]
 #: po/custom/fromJson.txt:3990
-#, fuzzy
 msgid "New Cyborg Research Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[0]
@@ -11203,9 +11176,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS1.text[0]
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4023
-#, fuzzy
 msgid "New Laser Weapon Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text[0]
@@ -11213,9 +11185,8 @@ msgstr "Vietinė sistema"
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[0]
 #: po/custom/fromJson.txt:4029
-#, fuzzy
 msgid "New Missile Turret Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[0]
@@ -11267,9 +11238,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[0]
 #. ... + 5 refs
 #: po/custom/fromJson.txt:4064
-#, fuzzy
 msgid "New Propulsion Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text[0]
@@ -11277,9 +11247,8 @@ msgstr "Vietinė sistema"
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[0]
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4076
-#, fuzzy
 msgid "New Rail Gun Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text[1]
@@ -11301,9 +11270,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text[3]
 #: po/custom/fromJson.txt:4090
-#, fuzzy
 msgid "New research options available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[0]
@@ -11311,9 +11279,8 @@ msgstr "Vietinė sistema"
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[0]
 #. ... + 9 refs
 #: po/custom/fromJson.txt:4104
-#, fuzzy
 msgid "New Rocket Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[0]
@@ -11321,31 +11288,27 @@ msgstr "Vietinė sistema"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[0]
 #: po/custom/fromJson.txt:4110
-#, fuzzy
 msgid "New SAM Turret Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[0]
 #: po/custom/fromJson.txt:4113
-#, fuzzy
 msgid "New System Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4116
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WS.text[0]
 #: po/custom/fromJson.txt:4120
-#, fuzzy
 msgid "New Systems Structure Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VCBSTW1.text[0]
@@ -11353,9 +11316,8 @@ msgstr "Vietinė sistema"
 #. data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[0]
 #. ... + 6 refs
 #: po/custom/fromJson.txt:4126
-#, fuzzy
 msgid "New Systems Tower Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
@@ -11363,17 +11325,15 @@ msgstr "Vietinė sistema"
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #: po/custom/fromJson.txt:4132
-#, fuzzy
 msgid "New Systems Turret Available for Design"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #: po/custom/fromJson.txt:4136
-#, fuzzy
 msgid "New Systems Turret Available For Design"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -11745,9 +11705,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[0]
 #: po/custom/fromJson.txt:4371
-#, fuzzy
 msgid "Power Module Available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-PowerModuleMk1.name
@@ -11773,9 +11732,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text[0]
 #: po/custom/fromJson.txt:4386
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text[1]
@@ -11786,9 +11744,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4392
-#, fuzzy
 msgid "Powerlab"
-msgstr "Energija"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -12077,9 +12034,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text[2]
 #: po/custom/fromJson.txt:4577
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -12123,9 +12079,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4620
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Kapitonas (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12153,9 +12108,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RFU4.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text[2]
 #: po/custom/fromJson.txt:4643
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12270,16 +12224,14 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RU4.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_RU7.text[2]
 #: po/custom/fromJson.txt:4731
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
 #: po/custom/fromJson.txt:4734
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -12982,9 +12934,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG1.text[0]
 #: po/custom/fromJson.txt:5175
-#, fuzzy
 msgid "Structure Research Completed"
-msgstr "Pastatas atkurtas"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
@@ -13008,25 +12959,22 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
 #: po/custom/fromJson.txt:5223
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Išleisti transportą"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:5226
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Išleisti transportą"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
 #. data/mp/stats/templates.json: $.SuperTransport.name
 #: po/custom/fromJson.txt:5230
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "Išleisti transportą"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -13664,9 +13612,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
 #: po/custom/fromJson.txt:5632
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text[1]
@@ -13773,9 +13720,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_EN10.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_V_EN7.text[2]
 #: po/custom/fromJson.txt:5715
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -14450,8 +14396,7 @@ msgid "Veteran"
 msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -14489,9 +14434,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -14558,9 +14502,8 @@ msgid "Play in fullscreen mode"
 msgstr ""
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
@@ -14597,9 +14540,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -14607,9 +14549,8 @@ msgid "savegame"
 msgstr ""
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -14672,9 +14613,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -14701,9 +14641,8 @@ msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Išeiti iš žaidimo"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -14859,14 +14798,12 @@ msgid "Store Design"
 msgstr ""
 
 #: src/display3d.cpp:676
-#, fuzzy
 msgid "Player left"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/display3d.cpp:680
-#, fuzzy
 msgid "Player dropped"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/display3d.cpp:684
 #: src/multiint.cpp:2060
@@ -14887,20 +14824,20 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Negalima statyti. Naftos telkinys dega."
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Žala %d%% - Patirtis %d, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Žala %d%% - Patirtis %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Prarastas karinis vienetas!"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -14947,14 +14884,12 @@ msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
 #: src/frontend.cpp:146
-#, fuzzy
 msgid "Single Player"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/frontend.cpp:147
-#, fuzzy
 msgid "Multi Player"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/frontend.cpp:148
 #: src/frontend.cpp:309
@@ -14977,14 +14912,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Tęsti žaidimą"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -15059,14 +14992,12 @@ msgid "Challenges"
 msgstr ""
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -15083,15 +15014,13 @@ msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Pakrauti išsaugotą žaidimą"
+msgstr ""
 
 #: src/frontend.cpp:610
 msgid "MULTI PLAYER"
@@ -15102,9 +15031,8 @@ msgid "Host Game"
 msgstr ""
 
 #: src/frontend.cpp:613
-#, fuzzy
 msgid "Join Game"
-msgstr "Tęsti žaidimą"
+msgstr ""
 
 #: src/frontend.cpp:618
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15195,9 +15123,8 @@ msgid "On"
 msgstr ""
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Rotating"
-msgstr "Lotynų"
+msgstr ""
 
 #: src/frontend.cpp:768
 msgid "Fixed"
@@ -15348,9 +15275,8 @@ msgid "Vertical sync"
 msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "Italų"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
@@ -15373,9 +15299,8 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/frontend.cpp:1561
 msgid "Camera Pitch"
@@ -15408,9 +15333,8 @@ msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Pasukti į kairę"
+msgstr ""
 
 #: src/frontend.cpp:1602
 msgid "MOUSE OPTIONS"
@@ -15462,9 +15386,8 @@ msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -15479,9 +15402,8 @@ msgstr ""
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "Žaidimas išsaugotas"
+msgstr ""
 
 #: src/hci.cpp:1566
 #, c-format
@@ -15499,9 +15421,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas droidas: %s."
 
 #: src/hci.cpp:1607
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas droidas: %s."
+msgstr ""
 
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
@@ -15522,14 +15444,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -15542,13 +15462,11 @@ msgid "Loop Production"
 msgstr "Nesibaigianti gamyba"
 
 #: src/hci.cpp:3840
-#, fuzzy
 msgid "Ally progress"
-msgstr "Eigos juosta"
+msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -15577,9 +15495,8 @@ msgstr ""
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Išeiti"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -15607,9 +15524,8 @@ msgid "Quit"
 msgstr "Išeiti"
 
 #: src/ingameop.cpp:342
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "Hostas paliko žaidimą"
+msgstr ""
 
 #: src/ingameop.cpp:348
 msgid "The game can't continue without the host."
@@ -15628,20 +15544,16 @@ msgid "View Key Mappings"
 msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
@@ -15650,18 +15562,16 @@ msgid "Waiting for Power"
 msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "Eigos juosta"
+msgstr ""
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -15832,9 +15742,9 @@ msgid "View Aligned to West"
 msgstr ""
 
 #: src/keybind.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas droidas: %s."
+msgstr ""
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -15950,9 +15860,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1483
-#, fuzzy
 msgid "Researched"
-msgstr "Išradimas (F2)"
+msgstr ""
 
 #: src/keybind.cpp:1504
 msgid "Only displaying energy bars when selected"
@@ -16110,9 +16019,8 @@ msgid "Commanders"
 msgstr ""
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
@@ -16503,9 +16411,8 @@ msgid "Select all Mechanics"
 msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Išleisti transportą"
+msgstr ""
 
 #: src/keymap.cpp:442
 msgid "Select all Repair Tanks"
@@ -16625,18 +16532,16 @@ msgid "Load Transport"
 msgstr "Pakrauti transportą"
 
 #: src/mission.cpp:2285
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "Užduotis atlikta"
+msgstr ""
 
 #: src/mission.cpp:2285
 msgid "OBJECTIVE ACHIEVED"
 msgstr "Užduotis atlikta"
 
 #: src/mission.cpp:2291
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "Užduotis neatlikta"
+msgstr ""
 
 #: src/mission.cpp:2291
 msgid "OBJECTIVE FAILED"
@@ -16658,9 +16563,8 @@ msgid "Load Saved Game"
 msgstr "Pakrauti išsaugotą žaidimą"
 
 #: src/mission.cpp:2425
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "Žaidimas išsaugotas"
+msgstr ""
 
 #: src/move.cpp:1981
 #, c-format
@@ -16679,9 +16583,9 @@ msgid "%s Gives you a %s"
 msgstr "%s Duoda jums %s"
 
 #: src/multigifts.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "Stengėsi atsikratyti %s - bet tai nėra leidžiama."
+msgstr ""
 
 #: src/multigifts.cpp:354
 #, c-format
@@ -16689,9 +16593,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s Duoda tau technologinius dokumentus"
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s Duoda tau galios"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -16724,9 +16628,8 @@ msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Kapitonas (F6)"
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -16766,15 +16669,13 @@ msgid "Laser Satellite disabled."
 msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Pastatas atkurtas"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -16785,8 +16686,7 @@ msgid "Select Game Name"
 msgstr ""
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -16834,8 +16734,7 @@ msgid "Random Game Options"
 msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -16865,9 +16764,8 @@ msgid "Starts disadvantaged"
 msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
@@ -16894,23 +16792,20 @@ msgid "Team"
 msgstr ""
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Waiting for player"
 msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
@@ -16945,18 +16840,16 @@ msgid "Click to change player colour"
 msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -16972,9 +16865,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Išsaugoti žaidimą"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -17045,9 +16937,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -17056,9 +16948,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Uždaryti"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -17099,14 +16990,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "Hostas paliko žaidimą"
+msgstr ""
 
 #: src/multijoin.cpp:503
-#, fuzzy
 msgid "Server message:"
-msgstr "Vietinė sistema"
+msgstr ""
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
@@ -17176,14 +17066,12 @@ msgid "Kills"
 msgstr ""
 
 #: src/multimenu.cpp:765
-#, fuzzy
 msgid "Units"
-msgstr "Karinis vienetas"
+msgstr ""
 
 #: src/multimenu.cpp:781
-#, fuzzy
 msgid "Structs"
-msgstr "Statyti"
+msgstr ""
 
 #: src/multimenu.cpp:793
 msgid "Sent/Received per sec —"
@@ -17425,10 +17313,10 @@ msgid "Rookie: %u"
 msgstr ""
 
 #: src/scores.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Žalia"
+msgstr ""
 
 #: src/scores.cpp:108
 #, c-format
@@ -17730,18 +17618,16 @@ msgid "Map Name"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:585
-#, fuzzy
 msgid "Players"
-msgstr "Žaidėjas"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Tęsti žaidimą"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -17753,9 +17639,8 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
-#, fuzzy
 msgid "Cancel"
-msgstr "Žydra"
+msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -17804,177 +17689,3 @@ msgstr ""
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Išradimas (F2)"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Išradimas (F2)"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Žaidėjas"
-
-#~ msgid "Unit"
-#~ msgstr "Karinis vienetas"
-
-#~ msgid "Struct"
-#~ msgstr "Statyti"
-
-#~ msgid "Feat"
-#~ msgstr "Naujovė"
-
-#~ msgid "Exit Game"
-#~ msgstr "Išeiti iš žaidimo"
-
-#, fuzzy
-#~ msgid "Current Player:"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "MAP SAVED!"
-#~ msgstr "Žaidimas išsaugotas"
-
-#, fuzzy
-#~ msgid "Save Map File"
-#~ msgstr "Išsaugoti žaidimą"
-
-#, fuzzy
-#~ msgid "Pause or unpause the game"
-#~ msgstr "Hostas paliko žaidimą"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "Player colour"
-#~ msgstr "Žaidėjas"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Sunkvežimiui įsakyta sukonstruoti naftos platformą"
-
-#, fuzzy
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "Sunkvežimiui įsakyta sukonstruoti naftos platformą"
-
-#, fuzzy
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "Sunkvežimiui įsakyta sukonstruoti naftos platformą"
-
-#, fuzzy
-#~ msgid "Kick player"
-#~ msgstr "Žaidėjas"
-
-#, fuzzy
-#~ msgid "Infinite Production"
-#~ msgstr "Nesibaigianti gamyba"
-
-#, fuzzy
-#~ msgid "Player number"
-#~ msgstr "Žaidėjas"
-
-#~ msgid "Danish"
-#~ msgstr "Danų"
-
-#~ msgid "German"
-#~ msgstr "Vokiečių"
-
-#, fuzzy
-#~ msgid "Spanish"
-#~ msgstr "Danų"
-
-#, fuzzy
-#~ msgid "Finnish"
-#~ msgstr "Danų"
-
-#~ msgid "French"
-#~ msgstr "Prancūzų"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "Lotynų"
-
-#~ msgid "Norwegian"
-#~ msgstr "Norvegų"
-
-#~ msgid "Dutch"
-#~ msgstr "Olandų"
-
-#, fuzzy
-#~ msgid "Polish"
-#~ msgstr "Anglų"
-
-#, fuzzy
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugalų"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "Portugalų"
-
-#~ msgid "Russian"
-#~ msgstr "Rusų"
-
-#~ msgid "English"
-#~ msgstr "Anglų"
-
-#, fuzzy
-#~ msgid "Basque"
-#~ msgstr "Mėlyna"
-
-#, fuzzy
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Norvegų"
-
-#, fuzzy
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "Švedų"
-
-#~ msgid "Swedish"
-#~ msgstr "Švedų"
