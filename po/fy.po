@@ -1,24 +1,19 @@
-# Frisian translation for warzone2100
-# Copyright (c) 2008 Warzone 2100 Resurrection Project
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Wander Nauta <wnauta@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-09 03:23+0000\n"
-"PO-Revision-Date: 2008-04-21 08:59+0000\n"
-"Last-Translator: Wander Nauta <wnauta@gmail.com>\n"
-"Language-Team: Frisian <fy@li.org>\n"
-"Language: fy\n"
+"PO-Revision-Date: 2020-03-09 20:29\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Frisian\n"
+"Language: fy_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Launchpad-Export-Date: 2008-04-28 05:16+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Language: fy-NL\n"
+"X-Crowdin-File: /master/po/warzone2100.pot\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -5488,9 +5483,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Kommandanten (F6)"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -5499,9 +5493,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Kommandanten (F6)"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5540,9 +5533,8 @@ msgid "Researching fundamental technology."
 msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
-#, fuzzy
 msgid "Researching "
-msgstr "Siekjen"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5608,9 +5600,8 @@ msgstr "Teams fêststelle"
 
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1293
-#, fuzzy
 msgid "Locked Teams, No Shared Research"
-msgstr "Teams fêststelle"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1301
@@ -5658,15 +5649,13 @@ msgid "Could not open required port (%s) on  (%s)"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1074
-msgid ""
-"You must manually configure your router & firewall to\n"
+msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1084
 #, c-format
-msgid ""
-"Game configured port (%s) correctly on (%s)\n"
+msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
@@ -5681,8 +5670,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:2225
 #, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
+msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
@@ -6150,9 +6138,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:476
-#, fuzzy
 msgid "Alpha Campaign"
-msgstr "Opslein Spul Lade"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -6954,9 +6941,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1039
-#, fuzzy
 msgid "Back to Basics"
-msgstr "Werom nei normaal!"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -7070,9 +7056,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1151
-#, fuzzy
 msgid "Beta Campaign"
-msgstr "Opslein Spul Lade"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7555,9 +7540,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1475
-#, fuzzy
 msgid "Command Turret Upgrade"
-msgstr "Kommandanten (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7634,9 +7618,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG3.text[0]
 #: po/custom/fromJson.txt:1520
-#, fuzzy
 msgid "Computer Research Completed"
-msgstr "Ûndersyk foltooid"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -7657,17 +7640,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_ENGIN1.text[2]
 #: po/custom/fromJson.txt:1533
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text[2]
 #: po/custom/fromJson.txt:1537
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -7680,9 +7661,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #: po/custom/fromJson.txt:1545
-#, fuzzy
 msgid "Controls up to ten commanders"
-msgstr "Koe gjin Kommandanten fine!"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -7886,9 +7866,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[0]
 #: po/custom/fromJson.txt:1693
-#, fuzzy
 msgid "Cyborg Transport Available"
-msgstr "Transport starte"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Transport.name
@@ -8491,9 +8470,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2112
-#, fuzzy
 msgid "Gamma Campaign"
-msgstr "Opslein Spul Lade"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -8603,8 +8581,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2177
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
 
@@ -8612,8 +8589,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
 #: po/custom/fromJson.txt:2180
 #, c-format
-msgid ""
-"Gets ~ 100% more power from each oil derrick\n"
+msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
@@ -8632,8 +8608,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2189
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
 
@@ -8642,8 +8617,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
 #: po/custom/fromJson.txt:2193
 #, c-format
-msgid ""
-"Gets ~ 25% less power from each oil derrick\n"
+msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
 
@@ -9965,9 +9939,8 @@ msgstr ""
 #. data/base/messages/resmessages23.json: $.RES_ENGIN2.text[2]
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text[2]
 #: po/custom/fromJson.txt:3099
-#, fuzzy
 msgid "Increases construction speed"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10161,9 +10134,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3299
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Kommandanten (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -11143,9 +11115,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[0]
 #: po/custom/fromJson.txt:3940
-#, fuzzy
 msgid "New Advanced Weapon Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[0]
@@ -11153,9 +11124,8 @@ msgstr "Systeemlocale"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[0]
 #: po/custom/fromJson.txt:3952
-#, fuzzy
 msgid "New Artillery Missile Turret Available"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[1]
@@ -11170,9 +11140,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[0]
 #. ... + 7 refs
 #: po/custom/fromJson.txt:3962
-#, fuzzy
 msgid "New Base Structure Available"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[1]
@@ -11185,17 +11154,15 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[0]
 #: po/custom/fromJson.txt:3976
-#, fuzzy
 msgid "New Construction Options Available"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[0]
 #: po/custom/fromJson.txt:3990
-#, fuzzy
 msgid "New Cyborg Research Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[0]
@@ -11209,9 +11176,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS1.text[0]
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4023
-#, fuzzy
 msgid "New Laser Weapon Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text[0]
@@ -11219,9 +11185,8 @@ msgstr "Systeemlocale"
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[0]
 #: po/custom/fromJson.txt:4029
-#, fuzzy
 msgid "New Missile Turret Available"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[0]
@@ -11273,9 +11238,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[0]
 #. ... + 5 refs
 #: po/custom/fromJson.txt:4064
-#, fuzzy
 msgid "New Propulsion Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text[0]
@@ -11283,17 +11247,15 @@ msgstr "Systeemlocale"
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[0]
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4076
-#, fuzzy
 msgid "New Rail Gun Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_REPAI1.text[1]
 #: po/custom/fromJson.txt:4080
-#, fuzzy
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "Reparaasjefasiliteit Priis - Reparaasje"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[0]
@@ -11308,9 +11270,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text[3]
 #: po/custom/fromJson.txt:4090
-#, fuzzy
 msgid "New research options available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[0]
@@ -11318,9 +11279,8 @@ msgstr "Systeemlocale"
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[0]
 #. ... + 9 refs
 #: po/custom/fromJson.txt:4104
-#, fuzzy
 msgid "New Rocket Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[0]
@@ -11328,31 +11288,27 @@ msgstr "Systeemlocale"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[0]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[0]
 #: po/custom/fromJson.txt:4110
-#, fuzzy
 msgid "New SAM Turret Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[0]
 #: po/custom/fromJson.txt:4113
-#, fuzzy
 msgid "New System Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4116
-#, fuzzy
 msgid "New Systems Sensor Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WS.text[0]
 #: po/custom/fromJson.txt:4120
-#, fuzzy
 msgid "New Systems Structure Available"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VCBSTW1.text[0]
@@ -11360,9 +11316,8 @@ msgstr "Alle items binne beskikber makke"
 #. data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[0]
 #. ... + 6 refs
 #: po/custom/fromJson.txt:4126
-#, fuzzy
 msgid "New Systems Tower Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
@@ -11370,17 +11325,15 @@ msgstr "Systeemlocale"
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #: po/custom/fromJson.txt:4132
-#, fuzzy
 msgid "New Systems Turret Available for Design"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #: po/custom/fromJson.txt:4136
-#, fuzzy
 msgid "New Systems Turret Available For Design"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -11576,9 +11529,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4273
-#, fuzzy
 msgid "Original Skirmish"
-msgstr "Oanpast"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -11753,9 +11705,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[0]
 #: po/custom/fromJson.txt:4371
-#, fuzzy
 msgid "Power Module Available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-PowerModuleMk1.name
@@ -11781,9 +11732,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text[0]
 #: po/custom/fromJson.txt:4386
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Ûndersyk foltooid"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text[1]
@@ -11794,9 +11744,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4392
-#, fuzzy
 msgid "Powerlab"
-msgstr "Krêft"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -12085,9 +12034,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text[2]
 #: po/custom/fromJson.txt:4577
-#, fuzzy
 msgid "Rearming speed +30%"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -12131,9 +12079,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4620
-#, fuzzy
 msgid "Repair Center Turret"
-msgstr "Kommandanten (F6)"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12161,9 +12108,8 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RFU4.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text[2]
 #: po/custom/fromJson.txt:4643
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12254,9 +12200,8 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[0]
 #: po/custom/fromJson.txt:4716
-#, fuzzy
 msgid "Research Module Available"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[1]
@@ -12279,16 +12224,14 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_ST_RU4.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_ST_RU7.text[2]
 #: po/custom/fromJson.txt:4731
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
 #: po/custom/fromJson.txt:4734
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -12991,9 +12934,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG1.text[0]
 #: po/custom/fromJson.txt:5175
-#, fuzzy
 msgid "Structure Research Completed"
-msgstr "Ûndersyk foltooid"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
@@ -13017,25 +12959,22 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
 #: po/custom/fromJson.txt:5223
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Transport starte"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.SuperTransportBody.name
 #: po/custom/fromJson.txt:5226
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Transport starte"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-SuperTransport.name
 #. data/mp/stats/templates.json: $.SuperTransport.name
 #: po/custom/fromJson.txt:5230
 #: src/design.cpp:1059
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transport starte"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
@@ -13197,9 +13136,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG5.text[0]
 #: po/custom/fromJson.txt:5340
-#, fuzzy
 msgid "Systems Research Completed"
-msgstr "Ûndersyk foltooid"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyA-Trocket.name
@@ -13674,9 +13612,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
 #: po/custom/fromJson.txt:5632
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Ûndersyk foltooid"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text[1]
@@ -13783,9 +13720,8 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_V_EN10.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_V_EN7.text[2]
 #: po/custom/fromJson.txt:5715
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Ûndersyk foltooid: %s"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -14281,9 +14217,8 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG6.text[0]
 #: po/custom/fromJson.txt:6030
-#, fuzzy
 msgid "Weapon Research Completed"
-msgstr "Ûndersyk foltooid"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_W1.text[1]
@@ -14392,10 +14327,9 @@ msgstr ""
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[6]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[6]
 #: po/custom/fromJson.txt:6095
-#, fuzzy
 msgctxt "rank"
 msgid "Elite"
-msgstr "Elite"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14409,68 +14343,60 @@ msgstr "Begjinner"
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[8]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[8]
 #: po/custom/fromJson.txt:6103
-#, fuzzy
 msgctxt "rank"
 msgid "Hero"
-msgstr "Held"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[4]
 #: po/custom/fromJson.txt:6107
-#, fuzzy
 msgctxt "rank"
 msgid "Professional"
-msgstr "Professioneel"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[3]
 #: po/custom/fromJson.txt:6111
-#, fuzzy
 msgctxt "rank"
 msgid "Regular"
-msgstr "Normaal"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[0]
 #: po/custom/fromJson.txt:6115
-#, fuzzy
 msgctxt "rank"
 msgid "Rookie"
-msgstr "Kabouter"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[7]
 #: po/custom/fromJson.txt:6119
-#, fuzzy
 msgctxt "rank"
 msgid "Special"
-msgstr "Spesjaal"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[2]
 #: po/custom/fromJson.txt:6123
-#, fuzzy
 msgctxt "rank"
 msgid "Trained"
-msgstr "Traint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
 #. data/base/stats/brain.json: $.ZNULLBRAIN.ranks[5]
 #: po/custom/fromJson.txt:6127
-#, fuzzy
 msgctxt "rank"
 msgid "Veteran"
-msgstr "Feteraan"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:1
-msgid ""
-"Copyright © 1999-2004 Eidos Interactive.\n"
+msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
 msgstr ""
 
@@ -14508,9 +14434,8 @@ msgid "Postnuclear realtime strategy"
 msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
-#, fuzzy
 msgid "Strategy Game"
-msgstr "Spul Opslaan"
+msgstr ""
 
 #: src/cheat.cpp:164
 #, c-format
@@ -14527,9 +14452,8 @@ msgid "Debug mode now enabled!"
 msgstr ""
 
 #: src/cheat.cpp:180
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Boumenu sil opnij iepenje"
+msgstr ""
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:86
@@ -14578,9 +14502,8 @@ msgid "Play in fullscreen mode"
 msgstr ""
 
 #: src/clparse.cpp:264
-#, fuzzy
 msgid "Load a specific game mode"
-msgstr "Tsjinnen Spul Starte"
+msgstr ""
 
 #: src/clparse.cpp:264
 msgid "level name"
@@ -14617,9 +14540,8 @@ msgid "Causes a crash to test the crash handler"
 msgstr ""
 
 #: src/clparse.cpp:271
-#, fuzzy
 msgid "Load a saved skirmish game"
-msgstr "Tsjinnen Spul Starte"
+msgstr ""
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -14627,9 +14549,8 @@ msgid "savegame"
 msgstr ""
 
 #: src/clparse.cpp:272
-#, fuzzy
 msgid "Load a saved campaign game"
-msgstr "Opslein Spul Lade"
+msgstr ""
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -14692,9 +14613,8 @@ msgid "Immediately save game and quit"
 msgstr ""
 
 #: src/clparse.cpp:285
-#, fuzzy
 msgid "save name"
-msgstr "Spul Opslaan"
+msgstr ""
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -14721,9 +14641,8 @@ msgid "Commander needs a higher level to command more units"
 msgstr ""
 
 #: src/configuration.cpp:163
-#, fuzzy
 msgid "My Game"
-msgstr "Spul ferlitte"
+msgstr ""
 
 #: src/configuration.cpp:164
 #: src/multistat.cpp:178
@@ -14879,14 +14798,12 @@ msgid "Store Design"
 msgstr ""
 
 #: src/display3d.cpp:676
-#, fuzzy
 msgid "Player left"
-msgstr "Spiler"
+msgstr ""
 
 #: src/display3d.cpp:680
-#, fuzzy
 msgid "Player dropped"
-msgstr "Spiler"
+msgstr ""
 
 #: src/display3d.cpp:684
 #: src/multiint.cpp:2060
@@ -14907,20 +14824,20 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kin net bouwe. Oaljebron is oan it brânen."
 
 #: src/display.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr "%s - Skea %d%% - Erfaring %d, %s"
+msgstr ""
 
 #: src/display.cpp:1692
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - Skea %d%% - Erfaring %d, %s"
+msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lost!"
-msgstr "Ienheid Ferlen!"
+msgstr ""
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -14959,14 +14876,12 @@ msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
 #: src/frontend.cpp:146
-#, fuzzy
 msgid "Single Player"
-msgstr "Spilernamme Selekteare"
+msgstr ""
 
 #: src/frontend.cpp:147
-#, fuzzy
 msgid "Multi Player"
-msgstr "Spiler"
+msgstr ""
 
 #: src/frontend.cpp:148
 #: src/frontend.cpp:309
@@ -14989,14 +14904,12 @@ msgstr ""
 
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
-#, fuzzy
 msgid "Continue Last Save"
-msgstr "Fjirder Mei Spul"
+msgstr ""
 
 #: src/frontend.cpp:168
-#, fuzzy
 msgid "No last save available"
-msgstr "Systeemlocale"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -15063,23 +14976,20 @@ msgid "New Campaign"
 msgstr ""
 
 #: src/frontend.cpp:365
-#, fuzzy
 msgid "Start Skirmish Game"
-msgstr "Tsjinnen Spul Starte"
+msgstr ""
 
 #: src/frontend.cpp:366
 msgid "Challenges"
 msgstr ""
 
 #: src/frontend.cpp:367
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Opslein Spul Lade"
+msgstr ""
 
 #: src/frontend.cpp:368
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Tsjinnen Spul Starte"
+msgstr ""
 
 #: src/frontend.cpp:370
 msgid "SINGLE PLAYER"
@@ -15096,29 +15006,25 @@ msgstr ""
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Opslein Spul Lade"
+msgstr ""
 
 #: src/frontend.cpp:557
 #: src/ingameop.cpp:878
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Opslein Spul Lade"
+msgstr ""
 
 #: src/frontend.cpp:610
-#, fuzzy
 msgid "MULTI PLAYER"
-msgstr "SPILERS"
+msgstr ""
 
 #: src/frontend.cpp:612
 msgid "Host Game"
 msgstr ""
 
 #: src/frontend.cpp:613
-#, fuzzy
 msgid "Join Game"
-msgstr "Fjirder Mei Spul"
+msgstr ""
 
 #: src/frontend.cpp:618
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15209,9 +15115,8 @@ msgid "On"
 msgstr ""
 
 #: src/frontend.cpp:768
-#, fuzzy
 msgid "Rotating"
-msgstr "Latyn"
+msgstr ""
 
 #: src/frontend.cpp:768
 msgid "Fixed"
@@ -15256,9 +15161,8 @@ msgid "Radar Jump"
 msgstr ""
 
 #: src/frontend.cpp:812
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "YNSTELLINGS"
+msgstr ""
 
 #: src/frontend.cpp:906
 msgid "Disabled"
@@ -15314,9 +15218,8 @@ msgstr ""
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:996
-#, fuzzy
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "YNSTELLINGS"
+msgstr ""
 
 #: src/frontend.cpp:1120
 msgid "Windowed"
@@ -15364,18 +15267,16 @@ msgid "Vertical sync"
 msgstr ""
 
 #: src/frontend.cpp:1243
-#, fuzzy
 msgid "Antialiasing*"
-msgstr "Italjaansk"
+msgstr ""
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
 #: src/frontend.cpp:1260
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "YNSTELLINGS"
+msgstr ""
 
 #: src/frontend.cpp:1547
 msgid "Middle Mouse"
@@ -15390,9 +15291,8 @@ msgid "Map/Radar Zoom"
 msgstr ""
 
 #: src/frontend.cpp:1560
-#, fuzzy
 msgid "Game Speed"
-msgstr "Spulsnelheid opnij ynsteld"
+msgstr ""
 
 #: src/frontend.cpp:1561
 msgid "Camera Pitch"
@@ -15425,14 +15325,12 @@ msgstr ""
 
 #: src/frontend.cpp:1598
 #: src/ingameop.cpp:725
-#, fuzzy
 msgid "Scroll Event"
-msgstr "Tab links"
+msgstr ""
 
 #: src/frontend.cpp:1602
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "YNSTELLINGS"
+msgstr ""
 
 #: src/frontend.cpp:1678
 #: src/multiint.cpp:223
@@ -15465,9 +15363,8 @@ msgstr ""
 
 #: src/frontend.cpp:1720
 #: src/frontend.cpp:1783
-#, fuzzy
 msgid "Camera Speed"
-msgstr "Spulsnelheid opnij ynsteld"
+msgstr ""
 
 #: src/frontend.cpp:1724
 #: src/frontend.cpp:1779
@@ -15481,9 +15378,8 @@ msgstr ""
 
 #: src/frontend.cpp:1754
 #: src/frontend.cpp:1781
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Spiler"
+msgstr ""
 
 #: src/frontend.cpp:1760
 #: src/frontend.cpp:1776
@@ -15498,9 +15394,8 @@ msgstr ""
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
 #: src/loop.cpp:262
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "SPUL OPSLEIN!"
+msgstr ""
 
 #: src/hci.cpp:1566
 #, c-format
@@ -15518,9 +15413,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Spiler %u is oan it fals spyljen (debugmenu)! Him of sij krijt in nije robot: %s."
 
 #: src/hci.cpp:1607
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Spiler %u is oan it fals spyljen (debugmenu)! Him of sij krijt in nije robot: %s."
+msgstr ""
 
 #: src/hci.cpp:2826
 #: src/multiint.cpp:1300
@@ -15541,14 +15436,12 @@ msgid "Showing Obsolete Tech"
 msgstr ""
 
 #: src/hci.cpp:3551
-msgid ""
-"Showing All Tech\n"
+msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
 #: src/hci.cpp:3553
-msgid ""
-"Showing Only Favorite Tech\n"
+msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
@@ -15561,13 +15454,11 @@ msgid "Loop Production"
 msgstr "Sirkelproduksje"
 
 #: src/hci.cpp:3840
-#, fuzzy
 msgid "Ally progress"
-msgstr "Foartgongsbalke"
+msgstr ""
 
 #: src/hci.cpp:3855
-msgid ""
-"\n"
+msgid "\n"
 "Cost: %1"
 msgstr ""
 
@@ -15576,9 +15467,8 @@ msgid "Chat: All"
 msgstr ""
 
 #: src/hci.cpp:4959
-#, fuzzy
 msgid "Chat: Team"
-msgstr "Teams fêststelle"
+msgstr ""
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -15597,9 +15487,8 @@ msgstr ""
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
-#, fuzzy
 msgid "Host Quit"
-msgstr "Ofslute"
+msgstr ""
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -15627,9 +15516,8 @@ msgid "Quit"
 msgstr "Ofslute"
 
 #: src/ingameop.cpp:342
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "De tsjinner hat it spul ferlitten!"
+msgstr ""
 
 #: src/ingameop.cpp:348
 msgid "The game can't continue without the host."
@@ -15648,20 +15536,16 @@ msgid "View Key Mappings"
 msgstr ""
 
 #: src/ingameop.cpp:882
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Spul Opslaan"
+msgstr ""
 
 #: src/ingameop.cpp:886
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Tsjinnen Spul Starte"
+msgstr ""
 
 #: src/init.cpp:445
 #, c-format
-msgid ""
-"The required mod could not be loaded: %s\n"
-"\n"
+msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
@@ -15670,18 +15554,16 @@ msgid "Waiting for Power"
 msgstr ""
 
 #: src/intdisplay.cpp:212
-#, fuzzy
 msgid "Build Progress"
-msgstr "Foartgongsbalke"
+msgstr ""
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:255
-#, fuzzy
 msgid "Research Progress"
-msgstr "Ûndersykspriis"
+msgstr ""
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
@@ -15840,24 +15722,21 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
 #: src/keybind.cpp:326
-#, fuzzy
 msgid "View Aligned to South"
-msgstr "Werjoust nei it noarden"
+msgstr ""
 
 #: src/keybind.cpp:336
-#, fuzzy
 msgid "View Aligned to East"
-msgstr "Werjoust nei it noarden"
+msgstr ""
 
 #: src/keybind.cpp:346
-#, fuzzy
 msgid "View Aligned to West"
-msgstr "Werjoust nei it noarden"
+msgstr ""
 
 #: src/keybind.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Spiler %u is oan it fals spyljen (debugmenu)! Him of sij krijt in nije robot: %s."
+msgstr ""
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -15973,9 +15852,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1483
-#, fuzzy
 msgid "Researched"
-msgstr "Ûndersykspriis"
+msgstr ""
 
 #: src/keybind.cpp:1504
 msgid "Only displaying energy bars when selected"
@@ -15990,14 +15868,12 @@ msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
 #: src/keybind.cpp:1523
-#, fuzzy
 msgid "Debug menu is Open"
-msgstr "Boumenu sil opnij iepenje"
+msgstr ""
 
 #: src/keybind.cpp:1558
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Koe gjin Trucks fine!"
+msgstr ""
 
 #: src/keybind.cpp:1722
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -16016,9 +15892,8 @@ msgid "Warning! This can have drastic consequences if used incorrectly in missio
 msgstr ""
 
 #: src/keybind.cpp:1828
-#, fuzzy
 msgid "All enemies destroyed by cheating!"
-msgstr "Fijân ferslein mei fals spyljen!"
+msgstr ""
 
 #: src/keybind.cpp:1869
 msgid "Destroying selected droids and structures!"
@@ -16053,9 +15928,8 @@ msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
 #: src/keybind.cpp:2508
-#, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Sorry, do kinst net fals spylje yn multiplayerspullen."
+msgstr ""
 
 #: src/keybind.cpp:2543
 #: src/keybind.cpp:2597
@@ -16063,14 +15937,14 @@ msgid "Game Speed Reset"
 msgstr "Spulsnelheid opnij ynsteld"
 
 #: src/keybind.cpp:2547
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Spulsnelheid ferheege nei %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2551
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Spulsnelheid ferleege nei %3.1f"
+msgstr ""
 
 #: src/keybind.cpp:2609
 msgid "Radar showing friend-foe colors"
@@ -16110,7 +15984,7 @@ msgstr "Standert selekteare"
 
 #: src/keyedit.cpp:457
 msgid "KEY MAPPING"
-msgstr "KEY MAPPING"
+msgstr ""
 
 #: src/keymap.cpp:297
 msgid "Manufacture"
@@ -16137,9 +16011,8 @@ msgid "Commanders"
 msgstr ""
 
 #: src/keymap.cpp:303
-#, fuzzy
 msgid "QuickSave"
-msgstr "Spul Opslaan"
+msgstr ""
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
@@ -16526,23 +16399,20 @@ msgid "Select all Land Combat Units"
 msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Omjouwing Selekteare"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Transport starte"
+msgstr ""
 
 #: src/keymap.cpp:442
 msgid "Select all Repair Tanks"
 msgstr ""
 
 #: src/keymap.cpp:443
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Koe gjin Sensorienheden fine!"
+msgstr ""
 
 #: src/keymap.cpp:444
 msgid "Select all Trucks"
@@ -16605,9 +16475,8 @@ msgid "Make a performance measurement sample"
 msgstr ""
 
 #: src/keymap.cpp:466
-#, fuzzy
 msgid "Make all items available"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #: src/keymap.cpp:467
 msgid "Kill Selected Unit(s)"
@@ -16655,18 +16524,16 @@ msgid "Load Transport"
 msgstr "Transport lade"
 
 #: src/mission.cpp:2285
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "DOEL HELLE"
+msgstr ""
 
 #: src/mission.cpp:2285
 msgid "OBJECTIVE ACHIEVED"
 msgstr "DOEL HELLE"
 
 #: src/mission.cpp:2291
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "DOEL MISLUKT"
+msgstr ""
 
 #: src/mission.cpp:2291
 msgid "OBJECTIVE FAILED"
@@ -16688,9 +16555,8 @@ msgid "Load Saved Game"
 msgstr "Opslein Spul Lade"
 
 #: src/mission.cpp:2425
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "SPUL OPSLEIN!"
+msgstr ""
 
 #: src/move.cpp:1981
 #, c-format
@@ -16709,9 +16575,9 @@ msgid "%s Gives you a %s"
 msgstr "%s Jout dij in %s"
 
 #: src/multigifts.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "Prebeare om in %s fuort te jaan - maar dat is net legaal."
+msgstr ""
 
 #: src/multigifts.cpp:354
 #, c-format
@@ -16719,9 +16585,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s Jouwt Dij Teknologyske Dokuminten"
 
 #: src/multigifts.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %d Power"
-msgstr "%s Jouwt Dij Stroom"
+msgstr ""
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -16754,9 +16620,8 @@ msgstr ""
 
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
-#, fuzzy
 msgid "Commander"
-msgstr "Kommandanten (F6)"
+msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -16788,25 +16653,21 @@ msgid "VTOLs disabled."
 msgstr ""
 
 #: src/multiint.cpp:1065
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "FPS-werjoust is útskakele."
+msgstr ""
 
 #: src/multiint.cpp:1066
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #: src/multiint.cpp:1067
-#, fuzzy
 msgid "Structure Limits Enforced."
-msgstr "Struktuurlimyten ynstelle"
+msgstr ""
 
 #: src/multiint.cpp:1228
 #: src/titleui/gamefind.cpp:579
-#, fuzzy
 msgid "Game Name"
-msgstr "Spulnamme Selekteare"
+msgstr ""
 
 #: src/multiint.cpp:1229
 msgid "One-Player Skirmish"
@@ -16817,8 +16678,7 @@ msgid "Select Game Name"
 msgstr "Spulnamme Selekteare"
 
 #: src/multiint.cpp:1247
-msgid ""
-"Select Map\n"
+msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -16853,9 +16713,8 @@ msgstr ""
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "Struktuurlimyten ynstelle"
+msgstr ""
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
@@ -16867,8 +16726,7 @@ msgid "Random Game Options"
 msgstr ""
 
 #: src/multiint.cpp:1335
-msgid ""
-"Random Game Options\n"
+msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
@@ -16894,23 +16752,20 @@ msgid "DIFFICULTY"
 msgstr ""
 
 #: src/multiint.cpp:1437
-#, fuzzy
 msgid "Starts disadvantaged"
-msgstr "Begjinne mei avanseare basis"
+msgstr ""
 
 #: src/multiint.cpp:1438
-#, fuzzy
 msgid "Plays nice"
-msgstr "Spiler"
+msgstr ""
 
 #: src/multiint.cpp:1439
 msgid "No holds barred"
 msgstr ""
 
 #: src/multiint.cpp:1440
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Begjinne mei avanseare basis"
+msgstr ""
 
 #: src/multiint.cpp:1477
 msgid "CHOOSE AI"
@@ -16929,23 +16784,20 @@ msgid "Team"
 msgstr ""
 
 #: src/multiint.cpp:2045
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Radar lit spilerkleuren sjen"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Waiting for player"
 msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is ready"
-msgstr "Spiler"
+msgstr ""
 
 #: src/multiint.cpp:2060
-#, fuzzy
 msgid "Player is downloading"
-msgstr "Spiler"
+msgstr ""
 
 #: src/multiint.cpp:2060
 msgid "Click when ready"
@@ -16968,32 +16820,28 @@ msgid "Click to change to this slot"
 msgstr ""
 
 #: src/multiint.cpp:2183
-#, fuzzy
 msgid "Choose Team"
-msgstr "Teams fêststelle"
+msgstr ""
 
 #: src/multiint.cpp:2187
 msgid "Teams locked"
 msgstr ""
 
 #: src/multiint.cpp:2213
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Radar lit spilerkleuren sjen"
+msgstr ""
 
 #: src/multiint.cpp:2238
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Spiler"
+msgstr ""
 
 #: src/multiint.cpp:2245
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
 #: src/multiint.cpp:2260
-#, fuzzy
 msgid "Player ID: "
-msgstr "Spiler"
+msgstr ""
 
 #: src/multiint.cpp:2267
 msgid "(none)"
@@ -17001,7 +16849,7 @@ msgstr ""
 
 #: src/multiint.cpp:2335
 msgid "CHAT"
-msgstr "CHAT"
+msgstr ""
 
 #: src/multiint.cpp:2657
 #: src/multiint.cpp:3666
@@ -17009,9 +16857,8 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:2812
-#, fuzzy
 msgid "Game Name Updated."
-msgstr "Spulnamme Selekteare"
+msgstr ""
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -17082,9 +16929,9 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
 #: src/multiint.cpp:4005
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "Radar lit spilerkleuren sjen"
+msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4251
@@ -17093,9 +16940,8 @@ msgstr ""
 
 #: src/multiint.cpp:4019
 #: src/multiint.cpp:4252
-#, fuzzy
 msgid "Closed"
-msgstr "Slúte"
+msgstr ""
 
 #: src/multiint.cpp:4084
 #, c-format
@@ -17136,14 +16982,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "De tsjinner hat it spul ferlitten!"
+msgstr ""
 
 #: src/multijoin.cpp:503
-#, fuzzy
 msgid "Server message:"
-msgstr "Systeemlocale"
+msgstr ""
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
@@ -17163,9 +17008,8 @@ msgid "Force Limits at Start"
 msgstr ""
 
 #: src/multilimit.cpp:185
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Werom Nei Foarige Skerm"
+msgstr ""
 
 #: src/multilimit.cpp:192
 #: src/titleui/protocol.cpp:178
@@ -17197,11 +17041,11 @@ msgid "Any number of players"
 msgstr ""
 
 #: src/multimenu.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "Spilers"
-msgstr[1] "Spilers"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -17212,14 +17056,12 @@ msgid "Kills"
 msgstr ""
 
 #: src/multimenu.cpp:765
-#, fuzzy
 msgid "Units"
-msgstr "Ienheid"
+msgstr ""
 
 #: src/multimenu.cpp:781
-#, fuzzy
 msgid "Structs"
-msgstr "Strukt"
+msgstr ""
 
 #: src/multimenu.cpp:793
 msgid "Sent/Received per sec —"
@@ -17230,9 +17072,9 @@ msgid "Total Sent/Received —"
 msgstr ""
 
 #: src/multimenu.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Traint: %u"
+msgstr ""
 
 #: src/multimenu.cpp:802
 #, c-format
@@ -17297,9 +17139,8 @@ msgid " (Global)"
 msgstr ""
 
 #: src/multiplay.cpp:1248
-#, fuzzy
 msgid "(allies"
-msgstr "Freonskippen"
+msgstr ""
 
 #: src/multiplay.cpp:1256
 msgid "(private to "
@@ -17462,10 +17303,10 @@ msgid "Rookie: %u"
 msgstr "Kabouter: %u"
 
 #: src/scores.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Begjinner: %u"
+msgstr ""
 
 #: src/scores.cpp:108
 #, c-format
@@ -17490,7 +17331,7 @@ msgstr "Feteran: %u"
 #: src/scores.cpp:112
 #, c-format
 msgid "Elite: %u"
-msgstr "Elite: %u"
+msgstr ""
 
 #: src/scores.cpp:113
 #, c-format
@@ -17558,38 +17399,37 @@ msgstr[0] "%u ienheid selekteard"
 msgstr[1] "%u ienheden selekteard"
 
 #: src/structure.cpp:2497
-#, fuzzy
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "Kommandolimyt helle - Produksje stopt"
+msgstr ""
 
 #: src/structure.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "Kommandolimyt helle - Produksje stopt"
+msgstr ""
 
 #: src/structure.cpp:2510
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "Kommandolimyt helle - Produksje stopt"
+msgstr ""
 
 #: src/structure.cpp:2518
-#, fuzzy, c-format
+#, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Kommandolimyt helle - Produksje stopt"
+msgstr ""
 
 #: src/structure.cpp:5428
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Ienheid tawezen"
-msgstr[1] "%s - %u Ienheden tawezen"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:5447
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Ienheid tawezen"
-msgstr[1] "%s - %u Ienheden tawezen"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
@@ -17603,9 +17443,9 @@ msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
 #: src/structure.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - %u fan %u ferbûn"
+msgstr ""
 
 #: src/structure.cpp:5640
 #: src/structure.cpp:5683
@@ -17650,9 +17490,8 @@ msgid "Refresh Games List"
 msgstr "Spullist fernije"
 
 #: src/titleui/gamefind.cpp:93
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Spullist fernije"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
@@ -17705,9 +17544,8 @@ msgid "There appears to be a game update available!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:382
-#, fuzzy
 msgid "No games are available for your version"
-msgstr "Alle items binne beskikber makke"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -17755,9 +17593,9 @@ msgid "Mods: None!"
 msgstr ""
 
 #: src/titleui/gamefind.cpp:569
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Feteran: %u"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -17772,9 +17610,8 @@ msgid "Status"
 msgstr ""
 
 #: src/titleui/msgbox.cpp:64
-#, fuzzy
 msgid "Continue"
-msgstr "Fjirder Mei Spul"
+msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -17786,9 +17623,8 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:180
-#, fuzzy
 msgid "Cancel"
-msgstr "Lochtblau"
+msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -17796,11 +17632,11 @@ msgstr "FERBINING"
 
 #: src/titleui/protocol.cpp:89
 msgid "Lobby"
-msgstr "Lobby"
+msgstr ""
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -17833,245 +17669,7 @@ msgstr ""
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Feteran: %u"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Research speed +40% (per minute)"
-#~ msgstr "Ûndersyk foltooid: %s"
-
-#, fuzzy
-#~ msgid "Research speed +60% (per minute)"
-#~ msgstr "Ûndersyk foltooid: %s"
-
-#~ msgid "Select Map"
-#~ msgstr "Omjouwing Selekteare"
-
-#, fuzzy
-#~ msgid "Click to change AI"
-#~ msgstr "Radar lit spilerkleuren sjen"
-
-#~ msgid "Unit"
-#~ msgstr "Ienheid"
-
-#~ msgid "Struct"
-#~ msgstr "Strukt"
-
-#, fuzzy
-#~ msgid "Place Structures on map"
-#~ msgstr "Struktuurlimyten ynstelle"
-
-#~ msgid "Feat"
-#~ msgstr "Funk"
-
-#~ msgid "Exit Game"
-#~ msgstr "Spul ferlitte"
-
-#, fuzzy
-#~ msgid "Current Player:"
-#~ msgstr "Spiler"
-
-#, fuzzy
-#~ msgid "MAP SAVED!"
-#~ msgstr "SPUL OPSLEIN!"
-
-#, fuzzy
-#~ msgid "Save Map File"
-#~ msgstr "Spul Opslaan"
-
-#, fuzzy
-#~ msgid "Pause or unpause the game"
-#~ msgstr "De tsjinner hat it spul ferlitten!"
-
-#, fuzzy
-#~ msgid "Start Edit Mode"
-#~ msgstr "Begjinne mei gjin basis"
-
-#~ msgid "Demo mode off - Returning to normal game mode"
-#~ msgstr "Demo mode út - Werom nei normale spulmodus"
-
-#, fuzzy
-#~ msgid "%s - Damage %3.0f%%"
-#~ msgstr "%s - Skea %3.0f%%"
-
-#, fuzzy
-#~ msgid "Password is already set!"
-#~ msgstr "Spiler"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "9 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "10 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "11 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "12 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "13 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "14 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "15 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "16 players"
-#~ msgstr "Spilers"
-
-#, fuzzy
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "Krêft tanommen"
-
-#, fuzzy
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Radar lit terrein sjen"
-
-#~ msgid "Fog"
-#~ msgstr "Dize"
-
-#~ msgid "Fog Of War"
-#~ msgstr "Kriigsdize"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Ôfstansdize"
-
-#, fuzzy
-#~ msgid "Player colour"
-#~ msgstr "Spiler"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Frachtauto kommandeare omt in Oaljepunt te bouwen"
-
-#, fuzzy
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "Frachtauto kommandeare omt in Oaljepunt te bouwen"
-
-#, fuzzy
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "Frachtauto kommandeare omt in Oaljepunt te bouwen"
-
-#, fuzzy
-#~ msgid "Kick player"
-#~ msgstr "Spiler"
-
-#, fuzzy
-#~ msgid "Infinite Production"
-#~ msgstr "Sirkelproduksje"
-
-#, fuzzy
-#~ msgid "Player number"
-#~ msgstr "Spiler"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "Spul"
-
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "Koe gjin bronúthellers fine!"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "Boumenu sil opnij iepenje"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "Boumenu sil net opnij iepenje"
-
-#~ msgid "Danish"
-#~ msgstr "Deensk"
-
-#~ msgid "German"
-#~ msgstr "Dútsk"
-
-#, fuzzy
-#~ msgid "Spanish"
-#~ msgstr "Deensk"
-
-#, fuzzy
-#~ msgid "Finnish"
-#~ msgstr "Deensk"
-
-#~ msgid "French"
-#~ msgstr "Frânsk"
-
-#, fuzzy
-#~ msgid "Irish"
-#~ msgstr "Oanpast"
-
-#, fuzzy
-#~ msgid "Croatian"
-#~ msgstr "Latyn"
-
-#~ msgid "Norwegian"
-#~ msgstr "Noarsk"
-
-#, fuzzy
-#~ msgid "Polish"
-#~ msgstr "Ingelsk"
-
-#, fuzzy
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugeesk"
-
-#, fuzzy
-#~ msgid "Portuguese"
-#~ msgstr "Portugeesk"
-
-#~ msgid "Russian"
-#~ msgstr "Russysk"
-
-#~ msgid "Formation speed limiting OFF"
-#~ msgstr "Limyt Foarmaasjesnelheid ÚT"
-
-#~ msgid "Formation speed limiting ON"
-#~ msgstr "Limyt Foarmaasjesnelheid OAN"
-
-#~ msgid "English"
-#~ msgstr "Ingelsk"
-
-#, fuzzy
-#~ msgid "Basque"
-#~ msgstr "Basis"
-
-#, fuzzy
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Noarsk"
-
-#, fuzzy
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "Sweedsk"
-
-#~ msgid "Swedish"
-#~ msgstr "Sweedsk"
-
-#~ msgid "Mayhem"
-#~ msgstr "Gekkichheid"
-
-#~ msgid "Energy bars display toggled"
-#~ msgstr "Enerzjybalken omskakele"
