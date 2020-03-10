@@ -54,4 +54,7 @@ for line in sorted(output_lines, key=str.casefold):
 		print("// " + src_ref)
 	if len(sorted_src_refs) > src_ref_limit:
 		print("// ... + " + str(len(sorted_src_refs) - src_ref_limit) + " refs")
+	if "%" in line:
+		# ensure xgettext doesn't decide to treat this as a c-format line
+		print("// xgettext:no-c-format")
 	print(line)
