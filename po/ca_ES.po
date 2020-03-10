@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-09 03:23+0000\n"
-"PO-Revision-Date: 2020-03-09 20:28\n"
+"PO-Revision-Date: 2020-03-10 20:30\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -386,7 +386,7 @@ msgstr "MISSIÓ DE LA BASE BETA: Sector est"
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr "A la teva arribada heu d'assumir el comandament de la base,"
+msgstr "A la teva arribada heu d'assumir el comandament de la base."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
