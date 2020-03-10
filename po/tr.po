@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-09 03:23+0000\n"
-"PO-Revision-Date: 2020-03-09 20:27\n"
+"PO-Revision-Date: 2020-03-10 20:29\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -5879,7 +5879,7 @@ msgstr "AA Termal Hedefleme Algılayıcısı"
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
 #: po/custom/fromJson.txt:154
 msgid "Adaptive AI with multiple personalities"
-msgstr ""
+msgstr "Çok kişilikli uyumsal YZ"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials08.name
@@ -6954,7 +6954,7 @@ msgstr "Başlangıçlara Dön"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1042
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "orijinal YZ tabanlı, yeni başlayanlar için"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -7069,7 +7069,7 @@ msgstr "Beta Seferberliği"
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1154
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7144,7 +7144,7 @@ msgstr "Metalik Laminler duvarlar ve savunmalar ile bağlandı"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1232
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "Kemik Kırıcı!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
@@ -7985,7 +7985,7 @@ msgstr "Güçlendirilmiş Uranyum MT Mermileri"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1784
 msgid "Designed for shared research team battles"
-msgstr ""
+msgstr "Paylaşımlı araştırma takım savaşları için tasarlandı"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
