@@ -37,6 +37,7 @@ _("76mm twin-barrel automatic-cannon")
 // data/mp/messages/resmessages2.json: $.RES_W_AAAC1.text[2]
 // data/mp/messages/resmessages23.json: $.RES_W_AAAC2.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_AAAC3.text[2]
+// xgettext:no-c-format
 _("AA accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
@@ -80,6 +81,7 @@ _("AA Flak Cannon")
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_AAD4.text[2]
+// xgettext:no-c-format
 _("AA Flak damage +25%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_AAD1.text[0]
@@ -114,6 +116,7 @@ _("AA HEAP Flak")
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text[2]
+// xgettext:no-c-format
 _("AA reload time -15%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[1]
@@ -627,6 +630,7 @@ _("Armed with tank killer rockets")
 // data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
 // data/mp/messages/resmessages2.json: $.RES_ST_MAT4.text[2]
 // ... + 4 refs
+// xgettext:no-c-format
 _("Armor +35%, Body Points +30%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_MG_D2.text[1]
@@ -812,6 +816,7 @@ _("Armored strongpoint with Tank Killer rocket")
 _("Armored Tracks")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_DF_WU1.text[2]
+// xgettext:no-c-format
 _("Armour +35%, Body Points +30%")  
 // TRANSLATORS: 
 // data/base/stats/features.json: $.Crate.name
@@ -1191,6 +1196,7 @@ _("Body Points: Very low")
 // data/mp/messages/resmessages2.json: $.RES_W_BAC1.text[2]
 // data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_BAC3.text[2]
+// xgettext:no-c-format
 _("Bomb damage +25%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
@@ -1284,6 +1290,7 @@ _("Burns oil more efficiently")
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text[2]
+// xgettext:no-c-format
 _("Cannon accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
@@ -1301,6 +1308,7 @@ _("Cannon Autoloader")
 // data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
 // data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[2]
+// xgettext:no-c-format
 _("Cannon damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaFireCan.name
@@ -1334,6 +1342,7 @@ _("Cannon Rapid Loader")
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_CN_ROF1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_CN_ROF4.text[2]
+// xgettext:no-c-format
 _("Cannon reload time -10%")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CannonTower.name
@@ -1530,10 +1539,12 @@ _("Computer systems can now be 'ring-fenced' from NEXUS")
 _("Computer Technology Breakthrough")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_ENGIN1.text[2]
+// xgettext:no-c-format
 _("Construction speed +10%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[2]
 // data/mp/messages/resmessages3.json: $.RES_ENGIN3.text[2]
+// xgettext:no-c-format
 _("Construction speed +20%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -1932,13 +1943,16 @@ _("Factory module enables medium and large bodies")
 _("Factory Module")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
+// xgettext:no-c-format
 _("Factory output speed +100%% per module")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_ST_FU1.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[2]
+// xgettext:no-c-format
 _("Factory output speed +60%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_ST_FU4.text[2]
+// xgettext:no-c-format
 _("Factory production rate +60%")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0LightFactory.name
@@ -2037,6 +2051,7 @@ _("Flamer Cyborg")
 // data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_FL_D4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_W_FL_D7.text[2]
+// xgettext:no-c-format
 _("Flamer damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.GuardTower4.name
@@ -2048,6 +2063,7 @@ _("Flamer Guard Tower")
 _("Flamer Hardpoint")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
+// xgettext:no-c-format
 _("Flamer reload time -15%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -2174,22 +2190,27 @@ _("Generates and concentrates bursts of laser energy")
 // data/mp/multiplay/skirmish/nb_generic.json: $.AI.insane_tip
 // data/mp/multiplay/skirmish/nb_hover.json: $.AI.insane_tip
 // ... + 3 refs
+// xgettext:no-c-format
 _("Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
+// xgettext:no-c-format
 _("Gets ~ 100% more power from each oil derrick\nUses the Heavy Plasma Launcher and EMP Mortar\nStarts with defensive structures and oil derricks")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
 // data/mp/multiplay/skirmish/nb_hover.json: $.AI.easy_tip
 // data/mp/multiplay/skirmish/nexus.json: $.AI.easy_tip
 // data/mp/multiplay/skirmish/semperfi.json: $.AI.easy_tip
+// xgettext:no-c-format
 _("Gets ~ 25% less power from each oil derrick")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
+// xgettext:no-c-format
 _("Gets ~ 25% less power from each oil derrick\nBasic decision making is slower")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
 // data/mp/multiplay/skirmish/nb_turtle.json: $.AI.easy_tip
+// xgettext:no-c-format
 _("Gets ~ 25% less power from each oil derrick\nResearch is not focused on a specific weapon branch")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -2802,6 +2823,7 @@ _("Hover")
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[2]
+// xgettext:no-c-format
 _("Howitzer accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
@@ -2818,6 +2840,7 @@ _("Howitzer Autoloader")
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[2]
+// xgettext:no-c-format
 _("Howitzer damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Howitzer.name
@@ -2831,6 +2854,7 @@ _("Howitzer Fast Loader")
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text[2]
+// xgettext:no-c-format
 _("Howitzer reload time -10%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[0]
@@ -3316,14 +3340,17 @@ _("Keeps map areas under constant surveillance")
 // data/mp/messages/resmessages2.json: $.RES_V_MET4.text[2]
 // data/mp/messages/resmessages3.json: $.RES_V_MET10.text[2]
 // data/mp/messages/resmessages3.json: $.RES_V_MET7.text[2]
+// xgettext:no-c-format
 _("Kinetic armor +30%, body points +30%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CYMET4.text[2]
+// xgettext:no-c-format
 _("Kinetic Armor +35%, and Body Points +35%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_CYMET1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_CYMET10.text[2]
 // data/mp/messages/resmessages3.json: $.RES_CYMET7.text[2]
+// xgettext:no-c-format
 _("Kinetic Armor +35%, Body Points +35%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYMET10.text[1]
@@ -3400,9 +3427,11 @@ _("Laser - Flashlight")
 _("Laser AA Gun Available")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_LASAC1.text[2]
+// xgettext:no-c-format
 _("Laser accuracy +10%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_LASD1.text[2]
+// xgettext:no-c-format
 _("Laser damage +25%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages23.json: $.RES_W_BAC2.text[1]
@@ -3416,6 +3445,7 @@ _("Laser designator paints and guides rounds to the target")
 _("Laser Guided Bombsight")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_LASROF1.text[2]
+// xgettext:no-c-format
 _("Laser reload time -15%")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-LasSat.name
@@ -3543,11 +3573,13 @@ _("Machinegun Bunker")
 // data/mp/messages/resmessages1.json: $.RES_W_MG_D2.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_MG_D5.text[2]
 // ... + 2 refs
+// xgettext:no-c-format
 _("Machinegun damage +25%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_MG_ROF2.text[2]
 // data/mp/messages/resmessages23.json: $.RES_W_MG_ROF3.text[2]
+// xgettext:no-c-format
 _("Machinegun reload time -15%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[0]
@@ -3766,6 +3798,7 @@ _("Mini-Rocket Viper Wheels")
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_MS_AC2.text[2]
+// xgettext:no-c-format
 _("Missile accuracy +10%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text[1]
@@ -3773,6 +3806,7 @@ _("Missile accuracy +10%")
 _("Missile actively seeks and homes on targets")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text[2]
+// xgettext:no-c-format
 _("Missile damage +25%")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Super-Missile.name
@@ -3782,6 +3816,7 @@ _("Missile Fortress")
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_W_MS_ROF1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[2]
+// xgettext:no-c-format
 _("Missile reload time -15%")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NX-CruiseSite.name
@@ -3816,6 +3851,7 @@ _("More armor and body points than Vengeance")
 // data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
 // data/mp/messages/resmessages23.json: $.RES_W_M_AC2.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_M_AC3.text[2]
+// xgettext:no-c-format
 _("Mortar accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
@@ -3836,6 +3872,7 @@ _("Mortar Cobra Half-tracks")
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_W_M_D1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_M_D4.text[2]
+// xgettext:no-c-format
 _("Mortar damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
@@ -3850,6 +3887,7 @@ _("Mortar Pit")
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_M_ROF4.text[2]
+// xgettext:no-c-format
 _("Mortar reload time -10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
@@ -4377,9 +4415,11 @@ _("Power Module Available")
 _("Power Module")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages23.json: $.RES_POWU1.text[2]
+// xgettext:no-c-format
 _("Power output +25%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_POWU2.text[2]
+// xgettext:no-c-format
 _("Power output +30%")  
 // TRANSLATORS: 
 // data/base/messages/messages.json: $.MSG2.text[0]
@@ -4503,9 +4543,11 @@ _("Radar Detector Tower")
 _("Radar Detector")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
+// xgettext:no-c-format
 _("Rail Gun accuracy +10%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text[2]
+// xgettext:no-c-format
 _("Rail Gun damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Rail2.name
@@ -4526,6 +4568,7 @@ _("Rail Gun Hardpoint")
 _("Rail Gun Mantis Tracks")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[2]
+// xgettext:no-c-format
 _("Rail Gun reload time -15%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
@@ -4574,6 +4617,7 @@ _("Rapid fire rail gun firing needle darts")
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text[2]
+// xgettext:no-c-format
 _("Rearming speed +30%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[1]
@@ -4640,6 +4684,7 @@ _("Repair Scorpion Tracks")
 // data/mp/messages/resmessages1.json: $.RES_ST_RFU1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_ST_RFU4.text[2]
 // data/mp/messages/resmessages3.json: $.RES_ST_RFU7.text[2]
+// xgettext:no-c-format
 _("Repair Speed +100%")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -4728,9 +4773,11 @@ _("Research Module")
 // data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_ST_RU4.text[2]
 // data/mp/messages/resmessages3.json: $.RES_ST_RU7.text[2]
+// xgettext:no-c-format
 _("Research speed +30%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
+// xgettext:no-c-format
 _("Research speed +85%")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body3MBT.name
@@ -4827,6 +4874,7 @@ _("Robotic VTOL Rearming")
 // data/mp/messages/resmessages1.json: $.RES_W_SRK_AC1.text[2]
 // data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[2]
+// xgettext:no-c-format
 _("Rocket accuracy +10%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
@@ -4853,6 +4901,7 @@ _("Rocket Buggy")
 // data/mp/messages/resmessages1.json: $.RES_W_SRK_D1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_SRK_D4.text[2]
+// xgettext:no-c-format
 _("Rocket damage +25%")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
@@ -4869,6 +4918,7 @@ _("Rocket Laser Designator")
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
 // data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[2]
+// xgettext:no-c-format
 _("Rocket reload time -15%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[1]
@@ -5040,12 +5090,15 @@ _("SemperFi")
 _("Sensor Cobra Half-tracks")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[2]
+// xgettext:no-c-format
 _("Sensor Range +10%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[2]
+// xgettext:no-c-format
 _("Sensor Range +15%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
+// xgettext:no-c-format
 _("Sensor Range +25%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Sensor-Tower01.name
@@ -5414,16 +5467,20 @@ _("Targeting systems compensate for distance and weather conditions")
 _("The VTOL returns to the selected pad for rearming")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_CY_AH4.text[2]
+// xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
 _("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+// xgettext:no-c-format
 _("Thermal Armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
+// xgettext:no-c-format
 _("Thermal Armor +45%")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CY_AH1.text[2]
@@ -5712,6 +5769,7 @@ _("Vehicle Propulsion Improved")
 // data/mp/messages/resmessages2.json: $.RES_V_EN4.text[2]
 // data/mp/messages/resmessages3.json: $.RES_V_EN10.text[2]
 // data/mp/messages/resmessages3.json: $.RES_V_EN7.text[2]
+// xgettext:no-c-format
 _("Vehicle speed +5%")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
