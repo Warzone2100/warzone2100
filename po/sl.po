@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-10 23:54\n"
+"PO-Revision-Date: 2020-03-11 21:02\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -16693,11 +16693,11 @@ msgstr "Poveljnik"
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "MANJKA IME UI"
 
 #: src/multiint.cpp:773
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "MANJKA OPIS UI"
 
 #: src/multiint.cpp:787
 #, c-format
@@ -16805,7 +16805,7 @@ msgstr "Začnite gostiti igro"
 
 #: src/multiint.cpp:1351
 msgid "Vote"
-msgstr ""
+msgstr "Glasuj"
 
 #: src/multiint.cpp:1352
 msgid "No. Do not allow host to randomize or change map"
@@ -17028,7 +17028,7 @@ msgstr "GOSTITELJ"
 #: src/multiint.cpp:4139
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr ""
+msgstr "Odzivni čas"
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -17069,7 +17069,7 @@ msgstr "OMEJITVE"
 
 #: src/multilimit.cpp:157
 msgid "Map Can Exceed Limits"
-msgstr ""
+msgstr "Zemljevid lahko presega omejitve"
 
 #: src/multilimit.cpp:163
 msgid "Force Limits at Start"
@@ -17202,11 +17202,11 @@ msgstr "Brcam igralca %s, ker so poskušali zaobiti preverjanje podatkovne integ
 
 #: src/multiplay.cpp:1146
 msgid " (Ally)"
-msgstr ""
+msgstr " (Zaveznik)"
 
 #: src/multiplay.cpp:1150
 msgid " (Global)"
-msgstr ""
+msgstr " (Globalno)"
 
 #: src/multiplay.cpp:1248
 msgid "(allies"
@@ -17683,11 +17683,11 @@ msgstr "Igralci"
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
-msgstr ""
+msgstr "Stanje"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Nadaljuj"
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -17712,7 +17712,7 @@ msgstr "Veža"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
