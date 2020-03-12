@@ -183,8 +183,8 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  ************************************************************************************
 **/
 static char const *versionString = version_getVersionString();
-static int NETCODE_VERSION_MAJOR = 0x1000;
-static int NETCODE_VERSION_MINOR = 1;
+static uint32_t NETCODE_VERSION_MAJOR = 0x1000;
+static uint32_t NETCODE_VERSION_MINOR = 1;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -2232,8 +2232,8 @@ bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function
 			strncpy(game.desc.host, getSocketTextAddress(sock), sizeof(game.desc.host) - 1);
 		}
 
-		int Vmgr = (game.future4 & 0xFFFF0000) >> 16;
-		int Vmnr = (game.future4 & 0x0000FFFF);
+		uint32_t Vmgr = (game.future4 & 0xFFFF0000) >> 16;
+		uint32_t Vmnr = (game.future4 & 0x0000FFFF);
 
 		if (Vmgr > NETCODE_VERSION_MAJOR || Vmnr > NETCODE_VERSION_MINOR)
 		{
@@ -2515,7 +2515,7 @@ static void NETallowJoining()
 	char *p_buffer;
 	int32_t result;
 	bool connectFailed = true;
-	int32_t major, minor;
+	uint32_t major, minor;
 	ssize_t recv_result = 0;
 
 	if (allow_joining == false)
@@ -2612,10 +2612,10 @@ static void NETallowJoining()
 				// New clients send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
 				// Check these numbers with our own.
 
-				memcpy(&major, p_buffer, sizeof(int32_t));
+				memcpy(&major, p_buffer, sizeof(uint32_t));
 				major = ntohl(major);
 				p_buffer += sizeof(int32_t);
-				memcpy(&minor, p_buffer, sizeof(int32_t));
+				memcpy(&minor, p_buffer, sizeof(uint32_t));
 				minor = ntohl(minor);
 
 				if (NETisCorrectVersion(major, minor))
@@ -3267,13 +3267,13 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 
 	// Send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
 	p_buffer = buffer;
-	auto pushi32 = [&](int32_t value) {
-		int32_t swapped = htonl(value);
+	auto pushu32 = [&](uint32_t value) {
+		uint32_t swapped = htonl(value);
 		memcpy(p_buffer, &swapped, sizeof(swapped));
 		p_buffer += sizeof(swapped);
 	};
-	pushi32(NETCODE_VERSION_MAJOR);
-	pushi32(NETCODE_VERSION_MINOR);
+	pushu32(NETCODE_VERSION_MAJOR);
+	pushu32(NETCODE_VERSION_MINOR);
 
 	if (writeAll(tcp_socket, buffer, sizeof(buffer)) == SOCKET_ERROR
 	    || readAll(tcp_socket, &result, sizeof(result), 1500) != sizeof(result))
