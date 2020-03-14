@@ -11,6 +11,7 @@ endif
 noinst_LIBRARIES = libnetplay.a
 noinst_HEADERS = \
 	netlog.h \
+	netplay_config.h \
 	netplay.h \
 	netqueue.h \
 	netsocket.h \
