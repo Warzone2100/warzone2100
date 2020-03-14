@@ -109,6 +109,7 @@ void StartTextInput();
 void StopTextInput();
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
+unsigned long wzThreadID(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) int wzThreadJoin(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) void wzThreadDetach(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) void wzThreadStart(WZ_THREAD *thread);

@@ -410,6 +410,12 @@ WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data)
 	return (WZ_THREAD *)SDL_CreateThread(threadFunc, "wzThread", data);
 }
 
+unsigned long wzThreadID(WZ_THREAD *thread)
+{
+	SDL_threadID threadID = SDL_GetThreadID((SDL_Thread *)thread);
+	return threadID;
+}
+
 int wzThreadJoin(WZ_THREAD *thread)
 {
 	int result;
