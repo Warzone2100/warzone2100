@@ -45,7 +45,7 @@ change it to:
     AC_MSG_CHECKING([whether to compile in debug mode])
     AC_MSG_RESULT([${enable_debug}])
 
-### lib/netplay/netplay.cpp
+### lib/netplay/netplay_config.h
 
 Every release should increment at least `NETCODE_VERSION_MINOR` by 1, to prevent any issues with data or code changes.
 It is very important that this number is in sequential order from the last release, as the lobby server needs sane data to identify versions.
@@ -215,7 +215,7 @@ This will automatically:
 
 ### Revert the changes to configure.ac
 
-Then you should revert the changes you made to `configure.ac` and `lib/netplay/netplay.cpp`, so that git master again becomes git master.
+Then you should revert the changes you made to `configure.ac` and `lib/netplay/netplay_config.h`, so that git master again becomes git master.
 
 
 Post-Release checklist
