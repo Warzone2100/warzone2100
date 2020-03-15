@@ -7,7 +7,7 @@ RUN dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-ascii
  && dnf clean all
 
 # Install WZ dependencies
-RUN dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel glew-devel freetype-devel harfbuzz-devel \
+RUN dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel glew-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel \
  && dnf clean all
 
 WORKDIR /code
