@@ -83,8 +83,13 @@
 #include "map.h"
 #include "keybind.h"
 #include "random.h"
+#include "urlrequest.h"
 #include <time.h>
 #include <LaunchInfo.h>
+
+#if defined(WZ_OS_UNIX)
+# include <signal.h>
+#endif
 
 #if defined(WZ_OS_MAC)
 // NOTE: Moving these defines is likely to (and has in the past) break the mac builds
@@ -127,6 +132,10 @@ static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
 static GAMECODE gameLoopStatus = GAMECODE_CONTINUE;
 static FOCUS_STATE focusState = FOCUS_IN;
+
+#if defined(WZ_OS_UNIX)
+static bool ignoredSIGPIPE = false;
+#endif
 
 
 #if defined(WZ_OS_WIN)
@@ -1217,6 +1226,14 @@ void osSpecificFirstChanceProcessSetup()
 {
 #if defined(WZ_OS_WIN)
 	osSpecificFirstChanceProcessSetup_Win();
+#elif defined(WZ_OS_UNIX)
+	// Before anything else is run, and before creating any threads, ignore SIGPIPE
+	// see: https://curl.haxx.se/libcurl/c/CURLOPT_NOSIGNAL.html
+	struct sigaction sa;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = SIG_IGN;
+	sa.sa_flags = 0;
+	ignoredSIGPIPE = sigaction(SIGPIPE, &sa, 0) == 0;
 #else
 	// currently, no-op
 #endif
@@ -1250,6 +1267,9 @@ int realmain(int argc, char *argv[])
 
 	LaunchInfo::initialize(argc, argv);
 	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(), version_getVersionedAppDirFolderName(), isPortableMode());
+
+	/*** Initialize URL Request library ***/
+	urlRequestInit();
 
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);
@@ -1338,6 +1358,10 @@ int realmain(int argc, char *argv[])
 	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
 	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
 
+#if defined(WZ_OS_UNIX)
+	debug(LOG_WZ, "Ignoring SIGPIPE: %s", (ignoredSIGPIPE) ? "true" : "false");
+#endif
+	urlRequestOutputDebugInfo();
 
 	/* Put in the writedir root */
 	sstrcpy(KeyMapPath, "keymap.json");
@@ -1530,6 +1554,7 @@ int realmain(int argc, char *argv[])
 	free(utfargv);
 #endif
 	wzShutdown();
+	urlRequestShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;
 }
