@@ -187,10 +187,34 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
 
   !insertmacro MUI_LANGUAGE "Dutch"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Dutch" "win_installer-nl_NL.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "French"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "French" "win_installer-fr_FR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "German"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "German" "win_installer-de_DE.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Greek"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Greek" "win_installer-el_GR.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Hungarian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Hungarian" "win_installer-hu_HU.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Italian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Italian" "win_installer-it_IT.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Korean"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Korean" "win_installer-ko_KR.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Polish"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Polish" "win_installer-pl_PL.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "PortugueseBR"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "PortugueseBR" "win_installer-pt_BR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Russian"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Russian" "win_installer-ru_RU.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Slovenian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Slovenian" "win_installer-sl_SI.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Spanish"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Spanish" "win_installer-es_ES.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Turkish"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Turkish" "win_installer-tr_TR.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Ukrainian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Ukrainian" "win_installer-uk_UA.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "SimpChinese"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "SimpChinese" "win_installer-zh_CN.nsh" ${WZ_LANGFILE_FALLBACK}
 
 ;--------------------------------
 ;Reserve Files
