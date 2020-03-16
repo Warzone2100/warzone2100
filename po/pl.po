@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-10 23:55\n"
+"PO-Revision-Date: 2020-03-16 19:39\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -1192,7 +1192,7 @@ msgstr "Wyburz"
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:3926
 msgid "Naval"
-msgstr ""
+msgstr "Marynarki wojennej"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -1338,7 +1338,7 @@ msgstr "Napęd cyborgów III"
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:385
 msgid "NP-Hardcrete"
-msgstr ""
+msgstr "NP-Beton"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox01.name
@@ -1529,7 +1529,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "Ulepszenie czujnika CB Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1539,12 +1539,12 @@ msgstr "Ulepszenie radaru CB VTOL"
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "Ulepszenie samolotu VTOL CB MK2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "Ulepszenie samolotu VTOL CB MK3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -1569,12 +1569,12 @@ msgstr "Ulepszony Scrambler"
 #: data/base/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:487
 msgid "Scrambler Turret Mk2"
-msgstr ""
+msgstr "Wieżyczka Scrambler Mk2"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:494
 msgid "Sensor Lock"
-msgstr ""
+msgstr "Blokada czujnika"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:527
@@ -4040,7 +4040,7 @@ msgstr "Badania (F2)"
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "Badania naukowe - najpierw zbuduj infrastrukturę badawczą"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4282,7 +4282,7 @@ msgstr "Transmisja z bazy Beta."
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
@@ -5174,23 +5174,23 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:337
 msgid "CAM1 VEHICLES"
-msgstr ""
+msgstr "KAM1 POJAZDY"
 
 #: data/mp/messages/strings/names.txt:338
 msgid "CAM1 WEAPONS"
-msgstr ""
+msgstr "KAM1 BROŃ"
 
 #: data/mp/messages/strings/names.txt:339
 msgid "CAM1 SYSTEMS"
-msgstr ""
+msgstr "KAM1 SYSTEMY"
 
 #: data/mp/messages/strings/names.txt:340
 msgid "CAM1 DEFENSES"
-msgstr ""
+msgstr "KAM1 OSŁONA"
 
 #: data/mp/messages/strings/names.txt:341
 msgid "CAM1 STRUCTURES"
-msgstr ""
+msgstr "KAM1 STRUKTURY"
 
 #: data/mp/messages/strings/names.txt:342
 msgid "CAM2 RESEARCH"
@@ -5198,27 +5198,27 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:343
 msgid "CAM2 VEHICLES"
-msgstr ""
+msgstr "KAM2 POJAZDY"
 
 #: data/mp/messages/strings/names.txt:344
 msgid "CAM2 CYBORGS"
-msgstr ""
+msgstr "KAM2 CYBORGI"
 
 #: data/mp/messages/strings/names.txt:345
 msgid "CAM2 WEAPONS"
-msgstr ""
+msgstr "KAM2 BROŃ"
 
 #: data/mp/messages/strings/names.txt:346
 msgid "CAM2 SYSTEMS"
-msgstr ""
+msgstr "KAM2 SYSTEMY"
 
 #: data/mp/messages/strings/names.txt:347
 msgid "CAM2 DEFENSES"
-msgstr ""
+msgstr "KAM2 OSŁONA"
 
 #: data/mp/messages/strings/names.txt:348
 msgid "CAM2 STRUCTURES"
-msgstr ""
+msgstr "KAM2 STRUKTURY"
 
 #: data/mp/messages/strings/names.txt:350
 msgid "CAM3 RESEARCH"
@@ -5498,27 +5498,27 @@ msgstr "Wieżyczka dowodząca IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "ŁATWY"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "ŚREDNI"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "TRUDNY"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "SZALONY"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
-msgstr ""
+msgstr "Zmiana osobowości powiodła się."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "Nie ma takiej osobowości! Wypróbuj jedną z nich:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
@@ -5534,35 +5534,35 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr ""
+msgstr "Badanie w toku "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "Nie ma takiej ścieżki badań! Wypróbuj jedną z nich:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Przepraszam, nie mam ciężarówek."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "Możesz użyć tego."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "Przepraszamy, transfer droida nie powiódł się."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "Moc przeniesiona."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "Umieść latarnię!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "Nadchodzę!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
@@ -6139,19 +6139,19 @@ msgstr "Wszystkie jednostki VTOL ulepszone automatycznie"
 #. data/mp/tests/miza.json: $.player_2.name
 #: po/custom/fromJson.txt:476
 msgid "Ally"
-msgstr ""
+msgstr "Sojusznik"
 
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:479
 msgid "Alpha Campaign"
-msgstr ""
+msgstr "Kampania Alfa"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:482
 msgid "Alpha"
-msgstr ""
+msgstr "Alfa"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -6791,7 +6791,7 @@ msgstr "Przypisane jednostki VTOL atakują jednostki wroga"
 #. data/mp/stats/repair.json: $.AutoRepair.name
 #: po/custom/fromJson.txt:915
 msgid "Auto Repair"
-msgstr ""
+msgstr "Automatyczna naprawa"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Autorepair-General.name
@@ -6956,7 +6956,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1047
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "bazujący na oryginalnej sztucznej inteligencji, teraz również dla początkujących"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -7065,13 +7065,13 @@ msgstr "Najlepsze cele: pojazdy kołowe i poduszkowce"
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1156
 msgid "Beta Campaign"
-msgstr ""
+msgstr "Kampania Beta"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1159
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7161,7 +7161,7 @@ msgstr "Robal"
 #. data/mp/stats/templates.json: $.BarbarianBuggy.name
 #: po/custom/fromJson.txt:1246
 msgid "Buggy"
-msgstr ""
+msgstr "Buggy"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[2]
@@ -7676,7 +7676,7 @@ msgstr "Jednostka budująca"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #: po/custom/fromJson.txt:1556
 msgid "Controls up to ten commanders"
-msgstr ""
+msgstr "Kontroluje aż do dziesięciu dowódców"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -8151,7 +8151,7 @@ msgstr "Umożliwia samonaprawę"
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1896
 msgid "Enemy"
-msgstr ""
+msgstr "Wróg"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -8245,7 +8245,7 @@ msgstr "Fabryka"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
 #: po/custom/fromJson.txt:1963
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Dalszy zasięg w porównaniu z innymi czujnikami"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
@@ -8460,7 +8460,7 @@ msgstr "Odpłata z laserem Flashlight poduszkowiec"
 #. data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 #: po/custom/fromJson.txt:2111
 msgid "Flashlight"
-msgstr ""
+msgstr "Latarka"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine02.name
@@ -8489,13 +8489,13 @@ msgstr "System wtrysku paliwa"
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2128
 msgid "Gamma Campaign"
-msgstr ""
+msgstr "Kampania Gamma"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2131
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -8601,7 +8601,8 @@ msgstr "Generuje i koncentruje ładunki energii laserowej"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Pobiera ~ 100% więcej mocy z każdej wieży wiertniczej\n"
+"Zaczyna się od struktur obronnych i wież wiertniczych"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8610,7 +8611,9 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Pobiera ~ 100% więcej mocy z każdej wieży wiertniczej\n"
+"Używa Ciężkiej Wyrzutni Plazmy i moździerza EMP\n"
+"Zaczyna od struktur obronnych i wież wiertniczych"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8620,7 +8623,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2205
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Pobiera ~ 25% mniej mocy z każdej wieży wiertniczej"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8628,7 +8631,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "Pobiera ~ 25% mniej mocy z każdej wieży wiertniczej\n"
+"Podstawowy proces decyzji jest wolniejszy"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8637,7 +8641,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "Pobiera ~ 25% mniej mocy z każdej wieży wiertniczej\n"
+"Badania nie koncentrują się na określonej gałęzi broni"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -8671,7 +8676,7 @@ msgstr "Dobra jednostka zwiadowcza"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2233
 msgid "Grenadier"
-msgstr ""
+msgstr "Grenadier"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -9327,14 +9332,14 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.Helicopter.name
 #: po/custom/fromJson.txt:2658
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer03-Rot.name
 #. data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 #: po/custom/fromJson.txt:2668
 msgid "Hellstorm"
-msgstr ""
+msgstr "Hellstorm"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -9382,7 +9387,7 @@ msgstr "Emiter lasera wysokiej mocy"
 #. data/mp/challenges/hidebehind.json: $.challenge.name
 #: po/custom/fromJson.txt:2695
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Ukryj się za mną"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
@@ -9514,13 +9519,13 @@ msgstr "Wysoko-akcelerujące, sabotujące pociski przebijające pancerz"
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2802
 msgid "HMG Bunker"
-msgstr ""
+msgstr "Bunkier HMG"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2805
 msgid "Hover AI"
-msgstr ""
+msgstr "Poduszkowiec AI"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
@@ -10070,7 +10075,7 @@ msgstr "Zwieksza szybkostrzelność rakiet"
 #. data/base/stats/features.json: $.Indirectlab.name
 #: po/custom/fromJson.txt:3276
 msgid "Indirectweaponslab"
-msgstr ""
+msgstr "Laboratorium broni pośredniej"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[1]
@@ -10130,7 +10135,7 @@ msgstr "Pyton miotacz poduszkowiec"
 #. data/mp/stats/weapons.json: $.Flame2.name
 #: po/custom/fromJson.txt:3309
 msgid "Inferno"
-msgstr ""
+msgstr "Inferno"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[2]
@@ -10163,7 +10168,7 @@ msgstr "Wieżyczka antyradaru"
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3327
 msgid "Jeep"
-msgstr ""
+msgstr "Jeep"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[3]
@@ -10393,7 +10398,7 @@ msgstr ""
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3466
 msgid "LasSat"
-msgstr ""
+msgstr "LasSat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -11066,7 +11071,7 @@ msgstr "Wielolufowy, obrotowy karabin maszynowy"
 #. data/base/stats/features.json: $.Nanolab.name
 #: po/custom/fromJson.txt:3920
 msgid "Nanolab"
-msgstr ""
+msgstr "Laboratorium Nano"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
@@ -11336,7 +11341,7 @@ msgstr "Nowy system dostępny"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4154
 msgid "New Systems Sensor Available"
-msgstr ""
+msgstr "Nowy czujnik systemów dostępny"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
@@ -11442,7 +11447,7 @@ msgstr "Średni kadłub NEXUS"
 #. data/base/stats/structure.json: $.NX-ANTI-SATSite.name
 #: po/custom/fromJson.txt:4231
 msgid "Nexus Missile Silo"
-msgstr ""
+msgstr "Silos Rakiet Nexus"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
@@ -11472,7 +11477,7 @@ msgstr "Mur NEXUS"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4249
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11565,7 +11570,7 @@ msgstr ""
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4311
 msgid "Original Skirmish"
-msgstr ""
+msgstr "Oryginalna potyczka"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
