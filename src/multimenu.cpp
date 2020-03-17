@@ -492,14 +492,14 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 		char *withoutExtension = strdup(*currFile);
 		withoutExtension[fileNameLength - extensionLength] = '\0';
-		char *withoutTechlevel = mapNameWithoutTechlevel(withoutExtension);
+		std::string withoutTechlevel = mapNameWithoutTechlevel(withoutExtension);
 		free(withoutExtension);
 
 		// Set the tip and add the button
 		W_BUTTON *button = new W_BUTTON(requestList);
 		button->id = nextButtonId;
 		button->setTip(withoutTechlevel);
-		button->setString(withoutTechlevel);
+		button->setString(WzString::fromUtf8(withoutTechlevel));
 		button->displayFunction = displayRequestOption;
 		button->pUserData = new DisplayRequestOptionData();
 		button->setOnDelete([](WIDGET *psWidget) {
@@ -508,8 +508,6 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 			psWidget->pUserData = nullptr;
 		});
 		requestList->addWidgetToLayout(button);
-
-		free(withoutTechlevel);
 
 		/* Update the init struct for the next button */
 		++nextButtonId;
@@ -529,12 +527,12 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 		for (auto mapData : levels)
 		{
-			char *withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
+			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
 			// add number of players to string.
 			W_BUTTON *button = new W_BUTTON(requestList);
 			button->id = nextButtonId;
 			button->setTip(withoutTechlevel);
-			button->setString(withoutTechlevel);
+			button->setString(WzString::fromUtf8(withoutTechlevel));
 			button->displayFunction = displayRequestOption;
 			button->pUserData = new DisplayRequestOptionData(mapData);
 			button->setOnDelete([](WIDGET *psWidget) {
@@ -543,7 +541,6 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 				psWidget->pUserData = nullptr;
 			});
 			buttons.push_back({stringRelevance(mapData->pName, searchString), button});
-			free(withoutTechlevel);
 
 			++nextButtonId;
 		}

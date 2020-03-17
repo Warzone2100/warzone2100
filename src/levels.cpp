@@ -1047,15 +1047,16 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	return true;
 }
 
-char *mapNameWithoutTechlevel(const char *mapName)
+std::string mapNameWithoutTechlevel(const char *mapName)
 {
-	size_t len = strlen(mapName);
-	char *r = strdup(mapName);
-	if (len > 2 && mapName[len - 3] == '-' && mapName[len - 2] == 'T' && isdigit(mapName[len - 1]))
+	ASSERT_OR_RETURN("", mapName != nullptr, "null mapName provided");
+	std::string result(mapName);
+	size_t len = result.length();
+	if (len > 2 && result[len - 3] == '-' && result[len - 2] == 'T' && isdigit(result[len - 1]))
 	{
-		r[len - 3] = '\0';
+		result.resize(len - 3);
 	}
-	return r;
+	return result;
 }
 
 /// returns maps of the right 'type'
@@ -1103,17 +1104,13 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 					{
 						continue;
 					}
-					char *levelBaseName = mapNameWithoutTechlevel(lev->pName);
-					char *mapBaseName = mapNameWithoutTechlevel(map->pName);
-					if (strcmp(levelBaseName, mapBaseName) == 0)
+					std::string levelBaseName = mapNameWithoutTechlevel(lev->pName);
+					std::string mapBaseName = mapNameWithoutTechlevel(map->pName);
+					if (strcmp(levelBaseName.c_str(), mapBaseName.c_str()) == 0)
 					{
 						already_added = true;
-						free(levelBaseName);
-						free(mapBaseName);
 						break;
 					}
-					free(levelBaseName);
-					free(mapBaseName);
 				}
 				if (!already_added)
 				{

@@ -1223,9 +1223,7 @@ bool init3DView()
 		return false;
 	}
 
-	char *withoutTechlevel = mapNameWithoutTechlevel(getLevelName());
-	txtLevelName.setText(withoutTechlevel, font_small);
-	free(withoutTechlevel);
+	txtLevelName.setText(mapNameWithoutTechlevel(getLevelName()), font_small);
 	txtDebugStatus.setText("DEBUG ", font_small);
 
 	return true;

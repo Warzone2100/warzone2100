@@ -107,6 +107,6 @@ const char *getLevelName();
 
 void levTest();
 
-char *mapNameWithoutTechlevel(const char *mapName);
+std::string mapNameWithoutTechlevel(const char *mapName);
 
 #endif // __INCLUDED_SRC_LEVELS_H__
