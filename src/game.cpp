@@ -6275,6 +6275,11 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 					{
 						if (dataType == MSG_DATA_BEACON)
 						{
+							//See addBeaconMessage(). psMessage->dataType is wrong here because
+							//addMessage() calls createMessage() which defaults dataType to MSG_DATA_DEFAULT.
+							//Later when findBeaconMsg() attempts to find a placed beacon it can't because
+							//the dataType is wrong.
+							psMessage->dataType = MSG_DATA_BEACON;
 							Vector2i pos = ini.vector2i("position");
 							int sender = ini.value("sender").toInt();
 							psViewData = CreateBeaconViewData(sender, pos.x, pos.y);
