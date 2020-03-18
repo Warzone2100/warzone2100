@@ -204,19 +204,6 @@ bool addChallenges()
 	sFormInit.UserData = 0;
 	widgAddForm(psRequestScreen, &sFormInit);
 
-	// Add Banner Label
-	W_LABINIT sLabInit;
-	sLabInit.formID		= CHALLENGE_BANNER;
-	sLabInit.FontID		= font_large;
-	sLabInit.id		= CHALLENGE_LABEL;
-	sLabInit.style		= WLAB_ALIGNCENTRE;
-	sLabInit.x		= 0;
-	sLabInit.y		= 0;
-	sLabInit.width		= CHALLENGE_W - (2 * CHALLENGE_HGAP);	//CHALLENGE_W;
-	sLabInit.height		= CHALLENGE_BANNER_DEPTH;		//This looks right -Q
-	sLabInit.pText		= WzString::fromUtf8("Challenge");
-	widgAddLabel(psRequestScreen, &sLabInit);
-
 	// add cancel.
 	W_BUTINIT sButInit;
 	sButInit.formID = CHALLENGE_BANNER;
@@ -230,6 +217,19 @@ bool addChallenges()
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	widgAddButton(psRequestScreen, &sButInit);
+
+	// Add Banner Label
+	W_LABINIT sLabInit;
+	sLabInit.formID		= CHALLENGE_BANNER;
+	sLabInit.FontID		= font_large;
+	sLabInit.id		= CHALLENGE_LABEL;
+	sLabInit.style		= WLAB_ALIGNCENTRE;
+	sLabInit.x		= 0;
+	sLabInit.y		= 0;
+	sLabInit.width		= CHALLENGE_W - (2 * CHALLENGE_HGAP);	//CHALLENGE_W;
+	sLabInit.height		= CHALLENGE_BANNER_DEPTH;		//This looks right -Q
+	sLabInit.pText		= WzString::fromUtf8("Challenge");
+	widgAddLabel(psRequestScreen, &sLabInit);
 
 	// add slots
 	sButInit = W_BUTINIT();
