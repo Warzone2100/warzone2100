@@ -231,19 +231,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	sFormInit.UserData = bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);
 
-	// Add Banner Label
-	W_LABINIT sLabInit;
-	sLabInit.formID = LOADSAVE_BANNER;
-	sLabInit.FontID = font_large;
-	sLabInit.id		= LOADSAVE_LABEL;
-	sLabInit.style	= WLAB_ALIGNCENTRE;
-	sLabInit.x		= 0;
-	sLabInit.y		= 0;
-	sLabInit.width	= LOADSAVE_W - (2 * LOADSAVE_HGAP);	//LOADSAVE_W;
-	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
-	sLabInit.pText	= WzString::fromUtf8(title);
-	widgAddLabel(psRequestScreen, &sLabInit);
-
 	// add cancel.
 	W_BUTINIT sButInit;
 	sButInit.formID = LOADSAVE_BANNER;
@@ -258,6 +245,19 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	widgAddButton(psRequestScreen, &sButInit);
+
+	// Add Banner Label
+	W_LABINIT sLabInit;
+	sLabInit.formID = LOADSAVE_BANNER;
+	sLabInit.FontID = font_large;
+	sLabInit.id		= LOADSAVE_LABEL;
+	sLabInit.style	= WLAB_ALIGNCENTRE;
+	sLabInit.x		= 0;
+	sLabInit.y		= 0;
+	sLabInit.width	= LOADSAVE_W - (2 * LOADSAVE_HGAP);	//LOADSAVE_W;
+	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
+	sLabInit.pText	= WzString::fromUtf8(title);
+	widgAddLabel(psRequestScreen, &sLabInit);
 
 	// add slots
 	sButInit = W_BUTINIT();
