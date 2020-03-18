@@ -31,6 +31,7 @@
 #include "orderdef.h"
 #include "stringdef.h"
 #include "messagedef.h"
+#include <vector>
 
 class DROID_GROUP;
 struct BASE_OBJECT;
@@ -79,8 +80,7 @@ struct MULTIPLAYERINGAME
 	int32_t				TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
 	UDWORD				startTime;
-	UDWORD				numStructureLimits;					// number of limits
-	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
+	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
 #define MPFLAGS_NO_CYBORGS	0x02  		///< Flag for cyborgs disabled
