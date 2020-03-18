@@ -14,21 +14,55 @@ set(_sdl2_library)
 set(_sdl2_include_dir)
 set(_sdl2_main_library)
 
+function(test_link_to_sdl_target sdl_target output_var)
+
+	set(CMAKE_REQUIRED_LIBRARIES "${sdl_target}")
+	check_cxx_source_compiles(
+	   "#include <SDL_version.h>
+		#include <cstdio>
+
+		void print_sdl_version() {
+		  SDL_version linked_sdl_version;
+		  SDL_GetVersion(&linked_sdl_version);
+		  printf(\"Linked SDL version: %u.%u.%u\", (unsigned int)linked_sdl_version.major, (unsigned int)linked_sdl_version.minor, (unsigned int)linked_sdl_version.patch);
+		}
+
+		int main()
+		{
+		  print_sdl_version();
+		  return 0;
+		}"
+	  ${output_var}
+	)
+	set(CMAKE_REQUIRED_LIBRARIES "")
+
+    set(${output_var} "${${output_var}}" PARENT_SCOPE)
+endfunction()
+
 # Prefer finding SDL2 using CMake Config, to properly include any dependencies / linked libraries (with complete, imported targets)
 # - This should work for vcpkg-installed SDL2, as well as other installs that generate a full (proper) CMake Config,
 # - and is required to properly link with a static SDL2 library (at least on Windows and macOS)
 find_package(SDL2 ${SDL2_MIN_VERSION} CONFIG QUIET)
 if(SDL2_FOUND)
 	if (TARGET SDL2::SDL2-static)
-		set(_sdl2_library SDL2::SDL2-static)
-	elseif(TARGET SDL2::SDL2)
-		set(_sdl2_library SDL2::SDL2)
-	else()
-		# Fall-back to FindSDL2 module (below)
-		set(_sdl2_main_library)
+		test_link_to_sdl_target(SDL2::SDL2-static LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
+		if (LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
+			set(_sdl2_library SDL2::SDL2-static)
+		endif()
 	endif()
-	if (TARGET SDL2::SDL2main)
-		set(_sdl2_main_library SDL2::SDL2main)
+	if (NOT _sdl2_library AND TARGET SDL2::SDL2)
+		test_link_to_sdl_target(SDL2::SDL2 LINK_SUCCESS_SDL2_SDL2_TARGET)
+		if (LINK_SUCCESS_SDL2_SDL2_TARGET)
+			set(_sdl2_library SDL2::SDL2)
+		endif()
+	endif()
+	if (NOT _sdl2_library)
+		# Fall-back to FindSDL2 module (below)
+	elseif (TARGET SDL2::SDL2main)
+		test_link_to_sdl_target("${_sdl2_library};SDL2::SDL2main" LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
+		if (LINK_SUCCESS_SDL2_SDL2MAIN_TARGET)
+			set(_sdl2_main_library SDL2::SDL2main)
+		endif()
 	endif()
 
 	if(_sdl2_library)
