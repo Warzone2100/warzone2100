@@ -3862,12 +3862,7 @@ void WzMultiOptionTitleUI::start()
 	// free limiter structure
 	if (!bReenter || challengeActive)
 	{
-		if (ingame.numStructureLimits)
-		{
-			ingame.numStructureLimits = 0;
-			free(ingame.pStructureLimits);
-			ingame.pStructureLimits = nullptr;
-		}
+		ingame.structureLimits.clear();
 	}
 
 	if (!bReenter)
