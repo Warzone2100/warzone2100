@@ -92,6 +92,7 @@
 #include "modding.h"
 #include "qtscript.h"
 #include "random.h"
+#include "notifications.h"
 
 #include "multiplay.h"
 #include "multiint.h"
@@ -113,6 +114,7 @@
 #include <algorithm>
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
+#define VOTE_TAG                 "voting"
 
 // ////////////////////////////////////////////////////////////////////////////
 // tertile dependent colors for map preview
@@ -159,8 +161,6 @@ static int					difficultyChooserUp = -1;
 static int					positionChooserUp = -1;
 static UDWORD hideTime = 0;
 static uint8_t playerVotes[MAX_PLAYERS];
-static uint8_t currentVote = 0;
-static bool votedOnJoin = false;
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
@@ -1120,26 +1120,14 @@ WzString formatGameName(WzString name)
 
 void resetVoteData()
 {
-	votedOnJoin = false;
-	currentVote = 0;
 	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		playerVotes[i] = 0;
 	}
 }
 
-static void sendVoteData(bool cancelEvent)
+static void sendVoteData(uint8_t currentVote)
 {
-	if (cancelEvent)
-	{
-		resetVoteData();
-		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_VOTE))->choose(0);
-	}
-	else
-	{
-		currentVote = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_VOTE))->currentValue();
-	}
-
 	NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
 	NETuint32_t(&selectedPlayer);
 	NETuint8_t(&currentVote);
@@ -1203,6 +1191,62 @@ static bool recvVote(NETQUEUE queue)
 	debug(LOG_NET, "total votes: %d/%d", static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
 
 	return true;
+}
+
+// Show a vote popup to allow changing maps or using the randomization feature.
+static void setupVoteChoice()
+{
+	//This shouldn't happen...
+	if (NetPlay.isHost)
+	{
+		ASSERT(false, "Host tried to send vote data to themself");
+		return;
+	}
+
+	if (!hasNotificationsWithTag(VOTE_TAG))
+	{
+		WZ_Notification notification;
+		notification.duration = 0;
+		notification.contentTitle = "Vote";
+		notification.contentText = "Allow host to change map or randomize?";
+		notification.action = WZ_Notification_Action("Allow", [](const WZ_Notification&) {
+			uint8_t vote = 1;
+			sendVoteData(vote);
+		});
+		notification.tag = VOTE_TAG;
+
+		addNotification(notification, WZ_Notification_Trigger(GAME_TICKS_PER_SEC * 1));
+	}
+}
+
+static bool canChangeMapOrRandomize()
+{
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return true;
+	}
+
+	uint8_t numHumans = NET_numHumanPlayers();
+	bool allowed = (static_cast<float>(getVoteTotal()) / static_cast<float>(numHumans)) > 0.5f;
+
+	resetVoteData(); //So the host can only do one change every vote session
+
+	if (numHumans == 1)
+	{
+		return true;
+	}
+
+	if (!allowed)
+	{
+		//setup a vote popup for the clients
+		NETbeginEncode(NETbroadcastQueue(), NET_VOTE_REQUEST);
+		NETend();
+
+		addConsoleMessage(_("Not enough votes to randomize or change the map."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+
+	return allowed;
 }
 
 // need to check for side effects.
@@ -1343,25 +1387,6 @@ static void addGameOptions()
 		hostButton->setLabel(_("Start Hosting Game"));
 		hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
 		optionsList->addWidgetToLayout(hostButton);
-	}
-	else if (!challengeActive && !NetPlay.isHost)
-	{
-		MultichoiceWidget *voteChoice = new MultichoiceWidget(optionsList, currentVote);
-		voteChoice->id = MULTIOP_VOTE;
-		voteChoice->setLabel(_("Vote"));
-		voteChoice->addButton(MULTIOP_VOTE_NO, Image(FrontImages, IMAGE_CHECK_OFF), Image(FrontImages, IMAGE_CHECK_OFF_HI), _("No. Do not allow host to randomize or change map"));
-		voteChoice->addButton(MULTIOP_VOTE_YES, Image(FrontImages, IMAGE_CHECK_ON), Image(FrontImages, IMAGE_CHECK_ON_HI), _("Yes. Allow host to randomize or change map"));
-		voteChoice->enable(true);
-		optionsList->addWidgetToLayout(voteChoice);
-
-		//Big hack here
-		if (!votedOnJoin)
-		{
-			currentVote = 0;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_VOTE))->choose(0);
-			sendVoteData(false);
-			votedOnJoin = true;
-		}
 	}
 
 	// cancel
@@ -2393,7 +2418,7 @@ static void disableMultiButs()
 static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 {
 	reloadMPConfig(); // reload own settings
-	resetVoteData();
+	cancelOrDismissNotificationsWithTag(VOTE_TAG);
 
 	debug(LOG_NET, "player %u (Host is %s) stopping.", selectedPlayer, NetPlay.isHost ? "true" : "false");
 
@@ -2651,10 +2676,8 @@ static void randomizeLimit(const char *name)
 /* Generate random options */
 static void randomizeOptions()
 {
-	uint8_t numHumans = NET_numHumanPlayers();
-	if (NetPlay.bComms && bHosted && numHumans > 1 && (static_cast<float>(getVoteTotal()) / static_cast<float>(numHumans)) <= 0.5f)
+	if (NetPlay.bComms && bHosted && !canChangeMapOrRandomize())
 	{
-		addConsoleMessage(_("Not enough votes to randomize or change the map."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		return;
 	}
 
@@ -3034,20 +3057,14 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");										// clear box
 		break;
 
-	case MULTIOP_VOTE:
-		if (!NetPlay.isHost)
-		{
-			sendVoteData(false);
-		}
-		break;
-
 	case CON_CANCEL:
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		if (!challengeActive)
 		{
 			if (NetPlay.bComms && !NetPlay.isHost && !bHosted && !ingame.bHostSetup)
 			{
-				sendVoteData(true);
+				uint8_t vote = 0;
+				sendVoteData(vote); //remove a potential "allow" vote if we gracefully leave
 			}
 			NETGameLocked(false);		// reset status on a cancel
 			stopJoining(parent);
@@ -3453,6 +3470,7 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 				break;
 			}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
+			cancelOrDismissNotificationsWithTag(VOTE_TAG); // don't need vote notifications anymore
 			if (NET_HOST_ONLY != queue.index)
 			{
 				HandleBadParam("NET_FIREUP given incorrect params.", 255, queue.index);
@@ -3544,6 +3562,13 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 			if (NetPlay.isHost && ingame.localOptionsReceived)
 			{
 				recvVote(queue);
+			}
+			break;
+
+		case NET_VOTE_REQUEST:
+			if (!NetPlay.isHost)
+			{
+				setupVoteChoice();
 			}
 			break;
 
@@ -3661,9 +3686,8 @@ TITLECODE WzMultiOptionTitleUI::run()
 							addConsoleMessage(_("Cannot change to a map with too few slots for all players."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 							break;
 						}
-						if (numHumans > 1 && (static_cast<float>(getVoteTotal()) / static_cast<float>(NET_numHumanPlayers())) <= 0.5f)
+						if (!canChangeMapOrRandomize())
 						{
-							addConsoleMessage(_("Not enough votes to randomize or change the map."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 							break;
 						}
 					}
@@ -3768,6 +3792,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 	}
 	if (!NetPlay.isHostAlive && !ingame.bHostSetup)
 	{
+		cancelOrDismissNotificationsWithTag(VOTE_TAG);
 		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("The host has quit.")), parent));
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}

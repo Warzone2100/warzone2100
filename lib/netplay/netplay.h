@@ -89,7 +89,8 @@ enum MESSAGE_TYPES
 	NET_FILE_CANCELLED,             ///< Player cancelled a file request
 	NET_FILE_PAYLOAD,               ///< sending file to the player that needs it
 	NET_DEBUG_SYNC,                 ///< Synch error messages, so people don't have to use pastebin.
-	NET_VOTE,                       ///< vote request
+	NET_VOTE,                       ///< player vote
+	NET_VOTE_REQUEST,               ///< Setup a vote popup
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.
