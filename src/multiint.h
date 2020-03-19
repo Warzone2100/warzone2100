@@ -313,10 +313,6 @@ void resetVoteData();
 #define MULTIOP_DIFFICULTY_CHOOSE_START	(MULTIOP_DIFFICULTY_INIT_END + 1)
 #define MULTIOP_DIFFICULTY_CHOOSE_END	(MULTIOP_DIFFICULTY_CHOOSE_START + MAX_PLAYERS)
 
-#define MULTIOP_VOTE			148940
-#define MULTIOP_VOTE_YES			1
-#define MULTIOP_VOTE_NO			0
-
 
 // ///////////////////////////////
 // Many Button Variations..
