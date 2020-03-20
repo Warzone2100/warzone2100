@@ -18,6 +18,7 @@ jobs:
     displayName: 'macOS [Xcode 9.4.1, macOS 10.13 SDK]'  # friendly name to display in the UI
     vmImage: 'macOS-10.14'
     xcodeDeveloperDir: '/Applications/Xcode_9.4.1.app'
+    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app'
     publishArtifact: false
 - template: .ci/azure/templates/macos-build-pipeline-template.yml
   parameters:
@@ -25,6 +26,7 @@ jobs:
     displayName: 'macOS [Xcode 10.3, macOS 10.14 SDK]'  # friendly name to display in the UI
     vmImage: 'macOS-10.14'
     xcodeDeveloperDir: '/Applications/Xcode_10.3.app' # Set default Xcode to Xcode 10.3 on macOS 10.14
+    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app'
     publishArtifact: true
     artifact: 'warzone2100_macOS'
     # Upload this macOS job's output to GitHub Releases

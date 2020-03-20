@@ -14,6 +14,8 @@ parameters:
   default: ''
 - name: xcodeDeveloperDir
   default: 'default'
+- name: vcpkgBuildXcodeDeveloperDir
+  default: 'default'
 - name: publishArtifact
   type: boolean
   default: false
@@ -35,6 +37,7 @@ jobs:
   variables:
     MACOSX_DEPLOYMENT_TARGET: 10.10
     DESIRED_XCODE_DEV_DIR: ${{ parameters.xcodeDeveloperDir }}
+    DESIRED_VCPKG_BUILD_XCODE_DEV_DIR: ${{ parameters.vcpkgBuildXcodeDeveloperDir }}
 
   steps:
   - template: prepare-repo-steps.yml
@@ -85,7 +88,12 @@ jobs:
         if [ "${DESIRED_XCODE_DEV_DIR}" != "default" ]; then
           # Need to run configure_mac script twice
 
-          echo "Run configure_mac to just build vcpkg (with system default Xcode)"
+          if [ "${DESIRED_VCPKG_BUILD_XCODE_DEV_DIR}" != "default" ]; then
+            echo "Run configure_mac to just build vcpkg (with Xcode: ${DESIRED_VCPKG_BUILD_XCODE_DEV_DIR})"
+            sudo xcode-select -switch "${DESIRED_VCPKG_BUILD_XCODE_DEV_DIR}"
+          else
+            echo "Run configure_mac to just build vcpkg (with system default Xcode)"
+          fi
           ADDITIONAL_CONFIGURE_ARGS="-DONLY_BUILD_VCPKG=true"
           echo "cmake ${ADDITIONAL_CONFIGURE_ARGS} -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -DADDITIONAL_CMAKE_ARGUMENTS=\"-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO\" -P ../configure_mac.cmake"
           cmake ${ADDITIONAL_CONFIGURE_ARGS} -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO" -P ../src/configure_mac.cmake
