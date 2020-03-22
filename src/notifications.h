@@ -163,6 +163,11 @@ enum class NotificationScope {
 	DISPLAYED_AND_QUEUED
 };
 
+// Whether one or more notifications with the specified tag (exact match) are currently-displayed or queued
+// If `scope` is `DISPLAYED_ONLY`, only currently-displayed notifications will be processed
+// If `scope` is `QUEUED_ONLY`, only queued notifications will be processed
+bool hasNotificationsWithTag(const std::string& tag, NotificationScope scope = NotificationScope::DISPLAYED_AND_QUEUED);
+
 // Cancel or dismiss existing notifications by tag (exact match)
 // If `scope` is `DISPLAYED_ONLY`, only currently-displayed notifications will be processed
 // If `scope` is `QUEUED_ONLY`, only queued notifications will be processed
