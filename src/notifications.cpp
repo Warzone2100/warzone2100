@@ -1229,6 +1229,32 @@ void addNotification(const WZ_Notification& notification, const WZ_Notification_
 	notificationQueue.push_back(std::unique_ptr<WZ_Queued_Notification>(new WZ_Queued_Notification(notification, WZ_Notification_Status(realTime), trigger)));
 }
 
+// Whether one or more notifications with the specified tag (exact match) are currently-displayed or queued
+// If `scope` is `DISPLAYED_ONLY`, only currently-displayed notifications will be processed
+// If `scope` is `QUEUED_ONLY`, only queued notifications will be processed
+bool hasNotificationsWithTag(const std::string& tag, NotificationScope scope /*= NotificationScope::DISPLAYED_AND_QUEUED*/)
+{
+	if ((scope == NotificationScope::DISPLAYED_AND_QUEUED || scope == NotificationScope::DISPLAYED_ONLY) && currentInGameNotification)
+	{
+		if (currentInGameNotification->notificationTag() == tag)
+		{
+			return true;
+		}
+	}
+
+	if ((scope == NotificationScope::DISPLAYED_AND_QUEUED || scope == NotificationScope::QUEUED_ONLY))
+	{
+		for (auto& queuedNotification : notificationQueue)
+		{
+			if (queuedNotification->notification.tag == tag)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 // Cancel or dismiss existing notifications by tag (exact match)
 // If `scope` is `DISPLAYED_ONLY`, only currently-displayed notifications will be processed
 // If `scope` is `QUEUED_ONLY`, only queued notifications will be processed
