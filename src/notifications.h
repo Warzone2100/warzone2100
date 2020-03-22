@@ -129,6 +129,9 @@ public:
 	WZ_Notification_Action action;
 	// See: WZ_Notification_Display_Options
 	WZ_Notification_Display_Options displayOptions;
+	// An optional string tag that can be filtered on to cancel / dismiss existing notifications
+	// Multiple notifications can share the same tag, if they ought to be "grouped" for this purpose
+	std::string tag;
 public:
 	bool isIgnorable() const { return !displayOptions.uniqueNotificationIdentifier().empty(); }
 };
@@ -153,6 +156,28 @@ public:
 
 // Add a notification
 void addNotification(const WZ_Notification& notification, const WZ_Notification_Trigger& trigger);
+
+enum class NotificationScope {
+	DISPLAYED_ONLY,
+	QUEUED_ONLY,
+	DISPLAYED_AND_QUEUED
+};
+
+// Cancel or dismiss existing notifications by tag (exact match)
+// If `scope` is `DISPLAYED_ONLY`, only currently-displayed notifications will be processed
+// If `scope` is `QUEUED_ONLY`, only queued notifications will be processed
+//
+// Returns: `true` if one or more notifications were cancelled or dismissed
+bool cancelOrDismissNotificationsWithTag(const std::string& tag, NotificationScope scope = NotificationScope::DISPLAYED_AND_QUEUED);
+
+// Cancel or dismiss existing notifications by tag
+// Accepts a `matchTagFunc` that receives each (queued / currently-displayed) notification's tag,
+// and returns "true" if it should be cancelled or dismissed (if queued / currently-displayed)
+// If `scope` is `DISPLAYED_ONLY`, only currently-displayed notifications will be processed
+// If `scope` is `QUEUED_ONLY`, only queued notifications will be processed
+//
+// Returns: `true` if one or more notifications were cancelled or dismissed
+bool cancelOrDismissNotificationIfTag(const std::function<bool (const std::string& tag)>& matchTagFunc, NotificationScope scope = NotificationScope::DISPLAYED_AND_QUEUED);
 
 // In-Game Notifications System
 bool notificationsInitialize();
