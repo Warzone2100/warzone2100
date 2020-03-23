@@ -1585,21 +1585,16 @@ UDWORD calcDroidPoints(DROID *psDroid)
 //Builds an instance of a Droid - the x/y passed in are in world coords.
 DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot)
 {
-	DROID			*psDroid;
-	DROID_GROUP		*psGrp;
-
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
 
-	psDroid = new DROID(generateSynchronisedObjectId(), player);
+	DROID *psDroid = new DROID(generateSynchronisedObjectId(), player);
 	droidSetName(psDroid, getName(pTemplate));
 
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
 	psDroid->pos = pos;
 	psDroid->rot = rot;
-	psDroid->prevSpacetime.pos = pos;
-	psDroid->prevSpacetime.rot = rot;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
@@ -1610,7 +1605,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 
 	if (isTransporter(psDroid) || psDroid->droidType == DROID_COMMAND)
 	{
-		psGrp = grpCreate();
+		DROID_GROUP *psGrp = grpCreate();
 		psGrp->add(psDroid);
 	}
 
@@ -1659,7 +1654,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		{
 			updateDroidOrientation(psDroid);
 		}
-		visTilesUpdate((BASE_OBJECT *)psDroid);
+		visTilesUpdate(psDroid);
 	}
 
 	/* transporter-specific stuff */
@@ -1675,13 +1670,17 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		psDroid->pos.z += TRANSPORTER_HOVER_HEIGHT;
 
 		/* reset halt secondary order from guard to hold */
-		secondarySetState( psDroid, DSO_HALTTYPE, DSS_HALT_HOLD );
+		secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_HOLD);
 	}
 
 	if (player == selectedPlayer)
 	{
 		scoreUpdateVar(WD_UNITS_BUILT);
 	}
+
+	// Avoid droid appearing to jump or turn on spawn.
+	psDroid->prevSpacetime.pos = psDroid->pos;
+	psDroid->prevSpacetime.rot = psDroid->rot;
 
 	debug(LOG_LIFE, "created droid for player %d, droid = %p, id=%d (%s): position: x(%d)y(%d)z(%d)", player, static_cast<void *>(psDroid), (int)psDroid->id, psDroid->aName, psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
 
