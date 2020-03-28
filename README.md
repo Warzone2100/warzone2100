@@ -31,6 +31,7 @@ Latest development builds
  [![Fedora Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/Fedora/master?label=Fedora&logo=fedora&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
  [![FreeBSD Build Status](https://img.shields.io/cirrus/github/Warzone2100/warzone2100/master?label=FreeBSD&logo=FreeBSD)](https://cirrus-ci.com/github/Warzone2100/warzone2100/master)
  [![Travis CI Build Status](https://img.shields.io/travis/Warzone2100/warzone2100/master?label=ARM64%20%2F%20Misc)](https://travis-ci.org/Warzone2100/warzone2100)
+ [![Packaging status](https://repology.org/badge/tiny-repos/warzone2100.svg)](https://repology.org/project/warzone2100/versions)
 
 ### Windows
 
