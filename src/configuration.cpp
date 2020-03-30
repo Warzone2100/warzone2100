@@ -164,11 +164,14 @@ bool loadConfig()
 	sstrcpy(sPlayer, ini.value("playerName", _("Player")).toString().toUtf8().constData());
 
 	// Set a default map to prevent hosting games without a map.
-	sstrcpy(game.map, DEFAULTSKIRMISHMAP);
-	game.hash.setZero();
-	game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
-	game.techLevel = 1;
+	sstrcpy(game.map, ini.value("mapName", DEFAULTSKIRMISHMAP).toString().toUtf8().constData());
+	if(ini.value("mapHash", 0).isValid() == true) {
+		game.hash.setZero();
+	} else {
+		game.hash.fromString(ini.value("mapHash", 0).toString().toUtf8().constData());
+	}
+	game.maxPlayers = ini.value("maxPlayers", DEFAULTSKIRMISHMAPMAXPLAYERS).toInt(); game.techLevel = 1;
 
 	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
