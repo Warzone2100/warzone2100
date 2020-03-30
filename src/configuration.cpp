@@ -172,6 +172,7 @@ bool loadConfig()
 		game.hash.fromString(ini.value("mapHash", 0).toString().toUtf8().constData());
 	}
 	game.maxPlayers = ini.value("maxPlayers", DEFAULTSKIRMISHMAPMAXPLAYERS).toInt(); game.techLevel = 1;
+	game.techLevel = 1;
 
 	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
