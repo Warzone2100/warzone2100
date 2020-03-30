@@ -76,6 +76,7 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	, boxColourSecond(WZCOL_FORM_LIGHT)
 	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {
+	bBeenClicked = false;
 	char const *text = init->pText;
 	if (!text)
 	{
@@ -106,7 +107,9 @@ W_EDITBOX::W_EDITBOX(WIDGET *parent)
 	, boxColourFirst(WZCOL_FORM_DARK)
 	, boxColourSecond(WZCOL_FORM_LIGHT)
 	, boxColourBackground(WZCOL_FORM_BACKGROUND)
-{}
+{
+	bBeenClicked = false;
+}
 
 void W_EDITBOX::initialise()
 {
@@ -514,6 +517,12 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 	if (state & WEDBS_DISABLE)  // disabled button.
 	{
 		return;
+	}
+	/* When this is the first click into the widget, clear the current content*/
+	if (bBeenClicked == false)
+	{
+		setString("");
+		bBeenClicked = true;
 	}
 
 	// Set cursor position to the click location.
