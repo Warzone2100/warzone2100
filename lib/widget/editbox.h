@@ -93,6 +93,7 @@ private:
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
 	EditBoxDisplayCache displayCache;
 	bool                beenClicked;
+	int                 internalFlags;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__
