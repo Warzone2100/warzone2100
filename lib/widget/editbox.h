@@ -36,6 +36,9 @@
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
+/* Edit box flags */
+#define CLEAR_ON_FIRST_CLICK 0x1
+
 struct EditBoxDisplayCache {
 	WzText wzDisplayedText;
 	WzText modeText;
