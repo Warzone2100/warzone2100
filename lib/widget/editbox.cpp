@@ -76,7 +76,8 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	, boxColourSecond(WZCOL_FORM_LIGHT)
 	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {
-	bBeenClicked = false;
+	beenClicked      = false;
+	internalFlags    = init->flags;
 	char const *text = init->pText;
 	if (!text)
 	{
@@ -108,7 +109,8 @@ W_EDITBOX::W_EDITBOX(WIDGET *parent)
 	, boxColourSecond(WZCOL_FORM_LIGHT)
 	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {
-	bBeenClicked = false;
+	beenClicked   = false;
+	internalFlags = 0;
 }
 
 void W_EDITBOX::initialise()
@@ -518,11 +520,11 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 	{
 		return;
 	}
-	/* When this is the first click into the widget, clear the current content*/
-	if (bBeenClicked == false)
+	/* When this is the first click into the widget and the CLEAR_ON_FIRST_CLICK flag is set, clear the current content */
+	if ((internalFlags & CLEAR_ON_FIRST_CLICK) && beenClicked == false)
 	{
+	  beenClicked = true;
 		setString("");
-		bBeenClicked = true;
 	}
 
 	// Set cursor position to the click location.

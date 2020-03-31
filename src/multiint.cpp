@@ -167,7 +167,7 @@ LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 // Function protos
 
 // widget functions
-static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
+static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid, const int flags);
 static void addBlueForm(UDWORD parent, UDWORD id, WzString txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 static void drawReadyButton(UDWORD player);
 
@@ -1271,13 +1271,13 @@ static void addGameOptions()
 	{
 		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Game Name"),
 		                challengeActive ? game.name : _("One-Player Skirmish"), IMAGE_EDIT_GAME,
-		                IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+		                IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON, CLEAR_ON_FIRST_CLICK);
 		// disable for one-player skirmish
 		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
 	}
 	else
 	{
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON, CLEAR_ON_FIRST_CLICK);
 	}
 	widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
 
@@ -1302,7 +1302,7 @@ static void addGameOptions()
 	// password box
 	if (ingame.bHostSetup && NetPlay.bComms)
 	{
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT, CLEAR_ON_FIRST_CLICK);
 		if (NetPlay.GamePassworded)
 		{
 			widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);
@@ -1311,7 +1311,7 @@ static void addGameOptions()
 	}
 
 	//just display the game options.
-	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char *) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char *) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON, CLEAR_ON_FIRST_CLICK);
 
 	ListWidget *optionsList = new ListWidget(optionsForm);
 	optionsList->setChildSize(MULTIOP_BLUEFORMW, 29);
@@ -2379,6 +2379,7 @@ static void addChatBox(bool preserveOldChat)
 	sEdInit.y = MULTIOP_CHATEDITY;
 	sEdInit.width = MULTIOP_CHATEDITW;
 	sEdInit.height = MULTIOP_CHATEDITH;
+	sEdInit.flags  = 0;
 
 	sEdInit.pUserData = nullptr;
 	sEdInit.pBoxDisplay = displayChatEdit;
@@ -4427,7 +4428,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 /////////////////////////////////////////////////////////////////////////////////////////
 // common widgets
 
-static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
+static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid, const int flags)
 {
 	W_EDBINIT sEdInit;                           // editbox
 	sEdInit.formID = formid;
@@ -4438,6 +4439,7 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 	sEdInit.height = MULTIOP_EDITBOXH;
 	sEdInit.pText = tipres;
 	sEdInit.pBoxDisplay = displayMultiEditBox;
+	sEdInit.flags = flags;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
 		return false;

@@ -164,6 +164,7 @@ struct W_EDBINIT : public W_INIT
 	const char *pText;		///< initial contents of the edit box
 	enum iV_fonts FontID;		///< ID of the IVIS font to use for this widget.
 	WIDGET_DISPLAY pBoxDisplay;	///< Optional callback to display the form.
+	int flags;            ///< Flags for the edit box (e.g. CLEAR_ON_FIRST_CLICK). When zero, no flags are set.
 };
 
 /* Orientation flags for the bar graph */
