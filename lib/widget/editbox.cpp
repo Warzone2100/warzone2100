@@ -523,7 +523,7 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 	/* When this is the first click into the widget and the CLEAR_ON_FIRST_CLICK flag is set, clear the current content */
 	if ((internalFlags & CLEAR_ON_FIRST_CLICK) && beenClicked == false)
 	{
-	  beenClicked = true;
+		beenClicked = true;
 		setString("");
 	}
 
