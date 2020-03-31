@@ -198,6 +198,7 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 	sEdInit.height = CON_NAMEBOXHEIGHT;
 	sEdInit.pText = mpGetServerName();
 	sEdInit.pBoxDisplay = intDisplayEditBox;
+	sEdInit.flags = 0;
 	if (!widgAddEditBox(psSettingsScreen, &sEdInit))
 	{
 		closeIPDialog();
