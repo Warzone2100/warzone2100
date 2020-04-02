@@ -261,6 +261,9 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
    * **CMake 3.10+** (https://cmake.org/)
    * **QT 5.9.1+** (https://www.qt.io/)
+     - The QT website nowadays is very confusing. Here's a link to the [5.9.9 installer](https://download.qt.io/archive/qt/5.9/5.9.9/).
+     - You will probably need to register for a QT account during the installation, along with activating your email.
+     - Required components to install: MSVC 2015, Qt Script (even though it's labelled as deprecated). The MSVC SDKs seem to be backwards-compatible, and 32-bit versions work on 64-bit platforms.
    * **Git** (if not building from a release source archive)
    * **7-Zip** (http://www.7-zip.org)
 * **Preparing to build:**
@@ -278,11 +281,10 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
    1. Open Visual Studio 2017
    2. Open the warzone2100 folder using **File** > **Open** > **Folder...**
       - Allow Visual Studio some time to load the project and retrieve information from CMake.
-   3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**.
+   3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**. You can also reach this dialog by clicking "Manage Configurations" in the configuration dropdown in the toolbar. Make sure the CMake components in Visual Studio are installed (by running the Visual Studio Installer).
       - This creates `CMakeSettings.json`
    4. Add the following variables to `cmakeCommandArgs` in `CMakeSettings.json`:
-      - `-DCMAKE_PREFIX_PATH=C:\Qt\Qt5.9.4\5.9.4\msvc2015` (change to use the appropriate path to your Qt installation)
-      - `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake`
+      - `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_PREFIX_PATH=C:\Qt\Qt5.9.9\5.9.9\msvc2015` (change to use the appropriate path to your Qt installation)
       - Note: Visual Studio should automatically escape and turn each `\` into `\\`
    5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
 
