@@ -32,6 +32,7 @@
 
 #include <string>
 #include <utility>
+#include <stdarg.h>
 
 /*!
  * On MSVC, in order to squelch tons of 'memory leaks' we set the allocator

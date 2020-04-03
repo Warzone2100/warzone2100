@@ -122,34 +122,56 @@ static const char *wz_strsignal(int signum, int sigcode)
 	case SIGBUS:
 		switch (sigcode)
 		{
+#ifdef BUS_ADRALN
 		case BUS_ADRALN:
 			return "SIGBUS: Access to an undefined portion of a memory object: Invalid address alignment";
+#endif /* BUS_ADRALN */
+#ifdef BUS_ADRERR
 		case BUS_ADRERR:
 			return "SIGBUS: Access to an undefined portion of a memory object: Nonexistent physical address";
+#endif /* BUS_ADRERR */
+#ifdef BUS_OBJERR
 		case BUS_OBJERR:
 			return "SIGBUS: Access to an undefined portion of a memory object: Object-specific hardware error";
+#endif /* BUS_OBJERR */
 		default:
 			return "SIGBUS: Access to an undefined portion of a memory object";
 		}
 	case SIGFPE:
 		switch (sigcode)
 		{
+#ifdef FPE_INTDIV
 		case FPE_INTDIV:
 			return "SIGFPE: Erroneous arithmetic operation: Integer divide by zero";
+#endif /* FPE_INTDIV */
+#ifdef FPE_INTOVF
 		case FPE_INTOVF:
 			return "SIGFPE: Erroneous arithmetic operation: Integer overflow";
+#endif /* FPE_INTOVF */
+#ifdef FPE_FLTDIV
 		case FPE_FLTDIV:
 			return "SIGFPE: Erroneous arithmetic operation: Floating-point divide by zero";
+#endif /* FPE_FLTDIV */
+#ifdef FPE_FLTOVF
 		case FPE_FLTOVF:
 			return "SIGFPE: Erroneous arithmetic operation: Floating-point overflow";
+#endif /* FPE_FLTOVF */
+#ifdef FPE_FLTUND
 		case FPE_FLTUND:
 			return "SIGFPE: Erroneous arithmetic operation: Floating-point underflow";
+#endif /* FPE_FLTUND */
+#ifdef FPE_FLTRES
 		case FPE_FLTRES:
 			return "SIGFPE: Erroneous arithmetic operation: Floating-point inexact result";
+#endif /* FPE_FLTRES */
+#ifdef FPE_FLTINV
 		case FPE_FLTINV:
 			return "SIGFPE: Erroneous arithmetic operation: Invalid floating-point operation";
+#endif /* FPE_FLTINV */
+#ifdef FPE_FLTSUB
 		case FPE_FLTSUB:
 			return "SIGFPE: Erroneous arithmetic operation: Subscript out of range";
+#endif /* FPE_FLTSUB */
 		default:
 			return "SIGFPE: Erroneous arithmetic operation";
 		};
@@ -158,22 +180,38 @@ static const char *wz_strsignal(int signum, int sigcode)
 	case SIGILL:
 		switch (sigcode)
 		{
+#ifdef ILL_ILLOPC
 		case ILL_ILLOPC:
 			return "SIGILL: Illegal instruction: Illegal opcode";
+#endif /* ILL_ILLOPC */
+#ifdef ILL_ILLOPN
 		case ILL_ILLOPN:
 			return "SIGILL: Illegal instruction: Illegal operand";
+#endif /* ILL_ILLOPN */
+#ifdef ILL_ILLADR
 		case ILL_ILLADR:
 			return "SIGILL: Illegal instruction: Illegal addressing mode";
+#endif /* ILL_ILLADR */
+#ifdef ILL_ILLTRP
 		case ILL_ILLTRP:
 			return "SIGILL: Illegal instruction: Illegal trap";
+#endif /* ILL_ILLTRP */
+#ifdef ILL_PRVOPC
 		case ILL_PRVOPC:
 			return "SIGILL: Illegal instruction: Privileged opcode";
+#endif /* ILL_PRVOPC */
+#ifdef ILL_PRVREG
 		case ILL_PRVREG:
 			return "SIGILL: Illegal instruction: Privileged register";
+#endif /* ILL_PRVREG */
+#ifdef ILL_COPROC
 		case ILL_COPROC:
 			return "SIGILL: Illegal instruction: Coprocessor error";
+#endif /* ILL_COPROC */
+#ifdef ILL_BADSTK
 		case ILL_BADSTK:
 			return "SIGILL: Illegal instruction: Internal stack error";
+#endif /* ILL_BADSTK */
 		default:
 			return "SIGILL: Illegal instruction";
 		}
@@ -188,10 +226,14 @@ static const char *wz_strsignal(int signum, int sigcode)
 	case SIGSEGV:
 		switch (sigcode)
 		{
+#ifdef SEGV_MAPERR
 		case SEGV_MAPERR:
 			return "SIGSEGV: Invalid memory reference: Address not mapped to object";
+#endif /* SEGV_MAPERR */
+#ifdef SEGV_ACCERR
 		case SEGV_ACCERR:
 			return "SIGSEGV: Invalid memory reference: Invalid permissions for mapped object";
+#endif /* SEGV_ACCERR */
 		default:
 			return "SIGSEGV: Invalid memory reference";
 		}
@@ -209,21 +251,31 @@ static const char *wz_strsignal(int signum, int sigcode)
 	case SIGTRAP:
 		switch (sigcode)
 		{
+#ifdef TRAP_BRKPT
 		case TRAP_BRKPT:
 			return "SIGTRAP: Trace/breakpoint trap: Process breakpoint";
+#endif /* TRAP_BRKPT */
+#ifdef TRAP_TRACE
 		case TRAP_TRACE:
 			return "SIGTRAP: Trace/breakpoint trap: Process trace trap";
+#endif /* TRAP_TRACE */
 		default:
 			return "SIGTRAP: Trace/breakpoint trap";
 		}
 #endif // _XOPEN_UNIX
 #if _XOPEN_UNIX
+# ifdef SIGVTALRM
 	case SIGVTALRM:
 		return "SIGVTALRM: Virtual timer expired";
+# endif /* SIGVTALRM */
+# ifdef SIGXCPU
 	case SIGXCPU:
 		return "SIGXCPU: CPU time limit exceeded";
+# endif /* SIGXCPU */
+# ifdef SIGXFSZ
 	case SIGXFSZ:
 		return "SIGXFSZ: File size limit exceeded";
+# endif /* SIGXFSZ */
 #endif // _XOPEN_UNIX
 	default:
 		return "Unknown signal";
