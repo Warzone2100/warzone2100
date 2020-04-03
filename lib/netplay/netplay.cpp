@@ -1839,7 +1839,7 @@ static void NETcheckPlayers()
 // We should not block here.
 bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
-	const int status = upnp_status; // hack fix for clang and c++11 - fixed in standard for c++14
+	const int status = upnp_status.load(); // hack fix for clang and c++11 - fixed in standard for c++14
 	switch (status)
 	{
 	case UPNP_ERROR_CONTROL_NOT_AVAILABLE:
