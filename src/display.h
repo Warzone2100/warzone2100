@@ -216,6 +216,8 @@ bool ctrlShiftDown();
 
 UDWORD getTargetType();
 
+#define	DEFAULT_ZOOM_SPEED (5000)
+
 void setZoom(float zoomSpeed, float zoomTarget);
 float getZoom();
 float getZoomSpeed();
