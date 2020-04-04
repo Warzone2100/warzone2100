@@ -3389,6 +3389,7 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 /// Smoothly adjust player height to match the desired height
 static void trackHeight(float desiredHeight)
 {
+	desiredHeight = std::ceil(desiredHeight / HEIGHT_TRACK_INCREMENTS) * HEIGHT_TRACK_INCREMENTS;
 	static float heightSpeed = 0.0f;
 	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
 
