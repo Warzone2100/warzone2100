@@ -2503,36 +2503,11 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 /// Draws the strobing 3D drag box that is used for multiple selection
 static void	drawDragBox()
 {
-	int minX, maxX;		// SHURCOOL: These 4 ints will hold the corners of the selection box
-	int minY, maxY;
-
 	if (dragBox3D.status == DRAG_DRAGGING && buildState == BUILD3D_NONE)
 	{
-		if (graphicsTime - dragBox3D.lastTime > BOX_PULSE_SPEED)
-		{
-			dragBox3D.pulse++;
-			if (dragBox3D.pulse >= BOX_PULSE_SIZE)
-			{
-				dragBox3D.pulse = 0;
-			}
-			dragBox3D.lastTime = graphicsTime;
-		}
-
-		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
-		minX = MIN(dragBox3D.x1, mouseX());
-		maxX = MAX(dragBox3D.x1, mouseX());
-		minY = MIN(dragBox3D.y1, mouseY());
-		maxY = MAX(dragBox3D.y1, mouseY());
-
-		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
-		minX += dragBox3D.pulse / 2;
-		maxX -= dragBox3D.pulse / 2;
-		minY += dragBox3D.pulse / 2;
-		maxY -= dragBox3D.pulse / 2;
-
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
-		iV_Box(minX, minY, maxX, maxY, WZCOL_UNIT_SELECT_BORDER);
-		pie_UniTransBoxFill(minX + 1, minY, maxX, maxY - 1, WZCOL_UNIT_SELECT_BOX);
+		iV_Box(dragBox3D.x1, dragBox3D.y1, dragBox3D.x2, dragBox3D.y2, WZCOL_UNIT_SELECT_BORDER);
+		pie_UniTransBoxFill(dragBox3D.x1 + 1, dragBox3D.y1, dragBox3D.x2, dragBox3D.y2 - 1, WZCOL_UNIT_SELECT_BOX);
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	}
 }
