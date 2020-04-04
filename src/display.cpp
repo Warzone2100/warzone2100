@@ -1160,33 +1160,33 @@ void displayWorld()
 			xMoved += abs(mouseX() - rotX);
 			if (mouseX() < rotX)
 			{
-				player.r.y = rotInitial + (rotX - mouseX()) * DEG(1) / 2;
+				player.r.y = rotInitial + (rotX - mouseX()) * DEG(1) / 4;
 			}
 			else
 			{
-				player.r.y = rotInitial - (mouseX() - rotX) * DEG(1) / 2;
+				player.r.y = rotInitial - (mouseX() - rotX) * DEG(1) / 4;
 			}
 			yMoved += abs(mouseY() - rotY);
 			if (bInvertMouse)
 			{
 				if (mouseY() < rotY)
 				{
-					player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 3;
+					player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 4;
 				}
 				else
 				{
-					player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 3;
+					player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 4;
 				}
 			}
 			else
 			{
 				if (mouseY() < rotY)
 				{
-					player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 3;
+					player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 4;
 				}
 				else
 				{
-					player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 3;
+					player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 4;
 				}
 			}
 			if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
