@@ -241,7 +241,26 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
 	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
 	shape->buffers[VBO_INDEX]->bind();
+
+	glClear(GL_STENCIL_BUFFER_BIT); // don't forget to clear the stencil buffer!
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
+	glStencilMask(0xFF); // enable writing to the stencil buffer
+	glUseProgram(program.program);
+
 	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->polys.size() * 3 * sizeof(uint16_t)));
+	
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilMask(0x00); // disable writing to the stencil buffer
+	glDisable(GL_DEPTH_TEST);
+	
+	pie_ActivateShader(SHADER_GENERIC_COLOR, glm::scale(pie_PerspectiveGet() * matrix, glm::vec3(1.1f)), glm::vec4(255.f / 255.f, 255.f / 255.f, 255.f / 255.f, 255.f / 255.f));
+	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->polys.size() * 3 * sizeof(uint16_t)));
+	
+	glStencilMask(0xFF);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass the stencil test
+	glEnable(GL_DEPTH_TEST);
+
 	disableArrays();
 
 	polyCount += shape->polys.size();
