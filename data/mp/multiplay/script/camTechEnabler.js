@@ -1,15 +1,15 @@
 function completeResearchOnTime(time, playnum)
 {
-	for ( var tech in allRes)
+	for (var tech in allRes)
 	{
 		if (allRes[tech] <= time)
 		{
-			completeResearch (tech, playnum);
+			completeResearch(tech, playnum);
 		}
 	}
 }
 
-var allRes= {
+var allRes = {
 	"R-Vehicle-Prop-Wheels": 0,
 	"R-Sys-Spade1Mk1": 0,
 	"R-Vehicle-Body01": 0,
@@ -410,4 +410,4 @@ var allRes= {
 	"R-Defense-WallTower-Rail3": 4124,
 	"R-Defense-MassDriver": 4664,
 	"R-Vehicle-Body14": 4734
-}
+};

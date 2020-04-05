@@ -389,7 +389,6 @@ function eventGameInit()
 		else if (techLevel == 3)
 		{
 			completeResearchOnTime(timeT3, playnum);
-		
 		}
 		else if (techLevel == 4)
 		{
