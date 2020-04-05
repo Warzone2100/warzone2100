@@ -321,48 +321,11 @@ function eventGameInit()
 	}
 	applyLimitSet();	// set limit options
 
-	const numCleanTech = 4;	// do x for clean
-	const numBaseTech = 18; // do x for base
-	var techlist = new Array(
-		"R-Vehicle-Prop-Wheels",
-		"R-Sys-Spade1Mk1",
-		"R-Vehicle-Body01",
-		"R-Comp-SynapticLink",
-		"R-Wpn-MG1Mk1",
-		"R-Defense-HardcreteWall",
-		"R-Vehicle-Prop-Wheels",
-		"R-Sys-Spade1Mk1",
-		"R-Struc-Factory-Cyborg",
-		"R-Defense-Pillbox01",
-		"R-Defense-Tower01",
-		"R-Vehicle-Body01",
-		"R-Sys-Engineering01",
-		"R-Struc-CommandRelay",
-		"R-Vehicle-Prop-Halftracks",
-		"R-Comp-CommandTurret01",
-		"R-Sys-Sensor-Turret01",
-		"R-Wpn-Flamer01Mk1",
-		"R-Vehicle-Body05",
-		"R-Struc-Research-Module",
-		"R-Struc-PowerModuleMk1",
-		"R-Struc-Factory-Module",
-		"R-Struc-RepairFacility",
-		"R-Sys-MobileRepairTurret01",
-		"R-Vehicle-Engine01",
-		"R-Wpn-MG3Mk1",
-		"R-Wpn-Cannon1Mk1",
-		"R-Wpn-Mortar01Lt",
-		"R-Defense-Pillbox05",
-		"R-Defense-TankTrap01",
-		"R-Defense-WallTower02",
-		"R-Sys-Sensor-Tower01",
-		"R-Defense-Pillbox04",
-		"R-Wpn-MG2Mk1",
-		"R-Wpn-Rocket05-MiniPod",
-		"R-Wpn-MG-Damage01",
-		"R-Wpn-Rocket-Damage01",
-		"R-Defense-WallTower01",
-		"R-Defense-Tower06");
+	const cleanTech = 1;
+	const timeBaseTech = 4.5*60;	
+	const timeAdvancedBaseTech = 7.9*60;
+	const timeT2= 17*60;
+	const timeT3= 25*60;
 
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
@@ -383,10 +346,7 @@ function eventGameInit()
 		if (baseType == CAMP_CLEAN)
 		{
 			setPower(1300, playnum);
-			for (var count = 0; count < numCleanTech; count++)
-			{
-				completeResearch(techlist[count], playnum);
-			}
+			completeResearchOnTime(cleanTech, playnum);
 			// Keep only some structures for insane AI
 			var structs = enumStruct(playnum);
 			for (var i = 0; i < structs.length; i++)
@@ -403,10 +363,7 @@ function eventGameInit()
 		else if (baseType == CAMP_BASE)
 		{
 			setPower(2500, playnum);
-			for (var count = 0; count < numBaseTech; count++)
-			{
-				completeResearch(techlist[count], playnum);
-			}
+			completeResearchOnTime(timeBaseTech, playnum);
 			// Keep only some structures
 			var structs = enumStruct(playnum);
 			for (var i = 0; i < structs.length; i++)
@@ -422,25 +379,21 @@ function eventGameInit()
 		else // CAMP_WALLS
 		{
 			setPower(2500, playnum);
-			for (var count = 0; count < techlist.length; count++)
-			{
-				completeResearch(techlist[count], playnum);
-			}
+			completeResearchOnTime(timeAdvancedBaseTech, playnum);
 		}
-	}
-
-	var techLevel = getMultiTechLevel();
-	if (techLevel == 2)
-	{
-		grantTech(TECH_TWO);
-	}
-	else if (techLevel == 3)
-	{
-		grantTech(TECH_THREE);
-	}
-	else if (techLevel == 4)
-	{
-		grantAllTech();
+		var techLevel = getMultiTechLevel();
+		if (techLevel == 2)
+		{
+			completeResearchOnTime(timeT2, playnum);
+		}
+		else if (techLevel == 3)
+		{
+			completeResearchOnTime(timeT3, playnum);
+		}
+		else if (techLevel == 4)
+		{
+			completeResearchOnTime(Infinity, playnum);
+		}
 	}
 
 	hackNetOn();
