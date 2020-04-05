@@ -95,6 +95,9 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 static float zoom_speed = 0.0f;
 static float zoom_target = 0.0f;
 
+int scrollDirLeftRight = 0;
+int scrollDirUpDown = 0;
+
 static bool	buildingDamaged(STRUCTURE *psStructure);
 static bool	repairDroidSelected(UDWORD player);
 static bool vtolDroidSelected(UDWORD player);
@@ -1005,7 +1008,6 @@ CURSOR scroll()
 {
 	SDWORD	xDif, yDif;
 	uint32_t timeDiff;
-	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 
 	float scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2);
@@ -1043,15 +1045,6 @@ CURSOR scroll()
 			cursor = CURSOR_RARROW;
 		}
 	}
-	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
-	{
-		// Scroll left or right
-		scrollDirLeftRight += keyDown(KEY_RIGHTARROW) - keyDown(KEY_LEFTARROW);
-
-		// Scroll down or up
-		scrollDirUpDown += keyDown(KEY_UPARROW) - keyDown(KEY_DOWNARROW);
-
-	}
 	CLIP(scrollDirLeftRight, -1, 1);
 	CLIP(scrollDirUpDown,    -1, 1);
 
@@ -1080,6 +1073,10 @@ CURSOR scroll()
 	player.p.z += yDif;
 
 	CheckScrollLimits();
+
+	// Reset scroll directions
+	scrollDirLeftRight = 0;
+	scrollDirUpDown = 0;
 
 	return cursor;
 }
