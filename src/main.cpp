@@ -1027,6 +1027,10 @@ void mainLoop()
 {
 	frameUpdate(); // General housekeeping
 
+
+	if(isStarsAllocated()){
+		printf("Stars allocated\n");
+	}
 	// Screenshot key is now available globally
 	if (keyPressed(KEY_F10))
 	{

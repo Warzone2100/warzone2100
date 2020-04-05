@@ -40,6 +40,7 @@ extern int hostlaunch;
 bool frontendInitVars();
 TITLECODE titleLoop();
 
+bool isStarsAllocated();
 void initLoadingScreen(bool drawbdrop);
 void closeLoadingScreen();
 void loadingScreenCallback();

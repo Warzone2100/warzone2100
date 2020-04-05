@@ -72,6 +72,11 @@ static STAR newStar()
 	return s;
 }
 
+bool isStarsAllocated()
+{
+	return !!stars;
+}
+
 static void setupLoadingScreen()
 {
 	unsigned int i;
