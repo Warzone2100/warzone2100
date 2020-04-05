@@ -31,6 +31,9 @@
 
 #define MAP_PITCH_RATE		(SPIN_SCALING/SECS_PER_SPIN)
 
+extern int scrollDirUpDown;
+extern int scrollDirLeftRight;
+
 // --------------- All those keyboard mappable functions */
 void kf_HalveHeights();
 void kf_DebugDroidInfo();
@@ -101,6 +104,10 @@ void kf_JumpToMapMarker();
 void kf_TogglePowerBar();
 void kf_ToggleDebugMappings();
 void kf_ToggleGodMode();
+void kf_CameraUp();
+void kf_CameraDown();
+void kf_CameraLeft();
+void kf_CameraRight();
 void kf_SeekNorth();
 void kf_MaxScrollLimits();
 void kf_LevelSea();

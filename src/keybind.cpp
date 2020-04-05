@@ -1323,6 +1323,22 @@ void	kf_SeekNorth()
 	CONPRINTF("%s", _("View Aligned to North"));
 }
 
+void kf_CameraUp() {
+	scrollDirUpDown += 1;
+}
+
+void kf_CameraDown() {
+	scrollDirUpDown += -1;
+}
+
+void kf_CameraLeft() {
+	scrollDirLeftRight += -1;
+}
+
+void kf_CameraRight() {
+	scrollDirLeftRight += 1;
+}
+
 void kf_toggleTrapCursor()
 {
 	char *msg;
