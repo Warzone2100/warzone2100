@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-10 23:54\n"
+"PO-Revision-Date: 2020-04-06 15:58\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -14490,7 +14490,7 @@ msgstr "Файл с музыкальным модом Warzone 2100"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr "Постядерная стратегия в реальном времени"
+msgstr "Постъядерная стратегия в реальном времени"
 
 #: po/custom/warzone2100.desktop.txt:3
 msgid "Strategy Game"
