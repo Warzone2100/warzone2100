@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-04-06 15:58\n"
+"PO-Revision-Date: 2020-04-07 15:54\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1349,7 +1349,7 @@ msgstr "NP-Хардкрит"
 #: data/mp/messages/strings/names.txt:395
 #: po/custom/fromJson.txt:2564
 msgid "Heavy Machinegun Bunker"
-msgstr "Бункер с крупнокалиберным пулемётом"
+msgstr "Бункер с тяжёлым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PrisLas.name
@@ -6531,7 +6531,7 @@ msgstr "Укреплённая оборонительная точка с Тяж
 #. data/mp/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #: po/custom/fromJson.txt:722
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Укреплённая оборонительная точка с крупнокалиберным пулемётом"
+msgstr "Укреплённая оборонительная точка с тяжелым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
@@ -9233,7 +9233,7 @@ msgstr "Тяжёлый пулемёт Кобра Колёса"
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2592
 msgid "Heavy Machinegun Hardpoint"
-msgstr "Оборонительная точка с крупнокалиберным пулемётом"
+msgstr "Оборонительная точка с тяжёлым пулемётом"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
