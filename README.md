@@ -272,8 +272,8 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
 * **Building from the command-line:**
    * Change directory to the warzone2100 repo directory
    * Configure
-      * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystem\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
-      * Visual Studio 2015: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystem\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015"`
+      * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
+      * Visual Studio 2015: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015"`
    * Build
       * Release: `cmake --build build --config Release`
       * Debug: `cmake --build build --config Debug`
