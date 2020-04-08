@@ -1,0 +1,23 @@
+name: Release Tasks
+
+on:
+  release:
+    types:
+      - published
+      - edited
+      - deleted
+      - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
+
+jobs:
+  trigger-site-update:
+    # For this job to work, the following secrets must be set:
+    # SITE_DISPATCH_ACCESS_TOKEN
+    name: 'Trigger Site Update'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Send Repository Dispatch Event'
+        run: |
+          curl -X POST https://api.github.com/repos/Warzone2100/wz2100.net/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.SITE_DISPATCH_ACCESS_TOKEN }} \
+          --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
