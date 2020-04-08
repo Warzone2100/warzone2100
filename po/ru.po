@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-04-07 15:54\n"
+"PO-Revision-Date: 2020-04-08 16:45\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -7150,7 +7150,7 @@ msgstr "Связанные металлические слои оформлен�
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1238
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "BoneCrusher!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
@@ -10419,7 +10419,7 @@ msgstr "Леопард"
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text[1]
 #: po/custom/fromJson.txt:3486
 msgid "Less armor and body points than Python"
-msgstr ""
+msgstr "Менее бронированный и прочный чем Питон"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body04.name
@@ -11493,7 +11493,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
@@ -12762,7 +12762,7 @@ msgstr "Саморепликация производства"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -14462,7 +14462,7 @@ msgstr "Все права сохранены © 1999-2004 Eidos Interactive.\n"
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14482,7 +14482,7 @@ msgstr "Файл с глобальным модом Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -16453,7 +16453,7 @@ msgstr "Показать частоту кадров"
 
 #: src/keymap.cpp:433
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Выбрать всех юнитов с такими же компонентами"
 
 #: src/keymap.cpp:437
 msgid "Select all Combat Cyborgs"
