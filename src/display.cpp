@@ -1183,8 +1183,6 @@ void displayWorld()
 	if (!mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		rotActive = false;
-		rotInitial = 0;
-		rotInitialUp = 0;
 		ignoreRMBC = true;
 		pos.x = player.r.x;
 		pos.y = player.r.y;
