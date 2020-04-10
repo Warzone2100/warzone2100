@@ -190,7 +190,7 @@ SDWORD	getDesiredPitch();
 void	setDesiredPitch(SDWORD pitch);
 
 #define MAX_PLAYER_X_ANGLE	(-1)
-#define MIN_PLAYER_X_ANGLE	(-60)
+#define MIN_PLAYER_X_ANGLE	(-90)
 
 #define MAXDISTANCE	(5000)
 #define MINDISTANCE	(0)
@@ -222,5 +222,12 @@ float getZoomSpeed();
 void zoom();
 bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
 bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
+
+// Camera rotation
+
+void initCameraRotation();
+void stopCameraRotation();
+void updateCameraRotation();
+void applyCameraRotation();
 
 #endif // __INCLUDED_SRC_DISPLAY_H__

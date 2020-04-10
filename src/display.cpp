@@ -116,11 +116,12 @@ void finishDeliveryPosition();
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
+float CAMERA_ROTATION_SMOOTHNESS = 10;
+float CAMERA_ROTATION_SPEED = 4;
 static SDWORD	rotX;
 static SDWORD	rotY;
 static UDWORD	rotInitial;
 static UDWORD	rotInitialUp;
-static UDWORD	xMoved, yMoved;
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
@@ -685,8 +686,6 @@ CURSOR processMouseClickInput()
 	{
 		rotInitial = player.r.y;
 		rotInitialUp = player.r.x;
-		xMoved = 0;
-		yMoved = 0;
 		rotActive = true;
 	}
 
@@ -1152,60 +1151,40 @@ bool CheckScrollLimits()
 void displayWorld()
 {
 	Vector3i pos;
-
+	
 	if (mouseDown(MOUSE_ROTATE) && rotActive)
 	{
-		if (abs(mouseX() - rotX) > 2 || xMoved > 2 || abs(mouseY() - rotY) > 2 || yMoved > 2)
-		{
-			xMoved += abs(mouseX() - rotX);
-			if (mouseX() < rotX)
-			{
-				player.r.y = rotInitial + (rotX - mouseX()) * DEG(1) / 4;
-			}
-			else
-			{
-				player.r.y = rotInitial - (mouseX() - rotX) * DEG(1) / 4;
-			}
-			yMoved += abs(mouseY() - rotY);
-			if (bInvertMouse)
-			{
-				if (mouseY() < rotY)
-				{
-					player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 4;
-				}
-				else
-				{
-					player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 4;
-				}
-			}
-			else
-			{
-				if (mouseY() < rotY)
-				{
-					player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 4;
-				}
-				else
-				{
-					player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 4;
-				}
-			}
-			if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
-			{
-				player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
-			}
-			if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
-			{
-				player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
-			}
+		float mouseDeltaX = mouseX() - rotX;
+		float mouseDeltaY = mouseY() - rotY;
 
-			setDesiredPitch(player.r.x / DEG_1);
+		if(bInvertMouse)
+		{
+			mouseDeltaY *= -1;
 		}
+
+		float rotationDeltaY = rotInitial + DEG(mouseDeltaX) / CAMERA_ROTATION_SPEED;
+
+		float rotationDeltaX = rotInitialUp + DEG(mouseDeltaY) / CAMERA_ROTATION_SPEED;
+		player.r.y = player.r.y + (rotationDeltaY - player.r.y) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
+		player.r.x = player.r.x + (rotationDeltaX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
+
+		if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+		{
+			player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+		}
+		if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
+		{
+			player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
+		}
+
+		setDesiredPitch(player.r.x / DEG_1);
 	}
 
 	if (!mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		rotActive = false;
-		xMoved = yMoved = 0;
+		rotInitial = 0;
+		rotInitialUp = 0;
 		ignoreRMBC = true;
 		pos.x = player.r.x;
 		pos.y = player.r.y;
@@ -1225,6 +1204,22 @@ static bool mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 bool DrawnInLastFrame(int32_t frame)
 {
 	return frame >= (int32_t)StartOfLastFrame;
+}
+
+
+
+// Camera rotation logic
+
+void initCameraRotation()
+{
+}
+
+void updateCameraRotation()
+{
+}
+
+void stopCameraRotation()
+{
 }
 
 
