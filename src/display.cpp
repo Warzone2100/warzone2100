@@ -1163,7 +1163,6 @@ void displayWorld()
 		}
 
 		float rotationDeltaY = rotInitial + DEG(mouseDeltaX) / CAMERA_ROTATION_SPEED;
-
 		float rotationDeltaX = rotInitialUp + DEG(mouseDeltaY) / CAMERA_ROTATION_SPEED;
 		player.r.y = player.r.y + (rotationDeltaY - player.r.y) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
 		player.r.x = player.r.x + (rotationDeltaX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
