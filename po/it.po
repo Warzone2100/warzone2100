@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-04-09 16:44\n"
+"PO-Revision-Date: 2020-04-10 16:45\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -401,7 +401,7 @@ msgstr "MISSIONE BASE BETA: Difendi e Fortifica"
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr "Si assicuri di fortificare il perimetro e di costruire difese antiaeree."
+msgstr "Assicurati di fortificare il perimetro e di costruire difese antiaeree."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -593,7 +593,7 @@ msgstr "Devono essere fermati."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr "Proceda dalla Zona di Atterraggio al reattore e lo distrugga."
+msgstr "Proceda dalla Zona di Atterraggio al reattore e distruggilo."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
@@ -623,7 +623,7 @@ msgstr "Parte della sua coscienza si è spostata in un remoto sito di controllo 
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr "Stiamo rilevando trasmissioni da questo luogo che stanno raggiungendo l'orbita alta."
+msgstr "Stiamo rilevando trasmissioni da questo luogo che stanno raggiungendo un'orbita elevata."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
@@ -898,7 +898,7 @@ msgstr "Ha l'opportunità di distruggere NEXUS prima che vi giungano."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr "Organizzi una forza d'attacco e tenda un agguato all'unità operativa NEXUS presso ........ il ......."
+msgstr "Organizzi una forza d'attacco e tenda un agguato all'unità operativa NEXUS presso il ........ il ......."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
@@ -1011,7 +1011,7 @@ msgstr "Comandante, sono presenti missili nelle basi missilistiche."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "Nexus ci sta impedendo di accedere al codice di controllo dei missili."
+msgstr "Il Nexus ci sta impedendo di accedere al codice di controllo dei missili."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
@@ -1039,7 +1039,7 @@ msgstr "Stiamo tentando di accedere ai codici di controllo dei missili."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr "Una struttura di ricerca è necessaria per crackare il codice. Ne assegni una immediatamente."
+msgstr "Una struttura di ricerca è necessaria per crackare il codice. Assegnane una immediatamente."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
@@ -1067,7 +1067,7 @@ msgstr "Programmazione del bersaglio dei missili in corso."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr "Una volta che i codici di livello tre saranno crackati inizieremo le procedure di lancio."
+msgstr "Una volta che i codici di livello 3 saranno crackati inizieremo le procedure di lancio."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
@@ -1247,7 +1247,7 @@ msgstr "Postazione con Ground Shaker"
 #: data/mp/messages/strings/names.txt:253
 #: po/custom/fromJson.txt:2664
 msgid "Hellstorm Emplacement"
-msgstr "Postazione con Tempesta Infernale"
+msgstr "Postazione con Hellstorm"
 
 #: data/base/messages/strings/names.txt:228
 #: data/mp/messages/strings/names.txt:264
@@ -1257,7 +1257,7 @@ msgstr "Postazione con Mortaio"
 #: data/base/messages/strings/names.txt:229
 #: data/mp/messages/strings/names.txt:265
 msgid "Bombard Emplacement"
-msgstr "Mortaio Interrato"
+msgstr "Postazione con Bombarda"
 
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
@@ -1269,7 +1269,7 @@ msgstr "Postazione con Pepperpot"
 #: data/mp/messages/strings/names.txt:274
 #: data/mp/messages/strings/names.txt:515
 msgid "Tornado Flak Turret"
-msgstr "Torretta Contraerea Tornado"
+msgstr "Torretta Flak Tornado"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:288
@@ -1316,7 +1316,7 @@ msgstr "Cyborg con Flashlight JetPack"
 
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
-msgstr "Jet Pack per Cyborg"
+msgstr "Jump Pack per Cyborg"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs02.name
@@ -1338,7 +1338,7 @@ msgstr "Propulsione Cyborg III"
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:385
 msgid "NP-Hardcrete"
-msgstr "NP-Cementitan"
+msgstr "NP-Hardcrete"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox01.name
@@ -1349,7 +1349,7 @@ msgstr "NP-Cementitan"
 #: data/mp/messages/strings/names.txt:395
 #: po/custom/fromJson.txt:2564
 msgid "Heavy Machinegun Bunker"
-msgstr "Bunker con Mitragliatrice pesante"
+msgstr "Bunker con Mitragliatrice Pesante"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PrisLas.name
@@ -1378,7 +1378,7 @@ msgstr "Torretta di Guardia Rinforzata con Mitragliatrice Pesante"
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:2059
 msgid "Flamer Guard Tower"
-msgstr "Torre di Guardia con Inceneritore"
+msgstr "Torre di Guardia con Lanciafiamme"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
@@ -1391,7 +1391,7 @@ msgstr "Torretta di Guardia con Lancer"
 #: data/mp/messages/strings/names.txt:409
 #: po/custom/fromJson.txt:2063
 msgid "Flamer Hardpoint"
-msgstr "Postazione Corazzata con Inceneritore"
+msgstr "Postazione Corazzata con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
@@ -1443,7 +1443,7 @@ msgstr "Riarmo VTOL Robotizzato Mk4"
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:449
 msgid "Cyborg Self-Repair"
-msgstr "I cyborg si autoriparano"
+msgstr "Autoriparazione Cyborg"
 
 #: data/base/messages/strings/names.txt:350
 #: data/mp/messages/strings/names.txt:450
@@ -1458,7 +1458,7 @@ msgstr "Riparazione Cyborg Automatizzata Mk3"
 #: data/base/messages/strings/names.txt:353
 #: data/mp/messages/strings/names.txt:453
 msgid "Defenses Self-Repair"
-msgstr "Le difese si autoriparano"
+msgstr "Autoriparazione Difese"
 
 #: data/base/messages/strings/names.txt:354
 #: data/mp/messages/strings/names.txt:454
@@ -1473,7 +1473,7 @@ msgstr "Riparazione Difese Automatizzata Mk3"
 #: data/base/messages/strings/names.txt:357
 #: data/mp/messages/strings/names.txt:457
 msgid "Base Structure Self-Repair"
-msgstr "Le strutture si autoriparano"
+msgstr "Autoriparazione Strutture"
 
 #: data/base/messages/strings/names.txt:358
 #: data/mp/messages/strings/names.txt:458
@@ -1488,7 +1488,7 @@ msgstr "Riparazione Strutture Automatizzata Mk3"
 #: data/base/messages/strings/names.txt:361
 #: data/mp/messages/strings/names.txt:461
 msgid "Vehicle Self-Repair"
-msgstr "I veicoli si autoriparano"
+msgstr "Autoriparazione Veicoli"
 
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:462
@@ -1768,7 +1768,7 @@ msgstr "Strati corazzati resistenti al calore"
 #: data/mp/messages/strings/resstrings.txt:8
 #: po/custom/fromJson.txt:5488
 msgid "Thermal Armor increased"
-msgstr "Armatura Termica incrementata"
+msgstr "Armatura Termica aumentata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[0]
@@ -1781,7 +1781,7 @@ msgstr "Armatura Termica incrementata"
 #: data/mp/messages/strings/resstrings.txt:16
 #: po/custom/fromJson.txt:4024
 msgid "New Cyborg Available"
-msgstr "Nuovo Cyborg disponibile"
+msgstr "Nuovo Cyborg Disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
@@ -1821,7 +1821,7 @@ msgstr "Armato con razzo Bunker Buster"
 #: data/mp/messages/strings/resstrings.txt:334
 #: po/custom/fromJson.txt:1183
 msgid "Body Points: Medium"
-msgstr "Punti corazza: Medi"
+msgstr "Punti Corazza: Medi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[3]
@@ -1838,7 +1838,7 @@ msgstr "Punti corazza: Medi"
 #: data/mp/messages/strings/resstrings.txt:29
 #: po/custom/fromJson.txt:4729
 msgid "Requires Cyborg factory to produce"
-msgstr "Richiede la fabbrica di cyborg per essere prodotto"
+msgstr "Richiede la Fabbrica di Cyborg per essere prodotto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
@@ -1880,7 +1880,7 @@ msgstr "Armato con missile Terra-Aria Revenger"
 #: data/mp/messages/strings/resstrings.txt:31
 #: po/custom/fromJson.txt:1743
 msgid "Defenses Improved"
-msgstr "Difese migliorate"
+msgstr "Difese Migliorate"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DF_WU4.text[1]
@@ -1902,7 +1902,7 @@ msgstr "Cemento ad alta resistenza rinforzato al boro"
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3091
 msgid "Increases Armor and Body Points"
-msgstr "Aumentano l'Armatura e i Punti Corazza"
+msgstr "Aumenta l'Armatura e i Punti Corazza"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -1913,7 +1913,7 @@ msgstr "Aumentano l'Armatura e i Punti Corazza"
 #: data/mp/messages/strings/resstrings.txt:34
 #: po/custom/fromJson.txt:317
 msgid "All defenses and walls upgraded automatically"
-msgstr "Tutte le difese e i muri saranno aggiornati automaticamente"
+msgstr "Tutte le difese e i muri sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[0]
@@ -1974,7 +1974,7 @@ msgstr "Tutte le difese e i muri saranno aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:161
 #: po/custom/fromJson.txt:4034
 msgid "New Defensive Structure Available"
-msgstr "Nuova struttura difensiva disponibile"
+msgstr "Nuova Struttura Difensiva disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA4.text[1]
@@ -1983,7 +1983,7 @@ msgstr "Nuova struttura difensiva disponibile"
 #: data/mp/messages/strings/resstrings.txt:37
 #: po/custom/fromJson.txt:132
 msgid "AA Site with Tornado Flak Turret"
-msgstr "Postazione antiaerea con Torretta Contraerea Tornado"
+msgstr "Postazione AA con Torretta Tornato Flak"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[2]
@@ -2041,7 +2041,7 @@ msgstr "Bersaglia automaticamente i VTOL"
 #: data/mp/messages/strings/resstrings.txt:129
 #: po/custom/fromJson.txt:1765
 msgid "Defensive Strength: Medium"
-msgstr "Copertura Difensiva: Media"
+msgstr "Forza Difensiva: Media"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[1]
@@ -2050,7 +2050,7 @@ msgstr "Copertura Difensiva: Media"
 #: data/mp/messages/strings/resstrings.txt:42
 #: po/custom/fromJson.txt:124
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "Postazione antiaerea con Torretta Contraerea Cyclone"
+msgstr "Postazione AA con Torretta Flak Cyclone"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[1]
@@ -2059,7 +2059,7 @@ msgstr "Postazione antiaerea con Torretta Contraerea Cyclone"
 #: data/mp/messages/strings/resstrings.txt:47
 #: po/custom/fromJson.txt:128
 msgid "AA Site with Hurricane Gun Turret"
-msgstr "Postazione antiaerea con Torretta Contraerea Hurricane"
+msgstr "Postazione AA con Torretta Cannone Hurricane"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[2]
@@ -2068,7 +2068,7 @@ msgstr "Postazione antiaerea con Torretta Contraerea Hurricane"
 #: data/mp/messages/strings/resstrings.txt:48
 #: po/custom/fromJson.txt:1007
 msgid "Automatically targets VTOL"
-msgstr "Bersaglia automaticamente i VTOL"
+msgstr "Bersaglia automaticamente VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA3.text[1]
@@ -2077,7 +2077,7 @@ msgstr "Bersaglia automaticamente i VTOL"
 #: data/mp/messages/strings/resstrings.txt:52
 #: po/custom/fromJson.txt:136
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr "Postazione antiaerea con Torretta Contraerea Whirlwind"
+msgstr "Postazione AA con Torretta Cannone Whirlwind"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_IDFR.text[1]
@@ -2109,7 +2109,7 @@ msgstr "Batteria di razzi a fuoco indiretto"
 #: data/mp/messages/strings/resstrings.txt:88
 #: po/custom/fromJson.txt:904
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr "Assegnata automaticamente alla torre CB o sensoria più vicina"
+msgstr "Assegnato automaticamente alla più vicina torre CB o Sensoria"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HvyMor.text[1]
@@ -2158,7 +2158,7 @@ msgstr "Postazione corazzata per Obice Ground Shaker"
 #: data/mp/messages/strings/resstrings.txt:87
 #: po/custom/fromJson.txt:760
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr "Postazione corazzata per Obice Tempesta Infernale"
+msgstr "Postazione corazzata per Obice Hellstorm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVATR.text[1]
@@ -2222,7 +2222,7 @@ msgstr "Posizione corazzata con Cannone ad Ipervelocità"
 #: data/mp/messages/strings/resstrings.txt:164
 #: po/custom/fromJson.txt:1755
 msgid "Defensive Strength: High"
-msgstr "Copertura Difensiva: Alta"
+msgstr "Forza Difensiva: Elevata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVFL.text[1]
@@ -2231,7 +2231,7 @@ msgstr "Copertura Difensiva: Alta"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:798
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Posizione corazzata con Inferno"
+msgstr "Posizione corazzata con Lanciafiamme Inferno"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2254,7 +2254,7 @@ msgstr "Torre rinforzata con Mitragliatrice d'Assalto"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Torre di guardia corazzata con Mitragliatrice pesante"
+msgstr "Torre di guardia corazzata con Mitragliatrice Pesante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
@@ -2281,12 +2281,12 @@ msgstr "Torre di guardia corazzata con Mitragliatrice pesante"
 #: data/mp/messages/strings/resstrings.txt:158
 #: po/custom/fromJson.txt:1003
 msgid "Automatically targets enemies within sensor range"
-msgstr "Bersaglia tutti i nemici a portata dei sensori"
+msgstr "Bersaglia automaticamente tutti i nemici a portata dei sensori"
 
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:122
 msgid "Armored guard tower with Flamer"
-msgstr "Torre di guardia corazzata con Inceneritore"
+msgstr "Torre di guardia corazzata con Lanciafiamme"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
@@ -2296,12 +2296,12 @@ msgstr "Torre di guardia corazzata con Razzo AT Lancer"
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
 msgid "Armored bunker with Heavy Machinegun"
-msgstr "Bunker corazzato con Mitragliatrice pesante"
+msgstr "Bunker corazzato con Mitragliatrice Pesante"
 
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
 msgid "Armored hardpoint with Flamer"
-msgstr "Postazione corazzata con Inceneritore"
+msgstr "Postazione corazzata con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT7_RMG.text[1]
@@ -2328,7 +2328,7 @@ msgstr "Postazione corazzata con Cannone d'Assalto"
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Postazione corazzata con Inferno"
+msgstr "Postazione corazzata con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2337,7 +2337,7 @@ msgstr "Postazione corazzata con Inferno"
 #: data/mp/messages/strings/resstrings.txt:157
 #: po/custom/fromJson.txt:754
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Postazione corazzata con razzo anticarro Tank Killer"
+msgstr "Postazione corazzata con missile AT Tank Killer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[1]
@@ -2355,7 +2355,7 @@ msgstr "Trappole per carri in cemento rinforzato"
 #: data/mp/messages/strings/resstrings.txt:163
 #: po/custom/fromJson.txt:4436
 msgid "Prevents enemy movement"
-msgstr "Impediscono i movimenti nemici"
+msgstr "Impedisce i movimenti nemici"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[0]
@@ -2396,7 +2396,7 @@ msgstr "Aumenta la velocità di riparazione"
 #: data/mp/messages/strings/resstrings.txt:169
 #: po/custom/fromJson.txt:399
 msgid "All repair facilities upgraded automatically"
-msgstr "Tutti i centri di riparazione saranno aggiornati automaticamente"
+msgstr "Tutti i centri di riparazione sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[0]
@@ -2571,7 +2571,7 @@ msgstr "Aumenta al resistenza ai danni"
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:2290
 msgid "Hardened Base Structure Materials"
-msgstr "Materiali da Costruzione Blindati"
+msgstr "Materiali da Costruzione Rinforzati"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[3]
@@ -3594,7 +3594,7 @@ msgstr "Migliori Bersagli: Bunker,veicoli su ruote e hovercraft"
 #: data/mp/messages/strings/resstrings.txt:366
 #: po/custom/fromJson.txt:2073
 msgid "Flamer Upgrade"
-msgstr "Aggiornamento dell'inceneritore"
+msgstr "Aggiornamento del Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_FL_D4.text[1]
@@ -3613,7 +3613,7 @@ msgstr "Ossido di propilene trattato in modo che bruci a temperature molto alte"
 #: data/mp/messages/strings/resstrings.txt:368
 #: po/custom/fromJson.txt:3146
 msgid "Increases Flamer damage"
-msgstr "Aumenta i danni dell'inceneritore"
+msgstr "Aumenta i danni del Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[3]
@@ -3750,7 +3750,7 @@ msgstr "Tutti gli obici saranno aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:392
 #: po/custom/fromJson.txt:2746
 msgid "High Explosive shells"
-msgstr "Colpi ad alto esplosivo"
+msgstr "Colpi altamenti esplosivi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
@@ -5257,7 +5257,7 @@ msgstr "Cannoniere Pesante"
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:2049
 msgid "Flamer Cyborg"
-msgstr "Cyborg con Inceneritore"
+msgstr "Cyborg con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-MG.name
@@ -5285,7 +5285,7 @@ msgstr "Torre con Mitragliatrice Pesante"
 
 #: data/mp/messages/strings/names.txt:405
 msgid "Flamer Tower"
-msgstr "Torre di Guardia con Inceneritore"
+msgstr "Torre di Guardia con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower5.name
@@ -6276,7 +6276,7 @@ msgstr "Armato con Cannone Cyborg"
 #. data/mp/messages/resmessages1.json: $.RES_CYW_FL1.text[1]
 #: po/custom/fromJson.txt:562
 msgid "Armed with Cyborg Flamer"
-msgstr "Armato con Inceneritore Cyborg"
+msgstr "Armato con Cyborg Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
@@ -6307,7 +6307,7 @@ msgstr "Armato con Lanciamissili Scourge per Cyborg"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
 #: po/custom/fromJson.txt:578
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Armato con Inceneritore alla Termite per Cyborg"
+msgstr "Armato con Cyborg Lanciafiamme alla Termite"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text[1]
@@ -6416,7 +6416,7 @@ msgstr "Proiettile perforante ad abbandono d'involucro con pinne stabilizzanti "
 #. data/mp/messages/resmessages1.json: $.RES_PB_FL.text[1]
 #: po/custom/fromJson.txt:650
 msgid "Armored bunker with Flamer"
-msgstr "Bunker corazzato con Inceneritore"
+msgstr "Bunker corazzato con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_ATR.text[1]
@@ -6608,7 +6608,7 @@ msgstr "Posizione corazzato con Laser Pesante"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PFL.text[1]
 #: po/custom/fromJson.txt:801
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Posizione corazzata con Inceneritore alla Plasmite"
+msgstr "Postazione corazzata con Lanciafiamme alla Plasmite"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
@@ -6677,7 +6677,7 @@ msgstr "Torre di Guardia con Cannone d'Assalto"
 #. data/mp/stats/structure.json: $.Wall-VulcanCan.name
 #: po/custom/fromJson.txt:844
 msgid "Assault Cannon Hardpoint"
-msgstr "Postazione Corazzata con Cannone d'Assalto"
+msgstr "Postazione corazzata con Cannone d'Assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
@@ -7120,7 +7120,7 @@ msgstr "Bombarda Cobra Semi-Cingoli"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit02.name
 #: po/custom/fromJson.txt:1219
 msgid "Bombard Pit"
-msgstr "Mortaio Interrato"
+msgstr "Postazione con Bombarda"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar2Mk1.name
@@ -7429,7 +7429,7 @@ msgstr "Bombe a Grappolo"
 #. data/base/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:1401
 msgid "Cobra Flamer Tracks"
-msgstr "Cobra Inceneritore Cingoli"
+msgstr "Cobra Lanciafiamme Cingoli"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraMedCnTrks.name
@@ -7758,7 +7758,7 @@ msgstr "Fabbrica di Cyborg"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:1606
 msgid "Cyborg Flamer"
-msgstr "Cyborg con Inceneritore"
+msgstr "Cyborg con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
@@ -8356,21 +8356,21 @@ msgstr "Lanciafiamme ad ossido di propilene"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF02.name
 #: po/custom/fromJson.txt:2027
 msgid "Flamer Autoloader Mk2"
-msgstr "Autocaricatore per Inceneritore Mk2"
+msgstr "Autocaricatore per Lanciafiamme Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 #: po/custom/fromJson.txt:2031
 msgid "Flamer Autoloader Mk3"
-msgstr "Autocaricatore per Inceneritore Mk3"
+msgstr "Autocaricatore per Lanciafiamme Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 #: po/custom/fromJson.txt:2035
 msgid "Flamer Autoloader"
-msgstr "Autocaricatore per Inceneritore"
+msgstr "Autocaricatore per Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox05.name
@@ -8379,7 +8379,7 @@ msgstr "Autocaricatore per Inceneritore"
 #. data/mp/stats/structure.json: $.PillBox5.name
 #: po/custom/fromJson.txt:2041
 msgid "Flamer Bunker"
-msgstr "Bunker con Incenertiore"
+msgstr "Bunker con Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraFlameTracks.name
@@ -8387,7 +8387,7 @@ msgstr "Bunker con Incenertiore"
 #. data/mp/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:2046
 msgid "Flamer Cobra Tracks"
-msgstr "Inceneritore Cobra Cingoli"
+msgstr "Lanciafiamme Cobra Cingoli"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
@@ -8396,27 +8396,27 @@ msgstr "Inceneritore Cobra Cingoli"
 #: po/custom/fromJson.txt:2055
 #, no-c-format
 msgid "Flamer damage +25%"
-msgstr "Danni dell'Inceneritore +25%"
+msgstr "Danni del Lanciafiamme +25%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:2067
 #, no-c-format
 msgid "Flamer reload time -15%"
-msgstr "Tempo di Ricarica degli Inceneritori -10%"
+msgstr "Tempo di Ricarica dei Lanciafiamme -10%"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
 #: po/custom/fromJson.txt:2076
 msgid "Flamer Viper Half-Tracks"
-msgstr "Inceneritore Viper Semicingoli"
+msgstr "Lanciafiamme Viper Semicingoli"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperFlameWheels.name
 #. data/mp/stats/templates.json: $.ViperFlameWheels.name
 #: po/custom/fromJson.txt:2080
 msgid "Flamer Viper Wheels"
-msgstr "Inceneritore Viper Ruote"
+msgstr "Lanciafiamme Viper Ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer01Mk1.name
@@ -8425,7 +8425,7 @@ msgstr "Inceneritore Viper Ruote"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2086
 msgid "Flamer"
-msgstr "Inceneritore"
+msgstr "Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
@@ -8743,49 +8743,49 @@ msgstr "Cementitan"
 #. data/mp/stats/research.json: $.R-Struc-Materials05.name
 #: po/custom/fromJson.txt:2280
 msgid "Hardened Base Structure Materials Mk2"
-msgstr "Materiali da Costruzione Blindati Mk2"
+msgstr "Materiali da Costruzione Rinforzati Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials06.name
 #. data/mp/stats/research.json: $.R-Struc-Materials06.name
 #: po/custom/fromJson.txt:2284
 msgid "Hardened Base Structure Materials Mk3"
-msgstr "Materiali da Costruzione Blindati Mk3"
+msgstr "Materiali da Costruzione Rinforzati Mk3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D1.text[1]
 #: po/custom/fromJson.txt:2294
 msgid "Hardened case machinegun bullets"
-msgstr "Proiettili blindati per mitragliatrice"
+msgstr "Proiettili rinforzati per mitragliatrice"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage01.name
 #: po/custom/fromJson.txt:2298
 msgid "Hardened MG Bullets"
-msgstr "Proiettili Blindati"
+msgstr "Proiettili Rinforzati"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Damage02.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Damage02.name
 #: po/custom/fromJson.txt:2302
 msgid "Hardened Rail Dart Mk2"
-msgstr "Dardi Blindati Mk2"
+msgstr "Dardi Rinforzati Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Damage03.name
 #: po/custom/fromJson.txt:2306
 msgid "Hardened Rail Dart Mk3"
-msgstr "Dardi Blindati Mk3"
+msgstr "Dardi Rinforzati Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Damage01.name
 #: po/custom/fromJson.txt:2310
 msgid "Hardened Rail Dart"
-msgstr "Dardi Blindati"
+msgstr "Dardi Rinforzati"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Tower02.name
@@ -9155,7 +9155,7 @@ msgstr "Cannone Pesante"
 #. data/mp/stats/research.json: $.R-Wpn-Flame2.name
 #: po/custom/fromJson.txt:2531
 msgid "Heavy Flamer - Inferno"
-msgstr "Inceneritore Pesante - Inferno"
+msgstr "Lanciafiamme Pesante - Inferno"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Cyb-Cannon-GROUND.name
@@ -9284,7 +9284,7 @@ msgstr "Mitragliatrice Pesante"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar02Hvy.name
 #: po/custom/fromJson.txt:2625
 msgid "Heavy Mortar - Bombard"
-msgstr "Mortaio Pesante-Bombarda"
+msgstr "Mortaio Pesante - Bombarda"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9338,7 +9338,7 @@ msgstr "Elicottero"
 #. data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 #: po/custom/fromJson.txt:2668
 msgid "Hellstorm"
-msgstr "Tempesta Infernale"
+msgstr "Hellstorm"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -9483,21 +9483,21 @@ msgstr "Alti costi energetici e lento da produrre"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 #: po/custom/fromJson.txt:2778
 msgid "High Temperature Flamer Gel Mk2"
-msgstr "Gel dell'Inceneritore ad Alta Temperatura Mk2"
+msgstr "Gel del Lanciafiamme ad Alta Temperatura Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #: po/custom/fromJson.txt:2782
 msgid "High Temperature Flamer Gel Mk3"
-msgstr "Gel dell'Inceneritore ad Alta Temperatura Mk3"
+msgstr "Gel del Lanciafiamme ad Alta Temperatura Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #: po/custom/fromJson.txt:2786
 msgid "High Temperature Flamer Gel"
-msgstr "Gel dell'Inceneritore ad Alta Temperatura"
+msgstr "Gel dell Lanciafiamme ad Alta Temperatura"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_DF_WU7.text[1]
@@ -9915,7 +9915,7 @@ msgstr "Obice Incendiario"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3064
 msgid "Incendiary Mortar Pit"
-msgstr "Postazione per Mortaio Incendiario"
+msgstr "Postazione con Mortaio Incendiario"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Incenediary.name
@@ -9971,7 +9971,7 @@ msgstr "Aumenta la velocità di costruzione"
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:3149
 msgid "Increases Flamer ROF"
-msgstr "Aumenta il rateo di fuoco dell'inceneritore"
+msgstr "Aumenta il rateo di fuoco del Lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[2]
@@ -11679,14 +11679,14 @@ msgstr "Inceneritore alla plasmite"
 #. data/mp/stats/structure.json: $.Plasmite-flamer-bunker.name
 #: po/custom/fromJson.txt:4373
 msgid "Plasmite Flamer Bunker"
-msgstr "Bunker con Inceneritore a Plasmite"
+msgstr "Bunker con Lanciafiamme Plasmite"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Plasmite-Flamer.name
 #. data/mp/stats/weapons.json: $.PlasmiteFlamer.name
 #: po/custom/fromJson.txt:4377
 msgid "Plasmite Flamer"
-msgstr "Inceneritore a Plasmite"
+msgstr "Lanciafiamme a Plasmite"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-Plasmite.name
@@ -12520,7 +12520,7 @@ msgstr "Il razzi traccia il designatore laser verso il bersaglio"
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
 #: po/custom/fromJson.txt:4936
 msgid "Rotary Howitzer - Hellstorm"
-msgstr "Obice Rotante - Tempesta Infernale"
+msgstr "Obice Rotante - Hellstorm"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
@@ -13086,39 +13086,39 @@ msgstr "Leghe Composite Superdense"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 #: po/custom/fromJson.txt:5321
 msgid "Superhot Flamer Gel Mk2"
-msgstr "Gel Superinfiammabile Mk2"
+msgstr "Gel Supercaldo Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #: po/custom/fromJson.txt:5325
 msgid "Superhot Flamer Gel Mk3"
-msgstr "Gel Superinfiammabile Mk3"
+msgstr "Gel Supercaldo Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #: po/custom/fromJson.txt:5329
 msgid "Superhot Flamer Gel"
-msgstr "Gel Superinfiammabile"
+msgstr "Gel Supercaldo"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5332
 msgid "Superhot Plasmite gel Mk2"
-msgstr "Gel a Plasmite Superinfiammabile Mk2"
+msgstr "Gel Supercaldo alla Plasmite Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5335
 msgid "Superhot Plasmite gel Mk3"
-msgstr "Gel a Plasmite Superinfiammabile Mk3"
+msgstr "Gel Supercaldo alla Plasmite Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5338
 msgid "Superhot Plasmite gel"
-msgstr "Gel a Plasmite Superinfiammabile"
+msgstr "Gel Supercaldo alla Plasmite"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13402,7 +13402,7 @@ msgstr "Bombe alla Termite"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5518
 msgid "Thermite Flamer"
-msgstr "Inceneritore alla Termite"
+msgstr "Lanciafiamme alla Termite"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
