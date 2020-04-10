@@ -1151,7 +1151,7 @@ bool CheckScrollLimits()
 void displayWorld()
 {
 	Vector3i pos;
-	
+
 	if (mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		float mouseDeltaX = mouseX() - rotX;
@@ -1205,23 +1205,6 @@ bool DrawnInLastFrame(int32_t frame)
 {
 	return frame >= (int32_t)StartOfLastFrame;
 }
-
-
-
-// Camera rotation logic
-
-void initCameraRotation()
-{
-}
-
-void updateCameraRotation()
-{
-}
-
-void stopCameraRotation()
-{
-}
-
 
 /*
 	Returns what the mouse was clicked on. Only called if there was a mouse pressed message

@@ -223,11 +223,4 @@ void zoom();
 bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
 bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
 
-// Camera rotation
-
-void initCameraRotation();
-void stopCameraRotation();
-void updateCameraRotation();
-void applyCameraRotation();
-
 #endif // __INCLUDED_SRC_DISPLAY_H__
