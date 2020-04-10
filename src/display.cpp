@@ -1167,14 +1167,7 @@ void displayWorld()
 		player.r.y = player.r.y + (rotationDeltaY - player.r.y) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
 		player.r.x = player.r.x + (rotationDeltaX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
 
-		if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
-		{
-			player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
-		}
-		if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
-		{
-			player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
-		}
+		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 
 		setDesiredPitch(player.r.x / DEG_1);
 	}
