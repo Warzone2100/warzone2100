@@ -4977,6 +4977,21 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		}
 		else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
+			iIMDShape *strImd;
+			strImd = psStructure->sDisplay.imd;
+			strImd = strImd->objanimpie[ANIM_EVENT_ACTIVE];
+
+			while (strImd)
+			{
+				if(strImd->objanimframes)
+				{
+					psStructure->timeAnimationStarted = -(rand() % (strImd->objanimframes * strImd->objanimtime * strImd->objanimframes));
+					break;
+				}
+				
+				strImd = strImd->next;
+			}
+
 			scriptSetDerrickPos(psStructure->pos.x, psStructure->pos.y);
 		}
 	}
@@ -5014,6 +5029,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;	// try to use fallback method
 	}
+	iIMDShape *strImd;
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadOnly);
 
 	freeAllFlagPositions();		//clear any flags put in during level loads
@@ -5193,6 +5209,19 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			}
 			break;
 		case REF_RESOURCE_EXTRACTOR:
+			strImd = psStructure->sDisplay.imd;
+			strImd = strImd->objanimpie[ANIM_EVENT_ACTIVE];
+
+			while (strImd)
+			{
+				if(strImd->objanimframes)
+				{
+					psStructure->timeAnimationStarted = -(rand() % (strImd->objanimframes * strImd->objanimtime * strImd->objanimframes));
+					break;
+				}
+				
+				strImd = strImd->next;
+			}
 			break;
 		case REF_REPAIR_FACILITY:
 			psRepair = ((REPAIR_FACILITY *)psStructure->pFunctionality);
