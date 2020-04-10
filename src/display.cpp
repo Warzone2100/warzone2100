@@ -116,12 +116,13 @@ void finishDeliveryPosition();
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
-float CAMERA_ROTATION_SMOOTHNESS = 10;
-float CAMERA_ROTATION_SPEED = 4;
+static const float CAMERA_ROTATION_SMOOTHNESS = 10;
+static const float CAMERA_ROTATION_SPEED = 4;
 static SDWORD	rotX;
 static SDWORD	rotY;
-static UDWORD	rotInitial;
+static float	rotInitial;
 static UDWORD	rotInitialUp;
+static float	rotationY;
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
@@ -684,8 +685,9 @@ CURSOR processMouseClickInput()
 	}
 	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging)
 	{
-		rotInitial = player.r.y;
+		rotInitial = (player.r.y % 65536) / DEG(1.0f); // negative values caused problems with float conversion
 		rotInitialUp = player.r.x;
+		rotationY = rotInitial; // instead of player.r.y, will track decimals for us
 		rotActive = true;
 	}
 
@@ -1157,16 +1159,18 @@ void displayWorld()
 		float mouseDeltaX = mouseX() - rotX;
 		float mouseDeltaY = mouseY() - rotY;
 
+		// the subtraction and then addition of rotationY is for the bug where wrapping between eg 350-10 degrees didn't work
+		rotationY = (rotInitial + mouseDeltaX / CAMERA_ROTATION_SPEED - rotationY) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + rotationY;
+		player.r.y = DEG(rotationY); // saved in a separate (float) variable in order to keep decimals for smoothness
+		
 		if(bInvertMouse)
 		{
 			mouseDeltaY *= -1;
 		}
 
-		float rotationDeltaY = rotInitial + DEG(mouseDeltaX) / CAMERA_ROTATION_SPEED;
-		float rotationDeltaX = rotInitialUp + DEG(mouseDeltaY) / CAMERA_ROTATION_SPEED;
-		player.r.y = player.r.y + (rotationDeltaY - player.r.y) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
-		player.r.x = player.r.x + (rotationDeltaX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
-
+		float rotationTargetX = rotInitialUp + DEG(mouseDeltaY) / CAMERA_ROTATION_SPEED;
+		
+		player.r.x = player.r.x + (rotationTargetX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
 		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 
 		setDesiredPitch(player.r.x / DEG_1);
