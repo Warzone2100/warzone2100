@@ -143,6 +143,9 @@ static UDWORD CurrentItemUnderMouse = 0;
 bool	rotActive = false;
 bool	gameStats = false;
 
+static const float FADE_START_OF_GAME_TIME = 4000;
+static void fadeStartOfGame();
+
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
 static bool bSensorAssigned;
 //used to determine if the player has selected a Las Sat structure
@@ -1212,6 +1215,21 @@ void displayWorld()
 	}
 
 	draw3DScene();
+
+	if(realTime < FADE_START_OF_GAME_TIME)
+	{
+		fadeStartOfGame();
+	}
+}
+
+static void fadeStartOfGame()
+{
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
+	PIELIGHT color = WZCOL_BLACK;
+	float delta = realTime / FADE_START_OF_GAME_TIME;
+	color.byte.a = 255 * (1 - delta * delta * delta); // cubic easing
+	pie_UniTransBoxFill(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), color);
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 static bool mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
