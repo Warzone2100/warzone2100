@@ -96,8 +96,6 @@
 #pragma GCC diagnostic ignored "-Wcast-align"	// TODO: FIXME!
 #endif
 
-static void startPieAnimationAtRandomFrame(STRUCTURE *psStructure, ANIMATION_EVENTS animation);
-
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
@@ -4979,8 +4977,6 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		}
 		else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
-			startPieAnimationAtRandomFrame(psStructure, ANIM_EVENT_ACTIVE);
-
 			scriptSetDerrickPos(psStructure->pos.x, psStructure->pos.y);
 		}
 	}
@@ -5197,7 +5193,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			}
 			break;
 		case REF_RESOURCE_EXTRACTOR:
-			startPieAnimationAtRandomFrame(psStructure, ANIM_EVENT_ACTIVE);
 			break;
 		case REF_REPAIR_FACILITY:
 			psRepair = ((REPAIR_FACILITY *)psStructure->pFunctionality);
@@ -5263,23 +5258,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 	resetFactoryNumFlag();	//reset flags into the masks
 
 	return true;
-}
-
-static void startPieAnimationAtRandomFrame(STRUCTURE *psStructure, ANIMATION_EVENTS animation)
-{
-	iIMDShape *strImd = psStructure->sDisplay.imd;
-	strImd = strImd->objanimpie[animation];
-
-	while (strImd)
-	{
-		if(strImd->objanimframes)
-		{
-			psStructure->timeAnimationStarted = (rand() % (strImd->objanimframes * strImd->objanimtime));
-			break;
-		}
-		
-		strImd = strImd->next;
-	}
 }
 
 // -----------------------------------------------------------------------------------------
