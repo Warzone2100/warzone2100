@@ -50,6 +50,7 @@
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_interpolation.hpp>
 
 #include "loop.h"
 #include "atmos.h"
@@ -356,6 +357,22 @@ void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight,
 	resizeRadar(); // recalculate radar position
 }
 
+float interpolateAngleDegrees(int a, int b, float t)
+{
+	if(a > 180)
+	{
+		a -= 360;
+	}
+	if(b > 180)
+	{
+		b -= 360;
+	}
+
+	float d = b - a;
+
+	return a + d * t;
+}
+
 bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix)
 {
 	glm::mat4 modelMatrix(1.f);
@@ -372,17 +389,24 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 			elapsed = 0; // Animation hasn't started yet.
 		}
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
+		const float frameFraction = fmod(elapsed / (float)strImd->objanimtime, strImd->objanimframes) - frame;
+		const int nextFrame = (frame + 1) % strImd->objanimframes;
 		ASSERT(frame < strImd->objanimframes, "Bad index %d >= %d", frame, strImd->objanimframes);
+
 		const ANIMFRAME &state = strImd->objanimdata.at(frame);
-		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
+		const ANIMFRAME &nextState = strImd->objanimdata.at(nextFrame);
+
+		if (state.scale.x == -1.0f || nextState.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
 			return false;
 		}
-		modelMatrix *= glm::translate(glm::vec3(state.pos)) *
-			glm::rotate(UNDEG(state.rot.pitch), glm::vec3(1.f, 0.f, 0.f)) *
-			glm::rotate(UNDEG(state.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(state.rot.roll), glm::vec3(0.f, 0.f, 1.f)) *
-			glm::scale(state.scale);
+
+		modelMatrix *= 
+				glm::interpolate(glm::translate(glm::vec3(state.pos)), glm::translate(glm::vec3(nextState.pos)), frameFraction) *
+				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.pitch / DEG(1), nextState.rot.pitch / DEG(1), frameFraction)), glm::vec3(1.f, 0.f, 0.f)) *
+				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.direction / DEG(1), nextState.rot.direction / DEG(1), frameFraction)), glm::vec3(0.f, 1.f, 0.f)) *
+				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.roll / DEG(1), nextState.rot.roll / DEG(1), frameFraction)), glm::vec3(0.f, 0.f, 1.f)) *
+				glm::scale(state.scale);
 	}
 
 	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);
