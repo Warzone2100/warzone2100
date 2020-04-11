@@ -3582,7 +3582,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		{
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 
-			iIMDShape *strImd = psBuilding->sDisplay.imd->objanimpie[psBuilding->animationEvent]->next;
+			iIMDShape *strImd = psBuilding->sDisplay.imd->objanimpie[psBuilding->animationEvent]->next; // first imd isn't animated
 			psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
 		}
 
