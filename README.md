@@ -260,10 +260,10 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
       - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
    * **CMake 3.10+** (https://cmake.org/)
-   * **QT 5.9.1+** (https://www.qt.io/)
-     - The QT website nowadays is very confusing. Here's a link to the [5.9.9 installer](https://download.qt.io/archive/qt/5.9/5.9.9/).
-     - You will probably need to register for a QT account during the installation, along with activating your email.
-     - Required components to install: MSVC 2015, Qt Script (even though it's labelled as deprecated). The MSVC SDKs seem to be backwards-compatible, and 32-bit versions work on 64-bit platforms.
+   * **Qt 5.9.1+** (https://www.qt.io/)
+     - Here's a direct link to the [Qt 5.9.9 installer](https://download.qt.io/archive/qt/5.9/5.9.9/).
+     - You will probably need to register for a Qt account during the installation, along with activating your email.
+     - Required components to install: MSVC 2015, Qt Script (even though it's labelled as deprecated). The MSVC 2015 components will work on MSVC 2017 / 2019, and 32-bit versions work on 64-bit platforms.
    * **Git** (if not building from a release source archive)
    * **7-Zip** (http://www.7-zip.org)
 * **Preparing to build:**
@@ -285,8 +285,8 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
       - This creates `CMakeSettings.json`
    4. Add the following variables to  in `CMakeSettings.json`:
       - To `cmakeCommandArgs`, add: `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_PREFIX_PATH=C:\Qt\Qt5.9.9\5.9.9\msvc2015` (check your Qt installation path)
-      - If you're running a 64-bit platform, you need to set the compilation to 32-bit by setting `inheritEnvironments` to [ "msvc_x86_x64" ]
-      - Note: Visual Studio should automatically escapes and turn each `\` into `\\`
+      - If you're running a 64-bit platform, you need to set the compilation to 32-bit by setting `inheritEnvironments` to `[ "msvc_x86_x64" ]`
+      - Note: Visual Studio automatically escapes and turns each `\` into `\\`
    5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
 
 ### macOS
