@@ -3580,20 +3580,10 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		else if (psBuilding->pFunctionality->resourceExtractor.psPowerGen
 		         && psBuilding->animationEvent == ANIM_EVENT_NONE) // we have a power generator, but no animation
 		{
-			iIMDShape *strImd = psBuilding->sDisplay.imd->objanimpie[ANIM_EVENT_ACTIVE];
-
-			while (strImd)
-			{
-				if(!strImd->objanimframes)
-				{
-					strImd = strImd->next;
-					break;
-				}
-				
-				psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
-			}
-
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
+
+			iIMDShape *strImd = psBuilding->sDisplay.imd->objanimpie[psBuilding->animationEvent]->next;
+			psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
 		}
 
 		if (psBuilding->player == selectedPlayer)
