@@ -85,9 +85,8 @@ struct	_dragBox
 	int y1;
 	int x2;
 	int y2;
-	UDWORD	status;
-	UDWORD	lastTime;
-	UDWORD	pulse;
+	UDWORD status;
+	float pulse = 0;
 };
 
 extern struct	_dragBox dragBox3D, wallDrag;
