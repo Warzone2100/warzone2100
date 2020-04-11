@@ -283,7 +283,7 @@ See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
       - Allow Visual Studio some time to load the project and retrieve information from CMake.
    3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**. You can also reach this dialog by clicking "Manage Configurations" in the configuration dropdown in the toolbar. Make sure the CMake components in Visual Studio are installed (by running the Visual Studio Installer).
       - This creates `CMakeSettings.json`
-   4. Add the following variables to  in `CMakeSettings.json`:
+   4. Add the following variables to `CMakeSettings.json`:
       - To `cmakeCommandArgs`, add: `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_PREFIX_PATH=C:\Qt\Qt5.9.9\5.9.9\msvc2015` (check your Qt installation path)
       - If you're running a 64-bit platform, you need to set the compilation to 32-bit by setting `inheritEnvironments` to `[ "msvc_x86_x64" ]`
       - Note: Visual Studio automatically escapes and turns each `\` into `\\`
