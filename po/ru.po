@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-10 23:54\n"
+"PO-Revision-Date: 2020-04-09 16:42\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1349,7 +1349,7 @@ msgstr "NP-Хардкрит"
 #: data/mp/messages/strings/names.txt:395
 #: po/custom/fromJson.txt:2564
 msgid "Heavy Machinegun Bunker"
-msgstr "Бункер с крупнокалиберным пулемётом"
+msgstr "Бункер с тяжёлым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PrisLas.name
@@ -6531,7 +6531,7 @@ msgstr "Укреплённая оборонительная точка с Тяж
 #. data/mp/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #: po/custom/fromJson.txt:722
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Укреплённая оборонительная точка с крупнокалиберным пулемётом"
+msgstr "Укреплённая оборонительная точка с тяжелым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
@@ -7150,7 +7150,7 @@ msgstr "Связанные металлические слои оформлен�
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1238
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "BoneCrusher!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
@@ -9233,7 +9233,7 @@ msgstr "Тяжёлый пулемёт Кобра Колёса"
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2592
 msgid "Heavy Machinegun Hardpoint"
-msgstr "Оборонительная точка с крупнокалиберным пулемётом"
+msgstr "Оборонительная точка с тяжёлым пулемётом"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -10419,7 +10419,7 @@ msgstr "Леопард"
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text[1]
 #: po/custom/fromJson.txt:3486
 msgid "Less armor and body points than Python"
-msgstr ""
+msgstr "Менее бронированный и прочный чем Питон"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body04.name
@@ -11493,7 +11493,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
@@ -12762,7 +12762,7 @@ msgstr "Саморепликация производства"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -14462,7 +14462,7 @@ msgstr "Все права сохранены © 1999-2004 Eidos Interactive.\n"
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14482,7 +14482,7 @@ msgstr "Файл с глобальным модом Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14490,7 +14490,7 @@ msgstr "Файл с музыкальным модом Warzone 2100"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr "Постядерная стратегия в реальном времени"
+msgstr "Постъядерная стратегия в реальном времени"
 
 #: po/custom/warzone2100.desktop.txt:3
 msgid "Strategy Game"
@@ -14896,7 +14896,7 @@ msgstr ""
 #: src/droid.cpp:248
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s Потерян!"
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -14972,7 +14972,7 @@ msgstr "Видео из кампании отсутствуют! Скачайт�
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Продолжить последнее сохранение"
 
 #: src/frontend.cpp:168
 msgid "No last save available"
@@ -15132,11 +15132,11 @@ msgstr "Раскладка клавиатуры"
 
 #: src/frontend.cpp:738
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:739
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:740
 #: src/frontend.cpp:1120
@@ -15164,7 +15164,7 @@ msgstr "Выкл."
 
 #: src/frontend.cpp:750
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:751
 #: src/multiplay.cpp:1897
@@ -16081,7 +16081,7 @@ msgstr "Командиры"
 
 #: src/keymap.cpp:303
 msgid "QuickSave"
-msgstr ""
+msgstr "Быстрое сохранение"
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
@@ -16453,7 +16453,7 @@ msgstr "Показать частоту кадров"
 
 #: src/keymap.cpp:433
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Выбрать всех юнитов с такими же компонентами"
 
 #: src/keymap.cpp:437
 msgid "Select all Combat Cyborgs"
@@ -16959,7 +16959,7 @@ msgstr "Хост стартует"
 
 #: src/multiint.cpp:3519
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Вы были исключены: "
 
 #: src/multiint.cpp:3531
 msgid "No connection to host."
@@ -17713,7 +17713,7 @@ msgstr "Холл"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:191
 msgid "IP Address or Machine Name"
@@ -17748,5 +17748,5 @@ msgstr " - ОТЛАДКА"
 #: src/version.cpp:131
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Version: %s,%s Built: %s%s"
 

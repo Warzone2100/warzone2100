@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-10 23:56\n"
+"PO-Revision-Date: 2020-04-09 16:44\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -294,7 +294,7 @@ msgstr "Entschlüsselung läuft....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "Kommandant."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
@@ -4282,7 +4282,7 @@ msgstr "Eintreffende Übertragung aus der Betabasis"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
@@ -5030,7 +5030,7 @@ msgstr "Mitternacht, 10. April, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Rocky Mountains"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
@@ -6153,7 +6153,7 @@ msgstr "Alphafeldzug"
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:482
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -6958,7 +6958,7 @@ msgstr "Zurück zu den Grundlagen!"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1047
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "basiert auf der ursprünglichen KI, jetzt für Anfänger"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -7073,7 +7073,7 @@ msgstr "Betafeldzug"
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1159
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7130,7 +7130,7 @@ msgstr "Bombardgrube"
 #. data/mp/stats/weapons.json: $.Mortar2Mk1.name
 #: po/custom/fromJson.txt:1223
 msgid "Bombard"
-msgstr ""
+msgstr "Bombard"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BAC3.text[1]
@@ -7149,21 +7149,21 @@ msgstr "Verbundene metallische Schichtstoffe für Mauern und Verteidigungsanlage
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1238
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "Knochenbrecher!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
 #. data/mp/stats/body.json: $.Body4ABT.name
 #: po/custom/fromJson.txt:1242
 msgid "Bug"
-msgstr ""
+msgstr "Käfer"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianBuggy.name
 #. data/mp/stats/templates.json: $.BarbarianBuggy.name
 #: po/custom/fromJson.txt:1246
 msgid "Buggy"
-msgstr ""
+msgstr "Buggy"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[2]
@@ -7178,7 +7178,7 @@ msgstr "Integrierte Diagnose- und Reparatursysteme"
 #. data/mp/stats/templates.json: $.Sk-CobraBBHover.name
 #: po/custom/fromJson.txt:1255
 msgid "Bunker Buster Cobra Hover"
-msgstr ""
+msgstr "Bunkerbrecher Kobra Luftkissen"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraBBTracks.name
@@ -7222,7 +7222,7 @@ msgstr "Bunker Buster Scorpion Ketten"
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-BB.name
 #: po/custom/fromJson.txt:1278
 msgid "Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "Bunkerbrecher Skorpion VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperBBWheels.name
@@ -7235,7 +7235,7 @@ msgstr "Bunker Buster Viper Räder"
 #. data/mp/stats/weapons.json: $.Rocket-BB.name
 #: po/custom/fromJson.txt:1285
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Bunkerbrecher"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[2]
@@ -7455,7 +7455,7 @@ msgstr "Cobra LKW"
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1415
 msgid "Cobra"
-msgstr ""
+msgstr "Kobra"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -7995,7 +7995,7 @@ msgstr "Maschinengewehrprojektile aus abgereichertem Uran"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1795
 msgid "Designed for shared research team battles"
-msgstr ""
+msgstr "Konzipiert für Kämpfe mit gemeinsamer Forschung"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8028,7 +8028,7 @@ msgstr "Abgeschossener Transporter"
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:1817
 msgid "Dragon"
-msgstr ""
+msgstr "Drache"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
@@ -8455,14 +8455,14 @@ msgstr "Aufhängung mit Flashlight"
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
 #: po/custom/fromJson.txt:2107
 msgid "Flashlight Retribution Hover"
-msgstr ""
+msgstr "Blitzlicht Vergeltung Luftkissen"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAMMk1.name
 #. data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 #: po/custom/fromJson.txt:2111
 msgid "Flashlight"
-msgstr ""
+msgstr "Blitzlicht"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine02.name
@@ -8497,7 +8497,7 @@ msgstr "Gammafeldzug"
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2131
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -8603,7 +8603,8 @@ msgstr "Erzeugt und konzentriert Laserenergiestöße"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Erhält ~ 100% mehr Leistung von jedem Bohrturm\n"
+"Beginnt mit Verteidigungsanlagen und Bohrtürmen"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8612,7 +8613,9 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Erhält ~ 100% mehr Leistung von jedem Bohrturm\n"
+"Verwendet die Schweren Plasmawerfer und EMP-Mörser\n"
+"Beginnt mit Verteidigungsanlagen und Bohrtürmen"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8622,7 +8625,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2205
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Erhält ~ 25% weniger Leistung aus jedem Bohrturm"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8630,7 +8633,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "Erhält ~ 25% weniger Leistung aus jedem Bohrturm\n"
+"Grundlegende Entscheidungsfindung ist langsamer"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8639,7 +8643,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "Erhält ~ 25% weniger Leistung aus jedem Bohrturm\n"
+"Die Forschung konzentriert sich nicht auf einen bestimmten Waffenzweig"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -8673,7 +8678,7 @@ msgstr "Gutes Erkundungsfahrzeug"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2233
 msgid "Grenadier"
-msgstr ""
+msgstr "Grenadier"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
