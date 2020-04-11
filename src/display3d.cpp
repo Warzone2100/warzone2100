@@ -396,7 +396,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		const ANIMFRAME &state = strImd->objanimdata.at(frame);
 		const ANIMFRAME &nextState = strImd->objanimdata.at(nextFrame);
 
-		if (state.scale.x == -1.0f || nextState.scale.x == -1.0f) // disabled frame, for implementing key frame animation
+		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
 			return false;
 		}
