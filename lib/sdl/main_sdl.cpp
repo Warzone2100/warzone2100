@@ -2115,10 +2115,10 @@ bool gamepadButtonPressed(GAMEPAD_BUTTON btn) {
 	return SDL_GameControllerGetButton(gamepad, (SDL_GameControllerButton) btn) == SDL_PRESSED;
 }
 
-int gamepadAxisValue(GAMEPAD_AXIS axis) {
+float gamepadAxisValue(GAMEPAD_AXIS axis) {
 	if (gamepad == NULL || axis < 0 || ((int)axis) > ((int)SDL_CONTROLLER_AXIS_MAX)) return 0;
 
-	const int deadzone = 8000;  /* TODO: Tweak this */
+	const int deadzone = 32767 / 100;
 	const int rawvalue = SDL_GameControllerGetAxis(gamepad, (SDL_GameControllerAxis)(axis));
 	int value = 0;
 
@@ -2126,7 +2126,7 @@ int gamepadAxisValue(GAMEPAD_AXIS axis) {
 		value = rawvalue;
 	}
 
-	return value;
+	return (float) value / 32767;
 }
 
 // Actual mainloop

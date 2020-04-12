@@ -31,8 +31,8 @@
 
 #define MAP_PITCH_RATE		(SPIN_SCALING/SECS_PER_SPIN)
 
-extern int scrollDirUpDown;
-extern int scrollDirLeftRight;
+extern float scrollDirUpDown;
+extern float scrollDirLeftRight;
 
 // --------------- All those keyboard mappable functions */
 void kf_HalveHeights();

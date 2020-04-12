@@ -95,8 +95,8 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 static float zoom_speed = 0.0f;
 static float zoom_target = 0.0f;
 
-int scrollDirLeftRight = 0;
-int scrollDirUpDown = 0;
+float scrollDirLeftRight = 0;
+float scrollDirUpDown = 0;
 
 static bool	buildingDamaged(STRUCTURE *psStructure);
 static bool	repairDroidSelected(UDWORD player);
@@ -409,6 +409,11 @@ void processInput()
 		/* Run all standard mappings */
 		keyProcessMappings(false);
 	}
+
+	/* Process Gamepad Mappings */
+	if (gamepadButtonPressed(GAMEPAD_LB)) kf_ZoomInStep();
+	if (gamepadButtonPressed(GAMEPAD_RB)) kf_ZoomOutStep();
+
 	/* Allow the user to clear the (Active) console if need be */
 	if (mouseOverConsoleBox() && mousePressed(MOUSE_LMB))
 	{
@@ -1045,6 +1050,10 @@ CURSOR scroll()
 			cursor = CURSOR_RARROW;
 		}
 	}
+
+	scrollDirLeftRight +=  gamepadAxisValue(GAMEPAD_LX);
+	scrollDirUpDown += gamepadAxisValue(GAMEPAD_LY) * -1;
+	
 	CLIP(scrollDirLeftRight, -1, 1);
 	CLIP(scrollDirUpDown,    -1, 1);
 

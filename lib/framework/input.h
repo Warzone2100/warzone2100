@@ -261,7 +261,7 @@ void initGamepad();
 /* Gamepad Buttons */
 
 bool gamepadButtonPressed(GAMEPAD_BUTTON btn);
-int gamepadAxisValue(GAMEPAD_AXIS axis);
+float gamepadAxisValue(GAMEPAD_AXIS axis);
 
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		KEY_LEFTARROW
