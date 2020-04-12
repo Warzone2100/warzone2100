@@ -143,7 +143,7 @@ static UDWORD CurrentItemUnderMouse = 0;
 bool	rotActive = false;
 bool	gameStats = false;
 
-static const float FADE_START_OF_GAME_TIME = 4000;
+static const float FADE_START_OF_GAME_TIME = 1000;
 static void fadeStartOfGame();
 
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
@@ -1216,7 +1216,7 @@ void displayWorld()
 
 	draw3DScene();
 
-	if(realTime < FADE_START_OF_GAME_TIME)
+	if(graphicsTime < FADE_START_OF_GAME_TIME)
 	{
 		fadeStartOfGame();
 	}
@@ -1226,7 +1226,7 @@ static void fadeStartOfGame()
 {
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 	PIELIGHT color = WZCOL_BLACK;
-	float delta = realTime / FADE_START_OF_GAME_TIME;
+	float delta = graphicsTime / FADE_START_OF_GAME_TIME;
 	color.byte.a = 255 * (1 - delta * delta * delta); // cubic easing
 	pie_UniTransBoxFill(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), color);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
