@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-04-11 18:56\n"
+"PO-Revision-Date: 2020-04-12 18:55\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -16749,7 +16749,8 @@ msgstr "Выбрать название игры"
 #: src/multiint.cpp:1247
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Выберите Карту\n"
+"Может быть заблокировано голосами игроков"
 
 #: src/multiint.cpp:1248
 msgid "Map-Mod!"
@@ -16792,7 +16793,7 @@ msgstr "Установить лимиты сооружений"
 
 #: src/multiint.cpp:1334
 msgid "Random Game Options"
-msgstr ""
+msgstr "Случайные настройки игры"
 
 #: src/multiint.cpp:1335
 msgid "Random Game Options\n"
@@ -16923,11 +16924,11 @@ msgstr "ЧАТ"
 #: src/multiint.cpp:2657
 #: src/multiint.cpp:3666
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Недостаточно голосов для рандомизации или изменения карты."
 
 #: src/multiint.cpp:2812
 msgid "Game Name Updated."
-msgstr ""
+msgstr "Имя игры обновлено."
 
 #: src/multiint.cpp:2925
 #, c-format
@@ -17203,7 +17204,7 @@ msgstr "Кик игрока %s за попытку обойти проверку
 
 #: src/multiplay.cpp:1146
 msgid " (Ally)"
-msgstr ""
+msgstr " (Союзник)"
 
 #: src/multiplay.cpp:1150
 msgid " (Global)"
@@ -17473,12 +17474,12 @@ msgstr[3] "выбрано %u юнитов"
 
 #: src/structure.cpp:2497
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Не могу построить больше юнитов, Достигнут предел юнитов — производство приостановлено"
 
 #: src/structure.cpp:2505
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr ""
+msgstr "Не могу построить \"%s\" без Командного поста — производство приостановлено"
 
 #: src/structure.cpp:2510
 #, c-format
