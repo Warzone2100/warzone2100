@@ -272,8 +272,6 @@ static bool globalDialog = false;
 
 static void updateGlobalModels();
 
-void to_json(nlohmann::json& j, const QVariant& value); // forward-declare
-
 bool bInTutorial = false;
 
 // ----------------------------------------------------------

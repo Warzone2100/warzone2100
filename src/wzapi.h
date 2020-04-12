@@ -267,6 +267,26 @@ namespace wzapi
 	no_return_value setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool value)) MULTIPLAY_SYNCREQUEST_REQUIRED;
 	no_return_value fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player));
 	no_return_value fireWeaponAtObj(WZAPI_PARAMS(std::string weaponName, BASE_OBJECT *psObj, optional<int> _player));
+	bool setUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue));
+	nlohmann::json getUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index));
 }
+
+enum Scrcb {
+	SCRCB_FIRST = COMP_NUMCOMPONENTS,
+	SCRCB_RES = SCRCB_FIRST,  // Research upgrade
+	SCRCB_MODULE_RES,  // Research module upgrade
+	SCRCB_REP,  // Repair upgrade
+	SCRCB_POW,  // Power upgrade
+	SCRCB_MODULE_POW,  // And so on...
+	SCRCB_CON,
+	SCRCB_MODULE_CON,
+	SCRCB_REA,
+	SCRCB_ARM,
+	SCRCB_HEA,
+	SCRCB_ELW,
+	SCRCB_HIT,
+	SCRCB_LIMIT,
+	SCRCB_LAST = SCRCB_LIMIT
+};
 
 #endif

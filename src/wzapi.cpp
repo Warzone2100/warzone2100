@@ -2912,3 +2912,654 @@ wzapi::no_return_value wzapi::fireWeaponAtObj(WZAPI_PARAMS(std::string weaponNam
 	proj_SendProjectile(&sWeapon, nullptr, player, target, psObj, true, 0);
 	return {};
 }
+
+
+// flag all droids as requiring update on next frame
+static void dirtyAllDroids(int player)
+{
+	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	{
+		psDroid->flags.set(OBJECT_FLAG_DIRTY);
+	}
+	for (DROID *psDroid = mission.apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	{
+		psDroid->flags.set(OBJECT_FLAG_DIRTY);
+	}
+	for (DROID *psDroid = apsLimboDroids[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	{
+		psDroid->flags.set(OBJECT_FLAG_DIRTY);
+	}
+}
+
+static void dirtyAllStructures(int player)
+{
+	for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	{
+		psCurr->flags.set(OBJECT_FLAG_DIRTY);
+	}
+	for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	{
+		psCurr->flags.set(OBJECT_FLAG_DIRTY);
+	}
+}
+
+bool wzapi::setUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue))
+{
+	int value = json_variant(newValue).toInt();
+	syncDebug("stats[p%d,t%d,%s,i%d] = %d", player, type, name.c_str(), index, value);
+	if (type == COMP_BODY)
+	{
+		SCRIPT_ASSERT(false, context, index < numBodyStats, "Bad index");
+		BODY_STATS *psStats = asBodyStats + index;
+		if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "Armour")
+		{
+			psStats->upgrade[player].armour = value;
+		}
+		else if (name == "Thermal")
+		{
+			psStats->upgrade[player].thermal = value;
+		}
+		else if (name == "Power")
+		{
+			psStats->upgrade[player].power = value;
+		}
+		else if (name == "Resistance")
+		{
+			// TBD FIXME - not updating resistance points in droids...
+			psStats->upgrade[player].resistance = value;
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_BRAIN)
+	{
+		SCRIPT_ASSERT(false, context, index < numBrainStats, "Bad index");
+		BRAIN_STATS *psStats = asBrainStats + index;
+		if (name == "BaseCommandLimit")
+		{
+			psStats->upgrade[player].maxDroids = value;
+		}
+		else if (name == "CommandLimitByLevel")
+		{
+			psStats->upgrade[player].maxDroidsMult = value;
+		}
+		else if (name == "RankThresholds")
+		{
+			SCRIPT_ASSERT(false, context, newValue.is_array(), "Level thresholds not an array!");
+			size_t length = newValue.size();
+			SCRIPT_ASSERT(false, context, length <= psStats->upgrade[player].rankThresholds.size(), "Invalid thresholds array length");
+			for (size_t i = 0; i < length; i++)
+			{
+				// Use json_variant to support conversion from other value types to an int
+				psStats->upgrade[player].rankThresholds[i] = json_variant(newValue[i]).toInt();
+			}
+		}
+		else if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_SENSOR)
+	{
+		SCRIPT_ASSERT(false, context, index < numSensorStats, "Bad index");
+		SENSOR_STATS *psStats = asSensorStats + index;
+		if (name == "Range")
+		{
+			psStats->upgrade[player].range = value;
+			dirtyAllDroids(player);
+			dirtyAllStructures(player);
+		}
+		else if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_ECM)
+	{
+		SCRIPT_ASSERT(false, context, index < numECMStats, "Bad index");
+		ECM_STATS *psStats = asECMStats + index;
+		if (name == "Range")
+		{
+			psStats->upgrade[player].range = value;
+			dirtyAllDroids(player);
+			dirtyAllStructures(player);
+		}
+		else if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_PROPULSION)
+	{
+		SCRIPT_ASSERT(false, context, index < numPropulsionStats, "Bad index");
+		PROPULSION_STATS *psStats = asPropulsionStats + index;
+		if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPctOfBody")
+		{
+			psStats->upgrade[player].hitpointPctOfBody = value;
+			dirtyAllDroids(player);
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_CONSTRUCT)
+	{
+		SCRIPT_ASSERT(false, context, index < numConstructStats, "Bad index");
+		CONSTRUCT_STATS *psStats = asConstructStats + index;
+		if (name == "ConstructorPoints")
+		{
+			psStats->upgrade[player].constructPoints = value;
+		}
+		else if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_REPAIRUNIT)
+	{
+		SCRIPT_ASSERT(false, context, index < numRepairStats, "Bad index");
+		REPAIR_STATS *psStats = asRepairStats + index;
+		if (name == "RepairPoints")
+		{
+			psStats->upgrade[player].repairPoints = value;
+		}
+		else if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_WEAPON)
+	{
+		SCRIPT_ASSERT(false, context, index < numWeaponStats, "Bad index");
+		WEAPON_STATS *psStats = asWeaponStats + index;
+		if (name == "MaxRange")
+		{
+			psStats->upgrade[player].maxRange = value;
+		}
+		else if (name == "ShortRange")
+		{
+			psStats->upgrade[player].shortRange = value;
+		}
+		else if (name == "MinRange")
+		{
+			psStats->upgrade[player].minRange = value;
+		}
+		else if (name == "HitChance")
+		{
+			psStats->upgrade[player].hitChance = value;
+		}
+		else if (name == "ShortHitChance")
+		{
+			psStats->upgrade[player].shortHitChance = value;
+		}
+		else if (name == "FirePause")
+		{
+			psStats->upgrade[player].firePause = value;
+		}
+		else if (name == "Rounds")
+		{
+			psStats->upgrade[player].numRounds = value;
+		}
+		else if (name == "ReloadTime")
+		{
+			psStats->upgrade[player].reloadTime = value;
+		}
+		else if (name == "Damage")
+		{
+			psStats->upgrade[player].damage = value;
+		}
+		else if (name == "MinimumDamage")
+		{
+			psStats->upgrade[player].minimumDamage = value;
+		}
+		else if (name == "Radius")
+		{
+			psStats->upgrade[player].radius = value;
+		}
+		else if (name == "RadiusDamage")
+		{
+			psStats->upgrade[player].radiusDamage = value;
+		}
+		else if (name == "RepeatDamage")
+		{
+			psStats->upgrade[player].periodicalDamage = value;
+		}
+		else if (name == "RepeatTime")
+		{
+			psStats->upgrade[player].periodicalDamageTime = value;
+		}
+		else if (name == "RepeatRadius")
+		{
+			psStats->upgrade[player].periodicalDamageRadius = value;
+		}
+		else if (name == "HitPoints")
+		{
+			psStats->upgrade[player].hitpoints = value;
+			dirtyAllDroids(player);
+		}
+		else if (name == "HitPointPct")
+		{
+			psStats->upgrade[player].hitpointPct = value;
+			dirtyAllDroids(player);
+		}
+		else
+		{
+			SCRIPT_ASSERT(false, context, false, "Invalid weapon method");
+		}
+	}
+	else if (type >= SCRCB_FIRST && type <= SCRCB_LAST)
+	{
+		SCRIPT_ASSERT(false, context, index < numStructureStats, "Bad index");
+		STRUCTURE_STATS *psStats = asStructureStats + index;
+		switch ((Scrcb)type)
+		{
+		case SCRCB_RES: psStats->upgrade[player].research = value; break;
+		case SCRCB_MODULE_RES: psStats->upgrade[player].moduleResearch = value; break;
+		case SCRCB_REP: psStats->upgrade[player].repair = value; break;
+		case SCRCB_POW: psStats->upgrade[player].power = value; break;
+		case SCRCB_MODULE_POW: psStats->upgrade[player].modulePower = value; break;
+		case SCRCB_CON: psStats->upgrade[player].production = value; break;
+		case SCRCB_MODULE_CON: psStats->upgrade[player].moduleProduction = value; break;
+		case SCRCB_REA: psStats->upgrade[player].rearm = value; break;
+		case SCRCB_HEA: psStats->upgrade[player].thermal = value; break;
+		case SCRCB_ARM: psStats->upgrade[player].armour = value; break;
+		case SCRCB_ELW:
+			// Update resistance points for all structures, to avoid making them damaged
+			// FIXME - this is _really_ slow! we could be doing this for dozens of buildings one at a time!
+			for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			{
+				if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
+				{
+					psCurr->resistance = value;
+				}
+			}
+			for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			{
+				if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
+				{
+					psCurr->resistance = value;
+				}
+			}
+			psStats->upgrade[player].resistance = value;
+			break;
+		case SCRCB_HIT:
+			// Update body points for all structures, to avoid making them damaged
+			// FIXME - this is _really_ slow! we could be doing this for
+			// dozens of buildings one at a time!
+			for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			{
+				if (psStats == psCurr->pStructureType && psStats->upgrade[player].hitpoints < value)
+				{
+					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
+				}
+			}
+			for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			{
+				if (psStats == psCurr->pStructureType && psStats->upgrade[player].hitpoints < value)
+				{
+					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
+				}
+			}
+			psStats->upgrade[player].hitpoints = value;
+			break;
+		case SCRCB_LIMIT:
+			psStats->upgrade[player].limit = value; break;
+		}
+	}
+	else
+	{
+		SCRIPT_ASSERT(false, context, false, "Component type not found for upgrade");
+	}
+
+	return true;
+}
+
+nlohmann::json wzapi::getUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index))
+{
+	if (type == COMP_BODY)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numBodyStats, "Bad index");
+		const BODY_STATS *psStats = asBodyStats + index;
+		if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else if (name == "Armour")
+		{
+			return psStats->upgrade[player].armour;
+		}
+		else if (name == "Thermal")
+		{
+			return psStats->upgrade[player].thermal;
+		}
+		else if (name == "Power")
+		{
+			return psStats->upgrade[player].power;
+		}
+		else if (name == "Resistance")
+		{
+			return psStats->upgrade[player].resistance;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_BRAIN)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numBrainStats, "Bad index");
+		const BRAIN_STATS *psStats = asBrainStats + index;
+		if (name == "BaseCommandLimit")
+		{
+			return psStats->upgrade[player].maxDroids;
+		}
+		else if (name == "CommandLimitByLevel")
+		{
+			return psStats->upgrade[player].maxDroidsMult;
+		}
+		else if (name == "RankThresholds")
+		{
+			size_t length = psStats->upgrade[player].rankThresholds.size();
+			nlohmann::json value = nlohmann::json::array();
+			for (size_t i = 0; i < length; i++)
+			{
+				value.push_back(psStats->upgrade[player].rankThresholds[i]);
+			}
+			return value;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_SENSOR)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numSensorStats, "Bad index");
+		const SENSOR_STATS *psStats = asSensorStats + index;
+		if (name == "Range")
+		{
+			return psStats->upgrade[player].range;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_ECM)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numECMStats, "Bad index");
+		const ECM_STATS *psStats = asECMStats + index;
+		if (name == "Range")
+		{
+			return psStats->upgrade[player].range;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_PROPULSION)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numPropulsionStats, "Bad index");
+		const PROPULSION_STATS *psStats = asPropulsionStats + index;
+		if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else if (name == "HitPointPctOfBody")
+		{
+			return psStats->upgrade[player].hitpointPctOfBody;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_CONSTRUCT)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numConstructStats, "Bad index");
+		const CONSTRUCT_STATS *psStats = asConstructStats + index;
+		if (name == "ConstructorPoints")
+		{
+			return psStats->upgrade[player].constructPoints;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_REPAIRUNIT)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numRepairStats, "Bad index");
+		const REPAIR_STATS *psStats = asRepairStats + index;
+		if (name == "RepairPoints")
+		{
+			return psStats->upgrade[player].repairPoints;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Upgrade component %s not found", name.c_str());
+		}
+	}
+	else if (type == COMP_WEAPON)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numWeaponStats, "Bad index");
+		const WEAPON_STATS *psStats = asWeaponStats + index;
+		if (name == "MaxRange")
+		{
+			return psStats->upgrade[player].maxRange;
+		}
+		else if (name == "ShortRange")
+		{
+			return psStats->upgrade[player].shortRange;
+		}
+		else if (name == "MinRange")
+		{
+			return psStats->upgrade[player].minRange;
+		}
+		else if (name == "HitChance")
+		{
+			return psStats->upgrade[player].hitChance;
+		}
+		else if (name == "ShortHitChance")
+		{
+			return psStats->upgrade[player].shortHitChance;
+		}
+		else if (name == "FirePause")
+		{
+			return psStats->upgrade[player].firePause;
+		}
+		else if (name == "Rounds")
+		{
+			return psStats->upgrade[player].numRounds;
+		}
+		else if (name == "ReloadTime")
+		{
+			return psStats->upgrade[player].reloadTime;
+		}
+		else if (name == "Damage")
+		{
+			return psStats->upgrade[player].damage;
+		}
+		else if (name == "MinimumDamage")
+		{
+			return psStats->upgrade[player].minimumDamage;
+		}
+		else if (name == "Radius")
+		{
+			return psStats->upgrade[player].radius;
+		}
+		else if (name == "RadiusDamage")
+		{
+			return psStats->upgrade[player].radiusDamage;
+		}
+		else if (name == "RepeatDamage")
+		{
+			return psStats->upgrade[player].periodicalDamage;
+		}
+		else if (name == "RepeatTime")
+		{
+			return psStats->upgrade[player].periodicalDamageTime;
+		}
+		else if (name == "RepeatRadius")
+		{
+			return psStats->upgrade[player].periodicalDamageRadius;
+		}
+		else if (name == "HitPoints")
+		{
+			return psStats->upgrade[player].hitpoints;
+		}
+		else if (name == "HitPointPct")
+		{
+			return psStats->upgrade[player].hitpointPct;
+		}
+		else
+		{
+			SCRIPT_ASSERT(nlohmann::json(), context, false, "Invalid weapon method");
+		}
+	}
+	else if (type >= SCRCB_FIRST && type <= SCRCB_LAST)
+	{
+		SCRIPT_ASSERT(nlohmann::json(), context, index < numStructureStats, "Bad index");
+		const STRUCTURE_STATS *psStats = asStructureStats + index;
+		switch (type)
+		{
+		case SCRCB_RES: return psStats->upgrade[player].research; break;
+		case SCRCB_MODULE_RES: return psStats->upgrade[player].moduleResearch; break;
+		case SCRCB_REP: return psStats->upgrade[player].repair; break;
+		case SCRCB_POW: return psStats->upgrade[player].power; break;
+		case SCRCB_MODULE_POW: return psStats->upgrade[player].modulePower; break;
+		case SCRCB_CON: return psStats->upgrade[player].production; break;
+		case SCRCB_MODULE_CON: return psStats->upgrade[player].moduleProduction; break;
+		case SCRCB_REA: return psStats->upgrade[player].rearm; break;
+		case SCRCB_ELW: return psStats->upgrade[player].resistance; break;
+		case SCRCB_HEA: return psStats->upgrade[player].thermal; break;
+		case SCRCB_ARM: return psStats->upgrade[player].armour; break;
+		case SCRCB_HIT: return psStats->upgrade[player].hitpoints;
+		case SCRCB_LIMIT: return psStats->upgrade[player].limit;
+		default: SCRIPT_ASSERT(nlohmann::json(), context, false, "Component type not found for upgrade"); break;
+		}
+	}
+	return nlohmann::json();
+}
