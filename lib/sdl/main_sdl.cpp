@@ -78,26 +78,6 @@ std::map<KEY_CODE, SDL_Keycode> KEY_CODE_to_SDLKey;
 std::map<SDL_Keycode, KEY_CODE > SDLKey_to_KEY_CODE;
 
 static SDL_GameController *gamepad;
-static bool GAMEPAD_A_PRESSED;
-static bool GAMEPAD_B_PRESSED;
-static bool GAMEPAD_X_PRESSED;
-static bool GAMEPAD_Y_PRESSED;
-static bool GAMEPAD_BACK_PRESSED;
-static bool GAMEPAD_START_PRESSED;
-static bool GAMEPAD_L3_PRESSED;
-static bool GAMEPAD_R3_PRESSED;
-static bool GAMEPAD_LB_PRESSED;
-static bool GAMEPAD_RB_PRESSED;
-static bool GAMEPAD_UP_PRESSED;
-static bool GAMEPAD_DOWN_PRESSED;
-static bool GAMEPAD_LEFT_PRESSED;
-static bool GAMEPAD_RIGHT_PRESSED;
-static float GAMEPAD_LX;
-static float GAMEPAD_LY;
-static float GAMEPAD_RX;
-static float GAMEPAD_RY;
-static float GAMEPAD_LT;
-static float GAMEPAD_RT;
 
 int realmain(int argc, char *argv[]);
 
@@ -758,7 +738,7 @@ void inputInitialise(void)
 	dragKey = MOUSE_LMB;
 
 	// Gamepad init 
-	debug(LOG_MAIN, "INIT GAMEPAD %i", SDL_NumJoysticks());
+	debug(LOG_MAIN, "Init Gamepad - Gamepads count: %i", SDL_NumJoysticks());
 
 	SDL_Init(SDL_INIT_GAMECONTROLLER);
 
@@ -2130,45 +2110,23 @@ static void handleActiveEvent(SDL_Event *event)
 	}
 }
 
-void processGamepad() {
-	if (gamepad == NULL) return;
-	for (unsigned int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; ++i) {
-		bool pressed = SDL_GameControllerGetButton(gamepad, (SDL_GameControllerButton)i) == SDL_PRESSED;
-		if (i == 0) GAMEPAD_A_PRESSED = pressed;
-		if (i == 1) GAMEPAD_B_PRESSED = pressed;
-		if (i == 2) GAMEPAD_X_PRESSED = pressed;
-		if (i == 3) GAMEPAD_Y_PRESSED = pressed;
-		if (i == 4) GAMEPAD_BACK_PRESSED = pressed;
-		// we don't care about button 5, that's the GUIDE button
-		if (i == 6) GAMEPAD_START_PRESSED = pressed;
-		if (i == 7) GAMEPAD_L3_PRESSED = pressed;
-		if (i == 8) GAMEPAD_R3_PRESSED = pressed;
-		if (i == 9) GAMEPAD_LB_PRESSED = pressed;
-		if (i == 10) GAMEPAD_RB_PRESSED = pressed;
-		if (i == 11) GAMEPAD_UP_PRESSED = pressed;
-		if (i == 12) GAMEPAD_DOWN_PRESSED = pressed;
-		if (i == 13) GAMEPAD_LEFT_PRESSED = pressed;
-		if (i == 14) GAMEPAD_RIGHT_PRESSED = pressed;
-	}
-	for (unsigned int i = 0; i < SDL_CONTROLLER_AXIS_MAX; ++i) {
-   	const Sint16 deadzone = 8000;  /* TODO: Tweak this */
-   	const Sint16 value = SDL_GameControllerGetAxis(gamepad, (SDL_GameControllerAxis)(i));
-		float val = 0;
-
-   	if (abs(value) > deadzone) {
-			val = value;
-		}
-		if (i == 0) GAMEPAD_LX = val;
-		if (i == 1) GAMEPAD_LY = val;
-		if (i == 2) GAMEPAD_RX = val;
-		if (i == 3) GAMEPAD_RY = val;
-		if (i == 4) GAMEPAD_LT = val;
-		if (i == 5) GAMEPAD_RT = val;
-  }
+bool gamepadButtonPressed(GAMEPAD_BUTTON btn) {
+	if (gamepad == NULL || btn < 0 || ((int)btn) > ((int)SDL_CONTROLLER_BUTTON_MAX)) return false;
+	return SDL_GameControllerGetButton(gamepad, (SDL_GameControllerButton) btn) == SDL_PRESSED;
 }
 
-int gamepadStartPressed() {
-	return GAMEPAD_START_PRESSED;
+int gamepadAxisValue(GAMEPAD_AXIS axis) {
+	if (gamepad == NULL || axis < 0 || ((int)axis) > ((int)SDL_CONTROLLER_AXIS_MAX)) return 0;
+
+	const int deadzone = 8000;  /* TODO: Tweak this */
+	const int rawvalue = SDL_GameControllerGetAxis(gamepad, (SDL_GameControllerAxis)(axis));
+	int value = 0;
+
+	if (abs(rawvalue) > deadzone) {
+		value = rawvalue;
+	}
+
+	return value;
 }
 
 // Actual mainloop
@@ -2239,7 +2197,6 @@ void wzMainEventLoop(void)
 		//
 		appPtr->processEvents();		// Qt needs to do its stuff
 #endif
-		processGamepad();
 		processScreenSizeChangeNotificationIfNeeded();
 		mainLoop();				// WZ does its thing
 		inputNewFrame();			// reset input states
