@@ -211,4 +211,7 @@ WzString::fromUtf8((_qstring).toUtf8().constData())
 #include "3rdparty/json/json_fwd.hpp"
 void setGlobalVariables(QScriptEngine *engine, const nlohmann::json& variables);
 
+class QVariant;
+void to_json(nlohmann::json& j, const QVariant& value); // forward-declare
+
 #endif
