@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-11 21:02\n"
+"PO-Revision-Date: 2020-04-12 18:55\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -5881,7 +5881,7 @@ msgstr "PZ senzor s toplotnim slikanjem"
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
 #: po/custom/fromJson.txt:157
 msgid "Adaptive AI with multiple personalities"
-msgstr ""
+msgstr "Prilagodljiva UI z večimi osebnostmi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials08.name
@@ -6958,7 +6958,7 @@ msgstr "Nazaj k osnovam"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1047
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "temelji na originalni UI, zdaj za začetnike"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -7073,7 +7073,7 @@ msgstr "Kampanja beta"
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1159
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7149,7 +7149,7 @@ msgstr "Vezane kovinske večslojne plošče vdelane v zidove in obrambe"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1238
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "KostoLomec!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
@@ -7995,7 +7995,7 @@ msgstr "ST naboji z osiromašenim uranom"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1795
 msgid "Designed for shared research team battles"
-msgstr ""
+msgstr "Zasnovan za skupne raziskovalne timske bitke"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -9516,7 +9516,7 @@ msgstr "Visoko-hitrostna oklepno-prebojna krilno-uravnotežena zavrgljiva obloga
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2802
 msgid "HMG Bunker"
-msgstr ""
+msgstr "HMG Bunker"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
@@ -10181,7 +10181,7 @@ msgstr "Zdaj je možna raziskava skakalnih kiborgov"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3337
 msgid "Keeps map areas under constant surveillance"
-msgstr "Obdrži območja mape pod stalnim nadzorom"
+msgstr "Ohranja območja zemljevida pod stalnim nadzorom"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -10395,7 +10395,7 @@ msgstr "Delavnica za lasersko optiko"
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3466
 msgid "LasSat"
-msgstr ""
+msgstr "LasSat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -10411,7 +10411,7 @@ msgstr "Slojne sestavljene zlitine in energijo-vsrkajoča vlakna"
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3482
 msgid "Leopard"
-msgstr ""
+msgstr "Leopard"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -11474,7 +11474,7 @@ msgstr "NEXUS-ov zid"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4249
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11486,7 +11486,7 @@ msgstr "Ni prostora za skritje"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4255
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Ne goljufa. Težek. Zabaven. Zdrobi!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
@@ -12728,7 +12728,7 @@ msgstr "Kodirna kupola"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5060
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "UI za morske zemljevide, ki temelji na NullBot-u"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -12761,7 +12761,7 @@ msgstr "Samoreprodukcijska izdelava"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13428,7 +13428,7 @@ msgstr "Spodbujevalnik termične palice"
 #. data/mp/stats/body.json: $.Body9REC.name
 #: po/custom/fromJson.txt:5537
 msgid "Tiger"
-msgstr ""
+msgstr "Tiger"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -14450,7 +14450,7 @@ msgstr "Izurjen"
 #: po/custom/fromJson.txt:6185
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veteran"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -14461,11 +14461,11 @@ msgstr "Avtorske pravice © 1999-2004 Eidos Interactive.\n"
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr "Warzone 2100 mapa/modifikacijska datoteka"
+msgstr "Warzone 2100 zemljevid / modifikacijska datoteka"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
@@ -14481,7 +14481,7 @@ msgstr "Warzone 2100 globalna modifikacijska datoteka"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14517,7 +14517,7 @@ msgstr "Razhroščevalni način je zdaj onemogočen!"
 #: src/clparse.cpp:86
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "Uporaba: %s [OPTION...]\n"
 
 #: src/clparse.cpp:258
 msgid "Set configuration directory"
@@ -14680,11 +14680,11 @@ msgstr "Začni spopadno igro z dano datoteko nastavitev"
 
 #: src/clparse.cpp:286
 msgid "test"
-msgstr ""
+msgstr "preizkus"
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
-msgstr ""
+msgstr "Nadaljuj zadnjo shranjeno igro"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -14971,11 +14971,11 @@ msgstr "Videoposnetki manjkajo, prenesite jih iz http://wz2100.net"
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Nadaljuj zadnji shranjeni položaj"
 
 #: src/frontend.cpp:168
 msgid "No last save available"
-msgstr ""
+msgstr "Zadnjega shranjenega položaja ni na voljo"
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -15163,7 +15163,7 @@ msgstr "Izklopljeno"
 
 #: src/frontend.cpp:750
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:751
 #: src/multiplay.cpp:1897
@@ -15219,7 +15219,7 @@ msgstr "Sence"
 #: src/frontend.cpp:804
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.cpp:808
 #: src/ingameop.cpp:542
@@ -15232,16 +15232,16 @@ msgstr "GRAFIČNE NASTAVITVE"
 
 #: src/frontend.cpp:906
 msgid "Disabled"
-msgstr ""
+msgstr "Onemogočeno"
 
 #: src/frontend.cpp:909
 msgid "Enabled"
-msgstr ""
+msgstr "Omogočeno"
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:919
 msgid "Auto"
-msgstr ""
+msgstr "Samodejno"
 
 #: src/frontend.cpp:954
 #: src/ingameop.cpp:159
@@ -15260,20 +15260,20 @@ msgstr "Glasnost glasbe"
 
 #: src/frontend.cpp:966
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
 #: src/frontend.cpp:971
 #: src/frontend.cpp:973
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "Vaša naprava / sistem / OpenAL knjižnica ne podpira HRTF"
 
 #: src/frontend.cpp:977
 msgid "Map Zoom"
-msgstr "Bližina mape"
+msgstr "Povečava zemljevida"
 
 #: src/frontend.cpp:981
 msgid "Map Zoom Rate"
-msgstr "Stopnja bližine mape"
+msgstr "Stopnja povečave zemljevida"
 
 #: src/frontend.cpp:985
 msgid "Radar Zoom"
@@ -15334,7 +15334,7 @@ msgstr "Vertikalna sinhhronizacija"
 
 #: src/frontend.cpp:1243
 msgid "Antialiasing*"
-msgstr ""
+msgstr "Glajenje*"
 
 #: src/frontend.cpp:1249
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
@@ -15354,7 +15354,7 @@ msgstr "Desna miška"
 
 #: src/frontend.cpp:1559
 msgid "Map/Radar Zoom"
-msgstr "Bližina mape/radarja"
+msgstr "Povečava zemljevida/radarja"
 
 #: src/frontend.cpp:1560
 msgid "Game Speed"
@@ -15600,7 +15600,7 @@ msgstr "Zvočne možnosti"
 
 #: src/ingameop.cpp:494
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Ogled vnosov tipk"
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
@@ -16080,7 +16080,7 @@ msgstr "Poveljniki"
 
 #: src/keymap.cpp:303
 msgid "QuickSave"
-msgstr ""
+msgstr "Hitra shramba"
 
 #: src/keymap.cpp:304
 msgid "Toggle Radar"
@@ -16088,7 +16088,7 @@ msgstr "Preklopi radar"
 
 #: src/keymap.cpp:305
 msgid "QuickLoad"
-msgstr ""
+msgstr "Hitri zagon"
 
 #: src/keymap.cpp:306
 msgid "Toggle Console Display"
@@ -16260,11 +16260,11 @@ msgstr "Zumiraj radar noter"
 
 #: src/keymap.cpp:362
 msgid "Zoom In"
-msgstr "Zumiraj ven"
+msgstr "Povečaj"
 
 #: src/keymap.cpp:363
 msgid "Zoom Out"
-msgstr "Zumiraj noter"
+msgstr "Pomanjšaj"
 
 #: src/keymap.cpp:364
 msgid "Pitch Forward"
@@ -16400,7 +16400,7 @@ msgstr "Preklopi radarski pogled zaveznik-sovražnik"
 
 #: src/keymap.cpp:411
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Pokaži vse tipkovnične vnose"
 
 #: src/keymap.cpp:420
 msgid "Select all Combat Units"
@@ -16452,7 +16452,7 @@ msgstr "Pokaži število slik"
 
 #: src/keymap.cpp:433
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Izberite vse enote z enakimi sestavnimi deli"
 
 #: src/keymap.cpp:437
 msgid "Select all Combat Cyborgs"
@@ -16504,7 +16504,7 @@ msgstr "Izberi naslednjo tovarno kiborgov"
 
 #: src/keymap.cpp:454
 msgid "Toggle Debug Mappings"
-msgstr "Preklopi razhroščevalna mapiranja"
+msgstr "Preklopi razhroščevalne vnose"
 
 #: src/keymap.cpp:455
 msgid "Toggle display of droid path"
@@ -16564,7 +16564,7 @@ msgstr "Dokončaj trenutno raziskavo"
 
 #: src/keymap.cpp:471
 msgid "Reveal map at mouse position"
-msgstr "Pokaži mapo na položaju miške"
+msgstr "Razkrij zemljevid na položaju miške"
 
 #: src/keymap.cpp:472
 msgid "Trace a game object"
@@ -16748,11 +16748,12 @@ msgstr "Izberite ime igre"
 #: src/multiint.cpp:1247
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Izberite zemljevid\n"
+"Lahko se blokira z glasovi igralcev"
 
 #: src/multiint.cpp:1248
 msgid "Map-Mod!"
-msgstr "Modifikacija mape!"
+msgstr "Modifikacija zemljevida!"
 
 #: src/multiint.cpp:1261
 msgid "Click to set Password"
@@ -16773,11 +16774,11 @@ msgstr "Baza"
 
 #: src/multiint.cpp:1318
 msgid "Map Preview"
-msgstr "Predogled mape"
+msgstr "Predogled zemljevida"
 
 #: src/multiint.cpp:1319
 msgid "Click to see Map"
-msgstr "Kliknite za ogled mape"
+msgstr "Kliknite za ogled zemljevida"
 
 #: src/multiint.cpp:1326
 #: src/multiint.cpp:1327
@@ -16809,11 +16810,11 @@ msgstr "Glasuj"
 
 #: src/multiint.cpp:1352
 msgid "No. Do not allow host to randomize or change map"
-msgstr ""
+msgstr "Ne. Ne dovolite gostitelju naključno menjati ali spremeniti zemljevida"
 
 #: src/multiint.cpp:1353
 msgid "Yes. Allow host to randomize or change map"
-msgstr ""
+msgstr "Da. Dovolite gostitelju naključno menjati ali spremeniti zemljevid"
 
 #: src/multiint.cpp:1424
 msgid "DIFFICULTY"
@@ -16922,7 +16923,7 @@ msgstr "KLEPET"
 #: src/multiint.cpp:2657
 #: src/multiint.cpp:3666
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Ni dovolj glasov za naključno menjavo ali sprembo zemljevida."
 
 #: src/multiint.cpp:2812
 msgid "Game Name Updated."
@@ -16939,7 +16940,7 @@ msgstr "*** geslo NI zahtevano! ***"
 
 #: src/multiint.cpp:2945
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr "To je modifikacija mape, lahko spremeni vašo igralsko izkušnjo!"
+msgstr "To je modifikacija zemljevida, lahko spremeni vašo igralsko izkušnjo!"
 
 #: src/multiint.cpp:3001
 msgid "Sorry! Failed to host the game."
@@ -16966,11 +16967,11 @@ msgstr ""
 
 #: src/multiint.cpp:3661
 msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
+msgstr "Ni mogoče spremeniti na zemljevid s premalo rež za vse igralce."
 
 #: src/multiint.cpp:3771
 msgid "The host has quit."
-msgstr ""
+msgstr "Gostitelj je odnehal."
 
 #: src/multiint.cpp:3897
 msgid "UPnP has been enabled."
@@ -17014,12 +17015,12 @@ msgstr "Zaprto"
 #: src/multiint.cpp:4084
 #, c-format
 msgid "Sending Map: %u%% "
-msgstr "Pošiljam mapo: %u%% "
+msgstr "Pošiljam zemljevid: %u%% "
 
 #: src/multiint.cpp:4084
 #, c-format
 msgid "Map: %u%% downloaded"
-msgstr "Mapa: %u%% prejeta"
+msgstr "Zemljevid: %u%% prejet"
 
 #: src/multiint.cpp:4132
 msgid "HOST"
@@ -17073,7 +17074,7 @@ msgstr "Zemljevid lahko presega omejitve"
 
 #: src/multilimit.cpp:163
 msgid "Force Limits at Start"
-msgstr ""
+msgstr "Na začetku vsili omejitve"
 
 #: src/multilimit.cpp:185
 msgid "Apply Defaults and Return To Previous Screen"
@@ -17102,7 +17103,7 @@ msgstr "Tehnološka stopnja 3"
 
 #: src/multimenu.cpp:593
 msgid "Max technology level"
-msgstr ""
+msgstr "Najvišja tehnološka stopnja"
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
@@ -17188,7 +17189,7 @@ msgstr "brcnil %s : %s iz igre ter jih dodal na spisek prepovedanih!"
 #: src/multiopt.cpp:304
 #: src/multiplay.cpp:1706
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr "Opozorilo, to je modifikacija mape, lahko spremeni običajno igralsko izkušnjo."
+msgstr "Opozorilo, to je modifikacija zemljevida, lahko spremeni običajno igralsko izkušnjo."
 
 #: src/multiopt.cpp:305
 #: src/multiplay.cpp:1710
@@ -17222,7 +17223,7 @@ msgstr "[neveljavno]"
 
 #: src/multiplay.cpp:1593
 msgid "Map was requested: SENDING MAP!"
-msgstr "Zahtevana je bila mapa: POŠILJAM MAPO!"
+msgstr "Zahtevan je bil zemljevid: POŠILJAM ZEMLJEVID!"
 
 #: src/multiplay.cpp:1609
 msgid "Mod was requested: SENDING MOD!"
@@ -17396,7 +17397,7 @@ msgstr "Poklicni: %u"
 #: src/scores.cpp:111
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Veteran: %u"
 
 #: src/scores.cpp:112
 #, c-format
@@ -17472,7 +17473,7 @@ msgstr[3] "%u enote izbrane"
 
 #: src/structure.cpp:2497
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Ne moremo izdelati več enot, meja enot dosežena - izdelava ustavljena"
 
 #: src/structure.cpp:2505
 #, c-format
@@ -17487,7 +17488,7 @@ msgstr "Ne moremo izdelati \"%s\", poveljniška meja dosežena - izdelava ustavl
 #: src/structure.cpp:2518
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Ne moremo izdelati več \"%s\", meja gradbenih enot dosežena - izdelava ustavljena"
 
 #: src/structure.cpp:5428
 #, c-format
@@ -17675,7 +17676,7 @@ msgstr "Verzija: %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
-msgstr "Ime mape"
+msgstr "Ime zemljevida"
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
