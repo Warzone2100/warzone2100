@@ -207,4 +207,8 @@ ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
 #define QStringToWzString(_qstring) \
 WzString::fromUtf8((_qstring).toUtf8().constData())
 
+// temporary
+#include "3rdparty/json/json_fwd.hpp"
+void setGlobalVariables(QScriptEngine *engine, const nlohmann::json& variables);
+
 #endif

@@ -4282,16 +4282,369 @@ static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, const QStrin
 	v.setProperty("name", name, QScriptValue::SkipInEnumeration | QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-QScriptValue register_common(QScriptEngine *engine, COMPONENT_STATS *psStats)
+nlohmann::json register_common(COMPONENT_STATS *psStats)
 {
-	QScriptValue v = engine->newObject();
-	v.setProperty("Id", WzStringToQScriptValue(engine, psStats->id), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("HitPoints", psStats->getBase().hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("HitPointPct", psStats->getBase().hitpointPct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	nlohmann::json v = nlohmann::json::object();
+	v["Id"] = psStats->id;
+	v["Weight"] = psStats->weight;
+	v["BuildPower"] = psStats->buildPower;
+	v["BuildTime"] = psStats->buildPoints;
+	v["HitPoints"] = psStats->getBase().hitpoints;
+	v["HitPointPct"] = psStats->getBase().hitpointPct;
 	return v;
+}
+
+nlohmann::json constructStatsObject()
+{
+	/// Register 'Stats' object. It is a read-only representation of basic game component states.
+	//== * ```Stats``` A sparse, read-only array containing rules information for game entity types.
+	//== (For now only the highest level member attributes are documented here. Use the 'jsdebug' cheat
+	//== to see them all.)
+	//== These values are defined:
+	nlohmann::json stats = nlohmann::json::object();
+	{
+		//==   * ```Body``` Droid bodies
+		nlohmann::json bodybase = nlohmann::json::object();
+		for (int j = 0; j < numBodyStats; j++)
+		{
+			BODY_STATS *psStats = asBodyStats + j;
+			nlohmann::json body = register_common(psStats);
+			body["Power"] = psStats->base.power;
+			body["Armour"] = psStats->base.armour;
+			body["Thermal"] = psStats->base.thermal;
+			body["Resistance"] = psStats->base.resistance;
+			body["Size"] = psStats->size;
+			body["WeaponSlots"] = psStats->weaponSlots;
+			body["BodyClass"] = psStats->bodyClass;
+			bodybase[psStats->name.toUtf8()] = body;
+		}
+		stats["Body"] = bodybase;
+
+		//==   * ```Sensor``` Sensor turrets
+		nlohmann::json sensorbase = nlohmann::json::object();
+		for (int j = 0; j < numSensorStats; j++)
+		{
+			SENSOR_STATS *psStats = asSensorStats + j;
+			nlohmann::json sensor = register_common(psStats);
+			sensor["Range"] = psStats->base.range;
+			sensorbase[psStats->name.toUtf8()] = sensor;
+		}
+		stats["Sensor"] = sensorbase;
+
+		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
+		nlohmann::json ecmbase = nlohmann::json::object();
+		for (int j = 0; j < numECMStats; j++)
+		{
+			ECM_STATS *psStats = asECMStats + j;
+			nlohmann::json ecm = register_common(psStats);
+			ecm["Range"] = psStats->base.range;
+			ecmbase[psStats->name.toUtf8()] = ecm;
+		}
+		stats["ECM"] = ecmbase;
+
+		//==   * ```Propulsion``` Propulsions
+		nlohmann::json propbase = nlohmann::json::object();
+		for (int j = 0; j < numPropulsionStats; j++)
+		{
+			PROPULSION_STATS *psStats = asPropulsionStats + j;
+			nlohmann::json v = register_common(psStats);
+			v["HitpointPctOfBody"] = psStats->base.hitpointPctOfBody;
+			v["MaxSpeed"] = psStats->maxSpeed;
+			v["TurnSpeed"] = psStats->turnSpeed;
+			v["SpinSpeed"] = psStats->spinSpeed;
+			v["SpinAngle"] = psStats->spinAngle;
+			v["SkidDeceleration"] = psStats->skidDeceleration;
+			v["Acceleration"] = psStats->acceleration;
+			v["Deceleration"] = psStats->deceleration;
+			propbase[psStats->name.toUtf8()] = v;
+		}
+		stats["Propulsion"] = propbase;
+
+		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
+		nlohmann::json repairbase = nlohmann::json::object();
+		for (int j = 0; j < numRepairStats; j++)
+		{
+			REPAIR_STATS *psStats = asRepairStats + j;
+			nlohmann::json repair = register_common(psStats);
+			repair["RepairPoints"] = psStats->base.repairPoints;
+			repairbase[psStats->name.toUtf8()] = repair;
+		}
+		stats["Repair"] = repairbase;
+
+		//==   * ```Construct``` Constructor turrets (eg for trucks)
+		nlohmann::json conbase = nlohmann::json::object();
+		for (int j = 0; j < numConstructStats; j++)
+		{
+			CONSTRUCT_STATS *psStats = asConstructStats + j;
+			nlohmann::json con = register_common(psStats);
+			con["ConstructorPoints"] = psStats->base.constructPoints;
+			conbase[psStats->name.toUtf8()] = con;
+		}
+		stats["Construct"] = conbase;
+
+		//==   * ```Brain``` Brains
+		nlohmann::json brainbase = nlohmann::json::object();
+		for (int j = 0; j < numBrainStats; j++)
+		{
+			BRAIN_STATS *psStats = asBrainStats + j;
+			nlohmann::json br = register_common(psStats);
+			br["BaseCommandLimit"] = psStats->base.maxDroids;
+			br["CommandLimitByLevel"] = psStats->base.maxDroidsMult;
+			nlohmann::json thresholds = nlohmann::json::array(); //engine->newArray(psStats->base.rankThresholds.size());
+			for (int x = 0; x < psStats->base.rankThresholds.size(); x++)
+			{
+				thresholds.push_back(psStats->base.rankThresholds.at(x));
+			}
+			br["RankThresholds"] = thresholds;
+			nlohmann::json ranks = nlohmann::json::array(); //engine->newArray(psStats->rankNames.size());
+			for (int x = 0; x < psStats->rankNames.size(); x++)
+			{
+				ranks.push_back(psStats->rankNames.at(x));
+			}
+			br["RankNames"] = ranks;
+			brainbase[psStats->name.toUtf8()] = br;
+		}
+		stats["Brain"] = brainbase;
+
+		//==   * ```Weapon``` Weapon turrets
+		nlohmann::json wbase = nlohmann::json::object();
+		for (int j = 0; j < numWeaponStats; j++)
+		{
+			WEAPON_STATS *psStats = asWeaponStats + j;
+			nlohmann::json weap = register_common(psStats);
+			weap["MaxRange"] = psStats->base.maxRange;
+			weap["ShortRange"] = psStats->base.shortRange;
+			weap["MinRange"] = psStats->base.minRange;
+			weap["HitChance"] = psStats->base.hitChance;
+			weap["ShortHitChance"] = psStats->base.shortHitChance;
+			weap["FirePause"] = psStats->base.firePause;
+			weap["ReloadTime"] = psStats->base.reloadTime;
+			weap["Rounds"] = psStats->base.numRounds;
+			weap["Damage"] = psStats->base.damage;
+			weap["MinimumDamage"] = psStats->base.minimumDamage;
+			weap["RadiusDamage"] = psStats->base.radiusDamage;
+			weap["RepeatDamage"] = psStats->base.periodicalDamage;
+			weap["RepeatRadius"] = psStats->base.periodicalDamageRadius;
+			weap["RepeatTime"] = psStats->base.periodicalDamageTime;
+			weap["Radius"] = psStats->base.radius;
+			weap["ImpactType"] = psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
+			weap["RepeatType"] = psStats->periodicalDamageWeaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
+			weap["ImpactClass"] = getWeaponSubClass(psStats->weaponSubClass);
+			weap["RepeatClass"] = getWeaponSubClass(psStats->periodicalDamageWeaponSubClass);
+			weap["FireOnMove"] = psStats->fireOnMove;
+			wbase[psStats->name.toUtf8()] = weap;
+		}
+		stats["Weapon"] = wbase;
+
+		//==   * ```WeaponClass``` Defined weapon classes
+		nlohmann::json weaptypes = nlohmann::json::array(); //engine->newArray(WSC_NUM_WEAPON_SUBCLASSES);
+		for (int j = 0; j < WSC_NUM_WEAPON_SUBCLASSES; j++)
+		{
+			weaptypes.push_back(getWeaponSubClass((WEAPON_SUBCLASS)j));
+		}
+		stats["WeaponClass"] = weaptypes;
+
+		//==   * ```Building``` Buildings
+		nlohmann::json structbase = nlohmann::json::object();
+		for (int j = 0; j < numStructureStats; j++)
+		{
+			STRUCTURE_STATS *psStats = asStructureStats + j;
+			nlohmann::json strct = nlohmann::json::object();
+			strct["Id"] = psStats->id;
+			if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_WALLCORNER
+			    || psStats->type == REF_GENERIC || psStats->type == REF_GATE)
+			{
+				strct["Type"] = "Wall";
+			}
+			else if (psStats->type != REF_DEMOLISH)
+			{
+				strct["Type"] = "Structure";
+			}
+			else
+			{
+				strct["Type"] = "Demolish";
+			}
+			strct["ResearchPoints"] = psStats->base.research;
+			strct["RepairPoints"] = psStats->base.repair;
+			strct["PowerPoints"] = psStats->base.power;
+			strct["ProductionPoints"] = psStats->base.production;
+			strct["RearmPoints"] = psStats->base.rearm;
+			strct["Armour"] = psStats->base.armour;
+			strct["Thermal"] = psStats->base.thermal;
+			strct["HitPoints"] = psStats->base.hitpoints;
+			strct["Resistance"] = psStats->base.resistance;
+			structbase[psStats->name.toUtf8()] = strct;
+		}
+		stats["Building"] = structbase;
+	}
+	return stats;
+}
+
+nlohmann::json getUsefulConstants()
+{
+	nlohmann::json constants = nlohmann::json::object();
+
+	constants["TER_WATER"] = TER_WATER;
+	constants["TER_CLIFFFACE"] = TER_CLIFFFACE;
+	constants["WEATHER_CLEAR"] = WT_NONE;
+	constants["WEATHER_RAIN"] = WT_RAINING;
+	constants["WEATHER_SNOW"] = WT_SNOWING;
+	constants["DORDER_ATTACK"] = DORDER_ATTACK;
+	constants["DORDER_OBSERVE"] = DORDER_OBSERVE;
+	constants["DORDER_RECOVER"] = DORDER_RECOVER;
+	constants["DORDER_MOVE"] = DORDER_MOVE;
+	constants["DORDER_SCOUT"] = DORDER_SCOUT;
+	constants["DORDER_BUILD"] = DORDER_BUILD;
+	constants["DORDER_HELPBUILD"] = DORDER_HELPBUILD;
+	constants["DORDER_LINEBUILD"] = DORDER_LINEBUILD;
+	constants["DORDER_REPAIR"] = DORDER_REPAIR;
+	constants["DORDER_PATROL"] = DORDER_PATROL;
+	constants["DORDER_DEMOLISH"] = DORDER_DEMOLISH;
+	constants["DORDER_EMBARK"] = DORDER_EMBARK;
+	constants["DORDER_DISEMBARK"] = DORDER_DISEMBARK;
+	constants["DORDER_FIRESUPPORT"] = DORDER_FIRESUPPORT;
+	constants["DORDER_COMMANDERSUPPORT"] = DORDER_COMMANDERSUPPORT;
+	constants["DORDER_HOLD"] = DORDER_HOLD;
+	constants["DORDER_RTR"] = DORDER_RTR;
+	constants["DORDER_RTB"] = DORDER_RTB;
+	constants["DORDER_STOP"] = DORDER_STOP;
+	constants["DORDER_REARM"] = DORDER_REARM;
+	constants["DORDER_RECYCLE"] = DORDER_RECYCLE;
+	constants["COMMAND"] = IDRET_COMMAND; // deprecated
+	constants["BUILD"] = IDRET_BUILD; // deprecated
+	constants["MANUFACTURE"] = IDRET_MANUFACTURE; // deprecated
+	constants["RESEARCH"] = IDRET_RESEARCH; // deprecated
+	constants["INTELMAP"] = IDRET_INTEL_MAP; // deprecated
+	constants["DESIGN"] = IDRET_DESIGN; // deprecated
+	constants["CANCEL"] = IDRET_CANCEL; // deprecated
+	constants["CAMP_CLEAN"] = CAMP_CLEAN;
+	constants["CAMP_BASE"] = CAMP_BASE;
+	constants["CAMP_WALLS"] = CAMP_WALLS;
+	constants["NO_ALLIANCES"] = NO_ALLIANCES;
+	constants["ALLIANCES"] = ALLIANCES;
+	constants["ALLIANCES_TEAMS"] = ALLIANCES_TEAMS;
+	constants["ALLIANCES_UNSHARED"] = ALLIANCES_UNSHARED;
+	constants["BEING_BUILT"] = SS_BEING_BUILT;
+	constants["BUILT"] = SS_BUILT;
+	constants["DROID_CONSTRUCT"] = DROID_CONSTRUCT;
+	constants["DROID_WEAPON"] = DROID_WEAPON;
+	constants["DROID_PERSON"] = DROID_PERSON;
+	constants["DROID_REPAIR"] = DROID_REPAIR;
+	constants["DROID_SENSOR"] = DROID_SENSOR;
+	constants["DROID_ECM"] = DROID_ECM;
+	constants["DROID_CYBORG"] = DROID_CYBORG;
+	constants["DROID_TRANSPORTER"] = DROID_TRANSPORTER;
+	constants["DROID_SUPERTRANSPORTER"] = DROID_SUPERTRANSPORTER;
+	constants["DROID_COMMAND"] = DROID_COMMAND;
+	constants["DROID_ANY"] = DROID_ANY;
+	constants["OIL_RESOURCE"] = FEAT_OIL_RESOURCE;
+	constants["OIL_DRUM"] = FEAT_OIL_DRUM;
+	constants["ARTIFACT"] = FEAT_GEN_ARTE;
+	constants["BUILDING"] = FEAT_BUILDING;
+	constants["HQ"] = REF_HQ;
+	constants["FACTORY"] = REF_FACTORY;
+	constants["POWER_GEN"] = REF_POWER_GEN;
+	constants["RESOURCE_EXTRACTOR"] = REF_RESOURCE_EXTRACTOR;
+	constants["DEFENSE"] = REF_DEFENSE;
+	constants["LASSAT"] = REF_LASSAT;
+	constants["WALL"] = REF_WALL;
+	constants["RESEARCH_LAB"] = REF_RESEARCH;
+	constants["REPAIR_FACILITY"] = REF_REPAIR_FACILITY;
+	constants["CYBORG_FACTORY"] = REF_CYBORG_FACTORY;
+	constants["VTOL_FACTORY"] = REF_VTOL_FACTORY;
+	constants["REARM_PAD"] = REF_REARM_PAD;
+	constants["SAT_UPLINK"] = REF_SAT_UPLINK;
+	constants["GATE"] = REF_GATE;
+	constants["COMMAND_CONTROL"] = REF_COMMAND_CONTROL;
+	constants["EASY"] = static_cast<int8_t>(AIDifficulty::EASY);
+	constants["MEDIUM"] = static_cast<int8_t>(AIDifficulty::MEDIUM);
+	constants["HARD"] = static_cast<int8_t>(AIDifficulty::HARD);
+	constants["INSANE"] = static_cast<int8_t>(AIDifficulty::INSANE);
+	constants["STRUCTURE"] = OBJ_STRUCTURE;
+	constants["DROID"] = OBJ_DROID;
+	constants["FEATURE"] = OBJ_FEATURE;
+	constants["ALL_PLAYERS"] = ALL_PLAYERS;
+	constants["ALLIES"] = ALLIES;
+	constants["ENEMIES"] = ENEMIES;
+	constants["POSITION"] = SCRIPT_POSITION;
+	constants["AREA"] = SCRIPT_AREA;
+	constants["RADIUS"] = SCRIPT_RADIUS;
+	constants["GROUP"] = SCRIPT_GROUP;
+	constants["PLAYER_DATA"] = SCRIPT_PLAYER;
+	constants["RESEARCH_DATA"] = SCRIPT_RESEARCH;
+	constants["LZ_COMPROMISED_TIME"] = JS_LZ_COMPROMISED_TIME;
+	constants["OBJECT_FLAG_UNSELECTABLE"] = OBJECT_FLAG_UNSELECTABLE;
+	// the constants below are subject to change without notice...
+	constants["PROX_MSG"] = MSG_PROXIMITY;
+	constants["CAMP_MSG"] = MSG_CAMPAIGN;
+	constants["MISS_MSG"] = MSG_MISSION;
+	constants["RES_MSG"] = MSG_RESEARCH;
+	constants["LDS_EXPAND_LIMBO"] = static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO);
+
+	return constants;
+}
+
+nlohmann::json constructStaticPlayerData()
+{
+	// Static knowledge about players
+	//== * ```playerData``` An array of information about the players in a game. Each item in the array is an object
+	//== containing the following variables:
+	//==   * ```difficulty``` (see ```difficulty``` global constant)
+	//==   * ```colour``` number describing the colour of the player
+	//==   * ```position``` number describing the position of the player in the game's setup screen
+	//==   * ```isAI``` whether the player is an AI (3.2+ only)
+	//==   * ```isHuman``` whether the player is human (3.2+ only)
+	//==   * ```name``` the name of the player (3.2+ only)
+	//==   * ```team``` the number of the team the player is part of
+	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		nlohmann::json vector = nlohmann::json::object();
+		vector["name"] = NetPlay.players[i].name;
+		vector["difficulty"] = static_cast<int8_t>(NetPlay.players[i].difficulty);
+		vector["colour"] = NetPlay.players[i].colour;
+		vector["position"] = NetPlay.players[i].position;
+		vector["team"] = NetPlay.players[i].team;
+		vector["isAI"] = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
+		vector["isHuman"] = NetPlay.players[i].allocated;
+		vector["type"] = SCRIPT_PLAYER;
+		playerData.push_back(vector);
+	}
+	return playerData;
+}
+
+nlohmann::json constructDerrickPositions()
+{
+	// Static map knowledge about start positions
+	//== * ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
+	//== object containing the x and y variables for a derrick.
+	nlohmann::json derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
+	for (int i = 0; i < derricks.size(); i++)
+	{
+		nlohmann::json vector = nlohmann::json::object();
+		vector["x"] = map_coord(derricks[i].x);
+		vector["y"] = map_coord(derricks[i].y);
+		vector["type"] = SCRIPT_POSITION;
+		derrickPositions.push_back(vector);
+	}
+	return derrickPositions;
+}
+
+nlohmann::json constructStartPositions()
+{
+	// Static map knowledge about start positions
+	//== * ```startPositions``` An array of player start positions on the current map. Each item in the array is an
+	//== object containing the x and y variables for a player start position.
+	nlohmann::json startPositions = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		nlohmann::json vector = nlohmann::json::object();
+		vector["x"] = map_coord(positions[i].x);
+		vector["y"] = map_coord(positions[i].y);
+		vector["type"] = SCRIPT_POSITION;
+		startPositions.push_back(vector);
+	}
+	return startPositions;
 }
 
 bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
@@ -4303,192 +4656,9 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	auto insert_result = groups.insert(ENGINEMAP::value_type(engine, psMap));
 	ASSERT(insert_result.second, "Entry for this engine %p already exists in ENGINEMAP!", static_cast<void *>(engine));
 
-	/// Register 'Stats' object. It is a read-only representation of basic game component states.
-	//== * ```Stats``` A sparse, read-only array containing rules information for game entity types.
-	//== (For now only the highest level member attributes are documented here. Use the 'jsdebug' cheat
-	//== to see them all.)
-	//== These values are defined:
-	QScriptValue stats = engine->newObject();
-	{
-		//==   * ```Body``` Droid bodies
-		QScriptValue bodybase = engine->newObject();
-		for (int j = 0; j < numBodyStats; j++)
-		{
-			BODY_STATS *psStats = asBodyStats + j;
-			QScriptValue body = register_common(engine, psStats);
-			body.setProperty("Power", psStats->base.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("Armour", psStats->base.armour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("Thermal", psStats->base.thermal, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("Resistance", psStats->base.resistance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("Size", psStats->size, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("WeaponSlots", psStats->weaponSlots, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			body.setProperty("BodyClass", QString::fromUtf8(psStats->bodyClass.toUtf8().c_str()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			bodybase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Sensor``` Sensor turrets
-		QScriptValue sensorbase = engine->newObject();
-		for (int j = 0; j < numSensorStats; j++)
-		{
-			SENSOR_STATS *psStats = asSensorStats + j;
-			QScriptValue sensor = register_common(engine, psStats);
-			sensor.setProperty("Range", psStats->base.range, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			sensorbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
-		QScriptValue ecmbase = engine->newObject();
-		for (int j = 0; j < numECMStats; j++)
-		{
-			ECM_STATS *psStats = asECMStats + j;
-			QScriptValue ecm = register_common(engine, psStats);
-			ecm.setProperty("Range", psStats->base.range, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			ecmbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Propulsion``` Propulsions
-		QScriptValue propbase = engine->newObject();
-		for (int j = 0; j < numPropulsionStats; j++)
-		{
-			PROPULSION_STATS *psStats = asPropulsionStats + j;
-			QScriptValue v = register_common(engine, psStats);
-			v.setProperty("HitpointPctOfBody", psStats->base.hitpointPctOfBody, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			v.setProperty("MaxSpeed", psStats->maxSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			v.setProperty("TurnSpeed", psStats->turnSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			v.setProperty("SpinSpeed", psStats->spinSpeed, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			v.setProperty("SpinAngle", psStats->spinAngle, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			v.setProperty("SkidDeceleration", psStats->skidDeceleration, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			v.setProperty("Acceleration", psStats->acceleration, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			v.setProperty("Deceleration", psStats->deceleration, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			propbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), v, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Propulsion", propbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
-		QScriptValue repairbase = engine->newObject();
-		for (int j = 0; j < numRepairStats; j++)
-		{
-			REPAIR_STATS *psStats = asRepairStats + j;
-			QScriptValue repair = register_common(engine, psStats);
-			repair.setProperty("RepairPoints", psStats->base.repairPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			repairbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Construct``` Constructor turrets (eg for trucks)
-		QScriptValue conbase = engine->newObject();
-		for (int j = 0; j < numConstructStats; j++)
-		{
-			CONSTRUCT_STATS *psStats = asConstructStats + j;
-			QScriptValue con = register_common(engine, psStats);
-			con.setProperty("ConstructorPoints", psStats->base.constructPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			conbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Brain``` Brains
-		QScriptValue brainbase = engine->newObject();
-		for (int j = 0; j < numBrainStats; j++)
-		{
-			BRAIN_STATS *psStats = asBrainStats + j;
-			QScriptValue br = register_common(engine, psStats);
-			br.setProperty("BaseCommandLimit", psStats->base.maxDroids, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			br.setProperty("CommandLimitByLevel", psStats->base.maxDroidsMult, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			QScriptValue thresholds = engine->newArray(psStats->base.rankThresholds.size());
-			for (int x = 0; x < psStats->base.rankThresholds.size(); x++)
-			{
-				thresholds.setProperty(x, psStats->base.rankThresholds.at(x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			}
-			br.setProperty("RankThresholds", thresholds, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			QScriptValue ranks = engine->newArray(psStats->rankNames.size());
-			for (int x = 0; x < psStats->rankNames.size(); x++)
-			{
-				ranks.setProperty(x, QString::fromStdString(psStats->rankNames.at(x)), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			}
-			br.setProperty("RankNames", ranks, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			brainbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), br, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Brain", brainbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Weapon``` Weapon turrets
-		QScriptValue wbase = engine->newObject();
-		for (int j = 0; j < numWeaponStats; j++)
-		{
-			WEAPON_STATS *psStats = asWeaponStats + j;
-			QScriptValue weap = register_common(engine, psStats);
-			weap.setProperty("MaxRange", psStats->base.maxRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("ShortRange", psStats->base.shortRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("MinRange", psStats->base.minRange, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("HitChance", psStats->base.hitChance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("ShortHitChance", psStats->base.shortHitChance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("FirePause", psStats->base.firePause, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("ReloadTime", psStats->base.reloadTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("Rounds", psStats->base.numRounds, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("Damage", psStats->base.damage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("MinimumDamage", psStats->base.minimumDamage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("RadiusDamage", psStats->base.radiusDamage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("RepeatDamage", psStats->base.periodicalDamage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("RepeatRadius", psStats->base.periodicalDamageRadius, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("RepeatTime", psStats->base.periodicalDamageTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("Radius", psStats->base.radius, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("ImpactType", psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT",
-			                 QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("RepeatType", psStats->periodicalDamageWeaponClass == WC_KINETIC ? "KINETIC" : "HEAT",
-			                 QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("ImpactClass", getWeaponSubClass(psStats->weaponSubClass),
-			                 QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("RepeatClass", getWeaponSubClass(psStats->periodicalDamageWeaponSubClass),
-			                 QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			weap.setProperty("FireOnMove", psStats->fireOnMove, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			wbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```WeaponClass``` Defined weapon classes
-		QScriptValue weaptypes = engine->newArray(WSC_NUM_WEAPON_SUBCLASSES);
-		for (int j = 0; j < WSC_NUM_WEAPON_SUBCLASSES; j++)
-		{
-			weaptypes.setProperty(j, getWeaponSubClass((WEAPON_SUBCLASS)j), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("WeaponClass", weaptypes, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Building``` Buildings
-		QScriptValue structbase = engine->newObject();
-		for (int j = 0; j < numStructureStats; j++)
-		{
-			STRUCTURE_STATS *psStats = asStructureStats + j;
-			QScriptValue strct = engine->newObject();
-			strct.setProperty("Id", WzStringToQScriptValue(engine, psStats->id), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_WALLCORNER
-			    || psStats->type == REF_GENERIC || psStats->type == REF_GATE)
-			{
-				strct.setProperty("Type", "Wall", QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			}
-			else if (psStats->type != REF_DEMOLISH)
-			{
-				strct.setProperty("Type", "Structure", QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			}
-			else
-			{
-				strct.setProperty("Type", "Demolish", QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			}
-			strct.setProperty("ResearchPoints", psStats->base.research, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("RepairPoints", psStats->base.repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("PowerPoints", psStats->base.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("ProductionPoints", psStats->base.production, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("RearmPoints", psStats->base.rearm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("Armour", psStats->base.armour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("Thermal", psStats->base.thermal, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("HitPoints", psStats->base.hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			strct.setProperty("Resistance", psStats->base.resistance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			structbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		stats.setProperty("Building", structbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	}
-	engine->globalObject().setProperty("Stats", stats, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	// Register 'Stats' object. It is a read-only representation of basic game component states.
+	nlohmann::json stats = constructStatsObject();
+	engine->globalObject().setProperty("Stats", mapJsonToQScriptValue(engine, stats, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	//== * ```Upgrades``` A special array containing per-player rules information for game entity types,
 	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
@@ -4820,102 +4990,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("fireWeaponAtObj", engine->newFunction(js_fireWeaponAtObj)); // WZAPI
 
 	// Set some useful constants
-	engine->globalObject().setProperty("TER_WATER", TER_WATER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("TER_CLIFFFACE", TER_CLIFFFACE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("WEATHER_CLEAR", WT_NONE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("WEATHER_RAIN", WT_RAINING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("WEATHER_SNOW", WT_SNOWING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_OBSERVE", DORDER_OBSERVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_RECOVER", DORDER_RECOVER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_MOVE", DORDER_MOVE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_SCOUT", DORDER_SCOUT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_BUILD", DORDER_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_HELPBUILD", DORDER_HELPBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_LINEBUILD", DORDER_LINEBUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_REPAIR", DORDER_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_PATROL", DORDER_PATROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_DEMOLISH", DORDER_DEMOLISH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_EMBARK", DORDER_EMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_DISEMBARK", DORDER_DISEMBARK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_FIRESUPPORT", DORDER_FIRESUPPORT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_COMMANDERSUPPORT", DORDER_COMMANDERSUPPORT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_HOLD", DORDER_HOLD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_RTR", DORDER_RTR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_RTB", DORDER_RTB, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_STOP", DORDER_STOP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_REARM", DORDER_REARM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DORDER_RECYCLE", DORDER_RECYCLE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
-	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
-	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
-	engine->globalObject().setProperty("RESEARCH", IDRET_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
-	engine->globalObject().setProperty("INTELMAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
-	engine->globalObject().setProperty("DESIGN", IDRET_DESIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
-	engine->globalObject().setProperty("CANCEL", IDRET_CANCEL, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
-	engine->globalObject().setProperty("CAMP_CLEAN", CAMP_CLEAN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CAMP_BASE", CAMP_BASE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CAMP_WALLS", CAMP_WALLS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("NO_ALLIANCES", NO_ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALLIANCES", ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALLIANCES_TEAMS", ALLIANCES_TEAMS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALLIANCES_UNSHARED", ALLIANCES_UNSHARED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("BEING_BUILT", SS_BEING_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("BUILT", SS_BUILT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_CONSTRUCT", DROID_CONSTRUCT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_WEAPON", DROID_WEAPON, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_PERSON", DROID_PERSON, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_REPAIR", DROID_REPAIR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_SENSOR", DROID_SENSOR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_ECM", DROID_ECM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_CYBORG", DROID_CYBORG, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_TRANSPORTER", DROID_TRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_SUPERTRANSPORTER", DROID_SUPERTRANSPORTER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_COMMAND", DROID_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID_ANY", DROID_ANY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("OIL_RESOURCE", FEAT_OIL_RESOURCE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("OIL_DRUM", FEAT_OIL_DRUM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ARTIFACT", FEAT_GEN_ARTE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("BUILDING", FEAT_BUILDING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("HQ", REF_HQ, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("FACTORY", REF_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("POWER_GEN", REF_POWER_GEN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RESOURCE_EXTRACTOR", REF_RESOURCE_EXTRACTOR, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DEFENSE", REF_DEFENSE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("LASSAT", REF_LASSAT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("WALL", REF_WALL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RESEARCH_LAB", REF_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REPAIR_FACILITY", REF_REPAIR_FACILITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CYBORG_FACTORY", REF_CYBORG_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("VTOL_FACTORY", REF_VTOL_FACTORY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("REARM_PAD", REF_REARM_PAD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("SAT_UPLINK", REF_SAT_UPLINK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("GATE", REF_GATE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("COMMAND_CONTROL", REF_COMMAND_CONTROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("EASY", static_cast<int8_t>(AIDifficulty::EASY), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("MEDIUM", static_cast<int8_t>(AIDifficulty::MEDIUM), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("HARD", static_cast<int8_t>(AIDifficulty::HARD), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("INSANE", static_cast<int8_t>(AIDifficulty::INSANE), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("STRUCTURE", OBJ_STRUCTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DROID", OBJ_DROID, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALL_PLAYERS", ALL_PLAYERS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ALLIES", ALLIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ENEMIES", ENEMIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("POSITION", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("AREA", SCRIPT_AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RADIUS", SCRIPT_RADIUS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("GROUP", SCRIPT_GROUP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("PLAYER_DATA", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RESEARCH_DATA", SCRIPT_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("LZ_COMPROMISED_TIME", JS_LZ_COMPROMISED_TIME, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("OBJECT_FLAG_UNSELECTABLE", OBJECT_FLAG_UNSELECTABLE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	// the constants below are subject to change without notice...
-	engine->globalObject().setProperty("PROX_MSG", MSG_PROXIMITY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CAMP_MSG", MSG_CAMPAIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("MISS_MSG", MSG_MISSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RES_MSG", MSG_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("LDS_EXPAND_LIMBO", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	setGlobalVariables(engine, getUsefulConstants());
 
 	/// Place to store group sizes
 	//== * ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
@@ -4923,56 +4998,14 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("groupSizes", engine->newObject());
 
 	// Static knowledge about players
-	//== * ```playerData``` An array of information about the players in a game. Each item in the array is an object
-	//== containing the following variables:
-	//==   * ```difficulty``` (see ```difficulty``` global constant)
-	//==   * ```colour``` number describing the colour of the player
-	//==   * ```position``` number describing the position of the player in the game's setup screen
-	//==   * ```isAI``` whether the player is an AI (3.2+ only)
-	//==   * ```isHuman``` whether the player is human (3.2+ only)
-	//==   * ```name``` the name of the player (3.2+ only)
-	//==   * ```team``` the number of the team the player is part of
-	QScriptValue playerData = engine->newArray(game.maxPlayers);
-	for (int i = 0; i < game.maxPlayers; i++)
-	{
-		QScriptValue vector = engine->newObject();
-		vector.setProperty("name", QString(NetPlay.players[i].name), QScriptValue::ReadOnly | QScriptValue::Undeletable);  // QString cast to work around bug in Qt5 QScriptValue(char *) constructor.
-		vector.setProperty("difficulty", static_cast<int8_t>(NetPlay.players[i].difficulty), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("colour", NetPlay.players[i].colour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("position", NetPlay.players[i].position, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("team", NetPlay.players[i].team, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("isAI", !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("isHuman", NetPlay.players[i].allocated, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("type", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		playerData.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	}
-	engine->globalObject().setProperty("playerData", playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	nlohmann::json playerData = constructStaticPlayerData();
+	engine->globalObject().setProperty("playerData", mapJsonToQScriptValue(engine, playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static map knowledge about start positions
-	//== * ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
-	//== object containing the x and y variables for a derrick.
-	//== * ```startPositions``` An array of player start positions on the current map. Each item in the array is an
-	//== object containing the x and y variables for a player start position.
-	QScriptValue startPositions = engine->newArray(game.maxPlayers);
-	for (int i = 0; i < game.maxPlayers; i++)
-	{
-		QScriptValue vector = engine->newObject();
-		vector.setProperty("x", map_coord(positions[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("y", map_coord(positions[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("type", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		startPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	}
-	QScriptValue derrickPositions = engine->newArray(derricks.size());
-	for (int i = 0; i < derricks.size(); i++)
-	{
-		QScriptValue vector = engine->newObject();
-		vector.setProperty("x", map_coord(derricks[i].x), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("y", map_coord(derricks[i].y), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		vector.setProperty("type", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		derrickPositions.setProperty(i, vector, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	}
-	engine->globalObject().setProperty("derrickPositions", derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("startPositions", startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	nlohmann::json startPositions = constructStartPositions();
+	nlohmann::json derrickPositions = constructDerrickPositions();
+	engine->globalObject().setProperty("derrickPositions", mapJsonToQScriptValue(engine, derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("startPositions", mapJsonToQScriptValue(engine, startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Clear previous log file
 	PHYSFS_delete(QString("logs/" + scriptName + ".log").toUtf8().constData());
