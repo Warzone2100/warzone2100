@@ -226,6 +226,16 @@ WZ_DECL_NONNULL(2, 3) bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py
 void setMouseWarp(bool value);
 bool getMouseWarp();
 
+/* Gamepad */
+
+void initGamepad();
+
+void processGamepad();
+
+/* Gamepad Buttons */
+
+int gamepadStartPressed();
+
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		KEY_LEFTARROW
 #define INPBUF_RIGHT		KEY_RIGHTARROW

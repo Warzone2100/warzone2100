@@ -108,7 +108,7 @@ static W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const 
 //
 bool CancelPressed()
 {
-	const bool cancel = keyPressed(KEY_ESC);
+	const bool cancel = keyPressed(KEY_ESC) || gamepadStartPressed();
 	if (cancel)
 	{
 		inputLoseFocus();	// clear the input buffer.
