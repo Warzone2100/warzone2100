@@ -1,32 +1,32 @@
-${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText "Bine ați venit în programul de instalare Warzone 2100!\r\n\r\nAcest asistent vă va ghida prin instalarea Warzone 2100.\r\n\r\nEste recomandat să închideți toate celelalte aplicații înainte de a continua această instalare. Acest lucru va face posibilă actualizarea fişierelor de sistem relevante fără a fi nevoie să reporniţi calculatorul.\r\n\r\nWarzone 2100 este 100% gratuit, program deschis cu sursă\r\n\r\nApăsați „Înainte” pentru a continua."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "Bine ați venit în programul de instalare portabil Warzone 2100!\r\n\r\nAcest asistent vă va ghida prin instalarea versiunii portabile de Warzone 2100.\r\n\r\nAceastă instalare este complet autonomă şi puteți dezinstala programul în orice moment prin ştergerea directorului.\r\n\r\nWarzone 2100 este 100% gratuit, program deschis cu sursă\r\n\r\nApăsați „Înainte” pentru a continua."
 
-${LangFileString} WZ_GPL_NEXT "Next"
+${LangFileString} WZ_GPL_NEXT "Înainte"
 
-${LangFileString} TEXT_SecBase "Core files"
-${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
+${LangFileString} TEXT_SecBase "Fişierele de bază"
+${LangFileString} DESC_SecBase "Fişierele de bază necesare pentru a rula Warzone 2100."
 
-${LangFileString} TEXT_SecFMVs "Videos"
-${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
+${LangFileString} TEXT_SecFMVs "Secvenţe"
+${LangFileString} DESC_SecFMVs "Descarcă şi instalează secvenţele din joc."
 
-${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngHi "Engleză (Calitate Ridicată)"
+${LangFileString} DESC_SecFMVs_EngHi "Descarcă şi instalează secvenţele în engleză, de înaltă calitate, din joc."
 
-${LangFileString} TEXT_SecFMVs_Eng "English"
-${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Eng "Engleză"
+${LangFileString} DESC_SecFMVs_Eng "Descarcă şi instalează secvenţele în engleză din joc."
 
-${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
-${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngLo "Engleză (Calitate Redusă)"
+${LangFileString} DESC_SecFMVs_EngLo "Descarcă şi instalează secvenţele în engleză, de calitate redusă, din joc."
 
-${LangFileString} TEXT_SecFMVs_Ger "German"
-${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Ger "Germană"
+${LangFileString} DESC_SecFMVs_Ger "Descarcă şi instalează secvenţele în germană din joc."
 
-${LangFileString} TEXT_SecNLS "Language files"
-${LangFileString} DESC_SecNLS "Support for languages other than English."
+${LangFileString} TEXT_SecNLS "Fişiere de limbă"
+${LangFileString} DESC_SecNLS "Suport pentru alte limbi în afara de engleză."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
-${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+${LangFileString} DESC_SecNLS_WinFonts "Include folderul Windows Fonts în calea de căutare. Activaţi această opţiune dacă vreţi să folosiţi fonturi personalizate în fișierul de configurare sau dacă aveţi probleme cu fontul standard. Poate fi mai lent în Vista și mai târziu!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} TEXT_SecMSSysLibraries "Biblioteci de legături dinamice importante de la Microsoft [DLL-uri]"
+${LangFileString} DESC_SecMSSysLibraries "Descărcați și instalați (sau actualizați) bibliotecile de sistem redistribuabile ale Microsoft Visual C++, de care unele componente ar avea nevoie să poată rula."
