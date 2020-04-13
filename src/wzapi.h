@@ -128,6 +128,97 @@ namespace wzapi
 		int32_t y;
 	};
 
+	class GameEntityRules
+	{
+	public:
+		typedef std::map<std::string, int> NameToTypeMap;
+		GameEntityRules(int player, int index, const NameToTypeMap& nameToTypeMap)
+		: player(player)
+		, index(index)
+		, propertyNameToTypeMap(nameToTypeMap)
+		{ }
+		GameEntityRules() { }
+	public:
+		using value_type = nlohmann::json;
+		value_type getPropertyValue(const wzapi::execution_context& context, const std::string& name) const;
+		value_type setPropertyValue(const wzapi::execution_context& context, const std::string& name, const value_type& newValue);
+	public:
+		inline NameToTypeMap::const_iterator begin() const
+		{
+			return propertyNameToTypeMap.cbegin();
+		}
+		inline NameToTypeMap::const_iterator end() const
+		{
+			return propertyNameToTypeMap.cend();
+		}
+		inline int getPlayer() const { return player; }
+		inline int getIndex() const { return index; }
+	private:
+		// context
+		int player = -1;
+		int index = -1;
+		NameToTypeMap propertyNameToTypeMap;
+	};
+
+	class GameEntityRuleContainer
+	{
+	public:
+		typedef std::string GameEntityName;
+	public:
+		GameEntityRuleContainer()
+		{ }
+		inline void addRules(const GameEntityName& statsName, GameEntityRules&& entityRules)
+		{
+			rules.emplace(statsName, std::move(entityRules));
+		}
+	public:
+		inline GameEntityRules& operator[](const GameEntityName& statsName)
+		{
+			return rules[statsName];
+		}
+		inline std::unordered_map<GameEntityName, GameEntityRules>::const_iterator begin() const
+		{
+			return rules.cbegin();
+		}
+		inline std::unordered_map<GameEntityName, GameEntityRules>::const_iterator end() const
+		{
+			return rules.cend();
+		}
+	private:
+		std::unordered_map<GameEntityName, GameEntityRules> rules;
+	};
+
+	class PerPlayerUpgrades
+	{
+	public:
+		typedef std::string GameEntityClass;
+	public:
+		PerPlayerUpgrades(int player)
+		: player(player)
+		{ }
+		inline void addGameEntity(const GameEntityClass& entityClass, GameEntityRuleContainer&& rulesContainer)
+		{
+			upgrades.emplace(entityClass, std::move(rulesContainer));
+		}
+	public:
+		inline GameEntityRuleContainer& operator[](const GameEntityClass& entityClass)
+		{
+			return upgrades[entityClass];
+		}
+		inline int getPlayer() const { return player; }
+		inline std::map<GameEntityClass, GameEntityRuleContainer>::const_iterator begin() const
+		{
+			return upgrades.cbegin();
+		}
+		inline std::map<GameEntityClass, GameEntityRuleContainer>::const_iterator end() const
+		{
+			return upgrades.cend();
+		}
+	private:
+		std::map<GameEntityClass, GameEntityRuleContainer> upgrades;
+		int player = 0;
+	};
+
 	#define MULTIPLAY_SYNCREQUEST_REQUIRED
 	#define MUTLIPLAY_UNSAFE
 	#define WZAPI_DEPRECATED
@@ -269,24 +360,9 @@ namespace wzapi
 	no_return_value fireWeaponAtObj(WZAPI_PARAMS(std::string weaponName, BASE_OBJECT *psObj, optional<int> _player));
 	bool setUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue));
 	nlohmann::json getUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index));
-}
 
-enum Scrcb {
-	SCRCB_FIRST = COMP_NUMCOMPONENTS,
-	SCRCB_RES = SCRCB_FIRST,  // Research upgrade
-	SCRCB_MODULE_RES,  // Research module upgrade
-	SCRCB_REP,  // Repair upgrade
-	SCRCB_POW,  // Power upgrade
-	SCRCB_MODULE_POW,  // And so on...
-	SCRCB_CON,
-	SCRCB_MODULE_CON,
-	SCRCB_REA,
-	SCRCB_ARM,
-	SCRCB_HEA,
-	SCRCB_ELW,
-	SCRCB_HIT,
-	SCRCB_LIMIT,
-	SCRCB_LAST = SCRCB_LIMIT
-};
+	// MARK: - Used for retrieving information to set up script instance environments
+	std::vector<PerPlayerUpgrades> getUpgradesObject();
+}
 
 #endif

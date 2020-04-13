@@ -2943,6 +2943,24 @@ static void dirtyAllStructures(int player)
 	}
 }
 
+enum Scrcb {
+	SCRCB_FIRST = COMP_NUMCOMPONENTS,
+	SCRCB_RES = SCRCB_FIRST,  // Research upgrade
+	SCRCB_MODULE_RES,  // Research module upgrade
+	SCRCB_REP,  // Repair upgrade
+	SCRCB_POW,  // Power upgrade
+	SCRCB_MODULE_POW,  // And so on...
+	SCRCB_CON,
+	SCRCB_MODULE_CON,
+	SCRCB_REA,
+	SCRCB_ARM,
+	SCRCB_HEA,
+	SCRCB_ELW,
+	SCRCB_HIT,
+	SCRCB_LIMIT,
+	SCRCB_LAST = SCRCB_LIMIT
+};
+
 bool wzapi::setUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue))
 {
 	int value = json_variant(newValue).toInt();
@@ -3562,4 +3580,204 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_PARAMS(int player, const std::string
 		}
 	}
 	return nlohmann::json();
+}
+
+
+wzapi::GameEntityRules::value_type wzapi::GameEntityRules::getPropertyValue(const wzapi::execution_context& context, const std::string& name) const
+{
+	auto it = propertyNameToTypeMap.find(name);
+	if (it == propertyNameToTypeMap.end())
+	{
+		// Failed to find `name`
+		return GameEntityRules::value_type();
+	}
+	int type = it->second;
+	return wzapi::getUpgradeStats(context, getPlayer(), name, type, getIndex());
+}
+
+wzapi::GameEntityRules::value_type wzapi::GameEntityRules::setPropertyValue(const wzapi::execution_context& context, const std::string& name, const value_type& newValue)
+{
+	auto it = propertyNameToTypeMap.find(name);
+	if (it == propertyNameToTypeMap.end())
+	{
+		// Failed to find `name`
+		return GameEntityRules::value_type();
+	}
+	int type = it->second;
+	return wzapi::setUpgradeStats(context, getPlayer(), name, type, getIndex(), newValue);
+}
+
+std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
+{
+	//== * ```Upgrades``` A special array containing per-player rules information for game entity types,
+	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
+	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
+	//== These values are defined:
+	std::vector<PerPlayerUpgrades> upgrades;
+	upgrades.reserve(MAX_PLAYERS);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+	{
+		upgrades.push_back(PerPlayerUpgrades(i));
+		PerPlayerUpgrades& node = upgrades.back();
+
+		//==   * ```Body``` Droid bodies
+		GameEntityRuleContainer bodybase;
+		for (int j = 0; j < numBodyStats; j++)
+		{
+			BODY_STATS *psStats = asBodyStats + j;
+			GameEntityRules body(i, j, {
+				{"HitPoints", COMP_BODY},
+				{"HitPointPct", COMP_BODY},
+				{"Power", COMP_BODY},
+				{"Armour", COMP_BODY},
+				{"Thermal", COMP_BODY},
+				{"Resistance", COMP_BODY},
+			});
+			bodybase.addRules(psStats->name.toUtf8(), std::move(body));
+		}
+		node.addGameEntity("Body", std::move(bodybase));
+
+		//==   * ```Sensor``` Sensor turrets
+		GameEntityRuleContainer sensorbase;
+		for (int j = 0; j < numSensorStats; j++)
+		{
+			SENSOR_STATS *psStats = asSensorStats + j;
+			GameEntityRules sensor(i, j, {
+				{"HitPoints", COMP_SENSOR},
+				{"HitPointPct", COMP_SENSOR},
+				{"Range", COMP_SENSOR},
+			});
+			sensorbase.addRules(psStats->name.toUtf8(), std::move(sensor));
+		}
+		node.addGameEntity("Sensor", std::move(sensorbase));
+
+		//==   * ```Propulsion``` Propulsions
+		GameEntityRuleContainer propbase;
+		for (int j = 0; j < numPropulsionStats; j++)
+		{
+			PROPULSION_STATS *psStats = asPropulsionStats + j;
+			GameEntityRules v(i, j, {
+				{"HitPoints", COMP_PROPULSION},
+				{"HitPointPct", COMP_PROPULSION},
+				{"HitPointPctOfBody", COMP_PROPULSION},
+			});
+			propbase.addRules(psStats->name.toUtf8(), std::move(v));
+		}
+		node.addGameEntity("Propulsion", std::move(propbase));
+
+		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
+		GameEntityRuleContainer ecmbase;
+		for (int j = 0; j < numECMStats; j++)
+		{
+			ECM_STATS *psStats = asECMStats + j;
+			GameEntityRules ecm(i, j, {
+				{"Range", COMP_ECM},
+				{"HitPoints", COMP_ECM},
+				{"HitPointPct", COMP_ECM},
+			});
+			ecmbase.addRules(psStats->name.toUtf8(), std::move(ecm));
+		}
+		node.addGameEntity("ECM", std::move(ecmbase));
+
+		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
+		GameEntityRuleContainer repairbase;
+		for (int j = 0; j < numRepairStats; j++)
+		{
+			REPAIR_STATS *psStats = asRepairStats + j;
+			GameEntityRules repair(i, j, {
+				{"RepairPoints", COMP_REPAIRUNIT},
+				{"HitPoints", COMP_REPAIRUNIT},
+				{"HitPointPct", COMP_REPAIRUNIT},
+			});
+			repairbase.addRules(psStats->name.toUtf8(), std::move(repair));
+		}
+		node.addGameEntity("Repair", std::move(repairbase));
+
+		//==   * ```Construct``` Constructor turrets (eg for trucks)
+		GameEntityRuleContainer conbase;
+		for (int j = 0; j < numConstructStats; j++)
+		{
+			CONSTRUCT_STATS *psStats = asConstructStats + j;
+			GameEntityRules con(i, j, {
+				{"ConstructorPoints", COMP_CONSTRUCT},
+				{"HitPoints", COMP_CONSTRUCT},
+				{"HitPointPct", COMP_CONSTRUCT},
+			});
+			conbase.addRules(psStats->name.toUtf8(), std::move(con));
+		}
+		node.addGameEntity("Construct", std::move(conbase));
+
+		//==   * ```Brain``` Brains
+		//== BaseCommandLimit: How many droids a commander can command. CommandLimitByLevel: How many extra droids
+		//== a commander can command for each of its rank levels. RankThresholds: An array describing how many
+		//== kills are required for this brain to level up to the next rank. To alter this from scripts, you must
+		//== set the entire array at once. Setting each item in the array will not work at the moment.
+		GameEntityRuleContainer brainbase;
+		for (int j = 0; j < numBrainStats; j++)
+		{
+			BRAIN_STATS *psStats = asBrainStats + j;
+			GameEntityRules br(i, j, {
+				{"BaseCommandLimit", COMP_BRAIN},
+				{"CommandLimitByLevel", COMP_BRAIN},
+				{"RankThresholds", COMP_BRAIN},
+				{"HitPoints", COMP_BRAIN},
+				{"HitPointPct", COMP_BRAIN},
+			});
+			brainbase.addRules(psStats->name.toUtf8(), std::move(br));
+		}
+		node.addGameEntity("Brain", std::move(brainbase));
+
+		//==   * ```Weapon``` Weapon turrets
+		GameEntityRuleContainer wbase;
+		for (int j = 0; j < numWeaponStats; j++)
+		{
+			WEAPON_STATS *psStats = asWeaponStats + j;
+			GameEntityRules weap(i, j, {
+				{"MaxRange", COMP_WEAPON},
+				{"ShortRange", COMP_WEAPON},
+				{"MinRange", COMP_WEAPON},
+				{"HitChance", COMP_WEAPON},
+				{"ShortHitChance", COMP_WEAPON},
+				{"FirePause", COMP_WEAPON},
+				{"ReloadTime", COMP_WEAPON},
+				{"Rounds", COMP_WEAPON},
+				{"Radius", COMP_WEAPON},
+				{"Damage", COMP_WEAPON},
+				{"MinimumDamage", COMP_WEAPON},
+				{"RadiusDamage", COMP_WEAPON},
+				{"RepeatDamage", COMP_WEAPON},
+				{"RepeatTime", COMP_WEAPON},
+				{"RepeatRadius", COMP_WEAPON},
+				{"HitPoints", COMP_WEAPON},
+				{"HitPointPct", COMP_WEAPON},
+			});
+			wbase.addRules(psStats->name.toUtf8(), std::move(weap));
+		}
+		node.addGameEntity("Weapon", std::move(wbase));
+
+		//==   * ```Building``` Buildings
+		GameEntityRuleContainer structbase;
+		for (int j = 0; j < numStructureStats; j++)
+		{
+			STRUCTURE_STATS *psStats = asStructureStats + j;
+			GameEntityRules strct(i, j, {
+				{"ResearchPoints", SCRCB_RES},
+				{"ModuleResearchPoints", SCRCB_MODULE_RES},
+				{"RepairPoints", SCRCB_REP},
+				{"PowerPoints", SCRCB_POW},
+				{"ModulePowerPoints", SCRCB_MODULE_POW},
+				{"ProductionPoints", SCRCB_CON},
+				{"ModuleProductionPoints", SCRCB_MODULE_CON},
+				{"RearmPoints", SCRCB_REA},
+				{"Armour", SCRCB_ARM},
+				{"Resistance", SCRCB_ELW},
+				{"Thermal", SCRCB_HEA},
+				{"HitPoints", SCRCB_HIT},
+				{"Limit", SCRCB_LIMIT},
+			});
+			structbase.addRules(psStats->name.toUtf8(), std::move(strct));
+		}
+		node.addGameEntity("Building", std::move(structbase));
+	}
+	return upgrades;
 }
