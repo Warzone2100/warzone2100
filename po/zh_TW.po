@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-10 23:54\n"
+"POT-Creation-Date: 2020-04-05 12:49+0000\n"
+"PO-Revision-Date: 2020-04-13 18:55\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -4087,12 +4087,12 @@ msgstr ""
 #: data/base/script/tutorial.js:251
 #: data/base/script/tutorial.js:510
 #: data/mp/multiplay/skirmish/rules.js:177
-#: src/challenge.cpp:230
+#: src/challenge.cpp:217
 #: src/hci.cpp:2964
 #: src/hci.cpp:3685
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
-#: src/loadsave.cpp:258
+#: src/loadsave.cpp:245
 #: src/multimenu.cpp:475
 #: src/multimenu.cpp:1208
 #: src/transporter.cpp:201
@@ -5573,63 +5573,63 @@ msgid "Any time, big boss!"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:29
-#: src/multiint.cpp:1279
-#: src/multiint.cpp:1282
+#: src/multiint.cpp:1323
+#: src/multiint.cpp:1326
 msgid "Scavengers"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:30
-#: src/multiint.cpp:1284
+#: src/multiint.cpp:1328
 msgid "No Scavengers"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:35
-#: src/multiint.cpp:1291
+#: src/multiint.cpp:1335
 msgid "No Alliances"
 msgstr "不允許同盟"
 
 #: data/mp/multiplay/skirmish/rules.js:36
-#: src/multiint.cpp:1292
+#: src/multiint.cpp:1336
 msgid "Allow Alliances"
 msgstr "允許同盟"
 
 #: data/mp/multiplay/skirmish/rules.js:37
-#: src/multiint.cpp:1294
+#: src/multiint.cpp:1338
 msgid "Locked Teams"
 msgstr "鎖定同盟模式"
 
 #: data/mp/multiplay/skirmish/rules.js:38
-#: src/multiint.cpp:1293
+#: src/multiint.cpp:1337
 msgid "Locked Teams, No Shared Research"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
-#: src/multiint.cpp:1301
+#: src/multiint.cpp:1345
 msgid "Low Power Levels"
 msgstr "生產能源速度：慢"
 
 #: data/mp/multiplay/skirmish/rules.js:45
-#: src/multiint.cpp:1302
+#: src/multiint.cpp:1346
 msgid "Medium Power Levels"
 msgstr "生產能源速度：中"
 
 #: data/mp/multiplay/skirmish/rules.js:46
-#: src/multiint.cpp:1303
+#: src/multiint.cpp:1347
 msgid "High Power Levels"
 msgstr "生產能源速度：快"
 
 #: data/mp/multiplay/skirmish/rules.js:52
-#: src/multiint.cpp:1310
+#: src/multiint.cpp:1354
 msgid "Start with No Bases"
 msgstr "開始時無基地"
 
 #: data/mp/multiplay/skirmish/rules.js:53
-#: src/multiint.cpp:1311
+#: src/multiint.cpp:1355
 msgid "Start with Bases"
 msgstr "開始時有基地"
 
 #: data/mp/multiplay/skirmish/rules.js:54
-#: src/multiint.cpp:1312
+#: src/multiint.cpp:1356
 msgid "Start with Advanced Bases"
 msgstr "開始時具規模基地"
 
@@ -14858,7 +14858,7 @@ msgid "Player dropped"
 msgstr ""
 
 #: src/display3d.cpp:684
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
@@ -14871,16 +14871,16 @@ msgstr ""
 msgid "Setting zoom to %.0f"
 msgstr ""
 
-#: src/display.cpp:1514
+#: src/display.cpp:1511
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.cpp:1530
+#: src/display.cpp:1527
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr ""
 
-#: src/display.cpp:1692
+#: src/display.cpp:1689
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr ""
@@ -14895,31 +14895,31 @@ msgstr ""
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.cpp:1923
+#: src/droid.cpp:1922
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.cpp:1932
+#: src/droid.cpp:1931
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.cpp:1943
+#: src/droid.cpp:1942
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.cpp:1947
+#: src/droid.cpp:1946
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.cpp:3056
+#: src/droid.cpp:3055
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -15008,13 +15008,13 @@ msgstr "教學模式"
 #: src/frontend.cpp:371
 #: src/frontend.cpp:417
 #: src/frontend.cpp:615
-#: src/frontend.cpp:688
-#: src/frontend.cpp:816
-#: src/frontend.cpp:989
-#: src/frontend.cpp:1263
-#: src/frontend.cpp:1605
-#: src/frontend.cpp:1757
-#: src/frontend.cpp:1777
+#: src/frontend.cpp:686
+#: src/frontend.cpp:814
+#: src/frontend.cpp:987
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1603
+#: src/frontend.cpp:1755
+#: src/frontend.cpp:1775
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
@@ -15078,186 +15078,186 @@ msgstr "加入遊戲"
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:681
-#: src/multiint.cpp:1223
+#: src/frontend.cpp:679
+#: src/multiint.cpp:1267
 msgid "OPTIONS"
 msgstr "選項"
 
-#: src/frontend.cpp:682
+#: src/frontend.cpp:680
 msgid "Game Options"
 msgstr "遊戲選項"
 
-#: src/frontend.cpp:683
+#: src/frontend.cpp:681
 #: src/ingameop.cpp:479
 msgid "Graphics Options"
 msgstr "圖形選項"
 
-#: src/frontend.cpp:684
+#: src/frontend.cpp:682
 #: src/ingameop.cpp:482
 msgid "Video Options"
 msgstr "顯示選項"
 
-#: src/frontend.cpp:685
+#: src/frontend.cpp:683
 msgid "Audio / Zoom Options"
 msgstr ""
 
-#: src/frontend.cpp:686
+#: src/frontend.cpp:684
 #: src/ingameop.cpp:489
 msgid "Mouse Options"
 msgstr "滑鼠選項"
 
-#: src/frontend.cpp:687
+#: src/frontend.cpp:685
 #: src/ingameop.cpp:494
 msgid "Key Mappings"
 msgstr "鍵盤配置"
 
-#: src/frontend.cpp:738
+#: src/frontend.cpp:736
 msgid "1×"
 msgstr ""
 
-#: src/frontend.cpp:739
+#: src/frontend.cpp:737
 msgid "2×"
 msgstr ""
 
-#: src/frontend.cpp:740
-#: src/frontend.cpp:1120
+#: src/frontend.cpp:738
+#: src/frontend.cpp:1118
 msgid "Fullscreen"
 msgstr "全螢幕"
 
-#: src/frontend.cpp:741
-#: src/frontend.cpp:752
-#: src/frontend.cpp:903
-#: src/frontend.cpp:1683
+#: src/frontend.cpp:739
+#: src/frontend.cpp:750
+#: src/frontend.cpp:901
+#: src/frontend.cpp:1681
 msgid "Unsupported"
 msgstr ""
 
-#: src/frontend.cpp:749
-#: src/frontend.cpp:758
-#: src/frontend.cpp:763
-#: src/frontend.cpp:1127
-#: src/frontend.cpp:1166
-#: src/frontend.cpp:1532
-#: src/frontend.cpp:1537
-#: src/frontend.cpp:1542
-#: src/frontend.cpp:1552
+#: src/frontend.cpp:747
+#: src/frontend.cpp:756
+#: src/frontend.cpp:761
+#: src/frontend.cpp:1125
+#: src/frontend.cpp:1164
+#: src/frontend.cpp:1530
+#: src/frontend.cpp:1535
+#: src/frontend.cpp:1540
+#: src/frontend.cpp:1550
 msgid "Off"
 msgstr "關閉"
 
-#: src/frontend.cpp:750
+#: src/frontend.cpp:748
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:751
-#: src/multiplay.cpp:1897
+#: src/frontend.cpp:749
+#: src/multiplay.cpp:1909
 msgid "Black"
 msgstr "黑色"
 
-#: src/frontend.cpp:758
-#: src/frontend.cpp:763
-#: src/frontend.cpp:1166
-#: src/frontend.cpp:1532
-#: src/frontend.cpp:1537
-#: src/frontend.cpp:1542
-#: src/frontend.cpp:1552
+#: src/frontend.cpp:756
+#: src/frontend.cpp:761
+#: src/frontend.cpp:1164
+#: src/frontend.cpp:1530
+#: src/frontend.cpp:1535
+#: src/frontend.cpp:1540
+#: src/frontend.cpp:1550
 msgid "On"
 msgstr "開啟"
 
-#: src/frontend.cpp:768
+#: src/frontend.cpp:766
 msgid "Rotating"
 msgstr ""
 
-#: src/frontend.cpp:768
+#: src/frontend.cpp:766
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:773
+#: src/frontend.cpp:771
 msgid "Instant"
 msgstr ""
 
-#: src/frontend.cpp:773
+#: src/frontend.cpp:771
 msgid "Tracked"
 msgstr ""
 
-#: src/frontend.cpp:786
+#: src/frontend.cpp:784
 #: src/ingameop.cpp:517
 msgid "Video Playback"
 msgstr "播放影片"
 
-#: src/frontend.cpp:790
+#: src/frontend.cpp:788
 #: src/ingameop.cpp:522
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:795
+#: src/frontend.cpp:793
 #: src/ingameop.cpp:527
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/frontend.cpp:800
+#: src/frontend.cpp:798
 #: src/ingameop.cpp:532
 msgid "Shadows"
 msgstr "影子"
 
-#: src/frontend.cpp:804
+#: src/frontend.cpp:802
 #: src/ingameop.cpp:537
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:808
+#: src/frontend.cpp:806
 #: src/ingameop.cpp:542
 msgid "Radar Jump"
 msgstr ""
 
-#: src/frontend.cpp:812
+#: src/frontend.cpp:810
 msgid "GRAPHICS OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:906
+#: src/frontend.cpp:904
 msgid "Disabled"
 msgstr ""
 
-#: src/frontend.cpp:909
+#: src/frontend.cpp:907
 msgid "Enabled"
 msgstr ""
 
-#: src/frontend.cpp:913
-#: src/frontend.cpp:919
+#: src/frontend.cpp:911
+#: src/frontend.cpp:917
 msgid "Auto"
 msgstr ""
 
-#: src/frontend.cpp:954
+#: src/frontend.cpp:952
 #: src/ingameop.cpp:159
 msgid "Voice Volume"
 msgstr "語音音量"
 
-#: src/frontend.cpp:958
+#: src/frontend.cpp:956
 #: src/ingameop.cpp:165
 msgid "FX Volume"
 msgstr "音效音量"
 
-#: src/frontend.cpp:962
+#: src/frontend.cpp:960
 #: src/ingameop.cpp:171
 msgid "Music Volume"
 msgstr "背景音樂音量"
 
-#: src/frontend.cpp:966
+#: src/frontend.cpp:964
 msgid "HRTF"
 msgstr ""
 
+#: src/frontend.cpp:969
 #: src/frontend.cpp:971
-#: src/frontend.cpp:973
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr ""
 
-#: src/frontend.cpp:977
+#: src/frontend.cpp:975
 msgid "Map Zoom"
 msgstr ""
 
-#: src/frontend.cpp:981
+#: src/frontend.cpp:979
 msgid "Map Zoom Rate"
 msgstr ""
 
-#: src/frontend.cpp:985
+#: src/frontend.cpp:983
 msgid "Radar Zoom"
 msgstr ""
 
@@ -15265,177 +15265,177 @@ msgstr ""
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:996
+#: src/frontend.cpp:994
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1120
+#: src/frontend.cpp:1118
 msgid "Windowed"
 msgstr "視窗模式"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1135
 msgid "Graphics Mode*"
 msgstr "圖形模式*"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1135
 msgid "Graphics Mode"
 msgstr ""
 
-#: src/frontend.cpp:1142
+#: src/frontend.cpp:1140
 msgid "Resolution*"
 msgstr "解析度*"
 
-#: src/frontend.cpp:1142
+#: src/frontend.cpp:1140
 msgid "Resolution"
 msgstr ""
 
-#: src/frontend.cpp:1147
+#: src/frontend.cpp:1145
 msgid "Display Scale*"
 msgstr ""
 
-#: src/frontend.cpp:1147
+#: src/frontend.cpp:1145
 msgid "Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:1191
+#: src/frontend.cpp:1189
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr ""
 
-#: src/frontend.cpp:1223
+#: src/frontend.cpp:1221
 msgid "* Takes effect on game restart"
 msgstr "*重啟遊戲後生效"
 
-#: src/frontend.cpp:1235
+#: src/frontend.cpp:1233
 msgid "Texture size"
 msgstr "貼圖精細度"
 
-#: src/frontend.cpp:1239
+#: src/frontend.cpp:1237
 #: src/ingameop.cpp:630
 msgid "Vertical sync"
 msgstr ""
 
-#: src/frontend.cpp:1243
+#: src/frontend.cpp:1241
 msgid "Antialiasing*"
 msgstr ""
 
-#: src/frontend.cpp:1249
+#: src/frontend.cpp:1247
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
-#: src/frontend.cpp:1260
+#: src/frontend.cpp:1258
 msgid "VIDEO OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1547
+#: src/frontend.cpp:1545
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1547
+#: src/frontend.cpp:1545
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1559
+#: src/frontend.cpp:1557
 msgid "Map/Radar Zoom"
 msgstr ""
 
-#: src/frontend.cpp:1560
+#: src/frontend.cpp:1558
 msgid "Game Speed"
 msgstr ""
 
-#: src/frontend.cpp:1561
+#: src/frontend.cpp:1559
 msgid "Camera Pitch"
 msgstr ""
 
-#: src/frontend.cpp:1576
+#: src/frontend.cpp:1574
 #: src/ingameop.cpp:697
 msgid "Reverse Rotation"
 msgstr ""
 
-#: src/frontend.cpp:1580
+#: src/frontend.cpp:1578
 #: src/ingameop.cpp:704
 msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
-#: src/frontend.cpp:1585
+#: src/frontend.cpp:1583
 #: src/ingameop.cpp:710
 msgid "Switch Mouse Buttons"
 msgstr ""
 
-#: src/frontend.cpp:1590
+#: src/frontend.cpp:1588
 #: src/ingameop.cpp:715
 msgid "Rotate Screen"
 msgstr ""
 
-#: src/frontend.cpp:1594
+#: src/frontend.cpp:1592
 #: src/ingameop.cpp:720
 msgid "Colored Cursors"
 msgstr ""
 
-#: src/frontend.cpp:1598
+#: src/frontend.cpp:1596
 #: src/ingameop.cpp:725
 msgid "Scroll Event"
 msgstr ""
 
-#: src/frontend.cpp:1602
+#: src/frontend.cpp:1600
 msgid "MOUSE OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1678
+#: src/frontend.cpp:1676
 #: src/multiint.cpp:223
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.cpp:1679
+#: src/frontend.cpp:1677
 msgid "Normal"
 msgstr "普通"
 
-#: src/frontend.cpp:1680
+#: src/frontend.cpp:1678
 #: src/multiint.cpp:223
 msgid "Hard"
 msgstr "困難"
 
-#: src/frontend.cpp:1681
+#: src/frontend.cpp:1679
 #: src/multiint.cpp:223
 msgid "Insane"
 msgstr ""
 
-#: src/frontend.cpp:1712
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1710
+#: src/frontend.cpp:1776
 msgid "Language"
 msgstr "語言"
 
-#: src/frontend.cpp:1716
-#: src/frontend.cpp:1782
+#: src/frontend.cpp:1714
+#: src/frontend.cpp:1780
 msgid "Campaign Difficulty"
 msgstr ""
 
-#: src/frontend.cpp:1720
-#: src/frontend.cpp:1783
+#: src/frontend.cpp:1718
+#: src/frontend.cpp:1781
 msgid "Camera Speed"
 msgstr ""
 
-#: src/frontend.cpp:1724
-#: src/frontend.cpp:1779
+#: src/frontend.cpp:1722
+#: src/frontend.cpp:1777
 msgid "Unit Colour:"
 msgstr ""
 
-#: src/frontend.cpp:1744
-#: src/frontend.cpp:1780
+#: src/frontend.cpp:1742
+#: src/frontend.cpp:1778
 msgid "Campaign"
 msgstr ""
 
-#: src/frontend.cpp:1754
-#: src/frontend.cpp:1781
+#: src/frontend.cpp:1752
+#: src/frontend.cpp:1779
 msgid "Skirmish/Multiplayer"
 msgstr ""
 
-#: src/frontend.cpp:1760
-#: src/frontend.cpp:1776
+#: src/frontend.cpp:1758
+#: src/frontend.cpp:1774
 msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
-#: src/frontend.cpp:1888
-#: src/multiint.cpp:2365
+#: src/frontend.cpp:1886
+#: src/multiint.cpp:2390
 msgid "Mod: "
 msgstr ""
 
@@ -15466,7 +15466,7 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
 #: src/hci.cpp:2818
-#: src/multiint.cpp:1300
+#: src/multiint.cpp:1344
 #: src/multimenu.cpp:770
 msgid "Power"
 msgstr "能源"
@@ -15618,7 +15618,7 @@ msgid "Need more resources!"
 msgstr ""
 
 #: src/intelmap.cpp:239
-#: src/keybind.cpp:1363
+#: src/keybind.cpp:1379
 msgid "PAUSED"
 msgstr "暫停"
 
@@ -15639,32 +15639,32 @@ msgid "New Intelligence Report"
 msgstr "新的智能情報"
 
 #: src/intorder.cpp:166
-#: src/keymap.cpp:396
+#: src/keymap.cpp:404
 msgid "Short Range"
 msgstr "短距離"
 
 #: src/intorder.cpp:167
-#: src/keymap.cpp:402
+#: src/keymap.cpp:410
 msgid "Long Range"
 msgstr "長距離"
 
 #: src/intorder.cpp:168
-#: src/keymap.cpp:395
+#: src/keymap.cpp:403
 msgid "Optimum Range"
 msgstr "最適距離"
 
 #: src/intorder.cpp:169
-#: src/keymap.cpp:414
+#: src/keymap.cpp:422
 msgid "Retreat at Medium Damage"
 msgstr "中度損傷時撤退"
 
 #: src/intorder.cpp:170
-#: src/keymap.cpp:415
+#: src/keymap.cpp:423
 msgid "Retreat at Heavy Damage"
 msgstr "重度損傷時撤退"
 
 #: src/intorder.cpp:171
-#: src/keymap.cpp:416
+#: src/keymap.cpp:424
 msgid "Do or Die!"
 msgstr "奮戰到底！"
 
@@ -15673,37 +15673,37 @@ msgid "Fire-At-Will"
 msgstr "接觸時開火"
 
 #: src/intorder.cpp:173
-#: src/keymap.cpp:390
+#: src/keymap.cpp:398
 msgid "Return Fire"
 msgstr "遭受攻擊時還擊"
 
 #: src/intorder.cpp:174
-#: src/keymap.cpp:388
+#: src/keymap.cpp:396
 msgid "Hold Fire"
 msgstr "停火"
 
 #: src/intorder.cpp:175
-#: src/keymap.cpp:398
+#: src/keymap.cpp:406
 msgid "Patrol"
 msgstr "巡邏模式"
 
 #: src/intorder.cpp:176
-#: src/keymap.cpp:397
+#: src/keymap.cpp:405
 msgid "Pursue"
 msgstr "追蹤模式"
 
 #: src/intorder.cpp:177
-#: src/keymap.cpp:392
+#: src/keymap.cpp:400
 msgid "Guard Position"
 msgstr "保持戒備"
 
 #: src/intorder.cpp:178
-#: src/keymap.cpp:394
+#: src/keymap.cpp:402
 msgid "Hold Position"
 msgstr "保持原位"
 
 #: src/intorder.cpp:179
-#: src/keymap.cpp:399
+#: src/keymap.cpp:407
 msgid "Return For Repair"
 msgstr "返回修理"
 
@@ -15712,12 +15712,12 @@ msgid "Return To HQ"
 msgstr "回到主基地"
 
 #: src/intorder.cpp:181
-#: src/keymap.cpp:401
+#: src/keymap.cpp:409
 msgid "Go to Transport"
 msgstr "前往運輸艦位置"
 
 #: src/intorder.cpp:182
-#: src/keymap.cpp:425
+#: src/keymap.cpp:433
 msgid "Return for Recycling"
 msgstr "返回回收"
 
@@ -15794,10 +15794,10 @@ msgstr ""
 #: src/keybind.cpp:743
 #: src/keybind.cpp:799
 #: src/keybind.cpp:1310
-#: src/keybind.cpp:1417
-#: src/keybind.cpp:1522
-#: src/keybind.cpp:1827
-#: src/keybind.cpp:1868
+#: src/keybind.cpp:1433
+#: src/keybind.cpp:1538
+#: src/keybind.cpp:1843
+#: src/keybind.cpp:1884
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -15881,145 +15881,145 @@ msgstr ""
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.cpp:1332
+#: src/keybind.cpp:1348
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.cpp:1418
+#: src/keybind.cpp:1434
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研發所有科技！"
 
-#: src/keybind.cpp:1442
+#: src/keybind.cpp:1458
 msgid "Selected buildings instantly recharged!"
 msgstr ""
 
-#: src/keybind.cpp:1483
+#: src/keybind.cpp:1499
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.cpp:1483
+#: src/keybind.cpp:1499
 msgid "Researched"
 msgstr ""
 
-#: src/keybind.cpp:1504
+#: src/keybind.cpp:1520
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.cpp:1507
+#: src/keybind.cpp:1523
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.cpp:1510
+#: src/keybind.cpp:1526
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.cpp:1523
+#: src/keybind.cpp:1539
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.cpp:1558
+#: src/keybind.cpp:1574
 msgid "Unable to locate any oil derricks!"
 msgstr ""
 
-#: src/keybind.cpp:1722
+#: src/keybind.cpp:1738
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天氣真糟...下雪"
 
-#: src/keybind.cpp:1728
+#: src/keybind.cpp:1744
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.cpp:1734
+#: src/keybind.cpp:1750
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天氣預報：一整片晴朗的天空。"
 
-#: src/keybind.cpp:1826
+#: src/keybind.cpp:1842
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.cpp:1828
+#: src/keybind.cpp:1844
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.cpp:1869
+#: src/keybind.cpp:1885
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2297
+#: src/keybind.cpp:2313
 msgid "Reveal OFF"
 msgstr ""
 
-#: src/keybind.cpp:2302
+#: src/keybind.cpp:2318
 msgid "Reveal ON"
 msgstr ""
 
-#: src/keybind.cpp:2383
+#: src/keybind.cpp:2399
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.cpp:2395
+#: src/keybind.cpp:2411
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.cpp:2402
+#: src/keybind.cpp:2418
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2451
+#: src/keybind.cpp:2467
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2456
+#: src/keybind.cpp:2472
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2508
+#: src/keybind.cpp:2524
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr ""
 
-#: src/keybind.cpp:2543
-#: src/keybind.cpp:2597
+#: src/keybind.cpp:2559
+#: src/keybind.cpp:2613
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.cpp:2547
+#: src/keybind.cpp:2563
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr ""
 
-#: src/keybind.cpp:2551
+#: src/keybind.cpp:2567
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr ""
 
-#: src/keybind.cpp:2609
+#: src/keybind.cpp:2625
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.cpp:2613
+#: src/keybind.cpp:2629
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.cpp:2628
+#: src/keybind.cpp:2644
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.cpp:2631
+#: src/keybind.cpp:2647
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.cpp:2634
+#: src/keybind.cpp:2650
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.cpp:2637
+#: src/keybind.cpp:2653
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 
 #: src/keyedit.cpp:360
-#: src/multiint.cpp:1372
+#: src/multiint.cpp:1397
 #: src/titleui/gamefind.cpp:85
 #: src/titleui/protocol.cpp:87
 msgid "Return To Previous Screen"
@@ -16034,519 +16034,535 @@ msgstr "選擇預設"
 msgid "KEY MAPPING"
 msgstr "鍵盤配置"
 
-#: src/keymap.cpp:297
+#: src/keymap.cpp:301
 msgid "Manufacture"
 msgstr "生產新單位"
 
-#: src/keymap.cpp:298
+#: src/keymap.cpp:302
 msgid "Research"
 msgstr "研發新科技"
 
-#: src/keymap.cpp:299
+#: src/keymap.cpp:303
 msgid "Build"
 msgstr "建築新建築物"
 
-#: src/keymap.cpp:300
+#: src/keymap.cpp:304
 msgid "Design"
 msgstr "設計新單位"
 
-#: src/keymap.cpp:301
+#: src/keymap.cpp:305
 msgid "Intelligence Display"
 msgstr "檢視情報及任務目標"
 
-#: src/keymap.cpp:302
+#: src/keymap.cpp:306
 msgid "Commanders"
 msgstr "指揮官"
 
-#: src/keymap.cpp:303
+#: src/keymap.cpp:307
 msgid "QuickSave"
 msgstr ""
 
-#: src/keymap.cpp:304
+#: src/keymap.cpp:308
 msgid "Toggle Radar"
 msgstr "開啟或關閉雷達"
 
-#: src/keymap.cpp:305
+#: src/keymap.cpp:309
 msgid "QuickLoad"
 msgstr ""
 
-#: src/keymap.cpp:306
+#: src/keymap.cpp:310
 msgid "Toggle Console Display"
 msgstr "開啟或關閉主控台"
 
-#: src/keymap.cpp:307
+#: src/keymap.cpp:311
 msgid "Toggle Damage Bars On/Off"
 msgstr "開啟或關閉損傷顯示"
 
-#: src/keymap.cpp:308
+#: src/keymap.cpp:312
 msgid "Take Screen Shot"
 msgstr "抓取螢幕截圖"
 
-#: src/keymap.cpp:309
+#: src/keymap.cpp:313
 msgid "Toggle Formation Speed Limiting"
 msgstr "開啟或關閉成型速度限制"
 
-#: src/keymap.cpp:310
+#: src/keymap.cpp:314
 msgid "View Location of Previous Message"
 msgstr "檢視前一訊息發生位置"
 
-#: src/keymap.cpp:311
+#: src/keymap.cpp:315
 msgid "Toggle Sensor display"
 msgstr ""
 
-#: src/keymap.cpp:315
+#: src/keymap.cpp:319
 msgid "Assign Group 0"
 msgstr "指定為第0隊"
 
-#: src/keymap.cpp:316
+#: src/keymap.cpp:320
 msgid "Assign Group 1"
 msgstr "指定為第1隊"
 
-#: src/keymap.cpp:317
+#: src/keymap.cpp:321
 msgid "Assign Group 2"
 msgstr "指定為第2隊"
 
-#: src/keymap.cpp:318
+#: src/keymap.cpp:322
 msgid "Assign Group 3"
 msgstr "指定為第3隊"
 
-#: src/keymap.cpp:319
+#: src/keymap.cpp:323
 msgid "Assign Group 4"
 msgstr "指定為第4隊"
 
-#: src/keymap.cpp:320
+#: src/keymap.cpp:324
 msgid "Assign Group 5"
 msgstr "指定為第5隊"
 
-#: src/keymap.cpp:321
+#: src/keymap.cpp:325
 msgid "Assign Group 6"
 msgstr "指定為第6隊"
 
-#: src/keymap.cpp:322
+#: src/keymap.cpp:326
 msgid "Assign Group 7"
 msgstr "指定為第7隊"
 
-#: src/keymap.cpp:323
+#: src/keymap.cpp:327
 msgid "Assign Group 8"
 msgstr "指定為第8隊"
 
-#: src/keymap.cpp:324
+#: src/keymap.cpp:328
 msgid "Assign Group 9"
 msgstr "指定為第隊"
 
-#: src/keymap.cpp:328
+#: src/keymap.cpp:332
 msgid "Select Group 0"
 msgstr "選擇第0隊"
 
-#: src/keymap.cpp:329
+#: src/keymap.cpp:333
 msgid "Select Group 1"
 msgstr "選擇第1隊"
 
-#: src/keymap.cpp:330
+#: src/keymap.cpp:334
 msgid "Select Group 2"
 msgstr "選擇第2隊"
 
-#: src/keymap.cpp:331
+#: src/keymap.cpp:335
 msgid "Select Group 3"
 msgstr "選擇第3隊"
 
-#: src/keymap.cpp:332
+#: src/keymap.cpp:336
 msgid "Select Group 4"
 msgstr "選擇第4隊"
 
-#: src/keymap.cpp:333
+#: src/keymap.cpp:337
 msgid "Select Group 5"
 msgstr "選擇第5隊"
 
-#: src/keymap.cpp:334
+#: src/keymap.cpp:338
 msgid "Select Group 6"
 msgstr "選擇第6隊"
 
-#: src/keymap.cpp:335
+#: src/keymap.cpp:339
 msgid "Select Group 7"
 msgstr "選擇第7隊"
 
-#: src/keymap.cpp:336
+#: src/keymap.cpp:340
 msgid "Select Group 8"
 msgstr "選擇第8隊"
 
-#: src/keymap.cpp:337
+#: src/keymap.cpp:341
 msgid "Select Group 9"
 msgstr "選擇第9隊"
 
-#: src/keymap.cpp:341
+#: src/keymap.cpp:345
 msgid "Select Commander 0"
 msgstr "選擇命令0"
 
-#: src/keymap.cpp:342
+#: src/keymap.cpp:346
 msgid "Select Commander 1"
 msgstr "選擇命令1"
 
-#: src/keymap.cpp:343
+#: src/keymap.cpp:347
 msgid "Select Commander 2"
 msgstr "選擇命令2"
 
-#: src/keymap.cpp:344
+#: src/keymap.cpp:348
 msgid "Select Commander 3"
 msgstr "選擇命令3"
 
-#: src/keymap.cpp:345
+#: src/keymap.cpp:349
 msgid "Select Commander 4"
 msgstr "選擇命令4"
 
-#: src/keymap.cpp:346
+#: src/keymap.cpp:350
 msgid "Select Commander 5"
 msgstr "選擇命令5"
 
-#: src/keymap.cpp:347
+#: src/keymap.cpp:351
 msgid "Select Commander 6"
 msgstr "選擇命令6"
 
-#: src/keymap.cpp:348
+#: src/keymap.cpp:352
 msgid "Select Commander 7"
 msgstr "選擇命令7"
 
-#: src/keymap.cpp:349
+#: src/keymap.cpp:353
 msgid "Select Commander 8"
 msgstr "選擇命令8"
 
-#: src/keymap.cpp:350
+#: src/keymap.cpp:354
 msgid "Select Commander 9"
 msgstr "選擇命令9"
 
-#: src/keymap.cpp:354
+#: src/keymap.cpp:358
 msgid "Multiplayer Options / Alliance dialog"
 msgstr ""
 
-#: src/keymap.cpp:357
+#: src/keymap.cpp:361
+msgid "Move Camera Up"
+msgstr ""
+
+#: src/keymap.cpp:362
+msgid "Move Camera Down"
+msgstr ""
+
+#: src/keymap.cpp:363
+msgid "Move Camera Right"
+msgstr ""
+
+#: src/keymap.cpp:364
+msgid "Move Camera Left"
+msgstr ""
+
+#: src/keymap.cpp:365
 msgid "Snap View to North"
 msgstr ""
 
-#: src/keymap.cpp:358
+#: src/keymap.cpp:366
 msgid "Toggle Tracking Camera"
 msgstr "開啟或關閉追蹤視角"
 
-#: src/keymap.cpp:359
+#: src/keymap.cpp:367
 msgid "Display In-Game Options"
 msgstr "顯示遊戲中選項"
 
-#: src/keymap.cpp:360
+#: src/keymap.cpp:368
 msgid "Zoom Radar Out"
 msgstr "縮小雷達視野"
 
-#: src/keymap.cpp:361
+#: src/keymap.cpp:369
 msgid "Zoom Radar In"
 msgstr "放大雷達視野"
 
-#: src/keymap.cpp:362
+#: src/keymap.cpp:370
 msgid "Zoom In"
 msgstr "視角拉近"
 
-#: src/keymap.cpp:363
+#: src/keymap.cpp:371
 msgid "Zoom Out"
 msgstr "視角拉遠"
 
-#: src/keymap.cpp:364
+#: src/keymap.cpp:372
 msgid "Pitch Forward"
 msgstr "視角前進"
 
-#: src/keymap.cpp:365
+#: src/keymap.cpp:373
 msgid "Rotate Left"
 msgstr "向左旋轉"
 
-#: src/keymap.cpp:366
+#: src/keymap.cpp:374
 msgid "Reset Pitch"
 msgstr "重設視角"
 
-#: src/keymap.cpp:367
+#: src/keymap.cpp:375
 msgid "Rotate Right"
 msgstr "向右旋轉"
 
-#: src/keymap.cpp:368
+#: src/keymap.cpp:376
 msgid "Pitch Back"
 msgstr "視角後退"
 
-#: src/keymap.cpp:369
+#: src/keymap.cpp:377
 msgid "Orders Menu"
 msgstr "命令選單"
 
-#: src/keymap.cpp:370
+#: src/keymap.cpp:378
 msgid "Decrease Game Speed"
 msgstr "降低遊戲速度"
 
-#: src/keymap.cpp:371
+#: src/keymap.cpp:379
 msgid "Increase Game Speed"
 msgstr "增加遊戲速度"
 
-#: src/keymap.cpp:372
+#: src/keymap.cpp:380
 msgid "Reset Game Speed"
 msgstr "重設遊戲速度"
 
-#: src/keymap.cpp:373
+#: src/keymap.cpp:381
 msgid "View North"
 msgstr "面向北方"
 
-#: src/keymap.cpp:374
+#: src/keymap.cpp:382
 msgid "View South"
 msgstr "面向南方"
 
-#: src/keymap.cpp:375
+#: src/keymap.cpp:383
 msgid "View East"
 msgstr "面向東方"
 
-#: src/keymap.cpp:376
+#: src/keymap.cpp:384
 msgid "View West"
 msgstr "面向西方"
 
-#: src/keymap.cpp:377
+#: src/keymap.cpp:385
 msgid "View next Oil Derrick"
 msgstr "檢視下一座鑽油井"
 
-#: src/keymap.cpp:378
+#: src/keymap.cpp:386
 msgid "View next Repair Unit"
 msgstr "檢視下一座修理單位"
 
-#: src/keymap.cpp:379
+#: src/keymap.cpp:387
 msgid "View next Truck"
 msgstr "檢視下一部工程車"
 
-#: src/keymap.cpp:380
+#: src/keymap.cpp:388
 msgid "View next Sensor Unit"
 msgstr "檢視下一座雷達單位"
 
-#: src/keymap.cpp:381
+#: src/keymap.cpp:389
 msgid "View next Commander"
 msgstr "檢視下一部指揮車"
 
-#: src/keymap.cpp:382
+#: src/keymap.cpp:390
 msgid "Toggle Overlays"
 msgstr "開啟或關閉疊層顯示"
 
-#: src/keymap.cpp:383
+#: src/keymap.cpp:391
 msgid "Toggle Console History "
 msgstr ""
 
-#: src/keymap.cpp:384
+#: src/keymap.cpp:392
 msgid "Toggle Team Chat History"
 msgstr ""
 
-#: src/keymap.cpp:387
+#: src/keymap.cpp:395
 msgid "Center View on HQ"
 msgstr "視角移至主基地"
 
-#: src/keymap.cpp:389
+#: src/keymap.cpp:397
 msgid "View Unassigned Units"
 msgstr "檢視未指定的單位"
 
-#: src/keymap.cpp:391
+#: src/keymap.cpp:399
 msgid "Fire at Will"
 msgstr "接觸時開火"
 
-#: src/keymap.cpp:393
+#: src/keymap.cpp:401
 msgid "Return to HQ"
 msgstr "回到主基地"
 
-#: src/keymap.cpp:400
+#: src/keymap.cpp:408
 msgid "Stop Droid"
 msgstr ""
 
-#: src/keymap.cpp:403
+#: src/keymap.cpp:411
 msgid "Send Global Text Message"
 msgstr ""
 
-#: src/keymap.cpp:404
+#: src/keymap.cpp:412
 msgid "Send Team Text Message"
 msgstr ""
 
-#: src/keymap.cpp:405
+#: src/keymap.cpp:413
 msgid "Drop a beacon"
 msgstr ""
 
-#: src/keymap.cpp:407
+#: src/keymap.cpp:415
 msgid "Toggles shadows"
 msgstr ""
 
-#: src/keymap.cpp:408
+#: src/keymap.cpp:416
 msgid "Trap cursor"
 msgstr ""
 
-#: src/keymap.cpp:409
+#: src/keymap.cpp:417
 msgid "Toggle radar terrain"
 msgstr ""
 
-#: src/keymap.cpp:410
+#: src/keymap.cpp:418
 msgid "Toggle ally-enemy radar view"
 msgstr ""
 
-#: src/keymap.cpp:411
+#: src/keymap.cpp:419
 msgid "Show all keyboard mappings"
 msgstr ""
 
-#: src/keymap.cpp:420
+#: src/keymap.cpp:428
 msgid "Select all Combat Units"
 msgstr "選擇所有戰鬥單位"
 
-#: src/keymap.cpp:421
+#: src/keymap.cpp:429
 msgid "Select all Cyborgs"
 msgstr ""
 
-#: src/keymap.cpp:422
+#: src/keymap.cpp:430
 msgid "Select all Heavily Damaged Units"
 msgstr "選擇所有重度損傷單位"
 
-#: src/keymap.cpp:423
+#: src/keymap.cpp:431
 msgid "Select all Half-tracks"
 msgstr "選擇所有半履帶單位"
 
-#: src/keymap.cpp:424
+#: src/keymap.cpp:432
 msgid "Select all Hovers"
 msgstr "選擇所有氣墊船單位"
 
-#: src/keymap.cpp:426
+#: src/keymap.cpp:434
 msgid "Select all Units on Screen"
 msgstr "選擇所有螢幕上單位"
 
-#: src/keymap.cpp:427
+#: src/keymap.cpp:435
 msgid "Select all Tracks"
 msgstr "選擇所有履帶單位"
 
-#: src/keymap.cpp:428
+#: src/keymap.cpp:436
 msgid "Select EVERY unit"
 msgstr "選擇所有單位"
 
-#: src/keymap.cpp:429
+#: src/keymap.cpp:437
 msgid "Select all VTOLs"
 msgstr "選擇所有VTOL 單位"
 
-#: src/keymap.cpp:430
+#: src/keymap.cpp:438
 msgid "Select all fully-armed VTOLs"
 msgstr ""
 
-#: src/keymap.cpp:431
+#: src/keymap.cpp:439
 msgid "Select all Wheels"
 msgstr "選擇所有輪系單位"
 
-#: src/keymap.cpp:432
+#: src/keymap.cpp:440
 msgid "Show frame rate"
 msgstr ""
 
-#: src/keymap.cpp:433
+#: src/keymap.cpp:441
 msgid "Select all units with the same components"
 msgstr ""
 
-#: src/keymap.cpp:437
+#: src/keymap.cpp:445
 msgid "Select all Combat Cyborgs"
 msgstr ""
 
-#: src/keymap.cpp:438
+#: src/keymap.cpp:446
 msgid "Select all Engineers"
 msgstr ""
 
-#: src/keymap.cpp:439
+#: src/keymap.cpp:447
 msgid "Select all Land Combat Units"
 msgstr ""
 
-#: src/keymap.cpp:440
+#: src/keymap.cpp:448
 msgid "Select all Mechanics"
 msgstr ""
 
-#: src/keymap.cpp:441
+#: src/keymap.cpp:449
 msgid "Select all Transporters"
 msgstr ""
 
-#: src/keymap.cpp:442
+#: src/keymap.cpp:450
 msgid "Select all Repair Tanks"
 msgstr ""
 
-#: src/keymap.cpp:443
+#: src/keymap.cpp:451
 msgid "Select all Sensor Units"
 msgstr ""
 
-#: src/keymap.cpp:444
+#: src/keymap.cpp:452
 msgid "Select all Trucks"
 msgstr ""
 
-#: src/keymap.cpp:448
+#: src/keymap.cpp:456
 msgid "Select next Factory"
 msgstr "選擇下一個工廠"
 
-#: src/keymap.cpp:449
+#: src/keymap.cpp:457
 msgid "Select next Research Facility"
 msgstr "選擇下一個研發中心"
 
-#: src/keymap.cpp:450
+#: src/keymap.cpp:458
 msgid "Select next Power Generator"
 msgstr "選擇下一個發電廠"
 
-#: src/keymap.cpp:451
+#: src/keymap.cpp:459
 msgid "Select next Cyborg Factory"
 msgstr "選擇下一個生化人工廠"
 
-#: src/keymap.cpp:454
+#: src/keymap.cpp:462
 msgid "Toggle Debug Mappings"
 msgstr ""
 
-#: src/keymap.cpp:455
+#: src/keymap.cpp:463
 msgid "Toggle display of droid path"
 msgstr ""
 
-#: src/keymap.cpp:456
+#: src/keymap.cpp:464
 msgid "Toggle display of gateways"
 msgstr ""
 
-#: src/keymap.cpp:457
+#: src/keymap.cpp:465
 msgid "Toggle visibility"
 msgstr ""
 
-#: src/keymap.cpp:458
+#: src/keymap.cpp:466
 msgid "Raise tile height"
 msgstr ""
 
-#: src/keymap.cpp:459
+#: src/keymap.cpp:467
 msgid "Lower tile height"
 msgstr ""
 
-#: src/keymap.cpp:460
+#: src/keymap.cpp:468
 msgid "Toggles All fog"
 msgstr ""
 
-#: src/keymap.cpp:461
+#: src/keymap.cpp:469
 msgid "Trigger some weather"
 msgstr ""
 
-#: src/keymap.cpp:462
+#: src/keymap.cpp:470
 msgid "Flip terrain triangle"
 msgstr ""
 
-#: src/keymap.cpp:463
+#: src/keymap.cpp:471
 msgid "Make a performance measurement sample"
 msgstr ""
 
-#: src/keymap.cpp:466
+#: src/keymap.cpp:474
 msgid "Make all items available"
 msgstr ""
 
-#: src/keymap.cpp:467
+#: src/keymap.cpp:475
 msgid "Kill Selected Unit(s)"
 msgstr ""
 
-#: src/keymap.cpp:468
+#: src/keymap.cpp:476
 msgid "Toggle god Mode Status"
 msgstr ""
 
-#: src/keymap.cpp:469
+#: src/keymap.cpp:477
 msgid "Display Options Screen"
 msgstr ""
 
-#: src/keymap.cpp:470
+#: src/keymap.cpp:478
 msgid "Complete current research"
 msgstr ""
 
-#: src/keymap.cpp:471
+#: src/keymap.cpp:479
 msgid "Reveal map at mouse position"
 msgstr ""
 
-#: src/keymap.cpp:472
+#: src/keymap.cpp:480
 msgid "Trace a game object"
 msgstr ""
 
@@ -16712,300 +16728,287 @@ msgstr ""
 msgid "Structure Limits Enforced."
 msgstr ""
 
-#: src/multiint.cpp:1228
+#: src/multiint.cpp:1246
+msgid "Not enough votes to randomize or change the map."
+msgstr ""
+
+#: src/multiint.cpp:1272
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
 msgstr ""
 
-#: src/multiint.cpp:1229
+#: src/multiint.cpp:1273
 msgid "One-Player Skirmish"
 msgstr ""
 
-#: src/multiint.cpp:1236
+#: src/multiint.cpp:1280
 msgid "Select Game Name"
 msgstr "選擇遊戲名稱"
 
-#: src/multiint.cpp:1247
+#: src/multiint.cpp:1291
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1248
+#: src/multiint.cpp:1292
 msgid "Map-Mod!"
 msgstr ""
 
-#: src/multiint.cpp:1261
+#: src/multiint.cpp:1305
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.cpp:1270
+#: src/multiint.cpp:1314
 msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
-#: src/multiint.cpp:1290
+#: src/multiint.cpp:1334
 #: src/multimenu.cpp:759
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.cpp:1309
+#: src/multiint.cpp:1353
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.cpp:1318
+#: src/multiint.cpp:1362
 msgid "Map Preview"
 msgstr "預覽地圖"
 
-#: src/multiint.cpp:1319
+#: src/multiint.cpp:1363
 msgid "Click to see Map"
 msgstr "按一下看地圖"
 
-#: src/multiint.cpp:1326
-#: src/multiint.cpp:1327
+#: src/multiint.cpp:1370
+#: src/multiint.cpp:1371
 msgid "Show Structure Limits"
 msgstr ""
 
-#: src/multiint.cpp:1326
-#: src/multiint.cpp:1327
+#: src/multiint.cpp:1370
+#: src/multiint.cpp:1371
 msgid "Set Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.cpp:1334
+#: src/multiint.cpp:1378
 msgid "Random Game Options"
 msgstr ""
 
-#: src/multiint.cpp:1335
+#: src/multiint.cpp:1379
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1343
-#: src/multiint.cpp:1344
+#: src/multiint.cpp:1387
+#: src/multiint.cpp:1388
 msgid "Start Hosting Game"
 msgstr "開始遊戲"
 
-#: src/multiint.cpp:1351
-msgid "Vote"
-msgstr ""
-
-#: src/multiint.cpp:1352
-msgid "No. Do not allow host to randomize or change map"
-msgstr ""
-
-#: src/multiint.cpp:1353
-msgid "Yes. Allow host to randomize or change map"
-msgstr ""
-
-#: src/multiint.cpp:1424
+#: src/multiint.cpp:1449
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1462
 msgid "Starts disadvantaged"
 msgstr ""
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1463
 msgid "Plays nice"
 msgstr ""
 
-#: src/multiint.cpp:1439
+#: src/multiint.cpp:1464
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1440
+#: src/multiint.cpp:1465
 msgid "Starts with advantages"
 msgstr ""
 
-#: src/multiint.cpp:1477
+#: src/multiint.cpp:1502
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1521
+#: src/multiint.cpp:1546
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1528
+#: src/multiint.cpp:1553
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:1990
+#: src/multiint.cpp:2015
 msgid "Team"
 msgstr "隊伍"
 
-#: src/multiint.cpp:2045
+#: src/multiint.cpp:2070
 msgid "Click to change difficulty"
 msgstr ""
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Waiting for player"
 msgstr ""
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Player is ready"
 msgstr ""
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Player is downloading"
 msgstr ""
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Click when ready"
 msgstr "按一下開始"
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Waiting for download"
 msgstr ""
 
-#: src/multiint.cpp:2072
+#: src/multiint.cpp:2097
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:2114
+#: src/multiint.cpp:2139
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.cpp:2149
+#: src/multiint.cpp:2174
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:2183
+#: src/multiint.cpp:2208
 msgid "Choose Team"
 msgstr ""
 
-#: src/multiint.cpp:2187
+#: src/multiint.cpp:2212
 msgid "Teams locked"
 msgstr ""
 
-#: src/multiint.cpp:2213
+#: src/multiint.cpp:2238
 msgid "Click to change player colour"
 msgstr ""
 
-#: src/multiint.cpp:2238
+#: src/multiint.cpp:2263
 msgid "Click to change player position"
 msgstr ""
 
-#: src/multiint.cpp:2245
+#: src/multiint.cpp:2270
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
-#: src/multiint.cpp:2260
+#: src/multiint.cpp:2285
 msgid "Player ID: "
 msgstr ""
 
-#: src/multiint.cpp:2267
+#: src/multiint.cpp:2292
 msgid "(none)"
 msgstr ""
 
-#: src/multiint.cpp:2335
+#: src/multiint.cpp:2360
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.cpp:2657
-#: src/multiint.cpp:3666
-msgid "Not enough votes to randomize or change the map."
-msgstr ""
-
-#: src/multiint.cpp:2812
+#: src/multiint.cpp:2835
 msgid "Game Name Updated."
 msgstr ""
 
-#: src/multiint.cpp:2925
+#: src/multiint.cpp:2948
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2931
+#: src/multiint.cpp:2954
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2945
+#: src/multiint.cpp:2968
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:3001
+#: src/multiint.cpp:3024
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3163
-#: src/multiint.cpp:3253
+#: src/multiint.cpp:3180
+#: src/multiint.cpp:3270
 #: src/multimenu.cpp:1324
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
 
-#: src/multiint.cpp:3310
+#: src/multiint.cpp:3327
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.cpp:3519
+#: src/multiint.cpp:3537
 msgid "You have been kicked: "
 msgstr ""
 
-#: src/multiint.cpp:3531
+#: src/multiint.cpp:3549
 msgid "No connection to host."
 msgstr ""
 
-#: src/multiint.cpp:3661
+#: src/multiint.cpp:3686
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:3771
+#: src/multiint.cpp:3796
 msgid "The host has quit."
 msgstr ""
 
-#: src/multiint.cpp:3897
+#: src/multiint.cpp:3922
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:3903
+#: src/multiint.cpp:3928
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:3907
+#: src/multiint.cpp:3932
 msgid "UPnP detection is in progress..."
 msgstr ""
 
-#: src/multiint.cpp:3914
+#: src/multiint.cpp:3939
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:3920
+#: src/multiint.cpp:3945
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:3924
+#: src/multiint.cpp:3949
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:4005
+#: src/multiint.cpp:4030
 #, c-format
 msgid "Click to take player slot %d"
 msgstr ""
 
-#: src/multiint.cpp:4019
-#: src/multiint.cpp:4251
+#: src/multiint.cpp:4044
+#: src/multiint.cpp:4276
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4019
-#: src/multiint.cpp:4252
+#: src/multiint.cpp:4044
+#: src/multiint.cpp:4277
 msgid "Closed"
 msgstr ""
 
-#: src/multiint.cpp:4084
+#: src/multiint.cpp:4109
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr ""
 
-#: src/multiint.cpp:4084
+#: src/multiint.cpp:4109
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:4132
+#: src/multiint.cpp:4157
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:4139
+#: src/multiint.cpp:4164
 #: src/multimenu.cpp:777
 msgid "Ping"
 msgstr ""
@@ -17060,7 +17063,7 @@ msgid "Apply Defaults and Return To Previous Screen"
 msgstr ""
 
 #: src/multilimit.cpp:192
-#: src/titleui/protocol.cpp:178
+#: src/titleui/protocol.cpp:175
 msgid "Accept Settings"
 msgstr "接受設定"
 
@@ -17163,12 +17166,12 @@ msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr ""
 
 #: src/multiopt.cpp:304
-#: src/multiplay.cpp:1706
+#: src/multiplay.cpp:1718
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr ""
 
 #: src/multiopt.cpp:305
-#: src/multiplay.cpp:1710
+#: src/multiplay.cpp:1722
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr ""
 
@@ -17177,105 +17180,105 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.cpp:1146
+#: src/multiplay.cpp:1158
 msgid " (Ally)"
 msgstr ""
 
-#: src/multiplay.cpp:1150
+#: src/multiplay.cpp:1162
 msgid " (Global)"
 msgstr ""
 
-#: src/multiplay.cpp:1248
+#: src/multiplay.cpp:1260
 msgid "(allies"
 msgstr ""
 
-#: src/multiplay.cpp:1256
+#: src/multiplay.cpp:1268
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.cpp:1269
+#: src/multiplay.cpp:1281
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.cpp:1593
+#: src/multiplay.cpp:1605
 msgid "Map was requested: SENDING MAP!"
 msgstr ""
 
-#: src/multiplay.cpp:1609
+#: src/multiplay.cpp:1621
 msgid "Mod was requested: SENDING MOD!"
 msgstr ""
 
-#: src/multiplay.cpp:1672
+#: src/multiplay.cpp:1684
 msgid "FILE SENT!"
 msgstr ""
 
-#: src/multiplay.cpp:1737
+#: src/multiplay.cpp:1749
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
 
-#: src/multiplay.cpp:1843
+#: src/multiplay.cpp:1855
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/multiplay.cpp:1894
+#: src/multiplay.cpp:1906
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.cpp:1895
+#: src/multiplay.cpp:1907
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.cpp:1896
+#: src/multiplay.cpp:1908
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.cpp:1898
+#: src/multiplay.cpp:1910
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.cpp:1899
+#: src/multiplay.cpp:1911
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.cpp:1900
+#: src/multiplay.cpp:1912
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.cpp:1901
+#: src/multiplay.cpp:1913
 msgid "Cyan"
 msgstr "青綠色"
 
-#: src/multiplay.cpp:1902
+#: src/multiplay.cpp:1914
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1903
+#: src/multiplay.cpp:1915
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1904
+#: src/multiplay.cpp:1916
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1905
+#: src/multiplay.cpp:1917
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:1906
+#: src/multiplay.cpp:1918
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1907
+#: src/multiplay.cpp:1919
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1908
+#: src/multiplay.cpp:1920
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1909
+#: src/multiplay.cpp:1921
 msgid "Brown"
 msgstr ""
 
@@ -17666,7 +17669,7 @@ msgid "OK"
 msgstr ""
 
 #: src/titleui/passbox.cpp:92
-#: src/titleui/protocol.cpp:180
+#: src/titleui/protocol.cpp:177
 msgid "Cancel"
 msgstr ""
 
@@ -17682,7 +17685,7 @@ msgstr "遊戲大廳"
 msgid "IP"
 msgstr ""
 
-#: src/titleui/protocol.cpp:191
+#: src/titleui/protocol.cpp:188
 msgid "IP Address or Machine Name"
 msgstr "IP 位置或電腦名稱"
 
