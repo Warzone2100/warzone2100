@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-03-10 22:55+0000\n"
-"PO-Revision-Date: 2020-03-10 23:54\n"
+"POT-Creation-Date: 2020-04-05 12:49+0000\n"
+"PO-Revision-Date: 2020-04-13 18:54\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -102,7 +102,7 @@ msgstr "Folosește o echipă de recunoaștere pentru a investiga semnalele."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Folosește constructorii pentru a clădi defenisva ZA."
+msgstr "Folosește-ți camioanele pentru a construi sisteme de apărare la ZA."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -162,7 +162,7 @@ msgstr "Întemeiază o bază înaintată pe platou."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
-msgstr "Construiește clădiri defenzive."
+msgstr "Construiește clădiri de apărare."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -174,7 +174,7 @@ msgstr "Forțe inamice se apropie dinspre nord și est."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr "Menține bazele și respinfge orice atac."
+msgstr "Menține controlul bazelor și respinge orice atac."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
@@ -186,7 +186,7 @@ msgstr "Detectăm forțe inamice la această locație."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Aceasta esteșansa noastră să învingem Noua Paradigmă și să le distrugem baza."
+msgstr "Aceasta este șansa noastră să învingem Noua Paradigmă și să le distrugem baza."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -362,7 +362,7 @@ msgstr "Felicitări pentru învingerea Noii Paradigme, acest sector este acum si
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "Programul intrus Nexus a fost detectat și în compuiterele Noii Paradigme."
+msgstr "Programul Intrus Nexus a fost detectat și în computerele Noii Paradigme."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -539,23 +539,23 @@ msgstr "După aceea, să distrugi baza."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "MISIUNEA BAZEI BETA: Distruge baza aeriană inamică și recuperează DAV-uri."
+msgstr "MISIUNEA BAZEI BETA: Distruge baza aeriană inamică și recuperează DAV-urile."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Analiza căilor de zbor indică locația originală a DAV-urilor aici."
+msgstr "Analiza traseelor de zbor indică faptul că DAV-urile Colectivului provin de aici."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "MISIUNEA BAZEI BETA: Distruge baza aeriană inamică și recuperează DAV-uri"
+msgstr "MISIUNEA BAZEI BETA: Distruge baza aeriană inamică și recuperează DAV-urile"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "Locația bazei aeriene inamice este aiciș acesta e obiectivul principal."
+msgstr "Locația bazei aeriene inamice este aici; acesta e obiectivul tău principal."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Elimină toqate forțele Colectivului și recuperează artefactele."
+msgstr "Eradichează toate forțele Colectivului și recuperează toate artefactele."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
@@ -1011,7 +1011,7 @@ msgstr "Comandante, silozul conține rachete."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "NEXUS ne blochează de la a accesa codurile de control."
+msgstr "Nexus ne împiedică să accesăm codul de control al rachetelor."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
@@ -1205,7 +1205,7 @@ msgstr "Centru de reparații"
 #: data/base/messages/strings/names.txt:307
 #: data/mp/messages/strings/names.txt:388
 msgid "Tornado AA Flak Site"
-msgstr ""
+msgstr "Amplasament AA cu Șrapnel Tornadă"
 
 #: data/base/messages/strings/names.txt:204
 #: data/base/messages/strings/names.txt:205
@@ -1269,7 +1269,7 @@ msgstr "Amplasament Piperniță"
 #: data/mp/messages/strings/names.txt:274
 #: data/mp/messages/strings/names.txt:515
 msgid "Tornado Flak Turret"
-msgstr ""
+msgstr "Turela Anti-Aeriană Tornadă"
 
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:288
@@ -1338,7 +1338,7 @@ msgstr "Propulsie de cyborg III"
 #: data/base/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:385
 msgid "NP-Hardcrete"
-msgstr ""
+msgstr "NP-Beton Tare"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox01.name
@@ -1349,7 +1349,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:395
 #: po/custom/fromJson.txt:2564
 msgid "Heavy Machinegun Bunker"
-msgstr "Buncăr cu mitralieră grea"
+msgstr "Buncăr cu Mitralieră Grea"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PrisLas.name
@@ -1370,7 +1370,7 @@ msgstr "Amplasament Lanternă"
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:2586
 msgid "Heavy Machinegun Guard Tower"
-msgstr "Turn cu mitralieră grea"
+msgstr "Turn de pază cu Mitralieră Grea"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower4.name
@@ -1398,15 +1398,15 @@ msgstr "Bloc cu aruncător de flăcări"
 #: data/base/messages/strings/names.txt:330
 #: po/custom/fromJson.txt:177
 msgid "Advanced Cyborg Production"
-msgstr "Producție avansată de cyborgi"
+msgstr "Producție Avansată de Cyborgi"
 
 #: data/base/messages/strings/names.txt:331
 msgid "Advanced Cyborg Production Mk2"
-msgstr "Producție avansată de cyborgi Mk2"
+msgstr "Producție Avansată de Cyborgi Mk2"
 
 #: data/base/messages/strings/names.txt:332
 msgid "Advanced Cyborg Production Mk3"
-msgstr "Producție avansată de cyborgi Mk3"
+msgstr "Producție Avansată de Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[1]
@@ -1438,22 +1438,22 @@ msgstr "Stație de reparații avansată îmbunătățită Mk3"
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:441
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Reînarmare DAV robotică Mk4"
+msgstr "Reînarmare Robotizată a DAV-urilor Mk4"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:449
 msgid "Cyborg Self-Repair"
-msgstr "Auto-reparație a cyborgilor"
+msgstr "Auto-Reparație a Cyborgilor"
 
 #: data/base/messages/strings/names.txt:350
 #: data/mp/messages/strings/names.txt:450
 msgid "Automated Cyborg Repair Mk2"
-msgstr "Reparație automată a cyborgilor Mk2"
+msgstr "Reparație Automatizată a Cyborgilor Mk2"
 
 #: data/base/messages/strings/names.txt:351
 #: data/mp/messages/strings/names.txt:451
 msgid "Automated Cyborg Repair Mk3"
-msgstr "Reparație automată a cyborgilor Mk3"
+msgstr "Reparație Automatizată a Cyborgilor Mk3"
 
 #: data/base/messages/strings/names.txt:353
 #: data/mp/messages/strings/names.txt:453
@@ -1502,19 +1502,19 @@ msgstr "Reparație automată a vehiculelor Mk3"
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
-msgstr "Turelă mobilă grea de reparații"
+msgstr "Turelă Mobilă Grea de Reparații"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/resstrings.txt:450
 #: data/mp/messages/strings/names.txt:470
 #: data/mp/messages/strings/resstrings.txt:217
 msgid "Mobile Repair Upgrade"
-msgstr "Îmbunătățirea turelelor mobile de reparații"
+msgstr "Îmbunătățirea Turelelor Mobile de Reparații"
 
 #: data/base/messages/strings/names.txt:370
 #: data/mp/messages/strings/names.txt:471
 msgid "Mobile Repair Upgrade Mk2"
-msgstr "Îmbunătățirea turelelor mobile de reparații Mk2"
+msgstr "Îmbunătățirea Turelelor Mobile de Reparații Mk2"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:474
@@ -1579,7 +1579,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:527
 msgid "Improved Laser Focusing Mk2"
-msgstr "Focalizare îmbunătățită a laserelor MK2"
+msgstr "Focalizare Îmbunătățită a Laserului Mk2"
 
 #: data/base/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:528
@@ -1624,7 +1624,7 @@ msgstr "Mini-rachete în foc rapid MK3"
 #: data/base/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:577
 msgid "Scavenger Flame Tower End"
-msgstr ""
+msgstr "Capăt Turn Aruncător de Flăcări al Bandiților"
 
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:588
@@ -1660,7 +1660,7 @@ msgstr "Laborator de inginerie"
 #: data/mp/messages/strings/names.txt:616
 #: data/mp/messages/strings/names.txt:632
 msgid "Robotics Laboratory"
-msgstr "Laborator de robotică"
+msgstr "Laborator de Robotică"
 
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:617
@@ -1983,7 +1983,7 @@ msgstr "O nouă clădire defensivă disponibilă"
 #: data/mp/messages/strings/resstrings.txt:37
 #: po/custom/fromJson.txt:132
 msgid "AA Site with Tornado Flak Turret"
-msgstr ""
+msgstr "Amplasament AA cu Turelă cu Șrapnel Tornadă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[2]
@@ -2050,7 +2050,7 @@ msgstr "Forță defensivă: medie"
 #: data/mp/messages/strings/resstrings.txt:42
 #: po/custom/fromJson.txt:124
 msgid "AA Site with Cyclone Flak Turret"
-msgstr ""
+msgstr "Amplasament AA cu Turelă cu Șrapnel Ciclon"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[1]
@@ -2059,7 +2059,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:47
 #: po/custom/fromJson.txt:128
 msgid "AA Site with Hurricane Gun Turret"
-msgstr ""
+msgstr "Amplasament AA cu Turelă Uragan"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[2]
@@ -2077,7 +2077,7 @@ msgstr "Țintește automat DAV"
 #: data/mp/messages/strings/resstrings.txt:52
 #: po/custom/fromJson.txt:136
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr ""
+msgstr "Amplasament AA cu Turelă Vârtej"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_IDFR.text[1]
@@ -2195,7 +2195,7 @@ msgstr "Țintește automat inamicii din rază"
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:794
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Montură ranforsată cu tun cu hiper-velocitate"
+msgstr "Punct fortificat blindat cu Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
@@ -2375,7 +2375,7 @@ msgstr "Stația de reparații îmbunătățită"
 #: data/mp/messages/strings/resstrings.txt:167
 #: po/custom/fromJson.txt:4132
 msgid "New robotic repair techniques"
-msgstr "Noi tehnici de reparație robotică"
+msgstr "Noi tehnici robotizate de reparații"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[2]
@@ -2419,7 +2419,7 @@ msgstr "Producția cyborgilor îmbunătățită"
 #: data/mp/messages/strings/resstrings.txt:172
 #: po/custom/fromJson.txt:4816
 msgid "Robotic Cyborg Production"
-msgstr "Producție robotică de cyborgi"
+msgstr "Producție Robotizată de Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[2]
@@ -2471,7 +2471,7 @@ msgstr "Producția de vehicule îmbunătățită"
 #: data/mp/messages/strings/resstrings.txt:182
 #: po/custom/fromJson.txt:4136
 msgid "New Robotic Techniques improve factory production"
-msgstr ""
+msgstr "Noi Tehnici Robotizate îmbunătățesc producția în fabrică"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[2]
@@ -2603,7 +2603,7 @@ msgstr "Productivitatea îmbunătățită"
 #: data/mp/messages/strings/resstrings.txt:202
 #: po/custom/fromJson.txt:4857
 msgid "Robotic VTOL Production"
-msgstr "Producție robotică a DAV-urilor"
+msgstr "Producție Robotizată a DAV-urilor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[2]
@@ -2867,7 +2867,7 @@ msgstr "Noi sisteme de recunoaștere a țintei"
 #: data/mp/messages/strings/resstrings.txt:238
 #: po/custom/fromJson.txt:1933
 msgid "Extends VTOL Strike Range"
-msgstr "Extinde raza de acțiune a DAV-urilor"
+msgstr "Extinde Raza de Acțiune a DAV-urilor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[3]
@@ -3033,7 +3033,7 @@ msgstr "Toate vehiculele îmbunătățite automat"
 #: data/mp/messages/strings/resstrings.txt:261
 #: po/custom/fromJson.txt:5749
 msgid "Vehicle Bodies Improved"
-msgstr "Șasiurile vehiculelor îmbunătățite"
+msgstr "Șasiurile Vehiculelor Îmbunătățite"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -3126,7 +3126,7 @@ msgstr "Nouă construcție ranforsată"
 #: data/mp/messages/strings/resstrings.txt:288
 #: po/custom/fromJson.txt:3100
 msgid "Increases Body Points"
-msgstr "Mărește rezistența șasiurilor"
+msgstr "Mărește Rezistența Șasiurilor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[3]
@@ -3187,7 +3187,7 @@ msgstr "Toate roțile îmbunătățite instantaneu"
 #: data/mp/messages/strings/resstrings.txt:306
 #: po/custom/fromJson.txt:3975
 msgid "New AA Turret Available"
-msgstr "Nouă turelă AA disponibilă"
+msgstr "Nouă Turelă AA Disponibilă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[1]
@@ -3196,7 +3196,7 @@ msgstr "Nouă turelă AA disponibilă"
 #: data/mp/messages/strings/resstrings.txt:292
 #: po/custom/fromJson.txt:5632
 msgid "Twin 80mm flak weapon"
-msgstr ""
+msgstr "Armă Dublă AA de 80mm cu șrapnel"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[2]
@@ -3222,7 +3222,7 @@ msgstr "Doar ținte aeriene"
 #: data/mp/messages/strings/resstrings.txt:297
 #: po/custom/fromJson.txt:4529
 msgid "Quad 80mm flak weapon"
-msgstr ""
+msgstr "Armă Cvadruplă AA de 80mm cu șrapnel"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA3.text[1]
@@ -3241,7 +3241,7 @@ msgstr "Mitralieră anti-aeriană de 30mm"
 #: data/mp/messages/strings/resstrings.txt:307
 #: po/custom/fromJson.txt:4522
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Mitralieră anti-aerianp de 30mm quadruplă"
+msgstr "Mitralieră Anti-Aeriana Cvadruplă de 30mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[0]
@@ -3297,7 +3297,7 @@ msgstr "Toate armele AA îmbunătățite instantaneu"
 #: data/mp/messages/strings/resstrings.txt:316
 #: po/custom/fromJson.txt:91
 msgid "AA Flak Upgrade"
-msgstr ""
+msgstr "Îmbunătățire Șrapnel AA"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[1]
@@ -3315,7 +3315,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:318
 #: po/custom/fromJson.txt:3081
 msgid "Increases AA Flak damage"
-msgstr ""
+msgstr "Mărește Pagubele Șrapnelului AA"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[3]
@@ -3326,7 +3326,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:269
 msgid "All AA flak weapons upgraded automatically"
-msgstr ""
+msgstr "Toate tunurile AA cu șrapnel sunt îmbunătățite automat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[1]
@@ -3335,7 +3335,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:322
 #: po/custom/fromJson.txt:4625
 msgid "Recoil loaded AA ammunition hopper"
-msgstr ""
+msgstr "Buncăr cu Muniție AA încărcat prin recul"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
@@ -3344,7 +3344,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:323
 #: po/custom/fromJson.txt:3085
 msgid "Increases AA ROF"
-msgstr "Mărește rata de foc AA"
+msgstr "Mărește Rata-de-Foc AA"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[0]
@@ -3512,7 +3512,7 @@ msgstr "Toate încărcăturile de bombe îmbunătățite instantaneu"
 #: data/mp/messages/strings/resstrings.txt:361
 #: po/custom/fromJson.txt:4198
 msgid "New Weapon Turret Available"
-msgstr "Nouă turelă disponibilă"
+msgstr "Nouă Turelă Disponibilă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[1]
@@ -3521,7 +3521,7 @@ msgstr "Nouă turelă disponibilă"
 #: data/mp/messages/strings/resstrings.txt:352
 #: po/custom/fromJson.txt:2936
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr ""
+msgstr "Tun de Hiper-Velocitate, automat, ce trage cu proiectile de 88mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -3552,7 +3552,7 @@ msgstr "Înlocuiește tunul mediu"
 #: data/mp/messages/strings/resstrings.txt:357
 #: po/custom/fromJson.txt:32
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "Tun cu hiper-velocitate automat de 76mm cu 4 țevi"
+msgstr "Tun de hiper-velocitate automat cvadruplu de 76mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[3]
@@ -3705,7 +3705,7 @@ msgstr "Ținta ideală: Clădiri, Buncăre"
 #: data/mp/messages/strings/resstrings.txt:396
 #: po/custom/fromJson.txt:2864
 msgid "Howitzer Upgrade"
-msgstr "Îmbunătățire a howitzer-ului"
+msgstr "Îmbunătățire a Obuzierului"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[1]
@@ -3725,7 +3725,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:388
 #: po/custom/fromJson.txt:3153
 msgid "Increases Howitzer accuracy"
-msgstr "Mărește precizia howitzer-elor"
+msgstr "Mărește Precizia Obuzierelor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[3]
@@ -3740,7 +3740,7 @@ msgstr "Mărește precizia howitzer-elor"
 #: data/mp/messages/strings/resstrings.txt:399
 #: po/custom/fromJson.txt:345
 msgid "All howitzers upgraded automatically"
-msgstr "Toate howitzer-ele îmbunătățite instantaneu"
+msgstr "Toate obuzierele sunt îmbunătățite automat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWD1.text[1]
@@ -3759,7 +3759,7 @@ msgstr "Muniție super-explozivă"
 #: data/mp/messages/strings/resstrings.txt:393
 #: po/custom/fromJson.txt:3157
 msgid "Increases Howitzer damage"
-msgstr "Mărește puterea howitzer-elor"
+msgstr "Mărește Puterea Obuzierelor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text[1]
@@ -3779,7 +3779,7 @@ msgstr "Mecanism automat înlocuiește încărcarea manuală"
 #: data/mp/messages/strings/resstrings.txt:398
 #: po/custom/fromJson.txt:3161
 msgid "Increases Howitzer ROF"
-msgstr "Mărește rata de foc a howitzer-elor"
+msgstr "Mărește Rata-de-Foc a Obuzierelor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[0]
@@ -3801,7 +3801,7 @@ msgstr "Îmbunătățire a mitralierei"
 #: data/mp/messages/strings/resstrings.txt:402
 #: po/custom/fromJson.txt:5595
 msgid "Tungsten-tipped armor-piercing bullets"
-msgstr "Gloanțe cu vârf de tungsten penetratoare de armură"
+msgstr "Gloanțe perforante cu vârf de tungsten"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[2]
@@ -3825,7 +3825,7 @@ msgstr "Mărește puterea mitralierelor"
 #: data/mp/messages/strings/resstrings.txt:409
 #: po/custom/fromJson.txt:357
 msgid "All machineguns upgraded automatically"
-msgstr "Toate mitralierele îmbunătățite instantaneu."
+msgstr "Toate mitralierele sunt îmbunătățite automat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_MG_ROF2.text[1]
@@ -3897,7 +3897,7 @@ msgstr "Îmbunătățire a mortierelor"
 #: data/mp/messages/strings/resstrings.txt:417
 #: po/custom/fromJson.txt:2722
 msgid "High Explosive Armor-Piercing Shells"
-msgstr ""
+msgstr "Proiectile Explozive Perforante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[2]
@@ -3938,7 +3938,7 @@ msgstr "Îmbunătățire la mini-rachete"
 #: data/mp/messages/strings/resstrings.txt:422
 #: po/custom/fromJson.txt:2725
 msgid "High Explosive Armor-Piercing warheads"
-msgstr ""
+msgstr "Focosase Explozive Perforante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text[2]
@@ -3965,7 +3965,7 @@ msgstr "Toate mini-rachetele îmbunătățite instantaneu"
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
 msgid "Robotic reload system"
-msgstr "Sistem de reîncărcare robotic"
+msgstr "Sistem de Reîncărcare Robotizat"
 
 #: data/base/messages/strings/resstrings.txt:953
 #: data/mp/messages/strings/resstrings.txt:428
@@ -3990,7 +3990,7 @@ msgstr "Îmbunătățire la rachete"
 #: data/mp/messages/strings/resstrings.txt:432
 #: po/custom/fromJson.txt:2750
 msgid "High Explosive Squash Head warhead"
-msgstr ""
+msgstr "Focos Exploziv cu Vârf Maleabil"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[2]
@@ -4087,12 +4087,12 @@ msgstr ""
 #: data/base/script/tutorial.js:251
 #: data/base/script/tutorial.js:510
 #: data/mp/multiplay/skirmish/rules.js:177
-#: src/challenge.cpp:230
+#: src/challenge.cpp:217
 #: src/hci.cpp:2964
 #: src/hci.cpp:3685
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
-#: src/loadsave.cpp:258
+#: src/loadsave.cpp:245
 #: src/multimenu.cpp:475
 #: src/multimenu.cpp:1208
 #: src/transporter.cpp:201
@@ -4129,7 +4129,7 @@ msgstr "Această pompă este deocamdată inactivă. Construiește o centrală el
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "Click stâng pe pictograma CONSTRUCȚIE care pâlpâie"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -4230,7 +4230,7 @@ msgstr "O fabrică e necesară pentru a construi vehiculul"
 
 #: data/base/script/tutorial.js:66
 msgid "Now left click the factory icon and position it at your base"
-msgstr "Fă click pe pictograma fabricii și plaseaz-o în bază"
+msgstr "Acum, fă click pe pictograma fabricii și plaseaz-o în bază"
 
 #: data/base/script/tutorial.js:67
 msgid "Select a location for your factory"
@@ -4354,7 +4354,7 @@ msgstr "Comandante, am recuperat o turelă de comandă de la Noua Paradigmă."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr "Turela permite comandanților să coordoneze atacuri între unitățile asociate și să primească întăriri direct de la fabrici. Cercetarea și folosirea tehnologiei acestea are cea mai mare prioritate."
+msgstr "Această turelă permite comandanților să coordoneze atacuri între unitățile asociate și să primească întăriri direct de la fabrici. Cercetarea și folosirea acestei tehnologii are cea mai mare prioritate."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
@@ -4388,7 +4388,7 @@ msgstr "Asigură o ZA și construiește o bază înaintată."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
-msgstr "Dupa aceea, distruge baza Noii Paradigme."
+msgstr "Apoi distruge baza Noii Paradigme."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
@@ -4408,7 +4408,7 @@ msgstr "Împreună putem crea o lume nouă."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr "Pot să-ți ofer putere mai multă decât poți visa.."
+msgstr "Pot să-ți ofer putere dincolo de cele mai îndrăznețe visele ale tale."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
@@ -4493,7 +4493,7 @@ msgstr "Întoarceți-vă la zona voastră sau veți fi distruși."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr "Repet. Întoarceți-vă la zona voastră sau veți fi distruți."
+msgstr "Repet. Întoarceți-vă la zona voastră sau veți fi distruşi."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
@@ -4837,7 +4837,7 @@ msgstr "Poți să ajungi la noi cu unități anti-aeriene?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Echipa Alfa aici. Repet, echipa Alfa aici. Avem nevoie imediată de ajutor."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
@@ -4861,7 +4861,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr ""
+msgstr "Ne confruntăm cu interferențe din partea NEXUS."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
@@ -4869,7 +4869,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
-msgstr ""
+msgstr "Comandante, bun venit la NEXUS!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -5038,7 +5038,7 @@ msgstr "Securitate"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr "Diminața, 4 Aprilie 2100"
+msgstr "Zori, 4 Aprilie, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
@@ -5140,7 +5140,7 @@ msgstr "Mitralieră"
 
 #: data/mp/messages/strings/names.txt:275
 msgid "VTOL Flak Cannon"
-msgstr ""
+msgstr "DAV Tun AA cu Șrapnel"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveWall.name
@@ -5302,7 +5302,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:436
 msgid "Robotic Repair Facility Mk3"
-msgstr ""
+msgstr "Stație de Reparații Robotizată Mk3"
 
 #: data/mp/messages/strings/names.txt:437
 msgid "Advanced Repair Facility Mk2"
@@ -5426,7 +5426,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:777
 #: po/custom/fromJson.txt:5243
 msgid "Super Auto-Cannon Cyborg"
-msgstr ""
+msgstr "Cyborg cu Super Autotun"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-HPV.name
@@ -5484,29 +5484,29 @@ msgstr "Super-cyborg cu Năpastă"
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
 msgid "Command Turret II"
-msgstr "Turelă de comandă II"
+msgstr "Turelă de Comandă II"
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
 msgid "Command Turret III"
-msgstr "Turelă de comandă III"
+msgstr "Turelă de Comandă III"
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
 msgid "Command Turret IV"
-msgstr "Turelă de comandă IV"
+msgstr "Turelă de Comandă IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "UȘOR"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "NORMAL"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "GREU"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
@@ -5573,63 +5573,63 @@ msgid "Any time, big boss!"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:29
-#: src/multiint.cpp:1279
-#: src/multiint.cpp:1282
+#: src/multiint.cpp:1323
+#: src/multiint.cpp:1326
 msgid "Scavengers"
 msgstr "Bandiți"
 
 #: data/mp/multiplay/skirmish/rules.js:30
-#: src/multiint.cpp:1284
+#: src/multiint.cpp:1328
 msgid "No Scavengers"
 msgstr "Fără bandiți"
 
 #: data/mp/multiplay/skirmish/rules.js:35
-#: src/multiint.cpp:1291
+#: src/multiint.cpp:1335
 msgid "No Alliances"
 msgstr "Fără alianțe"
 
 #: data/mp/multiplay/skirmish/rules.js:36
-#: src/multiint.cpp:1292
+#: src/multiint.cpp:1336
 msgid "Allow Alliances"
 msgstr "Permite alianțele"
 
 #: data/mp/multiplay/skirmish/rules.js:37
-#: src/multiint.cpp:1294
+#: src/multiint.cpp:1338
 msgid "Locked Teams"
 msgstr "Echipe blocate"
 
 #: data/mp/multiplay/skirmish/rules.js:38
-#: src/multiint.cpp:1293
+#: src/multiint.cpp:1337
 msgid "Locked Teams, No Shared Research"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
-#: src/multiint.cpp:1301
+#: src/multiint.cpp:1345
 msgid "Low Power Levels"
 msgstr "Nivel mic de energie"
 
 #: data/mp/multiplay/skirmish/rules.js:45
-#: src/multiint.cpp:1302
+#: src/multiint.cpp:1346
 msgid "Medium Power Levels"
 msgstr "Nivel mediu de energie"
 
 #: data/mp/multiplay/skirmish/rules.js:46
-#: src/multiint.cpp:1303
+#: src/multiint.cpp:1347
 msgid "High Power Levels"
 msgstr "Nivel mare de energie"
 
 #: data/mp/multiplay/skirmish/rules.js:52
-#: src/multiint.cpp:1310
+#: src/multiint.cpp:1354
 msgid "Start with No Bases"
 msgstr "Pornire fără baze"
 
 #: data/mp/multiplay/skirmish/rules.js:53
-#: src/multiint.cpp:1311
+#: src/multiint.cpp:1355
 msgid "Start with Bases"
 msgstr "Pornire cu baze"
 
 #: data/mp/multiplay/skirmish/rules.js:54
-#: src/multiint.cpp:1312
+#: src/multiint.cpp:1356
 msgid "Start with Advanced Bases"
 msgstr "Pornire cu baze avansate"
 
@@ -5729,21 +5729,21 @@ msgstr "Precizia AA +10%"
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF02.name
 #: po/custom/fromJson.txt:45
 msgid "AA Ammunition Hopper Mk2"
-msgstr ""
+msgstr "Buncăr cu Muniție AA Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF03.name
 #: po/custom/fromJson.txt:49
 msgid "AA Ammunition Hopper Mk3"
-msgstr ""
+msgstr "Buncăr cu Muniție AA Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-ROF01.name
 #: po/custom/fromJson.txt:53
 msgid "AA Ammunition Hopper"
-msgstr ""
+msgstr "Buncăr cu Muniție AA"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF05.name
@@ -5771,27 +5771,27 @@ msgstr "Încărcător AA pe lanț"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Flak Cannon Emplacement"
-msgstr ""
+msgstr "Amplasament cu Tun AA cu Șrapnel"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Punct Fortificat cu Tun AA cu Șrapnel"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "Tun AA cu Șrapnel pe șasiu Piton Semi-șenilat"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Flak Cannon"
-msgstr ""
+msgstr "Tun AA cu Șrapnel"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -5799,49 +5799,49 @@ msgstr ""
 #: po/custom/fromJson.txt:85
 #, no-c-format
 msgid "AA Flak damage +25%"
-msgstr ""
+msgstr "Pagube Șrapnel AA +25%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage02.name
 #: po/custom/fromJson.txt:95
 msgid "AA HE Flak Mk2"
-msgstr ""
+msgstr "Șrapnel Exploziv AA Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage03.name
 #: po/custom/fromJson.txt:99
 msgid "AA HE Flak Mk3"
-msgstr ""
+msgstr "Șrapnel Exploziv AA Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage01.name
 #: po/custom/fromJson.txt:103
 msgid "AA HE Flak"
-msgstr ""
+msgstr "Șrapnel Exploziv AA"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage05.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage05.name
 #: po/custom/fromJson.txt:107
 msgid "AA HEAP Flak Mk2"
-msgstr ""
+msgstr "Șrapnel Exploziv Perforant AA Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage06.name
 #: po/custom/fromJson.txt:111
 msgid "AA HEAP Flak Mk3"
-msgstr ""
+msgstr "Șrapnel Exploziv Perforant AA Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Damage04.name
 #: po/custom/fromJson.txt:115
 msgid "AA HEAP Flak"
-msgstr ""
+msgstr "Șrapnel Exploziv Perforant AA"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
@@ -5849,28 +5849,28 @@ msgstr ""
 #: po/custom/fromJson.txt:120
 #, no-c-format
 msgid "AA reload time -15%"
-msgstr ""
+msgstr "Timp de reîncărcare a muniției AA -15%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
 #: po/custom/fromJson.txt:140
 msgid "AA Target Acquisition Shells"
-msgstr ""
+msgstr "Proiectile AA Ghidate către Țintă"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
 #: po/custom/fromJson.txt:144
 msgid "AA Target Prediction Computer"
-msgstr ""
+msgstr "Computer Prezicere Țintă AA"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
 #: po/custom/fromJson.txt:148
 msgid "AA Thermal Imaging Sensor"
-msgstr ""
+msgstr "Senzor de Imagistică Termică AA"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6216,21 +6216,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage05.name
 #: po/custom/fromJson.txt:520
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr ""
+msgstr "Proiectile de tun APFSDS Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #: po/custom/fromJson.txt:524
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr ""
+msgstr "Proiectile de tun APFSDS Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #: po/custom/fromJson.txt:528
 msgid "APFSDS Cannon Rounds"
-msgstr ""
+msgstr "Proiectile de tun APFSDS"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyArtMissile.name
@@ -6332,7 +6332,7 @@ msgstr "Înarmat cu grenade"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_HPV.text[1]
 #: po/custom/fromJson.txt:593
 msgid "Armed with hyper velocity cannon"
-msgstr ""
+msgstr "Înarmat cu tun de hiper-velocitate"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
@@ -6446,7 +6446,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
 #: po/custom/fromJson.txt:671
 msgid "Armored guard tower with EMP Cannon"
-msgstr ""
+msgstr "Turn de pază blindat cu Tun cu Puls Electro Magnetic"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
@@ -6511,7 +6511,7 @@ msgstr "Bloc ranforsat cu laser Lanternă"
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL3.text[1]
 #: po/custom/fromJson.txt:714
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr ""
+msgstr "Punct fortificat blindat cu Tun Gauss"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT4_HC.text[1]
@@ -6532,7 +6532,7 @@ msgstr "Bloc ranforsat cu mitralieră grea"
 #. data/mp/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
 #: po/custom/fromJson.txt:726
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Bloc ranforsat cu tun cu hiper-velocitate"
+msgstr "Punct fortificat blindat cu Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
@@ -6594,7 +6594,7 @@ msgstr "Montură ranforsată cu laser Lanternă"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail3.text[1]
 #: po/custom/fromJson.txt:787
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr ""
+msgstr "Punct fortificat blindat cu Tun Gauss"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_HEAVYLAS.text[1]
@@ -6633,7 +6633,7 @@ msgstr "Șenile ranforsate"
 #: po/custom/fromJson.txt:820
 #, no-c-format
 msgid "Armour +35%, Body Points +30%"
-msgstr ""
+msgstr "Blindaj +35%, Structură Șasiu +30%"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Crate.name
@@ -7125,7 +7125,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Mortar2Mk1.name
 #: po/custom/fromJson.txt:1223
 msgid "Bombard"
-msgstr ""
+msgstr "Bombardă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BAC3.text[1]
@@ -7252,14 +7252,14 @@ msgstr "Precizia tunurilor +10%"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 #: po/custom/fromJson.txt:1298
 msgid "Cannon Autoloader Mk2"
-msgstr "Autoîncărcător pentru tunuri MK2"
+msgstr "Autoîncărcător pentru Tunuri Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #: po/custom/fromJson.txt:1302
 msgid "Cannon Autoloader Mk3"
-msgstr "Autoîncărcător pentru tunuri MK3"
+msgstr "Autoîncărcător pentru Tunuri Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF01.name
@@ -7311,14 +7311,14 @@ msgstr "Țintire laser pentru tunuri"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF05.name
 #: po/custom/fromJson.txt:1333
 msgid "Cannon Rapid Loader Mk2"
-msgstr "Încărcător rapid pentru tunuri MK2"
+msgstr "Încărcător Rapid pentru Tunuri Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF06.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF06.name
 #: po/custom/fromJson.txt:1337
 msgid "Cannon Rapid Loader Mk3"
-msgstr "Încărcător rapid pentru tunuri MK3"
+msgstr "Încărcător Rapid pentru Tunuri Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF04.name
@@ -7415,13 +7415,13 @@ msgstr "Civil"
 #. data/mp/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1395
 msgid "Cluster Bomb Bay"
-msgstr ""
+msgstr "Încărcătură de Bombe cu Fragmentare"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1398
 msgid "Cluster Bombs Bay"
-msgstr "Încărcătură de bombe fragmentare"
+msgstr "Încărcătură de Bombe cu Fragmentare"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraFlameTracks.name
@@ -7565,7 +7565,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:1493
 msgid "Command Turret"
-msgstr "Turelă de comandă"
+msgstr "Turelă de Comandă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[2]
@@ -7608,7 +7608,7 @@ msgstr "Aliaje compozite"
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[1]
 #: po/custom/fromJson.txt:1518
 msgid "Computer guided shells"
-msgstr ""
+msgstr "Proiectile ghidate de computer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAAC3.text[1]
@@ -7703,42 +7703,42 @@ msgstr "Turelă anti-baterie detectează bateriile de foc indirect inamice"
 #. data/mp/stats/research.json: $.R-Cyborg-Metals02.name
 #: po/custom/fromJson.txt:1574
 msgid "Cyborg Composite Alloys Mk2"
-msgstr "Aliaje compozite pentru cyborgi Mk2"
+msgstr "Aliaje Compozite pentru Cyborgi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals03.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals03.name
 #: po/custom/fromJson.txt:1578
 msgid "Cyborg Composite Alloys Mk3"
-msgstr "Aliaje compozite pentru cyborgi Mk3"
+msgstr "Aliaje Compozite pentru Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals01.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals01.name
 #: po/custom/fromJson.txt:1582
 msgid "Cyborg Composite Alloys"
-msgstr "Aliaje compozite pentru cyborgi"
+msgstr "Aliaje Compozite pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals05.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals05.name
 #: po/custom/fromJson.txt:1586
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr "Aliaje compozite dense pentru cyborgi Mk2"
+msgstr "Aliaje Compozite Dense pentru Cyborgi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals06.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals06.name
 #: po/custom/fromJson.txt:1590
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr "Aliaje compozite dense pentru cyborgi Mk3"
+msgstr "Aliaje Compozite Dense pentru Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals04.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals04.name
 #: po/custom/fromJson.txt:1594
 msgid "Cyborg Dense Composite Alloys"
-msgstr "Aliaje compozite dense pentru cyborgi"
+msgstr "Aliaje Compozite Dense pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[1]
@@ -7747,7 +7747,7 @@ msgstr "Aliaje compozite dense pentru cyborgi"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1600
 msgid "Cyborg Factory"
-msgstr "Fabrică de cyborgi"
+msgstr "Fabrică de Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Cyb-Flamer-GROUND.name
@@ -7769,21 +7769,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat05.name
 #: po/custom/fromJson.txt:1613
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr "Armură termală de mare intensitate pentru cyborgi Mk2"
+msgstr "Blindaj Termal de Mare Intensitate pentru Cyborgi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat06.name
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat06.name
 #: po/custom/fromJson.txt:1617
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr "Armură termală de mare intensitate pentru cyborgi Mk3"
+msgstr "Blindaj Termal de Mare Intensitate pentru Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat04.name
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat04.name
 #: po/custom/fromJson.txt:1621
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr "Armură termală de mare intensitate pentru cyborgi"
+msgstr "Blindaj Termal de Mare Intensitate pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgRocket.name
@@ -7812,67 +7812,67 @@ msgstr "Mecanic cyborg"
 #. data/mp/messages/resmessages3.json: $.RES_CY_LG3.text[0]
 #: po/custom/fromJson.txt:1657
 msgid "Cyborg Propulsion Improved"
-msgstr "Propulsia cyborgilor îmbunătățită"
+msgstr "Propulsia Cyborgilor Îmbunătățită"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals08.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals08.name
 #: po/custom/fromJson.txt:1666
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr "Aliaje compozite superdense pentru cyborgi Mk2"
+msgstr "Aliaje Compozite Super-Dense pentru Cyborgi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals09.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals09.name
 #: po/custom/fromJson.txt:1670
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr "Aliaje compozite superdense pentru cyborgi Mk3"
+msgstr "Aliaje Compozite Super-Dense pentru Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals07.name
 #. data/mp/stats/research.json: $.R-Cyborg-Metals07.name
 #: po/custom/fromJson.txt:1674
 msgid "Cyborg Superdense Composite Alloys"
-msgstr "Aliaje compozite superdense pentru cyborgi"
+msgstr "Aliaje Compozite Super-Dense pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat08.name
 #: po/custom/fromJson.txt:1677
 msgid "Cyborg Superdense Thermal Armor Mk2"
-msgstr "Armură termală supra-densă pentru cyborgi MK2"
+msgstr "Blindaj Termal Super-Dens pentru Cyborgi Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat09.name
 #: po/custom/fromJson.txt:1680
 msgid "Cyborg Superdense Thermal Armor Mk3"
-msgstr "Armură termală supra-densă pentru cyborgi MK3"
+msgstr "Blindaj Termal Super-Dens pentru Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat07.name
 #: po/custom/fromJson.txt:1683
 msgid "Cyborg Superdense Thermal Armor"
-msgstr "Armură termală supra-densă pentru cyborgi"
+msgstr "Blindaj Termal Super-Dens pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat02.name
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat02.name
 #: po/custom/fromJson.txt:1693
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "Armură termală pentru cyborgi Mk2"
+msgstr "Blindaj Termal pentru Cyborgi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat03.name
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat03.name
 #: po/custom/fromJson.txt:1697
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "Armură termală pentru cyborgi Mk3"
+msgstr "Blindaj Termal pentru Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 #. data/mp/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 #: po/custom/fromJson.txt:1701
 msgid "Cyborg Thermal Armor"
-msgstr "Armură termală pentru cyborgi"
+msgstr "Blindaj Termal pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[0]
@@ -7885,27 +7885,27 @@ msgstr "Transportor pentru cyborgi disponibil"
 #. data/mp/stats/templates.json: $.Transporter.name
 #: po/custom/fromJson.txt:1708
 msgid "Cyborg Transport"
-msgstr "Transportor pentru cyborgi"
+msgstr "Transportor pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_SL1.text[2]
 #. data/mp/messages/resmessages1.json: $.RES_C_SL1.text[2]
 #: po/custom/fromJson.txt:1712
 msgid "Cyborgs can now be researched"
-msgstr "Cyborgii pot fi acum cercetață"
+msgstr "Cyborgii pot fi acum cercetați"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadBof.name
 #. data/base/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:1716
 msgid "Cyclone AA Flak Site"
-msgstr ""
+msgstr "Amplasament Anti-Aerian cu Șrapnel Ciclon"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:1719
 msgid "Cyclone AA Python Half-tracks"
-msgstr ""
+msgstr "Tun AA Ciclon pe șasiu Piton Semi-șenilat"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun02.name
@@ -8248,19 +8248,19 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 #: po/custom/fromJson.txt:1966
 msgid "Fast Fire Mini-Rockets Mk2"
-msgstr "Mini-rchete în foc accelerat MK2"
+msgstr "Mini-Rachete în Foc Rapid Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 #: po/custom/fromJson.txt:1969
 msgid "Fast Fire Mini-Rockets Mk3"
-msgstr "Mini-rchete în foc accelerat MK3"
+msgstr "Mini-Rachete în Foc Rapid Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF01.name
 #: po/custom/fromJson.txt:1972
 msgid "Fast Fire Mini-Rockets"
-msgstr "Mini-rchete în foc accelerat"
+msgstr "Mini-Rachete în Foc Rapid"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
@@ -8550,7 +8550,7 @@ msgstr "Generator cu turbină de gaz"
 #. data/mp/stats/structure.json: $.Emplacement-Rail3.name
 #: po/custom/fromJson.txt:2165
 msgid "Gauss Cannon Emplacement"
-msgstr "Amplasament cu tun Gauss"
+msgstr "Amplasament cu Tun Gauss"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-Rail3.name
@@ -8559,19 +8559,19 @@ msgstr "Amplasament cu tun Gauss"
 #. data/mp/stats/structure.json: $.WallTower-Rail3.name
 #: po/custom/fromJson.txt:2171
 msgid "Gauss Cannon Hardpoint"
-msgstr "Bloc cu tun Gauss"
+msgstr "Punct Fortificat cu Tun Gauss"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
 #: po/custom/fromJson.txt:2174
 msgid "Gauss Cannon Python Tracks"
-msgstr ""
+msgstr "Tun Gauss pe şasiu Piton Şenilat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernGaussTracks.name
 #: po/custom/fromJson.txt:2177
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr ""
+msgstr "Tun Gauss pe şasiu Balaur Şenilat"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun03.name
@@ -8799,7 +8799,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[0]
 #: po/custom/fromJson.txt:2322
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr ""
+msgstr "Punct Fortificat cu Tun AA Ciclon Disponibil"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -8817,7 +8817,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[0]
 #: po/custom/fromJson.txt:2331
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr ""
+msgstr "Punct Fortificat cu Tun AA Vârtej Disponibil"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy01.name
@@ -8920,7 +8920,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb02.name
 #: po/custom/fromJson.txt:2386
 msgid "HEAP Bomb Bay"
-msgstr "Încărcătură de bombe SEPA"
+msgstr "Încărcătură de Bombe Explozive Perforatoare"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage05.name
@@ -9083,7 +9083,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraHvyCnTrks.name
 #: po/custom/fromJson.txt:2489
 msgid "Heavy Cannon Cobra Tracks"
-msgstr "tun greu Cobra șenile"
+msgstr "Tun Greu pe șasiu Cobra Șenilat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN3MK1.text[1]
@@ -9205,20 +9205,20 @@ msgstr "Mitralieră grea Cobră Semi-șenile"
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-HMG.name
 #: po/custom/fromJson.txt:2573
 msgid "Heavy Machinegun Cobra Hover"
-msgstr ""
+msgstr "Mitralieră Grea pe şasiu Cobra Amfibiu"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Trk-HMG.name
 #. data/mp/stats/templates.json: $.CobraHMGTracks.name
 #: po/custom/fromJson.txt:2577
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr ""
+msgstr "Mitralieră Grea pe şasiu Cobra Şenilat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Wheels-HMG.name
 #: po/custom/fromJson.txt:2580
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr ""
+msgstr "Mitralieră Grea pe şasiu Cobra cu Roți"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower01.name
@@ -9233,13 +9233,13 @@ msgstr "Bloc cu mitralieră grea"
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
 #: po/custom/fromJson.txt:2595
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr ""
+msgstr "Mitralieră Grea pe şasiu Scorpion Semi-şenilat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpTrkHMG.name
 #: po/custom/fromJson.txt:2598
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr ""
+msgstr "Mitralieră Grea pe şasiu Scorpion Şenilat"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGHalftrack.name
@@ -9261,7 +9261,7 @@ msgstr "Mitralieră grea Viperă Șenile"
 #. data/mp/stats/templates.json: $.ViperHMGWheels.name
 #: po/custom/fromJson.txt:2615
 msgid "Heavy Machinegun Viper Wheels"
-msgstr ""
+msgstr "Mitralieră Grea pe şasiu Viperă cu Roți"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG3Mk1.name
@@ -9448,14 +9448,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat05.name
 #: po/custom/fromJson.txt:2754
 msgid "High Intensity Thermal Armor Mk2"
-msgstr "Armură termală de mare intensitate MK2"
+msgstr "Blindaj Termal de Mare Intensitate Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat06.name
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat06.name
 #: po/custom/fromJson.txt:2758
 msgid "High Intensity Thermal Armor Mk3"
-msgstr "Armură termală de mare intensitate MK3"
+msgstr "Blindaj Termal de Mare Intensitate Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat04.name
@@ -9476,14 +9476,14 @@ msgstr "Costuri și timp de producție mari"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 #: po/custom/fromJson.txt:2778
 msgid "High Temperature Flamer Gel Mk2"
-msgstr "Gel pentru aruncător de temperatură mare MK2"
+msgstr "Gel de Temperatură Ridicată pentru Aruncător Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #: po/custom/fromJson.txt:2782
 msgid "High Temperature Flamer Gel Mk3"
-msgstr "Gel pentru aruncător de temperatură mare MK3"
+msgstr "Gel de Temperatură Ridicată pentru Aruncător Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage01.name
@@ -9558,14 +9558,14 @@ msgstr "Precizie howitzer +10%"
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 #: po/custom/fromJson.txt:2831
 msgid "Howitzer Autoloader Mk2"
-msgstr "Autoîncărcător pentru howitzer MK2"
+msgstr "Autoîncărcător pentru Obuzier Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #: po/custom/fromJson.txt:2835
 msgid "Howitzer Autoloader Mk3"
-msgstr "Autoîncărcător pentru howitzer MK3"
+msgstr "Autoîncărcător pentru Obuzier Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
@@ -9610,7 +9610,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2874
 msgid "HPV Cannon Emplacement"
-msgstr "Amplaasament tun HPV"
+msgstr "Amplasament cu Tun de HPV"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
@@ -9632,7 +9632,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
 #: po/custom/fromJson.txt:2887
 msgid "Hurricane AA Site"
-msgstr ""
+msgstr "Amplasament AA Uragan"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun03.name
@@ -9641,7 +9641,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
 #: po/custom/fromJson.txt:2893
 msgid "Hurricane AA Turret"
-msgstr ""
+msgstr "Turelă AA Uragan"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
@@ -9682,26 +9682,26 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2916
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr ""
+msgstr "Amplasament cu Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2920
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr ""
+msgstr "Punct fortificat cu Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
 #: po/custom/fromJson.txt:2923
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr ""
+msgstr "Tun de Hiper-Velocitate pe şasiu Piton Amfibiu"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2926
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr ""
+msgstr "Tun de Hiper-Velocitate pe şasiu Piton Şenilat"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -9710,7 +9710,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
 #: po/custom/fromJson.txt:2932
 msgid "Hyper Velocity Cannon"
-msgstr "Tun cu hiper-velocitate"
+msgstr "Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10321,7 +10321,7 @@ msgstr "Laser - Lanternă"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[0]
 #: po/custom/fromJson.txt:3427
 msgid "Laser AA Gun Available"
-msgstr ""
+msgstr "Armă Laser AA Disponibilă"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASAC1.text[2]
@@ -10434,7 +10434,7 @@ msgstr "Șasiu ușor - Leopard"
 #. data/mp/stats/research.json: $.R-Vehicle-Body03.name
 #: po/custom/fromJson.txt:3498
 msgid "Light Body - Retaliation"
-msgstr "Șasiu ușor - Represaliu"
+msgstr "Șasiu Ușor - Represiune"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body01.name
@@ -10570,13 +10570,13 @@ msgstr "Timpul de reîncărcare a mitralierelor +15%"
 #. data/mp/stats/templates.json: $.ViperLtMGHalfTracks.name
 #: po/custom/fromJson.txt:3592
 msgid "Machinegun Viper Half-Tracks"
-msgstr ""
+msgstr "Mitralieră pe şasiu Viperă Semi-şenilat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Trk-MG.name
 #: po/custom/fromJson.txt:3595
 msgid "Machinegun Viper Tracks"
-msgstr ""
+msgstr "Mitralieră pe şasiu Viperă Şenilat"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.Cyb-Chain-GROUND.name
@@ -10938,7 +10938,7 @@ msgstr "Rachetele detectează și blochează ținta cât timp se încarcă"
 #. data/mp/stats/research.json: $.R-Sys-MobileRepairTurret01.name
 #: po/custom/fromJson.txt:3840
 msgid "Mobile Repair Turret"
-msgstr "Turelă mobilă de reparații"
+msgstr "Turelă Mobilă de Reparații"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B10.text[1]
@@ -10969,14 +10969,14 @@ msgstr "Precizia mortarelor +10%"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-ROF02.name
 #: po/custom/fromJson.txt:3859
 msgid "Mortar Autoloader Mk2"
-msgstr "Autoîncărcător pentru mortier MK2"
+msgstr "Autoîncărcător pentru Mortier Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-ROF03.name
 #: po/custom/fromJson.txt:3863
 msgid "Mortar Autoloader Mk3"
-msgstr "Autoîncărcător pentru mortier MK3"
+msgstr "Autoîncărcător pentru Mortier Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF01.name
@@ -11050,7 +11050,7 @@ msgstr "Amplasament LRM"
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
 #: po/custom/fromJson.txt:3913
 msgid "Multi Turret Body - Dragon"
-msgstr "Șasiu multi-turelă - Dragon"
+msgstr "Șasiu Multi-Turelă - Dragon"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[1]
@@ -11157,7 +11157,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[0]
 #: po/custom/fromJson.txt:3990
 msgid "New Artillery Missile Turret Available"
-msgstr "Nouă turelă de artilerie cu rachete disponibilă"
+msgstr "Nouă Turelă de Artilerie cu Rachete Disponibilă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[1]
@@ -11209,7 +11209,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4061
 msgid "New Laser Weapon Available"
-msgstr "Mouă armă cu laser disponibilă"
+msgstr "Nouă Armă cu Laser Disponibilă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text[0]
@@ -11321,7 +11321,7 @@ msgstr "Nouă rachetă disponibilă"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[0]
 #: po/custom/fromJson.txt:4148
 msgid "New SAM Turret Available"
-msgstr "Nouă turelă RSA disponibilă"
+msgstr "Nouă Turelă RSA Disponibilă"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[0]
@@ -11412,7 +11412,7 @@ msgstr "Program intrus NEXUS"
 #. data/mp/messages/resmessages3.json: $.RES_V_B03.text[0]
 #: po/custom/fromJson.txt:4216
 msgid "NEXUS Light Body"
-msgstr "Șasiu uțor NEXUS"
+msgstr "Șasiu Ușor NEXUS"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTower.name
@@ -11598,7 +11598,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb03.name
 #: po/custom/fromJson.txt:4332
 msgid "Phosphor Bomb Bay"
-msgstr "Încărcătură de bombe cu fosfor"
+msgstr "Încărcătură de Bombe cu Fosfor"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaPickUp.name
@@ -11612,14 +11612,14 @@ msgstr "Mașină utilitară"
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade08.name
 #: po/custom/fromJson.txt:4340
 msgid "Plascrete Mk2"
-msgstr "Plasbeton MK2"
+msgstr "Plasbeton Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade09.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade09.name
 #: po/custom/fromJson.txt:4344
 msgid "Plascrete Mk3"
-msgstr "Plasbeton MK3"
+msgstr "Plasbeton Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade07.name
@@ -11691,13 +11691,13 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade11.name
 #: po/custom/fromJson.txt:4383
 msgid "Plasteel Mk2"
-msgstr "Plasoțel MK2"
+msgstr "Plasoțel Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade12.name
 #: po/custom/fromJson.txt:4386
 msgid "Plasteel Mk3"
-msgstr "Plasoțel MK3"
+msgstr "Plasoțel Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade10.name
@@ -11786,7 +11786,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
 #: po/custom/fromJson.txt:4440
 msgid "Produces Cyborgs"
-msgstr "Produce cyborgi"
+msgstr "Produce Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -11912,7 +11912,7 @@ msgstr "Piton"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:4525
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr ""
+msgstr "Mitralieră AA Cvadruplă de 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12089,7 +12089,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VP.text[1]
 #: po/custom/fromJson.txt:4639
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr "Reîncarcă, repară și re-alimentează DAV-uri"
+msgstr "Realimentează, reîncarcă și repară DAV-urile"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials02.name
@@ -12148,7 +12148,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4688
 #, no-c-format
 msgid "Repair Speed +100%"
-msgstr "viteză de reparații +100%"
+msgstr "Viteză de Reparații +100%"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12173,21 +12173,21 @@ msgstr ""
 #. data/base/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4701
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Turelă de reparații Viperă Semi-șenile"
+msgstr "Turelă de Reparații pe şasiu Viperă Semi-şenilat"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairWheels.name
 #. data/mp/stats/templates.json: $.ViperRepairWheels.name
 #: po/custom/fromJson.txt:4705
 msgid "Repair Turret Viper Wheels"
-msgstr "Turelă de reparații Viperă Roți"
+msgstr "Turelă de Reparații pe şasiu Viperă cu Roți"
 
 #. TRANSLATORS:
 #. data/base/stats/repair.json: $.LightRepair1.name
 #. data/mp/stats/repair.json: $.LightRepair1.name
 #: po/custom/fromJson.txt:4709
 msgid "Repair Turret"
-msgstr "Turelă de reparații"
+msgstr "Turelă de Reparații"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[3]
@@ -12317,31 +12317,31 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade05.name
 #: po/custom/fromJson.txt:4808
 msgid "Robotic Cyborg Production Mk2"
-msgstr "Producție robotică de cyborgi Mk2"
+msgstr "Producție Robotizată de Cyborgi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade06.name
 #: po/custom/fromJson.txt:4811
 msgid "Robotic Cyborg Production Mk3"
-msgstr "Producție robotică de cyborgi Mk3"
+msgstr "Producție Robotizată de Cyborgi Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade05.name
 #: po/custom/fromJson.txt:4819
 msgid "Robotic Factory Production Mk2"
-msgstr "Producție robotică a vehiculelor Mk2"
+msgstr "Producție Robotizată a Vehiculelor Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade06.name
 #: po/custom/fromJson.txt:4822
 msgid "Robotic Factory Production Mk3"
-msgstr "Producție robotică a vehiculelor Mk3"
+msgstr "Producție Robotizată a Vehiculelor Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 #: po/custom/fromJson.txt:4825
 msgid "Robotic Factory Production"
-msgstr "Producție robotică a vehiculelor"
+msgstr "Producție Robotizată a Vehiculelor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[1]
@@ -12356,57 +12356,57 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 #: po/custom/fromJson.txt:4834
 msgid "Robotic Manufacturing"
-msgstr ""
+msgstr "Fabricare Robotizată"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade05.name
 #: po/custom/fromJson.txt:4837
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Stație de reparații robotică îmbunătățită Mk2"
+msgstr "Stație de Reparații Robotizată Îmbunătățită Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:4840
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr "Stație de reparații robotică îmbunătățită Mk3"
+msgstr "Stație de Reparații Robotizată Îmbunătățită Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 #: po/custom/fromJson.txt:4843
 msgid "Robotic Repair Facility Upgrade"
-msgstr "Stație de reparații robotică îmbunătățită"
+msgstr "Stație de Reparații Robotizată Îmbunătățită"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 #: po/custom/fromJson.txt:4846
 msgid "Robotic Repair Facility"
-msgstr ""
+msgstr "Stație de Reparații Robotizată"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade02.name
 #: po/custom/fromJson.txt:4849
 msgid "Robotic VTOL Production Mk2"
-msgstr "Producție robotică a DAV-urilor Mk2"
+msgstr "Producție Robotizată a DAV-urilor Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade03.name
 #: po/custom/fromJson.txt:4852
 msgid "Robotic VTOL Production Mk3"
-msgstr "Producție robotică a DAV-urilor Mk3"
+msgstr "Producție Robotizată a DAV-urilor Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
 #: po/custom/fromJson.txt:4861
 msgid "Robotic VTOL Rearming Mk2"
-msgstr "Reînarmare DAV robotică Mk2"
+msgstr "Reînarmare Robotizată a DAV-urilor Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 #: po/custom/fromJson.txt:4865
 msgid "Robotic VTOL Rearming Mk3"
-msgstr "Reînarmare DAV robotică Mk3"
+msgstr "Reînarmare Robotizată a DAV-urilor Mk3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_VPU4.text[1]
@@ -12415,7 +12415,7 @@ msgstr "Reînarmare DAV robotică Mk3"
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade04.name
 #: po/custom/fromJson.txt:4871
 msgid "Robotic VTOL Rearming"
-msgstr "Reînarmare DAV robotică"
+msgstr "Reînarmare Robotizată a DAV-urilor"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_AC1.text[2]
@@ -12439,14 +12439,14 @@ msgstr "Artilerie cu rachete; poate fi atașată unui senzor"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 #: po/custom/fromJson.txt:4886
 msgid "Rocket Autoloader Mk2"
-msgstr "Autoîncărcător pentru rachete MK2"
+msgstr "Autoîncărcător pentru Rachete Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 #: po/custom/fromJson.txt:4890
 msgid "Rocket Autoloader Mk3"
-msgstr "Autoîncărcător pentru rachete MK3"
+msgstr "Autoîncărcător pentru Rachete Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF01.name
@@ -12460,7 +12460,7 @@ msgstr "Autoîncărcător pentru rachete"
 #. data/mp/stats/templates.json: $.BarbarianRKBuggy.name
 #: po/custom/fromJson.txt:4898
 msgid "Rocket Buggy"
-msgstr "ATV cu rachete"
+msgstr "ATV cu Rachete"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_D1.text[2]
@@ -12796,7 +12796,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.ViperSensorWheels.name
 #: po/custom/fromJson.txt:5115
 msgid "Sensor Turret Viper Wheels"
-msgstr "Turelă radar Viperă Roți"
+msgstr "Turelă Radar pe corp Viperă cu Roți"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Turret01.name
@@ -12954,7 +12954,7 @@ msgstr "Turn din oțel cu mitralieră"
 #. data/mp/stats/weapons.json: $.AAGunLaser.name
 #: po/custom/fromJson.txt:5212
 msgid "Stormbringer AA Laser"
-msgstr "Laser AA Furtună"
+msgstr "Laser AA Aducător-de-furtună"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-AA-Laser.name
@@ -12988,20 +12988,20 @@ msgstr "Cercetare de clădirie completă"
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
 #: po/custom/fromJson.txt:5231
 msgid "Sunburst AA Rocket Array"
-msgstr ""
+msgstr "Lansator AA Rază-de-Soare"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Sunburst.name
 #. data/mp/stats/structure.json: $.P0-AASite-Sunburst.name
 #: po/custom/fromJson.txt:5235
 msgid "Sunburst AA Site"
-msgstr ""
+msgstr "Amplasament AA Rază-de-Soare"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-Sunburst.name
 #: po/custom/fromJson.txt:5238
 msgid "Sunburst AA"
-msgstr ""
+msgstr "AA Rază-de-Soare"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13028,14 +13028,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade05.name
 #: po/custom/fromJson.txt:5291
 msgid "Supercrete Mk2"
-msgstr "Superbeton MK2"
+msgstr "Superbeton Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade06.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade06.name
 #: po/custom/fromJson.txt:5295
 msgid "Supercrete Mk3"
-msgstr "Superbeton MK3"
+msgstr "Superbeton Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade04.name
@@ -13079,14 +13079,14 @@ msgstr "Aliaje compozite superdense"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 #: po/custom/fromJson.txt:5321
 msgid "Superhot Flamer Gel Mk2"
-msgstr "Gel pentru aruncător super-fierbinte MK2"
+msgstr "Gel Super-Fierbinte pentru Aruncător Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #: po/custom/fromJson.txt:5325
 msgid "Superhot Flamer Gel Mk3"
-msgstr "Gel pentru aruncător super-fierbinte MK3"
+msgstr "Gel Super-Fierbinte pentru Aruncător Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage04.name
@@ -13348,14 +13348,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat02.name
 #: po/custom/fromJson.txt:5492
 msgid "Thermal Armor Mk2"
-msgstr "Armură termală MK2"
+msgstr "Blindaj Termal Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat03.name
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat03.name
 #: po/custom/fromJson.txt:5496
 msgid "Thermal Armor Mk3"
-msgstr "Armură termală MK3"
+msgstr "Blindaj Termal Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat01.name
@@ -13389,13 +13389,13 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Bomb04.name
 #: po/custom/fromJson.txt:5515
 msgid "Thermite Bomb Bay"
-msgstr "Încărcătură de bombe cu thermit"
+msgstr "Încărcătură de Bombe cu Termit"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5518
 msgid "Thermite Flamer"
-msgstr "Aruncător de thermit"
+msgstr "Aruncător de Termit"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -13622,7 +13622,7 @@ msgstr "Mitralieră dublă Viperă Semi-șenile"
 #. data/mp/stats/templates.json: $.A-Viper-Trk-TMG.name
 #: po/custom/fromJson.txt:5665
 msgid "Twin Machinegun Viper Tracks"
-msgstr ""
+msgstr "Mitralieră-Dublă pe şasiu Viperă Şenilat"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Wheels.name
@@ -13652,7 +13652,7 @@ msgstr "Laser anti-aerian mediu dublu"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGUN.text[1]
 #: po/custom/fromJson.txt:5683
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr ""
+msgstr "Mitralieră Dublă cu țevi multiple și rată mare de foc"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.challenge.name
@@ -13779,7 +13779,7 @@ msgstr "Viteza vehiculelor +5%"
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
 #: po/custom/fromJson.txt:5776
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr "Armură termală supra-densă pentru vehicule MK2"
+msgstr "Blindaj Termal Superdens pentru Vehicule Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat09.name
@@ -13997,7 +13997,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[1]
 #: po/custom/fromJson.txt:5914
 msgid "VTOL factory enables VTOL production"
-msgstr "Fabrica DAV permite construcția DAV-urilor"
+msgstr "Fabrica DAV permite producția de DAV-uri"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLFactory.name
@@ -14039,26 +14039,26 @@ msgstr "Mitralieră grea DAV"
 #. data/mp/stats/templates.json: $.V-Bug-HPV.name
 #: po/custom/fromJson.txt:5938
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr ""
+msgstr "DAV pe şasiu Gândac cu Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Mantis-HPV.name
 #: po/custom/fromJson.txt:5941
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr ""
+msgstr "DAV pe şasiu Călugăriţă cu Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-HPV.name
 #: po/custom/fromJson.txt:5944
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr ""
+msgstr "DAV pe şasiu Scorpion cu Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 #. data/mp/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 #: po/custom/fromJson.txt:5948
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "Tun cu hiper-velocitate DAV"
+msgstr "DAV Tun de Hiper-Velocitate"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol02.name
@@ -14218,7 +14218,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Sunburst.name
 #: po/custom/fromJson.txt:6054
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "DAV AA Rază-de-Soare"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
@@ -14307,7 +14307,7 @@ msgstr "Roți"
 #. data/mp/stats/structure.json: $.AASite-QuadRotMg.name
 #: po/custom/fromJson.txt:6113
 msgid "Whirlwind AA Site"
-msgstr ""
+msgstr "Amplasament AA Vârtej"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun04.name
@@ -14316,7 +14316,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.QuadRotAAGun.name
 #: po/custom/fromJson.txt:6119
 msgid "Whirlwind AA Turret"
-msgstr ""
+msgstr "Turelă AA Vârtej"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-QuadRotAA.name
@@ -14381,7 +14381,7 @@ msgstr "Balaur"
 #: po/custom/fromJson.txt:6153
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Elită"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14397,7 +14397,7 @@ msgstr "Soldat"
 #: po/custom/fromJson.txt:6161
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Erou"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14405,7 +14405,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6165
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "Profesionist"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14413,7 +14413,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6169
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "Obișnuit"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14421,7 +14421,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6173
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Recrut"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14429,7 +14429,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6177
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Special"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14437,7 +14437,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6181
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Antrenat"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14445,7 +14445,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6185
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veteran"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -14455,7 +14455,7 @@ msgstr ""
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14858,29 +14858,29 @@ msgid "Player dropped"
 msgstr "Jucătorul s-a deconectat"
 
 #: src/display3d.cpp:684
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Waiting for other players"
 msgstr "Așteptare pentru alți jucători"
 
 #: src/display3d.cpp:689
 msgid "Out of sync"
-msgstr ""
+msgstr "Desincronizat"
 
 #: src/display3d.cpp:1887
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr ""
 
-#: src/display.cpp:1514
+#: src/display.cpp:1511
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nu se poate construi. Puțul de petrol e în flăcări."
 
-#: src/display.cpp:1530
+#: src/display.cpp:1527
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr ""
 
-#: src/display.cpp:1692
+#: src/display.cpp:1689
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr ""
@@ -14895,7 +14895,7 @@ msgstr ""
 msgid "Structure Restored"
 msgstr "Clădire reconstruită"
 
-#: src/droid.cpp:1923
+#: src/droid.cpp:1922
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -14903,7 +14903,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:1932
+#: src/droid.cpp:1931
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -14911,7 +14911,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:1943
+#: src/droid.cpp:1942
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -14919,7 +14919,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:1947
+#: src/droid.cpp:1946
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -14927,7 +14927,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:3056
+#: src/droid.cpp:3055
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -15001,7 +15001,7 @@ msgstr ""
 
 #: src/frontend.cpp:183
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Verifică dacă există actualizări"
 
 #: src/frontend.cpp:310
 msgid "Fast Play"
@@ -15016,13 +15016,13 @@ msgstr "TUTORIALE"
 #: src/frontend.cpp:371
 #: src/frontend.cpp:417
 #: src/frontend.cpp:615
-#: src/frontend.cpp:688
-#: src/frontend.cpp:816
-#: src/frontend.cpp:989
-#: src/frontend.cpp:1263
-#: src/frontend.cpp:1605
-#: src/frontend.cpp:1757
-#: src/frontend.cpp:1777
+#: src/frontend.cpp:686
+#: src/frontend.cpp:814
+#: src/frontend.cpp:987
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1603
+#: src/frontend.cpp:1755
+#: src/frontend.cpp:1775
 msgctxt "menu"
 msgid "Return"
 msgstr "Întoarcere"
@@ -15037,7 +15037,7 @@ msgstr "Începe joc individual"
 
 #: src/frontend.cpp:366
 msgid "Challenges"
-msgstr ""
+msgstr "Provocări"
 
 #: src/frontend.cpp:367
 msgid "Load Campaign Game"
@@ -15058,7 +15058,7 @@ msgstr ""
 
 #: src/frontend.cpp:416
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "CAMPANII"
 
 #: src/frontend.cpp:551
 #: src/ingameop.cpp:874
@@ -15086,186 +15086,186 @@ msgstr "Alătură-te unui joc"
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:681
-#: src/multiint.cpp:1223
+#: src/frontend.cpp:679
+#: src/multiint.cpp:1267
 msgid "OPTIONS"
 msgstr "OPȚIUNI"
 
-#: src/frontend.cpp:682
+#: src/frontend.cpp:680
 msgid "Game Options"
 msgstr "Opțiuni de joc"
 
-#: src/frontend.cpp:683
+#: src/frontend.cpp:681
 #: src/ingameop.cpp:479
 msgid "Graphics Options"
-msgstr "Opoțiuni de grafică"
+msgstr "Setări de Grafică"
 
-#: src/frontend.cpp:684
+#: src/frontend.cpp:682
 #: src/ingameop.cpp:482
 msgid "Video Options"
 msgstr "Opțiuni video"
 
-#: src/frontend.cpp:685
+#: src/frontend.cpp:683
 msgid "Audio / Zoom Options"
 msgstr ""
 
-#: src/frontend.cpp:686
+#: src/frontend.cpp:684
 #: src/ingameop.cpp:489
 msgid "Mouse Options"
 msgstr "Opțiuni ale mouse-ului"
 
-#: src/frontend.cpp:687
+#: src/frontend.cpp:685
 #: src/ingameop.cpp:494
 msgid "Key Mappings"
 msgstr "Taste funcționale"
 
-#: src/frontend.cpp:738
+#: src/frontend.cpp:736
 msgid "1×"
-msgstr ""
+msgstr "1x"
 
-#: src/frontend.cpp:739
+#: src/frontend.cpp:737
 msgid "2×"
-msgstr ""
+msgstr "2x"
 
-#: src/frontend.cpp:740
-#: src/frontend.cpp:1120
+#: src/frontend.cpp:738
+#: src/frontend.cpp:1118
 msgid "Fullscreen"
 msgstr "Tot ecranul"
 
-#: src/frontend.cpp:741
-#: src/frontend.cpp:752
-#: src/frontend.cpp:903
-#: src/frontend.cpp:1683
+#: src/frontend.cpp:739
+#: src/frontend.cpp:750
+#: src/frontend.cpp:901
+#: src/frontend.cpp:1681
 msgid "Unsupported"
 msgstr ""
 
-#: src/frontend.cpp:749
-#: src/frontend.cpp:758
-#: src/frontend.cpp:763
-#: src/frontend.cpp:1127
-#: src/frontend.cpp:1166
-#: src/frontend.cpp:1532
-#: src/frontend.cpp:1537
-#: src/frontend.cpp:1542
-#: src/frontend.cpp:1552
+#: src/frontend.cpp:747
+#: src/frontend.cpp:756
+#: src/frontend.cpp:761
+#: src/frontend.cpp:1125
+#: src/frontend.cpp:1164
+#: src/frontend.cpp:1530
+#: src/frontend.cpp:1535
+#: src/frontend.cpp:1540
+#: src/frontend.cpp:1550
 msgid "Off"
 msgstr "Dezactivat"
 
-#: src/frontend.cpp:750
+#: src/frontend.cpp:748
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:751
-#: src/multiplay.cpp:1897
+#: src/frontend.cpp:749
+#: src/multiplay.cpp:1909
 msgid "Black"
 msgstr "Negru"
 
-#: src/frontend.cpp:758
-#: src/frontend.cpp:763
-#: src/frontend.cpp:1166
-#: src/frontend.cpp:1532
-#: src/frontend.cpp:1537
-#: src/frontend.cpp:1542
-#: src/frontend.cpp:1552
+#: src/frontend.cpp:756
+#: src/frontend.cpp:761
+#: src/frontend.cpp:1164
+#: src/frontend.cpp:1530
+#: src/frontend.cpp:1535
+#: src/frontend.cpp:1540
+#: src/frontend.cpp:1550
 msgid "On"
 msgstr "Activat"
 
-#: src/frontend.cpp:768
+#: src/frontend.cpp:766
 msgid "Rotating"
 msgstr "Rotație"
 
-#: src/frontend.cpp:768
+#: src/frontend.cpp:766
 msgid "Fixed"
 msgstr "Fix"
 
-#: src/frontend.cpp:773
+#: src/frontend.cpp:771
 msgid "Instant"
 msgstr ""
 
-#: src/frontend.cpp:773
+#: src/frontend.cpp:771
 msgid "Tracked"
 msgstr ""
 
-#: src/frontend.cpp:786
+#: src/frontend.cpp:784
 #: src/ingameop.cpp:517
 msgid "Video Playback"
 msgstr "Redare video"
 
-#: src/frontend.cpp:790
+#: src/frontend.cpp:788
 #: src/ingameop.cpp:522
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:795
+#: src/frontend.cpp:793
 #: src/ingameop.cpp:527
 msgid "Subtitles"
 msgstr "Subtitrări"
 
-#: src/frontend.cpp:800
+#: src/frontend.cpp:798
 #: src/ingameop.cpp:532
 msgid "Shadows"
 msgstr "Umbre"
 
-#: src/frontend.cpp:804
+#: src/frontend.cpp:802
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
-#: src/frontend.cpp:808
+#: src/frontend.cpp:806
 #: src/ingameop.cpp:542
 msgid "Radar Jump"
 msgstr ""
 
-#: src/frontend.cpp:812
+#: src/frontend.cpp:810
 msgid "GRAPHICS OPTIONS"
 msgstr "OPȚIUNI DE GRAFICĂ"
 
-#: src/frontend.cpp:906
+#: src/frontend.cpp:904
 msgid "Disabled"
 msgstr ""
 
-#: src/frontend.cpp:909
+#: src/frontend.cpp:907
 msgid "Enabled"
 msgstr ""
 
-#: src/frontend.cpp:913
-#: src/frontend.cpp:919
+#: src/frontend.cpp:911
+#: src/frontend.cpp:917
 msgid "Auto"
 msgstr ""
 
-#: src/frontend.cpp:954
+#: src/frontend.cpp:952
 #: src/ingameop.cpp:159
 msgid "Voice Volume"
 msgstr "Volumul vocii"
 
-#: src/frontend.cpp:958
+#: src/frontend.cpp:956
 #: src/ingameop.cpp:165
 msgid "FX Volume"
 msgstr "Volumul efectelor"
 
-#: src/frontend.cpp:962
+#: src/frontend.cpp:960
 #: src/ingameop.cpp:171
 msgid "Music Volume"
 msgstr "Volumul muzicii"
 
-#: src/frontend.cpp:966
+#: src/frontend.cpp:964
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
+#: src/frontend.cpp:969
 #: src/frontend.cpp:971
-#: src/frontend.cpp:973
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "HRTF nu este acceptat pe dispozitivul tau / sistemul tau / biblioteca OpenAL"
 
-#: src/frontend.cpp:977
+#: src/frontend.cpp:975
 msgid "Map Zoom"
 msgstr ""
 
-#: src/frontend.cpp:981
+#: src/frontend.cpp:979
 msgid "Map Zoom Rate"
 msgstr ""
 
-#: src/frontend.cpp:985
+#: src/frontend.cpp:983
 msgid "Radar Zoom"
 msgstr ""
 
@@ -15273,179 +15273,179 @@ msgstr ""
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:996
+#: src/frontend.cpp:994
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "SETĂRI AUDIO / ZOOM"
 
-#: src/frontend.cpp:1120
+#: src/frontend.cpp:1118
 msgid "Windowed"
 msgstr "În fereastră"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1135
 msgid "Graphics Mode*"
 msgstr "Modul de grafică*"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1135
 msgid "Graphics Mode"
 msgstr ""
 
-#: src/frontend.cpp:1142
+#: src/frontend.cpp:1140
 msgid "Resolution*"
 msgstr "Rezoluție*"
 
-#: src/frontend.cpp:1142
+#: src/frontend.cpp:1140
 msgid "Resolution"
-msgstr ""
+msgstr "Rezoluție"
 
-#: src/frontend.cpp:1147
+#: src/frontend.cpp:1145
 msgid "Display Scale*"
 msgstr ""
 
-#: src/frontend.cpp:1147
+#: src/frontend.cpp:1145
 msgid "Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:1191
+#: src/frontend.cpp:1189
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr ""
 
-#: src/frontend.cpp:1223
+#: src/frontend.cpp:1221
 msgid "* Takes effect on game restart"
 msgstr "* Are efect doar la repornirea jocului"
 
-#: src/frontend.cpp:1235
+#: src/frontend.cpp:1233
 msgid "Texture size"
 msgstr "Mărimea texturilor"
 
-#: src/frontend.cpp:1239
+#: src/frontend.cpp:1237
 #: src/ingameop.cpp:630
 msgid "Vertical sync"
-msgstr ""
+msgstr "Sincronizare verticală"
 
-#: src/frontend.cpp:1243
+#: src/frontend.cpp:1241
 msgid "Antialiasing*"
-msgstr ""
+msgstr "Antialiasing"
 
-#: src/frontend.cpp:1249
+#: src/frontend.cpp:1247
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Atenție: Antialiasing-ul poate cauza probleme, mai ales cu valori > 16"
 
-#: src/frontend.cpp:1260
+#: src/frontend.cpp:1258
 msgid "VIDEO OPTIONS"
 msgstr "OPȚIUNI VIDEO"
 
-#: src/frontend.cpp:1547
+#: src/frontend.cpp:1545
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1547
+#: src/frontend.cpp:1545
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1559
+#: src/frontend.cpp:1557
 msgid "Map/Radar Zoom"
 msgstr ""
 
-#: src/frontend.cpp:1560
+#: src/frontend.cpp:1558
 msgid "Game Speed"
-msgstr ""
+msgstr "Viteza Jocului"
 
-#: src/frontend.cpp:1561
+#: src/frontend.cpp:1559
 msgid "Camera Pitch"
 msgstr ""
 
-#: src/frontend.cpp:1576
+#: src/frontend.cpp:1574
 #: src/ingameop.cpp:697
 msgid "Reverse Rotation"
 msgstr "Inversează rotația"
 
-#: src/frontend.cpp:1580
+#: src/frontend.cpp:1578
 #: src/ingameop.cpp:704
 msgid "Trap Cursor"
 msgstr "Prinde cursorul"
 
-#: src/frontend.cpp:1585
+#: src/frontend.cpp:1583
 #: src/ingameop.cpp:710
 msgid "Switch Mouse Buttons"
 msgstr "Inversează butoanele mouse-ului"
 
-#: src/frontend.cpp:1590
+#: src/frontend.cpp:1588
 #: src/ingameop.cpp:715
 msgid "Rotate Screen"
 msgstr "Rotește ecranul"
 
-#: src/frontend.cpp:1594
+#: src/frontend.cpp:1592
 #: src/ingameop.cpp:720
 msgid "Colored Cursors"
 msgstr ""
 
-#: src/frontend.cpp:1598
+#: src/frontend.cpp:1596
 #: src/ingameop.cpp:725
 msgid "Scroll Event"
 msgstr ""
 
-#: src/frontend.cpp:1602
+#: src/frontend.cpp:1600
 msgid "MOUSE OPTIONS"
 msgstr "OPȚIUNI ALE MOUSE-ULUI"
 
-#: src/frontend.cpp:1678
+#: src/frontend.cpp:1676
 #: src/multiint.cpp:223
 msgid "Easy"
 msgstr "Ușor"
 
-#: src/frontend.cpp:1679
+#: src/frontend.cpp:1677
 msgid "Normal"
 msgstr ""
 
-#: src/frontend.cpp:1680
+#: src/frontend.cpp:1678
 #: src/multiint.cpp:223
 msgid "Hard"
 msgstr "Dificil"
 
-#: src/frontend.cpp:1681
+#: src/frontend.cpp:1679
 #: src/multiint.cpp:223
 msgid "Insane"
 msgstr ""
 
-#: src/frontend.cpp:1712
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1710
+#: src/frontend.cpp:1776
 msgid "Language"
 msgstr "Limbă"
 
-#: src/frontend.cpp:1716
-#: src/frontend.cpp:1782
+#: src/frontend.cpp:1714
+#: src/frontend.cpp:1780
 msgid "Campaign Difficulty"
 msgstr ""
 
-#: src/frontend.cpp:1720
-#: src/frontend.cpp:1783
+#: src/frontend.cpp:1718
+#: src/frontend.cpp:1781
 msgid "Camera Speed"
 msgstr ""
 
-#: src/frontend.cpp:1724
-#: src/frontend.cpp:1779
+#: src/frontend.cpp:1722
+#: src/frontend.cpp:1777
 msgid "Unit Colour:"
 msgstr ""
 
-#: src/frontend.cpp:1744
-#: src/frontend.cpp:1780
+#: src/frontend.cpp:1742
+#: src/frontend.cpp:1778
 msgid "Campaign"
 msgstr ""
 
-#: src/frontend.cpp:1754
-#: src/frontend.cpp:1781
+#: src/frontend.cpp:1752
+#: src/frontend.cpp:1779
 msgid "Skirmish/Multiplayer"
 msgstr ""
 
-#: src/frontend.cpp:1760
-#: src/frontend.cpp:1776
+#: src/frontend.cpp:1758
+#: src/frontend.cpp:1774
 msgid "GAME OPTIONS"
 msgstr "OPȚIUNI DE JOC"
 
-#: src/frontend.cpp:1888
-#: src/multiint.cpp:2365
+#: src/frontend.cpp:1886
+#: src/multiint.cpp:2390
 msgid "Mod: "
-msgstr "Modificare:"
+msgstr "Mod: "
 
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
@@ -15474,7 +15474,7 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
 #: src/hci.cpp:2818
-#: src/multiint.cpp:1300
+#: src/multiint.cpp:1344
 #: src/multimenu.cpp:770
 msgid "Power"
 msgstr "Energie"
@@ -15485,11 +15485,11 @@ msgstr ""
 
 #: src/hci.cpp:3529
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "Ascunde Tehnologia Învechită"
 
 #: src/hci.cpp:3531
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Arată Tehnologia Învechită"
 
 #: src/hci.cpp:3543
 msgid "Showing All Tech\n"
@@ -15520,11 +15520,11 @@ msgstr ""
 
 #: src/hci.cpp:4946
 msgid "Chat: All"
-msgstr ""
+msgstr "Chat: Toți"
 
 #: src/hci.cpp:4951
 msgid "Chat: Team"
-msgstr ""
+msgstr "Chat: Echipă"
 
 #: src/ingameop.cpp:116
 #: src/ingameop.cpp:191
@@ -15535,16 +15535,16 @@ msgstr ""
 #: src/ingameop.cpp:730
 #: src/keyedit.cpp:394
 msgid "Resume Game"
-msgstr ""
+msgstr "Reluați Jocul"
 
 #: src/ingameop.cpp:129
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr ""
+msgstr "AVERTISMENT: Tu ești gazda. Dacă renunți, jocul se termină pentru toată lumea!"
 
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
 msgid "Host Quit"
-msgstr ""
+msgstr "Gazda a Ieșit"
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
@@ -15565,7 +15565,7 @@ msgstr "Încarcă joc"
 #: src/ingameop.cpp:263
 #: src/mission.cpp:2460
 msgid "Save Game"
-msgstr ""
+msgstr "Salvează Jocul"
 
 #: src/ingameop.cpp:275
 msgid "Quit"
@@ -15577,7 +15577,7 @@ msgstr "Gazda a ieșit din joc!"
 
 #: src/ingameop.cpp:348
 msgid "The game can't continue without the host."
-msgstr ""
+msgstr "Jocul nu poate continua fără gazdă."
 
 #: src/ingameop.cpp:354
 msgid "-->  QUIT  <--"
@@ -15603,7 +15603,7 @@ msgstr ""
 #, c-format
 msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
-msgstr "Modulul necesar nu poate fi încărcat: %s\n\n"
+msgstr "Modul necesar nu poate fi încărcat: %s\n\n"
 "Warzone va încerca să încarce jocul fără el."
 
 #: src/intdisplay.cpp:164
@@ -15616,18 +15616,18 @@ msgstr ""
 
 #: src/intdisplay.cpp:234
 msgid "Construction Progress"
-msgstr ""
+msgstr "Progresul Construcției"
 
 #: src/intdisplay.cpp:255
 msgid "Research Progress"
-msgstr ""
+msgstr "Progresul Cercetării"
 
 #: src/intdisplay.cpp:670
 msgid "Need more resources!"
-msgstr ""
+msgstr "Ai nevoie de mai multe resurse!"
 
 #: src/intelmap.cpp:239
-#: src/keybind.cpp:1363
+#: src/keybind.cpp:1379
 msgid "PAUSED"
 msgstr "PAUZĂ"
 
@@ -15637,7 +15637,7 @@ msgstr ""
 
 #: src/intelmap.cpp:325
 msgid "Project Goals"
-msgstr ""
+msgstr "Obiectivele Proiectului"
 
 #: src/intelmap.cpp:328
 msgid "Current Objective"
@@ -15645,35 +15645,35 @@ msgstr "Obiectivul curent"
 
 #: src/intelmap.cpp:1230
 msgid "New Intelligence Report"
-msgstr ""
+msgstr "Nou Raport de Informații"
 
 #: src/intorder.cpp:166
-#: src/keymap.cpp:396
+#: src/keymap.cpp:404
 msgid "Short Range"
 msgstr "Rază scurtă"
 
 #: src/intorder.cpp:167
-#: src/keymap.cpp:402
+#: src/keymap.cpp:410
 msgid "Long Range"
 msgstr "Rază lungă"
 
 #: src/intorder.cpp:168
-#: src/keymap.cpp:395
+#: src/keymap.cpp:403
 msgid "Optimum Range"
 msgstr "Rază optimă"
 
 #: src/intorder.cpp:169
-#: src/keymap.cpp:414
+#: src/keymap.cpp:422
 msgid "Retreat at Medium Damage"
 msgstr "Retragere la avarii serioase"
 
 #: src/intorder.cpp:170
-#: src/keymap.cpp:415
+#: src/keymap.cpp:423
 msgid "Retreat at Heavy Damage"
 msgstr "Retragere la avarii grave"
 
 #: src/intorder.cpp:171
-#: src/keymap.cpp:416
+#: src/keymap.cpp:424
 msgid "Do or Die!"
 msgstr "Fă sau mori!"
 
@@ -15682,37 +15682,37 @@ msgid "Fire-At-Will"
 msgstr "Foc de voie"
 
 #: src/intorder.cpp:173
-#: src/keymap.cpp:390
+#: src/keymap.cpp:398
 msgid "Return Fire"
 msgstr "Foc de răspuns"
 
 #: src/intorder.cpp:174
-#: src/keymap.cpp:388
+#: src/keymap.cpp:396
 msgid "Hold Fire"
 msgstr "Foc oprit"
 
 #: src/intorder.cpp:175
-#: src/keymap.cpp:398
+#: src/keymap.cpp:406
 msgid "Patrol"
 msgstr "Patrulează"
 
 #: src/intorder.cpp:176
-#: src/keymap.cpp:397
+#: src/keymap.cpp:405
 msgid "Pursue"
 msgstr "Urmărește"
 
 #: src/intorder.cpp:177
-#: src/keymap.cpp:392
+#: src/keymap.cpp:400
 msgid "Guard Position"
 msgstr "Păzește poziția"
 
 #: src/intorder.cpp:178
-#: src/keymap.cpp:394
+#: src/keymap.cpp:402
 msgid "Hold Position"
 msgstr "Menține poziția"
 
 #: src/intorder.cpp:179
-#: src/keymap.cpp:399
+#: src/keymap.cpp:407
 msgid "Return For Repair"
 msgstr "Întoarcere pentru reparații"
 
@@ -15721,12 +15721,12 @@ msgid "Return To HQ"
 msgstr "Întoarcere la bază"
 
 #: src/intorder.cpp:181
-#: src/keymap.cpp:401
+#: src/keymap.cpp:409
 msgid "Go to Transport"
 msgstr "Spre transportor"
 
 #: src/intorder.cpp:182
-#: src/keymap.cpp:425
+#: src/keymap.cpp:433
 msgid "Return for Recycling"
 msgstr "Întoarcere pentru reciclare"
 
@@ -15780,15 +15780,15 @@ msgstr ""
 
 #: src/keybind.cpp:326
 msgid "View Aligned to South"
-msgstr ""
+msgstr "Vedere Aliniată spre Sud"
 
 #: src/keybind.cpp:336
 msgid "View Aligned to East"
-msgstr ""
+msgstr "Vedere Aliniată spre Est"
 
 #: src/keybind.cpp:346
 msgid "View Aligned to West"
-msgstr ""
+msgstr "Vedere Aliniată spre Vest"
 
 #: src/keybind.cpp:411
 #, c-format
@@ -15803,13 +15803,13 @@ msgstr ""
 #: src/keybind.cpp:743
 #: src/keybind.cpp:799
 #: src/keybind.cpp:1310
-#: src/keybind.cpp:1417
-#: src/keybind.cpp:1522
-#: src/keybind.cpp:1827
-#: src/keybind.cpp:1868
+#: src/keybind.cpp:1433
+#: src/keybind.cpp:1538
+#: src/keybind.cpp:1843
+#: src/keybind.cpp:1884
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr ""
+msgstr "(Jucătorul %u) trișeaza :%s"
 
 #: src/keybind.cpp:511
 msgid "Hard as nails!!!"
@@ -15841,11 +15841,11 @@ msgstr ""
 
 #: src/keybind.cpp:612
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "Afișajul FPS este activat."
 
 #: src/keybind.cpp:616
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "Afișajul FPS este dezactivat."
 
 #: src/keybind.cpp:669
 #, c-format
@@ -15854,15 +15854,15 @@ msgstr ""
 
 #: src/keybind.cpp:705
 msgid "Infinite power disabled"
-msgstr ""
+msgstr "Putere infinită dezactivată"
 
 #: src/keybind.cpp:705
 msgid "Infinite power enabled"
-msgstr ""
+msgstr "Putere infinită activată"
 
 #: src/keybind.cpp:744
 msgid "All items made available"
-msgstr ""
+msgstr "Toate obiectele sunt disponibile"
 
 #: src/keybind.cpp:800
 msgid "Fog on"
@@ -15880,155 +15880,155 @@ msgstr ""
 
 #: src/keybind.cpp:1311
 msgid "God Mode ON"
-msgstr ""
+msgstr "Invincibilitate ACTIVATĂ"
 
 #: src/keybind.cpp:1311
 msgid "God Mode OFF"
-msgstr ""
+msgstr "Invincibilitate DEZACTIVATĂ"
 
 #: src/keybind.cpp:1323
 msgid "View Aligned to North"
-msgstr ""
+msgstr "Vedere Aliniată spre Nord"
 
-#: src/keybind.cpp:1332
+#: src/keybind.cpp:1348
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.cpp:1418
+#: src/keybind.cpp:1434
 msgid "Researched EVERYTHING for you!"
-msgstr ""
+msgstr "TOTUL a fost cercetat pentru tine!"
 
-#: src/keybind.cpp:1442
+#: src/keybind.cpp:1458
 msgid "Selected buildings instantly recharged!"
 msgstr ""
 
-#: src/keybind.cpp:1483
+#: src/keybind.cpp:1499
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.cpp:1483
+#: src/keybind.cpp:1499
 msgid "Researched"
 msgstr "Cercetat"
 
-#: src/keybind.cpp:1504
+#: src/keybind.cpp:1520
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.cpp:1507
+#: src/keybind.cpp:1523
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.cpp:1510
+#: src/keybind.cpp:1526
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.cpp:1523
+#: src/keybind.cpp:1539
 msgid "Debug menu is Open"
 msgstr "Meniul de depanare deschis"
 
-#: src/keybind.cpp:1558
+#: src/keybind.cpp:1574
 msgid "Unable to locate any oil derricks!"
 msgstr ""
 
-#: src/keybind.cpp:1722
+#: src/keybind.cpp:1738
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.cpp:1728
+#: src/keybind.cpp:1744
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.cpp:1734
+#: src/keybind.cpp:1750
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.cpp:1826
+#: src/keybind.cpp:1842
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr ""
+msgstr "Atenție! Acest lucru poate avea consecințe drastice dacă este folosit incorect în misiuni."
 
-#: src/keybind.cpp:1828
+#: src/keybind.cpp:1844
 msgid "All enemies destroyed by cheating!"
 msgstr "Toți inamicii distruși prin trișare!"
 
-#: src/keybind.cpp:1869
+#: src/keybind.cpp:1885
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2297
+#: src/keybind.cpp:2313
 msgid "Reveal OFF"
-msgstr ""
+msgstr "Dezvăluire DEZACTIVATĂ"
 
-#: src/keybind.cpp:2302
+#: src/keybind.cpp:2318
 msgid "Reveal ON"
-msgstr ""
+msgstr "Dezvăluire ACTIVATĂ"
 
-#: src/keybind.cpp:2383
+#: src/keybind.cpp:2399
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.cpp:2395
+#: src/keybind.cpp:2411
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.cpp:2402
+#: src/keybind.cpp:2418
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2451
+#: src/keybind.cpp:2467
 msgid "Vertical rotation direction: Normal"
-msgstr ""
+msgstr "Direcție de rotație verticală: Normală"
 
-#: src/keybind.cpp:2456
+#: src/keybind.cpp:2472
 msgid "Vertical rotation direction: Flipped"
-msgstr ""
+msgstr "Direcție de rotație verticală: Răsturnată"
 
-#: src/keybind.cpp:2508
+#: src/keybind.cpp:2524
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr ""
 
-#: src/keybind.cpp:2543
-#: src/keybind.cpp:2597
+#: src/keybind.cpp:2559
+#: src/keybind.cpp:2613
 msgid "Game Speed Reset"
-msgstr ""
+msgstr "Resetarea Vitezei Jocului"
 
-#: src/keybind.cpp:2547
+#: src/keybind.cpp:2563
 #, c-format
 msgid "Game Speed Increased to %s"
-msgstr ""
+msgstr "Viteza Jocului Mărită la %s"
 
-#: src/keybind.cpp:2551
+#: src/keybind.cpp:2567
 #, c-format
 msgid "Game Speed Reduced to %s"
-msgstr ""
+msgstr "Viteza Jocului Redusă la %s"
 
-#: src/keybind.cpp:2609
+#: src/keybind.cpp:2625
 msgid "Radar showing friend-foe colors"
 msgstr "Radarul arată culorile prieten/inamic"
 
-#: src/keybind.cpp:2613
+#: src/keybind.cpp:2629
 msgid "Radar showing player colors"
 msgstr "Radarul arată culorile jucătorilor"
 
-#: src/keybind.cpp:2628
+#: src/keybind.cpp:2644
 msgid "Radar showing only objects"
 msgstr "Radarul arată doar obiecte"
 
-#: src/keybind.cpp:2631
+#: src/keybind.cpp:2647
 msgid "Radar blending terrain and height"
 msgstr "Radarul combină terenul și înălțimea"
 
-#: src/keybind.cpp:2634
+#: src/keybind.cpp:2650
 msgid "Radar showing terrain"
 msgstr "Radarul arată terenul"
 
-#: src/keybind.cpp:2637
+#: src/keybind.cpp:2653
 msgid "Radar showing height"
 msgstr "Radarul arată înălțimea"
 
 #: src/keyedit.cpp:360
-#: src/multiint.cpp:1372
+#: src/multiint.cpp:1397
 #: src/titleui/gamefind.cpp:85
 #: src/titleui/protocol.cpp:87
 msgid "Return To Previous Screen"
@@ -16043,519 +16043,535 @@ msgstr "Selectare implicită"
 msgid "KEY MAPPING"
 msgstr "ASOCIEREA TASTELOR"
 
-#: src/keymap.cpp:297
+#: src/keymap.cpp:301
 msgid "Manufacture"
 msgstr "Producție"
 
-#: src/keymap.cpp:298
+#: src/keymap.cpp:302
 msgid "Research"
 msgstr "Cercetare"
 
-#: src/keymap.cpp:299
+#: src/keymap.cpp:303
 msgid "Build"
 msgstr "Construcție"
 
-#: src/keymap.cpp:300
+#: src/keymap.cpp:304
 msgid "Design"
 msgstr "Scheme"
 
-#: src/keymap.cpp:301
+#: src/keymap.cpp:305
 msgid "Intelligence Display"
 msgstr "Afișare informații"
 
-#: src/keymap.cpp:302
+#: src/keymap.cpp:306
 msgid "Commanders"
 msgstr "Comandanți"
 
-#: src/keymap.cpp:303
+#: src/keymap.cpp:307
 msgid "QuickSave"
-msgstr ""
+msgstr "Salvare Rapidă"
 
-#: src/keymap.cpp:304
+#: src/keymap.cpp:308
 msgid "Toggle Radar"
 msgstr "Comută radarul"
 
-#: src/keymap.cpp:305
+#: src/keymap.cpp:309
 msgid "QuickLoad"
-msgstr ""
+msgstr "Încărcare Rapidă"
 
-#: src/keymap.cpp:306
+#: src/keymap.cpp:310
 msgid "Toggle Console Display"
 msgstr "Comută afișarea consolei"
 
-#: src/keymap.cpp:307
+#: src/keymap.cpp:311
 msgid "Toggle Damage Bars On/Off"
 msgstr "Comută afișarea barei de avarie"
 
-#: src/keymap.cpp:308
+#: src/keymap.cpp:312
 msgid "Take Screen Shot"
 msgstr "Capturează ecranul curent"
 
-#: src/keymap.cpp:309
+#: src/keymap.cpp:313
 msgid "Toggle Formation Speed Limiting"
 msgstr ""
 
-#: src/keymap.cpp:310
+#: src/keymap.cpp:314
 msgid "View Location of Previous Message"
 msgstr ""
 
-#: src/keymap.cpp:311
+#: src/keymap.cpp:315
 msgid "Toggle Sensor display"
 msgstr "Comută afișajul senzorilor"
 
-#: src/keymap.cpp:315
+#: src/keymap.cpp:319
 msgid "Assign Group 0"
 msgstr "Atribuie grupul 0"
 
-#: src/keymap.cpp:316
+#: src/keymap.cpp:320
 msgid "Assign Group 1"
 msgstr "Atribuie grupul 1"
 
-#: src/keymap.cpp:317
+#: src/keymap.cpp:321
 msgid "Assign Group 2"
 msgstr "Atribuie grupul 2"
 
-#: src/keymap.cpp:318
+#: src/keymap.cpp:322
 msgid "Assign Group 3"
 msgstr "Atribuie grupul 3"
 
-#: src/keymap.cpp:319
+#: src/keymap.cpp:323
 msgid "Assign Group 4"
 msgstr "Atribuie grupul 4"
 
-#: src/keymap.cpp:320
+#: src/keymap.cpp:324
 msgid "Assign Group 5"
 msgstr "Atribuie grupul 5"
 
-#: src/keymap.cpp:321
+#: src/keymap.cpp:325
 msgid "Assign Group 6"
 msgstr "Atribuie grupul 6"
 
-#: src/keymap.cpp:322
+#: src/keymap.cpp:326
 msgid "Assign Group 7"
 msgstr "Atribuie grupul 7"
 
-#: src/keymap.cpp:323
+#: src/keymap.cpp:327
 msgid "Assign Group 8"
 msgstr "Atribuie grupul 8"
 
-#: src/keymap.cpp:324
+#: src/keymap.cpp:328
 msgid "Assign Group 9"
 msgstr "Atribuie grupul 9"
 
-#: src/keymap.cpp:328
+#: src/keymap.cpp:332
 msgid "Select Group 0"
 msgstr "Selecteaza Grupul 0"
 
-#: src/keymap.cpp:329
+#: src/keymap.cpp:333
 msgid "Select Group 1"
 msgstr "Selecteaza Grupul 1"
 
-#: src/keymap.cpp:330
+#: src/keymap.cpp:334
 msgid "Select Group 2"
 msgstr "Selecteaza Grupul 2"
 
-#: src/keymap.cpp:331
+#: src/keymap.cpp:335
 msgid "Select Group 3"
 msgstr "Selecteaza Grupul 3"
 
-#: src/keymap.cpp:332
+#: src/keymap.cpp:336
 msgid "Select Group 4"
 msgstr "Selecteaza Grupul 4"
 
-#: src/keymap.cpp:333
+#: src/keymap.cpp:337
 msgid "Select Group 5"
 msgstr "Selecteaza Grupul 5"
 
-#: src/keymap.cpp:334
+#: src/keymap.cpp:338
 msgid "Select Group 6"
 msgstr "Selecteaza Grupul 6"
 
-#: src/keymap.cpp:335
+#: src/keymap.cpp:339
 msgid "Select Group 7"
 msgstr "Selecteaza Grupul 7"
 
-#: src/keymap.cpp:336
+#: src/keymap.cpp:340
 msgid "Select Group 8"
 msgstr "Selecteaza Grupul 8"
 
-#: src/keymap.cpp:337
+#: src/keymap.cpp:341
 msgid "Select Group 9"
 msgstr "Selecteaza Grupul 9"
 
-#: src/keymap.cpp:341
+#: src/keymap.cpp:345
 msgid "Select Commander 0"
 msgstr "Selectează comandantul 0"
 
-#: src/keymap.cpp:342
+#: src/keymap.cpp:346
 msgid "Select Commander 1"
 msgstr "Selectează comandantul 1"
 
-#: src/keymap.cpp:343
+#: src/keymap.cpp:347
 msgid "Select Commander 2"
 msgstr "Selectează comandantul 2"
 
-#: src/keymap.cpp:344
+#: src/keymap.cpp:348
 msgid "Select Commander 3"
 msgstr "Selectează comandantul 3"
 
-#: src/keymap.cpp:345
+#: src/keymap.cpp:349
 msgid "Select Commander 4"
 msgstr "Selectează comandantul 4"
 
-#: src/keymap.cpp:346
+#: src/keymap.cpp:350
 msgid "Select Commander 5"
 msgstr "Selectează comandantul 5"
 
-#: src/keymap.cpp:347
+#: src/keymap.cpp:351
 msgid "Select Commander 6"
 msgstr "Selectează comandantul 6"
 
-#: src/keymap.cpp:348
+#: src/keymap.cpp:352
 msgid "Select Commander 7"
 msgstr "Selectează comandantul 7"
 
-#: src/keymap.cpp:349
+#: src/keymap.cpp:353
 msgid "Select Commander 8"
 msgstr "Selectează comandantul 8"
 
-#: src/keymap.cpp:350
+#: src/keymap.cpp:354
 msgid "Select Commander 9"
 msgstr "Selectează comandantul 9"
 
-#: src/keymap.cpp:354
+#: src/keymap.cpp:358
 msgid "Multiplayer Options / Alliance dialog"
 msgstr ""
 
-#: src/keymap.cpp:357
+#: src/keymap.cpp:361
+msgid "Move Camera Up"
+msgstr "Mișcă camera în sus"
+
+#: src/keymap.cpp:362
+msgid "Move Camera Down"
+msgstr "Mișcă camera în jos"
+
+#: src/keymap.cpp:363
+msgid "Move Camera Right"
+msgstr "Mișcă camera în dreapta"
+
+#: src/keymap.cpp:364
+msgid "Move Camera Left"
+msgstr "Mișcă camera în stânga"
+
+#: src/keymap.cpp:365
 msgid "Snap View to North"
 msgstr ""
 
-#: src/keymap.cpp:358
+#: src/keymap.cpp:366
 msgid "Toggle Tracking Camera"
 msgstr ""
 
-#: src/keymap.cpp:359
+#: src/keymap.cpp:367
 msgid "Display In-Game Options"
-msgstr ""
+msgstr "Afișează Setarile Din Joc"
 
-#: src/keymap.cpp:360
+#: src/keymap.cpp:368
 msgid "Zoom Radar Out"
 msgstr "Depărtează radarul"
 
-#: src/keymap.cpp:361
+#: src/keymap.cpp:369
 msgid "Zoom Radar In"
 msgstr "Apropie radarul"
 
-#: src/keymap.cpp:362
+#: src/keymap.cpp:370
 msgid "Zoom In"
 msgstr "Apropie"
 
-#: src/keymap.cpp:363
+#: src/keymap.cpp:371
 msgid "Zoom Out"
 msgstr "Depărtează"
 
-#: src/keymap.cpp:364
+#: src/keymap.cpp:372
 msgid "Pitch Forward"
 msgstr ""
 
-#: src/keymap.cpp:365
+#: src/keymap.cpp:373
 msgid "Rotate Left"
-msgstr "Rotețte către stânga"
+msgstr "Roteşte către Stânga"
 
-#: src/keymap.cpp:366
+#: src/keymap.cpp:374
 msgid "Reset Pitch"
 msgstr ""
 
-#: src/keymap.cpp:367
+#: src/keymap.cpp:375
 msgid "Rotate Right"
 msgstr "Rotește către dreapta"
 
-#: src/keymap.cpp:368
+#: src/keymap.cpp:376
 msgid "Pitch Back"
 msgstr "Negru complet"
 
-#: src/keymap.cpp:369
+#: src/keymap.cpp:377
 msgid "Orders Menu"
 msgstr "Meniu de ordine"
 
-#: src/keymap.cpp:370
+#: src/keymap.cpp:378
 msgid "Decrease Game Speed"
-msgstr ""
+msgstr "Reduce Viteza Jocului"
 
-#: src/keymap.cpp:371
+#: src/keymap.cpp:379
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "Mărește Viteza Jocului"
 
-#: src/keymap.cpp:372
+#: src/keymap.cpp:380
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "Resetează Viteza Jocului"
 
-#: src/keymap.cpp:373
+#: src/keymap.cpp:381
 msgid "View North"
 msgstr "Vezi către nord"
 
-#: src/keymap.cpp:374
+#: src/keymap.cpp:382
 msgid "View South"
 msgstr "Vezi către sud"
 
-#: src/keymap.cpp:375
+#: src/keymap.cpp:383
 msgid "View East"
 msgstr "Vezi către Est"
 
-#: src/keymap.cpp:376
+#: src/keymap.cpp:384
 msgid "View West"
 msgstr "Vezi către Vest"
 
-#: src/keymap.cpp:377
+#: src/keymap.cpp:385
 msgid "View next Oil Derrick"
 msgstr "Vezi următoarea pompă de petrol"
 
-#: src/keymap.cpp:378
+#: src/keymap.cpp:386
 msgid "View next Repair Unit"
 msgstr "Vezi următoarea unitate mecanic"
 
-#: src/keymap.cpp:379
+#: src/keymap.cpp:387
 msgid "View next Truck"
 msgstr "Vezi următorul constructor"
 
-#: src/keymap.cpp:380
+#: src/keymap.cpp:388
 msgid "View next Sensor Unit"
 msgstr "Vezi următoarea unitate senzor"
 
-#: src/keymap.cpp:381
+#: src/keymap.cpp:389
 msgid "View next Commander"
 msgstr "Vezi următorul comandant"
 
-#: src/keymap.cpp:382
+#: src/keymap.cpp:390
 msgid "Toggle Overlays"
 msgstr ""
 
-#: src/keymap.cpp:383
+#: src/keymap.cpp:391
 msgid "Toggle Console History "
-msgstr ""
+msgstr "Comută Istoricul Consolei "
 
-#: src/keymap.cpp:384
+#: src/keymap.cpp:392
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Comută Istoricul Conversațiilor Echipei"
 
-#: src/keymap.cpp:387
+#: src/keymap.cpp:395
 msgid "Center View on HQ"
 msgstr "Centrează pe sediul central"
 
-#: src/keymap.cpp:389
+#: src/keymap.cpp:397
 msgid "View Unassigned Units"
 msgstr "Vezi unitățile neasociate"
 
-#: src/keymap.cpp:391
+#: src/keymap.cpp:399
 msgid "Fire at Will"
 msgstr "Foc de voie"
 
-#: src/keymap.cpp:393
+#: src/keymap.cpp:401
 msgid "Return to HQ"
 msgstr "Întoarce-te la bază"
 
-#: src/keymap.cpp:400
+#: src/keymap.cpp:408
 msgid "Stop Droid"
 msgstr ""
 
-#: src/keymap.cpp:403
+#: src/keymap.cpp:411
 msgid "Send Global Text Message"
 msgstr ""
 
-#: src/keymap.cpp:404
+#: src/keymap.cpp:412
 msgid "Send Team Text Message"
 msgstr ""
 
-#: src/keymap.cpp:405
+#: src/keymap.cpp:413
 msgid "Drop a beacon"
 msgstr "Lasă o baliză"
 
-#: src/keymap.cpp:407
+#: src/keymap.cpp:415
 msgid "Toggles shadows"
-msgstr ""
+msgstr "Comută umbre"
 
-#: src/keymap.cpp:408
+#: src/keymap.cpp:416
 msgid "Trap cursor"
 msgstr "Prinde cursorul"
 
-#: src/keymap.cpp:409
+#: src/keymap.cpp:417
 msgid "Toggle radar terrain"
-msgstr ""
+msgstr "Comută terenul radarului"
 
-#: src/keymap.cpp:410
+#: src/keymap.cpp:418
 msgid "Toggle ally-enemy radar view"
 msgstr ""
 
-#: src/keymap.cpp:411
+#: src/keymap.cpp:419
 msgid "Show all keyboard mappings"
 msgstr ""
 
-#: src/keymap.cpp:420
+#: src/keymap.cpp:428
 msgid "Select all Combat Units"
 msgstr "Selectează toate unitățile de luptă"
 
-#: src/keymap.cpp:421
+#: src/keymap.cpp:429
 msgid "Select all Cyborgs"
-msgstr ""
+msgstr "Selectează toți Cyborgii"
 
-#: src/keymap.cpp:422
+#: src/keymap.cpp:430
 msgid "Select all Heavily Damaged Units"
 msgstr "Selectează toate unitățile grav avariate"
 
-#: src/keymap.cpp:423
+#: src/keymap.cpp:431
 msgid "Select all Half-tracks"
 msgstr "Selectează toate unitățile cu semi-șenile"
 
-#: src/keymap.cpp:424
+#: src/keymap.cpp:432
 msgid "Select all Hovers"
 msgstr "Selectează toate unitățile plutitoare"
 
-#: src/keymap.cpp:426
+#: src/keymap.cpp:434
 msgid "Select all Units on Screen"
 msgstr "Selectează toate unitățile din ecran"
 
-#: src/keymap.cpp:427
+#: src/keymap.cpp:435
 msgid "Select all Tracks"
 msgstr "Selectează toate unitățile cu șenile"
 
-#: src/keymap.cpp:428
+#: src/keymap.cpp:436
 msgid "Select EVERY unit"
 msgstr "Selectează FIECARE unitate"
 
-#: src/keymap.cpp:429
+#: src/keymap.cpp:437
 msgid "Select all VTOLs"
 msgstr "Selectează toate DAV-urile"
 
-#: src/keymap.cpp:430
+#: src/keymap.cpp:438
 msgid "Select all fully-armed VTOLs"
-msgstr ""
+msgstr "Selectează toate DAV-urile complet înarmate"
 
-#: src/keymap.cpp:431
+#: src/keymap.cpp:439
 msgid "Select all Wheels"
 msgstr "Selectează toate unitățile cu roți"
 
-#: src/keymap.cpp:432
-msgid "Show frame rate"
-msgstr "Afpșază frecvența cadrelor"
-
-#: src/keymap.cpp:433
-msgid "Select all units with the same components"
-msgstr ""
-
-#: src/keymap.cpp:437
-msgid "Select all Combat Cyborgs"
-msgstr ""
-
-#: src/keymap.cpp:438
-msgid "Select all Engineers"
-msgstr ""
-
-#: src/keymap.cpp:439
-msgid "Select all Land Combat Units"
-msgstr ""
-
 #: src/keymap.cpp:440
-msgid "Select all Mechanics"
-msgstr ""
+msgid "Show frame rate"
+msgstr "Afișează frecvența cadrelor"
 
 #: src/keymap.cpp:441
+msgid "Select all units with the same components"
+msgstr "Selectați toate unitățile cu aceleași componente"
+
+#: src/keymap.cpp:445
+msgid "Select all Combat Cyborgs"
+msgstr "Selectează toți Cyborgii de Luptă"
+
+#: src/keymap.cpp:446
+msgid "Select all Engineers"
+msgstr "Selectează toți Inginerii"
+
+#: src/keymap.cpp:447
+msgid "Select all Land Combat Units"
+msgstr "Selectează toate Unitățile de Luptă Terestre"
+
+#: src/keymap.cpp:448
+msgid "Select all Mechanics"
+msgstr "Selectează toți Mecanicii"
+
+#: src/keymap.cpp:449
 msgid "Select all Transporters"
 msgstr ""
 
-#: src/keymap.cpp:442
+#: src/keymap.cpp:450
 msgid "Select all Repair Tanks"
 msgstr ""
 
-#: src/keymap.cpp:443
+#: src/keymap.cpp:451
 msgid "Select all Sensor Units"
 msgstr ""
 
-#: src/keymap.cpp:444
+#: src/keymap.cpp:452
 msgid "Select all Trucks"
-msgstr ""
+msgstr "Selectează toate Camioanele"
 
-#: src/keymap.cpp:448
+#: src/keymap.cpp:456
 msgid "Select next Factory"
 msgstr "Selectează următoarea fabrică"
 
-#: src/keymap.cpp:449
+#: src/keymap.cpp:457
 msgid "Select next Research Facility"
 msgstr "Selectează următorul centru de cercetare"
 
-#: src/keymap.cpp:450
+#: src/keymap.cpp:458
 msgid "Select next Power Generator"
 msgstr "Selectează următoarea centrală electrică"
 
-#: src/keymap.cpp:451
+#: src/keymap.cpp:459
 msgid "Select next Cyborg Factory"
-msgstr "Selectează următoarea fabrică de cyborgi"
+msgstr "Selectează următoarea Fabrică de Cyborgi"
 
-#: src/keymap.cpp:454
+#: src/keymap.cpp:462
 msgid "Toggle Debug Mappings"
 msgstr "Comută maparea pentru depanare"
 
-#: src/keymap.cpp:455
+#: src/keymap.cpp:463
 msgid "Toggle display of droid path"
 msgstr "Comută afișarea căii urmate de unitate"
 
-#: src/keymap.cpp:456
+#: src/keymap.cpp:464
 msgid "Toggle display of gateways"
 msgstr "Comută afișarea porților"
 
-#: src/keymap.cpp:457
+#: src/keymap.cpp:465
 msgid "Toggle visibility"
 msgstr "Comută vizibilitatea"
 
-#: src/keymap.cpp:458
+#: src/keymap.cpp:466
 msgid "Raise tile height"
 msgstr "Ridică placa"
 
-#: src/keymap.cpp:459
+#: src/keymap.cpp:467
 msgid "Lower tile height"
 msgstr "Coboară placa"
 
-#: src/keymap.cpp:460
+#: src/keymap.cpp:468
 msgid "Toggles All fog"
 msgstr "Comută toată ceața"
 
-#: src/keymap.cpp:461
+#: src/keymap.cpp:469
 msgid "Trigger some weather"
 msgstr "Activează anumite condiții meteorologice"
 
-#: src/keymap.cpp:462
+#: src/keymap.cpp:470
 msgid "Flip terrain triangle"
 msgstr ""
 
-#: src/keymap.cpp:463
+#: src/keymap.cpp:471
 msgid "Make a performance measurement sample"
 msgstr ""
 
-#: src/keymap.cpp:466
+#: src/keymap.cpp:474
 msgid "Make all items available"
 msgstr "Fă toate entitățile disponibile"
 
-#: src/keymap.cpp:467
+#: src/keymap.cpp:475
 msgid "Kill Selected Unit(s)"
 msgstr "Ucide unitatea selectată/unitățile selectate"
 
-#: src/keymap.cpp:468
+#: src/keymap.cpp:476
 msgid "Toggle god Mode Status"
 msgstr "Activează/dezactivează modul invincibil"
 
-#: src/keymap.cpp:469
+#: src/keymap.cpp:477
 msgid "Display Options Screen"
-msgstr "Afișază ecranul de opțiuni"
+msgstr "Afișază Ecranul de Opțiuni"
 
-#: src/keymap.cpp:470
+#: src/keymap.cpp:478
 msgid "Complete current research"
 msgstr "Completează cercetarea curentă"
 
-#: src/keymap.cpp:471
+#: src/keymap.cpp:479
 msgid "Reveal map at mouse position"
 msgstr ""
 
-#: src/keymap.cpp:472
+#: src/keymap.cpp:480
 msgid "Trace a game object"
 msgstr ""
 
@@ -16582,7 +16598,7 @@ msgstr "Încarcă Transportorul"
 
 #: src/mission.cpp:2285
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "OBIECTIV ATINS prin trișare"
+msgstr "OBIECTIV ATINS prin trișare!"
 
 #: src/mission.cpp:2285
 msgid "OBJECTIVE ACHIEVED"
@@ -16682,11 +16698,11 @@ msgstr ""
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "LIPSĂ NUME IA"
 
 #: src/multiint.cpp:773
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "LIPSĂ DESCRIERE IA"
 
 #: src/multiint.cpp:787
 #, c-format
@@ -16695,7 +16711,7 @@ msgstr ""
 
 #: src/multiint.cpp:887
 msgid "Error while joining."
-msgstr ""
+msgstr "Eroare la alăturare."
 
 #: src/multiint.cpp:1062
 msgid "Tanks disabled!!"
@@ -16721,303 +16737,291 @@ msgstr ""
 msgid "Structure Limits Enforced."
 msgstr ""
 
-#: src/multiint.cpp:1228
+#: src/multiint.cpp:1246
+msgid "Not enough votes to randomize or change the map."
+msgstr ""
+
+#: src/multiint.cpp:1272
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
 msgstr ""
 
-#: src/multiint.cpp:1229
+#: src/multiint.cpp:1273
 msgid "One-Player Skirmish"
 msgstr "Luptă individuală"
 
-#: src/multiint.cpp:1236
+#: src/multiint.cpp:1280
 msgid "Select Game Name"
 msgstr "Selectează numele jocului"
 
-#: src/multiint.cpp:1247
+#: src/multiint.cpp:1291
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1248
+#: src/multiint.cpp:1292
 msgid "Map-Mod!"
 msgstr ""
 
-#: src/multiint.cpp:1261
+#: src/multiint.cpp:1305
 msgid "Click to set Password"
 msgstr "Click pentru a seta o parolă"
 
-#: src/multiint.cpp:1270
+#: src/multiint.cpp:1314
 msgid "Select Player Name"
 msgstr "Selectează numele jucătorului"
 
-#: src/multiint.cpp:1290
+#: src/multiint.cpp:1334
 #: src/multimenu.cpp:759
 msgid "Alliances"
 msgstr "Alianțe"
 
-#: src/multiint.cpp:1309
+#: src/multiint.cpp:1353
 msgid "Base"
 msgstr "Bază"
 
-#: src/multiint.cpp:1318
+#: src/multiint.cpp:1362
 msgid "Map Preview"
 msgstr "Vizionare Hartă"
 
-#: src/multiint.cpp:1319
+#: src/multiint.cpp:1363
 msgid "Click to see Map"
 msgstr "Click pentru a vedea Harta"
 
-#: src/multiint.cpp:1326
-#: src/multiint.cpp:1327
+#: src/multiint.cpp:1370
+#: src/multiint.cpp:1371
 msgid "Show Structure Limits"
 msgstr "Arată limitele pentru clădiri"
 
-#: src/multiint.cpp:1326
-#: src/multiint.cpp:1327
+#: src/multiint.cpp:1370
+#: src/multiint.cpp:1371
 msgid "Set Structure Limits"
 msgstr "Setează limitele pentru clădiri"
 
-#: src/multiint.cpp:1334
+#: src/multiint.cpp:1378
 msgid "Random Game Options"
-msgstr ""
+msgstr "Opțiuni de Joc Aleatoriu"
 
-#: src/multiint.cpp:1335
+#: src/multiint.cpp:1379
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Opțiuni de Joc Aleatoriu\n"
+"Pot fi blocate de voturile jucătorilor"
 
-#: src/multiint.cpp:1343
-#: src/multiint.cpp:1344
+#: src/multiint.cpp:1387
+#: src/multiint.cpp:1388
 msgid "Start Hosting Game"
 msgstr "Începe găzduirea jocului"
 
-#: src/multiint.cpp:1351
-msgid "Vote"
-msgstr ""
-
-#: src/multiint.cpp:1352
-msgid "No. Do not allow host to randomize or change map"
-msgstr ""
-
-#: src/multiint.cpp:1353
-msgid "Yes. Allow host to randomize or change map"
-msgstr ""
-
-#: src/multiint.cpp:1424
+#: src/multiint.cpp:1449
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "DIFICULTATE"
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1462
 msgid "Starts disadvantaged"
 msgstr ""
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1463
 msgid "Plays nice"
 msgstr ""
 
-#: src/multiint.cpp:1439
+#: src/multiint.cpp:1464
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1440
+#: src/multiint.cpp:1465
 msgid "Starts with advantages"
 msgstr ""
 
-#: src/multiint.cpp:1477
+#: src/multiint.cpp:1502
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "ALEGE IA"
 
-#: src/multiint.cpp:1521
+#: src/multiint.cpp:1546
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Permite jucătorilor umani să se alăture în acest loc"
 
-#: src/multiint.cpp:1528
+#: src/multiint.cpp:1553
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Lasă acest loc neutilizat"
 
-#: src/multiint.cpp:1990
+#: src/multiint.cpp:2015
 msgid "Team"
 msgstr "Echipă"
 
-#: src/multiint.cpp:2045
+#: src/multiint.cpp:2070
 msgid "Click to change difficulty"
-msgstr ""
+msgstr "Faceți clic pentru a schimba dificultatea"
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Waiting for player"
-msgstr ""
+msgstr "Aşteptare jucător"
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Player is ready"
-msgstr ""
+msgstr "Jucătorul este gata"
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Player is downloading"
-msgstr ""
+msgstr "Jucătorul descarcă"
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Click when ready"
 msgstr "Click când ești pregătit"
 
-#: src/multiint.cpp:2060
+#: src/multiint.cpp:2085
 msgid "Waiting for download"
-msgstr ""
+msgstr "Se așteaptă descărcarea"
 
-#: src/multiint.cpp:2072
+#: src/multiint.cpp:2097
 msgid "READY?"
 msgstr "PREGĂTIT?"
 
-#: src/multiint.cpp:2114
+#: src/multiint.cpp:2139
 msgid "PLAYERS"
 msgstr "JUCĂTORI"
 
-#: src/multiint.cpp:2149
+#: src/multiint.cpp:2174
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:2183
+#: src/multiint.cpp:2208
 msgid "Choose Team"
 msgstr "Alege Echipa"
 
-#: src/multiint.cpp:2187
+#: src/multiint.cpp:2212
 msgid "Teams locked"
 msgstr ""
 
-#: src/multiint.cpp:2213
-msgid "Click to change player colour"
-msgstr ""
-
 #: src/multiint.cpp:2238
-msgid "Click to change player position"
-msgstr ""
+msgid "Click to change player colour"
+msgstr "Faceți clic pentru a schimba culoarea jucătorului"
 
-#: src/multiint.cpp:2245
+#: src/multiint.cpp:2263
+msgid "Click to change player position"
+msgstr "Faceți clic pentru a schimba poziția jucătorului"
+
+#: src/multiint.cpp:2270
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
-#: src/multiint.cpp:2260
+#: src/multiint.cpp:2285
 msgid "Player ID: "
-msgstr ""
+msgstr "ID jucător: "
 
-#: src/multiint.cpp:2267
+#: src/multiint.cpp:2292
 msgid "(none)"
 msgstr ""
 
-#: src/multiint.cpp:2335
+#: src/multiint.cpp:2360
 msgid "CHAT"
 msgstr "CONVERSAȚIE"
 
-#: src/multiint.cpp:2657
-#: src/multiint.cpp:3666
-msgid "Not enough votes to randomize or change the map."
-msgstr ""
-
-#: src/multiint.cpp:2812
+#: src/multiint.cpp:2835
 msgid "Game Name Updated."
 msgstr ""
 
-#: src/multiint.cpp:2925
+#: src/multiint.cpp:2948
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** parola [%s] este de acum necesară! ***"
 
-#: src/multiint.cpp:2931
+#: src/multiint.cpp:2954
 msgid "*** password is NOT required! ***"
 msgstr "*** parola NU este necesară! ***"
 
-#: src/multiint.cpp:2945
+#: src/multiint.cpp:2968
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:3001
+#: src/multiint.cpp:3024
 msgid "Sorry! Failed to host the game."
 msgstr "Scuze! Jocul nu s-a putut găzdui."
 
-#: src/multiint.cpp:3163
-#: src/multiint.cpp:3253
+#: src/multiint.cpp:3180
+#: src/multiint.cpp:3270
 #: src/multimenu.cpp:1324
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gazda l-a eliminat pe %s din joc!"
 
-#: src/multiint.cpp:3310
+#: src/multiint.cpp:3327
 msgid "Host is Starting Game"
 msgstr "Gazda Începe Jocul"
 
-#: src/multiint.cpp:3519
+#: src/multiint.cpp:3537
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Ai fost dat afară: "
 
-#: src/multiint.cpp:3531
+#: src/multiint.cpp:3549
 msgid "No connection to host."
-msgstr ""
+msgstr "Nici o conexiune la gazdă."
 
-#: src/multiint.cpp:3661
+#: src/multiint.cpp:3686
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:3771
+#: src/multiint.cpp:3796
 msgid "The host has quit."
 msgstr ""
 
-#: src/multiint.cpp:3897
+#: src/multiint.cpp:3922
 msgid "UPnP has been enabled."
-msgstr ""
+msgstr "UPnP a fost activat."
 
-#: src/multiint.cpp:3903
+#: src/multiint.cpp:3928
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr ""
+msgstr "Detectarea UPnP a eșuat. Trebuie să configurați manual routerul."
 
-#: src/multiint.cpp:3907
+#: src/multiint.cpp:3932
 msgid "UPnP detection is in progress..."
-msgstr ""
+msgstr "Detectarea UPnP este în desfășurare..."
 
-#: src/multiint.cpp:3914
+#: src/multiint.cpp:3939
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
+msgstr "Detectarea UPnP dezactivată de utilizator. Portul 2100 nu se va auto configura."
 
-#: src/multiint.cpp:3920
+#: src/multiint.cpp:3945
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:3924
+#: src/multiint.cpp:3949
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "Apăsați butonul de găzduire pentru a începe găzduirea unui joc."
 
-#: src/multiint.cpp:4005
+#: src/multiint.cpp:4030
 #, c-format
 msgid "Click to take player slot %d"
-msgstr ""
+msgstr "Faceți clic pentru a lua locul jucătorului %d"
 
-#: src/multiint.cpp:4019
-#: src/multiint.cpp:4251
+#: src/multiint.cpp:4044
+#: src/multiint.cpp:4276
 msgid "Open"
-msgstr ""
+msgstr "Deschis"
 
-#: src/multiint.cpp:4019
-#: src/multiint.cpp:4252
+#: src/multiint.cpp:4044
+#: src/multiint.cpp:4277
 msgid "Closed"
-msgstr ""
+msgstr "Închis"
 
-#: src/multiint.cpp:4084
+#: src/multiint.cpp:4109
 #, c-format
 msgid "Sending Map: %u%% "
-msgstr "Trimitere de hartă: %u%%"
+msgstr "Se trimite harta: %u%% "
 
-#: src/multiint.cpp:4084
+#: src/multiint.cpp:4109
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "Harta: %u%% descărcată"
 
-#: src/multiint.cpp:4132
+#: src/multiint.cpp:4157
 msgid "HOST"
 msgstr "GAZDĂ"
 
-#: src/multiint.cpp:4139
+#: src/multiint.cpp:4164
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -17041,35 +17045,35 @@ msgstr "%s (%u) are o modificare incompatibilă și a fost eliminat."
 #: src/multijoin.cpp:491
 #, c-format
 msgid "%s is joining the game"
-msgstr ""
+msgstr "%s se alătură jocului"
 
 #: src/multijoin.cpp:503
 msgid "Server message:"
-msgstr ""
+msgstr "Mesaj server:"
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
-msgstr ""
+msgstr "Există o actualizare a jocului, te rugăm să vizitezi http://wz2100.net pentru a descărca versiunea nouă."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:144
 msgid "LIMITS"
-msgstr ""
+msgstr "LIMITE"
 
 #: src/multilimit.cpp:157
 msgid "Map Can Exceed Limits"
-msgstr ""
+msgstr "Harta Poate Depăși Limitele"
 
 #: src/multilimit.cpp:163
 msgid "Force Limits at Start"
-msgstr ""
+msgstr "Impune limitele la pornire"
 
 #: src/multilimit.cpp:185
 msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Aplică Setările Implicite și Revino"
 
 #: src/multilimit.cpp:192
-#: src/titleui/protocol.cpp:178
+#: src/titleui/protocol.cpp:175
 msgid "Accept Settings"
 msgstr "Acceptă Setările"
 
@@ -17091,7 +17095,7 @@ msgstr "Tehnologie nivel 3"
 
 #: src/multimenu.cpp:593
 msgid "Max technology level"
-msgstr ""
+msgstr "Nivel tehnologic maxim"
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
@@ -17123,11 +17127,11 @@ msgstr "Clădiri"
 
 #: src/multimenu.cpp:793
 msgid "Sent/Received per sec —"
-msgstr ""
+msgstr "Trimise/Primite pe sec —"
 
 #: src/multimenu.cpp:793
 msgid "Total Sent/Received —"
-msgstr ""
+msgstr "Total Trimise/Primite —"
 
 #: src/multimenu.cpp:798
 #, c-format
@@ -17174,12 +17178,12 @@ msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "eliminat pe %s: %s din joc, și adăugat la lista de interziși!"
 
 #: src/multiopt.cpp:304
-#: src/multiplay.cpp:1706
+#: src/multiplay.cpp:1718
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr ""
 
 #: src/multiopt.cpp:305
-#: src/multiplay.cpp:1710
+#: src/multiplay.cpp:1722
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr ""
 
@@ -17188,107 +17192,107 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Eliminat jucătorul %s, deoarece a încercat să înșele verificarea de integritate a datelor!"
 
-#: src/multiplay.cpp:1146
+#: src/multiplay.cpp:1158
 msgid " (Ally)"
 msgstr ""
 
-#: src/multiplay.cpp:1150
+#: src/multiplay.cpp:1162
 msgid " (Global)"
 msgstr ""
 
-#: src/multiplay.cpp:1248
+#: src/multiplay.cpp:1260
 msgid "(allies"
 msgstr "(aliați"
 
-#: src/multiplay.cpp:1256
+#: src/multiplay.cpp:1268
 msgid "(private to "
 msgstr "(privat către "
 
-#: src/multiplay.cpp:1269
+#: src/multiplay.cpp:1281
 msgid "[invalid]"
-msgstr ""
+msgstr "[invalid]"
 
-#: src/multiplay.cpp:1593
+#: src/multiplay.cpp:1605
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "Harta a fost solicitată: TRIMIT HARTA!"
 
-#: src/multiplay.cpp:1609
+#: src/multiplay.cpp:1621
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "Modul de joc a fost solicitat: TRIMIT MODUL!"
 
-#: src/multiplay.cpp:1672
+#: src/multiplay.cpp:1684
 msgid "FILE SENT!"
-msgstr ""
+msgstr "FIȘIER TRIMIS!"
 
-#: src/multiplay.cpp:1737
+#: src/multiplay.cpp:1749
 #, c-format
 msgid "Beacon %d"
 msgstr "Baliză %d"
 
-#: src/multiplay.cpp:1843
+#: src/multiplay.cpp:1855
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Baliză recepționată de la %s!"
 
-#: src/multiplay.cpp:1894
+#: src/multiplay.cpp:1906
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.cpp:1895
+#: src/multiplay.cpp:1907
 msgid "Orange"
 msgstr "Portocaliu"
 
-#: src/multiplay.cpp:1896
+#: src/multiplay.cpp:1908
 msgid "Grey"
 msgstr "Gri"
 
-#: src/multiplay.cpp:1898
+#: src/multiplay.cpp:1910
 msgid "Red"
 msgstr "Roşu"
 
-#: src/multiplay.cpp:1899
+#: src/multiplay.cpp:1911
 msgid "Blue"
 msgstr "Albastru"
 
-#: src/multiplay.cpp:1900
+#: src/multiplay.cpp:1912
 msgid "Pink"
 msgstr "Roz"
 
-#: src/multiplay.cpp:1901
+#: src/multiplay.cpp:1913
 msgid "Cyan"
 msgstr "Azuriu"
 
-#: src/multiplay.cpp:1902
+#: src/multiplay.cpp:1914
 msgid "Yellow"
-msgstr ""
+msgstr "Galben"
 
-#: src/multiplay.cpp:1903
+#: src/multiplay.cpp:1915
 msgid "Purple"
-msgstr ""
+msgstr "Violet"
 
-#: src/multiplay.cpp:1904
+#: src/multiplay.cpp:1916
 msgid "White"
-msgstr ""
+msgstr "Alb"
 
-#: src/multiplay.cpp:1905
+#: src/multiplay.cpp:1917
 msgid "Bright blue"
-msgstr ""
+msgstr "Albastru deschis"
 
-#: src/multiplay.cpp:1906
+#: src/multiplay.cpp:1918
 msgid "Neon green"
-msgstr ""
+msgstr "Verde neon"
 
-#: src/multiplay.cpp:1907
+#: src/multiplay.cpp:1919
 msgid "Infrared"
-msgstr ""
+msgstr "Infraroșu"
 
-#: src/multiplay.cpp:1908
+#: src/multiplay.cpp:1920
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ultraviolet"
 
-#: src/multiplay.cpp:1909
+#: src/multiplay.cpp:1921
 msgid "Brown"
-msgstr ""
+msgstr "Maro"
 
 #: src/order.cpp:776
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -17305,7 +17309,7 @@ msgstr "AI FOST ÎNFRÂNT!"
 #: src/research.cpp:597
 #, c-format
 msgid "Research completed: %s"
-msgstr "Cercetare complată: %s"
+msgstr "Cercetare finalizată: %s"
 
 #: src/research.cpp:602
 msgid "Research Completed"
@@ -17552,11 +17556,11 @@ msgstr "Reîmprospătează lista de jocuri"
 
 #: src/titleui/gamefind.cpp:93
 msgid "Filter Games List"
-msgstr ""
+msgstr "Filtrează Lista de Jocuri"
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
-msgstr ""
+msgstr "Se reîmprospătează..."
 
 #: src/titleui/gamefind.cpp:180
 msgid "Searching"
@@ -17564,49 +17568,49 @@ msgstr "Căutare"
 
 #: src/titleui/gamefind.cpp:233
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Conectare la server..."
 
 #: src/titleui/gamefind.cpp:244
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Versiunea ta de Warzone este incompatibilă cu acest joc."
 
 #: src/titleui/gamefind.cpp:311
 msgid "[Password required]"
-msgstr ""
+msgstr "[Parolă necesară]"
 
 #: src/titleui/gamefind.cpp:315
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Fără Tancuri]"
 
 #: src/titleui/gamefind.cpp:319
 msgid "[No Cyborgs]"
-msgstr ""
+msgstr "[Fără Cyborgi]"
 
 #: src/titleui/gamefind.cpp:323
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Fără DAV]"
 
 #: src/titleui/gamefind.cpp:328
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Găzduit de %s"
 
 #: src/titleui/gamefind.cpp:332
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Găzduit de %s —%s"
 
 #: src/titleui/gamefind.cpp:361
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Nu s-a găsit nici un joc pentru versiunea ta."
 
 #: src/titleui/gamefind.cpp:378
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Se pare că este disponibilă o actualizare a jocului!"
 
 #: src/titleui/gamefind.cpp:382
 msgid "No games are available for your version"
-msgstr ""
+msgstr "Nu sunt jocuri disponibile pentru versiunea ta"
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -17622,7 +17626,7 @@ msgstr "Versiune de joc greșită!"
 
 #: src/titleui/gamefind.cpp:396
 msgid "You have an incompatible mod."
-msgstr "Ai o modificare incomkpatibilă."
+msgstr "Ai un mod incompatibil."
 
 #: src/titleui/gamefind.cpp:400
 msgid "Host couldn't send file?"
@@ -17642,25 +17646,25 @@ msgstr "Eroare de conexiune"
 
 #: src/titleui/gamefind.cpp:462
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Nu se poate realiza conexiunea la server!"
 
 #: src/titleui/gamefind.cpp:557
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Moduri: %s"
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
-msgstr ""
+msgstr "Moduri: Nici unul!"
 
 #: src/titleui/gamefind.cpp:569
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "Versiune: %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
-msgstr ""
+msgstr "Nume Hartă"
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
@@ -17668,11 +17672,11 @@ msgstr "Jucători"
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
-msgstr ""
+msgstr "Stare"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Continuă"
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -17683,7 +17687,7 @@ msgid "OK"
 msgstr "Acceptă"
 
 #: src/titleui/passbox.cpp:92
-#: src/titleui/protocol.cpp:180
+#: src/titleui/protocol.cpp:177
 msgid "Cancel"
 msgstr "Anulare"
 
@@ -17697,9 +17701,9 @@ msgstr "Arenă"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
-#: src/titleui/protocol.cpp:191
+#: src/titleui/protocol.cpp:188
 msgid "IP Address or Machine Name"
 msgstr "Adresă IP sau numele calculatorului"
 
@@ -17710,7 +17714,7 @@ msgstr "Lansează transportorul"
 
 #: src/transporter.cpp:982
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "Nu există suficient spațiu în Transport!"
 
 #: src/transporter.cpp:1161
 msgid "Reinforcements landing"
@@ -17732,5 +17736,5 @@ msgstr " - TESTARE"
 #: src/version.cpp:131
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Versiune: %s,%s Compilare: %s%s"
 
