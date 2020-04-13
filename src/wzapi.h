@@ -362,6 +362,9 @@ namespace wzapi
 	nlohmann::json getUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index));
 
 	// MARK: - Used for retrieving information to set up script instance environments
+	nlohmann::json constructStatsObject();
+	nlohmann::json getUsefulConstants();
+	nlohmann::json constructStaticPlayerData();
 	std::vector<PerPlayerUpgrades> getUpgradesObject();
 }
 
