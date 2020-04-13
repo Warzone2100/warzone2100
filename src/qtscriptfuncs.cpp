@@ -3994,6 +3994,41 @@ nlohmann::json constructStartPositions()
 	return startPositions;
 }
 
+QScriptValue constructUpgradesQScriptValue(QScriptEngine *engine)
+{
+	auto upgradesObj = wzapi::getUpgradesObject();
+
+	QScriptValue upgrades = engine->newArray(MAX_PLAYERS);
+	for (auto& playerUpgrades : upgradesObj)
+	{
+		QScriptValue node = engine->newObject();
+
+		for (const auto& gameEntityClass : playerUpgrades)
+		{
+			const std::string& gameEntityClassName = gameEntityClass.first;
+			QScriptValue entityBase = engine->newObject();
+			for (const auto& gameEntity : gameEntityClass.second)
+			{
+				const std::string& gameEntityName = gameEntity.first;
+				const auto& gameEntityRules = gameEntity.second;
+				QScriptValue v = engine->newObject();
+				for (const auto& property : gameEntityRules)
+				{
+					setStatsFunc(v, engine, QString::fromUtf8(property.first.c_str()), gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex());
+				}
+				entityBase.setProperty(QString::fromUtf8(gameEntityName.c_str()), v, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			}
+			node.setProperty(QString::fromUtf8(gameEntityClassName.c_str()), entityBase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		}
+
+		// Finally
+		ASSERT(playerUpgrades.getPlayer() >= 0 && playerUpgrades.getPlayer() < MAX_PLAYERS, "Invalid player index");
+		upgrades.setProperty(playerUpgrades.getPlayer(), node, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
+
+	return upgrades;
+}
+
 bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 {
 	debug(LOG_WZ, "Loading functions for engine %p, script %s", static_cast<void *>(engine), scriptName.toUtf8().constData());
@@ -4011,164 +4046,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
 	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
 	//== These values are defined:
-	QScriptValue upgrades = engine->newArray(MAX_PLAYERS);
-	for (int i = 0; i < MAX_PLAYERS; i++)
-	{
-		QScriptValue node = engine->newObject();
-
-		//==   * ```Body``` Droid bodies
-		QScriptValue bodybase = engine->newObject();
-		for (int j = 0; j < numBodyStats; j++)
-		{
-			BODY_STATS *psStats = asBodyStats + j;
-			QScriptValue body = engine->newObject();
-			setStatsFunc(body, engine, "HitPoints", i, COMP_BODY, j);
-			setStatsFunc(body, engine, "HitPointPct", i, COMP_BODY, j);
-			setStatsFunc(body, engine, "Power", i, COMP_BODY, j);
-			setStatsFunc(body, engine, "Armour", i, COMP_BODY, j);
-			setStatsFunc(body, engine, "Thermal", i, COMP_BODY, j);
-			setStatsFunc(body, engine, "Resistance", i, COMP_BODY, j);
-			bodybase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Sensor``` Sensor turrets
-		QScriptValue sensorbase = engine->newObject();
-		for (int j = 0; j < numSensorStats; j++)
-		{
-			SENSOR_STATS *psStats = asSensorStats + j;
-			QScriptValue sensor = engine->newObject();
-			setStatsFunc(sensor, engine, "HitPoints", i, COMP_SENSOR, j);
-			setStatsFunc(sensor, engine, "HitPointPct", i, COMP_SENSOR, j);
-			setStatsFunc(sensor, engine, "Range", i, COMP_SENSOR, j);
-			sensorbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Propulsion``` Propulsions
-		QScriptValue propbase = engine->newObject();
-		for (int j = 0; j < numPropulsionStats; j++)
-		{
-			PROPULSION_STATS *psStats = asPropulsionStats + j;
-			QScriptValue v = engine->newObject();
-			setStatsFunc(v, engine, "HitPoints", i, COMP_PROPULSION, j);
-			setStatsFunc(v, engine, "HitPointPct", i, COMP_PROPULSION, j);
-			setStatsFunc(v, engine, "HitPointPctOfBody", i, COMP_PROPULSION, j);
-			propbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), v, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Propulsion", propbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
-		QScriptValue ecmbase = engine->newObject();
-		for (int j = 0; j < numECMStats; j++)
-		{
-			ECM_STATS *psStats = asECMStats + j;
-			QScriptValue ecm = engine->newObject();
-			setStatsFunc(ecm, engine, "Range", i, COMP_ECM, j);
-			setStatsFunc(ecm, engine, "HitPoints", i, COMP_ECM, j);
-			setStatsFunc(ecm, engine, "HitPointPct", i, COMP_ECM, j);
-			ecmbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
-		QScriptValue repairbase = engine->newObject();
-		for (int j = 0; j < numRepairStats; j++)
-		{
-			REPAIR_STATS *psStats = asRepairStats + j;
-			QScriptValue repair = engine->newObject();
-			setStatsFunc(repair, engine, "RepairPoints", i, COMP_REPAIRUNIT, j);
-			setStatsFunc(repair, engine, "HitPoints", i, COMP_REPAIRUNIT, j);
-			setStatsFunc(repair, engine, "HitPointPct", i, COMP_REPAIRUNIT, j);
-			repairbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Construct``` Constructor turrets (eg for trucks)
-		QScriptValue conbase = engine->newObject();
-		for (int j = 0; j < numConstructStats; j++)
-		{
-			CONSTRUCT_STATS *psStats = asConstructStats + j;
-			QScriptValue con = engine->newObject();
-			setStatsFunc(con, engine, "ConstructorPoints", i, COMP_CONSTRUCT, j);
-			setStatsFunc(con, engine, "HitPoints", i, COMP_CONSTRUCT, j);
-			setStatsFunc(con, engine, "HitPointPct", i, COMP_CONSTRUCT, j);
-			conbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Brain``` Brains
-		//== BaseCommandLimit: How many droids a commander can command. CommandLimitByLevel: How many extra droids
-		//== a commander can command for each of its rank levels. RankThresholds: An array describing how many
-		//== kills are required for this brain to level up to the next rank. To alter this from scripts, you must
-		//== set the entire array at once. Setting each item in the array will not work at the moment.
-		QScriptValue brainbase = engine->newObject();
-		for (int j = 0; j < numBrainStats; j++)
-		{
-			BRAIN_STATS *psStats = asBrainStats + j;
-			QScriptValue br = engine->newObject();
-			setStatsFunc(br, engine, "BaseCommandLimit", i, COMP_BRAIN, j);
-			setStatsFunc(br, engine, "CommandLimitByLevel", i, COMP_BRAIN, j);
-			setStatsFunc(br, engine, "RankThresholds", i, COMP_BRAIN, j);
-			setStatsFunc(br, engine, "HitPoints", i, COMP_BRAIN, j);
-			setStatsFunc(br, engine, "HitPointPct", i, COMP_BRAIN, j);
-			brainbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), br, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Brain", brainbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Weapon``` Weapon turrets
-		QScriptValue wbase = engine->newObject();
-		for (int j = 0; j < numWeaponStats; j++)
-		{
-			WEAPON_STATS *psStats = asWeaponStats + j;
-			QScriptValue weap = engine->newObject();
-			setStatsFunc(weap, engine, "MaxRange", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "ShortRange", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "MinRange", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "HitChance", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "ShortHitChance", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "FirePause", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "ReloadTime", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "Rounds", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "Radius", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "Damage", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "MinimumDamage", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "RadiusDamage", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "RepeatDamage", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "RepeatTime", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "RepeatRadius", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "HitPoints", i, COMP_WEAPON, j);
-			setStatsFunc(weap, engine, "HitPointPct", i, COMP_WEAPON, j);
-			wbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		//==   * ```Building``` Buildings
-		QScriptValue structbase = engine->newObject();
-		for (int j = 0; j < numStructureStats; j++)
-		{
-			STRUCTURE_STATS *psStats = asStructureStats + j;
-			QScriptValue strct = engine->newObject();
-			setStatsFunc(strct, engine, "ResearchPoints", i, SCRCB_RES, j);
-			setStatsFunc(strct, engine, "ModuleResearchPoints", i, SCRCB_MODULE_RES, j);
-			setStatsFunc(strct, engine, "RepairPoints", i, SCRCB_REP, j);
-			setStatsFunc(strct, engine, "PowerPoints", i, SCRCB_POW, j);
-			setStatsFunc(strct, engine, "ModulePowerPoints", i, SCRCB_MODULE_POW, j);
-			setStatsFunc(strct, engine, "ProductionPoints", i, SCRCB_CON, j);
-			setStatsFunc(strct, engine, "ModuleProductionPoints", i, SCRCB_MODULE_CON, j);
-			setStatsFunc(strct, engine, "RearmPoints", i, SCRCB_REA, j);
-			setStatsFunc(strct, engine, "Armour", i, SCRCB_ARM, j);
-			setStatsFunc(strct, engine, "Resistance", i, SCRCB_ELW, j);
-			setStatsFunc(strct, engine, "Thermal", i, SCRCB_HEA, j);
-			setStatsFunc(strct, engine, "HitPoints", i, SCRCB_HIT, j);
-			setStatsFunc(strct, engine, "Limit", i, SCRCB_LIMIT, j);
-			structbase.setProperty(QString::fromUtf8(psStats->name.toUtf8().c_str()), strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-		node.setProperty("Building", structbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-		// Finally
-		upgrades.setProperty(i, node, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	}
+	QScriptValue upgrades = constructUpgradesQScriptValue(engine);
 	engine->globalObject().setProperty("Upgrades", upgrades, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Register functions to the script engine here
