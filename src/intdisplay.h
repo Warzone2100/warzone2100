@@ -216,6 +216,15 @@ protected:
 	BASE_STATS *Stat;
 };
 
+/// Form which only acts as a glass container.
+class IntFormTransparent : public W_FORM
+{
+public:
+	IntFormTransparent(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+};
+
 /// Form which animates opening/closing.
 class IntFormAnimated : public W_FORM
 {
