@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-13 18:55\n"
+"PO-Revision-Date: 2020-04-14 19:07\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -7996,7 +7996,7 @@ msgstr "Απεμπλουτισμένου Ουρανίου Σφαίρες Πολ�
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1795
 msgid "Designed for shared research team battles"
-msgstr ""
+msgstr "Σχεδιασμένο για ομαδικές μάχες με κοινή έρευνα"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -14694,11 +14694,11 @@ msgstr "Συνέχιση του τελευταίου, αποθηκευμένου
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
-msgstr ""
+msgstr "Εκκίνηση της φιλοξενίας ενός παιχνιδιού, βάσει των ρυθμίσεων του ορισμένου αρχείου"
 
 #: src/clparse.cpp:288
 msgid "autohost"
-msgstr ""
+msgstr "αυτόματη-φιλοξενία"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15263,7 +15263,7 @@ msgstr ""
 #: src/frontend.cpp:969
 #: src/frontend.cpp:971
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "Η Κεφαλής Σχετιζόμενη Λειτουργία Μεταφοράς (HRTF) δεν υποστηρίζεται από τη συσκευή σου, ή το σύστημά σου, ή την OpenAL βιβλιοθήκη σου"
 
 #: src/frontend.cpp:975
 msgid "Map Zoom"
@@ -15283,7 +15283,7 @@ msgstr "Εστίαση του Αισθητήρα"
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:994
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "ΗΧΟΣ / ΕΣΤΙΑΣΗ\\nΕΠΙΛΟΓΕΣ"
 
 #: src/frontend.cpp:1118
 msgid "Windowed"
@@ -15315,7 +15315,7 @@ msgstr "Κλίμακα Εμφάνισης"
 
 #: src/frontend.cpp:1189
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Μπορείς να μεταβάλεις την ανάλυση, αλλάζοντας το μέγεθος του παράθυρου «κανονικά». (Για παράδειγμα, «αρπάζοντας» και «τραβώντας» μια γωνία, ή μια πλευρά του.)"
 
 #: src/frontend.cpp:1221
 msgid "* Takes effect on game restart"
@@ -15332,11 +15332,11 @@ msgstr "κάθετος συγχ/μός"
 
 #: src/frontend.cpp:1241
 msgid "Antialiasing*"
-msgstr ""
+msgstr "Αντι-Σπασμωδική*"
 
 #: src/frontend.cpp:1247
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Προειδοποίηση: η Αντι-Σπασμωδική μπορεί να προκαλέσει κατάρρευση, ειδικά σε τιμές > 16"
 
 #: src/frontend.cpp:1258
 msgid "VIDEO OPTIONS"
@@ -15502,12 +15502,14 @@ msgstr "Εμφανίζεται η Ξεπερασμένη Τεχνολογία"
 #: src/hci.cpp:3543
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Προβολή Όλων των Τεχνολογιών\n"
+"Με δεξί κλικ προσθέτονται στις Αγαπημένες"
 
 #: src/hci.cpp:3545
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Προβολή Μόνο των Αγαπημένων Τεχνολογιών\n"
+"Με δεξί κλικ αφαιρούνται από στις Αγαπημένες"
 
 #: src/hci.cpp:3625
 msgid "Factory Delivery Point"
@@ -15598,7 +15600,7 @@ msgstr "ήχος"
 
 #: src/ingameop.cpp:494
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Προβολή της Χάρτας των Πλήκτρων"
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
@@ -15885,7 +15887,7 @@ msgstr "Απενεργοποιημένη η Ομίχλη"
 #: src/keybind.cpp:922
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "Ορισμός της εστίασης του ραδιοεντοπιστή στα %u"
 
 #: src/keybind.cpp:1311
 msgid "God Mode ON"
@@ -16238,19 +16240,19 @@ msgstr "Επιλογές για παιχνίδι πολλών/ Διάλογος 
 
 #: src/keymap.cpp:361
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Μετακίνηση Της Κάμερας Πάνω"
 
 #: src/keymap.cpp:362
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Μετακίνηση Της Κάμερας Κάτω"
 
 #: src/keymap.cpp:363
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Μετακίνηση Της Κάμερας Δεξιά"
 
 #: src/keymap.cpp:364
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Μετακίνηση Της Κάμερας Αριστερά"
 
 #: src/keymap.cpp:365
 msgid "Snap View to North"
@@ -16414,7 +16416,7 @@ msgstr "Εναλλαγή του ραδιοεντοπισμού συμμάχων/
 
 #: src/keymap.cpp:419
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Προβολή όλων των αντιστοιχίσεων του πληκτρολογίου"
 
 #: src/keymap.cpp:428
 msgid "Select all Combat Units"
@@ -16466,7 +16468,7 @@ msgstr "Εμφάνιση ρυθμού πλαισίων"
 
 #: src/keymap.cpp:441
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Επιλογή όλων των μονάδων με τα ίδια εξαρτήματα"
 
 #: src/keymap.cpp:445
 msgid "Select all Combat Cyborgs"
@@ -16744,11 +16746,11 @@ msgstr "Ο Δορυφόρος Φωτακτίνας είναι απενεργοπ
 
 #: src/multiint.cpp:1067
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Επιβλήθηκαν Περιορισμοί Δόμησης."
 
 #: src/multiint.cpp:1246
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Ανεπαρκείς ψήφοι για την τυχαιοποίηση ή την αλλαγή του χάρτη."
 
 #: src/multiint.cpp:1272
 #: src/titleui/gamefind.cpp:579
@@ -16766,7 +16768,8 @@ msgstr "Επέλεξε ένα Όνομα για το Παιχνίδι"
 #: src/multiint.cpp:1291
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Επιλογή Χάρτη\n"
+"Μπορεί να μπλοκαριστεί με τις ψήφους των παικτών"
 
 #: src/multiint.cpp:1292
 msgid "Map-Mod!"
@@ -16809,12 +16812,13 @@ msgstr "Περιορισμοί Δόμησης"
 
 #: src/multiint.cpp:1378
 msgid "Random Game Options"
-msgstr ""
+msgstr "Επιλογές Τυχαίου Παιχνιδιού"
 
 #: src/multiint.cpp:1379
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Επιλογές Τυχαίου Παιχνιδιού\n"
+"Μπορεί να μπλοκαριστεί με τις ψήφους των παικτών"
 
 #: src/multiint.cpp:1387
 #: src/multiint.cpp:1388
