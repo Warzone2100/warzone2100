@@ -2046,7 +2046,7 @@ void addTopForm(bool wide)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *topForm = new IntFormAnimated(parent, false);
+	IntFormTransparent *topForm = new IntFormTransparent(parent);
 	topForm->id = FRONTEND_TOPFORM;
 	if (wide)
 	{

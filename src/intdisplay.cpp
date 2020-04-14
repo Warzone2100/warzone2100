@@ -1001,6 +1001,15 @@ void IntStatsButton::display(int xOffset, int yOffset)
 	doneDisplay();
 }
 
+IntFormTransparent::IntFormTransparent(WIDGET *parent)
+	: W_FORM(parent)
+{
+}
+
+void IntFormTransparent::display(int xOffset, int yOffset)
+{
+}
+
 IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
 	: W_FORM(parent)
 	, startTime(0)
