@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-14 19:07\n"
+"PO-Revision-Date: 2020-04-15 19:10\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -1192,7 +1192,7 @@ msgstr "Demolează"
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:3926
 msgid "Naval"
-msgstr ""
+msgstr "Naval"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -1214,7 +1214,7 @@ msgstr "Amplasament AA cu Șrapnel Tornadă"
 #: data/mp/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:402
 msgid "Dragon's Teeth"
-msgstr ""
+msgstr "Dinţi de Dragon"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Howitzer.name
@@ -12754,7 +12754,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade09.name
 #: po/custom/fromJson.txt:5084
 msgid "Self-Replicating Manufacturing"
-msgstr ""
+msgstr "Fabricație prin Auto-Replicare"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
