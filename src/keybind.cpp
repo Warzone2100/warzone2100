@@ -1528,8 +1528,6 @@ void	kf_ToggleProximitys()
 // --------------------------------------------------------------------------
 void	kf_JumpToResourceExtractor()
 {
-	int xJump, yJump;
-
 	if (psOldRE && (STRUCTURE *)psOldRE->psNextFunc)
 	{
 		psOldRE = psOldRE->psNextFunc;
@@ -1541,10 +1539,6 @@ void	kf_JumpToResourceExtractor()
 
 	if (psOldRE)
 	{
-		xJump = psOldRE->pos.x;
-		yJump = psOldRE->pos.y;
-		player.p.x = xJump;
-		player.p.z = yJump;
 		player.r.y = 0; // face north
 		setViewPos(map_coord(psOldRE->pos.x), map_coord(psOldRE->pos.y), true);
 	}
