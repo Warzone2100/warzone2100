@@ -1873,7 +1873,11 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 	player.r.z = 0;
 	
 	calcAverageTerrainHeight(&player);
-	player.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
+
+	if(player.p.y < averageCentreTerrainHeight)
+	{
+		player.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
+	}
 
 	if (getWarCamStatus())
 	{
