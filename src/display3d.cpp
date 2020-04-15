@@ -117,7 +117,7 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
-static void	calcAverageTerrainHeight(iView *player);
+static void	calcAverageTerrainHeight();
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
@@ -871,7 +871,7 @@ void draw3DScene()
 	if (!getWarCamStatus())
 	{
 		/* Move the autonomous camera if necessary */
-		calcAverageTerrainHeight(&player);
+		calcAverageTerrainHeight();
 		trackHeight(averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT);
 	}
 	else
@@ -932,7 +932,7 @@ void	setProximityDraw(bool val)
 }
 /***************************************************************************/
 /// Calculate the average terrain height for the area directly below the player
-static void calcAverageTerrainHeight(iView *player)
+static void calcAverageTerrainHeight()
 {
 	int numTilesAveraged = 0;
 
@@ -1851,7 +1851,7 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 	player.p.z = world_coord(y);
 	player.r.z = 0;
 	
-	calcAverageTerrainHeight(&player);
+	calcAverageTerrainHeight();
 
 	if(player.p.y < averageCentreTerrainHeight)
 	{
@@ -3370,18 +3370,18 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, player.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(UNDEG(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
-/// Smoothly adjust player height to match the desired height
-static void trackHeight(float desiredHeight)
-{
-	desiredHeight = std::ceil(desiredHeight / HEIGHT_TRACK_INCREMENTS) * HEIGHT_TRACK_INCREMENTS;
-	static float heightSpeed = 0.0f;
-	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
 
-	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
-	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, realTimeAdjustedIncrement(1));
+
+/// Smoothly adjust player height to match the desired height
+static void trackHeight(float height)
+{
+	// snap height to increments to avoid annoying microcorrections to the viewport
+	height = std::ceil(height / HEIGHT_TRACK_INCREMENTS) * HEIGHT_TRACK_INCREMENTS;
+	static float heightSpeed = 0.0f;
+	float separation = height - player.p.y;	// How far are we from desired height?
 
 	/* Adjust the height accordingly */
-	player.p.y = desiredHeight - separation;
+	player.p.y = height - separation;
 }
 
 /// Select the next energy bar display mode
