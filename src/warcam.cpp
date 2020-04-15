@@ -952,6 +952,7 @@ static bool camTrackCamera()
 	/* Update the position that's now stored in trackingCamera.position */
 	player.p.x = trackingCamera.position.x;
 	player.p.y = trackingCamera.position.y;
+	resetPlayerHeight();
 	player.p.z = trackingCamera.position.z;
 
 	/* Update the rotations that're now stored in trackingCamera.rotation */
