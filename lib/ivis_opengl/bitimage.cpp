@@ -269,8 +269,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 				}
 			}
 
-			free(src);
 			free(trg);
+			free(src);
 		}
 
 		imageRect->siz = Vector2i(imageRect->data->width, imageRect->data->height);

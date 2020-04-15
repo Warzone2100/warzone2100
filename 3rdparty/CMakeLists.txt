@@ -24,3 +24,20 @@ set(SHA2_SOURCES
 add_library(sha2 STATIC ${SHA2_HEADERS} ${SHA2_SOURCES})
 set_property(TARGET sha2 PROPERTY FOLDER "3rdparty")
 target_include_directories(sha2 PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+
+
+# xBRZ-library
+
+set(XBRZ_HEADERS
+	xbrz/xbrz_config.h
+	xbrz/xbrz_tools.h
+	xbrz/xbrz.h
+)
+
+set(XBRZ_SOURCES
+	xbrz/xbrz.cpp
+)
+
+add_library(xbrz STATIC ${XBRZ_HEADERS} ${XBRZ_SOURCES})
+set_property(TARGET xbrz PROPERTY FOLDER "3rdparty")
+target_include_directories(xbrz PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

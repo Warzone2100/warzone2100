@@ -420,7 +420,7 @@ void blendPixel(const Kernel_3x3& ker,
                 return true;
 
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-            if (getTopR(blend) != BLEND_NONE && !eq(e, g)) //but support double-blending for 90° corners
+            if (getTopR(blend) != BLEND_NONE && !eq(e, g)) //but support double-blending for 90ï¿½ corners
                 return false;
             if (getBottomL(blend) != BLEND_NONE && !eq(e, c))
                 return false;
@@ -487,7 +487,8 @@ public:
 
     void readDhlp(Kernel_4x4& ker, int x) const //(x, y) is at kernel position F
     {
-        [[likely]] if (const int x_p2 = x + 2; 0 <= x_p2 && x_p2 < srcWidth_)
+        const int x_p2 = x + 2;
+        if (0 <= x_p2 && x_p2 < srcWidth_)
         {
             ker.d = s_m1 ? s_m1[x_p2] : 0;
             ker.h = s_0  ? s_0 [x_p2] : 0;
@@ -512,19 +513,27 @@ private:
 };
 
 
+int clamp(int value, int min, int max)
+{
+    if(value < min) return min;
+    if(value > max) return max;
+
+    return value;
+}
+
 class OobReaderDuplicate
 {
 public:
     OobReaderDuplicate(const uint32_t* src, int srcWidth, int srcHeight, int y) :
-        s_m1(src + srcWidth * std::clamp(y - 1, 0, srcHeight - 1)),
-        s_0 (src + srcWidth * std::clamp(y,     0, srcHeight - 1)),
-        s_p1(src + srcWidth * std::clamp(y + 1, 0, srcHeight - 1)),
-        s_p2(src + srcWidth * std::clamp(y + 2, 0, srcHeight - 1)),
+        s_m1(src + srcWidth * clamp(y - 1, 0, srcHeight - 1)),
+        s_0 (src + srcWidth * clamp(y,     0, srcHeight - 1)),
+        s_p1(src + srcWidth * clamp(y + 1, 0, srcHeight - 1)),
+        s_p2(src + srcWidth * clamp(y + 2, 0, srcHeight - 1)),
         srcWidth_(srcWidth) {}
 
     void readDhlp(Kernel_4x4& ker, int x) const //(x, y) is at kernel position F
     {
-        const int x_p2 = std::clamp(x + 2, 0, srcWidth_ - 1);
+        const int x_p2 = clamp(x + 2, 0, srcWidth_ - 1);
         ker.d = s_m1[x_p2];
         ker.h = s_0 [x_p2];
         ker.l = s_p1[x_p2];
@@ -693,7 +702,7 @@ void scaleImage(const uint32_t* src, uint32_t* trg, int srcWidth, int srcHeight,
                 addTopR(blend_xy1, res.blend_j); //set 2nd known corner for (x, y + 1)
                 preProcBuf[x] = blend_xy1; //store on current buffer position for use on next row
 
-                [[likely]] if (x + 1 < srcWidth)
+                if (x + 1 < srcWidth)
                 {
                     //blend_xy1 -> blend_x1y1
                     clearAddTopL(blend_xy1, res.blend_k); //set 1st known corner for (x + 1, y + 1) and buffer for use on next column

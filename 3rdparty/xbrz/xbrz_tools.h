@@ -202,7 +202,11 @@ void bilinearScale(const uint32_t* src, int srcWidth, int srcHeight, int srcPitc
         const double xx1 = x / scaleX - x1;
         const double x2x = 1 - xx1;
 
-        buf[x] = { x1, x2, xx1, x2x };
+        buf[x] = CoeffsX();
+        buf[x].x1 = x1;
+        buf[x].x2 = x2;
+        buf[x].xx1 = xx1;
+        buf[x].x2x = x2x;
     }
 
     for (int y = yFirst; y < yLast; ++y)
