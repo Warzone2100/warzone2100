@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-13 18:54\n"
+"PO-Revision-Date: 2020-04-15 19:11\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -8603,7 +8603,8 @@ msgstr "Proizvaja in osredotoča izbruhe laserske energije"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Dobi ~ 100% več moči od vsake naftne vrtine\n"
+"Začne z obrambnimi zgradbami in naftnimi vrtinami"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8612,7 +8613,9 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Dobi ~ 100% več moči od vsake naftne vrtine\n"
+"Uporablja težki metalec plazme in EMS možnar\n"
+"Začne z obrambnimi zgradbami in naftnimi vrtinami"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -13441,7 +13444,7 @@ msgstr "Titansko-okrepljen beton"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
 #: po/custom/fromJson.txt:5544
 msgid "Tower wars AI, based on NullBot"
-msgstr ""
+msgstr "UI za stolpne vojne, ki temelji na NullBot-u"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Tracks.name
@@ -13742,7 +13745,7 @@ msgstr "Uporablja napredno tehnologijo raketnih pušk"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
 #: po/custom/fromJson.txt:5729
 msgid "Uses the Heavy Plasma Launcher"
-msgstr ""
+msgstr "Uporablja težki metalec plazme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
@@ -14676,7 +14679,7 @@ msgstr "ime shranjene igre"
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
-msgstr "Začni spopadno igro z dano datoteko nastavitev"
+msgstr "Začni spopadno igro z dano nastavitveno datoteko"
 
 #: src/clparse.cpp:286
 msgid "test"
@@ -14688,11 +14691,11 @@ msgstr "Nadaljuj zadnjo shranjeno igro"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
-msgstr ""
+msgstr "Začni gostitveno igro z dano nastavitveno datoteko"
 
 #: src/clparse.cpp:288
 msgid "autohost"
-msgstr ""
+msgstr "samodejno gostuj"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14884,7 +14887,7 @@ msgstr "Gradnja ni možna. Vir nafte gori."
 #: src/display.cpp:1527
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr ""
+msgstr "%s - Udarne točke %d/%d - Izkušnje %.1f, %s"
 
 #: src/display.cpp:1689
 #, c-format
@@ -14895,7 +14898,7 @@ msgstr "%s - Zaveznik - Udarne točke %d/%d - Izkušnje %d, %s"
 #: src/droid.cpp:248
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s izgubljen!"
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -16240,19 +16243,19 @@ msgstr "Večigralske možnosti / Zavezniški pogovor"
 
 #: src/keymap.cpp:361
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Premakni kamero gor"
 
 #: src/keymap.cpp:362
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Premakni kamero dol"
 
 #: src/keymap.cpp:363
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Premakni kamero desno"
 
 #: src/keymap.cpp:364
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Premakni kamero levo"
 
 #: src/keymap.cpp:365
 msgid "Snap View to North"
@@ -16914,7 +16917,7 @@ msgstr "Klikni za spremembo položaja igralca"
 
 #: src/multiint.cpp:2270
 msgid "Click to change AI, right click to distribute choice"
-msgstr ""
+msgstr "Kliknite za spremembo UI, desno kliknite za delitev izbire"
 
 #: src/multiint.cpp:2285
 msgid "Player ID: "
@@ -16930,7 +16933,7 @@ msgstr "KLEPET"
 
 #: src/multiint.cpp:2835
 msgid "Game Name Updated."
-msgstr ""
+msgstr "Ime igre posodobljeno."
 
 #: src/multiint.cpp:2948
 #, c-format
@@ -16962,11 +16965,11 @@ msgstr "Gostitelj začenja igro"
 
 #: src/multiint.cpp:3537
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Bili ste brcnjeni: "
 
 #: src/multiint.cpp:3549
 msgid "No connection to host."
-msgstr ""
+msgstr "Ni povezave z gostiteljem."
 
 #: src/multiint.cpp:3686
 msgid "Cannot change to a map with too few slots for all players."
@@ -16998,7 +17001,7 @@ msgstr "Za začetek vašega izziva odkljukajte okvirček pripravljenosti!"
 
 #: src/multiint.cpp:3949
 msgid "Press the start hosting button to begin hosting a game."
-msgstr "Za začetek gostovanja igre pritisnite gumb Začni gostovanje."
+msgstr "Za začetek gostovanja igre pritisnite gumb začni gostovanje."
 
 #: src/multiint.cpp:4030
 #, c-format
