@@ -93,7 +93,7 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix);
 static void displayFeatures(const glm::mat4 &viewMatrix);
 static UDWORD	getTargettingGfx();
 static void	drawDroidGroupNumber(DROID *psDroid);
-static void	trackHeight(float desiredHeight);
+static void	trackHeight();
 static void	renderSurroundings(const glm::mat4 &viewMatrix);
 static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
@@ -117,7 +117,13 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
-static void	calcAverageTerrainHeight();
+static float getAverageTerrainHeight();
+
+float referenceHeight = 0;
+float targetHeight = 0;
+UDWORD heightChangeStartTime = 0;
+static const float TERRAIN_HEIGHT_CHANGE_TIME = 500;
+static const int HEIGHT_TRACK_INCREMENTS = 125;
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
@@ -254,9 +260,6 @@ char DROIDDOING[512];
 
 /// Geometric offset which will be passed to pie_SetGeometricOffset
 static const int geoOffset = 192;
-
-/// The average terrain height for the center of the area the camera is looking at
-static int averageCentreTerrainHeight;
 
 /** The time at which a sensor target was last assigned
  * Used to draw a visual effect.
@@ -870,9 +873,7 @@ void draw3DScene()
 	/* If we don't have an active camera track, then track terrain height! */
 	if (!getWarCamStatus())
 	{
-		/* Move the autonomous camera if necessary */
-		calcAverageTerrainHeight();
-		trackHeight(averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT);
+		trackHeight();
 	}
 	else
 	{
@@ -932,24 +933,24 @@ void	setProximityDraw(bool val)
 }
 /***************************************************************************/
 /// Calculate the average terrain height for the area directly below the player
-static void calcAverageTerrainHeight()
+static float getAverageTerrainHeight()
 {
 	int numTilesAveraged = 0;
 
 	/*	We track the height here - so make sure we get the average heights
 		of the tiles directly underneath us
 	*/
-	averageCentreTerrainHeight = 0;
-	for (int i = -4; i <= 4; i++)
+	float result = 0;
+	for (int i = -5; i <= 5; i++)
 	{
-		for (int j = -4; j <= 4; j++)
+		for (int j = -5; j <= 5; j++)
 		{
 			if (tileOnMap(playerXTile + j, playerZTile + i))
 			{
 				/* Get a pointer to the tile at this location */
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
-				averageCentreTerrainHeight += psTile->height;
+				result += psTile->height;
 				numTilesAveraged++;
 			}
 		}
@@ -960,16 +961,18 @@ static void calcAverageTerrainHeight()
 	{
 		MAPTILE *psTile = mapTile(playerXTile, playerZTile);
 
-		averageCentreTerrainHeight /= numTilesAveraged;
-		if (averageCentreTerrainHeight < psTile->height)
+		result /= numTilesAveraged;
+		if (result < psTile->height)
 		{
-			averageCentreTerrainHeight = psTile->height;
+			result = psTile->height;
 		}
 	}
 	else
 	{
-		averageCentreTerrainHeight = ELEVATION_SCALE * TILE_UNITS;
+		result = ELEVATION_SCALE * TILE_UNITS;
 	}
+
+	return result;
 }
 
 inline bool quadIntersectsWithScreen(const QUAD & quad)
@@ -1850,13 +1853,8 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 	player.p.x = world_coord(x);
 	player.p.z = world_coord(y);
 	player.r.z = 0;
-	
-	calcAverageTerrainHeight();
-
-	if(player.p.y < averageCentreTerrainHeight)
-	{
-		player.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
-	}
+	player.p.y = getAverageTerrainHeight() + CAMERA_PIVOT_HEIGHT;
+	resetPlayerHeight();
 
 	if (getWarCamStatus())
 	{
@@ -3370,18 +3368,47 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, player.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(UNDEG(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
+void resetPlayerHeight(){
+	referenceHeight = 0;
+	targetHeight = 0;
+	heightChangeStartTime = 0;
+}
 
-
-/// Smoothly adjust player height to match the desired height
-static void trackHeight(float height)
+/// Smoothly adjust player height to match the average terrain height
+static void trackHeight()
 {
-	// snap height to increments to avoid annoying microcorrections to the viewport
-	height = std::ceil(height / HEIGHT_TRACK_INCREMENTS) * HEIGHT_TRACK_INCREMENTS;
-	static float heightSpeed = 0.0f;
-	float separation = height - player.p.y;	// How far are we from desired height?
+	float calculatedHeight = getAverageTerrainHeight() + CAMERA_PIVOT_HEIGHT;
 
-	/* Adjust the height accordingly */
-	player.p.y = height - separation;
+	if(referenceHeight == 0 && abs(player.p.y - calculatedHeight) < HEIGHT_TRACK_INCREMENTS)
+	{
+		return;
+	}
+
+	if(calculatedHeight == player.p.y)
+	{
+		return;
+	}
+
+	if(referenceHeight == 0)
+	{
+		referenceHeight = std::max(player.p.y, 1);
+		targetHeight = calculatedHeight;
+		heightChangeStartTime = graphicsTime;
+	}
+
+	float time = graphicsTime - heightChangeStartTime;
+	float t = time / TERRAIN_HEIGHT_CHANGE_TIME;
+
+	if(t > 1)
+	{
+		player.p.y = targetHeight;
+		resetPlayerHeight();
+		return;
+	}
+
+	printf("RH: %i TH: %i T: %0.3f Y: %i\n", (int)referenceHeight, (int)targetHeight, t, player.p.y);
+
+	player.p.y = referenceHeight + (targetHeight - referenceHeight) * t * t; // cubic easing
 }
 
 /// Select the next energy bar display mode

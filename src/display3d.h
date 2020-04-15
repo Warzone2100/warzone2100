@@ -28,7 +28,7 @@
 #include "objectdef.h"
 #include "message.h"
 
-#define HEIGHT_TRACK_INCREMENTS (250)
+void resetPlayerHeight();
 
 /*!
  * Special tile types
