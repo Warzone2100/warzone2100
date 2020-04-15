@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-13 18:54\n"
+"PO-Revision-Date: 2020-04-15 19:10\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -11487,7 +11487,7 @@ msgstr "Gizlenecek Yer Yok"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4255
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Hile Yapmayan. Zor. Eğlenceli. Ezin!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
@@ -14462,7 +14462,7 @@ msgstr "Telif Hakkı © 1999-2004 Eidos Interactive.\n"
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14482,7 +14482,7 @@ msgstr "Warzone 2100 Küresel Mod Dosyası"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14518,7 +14518,7 @@ msgstr "Hata ayıklama modu devre dışı!"
 #: src/clparse.cpp:86
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "Kullanım: %s [SEÇENEK...]\n"
 
 #: src/clparse.cpp:258
 msgid "Set configuration directory"
@@ -14580,7 +14580,7 @@ msgstr "Bir küresel modu etkinleştir"
 #: src/clparse.cpp:267
 #: src/clparse.cpp:268
 msgid "mod"
-msgstr ""
+msgstr "mod"
 
 #: src/clparse.cpp:267
 msgid "Enable a campaign only mod"
@@ -14681,15 +14681,15 @@ msgstr "Belirtilen ayar dosyası ile çatışma oyunu başlat"
 
 #: src/clparse.cpp:286
 msgid "test"
-msgstr ""
+msgstr "test"
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
-msgstr ""
+msgstr "Son kaydedilen oyuna devam et"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
-msgstr ""
+msgstr "Belirtilen ayar dosyası ile kurucu oyunu başlat"
 
 #: src/clparse.cpp:288
 msgid "autohost"
@@ -14896,7 +14896,7 @@ msgstr "%s - Müttefik - Hasar %d/%d - Tecrübe %d, %s"
 #: src/droid.cpp:248
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s Kaybedildi!"
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -14964,11 +14964,11 @@ msgstr "Videolar eksik! Videoları http://wz2100.net'den indirin"
 #: src/frontend.cpp:163
 #: src/frontend.cpp:167
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Son Kayıttan Devam Et"
 
 #: src/frontend.cpp:168
 msgid "No last save available"
-msgstr ""
+msgstr "Son kayıt mevcut değil"
 
 #: src/frontend.cpp:170
 msgid "Quit Game"
@@ -15124,11 +15124,11 @@ msgstr "Klavye Kısayolları"
 
 #: src/frontend.cpp:736
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:737
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:738
 #: src/frontend.cpp:1118
@@ -15212,7 +15212,7 @@ msgstr "Gölgeler"
 #: src/frontend.cpp:802
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.cpp:806
 #: src/ingameop.cpp:542
@@ -15225,16 +15225,16 @@ msgstr "GRAFİK AYARLARI"
 
 #: src/frontend.cpp:904
 msgid "Disabled"
-msgstr ""
+msgstr "Devre dışı"
 
 #: src/frontend.cpp:907
 msgid "Enabled"
-msgstr ""
+msgstr "Etkin"
 
 #: src/frontend.cpp:911
 #: src/frontend.cpp:917
 msgid "Auto"
-msgstr ""
+msgstr "Otomatik"
 
 #: src/frontend.cpp:952
 #: src/ingameop.cpp:159
@@ -15398,7 +15398,7 @@ msgstr "Kolay"
 
 #: src/frontend.cpp:1677
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: src/frontend.cpp:1678
 #: src/multiint.cpp:223
@@ -15448,7 +15448,7 @@ msgstr "OYUN AYARLARI"
 #: src/frontend.cpp:1886
 #: src/multiint.cpp:2390
 msgid "Mod: "
-msgstr ""
+msgstr "Mod: "
 
 #: src/hci.cpp:1169
 #: src/loop.cpp:246
@@ -15497,12 +15497,14 @@ msgstr "Eski Teknoloji Gösteriliyor"
 #: src/hci.cpp:3543
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Tüm Teknolojiler Gösteriliyor\n"
+"Favorilere eklemek için sağ tıklayın"
 
 #: src/hci.cpp:3545
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Sadece Favori Teknolojiler Gösteriliyor\n"
+"Favorilerden kaldırmak için sağ tıklayın"
 
 #: src/hci.cpp:3625
 msgid "Factory Delivery Point"
@@ -15593,7 +15595,7 @@ msgstr "Ses Ayarları"
 
 #: src/ingameop.cpp:494
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Klavye Kısayollarını Göster"
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
@@ -16073,7 +16075,7 @@ msgstr "Komutanlar"
 
 #: src/keymap.cpp:307
 msgid "QuickSave"
-msgstr ""
+msgstr "Hızlı Kayıt"
 
 #: src/keymap.cpp:308
 msgid "Toggle Radar"
@@ -16081,7 +16083,7 @@ msgstr "Radar Anahtarı"
 
 #: src/keymap.cpp:309
 msgid "QuickLoad"
-msgstr ""
+msgstr "Hızlı Yükle"
 
 #: src/keymap.cpp:310
 msgid "Toggle Console Display"
@@ -16233,19 +16235,19 @@ msgstr "Çok Oyunculu Oyun Ayarları / Müttefikler ile sohbet"
 
 #: src/keymap.cpp:361
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Kamerayı Yukarı Taşı"
 
 #: src/keymap.cpp:362
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Kamerayı Aşağı Taşı"
 
 #: src/keymap.cpp:363
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Kamerayı Sağa Taşı"
 
 #: src/keymap.cpp:364
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Kamerayı Sola Taşı"
 
 #: src/keymap.cpp:365
 msgid "Snap View to North"
@@ -16409,7 +16411,7 @@ msgstr "Dost düşman radarı anahtarı"
 
 #: src/keymap.cpp:419
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Tüm klavye tuşlarını göster"
 
 #: src/keymap.cpp:428
 msgid "Select all Combat Units"
@@ -16461,7 +16463,7 @@ msgstr "Saniyedeki kare sayısını göster"
 
 #: src/keymap.cpp:441
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Aynı bileşenleri olan tüm birimleri seç"
 
 #: src/keymap.cpp:445
 msgid "Select all Combat Cyborgs"
@@ -16581,15 +16583,15 @@ msgstr "Bir oyun nesnesini izle"
 
 #: src/loadsave.cpp:311
 msgid "Parent directory"
-msgstr ""
+msgstr "Üst dizin"
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory"
-msgstr ""
+msgstr "Otomatik kaydetme dizini"
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "Otomatik kaydetme dizini (kayıt için izin verilmiyor)"
 
 #: src/loop.cpp:253
 #: src/loop.cpp:269
@@ -16702,11 +16704,11 @@ msgstr "Komutan"
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "EKSİK YZ ADI"
 
 #: src/multiint.cpp:773
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "EKSİK YZ AÇIKLAMASI"
 
 #: src/multiint.cpp:787
 #, c-format
@@ -16715,7 +16717,7 @@ msgstr ""
 
 #: src/multiint.cpp:887
 msgid "Error while joining."
-msgstr ""
+msgstr "Katılırken hata oluştu."
 
 #: src/multiint.cpp:1062
 msgid "Tanks disabled!!"
@@ -16739,11 +16741,11 @@ msgstr "Lazer Uydusu devred dışı."
 
 #: src/multiint.cpp:1067
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Yapı Sınırları Zorlanmış."
 
 #: src/multiint.cpp:1246
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Rastgeleştirmek ya da harita değişikliği için yeterli oy yok."
 
 #: src/multiint.cpp:1272
 #: src/titleui/gamefind.cpp:579
