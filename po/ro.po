@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-15 19:10\n"
+"PO-Revision-Date: 2020-04-16 19:06\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -1524,27 +1524,27 @@ msgstr "Îmbunătățire a senzorilor AB"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "Îmbunătățire a Senzorilor AB Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "Îmbunătățire a Senzorilor AB Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
 msgid "VTOL CB Upgrade"
-msgstr ""
+msgstr "Îmbunătățire DAV AB"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "Îmbunătățire DAV AB Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "Îmbunătățire DAV AB Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -1684,7 +1684,7 @@ msgstr "Laborator chimic"
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:627
 msgid "Advanced Warfare"
-msgstr ""
+msgstr "Război Avansat"
 
 #: data/base/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:703
@@ -1700,7 +1700,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:1
 #: po/custom/fromJson.txt:1635
 msgid "Cyborg Materials Improved"
-msgstr "Materialele pentru cyborgi îmbunătățite"
+msgstr "Materialele pentru Cyborgi Îmbunătățite"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYMET4.text[1]
@@ -1737,7 +1737,7 @@ msgstr "Îmbunătățește armura cinetică și rezistența la avarie"
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:311
 msgid "All Cyborgs upgraded automatically"
-msgstr "Toți cyborgii îmbunătățiți instantaneu"
+msgstr "Toți Cyborgii îmbunătățiți automat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -1838,7 +1838,7 @@ msgstr "Rezistență a șasiului: Medie"
 #: data/mp/messages/strings/resstrings.txt:29
 #: po/custom/fromJson.txt:4729
 msgid "Requires Cyborg factory to produce"
-msgstr "Necesită fabrică de cyborgi pentru a fi produs"
+msgstr "Necesită Fabrică de Cyborgi pentru a fi produs"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
@@ -1869,7 +1869,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:22
 #: po/custom/fromJson.txt:618
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr ""
+msgstr "Înarmat cu rachete Sol-Aer Răzbunătorul"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[0]
@@ -2136,7 +2136,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:72
 #: po/custom/fromJson.txt:764
 msgid "Armored howitzer emplacement"
-msgstr ""
+msgstr "Amplasament blindat cu obuzier"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HvHOW.text[1]
@@ -2145,7 +2145,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:77
 #: po/custom/fromJson.txt:668
 msgid "Armored Ground Shaker howitzer emplacement"
-msgstr ""
+msgstr "Amplasament blindat cu obuzier Cutremurător"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_IncHOW.text[1]
@@ -2158,7 +2158,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:87
 #: po/custom/fromJson.txt:760
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr ""
+msgstr "Amplasament blindat cu obuzier Furtună-din-Infern"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVATR.text[1]
@@ -2409,7 +2409,7 @@ msgstr "Toate stațiile de reparații îmbunătățite instantaneu"
 #: data/mp/messages/strings/resstrings.txt:176
 #: po/custom/fromJson.txt:1644
 msgid "Cyborg Production Improved"
-msgstr "Producția cyborgilor îmbunătățită"
+msgstr "Producția Cyborgilor Îmbunătățită"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FCY4.text[1]
@@ -2432,7 +2432,7 @@ msgstr "Producție Robotizată de Cyborgi"
 #: data/mp/messages/strings/resstrings.txt:178
 #: po/custom/fromJson.txt:3129
 msgid "Increases Cyborg factory output"
-msgstr "Mărește productivitatea fabricii de cyborgi"
+msgstr "Mărește [roductivitatea fabricii de Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[3]
@@ -2445,12 +2445,12 @@ msgstr "Mărește productivitatea fabricii de cyborgi"
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:305
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Toate fabricile de cyborgi îmbunătățite instantaneu"
+msgstr "Toate fabricile de Cyborgi îmbunătățite automat"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
 msgid "Self-Replicating Cyborg Production"
-msgstr "Producție în auto-replicare de cyborgi"
+msgstr "Producție de Cyborgi prin Auto-Replicare"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FU1.text[0]
@@ -2636,7 +2636,7 @@ msgstr "Toate fabricile DAV îmbunătățite automat"
 #: data/mp/messages/strings/resstrings.txt:206
 #: po/custom/fromJson.txt:6022
 msgid "VTOL Rearming Times Reduced"
-msgstr "Timpii reînarmăreii DAV-urilor reduși"
+msgstr "Timpii reînarmării DAV-urilor reduși"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
@@ -2647,7 +2647,7 @@ msgstr "Timpii reînarmăreii DAV-urilor reduși"
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:976
 msgid "Automated VTOL Rearming"
-msgstr "Reînarmare automată a DAV-urilor"
+msgstr "Reînarmare Automată a DAV-urilor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -2680,7 +2680,7 @@ msgstr "Toate stațiile de reînarmare îmbunătățite instantaneu"
 #: data/mp/messages/strings/resstrings.txt:226
 #: po/custom/fromJson.txt:4180
 msgid "New Systems Turret Available"
-msgstr "Nouă turelă funcțională disponibilă"
+msgstr "Nouă Turelă Funcțională Disponibilă"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_REPTUHVY.text[1]
@@ -2781,7 +2781,7 @@ msgstr "Turela DAV-AB detectează bateriile de foc indirect inamice"
 #: data/mp/messages/strings/resstrings.txt:228
 #: po/custom/fromJson.txt:4305
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr ""
+msgstr "Ordonă DAV-urilor desemnate să atace bateriile inamice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[3]
@@ -2888,7 +2888,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
 msgid "Improvement in synaptic link technology"
-msgstr ""
+msgstr "Îmbunătățire în tehnologia legăturii sinaptice"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
@@ -3306,7 +3306,7 @@ msgstr "Îmbunătățire Șrapnel AA"
 #: data/mp/messages/strings/resstrings.txt:317
 #: po/custom/fromJson.txt:2733
 msgid "High Explosive Flak shards"
-msgstr ""
+msgstr "Schije pentru Șrapnel Exploziv"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -3379,7 +3379,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:333
 #: po/custom/fromJson.txt:1075
 msgid "Best Targets: Base Structures and Defenses"
-msgstr ""
+msgstr "Ținte ideale: Clădiri și Fortificații"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB2.text[1]
@@ -3468,7 +3468,7 @@ msgstr "Ținta ideală: Clădirile defensive"
 #: data/mp/messages/strings/resstrings.txt:346
 #: po/custom/fromJson.txt:1231
 msgid "Bombsight Upgrade"
-msgstr ""
+msgstr "Îmbunătățire a Vizorului pentru Bombardament"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BAC1.text[1]
@@ -3650,7 +3650,7 @@ msgstr "Nouă Armă pentru Țintire Indirectă Disponibilă"
 #: data/mp/messages/strings/resstrings.txt:372
 #: po/custom/fromJson.txt:12
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "Howitzer-ul de 105mm poate fi asociat unui senzor"
+msgstr "Obuzierul de 105mm poate fi asociat unui senzor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
@@ -3672,7 +3672,7 @@ msgstr "Ținta ideală: Clădiri, infanterie, vehicule cu roți"
 #: data/mp/messages/strings/resstrings.txt:377
 #: po/custom/fromJson.txt:20
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "Howitzer-ul de 155mm poate fi asociat unui senzor"
+msgstr "Obuzierul de 155mm poate fi asociat unui senzor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[1]
@@ -3681,7 +3681,7 @@ msgstr "Howitzer-ul de 155mm poate fi asociat unui senzor"
 #: data/mp/messages/strings/resstrings.txt:382
 #: po/custom/fromJson.txt:8
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr ""
+msgstr "Obuzier de 105mm cu proiectile incendiare, poate fi atribuit unui senzor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -4027,7 +4027,7 @@ msgstr "Producție (F1)"
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/skirmish/rules.js:91
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Fabricare - construieşte întai o fabrică"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
@@ -4040,7 +4040,7 @@ msgstr "Cercetare (F2)"
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "Cercetare - construieşte întai un centru de cercetare"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4057,7 +4057,7 @@ msgstr "Construcție (F3)"
 #: data/base/script/tutorial.js:513
 #: data/mp/multiplay/skirmish/rules.js:130
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Construire - fabrică mai întâi droizi de construcţii"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
@@ -4070,7 +4070,7 @@ msgstr "Scheme (F4)"
 #: data/base/script/tutorial.js:514
 #: data/mp/multiplay/skirmish/rules.js:158
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "Schiţe - Construieşte Centrul de Comandă întai"
 
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/skirmish/rules.js:167
@@ -4081,7 +4081,7 @@ msgstr "Comandanți (F6)"
 #: data/base/script/tutorial.js:516
 #: data/mp/multiplay/skirmish/rules.js:171
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Comandanți - fabrică mai întâi comandanți"
 
 #: data/base/script/rules.js:191
 #: data/base/script/tutorial.js:251
@@ -4469,7 +4469,7 @@ msgstr "Legătura are un port rapid de transfer de date ce e compatibil cu orice
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr "Mai important, dezvoltarea legăturii sinaptice a făcut posibilă producerea de cyborgi. Încercările inițiale de costume armate pentru soldați au eșuat deoarece s-au dovedit a fi prea lente și greu de controlat."
+msgstr "Mai important, dezvoltarea legăturii sinaptice a făcut posibilă crearea de cyborgi. Încercările inițiale de exoschelete pentru soldați au eșuat deoarece s-au dovedit a fi prea lente și greu de controlat."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
@@ -4513,7 +4513,7 @@ msgstr "Ați procedat bine."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr "Pdată ce am analizat și autentificat tehnologia, răsplata voastră va urma."
+msgstr "Odată ce am analizat și autentificat tehnologia, răsplata voastră va urma."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
@@ -4525,7 +4525,7 @@ msgstr "Programul intrus Nexus este un parazit digital polimorf. Aceasta îl fac
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr "Nu am putut încă stabili care îi este scopul sau funcția. În form a inițială, caută și izolează meorie disponibilă față de restul sistemului invadat. Apoi începe să se modifice și să modifice structurile de date, reprogramând sistemul din interior."
+msgstr "Nu am putut încă stabili care îi este scopul final sau funcția. În forma sa inițială, caută și izolează secțiuni de memorie față de restul sistemului invadat. Apoi începe să se modifice pe el și structurile de date, reprogramând sistemul din interior."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -4581,7 +4581,7 @@ msgstr "Trebuie să începi evacuarea de urgență a bazei Beta spre refugiul si
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr "Nasda înseamnă „North American Strategic Defense Agency”."
+msgstr "NASDA este \"Agenţia Nord-Americană de Apărare Strategică\"."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
@@ -4593,7 +4593,7 @@ msgstr "În 2085, sateliții NASDA au lansat armele atomice asupra Pământului.
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr "Au fost de asemenea construite silozuri la sol. Multe dintre acestea au nfost distruse în contraatacul atomic, dar unele cu siguranță au rămas."
+msgstr "Erau de asemenea şi silozuri în locaţii terestre. Multe dintre acestea au fost distruse în contraatacurile nucleare, dar unele cu siguranţă au rămas."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
@@ -4601,7 +4601,7 @@ msgstr "Sateliții NASDA conțineau de asemenea lasere pulsatile pentru a opri r
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr "În contratacuri, acești sateliți laser nu au tras. Dacă sunt aduși în stare de operațiuni, acești sateliți pot cauza pagube enorme țintelor de la sol."
+msgstr "În timpul contraatacurilor, acești Sateliți Laser nu au reușit să tragă. Dacă sunt aduși în funcțiune, acești Sateliți Laser ar putea provoca pagube enorme țintelor de la sol."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
@@ -4657,7 +4657,7 @@ msgstr "Pulsurile magnetice rezultante au șters mare parte din bancurile de mem
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr "NEXUS a fost ars după ce mari părți din conștiința sa au fost distruse în timpul represaliilor."
+msgstr "Nexus a fost ars după ce secțiuni intregîi din conștiința sa au fost distruse în timpul contraatacurilor."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
@@ -4673,7 +4673,7 @@ msgstr "Aceasta este o amenințare serioasă împotriva Proiectului și a suprav
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr "Analiza centrului principal NASDA nu lasă nici urmă de îndoială că virusul intrus Nexus a fostr introdus de către Colectiv."
+msgstr "Analiza Centrului Principal NASDA nu lasă nici urmă de îndoială că Colectivul a introdus Virusul Intrus Nexus în el."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
@@ -4689,7 +4689,7 @@ msgstr "Echipa Gamma trimite o forță pentru a investiga și a opri orice alte 
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr "Putem presupune că NEXUS a obținut controlul asupra acestei baze. Nu putem ști dacă racheta e armată, sau care îi este ținta. Este recomandat să începi pregătirile pentru evacuarea bazei."
+msgstr "Putem presupune că Nexus a obținut controlul asupra acestei baze. Nu putem ști dacă racheta e cu focos nuclear, sau care îi este ținta. Este recomandat să începi pregătirile pentru evacuarea bazei."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -4729,7 +4729,7 @@ msgstr "Atacați!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr "Războinici ai Colectivului, NEXUS ne-a dat puterea mașinăriei ca să putem distruge tot ce ni se opune."
+msgstr "Războinici ai Colectivului, Nexus ne-a dat puterea mașinăriei ca să-i putem distruge pe toți care ni se opun."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
@@ -5050,11 +5050,11 @@ msgstr "Sistemul NASDA a fost creat ca să ne protejeze. Ar fi evitat un război
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "Raporatele spun că NASDA a avut o eroare la o verificare de rutină. Nu credeți. Cineva a vrut să ne elimine."
+msgstr "Rapoartele spun că NASDA a avut o eroare la o verificare de rutină. Nu credeți. Cineva a vrut să ne elimine."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "Acele bombe atomice ao țintit fiecare oraș major de pe glob. NASDA a fost programat ca să inițieze Colapsul. Când contraofensivele au pornit, sistemele de apărare cu laser și siturile de rachete de pe pământ nu au funcționat."
+msgstr "Acele bombe atomice au țintit fiecare oraș major de pe glob. NASDA a fost programat ca să inițieze Colapsul. Când contraofensivele au pornit, sistemele de apărare cu laser și site-urile de anti-rachete de la sol nu au funcționat."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
@@ -5078,7 +5078,7 @@ msgstr "Am spart ușile și am curățat locul de cadavre."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr "Știam că lucrurile nu vor fi niciodată la fel, dar eram determinați să construim o nouă lume din ruine. Am reconstruit aerodroamele și am adus vechile sisteme în stare de funcționare."
+msgstr "Știam că lucrurile nu vor mai fi niciodată la fel, dar eram determinați să construim o nouă lume din ruine. Am reconstruit aerodroamele și am adus vechile sisteme înapoi în stare de funcționare."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
@@ -5400,7 +5400,7 @@ msgstr "Centru de Comandă al Noii Paradigme"
 #: data/mp/messages/strings/names.txt:570
 #: po/custom/fromJson.txt:1422
 msgid "Collective Command Center"
-msgstr "Centru de Comandă al Colectibului"
+msgstr "Centru de Comandă al Colectivului"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NX-CruiseSite.name
@@ -5704,7 +5704,7 @@ msgstr "Mitralieră grea de calibrul .50"
 #. data/mp/messages/resmessages23.json: $.RES_W_RHOW.text[1]
 #: po/custom/fromJson.txt:16
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "Howitzer-ul cu țevi multiple de 105mm poate fi atribuit unui senzor"
+msgstr "Obuzierul cu țevi multiple de 105mm poate fi atribuit unui senzor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[1]
@@ -5943,14 +5943,14 @@ msgstr "Fabricație Avansată"
 #. data/mp/stats/research.json: $.R-Wpn-Missile-ROF02.name
 #: po/custom/fromJson.txt:199
 msgid "Advanced Missile Allocation System Mk2"
-msgstr "Sistem avansat de alocare a rachetelor MK2"
+msgstr "Sistem Avansat de Alocare a Rachetelor Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-ROF03.name
 #: po/custom/fromJson.txt:203
 msgid "Advanced Missile Allocation System Mk3"
-msgstr "Sistem avansat de alocare a rachetelor MK3"
+msgstr "Sistem Avansat de Alocare a Rachetelor Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-ROF01.name
@@ -5964,14 +5964,14 @@ msgstr "Sistem avansat de alocare a rachetelor"
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage02.name
 #: po/custom/fromJson.txt:211
 msgid "Advanced Missile Warhead Mk2"
-msgstr "Rachetă cu focos avansat MK2"
+msgstr "Rachetă cu Focos Avansat Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage03.name
 #: po/custom/fromJson.txt:215
 msgid "Advanced Missile Warhead Mk3"
-msgstr "Rachetă cu focos avansat MK3"
+msgstr "Rachetă cu Focos Avansat Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Damage01.name
@@ -6271,21 +6271,21 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 #: po/custom/fromJson.txt:558
 msgid "Armed with Cyborg Cannon"
-msgstr "Înarmat cu tun pentru cyborgi"
+msgstr "Înarmat cu Tun pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_FL1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_CYW_FL1.text[1]
 #: po/custom/fromJson.txt:562
 msgid "Armed with Cyborg Flamer"
-msgstr "Înarmat cu aruncător de flăcări pentru cyborgi"
+msgstr "Înarmat cu Aruncător de Flăcări pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
 #: po/custom/fromJson.txt:566
 msgid "Armed with Cyborg Machinegun"
-msgstr "Înarmat cu mitralieră pentru cyborgi"
+msgstr "Înarmat cu Mitralieră pentru Cyborgi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_PLAS.text[1]
@@ -6811,13 +6811,13 @@ msgstr "Autoîncărcătorul micșorează timpul de încărcare"
 #. data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade02.name
 #: po/custom/fromJson.txt:925
 msgid "Automated Cyborg Production Mk2"
-msgstr "Producție automatizată a cyborgilor Mk2"
+msgstr "Producție Automatizată a Cyborgilor Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade03.name
 #: po/custom/fromJson.txt:928
 msgid "Automated Cyborg Production Mk3"
-msgstr "Producție automatizată a cyborgilor Mk3"
+msgstr "Producție Automatizată a Cyborgilor Mk3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[1]
@@ -6825,7 +6825,7 @@ msgstr "Producție automatizată a cyborgilor Mk3"
 #. data/mp/messages/resmessages1.json: $.RES_ST_FCY01.text[1]
 #: po/custom/fromJson.txt:933
 msgid "Automated Cyborg Production"
-msgstr "Producție automatizată a cyborgilor"
+msgstr "Producție Automatizată a Cyborgilor"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Factory-Upgrade02.name
@@ -6885,14 +6885,14 @@ msgstr "Stație de reparații automată"
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
 #: po/custom/fromJson.txt:966
 msgid "Automated VTOL Rearming Mk2"
-msgstr "Reînarmare automată a DAV-urilor Mk2"
+msgstr "Reînarmare Automatizată a DAV-urilor Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #: po/custom/fromJson.txt:970
 msgid "Automated VTOL Rearming Mk3"
-msgstr "Reînarmare automată a DAV-urilor Mk3"
+msgstr "Reînarmare Automatizată a DAV-urilor Mk3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[1]
@@ -6991,7 +6991,7 @@ msgstr "Ținta ideală: Doar ținte aeriene"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1069
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Ținta ideală: Clădiri și cyborgi"
+msgstr "Țintele ideale: Clădiri și cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
@@ -7023,13 +7023,13 @@ msgstr "Ținta ideală: buncăre și blocuri"
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS2.text[2]
 #: po/custom/fromJson.txt:1121
 msgid "Best Targets: Cyborgs"
-msgstr "Ținta ideală: Cyborgi"
+msgstr "Țintele ideale: Cyborgi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text[2]
 #: po/custom/fromJson.txt:1128
 msgid "Best Targets: Heavy cyborgs"
-msgstr "Ținta ideală: Cyborgi grei"
+msgstr "Țintele ideale: Cyborgi grei"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[2]
@@ -7177,13 +7177,13 @@ msgstr "Sistem integrat de diagnosticare și reparații"
 #. data/mp/stats/templates.json: $.Sk-CobraBBHover.name
 #: po/custom/fromJson.txt:1255
 msgid "Bunker Buster Cobra Hover"
-msgstr "Rachete Anti-Buncăr pe şasiu Cobră Amfibiu"
+msgstr "Rachetă Anti-Buncăr pe şasiu Cobră Amfibiu"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraBBTracks.name
 #: po/custom/fromJson.txt:1258
 msgid "Bunker Buster Cobra Tracks"
-msgstr "Rachete Anti-Buncăr pe şasiu Cobră Şenilat"
+msgstr "Rachetă Anti-Buncăr pe şasiu Cobră Şenilat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisBBTracks.name
@@ -7203,7 +7203,7 @@ msgstr "Rachetă Bunker Buster"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket03-HvAT.name
 #: po/custom/fromJson.txt:1269
 msgid "Bunker Buster Rocket"
-msgstr "Rachete Anti-Buncăr"
+msgstr "Rachetă Anti-Buncăr"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperBBWheels.name
@@ -7215,7 +7215,7 @@ msgstr "Rachete Anti-Buncăr pe şasiu Viperă cu Roți"
 #. data/mp/stats/templates.json: $.ScorpBBTracks.name
 #: po/custom/fromJson.txt:1275
 msgid "Bunker Buster Scorpion Tracks"
-msgstr "Rachete Anti-Buncăr pe şasiu Scorpion Şenilat"
+msgstr "Rachetă Anti-Buncăr pe şasiu Scorpion Şenilat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-BB.name
@@ -7360,7 +7360,7 @@ msgstr "Îmbunătățire a tunurilor"
 #. data/mp/stats/sensor.json: $.Sys-CBTurret01.name
 #: po/custom/fromJson.txt:1360
 msgid "CB Radar Turret"
-msgstr "Turelă radar AB"
+msgstr "Turelă Radar AB"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[0]
@@ -7700,7 +7700,7 @@ msgstr ""
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
 #: po/custom/fromJson.txt:1570
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "Turelă anti-baterie detectează bateriile de foc indirect inamice"
+msgstr "Turelă anti-baterie care detectează bateriile de foc indirect inamice"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -7882,7 +7882,7 @@ msgstr "Blindaj Termal pentru Cyborgi"
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[0]
 #: po/custom/fromJson.txt:1704
 msgid "Cyborg Transport Available"
-msgstr "Transportor pentru cyborgi disponibil"
+msgstr "Transportor pentru Cyborgi Disponibil"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Transport.name
@@ -8123,7 +8123,7 @@ msgstr "Permite auto-reparația în toate clădirile"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
 #: po/custom/fromJson.txt:1879
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Permite auto-reparația pe toți cyborgii"
+msgstr "Permite auto-reparația pentru toți Cyborgii"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
@@ -8351,7 +8351,7 @@ msgstr "Lansează salve de mini-rachete"
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[1]
 #: po/custom/fromJson.txt:2023
 msgid "Flame-thrower firing Propylene Oxide gel"
-msgstr "Aruncător de flăcări folosind gel oxi-propilenă"
+msgstr "Aruncător de flăcări ce foloseste gel Oxid-Propilenă"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF02.name
@@ -9898,7 +9898,7 @@ msgstr "Amplasament pentru howitzer incendiar"
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 #: po/custom/fromJson.txt:3056
 msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr "Howitzer-ul incendiar poate fi atribuit unui senzor"
+msgstr "Obuzierul Incendiar poate fi atribuit unui senzor"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Incenediary.name
@@ -10643,7 +10643,7 @@ msgstr "Îi poate fi dată o țintă sau poate fi atașat de un senzor"
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[3]
 #: po/custom/fromJson.txt:3658
 msgid "May be upgraded using factory modules"
-msgstr "Poate fi îmbunătăpțită folosindu-se module de fabrică"
+msgstr "Poate fi îmbunătățită folosindu-se module de fabrică"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -11222,7 +11222,7 @@ msgstr "Nouă Armă cu Laser Disponibilă"
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[0]
 #: po/custom/fromJson.txt:4067
 msgid "New Missile Turret Available"
-msgstr "Nouă turelă cu rachete disponibilă"
+msgstr "Nouă Turelă cu Rachete Disponibilă"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[0]
@@ -11362,14 +11362,14 @@ msgstr "Nou turn de sisteme disponibil"
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #: po/custom/fromJson.txt:4170
 msgid "New Systems Turret Available for Design"
-msgstr "Nouă turelă de sisteme disponibilă pentru scheme"
+msgstr "Nouă Turelă Funcțională Disponibilă pentru Scheme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #: po/custom/fromJson.txt:4174
 msgid "New Systems Turret Available For Design"
-msgstr "O nouă turelă de sisteme este disponibilă pentru scheme"
+msgstr "Nouă Turelă Funcțională Disponibilă pentru Scheme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -11430,7 +11430,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.SpyTurret01.name
 #: po/custom/fromJson.txt:4224
 msgid "Nexus Link Turret"
-msgstr "Turelă cu legătură Nexus"
+msgstr "Turelă cu Legătură Nexus"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B07.text[0]
@@ -11479,7 +11479,7 @@ msgstr ""
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4252
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Nici Un Loc Pentru A Te Ascunde"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
@@ -11491,7 +11491,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
@@ -11554,19 +11554,19 @@ msgstr "Sau selectează stația de reparații ca destinație pentru unitate"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[2]
 #: po/custom/fromJson.txt:4299
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr "Ordonează unităților de artilerie să deschidă focuol asupra bateriilor inamice"
+msgstr "Ordonă unităților desemnate de artilerie să deschidă focul asupra bateriilor inamice"
 
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4308
 msgid "Original Campaign"
-msgstr ""
+msgstr "Campanie Originală"
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4311
 msgid "Original Skirmish"
-msgstr ""
+msgstr "Încăierare Originală"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -11637,14 +11637,14 @@ msgstr "Plasbeton"
 #. data/mp/stats/structure.json: $.Emplacement-PlasmaCannon.name
 #: po/custom/fromJson.txt:4352
 msgid "Plasma Cannon Emplacement"
-msgstr ""
+msgstr "Amplasament cu Tun cu Plasmă"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASCAN.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASCAN.text[1]
 #: po/custom/fromJson.txt:4356
 msgid "Plasma Cannon firing plasma"
-msgstr ""
+msgstr "Tun cu Plasmă care trage cu plasmă"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
@@ -11663,27 +11663,27 @@ msgstr "Tun cu plasmă"
 #. data/mp/stats/research.json: $.R-Wpn-Bomb05.name
 #: po/custom/fromJson.txt:4366
 msgid "Plasmite Bomb"
-msgstr "Bombă plasmit"
+msgstr "Bombă cu Plasmit"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[1]
 #: po/custom/fromJson.txt:4369
 msgid "Plasmite Flame-thrower"
-msgstr "Aruncător de flăcări cu plasmit"
+msgstr "Aruncător de Flăcări cu Plasmit"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-PlasmiteFlamer.name
 #. data/mp/stats/structure.json: $.Plasmite-flamer-bunker.name
 #: po/custom/fromJson.txt:4373
 msgid "Plasmite Flamer Bunker"
-msgstr "Buncăr pentru aruncător de plasmit"
+msgstr "Buncăr cu Aruncător de Plasmit"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Plasmite-Flamer.name
 #. data/mp/stats/weapons.json: $.PlasmiteFlamer.name
 #: po/custom/fromJson.txt:4377
 msgid "Plasmite Flamer"
-msgstr "Aruncător de plasmit"
+msgstr "Aruncător de Plasmit"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-Plasmite.name
@@ -11758,7 +11758,7 @@ msgstr "Modul pentru centrală electrică"
 #: po/custom/fromJson.txt:4419
 #, no-c-format
 msgid "Power output +25%"
-msgstr ""
+msgstr "Generare de energie +25%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[2]
@@ -11818,7 +11818,7 @@ msgstr "Șasiu Mediu al Proiectului"
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[1]
 #: po/custom/fromJson.txt:4462
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
-msgstr "Gel oxi-propilenă tratat pentru a arde la temperaturi mari"
+msgstr "Gel Oxid-Propilenă tratat pentru a arde la temperaturi mai mari"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.tip
@@ -12077,7 +12077,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4621
 #, no-c-format
 msgid "Rearming speed +30%"
-msgstr ""
+msgstr "Viteza de reînarmare +30%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -12086,7 +12086,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:4631
 msgid "Reduced chance of NEXUS take-over"
-msgstr ""
+msgstr "Reduce șansa de a fi preluat de NEXUS"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VP.text[1]
@@ -12237,7 +12237,7 @@ msgstr "Centru de cercetare"
 #. data/mp/messages/resmessages1.json: $.RES_ST_FCY1.text[3]
 #: po/custom/fromJson.txt:4757
 msgid "Research makes additional Cyborgs available"
-msgstr "Cercetarea oferă mai multe opțiuni pentru cyborgi"
+msgstr "Cercetarea face disponibili mai mulți Cyborgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[0]
@@ -12283,7 +12283,7 @@ msgstr "Viteza de cercetare +85%"
 #. data/mp/stats/body.json: $.Body3MBT.name
 #: po/custom/fromJson.txt:4785
 msgid "Retaliation"
-msgstr "Represaliu"
+msgstr "Represiune"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body7ABT.name
@@ -12809,7 +12809,7 @@ msgstr "Turelă Radar pe corp Viperă cu Roți"
 #. data/mp/stats/sensor.json: $.SensorTurret1Mk1.name
 #: po/custom/fromJson.txt:5121
 msgid "Sensor Turret"
-msgstr "Turelă cu senzor"
+msgstr "Turelă cu Senzor"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
@@ -12828,7 +12828,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
 #: po/custom/fromJson.txt:5131
 msgid "Sensor Upgrade"
-msgstr "Îmbunătățier de senzori"
+msgstr "Îmbunătățire de Senzori"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[0]
@@ -12986,7 +12986,7 @@ msgstr ""
 #. data/base/messages/messages.json: $.MSG1.text[0]
 #: po/custom/fromJson.txt:5228
 msgid "Structure Research Completed"
-msgstr "Cercetare de clădirie completă"
+msgstr "Cercetare de Clădirie Completă"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
@@ -13103,19 +13103,19 @@ msgstr "Gel pentru aruncător super-fierbinte"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5332
 msgid "Superhot Plasmite gel Mk2"
-msgstr "Gel plasmit super-fierbinte MK2"
+msgstr "Gel Plasmit Super-Fierbinte Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5335
 msgid "Superhot Plasmite gel Mk3"
-msgstr "Gel plasmit super-fierbinte MK3"
+msgstr "Gel Plasmit Super-Fierbinte Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5338
 msgid "Superhot Plasmite gel"
-msgstr "Gel plasmit super-fierbinte"
+msgstr "Gel Plasmit Super-Fierbinte"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -14695,7 +14695,7 @@ msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
-msgstr ""
+msgstr "Comandantul are nevoie de un nivel mai mare pentru a comanda mai multe unități"
 
 #: src/configuration.cpp:163
 msgid "My Game"
@@ -14883,12 +14883,12 @@ msgstr "Nu se poate construi. Puțul de petrol e în flăcări."
 #: src/display.cpp:1527
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
-msgstr ""
+msgstr "%s - Puncte de viață %d/%d - Experiență %.1f, %s"
 
 #: src/display.cpp:1689
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr ""
+msgstr "%s - Aliat - Puncte de viață %d/%d - Experiență %d, %s"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
@@ -15923,11 +15923,11 @@ msgstr ""
 
 #: src/keybind.cpp:1523
 msgid "Always displaying energy bars for units"
-msgstr ""
+msgstr "Afișează întotdeauna barele de energie pentru unități"
 
 #: src/keybind.cpp:1526
 msgid "Always displaying energy bars for units and structures"
-msgstr ""
+msgstr "Afișează întotdeauna barele de energie pentru unități și structuri"
 
 #: src/keybind.cpp:1539
 msgid "Debug menu is Open"
@@ -16350,7 +16350,7 @@ msgstr "Vezi următorul comandant"
 
 #: src/keymap.cpp:390
 msgid "Toggle Overlays"
-msgstr ""
+msgstr "Comutare Suprapuneri"
 
 #: src/keymap.cpp:391
 msgid "Toggle Console History "
@@ -16382,11 +16382,11 @@ msgstr ""
 
 #: src/keymap.cpp:411
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "Trimite Mesaj Text Tuturor"
 
 #: src/keymap.cpp:412
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "Trimite Mesaj Text Echipei"
 
 #: src/keymap.cpp:413
 msgid "Drop a beacon"
@@ -16490,7 +16490,7 @@ msgstr "Selectează toate Tancurile de Reparații"
 
 #: src/keymap.cpp:451
 msgid "Select all Sensor Units"
-msgstr ""
+msgstr "Selectează toate Unitățile de Senzori"
 
 #: src/keymap.cpp:452
 msgid "Select all Trucks"
@@ -16574,7 +16574,7 @@ msgstr "Completează cercetarea curentă"
 
 #: src/keymap.cpp:479
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "Dezvăluie harta la poziția mouse-ului"
 
 #: src/keymap.cpp:480
 msgid "Trace a game object"
@@ -16699,7 +16699,7 @@ msgstr ""
 #: src/multiint.cpp:281
 #: src/multiplay.cpp:468
 msgid "Commander"
-msgstr ""
+msgstr "Comandant"
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
@@ -16732,11 +16732,11 @@ msgstr "DAV-urile dezactivate."
 
 #: src/multiint.cpp:1065
 msgid "Satellite Uplink disabled."
-msgstr ""
+msgstr "Legătură Satelit dezactivată."
 
 #: src/multiint.cpp:1066
 msgid "Laser Satellite disabled."
-msgstr ""
+msgstr "Satelit Laser dezactivat."
 
 #: src/multiint.cpp:1067
 msgid "Structure Limits Enforced."
@@ -16744,12 +16744,12 @@ msgstr ""
 
 #: src/multiint.cpp:1246
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Nu sunt suficiente voturi pentru a alege aleator sau schimba harta."
 
 #: src/multiint.cpp:1272
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
-msgstr ""
+msgstr "Numele Jocului"
 
 #: src/multiint.cpp:1273
 msgid "One-Player Skirmish"
@@ -16824,19 +16824,19 @@ msgstr "DIFICULTATE"
 
 #: src/multiint.cpp:1462
 msgid "Starts disadvantaged"
-msgstr ""
+msgstr "Începe dezavantajat"
 
 #: src/multiint.cpp:1463
 msgid "Plays nice"
-msgstr ""
+msgstr "Joacă frumos"
 
 #: src/multiint.cpp:1464
 msgid "No holds barred"
-msgstr ""
+msgstr "Fără menajamente"
 
 #: src/multiint.cpp:1465
 msgid "Starts with advantages"
-msgstr ""
+msgstr "Începe cu avantaje"
 
 #: src/multiint.cpp:1502
 msgid "CHOOSE AI"
@@ -16888,7 +16888,7 @@ msgstr "JUCĂTORI"
 
 #: src/multiint.cpp:2174
 msgid "Click to change to this slot"
-msgstr ""
+msgstr "Fă clic pentru a te muta la acest loc"
 
 #: src/multiint.cpp:2208
 msgid "Choose Team"
@@ -16896,7 +16896,7 @@ msgstr "Alege Echipa"
 
 #: src/multiint.cpp:2212
 msgid "Teams locked"
-msgstr ""
+msgstr "Echipe blocate"
 
 #: src/multiint.cpp:2238
 msgid "Click to change player colour"
@@ -16908,7 +16908,7 @@ msgstr "Faceți clic pentru a schimba poziția jucătorului"
 
 #: src/multiint.cpp:2270
 msgid "Click to change AI, right click to distribute choice"
-msgstr ""
+msgstr "Faceți clic pentru a schimba IA, click dreapta pentru a distribui alegerea"
 
 #: src/multiint.cpp:2285
 msgid "Player ID: "
@@ -16916,7 +16916,7 @@ msgstr "ID jucător: "
 
 #: src/multiint.cpp:2292
 msgid "(none)"
-msgstr ""
+msgstr "(niciunul)"
 
 #: src/multiint.cpp:2360
 msgid "CHAT"
@@ -16924,7 +16924,7 @@ msgstr "CONVERSAȚIE"
 
 #: src/multiint.cpp:2835
 msgid "Game Name Updated."
-msgstr ""
+msgstr "Nume Joc Actualizat."
 
 #: src/multiint.cpp:2948
 #, c-format
@@ -16964,11 +16964,11 @@ msgstr "Nici o conexiune la gazdă."
 
 #: src/multiint.cpp:3686
 msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
+msgstr "Nu se poate schimba la o hartă cu prea puţine locuri pentru toţi jucătorii."
 
 #: src/multiint.cpp:3796
 msgid "The host has quit."
-msgstr ""
+msgstr "Gazda a renunţat."
 
 #: src/multiint.cpp:3922
 msgid "UPnP has been enabled."
@@ -16988,7 +16988,7 @@ msgstr "Detectarea UPnP dezactivată de utilizator. Portul 2100 nu se va auto co
 
 #: src/multiint.cpp:3945
 msgid "Hit the ready box to begin your challenge!"
-msgstr ""
+msgstr "Fă click pe caseta gata pentru a începe provocarea ta!"
 
 #: src/multiint.cpp:3949
 msgid "Press the start hosting button to begin hosting a game."
@@ -17110,7 +17110,7 @@ msgstr "Oricâți jucători"
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] ""
+msgstr[0] "%d jucător"
 msgstr[1] ""
 msgstr[2] ""
 
@@ -17141,17 +17141,17 @@ msgstr "Total Trimise/Primite —"
 #: src/multimenu.cpp:798
 #, c-format
 msgid "Traf: %u/%u"
-msgstr ""
+msgstr "Traf: %u/%u"
 
 #: src/multimenu.cpp:802
 #, c-format
 msgid "Uncompressed: %u/%u"
-msgstr ""
+msgstr "Necomprimat: %u/%u"
 
 #: src/multimenu.cpp:806
 #, c-format
 msgid "Pack: %u/%u"
-msgstr ""
+msgstr "Pachet: %u/%u"
 
 #: src/multimenu.cpp:1106
 msgid "Channel"
@@ -17483,13 +17483,13 @@ msgstr ""
 #: src/structure.cpp:2518
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Nu se mai pot construi \"%s\", Limita Unităților de Construcție a fost Atinsă — Producție Oprită"
 
 #: src/structure.cpp:5428
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
+msgstr[0] "%s - %u Unitate asociată - Puncte de viață %d/%d"
 msgstr[1] ""
 msgstr[2] ""
 
@@ -17497,7 +17497,7 @@ msgstr[2] ""
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
+msgstr[0] "%s - %u Unitate asociată - Pagube %d/%d"
 msgstr[1] ""
 msgstr[2] ""
 
