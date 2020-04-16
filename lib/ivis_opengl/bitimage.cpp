@@ -241,36 +241,51 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		bool upscale = upscaleImageFilenameSuffixSegment == parameters;
 
 		if(upscale && imageRect->data->depth == 4){
-			uint32_t* src = (uint32_t *)malloc(imageRect->data->height * imageRect->data->width);
-			uint32_t* trg = (uint32_t *)malloc(imageRect->data->height * 2 * imageRect->data->width * 2);
-			
+			uint32_t* src = new uint32_t[imageRect->data->height * imageRect->data->width];
+			uint32_t* trg = new uint32_t[imageRect->data->height * 2 * imageRect->data->width * 2];
+
 			for(int y = 0; y < imageRect->data->height; y++)
 			{
 				for(int x = 0; x < imageRect->data->width; x++)
 				{
 					uint32_t pixel = 
-						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 3] << 24 |
-						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 2] << 16 |
+						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 0] |
 						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 1] << 8 |
-						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 0];
+						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 2] << 16 |
+						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 3] << 24;
 
 					src[y * imageRect->data->width + x] = pixel;
+
+					printf("Source %i, %i is %#010x\n", x, y, pixel);
 				}
 			}
 
 			scaleSuperXBR(2, src, trg, imageRect->data->width, imageRect->data->height);
 
-			printf("Data:\n");
+			unsigned char* newData = (unsigned char *)malloc(imageRect->data->height * 2 * imageRect->data->width * 2 * 4);
+
 			for(int y = 0; y < imageRect->data->height * 2; y++)
 			{
 				for(int x = 0; x < imageRect->data->width * 2; x++)
 				{
-					printf("RGBA (%i, %i): %08x\n", x, y, trg[y * imageRect->data->width + x]);
+					uint32_t pixel = trg[y * imageRect->data->width * 2 + x];
+
+					newData[y * imageRect->data->width * 2 * 4 + x * 4 + 0] = (pixel) & 0xFF;
+					newData[y * imageRect->data->width * 2 * 4 + x * 4 + 1] = (pixel >> 8) & 0xFF;
+					newData[y * imageRect->data->width * 2 * 4 + x * 4 + 2] = (pixel >> 16) & 0xFF;
+					newData[y * imageRect->data->width * 2 * 4 + x * 4 + 3] = (pixel >> 24) & 0xFF;
+
+					printf("Target %i, %i is %#010x\n", x, y, pixel);
 				}
 			}
 
-			free(trg);
-			free(src);
+			free(imageRect->data->bmp);
+			imageRect->data->bmp = newData;
+			imageRect->data->width *= 2;
+			imageRect->data->height *= 2;
+
+			delete[] src;
+			delete[] trg;
 		}
 
 		imageRect->siz = Vector2i(imageRect->data->width, imageRect->data->height);
