@@ -218,8 +218,6 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		{
 			parameters = spriteName.substr(qmIndex + 1);
 			spriteName = spriteName.substr(0, qmIndex);
-
-			printf("Sprite name after stripping parameters: %s (%s)\n", spriteName.c_str(), parameters.c_str());
 		}
 
 		imageFile->imageNames[numImages].first = spriteName;
@@ -255,8 +253,6 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 						imageRect->data->bmp[y * imageRect->data->width * 4 + x * 4 + 3] << 24;
 
 					src[y * imageRect->data->width + x] = pixel;
-
-					printf("Source %i, %i is %#010x\n", x, y, pixel);
 				}
 			}
 
@@ -274,8 +270,6 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 					newData[y * imageRect->data->width * 2 * 4 + x * 4 + 1] = (pixel >> 8) & 0xFF;
 					newData[y * imageRect->data->width * 2 * 4 + x * 4 + 2] = (pixel >> 16) & 0xFF;
 					newData[y * imageRect->data->width * 2 * 4 + x * 4 + 3] = (pixel >> 24) & 0xFF;
-
-					printf("Target %i, %i is %#010x\n", x, y, pixel);
 				}
 			}
 
