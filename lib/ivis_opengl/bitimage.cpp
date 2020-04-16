@@ -21,7 +21,7 @@
 
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
-#include "3rdparty/xbrz/xbrz.h"
+#include "3rdparty/xbr/xbr.h"
 
 #include "bitimage.h"
 #include "tex.h"
@@ -258,7 +258,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 				}
 			}
 
-			xbrz::scale(2, src, trg, imageRect->data->width, imageRect->data->height, xbrz::ColorFormat::ARGB);
+			scaleSuperXBR(2, src, trg, imageRect->data->width, imageRect->data->height);
 
 			printf("Data:\n");
 			for(int y = 0; y < imageRect->data->height * 2; y++)

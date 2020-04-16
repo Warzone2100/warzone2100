@@ -26,18 +26,16 @@ set_property(TARGET sha2 PROPERTY FOLDER "3rdparty")
 target_include_directories(sha2 PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 
-# xBRZ-library
+# xBR-library
 
-set(XBRZ_HEADERS
-	xbrz/xbrz_config.h
-	xbrz/xbrz_tools.h
-	xbrz/xbrz.h
+set(XBR_HEADERS
+	xbr/xbr.h
 )
 
-set(XBRZ_SOURCES
-	xbrz/xbrz.cpp
+set(XBR_SOURCES
+	xbr/xbr.cpp
 )
 
-add_library(xbrz STATIC ${XBRZ_HEADERS} ${XBRZ_SOURCES})
-set_property(TARGET xbrz PROPERTY FOLDER "3rdparty")
-target_include_directories(xbrz PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+add_library(xbr STATIC ${XBR_HEADERS} ${XBR_SOURCES})
+set_property(TARGET xbr PROPERTY FOLDER "3rdparty")
+target_include_directories(xbr PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
