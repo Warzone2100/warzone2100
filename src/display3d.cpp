@@ -2501,7 +2501,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 }
 
 /// SHURCOOL: Draws the strobing 3D drag box that is used for multiple selection
-static void	drawDragBox()//
+static void	drawDragBox()
 {
 	if (dragBox3D.status != DRAG_DRAGGING || buildState != BUILD3D_NONE)
 	{
