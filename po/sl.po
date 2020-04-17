@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-16 19:06\n"
+"PO-Revision-Date: 2020-04-17 19:10\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -17580,7 +17580,7 @@ msgstr "Filtriraj spisek iger"
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
-msgstr "Osvežujem..."
+msgstr "Osveževanje..."
 
 #: src/titleui/gamefind.cpp:180
 msgid "Searching"
@@ -17596,7 +17596,7 @@ msgstr "Vaša verzija Warzone je nezdružljiva s to igro."
 
 #: src/titleui/gamefind.cpp:311
 msgid "[Password required]"
-msgstr "[Geslo potrebno]"
+msgstr "[Zahtevano geslo]"
 
 #: src/titleui/gamefind.cpp:315
 msgid "[No Tanks]"
