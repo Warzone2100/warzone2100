@@ -158,6 +158,9 @@ cscope.out
 /waf
 /.waf-*
 
+# VS Code
+.vscode
+
 # Eclipse CDT
 .project
 .cproject
