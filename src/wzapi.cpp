@@ -110,6 +110,56 @@
 #define ALLIES -2
 #define ENEMIES -3
 
+
+
+wzapi::scripting_instance::scripting_instance(int player, const std::string& scriptName)
+: m_player(player)
+, m_scriptName(scriptName)
+{ }
+wzapi::scripting_instance::~scripting_instance()
+{ }
+
+wzapi::object_request::object_request()
+: requestType(wzapi::object_request::RequestType::INVALID_REQUEST)
+{}
+wzapi::object_request::object_request(const std::string& label)
+: requestType(wzapi::object_request::RequestType::LABEL_REQUEST)
+, str(label)
+{}
+wzapi::object_request::object_request(int x, int y)
+: requestType(wzapi::object_request::RequestType::MAPPOS_REQUEST)
+, val1(x)
+, val2(y)
+{}
+wzapi::object_request::object_request(OBJECT_TYPE type, int player, int id)
+: requestType(wzapi::object_request::RequestType::OBJECTID_REQUEST)
+, val1(type)
+, val2(player)
+, val3(id)
+{}
+
+const std::string& wzapi::object_request::getLabel() const
+{
+	ASSERT(requestType == wzapi::object_request::RequestType::LABEL_REQUEST, "Not a label request");
+	return str;
+}
+scr_position wzapi::object_request::getMapPosition() const
+{
+	ASSERT(requestType == wzapi::object_request::RequestType::MAPPOS_REQUEST, "Not a map position request");
+	return scr_position{val1, val2};
+}
+std::tuple<OBJECT_TYPE, int, int> wzapi::object_request::getObjectIDRequest() const
+{
+	ASSERT(requestType == wzapi::object_request::RequestType::OBJECTID_REQUEST, "Not an object ID request");
+	return std::tuple<OBJECT_TYPE, int, int>{(OBJECT_TYPE)val1, val2, val3};
+}
+
+// MARK: - Labels
+
+
+
+// MARK: -
+
 //-- ## _(string)
 //--
 //-- Mark string for translation.
@@ -679,6 +729,55 @@ wzapi::no_return_value wzapi::hackStopIngameAudio(WZAPI_NO_PARAMS)
 	return {};
 }
 
+//-- ## hackMarkTiles([label | x, y[, x2, y2]])
+//--
+//-- Mark the given tile(s) on the map. Either give a POSITION or AREA label,
+//-- or a tile x, y position, or four positions for a square area. If no parameter
+//-- is given, all marked tiles are cleared. (3.2+ only)
+//--
+wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_or_position_values> _tilePosOrArea))
+{
+	if (_tilePosOrArea.has_value())
+	{
+		label_or_position_values& tilePosOrArea = _tilePosOrArea.value();
+		if (tilePosOrArea.isLabel()) // label
+		{
+			const std::string& label = tilePosOrArea.label;
+			return scripting_engine::instance().hackMarkTiles_ByLabel(context, label);
+		}
+		else if (tilePosOrArea.isPositionValues())
+		{
+			if (tilePosOrArea.x2.has_value() || tilePosOrArea.y2.has_value())
+			{
+				SCRIPT_ASSERT({}, context, tilePosOrArea.x2.has_value() && tilePosOrArea.y2.has_value(), "If x2 or y2 are provided, *both* must be provided");
+				int x1 = tilePosOrArea.x1;
+				int y1 = tilePosOrArea.y1;
+				int x2 = tilePosOrArea.x2.value();
+				int y2 = tilePosOrArea.y2.value();
+				for (int x = x1; x < x2; x++)
+				{
+					for (int y = y1; y < y2; y++)
+					{
+						MAPTILE *psTile = mapTile(x, y);
+						psTile->tileInfoBits |= BITS_MARKED;
+					}
+				}
+			}
+			else // single tile
+			{
+				int x = tilePosOrArea.x1;
+				int y = tilePosOrArea.y1;
+				MAPTILE *psTile = mapTile(x, y);
+				psTile->tileInfoBits |= BITS_MARKED;
+			}
+		}
+	}
+	else // clear all marks
+	{
+		clearMarks();
+	}
+	return {};
+}
 
 // MARK: - General functions -- geared for use in AI scripts
 
@@ -879,15 +978,15 @@ std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int looking, option
 //-- can see. This includes sensors revealed by radar detectors, as well as ECM jammers.
 //-- It does not include units going out of view.
 //--
-std::vector<Position> wzapi::enumBlips(WZAPI_PARAMS(int player))
+std::vector<scr_position> wzapi::enumBlips(WZAPI_PARAMS(int player))
 {
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	std::vector<Position> matches;
+	std::vector<scr_position> matches;
 	for (BASE_OBJECT *psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
 	{
 		if (psSensor->visible[player] > 0 && psSensor->visible[player] < UBYTE_MAX)
 		{
-			matches.push_back(psSensor->pos);
+			matches.push_back({map_coord(psSensor->pos.x), map_coord(psSensor->pos.y)});
 		}
 	}
 	return matches;
@@ -897,7 +996,7 @@ std::vector<Position> wzapi::enumBlips(WZAPI_PARAMS(int player))
 //--
 //-- Return an array containing all game objects currently selected by the host player. (3.2+ only)
 //--
-std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS)
+std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT)
 {
 	std::vector<const BASE_OBJECT *> matches;
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
@@ -1280,7 +1379,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 //-- Pick a location for constructing a certain type of building near some given position.
 //-- Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
 //--
-optional<wzapi::position_in_map_coords> wzapi::pickStructLocation(WZAPI_PARAMS(DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles))
+optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
 	const int player = psDroid->player;
@@ -1367,7 +1466,7 @@ endstructloc:
 //		retval.setProperty("y", y + map_coord(offset.y), QScriptValue::ReadOnly);
 //		retval.setProperty("type", SCRIPT_POSITION, QScriptValue::ReadOnly);
 //		return retval;
-		return optional<wzapi::position_in_map_coords>({x + map_coord(offset.x), y + map_coord(offset.y)});
+		return optional<scr_position>({x + map_coord(offset.x), y + map_coord(offset.y)});
 	}
 	else
 	{
@@ -1658,7 +1757,7 @@ std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int playe
 //-- into a transporter, which is also currently on the campaign off-world mission list.
 //-- (3.2+ only)
 //--
-bool wzapi::addDroidToTransporter(WZAPI_PARAMS(droid_id_player transporter, droid_id_player droid))
+bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporter, game_object_identifier droid))
 {
 	int transporterId = transporter.id;
 	int transporterPlayer = transporter.player;
@@ -2912,7 +3011,6 @@ wzapi::no_return_value wzapi::fireWeaponAtObj(WZAPI_PARAMS(std::string weaponNam
 	proj_SendProjectile(&sWeapon, nullptr, player, target, psObj, true, 0);
 	return {};
 }
-
 
 // flag all droids as requiring update on next frame
 static void dirtyAllDroids(int player)

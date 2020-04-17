@@ -199,6 +199,12 @@ nlohmann::json WzConfig::json(const WzString &key, const nlohmann::json &default
 	}
 }
 
+nlohmann::json& WzConfig::currentJsonValue() const
+{
+	ASSERT(pCurrentObj, "pCurrentObj is null");
+	return *pCurrentObj;
+}
+
 WzString WzConfig::string(const WzString &key, const WzString &defaultValue) const
 {
 	auto it = pCurrentObj->find(key.toUtf8());

@@ -127,6 +127,8 @@ public:
 	nlohmann::json json(const WzString &key, const nlohmann::json &defaultValue = nlohmann::json()) const;
 	WzString string(const WzString &key, const WzString &defaultValue = WzString()) const;
 
+	nlohmann::json& currentJsonValue() const;
+
 	void beginArray(const WzString &name);
 	void nextArrayItem();
 	void endArray();

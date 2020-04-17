@@ -344,25 +344,25 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 
 	// Add globals
 	QTabWidget *contextsTab = new QTabWidget(this);
-	for (MODELMAP::const_iterator i = models.constBegin(); i != models.constEnd(); ++i)
+	for (MODELMAP::const_iterator i = models.cbegin(); i != models.cend(); ++i)
 	{
 		QWidget *dummyWidget = new QWidget(this);
-		QScriptEngine *engine = i.key();
-		QStandardItemModel *m = i.value();
+		wzapi::scripting_instance *instance = i->first;
+		QStandardItemModel *m = i->second;
 		m->setParent(this); // take ownership to avoid memory leaks
 		QTreeView *view = new QTreeView(this);
 		view->setSelectionMode(QAbstractItemView::NoSelection);
 		view->setModel(m);
-		QString scriptName = engine->globalObject().property("scriptName").toString();
-		int player = engine->globalObject().property("me").toInt32();
+		QString scriptName = QString::fromStdString(instance->scriptName());
+		int player = instance->player();
 		QLineEdit *lineEdit = new QLineEdit(this);
 		QVBoxLayout *layout = new QVBoxLayout;
 		QHBoxLayout *layout2 = new QHBoxLayout;
 		QPushButton *updateButton = new QPushButton("Update", this);
 		QPushButton *button = new QPushButton("Run", this);
-		connect(button, &QPushButton::pressed, [=] { runClicked(engine); });
+		connect(button, &QPushButton::pressed, [=] { runClicked(instance); });
 		connect(updateButton, SIGNAL(pressed()), this, SLOT(updateModels()));
-		editMap.insert(engine, lineEdit); // store this for slot
+		editMap.insert(EDITMAP::value_type(instance, lineEdit)); // store this for slot
 		layout->addWidget(view);
 		layout2->addWidget(updateButton);
 		layout2->addWidget(lineEdit);
@@ -484,13 +484,17 @@ void ScriptDebugger::update()
 	}
 }
 
-void ScriptDebugger::runClicked(QObject *obj)
+void ScriptDebugger::runClicked(wzapi::scripting_instance * instance)
 {
-	QScriptEngine *engine = (QScriptEngine *)obj;
-	QLineEdit *line = editMap.value(engine);
+	QLineEdit *line = nullptr;
+	auto it = editMap.find(instance);
+	if (it != editMap.end())
+	{
+		line = it->second;
+	}
 	if (line)
 	{
-		jsEvaluate(engine, line->text());
+		instance->debugEvaluateCommand(line->text().toStdString());
 	}
 }
 
@@ -507,13 +511,13 @@ void ScriptDebugger::labelClear()
 void ScriptDebugger::labelClickedAll()
 {
 	clearMarks();
-	markAllLabels(false);
+	scripting_engine::instance().markAllLabels(false);
 }
 
 void ScriptDebugger::labelClickedActive()
 {
 	clearMarks();
-	markAllLabels(true);
+	scripting_engine::instance().markAllLabels(true);
 }
 
 void ScriptDebugger::labelClicked()
@@ -525,7 +529,7 @@ void ScriptDebugger::labelClicked()
 		QStandardItem *item = labelModel->itemFromIndex(labelModel->index(idx.row(), 0));
 		if (item)
 		{
-			showLabel(item->text().toStdString());
+			scripting_engine::instance().showLabel(item->text().toStdString());
 		}
 	}
 }
@@ -569,7 +573,7 @@ void ScriptDebugger::labelClickedIdx(const QModelIndex &idx)
 	QStandardItem *item = labelModel->itemFromIndex(labelModel->index(idx.row(), 0));
 	if (item)
 	{
-		showLabel(item->text().toStdString());
+		scripting_engine::instance().showLabel(item->text().toStdString());
 	}
 }
 
