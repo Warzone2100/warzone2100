@@ -47,8 +47,11 @@ class QScriptEngine;
 class QModelIndex;
 class QLineEdit;
 
-typedef QHash<QScriptEngine *, QStandardItemModel *> MODELMAP;
-typedef QHash<QScriptEngine *, QLineEdit *> EDITMAP;
+#include "wzapi.h"
+#include <unordered_map>
+
+typedef std::unordered_map<wzapi::scripting_instance *, QStandardItemModel *> MODELMAP;
+typedef std::unordered_map<wzapi::scripting_instance *, QLineEdit *> EDITMAP;
 
 class ScriptDebugger : public QDialog
 {
@@ -89,7 +92,7 @@ protected slots:
 	void labelClickedAll();
 	void labelClickedActive();
 	void labelClear();
-	void runClicked(QObject *obj);
+	void runClicked(wzapi::scripting_instance * instance);
 	void updateModels();
 	void powerEditing(const QString &value);
 	void powerEditingFinished();

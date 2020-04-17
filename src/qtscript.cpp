@@ -57,12 +57,6 @@
 #endif
 
 // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtCore/QTextStream>
-#include <QtCore/QHash>
-#include <QtScript/QScriptEngine>
-#include <QtScript/QScriptValue>
-#include <QtScript/QScriptValueIterator>
-#include <QtScript/QScriptSyntaxCheckResult>
 #include <QtCore/QList>
 #include <QtCore/QQueue>
 #include <QtCore/QString>
@@ -70,6 +64,7 @@
 #include <QtCore/QFileInfo>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QFileDialog>
+#include <QtCore/QPointer>
 
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
 # pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
@@ -100,7 +95,6 @@
 #include <unordered_map>
 #include <sstream>
 #include <iomanip>
-#include <chrono>
 
 #include "qtscriptdebug.h"
 #include "qtscriptfuncs.h"
@@ -114,92 +108,91 @@ typedef QList<QStandardItem *> QStandardItemList;
 static bool selectionChanged = false;
 extern bool doUpdateModels; // ugh-ly hack; fix with signal when moc-ing this file
 
-typedef uint64_t uniqueTimerID;
-class timerAdditionalData
+void scripting_engine::GROUPMAP::insertObjectIntoGroup(const BASE_OBJECT *psObj, scripting_engine::GROUPMAP::groupID groupId)
 {
-public:
-	virtual ~timerAdditionalData() { }
-public:
-	virtual void onTimerDelete(uniqueTimerID, BASE_OBJECT*) { };
-};
+	std::pair<ObjectToGroupMap::iterator,bool> result = m_map.insert(std::pair<const BASE_OBJECT *, scripting_engine::GROUPMAP::groupID>(psObj, groupId));
+	if (result.second)
+	{
+		m_groupCount[groupId] = m_groupCount[groupId] + 1;
+	}
+}
 
-typedef std::function<void (uniqueTimerID, BASE_OBJECT*, timerAdditionalData *)> TimerFunc;
-
-enum timerType
+size_t scripting_engine::GROUPMAP::groupSize(GROUPMAP::groupID groupId) const
 {
-	TIMER_REPEAT, TIMER_ONESHOT_READY, TIMER_ONESHOT_DONE
-};
+	auto it = m_groupCount.find(groupId);
+	if (it != m_groupCount.end())
+	{
+		return it->second;
+	}
+	return 0;
+}
 
-struct timerNode
+optional<scripting_engine::GROUPMAP::groupID> scripting_engine::GROUPMAP::removeObjectFromGroup(const BASE_OBJECT *psObj)
 {
-	uniqueTimerID timerID;
-	TimerFunc function;
-	std::string timerName;
-	QScriptEngine *engine;
-	int baseobj;
-	OBJECT_TYPE baseobjtype;
-	timerAdditionalData* additionalTimerFuncParam;
-	int frameTime;
-	int ms;
-	int player;
-	int calls;
-	timerType type;
-	timerNode() : engine(nullptr), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(nullptr) {}
-	timerNode(QScriptEngine *caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, timerAdditionalData* additionalParam = nullptr)
-		: function(func), timerName(timerName), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(additionalParam),
-			frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
-	~timerNode()
+	auto it = m_map.find(psObj);
+	if (it != m_map.end())
 	{
-		if (additionalTimerFuncParam)
-		{
-			additionalTimerFuncParam->onTimerDelete(timerID, IdToObject(baseobjtype, baseobj, player));
-		}
+		groupID groupId = it->second;
+		m_map.erase(it);
+
+		size_t oldGroupCount = groupSize(groupId);
+		ASSERT(oldGroupCount > 0, "Bad group count in group %d (was %zu)", groupId, oldGroupCount);
+		m_groupCount[groupId] = oldGroupCount - 1;
+		return optional<groupID>(groupId);
 	}
-	bool operator== (const timerNode &t)
+	return optional<groupID>();
+}
+
+scripting_engine::timerNode::timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, timerAdditionalData* additionalParam /*= nullptr*/)
+: function(func), timerName(timerName), instance(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(additionalParam),
+	frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT)
+{}
+
+scripting_engine::timerNode::~timerNode()
+{
+	if (additionalTimerFuncParam)
 	{
-		return (timerID == t.timerID) && (timerName == t.timerName) && (player == t.player);
+		additionalTimerFuncParam->onTimerDelete(timerID, IdToObject(baseobjtype, baseobj, player));
 	}
-	// implement operator less TODO
+}
 
-	timerNode(timerNode&& rhs)           // move constructor
-	: timerNode()
-    {
-		swap(rhs);
-    }
+scripting_engine::timerNode::timerNode(timerNode&& rhs)           // move constructor
+: timerNode()
+{
+	swap(rhs);
+}
 
-private:
-	// non-copyable
-	timerNode(const timerNode&) = delete;
-	timerNode& operator=(const timerNode&) = delete;
+void scripting_engine::timerNode::swap(timerNode& _rhs)
+{
+	std::swap(timerID, _rhs.timerID);
+	std::swap(function, _rhs.function);
+	std::swap(timerName, _rhs.timerName);
+	std::swap(instance, _rhs.instance);
+	std::swap(baseobj, _rhs.baseobj);
+	std::swap(baseobjtype, _rhs.baseobjtype);
+	std::swap(additionalTimerFuncParam, _rhs.additionalTimerFuncParam);
+	std::swap(frameTime, _rhs.frameTime);
+	std::swap(ms, _rhs.ms);
+	std::swap(player, _rhs.player);
+	std::swap(calls, _rhs.calls);
+	std::swap(type, _rhs.type);
+}
 
-	void swap(timerNode& _rhs)
-	{
-		std::swap(timerID, _rhs.timerID);
-		std::swap(function, _rhs.function);
-		std::swap(timerName, _rhs.timerName);
-		std::swap(engine, _rhs.engine);
-		std::swap(baseobj, _rhs.baseobj);
-		std::swap(baseobjtype, _rhs.baseobjtype);
-		std::swap(additionalTimerFuncParam, _rhs.additionalTimerFuncParam);
-		std::swap(frameTime, _rhs.frameTime);
-		std::swap(ms, _rhs.ms);
-		std::swap(player, _rhs.player);
-		std::swap(calls, _rhs.calls);
-		std::swap(type, _rhs.type);
-	}
-};
+scripting_engine::area_by_values_or_area_label_lookup::area_by_values_or_area_label_lookup() { }
+scripting_engine::area_by_values_or_area_label_lookup::area_by_values_or_area_label_lookup(const std::string &label)
+: m_isLabel(true)
+, m_label(label)
+{ }
+scripting_engine::area_by_values_or_area_label_lookup::area_by_values_or_area_label_lookup(int x1, int y1, int x2, int y2)
+: m_isLabel(false)
+, x1(x1), y1(y1), x2(x2), y2(y2)
+{ }
 
 #define MAX_US 20000
 #define HALF_MAX_US 10000
 
-/// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
-/// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
-/// host, we do not need to worry about each peer simulating the world differently.
-static std::list<timerNode> timers;
-static uniqueTimerID lastTimerID = 0;
-static std::unordered_map<uniqueTimerID, std::list<timerNode>::iterator> timerIDMap; // a map from uniqueTimerID -> entry in the timers list
 
-uniqueTimerID getNextAvailableTimerID()
+uniqueTimerID scripting_engine::getNextAvailableTimerID()
 {
 	do {
 		++lastTimerID;
@@ -207,7 +200,7 @@ uniqueTimerID getNextAvailableTimerID()
 	return lastTimerID;
 }
 
-uniqueTimerID setTimer(QScriptEngine *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName = "", const BASE_OBJECT * obj = nullptr, timerType type = TIMER_REPEAT, timerAdditionalData* additionalParam = nullptr)
+uniqueTimerID scripting_engine::setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName /*= ""*/, const BASE_OBJECT * obj /*= nullptr*/, timerType type /*= TIMER_REPEAT*/, timerAdditionalData* additionalParam /*= nullptr*/)
 {
 	uniqueTimerID newTimerID = getNextAvailableTimerID();
 	timerNode node(caller, timerFunc, timerName, player, milliseconds, additionalParam);
@@ -224,7 +217,7 @@ uniqueTimerID setTimer(QScriptEngine *caller, const TimerFunc& timerFunc, int pl
 }
 
 // internal-only function that adds a Timer node (used for restoring saved games)
-void addTimerNode(timerNode&& node)
+void scripting_engine::addTimerNode(scripting_engine::timerNode&& node)
 {
 	ASSERT(timerIDMap.count(node.timerID) == 0, "Duplicate timerID found: %s", WzString::number(node.timerID).toUtf8().c_str());
 	auto inserted_iter = timers.emplace(timers.end(), std::move(node));
@@ -232,7 +225,7 @@ void addTimerNode(timerNode&& node)
 }
 
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
-static QList<QScriptEngine *> scripts;
+static std::vector<wzapi::scripting_instance *> scripts;
 
 /// Whether the scripts have been set up or not
 static bool scriptsReady = false;
@@ -249,8 +242,8 @@ struct researchEvent
 /// Research events that are put on hold until the scripts are ready
 static QQueue<struct researchEvent> eventQueue;
 
-/// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
-static std::set<QString> internalNamespace;
+///// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
+//static std::set<QString> internalNamespace;
 
 typedef struct monitor_bin
 {
@@ -263,202 +256,17 @@ typedef struct monitor_bin
 	monitor_bin() : worst(0),  worstGameTime(0), calls(0), overMaxTimeCalls(0), overHalfMaxTimeCalls(0), time(0) {}
 } MONITOR_BIN;
 typedef std::unordered_map<std::string, MONITOR_BIN> MONITOR;
-static std::unordered_map<QScriptEngine *, MONITOR *> monitors;
-static std::unordered_map<QScriptEngine *, QStringList> eventNamespaces; // separate event namespaces for libraries
+static std::unordered_map<wzapi::scripting_instance *, MONITOR *> monitors;
 
 static MODELMAP models;
 static QStandardItemModel *triggerModel;
 static bool globalDialog = false;
 
-static void updateGlobalModels();
-
 bool bInTutorial = false;
 
 // ----------------------------------------------------------
 
-void doNotSaveGlobal(const QString &global)
-{
-	internalNamespace.insert(global);
-}
-
-template<typename Func>
-void executeWithPerformanceMonitoring(QScriptEngine *engine, const std::string &function, Func f)
-{
-	using microDuration = std::chrono::duration<uint64_t, std::micro>;
-	auto time_begin = std::chrono::steady_clock::now();
-	f(); // execute provided Func f
-	auto duration_microsec = std::chrono::duration_cast<microDuration>(std::chrono::steady_clock::now() - time_begin);
-	int ticks = duration_microsec.count();
-	MONITOR *monitor = monitors.at(engine); // pick right one for this engine
-	MONITOR_BIN m;
-	MONITOR::iterator it = monitor->find(function);
-	if (it != monitor->end())
-	{
-		m = it->second;
-	}
-	if (ticks > MAX_US)
-	{
-		debug(LOG_SCRIPT, "%s took %dus at time %d", function.c_str(), ticks, wzGetTicks());
-		m.overMaxTimeCalls++;
-	}
-	else if (ticks > HALF_MAX_US)
-	{
-		m.overHalfMaxTimeCalls++;
-	}
-	m.calls++;
-	if (ticks > m.worst)
-	{
-		m.worst = ticks;
-		m.worstGameTime = gameTime;
-	}
-	m.time += ticks;
-	monitor->insert(MONITOR::value_type(function, m));
-
-}
-
-// Call a function by name
-static QScriptValue callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool event = true)
-{
-	if (event)
-	{
-		// recurse into variants, if any
-		for (const QString &s : eventNamespaces[engine])
-		{
-			const QScriptValue &value = engine->globalObject().property(s + function);
-			if (value.isValid() && value.isFunction())
-			{
-				callFunction(engine, s + function, args, event);
-			}
-		}
-	}
-	code_part level = event ? LOG_SCRIPT : LOG_ERROR;
-	QScriptValue value = engine->globalObject().property(function);
-	if (!value.isValid() || !value.isFunction())
-	{
-		// not necessarily an error, may just be a trigger that is not defined (ie not needed)
-		// or it could be a typo in the function name or ...
-		debug(level, "called function (%s) not defined", function.toUtf8().constData());
-		return false;
-	}
-
-	QScriptValue result;
-	executeWithPerformanceMonitoring(engine, function.toStdString(), [&result, &value, &args](){
-		result = value.call(QScriptValue(), args);
-	});
-
-	if (engine->hasUncaughtException())
-	{
-		int line = engine->uncaughtExceptionLineNumber();
-		QStringList bt = engine->uncaughtExceptionBacktrace();
-		for (int i = 0; i < bt.size(); i++)
-		{
-			debug(LOG_ERROR, "%d : %s", i, bt.at(i).toUtf8().constData());
-		}
-		ASSERT(false, "Uncaught exception calling function \"%s\" at line %d: %s",
-		       function.toUtf8().constData(), line, result.toString().toUtf8().constData());
-		engine->clearExceptions();
-		return QScriptValue();
-	}
-	return result;
-}
-
-//-- ## setTimer(function, milliseconds[, object])
-//--
-//-- Set a function to run repeated at some given time interval. The function to run
-//-- is the first parameter, and it _must be quoted_, otherwise the function will
-//-- be inlined. The second parameter is the interval, in milliseconds. A third, optional
-//-- parameter can be a **game object** to pass to the timer function. If the **game object**
-//-- dies, the timer stops running. The minimum number of milliseconds is 100, but such
-//-- fast timers are strongly discouraged as they may deteriorate the game performance.
-//--
-//-- ```javascript
-//--   function conDroids()
-//--   {
-//--      ... do stuff ...
-//--   }
-//--   // call conDroids every 4 seconds
-//--   setTimer("conDroids", 4000);
-//-- ```
-//--
-class qtscript_timer_additionaldata : public timerAdditionalData
-{
-public:
-	QString stringArg;
-	qtscript_timer_additionaldata(const QString& _stringArg)
-	: stringArg(_stringArg)
-	{ }
-};
-static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
-{
-	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
-	QString funcName = context->argument(0).toString();
-	QScriptValue ms = context->argument(1);
-	int player = engine->globalObject().property("me").toInt32();
-
-	QScriptValue value = engine->globalObject().property(funcName); // check existence
-	SCRIPT_ASSERT(context, value.isValid() && value.isFunction(), "No such function: %s",
-	              funcName.toUtf8().constData());
-
-	QString stringArg;
-	BASE_OBJECT *psObj = nullptr;
-	if (context->argumentCount() == 3)
-	{
-		QScriptValue obj = context->argument(2);
-		if (obj.isString())
-		{
-			stringArg = obj.toString();
-		}
-		else // is game object
-		{
-			int baseobj = obj.property("id").toInt32();
-			OBJECT_TYPE baseobjtype = (OBJECT_TYPE)obj.property("type").toInt32();
-			psObj = IdToObject(baseobjtype, baseobj, player);
-		}
-	}
-
-	setTimer(engine
-	  // timerFunc
-	, [engine, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
-		qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParams);
-		QScriptValueList args;
-		if (baseObject != nullptr)
-		{
-			args += convMax(baseObject, engine);
-		}
-		else if (pData && !(pData->stringArg.isEmpty()))
-		{
-			args += pData->stringArg;
-		}
-		callFunction(engine, funcName, args, true);
-	}
-	, player, ms.toInt32(), funcName.toStdString(), psObj, TIMER_REPEAT
-	// additionalParams
-	, new qtscript_timer_additionaldata(stringArg));
-
-	return QScriptValue();
-}
-
-// removes any timer(s) that satisfy _pred
-template< class UnaryPredicate >
-std::vector<uniqueTimerID> removeTimersIf(UnaryPredicate _pred)
-{
-	std::vector<uniqueTimerID> removedTimerIDs;
-	timers.remove_if([_pred, &removedTimerIDs](const timerNode& node) {
-		if (_pred(node))
-		{
-			removedTimerIDs.push_back(node.timerID);
-			return true;
-		}
-		return false;
-	});
-	for (const auto &timerID : removedTimerIDs)
-	{
-		timerIDMap.erase(timerID);
-	}
-	return removedTimerIDs;
-}
-
-bool removeTimer(uniqueTimerID timerID)
+bool scripting_engine::removeTimer(uniqueTimerID timerID)
 {
 	auto it = timerIDMap.find(timerID);
 	if (it != timerIDMap.end())
@@ -470,183 +278,14 @@ bool removeTimer(uniqueTimerID timerID)
 	return false;
 }
 
-//-- ## removeTimer(function)
-//--
-//-- Removes an existing timer. The first parameter is the function timer to remove,
-//-- and its name _must be quoted_.
-//--
-static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engine)
-{
-	SCRIPT_ASSERT(context, context->argument(0).isString(), "Timer functions must be quoted");
-	std::string function = context->argument(0).toString().toStdString();
-	int player = engine->globalObject().property("me").toInt32();
-	std::vector<uniqueTimerID> removedTimerIDs = removeTimersIf(
-		[engine, function, player](const timerNode& node)
-	{
-		return (node.engine == engine) && (node.timerName == function) && (node.player == player);
-	});
-	if (removedTimerIDs.empty())
-	{
-		// Friendly warning
-		QString warnName = QString::fromStdString(function).left(15) + "...";
-		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.toUtf8().constData());
-	}
-	return QScriptValue();
-}
-
-//-- ## queue(function[, milliseconds[, object]])
-//--
-//-- Queues up a function to run at a later game frame. This is useful to prevent
-//-- stuttering during the game, which can happen if too much script processing is
-//-- done at once.  The function to run is the first parameter, and it
-//-- _must be quoted_, otherwise the function will be inlined.
-//-- The second parameter is the delay in milliseconds, if it is omitted or 0,
-//-- the function will be run at a later frame.  A third optional
-//-- parameter can be a **game object** to pass to the queued function. If the **game object**
-//-- dies before the queued call runs, nothing happens.
-//--
-// TODO, check if an identical call is already queued up - and in this case,
-// do not add anything.
-static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
-{
-	SCRIPT_ASSERT(context, context->argument(0).isString(), "Queued functions must be quoted");
-	QString funcName = context->argument(0).toString();
-	QScriptValue value = engine->globalObject().property(funcName); // check existence
-	SCRIPT_ASSERT(context, value.isValid() && value.isFunction(), "No such function: %s",
-	              funcName.toUtf8().constData());
-	int ms = 0;
-	if (context->argumentCount() > 1)
-	{
-		ms = context->argument(1).toInt32();
-	}
-	int player = engine->globalObject().property("me").toInt32();
-
-	QString stringArg;
-	BASE_OBJECT *psObj = nullptr;
-	if (context->argumentCount() == 3)
-	{
-		QScriptValue obj = context->argument(2);
-		if (obj.isString())
-		{
-			stringArg = obj.toString();
-		}
-		else // is game object
-		{
-			int baseobj = obj.property("id").toInt32();
-			OBJECT_TYPE baseobjtype = (OBJECT_TYPE)obj.property("type").toInt32();
-			psObj = IdToObject(baseobjtype, baseobj, player);
-		}
-	}
-
-	setTimer(engine
-	  // timerFunc
-	, [engine, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
-		qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParams);
-		QScriptValueList args;
-		if (baseObject != nullptr)
-		{
-			args += convMax(baseObject, engine);
-		}
-		else if (pData && !(pData->stringArg.isEmpty()))
-		{
-			args += pData->stringArg;
-		}
-		callFunction(engine, funcName, args, true);
-	}
-	, player, ms, funcName.toStdString(), psObj, TIMER_ONESHOT_READY
-	// additionalParams
-	, new qtscript_timer_additionaldata(stringArg));
-	return QScriptValue();
-}
-
-//-- ## profile(function[, arguments])
-//-- Calls a function with given arguments, measures time it took to evaluate the function,
-//-- and adds this time to performance monitor statistics. Transparently returns the
-//-- function's return value. The function to run is the first parameter, and it
-//-- _must be quoted_. (3.2+ only)
-//--
-static QScriptValue js_profile(QScriptContext *context, QScriptEngine *engine)
-{
-	SCRIPT_ASSERT(context, context->argument(0).isString(), "Profiled functions must be quoted");
-	QString funcName = context->argument(0).toString();
-	QScriptValueList args;
-	for (int i = 1; i < context->argumentCount(); ++i)
-	{
-		args.push_back(context->argument(i));
-	}
-	return callFunction(engine, funcName, args);
-}
-
 void scriptRemoveObject(BASE_OBJECT *psObj)
 {
 	// Weed out timers with dead objects
-	removeTimersIf([psObj](const timerNode& node)
+	scripting_engine::instance().removeTimersIf([psObj](const scripting_engine::timerNode& node)
 	{
 		return (node.baseobj == psObj->id);
 	});
-	groupRemoveObject(psObj);
-}
-
-//-- ## namespace(prefix)
-//-- Registers a new event namespace. All events can now have this prefix. This is useful for
-//-- code libraries, to implement event that do not conflict with events in main code. This
-//-- function should be called from global; do not (for hopefully obvious reasons) put it
-//-- inside an event.
-//--
-static QScriptValue js_namespace(QScriptContext *context, QScriptEngine *engine)
-{
-	QString prefix(context->argument(0).toString());
-	eventNamespaces[engine].append(prefix);
-	return QScriptValue(true);
-}
-
-//-- ## include(file)
-//-- Includes another source code file at this point. You should generally only specify the filename,
-//-- not try to specify its path, here.
-//--
-static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
-{
-	QString basePath = engine->globalObject().property("scriptPath").toString();
-	QFileInfo basename(context->argument(0).toString());
-	QString path = basePath + "/" + basename.fileName();
-	// allow users to use subdirectories too
-	if (PHYSFS_exists(basename.filePath().toUtf8().constData()))
-	{
-		path = basename.filePath(); // use this path instead (from read-only dir)
-	}
-	else if (PHYSFS_exists(QString("scripts/" + basename.filePath()).toUtf8().constData()))
-	{
-		path = "scripts/" + basename.filePath(); // use this path instead (in user write dir)
-	}
-	UDWORD size;
-	char *bytes = nullptr;
-	if (!loadFile(path.toUtf8().constData(), &bytes, &size))
-	{
-		debug(LOG_ERROR, "Failed to read include file \"%s\" (path=%s, name=%s)",
-		      path.toUtf8().constData(), basePath.toUtf8().constData(), basename.filePath().toUtf8().constData());
-		return QScriptValue(false);
-	}
-	QString source = QString::fromUtf8(bytes, size);
-	free(bytes);
-	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
-	{
-		debug(LOG_ERROR, "Syntax error in include %s line %d: %s",
-		      path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
-		return QScriptValue(false);
-	}
-	context->setActivationObject(engine->globalObject());
-	context->setThisObject(engine->globalObject());
-	QScriptValue result = engine->evaluate(source, path);
-	if (engine->hasUncaughtException())
-	{
-		int line = engine->uncaughtExceptionLineNumber();
-		debug(LOG_ERROR, "Uncaught exception at line %d, include file %s: %s",
-		      line, path.toUtf8().constData(), result.toString().toUtf8().constData());
-		return QScriptValue(false);
-	}
-	debug(LOG_SCRIPT, "Included new script file %s", path.toUtf8().constData());
-	return QScriptValue(true);
+	scripting_engine::instance().groupRemoveObject(psObj);
 }
 
 // do not want to call this 'init', since scripts are often loaded before we get here
@@ -655,7 +294,7 @@ bool prepareScripts(bool loadGame)
 	debug(LOG_WZ, "Scripts prepared");
 	if (!loadGame) // labels saved in savegame
 	{
-		prepareLabels();
+		scripting_engine::instance().prepareLabels();
 	}
 	// Assume that by this point all scripts are loaded
 	scriptsReady = true;
@@ -674,16 +313,21 @@ bool initScripts()
 
 bool shutdownScripts()
 {
+	return scripting_engine::instance().shutdownScripts();
+}
+
+bool scripting_engine::shutdownScripts()
+{
 	scriptsReady = false;
 	jsDebugShutdown();
 	globalDialog = false;
 	models.clear();
 	triggerModel = nullptr;
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		MONITOR *monitor = monitors.at(engine);
-		WzString scriptName = QStringToWzString(engine->globalObject().property("scriptName").toString());
-		int me = engine->globalObject().property("me").toInt32();
+		MONITOR *monitor = monitors.at(instance);
+		WzString scriptName = WzString::fromUtf8(instance->scriptName());
+		int me = instance->player();
 		dumpScriptLog(scriptName, me, "=== PERFORMANCE DATA ===\n");
 		dumpScriptLog(scriptName, me, "    calls | avg (usec) | worst (usec) | worst call at | >=limit | >=limit/2 | function\n");
 		for (MONITOR::const_iterator iter = monitor->begin(); iter != monitor->end(); ++iter)
@@ -702,39 +346,41 @@ bool shutdownScripts()
 		}
 		monitor->clear();
 		delete monitor;
-		unregisterFunctions(engine);
+		unregisterFunctions(instance);
 	}
 	timers.clear();
 	lastTimerID = 0;
 	timerIDMap.clear();
-	internalNamespace.clear();
 	monitors.clear();
-	eventNamespaces.clear();
-	while (!scripts.isEmpty())
+	for (auto& script : scripts)
 	{
-		delete scripts.takeFirst();
+		delete script;
 	}
+	scripts.clear();
 	return true;
 }
 
 bool updateScripts()
 {
+	return scripting_engine::instance().updateScripts();
+}
+
+bool scripting_engine::updateScripts()
+{
 	// Call delayed triggers here
 	if (selectionChanged)
 	{
-		for (auto *engine : scripts)
+		for (auto *instance : scripts)
 		{
-			QScriptValueList args;
-			args += js_enumSelected(nullptr, engine);
-			callFunction(engine, "eventSelectionChanged", args);
+			instance->handle_eventSelectionChanged(wzapi::enumSelected());
 		}
 		selectionChanged = false;
 	}
 
 	// Update gameTime
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		instance->updateGameTime(gameTime);
 	}
 	// Weed out dead timers
 	removeTimersIf([](const timerNode& node)
@@ -809,171 +455,50 @@ uint32_t ScriptMapData::crcSumFeatures(uint32_t crc) const
 
 ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview)
 {
-	ScriptMapData data;
-	data.valid = false;
-	data.mt = MersenneTwister(seed);
-
-	auto engine = std::unique_ptr<QScriptEngine>(new QScriptEngine());
-	//auto engine = std::make_unique<QScriptEngine>();
-	engine->setProcessEventsInterval(-1);
-	UDWORD size;
-	char *bytes = nullptr;
-	if (!loadFile(path.toUtf8().c_str(), &bytes, &size))
-	{
-		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
-		return data;
-	}
-	QString source = QString::fromUtf8(bytes, size);
-	free(bytes);
-	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	ASSERT_OR_RETURN(data, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s",
-	                 path.toUtf8().c_str(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
-	engine->globalObject().setProperty("preview", preview, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("XFLIP", TILE_XFLIP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("YFLIP", TILE_YFLIP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ROTMASK", TILE_ROTMASK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("ROTSHIFT", TILE_ROTSHIFT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("TRIFLIP", TILE_TRIFLIP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	//engine->globalObject().setProperty("players", players, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("gameRand", engine->newFunction([](QScriptContext *context, QScriptEngine *, void *_data) -> QScriptValue {
-		auto &data = *(ScriptMapData *)_data;
-		uint32_t num = data.mt.u32();
-		uint32_t mod = context->argument(0).toUInt32();
-		return mod? num%mod : num;
-	}, &data), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("log", engine->newFunction([](QScriptContext *context, QScriptEngine *, void *_data) -> QScriptValue {
-		auto &data = *(ScriptMapData *)_data;
-		(void)data;
-		auto str = context->argument(0).toString();
-		debug(LOG_INFO, "game.js: \"%s\"", str.toUtf8().constData());
-		return {};
-	}, &data), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("setMapData", engine->newFunction([](QScriptContext *context, QScriptEngine *, void *_data) -> QScriptValue {
-		auto &data = *(ScriptMapData *)_data;
-		data.valid = false;
-		auto mapWidth = context->argument(0);
-		auto mapHeight = context->argument(1);
-		auto texture = context->argument(2);
-		auto height = context->argument(3);
-		auto structures = context->argument(4);
-		auto droids = context->argument(5);
-		auto features = context->argument(6);
-		ASSERT_OR_RETURN(false, mapWidth.isNumber(), "mapWidth must be number");
-		ASSERT_OR_RETURN(false, mapHeight.isNumber(), "mapHeight must be number");
-		ASSERT_OR_RETURN(false, texture.isArray(), "texture must be array");
-		ASSERT_OR_RETURN(false, height.isArray(), "height must be array");
-		ASSERT_OR_RETURN(false, structures.isArray(), "structures must be array");
-		ASSERT_OR_RETURN(false, droids.isArray(), "droids must be array");
-		ASSERT_OR_RETURN(false, features.isArray(), "features must be array");
-		data.mapWidth = mapWidth.toInt32();
-		data.mapHeight = mapHeight.toInt32();
-		ASSERT_OR_RETURN(false, data.mapWidth > 1 && data.mapHeight > 1 && (uint64_t)data.mapWidth*data.mapHeight <= 65536, "Map size out of bounds");
-		size_t N = (size_t)data.mapWidth*data.mapHeight;
-		data.texture.resize(N);
-		data.height.resize(N);
-		for (size_t n = 0; n < N; ++n)
-		{
-			data.texture[n] = texture.property(n).toUInt16();
-			data.height[n] = height.property(n).toInt32();
-		}
-		uint16_t structureCount = structures.property("length").toUInt16();
-		for (unsigned i = 0; i < structureCount; ++i) {
-			auto structure = structures.property(i);
-			auto position = structure.property("position");
-			ScriptMapData::Structure sd;
-			sd.name = structure.property("name").toString().toUtf8().constData();
-			sd.position = {position.property(0).toInt32(), position.property(1).toInt32()};
-			sd.direction = structure.property("direction").toInt32();
-			sd.modules = structure.property("modules").toUInt32();
-			sd.player = structure.property("player").toInt32();
-			if (sd.player < -1 || sd.player >= MAX_PLAYERS) {
-				ASSERT(false, "Invalid player");
-				continue;
-			}
-			data.structures.push_back(std::move(sd));
-		}
-		uint16_t droidCount = droids.property("length").toUInt16();
-		for (unsigned i = 0; i < droidCount; ++i) {
-			auto droid = droids.property(i);
-			auto position = droid.property("position");
-			ScriptMapData::Droid sd;
-			sd.name = droid.property("name").toString().toUtf8().constData();
-			sd.position = {position.property(0).toInt32(), position.property(1).toInt32()};
-			sd.direction = droid.property("direction").toInt32();
-			sd.player = droid.property("player").toInt32();
-			if (sd.player < -1 || sd.player >= MAX_PLAYERS) {
-				ASSERT(false, "Invalid player");
-				continue;
-			}
-			data.droids.push_back(std::move(sd));
-		}
-		uint16_t featureCount = features.property("length").toUInt16();
-		for (unsigned i = 0; i < featureCount; ++i) {
-			auto feature = features.property(i);
-			auto position = feature.property("position");
-			ScriptMapData::Feature sd;
-			sd.name = feature.property("name").toString().toUtf8().constData();
-			sd.position = {position.property(0).toInt32(), position.property(1).toInt32()};
-			sd.direction = feature.property("direction").toInt32();
-			data.features.push_back(std::move(sd));
-		}
-		data.valid = true;
-		return true;
-	}, &data), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-	QScriptValue result = engine->evaluate(source, QString::fromUtf8(path.toUtf8().c_str()));
-	ASSERT_OR_RETURN(data, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s",
-	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().c_str(), result.toString().toUtf8().constData());
-
-	return data;
+	return scripting_engine::instance().runMapScript(path, seed, preview);
 }
 
-void setGlobalVariables(QScriptEngine *engine, const nlohmann::json& variables)
+ScriptMapData scripting_engine::runMapScript(WzString const &path, uint64_t seed, bool preview)
 {
-	if (!variables.is_object())
-	{
-		ASSERT(false, "setGlobalVariables expects a JSON object");
-		return;
-	}
-	for (auto it : variables.items())
-	{
-		ASSERT(!it.key().empty(), "Empty key");
-		engine->globalObject().setProperty(
-			QString::fromStdString(it.key()),
-			mapJsonToQScriptValue(engine, it.value(), QScriptValue::ReadOnly | QScriptValue::Undeletable),
-			QScriptValue::ReadOnly | QScriptValue::Undeletable
-		);
-	}
+	// TODO: Further refactoring
+	return runMapScript_QtScript(path, seed, preview);
 }
 
-QScriptEngine *loadPlayerScript(WzString const &path, int player, AIDifficulty difficulty)
+wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
+{
+	return scripting_engine::instance().loadPlayerScript(path, player, difficulty);
+}
+
+wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
-	QScriptEngine *engine = new QScriptEngine();
-	// Set processEventsInterval to -1 because the interpreter should *never* call
-	// QCoreApplication::processEvents() (or SDL builds will break in various ways).
-	engine->setProcessEventsInterval(-1);
-	UDWORD size;
-	char *bytes = nullptr;
-	if (!loadFile(path.toUtf8().c_str(), &bytes, &size))
+
+	debug(LOG_SCRIPT, "loadPlayerScript[%d]: %s", player, path.toUtf8().c_str());
+
+	int realDifficulty;
+	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
-		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
+		realDifficulty = static_cast<int8_t>(difficulty);
+	}
+	else // campaign
+	{
+		realDifficulty = (int)getDifficultyLevel();
+	}
+
+	wzapi::scripting_instance* pNewInstance = createQtScriptInstance(path, player, realDifficulty);
+	if (!pNewInstance)
+	{
+		// failed to create new scripting instance
+		debug(LOG_ERROR, "Failed to create new scripting instance: path:\"%s\", player: %d, difficulty: %d", path.toUtf8().c_str(), player, static_cast<int>(difficulty));
 		return nullptr;
 	}
-	QString source = QString::fromUtf8(bytes, size);
-	free(bytes);
-	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	ASSERT_OR_RETURN(nullptr, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s",
-	                 path.toUtf8().c_str(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
-	// Special functions
-	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
-	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
-	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
-	engine->globalObject().setProperty("profile", engine->newFunction(js_profile));
-	engine->globalObject().setProperty("include", engine->newFunction(js_include));
-	engine->globalObject().setProperty("namespace", engine->newFunction(js_namespace));
 
-	json globalVars;
+	// Create group map
+	GROUPMAP *psMap = new GROUPMAP;
+	auto insert_result = groups.insert(ENGINEMAP::value_type(pNewInstance, psMap));
+	ASSERT(insert_result.second, "Entry for this engine %p already exists in ENGINEMAP!", static_cast<void *>(pNewInstance));
+
+	json globalVars = json::object();
 	// Special global variables
 	//== * ```version``` Current version of the game, set in *major.minor* format.
 	globalVars["version"] = version_getVersionString();
@@ -1033,44 +558,35 @@ QScriptEngine *loadPlayerScript(WzString const &path, int player, AIDifficulty d
 	// un-documented placeholder variable
 	globalVars["isReceivingAllEvents"] = false;
 
-	setGlobalVariables(engine, globalVars);
+	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
-	// Regular functions
 	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
-	registerFunctions(engine, basename.baseName());
-
-	// Remember internal, reserved names
-	QScriptValueIterator it(engine->globalObject());
-	while (it.hasNext())
-	{
-		it.next();
-		internalNamespace.insert(it.name());
-	}
-
+	json globalVarsToSave = json::object();
 	// We need to always save the 'me' special variable.
 	//== * ```me``` The player the script is currently running as.
-	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVarsToSave["me"] = player;
 
 	// We also need to save the special 'scriptName' variable.
 	//== * ```scriptName``` Base name of the script that is running.
-	engine->globalObject().setProperty("scriptName", basename.baseName(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVarsToSave["scriptName"] = basename.baseName().toStdString();
 
 	// We also need to save the special 'scriptPath' variable.
 	//== * ```scriptPath``` Base path of the script that is running.
-	engine->globalObject().setProperty("scriptPath", basename.path(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	globalVarsToSave["scriptPath"] = basename.path().toStdString();
 
-	QScriptValue result = engine->evaluate(source, QString::fromUtf8(path.toUtf8().c_str()));
-	ASSERT_OR_RETURN(nullptr, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s",
-	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().c_str(), result.toString().toUtf8().constData());
+	pNewInstance->setSpecifiedGlobalVariables(globalVarsToSave, wzapi::GlobalVariableFlags::ReadOnly);
+
+	bool ready = pNewInstance->readyInstanceForExecution();
+	ASSERT_OR_RETURN(nullptr, ready, "Unable to ready instance for execution: %s", path.toUtf8().c_str());
 
 	// Register script
-	scripts.push_back(engine);
+	scripts.push_back(pNewInstance);
 
 	MONITOR *monitor = new MONITOR;
-	monitors[engine] = monitor;
+	monitors[pNewInstance] = monitor;
 
-	debug(LOG_SAVE, "Created script engine %d for player %d from %s", scripts.size() - 1, player, path.toUtf8().c_str());
-	return engine;
+	debug(LOG_SAVE, "Created script engine %zu for player %d from %s", scripts.size() - 1, player, path.toUtf8().c_str());
+	return pNewInstance;
 }
 
 bool loadGlobalScript(WzString path)
@@ -1078,50 +594,27 @@ bool loadGlobalScript(WzString path)
 	return loadPlayerScript(std::move(path), selectedPlayer, AIDifficulty::DISABLED);
 }
 
-bool saveScriptGlobals(nlohmann::json &result, QScriptEngine *engine)
-{
-	QScriptValueIterator it(engine->globalObject());
-	// we save 'scriptName' and 'me' implicitly
-	while (it.hasNext())
-	{
-		it.next();
-		if (internalNamespace.count(it.name()) == 0 && !it.value().isFunction()
-			&& !it.value().equals(engine->globalObject()))
-		{
-			result[it.name().toStdString()] = it.value().toVariant();
-		}
-	}
-	return true;
-}
-
-nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam)
-{
-	nlohmann::json result = nlohmann::json::object();
-	result["function"] = timerName;
-	qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParam);
-	if (pData)
-	{
-		result["stringArg"] = (pData->stringArg).toStdString();
-	}
-	return result;
-}
-
 bool saveScriptStates(const char *filename)
+{
+	return scripting_engine::instance().saveScriptStates(filename);
+}
+
+bool scripting_engine::saveScriptStates(const char *filename)
 {
 	WzConfig ini(filename, WzConfig::ReadAndWrite);
 	for (int i = 0; i < scripts.size(); ++i)
 	{
-		QScriptEngine *engine = scripts.at(i);
+		wzapi::scripting_instance* instance = scripts.at(i);
 
 		nlohmann::json globalsResult = nlohmann::json::object();
-		saveScriptGlobals(globalsResult, engine); // we save 'scriptName' and 'me' implicitly
+		instance->saveScriptGlobals(globalsResult); // we save 'scriptName' and 'me' implicitly
 		ini.setValue("globals_" + WzString::number(i), globalsResult);
 
 		// we have to save 'scriptName' and 'me' explicitly
 		nlohmann::json groupsResult = nlohmann::json::object();
-		saveGroups(groupsResult, engine);
-		groupsResult["me"] = engine->globalObject().property("me").toInt32();
-		groupsResult["scriptName"] = QStringToWzString(engine->globalObject().property("scriptName").toString());
+		saveGroups(groupsResult, instance);
+		groupsResult["me"] = instance->player();
+		groupsResult["scriptName"] = instance->scriptName();
 		ini.setValue("groups_" + WzString::number(i), groupsResult);
 	}
 	size_t timerIdx = 0;
@@ -1132,8 +625,8 @@ bool saveScriptStates(const char *filename)
 		nodeInfo["timerName"] = node.timerName;
 		// we have to save 'scriptName' and 'me' explicitly
 		nodeInfo["me"] = node.player;
-		nodeInfo["scriptName"] = QStringToWzString(node.engine->globalObject().property("scriptName").toString());
-		nodeInfo["functionRestoreInfo"] = saveTimerFunction(node.timerID, node.timerName, node.additionalTimerFuncParam);
+		nodeInfo["scriptName"] = node.instance->scriptName();
+		nodeInfo["functionRestoreInfo"] = node.instance->saveTimerFunction(node.timerID, node.timerName, node.additionalTimerFuncParam);
 		if (node.baseobj >= 0)
 		{
 			nodeInfo["object"] = node.baseobj;
@@ -1150,72 +643,48 @@ bool saveScriptStates(const char *filename)
 	return true;
 }
 
-static QScriptEngine *findEngineForPlayer(int match, const QString& scriptName)
+wzapi::scripting_instance* scripting_engine::findInstanceForPlayer(int match, const WzString& _scriptName)
 {
-	for (auto *engine : scripts)
+	WzString scriptName = _scriptName.normalized(WzString::NormalizationForm_KD);
+	for (auto *instance : scripts)
 	{
-		int player = engine->globalObject().property("me").toInt32();
-		QString matchName = engine->globalObject().property("scriptName").toString();
-		if (match == player && (matchName.compare(scriptName, Qt::CaseInsensitive) == 0 || scriptName.isEmpty()))
+		int player = instance->player();
+		WzString matchName = WzString::fromUtf8(instance->scriptName()).normalized(WzString::NormalizationForm_KD);
+		if (match == player && (matchName.compare(scriptName) == 0 || scriptName.isEmpty()))
 		{
-			return engine;
+			return instance;
 		}
 	}
 	ASSERT(false, "Script context for player %d and script name %s not found",
-	       match, scriptName.toUtf8().constData());
+	       match, scriptName.toUtf8().c_str());
 	return nullptr;
-}
-
-// recreates timer functions (and additional userdata) based on the information saved by the saveTimer() method
-std::tuple<TimerFunc, timerAdditionalData *> restoreTimerFunction(QScriptEngine *engine, const nlohmann::json& savedTimerFuncData)
-{
-	QString funcName = QString::fromStdString(json_getValue(savedTimerFuncData, WzString::fromUtf8("function")).toWzString().toStdString());
-	if (funcName.isEmpty())
-	{
-		throw std::runtime_error("Invalid timer restore data");
-	}
-	QString stringArg = QString::fromStdString(json_getValue(savedTimerFuncData, WzString::fromUtf8("stringArg")).toWzString().toStdString());
-
-	return {
-		// timerFunc
-		[engine, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
-			qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParams);
-			QScriptValueList args;
-			if (baseObject != nullptr)
-			{
-				args += convMax(baseObject, engine);
-			}
-			else if (pData && !(pData->stringArg.isEmpty()))
-			{
-				args += pData->stringArg;
-			}
-			callFunction(engine, funcName, args, true);
-		}
-		// additionalParams
-		, new qtscript_timer_additionaldata(stringArg)
-	};
 }
 
 bool loadScriptStates(const char *filename)
 {
+	return scripting_engine::instance().loadScriptStates(filename);
+}
+
+bool scripting_engine::loadScriptStates(const char *filename)
+{
 	uniqueTimerID maxRestoredTimerID = 0;
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
+	debug(LOG_SAVE, "Loading script states for %zu script contexts", scripts.size());
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		int player = ini.value("me").toInt();
-		QString scriptName = QString::fromUtf8(ini.value("scriptName").toWzString().toUtf8().c_str());
-		QScriptEngine *engine = findEngineForPlayer(player, scriptName);
-		if (engine && list[i].startsWith("triggers_"))
+		WzString scriptName = ini.value("scriptName").toWzString();
+		wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
+		if (instance && list[i].startsWith("triggers_"))
 		{
 			timerNode node;
 			node.timerID = ini.value("timerID").toInt();
 			node.timerName = ini.value("timerName").toWzString().toStdString();
-			node.engine = engine;
+			node.instance = instance;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
-			      i, player, scriptName.toUtf8().constData());
+			      i, player, scriptName.toUtf8().c_str());
 			node.baseobj = ini.value("baseobj", -1).toInt();
 			node.baseobjtype = (OBJECT_TYPE)ini.value("objectType", (int)OBJ_NUM_TYPES).toInt();
 			node.frameTime = ini.value("frame").toInt();
@@ -1227,7 +696,7 @@ bool loadScriptStates(const char *filename)
 			std::tuple<TimerFunc, timerAdditionalData *> restoredTimerInfo;
 			try
 			{
-				restoredTimerInfo = restoreTimerFunction(engine, ini.value("functionRestoreInfo").jsonValue());
+				restoredTimerInfo = instance->restoreTimerFunction(ini.value("functionRestoreInfo").jsonValue());
 			}
 			catch (const std::exception& e)
 			{
@@ -1238,24 +707,18 @@ bool loadScriptStates(const char *filename)
 			node.function = std::get<0>(restoredTimerInfo);
 			node.additionalTimerFuncParam = std::get<1>(restoredTimerInfo);
 
-			maxRestoredTimerID = std::max(maxRestoredTimerID, node.timerID);
+			maxRestoredTimerID = std::max<uniqueTimerID>(maxRestoredTimerID, node.timerID);
 
 			addTimerNode(std::move(node));
 		}
-		else if (engine && list[i].startsWith("globals_"))
+		else if (instance && list[i].startsWith("globals_"))
 		{
-			std::vector<WzString> keys = ini.childKeys();
+			const nlohmann::json &result = ini.currentJsonValue();
 			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %zu values",
-			      player, scriptName.toUtf8().constData(), keys.size());
-			for (size_t j = 0; j < keys.size(); ++j)
-			{
-				// IMPORTANT: "null" JSON values *MUST* map to QScriptValue::UndefinedValue.
-				//			  If they are set to QScriptValue::NullValue, it causes issues for libcampaign.js. (As the values become "defined".)
-				//			  (mapJsonToQScriptValue handles this properly.)
-				engine->globalObject().setProperty(QString::fromUtf8(keys.at(j).toUtf8().c_str()), mapJsonToQScriptValue(engine, ini.json(keys.at(j)), QScriptValue::PropertyFlags()));
-			}
+				  instance->player(), instance->scriptName().c_str(), result.size());
+			instance->loadScriptGlobals(result);
 		}
-		else if (engine && list[i].startsWith("groups_"))
+		else if (instance && list[i].startsWith("groups_"))
 		{
 			std::vector<WzString> keys = ini.childKeys();
 			for (size_t j = 0; j < keys.size(); ++j)
@@ -1266,13 +729,13 @@ bool loadScriptStates(const char *filename)
 				for (size_t k = 0; ok && k < values.size(); k++)
 				{
 					int groupId = values.at(k).toInt();
-					loadGroup(engine, groupId, droidId);
+					loadGroup(instance, groupId, droidId);
 				}
 			}
 		}
 		else
 		{
-			if (engine)
+			if (instance)
 			{
 				debug(LOG_WARNING, "Encountered unexpected group '%s' in loadScriptStates", list[i].toUtf8().c_str());
 			}
@@ -1283,49 +746,41 @@ bool loadScriptStates(const char *filename)
 	return true;
 }
 
-static QStandardItemList addModelItem(QScriptValueIterator &it)
+static QStandardItemList addModelItem(const std::string& name, const nlohmann::json& data)
 {
 	QStandardItemList l;
-	QStandardItem *key = new QStandardItem(it.name());
+	QStandardItem *key = new QStandardItem(QString::fromStdString(name));
 	QStandardItem *value = nullptr;
 
-	if (it.value().isObject() || it.value().isArray())
+	if (data.is_object() || data.is_array())
 	{
-		QScriptValueIterator obit(it.value());
-		while (obit.hasNext())
+		for (auto it : data.items())
 		{
-			obit.next();
-			key->appendRow(addModelItem(obit));
+			key->appendRow(addModelItem(it.key(), it.value()));
 		}
 		value = new QStandardItem("[Object]");
 	}
 	else
 	{
-		value = new QStandardItem(it.value().toString());
+		value = new QStandardItem(QString::fromUtf8(json_variant(data).toWzString().toUtf8().c_str()));
 	}
 	l += key;
 	l += value;
 	return l;
 }
 
-static void updateGlobalModels()
+void scripting_engine::updateGlobalModels()
 {
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueIterator it(engine->globalObject());
-		QStandardItemModel *m = models.value(engine);
+		json scriptGlobals = instance->debugGetAllScriptGlobals();
+		QStandardItemModel *m = models.at(instance);
 		m->setRowCount(0);
 
-		while (it.hasNext())
+		for (auto it : scriptGlobals.items())
 		{
-			it.next();
-			if ((internalNamespace.count(it.name()) == 0 && !it.value().isFunction()
-			     && !it.value().equals(engine->globalObject()))
-			    || it.name() == "Upgrades" || it.name() == "Stats")
-			{
-				QStandardItemList list = addModelItem(it);
-				m->appendRow(list);
-			}
+			QStandardItemList list = addModelItem(it.key(), it.value());
+			m->appendRow(list);
 		}
 	}
 	QStandardItemModel *m = triggerModel;
@@ -1336,7 +791,7 @@ static void updateGlobalModels()
 		m->setRowCount(nextRow);
 		m->setItem(nextRow, 0, new QStandardItem(QString::number(node.timerID)));
 		m->setItem(nextRow, 1, new QStandardItem(QString::fromStdString(node.timerName)));
-		QString scriptName = node.engine->globalObject().property("scriptName").toString();
+		QString scriptName = QString::fromStdString(node.instance->scriptName());
 		m->setItem(nextRow, 2, new QStandardItem(scriptName + ":" + QString::number(node.player)));
 		if (node.baseobj >= 0)
 		{
@@ -1364,37 +819,17 @@ static void updateGlobalModels()
 	}
 }
 
-bool jsEvaluate(QScriptEngine *engine, const QString &text)
-{
-	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(text);
-	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
-	{
-		debug(LOG_ERROR, "Syntax error in %s: %s",
-		      text.toUtf8().constData(), syntax.errorMessage().toUtf8().constData());
-		return false;
-	}
-	QScriptValue result = engine->evaluate(text);
-	if (engine->hasUncaughtException())
-	{
-		debug(LOG_ERROR, "Uncaught exception in %s: %s",
-		      text.toUtf8().constData(), result.toString().toUtf8().constData());
-		return false;
-	}
-	console("%s", result.toString().toUtf8().constData());
-	return true;
-}
-
 void jsAutogameSpecific(const WzString &name, int player)
 {
-	QScriptEngine *engine = loadPlayerScript(name, player, AIDifficulty::MEDIUM);
-	if (!engine)
+	wzapi::scripting_instance* instance = loadPlayerScript(name, player, AIDifficulty::MEDIUM);
+	if (!instance)
 	{
 		console("Failed to load selected AI! Check your logs to see why.");
 		return;
 	}
 	console("Loaded the %s AI script for current player!", name.toUtf8().c_str());
-	callFunction(engine, "eventGameInit", QScriptValueList());
-	callFunction(engine, "eventStartLevel", QScriptValueList());
+	instance->handle_eventGameInit();
+	instance->handle_eventStartLevel();
 }
 
 void jsAutogame()
@@ -1420,12 +855,12 @@ void jsHandleDebugClosed()
 void jsShowDebug()
 {
 	// Add globals
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
 		QStandardItemModel *m = new QStandardItemModel(0, 2);
 		m->setHeaderData(0, Qt::Horizontal, QString("Name"));
 		m->setHeaderData(1, Qt::Horizontal, QString("Value"));
-		models.insert(engine, m);
+		models.insert(MODELMAP::value_type(instance, m));
 	}
 	// Add triggers
 	triggerModel = new QStandardItemModel(0, 8);
@@ -1439,8 +874,8 @@ void jsShowDebug()
 	triggerModel->setHeaderData(7, Qt::Horizontal, QString("Calls"));
 
 	globalDialog = true;
-	updateGlobalModels();
-	jsDebugCreate(models, triggerModel, createLabelModel(), jsHandleDebugClosed);
+	scripting_engine::instance().updateGlobalModels();
+	jsDebugCreate(models, triggerModel, scripting_engine::instance().createLabelModel(), jsHandleDebugClosed);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1547,110 +982,103 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 {
 	// HACK: TRIGGER_VIDEO_QUIT is called before scripts for initial campaign video
 	ASSERT(scriptsReady || trigger == TRIGGER_VIDEO_QUIT, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-
 		if (psObj)
 		{
-			int player = engine->globalObject().property("me").toInt32();
-			bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+			int player = instance->player();
+			bool receiveAll = instance->isReceivingAllEvents();
 			if (player != psObj->player && !receiveAll)
 			{
 				continue;
 			}
-			args += convMax(psObj, engine);
 		}
 
 		switch (trigger)
 		{
 		case TRIGGER_GAME_INIT:
-			callFunction(engine, "eventGameInit", QScriptValueList());
+			instance->handle_eventGameInit();
 			break;
 		case TRIGGER_START_LEVEL:
 			processVisibility(); // make sure we initialize visibility first
-			callFunction(engine, "eventStartLevel", QScriptValueList());
+			instance->handle_eventStartLevel();
 			break;
 		case TRIGGER_TRANSPORTER_LAUNCH:
-			callFunction(engine, "eventLaunchTransporter", QScriptValueList()); // deprecated!
-			callFunction(engine, "eventTransporterLaunch", args);
+			instance->handle_eventLaunchTransporter(); // deprecated!
+			instance->handle_eventTransporterLaunch(psObj);
 			break;
 		case TRIGGER_TRANSPORTER_ARRIVED:
-			callFunction(engine, "eventReinforcementsArrived", QScriptValueList()); // deprecated!
-			callFunction(engine, "eventTransporterArrived", args);
+			instance->handle_eventReinforcementsArrived(); // deprecated!
+			instance->handle_eventTransporterArrived(psObj);
 			break;
 		case TRIGGER_DELIVERY_POINT_MOVING:
-			callFunction(engine, "eventDeliveryPointMoving", args);
+			instance->handle_eventDeliveryPointMoving(psObj);
 			break;
 		case TRIGGER_DELIVERY_POINT_MOVED:
-			callFunction(engine, "eventDeliveryPointMoved", args);
+			instance->handle_eventDeliveryPointMoved(psObj);
 			break;
 		case TRIGGER_OBJECT_RECYCLED:
-			callFunction(engine, "eventObjectRecycled", args);
+			instance->handle_eventObjectRecycled(psObj);
 			break;
 		case TRIGGER_TRANSPORTER_EXIT:
-			callFunction(engine, "eventTransporterExit", args);
+			instance->handle_eventTransporterExit(psObj);
 			break;
 		case TRIGGER_TRANSPORTER_DONE:
-			callFunction(engine, "eventTransporterDone", args);
+			instance->handle_eventTransporterDone(psObj);
 			break;
 		case TRIGGER_TRANSPORTER_LANDED:
-			callFunction(engine, "eventTransporterLanded", args);
+			instance->handle_eventTransporterLanded(psObj);
 			break;
 		case TRIGGER_MISSION_TIMEOUT:
-			callFunction(engine, "eventMissionTimeout", QScriptValueList());
+			instance->handle_eventMissionTimeout();
 			break;
 		case TRIGGER_VIDEO_QUIT:
-			callFunction(engine, "eventVideoDone", QScriptValueList());
+			instance->handle_eventVideoDone();
 			break;
 		case TRIGGER_GAME_LOADED:
-			callFunction(engine, "eventGameLoaded", QScriptValueList());
+			instance->handle_eventGameLoaded();
 			break;
 		case TRIGGER_GAME_SAVING:
-			callFunction(engine, "eventGameSaving", QScriptValueList());
+			instance->handle_eventGameSaving();
 			break;
 		case TRIGGER_GAME_SAVED:
-			callFunction(engine, "eventGameSaved", QScriptValueList());
+			instance->handle_eventGameSaved();
 			break;
 		case TRIGGER_DESIGN_BODY:
-			callFunction(engine, "eventDesignBody", QScriptValueList());
+			instance->handle_eventDesignBody();
 			break;
 		case TRIGGER_DESIGN_PROPULSION:
-			callFunction(engine, "eventDesignPropulsion", QScriptValueList());
+			instance->handle_eventDesignPropulsion();
 			break;
 		case TRIGGER_DESIGN_WEAPON:
-			callFunction(engine, "eventDesignWeapon", QScriptValueList());
+			instance->handle_eventDesignWeapon();
 			break;
 		case TRIGGER_DESIGN_COMMAND:
-			callFunction(engine, "eventDesignCommand", QScriptValueList());
+			instance->handle_eventDesignCommand();
 			break;
 		case TRIGGER_DESIGN_SYSTEM:
-			callFunction(engine, "eventDesignSystem", QScriptValueList());
+			instance->handle_eventDesignSystem();
 			break;
 		case TRIGGER_DESIGN_QUIT:
-			callFunction(engine, "eventDesignQuit", QScriptValueList());
+			instance->handle_eventDesignQuit();
 			break;
 		case TRIGGER_MENU_BUILD_SELECTED:
-			callFunction(engine, "eventMenuBuildSelected", args);
+			instance->handle_eventMenuBuildSelected();
 			break;
 		case TRIGGER_MENU_RESEARCH_SELECTED:
-			callFunction(engine, "eventMenuResearchSelected", args);
+			instance->handle_eventMenuResearchSelected();
 			break;
 		case TRIGGER_MENU_BUILD_UP:
-			args += QScriptValue(true);
-			callFunction(engine, "eventMenuBuild", args);
+			instance->handle_eventMenuBuild();
 			break;
 		case TRIGGER_MENU_RESEARCH_UP:
-			args += QScriptValue(true);
-			callFunction(engine, "eventMenuResearch", args);
+			instance->handle_eventMenuResearch();
 			break;
 		case TRIGGER_MENU_DESIGN_UP:
-			args += QScriptValue(true);
-			callFunction(engine, "eventMenuDesign", args);
+			instance->handle_eventMenuDesign();
 			break;
 		case TRIGGER_MENU_MANUFACTURE_UP:
-			args += QScriptValue(true);
-			callFunction(engine, "eventMenuManufacture", args);
+			instance->handle_eventMenuManufacture();
 			break;
 		}
 	}
@@ -1671,11 +1099,9 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 bool triggerEventPlayerLeft(int id)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += id;
-		callFunction(engine, "eventPlayerLeft", args);
+		instance->handle_eventPlayerLeft(id);
 	}
 	return true;
 }
@@ -1688,11 +1114,9 @@ bool triggerEventPlayerLeft(int id)
 bool triggerEventCheatMode(bool entered)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += entered;
-		callFunction(engine, "eventCheatMode", args);
+		instance->handle_eventCheatMode(entered);
 	}
 	return true;
 }
@@ -1704,14 +1128,12 @@ bool triggerEventCheatMode(bool entered)
 bool triggerEventDroidIdle(DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int player = engine->globalObject().property("me").toInt32();
+		int player = instance->player();
 		if (player == psDroid->player)
 		{
-			QScriptValueList args;
-			args += convDroid(psDroid, engine);
-			callFunction(engine, "eventDroidIdle", args);
+			instance->handle_eventDroidIdle(psDroid);
 		}
 	}
 	return true;
@@ -1726,19 +1148,13 @@ bool triggerEventDroidIdle(DROID *psDroid)
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int player = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psDroid->player || receiveAll)
 		{
-			QScriptValueList args;
-			args += convDroid(psDroid, engine);
-			if (psFactory)
-			{
-				args += convStructure(psFactory, engine);
-			}
-			callFunction(engine, "eventDroidBuilt", args);
+			instance->handle_eventDroidBuilt(psDroid, psFactory);
 		}
 	}
 	return true;
@@ -1753,19 +1169,13 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int player = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psStruct->player || receiveAll)
 		{
-			QScriptValueList args;
-			args += convStructure(psStruct, engine);
-			if (psDroid)
-			{
-				args += convDroid(psDroid, engine);
-			}
-			callFunction(engine, "eventStructureBuilt", args);
+			instance->handle_eventStructBuilt(psStruct, psDroid);
 		}
 	}
 	return true;
@@ -1779,19 +1189,13 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int player = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psStruct->player || receiveAll)
 		{
-			QScriptValueList args;
-			args += convStructure(psStruct, engine);
-			if (psDroid)
-			{
-				args += convDroid(psDroid, engine);
-			}
-			callFunction(engine, "eventStructureDemolish", args);
+			instance->handle_eventStructDemolish(psStruct, psDroid);
 		}
 	}
 	return true;
@@ -1806,15 +1210,13 @@ bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
 bool triggerEventStructureReady(STRUCTURE *psStruct)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int player = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psStruct->player || receiveAll)
 		{
-			QScriptValueList args;
-			args += convStructure(psStruct, engine);
-			callFunction(engine, "eventStructureReady", args);
+			instance->handle_eventStructureReady(psStruct);
 		}
 	}
 	return true;
@@ -1839,16 +1241,13 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 	{
 		return false;
 	}
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int player = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psVictim->player || receiveAll)
 		{
-			QScriptValueList args;
-			args += convMax(psVictim, engine);
-			args += convMax(psAttacker, engine);
-			callFunction(engine, "eventAttacked", args);
+			instance->handle_eventAttacked(psVictim, psAttacker);
 		}
 	}
 	return true;
@@ -1870,24 +1269,13 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 		eventQueue.enqueue(researchEvent(psResearch, psStruct, player));
 		return true;
 	}
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int me = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int me = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (me == player || receiveAll)
 		{
-			QScriptValueList args;
-			args += convResearch(psResearch, engine, player);
-			if (psStruct)
-			{
-				args += convStructure(psStruct, engine);
-			}
-			else
-			{
-				args += QScriptValue::NullValue;
-			}
-			args += QScriptValue(player);
-			callFunction(engine, "eventResearched", args);
+			instance->handle_eventResearched(wzapi::researchResult(psResearch, player), psStruct, player);
 		}
 	}
 	return true;
@@ -1901,12 +1289,10 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (int i = 0; i < scripts.size() && psVictim; ++i)
+	if (!psVictim) { return true; }
+	for (auto *instance : scripts)
 	{
-		QScriptEngine *engine = scripts.at(i);
-		QScriptValueList args;
-		args += convMax(psVictim, engine);
-		callFunction(engine, "eventDestroyed", args);
+		instance->handle_eventDestroyed(psVictim);
 	}
 	return true;
 }
@@ -1920,12 +1306,9 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += convFeature(psFeat, engine);
-		args += convDroid(psDroid, engine);
-		callFunction(engine, "eventPickup", args);
+		instance->handle_eventPickup(psFeat, psDroid);
 	}
 	return true;
 }
@@ -1947,24 +1330,23 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 //__
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {
+	return scripting_engine::instance().triggerEventSeen(psViewer, psSeen);
+}
+bool scripting_engine::triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
+{
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (int i = 0; i < scripts.size() && psSeen && psViewer; ++i)
+	if (!psSeen || !psViewer) { return true; }
+	for (auto *instance : scripts)
 	{
-		QScriptEngine *engine = scripts.at(i);
-		std::pair<bool, int> callbacks = seenLabelCheck(engine, psSeen, psViewer);
+		std::pair<bool, int> callbacks = scripting_engine::instance().seenLabelCheck(instance, psSeen, psViewer);
 		if (callbacks.first)
 		{
-			QScriptValueList args;
-			args += convMax(psViewer, engine);
-			args += convMax(psSeen, engine);
-			callFunction(engine, "eventObjectSeen", args);
+			instance->handle_eventObjectSeen(psViewer, psSeen);
 		}
 		if (callbacks.second)
 		{
-			QScriptValueList args;
-			args += convMax(psViewer, engine);
-			args += QScriptValue(callbacks.second); // group id
-			callFunction(engine, "eventGroupSeen", args);
+			int groupId = callbacks.second;
+			instance->handle_eventGroupSeen(psViewer, groupId);
 		}
 	}
 	return true;
@@ -1980,17 +1362,14 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (int i = 0; i < scripts.size() && psObj; ++i)
+	if (!psObj) { return true; }
+	for (auto *instance : scripts)
 	{
-		QScriptEngine *engine = scripts.at(i);
-		int me = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int me = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (me == psObj->player || me == from || receiveAll)
 		{
-			QScriptValueList args;
-			args += convMax(psObj, engine);
-			args += QScriptValue(from);
-			callFunction(engine, "eventObjectTransfer", args);
+			instance->handle_eventObjectTransfer(psObj, from);
 		}
 	}
 	return true;
@@ -2004,18 +1383,15 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 //__
 bool triggerEventChat(int from, int to, const char *message)
 {
-	for (int i = 0; scriptsReady && message && i < scripts.size(); ++i)
+	ASSERT_OR_RETURN(false, scriptsReady, "Scripts not initialized yet");
+	ASSERT_OR_RETURN(false, message, "No message provided");
+	for (auto *instance : scripts)
 	{
-		QScriptEngine *engine = scripts.at(i);
-		int me = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int me = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (me == to || (receiveAll && to == from))
 		{
-			QScriptValueList args;
-			args += QScriptValue(from);
-			args += QScriptValue(to);
-			args += QScriptValue(QString(message));
-			callFunction(engine, "eventChat", args);
+			instance->handle_eventChat(from, to, message);
 		}
 	}
 	return true;
@@ -2029,22 +1405,14 @@ bool triggerEventChat(int from, int to, const char *message)
 //__
 bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 {
-	for (auto *engine : scripts)
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *instance : scripts)
 	{
-		int me = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int me = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (me == to || receiveAll)
 		{
-			QScriptValueList args;
-			args += QScriptValue(map_coord(x));
-			args += QScriptValue(map_coord(y));
-			args += QScriptValue(from);
-			args += QScriptValue(to);
-			if (message)
-			{
-				args += QScriptValue(QString(message));
-			}
-			callFunction(engine, "eventBeacon", args);
+			instance->handle_eventBeacon(map_coord(x), map_coord(y), from, to, message);
 		}
 	}
 	return true;
@@ -2058,16 +1426,13 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 bool triggerEventBeaconRemoved(int from, int to)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		int me = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		int me = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
 		if (me == to || receiveAll)
 		{
-			QScriptValueList args;
-			args += QScriptValue(from);
-			args += QScriptValue(to);
-			callFunction(engine, "eventBeaconRemoved", args);
+			instance->handle_eventBeaconRemoved(from, to);
 		}
 	}
 	return true;
@@ -2096,21 +1461,16 @@ bool triggerEventSelected()
 //__ is the about to be killed object, the group's id, and the new group size.
 //__
 // Since groups are entities local to one context, we do not iterate over them here.
-bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine)
+bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, wzapi::scripting_instance *instance)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	QScriptValueList args;
-	args += convMax(psObj, engine);
-	args += QScriptValue(group);
-	args += QScriptValue(size);
-	callFunction(engine, "eventGroupLoss", args);
-	return true;
+	return instance->handle_eventGroupLoss(psObj, group, size);
 }
 
 // This is not a trigger yet.
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 {
-	return areaLabelCheck(psDroid);
+	return scripting_engine::instance().areaLabelCheck(psDroid);
 }
 
 //__ ## eventArea<label>(droid)
@@ -2122,14 +1482,9 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 bool triggerEventArea(const std::string& label, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += convDroid(psDroid, engine);
-		QString funcname = QString("eventArea" + QString::fromStdString(label));
-		debug(LOG_SCRIPT, "Triggering %s for %s", funcname.toUtf8().constData(),
-		      engine->globalObject().property("scriptName").toString().toUtf8().constData());
-		callFunction(engine, funcname, args);
+		instance->handle_eventArea(label, psDroid);
 	}
 	return true;
 }
@@ -2142,11 +1497,9 @@ bool triggerEventArea(const std::string& label, DROID *psDroid)
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += convTemplate(psTemplate, engine);
-		callFunction(engine, "eventDesignCreated", args);
+		instance->handle_eventDesignCreated(psTemplate);
 	}
 	return true;
 }
@@ -2157,12 +1510,10 @@ bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 //__
 bool triggerEventAllianceOffer(uint8_t from, uint8_t to)
 {
-	for (auto *engine : scripts)
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += QScriptValue(from);
-		args += QScriptValue(to);
-		callFunction(engine, "eventAllianceOffer", args);
+		instance->handle_eventAllianceOffer(from, to);
 	}
 	return true;
 }
@@ -2173,12 +1524,10 @@ bool triggerEventAllianceOffer(uint8_t from, uint8_t to)
 //__
 bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 {
-	for (auto *engine : scripts)
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += QScriptValue(from);
-		args += QScriptValue(to);
-		callFunction(engine, "eventAllianceAccepted", args);
+		instance->handle_eventAllianceAccepted(from, to);
 	}
 	return true;
 }
@@ -2189,12 +1538,10 @@ bool triggerEventAllianceAccepted(uint8_t from, uint8_t to)
 //__
 bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 {
-	for (auto *engine : scripts)
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += QScriptValue(from);
-		args += QScriptValue(to);
-		callFunction(engine, "eventAllianceBroken", args);
+		instance->handle_eventAllianceBroken(from, to);
 	}
 	return true;
 }
@@ -2208,22 +1555,9 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += QScriptValue(from);
-		args += QScriptValue(req_id);
-		args += QScriptValue(x);
-		args += QScriptValue(y);
-		if (psObj)
-		{
-			args += convMax(psObj, engine);
-		}
-		if (psObj2)
-		{
-			args += convMax(psObj2, engine);
-		}
-		callFunction(engine, "eventSyncRequest", args);
+		instance->handle_eventSyncRequest(from, req_id, x, y, psObj, psObj2);
 	}
 	return true;
 }
@@ -2235,123 +1569,1142 @@ bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *ps
 bool triggerEventKeyPressed(int meta, int key)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *engine : scripts)
+	for (auto *instance : scripts)
 	{
-		QScriptValueList args;
-		args += QScriptValue(meta);
-		args += QScriptValue(key);
-		callFunction(engine, "eventKeyPressed", args);
+		instance->handle_eventKeyPressed(meta, key);
 	}
 	return true;
 }
 
-bool namedScriptCallback(QScriptEngine *engine, const WzString& func, int player)
+// ----
+
+#define ALL_PLAYERS -1
+#define ALLIES -2
+#define ENEMIES -3
+
+static QPointer<QStandardItemModel> labelModel; // TODO: Move this into scripting_engine instance
+
+scripting_engine& scripting_engine::instance()
 {
-	ASSERT(scriptsReady, "Scripts not initialized yet");
-	QScriptValueList args;
-	args += QScriptValue(player);
-	callFunction(engine, QString::fromUtf8(func.toUtf8().c_str()), args);
-	return true;
+	static scripting_engine engine = scripting_engine();
+	return engine;
 }
 
-// Enable JSON support for custom types
-
-// QVariant
-void to_json(nlohmann::json& j, const QVariant& value) {
-	// IMPORTANT: This largely follows the Qt documentation on QJsonValue::fromVariant
-	// See: http://doc.qt.io/qt-5/qjsonvalue.html#fromVariant
-	//
-	// The main change is that numeric types are independently handled (instead of
-	// converting everything to `double`), because nlohmann::json handles them a bit
-	// differently.
-
-	// Note: Older versions of Qt 5.x (5.6?) do not define QMetaType::Nullptr,
-	//		 so check value.isNull() instead.
-	if (value.isNull())
+void scripting_engine::updateLabelModel()
+{
+	if (!labelModel)
 	{
-		j = nlohmann::json(); // null value
 		return;
 	}
-
-	switch (value.userType())
+	labelModel->setRowCount(0);
+	labelModel->setRowCount(labels.size());
+	int nextRow = 0;
+	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 	{
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
-		case QMetaType::Nullptr:
-			j = nlohmann::json(); // null value
-			break;
-#endif
-		case QMetaType::Bool:
-			j = value.toBool();
-			break;
-		case QMetaType::Int:
-			j = value.toInt();
-			break;
-		case QMetaType::UInt:
-			j = value.toUInt();
-			break;
-		case QMetaType::LongLong:
-			j = value.toLongLong();
-			break;
-		case QMetaType::ULongLong:
-			j = value.toULongLong();
-			break;
-		case QMetaType::Float:
-		case QVariant::Double:
-			j = value.toDouble();
-			break;
-		case QMetaType::QString:
+		const LABEL &l = i->second;
+		labelModel->setItem(nextRow, 0, new QStandardItem(QString::fromStdString(i->first)));
+		const char *c = "?";
+		switch (l.type)
 		{
-			QString qstring = value.toString();
-			j = json(qstring.toUtf8().constData());
-			break;
+		case OBJ_DROID: c = "DROID"; break;
+		case OBJ_FEATURE: c = "FEATURE"; break;
+		case OBJ_STRUCTURE: c = "STRUCTURE"; break;
+		case SCRIPT_POSITION: c = "POSITION"; break;
+		case SCRIPT_AREA: c = "AREA"; break;
+		case SCRIPT_RADIUS: c = "RADIUS"; break;
+		case SCRIPT_GROUP: c = "GROUP"; break;
+		case SCRIPT_PLAYER:
+		case SCRIPT_RESEARCH:
+		case OBJ_PROJECTILE:
+		case SCRIPT_COUNT: c = "ERROR"; break;
 		}
-		case QMetaType::QStringList:
-		case QMetaType::QVariantList:
+		labelModel->setItem(nextRow, 1, new QStandardItem(QString(c)));
+		switch (l.triggered)
 		{
-			// an array
-			j = nlohmann::json::array();
-			QList<QVariant> list = value.toList();
-			for (QVariant& list_variant : list)
-			{
-				nlohmann::json list_variant_json_value;
-				to_json(list_variant_json_value, list_variant);
-				j.push_back(list_variant_json_value);
-			}
-			break;
+		case -1: labelModel->setItem(nextRow, 2, new QStandardItem("N/A")); break;
+		case 0: labelModel->setItem(nextRow, 2, new QStandardItem("Active")); break;
+		default: labelModel->setItem(nextRow, 2, new QStandardItem("Done")); break;
 		}
-		case QMetaType::QVariantMap:
+		if (l.player == ALL_PLAYERS)
 		{
-			// an object
-			j = nlohmann::json::object();
-			QMap<QString, QVariant> map = value.toMap();
-			for (QMap<QString, QVariant>::const_iterator i = map.constBegin(); i != map.constEnd(); ++i)
-			{
-				j[i.key().toUtf8().constData()] = i.value();
-			}
-			break;
+			labelModel->setItem(nextRow, 3, new QStandardItem("ALL"));
 		}
-		case QMetaType::QVariantHash:
+		else
 		{
-			// an object
-			j = nlohmann::json::object();
-			QHash<QString, QVariant> hash = value.toHash();
-			for (QHash<QString, QVariant>::const_iterator i = hash.constBegin(); i != hash.constEnd(); ++i)
-			{
-				j[i.key().toUtf8().constData()] = i.value();
-			}
-			break;
+			labelModel->setItem(nextRow, 3, new QStandardItem(QString::number(l.player)));
 		}
-		default:
-			// For all other QVariant types a conversion to a QString will be attempted.
-			QString qstring = value.toString();
-			// If the returned string is empty, a Null QJsonValue will be stored, otherwise a String value using the returned QString.
-			if (qstring.isEmpty())
-			{
-				j = nlohmann::json(); // null value
-			}
-			else
-			{
-				j = std::string(qstring.toUtf8().constData());
-			}
+		if (l.subscriber == ALL_PLAYERS)
+		{
+			labelModel->setItem(nextRow, 4, new QStandardItem("ALL"));
+		}
+		else
+		{
+			labelModel->setItem(nextRow, 4, new QStandardItem(QString::number(l.subscriber)));
+		}
+		nextRow++;
 	}
+}
+
+QStandardItemModel *scripting_engine::createLabelModel()
+{
+	labelModel = new QStandardItemModel(0, 5);
+	labelModel->setHeaderData(0, Qt::Horizontal, QString("Label"));
+	labelModel->setHeaderData(1, Qt::Horizontal, QString("Type"));
+	labelModel->setHeaderData(2, Qt::Horizontal, QString("Trigger"));
+	labelModel->setHeaderData(3, Qt::Horizontal, QString("Owner"));
+	labelModel->setHeaderData(4, Qt::Horizontal, QString("Subscriber"));
+	updateLabelModel();
+	return labelModel;
+}
+
+void clearMarks()
+{
+	for (int x = 0; x < mapWidth; x++) // clear old marks
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+			psTile->tileInfoBits &= ~BITS_MARKED;
+		}
+	}
+}
+
+void scripting_engine::markAllLabels(bool only_active)
+{
+	for (const auto &it : labels)
+	{
+		const auto &key = it.first;
+		const LABEL &l = it.second;
+		if (!only_active || l.triggered <= 0)
+		{
+			showLabel(key, false, false);
+		}
+	}
+}
+
+#include "display3d.h"
+
+void scripting_engine::showLabel(const std::string &key, bool clear_old, bool jump_to)
+{
+	if (labels.count(key) == 0)
+	{
+		debug(LOG_ERROR, "label %s not found", key.c_str());
+		return;
+	}
+	LABEL &l = labels[key];
+	if (clear_old)
+	{
+		clearMarks();
+	}
+	if (l.type == SCRIPT_AREA || l.type == SCRIPT_POSITION)
+	{
+		if (jump_to)
+		{
+			setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		}
+		int maxx = map_coord(l.p2.x);
+		int maxy = map_coord(l.p2.y);
+		if (l.type == SCRIPT_POSITION)
+		{
+			maxx = MIN(mapWidth, maxx + 1);
+			maxy = MIN(mapHeight, maxy + 1);
+		}
+		for (int x = map_coord(l.p1.x); x < maxx; x++) // make new ones
+		{
+			for (int y = map_coord(l.p1.y); y < maxy; y++)
+			{
+				MAPTILE *psTile = mapTile(x, y);
+				psTile->tileInfoBits |= BITS_MARKED;
+			}
+		}
+	}
+	else if (l.type == SCRIPT_RADIUS)
+	{
+		if (jump_to)
+		{
+			setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		}
+		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), mapWidth); x++)
+		{
+			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), mapHeight); y++) // l.p2.x is radius, not a bug
+			{
+				if (iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
+				{
+					MAPTILE *psTile = mapTile(x, y);
+					psTile->tileInfoBits |= BITS_MARKED;
+				}
+			}
+		}
+	}
+	else if (l.type == OBJ_DROID || l.type == OBJ_FEATURE || l.type == OBJ_STRUCTURE)
+	{
+		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)l.type, l.id, l.player);
+		if (psObj)
+		{
+			if (jump_to)
+			{
+				setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
+			}
+			MAPTILE *psTile = mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y));
+			psTile->tileInfoBits |= BITS_MARKED;
+		}
+	}
+	else if (l.type == SCRIPT_GROUP)
+	{
+		bool cameraMoved = false;
+		for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
+		{
+			const GROUPMAP *pGroupMap = i->second;
+			for (auto iter = pGroupMap->map().cbegin(); iter != pGroupMap->map().cend(); ++iter)
+			{
+				if (iter->second == l.id)
+				{
+					const BASE_OBJECT *psObj = iter->first;
+					if (!cameraMoved && jump_to)
+					{
+						setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
+						cameraMoved = true;
+					}
+					MAPTILE *psTile = mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y));
+					psTile->tileInfoBits |= BITS_MARKED;
+				}
+			}
+		}
+	}
+}
+
+// The bool return value is true when an object callback needs to be called.
+// The int return value holds group id when a group callback needs to be called, 0 otherwise.
+std::pair<bool, int> scripting_engine::seenLabelCheck(wzapi::scripting_instance *instance, BASE_OBJECT *seen, BASE_OBJECT *viewer)
+{
+	GROUPMAP *psMap = getGroupMap(instance);
+	ASSERT_OR_RETURN(std::make_pair(false, 0), psMap != nullptr, "Non-existent groupmap for engine");
+	auto seenObjIt = psMap->map().find(seen);
+	int groupId = (seenObjIt != psMap->map().end()) ? seenObjIt->second : 0;
+	bool foundObj = false, foundGroup = false;
+	for (auto &it : labels)
+	{
+		LABEL &l = it.second;
+		if (l.triggered != 0 || !(l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		{
+			continue;
+		}
+
+		// Don't let a seen game object ID which matches a group label ID to prematurely
+		// trigger a group label.
+		if (l.type != SCRIPT_GROUP && l.id == seen->id)
+		{
+			l.triggered = viewer->id; // record who made the discovery
+			foundObj = true;
+		}
+		else if (l.type == SCRIPT_GROUP && l.id == groupId)
+		{
+			l.triggered = viewer->id; // record who made the discovery
+			foundGroup = true;
+		}
+	}
+	if (foundObj || foundGroup)
+	{
+		updateLabelModel();
+	}
+	return std::make_pair(foundObj, foundGroup ? groupId : 0);
+}
+
+bool scripting_engine::areaLabelCheck(DROID *psDroid)
+{
+	int x = psDroid->pos.x;
+	int y = psDroid->pos.y;
+	bool activated = false;
+	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+	{
+		LABEL &l = i->second;
+		if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
+		    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
+		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - psDroid->pos.xy()) < l.p2.x)))
+		{
+			// We're inside an untriggered area
+			activated = true;
+			l.triggered = psDroid->id;
+			triggerEventArea(i->first, psDroid);
+		}
+	}
+	if (activated)
+	{
+		updateLabelModel();
+	}
+	return activated;
+}
+
+// ----------------------------------------------------------------------------------------
+// Group system
+//
+
+scripting_engine::GROUPMAP* scripting_engine::getGroupMap(wzapi::scripting_instance *instance)
+{
+	auto groupIt = groups.find(instance);
+	GROUPMAP *psMap = (groupIt != groups.end()) ? groupIt->second : nullptr;
+	return psMap;
+}
+
+void scripting_engine::removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, BASE_OBJECT *psObj)
+{
+	auto result = psMap->removeObjectFromGroup(psObj);
+	if (result.has_value())
+	{
+		int groupId = result.value();
+		const int newGroupSize = psMap->groupSize(groupId);
+		instance->updateGroupSizes(groupId, newGroupSize);
+		triggerEventGroupLoss(psObj, groupId, newGroupSize, instance);
+	}
+}
+
+void scripting_engine::groupRemoveObject(BASE_OBJECT *psObj)
+{
+	for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
+	{
+		removeFromGroup(i->first, i->second, psObj);
+	}
+}
+
+bool scripting_engine::groupAddObject(BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance)
+{
+	ASSERT_OR_RETURN(false, psObj && instance, "Bad parameter");
+	GROUPMAP *psMap = getGroupMap(instance);
+	removeFromGroup(instance, psMap, psObj);
+	psMap->insertObjectIntoGroup(psObj, groupId);
+	instance->updateGroupSizes(groupId, psMap->groupSize(groupId));
+	return true; // inserted
+}
+
+bool scripting_engine::loadGroup(wzapi::scripting_instance *instance, int groupId, int objId)
+{
+	BASE_OBJECT *psObj = IdToPointer(objId, ANYPLAYER);
+	ASSERT_OR_RETURN(false, psObj, "Non-existent object %d in group %d in savegame", objId, groupId);
+	return groupAddObject(psObj, groupId, instance);
+}
+
+bool scripting_engine::saveGroups(nlohmann::json &result, wzapi::scripting_instance *instance)
+{
+	// Save group info as a list of group memberships for each droid
+	GROUPMAP *psMap = getGroupMap(instance);
+	ASSERT_OR_RETURN(false, psMap, "Non-existent groupmap for engine");
+	for (auto i = psMap->map().begin(); i != psMap->map().end(); ++i)
+	{
+		const BASE_OBJECT *psObj = i->first;
+		ASSERT(!isDead(psObj), "Wanted to save dead %s to savegame!", objInfo(psObj));
+		std::vector<WzString> value = json_getValue(result, WzString::number(psObj->id)).toWzStringList();
+		value.push_back(WzString::number(i->second));
+		result[WzString::number(psObj->id).toUtf8()] = value;
+	}
+	return true;
+}
+
+// ----------------------------------------------------------------------------------------
+// Label system (function defined in qtscript.h header)
+//
+
+bool loadLabels(const char *filename)
+{
+	return scripting_engine::instance().loadLabels(filename);
+}
+
+// Load labels
+bool scripting_engine::loadLabels(const char *filename)
+{
+	int groupidx = -1;
+
+	if (!PHYSFS_exists(filename))
+	{
+		debug(LOG_SAVE, "No %s found -- not adding any labels", filename);
+		return false;
+	}
+	WzConfig ini(filename, WzConfig::ReadOnly);
+	labels.clear();
+	std::vector<WzString> list = ini.childGroups();
+	debug(LOG_SAVE, "Loading %zu labels...", list.size());
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
+		LABEL p;
+		std::string label = ini.value("label").toWzString().toUtf8();
+		if (labels.count(label) > 0)
+		{
+			debug(LOG_ERROR, "Duplicate label found");
+		}
+		else if (list[i].startsWith("position"))
+		{
+			p.p1 = ini.vector2i("pos");
+			p.p2 = p.p1;
+			p.type = SCRIPT_POSITION;
+			p.player = ALL_PLAYERS;
+			p.id = -1;
+			p.triggered = -1; // always deactivated
+			labels[label] = p;
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+		}
+		else if (list[i].startsWith("area"))
+		{
+			p.p1 = ini.vector2i("pos1");
+			p.p2 = ini.vector2i("pos2");
+			p.type = SCRIPT_AREA;
+			p.player = ini.value("player", ALL_PLAYERS).toInt();
+			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
+			p.id = -1;
+			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			labels[label] = p;
+		}
+		else if (list[i].startsWith("radius"))
+		{
+			p.p1 = ini.vector2i("pos");
+			p.p2.x = ini.value("radius").toInt();
+			p.p2.y = 0; // unused
+			p.type = SCRIPT_RADIUS;
+			p.player = ini.value("player", ALL_PLAYERS).toInt();
+			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
+			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.id = -1;
+			labels[label] = p;
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+		}
+		else if (list[i].startsWith("object"))
+		{
+			p.id = ini.value("id").toInt();
+			p.type = ini.value("type").toInt();
+			p.player = ini.value("player").toInt();
+			labels[label] = p;
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+		}
+		else if (list[i].startsWith("group"))
+		{
+			p.id = groupidx--;
+			p.type = SCRIPT_GROUP;
+			p.player = ini.value("player").toInt();
+			std::vector<WzString> memberList = ini.value("members").toWzStringList();
+			for (WzString const &j : memberList)
+			{
+				int id = j.toInt();
+				BASE_OBJECT *psObj = IdToPointer(id, p.player);
+				ASSERT(psObj, "Unit %d belonging to player %d not found from label %s",
+				       id, p.player, list[i].toUtf8().c_str());
+				p.idlist.push_back(id);
+			}
+			labels[label] = p;
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+		}
+		else
+		{
+			debug(LOG_ERROR, "Misnamed group in %s", filename);
+		}
+		ini.endGroup();
+	}
+	return true;
+}
+
+bool writeLabels(const char *filename)
+{
+	return scripting_engine::instance().writeLabels(filename);
+}
+
+bool scripting_engine::writeLabels(const char *filename)
+{
+	int c[5]; // make unique, incremental section names
+	memset(c, 0, sizeof(c));
+	WzConfig ini(filename, WzConfig::ReadAndWrite);
+	for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
+	{
+		const std::string& key = i->first;
+		const LABEL &l = i->second;
+		if (l.type == SCRIPT_POSITION)
+		{
+			ini.beginGroup("position_" + WzString::number(c[0]++));
+			ini.setVector2i("pos", l.p1);
+			ini.setValue("label", WzString::fromUtf8(key));
+			ini.setValue("triggered", l.triggered);
+			ini.endGroup();
+		}
+		else if (l.type == SCRIPT_AREA)
+		{
+			ini.beginGroup("area_" + WzString::number(c[1]++));
+			ini.setVector2i("pos1", l.p1);
+			ini.setVector2i("pos2", l.p2);
+			ini.setValue("label", WzString::fromUtf8(key));
+			ini.setValue("player", l.player);
+			ini.setValue("triggered", l.triggered);
+			ini.setValue("subscriber", l.subscriber);
+			ini.endGroup();
+		}
+		else if (l.type == SCRIPT_RADIUS)
+		{
+			ini.beginGroup("radius_" + WzString::number(c[2]++));
+			ini.setVector2i("pos", l.p1);
+			ini.setValue("radius", l.p2.x);
+			ini.setValue("label", WzString::fromUtf8(key));
+			ini.setValue("player", l.player);
+			ini.setValue("triggered", l.triggered);
+			ini.setValue("subscriber", l.subscriber);
+			ini.endGroup();
+		}
+		else if (l.type == SCRIPT_GROUP)
+		{
+			ini.beginGroup("group_" + WzString::number(c[3]++));
+			ini.setValue("player", l.player);
+			ini.setValue("triggered", l.triggered);
+			QStringList list;
+			for (int i : l.idlist)
+			{
+				list += QString::number(i);
+			}
+			std::list<WzString> wzlist;
+			std::transform(list.constBegin(), list.constEnd(), std::back_inserter(wzlist),
+						   [](const QString& qs) -> WzString { return QStringToWzString(qs); });
+			ini.setValue("members", wzlist);
+			ini.setValue("label", WzString::fromUtf8(key));
+			ini.setValue("subscriber", l.subscriber);
+			ini.endGroup();
+		}
+		else
+		{
+			ini.beginGroup("object_" + WzString::number(c[4]++));
+			ini.setValue("id", l.id);
+			ini.setValue("player", l.player);
+			ini.setValue("type", l.type);
+			ini.setValue("label", WzString::fromUtf8(key));
+			ini.setValue("triggered", l.triggered);
+			ini.endGroup();
+		}
+	}
+	return true;
+}
+
+//
+
+#if defined(SCRIPT_ASSERT)
+#undef SCRIPT_ASSERT
+#endif
+#define SCRIPT_ASSERT(retval, execution_context, expr, ...) \
+	do { bool _wzeval = (expr); \
+		if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
+			context.throwError(#expr, __LINE__, __FUNCTION__); \
+			return retval; } } while (0)
+
+#if defined(SCRIPT_ASSERT_PLAYER)
+#undef SCRIPT_ASSERT_PLAYER
+#endif
+#define SCRIPT_ASSERT_PLAYER(retval, _context, _player) \
+	SCRIPT_ASSERT(retval, _context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
+
+//-- ## resetLabel(label[, filter])
+//--
+//-- Reset the trigger on an label. Next time a unit enters the area, it will trigger
+//-- an area event. Next time an object or a group is seen, it will trigger a seen event.
+//-- Optionally add a filter on it in the second parameter, which can
+//-- be a specific player to watch for, or ALL_PLAYERS by default.
+//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
+//-- ## resetArea(label[, filter])
+//-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
+//-- an area event. Optionally add a filter on it in the second parameter, which can
+//-- be a specific player to watch for, or ALL_PLAYERS by default.
+//-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
+//--
+wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> filter))
+{
+	LABELMAP& labels = scripting_engine::instance().labels;
+	SCRIPT_ASSERT({}, context, labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
+	LABEL &l = labels[labelName];
+	l.triggered = 0; // make active again
+	if (filter.has_value())
+	{
+		l.subscriber = filter.value();
+	}
+	return {};
+}
+
+//-- ## enumLabels([filter])
+//--
+//-- Returns a string list of labels that exist for this map. The optional filter
+//-- parameter can be used to only return labels of one specific type. (3.2+ only)
+//--
+std::vector<std::string> scripting_engine::enumLabels(WZAPI_PARAMS(optional<int> filterLabelType))
+{
+	const LABELMAP& labels = scripting_engine::instance().labels;
+	std::vector<std::string> matches;
+	if (filterLabelType.has_value()) // filter
+	{
+		SCRIPT_TYPE type = (SCRIPT_TYPE)filterLabelType.value();
+		for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
+		{
+			const LABEL &l = i->second;
+			if (l.type == type)
+			{
+				matches.push_back(i->first);
+			}
+		}
+	}
+	else // fast path, give all
+	{
+		matches.reserve(labels.size());
+		for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
+		{
+			matches.push_back(i->first);
+		}
+	}
+	return matches;
+}
+
+generic_script_object::generic_script_object()
+: p1(Vector2i(0,0))
+, p2(Vector2i(0,0))
+, id(-1)
+, player(-1)
+, type(-1)
+{ }
+
+generic_script_object generic_script_object::Null()
+{
+	return generic_script_object();
+}
+
+generic_script_object generic_script_object::fromRadius(int x, int y, int radius)
+{
+	generic_script_object result;
+	result.type = SCRIPT_RADIUS;
+	result.p1.x = x;
+	result.p1.y = y;
+	result.p2.x = radius;
+	return result;
+}
+
+scr_radius generic_script_object::getRadius() const // if type == SCRIPT_RADIUS, returns the radius
+{
+	ASSERT(isRadius(), "generic_script_object is not a radius; type: %d", type);
+	return scr_radius {p1.x, p1.y, p2.x};
+}
+
+generic_script_object generic_script_object::fromArea(int x, int y, int x2, int y2)
+{
+	generic_script_object result;
+	result.type = SCRIPT_AREA;
+	result.p1.x = x;
+	result.p1.y = y;
+	result.p2.x = x2;
+	result.p2.y = y2;
+	return result;
+}
+
+scr_area generic_script_object::getArea() const // if type == SCRIPT_AREA, returns the area
+{
+	ASSERT(isArea(), "generic_script_object is not an area; type: %d", type);
+	return scr_area {p1.x, p1.y, p2.x, p2.y};
+}
+
+generic_script_object generic_script_object::fromPosition(int x, int y)
+{
+	generic_script_object result;
+	result.type = SCRIPT_POSITION;
+	result.p1.x = x;
+	result.p1.y = y;
+	return result;
+}
+
+scr_position generic_script_object::getPosition() const // if type == SCRIPT_POSITION, returns the position
+{
+	ASSERT(isPosition(), "generic_script_object is not a position; type: %d", type);
+	return scr_position {p1.x, p1.y};
+}
+
+generic_script_object generic_script_object::fromGroup(int groupId)
+{
+	generic_script_object result;
+	result.type = SCRIPT_GROUP;
+	result.id = groupId;
+	return result;
+}
+
+int generic_script_object::getGroupId() const // if type == SCRIPT_GROUP, returns the groupId
+{
+	ASSERT(isGroup(), "generic_script_object is not a group; type: %d", type);
+	return id;
+}
+
+generic_script_object generic_script_object::fromObject(const BASE_OBJECT *psObj)
+{
+	generic_script_object result;
+	ASSERT_OR_RETURN(generic_script_object::Null(), psObj, "Not a valid object");
+	result.type = psObj->type;
+	result.id = psObj->id;
+	result.player = psObj->player;
+	return result;
+}
+
+BASE_OBJECT * generic_script_object::getObject() const // if type == OBJ_DROID, OBJ_FEATURE, OBJ_STRUCTURE, returns the game object
+{
+	ASSERT(isObject(), "generic_script_object is not an object; type: %d", type);
+	return IdToObject((OBJECT_TYPE)type, id, player);
+}
+
+LABEL generic_script_object::toNewLabel() const
+{
+	LABEL value;
+	value.type = type;
+	value.id = id;
+	value.player = player;
+	value.p1.x = world_coord(p1.x);
+	value.p1.y = world_coord(p1.y);
+	if (type == SCRIPT_AREA)
+	{
+		value.p2.x = world_coord(p2.x);
+		value.p2.y = world_coord(p2.y);
+	}
+	else if (type == SCRIPT_RADIUS)
+	{
+		value.p2.x = world_coord(p2.x);
+	}
+
+	value.triggered = -1; // default off
+
+	return value;
+}
+
+//-- ## addLabel(object, label[, triggered])
+//--
+//-- Add a label to a game object. If there already is a label by that name, it is overwritten.
+//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
+//-- Can optionally specify an initial "triggered" value for the label. (3.4+ only)
+//--
+wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered))
+{
+	LABELMAP& labels = scripting_engine::instance().labels;
+	LABEL value = object.toNewLabel();
+
+	if (value.type == OBJ_DROID || value.type == OBJ_STRUCTURE || value.type == OBJ_FEATURE)
+	{
+		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)value.type, value.id, value.player);
+		SCRIPT_ASSERT({}, context, psObj, "Object id %d not found belonging to player %d", value.id, value.player);
+	}
+
+	value.triggered = -1; // default off
+	if (_triggered.has_value())
+	{
+		SCRIPT_ASSERT({}, context, value.type != SCRIPT_POSITION, "Cannot assign a trigger to a position");
+		value.triggered = _triggered.value();
+	}
+
+	labels[label] = value;
+	scripting_engine::instance().updateLabelModel();
+	return {};
+}
+
+//-- ## removeLabel(label)
+//--
+//-- Remove a label from the game. Returns the number of labels removed, which should normally be
+//-- either 1 (label found) or 0 (label not found). (3.2+ only)
+//--
+int scripting_engine::removeLabel(WZAPI_PARAMS(std::string label))
+{
+	LABELMAP& labels = scripting_engine::instance().labels;
+	int result = labels.erase(label);
+	scripting_engine::instance().updateLabelModel();
+	return result;
+}
+
+//-- ## getLabel(object)
+//--
+//-- Get a label string belonging to a game object. If the object has multiple labels, only the first
+//-- label found will be returned. If the object has no labels, undefined is returned.
+//-- This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
+//--
+optional<std::string> scripting_engine::getLabel(WZAPI_PARAMS(BASE_OBJECT *psObj))
+{
+	ASSERT_OR_RETURN(nullopt, psObj, "No valid object provided");
+	wzapi::game_object_identifier tmp;
+	tmp.id = psObj->id;
+	tmp.player = psObj->player;
+	tmp.type = psObj->type;
+	return _findMatchingLabel(tmp);
+}
+optional<std::string> scripting_engine::getLabelJS(WZAPI_PARAMS(wzapi::game_object_identifier obj_id))
+{
+	return _findMatchingLabel(obj_id);
+}
+optional<std::string> scripting_engine::_findMatchingLabel(wzapi::game_object_identifier obj_id)
+{
+	const LABELMAP& labels = scripting_engine::instance().labels;
+	LABEL value;
+	value.id = obj_id.id;
+	value.player = obj_id.player;
+	value.type = obj_id.type;
+	std::string label;
+	for (const auto &it : labels)
+	{
+		if (it.second == value)
+		{
+			label = it.first;
+			break;
+		}
+	}
+
+	optional<std::string> retLabel;
+	if (!label.empty())
+	{
+		retLabel = std::string(label);
+	}
+	return retLabel;
+}
+
+//-- ## getObject(label | x, y | type, player, id)
+//--
+//-- Fetch something denoted by a label, a map position or its object ID. A label refers to an area,
+//-- a position or a **game object** on the map defined using the map editor and stored
+//-- together with the map. In this case, the only argument is a text label. The function
+//-- returns an object that has a type variable defining what it is (in case this is
+//-- unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA, GROUP or POSITION.
+//-- The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only defined 'x' and 'y'.
+//-- The GROUP type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
+//-- This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
+//-- undefined value is returned. If whatever object the label should point at no longer exists,
+//-- a null value is returned.
+//--
+//-- You can also fetch a STRUCTURE or FEATURE type game object from a given map position (if any).
+//-- This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
+//-- manner, since they do not have a unique placement on map tiles. Finally, you can fetch an object using
+//-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
+//-- operation of O(n) algorithmic complexity. (3.2+ only)
+//--
+generic_script_object scripting_engine::getObject(WZAPI_PARAMS(wzapi::object_request request))
+{
+	if (request.requestType == wzapi::object_request::RequestType::MAPPOS_REQUEST)
+	{
+		auto pos = request.getMapPosition();
+		int x = pos.x;
+		int y = pos.y;
+		SCRIPT_ASSERT({}, context, tileOnMap(x, y), "Map position (%d, %d) not on the map!", x, y);
+		const MAPTILE *psTile = mapTile(x, y);
+		return generic_script_object::fromObject(psTile->psObject);
+	}
+	else if (request.requestType == wzapi::object_request::RequestType::OBJECTID_REQUEST)
+	{
+		auto type_player_id = request.getObjectIDRequest();
+		OBJECT_TYPE type = std::get<0>(type_player_id);
+		int player = std::get<1>(type_player_id);
+		int id = std::get<2>(type_player_id);
+		SCRIPT_ASSERT_PLAYER({}, context, player);
+		return generic_script_object::fromObject(IdToObject(type, id, player));
+	}
+	else if (request.requestType == wzapi::object_request::RequestType::LABEL_REQUEST)
+	{
+		return scripting_engine::instance().getObjectFromLabel(context, request.getLabel());
+	}
+	return {};
+}
+
+generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const std::string& label))
+{
+	// get by label case
+	BASE_OBJECT *psObj = nullptr;
+	if (labels.count(label) > 0)
+	{
+		const LABEL &p = labels[label];
+		switch (p.type)
+		{
+		case SCRIPT_RADIUS:
+			return generic_script_object::fromRadius(map_coord(p.p1.x), map_coord(p.p1.y), map_coord(p.p2.x));
+			break;
+		case SCRIPT_AREA:
+			return generic_script_object::fromArea(map_coord(p.p1.x), map_coord(p.p1.y), map_coord(p.p2.x), map_coord(p.p2.y));
+			break;
+		case SCRIPT_POSITION:
+			return generic_script_object::fromPosition(map_coord(p.p1.x), map_coord(p.p1.y));
+			break;
+		case SCRIPT_GROUP:
+			return generic_script_object::fromGroup(p.id);
+			break;
+		case OBJ_DROID:
+		case OBJ_FEATURE:
+		case OBJ_STRUCTURE:
+			psObj = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
+			if (!psObj)
+			{
+				return generic_script_object::Null();
+			}
+			return generic_script_object::fromObject(psObj);
+		default:
+			SCRIPT_ASSERT({}, context, false, "Bad object label type found for label %s!", label.c_str());
+			break;
+		}
+	}
+	return generic_script_object::Null();
+}
+
+//-- ## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
+//--
+//-- Returns an array of game objects seen within the given area that passes the optional filter
+//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
+//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
+//-- returned; by default only visible objects are returned. The label can either be actual
+//-- positions or a label to an AREA. Calling this function is much faster than iterating over all
+//-- game objects using other enum functions. (3.2+ only)
+//--
+std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> _filter, optional<bool> _seen))
+{
+	SCRIPT_ASSERT({}, context, instance().labels.count(label) > 0, "Label %s not found", label.c_str());
+	const LABEL &p = instance().labels[label];
+	SCRIPT_ASSERT({}, context, p.type == SCRIPT_AREA, "Wrong label type for %s", label.c_str());
+	int x1 = p.p1.x;
+	int y1 = p.p1.y;
+	int x2 = p.p2.x;
+	int y2 = p.p2.y;
+	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _filter, _seen);
+}
+
+typedef std::vector<BASE_OBJECT *> GridList;
+#include "mapgrid.h"
+
+std::vector<const BASE_OBJECT *> scripting_engine::enumArea(WZAPI_PARAMS(scr_area area, optional<int> _filter, optional<bool> _seen))
+{
+	int x1 = world_coord(area.x1);
+	int y1 = world_coord(area.y1);
+	int x2 = world_coord(area.x2);
+	int y2 = world_coord(area.y2);
+	return _enumAreaWorldCoords(context, x1, y1, x2, y2, _filter, _seen);
+}
+
+std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> _filter, optional<bool> _seen))
+{
+	int player = context.player();
+	int filter = (_filter.has_value()) ? _filter.value() : ALL_PLAYERS;
+	bool seen = (_seen.has_value()) ? _seen.value() : true;
+
+	static GridList gridList;  // static to avoid allocations. // not thread-safe
+	gridList = gridStartIterateArea(x1, y1, x2, y2);
+	std::vector<const BASE_OBJECT *> list;
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		BASE_OBJECT *psObj = *gi;
+		if ((psObj->visible[player] || !seen) && !psObj->died)
+		{
+			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
+			    || (filter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
+			    || (filter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
+			{
+				list.push_back(psObj);
+			}
+		}
+	}
+	return list;
+}
+
+std::vector<const BASE_OBJECT *> scripting_engine::enumAreaJS(WZAPI_PARAMS(scripting_engine::area_by_values_or_area_label_lookup area_lookup, optional<int> filter, optional<bool> seen))
+{
+	if (area_lookup.isLabel())
+	{
+		auto optLabel = area_lookup.label();
+		ASSERT(optLabel.has_value(), "optional label is null");
+		return enumAreaByLabel(context, optLabel.value(), filter, seen);
+	}
+	else
+	{
+		auto optArea = area_lookup.area();
+		ASSERT(optArea.has_value(), "optional area is null");
+		return enumArea(context, optArea.value(), filter, seen);
+	}
+}
+
+//-- ## enumGroup(group)
+//--
+//-- Return an array containing all the members of a given group.
+//--
+std::vector<const BASE_OBJECT *> scripting_engine::enumGroup(WZAPI_PARAMS(int groupId))
+{
+	std::vector<const BASE_OBJECT *> matches;
+	GROUPMAP *psMap = instance().getGroupMap(context.currentInstance());
+
+	if (psMap != nullptr)
+	{
+		for (auto i = psMap->map().cbegin(); i != psMap->map().cend(); ++i)
+		{
+			if (i->second == groupId)
+			{
+				matches.push_back(i->first);
+			}
+		}
+	}
+	return matches;
+}
+
+//-- ## newGroup()
+//--
+//-- Allocate a new group. Returns its numerical ID. Deprecated since 3.2 - you should now
+//-- use your own number scheme for groups.
+//--
+int scripting_engine::newGroup(WZAPI_NO_PARAMS)
+{
+	static int i = 1; // group zero reserved
+	return i++;
+}
+
+//-- ## groupAddArea(group, x1, y1, x2, y2)
+//--
+//-- Add any droids inside the given area to the given group. (3.2+ only)
+//--
+wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, int _x1, int _y1, int _x2, int _y2))
+{
+	int player = context.player();
+	int x1 = world_coord(_x1);
+	int y1 = world_coord(_y1);
+	int x2 = world_coord(_x2);
+	int y2 = world_coord(_y2);
+
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
+		{
+			scripting_engine::instance().groupAddObject(psDroid, groupId, context.currentInstance());
+		}
+	}
+	return {};
+}
+
+//-- ## groupAddDroid(group, droid)
+//--
+//-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
+//--
+wzapi::no_return_value scripting_engine::groupAddDroid(WZAPI_PARAMS(int groupId, DROID *psDroid))
+{
+	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
+	scripting_engine::instance().groupAddObject(psDroid, groupId, context.currentInstance());
+	return {};
+}
+
+//-- ## groupAdd(group, object)
+//--
+//-- Add given game object to the given group.
+//--
+wzapi::no_return_value scripting_engine::groupAdd(WZAPI_PARAMS(int groupId, BASE_OBJECT *psObj))
+{
+	SCRIPT_ASSERT({}, context, psObj, "No valid object provided");
+	scripting_engine::instance().groupAddObject(psObj, groupId, context.currentInstance());
+	return {};
+}
+
+//-- ## groupSize(group)
+//--
+//-- Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
+//--
+int scripting_engine::groupSize(WZAPI_PARAMS(int groupId))
+{
+	auto groupMap = instance().getGroupMap(context.currentInstance());
+	ASSERT_OR_RETURN(0, groupMap, "Failed to obtain groupMap");
+	return groupMap->groupSize(groupId);
+}
+
+// ----------------------------------------------------------------------------------------
+// Register functions with scripting system
+
+bool scripting_engine::unregisterFunctions(wzapi::scripting_instance *instance)
+{
+	int num = 0;
+	auto it = groups.find(instance);
+	if (it != groups.end())
+	{
+		GROUPMAP *psMap = groups.at(instance);
+		groups.erase(it);
+		delete psMap;
+		num = 1;
+	}
+	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
+	labels.clear();
+	labelModel = nullptr;
+	return true;
+}
+
+// Call this just before launching game; we can't do everything in registerFunctions()
+// since all game state may not be fully loaded by then
+void scripting_engine::prepareLabels()
+{
+	// load the label group data into every scripting context, with the same negative group id
+	for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+	{
+		wzapi::scripting_instance *instance = iter->first;
+		for (LABELMAP::iterator i = labels.begin(); i != labels.end(); ++i)
+		{
+			const LABEL &l = i->second;
+			if (l.type == SCRIPT_GROUP)
+			{
+				for (std::vector<int>::const_iterator j = l.idlist.begin(); j != l.idlist.end(); j++)
+				{
+					int id = (*j);
+					BASE_OBJECT *psObj = IdToPointer(id, l.player);
+					ASSERT(psObj, "Unit %d belonging to player %d not found", id, l.player);
+					if (psObj)
+					{
+						groupAddObject(psObj, l.id, instance);
+					}
+				}
+			}
+		}
+	}
+	updateLabelModel();
+}
+
+wzapi::no_return_value scripting_engine::hackMarkTiles_ByLabel(WZAPI_PARAMS(const std::string& label))
+{
+	SCRIPT_ASSERT({}, context, labels.count(label) > 0, "Label %s not found", label.c_str());
+
+	const LABEL &l = labels[label];
+	if (l.type == SCRIPT_AREA)
+	{
+		for (int x = map_coord(l.p1.x); x < map_coord(l.p2.x); x++)
+		{
+			for (int y = map_coord(l.p1.y); y < map_coord(l.p2.y); y++)
+			{
+				MAPTILE *psTile = mapTile(x, y);
+				psTile->tileInfoBits |= BITS_MARKED;
+			}
+		}
+	}
+	else if (l.type == SCRIPT_RADIUS)
+	{
+		for (int x = map_coord(l.p1.x - l.p2.x); x < map_coord(l.p1.x + l.p2.x); x++)
+		{
+			for (int y = map_coord(l.p1.y - l.p2.x); y < map_coord(l.p1.y + l.p2.x); y++)
+			{
+				if (x >= -1 && x < mapWidth + 1 && y >= -1 && y < mapWidth + 1 && iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
+				{
+					MAPTILE *psTile = mapTile(x, y);
+					psTile->tileInfoBits |= BITS_MARKED;
+				}
+			}
+		}
+	}
+
+	return {};
+}
+
+void scripting_engine::logFunctionPerformance(wzapi::scripting_instance *instance, const std::string &function, int ticks)
+{
+	MONITOR *monitor = monitors.at(instance); // pick right one for this instance
+	MONITOR_BIN m;
+	MONITOR::iterator it = monitor->find(function);
+	if (it != monitor->end())
+	{
+		m = it->second;
+	}
+	if (ticks > MAX_US)
+	{
+		debug(LOG_SCRIPT, "%s took %dus at time %d", function.c_str(), ticks, wzGetTicks());
+		m.overMaxTimeCalls++;
+	}
+	else if (ticks > HALF_MAX_US)
+	{
+		m.overHalfMaxTimeCalls++;
+	}
+	m.calls++;
+	if (ticks > m.worst)
+	{
+		m.worst = ticks;
+		m.worstGameTime = gameTime;
+	}
+	m.time += ticks;
+	monitor->insert(MONITOR::value_type(function, m));
 }

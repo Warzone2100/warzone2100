@@ -23,9 +23,11 @@
 #include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
 #include "random.h"
+#include "wzapi.h"
+#include <chrono>
 
-class QScriptEngine;
 class QString;
+class QStandardItemModel;
 class WzString;
 struct BASE_OBJECT;
 struct DROID;
@@ -65,6 +67,17 @@ enum SCRIPT_TRIGGER_TYPE
 	TRIGGER_OBJECT_RECYCLED
 };
 
+enum SCRIPT_TYPE
+{
+	SCRIPT_POSITION = OBJ_NUM_TYPES,
+	SCRIPT_AREA,
+	SCRIPT_PLAYER,
+	SCRIPT_RESEARCH,
+	SCRIPT_GROUP,
+	SCRIPT_RADIUS,
+	SCRIPT_COUNT
+};
+
 extern bool bInTutorial;
 
 // ----------------------------------------------
@@ -89,18 +102,12 @@ bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
 bool loadGlobalScript(WzString path);
-QScriptEngine *loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
+wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.
 bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
-
-/// Load map labels (implemented in qtscriptfuncs.cpp)
-bool loadLabels(const char *filename);
-
-/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
-bool writeLabels(const char *filename);
 
 /// Tell script system that an object has been removed.
 void scriptRemoveObject(BASE_OBJECT *psObj);
@@ -113,12 +120,6 @@ void jsAutogame();
 
 /// Choose a specific autogame AI
 void jsAutogameSpecific(const WzString &name, int player);
-
-/// Run-time code from user
-bool jsEvaluate(QScriptEngine *engine, const QString &text);
-
-/// Run a named script callback
-bool namedScriptCallback(QScriptEngine *engine, const WzString& func, int player);
 
 // ----------------------------------------------
 // Event functions
@@ -142,7 +143,7 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y);
 bool triggerEventBeaconRemoved(int from, int to);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 bool triggerEventCheatMode(bool entered);
-bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine);
+bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, wzapi::scripting_instance *instance);
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
 bool triggerEventArea(const std::string& label, DROID *psDroid);
 bool triggerEventSelected();
@@ -203,15 +204,291 @@ struct ScriptMapData
 };
 
 ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
+//
+
+struct LABEL
+{
+	Vector2i p1, p2;	// world coordinates
+	int id;
+	int type;
+	int player;
+	int subscriber;
+	std::vector<int> idlist;
+	int triggered;
+
+	bool operator==(const LABEL &o) const
+	{
+		return id == o.id && type == o.type && player == o.player;
+	}
+};
+
+struct generic_script_object
+{
+private:
+	Vector2i p1 = {};
+	Vector2i p2 = {};
+	int id;
+	int player;
+	int type;
+public:
+	generic_script_object();
+	static generic_script_object Null();
+	// all coordinates are in *map* coordinates
+	static generic_script_object fromRadius(int x, int y, int radius);
+	static generic_script_object fromArea(int x, int y, int x2, int y2);
+	static generic_script_object fromPosition(int x, int y);
+	static generic_script_object fromGroup(int groupId);
+	static generic_script_object fromObject(const BASE_OBJECT *psObj);
+public:
+	inline bool isNull() const { return type < 0; }
+	inline bool isRadius() const { return type == SCRIPT_RADIUS; }
+	inline bool isArea() const { return type == SCRIPT_AREA; }
+	inline bool isPosition() const { return type == SCRIPT_POSITION; }
+	inline bool isGroup() const { return type == SCRIPT_GROUP; }
+	inline bool isObject() const { return type == OBJ_DROID || type == OBJ_FEATURE || type == OBJ_STRUCTURE; }
+public:
+	inline int getType() const { return type; }
+	scr_radius getRadius() const; // if type == SCRIPT_RADIUS, returns the radius
+	scr_area getArea() const; // if type == SCRIPT_AREA, returns the area
+	scr_position getPosition() const; // if type == SCRIPT_POSITION, returns the position
+	int getGroupId() const; // if type == SCRIPT_GROUP, returns the groupId
+	BASE_OBJECT *getObject() const; // if type == OBJ_DROID, OBJ_FEATURE, OBJ_STRUCTURE, returns the game object
+public:
+	LABEL toNewLabel() const;
+};
+
+/// Load map labels (implemented in qtscriptfuncs.cpp)
+bool loadLabels(const char *filename);
+
+/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+bool writeLabels(const char *filename);
+
+class scripting_engine
+{
+public:
+	struct GROUPMAP
+	{
+		typedef int groupID;
+		typedef std::map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
+	private:
+		ObjectToGroupMap m_map;
+		std::map<groupID, size_t> m_groupCount;
+	public:
+		void insertObjectIntoGroup(const BASE_OBJECT *psObj, groupID groupId);
+		inline const ObjectToGroupMap& map() const { return m_map; }
+		size_t groupSize(groupID groupId) const;
+		optional<groupID> removeObjectFromGroup(const BASE_OBJECT *psObj);
+	};
+
+	struct timerNode
+	{
+		uniqueTimerID timerID;
+		TimerFunc function;
+		std::string timerName;
+		wzapi::scripting_instance* instance;
+		int baseobj;
+		OBJECT_TYPE baseobjtype;
+		timerAdditionalData* additionalTimerFuncParam;
+		int frameTime;
+		int ms;
+		int player;
+		int calls;
+		timerType type;
+		timerNode() : instance(nullptr), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(nullptr) {}
+		timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, timerAdditionalData* additionalParam = nullptr);
+		~timerNode();
+		inline bool operator== (const timerNode &t)
+		{
+			return (timerID == t.timerID) && (timerName == t.timerName) && (player == t.player);
+		}
+		// implement operator less TODO
+
+		timerNode(timerNode&& rhs);           // move constructor
+
+	private:
+		// non-copyable
+		timerNode(const timerNode&) = delete;
+		timerNode& operator=(const timerNode&) = delete;
+
+		void swap(timerNode& _rhs);
+	};
+private:
+	typedef std::map<std::string, LABEL> LABELMAP;
+	LABELMAP labels;
+
+	typedef std::map<wzapi::scripting_instance *, GROUPMAP *> ENGINEMAP;
+	ENGINEMAP groups;
+
+	/// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
+	/// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
+	/// host, we do not need to worry about each peer simulating the world differently.
+	std::list<timerNode> timers;
+	uniqueTimerID lastTimerID = 0;
+	std::unordered_map<uniqueTimerID, std::list<timerNode>::iterator> timerIDMap; // a map from uniqueTimerID -> entry in the timers list
+private:
+	scripting_engine() { }
+public:
+	static scripting_engine& instance();
+public:
+	bool initScripts();
+	bool prepareScripts(bool loadGame);
+	bool updateScripts();
+	bool shutdownScripts();
+
+	ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
+	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
+
+	// Set/write variables in the script's global context, run after loading script,
+	// but before triggering any events.
+	bool loadScriptStates(const char *filename);
+	bool saveScriptStates(const char *filename);
+
+	bool unregisterFunctions(wzapi::scripting_instance *instance);
+	void prepareLabels();
+
+// MARK: LABELS
+public:
+	/// Load map labels (implemented in qtscriptfuncs.cpp)
+	bool loadLabels(const char *filename);
+
+	/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+	bool writeLabels(const char *filename);
+
+// MARK: GROUPS
+public:
+	GROUPMAP* getGroupMap(wzapi::scripting_instance *instance);
+
+	bool loadGroup(wzapi::scripting_instance *instance, int groupId, int objId);
+	bool saveGroups(nlohmann::json &result, wzapi::scripting_instance *instance);
+
+// MARK: TIMERS
+public:
+	uniqueTimerID setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName = "", const BASE_OBJECT * obj = nullptr, timerType type = TIMER_REPEAT, timerAdditionalData* additionalParam = nullptr);
+
+	// removes any timer(s) that satisfy _pred
+	template< class UnaryPredicate >
+	std::vector<uniqueTimerID> removeTimersIf(UnaryPredicate _pred)
+	{
+		std::vector<uniqueTimerID> removedTimerIDs;
+		timers.remove_if([_pred, &removedTimerIDs](const timerNode& node) {
+			if (_pred(node))
+			{
+				removedTimerIDs.push_back(node.timerID);
+				return true;
+			}
+			return false;
+		});
+		for (const auto &timerID : removedTimerIDs)
+		{
+			timerIDMap.erase(timerID);
+		}
+		return removedTimerIDs;
+	}
+	
+	bool removeTimer(uniqueTimerID timerID);
+public:
+	// Monitoring performance of function calls
+	template<typename Func>
+	void executeWithPerformanceMonitoring(wzapi::scripting_instance *instance, const std::string &function, Func f)
+	{
+		using microDuration = std::chrono::duration<uint64_t, std::micro>;
+		auto time_begin = std::chrono::steady_clock::now();
+		f(); // execute provided Func f
+		auto duration_microsec = std::chrono::duration_cast<microDuration>(std::chrono::steady_clock::now() - time_begin);
+		int ticks = duration_microsec.count();
+		logFunctionPerformance(instance, function, ticks);
+	}
+private:
+	void logFunctionPerformance(wzapi::scripting_instance *instance, const std::string &function, int ticks);
+	uniqueTimerID getNextAvailableTimerID();
+	// internal-only function that adds a Timer node (used for restoring saved games)
+	void addTimerNode(timerNode&& node);
+
+// MARK: triggering events (from wz game code)
+public:
+	bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
+
+// MARK: wzapi functions
+public:
+	// Label functions
+	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string label, optional<int> filter));
+	static std::vector<std::string> enumLabels(WZAPI_PARAMS(optional<int> filterLabelType));
+
+	static wzapi::no_return_value addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered));
+
+	static int removeLabel(WZAPI_PARAMS(std::string label));
+	static optional<std::string> getLabel(WZAPI_PARAMS(BASE_OBJECT *psObj));
+	static optional<std::string> getLabelJS(WZAPI_PARAMS(wzapi::game_object_identifier obj_id));
+
+	generic_script_object getObjectFromLabel(WZAPI_PARAMS(const std::string& label));
+	wzapi::no_return_value hackMarkTiles_ByLabel(WZAPI_PARAMS(const std::string& label));
+private:
+	static optional<std::string> _findMatchingLabel(wzapi::game_object_identifier obj_id);
+public:
+
+	static generic_script_object getObject(WZAPI_PARAMS(wzapi::object_request request));
+	static std::vector<const BASE_OBJECT *> enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> filter, optional<bool> seen));
+	static std::vector<const BASE_OBJECT *> enumArea(WZAPI_PARAMS(scr_area area, optional<int> filter, optional<bool> seen));
+private:
+	static std::vector<const BASE_OBJECT *> _enumAreaWorldCoords(WZAPI_PARAMS(int x1, int y1, int x2, int y2, optional<int> filter, optional<bool> seen));
+public:
+
+	// A special function for Javascript backends that accept either a label or a series of integers describing an area
+	struct area_by_values_or_area_label_lookup
+	{
+	public:
+		area_by_values_or_area_label_lookup();
+		area_by_values_or_area_label_lookup(const std::string &label);
+		area_by_values_or_area_label_lookup(int x1, int y1, int x2, int y2);
+
+		inline bool isLabel() { return m_isLabel; }
+		inline optional<std::string> label() { return (m_isLabel) ? optional<std::string>(m_label) : nullopt; }
+		inline optional<scr_area> area() { return (!m_isLabel) ? optional<scr_area>(scr_area{x1, y1, x2, y2}) : nullopt; }
+	private:
+		bool m_isLabel = false;
+		std::string m_label;
+		int x1 = -1;
+		int y1 = -1;
+		int x2 = -1;
+		int y2 = -1;
+	};
+	static std::vector<const BASE_OBJECT *> enumAreaJS(WZAPI_PARAMS(area_by_values_or_area_label_lookup area_lookup, optional<int> filter, optional<bool> seen));
+
+	// Group functions
+	static std::vector<const BASE_OBJECT *> enumGroup(WZAPI_PARAMS(int groupId));
+	static int newGroup(WZAPI_NO_PARAMS);
+	static wzapi::no_return_value groupAddArea(WZAPI_PARAMS(int groupId, int x1, int y1, int x2, int y2));
+	static wzapi::no_return_value groupAddDroid(WZAPI_PARAMS(int groupId, DROID *psDroid));
+	static wzapi::no_return_value groupAdd(WZAPI_PARAMS(int groupId, BASE_OBJECT *psObj));
+	static int groupSize(WZAPI_PARAMS(int groupId));
+private:
+	wzapi::scripting_instance* findInstanceForPlayer(int match, const WzString& scriptName);
+protected:
+	friend void jsShowDebug();
+	friend class ScriptDebugger;
+	void updateLabelModel();
+	/// Create model for labels for js debug dialog
+	QStandardItemModel *createLabelModel();
+	
+	/// Show all labels or all currently active labels
+	void markAllLabels(bool only_active);
+	/// Mark and show label
+	void showLabel(const std::string &key, bool clear_old = true, bool jump_to = true);
+
+	friend bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
+	bool areaLabelCheck(DROID *psDroid);
+
+	friend void scriptRemoveObject(BASE_OBJECT *psObj);
+	void groupRemoveObject(BASE_OBJECT *psObj);
+
+private:
+	std::pair<bool, int> seenLabelCheck(wzapi::scripting_instance *instance, BASE_OBJECT *seen, BASE_OBJECT *viewer);
+	void removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, BASE_OBJECT *psObj);
+	bool groupAddObject(BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
+	void updateGlobalModels();
+};
 
 #define QStringToWzString(_qstring) \
 WzString::fromUtf8((_qstring).toUtf8().constData())
-
-// temporary
-#include "3rdparty/json/json_fwd.hpp"
-void setGlobalVariables(QScriptEngine *engine, const nlohmann::json& variables);
-
-class QVariant;
-void to_json(nlohmann::json& j, const QVariant& value); // forward-declare
 
 #endif
