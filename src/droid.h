@@ -82,10 +82,10 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
 
 /* Set the asBits in a DROID structure given it's template. */
-void droidSetBits(DROID_TEMPLATE *pTemplate, DROID *psDroid);
+void droidSetBits(const DROID_TEMPLATE *pTemplate, DROID *psDroid);
 
 /* Calculate the weight of a droid from it's template */
-UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate);
+UDWORD calcDroidWeight(const DROID_TEMPLATE *psTemplate);
 
 /* Calculate the power points required to build/maintain a droid */
 UDWORD calcDroidPower(const DROID *psDroid);
@@ -94,10 +94,10 @@ UDWORD calcDroidPower(const DROID *psDroid);
 UDWORD calcDroidPoints(DROID *psDroid);
 
 /* Calculate the body points of a droid from it's template */
-UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player);
+UDWORD calcTemplateBody(const DROID_TEMPLATE *psTemplate, UBYTE player);
 
 /* Calculate the base speed of a droid from it's template */
-UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player);
+UDWORD calcDroidBaseSpeed(const DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player);
 
 /* Calculate the speed of a droid over a terrain */
 UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UDWORD level);
@@ -162,7 +162,7 @@ bool droidTemplateShutDown();
 DROID_TYPE droidType(DROID *psDroid);
 
 /* Return the type of a droid from it's template */
-DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
+DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
 void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
 

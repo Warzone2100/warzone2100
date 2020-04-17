@@ -278,7 +278,7 @@ bool scripting_engine::removeTimer(uniqueTimerID timerID)
 	return false;
 }
 
-void scriptRemoveObject(BASE_OBJECT *psObj)
+void scriptRemoveObject(const BASE_OBJECT *psObj)
 {
 	// Weed out timers with dead objects
 	scripting_engine::instance().removeTimersIf([psObj](const scripting_engine::timerNode& node)
@@ -1461,7 +1461,7 @@ bool triggerEventSelected()
 //__ is the about to be killed object, the group's id, and the new group size.
 //__
 // Since groups are entities local to one context, we do not iterate over them here.
-bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, wzapi::scripting_instance *instance)
+bool triggerEventGroupLoss(const BASE_OBJECT *psObj, int group, int size, wzapi::scripting_instance *instance)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	return instance->handle_eventGroupLoss(psObj, group, size);
@@ -1775,7 +1775,7 @@ void scripting_engine::showLabel(const std::string &key, bool clear_old, bool ju
 
 // The bool return value is true when an object callback needs to be called.
 // The int return value holds group id when a group callback needs to be called, 0 otherwise.
-std::pair<bool, int> scripting_engine::seenLabelCheck(wzapi::scripting_instance *instance, BASE_OBJECT *seen, BASE_OBJECT *viewer)
+std::pair<bool, int> scripting_engine::seenLabelCheck(wzapi::scripting_instance *instance, const BASE_OBJECT *seen, const BASE_OBJECT *viewer)
 {
 	GROUPMAP *psMap = getGroupMap(instance);
 	ASSERT_OR_RETURN(std::make_pair(false, 0), psMap != nullptr, "Non-existent groupmap for engine");
@@ -1846,7 +1846,7 @@ scripting_engine::GROUPMAP* scripting_engine::getGroupMap(wzapi::scripting_insta
 	return psMap;
 }
 
-void scripting_engine::removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, BASE_OBJECT *psObj)
+void scripting_engine::removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, const BASE_OBJECT *psObj)
 {
 	auto result = psMap->removeObjectFromGroup(psObj);
 	if (result.has_value())
@@ -1858,7 +1858,7 @@ void scripting_engine::removeFromGroup(wzapi::scripting_instance *instance, GROU
 	}
 }
 
-void scripting_engine::groupRemoveObject(BASE_OBJECT *psObj)
+void scripting_engine::groupRemoveObject(const BASE_OBJECT *psObj)
 {
 	for (ENGINEMAP::iterator i = groups.begin(); i != groups.end(); ++i)
 	{
@@ -1866,7 +1866,7 @@ void scripting_engine::groupRemoveObject(BASE_OBJECT *psObj)
 	}
 }
 
-bool scripting_engine::groupAddObject(BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance)
+bool scripting_engine::groupAddObject(const BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance)
 {
 	ASSERT_OR_RETURN(false, psObj && instance, "Bad parameter");
 	GROUPMAP *psMap = getGroupMap(instance);
@@ -2314,7 +2314,7 @@ int scripting_engine::removeLabel(WZAPI_PARAMS(std::string label))
 //-- label found will be returned. If the object has no labels, undefined is returned.
 //-- This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
 //--
-optional<std::string> scripting_engine::getLabel(WZAPI_PARAMS(BASE_OBJECT *psObj))
+optional<std::string> scripting_engine::getLabel(WZAPI_PARAMS(const BASE_OBJECT *psObj))
 {
 	ASSERT_OR_RETURN(nullopt, psObj, "No valid object provided");
 	wzapi::game_object_identifier tmp;
@@ -2569,7 +2569,7 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 //--
 //-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
 //--
-wzapi::no_return_value scripting_engine::groupAddDroid(WZAPI_PARAMS(int groupId, DROID *psDroid))
+wzapi::no_return_value scripting_engine::groupAddDroid(WZAPI_PARAMS(int groupId, const DROID *psDroid))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
 	scripting_engine::instance().groupAddObject(psDroid, groupId, context.currentInstance());
@@ -2580,7 +2580,7 @@ wzapi::no_return_value scripting_engine::groupAddDroid(WZAPI_PARAMS(int groupId,
 //--
 //-- Add given game object to the given group.
 //--
-wzapi::no_return_value scripting_engine::groupAdd(WZAPI_PARAMS(int groupId, BASE_OBJECT *psObj))
+wzapi::no_return_value scripting_engine::groupAdd(WZAPI_PARAMS(int groupId, const BASE_OBJECT *psObj))
 {
 	SCRIPT_ASSERT({}, context, psObj, "No valid object provided");
 	scripting_engine::instance().groupAddObject(psObj, groupId, context.currentInstance());

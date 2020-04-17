@@ -1233,7 +1233,7 @@ DROID_TYPE droidType(DROID *psDroid)
 }
 
 /* Return the type of a droid from it's template */
-DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
+DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate)
 {
 	DROID_TYPE type = DROID_DEFAULT;
 
@@ -1361,7 +1361,7 @@ static unsigned calcUpgradeSum(const DROID *psDroid, int player, F func, G propu
 }
 
 /* Calculate the weight of a droid from it's template */
-UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
+UDWORD calcDroidWeight(const DROID_TEMPLATE *psTemplate)
 {
 	return calcSum(psTemplate, [](COMPONENT_STATS const &stat) {
 		return stat.weight;
@@ -1392,7 +1392,7 @@ static uint32_t calcBody(T *obj, int player)
 }
 
 // Calculate the body points of a droid from its template
-UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
+UDWORD calcTemplateBody(const DROID_TEMPLATE *psTemplate, UBYTE player)
 {
 	if (psTemplate == nullptr)
 	{
@@ -1411,7 +1411,7 @@ static UDWORD calcDroidBaseBody(DROID *psDroid)
 
 
 /* Calculate the base speed of a droid from it's template */
-UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
+UDWORD calcDroidBaseSpeed(const DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
 	unsigned speed = asPropulsionTypes[asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType].powerRatioMult *
 		         bodyPower(&asBodyStats[psTemplate->asParts[COMP_BODY]], player) / MAX(1, weight);
@@ -1632,7 +1632,7 @@ void initDroidMovement(DROID *psDroid)
 }
 
 // Set the asBits in a DROID structure given it's template.
-void droidSetBits(DROID_TEMPLATE *pTemplate, DROID *psDroid)
+void droidSetBits(const DROID_TEMPLATE *pTemplate, DROID *psDroid)
 {
 	psDroid->droidType = droidTemplateType(pTemplate);
 	psDroid->numWeaps = pTemplate->numWeaps;

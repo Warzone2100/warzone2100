@@ -877,7 +877,7 @@ namespace wzapi
 	int32_t playerPower(WZAPI_PARAMS(int player));
 	int queuedPower(WZAPI_PARAMS(int player));
 	bool isStructureAvailable(WZAPI_PARAMS(std::string structName, optional<int> _player));
-	optional<scr_position> pickStructLocation(WZAPI_PARAMS(DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles));
+	optional<scr_position> pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles));
 	bool droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y));
 	bool propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, int y1, int x2, int y2));
 	int terrainType(WZAPI_PARAMS(int x, int y));
@@ -894,7 +894,7 @@ namespace wzapi
 	bool chat(WZAPI_PARAMS(int target, std::string message));
 	bool addBeacon(WZAPI_PARAMS(int x, int y, int target, optional<std::string> _message));
 	bool removeBeacon(WZAPI_PARAMS(int target));
-	std::unique_ptr<const DROID> getDroidProduction(WZAPI_PARAMS(STRUCTURE *_psFactory));
+	std::unique_ptr<const DROID> getDroidProduction(WZAPI_PARAMS(const STRUCTURE *_psFactory));
 	int getDroidLimit(WZAPI_PARAMS(optional<int> _player, optional<int> _unitType));
 	int getExperienceModifier(WZAPI_PARAMS(int player));
 	bool setDroidLimit(WZAPI_PARAMS(int player, int value, optional<int> _droidType));
