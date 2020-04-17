@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.5)
 ########################################################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "5c415ff8a0aad831ee90ee4327f26992d5fe3fb3")
+set(VCPKG_COMMIT_SHA "556325a1f7b6049d91565257c00db2f0bf1eadc5")
 
 # WZ macOS dependencies (for vcpkg install)
 set(VCPKG_INSTALL_DEPENDENCIES physfs harfbuzz libogg libtheora libvorbis libpng sdl2 glew freetype gettext zlib openal-soft)
@@ -82,6 +82,11 @@ else()
 	if(NOT _exstatus EQUAL 0)
 		message(FATAL_ERROR "Failed to fetch vcpkg updates")
 	endif()
+endif()
+
+if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_LESS "18.0"))
+	# Workaround an issue with vcpkg's updated ninja on older versions of macOS
+	set(VCPKG_COMMIT_SHA "5c415ff8a0aad831ee90ee4327f26992d5fe3fb3")
 endif()
 
 execute_process(
