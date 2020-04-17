@@ -110,7 +110,7 @@ bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
 
 /// Tell script system that an object has been removed.
-void scriptRemoveObject(BASE_OBJECT *psObj);
+void scriptRemoveObject(const BASE_OBJECT *psObj);
 
 /// Open debug GUI
 void jsShowDebug();
@@ -143,7 +143,7 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y);
 bool triggerEventBeaconRemoved(int from, int to);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
 bool triggerEventCheatMode(bool entered);
-bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, wzapi::scripting_instance *instance);
+bool triggerEventGroupLoss(const BASE_OBJECT *psObj, int group, int size, wzapi::scripting_instance *instance);
 bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
 bool triggerEventArea(const std::string& label, DROID *psDroid);
 bool triggerEventSelected();
@@ -417,7 +417,7 @@ public:
 	static wzapi::no_return_value addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered));
 
 	static int removeLabel(WZAPI_PARAMS(std::string label));
-	static optional<std::string> getLabel(WZAPI_PARAMS(BASE_OBJECT *psObj));
+	static optional<std::string> getLabel(WZAPI_PARAMS(const BASE_OBJECT *psObj));
 	static optional<std::string> getLabelJS(WZAPI_PARAMS(wzapi::game_object_identifier obj_id));
 
 	generic_script_object getObjectFromLabel(WZAPI_PARAMS(const std::string& label));
@@ -458,8 +458,8 @@ public:
 	static std::vector<const BASE_OBJECT *> enumGroup(WZAPI_PARAMS(int groupId));
 	static int newGroup(WZAPI_NO_PARAMS);
 	static wzapi::no_return_value groupAddArea(WZAPI_PARAMS(int groupId, int x1, int y1, int x2, int y2));
-	static wzapi::no_return_value groupAddDroid(WZAPI_PARAMS(int groupId, DROID *psDroid));
-	static wzapi::no_return_value groupAdd(WZAPI_PARAMS(int groupId, BASE_OBJECT *psObj));
+	static wzapi::no_return_value groupAddDroid(WZAPI_PARAMS(int groupId, const DROID *psDroid));
+	static wzapi::no_return_value groupAdd(WZAPI_PARAMS(int groupId, const BASE_OBJECT *psObj));
 	static int groupSize(WZAPI_PARAMS(int groupId));
 private:
 	wzapi::scripting_instance* findInstanceForPlayer(int match, const WzString& scriptName);
@@ -478,13 +478,13 @@ protected:
 	friend bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy);
 	bool areaLabelCheck(DROID *psDroid);
 
-	friend void scriptRemoveObject(BASE_OBJECT *psObj);
-	void groupRemoveObject(BASE_OBJECT *psObj);
+	friend void scriptRemoveObject(const BASE_OBJECT *psObj);
+	void groupRemoveObject(const BASE_OBJECT *psObj);
 
 private:
-	std::pair<bool, int> seenLabelCheck(wzapi::scripting_instance *instance, BASE_OBJECT *seen, BASE_OBJECT *viewer);
-	void removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, BASE_OBJECT *psObj);
-	bool groupAddObject(BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
+	std::pair<bool, int> seenLabelCheck(wzapi::scripting_instance *instance, const BASE_OBJECT *seen, const BASE_OBJECT *viewer);
+	void removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, const BASE_OBJECT *psObj);
+	bool groupAddObject(const BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
 	void updateGlobalModels();
 };
 

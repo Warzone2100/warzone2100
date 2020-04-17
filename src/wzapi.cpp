@@ -1379,7 +1379,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 //-- Pick a location for constructing a certain type of building near some given position.
 //-- Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
 //--
-optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles))
+optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
 	const int player = psDroid->player;
@@ -1929,16 +1929,16 @@ bool wzapi::removeBeacon(WZAPI_PARAMS(int target))
 //-- Return droid in production in given factory. Note that this droid is fully
 //-- virtual, and should never be passed anywhere. (3.2+ only)
 //--
-std::unique_ptr<const DROID> wzapi::getDroidProduction(WZAPI_PARAMS(STRUCTURE *_psFactory))
+std::unique_ptr<const DROID> wzapi::getDroidProduction(WZAPI_PARAMS(const STRUCTURE *_psFactory))
 {
-	STRUCTURE *psStruct = _psFactory;
+	const STRUCTURE *psStruct = _psFactory;
 	SCRIPT_ASSERT(nullptr, context, psStruct, "No valid structure provided");
 	int player = psStruct->player;
 	SCRIPT_ASSERT(nullptr, context, psStruct->pStructureType->type == REF_FACTORY
 				  || psStruct->pStructureType->type == REF_CYBORG_FACTORY
 				  || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Structure not a factory");
-	FACTORY *psFactory = &psStruct->pFunctionality->factory;
-	DROID_TEMPLATE *psTemp = psFactory->psSubject;
+	const FACTORY *psFactory = &psStruct->pFunctionality->factory;
+	const DROID_TEMPLATE *psTemp = psFactory->psSubject;
 	if (!psTemp)
 	{
 		return nullptr;
