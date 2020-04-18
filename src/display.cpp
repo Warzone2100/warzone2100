@@ -143,6 +143,10 @@ static UDWORD CurrentItemUnderMouse = 0;
 bool	rotActive = false;
 bool	gameStats = false;
 
+static const UDWORD FADE_START_OF_GAME_TIME = 1000;
+static UDWORD fadeEndTime = 0;
+static void fadeStartOfGame();
+
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
 static bool bSensorAssigned;
 //used to determine if the player has selected a Las Sat structure
@@ -1212,6 +1216,35 @@ void displayWorld()
 	}
 
 	draw3DScene();
+
+	if (fadeEndTime)
+	{
+		if (graphicsTime < fadeEndTime)
+		{
+			fadeStartOfGame();
+		}
+		else
+		{
+			// ensure the fade only happens once (per call to transitionInit() & graphicsTime init) - i.e. at game start - regardless of graphicsTime wrap-around
+			fadeEndTime = 0;
+		}
+	}
+}
+
+bool transitionInit()
+{
+	fadeEndTime = FADE_START_OF_GAME_TIME;
+	return true;
+}
+
+static void fadeStartOfGame()
+{
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
+	PIELIGHT color = WZCOL_BLACK;
+	float delta = (static_cast<float>(graphicsTime) / static_cast<float>(fadeEndTime) - 1.f);
+	color.byte.a = static_cast<uint8_t>(std::min<uint32_t>(255, static_cast<uint32_t>(std::ceil(255.f * (1.f - (delta * delta * delta + 1.f)))))); // cubic easing
+	pie_UniTransBoxFill(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), color);
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 static bool mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)

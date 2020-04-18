@@ -31,6 +31,9 @@
 /* Initialise the display system */
 bool dispInitialise();
 
+/* Initialize fade-in transition */
+bool transitionInit();
+
 void ProcessRadarInput();
 
 void processInput();
