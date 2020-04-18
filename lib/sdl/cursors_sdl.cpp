@@ -29,6 +29,7 @@
 #include <SDL.h>
 
 static CURSOR currentCursor = CURSOR_MAX;
+static bool newCursor = false;
 static SDL_Cursor *aCursors[CURSOR_MAX];
 static bool monoCursor;
 
@@ -1355,24 +1356,40 @@ SDL_Cursor *init_system_cursor32(CURSOR cur)
 }
 
 /**
-	wzSetCursor()-- Set the current cursor
+	wzSetCursor()-- Set the current cursor. Needs to be combined with wzUpdateCursor() !
  */
 void wzSetCursor(CURSOR cur)
 {
 	ASSERT(cur < CURSOR_MAX, "Specified cursor(%d) is over our limit of (%d)!", (int)cur, (int)CURSOR_MAX);
+	
+	if(currentCursor == cur)
+	{
+		return;
+	}
+
+	currentCursor = cur;
+	newCursor = true;
+}
+
+void wzUpdateCursor()
+{
 	// If mouse cursor options change, change cursors (used to only work on mouse options screen for some reason)
 	if (!(war_GetColouredCursor() ^ monoCursor))
 	{
 		sdlFreeCursors();
 		war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();
-		SDL_SetCursor(aCursors[cur]);
+		SDL_SetCursor(aCursors[currentCursor]);
+		return;
 	}
-	// If we are already using this cursor then  return
-	if (cur != currentCursor)
+
+	if(!newCursor)
 	{
-		SDL_SetCursor(aCursors[cur]);
-		currentCursor = cur;
+		return;
 	}
+
+	// If we are already using this cursor then return
+	SDL_SetCursor(aCursors[currentCursor]);
+	newCursor = false;
 }
 
 /**

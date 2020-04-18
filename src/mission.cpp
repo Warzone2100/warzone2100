@@ -2408,6 +2408,7 @@ void intRemoveMissionResultNoAnim()
 void intRunMissionResult()
 {
 	wzSetCursor(CURSOR_DEFAULT);
+	wzUpdateCursor();
 
 	if (bLoadSaveUp)
 	{

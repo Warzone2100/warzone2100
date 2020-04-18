@@ -1643,6 +1643,7 @@ bool runMouseOptionsMenu()
 		war_SetColouredCursor(!war_GetColouredCursor());
 		widgSetString(psWScreen, FRONTEND_CURSORMODE_R, mouseOptionsCursorModeString());
 		wzSetCursor(CURSOR_DEFAULT);
+		wzUpdateCursor();
 		break;
 
 	case FRONTEND_SCROLLEVENT:
