@@ -834,7 +834,7 @@ bool frontendInitialise(const char *ResourceFile)
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.
 	wzSetCursor(CURSOR_DEFAULT);
-	wzUpdateCursor();
+	wzApplyCursor();
 
 	SetFormAudioIDs(-1, ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
 
@@ -1089,7 +1089,7 @@ bool stageTwoInitialise()
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.
 	wzSetCursor(CURSOR_DEFAULT);
-	wzUpdateCursor();
+	wzApplyCursor();
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN, ID_SOUND_WINDOWCLOSE);
 

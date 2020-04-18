@@ -1356,7 +1356,7 @@ SDL_Cursor *init_system_cursor32(CURSOR cur)
 }
 
 /**
-	wzSetCursor()-- Set the current cursor. Needs to be combined with wzUpdateCursor() !
+	wzSetCursor()-- Set the current cursor. Needs to be combined with wzApplyCursor() !
  */
 void wzSetCursor(CURSOR cur)
 {
@@ -1371,7 +1371,7 @@ void wzSetCursor(CURSOR cur)
 	newCursor = true;
 }
 
-void wzUpdateCursor()
+void wzApplyCursor()
 {
 	// If mouse cursor options change, change cursors (used to only work on mouse options screen for some reason)
 	if (!(war_GetColouredCursor() ^ monoCursor))

@@ -167,7 +167,7 @@ TITLECODE titleLoop()
 		}
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		wzSetCursor(CURSOR_DEFAULT);
-		wzUpdateCursor();
+		wzApplyCursor();
 	}
 
 	if (wzTitleUICurrent)
