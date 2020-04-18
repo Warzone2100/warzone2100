@@ -177,6 +177,10 @@ void setZoom(float speed, float target)
 		zoom_time = graphicsTime;
 		is_zooming = true;
 	}
+	else if((target < zoom_current && zoom_target > zoom_current) || (target > zoom_current && zoom_target < zoom_current)) // switched directions "mid-air"
+	{
+		zoom_reference = zoom_target; // we should probably calculate this but it seems this works good enough.
+	}
 
 	zoom_target = target;
 }
@@ -201,8 +205,6 @@ void zoom()
 	deceleration = deceleration * (2 - deceleration); // quadratic ease out
 
 	float speed = std::fmin(acceleration, deceleration);
-
-	printf("d: %i, c: %i, t: %i, a: %0.3f, d: %0.3f, s: %0.3f\n", (int)delta, (int)current, (int)zoom_target, acceleration, deceleration, speed);
 
 	zoom_current += speed * graphicsTimeAdjustedIncrement(zoom_velocity_units_per_sec) * direction;
 
