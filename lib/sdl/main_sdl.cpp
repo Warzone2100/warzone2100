@@ -202,6 +202,11 @@ bool GetTextEvents = false;
 /***     Misc support   ***/
 /**************************/
 
+WzString wzGetPlatform()
+{
+	return WzString::fromUtf8(SDL_GetPlatform());
+}
+
 // See if we have TEXT in the clipboard
 bool has_scrap(void)
 {
