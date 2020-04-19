@@ -19,6 +19,9 @@ endif()
 # Disallow in-source builds
 include(DisallowInSourceBuilds)
 
+# Disable CTest targets
+set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
+
 if(WZ_ENABLE_WARNINGS)
 	set(WZ_Wno_ "-Wno-error=")
 else()

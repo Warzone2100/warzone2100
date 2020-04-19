@@ -16,3 +16,6 @@
 [submodule "3rdparty/launchinfo"]
 	path = 3rdparty/launchinfo
 	url = https://github.com/past-due/launchinfo.git
+[submodule "3rdparty/re2"]
+	path = 3rdparty/re2
+	url = https://github.com/google/re2.git

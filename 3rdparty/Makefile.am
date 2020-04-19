@@ -98,6 +98,16 @@ miniupnp_libminiupnpc_a_SOURCES = \
 nodist_miniupnp_libminiupnpc_a_SOURCES = $(builddir)/miniupnp/miniupnpc/miniupnpcstrings.h
 
 
+# re2
+
+all-local:
+	cd re2 && $(MAKE) $(AM_MAKEFLAGS) all
+check-local:
+	cd re2 && $(MAKE) $(AM_MAKEFLAGS) test
+clean-local:
+	cd re2 && $(MAKE) $(AM_MAKEFLAGS) clean
+
 EXTRA_DIST = \
 	utf8proc \
-	miniupnp
+	miniupnp \
+	re2
