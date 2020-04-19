@@ -12,6 +12,15 @@ set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
 add_subdirectory(launchinfo)
 set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
 
+SET(RE2_BUILD_TESTING OFF CACHE BOOL "enable testing for RE2" FORCE)
+add_subdirectory(re2 EXCLUDE_FROM_ALL)
+target_include_directories(re2 PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/re2>
+)
+set_property(TARGET re2 PROPERTY FOLDER "3rdparty")
+set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS NO)	# -Wmissing-field-initializers
+set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-field-initializers")
+
 # SHA2-library
 
 set(SHA2_HEADERS

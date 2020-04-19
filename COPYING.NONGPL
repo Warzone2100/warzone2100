@@ -19,6 +19,8 @@ data/base/texpages/page-25-sky-urban.png
 	- BSD, Copyright (c) 2005-2017, Thomas BERNARD (http://miniupnp.free.fr)
 3rdparty/optional-lite/*
 	- Boost Software License 1.0, Copyright (c) 2014-2018 Martin Moene (https://github.com/martinmoene/optional-lite)
+3rdparty/re2/*
+	- BSD-style license, Copyright (c) 2009 The RE2 Authors (https://github.com/google/re2)
 3rdparty/utf8proc/*
 	- MIT, Copyright (c) 2014-2015 by Steven G. Johnson, Jiahao Chen, Tony Kelman, Jonas Fonseca, and other contributors listed in the git history, Copyright (c) 2009, 2013 Public Software Group e. V., Berlin, Germany
 	- Unicode data license, Copyright (c) 1991-2007 Unicode, Inc. All rights reserved. Distributed under the Terms of Use in http://www.unicode.org/copyright.html

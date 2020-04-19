@@ -128,6 +128,7 @@ endif()
 
 include(IncludeFindCurl)
 target_link_libraries(warzone2100 CURL::libcurl)
+target_link_libraries(warzone2100 re2::re2)
 
 set(_curl_gnutls_thread_safe_fix FALSE)
 if (DEFINED CURL_GNUTLS_REQUIRES_CALLBACKS)
