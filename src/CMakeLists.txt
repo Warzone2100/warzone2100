@@ -85,7 +85,7 @@ if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
 
-file(GLOB HEADERS "*.h")
+file(GLOB HEADERS "*.h" "*/*.h")
 file(GLOB SRC "*.cpp" "*/*.cpp")
 qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
 

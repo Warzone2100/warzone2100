@@ -42,6 +42,7 @@ bin_PROGRAMS = warzone2100
 endif
 
 noinst_HEADERS = \
+	3rdparty/propertymatcher.h \
 	action.h \
 	actiondef.h \
 	advvis.h \
@@ -158,12 +159,14 @@ noinst_HEADERS = \
 	wavecast.h \
 	weapondef.h \
 	wrappers.h \
+	wzpropertyproviders.h \
 	$(MOCHEADER)
 
 nodist_COMMONSOURCES = \
 	qtscriptdebug_moc.cpp
 
 COMMONSOURCES = \
+	3rdparty/propertymatcher.cpp \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
@@ -268,7 +271,8 @@ COMMONSOURCES = \
 	warcam.cpp \
 	warzoneconfig.cpp \
 	wavecast.cpp \
-	wrappers.cpp
+	wrappers.cpp \
+	wzpropertyproviders.cpp
 
 
 
