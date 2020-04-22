@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-16 19:06\n"
+"PO-Revision-Date: 2020-04-22 07:08\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -1296,7 +1296,7 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
-msgstr ""
+msgstr "Lăncier Săritor"
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
