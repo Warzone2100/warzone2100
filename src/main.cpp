@@ -86,6 +86,7 @@
 #include "urlrequest.h"
 #include <time.h>
 #include <LaunchInfo.h>
+#include <sodium.h>
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -1267,6 +1268,13 @@ int realmain(int argc, char *argv[])
 
 	LaunchInfo::initialize(argc, argv);
 	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(), version_getVersionedAppDirFolderName(), isPortableMode());
+
+	/*** Initialize sodium library ***/
+	if (sodium_init() < 0) {
+        /* libsodium couldn't be initialized - it is not safe to use */
+		fprintf(stderr, "Failed to initialize libsodium\n");
+		return EXIT_FAILURE;
+    }
 
 	/*** Initialize URL Request library ***/
 	urlRequestInit();

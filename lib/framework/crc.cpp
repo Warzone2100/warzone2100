@@ -79,23 +79,23 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 // MARK: - SHA256
 //================================================================================
 
-#include <sha/sha2.h>
+#include <sodium.h>
 Sha256 sha256Sum(void const *data, size_t dataLen)
 {
-	static_assert(Sha256::Bytes == SHA256_DIGEST_SIZE, "Size mismatch.");
+	static_assert(Sha256::Bytes == crypto_hash_sha256_BYTES, "Size mismatch.");
 
 	Sha256 ret;
-	if (dataLen > std::numeric_limits<unsigned long>::max())
+	if (dataLen > std::numeric_limits<unsigned long long>::max())
 	{
-		debug(LOG_FATAL, "Attempting to calculate SHA256 on data length exceeding std::numeric_limits<unsigned long>::max()=(%lu)", std::numeric_limits<unsigned long>::max());
+		debug(LOG_FATAL, "Attempting to calculate SHA256 on data length exceeding std::numeric_limits<unsigned long long>::max()=(%llu)", std::numeric_limits<unsigned long long>::max());
 		ret.setZero();
 		return ret;
 	}
 
-	sha256_ctx ctx[1];
-	sha256_begin(ctx);
-	sha256_hash((const unsigned char *)data, dataLen, ctx);
-	sha256_end(ret.bytes, ctx);
+	crypto_hash_sha256_state state;
+	crypto_hash_sha256_init(&state);
+	crypto_hash_sha256_update(&state, (const unsigned char *)data, dataLen);
+	crypto_hash_sha256_final(&state, ret.bytes);
 	return ret;
 }
 

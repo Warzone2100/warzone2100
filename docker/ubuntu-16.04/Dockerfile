@@ -8,8 +8,10 @@ RUN apt-get -u update \
 
 # Download, build, & install SDL 2.0.5 from source
 # For why --enable-mir-shared=no is needed, see: https://bugzilla.libsdl.org/show_bug.cgi?id=3539
+ENV SDL2_SHA256 442038cf55965969f2ff06d976031813de643af9c9edc9e331bd761c242e8785
 ADD https://www.libsdl.org/release/SDL2-2.0.5.tar.gz /tmp
-RUN tar -C /tmp -xzf /tmp/SDL2-2.0.5.tar.gz \
+RUN echo "$SDL2_SHA256 /tmp/SDL2-2.0.5.tar.gz" | sha256sum -c \
+ && tar -C /tmp -xzf /tmp/SDL2-2.0.5.tar.gz \
  && rm /tmp/SDL2-2.0.5.tar.gz \
  && cd /tmp/SDL2-2.0.5 \
  && mkdir build \
@@ -19,6 +21,21 @@ RUN tar -C /tmp -xzf /tmp/SDL2-2.0.5.tar.gz \
  && sudo make install \
  && cd /tmp \
  && rm -rf /tmp/SDL2-2.0.5
+
+# Download, build, & install libsodium from source
+ENV SODIUM_SHA256 6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1
+ADD https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz /tmp
+RUN echo "$SODIUM_SHA256 /tmp/libsodium-1.0.18.tar.gz" | sha256sum -c \
+ && tar -C /tmp -xzf /tmp/libsodium-1.0.18.tar.gz \
+ && rm /tmp/libsodium-1.0.18.tar.gz \
+ && cd /tmp/libsodium-1.0.18 \
+ && mkdir build \
+ && cd build \
+ && ../configure \
+ && make && make check \
+ && sudo make install \
+ && cd /tmp \
+ && rm -rf /tmp/libsodium-1.0.18
 
 WORKDIR /code
 CMD ["sh"]

@@ -15,7 +15,7 @@ freebsd_build_task:
   install_script:
     - pkg update -f
     - pkg clean -a
-    - pkg install -y git cmake ninja p7zip gettext qt5-core qt5-qmake qt5-buildtools qt5-widgets qt5-script png sdl2 openal-soft physfs libvorbis libtheora glew freetype2 harfbuzz curl rubygem-asciidoctor
+    - pkg install -y git cmake ninja p7zip gettext qt5-core qt5-qmake qt5-buildtools qt5-widgets qt5-script png sdl2 openal-soft physfs libvorbis libtheora glew freetype2 harfbuzz curl libsodium rubygem-asciidoctor
 
   init_git_submodules_script: git submodule update --init --recursive
 
