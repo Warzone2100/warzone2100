@@ -10,7 +10,7 @@ on:
 jobs:
   ubuntu-16-04-gcc:
     name: Ubuntu 16.04 (CMake) [GCC]
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
 
   ubuntu-18-04-gcc:
     name: Ubuntu 18.04 (CMake) [GCC]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v2
@@ -58,7 +58,7 @@ jobs:
 
   package-source:
     name: Package Source (Ubuntu 18.04, CMake) [GCC]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v2
@@ -102,7 +102,7 @@ jobs:
 
   ubuntu-18-04-clang:
     name: Ubuntu 18.04 (CMake) [Clang]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - uses: actions/checkout@v2
