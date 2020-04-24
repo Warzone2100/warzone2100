@@ -49,7 +49,7 @@ $vcpkg_succeeded = -1;
 $vcpkg_attempts = 0;
 While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
 {
-	.\vcpkg install physfs harfbuzz libiconv libogg libtheora libvorbis libpng openal-soft sdl2 glew freetype gettext zlib curl[winssl];
+	.\vcpkg install physfs harfbuzz libiconv libogg libtheora libvorbis libpng openal-soft sdl2 glew freetype gettext zlib curl[winssl] libsodium;
 	$vcpkg_succeeded = $LastExitCode;
 	$vcpkg_attempts++;
 }

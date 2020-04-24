@@ -82,6 +82,9 @@ AM_GNU_GETTEXT_VERSION([0.17])
 # Check for libcurl
 LIBCURL_CHECK_CONFIG([yes], [7.10.1], , [AC_MSG_ERROR([Missing required libcurl >= 7.10.1])])
 
+# Check for libsodium
+WZ_FIND_SODIUM
+
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
