@@ -121,7 +121,7 @@ TITLECODE WzOldTitleUI::run()
 	{
 		screen_disableMapPreview();
 	}
-	
+
 	switch (mode) // run relevant title screen code.
 	{
 	// MULTIPLAYER screens
