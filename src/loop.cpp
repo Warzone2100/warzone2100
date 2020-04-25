@@ -160,7 +160,6 @@ static GAMECODE renderLoop()
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 				wzSetCursor(CURSOR_DEFAULT);
-				wzApplyCursor();
 			}
 
 #ifdef DEBUG
@@ -204,7 +203,6 @@ static GAMECODE renderLoop()
 	{
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		wzSetCursor(CURSOR_DEFAULT);
-		wzApplyCursor();
 
 		if (dragBox3D.status != DRAG_DRAGGING)
 		{
@@ -336,7 +334,6 @@ static GAMECODE renderLoop()
 	}
 
 	wzSetCursor(cursor);
-	wzApplyCursor();
 
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount);
 

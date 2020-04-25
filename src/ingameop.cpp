@@ -279,7 +279,6 @@ static bool _intAddInGameOptions()
 	InGameOpUp	= true;					// inform interface.
 
 	wzSetCursor(CURSOR_DEFAULT);
-	wzApplyCursor();
 
 	return true;
 }
@@ -766,7 +765,6 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 		war_SetColouredCursor(!war_GetColouredCursor());
 		widgSetString(psWScreen, INTINGAMEOP_CURSORMODE_R, mouseOptionsCursorModeString());
 		wzSetCursor(CURSOR_DEFAULT);
-		wzApplyCursor();
 		break;
 
 	case INTINGAMEOP_SCROLLEVENT:

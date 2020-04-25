@@ -1054,6 +1054,7 @@ void mainLoop()
 		realTimeUpdate(); // Update realTime.
 	}
 
+	wzApplyCursor();
 	runNotifications();
 }
 

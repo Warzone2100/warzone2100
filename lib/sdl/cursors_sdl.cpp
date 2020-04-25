@@ -1356,7 +1356,7 @@ SDL_Cursor *init_system_cursor32(CURSOR cur)
 }
 
 /**
-	wzSetCursor()-- Set the current cursor. Needs to be combined with wzApplyCursor() !
+	wzSetCursor()-- Set the current cursor. Cursor is actually applied in wzApplyCursor() in mainLoop()
  */
 void wzSetCursor(CURSOR cur)
 {

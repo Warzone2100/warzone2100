@@ -2798,7 +2798,6 @@ void kf_QuickLoad()
 		setWidgetsStatus(true);
 		intResetScreen(false);
 		wzSetCursor(CURSOR_DEFAULT);
-		wzApplyCursor();
 		int campaign = getCampaign(filename);
 		setCampaignNumber(campaign);
 
