@@ -938,26 +938,6 @@ CURSOR processMouseClickInput()
 		{
 			cursor = CURSOR_SELECT; // Special casing for LasSat or own unit
 		}
-		else
-		{
-			// when one of the arrow key gets pressed, set cursor appropriately
-			if (keyDown(KEY_UPARROW))
-			{
-				cursor = CURSOR_UARROW;
-			}
-			else if (keyDown(KEY_DOWNARROW))
-			{
-				cursor = CURSOR_DARROW;
-			}
-			else if (keyDown(KEY_LEFTARROW))
-			{
-				cursor = CURSOR_LARROW;
-			}
-			else if (keyDown(KEY_RIGHTARROW))
-			{
-				cursor = CURSOR_RARROW;
-			}
-		}
 	}
 
 	CurrentItemUnderMouse = item;
@@ -1026,27 +1006,25 @@ CURSOR scroll()
 
 	if (mouseScroll && wzMouseInWindow())
 	{
-		// Scroll left or right
-		scrollDirLeftRight += (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X)) - (mouseX() < BOUNDARY_X);
-
-		// Scroll down or up
-		scrollDirUpDown += (mouseY() < BOUNDARY_Y) - (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y));
-		// when mouse cursor goes to an edge, set cursor appropriately
-		if (scrollDirUpDown > 0)
+		if (mouseY() < BOUNDARY_Y)
 		{
+			scrollDirUpDown++;
 			cursor = CURSOR_UARROW;
 		}
-		else if (scrollDirUpDown < 0)
+		else if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
+			scrollDirUpDown--;
 			cursor = CURSOR_DARROW;
 		}
-		else if (scrollDirLeftRight < 0)
+		else if (mouseX() < BOUNDARY_X)
 		{
 			cursor = CURSOR_LARROW;
+			scrollDirLeftRight--;
 		}
-		else if (scrollDirLeftRight > 0)
+		else if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			cursor = CURSOR_RARROW;
+			scrollDirLeftRight++;
 		}
 	}
 	CLIP(scrollDirLeftRight, -1, 1);
