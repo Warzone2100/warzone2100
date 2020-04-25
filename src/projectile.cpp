@@ -187,7 +187,7 @@ proj_InitSystem()
 	{
 		experienceGain[x] = 100;
 	}
-	ProjectileTrackerIDIncrement = 0;
+	projectileTrackerIDIncrement = 0;
 	return true;
 }
 
