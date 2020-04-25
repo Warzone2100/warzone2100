@@ -1382,7 +1382,7 @@ void wzApplyCursor()
 		return;
 	}
 
-	if(!newCursor)
+	if (!newCursor)
 	{
 		return;
 	}
