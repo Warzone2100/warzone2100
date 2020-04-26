@@ -151,6 +151,7 @@ noinst_HEADERS = \
 	texture.h \
 	titleui/titleui.h \
 	transporter.h \
+	urlhelpers.h \
 	urlrequest.h \
 	visibility.h \
 	version.h \
@@ -265,6 +266,7 @@ COMMONSOURCES = \
 	titleui/protocol.cpp \
 	titleui/titleui.cpp \
 	transporter.cpp \
+	urlhelpers.cpp \
 	urlrequest.cpp \
 	version.cpp \
 	visibility.cpp \
