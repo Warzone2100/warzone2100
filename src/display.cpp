@@ -1011,17 +1011,17 @@ CURSOR scroll()
 			scrollDirUpDown++;
 			cursor = CURSOR_UARROW;
 		}
-		else if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
+		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			scrollDirUpDown--;
 			cursor = CURSOR_DARROW;
 		}
-		else if (mouseX() < BOUNDARY_X)
+		if (mouseX() < BOUNDARY_X)
 		{
 			cursor = CURSOR_LARROW;
 			scrollDirLeftRight--;
 		}
-		else if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
+		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			cursor = CURSOR_RARROW;
 			scrollDirLeftRight++;
