@@ -29,7 +29,7 @@
 #include <SDL.h>
 
 static CURSOR currentCursor = CURSOR_MAX;
-static bool newCursor = false;
+static CURSOR lastAppliedCursor = CURSOR_MAX;
 static SDL_Cursor *aCursors[CURSOR_MAX];
 static bool monoCursor;
 
@@ -1362,13 +1362,7 @@ void wzSetCursor(CURSOR cur)
 {
 	ASSERT(cur < CURSOR_MAX, "Specified cursor(%d) is over our limit of (%d)!", (int)cur, (int)CURSOR_MAX);
 	
-	if(currentCursor == cur)
-	{
-		return;
-	}
-
 	currentCursor = cur;
-	newCursor = true;
 }
 
 void wzApplyCursor()
@@ -1379,17 +1373,18 @@ void wzApplyCursor()
 		sdlFreeCursors();
 		war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();
 		SDL_SetCursor(aCursors[currentCursor]);
-		return;
-	}
-
-	if (!newCursor)
-	{
+		lastAppliedCursor = currentCursor;
 		return;
 	}
 
 	// If we are already using this cursor then return
+	if (currentCursor == lastAppliedCursor)
+	{
+		return;
+	}
+
 	SDL_SetCursor(aCursors[currentCursor]);
-	newCursor = false;
+	lastAppliedCursor = currentCursor;
 }
 
 /**
