@@ -38,6 +38,20 @@
 #include <execinfo.h>  // Nonfatal runtime backtraces.
 #endif //WZ_OS_LINUX
 
+#if defined(WZ_OS_UNIX)
+# include <fcntl.h>
+# ifndef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE 1
+# endif
+# ifndef _XOPEN_SOURCE
+#  define _XOPEN_SOURCE
+# endif
+# ifndef _POSIX_SOURCE
+#  define _POSIX_SOURCE
+# endif
+# include <stdio.h>
+#endif
+
 #define MAX_LEN_LOG_LINE 512
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
@@ -228,6 +242,13 @@ bool debug_callback_file_init(void **data)
 		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename.toUtf8().c_str());
 		return false;
 	}
+#if defined(WZ_OS_UNIX)
+	int fd = fileno(logfile);
+	if (fd != -1)
+	{
+		fcntl(fd, F_SETFD, FD_CLOEXEC);
+	}
+#endif
 	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename.toUtf8().c_str());
 	setbuf(logfile, nullptr);
 	fprintf(logfile, "--- Starting log [%s]---\n", WZDebugfilename.toUtf8().c_str());
