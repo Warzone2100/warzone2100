@@ -91,10 +91,6 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 #include "cursorselection"
 };
 
-// Control zoom. Add an amount to zoom this much each second.
-static float zoom_speed = 0.0f;
-static float zoom_target = 0.0f;
-
 int scrollDirLeftRight = 0;
 int scrollDirUpDown = 0;
 
@@ -154,38 +150,84 @@ static bool bLasSatStruct;
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 
-float getZoom()
-{
-	return zoom_target;
-}
+static const float zoom_velocity_units_per_sec = 5000;
+static const float zoom_full_acceleration_time_millis = 200;
+static const float zoom_full_deceleration_time_millis = 100;
+static bool is_zooming = false;
+static float zoom_reference = 0;
+static float zoom_current = 0;
+static float zoom_target = 0;
+static UDWORD zoom_time = 0;
 
-float getZoomSpeed()
+void setZoom(float speed, float target)
 {
-	return fabsf(zoom_speed);
-}
+	if(speed == 0) // we can't use speed. but if it's 0, it's immediate.
+	{
+		is_zooming = false;
+		zoom_reference = 0;
+		zoom_current = 0;
+		zoom_target = 0;
+		zoom_time = 0;
+		setViewDistance(target);
+		UpdateFogDistance(target);
+		return;
+	}
 
-void setZoom(float zoomSpeed, float zoomTarget)
-{
-	float zoom_origin = getViewDistance();
-	zoom_speed = zoomSpeed;
-	zoom_target = zoomTarget;
-	zoom_speed *= zoom_target > zoom_origin ? 1 : -1; // get direction
+	if(!is_zooming)
+	{
+		zoom_reference = getViewDistance();
+		zoom_current = getViewDistance();
+		zoom_target = getViewDistance();
+		zoom_time = graphicsTime;
+		is_zooming = true;
+	}
+	else if((target < zoom_current && zoom_target > zoom_current) || (target > zoom_current && zoom_target < zoom_current)) // switched directions "mid-air"
+	{
+		zoom_reference = zoom_target; // we should probably calculate this but it seems this works good enough.
+	}
+
+	zoom_target = target;
 }
 
 void zoom()
 {
-	if (zoom_speed != 0.0f)
+	if(!is_zooming)
 	{
-		float distance = getViewDistance();
-		distance += graphicsTimeAdjustedIncrement(zoom_speed);
-		if ((zoom_speed > 0.0f && distance > zoom_target) || (zoom_speed <= 0.0f && distance < zoom_target))
-		{
-			distance = zoom_target; // reached target
-			zoom_speed = 0.0f;
-		}
-		setViewDistance(distance);
-		UpdateFogDistance(distance);
+		return;
 	}
+
+	int direction = zoom_target > zoom_reference ? 1 : -1;
+	float delta = zoom_target - zoom_reference;
+	float current = zoom_current - zoom_reference;
+
+	float acceleration = std::fmin((graphicsTime - zoom_time) / zoom_full_acceleration_time_millis, 1);
+	acceleration = acceleration * acceleration; // quadratic ease in
+
+	float zoom_full_deceleration_distance = zoom_velocity_units_per_sec / 1000 * zoom_full_deceleration_time_millis;
+
+	float deceleration = std::fmin(fabs(delta - current) / zoom_full_deceleration_distance, 1);
+	deceleration = deceleration * (2 - deceleration); // quadratic ease out
+
+	float speed = std::fmin(acceleration, deceleration);
+
+	zoom_current += speed * graphicsTimeAdjustedIncrement(zoom_velocity_units_per_sec) * direction;
+
+	if((direction == 1 && zoom_current > zoom_target - 1) || (direction == -1 && zoom_current < zoom_target + 1))
+	{
+		setViewDistance(zoom_target);
+		UpdateFogDistance(zoom_target);
+
+		zoom_reference = 0;
+		zoom_current = 0;
+		zoom_target = 0;
+		zoom_time = 0;
+		is_zooming = false;
+
+		return;
+	}
+
+	setViewDistance(zoom_current);
+	UpdateFogDistance(zoom_current);
 }
 
 bool isMouseOverRadar()

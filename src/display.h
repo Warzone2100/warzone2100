@@ -221,8 +221,6 @@ UDWORD getTargetType();
 #define	DEFAULT_ZOOM_SPEED (5000)
 
 void setZoom(float zoomSpeed, float zoomTarget);
-float getZoom();
-float getZoomSpeed();
 void zoom();
 bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
 bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
