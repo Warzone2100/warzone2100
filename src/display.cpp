@@ -1160,7 +1160,7 @@ void displayWorld()
 		float mouseDeltaY = mouseY() - rotY;
 
 		// the subtraction and then addition of rotationY is for the bug where wrapping between eg 350-10 degrees didn't work
-		rotationY = (rotInitial + mouseDeltaX / CAMERA_ROTATION_SPEED - rotationY) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + rotationY;
+		rotationY = (rotInitial - mouseDeltaX / CAMERA_ROTATION_SPEED - rotationY) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + rotationY;
 		player.r.y = DEG(rotationY); // saved in a separate (float) variable in order to keep decimals for smoothness
 		
 		if(bInvertMouse)
