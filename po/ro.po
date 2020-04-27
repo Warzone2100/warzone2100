@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-22 07:08\n"
+"PO-Revision-Date: 2020-04-27 21:05\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -17111,8 +17111,8 @@ msgstr "Oricâți jucători"
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d jucător"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "%d jucători"
+msgstr[2] "%d jucători"
 
 #: src/multimenu.cpp:761
 msgid "Score"
@@ -17490,16 +17490,16 @@ msgstr "Nu se mai pot construi \"%s\", Limita Unităților de Construcție a fos
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Unitate asociată - Puncte de viață %d/%d"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "%s - %u Unități asociată - Puncte de viață %d/%d"
+msgstr[2] "%s - %u Unități asociată - Puncte de viață %d/%d"
 
 #: src/structure.cpp:5447
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Unitate asociată - Pagube %d/%d"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "%s - %u Unități asociată - Puncte de viață %d/%d"
+msgstr[2] "%s - %u Unități asociată - Puncte de viață %d/%d"
 
 #: src/structure.cpp:5452
 #: src/structure.cpp:5462
