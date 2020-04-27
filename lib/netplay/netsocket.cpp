@@ -1090,7 +1090,11 @@ Socket *socketAccept(Socket *sock)
 			Socket *conn;
 			unsigned int j;
 
+#if defined(SOCK_CLOEXEC)
+			const SOCKET newConn = accept4(sock->fd[i], (struct sockaddr *)&addr, &addr_len, SOCK_CLOEXEC);
+#else
 			const SOCKET newConn = accept(sock->fd[i], (struct sockaddr *)&addr, &addr_len);
+#endif
 			if (newConn == INVALID_SOCKET)
 			{
 				// Ignore the case where no connection is pending
@@ -1172,7 +1176,11 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		conn->fd[i] = INVALID_SOCKET;
 	}
 
-	conn->fd[SOCK_CONNECTION] = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+	int socket_type = addr->ai_socktype;
+#if defined(SOCK_CLOEXEC)
+	socket_type |= SOCK_CLOEXEC;
+#endif
+	conn->fd[SOCK_CONNECTION] = socket(addr->ai_family, socket_type, addr->ai_protocol);
 
 	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
@@ -1309,8 +1317,12 @@ Socket *socketListen(unsigned int port)
 	addr6.sin6_flowinfo = 0;
 	addr6.sin6_scope_id = 0;
 
-	conn->fd[SOCK_IPV4_LISTEN] = socket(addr4.sin_family, SOCK_STREAM, 0);
-	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, SOCK_STREAM, 0);
+	int socket_type = SOCK_STREAM;
+#if defined(SOCK_CLOEXEC)
+	socket_type |= SOCK_CLOEXEC;
+#endif
+	conn->fd[SOCK_IPV4_LISTEN] = socket(addr4.sin_family, socket_type, 0);
+	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, socket_type, 0);
 
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
 	    && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
