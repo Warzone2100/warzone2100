@@ -192,7 +192,7 @@ SDWORD	getDesiredPitch();
 void	setDesiredPitch(SDWORD pitch);
 
 #define MAX_PLAYER_X_ANGLE	(-1)
-#define MIN_PLAYER_X_ANGLE	(-60)
+#define MIN_PLAYER_X_ANGLE	(-90)
 
 #define MAXDISTANCE	(5000)
 #define MINDISTANCE	(0)

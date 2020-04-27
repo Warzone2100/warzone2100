@@ -115,11 +115,13 @@ void finishDeliveryPosition();
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
+static const float CAMERA_ROTATION_SMOOTHNESS = 10;
+static const float CAMERA_ROTATION_SPEED = 4;
 static SDWORD	rotX;
 static SDWORD	rotY;
-static UDWORD	rotInitial;
+static float	rotInitial;
 static UDWORD	rotInitialUp;
-static UDWORD	xMoved, yMoved;
+static float	rotationY;
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
@@ -732,10 +734,9 @@ CURSOR processMouseClickInput()
 	}
 	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging)
 	{
-		rotInitial = player.r.y;
+		rotInitial = (player.r.y % 65536) / DEG(1.0f); // negative values caused problems with float conversion
 		rotInitialUp = player.r.x;
-		xMoved = 0;
-		yMoved = 0;
+		rotationY = rotInitial; // instead of player.r.y, will track decimals for us
 		rotActive = true;
 	}
 
@@ -1198,57 +1199,29 @@ void displayWorld()
 
 	if (mouseDown(MOUSE_ROTATE) && rotActive)
 	{
-		if (abs(mouseX() - rotX) > 2 || xMoved > 2 || abs(mouseY() - rotY) > 2 || yMoved > 2)
-		{
-			xMoved += abs(mouseX() - rotX);
-			if (mouseX() < rotX)
-			{
-				player.r.y = rotInitial + (rotX - mouseX()) * DEG(1) / 2;
-			}
-			else
-			{
-				player.r.y = rotInitial - (mouseX() - rotX) * DEG(1) / 2;
-			}
-			yMoved += abs(mouseY() - rotY);
-			if (bInvertMouse)
-			{
-				if (mouseY() < rotY)
-				{
-					player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 3;
-				}
-				else
-				{
-					player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 3;
-				}
-			}
-			else
-			{
-				if (mouseY() < rotY)
-				{
-					player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 3;
-				}
-				else
-				{
-					player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 3;
-				}
-			}
-			if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
-			{
-				player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
-			}
-			if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
-			{
-				player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
-			}
+		float mouseDeltaX = mouseX() - rotX;
+		float mouseDeltaY = mouseY() - rotY;
 
-			setDesiredPitch(player.r.x / DEG_1);
+		// the subtraction and then addition of rotationY is for the bug where wrapping between eg 350-10 degrees didn't work
+		rotationY = (rotInitial - mouseDeltaX / CAMERA_ROTATION_SPEED - rotationY) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + rotationY;
+		player.r.y = DEG(rotationY); // saved in a separate (float) variable in order to keep decimals for smoothness
+		
+		if(bInvertMouse)
+		{
+			mouseDeltaY *= -1;
 		}
+
+		float rotationTargetX = rotInitialUp + DEG(mouseDeltaY) / CAMERA_ROTATION_SPEED;
+		
+		player.r.x = player.r.x + (rotationTargetX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
+		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
+
+		setDesiredPitch(player.r.x / DEG_1);
 	}
 
 	if (!mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		rotActive = false;
-		xMoved = yMoved = 0;
 		ignoreRMBC = true;
 		pos.x = player.r.x;
 		pos.y = player.r.y;
