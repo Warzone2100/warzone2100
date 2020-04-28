@@ -1,0 +1,33 @@
+# To learn more about .editorconfig, see: https://editorconfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# All files
+[*]
+charset = utf-8
+
+# Code files
+[*.{cpp,c,hpp,h}]
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# YAML
+[*.{yml,yaml}]
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Python
+[*.py]
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# CMake
+[CMakeLists.txt]
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
