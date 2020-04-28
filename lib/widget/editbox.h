@@ -49,6 +49,7 @@ public:
 	W_EDITBOX(WIDGET *parent);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
+	void simulateClick(W_CONTEXT *psContext, bool silenceClickAudio = false, WIDGET_KEY key = WKEY_PRIMARY);
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
 	void focusLost() override;
@@ -89,6 +90,7 @@ private:
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
 	EditBoxDisplayCache displayCache;
+	bool suppressAudioCallback = false;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

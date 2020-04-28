@@ -507,6 +507,18 @@ void W_EDITBOX::setString(WzString string)
 	dirty = true;
 }
 
+void W_EDITBOX::simulateClick(W_CONTEXT *psContext, bool silenceClickAudio /*= false*/, WIDGET_KEY key /*= WKEY_PRIMARY*/)
+{
+	if (silenceClickAudio)
+	{
+		suppressAudioCallback = true;
+	}
+	clicked(psContext, key);
+	if (silenceClickAudio)
+	{
+		suppressAudioCallback = false;
+	}
+}
 
 /* Respond to a mouse click */
 void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
@@ -524,7 +536,7 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 
 	if ((state & WEDBS_MASK) == WEDBS_FIXED)
 	{
-		if (AudioCallback)
+		if (AudioCallback && !suppressAudioCallback)
 		{
 			AudioCallback(ClickedAudioID);
 		}
