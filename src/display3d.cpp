@@ -1880,7 +1880,7 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 		camToggleStatus();
 	}
 
-	scroll();
+	scroll(); // why ?
 }
 
 /// Get the player position

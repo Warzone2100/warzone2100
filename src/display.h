@@ -38,9 +38,9 @@ void ProcessRadarInput();
 
 void processInput();
 /*don't want to do any of these whilst in the Intelligence Screen*/
-CURSOR processMouseClickInput();
+void processMouseClickInput();
 
-CURSOR scroll();
+void scroll();
 void resetScroll();
 void setMouseScroll(bool);
 
