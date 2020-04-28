@@ -109,6 +109,12 @@ void W_BUTTON::setTip(std::string string)
 
 void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
+	if ((minClickInterval > 0) && (realTime - lastClickTime < minClickInterval))
+	{
+		return;
+	}
+	lastClickTime = realTime;
+
 	dirty = true;
 
 	/* Can't click a button if it is disabled or locked down */
