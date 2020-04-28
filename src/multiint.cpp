@@ -249,7 +249,7 @@ struct WzMultiButton : public W_BUTTON
 {
 	WzMultiButton(WIDGET *parent) : W_BUTTON(parent) {}
 
-	void display(int xOffset, int yOffset);
+	void display(int xOffset, int yOffset) override;
 
 	Image imNormal;
 	Image imDown;
@@ -1303,6 +1303,11 @@ static void addGameOptions()
 	if (ingame.bHostSetup && NetPlay.bComms)
 	{
 		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+		auto *pPasswordButton = dynamic_cast<WzMultiButton*>(widgGetFromID(psWScreen, MULTIOP_PASSWORD_BUT));
+		if (pPasswordButton)
+		{
+			pPasswordButton->minClickInterval = GAME_TICKS_PER_SEC / 2;
+		}
 		if (NetPlay.GamePassworded)
 		{
 			widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);
@@ -2935,14 +2940,17 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			{
 				char buf[255];
 
-				bool willSet = widgGetButtonState(psWScreen, MULTIOP_PASSWORD_BUT) == 0;
+				UDWORD currentButState = widgGetButtonState(psWScreen, MULTIOP_PASSWORD_BUT);
+				bool willSet = currentButState == 0;
+				char game_password[password_string_size] = {0};
+				sstrcpy(game_password, widgGetString(psWScreen, MULTIOP_PASSWORD_EDIT));
+				const size_t passLength = strlen(game_password) > 0;
+				willSet &= (passLength > 0);
 				debug(LOG_NET, "Password button hit, %d", (int)willSet);
 				widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT,  willSet ? WBUT_CLICKLOCK : 0);
 				widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, willSet ? WEDBS_DISABLE  : 0);
 				if (willSet)
 				{
-					char game_password[64];
-					sstrcpy(game_password, widgGetString(psWScreen, MULTIOP_PASSWORD_EDIT));
 					NETsetGamePassword(game_password);
 					// say password is now required to join games?
 					ssprintf(buf, _("*** password [%s] is now required! ***"), NetPlay.gamePassword);
