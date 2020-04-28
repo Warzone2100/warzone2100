@@ -963,6 +963,17 @@ void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char 
 	geometryChanged();
 }
 
+void MultibuttonWidget::setButtonMinClickInterval(UDWORD interval)
+{
+	for (auto& button_pair : buttons)
+	{
+		if (button_pair.first)
+		{
+			button_pair.first->minClickInterval = interval;
+		}
+	}
+}
+
 void MultibuttonWidget::enable(bool enabled)
 {
 	if (!enabled == disabled)
@@ -1382,6 +1393,7 @@ static void addGameOptions()
 		randomButton->id = MULTIOP_RANDOM;
 		randomButton->setLabel(_("Random Game Options"));
 		randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
+		randomButton->setButtonMinClickInterval(GAME_TICKS_PER_SEC / 2);
 		optionsList->addWidgetToLayout(randomButton);
 	}
 
