@@ -1055,7 +1055,7 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
 		size_t newtextsize = 0;
 		utf8Buf = UTF8toUTF32(Tevent->text, &newtextsize);
 		debug(LOG_INPUT, "Keyboard: text input \"%s\"", Tevent->text);
-		for (unsigned i = 0; i < newtextsize / 4; ++i)
+		for (unsigned i = 0; i < newtextsize / sizeof(utf_32_char); ++i)
 		{
 			inputAddBuffer(0, utf8Buf[i]);
 		}
