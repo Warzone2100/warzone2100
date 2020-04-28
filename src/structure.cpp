@@ -2601,7 +2601,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			//////
 			// - radar should rotate every three seconds ... 'cause we timed it at Heathrow !
 			// gameTime is in milliseconds - one rotation every 3 seconds = 1 rotation event 3000 millisecs
-			psStructure->asWeaps[0].rot.direction = (uint16_t)((uint64_t)gameTime * 65536 / 3000);  // Cast wrapping intended.
+			psStructure->asWeaps[0].rot.direction = (uint16_t)((uint64_t)gameTime * 65536 / 3000) + ((psStructure->pos.x + psStructure->pos.y) % 10) * 6550;  // Randomize by hashing position as seed for rotating 1/10th turns. Cast wrapping intended.
 			psStructure->asWeaps[0].rot.pitch = 0;
 		}
 	}
