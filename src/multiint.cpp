@@ -3631,9 +3631,10 @@ TITLECODE WzMultiOptionTitleUI::run()
 		context.mx			= mouseX();
 		context.my			= mouseY();
 
-		if (widgGetFromID(psWScreen, MULTIOP_CHATEDIT))
+		W_EDITBOX* pChatEdit = dynamic_cast<W_EDITBOX*>(widgGetFromID(psWScreen, MULTIOP_CHATEDIT));
+		if (pChatEdit)
 		{
-			widgGetFromID(psWScreen, MULTIOP_CHATEDIT)->clicked(&context);
+			pChatEdit->simulateClick(&context, true);
 		}
 	}
 
