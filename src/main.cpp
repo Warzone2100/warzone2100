@@ -1046,6 +1046,8 @@ void mainLoop()
 		inputLoseFocus();		// remove it from input stream
 	}
 
+	wzSetCursor(CURSOR_DEFAULT); // if cursor isn't set by anything in the mainLoop, it should revert to default.
+
 	if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
 	{
 		if (loop_GetVideoStatus())
