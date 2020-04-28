@@ -424,6 +424,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				insPos = 0;
 				printStart = 0;
 				fitStringStart();
+				inputLoseFocus();	// clear the input buffer.
 			}
 			else
 			{
