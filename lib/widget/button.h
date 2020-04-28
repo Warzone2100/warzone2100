@@ -89,7 +89,9 @@ public:
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 	iV_fonts        FontID;
+	UDWORD minClickInterval = 0;
 private:
+	UDWORD lastClickTime = 0;
 	std::vector<W_BUTTON_ONCLICK_FUNC> onClickHandlers;
 };
 
