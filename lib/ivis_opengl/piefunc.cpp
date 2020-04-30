@@ -148,7 +148,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		const char* vertexShaderSource[1] = {
-			"attribute vec4 c;attribute vec2 texCoord;uniform mat4 ModelViewProjectionMatrix;varying vec2 TexCoord;void main(void) {gl_Position = ModelViewProjectionMatrix * c;TexCoord = texCoord;}"
+			"attribute vec4 c;attribute vec2 texCoord;uniform mat4 ModelViewProjectionMatrix;varying vec2 TexCoord;varying vec3 VertexPosition;void main(void) {gl_Position = ModelViewProjectionMatrix * c;TexCoord = texCoord;VertexPosition = c;}"
 		};
 		glShaderSource(vertexShader, 1, vertexShaderSource, nullptr);
 		glCompileShader(vertexShader);
@@ -170,7 +170,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"varying vec2 TexCoord;uniform sampler2D tex;void main(void) {gl_FragColor=texture(tex, TexCoord);}"
+			"varying vec2 TexCoord;varying vec3 VertexPosition;uniform sampler2D tex;void main(void) {vec4 sample = texture(tex, TexCoord);float length = distance(vec3(100, 500, 0), VertexPosition);float opacity = clamp(length / 50, 0, 1);gl_FragColor=vec4(sample.xyz, 1);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -217,9 +217,9 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
 
-	Vector3f v1 = Vector3f(0, 300, 0);
-	Vector3f v2 = Vector3f(-100, 500, 0);
-	Vector3f v3 = Vector3f(100, 500, 0);
+	Vector3f v1 = Vector3f(0, 400, 0);
+	Vector3f v2 = Vector3f(100, 260, 0);
+	Vector3f v3 = Vector3f(-100, 240, 0);
 
 	std::array<float, 15> vrt = {
 		v1.x, v1.y, v1.z, 0.5, 0,
