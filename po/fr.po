@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-27 21:05\n"
+"POT-Creation-Date: 2020-04-26 07:30+0000\n"
+"PO-Revision-Date: 2020-04-30 20:55\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -14873,16 +14873,16 @@ msgstr "Désynchronisé"
 msgid "Setting zoom to %.0f"
 msgstr ""
 
-#: src/display.cpp:1511
+#: src/display.cpp:1522
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction impossible pour le moment. Le gisement de pétrole est en feu."
 
-#: src/display.cpp:1527
+#: src/display.cpp:1538
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - Points de vie : %d/%d - Expérience %.1f, %s"
 
-#: src/display.cpp:1689
+#: src/display.cpp:1700
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Allié - Points de vie : %d/%d - Expérience %d, %s"
@@ -15759,23 +15759,23 @@ msgstr "Désolé, ce code de triche est désactivé pour les parties multijoueur
 
 #: src/keybind.cpp:156
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr "Attention ! Ce code de triche est buggé. Nous vous recommandons de ne PAS l'utiliser."
+msgstr "Attention! Ce code de triche est buggé. Nous vous recommandons de ne PAS l'utiliser."
 
 #: src/keybind.cpp:218
 msgid "Ouch! Droid's health is down 20%!"
-msgstr "Ouch ! La résistance des unités baisse de 20% !"
+msgstr "Ouch! La résistance des unités baisse de 20%!"
 
 #: src/keybind.cpp:234
 msgid "Ouch! Structure's health is down 20%!"
-msgstr "Ouch ! La résistance des structures baisse de 20% !"
+msgstr "Ouch! La résistance des structures baisse de 20%!"
 
 #: src/keybind.cpp:290
 msgid "Lets us see what you see!"
-msgstr "Voyons voir ce que tu vois !"
+msgstr "Voyons voir ce que tu vois!"
 
 #: src/keybind.cpp:294
 msgid "Fine, weapon & sensor display is off!"
-msgstr "C'est bon, je désactive l'affichage des détecteurs et de la portée de tir !"
+msgstr "C'est bon, je désactive l'affichage des détecteurs et de la portée de tir!"
 
 #: src/keybind.cpp:326
 msgid "View Aligned to South"
@@ -15808,11 +15808,11 @@ msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle
 #: src/keybind.cpp:1884
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr "Le joueur %u utilise un code de triche : %s"
+msgstr "(Le joueur %u) utilise un code de triche : %s"
 
 #: src/keybind.cpp:511
 msgid "Hard as nails!!!"
-msgstr "Prends-toi ça dans les dents !!!"
+msgstr "Prends-toi ça dans les dents!!!"
 
 #: src/keybind.cpp:525
 msgid "Takings thing easy!"
@@ -15840,16 +15840,16 @@ msgstr "Deux fois mieux !"
 
 #: src/keybind.cpp:612
 msgid "FPS display is enabled."
-msgstr "L'affichage du nombre de frames par seconde est activé"
+msgstr "L'affichage du nombre de frames par seconde est activé."
 
 #: src/keybind.cpp:616
 msgid "FPS display is disabled."
-msgstr "L'affichage du nombre de frames par seconde est désactivé"
+msgstr "L'affichage du nombre de frames par seconde est désactivé."
 
 #: src/keybind.cpp:669
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "Le joueur %u utilise une tricherie : Unités : %d  Structures : %d  Features : %d"
+msgstr "(Le joueur %u) utilise une tricherie : Unités : %d  Structures : %d  Features : %d"
 
 #: src/keybind.cpp:705
 msgid "Infinite power disabled"
@@ -15896,16 +15896,16 @@ msgstr "Piéger le curseur %s"
 
 #: src/keybind.cpp:1434
 msgid "Researched EVERYTHING for you!"
-msgstr "Nous avons fait toutes les recherches pour vous !"
+msgstr "Nous avons fait toutes les recherches pour vous!"
 
 #: src/keybind.cpp:1458
 msgid "Selected buildings instantly recharged!"
-msgstr "Bâtiments sélectionnés rechargés !"
+msgstr "Bâtiments sélectionnés rechargés!"
 
 #: src/keybind.cpp:1499
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr "Le joueur %u utilise un code de triche : %s %s"
+msgstr "(Le joueur %u) utilise un code de triche : %s %s"
 
 #: src/keybind.cpp:1499
 msgid "Researched"
@@ -15933,27 +15933,27 @@ msgstr "Impossible de localiser le moindre puits de pétrole!"
 
 #: src/keybind.cpp:1738
 msgid "Oh, the weather outside is frightful... SNOW"
-msgstr "Brrr... Il fait si froid... Il neige."
+msgstr "Brrr... Il fait si froid... Il neige"
 
 #: src/keybind.cpp:1744
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Singing in the rain, I'm singing in the rain... Il pleut."
+msgstr "Singing in the rain, I'm singing in the rain... Il pleut"
 
 #: src/keybind.cpp:1750
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr "Prévisions météo : ciel dégagé dans toute la région... Aucune intempérie."
+msgstr "Prévisions météo : ciel dégagé dans toute la région... Aucune intempérie"
 
 #: src/keybind.cpp:1842
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr "Attention ! Ceci peut avoir des conséquences désastreuses si mal utilisé dans les missions."
+msgstr "Attention! Ceci peut avoir des conséquences désastreuses si mal utilisé dans les missions."
 
 #: src/keybind.cpp:1844
 msgid "All enemies destroyed by cheating!"
-msgstr "Tous les ennemis ont été détruits par un TRICHEUR !"
+msgstr "Tous les ennemis ont été détruits par un TRICHEUR!"
 
 #: src/keybind.cpp:1885
 msgid "Destroying selected droids and structures!"
-msgstr "Destruction des unités et les structures sélectionnées !"
+msgstr "Destruction des unités et les structures sélectionnées!"
 
 #: src/keybind.cpp:2313
 msgid "Reveal OFF"
@@ -15965,11 +15965,11 @@ msgstr ""
 
 #: src/keybind.cpp:2399
 msgid "Centered on player HQ, direction NORTH"
-msgstr "Vue centrée sur le quartier général, direction Nord."
+msgstr "Vue centrée sur le quartier général, direction Nord"
 
 #: src/keybind.cpp:2411
 msgid "Unable to locate HQ!"
-msgstr "Impossible de localiser le Quartier Général !"
+msgstr "Impossible de localiser le Quartier Général!"
 
 #: src/keybind.cpp:2418
 msgid "Formation speed limiting has been removed from the game due to bugs."
@@ -16873,7 +16873,7 @@ msgstr "Attente de la fin du téléchargement"
 
 #: src/multiint.cpp:2097
 msgid "READY?"
-msgstr "PRÊT ?"
+msgstr "PRÊT?"
 
 #: src/multiint.cpp:2139
 msgid "PLAYERS"
@@ -16965,7 +16965,7 @@ msgstr ""
 
 #: src/multiint.cpp:3922
 msgid "UPnP has been enabled."
-msgstr "UPnP activé"
+msgstr "UPnP activé."
 
 #: src/multiint.cpp:3928
 msgid "UPnP detection failed. You must manually configure router yourself."
@@ -17103,7 +17103,7 @@ msgstr "Tout nombre de joueurs"
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "1 joueur"
+msgstr[0] "%d joueur"
 msgstr[1] "%d joueurs"
 
 #: src/multimenu.cpp:761
@@ -17211,15 +17211,15 @@ msgstr "[invalide]"
 
 #: src/multiplay.cpp:1605
 msgid "Map was requested: SENDING MAP!"
-msgstr "Carte requise : envoi en cours"
+msgstr "Carte requise: envoi en cours!"
 
 #: src/multiplay.cpp:1621
 msgid "Mod was requested: SENDING MOD!"
-msgstr "Mode requis : envoi en cours"
+msgstr "Mode requis: envoi en cours!"
 
 #: src/multiplay.cpp:1684
 msgid "FILE SENT!"
-msgstr "Fichier envoyé"
+msgstr "Fichier envoyé!"
 
 #: src/multiplay.cpp:1749
 #, c-format
@@ -17404,11 +17404,11 @@ msgstr "Héros : %u"
 
 #: src/scores.cpp:291
 msgid "Unit Losses"
-msgstr "Unités perdues :"
+msgstr "Unités perdues"
 
 #: src/scores.cpp:293
 msgid "Structure Losses"
-msgstr "Bâtiments perdus :"
+msgstr "Bâtiments perdus"
 
 #: src/scores.cpp:295
 msgid "Force Information"
@@ -17566,7 +17566,7 @@ msgstr "Connexion à l'antichambre..."
 
 #: src/titleui/gamefind.cpp:244
 msgid "Your version of Warzone is incompatible with this game."
-msgstr "Votre version de Warzone est incompatible avec cette partie"
+msgstr "Votre version de Warzone est incompatible avec cette partie."
 
 #: src/titleui/gamefind.cpp:311
 msgid "[Password required]"
@@ -17596,7 +17596,7 @@ msgstr "Hébergé par %s - %s"
 
 #: src/titleui/gamefind.cpp:361
 msgid "Can't find any games for your version."
-msgstr "Aucune partie disponible pour votre version du jeu"
+msgstr "Aucune partie disponible pour votre version du jeu."
 
 #: src/titleui/gamefind.cpp:378
 msgid "There appears to be a game update available!"
@@ -17649,7 +17649,7 @@ msgstr "Modes : %s"
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
-msgstr "Modes : aucun"
+msgstr "Modes : aucun!"
 
 #: src/titleui/gamefind.cpp:569
 #, c-format
