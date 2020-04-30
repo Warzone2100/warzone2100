@@ -124,6 +124,18 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	glDisableVertexAttribArray(program.locVertex);
 }
 
+Vector3f offsetTest(Vector3f position, Vector3i offset)
+{
+	int x, y, z;
+
+	printf("%i, %i\n", (int)position.x, offset.x);
+	x = position.x;
+	z = position.z;//-(position.y - offset.z);
+	y = position.y;
+
+	return Vector3f(x, y, z);
+}
+
 void demoTest(Vector3i position, Vector3i rotation, float distance)
 {
 	const glm::mat4 &viewMatrix =
@@ -148,7 +160,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		const char* vertexShaderSource[1] = {
-			"attribute vec4 c;attribute vec2 texCoord;uniform mat4 ModelViewProjectionMatrix;varying vec2 TexCoord;varying vec3 VertexPosition;void main(void) {gl_Position = ModelViewProjectionMatrix * c;TexCoord = texCoord;VertexPosition = c;}"
+			"attribute vec4 c;uniform mat4 ModelViewProjectionMatrix;void main(void) {gl_Position = ModelViewProjectionMatrix * c;}"
 		};
 		glShaderSource(vertexShader, 1, vertexShaderSource, nullptr);
 		glCompileShader(vertexShader);
@@ -170,7 +182,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"varying vec2 TexCoord;varying vec3 VertexPosition;uniform sampler2D tex;void main(void) {vec4 sample = texture(tex, TexCoord);float length = distance(vec3(100, 500, 0), VertexPosition);float opacity = clamp(length / 50, 0, 1);gl_FragColor=vec4(sample.xyz, 1);}"
+			"void main(void) {gl_FragColor = vec4(vec3(gl_FragCoord.z), 1.0);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -207,9 +219,9 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 	}
 
 	glUseProgram(shaderProgram);
+	pie_SetRendMode(REND_OPAQUE);
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
-	pie_SetTexturePage(iV_GetTexture("page-12-player-buildings.png"));
-	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
 
@@ -217,23 +229,19 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
 
-	Vector3f v1 = Vector3f(0, 400, 0);
-	Vector3f v2 = Vector3f(100, 260, 0);
-	Vector3f v3 = Vector3f(-100, 240, 0);
+	Vector3f v1 = Vector3f(0, 800, 0);
+	Vector3f v2 = Vector3f(300, 260, 0);
+	Vector3f v3 = Vector3f(-300, 240, 0);
 
-	std::array<float, 15> vrt = {
-		v1.x, v1.y, v1.z, 0.5, 0,
-		v2.x, v2.y, v2.z, 0, 1,
-		v3.x, v3.y, v3.z, 1, 1,
+	std::array<Vector3f, 3> vrt = {
+		offsetTest(v1, position), offsetTest(v2, position), offsetTest(v3, position)
 	};
 	if (!vrtBuffer)
 		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
-	vrtBuffer->upload(5 * 3 * sizeof(float), vrt.data());
+	vrtBuffer->upload(3 * sizeof(Vector3f), vrt.data());
 	vrtBuffer->bind();
-	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0));
+	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), (void*)(0));
 	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
-	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "texCoord"), 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "texCoord"));
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glDisableVertexAttribArray(0);
