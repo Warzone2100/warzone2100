@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-27 21:06\n"
+"POT-Creation-Date: 2020-04-26 07:30+0000\n"
+"PO-Revision-Date: 2020-04-30 20:54\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -14876,16 +14876,16 @@ msgstr "Fora de sincronia"
 msgid "Setting zoom to %.0f"
 msgstr "Config. de zoom para %.0f"
 
-#: src/display.cpp:1511
+#: src/display.cpp:1522
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Poço em chamas."
 
-#: src/display.cpp:1527
+#: src/display.cpp:1538
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - Dano %d/%d - Experiência %.1f, %s"
 
-#: src/display.cpp:1689
+#: src/display.cpp:1700
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Aliado - Danos %d%d - Experiência %d, %s"
