@@ -761,6 +761,8 @@ void draw3DScene()
 	/* Now, draw the terrain */
 	drawTiles(&player);
 
+	demoTest(player.p, player.r, distance);
+
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
 	/* Show the drag Box if necessary */
@@ -3641,6 +3643,14 @@ static void structureEffects()
 /// Show the sensor ranges of selected droids and buildings
 static void	showDroidSensorRanges()
 {
+
+
+
+
+
+
+return;
+
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
 

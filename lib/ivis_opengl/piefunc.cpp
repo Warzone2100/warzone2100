@@ -124,6 +124,121 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	glDisableVertexAttribArray(program.locVertex);
 }
 
+void demoTest(Vector3i position, Vector3i rotation, float distance)
+{
+	const glm::mat4 &viewMatrix =
+		glm::translate(glm::vec3(0.f, 0.f, distance)) *
+		glm::scale(glm::vec3(pie_GetResScalingFactor() / 100.f)) *
+		glm::rotate(rotation.z * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 0.f, 1.f)) *
+		glm::rotate(rotation.x * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(rotation.y * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::translate(glm::vec3(0, -position.y, 0));
+		
+	static GLuint shaderProgram = 0;
+
+	if(shaderProgram == 0)
+	{
+		shaderProgram = glCreateProgram();
+		glBindAttribLocation(shaderProgram, 0, "vertex");
+
+		GLint status;
+		GLint infologLen = 0;
+		GLint charsWritten = 0;
+		GLchar *infoLog = nullptr;
+
+		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		const char* vertexShaderSource[1] = {
+			"attribute vec4 c;attribute vec2 texCoord;uniform mat4 ModelViewProjectionMatrix;varying vec2 TexCoord;void main(void) {gl_Position = ModelViewProjectionMatrix * c;TexCoord = texCoord;}"
+		};
+		glShaderSource(vertexShader, 1, vertexShaderSource, nullptr);
+		glCompileShader(vertexShader);
+
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
+
+		if (!status)
+		{
+			printf("Error compiling vertex shader\n");
+			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &infologLen);
+			infoLog = (GLchar *)malloc(infologLen);
+			glGetShaderInfoLog(vertexShader, infologLen, &charsWritten, infoLog);
+			printf("%s\n", infoLog);
+			free(infoLog);
+			exit(1);
+		}
+
+		glAttachShader(shaderProgram, vertexShader);
+
+		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		const char* fragmentShaderSource[1] = {
+			"varying vec2 TexCoord;uniform sampler2D tex;void main(void) {gl_FragColor=texture(tex, TexCoord);}"
+		};
+		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
+		glCompileShader(fragmentShader);
+
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
+
+		if (!status)
+		{
+			printf("Error compiling fragment shader\n");
+			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &infologLen);
+			infoLog = (GLchar *)malloc(infologLen);
+			glGetShaderInfoLog(fragmentShader, infologLen, &charsWritten, infoLog);
+			printf("%s\n", infoLog);
+			free(infoLog);
+			exit(1);
+		}
+
+		glAttachShader(shaderProgram, fragmentShader);
+
+		glLinkProgram(shaderProgram);
+
+		// Check for linkage errors
+		glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
+		if (!status)
+		{
+			printf("Error linking program\n");
+			glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &infologLen);
+			infoLog = (GLchar *)malloc(infologLen);
+			glGetProgramInfoLog(shaderProgram, infologLen, &charsWritten, infoLog);
+			printf("%s\n", infoLog);
+			free(infoLog);
+			exit(1);
+		}
+	}
+
+	glUseProgram(shaderProgram);
+
+	pie_SetTexturePage(iV_GetTexture("page-12-player-buildings.png"));
+	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+
+	static gfx_api::buffer* vrtBuffer = nullptr;
+
+	// viewMatrix = glm::rotate(glm::radians(90.0f), glm::vec3(1, 0, 0)) * viewMatrix;
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
+
+	Vector3f v1 = Vector3f(0, 300, 0);
+	Vector3f v2 = Vector3f(-100, 500, 0);
+	Vector3f v3 = Vector3f(100, 500, 0);
+
+	std::array<float, 15> vrt = {
+		v1.x, v1.y, v1.z, 0.5, 0,
+		v2.x, v2.y, v2.z, 0, 1,
+		v3.x, v3.y, v3.z, 1, 1,
+	};
+	if (!vrtBuffer)
+		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
+	vrtBuffer->upload(5 * 3 * sizeof(float), vrt.data());
+	vrtBuffer->bind();
+	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0));
+	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
+	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "texCoord"), 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "texCoord"));
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDisableVertexAttribArray(0);
+}
+
 void pie_Skybox_Init()
 {
 	const int u = 0;

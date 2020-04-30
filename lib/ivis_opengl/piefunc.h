@@ -43,5 +43,6 @@ void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix);
 void pie_Skybox_Init();
 void pie_Skybox_Shutdown();
 void pie_Skybox_Texture(const char *filename);
+void demoTest(Vector3i position, Vector3i rotation, float distance);
 
 #endif // _piedef_h
