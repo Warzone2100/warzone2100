@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-27 21:06\n"
+"POT-Creation-Date: 2020-04-26 07:30+0000\n"
+"PO-Revision-Date: 2020-04-30 20:54\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -5530,7 +5530,7 @@ msgstr "Pesquisa bloqueada, não vou pesquisar nada."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr "A pesquisar tecnologias fundamentais"
+msgstr "A pesquisar tecnologias fundamentais."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
@@ -14876,16 +14876,16 @@ msgstr "Falha de sincronização"
 msgid "Setting zoom to %.0f"
 msgstr ""
 
-#: src/display.cpp:1511
+#: src/display.cpp:1522
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Impossível construir. Fonte de petróleo a arder."
 
-#: src/display.cpp:1527
+#: src/display.cpp:1538
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - Dano %d/%d - Experiência %.1f, %s"
 
-#: src/display.cpp:1689
+#: src/display.cpp:1700
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Aliado - Dano %d/%d - Experiência %d, %s"
@@ -16039,7 +16039,7 @@ msgstr "Voltar ao ecrâ anterior"
 #: src/keyedit.cpp:366
 #: src/keyedit.cpp:402
 msgid "Select Default"
-msgstr "Seleccionar Original"
+msgstr "Selecionar Original"
 
 #: src/keyedit.cpp:457
 msgid "KEY MAPPING"
@@ -16147,83 +16147,83 @@ msgstr "Designar Grupo 9"
 
 #: src/keymap.cpp:332
 msgid "Select Group 0"
-msgstr "Seleccionar Grupo 0"
+msgstr "Selecionar Grupo 0"
 
 #: src/keymap.cpp:333
 msgid "Select Group 1"
-msgstr "Seleccionar Grupo 1"
+msgstr "Selecionar Grupo 1"
 
 #: src/keymap.cpp:334
 msgid "Select Group 2"
-msgstr "Seleccionar Grupo 2"
+msgstr "Selecionar Grupo 2"
 
 #: src/keymap.cpp:335
 msgid "Select Group 3"
-msgstr "Seleccionar Grupo 3"
+msgstr "Selecionar Grupo 3"
 
 #: src/keymap.cpp:336
 msgid "Select Group 4"
-msgstr "Seleccionar Grupo 4"
+msgstr "Selecionar Grupo 4"
 
 #: src/keymap.cpp:337
 msgid "Select Group 5"
-msgstr "Seleccionar Grupo 5"
+msgstr "Selecionar Grupo 5"
 
 #: src/keymap.cpp:338
 msgid "Select Group 6"
-msgstr "Seleccionar Grupo 6"
+msgstr "Selecionar Grupo 6"
 
 #: src/keymap.cpp:339
 msgid "Select Group 7"
-msgstr "Seleccionar Grupo 7"
+msgstr "Selecionar Grupo 7"
 
 #: src/keymap.cpp:340
 msgid "Select Group 8"
-msgstr "Seleccionar Grupo 8"
+msgstr "Selecionar Grupo 8"
 
 #: src/keymap.cpp:341
 msgid "Select Group 9"
-msgstr "Seleccionar Grupo 9"
+msgstr "Selecionar Grupo 9"
 
 #: src/keymap.cpp:345
 msgid "Select Commander 0"
-msgstr "Seleccionar Comandante 0"
+msgstr "Selecionar Comandante 0"
 
 #: src/keymap.cpp:346
 msgid "Select Commander 1"
-msgstr "Seleccionar Comandante 1"
+msgstr "Selecionar Comandante 1"
 
 #: src/keymap.cpp:347
 msgid "Select Commander 2"
-msgstr "Seleccionar Comandante 2"
+msgstr "Selecionar Comandante 2"
 
 #: src/keymap.cpp:348
 msgid "Select Commander 3"
-msgstr "Seleccionar Comandante 3"
+msgstr "Selecionar Comandante 3"
 
 #: src/keymap.cpp:349
 msgid "Select Commander 4"
-msgstr "Seleccionar Comandante 4"
+msgstr "Selecionar Comandante 4"
 
 #: src/keymap.cpp:350
 msgid "Select Commander 5"
-msgstr "Seleccionar Comandante 5"
+msgstr "Selecionar Comandante 5"
 
 #: src/keymap.cpp:351
 msgid "Select Commander 6"
-msgstr "Seleccionar Comandante 6"
+msgstr "Selecionar Comandante 6"
 
 #: src/keymap.cpp:352
 msgid "Select Commander 7"
-msgstr "Seleccionar Comandante 7"
+msgstr "Selecionar Comandante 7"
 
 #: src/keymap.cpp:353
 msgid "Select Commander 8"
-msgstr "Seleccionar Comandante 8"
+msgstr "Selecionar Comandante 8"
 
 #: src/keymap.cpp:354
 msgid "Select Commander 9"
-msgstr "Seleccionar Comandante 9"
+msgstr "Selecionar Comandante 9"
 
 #: src/keymap.cpp:358
 msgid "Multiplayer Options / Alliance dialog"
@@ -16411,47 +16411,47 @@ msgstr ""
 
 #: src/keymap.cpp:428
 msgid "Select all Combat Units"
-msgstr "Seleccionar todas as unidades de combate"
+msgstr "Selecionar todas as unidades de combate"
 
 #: src/keymap.cpp:429
 msgid "Select all Cyborgs"
-msgstr "Seleccionar todos os Cyborgs"
+msgstr "Selecionar todos os Cyborgs"
 
 #: src/keymap.cpp:430
 msgid "Select all Heavily Damaged Units"
-msgstr "Seleccionar Todas as Unidades Muito Danificadas"
+msgstr "Selecionar Todas as Unidades Muito Danificadas"
 
 #: src/keymap.cpp:431
 msgid "Select all Half-tracks"
-msgstr "Seleccionar todos os veículos movidos por Semi-Lagartas"
+msgstr "Selecionar todos os veículos movidos por Semi-Lagartas"
 
 #: src/keymap.cpp:432
 msgid "Select all Hovers"
-msgstr "Seleccionar todos os Hovercrafts"
+msgstr "Selecionar todos os Hovercrafts"
 
 #: src/keymap.cpp:434
 msgid "Select all Units on Screen"
-msgstr "Seleccionar Todas as Unidades no Ecrâ"
+msgstr "Selecionar Todas as Unidades no Ecrâ"
 
 #: src/keymap.cpp:435
 msgid "Select all Tracks"
-msgstr "Seleccionar todos os veículos movidos por Lagartas"
+msgstr "Selecionar todos os veículos movidos por Lagartas"
 
 #: src/keymap.cpp:436
 msgid "Select EVERY unit"
-msgstr "Seleccionar TODAS as unidades"
+msgstr "Selecionar TODAS as unidades"
 
 #: src/keymap.cpp:437
 msgid "Select all VTOLs"
-msgstr "Seleccionar todos os VTOL"
+msgstr "Selecionar todos os VTOL"
 
 #: src/keymap.cpp:438
 msgid "Select all fully-armed VTOLs"
-msgstr "Seleccionar todos os VTOL reabastecidos"
+msgstr "Selecionar todos os VTOL reabastecidos"
 
 #: src/keymap.cpp:439
 msgid "Select all Wheels"
-msgstr "Seleccionar todos os veículos movidos por Rodas"
+msgstr "Selecionar todos os veículos movidos por Rodas"
 
 #: src/keymap.cpp:440
 msgid "Show frame rate"
@@ -16463,51 +16463,51 @@ msgstr ""
 
 #: src/keymap.cpp:445
 msgid "Select all Combat Cyborgs"
-msgstr "Seleccionar todas os Cyborgs de Combate"
+msgstr "Selecionar todas os Cyborgs de Combate"
 
 #: src/keymap.cpp:446
 msgid "Select all Engineers"
-msgstr "Seleccionar todos os Engenheiros"
+msgstr "Selecionar todos os Engenheiros"
 
 #: src/keymap.cpp:447
 msgid "Select all Land Combat Units"
-msgstr "Seleccionar todas as unidades de combate terrestre"
+msgstr "Selecionar todas as unidades de combate terrestre"
 
 #: src/keymap.cpp:448
 msgid "Select all Mechanics"
-msgstr "Seleccionar todos os Mecânicos"
+msgstr "Selecionar todos os Mecânicos"
 
 #: src/keymap.cpp:449
 msgid "Select all Transporters"
-msgstr "Seleccionar todos os Transportes"
+msgstr "Selecionar todos os Transportes"
 
 #: src/keymap.cpp:450
 msgid "Select all Repair Tanks"
-msgstr "Seleccionar todos os veículos de reparação"
+msgstr "Selecionar todos os veículos de reparação"
 
 #: src/keymap.cpp:451
 msgid "Select all Sensor Units"
-msgstr "Seleccionar todas as unidades de Sensor"
+msgstr "Selecionar todas as unidades de Sensor"
 
 #: src/keymap.cpp:452
 msgid "Select all Trucks"
-msgstr "Seleccionar todos os Camiões"
+msgstr "Selecionar todos os Camiões"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
-msgstr "Seleccionar a próxima Fábrica"
+msgstr "Selecionar a próxima Fábrica"
 
 #: src/keymap.cpp:457
 msgid "Select next Research Facility"
-msgstr "Seleccionar o próximo Centro de Pesquisa"
+msgstr "Selecionar o próximo Centro de Pesquisa"
 
 #: src/keymap.cpp:458
 msgid "Select next Power Generator"
-msgstr "Seleccionar o próximo Gerador de Energia"
+msgstr "Selecionar o próximo Gerador de Energia"
 
 #: src/keymap.cpp:459
 msgid "Select next Cyborg Factory"
-msgstr "Seleccionar a próxima Fábrica de Cyborgs"
+msgstr "Selecionar a próxima Fábrica de Cyborgs"
 
 #: src/keymap.cpp:462
 msgid "Toggle Debug Mappings"
@@ -16636,7 +16636,7 @@ msgstr "JOGO GRAVADO :"
 #: src/move.cpp:1981
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr "Encontrou %u energia num barril de petróleo"
+msgstr "Encontrou %u energia num barril de petróleo."
 
 #: src/multigifts.cpp:221
 #, c-format
@@ -16754,7 +16754,7 @@ msgstr "Escaramuça de Um Jogador"
 
 #: src/multiint.cpp:1280
 msgid "Select Game Name"
-msgstr "Seleccionar Nome do Jogo"
+msgstr "Selecionar Nome do Jogo"
 
 #: src/multiint.cpp:1291
 msgid "Select Map\n"
@@ -16771,7 +16771,7 @@ msgstr "Clica para definir Palavra-passe"
 
 #: src/multiint.cpp:1314
 msgid "Select Player Name"
-msgstr "Seleccionar Nome de Jogador"
+msgstr "Selecionar Nome de Jogador"
 
 #: src/multiint.cpp:1334
 #: src/multimenu.cpp:759
@@ -17444,11 +17444,11 @@ msgstr "Incapaz de localizar qualquer unidade de reparação!"
 
 #: src/selection.cpp:355
 msgid "Unable to locate any Trucks!"
-msgstr "Incapaz de localizar qualquer Camião"
+msgstr "Incapaz de localizar qualquer Camião!"
 
 #: src/selection.cpp:358
 msgid "Unable to locate any Sensor Units!"
-msgstr "Incapaz de localizar qualquer unidade de Sensor"
+msgstr "Incapaz de localizar qualquer unidade de Sensor!"
 
 #: src/selection.cpp:361
 msgid "Unable to locate any Commanders!"
@@ -17678,7 +17678,7 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
-msgstr "Insira a Palavra-passe"
+msgstr "Insira a Palavra-passe:"
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
