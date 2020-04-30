@@ -124,18 +124,6 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	glDisableVertexAttribArray(program.locVertex);
 }
 
-Vector3f offsetTest(Vector3f position, Vector3i offset)
-{
-	int x, y, z;
-
-	printf("%i, %i\n", (int)position.x, offset.x);
-	x = position.x;
-	z = position.z;//-(position.y - offset.z);
-	y = position.y;
-
-	return Vector3f(x, y, z);
-}
-
 void demoTest(Vector3i position, Vector3i rotation, float distance)
 {
 	const glm::mat4 &viewMatrix =
@@ -160,7 +148,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		const char* vertexShaderSource[1] = {
-			"attribute vec4 c;uniform mat4 ModelViewProjectionMatrix;void main(void) {gl_Position = ModelViewProjectionMatrix * c;}"
+			"attribute vec4 c;uniform mat4 ModelViewProjectionMatrix;varying float Out;void main(void) {gl_Position = ModelViewProjectionMatrix * c;Out = gl_Position.z;}"
 		};
 		glShaderSource(vertexShader, 1, vertexShaderSource, nullptr);
 		glCompileShader(vertexShader);
@@ -182,7 +170,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"void main(void) {gl_FragColor = vec4(vec3(gl_FragCoord.z), 1.0);}"
+			"varying float Out;void main(void) {gl_FragColor = vec4(vec3(Out / 2 + 0.5), 1.0);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -220,8 +208,9 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 	glUseProgram(shaderProgram);
 	pie_SetRendMode(REND_OPAQUE);
-	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
 
@@ -229,12 +218,12 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
 
-	Vector3f v1 = Vector3f(0, 800, 0);
-	Vector3f v2 = Vector3f(300, 260, 0);
-	Vector3f v3 = Vector3f(-300, 240, 0);
+	Vector3f v1 = Vector3f(11000 - position.x, 800, position.z - 12500);
+	Vector3f v2 = Vector3f(11500 - position.x, 300, position.z - 12500);
+	Vector3f v3 = Vector3f(10300 - position.x, 200, position.z - 12500);
 
 	std::array<Vector3f, 3> vrt = {
-		offsetTest(v1, position), offsetTest(v2, position), offsetTest(v3, position)
+		v1, v2, v3
 	};
 	if (!vrtBuffer)
 		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
