@@ -135,6 +135,8 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 		glm::translate(glm::vec3(0, -position.y, 0));
 		
 	static GLuint shaderProgram = 0;
+	static GLuint m_FBOdepth_textura;
+	static GLuint m_FBO;
 
 	if(shaderProgram == 0)
 	{
@@ -148,7 +150,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		const char* vertexShaderSource[1] = {
-			"attribute vec4 c;uniform mat4 ModelViewProjectionMatrix;varying float Out;void main(void) {gl_Position = ModelViewProjectionMatrix * c;Out = gl_Position.z;}"
+			"attribute vec4 c;attribute vec2 texCoord;uniform mat4 ModelViewProjectionMatrix;varying vec2 TexCoord;void main(void) {gl_Position = ModelViewProjectionMatrix * c;TexCoord = texCoord;}"
 		};
 		glShaderSource(vertexShader, 1, vertexShaderSource, nullptr);
 		glCompileShader(vertexShader);
@@ -170,7 +172,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"varying float Out;void main(void) {gl_FragColor = vec4(vec3(Out / 2 + 0.5), 1.0);}"
+			"varying vec2 TexCoord;uniform sampler2D tex;void main(void) {gl_FragColor=texture(tex, TexCoord);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -204,33 +206,49 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 			free(infoLog);
 			exit(1);
 		}
+
+		glGenFramebuffers(1, &m_FBO);
+		glGenTextures(1, &m_FBOdepth_textura);
 	}
 
 	glUseProgram(shaderProgram);
 	pie_SetRendMode(REND_OPAQUE);
 
+
+		glBindTexture(GL_TEXTURE_2D, m_FBOdepth_textura);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, 1280, 720, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_FBOdepth_textura, 0);
+		glDrawBuffer(GL_NONE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 
+	glBindTexture(GL_TEXTURE_2D, m_FBOdepth_textura);
+
 	static gfx_api::buffer* vrtBuffer = nullptr;
 
-	// viewMatrix = glm::rotate(glm::radians(90.0f), glm::vec3(1, 0, 0)) * viewMatrix;
-
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
+	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 
 	Vector3f v1 = Vector3f(11000 - position.x, 800, position.z - 12500);
 	Vector3f v2 = Vector3f(11500 - position.x, 300, position.z - 12500);
 	Vector3f v3 = Vector3f(10300 - position.x, 200, position.z - 12500);
 
-	std::array<Vector3f, 3> vrt = {
-		v1, v2, v3
+	std::array<float, 15> vrt = {
+		v1.x, v1.y, v1.z, 0.5, 0,
+		v2.x, v2.y, v2.z, 0, 1,
+		v3.x, v3.y, v3.z, 1, 1,
 	};
 	if (!vrtBuffer)
 		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
-	vrtBuffer->upload(3 * sizeof(Vector3f), vrt.data());
+	vrtBuffer->upload(5 * 3 * sizeof(float), vrt.data());
 	vrtBuffer->bind();
-	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), (void*)(0));
+	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
+	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "texCoord"), 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "texCoord"));
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glDisableVertexAttribArray(0);
