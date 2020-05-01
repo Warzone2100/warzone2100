@@ -3406,8 +3406,6 @@ static void trackHeight()
 		return;
 	}
 
-	printf("RH: %i TH: %i T: %0.3f Y: %i\n", (int)referenceHeight, (int)targetHeight, t, player.p.y);
-
 	player.p.y = referenceHeight + (targetHeight - referenceHeight) * t * t; // cubic easing
 }
 
