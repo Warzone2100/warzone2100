@@ -21,6 +21,9 @@ set_property(TARGET re2 PROPERTY FOLDER "3rdparty")
 set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS NO)	# -Wmissing-field-initializers
 set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-field-initializers")
 
+add_subdirectory(EmbeddedJSONSignature)
+set_property(TARGET EmbeddedJSONSignature PROPERTY FOLDER "3rdparty")
+
 # SHA2-library
 
 set(SHA2_HEADERS

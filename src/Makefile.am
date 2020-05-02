@@ -151,6 +151,7 @@ noinst_HEADERS = \
 	texture.h \
 	titleui/titleui.h \
 	transporter.h \
+	updatemanager.h \
 	urlhelpers.h \
 	urlrequest.h \
 	visibility.h \
@@ -266,6 +267,7 @@ COMMONSOURCES = \
 	titleui/protocol.cpp \
 	titleui/titleui.cpp \
 	transporter.cpp \
+	updatemanager.cpp \
 	urlhelpers.cpp \
 	urlrequest.cpp \
 	version.cpp \
@@ -288,6 +290,7 @@ COMMONLIBS = \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a \
 	$(top_builddir)/3rdparty/miniupnp/libminiupnpc.a \
 	$(top_builddir)/3rdparty/launchinfo/liblaunchinfo.a \
+	$(top_builddir)/3rdparty/EmbeddedJSONSignature/libembeddedjsonsignature.a \
 	$(top_builddir)/3rdparty/re2/obj/libre2.a
 
 if PORTABLE

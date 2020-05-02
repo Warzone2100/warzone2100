@@ -87,6 +87,7 @@
 #include <time.h>
 #include <LaunchInfo.h>
 #include <sodium.h>
+#include "updatemanager.h"
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -1545,6 +1546,8 @@ int realmain(int argc, char *argv[])
 		debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
 		break;
 	}
+
+	WzInfoManager::initialize();
 
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
 	debug_MEMSTATS();
