@@ -83,8 +83,9 @@
 #include "frend.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
+// Do not highlight buttons while paused.
 //
-#define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0)
+#define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0 && !gamePaused())
 
 // Empty edit window
 static bool SecondaryWindowUp = false;
@@ -496,7 +497,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	bool Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
 	bool Hilight = buttonIsHilite(psButton);
 
-	if (Down)
+	if (Down && !gamePaused())
 	{
 		if ((DownTime < 1) && (psWidget->UserData != RETBUT_CANCEL))
 		{
@@ -511,7 +512,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	}
 	else
 	{
-		if (flashing)
+		if (flashing && !gamePaused())
 		{
 			if (((realTime / 250) % 2) != 0)
 			{
