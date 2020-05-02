@@ -124,6 +124,35 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	glDisableVertexAttribArray(program.locVertex);
 }
 
+GLuint depthTexture;
+GLuint depthFrameBuffer;
+
+void writeToDepthFrameBuffer(unsigned int screenWidth, unsigned int screenHeight){
+	if(depthTexture == 0)
+	{
+		glGenTextures(1, &depthTexture);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, screenWidth, screenHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if(depthFrameBuffer == 0)
+	{
+		glGenFramebuffers(1, &depthFrameBuffer);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture, 0);
+	glDrawBuffer(GL_NONE);
+
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		printf("Framebuffer error!\n");
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void demoTest(Vector3i position, Vector3i rotation, float distance)
 {
 	const glm::mat4 &viewMatrix =
@@ -132,11 +161,9 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 		glm::rotate(rotation.z * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 0.f, 1.f)) *
 		glm::rotate(rotation.x * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(1.f, 0.f, 0.f)) *
 		glm::rotate(rotation.y * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::translate(glm::vec3(0, -position.y, 0));
+		glm::translate(glm::vec3(-position.x, -position.y, position.z));
 		
 	static GLuint shaderProgram = 0;
-	static GLuint m_FBOdepth_textura;
-	static GLuint m_FBO;
 
 	if(shaderProgram == 0)
 	{
@@ -172,7 +199,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"varying vec2 TexCoord;uniform sampler2D tex;void main(void) {gl_FragColor=texture(tex, TexCoord);}"
+			"varying vec2 TexCoord;uniform sampler2D tex;void main(void) {vec4 t =texture(tex, TexCoord);gl_FragColor=vec4(t);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -207,39 +234,22 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 			exit(1);
 		}
 
-		glGenFramebuffers(1, &m_FBO);
-		glGenTextures(1, &m_FBOdepth_textura);
 	}
 
 	glUseProgram(shaderProgram);
 	pie_SetRendMode(REND_OPAQUE);
 
-
-		glBindTexture(GL_TEXTURE_2D, m_FBOdepth_textura);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, 1280, 720, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_FBOdepth_textura, 0);
-		glDrawBuffer(GL_NONE);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_FALSE);
-
-	glBindTexture(GL_TEXTURE_2D, m_FBOdepth_textura);
+	// glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
+	  glActiveTexture(GL_TEXTURE0); // Color
+	    glBindTexture(GL_TEXTURE_2D, depthTexture); // ColorTexture ID
+	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
-
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
-	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
-
-	Vector3f v1 = Vector3f(11000 - position.x, 800, position.z - 12500);
-	Vector3f v2 = Vector3f(11500 - position.x, 300, position.z - 12500);
-	Vector3f v3 = Vector3f(10300 - position.x, 200, position.z - 12500);
-
 	std::array<float, 15> vrt = {
-		v1.x, v1.y, v1.z, 0.5, 0,
-		v2.x, v2.y, v2.z, 0, 1,
-		v3.x, v3.y, v3.z, 1, 1,
+		11000.f, 800, -12500.f, 0.5, 0,
+		11500.f, 300, -12500.f, 0, 1,
+		10300.f, 200, -12500.f, 1, 1,
 	};
 	if (!vrtBuffer)
 		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
@@ -251,7 +261,9 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "texCoord"));
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
+	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "texCoord"));
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void pie_Skybox_Init()

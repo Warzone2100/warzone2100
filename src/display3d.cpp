@@ -1137,6 +1137,8 @@ static void drawTiles(iView *player)
 
 	wzPerfEnd(PERF_TERRAIN);
 
+	writeToDepthFrameBuffer(screenWidth, screenHeight);
+
 	// draw skybox
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
 	renderSurroundings(viewMatrix);
