@@ -19,3 +19,6 @@
 [submodule "3rdparty/re2"]
 	path = 3rdparty/re2
 	url = https://github.com/google/re2.git
+[submodule "3rdparty/EmbeddedJSONSignature"]
+	path = 3rdparty/EmbeddedJSONSignature
+	url = https://github.com/past-due/EmbeddedJSONSignature.git
