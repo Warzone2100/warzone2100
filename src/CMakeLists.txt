@@ -121,7 +121,7 @@ target_link_libraries(warzone2100
 	Qt5::Gui
 	Qt5::Widgets
 )
-target_link_libraries(warzone2100 launchinfo)
+target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
 if(ENABLE_NLS)
 	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
 endif()

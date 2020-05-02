@@ -491,6 +491,8 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/glm"
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/miniupnp"
 # launchinfo
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/launchinfo/include"
+# EmbeddedJSONSignature
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/EmbeddedJSONSignature/include"
 # re2
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/re2"
 # date

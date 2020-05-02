@@ -14,10 +14,17 @@ jobs:
     # SITE_DISPATCH_ACCESS_TOKEN
     name: 'Trigger Site Update'
     runs-on: ubuntu-latest
+    if: (github.repository == 'Warzone2100/warzone2100')
     steps:
-      - name: 'Send Repository Dispatch Event'
+      - name: 'Trigger wz2100.net update'
         run: |
           curl -X POST https://api.github.com/repos/Warzone2100/wz2100.net/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.SITE_DISPATCH_ACCESS_TOKEN }} \
+          --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+      - name: 'Trigger updates.json update'
+        run: |
+          curl -X POST https://api.github.com/repos/Warzone2100/update-data/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.SITE_DISPATCH_ACCESS_TOKEN }} \
           --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
