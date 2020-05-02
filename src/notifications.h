@@ -155,7 +155,12 @@ public:
 };
 
 // Add a notification
+// - must be called from the main thread
 void addNotification(const WZ_Notification& notification, const WZ_Notification_Trigger& trigger);
+
+// Remove notification preferences by unique notification identifier
+// - must be called from the main thread
+bool removeNotificationPreferencesIf(const std::function<bool (const std::string& uniqueNotificationIdentifier)>& matchIdentifierFunc);
 
 enum class NotificationScope {
 	DISPLAYED_ONLY,
