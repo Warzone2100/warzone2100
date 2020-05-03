@@ -105,6 +105,7 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, b
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 			return true;
+#  if !defined(WZ_OS_MAC)
 		case OpenGLES30:
 			setOpenGLESDriver(useOpenGLESLibrary);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
@@ -119,6 +120,12 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, b
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			return true;
+#  else
+		case OpenGLES30:
+			return false;
+		case OpenGLES20:
+			return false;
+#  endif
 		case MAX_CONTEXT_REQUESTS:
 			return false;
 	}
