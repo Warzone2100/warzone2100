@@ -414,7 +414,12 @@ void wzToggleFullscreen()
 
 bool wzIsFullscreen()
 {
-	assert(WZwindow != nullptr);
+	if (WZwindow == nullptr)
+	{
+		// NOTE: Can't use debug(...) to log here or it will risk overwriting fatal error messages,
+		// as `_debug(...)` calls this function
+		return false;
+	}
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
 	if ((flags & SDL_WINDOW_FULLSCREEN) || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP))
 	{
@@ -1744,7 +1749,13 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
 		}
 
-		sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary);
+		if (!sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary))
+		{
+			// Failed to configure OpenGL context request
+			debug(LOG_FATAL, "Failed to configure OpenGL context request");
+			SDL_Quit();
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	// Populated our resolution list (does all displays now)
