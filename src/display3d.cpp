@@ -3395,6 +3395,11 @@ static void trackHeight()
 
 	if(referenceTime == 0)
 	{
+		if(scrollSpeedLeftRight != 0 || scrollStepLeftRight != 0)
+		{
+			return;
+		}
+
 		referenceTime = graphicsTime;
 		referenceHeight = std::max(player.p.y, 1);
 		targetHeight = calculatedHeight;
