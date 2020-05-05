@@ -269,6 +269,7 @@ devpkg/*
 *.exp
 warzone*.*build
 *.lnk
+CMakeSettings.json
 
 # profiler stuff
 win32/CodeAnalyst
