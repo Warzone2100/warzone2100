@@ -121,9 +121,9 @@ static float getAverageTerrainHeight();
 
 float referenceHeight = 0;
 float targetHeight = 0;
-UDWORD heightChangeStartTime = 0;
+UDWORD referenceTime = 0;
 static const float TERRAIN_HEIGHT_CHANGE_TIME = 500;
-static const int HEIGHT_TRACK_INCREMENTS = 125;
+static const int HEIGHT_TRACK_INCREMENTS = 100;
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
@@ -3369,9 +3369,13 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 }
 
 void resetPlayerHeight(){
-	referenceHeight = 0;
+	referenceTime = 0;
+	// if referenceTime is 0, referenceHeight is the players last adjusted height.
+	// deviating from it by more than HEIGHT_TRACK_INCREMENTS which will cause a new adjustment.
+	// if referenceTime is NOT 0, means we're currently adjusting, and referenceHeight 
+	// is the players height before starting the adjustment.
+	referenceHeight = player.p.y;
 	targetHeight = 0;
-	heightChangeStartTime = 0;
 }
 
 /// Smoothly adjust player height to match the average terrain height
@@ -3379,24 +3383,28 @@ static void trackHeight()
 {
 	float calculatedHeight = getAverageTerrainHeight() + CAMERA_PIVOT_HEIGHT;
 
-	if(referenceHeight == 0 && abs(player.p.y - calculatedHeight) < HEIGHT_TRACK_INCREMENTS)
+	if(referenceTime == 0 && abs(referenceHeight - calculatedHeight) < HEIGHT_TRACK_INCREMENTS)
 	{
 		return;
 	}
 
-	if(calculatedHeight == player.p.y)
+	if(calculatedHeight == referenceHeight)
 	{
 		return;
 	}
 
-	if(referenceHeight == 0)
+	if(referenceTime == 0)
 	{
+		referenceTime = graphicsTime;
 		referenceHeight = std::max(player.p.y, 1);
 		targetHeight = calculatedHeight;
-		heightChangeStartTime = graphicsTime;
 	}
 
-	float time = graphicsTime - heightChangeStartTime;
+	float delta = targetHeight - referenceHeight;
+
+	// need to do some mid-air checks here, if the player has moved back down, or moved even more.
+
+	float time = graphicsTime - referenceTime;
 	float t = time / TERRAIN_HEIGHT_CHANGE_TIME;
 
 	if(t > 1)
@@ -3406,7 +3414,9 @@ static void trackHeight()
 		return;
 	}
 
-	player.p.y = referenceHeight + (targetHeight - referenceHeight) * t * t; // cubic easing
+	t = t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; // easing in/out
+
+	player.p.y = referenceHeight + delta * t;
 }
 
 /// Select the next energy bar display mode
