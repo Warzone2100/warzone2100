@@ -219,16 +219,6 @@ WzString& WzString::insert(size_t position, const WzString &str)
 {
 	auto it = _utf8String.begin();
 	_utf8_advance(it, position, _utf8String.end());
-	if (it == _utf8String.end())
-	{
-		size_t distance = it - _utf8String.begin();
-		if (distance > position)
-		{
-			// TODO: To match QString behavior, we need to extend the string?
-			ASSERT(it != _utf8String.end(), "Cannot find position in string prior to end of string.");
-		}
-		// deliberately fall-through
-	}
 	_utf8String.insert(it, str._utf8String.begin(), str._utf8String.end());
 	return *this;
 }
@@ -237,15 +227,6 @@ WzString& WzString::insert(size_t i, WzUniCodepoint c)
 {
 	auto it = _utf8String.begin();
 	_utf8_advance(it, i, _utf8String.end());
-	if (it == _utf8String.end())
-	{
-		size_t distance = it - _utf8String.begin();
-		if (distance > i)
-		{
-			// TODO: To match QString behavior, we need to extend the string?
-			ASSERT(it != _utf8String.end(), "Cannot find position in string prior to end of string.");
-		}
-	}
 	auto cUtf8Codepoints = WzString::fromCodepoint(c);
 	_utf8String.insert(it, cUtf8Codepoints._utf8String.begin(), cUtf8Codepoints._utf8String.end());
 	return *this;

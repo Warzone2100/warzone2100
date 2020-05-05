@@ -83,6 +83,7 @@ unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, uns
 unsigned int wzGetCurrentDisplayScale();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
 void wzSetCursor(CURSOR index);
+void wzApplyCursor();
 void wzScreenFlip();	///< Swap the graphics buffers
 void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse();		///< Trap mouse cursor in application window
@@ -96,6 +97,7 @@ enum DialogType {
 };
 WZ_DECL_NONNULL(2, 3) void wzDisplayDialog(DialogType type, const char *title, const char *message);	///< Throw up a modal warning dialog - title & message are UTF-8 text
 
+WzString wzGetPlatform();
 std::vector<screeninfo> wzAvailableResolutions();
 std::vector<unsigned int> wzAvailableDisplayScales();
 void wzSetSwapInterval(int swap);
@@ -108,6 +110,7 @@ void StartTextInput();
 void StopTextInput();
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
+unsigned long wzThreadID(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) int wzThreadJoin(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) void wzThreadDetach(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) void wzThreadStart(WZ_THREAD *thread);

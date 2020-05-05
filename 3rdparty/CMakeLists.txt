@@ -9,6 +9,9 @@ SET(UTF8PROC_INSTALL OFF CACHE BOOL "Enable installation of utf8proc" FORCE)
 add_subdirectory(utf8proc)
 set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
 
+add_subdirectory(launchinfo)
+set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
+
 # SHA2-library
 
 set(SHA2_HEADERS

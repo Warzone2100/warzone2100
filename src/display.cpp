@@ -91,9 +91,8 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 #include "cursorselection"
 };
 
-// Control zoom. Add an amount to zoom this much each second.
-static float zoom_speed = 0.0f;
-static float zoom_target = 0.0f;
+int scrollDirLeftRight = 0;
+int scrollDirUpDown = 0;
 
 static bool	buildingDamaged(STRUCTURE *psStructure);
 static bool	repairDroidSelected(UDWORD player);
@@ -116,11 +115,13 @@ void finishDeliveryPosition();
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
+static const float CAMERA_ROTATION_SMOOTHNESS = 10;
+static const float CAMERA_ROTATION_SPEED = 4;
 static SDWORD	rotX;
 static SDWORD	rotY;
-static UDWORD	rotInitial;
+static float	rotInitial;
 static UDWORD	rotInitialUp;
-static UDWORD	xMoved, yMoved;
+static float	rotationY;
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
@@ -140,6 +141,10 @@ static UDWORD CurrentItemUnderMouse = 0;
 bool	rotActive = false;
 bool	gameStats = false;
 
+static const UDWORD FADE_START_OF_GAME_TIME = 1000;
+static UDWORD fadeEndTime = 0;
+static void fadeStartOfGame();
+
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
 static bool bSensorAssigned;
 //used to determine if the player has selected a Las Sat structure
@@ -147,38 +152,84 @@ static bool bLasSatStruct;
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 
-float getZoom()
-{
-	return zoom_target;
-}
+static const float zoom_velocity_units_per_sec = 5000;
+static const float zoom_full_acceleration_time_millis = 200;
+static const float zoom_full_deceleration_time_millis = 100;
+static bool is_zooming = false;
+static float zoom_reference = 0;
+static float zoom_current = 0;
+static float zoom_target = 0;
+static UDWORD zoom_time = 0;
 
-float getZoomSpeed()
+void setZoom(float speed, float target)
 {
-	return fabsf(zoom_speed);
-}
+	if(speed == 0) // we can't use speed. but if it's 0, it's immediate.
+	{
+		is_zooming = false;
+		zoom_reference = 0;
+		zoom_current = 0;
+		zoom_target = 0;
+		zoom_time = 0;
+		setViewDistance(target);
+		UpdateFogDistance(target);
+		return;
+	}
 
-void setZoom(float zoomSpeed, float zoomTarget)
-{
-	float zoom_origin = getViewDistance();
-	zoom_speed = zoomSpeed;
-	zoom_target = zoomTarget;
-	zoom_speed *= zoom_target > zoom_origin ? 1 : -1; // get direction
+	if(!is_zooming)
+	{
+		zoom_reference = getViewDistance();
+		zoom_current = getViewDistance();
+		zoom_target = getViewDistance();
+		zoom_time = graphicsTime;
+		is_zooming = true;
+	}
+	else if((target < zoom_current && zoom_target > zoom_current) || (target > zoom_current && zoom_target < zoom_current)) // switched directions "mid-air"
+	{
+		zoom_reference = zoom_target; // we should probably calculate this but it seems this works good enough.
+	}
+
+	zoom_target = target;
 }
 
 void zoom()
 {
-	if (zoom_speed != 0.0f)
+	if(!is_zooming)
 	{
-		float distance = getViewDistance();
-		distance += graphicsTimeAdjustedIncrement(zoom_speed);
-		if ((zoom_speed > 0.0f && distance > zoom_target) || (zoom_speed <= 0.0f && distance < zoom_target))
-		{
-			distance = zoom_target; // reached target
-			zoom_speed = 0.0f;
-		}
-		setViewDistance(distance);
-		UpdateFogDistance(distance);
+		return;
 	}
+
+	int direction = zoom_target > zoom_reference ? 1 : -1;
+	float delta = zoom_target - zoom_reference;
+	float current = zoom_current - zoom_reference;
+
+	float acceleration = std::fmin((graphicsTime - zoom_time) / zoom_full_acceleration_time_millis, 1);
+	acceleration = acceleration * acceleration; // quadratic ease in
+
+	float zoom_full_deceleration_distance = zoom_velocity_units_per_sec / 1000 * zoom_full_deceleration_time_millis;
+
+	float deceleration = std::fmin(fabs(delta - current) / zoom_full_deceleration_distance, 1);
+	deceleration = deceleration * (2 - deceleration); // quadratic ease out
+
+	float speed = std::fmin(acceleration, deceleration);
+
+	zoom_current += speed * graphicsTimeAdjustedIncrement(zoom_velocity_units_per_sec) * direction;
+
+	if((direction == 1 && zoom_current > zoom_target - 1) || (direction == -1 && zoom_current < zoom_target + 1))
+	{
+		setViewDistance(zoom_target);
+		UpdateFogDistance(zoom_target);
+
+		zoom_reference = 0;
+		zoom_current = 0;
+		zoom_target = 0;
+		zoom_time = 0;
+		is_zooming = false;
+
+		return;
+	}
+
+	setViewDistance(zoom_current);
+	UpdateFogDistance(zoom_current);
 }
 
 bool isMouseOverRadar()
@@ -683,10 +734,9 @@ CURSOR processMouseClickInput()
 	}
 	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging)
 	{
-		rotInitial = player.r.y;
+		rotInitial = (player.r.y % 65536) / DEG(1.0f); // negative values caused problems with float conversion
 		rotInitialUp = player.r.x;
-		xMoved = 0;
-		yMoved = 0;
+		rotationY = rotInitial; // instead of player.r.y, will track decimals for us
 		rotActive = true;
 	}
 
@@ -931,26 +981,6 @@ CURSOR processMouseClickInput()
 		{
 			cursor = CURSOR_SELECT; // Special casing for LasSat or own unit
 		}
-		else
-		{
-			// when one of the arrow key gets pressed, set cursor appropriately
-			if (keyDown(KEY_UPARROW))
-			{
-				cursor = CURSOR_UARROW;
-			}
-			else if (keyDown(KEY_DOWNARROW))
-			{
-				cursor = CURSOR_DARROW;
-			}
-			else if (keyDown(KEY_LEFTARROW))
-			{
-				cursor = CURSOR_LARROW;
-			}
-			else if (keyDown(KEY_RIGHTARROW))
-			{
-				cursor = CURSOR_RARROW;
-			}
-		}
 	}
 
 	CurrentItemUnderMouse = item;
@@ -1005,7 +1035,6 @@ CURSOR scroll()
 {
 	SDWORD	xDif, yDif;
 	uint32_t timeDiff;
-	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 
 	float scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2);
@@ -1020,37 +1049,26 @@ CURSOR scroll()
 
 	if (mouseScroll && wzMouseInWindow())
 	{
-		// Scroll left or right
-		scrollDirLeftRight += (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X)) - (mouseX() < BOUNDARY_X);
-
-		// Scroll down or up
-		scrollDirUpDown += (mouseY() < BOUNDARY_Y) - (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y));
-		// when mouse cursor goes to an edge, set cursor appropriately
-		if (scrollDirUpDown > 0)
+		if (mouseY() < BOUNDARY_Y)
 		{
+			scrollDirUpDown++;
 			cursor = CURSOR_UARROW;
 		}
-		else if (scrollDirUpDown < 0)
+		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
+			scrollDirUpDown--;
 			cursor = CURSOR_DARROW;
 		}
-		else if (scrollDirLeftRight < 0)
+		if (mouseX() < BOUNDARY_X)
 		{
 			cursor = CURSOR_LARROW;
+			scrollDirLeftRight--;
 		}
-		else if (scrollDirLeftRight > 0)
+		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			cursor = CURSOR_RARROW;
+			scrollDirLeftRight++;
 		}
-	}
-	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
-	{
-		// Scroll left or right
-		scrollDirLeftRight += keyDown(KEY_RIGHTARROW) - keyDown(KEY_LEFTARROW);
-
-		// Scroll down or up
-		scrollDirUpDown += keyDown(KEY_UPARROW) - keyDown(KEY_DOWNARROW);
-
 	}
 	CLIP(scrollDirLeftRight, -1, 1);
 	CLIP(scrollDirUpDown,    -1, 1);
@@ -1080,6 +1098,10 @@ CURSOR scroll()
 	player.p.z += yDif;
 
 	CheckScrollLimits();
+
+	// Reset scroll directions
+	scrollDirLeftRight = 0;
+	scrollDirUpDown = 0;
 
 	return cursor;
 }
@@ -1155,57 +1177,29 @@ void displayWorld()
 
 	if (mouseDown(MOUSE_ROTATE) && rotActive)
 	{
-		if (abs(mouseX() - rotX) > 2 || xMoved > 2 || abs(mouseY() - rotY) > 2 || yMoved > 2)
-		{
-			xMoved += abs(mouseX() - rotX);
-			if (mouseX() < rotX)
-			{
-				player.r.y = rotInitial + (rotX - mouseX()) * DEG(1) / 2;
-			}
-			else
-			{
-				player.r.y = rotInitial - (mouseX() - rotX) * DEG(1) / 2;
-			}
-			yMoved += abs(mouseY() - rotY);
-			if (bInvertMouse)
-			{
-				if (mouseY() < rotY)
-				{
-					player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 3;
-				}
-				else
-				{
-					player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 3;
-				}
-			}
-			else
-			{
-				if (mouseY() < rotY)
-				{
-					player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 3;
-				}
-				else
-				{
-					player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 3;
-				}
-			}
-			if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
-			{
-				player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
-			}
-			if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
-			{
-				player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
-			}
+		float mouseDeltaX = mouseX() - rotX;
+		float mouseDeltaY = mouseY() - rotY;
 
-			setDesiredPitch(player.r.x / DEG_1);
+		// the subtraction and then addition of rotationY is for the bug where wrapping between eg 350-10 degrees didn't work
+		rotationY = (rotInitial - mouseDeltaX / CAMERA_ROTATION_SPEED - rotationY) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + rotationY;
+		player.r.y = DEG(rotationY); // saved in a separate (float) variable in order to keep decimals for smoothness
+		
+		if(bInvertMouse)
+		{
+			mouseDeltaY *= -1;
 		}
+
+		float rotationTargetX = rotInitialUp + DEG(mouseDeltaY) / CAMERA_ROTATION_SPEED;
+		
+		player.r.x = player.r.x + (rotationTargetX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
+		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
+
+		setDesiredPitch(player.r.x / DEG_1);
 	}
 
 	if (!mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		rotActive = false;
-		xMoved = yMoved = 0;
 		ignoreRMBC = true;
 		pos.x = player.r.x;
 		pos.y = player.r.y;
@@ -1215,6 +1209,35 @@ void displayWorld()
 	}
 
 	draw3DScene();
+
+	if (fadeEndTime)
+	{
+		if (graphicsTime < fadeEndTime)
+		{
+			fadeStartOfGame();
+		}
+		else
+		{
+			// ensure the fade only happens once (per call to transitionInit() & graphicsTime init) - i.e. at game start - regardless of graphicsTime wrap-around
+			fadeEndTime = 0;
+		}
+	}
+}
+
+bool transitionInit()
+{
+	fadeEndTime = FADE_START_OF_GAME_TIME;
+	return true;
+}
+
+static void fadeStartOfGame()
+{
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
+	PIELIGHT color = WZCOL_BLACK;
+	float delta = (static_cast<float>(graphicsTime) / static_cast<float>(fadeEndTime) - 1.f);
+	color.byte.a = static_cast<uint8_t>(std::min<uint32_t>(255, static_cast<uint32_t>(std::ceil(255.f * (1.f - (delta * delta * delta + 1.f)))))); // cubic easing
+	pie_UniTransBoxFill(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), color);
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 static bool mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)

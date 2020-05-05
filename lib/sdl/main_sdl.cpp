@@ -197,11 +197,15 @@ struct InputKey
 static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
-static unsigned int CurrentKey = 0;			// Our Current keypress
 bool GetTextEvents = false;
 /**************************/
 /***     Misc support   ***/
 /**************************/
+
+WzString wzGetPlatform()
+{
+	return WzString::fromUtf8(SDL_GetPlatform());
+}
 
 // See if we have TEXT in the clipboard
 bool has_scrap(void)
@@ -246,7 +250,6 @@ void StartTextInput()
 	if (!GetTextEvents)
 	{
 		SDL_StartTextInput();	// enable text events
-		CurrentKey = 0;
 		GetTextEvents = true;
 		debug(LOG_INPUT, "SDL text events started");
 	}
@@ -255,7 +258,6 @@ void StartTextInput()
 void StopTextInput()
 {
 	SDL_StopTextInput();	// disable text events
-	CurrentKey = 0;
 	GetTextEvents = false;
 	debug(LOG_INPUT, "SDL text events stopped");
 }
@@ -411,6 +413,12 @@ int wzGetSwapInterval()
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data)
 {
 	return (WZ_THREAD *)SDL_CreateThread(threadFunc, "wzThread", data);
+}
+
+unsigned long wzThreadID(WZ_THREAD *thread)
+{
+	SDL_threadID threadID = SDL_GetThreadID((SDL_Thread *)thread);
+	return threadID;
 }
 
 int wzThreadJoin(WZ_THREAD *thread)
@@ -932,10 +940,11 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
  */
 static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 {
-	UDWORD code = 0, vk = 0;
 	switch (keyEvent->type)
 	{
 	case SDL_KEYDOWN:
+	{
+		unsigned vk = 0;
 		switch (keyEvent->keysym.sym)
 		{
 		// our "editing" keys for text
@@ -975,32 +984,32 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		case KEY_TAB:
 			vk = INPBUF_TAB;
 			break;
-		case	KEY_RETURN:
+		case KEY_RETURN:
 			vk = INPBUF_CR;
 			break;
-		case 	KEY_ESC:
+		case KEY_ESC:
 			vk = INPBUF_ESC;
 			break;
 		default:
 			break;
 		}
 		// Keycodes without character representations are determined by their scancode bitwise OR-ed with 1<<30 (0x40000000).
-		CurrentKey = keyEvent->keysym.sym;
+		unsigned currentKey = keyEvent->keysym.sym;
 		if (vk)
 		{
 			// Take care of 'editing' keys that were pressed
 			inputAddBuffer(vk, 0);
-			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(CurrentKey));
+			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(currentKey));
 		}
 		else
 		{
 			// add everything else
-			inputAddBuffer(CurrentKey, 0);
+			inputAddBuffer(currentKey, 0);
 		}
 
-		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", CurrentKey, CurrentKey, (CurrentKey < 128) && (CurrentKey > 31) ? (char)CurrentKey : '?', SDL_GetKeyName(CurrentKey));
+		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", currentKey, currentKey, currentKey < 128 && currentKey > 31 ? (char)currentKey : '?', SDL_GetKeyName(currentKey));
 
-		code = sdlKeyToKeyCode(CurrentKey);
+		KEY_CODE code = sdlKeyToKeyCode(currentKey);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
@@ -1014,11 +1023,13 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 			aKeyState[code].lastdown = 0;
 		}
 		break;
+	}
 
 	case SDL_KEYUP:
-		code = keyEvent->keysym.sym;
-		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, [%c] SDLkey=[%s]", code, code, (code < 128) && (code > 31) ? (char)code : '?', SDL_GetKeyName(code));
-		code = sdlKeyToKeyCode(keyEvent->keysym.sym);
+	{
+		unsigned currentKey = keyEvent->keysym.sym;
+		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, [%c] SDLkey=[%s]", currentKey, currentKey, currentKey < 128 && currentKey > 31 ? (char)currentKey : '?', SDL_GetKeyName(currentKey));
+		KEY_CODE code = sdlKeyToKeyCode(keyEvent->keysym.sym);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
@@ -1032,6 +1043,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 			aKeyState[code].state = KEY_RELEASED;
 		}
 		break;
+	}
 	default:
 		break;
 	}
@@ -1042,8 +1054,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 */
 void inputhandleText(SDL_TextInputEvent *Tevent)
 {
-	size_t *newtextsize = nullptr;
-	int size = 	SDL_strlen(Tevent->text);
+	int size = SDL_strlen(Tevent->text);
 	if (size)
 	{
 		if (utf8Buf)
@@ -1052,9 +1063,13 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
 			free(utf8Buf);
 			utf8Buf = nullptr;
 		}
-		utf8Buf = UTF8toUTF32(Tevent->text, newtextsize);
+		size_t newtextsize = 0;
+		utf8Buf = UTF8toUTF32(Tevent->text, &newtextsize);
 		debug(LOG_INPUT, "Keyboard: text input \"%s\"", Tevent->text);
-		inputAddBuffer(CurrentKey, *utf8Buf);
+		for (unsigned i = 0; i < newtextsize / sizeof(utf_32_char); ++i)
+		{
+			inputAddBuffer(0, utf8Buf[i]);
+		}
 	}
 }
 

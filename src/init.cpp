@@ -955,6 +955,7 @@ bool stageOneInitialise()
 	scriptInit();
 
 	gameTimeInit();
+	transitionInit();
 
 	return true;
 }

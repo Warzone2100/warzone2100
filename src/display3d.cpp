@@ -50,6 +50,7 @@
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_interpolation.hpp>
 
 #include "loop.h"
 #include "atmos.h"
@@ -347,7 +348,7 @@ static std::vector<Blueprint> blueprints;
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
 
 /// The distance the selection box will pulse
-#define BOX_PULSE_SIZE  10
+static const float BOX_PULSE_SIZE = 30;
 
 /// the opacity at which building blueprints will be drawn
 static const int BLUEPRINT_OPACITY = 120;
@@ -357,6 +358,22 @@ static const int BLUEPRINT_OPACITY = 120;
 void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	resizeRadar(); // recalculate radar position
+}
+
+float interpolateAngleDegrees(int a, int b, float t)
+{
+	if(a > 180)
+	{
+		a -= 360;
+	}
+	if(b > 180)
+	{
+		b -= 360;
+	}
+
+	float d = b - a;
+
+	return a + d * t;
 }
 
 bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix)
@@ -375,17 +392,24 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 			elapsed = 0; // Animation hasn't started yet.
 		}
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
+		const float frameFraction = fmod(elapsed / (float)strImd->objanimtime, strImd->objanimframes) - frame;
+		const int nextFrame = (frame + 1) % strImd->objanimframes;
 		ASSERT(frame < strImd->objanimframes, "Bad index %d >= %d", frame, strImd->objanimframes);
+
 		const ANIMFRAME &state = strImd->objanimdata.at(frame);
+		const ANIMFRAME &nextState = strImd->objanimdata.at(nextFrame);
+
 		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
 			return false;
 		}
-		modelMatrix *= glm::translate(glm::vec3(state.pos)) *
-			glm::rotate(UNDEG(state.rot.pitch), glm::vec3(1.f, 0.f, 0.f)) *
-			glm::rotate(UNDEG(state.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(state.rot.roll), glm::vec3(0.f, 0.f, 1.f)) *
-			glm::scale(state.scale);
+
+		modelMatrix *= 
+				glm::interpolate(glm::translate(glm::vec3(state.pos)), glm::translate(glm::vec3(nextState.pos)), frameFraction) *
+				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.pitch / DEG(1), nextState.rot.pitch / DEG(1), frameFraction)), glm::vec3(1.f, 0.f, 0.f)) *
+				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.direction / DEG(1), nextState.rot.direction / DEG(1), frameFraction)), glm::vec3(0.f, 1.f, 0.f)) *
+				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.roll / DEG(1), nextState.rot.roll / DEG(1), frameFraction)), glm::vec3(0.f, 0.f, 1.f)) *
+				glm::scale(state.scale);
 	}
 
 	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);
@@ -1889,7 +1913,7 @@ float getViewDistance()
 void setViewDistance(float dist)
 {
 	distance = dist;
-	CONPRINTF(_("Setting zoom to %.0f"), distance);
+	debug(LOG_WZ, _("Setting zoom to %.0f"), distance);
 }
 
 /// Draw a feature (tree/rock/etc.)
@@ -2505,41 +2529,44 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	return true;
 }
 
-/// Draws the strobing 3D drag box that is used for multiple selection
+/// SHURCOOL: Draws the strobing 3D drag box that is used for multiple selection
 static void	drawDragBox()
 {
-	int minX, maxX;		// SHURCOOL: These 4 ints will hold the corners of the selection box
-	int minY, maxY;
-
-	if (dragBox3D.status == DRAG_DRAGGING && buildState == BUILD3D_NONE)
+	if (dragBox3D.status != DRAG_DRAGGING || buildState != BUILD3D_NONE)
 	{
-		if (graphicsTime - dragBox3D.lastTime > BOX_PULSE_SPEED)
-		{
-			dragBox3D.pulse++;
-			if (dragBox3D.pulse >= BOX_PULSE_SIZE)
-			{
-				dragBox3D.pulse = 0;
-			}
-			dragBox3D.lastTime = graphicsTime;
-		}
-
-		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
-		minX = MIN(dragBox3D.x1, mouseX());
-		maxX = MAX(dragBox3D.x1, mouseX());
-		minY = MIN(dragBox3D.y1, mouseY());
-		maxY = MAX(dragBox3D.y1, mouseY());
-
-		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
-		minX += dragBox3D.pulse / 2;
-		maxX -= dragBox3D.pulse / 2;
-		minY += dragBox3D.pulse / 2;
-		maxY -= dragBox3D.pulse / 2;
-
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
-		iV_Box(minX, minY, maxX, maxY, WZCOL_UNIT_SELECT_BORDER);
-		pie_UniTransBoxFill(minX + 1, minY, maxX, maxY - 1, WZCOL_UNIT_SELECT_BOX);
-		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
+		return;
 	}
+
+	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
+
+	int X1 = MIN(dragBox3D.x1, mouseX());
+	int X2 = MAX(dragBox3D.x1, mouseX());
+	int Y1 = MIN(dragBox3D.y1, mouseY());
+	int Y2 = MAX(dragBox3D.y1, mouseY());
+
+	// draw static box
+	
+	iV_Box(X1, Y1, X2, Y2, WZCOL_UNIT_SELECT_BORDER);
+	pie_UniTransBoxFill(X1, Y1, X2, Y2, WZCOL_UNIT_SELECT_BOX);
+
+	// draw pulse effect
+
+	dragBox3D.pulse += (BOX_PULSE_SIZE - dragBox3D.pulse) * realTimeAdjustedIncrement(5);
+
+	if(dragBox3D.pulse > BOX_PULSE_SIZE - 0.1f) {
+		dragBox3D.pulse = 0;
+	}
+
+	PIELIGHT color = WZCOL_UNIT_SELECT_BOX;
+
+	color.byte.a = (float)color.byte.a * (1 - (dragBox3D.pulse / BOX_PULSE_SIZE)); // alpha relative to max pulse size
+
+	pie_UniTransBoxFill(X2, Y1, X2 + dragBox3D.pulse, Y2 + dragBox3D.pulse, color); // east side + south-east corner
+	pie_UniTransBoxFill(X1 - dragBox3D.pulse, Y2, X2, Y2 + dragBox3D.pulse, color); // south side + south-west corner
+	pie_UniTransBoxFill(X1 - dragBox3D.pulse, Y1 - dragBox3D.pulse, X1, Y2, color); // west side + north-west corner
+	pie_UniTransBoxFill(X1, Y1 - dragBox3D.pulse, X2 + dragBox3D.pulse, Y1, color); // north side + north-east corner
+
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 

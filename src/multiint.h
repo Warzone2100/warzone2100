@@ -50,6 +50,7 @@ public:
 
 	void setLabel(char const *text);
 	void addButton(int value, Image image, Image imageHighlight, char const *tip);
+	void setButtonMinClickInterval(UDWORD interval);
 	void enable(bool enabled = true);
 	void disable()
 	{

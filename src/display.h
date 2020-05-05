@@ -31,6 +31,9 @@
 /* Initialise the display system */
 bool dispInitialise();
 
+/* Initialize fade-in transition */
+bool transitionInit();
+
 void ProcessRadarInput();
 
 void processInput();
@@ -85,9 +88,8 @@ struct	_dragBox
 	int y1;
 	int x2;
 	int y2;
-	UDWORD	status;
-	UDWORD	lastTime;
-	UDWORD	pulse;
+	UDWORD status;
+	float pulse = 0;
 };
 
 extern struct	_dragBox dragBox3D, wallDrag;
@@ -190,7 +192,7 @@ SDWORD	getDesiredPitch();
 void	setDesiredPitch(SDWORD pitch);
 
 #define MAX_PLAYER_X_ANGLE	(-1)
-#define MIN_PLAYER_X_ANGLE	(-60)
+#define MIN_PLAYER_X_ANGLE	(-90)
 
 #define MAXDISTANCE	(5000)
 #define MINDISTANCE	(0)
@@ -216,9 +218,9 @@ bool ctrlShiftDown();
 
 UDWORD getTargetType();
 
+#define	DEFAULT_ZOOM_SPEED (5000)
+
 void setZoom(float zoomSpeed, float zoomTarget);
-float getZoom();
-float getZoomSpeed();
 void zoom();
 bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
 bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);

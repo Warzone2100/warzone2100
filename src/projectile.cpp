@@ -80,7 +80,8 @@ struct INTERVAL
 /* The range for neighbouring objects */
 #define PROJ_NEIGHBOUR_RANGE (TILE_UNITS*4)
 // used to create a specific ID for projectile objects to facilitate tracking them.
-static const UDWORD ProjectileTrackerID =	0xdead0000;
+static const uint32_t ProjectileTrackerID = 0xdead0000;
+static uint32_t projectileTrackerIDIncrement = 0;
 
 /* The list of projectiles in play */
 static std::vector<PROJECTILE *> psProjectileList;
@@ -186,6 +187,7 @@ proj_InitSystem()
 	{
 		experienceGain[x] = 100;
 	}
+	projectileTrackerIDIncrement = 0;
 	return true;
 }
 
@@ -413,7 +415,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid weapon stats");
 	ASSERT_OR_RETURN(false, psTarget == nullptr || !psTarget->died, "Aiming at dead target!");
 
-	PROJECTILE *psProj = new PROJECTILE(ProjectileTrackerID | (realTime >> 4), player);
+	PROJECTILE *psProj = new PROJECTILE(ProjectileTrackerID + ++projectileTrackerIDIncrement, player);
 
 	/* get muzzle offset */
 	if (psAttacker == nullptr)

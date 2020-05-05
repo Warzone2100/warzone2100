@@ -116,6 +116,10 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_addMultiMenu, "addMultiMenu"},
 	{kf_multiAudioStart, "multiAudioStart"},
 	{kf_multiAudioStop, "multiAudioStop"},
+	{kf_CameraUp, "CameraUp"},
+	{kf_CameraDown, "CameraDown"},
+	{kf_CameraLeft, "CameraLeft"},
+	{kf_CameraRight, "CameraRight"},
 	{kf_SeekNorth, "SeekNorth"},
 	{kf_ToggleCamera, "ToggleCamera"},
 	{kf_addInGameOptions, "addInGameOptions"},
@@ -354,6 +358,10 @@ void keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KPENTER, KEYMAP_PRESSED, kf_addMultiMenu, N_("Multiplayer Options / Alliance dialog"));
 	//
 	//	GAME CONTROLS - Moving around, zooming in, rotating etc
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_UPARROW,           KEYMAP_DOWN,    kf_CameraUp,                N_("Move Camera Up"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_DOWNARROW,         KEYMAP_DOWN,    kf_CameraDown,              N_("Move Camera Down"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RIGHTARROW,        KEYMAP_DOWN,    kf_CameraRight,             N_("Move Camera Right"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_LEFTARROW,         KEYMAP_DOWN,    kf_CameraLeft,              N_("Move Camera Left"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKSPACE,         KEYMAP_PRESSED, kf_SeekNorth,               N_("Snap View to North"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_SPACE,             KEYMAP_PRESSED, kf_ToggleCamera,            N_("Toggle Tracking Camera"));
 	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_ESC,               KEYMAP_PRESSED, kf_addInGameOptions,        N_("Display In-Game Options"));

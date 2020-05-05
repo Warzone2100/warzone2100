@@ -22,4 +22,4 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	endif()
 endif()
 
-target_link_libraries(exception-handler PRIVATE framework)
+target_link_libraries(exception-handler PRIVATE framework launchinfo)

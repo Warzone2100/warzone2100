@@ -1,6 +1,6 @@
 ${LangFileString} WZWelcomeText "Этот помощник установки поможет вам установить Warzone2100.\r\n\r\nПеред началом рекомендуем закрыть все другие приложения. Это позволит обновить соответствующие системные файлы без перезагрузки системы.\r\n\r\nWarzone2100 100% бесплатный, если вы за него заплатили сообщите нам!\r\n\r\nНажмите Далее для продолжения."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "Добро пожаловать в установщик портативной Warzone 2100!\r\n\r\nЭтот установщик поможет вам установить портативную версию Warzone 2100.\r\n\r\nЭта установка полностью самодостаточна, и вы можете удалить программу в любое время, удалив каталог.\r\n\r\nWarzone 2100 — 100% бесплатная программа с открытым исходным кодом! \r\n\r\nНажмите кнопку Далее, чтобы продолжить."
 
 ${LangFileString} WZ_GPL_NEXT "Согласен"
 
@@ -11,7 +11,7 @@ ${LangFileString} TEXT_SecFMVs "Видео"
 ${LangFileString} DESC_SecFMVs "Скачать и установить внутриигровые ролики."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "Английские (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_EngHi "Скачать и установить внутриигровые ролики высокого качества на английском языке."
 
 ${LangFileString} TEXT_SecFMVs_Eng "Английские"
 ${LangFileString} DESC_SecFMVs_Eng "Скачать и установить внутриигровые ролики на английском языке."
