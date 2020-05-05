@@ -22,3 +22,6 @@
 [submodule "3rdparty/EmbeddedJSONSignature"]
 	path = 3rdparty/EmbeddedJSONSignature
 	url = https://github.com/past-due/EmbeddedJSONSignature.git
+[submodule "3rdparty/date"]
+	path = 3rdparty/date
+	url = https://github.com/HowardHinnant/date.git
