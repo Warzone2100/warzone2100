@@ -9,6 +9,8 @@ data/texpages/bdrops/backdrop6.png
 	- CC0		- Copyright (c) 2010-2011 jorzi
 data/base/texpages/page-25-sky-urban.png
 	- CC0, original work by cybersphinx
+3rdparty/date/*
+	- MIT, Various Authors, See: https://github.com/HowardHinnant/date/blob/master/include/date/date.h
 3rdparty/json/*
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
 3rdparty/micro-ecc/*

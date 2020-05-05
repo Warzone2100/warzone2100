@@ -493,6 +493,8 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/miniupnp"
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/launchinfo/include"
 # re2
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/re2"
+# date
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/date/include"
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])

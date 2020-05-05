@@ -585,6 +585,7 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories(".")
 include_directories("3rdparty")
 include_directories(SYSTEM "3rdparty/glm")
+include_directories("3rdparty/date/include")
 
 SET(STDC_HEADERS ON)
 
