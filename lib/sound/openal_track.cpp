@@ -879,9 +879,13 @@ bool sound_Play3DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample)
 		 */
 	}
 
+#if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
 	alSourcef(psSample->iSample, AL_PITCH, 1.001f);
+#else
+	alSourcef(psSample->iSample, AL_PITCH, 1.0f);
+#endif
 
 	sound_SetObjectPosition(psSample);
 	alSourcefv(psSample->iSample, AL_VELOCITY, zero);
@@ -988,9 +992,13 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 
 	alSourcef(stream->source, AL_GAIN, stream->volume);
 
+#if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
 	alSourcef(stream->source, AL_PITCH, 1.001f);
+#else
+	alSourcef(stream->source, AL_PITCH, 1.0f);
+#endif
 
 	// Create some OpenAL buffers to store the decoded data in
 	alGenBuffers(buffer_count, buffers);
