@@ -234,45 +234,37 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 
 	// TODO: Interpolate position!
 
-	std::array<float, 36 * 3> vrt = {
-		500.f, 1000, 0,
-		500.f, 0, 0,
-		0.f, 0, 0,
-		500.f, 1000, 0,
-		0.f, 0, 0,
-		0.f, 1000, 0,
-		// 11000.f, 800, -12500.f,
-		// 11500.f, 300, -12500.f,
-		// 10300.f, 200, -12500.f,
-	};
+	float v1, v2;
 
-	int v = 0;
+	for(int i = 0; i < 8; i++)
+	{
+		v1 = 2.f * M_PI / 8 * i;
+		v2 = 2.f * M_PI / 8 * (i + 1);
 
-	float v1 = 0;
-	float v2 = 2.f * M_PI / 8;
-	vrt[v++] = cos(v1) * radius;
-	vrt[v++] = 1000;
-	vrt[v++] = sin(v1) * radius;
+		vrt.push_back(cos(v1) * radius);
+		vrt.push_back(1000);
+		vrt.push_back(sin(v1) * radius);
 
-	vrt[v++] = cos(v1) * radius;
-	vrt[v++] = 0;
-	vrt[v++] = sin(v1) * radius;
+		vrt.push_back(cos(v1) * radius);
+		vrt.push_back(0);
+		vrt.push_back(sin(v1) * radius);
 
-	vrt[v++] = cos(v2) * radius;
-	vrt[v++] = 0;
-	vrt[v++] = sin(v2) * radius;
+		vrt.push_back(cos(v2) * radius);
+		vrt.push_back(0);
+		vrt.push_back(sin(v2) * radius);
 
-	vrt[v++] = cos(v1) * radius;
-	vrt[v++] = 1000;
-	vrt[v++] = sin(v1) * radius;
+		vrt.push_back(cos(v1) * radius);
+		vrt.push_back(1000);
+		vrt.push_back(sin(v1) * radius);
 
-	vrt[v++] = cos(v2) * radius;
-	vrt[v++] = 0;
-	vrt[v++] = sin(v2) * radius;
+		vrt.push_back(cos(v2) * radius);
+		vrt.push_back(0);
+		vrt.push_back(sin(v2) * radius);
 
-	vrt[v++] = cos(v2) * radius;
-	vrt[v++] = 1000;
-	vrt[v++] = sin(v2) * radius;
+		vrt.push_back(cos(v2) * radius);
+		vrt.push_back(1000);
+		vrt.push_back(sin(v2) * radius);
+	}
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
@@ -288,7 +280,7 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLES, 0, vrt.size() / 3);
 	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
