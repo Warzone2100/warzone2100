@@ -761,12 +761,6 @@ void draw3DScene()
 	/* Now, draw the terrain */
 	drawTiles(&player);
 
-
-	saveDepthBuffer(screenWidth, screenHeight);
-
-	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
-	// drawRange(player.p, player.r, distance, screenWidth, screenHeight);
-
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
 	/* Show the drag Box if necessary */
@@ -1181,6 +1175,9 @@ static void drawTiles(iView *player)
 	GL_DEBUG("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix);
 
+	saveDepthBuffer(screenWidth, screenHeight);
+
+	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
 	pie_RemainingPasses(currentGameFrame); // draws shadows and transparent shapes
 
 	if (!gamePaused())

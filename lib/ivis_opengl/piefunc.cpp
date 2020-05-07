@@ -230,40 +230,46 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 
 	glUseProgram(shaderProgram);
 	pie_SetRendMode(REND_ADDITIVE);
-    glDisable(GL_CULL_FACE);
+	glDepthMask(GL_FALSE);
+	glDisable(GL_CULL_FACE);
 
 	// TODO: Interpolate position!
 
-	float v1, v2;
+	static std::vector<float> vrt;
 
-	for(int i = 0; i < 8; i++)
+	if(vrt.size() == 0)
 	{
-		v1 = 2.f * M_PI / 8 * i;
-		v2 = 2.f * M_PI / 8 * (i + 1);
+		float v1, v2;
 
-		vrt.push_back(cos(v1) * radius);
-		vrt.push_back(1000);
-		vrt.push_back(sin(v1) * radius);
+		for(int i = 0; i < 32 + 1; i++)
+		{
+			v1 = 2.f * M_PI / 32 * i;
+			v2 = 2.f * M_PI / 32 * (i + 1);
 
-		vrt.push_back(cos(v1) * radius);
-		vrt.push_back(0);
-		vrt.push_back(sin(v1) * radius);
+			vrt.push_back(cos(v1) * radius);
+			vrt.push_back(1000);
+			vrt.push_back(sin(v1) * radius);
 
-		vrt.push_back(cos(v2) * radius);
-		vrt.push_back(0);
-		vrt.push_back(sin(v2) * radius);
+			vrt.push_back(cos(v1) * radius);
+			vrt.push_back(0);
+			vrt.push_back(sin(v1) * radius);
 
-		vrt.push_back(cos(v1) * radius);
-		vrt.push_back(1000);
-		vrt.push_back(sin(v1) * radius);
+			vrt.push_back(cos(v2) * radius);
+			vrt.push_back(0);
+			vrt.push_back(sin(v2) * radius);
 
-		vrt.push_back(cos(v2) * radius);
-		vrt.push_back(0);
-		vrt.push_back(sin(v2) * radius);
+			vrt.push_back(cos(v1) * radius);
+			vrt.push_back(1000);
+			vrt.push_back(sin(v1) * radius);
 
-		vrt.push_back(cos(v2) * radius);
-		vrt.push_back(1000);
-		vrt.push_back(sin(v2) * radius);
+			vrt.push_back(cos(v2) * radius);
+			vrt.push_back(0);
+			vrt.push_back(sin(v2) * radius);
+
+			vrt.push_back(cos(v2) * radius);
+			vrt.push_back(1000);
+			vrt.push_back(sin(v2) * radius);
+		}
 	}
 
 	glActiveTexture(GL_TEXTURE0);
@@ -284,7 +290,9 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glEnable(GL_CULL_FACE);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_CULL_FACE);
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
 void pie_Skybox_Init()
