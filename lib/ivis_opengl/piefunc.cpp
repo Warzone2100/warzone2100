@@ -130,19 +130,17 @@ void writeToDepthFrameBuffer(unsigned int screenWidth, unsigned int screenHeight
 	if(depthTexture == 0)
 	{
 		glGenTextures(1, &depthTexture);
+		glBindTexture(GL_TEXTURE_2D, depthTexture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, screenWidth, screenHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 	}
 
-	glGenTextures(1, &depthTexture);
-
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, screenWidth, screenHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, screenWidth,screenHeight);
 
 }
@@ -193,7 +191,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance, unsigned int
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t = texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(t);}"
+			"uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t = texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(1,1,1, 1 - clamp(abs(gl_FragCoord.z - t.z) * 100, 0, 1));}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -231,7 +229,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance, unsigned int
 	}
 
 	glUseProgram(shaderProgram);
-	pie_SetRendMode(REND_OPAQUE);
+	pie_SetRendMode(REND_ADDITIVE);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
