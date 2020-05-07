@@ -23,6 +23,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
+#include "lib/framework/math_ext.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piedef.h"
@@ -191,7 +192,7 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t = texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(1,1,1, 1 - clamp(abs(gl_FragCoord.z - t.z) * 1000, 0, 1));}"
+			"uniform ivec2 screen;uniform sampler2D tex;uniform vec3 color;void main(void) {vec4 t = texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));float distance = 1 - clamp(abs(gl_FragCoord.z - t.z) * 600, 0, 1);gl_FragColor=vec4(mix(color, vec3(1), distance / 2), distance * 2);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -241,7 +242,7 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 	{
 		float v1, v2;
 
-		for(int i = 0; i < 32 + 1; i++)
+		for(int i = 0; i < 32; i++)
 		{
 			v1 = 2.f * M_PI / 32 * i;
 			v2 = 2.f * M_PI / 32 * (i + 1);
@@ -274,6 +275,7 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	glUniform3f(glGetUniformLocation(shaderProgram, "color"), 1.f, 0.f, 0.f);
 	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 	glUniform2i(glGetUniformLocation(shaderProgram, "screen"), screenWidth, screenHeight);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
