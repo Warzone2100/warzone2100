@@ -761,6 +761,8 @@ void draw3DScene()
 	/* Now, draw the terrain */
 	drawTiles(&player);
 
+
+	writeToDepthFrameBuffer(screenWidth, screenHeight);
 	demoTest(player.p, player.r, distance);
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
@@ -1136,8 +1138,6 @@ static void drawTiles(iView *player)
 	drawTerrain(pie_PerspectiveGet() * viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
 
 	wzPerfEnd(PERF_TERRAIN);
-
-	writeToDepthFrameBuffer(screenWidth, screenHeight);
 
 	// draw skybox
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");

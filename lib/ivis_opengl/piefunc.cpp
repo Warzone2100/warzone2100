@@ -125,7 +125,6 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 }
 
 GLuint depthTexture;
-GLuint depthFrameBuffer;
 
 void writeToDepthFrameBuffer(unsigned int screenWidth, unsigned int screenHeight){
 	if(depthTexture == 0)
@@ -133,24 +132,19 @@ void writeToDepthFrameBuffer(unsigned int screenWidth, unsigned int screenHeight
 		glGenTextures(1, &depthTexture);
 	}
 
+	glGenTextures(1, &depthTexture);
+
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, screenWidth, screenHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 
-	if(depthFrameBuffer == 0)
-	{
-		glGenFramebuffers(1, &depthFrameBuffer);
-	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture, 0);
-	glDrawBuffer(GL_NONE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		printf("Framebuffer error!\n");
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, screenWidth, screenHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, screenWidth,screenHeight);
+
 }
 
 void demoTest(Vector3i position, Vector3i rotation, float distance)
@@ -247,9 +241,9 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
 	std::array<float, 15> vrt = {
-		11000.f, 800, -12500.f, 0.5, 0,
-		11500.f, 300, -12500.f, 0, 1,
-		10300.f, 200, -12500.f, 1, 1,
+		11000.f, 800, -12500.f, 0.5, 1,
+		11500.f, 300, -12500.f, 0, 0,
+		10300.f, 200, -12500.f, 1, 0,
 	};
 	if (!vrtBuffer)
 		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
