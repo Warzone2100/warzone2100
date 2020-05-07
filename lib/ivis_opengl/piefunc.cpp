@@ -171,7 +171,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance, unsigned int
 
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		const char* vertexShaderSource[1] = {
-			"attribute vec4 c;attribute vec2 texCoord;uniform mat4 ModelViewProjectionMatrix;varying vec2 TexCoord;void main(void) {gl_Position = ModelViewProjectionMatrix * c;TexCoord = texCoord;}"
+			"attribute vec4 c;uniform mat4 ModelViewProjectionMatrix;void main(void) {gl_Position = ModelViewProjectionMatrix * c;}"
 		};
 		glShaderSource(vertexShader, 1, vertexShaderSource, nullptr);
 		glCompileShader(vertexShader);
@@ -193,7 +193,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance, unsigned int
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"varying vec2 TexCoord;uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t =texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(t);}"
+			"uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t = texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(t);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -233,31 +233,33 @@ void demoTest(Vector3i position, Vector3i rotation, float distance, unsigned int
 	glUseProgram(shaderProgram);
 	pie_SetRendMode(REND_OPAQUE);
 
-	// glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
-	  glActiveTexture(GL_TEXTURE0); // Color
-	    glBindTexture(GL_TEXTURE_2D, depthTexture); // ColorTexture ID
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthTexture);
 	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 	glUniform2i(glGetUniformLocation(shaderProgram, "screen"), screenWidth, screenHeight);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
-	std::array<float, 15> vrt = {
-		11000.f, 800, -12500.f, 0.5, 1,
-		11500.f, 300, -12500.f, 0, 0,
-		10300.f, 200, -12500.f, 1, 0,
+	std::array<float, 18> vrt = {
+		11000.f, 500, -12500.f,
+		11000.f, 200, -12500.f,
+		10500.f, 200, -12500.f,
+		11000.f, 500, -12500.f,
+		10500.f, 200, -12500.f,
+		10500.f, 500, -12500.f,
+		// 11000.f, 800, -12500.f,
+		// 11500.f, 300, -12500.f,
+		// 10300.f, 200, -12500.f,
 	};
 	if (!vrtBuffer)
 		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
-	vrtBuffer->upload(5 * 3 * sizeof(float), vrt.data());
+	vrtBuffer->upload(vrt.size() * sizeof(float), vrt.data());
 	vrtBuffer->bind();
-	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0));
+	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
-	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "texCoord"), 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "texCoord"));
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
-	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "texCoord"));
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
