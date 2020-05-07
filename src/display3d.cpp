@@ -762,8 +762,8 @@ void draw3DScene()
 	drawTiles(&player);
 
 
-	writeToDepthFrameBuffer(screenWidth, screenHeight);
-	demoTest(player.p, player.r, distance, screenWidth, screenHeight);
+	saveDepthBuffer(screenWidth, screenHeight);
+	drawRange(player.p, player.r, distance, screenWidth, screenHeight);
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 

@@ -126,7 +126,7 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 
 GLuint depthTexture;
 
-void writeToDepthFrameBuffer(unsigned int screenWidth, unsigned int screenHeight){
+void saveDepthBuffer(unsigned int screenWidth, unsigned int screenHeight){
 	if(depthTexture == 0)
 	{
 		glGenTextures(1, &depthTexture);
@@ -145,7 +145,7 @@ void writeToDepthFrameBuffer(unsigned int screenWidth, unsigned int screenHeight
 
 }
 
-void demoTest(Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight)
+void drawRange(Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight)
 {
 	const glm::mat4 &viewMatrix =
 		glm::translate(glm::vec3(0.f, 0.f, distance)) *
