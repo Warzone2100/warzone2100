@@ -312,13 +312,11 @@ if PORTABLE
 warzone2100_portable_LIBS += \
 	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/3rdparty/micro-ecc/libmicroecc.a \
-	$(top_builddir)/3rdparty/sha/libsha2.a \
 	$(top_builddir)/3rdparty/utf8proc/libutf8proc.a
 else
 warzone2100_LIBS += \
 	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/3rdparty/micro-ecc/libmicroecc.a \
-	$(top_builddir)/3rdparty/sha/libsha2.a \
 	$(top_builddir)/3rdparty/utf8proc/libutf8proc.a
 endif
 
