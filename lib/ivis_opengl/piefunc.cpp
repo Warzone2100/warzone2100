@@ -152,7 +152,8 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 		glm::rotate(rotation.z * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 0.f, 1.f)) *
 		glm::rotate(rotation.x * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(1.f, 0.f, 0.f)) *
 		glm::rotate(rotation.y * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::translate(glm::vec3(-position.x, -position.y, position.z));
+		glm::translate(glm::vec3(-position.x, -position.y, position.z)) *
+		glm::translate(glm::vec3(p1.x, 0, -p1.y));
 		
 	static GLuint shaderProgram = 0;
 
@@ -229,6 +230,53 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 
 	glUseProgram(shaderProgram);
 	pie_SetRendMode(REND_ADDITIVE);
+    glDisable(GL_CULL_FACE);
+
+	// TODO: Interpolate position!
+
+	std::vector<float> vrt;
+	int v = 0;
+
+	int slices = 8;
+	for(int i=0; i<slices; i++) {
+		float v1 = ((float)i) * 2.0 * M_PI;
+		float v2 = ((float)i+1) * 2.0 * M_PI;
+		vrt[v++] = cos(v1) * radius;
+		vrt[v++] = 1000;
+		vrt[v++] = sin(v1) * radius;
+
+		vrt[v++] = cos(v1) * radius;
+		vrt[v++] = 0;
+		vrt[v++] = sin(v1) * radius;
+
+		vrt[v++] = cos(v2) * radius;
+		vrt[v++] = 0;
+		vrt[v++] = sin(v2) * radius;
+
+		vrt[v++] = cos(v1) * radius;
+		vrt[v++] = 1000;
+		vrt[v++] = sin(v1) * radius;
+
+		vrt[v++] = cos(v2) * radius;
+		vrt[v++] = 0;
+		vrt[v++] = sin(v2) * radius;
+
+		vrt[v++] = cos(v2) * radius;
+		vrt[v++] = 1000;
+		vrt[v++] = sin(v2) * radius;
+	}
+
+	// std::array<float, 18> vrt = {
+	// 	500.f, 1000, 0,
+	// 	500.f, 0, 0,
+	// 	0.f, 0, 0,
+	// 	500.f, 1000, 0,
+	// 	0.f, 0, 0,
+	// 	0.f, 1000, 0,
+	// 	// 11000.f, 800, -12500.f,
+	// 	// 11500.f, 300, -12500.f,
+	// 	// 10300.f, 200, -12500.f,
+	// };
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
@@ -237,15 +285,6 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
-	std::array<float, 18> vrt = {
-		0.f + p1.x, 1000, (float)-p1.y,
-		500.f + p1.x, 1000, (float)-p1.y,
-		500.f + p1.x, 0, (float)-p1.y,
-		0.f + p1.x, 0, (float)-p1.y,
-		// 11000.f, 800, -12500.f,
-		// 11500.f, 300, -12500.f,
-		// 10300.f, 200, -12500.f,
-	};
 	if (!vrtBuffer)
 		vrtBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
 	vrtBuffer->upload(vrt.size() * sizeof(float), vrt.data());
@@ -253,9 +292,11 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
 
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glEnable(GL_CULL_FACE);
 }
 
 void pie_Skybox_Init()
