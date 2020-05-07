@@ -234,49 +234,45 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 
 	// TODO: Interpolate position!
 
-	std::vector<float> vrt;
+	std::array<float, 36 * 3> vrt = {
+		500.f, 1000, 0,
+		500.f, 0, 0,
+		0.f, 0, 0,
+		500.f, 1000, 0,
+		0.f, 0, 0,
+		0.f, 1000, 0,
+		// 11000.f, 800, -12500.f,
+		// 11500.f, 300, -12500.f,
+		// 10300.f, 200, -12500.f,
+	};
+
 	int v = 0;
 
-	int slices = 8;
-	for(int i=0; i<slices; i++) {
-		float v1 = ((float)i) * 2.0 * M_PI;
-		float v2 = ((float)i+1) * 2.0 * M_PI;
-		vrt[v++] = cos(v1) * radius;
-		vrt[v++] = 1000;
-		vrt[v++] = sin(v1) * radius;
+	float v1 = 0;
+	float v2 = 2.f * M_PI / 8;
+	vrt[v++] = cos(v1) * radius;
+	vrt[v++] = 1000;
+	vrt[v++] = sin(v1) * radius;
 
-		vrt[v++] = cos(v1) * radius;
-		vrt[v++] = 0;
-		vrt[v++] = sin(v1) * radius;
+	vrt[v++] = cos(v1) * radius;
+	vrt[v++] = 0;
+	vrt[v++] = sin(v1) * radius;
 
-		vrt[v++] = cos(v2) * radius;
-		vrt[v++] = 0;
-		vrt[v++] = sin(v2) * radius;
+	vrt[v++] = cos(v2) * radius;
+	vrt[v++] = 0;
+	vrt[v++] = sin(v2) * radius;
 
-		vrt[v++] = cos(v1) * radius;
-		vrt[v++] = 1000;
-		vrt[v++] = sin(v1) * radius;
+	vrt[v++] = cos(v1) * radius;
+	vrt[v++] = 1000;
+	vrt[v++] = sin(v1) * radius;
 
-		vrt[v++] = cos(v2) * radius;
-		vrt[v++] = 0;
-		vrt[v++] = sin(v2) * radius;
+	vrt[v++] = cos(v2) * radius;
+	vrt[v++] = 0;
+	vrt[v++] = sin(v2) * radius;
 
-		vrt[v++] = cos(v2) * radius;
-		vrt[v++] = 1000;
-		vrt[v++] = sin(v2) * radius;
-	}
-
-	// std::array<float, 18> vrt = {
-	// 	500.f, 1000, 0,
-	// 	500.f, 0, 0,
-	// 	0.f, 0, 0,
-	// 	500.f, 1000, 0,
-	// 	0.f, 0, 0,
-	// 	0.f, 1000, 0,
-	// 	// 11000.f, 800, -12500.f,
-	// 	// 11500.f, 300, -12500.f,
-	// 	// 10300.f, 200, -12500.f,
-	// };
+	vrt[v++] = cos(v2) * radius;
+	vrt[v++] = 1000;
+	vrt[v++] = sin(v2) * radius;
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
