@@ -147,7 +147,7 @@ void writeToDepthFrameBuffer(unsigned int screenWidth, unsigned int screenHeight
 
 }
 
-void demoTest(Vector3i position, Vector3i rotation, float distance)
+void demoTest(Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight)
 {
 	const glm::mat4 &viewMatrix =
 		glm::translate(glm::vec3(0.f, 0.f, distance)) *
@@ -193,7 +193,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"varying vec2 TexCoord;uniform sampler2D tex;void main(void) {vec4 t =texture(tex, TexCoord);gl_FragColor=vec4(t);}"
+			"varying vec2 TexCoord;uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t =texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(t);}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
@@ -237,6 +237,7 @@ void demoTest(Vector3i position, Vector3i rotation, float distance)
 	  glActiveTexture(GL_TEXTURE0); // Color
 	    glBindTexture(GL_TEXTURE_2D, depthTexture); // ColorTexture ID
 	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+	glUniform2i(glGetUniformLocation(shaderProgram, "screen"), screenWidth, screenHeight);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
