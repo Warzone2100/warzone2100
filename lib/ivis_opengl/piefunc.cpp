@@ -191,7 +191,7 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		const char* fragmentShaderSource[1] = {
-			"uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t = texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(1,1,1, 1 - clamp(abs(gl_FragCoord.z - t.z) * 100, 0, 1));}"
+			"uniform ivec2 screen;uniform sampler2D tex;void main(void) {vec4 t = texture(tex, vec2(gl_FragCoord.x / screen.x, gl_FragCoord.y / screen.y));gl_FragColor=vec4(1,1,1, 1 - clamp(abs(gl_FragCoord.z - t.z) * 1000, 0, 1));}"
 		};
 		glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
 		glCompileShader(fragmentShader);
