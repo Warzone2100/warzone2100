@@ -23,19 +23,3 @@ set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-fi
 
 add_subdirectory(EmbeddedJSONSignature)
 set_property(TARGET EmbeddedJSONSignature PROPERTY FOLDER "3rdparty")
-
-# SHA2-library
-
-set(SHA2_HEADERS
-	sha/brg_endian.h
-	sha/brg_types.h
-	sha/sha2.h
-)
-
-set(SHA2_SOURCES
-	sha/sha2.c
-)
-
-add_library(sha2 STATIC ${SHA2_HEADERS} ${SHA2_SOURCES})
-set_property(TARGET sha2 PROPERTY FOLDER "3rdparty")
-target_include_directories(sha2 PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
