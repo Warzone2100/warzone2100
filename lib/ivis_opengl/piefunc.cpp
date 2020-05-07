@@ -145,7 +145,7 @@ void saveDepthBuffer(unsigned int screenWidth, unsigned int screenHeight){
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, screenWidth,screenHeight);
 }
 
-void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight)
+void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, float distance, int screenWidth, int screenHeight, Vector3f color)
 {
 	const glm::mat4 &viewMatrix =
 		glm::translate(glm::vec3(0.f, 0.f, distance)) *
@@ -154,7 +154,8 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 		glm::rotate(rotation.x * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(1.f, 0.f, 0.f)) *
 		glm::rotate(rotation.y * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::translate(glm::vec3(-position.x, -position.y, position.z)) *
-		glm::translate(glm::vec3(p1.x, 0, -p1.y));
+		glm::translate(glm::vec3(p1.x, 0, -p1.y)) *
+		glm::scale(glm::vec3(radius));
 		
 	static GLuint shaderProgram = 0;
 
@@ -247,35 +248,35 @@ void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, fl
 			v1 = 2.f * M_PI / 32 * i;
 			v2 = 2.f * M_PI / 32 * (i + 1);
 
-			vrt.push_back(cos(v1) * radius);
+			vrt.push_back(cos(v1));
 			vrt.push_back(1000);
-			vrt.push_back(sin(v1) * radius);
+			vrt.push_back(sin(v1));
 
-			vrt.push_back(cos(v1) * radius);
+			vrt.push_back(cos(v1));
 			vrt.push_back(0);
-			vrt.push_back(sin(v1) * radius);
+			vrt.push_back(sin(v1));
 
-			vrt.push_back(cos(v2) * radius);
+			vrt.push_back(cos(v2));
 			vrt.push_back(0);
-			vrt.push_back(sin(v2) * radius);
+			vrt.push_back(sin(v2));
 
-			vrt.push_back(cos(v1) * radius);
+			vrt.push_back(cos(v1));
 			vrt.push_back(1000);
-			vrt.push_back(sin(v1) * radius);
+			vrt.push_back(sin(v1));
 
-			vrt.push_back(cos(v2) * radius);
+			vrt.push_back(cos(v2));
 			vrt.push_back(0);
-			vrt.push_back(sin(v2) * radius);
+			vrt.push_back(sin(v2));
 
-			vrt.push_back(cos(v2) * radius);
+			vrt.push_back(cos(v2));
 			vrt.push_back(1000);
-			vrt.push_back(sin(v2) * radius);
+			vrt.push_back(sin(v2));
 		}
 	}
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
-	glUniform3f(glGetUniformLocation(shaderProgram, "color"), 1.f, 0.f, 0.f);
+	glUniform3f(glGetUniformLocation(shaderProgram, "color"), color.x, color.y, color.b);
 	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 	glUniform2i(glGetUniformLocation(shaderProgram, "screen"), screenWidth, screenHeight);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "ModelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(pie_PerspectiveGet() * viewMatrix));

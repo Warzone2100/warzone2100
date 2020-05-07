@@ -3709,17 +3709,19 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 	}
 	const unsigned weaponRange = proj_GetLongRange(psStats, psObj->player);
 	const unsigned minRange = proj_GetMinRange(psStats, psObj->player);
-	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
+	//showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
+	drawRange(psObj->pos, weaponRange, player.p, player.r, distance, screenWidth, screenHeight, Vector3f(1, 0, 0));
 	if (minRange > 0)
 	{
-		showEffectCircle(psObj->pos, minRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA);
+		//showEffectCircle(psObj->pos, minRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA);
+		drawRange(psObj->pos, minRange, player.p, player.r, distance, screenWidth, screenHeight, Vector3f(1, 0, 1));
 	}
 }
 
 static void showSensorRange2(BASE_OBJECT *psObj)
 {
 	//showEffectCircle(psObj->pos, objSensorRange(psObj), 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
-	drawRange(psObj->pos, objSensorRange(psObj), player.p, player.r, distance, screenWidth, screenHeight);
+	drawRange(psObj->pos, objSensorRange(psObj), player.p, player.r, distance, screenWidth, screenHeight, Vector3f(0, 0, 1));
 	showWeaponRange(psObj);
 }
 
