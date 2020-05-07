@@ -185,7 +185,7 @@ function rearrangeAttackVtols()
 
 		if (enumGroup(group).length > 0)
 		{
-			droids.concat(group);
+			droids = droids.concat(group);
 		}
 	}
 
