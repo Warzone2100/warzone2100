@@ -51,11 +51,17 @@ function eventStructureBuilt(structure, droid)
 		{
 			orderDroidBuild(droid, DORDER_BUILD, structures.derricks, nearbyOils[0].x, nearbyOils[0].y);
 		}
-		else if (!highOilMap())
+		else
 		{
-			var numDefenses = enumRange(droid.x, droid.y, 3, me, false).filter(function(obj) {
+			//Probably most oils are close to base anyway on high oil maps
+			if ((getRealPower() < Math.floor(SUPER_LOW_POWER / 2)) || (highOilMap() && (gameTime < 240000)))
+			{
+				return;
+			}
+
+			var numDefenses = enumRange(droid.x, droid.y, 7, me, false).filter(function(obj) {
 				return (allianceExistsBetween(me, obj.player) && (obj.type === STRUCTURE) && (obj.stattype === DEFENSE));
-			});
+			}).length;
 
 			if (numDefenses === 0)
 			{
@@ -140,7 +146,7 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	const GROUP_SCAN_RADIUS = 8;
+	const GROUP_SCAN_RADIUS = subPersonalities[personality].retreatScanRange;
 	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter(function(obj) {
 		return obj.type === DROID;
 	});
@@ -148,6 +154,8 @@ function eventAttacked(victim, attacker)
 	//Custom SemperFi-JS's localized regrouping code to be used to retreat away from highly outnumbered contests.
 	if (victim.type === DROID && victim.player === me)
 	{
+		var nearbyScavs = 0;
+		var nearbyEnemies = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ENEMIES, false);
 		if (isVTOL(victim))
 		{
 			droidReady(victim.id);
@@ -155,10 +163,29 @@ function eventAttacked(victim, attacker)
 		else if (victim.order !== DORDER_RTR &&
 			victim.order !== DORDER_RECYCLE &&
 			!repairDroid(victim.id) &&
-			nearbyUnits.length < enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ENEMIES, false).length)
+			nearbyUnits.length < nearbyEnemies.length &&
+			distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, victim.x, victim.y) >= 20)
 		{
-			orderDroidLoc(victim, DORDER_MOVE, MY_BASE.x, MY_BASE.y); //Move now
-			groupAdd(retreatGroup, victim);
+			var run = true;
+
+			//Be more aggressive with scavenger stuff
+			if (isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer))
+			{
+				nearbyEnemies.forEach(function(obj) {
+					nearbyScavs += (obj.player === scavengerPlayer);
+				});
+
+				if (Math.floor(nearbyUnits.length * 1.5) > nearbyScavs)
+				{
+					run = false;
+				}
+			}
+
+			if (run)
+			{
+				orderDroidLoc(victim, DORDER_MOVE, MY_BASE.x, MY_BASE.y); //Move now
+				groupAdd(retreatGroup, victim);
+			}
 		}
 	}
 
@@ -170,10 +197,7 @@ function eventAttacked(victim, attacker)
 
 	if (attacker.player !== me && !allianceExistsBetween(attacker.player, victim.player))
 	{
-		if (grudgeCount[attacker.player] < MAX_GRUDGE)
-		{
-			grudgeCount[attacker.player] += (victim.type === STRUCTURE) ? 20 : 5;
-		}
+		grudgeCount[attacker.player] += (victim.type === STRUCTURE) ? 20 : 5;
 
 		//Check if a droid needs repair.
 		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(structures.extras[0]))
@@ -202,13 +226,14 @@ function eventAttacked(victim, attacker)
 			{
 				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
 				{
-					if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < (GROUP_SCAN_RADIUS + 4))
+					var unit = units[i];
+					if (unit !== null && distBetweenTwoPoints(unit.x, unit.y, attacker.x, attacker.y) < (GROUP_SCAN_RADIUS + 4))
 					{
-						orderDroidObj(units[i], DORDER_ATTACK, attacker);
+						orderDroidObj(unit, DORDER_ATTACK, attacker);
 					}
-					else
+					else if (unit !== null && isDefined(attacker.x) && isDefined(attacker.y))
 					{
-						orderDroidLoc(units[i], DORDER_SCOUT, attacker.x, attacker.y);
+						orderDroidLoc(unit, DORDER_SCOUT, attacker.x, attacker.y);
 					}
 				}
 			}

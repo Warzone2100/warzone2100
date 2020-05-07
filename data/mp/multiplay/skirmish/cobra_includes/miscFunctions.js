@@ -103,7 +103,7 @@ function rangeStep(player)
 		return undefined;
 	}
 
-	return cacheThis(uncached, [player]);
+	return cacheThis(uncached, [player], "rangeStep" + player, 10000);
 }
 
 //passing true finds allies and passing false finds enemies.
@@ -114,31 +114,22 @@ function playerAlliance(ally)
 		ally = false;
 	}
 
-	function uncached(ally)
+	var players = [];
+
+	for (var i = 0; i < maxPlayers; ++i)
 	{
-		var players = [];
-		for (var i = 0; i < maxPlayers; ++i)
+		if (i === me)
 		{
-			if (!ally)
-			{
-				if (!allianceExistsBetween(i, me) && (i !== me))
-				{
-					players.push(i);
-				}
-			}
-			else
-			{
-				if (allianceExistsBetween(i, me) && (i !== me))
-				{
-					players.push(i);
-				}
-			}
+			continue;
 		}
 
-		return players;
+		if ((!ally && !allianceExistsBetween(i, me)) || (ally && allianceExistsBetween(i, me)))
+		{
+			players.push(i);
+		}
 	}
 
-	return cacheThis(uncached, [ally], undefined, 5000);
+	return players;
 }
 
 //return real power levels.
@@ -185,7 +176,7 @@ function findLivingEnemies()
 		return alive;
 	}
 
-	return cacheThis(uncached, [], undefined, 10000);
+	return cacheThis(uncached, [], "findLivingEnemies1", 8000);
 }
 
 //The enemy of which Cobra is focusing on.
@@ -230,7 +221,7 @@ function getMostHarmfulPlayer()
 		return mostHarmful;
 	}
 
-	return cacheThis(uncached, [], undefined, 7000);
+	return cacheThis(uncached, [], "getMostHarmfulPlayer1", 5000);
 }
 
 //Set the initial grudge counter to target a random enemy.
@@ -346,7 +337,6 @@ function initCobraGroups()
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return obj.isCB; }));
 
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-	var highOil = highOilMap();
 	for (var i = 0, l = cons.length; i < l; ++i)
 	{
 		var con = cons[i];
@@ -403,5 +393,5 @@ function randomOffsetLocation(location)
 		return {x: newValueX, y: newValueY};
 	}
 
-	return cacheThis(uncached, [location], undefined, 2000);
+	return cacheThis(uncached, [location], "randomOffsetLocation1", 2000);
 }
