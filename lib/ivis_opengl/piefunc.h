@@ -43,7 +43,7 @@ void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix);
 void pie_Skybox_Init();
 void pie_Skybox_Shutdown();
 void pie_Skybox_Texture(const char *filename);
-void drawRange(Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight);
+void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight);
 void saveDepthBuffer(unsigned int screenWidth, unsigned int screenHeight);
 
 #endif // _piedef_h

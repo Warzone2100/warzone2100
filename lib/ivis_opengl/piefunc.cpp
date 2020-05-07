@@ -142,10 +142,9 @@ void saveDepthBuffer(unsigned int screenWidth, unsigned int screenHeight){
 
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, screenWidth,screenHeight);
-
 }
 
-void drawRange(Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight)
+void drawRange(Vector3i p1, int radius, Vector3i position, Vector3i rotation, float distance, unsigned int screenWidth, unsigned int screenHeight)
 {
 	const glm::mat4 &viewMatrix =
 		glm::translate(glm::vec3(0.f, 0.f, distance)) *
@@ -239,12 +238,10 @@ void drawRange(Vector3i position, Vector3i rotation, float distance, unsigned in
 
 	static gfx_api::buffer* vrtBuffer = nullptr;
 	std::array<float, 18> vrt = {
-		11000.f, 500, -12500.f,
-		11000.f, 200, -12500.f,
-		10500.f, 200, -12500.f,
-		11000.f, 500, -12500.f,
-		10500.f, 200, -12500.f,
-		10500.f, 500, -12500.f,
+		0.f + p1.x, 1000, (float)-p1.y,
+		500.f + p1.x, 1000, (float)-p1.y,
+		500.f + p1.x, 0, (float)-p1.y,
+		0.f + p1.x, 0, (float)-p1.y,
 		// 11000.f, 800, -12500.f,
 		// 11500.f, 300, -12500.f,
 		// 10300.f, 200, -12500.f,
@@ -256,7 +253,7 @@ void drawRange(Vector3i position, Vector3i rotation, float distance, unsigned in
 	glVertexAttribPointer(glGetAttribLocation(shaderProgram, "c"), 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableVertexAttribArray(glGetAttribLocation(shaderProgram, "c"));
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

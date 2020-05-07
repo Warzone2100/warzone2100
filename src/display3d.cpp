@@ -763,7 +763,9 @@ void draw3DScene()
 
 
 	saveDepthBuffer(screenWidth, screenHeight);
-	drawRange(player.p, player.r, distance, screenWidth, screenHeight);
+
+	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
+	// drawRange(player.p, player.r, distance, screenWidth, screenHeight);
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
@@ -778,6 +780,7 @@ void draw3DScene()
 
 	pie_BeginInterface();
 	drawDroidSelections();
+
 
 	drawStructureSelections();
 
@@ -911,8 +914,6 @@ void draw3DScene()
 	processDestinationTarget();
 
 	structureEffects(); // add fancy effects to structures
-
-	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
 	if (CauseCrash)
 	{
 		char *crash = nullptr;
@@ -3645,14 +3646,6 @@ static void structureEffects()
 /// Show the sensor ranges of selected droids and buildings
 static void	showDroidSensorRanges()
 {
-
-
-
-
-
-
-return;
-
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
 
@@ -3728,7 +3721,8 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 
 static void showSensorRange2(BASE_OBJECT *psObj)
 {
-	showEffectCircle(psObj->pos, objSensorRange(psObj), 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
+	// showEffectCircle(psObj->pos, objSensorRange(psObj), 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
+	drawRange(psObj->pos, objSensorRange(psObj), player.p, player.r, distance, screenWidth, screenHeight);
 	showWeaponRange(psObj);
 }
 
